@@ -85,7 +85,7 @@ caught it ([deploy.md](deploy.md), open).
 | Create: The Salt 1.1.0 | both | salt integration for Create |
 | Storage Labels 1.10 | both | decorative item labels |
 | Vinery (Backport) `-01` | both | replaces Let's Do Vinery 1.3.10 + Let's Do API |
-| Brewin' and Chewin' (Backport) `-01` | both | beside the 2.0 jar (2.2) |
+| Brewin' & Chewin' (Backport) `-01` | both | beside the 2.0 jar (2.2) |
 
 Relabelled server -> both in `mod_sides.md` (no change in where the jar goes: the client already gets every server
 mod, because clients host single-player worlds): Async Locator, Block Runner, Cherished Items, Chunky, Create: Fast

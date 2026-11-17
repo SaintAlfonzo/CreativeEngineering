@@ -6,10 +6,12 @@ description: Write an integration report for a new or updated mod (e.g. a Farmer
 # Integration report
 
 Output: one writeup `feature_writeup/<mod_snake>.md`, investigation only (nothing built unless the owner
-says so). Models: [hostile_delight.md](../../../feature_writeup/hostile_delight.md) (full report),
-[unusual_delight.md](../../../feature_writeup/unusual_delight.md) (overlap-first order),
-[more_delight.md](../../../feature_writeup/more_delight.md) (newer jar against an installed one). Read the model's
-section you are writing, not the whole file.
+says so). Two layouts (section 1): a **full report** (the ten sections 0 to 9) for a mod new to the pack, and a
+**jar upgrade** (five sections) for a newer jar of an installed mod. The older reports are historical and do not
+follow either layout exactly; use them as content examples for one section at a time, not as layout models:
+overlap table, [unusual_delight.md](../../../feature_writeup/unusual_delight.md) section 3; inventory and fold-in steps,
+[hostile_delight.md](../../../feature_writeup/hostile_delight.md); jar upgrade,
+[more_delight.md](../../../feature_writeup/more_delight.md). The next report written to the full layout becomes its model.
 
 ## 0. Gather (before writing)
 
@@ -26,6 +28,8 @@ section you are writing, not the whole file.
    dumps in `kubejs/exported/` predate the jar (then `/dumpall` is step 0 of the fold-in).
 
 ## 1. Report order (sections)
+
+**Full report.**
 
 Title `# <Mod>: overlap and integration report`. Opening paragraph: date, "nothing built", jar, licence,
 whether a port is needed, short name used in the file, test prefix (3+ letters, grep-safe, unused; add its row to
@@ -61,8 +65,15 @@ mod or defined by a pack rule unless the owner asks by name; upstream bugs are f
   End with the ordering constraints ("step 0 before 9-13 ...").
   Food and cooking code is routed into Creative Delight trees (memory `creative-delight-routing`): say where each step's files go.
 - **5. Decisions for the owner**: table `# | Question | Recommendation | Default if not answered`, D1-Dn.
-- **6. File map (planned)**, **7. Offline checks (once built)**, **8. In-game test suite (drafted)**
-  (`| ID | Test | Pass |`), **9. History** (dated line: "investigation written, nothing built").
+- **6. File map (planned)**, **7. Offline checks (once built)**, **8. In-game test suite (drafted)**: checkbox
+  lines `- [ ] **PREFIX-NN Name:** setup and action -> expected` (design_rules.md DR-W3), never a table;
+  **9. History** (dated line: "investigation written, nothing built").
+
+**Jar upgrade** (a newer jar against the installed one; content example more_delight.md): title and opening paragraph
+as above, then **0. How it was read** (the two jars, `tools/jar_diff.py` and dump commands), **1. Changes** (added,
+removed, changed by registry id and data path, each with its pack impact), **2. Open questions** (D1-Dn as in the
+full report's section 5), **3. Tests** (checkbox lines as above), **4. History**. Sections that would be empty are
+left out; a change that needs a fold-in step names the pack system and its doc as in the full report's section 4.
 
 ## 2. Also, same session
 

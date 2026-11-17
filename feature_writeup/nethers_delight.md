@@ -66,7 +66,7 @@ No food value, item, loot-modifier or vanilla loot-table change; `minecraft:enti
 
 About 120 blocks and items (Blazier, ghast foods, eggs, bread and toast, sausages, hotdogs, magma cake, stone cabinets,
 powdery cannon wood set, 2 effects, Curse of Poaching, piglin and bastion loot, config screen). Needs Farmer's Delight
-1.3.2; Miner's Delight, Brewin' and Chewin' and Farmer's Respite optional. Its tags list Nether's Delight items as optional,
+1.3.2; Miner's Delight, Brewin' & Chewin' and Farmer's Respite optional. Its tags list Nether's Delight items as optional,
 so it is meant to run beside it. If both ran: hoglin and strider drops would double up (Nether's Delight replaces the vanilla
 tables, MND adds its own through loot modifiers), two hoglin hides, two strider slices, two explosive cane patches in
 crimson forests. Not pursued.

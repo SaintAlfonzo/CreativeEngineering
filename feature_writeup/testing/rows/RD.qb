@@ -298,7 +298,7 @@ look entity census (rows/SQ-FGD-15.shell.txt): dark forest about 50 % brown, mus
 @@text
 @@text Refilled 2026-10-23 (doc sweep): everything built after the 2026-10-22 second bulk run (last game boot 2026-10-22
 @@text 23:34, before any of the jars below existed in `mods/`). Entries of the earlier runs are archived in
-@@text [scratch_queue_run_2026-10-22b.md](scratch_queue_run_2026-10-22b.md); the probes stay in `tools/`.
+@@text [scratch_run_2026-10-22b.md](scratch_run_2026-10-22b.md); the probes stay in `tools/`.
 @@text
 @@text Refreshed 2026-10-25: `backportedVeggies-...-02`, `backportedVintage-...-03`, `backportedFungi-...-01`, `backportedMiners-...-01`
 @@text and `incubationAdditions-1.1.0` are in `mods/` and loaded in the user's client on 2026-10-25 03:19 (no registry error; Miner's

@@ -318,7 +318,7 @@ crop holds only on `#vintagedelight:ghost_pepper_soil`. What it lacked was the s
 Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): wave 2 SQ-SY-14 to -21 PASS (`35 crops`, row fixed; sweet potato ripe at `age=5`), CQ-SY-22 PASS (soil tooltips +10 % / +20 %).
 
 Run as SQ-SY-01 to SQ-SY-07 in [testing/scratch_queue.md](testing/scratch_queue.md) (SY-n = SQ-SY-n). All PASS on
-2026-10-28 ([run log](testing/scratch_queue_run_2026-10-28.md)), measured with `tools/soil_yield_probe/sy_probe.js`
+2026-10-28 ([run log](testing/scratch_run_2026-10-28.md)), measured with `tools/soil_yield_probe/sy_probe.js`
 (`/syt roll`, 400 to 1500 loot rolls per case on placed blocks): wheat 1.00 / 1.71 / 1.49 per plant on farmland /
 Rich Farmland / Fertile Soil, carrots 3.71 / 4.42 / 4.20, rice and knife rice extra on Rich Soil only, corn extra on
 the lower half only, hemp from the top, flax from the lower half, bell peppers still 1:1:1, `richFarmlandTries = 0`

@@ -138,3 +138,55 @@
 	#Range: 1 ~ 16
 	honeycombMultiplier = 2
 
+#Melting: salt, fire and lava melt ice and snow (server side). Sources are the block tags
+#creativecommon:melting/salt, /fire (a block with a lit property counts only while lit) and /lava (plus any
+#block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow becomes air) and
+#/meltable_slow (packed and blue ice, one tier down). Each target rolls once per random tick. Ranges are
+#spheres measured through any blocks: 1 = the 6 touching blocks, 0 = this source never melts that kind.
+#A target looks past its 6 neighbours only when block light reaches it, so a fire or lava behind a sealed
+#wall melts nothing; magma (light 3) melts from its own random tick instead. feature_writeup/melting.md.
+[melting]
+	#Master switch for salt, fire and lava melting. The Salt item click is The Salt's own and not covered.
+	enabled = true
+	#Salt: reach for every target (meltable and meltable_slow). 1 = touching. Above 1 every
+	#target scans a sphere on each roll (salt gives no light to gate it), so keep it at 1 on big glaciers.
+	#Range: 0 ~ 4
+	saltRange = 1
+	#Fire, torches, lanterns, glowstone, magma: reach for meltable targets.
+	#Range: 0 ~ 8
+	fireRange = 3
+	#Lava: reach for meltable targets.
+	#Range: 0 ~ 8
+	lavaRange = 4
+	#Fire: reach for packed and blue ice.
+	#Range: 0 ~ 8
+	slowFireRange = 1
+	#Lava: reach for packed and blue ice.
+	#Range: 0 ~ 8
+	slowLavaRange = 2
+	#Chance per random tick that a meltable target with a source in reach melts. A block random ticks about
+	#every 68 s at randomTickSpeed 3, so 0.4 melts it in about 3 minutes on average.
+	#Range: 0.0 ~ 1.0
+	meltChance = 0.4
+	#The same for packed and blue ice, one tier per success (about 23 minutes per tier at 0.05).
+	#Range: 0.0 ~ 1.0
+	slowMeltChance = 0.05
+	#Melted ice (#minecraft:ice) leaves a water source; false leaves air. Ultra-warm dimensions
+	#(the Nether) always leave air.
+	placeWater = true
+	#Vanilla melts ice above block light 11 and snow layers above 11, from any light (sea lanterns,
+	#shroomlights, redstone lamps). false: only the sources above melt anything (torches, lanterns and
+	#glowstone through the fire rule). true: vanilla's light melting runs as well. Serene Seasons' seasonal
+	#melt and Immersive Weathering's ice melt are their own and not touched by this.
+	vanillaLightMelting = false
+	#Blocks in creativecommon:melting/ultrawarm_instant (snow layers, snow blocks, powder snow) become air the
+	#moment they are placed in an ultra-warm dimension (the Nether): by hand, dispenser, /setblock or a mod.
+	ultraWarmInstantMelt = true
+	#"from=to" block ids: what a meltable_slow target becomes when it melts. A meltable_slow block with no
+	#row here melts fully, like a meltable one.
+	slowSteps = ["minecraft:blue_ice=minecraft:packed_ice", "minecraft:packed_ice=minecraft:ice"]
+	#Blocks that get random ticks so they can melt (vanilla gives none to these). Ice, frosted ice and snow
+	#layers tick already. A block left out of this list (or a modded target that does not tick) melts only
+	#from a source-driven tick. Read once at startup: a change needs a restart.
+	extraRandomTickBlocks = ["minecraft:snow_block", "minecraft:powder_snow", "minecraft:packed_ice", "minecraft:blue_ice"]
+

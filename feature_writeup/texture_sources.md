@@ -98,7 +98,7 @@ made by an AI script look the same; those stay `confirm`. Mojang 26.1 files are 
 | `kubejs/assets/vintagedelight` `item/cucumber_dough`, `cucumber_noodles` | Vintage KOTS `cucumber_dough`; Farmer's Delight `raw_pasta` | ad-hoc recolour | `palette_swap.py` |
 | Hearth member `block/sunflower_stem` | a stem sprite (match is a lead only) | ad-hoc recolour (2026-11-09) | `palette_swap.py` |
 | `kubejs/assets/beautify` `blocks/hanging_pot` | Beautify `hanging_pot` (36 px changed) | colour-map `putpixel` script | `palette_swap.py --drop`, or `combine_tex.py` |
-| Brewin' member `gui/keg` | Brewin' and Chewin' 4.5.0 `gui/keg` (98 % unchanged) | ad-hoc pixel edit of the GUI | owner check: hand edit in an image editor |
+| Brewin' member `gui/keg` | Brewin' & Chewin' 4.5.0 `gui/keg` (98 % unchanged) | ad-hoc pixel edit of the GUI | owner check: hand edit in an image editor |
 
 The full list with the matched source per file: `ledger.csv` rows with status `redo`.
 

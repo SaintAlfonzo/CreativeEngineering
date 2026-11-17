@@ -1,3 +1,4 @@
+
 #Developer tools. Only meaningful in the dev instance (the one with tools/ and mods/ source).
 [debug]
 
@@ -30,7 +31,7 @@
 	[debug.block_state_sync]
 		#Debug mode. Client: logs every block-update packet containing a state id the client cannot resolve
 		#(the raw id, the block position, the client's state count) and writes
-		#logs/ce_block_state_ranges_client.txt. Dedicated server: writes logs/ce_block_state_ranges_server.txt
+		#logs/cdev_block_state_ranges_client.txt. Dedicated server: writes logs/cdev_block_state_ranges_server.txt
 		#when it starts. tools/diff_block_state_ranges.py compares the two files and names the block.
 		enabled = false
 		#Per-packet detail lines to log before falling back to one summary line every 500 bad packets.
@@ -106,4 +107,7 @@
 	#The Flower Test world builder (flowerworld/flower_world.js): builds the table on the first start
 	#of a Flower Test world, and /flowerworld.
 	flowerWorld = true
+	#The Structure Catalogue world type (cdevplace/StructureCatalogue): lays out every structure on the
+	#first start of such a world, and /cdevplace catalogue build.
+	structureCatalogue = true
 

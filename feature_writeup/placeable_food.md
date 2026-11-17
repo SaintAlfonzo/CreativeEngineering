@@ -49,7 +49,7 @@ There are three ways to put food down in this pack:
    while sneaking. Vinery bottles (backport 1.5.5, `DrinkBlockItem`) also place only while sneaking; in the air you drink them.
 3. **Edible plants** (carrot, potato, sweet berries, glow berries, onion, corn kernels, blueberry, cranberry,
    mulberry) plant a crop. They are listed but get no line.
-4. **Brewin' and Chewin' coaster** (backport, [alcohol.md](alcohol.md) 8.3, 12): right click a coaster to put an item on
+4. **Brewin' & Chewin' coaster** (backport, [alcohol.md](alcohol.md) 8.3, 12): right click a coaster to put an item on
    it, up to 4. Since 2026-10-20 it takes only items with a coaster model (`#brewinandchewin:placeable_on_coaster`,
    port setting `[coaster] taggedItemsOnly`): the port's 96 (vanilla foods, Farmer's Delight meals and drinks, every
    Brewin drink) and the 56 Display Delight foods `tools/gen_coaster_models.py` gives one. "Placeable on a coaster"

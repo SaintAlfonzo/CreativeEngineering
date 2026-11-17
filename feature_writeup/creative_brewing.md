@@ -39,7 +39,7 @@ Ports' own content and tests stay in [alcohol.md](alcohol.md) (Brewin', `AL-`) a
 | Member | Gradle project | Folder | Mod ids | Display name | Version |
 |---|---|---|---|---|---|
 | Let's Do Vinery 1.5.5 port | `:backportedVinery` | `development/creativeBrewing/members/vinery` | `vinery`, `foundation` | "Vinery (Creative Brewing)", "Foundation (Creative Brewing)" (the `foundation` id; both renamed 2026-11-04, plan_cb_publish.md M5) | `1.5.5-ce-19.2-08` |
-| Brewin' and Chewin' 4.5.0 port | `:backportedBrewin` | `development/creativeBrewing/members/brewin` | `brewinandchewin` | "Brewin' & Chewin' (Creative Brewing)" | `4.5.0-ce-19.2-05` |
+| Brewin' & Chewin' 4.5.0 port | `:backportedBrewin` | `development/creativeBrewing/members/brewin` | `brewinandchewin` | "Brewin' & Chewin' (Creative Brewing)" | `4.5.0-ce-19.2-05` |
 | (the bundle itself) | `:creativeBrewing` | `development/creativeBrewing` | `creativebrewing` | "Creative Brewing" | `1.0.0` |
 
 Version bumps: Vinery `-07` was already built (in `jar_archive/`, never installed) and the tree has uncommitted work since,

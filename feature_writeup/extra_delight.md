@@ -68,7 +68,7 @@ text in those rows is kept for history and marked "(rev 11-09)" where it no long
   modpacks or servers. Port route: its own in-tree jar under that licence, **not** inside the GPLv3 Creative Delight
   bundle (D2).
 - **Dependencies:** NeoForge 21+, Minecraft 1.21, Farmer's Delight 1.2.8+ (required). Optional by `mod_loaded`: Create
-  (209 mixing recipes), Butchercraft (1). Tag-only compat: Brewin' and Chewin', Corn Delight, Cultural Delights, Pizza
+  (209 mixing recipes), Butchercraft (1). Tag-only compat: Brewin' & Chewin', Corn Delight, Cultural Delights, Pizza
   Delight, The Salt, Serene Seasons, Tough As Nails.
 - **Pack references today:** none in code. Docs: TODO rows `mod-additions #10` / `#11`, `farming/crops #8` (watering
   can held for "Bountiful Harvest or Extra Delight"), H&H report 2.5 / 2.6.

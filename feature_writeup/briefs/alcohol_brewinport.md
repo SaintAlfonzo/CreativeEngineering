@@ -76,7 +76,7 @@ None open.
 
 | Row | Change | Status | Note |
 |---|---|---|---|
-| brewinport #1 | Brewin' and Chewin' 4.5.0 port | Testing | alcohol.md Part A; AL-01 to AL-84; open S+ C~ P. Now `-05` nested in Creative Brewing 1.0.0, booted 2026-10-31 17:15 (the row still says `-04` not booted) |
+| brewinport #1 | Brewin' & Chewin' 4.5.0 port | Testing | alcohol.md Part A; AL-01 to AL-84; open S+ C~ P. Now `-05` nested in Creative Brewing 1.0.0, booted 2026-10-31 17:15 (the row still says `-04` not booted) |
 | brewinport #2 | Heat / cold tag audit | Testing | alcohol.md 2.7, 10.13; AL-41, AL-77; open S C~ P. The 2026-10-30 tag dump holds 67 `#brewinandchewin:heat_sources` and 14 `freeze_sources` blocks (snow layers included, by the owner's 10.13 list; AL-41's "a snow layer doesn't count" is stale) |
 | brewinport #2, #4 | Reading the 2026-10-30 dumps (`tags/item_tags.json`) | Testing | CQ-DUMP-06. The tag half is read above (#2); the food half is #4's Now. What is left is the stack generator run (#4 Build 1) |
 | brewinport #5 | Black and purple tankard slot icon | Testing | alcohol.md 8.9 Q1, 10.16; AL-78; open C P |

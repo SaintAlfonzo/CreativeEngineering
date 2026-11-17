@@ -110,7 +110,7 @@ type (printed so you can move them) and an item_dict key; nothing you placed mov
 
 Where the 856 foods come from (2026-10-02 export): Fruits Delight 107, Farmer's Delight 74, Delightful 46, Golden
 Food 45, Canned Goods 39, vanilla 39, Neapolitan 38, Vinery 38, Create Confectionery 37, the pack's own cans 36,
-Rustic Delight 34, More Delight 31, Farmer's Respite 30, Brewin' and Chewin' 29, Abnormals Delight 28, Alex's Delight
+Rustic Delight 34, More Delight 31, Farmer's Respite 30, Brewin' & Chewin' 29, Abnormals Delight 28, Alex's Delight
 23, Create: Central Kitchen 22, Alex's Mobs 20, Ender's Delight 20, Corn Delight 19, Create: Factory 19, Nether's
 Delight 14, Upgrade Aquatic 11, Quark Delight 9, 16 more mods with 1 to 7 each (Untitled Duck Mod 4).
 
@@ -149,7 +149,7 @@ One type per food. A `/` nests a type under its parent, and the tag of a nested 
 | `meal` | plated meals | 65 | 12 / 0.8 | steak and potatoes, fried rice, pasta, curry |
 | `meal/feast` | servings from a placed feast | 10 | 14 / 0.75 | roast chicken, shepherd's pie, stuffed hoglin |
 | `drink` | non-alcoholic drinks | 62 | 0 / 0 | coffee, milkshakes, tea, honey bottle, soda |
-| `drink/alcohol` | wine, beer, spirits | 41 | 1 / 0 | Vinery wines, Brewin' and Chewin' boozes |
+| `drink/alcohol` | wine, beer, spirits | 41 | 1 / 0 | Vinery wines, Brewin' & Chewin' boozes |
 | `golden` | golden apple tier | 25 | 4 / 1.2 | golden apple, golden carrot, Golden Food's golden_* |
 | `golden/enchanted` | notch apple tier | 25 | 8 / 8 | enchanted golden apple, Golden Food's enchanted_* |
 | `ingredient` | edible intermediates | 42 | 4 / 0.3 | dough, raw pasta, tomato sauce, cooking oil, jam |
@@ -335,7 +335,7 @@ Rhino build: cans.js uses the consumer form on the Canned Goods cans and food_va
 built `FoodProperties`, and the 2026-10-20 `/dumpfood` shows their values. The consumer form keeps the old meat /
 always-edible / fast flags and effects unless the script sets them (`meat(false)` etc.).
 
-**Code-side effects are separate.** Canned Goods' procedures, Brewin' and Chewin's Tipsy, Vinery's age-scaled wines,
+**Code-side effects are separate.** Canned Goods' procedures, Brewin' & Chewin's Tipsy, Vinery's age-scaled wines,
 Neapolitan's healing items and Farmer's Delight's hot cocoa / milk bottle act in `finishUsingItem`, not through food
 properties, so the step above can't change them. Options per mod: an `ItemEvents.foodEaten` handler that corrects the
 effect a tick later, or a patcherMod mixin that skips the procedure. Decision D4.

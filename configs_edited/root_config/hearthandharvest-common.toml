@@ -22,4 +22,117 @@
 	#Chance of a Corn Husk when harvesting corn.
 	#Range: 0.0 ~ 1.0
 	cornHuskHarvestChance = 0.25
+	#Ignored since 2026-11-14: hops grow as a vine on a wall or on Vinery's grapevine lattice, never on farmland. Kept so old files load.
+	hopsRequireFarmland = true
+
+[machines]
+	#Water Trough stops breeding when this many animals stand within 20x8x20 blocks of it.
+	#Range: 1 ~ 256
+	troughBreedingCap = 16
+	#Ticks between a Field Sprinkler's scans of its area for farmland, crops and fire (20 = 1 s).
+	#Range: 20 ~ 1200
+	sprinklerRescanTicks = 100
+	#Items that fit in one Stomping Basin slot (one slot alone, four in a 2x2 group).
+	#Range: 1 ~ 512
+	stompingBasinSlotLimit = 64
+
+[worldgen]
+	#Generate salt caves.
+	saltCaves = true
+	#One salt cave attempt in this many chunks of a salt cave biome.
+	#Range: 1 ~ 100000
+	saltCaveRarity = 24
+	#Lowest centre height of a salt cave.
+	#Range: -64 ~ 300
+	saltCaveMinY = -40
+	#Highest centre height of a salt cave.
+	#Range: -64 ~ 300
+	saltCaveMaxY = 30
+	#Generate corn mazes (their rate is in the pack's structure tables).
+	cornMaze = true
+
+[salt]
+	#Right-clicking a salt block with both hands empty licks it.
+	playerLicking = true
+	#Animals in the salt_lickers tag stay near salt blocks and lick them.
+	animalLicking = true
+	#Chance that a player's lick wears the block one stage.
+	#Range: 0.0 ~ 1.0
+	saltPlayerLickChance = 0.05
+	#Chance that an animal's lick wears the block one stage.
+	#Range: 0.0 ~ 1.0
+	saltAnimalStageChance = 0.125
+	#Blocks an animal keeps within of a salt block. The search reaches 2 further.
+	#Range: 1 ~ 64
+	saltAnimalRadius = 20
+	#Ticks between searches for a salt block.
+	#Range: 20 ~ 6000
+	saltSearchInterval = 200
+	#Average ticks between an animal's licks, randomised by a quarter either way. The first lick comes after half to one and a half intervals.
+	#Range: 200 ~ 72000
+	saltLickInterval = 1200
+
+[crow]
+	#Wild crows flee players, villagers and whoever hurt them.
+	fleeing = true
+	#Hurting a wild crow alarms the wild crows within 16 blocks.
+	flockAlarm = true
+	#Wild crows come to a player holding crow food and slowly let them closer.
+	tempting = true
+	#Feeding crow food by hand can tame a wild crow, 1 in 5.
+	handFeeding = true
+	#Wild crows eat crow food on the ground, 1 in 8 to tame the thrower.
+	eatDroppedFood = true
+	#On: only corn and corn seeds start breeding in tame crows. Off: any crow food does. Any crow food heals a tame crow either way.
+	cornBreeding = true
+	#Wild crows peck crops back to age 0. Also needs mobGriefing.
+	eatCrops = true
+	#Wild crows take one shiny item from a player's hotbar.
+	stealShinyItems = true
+	#Chance per second that a wild crow within 10 blocks starts a theft.
+	#Range: 0.0 ~ 1.0
+	stealChance = 0.1
+	#A crow carrying loot leaves it in a nest within 16 blocks.
+	stashInNests = true
+	#A hit makes a crow drop its loot. Off, it keeps the loot until it dies or the carry time ends.
+	dropOnHurt = true
+	#Ticks a crow carries loot before dropping it.
+	#Range: 20 ~ 72000
+	carryTicks = 1200
+	#Blocks at which players, villagers and repelling blocks scare wild crows. 0 stops them being scared.
+	#Range: 0 ~ 32
+	scareRadius = 6
+	#Nests generate on tree tops in temperate forests in new chunks.
+	generateNests = true
+	#Tame crows pick up items near their owner and bring them over.
+	fetchItems = true
+	#Tame crows also fetch items their owner threw away.
+	fetchThrownItems = true
+	#Tame crows hop off their owner's shoulder to fetch an item.
+	leaveShoulderToFetch = true
+	#Nests generate on village house roofs in new chunks.
+	villageRoofNests = true
+	#Chance per village house of a roof nest.
+	#Range: 0.0 ~ 1.0
+	villageRoofNestChance = 0.25
+	#Fewest crows a nest generates with. Crows have no other natural spawn.
+	#Range: 0 ~ 8
+	nestFlockMin = 2
+	#Most crows a nest generates with.
+	#Range: 0 ~ 8
+	nestFlockMax = 3
+	#A generated nest stops refilling once this many crows are within nestCrowRange.
+	#Range: 0 ~ 16
+	nestCrowCap = 3
+	#Blocks around a nest in which crows count towards nestCrowCap.
+	#Range: 4 ~ 64
+	nestCrowRange = 24
+	#Minutes of game time between two crows from the same nest.
+	#Range: 1 ~ 120
+	nestRespawnMinutes = 5
+	#A nest refills only with a player within this many blocks.
+	#Range: 8 ~ 128
+	nestPlayerRange = 48
+	#Player-placed nests also make crows. Off stops crow farms.
+	playerNestsSpawnCrows = false
 

@@ -157,10 +157,10 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | Emptiness `botania:emptiness` | Botania | Brewery | - | N | N | Y (pack) | | | Phantom Bane, Patrol Nullifier: slight | No natural mob spawns within 128 blocks. | Prevents mob natural mob spawning in a 128 block radius around the affected entity | Prevents natural mob spawning in a 128 block radius around the affected entity. 
 | Feather Feet `botania:feather_feet` | Botania | Brewery | - | N | N | Y (pack) | | | Slow Falling, Sunbird's Blessing: slight | No fall damage. Also the dragon armor set. | Negated damaged cause by falling. This effect doesn't prevent fall damage from other causes like Ender Pearls | Negates damage caused by falling. This effect doesn't prevent fall damage from other causes like Ender Pearls. 
 | Soul Cross `botania:soul_cross` | Botania | Brewery | - | N | N | Y (pack) | | | Soulsteal: slight | Heal 5% of a killed creature's max health. | PROPOSED: When you kill a creature, heals you by 5% of that creature's maximum health. | When you kill a creature, heals you by 5% of that creature's maximum health. 
-| Intoxication `brewinandchewin:intoxication` | Brewin' and Chewin' (port) | N | - | N | N | Y | 16: Beer, Bloody Mary, Dread Nog, Egg Grog, +12 more | | Hunger: slight | Food gives no saturation; hidden, comes with every alcoholic drink. | Makes the player unable to gain Saturation from food. |
-| Raging `brewinandchewin:raging` | Brewin' and Chewin' (port) | N | - | N | N | Y | 2: Bloody Mary, Red Rum | | Haste, Orca's Might, Caffeinated: slight | +5% attack speed per melee hit, stacks 4 times. | Allows you to gain a 5% attack speed boost upon dealing melee damage to entities. This stacks up to 4 times. |
-| Sweet Heart `brewinandchewin:sweet_heart` | Brewin' and Chewin' (port) | N | - | N | N | Y | 2: Mead, Saccharine Rum | | Regeneration, Comfort: slight | Spends saturation to heal 1 HP per second (faster per level) at any hunger. | Allows for extra saturation based healing at any hunger level on top of the existing saturation healing. |
-| Tipsy `brewinandchewin:tipsy` | Brewin' and Chewin' (port) | N | - | N | N | Y | 16: Beer, Bloody Mary, Dread Nog, Egg Grog, +12 more | | Nausea, Trippy: slight | Screen wobble; mouse drag at III, scrambled chat at IV; delays damage. | Provides the screen with a wobble effect. At level III or higher, your mouse will have drag to it. At level IV or higher, chat sent by you, other player's chat on your end and signs will be scrambled. May delay damage, notated by orange Tipsy hearts. |
+| Intoxication `brewinandchewin:intoxication` | Brewin' & Chewin' (port) | N | - | N | N | Y | 16: Beer, Bloody Mary, Dread Nog, Egg Grog, +12 more | | Hunger: slight | Food gives no saturation; hidden, comes with every alcoholic drink. | Makes the player unable to gain Saturation from food. |
+| Raging `brewinandchewin:raging` | Brewin' & Chewin' (port) | N | - | N | N | Y | 2: Bloody Mary, Red Rum | | Haste, Orca's Might, Caffeinated: slight | +5% attack speed per melee hit, stacks 4 times. | Allows you to gain a 5% attack speed boost upon dealing melee damage to entities. This stacks up to 4 times. |
+| Sweet Heart `brewinandchewin:sweet_heart` | Brewin' & Chewin' (port) | N | - | N | N | Y | 2: Mead, Saccharine Rum | | Regeneration, Comfort: slight | Spends saturation to heal 1 HP per second (faster per level) at any hunger. | Allows for extra saturation based healing at any hunger level on top of the existing saturation healing. |
+| Tipsy `brewinandchewin:tipsy` | Brewin' & Chewin' (port) | N | - | N | N | Y | 16: Beer, Bloody Mary, Dread Nog, Egg Grog, +12 more | | Nausea, Trippy: slight | Screen wobble; mouse drag at III, scrambled chat at IV; delays damage. | Provides the screen with a wobble effect. At level III or higher, your mouse will have drag to it. At level IV or higher, chat sent by you, other player's chat on your end and signs will be scrambled. May delay damage, notated by orange Tipsy hearts. |
 | Sunny `buzzier_bees:sunny` | Buzzier Bees | N | - | N | N | Y (hidden in JEI) | | | Phantom Bane: slight | Acts as sunlight: undead burn, bees stay awake, phantoms leave you alone. Buttercup stew (12 s), mooblooms: both gone in this pack, and More Mooblooms denies the effect (F7). | Simulates sunlight. Phantoms won't attack mobs that have the effect, bees won't sleep if they have the effect, undead that have the effect will burn |
 | Rest `create_confectionery:rest` | Create Confectionery | N | - | N | N | Y | 3: Bar of White Chocolate, Black Chocolate Candy, Ruby Chocolate Candy | | Phantom Bane: slight | Removes phantoms within 4 blocks every tick. Listed as harmful. | Makes phantoms disappear. |
 | Stimulation `create_confectionery:stimulation` | Create Confectionery | N | - | Y | N | Y | 3: Bar of Black Chocolate, Black Chocolate Candy, Ruby Chocolate Candy | Refreshing, Sweetening (Fruits Delight) | Refreshing: total; Sweetening: total | Clears Slowness and Mining Fatigue every tick. | Removes mining fatigue and slowness |
@@ -250,7 +250,7 @@ carry vanilla effects; only the six Botania effects are listed under Botania.
 | Alex's Mobs | 18 | 6 | 16 (2 partial) |
 | Better Beacons | 3 | 2 (pack) | 0 |
 | Botania | 6 | 6 (Brewery only) | 5 (1 wrong) |
-| Brewin' and Chewin' (port) | 4 | 0 | 4 |
+| Brewin' & Chewin' (port) | 4 | 0 | 4 |
 | Buzzier Bees | 1 | 0 | 1 (hidden in JEI) |
 | Create Confectionery | 2 | 0 | 2 |
 | Create Crafts & Additions | 1 | 0 | 0 (partial) |
@@ -369,10 +369,10 @@ it?
 | Emptiness `botania:emptiness` | Botania | BENEFICIAL | blue | |  |
 | Feather Feet `botania:feather_feet` | Botania | BENEFICIAL | blue | |  |
 | Soul Cross `botania:soul_cross` | Botania | BENEFICIAL | blue | |  |
-| Intoxication `brewinandchewin:intoxication` | Brewin' and Chewin' (port) | HARMFUL | red | | Hidden; AppleSkin and the Intoxicating Drink line rely on it being harmful |
-| Raging `brewinandchewin:raging` | Brewin' and Chewin' (port) | BENEFICIAL | blue | |  |
-| Sweet Heart `brewinandchewin:sweet_heart` | Brewin' and Chewin' (port) | BENEFICIAL | blue | |  |
-| Tipsy `brewinandchewin:tipsy` | Brewin' and Chewin' (port) | NEUTRAL | blue | | Mixed: impairs you but delays damage taken. Kept blue |
+| Intoxication `brewinandchewin:intoxication` | Brewin' & Chewin' (port) | HARMFUL | red | | Hidden; AppleSkin and the Intoxicating Drink line rely on it being harmful |
+| Raging `brewinandchewin:raging` | Brewin' & Chewin' (port) | BENEFICIAL | blue | |  |
+| Sweet Heart `brewinandchewin:sweet_heart` | Brewin' & Chewin' (port) | BENEFICIAL | blue | |  |
+| Tipsy `brewinandchewin:tipsy` | Brewin' & Chewin' (port) | NEUTRAL | blue | | Mixed: impairs you but delays damage taken. Kept blue |
 | Sunny `buzzier_bees:sunny` | Buzzier Bees | BENEFICIAL | blue | | Hidden in JEI |
 | Rest `create_confectionery:rest` | Create Confectionery | HARMFUL | red | **BENEFICIAL** (blue) | Only clears phantoms near you; nothing bad about it |
 | Stimulation `create_confectionery:stimulation` | Create Confectionery | BENEFICIAL | blue | |  |

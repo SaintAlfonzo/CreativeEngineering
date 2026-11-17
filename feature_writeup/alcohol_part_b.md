@@ -1,6 +1,6 @@
 # Alcohol Part B: Let's Do Vinery (Backported Vinery)
 
-> Split out of [alcohol.md](alcohol.md) on 2026-11-17 (design_rules.md V-52); Part A (Brewin' and Chewin') stays
+> Split out of [alcohol.md](alcohol.md) on 2026-11-17 (design_rules.md V-52); Part A (Brewin' & Chewin') stays
 > there. Section numbers 10 to 13 in this file are sections of [alcohol.md](alcohol.md) (they cover both ports).
 
 Test prefix **VB-** · Written **2026-10-14** · Status **port `-02` DEPLOYED with pack 1.0.8 (2026-10-19) and live in

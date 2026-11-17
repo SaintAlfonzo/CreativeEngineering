@@ -803,7 +803,7 @@ The Backported Vinery jar and its follow-ups.
 
 ## Brewin Port
 
-The Backported Brewin' and Chewin' jar and its follow-ups.
+The Backported Brewin' & Chewin' jar and its follow-ups.
 
 <?todo rows Brewin Port?>
 

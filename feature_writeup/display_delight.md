@@ -65,7 +65,7 @@ Port: `md_` maps to the pack's `miners_delight` (1.7.0 says `minersdelight`), in
 | Ender's Delight 1.2.2 | 17 | 12 | Chorus Stew, Ender Paella, Pearl Pasta, Twisted Cereal; 5 are 1.20-only foods |
 | Farmer's Respite 2.0 | 14 | 14 | the 8 teas, Coffee, Blazing Chili, Tea Curry, Black Cod, Coffee Cake and Rose Hip Pie slices |
 | Miner's Delight (port) | 12 | 12 | Cave Soup, Takoyaki, Glow Ink Pasta, Vegan Hamburger, Squid Sandwich, Fake Meatloaf |
-| Brewin' and Chewin' (port) | 8 | 8 | Cheesy Pasta, Creamy Onion Soup, Fiery Fondue, Horror Lasagna, Scarlet Pierogi |
+| Brewin' & Chewin' (port) | 8 | 8 | Cheesy Pasta, Creamy Onion Soup, Fiery Fondue, Horror Lasagna, Scarlet Pierogi |
 | Nether's Delight 3.1 | 7 | 7 | Grilled Strider, Strider Moss Stew, 3 stuffed hoglin plates |
 | Farmer's Delight | 4 | 1 (+2) | Nether Salad; Gleaming Salad and Slice of Pumpkin Pie link once Creative Delight's FD 1.3.4 items are in the dump (they are in the release); Onion Soup has no item |
 | **Total** | **101** | **93 (95 with Creative Delight)** | |
