@@ -18,16 +18,18 @@
 @pass No log line; 18 stonecutter recipes (9 basin x2, 9 tray x4), each wood's on its own log tag, oak's on `#creativedelight:bbq_oak_logs`; that tag holds oak logs and modded logs, no spruce/birch/jungle/acacia/dark oak/mangrove logs or crimson/warped stems; the 18 blocks in both block tags; no `bbq_basin_from_logs` / `bbq_tray_from_logs`
 @fails unknown dict key in `recipes.js` / `tags.js`; `addMatching` warning
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-16
 bootreject (?i)barbequesdelight.*(error|exception|invalid for block)
-> zq rdetail _from_logs
-> zq itemtag creativedelight:bbq_oak_logs
-> zq blocktag minecraft:mineable/axe
-> zq blocktag blockrunner:surface/wood
-waitlog blocktag blockrunner:surface/wood 20
-count creativedelight:stonecutting/bbq_[a-z_]+_from_logs \{ == 18
+> cdevtest rdetail _from_logs
+> cdevtest tag item creativedelight:bbq_oak_logs
+> cdevtest tag block minecraft:mineable/axe
+> cdevtest tag block blockrunner:surface/wood
+waitlog verb=tag kind=block tag=blockrunner:surface/wood n= 20
+count id=creativedelight:stonecutting/bbq_[a-z_]+_from_logs serializer= == 18
 reject stonecutting/bbq_(basin|tray)_from_logs
-reject itemtag creativedelight:bbq_oak_logs \(\d+\): .*minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove)_log|minecraft:(crimson|warped)_stem
+reject verb=tag kind=item tag=creativedelight:bbq_oak_logs n=\d+ ids=.*minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove)_log|minecraft:(crimson|warped)_stem
 look basins x2 and trays x4 output; each wood's on its own log tag, oak's on #creativedelight:bbq_oak_logs (oak logs and modded logs); the 18 blocks in mineable/axe and blockrunner:surface/wood
+reject verb=\S+ .*done=0
 
 ## SQ-BBQW-02 | skewering on a warped basin still works (2 beef, stick, cabbage in the off hand)
 @group A
@@ -35,17 +37,18 @@ look basins x2 and trays x4 output; each wood's on its own log tag, oak's on #cr
 @pass One `barbequesdelight:basin` / `tray` block entity type on every wood; skewering works on the warped basin; each drops itself both ways
 @fails block entity type built with the oak block only
 @from batches/r1115/p6_a1.qb passed
+@reviewed 2026-11-16
 > clear c6b
 > setblock 302 -60 370 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:2b}]}}
-> zc2 inv 302 -60 370
+> cdevtest inv 302 -60 370
 > pbot hold c6b minecraft:stick 1
 > item replace entity c6b weapon.offhand with farmersdelight:cabbage 2
-> zc2 useat c6b 302 -60 370 0.75 0.2 0.5 up
+> cdevtest use 302 -60 370 as=c6b hit=0.75,0.2,0.5 face=up hand=both
 sleep 1
-> zc2 inv 302 -60 370
-> zp inv c6b
-waitlog \[zp\] done 20
-expect \[zp\] inv c6b: .*barbequesdelight:raw_beef_skewer
+> cdevtest inv 302 -60 370
+> pbot inv c6b get
+expect verb=pbot\.inv bot=c6b slot=\d+ item=barbequesdelight:raw_beef_skewer
+reject verb=\S+ .*done=0
 > clear c6b
 > pbot remove c6b
 
@@ -55,27 +58,31 @@ expect \[zp\] inv c6b: .*barbequesdelight:raw_beef_skewer
 @pass Mixed trays stack (`support=true` on the upper two); removing the base drops the whole stack
 @fails `TrayBlock` still checks `is(this)`
 @from batches/r1113/fix_c2a1.qb
+@reviewed 2026-11-16
 > setblock 310 -60 370 minecraft:oak_planks
 > setblock 310 -59 370 barbequesdelight:spruce_tray[facing=north]
-> zp sneak c2b on
+> pbot sneak c2b on
 > pbot hold c2b barbequesdelight:tray 1
 > pbot use c2b 310 -59 370 up
 > pbot hold c2b barbequesdelight:birch_tray 1
 > pbot use c2b 310 -58 370 up
-> zp sneak c2b off
+> pbot sneak c2b off
 sleep 1
-> zc2 state 310 -59 370
-> zc2 state 310 -58 370
-> zc2 state 310 -57 370
+> cdevtest state 310 -59 370
+> cdevtest state 310 -58 370
+> cdevtest state 310 -57 370
 > kill @e[type=minecraft:item,x=306,y=-62,z=366,dx=8,dy=10,dz=8]
 > setblock 310 -60 370 minecraft:air
 sleep 2
-> zc2 state 310 -59 370
-> zc2 state 310 -58 370
-> zc2 state 310 -57 370
+> cdevtest state 310 -59 370
+> cdevtest state 310 -58 370
+> cdevtest state 310 -57 370
 > kill @e[type=minecraft:item,x=306,y=-62,z=366,dx=8,dy=10,dz=8]
-expect \[zc2\] state 310 -58 370: .*barbequesdelight:tray\}.*support=true
-expect \[zc2\] state 310 -57 370: .*birch_tray.*support=true
+expect verb=state pos=310,-58,370 state="?barbequesdelight:tray\[.*support=true
+expect verb=state pos=310,-57,370 state="?barbequesdelight:birch_tray\[.*support=true
+expect verb=state pos=310,-59,370 state="?barbequesdelight:spruce_tray\[.*support=false
+count verb=state pos=310,-(59|58|57),370 state=minecraft:air == 3
+reject verb=\S+ .*done=0
 look first three states: spruce support=false, oak (barbequesdelight:tray) and birch support=true; after the plank goes all three air and the last kill line says "Killed 3". If the birch use placed at -58 again (the oak use PASSed without placing), BATCH-FAULT: place by hand in a client
 > clear c2b
 

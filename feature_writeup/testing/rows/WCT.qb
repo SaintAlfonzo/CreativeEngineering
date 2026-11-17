@@ -21,18 +21,20 @@
 @pass six can ids registered once; recipes `creativedelight:...watering_can` and the five `smithing/..._watering_can` loaded; no error
 @fails stale patcherMod still registering the id; NCH key missing in item_dict
 @from batches/r1101/p1_server.qb
+@reviewed 2026-11-16
 bootreject (?i)duplicate.*watering_can
-> zq item hearthandharvest:watering_can
-> zq item hearthandharvest:iron_watering_can
-> zq item hearthandharvest:golden_watering_can
-> zq item hearthandharvest:diamond_watering_can
-> zq item hearthandharvest:netherite_watering_can
-> zq item hearthandharvest:dragon_watering_can
-> zq makes watering_can
+> cdevtest item hearthandharvest:watering_can
+> cdevtest item hearthandharvest:iron_watering_can
+> cdevtest item hearthandharvest:golden_watering_can
+> cdevtest item hearthandharvest:diamond_watering_can
+> cdevtest item hearthandharvest:netherite_watering_can
+> cdevtest item hearthandharvest:dragon_watering_can
+> cdevtest makes watering_can
 reject Unknown item
-expect creativedelight:.*watering_can -> 1 hearthandharvest:watering_can
+expect id=creativedelight:.*watering_can result=hearthandharvest:watering_can\*
 count smithing/[a-z_]*watering_can >= 5
 look six ids resolve once; base can recipe under creativedelight; five smithing recipes
+reject verb=\S+ .*done=0
 
 ## SQ-WCT-02 | cauldron fills by tier
 @group A
@@ -77,10 +79,13 @@ count Test passed >= 3
 @pass WaterLevel 12 each time; tank down 1000 mB per fill
 @fails well did not pass the click (fluid item check); roof half not routed below
 @from batches/r1101/p1_server.qb
+@reviewed 2026-11-16
 > setblock -36 -60 -15 well:well
 > data get block -36 -60 -15
 > data get block -36 -59 -15
-sleep 20
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done ticks=400 60
+> cdevtest tank -36 -60 -15
 > data get block -36 -60 -15
 > tp qa -36 -60 -13
 > item replace entity qa weapon.mainhand with hearthandharvest:iron_watering_can
@@ -91,6 +96,7 @@ sleep 20
 > pbot use qa -36 -59 -15 north
 > data get entity qa SelectedItem
 > data get block -36 -60 -15
+reject verb=tickwarp .*done=0
 look WaterLevel 12 after each use; well tank down 1000 mB per fill; an empty well (no rain / no water below) = setup, not the can: record the tank NBT
 
 ## SQ-WCT-04 | dragon can soaks 7x7, copper can the centre only
@@ -125,7 +131,8 @@ count Test passed >= 4
 @pass recipe base golden can, addition diamond; old can reads 8, drops to 7 after the use
 @fails recipe id; clamp on read
 @from batches/r1101/p1_server.qb
-> zq rdetail smithing/diamond_watering_can
+@reviewed 2026-11-16
+> cdevtest rdetail smithing/diamond_watering_can
 expect golden_watering_can
 > gamerule randomTickSpeed 0
 > setblock -48 -61 -30 minecraft:farmland[moisture=0]
@@ -136,3 +143,4 @@ expect golden_watering_can
 > data get entity qa SelectedItem
 > gamerule randomTickSpeed 3
 look smithing base golden can, addition diamond; old can reads 8 and drops to 7 after the use (WaterLevel 7 in the NBT, or 15 if the clamp is on read only: record)
+reject verb=\S+ .*done=0

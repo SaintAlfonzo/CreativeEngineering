@@ -48,33 +48,35 @@ look untiered list only minecraft:magma_block (exit 3) or empty
 @pass each in that tier
 @fails camouflage holding only 2: Common jar without the `has.js` fix
 @from batches/r1111/a1.qb
-> zq tagsof framedblocks:framed_cube
-waitlog \[zq\] done 20
-expect blockrunner:surface/camouflage
-> zq tagsof copycats:copycat_block
-waitlog \[zq\] done 20
-expect blockrunner:surface/camouflage
-> zq tagsof create_confectionery:chocolate_bricks
-waitlog \[zq\] done 20
-expect blockrunner:surface/confectionery
-> zq tagsof create:mechanical_press
-waitlog \[zq\] done 20
-expect blockrunner:surface/machinery
-> zq tagsof handcrafted:oak_counter_1
-waitlog \[zq\] done 20
-expect blockrunner:surface/furniture
-> zq tagsof vintagedelight:strawberry_jam_block
-waitlog \[zq\] done 20
-expect blockrunner:surface/very_sticky
-> zq tagsof upgrade_aquatic:coralstone
-waitlog \[zq\] done 20
-expect blockrunner:surface/natural_smooth
-> zq blocktag blockrunner:surface/metal
-waitlog \[zq\] done 20
-expect metalfences:
-> zq blocktag blockrunner:surface/camouflage
-waitlog \[zq\] done 20
-look camouflage holds more than 2 members (framed + copycats); each block above in its tier (tagsof lines)
+@reviewed 2026-11-16
+> cdevtest tagsof framedblocks:framed_cube
+waitlog \[cdevtest\] verb=tagsof done= 20
+expect \[cdevtest\] verb=tagsof id=framedblocks:framed_cube .*block_tags=\S*\bblockrunner:surface/camouflage\b
+> cdevtest tagsof copycats:copycat_block
+waitlog \[cdevtest\] verb=tagsof done= 20
+expect \[cdevtest\] verb=tagsof id=copycats:copycat_block .*block_tags=\S*\bblockrunner:surface/camouflage\b
+> cdevtest tagsof create_confectionery:chocolate_bricks
+waitlog \[cdevtest\] verb=tagsof done= 20
+expect \[cdevtest\] verb=tagsof id=create_confectionery:chocolate_bricks .*block_tags=\S*\bblockrunner:surface/confectionery\b
+> cdevtest tagsof create:mechanical_press
+waitlog \[cdevtest\] verb=tagsof done= 20
+expect \[cdevtest\] verb=tagsof id=create:mechanical_press .*block_tags=\S*\bblockrunner:surface/machinery\b
+> cdevtest tagsof handcrafted:oak_counter_1
+waitlog \[cdevtest\] verb=tagsof done= 20
+expect \[cdevtest\] verb=tagsof id=handcrafted:oak_counter_1 .*block_tags=\S*\bblockrunner:surface/furniture\b
+> cdevtest tagsof vintagedelight:strawberry_jam_block
+waitlog \[cdevtest\] verb=tagsof done= 20
+expect \[cdevtest\] verb=tagsof id=vintagedelight:strawberry_jam_block .*block_tags=\S*\bblockrunner:surface/very_sticky\b
+> cdevtest tagsof upgrade_aquatic:coralstone
+waitlog \[cdevtest\] verb=tagsof done= 20
+expect \[cdevtest\] verb=tagsof id=upgrade_aquatic:coralstone .*block_tags=\S*\bblockrunner:surface/natural_smooth\b
+> cdevtest tag block blockrunner:surface/metal
+waitlog \[cdevtest\] verb=tag done= 20
+expect \[cdevtest\] verb=tag kind=block tag=blockrunner:surface/metal n=[1-9]\d* ids=\S*\bmetalfences:
+> cdevtest tag block blockrunner:surface/camouflage
+waitlog \[cdevtest\] verb=tag done= 20
+expect \[cdevtest\] verb=tag kind=block tag=blockrunner:surface/camouflage n=([3-9]|\d\d+) 
+reject \[cdevtest\] .*(done=0|error=)
 
 ## SQ-BRA-05 | speed modifiers, set 1
 @group A

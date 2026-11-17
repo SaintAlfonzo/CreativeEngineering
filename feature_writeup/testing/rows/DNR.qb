@@ -19,52 +19,160 @@
 @commands Scratch server and client with the new CD jar plus both donor folders; load a copy of a 1.1.03+ world that has a placed paella plate (part eaten), a stuffed pufferfish, a sponge cake with bites, a sea grape column with fruit, wild sea grape and both crates; `grep -iE "oceanic_upstream\|Missing\|remap\|oceanic_delight" logs/latest.log`
 @pass Boots; "Oceanic Delight upstream assets/data: N files" logged; no missing-id or remap lines; every block keeps its state and texture; creative tab "Oceanic Delight" lists the items
 @fails Missing art: check `/datapack list` and the resource pack list for `oceanic_upstream_*`; a reset state: compare the property names in `ServingPlateBlock` / `SeaGrapePlantBlock`
-@draft no batch holds this row yet
+@draft needs a copy of a 1.1.03+ world with the placed blocks of the Commands cell as the boot level (none in the scratch kit); the reads are cdevtest state / be at their positions and bootreject on Missing / remap lines
 ## SQ-DNR-O-02
 @group A
 @commands Eat Shrimp Stew, Bowl of Paella, Sea Grape, Sea Grape Juice and Nautilus Juice; use the paella and pufferfish with and without a bowl; knife the sponge cake, then eat from it; bone meal a sea grape plant; brew Awkward + Elder Guardian Eye, then + redstone, + glowstone
 @pass Bowls, bottle and shell come back; Comfort 5:00, Nourishment 5:00, Instant Breath (air full) apply, with blue tooltip lines; no bowl gives "You need a Bowl to eat this."; the empty paella pan is picked up (pan + skillet); a slice drops; bone meal adds a plant; the three Mining Fatigue potions brew and JEI shows them
 @fails Compare with ocean_delight.md 5.6; missing effect: Farmer's Delight effect id lookup in `OceanicFood.farmers`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 2592 2592 2616 2616
+> pbot spawn dnr2 2600 -60 2600 minecraft:overworld survival
+sleep 3
+> clear dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:shrimp_stew
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:bowl_of_paella
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:sea_grape
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:sea_grape_juice
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> effect clear dnr2
+> pbot hunger dnr2 4
+> pbot hold dnr2 oceanic_delight:nautilus_juice
+> pbot eat dnr2
+sleep 4
+> cdevtest player dnr2
+> pbot inv dnr2 get
+count verb=pbot.useitem bot=dnr2 end=finish == 5
+expect verb=player name=dnr2 effects=\S*farmersdelight:comfort:0:5\d\d\d\b
+expect verb=player name=dnr2 effects=\S*farmersdelight:nourishment:0:5\d\d\d\b
+expect verb=pbot.inv bot=dnr2 slot=\d+ item=minecraft:bowl\*
+expect verb=pbot.inv bot=dnr2 slot=\d+ item=minecraft:glass_bottle\*
+expect verb=pbot.inv bot=dnr2 slot=\d+ item=minecraft:nautilus_shell\*
+> pbot remove dnr2
+> cdevtest place 2604 -60 2604 oceanic_delight:paella_plate
+> cdevtest use 2604 -60 2604 held=minecraft:bowl hand=main
+> cdevtest place 2606 -60 2604 oceanic_delight:sponge_cake
+> cdevtest use 2606 -60 2604 held=farmersdelight:flint_knife hand=main
+> cdevtest items 2606 -60 2604 2
+> cdevtest place 2608 -61 2604 minecraft:sand
+> fill 2607 -60 2603 2609 -58 2605 minecraft:water
+> cdevtest place 2608 -60 2604 oceanic_delight:sea_grape_plant
+> cdevtest use 2608 -60 2604 held=minecraft:bone_meal hand=main
+> cdevtest count 2608 -60 2604 2608 -55 2604 oceanic_delight:sea_grape_plant
+> cdevtest potion minecraft:awkward oceanic_delight:elder_guardian_eye
+> cdevtest potion oceanic_delight:mining_fatigue minecraft:redstone,minecraft:glowstone_dust
+expect verb=use main=oceanic_delight:bowl_of_paella\*1
+expect verb=items items=\S*oceanic_delight:sponge_cake_slice:1\b
+expect verb=potion potion=minecraft:awkward ingredient=oceanic_delight:elder_guardian_eye output="minecraft:potion oceanic_delight:mining_fatigue"
+expect verb=potion potion=oceanic_delight:mining_fatigue ingredient=minecraft:redstone output="minecraft:potion oceanic_delight:mining_fatigue_extended"
+expect verb=potion potion=oceanic_delight:mining_fatigue ingredient=minecraft:glowstone_dust output="minecraft:potion oceanic_delight:mining_fatigue_two"
+reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|Unknown item|No player was found)
+look the five player lines: Comfort 5:00, Nourishment 5:00, Instant Breath (air=300) after the right food; the sea grape count above 1 after the bone meal; the empty paella pan pick-up (pan + skillet), the "You need a Bowl" message, the blue tooltip lines and JEI are client (CQ)
 ## SQ-DNR-O-03
 @group A
 @commands Rerun DA-01, DA-02, DA-09, DA-10 and DA-11 (ocean_delight.md 6)
 @pass Same results as before; drops come from `creativedelight:gameplay/fishing_net/*`; Upgrade Aquatic kelps and pickerelweed work through the tags; no loot parse error
 @fails Nothing drops: the CD jar is missing `data/creativedelight/loot_tables`; a block ignored: the tag fill in `oceanic_delight/fishing_net_tags.js`
-@draft no batch holds this row yet
+@draft reruns DA-01, DA-02, DA-09 to -11 (ocean_delight.md 6): fishing-net catch rows whose steps live in the DA rows of the ocean rows file; run those rows on this boot instead of copying their steps here
 ## SQ-DNR-O-04
 @group normal world
 @commands Kill a salmon with a knife, an elder guardian, a squid; `/loot` a shipwreck supply and a buried treasure chest; fresh warm ocean
 @pass Salmon eggs and elder eye drop as upstream (squid: one squid item, no tentacles); chests can hold salmon or ancient fish eggs; wild sea grape patches generate
 @fails Modifier error in the log: codec `oceanic_delight:oceanic_delight_loot_modifier` not registered
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootreject (?i)oceanic_delight:oceanic_delight_loot_modifier.*(not registered|unknown|error)
+> forceload add 0 0 15 15
+> fill 0 199 0 15 199 15 minecraft:glass
+> cdevtest kill 4 200 4 minecraft:salmon n=5 held=farmersdelight:flint_knife
+> cdevtest kill 8 200 4 minecraft:elder_guardian
+> cdevtest kill 12 200 4 minecraft:squid held=farmersdelight:flint_knife
+repeat 10
+> loot spawn 4 200 12 loot minecraft:chests/shipwreck_supply
+> loot spawn 4 200 12 loot minecraft:chests/buried_treasure
+end
+> cdevtest items 4 200 12 3
+expect verb=kill drops=\S*oceanic_delight:salmon_eggs:
+expect verb=kill drops=\S*oceanic_delight:elder_guardian_eye:
+reject verb=kill drops=\S*tentacle
+> execute positioned 0 70 0 run locate biome minecraft:warm_ocean
+waitlog nearest minecraft:warm_ocean is at 300
+capture WO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> pbot spawn dnr4 {WO1} 120 {WO3} minecraft:overworld creative
+sleep 30
+# a count box is at most 262144 blocks (64x64x64): the box runs as slices; the shell sums them
+> say DNRO04 begin
+> cdevtest count {WO1-48} 20 {WO3-48} {WO1+47} 64 {WO3-1} oceanic_delight:wild_sea_grape
+> cdevtest count {WO1-48} 20 {WO3} {WO1+47} 64 {WO3+47} oceanic_delight:wild_sea_grape
+> say DNRO04 end
+waitlog DNRO04 end 120
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" DNRO04 oceanic_delight:wild_sea_grape
+> pbot remove dnr4
+expect verb=count block=oceanic_delight:wild_sea_grape n=[1-9]
+reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
+look the chest items line may hold salmon or ancient fish eggs over the 20 rolls (chance-based: record, not judged); the squid kill drops one squid item; the warm ocean count above 0 (patches generate)
 ## SQ-DNR-O-05
 @group A
 @commands Move `oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar` away and start; then put any other jar there under that name and start; restore
 @pass Startup stops with the "reads its textures, models and recipes from the original Oceanic Delight jar ... folder 'oceanic_upstream' ... missing" message and the Modrinth URL; the second run says "wrong file ... expected 91fd8842..."
 @fails Game starts: `UpstreamJars.verifyOrFail` is not the first call of the constructor
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect (?i)original Oceanic Delight jar.*oceanic_upstream.*missing|oceanic_upstream.*missing.*modrinth
+look own boot with oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar moved away: startup stops with the missing message and the Modrinth URL; a second boot with another jar under that name stops with "wrong file ... expected 91fd8842..." (bootexpect wrong file .*91fd8842 on that boot); restore the jar after
 ## SQ-DNR-E-01
 @group old world
 @commands Same boot; load a 1.1.03+ world that has the four End plants, a Void Pepper vine (plain and fruiting), a Chorus Crate and an End House; `grep -i "enders_upstream\|enders_additions\|Missing" logs/latest.log`
 @pass No missing-id or remap lines; every 1.1.4 block and item keeps its texture and model; 1.2.2 items look as before
 @fails Missing textures: check that `enders_upstream_assets` is listed; 1.2.2 art changed: a translator path collides with 1.2.2
-@draft no batch holds this row yet
+@draft needs a copy of a 1.1.03+ world with the placed blocks of the Commands cell as the boot level (none in the scratch kit); the reads are cdevtest state / be at their positions and bootreject on Missing / remap lines
 ## SQ-DNR-E-02
 @group A
 @commands `/loot spawn ~ ~ ~ loot endersdelight:blocks/chorus_crate`; break `chorus_flame_block` age 2 and a fruiting `voidpepper_block`; `/locate structure endersdelight:end_house` in the End
 @pass Crate drops itself; plants drop as in EN-01 / EN-02; the End House is located and placed
 @fails Compare `EndersTranslator.DATA` with `/datapack list` (`enders_upstream_data`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 2592 2592 2616 2616
+> loot spawn 2600 -58 2600 loot endersdelight:blocks/chorus_crate
+> cdevtest place 2602 -60 2600 endersdelight:chorus_flame_block[age=2] flags=18
+> cdevtest loot 2602 -60 2600 rolls=1
+> execute in minecraft:the_end run locate structure endersdelight:end_house
+waitlog (nearest endersdelight:end_house|Could not find) 300
+expect Dropped [1-9]
+expect verb=loot state="?endersdelight:chorus_flame_block\[age=2\]"? .*drops=\S+
+expect nearest endersdelight:end_house
+reject (\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=|Unknown item|No player was found)
+look the chorus flame drops as in EN-01; the fruiting voidpepper_block half (its fruiting state name) is EN-02's
 ## SQ-DNR-E-03
 @group A
 @commands Move `enders_upstream/endersdelight-1.1.4.jar` away and start; restore
 @pass Startup stops with the "Ender's Delight Additions (Creative Delight) ... folder 'enders_upstream' ... missing" message
 @fails `verifyOrFail` is not running first
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect (?i)Ender's Delight Additions.*enders_upstream.*missing
+look own boot with enders_upstream/endersdelight-1.1.4.jar moved away: startup stops with the missing message; restore the jar after
 ## SQ-DNR-E-04
 @group A
 @commands Put another jar there under the same name and start; restore
 @pass Stops with "wrong file ... expected d1541d70..."
 @fails The sha1 pin is not checked
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect (?i)wrong file.*d1541d70
+look own boot with another jar under enders_upstream/endersdelight-1.1.4.jar: startup stops with the sha1 message; restore the jar after

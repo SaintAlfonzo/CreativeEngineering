@@ -26,6 +26,7 @@ bootreject (Mixin apply failed|InvalidInjectionException).*(GorillaForageBananaM
 @pass No chimpanzees (kill count 0); gorillas drop and eat Neapolitan bananas, never Alex's Mobs'
 @fails chimps: config not read (check the group chance line); Alex's banana: gorilla mixin not applied
 @from batches/r1031/b1_gameplay.qb
+@reviewed 2026-11-16
 > execute positioned 0 70 0 run locate biome minecraft:jungle
 waitlog nearest minecraft:jungle is at 300
 capture JG is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
@@ -41,20 +42,23 @@ end
 > execute at qa run summon alexsmobs:gorilla ~-2 ~ ~
 > execute at qa run summon alexsmobs:gorilla ~ ~ ~2
 > time add 6000
-sleep 120
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 240
 > execute at qa if entity @e[type=item,nbt={Item:{id:"alexsmobs:banana"}},distance=..48]
 > execute at qa if entity @e[type=item,nbt={Item:{id:"neapolitan:banana"}},distance=..48]
 expect No entity was found
-look the chimp kill finds nothing; the alexsmobs banana check fails and the neapolitan one passes (if neither, gorillas did not forage in 2 min: zq count leaves near qa, wait longer); spreadplayers moves the bot across the canopy
+look the chimp kill finds nothing; the alexsmobs banana check fails and the neapolitan one passes (if neither, gorillas did not forage in the 2400 warped ticks: count leaves near qa, warp longer); spreadplayers moves the bot across the canopy
 # `if entity ...nbt` and `place feature` left no log line on 10-31 B1: data get probes instead
 > execute at qa run tp qa ~ ~ ~
 sleep 1
 capture QA Teleported qa to (-?\d+)\.\d+, (-?\d+)\.\d+, (-?\d+)
-> zq count {QA1-32} {QA2-40} {QA3-32} {QA1+32} {QA2+20} {QA3+32} neapolitan:banana_stalk
+> cdevtest count {QA1-32} {QA2-40} {QA3-32} {QA1+32} {QA2+20} {QA3+32} neapolitan:banana_stalk
 > execute at qa as @e[type=minecraft:item,distance=..48] run data get entity @s Item.id
 > execute at qa as @e[type=alexsmobs:gorilla,distance=..48] run data get entity @s HandItems
 reject alexsmobs:banana
-look at least one neapolitan:banana among the item ids or hands; banana_stalk count above 0 (plants placed)
+expect verb=count block=neapolitan:banana_stalk n=[1-9]
+reject \[cdevtest\] verb=\S+ done=0
+look at least one neapolitan:banana among the item ids or hands; banana_stalk count above 0 (checked)
 sleep 3
 
 ## SQ-MG-19 | sugar gliders drop Neapolitan bananas
@@ -63,10 +67,12 @@ sleep 3
 @pass Neapolitan bananas among the drops, no `alexsmobs:banana`
 @fails sugar glider mixin not applied
 @from batches/r1031/b1_gameplay.qb
+@reviewed 2026-11-16
 > execute at qa run summon alexsmobs:sugar_glider ~1 ~ ~1
 > execute at qa run summon alexsmobs:sugar_glider ~-1 ~ ~1
 > execute at qa run summon alexsmobs:sugar_glider ~1 ~ ~-1
-sleep 120
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 240
 > execute at qa if entity @e[type=item,nbt={Item:{id:"alexsmobs:banana"}},distance=..48]
 > execute at qa if entity @e[type=item,nbt={Item:{id:"neapolitan:banana"}},distance=..48]
 look first check fails, second passes
@@ -74,11 +80,13 @@ look first check fails, second passes
 > execute at qa run tp qa ~ ~ ~
 sleep 1
 capture QA Teleported qa to (-?\d+)\.\d+, (-?\d+)\.\d+, (-?\d+)
-> zq count {QA1-32} {QA2-40} {QA3-32} {QA1+32} {QA2+20} {QA3+32} neapolitan:banana_stalk
+> cdevtest count {QA1-32} {QA2-40} {QA3-32} {QA1+32} {QA2+20} {QA3+32} neapolitan:banana_stalk
 > execute at qa as @e[type=minecraft:item,distance=..48] run data get entity @s Item.id
 > execute at qa as @e[type=alexsmobs:sugar_glider,distance=..48] run data get entity @s HandItems
 reject alexsmobs:banana
-look at least one neapolitan:banana among the item ids or hands; banana_stalk count above 0 (plants placed)
+expect verb=count block=neapolitan:banana_stalk n=[1-9]
+reject \[cdevtest\] verb=\S+ done=0
+look at least one neapolitan:banana among the item ids or hands; banana_stalk count above 0 (checked)
 sleep 3
 
 ## SQ-MG-20

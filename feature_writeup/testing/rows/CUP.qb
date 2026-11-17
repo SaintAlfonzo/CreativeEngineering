@@ -32,7 +32,9 @@ look rows/SQ-CUP-01.shell.txt: no Unknown item line from the dicts, stack_sizes 
 @pass 50 `miners_delight` items; every `/give` fails with unknown item; `delightful:cactus_soup` still exists
 @fails `MDItems` / `DelightfulBackportRegistry`
 @from batches/r1103/sB_2.qb passed
-> zsb ns miners_delight
+@reviewed 2026-11-16
+> cdevtest reg item ^miners_delight: max=500
+> cdevtest reg item cup$
 > give @p miners_delight:copper_cup
 > give @p miners_delight:water_cup
 > give @p miners_delight:milk_cup
@@ -40,11 +42,14 @@ look rows/SQ-CUP-01.shell.txt: no Unknown item line from the dicts, stack_sizes 
 > give @p miners_delight:beef_stew_cup
 > give @p miners_delight:onion_soup_cup
 > give @p delightful:cactus_soup_cup
-> zq item delightful:cactus_soup
-waitlog \[zq\] item delightful:cactus_soup: 30
-expect \[zsb\] ns miners_delight: 50 items, cup ids \(0\)
+> cdevtest item delightful:cactus_soup
+waitlog verb=item item=delightful:cactus_soup 30
+expect verb=reg kind=item regex=\^miners_delight: n=50\b
+reject verb=reg kind=item id=miners_delight:\S*cup 
+reject verb=reg kind=item id=delightful:\S*cup 
 count Unknown item >= 7
-expect \[zq\] item delightful:cactus_soup: class (?!AirItem)
+expect verb=item item=delightful:cactus_soup class=(?!\S*AirItem)
+reject verb=\S+ .*done=0
 
 ## SQ-CUP-03 | Copper Pot: recipe keyed on the water bucket; soups served in bowls (x 110..122)
 @group A
@@ -52,7 +57,8 @@ expect \[zq\] item delightful:cactus_soup: class (?!AirItem)
 @pass the Copper Pot recipe exists, its centre key is only `minecraft:water_bucket`; each soup comes out as its bowl item (count as the recipe) with container `minecraft:bowl`
 @fails `MinersTranslator.withoutRemovedAlternatives` (the recipe dropped whole if the patch missed), `CopperPotBlockEntity.servedResult`
 @from batches/r1103/sB_2.qb
-> zq rdetail miners_delight:copper_pot
+@reviewed 2026-11-16
+> cdevtest rdetail miners_delight:copper_pot
 > zsb potnbt miners_delight:cave_soup
 > zsb potnbt miners_delight:bat_soup
 > zsb potnbt farmersdelight:beef_stew
@@ -66,7 +72,7 @@ capture CP3 \[zsb\] potnbt farmersdelight:beef_stew (\{.*\})$
 capture CT3 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ farmersdelight:beef_stew
 capture CP4 \[zsb\] potnbt delightful:cactus_soup (\{.*\})$
 capture CT4 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ delightful:cactus_soup
-expect \[zq\] miners_delight:copper_pot \{
+expect id=miners_delight:copper_pot serializer=
 > setblock 110 -60 500 minecraft:campfire[lit=true]
 > setblock 110 -59 500 miners_delight:copper_pot
 > data merge block 110 -59 500 {CP1}
@@ -89,7 +95,7 @@ expect 114, -59, 500 has the following block data: .*miners_delight:bat_soup
 expect 118, -59, 500 has the following block data: .*farmersdelight:beef_stew
 expect 122, -59, 500 has the following block data: .*delightful:cactus_soup
 reject has the following block data: .*_cup"
-reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zq|zsb|zlbs)\] (error|unknown))
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zsb|zlbs)\] (error|unknown)|verb=\S+ .*done=0)
 look the copper_pot rdetail line: the centre ingredient is only minecraft:water_bucket; each pot: the soup served (output slot) in its bowl with the recipe's count, container minecraft:bowl (potrecipe lines)
 
 ## SQ-CUP-04 | milk tags without the cup; a Supplementaries jar takes Cave Soup and gives the bowl back (x 140; /reload first)
@@ -98,15 +104,16 @@ look the copper_pot rdetail line: the centre ingredient is only minecraft:water_
 @pass neither tag names `miners_delight:milk_cup` (tags load without error); the jar fills from a bowl of Cave Soup and gives the bowl back
 @fails translator tag strip; `soft_fluids/cave_soup.json`
 @from batches/r1103/sB_2.qb
+@reviewed 2026-11-16
 # /reload fills Moonlight's soft-fluid item map (empty on a dedicated server until a player joins or a reload);
 # it truncates logs/kubejs/server.log, so this row is last
 > reload
 waitlog Loaded \d+ pocket computer upgrades 300
 sleep 10
-> zq itemtag forge:milk
-> zq itemtag forge:milk/milk
-waitlog \[zq\] itemtag forge:milk/milk 30
-reject \[zq\] itemtag forge:milk(/milk)? \(\d+\): .*miners_delight:milk_cup
+> cdevtest tag item forge:milk
+> cdevtest tag item forge:milk/milk
+waitlog verb=tag kind=item tag=forge:milk/milk n= 30
+reject verb=tag kind=item tag=forge:milk(/milk)? n=\d+ ids=.*miners_delight:milk_cup
 reject (?i)(failed to load|couldn't load) tag.*milk
 > setblock 140 -60 500 supplementaries:jar
 > pbot spawn cup4 140.5 -60 502.5 minecraft:overworld survival
@@ -120,12 +127,13 @@ expect 140, -60, 500 has the following block data: .*cave_soup
 expect cup4 has the following entity data: .*minecraft:bowl
 reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot|no such item)
 look the "pbot use" reply is SUCCESS / CONSUME; the jar's fluid is the cave soup; the bot holds a bowl
+reject verb=\S+ .*done=0
 
 ## SQ-CUP-05
 @group B (copy of a world with cups)
 @commands copy a pre-change world holding copper and soup cups (in a chest, in a copper pot container slot), boot, open the chest and pot
 @pass world loads; the cups are gone (missing-item drop), the pot keeps its meal and serves it in its bowl; no crash
 @fails Forge missing mappings for items; pot `Container` NBT reading an unknown item
-@draft no batch holds this row yet
+@draft needs a world copy saved before the cup removal with cups in a chest and in a copper pot; no such save is kept (no run doc names one): the runner makes or finds it, then reads the chest and pot with /cdevtest inv
 @@text
 @@text Client: CQ-CUP-01 JEI search "cup" shows no Miner's or Delightful cup; R on Beef Stew shows the Copper Pot category with a bowl container; Supplementaries jar JEI tab has no cup rows; the Copper Pot recipe in JEI shows only the Water Bucket.

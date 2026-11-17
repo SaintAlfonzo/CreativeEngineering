@@ -45,12 +45,14 @@ shell n=$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "failed a
 @pass no `Error parsing recipe ...horror_lasagna`; no filling recipe with `minecraft:empty`; `[absent mods]` counts it under the Item.of / Fluid.of label
 @fails `_stepHasEmptyFluid` did not see the fluid (inputValues shape)
 @from batches/r1106cbp/p1_chain.qb passed
+@reviewed 2026-11-16
 shell ! grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log | grep -iE "error|fail"
 shell grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log | head -5
-> zq bytype create:filling
+> cdevtest bytype create:filling max=3000
 sleep 3
 reject minecraft:empty
 shell grep -h "absent mods.*\(Item.of\|Fluid.of\)" logs/kubejs/server.log | head -3
+reject verb=\S+ .*done=0
 
 ## SQ-CBP-04 | chain + Immersive Weathering: compost skips absent compat folders
 @group B (chain + Immersive Weathering)
@@ -81,6 +83,7 @@ kjsexpect removed 1328 recipes
 @pass all show and apply their effect (not Uncraftable Potion); active Magic Resistance kept; no missing-mappings line for `creativebrewing:` potions or the effect; `/effect give @p creativecommon:magic_resistance` works
 @fails `PotionByNameRemapMixin` not applied, or the swap file not read (`[swaps]` log line)
 @from batches/r1106cbp/p8_full_new.qb
+@reviewed 2026-11-16
 shell ! grep -iE "missing.*creativebrewing:(resistance|magic_resistance)|creativebrewing:magic_resistance.*missing" logs/latest.log
 shell grep -h "\[swaps\]" logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | head
 > forceload add 0 0
@@ -102,11 +105,12 @@ expect "forge:id": "minecraft:resistance"
 expect "forge:id": "creativecommon:magic_resistance"
 > effect give @e[tag=mrA] creativecommon:magic_resistance 30 0
 reject Unknown effect
-> zq potion creativecommon:resistance
-> zq potion kubejs:long_wither
-> zq potion creativecommon:long_wither
+> cdevtest potion creativecommon:resistance
+> cdevtest potion kubejs:long_wither
+> cdevtest potion creativecommon:long_wither
 sleep 3
 look Items: potions show creativebrewing:/kubejs: Potion strings or remapped ones; dispensed splash potions applied their effect (above); kubejs:long_wither resolves
+reject verb=\S+ .*done=0
 
 ## SQ-CBP-07 | config carry-over: effects and magic_resistance into Common, copper_poisoning into Equipment
 @group A (full pack, config)
@@ -126,6 +130,7 @@ look diff of the moved sections against configs_edited/root_config/creativebrewi
 @pass `effects leaks 0`; echo pickaxe/axe/shovel/hoe onHit rows present; End gear (felsic) recipes load with the `creativecommon:magic_resistance` potion; no `global.CB` or CB class error
 @fails an Equipment script still reads a CB global
 @from batches/r1106cbp/p6_equipment.qb
+@reviewed 2026-11-16
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|Encountered an unexpected exception
 bootexpect \[creativeequipment\] loaded
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined|global\.CB" logs/kubejs/startup.log logs/kubejs/server.log
@@ -135,12 +140,13 @@ expect effects leaks 0$
 reject \[cbo\] leak
 look record "effects items by namespace"; creativeequipment echo pickaxe/axe/shovel/hoe onHit rows present
 shell grep -h "creativecommon:magic_resistance\|felsic" logs/kubejs/server.log | head -5
-> zq potion creativecommon:magic_resistance
-> zq potion creativecommon:darkness
-> zq potion creativecommon:long_resistance
+> cdevtest potion creativecommon:magic_resistance
+> cdevtest potion creativecommon:darkness
+> cdevtest potion creativecommon:long_resistance
 sleep 3
-expect potion creativecommon:magic_resistance registered: true
-expect potion creativecommon:long_resistance registered: true
+expect verb=potion potion=creativecommon:magic_resistance registered=true
+expect verb=potion potion=creativecommon:long_resistance registered=true
+reject verb=\S+ .*done=0
 
 ## SQ-CBP-09 | chain without Equipment: no echo or dragon rows
 @group B (chain without Equipment)
@@ -159,25 +165,43 @@ reject \[cbo\] leak
 @commands rerun SQ-CBO-12, -13, -15 (batches already use `creativecommon:`)
 @pass Long Reach, Phantom Bane, Magic Resistance potions and mixes present under `creativecommon:`; effect remap and removed rules still apply
 @fails `CommonPotions` or the effect mixins not applied from Common (mixin gate rows in `CommonMixinPlugin`)
-@draft no batch holds this row yet
+@draft no own steps: a rerun of SQ-CBO-12, -13 and -15 (CBO.qb, already on creativecommon: ids); run those rows by id
 ## SQ-CBP-03b
 @group B (chain)
 @commands rerun of SQ-CBP-03 with the Common build of 2026-11-06 18:29 (`_stepHasEmptyFluid` unwraps `Either`): `bash tools/scratch_query/batches/r1106cbp/run_boots.sh '^p1$'` after copying Common into `CEPortTesting/mods/`
 @pass no `Error parsing recipe ...horror_lasagna`; `[absent mods] skipped N recipe rows for absent minecraft:empty` (or the Item.of / Fluid.of label) counts it; failed recipes 0 on the chain
 @fails the value is not an `Either` in this kubejs-create build: print `step.inputValues()[k].value.getClass()` in a srv-only script
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# boot p1 of tools/scratch_query/batches/r1106cbp/run_boots.sh (chain); this row reads that boot's logs
+bootexpect Done \(
+bootreject Error parsing recipe .*horror_lasagna
+shell grep -hE "\[absent mods\] skipped [0-9]+ recipe rows" logs/latest.log logs/kubejs/server.log | head -5; grep -hcE "Error parsing recipe" logs/latest.log; true
+> cdevtest recipes horror_lasagna
+expect verb=recipes text=horror_lasagna n=
+reject verb=\S+ .*done=0
+look shell: an [absent mods] skipped line counts the minecraft:empty (or Item.of / Fluid.of) row; the parse-error count is 0
 ## SQ-CBP-08b
 @group B (Equipment without CB)
 @commands rerun of SQ-CBP-08 with the Equipment, Engineering and Common builds of 18:35 (end gear and air brake transition rows, felsic data, shield and echo / air brake textures moved into Equipment; backpack skin recipes guarded): `run_boots.sh '^p6f?$'`
 @pass no `Error parsing recipe`; startup prints `[creativeequipment] end gear transition items (37)`; `[creativeequipment] mod data packs on: none; off (mod not loaded): [felsic_gear]` (p6) and `on: [felsic_gear]` (p6f); `[absent mods]` counts `sophisticatedbackpacks` (2 rows); the felsic ingot sequenced assembly loads in p6f
 @fails `global.NCH` not ready when Equipment's item event runs; `packs/felsic_gear/pack.mcmeta` missing from the jar
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# boot p6f of tools/scratch_query/batches/r1106cbp/run_boots.sh (Equipment without CB, felsic_gear present); p6 (felsic_gear absent) is the same row on the other boot: its pack line reads on: none; off (mod not loaded): [felsic_gear]
+bootexpect Done \(
+bootreject Error parsing recipe
+shell grep -hE "\[creativeequipment\] (end gear transition items|mod data packs on)" logs/kubejs/startup.log logs/latest.log | head -4; grep -hE "\[absent mods\].*sophisticatedbackpacks" logs/latest.log logs/kubejs/server.log | head -3
+shell grep -qE "\[creativeequipment\] end gear transition items \(37\)" logs/kubejs/startup.log logs/latest.log
+> cdevtest bytype create:sequenced_assembly
+expect verb=bytype id=\S*felsic\S* result=\S*felsic_ingot
+reject verb=\S+ .*done=0
+look shell: transition items (37); pack line on: [felsic_gear] (p6f) or off (mod not loaded): [felsic_gear] (p6); [absent mods] counts sophisticatedbackpacks (2 rows)
 ## SQ-CBP-11 | transitions in Equipment (37); felsic_gear pack on; no incomplete or duplicate error; felsic ore in End highlands; block drops 1-2 scrap
 @group B (full pack, fresh world, seed 8675309)
 @commands full pack with Engineering + Equipment + Common of 18:35: `grep -h "transition items\|end gear transition\|mod data packs" logs/kubejs/startup.log logs/latest.log`; `> datapack list`; `> zq bytype create:sequenced_assembly`; `> execute in minecraft:the_end run locate biome minecraft:end_highlands`, tp there, `> zq census felsic_gear:felsic_block` (or `fill`-scan probe) over a few chunks; break a felsic block with a netherite pickaxe (fake player)
 @pass Engineering transition count 37 lower than before; Equipment 37; data pack `creativeequipment:felsic_gear` listed and enabled; no `incomplete('...') not registered`, no duplicate-registration error for `kubejs:incomplete_*`; felsic ore present in the End highlands; the block drops 1-2 Felsic Scrap before Fortune (loot table moved; owner value 2026-11-14, plan_bugfix_1114.md 4.5; r1114: 68 from 50 breaks)
 @fails a row left in Engineering (duplicate id); pack not added (`ModDataPacks` listener); ore missing: biome modifier path under `packs/felsic_gear/data/creativeengineering/forge/biome_modifier/`
 @from batches/r1115/p1_b1.qb
+@reviewed 2026-11-16
 shell grep -hE "transition items|end gear transition|mod data packs" logs/kubejs/startup.log logs/latest.log | cut -c1-220
 shell grep -qE "\[creativeequipment\] end gear transition items \(37\)" logs/kubejs/startup.log
 bootreject incomplete\('[^']*'\) not registered
@@ -185,37 +209,66 @@ bootreject (Duplicate|duplicate).*kubejs:incomplete_
 > datapack list
 waitlog data packs? enabled 30
 expect felsic_gear
-> zq bytype create:sequenced_assembly
-waitlog \[zq\] bytype create:sequenced_assembly: \d+ 60
+> cdevtest bytype create:sequenced_assembly
+waitlog verb=bytype serializer=create:sequenced_assembly n=\d+ 60
 > execute in minecraft:the_end run locate biome minecraft:end_highlands
 waitlog nearest minecraft:end_highlands is at|Could not find 300
 capture EH minecraft:end_highlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > execute in minecraft:the_end run forceload add {EH1-40} {EH3-40} {EH1+39} {EH3+39}
 sleep 60
-> zq count {EH1-40} 0 {EH3-40} {EH1+39} 120 {EH3+39} felsic_gear:felsic_block minecraft:the_end
-waitlog \[zq\] count felsic_gear:felsic_block: \d+ 300
-expect \[zq\] count felsic_gear:felsic_block: [1-9]
+> cdevtest count {EH1-40} 0 {EH3-40} {EH1+39} 39 {EH3+39} felsic_gear:felsic_block dim=minecraft:the_end
+> cdevtest count {EH1-40} 40 {EH3-40} {EH1+39} 79 {EH3+39} felsic_gear:felsic_block dim=minecraft:the_end
+> cdevtest count {EH1-40} 80 {EH3-40} {EH1+39} 119 {EH3+39} felsic_gear:felsic_block dim=minecraft:the_end
+expect verb=count block=felsic_gear:felsic_block n=[1-9]
 > execute in minecraft:the_end run forceload remove {EH1-40} {EH3-40} {EH1+39} {EH3+39}
 > setblock 0 200 2 felsic_gear:felsic_block
-> zact break 0 200 2 minecraft:netherite_pickaxe
-waitlog \[zact\] done 20
-expect \[zact\] break.*creativeequipment:felsic_scrap x[1-2]\b
+> cdevtest break 0 200 2 held=minecraft:netherite_pickaxe
+expect verb=break .*broken=true
+expect verb=break drops=\S*creativeequipment:felsic_scrap:[1-2]\b
 > setblock 0 200 2 felsic_gear:felsic_block
-> zc3 loot 0 200 2 minecraft:netherite_pickaxe 50
-waitlog \[c3\] done 20
+> cdevtest loot 0 200 2 tool=minecraft:netherite_pickaxe rolls=50
 > setblock 0 200 2 minecraft:air
-expect \[c3\] loot .*creativeequipment:felsic_scrap x(5\d|6\d|7\d|8\d|9\d|100)\b
+expect verb=loot .*rolls=50 drops=\S*creativeequipment:felsic_scrap:(5\d|6\d|7\d|8\d|9\d|100)\b
 look Equipment 37 transitions, Engineering count lower; felsic_gear pack enabled; ore in End highlands; one break 1-2 scrap; 50 rolls between 50 and 100 (uniform 1-2 = about 75)
+reject verb=\S+ .*done=0
 
 ## CQ-CBP-02
 @group client (full pack)
 @commands JEI: Felsic Scrap, echo pickaxe / axe / shovel / hoe, air brake; hold each tier shield (copper to dragon) and block; a felsic and a dragon sequenced assembly page
 @pass sprites show (echo tools animated as before); shields render their tier pattern in hand and on block (entity textures now in the Equipment jar); incomplete items show grey sprites
 @fails asset paths in the Equipment jar (`assets/creativeengineering/textures/entity/shield/`, `textures/item/`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+do {"tooltip_text": "creativeequipment:felsic_scrap", "reject": "item\\.creativeequipment"}
+do {"tooltip_text": "creativeequipment:air_brake", "reject": "item\\.creativeequipment"}
+do {"tooltip_text": "creativeequipment:echo_pickaxe", "reject": "item\\.creativeequipment"}
+do {"tooltip_text": "creativeequipment:echo_axe", "reject": "item\\.creativeequipment"}
+do {"tooltip_text": "creativeequipment:echo_shovel", "reject": "item\\.creativeequipment"}
+do {"tooltip_text": "creativeequipment:echo_hoe", "reject": "item\\.creativeequipment"}
+> clear @s
+> give @s creativeequipment:copper_shield
+> give @s creativeequipment:gold_shield
+> give @s creativeequipment:diamond_shield
+> give @s creativeequipment:netherite_shield
+> give @s creativeequipment:felsic_shield
+> give @s creativeequipment:echo_shield
+> give @s creativeequipment:dragon_shield
+do {"screen": "inventory"}
+shot shields_inv
+do {"screen": "close"}
+do {"slot": 0}
+do {"walk": 10, "keys": "use"}
+shot block_pose
+look sprites show (echo tools animated as before); shields render their tier pattern in the hotbar and the block pose; the felsic and dragon sequenced assembly pages (incomplete items grey) by JEI by hand
 ## CQ-CBP-01
 @group client (full pack)
 @commands JEI: Night Vision and Phantom Bane effect pages (JEED), netherite and dragon armor tooltips, Magic Resistance potion tooltip mod name; drink a Brewin' drink (Intoxication HUD icon); hover a Vinery wine
 @pass echo armor listed as a provider; set bonus lines as before; potions say Creative Common; HUD icon shows; compound effect lines ("Compound of: ...") as before
 @fails client mixins (`GuiEffectIconMixin`, JEED mixins) not in Common's client list
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+do {"tooltip_text": "dragonloot:dragon_chestplate", "shift": true}
+do {"tooltip_text": "minecraft:netherite_chestplate", "shift": true}
+> give @s minecraft:potion{Potion:"creativecommon:magic_resistance"}
+do {"tooltip_text": "held"}
+look armor tooltips: set bonus lines as before; the Magic Resistance potion line says Creative Common; JEED pages for Night Vision and Phantom Bane (echo armor a provider), the Intoxication HUD icon and a Vinery wine compound line by hand

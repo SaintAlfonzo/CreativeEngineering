@@ -29,6 +29,7 @@ bootreject (?i)(IwBlockGrowth|IwServerLevel).*(error|fail|not found|unknown sign
 @pass Grass and flowers grow on the floor and leaf piles form, in both boots, counts of the same order
 @fails Nothing in the fast boot only: the per-block tables were not filled (`IwGrowthFast.rebuilt` not called: check the `rebuild` RETURN inject)
 @from batches/r1031/b1_gameplay.qb
+@reviewed 2026-11-16
 > tp qa {PL1} 150 {PL3}
 sleep 20
 > fill {PL1-8} 160 {PL3-8} {PL1+8} 160 {PL3+8} minecraft:grass_block
@@ -40,11 +41,12 @@ sleep 20
 > gamerule randomTickSpeed 1000
 sleep 60
 > gamerule randomTickSpeed 3
-> zq count {PL1-8} 161 {PL3-8} {PL1+8} 161 {PL3+8} minecraft:grass
-> zq count {PL1-8} 161 {PL3-8} {PL1+8} 161 {PL3+8} minecraft:tall_grass
-> zq count {PL1+10} 161 {PL3-2} {PL1+14} 163 {PL3+2} immersive_weathering:oak_leaf_pile
-> zq count {PL1+10} 164 {PL3-2} {PL1+14} 166 {PL3+2} minecraft:oak_leaves
+> cdevtest count {PL1-8} 161 {PL3-8} {PL1+8} 161 {PL3+8} minecraft:grass
+> cdevtest count {PL1-8} 161 {PL3-8} {PL1+8} 161 {PL3+8} minecraft:tall_grass
+> cdevtest count {PL1+10} 161 {PL3-2} {PL1+14} 163 {PL3+2} immersive_weathering:oak_leaf_pile
+> cdevtest count {PL1+10} 164 {PL3-2} {PL1+14} 166 {PL3+2} minecraft:oak_leaves
 look grass/tall grass above 0 on the floor and leaf piles above 0 (about 10 expected: 72 leaves x 1000/4096 x 1200 x 0.0005); leaves still about 72 (the log keeps them from decaying, so the piles come from IW's block-tick growth, the fast path, not from decay); record the numbers for B1b
+reject verb=\S+ .*done=0
 
 ## SQ-IWF-03 | snowy stone or icicles in a snowy biome in thunder
 @group B
@@ -52,6 +54,7 @@ look grass/tall grass above 0 on the floor and leaf piles above 0 (about 10 expe
 @pass Snow-covered stone or icicles appear (universal snow growths through the sky tick)
 @fails None: the universal table is empty, check `universal[]` after rebuild
 @from batches/r1031/b1_gameplay.qb
+@reviewed 2026-11-16
 > execute positioned 0 70 0 run locate biome minecraft:snowy_plains
 waitlog nearest minecraft:snowy_plains is at 300
 capture SN is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
@@ -62,9 +65,13 @@ sleep 20
 sleep 60
 > gamerule randomTickSpeed 3
 > weather clear
-> zq count {SN1-32} 40 {SN3-32} {SN1+32} 140 {SN3+32} immersive_weathering:icicle
-> zq count {SN1-32} 40 {SN3-32} {SN1+32} 140 {SN3+32} immersive_weathering:snowy_stone
-look either count above 0
+> cdevtest count {SN1-32} 40 {SN3-32} {SN1+32} 89 {SN3+32} immersive_weathering:icicle
+> cdevtest count {SN1-32} 90 {SN3-32} {SN1+32} 140 {SN3+32} immersive_weathering:icicle
+> cdevtest count {SN1-32} 40 {SN3-32} {SN1+32} 89 {SN3+32} immersive_weathering:snowy_stone
+> cdevtest count {SN1-32} 90 {SN3-32} {SN1+32} 140 {SN3+32} immersive_weathering:snowy_stone
+expect verb=count block=immersive_weathering:(icicle|snowy_stone) n=[1-9]
+reject verb=\S+ .*done=0
+look the counts (two y bands per block; the random ticks go through the level's chunk tick on purpose: that is the IW sky-tick path, so no /cdevtest randomtick here)
 
 ## SQ-IWF-04 | block_growths off: no grass, flowers or leaf piles from growths (boot B1c)
 @group B
@@ -72,6 +79,7 @@ look either count above 0
 @pass No grass, flowers or leaf piles from growths (leaf piles still come from decay)
 @fails Growths run: the switch is not read (`growthsOn`)
 @from batches/r1031/b1_iwf.qb
+@reviewed 2026-11-16
 > pbot spawn qa {PL1} 161 {PL3-12} minecraft:overworld creative
 sleep 15
 > fill {PL1-8} 180 {PL3-8} {PL1+8} 180 {PL3+8} minecraft:dirt
@@ -81,13 +89,14 @@ sleep 15
 > gamerule randomTickSpeed 300
 sleep 60
 > gamerule randomTickSpeed 3
-> zq count {PL1-8} 180 {PL3-8} {PL1+8} 180 {PL3+8} minecraft:grass_block
-> zq count {PL1+10} 181 {PL3-2} {PL1+14} 181 {PL3+2} immersive_weathering:oak_leaf_pile
+> cdevtest count {PL1-8} 180 {PL3-8} {PL1+8} 180 {PL3+8} minecraft:grass_block
+> cdevtest count {PL1+10} 181 {PL3-2} {PL1+14} 181 {PL3+2} immersive_weathering:oak_leaf_pile
 look grass still spreads (vanilla), but no IW flowers on it and no leaf piles beyond what leaf decay drops (persistent leaves do not decay, so 0)
+reject verb=\S+ .*done=0
 
 ## SQ-IWF-05
 @group B
 @commands Perf suite run on the new jar: `perf_suite.py run general g2` (or at least G03a, G04, G12); compare with `g1` (perf.md 15.1)
 @pass IW `tickBlock` share of the Server thread well under 0.5% (g1: 1.9 to 2.6%); IW allocation share near 0 (g1: 5.5 to 6.4%); tickChunk share down by about the same
 @fails Shares unchanged: the overwrite is not live (check `IwGrowthFast` frames in the JFR)
-@draft no batch holds this row yet
+@draft perf suite run (tools/perf perf_suite.py run general g2 on the perf world with JFR), judged against g1 in perf.md 15.1: a perf session, not a scratch-server row

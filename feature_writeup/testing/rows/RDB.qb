@@ -41,42 +41,72 @@ look every [rdb] line SAME (recipes 270); a DIFF names the entry: check its bake
 @commands Rerun SQ-RD-08, -10, -11, -22 (open FAIL), -24, -26 and SQ-RDX-01 to -14
 @pass Same results as their last run (-22 may stay FAIL, not a regression)
 @fails Compare with the last run record
-@draft no batch holds this row yet
+@draft a rerun list, not a row: run `qrun.py run OUT feature_writeup/testing/rows/RD.qb RES --rows SQ-RD-08,SQ-RD-10,SQ-RD-11,SQ-RD-22,SQ-RD-24,SQ-RD-26` and the SQ-RDX rows; this row holds no steps of its own
 ## SQ-RDB-04
 @group B
 @commands New world; `/place feature rusticdelight:wild_bell_peppers_placed`, `wild_cotton_placed`, `wild_coffee_placed`, `bell_pepper_block_patch_placed` on grass; a jungle temple and village chest roll (loot tables `/loot spawn`) and a Wandering Trader
 @pass Patches place (peppers base colours only); chest seeds and trader seeds as in SQ-RD-24, -26
 @fails `base_patch` rule or a worldgen file missing
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# a grass platform at y 199 far from spawn (the placed features follow the heightmap onto it)
+> forceload add 41000 41000 41047 41047
+> fill 41000 199 41000 41047 199 41047 minecraft:grass_block
+> place feature rusticdelight:wild_bell_peppers_placed 41008 200 41008
+> place feature rusticdelight:wild_cotton_placed 41038 200 41008
+> place feature rusticdelight:wild_coffee_placed 41008 200 41038
+> place feature rusticdelight:bell_pepper_block_patch_placed 41038 200 41038
+> cdevtest count 41000 200 41000 41047 202 41047 #minecraft:replaceable_plants
+> cdevtest count 41000 200 41000 41047 202 41047 rusticdelight:wild_cotton
+> cdevtest count 41000 200 41000 41047 202 41047 rusticdelight:wild_coffee
+> cdevtest count 41000 200 41000 41047 202 41047 rusticdelight:bell_pepper_red_block
+count Placed feature == 4
+reject Failed to place feature
+expect verb=count block=rusticdelight:wild_cotton n=[1-9]
+expect verb=count block=rusticdelight:wild_coffee n=[1-9]
+reject verb=count block=\S+ .*on=\S*minecraft:(dirt|sand):
+# chest rolls (SQ-RD-26 seeds) and a trader
+repeat 40
+> loot spawn 41020 201 41020 loot minecraft:chests/jungle_temple
+end
+> cdevtest items 41020 201 41020 3
+repeat 40
+> loot spawn 41020 201 41020 loot minecraft:chests/village/village_plains_house
+end
+> cdevtest items 41020 201 41020 3
+> summon minecraft:wandering_trader 41024 200 41024 {NoAI:1b}
+> data get entity @e[type=minecraft:wandering_trader,limit=1,x=41024,y=200,z=41024,distance=..3] Offers.Recipes
+reject \[cdevtest\] verb=\S+ done=0
+look the wild pepper patch placed its plant and the giant patch only red, yellow or green blocks (the ids in the four Placed lines); chest items lines carry the Rustic seeds as in SQ-RD-26 (rusticdelight: ids among the sums); trader offers name a rusticdelight seed or none (record)
 ## SQ-RDB-05 | Rustic blocks from the 1.2.02 save keep their states
 @group old world
 @commands Save from the live pack with Rustic plates, crops, crates and potted wild coffee (as SQ-RD-03), opened on the -02 jar
 @pass Every block keeps its state; no missing-registry warning for `rusticdelight:`
 @fails Ids did not change, so a loss is a registry bug, not the bake
 @from batches/r1115/p9_o2.qb passed
-> zp9 bstate 200 -60 200
-> zp9 bstate 202 -60 200
-> zp9 bstate 204 -60 200
-> zp9 bstate 206 -60 200
-> zp9 bstate 208 -60 200
-> zp9 bstate 210 -60 200
-> zp9 bstate 212 -60 200
-> zp9 bstate 214 -60 200
-> zp9 bstate 216 -60 200
-> zp9 bstate 218 -60 200
-> zp9 bstate 220 -60 200
-sleep 1
-expect \[zp9\] bstate 200 -60 200 Block\{rusticdelight:pancakes\}\[facing=east,servings=4\]
-expect \[zp9\] bstate 202 -60 200 Block\{rusticdelight:honey_pancakes\}\[facing=east,servings=7\]
-expect \[zp9\] bstate 204 -60 200 Block\{rusticdelight:cotton\}\[age=3\]
-expect \[zp9\] bstate 206 -60 200 Block\{rusticdelight:coffee\}\[age=4\]
-expect \[zp9\] bstate 208 -60 200 Block\{rusticdelight:bell_peppers\}\[age=6\]
-expect \[zp9\] bstate 210 -60 200 Block\{rusticdelight:bell_pepper_red_crate\}
-expect \[zp9\] bstate 212 -60 200 Block\{rusticdelight:cotton_boll_crate\}
-expect \[zp9\] bstate 214 -60 200 Block\{rusticdelight:potted_wild_coffee\}
-expect \[zp9\] bstate 216 -60 200 Block\{rusticdelight:cherry_blossom_cheesecake\}\[bites=1,facing=north\]
-expect \[zp9\] bstate 218 -60 200 Block\{rusticdelight:wild_coffee\}
-expect \[zp9\] bstate 220 -60 200 Block\{rusticdelight:glowing_calamari_crate\}
+@reviewed 2026-11-16
+> cdevtest state 200 -60 200
+> cdevtest state 202 -60 200
+> cdevtest state 204 -60 200
+> cdevtest state 206 -60 200
+> cdevtest state 208 -60 200
+> cdevtest state 210 -60 200
+> cdevtest state 212 -60 200
+> cdevtest state 214 -60 200
+> cdevtest state 216 -60 200
+> cdevtest state 218 -60 200
+> cdevtest state 220 -60 200
+expect verb=state pos=200,-60,200 state="rusticdelight:pancakes\[facing=east,servings=4\]"
+expect verb=state pos=202,-60,200 state="rusticdelight:honey_pancakes\[facing=east,servings=7\]"
+expect verb=state pos=204,-60,200 state="rusticdelight:cotton\[age=3\]"
+expect verb=state pos=206,-60,200 state="rusticdelight:coffee\[age=4\]"
+expect verb=state pos=208,-60,200 state="rusticdelight:bell_peppers\[age=6\]"
+expect verb=state pos=210,-60,200 state=rusticdelight:bell_pepper_red_crate 
+expect verb=state pos=212,-60,200 state=rusticdelight:cotton_boll_crate 
+expect verb=state pos=214,-60,200 state=rusticdelight:potted_wild_coffee 
+expect verb=state pos=216,-60,200 state="rusticdelight:cherry_blossom_cheesecake\[bites=1,facing=north\]"
+expect verb=state pos=218,-60,200 state=rusticdelight:wild_coffee 
+expect verb=state pos=220,-60,200 state=rusticdelight:glowing_calamari_crate 
+reject \[cdevtest\] verb=\S+ done=0
 shell echo "missing-registry lines naming rusticdelight: $(grep -ciE '(missing|unidentified|unknown).*rusticdelight' logs/latest.log)"; grep -iE "(missing|unidentified|unknown).*rusticdelight" logs/latest.log | cut -c1-240 | head -8
 
 ## SQ-RDB-06 | old rustic_upstream folder beside mods/ is ignored
@@ -95,4 +125,19 @@ shell ls -ld rustic_upstream; echo "rustic error lines: $(grep -iE 'rustic' logs
 @commands Creative tab and JEI for Rustic: peppers (nine colours), pancake plates, syrup, coffee, cotton; place each flavoured pancake on a Brewin' coaster; hover items with FD tooltips (syrup, pumpkin, cherry blossom tea)
 @pass LOOK: textures and names as before; the six pancake recolours (as in 1.2.02); coaster pancakes render (no magenta cube); `grep "coaster/pancake" logs/latest.log` empty
 @fails Missing texture: `bake_upstream.py --check`; recolour lost: `own_overrides.json`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "rusticdelight:syrup", "reject": "rusticdelight\\.\\w|item\\.rusticdelight"}
+do {"tooltip_text": "rusticdelight:pancakes", "reject": "item\\.rusticdelight"}
+> fill 0 100 0 8 100 2 minecraft:stone
+> setblock 0 101 1 rusticdelight:pancakes
+> setblock 2 101 1 rusticdelight:honey_pancakes
+> setblock 4 101 1 brewinandchewin:coaster
+do {"wait": "jei"}
+do {"screen": "creative:rusticdelight"}
+shot creative_tab
+do {"screen": "close"}
+do {"look": {"from": "2 103 -2", "at": "2 101 1"}}
+do {"wait": "chunks"}
+shot placed
+shell grep -c "coaster/pancake" logs/latest.log; true
+look textures and names as before, the six pancake recolours, coaster pancakes (place each flavoured pancake on the coaster by hand) render without a magenta cube; the grep count 0

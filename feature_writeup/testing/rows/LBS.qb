@@ -85,4 +85,4 @@ look rows/SQ-LBS-05.shell.txt: SAME, or only differences that keep every note an
 @commands In the SQ-LBS-01/-03 world: look at each label and centred note up close, show an item on the botany pot label (sneak + right-click), feather for the name
 @pass LOOK: labels flat on each block's surface, no gap over 1 px, the botany pot label smaller and filling the pot's height, icon and name scaled with it; centred notes in the middle of each side, not floating
 @fails `LabelQuads.map` / `LabelLayout.at` with the `Place` (client), `FacePaperModel` cache key
-@draft no batch holds this row yet
+@draft needs the SQ-LBS-01/-03 hosts in the client world: copy tools/scratch_query/zlbs_probe.js into the client kubejs/server_scripts, /reload, /zlbs labels and /zlbs centre, then a look and shot per host from the positions in that probe; write those steps with the probe open

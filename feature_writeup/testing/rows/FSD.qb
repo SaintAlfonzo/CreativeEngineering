@@ -72,8 +72,10 @@ shell python3 -I $INST/tools/scratch_query/dumpq.py sset any -farmers_structures
 @pass The sign is present, hanging from a ceiling
 @fails CD jar
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 > place template farmers_structures:cook_houses/cook_end_1_21 200 -60 540
 expect Loaded template
-> zq count 195 -64 535 235 -30 575 farmersdelight:hanging_canvas_sign
-expect \[zq\] count farmersdelight:hanging_canvas_sign: [1-9]
-look the sign hangs under a block (the count line's "on:" lists what is under it: air under a hanging sign is expected; the ceiling is the block above)
+> cdevtest count 195 -64 535 235 -30 575 farmersdelight:hanging_canvas_sign
+expect verb=count block=farmersdelight:hanging_canvas_sign n=[1-9]
+look the sign hangs under a block (the count line's on= lists what is under it: air under a hanging sign is expected; the ceiling is the block above)
+reject \[cdevtest\] verb=\S+ .*error=

@@ -25,22 +25,21 @@
 @fails Path or namespace wrong: check `kubejs/assets/wares/textures/` and `design_decor/`
 @jars creativecommon creativedelight
 @from batches/r1113/c1_a1.qb
+@reviewed 2026-11-16
 # ids: Old box = design_decor:cardboard_box, Weathered = creativecompat:weathered_cardboard_box (Common item_dict),
 # Dustrial box = dustrial_decor:cardboard_box
-> zq makes design_decor:cardboard_box
-waitlog \[zq\] makes design_decor:cardboard_box: \d+ 30
-> zq makes creativecompat:weathered_cardboard_box
-waitlog \[zq\] makes creativecompat:weathered_cardboard_box: \d+ 30
-> zq rdetail cardboard_box
-waitlog \[zq\] rdetail matching cardboard_box: \d+ 30
-> zq tagsof creativecompat:weathered_cardboard_box
-waitlog \[zq\] block tags of 30
-expect \[zq\] makes design_decor:cardboard_box: 1$
-expect \[zq\] makes creativecompat:weathered_cardboard_box: 1$
-expect \{create:splashing\} -> 1 cardboard_box <- dustrial_decor:cardboard_box
-expect \{create:splashing\} -> 1 weathered_cardboard_box <- design_decor:cardboard_box
-expect block tags of creativecompat:weathered_cardboard_box: .*minecraft:mineable/axe
-expect block tags of creativecompat:weathered_cardboard_box: .*blockrunner:surface/soft
+> cdevtest makes design_decor:cardboard_box
+> cdevtest makes creativecompat:weathered_cardboard_box
+> cdevtest rdetail cardboard_box
+> cdevtest tagsof creativecompat:weathered_cardboard_box
+waitlog \[cdevtest\] verb=tagsof done= 30
+expect \[cdevtest\] verb=makes item=design_decor:cardboard_box n=1 
+expect \[cdevtest\] verb=makes item=creativecompat:weathered_cardboard_box n=1 
+expect \[cdevtest\] verb=rdetail id=\S+ serializer=create:splashing result=design_decor:cardboard_box\*1 ingredients=dustrial_decor:cardboard_box
+expect \[cdevtest\] verb=rdetail id=\S+ serializer=create:splashing result=creativecompat:weathered_cardboard_box\*1 ingredients=design_decor:cardboard_box
+expect \[cdevtest\] verb=tagsof id=creativecompat:weathered_cardboard_box block_tags=\S*minecraft:mineable/axe
+expect \[cdevtest\] verb=tagsof id=creativecompat:weathered_cardboard_box block_tags=\S*blockrunner:surface/soft
+reject \[cdevtest\] .*(done=0|error=)
 look client half (textures, names, JEI, walking feel, sinking) stays open; the two makes lines are the splashing recipes only
 
 @@text | BR-01 | A | Give honey bread, toast, bread slice, banana bread; craft a hamburger (burger, patty, tomato, onion, salad), a chicken sandwich and a pb_j with each; `/reload` first | Each bread works in each recipe; JEI shows #forge:bread listing all of them | bread_tags.js not loaded (CD jar/patcherMod stale) or tag add rejected: grep latest.log for `bread_tags` |

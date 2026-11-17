@@ -43,19 +43,21 @@
 @pass `#brewinandchewin:cooked_horror_lasagna_meats` holds beef, mutton, beef patty, cooked mutton chops; the soup-veggie cooked tag holds kimchi; the pizza topping tag holds the bell peppers; no tag or recipe error from the two emptied scripts; Supreme Pizza, Ham and Cheese Sandwich, Scarlet Pierogi recipes still load (recipe dump)
 @fails CD `brewinandchewin/tags.js` / `recipes.js` `requires` header; a stale copy of the old scripts
 @from batches/r1101/p1_server.qb
-> zq itemtag brewinandchewin:cooked_horror_lasagna_meats
-> zq tagsof farmersdelight:beef_patty
-> zq tagsof brewinandchewin:kimchi
-> zq tagsof vintagedelight:green_bell_pepper
-> zq makes supreme_pizza
-> zq makes ham_and_cheese_sandwich
-> zq makes scarlet_pierogi
+@reviewed 2026-11-16
+> cdevtest tag item brewinandchewin:cooked_horror_lasagna_meats
+> cdevtest tagsof farmersdelight:beef_patty
+> cdevtest tagsof brewinandchewin:kimchi
+> cdevtest tagsof vintagedelight:green_bell_pepper
+> cdevtest makes supreme_pizza
+> cdevtest makes ham_and_cheese_sandwich
+> cdevtest makes scarlet_pierogi
 shell test ! -s kubejs/server_scripts/tags/cookingtags.js && test ! -s kubejs/server_scripts/cooking/cooking.js
 bootreject brewinandchewin/tags\.js.*(Error|error)
 kjsreject Error occurred while handling event
-expect itemtag brewinandchewin:cooked_horror_lasagna_meats .*minecraft:beef
-expect itemtag brewinandchewin:cooked_horror_lasagna_meats .*minecraft:mutton
+expect verb=tag kind=item tag=brewinandchewin:cooked_horror_lasagna_meats .*.*minecraft:beef
+expect verb=tag kind=item tag=brewinandchewin:cooked_horror_lasagna_meats .*.*minecraft:mutton
 look lasagna meats = beef, mutton, beef patty, cooked mutton chops; kimchi in the cooked soup-veggie tag; bell peppers in the pizza topping tag; the three dishes have recipes
+reject verb=\S+ .*done=0
 
 ## SQ-PRI-02 | Floral Enchantment large pots: recipe gone, block kept
 @group A
@@ -63,11 +65,13 @@ look lasagna meats = beef, mutton, beef patty, cooked mutton chops; kimchi in th
 @pass the Floral Enchantment large pot recipe is gone; the 31 large pots are not in JEI or the creative tabs; a pot placed with `/setblock` still renders and keeps its plant
 @fails `removed_items.js` (`floral_large_` prefix), `other/flowers.js` recipe removal
 @from batches/r1101/p1_server.qb
-> zq recipes floral_large
-> zq makes floralench:
+@reviewed 2026-11-16
+> cdevtest recipes floral_large
+> cdevtest makes floralench:
 > setblock 60 -60 30 floralench:floral_large_pot_poppy
 > execute if block 60 -60 30 floralench:floral_large_pot_poppy
 look no floral large pot recipe; the setblock works or names the real id (31 ids, prefix floral_large_); JEI / creative tabs hiding is CQ-PRI-02 side
+reject verb=\S+ .*done=0
 
 ## SQ-PRI-03 | JRFTL gone
 @group A
@@ -75,11 +79,13 @@ look no floral large pot recipe; the setblock works or names the real id (31 ids
 @pass no JRFTL jar and no `jrftl-common.toml`; no log line naming jrftl; rotten flesh in a Create or IE recipe is unchanged (prepared flesh route, SQ-JRFTL-01)
 @fails stale file in the scratch `mods/`
 @from batches/r1101/p1_server.qb
+@reviewed 2026-11-16
 shell ! ls mods config | grep -qi jrftl
 bootreject (?i)jrftl
-> zq item jrftl:prepared_flesh
-> zq uses minecraft:rotten_flesh
+> cdevtest item jrftl:prepared_flesh
+> cdevtest uses minecraft:rotten_flesh
 look prepared_flesh: a CE or KubeJS replacement item resolves, or the route lists the pack's own prepared flesh; rotten flesh still in the Create / IE recipes
+reject verb=\S+ .*done=0
 
 ## CQ-PRI-01 | WTHIT silk touch lines
 @group client

@@ -34,6 +34,7 @@
 @pass `expect mods loaded 0 of 24: -`; `expect effects leaks 0`; `effects items by namespace:` names only vanilla, `creativebrewing`, the members and chain mods (record the line, the reference for the single boots); `expect potion creativebrewing:long_reach registered: false`, same `false` for `buzzier_bees:long_luck`, `alexsmobs:speed_iii`, `quark:resilience`
 @fails a leak line: the row in `armor_effects.js` / `tool_effects.js` (CB `kubejs_startup/creativeengineering/`) without a `global.has` block (`python3 tools/guard_check.py --jar creativebrewing`)
 @from batches/r1106cbp/p1_chain.qb
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -44,15 +45,16 @@ reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 0 of 24: -
 look record the "effects items by namespace" line (reference for the single-mod boots)
-> zq potion creativecommon:long_reach
-> zq potion buzzier_bees:long_luck
-> zq potion alexsmobs:speed_iii
-> zq potion quark:resilience
+> cdevtest potion creativebrewing:long_reach
+> cdevtest potion buzzier_bees:long_luck
+> cdevtest potion alexsmobs:speed_iii
+> cdevtest potion quark:resilience
 sleep 3
-expect potion creativecommon:long_reach registered: false
-expect potion buzzier_bees:long_luck registered: false
-expect potion alexsmobs:speed_iii registered: false
-expect potion quark:resilience registered: false
+expect verb=potion potion=creativebrewing:long_reach registered=false
+expect verb=potion potion=buzzier_bees:long_luck registered=false
+expect verb=potion potion=alexsmobs:speed_iii registered=false
+expect verb=potion potion=quark:resilience registered=false
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-02 | chain: potion, swap, alcohol, bottling, JEED counts (reference)
 @group A (chain)
@@ -64,7 +66,7 @@ shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food v
 bootreject Lingerification:
 bootreject registered [0-9]+ dragon-breath
 shell grep -h "better_beacons not present" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | head -4
-shell grep -c "better_beacons not present" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+shell grep -c "better_beacons not present" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log; true
 shell ! grep -hE "\[CE potions\] mix skipped|effect .* not registered" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
 look counts recorded; better_beacons skip lines for long_reach and phantom_bane; re-added 0 dragon-breath
 
@@ -75,7 +77,7 @@ look counts recorded; better_beacons skip lines for long_reach and phantom_bane;
 @fails an NCH row of CB failing instead of skipping: the row's script (`jeed_providers.js`, `fluid_tags.js`, G5)
 @from batches/r1106cbp/p1_chain.qb
 shell grep -h "absent mods" logs/kubejs/server.log
-shell grep -c "failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log
+shell grep -c "failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log; true
 look the [absent mods] lines name only mods missing from the chain; failure count recorded
 
 ## SQ-CBO-04 | chain: Poison applies, reload with absent-mod config ids
@@ -169,23 +171,25 @@ look mix and effect swap counts above SQ-CBO-02's; re-added [1-9]
 
 ## SQ-CBO-12 | optional: guarded brews
 @group A (optional)
-@commands `> zq potion creativebrewing:long_reach minecraft:redstone`; `> zq potion minecraft:thick geode:wrappist_shard,geode:celestite_shard`; `> zq potion minecraft:awkward buzzier_bees:four_leaf_clover,buzzier_bees:silverfish_bottle`; `> zq potion minecraft:strong_swiftness alexsmobs:gazelle_horn`; `> zq potion alexsmobs:lava_vision minecraft:redstone`
+@commands `> cdevtest potion creativebrewing:long_reach minecraft:redstone`; `> cdevtest potion minecraft:thick geode:wrappist_shard,geode:celestite_shard`; `> cdevtest potion minecraft:awkward buzzier_bees:four_leaf_clover,buzzier_bees:silverfish_bottle`; `> cdevtest potion minecraft:strong_swiftness alexsmobs:gazelle_horn`; `> cdevtest potion alexsmobs:lava_vision minecraft:redstone`
 @pass `-> ... long_long_reach`; wrappist `-> long_reach`, celestite `-> phantom_bane`; clover `-> luck`, silverfish `-> unluck`; `-> speed_iii`; `-> long_lava_vision`
 @fails the guarded block in `potions.js` (lines name the mod)
 @from batches/r1106cbp/p3_optional.qb passed
-> zq potion creativecommon:long_reach minecraft:redstone
-> zq potion minecraft:thick geode:wrappist_shard,geode:celestite_shard
-> zq potion minecraft:awkward buzzier_bees:four_leaf_clover,buzzier_bees:silverfish_bottle
-> zq potion minecraft:strong_swiftness alexsmobs:gazelle_horn
-> zq potion alexsmobs:lava_vision minecraft:redstone
+@reviewed 2026-11-16
+> cdevtest potion creativebrewing:long_reach minecraft:redstone
+> cdevtest potion minecraft:thick geode:wrappist_shard,geode:celestite_shard
+> cdevtest potion minecraft:awkward buzzier_bees:four_leaf_clover,buzzier_bees:silverfish_bottle
+> cdevtest potion minecraft:strong_swiftness alexsmobs:gazelle_horn
+> cdevtest potion alexsmobs:lava_vision minecraft:redstone
 sleep 3
-expect long_reach \+ minecraft:redstone -> .*long_long_reach
-expect wrappist_shard -> .*long_reach
-expect celestite_shard -> .*phantom_bane
-expect four_leaf_clover -> .*luck
-expect silverfish_bottle -> .*unluck
-expect gazelle_horn -> .*speed_iii
-expect lava_vision \+ minecraft:redstone -> .*long_lava_vision
+expect verb=potion potion=\S*long_reach ingredient=minecraft:redstone output="?.*long_long_reach
+expect verb=potion potion=\S+ ingredient=\S*wrappist_shard output="?.*long_reach
+expect verb=potion potion=\S+ ingredient=\S*celestite_shard output="?.*phantom_bane
+expect verb=potion potion=\S+ ingredient=\S*four_leaf_clover output="?.*luck
+expect verb=potion potion=\S+ ingredient=\S*silverfish_bottle output="?.*unluck
+expect verb=potion potion=\S+ ingredient=\S*gazelle_horn output="?.*speed_iii
+expect verb=potion potion=\S*lava_vision ingredient=minecraft:redstone output="?.*long_lava_vision
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-13 | optional: effect remaps and removals
 @group A (optional)
@@ -220,20 +224,23 @@ reject "forge:id": "alexsmobs:power_down"
 
 ## SQ-CBO-14 | optional: no CB server script skipped, winemaker, fermenting, effect providers
 @group A (optional)
-@commands `kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js`; `kjsreject Skipped creativebrewing:kubejs/`; `kjsexpect \[wandering trades\] winemaker [1-9]` (compare with SQ-CBA-10); `> zq bytype brewinandchewin:fermenting`; `> zq bytype jeed:effect_provider`
+@commands `kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js`; `kjsreject Skipped creativebrewing:kubejs/`; `kjsexpect \[wandering trades\] winemaker [1-9]` (compare with SQ-CBA-10); `> cdevtest bytype brewinandchewin:fermenting`; `> cdevtest bytype jeed:effect_provider`
 @pass no CB server script skipped; winemaker count above the chain's; fermenting 21 or more; effect providers 1 or more with `creativebrewing:` / `vinery:` ids
 @fails `// requires:` header of the skipped script
 @from batches/r1106cbp/p3_optional.qb passed
+@reviewed 2026-11-16
 kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
 kjsreject Skipped creativebrewing:kubejs/
 kjsexpect \[wandering trades\] winemaker [1-9]
 shell grep -h "\[wandering trades\]" logs/kubejs/server.log logs/kubejs/startup.log
-> zq bytype brewinandchewin:fermenting
-> zq bytype jeed:effect_provider
+> cdevtest bytype brewinandchewin:fermenting
+> cdevtest bytype jeed:effect_provider
 sleep 3
-expect bytype brewinandchewin:fermenting: (2[1-9]|[3-9]\d)$
-expect bytype jeed:effect_provider: [1-9]
-expect bytype jeed:effect_provider (creativebrewing|vinery):
+expect verb=bytype serializer=brewinandchewin:fermenting n=(2[1-9]|[3-9]\d)$
+expect verb=bytype serializer=jeed:effect_provider n=[1-9]
+# bytype id lines carry no serializer: count only the id lines between the fermenting and the jeed summary lines
+shell awk '/verb=bytype serializer=brewinandchewin:fermenting n=/{on=1;n=0;next} /verb=bytype serializer=jeed:effect_provider n=/{on=0} on&&/verb=bytype id=(creativebrewing|vinery):/{n++} END{print "jeed provider ids from creativebrewing/vinery: " n+0; exit !(n>0)}' logs/latest.log
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-15 | optional: Magic Resistance golems and potion bucket dispenser
 @group A (optional)
@@ -275,7 +282,7 @@ reject dispensed with no KubeJS handler installed
 @fails a row naming an optional mod's item that does not exist in that mod's version (the id is wrong, not absent)
 @from batches/r1106cbp/p3_optional.qb
 shell grep -h "absent mods" logs/kubejs/server.log
-shell grep -c "failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log
+shell grep -c "failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log; true
 shell ! grep -h "absent mods" logs/kubejs/server.log | grep -wE "alexsmobs|appleskin|better_beacons|botania|buzzier_bees|create_central_kitchen|create_deep_dark|dragonloot|everythingcopper|farmersrespite|felsic_gear|fruitsdelight|geode|immersive_armors|immersive_weathering|immersiveengineering|jeed|jei|neapolitan|potionbundles|quark|supplementaries|tmted|upgrade_aquatic"
 look failure count not above SQ-CBO-03's
 
@@ -315,6 +322,7 @@ expect effects leaks 0
 @pass `expect mods loaded 1 of 24: alexsmobs`; `kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js`; the Alex's Mobs brews of SQ-CBO-12; golem check `quark:resilience` impossible (Quark absent): instead `alexsmobs:power_down` not applied
 @fails the `has('alexsmobs')` block in `potions.js` or the nested `has('quark')` block inside it (line ~158)
 @from batches/r1106cbp/s20.qb passed
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -325,11 +333,11 @@ reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: alexsmobs$
 kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
-> zq potion minecraft:strong_swiftness alexsmobs:gazelle_horn
-> zq potion alexsmobs:lava_vision minecraft:redstone
+> cdevtest potion minecraft:strong_swiftness alexsmobs:gazelle_horn
+> cdevtest potion alexsmobs:lava_vision minecraft:redstone
 sleep 3
-expect gazelle_horn -> .*speed_iii
-expect lava_vision \+ minecraft:redstone -> .*long_lava_vision
+expect verb=potion potion=\S+ ingredient=\S*gazelle_horn output="?.*speed_iii
+expect verb=potion potion=\S*lava_vision ingredient=minecraft:redstone output="?.*long_lava_vision
 > forceload add 0 0
 sleep 1
 > kill @e[tag=cbo]
@@ -344,6 +352,7 @@ reject "forge:id": "alexsmobs:power_down"
 > cbo potions
 waitlog \[cbo\] done 30
 shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-21 | chain + appleskin-*.jar
 @group A (chain + AppleSkin)
@@ -363,10 +372,11 @@ expect mods loaded 1 of 24: appleskin$
 
 ## SQ-CBO-22 | chain + CerbonsBetterBeacons-*.jar
 @group A (chain + Better Beacons)
-@commands `ADD="CerbonsBetterBeacons-*.jar"`; boot; checks S; `> cbo potions`; `> zq potion creativebrewing:long_reach minecraft:redstone,minecraft:glowstone_dust`
+@commands `ADD="CerbonsBetterBeacons-*.jar"`; boot; checks S; `> cbo potions`; `> cdevtest potion creativebrewing:long_reach minecraft:redstone,minecraft:glowstone_dust`
 @pass long_reach and phantom_bane `true`; `-> long_long_reach`, `-> strong_long_reach`; no `mix skipped` WARN naming `geode:` (Geode absent: its mixes sit inside this block behind their own check)
 @fails `CommonPotions` rows (`needsMod`); a `geode:` WARN: the inner `has('geode')` check
 @from batches/r1106cbp/s22.qb passed
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -380,11 +390,12 @@ expect mods loaded 1 of 24: better_beacons$
 waitlog \[cbo\] done 30
 expect potion creativecommon:long_reach registered: true
 expect potion creativecommon:phantom_bane registered: true
-> zq potion creativecommon:long_reach minecraft:redstone,minecraft:glowstone_dust
+> cdevtest potion creativebrewing:long_reach minecraft:redstone,minecraft:glowstone_dust
 sleep 3
-expect redstone -> .*long_long_reach
-expect glowstone_dust -> .*strong_long_reach
+expect verb=potion potion=\S+ ingredient=\S*redstone output="?.*long_long_reach
+expect verb=potion potion=\S+ ingredient=\S*glowstone_dust output="?.*strong_long_reach
 shell ! grep -hE "mix skipped.*geode:" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-23 | chain + Botania-*.jar,curios-forge-*.jar,Patchouli-*.jar
 @group A (chain + Botania)
@@ -405,10 +416,11 @@ expect effects items by namespace: .*\bbotania=
 
 ## SQ-CBO-24 | chain + buzzier_bees-*.jar,blueprint-*.jar
 @group A (chain + Buzzier Bees)
-@commands `ADD="buzzier_bees-*.jar,blueprint-*.jar"`; boot; checks S; `> zq potion minecraft:luck minecraft:redstone,minecraft:glowstone_dust`; `> zq potion minecraft:awkward buzzier_bees:four_leaf_clover`
+@commands `ADD="buzzier_bees-*.jar,blueprint-*.jar"`; boot; checks S; `> cdevtest potion minecraft:luck minecraft:redstone,minecraft:glowstone_dust`; `> cdevtest potion minecraft:awkward buzzier_bees:four_leaf_clover`
 @pass `-> buzzier_bees:long_luck`, `-> buzzier_bees:strong_luck`, `-> luck`
 @fails `has('buzzier_bees')` block in `potions.js`; `LUCK_POTIONS` list
 @from batches/r1106cbp/s24.qb passed
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -418,12 +430,13 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: buzzier_bees$
-> zq potion minecraft:luck minecraft:redstone,minecraft:glowstone_dust
-> zq potion minecraft:awkward buzzier_bees:four_leaf_clover
+> cdevtest potion minecraft:luck minecraft:redstone,minecraft:glowstone_dust
+> cdevtest potion minecraft:awkward buzzier_bees:four_leaf_clover
 sleep 3
-expect redstone -> .*long_luck
-expect glowstone_dust -> .*strong_luck
-expect four_leaf_clover -> .*luck
+expect verb=potion potion=\S+ ingredient=\S*redstone output="?.*long_luck
+expect verb=potion potion=\S+ ingredient=\S*glowstone_dust output="?.*strong_luck
+expect verb=potion potion=\S+ ingredient=\S*four_leaf_clover output="?.*luck
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-25 | chain + create_central_kitchen-*.jar
 @group A (chain + Create Central Kitchen)
@@ -499,10 +512,11 @@ reject leak .*immersiveengineering:conductive
 
 ## SQ-CBO-29 | chain + FarmersRespite-*.jar
 @group A (chain + Farmer's Respite)
-@commands `ADD="FarmersRespite-*.jar"`; boot; checks S; the SQ-CBO-02 effect swaps grep; `> zq bytype brewinandchewin:fermenting`
+@commands `ADD="FarmersRespite-*.jar"`; boot; checks S; the SQ-CBO-02 effect swaps grep; `> cdevtest bytype brewinandchewin:fermenting`
 @pass effect swaps count above the chain's; fermenting count recorded against SQ-CBA-09 and SQ-CBO-14; no `effect swap: ... is not a food` WARN
 @fails `effect_swaps.js` `has('farmersrespite')` rows; `CaffeinatedEffectMixin`
 @from batches/r1106cbp/s29.qb
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -513,10 +527,11 @@ reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: farmersrespite$
 shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
-> zq bytype brewinandchewin:fermenting
+> cdevtest bytype brewinandchewin:fermenting
 sleep 3
 shell ! grep -h "effect swap: .* is not a food" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
 look effect swaps above the chain's; fermenting count recorded
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-30 | chain + Felsic Gear *.jar
 @group A (chain + Felsic Gear)
@@ -569,10 +584,11 @@ look winemaker count above SQ-CBA-10's
 
 ## SQ-CBO-32 | chain + geodeforge-*.jar
 @group A (chain + Geode)
-@commands `ADD="geodeforge-*.jar"`; boot; checks S; `> zq potion minecraft:thick geode:wrappist_shard`
+@commands `ADD="geodeforge-*.jar"`; boot; checks S; `> cdevtest potion minecraft:thick geode:wrappist_shard`
 @pass `-> nothing`, no `mix skipped` WARN (Better Beacons absent)
 @fails the Geode block must stay inside the Better Beacons block
 @from batches/r1106cbp/s32.qb passed
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -582,10 +598,11 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: geode$
-> zq potion minecraft:thick geode:wrappist_shard
+> cdevtest potion minecraft:thick geode:wrappist_shard
 sleep 3
-expect wrappist_shard -> nothing
+expect verb=potion potion=\S+ ingredient=\S*wrappist_shard output="?nothing
 shell ! grep -hE "mix skipped" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-33 | chain + immersive_armors-*.jar
 @group A (chain + Immersive Armors)
@@ -624,10 +641,11 @@ shell ! grep -E "WARN.*immersive_weathering" logs/latest.log | grep -iE "creativ
 
 ## SQ-CBO-35 | chain + ImmersiveEngineering-*.jar
 @group A (chain + Immersive Engineering)
-@commands `ADD="ImmersiveEngineering-*.jar"`; boot; checks S; `bootexpect Lingerification: registered refinery list generator`; `shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log`; `> zq recipes creativebrewing:bottling`; `> cbo effects`
+@commands `ADD="ImmersiveEngineering-*.jar"`; boot; checks S; `bootexpect Lingerification: registered refinery list generator`; `shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log`; `> cdevtest recipes creativebrewing:bottling`; `> cbo effects`
 @pass refinery generator line; `generated [1-9]` refinery recipes; bottling count above 0; `creativebrewing:` bottling ids listed; namespaces include `immersiveengineering`; no IE mixin error (`PotionHelperMixin`, `PotionRecipeGeneratorsMixin`)
 @fails `Lingerification`, `potion_bottling.js`, the `immersiveengineering` compartment
 @from batches/r1106cbp/s35.qb
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -642,17 +660,19 @@ bootexpect Lingerification: registered refinery list generator
 shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log
 bootexpect Lingerification: generated [1-9]
 kjsexpect potion bottling done \([1-9]
-> zq recipes creativebrewing:bottling
+> cdevtest recipes creativebrewing:bottling
 sleep 3
-expect recipes matching creativebrewing:bottling: [1-9]
+expect verb=recipes text=creativebrewing:bottling n=[1-9]
 bootreject PotionHelperMixin|PotionRecipeGeneratorsMixin
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-36 | chain + jeed-*.jar
 @group A (chain + JEED)
-@commands `ADD="jeed-*.jar"`; boot; checks S; `kjsexpect jeed_providers.js: [1-9]`; `> zq bytype jeed:effect_provider`
+@commands `ADD="jeed-*.jar"`; boot; checks S; `kjsexpect jeed_providers.js: [1-9]`; `> cdevtest bytype jeed:effect_provider`
 @pass provider recipes above 0 with `creativebrewing:magic_resistance` among them; no `no Vinery wine providers` WARN
 @fails `jeed_providers.js`; JEED's recipe type id
 @from batches/r1106cbp/s36.qb
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -663,11 +683,12 @@ reject \[cbo\] leak
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: jeed$
 kjsexpect jeed_providers.js: [1-9]
-> zq bytype jeed:effect_provider
+> cdevtest bytype jeed:effect_provider
 sleep 3
-expect bytype jeed:effect_provider: [1-9]
+expect verb=bytype serializer=jeed:effect_provider n=[1-9]
 expect magic_resistance
 kjsreject no Vinery wine providers
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-37 | chain + jei-*.jar
 @group A (chain + JEI)
@@ -735,10 +756,11 @@ bootreject PotionFluidHandlerMixin
 
 ## SQ-CBO-40 | chain + Quark-*.jar,AutoRegLib-*.jar
 @group A (chain + Quark)
-@commands `ADD="Quark-*.jar,AutoRegLib-*.jar"`; boot; checks S; `> zq potion quark:resilience minecraft:redstone,minecraft:glowstone_dust`; golem check `quark:resilience`
+@commands `ADD="Quark-*.jar,AutoRegLib-*.jar"`; boot; checks S; `> cdevtest potion quark:resilience minecraft:redstone,minecraft:glowstone_dust`; golem check `quark:resilience`
 @pass `-> nothing` for both (Resilience brews removed, `REMOVED_POTIONS`); Resilience applies unchanged OR is dropped, but no exception (the remap target `alexsmobs:knockback_resistance` is absent; record which)
 @fails `LivingEntityEffectRemapMixin` with an unregistered target: must leave the effect alone
 @from batches/r1106cbp/s40.qb
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -748,10 +770,10 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: quark$
-> zq potion quark:resilience minecraft:redstone,minecraft:glowstone_dust
+> cdevtest potion quark:resilience minecraft:redstone,minecraft:glowstone_dust
 sleep 3
-expect resilience \+ minecraft:redstone -> nothing
-expect resilience \+ minecraft:glowstone_dust -> nothing
+expect verb=potion potion=\S*resilience ingredient=minecraft:redstone output="?nothing
+expect verb=potion potion=\S*resilience ingredient=minecraft:glowstone_dust output="?nothing
 > forceload add 0 0
 sleep 1
 > kill @e[tag=cbo]
@@ -764,6 +786,7 @@ sleep 2
 > kill @e[tag=cbo]
 reject Exception
 look record whether Resilience stayed or was dropped (remap target absent)
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-41 | chain + supplementaries-*.jar,moonlight-*.jar
 @group A (chain + Supplementaries)
@@ -801,10 +824,11 @@ shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/serv
 
 ## SQ-CBO-43 | chain + upgrade_aquatic-*.jar,blueprint-*.jar
 @group A (chain + Upgrade Aquatic)
-@commands `ADD="upgrade_aquatic-*.jar,blueprint-*.jar"`; boot; checks S; golem checks `upgrade_aquatic:restfulness`, `upgrade_aquatic:insomnia`; `> zq potion upgrade_aquatic:restfulness minecraft:glowstone_dust`; `> zq potion upgrade_aquatic:insomnia minecraft:glowstone_dust`
+@commands `ADD="upgrade_aquatic-*.jar,blueprint-*.jar"`; boot; checks S; golem checks `upgrade_aquatic:restfulness`, `upgrade_aquatic:insomnia`; `> cdevtest potion upgrade_aquatic:restfulness minecraft:glowstone_dust`; `> cdevtest potion upgrade_aquatic:insomnia minecraft:glowstone_dust`
 @pass neither effect applied; `-> nothing` for both brews
 @fails `[effects] removed`; `REMOVED_POTIONS` block
 @from batches/r1106cbp/s43.qb
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -827,19 +851,21 @@ sleep 2
 > kill @e[tag=cbo]
 reject "forge:id": "upgrade_aquatic:restfulness"
 reject "forge:id": "upgrade_aquatic:insomnia"
-> zq potion upgrade_aquatic:restfulness minecraft:glowstone_dust
-> zq potion upgrade_aquatic:insomnia minecraft:glowstone_dust
+> cdevtest potion upgrade_aquatic:restfulness minecraft:glowstone_dust
+> cdevtest potion upgrade_aquatic:insomnia minecraft:glowstone_dust
 sleep 3
-reject restfulness \+ minecraft:glowstone_dust -> minecraft
-reject insomnia \+ minecraft:glowstone_dust -> minecraft
+reject verb=potion potion=\S*restfulness ingredient=minecraft:glowstone_dust output="?minecraft
+reject verb=potion potion=\S*insomnia ingredient=minecraft:glowstone_dust output="?minecraft
 look both brews -> nothing (or the potion unregistered)
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-50 | chain + CerbonsBetterBeacons-*.jar,geodeforge-*.jar
 @group A (chain + Better Beacons + Geode)
-@commands `ADD="CerbonsBetterBeacons-*.jar,geodeforge-*.jar"`; boot; checks S; `> zq potion minecraft:thick geode:wrappist_shard,geode:celestite_shard`
+@commands `ADD="CerbonsBetterBeacons-*.jar,geodeforge-*.jar"`; boot; checks S; `> cdevtest potion minecraft:thick geode:wrappist_shard,geode:celestite_shard`
 @pass `-> long_reach`, `-> phantom_bane`
 @fails the nested Geode block
 @from batches/r1106cbp/s50.qb passed
+@reviewed 2026-11-16
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
 bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
@@ -849,10 +875,11 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 2 of 24: better_beacons, geode$
-> zq potion minecraft:thick geode:wrappist_shard,geode:celestite_shard
+> cdevtest potion minecraft:thick geode:wrappist_shard,geode:celestite_shard
 sleep 3
-expect wrappist_shard -> .*long_reach
-expect celestite_shard -> .*phantom_bane
+expect verb=potion potion=\S+ ingredient=\S*wrappist_shard output="?.*long_reach
+expect verb=potion potion=\S+ ingredient=\S*celestite_shard output="?.*phantom_bane
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBO-51 | chain + alexsmobs-*.jar,citadel-*.jar,Quark-*.jar,AutoRegLib-*.jar
 @group A (chain + Alex's Mobs + Quark)
@@ -902,7 +929,7 @@ expect mods loaded 2 of 24: everythingcopper, immersiveengineering$
 > cbo effects
 waitlog \[cbo\] done 30
 expect effects leaks 0$
-shell grep -c "immersiveengineering:conductive" logs/kubejs/startup.log logs/latest.log
+shell grep -c "immersiveengineering:conductive" logs/kubejs/startup.log logs/latest.log; true
 look copper armor rows carry immersiveengineering:conductive
 
 ## SQ-CBO-53 | chain + immersive_armors-*.jar,ImmersiveEngineering-*.jar

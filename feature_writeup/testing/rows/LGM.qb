@@ -61,8 +61,11 @@ reject Slot: 7b?, id: "minecraft:bowl"
 @pass custard; stack size per the stack-size pass (LGM-04)
 @fails
 @from batches/r1102b/s3_A.qb
-> zq item largemeals:sweet_berry_custard
-look max stack against food_stack-sizes (a drink-like custard in a glass bottle: 16 or 32)
+@reviewed 2026-11-16
+> cdevtest item largemeals:sweet_berry_custard
+expect verb=item item=largemeals:sweet_berry_custard .*max_stack=(16|32)\b
+look max_stack against food_stack-sizes (a drink-like custard in a glass bottle: 16 or 32)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-LGM-05 | knife kills drop racks of mutton (sheep at 190)
 @group A
@@ -70,13 +73,17 @@ look max stack against food_stack-sizes (a drink-like custard in a glass bottle:
 @pass about half drop a Raw Rack of Mutton; burning ones the Cooked Rack; none with the sword (LGM-05, 06)
 @fails loot modifier (`data/forge/loot_modifiers`)
 @from batches/r1102b/s3_A.qb
-> zact kill 190 -60 500 minecraft:sheep 20 farmersdelight:iron_knife
-> zact kill 190 -60 500 minecraft:sheep 20 farmersdelight:iron_knife fire
-> zact kill 190 -60 500 minecraft:sheep 20 minecraft:stone_sword
-expect \[zact\] kill minecraft:sheep x20 held farmersdelight:iron_knife dead 20: .*largemeals:raw_mutton_rack x([5-9]|1[0-5])\b
-expect \[zact\] kill minecraft:sheep x20 held farmersdelight:iron_knife fire dead 20: .*largemeals:cooked_mutton_rack x([5-9]|1[0-5])\b
-expect \[zact\] kill minecraft:sheep x20 held minecraft:stone_sword dead 20: (?!.*mutton_rack)
-look about half of each knife batch drops a rack; the burning batch has no raw rack
+@reviewed 2026-11-16
+> cdevtest kill 190 -60 500 minecraft:sheep n=20 held=farmersdelight:iron_knife
+> cdevtest kill 190 -60 500 minecraft:sheep n=20 held=farmersdelight:iron_knife fire
+> cdevtest kill 190 -60 500 minecraft:sheep n=20 held=minecraft:stone_sword
+count verb=kill type=minecraft:sheep n=20 killed=20 == 3
+expect verb=kill drops=\S*largemeals:raw_mutton_rack:([5-9]|1[0-5])\b
+expect verb=kill drops=\S*largemeals:cooked_mutton_rack:([5-9]|1[0-5])\b
+reject verb=kill drops=\S*cooked_mutton_rack:\d+,\S*raw_mutton_rack:
+count verb=kill drops=\S*mutton_rack: == 2
+look drops lines in order knife, knife burning, sword: about half of each knife batch drops a rack; the burning batch has no raw rack; the sword batch none
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-LGM-06 | mutton rack cooking recipes (the cutting board half runs in the block rows)
 @group A
@@ -84,12 +91,14 @@ look about half of each knife batch drops a rack; the burning batch has no raw r
 @pass 4 mutton chops / 4 cooked mutton chops; cooked rack from all three (LGM-07, 08)
 @fails
 @from batches/r1102b/s3_A.qb passed
-> zq makes largemeals:cooked_mutton_rack
-> zq rdetail cooked_mutton_rack
-expect makes largemeals:cooked_mutton_rack: [3-9]
-expect \{minecraft:smelting\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
-expect \{minecraft:smoking\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
-expect \{minecraft:campfire_cooking\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
+@reviewed 2026-11-16
+> cdevtest makes largemeals:cooked_mutton_rack
+> cdevtest rdetail cooked_mutton_rack
+expect verb=makes item=largemeals:cooked_mutton_rack n=[3-9]
+expect verb=rdetail id=\S+ serializer=minecraft:smelting result=\S*cooked_mutton_rack\*1 ingredients=largemeals:raw_mutton_rack
+expect verb=rdetail id=\S+ serializer=minecraft:smoking result=\S*cooked_mutton_rack\*1 ingredients=largemeals:raw_mutton_rack
+expect verb=rdetail id=\S+ serializer=minecraft:campfire_cooking result=\S*cooked_mutton_rack\*1 ingredients=largemeals:raw_mutton_rack
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-LGM-07 | Omurice feast: 4 bowls then the plate; full and part-eaten drops (block at 200)
 @group A
@@ -97,6 +106,7 @@ expect \{minecraft:campfire_cooking\} -> 1 \S*cooked_mutton_rack <- largemeals:r
 @pass 4 Bowl of Omurice, then the plate leftover; full drops the feast item, part-eaten a bowl (LGM-09, 10)
 @fails FeastBlock property names
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 > setblock 200 -60 500 largemeals:omurice_block
 > pbot spawn lg7 200 -60 503 minecraft:overworld survival
 > pbot hold lg7 minecraft:bowl 5
@@ -107,13 +117,14 @@ end
 > data get block 200 -60 500
 expect Found 4 matching item
 > setblock 200 -60 500 largemeals:omurice_block
-> zact break 200 -60 500 none
+> cdevtest break 200 -60 500
 > setblock 200 -60 500 largemeals:omurice_block[servings=2]
-> zact break 200 -60 500 none
-expect \[zact\] break 200 -60 500 largemeals:omurice_block held none: true, .*drops largemeals:omurice_block x1$
-expect \[zact\] break 200 -60 500 largemeals:omurice_block held none: true, .*drops minecraft:bowl x1$
+> cdevtest break 200 -60 500
+expect verb=break drops=largemeals:omurice_block:1 stacks=1\b
+expect verb=break drops=minecraft:bowl:1 stacks=1\b
 > pbot remove lg7
 look after the 4th bowl the block is the plate leftover (5th use); the setblock state name servings fits FeastBlock
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-LGM-08 | Roasted Rack feast from the pot, both ways; grid craft manual_only (pots 205, 208)
 @group A
@@ -121,18 +132,21 @@ look after the 4th bowl the block is the plate leftover (5th use); the setblock 
 @pass each gives the feast (LGM-17); grid craft listed `_manual_only`
 @fails pot ingredient limit 6
 @from batches/r1102b/s3_A.qb
-> zq recipes roasted_mutton_rack
+@reviewed 2026-11-16
+> cdevtest recipes roasted_mutton_rack
 > setblock 205 -60 500 minecraft:campfire[lit=true]
 > setblock 205 -59 500 farmersdelight:cooking_pot
 > data merge block 205 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:raw_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
 > setblock 208 -60 500 minecraft:campfire[lit=true]
 > setblock 208 -59 500 farmersdelight:cooking_pot
 > data merge block 208 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:cooked_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:5b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
-sleep 30
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done 60
 > data get block 205 -59 500 Inventory
 > data get block 208 -59 500 Inventory
 count Slot: [68]b?, id: "largemeals:roasted_mutton_rack_block" == 2
-expect \[zq\] creativedelight:\S*roasted_mutton_rack\S*_manual_only ->
+expect verb=recipes id=creativedelight:\S*roasted_mutton_rack\S*_manual_only result=
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-LGM-09 | egg dishes accept duck, goose, parrot, turtle eggs; not the dragon egg
 @group A
@@ -140,15 +154,17 @@ expect \[zq\] creativedelight:\S*roasted_mutton_rack\S*_manual_only ->
 @pass the four accepted, dragon egg rejected (LGM-18)
 @fails `#forge:eggs`
 @from batches/r1102b/s3_A.qb
-> zq uses untitledduckmod:duck_egg
-> zq uses untitledduckmod:goose_egg
-> zq uses quark:egg_parrot_red_blue
-> zq uses minecraft:turtle_egg
-count (alone|shared) \S*tomato_egg_soup >= 4
-count (alone|shared) \S*omurice >= 4
-count (alone|shared) \S*sweet_berry_custard >= 4
-> zq uses minecraft:dragon_egg
-look the minecraft:dragon_egg uses list (last block of lines) has no tomato_egg_soup, omurice or sweet_berry_custard
+@reviewed 2026-11-16
+> cdevtest uses untitledduckmod:duck_egg
+> cdevtest uses untitledduckmod:goose_egg
+> cdevtest uses quark:egg_parrot_red_blue
+> cdevtest uses minecraft:turtle_egg
+count verb=uses id=\S*tomato_egg_soup\S* alone= >= 4
+count verb=uses id=\S*omurice\S* alone= >= 4
+count verb=uses id=\S*sweet_berry_custard\S* alone= >= 4
+> cdevtest uses minecraft:dragon_egg
+look the minecraft:dragon_egg uses list (last block of lines, before "verb=uses item=minecraft:dragon_egg") has no tomato_egg_soup, omurice or sweet_berry_custard
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-LGM-10 | after /reload: 13 manual_only and 3 assemblies make Large Meals food
 @group A
@@ -156,10 +172,12 @@ look the minecraft:dragon_egg uses list (last block of lines) has no tomato_egg_
 @pass 13 `_manual_only` shapeless (4 soups, 6 meals and desserts, 3 feasts) + 3 sequenced assemblies on a bowl, none in the mechanical crafter (LGM-13); Large Meals Chicken Curry has its pot recipe `chicken_curry` and `chicken_curry_cooked_manual_only`, Ender's End Chicken Curry has `ender_chicken_curry` and `ender_chicken_curry_cooked_manual_only`; no duplicate recipe id line in the log (plan_scratch_bugfix_1103 5.2)
 @fails
 @from batches/r1102b/s3_A.qb
-> zq makes largemeals
-count \[zq\] creativedelight:\S*_manual_only -> \d+ largemeals: == 13
-count \[zq\] creativedelight:createsequencedassembly/\S+ -> \d+ largemeals: == 3
+@reviewed 2026-11-16
+> cdevtest makes largemeals
+count verb=makes id=creativedelight:\S*_manual_only result=largemeals: == 13
+count verb=makes id=creativedelight:createsequencedassembly/\S+ result=largemeals: == 3
 look 4 soups, 6 meals and desserts, 3 feasts among the manual_only ids; the assemblies start on a bowl
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## CQ-LGM-11
 @group client

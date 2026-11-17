@@ -16,4 +16,29 @@
 @commands stone at 640 -60 520 and 641 -60 520, 642 -60 520; place `vinery:grapevine_lattice` on their south faces (y -59, glass under nothing: the lattice at y -59 has air below); plant jungle white seeds in the first two; `/cdevtest use` with `minecraft:bone_meal*4` on the stage 1 lattice, the empty one, and a stage 3 one
 @pass planted stage 1: bone meal used and the lattice at stage 2 or more; empty lattice: bone meal kept (`main=minecraft:bone_meal*4`); stage 3: the click harvests (2 jungle grapes on the ground, back to stage 1, bone meal kept)
 @fails `LegacyLatticeStemBlock.isValidBonemealTarget` (age > 0 and not mature, no lattice-below check); the grapevine stem's own trunk rule is separate (2.4)
-@draft the lattice state names (age, grape, facing) and the planting item id must be read from a dump before the steps can be written
+@reviewed 2026-11-16
+> forceload add 636 516 648 524
+> time set noon
+> fill 640 -60 520 642 -59 520 minecraft:stone
+> cdevtest place 640 -59 521 vinery:grapevine_lattice[facing=south] flags=18
+> cdevtest place 641 -59 521 vinery:grapevine_lattice[facing=south] flags=18
+> cdevtest place 642 -59 521 vinery:grapevine_lattice[facing=south] flags=18
+> cdevtest use 640 -59 521 held=vinery:jungle_grape_seeds_white hand=main
+> cdevtest use 642 -59 521 held=vinery:jungle_grape_seeds_white hand=main
+> cdevtest use 642 -59 521 held=minecraft:bone_meal hand=main
+> cdevtest use 642 -59 521 held=minecraft:bone_meal hand=main
+> cdevtest state 640 -59 521
+> cdevtest state 642 -59 521
+expect verb=state pos=640,-59,521 state="vinery:grapevine_lattice\[age=1,
+expect verb=state pos=642,-59,521 state="vinery:grapevine_lattice\[age=3,
+> cdevtest items 642 -59 521 3
+> cdevtest use 640 -59 521 held=minecraft:bone_meal*4 hand=main
+> cdevtest use 641 -59 521 held=minecraft:bone_meal*4 hand=main
+> cdevtest use 642 -59 521 held=minecraft:bone_meal*4 hand=main
+> cdevtest items 642 -59 521 3
+expect verb=use main=minecraft:bone_meal\*3 off=\S+ state="vinery:grapevine_lattice\[age=[2-4],
+expect verb=use main=minecraft:bone_meal\*4 off=\S+ state="vinery:grapevine_lattice\[age=0,
+expect verb=use main=minecraft:bone_meal\*4 off=\S+ state="vinery:grapevine_lattice\[age=1,
+expect verb=items items=\S*vinery:jungle_grapes_white:2\b
+reject \[cdevtest\] .*done=0
+look if the 642 lattice is not at age 3 after the two single bone meals (growth per use differs), the harvest lines do not apply: rerun with a third single bone meal; the state lines give the grape property name for later rows

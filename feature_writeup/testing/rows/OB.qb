@@ -31,17 +31,19 @@ look salt dust Salt; corn Corn; spool Spool of String; veggie patties Veggie Pat
 
 ## SQ-OB-03 | farmers_hats tag (hearthandharvest namespace): no summer hat
 @group B
-@commands `/zq itemtag hearthandharvest:farmers_hats`
+@commands `/cdevtest tag item hearthandharvest:farmers_hats`
 @pass Contains the H&H hat, Wardrobe hat, Vinery straw hat, Simple Hats farmerbrim; no `simplehats:summerhat`
 @fails Tag script not applied
 @from batches/r1112/rowtext.qb passed
-> zq itemtag hearthandharvest:farmers_hats
-waitlog \[zq\] done 20
-expect farmers_hats .*hearthandharvest:farmers_hat
-expect farmers_hats .*wardrobe:farmers_hat_helmet
-expect farmers_hats .*vinery:straw_hat
-expect farmers_hats .*simplehats:farmerbrim
-reject farmers_hats .*summerhat
+@reviewed 2026-11-16
+> cdevtest tag item hearthandharvest:farmers_hats
+waitlog \[cdevtest\] verb=tag done=1 20
+expect \[cdevtest\] verb=tag kind=item tag=hearthandharvest:farmers_hats n=\d+ ids=\S*hearthandharvest:farmers_hat\b
+expect \[cdevtest\] verb=tag kind=item tag=hearthandharvest:farmers_hats .*\bwardrobe:farmers_hat_helmet\b
+expect \[cdevtest\] verb=tag kind=item tag=hearthandharvest:farmers_hats .*\bvinery:straw_hat\b
+expect \[cdevtest\] verb=tag kind=item tag=hearthandharvest:farmers_hats .*\bsimplehats:farmerbrim\b
+reject \[cdevtest\] verb=tag kind=item tag=hearthandharvest:farmers_hats .*summerhat
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-OB-04 | fruit pies and a Rustic cheesecake take 3 fruit; filling cans unchanged (one narrow query per pie)
 @group B
@@ -49,18 +51,20 @@ reject farmers_hats .*summerhat
 @pass Each takes 3 fruit; filling cans unchanged
 @fails Recipe still on 2: `pieBake` call site
 @from batches/r1112/b_vh.qb
-> zq rdetail creativedelight:baking/apple_pie
-> zq rdetail creativedelight:baking/pumpkin_pie
-> zq rdetail creativedelight:baking/sweet_berry_cheesecake
-> zq rdetail creativedelight:baking/grape_pie
-> zq rdetail creativedelight:baking/syrup_cheesecake
-> zq rdetail canned_apple_pie_filling_pot
-> zq rdetail canned_pumpkin_pie_filling_pot
-> zq rdetail canned_sweet_berry_pie_filling_pot
-expect baking/apple_pie \{\S+\} -> 1 apple_pie <- farmersdelight:pie_crust
-expect baking/grape_pie \{\S+\} -> 1 grape_pie <- farmersdelight:pie_crust
-expect baking/syrup_cheesecake \{\S+\} -> 1 syrup_cheesecake <- farmersdelight:pie_crust
-look each pie and the cheesecake: crust + 3 of its fruit + 2 sweet (pumpkin_pie: 3 pumpkin slices, grape: 3 grapes, syrup cheesecake: 3 syrup); the _from_filling recipes are crust + can; the three canned_*_pie_filling_pot recipes keep 3 fruit + 2 sweet + empty can (unchanged)
+@reviewed 2026-11-16
+> cdevtest rdetail creativedelight:baking/apple_pie
+> cdevtest rdetail creativedelight:baking/pumpkin_pie
+> cdevtest rdetail creativedelight:baking/sweet_berry_cheesecake
+> cdevtest rdetail creativedelight:baking/grape_pie
+> cdevtest rdetail creativedelight:baking/syrup_cheesecake
+> cdevtest rdetail canned_apple_pie_filling_pot
+> cdevtest rdetail canned_pumpkin_pie_filling_pot
+> cdevtest rdetail canned_sweet_berry_pie_filling_pot
+expect \[cdevtest\] verb=rdetail id=creativedelight:baking/apple_pie serializer=\S+ result=\S+:apple_pie\*1 ingredients=farmersdelight:pie_crust\b
+expect \[cdevtest\] verb=rdetail id=creativedelight:baking/grape_pie serializer=\S+ result=\S+:grape_pie\*1 ingredients=farmersdelight:pie_crust\b
+expect \[cdevtest\] verb=rdetail id=creativedelight:baking/syrup_cheesecake serializer=\S+ result=\S+:syrup_cheesecake\*1 ingredients=farmersdelight:pie_crust\b
+look each pie and the cheesecake (ingredients= list): crust + 3 of its fruit + 2 sweet (pumpkin_pie: 3 pumpkin slices, grape: 3 grapes, syrup cheesecake: 3 syrup); the _from_filling recipes are crust + can; the three canned_*_pie_filling_pot recipes keep 3 fruit + 2 sweet + empty can (unchanged)
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-OB-05 | cave carrot cutting and baked cutting, and their Slice & Dice copies: 2 raw / 2 cooked veggie patties
 @group B
@@ -68,13 +72,16 @@ look each pie and the cheesecake: crust + 3 of its fruit + 2 sweet (pumpkin_pie:
 @pass 2 raw / 2 cooked veggie patties, never air
 @fails Miner's Delight guard or NCH id
 @from batches/r1115/p1_b1.qb
+@reviewed 2026-11-16
 > give cb miners_delight:cave_carrot 4
-> zq rdetail veggie_patty_from
-waitlog \[zq\] rdetail matching veggie_patty_from: \d+ 30
-expect raw_veggie_patty_from_cave_carrot .*2 
-expect cooked_veggie_patty_from_baked_cave_carrot .*2 
-reject veggie_patty_from.*(minecraft:air|-> 0 )
+> cdevtest rdetail veggie_patty_from
+waitlog \[cdevtest\] verb=rdetail text=veggie_patty_from n=\d+ 30
+expect \[cdevtest\] verb=rdetail id=\S*raw_veggie_patty_from_cave_carrot .*veggie_patty\*2\b
+expect \[cdevtest\] verb=rdetail id=\S*cooked_veggie_patty_from_baked_cave_carrot .*veggie_patty\*2\b
+reject \[cdevtest\] verb=rdetail id=\S*veggie_patty_from\S* .*(minecraft:air|result=empty|\*0\b)
+expect \[cdevtest\] verb=rdetail text=veggie_patty_from n=4 
 look 4 recipes (2 cutting, 2 S&D copies): results 2 raw / 2 cooked veggie patties, inputs cave carrot / baked cave carrot, never air
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-OB-06 | corn processing
 @group B
@@ -82,10 +89,13 @@ look 4 recipes (2 cutting, 2 S&D copies): results 2 raw / 2 cooked veggie pattie
 @pass Cut gives 6 kernels and a 75% cob and 33% husk for both (as SQ-OB-12); cob milling and crusher 3 kernels; wild corn crusher 2 cornmeal, 50% kernel, 10% cob
 @fails Compare with `corn_delight/recipes.js`, creativeengineering and IE recipe files
 @from batches/r1111/bw.qb
-> zq uses corn_delight:corn
-> zq uses corn_delight:corn_cob
-> zq uses corn_delight:wild_corn
-look cut corn and wild corn 6 kernels, 75% cob, 75% husk; cob milling and crusher 3 kernels; wild corn crusher 2 cornmeal, 50% kernel, 10% cob
+@reviewed 2026-11-16
+> cdevtest uses corn_delight:corn
+> cdevtest uses corn_delight:corn_cob
+> cdevtest uses corn_delight:wild_corn
+waitlog \[cdevtest\] verb=uses item=corn_delight:wild_corn alone= 20
+look verb=uses id= lines (then cdevtest rdetail on the ids for the outputs): cut corn and wild corn 6 kernels, 75% cob, 75% husk; cob milling and crusher 3 kernels; wild corn crusher 2 cornmeal, 50% kernel, 10% cob
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-OB-07 | biscuits and gravy and glazed carrots pot recipes
 @group B
@@ -93,17 +103,18 @@ look cut corn and wild corn 6 kernels, 75% cob, 75% husk; cob milling and crushe
 @pass Shapeless biscuits recipe gone; pot recipe takes any dough, raw sausage, salt, milk; glazed carrots take cave carrot
 @fails Check `hearthandharvest/recipes.js`
 @from batches/r1115/p9_a1.qb
-> zq makes hearthandharvest:biscuits_and_gravy
-waitlog \[zq\] done 20
-> zq rdetail biscuits_and_gravy
-waitlog \[zq\] done 20
-> zq makes hearthandharvest:glazed_carrots
-waitlog \[zq\] done 20
-> zq rdetail glazed_carrots
-waitlog \[zq\] done 20
-> zq uses miners_delight:cave_carrot
-waitlog \[zq\] done 20
-look no shapeless (crafting_shapeless) biscuits recipe; one cooking pot recipe: any dough, raw sausage, salt, milk (bowl); glazed carrots pot recipe accepts cave carrot
+@reviewed 2026-11-16
+> cdevtest makes hearthandharvest:biscuits_and_gravy
+> cdevtest rdetail biscuits_and_gravy
+> cdevtest makes hearthandharvest:glazed_carrots
+> cdevtest rdetail glazed_carrots
+> cdevtest uses miners_delight:cave_carrot
+waitlog \[cdevtest\] verb=uses item=miners_delight:cave_carrot alone= 20
+reject \[cdevtest\] verb=makes id=\S+ result=hearthandharvest:biscuits_and_gravy\S* serializer=minecraft:crafting_shapeless
+expect \[cdevtest\] verb=makes id=\S+ result=hearthandharvest:biscuits_and_gravy\S* serializer=farmersdelight:cooking
+expect \[cdevtest\] verb=uses id=\S*glazed_carrots alone=\S+ serializer=farmersdelight:cooking
+look biscuits_and_gravy rdetail ingredients=: any dough, raw sausage, salt, milk (bowl)
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-OB-08 | Street Corn: Fire Resistance 30 s plus Nourishment and Haste
 @group B
@@ -111,18 +122,25 @@ look no shapeless (crafting_shapeless) biscuits recipe; one cooking pot recipe: 
 @pass Fire Resistance 30 s plus Haste (no Nourishment: the Comfort/Nourishment rule removes it from every other food, r1115)
 @fails `effect_swaps.js` modification not applied
 @from batches/r1115/p9_a1.qb
+@reviewed 2026-11-16
 > pbot spawn ob8 14 -60 1000 minecraft:overworld survival
 sleep 3
 > effect clear ob8
-> zq food hearthandharvest:street_corn
-waitlog \[zq\] done 20
-> zc4 hunger ob8 2
-> zc4 eat ob8 hearthandharvest:street_corn
-waitlog \[zc4\] eat ob8 20
-> data get entity ob8 ActiveEffects
+> cdevtest food hearthandharvest:street_corn
+waitlog \[cdevtest\] verb=food done=1 20
+> pbot hunger ob8 2
+> pbot inv ob8 set 0 hearthandharvest:street_corn 1
+> pbot inv ob8 select 0
+> pbot eat ob8
+waitlog \[cdevtest\] verb=pbot\.useitem bot=ob8 end=finish item=hearthandharvest:street_corn 30
+> cdevtest player ob8
 sleep 1
-expect minecraft:fire_resistance|fire_resistance
-look ActiveEffects: fire resistance 600 ticks plus Nourishment and Haste (zq food line lists the same)
+expect \[cdevtest\] verb=player name=ob8 effects=\S*minecraft:fire_resistance:0:(5\d\d|600)\b
+expect \[cdevtest\] verb=player name=ob8 effects=\S*minecraft:haste:
+expect \[cdevtest\] verb=food item=hearthandharvest:street_corn\S* food=true .*effects=\S*minecraft:fire_resistance:0:600:
+look effects= on the player line: fire resistance about 600 ticks plus Haste, no Nourishment (r1115 rule); the food line lists the same
+reject \[cdevtest\] verb=\S+ done=0
+reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 
 ## SQ-OB-09 | no killer rabbit babies (25 pairs spaced 6 apart, cramming off, births counted by tag)
 @group B
@@ -200,7 +218,12 @@ look config 0.0; first count 50 (no adult died); second (babies) Test passed wit
 @commands Hover Goat Milk Bottle and Chocolate Milk Bottle
 @pass LOOK: FD tooltip line "Clears 1 Effect" shows
 @fails Bottle class does not use custom tooltips: needs Java
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "hearthandharvest:goat_milk_bottle", "expect": "Clears 1 Effect"}
+do {"tooltip_text": "hearthandharvest:chocolate_milk_bottle", "expect": "Clears 1 Effect"}
+do {"tooltip": "hearthandharvest:goat_milk_bottle"}
+shot goat_milk_bottle
+look the Farmer's Delight "Clears 1 Effect" line shows on both (READ tooltip_text lines; shot for the layout)
 ## CQ-OB-02
 @group client
 @commands Look at a thrown cleaver and pitchfork name (death message, F3+B), the Immersive Portals portal block (WTHIT or give)
@@ -212,15 +235,19 @@ look config 0.0; first count 50 (no adult died); second (babies) Test passed wit
 @commands Hover Farmer's Hat harvest tooltip
 @pass LOOK: Summer Hat not listed
 @fails `client.js` list
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "hearthandharvest:farmers_hat", "shift": true, "reject": "Summer Hat"}
+do {"tooltip": "hearthandharvest:farmers_hat", "shift": true}
+shot farmers_hat
+look the harvest tooltip lists the hats of #hearthandharvest:farmers_hats, no Summer Hat
 ## SQ-OB-10 | wooden buckets exist; one tree tapper recipe accepts either bucket; bucket from planks
 @group B
 @commands `/give @p creativedelight:wooden_bucket`, and `wooden_water_bucket`, `wooden_sap_bucket`, `wooden_milk_bucket`, `wooden_honey_bucket`; recipe check for the tree tapper with an iron and a wooden bucket, and the wooden bucket from planks
 @pass All five items exist; one tapper recipe accepts either bucket; boot log has no Creative Delight error
 @fails Registry or recipe id
 @from batches/r1115/p9_a1.qb
-> zq items creativedelight:wooden_
-waitlog \[zq\] done 20
+@reviewed 2026-11-16
+> cdevtest reg item ^creativedelight:wooden_
 > give ob8 creativedelight:wooden_bucket
 > give ob8 creativedelight:wooden_water_bucket
 > give ob8 creativedelight:wooden_sap_bucket
@@ -229,15 +256,17 @@ waitlog \[zq\] done 20
 sleep 1
 count Gave 1\s+\[.*\] to ob8 >= 5
 reject Unknown item
-> zq makes hearthandharvest:tree_tapper
-waitlog \[zq\] done 20
-> zq rdetail tree_tapper
-waitlog \[zq\] done 20
-> zq makes creativedelight:wooden_bucket
-waitlog \[zq\] done 20
+> cdevtest makes hearthandharvest:tree_tapper
+> cdevtest rdetail tree_tapper
+> cdevtest makes creativedelight:wooden_bucket
 bootreject \[creativedelight\].*(Exception|ERROR)
 shell grep -cE "ERROR.*creativedelight|creativedelight.*Exception" logs/latest.log; true
-look one tree tapper recipe, B slot accepts minecraft:bucket and creativedelight:wooden_bucket; a wooden bucket recipe from planks
+expect \[cdevtest\] verb=reg kind=item regex=\S+ n=([5-9]|\d\d+)$
+expect \[cdevtest\] verb=makes item=hearthandharvest:tree_tapper n=1$
+expect \[cdevtest\] verb=rdetail id=\S*tree_tapper .*ingredients=\S*(minecraft:bucket/\S*creativedelight:wooden_bucket|creativedelight:wooden_bucket/\S*minecraft:bucket)
+expect \[cdevtest\] verb=makes item=creativedelight:wooden_bucket n=[1-9]
+look the wooden bucket recipe (makes creativedelight:wooden_bucket) is from planks
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-OB-11 | old creativeengineering wooden buckets load as Creative Delight wooden buckets
 @group Old save
@@ -266,8 +295,11 @@ expect ob11 has the following entity data: .*creativedelight:wooden_bucket.*crea
 @pass 6 kernels, cob 75%, husk 33%
 @fails `corn_delight/recipes.js`
 @from batches/r1111/bw.qb
-> zq rdetail cutting/corn
-look 6 kernels, cob 75%, husk 33%
+@reviewed 2026-11-16
+> cdevtest rdetail cutting/corn
+waitlog \[cdevtest\] verb=rdetail text=cutting/corn n= 20
+look part=results value= of the corn cutting recipe: 6 kernels, cob @0.75, husk @0.33
+reject \[cdevtest\] verb=\S+ done=0
 
 ## CQ-OB-04
 @group client

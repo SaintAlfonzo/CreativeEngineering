@@ -63,40 +63,87 @@ look each new command printed usage or a result (no "Unknown or incomplete comma
 @commands before the swap: kettle with water in its tank, nightstand with items, lunchbox with a skin, backpack with a skin, a half-done sequenced assembly item in a chest; swap to the new builds; reload the world; `/data get block` on kettle and nightstand, `/data get block` on the chest
 @pass kettle tank keeps fluid and level (`CETankFluid`, `CETankLevel`), nightstand keeps `CENightstandItems`, lunchbox and backpack keep `CELunchboxSkin` / `CESkin`, the assembly item keeps `CEStash`
 @fails a saved NBT key renamed with its Java constant
-@draft no batch holds this row yet
+@draft needs a fixture world saved on the 11-06 builds (kettle with water, nightstand, skinned lunchbox and backpack, half-done assembly item) and no fixture builder exists; once built, the reads are `/cdevtest be` on kettle and nightstand and `/cdevtest inv` on the chest, expecting CETankFluid, CENightstandItems, CELunchboxSkin, CESkin, CEStash
 ## CQ-IDS-01
 @group client (full pack)
 @commands WTHIT config screen, Plugins; look at a state-line block, hive, campfire, coaster, sheared grass, silk-touch block, flower pot with a plant, cooking pot with leftovers, a crop with Serene Seasons on, a Blockrunner road
 @pass Creative Compat lists its 15 lines (block model icon, coaster, jar contents, hive, servings, campfire, sheetmetal tank, kitchen station, pot and kettle leftovers, sheared, silk touch, operator barriers, flower pot contents, run speed) and Creative Calendar lists Crop Seasons, each with a name (no raw `config.waila.plugin_*`); every line still shows in world
 @fails lang key not renamed with the plugin id
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill 0 100 0 10 100 2 minecraft:stone
+> setblock 0 101 1 minecraft:beehive
+> setblock 2 101 1 minecraft:campfire
+> setblock 4 101 1 minecraft:potted_poppy
+> setblock 6 101 1 farmersdelight:cooking_pot
+> setblock 8 101 1 minecraft:wheat[age=3]
+do {"look": {"from": "0.5 102.6 -1", "at": "0.5 101.5 1.5"}}
+shot wthit_hive
+do {"look": {"from": "4.5 102.6 -1", "at": "4.5 101.3 1.5"}}
+shot wthit_pot
+do {"look": {"from": "8.5 102.6 -1", "at": "8.5 101.2 1.5"}}
+shot wthit_crop
+shell grep -c "creativecommon:\|creativeengineering:" config/waila/plugin_toggle.json5; true
+look WTHIT lines show in world with names; the WTHIT config Plugins page (by hand): Creative Compat 15 lines and Creative Calendar Crop Seasons, each named (no raw config.waila.plugin_*); shell count 0 (SQ-IDS-01's client half)
 ## CQ-IDS-02
 @group client (same)
 @commands JEI: open the World tabs, Canning, Can Uses, Feast Plating, Seasoning, Baking; check the tab order against the 11-06 client
 @pass the 19 World tabs right after Tipped Arrows, the four Delight tabs where they were, Baking unchanged; all pages filled
 @fails `recipe-category-sort-order.ini` not shipped with the new ids
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+do {"screen": "jei_uses:minecraft:tipped_arrow"}
+shot jei_tabs_after_tipped_arrows
+do {"screen": "jei_recipes:creativedelight:canned_noodle_soup"}
+shot jei_canning
+do {"screen": "close"}
+shell grep -c "creativecompat\|creativedelight\|creativeworldgen" config/jei/recipe-category-sort-order.ini; true
+look the 19 World tabs right after Tipped Arrows, the four Delight tabs where they were, Baking unchanged, pages filled (compare with the 11-06 client captures)
 ## CQ-IDS-03
 @group client (same)
 @commands rename a chest to a 40-character name in an anvil; place and open it; `ls -l kubejs/exported/gui_title_overflow.json`
 @pass the title plaque stretches to fit; the overflow file gains the chest's entry
 @fails TitlePlaques still not subscribed (mod id)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> setblock 0 101 1 minecraft:chest{CustomName:'{"text":"A chest with a forty character long name"}'}
+do {"look": {"from": "0.5 102.6 -1", "at": "0.5 101.5 1.5"}}
+do {"use": true}
+do {"wait": "screen:ContainerScreen"}
+do {"screen_info": true, "expect": "forty character"}
+shot chest_title
+do {"screen": "close"}
+shell ls -l --time-style=+%H:%M:%S kubejs/exported/gui_title_overflow.json; grep -c "forty character\|ContainerScreen\|chest" kubejs/exported/gui_title_overflow.json; true
+look the title plaque stretches to fit the name (shot); the overflow file was written now and holds the chest entry
 ## CQ-IDS-04
 @group client (same)
 @commands wear armor over 20 points with Detail Armor Bar
 @pass the overflow tint draws over the armor bar
 @fails ArmorOverflowRenderer still not subscribed
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> item replace entity @s armor.head with minecraft:netherite_helmet
+> item replace entity @s armor.chest with minecraft:netherite_chestplate
+> item replace entity @s armor.legs with minecraft:netherite_leggings
+> item replace entity @s armor.feet with minecraft:netherite_boots
+> attribute @s minecraft:generic.armor base set 10
+> gamemode survival
+do {"wait": "20"}
+shot armor_bar
+> gamemode creative
+look the overflow tint draws over the armor bar (more than 20 points with Detail Armor Bar)
 ## CQ-IDS-05
 @group client on a dedicated server with the new builds
 @commands use the stepstool key on a stepstool; rotate a sack bundle's selection
 @pass the stool works; the sack rotates; no "unknown channel" or disconnect
 @fails client and server on different builds
-@draft no batch holds this row yet
+@owner true
+@draft needs a client joined to a dedicated server on the new builds and the stepstool key pressed in game (a key mapping and a scroll on the sack): the capture driver has no join-a-server plan in this row; owner playtest or a paired client + server batch (item 5)
+@reviewed 2026-11-16
 ## CQ-IDS-06
 @group throwaway client
 @commands `/cdevdumpicons`; a capture plan run with `-Dcdevcapture.plan=<plan>` (tools/client_capture)
 @pass the icon dump file is written; the driver loads the world and saves shots
 @fails a capture tool still passing `-Dcecapture.plan`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevdumpicons
+shell sleep 5; ls -lt --time-style=+%H:%M kubejs/exported | head -5
+shell grep -rn "cecapture.plan" $INST/tools/client_capture 2>/dev/null | head -3; true
+look the icon dump file is written now; the driver itself loaded the world (this row runs on it); the grep prints nothing (no tool passes the old -Dcecapture.plan)

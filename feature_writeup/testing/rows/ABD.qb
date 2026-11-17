@@ -15,28 +15,39 @@
 @commands Boot, then `/dumpall` and look up `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice`
 @pass Both gone; `creativedelight:smelting/cooked_perch_slice` and `.../cooked_pike_slice` present, experience 0.35, cookingtime 200, same input and output; the smoking and campfire recipes unchanged; no error in `logs/latest.log`
 @fails CD jar
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest recipes abnormals_delight:upgrade_aquatic/cooked_
+> cdevtest rdetail cooked_perch_slice
+> cdevtest rdetail cooked_pike_slice
+expect verb=recipes text=abnormals_delight:upgrade_aquatic/cooked_ n=0\b
+expect verb=rdetail id=creativedelight:smelting/cooked_perch_slice serializer=minecraft:smelting\b
+expect verb=rdetail id=creativedelight:smelting/cooked_pike_slice serializer=minecraft:smelting\b
+look experience 0.35 and cookingtime 200 are not printed (part=fields only for public fields): check the /dumpall recipe dump; the smoking and campfire lines unchanged
+reject \[cdevtest\] verb=\S+ .*error=
+
 ## SQ-ABD-02 | Upgrade Aquatic driftwood salvaging moved to CD ids
 @group B
 @commands Same boot: look up the salvaging ids in the dump
 @pass `abnormals_delight:upgrade_aquatic/cutting/driftwood_door`, `_sign`, `_trapdoor` gone; `creativedelight:farmersdelightcutting/salvaging/driftwood_furniture` (10 items incl. `abnormals_delight:driftwood_cabinet`, 0.75 driftwood planks, axe), `.../driftwood_chest_boat`, `.../driftwood_furnace_boat`, `.../<wood>_furnace_boat` for the 9 vanilla woods (crimson and warped give `boatload:` boats), `.../crimson_boat`, `.../warped_boat`, `.../crimson_chest_boat`, `.../warped_chest_boat` present; no `fdCutting` warning in `logs/latest.log`
 @fails CD jar
 @from batches/r1102b/s3_A.qb
-> zq recipes abnormals_delight:upgrade_aquatic/cutting/driftwood_
-> zq rdetail salvaging/driftwood_furniture
-> zq recipes salvaging/
-expect recipes matching abnormals_delight:upgrade_aquatic/cutting/driftwood_: 0$
-expect \[zq\] creativedelight:farmersdelightcutting/salvaging/driftwood_furniture \{
-expect \[zq\] creativedelight:farmersdelightcutting/salvaging/driftwood_chest_boat
-expect \[zq\] creativedelight:farmersdelightcutting/salvaging/driftwood_furnace_boat
-expect \[zq\] creativedelight:farmersdelightcutting/salvaging/crimson_boat
-expect \[zq\] creativedelight:farmersdelightcutting/salvaging/warped_boat
-expect \[zq\] creativedelight:farmersdelightcutting/salvaging/crimson_chest_boat
-expect \[zq\] creativedelight:farmersdelightcutting/salvaging/warped_chest_boat
-count \[zq\] creativedelight:farmersdelightcutting/salvaging/[a-z_]+_furnace_boat -> >= 10
+@reviewed 2026-11-16
+> cdevtest recipes abnormals_delight:upgrade_aquatic/cutting/driftwood_
+> cdevtest rdetail salvaging/driftwood_furniture
+> cdevtest recipes salvaging/ max=500
+expect verb=recipes text=abnormals_delight:upgrade_aquatic/cutting/driftwood_ n=0\b
+expect verb=rdetail id=creativedelight:farmersdelightcutting/salvaging/driftwood_furniture serializer=
+expect verb=recipes id=creativedelight:farmersdelightcutting/salvaging/driftwood_chest_boat\b
+expect verb=recipes id=creativedelight:farmersdelightcutting/salvaging/driftwood_furnace_boat\b
+expect verb=recipes id=creativedelight:farmersdelightcutting/salvaging/crimson_boat\b
+expect verb=recipes id=creativedelight:farmersdelightcutting/salvaging/warped_boat\b
+expect verb=recipes id=creativedelight:farmersdelightcutting/salvaging/crimson_chest_boat\b
+expect verb=recipes id=creativedelight:farmersdelightcutting/salvaging/warped_chest_boat\b
+count verb=recipes id=creativedelight:farmersdelightcutting/salvaging/[a-z_]+_furnace_boat result= >= 10
 kjsreject (?i)fdCutting.*(warn|error)
 bootreject (?i)fdCutting.*warn
 look driftwood_furniture rdetail: input lists the 10 driftwood items incl. abnormals_delight:driftwood_cabinet (first 3 + "/+7"), result driftwood planks, axe tool; crimson / warped furnace boats take boatload: boats
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-ABD-03 | Adzuki curry: grid recipe moved, pot recipe kept
 @group B
@@ -44,11 +55,13 @@ look driftwood_furniture rdetail: input lists the 10 driftwood items incl. abnor
 @pass `abnormals_delight:neapolitan/adzuki_curry` gone; `creativedelight:shapeless/adzuki_curry_cooked_manual_only` takes roasted adzuki beans, dried banana, `#forge:crops/carrot`, pumpkin slice, bowl; `abnormals_delight:neapolitan/cooking/adzuki_curry` unchanged
 @fails CD jar
 @from batches/r1102b/s3_A.qb
-> zq rdetail adzuki_curry
-reject \[zq\] abnormals_delight:neapolitan/adzuki_curry \{
-expect \[zq\] creativedelight:shapeless/adzuki_curry_cooked_manual_only \{
-expect \[zq\] abnormals_delight:neapolitan/cooking/adzuki_curry \{
+@reviewed 2026-11-16
+> cdevtest rdetail adzuki_curry
+reject verb=rdetail id=abnormals_delight:neapolitan/adzuki_curry serializer=
+expect verb=rdetail id=creativedelight:shapeless/adzuki_curry_cooked_manual_only serializer=
+expect verb=rdetail id=abnormals_delight:neapolitan/cooking/adzuki_curry serializer=
 look manual_only inputs: roasted adzuki beans, dried banana, #forge:crops/carrot, pumpkin slice, bowl
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-ABD-04 | pickerelweed tag and the two CD cooking recipes
 @group B
@@ -56,16 +69,18 @@ look manual_only inputs: roasted adzuki beans, dried banana, #forge:crops/carrot
 @pass `#creativeengineering:pickerelweed` = blue + purple; `abnormals_delight:pickerelweed_juice` and `pike_with_beetroot` gone; `creativedelight:farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot` take that tag twice, 1.0 xp, 200 ticks
 @fails CD jar
 @from batches/r1102b/s3_A.qb
-> zq itemtag creativeengineering:pickerelweed
-> zq rdetail pickerelweed_juice
-> zq rdetail pike_with_beetroot
-expect itemtag creativeengineering:pickerelweed \(2\): .*upgrade_aquatic:blue_pickerelweed
-expect itemtag creativeengineering:pickerelweed \(2\): .*upgrade_aquatic:purple_pickerelweed
-reject \[zq\] abnormals_delight:\S*pickerelweed_juice \{
-reject \[zq\] abnormals_delight:\S*pike_with_beetroot \{
-expect \[zq\] creativedelight:farmersdelightcooking/pickerelweed_juice(_manual_only)? \{.*pickerelweed.*pickerelweed
-expect \[zq\] creativedelight:farmersdelightcooking/pike_with_beetroot \{.*pickerelweed.*pickerelweed
-look 1.0 xp and 200 ticks are not printed by /zq (recipe dump or JEI)
+@reviewed 2026-11-16
+> cdevtest tag item creativeengineering:pickerelweed
+> cdevtest rdetail pickerelweed_juice
+> cdevtest rdetail pike_with_beetroot
+expect verb=tag kind=item tag=creativeengineering:pickerelweed n=2 ids=\S*upgrade_aquatic:blue_pickerelweed
+expect verb=tag kind=item tag=creativeengineering:pickerelweed n=2 ids=\S*upgrade_aquatic:purple_pickerelweed
+reject verb=rdetail id=abnormals_delight:\S*pickerelweed_juice serializer=
+reject verb=rdetail id=abnormals_delight:\S*pike_with_beetroot serializer=
+expect verb=rdetail id=creativedelight:farmersdelightcooking/pickerelweed_juice(_manual_only)? serializer=\S+ result=\S+ ingredients=\S*pickerelweed\S*pickerelweed
+expect verb=rdetail id=creativedelight:farmersdelightcooking/pike_with_beetroot serializer=\S+ result=\S+ ingredients=\S*pickerelweed\S*pickerelweed
+look 1.0 xp and 200 ticks: a part=fields line shows them only if the recipe class has public fields (else recipe dump or JEI)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-ABD-05 | milk bottle <-> bucket recipes moved to CD
 @group B
@@ -73,9 +88,11 @@ look 1.0 xp and 200 ticks are not printed by /zq (recipe dump or JEI)
 @pass `neapolitan:milk/milk_bottles_from_bucket` and `milk_bucket_from_bottles` gone; `creativedelight:shapeless/milk_bottles_from_bucket` (`#forge:buckets/milk` + 4 glass bottles -> 4 `farmersdelight:milk_bottle`) and `.../milk_bucket_from_bottles` (bucket + 4 `#forge:bottles/milk` -> milk bucket) present
 @fails CD jar
 @from batches/r1102b/s3_A.qb passed
-> zq rdetail milk_bottles_from_bucket
-> zq rdetail milk_bucket_from_bottles
-reject \[zq\] neapolitan:milk/milk_bottles_from_bucket
-reject \[zq\] neapolitan:milk/milk_bucket_from_bottles
-expect \[zq\] creativedelight:shapeless/milk_bottles_from_bucket \{.*-> 4 \S*milk_bottle
-expect \[zq\] creativedelight:shapeless/milk_bucket_from_bottles \{.*-> 1 \S*milk_bucket
+@reviewed 2026-11-16
+> cdevtest rdetail milk_bottles_from_bucket
+> cdevtest rdetail milk_bucket_from_bottles
+reject verb=rdetail id=neapolitan:milk/milk_bottles_from_bucket\b
+reject verb=rdetail id=neapolitan:milk/milk_bucket_from_bottles\b
+expect verb=rdetail id=creativedelight:shapeless/milk_bottles_from_bucket serializer=\S+ result=\S*milk_bottle\*4\b
+expect verb=rdetail id=creativedelight:shapeless/milk_bucket_from_bottles serializer=\S+ result=\S*milk_bucket\*1\b
+reject \[cdevtest\] verb=\S+ .*error=

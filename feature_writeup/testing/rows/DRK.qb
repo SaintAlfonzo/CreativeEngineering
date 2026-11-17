@@ -18,46 +18,47 @@
 @pass No error; no NCH warning naming a drink; no duplicate recipe id; startup registers the 14 items and 17 fluids (`/give @p creativeengineering:kiwi_tea`, `creativeengineering:peach_juice` work)
 @fails missing dict key (`item_dict.js` / `fluid_dict.js` not updated on the server), duplicate id with `kettle.js` or a member file
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-16
 shell ! grep -iE '(error|exception).*(drinks|drink_tags|kettle|fluids)\.js' logs/kubejs/startup.log logs/kubejs/server.log
 shell ! (grep -n 'Error occurred while handling event' logs/latest.log | grep -qiE 'drink|kettle|tea|juice')
 kjsreject \[NCH\].*(?i:tea|juice|coffee|latte|nectar)
 kjsreject (?i)duplicate recipe id
 > pbot spawn s5g {S5H1+18} {S5H2} {S5H3+30} minecraft:overworld survival
-> give s5g creativeengineering:kiwi_tea
-> give s5g creativeengineering:turnip_tea
-> give s5g creativeengineering:bayberry_tea
-> give s5g creativeengineering:hamimelon_tea
-> give s5g creativeengineering:carrot_tea
-> give s5g creativeengineering:lemon_tea
-> give s5g creativeengineering:melon_tea
-> give s5g creativeengineering:orange_tea
-> give s5g creativeengineering:pear_tea
-> give s5g creativeengineering:lychee_juice
-> give s5g creativeengineering:hawberry_juice
-> give s5g creativeengineering:mango_juice
-> give s5g creativeengineering:mangosteen_juice
-> give s5g creativeengineering:peach_juice
+> give s5g creativedelight:kiwi_tea
+> give s5g creativedelight:turnip_tea
+> give s5g creativedelight:bayberry_tea
+> give s5g creativedelight:hamimelon_tea
+> give s5g creativedelight:carrot_tea
+> give s5g creativedelight:lemon_tea
+> give s5g creativedelight:melon_tea
+> give s5g creativedelight:orange_tea
+> give s5g creativedelight:pear_tea
+> give s5g creativedelight:lychee_juice
+> give s5g creativedelight:hawberry_juice
+> give s5g creativedelight:mango_juice
+> give s5g creativedelight:mangosteen_juice
+> give s5g creativedelight:peach_juice
 count Gave 1 +\[ >= 14
-> s5 fluidtag forge:fluid/kiwi_tea
-> s5 fluidtag forge:fluid/turnip_tea
-> s5 fluidtag forge:fluid/bayberry_tea
-> s5 fluidtag forge:fluid/hamimelon_tea
-> s5 fluidtag forge:fluid/carrot_tea
-> s5 fluidtag forge:fluid/lemon_tea
-> s5 fluidtag forge:fluid/melon_tea
-> s5 fluidtag forge:fluid/orange_tea
-> s5 fluidtag forge:fluid/pear_tea
-> s5 fluidtag forge:fluid/lychee_juice
-> s5 fluidtag forge:fluid/hawberry_juice
-> s5 fluidtag forge:fluid/mango_juice
-> s5 fluidtag forge:fluid/mangosteen_juice
-> s5 fluidtag forge:fluid/peach_juice
-> s5 fluidtag forge:fluid/chorus_tea
-> s5 fluidtag forge:fluid/sea_grape_juice
-> s5 fluidtag forge:fluid/pickerelweed_juice
-count \[s5\] fluidtag forge:fluid/\S+ \([1-9]\d*\): .*creativeengineering:\S+ >= 17
-reject \[s5\] fluidtag forge:fluid/\S+ \(0\)
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+> cdevtest tag fluid forge:fluid/kiwi_tea
+> cdevtest tag fluid forge:fluid/turnip_tea
+> cdevtest tag fluid forge:fluid/bayberry_tea
+> cdevtest tag fluid forge:fluid/hamimelon_tea
+> cdevtest tag fluid forge:fluid/carrot_tea
+> cdevtest tag fluid forge:fluid/lemon_tea
+> cdevtest tag fluid forge:fluid/melon_tea
+> cdevtest tag fluid forge:fluid/orange_tea
+> cdevtest tag fluid forge:fluid/pear_tea
+> cdevtest tag fluid forge:fluid/lychee_juice
+> cdevtest tag fluid forge:fluid/hawberry_juice
+> cdevtest tag fluid forge:fluid/mango_juice
+> cdevtest tag fluid forge:fluid/mangosteen_juice
+> cdevtest tag fluid forge:fluid/peach_juice
+> cdevtest tag fluid forge:fluid/chorus_tea
+> cdevtest tag fluid forge:fluid/sea_grape_juice
+> cdevtest tag fluid forge:fluid/pickerelweed_juice
+count \[cdevtest\] verb=tag kind=fluid tag=forge:fluid/\S+ n=[1-9]\d* ids=\S*creativedelight: >= 17
+reject \[cdevtest\] verb=tag kind=fluid tag=forge:fluid/\S+ n=0\b
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the pickerelweed and sea grape fluids may be another mod's (abnormals_delight / oceanic_delight) when the fluid dict maps them there; 14 + 3 non-empty tags
 
 ## SQ-DRK-02 | juice recipes: pot and Kettle rule, upstream recipes removed
@@ -66,113 +67,114 @@ look the pickerelweed and sea grape fluids may be another mod's (abnormals_delig
 @pass Pot juices for bayberry, hamimelon, chorus, lychee, hawberry, kiwi, lemon, mango, mangosteen, melon, orange, peach, pear, carrot, turnip (4 fruit + 1 sugar-like, glass bottle, 1 out), dandelion (2 leaves + 2 sugar cane), pickerelweed and sea grape (2 + 2 sugar); Kettle juices 2 fruit on water; nautilus Kettle into a nautilus shell; absent: `farmersdelight:cooking/bayberry_soup`, `farmersrespite:brewing/melon_juice`, `farmersrespite:brewing/dandelion_tea`, `hostiledelight:cucumbertearecp`, `delightful:food/cooking/ender_nectar`, `ends_delight:food/chorus_fruit_milk_tea`, `quarkdelight:cooking/cloud_latte`, the five `fruitsdelight:mixing/flowing_*_tea`; the old `creativedelight:farmersdelightcooking/{carrot,dandelion,turnip_water,chorus}_juice_manual_only` and `pickerelweed_juice` gone
 @fails removal id wrong (upstream id differs): add it; `CD.on` false for a mod
 @from batches/r1102b/s5_A.qb
-> zq recipes creativedelight:farmersdelightcooking/bayberry_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/bayberry_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/hamimelon_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/hamimelon_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/chorus_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/chorus_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/lychee_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/lychee_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/hawberry_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/hawberry_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/kiwi_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/kiwi_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/lemon_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/lemon_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/mango_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/mango_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/mangosteen_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/mangosteen_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/melon_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/melon_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/orange_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/orange_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/peach_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/peach_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/pear_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/pear_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/carrot_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/carrot_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/turnip_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/turnip_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/dandelion_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/dandelion_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/pickerelweed_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/pickerelweed_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/sea_grape_juice_manual_only
-expect \[zq\] creativedelight:farmersdelightcooking/sea_grape_juice_manual_only -> 
-> zq recipes creativedelight:farmersrespitebrewing/bayberry_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/bayberry_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/hamimelon_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/hamimelon_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/chorus_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/chorus_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/lychee_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/lychee_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/hawberry_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/hawberry_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/kiwi_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/kiwi_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/lemon_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/lemon_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/mango_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/mango_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/mangosteen_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/mangosteen_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/melon_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/melon_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/orange_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/orange_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/peach_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/peach_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/pear_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/pear_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/carrot_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/carrot_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/turnip_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/turnip_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/dandelion_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/dandelion_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/pickerelweed_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/pickerelweed_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/sea_grape_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/sea_grape_juice -> 
-> zq recipes creativedelight:farmersrespitebrewing/nautilus_juice
-expect \[zq\] creativedelight:farmersrespitebrewing/nautilus_juice -> 
-> zq recipes farmersdelight:cooking/bayberry_soup
-reject \[zq\] farmersdelight:cooking/bayberry_soup -> 
-> zq recipes farmersrespite:brewing/melon_juice
-reject \[zq\] farmersrespite:brewing/melon_juice -> 
-> zq recipes farmersrespite:brewing/dandelion_tea
-reject \[zq\] farmersrespite:brewing/dandelion_tea -> 
-> zq recipes hostiledelight:cucumbertearecp
-reject \[zq\] hostiledelight:cucumbertearecp -> 
-> zq recipes delightful:food/cooking/ender_nectar
-reject \[zq\] delightful:food/cooking/ender_nectar -> 
-> zq recipes ends_delight:food/chorus_fruit_milk_tea
-reject \[zq\] ends_delight:food/chorus_fruit_milk_tea -> 
-> zq recipes quarkdelight:cooking/cloud_latte
-reject \[zq\] quarkdelight:cooking/cloud_latte -> 
-> zq recipes fruitsdelight:mixing/flowing_hawberry_tea
-reject \[zq\] fruitsdelight:mixing/flowing_hawberry_tea -> 
-> zq recipes fruitsdelight:mixing/flowing_mango_tea
-reject \[zq\] fruitsdelight:mixing/flowing_mango_tea -> 
-> zq recipes fruitsdelight:mixing/flowing_mangosteen_tea
-reject \[zq\] fruitsdelight:mixing/flowing_mangosteen_tea -> 
-> zq recipes fruitsdelight:mixing/flowing_peach_tea
-reject \[zq\] fruitsdelight:mixing/flowing_peach_tea -> 
-> zq recipes fruitsdelight:mixing/flowing_lychee_cherry_tea
-reject \[zq\] fruitsdelight:mixing/flowing_lychee_cherry_tea -> 
-> zq recipes creativedelight:farmersdelightcooking/turnip_water_juice_manual_only
-reject \[zq\] creativedelight:farmersdelightcooking/turnip_water_juice_manual_only -> 
-> zq recipes creativedelight:farmersdelightcooking/pickerelweed_juice
-reject \[zq\] creativedelight:farmersdelightcooking/pickerelweed_juice -> 
-> zq rdetail creativedelight:farmersdelightcooking/kiwi_juice_manual_only
-waitlog \[zq\] rdetail matching 30
-> zq rdetail creativedelight:farmersdelightcooking/dandelion_juice_manual_only
+@reviewed 2026-11-16
+> cdevtest recipes creativedelight:farmersdelightcooking/bayberry_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/bayberry_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/hamimelon_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/hamimelon_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/chorus_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/chorus_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/lychee_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/lychee_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/hawberry_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/hawberry_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/kiwi_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/kiwi_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/lemon_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/lemon_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/mango_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/mango_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/mangosteen_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/mangosteen_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/melon_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/melon_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/orange_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/orange_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/peach_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/peach_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/pear_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/pear_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/carrot_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/carrot_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/turnip_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/turnip_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/dandelion_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/dandelion_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/pickerelweed_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/pickerelweed_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/sea_grape_juice_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/sea_grape_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/bayberry_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/bayberry_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/hamimelon_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/hamimelon_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/chorus_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/chorus_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/lychee_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/lychee_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/hawberry_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/hawberry_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/kiwi_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/kiwi_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/lemon_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/lemon_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/mango_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/mango_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/mangosteen_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/mangosteen_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/melon_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/melon_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/orange_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/orange_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/peach_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/peach_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/pear_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/pear_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/carrot_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/carrot_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/turnip_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/turnip_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/dandelion_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/dandelion_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/pickerelweed_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/pickerelweed_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/sea_grape_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/sea_grape_juice result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/nautilus_juice
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/nautilus_juice result=
+> cdevtest recipes farmersdelight:cooking/bayberry_soup
+reject \[cdevtest\] verb=recipes id=farmersdelight:cooking/bayberry_soup result=
+> cdevtest recipes farmersrespite:brewing/melon_juice
+reject \[cdevtest\] verb=recipes id=farmersrespite:brewing/melon_juice result=
+> cdevtest recipes farmersrespite:brewing/dandelion_tea
+reject \[cdevtest\] verb=recipes id=farmersrespite:brewing/dandelion_tea result=
+> cdevtest recipes hostiledelight:cucumbertearecp
+reject \[cdevtest\] verb=recipes id=hostiledelight:cucumbertearecp result=
+> cdevtest recipes delightful:food/cooking/ender_nectar
+reject \[cdevtest\] verb=recipes id=delightful:food/cooking/ender_nectar result=
+> cdevtest recipes ends_delight:food/chorus_fruit_milk_tea
+reject \[cdevtest\] verb=recipes id=ends_delight:food/chorus_fruit_milk_tea result=
+> cdevtest recipes quarkdelight:cooking/cloud_latte
+reject \[cdevtest\] verb=recipes id=quarkdelight:cooking/cloud_latte result=
+> cdevtest recipes fruitsdelight:mixing/flowing_hawberry_tea
+reject \[cdevtest\] verb=recipes id=fruitsdelight:mixing/flowing_hawberry_tea result=
+> cdevtest recipes fruitsdelight:mixing/flowing_mango_tea
+reject \[cdevtest\] verb=recipes id=fruitsdelight:mixing/flowing_mango_tea result=
+> cdevtest recipes fruitsdelight:mixing/flowing_mangosteen_tea
+reject \[cdevtest\] verb=recipes id=fruitsdelight:mixing/flowing_mangosteen_tea result=
+> cdevtest recipes fruitsdelight:mixing/flowing_peach_tea
+reject \[cdevtest\] verb=recipes id=fruitsdelight:mixing/flowing_peach_tea result=
+> cdevtest recipes fruitsdelight:mixing/flowing_lychee_cherry_tea
+reject \[cdevtest\] verb=recipes id=fruitsdelight:mixing/flowing_lychee_cherry_tea result=
+> cdevtest recipes creativedelight:farmersdelightcooking/turnip_water_juice_manual_only
+reject \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/turnip_water_juice_manual_only result=
+> cdevtest recipes creativedelight:farmersdelightcooking/pickerelweed_juice
+reject \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/pickerelweed_juice result=
+> cdevtest rdetail creativedelight:farmersdelightcooking/kiwi_juice_manual_only
+waitlog \[cdevtest\] verb=rdetail text= 30
+> cdevtest rdetail creativedelight:farmersdelightcooking/dandelion_juice_manual_only
 sleep 2
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look stale row text: the 'old ... {carrot,dandelion,chorus}_juice_manual_only gone' ids are the same ids the new rule makes, so only turnip_water_juice_manual_only and pickerelweed_juice are checked absent; rdetail: 4 fruit + 1 sugar-like in a glass bottle, dandelion 2 leaves + 2 sugar cane
 
 ## SQ-DRK-03 | tea recipes: Kettle on the juice fluid, heated mixing
@@ -181,92 +183,93 @@ look stale row text: the 'old ... {carrot,dandelion,chorus}_juice_manual_only go
 @pass Kettle: 9 new teas + hawberry, mango, mangosteen, peach, lychee cherry (spore blossom), dandelion (dandelion) each on its juice fluid with `#farmersrespite:tea_leaves`; azalea and lavender on green tea; sea pickle tea twice (sea grape, pickerelweed juice); chorus tea on chorus juice with ender eye; `creativedelight:createmixing/<tea>` heated for each: juice 250 mB + 2 tea leaves + extra + sugar-like -> 250 mB; azalea and sea pickle mix into a bottle
 @fails NCH `_checkFluid` warning: a Fruits Delight fluid id differs
 @from batches/r1102b/s5_A.qb
-> zq recipes creativedelight:farmersrespitebrewing/kiwi_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/kiwi_tea -> 
-> zq recipes creativedelight:createmixing/kiwi_tea
-expect \[zq\] creativedelight:createmixing/kiwi_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/turnip_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/turnip_tea -> 
-> zq recipes creativedelight:createmixing/turnip_tea
-expect \[zq\] creativedelight:createmixing/turnip_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/bayberry_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/bayberry_tea -> 
-> zq recipes creativedelight:createmixing/bayberry_tea
-expect \[zq\] creativedelight:createmixing/bayberry_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/hamimelon_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/hamimelon_tea -> 
-> zq recipes creativedelight:createmixing/hamimelon_tea
-expect \[zq\] creativedelight:createmixing/hamimelon_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/carrot_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/carrot_tea -> 
-> zq recipes creativedelight:createmixing/carrot_tea
-expect \[zq\] creativedelight:createmixing/carrot_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/lemon_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/lemon_tea -> 
-> zq recipes creativedelight:createmixing/lemon_tea
-expect \[zq\] creativedelight:createmixing/lemon_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/melon_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/melon_tea -> 
-> zq recipes creativedelight:createmixing/melon_tea
-expect \[zq\] creativedelight:createmixing/melon_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/orange_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/orange_tea -> 
-> zq recipes creativedelight:createmixing/orange_tea
-expect \[zq\] creativedelight:createmixing/orange_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/pear_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/pear_tea -> 
-> zq recipes creativedelight:createmixing/pear_tea
-expect \[zq\] creativedelight:createmixing/pear_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/hawberry_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/hawberry_tea -> 
-> zq recipes creativedelight:createmixing/hawberry_tea
-expect \[zq\] creativedelight:createmixing/hawberry_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/mango_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/mango_tea -> 
-> zq recipes creativedelight:createmixing/mango_tea
-expect \[zq\] creativedelight:createmixing/mango_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/mangosteen_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/mangosteen_tea -> 
-> zq recipes creativedelight:createmixing/mangosteen_tea
-expect \[zq\] creativedelight:createmixing/mangosteen_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/peach_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/peach_tea -> 
-> zq recipes creativedelight:createmixing/peach_tea
-expect \[zq\] creativedelight:createmixing/peach_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/lychee_cherry_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/lychee_cherry_tea -> 
-> zq recipes creativedelight:createmixing/lychee_cherry_tea
-expect \[zq\] creativedelight:createmixing/lychee_cherry_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/dandelion_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/dandelion_tea -> 
-> zq recipes creativedelight:createmixing/dandelion_tea
-expect \[zq\] creativedelight:createmixing/dandelion_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/azalea_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/azalea_tea -> 
-> zq recipes creativedelight:createmixing/azalea_tea
-expect \[zq\] creativedelight:createmixing/azalea_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/lavender_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/lavender_tea -> 
-> zq recipes creativedelight:createmixing/lavender_tea
-expect \[zq\] creativedelight:createmixing/lavender_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/chorus_tea
-expect \[zq\] creativedelight:farmersrespitebrewing/chorus_tea -> 
-> zq recipes creativedelight:createmixing/chorus_tea
-expect \[zq\] creativedelight:createmixing/chorus_tea -> 
-> zq recipes creativedelight:farmersrespitebrewing/sea_pickle_tea_on_sea_grape
-expect \[zq\] creativedelight:farmersrespitebrewing/sea_pickle_tea_on_sea_grape -> 
-> zq recipes creativedelight:createmixing/sea_pickle_tea_on_sea_grape
-expect \[zq\] creativedelight:createmixing/sea_pickle_tea_on_sea_grape -> 
-> zq recipes creativedelight:farmersrespitebrewing/sea_pickle_tea_on_pickerelweed
-expect \[zq\] creativedelight:farmersrespitebrewing/sea_pickle_tea_on_pickerelweed -> 
-> zq recipes creativedelight:createmixing/sea_pickle_tea_on_pickerelweed
-expect \[zq\] creativedelight:createmixing/sea_pickle_tea_on_pickerelweed -> 
-> zq rdetail creativedelight:createmixing/kiwi_tea
-waitlog \[zq\] rdetail matching 30
-> zq rdetail creativedelight:farmersrespitebrewing/chorus_tea
+@reviewed 2026-11-16
+> cdevtest recipes creativedelight:farmersrespitebrewing/kiwi_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/kiwi_tea result=
+> cdevtest recipes creativedelight:createmixing/kiwi_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/kiwi_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/turnip_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/turnip_tea result=
+> cdevtest recipes creativedelight:createmixing/turnip_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/turnip_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/bayberry_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/bayberry_tea result=
+> cdevtest recipes creativedelight:createmixing/bayberry_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/bayberry_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/hamimelon_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/hamimelon_tea result=
+> cdevtest recipes creativedelight:createmixing/hamimelon_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/hamimelon_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/carrot_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/carrot_tea result=
+> cdevtest recipes creativedelight:createmixing/carrot_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/carrot_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/lemon_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/lemon_tea result=
+> cdevtest recipes creativedelight:createmixing/lemon_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/lemon_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/melon_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/melon_tea result=
+> cdevtest recipes creativedelight:createmixing/melon_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/melon_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/orange_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/orange_tea result=
+> cdevtest recipes creativedelight:createmixing/orange_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/orange_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/pear_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/pear_tea result=
+> cdevtest recipes creativedelight:createmixing/pear_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/pear_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/hawberry_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/hawberry_tea result=
+> cdevtest recipes creativedelight:createmixing/hawberry_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/hawberry_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/mango_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/mango_tea result=
+> cdevtest recipes creativedelight:createmixing/mango_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/mango_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/mangosteen_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/mangosteen_tea result=
+> cdevtest recipes creativedelight:createmixing/mangosteen_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/mangosteen_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/peach_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/peach_tea result=
+> cdevtest recipes creativedelight:createmixing/peach_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/peach_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/lychee_cherry_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/lychee_cherry_tea result=
+> cdevtest recipes creativedelight:createmixing/lychee_cherry_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/lychee_cherry_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/dandelion_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/dandelion_tea result=
+> cdevtest recipes creativedelight:createmixing/dandelion_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/dandelion_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/azalea_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/azalea_tea result=
+> cdevtest recipes creativedelight:createmixing/azalea_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/azalea_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/lavender_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/lavender_tea result=
+> cdevtest recipes creativedelight:createmixing/lavender_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/lavender_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/chorus_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/chorus_tea result=
+> cdevtest recipes creativedelight:createmixing/chorus_tea
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/chorus_tea result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/sea_pickle_tea_on_sea_grape
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/sea_pickle_tea_on_sea_grape result=
+> cdevtest recipes creativedelight:createmixing/sea_pickle_tea_on_sea_grape
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/sea_pickle_tea_on_sea_grape result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/sea_pickle_tea_on_pickerelweed
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/sea_pickle_tea_on_pickerelweed result=
+> cdevtest recipes creativedelight:createmixing/sea_pickle_tea_on_pickerelweed
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/sea_pickle_tea_on_pickerelweed result=
+> cdevtest rdetail creativedelight:createmixing/kiwi_tea
+waitlog \[cdevtest\] verb=rdetail text= 30
+> cdevtest rdetail creativedelight:farmersrespitebrewing/chorus_tea
 sleep 2
 kjsreject \[NCH\].*_checkFluid
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look rdetail: mixing = juice 250 mB + 2 tea leaves + extra + sugar-like; chorus Kettle on chorus juice with an ender eye
 
 ## SQ-DRK-04 | spout fills a bottle from Kiwi Tea (diagnostic: recipe presence)
@@ -275,15 +278,16 @@ look rdetail: mixing = juice 250 mB + 2 tea leaves + extra + sugar-like; chorus 
 @pass each fills one bottle of the matching item and drains back to 250 mB
 @fails createBottle pair missing for that fluid
 @from batches/r1103/p2_R2.qb
+@reviewed 2026-11-16
 # r1103 p2: every spout line read "needs -1 mB, gives nothing" (no filling recipe matched) while the drain worked;
 # NCH createBottle makes the filling and emptying pair together. List both recipes and retry the spout.
-> zq recipes kiwi_tea
-> zq recipes lychee_juice
-> zq bytype create:filling
-> s5 spout creativeengineering:kiwi_tea 250 minecraft:glass_bottle
+> cdevtest recipes kiwi_tea
+> cdevtest recipes lychee_juice
+> cdevtest bytype create:filling
+> s5 spout creativedelight:kiwi_tea 250 minecraft:glass_bottle
 > s5 spout minecraft:water 250 minecraft:glass_bottle
-expect \[zq\] \S*filling\S*kiwi_tea\S* ->
-expect \[s5\] spout creativeengineering:kiwi_tea 250 mB into minecraft:glass_bottle: can true, needs 250 mB, gives creativeengineering:kiwi_tea x1
+expect \[cdevtest\] verb=bytype id=\S*filling\S*kiwi_tea\S* result=
+expect \[s5\] spout creativedelight:kiwi_tea 250 mB into minecraft:glass_bottle: can true, needs 250 mB, gives creativedelight:kiwi_tea x1
 look the water spout line is the probe control (vanilla potion fill); if it also reads -1, the probe is wrong, not the pack
 
 ## SQ-DRK-05 | coffee: roasted beans only, flavour tags, Kettle from the coffee tank, heated mixers
@@ -292,48 +296,49 @@ look the water spout line is the probe control (vanilla potion fill); if it also
 @pass pots take `rusticdelight:roasted_coffee_beans` only (no raw beans), chocolate takes `#creativeengineering:coffee_chocolate`, pumpkin `#creativeengineering:coffee_pumpkin`; the Kettle brews Chocolate Coffee from the plain coffee tank; heated mixer recipes `creativedelight:createmixing/{coffee,dark_coffee,milk_coffee,<flavour>_coffee,<flavour>_coffee_from_coffee}` exist
 @fails replaceInput did not match the FD cooking schema: rebuild the recipes by hand
 @from batches/r1102b/s5_A.qb
-> zq rdetail rusticdelight:coffee
-waitlog \[zq\] rdetail matching 30
-> zq rdetail rusticdelight:chocolate_coffee
+@reviewed 2026-11-16
+> cdevtest rdetail rusticdelight:coffee
+waitlog \[cdevtest\] verb=rdetail text= 30
+> cdevtest rdetail rusticdelight:chocolate_coffee
 sleep 2
-> zq rdetail rusticdelight:cooking/pumpkin_coffee
+> cdevtest rdetail rusticdelight:cooking/pumpkin_coffee
 sleep 2
-reject \[zq\] rusticdelight:coffee \{.*rusticdelight:coffee_beans\b
-expect \[zq\] rusticdelight:coffee \{.*rusticdelight:roasted_coffee_beans
-> zq recipes creativedelight:createmixing/coffee
-expect \[zq\] creativedelight:createmixing/coffee -> 
-> zq recipes creativedelight:createmixing/dark_coffee
-expect \[zq\] creativedelight:createmixing/dark_coffee -> 
-> zq recipes creativedelight:createmixing/milk_coffee
-expect \[zq\] creativedelight:createmixing/milk_coffee -> 
-> zq recipes creativedelight:createmixing/honey_coffee
-expect \[zq\] creativedelight:createmixing/honey_coffee -> 
-> zq recipes creativedelight:createmixing/chocolate_coffee
-expect \[zq\] creativedelight:createmixing/chocolate_coffee -> 
-> zq recipes creativedelight:createmixing/syrup_coffee
-expect \[zq\] creativedelight:createmixing/syrup_coffee -> 
-> zq recipes creativedelight:createmixing/pumpkin_coffee
-expect \[zq\] creativedelight:createmixing/pumpkin_coffee -> 
-> zq recipes creativedelight:createmixing/cherry_blossom_coffee
-expect \[zq\] creativedelight:createmixing/cherry_blossom_coffee -> 
-> zq recipes creativedelight:createmixing/honey_coffee_from_coffee
-expect \[zq\] creativedelight:createmixing/honey_coffee_from_coffee -> 
-> zq recipes creativedelight:createmixing/chocolate_coffee_from_coffee
-expect \[zq\] creativedelight:createmixing/chocolate_coffee_from_coffee -> 
-> zq recipes creativedelight:createmixing/syrup_coffee_from_coffee
-expect \[zq\] creativedelight:createmixing/syrup_coffee_from_coffee -> 
-> zq recipes creativedelight:createmixing/pumpkin_coffee_from_coffee
-expect \[zq\] creativedelight:createmixing/pumpkin_coffee_from_coffee -> 
-> zq recipes creativedelight:createmixing/cherry_blossom_coffee_from_coffee
-expect \[zq\] creativedelight:createmixing/cherry_blossom_coffee_from_coffee -> 
-> zq recipes creativedelight:farmersrespitebrewing/chocolate_coffee_from_coffee
-expect \[zq\] creativedelight:farmersrespitebrewing/chocolate_coffee_from_coffee -> 
-> zq itemtag creativeengineering:coffee_chocolate
+reject \[cdevtest\] verb=rdetail id=rusticdelight:coffee serializer=\S*.*rusticdelight:coffee_beans\b
+expect \[cdevtest\] verb=rdetail id=rusticdelight:coffee serializer=\S*.*rusticdelight:roasted_coffee_beans
+> cdevtest recipes creativedelight:createmixing/coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/coffee result=
+> cdevtest recipes creativedelight:createmixing/dark_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/dark_coffee result=
+> cdevtest recipes creativedelight:createmixing/milk_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/milk_coffee result=
+> cdevtest recipes creativedelight:createmixing/honey_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/honey_coffee result=
+> cdevtest recipes creativedelight:createmixing/chocolate_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/chocolate_coffee result=
+> cdevtest recipes creativedelight:createmixing/syrup_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/syrup_coffee result=
+> cdevtest recipes creativedelight:createmixing/pumpkin_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/pumpkin_coffee result=
+> cdevtest recipes creativedelight:createmixing/cherry_blossom_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/cherry_blossom_coffee result=
+> cdevtest recipes creativedelight:createmixing/honey_coffee_from_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/honey_coffee_from_coffee result=
+> cdevtest recipes creativedelight:createmixing/chocolate_coffee_from_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/chocolate_coffee_from_coffee result=
+> cdevtest recipes creativedelight:createmixing/syrup_coffee_from_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/syrup_coffee_from_coffee result=
+> cdevtest recipes creativedelight:createmixing/pumpkin_coffee_from_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/pumpkin_coffee_from_coffee result=
+> cdevtest recipes creativedelight:createmixing/cherry_blossom_coffee_from_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:createmixing/cherry_blossom_coffee_from_coffee result=
+> cdevtest recipes creativedelight:farmersrespitebrewing/chocolate_coffee_from_coffee
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersrespitebrewing/chocolate_coffee_from_coffee result=
+> cdevtest tag item creativedelight:coffee_chocolate
 sleep 2
-> zq itemtag creativeengineering:coffee_pumpkin
+> cdevtest tag item creativedelight:coffee_pumpkin
 sleep 2
-reject \[zq\] itemtag creativeengineering:coffee_(chocolate|pumpkin) \(0\)
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject \[cdevtest\] verb=tag kind=item tag=creativedelight:coffee_(chocolate|pumpkin) n=0 ids=
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look rdetail: chocolate coffee takes coffee_chocolate tag items (not just cocoa beans), pumpkin coffee coffee_pumpkin tag items
 
 ## SQ-DRK-06 | drink_fruits tags filled (rest of the row PASSed in the first run)
@@ -342,15 +347,16 @@ look rdetail: chocolate coffee takes coffee_chocolate tag items (not just cocoa 
 @pass `#creativeengineering:azalea_flowers` = Twigs' and Immersive Weathering's; `pink_flowers`, `lavender_tea_herbs`, `coffee_chocolate`, `coffee_pumpkin`, `drink_fruits/*`, `sea_pickles` filled; `forge:fluid/<name>` for the 17 fluids; the 14 items are in `#creativeengineering:food_type/drink`, stack to 32, give 1 hunger and return a glass bottle
 @fails food_types member script not regenerated (`tools/food_catalog.py --members`)
 @from batches/r1102b/s5_R_A.qb
+@reviewed 2026-11-16
 # drink_tags.js makes drink_fruits/lemon, /orange and /hamimelon only; the first run asked for /kiwi (no such tag)
-> zq itemtag creativeengineering:drink_fruits/lemon
+> cdevtest tag item creativedelight:drink_fruits/lemon
 sleep 1
-> zq itemtag creativeengineering:drink_fruits/orange
+> cdevtest tag item creativedelight:drink_fruits/orange
 sleep 1
-> zq itemtag creativeengineering:drink_fruits/hamimelon
+> cdevtest tag item creativedelight:drink_fruits/hamimelon
 sleep 1
-count \[zq\] itemtag creativeengineering:drink_fruits/(lemon|orange|hamimelon) \([1-9]\d*\): == 3
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+count \[cdevtest\] verb=tag kind=item tag=creativedelight:drink_fruits/(lemon|orange|hamimelon) n=[1-9]\d* ids= == 3
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look first run (perf/runs/r1102b/s5/rows/SQ-DRK-06.log): azalea/pink/lavender/coffee/sea pickle tags, food_type/drink, stack 32, nutrition 1 and the glass bottle all PASSed; this row only adds the drink_fruits tags
 
 
@@ -366,4 +372,49 @@ look first run (perf/runs/r1102b/s5/rows/SQ-DRK-06.log): azalea/pink/lavender/co
 @commands Client with the rebuilt CD jar; JEI the new teas and juices; hover the renamed drinks; drink one
 @pass 14 sprites (mug teas, bottle juices) with no missing texture; names Turnip Juice, Sea Pickle Tea, Chorus Fruit Bubble Tea, Ice Berry Matcha, Chorus Tea (and the Turnip Juice, Ice Berry Matcha and Chorus Tea fluids); drinking plays the drink animation
 @fails texture path `creativeengineering:item/<id>`; names.js not reloaded (F3+T)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> clear @s
+> item replace entity @s hotbar.0 with creativedelight:kiwi_tea
+> item replace entity @s hotbar.1 with creativedelight:turnip_tea
+> item replace entity @s hotbar.2 with creativedelight:bayberry_tea
+> item replace entity @s hotbar.3 with creativedelight:hamimelon_tea
+> item replace entity @s hotbar.4 with creativedelight:carrot_tea
+> item replace entity @s hotbar.5 with creativedelight:lemon_tea
+> item replace entity @s hotbar.6 with creativedelight:melon_tea
+> item replace entity @s hotbar.7 with creativedelight:orange_tea
+> item replace entity @s hotbar.8 with creativedelight:pear_tea
+> item replace entity @s inventory.0 with creativedelight:lychee_juice
+> item replace entity @s inventory.1 with creativedelight:hawberry_juice
+> item replace entity @s inventory.2 with creativedelight:mango_juice
+> item replace entity @s inventory.3 with creativedelight:mangosteen_juice
+> item replace entity @s inventory.4 with creativedelight:peach_juice
+do {"wait": "jei"}
+do {"tooltip_text": "creativedelight:kiwi_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:turnip_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:bayberry_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:hamimelon_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:carrot_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:lemon_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:melon_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:orange_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:pear_tea", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:lychee_juice", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:hawberry_juice", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:mango_juice", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:mangosteen_juice", "reject": "item\\.creativedelight"}
+do {"tooltip_text": "creativedelight:peach_juice", "reject": "item\\.creativedelight"}
+do {"screen": "inventory"}
+shot drinks_inventory
+do {"screen": "close"}
+> effect clear @s
+> gamemode survival
+> effect give @s minecraft:hunger 3 255
+do {"wait": 60}
+do {"slot": 0}
+do {"use": true}
+do {"wait": 10}
+shot drinking
+do {"wait": 40}
+do {"held": true}
+> gamemode creative
+look the inventory shot: 14 sprites (mug teas, bottle juices), none purple-black; tooltip READ lines give the names (Turnip Juice is the renamed `turnip_tea`; Sea Pickle Tea, Chorus Fruit Bubble Tea, Ice Berry Matcha and Chorus Tea are other mods' drinks renamed: hover them in JEI if wanted); the drinking shot shows the drink animation and `held` reads the emptied container afterwards

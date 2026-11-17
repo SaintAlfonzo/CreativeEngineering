@@ -14,18 +14,20 @@
 @commands Boot; grep latest.log for `[plantable]` and `Error occurred while handling event`; `/dumptags`, then read `creativeengineering:plantable/*` in `kubejs/exported/tags/item_tags.json`
 @pass one `[plantable] seed=.., crop=.., sapling=.., fungi_sapling=.., water=.., vine=.., vertical=..` line near plantable.md 2 counts (seed about 49, crop 14, sapling 37, fungi_sapling 23, water 11, vine 23, vertical 5); no `no item_dict key` warning; no Botania petal, flower, weeds or leaves in any family
 @fails `plantabletags.js` rules; a Rhino `instanceof` on a class that failed to load
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
 bootexpect \[plantable\] seed=\d+, crop=\d+, sapling=\d+, fungi_sapling=\d+, water=\d+, vine=\d+, vertical=\d+
 bootreject \[plantable\] no item_dict key
-> zq itemtag creativeengineering:plantable/seed
-> zq itemtag creativeengineering:plantable/crop
-> zq itemtag creativeengineering:plantable/sapling
-> zq itemtag creativeengineering:plantable/fungi_sapling
-> zq itemtag creativeengineering:plantable/water
-> zq itemtag creativeengineering:plantable/vine
-> zq itemtag creativeengineering:plantable/vertical
-count \[zq\] itemtag creativeengineering:plantable/ == 7
-reject \[zq\] itemtag creativeengineering:plantable/\S+ \(\d+\): .*botania:[a-z_]*(petal|flower|weeds|leaves)
+> cdevtest tag item creativecommon:plantable/seed
+> cdevtest tag item creativecommon:plantable/crop
+> cdevtest tag item creativecommon:plantable/sapling
+> cdevtest tag item creativecommon:plantable/fungi_sapling
+> cdevtest tag item creativecommon:plantable/water
+> cdevtest tag item creativecommon:plantable/vine
+> cdevtest tag item creativecommon:plantable/vertical
+count verb=tag kind=item tag=creativecommon:plantable/\S+ n=[1-9] == 7
+reject verb=tag kind=item tag=creativecommon:plantable/\S+ .*botania:[a-z_]*(petal|flower|weeds|leaves)
+reject \[cdevtest\] .*done=0
 shell grep -h "\[plantable\]" logs/latest.log | head -3; true
 look counts near seed 49, crop 14, sapling 37, fungi_sapling 23, water 11, vine 23, vertical 5 (plantable.md 2)
 

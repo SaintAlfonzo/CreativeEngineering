@@ -50,21 +50,28 @@ look the hopper below pulled the sugar; restart and break halves in p1b
 @commands `/place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0` and `_1`
 @pass `fantasyfurniture:decorations/hanging_herbs` at 4 and 2 spots (SVA-08)
 @fails `brewery:dried_*` rows in `tools/skyvillage_addon_remap.json`, rerun the tool
+@reviewed 2026-11-16
 @from batches/r1101/p1_server.qb
 > forceload add 96 96 160 160
 > place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0 100 -40 100
 > place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_1 130 -40 100
 sleep 3
-> zq count 95 -45 95 128 0 128 fantasyfurniture:decorations/hanging_herbs
-> zq count 128 -45 95 160 0 128 fantasyfurniture:decorations/hanging_herbs
-> zq count 95 -45 95 160 0 128 brewery:dried_wheat
-look counts 4 (template 0) and 2 (template 1); no brewery:dried_* left; `count` prints the total per box
+> cdevtest count 95 -45 95 127 0 128 fantasyfurniture:decorations/hanging_herbs
+> cdevtest count 128 -45 95 160 0 128 fantasyfurniture:decorations/hanging_herbs
+> cdevtest count 95 -45 95 160 0 128 brewery:dried_wheat
+expect verb=count block=fantasyfurniture:decorations/hanging_herbs n=4\b
+expect verb=count block=fantasyfurniture:decorations/hanging_herbs n=2\b
+expect verb=count block=brewery:dried_wheat n=0\b
+reject verb=count .*skipped_columns=[1-9]
+reject \[cdevtest\] .*done=0
+look the first count is template 0 (4), the second template 1 (2)
 
 ## SQ-TSK-02 | tomato vines climb treated sticks
 @group A
 @commands FD tomato vine on farmland with `creativedelight:treated_stick` two above, `/gamerule randomTickSpeed 300`; repeat with `supplementaries:stick_tomatoes` under a treated stick
 @pass the vine climbs into `creativedelight:treated_stick_tomatoes`, stops at three high
 @fails `TomatoClimbTreatedStickMixin` / `SuppTomatoClimbTreatedStickMixin`
+@reviewed 2026-11-16
 @from batches/r1101/p1_server.qb
 > gamerule randomTickSpeed 0
 > setblock -10 -61 30 minecraft:farmland[moisture=7]
@@ -74,8 +81,8 @@ look counts 4 (template 0) and 2 (template 1); no brewery:dried_* left; `count` 
 > setblock -8 -61 30 minecraft:farmland[moisture=7]
 > setblock -8 -60 30 supplementaries:stick_tomatoes
 > setblock -8 -59 30 creativedelight:treated_stick
-> gamerule randomTickSpeed 300
-sleep 60
+> cdevtest randomtick -10 -60 30 -8 -57 30 100
+expect verb=randomtick .*changed=[1-9]
 > gamerule randomTickSpeed 3
 > execute if block -10 -59 30 creativedelight:treated_stick_tomatoes
 > execute if block -10 -57 30 minecraft:air
@@ -105,21 +112,22 @@ look vine reverted to treated_stick and dropped FD tomato loot; each axe loot = 
 @commands Dandelions on Rich Soil and Fertile Soil, `/gamerule randomTickSpeed 300`
 @pass Fertile Soil matures about twice as fast as Rich Soil (`fertileSoilTicks = 10`, `richSoilTicks = 20`)
 @fails the config file still holds the old values
+@reviewed 2026-11-16
 @from batches/r1101/p1_server.qb
 > gamerule randomTickSpeed 0
 > fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
 > fill 20 -61 32 29 -61 32 creativedelight:fertile_soil
 > fill 20 -60 30 29 -60 30 minecraft:dandelion
 > fill 20 -60 32 29 -60 32 minecraft:dandelion
-> gamerule randomTickSpeed 30
-sleep 30
-> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
-> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
-sleep 30
-> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
-> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+> cdevtest randomtick 20 -61 30 29 -60 32 5
+> cdevtest count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> cdevtest count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+> cdevtest randomtick 20 -61 30 29 -60 32 5
+> cdevtest count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> cdevtest count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
 > gamerule randomTickSpeed 3
-look fertile row (z 32) matures about twice as fast as rich row (z 30); fertile soil id may differ (record the fill error if any)
+reject \[cdevtest\] .*done=0
+look count lines alternate rich (z 30), fertile (z 32): fertile matures about twice as fast as rich at each read (5 random ticks per block per round = the old 30 s at randomTickSpeed 30); fertile soil id may differ (record the fill error if any)
 
 ## CQ-WC-06 | bone-meal can on a sweet berry bush
 @group client
@@ -224,7 +232,7 @@ look textures present (treated_sticks.md TSK-01 to TSK-05)
 @fails `KubeJSClientResourceScriptsMixin`
 @from batches/r1101/c0_priority.qb
 kjsreject (?i)error occurred
-shell grep -c "creativedelight:kubejs/" logs/kubejs/client.log
+shell grep -c "creativedelight:kubejs/" logs/kubejs/client.log; true
 look client.log lists every creativedelight:kubejs/... client script once with no new errors; hand: garlic-seasoned popcorn tooltip "Garlic: Speed (0:10)"
 
 ## CQ-JB-01 | JEI berries and pips (hand)

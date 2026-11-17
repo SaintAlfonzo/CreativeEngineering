@@ -252,6 +252,7 @@ shell grep -hE "\[zmelt\] (change m07_|light)" logs/latest.log | sed -E 's/^.*\[
 @pass blue -> packed -> ice -> water, one step per click, every click
 @fails the salt member's item click (Creative Delight, agent cd-a); it should call `Melting.meltStep`
 @from batches/r1115/p3_a1.qb
+@reviewed 2026-11-16
 > setblock 2048 -61 2072 minecraft:blue_ice
 > zmelt w m08_blue overworld 2048 -61 2072
 > clear m3
@@ -265,10 +266,11 @@ expect SQ-MELT-08-click2$
 > pbot use m3 2048 -61 2072 up
 > execute if block 2048 -61 2072 minecraft:water run say SQ-MELT-08-click3
 expect SQ-MELT-08-click3$
-> zp inv m3
-waitlog \[zp\] done 20
+> pbot inv m3 get
+waitlog \[cdevtest\] verb=pbot\.inv bot=m3 filled= 20
 shell grep -hE "\[zmelt\] change m08_" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
-look one change per click (three changes); the use replies
+look one change per click (three changes); the use replies; the verb=pbot.inv lines show the salt left
+reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 
 ## SQ-MELT-09 | Common + Compat: fire and lava melt as in -02 / -03; [melting] tags salt 0; no melting error or warning
 @group A
@@ -341,24 +343,55 @@ look fire and lava pairs as in -02 / -03; tags line salt 0; no melting error aft
 @fails a glob matched nothing: id renamed in a mod update (re-grep a fresh `/dumpall`); a low-light block: check it melts at 1 only and report
 @owner true
 @from batches/r1115/p3_a1.qb
+@reviewed 2026-11-16
 bootexpect \[melting\] tags: \d+ meltable
 bootexpect \[melting\] random ticks on for \d+ extra blocks
 bootreject fire tag blocks with light below
 shell grep -hE "\[melting\]" logs/latest.log | sed -E 's/^.*\[melting\]/[melting]/' | cut -c1-400
-> zq blocktag creativecommon:melting/fire
-> zq blocktag creativecommon:melting/salt
-> zq blocktag creativecommon:melting/lava
-> zq blocktag creativecommon:melting/meltable
-> zq blocktag creativecommon:melting/meltable_slow
-waitlog blocktag creativecommon:melting/meltable_slow 30
-look fire count >= 100 in the [melting] tags line; source-driven list = magma_block (light 3) only; every 3.8 table id in the blocktag fire line
+> cdevtest tag block creativecommon:melting/fire
+> cdevtest tag block creativecommon:melting/salt
+> cdevtest tag block creativecommon:melting/lava
+> cdevtest tag block creativecommon:melting/meltable
+> cdevtest tag block creativecommon:melting/meltable_slow
+waitlog \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/meltable_slow n= 30
+expect \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/fire n=\d{3,} 
+look fire count >= 100 in the [melting] tags line; source-driven list = magma_block (light 3) only; every 3.8 table id in the ids= of the verb=tag ... tag=creativecommon:melting/fire line
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-MELT-P1
 @group A
 @commands Perf suite, `randomTickSpeed 3`: two boxes 64 x 64 x 16, one solid `packed_ice` with ice and snow layers on top (dark), one stone (control); 10 min each with `perf_session.sh mark SQ-MELT-P1`; JFR on
 @pass MSPT difference under 0.5 ms; `Melting.onRandomTick` under 1 % of server tick time in JFR
 @fails most time in `targetTick`: the roll happens first, so a dark glacier should cost only the roll; a hot `blockLit` / sphere scan means light is reaching the box
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# real time on purpose (MSPT and JFR windows): run inside an open perf session (the row is its own segment); boxes
+# 64 x 64 at 2200..2263 / 2300..2363, z 2200..2263, roofed with stone so the glacier is dark
+> gamerule randomTickSpeed 3
+> forceload add 2200 2200 2363 2263
+> fill 2200 -60 2200 2263 -53 2263 minecraft:packed_ice
+> fill 2200 -52 2200 2263 -47 2263 minecraft:packed_ice
+> fill 2200 -46 2200 2263 -46 2263 minecraft:ice
+> fill 2200 -45 2200 2263 -45 2263 minecraft:snow[layers=2]
+> fill 2200 -44 2200 2263 -44 2263 minecraft:stone
+> cdevtest state 2230 -45 2230
+expect verb=state pos=2230,-45,2230 state="?minecraft:snow\[layers=2\].*light_block=0 light_sky=0
+shell bash $INST/tools/perf/session/perf_session.sh mark "SQ-MELT-P1 glacier" || true
+sleep 600
+> forge tps
+capture MG Overall: Mean tick time: ([\d.]+) ms
+> fill 2300 -60 2200 2363 -53 2263 minecraft:stone
+> fill 2300 -52 2200 2363 -45 2263 minecraft:stone
+> fill 2200 -60 2200 2263 -53 2263 minecraft:air
+> fill 2200 -52 2200 2263 -44 2263 minecraft:air
+shell bash $INST/tools/perf/session/perf_session.sh mark "SQ-MELT-P1 stone" || true
+sleep 600
+> forge tps
+capture MS Overall: Mean tick time: ([\d.]+) ms
+> fill 2300 -60 2200 2363 -53 2263 minecraft:air
+> fill 2300 -52 2200 2363 -45 2263 minecraft:air
+> forceload remove 2200 2200 2363 2263
+reject \[cdevtest\] .*done=0
+look glacier window mean tick {MG} ms minus stone window {MS} ms under 0.5; JFR of the glacier window: `Melting.onRandomTick` under 1 % of server tick time
 ## SQ-SALT2-06b | Nether: snow layer and snow block placed by a survival bot, setblock powder snow, dispenser of snow blocks: air at once
 @group B-nether
 @commands In the Nether: place `minecraft:snow` (layer) and a `snow_block` by hand (survival player bot), `setblock` a `powder_snow`, and fire a dispenser holding snow blocks
@@ -366,6 +399,7 @@ look fire count >= 100 in the [melting] tags line; source-driven list = magma_bl
 @fails `Melting.onPlaced` not reached: `MeltingBlockStateMixin` onPlace inject (`m_60696_`); `ultraWarmInstantMelt` off
 @jars creativedelight
 @from batches/r1115/p3_a1.qb
+@reviewed 2026-11-16
 > execute in minecraft:the_nether run clear m3n
 > zmelt w n_layer the_nether 16 129 16
 > zmelt w n_block the_nether 18 129 16
@@ -374,11 +408,11 @@ look fire count >= 100 in the [melting] tags line; source-driven list = magma_bl
 > pbot hold m3n minecraft:snow 4
 > pbot use m3n 16 128 16 up
 > execute in minecraft:the_nether if block 16 129 16 minecraft:air run say SQ-SALT2-06b-layer_air
-> zp inv m3n
+> pbot inv m3n get
 > pbot hold m3n minecraft:snow_block 4
 > pbot use m3n 18 128 16 up
 > execute in minecraft:the_nether if block 18 129 16 minecraft:air run say SQ-SALT2-06b-block_air
-> zp inv m3n
+> pbot inv m3n get
 > execute in minecraft:the_nether run setblock 20 129 16 minecraft:powder_snow
 > execute in minecraft:the_nether if block 20 129 16 minecraft:air run say SQ-SALT2-06b-powder_air
 > execute in minecraft:the_nether run setblock 22 129 16 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"minecraft:snow_block",Count:4b}]}
@@ -387,28 +421,31 @@ sleep 2
 > execute in minecraft:the_nether if block 23 129 16 minecraft:air run say SQ-SALT2-06b-disp_air
 > execute in minecraft:the_nether positioned 23 129 16 if entity @e[type=item,distance=..2]
 > execute in minecraft:the_nether run data get block 22 129 16 Items
-waitlog \[zp\] done 20
+waitlog \[cdevtest\] verb=pbot\.inv bot=m3n filled= 20
 expect SQ-SALT2-06b-layer_air$
 expect SQ-SALT2-06b-block_air$
 expect SQ-SALT2-06b-powder_air$
 expect SQ-SALT2-06b-disp_air$
 reject change n_(layer|block|powder|disp_out) .*-> minecraft:(snow|snow_block|powder_snow)
-shell grep -hE "\[zmelt\] change n_|\[zp\]" logs/latest.log | sed -E 's/^.*\[(zmelt|zp)\]/[\1]/' | tail -12
-look bot inventory shrinks (snow 4 -> 3, snow_block 4 -> 3); dispenser: placed-and-melted (no item entity, Items shrinks) or dropped as an item (vanilla dispense; record which)
+shell grep -hE "\[zmelt\] change n_|verb=pbot\.inv" logs/latest.log | sed -E 's/^.*\[(zmelt|cdevtest)\]/[\1]/' | tail -12
+expect \[cdevtest\] verb=pbot\.inv bot=m3n slot=\d+ item=minecraft:snow\*3$
+expect \[cdevtest\] verb=pbot\.inv bot=m3n slot=\d+ item=minecraft:snow_block\*3$
+look dispenser: placed-and-melted (no item entity, Items shrinks) or dropped as an item (vanilla dispense; record which)
+reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 
 ## SQ-AZW-01 (rerun)
 @group A
 @commands As SQ-AZW-01 above
 @pass its pass text; no `[item_dict] Missing` naming `sunflower_stem` (now `block_dict` `b.sunflower_stem`)
 @fails plan_bugfix_1114.md 7.1
-@draft no batch holds this row yet
+@superseded SQ-AZW-01 in FCK.qb (rewritten 2026-11-16: its steps carry this rerun's item_dict Missing and sunflower_stem checks)
 ## SQ-DCM-02 (rerun)
 @group A
 @commands As SQ-DCM-02 above
 @pass its pass text; `[absent mods]` lists none of towns_and_towers, hopo, unwrecked_ships, yuushya, cozys-improved-cats
 @fails `func/has.js` `_modOf` map (plan_bugfix_1114.md 5.1)
 @jars creativebrewing creativecommon creativedelight
-@draft no batch holds this row yet
+@superseded SQ-DCM-02 in DCM.qb (its steps carry this rerun's check: no absent-mods line names the five G5 mods)
 ## SQ-MELT-09b | Common + Compat: fire and lava melt as in -02 / -03; [melting] tags salt 0; no melting error or warning
 @group A
 @commands Rerun of the SQ-MELT-09 boot (Common + Compat set, no Rare Ice) with creativecommon-1.2.0.jar built 2026-11-15 02:27 (fix-1, r1115: `RareIceLightMeltMixin` gated on `rare_ice` in `CommonMixinPlugin.NEEDS_MOD`); grep latest.log for `RareIce` and `melting`
@@ -479,4 +516,42 @@ look no Rare Ice line in the log (bootreject); fire and lava pairs as in -02 / -
 @commands Rerun of SQ-MELT-P1 (same boxes, `randomTickSpeed 3`, 10 min each, JFR on, `perf_session.sh mark SQ-MELT-P1b`) with creativecommon-1.2.0.jar built 2026-11-15 02:27 (fix-1, r1115: [melting] config values cached in `Melting.cfg`, refreshed on ModConfigEvent)
 @pass SQ-MELT-P1 pass text; no `ForgeConfigSpec$ConfigValue.get` / `ConfigValue.get` frames under `Melting.onRandomTick` in the JFR samples; editing `[melting] enabled` in the toml mid-run still stops melting (reload refresh)
 @fails config frames still present: old jar loaded; melting ignores a toml edit: `Melting::onConfig` not on the mod bus
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# as SQ-MELT-P1 (real-time perf windows in an open perf session), then the reload refresh: [melting] enabled = false
+# saved in place mid-run, a salt block touching ice gets 50 random-tick rounds and the ice must stay
+> gamerule randomTickSpeed 3
+> forceload add 2200 2200 2363 2263
+> fill 2200 -60 2200 2263 -53 2263 minecraft:packed_ice
+> fill 2200 -52 2200 2263 -47 2263 minecraft:packed_ice
+> fill 2200 -46 2200 2263 -46 2263 minecraft:ice
+> fill 2200 -45 2200 2263 -45 2263 minecraft:snow[layers=2]
+> fill 2200 -44 2200 2263 -44 2263 minecraft:stone
+shell bash $INST/tools/perf/session/perf_session.sh mark "SQ-MELT-P1b glacier" || true
+sleep 600
+> forge tps
+capture MG2 Overall: Mean tick time: ([\d.]+) ms
+> fill 2300 -60 2200 2363 -53 2263 minecraft:stone
+> fill 2300 -52 2200 2363 -45 2263 minecraft:stone
+> fill 2200 -60 2200 2263 -53 2263 minecraft:air
+> fill 2200 -52 2200 2263 -44 2263 minecraft:air
+shell bash $INST/tools/perf/session/perf_session.sh mark "SQ-MELT-P1b stone" || true
+sleep 600
+> forge tps
+capture MS2 Overall: Mean tick time: ([\d.]+) ms
+> fill 2300 -60 2200 2363 -53 2263 minecraft:air
+> fill 2300 -52 2200 2363 -45 2263 minecraft:air
+shell cp config/creativecommon-common.toml .meltp1b_common.toml; python3 -c "import re;p='config/creativecommon-common.toml';s=open(p).read();i=s.index('[melting]');j=s.index('enabled',i);s=s[:j]+re.sub(r'enabled\s*=\s*true','enabled = false',s[j:],count=1);f=open(p,'r+');f.write(s);f.truncate();f.close()"
+sleep 8
+> setblock 2210 -60 2210 salt:salt_block
+> setblock 2211 -60 2210 minecraft:ice
+> cdevtest randomtick 2211 -60 2210 2211 -60 2210 50
+waitlog verb=randomtick done= 60
+> cdevtest state 2211 -60 2210
+expect verb=state pos=2211,-60,2210 state=minecraft:ice 
+shell cp .meltp1b_common.toml config/creativecommon-common.toml
+sleep 8
+> setblock 2210 -60 2210 minecraft:air
+> setblock 2211 -60 2210 minecraft:air
+> forceload remove 2200 2200 2363 2263
+reject \[cdevtest\] .*done=0
+look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `ForgeConfigSpec$ConfigValue.get` / `ConfigValue.get` frames under `Melting.onRandomTick`, `Melting.onRandomTick` under 1 %

@@ -21,7 +21,8 @@
 @pass Every station: the containers are all in its container slot (pot 7, copper pot 5, kettle 3, oven 8, jar 6) and no container in an ingredient slot; the carrots are all in ingredient slots and none in the container slot; both hoppers empty (from the top and from the side)
 @fails Slot rule: `StationSlotRule` / `forge.ItemStackHandlerSlotRuleMixin` (pot, kettle; log `Mixin apply failed`), `isItemValid` in `CopperPotBlockEntity`, `OvenBlockEntity.createHandler`, `FermentingJarBlockEntity`; faces: `CookingPotItemHandlerMixin`, `KettleItemHandlerMixin`, `CopperPotItemHandler.insertItem`, `FermentingJarItemHandler.insertRouted`. Empty container set: `StationContainers` built before recipes (check the generation bump)
 @from batches/r1113/c2_a1.qb
-> zq recipes muffin
+@reviewed 2026-11-16
+> cdevtest recipes muffin
 > setblock 300 -60 320 minecraft:campfire[lit=true]
 > setblock 304 -60 320 minecraft:campfire[lit=true]
 > setblock 308 -60 320 minecraft:campfire[lit=true]
@@ -41,23 +42,23 @@
 > setblock 313 -59 320 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"minecraft:paper",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
 > setblock 317 -59 320 minecraft:hopper[facing=west]{Items:[{Slot:0b,id:"vintagedelight:empty_mason_jar",Count:4b},{Slot:1b,id:"minecraft:carrot",Count:4b}]}
 sleep 8
-> zc2 inv 300 -59 320
-> zc2 inv 304 -59 320
-> zc2 inv 308 -59 320
-> zc2 inv 312 -59 320
-> zc2 inv 316 -59 320
-> zc2 inv 300 -58 320
-> zc2 inv 304 -58 320
-> zc2 inv 308 -58 320
-> zc2 inv 312 -58 320
-> zc2 inv 316 -58 320
-> zc2 inv 301 -59 320
-> zc2 inv 305 -59 320
-> zc2 inv 309 -59 320
-> zc2 inv 313 -59 320
-> zc2 inv 317 -59 320
-reject \[zc2\] error
-look stations (first five inv lines): containers only in pot slot 7, copper pot 5, kettle 3, oven 8, jar 6 (8 each where the slot takes 8; a full container slot leaves the rest in a hopper, note it); carrots only in ingredient slots (pot 0-5, copper pot 0-3, kettle 0-1, oven 0-5, jar 0-5), never in the container slot; the ten hoppers empty. Oven container: the muffin recipes take paper (muffin line: "one paper each"); if the zq muffin lines show another container, judge the oven with that (BATCH-FAULT if paper is wrong). A carrot the kettle or oven refuses in every ingredient slot stays in its hopper: note, judge only the container rule then
+> cdevtest inv 300 -59 320
+> cdevtest inv 304 -59 320
+> cdevtest inv 308 -59 320
+> cdevtest inv 312 -59 320
+> cdevtest inv 316 -59 320
+> cdevtest inv 300 -58 320
+> cdevtest inv 304 -58 320
+> cdevtest inv 308 -58 320
+> cdevtest inv 312 -58 320
+> cdevtest inv 316 -58 320
+> cdevtest inv 301 -59 320
+> cdevtest inv 305 -59 320
+> cdevtest inv 309 -59 320
+> cdevtest inv 313 -59 320
+> cdevtest inv 317 -59 320
+reject \[cdevtest\] .*(done=0|error=)
+look stations (the first five `verb=inv` calls: slot lines, then the summary): containers only in pot slot 7, copper pot 5, kettle 3, oven 8, jar 6 (8 each where the slot takes 8; a full container slot leaves the rest in a hopper, note it); carrots only in ingredient slots (pot 0-5, copper pot 0-3, kettle 0-1, oven 0-5, jar 0-5), never in the container slot; the ten hoppers empty. Oven container: the muffin recipes take paper (muffin line: "one paper each"); if the `verb=recipes` muffin lines show another container, judge the oven with that (BATCH-FAULT if paper is wrong). A carrot the kettle or oven refuses in every ingredient slot stays in its hopper: note, judge only the container rule then
 
 ## SQ-STN-02 | outputs then leftovers leave through a hopper below; the container stays; the jar's inputs are not pulled from below or the side
 @group A
@@ -65,33 +66,34 @@ look stations (first five inv lines): containers only in pot slot 7, copper pot 
 @pass Hopper (and the jar's side funnel) gets the outputs, then the leftover items; the container slot still holds its container on every station; the jar's ingredients are not pulled from below or the side
 @fails `RemainderOutputHandler` (pot, kettle, oven), `CopperPotItemHandler.extractItem`, `FermentingJarItemHandler.forSide` (SIDE_VIEW / OUTPUTS)
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-16
 > setblock 300 -59 330 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:7,id:"minecraft:bowl",Count:2b},{Slot:8,id:"farmersdelight:vegetable_soup",Count:2b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bucket",Count:1b}]}}}
 > setblock 304 -59 330 miners_delight:copper_pot{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:5,id:"minecraft:bowl",Count:2b},{Slot:6,id:"farmersdelight:vegetable_soup",Count:2b},{Slot:7,id:"minecraft:bucket",Count:1b}]}}
 > setblock 312 -59 330 creativedelight:oven[facing=north]{Inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:8,id:"minecraft:paper",Count:2b},{Slot:9,id:"minecraft:bread",Count:2b}]},Remainders:{Items:[{Slot:0,id:"minecraft:bucket",Count:1b}]}}
 > setblock 316 -59 330 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"minecraft:carrot",Count:2b},{Slot:6,id:"vintagedelight:empty_mason_jar",Count:2b},{Slot:7,id:"vintagedelight:pickle",Count:2b},{Slot:9,id:"minecraft:bucket",Count:1b}]}}
 > setblock 308 -59 330 farmersrespite:kettle
 > data get block 308 -59 330
-> zc2 inv 300 -59 330
-> zc2 inv 304 -59 330
-> zc2 inv 312 -59 330
-> zc2 inv 316 -59 330
-> zc2 cap 316 -59 330 down
-> zc2 cap 316 -59 330 east
-> zc2 cap 316 -59 330 up
+> cdevtest inv 300 -59 330
+> cdevtest inv 304 -59 330
+> cdevtest inv 312 -59 330
+> cdevtest inv 316 -59 330
+> cdevtest inv 316 -59 330 face=down
+> cdevtest inv 316 -59 330 face=east
+> cdevtest inv 316 -59 330 face=up
 > setblock 300 -60 330 minecraft:hopper[facing=down]
 > setblock 304 -60 330 minecraft:hopper[facing=down]
 > setblock 312 -60 330 minecraft:hopper[facing=down]
 > setblock 316 -60 330 minecraft:hopper[facing=down]
 sleep 12
-> zc2 inv 300 -59 330
-> zc2 inv 304 -59 330
-> zc2 inv 312 -59 330
-> zc2 inv 316 -59 330
-> zc2 inv 300 -60 330
-> zc2 inv 304 -60 330
-> zc2 inv 312 -60 330
-> zc2 inv 316 -60 330
-reject \[zc2\] error
+> cdevtest inv 300 -59 330
+> cdevtest inv 304 -59 330
+> cdevtest inv 312 -59 330
+> cdevtest inv 316 -59 330
+> cdevtest inv 300 -60 330
+> cdevtest inv 304 -60 330
+> cdevtest inv 312 -60 330
+> cdevtest inv 316 -60 330
+reject \[cdevtest\] .*(done=0|error=)
 look first four inv lines: the merged items are where they were put (pot buffer under "cap creativedelight:remainder_buffer"; if the pot line shows no buffer the ForgeCaps merge did not take: judge the pot on outputs only). After 12 s: each hopper holds the 2 outputs and then the bucket (leftover), the station's container slot still holds its 2 containers and the carrot stays in slot 0; jar cap lines: down and east views offer slots 7 (pickle) and 9 (bucket) for extraction only (extract 0 on slots 0 and 6); up view extract 0 everywhere or no outputs. Kettle: data get line names its inventory key and slot layout; kettle not rigged here (third-party layout unverified): judge it in a rerun with that layout. Create funnel on the jar's side replaced by the east cap view (same item handler the funnel reads)
 
 ## SQ-STN-03 | Pickling Jar progress restarts when the recipe changes; kimchi only after its full time
@@ -100,20 +102,24 @@ look first four inv lines: the merged items are where they were put (pot buffer 
 @pass First read about 1400; after the swap the progress is under 40 (restarted); no kimchi in slot 7 before 2400 ticks after the swap, 4 kimchi by 2420
 @fails `FermentingJarBlockEntity.tick` `progressRecipe` check; if the kimchi still comes early, log `recipe.getId()` and `getProcessingTime()` per tick
 @from batches/r1113/fix_c2a1.qb
-> zq rdetail pickle_from_fermenting
-> zq rdetail kimchi_from_onion
+@reviewed 2026-11-16
+> cdevtest rdetail pickle_from_fermenting
+> cdevtest rdetail kimchi_from_onion
 > setblock 300 -60 340 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"vintagedelight:cucumber",Count:1b},{Slot:1,id:"vintagedelight:cucumber",Count:1b},{Slot:2,id:"vintagedelight:cucumber",Count:1b},{Slot:3,id:"vintagedelight:cucumber",Count:1b},{Slot:4,id:"vintagedelight:cucumber",Count:1b},{Slot:5,id:"vintagedelight:salt_dust",Count:1b}]}}
-sleep 70
-> zc2 inv 300 -60 340
+> cdevtest tickwarp 1400
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=1400 120
+> cdevtest be 300 -60 340
 > data merge block 300 -60 340 {inventory:{Items:[{Slot:0,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:1,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:2,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:3,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:4,id:"vintagedelight:salt_dust",Count:1b},{Slot:5,id:"farmersdelight:onion",Count:1b}]}}
 sleep 1
-> zc2 inv 300 -60 340
-sleep 100
-> zc2 inv 300 -60 340
-sleep 21
-> zc2 inv 300 -60 340
-reject \[zc2\] error
-look (1) rdetail: pickle_from_fermenting inputs are 5 cucumbers + salt_dust (if not, BATCH-FAULT again: rerun with them) and its time; kimchi_from_onion 4 cabbage leaves + salt + onion. (2) read at 70 s: progress about 1400 (not 0). (3) 1 s after the swap: under 40. (4) at about 2000 ticks after the swap: no kimchi in slot 7. (5) at about 2420: 4 kimchi in slot 7
+> cdevtest be 300 -60 340
+> cdevtest tickwarp 2001
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=2001 120
+> cdevtest be 300 -60 340
+> cdevtest tickwarp 422
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=422 120
+> cdevtest be 300 -60 340
+reject \[cdevtest\] .*(done=0|error=)
+look (1) rdetail: pickle_from_fermenting inputs are 5 cucumbers + salt_dust (if not, BATCH-FAULT again: rerun with them) and its time; kimchi_from_onion 4 cabbage leaves + salt + onion. (2) first `verb=be` nbt (after a 1400-tick warp): progress about 1400 (not 0). (3) 20 ticks after the swap: under 40. (4) at about 2020 ticks after the swap: no kimchi in slot 7. (5) at about 2440: 4 kimchi in slot 7
 
 ## SQ-STN-04 | kettle brew time 600 from the default config
 @group A
@@ -134,20 +140,21 @@ look BrewTimeTotal 600 (kettleBrewTicks default)
 @pass One bowl: the bowl stays in the buffer about 10 ticks, then slot 7 holds it about 10 ticks, then slot 8 holds 1 soup. Five bowls: 3 move to slot 7, 2 stay in the buffer, 3 soups plated. Glass bottle: never moves, the soup waits
 @fails `RemainderBuffer.pullForPlating` (called from `CookingPotRemainderMixin.ce$pullTick` HEAD of `cookingTick`), shared `OverflowPull`
 @from batches/r1113/fix_c2a1.qb
+@reviewed 2026-11-16
 > setblock 304 -60 340 minecraft:campfire[lit=true]
 > setblock 306 -60 340 minecraft:campfire[lit=true]
 > setblock 308 -60 342 minecraft:campfire[lit=true]
 > setblock 304 -59 340 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bowl",Count:1b}]}}}
-> zc2 watch 304 -59 340 40 2
+> cdevtest watch 304 -59 340 40 2 what=inv
 sleep 4
 > setblock 306 -59 340 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:bowl",Count:5b}]}}}
-> zc2 watch 306 -59 340 40 2
+> cdevtest watch 306 -59 340 40 2 what=inv
 sleep 4
 > setblock 308 -59 342 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:6,id:"farmersdelight:vegetable_soup",Count:3b}]},ForgeCaps:{"creativedelight:remainder_buffer":{Items:[{Slot:0,id:"minecraft:glass_bottle",Count:1b}]}}}
-> zc2 watch 308 -59 342 40 2
+> cdevtest watch 308 -59 342 40 2 what=inv
 sleep 4
-reject \[zc2\] (watch )?error
-look three watch series (t=0..40, the pots at x 304, 306, 308): one bowl: in the buffer about 10 ticks, then slot 7 about 10 ticks, then slot 8 holds 1 soup. Five bowls: 3 reach slot 7, 2 stay in the buffer, 3 soups plated. Bottle: never leaves the buffer, soup stays in slot 6. If t=0 already shows the end state, the console still lagged: judge on end states (c2a1 already showed them) and mark the timing half for a client CQ
+reject \[cdevtest\] .*(done=0|error=)
+look three watch series (t=0..40, the pots at x 304, 306, 308): one bowl: in the buffer about 10 ticks, then slot 7 about 10 ticks, then slot 8 holds 1 soup. Five bowls: 3 reach slot 7, 2 stay in the buffer, 3 soups plated. Bottle: never leaves the buffer, soup stays in slot 6. The watch lines are tick-based (`t=` server ticks since the call), so the timing half is judged here too
 
 ## SQ-STN-07 | Pickling Jar pulls the recipe's container from slot 9 to slot 6, then progress counts
 @group A
@@ -155,11 +162,12 @@ look three watch series (t=0..40, the pots at x 304, 306, 308): one bowl: in the
 @pass The container moves from slot 9 to slot 6 after about 10 ticks and progress starts counting
 @fails `FermentingJarBlockEntity.pullForNextBatch`
 @from batches/r1113/c2_a1.qb
-> zq rdetail overnight_oats
+@reviewed 2026-11-16
+> cdevtest rdetail overnight_oats
 > setblock 308 -60 340 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"vintagedelight:raw_oats",Count:1b},{Slot:1,id:"minecraft:sweet_berries",Count:1b},{Slot:2,id:"minecraft:sweet_berries",Count:1b},{Slot:3,id:"farmersdelight:pumpkin_slice",Count:1b},{Slot:4,id:"minecraft:melon_slice",Count:1b},{Slot:5,id:"minecraft:apple",Count:1b},{Slot:9,id:"minecraft:bowl",Count:1b}]}}
-> zc2 watch 308 -60 340 40 2
-waitlog \[zc2\] watch done 30
-reject \[zc2\] (watch )?error
+> cdevtest watch 308 -60 340 40 2 what=be
+waitlog \[cdevtest\] verb=watch end=done 30
+reject \[cdevtest\] .*(done=0|error=)
 look rdetail: overnight_oats fermenting with container bowl and these six inputs (if the pack changed the inputs, BATCH-FAULT: rerun with them). Watch: the bowl moves from slot 9 to slot 6 after about 10 ticks and fermenting_jar.progress then rises
 
 ## SQ-STN-05 | station containers list

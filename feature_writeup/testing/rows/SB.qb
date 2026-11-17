@@ -40,7 +40,7 @@ waitlog \[ceplace\] done 600
 reject \[ceplace\] done.* [1-9]\d* failed
 expect \[spawner-filter\].*removed
 expect \[spawner-filter\].*plus 2 with no mob
-look no spawner block in any (zq count around the logged placements for minecraft:spawner = 0); /ceplace syntax per memory worldgen-config-ceplace if the command is rejected
+look no spawner block in any (cdevtest count around the logged placements for minecraft:spawner: n=0); /ceplace syntax per memory worldgen-config-ceplace if the command is rejected
 
 ## SQ-SB-03 | lone large pillager tower: illager mix at night, pillagers only by day
 @group B
@@ -48,12 +48,15 @@ look no spawner block in any (zq count around the logged placements for minecraf
 @pass night: pillagers, vindicators, evokers, illusioners, witches, no ravager, no zombie or creeper inside; day: only pillagers (ST-322)
 @fails biome mobs inside: mixin not applied (boot log mixin error) or tag `meta/pillager_large_towers` empty
 @from batches/r1031/w2_metas_spawns.qb
+@reviewed 2026-11-16
 > locate structure mysticrift_pillagers_towers_aris:birch_pillager_tower
 waitlog nearest mysticrift_pillagers_towers_aris:birch_pillager_tower is at|type "?mysticrift_pillagers_towers_aris:birch_pillager_tower|mysticrift_pillagers_towers_aris:birch_pillager_tower.*timed out 330
 capture BT is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {BT1+30} 100 {BT3}
 > time set 18000
-sleep 240
+sleep 20
+> cdevtest tickwarp 4400
+waitlog verb=tickwarp end=done ticks=4400 asked=4400 300
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:pillager,distance=..48]
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:vindicator,distance=..48]
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:evoker,distance=..48]
@@ -64,12 +67,15 @@ sleep 240
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:creeper,distance=..48]
 > execute positioned {BT1} 80 {BT3} run kill @e[type=!minecraft:player,distance=..64]
 > time set 6000
-sleep 180
+sleep 20
+> cdevtest tickwarp 3601
+waitlog verb=tickwarp end=done ticks=3601 asked=3601 300
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:pillager,distance=..48]
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:vindicator,distance=..48]
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:witch,distance=..48]
 look night: pillager, vindicator, evoker, illusioner, witch present (counts), ravager / zombie / creeper "Test failed"; day: only pillagers (ST-322). y 80 is a guess: if every check fails, read the tower's y from the locate line or a meta log line and rerun with that y
 > time set 18000
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SB-04 | tower siege meta: both spots spawn the large-tower mix; lone T&T tower its own mix
 @group B
@@ -77,11 +83,14 @@ look night: pillager, vindicator, evoker, illusioner, witch present (counts), ra
 @pass meta: both spots spawn the large-tower mix; lone T&T tower: pillagers, vindicators, rare witch (ST-323)
 @fails meta spots spawn nothing or biome mobs: `StructureSpawnBoxes.inMeta` / `MetaStructure.parts`
 @from batches/r1101/w2_worldgen.qb
+@reviewed 2026-11-16
 > locate structure creativeengineering:meta/pillager_tower_siege
 waitlog nearest creativeengineering:meta/pillager_tower_siege is at|type "?creativeengineering:meta/pillager_tower_siege|creativeengineering:meta/pillager_tower_siege.*timed out 330
 capture TS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {TS1+30} 100 {TS3}
-sleep 240
+sleep 20
+> cdevtest tickwarp 4400
+waitlog verb=tickwarp end=done ticks=4400 asked=4400 300
 > execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:evoker,distance=..64]
 > execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:illusioner,distance=..64]
 > execute positioned {TS1} 80 {TS3} if entity @e[type=minecraft:zombie,distance=..64]
@@ -89,11 +98,14 @@ sleep 240
 waitlog nearest towns_and_towers:pillager_outpost_forest is at|type "?towns_and_towers:pillager_outpost_forest|towns_and_towers:pillager_outpost_forest.*timed out 330
 capture TT is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {TT1+30} 100 {TT3}
-sleep 240
+sleep 20
+> cdevtest tickwarp 4401
+waitlog verb=tickwarp end=done ticks=4401 asked=4401 300
 > execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:pillager,distance=..48]
 > execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:vindicator,distance=..48]
 > execute positioned {TT1} 80 {TT3} if entity @e[type=minecraft:evoker,distance=..48]
 look meta: evokers and illusioners present, no zombie; T&T tower: pillagers and vindicators, no evoker (ST-323)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SB-05 | pillager camp + ruin meta: camp illagers, ruin its own mobs
 @group B
@@ -101,13 +113,17 @@ look meta: evokers and illusioners present, no zombie; T&T tower: pillagers and 
 @pass camp: pillagers, vindicators, witches, evokers; the ruin: its own Philip's Ruins mobs (ST-324)
 @fails ruin spawns illagers: meta box applied to an unboxed part
 @from batches/r1101/w2_worldgen.qb
+@reviewed 2026-11-16
 > locate structure creativeengineering:meta/pillager_camp_ruin
 waitlog nearest creativeengineering:meta/pillager_camp_ruin is at|type "?creativeengineering:meta/pillager_camp_ruin|creativeengineering:meta/pillager_camp_ruin.*timed out 330
 capture PR is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {PR1+30} 100 {PR3}
-sleep 240
+sleep 20
+> cdevtest tickwarp 4400
+waitlog verb=tickwarp end=done ticks=4400 asked=4400 300
 > execute positioned {PR1} 70 {PR3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..96] run data get entity @s id
 look camp: pillagers, vindicators, witches, evokers; the ruin part (offset from the meta log): its Philip's Ruins mobs, no illagers (ST-324)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SB-06 | box evokers drop no totem
 @group B
@@ -115,17 +131,21 @@ look camp: pillagers, vindicators, witches, evokers; the ruin part (offset from 
 @pass fort evokers drop no Totem of Undying; the mansion's generated evoker does (ST-325)
 @fails totem from a box evoker: `onSpecialSpawn` mark missing (`/data get entity @e[type=evoker,limit=1,sort=nearest] ForgeData`)
 @from batches/r1101/w2_worldgen.qb
+@reviewed 2026-11-16
 > locate structure towns_and_towers:pillager_outpost_badlands
 waitlog nearest towns_and_towers:pillager_outpost_badlands is at|type "?towns_and_towers:pillager_outpost_badlands|towns_and_towers:pillager_outpost_badlands.*timed out 330
 capture BF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {BF1+30} 110 {BF3}
-sleep 240
+sleep 20
+> cdevtest tickwarp 4400
+waitlog verb=tickwarp end=done ticks=4400 asked=4400 300
 > execute positioned {BF1} 80 {BF3} as @e[type=minecraft:evoker,distance=..64,limit=1] run data get entity @s ForgeData
 > execute positioned {BF1} 80 {BF3} run kill @e[type=minecraft:evoker,distance=..64]
 sleep 3
 > execute positioned {BF1} 80 {BF3} if entity @e[type=item,nbt={Item:{id:"minecraft:totem_of_undying"}},distance=..64]
 expect Test failed|No entity was found
 look ForgeData shows the spawn-box mark; the totem check fails. Mansion half (generated evoker drops a totem) is a client check
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SB-07 | pillager ship crews: boat mix; villager ships none
 @group B
@@ -133,13 +153,17 @@ look ForgeData shows the spawn-box mark; the totem check fails. Mansion half (ge
 @pass pillager ship: boat mix (pillagers, vindicators, evokers, witches); villager ship: no illagers (ST-326)
 @fails illagers on every ship: `requires_piece` ignored
 @from batches/r1101/w2_worldgen.qb
+@reviewed 2026-11-16
 > locate structure unwrecked_ships:ship
 waitlog nearest unwrecked_ships:ship is at|type "?unwrecked_ships:ship|unwrecked_ships:ship.*timed out 330
 capture US is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {US1+20} 90 {US3}
-sleep 240
+sleep 20
+> cdevtest tickwarp 4400
+waitlog verb=tickwarp end=done ticks=4400 asked=4400 300
 > execute positioned {US1} 63 {US3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..48] run data get entity @s id
 look pillager-crew ship: pillagers, vindicators, evokers, witches; villager-crew ship: no illagers (ST-326)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SB-08 | witch wagon and swamp hut: witches only inside
 @group B
@@ -147,19 +171,25 @@ look pillager-crew ship: pillagers, vindicators, evokers, witches; villager-crew
 @pass witches only inside each; swamp hut cats still spawn (ST-327)
 @fails no witches: wrong box type for the piece layout
 @from batches/r1101/w2_worldgen.qb
+@reviewed 2026-11-16
 > locate structure eugene:witch_wagon
 waitlog nearest eugene:witch_wagon is at|type "?eugene:witch_wagon|eugene:witch_wagon.*timed out 330
 capture WW is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {WW1+24} 100 {WW3}
-sleep 240
+sleep 20
+> cdevtest tickwarp 4400
+waitlog verb=tickwarp end=done ticks=4400 asked=4400 300
 > execute positioned {WW1} 70 {WW3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..32] run data get entity @s id
 > locate structure minecraft:swamp_hut
 waitlog nearest minecraft:swamp_hut is at|type "?minecraft:swamp_hut|minecraft:swamp_hut.*timed out 330
 capture SH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {SH1+24} 90 {SH3}
-sleep 240
+sleep 20
+> cdevtest tickwarp 4401
+waitlog verb=tickwarp end=done ticks=4401 asked=4401 300
 > execute positioned {SH1} 70 {SH3} as @e[type=!minecraft:player,type=!minecraft:item,distance=..24] run data get entity @s id
 look witches only inside each; swamp hut cats still spawn (ST-327)
+reject \[cdevtest\] verb=\S+ .*error=
 
 @@text
 ## SQ-DM-01 | dandelions mature on Rich Soil and Fertile Soil, not on grass
@@ -207,17 +237,18 @@ expect Test passed
 @fails no drop: `DandelionBlock.use` not reached
 @jars creativedelight
 @from batches/r1101/p1_server.qb
+@reviewed 2026-11-16
 > gamerule randomTickSpeed 0
 > fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
 > fill 20 -61 32 29 -61 32 creativedelight:fertile_soil
 > fill 20 -60 30 29 -60 30 minecraft:dandelion
 > fill 20 -60 32 29 -60 32 minecraft:dandelion
-> gamerule randomTickSpeed 30
-sleep 30
-> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
-> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
-sleep 30
-> zq count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
-> zq count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+> cdevtest randomtick 20 -60 30 29 -60 32 4
+> cdevtest count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> cdevtest count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
+> cdevtest randomtick 20 -60 30 29 -60 32 4
+> cdevtest count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
+> cdevtest count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
 > gamerule randomTickSpeed 3
-look fertile row (z 32) matures about twice as fast as rich row (z 30); fertile soil id may differ (record the fill error if any)
+reject \[cdevtest\] verb=\S+ .*error=
+look counts: fertile row (z 32, second and fourth count) about twice the rich row (z 30); 4 random ticks per block per round (about 30 s at randomTickSpeed 30)

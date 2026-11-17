@@ -23,15 +23,22 @@
 @commands Boot; grep latest.log for `FlowingFluidSettleMixin`, `LevelChunkFirstTickWaterMixin`, `BlockPopResourceSettleMixin`, `m_152440_`, `m_62812_`; check `config/creativeengineering-common.toml` has `[worldgen.first_tick_water]` `windowTicks = 600`
 @pass No mixin warning or error; `Done` time within the eval's 212-225 s (no startup cost)
 @fails Injection failure on `m_152440_`: another mod changed `Block.popResource` (grep `exported/` / mixin audit for `popResource`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure|InjectionError).*(FlowingFluidSettleMixin|LevelChunkFirstTickWaterMixin|BlockPopResourceSettleMixin|m_152440_|m_62812_)
+bootreject (?i)(WARN|ERROR).*(FlowingFluidSettleMixin|LevelChunkFirstTickWaterMixin|BlockPopResourceSettleMixin)
+shell grep -A4 "first_tick_water" config/creativeworldgen-common.toml | grep -E "windowTicks"; grep -oE "Done \([0-9.]+s\)" logs/latest.log
+look windowTicks = 600 under [worldgen.first_tick_water] (the section moved to creativeworldgen-common.toml); the Done time against 212-225 s on this machine (no startup cost)
 ## SQ-FTW-02 | ftw_on: item entities after the spawn chunks ticked 120 s
 @group same, then `ftw_off`
-@commands After `Done` wait 120 s (spawn chunks tick), `stop`, census
+@commands After `Done` `/cdevtest tickwarp 2400` (was a 120 s wait: the spawn chunks tick), `save-all flush`, census
 @pass `ftw_on`: item entities below y 50 near 0 (moss carpet, seeds, azalea, glow berries, torches, cocoa, Miner's Delight plants each under 10); `ftw_off`: about the eval's 672. Falling blocks may stay in both
 @fails Still hundreds in `ftw_on`: note which items and their y; sugar cane / cactus / bamboo are expected leftovers (scheduled support ticks, perf.md 10.6); others lying near no water point to a second cause
 @from batches/r1103w/w_9_B.qb
+@reviewed 2026-11-16
 bootexpect Done \(
-sleep 120
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 240
 > save-all flush
 waitlog Saved the game 300
 shell mkdir -p $INST/perf/runs/r1103w/w; rm -rf ../ftw_on_snap; mkdir ../ftw_on_snap && cp -r ftw_on/entities ../ftw_on_snap/ && python3 -I $INST/tools/perf/eval/entity_census.py ../ftw_on_snap > $INST/perf/runs/r1103w/w/ftw_on_census.txt 2>&1; head -40 $INST/perf/runs/r1103w/w/ftw_on_census.txt
@@ -42,13 +49,41 @@ look item entities near 0 (moss carpet, seeds, azalea, glow berries, torches, co
 @commands Pregen without ticking: `/chunky center 4000 4000`, `/chunky radius 120`, `/chunky start`, wait for done; then `/forceload add 3888 3888 4112 4112`, wait 90 s, `/forceload remove all`, wait 10 s, `stop`, census
 @pass `ftw_on` well under `ftw_off` for the cave plant items
 @fails Equal counts: forceloaded chunks did not tick fluids (then rely on SQ-FTW-02)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# run on the ftw_on boot, then again on ftw_off (the pair as SQ-FTW-02)
+> chunky center 4000 4000
+> chunky radius 120
+> chunky start
+waitlog (?i)\[chunky\] task finished|generation.*complete|100(\.0+)?% 900
+> forceload add 3888 3888 4112 4112
+> cdevtest tickwarp 1800
+waitlog verb=tickwarp end=done 300
+> forceload remove all
+> cdevtest tickwarp 200
+waitlog verb=tickwarp end=done ticks=200 120
+> save-all flush
+waitlog Saved the game 300
+shell L=$(grep -E "^level-name=" server.properties | cut -d= -f2); rm -rf ../ftw3_snap_$L; mkdir ../ftw3_snap_$L && cp -r $L/entities ../ftw3_snap_$L/ && python3 -I $INST/tools/perf/eval/entity_census.py ../ftw3_snap_$L 2>&1 | head -40
+look cave plant items (moss carpet, azalea, glow berries, Miner's Delight plants) on ftw_on well under ftw_off; equal counts mean the forceloaded chunks did not tick fluids (then rely on SQ-FTW-02)
 ## SQ-FTW-04
 @group A
 @commands Boot, stay at spawn 60 s. `/kill @e[type=item]`, `/setblock ~3 ~ ~ minecraft:grass`, `/setblock ~2 ~ ~ minecraft:water`; after 2 s `/execute if block ~3 ~ ~ minecraft:grass` and `/execute if entity @e[type=item,distance=..8]`
 @pass Vanilla after the window: the grass is washed away and items may lie there (grass drops seeds 1 time in 8: repeat with a torch, `/setblock ~3 ~ ~ minecraft:torch`, which always drops)
 @fails Torch washed with no item: the window never closed (purge or `windowTicks` check)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# spawn chunks are older than windowTicks 600 after this warp: vanilla washing (the torch always drops)
+> pbot spawn ftw 0 -60 0 minecraft:overworld creative
+> cdevtest tickwarp 1200
+waitlog verb=tickwarp end=done 120
+> kill @e[type=minecraft:item]
+> setblock 3 -60 0 minecraft:torch
+> setblock 2 -60 0 minecraft:water
+sleep 3
+> execute if block 3 -60 0 minecraft:torch run say FTW04 torch still there
+> execute positioned 3 -60 0 if entity @e[type=minecraft:item,nbt={Item:{id:"minecraft:torch"}},distance=..8] run say FTW04 torch item
+expect FTW04 torch item
+reject FTW04 torch still there
+reject \[cdevtest\] verb=\S+ done=0
 ## SQ-FTW-05 | fresh chunk 2000 away, inside the window: torch washed away, no torch item
 @group same
 @commands Fresh chunk 2000 blocks away: `/tp @s 2000 ~ 2000`; within 20 s `/kill @e[type=item]`, `/setblock ~3 ~ ~ minecraft:torch`, `/setblock ~2 ~ ~ minecraft:water`; after 2 s check block and items as above

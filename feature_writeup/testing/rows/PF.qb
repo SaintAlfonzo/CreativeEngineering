@@ -18,17 +18,25 @@
 @commands Boot; `/cdevperf status` (PF-14)
 @pass Recording `ce` running; all 10 events recorded; hooks: all run except possibly chunk wait; KubeJS handlers wrapped > 0; no mixin warning for the 9 perf mixins
 @fails
-@draft no batch holds this row yet
-## SQ-PF-02 | /ceperf dump and the perf report
+@reviewed 2026-11-16
+bootreject Mixin apply failed.*(?i:perf)
+> cdevperf status
+expect recording '
+expect hooks: (all have run|not run yet: [^,]*chunk[^,]*;)
+expect [1-9]\d* KubeJS handlers wrapped
+expect (?<!not )recorded: \S
+look the recorded list holds all 10 events (no "not recorded:" line); a hooks line naming only the chunk wait is fine
+## SQ-PF-02 | /cdevperf dump and the perf report
 @group A
 @commands After 2 min, `/cdevperf dump smoke`; copy the file here, `python3 tools/perf/perf_report.py <file>` (PF-15)
 @pass Chat says saved; the report's "Measured by the pack's hooks" has ticks, a row per dimension, handlers as `server_scripts:<file>:<line>`, entity and block entity types
 @fails SQ-PF-01
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
-> ceperf status
+> cdevperf status
 expect recording '
-> ceperf dump smoke
-waitlog \[ceperf\] recording saved to 300
+> cdevperf dump smoke
+waitlog \[cdevperf\] recording saved to 300
 capture PFF recording saved to (\S+)
 shell python3 -I $INST/tools/perf/perf_report.py {PFF} > ../pf02_report.txt 2>&1; echo "exit $?"; grep -n -A25 "Measured by the pack" ../pf02_report.txt | head -60
 look rows/SQ-PF-02.shell.txt: ticks, a row per dimension, handlers as server_scripts:<file>:<line>, entity and block entity types
@@ -38,20 +46,39 @@ look rows/SQ-PF-02.shell.txt: ticks, a row per dimension, handlers as server_scr
 @commands New world: `/tp` 5 times to unexplored land 2000+ blocks apart, then `/cdevperf dump tp` and report (PF-16)
 @pass Chunk waits lists waits over 1 ms with a caller and phase; totals non-zero
 @fails SQ-PF-01
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> pbot spawn pf3 0 100 0 minecraft:overworld creative
+sleep 5
+> tp pf3 2000 120 0
+sleep 20
+> tp pf3 4000 120 2000
+sleep 20
+> tp pf3 6000 120 4000
+sleep 20
+> tp pf3 8000 120 6000
+sleep 20
+> tp pf3 10000 120 8000
+sleep 20
+> cdevperf dump tp
+waitlog \[cdevperf\] recording saved to 300
+capture PFT recording saved to (\S+)
+> pbot remove pf3
+shell python3 -I $INST/tools/perf/perf_report.py {PFT} > ../pf03_report.txt 2>&1; echo "exit $?"; grep -n -i -A20 "chunk wait" ../pf03_report.txt | head -40
+look rows/SQ-PF-03.shell.txt: chunk waits over 1 ms with a caller and phase; totals non-zero
 ## SQ-PF-04
 @group B
 @commands Chunky pregen 2601 chunks with the jfc as is, then with every `creativecommon.*` set to `enabled=false` (PF-17)
 @pass Same time within noise (1:34 in the 2026-09-28 A/B)
 @fails SQ-PF-01
-@draft no batch holds this row yet
+@draft two Chunky pregens of 2601 chunks on the same seed, the second after a stop with every creativecommon.* JFR event set to enabled=false in the jfc: two boots and a jfc edit between them, timed by wall clock against the 2026-09-28 A/B (1:34); a runner script, not one batch
 ## SQ-PF-05 | /reload twice keeps the wrapped KubeJS handler count
 @group A
 @commands `/reload` twice, `/cdevperf status` (PF-18)
 @pass Wrapped-handler count unchanged; no KubeJS errors
 @fails SQ-PF-01
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb passed
-> ceperf status
+> cdevperf status
 capture PFW (\d+) KubeJS handlers wrapped
 > reload
 waitlog Loaded \d+ pocket computer upgrades 300
@@ -59,7 +86,7 @@ sleep 10
 > reload
 sleep 60
 count Loaded \d+ pocket computer upgrades >= 2
-> ceperf status
+> cdevperf status
 sleep 2
 shell n=$(grep -o "[0-9]* KubeJS handlers wrapped" logs/latest.log | tail -1 | cut -d" " -f1); echo "before {PFW} after $n"; [ "$n" = "{PFW}" ]
 reject /ERROR\] \[KubeJS Server

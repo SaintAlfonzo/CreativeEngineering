@@ -17,11 +17,13 @@
 @pass `creativeengineering:sawmill/recycle_wooden_slab` -> 2, `_stairs` -> 3, `_door` -> 4 sticks
 @fails recipe JSONs in `kubejs/data/creativeengineering/recipes/sawmill/`
 @from batches/r1031/a1_data.qb
-> zq makes minecraft:stick
-expect creativeengineering:sawmill/recycle_wooden_slab -> 2 minecraft:stick
-expect creativeengineering:sawmill/recycle_wooden_stairs -> 3 minecraft:stick
-expect creativeengineering:sawmill/recycle_wooden_door -> 4 minecraft:stick
-> zq rdetail sawmill/recycle_wooden
+@reviewed 2026-11-16
+> cdevtest makes minecraft:stick
+expect verb=makes id=creativeengineering:sawmill/recycle_wooden_slab result=minecraft:stick\*2
+expect verb=makes id=creativeengineering:sawmill/recycle_wooden_stairs result=minecraft:stick\*3
+expect verb=makes id=creativeengineering:sawmill/recycle_wooden_door result=minecraft:stick\*4
+> cdevtest rdetail sawmill/recycle_wooden
+reject \[cdevtest\] verb=\S+ done=0
 look inputs are the wooden slab / stairs / door tags; the sawdust secondary shows in JEI (CQ-GF31-01)
 
 ## SQ-GF31-02 | dispenser vanilla recipe back (new row)
@@ -30,8 +32,10 @@ look inputs are the wooden slab / stairs / door tags; the sawdust secondary show
 @pass `minecraft:dispenser` -> 1 (vanilla craft back)
 @fails `engineering/redstone.js` still removes it
 @from batches/r1031/a1_data.qb passed
-> zq makes minecraft:dispenser
-expect minecraft:dispenser -> 1 minecraft:dispenser
+@reviewed 2026-11-16
+> cdevtest makes minecraft:dispenser
+expect verb=makes id=minecraft:dispenser result=minecraft:dispenser\*1
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-GF31-03 | Sputter cannot be built (new row)
 @group A
@@ -57,11 +61,13 @@ look "Test failed" must come from the sputter check and "Test passed" from the p
 @pass "Year 2, Early Spring, day 1" (TI-37 server half)
 @fails `TimeDate` first-sunrise rounding
 @from batches/r1031/b1_gameplay.qb passed
-> cetime date
-> cetime date next year
-> cetime date
+@reviewed 2026-11-16
+> ccaltime date
+> ccaltime date next year
+> ccaltime date
 expect Year 2, Early Spring, day 1
-> cetime date reset
+> ccaltime date reset
+reject Unknown or incomplete command
 
 ## SQ-RW-28 | Dreams & Desires rose, rubber, spirit wood removed (new row, recipes_wood.md 2.6)
 @group A
@@ -69,16 +75,17 @@ expect Year 2, Early Spring, day 1
 @pass 0 recipes each, no tags; smoked planks keep their recipe
 @fails `removed_woods.js` (start and server)
 @from batches/r1031/a1_effects.qb
-> zq makes create_dd:rose_planks
-> zq makes create_dd:rubber_planks
-> zq makes create_dd:spirit_planks
-> zq tagsof create_dd:rose_log
-> zq makes create_dd:smoked_planks
-expect makes create_dd:rose_planks: 0
-expect makes create_dd:rubber_planks: 0
-expect makes create_dd:spirit_planks: 0
-reject item tags of create_dd:rose_log: \S
-reject makes create_dd:smoked_planks: 0
+@reviewed 2026-11-16
+> cdevtest makes create_dd:rose_planks
+> cdevtest makes create_dd:rubber_planks
+> cdevtest makes create_dd:spirit_planks
+> cdevtest tagsof create_dd:rose_log
+> cdevtest makes create_dd:smoked_planks
+expect verb=makes item=create_dd:rose_planks n=0
+expect verb=makes item=create_dd:rubber_planks n=0
+expect verb=makes item=create_dd:spirit_planks n=0
+reject verb=tagsof id=create_dd:rose_log .*_tags=(?!-)\S
+reject verb=makes item=create_dd:smoked_planks n=0
 kjsreject (removed_woods\.js).*(Error|error)
 look smoked planks keep their own recipe (RW-23); the JEI half is RW-28 in the client block
 
@@ -120,9 +127,11 @@ look bark sides textured (no purple-black checker) on the log, the filled log an
 @pass lists 50 generators from `tools/generators.json` with their groups (`stacks` among them) and the last run; no `[cdevgen]` error in `latest.log`
 @fails pack_tooling.md TL-09, TODO `tooling/generators-and-tests #1`
 @from batches/r1101/p1_server.qb
-> cegen
+@reviewed 2026-11-16
+> cdevgen
 sleep 3
-reject \[cegen\].*(Error|error|failed)
+reject \[(cegen|cdevgen)\].*(Error|error|failed)
+reject Unknown or incomplete command
 look lists the generators from tools/generators.json with groups (stacks among them)
 
 ## SQ-JRFTL-01 (r1101 PASS)
@@ -130,4 +139,14 @@ look lists the generators from tools/generators.json with groups (stacks among t
 @commands after JRFTL jar is out of mods/: `/give @s jrftl:prepared_flesh`; creosote filling and IE bottling on rotten flesh; smoke it
 @pass item exists with the new texture and name "Prepared Flesh"; recipes work; smoking gives leather; no jrftl errors in latest.log
 @fails `misc_items.js`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootreject (?i)(ERROR|Exception).*jrftl
+> cdevtest item jrftl:prepared_flesh
+> cdevtest makes jrftl:prepared_flesh
+> cdevtest uses jrftl:prepared_flesh
+expect verb=item item=jrftl:prepared_flesh class=
+expect verb=makes id=\S+ result=jrftl:prepared_flesh\S* serializer=create:filling
+expect verb=makes id=\S+ result=jrftl:prepared_flesh\S* serializer=immersiveengineering:bottling_machine
+expect verb=uses id=\S+ alone=\S+ serializer=minecraft:smoking
+reject \[cdevtest\] verb=\S+ done=0
+look the smoking recipe makes leather (rdetail the id from the uses line if unsure); name "Prepared Flesh" and the new texture are client looks (JEI)

@@ -17,21 +17,21 @@
 @commands Tag probe `#quark:simple_harvest_blacklisted`, `#immersive_weathering:fertile_blocks`; fake player right-clicks `immersive_weathering:weeds[age=7]` on farmland (empty hand, then iron hoe); places the weeds item on `farmersdelight:rich_soil_farmland`, `farmersdelight:rich_soil`, `immersive_weathering:mulch_block`
 @pass weeds in the blacklist, Rich Farmland in fertile_blocks; the right-clicks change nothing; the weed places on all three soils (CR-108, CR-109 placement half)
 @fails `crop_tags.js` not in the CD jar; `global.has(item.weeds)` false
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
-> zq itemtag quark:simple_harvest_blacklisted
-> zq blocktag quark:simple_harvest_blacklisted
-> zq blocktag immersive_weathering:fertile_blocks
-waitlog \[zq\] blocktag immersive_weathering:fertile_blocks 30
-expect simple_harvest_blacklisted \(\d+\):.*immersive_weathering:weeds
-expect blocktag immersive_weathering:fertile_blocks \(\d+\):.*farmersdelight:rich_soil_farmland
+> cdevtest tag item quark:simple_harvest_blacklisted
+> cdevtest tag block quark:simple_harvest_blacklisted
+> cdevtest tag block immersive_weathering:fertile_blocks
+expect verb=tag kind=(item|block) tag=quark:simple_harvest_blacklisted n=\d+ ids=\S*immersive_weathering:weeds
+expect verb=tag kind=block tag=immersive_weathering:fertile_blocks n=\d+ ids=\S*farmersdelight:rich_soil_farmland
 > setblock 1000 -61 1070 minecraft:farmland[moisture=7]
 > setblock 1000 -60 1070 immersive_weathering:weeds[age=7]
 > clear G
 > pbot use G 1000 -60 1070 up
 > pbot hold G minecraft:iron_hoe 1
 > pbot use G 1000 -60 1070 up
-> zc3 bstate 1000 -60 1070
-expect bstate 1000 -60 1070 Block\{immersive_weathering:weeds\}\[age=7\]
+> cdevtest state 1000 -60 1070
+expect verb=state pos=1000,-60,1070 state="immersive_weathering:weeds\[age=7\]"
 > setblock 1002 -61 1070 farmersdelight:rich_soil_farmland
 > setblock 1004 -61 1070 farmersdelight:rich_soil
 > setblock 1006 -61 1070 immersive_weathering:mulch_block
@@ -39,11 +39,14 @@ expect bstate 1000 -60 1070 Block\{immersive_weathering:weeds\}\[age=7\]
 > pbot use G 1002 -61 1070 up
 > pbot use G 1004 -61 1070 up
 > pbot use G 1006 -61 1070 up
-> zc3 bstate 1002 -60 1070 1004 -60 1070 1006 -60 1070
-expect bstate 1002 -60 1070 Block\{immersive_weathering:weeds\}
-expect bstate 1004 -60 1070 Block\{immersive_weathering:weeds\}
-expect bstate 1006 -60 1070 Block\{immersive_weathering:weeds\}
-look the blacklist tag the row means may be the item or the block tag (both printed); weeds still age 7 after both clicks
+> cdevtest state 1002 -60 1070
+> cdevtest state 1004 -60 1070
+> cdevtest state 1006 -60 1070
+expect verb=state pos=1002,-60,1070 state="?immersive_weathering:weeds\b
+expect verb=state pos=1004,-60,1070 state="?immersive_weathering:weeds\b
+expect verb=state pos=1006,-60,1070 state="?immersive_weathering:weeds\b
+reject \[cdevtest\] .*done=0
+look the blacklist tag the row means may be the item or the block tag (both printed)
 
 ## SQ-FCK-02 | pack config: [dandelion_maturing] richSoilTicks = 10, fertileSoilTicks = 5 (fresh-config half: c3_ch1.qb)
 @group A
@@ -74,25 +77,29 @@ look the second data get shows bone broth in the meal or output slot (row says x
 @commands Recipe probe for output `creativeengineering:canned_oatmeal`
 @pass two recipes: 6 oatmeal; 3 oatmeal + 1 sugar (`_sugar`); none with salt or bone broth (CN-12)
 @fails old CD jar (can_types member script)
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
-> zq rdetail canned_oatmeal
-waitlog \[zq\] rdetail matching canned_oatmeal: \d+ 30
-> zq makes creativedelight:canned_oatmeal
-waitlog \[zq\] makes creativedelight:canned_oatmeal: \d+ 30
-reject rdetail .*canned_oatmeal.*(salt|bone_broth)
-look two crafting recipes (plain and `_sugar`); id is creativedelight:canned_oatmeal since 11-09 (row said creativeengineering:)
+> cdevtest rdetail canned_oatmeal
+> cdevtest makes creativedelight:canned_oatmeal
+waitlog verb=makes item=creativedelight:canned_oatmeal n=\d+ 30
+expect verb=makes item=creativedelight:canned_oatmeal n=2$
+reject verb=rdetail id=\S*canned_oatmeal.*(salt|bone_broth)
+reject \[cdevtest\] .*done=0
+look two crafting recipes (plain and `_sugar`): 6 oatmeal; 3 oatmeal + sugar
 
 ## SQ-FCK-05 | peanut crop age 7: magic peanut about 10 in 20000 rolls, never over 30
 @group A
 @commands Loot probe `vintagedelight:blocks/peanut_crop` with `age=7`, 20000 rolls
 @pass magic peanut about 10 times (0.05 %), never more than 30
 @fails old CD jar (0.01 loot table)
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
 > setblock 1012 -61 1070 minecraft:farmland[moisture=7]
 > setblock 1012 -60 1070 vintagedelight:peanut_crop[age=7]
-> zc3 loot 1012 -60 1070 none 20000
-waitlog \[c3\] loot .* rolls 20000: 300
-expect rolls 20000: .*vintagedelight:magic_peanut x([1-9]|[12]\d|30)\b
+> cdevtest loot 1012 -60 1070 rolls=20000
+waitlog verb=loot (done|error)= 300
+expect verb=loot state="vintagedelight:peanut_crop\[age=7\]" tool=empty rolls=20000 drops=\S*vintagedelight:magic_peanut:([1-9]|[12]\d|30)\b
+reject verb=loot .*done=0
 look magic peanut about 10 (0.05 %)
 
 ## SQ-FCK-06 | 3 rich soil -> 1 mulch block, id fertile_soil_from_rich_soil_manual_only
@@ -100,19 +107,21 @@ look magic peanut about 10 (0.05 %)
 @commands Recipe probe for output `immersive_weathering:mulch_block`
 @pass a shapeless 3 `farmersdelight:rich_soil` -> 1, id `..._fertile_soil_from_rich_soil_manual_only` (RW-31)
 @fails old Engineering jar
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
-> zq makes immersive_weathering:mulch_block
-waitlog \[zq\] makes immersive_weathering:mulch_block: \d+ 30
-expect fertile_soil_from_rich_soil_manual_only -> 1 immersive_weathering:mulch_block
-> zq rdetail fertile_soil_from_rich_soil_manual_only
-waitlog \[zq\] rdetail matching fertile_soil_from_rich_soil_manual_only: 1 30
-look the inputs are 3 farmersdelight:rich_soil, shapeless (id creativeengineering:shapeless/..., written by Engineering's sawdust.js)
+> cdevtest makes immersive_weathering:mulch_block
+> cdevtest rdetail fertile_soil_from_rich_soil_manual_only
+waitlog verb=rdetail text=fertile_soil_from_rich_soil_manual_only n=1 30
+expect verb=makes id=\S*fertile_soil_from_rich_soil_manual_only result=immersive_weathering:mulch_block\*1
+expect verb=rdetail id=\S*fertile_soil_from_rich_soil_manual_only serializer=minecraft:crafting_shapeless result=immersive_weathering:mulch_block\*1 ingredients=farmersdelight:rich_soil,farmersdelight:rich_soil,farmersdelight:rich_soil$
+reject \[cdevtest\] .*done=0
 
 ## SQ-FCK-07 | glow lichen in a 9x9-chunk plains box about 3x the control boot (c3_b2.qb, SQ-FCK-07c); no lichen codec error
 @group A
 @commands Fresh world, pregen a 9x9 chunk area around 0,0 in a plains / forest seed; count `minecraft:glow_lichen` blocks (`tools/farm_worldgen_probe.js` block census or WorldEdit `//count`); same on a control boot with the two `kubejs/data/minecraft/worldgen/*/glow_lichen.json` files moved out
 @pass about 3x the control count or more; no `glow_lichen` codec error in latest.log (FL-15)
 @fails JSON codec error (1.19.2 IntProvider shape); a mod's biome lists a different lichen feature
+@reviewed 2026-11-16
 @from batches/r1113/c3_b1.qb
 bootreject glow_lichen.*([Cc]odec|[Ee]rror|Failed)|Failed to parse.*glow_lichen
 > locate biome minecraft:plains
@@ -120,137 +129,156 @@ waitlog nearest minecraft:plains is at|Could not find 300
 capture PL minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {PL1-72} {PL3-72} {PL1+71} {PL3+71}
 sleep 90
-> zq count {PL1-72} -64 {PL3-72} {PL1+71} 70 {PL3+71} minecraft:glow_lichen
-waitlog \[zq\] count minecraft:glow_lichen: \d+ 900
+# a count box is at most 262144 blocks (64x64x64): the box runs as slices; the shell prints the summed n per block
+> say FCK07 begin
+> cdevtest count {PL1-72} -64 {PL3-72} {PL1+71} 70 {PL3-61} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3-60} {PL1+71} 70 {PL3-49} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3-48} {PL1+71} 70 {PL3-37} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3-36} {PL1+71} 70 {PL3-25} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3-24} {PL1+71} 70 {PL3-13} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3-12} {PL1+71} 70 {PL3-1} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3} {PL1+71} 70 {PL3+11} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3+12} {PL1+71} 70 {PL3+23} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3+24} {PL1+71} 70 {PL3+35} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3+36} {PL1+71} 70 {PL3+47} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3+48} {PL1+71} 70 {PL3+59} minecraft:glow_lichen
+> cdevtest count {PL1-72} -64 {PL3+60} {PL1+71} 70 {PL3+71} minecraft:glow_lichen
+> say FCK07 end
+waitlog FCK07 end 900
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" FCK07
+reject verb=count .*skipped_columns=[1-9]
 > forceload remove {PL1-72} {PL3-72} {PL1+71} {PL3+71}
-look count here vs SQ-FCK-07c (same seed and box): about 3x or more. The plains spot is the same in both boots (same seed); note both counts
+look the shell's summed glow_lichen total here vs SQ-FCK-07c (same seed and box): about 3x or more. The plains spot is the same in both boots (same seed); note both counts
 
 ## SQ-FCK-08 | hamimelon and Mini Cantaloupe in desert and badlands about 2.5x the control (c3_b2.qb, SQ-FCK-08c); rules list the _common features
 @group A
 @commands Pregen 25x25 chunks in `minecraft:desert` and `minecraft:badlands` (two seeds); count `fruitsdelight:hamimelon` and the Mini Cantaloupe block; control with the two `_common` placed features removed from wild_crops.json
 @pass about 2.5x the control count of each (CR-111); log lists the two new features in the hamimelon / cantaloupe rules
 @fails rule `requires` gate moved only the old files (`packs/worldgen/<mod>/` in the built CD jar)
+@reviewed 2026-11-16
 @from batches/r1113/c3_b1.qb
-# r1114: no log line names the features; read the rules file the server loaded
 shell grep -oE "(hamimelon|mini_cantaloupe)_common" kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json | sort | uniq -c
 > locate biome minecraft:desert
 waitlog nearest minecraft:desert is at|Could not find 300
 capture DS minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {DS1-112} {DS3-112} {DS1+111} {DS3+111}
 sleep 150
-> zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} fruitsdelight:hamimelon
-waitlog \[zq\] count fruitsdelight:hamimelon: \d+ 900
+# a count box is at most 262144 blocks (64x64x64): the box runs as slices; the shell prints the summed n per block
+> say FCK08 begin
+> cdevtest count {DS1-112} 40 {DS3-112} {DS1+111} 65 {DS3-68} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 66 {DS3-112} {DS1+111} 91 {DS3-68} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 92 {DS3-112} {DS1+111} 117 {DS3-68} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 118 {DS3-112} {DS1+111} 140 {DS3-68} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 40 {DS3-67} {DS1+111} 65 {DS3-23} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 66 {DS3-67} {DS1+111} 91 {DS3-23} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 92 {DS3-67} {DS1+111} 117 {DS3-23} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 118 {DS3-67} {DS1+111} 140 {DS3-23} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 40 {DS3-22} {DS1+111} 65 {DS3+22} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 66 {DS3-22} {DS1+111} 91 {DS3+22} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 92 {DS3-22} {DS1+111} 117 {DS3+22} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 118 {DS3-22} {DS1+111} 140 {DS3+22} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 40 {DS3+23} {DS1+111} 65 {DS3+67} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 66 {DS3+23} {DS1+111} 91 {DS3+67} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 92 {DS3+23} {DS1+111} 117 {DS3+67} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 118 {DS3+23} {DS1+111} 140 {DS3+67} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 40 {DS3+68} {DS1+111} 65 {DS3+111} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 66 {DS3+68} {DS1+111} 91 {DS3+111} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 92 {DS3+68} {DS1+111} 117 {DS3+111} fruitsdelight:hamimelon
+> cdevtest count {DS1-112} 118 {DS3+68} {DS1+111} 140 {DS3+111} fruitsdelight:hamimelon
 # r1114: the patch places delightful:cantaloupe (the fruit block), not cantaloupe_plant
-> zq count {DS1-112} 40 {DS3-112} {DS1+111} 140 {DS3+111} delightful:cantaloupe
-waitlog \[zq\] count delightful:cantaloupe: \d+ 900
-look desert counts (15x15 chunks: the row's 25x25 is over the 256-chunk forceload cap; the same box in both boots)
+> cdevtest count {DS1-112} 40 {DS3-112} {DS1+111} 65 {DS3-68} delightful:cantaloupe
+> cdevtest count {DS1-112} 66 {DS3-112} {DS1+111} 91 {DS3-68} delightful:cantaloupe
+> cdevtest count {DS1-112} 92 {DS3-112} {DS1+111} 117 {DS3-68} delightful:cantaloupe
+> cdevtest count {DS1-112} 118 {DS3-112} {DS1+111} 140 {DS3-68} delightful:cantaloupe
+> cdevtest count {DS1-112} 40 {DS3-67} {DS1+111} 65 {DS3-23} delightful:cantaloupe
+> cdevtest count {DS1-112} 66 {DS3-67} {DS1+111} 91 {DS3-23} delightful:cantaloupe
+> cdevtest count {DS1-112} 92 {DS3-67} {DS1+111} 117 {DS3-23} delightful:cantaloupe
+> cdevtest count {DS1-112} 118 {DS3-67} {DS1+111} 140 {DS3-23} delightful:cantaloupe
+> cdevtest count {DS1-112} 40 {DS3-22} {DS1+111} 65 {DS3+22} delightful:cantaloupe
+> cdevtest count {DS1-112} 66 {DS3-22} {DS1+111} 91 {DS3+22} delightful:cantaloupe
+> cdevtest count {DS1-112} 92 {DS3-22} {DS1+111} 117 {DS3+22} delightful:cantaloupe
+> cdevtest count {DS1-112} 118 {DS3-22} {DS1+111} 140 {DS3+22} delightful:cantaloupe
+> cdevtest count {DS1-112} 40 {DS3+23} {DS1+111} 65 {DS3+67} delightful:cantaloupe
+> cdevtest count {DS1-112} 66 {DS3+23} {DS1+111} 91 {DS3+67} delightful:cantaloupe
+> cdevtest count {DS1-112} 92 {DS3+23} {DS1+111} 117 {DS3+67} delightful:cantaloupe
+> cdevtest count {DS1-112} 118 {DS3+23} {DS1+111} 140 {DS3+67} delightful:cantaloupe
+> cdevtest count {DS1-112} 40 {DS3+68} {DS1+111} 65 {DS3+111} delightful:cantaloupe
+> cdevtest count {DS1-112} 66 {DS3+68} {DS1+111} 91 {DS3+111} delightful:cantaloupe
+> cdevtest count {DS1-112} 92 {DS3+68} {DS1+111} 117 {DS3+111} delightful:cantaloupe
+> cdevtest count {DS1-112} 118 {DS3+68} {DS1+111} 140 {DS3+111} delightful:cantaloupe
+> say FCK08 end
+waitlog FCK08 end 900
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" FCK08
+reject verb=count .*done=0
+look desert totals from the shell line (15x15 chunks: the row's 25x25 is over the 256-chunk forceload cap; the same box in both boots); skipped_columns 0
 
 ## SQ-FCK-09 | each of the 21 A12 feast cans has one recipe: its feast block item plus an empty can
 @group A
 @commands Recipe probe for each of the 21 new feast cans (`canned_pizza` ... `canned_stuffed_bell_peppers`); `[cans] registered N generated cans` in the startup log
 @pass each has one recipe: its feast block item + an empty can; N up by 36 from the last run (21 feasts + 15 catch-up cans) (CN-10)
 @fails item_dict not rebuilt in Common; feast block key wrong in `gen_can_types.py`
+@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
 shell grep -h "\[cans\] registered" logs/kubejs/startup.log | cut -c1-200
-> zq makes creativedelight:canned_pizza
-waitlog \[zq\] makes creativedelight:canned_pizza: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_pizza
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_pizza: \d+ 30
-> zq makes creativedelight:canned_cheese_pizza
-waitlog \[zq\] makes creativedelight:canned_cheese_pizza: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_cheese_pizza
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_cheese_pizza: \d+ 30
-> zq makes creativedelight:canned_meat_pizza
-waitlog \[zq\] makes creativedelight:canned_meat_pizza: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_meat_pizza
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_meat_pizza: \d+ 30
-> zq makes creativedelight:canned_vegan_pizza
-waitlog \[zq\] makes creativedelight:canned_vegan_pizza: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_vegan_pizza
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_vegan_pizza: \d+ 30
-> zq makes creativedelight:canned_stuffed_cantaloupe
-waitlog \[zq\] makes creativedelight:canned_stuffed_cantaloupe: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_stuffed_cantaloupe
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_stuffed_cantaloupe: \d+ 30
-> zq makes creativedelight:canned_dragon_meat_stew
-waitlog \[zq\] makes creativedelight:canned_dragon_meat_stew: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_dragon_meat_stew
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_dragon_meat_stew: \d+ 30
-> zq makes creativedelight:canned_grilled_shulker
-waitlog \[zq\] makes creativedelight:canned_grilled_shulker: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_grilled_shulker
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_grilled_shulker: \d+ 30
-> zq makes creativedelight:canned_steamed_dragon_egg
-waitlog \[zq\] makes creativedelight:canned_steamed_dragon_egg: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_steamed_dragon_egg
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_steamed_dragon_egg: \d+ 30
-> zq makes creativedelight:canned_rice_roll_medley
-waitlog \[zq\] makes creativedelight:canned_rice_roll_medley: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_rice_roll_medley
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_rice_roll_medley: \d+ 30
-> zq makes creativedelight:canned_fake_meatloaf
-waitlog \[zq\] makes creativedelight:canned_fake_meatloaf: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_fake_meatloaf
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_fake_meatloaf: \d+ 30
-> zq makes creativedelight:canned_glazed_arachnid_limbs
-waitlog \[zq\] makes creativedelight:canned_glazed_arachnid_limbs: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_glazed_arachnid_limbs
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_glazed_arachnid_limbs: \d+ 30
-> zq makes creativedelight:canned_stuffed_squid
-waitlog \[zq\] makes creativedelight:canned_stuffed_squid: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_stuffed_squid
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_stuffed_squid: \d+ 30
-> zq makes creativedelight:canned_guardian_soup
-waitlog \[zq\] makes creativedelight:canned_guardian_soup: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_guardian_soup
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_guardian_soup: \d+ 30
-> zq makes creativedelight:canned_legendary_roll_medley
-waitlog \[zq\] makes creativedelight:canned_legendary_roll_medley: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_legendary_roll_medley
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_legendary_roll_medley: \d+ 30
-> zq makes creativedelight:canned_mythical_roll_medley
-waitlog \[zq\] makes creativedelight:canned_mythical_roll_medley: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_mythical_roll_medley
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_mythical_roll_medley: \d+ 30
-> zq makes creativedelight:canned_bell_pepper_medley
-waitlog \[zq\] makes creativedelight:canned_bell_pepper_medley: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_bell_pepper_medley
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_bell_pepper_medley: \d+ 30
-> zq makes creativedelight:canned_pale_bell_pepper_medley
-waitlog \[zq\] makes creativedelight:canned_pale_bell_pepper_medley: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_pale_bell_pepper_medley
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_pale_bell_pepper_medley: \d+ 30
-> zq makes creativedelight:canned_dark_bell_pepper_medley
-waitlog \[zq\] makes creativedelight:canned_dark_bell_pepper_medley: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_dark_bell_pepper_medley
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_dark_bell_pepper_medley: \d+ 30
-> zq makes creativedelight:canned_rice_roll_royale
-waitlog \[zq\] makes creativedelight:canned_rice_roll_royale: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_rice_roll_royale
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_rice_roll_royale: \d+ 30
-> zq makes creativedelight:canned_lasagna
-waitlog \[zq\] makes creativedelight:canned_lasagna: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_lasagna
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_lasagna: \d+ 30
-> zq makes creativedelight:canned_stuffed_bell_peppers
-waitlog \[zq\] makes creativedelight:canned_stuffed_bell_peppers: \d+ 30
-> zq rdetail creativedelight:shapeless/canned_stuffed_bell_peppers
-waitlog \[zq\] rdetail matching creativedelight:shapeless/canned_stuffed_bell_peppers: \d+ 30
-count \[zq\] makes creativedelight:canned_[a-z_]+: 1$ >= 21
-count -> 1 canned_[a-z_]+ <- canned_goods:empty_can, [a-z_]+:[a-z_]+$ >= 21
-look 21 `makes ...: 1` lines; each rdetail line takes the empty can and one feast block item (Brewin' pizza, stuffed cantaloupe, dragon meat stew, ...); N in the shell line 307 as in the 11-12 pack log
+> cdevtest makes creativedelight:canned_pizza
+> cdevtest rdetail creativedelight:shapeless/canned_pizza
+> cdevtest makes creativedelight:canned_cheese_pizza
+> cdevtest rdetail creativedelight:shapeless/canned_cheese_pizza
+> cdevtest makes creativedelight:canned_meat_pizza
+> cdevtest rdetail creativedelight:shapeless/canned_meat_pizza
+> cdevtest makes creativedelight:canned_vegan_pizza
+> cdevtest rdetail creativedelight:shapeless/canned_vegan_pizza
+> cdevtest makes creativedelight:canned_stuffed_cantaloupe
+> cdevtest rdetail creativedelight:shapeless/canned_stuffed_cantaloupe
+> cdevtest makes creativedelight:canned_dragon_meat_stew
+> cdevtest rdetail creativedelight:shapeless/canned_dragon_meat_stew
+> cdevtest makes creativedelight:canned_grilled_shulker
+> cdevtest rdetail creativedelight:shapeless/canned_grilled_shulker
+> cdevtest makes creativedelight:canned_steamed_dragon_egg
+> cdevtest rdetail creativedelight:shapeless/canned_steamed_dragon_egg
+> cdevtest makes creativedelight:canned_rice_roll_medley
+> cdevtest rdetail creativedelight:shapeless/canned_rice_roll_medley
+> cdevtest makes creativedelight:canned_fake_meatloaf
+> cdevtest rdetail creativedelight:shapeless/canned_fake_meatloaf
+> cdevtest makes creativedelight:canned_glazed_arachnid_limbs
+> cdevtest rdetail creativedelight:shapeless/canned_glazed_arachnid_limbs
+> cdevtest makes creativedelight:canned_stuffed_squid
+> cdevtest rdetail creativedelight:shapeless/canned_stuffed_squid
+> cdevtest makes creativedelight:canned_guardian_soup
+> cdevtest rdetail creativedelight:shapeless/canned_guardian_soup
+> cdevtest makes creativedelight:canned_legendary_roll_medley
+> cdevtest rdetail creativedelight:shapeless/canned_legendary_roll_medley
+> cdevtest makes creativedelight:canned_mythical_roll_medley
+> cdevtest rdetail creativedelight:shapeless/canned_mythical_roll_medley
+> cdevtest makes creativedelight:canned_bell_pepper_medley
+> cdevtest rdetail creativedelight:shapeless/canned_bell_pepper_medley
+> cdevtest makes creativedelight:canned_pale_bell_pepper_medley
+> cdevtest rdetail creativedelight:shapeless/canned_pale_bell_pepper_medley
+> cdevtest makes creativedelight:canned_dark_bell_pepper_medley
+> cdevtest rdetail creativedelight:shapeless/canned_dark_bell_pepper_medley
+> cdevtest makes creativedelight:canned_rice_roll_royale
+> cdevtest rdetail creativedelight:shapeless/canned_rice_roll_royale
+> cdevtest makes creativedelight:canned_lasagna
+> cdevtest rdetail creativedelight:shapeless/canned_lasagna
+> cdevtest makes creativedelight:canned_stuffed_bell_peppers
+> cdevtest rdetail creativedelight:shapeless/canned_stuffed_bell_peppers
+waitlog verb=rdetail text=creativedelight:shapeless/canned_stuffed_bell_peppers n=\d+ 30
+count verb=makes item=creativedelight:canned_[a-z_]+ n=1$ >= 21
+count verb=rdetail id=creativedelight:shapeless/canned_[a-z_]+ serializer=\S+ result=creativedelight:canned_[a-z_]+\*1 ingredients=\S*canned_goods:empty_can >= 21
+reject verb=(makes|rdetail) .*done=0
+look 21 `verb=makes ... n=1` lines; each rdetail line takes the empty can and one feast block item (Brewin' pizza, stuffed cantaloupe, dragon meat stew, ...); N in the shell line 307 as in the 11-12 pack log
 
 ## SQ-FCK-10 | #fruitsdelight:pineapple_grows_on holds the farmland soils; pineapple places on all three
 @group A
 @commands Tag probe `#fruitsdelight:pineapple_grows_on`; place pineapple seeds (or the plant) on farmland, rich soil farmland, mulch block
 @pass tag holds the three farmland soils besides sand; placement works on all three (CR-110)
 @fails tag nesting through `global.tags` not expanded
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
-> zq blocktag fruitsdelight:pineapple_grows_on
-waitlog \[zq\] blocktag fruitsdelight:pineapple_grows_on 30
-expect pineapple_grows_on \(\d+\):.*minecraft:farmland
-expect pineapple_grows_on \(\d+\):.*farmersdelight:rich_soil_farmland
-expect pineapple_grows_on \(\d+\):.*immersive_weathering:mulch_block
+> cdevtest tag block fruitsdelight:pineapple_grows_on
+expect verb=tag kind=block tag=fruitsdelight:pineapple_grows_on n=\d+ ids=\S*minecraft:farmland
+expect verb=tag kind=block tag=fruitsdelight:pineapple_grows_on n=\d+ ids=\S*farmersdelight:rich_soil_farmland
+expect verb=tag kind=block tag=fruitsdelight:pineapple_grows_on n=\d+ ids=\S*immersive_weathering:mulch_block
 > setblock 1020 -61 1070 minecraft:farmland[moisture=7]
 > setblock 1022 -61 1070 farmersdelight:rich_soil_farmland[moisture=7]
 > setblock 1024 -61 1070 immersive_weathering:mulch_block
@@ -258,9 +286,11 @@ expect pineapple_grows_on \(\d+\):.*immersive_weathering:mulch_block
 > pbot use G 1020 -61 1070 up
 > pbot use G 1022 -61 1070 up
 > pbot use G 1024 -61 1070 up
-> zc3 bstate 1020 -60 1070 1022 -60 1070 1024 -60 1070
-reject bstate 10(20|22|24) -60 1070 Block\{minecraft:air\}
-look each soil holds the pineapple plant (block id fruitsdelight:pineapple...)
+> cdevtest state 1020 -60 1070
+> cdevtest state 1022 -60 1070
+> cdevtest state 1024 -60 1070
+count verb=state pos=10(20|22|24),-60,1070 state="?fruitsdelight:pineapple == 3
+reject \[cdevtest\] .*done=0
 
 ## SQ-FCK-11 | Just a Well: a watering can fill drains the well, then it refills
 @group A
@@ -288,123 +318,147 @@ look Amount falls by 1000 after the use (FillTick not wrapped between the two re
 @commands `/setblock ~ ~ ~ minecraft:beehive[honey_level=5]`; fake player with shears uses it; count honeycomb item entities
 @pass one stack of 6; `[bees] honeycombMultiplier = 2` in `config/creativecommon-common.toml` (BN-HC-01)
 @fails `BeehiveHoneycombMixin` not applied (latest.log, `m_49600_`)
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb passed
 shell grep -A4 "^\[bees\]" config/creativecommon-common.toml | grep honeycombMultiplier
 shell grep -qE "^\s*honeycombMultiplier = 2" config/creativecommon-common.toml
 > setblock 1040 -60 1080 minecraft:beehive[honey_level=5,facing=north]
 > pbot hold G minecraft:shears 1
 > pbot use G 1040 -60 1080 north
-sleep 1
-> zc3 items 1040 -60 1080 3
-expect \[c3\] items 1040 -60 1080: .*minecraft:honeycomb x6\b
+> cdevtest tickwarp 20
+waitlog verb=tickwarp end=done 30
+> cdevtest items 1040 -60 1080 3
+expect verb=items items=(\S*,)?minecraft:honeycomb:6\b
+reject \[cdevtest\] .*done=0
 
 ## SQ-FCK-13 | dispenser shears a full nest: 6 honeycomb, then 3 with the multiplier at 1 (read live)
 @group A
 @commands Dispenser with shears facing `bee_nest[honey_level=5]`, pulse; set the key to 1, refill, pulse
 @pass 6 honeycombs, then 3
 @fails dispenser path not through `dropHoneycomb`; config not read live
+@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
 > setblock 1050 -60 1080 minecraft:dispenser[facing=east]{Items:[{Slot:0b,id:"minecraft:shears",Count:1b}]}
 > setblock 1051 -60 1080 minecraft:bee_nest[honey_level=5,facing=north]
 > setblock 1050 -60 1081 minecraft:redstone_block
-sleep 1
+> cdevtest tickwarp 20
+waitlog verb=tickwarp end=done ticks=\d+ asked=20\b 30
 > setblock 1050 -60 1081 minecraft:air
-sleep 1
-> zc3 items 1051 -60 1080 3
-expect \[c3\] items 1051 -60 1080: .*minecraft:honeycomb x6\b
+> cdevtest tickwarp 21
+waitlog verb=tickwarp end=done ticks=\d+ asked=21\b 30
+> cdevtest items 1051 -60 1080 3
+expect verb=items items=(\S*,)?minecraft:honeycomb:6\b
 shell sed 's/^\(\s*honeycombMultiplier = \)2/\11/' config/creativecommon-common.toml > config/creativecommon-common.toml.tmp && cat config/creativecommon-common.toml.tmp > config/creativecommon-common.toml && rm config/creativecommon-common.toml.tmp && grep honeycombMultiplier config/creativecommon-common.toml
 sleep 5
-shell grep -c "creativecommon-common.toml changed" logs/debug.log
+shell grep -c "creativecommon-common.toml changed" logs/debug.log; true
 > setblock 1051 -60 1080 minecraft:bee_nest[honey_level=5,facing=north]
 > setblock 1050 -60 1081 minecraft:redstone_block
-sleep 1
+> cdevtest tickwarp 22
+waitlog verb=tickwarp end=done ticks=\d+ asked=22\b 30
 > setblock 1050 -60 1081 minecraft:air
-sleep 1
-> zc3 items 1051 -60 1080 3
-expect \[c3\] items 1051 -60 1080: .*minecraft:honeycomb x3\b
+> cdevtest tickwarp 23
+waitlog verb=tickwarp end=done ticks=\d+ asked=23\b 30
+> cdevtest items 1051 -60 1080 3
+expect verb=items items=(\S*,)?minecraft:honeycomb:3\b
 shell sed 's/^\(\s*honeycombMultiplier = \)1/\12/' config/creativecommon-common.toml > config/creativecommon-common.toml.tmp && cat config/creativecommon-common.toml.tmp > config/creativecommon-common.toml && rm config/creativecommon-common.toml.tmp && grep honeycombMultiplier config/creativecommon-common.toml
-look the debug.log count is >= 1 (the watcher saw the edit); x6 again with a count >= 1 means the value is not read live (FAIL); count 0 = the edit was still not seen (batch)
+reject \[cdevtest\] .*done=0
+look the debug.log count is >= 1 (the watcher saw the edit); honeycomb:6 again with a count >= 1 means the value is not read live (FAIL); count 0 = the edit was still not seen (batch)
 
 ## SQ-FCK-14 | water bucket on dry soil soaks the 3x3 to 7, ring stays 0, bucket comes back empty
 @group A
 @commands 5x5 `farmland[moisture=0]`, no water; fake player (not sneaking) uses a water bucket on the top of the centre; check moisture of the 3x3 and the ring; held item; repeat on `rich_soil_farmland` and `mulch_block[moisture=0]`
 @pass 3x3 at 7, ring at 0, holds `minecraft:bucket` (CR-105)
 @fails `WaterOnSoil` not registered; event cancelled too late
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb passed
 > fill 1018 -61 1018 1022 -61 1022 minecraft:farmland[moisture=0]
 > pbot hold G minecraft:water_bucket 1
 > pbot use G 1020 -61 1020 up
-> zc3 bstate 1019 -61 1019 1021 -61 1021 1020 -61 1020 1018 -61 1018 1022 -61 1020
-expect bstate 1019 -61 1019 Block\{minecraft:farmland\}\[moisture=7\]
-expect bstate 1021 -61 1021 Block\{minecraft:farmland\}\[moisture=7\]
-expect bstate 1020 -61 1020 Block\{minecraft:farmland\}\[moisture=7\]
-expect bstate 1018 -61 1018 Block\{minecraft:farmland\}\[moisture=0\]
-expect bstate 1022 -61 1020 Block\{minecraft:farmland\}\[moisture=0\]
-> zp inv G
-waitlog \[zp\] done 20
-expect minecraft:bucket
+> cdevtest state 1019 -61 1019
+> cdevtest state 1021 -61 1021
+> cdevtest state 1020 -61 1020
+> cdevtest state 1018 -61 1018
+> cdevtest state 1022 -61 1020
+expect verb=state pos=1019,-61,1019 state="minecraft:farmland\[moisture=7\]"
+expect verb=state pos=1021,-61,1021 state="minecraft:farmland\[moisture=7\]"
+expect verb=state pos=1020,-61,1020 state="minecraft:farmland\[moisture=7\]"
+expect verb=state pos=1018,-61,1018 state="minecraft:farmland\[moisture=0\]"
+expect verb=state pos=1022,-61,1020 state="minecraft:farmland\[moisture=0\]"
+> cdevtest player G
+expect verb=player name=G .* main=minecraft:bucket\*1\b
 > fill 1028 -61 1018 1032 -61 1022 farmersdelight:rich_soil_farmland[moisture=0]
 > pbot hold G minecraft:water_bucket 1
 > pbot use G 1030 -61 1020 up
 > fill 1038 -61 1018 1042 -61 1022 immersive_weathering:mulch_block[moisture=0]
 > pbot hold G minecraft:water_bucket 1
 > pbot use G 1040 -61 1020 up
-> zc3 bstate 1029 -61 1019 1028 -61 1018 1039 -61 1019 1038 -61 1018
-expect bstate 1029 -61 1019 .*moisture=7
-expect bstate 1028 -61 1018 .*moisture=0
-expect bstate 1039 -61 1019 .*moisture=7
-expect bstate 1038 -61 1018 .*moisture=0
+> cdevtest state 1029 -61 1019
+> cdevtest state 1028 -61 1018
+> cdevtest state 1039 -61 1019
+> cdevtest state 1038 -61 1018
+expect verb=state pos=1029,-61,1019 state=.*moisture=7
+expect verb=state pos=1028,-61,1018 state=.*moisture=0
+expect verb=state pos=1039,-61,1019 state=.*moisture=7
+expect verb=state pos=1038,-61,1018 state=.*moisture=0
+reject \[cdevtest\] .*done=0
 
 ## SQ-FCK-15 | water bottle soaks one dry block; no change on moist soil; bucket on ripe wheat soaks, wheat stays 7
 @group A
 @commands Water bottle on one dry farmland; another bottle on moist farmland; bucket on ripe `wheat[age=7]` over dry farmland
 @pass first: one block at 7, holds glass bottle; second: no change (drink path); third: the 3x3 soaks, wheat stays age 7 (CR-106)
 @fails bottle check wrong; Quark harvest ran first
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
 > fill 1018 -61 1028 1022 -61 1028 minecraft:farmland[moisture=0]
 > item replace entity G weapon.mainhand with minecraft:potion{Potion:"minecraft:water"}
 > pbot use G 1020 -61 1028 up
-> zc3 bstate 1020 -61 1028 1019 -61 1028
-expect bstate 1020 -61 1028 Block\{minecraft:farmland\}\[moisture=7\]
-expect bstate 1019 -61 1028 Block\{minecraft:farmland\}\[moisture=0\]
-> zp inv G
-waitlog \[zp\] done 20
-expect minecraft:glass_bottle
+> cdevtest state 1020 -61 1028
+> cdevtest state 1019 -61 1028
+expect verb=state pos=1020,-61,1028 state="minecraft:farmland\[moisture=7\]"
+expect verb=state pos=1019,-61,1028 state="minecraft:farmland\[moisture=0\]"
+> cdevtest player G
+expect verb=player name=G .* main=minecraft:glass_bottle\*1\b
 > setblock 1024 -61 1028 minecraft:farmland[moisture=7]
 > item replace entity G weapon.mainhand with minecraft:potion{Potion:"minecraft:water"}
 > pbot use G 1024 -61 1028 up
-> zp inv G
-waitlog \[zp\] done 20
+> cdevtest player G
+expect verb=player name=G .* main="?minecraft:potion\*1\{Potion:
 > fill 1018 -61 1032 1022 -61 1036 minecraft:farmland[moisture=0]
 > setblock 1020 -60 1034 minecraft:wheat[age=7]
 > pbot hold G minecraft:water_bucket 1
 > pbot use G 1020 -60 1034 up
-> zc3 bstate 1020 -60 1034 1019 -61 1033 1021 -61 1035
-expect bstate 1020 -60 1034 Block\{minecraft:wheat\}\[age=7\]
-expect bstate 1019 -61 1033 .*moisture=7
-expect bstate 1021 -61 1035 .*moisture=7
-look moist-soil bottle: the bot still holds the water bottle (no soak; the drink would follow on a client)
+> cdevtest state 1020 -60 1034
+> cdevtest state 1019 -61 1033
+> cdevtest state 1021 -61 1035
+expect verb=state pos=1020,-60,1034 state="minecraft:wheat\[age=7\]"
+expect verb=state pos=1019,-61,1033 state=.*moisture=7
+expect verb=state pos=1021,-61,1035 state=.*moisture=7
+reject \[cdevtest\] .*done=0
 
 ## SQ-FCK-16 | sneaking bucket use: moisture unchanged by the click, water placed above as vanilla
 @group A
 @commands Sneaking fake player uses a water bucket on dry farmland
 @pass a water source placed above as vanilla; moisture unchanged by the click (CR-107)
 @fails sneak not respected
+@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
 > fill 1028 -61 1032 1028 -61 1032 minecraft:farmland[moisture=0]
 > pbot spawn W 1028.5 -60 1032.5 minecraft:overworld survival
 sleep 2
 > pbot hold W minecraft:water_bucket 1
-> zp sneak W on
+> pbot sneak W on
 > pbot use W 1028 -61 1032 up
-> zc3 bstate 1028 -61 1032
-> execute as W at @s run tp @s ~ ~ ~ 0 90
-> zq useitem W
-> zc3 bstate 1028 -61 1032 1028 -60 1032
-> zp sneak W off
+> cdevtest state 1028 -61 1032
+> pbot look W 0 90
+> cdevtest useair as=W hand=both
+> cdevtest state 1028 -61 1032
+> cdevtest state 1028 -60 1032
+> pbot sneak W off
 > pbot remove W
-count bstate 1028 -61 1032 Block\{minecraft:farmland\}\[moisture=0\] >= 2
-expect bstate 1028 -60 1032 Block\{minecraft:water\}
+expect verb=pbot.sneak bot=W shift=true
+count verb=state pos=1028,-61,1032 state="minecraft:farmland\[moisture=0\]" >= 2
+expect verb=state pos=1028,-60,1032 state="?minecraft:water\b
+reject \[cdevtest\] .*done=0
 look `pbot use` PASS, farmland moisture 0 both times, water source above after the item use
 
 ## SQ-FCK-17 | tea seeds place on farmland, rich farmland, mulch; a full tea bush on farmland stays
@@ -412,6 +466,7 @@ look `pbot use` PASS, farmland moisture 0 both times, water source above after t
 @commands Place `farmersrespite:tea_seeds` on farmland, rich soil farmland, mulch block; `/setblock` a full tea bush on farmland and update a neighbour
 @pass small bushes placed on all three; the full bush stays (CR-31)
 @fails `TeaBushSoilMixin` not applied
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
 > setblock 1040 -61 1030 minecraft:farmland[moisture=7]
 > setblock 1042 -61 1030 farmersdelight:rich_soil_farmland[moisture=7]
@@ -420,17 +475,21 @@ look `pbot use` PASS, farmland moisture 0 both times, water source above after t
 > pbot use G 1040 -61 1030 up
 > pbot use G 1042 -61 1030 up
 > pbot use G 1044 -61 1030 up
-> zc3 bstate 1040 -60 1030 1042 -60 1030 1044 -60 1030
-expect bstate 1040 -60 1030 Block\{farmersrespite:small_tea_bush\}
-expect bstate 1042 -60 1030 Block\{farmersrespite:small_tea_bush\}
-expect bstate 1044 -60 1030 Block\{farmersrespite:small_tea_bush\}
+> cdevtest state 1040 -60 1030
+> cdevtest state 1042 -60 1030
+> cdevtest state 1044 -60 1030
+expect verb=state pos=1040,-60,1030 state="?farmersrespite:small_tea_bush\b
+expect verb=state pos=1042,-60,1030 state="?farmersrespite:small_tea_bush\b
+expect verb=state pos=1044,-60,1030 state="?farmersrespite:small_tea_bush\b
 > setblock 1046 -61 1030 minecraft:farmland[moisture=7]
 > setblock 1046 -60 1030 farmersrespite:tea_bush[half=lower,age=2]
 > setblock 1046 -59 1030 farmersrespite:tea_bush[half=upper,age=2]
 > setblock 1047 -60 1030 minecraft:stone
 > setblock 1047 -60 1030 minecraft:air
-> zc3 bstate 1046 -60 1030 1046 -59 1030
-expect bstate 1046 -60 1030 Block\{farmersrespite:tea_bush\}
+> cdevtest state 1046 -60 1030
+> cdevtest state 1046 -59 1030
+expect verb=state pos=1046,-60,1030 state="?farmersrespite:tea_bush\b
+reject \[cdevtest\] .*done=0
 look if tea_bush has no age=2 the setblock fails (log says so): BATCH-FAULT, rerun with the default state
 
 ## SQ-FCK-18 | corn top click harvests from the bottom; hoe harvests a 3x3 of ripe corn
@@ -438,29 +497,30 @@ look if tea_bush has no age=2 the setblock fails (log says so): BATCH-FAULT, rer
 @commands Farmland with `corn_delight:corn_crop[age=7,upper=false]` and the upper half; empty hand uses the top; repeat with an iron hoe on a 3x3 of ripe corn, clicking a top half
 @pass lower half back to age 0, top gone, corn dropped; with the hoe every corn in the area replanted (CR-33)
 @fails tag `creativeengineering:crops/harvest_from_bottom` empty; `QuarkTopHalfHarvestMixin` not applied
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
 > setblock 1050 -61 1040 minecraft:farmland[moisture=7]
 > setblock 1050 -60 1040 corn_delight:corn_crop[age=7,upper=false]
 > setblock 1050 -59 1040 corn_delight:corn_crop[age=7,upper=true]
 > clear G
 > pbot use G 1050 -59 1040 north
-> zc3 bstate 1050 -60 1040 1050 -59 1040
-expect bstate 1050 -60 1040 Block\{corn_delight:corn_crop\}\[age=0,upper=false\]
-expect bstate 1050 -59 1040 Block\{minecraft:air\}
-> zc3 items 1050 -60 1040 3
-expect items 1050 -60 1040: .*corn_delight:corn
+> cdevtest state 1050 -60 1040
+> cdevtest state 1050 -59 1040
+expect verb=state pos=1050,-60,1040 state="corn_delight:corn_crop\[age=0,upper=false\]"
+expect verb=state pos=1050,-59,1040 state=minecraft:air
+> cdevtest items 1050 -60 1040 3
+expect verb=items items=(\S*,)?corn_delight:corn:
 > fill 1054 -61 1044 1056 -61 1046 minecraft:farmland[moisture=7]
 > fill 1054 -60 1044 1056 -60 1046 corn_delight:corn_crop[age=7,upper=false]
 > fill 1054 -59 1044 1056 -59 1046 corn_delight:corn_crop[age=7,upper=true]
 > pbot hold G minecraft:iron_hoe 1
 > pbot use G 1055 -59 1045 north
-> zq ages 1054 -60 1044 1056 -60 1046 corn_delight:corn_crop
-waitlog \[zq\] ages corn_delight:corn_crop: \d+ 30
-> zq count 1054 -59 1044 1056 -59 1046 corn_delight:corn_crop
-waitlog \[zq\] count corn_delight:corn_crop: \d+ 30
-expect ages corn_delight:corn_crop: 9 blocks, mean 0\.00
-expect count corn_delight:corn_crop: 0\b
-look the hoe click replants all nine (lower halves age 0, no top halves); tag is creativedelight:crops/harvest_from_bottom since 11-09 (row said creativeengineering:)
+> cdevtest ages 1054 -60 1044 1056 -60 1046 corn_delight:corn_crop
+> cdevtest count 1054 -59 1044 1056 -59 1046 corn_delight:corn_crop
+expect verb=ages block=corn_delight:corn_crop prop=age n=9 mean=0.000
+expect verb=count block=corn_delight:corn_crop n=0\b
+reject \[cdevtest\] .*done=0
+look the count box is the top layer only (y -59): n=0 means no top halves left; tag is creativedelight:crops/harvest_from_bottom since 11-09
 
 ## SQ-AZW-01 | rerun: azalea trees grow quark:azalea_log; logs stay azalea; 4 woods merged into oak; no item_dict Missing (sunflower_stem)
 @group A
@@ -468,6 +528,7 @@ look the hoe click replants all nine (lower halves age 0, no top halves); tag is
 @pass trunks `quark:azalea_log`; the logs stay azalea; `4 woods merged into oak`, no `[item_dict] Missing`
 @fails Quark config line 796 false; old Common jar still lists `removedWoods.azalea`
 @jars creativedelight powergrid
+@reviewed 2026-11-16
 @from batches/r1115/p3_a1b.qb
 shell grep -h "\[removedWoods\]" logs/kubejs/startup.log | cut -c1-200
 shell grep -qE "\[removedWoods\] 4 woods merged into oak" logs/kubejs/startup.log
@@ -483,19 +544,16 @@ shell test "$(grep -c "sunflower_stem" logs/kubejs/startup.log)" = 0 || grep -h 
 repeat 8
 > pbot use m3 2135 -60 2130 up
 end
-> zq count 2100 -61 2125 2140 -40 2135 quark:azalea_log
-waitlog \[zq\] count quark:azalea_log: \d+ 60
-> zq count 2100 -61 2125 2140 -40 2135 minecraft:oak_log
-waitlog \[zq\] count minecraft:oak_log: \d+ 60
-expect \[zq\] count quark:azalea_log: [1-9]\d*
-expect \[zq\] count minecraft:oak_log: 0\b
+> cdevtest count 2100 -61 2125 2140 -40 2135 quark:azalea_log
+> cdevtest count 2100 -61 2125 2140 -40 2135 minecraft:oak_log
+expect verb=count block=quark:azalea_log n=[1-9]\d*
+expect verb=count block=minecraft:oak_log n=0\b
 > clear m3
 > give m3 quark:azalea_log 4
 sleep 2
-> zp inv m3
-waitlog \[zp\] done 20
-expect quark:azalea_log
-look trunks quark:azalea_log, no oak_log; inventory keeps quark:azalea_log x4
+> pbot inv m3 get
+expect verb=pbot.inv bot=m3 slot=\d+ item=quark:azalea_log\*4
+reject \[cdevtest\] .*done=0
 
 ## SQ-AZW-02 | each azalea output has a recipe; Azalea Spice Rack places and drops itself
 @group A
@@ -503,29 +561,25 @@ look trunks quark:azalea_log, no oak_log; inventory keeps quark:azalea_log x4
 @pass each has a recipe; the rack places and drops itself
 @fails old Engineering or Delight jar; `RackWoods` / `kitchen.js` out of step; `removedWoodTracks` still has the tracks
 @jars creativedelight powergrid
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
-> zq makes quark:azalea_planks
-waitlog \[zq\] makes quark:azalea_planks: [1-9]\d* 30
-> zq makes quark:vertical_azalea_planks
-waitlog \[zq\] makes quark:vertical_azalea_planks: [1-9]\d* 30
-> zq makes everycomp:bd/quark/azalea_picture_frame
-waitlog \[zq\] makes everycomp:bd/quark/azalea_picture_frame: [1-9]\d* 30
-> zq makes creativedelight:azalea_spice_rack
-waitlog \[zq\] makes creativedelight:azalea_spice_rack: [1-9]\d* 30
-> zq makes creativedelight:azalea_tool_rack
-waitlog \[zq\] makes creativedelight:azalea_tool_rack: [1-9]\d* 30
-> zq makes creativedelight:azalea_fruit_basket
-waitlog \[zq\] makes creativedelight:azalea_fruit_basket: [1-9]\d* 30
-> zq makes railways:track_quark_azalea
-waitlog \[zq\] makes railways:track_quark_azalea: [1-9]\d* 30
+> cdevtest makes quark:azalea_planks
+> cdevtest makes quark:vertical_azalea_planks
+> cdevtest makes everycomp:bd/quark/azalea_picture_frame
+> cdevtest makes creativedelight:azalea_spice_rack
+> cdevtest makes creativedelight:azalea_tool_rack
+> cdevtest makes creativedelight:azalea_fruit_basket
+> cdevtest makes railways:track_quark_azalea
+waitlog verb=makes item=railways:track_quark_azalea n=\d+ 30
+count verb=makes item=\S+ n=[1-9]\d*$ == 7
 > setblock 1050 -60 1060 minecraft:stone
 > pbot hold G creativedelight:azalea_spice_rack 1
 > pbot use G 1050 -60 1060 north
-> zc3 bstate 1050 -60 1059
-> zact break 1050 -60 1059 none
-waitlog \[zact\] done 20
-expect bstate 1050 -60 1059 Block\{creativedelight:azalea_spice_rack\}
-expect \[zact\] break.*creativedelight:azalea_spice_rack x1
+> cdevtest state 1050 -60 1059
+> cdevtest break 1050 -60 1059
+expect verb=state pos=1050,-60,1059 state="?creativedelight:azalea_spice_rack\b
+expect verb=break drops=(\S*,)?creativedelight:azalea_spice_rack:1\b
+reject \[cdevtest\] .*done=0
 look if the rack does not place on a wall face, retry is a batch fault (rack wants a floor or counter): judge from `use` result
 
 ## SQ-AZW-03 | azalea log on the cutting board strips to the stripped log plus Immersive Weathering azalea bark
@@ -534,10 +588,12 @@ look if the rack does not place on a wall face, retry is a batch fault (rack wan
 @pass no swap either way; stripping gives Immersive Weathering azalea bark (RW-29)
 @fails `bark.js` azalea row missing
 @jars creativedelight powergrid
+@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
-> zq rdetail azalea_log_to
-waitlog \[zq\] rdetail matching azalea_log_to: \d+ 30
-expect rdetail\+ [a-z_]+:[a-z_]+/azalea_log_to\S* results: .*immersive_weathering:quark/azalea_bark
+> cdevtest rdetail azalea_log_to
+waitlog verb=rdetail text=azalea_log_to n=\d+ 30
+expect verb=rdetail id=\S*azalea_log_to\S* part=results value=\S*immersive_weathering:quark/azalea_bark
+reject verb=rdetail .*done=0
 look the line for the quark:azalea_log input (not the hollow log) lists the stripped log and the bark (chance 0.5)
 
 ## SQ-MG-22 | coffee bush on basalt breaks on its first random tick, wheat untouched, no Wither Roots
@@ -546,23 +602,27 @@ look the line for the quark:azalea_log input (not the hollow log) lists the stri
 @pass no mixin error; the bush is gone, Rustic Delight coffee items (or nothing for a young bush) on the ground, the wheat untouched, no Wither Roots (MG-49)
 @fails mixin skipped (rusticdelight gate) or FR method names differ
 @jars creativecommon creativedelight
+@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
 > fill 1000 -61 1040 1004 -61 1040 minecraft:basalt
 > setblock 1002 -60 1040 farmersrespite:coffee_bush[half=lower]
 > setblock 1002 -59 1040 farmersrespite:coffee_bush[half=upper]
 > setblock 1004 -61 1041 minecraft:farmland[moisture=7]
 > setblock 1004 -60 1041 minecraft:wheat[age=3]
-> zc3 bstate 1002 -60 1040 1002 -59 1040
-> gamerule randomTickSpeed 300
-sleep 10
-> gamerule randomTickSpeed 0
-> zc3 bstate 1002 -60 1040 1002 -59 1040 1004 -60 1041
-> zc3 items 1002 -60 1040 4
-count bstate 1002 -60 1040 Block\{farmersrespite:coffee_bush\} >= 1
-count bstate 1002 -60 1040 Block\{minecraft:air\} >= 1
-expect bstate 1004 -60 1041 Block\{minecraft:wheat\}
-reject bstate .*wither
-look first bstate pair shows both halves of the bush, the second pair air; items: Rustic Delight coffee items or none
+> cdevtest state 1002 -60 1040
+> cdevtest state 1002 -59 1040
+expect verb=state pos=1002,-60,1040 state="farmersrespite:coffee_bush\[
+> cdevtest randomtick 1002 -60 1040 1002 -59 1040 3
+waitlog verb=randomtick (done|error)= 60
+> cdevtest state 1002 -60 1040
+> cdevtest state 1002 -59 1040
+> cdevtest state 1004 -60 1041
+> cdevtest items 1002 -60 1040 4
+count verb=state pos=1002,-60,1040 state=minecraft:air >= 1
+expect verb=state pos=1004,-60,1041 state="minecraft:wheat\[age=3\]"
+reject verb=state .*wither
+reject \[cdevtest\] .*done=0
+look the randomtick box is the bush only (the wheat stays age 3); items: Rustic Delight coffee items or none
 
 ## SQ-MG-23 | 2 pack merges; Twigs azalea flowers turn into IW flowers; no recipe makes Twigs' item
 @group A
@@ -570,20 +630,21 @@ look first bstate pair shows both halves of the bush, the second pair air; items
 @pass 2 pack merges; no mixin error; Twigs' flowering-azalea recipes make IW flowers; no recipe makes Twigs' item; the stack becomes 3 IW flowers
 @fails pair skipped (`already merged`); dict key changed
 @jars creativecommon creativedelight
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
 shell grep -qE "\[itemMerges\] 2 pack merges registered" logs/kubejs/startup.log
 bootreject IwAzaleaFlowersPlaceMixin.*(fail|error|Exception)
-> zq makes immersive_weathering:azalea_flowers
-waitlog \[zq\] makes immersive_weathering:azalea_flowers: \d+ 30
-> zq makes twigs:azalea_flowers
-waitlog \[zq\] makes twigs:azalea_flowers: 0 30
+> cdevtest makes immersive_weathering:azalea_flowers
+> cdevtest makes twigs:azalea_flowers
+waitlog verb=makes item=twigs:azalea_flowers n=\d+ 30
+expect verb=makes item=twigs:azalea_flowers n=0$
 > clear G
 > give G twigs:azalea_flowers 3
 sleep 3
-> zp inv G
-waitlog \[zp\] done 20
-expect immersive_weathering:azalea_flowers
-reject \[zp\].*twigs:azalea_flowers
+> pbot inv G get
+expect verb=pbot.inv bot=G slot=\d+ item=immersive_weathering:azalea_flowers\*3
+reject verb=pbot.inv .*twigs:azalea_flowers
+reject \[cdevtest\] .*done=0
 look the IW-flowers makes list holds Twigs' flowering-azalea recipes
 
 ## SQ-MG-24 | flax items unused and unmade; rope only from 3 string, sack only wheat + string; no flax seeds in two chest tables
@@ -592,32 +653,35 @@ look the IW-flowers makes list holds Twigs' flowering-azalea recipes
 @pass no recipe uses or makes the flax items; rope only from 3 string, sack only wheat + string; no flax seeds in either table (MG-51)
 @fails Supplementaries reverted `[functional.flax]`; `misc_mods.js` not in the Compat jar
 @jars creativecommon creativedelight
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
-> zq uses supplementaries:flax
-waitlog \[zq\] uses supplementaries:flax: 0 alone, 0 with other items 30
-> zq uses supplementaries:flax_seeds
-waitlog \[zq\] uses supplementaries:flax_seeds: 0 alone, 0 with other items 30
-> zq uses supplementaries:flax_block
-waitlog \[zq\] uses supplementaries:flax_block: 0 alone, 0 with other items 30
-> zq makes supplementaries:flax_block
-waitlog \[zq\] makes supplementaries:flax_block: 0 30
-> zq makes supplementaries:rope
-waitlog \[zq\] makes supplementaries:rope: \d+ 30
-> zq makes supplementaries:sack
-waitlog \[zq\] makes supplementaries:sack: \d+ 30
-> zq rdetail supplementaries:rope
-waitlog \[zq\] rdetail matching supplementaries:rope: \d+ 30
-> zq rdetail supplementaries:sack
-waitlog \[zq\] rdetail matching supplementaries:sack: \d+ 30
+> cdevtest uses supplementaries:flax
+> cdevtest uses supplementaries:flax_seeds
+> cdevtest uses supplementaries:flax_block
+> cdevtest makes supplementaries:flax_block
+> cdevtest makes supplementaries:rope
+> cdevtest makes supplementaries:sack
+> cdevtest rdetail supplementaries:rope
+> cdevtest rdetail supplementaries:sack
+waitlog verb=rdetail text=supplementaries:sack n=\d+ 30
+expect verb=uses item=supplementaries:flax alone=0 shared=0
+expect verb=uses item=supplementaries:flax_seeds alone=0 shared=0
+expect verb=uses item=supplementaries:flax_block alone=0 shared=0
+expect verb=makes item=supplementaries:flax_block n=0$
+expect verb=makes item=supplementaries:rope n=1$
+expect verb=makes item=supplementaries:sack n=1$
+expect verb=rdetail id=supplementaries:rope serializer=\S+ result=supplementaries:rope\*\d+ ingredients=minecraft:string,minecraft:string,minecraft:string$
 repeat 20
 > loot spawn 1080 -60 1000 loot minecraft:chests/pillager_outpost
 > loot spawn 1080 -60 1000 loot underground_bunkers:chests/underground_bunker/underground_bunker_treasure
 end
-sleep 1
-> zc3 items 1080 -60 1000 3
-waitlog \[c3\] items 1080 -60 1000 20
-reject items 1080 -60 1000: .*supplementaries:flax
-look rope: one recipe, 3 string; sack: one recipe, wheat + string. If the bunker table id is unknown (`loot spawn` error), only the outpost half counts
+> cdevtest tickwarp 20
+waitlog verb=tickwarp end=done 30
+> cdevtest items 1080 -60 1000 3
+expect verb=items items=\S+ stacks=[1-9]
+reject verb=items .*supplementaries:flax
+reject \[cdevtest\] .*done=0
+look sack: one recipe, wheat + string (rdetail ingredients line). If the bunker table id is unknown (`loot spawn` error), only the outpost half counts
 
 ## SQ-BOT-01 | [botany_pots] growthTicks scaled line, no scaleRecipeInt missing
 @group A
@@ -650,8 +714,9 @@ expect pot botanypots:farmersdelight/crop/wild_tomatoes: growthTicks 9600\b
 @pass recipe gone; growth unchanged, bone meal not used
 @fails `R.remove({type:'botanypots:fertilizer'})` did not match
 @from batches/r1113/fix_c3a1.qb
-> zq recipes botanypots:minecraft/fertilizer/bonemeal
-waitlog \[zq\] recipes matching botanypots:minecraft/fertilizer/bonemeal: 0 30
+@reviewed 2026-11-16
+> cdevtest recipes botanypots:minecraft/fertilizer/bonemeal
+expect verb=recipes text=botanypots:minecraft/fertilizer/bonemeal n=0\b
 > setblock 1060 -60 1060 botanypots:terracotta_botany_pot
 > data merge block 1060 -60 1060 {Inventory:{Items:[{Slot:0b,id:"minecraft:dirt",Count:1b},{Slot:1b,id:"minecraft:wheat_seeds",Count:1b}]}}
 sleep 3
@@ -663,6 +728,7 @@ sleep 3
 expect has the following entity data: .*(Count: 5b.*minecraft:bone_meal|minecraft:bone_meal.*Count: 5b)
 expect block data: .*minecraft:wheat_seeds
 look both block reads hold dirt and wheat seeds with GrowthTime >= 0; the second GrowthTime is the first plus about 3 s of ticks (60), not a jump; if GrowthTime stays -1 the merge did not set the crop: note it (then a client row)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BOT-04 | fruitsdelight:botanypots/lemon: every display phase half=lower, growthTicks 9600
 @group A
@@ -682,27 +748,27 @@ look every state in display [...] carries half=lower
 @pass the item has `BlockEntityTag.Inventory` with every kept slot (pot 0-8, copper 0-6, kettle 0-4 plus `CETankLevel`); only the bottle drops; placing restores every slot and the tank; the creative break drops loose; `[qol] cookwareKeepContents = false` restores upstream drops and the #27 pickup (KT-26)
 @fails `CookwareContents` not registered (no mark); BreakEvent cancelled by protection; loot run on another tick
 @jars creativecommon creativedelight
+@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
 > setblock 1060 -60 1050 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0b,id:"minecraft:carrot",Count:1b},{Slot:6b,id:"farmersdelight:vegetable_soup",Count:2b},{Slot:7b,id:"minecraft:bowl",Count:4b}]}}
-> zact break 1060 -60 1050 minecraft:iron_pickaxe keep
-waitlog \[zact\] done 20
+> cdevtest break 1060 -60 1050 held=minecraft:iron_pickaxe keep
 > execute positioned 1060.5 -60 1050.5 run data get entity @e[type=minecraft:item,nbt={Item:{id:"farmersdelight:cooking_pot"}},limit=1,sort=nearest,distance=..3] Item
 > setblock 1070 -60 1050 miners_delight:copper_pot{Inventory:{Items:[{Slot:0b,id:"minecraft:bone",Count:1b},{Slot:1b,id:"minecraft:glow_lichen",Count:1b},{Slot:7b,id:"minecraft:glass_bottle",Count:1b}]}}
-> zact break 1070 -60 1050 minecraft:iron_pickaxe keep
-waitlog \[zact\] done 20
+> cdevtest break 1070 -60 1050 held=minecraft:iron_pickaxe keep
 > execute positioned 1070.5 -60 1050.5 run data get entity @e[type=minecraft:item,nbt={Item:{id:"miners_delight:copper_pot"}},limit=1,sort=nearest,distance=..3] Item
 > setblock 1080 -60 1050 farmersrespite:kettle{Inventory:{Items:[{Slot:0b,id:"farmersrespite:green_tea_leaves",Count:2b}]}}
-> zact break 1080 -60 1050 minecraft:iron_pickaxe keep
-waitlog \[zact\] done 20
+> cdevtest break 1080 -60 1050 held=minecraft:iron_pickaxe keep
 > execute positioned 1080.5 -60 1050.5 run data get entity @e[type=minecraft:item,nbt={Item:{id:"farmersrespite:kettle"}},limit=1,sort=nearest,distance=..3] Item
 > kill @e[type=minecraft:item,x=1070,y=-60,z=1050,distance=..15]
-expect break 1060 -60 1050 .*drops farmersdelight:cooking_pot x1$
-expect break 1070 -60 1050 .*drops .*miners_delight:copper_pot x1
-reject break 1070 -60 1050 .*minecraft:(bone|glow_lichen)
+expect verb=break drops=farmersdelight:cooking_pot:1 stacks=1
+expect verb=break drops=(\S*,)?miners_delight:copper_pot:1\b
+reject verb=break drops=\S*minecraft:(bone|glow_lichen):
 expect has the following entity data: .*BlockEntityTag.*minecraft:carrot
 expect has the following entity data: .*BlockEntityTag.*minecraft:glow_lichen
 expect has the following entity data: .*BlockEntityTag.*farmersrespite:green_tea_leaves
-look cooking pot item keeps slots 0, 6, 7 (carrot, soup, bowls); copper pot item keeps bone and lichen, the glass bottle (slot 7) drops loose beside it; kettle item keeps the leaves. Place-back, sneak pickup, creative break and the remainder-buffer bottle stay for a client run
+count verb=break broken=true >= 3
+reject \[cdevtest\] .*done=0
+look cooking pot item keeps slots 0, 6, 7 (carrot, soup, bowls); copper pot item keeps bone and lichen, the glass bottle (slot 7) drops loose beside it; kettle item keeps the leaves. Place-back, sneak pickup, creative break and the remainder-buffer bottle stay
 
 ## SQ-FCB-10 | removing the wall drops the hung skillet (wall-removal case only)
 @group A
@@ -710,22 +776,25 @@ look cooking pot item keeps slots 0, 6, 7 (carrot, soup, bowls); copper pot item
 @pass air above: `farmersdelight:hanging_skillet[facing=north]` holding the skillet; stone above: a standing skillet; breaking drops the same enchanted renamed skillet; removing the wall drops it; no block-entity warning (KT-27)
 @fails `SkilletHangMixin` not applied (member mixin config); skillet block entity rejects the block
 @jars creativecommon creativedelight
+@reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
 > setblock 1074 -60 1031 minecraft:stone
 > fill 1074 -60 1030 1074 -58 1030 minecraft:air
 > item replace entity G weapon.mainhand with farmersdelight:skillet{display:{Name:'{"text":"PanC3"}'},Enchantments:[{id:"minecraft:sharpness",lvl:2s}]}
-> zp sneak G on
+> pbot sneak G on
 > pbot use G 1074 -60 1031 north
-> zp sneak G off
-> zc3 bstate 1074 -60 1030
-expect bstate 1074 -60 1030 Block\{farmersdelight:hanging_skillet\}\[facing=north\]
+> pbot sneak G off
+> cdevtest state 1074 -60 1030
+expect verb=state pos=1074,-60,1030 state="farmersdelight:hanging_skillet\[facing=north\]"
 > setblock 1074 -60 1031 minecraft:air
-sleep 1
-> zc3 bstate 1074 -60 1030
+> cdevtest tickwarp 20
+waitlog verb=tickwarp end=done 30
+> cdevtest state 1074 -60 1030
 > execute positioned 1074.5 -60 1030.5 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
+expect verb=state pos=1074,-60,1030 state=minecraft:air
 expect has the following entity data: .*farmersdelight:skillet.*PanC3|PanC3.*farmersdelight:skillet
 reject block entity.*(warn|error)|Skipping BlockEntity
-look the hung skillet goes (bstate air) and the dropped item is the named, enchanted skillet
+reject \[cdevtest\] .*done=0
 
 ## CQ-FCK-01
 @group client
@@ -787,12 +856,14 @@ look the hung skillet goes (bstate air) and the dropped item is the named, encha
 @pass no event errors; item shows Gelatin, block shows Empty Terrarium
 @fails names.js not loaded (`requires` key)
 @jars creativedelight powergrid
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
 bootreject Error occurred while handling event
-> zq item hostiledelight:refinedgelatin
-> zq item redeco:jar
-waitlog \[zq\] item redeco:jar 20
-reject \[zq\] error
+> cdevtest item hostiledelight:refinedgelatin
+> cdevtest item redeco:jar
+expect verb=item item=hostiledelight:refinedgelatin class=
+expect verb=item item=redeco:jar class=\S+ .*block=redeco:jar
+reject \[cdevtest\] .*done=0
 look names half (Gelatin, Empty Terrarium) needs the client lang dump: leave for a client run; this row only checks event errors and the ids
 
 ## SQ-T1-02
@@ -801,21 +872,32 @@ look names half (Gelatin, Empty Terrarium) needs the client lang dump: leave for
 @pass rotten_meat = rotten flesh, rottenham, cookedrottenham; both hams in hazard only
 @fails hams still in the meat types (food_types.js stale)
 @jars creativedelight powergrid
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest tag item forge:rotten_meat
+> cdevtest tag item creativedelight:food_type/raw/meat
+> cdevtest tag item creativedelight:food_type/cooked/meat
+> cdevtest tag item creativedelight:food_type/hazard
+expect verb=tag kind=item tag=forge:rotten_meat n=3 ids=\S*hostiledelight:cookedrottenham,hostiledelight:rottenham,minecraft:rotten_flesh$
+expect verb=tag kind=item tag=creativedelight:food_type/hazard n=\d+ ids=\S*hostiledelight:cookedrottenham,hostiledelight:rottenham\b
+reject verb=tag kind=item tag=creativedelight:food_type/(raw|cooked)/meat .*hostiledelight:(cooked)?rottenham
+reject \[cdevtest\] .*done=0
+
 ## SQ-T1-03 | create:cutting/diced_potatoes gone; no barrier input on any More Delight dish
 @group A
 @commands Recipe probe: `create:cutting/diced_potatoes` absent; every recipe with input `#forge:sliced_potatoes` and a barrier-input scan over `moredelight:*` dishes
 @pass recipe absent; no barrier ingredient on any dish
 @fails a dish recipe still lists the merged diced potatoes
 @jars creativedelight powergrid
+@reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
-> zq recipes create:cutting/diced_potatoes
-waitlog \[zq\] recipes matching create:cutting/diced_potatoes: 0 30
-> zq uses creativedelight:sliced_sweet_potato
-waitlog \[zq\] uses creativedelight:sliced_sweet_potato: 30
-> zq rdetail moredelight:
-waitlog \[zq\] rdetail matching moredelight:: \d+ 60
-reject minecraft:barrier
+> cdevtest recipes create:cutting/diced_potatoes
+> cdevtest uses creativedelight:sliced_sweet_potato
+> cdevtest rdetail moredelight: max=2000
+waitlog verb=rdetail text=moredelight: n=\d+ 60
+expect verb=recipes text=create:cutting/diced_potatoes n=0\b
+expect verb=uses item=creativedelight:sliced_sweet_potato alone=\d+ shared=\d+
+reject verb=rdetail id=moredelight:.*minecraft:barrier
+reject \[cdevtest\] .*done=0
 look `#forge:sliced_potatoes` = Creative Delight sliced sweet potato and Rustic potato slices; the uses list holds the dishes that took the merged diced potatoes
 
 ## SQ-T1-04 | tag probe and recipe probes: gold components and golden pickaxe/apple take the gold tag; gold block and bars literal
@@ -824,19 +906,20 @@ look `#forge:sliced_potatoes` = Creative Delight sliced sweet potato and Rustic 
 @pass first group accepts `#forge:ingots/gold` etc. (rose gold fits); gold block and gold bars still the literal gold item; golden pickaxe and golden apple take the gold tag (rewritten 2026-11-14, plan_bugfix_1114.md 4.2: golden tools, armor and food take rose gold)
 @fails replaceInput threw (regex/array filter) or a raw gold form takes rose gold
 @jars creativedelight powergrid
+@reviewed 2026-11-16
 @from batches/r1115/p1_a1.qb
-> zq itemtag forge:plates/gold
-> zq itemtag forge:wires/gold
-waitlog \[zq\] itemtag forge:wires/gold 30
-> zq uses mca:rose_gold_ingot
-waitlog \[zq\] uses mca:rose_gold_ingot: 60
-expect (shared|alone) minecraft:clock$
-expect (shared|alone) minecraft:powered_rail$
-expect (shared|alone) [a-z_]+:.*mechanical_crafter
-expect (shared|alone) minecraft:golden_pickaxe$
-expect (shared|alone) minecraft:golden_apple$
-reject (shared|alone) minecraft:gold_block$
-reject (shared|alone) .*gold_bars$
-> zq uses vintageimprovements:rose_gold_sheet
-waitlog \[zq\] uses vintageimprovements:rose_gold_sheet: 60
-look component_gold craft takes the plate or wire tag; gold block and gold bars not in the rose gold uses
+> cdevtest tag item forge:plates/gold
+> cdevtest tag item forge:wires/gold
+> cdevtest uses mca:rose_gold_ingot
+waitlog verb=uses item=mca:rose_gold_ingot alone= 60
+expect verb=uses id=minecraft:clock alone=
+expect verb=uses id=minecraft:powered_rail alone=
+expect verb=uses id=\S*mechanical_crafter\S* alone=
+expect verb=uses id=minecraft:golden_pickaxe alone=
+expect verb=uses id=minecraft:golden_apple alone=
+reject verb=uses id=minecraft:gold_block alone=
+reject verb=uses id=\S*gold_bars\S* alone=
+> cdevtest uses vintageimprovements:rose_gold_sheet
+waitlog verb=uses item=vintageimprovements:rose_gold_sheet alone= 60
+reject \[cdevtest\] .*done=0
+look uses lines name recipe ids (the old probe printed results): a recipe whose id differs from its result shows under its own id; component_gold craft takes the plate or wire tag; gold block and gold bars not in the rose gold uses

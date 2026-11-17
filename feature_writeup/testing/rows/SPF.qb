@@ -53,10 +53,15 @@ look 11 Creative jars (Common, Compat, Calendar, Devtools, Magic, Equipment, Eng
 @pass NCH-built recipes for each jar under its own namespace; andesite alloy recipe as the baseline (helper path, not a vanilla default); tag rows filled by `global.tags`; no NCH failure line
 @fails `neoCraftHelper.js` / `tag_helper.js` not loaded first (Common's startup pack order, `HELPERS_MOD_ID`)
 @from batches/r1106spf/b1.qb
-> zq recipes creativecommon:
-> zq makes create:andesite_alloy
-> zq itemtag forge:ingots/copper
+@reviewed 2026-11-16
+> cdevtest recipes creativecommon:
+> cdevtest makes create:andesite_alloy
+> cdevtest tag item forge:ingots/copper
 look per-jar namespaces present; andesite alloy recipes same as base
+expect verb=recipes text=creativecommon: n=[1-9]
+expect verb=makes item=create:andesite_alloy n=[1-9]
+expect verb=tag kind=item tag=forge:ingots/copper n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-02 | Common: item merge (farmersrespite:coffee_beans -> rusticdelight:roasted_coffee_beans), removed items
 @group A
@@ -90,12 +95,15 @@ look offers present; pack trade ids (CD or Engineering items) among them
 @pass every potion registered; brewing ingredients as the baseline; the effect applies and ticks
 @fails registry still in Brewing; `DrinkFluidEffects` call site wrong
 @from batches/r1106spf/b1.qb
-> zq potion creativecommon:long_reach
-> zq potion creativecommon:phantom_bane
-> zq potion creativecommon:magic_resistance
-> zq potion creativecommon:long_magic_resistance
-> zq potion creativebrewing:magic_resistance
+@reviewed 2026-11-16
+> cdevtest potion creativecommon:long_reach
+> cdevtest potion creativecommon:phantom_bane
+> cdevtest potion creativecommon:magic_resistance
+> cdevtest potion creativecommon:long_magic_resistance
+> cdevtest potion creativebrewing:magic_resistance
 look every creativecommon: potion registered (new jars); brewing lines as base
+count verb=potion potion=\S+ registered=true >= 4
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-05 | Common engine fixes: 200 block place/break over 4 chunk sections
 @group A
@@ -112,7 +120,7 @@ look every creativecommon: potion registered (new jars); brewing lines as base
 > fill 48 -44 -60 55 -30 -55 minecraft:glass
 > fill 48 -44 -60 55 -30 -55 minecraft:air
 sleep 2
-shell grep -ciE "null (block)?state|section update" logs/latest.log
+shell grep -ciE "null (block)?state|section update" logs/latest.log; true
 reject (?i)null (block)?state
 bootreject (?i)(FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound).*(error|fail)
 
@@ -132,6 +140,7 @@ look moss tint is client-only (CQ-SPF-01); vine and monster box: SQ-VS / SQ-MB r
 @pass Allurement curses behave as SQ-IP; burn transform outputs as the baseline (`physics/` item tags filled)
 @fails `itemphysic/` mixins gated off; `tags/items/physics/` missing from the jar
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-16
 > fill 60 -61 -20 62 -61 -18 minecraft:lava
 > fill 60 -61 -14 62 -61 -12 minecraft:stone
 > setblock 61 -60 -13 minecraft:fire
@@ -140,9 +149,11 @@ look moss tint is client-only (CQ-SPF-01); vine and monster box: SQ-VS / SQ-MB r
 sleep 15
 > execute positioned 61 -60 -19 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
 > execute positioned 61 -60 -13 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
-> zq itemtag creativecompat:physics/burns_to_charcoal
-shell grep -c "itemphysic\|ItemPhysic" logs/latest.log
+> cdevtest tag item creativecompat:physics/burns_to_charcoal
+shell grep -c "itemphysic\|ItemPhysic" logs/latest.log; true
 look burn transform outputs (charcoal / ash) as base; physics tags filled
+expect verb=tag kind=item tag=creativecompat:physics/burns_to_charcoal n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-12 | Compat leaf pile slow and surface walk speed
 @group A
@@ -187,13 +198,16 @@ look Killed N entities with N = [shrapnel] count (24 default); vein undo (SQ-CEN
 @pass cat targets the feather (FeatherAttackGoal log line or goal in `/data get`); item count unchanged after sort (Quark safe sort)
 @fails cats gated mixins off (`domesticationinnovation`, `cozy`); `QuarkSafeSort` mixin missing
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-16
 > summon minecraft:cat -12 -60 -26 {Tame:0b}
 > pbot hold qa domesticationinnovation:feather_on_a_stick
-> zq useitem qa
+> cdevtest useair as=qa hand=both
 sleep 2
 > data get entity @e[type=minecraft:cat,limit=1,sort=nearest,x=-12,y=-60,z=-26] Brain
 shell grep -iE "FeatherAttack|feather" logs/latest.log | tail -3
 look cat reacts (log line or memory); Quark sort is in the Trinket Case probe (SQ-CMG-05 tcprobe sort)
+expect verb=useair who=\S+ hand=main result=
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-20 | Calendar time: one day, pushed values
 @group A
@@ -213,6 +227,7 @@ look date moved one day; Better Days and Serene Seasons values match [time.day] 
 @pass off-season crop grows slower than in season, wheat as the baseline ratio; SQ-CS pass texts
 @fails `CropSeasonGrowHook` gated off (`sereneseasons`); `crop_seasons.json` not found in the game folder
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-16
 > execute if block -30 -60 -48 #creativeengineering:crop_seasons/warm_wet
 > execute if block -30 -60 -48 #creativeengineering:crop_seasons/warm_dry
 > execute if block -30 -60 -50 #creativeengineering:crop_seasons/temperate
@@ -220,20 +235,19 @@ look date moved one day; Better Days and Serene Seasons values match [time.day] 
 > fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
 > tp qa -30 -60 -45
 > season set MID_WINTER
-> gamerule randomTickSpeed 100
-sleep 30
-> gamerule randomTickSpeed 3
-> zq ages -35 -60 -50 -26 -60 -50 minecraft:wheat
-> zq ages -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop
+> cdevtest randomtick -35 -60 -50 -26 -60 -48 15
+> cdevtest ages -35 -60 -50 -26 -60 -50 minecraft:wheat
+> cdevtest ages -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop
 > fill -35 -60 -50 -26 -60 -50 minecraft:wheat[age=0]
 > fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
 > season set MID_SUMMER
-> gamerule randomTickSpeed 100
-sleep 30
-> gamerule randomTickSpeed 3
-> zq ages -35 -60 -50 -26 -60 -50 minecraft:wheat
-> zq ages -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop
+> cdevtest randomtick -35 -60 -50 -26 -60 -48 15
+waitlog verb=randomtick rounds=15 60
+> cdevtest ages -35 -60 -50 -26 -60 -50 minecraft:wheat
+> cdevtest ages -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop
 look winter means below summer means for the warm crop; both still grow in winter (off is slower, never stopped)
+count verb=ages block=\S+ prop=age n=10 >= 4
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-22 | Calendar into Brewing: wine clock after 2 days
 @group A
@@ -258,15 +272,15 @@ look clock advanced by 2 days against the base value (SQ-SPF-22-base) plus the b
 @pass boots; `/dumpall` and `/cdevgen` unknown; no ERROR naming `creativedevtools`; removed items still lose their tags
 @fails a Common or Compat class still imports a Devtools probe (hook not used)
 @from batches/r1106spf/b1n.qb
+@reviewed 2026-11-16
 bootexpect Done \(
 bootreject (?i)ERROR.*creativedevtools
 bootreject (NoClassDefFoundError|ClassNotFoundException).*(creativedevtools|ceperfbot|BlockStateLookupHook)
 > dumpall
-> cegen list
+> cdevgen list
 count Unknown or incomplete command == 2
-> zq tagsof minecraft:stick
-shell grep -c "creativedevtools" logs/latest.log; ls mods | grep -ci devtools
-look removed items still lose their tags (compare.py: removed item ids carry no tags in this boot is not dumped; check a known removed id with zq tagsof)
+shell grep -c "creativedevtools" logs/latest.log; ls mods | grep -ci devtools; true
+look removed items still lose their tags (no runtime tag reader in this boot: /cdevtest is Devtools and the KubeJS zq probe is retired; judge from a /kubejs hand on a known removed id in a client, or skip)
 
 ## SQ-SPF-40 | Magic: portal frame with flint and steel vs Flint and Terrasteel (SQ-CMG-04)
 @group A
@@ -274,6 +288,7 @@ look removed items still lose their tags (compare.py: removed item ids carry no 
 @pass as those rows
 @fails `PortalFailureHandler` bus id; Magic config read
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-16
 > fill 30 -61 70 33 -57 70 minecraft:obsidian
 > fill 31 -60 70 32 -58 70 minecraft:air
 > fill 35 -61 70 38 -57 70 minecraft:obsidian
@@ -289,9 +304,11 @@ sleep 2
 > pbot use qa 36 -61 70 up
 sleep 2
 > execute if block 36 -60 70 minecraft:nether_portal
-> zq recipes creativemagic:
+> cdevtest recipes creativemagic:
 > tp qa -20 -60 -24
 look first frame: crying obsidian, no portal; second: portal open; creativemagic: recipes listed (Flint and Terrasteel, Ender Storage, CEI machine, sculk)
+expect verb=recipes text=creativemagic: n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-41 | Magic: experience fluid tag and bridge line
 @group A
@@ -309,20 +326,24 @@ look new jars: bridge line logged by creativemagic, one fluid in the tag
 @pass as those rows
 @fails see each row
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-16
 > data get block -20 -60 -20 Items
 expect creativeengineering:copper_shield
 expect clothColor
 > give qa creativeengineering:netherite_shield
-> zq itemtag creativeengineering:stepstools
-> zq itemtag curios:feet
-> zq itemtag creativeengineering:dragon_gear
-> zq itemtag creativeengineering:elytra_chestplates
-> zq itemtag creativeengineering:bonemeal_charms
-> zq recipes creativeequipment:
-> zq blocktag creativeengineering:needs_copper_tool
+> cdevtest tag item creativeengineering:stepstools
+> cdevtest tag item curios:feet
+> cdevtest tag item creativeengineering:dragon_gear
+> cdevtest tag item creativeengineering:elytra_chestplates
+> cdevtest tag item creativeengineering:bonemeal_charms
+> cdevtest recipes creativeequipment:
+> cdevtest tag block creativeengineering:needs_copper_tool
 > execute if block -20 -60 -20 minecraft:chest
-shell grep -c "\[tags\].*harvest" logs/kubejs/server.log
+shell grep -c "\[tags\].*harvest" logs/kubejs/server.log; true
 look items keep NBT (backpack colours, sawblade Damage 5); tag counts as base (compare with SQ-SPF-50 lines vs b0 dumps); creativeequipment: recipes (felsic assembly, End gear, shield, stepstool, archery, bullets, camera bag, backpack skin)
+count verb=tag kind=(item|block) tag=\S+ n=[1-9] >= 6
+expect verb=recipes text=creativeequipment: n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-51 | Equipment moved in: wooden water bucket place and pick up, fletching recipes
 @group A
@@ -330,6 +351,7 @@ look items keep NBT (backpack colours, sawblade Damage 5); tag counts as base (c
 @pass bucket places and refills, keeps its id; fletching and bucket recipes present
 @fails bucket registry now in Equipment but its model or item class still in Engineering
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-16
 > tp qa -10 -60 -40
 > pbot hold qa creativeengineering:wooden_water_bucket
 > pbot use qa -10 -61 -42 up
@@ -340,10 +362,13 @@ sleep 1
 > pbot use qa -10 -60 -42 up
 sleep 1
 > data get entity qa SelectedItem
-> zq makes creativeengineering:wooden_bucket
-> zq recipes fletching
+> cdevtest makes creativeengineering:wooden_bucket
+> cdevtest recipes fletching
 > tp qa -20 -60 -24
 look water placed, empty wooden bucket after; bucket refilled with water (wooden_water_bucket) on the second use; bucket and fletching recipes present
+expect verb=makes item=creativeengineering:wooden_bucket n=[1-9]
+expect verb=recipes text=fletching n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-52 | Equipment stepstools (SQ-STL-01, -02 reruns are in this boot)
 @group A
@@ -361,8 +386,9 @@ look stepstool equipped; step-up packet needs the client (CQ-SPF-02)
 @pass as those rows
 @fails Engineering startup pack order; `sawmill/` pre-load
 @from batches/r1106spf/b1.qb
-> zq bytype creativeengineering:dragon_breathing
-> zq bytype immersiveengineering:sawmill
+@reviewed 2026-11-16
+> cdevtest bytype creativeengineering:dragon_breathing
+> cdevtest bytype immersiveengineering:sawmill
 > setblock 20 -60 90 create:creative_motor[facing=east]
 > setblock 21 -60 90 create:encased_fan[facing=east]
 > setblock 22 -60 90 minecraft:dragon_head[rotation=4]
@@ -371,6 +397,8 @@ sleep 12
 > execute positioned 24 -60 90 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..4] Item
 shell grep -iE "dragon_breathing|DragonBreathing" logs/latest.log | head -5
 look the fan processes the item with the dragon recipe (output differs from glass bottle if a bottle recipe exists; else judge from the bytype list); fan type registered once; sawmill needs a fed multiblock: count only here, operation in CQ-SPF-01 JEI
+expect verb=bytype serializer=creativeengineering:dragon_breathing n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-61 | Engineering items: recipes making each item family
 @group A
@@ -378,16 +406,20 @@ look the fan processes the item with the dragon recipe (output differs from glas
 @pass every output has its recipe as the baseline; sequenced assembly lists its transition item
 @fails `transition_items.js` not loaded before the recipe scripts
 @from batches/r1106spf/b1.qb
-> zq makes component_copper
-> zq makes component_netherite
-> zq makes coil_electrum
-> zq makes plate_block_iron
-> zq makes dust_pile
-> zq makes wood_pellet
-> zq makes prepared_flesh
-> zq makes hemp_fabric
-> zq bytype create:sequenced_assembly
+@reviewed 2026-11-16
+> cdevtest makes component_copper
+> cdevtest makes component_netherite
+> cdevtest makes coil_electrum
+> cdevtest makes plate_block_iron
+> cdevtest makes dust_pile
+> cdevtest makes wood_pellet
+> cdevtest makes prepared_flesh
+> cdevtest makes hemp_fabric
+> cdevtest bytype create:sequenced_assembly
 look every family has recipes, counts as base
+count verb=makes item=\S+ n=[1-9] == 8
+expect verb=bytype serializer=create:sequenced_assembly n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-62 | Engineering: IE recipe count
 @group A
@@ -395,18 +427,22 @@ look every family has recipes, counts as base
 @pass as those rows; same IE count
 @fails `IECompat` gate
 @from batches/r1106spf/b1.qb
-> zq bytype immersiveengineering:sawmill
-> zq bytype immersiveengineering:crusher
-> zq bytype immersiveengineering:metal_press
-> zq bytype immersiveengineering:blueprint
+@reviewed 2026-11-16
+> cdevtest bytype immersiveengineering:sawmill
+> cdevtest bytype immersiveengineering:crusher
+> cdevtest bytype immersiveengineering:metal_press
+> cdevtest bytype immersiveengineering:blueprint
 look counts identical to base
+count verb=bytype serializer=immersiveengineering:\S+ n=[1-9] == 4
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-70 | Worldgen: packs enabled, structures locate, ground under them
 @group B
-@commands Worldgen: boot 2 (fresh world, 18:5x builds); `> datapack list`; `/locate structure` each `creativeengineering:` structure in `structures_by_biome.md` (Async Locator on), `/zq under` on two found
-@pass every pack enabled; each structure found within the baseline radius (SQ-WGE census); no air or water under the built bottom
+@commands Worldgen: boot 2 (fresh world, 18:5x builds); `> datapack list`; `/locate structure` each `creativeengineering:` structure in `structures_by_biome.md` (Async Locator on), `/cdevtest under` on one found (ruin_scatter, the bot keeps its chunks loaded)
+@pass every pack enabled; each structure found within the baseline radius (SQ-WGE census); under the built bottom no air gap over 6 and no water deeper than 2 (`efb_judge.py under --fail over6 --fail deepwater`, the earth fill limits)
 @fails a structure json left in `kubejs/data/creativeengineering/` and the jar copy shadowed; `WorldgenMixinPlugin` gate
 @from batches/r1106spf/b2.qb
+@reviewed 2026-11-16
 bootexpect Done \(
 bootreject (Mixin apply failed|InvalidInjectionException).*(creativeworldgen|WorldgenMixinPlugin)
 > datapack list
@@ -418,13 +454,16 @@ capture RS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 waitlog (nearest|Could not find).*ruin_cluster 240
 > locate structure creativeengineering:meta/pillager_camp_ruins
 waitlog (nearest|Could not find).*pillager_camp_ruins 240
-> locate structure creativeengineering:sky_island
+> locate structure creativeworldgen:sky_island
 waitlog (nearest|Could not find).*sky_island 240
 > tp qa {RS1} 150 {RS3}
 sleep 15
-> zq under {RS1} {RS3} 2
-waitlog \[zq\] done 120
-look every creative pack listed and enabled; each locate finds a structure within the SQ-WGE census radius; zq under: no air or water under the built bottom
+> cdevtest under {RS1} {RS3} 2 -
+waitlog \[cdevtest\] verb=under (.* )?done=[01] 120
+expect \[cdevtest\] verb=under starts=[1-9]
+reject \[cdevtest\] verb=under .*done=0
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RS1-48} {RS3-48} {RS1+48} {RS3+48} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail over6 --fail deepwater
+look every creative pack listed and enabled; each locate finds a structure within the SQ-WGE census radius
 
 ## SQ-SPF-71 | Worldgen fauna: mooblooms and baby mobs near the plains bot, mooshroom breeding
 @group B
@@ -449,13 +488,15 @@ look entity ids include more_mooblooms: and baby mob types; a calf (Age negative
 @pass leaves decay within the `[leaf_decay]` range, leaf piles drop; Forgiving Void returns the bot to the surface; biome-tagged loot only in the matching biome
 @fails `FastLeafDecayPort` / `forgivingvoid/` listeners not on Worldgen's bus; `loot/` condition type registered under the wrong id
 @from batches/r1106spf/b2.qb
+@reviewed 2026-11-16
 > tp qa 300 120 300
 sleep 8
 > place feature minecraft:oak 300 ~ 300
 > execute positioned 300 ~ 300 run fill ~-1 ~ ~-1 ~1 ~8 ~1 minecraft:air replace minecraft:oak_log
-sleep 20
-> zq count 294 -64 294 306 200 306 minecraft:oak_leaves
-> zq count 294 -64 294 306 200 306 immersive_weathering:oak_leaf_pile
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done 60
+> cdevtest count 294 -64 294 306 200 306 minecraft:oak_leaves
+> cdevtest count 294 -64 294 306 200 306 immersive_weathering:oak_leaf_pile
 > gamemode survival qa
 > tp qa 0 -100 0
 sleep 6
@@ -463,6 +504,7 @@ sleep 6
 > gamemode creative qa
 shell grep -A4 "^\[leaf_decay\]" config/creativeworldgen-common.toml | head -5
 look leaves gone or decaying within the [leaf_decay] range, leaf piles left; bot returned to the surface (y above 60) by Forgiving Void; loot BiomeTagCondition is checked in the client chest look (CQ-SPF-01) unless zloot probe added
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-73 | Worldgen wild crops at the plains SQ-NM-01 located (literal box via {PL}; zq count takes no ~)
 @group B
@@ -470,15 +512,43 @@ look leaves gone or decaying within the [leaf_decay] range, leaf piles left; bot
 @pass each present; counts within 20 percent of the SQ-CDW / SQ-WGE census
 @fails gated pack folder not enabled (`mod data packs on:` line)
 @from batches/r1106spf/b2.qb
+@reviewed 2026-11-16
 > forceload add {PL1-32} {PL3-32} {PL1+31} {PL3+31}
 sleep 30
-> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} farmersdelight:wild_carrots
-> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} farmersdelight:wild_cabbages
-> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} farmersdelight:wild_onions
-> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} farmersdelight:wild_potatoes
-> zq count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3+31} minecraft:grass
+# a count box is at most 262144 blocks (64x64x64): the 64x265x64 box runs as z slices; the shell sums them per block
+> say SPF73 begin
+> cdevtest count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3-20} farmersdelight:wild_carrots
+> cdevtest count {PL1-32} -64 {PL3-19} {PL1+31} 200 {PL3-7} farmersdelight:wild_carrots
+> cdevtest count {PL1-32} -64 {PL3-6} {PL1+31} 200 {PL3+6} farmersdelight:wild_carrots
+> cdevtest count {PL1-32} -64 {PL3+7} {PL1+31} 200 {PL3+19} farmersdelight:wild_carrots
+> cdevtest count {PL1-32} -64 {PL3+20} {PL1+31} 200 {PL3+31} farmersdelight:wild_carrots
+> cdevtest count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3-20} farmersdelight:wild_cabbages
+> cdevtest count {PL1-32} -64 {PL3-19} {PL1+31} 200 {PL3-7} farmersdelight:wild_cabbages
+> cdevtest count {PL1-32} -64 {PL3-6} {PL1+31} 200 {PL3+6} farmersdelight:wild_cabbages
+> cdevtest count {PL1-32} -64 {PL3+7} {PL1+31} 200 {PL3+19} farmersdelight:wild_cabbages
+> cdevtest count {PL1-32} -64 {PL3+20} {PL1+31} 200 {PL3+31} farmersdelight:wild_cabbages
+> cdevtest count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3-20} farmersdelight:wild_onions
+> cdevtest count {PL1-32} -64 {PL3-19} {PL1+31} 200 {PL3-7} farmersdelight:wild_onions
+> cdevtest count {PL1-32} -64 {PL3-6} {PL1+31} 200 {PL3+6} farmersdelight:wild_onions
+> cdevtest count {PL1-32} -64 {PL3+7} {PL1+31} 200 {PL3+19} farmersdelight:wild_onions
+> cdevtest count {PL1-32} -64 {PL3+20} {PL1+31} 200 {PL3+31} farmersdelight:wild_onions
+> cdevtest count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3-20} farmersdelight:wild_potatoes
+> cdevtest count {PL1-32} -64 {PL3-19} {PL1+31} 200 {PL3-7} farmersdelight:wild_potatoes
+> cdevtest count {PL1-32} -64 {PL3-6} {PL1+31} 200 {PL3+6} farmersdelight:wild_potatoes
+> cdevtest count {PL1-32} -64 {PL3+7} {PL1+31} 200 {PL3+19} farmersdelight:wild_potatoes
+> cdevtest count {PL1-32} -64 {PL3+20} {PL1+31} 200 {PL3+31} farmersdelight:wild_potatoes
+> cdevtest count {PL1-32} -64 {PL3-32} {PL1+31} 200 {PL3-20} minecraft:grass
+> cdevtest count {PL1-32} -64 {PL3-19} {PL1+31} 200 {PL3-7} minecraft:grass
+> cdevtest count {PL1-32} -64 {PL3-6} {PL1+31} 200 {PL3+6} minecraft:grass
+> cdevtest count {PL1-32} -64 {PL3+7} {PL1+31} 200 {PL3+19} minecraft:grass
+> cdevtest count {PL1-32} -64 {PL3+20} {PL1+31} 200 {PL3+31} minecraft:grass
+> say SPF73 end
+waitlog SPF73 end 120
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" SPF73 minecraft:grass
 > forceload remove {PL1-32} {PL3-32} {PL1+31} {PL3+31}
 look grass > 0 shows the box was generated; wild crops above 0 (one 4 x 4 chunk box can miss a rare patch: try a second plains)
+expect verb=count block=minecraft:grass n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-80 | Delight: cooking and cutting counts, five dishes
 @group A
@@ -486,14 +556,19 @@ look grass > 0 shows the box was generated; wild crops above 0 (one 4 x 4 chunk 
 @pass meal out with its container; counts identical; food values as the baseline
 @fails a member's startup pack skipped; food tuning script order
 @from batches/r1106spf/b1.qb
-> zq bytype farmersdelight:cooking
-> zq bytype farmersdelight:cutting
-> zq food veggiesdelight:cauliflower_soup
-> zq food vintagedelight:pickle_soup
-> zq food farmersdelight:vegetable_soup
-> zq food miners_delight:cave_soup
-> zq food endersdelight:chorus_stew
+@reviewed 2026-11-16
+> cdevtest bytype farmersdelight:cooking
+> cdevtest bytype farmersdelight:cutting
+> cdevtest food veggiesdelight:cauliflower_soup
+> cdevtest food vintagedelight:pickle_soup
+> cdevtest food farmersdelight:vegetable_soup
+> cdevtest food miners_delight:cave_soup
+> cdevtest food endersdelight:chorus_stew
 look counts and food values identical to base
+expect verb=bytype serializer=farmersdelight:cooking n=[1-9]
+expect verb=bytype serializer=farmersdelight:cutting n=[1-9]
+count verb=food item=\S+ food=true nutrition=[1-9] == 5
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-81
 @group A
@@ -507,11 +582,16 @@ look counts and food values identical to base
 @pass present under `creativedelight:`; tags as the baseline
 @fails SQ-ENGM-03 failure text
 @from batches/r1106spf/b1.qb
-> zq recipes torch_crafting_animal_fat
-> zq recipes seeds_bone_meal
-> zq itemtag creativeengineering:millable_seeds
-> zq itemtag forge:mulch
+@reviewed 2026-11-16
+> cdevtest recipes torch_crafting_animal_fat
+> cdevtest recipes seeds_bone_meal
+> cdevtest tag item creativeengineering:millable_seeds
+> cdevtest tag item forge:mulch
 look present under creativedelight: on the new jars; tags same as base
+expect verb=recipes text=torch_crafting_animal_fat n=[1-9]
+expect verb=recipes text=seeds_bone_meal n=[1-9]
+expect verb=tag kind=item tag=creativeengineering:millable_seeds n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-83 | Delight fluids and compost
 @group A
@@ -538,9 +618,12 @@ look fluid tags list creativedelight: fluids only; composter level against the c
 @pass wine out; count identical
 @fails `UpstreamJars` donor path; Vinery recipes skipped by a guard
 @from batches/r1106spf/b1.qb
-> zq bytype vinery:wine_fermentation
-> zq bytype vinery:apple_fermenting
+@reviewed 2026-11-16
+> cdevtest bytype vinery:wine_fermentation
+> cdevtest bytype vinery:apple_fermenting
 look count identical to base
+expect verb=bytype serializer=vinery:wine_fermentation n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-91 | Brewing: Brewin' fermenting count
 @group A
@@ -548,9 +631,12 @@ look count identical to base
 @pass brew out; count identical; Tipsy (or the pack's alcohol effect) applied with the `alcohol_drinks.js` values
 @fails `alcohol_drinks.js` moved to `kubejs_startup/creativebrewing/` but the pack still loads it from the old path
 @from batches/r1106spf/b1.qb
-> zq bytype brewinandchewin:fermenting
-> zq bytype brewinandchewin:keg_pouring
+@reviewed 2026-11-16
+> cdevtest bytype brewinandchewin:fermenting
+> cdevtest bytype brewinandchewin:keg_pouring
 look count identical to base
+expect verb=bytype serializer=brewinandchewin:fermenting n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-92
 @group A

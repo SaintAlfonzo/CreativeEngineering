@@ -17,14 +17,16 @@
 @commands boot; `grep -nE "CfbOven(Lit\|LitSync\|Shape\|Renderer)Mixin\|blockheads_additions.mixins\|InvalidInjectionException" logs/latest.log`; `/setblock` a `cookingforblockheads:oven`; probe its block state and shape
 @pass `Done (`; no mixin error; the oven's states include `lit`, a fresh oven is `lit=false`; its shape's max y is 1.0 (was 0.9375)
 @fails mixin target name (SRG `m_7926_`, `m_49959_`, `m_5940_`, `serverTick` descriptor) wrong for CfB 13.3.4
+@reviewed 2026-11-16
 @from batches/r1113/c2_a1.qb
 shell grep -nE "CfbOven(Lit|LitSync|Shape|Fuel|Smoking)Mixin|blockheads_additions.mixins|InvalidInjectionException" logs/latest.log | head -12 | cut -c1-260; true
 bootreject CfbOven\w*Mixin.*(rror|ailed|could not)
+> forceload add 296 304 316 316
 > setblock 300 -60 310 cookingforblockheads:oven[facing=north]
-> zc2 state 300 -60 310
-waitlog \[zc2\] state 300 -60 310 20
-expect \[zc2\] state 300 -60 310: .*lit=false
-expect \[zc2\] state 300 -60 310: .*maxY=1\.0
+> cdevtest state 300 -60 310
+expect verb=state pos=300,-60,310 state="\S*lit=false
+expect verb=state pos=300,-60,310 .*shape_top=1\b
+reject \[cdevtest\] .*done=0
 look shell lines: no InvalidInjectionException naming a CfbOven mixin (others in the log are third-party, note them only)
 
 ## SQ-CFS-02 | a CfB oven is an FD heat source only while lit; the pot above cooks only then; oven slots kept through the toggles
@@ -32,36 +34,45 @@ look shell lines: no InvalidInjectionException naming a CfbOven mixin (others in
 @commands tag probe `#farmersdelight:heat_sources`; oven with no fuel, `farmersdelight:cooking_pot` above it with a fast recipe's inputs (`/data merge block`); wait 30 s; then put coal in the oven's fuel slot (`/data get block` first to see the fuel container's NBT key, then `/data merge block`, or a hopper into the fuel side); wait; let the fuel run out
 @pass tag lists `cookingforblockheads:oven`; no cooking while unlit; `lit=true` within a tick of burning, the pot finishes the meal; `lit=false` when the fuel runs out and the pot's progress stops; the oven's input, output and tool slots keep their items through each toggle
 @fails `CfbOvenLitSyncMixin` not at RETURN of the instance `serverTick`; tag script skipped (`global.CD.on('blockheads_additions')` false)
+@reviewed 2026-11-16
 @from batches/r1113/c2_a1.qb
-> zq blocktag farmersdelight:heat_sources
-> zq rdetail farmersdelight:cooking/tomato_sauce
+> cdevtest tag block farmersdelight:heat_sources
+> cdevtest rdetail farmersdelight:cooking/tomato_sauce
 > setblock 304 -60 310 cookingforblockheads:oven[facing=north]{ItemHandler:{Items:[{Slot:0,id:"minecraft:potato",Count:3b}]}}
 > setblock 304 -59 310 farmersdelight:cooking_pot{Inventory:{Items:[{Slot:0,id:"farmersdelight:tomato",Count:1b},{Slot:1,id:"farmersdelight:tomato",Count:1b},{Slot:7,id:"minecraft:bowl",Count:4b}]}}
 > data get block 304 -60 310
-sleep 10
-> zc2 inv 304 -59 310
-> zc2 state 304 -60 310
+> cdevtest tickwarp 200
+waitlog verb=tickwarp end=\S+ ticks=200 60
+> cdevtest be 304 -59 310
+> cdevtest state 304 -60 310
 > data merge block 304 -60 310 {BurnTime:400,CurrentItemBurnTime:400}
-sleep 2
-> zc2 state 304 -60 310
-sleep 12
-> zc2 inv 304 -59 310
-sleep 10
-> zc2 state 304 -60 310
-> zc2 inv 304 -59 310
-sleep 4
-> zc2 inv 304 -59 310
-> zc2 inv 304 -60 310
-expect blocktag farmersdelight:heat_sources .*cookingforblockheads:oven
-expect \[zc2\] state 304 -60 310: .*lit=true
-expect \[zc2\] state 304 -60 310: .*lit=false
-look (1) the rdetail line gives tomato_sauce's inputs; if they are not 2 tomatoes the pot never starts: BATCH-FAULT, rerun with those inputs. (2) first pot inv (unlit, 10 s): CookTime=0. (3) after BurnTime 400 the oven reads lit=true; 12 s later the pot's CookTime > 0 or the sauce is in slot 6/8. (4) after the burn ran out (about 20 s) lit=false and the two last pot reads 4 s apart show the same CookTime (no progress). (5) last oven inv still holds 0:3 minecraft:potato. data get line: note the fuel slot index (ItemHandler) for the CQ / a rerun with real fuel
+> cdevtest tickwarp 40
+waitlog verb=tickwarp end=\S+ ticks=40 60
+> cdevtest state 304 -60 310
+> cdevtest tickwarp 240
+waitlog verb=tickwarp end=\S+ ticks=240 60
+> cdevtest be 304 -59 310
+> cdevtest tickwarp 201
+waitlog verb=tickwarp end=\S+ ticks=201 60
+> cdevtest state 304 -60 310
+> cdevtest be 304 -59 310
+> cdevtest tickwarp 80
+waitlog verb=tickwarp end=\S+ ticks=80 60
+> cdevtest be 304 -59 310
+> cdevtest inv 304 -60 310
+expect verb=tag kind=block tag=farmersdelight:heat_sources .*cookingforblockheads:oven(,|$)
+expect verb=state pos=304,-60,310 state="\S*lit=true
+expect verb=state pos=304,-60,310 state="\S*lit=false
+expect verb=inv slot=0 item=minecraft:potato\*3
+reject \[cdevtest\] .*done=0
+look (1) the rdetail line gives tomato_sauce's inputs; if they are not 2 tomatoes the pot never starts: BATCH-FAULT, rerun with those inputs. (2) first pot be line (unlit, 200 ticks): CookTime 0. (3) after BurnTime 400 the oven reads lit=true; 240 ticks later the pot's CookTime > 0 or the sauce is in slot 6/8. (4) after the burn ran out (481 ticks after the merge) lit=false and the two last pot be lines 80 ticks apart show the same CookTime (no progress). (5) last oven inv still holds slot 0 potato x3 (checked). data get line: note the fuel slot index (ItemHandler) for the CQ / a rerun with real fuel
 
 ## SQ-CFS-03 | skillet cooks only while the oven under it is lit; a Brewin' keg's temperature rises while lit
 @group A
 @commands same with `farmersdelight:skillet` (block) and a Brewin' keg on a burning oven
 @pass skillet cooks only while lit; keg temperature rises while lit
 @fails keg tag no longer nests FD heat_sources
+@reviewed 2026-11-16
 @from batches/r1113/c2_a1.qb
 > setblock 308 -60 310 cookingforblockheads:oven[facing=north]
 > setblock 308 -59 310 farmersdelight:skillet[facing=north]
@@ -69,19 +80,24 @@ look (1) the rdetail line gives tomato_sauce's inputs; if they are not 2 tomatoe
 > setblock 312 -59 310 brewinandchewin:keg[facing=north]
 > pbot hold c2b minecraft:beef 1
 > pbot use c2b 308 -59 310
-sleep 6
-> zc2 inv 308 -59 310
-> zc2 inv 312 -59 310
+> cdevtest tickwarp 120
+waitlog verb=tickwarp end=\S+ ticks=120 60
+> cdevtest be 308 -59 310
+> cdevtest be 312 -59 310
 > data merge block 308 -60 310 {BurnTime:600,CurrentItemBurnTime:600}
 > data merge block 312 -60 310 {BurnTime:600,CurrentItemBurnTime:600}
-sleep 8
-> zc2 inv 308 -59 310
-> zc2 inv 312 -59 310
-sleep 25
-> zc2 inv 308 -59 310
-> zc2 state 312 -60 310
-> zc2 inv 312 -59 310
-look skillet: the beef placed by the bot ("use" line SUCCESS/CONSUME), cooking progress 0 in the unlit read, rising after BurnTime (cooked beef or progress > 0 after 8 s); keg: temperature tag (numeric list) higher while lit than before; after the burn ran out (33 s) the oven lit=false. If the keg has no temperature field in its NBT, mark not judged (client WTHIT)
+> cdevtest tickwarp 160
+waitlog verb=tickwarp end=\S+ ticks=160 60
+> cdevtest be 308 -59 310
+> cdevtest be 312 -59 310
+> cdevtest tickwarp 500
+waitlog verb=tickwarp end=\S+ ticks=500 60
+> cdevtest be 308 -59 310
+> cdevtest state 312 -60 310
+> cdevtest be 312 -59 310
+expect verb=state pos=312,-60,310 state="\S*lit=false
+reject \[cdevtest\] .*done=0
+look skillet: the beef placed by the bot ("use" line SUCCESS/CONSUME), cooking progress 0 in the unlit be line, rising after BurnTime (cooked beef or progress > 0 after 160 ticks); keg: temperature tag (numeric list) higher while lit than before; after the burn ran out (660 ticks) the oven lit=false (checked). If the keg has no temperature field in its NBT, mark not judged (client WTHIT)
 
 @@text
 @@text Client: CQ-CFS-01 place a CfB oven with a cooking pot on top: the cook surface meets the pot with no gap; the backsplash

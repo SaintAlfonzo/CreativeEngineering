@@ -31,16 +31,18 @@ shell grep -q "^\s*\[kitchen\]" config/blockheads_additions-common.toml
 @pass 40 `creativedelight:shaped/<wood>_spice_rack` / `_tool_rack` recipes; `cookingforblockheads:spice_rack` and `tool_rack` take `#creativedelight:rack_slabs/other`, which holds no `minecraft:oak_slab` but holds `quark:blossom_planks_slab`; the 40 racks in `#minecraft:mineable/axe`
 @fails `kitchen.js` errors in `/kubejs errors`; `CD.on('blockheads_additions')` false (member switch)
 @from batches/r1101/p1_server.qb
-> zq recipes _spice_rack
-> zq recipes _tool_rack
-> zq itemtag creativedelight:rack_slabs/other
-> zq blocktag minecraft:mineable/axe
-> zq rdetail cookingforblockheads:spice_rack
-count creativedelight:shaped/[a-z_]+_spice_rack >= 20
-count creativedelight:shaped/[a-z_]+_tool_rack >= 20
-expect itemtag creativedelight:rack_slabs/other .*quark:blossom_planks_slab
-reject itemtag creativedelight:rack_slabs/other .*minecraft:oak_slab
-look 40 rack recipes (20 + 20); cookingforblockheads:spice_rack and tool_rack take #creativedelight:rack_slabs/other; mineable/axe lists the racks (blocktag line is long; grep spice_rack)
+@reviewed 2026-11-16
+> cdevtest recipes _spice_rack
+> cdevtest recipes _tool_rack
+> cdevtest tag item creativedelight:rack_slabs/other
+> cdevtest tag block minecraft:mineable/axe
+> cdevtest rdetail cookingforblockheads:spice_rack
+count verb=recipes id=creativedelight:shaped/[a-z_]+_spice_rack result= >= 20
+count verb=recipes id=creativedelight:shaped/[a-z_]+_tool_rack result= >= 20
+expect verb=tag kind=item tag=creativedelight:rack_slabs/other .*ids=\S*quark:blossom_planks_slab
+reject verb=tag kind=item tag=creativedelight:rack_slabs/other .*ids=(\S*,)?minecraft:oak_slab(,|$)
+expect verb=tag kind=block tag=minecraft:mineable/axe .*ids=\S*spice_rack
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-KT-24 | oak spice rack block entity keeps and drops items
 @group A
@@ -107,8 +109,9 @@ look fridge textured (no checker), racks in their wood. hand: kitchen.md KT-22 t
 @pass `Done (`; no mixin error naming `CfbFridgePlaceMixin` or `CfbFridgeRendererMixin`
 @fails SRG name `m_5573_` (FridgeBlock.getStateForPlacement) or the `renderDoor` target changed in CfB
 @jars creativedelight
-@draft no batch holds this row yet
-bootreject (Mixin apply failed|InvalidInjectionException).*CfbFridge
+@reviewed 2026-11-16
+bootexpect Done \(
+bootreject (?i)mixin.*(CfbFridgePlaceMixin|CfbFridgeRendererMixin)|(CfbFridgePlaceMixin|CfbFridgeRendererMixin).*(error|fail)
 
 ## CQ-KT-29 | double fridges drawn joined
 @group client

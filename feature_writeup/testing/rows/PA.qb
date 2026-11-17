@@ -68,10 +68,12 @@ shell grep -n -A3 "^\[paintings\]" config/creativecompat-common.toml | head -4
 @commands Single player, Immersive Paintings Datapacks page: then run the writeup's PA-01 to PA-06
 @pass modded and vanilla paintings listed at 32 px per block as before; LOOK: an old save with a modded painting placed before this jar keeps its picture
 @fails ids must stay `creativeengineering:paintings/<ns>/<id>.png` (`PaintingArt.OUT_NAMESPACE`)
-@draft no batch holds this row yet
+@draft Immersive Paintings Datapacks page and an old save's painting judged by eye
+@owner true
 ## CQ-PA-02
 @group client
 @commands With SQ-PA-03's zip set in the client's own config (single player), open the Datapacks page, search `afternoon`
 @pass LOOK: Afternoon is solid magenta
 @fails Immersive keys client images by painting id, so an older copy may be cached on the client: new world or relaunch, then retry; else the server log of SQ-PA-03
-@draft no batch holds this row yet
+@draft Datapacks page colour check by eye, with the SQ-PA-03 zip in the client config
+@owner true

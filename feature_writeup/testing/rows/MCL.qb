@@ -96,4 +96,4 @@ look every monster Y within 32 of qm's Y; qm stands in plains over caves
 @commands Four bots as suite G04 (perf_suite.md), `mobCapForceLevel -1`, JFR, `perf_report.py` against `perf/suite/g1/reports/G04.summary.json`; repeat with level 1 and 2 forced
 @pass Auto picks level 2 (about 1150 chunks); monster share below 22.0%, natural spawning below 5.3%, MSPT mean below 50.1
 @fails Record the numbers per level in perf.md 17.5 for the thresholds
-@draft no batch holds this row yet
+@draft perf suite rows (four bots as suite G04, JFR, perf_report.py against G04.summary.json, three forced levels): run from the perf suite, not a qrun batch

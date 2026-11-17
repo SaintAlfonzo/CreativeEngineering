@@ -8,7 +8,7 @@
 @@jars creativeworldgen
 @@sources feature_writeup/wise_oak.md
 @@text
-@@text Targets Creative Worldgen 20:25 (installed in `mods/`). Needs the probe `tools/scratch_query/wo_probe.js` (`/zwo`, not run yet: one live call of each verb before relying on it), and Creative Devtools' perfBot (`pbot`). Each row has its own tree at the X in its commands; X is unique per row, so rows in one boot do not interfere. G and H stand far from the trees so they do not pick drops up (`pbot use` needs no reach).
+@@text Targets Creative Worldgen 20:25 (installed in `mods/`). Reads go through Creative Devtools' `/cdevtest` (`state`, `items`, `entities`) and `/pbot punch` since 2026-11-16; the probe `tools/scratch_query/wo_probe.js` (`/zwo`) is still copied for `zwo skip` (game-time skip) and SQ-WO-27's `zwo drops` lines, which `wo_judge.py gifts` reads, and Creative Devtools' perfBot (`pbot`). Each row has its own tree at the X in its commands; X is unique per row, so rows in one boot do not interfere. G and H stand far from the trees so they do not pick drops up (`pbot use` needs no reach).
 @@text
 @@text | Boot | World | Srv config (`qrun.py toml OUT/srv/config/creativeworldgen-common.toml <section> <key> <value>`) | Rows |
 @@text |---|---|---|---|
@@ -20,18 +20,19 @@
 @@text | B | B fresh, worldgen | `config/mysticaloaktree-common.toml` `tree_rarity = 1` | SQ-WO-35, -36 |
 @@text | S | A, under strace | defaults | SQ-WO-37 |
 @@text
-@@text Every boot: copy the probe, `forceload add 270 290 900 320`, and spawn G and H as in SQ-WO-01. A `\|` in a table cell is a plain `|`. Reading: `zwo state X Y Z` prints the block state and game time. Timers: `data get block X Y Z creativeworldgen_sleep_until` (or `_angry_until`). Trust: `wiseoak trust X Y Z G`. Not scriptable, so left to CQ rows: the push, faces, particles, dialogue, and the talk counter reset.
+@@text Every boot: copy the probe, `forceload add 270 290 900 320`, and spawn G and H as in SQ-WO-01. A `\|` in a table cell is a plain `|`. Reading: `cdevtest state X Y Z` prints the block state and game time. Timers: `data get block X Y Z creativeworldgen_sleep_until` (or `_angry_until`). Trust: `wiseoak trust X Y Z G`. Not scriptable, so left to CQ rows: the push, faces, particles, dialogue, and the talk counter reset.
 @@text
 @@table
 ## SQ-WO-01 | boot, web block logged once, config defaults, probe answers
 @group A1 (first)
-@commands `bash tools/scratch_query/prep_srv.sh OUT wo A`; `cp tools/scratch_query/wo_probe.js OUT/srv/kubejs/server_scripts/zz_wo_probe.js`; boot; `forceload add 270 290 900 320`; `pbot spawn G 280 -60 280 minecraft:overworld survival`; `pbot spawn H 276 -60 280 minecraft:overworld survival`; `zwo state 310 -60 300`; grep the boot log and `OUT/srv/config/creativeworldgen-common.toml` (WO-15)
-@pass `Wise Oak web lookups disabled` count == 1; no `wiseoak` line with `InjectionError` or `failed`; `[wise_oak]` 300, 30, 600; `[wise_oak.gifts]` 5.0, 75, list sizes 17, 14, 14, 30, counts 1, 1, 4, 16; `/zwo` answers
+@commands `bash tools/scratch_query/prep_srv.sh OUT wo A`; `cp tools/scratch_query/wo_probe.js OUT/srv/kubejs/server_scripts/zz_wo_probe.js`; boot; `forceload add 270 290 900 320`; `pbot spawn G 280 -60 280 minecraft:overworld survival`; `pbot spawn H 276 -60 280 minecraft:overworld survival`; `cdevtest state 310 -60 300`; grep the boot log and `OUT/srv/config/creativeworldgen-common.toml` (WO-15)
+@pass `Wise Oak web lookups disabled` count == 1; no `wiseoak` line with `InjectionError` or `failed`; `[wise_oak]` 300, 30, 600; `[wise_oak.gifts]` 5.0, 75, list sizes 17, 14, 14, 30, counts 1, 1, 4, 16; `/cdevtest state` answers
 @fails A failed inject crashes boot or leaves stock behaviour: compare the `@At` targets in `WiseOakTileMixin` with the jar. Probe error: fix `wo_probe.js`, see its header
+@reviewed 2026-11-16
 @from batches/r1109wo/b1_defaults.qb passed
 bootexpect Done \(
 bootreject (?i)wiseoak.*(InjectionError|failed)
-bootreject InvalidInjectionException.*(?i)wiseoak
+bootreject (?i)InvalidInjectionException.*wiseoak
 shell test "$(grep -c 'Wise Oak web lookups disabled' logs/latest.log)" = 1 && echo "web block line once"
 shell python3 "$INST/tools/scratch_query/wo_judge.py" toml config/creativeworldgen-common.toml 300 30 600 5.0 75 17 14 14 30 1 1 4 16
 > forceload add 270 290 900 320
@@ -39,10 +40,10 @@ sleep 8
 > pbot spawn G 280 -60 280 minecraft:overworld survival
 > pbot spawn H 276 -60 280 minecraft:overworld survival
 sleep 3
-> zwo state 310 -60 300
-waitlog \[zwo\] done 20
-expect \[zwo\] 310 -60 300
+> cdevtest state 310 -60 300
+expect verb=state pos=310,-60,300 
 > gamerule randomTickSpeed 0
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-02 | trust command reads, writes, selector, per player
 @group A1
@@ -93,148 +94,165 @@ reject Exception
 
 ## SQ-WO-04 | stays awake by day at the default random tick speed (r1109 ran at 300: tired-roll suspicion)
 @group A1
-@commands `time set noon`; `weather clear`; `setblock 340 -60 300 mysticaloaktree:wise_oak`; sleep 120; `zwo state 340 -60 300` (WO-01)
+@commands `time set noon`; `weather clear`; `setblock 340 -60 300 mysticaloaktree:wise_oak`; sleep 120; `cdevtest state 340 -60 300` (WO-01)
 @pass `state=(none\|blinking)`
 @fails The stock day sleep is still active: `randomTick` inject
+@reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
 > gamerule randomTickSpeed 3
 > time set noon
 > weather clear 100000
 > setblock 30040 -60 30020 mysticaloaktree:wise_oak
-sleep 120
-> zwo state 30040 -60 30020
-waitlog \[zwo\] done 20
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done ticks=2400 120
+> cdevtest state 30040 -60 30020
 > data get block 30040 -60 30020 creativeworldgen_sleep_until
 sleep 1
-expect \[zwo\] 30040 -60 30020 .*state=(none|blinking)
-reject \[zwo\] 30040 -60 30020 .*state=sleeping
+expect verb=state pos=30040,-60,30020 .*state=(none|blinking)
+reject verb=state pos=30040,-60,30020 .*state=sleeping
 look if sleeping: does the data get show a sleep_until (tired sleep timer) or none (day sleep inject not active)?
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-05 | sleeps at night, wakes by day, no timer
 @group A1
-@commands `setblock 350 -60 300 mysticaloaktree:wise_oak`; `time set midnight`; sleep 120; `zwo state 350 -60 300`; `time set noon`; sleep 120; `zwo state 350 -60 300`; `data get block 350 -60 300 creativeworldgen_sleep_until` (WO-02)
+@commands `setblock 350 -60 300 mysticaloaktree:wise_oak`; `time set midnight`; sleep 120; `cdevtest state 350 -60 300`; `time set noon`; sleep 120; `cdevtest state 350 -60 300`; `data get block 350 -60 300 creativeworldgen_sleep_until` (WO-02)
 @pass `state=sleeping` at night; `state=(none\|blinking)` by day; no sleep timer in the NBT (a night sleep has none)
 @fails `randomTick` night and wake branches
+@reviewed 2026-11-16
 @from batches/r1109wo/b1_defaults.qb passed
 > setblock 350 -60 300 mysticaloaktree:wise_oak
 > time set midnight
-sleep 30
-> zwo state 350 -60 300
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done ticks=600 30
+> cdevtest state 350 -60 300
 > time set noon
-sleep 30
-> zwo state 350 -60 300
+> cdevtest tickwarp 601
+waitlog verb=tickwarp end=done ticks=601 30
+> cdevtest state 350 -60 300
 > data get block 350 -60 300 creativeworldgen_sleep_until
 sleep 1
-expect \[zwo\] 350 -60 300 .*state=sleeping
-expect \[zwo\] 350 -60 300 .*state=(none|blinking)
+expect verb=state pos=350,-60,300 .*state=sleeping
+expect verb=state pos=350,-60,300 .*state=(none|blinking)
 expect (?i)found no elements
 reject has the following block data
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-06 | sleeps in a storm by day, wakes after (default tick speed, timer read)
 @group A1
-@commands `time set noon`; `setblock 360 -60 300 mysticaloaktree:wise_oak`; `weather thunder 600`; sleep 120; `zwo state 360 -60 300`; `weather clear`; sleep 120; `zwo state 360 -60 300` (WO-02b)
+@commands `time set noon`; `setblock 360 -60 300 mysticaloaktree:wise_oak`; `weather thunder 600`; sleep 120; `cdevtest state 360 -60 300`; `weather clear`; sleep 120; `cdevtest state 360 -60 300` (WO-02b)
 @pass `state=sleeping` in the storm; `state=(none\|blinking)` after
 @fails `isNight` in thunder; the sky-darkness update needs players or a ticking level
+@reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
 > time set noon
 > setblock 30050 -60 30020 mysticaloaktree:wise_oak
 > weather thunder 600
-sleep 120
-> zwo state 30050 -60 30020
-waitlog \[zwo\] done 20
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done ticks=2400 120
+> cdevtest state 30050 -60 30020
 > weather clear 100000
-sleep 120
-> zwo state 30050 -60 30020
-waitlog \[zwo\] done 20
+> cdevtest tickwarp 2401
+waitlog verb=tickwarp end=done ticks=2401 120
+> cdevtest state 30050 -60 30020
 > data get block 30050 -60 30020 creativeworldgen_sleep_until
 sleep 1
-expect \[zwo\] 30050 -60 30020 .*state=sleeping
-expect \[zwo\] 30050 -60 30020 .*state=(none|blinking)
+expect verb=state pos=30050,-60,30020 .*state=sleeping
+expect verb=state pos=30050,-60,30020 .*state=(none|blinking)
 look if the last state is sleeping: a sleep_until in the data get means a timed (tired) sleep, not the storm branch
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-07 | storm ending at night does not wake it
 @group A1
-@commands `time set midnight`; `setblock 370 -60 300 mysticaloaktree:wise_oak`; `weather thunder 600`; sleep 120; `weather clear`; sleep 120; `zwo state 370 -60 300`; `time set noon`; sleep 120; `zwo state 370 -60 300` (WO-02b)
+@commands `time set midnight`; `setblock 370 -60 300 mysticaloaktree:wise_oak`; `weather thunder 600`; sleep 120; `weather clear`; sleep 120; `cdevtest state 370 -60 300`; `time set noon`; sleep 120; `cdevtest state 370 -60 300` (WO-02b)
 @pass Still `state=sleeping` after the storm ends at night; awake by day
 @fails Wake check must require `!night`
+@reviewed 2026-11-16
 @from batches/r1109wo/b1_defaults.qb passed
 > time set midnight
 > setblock 370 -60 300 mysticaloaktree:wise_oak
 > weather thunder 600
-sleep 30
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done ticks=600 30
 > weather clear
-sleep 30
-> zwo state 370 -60 300
+> cdevtest tickwarp 601
+waitlog verb=tickwarp end=done ticks=601 30
+> cdevtest state 370 -60 300
 > time set noon
-sleep 30
-> zwo state 370 -60 300
+> cdevtest tickwarp 602
+waitlog verb=tickwarp end=done ticks=602 30
+> cdevtest state 370 -60 300
 sleep 1
-expect \[zwo\] 370 -60 300 .*state=sleeping
-expect \[zwo\] 370 -60 300 .*state=(none|blinking)
+expect verb=state pos=370,-60,300 .*state=sleeping
+expect verb=state pos=370,-60,300 .*state=(none|blinking)
 > gamerule randomTickSpeed 0
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-08 | right-click on a sleeper: angry, 600 tick timer (r1109: tree was awake at the click; state read at each step)
 @group A1
-@commands `time set noon`; `weather clear`; `setblock 380 -60 300 mysticaloaktree:wise_oak[state=sleeping]`; `wiseoak trust 380 -60 300 G 50`; `pbot use G 380 -60 300 up`; `zwo state 380 -60 300`; `data get block 380 -60 300 creativeworldgen_angry_until` (default timers, WO-05)
+@commands `time set noon`; `weather clear`; `setblock 380 -60 300 mysticaloaktree:wise_oak[state=sleeping]`; `wiseoak trust 380 -60 300 G 50`; `pbot use G 380 -60 300 up`; `cdevtest state 380 -60 300`; `data get block 380 -60 300 creativeworldgen_angry_until` (default timers, WO-05)
 @pass `state=angry`; `angry_until` = game time + 600 (within 5 ticks)
 @fails `onInteract` wake inject; `angerDurationSeconds`
+@reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
 > gamerule randomTickSpeed 0
 > time set noon
 > weather clear 100000
 > setblock 30060 -60 30020 mysticaloaktree:wise_oak[state=sleeping]
-> zwo state 30060 -60 30020
+> cdevtest state 30060 -60 30020
 > wiseoak trust 30060 -60 30020 G 50
 sleep 1
-> zwo state 30060 -60 30020
+> cdevtest state 30060 -60 30020
 > tp G 30060 -60 30017
 > pbot use G 30060 -60 30020 up
-> zwo state 30060 -60 30020
+> cdevtest state 30060 -60 30020
 > data get block 30060 -60 30020 creativeworldgen_angry_until
 sleep 1
-waitlog \[zwo\] done 20
-expect \[zwo\] 30060 -60 30020 .*state=angry
+expect verb=state pos=30060,-60,30020 .*state=angry
 expect has the following block data
-look angry_until = game + 600 within 5 ticks; if not angry, which zwo state line first reads awake (after setblock, after the trust command, or only after the use)
+look angry_until = game + 600 within 5 ticks; if not angry, which state line first reads awake (after setblock, after the trust command, or only after the use)
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-09 | anger ends in a timed sleep on the game-time basis (tree of SQ-WO-08; meaningful only if -08 read angry)
 @group A1
-@commands The tree of SQ-WO-08. `zwo skip 601`; sleep 3; `zwo state 380 -60 300`; read `creativeworldgen_sleep_until` of it and game time; `time add 12000`; read the timer; `time set noon`; `zwo skip 12000`; sleep 3; `zwo state 380 -60 300` (WO-05, WO-11)
+@commands The tree of SQ-WO-08. `zwo skip 601`; sleep 3; `cdevtest state 380 -60 300`; read `creativeworldgen_sleep_until` of it and game time; `time add 12000`; read the timer; `time set noon`; `zwo skip 12000`; sleep 3; `cdevtest state 380 -60 300` (WO-05, WO-11)
 @pass `state=sleeping`; `sleep_until` = game time + 12000 (within 25 ticks); unchanged by `time add`; awake after the skip
 @fails The 23-tick timer inject or the game-time basis
+@reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
 > zwo skip 601
 sleep 3
-> zwo state 30060 -60 30020
+> cdevtest state 30060 -60 30020
 > data get block 30060 -60 30020 creativeworldgen_sleep_until
 > time add 12000
 > data get block 30060 -60 30020 creativeworldgen_sleep_until
 > time set noon
 > zwo skip 12000
 sleep 3
-> zwo state 30060 -60 30020
+> cdevtest state 30060 -60 30020
 sleep 1
-waitlog \[zwo\] done 20
-expect \[zwo\] 30060 -60 30020 .*state=sleeping
-expect \[zwo\] 30060 -60 30020 .*state=(none|blinking)
+expect verb=state pos=30060,-60,30020 .*state=sleeping
+expect verb=state pos=30060,-60,30020 .*state=(none|blinking)
 look sleep_until = game + 12000 within 25 ticks, same value after time add; final state awake
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-10 | angry with no timer sleeps at once; save before the restart
 @group A1 (before the restart)
 @commands `time set noon`; `setblock 400 -60 300 mysticaloaktree:wise_oak[state=angry]`; `wiseoak trust 400 -60 300 G 40`; sleep 3; read `creativeworldgen_sleep_until`; `save-all flush`; restart; `forceload add 270 290 900 320`; `wiseoak trust 400 -60 300 G`; read `creativeworldgen_sleep_until` (ANGRY with no timer counts as expired; WO-09)
 @pass `state=sleeping` at once; the timer has the same value after the restart; trust 40
 @fails NBT save and load injects; `saveAdditional` must run for the chunk
+@reviewed 2026-11-16
 @from batches/r1109wo/b1_defaults.qb passed
 > time set noon
 > setblock 400 -60 300 mysticaloaktree:wise_oak[state=angry]
 > wiseoak trust 400 -60 300 G 40
 sleep 3
-> zwo state 400 -60 300
+> cdevtest state 400 -60 300
 > data get block 400 -60 300 creativeworldgen_sleep_until
 > save-all flush
 sleep 5
-expect \[zwo\] 400 -60 300 .*state=sleeping
+expect verb=state pos=400,-60,300 .*state=sleeping
 expect has the following block data
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-11 | lightning grows an oak sapling into a Wise Oak
 @group A1
@@ -282,9 +300,10 @@ expect No blocks were filled
 
 ## SQ-WO-14 | twelve talks make it tired; timed sleep, then awake
 @group A2
-@commands `time set noon`; `setblock 440 -60 300 mysticaloaktree:wise_oak`; twelve times: `pbot use G 440 -60 300 up`, then `zwo skip 60`; `sleep 90`; `zwo state 440 -60 300`; read `creativeworldgen_sleep_until` and game time; sleep 8; `zwo state 440 -60 300` (WO-03, WO-04)
+@commands `time set noon`; `setblock 440 -60 300 mysticaloaktree:wise_oak`; twelve times: `pbot use G 440 -60 300 up`, then `zwo skip 60`; `sleep 90`; `cdevtest state 440 -60 300`; read `creativeworldgen_sleep_until` and game time; sleep 8; `cdevtest state 440 -60 300` (WO-03, WO-04)
 @pass `state=sleeping`; `sleep_until` = game time + 100 at most; awake after it
 @fails Tired roll and `sleepDurationSeconds`. The talk counter reset is not observable from the server; WO-04 covers it by hand
+@reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
 > setblock 440 -60 300 mysticaloaktree:wise_oak
 repeat 12
@@ -293,60 +312,65 @@ repeat 12
 end
 > gamerule randomTickSpeed 4096
 > gamerule randomTickSpeed 0
-> zwo state 440 -60 300
+> cdevtest state 440 -60 300
 > data get block 440 -60 300 creativeworldgen_sleep_until
 sleep 8
-> zwo state 440 -60 300
+> cdevtest state 440 -60 300
 sleep 1
-expect \[zwo\] 440 -60 300 .*state=sleeping
-expect \[zwo\] 440 -60 300 .*state=(none|blinking)
+expect verb=state pos=440,-60,300 .*state=sleeping
+expect verb=state pos=440,-60,300 .*state=(none|blinking)
 expect has the following block data
 look sleep_until at most game + 100
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-15 | timer ends at night: stays asleep, wakes right after dawn
 @group A2
-@commands `time set noon`; `setblock 450 -60 300 mysticaloaktree:wise_oak[state=angry]`; sleep 3; `time set midnight`; sleep 8; `zwo state 450 -60 300`; read the timer; `time set noon`; sleep 3; `zwo state 450 -60 300` (WO-08)
+@commands `time set noon`; `setblock 450 -60 300 mysticaloaktree:wise_oak[state=angry]`; sleep 3; `time set midnight`; sleep 8; `cdevtest state 450 -60 300`; read the timer; `time set noon`; sleep 3; `cdevtest state 450 -60 300` (WO-08)
 @pass `state=sleeping` after the timer expired at night; awake right after dawn
 @fails Wake requires `!night` in `creativeworldgen$endTimers`
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
 > time set noon
 > setblock 450 -60 300 mysticaloaktree:wise_oak[state=angry]
 sleep 3
 > time set midnight
 sleep 8
-> zwo state 450 -60 300
+> cdevtest state 450 -60 300
 > data get block 450 -60 300 creativeworldgen_sleep_until
 > time set noon
 sleep 3
-> zwo state 450 -60 300
+> cdevtest state 450 -60 300
 sleep 1
-expect \[zwo\] 450 -60 300 .*state=sleeping
-expect \[zwo\] 450 -60 300 .*state=(none|blinking)
+expect verb=state pos=450,-60,300 .*state=sleeping
+expect verb=state pos=450,-60,300 .*state=(none|blinking)
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-16 | wake a sleeper: trust -20, angry timer, timed sleep, awake
 @group A2
-@commands `time set noon`; `setblock 460 -60 300 mysticaloaktree:wise_oak[state=sleeping]`; `wiseoak trust 460 -60 300 G 30`; `pbot use G 460 -60 300 up`; `zwo state 460 -60 300`; `wiseoak trust 460 -60 300 G`; read `creativeworldgen_angry_until`; sleep 7; `zwo state 460 -60 300`; read `creativeworldgen_sleep_until`; sleep 7; `zwo state 460 -60 300` (WO-05)
+@commands `time set noon`; `setblock 460 -60 300 mysticaloaktree:wise_oak[state=sleeping]`; `wiseoak trust 460 -60 300 G 30`; `pbot use G 460 -60 300 up`; `cdevtest state 460 -60 300`; `wiseoak trust 460 -60 300 G`; read `creativeworldgen_angry_until`; sleep 7; `cdevtest state 460 -60 300`; read `creativeworldgen_sleep_until`; sleep 7; `cdevtest state 460 -60 300` (WO-05)
 @pass `state=angry`, trust 10, angry timer set; then `state=sleeping` with a sleep timer; then awake
 @fails `onInteract` inject; stock `Relationship.decrease`
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
 > time set noon
 > setblock 460 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > wiseoak trust 460 -60 300 G 30
 > pbot use G 460 -60 300 up
-> zwo state 460 -60 300
+> cdevtest state 460 -60 300
 > wiseoak trust 460 -60 300 G
 > data get block 460 -60 300 creativeworldgen_angry_until
 sleep 7
-> zwo state 460 -60 300
+> cdevtest state 460 -60 300
 > data get block 460 -60 300 creativeworldgen_sleep_until
 sleep 7
-> zwo state 460 -60 300
+> cdevtest state 460 -60 300
 sleep 1
-expect \[zwo\] 460 -60 300 .*state=angry
+expect verb=state pos=460,-60,300 .*state=angry
 expect Trust of G at .*: 10
-expect \[zwo\] 460 -60 300 .*state=sleeping
-expect \[zwo\] 460 -60 300 .*state=(none|blinking)
+expect verb=state pos=460,-60,300 .*state=sleeping
+expect verb=state pos=460,-60,300 .*state=(none|blinking)
 count has the following block data == 2
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-17 | trust floor
 @group A2
@@ -363,103 +387,119 @@ expect Trust of G at .*: 0
 
 ## SQ-WO-18 | angry tree ignores a talk: no trust, no gift
 @group A2
-@commands `setblock 480 -60 300 mysticaloaktree:wise_oak[state=angry]` then at once `wiseoak trust 480 -60 300 G 50`; `pbot use G 480 -60 300 up`; `wiseoak trust 480 -60 300 G`; `zwo drops 480 -60 300 3` (WO-06)
+@commands `setblock 480 -60 300 mysticaloaktree:wise_oak[state=angry]` then at once `wiseoak trust 480 -60 300 G 50`; `pbot use G 480 -60 300 up`; `wiseoak trust 480 -60 300 G`; `cdevtest items 480 -60 300 3` (WO-06)
 @pass `use PASS` (or no `CONSUME`); trust 50; `drops none`
 @fails Stock angry check; gift inject must see PASS
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
 > setblock 480 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > pbot use G 480 -60 300 up
 > wiseoak trust 480 -60 300 G 50
 > pbot use G 480 -60 300 up
 > wiseoak trust 480 -60 300 G
-> zwo drops 480 -60 300 3
+> cdevtest items 480 -60 300 3
 sleep 1
 expect use PASS
 expect Trust of G at .*: 50
-expect \[zwo\] drops none
+expect verb=items items=- stacks=0
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-19 | a hit blows, then anger with a timer, sleep, awake
 @group A2
-@commands `pace 0.2`. `time set noon`; `setblock 490 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 490 -60 300 G 50`; `zwo punch G 490 -60 300`; `zwo state 490 -60 300`; `wiseoak trust 490 -60 300 G`; sleep 3; `zwo state 490 -60 300`; read `creativeworldgen_angry_until`; sleep 7; `zwo state 490 -60 300`; sleep 7; `zwo state 490 -60 300` (WO-07)
+@commands `pace 0.2`. `time set noon`; `setblock 490 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 490 -60 300 G 50`; `pbot punch G (G teleported next to the tree) 490 -60 300`; `cdevtest state 490 -60 300`; `wiseoak trust 490 -60 300 G`; sleep 3; `cdevtest state 490 -60 300`; read `creativeworldgen_angry_until`; sleep 7; `cdevtest state 490 -60 300`; sleep 7; `cdevtest state 490 -60 300` (WO-07)
 @pass `state=(blowing\|thicc)`, trust 30; then `state=angry` with a timer; then `state=sleeping`; then awake
 @fails `stopBlowing` TAIL inject. Probe: `onAttack` from Rhino
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
 > time set noon
+> tp G 488 -60 300
 > setblock 490 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 490 -60 300 G 50
-> zwo punch G 490 -60 300
-> zwo state 490 -60 300
+> pbot punch G 490 -60 300
+> cdevtest state 490 -60 300
 > wiseoak trust 490 -60 300 G
 sleep 3
-> zwo state 490 -60 300
+> cdevtest state 490 -60 300
 > data get block 490 -60 300 creativeworldgen_angry_until
 sleep 7
-> zwo state 490 -60 300
+> cdevtest state 490 -60 300
 sleep 7
-> zwo state 490 -60 300
+> cdevtest state 490 -60 300
+> tp G 280 -60 280
 sleep 1
-expect \[zwo\] 490 -60 300 .*state=(blowing|thicc)
+expect verb=state pos=490,-60,300 .*state=(blowing|thicc)
 expect Trust of G at .*: 30
-expect \[zwo\] 490 -60 300 .*state=angry
+expect verb=state pos=490,-60,300 .*state=angry
 expect has the following block data
-expect \[zwo\] 490 -60 300 .*state=sleeping
-expect \[zwo\] 490 -60 300 .*state=(none|blinking)
+expect verb=state pos=490,-60,300 .*state=sleeping
+expect verb=state pos=490,-60,300 .*state=(none|blinking)
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-20 | a second hit restarts the blow
 @group A2
-@commands `pace 0.2`. `setblock 500 -60 300 mysticaloaktree:wise_oak`; `zwo punch G 500 -60 300`; sleep 1; `zwo punch G 500 -60 300`; sleep 1.2; `zwo state 500 -60 300`; sleep 2; `zwo state 500 -60 300` (WO-07)
+@commands `pace 0.2`. `setblock 500 -60 300 mysticaloaktree:wise_oak`; `pbot punch G (G teleported next to the tree) 500 -60 300`; sleep 1; `pbot punch G (G teleported next to the tree) 500 -60 300`; sleep 1.2; `cdevtest state 500 -60 300`; sleep 2; `cdevtest state 500 -60 300` (WO-07)
 @pass Still `state=(blowing\|thicc)` at 2.2 s, past the 34 ticks of the first hit; `state=angry` after
 @fails Stock counter restart
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
+> tp G 498 -60 300
 > setblock 500 -60 300 mysticaloaktree:wise_oak
-> zwo punch G 500 -60 300
+> pbot punch G 500 -60 300
 sleep 1
-> zwo punch G 500 -60 300
+> pbot punch G 500 -60 300
 sleep 0.8
-> zwo state 500 -60 300
+> cdevtest state 500 -60 300
 sleep 2
-> zwo state 500 -60 300
+> cdevtest state 500 -60 300
+> tp G 280 -60 280
 sleep 1
-expect \[zwo\] 500 -60 300 .*state=(blowing|thicc)
-expect \[zwo\] 500 -60 300 .*state=angry
+expect verb=state pos=500,-60,300 .*state=(blowing|thicc)
+expect verb=state pos=500,-60,300 .*state=angry
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-21 | a hit on a sleeper blows
 @group A2
-@commands `pace 0.2`. `time set noon`; `setblock 510 -60 300 mysticaloaktree:wise_oak[state=sleeping]`; `zwo punch G 510 -60 300`; `zwo state 510 -60 300`; sleep 3; `zwo state 510 -60 300` (WO-07)
+@commands `pace 0.2`. `time set noon`; `setblock 510 -60 300 mysticaloaktree:wise_oak[state=sleeping]`; `pbot punch G (G teleported next to the tree) 510 -60 300`; `cdevtest state 510 -60 300`; sleep 3; `cdevtest state 510 -60 300` (WO-07)
 @pass `state=(blowing\|thicc)`; then `state=angry`
 @fails A hit on a sleeper follows the stock blow
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
 > time set noon
+> tp G 508 -60 300
 > setblock 510 -60 300 mysticaloaktree:wise_oak[state=sleeping]
-> zwo punch G 510 -60 300
-> zwo state 510 -60 300
+> pbot punch G 510 -60 300
+> cdevtest state 510 -60 300
 sleep 3
-> zwo state 510 -60 300
+> cdevtest state 510 -60 300
+> tp G 280 -60 280
 sleep 1
-expect \[zwo\] 510 -60 300 .*state=(blowing|thicc)
-expect \[zwo\] 510 -60 300 .*state=angry
+expect verb=state pos=510,-60,300 .*state=(blowing|thicc)
+expect verb=state pos=510,-60,300 .*state=angry
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-22 | angry sleep at night stays asleep past its timer
 @group A2
-@commands `time set midnight`; `setblock 520 -60 300 mysticaloaktree:wise_oak[state=sleeping]`; `pbot use G 520 -60 300 up`; `zwo state 520 -60 300`; sleep 7; `zwo state 520 -60 300`; sleep 7; `zwo state 520 -60 300`; `time set noon`; sleep 3; `zwo state 520 -60 300` (WO-05, WO-08)
+@commands `time set midnight`; `setblock 520 -60 300 mysticaloaktree:wise_oak[state=sleeping]`; `pbot use G 520 -60 300 up`; `cdevtest state 520 -60 300`; sleep 7; `cdevtest state 520 -60 300`; sleep 7; `cdevtest state 520 -60 300`; `time set noon`; sleep 3; `cdevtest state 520 -60 300` (WO-05, WO-08)
 @pass `state=angry`; `state=sleeping`; still `state=sleeping` at night after the sleep timer; awake at noon
 @fails Angry sleep must respect the night rule
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
 > time set midnight
 > setblock 520 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > pbot use G 520 -60 300 up
-> zwo state 520 -60 300
+> cdevtest state 520 -60 300
 sleep 7
-> zwo state 520 -60 300
+> cdevtest state 520 -60 300
 sleep 7
-> zwo state 520 -60 300
+> cdevtest state 520 -60 300
 > time set noon
 sleep 3
-> zwo state 520 -60 300
+> cdevtest state 520 -60 300
 sleep 1
-expect \[zwo\] 520 -60 300 .*state=angry
-count \[zwo\] 520 -60 300 .*state=sleeping == 2
-expect \[zwo\] 520 -60 300 .*state=(none|blinking)
+expect verb=state pos=520,-60,300 .*state=angry
+count verb=state pos=520,-60,300 .*state=sleeping == 2
+expect verb=state pos=520,-60,300 .*state=(none|blinking)
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-23 | talk cooldown 54 ticks
 @group A2
@@ -483,23 +523,26 @@ expect Trust of G at .*: 60
 
 ## SQ-WO-24 | trust cap
 @group A2
-@commands `setblock 540 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 540 -60 300 G 100`; `pbot use G 540 -60 300 up`; `wiseoak trust 540 -60 300 G`; `zwo drops 540 -60 300 3` (WO-12)
+@commands `setblock 540 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 540 -60 300 G 100`; `pbot use G 540 -60 300 up`; `wiseoak trust 540 -60 300 G`; `cdevtest items 540 -60 300 3` (WO-12)
 @pass Trust stays 100
 @fails Stock cap
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
 > setblock 540 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 540 -60 300 G 100
 > pbot use G 540 -60 300 up
 > wiseoak trust 540 -60 300 G
-> zwo drops 540 -60 300 3
+> cdevtest items 540 -60 300 3
 sleep 1
 expect Trust of G at .*: 100
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-25 | trust is per player
 @group A2
-@commands `setblock 550 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 550 -60 300 G 100`; `wiseoak trust 550 -60 300 H 0`; `pbot use H 550 -60 300 up`; `wiseoak trust 550 -60 300 H`; `wiseoak trust 550 -60 300 G`; `zwo drops 550 -60 300 3` (WO-17)
+@commands `setblock 550 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 550 -60 300 G 100`; `wiseoak trust 550 -60 300 H 0`; `pbot use H 550 -60 300 up`; `wiseoak trust 550 -60 300 H`; `wiseoak trust 550 -60 300 G`; `cdevtest items 550 -60 300 3` (WO-17)
 @pass H trust 5, G still 100, `drops none` (trust is per player)
 @fails `getRelationship(player)` in the gift inject
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a2.qb passed
 > setblock 550 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 550 -60 300 G 100
@@ -507,34 +550,37 @@ expect Trust of G at .*: 100
 > pbot use H 550 -60 300 up
 > wiseoak trust 550 -60 300 H
 > wiseoak trust 550 -60 300 G
-> zwo drops 550 -60 300 3
+> cdevtest items 550 -60 300 3
 sleep 1
 expect Trust of H at .*: 5
 expect Trust of G at .*: 100
-expect \[zwo\] drops none
+expect verb=items items=- stacks=0
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-26 | threshold is on the trust after the talk
 @group A2
-@commands `setblock 560 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 560 -60 300 G 65`; `pbot use G 560 -60 300 up`; `zwo drops 560 -60 300 3`; `wiseoak trust 560 -60 300 G 70`; `pbot use G 560 -60 300 up`; `zwo drops 560 -60 300 3`; `wiseoak trust 560 -60 300 G 100`; `pbot use G 560 -60 300 up`; `zwo drops 560 -60 300 3` (chance 100, threshold 75; WO-17)
+@commands `setblock 560 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 560 -60 300 G 65`; `pbot use G 560 -60 300 up`; `cdevtest items 560 -60 300 3`; `wiseoak trust 560 -60 300 G 70`; `pbot use G 560 -60 300 up`; `cdevtest items 560 -60 300 3`; `wiseoak trust 560 -60 300 G 100`; `pbot use G 560 -60 300 up`; `cdevtest items 560 -60 300 3` (chance 100, threshold 75; WO-17)
 @pass `drops none` at 65 (70 after the talk); a gift at 70 (75 after the talk); a gift at 100
 @fails Threshold is `>=` on the trust after the talk
+@reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
 > setblock 560 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 560 -60 300 G 65
 > pbot use G 560 -60 300 up
-> zwo drops 560 -60 300 3
+> cdevtest items 560 -60 300 3
 > zwo skip 60
 > wiseoak trust 560 -60 300 G 70
 > pbot use G 560 -60 300 up
-> zwo drops 560 -60 300 3
+> cdevtest items 560 -60 300 3
 > zwo skip 60
 > wiseoak trust 560 -60 300 G 100
 > pbot use G 560 -60 300 up
-> zwo drops 560 -60 300 3
+> cdevtest items 560 -60 300 3
 sleep 1
-count \[zwo\] drops none == 1
-count \[zwo\] drops [a-z_0-9]+:[a-z_0-9/]+ x == 2
+count verb=items items=- stacks=0 == 1
+count verb=items items=[a-z_0-9]+:[a-z_0-9/]+:\d+ stacks= == 2
 look the drops none line is the first (trust 65)
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-27 | forty rolls: one id per drop, all four lists, right counts
 @group A2
@@ -709,81 +755,93 @@ look wo_judge.py gifts on this row log: every drop one id, count matches its lis
 
 ## SQ-WO-28 | no gift from a sleeper, an angry tree, during a blow; one gift for a double click
 @group A2
-@commands `wiseoak trust` is 100 throughout. `setblock 580 -60 300 mysticaloaktree:wise_oak[state=sleeping]`, use, `zwo drops 580 -60 300 3`. `setblock 580 -60 300 mysticaloaktree:wise_oak[state=angry]`, use, drops. `setblock 580 -60 300 mysticaloaktree:wise_oak`, `zwo punch G 580 -60 300`, use during the blow, drops. `setblock 580 -60 300 mysticaloaktree:wise_oak`, use twice with `pace 0.2`, `zwo drops 580 -60 300 3` (WO-16)
+@commands `wiseoak trust` is 100 throughout. `setblock 580 -60 300 mysticaloaktree:wise_oak[state=sleeping]`, use, `cdevtest items 580 -60 300 3`. `setblock 580 -60 300 mysticaloaktree:wise_oak[state=angry]`, use, drops. `setblock 580 -60 300 mysticaloaktree:wise_oak`, `pbot punch G (G teleported next to the tree) 580 -60 300`, use during the blow, drops. `setblock 580 -60 300 mysticaloaktree:wise_oak`, use twice with `pace 0.2`, `cdevtest items 580 -60 300 3` (WO-16)
 @pass `drops none` for the sleeper, the angry tree and the blow; exactly one gift for the double click
 @fails `canSleep` and PASS checks in the gift inject
+@reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
 > setblock 580 -60 300 mysticaloaktree:wise_oak[state=sleeping]
 > wiseoak trust 580 -60 300 G 100
 > pbot use G 580 -60 300 up
-> zwo drops 580 -60 300 3
+> cdevtest items 580 -60 300 3
 > setblock 580 -60 306 mysticaloaktree:wise_oak[state=sleeping]
 > pbot use G 580 -60 306 up
 > wiseoak trust 580 -60 306 G 100
 > pbot use G 580 -60 306 up
-> zwo drops 580 -60 306 3
+> cdevtest items 580 -60 306 3
 > setblock 580 -60 312 mysticaloaktree:wise_oak
 > wiseoak trust 580 -60 312 G 100
-> zwo punch G 580 -60 312
+> tp G 578 -60 312
+> pbot punch G 580 -60 312
+> tp G 280 -60 280
 > wiseoak trust 580 -60 312 G 100
 > pbot use G 580 -60 312 up
-> zwo drops 580 -60 312 3
+> cdevtest items 580 -60 312 3
 > setblock 580 -60 318 mysticaloaktree:wise_oak
 > wiseoak trust 580 -60 318 G 100
 > pbot use G 580 -60 318 up
 > pbot use G 580 -60 318 up
-> zwo drops 580 -60 318 3
+> cdevtest items 580 -60 318 3
 sleep 1
-count \[zwo\] drops none == 3
-count \[zwo\] drops [a-z_0-9]+:[a-z_0-9/]+ x == 1
+count verb=items items=- stacks=0 == 3
+count verb=items items=[a-z_0-9]+:[a-z_0-9/]+:\d+ stacks= == 1
 look the one gift is the last drops line, and it is a single id
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-29 | the gift comes out on the facing side
 @group A2
-@commands `setblock 590 -60 300 mysticaloaktree:wise_oak[facing=north]`; `wiseoak trust 590 -60 300 G 100`; `pbot use G 590 -60 300 up`; `zwo stacks 590 -60 300 1`; `zwo drops 590 -60 300 3`; `setblock 590 -60 300 mysticaloaktree:wise_oak[facing=south]`; `wiseoak trust 590 -60 300 G 100`; `pbot use G 590 -60 300 up`; `zwo stacks 590 -60 300 1` (WO-16)
+@commands `setblock 590 -60 300 mysticaloaktree:wise_oak[facing=north]`; `wiseoak trust 590 -60 300 G 100`; `pbot use G 590 -60 300 up`; `cdevtest items 590 -60 300 1`; `cdevtest items 590 -60 300 3`; `setblock 590 -60 300 mysticaloaktree:wise_oak[facing=south]`; `wiseoak trust 590 -60 300 G 100`; `pbot use G 590 -60 300 up`; `cdevtest items 590 -60 300 1` (WO-16)
 @pass The stack sits on the facing side (Z smaller for north, larger for south), not inside the block
 @fails `popResourceFromFace` with the `FACING` property
+@reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
 > setblock 590 -60 300 mysticaloaktree:wise_oak[facing=north]
 > wiseoak trust 590 -60 300 G 100
 > pbot use G 590 -60 300 up
-> execute as @e[type=item,x=590,y=-60,z=300,distance=..3] run data get entity @s Pos
-> zwo stacks 590 -60 300 1
-> zwo drops 590 -60 300 3
+> cdevtest entities 590 -60 300 3 type=minecraft:item
+> cdevtest items 590 -60 300 1 keep
+> cdevtest items 590 -60 300 3
 > setblock 590 -60 300 mysticaloaktree:wise_oak[facing=south]
 > wiseoak trust 590 -60 300 G 100
 > zwo skip 60
 > pbot use G 590 -60 300 up
-> execute as @e[type=item,x=590,y=-60,z=300,distance=..3] run data get entity @s Pos
-> zwo stacks 590 -60 300 1
+> cdevtest entities 590 -60 300 3 type=minecraft:item
+> cdevtest items 590 -60 300 1 keep
+> cdevtest items 590 -60 300 3
 sleep 1
-count \[zwo\] stacks 1 == 2
-look Pos of the item: Z below 300 for north, Z above 301 for south, not inside the block
+count verb=items items=\S+ stacks=1 xp=0 kept=true == 2
+expect verb=entities type=minecraft:item uuid=\S+ x=\S+ y=\S+ z=(29\d|300)(\.\d+)?\b
+expect verb=entities type=minecraft:item uuid=\S+ x=\S+ y=\S+ z=30[1-9](\.\d+)?\b
+count verb=entities n=1 == 2
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-30 | silk touch keeps trust and no timers; plain axe drops a log
 @group A2
-@commands `setblock 600 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 600 -60 300 G 80`; `loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe{Enchantments:[{id:\"minecraft:silk_touch\",lvl:1}]}`; `data get entity @e[type=item,limit=1,sort=nearest,x=600,y=-60,z=300] Item`; `zwo drops 600 -60 300 3`; `loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe`; `zwo drops 600 -60 300 3` (WO-12)
+@commands `setblock 600 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 600 -60 300 G 80`; `loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe{Enchantments:[{id:\"minecraft:silk_touch\",lvl:1}]}`; `data get entity @e[type=item,limit=1,sort=nearest,x=600,y=-60,z=300] Item`; `cdevtest items 600 -60 300 3`; `loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe`; `cdevtest items 600 -60 300 3` (WO-12)
 @pass Silk touch item is the Wise Oak with a `relationship` holding trust 80 and no timer keys; plain axe drops `minecraft:oak_log`
 @fails Stock loot table; timers must stay out of the item
+@reviewed 2026-11-16
 @from batches/r1109wo/b2_short_timers.qb
 > setblock 600 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 600 -60 300 G 80
 > loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe{Enchantments:[{id:"minecraft:silk_touch",lvl:1}]}
 > data get entity @e[type=item,limit=1,sort=nearest,x=600,y=-60,z=300] Item
-> zwo drops 600 -60 300 3
+> cdevtest items 600 -60 300 3
 > loot spawn 600 -60 300 mine 600 -60 300 minecraft:diamond_axe
-> zwo drops 600 -60 300 3
+> cdevtest items 600 -60 300 3
 sleep 1
-expect \[zwo\] drops mysticaloaktree:wise_oak x1
-expect \[zwo\] drops minecraft:oak_log
+expect verb=items items=mysticaloaktree:wise_oak:1 stacks=
+expect verb=items items=minecraft:oak_log:
 reject creativeworldgen_(sleep|angry)_until
 look Item NBT holds a relationship with trust 80 and no timer keys
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-31 | chance 0 never gifts
 @group A3 (`chancePercent = 0`, `trustThreshold = 0`)
-@commands Boot; bots as SQ-WO-01; `setblock 610 -60 300 mysticaloaktree:wise_oak`; five times `wiseoak trust 610 -60 300 G 100`, `pbot use G 610 -60 300 up`, `zwo skip 60`; `zwo drops 610 -60 300 3` (WO-17)
+@commands Boot; bots as SQ-WO-01; `setblock 610 -60 300 mysticaloaktree:wise_oak`; five times `wiseoak trust 610 -60 300 G 100`, `pbot use G 610 -60 300 up`, `zwo skip 60`; `cdevtest items 610 -60 300 3` (WO-17)
 @pass `drops none`
 @fails `chancePercent` check
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a3.qb passed
 > forceload add 270 290 900 320
 sleep 8
@@ -797,15 +855,17 @@ repeat 5
 > pbot use G 610 -60 300 up
 > zwo skip 60
 end
-> zwo drops 610 -60 300 3
+> cdevtest items 610 -60 300 3
 sleep 1
-expect \[zwo\] drops none
+expect verb=items items=- stacks=0
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-32 | bad id skipped once, empty lists out of the draw, oversize count split
 @group A4 (`saplings = ["minecraft:oak_sapling", "nope:bad"]`, `saplingCount = 3`, `leaves = ["minecraft:totem_of_undying"]`, `leavesCount = 3`, `fruitSaplings = []`, `fruit = []`, chance 100, threshold 0)
-@commands Boot; bots; `setblock 620 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 620 -60 300 G 100`; ten times `pbot use G 620 -60 300 up`, `zwo stacks 620 -60 300 3`, `zwo drops 620 -60 300 3`, `zwo skip 60`, replacing the tree if it sleeps; `grep -c "Wise Oak gift list" latest.log` (WO-17)
-@pass Only oak x3 and totem x3 drop; a totem drop is 3 stacks of 1 (split by max stack size); `unknown item nope:bad` once; empty lists out of the draw
+@commands Boot; bots; `setblock 620 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 620 -60 300 G 100`; ten times `pbot use G 620 -60 300 up`, `cdevtest items 620 -60 300 3` (summed per id, with the stack count), `zwo skip 60`, replacing the tree if it sleeps; `grep -c "Wise Oak gift list" latest.log` (WO-17)
+@pass Every `items` line is `minecraft:oak_sapling:3 stacks=1` or `minecraft:totem_of_undying:3 stacks=3` (a totem drop is 3 stacks of 1) (split by max stack size); `unknown item nope:bad` once; empty lists out of the draw
 @fails `WiseOakGifts.add`; `defineListAllowEmpty` must keep the empty lists
+@reviewed 2026-11-16
 @from batches/r1111wo/b4_lists.qb
 > forceload add 270 290 900 320
 sleep 8
@@ -819,8 +879,7 @@ sleep 3
 > wiseoak trust 620 -60 300 G 100
 repeat 2
 > pbot use G 620 -60 300 up
-> zwo stacks 620 -60 300 3
-> zwo drops 620 -60 300 3
+> cdevtest items 620 -60 300 3
 > zwo skip 60
 end
 > setblock 620 -60 300 minecraft:air
@@ -828,8 +887,7 @@ end
 > wiseoak trust 620 -60 300 G 100
 repeat 2
 > pbot use G 620 -60 300 up
-> zwo stacks 620 -60 300 3
-> zwo drops 620 -60 300 3
+> cdevtest items 620 -60 300 3
 > zwo skip 60
 end
 > setblock 620 -60 300 minecraft:air
@@ -837,8 +895,7 @@ end
 > wiseoak trust 620 -60 300 G 100
 repeat 2
 > pbot use G 620 -60 300 up
-> zwo stacks 620 -60 300 3
-> zwo drops 620 -60 300 3
+> cdevtest items 620 -60 300 3
 > zwo skip 60
 end
 > setblock 620 -60 300 minecraft:air
@@ -846,8 +903,7 @@ end
 > wiseoak trust 620 -60 300 G 100
 repeat 2
 > pbot use G 620 -60 300 up
-> zwo stacks 620 -60 300 3
-> zwo drops 620 -60 300 3
+> cdevtest items 620 -60 300 3
 > zwo skip 60
 end
 > setblock 620 -60 300 minecraft:air
@@ -855,22 +911,26 @@ end
 > wiseoak trust 620 -60 300 G 100
 repeat 2
 > pbot use G 620 -60 300 up
-> zwo stacks 620 -60 300 3
-> zwo drops 620 -60 300 3
+> cdevtest items 620 -60 300 3
 > zwo skip 60
 end
 sleep 1
 shell test "$(grep -c 'Wise Oak gift list' logs/latest.log)" = 1 && echo "unknown item warned once"
 bootexpect Wise Oak gift list: unknown item nope:bad
-count \[zwo\] drops none == 0
-reject \[zwo\] drops .*(sapling|totem).*,
-look only oak x3 and totem x3; totem drops are 3 stacks of 1
+count verb=items items=- stacks=0 == 0
+reject verb=items items=\S*,
+reject verb=items items=(?!minecraft:(oak_sapling|totem_of_undying):3 )
+reject verb=items items=minecraft:totem_of_undying:3 stacks=(?!3 )
+reject verb=items items=minecraft:oak_sapling:3 stacks=(?!1 )
+count verb=items items=\S+ stacks= == 10
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-33 | all lists empty: nothing, no exception
 @group A5 (all four lists `[]`, chance 100, threshold 0)
-@commands Boot; bots; `setblock 630 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 630 -60 300 G 100`; `pbot use G 630 -60 300 up`; `zwo drops 630 -60 300 3` (WO-17)
+@commands Boot; bots; `setblock 630 -60 300 mysticaloaktree:wise_oak`; `wiseoak trust 630 -60 300 G 100`; `pbot use G 630 -60 300 up`; `cdevtest items 630 -60 300 3` (WO-17)
 @pass `drops none`, no exception
 @fails `categories.isEmpty()`
+@reviewed 2026-11-16
 @from batches/r1115/p9_wo_a5.qb passed
 > forceload add 270 290 900 320
 sleep 8
@@ -881,16 +941,18 @@ sleep 3
 > setblock 630 -60 300 mysticaloaktree:wise_oak
 > wiseoak trust 630 -60 300 G 100
 > pbot use G 630 -60 300 up
-> zwo drops 630 -60 300 3
+> cdevtest items 630 -60 300 3
 sleep 1
-expect \[zwo\] drops none
+expect verb=items items=- stacks=0
 reject Exception
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-34 | a gift list edit applies without a restart (needs a free inotify instance; see the shell line)
 @group A5, right after
-@commands `python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativeworldgen-common.toml wise_oak.gifts saplings '["minecraft:oak_sapling"]'`; sleep 15; grep `latest.log` for a config reload; `wiseoak trust 640 -60 300 G 100`; `pbot use G 640 -60 300 up`; `zwo drops 640 -60 300 3` (WO-17)
+@commands `python3 tools/scratch_query/qrun.py toml OUT/srv/config/creativeworldgen-common.toml wise_oak.gifts saplings '["minecraft:oak_sapling"]'`; sleep 15; grep `latest.log` for a config reload; `wiseoak trust 640 -60 300 G 100`; `pbot use G 640 -60 300 up`; `cdevtest items 640 -60 300 3` (WO-17)
 @pass `minecraft:oak_sapling x1` without a restart
 @fails Forge config watcher; if the file edit is not picked up the row is a BATCH-FAULT, not a gift bug
+@reviewed 2026-11-16
 @from batches/r1113/rerun_a.qb
 shell echo "inotify instances: $(find /proc/*/fd -lname 'anon_inode:inotify' 2>/dev/null | wc -l) of $(cat /proc/sys/fs/inotify/max_user_instances)"; grep -nE "WatchService|inotify|Too many open files|FileWatcher" logs/debug.log | head -5
 shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml wise_oak.gifts saplings '["minecraft:oak_sapling"]'
@@ -901,16 +963,18 @@ shell echo "reload lines: $(grep -E 'creativeworldgen-common.toml' logs/debug.lo
 > wiseoak trust 30080 -60 30020 G 100
 > tp G 30080 -60 30017
 > pbot use G 30080 -60 30020 up
-> zwo drops 30080 -60 30020 3
+> cdevtest items 30080 -60 30020 3
 sleep 1
-expect \[zwo\] drops minecraft:oak_sapling x1
+expect verb=items items=minecraft:oak_sapling:1 stacks=
 look r1110 and r1111: no config-change line for any file. On 2026-11-13 the owner's session showed 128 inotify instances in use of max_user_instances 128: Forge's watcher cannot start. If the shell line still reads 128 of 128, record BLOCKED (environment), not a gift bug
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-35 | biome tag and placement (region census judged after the stop)
 @group B, fresh world, srv `config/mysticaloaktree-common.toml` `tree_rarity = 1`
-@commands `/locate biome` for `minecraft:plains`, `minecraft:forest`, `minecraft:taiga`, `minecraft:desert`, `minecraft:snowy_plains`, `minecraft:ocean`, `minecraft:river`, `minecraft:dripstone_caves`; forceload 5 x 5 chunks at each; `execute positioned <p> if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes`; `save-all flush`; stop; `python3 tools/scratch_query/region_blocks.py blocks OUT/srv/wo mysticaloaktree:wise_oak --json OUT/wo_blocks.json` (WO-14)
+@commands `/locate biome` for `minecraft:plains`, `minecraft:forest`, `minecraft:taiga`, `minecraft:desert`, `minecraft:snowy_plains`, `minecraft:ocean`, `minecraft:river`, `minecraft:dripstone_caves`; forceload 5 x 5 chunks at each; `cdevtest tag biome creativeworldgen:wise_oak_biomes` (`execute if biome` is 1.19.3+); `save-all flush`; stop; `python3 tools/scratch_query/region_blocks.py blocks OUT/srv/wo mysticaloaktree:wise_oak --json OUT/wo_blocks.json` (WO-14)
 @pass Tag test passes for plains and forest, fails for the rest; Wise Oak blocks only in biomes listed in `wise_oak_biomes.json`, above 0 in plains or forest
 @fails Tag or `kubejs/data/mysticaloaktree/forge/biome_modifier/wise_oak.json`. Terrain may not offer soil at every spot, so zero in a single biome is not a failure
+@reviewed 2026-11-16
 @from batches/r1111wo/b7_worldgen.qb
 > locate biome minecraft:plains
 waitlog (?i)(nearest minecraft:plains|could not find) 240
@@ -936,17 +1000,12 @@ capture H at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > locate biome minecraft:dripstone_caves
 waitlog (?i)(nearest minecraft:dripstone_caves|could not find) 240
 capture I at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> execute positioned {A1} {A2} {A3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
-> execute positioned {B1} {B2} {B3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
-> execute positioned {C1} {C2} {C3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
-> execute positioned {D1} {D2} {D3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
-> execute positioned {E1} {E2} {E3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
-> execute positioned {F1} {F2} {F3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
-> execute positioned {H1} {H2} {H3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
-> execute positioned {I1} {I2} {I3} if biome ~ ~ ~ #creativeworldgen:wise_oak_biomes
+> cdevtest tag biome creativeworldgen:wise_oak_biomes
 sleep 2
-count Test passed == 2
-count Test failed == 6
+expect verb=tag kind=biome tag=creativeworldgen:wise_oak_biomes .*ids=\S*minecraft:plains\b
+expect verb=tag kind=biome tag=creativeworldgen:wise_oak_biomes .*ids=\S*minecraft:forest\b
+reject verb=tag kind=biome .*ids=\S*minecraft:(taiga|desert|snowy_plains|ocean|river|dripstone_caves)\b
+reject \[cdevtest\] .*done=0
 > forceload add {A1-32} {A3-32} {A1+32} {A3+32}
 sleep 20
 > forceload add {B1-32} {B3-32} {B1+32} {B3+32}
@@ -963,26 +1022,28 @@ sleep 20
 sleep 20
 > forceload add {I1-32} {I3-32} {I1+32} {I3+32}
 sleep 20
-look positions and Test passed or failed: plains and forest pass, the other six fail; census by wo_judge.py region after the stop
+look locate positions recorded (tag members are checked above); census by wo_judge.py region after the stop
 
 ## SQ-WO-36 | lightning grows a Wise Oak outside the tag (taiga)
 @group B, same world
 @commands At a taiga spot from the row before, on grass with room: `setblock <p> minecraft:oak_sapling`; `summon minecraft:lightning_bolt <p>`; sleep 3; `fill` a 17 x 17 x 20 box `replace mysticaloaktree:wise_oak` (WO-13)
 @pass `Successfully filled 1 block` in a biome outside the tag
 @fails Lightning must ignore the tag
+@reviewed 2026-11-16
 @from batches/r1111wo/b7_worldgen.qb
-> execute positioned {C1} 201 {C3} if biome ~ ~ ~ minecraft:taiga
 > fill {C1-8} 200 {C3-8} {C1+8} 200 {C3+8} minecraft:grass_block
+> cdevtest state {C1} 201 {C3}
 > setblock {C1} 201 {C3} minecraft:oak_sapling
 > summon minecraft:lightning_bolt {C1} 201 {C3}
 sleep 5
 > fill {C1-8} 201 {C3-8} {C1+8} 220 {C3+8} minecraft:air replace mysticaloaktree:wise_oak
 > fill {C1-8} 200 {C3-8} {C1+8} 200 {C3+8} minecraft:air
 sleep 1
-expect Test passed
+expect verb=state pos=\S+ .*biome=minecraft:taiga
 expect Successfully filled 1 block
 > save-all flush
 sleep 15
+reject \[cdevtest\] .*done=0
 
 ## SQ-WO-37 | no connection to the web lookups, server side
 @group A, own boot under strace

@@ -31,7 +31,12 @@ look one apply, from creativedelight.mixins.json
 @commands Before the boot: `config/creativecompat-common.toml` holds `[campfire]` with `rainOutTicks = 100`, `config/creativedelight-common.toml` exists without `[campfire]`. Boot; read both files; reboot and grep again
 @pass `[swaps] config sections [campfire] merged from creativecompat-common.toml into creativedelight-common.toml`; the CD file has `[campfire]` with `rainOutTicks = 100` and the other six keys; after the boot the Compat file has no `[campfire]`; second boot: no merge line, no WARN
 @fails `CreativeDelight` constructor order (carry must run before `registerConfig`), or Forge did not correct the Compat file
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[swaps\] config sections \[campfire\] merged from creativecompat-common\.toml into creativedelight-common\.toml
+shell grep -A9 "^\[campfire\]" config/creativedelight-common.toml | grep -E "^\s*\w+ =" | cut -c1-100
+shell grep -A9 "^\[campfire\]" config/creativedelight-common.toml | grep -qE "^\s*rainOutTicks = 100" && test "$(grep -A9 '^\[campfire\]' config/creativedelight-common.toml | grep -cE '^\s*\w+ =')" -ge 7 && echo "CD [campfire] carried, 7 keys"
+shell ! grep -q "^\[campfire\]" config/creativecompat-common.toml && echo "Compat file has no [campfire]"
+look own boot with the Commands cell's two files written before it; the second boot (same srv): no merge line and no WARN naming campfire (bootreject on that boot)
 ## SQ-CFR-03 | [campfire] carried from Compat's file into a new CD file, then the CD carve tables merged from the old file
 @group A
 @commands Before the boot: no `config/creativedelight-common.toml`; Compat file with `[campfire] rainOutTicks = 100`. Boot
@@ -60,6 +65,7 @@ look CD file [campfire] rainOutTicks = 120
 @commands Default config. `/weather rain`; `/setblock` stone, a lit `minecraft:campfire` on it under open sky; second lit campfire on `minecraft:coal_block`; a lit `minecraft:soul_campfire` on stone; a lit campfire on stone under a 3-block roof; wait 200 ticks; `/data get block` / block state of each
 @pass Only the open-sky one on stone is `lit=false` (after 160 ticks; fizz sound, food on it stays); coal-block, soul and roofed ones stay `lit=true`; `/weather clear` + relight: stays lit
 @fails `CampfireRain` not ticking (mixin not applied) or `CDConfig.CAMPFIRE` not read; tags `#creativeengineering:campfire/rain_douses` / `rain_proof_fuel` (blocktags.js)
+@reviewed 2026-11-16
 @from batches/r1106spf/b1.qb
 > fill 90 -61 -40 100 -61 -30 minecraft:stone
 > setblock 90 -60 -40 minecraft:campfire[lit=true]
@@ -69,7 +75,8 @@ look CD file [campfire] rainOutTicks = 120
 > setblock 99 -60 -40 minecraft:campfire[lit=true]
 > fill 98 -57 -41 100 -57 -39 minecraft:stone
 > weather rain
-sleep 11
+> cdevtest tickwarp 220
+waitlog verb=tickwarp end=\S+ ticks=220 60
 > execute if block 90 -60 -40 minecraft:campfire[lit=false]
 > execute if block 93 -60 -40 minecraft:campfire[lit=true]
 > execute if block 96 -60 -40 minecraft:soul_campfire[lit=true]
@@ -84,10 +91,12 @@ look the fixture campfire (open sky, grass) also out: SQ-SPF-81 thunder half
 @commands `qrun.py toml` CD `[campfire] rainDouses = false`, reboot; repeat the open-sky campfire of CFR-05
 @pass Stays lit after 400 ticks
 @fails `rainDouses` read from the wrong spec (Compat)
+@reviewed 2026-11-16
 @from batches/r1106spf/b1c.qb passed
 > setblock 90 -60 -44 minecraft:campfire[lit=true]
 > weather rain
-sleep 20
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=\S+ ticks=400 60
 > execute if block 90 -60 -44 minecraft:campfire[lit=true]
 expect Test passed
 > weather clear

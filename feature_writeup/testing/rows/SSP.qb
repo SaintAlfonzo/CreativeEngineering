@@ -17,13 +17,15 @@
 @pass no hits; ash after 10 s; JEI shows 10 s, not 0
 @fails `food/drinks #12` (NCH `_or` replaces numeric `??` defaults)
 @from batches/r1101/p1_server.qb
+@reviewed 2026-11-16
 bootreject Can't modify the empty stack
 kjsreject Can't modify the empty stack
-> zq rdetail sawdust
+> cdevtest rdetail sawdust
 > setblock 70 -60 0 minecraft:furnace{Items:[{Slot:0b,id:"immersiveengineering:dust_wood",Count:1b},{Slot:1b,id:"minecraft:coal",Count:1b}]}
 sleep 12
 > data get block 70 -60 0 Items
 look sawdust smelting recipe cookingtime 200; the furnace output slot (Slot 2b) holds ash after 12 s
+reject verb=\S+ .*done=0
 
 ## SQ-GT-31 | felsic helmet reach potion mB from config
 @group A
@@ -31,15 +33,17 @@ look sawdust smelting recipe cookingtime 200; the furnace output slot (Slot 2b) 
 @pass no missing-key lines; log shows `CRAFTING.FELSIC_HELMET.reachMb overridden: default 500 -> 100`; recipe has a 100 mB Long Reach fill and a 500 mB Magic Resistance fill
 @fails `gear/tuning #6`
 @from batches/r1101/p1_server.qb
+@reviewed 2026-11-16
 bootreject \[NCH.cfg\] no CEConfig.CRAFTING.FELSIC_
 shell python3 $INST/tools/scratch_query/qrun.py toml config/creativeengineering-common.toml crafting.felsic_helmet reachPotionMb 100
 > reload
 waitlog (Reloaded|reload)
 sleep 5
 expect CRAFTING.FELSIC_HELMET.reachMb overridden: default 500 -> 100
-> zq rdetail felsic_helmet
+> cdevtest rdetail felsic_helmet
 shell sed -i '/reachPotionMb = 100/d' config/creativeengineering-common.toml
 look recipe shows a 100 mB Long Reach fill and a 500 mB Magic Resistance fill; if the override line is missing, the toml change is not re-read on /reload (record, check on the p1b restart)
+reject verb=\S+ .*done=0
 
 ## SQ-RE-16 | amethyst shard crushing
 @group A
@@ -47,8 +51,10 @@ look recipe shows a 100 mB Long Reach fill and a 500 mB Magic Resistance fill; i
 @pass millstone and crushing wheels: one recipe each, 75 % amethyst dust; IE crusher: amethyst dust + 25 % amethyst dust; no glowstone from shards
 @fails `recipes/engineering #2`, `dust.js`
 @from batches/r1101/p1_server.qb
-> zq uses minecraft:amethyst_shard
+@reviewed 2026-11-16
+> cdevtest uses minecraft:amethyst_shard
 look millstone and crushing wheels: one recipe each, 75 % amethyst dust; IE crusher: dust + 25 % dust; no glowstone output from shards
+reject verb=\S+ .*done=0
 
 ## SQ-RW-23b | smoked planks: all smoking recipes with inputs (decides SQ-RW-23; zq recipes stopped at 80 lines)
 @group A
@@ -56,8 +62,10 @@ look millstone and crushing wheels: one recipe each, 75 % amethyst dust; IE crus
 @pass 13 smoking recipes, cook time 200; each `creativeengineering:smokable/*` tag holds exactly the 7 `minecraft:` overworld woods (mangrove included); no `botania:*`, driftwood, `quark:*`, crimson or warped
 @fails `engineering/dreams-and-desires #10`
 @from batches/r1031/a1_followup.qb
-> zq rdetail creativeengineering:smoking/
+@reviewed 2026-11-16
+> cdevtest rdetail creativeengineering:smoking/
 look 13 recipes, one per smoked shape; inputs oak / spruce, no botania and no driftwood
+reject verb=\S+ .*done=0
 
 ## SQ-EN-01 | librarians: no Nock Enough Arrows enchantments in trades
 @group B
@@ -148,8 +156,9 @@ look load line: 7 sunk starts, no crypt warning; the crypt position goes to the 
 @pass board and slicer each give 3 Potato Slices and 3 Sliced Sweet Potatoes; no recipe error for `creativedelight:farmersdelightcutting/potato_slices` or `.../sliced_sweet_potato`
 @fails `dishes/ingredients #20`
 @from batches/r1102b/s3_A.qb
-> zq rdetail farmersdelightcutting/potato_slices
-> zq rdetail farmersdelightcutting/sliced_sweet_potato
+@reviewed 2026-11-16
+> cdevtest rdetail farmersdelightcutting/potato_slices
+> cdevtest rdetail farmersdelightcutting/sliced_sweet_potato
 > setblock 125 -60 500 farmersdelight:cutting_board
 > pbot spawn ssp 125 -60 504 minecraft:overworld survival
 > pbot hold ssp minecraft:potato
@@ -157,21 +166,21 @@ look load line: 7 sunk starts, no crypt warning; the crypt position goes to the 
 > pbot hold ssp farmersdelight:iron_knife
 > pbot use ssp 125 -60 500 up
 sleep 2
-> zcount 121 -61 496 129 -57 508
+> cdevtest items 125 -60 500 4
 > clear ssp rusticdelight:potato_slices 0
-> kill @e[type=minecraft:item,x=125,y=-60,z=500,distance=..6]
 > pbot hold ssp veggiesdelight:sweet_potato
 > pbot use ssp 125 -60 500 up
 > pbot hold ssp farmersdelight:iron_knife
 > pbot use ssp 125 -60 500 up
 sleep 2
-> zcount 121 -61 496 129 -57 508
+> cdevtest items 125 -60 500 4
 > clear ssp creativeengineering:sliced_sweet_potato 0
-expect \[zq\] creativedelight:farmersdelightcutting/potato_slices \{
-expect \[zq\] creativedelight:farmersdelightcutting/sliced_sweet_potato \{
+expect id=creativedelight:farmersdelightcutting/potato_slices serializer=
+expect id=creativedelight:farmersdelightcutting/sliced_sweet_potato serializer=
 reject (?i)(error|exception).*(potato_slices|sliced_sweet_potato)
 > pbot remove ssp
-look 3 Potato Slices, then 3 Sliced Sweet Potatoes: zcount item entities plus the bot's "Found N" (it can pick up drops)
+look 3 Potato Slices, then 3 Sliced Sweet Potatoes: the verb=items count of each plus the bot's "Found N" (it can pick up drops)
+reject verb=\S+ .*done=0
 
 ## SQ-SSP-02 | Sliced Sweet Potato tags
 @group A
@@ -179,13 +188,15 @@ look 3 Potato Slices, then 3 Sliced Sweet Potatoes: zcount item entities plus th
 @pass lists `forge:sliced_potato`, `forge:sliced_potatoes`, `forge:vegetables/sweet_potato`, `forge:vegetables/potato`, `forge:vegetables`, `creativeengineering:food_type/raw/veggie/sliced`
 @fails `dishes/ingredients #20`
 @from batches/r1102b/s3_A.qb passed
-> zq tagsof creativeengineering:sliced_sweet_potato
-expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:sliced_potato\b
-expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:sliced_potatoes\b
-expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:vegetables/sweet_potato\b
-expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:vegetables/potato\b
-expect item tags of creativeengineering:sliced_sweet_potato: .*\bforge:vegetables\b
-expect item tags of creativeengineering:sliced_sweet_potato: .*\bcreativeengineering:food_type/raw/veggie/sliced\b
+@reviewed 2026-11-16
+> cdevtest tagsof creativeengineering:sliced_sweet_potato
+expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:sliced_potato\b
+expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:sliced_potatoes\b
+expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:vegetables/sweet_potato\b
+expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:vegetables/potato\b
+expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bforge:vegetables\b
+expect verb=tagsof id=creativeengineering:sliced_sweet_potato .*item_tags=.*\bcreativeengineering:food_type/raw/veggie/sliced\b
+reject verb=\S+ .*done=0
 
 ## SQ-SSP-03 | Sliced Sweet Potato food and compost (JEI half: client)
 @group A
@@ -193,8 +204,10 @@ expect item tags of creativeengineering:sliced_sweet_potato: .*\bcreativeenginee
 @pass nutrition 1, modifier 0.3, compost 0.5; JEI shows the potato slices sprite, "Sliced Sweet Potato", uses in fries, More Delight potato dishes and Canned Sweet Potato
 @fails `dishes/ingredients #20`, `dishes/meals #34`
 @from batches/r1102b/s3_A.qb passed
-> zq food creativeengineering:sliced_sweet_potato
-expect food creativeengineering:sliced_sweet_potato: nutrition 1, modifier 0.3
+@reviewed 2026-11-16
+> cdevtest food creativeengineering:sliced_sweet_potato
+expect verb=food item=creativeengineering:sliced_sweet_potato\*\d+ food=true nutrition=1 modifier=0.3
 > dumpcompost
 waitlog Dumped compost table 300
 shell python3 -I $INST/tools/scratch_query/dumpq.py compost creativeengineering:sliced_sweet_potato=0.5
+reject verb=\S+ .*done=0

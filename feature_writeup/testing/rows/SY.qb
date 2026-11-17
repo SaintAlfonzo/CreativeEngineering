@@ -276,4 +276,10 @@ look required 8000 (Fertile) / 8727 (Rich Farmland) / 9600 (dirt); rich soil as 
 @commands Hover Rich Soil, Rich Soil Farmland, Fertile Soil
 @pass "Growth speed in Botany Pots +10%" (Fertile: +20%) and "Does not change yield" under each
 @fails Client script `tooltips.js` not reloaded, or Botany Pots absent
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "farmersdelight:rich_soil", "expect": "Growth speed in Botany Pots \\+10%"}
+do {"tooltip_text": "farmersdelight:rich_soil", "expect": "Does not change yield"}
+do {"tooltip_text": "farmersdelight:rich_soil_farmland", "expect": "Growth speed in Botany Pots \\+10%"}
+do {"tooltip": "farmersdelight:rich_soil"}
+shot rich_soil
+look Fertile Soil (+20%) hovered by hand from the creative search (its id is not in the dumps): same two lines

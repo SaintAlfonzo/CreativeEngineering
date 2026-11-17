@@ -55,4 +55,15 @@ expect for entity qa is 50
 @commands Wear the full dragon set
 @pass HUD armor bar shows 36 (one extra row past 20)
 @fails client-side config or mixin
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> gamemode survival
+> item replace entity @s armor.head with dragonloot:dragon_helmet
+> item replace entity @s armor.chest with dragonloot:dragon_chestplate
+> item replace entity @s armor.legs with dragonloot:dragon_leggings
+> item replace entity @s armor.feet with dragonloot:dragon_boots
+do {"wait": 20}
+> attribute @s minecraft:generic.armor get
+expect is 36
+shot hud_armor_bar
+> gamemode creative
+look the HUD armour bar shows 36 (one extra row past 20; Detail Armor Bar style)

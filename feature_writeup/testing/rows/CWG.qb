@@ -148,6 +148,7 @@ look every listed tag has members; the bubble_column_immune entity tag present
 @pass Saved structures and mobs intact; mooshroom breeding as before; leaf decay cascade; raiders glow; the three Devtools commands run
 @fails A listener that did not move, or Devtools' `ModList` guard
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > execute if entity @e[type=minecraft:mooshroom,tag=sacwgbrown] run say SA2 brown ok
 > execute if entity @e[type=minecraft:mooshroom,tag=sacwgred] run say SA2 red ok
 > scoreboard objectives add sacwg dummy
@@ -164,9 +165,10 @@ sleep 30
 > pbot spawn sacwg {SAH1+43} {SAH2+3} {SAH3+11} minecraft:overworld creative
 > data merge entity @e[type=minecraft:mooshroom,tag=sacwgbrown,limit=1] {InLove:600}
 > data merge entity @e[type=minecraft:mooshroom,tag=sacwgred,limit=1] {InLove:600}
-sleep 40
-> zcount {SAH1+41} {SAH2} {SAH3+9} {SAH1+45} {SAH2+2} {SAH3+13}
-waitlog \[zcount\] entities 30
+> cdevtest tickwarp 800
+waitlog verb=tickwarp end=done ticks=800 60
+> cdevtest entities {SAH1+43} {SAH2+1} {SAH3+11} 3 type=minecraft:mooshroom
+waitlog verb=entities n= 20
 > execute as @e[type=minecraft:mooshroom,tag=!sacwgm,x={SAH1+40},y={SAH2},z={SAH3+8},dx=6,dy=3,dz=6] run data get entity @s Type
 # leaf decay cascade: log + leaves, log removed, bot within 128 blocks for random ticks
 > fill {SAH1+68} {SAH2+2} {SAH3+18} {SAH1+72} {SAH2+4} {SAH3+22} minecraft:oak_leaves[persistent=false]
@@ -174,18 +176,20 @@ waitlog \[zcount\] entities 30
 sleep 3
 > setblock {SAH1+70} {SAH2} {SAH3+20} minecraft:air destroy
 > fill {SAH1+70} {SAH2+1} {SAH3+20} {SAH1+70} {SAH2+4} {SAH3+20} minecraft:air destroy
-> gamerule randomTickSpeed 200
-sleep 25
-> gamerule randomTickSpeed 3
-> zq count {SAH1+66} {SAH2} {SAH3+16} {SAH1+74} {SAH2+6} {SAH3+24} minecraft:oak_leaves
-waitlog \[zq\] count minecraft:oak_leaves
+sleep 2
+# 30 random ticks per block (the old 25 s at randomTickSpeed 200 gave about 24)
+> cdevtest randomtick {SAH1+66} {SAH2} {SAH3+16} {SAH1+74} {SAH2+6} {SAH3+24} 30
+waitlog verb=randomtick (done=|error=) 30
+> cdevtest count {SAH1+66} {SAH2} {SAH3+16} {SAH1+74} {SAH2+6} {SAH3+24} minecraft:oak_leaves
+waitlog verb=count block=minecraft:oak_leaves n=
 > ceperf mobcap
 > dumpspawns
 > ceplace status
 sleep 5
 > pbot remove sacwg
-look bell / bed clone counts equal boot 1's (SQ-CWG-08o); the mooshroom pair bred (a calf, Type as the pack's rule for brown x red); oak_leaves count 0 or far below 75 after 25 s at randomTickSpeed 200; ceperf mobcap, dumpspawns and ceplace status each answered (no "Unknown command"). Cow beside a flower biome: n/a in superflat (moobloom conversion: CQ-CWG-11)
+look bell / bed clone counts equal boot 1's (SQ-CWG-08o); the mooshroom pair bred (entities n=3 or more, a calf, Type as the pack's rule for brown x red); oak_leaves count 0 or far below 75 after 30 random ticks each; ceperf mobcap, dumpspawns and ceplace status each answered (no "Unknown command"). Cow beside a flower biome: n/a in superflat (moobloom conversion: CQ-CWG-11)
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|sa|zp)\] (error|no player))
+reject verb=\S+ .*done=0
 
 ## SQ-CWG-09 | Forgiving Void in the End, End illager divers, Farmer's donor pack order
 @group A
@@ -225,4 +229,5 @@ look no error on the Farmer's donor pin or check_climate_reader; the Worldgen sc
 @commands Pinned until wave 8+ (7.8): look at a moobloom, a baby squid and a baby dolphin; JEI Moobloom Conversion page
 @pass LOOK: models and textures as before
 @fails Member assets not nested
-@draft no batch holds this row yet
+@draft pinned until wave 8+ (7.8); model and texture looks
+@owner true

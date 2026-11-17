@@ -43,10 +43,11 @@ look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named a
 @commands `/summon minecraft:cow ~ ~ ~ {Age:-24000}` and the same for pig, sheep, chicken, wolf, `cozys-improved-cats:improved_cat` (Cozy's Improved Cats replaces the cat), horse, villager, zombie (`IsBaby:1`); `/data get entity @e[type=cow,limit=1,sort=nearest] Age`
 @pass each summons and keeps its age or baby flag; server does not crash or log a mixin error on any of them
 @fails a server-side use of a remodel class
+@reviewed 2026-11-16
 @from batches/r1103/p2_R.qb
 # r1103 p2: at pace 2 the "5 s" reads came about 25 s after the summons, and the baby zombie burned to death in the
 # sun (onFire from 02:53:24, gone by 02:53:46): now night, a helmet on the zombie, pace 0.2 for the summons. The cat
-# vanished within 1 s twice (r1102b, r1103): a zcount right after its summon shows what took its place
+# vanished within 1 s twice (r1102b, r1103): a cdevtest entities read right after its summon shows what took its place
 > time set 18000
 > kill @e[x=140,y=-61,z=495,dx=10,dy=5,dz=18]
 > summon minecraft:cow 145 -60 500 {Age:-24000,NoAI:1b,Tags:["bm02"]}
@@ -58,10 +59,10 @@ look rows/SQ-BM-01.shell.txt: the client mixins (mixin/client/*) are not named a
 > summon minecraft:horse 145 -60 506 {Age:-24000,NoAI:1b,Tags:["bm02"]}
 > summon minecraft:villager 145 -60 507 {Age:-24000,NoAI:1b,Tags:["bm02"]}
 > summon minecraft:zombie 145 -60 508 {IsBaby:1b,NoAI:1b,PersistenceRequired:1b,Tags:["bm02"],ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}],ArmorDropChances:[0.0f,0.0f,0.0f,0.0f]}
-> zcount 144 -60 504 146 -58 506
+> cdevtest entities 145 -59 505 1
 sleep 1
 > execute if entity @e[tag=bm02c] run say BM02 cat present at 1 s
-> zcount 143 -61 503 147 -57 507
+> cdevtest entities 145 -59 505 2
 sleep 4
 > data get entity @e[type=minecraft:cow,tag=bm02,limit=1] Age
 > data get entity @e[type=minecraft:pig,tag=bm02,limit=1] Age
@@ -79,7 +80,8 @@ expect has the following entity data: 1b$
 reject No entity was found
 reject BM02 cat gone
 reject (?i)mixin.*(baby|remodel).*(error|exception)
-look the two zcounts at x 145 z 505: the cat (minecraft:cat) right after its summon, and what stands there at 1 s if it is gone (another mod's cat type = replaced, not lost); the "BM02 alive" lines name the 9 mobs (the villager as an MCA villager); if the cat is gone, grep the row log for what removed it
+reject \[cdevtest\] .*done=0
+look the two entities reads at x 145 z 505 (by_type): the cat (minecraft:cat) right after its summon, and what stands there at 1 s if it is gone (another mod's cat type = replaced, not lost); the "BM02 alive" lines name the 9 mobs (the villager as an MCA villager); if the cat is gone, grep the row log for what removed it
 > kill @e[tag=bm02]
 > time set 6000
 

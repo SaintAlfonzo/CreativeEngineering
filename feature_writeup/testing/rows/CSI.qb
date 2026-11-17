@@ -32,4 +32,14 @@ look rows/SQ-CSI-01.log: the three new slots listed alongside head, back and the
 @commands `/curios list <bot>` on a bot that joined an existing world
 @pass the bot has 1 slot each of hands, face, feet
 @fails existing saves not getting new IMC slots (then note in curios_slots.md)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# run on a later boot of the SQ-CSI-01 world: bot csi rejoins with its saved player data
+> pbot remove csi
+> pbot spawn csi 140 -60 503 minecraft:overworld survival
+> cdevtest tickwarp 40
+waitlog verb=tickwarp end=done ticks=40 60
+> curios list csi
+expect \bhands\b
+expect \bface\b
+expect \bfeet\b
+look the world had SQ-CSI-01's bot csi saved on an earlier boot (else this is a first join and proves nothing): one slot each of hands, face, feet

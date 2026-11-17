@@ -17,13 +17,42 @@
 @commands Boot; grep latest.log for `WorldEdit`, `Mixin`, `BlockStateIdAccess`, `Capability`
 @pass Both mixins apply, no error; the gap between FTB Quests loading and `Done` is about 13 s shorter than perf.md 11.1's 44 s
 @fails A mixin did not apply: check the target `Capability$4` (enum body class order changes between WorldEdit versions)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootreject (?i)(Mixin apply failed|InvalidInjectionException).*(WorldEdit|BlockStateIdAccess)
+bootreject (?i)worldedit.*(exception|error)
+bootexpect Done \(
+shell grep -nE "WorldEdit|BlockStateIdAccess" logs/latest.log | head -8 | cut -c1-200; echo; grep -nE "FTB Quests|Done \(" logs/latest.log | head -4 | cut -c1-160
+look the gap between the FTB Quests load line and Done is about 13 s shorter than perf.md 11.1's 44 s
 ## SQ-WE-02
 @group A
 @commands `//pos1 0 -60 0`, `//pos2 15 -50 15`, `//set oak_stairs[facing=east,half=top]`, then `//replace oak_stairs[facing=east,half=top] stone`, `//set air`
 @pass Every block placed with the given state, replace matches it, no exception in the log
 @fails Wrong state placed: the lazy id and vanilla's id differ (`transmogToMinecraft` vs `Block.getId`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 0 0 15 15
+> pbot spawn we2 8 -59 8 minecraft:overworld creative
+sleep 3
+> op we2
+> execute as we2 run /pos1 0,-60,0
+> execute as we2 run /pos2 15,-50,15
+> execute as we2 run /set oak_stairs[facing=east,half=top]
+sleep 2
+> cdevtest count 0 -60 0 15 -50 15 minecraft:oak_stairs
+> cdevtest state 3 -55 3
+> execute as we2 run /replace oak_stairs[facing=east,half=top] stone
+sleep 2
+> cdevtest count 0 -60 0 15 -50 15 minecraft:stone
+> execute as we2 run /set air
+sleep 2
+> cdevtest count 0 -60 0 15 -50 15 minecraft:oak_stairs
+> pbot remove we2
+expect verb=state pos=3,-55,3 state="minecraft:oak_stairs\[facing=east,half=top
+expect verb=count block=minecraft:oak_stairs n=2816\b
+expect verb=count block=minecraft:stone n=2816\b
+expect verb=count block=minecraft:oak_stairs n=0\b
+reject (?i)exception
+reject \[cdevtest\] .*done=0
+look if "execute as <bot> run /pos1" is refused (WorldEdit wants a real player session), the // commands are a client check (s3_skip.md): record the refusal
 ## SQ-WE-03 | WorldEdit copy / paste / undo / redo through the API (the `//` commands by a player: s3_skip.md)
 @group A
 @commands Build a mixed region (stairs, walls, a chest with items, a sign); `//copy`, move, `//paste`, `//undo`, `//redo`

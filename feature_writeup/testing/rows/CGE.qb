@@ -30,7 +30,17 @@ look Done line present; no WARN/ERROR naming either Create Gravity mixin
 @commands falling block: `summon falling_block 0 120 0 {BlockState:{Name:"minecraft:sand"},Time:1}` in the End and in the overworld (plains, flat); read `Pos[1]` at 20 and 40 ticks
 @pass End drop is under 40 percent of the overworld drop at both reads (expected about 20 percent); overworld drop equals vanilla (about 27 blocks at 40 ticks)
 @fails method name `m_8119_` on `FallingBlockEntity`, `ServerConfig.getBiomeConfig` returning null for the End (tag `#minecraft:is_end` not resolved), `PULL` constant
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:the_end run forceload add 0 0 6 18
+> forceload add 0 0 6 18
+> zgv cfg the_end 0 70 0
+> zgv drop the_end 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:the_end 20
+> zgv drop overworld 0 120 0
+waitlog \[zgv\] drop done dim=minecraft:overworld 20
+reject \[zgv\] error
+shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld low
+look shell.txt: falling_block (and the item and TNT of SQ-CGE-03) at about 0.2 of the overworld drop at t=20 and t=40; overworld drop about 27 blocks at t=40
 ## SQ-CGE-03 | item and TNT in the End (covered by the drop lines of 02b / 02c: type=item.minecraft.stone, entity.minecraft.tnt)
 @group A (same boot)
 @commands dropped item `summon item 0 120 0 {Item:{id:"minecraft:stone",Count:1b},Age:0}` and lit TNT `summon tnt 0 120 0 {Fuse:200}`, End vs overworld, as SQ-CGE-02
@@ -208,6 +218,7 @@ look Air 300 at first, then 4 lower per 5 s (296 or 292 after 12 s) without a ba
 @commands same bot with a Create Goggles leather backtank `{Air:900}`; tag counts
 @pass Air back above 0, the backtank's Air NBT 880-899 after 6 s; `create_gravity:backtanks` 7, `diving_helmets` 4
 @fails Compat `tags/misctags.js`; `full_set` (false: backtank alone is enough)
+@reviewed 2026-11-16
 @from batches/r1108cge2/b1_full.qb
 > item replace entity cge10 armor.chest with creategoggles:leather_backtank{Air:900}
 sleep 6
@@ -215,10 +226,10 @@ sleep 6
 > data get entity cge10 Inventory[{Slot:102b}].tag.Air
 expect cge10 has the following entity data: (\d{2,3})s
 expect cge10 has the following entity data: 8[89]\d$
-> zq itemtag create_gravity:backtanks
-> zq itemtag create_gravity:diving_helmets
-expect itemtag create_gravity:backtanks \(7\)
-expect itemtag create_gravity:diving_helmets \(4\)
+> cdevtest tag item create_gravity:backtanks
+> cdevtest tag item create_gravity:diving_helmets
+expect verb=tag kind=item tag=create_gravity:backtanks n=7\b
+expect verb=tag kind=item tag=create_gravity:diving_helmets n=4\b
 > pbot remove cge10
 look with the leather backtank Air climbs back (2-3 digits, positive) and the backtank's Air NBT falls from 900 by about 1 a second
 
@@ -241,19 +252,20 @@ expect Entity Gravity for entity cge11 is 0\.08
 @commands `/zq itemtag creativecompat:physics/*`, `burn/to_ash`, the four old `creativeengineering:physics/*` tags; acacia log and redstone items in the overworld tub
 @pass floats 3+ digits, sinks non-empty, all four old tags empty; startup line names `creativecompat:physics/floats`; log at the surface (>= 64.5), redstone on the floor (<= 61.5)
 @fails Compat `item_physics_tags.js`, `ItemPhysicSplit.TAG_NS`, `item_physics.js`
+@reviewed 2026-11-16
 @from batches/r1108cge2/b1_full.qb
-> zq itemtag creativecompat:physics/floats
-> zq itemtag creativecompat:physics/sinks
-> zq itemtag creativecompat:physics/fireproof
-> zq itemtag creativecompat:physics/lavaproof
-> zq itemtag creativecompat:burn/to_ash
-> zq itemtag creativeengineering:physics/floats
-> zq itemtag creativeengineering:physics/sinks
-> zq itemtag creativeengineering:physics/fireproof
-> zq itemtag creativeengineering:physics/lavaproof
-expect itemtag creativecompat:physics/floats \(\d{3,}\)
-expect itemtag creativecompat:physics/sinks \([1-9]\d*\)
-reject itemtag creativeengineering:physics/(floats|sinks|fireproof|lavaproof) \([1-9]
+> cdevtest tag item creativecompat:physics/floats
+> cdevtest tag item creativecompat:physics/sinks
+> cdevtest tag item creativecompat:physics/fireproof
+> cdevtest tag item creativecompat:physics/lavaproof
+> cdevtest tag item creativecompat:burn/to_ash
+> cdevtest tag item creativeengineering:physics/floats
+> cdevtest tag item creativeengineering:physics/sinks
+> cdevtest tag item creativeengineering:physics/fireproof
+> cdevtest tag item creativeengineering:physics/lavaproof
+expect verb=tag kind=item tag=creativecompat:physics/floats n=\d{3,}\b
+expect verb=tag kind=item tag=creativecompat:physics/sinks n=[1-9]\d*\b
+reject verb=tag kind=item tag=creativeengineering:physics/(floats|sinks|fireproof|lavaproof) n=[1-9]
 # float check in the overworld tub of SQ-CGE-13 (acacia log floats, redstone sinks; both tags as of the 11-07 dump)
 > summon minecraft:item 21 61.2 21 {Item:{id:"minecraft:acacia_log",Count:1b},PickupDelay:32767,Tags:["cge12f"]}
 > summon minecraft:item 23 61.2 23 {Item:{id:"minecraft:redstone",Count:1b},PickupDelay:32767,Tags:["cge12s"]}
@@ -323,6 +335,7 @@ expect Entity Gravity for entity .* is 0\.01599
 @commands order line, startup errors, dropall End (y 140) and overworld (y 200); judge `low`; backtanks tag
 @pass no `_helpers` pack, `creativecommon, startup_scripts`; 0 startup errors; about 0.2; backtanks 2 (Create's own)
 @fails Common's low gravity must not need Compat
+@reviewed 2026-11-16
 @from batches/r1108cge2/b4_common_only.qb
 bootreject Mixin apply failed|InvalidMixinException|InjectionError|InvalidInjectionException
 shell grep -E "packs in order" logs/kubejs/startup.log | grep -v "_helpers" | grep -q "creativecommon, startup_scripts" && echo "order ok"
@@ -334,8 +347,8 @@ waitlog \[zgv\] drop done dim=minecraft:the_end 20
 > zgv dropall overworld 0 200 0
 waitlog \[zgv\] drop done dim=minecraft:overworld 20
 shell python3 "$INST/tools/scratch_query/cge_judge.py" logs/latest.log the_end overworld low
-> zq itemtag create_gravity:backtanks
-expect itemtag create_gravity:backtanks \(2\)
+> cdevtest tag item create_gravity:backtanks
+expect verb=tag kind=item tag=create_gravity:backtanks n=2\b
 look order line without a _helpers pack; 9 types at about 0.2; backtanks = Create's two (Compat absent)
 
 ## SQ-CGE-16 | ItemPhysic without Create Gravity: boots, ticks items without an error, vanilla fall everywhere

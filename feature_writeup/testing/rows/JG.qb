@@ -15,16 +15,51 @@
 @commands launch, new world, open JEI; `grep -nE "jei_order|JEI feature|outside the tested range|broken recipe" logs/latest.log`
 @pass one `outside the tested range` line from `[creativecompat]` (plugin gate) and one from the mixin plugin; `[jei_order] no order defined`; no `broken recipe`, no `could not hand the JEI order`; JEI opens and lists items
 @fails `JeiGate`, the plugin wrappers, `jei_order.js`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+shell grep -nE "jei_order|JEI feature|outside the tested range|broken recipe" logs/latest.log | cut -c1-200 | head
+shell [ "$(grep -c 'outside the tested range' logs/latest.log)" -ge 2 ] && grep -q "\[jei_order\] no order defined" logs/latest.log && ! grep -qE "broken recipe|could not hand the JEI order" logs/latest.log
+do {"screen": "inventory"}
+shot jei_list
+do {"screen": "close"}
+look one `outside the tested range` line from `[creativecompat]` and one from the mixin plugin (shell); JEI opens and lists items (shot). Boot preset: CEPortTesting with Common + Compat and JEI 11.80.0.1094
 ## CQ-JG-02
 @group client, full pack (JEI 11.8.1.1034)
 @commands launch, join a world, open JEI; same grep; recipes of Repair Item, Banner Duplicate, Book Cloning, Map Cloning, Firework Rocket, Firework Star, Armor Dye
 @pass 0 `broken recipe` lines; `[jei cycle] built`; the pages exist, one per layout (names end `_1`, `_2` where a recipe has several); the pack JEI order still applies (CQ-CCB-02)
 @fails `CraftingProbe.page`, `CyclingCraftingExtension.setRecipe`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+shell ! grep -q "broken recipe" logs/latest.log && grep -q "\[jei cycle\] built" logs/latest.log
+do {"screen": "jei_recipes:minecraft:firework_rocket"}
+shot firework_rocket
+do {"screen": "jei_recipes:minecraft:firework_star"}
+shot firework_star
+do {"screen": "jei_recipes:minecraft:leather_chestplate"}
+shot armor_dye
+do {"screen": "jei_recipes:minecraft:white_banner"}
+shot banner_duplicate
+do {"screen": "jei_recipes:minecraft:written_book"}
+shot book_cloning
+do {"screen": "jei_recipes:minecraft:filled_map"}
+shot map_cloning
+do {"screen": "jei_uses:minecraft:diamond_sword"}
+shot repair_item
+do {"screen": "close"}
+look each shot holds the special-recipe page(s), one per layout; the pack JEI order still applies (CQ-CCB-02)
 ## CQ-JG-03
 @group client
 @commands a cycling page: press R / U on a dye or tool in it
 @pass every filled slot and the result cycle together
 @fails the link filter in `CyclingCraftingExtension`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+do {"screen": "jei_recipes:minecraft:leather_chestplate"}
+do {"wait": 10}
+shot cycle_t0
+do {"wait": 20}
+shot cycle_t20
+do {"wait": 20}
+shot cycle_t40
+do {"screen": "close"}
+look across the three shots every filled slot and the result change together (one link set per frame); R / U from JEI inside the page is the same view as jei_recipes

@@ -16,14 +16,15 @@
 @pass `[jeiOrder] defined N nodes` once; `item: N jei tags` as before; the tag lists its members; no `creativecommon:jei/` tag left
 @fails helper not loaded from the Compat jar pack, `TAG_ROOT`
 @from batches/r1113/c3_a1.qb
+@reviewed 2026-11-16
 shell grep -nE "jeiOrder|jei_order|fluid_jei" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-200 | head -12
 shell test "$(grep -c "\[jeiOrder\] defined" logs/kubejs/startup.log)" = 1
-> zq itemtag creativecompat:jei/equipment/chainmail
-waitlog \[zq\] itemtag creativecompat:jei/equipment/chainmail \(\d+\) 30
-expect itemtag creativecompat:jei/equipment/chainmail \([1-9]\d*\)
-> zq itemtag creativecommon:jei/equipment/chainmail
-waitlog \[zq\] itemtag creativecommon:jei/equipment/chainmail \(\d+\) 30
-expect itemtag creativecommon:jei/equipment/chainmail \(0\)
+> cdevtest tag item creativecompat:jei/equipment/chainmail
+> cdevtest tag item creativecommon:jei/equipment/chainmail
+waitlog verb=tag kind=item tag=creativecommon:jei/equipment/chainmail n= 30
+expect verb=tag kind=item tag=creativecompat:jei/equipment/chainmail n=[1-9]\d* 
+expect verb=tag kind=item tag=creativecommon:jei/equipment/chainmail n=0 
+reject \[cdevtest\] .*done=0
 look `[jeiOrder] defined N nodes` once (43 in the 11-12 pack log); `item: N jei tags` (35). Tag copper had 0 members in the 11-10 dump, so the row uses chainmail (6). The /reload of SQ-PA-02 has run before this row
 
 ## CQ-CCB-01
@@ -31,16 +32,37 @@ look `[jeiOrder] defined N nodes` once (43 in the 11-12 pack log); `item: N jei 
 @commands launch, new world; `grep -nE "magic_resistance.png\|JEIEvents\|jei_order\|damage-tags" logs/latest.log`; `/effect give @s creativecommon:magic_resistance 60`
 @pass no line from the grep (no `#creativedelight:stoves` WARN); potion names read "Potion of Magic Resistance" in the creative inventory or `/give`; the HUD and inventory show the purple Resistance-style icon, not the purple-black missing texture
 @fails icon path, the JEI guards
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell ! grep -nE "magic_resistance.png|JEIEvents|jei_order|damage-tags" logs/latest.log
+> item replace entity @s weapon.mainhand with minecraft:potion{Potion:"creativecommon:magic_resistance"}
+do {"tooltip_text": "held", "expect": "Potion of Magic Resistance"}
+> effect give @s creativecommon:magic_resistance 60
+do {"effects": true, "expect": "creativecommon:magic_resistance"}
+do {"screen": "inventory"}
+shot inventory_effect_icon
+do {"screen": "close"}
+shot hud_effect_icon
+look both shots: the purple Resistance-style icon, not the purple-black missing texture
 ## CQ-CCB-02
 @group client (full pack)
 @commands launch, join a world, open JEI; `grep -nE "jei_order\|fluid_jei\|PackIngredientOrder" logs/latest.log \| head`
 @pass `[fluid_jei] added N fluids`; no `could not hand the JEI order`; the JEI list keeps the pack order (Equipment first, by material); dead placeholder fluids still absent; Magic Resistance icon shows
 @fails client script load order, `TAG_NAMESPACE`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+shell grep -hnE "jei_order|fluid_jei|PackIngredientOrder" logs/latest.log logs/kubejs/client.log | cut -c1-200 | head; true
+shell grep -qE "\[fluid_jei\] added [0-9]+ fluids" logs/latest.log logs/kubejs/client.log
+shell ! grep -q "could not hand the JEI order" logs/latest.log logs/kubejs/client.log
+do {"screen": "inventory"}
+shot jei_list_order
+do {"screen": "close"}
+look the JEI list keeps the pack order (Equipment first, by material); no dead placeholder fluids; the Magic Resistance icon draws
 ## CQ-CCB-03
 @group client, Common + Compat without JEI (CEPortTesting plus Compat and its hard dependencies)
 @commands launch, new world; `grep -nE "jei_order\|JEIEvents\|NoClassDefFound" logs/latest.log`
 @pass no line; boots clean
 @fails the `Platform.isLoaded('jei')` guards
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+shell ! grep -nE "jei_order|JEIEvents|NoClassDefFound" logs/latest.log
+look the client booted and joined clean on Common + Compat without JEI (the wait step returns at once when JEI is absent: record what it logged)

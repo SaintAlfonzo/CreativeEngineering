@@ -91,6 +91,7 @@ look tabulate cancels per family (python over RES/rows/SQ-TER-05.log) against to
 @pass `SWAP` (default): no basalt or calcite showing; geodes that reach the floor are mounds of the floor's own sand / gravel, amethyst only in the opening; then set `floorPatch = "CUT"`, restart, a fresh square: geodes cut flush, rim in the floor block; prismarine geodes (Geode Plus) untouched in both (ST-305)
 @fails basalt still showing: `floorPatch` OFF or the RETURN injector failed (mixin error in latest.log); air pocket under water: `patchColumn` water rule
 @from batches/r1031/w3_terrain.qb
+@reviewed 2026-11-16
 > execute positioned 0 70 0 run locate biome minecraft:deep_ocean
 waitlog nearest minecraft:deep_ocean is at 300
 capture GO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
@@ -98,9 +99,21 @@ capture GO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > chunky radius 300
 > chunky start
 waitlog Task finished 1800
-> zq count {GO1-300} 20 {GO3-300} {GO1-150} 63 {GO3-150} minecraft:calcite
-> zq count {GO1-150} 20 {GO3-150} {GO1} 63 {GO3} minecraft:calcite
-> zq count {GO1} 20 {GO3} {GO1+150} 63 {GO3+150} minecraft:calcite
-> zq count {GO1-300} 20 {GO3-300} {GO1+300} 63 {GO3+300} minecraft:amethyst_block
-> zq count {GO1-300} 20 {GO3-300} {GO1+300} 63 {GO3+300} minecraft:smooth_basalt
-look zq "count" lines give the blocks and "on:" what they stand on; calcite and smooth basalt seen from the water (first block below water) should be about 0: fly 5 geode spots in the client block for the look (ST-305); prismarine geodes untouched. zq count reads loaded chunks only: run right after Chunky while they are still loaded, else forceload the box first
+> forceload add {GO1-64} {GO3-64} {GO1+63} {GO3+63}
+sleep 20
+# 128 x 128 sample at the square centre in four 64 x 44 x 64 tiles (the box limit is 262144 blocks)
+> cdevtest count {GO1-64} 20 {GO3-64} {GO1-1} 63 {GO3-1} minecraft:calcite
+> cdevtest count {GO1} 20 {GO3-64} {GO1+63} 63 {GO3-1} minecraft:calcite
+> cdevtest count {GO1-64} 20 {GO3} {GO1-1} 63 {GO3+63} minecraft:calcite
+> cdevtest count {GO1} 20 {GO3} {GO1+63} 63 {GO3+63} minecraft:calcite
+> cdevtest count {GO1-64} 20 {GO3-64} {GO1-1} 63 {GO3-1} minecraft:smooth_basalt
+> cdevtest count {GO1} 20 {GO3-64} {GO1+63} 63 {GO3-1} minecraft:smooth_basalt
+> cdevtest count {GO1-64} 20 {GO3} {GO1-1} 63 {GO3+63} minecraft:smooth_basalt
+> cdevtest count {GO1} 20 {GO3} {GO1+63} 63 {GO3+63} minecraft:smooth_basalt
+> cdevtest count {GO1-64} 20 {GO3-64} {GO1-1} 63 {GO3-1} minecraft:amethyst_block
+> cdevtest count {GO1} 20 {GO3-64} {GO1+63} 63 {GO3-1} minecraft:amethyst_block
+> cdevtest count {GO1-64} 20 {GO3} {GO1-1} 63 {GO3+63} minecraft:amethyst_block
+> cdevtest count {GO1} 20 {GO3} {GO1+63} 63 {GO3+63} minecraft:amethyst_block
+> forceload remove {GO1-64} {GO3-64} {GO1+63} {GO3+63}
+reject verb=\S+ .*done=0
+look the verb=count lines give n and on= (what each stands on); calcite and smooth basalt seen from the water (first block below water) should be about 0: fly 5 geode spots in the client block for the look (ST-305); prismarine geodes untouched. count reads loaded chunks only (skipped_columns 0 means the sample was loaded) Chunky while they are still loaded, else forceload the box first

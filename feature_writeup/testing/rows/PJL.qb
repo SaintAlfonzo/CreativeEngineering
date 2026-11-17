@@ -18,21 +18,24 @@
 @pass 10 jam blocks, 10 jello blocks, 10 jellos, 30 cauldrons, 22 `fd_*_jam_jar`, 5 new jars, 19 fluids; no missing model
 @fails Vintage `jam/PackJams.java`, `tools/gen_pack_jams.py` (rerun it and `port_resources.py`)
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-16
 shell grep -niE "vintagedelight" logs/latest.log | grep -iE "error|exception|missing|unknown" | head -20 | cut -c1-260; true
-> zc2 reg block ^vintagedelight:[a-z_]+_jam_block$
-> zc2 reg block ^vintagedelight:[a-z_]+_jello_block$
-> zc2 reg item ^vintagedelight:[a-z_]+_jello$
-> zc2 reg block ^vintagedelight:[a-z_]+_cauldron$
-> zc2 reg block fd_[a-z_]+_jam_jar$
-> zc2 reg item _jam_jar$
-> zc2 reg fluid ^vintagedelight:
-waitlog \[zc2\] reg fluid 30
-expect \[zc2\] reg block \S+_jam_block\S*: 10\b
-expect \[zc2\] reg block \S+_jello_block\S*: 10\b
-expect \[zc2\] reg item \S+_jello\S*: 10\b
-expect \[zc2\] reg block \S+_cauldron\S*: 30\b
-expect \[zc2\] reg block fd_\S+: 22\b
-look shell output: no vintagedelight error / missing line (models are client-side, not checked here); fluid count = 19 sources (38 with flowing ids); "5 new jars" = the jam jars of the pack line beyond Vintage's own (item _jam_jar list: ancient_fruit, banana, mulberry, strawberry and the rest; note the count)
+> cdevtest reg block ^vintagedelight:[a-z_]+_jam_block$
+> cdevtest reg block ^vintagedelight:[a-z_]+_jello_block$
+> cdevtest reg item ^vintagedelight:[a-z_]+_jello$
+> cdevtest reg block ^vintagedelight:[a-z_]+_cauldron$
+> cdevtest reg block fd_[a-z_]+_jam_jar$
+> cdevtest reg item _jam_jar$
+> cdevtest reg fluid ^vintagedelight: max=200
+waitlog \[cdevtest\] verb=reg kind=fluid regex=\S+ n=\d+ 30
+expect \[cdevtest\] verb=reg kind=block regex=\S+_jam_block\S* n=10$
+expect \[cdevtest\] verb=reg kind=block regex=\S+_jello_block\S* n=10$
+expect \[cdevtest\] verb=reg kind=item regex=\S+_jello\S* n=10$
+expect \[cdevtest\] verb=reg kind=block regex=\S+_cauldron\S* n=30$
+expect \[cdevtest\] verb=reg kind=block regex=fd_\S+ n=22$
+count \[cdevtest\] verb=reg kind=fluid id=vintagedelight:\S+ class= >= 19
+look shell output: no vintagedelight error / missing line (models are client-side, not checked here); fluid n = 19 sources (38 with flowing ids); "5 new jars" = the jam jars of the pack line beyond Vintage's own (verb=reg kind=item id= lines for _jam_jar: ancient_fruit, banana, mulberry, strawberry and the rest; note the n)
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-PJL-02 | pack jam jars cooked in the pot; no Upgrade Aquatic mulberry jam recipes; given UA jam items become Vintage's
 @group A
@@ -40,27 +43,30 @@ look shell output: no vintagedelight error / missing line (models are client-sid
 @pass `creativedelight:fdcooking/{ancient_fruit,banana,mulberry,strawberry}_jam_jar`; no `upgrade_aquatic:mulberry_jam_*` or Central Kitchen bottle / mixing ids; given items become `vintagedelight:mulberry_jam_jar` / `mulberry_jam_block`
 @fails CD `vintagedelight/jams.js` "Pack jam line"; swaps `merges_upgrade_aquatic_jams.json`
 @from batches/r1113/c2_a1.qb
-> zq recipes farmersdelightcooking/ancient_fruit_jam_jar
-> zq recipes farmersdelightcooking/banana_jam_jar
-> zq recipes farmersdelightcooking/mulberry_jam_jar
-> zq recipes farmersdelightcooking/strawberry_jam_jar
-> zq recipes upgrade_aquatic:mulberry_jam
-> zq recipes mulberry_jam
+@reviewed 2026-11-16
+> cdevtest recipes farmersdelightcooking/ancient_fruit_jam_jar
+> cdevtest recipes farmersdelightcooking/banana_jam_jar
+> cdevtest recipes farmersdelightcooking/mulberry_jam_jar
+> cdevtest recipes farmersdelightcooking/strawberry_jam_jar
+> cdevtest recipes upgrade_aquatic:mulberry_jam
+> cdevtest recipes mulberry_jam
 > give c2b upgrade_aquatic:mulberry_jam_bottle 2
 > give c2b upgrade_aquatic:mulberry_jam_block 1
 sleep 3
-> zp inv c2b
-waitlog \[zp\] done 20
-expect creativedelight:farmersdelightcooking/ancient_fruit_jam_jar ->
-expect creativedelight:farmersdelightcooking/banana_jam_jar ->
-expect creativedelight:farmersdelightcooking/mulberry_jam_jar ->
-expect creativedelight:farmersdelightcooking/strawberry_jam_jar ->
-expect recipes matching upgrade_aquatic:mulberry_jam: 0
-expect \[zp\] inv c2b: .*vintagedelight:mulberry_jam_jar
-expect \[zp\] inv c2b: .*vintagedelight:mulberry_jam_block
-reject \[zp\] inv c2b: .*upgrade_aquatic:mulberry_jam
-look the mulberry_jam list has no Central Kitchen bottle or mixing id (create_central_kitchen:*mulberry_jam*). Row id fix: fdcooking/ is now farmersdelightcooking/ (NCH id naming)
+> pbot inv c2b get
+waitlog \[cdevtest\] verb=pbot\.inv bot=c2b filled= 20
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/ancient_fruit_jam_jar result=
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/banana_jam_jar result=
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/mulberry_jam_jar result=
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/strawberry_jam_jar result=
+expect \[cdevtest\] verb=recipes text=upgrade_aquatic:mulberry_jam n=0 
+expect \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=vintagedelight:mulberry_jam_jar\*
+expect \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=vintagedelight:mulberry_jam_block\*
+reject \[cdevtest\] verb=pbot\.inv bot=c2b slot=\d+ item=upgrade_aquatic:mulberry_jam
+reject \[cdevtest\] verb=recipes id=create_central_kitchen:\S*mulberry_jam
 > clear c2b
+reject \[cdevtest\] verb=\S+ done=0
+reject \[cdevtest\] verb=pbot\.\S+ bot=\S+ error=
 
 ## SQ-PJL-03 | per jam shapeless jam block, jar from block, jello block, jello from block (40)
 @group A
@@ -68,15 +74,17 @@ look the mulberry_jam list has no Central Kitchen bottle or mixing id (create_ce
 @pass Per jam `shapeless/<n>_jam_block`, `_jam_jar_from_block`, `_jello_block`, `_jello_from_block` (40)
 @fails `jams.js` `packJams()` `ok` flags (mod not loaded)
 @from batches/r1113/c2_a1.qb passed
-> zq recipes _jam_jar_from_block
-> zq recipes _jello_from_block
-> zq recipes _jam_block
-> zq recipes _jello_block
-waitlog recipes matching _jello_block: 30
-expect recipes matching _jam_jar_from_block: 10$
-expect recipes matching _jello_from_block: 10$
-count creativedelight:shapeless/[a-z_]+_jam_block -> == 10
-count creativedelight:shapeless/[a-z_]+_jello_block -> == 10
+@reviewed 2026-11-16
+> cdevtest recipes _jam_jar_from_block
+> cdevtest recipes _jello_from_block
+> cdevtest recipes _jam_block
+> cdevtest recipes _jello_block
+waitlog \[cdevtest\] verb=recipes text=_jello_block n= 30
+expect \[cdevtest\] verb=recipes text=_jam_jar_from_block n=10 
+expect \[cdevtest\] verb=recipes text=_jello_from_block n=10 
+count verb=recipes id=creativedelight:shapeless/[a-z_]+_jam_block result= == 10
+count verb=recipes id=creativedelight:shapeless/[a-z_]+_jello_block result= == 10
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-PJL-04 | Create filling / emptying of each jam jar and jello, one query per id
 @group A
@@ -84,41 +92,43 @@ count creativedelight:shapeless/[a-z_]+_jello_block -> == 10
 @pass `createfilling/` and `createemptying/` `<n>_jam_jar` (9, no mulberry jam fluid without Central Kitchen) and `<n>_jello` (10); `createcompacting/<n>_jam_block` (9), `_jello_block` (10); `createmixing/<n>_jam`, `<n>_jello` heated
 @fails `jams.js`; fluid ids in `fluid_dict.js`
 @from batches/r1113/fix_c2a1.qb
-> zq recipes createfilling/ancient_fruit_jam_jar
-> zq recipes createemptying/ancient_fruit_jam_jar
-> zq recipes createfilling/ancient_fruit_jello
-> zq recipes createfilling/banana_jam_jar
-> zq recipes createemptying/banana_jam_jar
-> zq recipes createfilling/banana_jello
-> zq recipes createfilling/cherry_jam_jar
-> zq recipes createemptying/cherry_jam_jar
-> zq recipes createfilling/cherry_jello
-> zq recipes createfilling/green_grape_jam_jar
-> zq recipes createemptying/green_grape_jam_jar
-> zq recipes createfilling/green_grape_jello
-> zq recipes createfilling/mulberry_jam_jar
-> zq recipes createemptying/mulberry_jam_jar
-> zq recipes createfilling/mulberry_jello
-> zq recipes createfilling/pepper_jam_jar
-> zq recipes createemptying/pepper_jam_jar
-> zq recipes createfilling/pepper_jello
-> zq recipes createfilling/raspberry_jam_jar
-> zq recipes createemptying/raspberry_jam_jar
-> zq recipes createfilling/raspberry_jello
-> zq recipes createfilling/red_grape_jam_jar
-> zq recipes createemptying/red_grape_jam_jar
-> zq recipes createfilling/red_grape_jello
-> zq recipes createfilling/salmonberry_jam_jar
-> zq recipes createemptying/salmonberry_jam_jar
-> zq recipes createfilling/salmonberry_jello
-> zq recipes createfilling/strawberry_jam_jar
-> zq recipes createemptying/strawberry_jam_jar
-> zq recipes createfilling/strawberry_jello
-waitlog recipes matching createfilling/strawberry_jello 30
-count creativedelight:createfilling/[a-z_]+_jam_jar -> >= 10
-count creativedelight:createemptying/[a-z_]+_jam_jar -> >= 10
-count creativedelight:createfilling/[a-z_]+_jello -> >= 10
-look one creativedelight: line per jar and per jello (sliceanddice: copies may add lines; count only creativedelight:). Compacting was judged in c2a1 (9 jam blocks, 10 jello blocks). Mixing heat: zq prints no heat field; jams.js 167-168 passes 'heated'
+@reviewed 2026-11-16
+> cdevtest recipes createfilling/ancient_fruit_jam_jar
+> cdevtest recipes createemptying/ancient_fruit_jam_jar
+> cdevtest recipes createfilling/ancient_fruit_jello
+> cdevtest recipes createfilling/banana_jam_jar
+> cdevtest recipes createemptying/banana_jam_jar
+> cdevtest recipes createfilling/banana_jello
+> cdevtest recipes createfilling/cherry_jam_jar
+> cdevtest recipes createemptying/cherry_jam_jar
+> cdevtest recipes createfilling/cherry_jello
+> cdevtest recipes createfilling/green_grape_jam_jar
+> cdevtest recipes createemptying/green_grape_jam_jar
+> cdevtest recipes createfilling/green_grape_jello
+> cdevtest recipes createfilling/mulberry_jam_jar
+> cdevtest recipes createemptying/mulberry_jam_jar
+> cdevtest recipes createfilling/mulberry_jello
+> cdevtest recipes createfilling/pepper_jam_jar
+> cdevtest recipes createemptying/pepper_jam_jar
+> cdevtest recipes createfilling/pepper_jello
+> cdevtest recipes createfilling/raspberry_jam_jar
+> cdevtest recipes createemptying/raspberry_jam_jar
+> cdevtest recipes createfilling/raspberry_jello
+> cdevtest recipes createfilling/red_grape_jam_jar
+> cdevtest recipes createemptying/red_grape_jam_jar
+> cdevtest recipes createfilling/red_grape_jello
+> cdevtest recipes createfilling/salmonberry_jam_jar
+> cdevtest recipes createemptying/salmonberry_jam_jar
+> cdevtest recipes createfilling/salmonberry_jello
+> cdevtest recipes createfilling/strawberry_jam_jar
+> cdevtest recipes createemptying/strawberry_jam_jar
+> cdevtest recipes createfilling/strawberry_jello
+waitlog \[cdevtest\] verb=recipes text=createfilling/strawberry_jello n= 30
+count verb=recipes id=creativedelight:createfilling/[a-z_]+_jam_jar result= >= 10
+count verb=recipes id=creativedelight:createemptying/[a-z_]+_jam_jar result= >= 10
+count verb=recipes id=creativedelight:createfilling/[a-z_]+_jello result= >= 10
+look one creativedelight: line per jar and per jello (sliceanddice: copies may add lines; count only creativedelight:). Compacting was judged in c2a1 (9 jam blocks, 10 jello blocks). Mixing heat: cdevtest recipes prints no heat field; jams.js 167-168 passes 'heated'
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-PJL-05 | nut milk jar recipes and tags; jam / jello tags; soft fluid containers capacity 1
 @group A
@@ -126,17 +136,21 @@ look one creativedelight: line per jar and per jello (sliceanddice: copies may a
 @pass `fdcooking/nut_milk_jar`, `nut_milk_jar_from_bottle`, `nut_milk_bottle_from_jar`; nut milk jar in `#forge:milk`; new jars in `#forge:jams`, new jellos in `#fruitsdelight:jello`; every soft fluid container `capacity` 1
 @fails `jams.js`, `port_resources.py` `convert_soft_fluid`
 @from batches/r1113/c2_a1.qb
-> zq recipes nut_milk
-> zq tagsof vintagedelight:nut_milk_jar
-> zq itemtag forge:jams
-> zq itemtag fruitsdelight:jello
-waitlog itemtag fruitsdelight:jello 20
+@reviewed 2026-11-16
+> cdevtest recipes nut_milk
+> cdevtest tagsof vintagedelight:nut_milk_jar
+> cdevtest tag item forge:jams
+> cdevtest tag item fruitsdelight:jello
+waitlog \[cdevtest\] verb=tag kind=item tag=fruitsdelight:jello n= 20
 shell python3 $INST/tools/scratch_query/c2_famcheck.py softfluids $(ls mods/creativedelight-*.jar | head -1) 2>&1 | cut -c1-300
-expect creativedelight:farmersdelightcooking/nut_milk_jar ->
-expect creativedelight:shapeless/nut_milk_jar_from_bottle ->
-expect creativedelight:shapeless/nut_milk_bottle_from_jar ->
-expect item tags of vintagedelight:nut_milk_jar: .*forge:milk
-look forge:jams holds the pack's new jam jars (ancient_fruit, banana, mulberry, strawberry ...), fruitsdelight:jello the new jellos; shell: every soft fluid container line is "capacity 1" (no other capacity line)
+expect \[cdevtest\] verb=recipes id=creativedelight:farmersdelightcooking/nut_milk_jar result=
+expect \[cdevtest\] verb=recipes id=creativedelight:shapeless/nut_milk_jar_from_bottle result=
+expect \[cdevtest\] verb=recipes id=creativedelight:shapeless/nut_milk_bottle_from_jar result=
+expect \[cdevtest\] verb=tagsof id=vintagedelight:nut_milk_jar item_tags=\S*forge:milk\b
+expect \[cdevtest\] verb=tag kind=item tag=forge:jams n=\d+ ids=\S*vintagedelight:ancient_fruit_jam_jar\S*vintagedelight:banana_jam_jar
+expect \[cdevtest\] verb=tag kind=item tag=forge:jams n=\d+ ids=\S*vintagedelight:mulberry_jam_jar\S*vintagedelight:strawberry_jam_jar
+look fruitsdelight:jello ids= holds the new jellos; shell: every soft fluid container line is "capacity 1" (no other capacity line)
+reject \[cdevtest\] verb=\S+ done=0
 
 ## CQ-PJL-06
 @group client

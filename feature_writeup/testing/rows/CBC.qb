@@ -23,7 +23,7 @@
 @from batches/r1106cbp/p1_chain.qb
 shell grep -h "transition items" logs/kubejs/startup.log
 shell grep -qE '\[creativedelight\] transition items \(89\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
-shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log
+shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log; true
 shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "not registered - add a row\|no incomplete item registered")" = 0
 
 ## SQ-CBC-02 | cooking: NCH failures and absent-mods summary
@@ -55,15 +55,16 @@ shell n=$(grep -oE "[0-9]+ failed" logs/kubejs/server.log | tail -1 | grep -oE "
 @pass CD line 80 and Engineering's own count line (80 fewer than before); removed 1328 as r1106cbb boot 4; sequenced assembly count unchanged; `[absent mods]` prints `none skipped` or only mods truly absent from the pack
 @fails a row lost in the move (compare both row lists with git)
 @from batches/r1106cbo/c4_full.qb
+@reviewed 2026-11-16
 shell grep -h "transition items" logs/kubejs/startup.log
 shell grep -qE '\[creativedelight\] transition items \(89\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
 shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
 shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -gt 1100 -a "$n" -lt 1600
 shell grep -h "absent mods" logs/kubejs/server.log
-shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log
-> zq bytype create:sequenced_assembly
-waitlog bytype create:sequenced_assembly: [0-9]+ 60
-expect bytype create:sequenced_assembly: 296$
+shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log; true
+> cdevtest bytype create:sequenced_assembly max=1
+expect verb=bytype serializer=create:sequenced_assembly n=296$
+reject \[cdevtest\] verb=\S+ done=0
 look sequenced assembly count against 296 (11-05 dump); [absent mods] never prints (afterRecipes not posted, run notes 14:06)
 
 ## SQ-CBC-05
@@ -71,13 +72,25 @@ look sequenced assembly count against 296 (11-05 dump); [absent mods] never prin
 @commands new OUT: `NOUPSTREAM=vinery_upstream port_chain.sh server OUT cbc05 A chain`; boot; wait for `Stopping\|crash`
 @pass `bootexpect Vinery \(Creative Brewing\)` in the missing-jar message; no `Backport`
 @fails `UpstreamJars.verifyOrFail` label
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: NOUPSTREAM=vinery_upstream port_chain.sh server OUT cbc05 A chain; boot and wait for Stopping or a crash, not Done (as SQ-CBA-13)
+bootexpect missing: .*vinery_upstream
+bootexpect Vinery \(Creative Brewing\)
+bootreject Backport
+bootreject Done \(
+shell grep -nE "missing: |get it from|Vinery \(Creative Brewing\)" logs/latest.log | head -5 | cut -c1-300
 ## SQ-CBC-06
 @group B (instance + Creative Worldgen)
 @commands new OUT with Creative Worldgen and its world generation mods but `DROP="GeophilicReforged-*.jar"`; boot
 @pass `bootexpect Missing or unsupported mandatory dependencies`; `geophilic_reforged` listed for `creativeworldgen`
 @fails Worldgen `mods.toml` entry
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: DROP="GeophilicReforged-*.jar" ADD="creativeworldgen-*.jar" port_chain.sh server OUT cbc06 B instance (Creative Worldgen and its world generation mods from the pack, Geophilic left out); boot and wait for Stopping or a crash
+bootexpect Missing or unsupported mandatory dependencies
+bootexpect geophilic_reforged
+bootreject Done \(
+shell grep -nE "Missing or unsupported|Mod ID: 'geophilic_reforged'|Requested by: 'creativeworldgen'" logs/latest.log | head -8 | cut -c1-300
+look geophilic_reforged is listed for creativeworldgen (Requested by line); if other Worldgen dependencies are listed too, ADD their jars and rerun
 ## SQ-CBC-07 | chain: no dependency or ordering error for creativebrewing
 @group A (chain)
 @commands the SQ-CBC-01 boot: `shell grep -c "creativebrewing" logs/latest.log` near `Missing or unsupported`; in the full-pack boot (SQ-CBC-04) the same
@@ -93,4 +106,11 @@ shell grep -n "creativebrewing" logs/latest.log | grep -iE "depend|missing|unsup
 @commands JEI: search `incomplete`; open the sequenced assembly page of a cod roll, a large meal (omurice) and an enchanted golden apple
 @pass LOOK: the incomplete items keep their names and tinted sprites; the three assemblies list as before
 @fails a moved row's texture override lost
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+do {"screen": "jei_recipes:minecraft:enchanted_golden_apple"}
+shot egapple_assembly
+do {"screen": "jei_uses:create:sequenced_assembly"}
+do {"screen": "close"}
+do {"tooltip_text": "creativedelight:incomplete_omurice", "reject": "item\\.creative"}
+look incomplete items keep their names and tinted sprites; cod roll, omurice and the enchanted golden apple assemblies list as before (open the other two pages by hand if the ids differ)

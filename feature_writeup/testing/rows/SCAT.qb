@@ -55,28 +55,32 @@ look build ended; RECORD seconds, refused count, ids and reasons
 @commands Create World on a dev client, More World Options, cycle World Type; repeat with the Devtools jar removed
 @pass LOOK: "Structure Catalogue" listed with Devtools, absent without it
 @fails `data/minecraft/tags/worldgen/world_preset/normal.json`, lang key in Devtools
-@draft no batch holds this row yet
+@draft Create World screen with and without the Devtools jar: two client launches with a mods/ change between them; driver steps not written in the 2026-11-16 pass
 ## CQ-SCAT-09
 @group client
 @commands In a built world, walk +X along z = -9
 @pass LOOK: gaps of 20, 12, 6 and 3 between category, subfamily, function and biome columns, 3 between items in a column (rule file 2026-11-15); order Village, Pillager, Ruins, and on as in the rule file; every level has a sign at z = -8 to -2; each item has a sign two blocks in front
 @fails `CatalogueLayout`, `levelSigns`
-@draft no batch holds this row yet
+@draft walk a built Structure Catalogue world and judge the layout by eye (owner playtest)
+@owner true
 ## CQ-SCAT-14
 @group client
 @commands In a world built with the 2026-11-15 rules (Devtools 11-15), walk Village > Villager Houses > Weaponsmith, then Ruins
 @pass LOOK: one Savanna column holds the vanilla savanna, Iberian and Mediterranean smiths (no separate Iberian, Savanna zombie or Acacia column); no Terralith Desert or Badlands Pueblo columns anywhere; Ruins has a Village ruins subfamily with 3 columns of Forest Ruins pieces, and Village has none
 @fails `biomeFamilies` and `pieces.reroute` in `structure_world.json`, `CatalogueRules.fold`
-@draft no batch holds this row yet
+@draft walk a built Structure Catalogue world and judge the layout by eye (owner playtest)
+@owner true
 ## CQ-SCAT-10
 @group client
 @commands Walk -X from spawn
 @pass LOOK: one column per mod running -X then +Z, first column ending at x = -16; every item's sign reads "(needs type tag)"; the same ids are in the report's `unmapped`
 @fails `CatalogueRules.build` unmapped branch
-@draft no batch holds this row yet
+@draft walk a built Structure Catalogue world and judge the layout by eye (owner playtest)
+@owner true
 ## CQ-SCAT-11
 @group client
 @commands Teleport to an ocean monument, a shipwreck and an ocean ruin in the Underwater columns; wait 5 minutes in each; then a village well in Town centres
 @pass LOOK: no water, kelp or seagrass in the three structures after 5 minutes; the well still holds water
 @fails `dryChunk`; if water returns on first tick see note [first-tick-postprocess-water](../agent_notes/first-tick-postprocess-water.md)
-@draft no batch holds this row yet
+@draft walk a built Structure Catalogue world and judge the layout by eye (owner playtest)
+@owner true

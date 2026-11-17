@@ -19,18 +19,22 @@
 @pass potato ingredient `{"tag":"creativedelight:skewering/potato"}` count 2, side `{"tag":"creativedelight:skewering/bacon"}`; beef `skewering/beef` + `skewering/cabbage`; sandwich has 2 `{"tag":"barbequesdelight:grilled_skewers"}` slots; tag dump `#creativedelight:skewering/potato` = potato, sweet potato
 @fails an `{"item":...}` input = `Item.of(tag, n)` still in `recipes.js`; unknown dict key `t_skewering_*` (startup scripts not reloaded)
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-16
 kjsreject (bbqSkewering|bbqCombine).*(warn|WARN|unknown|Unknown)
 shell grep -nE "bbqSkewering|bbqCombine|skewering/" logs/kubejs/server.log | head -10 | cut -c1-240; true
-> zq rdetail creativedelight:skewering/raw_potato_skewer
-> zq rdetail creativedelight:skewering/raw_beef_skewer
-> zq rdetail kebab_sandwich
-> zq itemtag creativedelight:skewering/potato
-> zq itemtag creativedelight:skewering/bacon
-> zq itemtag creativedelight:skewering/beef
-> zq itemtag creativedelight:skewering/cabbage
-waitlog itemtag creativedelight:skewering/cabbage 20
-expect itemtag creativedelight:skewering/potato \(2\): .*minecraft:potato
-expect itemtag creativedelight:skewering/potato \(2\): .*veggiesdelight:sweet_potato
+> cdevtest rdetail creativedelight:skewering/raw_potato_skewer
+> cdevtest rdetail creativedelight:skewering/raw_beef_skewer
+> cdevtest rdetail kebab_sandwich
+> cdevtest tag item creativedelight:skewering/potato
+> cdevtest tag item creativedelight:skewering/bacon
+> cdevtest tag item creativedelight:skewering/beef
+> cdevtest tag item creativedelight:skewering/cabbage
+waitlog verb=tag kind=item tag=creativedelight:skewering/cabbage n= 20
+expect verb=tag kind=item tag=creativedelight:skewering/potato n=2 ids=\S*minecraft:potato
+expect verb=tag kind=item tag=creativedelight:skewering/potato n=2 ids=\S*veggiesdelight:sweet_potato
+expect verb=rdetail id=creativedelight:skewering/raw_potato_skewer serializer=
+expect verb=rdetail id=creativedelight:skewering/raw_beef_skewer serializer=
+reject \[cdevtest\] .*done=0
 look raw_potato_skewer inputs = the potato tag's items (potato/sweet_potato) and the bacon tag's items; beef = beef tag + cabbage tag items; kebab sandwich (shaped _manual_only and the sequenced assembly; row named shapeless/kebab_sandwich, id now shaped/kebab_sandwich_manual_only) has two inputs listing the grilled skewers. Ingredient count 2 on the potato: rdetail+ fields line if shown, else judge in JEI (CQ-BBQS-01)
 
 ## SQ-BBQS-02 | basin well with 2 sweet potatoes, stick in hand, bacon in off hand: raw potato skewer
@@ -40,16 +44,19 @@ look raw_potato_skewer inputs = the potato tag's items (potato/sweet_potato) and
 @fails no recipe match: tag empty or ingredient JSON
 @from batches/r1113/c2_a1.qb
 > setblock 300 -60 350 barbequesdelight:basin[facing=north]{Items:{Items:[{Slot:0,id:"veggiesdelight:sweet_potato",Count:2b}]}}
-> zc2 inv 300 -60 350
+> cdevtest inv 300 -60 350
 > pbot hold c2b minecraft:stick 1
 > item replace entity c2b weapon.offhand with farmersdelight:bacon 2
-> zc2 useat c2b 300 -60 350 0.75 0.2 0.5 up
-sleep 1
-> zc2 inv 300 -60 350
-> zp inv c2b
-waitlog \[zp\] done 20
-expect \[zp\] inv c2b: .*barbequesdelight:raw_potato_skewer
-look first basin inv shows 0:2 veggiesdelight:sweet_potato (else the Items NBT shape is wrong: BATCH-FAULT); after the use: well 0 empty, raw potato skewer in the inventory or main hand, stick gone (main now empty or the skewer), bacon in the off hand down by one (off now 1 farmersdelight:bacon). Hit x 0.75 is well 0 for facing=north (BlockSlot index = 1 - x)
+> cdevtest use 300 -60 350 as=c2b hit=0.75,0.2,0.5 face=up hand=both
+> cdevtest inv 300 -60 350
+> pbot inv c2b get
+waitlog verb=pbot\.inv bot=c2b filled= 20
+expect verb=inv slot=0 item=veggiesdelight:sweet_potato\*2
+expect verb=inv via=\S+ slots=\d+ filled=0
+expect verb=pbot\.inv bot=c2b slot=\d+ item=barbequesdelight:raw_potato_skewer
+reject verb=pbot\.\S+ .*error=
+reject \[cdevtest\] .*done=0
+look first basin inv shows slot=0 item=veggiesdelight:sweet_potato*2 (else the Items NBT shape is wrong: BATCH-FAULT); after the use: well 0 empty, raw potato skewer in the inventory or main hand, stick gone (main now empty or the skewer), bacon in the off hand down by one (off now 1 farmersdelight:bacon). Hit x 0.75 is well 0 for facing=north (BlockSlot index = 1 - x)
 > clear c2b
 
 ## SQ-BBQS-03 | sneaking use with a stick on a well of 4 cabbage takes one cabbage, keeps the stick
@@ -58,19 +65,23 @@ look first basin inv shows 0:2 veggiesdelight:sweet_potato (else the Items NBT s
 @pass 3 cabbage left; cabbage in the inventory; stick still in hand
 @fails `onSneakGrab` not registered (BarbequesDelight ctor)
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-16
 > setblock 302 -60 350 barbequesdelight:basin[facing=north]{Items:{Items:[{Slot:0,id:"farmersdelight:cabbage",Count:4b}]}}
 > pbot hold c2b minecraft:stick 1
-> zp sneak c2b on
-> zc2 useat c2b 302 -60 350 0.75 0.2 0.5 up
-sleep 1
-> zp sneak c2b off
-> zc2 inv 302 -60 350
-> zp inv c2b
-waitlog \[zp\] done 20
-expect \[zc2\] inv 302 -60 350: .*0:3 farmersdelight:cabbage
-expect \[zp\] inv c2b: .*farmersdelight:cabbage
-expect \[zp\] inv c2b: .*minecraft:stick
-look the useat line: main stays 1 minecraft:stick; one cabbage in the inventory
+> pbot sneak c2b on
+> cdevtest use 302 -60 350 as=c2b hit=0.75,0.2,0.5 face=up hand=both
+> pbot sneak c2b off
+> cdevtest inv 302 -60 350
+> pbot inv c2b get
+waitlog verb=pbot\.inv bot=c2b filled= 20
+expect verb=pbot\.sneak bot=c2b shift=true
+expect verb=inv slot=0 item=farmersdelight:cabbage\*3
+expect verb=use main=minecraft:stick\*1 
+expect verb=pbot\.inv bot=c2b slot=\d+ item=farmersdelight:cabbage\*1
+expect verb=pbot\.inv bot=c2b slot=\d+ item=minecraft:stick\*1
+reject verb=pbot\.\S+ .*error=
+reject \[cdevtest\] .*done=0
+look one cabbage in the bot inventory, the stick still in the main hand
 > clear c2b
 
 @@text

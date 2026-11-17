@@ -22,17 +22,19 @@
 @pass no error naming mixed_seeds; the plant tag holds wheat, beetroot, `farmersdelight:cabbage_seeds`, melon and pumpkin seeds; `forge:seeds` holds `vintagedelight:mixed_seeds`
 @fails Unknown item: the `-10` jar is not loaded; empty tag: CD `vintagedelight/tags.js` not loaded
 @from batches/r1102/b1_main.qb passed
+@reviewed 2026-11-16
 bootreject (?i)mixed_seeds.*(error|unknown)
 kjsreject (?i)mixed_seeds.*(error|unknown)
 kjsreject Error occurred while handling event.*mixed_seeds
-> zq itemtag vintagedelight:mixed_seeds_plants
-> zq itemtag forge:seeds
-expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*minecraft:wheat_seeds
-expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*minecraft:beetroot_seeds
-expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*farmersdelight:cabbage_seeds
-expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*minecraft:melon_seeds
-expect \[zq\] itemtag vintagedelight:mixed_seeds_plants .*minecraft:pumpkin_seeds
-expect \[zq\] itemtag forge:seeds .*vintagedelight:mixed_seeds
+> cdevtest tag item vintagedelight:mixed_seeds_plants
+> cdevtest tag item forge:seeds
+expect verb=tag kind=item tag=vintagedelight:mixed_seeds_plants .*.*minecraft:wheat_seeds
+expect verb=tag kind=item tag=vintagedelight:mixed_seeds_plants .*.*minecraft:beetroot_seeds
+expect verb=tag kind=item tag=vintagedelight:mixed_seeds_plants .*.*farmersdelight:cabbage_seeds
+expect verb=tag kind=item tag=vintagedelight:mixed_seeds_plants .*.*minecraft:melon_seeds
+expect verb=tag kind=item tag=vintagedelight:mixed_seeds_plants .*.*minecraft:pumpkin_seeds
+expect verb=tag kind=item tag=forge:seeds .*.*vintagedelight:mixed_seeds
+reject verb=\S+ .*done=0
 
 ## SQ-MXS-02 | mixed seeds plant mixed crops on farmland, not on grass or stone
 @group A
@@ -40,6 +42,7 @@ expect \[zq\] itemtag forge:seeds .*vintagedelight:mixed_seeds
 @pass 20 crops planted, the stack empty, at least four of the five kinds (wheat, beetroots, cabbages, melon stem, pumpkin stem); grass and stone: nothing planted, seed kept (VTD-46)
 @fails All one kind: the shuffle failed; seeds kept after planting: shrink missing
 @from batches/r1102/b1_main.qb
+@reviewed 2026-11-16
 > fill {H1} {H2-1} {H3+22} {H1+19} {H2-1} {H3+22} minecraft:farmland[moisture=7]
 > fill {H1} {H2-1} {H3+23} {H1+19} {H2-1} {H3+23} minecraft:water
 > pbot spawn mx {H1+10} {H2} {H3+25} minecraft:overworld survival
@@ -64,10 +67,11 @@ expect \[zq\] itemtag forge:seeds .*vintagedelight:mixed_seeds
 > pbot use mx {H1+17} {H2-1} {H3+22} up
 > pbot use mx {H1+18} {H2-1} {H3+22} up
 > pbot use mx {H1+19} {H2-1} {H3+22} up
-> zcount {H1} {H2} {H3+22} {H1+19} {H2} {H3+22}
+> cdevtest count {H1} {H2} {H3+22} {H1+19} {H2} {H3+22} #minecraft:crops
 > data get entity mx SelectedItem
 expect Found no elements matching SelectedItem
-reject \[zcount\] blocks .*minecraft:air=
+expect verb=count block=#minecraft:crops n=20 
+reject verb=\S+ .*done=0
 # one more seed on grass (natural floor) and on stone: nothing planted, the seed kept
 > setblock {H1+3} {H2-1} {H3+26} minecraft:stone
 > pbot hold mx vintagedelight:mixed_seeds 1
@@ -79,7 +83,7 @@ reject \[zcount\] blocks .*minecraft:air=
 expect MXS02 grass stays empty
 expect MXS02 stone stays empty
 expect has the following entity data: \{.*id: "vintagedelight:mixed_seeds"
-look the zcount blocks line: 20 crops, at least four of wheat, beetroots, farmersdelight cabbages, melon_stem, pumpkin_stem
+look the verb=count ids= map: 20 crops, at least four of wheat, beetroots, farmersdelight cabbages, melon_stem, pumpkin_stem
 
 ## SQ-MXS-03 | mixed seeds from village chests and from grass (not with shears)
 @group A
@@ -87,18 +91,19 @@ look the zcount blocks line: 20 crops, at least four of wheat, beetroots, farmer
 @pass some Mixed Seeds from the chest rolls (share 0.04, 1-4); about 6 from the 300 grass (2 %); none with shears (VTD-79)
 @fails none from grass: the LootJS modifier did not load (CD `vintagedelight/loot.js`)
 @from batches/r1102/b1_main.qb
+@reviewed 2026-11-16
 > kill @e[type=minecraft:item]
 repeat 40
 > loot spawn {H1+40} {H2} {H3+30} loot minecraft:chests/village/village_plains_house
 end
 sleep 3
-> zcount {H1+37} {H2} {H3+27} {H1+43} {H2+3} {H3+33}
+> cdevtest items {H1+40} {H2+1} {H3+30} 3
 > setblock {H1+40} {H2} {H3+36} minecraft:grass
 repeat 300
 > loot spawn {H1+40} {H2+1} {H3+38} mine {H1+40} {H2} {H3+36}
 end
 sleep 3
-> zcount {H1+38} {H2} {H3+37} {H1+42} {H2+3} {H3+40}
+> cdevtest items {H1+40} {H2+1} {H3+38} 2
 > setblock {H1+46} {H2} {H3+36} minecraft:grass
 # the shears case through a bot holding shears: LootJS matchMainHand reads the player's main hand, not the /loot tool
 # (r1102 judge: plain /loot mine ... minecraft:shears dropped 2 mixed seeds since no player was in the context)
@@ -108,9 +113,11 @@ repeat 100
 > execute as mxs run loot spawn {H1+46} {H2+1} {H3+38} mine {H1+46} {H2} {H3+36} minecraft:shears
 end
 sleep 3
-> zcount {H1+44} {H2} {H3+37} {H1+48} {H2+3} {H3+40}
+> cdevtest items {H1+46} {H2+1} {H3+38} 2
+expect verb=items items=\S*vintagedelight:mixed_seeds:\d+
+reject verb=\S+ .*done=0
 shell grep -c "CE/vintage_mixed_seeds_grass" logs/latest.log; true
-look line 1 (chest rolls): some vintagedelight:mixed_seeds (share 0.04, 1-4); line 2 (300 empty-hand grass, /loot mine with no tool): about 6 mixed seeds; line 3 (100 with shears): grass items only, no mixed seeds
+look the three verb=items lines in order: line 1 (chest rolls): some vintagedelight:mixed_seeds (share 0.04, 1-4); line 2 (300 empty-hand grass, /loot mine with no tool): about 6 mixed seeds; line 3 (100 with shears): grass items only, no mixed seeds
 > kill @e[type=minecraft:item]
 
 ## SQ-VTD7-01 | Vintage hats, pizzas and cheese wheel stack to 8
@@ -119,11 +126,13 @@ look line 1 (chest rolls): some vintagedelight:mixed_seeds (share 0.04, 1-4); li
 @pass 8 each (were 1 for the hats, 64 for the pizzas and wheel)
 @fails `stack_sizes.json` not regenerated or startup not restarted
 @from batches/r1102b/s3_A.qb passed
-> zq item vintagedelight:red_chefs_hat
-> zq item vintagedelight:cheese_pizza
-> zq item vintagedelight:meat_pizza
-> zq item vintagedelight:cheese_wheel
-count item vintagedelight:(red_chefs_hat|cheese_pizza|meat_pizza|cheese_wheel): .*max stack 8$ == 4
+@reviewed 2026-11-16
+> cdevtest item vintagedelight:red_chefs_hat
+> cdevtest item vintagedelight:cheese_pizza
+> cdevtest item vintagedelight:meat_pizza
+> cdevtest item vintagedelight:cheese_wheel
+count verb=item item=vintagedelight:(red_chefs_hat|cheese_pizza|meat_pizza|cheese_wheel) .*max_stack=8\b == 4
+reject verb=\S+ .*done=0
 
 ## SQ-VTD7-02 | BlockRunner surface tags for Vintage and salt blocks
 @group A
@@ -131,22 +140,30 @@ count item vintagedelight:(red_chefs_hat|cheese_pizza|meat_pizza|cheese_wheel): 
 @pass all present, 0 overlaps
 @fails missing: `blocktags.js` not reloaded
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
-> zq blocktag blockrunner:surface/wood
-> zq blocktag blockrunner:surface/natural_smooth
-> zq blocktag blockrunner:surface/constructed_brick
-> zq blocktag blockrunner:surface/constructed_smooth
-> zq blocktag blockrunner:surface/confectionery
-expect blocktag blockrunner:surface/wood \(\d+\): .*vintagedelight:peanut_crate
-expect blocktag blockrunner:surface/natural_smooth \(\d+\): .*vintagedelight:oat_bale
-expect blocktag blockrunner:surface/natural_smooth \(\d+\): .*salt:salt_block
-expect blocktag blockrunner:surface/constructed_brick \(\d+\): .*vintagedelight:salt_bricks
-expect blocktag blockrunner:surface/constructed_smooth \(\d+\): .*vintagedelight:smooth_salt_block
-expect blocktag blockrunner:surface/confectionery \(\d+\): .*vintagedelight:cheese_pizza
+> cdevtest tag block blockrunner:surface/wood
+> cdevtest tag block blockrunner:surface/natural_smooth
+> cdevtest tag block blockrunner:surface/constructed_brick
+> cdevtest tag block blockrunner:surface/constructed_smooth
+> cdevtest tag block blockrunner:surface/confectionery
+expect verb=tag kind=block tag=blockrunner:surface/wood n=\d+ ids=.*vintagedelight:peanut_crate
+expect verb=tag kind=block tag=blockrunner:surface/natural_smooth n=\d+ ids=.*vintagedelight:oat_bale
+expect verb=tag kind=block tag=blockrunner:surface/natural_smooth n=\d+ ids=.*salt:salt_block
+expect verb=tag kind=block tag=blockrunner:surface/constructed_brick n=\d+ ids=.*vintagedelight:salt_bricks
+expect verb=tag kind=block tag=blockrunner:surface/constructed_smooth n=\d+ ids=.*vintagedelight:smooth_salt_block
+expect verb=tag kind=block tag=blockrunner:surface/confectionery n=\d+ ids=.*vintagedelight:cheese_pizza
+reject verb=\S+ .*done=0
 
 ## CQ-MXS-04
 @group client
 @commands Mixed Seeds icon, name, tooltip "Plants a random crop", JEI info page; JEI shows it in `#forge:seeds` uses
 @pass as listed
 @fails model or lang missing from the `-10` jar
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+do {"tooltip_text": "vintagedelight:mixed_seeds", "expect": "Plants a random crop"}
+do {"screen": "jei_recipes:vintagedelight:mixed_seeds"}
+shot jei_info
+do {"screen": "close"}
+look icon and name in the JEI shot; the info page is listed

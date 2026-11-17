@@ -160,6 +160,7 @@ expect Test passed, count: 2
 @pass First touch rolls loot (or nothing: about half the tree nests are empty); `LootTable` gone after; the same nest gives no new items on reopen; breaking drops the rolled items; roof nests can hold seeds, bread, a book or a lead
 @fails Loot rolled twice: `NestBlockEntity.unpackLoot` not clearing the table first
 @from batches/r1113/c4_ar.qb
+@reviewed 2026-11-16
 > forceload add 39990 39990 40040 40020
 sleep 3
 # the feature nest placed in c4_a (40005 -55 40005, generated=true) is still there: is it on leaves?
@@ -179,45 +180,42 @@ expect has the following block data: "hearthandharvest:chests/crow_nest_village"
 sleep 2
 > clear n8
 # sneaking with an empty hand takes every stack in one use (NestBlock.use loops while shift is down)
-> zhh3 sneak n8 on
+> pbot sneak n8 on
 > pbot use n8 40020 -60 40000 up
 sleep 1
 > data get block 40020 -60 40000 LootTable
 expect Found no elements matching LootTable
 > data get block 40020 -60 40000 Inventory
-> zhh3 inv n8
-waitlog \[zhh3\] done 20
+> pbot inv n8 get
 # reopen the emptied nest with an empty hand: nothing new
 > clear n8
 > pbot use n8 40020 -60 40000 up
 sleep 1
-> zhh3 inv n8
-waitlog \[zhh3\] done 20
+> pbot inv n8 get
 > data get block 40020 -60 40000 Inventory
 > clear n8
 > pbot spawn n8 40023.5 -60 40002.5 minecraft:overworld survival
-> zhh3 sneak n8 on
+> pbot sneak n8 on
 > pbot use n8 40022 -60 40000 up
 sleep 1
-> zhh3 inv n8
-waitlog \[zhh3\] done 20
+> pbot inv n8 get
 > clear n8
 > pbot spawn n8 40025.5 -60 40002.5 minecraft:overworld survival
-> zhh3 sneak n8 on
+> pbot sneak n8 on
 > pbot use n8 40024 -60 40000 up
 sleep 1
-> zhh3 inv n8
-waitlog \[zhh3\] done 20
-> zhh3 sneak n8 off
+> pbot inv n8 get
+> pbot sneak n8 off
 > kill @e[type=minecraft:item,x=40015,y=-62,z=39995,dx=20,dy=6,dz=12]
 > setblock 40026 -60 40000 minecraft:air destroy
 > setblock 40030 -60 40000 minecraft:air destroy
 sleep 2
-> zhh3 items 40026 -60 40000 2
-> zhh3 items 40030 -60 40000 2
+> cdevtest items 40026 -60 40000 2
+> cdevtest items 40030 -60 40000 2
 > pbot remove n8
 expect HCS7 feature nest present
-look the first sneak-use moved the 40020 roll to n8 (inv line: seeds, bread, book, lead, nuggets or shiny items; c4_a showed iron ingot + constantan nugget for seed 11) and its Inventory is empty after; LootTable gone after the first touch; the reopen added nothing (second inv empty); 40022 / 40024 gave their rolls (or nothing); the broken village nest dropped its rolled items plus the nest, the tree-table nest at 40030 its roll or only the nest; "feature nest on leaves" or "under leaves" says where the oak feature put it
+look the first sneak-use moved the 40020 roll to n8 (pbot inv lines: seeds, bread, book, lead, nuggets or shiny items; c4_a showed iron ingot + constantan nugget for seed 11) and its Inventory is empty after; LootTable gone after the first touch; the reopen added nothing (second inv empty); 40022 / 40024 gave their rolls (or nothing); the broken village nest dropped its rolled items plus the nest, the tree-table nest at 40030 its roll or only the nest; "feature nest on leaves" or "under leaves" says where the oak feature put it
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-HCS-08 | no natural Alex's Mobs crow; summon works
 @group B
@@ -251,11 +249,12 @@ look region census: alexsmobs:crow 0 saved in chunks, hearthandharvest:crow pres
 @pass 2 Straw by hand, 3 from the Millstone; the block is named Crow Nest
 @fails Recipe missing: `crow_salt_recipes.js` (creativedelight `shapeless/straw_from_crow_nest`, `createmilling/straw_from_crow_nest`)
 @from batches/r1111/a1.qb
-> zq rdetail straw_from_crow_nest
-waitlog \[zq\] done 20
-expect creativedelight:shapeless/straw_from_crow_nest
-expect creativedelight:createmilling/straw_from_crow_nest
+@reviewed 2026-11-16
+> cdevtest rdetail straw_from_crow_nest
+expect verb=rdetail id=creativedelight:shapeless/straw_from_crow_nest\b
+expect verb=rdetail id=creativedelight:createmilling/straw_from_crow_nest\b
 look shapeless gives 2 straw, milling 3
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-HCS-12 | tame crow on the shoulder hops off to fetch a dropped and a thrown item, then perches again
 @group A
@@ -263,6 +262,7 @@ look shapeless gives 2 straw, milling 3
 @pass The crow hops off and brings the item, perching back on the shoulder; thrown items are fetched too (`fetchThrownItems` true)
 @fails Never hops off: `CrowShoulder` reflection names `m_36362_` / `m_36364_` (log `NoSuchMethod`)
 @from batches/r1113/c4_ar.qb
+@reviewed 2026-11-16
 > forceload add 40087 39987 40113 40013
 sleep 3
 > kill @e[type=!player,x=40087,y=-62,z=39987,dx=26,dy=17,dz=26]
@@ -274,26 +274,30 @@ sleep 2
 > zhh3 tame c13 40100 -54 40000 13
 waitlog \[zhh3\] tamed 20
 expect \[zhh3\] tamed 1
-sleep 45
+> cdevtest tickwarp 900
+waitlog verb=tickwarp end=done ticks=900 asked=900 120
 > zhh3 tally 40100 -55 40000 14
 waitlog \[zhh3\] tally 20
 expect \[zhh3\] tally crows=1 tamed=1 .*shoulder=1
 > summon minecraft:item 40106.5 -60 40000.5 {Item:{id:"minecraft:gold_nugget",Count:1b},PickupDelay:0s}
-sleep 30
-> zhh3 inv c13 minecraft:gold_nugget
-waitlog \[zhh3\] invcount c13 20
-expect \[zhh3\] invcount c13 minecraft:gold_nugget 1
-sleep 30
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done ticks=600 asked=600 120
+> pbot inv c13 get
+expect verb=pbot.inv bot=c13 slot=\d+ item=minecraft:gold_nugget\*1$
+> cdevtest tickwarp 620
+waitlog verb=tickwarp end=done ticks=620 asked=620 120
 > zhh3 tally 40100 -55 40000 14
 waitlog \[zhh3\] tally 20
 > zhh3 throw c13 40106 -60 40000 minecraft:gold_nugget 1
-sleep 40
-> zhh3 inv c13 minecraft:gold_nugget
-waitlog \[zhh3\] invcount c13 minecraft:gold_nugget 2 30
+> cdevtest tickwarp 800
+waitlog verb=tickwarp end=done ticks=800 asked=800 120
+> pbot inv c13 get
+expect verb=pbot.inv bot=c13 slot=\d+ item=minecraft:gold_nugget\*2$
 > pbot remove c13
 > kill @e[type=hearthandharvest:crow,x=40087,y=-62,z=39987,dx=26,dy=18,dz=26]
 reject (?i)NoSuchMethod|m_36362_|m_36364_
 look the second tally shows shoulder=1 again (perched back after the first fetch)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## CQ-HCS-01
 @group client

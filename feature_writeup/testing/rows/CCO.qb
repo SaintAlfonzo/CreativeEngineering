@@ -78,6 +78,7 @@ look shell.txt: config present and overrides = [], removed = [], gravityLimitDim
 @pass no ASM warning (`unknown signature`, `handler not found`); growth still happens (block variants change) with the fast path; with `-Dcreativecommon.iwFastTick=false` in `srv/user_jvm_args.txt` the second boot logs `random-tick fast path off` and growth still happens
 @fails `IwServerLevelTickMixin`, `IwGrowthFast`, IW 1.2.10 `callTick` signature
 @from batches/r1107cco/b2_console.qb
+@reviewed 2026-11-16
 bootreject (?i)unknown signature|handler not found
 bootexpect \[perf\] Immersive Weathering callTick handler .* now calls IwGrowthFast\.blockTick
 > pbot remove-all
@@ -89,13 +90,16 @@ sleep 2
 > fill 8 70 8 23 72 23 minecraft:air
 > setblock 15 69 15 minecraft:mossy_cobblestone
 > setblock 16 70 16 minecraft:water
-> zq count 8 69 8 23 69 23 minecraft:mossy_cobblestone
+> cdevtest count 8 69 8 23 69 23 minecraft:mossy_cobblestone
 > gamerule randomTickSpeed 300
-sleep 60
-> zq count 8 69 8 23 69 23 minecraft:mossy_cobblestone
-> zq count 8 69 8 23 69 23 minecraft:cobblestone
+> cdevtest tickwarp 1200
+waitlog verb=tickwarp end=done 120
+> cdevtest count 8 69 8 23 69 23 minecraft:mossy_cobblestone
+> cdevtest count 8 69 8 23 69 23 minecraft:cobblestone
 > gamerule randomTickSpeed 3
-look mossy_cobblestone count after 60 s at randomTickSpeed 300 is higher than the first count (growth happens with the fast path)
+look mossy_cobblestone count after 1200 ticks at randomTickSpeed 300 (tick warp: real level ticks, so the IW fast path runs; /cdevtest randomtick would bypass it) is higher than the first count (growth happens with the fast path)
+expect verb=count block=minecraft:mossy_cobblestone n=[1-9]
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-CCO-06 | Armor Trims item list cache survives two reloads
 @group -
@@ -212,7 +216,7 @@ reject (No player was found|no such bot|Unknown or incomplete command)
 @pass the conform line and the Heartstone priority line each appear once; no `cannot reduce visibility`; the Nether trip and the return do not crash
 @fails `conformPortalsOverwrites`, `orderHeartstoneBeforePortals`, `imm_ptl.mixins.json` name
 @from batches/r1107cco/b2_console.qb
-shell grep -c "overwrites conform" logs/latest.log; grep -c "cannot reduce visibility\|Static binding violation" logs/latest.log
+shell grep -c "overwrites conform" logs/latest.log; grep -c "cannot reduce visibility\|Static binding violation" logs/latest.log; true
 > pbot spawn s5pb1 0 70 0 minecraft:overworld survival
 sleep 2
 > execute in minecraft:the_nether run tp s5pb1 0 100 0
@@ -277,17 +281,19 @@ look the stack keeps Potion "creativecommon:long_reach" after a save (no rewrite
 @pass all Common startup files loaded; tags exist; dict keys of absent mods print a skip value, not an exception
 @fails `item_dict.js` / `block_dict.js` guards
 @from batches/r1107cco/b2_console.qb
+@reviewed 2026-11-16
 shell grep -E "creativecommon: .* files loaded" logs/kubejs/startup.log
 shell cp "$INST/tools/scratch_query/s5_probe.js" kubejs/server_scripts/zz_s5_probe.js && cp "$INST/tools/scratch_query/cc_phantom_probe.js" kubejs/server_scripts/zz_cc_phantom_probe.js && cp "$INST/tools/scratch_query/cc_dict_probe.js" kubejs/server_scripts/zz_cc_dict_probe.js && echo probes copied
 > reload
 sleep 20
-> zq itemtag creativecommon:bark
-> zq itemtag creativecommon:metal_dusts
+> cdevtest tag item creativecommon:bark
+> cdevtest tag item creativecommon:metal_dusts
 sleep 2
 shell grep -E "\[ccdict\]" logs/kubejs/server.log | head -40
 shell grep -ciE "exception|error" logs/kubejs/server.log || true
 reject Unknown or incomplete command
-look startup line says creativecommon N of N files loaded; both tags list items (or the zq line says empty for a tag whose items are all from absent mods); [ccdict] lines show skip values, no exception
+look startup line says creativecommon N of N files loaded; both tags list items (or the tag line says n=0 for a tag whose items are all from absent mods); [ccdict] lines show skip values, no exception
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-CCO-16 | trader offers and advancements on Common's defaults
 @group `full`

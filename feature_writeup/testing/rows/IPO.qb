@@ -18,18 +18,57 @@
 @commands Boot; grep latest.log for `ImmersivePosts`, `Mixin`, `immersiveposts`; `/setblock ~ ~ ~ immersiveposts:ironpost`, then `immersiveposts:silverpost`
 @pass Both mixins apply, no error; the iron post places; `silverpost` is an unknown block. State count (the pack's state dump, or `Block.BLOCK_STATE_REGISTRY` size) is about 44,900 lower than 770,959
 @fails A mixin did not apply: the static-init lambda is no longer `lambda$static$0` (mod updated)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootreject (?i)(Mixin apply failed|InvalidInjectionException).*ImmersivePosts
+bootreject (?i)immersiveposts.*(exception|error)
+> forceload add 2696 2696 2720 2720
+> setblock 2700 -60 2700 immersiveposts:ironpost
+> setblock 2702 -60 2700 immersiveposts:silverpost
+> cdevtest states
+capture STN verb=states states=(\d+)
+shell python3 -c "import sys; n={STN}; print('states', n, 'cut', 770959 - n); sys.exit(0 if 770959 - n > 40000 else 1)"
+expect Changed the block at 2700, -60, 2700
+expect (?i)unknown block.*immersiveposts:silverpost
+reject \[cdevtest\] .*done=0
 ## SQ-IPO-02
 @group A
 @commands Place a post base; use an iron fence on it 3 times; use a hammer on the post's side to make an arm; place a second post 3 blocks away and join them with a truss (fence on the post side)
 @pass Post grows, arm and truss form as before
 @fails A kept material lost its post or truss: `Posts.get` returned null, check `ImmersivePostsMaterials.KEPT`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 2696 2696 2720 2720
+> setblock 2704 -60 2704 immersiveposts:postbase
+> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main
+> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main
+> cdevtest use 2704 -60 2704 held=immersiveposts:fence_iron hand=main
+> setblock 2708 -60 2704 immersiveposts:postbase
+> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main
+> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main
+> cdevtest use 2708 -60 2704 held=immersiveposts:fence_iron hand=main
+> cdevtest count 2704 -59 2704 2704 -55 2704 immersiveposts:ironpost
+> cdevtest use 2704 -58 2704 held=immersiveengineering:hammer face=east hand=main
+> cdevtest state 2705 -58 2704
+> cdevtest use 2704 -57 2704 held=immersiveposts:fence_iron face=east hand=main
+> cdevtest state 2706 -57 2704
+expect verb=count block=immersiveposts:ironpost n=3\b
+reject (?i)exception
+reject \[cdevtest\] .*done=0
+look the 2705 -58 state is the arm; the truss blocks between the posts at y -57 (state lines; ids per the IP jar); post growth: each fence use raised the post by one
 ## SQ-IPO-03
 @group A
 @commands Use a silver fence, a gold fence and a nether brick fence on a post base
 @pass Nothing happens (fence places as a normal block or the click is ignored), no exception in the log
 @fails Exception from `getPostState`: `isValidItem` was not redirected at that call site
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 2696 2696 2720 2720
+> setblock 2712 -60 2704 immersiveposts:postbase
+> cdevtest use 2712 -60 2704 held=immersiveposts:fence_silver hand=main
+> cdevtest use 2712 -60 2704 held=immersiveposts:fence_gold hand=main
+> cdevtest use 2712 -60 2704 held=minecraft:nether_brick_fence hand=main
+> cdevtest state 2712 -59 2704
+reject verb=state pos=2712,-59,2704 state="?immersiveposts:
+reject (?i)exception
+reject \[cdevtest\] .*done=0
+look the three use lines: the click is ignored or the fence places as a plain block
 @@text
 @@text Results 2026-10-27 night (`tools/immersive_posts_probe/ipo_probe.js`, `/ipotest`): first the 17:47 jar's `ImmersivePostsValidItemMixin` crashed at load (static handler, `method = "*"`): fixed. SQ-IPO-01 PASS: 726,031 states (-44,928), kept posts and trusses registered, dropped ones not, `setblock ... silverpost` = unknown block; but the mod's own `mineable/pickaxe`, `needs_stone_tool`, `needs_iron_tool` files then failed to load (and IE's `mineable/drill`): fixed with `TagLoaderImmersivePostsMixin`, no IPO tag error after (perf.md 12.2). SQ-IPO-02 partial: an iron fence grows the post 3 times; arms and trusses are hammer paths the mixin does not touch and the fake-player clicks did not form them (player check left: hammer arm, truss). SQ-IPO-03 PASS: silver, gold and nether brick fences place as plain fences, no exception.

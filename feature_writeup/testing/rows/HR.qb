@@ -19,13 +19,15 @@
 @pass member `hearthandharvest` loads; no missing model / texture for `hearthandharvest:raspberry_bush`; no error in `hearthandharvest/*.js`; recipe `creativedelight:...raspberry_pips_from_raspberry` loaded; watering can still registers
 @fails two registrations under one namespace clash; NCH key missing
 @from batches/r1101/p1_server.qb passed
+@reviewed 2026-11-16
 bootreject (?i)(missing|unknown).*(raspberry)
 bootreject hearthandharvest/.*\.js.*(Error|error)
-> zq item hearthandharvest:raspberry_pips
-> zq item hearthandharvest:raspberries
-> zq makes hearthandharvest:raspberry_pips
+> cdevtest item hearthandharvest:raspberry_pips
+> cdevtest item hearthandharvest:raspberries
+> cdevtest makes hearthandharvest:raspberry_pips
 reject Unknown item
 expect raspberry_pips_from_raspberry
+reject \[cdevtest\] .*done=0
 
 ## SQ-HR-02 | pips plant on dirt, not sand; grow to age 3
 @group A
@@ -77,8 +79,9 @@ look age 2: the first `if entity` fails (no drop); age 3: 2-3 raspberries on the
 @pass tags hold the items; the fox empties the bush to age 1 and holds a raspberry
 @fails tags.js not run (member switch); fox goal not added
 @from batches/r1101/p1_server.qb
-> zq tagsof hearthandharvest:raspberries
-> zq tagsof hearthandharvest:raspberry_pips
+@reviewed 2026-11-16
+> cdevtest tagsof hearthandharvest:raspberries
+> cdevtest tagsof hearthandharvest:raspberry_pips
 expect forge:fruits/raspberries
 expect forge:berries
 expect minecraft:fox_food
@@ -92,13 +95,15 @@ sleep 60
 > execute if block 28 -60 -10 hearthandharvest:raspberry_bush[age=1]
 > execute as @e[type=fox,limit=1,sort=nearest] at @s run data get entity @s HandItems
 look fox emptied the bush (age 1 Test passed) and holds a raspberry; a fox asleep at noon does not forage (vanilla): rerun at night if it fails
+reject \[cdevtest\] .*done=0
 
 ## SQ-HR-05 | wild raspberry patches in forest
 @group B
-@commands New world, seed 8675309; `/locate biome minecraft:forest`, fly there (r1101: the `[wild-crops]` log names no rules; use `/zq biometag creativedelight:wild_crops/raspberry` and a fully loaded 256-chunk `/zq count`)
+@commands New world, seed 8675309; `/locate biome minecraft:forest`, fly there (r1101: the `[wild-crops]` log names no rules; use `/cdevtest tag biome creativedelight:wild_crops/raspberry` and a fully loaded 256-chunk `/cdevtest count`)
 @pass tag lists 26 biomes; ripe raspberry bush patches in forest / plains
 @fails `requires` skipped the rule; feature json invalid in 1.19.2
 @from batches/r1101/w2_worldgen.qb
+@reviewed 2026-11-16
 bootexpect \[wild-crops\].*raspberry
 > locate biome minecraft:forest
 waitlog nearest minecraft:forest is at 300
@@ -107,9 +112,12 @@ capture FO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 sleep 40
 > forceload add {FO1-64} {FO3-64} {FO1+64} {FO3+64}
 sleep 30
-> zq count {FO1-64} 50 {FO3-64} {FO1+64} 120 {FO3+64} hearthandharvest:raspberry_bush
+> cdevtest count {FO1-64} 50 {FO3-64} {FO1+64} 120 {FO3+64} hearthandharvest:raspberry_bush
+expect verb=count block=hearthandharvest:raspberry_bush n=[1-9]
+> cdevtest ages {FO1-64} 50 {FO3-64} {FO1+64} 120 {FO3+64} hearthandharvest:raspberry_bush
 > forceload remove all
-look the [wild-crops] line lists rule raspberry (26 biomes); bushes counted in the forest square (> 0), ripe (age 3) ones among them; record the count
+look the [wild-crops] line lists rule raspberry (26 biomes); bushes counted in the forest square (> 0), ripe (age 3) ones among them (verb=ages hist 3:); record the count
+reject \[cdevtest\] .*done=0
 
 ## CQ-HR-06 | raspberry bush ages and WTHIT growth line
 @group client

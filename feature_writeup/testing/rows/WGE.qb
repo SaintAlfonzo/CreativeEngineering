@@ -22,103 +22,338 @@
 @commands `bash tools/test_pool_merge/run.sh`; `python3 tools/gen_structure_groups.py --check`; `python3 tools/changelog_lint.py`; `python3 -c "import json;[json.load(open(f)) for f in ('kubejs/generation_scripts/worldgen/pool_config.json','kubejs/generation_scripts/worldgen/structure_groups.json','kubejs/generation_scripts/worldgen/structure_tags.json','kubejs/generation_scripts/worldgen/biome_config.json')]"`; `diff config/waystones-common.toml configs_edited/root_config/waystones-common.toml`; same diff for `creativeengineering-common.toml`
 @pass merge harness prints `ALL PASS` (6 ok lines); groups check passes and lists no new warning; lint 0 errors and no `unreleased.md` warning; JSON loads; both diffs empty
 @fails harness: `PoolTuner.mergeCurrent`; diff: re-copy the config to `configs_edited/`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell cd $INST && bash tools/test_pool_merge/run.sh > /tmp/wge00_merge.txt 2>&1; tail -8 /tmp/wge00_merge.txt; grep -q "ALL PASS" /tmp/wge00_merge.txt
+shell cd $INST && python3 tools/gen_structure_groups.py --check 2>&1 | tail -12
+shell cd $INST && python3 tools/changelog_lint.py 2>&1 | tail -6
+shell cd $INST && python3 -c "import json;[json.load(open(f)) for f in ('kubejs/generation_scripts/worldgen/pool_config.json','kubejs/generation_scripts/worldgen/structure_groups.json','kubejs/generation_scripts/worldgen/structure_tags.json','kubejs/generation_scripts/worldgen/biome_config.json')]" && echo JSON_OK
+shell cd $INST && diff config/waystones-common.toml configs_edited/root_config/waystones-common.toml && diff config/creativeworldgen-common.toml configs_edited/root_config/creativeworldgen-common.toml && echo DIFFS_EMPTY
+look rows/<ID>.shell.txt: merge harness ALL PASS (6 ok lines); groups check lists no new warning; changelog lint 0 errors and no unreleased.md warning; JSON_OK; DIFFS_EMPTY (the worldgen keys moved to creativeworldgen-common.toml with the wave 5 carve)
 ## SQ-WGE-01a (A1)
 @group B, fresh world
 @commands before boot: `grep -n -A2 'nullscape:shadowlands' kubejs/generation_scripts/worldgen/biome_config.json` (multiplier 0.75); boot; `grep -i 'BiomeLayoutTuner\|biome solver' OUT/srv/logs/latest.log`
 @pass the solver summary names `nullscape:shadowlands` with a modelled End share near 14 % (aim about 16 % of the surface); no solver note for it, `crystal_peaks` still 3 and `void_barrens` 2 (3.95 % / 5.41 % in the old samples); no ERROR from the tuner
 @fails cached layout used: delete `biome_layout_cache.json.gz` in the scratch `OUT/srv` and reboot; multiplier not 0.75
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -n -A2 'nullscape:shadowlands' $INST/kubejs/generation_scripts/worldgen/biome_config.json | head -4
+shell grep -aiE 'BiomeLayoutTuner|biome solver' logs/latest.log | cut -c1-300 | head -30
+bootexpect (?i)(BiomeLayoutTuner|biome solver).*nullscape:shadowlands
+bootreject (?i)(BiomeLayoutTuner|biome solver).*ERROR
+look rows/<ID>.shell.txt: multiplier 0.75; the solver summary gives nullscape:shadowlands a modelled End share near 14 % (aim about 16 %), crystal_peaks still 3 and void_barrens 2; a cached layout (no solver lines) = delete biome_layout_cache.json.gz and reboot
 ## SQ-WGE-01b (A1)
 @group B
 @commands `execute in minecraft:the_end run locate biome nullscape:shadowlands` from 0 0 and after `tp` to 3000 0, 0 3000 and -3000 -3000 (outer islands start near 1000); then the 20,000-point End sample used in SQ-WG30-E03 (`tools/scratch_query/zq_probe.js` End climate dump)
 @pass shadowlands found from all four spots, nearest find under 1500 blocks from each; sample share of shadowlands between 12 and 20 % (old 10.7 %); crystal peaks and void barrens still found (SQ-WG30-E03 numbers within a factor of 1.3)
 @fails share still near 10 %: the multiplier is applied before another donor re-solve, read the solver line; `end_highlands` taking its place: biome_tuning.md F4
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:the_end positioned 0 70 0 run locate biome nullscape:shadowlands
+waitlog (The nearest nullscape:shadowlands is at|Could not find|timed out after) 600
+capture SHA The nearest nullscape:shadowlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_end positioned 3000 70 0 run locate biome nullscape:shadowlands
+waitlog (The nearest nullscape:shadowlands is at|Could not find|timed out after) 600
+capture SHB The nearest nullscape:shadowlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_end positioned 0 70 3000 run locate biome nullscape:shadowlands
+waitlog (The nearest nullscape:shadowlands is at|Could not find|timed out after) 600
+capture SHC The nearest nullscape:shadowlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_end positioned -3000 70 -3000 run locate biome nullscape:shadowlands
+waitlog (The nearest nullscape:shadowlands is at|Could not find|timed out after) 600
+capture SHD The nearest nullscape:shadowlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_end positioned 3000 70 0 run locate biome nullscape:crystal_peaks
+waitlog (The nearest nullscape:crystal_peaks is at|Could not find|timed out after) 600
+> execute in minecraft:the_end positioned 3000 70 0 run locate biome nullscape:void_barrens
+waitlog (The nearest nullscape:void_barrens is at|Could not find|timed out after) 600
+count The nearest nullscape:shadowlands is at .*\((\d{1,3}|1[0-4]\d\d) blocks away\) == 4
+count The nearest nullscape:(crystal_peaks|void_barrens) is at == 2
+reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look the 20,000-point End share sample (shadowlands 12 to 20 %, old 10.7 %) has no /cdevtest verb (zq_probe.js End climate dump retired): judge it from SQ-WG30-E03's sampler when that row runs, or leave it to the owner
 ## SQ-WGE-02a (A2)
 @group B
 @commands `qrun.py toml` read of `[worldgen.locate] searchTimeoutSeconds`; delete that toml line and reboot once (or read the spec default via `/zcfg`)
 @pass toml shows 120; with the line removed Forge writes 120 back (CEConfig default)
 @fails CEConfig default not rebuilt: check the jar in `mods/` is the 00:18 build
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -nE '^\s*searchTimeoutSeconds' config/creativeworldgen-common.toml; grep -qE '^\s*searchTimeoutSeconds = 120' config/creativeworldgen-common.toml
+shell grep -n 'searchTimeoutSeconds' $INST/development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/*Config*.java $INST/development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/*/*Config*.java 2>/dev/null | head -4; true
+look the spec default in the source line is 120 (the delete-and-reboot half needs its own boot: optional)
 ## SQ-WGE-02b (A2)
 @group B
 @commands SQ-WG30-C05 at 120: `/locate structure creativeengineering:meta/fortified_camps` from 0 0 and from 2448 -624, `meta/fortified_ruins` from 0 0
 @pass each answers, or ends with exactly one `[locate] ... timed out after 120 s` line; previous answers were 1 to 5 s (1823 / 3019 / 2608 blocks), so none should time out; server keeps ticking
 @fails a timeout where C05 passed at 300 s: the earlier answers were slow only on a cold world, rerun; message says 300: toml not updated
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/fortified_camps
+waitlog (The nearest creativeengineering:meta/fortified_camps is at|Could not find|timed out after) 400
+> execute in minecraft:overworld positioned 2448 70 -624 run locate structure creativeengineering:meta/fortified_camps
+waitlog (The nearest creativeengineering:meta/fortified_camps is at|Could not find|timed out after) 400
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/fortified_ruins
+waitlog (The nearest creativeengineering:meta/fortified_ruins is at|Could not find|timed out after) 400
+count The nearest creativeengineering:meta/fortified_(camps|ruins) is at == 3
+reject timed out after 300 s
+count \[locate\].*timed out after 120 s <= 1
+reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look any timeout line names 120 s (300 = toml not updated); previous answers were 1 to 5 s
 ## SQ-WGE-02c (A2)
 @group B
 @commands set `searchTimeoutSeconds = 5` in the scratch toml, reboot, `/locate structure minecraft:mansion` from 0 0 (rare, long), then `/locate structure creativeengineering:meta/fortified_ruins`; restore 120
 @pass the mansion search ends as not found with a `[locate] ... timed out after 5 s` line and its counters; the tick time stays under 100 ms during it; fortified ruins either answers or times out the same way; thread free for the next search
 @fails no timeout line: `LocateStats.expired` path or the value is not read per search
-@draft no batch holds this row yet
+@draft needs its own boot with searchTimeoutSeconds = 5 preset (qrun.py toml before the boot; a row cannot reboot the server), then mansion and fortified_ruins locates expecting `timed out after 5 s`; restore 120 after
 ## SQ-WGE-03a (A3)
 @group B
 @commands `python3 -c` over `structure_tags.json`: `eugene:undead_castle` in `land/plains` and `land/taiga`, not in `land/highlands`; boot; `grep -i 'earth.fill.*override\|undead_castle' OUT/srv/logs/latest.log`
 @pass tag lists as stated; the override line reads `eugene:undead_castle` water 24, air 800, mound 400
 @fails toml copy differs (`diff` in 00); override string malformed: `EarthFillConfig` parse log
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell cd $INST && python3 -c "import json; t=json.load(open('kubejs/generation_scripts/worldgen/structure_tags.json')); s=json.dumps(t); import re; [print(k, 'eugene:undead_castle' in json.dumps(v)) for k,v in (t.items() if isinstance(t,dict) else []) if re.search(r'land/(plains|taiga|highlands)', k)]"
+shell grep -aiE 'earth.?fill.*override|undead_castle' logs/latest.log | cut -c1-300 | head -10
+bootexpect (?i)earth.?fill.*eugene:undead_castle
+look rows/<ID>.shell.txt: undead_castle True for land/plains and land/taiga, False for land/highlands; the override line reads water 24, air 800, mound 400
 ## SQ-WGE-03b (A3)
 @group B
 @commands SQ-EF-06 again, two r 400 squares (plains/taiga and highlands, `/locate biome terralith:alpine_highlands`); `/cwglocate census 96 <x> <z>` for `eugene:undead_castle` over 4 centres; `grep 'eugene:undead_castle'` earth-fill log lines (`log = ALL`)
 @pass no castle starts in a highlands biome (`getNoiseBiome` probe per start); every plains/taiga castle that the old limit cancelled with 562 to 708 over air is now kept (log shows kept, air value, limit 800); castle count in the census about the same as before per area (fits no longer include highlands, so a drop in highland-adjacent area is expected, not a fail); `tp` to one kept castle on a slope: no earth over more than 6 blocks of air (ST-240)
 @fails cancels still logged with air over 800: the beard sees terrain far below, raise the limit and note the measured value; castles in highlands: groups not regenerated, `structure_group_estimates.md` castle row should read spacing 100
-@draft no batch holds this row yet
+@draft needs a judgement on generated castles (slope earth over air, ST-240) after two r 400 Chunky squares and four censuses: write the census and earth-fill grep steps when the row is run with `log = ALL`; the highlands start check needs a per-start biome readback no verb has (`cdevtest under` lists starts without biomes)
 ## SQ-WGE-04a (A4)
 @group B
 @commands `python3 tools/gen_structure_groups.py --check`; in `structure_groups.json` the 8 weights are acacia 30, birch 24, cherry 51, desert 3, end 3, jungle 30, mangrove 15, oak 15 and `frequency` unchanged
 @pass all 8 `tuned` strings end `weight x3 by hand (user, 2026-11-01)`; no value reverted; the estimates table lists acacia 115, birch 169, cherry 137, desert 355, jungle 91, mangrove 765, oak 190, end 232 chunks per start
 @fails a `--fit-rates` or `--refit` rerun overwrote the weights
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell cd $INST && python3 tools/gen_structure_groups.py --check 2>&1 | tail -8
+shell cd $INST && python3 -c "import json; g=json.dumps(json.load(open('kubejs/generation_scripts/worldgen/structure_groups.json'))); print(g.count('weight x3 by hand (user, 2026-11-01)'))"
+shell cd $INST && grep -nE '(acacia|birch|cherry|desert|end|jungle|mangrove|oak)_pillager_tower' feature_writeup/structure_group_estimates.md | head -10
+look rows/<ID>.shell.txt: 8 `weight x3 by hand` strings; weights acacia 30, birch 24, cherry 51, desert 3, end 3, jungle 30, mangrove 15, oak 15; estimates acacia 115, birch 169, cherry 137, desert 355, jungle 91, mangrove 765, oak 190, end 232 chunks per start
 ## SQ-WGE-04b (A4)
 @group B, seed 8675309
 @commands `/cwglocate census 128 0 0` and `... 4000 4000` with `mysticrift_pillagers_towers_aris:*_pillager_tower` rows; compare with the pre-change census in `structure_group_estimates.md` (192 / 288 / 230 / 599 / 151 / 1304 / 242 chunks per start)
 @pass each tower type is 1.3 to 2.2 times as common as before where it is not biome-limited (acacia, birch, cherry, jungle, oak, desert); end (232) and mangrove (limited by its own 0.038 frequency) within 15 % of before; total pillager_settlements group not displacing camps, vehicles or statues by more than 15 % (they share the grid)
 @fails camps / statues fell: the group's other members lost slots, give the shortfall in the TODO row
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cwglocate census 128 0 0
+waitlog \[cwglocate\] census done 1800
+shell cp $INST/kubejs/exported/worldgen/locate_census.json ../wge04b_census_0_0.json 2>/dev/null || cp kubejs/exported/worldgen/locate_census.json ../wge04b_census_0_0.json; grep -o '"[a-z_]*:[a-z_]*_pillager_tower"[^}]*' ../wge04b_census_0_0.json | head -10
+> cwglocate census 128 4000 4000
+waitlog \[cwglocate\] census done 1800
+shell cp kubejs/exported/worldgen/locate_census.json ../wge04b_census_4000.json; grep -o '"[a-z_]*:[a-z_]*_pillager_tower"[^}]*' ../wge04b_census_4000.json | head -10
+reject census done \(stopped\)
+reject \d+ false negatives \(prediction bug
+look tower rows in both census files against structure_group_estimates.md (192 / 288 / 230 / 599 / 151 / 1304 / 242 chunks per start): acacia, birch, cherry, jungle, oak, desert 1.3 to 2.2 times as common; end and mangrove within 15 %; camps, vehicles, statues not down more than 15 %
 ## SQ-WGE-05a (A5)
 @group B, fresh world
 @commands `grep -n 'frequency\|forceSpawnInVillages' OUT/srv/config/waystones-common.toml`; `/locate structure` has no waystone entry, so use `/cwglocate census 128 0 0` or a block probe over 40,000 chunks counting `waystones:*waystone*` blocks outside villages (`zq_probe.js`)
 @pass toml frequency 60 and forceSpawnInVillages true; lone waystones about 1 per 60 chunks of free land (was 25: about 5.8 times fewer in count), deserts no longer the densest area
 @fails `waystones-common.toml` not in the scratch `config/`; a world made before the change: use a new level-name
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -nE 'frequency|forceSpawnInVillages' config/waystones-common.toml | grep -v '#'
+> forceload add -128 -128 127 127
+sleep 60
+# a count box is at most 262144 blocks (64x64x64): the 256-block square runs as slices from y 30 (no land waystone lower); the shell sums them
+> say WGE05A begin
+> cdevtest count -128 30 -128 127 33 127 #waystones:waystones
+> cdevtest count -128 34 -128 127 37 127 #waystones:waystones
+> cdevtest count -128 38 -128 127 41 127 #waystones:waystones
+> cdevtest count -128 42 -128 127 45 127 #waystones:waystones
+> cdevtest count -128 46 -128 127 49 127 #waystones:waystones
+> cdevtest count -128 50 -128 127 53 127 #waystones:waystones
+> cdevtest count -128 54 -128 127 57 127 #waystones:waystones
+> cdevtest count -128 58 -128 127 61 127 #waystones:waystones
+> cdevtest count -128 62 -128 127 65 127 #waystones:waystones
+> cdevtest count -128 66 -128 127 69 127 #waystones:waystones
+> cdevtest count -128 70 -128 127 73 127 #waystones:waystones
+> cdevtest count -128 74 -128 127 77 127 #waystones:waystones
+> cdevtest count -128 78 -128 127 81 127 #waystones:waystones
+> cdevtest count -128 82 -128 127 85 127 #waystones:waystones
+> cdevtest count -128 86 -128 127 89 127 #waystones:waystones
+> cdevtest count -128 90 -128 127 93 127 #waystones:waystones
+> cdevtest count -128 94 -128 127 97 127 #waystones:waystones
+> cdevtest count -128 98 -128 127 101 127 #waystones:waystones
+> cdevtest count -128 102 -128 127 105 127 #waystones:waystones
+> cdevtest count -128 106 -128 127 109 127 #waystones:waystones
+> cdevtest count -128 110 -128 127 113 127 #waystones:waystones
+> cdevtest count -128 114 -128 127 117 127 #waystones:waystones
+> cdevtest count -128 118 -128 127 121 127 #waystones:waystones
+> cdevtest count -128 122 -128 127 125 127 #waystones:waystones
+> cdevtest count -128 126 -128 127 129 127 #waystones:waystones
+> cdevtest count -128 130 -128 127 133 127 #waystones:waystones
+> cdevtest count -128 134 -128 127 137 127 #waystones:waystones
+> cdevtest count -128 138 -128 127 141 127 #waystones:waystones
+> cdevtest count -128 142 -128 127 145 127 #waystones:waystones
+> cdevtest count -128 146 -128 127 149 127 #waystones:waystones
+> cdevtest count -128 150 -128 127 153 127 #waystones:waystones
+> cdevtest count -128 154 -128 127 157 127 #waystones:waystones
+> cdevtest count -128 158 -128 127 161 127 #waystones:waystones
+> cdevtest count -128 162 -128 127 165 127 #waystones:waystones
+> cdevtest count -128 166 -128 127 169 127 #waystones:waystones
+> cdevtest count -128 170 -128 127 173 127 #waystones:waystones
+> cdevtest count -128 174 -128 127 177 127 #waystones:waystones
+> cdevtest count -128 178 -128 127 181 127 #waystones:waystones
+> cdevtest count -128 182 -128 127 185 127 #waystones:waystones
+> cdevtest count -128 186 -128 127 189 127 #waystones:waystones
+> cdevtest count -128 190 -128 127 193 127 #waystones:waystones
+> cdevtest count -128 194 -128 127 197 127 #waystones:waystones
+> cdevtest count -128 198 -128 127 201 127 #waystones:waystones
+> cdevtest count -128 202 -128 127 205 127 #waystones:waystones
+> cdevtest count -128 206 -128 127 209 127 #waystones:waystones
+> cdevtest count -128 210 -128 127 213 127 #waystones:waystones
+> cdevtest count -128 214 -128 127 217 127 #waystones:waystones
+> cdevtest count -128 218 -128 127 221 127 #waystones:waystones
+> cdevtest count -128 222 -128 127 225 127 #waystones:waystones
+> cdevtest count -128 226 -128 127 229 127 #waystones:waystones
+> cdevtest count -128 230 -128 127 233 127 #waystones:waystones
+> cdevtest count -128 234 -128 127 237 127 #waystones:waystones
+> cdevtest count -128 238 -128 127 241 127 #waystones:waystones
+> cdevtest count -128 242 -128 127 245 127 #waystones:waystones
+> cdevtest count -128 246 -128 127 249 127 #waystones:waystones
+> cdevtest count -128 250 -128 127 253 127 #waystones:waystones
+> cdevtest count -128 254 -128 127 257 127 #waystones:waystones
+> cdevtest count -128 258 -128 127 261 127 #waystones:waystones
+> cdevtest count -128 262 -128 127 265 127 #waystones:waystones
+> cdevtest count -128 266 -128 127 269 127 #waystones:waystones
+> cdevtest count -128 270 -128 127 273 127 #waystones:waystones
+> cdevtest count -128 274 -128 127 277 127 #waystones:waystones
+> cdevtest count -128 278 -128 127 281 127 #waystones:waystones
+> cdevtest count -128 282 -128 127 285 127 #waystones:waystones
+> cdevtest count -128 286 -128 127 289 127 #waystones:waystones
+> cdevtest count -128 290 -128 127 293 127 #waystones:waystones
+> cdevtest count -128 294 -128 127 297 127 #waystones:waystones
+> cdevtest count -128 298 -128 127 301 127 #waystones:waystones
+> cdevtest count -128 302 -128 127 305 127 #waystones:waystones
+> cdevtest count -128 306 -128 127 309 127 #waystones:waystones
+> cdevtest count -128 310 -128 127 313 127 #waystones:waystones
+> cdevtest count -128 314 -128 127 317 127 #waystones:waystones
+> cdevtest count -128 318 -128 127 320 127 #waystones:waystones
+> say WGE05A end
+waitlog WGE05A end 900
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" WGE05A
+> forceload remove -128 -128 127 127
+reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look toml frequency 60 and forceSpawnInVillages true; the shell's summed count over 256 chunks (village ones included: the `on` list shows what each stands on) is about 4 or fewer lone waystones (1 per 60 chunks; was 1 per 25); deserts no longer densest
 ## SQ-WGE-05b (A5)
 @group B
 @commands find 10 villages (`/locate structure minecraft:village_plains` and the other four kinds), `tp` to each, look for a waystone within 20 blocks of the village centre (probe: nearest `waystones:` block entity)
 @pass at least 8 of 10 villages have one, near the centre (accepted 2026-11-03: r1103w found 8 of 10, none at -240 1120 and 2496 -1488); each waystone is registered (right-click shows a name)
 @fails fewer than 8 (list the villages without one): `forceSpawnInVillages` not read, or a village mod (Towns and Towers, Villages and Pillages) without the waystone piece, list which
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:overworld positioned 0 70 0 run locate structure minecraft:village_plains
+waitlog (The nearest minecraft:village_plains is at|Could not find|timed out after) 600
+capture VA The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VA1-24} {VA3-24} {VA1+24} {VA3+24}
+sleep 10
+# a count box is at most 262144 blocks: 41 x 155 x 41 (y 6 to 160, below any village surface)
+> cdevtest count {VA1-20} 6 {VA3-20} {VA1+20} 160 {VA3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VA1-24} {VA3-24} {VA1+24} {VA3+24}
+> execute in minecraft:overworld positioned 0 70 0 run locate structure minecraft:village_desert
+waitlog (The nearest minecraft:village_desert is at|Could not find|timed out after) 600
+capture VB The nearest minecraft:village_desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VB1-24} {VB3-24} {VB1+24} {VB3+24}
+sleep 10
+> cdevtest count {VB1-20} 6 {VB3-20} {VB1+20} 160 {VB3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VB1-24} {VB3-24} {VB1+24} {VB3+24}
+> execute in minecraft:overworld positioned 0 70 0 run locate structure minecraft:village_savanna
+waitlog (The nearest minecraft:village_savanna is at|Could not find|timed out after) 600
+capture VC The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VC1-24} {VC3-24} {VC1+24} {VC3+24}
+sleep 10
+> cdevtest count {VC1-20} 6 {VC3-20} {VC1+20} 160 {VC3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VC1-24} {VC3-24} {VC1+24} {VC3+24}
+> execute in minecraft:overworld positioned 0 70 0 run locate structure minecraft:village_snowy
+waitlog (The nearest minecraft:village_snowy is at|Could not find|timed out after) 600
+capture VD The nearest minecraft:village_snowy is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VD1-24} {VD3-24} {VD1+24} {VD3+24}
+sleep 10
+> cdevtest count {VD1-20} 6 {VD3-20} {VD1+20} 160 {VD3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VD1-24} {VD3-24} {VD1+24} {VD3+24}
+> execute in minecraft:overworld positioned 0 70 0 run locate structure minecraft:village_taiga
+waitlog (The nearest minecraft:village_taiga is at|Could not find|timed out after) 600
+capture VE The nearest minecraft:village_taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VE1-24} {VE3-24} {VE1+24} {VE3+24}
+sleep 10
+> cdevtest count {VE1-20} 6 {VE3-20} {VE1+20} 160 {VE3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VE1-24} {VE3-24} {VE1+24} {VE3+24}
+# the second village of a kind: the waitlog skips the first one's reply line (same pattern), else the capture can read the old village
+> execute in minecraft:overworld positioned 4000 70 4000 run locate structure minecraft:village_plains
+waitlog (The nearest minecraft:village_plains is at \[(?!{VA1}, )|Could not find|timed out after) 600
+capture VF The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VF1-24} {VF3-24} {VF1+24} {VF3+24}
+sleep 10
+> cdevtest count {VF1-20} 6 {VF3-20} {VF1+20} 160 {VF3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VF1-24} {VF3-24} {VF1+24} {VF3+24}
+> execute in minecraft:overworld positioned 4000 70 4000 run locate structure minecraft:village_desert
+waitlog (The nearest minecraft:village_desert is at \[(?!{VB1}, )|Could not find|timed out after) 600
+capture VG The nearest minecraft:village_desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VG1-24} {VG3-24} {VG1+24} {VG3+24}
+sleep 10
+> cdevtest count {VG1-20} 6 {VG3-20} {VG1+20} 160 {VG3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VG1-24} {VG3-24} {VG1+24} {VG3+24}
+> execute in minecraft:overworld positioned 4000 70 4000 run locate structure minecraft:village_savanna
+waitlog (The nearest minecraft:village_savanna is at \[(?!{VC1}, )|Could not find|timed out after) 600
+capture VH The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VH1-24} {VH3-24} {VH1+24} {VH3+24}
+sleep 10
+> cdevtest count {VH1-20} 6 {VH3-20} {VH1+20} 160 {VH3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VH1-24} {VH3-24} {VH1+24} {VH3+24}
+> execute in minecraft:overworld positioned 4000 70 4000 run locate structure minecraft:village_snowy
+waitlog (The nearest minecraft:village_snowy is at \[(?!{VD1}, )|Could not find|timed out after) 600
+capture VI The nearest minecraft:village_snowy is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VI1-24} {VI3-24} {VI1+24} {VI3+24}
+sleep 10
+> cdevtest count {VI1-20} 6 {VI3-20} {VI1+20} 160 {VI3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VI1-24} {VI3-24} {VI1+24} {VI3+24}
+> execute in minecraft:overworld positioned 4000 70 4000 run locate structure minecraft:village_taiga
+waitlog (The nearest minecraft:village_taiga is at \[(?!{VE1}, )|Could not find|timed out after) 600
+capture VJ The nearest minecraft:village_taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VJ1-24} {VJ3-24} {VJ1+24} {VJ3+24}
+sleep 10
+> cdevtest count {VJ1-20} 6 {VJ3-20} {VJ1+20} 160 {VJ3+20} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {VJ1-24} {VJ3-24} {VJ1+24} {VJ3+24}
+count \[cdevtest\] verb=count block=#waystones:waystones n=[1-9] >= 8
+reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look the villages with n=0 (accepted 2026-11-03: 8 of 10); right-click one waystone in a client session for the name screen (registered)
 ## SQ-WGE-05c (A5)
 @group B-nether
 @commands `tp` through 3 Nether and End chunks areas with `dimensionAllowList` unchanged
 @pass waystones generate in the Nether and End at the 60 chunk rate; none inside lava or void; nothing in latest.log from `waystones` worldgen
 @fails feature global: one rate for all dimensions, note if the Nether feels crowded
-@draft no batch holds this row yet
+@draft needs a judgement of three explored Nether and End areas (waystones inside lava or void, crowding feel); a `cdevtest count #waystones:waystones` over a forceloaded Nether and End square gives the rate when the row runs
 ## SQ-WGE-06a (B1)
 @group A
 @commands boot with the new `pool_config.json`; `grep -i 'piece order changed\|changed this edited piece\|PoolTuner' OUT/srv/logs/latest.log`; read `pool_tag_report.md` "Retuned pools"
 @pass no `piece order changed` warning (no duplicate is edited); the retuned list has only the vinery / beautify / tech pools (the 9 village pieces), down from 39
 @fails warnings for unedited duplicates: `mergeCurrent` not in the jar; extra retuned pools: reset list incomplete
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootreject (?i)piece order changed
+shell grep -aiE 'piece order changed|changed this edited piece|PoolTuner' logs/latest.log | cut -c1-300 | head -20
+shell cd $INST && awk '/Retuned pools/,0' feature_writeup/pool_tag_report.md 2>/dev/null | head -30; true
+look the Retuned pools list holds only the vinery / beautify / tech pools (the 9 village pieces), down from 39
 ## SQ-WGE-06b (B1)
 @group A
 @commands compare effective weights in `pool_tag_report.md` / `pool_config.json` for `subterrestrial:cabin/deepslate/base`, `betterfortresses:bridge` (pillars 10 / 15 / 20 in that order), `nullscape:dragon_skeleton`, `unwrecked_ships:ship/sails`, `villagesandpillages:village_witch/road_and_house` against `original`
 @pass every `#2` / `#3` duplicate has `current == original` and plays that weight; sample 300 generations of the bridge pool with a probe: proportions match 10 : 15 : 20 within sampling error
 @fails pieces still permuted: pool_config.json not reset, or `canonicalOrder` reordered after the merge
-@draft no batch holds this row yet
+@draft the 300-generation bridge-pool sample needs a jigsaw sampler no verb or probe has; the weight compare half is offline (pool_tag_report.md against pool_config.json `original`), fold it into SQ-WGE-06a when it runs
 ## SQ-WGE-06c (B1)
 @group A
 @commands edit one duplicate by hand (`current` of a `#2` piece, say 7), reboot; then change nothing and reboot again
 @pass first reboot keeps 7 with no warning (original unchanged); to force reorder, set its stored `original` to a different number and reboot: a `piece order changed under an edited duplicate` warning appears in the log and the report, value kept at 7
 @fails warning missing: `mergeCurrent` branch for edited entries
-@draft no batch holds this row yet
+@draft needs two reboots with hand edits of pool_config.json between them (a row cannot reboot the server): run as three short boots, each with a bootreject/bootexpect for `piece order changed`
 ## SQ-WGE-06d (B1)
 @group B
 @commands ST-191: boot a normal world, `/locate structure minecraft:village_plains` and note 3 village coordinates plus a pillager outpost; stop, boot again with the same world and seed, repeat; then generate a fresh area (`/cdevplace` or `forceload`) and compare the first 5 village layouts (piece list) across two restarts
 @pass same coordinates and same layouts across restarts (canonical order is on); no `Element ... is not valid` errors on save
 @fails layouts differ per start: `canonicalOrder` off in the toml, or the sort tie-break
-@draft no batch holds this row yet
+@draft needs a stop and a reboot of the same world between the two locate passes (a row cannot reboot), and the layout compare is a piece-list judgement; run as two boots with the same seed, locate steps in each
 ## CQ-WGE-07a (B5)
 @group client
 @commands WE-25: Cool Rain 1.0.2 and Serene Seasons loaded; `grep -i 'CoolRainSeasonMixin\|coolrain' logs/latest.log` after the title screen
@@ -142,55 +377,131 @@
 @commands full-boot regression: `grep -c 'ERROR' latest.log`, `grep -i 'mixin\|Exception' latest.log | head`, tick time of the first 5 min with the perf session
 @pass no new ERROR lines against the last clean boot; boot time within 10 % of SQ-WG30; the changelog World Generation bullets (9) each match a row above
 @fails an unrelated error: check `git stash` against the last clean jars before blaming this plan
-@draft no batch holds this row yet
+@draft regression compare against the last clean boot (ERROR count, boot time, perf session) is a judgement across two run docs; run inside the run that boots group B, from qrun.py plan
 ## SQ-WGE-00b (step 3 to 5, all)
 @group none, offline
 @commands `python3 tools/gen_nether_swaps.py`; `python3 tools/check_worldgen_json.py`; `python3 tools/gen_structure_groups.py --check`; `python3 tools/check_moobloom_data.py`; `node --check` on `end_divers.js`
 @pass 1514 swaps in 117 templates (1407 before C3); 0 worldgen problems; groups check lists `creativeengineering:meta/waystone_ruins` in `ruins` at weight 1 and no new warning; moobloom check OK with 38 spawn rules; script parses
 @fails swap count off by the 7 rule rows: a rule's `to` id or a KEEP property
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell cd $INST && python3 tools/gen_nether_swaps.py 2>&1 | tail -6
+shell cd $INST && python3 tools/check_worldgen_json.py 2>&1 | tail -6
+shell cd $INST && python3 tools/gen_structure_groups.py --check 2>&1 | grep -nE "waystone_ruins|WARN|warn" | head -12
+shell cd $INST && python3 tools/check_moobloom_data.py 2>&1 | tail -6
+shell cd $INST && node --check kubejs/data/creativeworldgen/kubejs/mobs/end_divers.js && echo END_DIVERS_PARSES
+look rows/<ID>.shell.txt: 1514 swaps in 117 templates (more is fine when later rules were added; fewer = a rule's `to` id or KEEP property); 0 worldgen problems; `creativeengineering:meta/waystone_ruins` in `ruins` at weight 1, no new warning; moobloom check OK with 38 spawn rules; END_DIVERS_PARSES
 ## SQ-WGE-09 (A7)
 @group B, plus the Nether
 @commands ST-294 and ST-295 (already queued with the pre-scratch pass): in the Overworld `/locate structure philipsruins:lost_soul_city`, `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin`; in the Nether the same four; `/locate structure creativeengineering:meta/ruin_cluster` in the Overworld
 @pass none found in the Overworld; each found in the Nether in its biomes (soul sand valley; crimson / warped forest; wastes / deltas) at y 33 (ruins), 12 (dungeon), 5 (city); soul fire inside them kept (no swap: the generator skips Nether-owned templates); ruin cluster still found
 @fails found in the Overworld: the jar json override in `kubejs/data/philipsruins/` not loaded; soul fire swapped: template also owned by an Overworld structure
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:lost_soul_city
+waitlog (The nearest philipsruins:lost_soul_city is at|Could not find|timed out after) 600
+> execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:lost_soul_dungeon
+waitlog (The nearest philipsruins:lost_soul_dungeon is at|Could not find|timed out after) 600
+> execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:rare_ruin
+waitlog (The nearest philipsruins:rare_ruin is at|Could not find|timed out after) 600
+> execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:start_nether_ruin
+waitlog (The nearest philipsruins:start_nether_ruin is at|Could not find|timed out after) 600
+> execute in minecraft:the_nether positioned 0 70 0 run locate structure philipsruins:lost_soul_city
+waitlog (The nearest philipsruins:lost_soul_city is at|Could not find|timed out after) 600
+> execute in minecraft:the_nether positioned 0 70 0 run locate structure philipsruins:lost_soul_dungeon
+waitlog (The nearest philipsruins:lost_soul_dungeon is at|Could not find|timed out after) 600
+> execute in minecraft:the_nether positioned 0 70 0 run locate structure philipsruins:rare_ruin
+waitlog (The nearest philipsruins:rare_ruin is at|Could not find|timed out after) 600
+> execute in minecraft:the_nether positioned 0 70 0 run locate structure philipsruins:start_nether_ruin
+waitlog (The nearest philipsruins:start_nether_ruin is at|Could not find|timed out after) 600
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/ruin_cluster
+waitlog (The nearest creativeengineering:meta/ruin_cluster is at|Could not find|timed out after) 900
+count The nearest philipsruins:(lost_soul_city|lost_soul_dungeon|rare_ruin|start_nether_ruin) is at == 4
+count Could not find a structure of type "?philipsruins: >= 4
+expect The nearest creativeengineering:meta/ruin_cluster is at
+reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look the Overworld locates come first: their 4 lines must be the not-found ones (order in rows/<ID>.log); Nether biomes and y and the soul fire inside are SQ-PSW-02's checks (same steps there with biome readback)
 ## SQ-WGE-10 (C3)
 @group B
 @commands `/place structure` a fortified desert village, YUNG's desert temple, YUNG's stronghold, a T&T jungle outpost, the spire, the zombie dungeon, an ocean ruin; at each, `/zq` block probe (or F3) on the pieces listed in nether_swaps.md rules 26 to 32
 @pass no crimson or warped trapdoor, button, slab, pressure plate, stairs or stripped hyphae; mangrove trapdoors / buttons / slabs and dark oak pressure plates / trapdoors / stairs / stripped wood in their place, facing, half, open and axis as before (trapdoors still open where they were); the desert temple's 24-plate puzzle still triggers
 @fails old block still there: template id renamed (rerun the generator); state lost: KEEP table
-@draft no batch holds this row yet
+@draft per-piece block reads at /place structure sites need the piece positions from nether_swaps.md rules 26 to 32 per template; a person or agent picks them at the placed structure (cdevtest state per block) and judges facing, half and the temple puzzle
 ## SQ-WGE-11 (C4, C5)
 @group B, seed 8675309
 @commands `[worldgen.meta_structures] log = true`; `/cwglocate census 128 0 0` and `... 4000 4000` counting `meta/pillager_camp_ruin`, `pillager_camp_ruins`, `pillager_great_tower_siege`, `meteor_shower`; compare with the SQ-META31 census
 @pass camp ruin metas about 1.7 times as common as before (share 0.25 [0.15]); great tower siege about 0.6 times (0.30 [0.50]); meteor shower about 0.66 times (0.33 [0.50]); plain camp, great tower and meteorite counts unchanged within 15 % (shares never change an anchor's slots)
 @fails anchors fell: MetaSlots counts a meta as its anchor's slot
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cwglocate census 128 0 0
+waitlog \[cwglocate\] census done 1800
+shell cp kubejs/exported/worldgen/locate_census.json ../wge11_census_0_0.json; grep -oE '"[a-z_]+:(meta/)?(pillager_camp_ruins?|pillager_great_tower_siege|meteor_shower|pillager_camp|great_tower|meteorite)[a-z_]*"[^}]{0,200}' ../wge11_census_0_0.json | head -12
+> cwglocate census 128 4000 4000
+waitlog \[cwglocate\] census done 1800
+shell cp kubejs/exported/worldgen/locate_census.json ../wge11_census_4000.json; grep -oE '"[a-z_]+:(meta/)?(pillager_camp_ruins?|pillager_great_tower_siege|meteor_shower|pillager_camp|great_tower|meteorite)[a-z_]*"[^}]{0,200}' ../wge11_census_4000.json | head -12
+reject census done \(stopped\)
+look against the SQ-META31 census: camp ruin metas about 1.7x (share 0.25 [0.15]); great tower siege about 0.6x; meteor shower about 0.66x; plain camp, great tower and meteorite counts within 15 %
 ## SQ-WGE-12 (B2)
 @group B
 @commands Needs the Creative Worldgen jar of 2026-11-03 or later (`punch` accepted by `structure_overrides.js`; before, the definition was dropped). SQ-META31-04b: `/place structure creativeengineering:meta/meteorite_desert_pyramid` 3 times on desert ground, and 2 found with `/locate`; grep `[meta-structures] ... meteorite_desert_pyramid` (log on); LOOK at each from the ground and from the side
 @pass log line has `punch r <n> column <c> y <from>-<top>`; the meteorite centre within 4 blocks of the pyramid centre; the pyramid above ground stands (walls, towers, roof) except a round shaft over the meteorite; sky stone sphere under or through the floor; no crater, no fallout, no cleared sand around the pyramid; no `could not rebuild an AE2 meteorite piece` error
 @fails crater still there: crater type not rewritten (AE2 tag keys changed: read `MeteoriteStructurePiece` save keys); no shaft: `topOver` found no box (meteorite missed the pyramid)
-@draft no batch holds this row yet
+@owner true
+@draft the pass is a look at three placed meteorite pyramids from the ground and the side (shaft, sphere, no crater): owner or agent judgement in a client; the log half (`punch r` line, no rebuild error) goes in when the row is run
 ## SQ-WGE-13 (C6)
 @group B
 @commands `/cwglocate census 128 0 0` for `ae2:meteorite` and its start positions; for 20 free-standing ones `/zq` the sky stone height against the ground (`WORLD_SURFACE`); `/locate` 3 meteorite villages, 3 pillager camp meteorites, 1 underwater meteorite
 @pass about 40 % at the surface with a crater (AE2 as before), about 30 % underground (sky stone sphere in stone, no crater, no hole to the surface), about 30 % in the air 16 to 96 blocks over the ground (floating sphere, no crater, no earth fill under it); every meta meteorite on the surface as before; no `[meteorites] could not move` error
 @fails all at the surface: mixin not applied (`AeMeteoriteHeightMixin` in the Creative Worldgen mixin config); metas moved: `MeteoriteHeights.enterMeta` not around `generate`
-@draft no batch holds this row yet
+@draft needs the sky stone height of 20 meteorite starts against WORLD_SURFACE: `cdevtest under` lists starts (deferred verb) but no verb reads a start box against the surface height; write when a heights reader exists (tools/scratch_query/meteor_heights.py may cover it)
 ## SQ-WGE-14 (A6)
 @group B
 @commands `/locate structure creativeengineering:meta/waystone_ruins` 4 times (log on); tp to each; right-click the waystone
 @pass a small ruin with one waystone 4 to 12 blocks from its centre, standing on the ground (beard), not inside a wall; the waystone is registered (name screen); `/locate structure creativeengineering:waystone_ruin_part` alone finds only the ones inside metas (no structure set); ruin_scatter still found; plain stone waystone in every biome (Waystones' BIOME style only covers its lone waystones)
 @fails `no satellite fitted` for most: margin 1 too tight, raise distance; waystone not registered: template block entity, compare with a village waystone
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/waystone_ruins
+waitlog (The nearest creativeengineering:meta/waystone_ruins is at|Could not find|timed out after) 900
+capture WRA The nearest creativeengineering:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WRA1-16} {WRA3-16} {WRA1+16} {WRA3+16}
+sleep 10
+> cdevtest count {WRA1-16} -20 {WRA3-16} {WRA1+16} 200 {WRA3+16} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {WRA1-16} {WRA3-16} {WRA1+16} {WRA3+16}
+> execute in minecraft:overworld positioned 3000 70 0 run locate structure creativeengineering:meta/waystone_ruins
+waitlog (The nearest creativeengineering:meta/waystone_ruins is at|Could not find|timed out after) 900
+capture WRB The nearest creativeengineering:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WRB1-16} {WRB3-16} {WRB1+16} {WRB3+16}
+sleep 10
+> cdevtest count {WRB1-16} -20 {WRB3-16} {WRB1+16} 200 {WRB3+16} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {WRB1-16} {WRB3-16} {WRB1+16} {WRB3+16}
+> execute in minecraft:overworld positioned 0 70 3000 run locate structure creativeengineering:meta/waystone_ruins
+waitlog (The nearest creativeengineering:meta/waystone_ruins is at|Could not find|timed out after) 900
+capture WRC The nearest creativeengineering:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WRC1-16} {WRC3-16} {WRC1+16} {WRC3+16}
+sleep 10
+> cdevtest count {WRC1-16} -20 {WRC3-16} {WRC1+16} 200 {WRC3+16} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {WRC1-16} {WRC3-16} {WRC1+16} {WRC3+16}
+> execute in minecraft:overworld positioned -3000 70 -3000 run locate structure creativeengineering:meta/waystone_ruins
+waitlog (The nearest creativeengineering:meta/waystone_ruins is at|Could not find|timed out after) 900
+capture WRD The nearest creativeengineering:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {WRD1-16} {WRD3-16} {WRD1+16} {WRD3+16}
+sleep 10
+> cdevtest count {WRD1-16} -20 {WRD3-16} {WRD1+16} 200 {WRD3+16} #waystones:waystones
+waitlog \[cdevtest\] verb=count done= 120
+> forceload remove {WRD1-16} {WRD3-16} {WRD1+16} {WRD3+16}
+count \[cdevtest\] verb=count block=#waystones:waystones n=1 == 4
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/ruin_scatter
+waitlog (The nearest creativeengineering:meta/ruin_scatter is at|Could not find|timed out after) 900
+expect The nearest creativeengineering:meta/ruin_scatter is at
+reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look the `on` value of each count line (the waystone stands on ground blocks, not in a wall); 4 to 12 blocks from the ruin centre and the name screen need a client look
 ## SQ-WGE-15 (B3, B4)
 @group B
 @commands run SQ-PSM-02 and SQ-PSM-03 as written; for the tower siege also `kill @e[type=!player,distance=..128]` at the anchor first (the T&T tower places about 11 grunt pillagers and vindicators when it generates)
 @pass as in those rows: the lone birch tower resolves to box `large_towers`; each siege part prints the meta's box; evokers, illusioners or witches only on floors with block light 0
 @fails as in those rows
-@draft no batch holds this row yet
+@draft runs SQ-PSM-02 and SQ-PSM-03 (they hold the steps); queue those two rows with the tower-siege kill first instead of copying them here
 ## SQ-MOB-N5 | lone villagers: plains creature list has minecraft:villager 1 (1-1); villagers in the plains square
 @group B
 @commands `/dumpspawns`; explore new plains and meadow chunks by day
@@ -287,7 +598,41 @@ look End drop chances 0 for the three pieces; Overworld pillager ArmorItems all 
 @commands MB-97 and MB-99: `/locate biome terralith:skylands_spring`, `_summer`, `_autumn`, `_winter`; explore new chunks, count cows and mooblooms
 @pass spring: no plain cows, the 7 spring variants in roughly equal numbers; summer: sunbloom / moobloom / oxeyebloom about even; autumn: moobloom / sunbloom / rosebloom about even; winter: plain cows (new) with goats and sheep
 @fails plain cows in spring to autumn: rule order (exact biome rules win over tag rules); no winter cows: biome modifier not loaded
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:overworld positioned 0 70 0 run locate biome terralith:skylands_spring
+waitlog (The nearest terralith:skylands_spring is at|Could not find|timed out after) 600
+capture SKA The nearest terralith:skylands_spring is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SKA1-64} {SKA3-64} {SKA1+63} {SKA3+63}
+sleep 60
+> cdevtest entities {SKA1} 150 {SKA3} 96 type=minecraft:cow
+> cdevtest entities {SKA1} 150 {SKA3} 96
+> forceload remove {SKA1-64} {SKA3-64} {SKA1+63} {SKA3+63}
+> execute in minecraft:overworld positioned 0 70 0 run locate biome terralith:skylands_summer
+waitlog (The nearest terralith:skylands_summer is at|Could not find|timed out after) 600
+capture SKB The nearest terralith:skylands_summer is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SKB1-64} {SKB3-64} {SKB1+63} {SKB3+63}
+sleep 60
+> cdevtest entities {SKB1} 150 {SKB3} 96 type=minecraft:cow
+> cdevtest entities {SKB1} 150 {SKB3} 96
+> forceload remove {SKB1-64} {SKB3-64} {SKB1+63} {SKB3+63}
+> execute in minecraft:overworld positioned 0 70 0 run locate biome terralith:skylands_autumn
+waitlog (The nearest terralith:skylands_autumn is at|Could not find|timed out after) 600
+capture SKC The nearest terralith:skylands_autumn is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SKC1-64} {SKC3-64} {SKC1+63} {SKC3+63}
+sleep 60
+> cdevtest entities {SKC1} 150 {SKC3} 96 type=minecraft:cow
+> cdevtest entities {SKC1} 150 {SKC3} 96
+> forceload remove {SKC1-64} {SKC3-64} {SKC1+63} {SKC3+63}
+> execute in minecraft:overworld positioned 0 70 0 run locate biome terralith:skylands_winter
+waitlog (The nearest terralith:skylands_winter is at|Could not find|timed out after) 600
+capture SKD The nearest terralith:skylands_winter is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SKD1-64} {SKD3-64} {SKD1+63} {SKD3+63}
+sleep 60
+> cdevtest entities {SKD1} 150 {SKD3} 96 type=minecraft:cow
+> cdevtest entities {SKD1} 150 {SKD3} 96
+> forceload remove {SKD1-64} {SKD3-64} {SKD1+63} {SKD3+63}
+reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look the by_type lines per biome (spring, summer, autumn, winter in order): spring no plain cows and the 7 spring variants about equal; summer sunbloom / moobloom / oxeyebloom about even; autumn moobloom / sunbloom / rosebloom about even; winter plain cows with goats and sheep. (mooblooms by their entity ids in the untyped line)
 ## CQ-WGE-17 (N11)
 @group client
 @commands `structures/testing #1`: the client list structure_tuning.md 8.0.11; `structures/testing #3`: create a Superflat world in single player, then `/time` across a season change with Serene Seasons' clock item in hand

@@ -26,11 +26,13 @@ kjsreject (stepstools\.js|stepstool\.js|curiostags\.js).*(Error|error)
 @pass 16 `creativeengineering:shaped/*_stepstool` recipes (seat over `minecraft:oak_fence`); `#creativeengineering:stepstools` has 16, `#curios:feet` resolves to them; `/curios list` shows `feet`
 @fails dict keys `i.<colour>_seat`, `i.fence_oak`; `feet.json` path
 @from batches/r1106spf/b1.qb passed
-> zq recipes _stepstool
-> zq itemtag creativeengineering:stepstools
-> zq itemtag curios:feet
+@reviewed 2026-11-16
+> cdevtest recipes _stepstool max=100
+> cdevtest tag item creativeengineering:stepstools
+> cdevtest tag item curios:feet
 > curios list
-count creative(engineering|equipment):shaped/[a-z0-9_]*_stepstool[a-z_]* -> 1 [a-z_]*_stepstool == 16
-expect itemtag creativeengineering:stepstools \(16\)
-expect itemtag curios:feet .*stepstool
+count verb=recipes id=creative(engineering|equipment):shaped/[a-z0-9_]*_stepstool[a-z_]* result=\S*_stepstool\*1 == 16
+expect verb=tag kind=item tag=creativeengineering:stepstools n=16
+expect verb=tag kind=item tag=curios:feet .*stepstool
 expect (?i)feet
+reject \[cdevtest\] verb=\S+ done=0

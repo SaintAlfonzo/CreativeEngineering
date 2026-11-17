@@ -100,6 +100,7 @@ look audit header "dump yes", unclassified below 650, minecraft:netherite_scrap 
 @pass no portal (no `imm_ptl_core:nether_portal_new` entity, no `minecraft:nether_portal` blocks); frame turns to crying obsidian, soul fire in it; `PortalSpawnEvent fired` in the log for each, the full-size frames with `state=Block{minecraft:fire}` (not `nether_portal`: that is Smaller Nether Portals' late event); the small frame also turns to crying obsidian, its portal blocks gone
 @fails `IPFireGateMixin` not applied (boot check), or IP's redirect took another path: grep `onFireLitOnObsidian` callers again
 @from batches/r1113/fix_c3a1.qb
+@reviewed 2026-11-16
 > fill 1200 -60 1000 1203 -56 1000 minecraft:obsidian
 > fill 1201 -59 1000 1202 -57 1000 minecraft:air
 > fill 1210 -60 1000 1213 -56 1000 minecraft:obsidian
@@ -122,21 +123,35 @@ sleep 3
 > summon minecraft:lightning_bolt 1221 -59 1000
 sleep 3
 > gamerule doFireTick false
-> zp sneak qa on
+> pbot sneak qa on
 > pbot hold qa minecraft:flint_and_steel 1
 > pbot use qa 1231 -60 1000 up
-> zp sneak qa off
+> pbot sneak qa off
 sleep 2
 > pbot hold qa minecraft:flint_and_steel 1
 > pbot use qa 1241 -60 1000 up
 sleep 2
-> zc3 bstate 1201 -60 1000 1200 -58 1000 1211 -60 1000 1210 -58 1000 1221 -60 1000 1220 -58 1000 1231 -60 1000 1230 -58 1000 1241 -60 1000 1240 -58 1000
-> zc3 bstate 1201 -59 1000 1211 -59 1000 1221 -59 1000 1231 -59 1000 1241 -59 1000 1241 -58 1000
+> cdevtest state 1201 -60 1000
+> cdevtest state 1200 -58 1000
+> cdevtest state 1211 -60 1000
+> cdevtest state 1210 -58 1000
+> cdevtest state 1221 -60 1000
+> cdevtest state 1220 -58 1000
+> cdevtest state 1231 -60 1000
+> cdevtest state 1230 -58 1000
+> cdevtest state 1241 -60 1000
+> cdevtest state 1240 -58 1000
+> cdevtest state 1201 -59 1000
+> cdevtest state 1211 -59 1000
+> cdevtest state 1221 -59 1000
+> cdevtest state 1231 -59 1000
+> cdevtest state 1241 -59 1000
+> cdevtest state 1241 -58 1000
 > execute if entity @e[type=imm_ptl_core:nether_portal_new]
 reject Test passed
-reject bstate .*minecraft:nether_portal
+reject \[cdevtest\] verb=state .*state="?minecraft:nether_portal\b
 count PortalSpawnEvent fired, state=Block\{minecraft:fire\} >= 3
-count bstate 12[0-4][01] -(60|58) 1000 Block\{minecraft:crying_obsidian\} >= 8
+count \[cdevtest\] verb=state pos=12[0-4][01],-(60|58),1000 state=minecraft:crying_obsidian >= 8
 look all ten edge-middle reads crying obsidian (corners stay obsidian: the converter takes only frame blocks beside the interior); soul fire inside each; small frame 1240 too (row: its portal blocks gone)
 
 ## SQ-IP-02 | Dark Fire: IP portal entity pair in a valid frame (Overworld and Nether), frame stays obsidian, L frame does not light
@@ -145,6 +160,7 @@ look all ten edge-middle reads crying obsidian (corners stay obsidian: the conve
 @pass an IP Nether portal entity pair, no vanilla portal blocks; frame stays obsidian; the Nether side gets a generated frame with no crying obsidian; the L shape does not light; `qa` arrives in the Nether without a load screen (client: CQ-IP-01)
 @fails `IPNetherPortalBridge.light` returned false (IP mode not `normal`, or no frame found: falls back to vanilla blocks, which is the old behaviour)
 @from batches/r1113/c3_a1.qb
+@reviewed 2026-11-16
 > fill 1200 -60 1020 1203 -56 1020 minecraft:obsidian
 > fill 1201 -59 1020 1202 -57 1020 minecraft:air
 > fill 1210 -60 1020 1213 -60 1020 minecraft:obsidian
@@ -158,9 +174,10 @@ sleep 2
 > execute if entity @e[type=imm_ptl_core:nether_portal_new,x=1201,y=-58,z=1020,distance=..4]
 > execute if entity @e[type=imm_ptl_core:nether_portal_new,x=1211,y=-58,z=1020,distance=..3]
 > execute in minecraft:the_nether if entity @e[type=imm_ptl_core:nether_portal_new]
-> zc3 bstate 1200 -60 1020 1201 -59 1020
-expect bstate 1200 -60 1020 Block\{minecraft:obsidian\}
-reject bstate 1201 -59 1020 Block\{minecraft:nether_portal\}
+> cdevtest state 1200 -60 1020
+> cdevtest state 1201 -59 1020
+expect \[cdevtest\] verb=state pos=1200,-60,1020 state=minecraft:obsidian 
+reject \[cdevtest\] verb=state pos=1201,-59,1020 state="?minecraft:nether_portal\b
 > execute in minecraft:the_nether run forceload add 0 0 32 32
 sleep 20
 > execute in minecraft:the_nether run fill -2 99 -3 6 99 3 minecraft:obsidian
@@ -174,7 +191,7 @@ sleep 3
 sleep 5
 > execute in minecraft:the_nether if entity @e[type=imm_ptl_core:nether_portal_new,x=1,y=102,z=0,distance=..4]
 > pbot remove qn
-look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); second (L frame): Test failed; Nether side exists (Test passed); the Nether-lit frame: Test passed. Frame stays obsidian. Walking through is client row CQ-IP-01. If the Nether frame in a generated Nether lands in lava or rock the fill clears it; a fail there with the Overworld half passing points at the Nether build, look at the bstate first
+look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); second (L frame): Test failed; Nether side exists (Test passed); the Nether-lit frame: Test passed. Frame stays obsidian. Walking through is client row CQ-IP-01. If the Nether frame in a generated Nether lands in lava or rock the fill clears it; a fail there with the Overworld half passing points at the Nether build, look at the state lines first
 
 ## SQ-IP-03 | flint and steel on a 3x3 wall of each mirror-glass block and pane: a breakable mirror on each; breaking a block removes it
 @group A
@@ -182,6 +199,7 @@ look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); 
 @pass an `imm_ptl_core:breakable_mirror` entity on each wall; breaking one block of a wall removes its mirror
 @fails `/kubejs` tag dump: the tag is empty (blocktags.js not in the jar) or the mixin missed (boot check)
 @from batches/r1113/c3_a1.qb
+@reviewed 2026-11-16
 > clear qm
 > pbot hold qm minecraft:flint_and_steel 1
 > fill 1200 -60 1075 1202 -58 1075 alexsmobs:rainbow_glass
@@ -201,9 +219,9 @@ look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); 
 > fill 1235 -60 1075 1237 -58 1075 design_decor:vertical_tinted_framed_glass
 > pbot use qm 1236 -59 1075 north
 > fill 1240 -60 1075 1242 -58 1075 immersive_weathering:frosty_glass
-> zp sneak qm on
+> pbot sneak qm on
 > pbot use qm 1241 -59 1075 north
-> zp sneak qm off
+> pbot sneak qm off
 > fill 1245 -60 1075 1247 -58 1075 minecraft:tinted_glass
 > pbot use qm 1246 -59 1075 north
 > fill 1250 -60 1075 1252 -58 1075 quark:black_framed_glass
@@ -253,9 +271,9 @@ look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); 
 > fill 1360 -60 1075 1362 -58 1075 createframed:vertical_tinted_framed_glass_pane
 > pbot use qm 1361 -59 1075 north
 > fill 1365 -60 1075 1367 -58 1075 immersive_weathering:frosty_glass_pane
-> zp sneak qm on
+> pbot sneak qm on
 > pbot use qm 1366 -59 1075 north
-> zp sneak qm off
+> pbot sneak qm off
 > fill 1370 -60 1075 1372 -58 1075 quark:black_framed_glass_pane
 > pbot use qm 1371 -59 1075 north
 > fill 1375 -60 1075 1377 -58 1075 quark:blue_framed_glass_pane

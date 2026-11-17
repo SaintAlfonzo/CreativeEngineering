@@ -55,4 +55,6 @@ look sheep: mutton, no wool; golems: iron ingots; stone count below 25
 @commands a straight 200-block road of each of ice, packed ice, blue ice; row a boat along each and note top speed (F3 or timing 100 blocks); walk and sprint on each; then `[boat_friction] enabled = false` (restart) and repeat once on blue ice
 @pass with the config on: ice slowest, packed ice faster, blue ice fastest, blue ice clearly below its off-config speed; walking and sprinting feel the same with the config on and off; dropped items slide as before
 @fails `BoatIceFrictionMixin` (`Boat#getGroundFriction`) not applied on the client (the rider's client moves the boat; both sides need the config)
-@draft needs a client and a rider
+@owner true
+@draft rowing a boat 200 blocks per ice kind and judging that walking and sprinting feel the same, plus a restart with the key off: owner playtest (the server half is SQ-MT-01)
+@reviewed 2026-11-16
