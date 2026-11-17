@@ -130,7 +130,7 @@ scratchpad only). The live `config/` file is left for the first boot to split (S
 - `tools/build_deploy.py`: both jars in `IN_TREE_MODS`; the climate reader check reads Common's `WorldgenFiles`; the
   `[worldgen.debug]` release check now reads `creativeworldgen-common.toml` (it still read the CE file, stale since wave 5).
 
-## 4.1 Carve of 2026-11-06
+### 4.1 Carve of 2026-11-06
 
 Non-engineering content moved to Magic, Compat, Equipment, Brewing, Delight and Worldgen; Engineering keeps machines,
 metals, components, coils, wood processing, prepared flesh, hemp fabric, and now ships its own block and item assets.
@@ -371,6 +371,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-14: [melting]: new 2026-11-14 (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/CommonConfig.java)
 - 2026-11-14: Something still references those objects, so a GC alone frees nothing (tested 2026-11-14) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/StaleJarHandles.java)
 - 2026-11-15: no MOD_RANGE row: the jar's mods.toml version is ${file.jarVersion} with no Implementation-Version, and the redirect is require = 0, so any loaded Rare Ice keeps it (2026-11-15, SQ-MELT-09) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/perf/CommonMixinPlugin.java)
+- 2026-11-17: "4.1 Carve of 2026-11-06" made a subsection of 4 (plan_rules_fixes.md V-53).
 
 
 ## 7. License audit: Creative Common (2026-11-04, plan_cb_publish.md Step 2)

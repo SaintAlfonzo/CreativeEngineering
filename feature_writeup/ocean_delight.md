@@ -85,7 +85,7 @@ drop modifiers wins), or drop Ocean's Delight (smallest, most overlapped).
 
 ## 2. Integration checklist (ocean rows of `mod-additions #5` / `#9`)
 
-## 3. Integration work common to all five (checklist for `mod-additions #4`)
+### 2.1 Integration work common to all five (checklist for `mod-additions #4`)
 
 | `mod_sides.md` rows | One row per jar: all five are `both`, none has a library dependency beyond Farmer's Delight (Oceanic: check AppleSkin / JEED / JEI entries) |
 | Tag unification | Squid tentacles, shulker meat, sea pickles, shrimp, chorus pie slices; add through `global.tags` |
@@ -259,6 +259,22 @@ their name. Caviar in the sea pickle roll was deferred by the user to the caviar
 CD `oceansdelight/recipes.js`: a second pot recipe, 2 Sea Pickle Slices + 2 brown mushrooms + bowl (Ocean's own
 one-pickle recipe stays). Only with Oceanic Delight on (the slices are its item).
 
+### 5.5 Tentacles removed, seagrass salad (2026-10-29, TODO `dishes/ocean #4`, `creativedelight/members #24`)
+
+- The ten tentacle items of Miner's (`tentacles`, `baked_tentacles`, `tentacles_on_a_stick`), Ocean's (`tentacles`, `cut_tentacles`,
+  `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`) and Oceanic (`squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`)
+  are in `removed_items.js` (hidden, tags stripped). Their recipes are removed by output and input (CD `oceansdelight/recipes.js`,
+  `miners_delight/recipes.js`). Hostile Delight's ghast tentacle and Alex's Mobs' lost tentacle are not touched.
+- Dishes: Squid Rings takes raw calamari in place of cut tentacles; Glow Squid Stew raw calamari (the tag holds glowing and every slice); Sea Pickle Roll, Shrimp Rice,
+  Squid Salad and Takoyaki raw calamari (were `#forge:squid_tentacles`); Seafood Skewer and Squid and Pickles cooked calamari (the grilled tentacle slot).
+- Fix 2026-10-31 (SQ-CM-32 FAILED in scratch r1031): the removal by input ran before the swaps and took Squid Rings,
+  Glow Squid Stew, Seafood Skewer and Squid and Pickles; it now runs after them. The tentacle tags are empty once the items
+  are stripped, so a `replaceInput` on them cannot match (NCH error at boot); instead raw calamari is added to
+  `#forge:squid_tentacles` (Oceanic's four dishes) and `#forge:foods/tentacles` (Miner's Takoyaki, two slots) in CD
+  `oceansdelight/tags.js`. Rebuilt and installed 2026-10-31 12:32; recheck SQ-CM-32 and SQ-CM-35.
+- Seagrass Salad: 2 seagrass + bowl.
+- Not done: generated files still list the removed items (`food_types.json`, the can and compost outputs); the generators drop them on the next `/dumpall` and `/cdevgen` run.
+
 ### 5.6 Oceanic Delight on the donor route (2026-11-01, TODO `creativedelight/framework #3`, `members #6`)
 
 Owner 2026-11-01 (creative_delight.md 33.1): Oceanic Delight becomes a donor jar, Miner's route. The repack
@@ -320,22 +336,6 @@ Tests: SQ-DNR-O-01 to -05 (scratch queue). Old-world check: a 1.1.03+ world with
 | DA-10 | A stack of nets, an ocean | Search about 200 times | A few nautilus shells; a heart of the sea is rare; junk about 1 in 20; never a lily pad, water bottle, rod or ink sacs |
 | DA-11 | `latest.log` after start and `/reload` | grep `fishing_net`, `biome_tag`, `oceanic_upstream` | No loot table parse error; both upstream packs listed (the mixin is gone since 5.6) |
 
-
-### 5.5 Tentacles removed, seagrass salad (2026-10-29, TODO `dishes/ocean #4`, `creativedelight/members #24`)
-
-- The ten tentacle items of Miner's (`tentacles`, `baked_tentacles`, `tentacles_on_a_stick`), Ocean's (`tentacles`, `cut_tentacles`,
-  `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`) and Oceanic (`squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`)
-  are in `removed_items.js` (hidden, tags stripped). Their recipes are removed by output and input (CD `oceansdelight/recipes.js`,
-  `miners_delight/recipes.js`). Hostile Delight's ghast tentacle and Alex's Mobs' lost tentacle are not touched.
-- Dishes: Squid Rings takes raw calamari in place of cut tentacles; Glow Squid Stew raw calamari (the tag holds glowing and every slice); Sea Pickle Roll, Shrimp Rice,
-  Squid Salad and Takoyaki raw calamari (were `#forge:squid_tentacles`); Seafood Skewer and Squid and Pickles cooked calamari (the grilled tentacle slot).
-- Fix 2026-10-31 (SQ-CM-32 FAILED in scratch r1031): the removal by input ran before the swaps and took Squid Rings,
-  Glow Squid Stew, Seafood Skewer and Squid and Pickles; it now runs after them. The tentacle tags are empty once the items
-  are stripped, so a `replaceInput` on them cannot match (NCH error at boot); instead raw calamari is added to
-  `#forge:squid_tentacles` (Oceanic's four dishes) and `#forge:foods/tentacles` (Miner's Takoyaki, two slots) in CD
-  `oceansdelight/tags.js`. Rebuilt and installed 2026-10-31 12:32; recheck SQ-CM-32 and SQ-CM-35.
-- Seagrass Salad: 2 seagrass + bowl.
-- Not done: generated files still list the removed items (`food_types.json`, the can and compost outputs); the generators drop them on the next `/dumpall` and `/cdevgen` run.
 
 ## 7. Built 2026-11-02 (food and cooking batch, [plan_food_cooking_batch.md](plan_food_cooking_batch.md))
 
@@ -406,3 +406,4 @@ Owner notes for both mods, together with the Hostile Delight notes ([hostile_del
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
 - 2026-11-02: Comfort / Nourishment are not applied here: the pack's Comfort / Nourishment rule sets them on the bowls' food properties (tools/gen_comfort_nourishment.py, comfort_nourishment.md 10; dishes/ocean #8, 2026-11-02) (development/creativeDelight/members/oceanic/src/main/java/com/SaintAlfonzo/creativedelight/oceanic/registry/OceanicItems.java)
+- 2026-11-17: the second section 3 ("Integration work common to all five") is now 2.1; 5.5 moved before 5.6 (numbers unchanged; plan_rules_fixes.md V-53).

@@ -67,6 +67,7 @@ Contact sheets (regenerable): unzip the jar's `assets/rusticdelight/textures` an
 
 - `block/tray_top`: no model references it (the pancake blocks use their own `*_tray_top`). Free to borrow.
 
-## 8. History
+## 3. History
 
 - 2026-10-22: written; Rustic Delight 1.3.0 surveyed.
+- 2026-11-17: History renumbered 3 (was 8; plan_rules_fixes.md V-53).

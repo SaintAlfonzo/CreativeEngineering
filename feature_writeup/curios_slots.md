@@ -66,7 +66,7 @@ current line to all items (wording is Curios'). The stepstools' own "Worn in the
 Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terraria-like accessories for these slots
 (defense, abilities, effects). Which accessories and their design are open; nothing built.
 
-## 2. Tests
+## 7. Tests
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): rerun pending (batch fault) SQ-CSI-01.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-CSI-01.
@@ -83,3 +83,7 @@ Owner idea (scratchpad 2026-10-29, TODO `largecontent/mod-additions #32`): Terra
 - CS-09 Hover the Cob Pipe: the slot line reads Face, Head (no Mouth). Right click it with an empty Face slot: it goes in Face.
 - CS-10 Wear a Simple Hats mask (hockey mask) in Face: drawn on the head in third person; toggle the slot's render
   button off: hidden. A Botania cosmetic mask and the Cob Pipe in Face are drawn too.
+
+## 8. History
+
+- 2026-11-17: Tests renumbered 7 (was 2) to match the writeup layout; History added (plan_rules_fixes.md V-53).
