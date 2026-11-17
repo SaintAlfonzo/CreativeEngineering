@@ -37,6 +37,8 @@ Commands:
     qrows.py migrate [--dry] [--only CODE,...]   move queue sections into rows/*.qb (newest first is irrelevant: one pass)
     qrows.py check                               every .qb parses; rendering each section equals its queue block
     qrows.py stats                               rows, drafts, steps, owner rows per file
+    qrows.py jars [--dry]                        reset each section's @@jars from features.csv (jars of the file's code
+                                                 and of every row code in the section); row-level @jars stay
 """
 import collections
 import json
@@ -50,7 +52,7 @@ QUEUE = ROOT / 'feature_writeup/testing/scratch_queue.md'
 ROWS = Path(os.environ.get('QROWS_DIR', ROOT / 'feature_writeup/testing/rows'))
 BATCHES = ROOT / 'tools/scratch_query/batches'
 RUNS = ROOT / 'perf/runs'
-FEATURES = ROOT / 'feature_writeup/status/features.tsv'
+FEATURES = ROOT / 'feature_writeup/status/features.csv'
 
 STD_HEAD = '| ID | Group | Commands | Pass | If it fails |'
 STD_SEP = '|---|---|---|---|---|'
@@ -272,16 +274,15 @@ def section_code(head, body):
 
 
 def feature_jars():
-    """queue code (no SQ-/CQ-) -> set of jars, from features.tsv."""
+    """queue code (no SQ-/CQ-) -> set of jars, from features.csv."""
     out = collections.defaultdict(set)
     if not FEATURES.exists():
         return out
-    rows = [l.split('\t') for l in FEATURES.read_text().splitlines()[1:] if l.strip()]
-    for r in rows:
-        if len(r) < 6:
-            continue
-        jars = [j.strip() for j in r[4].split(',') if j.strip()]
-        for c in r[5].split(','):
+    sys.path.insert(0, str(ROOT / 'tools'))
+    import table_io
+    for r in table_io.read_dicts(FEATURES):
+        jars = [j.strip() for j in r.get('jars', '').split(',') if j.strip()]
+        for c in r.get('queue codes', '').split(','):
             c = c.strip()
             if c:
                 out[c.split('-', 1)[1]].update(jars)
@@ -346,6 +347,46 @@ def pick_steps(rid, idx, passed):
 
 
 OWNER_RE = re.compile(r'\bowner (judges|decides|looks?|feel|playtest)|\bfeel(s)? right\b|\blooks? right\b', re.I)
+
+
+def reset_jars(argv):
+    """P3.3 item 4: the section jars follow the repaired features.csv."""
+    dry = '--dry' in argv
+    jars_of = feature_jars()
+    files = changed = 0
+    for path in all_files():
+        lines = path.read_text().split('\n')
+        starts = [i for i, l in enumerate(lines) if l.startswith('@@section ')] + [len(lines)]
+        new = list(lines)
+        inserts = []
+        touched = False
+        for a, b in zip(starts, starts[1:]):
+            codes = {path.stem}
+            for l in lines[a:b]:
+                m = re.match(r'## (?:SQ|CQ)-([A-Z0-9]+)-', l)
+                if m:
+                    codes.add(m.group(1))
+            jars = ' '.join(sorted(set().union(*(jars_of.get(c, set()) for c in codes)) - {'kubejs', 'datapack', 'tools'}))
+            at = next((i for i in range(a, b) if lines[i].startswith('@@jars')), None)
+            old = lines[at][7:].strip() if at is not None else ''
+            if old == jars:
+                continue
+            if at is not None:
+                new[at] = '@@jars ' + jars if jars else None
+            elif jars:
+                after = max(i for i in range(a, b) if lines[i].startswith(('@@section', '@@title', '@@date')))
+                inserts.append((after + 1, '@@jars ' + jars))
+            changed += 1
+            touched = True
+            print('%s section %s: %s -> %s' % (path.name, lines[a][10:], old or '(none)', jars or '(none)'))
+        if touched:
+            files += 1
+            for i, l in sorted(inserts, reverse=True):
+                new.insert(i, l)
+            if not dry:
+                path.write_text('\n'.join(l for l in new if l is not None))
+    print('%d section(s) in %d file(s) %s' % (changed, files, 'would change' if dry else 'changed'))
+    return 0
 
 
 def migrate(argv):
@@ -472,6 +513,8 @@ def main(argv):
     if not argv:
         print(__doc__)
         return 2
+    if argv[0] == 'jars':
+        return reset_jars(argv[1:])
     if argv[0] == 'migrate':
         return migrate(argv[1:])
     if argv[0] == 'check':

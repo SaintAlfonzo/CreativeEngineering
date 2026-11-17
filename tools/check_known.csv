@@ -1,0 +1,4 @@
+# Accepted failures for tools/check_all.py (plan_process_overhaul.md P1.1).
+# Columns: check, regex matched against the check output, reason, date added (yyyy-mm-dd). Entries older than 30 days warn.
+check,regex,reason,date
+test_crop_growth,UNKNOWN: hearthandharvest:hops_vine,Hops vine has no crop growth rule; tracked as largecontent/mod-additions #64 (WTHIT growth line),2026-11-16

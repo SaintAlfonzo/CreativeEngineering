@@ -13,7 +13,7 @@ so headless test JVMs run from the root do not count), a dialog (zenity, else ya
 No display or no dialog tool, or no answer in 15 minutes: behaves as Skip and prints the reason.
 
 Install = move every other mods/ jar matching <name>-*.jar or a --replaces glob to --displaced, copy the jar in.
-Ledger: jar_archive/installed.tsv (time, jar, stamp, displaced, displaced stamp, mode, note).
+Ledger: jar_archive/installed.csv (time, jar, stamp, displaced, displaced stamp, mode, note).
 
 Usage: install_jar.py --jar BUILT --name JAR_NAME --displaced DIR [--replaces GLOB,...] [--skip-checks]
        [--no-dialog] [--game-pid PID]   (test hooks: no-dialog = treat a running game as Skip; game-pid = pretend)
@@ -30,13 +30,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 import jarstamp  # noqa: E402
+import table_io  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 MODS = ROOT / 'mods'
 ARCHIVE = ROOT / 'jar_archive'
-LEDGER = ARCHIVE / 'installed.tsv'
+LEDGER = ARCHIVE / 'installed.csv'
 HOLD = ARCHIVE / 'pending_install'
-LEDGER_HEAD = 'time\tjar\tstamp\tdisplaced\tdisplaced_stamp\tmode\tnote\n'
+LEDGER_HEAD = ['time', 'jar', 'stamp', 'displaced', 'displaced_stamp', 'mode', 'note']
 DIALOG_TIMEOUT = 900
 
 
@@ -71,12 +72,8 @@ def game_pid(fake=None):
 
 def ledger(jar, stamp, displaced, displaced_stamp, mode, note=''):
     ARCHIVE.mkdir(exist_ok=True)
-    new = not LEDGER.exists()
-    with LEDGER.open('a') as f:
-        if new:
-            f.write(LEDGER_HEAD)
-        f.write('\t'.join([time.strftime('%Y-%m-%dT%H:%M:%S'), jar, stamp or 'unstamped', displaced or '-',
-                           displaced_stamp or '-', mode, note.replace('\t', ' ')]) + '\n')
+    table_io.append(LEDGER, LEDGER_HEAD, [time.strftime('%Y-%m-%dT%H:%M:%S'), jar, stamp or 'unstamped',
+                                          displaced or '-', displaced_stamp or '-', mode, note])
 
 
 def install(src, name, replaces, displaced_dir, mode, note=''):

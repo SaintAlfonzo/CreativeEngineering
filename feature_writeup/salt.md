@@ -174,7 +174,7 @@ Status: BUILT 2026-11-15, not installed: Creative Common 1.2.0 (`Melting` listen
 ### 7.2 Notes
 
 - Salt Melt texture: the item model is `salt:item/salt` from the same jar (upstream human art, used as is; no file
-  copied, so no `sources.tsv` row). If the owner meant `block/salt_cluster`, change the model's `layer0`.
+  copied, so no `sources.csv` row). If the owner meant `block/salt_cluster`, change the model's `layer0`.
 - Creative Delight compiles against the upstream Salt jar, so `SaltLayerMelt` reads `SaltLayerVanishChance` by
   reflection; a Creative Delight jar without the `-04` Salt member reads chance 0 (no layer vanishes).
 - Salt member `-04`: `replaced_resources` now lists `assets/salt/lang/en_us.json` (upstream copy plus `item.salt.salt_melt`).

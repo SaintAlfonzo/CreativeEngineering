@@ -407,7 +407,7 @@ rewritten. Not run yet.
 
 | # | Point | Suggested answer |
 |---|---|---|
-| E1 | **(answered 2026-11-13: as suggested)** Where the port runs during evaluation | scratch servers and clients only (pack mods plus the PG jar); the pack's `mods/` gets the jar only with the stage 5 mode switch |
+| E1 | **(answered 2026-11-13: as suggested)** Where the port runs during evaluation | scratch servers and clients only (pack mods plus the PG jar); the pack's `mods/` gets the jar only with the stage 5 mode switch. **Superseded 2026-11-16** by plan_process_overhaul.md D11: the current build is in `mods/` (P3.1) |
 | E2 | **(answered 2026-11-13: as suggested)** Ponder: one phase (P5) for core content then per phase, or all scenes at the end | as planned (D12 puts ponder right after the core) |
 | E3 | **(answered 2026-11-13: as suggested)** Flywheel 0.6 instances for heavy blocks (generators, motors) | not planned; only if CQ-PWG rows show an FPS problem from renderers |
 | E4 | **(answered 2026-11-13: as suggested)** Config key typo `splittingsTransformers` (B3) | keep the key, comment it |

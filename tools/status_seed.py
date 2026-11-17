@@ -2,7 +2,7 @@
 """One-time seed of status as data (plan_process_overhaul.md P1.4 item 1, 2026-11-16).
 
 From the hand-written README index table:
-  - feature_writeup/status/features.tsv, one row per index row (status word, jars, queue codes, todo ids mapped by the
+  - feature_writeup/status/features.csv (written as TSV until P3.3), one row per index row (status word, jars, queue codes, todo ids mapped by the
     rules below; the seed report lists every row that needed a fallback);
   - feature_writeup/status/readme_index_2026-11-16.md, the original table verbatim;
   - owner ruling D6: each row's feature and status cells go verbatim into its writeup's section 0 ("At a glance") as a
@@ -10,7 +10,7 @@ From the hand-written README index table:
     the verbatim copy);
   - generated-block markers in README (index table), TODO (status snapshot counts) and the scratch queue (coverage, in
     place of the "added at the end" banners); the replaced prose goes once to feature_writeup/status/history.md.
-Refuses to run when features.tsv exists. Usage: python3 tools/status_seed.py [--dry]
+Refuses to run when features.csv exists. Usage: python3 tools/status_seed.py [--dry]
 """
 import os
 import re
@@ -24,7 +24,7 @@ README = FW / 'README.md'
 TODO = FW / 'todo' / 'TODO.md'
 QUEUE = FW / 'testing' / 'scratch_queue.md'
 STATUS = FW / 'status'
-TSV = STATUS / 'features.tsv'
+TSV = STATUS / 'features.csv'
 DATE = '2026-11-16'
 sys.path.insert(0, str(ROOT / 'tools'))
 import status_index as si  # noqa: E402
@@ -141,7 +141,7 @@ def insert_section0(path, paras):
 
 def main(dry):
     if TSV.exists() and not dry:
-        print('features.tsv exists; the seed runs once')
+        print('features.csv exists; the seed runs once')
         return 1
     rl = README.read_text().split('\n')
     start = next(i for i, l in enumerate(rl) if l.startswith('| Feature | File | Test prefix |'))
@@ -257,11 +257,9 @@ def main(dry):
     if dry:
         return 0
     STATUS.mkdir(parents=True, exist_ok=True)
-    out = ['\t'.join(si.TSV_COLS)]
-    for f in feats:
-        out.append('\t'.join([f['key'], f['file'], f['prefix'], f['status'], f['jars'], ', '.join(sorted(f['codes'])),
-                              f['todo'], f['note']]))
-    TSV.write_text('\n'.join(out) + '\n')
+    import table_io
+    table_io.write(TSV, si.TSV_COLS, [[f['key'], f['file'], f['prefix'], f['status'], f['jars'],
+                                       ', '.join(sorted(f['codes'])), f['todo'], f['note']] for f in feats])
     (STATUS / ('readme_index_%s.md' % DATE)).write_text(
         '# README index as hand-written until %s\n\nThe feature index table of [../README.md](../README.md) verbatim, '
         'before `tools/status_seed.py` replaced it with the generated view (plan_process_overhaul.md P1.4). Links '

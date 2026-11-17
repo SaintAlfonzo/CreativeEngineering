@@ -235,6 +235,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Portable Mobs | `portablemobs` | `portablemobs-1.2.1-forge-mc1.19.jar` |  |
 | both | PortableWardrobe | `portablewardrobe` | `portablewardrobearmorswap-1.0.2-forge-1.19.2.jar` |  |
 | both | Potion Bundles | `potionbundles` | `potionbundles-1.19.1-1.6.jar` |  |
+| both | Power Grid | `powergrid` | `backportedPowerGrid-0.6.2-ce-19.2-19.jar` | This pack's backport of Power Grid 0.6.2 (development/backportedPowerGrid; plan_power_grid.md); blocks, block entities, network and menus on both sides. In `mods/` since 2026-11-16 (process overhaul P3.1, owner ruling D11; supersedes plan_power_grid.md E1) |
 | both | Pretty Pipes | `prettypipes` | `PrettyPipes-1.13.6.jar` | Required by: Pretty Pipes: Fluids |
 | both | Pretty Pipes: Fluids | `ppfluids` | `ppfluids-1.19.2-2.0.1.jar` |  |
 | both | ProjectRed Core | `projectred_core` | `ProjectRed-1.19.2-4.19.0-beta+33-core.jar` | Required by: ProjectRed Fabrication, ProjectRed Illumination, ProjectRed Integration, ProjectRed Transmission |

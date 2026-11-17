@@ -6,17 +6,22 @@ outer jar and each nested member.
 Usage:
   python3 tools/jarstamp.py [FOLDER ...]        stamps of every own jar in the folders (default mods/), members indented
   python3 tools/jarstamp.py diff A B            compare two folders (mods/, a scratch srv/mods, a staged payload ...)
-  python3 tools/jarstamp.py pending             built jars (development/*/build/libs) whose stamp is not in mods/
+  python3 tools/jarstamp.py pending             built jars (development/*/build/libs) whose stamp is not in mods/;
+                                                unstamped builds are compared by sha1 (`unstamped, differs`)
+  python3 tools/jarstamp.py prune [--dry-run]   move every jar in build/libs that is not the current mod_version's
+                                                output to jar_archive/displaced/pruned/<project>/
   python3 tools/jarstamp.py JAR                 one jar's stamp
 
 Jars built before stamping show `unstamped`. diff exits 1 when anything differs; pending exits 1 when anything is
 pending. Library use: stamp_of(path), folder_stamps(folder), shipped_builds().
 """
+import hashlib
 import io
 import json
 import re
 import sys
 import zipfile
+import shutil
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -52,6 +57,26 @@ def stamp_info(path_or_bytes):
             return own, members
     except (zipfile.BadZipFile, OSError):
         return None, []
+
+
+STAMP_FILES = {'META-INF/ce-build.json', 'META-INF/MANIFEST.MF'}
+
+
+def content_digest(path_or_bytes, depth=0):
+    """sha1 over the jar's entries (name and CRC), leaving out the stamp files and reading nested jars the same way:
+    two builds of the same sources match although their stamps differ. Used where no stamp was recorded (deploys
+    before 2026-11-16)."""
+    src = io.BytesIO(path_or_bytes) if isinstance(path_or_bytes, bytes) else path_or_bytes
+    h = hashlib.sha1()
+    with zipfile.ZipFile(src) as z:
+        for i in sorted(z.infolist(), key=lambda i: i.filename):
+            if i.filename in STAMP_FILES or i.is_dir():
+                continue
+            if i.filename.endswith('.jar') and depth < 2:
+                h.update((i.filename + ' ' + content_digest(z.read(i), depth + 1)).encode())
+            else:
+                h.update(('%s %08x' % (i.filename, i.CRC)).encode())
+    return h.hexdigest()
 
 
 def stamp_of(path):
@@ -135,15 +160,26 @@ def cmd_diff(a, b):
     return 1 if diffs else 0
 
 
+def _sha1(path):
+    h = hashlib.sha1()
+    with open(path, 'rb') as f:
+        for chunk in iter(lambda: f.read(1 << 20), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+
 def pending():
-    """[(project, built jar, built stamp, installed jar name or None, installed stamp)] not installed."""
+    """[(project, built jar, built stamp or 'unstamped, differs', installed jar name or None, installed stamp)] not
+    installed. A stamped build is compared by stamp; an unstamped one by sha1 against the mods/ jar."""
     out = []
     for proj, mod_id, jar_name, jar in shipped_builds():
         built = stamp_of(jar)
-        if built is None:
-            continue
         inst = installed_by_name(jar_name)
         inst_stamp = stamp_of(inst) if inst else None
+        if built is None:
+            if inst is None or _sha1(inst) != _sha1(jar):
+                out.append((proj, jar, 'unstamped, differs', inst.name if inst else None, inst_stamp))
+            continue
         if inst_stamp != built:
             out.append((proj, jar, built, inst.name if inst else None, inst_stamp))
     return out
@@ -158,6 +194,41 @@ def cmd_pending():
     return 1 if rows else 0
 
 
+def stale_outputs():
+    """[(project folder, stale jar Path)]: jars in a build/libs (own projects and bundle members) that are not the
+    output of the current mod_version (`<jar_name>-<mod_version>.jar` and its `-own` / `-overlay` siblings). A folder
+    whose current output is missing is left alone."""
+    out = []
+    for gp in sorted(list(DEV.glob('*/gradle.properties')) + list(DEV.glob('*/members/*/gradle.properties'))):
+        p = _props(gp)
+        if 'mod_id' not in p or 'mod_version' not in p:
+            continue
+        libs = gp.parent / 'build' / 'libs'
+        current = '%s-%s' % (p.get('jar_name', p['mod_id']), p['mod_version'])
+        keep = {current + s + '.jar' for s in ('', '-own', '-overlay')}
+        jars = sorted(libs.glob('*.jar')) if libs.is_dir() else []
+        if not any(j.name == current + '.jar' for j in jars):
+            continue
+        proj = gp.parent.relative_to(DEV).as_posix()
+        out += [(proj, j) for j in jars if j.name not in keep]
+    return out
+
+
+def cmd_prune(dry):
+    rows = stale_outputs()
+    dest_root = ROOT / 'jar_archive' / 'displaced' / 'pruned'
+    for proj, j in rows:
+        dest = dest_root / proj / j.name
+        print('%s %s -> %s' % ('would move' if dry else 'moved', j.relative_to(ROOT), dest.relative_to(ROOT)))
+        if not dry:
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            if dest.exists():
+                dest = dest.with_name(dest.stem + '.%d.jar' % int(j.stat().st_mtime))
+            shutil.move(str(j), str(dest))
+    print('%d stale build output(s)%s' % (len(rows), ' (dry run)' if dry else ''))
+    return 0
+
+
 def main(argv):
     if argv[:1] == ['diff']:
         if len(argv) != 3:
@@ -165,6 +236,8 @@ def main(argv):
         return cmd_diff(argv[1], argv[2])
     if argv[:1] == ['pending']:
         return cmd_pending()
+    if argv[:1] == ['prune']:
+        return cmd_prune('--dry-run' in argv[1:])
     return cmd_list(argv or [str(MODS)])
 
 
