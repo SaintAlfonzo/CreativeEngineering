@@ -5,6 +5,7 @@
 @@section 1
 @@title Worldgen hot spots, 2026-10-27 ([perf.md](../perf.md) 10.8, TODO `perf #13`)
 @@date 2026-10-27
+@@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
 @@text Target: patcherMod built 2026-10-27 with `DimensionFilter`, the shared terrain cache and `sampleGrid` 4 (NOT yet in

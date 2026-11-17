@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-CDJ7 Creative Delight member open rows, 2026-11-03 (CD and Creative Brewing jars installed 2026-11-03 00:08)
 @@date 2026-11-03
-@@jars creativedelight
+@@jars creativecommon creativedelight
 @@text
 @@text Not run. Needs a full restart on the installed jars. After boot: `/dumpall`, `/cdevgen food_families` (skewer family), then
 @@text `/dumpfood` and `tools/gen_can_types.py` (gilded cans), `/dumpcompost` (SQ-CDF-08). Writeups: barbeques_delight.md 4.5,

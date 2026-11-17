@@ -4,6 +4,7 @@
 
 @@section 1
 @@title Abnormals Delight plans (abnormals_delight.md section 3)
+@@jars creativedelight
 @@text
 @@text Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, `installToMods`).
 @@text

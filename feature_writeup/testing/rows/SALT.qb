@@ -4,7 +4,7 @@
 
 @@section 1
 @@title Run log
-@@jars creativecommon creativedelight
+@@jars creativebrewing creativecalendar creativecommon creativecompat creativedelight creativedevtools creativeengineering creativeequipment creativeworldgen
 @@text
 @@text - **r1116, 2026-11-15 23:55 to 2026-11-16 01:45, STOPPED by the owner 17:21, main session as orchestrator, runners 1 to 4.** Group A worlds, then group B seed 8675309 (booted, no row). Perf session r1116 closed, [perf/sessions/r1116/summary.md](../../perf/sessions/r1116/summary.md) (no `--prune`). TODO `tooling/scratch-1115-follow-ups-2 #8` to `#16`. Jars: `mods/` plus build/libs Compat and Devtools 11-16 00:08, Worldgen 11-15 23:57, Power Grid gate -19 (srv only). Phase 1 SQ-TX-01 to -18, SQ-TXQ-01 to -03: PASS 20, INCONCLUSIVE 1 (SQ-TX-18 second boot impossible, Compat mandatory). Phase 2 SQ-PS15B-01 to -12, SQ-PTH-06b, -25c: PASS 10, FAIL 4 (SQ-PS15B-01, -10, -12, SQ-PTH-25c). Phase 3 SQ-PS15 group A: PASS 8, FAIL 4 (SQ-PS15-01, -07 Rare Ice, -14, -16). Deferred: SQ-PS15-11 to -12c, SQ-PTH-28c, all client rows. Findings: [scratch_run_2026-11-16.md](scratch_run_2026-11-16.md) 9.
 @@text - **r1115 phase 11, 2026-11-15 11:33 to about 13:40 (pass-through), main session as orchestrator, runner-11.** Perf

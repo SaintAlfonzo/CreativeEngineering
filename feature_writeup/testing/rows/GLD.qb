@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-CDJ6 Creative Delight plan J and open rows, 2026-11-02 night ([plan_creative_delight.md](../plan_creative_delight.md) section K)
 @@date 2026-11-02
-@@jars creativedelight
+@@jars creativecommon creativedelight creativeworldgen
 @@sources feature_writeup/plan_creative_delight.md
 @@text
 @@text One build covers every block below: `mods/creativedelight-1.0.0.jar` (23 members, 23:16), `mods/creativeengineering-1.1.08.jar` and `mods/creativeworldgen-1.0.0.jar` (23:16 to 23:17, first install of Creative Worldgen, so run SQ-CWG in the same session). The scratch server mods/ must lose `salt-*`, `create_salt*`, `CannedGoods-*`, `goldenfood-*` and gain `goldenfood_upstream/` beside mods/. Refresh dumps first (`/dumpall`), then `python3 tools/gen_loot_config.py` (SQ-GLD-09).

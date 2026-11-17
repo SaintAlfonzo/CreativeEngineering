@@ -5,6 +5,7 @@
 @@section 1
 @@title Whistle goal skip and underground bees, 2026-10-28 ([perf.md](../perf.md) 16, TODO `server #30`)
 @@date 2026-10-28
+@@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
 @@text patcherMod 1.1.03 with `NeaWhistleGoalSkipMixin`, `MobBeeIdleMixin`, `perf.WhistleArrowTracker`. Group A, one player

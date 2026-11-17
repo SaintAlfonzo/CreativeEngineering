@@ -5,7 +5,7 @@
 @@section 1
 @@title End's and Ender's Delight, 2026-10-25 ([ends_delight.md](../ends_delight.md) 5.6)
 @@date 2026-10-25
-@@jars creativedelight
+@@jars creativecommon creativecompat creativedelight creativeequipment creativeworldgen
 @@sources feature_writeup/ends_delight.md
 @@text
 @@text Needs the CD jar built 2026-10-25 (`repackedEnds -02`, `endersAdditions -01`) and the patcherMod it needs, installed; full

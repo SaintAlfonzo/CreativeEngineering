@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-CDJ5 Creative Delight nests the five ports (plan G steps 1 to 3), 2026-11-02 ([plan_creative_delight.md](../plan_creative_delight.md) H; [creative_delight.md](../creative_delight.md) 38.4; [display_delight.md](../display_delight.md) 6 DDP-01, DDP-13; [vintage_delight.md](../vintage_delight.md) 2026-11-02 history; TODO `creativedelight/members #1`, `#35`, `framework #4`, `#6`)
 @@date 2026-11-02
-@@jars creativecommon creativedelight
+@@jars creativecommon creativedelight creativeworldgen
 @@sources feature_writeup/plan_creative_delight.md feature_writeup/creative_delight.md feature_writeup/display_delight.md feature_writeup/vintage_delight.md
 @@text
 @@text Targets the installed `mods/creativedelight-1.0.0.jar` (2026-11-02 00:45; 20 members, nesting Veggies `-05`, Vintage `-11`,

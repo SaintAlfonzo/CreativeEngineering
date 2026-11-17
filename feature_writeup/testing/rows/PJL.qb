@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-PJL pack jam line, 2026-11-03 ([recipes_cooking.md](../recipes_cooking.md) RC-180 to RC-185, TODO `dishes/jams #8`, `#1`)
 @@date 2026-11-03
+@@jars creativedelight
 @@sources feature_writeup/recipes_cooking.md
 @@text
 @@text Not run. Needs the Creative Delight jar from `development/creativeDelight/build/libs` (Vintage port `-15`) in `mods/` and a

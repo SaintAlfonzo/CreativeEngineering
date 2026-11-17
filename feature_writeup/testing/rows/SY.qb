@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-SY wave 2, 2026-11-14 ([crop_yields.md](../crop_yields.md) sections 2.5, 3, 4; TODO `farming/crops #53` to `#57`, `largecontent/mod-additions #35`)
 @@date 2026-11-14
-@@jars creativecommon
+@@jars creativedelight
 @@sources feature_writeup/crop_yields.md
 @@text
 @@text Targets the Creative Delight and Creative Common jars built 2026-11-14 (`development/creativeDelight/build/libs/creativedelight-1.1.0.jar`,

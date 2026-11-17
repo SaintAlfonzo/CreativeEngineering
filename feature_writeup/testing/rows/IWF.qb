@@ -5,6 +5,7 @@
 @@section 1
 @@title Immersive Weathering growth fast path, 2026-10-28 ([perf.md](../perf.md) 15.4, TODO `server #29`)
 @@date 2026-10-28
+@@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
 @@text patcherMod 1.1.03 with `IwBlockGrowthHandlerMixin`, `IwBlockGrowthHolderMixin`, `IwServerLevelTickMixin` and the

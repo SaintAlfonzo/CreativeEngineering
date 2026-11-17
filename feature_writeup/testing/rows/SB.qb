@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-SB pillager spawners out, spawn boxes on pillager and witch structures, 2026-10-30
 @@date 2026-10-30
-@@jars creativecommon
+@@jars creativedelight creativeworldgen
 @@text
 @@text patcherMod 1.1.04 of 17:55 in `mods/` (`TemplateSpawnerFilter`, `StructureSpawnBoxes`, `ChunkGeneratorSpawnBoxesMixin`,
 @@text CEConfig `[worldgen.systems] spawnBoxes`, `removeSpawners`); data `kubejs/generation_scripts/worldgen/spawn_boxes.json`.

@@ -5,6 +5,7 @@
 @@section 1
 @@title Bug batch, 2026-11-01 (TODO rows in each ID's Depends column)
 @@date 2026-11-01
+@@jars creativedelight creativeengineering creativeworldgen
 @@text
 @@text Needs the patcherMod jar (`creativeengineering-1.1.04.jar`, built 2026-11-01 01:35) and the Creative Delight jar (`creativedelight-1.0.0.jar`, 01:23) installed, and a full restart. Already-queued checks to rerun with these jars: SQ-RSP-09 (Spout / Item Drain drinks), SQ-FFH-03 (zucchini quiche), SQ-MRD-03 (tags half, rewritten), SQ-CM-32 and SQ-CM-35 (calamari), SQ-AC-02 (also `/attribute <bot> minecraft:generic.armor_toughness get`: armor 36, toughness 18).
 @@text

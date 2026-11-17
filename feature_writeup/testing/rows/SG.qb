@@ -5,7 +5,7 @@
 @@section 1
 @@title Sheared grass, 2026-10-28 ([wthit_lines.md](../wthit_lines.md) 2.10, TODO `misc #6`)
 @@date 2026-10-28
-@@jars creativedelight
+@@jars creativecompat
 @@sources feature_writeup/wthit_lines.md
 @@text
 @@text Jars: patcherMod 1.1.03, `backportedVintage-0.1.6-ce-19.2-08`, `backportedVinery-1.5.5-ce-19.2-05` (all in `mods/`).

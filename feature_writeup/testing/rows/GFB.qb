@@ -5,6 +5,7 @@
 @@section 1
 @@title Overall-run follow-ups: season cache, generated falling blocks, unkeyed holders, 2026-10-27 late ([perf.md](../perf.md) 13, TODO `server #24` to `#26`)
 @@date 2026-10-27
+@@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
 @@text patcherMod 1.1.03 (20:44) with `FallingBlockHoldMixin`, `ProtoChunkTicksFallingMixin`, `HolderReferenceUnboundMixin`

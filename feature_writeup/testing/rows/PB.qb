@@ -5,6 +5,7 @@
 @@section 1
 @@title Perf suite and bot players, 2026-10-28 ([perf_suite.md](../perf_suite.md), TODO `server #28`)
 @@date 2026-10-28
+@@jars creativedevtools
 @@sources feature_writeup/perf_suite.md
 @@text
 @@text Dev-only `perfBot` jar (`development/perfBot/build/libs/cdevperfbot-0.1.0.jar`, built 2026-10-28 00:50) and the runner

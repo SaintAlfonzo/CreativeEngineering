@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-MELT Melting system: salt, fire and lava melt ice and snow, 2026-11-14 ([melting.md](../melting.md) 7, [plan_bugfix_1114.md](../plan_bugfix_1114.md) 3.8, 5.1, 7.1; TODO `creativedelight/members #56`)
 @@date 2026-11-14
-@@jars creativedelight powergrid
+@@jars creativebrewing creativecommon creativedelight powergrid
 @@sources feature_writeup/melting.md feature_writeup/plan_bugfix_1114.md
 @@text
 @@text Creative Common 1.2.0 of 2026-11-14 (installed), with Creative Delight rebuilt so its salt member no longer melts by

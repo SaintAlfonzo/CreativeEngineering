@@ -5,7 +5,7 @@
 @@section 1
 @@title SQ-EF earth fill build plan, 2026-10-30
 @@date 2026-10-30
-@@jars creativecommon
+@@jars creativeworldgen
 @@text
 @@text TODO `structures/earthfill #13`, `#14`, `#16`, `#3`, `#4`; [structure_tuning.md](../structure_tuning.md) 3.28, ST-235 to
 @@text ST-242; plan in [briefs/structures_earthfill.md](../briefs/structures_earthfill.md). patcherMod `creativeengineering-1.1.04.jar`

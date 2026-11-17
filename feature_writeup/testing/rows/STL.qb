@@ -5,7 +5,7 @@
 @@section 1
 @@title Stepstools, 2026-10-29 ([stepstool.md](../stepstool.md))
 @@date 2026-10-29
-@@jars creativecommon
+@@jars creativeequipment
 @@sources feature_writeup/stepstool.md
 @@text
 @@text Needs patcherMod 1.1.04 (built 2026-10-29, `development/creativeCommon/build/libs/creativecommon-1.1.04.jar`, not yet in `mods/`) and current kubejs.

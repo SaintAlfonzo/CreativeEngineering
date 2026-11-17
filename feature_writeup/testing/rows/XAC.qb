@@ -5,6 +5,7 @@
 @@section 1
 @@title CQ-XAC Xaero's World Map colours from the block atlas, 2026-11-07 ([perf.md](../perf.md) section 18; Compat 13:35 installed)
 @@date 2026-11-07
+@@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
 @@text | ID | Side | Check | Expect | Failure means |

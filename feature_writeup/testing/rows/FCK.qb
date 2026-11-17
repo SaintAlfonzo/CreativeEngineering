@@ -5,6 +5,7 @@
 @@section 1
 @@title SQ-FCK farming and cooking batch, 2026-11-07 ([plan_farming_cooking_batch.md](../plan_farming_cooking_batch.md); jars to build and install first: Common, Engineering, Delight, Compat, Brewing, Worldgen; none installed)
 @@date 2026-11-07
+@@jars creativecommon creativedelight creativeworldgen powergrid
 @@sources feature_writeup/plan_farming_cooking_batch.md
 @@text
 @@text Double fridges (`kitchen #36`) not built, no row. Moobloom rules: no row (generator output identical). SQ-FCB-08 (cookware pickup) needs `[qol] cookwareKeepContents = false` now, or expect the stocked item.

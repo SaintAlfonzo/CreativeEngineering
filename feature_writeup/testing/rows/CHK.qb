@@ -5,7 +5,7 @@
 @@section 1
 @@title CQ-CHK Chat key typed into the chat box, 2026-11-12 ([fixes_compat.md](../fixes_compat.md) 2.33, FX-50)
 @@date 2026-11-12
-@@jars creativecommon creativeengineering
+@@jars creativecommon creativecompat creativeequipment creativeworldgen
 @@sources feature_writeup/fixes_compat.md
 @@text
 @@text Client only (keyboard events); no server half. **CQ-CHK-01 PASS 2026-11-13 (owner, in play).** Needs Creative Common built 2026-11-12 (in `mods/`), any world.
