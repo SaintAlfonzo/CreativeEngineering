@@ -1217,4 +1217,4 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
   ids), with the package, mixin json, `data/` and `assets/` trees, lang keys and the pack folder `kubejs/data/moremooblooms/`.
   Saves: `data/moremooblooms/swaps/owner_namespace.json` moves the entity type and the spawn egg (namespace move plus
   permanent aliases); saved `Variant` ids and egg NBT are read through `MoobloomVariants.legacy`, as are older data files;
-  Creative Worldgen carries `more_mooblooms-common.toml` over to `moremooblooms-common.toml`. Queue SQ-MB-* old-id rows.
+  Creative Worldgen carries `more_mooblooms-common.toml` over to `moremooblooms-common.toml`. Queue SQ-RFX-26, SQ-RFX-27 (old-id rows) and CQ-RFX-05.
