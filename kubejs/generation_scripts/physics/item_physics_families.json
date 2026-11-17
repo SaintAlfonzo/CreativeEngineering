@@ -18258,7 +18258,7 @@
   "more_immersive_wires:cc_connector": ["metal", "material", "METAL/METAL", "sink/burn", []],
   "more_immersive_wires:cc_modem": ["metal", "material", "METAL/METAL", "sink/burn", []],
   "more_immersive_wires:cc_relay": ["metal", "material", "METAL/METAL", "sink/burn", []],
-  "more_mooblooms:moobloom_spawn_egg": ["technical", "name", "spawn", "sink/burn", []],
+  "moremooblooms:moobloom_spawn_egg": ["technical", "name", "spawn", "sink/burn", []],
   "moredelight:bread_slice": ["food", "tag", "#creativedelight:food_type", "sink/burn", []],
   "moredelight:carrot_soup": ["food", "tag", "#creativedelight:food_type", "sink/burn", []],
   "moredelight:chicken_salad": ["food", "tag", "#creativedelight:food_type", "sink/burn", []],
