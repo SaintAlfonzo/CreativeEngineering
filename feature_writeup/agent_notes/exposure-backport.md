@@ -133,7 +133,7 @@ which matters for existing worlds. None of the addons can drop in: every one dep
 - Server storage has `getAllIds()`/`getOrQuery()`/`put()`, but no delete. Catalog needs that, and a 1.19.2 GUI rewrite (1.21 GuiGraphics/sprites/Tooltip).
 - KubeJS 1902 has `StartupEvents.registry(...).createCustom(id, supplier)`, so Java-class items can be registered from JS.
 
-Subclassing Exposure classes from Creative Common hits the SRG/Mojmap libs split (see [patchermod-coremod](patchermod-coremod.md)); consider
+Subclassing Exposure classes from Creative Common hits the SRG/Mojmap libs split (see [creative-common-coremod](creative-common-coremod.md)); consider
 `fg.deobf` for the exposure jar.
 
 ## exposure-login-packet-null-kick

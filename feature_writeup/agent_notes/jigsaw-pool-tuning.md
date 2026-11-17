@@ -26,7 +26,7 @@ structures. They're weighted pieces that mods inject in code into vanilla pools 
   droppers + monobank bank blocks remain unconverted (left alone on purpose).
 - Weights: DV houses are 20 EACH, vanilla houses 2-4, IE 1.
 - Headless test (32 checks: tags, pools filter, fractional scaling, re-injection, error restore, empty pool,
-  broken-json no-clobber, stale entries, swaps) passed using the memory `patchermod-headless-smoke-test` recipe.
+  broken-json no-clobber, stale entries, swaps) passed using the memory `creative-common-headless-smoke-test` recipe.
   Built on 2026-09-26. **Running in game as of 2026-09-27** (report rewritten at world load: 645 pools / 3669 pieces / 12 retuned; ST-11 passed). PoolTuner logs no line of its own, the report timestamp is the evidence. Writeup: `feature_writeup/structure_tuning.md`.
 
-Related: [structure-gen-framework](structure-gen-framework.md), [patchermod-coremod](patchermod-coremod.md).
+Related: [structure-gen-framework](structure-gen-framework.md), [creative-common-coremod](creative-common-coremod.md).

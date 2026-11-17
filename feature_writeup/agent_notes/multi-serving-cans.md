@@ -13,4 +13,4 @@ Built 2026-09-28 (feature_writeup/food.md 3.6, FO-14..22). Jar built.
 - Recipes: NCH shaped(..., damage, cans) / shapeless(..., damage, replace, cans) now return the recipe; attaches `creativeengineering:can_serving` custom ingredient action. **KubeJS clears CustomIngredientAction.MAP on every server script load** (ServerScriptManager), so NCH re-registers via compat.KubeJSCanAction.register() each call.
 - Defaults double can value (2 servings x Canned Goods' 2-food values) until parity tuning.
 
-Related: [food-tuning-system](food-tuning-system.md), [patchermod-coremod](patchermod-coremod.md), memory `centralize-recipes-tags-items`.
+Related: [food-tuning-system](food-tuning-system.md), [creative-common-coremod](creative-common-coremod.md), memory `centralize-recipes-tags-items`.

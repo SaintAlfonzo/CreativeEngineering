@@ -58,8 +58,6 @@ public final class BuzzierBeesSet {
 				new DataSwitch("disable_moobloom_spawns", MMConfig.BuzzierBees.DISABLE_MOOBLOOM_SPAWNS),
 				new DataSwitch("restore_cow_spawns", MMConfig.BuzzierBees.RESTORE_COW_SPAWNS),
 				new DataSwitch("empty_hostiles_tag", MMConfig.BuzzierBees.EMPTY_HOSTILES_TAG),
-				new DataSwitch("replace_two_by_two", MMConfig.BuzzierBees.REPLACE_TWO_BY_TWO),
-				new DataSwitch("remove_sunny_from_all_effects", MMConfig.BuzzierBees.REMOVE_SUNNY_FROM_ALL_EFFECTS),
 				new DataSwitch("remove_buttercup_worldgen", MMConfig.BuzzierBees.REMOVE_BUTTERCUP_WORLDGEN),
 				new DataSwitch("remove_buttercup_recipes", MMConfig.BuzzierBees.REMOVE_BUTTERCUP_RECIPES));
 	}

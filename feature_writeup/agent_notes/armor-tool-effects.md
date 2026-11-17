@@ -190,7 +190,7 @@ roll damages the "responsible" item as the cost (Vinery: all 4 armor pieces; our
 - `creativeCommon/.../mixin/BonemealCharmMixin.java` — targets `BoneMealItem`, SRG method id
   `m_6225_` (= `useOn`, looked up in `creativeCommon/build/reobfJar/mappings.tsrg`) with
   `remap = false`, same idiom as `LivingEntityShieldMixin`/`VanillaShieldDurabilityMixin`
-  ("no refmap; the pack only runs reobfuscated" — see [patchermod-coremod](patchermod-coremod.md)). Since bone
+  ("no refmap; the pack only runs reobfuscated" — see [creative-common-coremod](creative-common-coremod.md)). Since bone
   meal occupies whichever hand triggered `useOn` (`context.getHand()`), the charm is checked
   in the OTHER hand.
 - `creativeCommon/.../util/BonemealCharms.java` — holds the `TagKey<Item>` for

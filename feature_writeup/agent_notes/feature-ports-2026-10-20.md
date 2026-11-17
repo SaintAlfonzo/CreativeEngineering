@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-2026-10-20 (feature_porting.md 1.1 + 2.4, FP-08..14; TODO largecontent/featureporting #2 Testing, #3 In Progress):
+2026-10-20 (feature_porting.md 1.1 + 2.4, FP-08..14; TODO largecontent/featureporting #2, #3):
 - Tier 1 in `kubejs/server_scripts/other/feature_ports.js` (377 recipes through NCH; AE2's 311 generated from 19
   templates x 16 colors + 7 fluix; 85 `ae2:*_cable` keys added to item_dict), `tags/feature_port_tags.js`
   (`ae2:can_remove_color`, `forge:buckets/water`, `creativeengineering:bottled_air/fire_sources`),
@@ -21,4 +21,4 @@ Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs
 - Scratch 2026-10-20: FP-06, FP-08, FP-14 PASSED; player-driven tests (FP-09..13) need the user's game.
 - User's version rule: this Creative Common release is **1.1.01** (not 1.0.11).
 
-Related: [patchermod-coremod](patchermod-coremod.md), memory `scratch-server-verify`, [campfire-rain](campfire-rain.md), [backported-vinery](backported-vinery.md).
+Related: [creative-common-coremod](creative-common-coremod.md), memory `scratch-server-verify`, [campfire-rain](campfire-rain.md), [backported-vinery](backported-vinery.md).

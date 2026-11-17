@@ -283,11 +283,13 @@ if wants('namespace'):
 	print('   ' + '\n   '.join(l for l in out.split('\n') if l.startswith('##') or l.startswith('namespace_lint')))
 	print()
 
-# DR-C1: villager trades through global.trades.villager (plan_rules_fixes.md 12c); report until the P3 conversions.
-if wants('recipes'):
-	hits = [(p, i, l.strip()) for p, i, l in lines_of([s for s in SCRIPTS if not HELPERS.search(s)])
-			if re.search(r'\b(e|event)\.addTrade\s*\(', l) and not l.strip().startswith('//')]
-	report('DR-C1', 'raw villager e.addTrade calls outside global.trades.villager', hits)
+# DR-C1: villager trades through global.trades.villager (plan_rules_fixes.md 12c). `trades --fail` exits 1 on a hit
+# (check_all `trade_lint`).
+TRADE_HITS = []
+if wants('recipes') or 'trades' in ONLY:
+	TRADE_HITS = [(p, i, l.strip()) for p, i, l in lines_of([s for s in SCRIPTS if not HELPERS.search(s)])
+				  if re.search(r'\b(e|event)\.addTrade\s*\(', l) and not l.strip().startswith('//')]
+	report('DR-C1', 'raw villager e.addTrade calls outside global.trades.villager', TRADE_HITS)
 
 # DR-P12: tooltip colors outside the col roles (plan_rules_fixes.md section 12, V-43): raw section signs, bare
 # Text.<color>( calls, raw color keys of the palette. Report until the P3 replacements; the palette lib is the source.
@@ -422,11 +424,30 @@ if wants('index'):
 			if len(x['note']) > 160]
 	report('DR-W6', 'index notes over 160 characters (status plus one line; move the log to the writeup History)', hits)
 
+# DR-W5: writeups (features.csv `file` cells) with no History section. Report only: the History audit is deferred
+# (design_rules V-50, V-51; TODO tooling/design-rules #2), the count keeps it visible.
+if wants('writeuphistory'):
+	import csv
+	feats = list(csv.DictReader(open(ROOT / 'feature_writeup/status/features.csv', encoding='utf-8')))
+	docs = sorted({f.strip() for x in feats for f in x['file'].split(',') if f.strip().endswith('.md')})
+	hits = []
+	for d in docs:
+		p = 'feature_writeup/' + d
+		text = read(p) if (ROOT / p).exists() else None
+		if text is not None and not re.search(r'^#+ .*\bHistory\b', text, re.M):
+			hits.append((p, 0, 'no History section'))
+	report('DR-W5', 'writeups with no History section (deferred: TODO tooling/design-rules #2)', hits, 'files', top=10)
+
 # DR-W11: doc file names.
 if wants('docnames'):
+	# agent_notes/ keep the hyphenated ids they had as memory files (CLAUDE.md links them by those names).
 	hits = [(p, 0, Path(p).name) for p in FILES if p.startswith('feature_writeup/') and p.endswith('.md')
+			and not p.startswith('feature_writeup/agent_notes/')
 			and not re.fullmatch(r'[a-z0-9_]+(_\d{4}-\d\d-\d\d[a-z]?)?(\.[0-9]+)*\.md|README\.md|TODO\.md|RUNNER\.md|[A-Z_]+\.md',
 								 Path(p).name)
 			and not (p.startswith('feature_writeup/briefs/')        # briefs/<family>_<sub>.md, sub keeps its hyphens
 					 and re.fullmatch(r'[a-z0-9]+_[a-z0-9-]+\.md', Path(p).name))]
 	report('DR-W11', 'writeup file names that are not snake_case', hits, 'files', top=20)
+
+if '--fail' in sys.argv and TRADE_HITS:
+	sys.exit(1)

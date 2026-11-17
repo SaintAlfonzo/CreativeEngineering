@@ -14,9 +14,8 @@ Moved from agent memory 2026-11-16 (last edited there 2026-10-02). Repo status d
   `player.getLookAngle()` per axis), `crops/HoeHarvestTooltip` (lang `creativeengineering.hoe_harvest.*`),
   `mixin/QuarkHoeAreaHarvestMixin` (SimpleHarvestModule.click) + `QuarkHoeAreaBreakMixin`
   (HoeHarvestingModule.onBlockBroken): inject at the `getRange` INVOKE, require = 1, replay Quark's loop.
-- Status: two scratch-server boots clean (injections apply), tags verified via dumptags. Jar in
-  Creative Common build/libs only. Tests CR-26..30 in crops.md §7.
+- Tests CR-26..30 in crops.md section 7 (state there).
 
-**How to apply:** change sizes by editing the tags, not Java. See [crops-harvest-writeup](crops-harvest-writeup.md), [patchermod-coremod](patchermod-coremod.md).
+**How to apply:** change sizes by editing the tags, not Java. See [crops-harvest-writeup](crops-harvest-writeup.md), [creative-common-coremod](creative-common-coremod.md).
 
 2026-10-02: this ships as Creative Common **1.0.4** (pack 1.0.4), not 1.0.3; now in mods/. See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).

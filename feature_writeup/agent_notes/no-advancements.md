@@ -8,4 +8,4 @@ Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs
 
 **Why:** the user's call; the pack also has no vanilla recipe book (so recipe advancements were unused anyway).
 
-**How to apply:** don't design features that grant items, unlock recipes or detect progress through advancements; use FTB Quests, loot or code instead. Rewards lost with them: Vinery banner (crafting recipe since 2026-10-18, alcohol.md 10.5), and with no source yet: Lootr trophy, LC chocolate event coins; partly elsewhere: MCA books, Yuushya book, IE/IP shader bags (alcohol.md 10.2). Related: [backported-vinery](backported-vinery.md), [patchermod-coremod](patchermod-coremod.md).
+**How to apply:** don't design features that grant items, unlock recipes or detect progress through advancements; use FTB Quests, loot or code instead. Rewards lost with them: Vinery banner (crafting recipe since 2026-10-18, alcohol.md 10.5), and with no source yet: Lootr trophy, LC chocolate event coins; partly elsewhere: MCA books, Yuushya book, IE/IP shader bags (alcohol.md 10.2). Related: [backported-vinery](backported-vinery.md), [creative-common-coremod](creative-common-coremod.md).

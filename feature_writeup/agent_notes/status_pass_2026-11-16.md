@@ -21,7 +21,7 @@ Rule used:
 | [plan-1-0-8](plan-1-0-8.md) | Done paragraph, open list, "--snapshot 1.0.8", deployed line; kept the client-class mixin gotcha and the rebuild-after-snapshot method | plan_1.0.8.md, TODO `pack/release #2`, `#3` | open list was stale: oven JEI and duplicate jars fixed in 1.0.9, `#2` decided 2026-10-26 |
 | [plan-1-0-9](plan-1-0-9.md) | "DEPLOYED ... nothing run in game yet"; mods/ jar md5 | plan_1.0.9.md, TODO `pack/release #4` | agrees (`#4` Testing) |
 | [miners-delight-backport-plan](miners-delight-backport-plan.md) | "DEPLOYED.json still says 1.1.01" | DEPLOY_LOG (1.1.02 deployed 2026-10-23) | stale: DEPLOYED.json is at 1.2.02 |
-| [patchermod-coremod](patchermod-coremod.md) | 1.0.5 to 1.0.8 bump diary; kept the instance.json gotcha | deploy.md 8, DEPLOY_LOG | none |
+| [creative-common-coremod](creative-common-coremod.md) | 1.0.5 to 1.0.8 bump diary; kept the instance.json gotcha | deploy.md 8, DEPLOY_LOG | none |
 | [backported-brewin](backported-brewin.md) | `-02` build and install lines; kept the bump-before-rebuild rule | alcohol.md, creative_brewing.md | port is a Creative Brewing member since 2026-10-31 |
 | [backported-vinery](backported-vinery.md) | `-02` / `-03` install lines | alcohol.md, creative_brewing.md | none |
 | [alcohol-drink-food-values](alcohol-drink-food-values.md) | "Rebuilt as -03" | alcohol.md | none |

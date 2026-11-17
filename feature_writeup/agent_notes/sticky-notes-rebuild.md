@@ -15,4 +15,4 @@ Writeup: feature_writeup/sticky_notes.md (SN-01..55), TODO `largecontent/stickyn
 - **Art:** licenses forbid redistribution (Sticky It ARR; Labels ARR + Supplementaries Team License), user won't ask authors. Both jars stay as donors (referenced, recolours in memory like the Vinery port; the pack code is now the shared BuiltInPacks/MemoryPackResources from development/shared/); phase 5 (pinned) = own art, then drop donors.
 - Sticky It textures: index 0-10 normal (sticky, blue, green, light_blue, light_pink, orange, pink, cyan, dark_green, lavander, light_gray), 11-14 rare (gold+spark, creeper, inverted, smile); red/magenta(maroon)/purple unused. (Round 4: no per-color files generated any more; dyed notes tint a greyscale base.)
 
-Related: memory `wthit-plugin-patchermod`, memory `feature-writeup-pattern`, [backported-vinery](backported-vinery.md), memory `license-gplv3`, [root-gradle-build](root-gradle-build.md).
+Related: memory `wthit-plugin-creative-common`, memory `feature-writeup-pattern`, [backported-vinery](backported-vinery.md), memory `license-gplv3`, [root-gradle-build](root-gradle-build.md).

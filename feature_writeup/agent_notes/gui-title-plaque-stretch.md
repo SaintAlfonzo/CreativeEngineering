@@ -23,4 +23,4 @@ Built 2026-10-05 into the Creative Common 1.0.5 jar (no version bump).
   - Check the overflow JSON.
   - Toggle with [gui_title] stretchPlaque / logOverflow.
 
-See [patchermod-coremod](patchermod-coremod.md).
+See [creative-common-coremod](creative-common-coremod.md).

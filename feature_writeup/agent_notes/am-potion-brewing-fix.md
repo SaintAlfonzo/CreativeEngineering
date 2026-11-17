@@ -127,7 +127,7 @@ Five holes closed:
   only use** (Create side stays fluid-based; asymmetry is deliberate — IE Mixer is 1 fluid + items,
   can't do fluid+fluid). Reads `PotionBrewing.POTION_MIXES`/`CONTAINER_MIXES` (`f_43494_`/`f_43495_`)
   by **reflection** (SRG name, Mojmap fallback) — `@Accessor` of MC fields fails the AP validator
-  in this no-refmap project (see [patchermod-coremod](patchermod-coremod.md)).
+  in this no-refmap project (see [creative-common-coremod](creative-common-coremod.md)).
 - **lava_vision / poison_resistance uncraftable in both mixers** — AM registers their base brews
   from non-potion items (`alexsmobs:lava_bottle`, `alexsmobs:poison_bottle`), so
   `PotionUtils.getPotion` = EMPTY -> Create Phase D skips them, IE builds an unobtainable

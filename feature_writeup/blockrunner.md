@@ -745,7 +745,7 @@ and powdered sugar got `StuckInBlock` lines.
   `build/libs/creativeengineering-1.0.1.jar` to `mods/` **with the game closed** and compare `md5sum`
   of both files.
 - **Creative Common logic without the game:** plain `javac`/`java` against the mapped Forge jar, with a
-  one-line `FMLEnvironment` stub (see Claude's memory `patchermod-headless-smoke-test`). It can
+  one-line `FMLEnvironment` stub (see Claude's memory `creative-common-headless-smoke-test`). It can
   bootstrap Minecraft to check real blocks' collision shapes and the `StuckInBlock` table; the Run
   Speed test (31 checks) ran that way. Mixins, WTHIT and rendering still need the game.
 - **Rhino-only script bugs:** the headless Rhino harness (see Claude's memory

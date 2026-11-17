@@ -1,9 +1,9 @@
 # Rules violation fix plan (design_rules.md section 9, V-01 to V-62)
 
 Owner brief 2026-11-16 applied to the 2026-11-14 compliance audit in [design_rules.md](design_rules.md) section 9.
-Status: P0 and P1 built 2026-11-17 (rule text, prefix lint and renames, docs moves, license names, mod sides, date and
-spelling sweeps of the docs; owner list below); P2 (Creative Common) built 2026-11-17; P2b to P7 planned. Code facts below were read
-2026-11-16 (paths and lines drift; re-read before editing).
+Status: built through P7 on 2026-11-17 (every phase; queue rows written, none run); V-14 left for the owner. Test ids,
+pending jars and the open owner items: [Hand-over](#hand-over) at the end; earlier owner items: [Owner list (P1)](#owner-list-p1).
+Code facts below were read 2026-11-16 (paths and lines drift; re-read before editing).
 
 Short names: R = instance root; dict = `development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/`;
 KJ = `kubejs/data/creativedelight/kubejs`. Rebuild map as in [plan_bugfix_1114.md](plan_bugfix_1114.md): A = instance
@@ -13,16 +13,14 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=3fbc6bae19cd -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 19 open TODO rows (Planned 3, In Progress 2, Testing 14), 8 Complete.
+<!-- generated:status_index begin open_work sha1=54b6c038076a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 20 open TODO rows (Planned 3, Testing 17), 11 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `conventions #35` | Planned | none | Memory cleanup todo |
-| `conventions #36` | Planned | none | History audit, low priority, marked |
-| `tooling/conventions #11` | Planned | S | Rules violation fixes (design_rules V-01 to V-62) |
-| `conventions #24` | In Progress | SQ-RFX-01, -03, -07, -08, -12, -15, -19, CQ-RFX-01, CQ-RFX-03 | Small fixes (added 2026-11-16) |
-| `conventions #25` | In Progress | SQ-RFX-04, -10 | Villager trade helper |
+| `tooling/design-rules #2` | Planned |  | History audit (low priority) |
+| `tooling/design-rules #3` | Planned |  | patcherMod identifier rename audit |
+| `tooling/design-rules #4` | Planned |  | Palette test tooltips off before distribution |
 | `conventions #14` | Testing | SQ-DRK-08 | Tilled end stone and sea pickles |
 | `conventions #15` | Testing | SQ-LOOT-02, SQ-RFX-16 to -18 | Global loot modifiers |
 | `conventions #16` | Testing | SQ-LOOT-01 to -06 | Split Creative Loot out of Creative Worldgen |
@@ -31,12 +29,15 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 | `conventions #20` | Testing | CQ-TT-04, CQ-TT-05 | Test-item palette switch |
 | `conventions #22` | Testing | SQ-RFX-20 | Brewin' advancement scan |
 | `conventions #23` | Testing | SQ-RFX-01, SQ-RFX-06, -07, -09, -12, -13, -16, -19, -27, SQ-EX-01, CQ-RFX-02 | Member checks, remaps, helper copies |
+| `conventions #24` | Testing | SQ-RFX-01, -03, -07, -08, -12, -15, -19, -29, CQ-RFX-01, CQ-RFX-03 | Small fixes (added 2026-11-16) |
+| `conventions #25` | Testing | SQ-RFX-04, -10 | Villager trade helper |
 | `conventions #26` | Testing | SQ-RFX-21 to -23, SQ-MDL-01 | Delight loot through Creative Loot |
 | `conventions #27` | Testing | SQ-AV-01 to -04, CQ-AV-01, CQ-AV-02 | No recipe unlocks |
 | `conventions #28` | Testing | SQ-PST-09c, SQ-PST-10c, SQ-RFX-24, CQ-RFX-04 | Sideways edges and what the dependencies simplify |
 | `conventions #29` | Testing | SQ-RFX-28 | patcherMod to Creative Common in text |
 | `conventions #30` | Testing | SQ-RFX-25 to -27, SQ-BM-03, SQ-CAL-09, SQ-EX-01, CQ-RFX-05 | Underscores in own names, touches saves |
 | `conventions #32` | Testing | CQ-TT-01 to -03, SQ-RFX-28 | American spelling and arrows |
+| `tooling/conventions #11` | Testing | SQ-RFX-01 to -29, CQ-RFX-01 to -05 (per section: conventions #13 to #37) | Rules violation fixes (design_rules V-01 to V-62) |
 <!-- generated:status_index end open_work -->
 
 Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2026-11-16, D20 to D26 from the owner's answers the same day.
@@ -722,3 +723,48 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
 - 2026-11-17: P4 built (P4 agent), Common, Worldgen, Calendar, Brewing, Exposure and Delight installed: section 14 (`moremooblooms`, `babymobs`, `vinerybackport`: packages, mixin jsons, `data/` and `assets/` trees, pack folder `kubejs/data/moremooblooms/`, lang keys; swap list `data/moremooblooms/swaps/owner_namespace.json` for the entity type and spawn egg; saved `Variant` ids read through `MoobloomVariants.legacy`; the member configs carried by Worldgen with `ConfigRename.carryOver`, a whole-file rename, not `carrySections`; Baby Mobs registers nothing, so no swap list), V-07 (`CalendarConfigMigration` deleted; an existing calendar file is no longer patched and the old CE file is no longer stripped), V-06 (Exposure swap list `replaces`). Delight rebuilt for `sample_syringe.js`, Common for the dict value and tips. `qrowlint.py` accepts old ids that a swap list keeps as aliases; the stale entity dump is a dated `check_known.csv` entry until the next `/dumpall`. Pre-rename Worldgen for the old-id rows: `jar_archive/p4_oldid/`. Queue SQ-RFX-25 to -27, CQ-RFX-05, SQ-BM-03, SQ-CAL-09, SQ-EX-01 (new `EX.qb`).
 - 2026-11-17: P5 sweeps except tabs built (P5 agent), one commit each: section 17 (`tools/history_extract.py`, `tools/writeup_owner.json`; 961 dated comment sentences moved to the History of 37 writeups, rules kept undated and listed in [history_extract_review.md](history_extract_review.md), owner list item 9; generators that wrote dated headers fixed), sections 15 and 15b code pass (`--scope code` in both tools, 958 spelling changes in comments and prose strings of own code; `catalogue`, config keys, ALL-CAPS values and format fields kept; config comment text of six jars changed), section 13 (`tools/rename_patchermod.py`, about 3,600 hits; lines naming both names kept as swap history; list for TODO `tooling/design-rules #3` in [patchermod_left.csv](patchermod_left.csv): no Java identifier, mixin or config key says patcherMod). The date, spelling and comment-date lints fail in check_all. Queue SQ-RFX-28.
 - 2026-11-17: P5 section 16 built (P5b agent): `tools/tab_indent.py` with `tools/tab_indent_check/AstFingerprint.java`; 235 Python, 173 JS, 1032 Java, 31 Gradle and 58 JSON files, one `[no-stale]` commit each; lint `tab_indent` in check_all and the audit. Rulings made in the tool: a file under a folder output of `tools/generators.json` is generated only when it carries a generated-by header (the folders also hold hand-written scripts); upstream donor = a development tree with a `NOTICE-upstream-*` file (Power Grid, Tempad, Exposure, Repacked Storage, 15 Delight members, Brewin', Vinery) or an `upstream/` folder; JSON in scope only under own namespaces and not equal to `json.dumps` output; a tab counts as one unit in a 2-space file. Class compare: 4974 of 4978 class files byte-identical, 4 differ only in javac's `patt<offset>$temp` local name (taken from the source character offset), so no jar was installed. `tools/check_all.py --only test_worldgen_tools` fails on SCAT-01 since the section 15b commit (54246e27 changed the test to `"Town centers"`; `structure_world.json` still says `"Town centres"`): not changed here.
+- 2026-11-17: P7 built (P7 agent): section 18 (memory: state cut from 5 files, `patchermod-headless-smoke-test` and `wthit-plugin-patchermod` renamed `creative-common-headless-smoke-test`, `wthit-plugin-creative-common`; agent note `patchermod-coremod` renamed `creative-common-coremod` with its links; `power-grid-port` says the build is in `mods/` for development testing; 9 agent notes' state lines cut to pointers), section 19 (V-50, V-51 Deferred; audit check `writeuphistory` counts 64 writeups with no History; TODO `tooling/design-rules #2` to `#4` reopened: the P3.5 conversion had read their old Open status as Complete), section 21 (V-02 built, missed in P3: Creative Worldgen installed, SQ-RFX-29; the 12c failing trade lint `trade_lint`; design_rules section 1 rows for `tab_indent.py`, `todo.py lint`, `qrowlint.py`, the trade lint; `plan_lint.py` skips a plan carrying the Superseded marker; Creative Engineering and Exposure rebuilt and installed so the installed jars hold the P3b and P4 changes for sure). Hand-over below.
+
+## Hand-over
+
+Written 2026-11-17 at the end of P7. Nothing below has been run; every row is in `testing/rows/*.qb` and rendered in
+[scratch_queue.md](testing/scratch_queue.md). `python3 tools/scratch_query/qrun.py plan` gives the order.
+
+**Queue ids by world and boot.**
+
+- Standard boot, one world (group A, the pack's mods): SQ-RFX-01 to -11, SQ-RFX-13 to -17, SQ-RFX-19 to -24, SQ-RFX-29,
+  SQ-DRK-08, SQ-HH-1546, SQ-HH-1546c, SQ-LOOT-01 to -06, SQ-AV-01 to -04, SQ-MDL-01, SQ-PST-09c, SQ-PST-10c (same temperate column).
+- Fresh server with no `config/creative*` files: SQ-RFX-28.
+- Config written before boot: SQ-CAL-09 (`creativeengineering-common.toml` holding the old sections).
+- Member switch off, one boot each, switch set back after: SQ-RFX-12 (`[members] salt = false`), SQ-RFX-18
+  (`[members] veggiesdelight = false`).
+- One old-id world for P4 (written with the pre-rename Worldgen from `jar_archive/p4_oldid/`, then loaded with the new jars):
+  SQ-RFX-25 (two boots), then on boot 2 SQ-RFX-26, SQ-EX-01, SQ-BM-03; SQ-HH-1546b runs inside SQ-HOP-11 on its old save.
+- Fresh world, old ids in NBT: SQ-RFX-27.
+- Client rows (capture driver or the owner by hand): CQ-RFX-01 to -05, CQ-TT-01 to -05 (CQ-TT-04 with `paletteDemo = true`,
+  CQ-TT-05 with it false), CQ-AV-01, CQ-AV-02.
+
+Section 21 queue items map as: sea pickle tea SQ-DRK-08; palette switch CQ-TT-04, -05; GlmMerge count and loot probes
+SQ-LOOT-01 to -06, SQ-RFX-16 to -18; member switch off SQ-RFX-12, -18; recipe unlocks SQ-AV-01 to -04, CQ-AV-01, -02;
+trade dump diff SQ-RFX-04, -10; loot probes for moved rules SQ-RFX-21 to -23, SQ-MDL-01; grass seasons and vintage clock
+SQ-PST-09c, -10c, SQ-RFX-24; Exposure and underscore-rename old-id save SQ-RFX-25 to -27, SQ-EX-01, SQ-BM-03, SQ-CAL-09,
+CQ-RFX-05; namespace recipe counts and id diff SQ-RFX-01, -02, -05, -07, -08, -14; food dump diff SQ-RFX-09, -19; tooltip
+screenshots CQ-TT-01 to -03, CQ-RFX-01 to -04.
+
+**Jars.** Installed in P7: `creativeworldgen-1.0.0.jar` (V-02), `creativeengineering-2.0.0.jar`, `exposureBackport-1.9.19-ce-19.2-04.jar`.
+`python3 tools/jarstamp.py pending` after P7 lists 7 built, not installed: Creative Common, Creative Compat, Creative
+Calendar, Creative Loot, Spice of Life: Raspberry Pie, Tempad and Power Grid. Each differs from its installed jar's source only in
+comments and whitespace (P5 sweeps, the P7 memory-id renames); Power Grid also in its NOTICE file name. Creative Brewing and
+Creative Equipment have P7 comment-only edits and no new build. None needs installing for a test.
+
+**Open owner items** (consolidated):
+
+1. V-14: Miner's package (section 0 "Still open").
+2. Owner list (P1) items 1 (7 whole-copy duplicate queue ids), 3 (Create Confectionery name), 4 (JEI in `unreleased.md`, G17),
+   5 (NOTICE file name), 7 (rows file names), 8 (Alcohol Part B numbering), 9 (read [history_extract_review.md](history_extract_review.md)),
+   10 (`SQ-MB-` collision), 11 (25 queue tables in their own headers), 12 (39 test lines).
+3. From P3c: `creativecompat:physics/floats` in `animal_tags.js` (ordering), Calendar's Nether's Delight class name in
+   `CropSeasonGrowHookMixin`.
+4. TODO `tooling/design-rules #2` (History audit, deferred), `#3` (patcherMod identifier rename audit), `#4` (palette demo
+   off before the next release; it brings the section 9 changelog bullet).
+5. `tools/name_audit.py --check` says OUT OF DATE (V-62): it needs a fresh client name dump (`/cdevdumpnames`) before a rerun.

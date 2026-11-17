@@ -99,7 +99,7 @@ findings) become a plan, split and classify them and ask the open items before b
   output in its own commit. If the push is not a fast-forward, stop and ask.
 - Logic tests without the game: plain `javac`/`java` harness (creativeCommon `build/classes`, Mojmap, an
   `FMLEnvironment` stub first on the classpath). Live checks: throwaway dedicated server in the
-  scratchpad. Details: memory `patchermod-headless-smoke-test`, skill `scratch-test`.
+  scratchpad. Details: memory `creative-common-headless-smoke-test`, skill `scratch-test`.
 - **Scratch server tests default to the queue.** Add every live check a change needs to its rows file
   `feature_writeup/testing/rows/<CODE>.qb` in the same session (rendered into
   [scratch_queue.md](feature_writeup/testing/scratch_queue.md) by `status_index.py`); only boot a scratch server when the

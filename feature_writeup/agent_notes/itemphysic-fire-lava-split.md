@@ -8,7 +8,7 @@ ItemPhysic 1.6.7 (`config/itemphysic.json`, CreativeCore `SortingList`s) has **o
 `burningItems` bucket — IN_FIRE / ON_FIRE / LAVA are indistinguishable — and one
 `swimmingItems` bucket. `canPass(stack)==true` means "this hazard may destroy it".
 
-**Creative Common** ([patchermod-coremod](patchermod-coremod.md)) splits this:
+**Creative Common** ([creative-common-coremod](creative-common-coremod.md)) splits this:
 
 - `mixin/ItemPhysicServerMixin` — `@Redirect`s every `SortingList.canPass(ItemStack)` call in
   `ItemPhysicServer.{fireImmune,hurt,updatePre,updateFluidHeightAndDoFluidPushing}`

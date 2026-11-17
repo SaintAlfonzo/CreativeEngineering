@@ -46,7 +46,6 @@ import java.util.List;
  * <ul>
  *   <li>{@code buzzier_bees}: {@link BuzzierBeesSet}, with one sub-pack per config switch</li>
  *   <li>{@code jei}: compat/jei (loaded by JEI itself through @JeiPlugin; checks the set's own conditions)</li>
- *   <li>{@code blueprint}: the Two by Two advancement modifier</li>
  *   <li>{@code alexsmobs}, {@code supplementaries}, {@code abnormals_delight}, {@code botania}, {@code delightful}:
  *       the moobloom joins that mod's cow tags</li>
  * </ul>
@@ -57,9 +56,9 @@ public class MoreMooblooms {
 	public static final String ID = "moremooblooms";
 	public static final Logger LOGGER = LogUtils.getLogger();
 
-	/** Content sets that are only a data pack (tag and advancement additions for that mod). */
+	/** Content sets that are only a data pack (tag additions for that mod). */
 	private static final List<String> TAG_PACK_MODS =
-			List.of("blueprint", "alexsmobs", "supplementaries", "abnormals_delight", "botania", "delightful");
+			List.of("alexsmobs", "supplementaries", "abnormals_delight", "botania", "delightful");
 
 	public MoreMooblooms() {
 		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -89,7 +88,7 @@ public class MoreMooblooms {
 	}
 
 	/**
-	 * Adds the packs of every active content set. Tag/advancement packs go at the bottom (they only add).
+	 * Adds the packs of every active content set. Tag packs go at the bottom (they only add).
 	 * The Buzzier Bees sub-packs replace Buzzier Bees' own files by path, so they go on top of the mod
 	 * resources; the pack's kubejs/data still loads above them.
 	 */

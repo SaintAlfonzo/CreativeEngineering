@@ -294,7 +294,7 @@ crop holds only on `#vintagedelight:ghost_pepper_soil`. What it lacked was the s
 2026-10-28:
 
 - `./gradlew :creativeCommon:build --offline` passes.
-- Headless CEConfig spec test (javac harness, memory `patchermod-headless-smoke-test`): 27 crop switches, all `false`;
+- Headless CEConfig spec test (javac harness, memory `creative-common-headless-smoke-test`): 27 crop switches, all `false`;
   one set `true` reads back `true`; an unknown key gives `null`; soil defaults 2 x 0.35 / 2 x 0.25; the bell pepper
   section still reads `enabled = true`, weight 1.
 - Node harness over `soil_yield.js` with the real item and block dicts and every crop forced on: 27 tables, 3 pools each,

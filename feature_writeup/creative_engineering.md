@@ -372,6 +372,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-14: Something still references those objects, so a GC alone frees nothing (tested 2026-11-14) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/util/StaleJarHandles.java)
 - 2026-11-15: no MOD_RANGE row: the jar's mods.toml version is ${file.jarVersion} with no Implementation-Version, and the redirect is require = 0, so any loaded Rare Ice keeps it (2026-11-15, SQ-MELT-09) (development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/perf/CommonMixinPlugin.java)
 - 2026-11-17: "4.1 Carve of 2026-11-06" made a subsection of 4 (plan_rules_fixes.md V-53).
+- 2026-11-17: Creative Common helpers from plan_rules_fixes.md P2 to P5: `global.NCH.forPack(ns)` and `global.reg.forPack(ns)` (scripts bind recipes and registrations to their folder's namespace), `global.effect.resolve`, tooltip `col` roles and `global.tooltips.code`, `NCH.cfgClass` / `cfgValue`, `global.trades.villager`, `NoRecipeUnlockMixin` (no recipe unlocks of any kind, section 12e), the `[tooltips] paletteDemo` switch, dict lines checked by `tools/dict_lint.py`; patcherMod text reads Creative Common, comments and config text in American spelling, tabs as indent (sections 13, 15b, 16). Queue SQ-AV-01, CQ-AV-01, -02, CQ-TT-04, -05, SQ-RFX-28.
 
 
 ## 7. License audit: Creative Common (2026-11-04, plan_cb_publish.md Step 2)

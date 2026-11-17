@@ -20,4 +20,4 @@ Non-obvious findings:
 - `#creativeengineering:loot/golden_food` contains golden chorus fruit (End), hence the separate trades tag.
 - Forge config live reload misses `sed -i` (rename); write in place to test.
 
-Related: [patchermod-coremod](patchermod-coremod.md), memory `feature-writeup-pattern`, [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md), memory `scratch-server-verify`, memory `centralize-recipes-tags-items`, memory `rhino-fieldandmethods-gotcha`.
+Related: [creative-common-coremod](creative-common-coremod.md), memory `feature-writeup-pattern`, [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md), memory `scratch-server-verify`, memory `centralize-recipes-tags-items`, memory `rhino-fieldandmethods-gotcha`.

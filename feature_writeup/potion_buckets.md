@@ -170,7 +170,7 @@ Lingering `create:potion` only; one recipe pair per potion.
 
 ### Rejected options
 
-- **One spherical cloud via mixin:** built and removed (memory notes `patchermod-coremod`, `potion-buckets`); the ring
+- **One spherical cloud via mixin:** built and removed (memory notes `creative-common-coremod`, `potion-buckets`); the ring
   stack needs no Java.
 - **A fluid-handler capability on the buckets:** would have let machines fill them generically, but KubeJS items
   can't carry one; hence one recipe per potion.

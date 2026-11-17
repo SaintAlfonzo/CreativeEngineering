@@ -1,4 +1,4 @@
-# patchermod-coremod
+# creative-common-coremod
 
 > patcherMod (now Creative Common, development/creativeCommon, modid creativecommon since 2026-11-04) is the pack's in-tree core mixin mod; creativeengineering is now the Engineering jar
 

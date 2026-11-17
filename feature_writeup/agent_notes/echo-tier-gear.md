@@ -68,7 +68,7 @@ Wiring: added to `creativeengineering.mixins.json` `"mixins"` array; optional
 `create_deep_dark` dep (`mandatory=false`, `ordering="AFTER"`) in mods.toml; **added
 `create_deep_dark-1.7.0-forge-1.19.2.jar` to `creativeCommon/libs/`** (the Mixin AP validates
 `@Mixin(value=X.class)` targets at compile — same reason ItemPhysic/Create jars are in
-libs). Build/deploy per [patchermod-coremod](patchermod-coremod.md): `./gradlew build --offline` -> copy jar to
+libs). Build/deploy per [creative-common-coremod](creative-common-coremod.md): `./gradlew build --offline` -> copy jar to
 `mods/`. To change the effects, edit the two branches in the mixin.
 
 **Tooltip follow-up (2026-09-10):** the armor's own hardcoded tooltip ("With full set on:

@@ -176,7 +176,7 @@ into a Kebab Wrap, Kebab Sandwich or Bibimbap that carry the skewers' effects. A
 | Villager trades (`economy/trades.js`, MoreJS) | 6 seasonings added to the butcher's level-1 pool in Java | Pack trades are edited in KubeJS; Java trades are only visible to `forEachTrades` filters (precedent: the Canned Goods butcher filter) | Not ported (O6); a comprehensive seasoning trade pass comes later (`food/seasoning #12`) |
 | Compost ([composting.md](composting.md)) | `neoforge:compostables` data map | 1.21 only | Re-express as a hand `barbequesdelight/compost.js` (O7, 3.7) |
 | Display / placeable ([display_delight.md](display_delight.md)) | Skewer and sandwich families say Food Plate; FD and End's sticks already have plated models | BBQ has no placeables | None added (O8); recolor review in `food/placeable #5` |
-| Jade vs WTHIT | Jade grill tooltip | Pack runs WTHIT, not Jade | Port as a WTHIT provider in the port (O9, step 17; memory `wthit-plugin-patchermod`) |
+| Jade vs WTHIT | Jade grill tooltip | Pack runs WTHIT, not Jade | Port as a WTHIT provider in the port (O9, step 17; memory `wthit-plugin-creative-common`) |
 | CarryOn tag | `carryon:block_blacklist` | CarryOn not in the pack | Drop |
 | Cans | handhelds never canned | - | None |
 
@@ -561,7 +561,7 @@ server `kubejs/data/creativedelight/kubejs/barbequesdelight/` (memory `creative-
 16. **Names and lang** ([names.md](names.md)): D5 (Lamb -> Mutton in lang only; Ingredients Basin kept); "Barbeque"
     spelling kept as the mod's own; `en_ud`, `uk_ua`, `zh_cn` carried.
 17. **Mob and block audit:** BlockRunner tier for grill (metal) and basin/tray (wood); mineable tags as upstream; Item
-    Physic fire behavior for skewers; **WTHIT provider for grill progress, porting the Jade tooltip (O9, `ui/wthit #13`)**: `waila_plugins.json` entry, server half writes each slot's progress and flip state into the data tag, client half draws the countdown and Ready to Flip at half time (pattern: the hive plugin, memory `wthit-plugin-patchermod`).
+    Physic fire behavior for skewers; **WTHIT provider for grill progress, porting the Jade tooltip (O9, `ui/wthit #13`)**: `waila_plugins.json` entry, server half writes each slot's progress and flip state into the data tag, client half draws the countdown and Ready to Flip at half time (pattern: the hive plugin, memory `wthit-plugin-creative-common`).
 18. **Tooltips and JEI** ([tooltips.md](tooltips.md), [jei_coverage.md](jei_coverage.md)): keep BBQ's Skewering and
     Grilling JEI categories; seasoning tooltip line as upstream (O4), pack style at the fold; FD effect-tooltip gate kept.
 19. **Placeables and trades:** none now. BBQ has no placeables and none are added (O8); `food/placeable #5` reviews

@@ -17,7 +17,6 @@ Built 2026-10-11. First batch (village_towers, driftwood_flotilla), then the sam
 - Gotcha: the conversion runs before the anchor's own biome check, so failed picks tried a meta first; the forced-anchor miss is not logged.
 - Gotcha: `until ! pgrep -f "<pattern>"` loops forever: pgrep matches its own shell's command line.
 - Tests: MetaTest 48 checks (tools/test_worldgen_tools.sh step 6); test_structure_groups.sh parity. Scratch server seed 8675309: all 13 locatable metas found, part locates land on parts inside metas.
-- Status: Creative Common 1.0.5 build in development/creativeCommon/build/libs.
 
 Related: [structure-groups](structure-groups.md), [biome-fits-towers](biome-fits-towers.md), [terrain-adaptation-soft-beard](terrain-adaptation-soft-beard.md), [earth-fill-system](earth-fill-system.md), memory `scratch-server-verify`, memory `rhino-fieldandmethods-gotcha`.
 - 2026-10-12: MetaSlots generalised: Conversion.target (any Structure), Decision.targetEntry; plain-structure "replacements" staged via MetaSlots.stageReplacements; replacement biomes narrowed to the replaced member's. See [plan-7-1-execution](plan-7-1-execution.md).

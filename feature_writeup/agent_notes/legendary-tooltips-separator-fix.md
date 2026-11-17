@@ -9,4 +9,4 @@ Legendary Tooltips 1.4.0 (`render_item_model = "EQUIPMENT"`) draws the name unde
 Fix (2026-10-05): Creative Common client mixin `IcebergTitleBreakMixin` (TAIL of `IcebergClient.onGatherComponentsEventEnd`) moves the break from index 2 to 3 when index 0 is `ItemModelComponent`. Iceberg + LegendaryTooltips jars added to creativeCommon/libs. Built into creativeengineering-1.0.5.jar; NOT copied to mods/.
 
 **Why:** the user reported the underline crossing the spinning model.
-**How to apply:** after installing the jar, check armor/tool tooltips across a few launches. Client-only, see [patchermod-coremod](patchermod-coremod.md).
+**How to apply:** after installing the jar, check armor/tool tooltips across a few launches. Client-only, see [creative-common-coremod](creative-common-coremod.md).

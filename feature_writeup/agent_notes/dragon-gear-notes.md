@@ -20,7 +20,7 @@ silently lost that NBT at the very first step.
 Fixed via `creativeCommon/src/main/java/.../mixin/SequencedAssemblyRecipeMixin.java` (registered in
 `creativeengineering.mixins.json`, common list): `@Inject` at `RETURN` of
 `SequencedAssemblyRecipe.advance` (Create's own method, real name, `remap = false` — see
-[patchermod-coremod](patchermod-coremod.md)). `advance(ItemStack input)`'s `input` argument IS the real evolving stack
+[creative-common-coremod](creative-common-coremod.md)). `advance(ItemStack input)`'s `input` argument IS the real evolving stack
 (confirmed via `ProcessingRecipe.rollResults()`, which substitutes `forcedResult.get()` — i.e. this
 method's return value — directly as the actual output item stack). On step 0, if `input` carries
 any of `Enchantments`/`StoredEnchantments`/`display`/`RepairCost`/`Unbreakable`/`AttributeModifiers`,
@@ -35,7 +35,7 @@ per-recipe allowlist was needed. Deliberately does NOT carry over `Damage` (dura
 full-durability item on tier-up, matching what was asked ("enchantments and name").
 
 Built + copied to `mods/creativeengineering-1.0.0.jar` 2026-09-16; not yet confirmed in an actual
-play session (see [patchermod-coremod](patchermod-coremod.md) for the build/copy/md5sum ritual and the "game must not
+play session (see [creative-common-coremod](creative-common-coremod.md) for the build/copy/md5sum ritual and the "game must not
 be running when you copy" gotcha).
 
 ## dragon-gear-autorepair
@@ -83,7 +83,7 @@ dep (`mandatory=false`, AFTER) in mods.toml; `easyelytratakeoff-1.19.2-4.2.jar` 
 `creativeCommon/libs/` (Mixin AP validates `@Mixin(value=X.class)` targets at compile). Tag
 populated in `kubejs/server_scripts/tags/equipmenttags.js`:
 `e.add('creativeengineering:elytra_chestplates', 'dragonloot:upgraded_dragon_chestplate')`
-(reload-able — add more modded elytra-chestplates there). Build/deploy per [patchermod-coremod](patchermod-coremod.md).
+(reload-able — add more modded elytra-chestplates there). Build/deploy per [creative-common-coremod](creative-common-coremod.md).
 
 If EET is ever removed, pull `EasyElytraTakeoffHelperMixin` from the config + `libs/` too.
 
@@ -113,7 +113,7 @@ EET bails immediately. To give it takeoff: either (a) a Creative Common `@Inject
 returns success; or (b) widen EET's `onFirework` name gate to also accept
 `alexsmobs:enderiophage_rocket` AND relax its booster re-fire path — messier, and EET's tick
 spawns a vanilla `FireworkRocketEntity` from the main-hand stack (would be a dud for a
-non-firework). Option (a) is cleaner. See [patchermod-coremod](patchermod-coremod.md).
+non-firework). Option (a) is cleaner. See [creative-common-coremod](creative-common-coremod.md).
 
 ## dragon-scale-elytra-duplication
 
@@ -142,7 +142,7 @@ vanilla `CustomRecipe` in Creative Common, reading `catalyst` (Ingredient) and `
   stays vanilla's shared `minecraft:crafting` (matches how vanilla's own ArmorDyeRecipe/
   BookCloningRecipe work), no new RecipeType needed.
 - `CreativeEngineering.java` constructor calls `ElytraDuplicationSerializers.register(modEventBus)`
-  alongside the other Creative Common recipe-type registrations ([patchermod-coremod](patchermod-coremod.md)).
+  alongside the other Creative Common recipe-type registrations ([creative-common-coremod](creative-common-coremod.md)).
 - KubeJS: `global.NCH.elytraDuplication(catalyst, result, e, idOverride)` in neoCraftHelper.js
   (same file/pattern as `dragonBreathing`) emits the datapack JSON via `e.custom(...)`.
 - Wired up: `kubejs/server_scripts/equipment/end_gear.js` "Dragon" section —

@@ -391,3 +391,22 @@ shell grep -q "neighbours = " config/creativecompat-common.toml
 > reload
 shell ! grep -n "patcherMod" logs/latest.log
 look the config comments read naturally (no "Creative Common Creative Common" or broken sentence where a date or old name was taken out)
+
+@@section 9
+@@title SQ-RFX Rules fixes P7 on a boot: dead advancement modifiers gone from More Mooblooms, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) 12b V-02; [mooblooms.md](../mooblooms.md) 4.11)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativeworldgen
+@@sources development/creativeWorldgen/members/mooblooms/src/main/java/com/SaintAlfonzo/moremooblooms/MoreMooblooms.java development/creativeWorldgen/members/mooblooms/src/main/java/com/SaintAlfonzo/moremooblooms/compat/BuzzierBeesSet.java development/creativeWorldgen/members/mooblooms/src/main/java/com/SaintAlfonzo/moremooblooms/MMConfig.java
+@@text
+@@text The `blueprint` content set and the Buzzier Bees sub-packs `replace_two_by_two` and `remove_sunny_from_all_effects` were deleted with their switches. The other Buzzier Bees sub-packs and the tag-compat packs still load.
+@@table
+## SQ-RFX-29 | More Mooblooms adds no advancement modifier packs; the other Buzzier Bees sub-packs still load
+@group A (the pack's mods, Buzzier Bees and Blueprint present)
+@commands Boot to the world; `/datapack list`; `shell` checks of the log and `config/moremooblooms-common.toml`
+@pass `/datapack list` shows no `moremooblooms:blueprint`, `moremooblooms:buzzier_bees/replace_two_by_two` or `moremooblooms:buzzier_bees/remove_sunny_from_all_effects`, and still shows `moremooblooms:buzzier_bees/disable_moobloom_spawns` and `moremooblooms:alexsmobs`; the config file has no `replaceTwoByTwo` or `removeSunnyFromAllEffects` key; no ERROR from moremooblooms
+@fails a deleted pack still listed: the jar in mods/ predates the change; a missing sub-pack: `BuzzierBeesSet.dataSwitches` lost more than the two entries
+> datapack list
+shell ! grep -nE "replaceTwoByTwo|removeSunnyFromAllEffects" config/moremooblooms-common.toml
+shell ! grep -nE "ERROR.*moremooblooms" logs/latest.log
+look `/datapack list` output: the three packs absent, `buzzier_bees/disable_moobloom_spawns` and `alexsmobs` present

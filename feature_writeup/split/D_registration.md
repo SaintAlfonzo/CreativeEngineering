@@ -319,7 +319,7 @@ without IE on the classpath at class-verify time only if that method is reached;
 | `creativeengineering.mixins.json` | 213 common + 78 client mixin entries, `server: []`, package `com.SaintAlfonzo.creativeengineering.mixin`, no refmap (SRG names, `remap = false`; `disable_target_validator=true`) | **Mixed**: sweep B assigns each entry; each jar gets `<modid>.mixins.json` with its package |
 | `"plugin": perf/CEMixinPlugin` | `IMixinConfigPlugin`: `shouldApplyMixin` gates, and `postApply` rewrites Immersive Weathering's `ServerLevelMixin$callTick` to call `perf/IwGrowthFast.blockTick` (switch `-Dcreativeengineering.iwFastTick=false`) | Common (perf, Q3) |
 | Jar manifest `MixinConfigs` | written by `build-logic/src/main/groovy/ce.forge-mod.gradle` from `mixin_configs` (default `<mod_id>.mixins.json`) | per jar, automatic |
-| Coremod JS | **none**: no `META-INF/coremods.json`, no `Mixins.addConfiguration`. "Coremod" in the plan means the mixin jar (note [patchermod-coremod](../agent_notes/patchermod-coremod.md)) | - |
+| Coremod JS | **none**: no `META-INF/coremods.json`, no `Mixins.addConfiguration`. "Coremod" in the plan means the mixin jar (note [creative-common-coremod](../agent_notes/creative-common-coremod.md)) | - |
 | `GatedMixinPlugin` | `development/shared/mixinplugin/ce/shared/GatedMixinPlugin.java`, pulled in by `shared_sources=mixinplugin` (CD, CB, Labels, More Mooblooms, Incubation). patcherMod has `shared_sources=packs` only and uses `CEMixinPlugin` instead | Every new jar: `shared_sources=packs,mixinplugin`, a `<X>MixinPlugin extends GatedMixinPlugin` named in its mixins json. Common keeps `CEMixinPlugin` (or merges its IW rewrite into a gated subclass) |
 
 ## D.7 Summary per target jar

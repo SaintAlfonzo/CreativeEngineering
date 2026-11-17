@@ -27,5 +27,5 @@ Checked fine: vanilla recipe book (Forge passes stack), Polymorph, Sol food book
 - AE2: `AeTooltipStacks` pending set before AbstractTableRenderer.render's drawTooltipWithHeader and PatternEncodingTermScreen.m_7025_'s drawTooltip; AEBaseScreen.drawTooltip HEAD draws with stack. Guidebook ItemTooltip.getLines returns ForgeHooksClient.gatherTooltipComponents.
 - New compile libs in creativeCommon/libs: CCK, PrettyPipes, FTB library + quests, Wares, Patchouli, AE2.
 
-**Why:** user asked for the audit, then for JEI + LC fixes. Fix pattern for the others: same idea, see [patchermod-coremod](patchermod-coremod.md).
+**Why:** user asked for the audit, then for JEI + LC fixes. Fix pattern for the others: same idea, see [creative-common-coremod](creative-common-coremod.md).
 **How to apply:** if the JEI jar changes from 11.8.1, re-check the lambda name `lambda$render$6`.

@@ -14,4 +14,4 @@ User prefers Flower Patch's mechanics over Bushier Flowers (both installed). 202
 - Scratch-server verified: mixin applies, dispensed bone meal turns a poppy into `flowerpatch:poppy_patch`, grown poppy no longer pops a flower.
   Not verified: worldgen absence (forge:none is standard), the recipes in JEI.
 
-**Why:** the Flower Patch mechanics work better. **How to apply:** don't re-enable bushier growth; the grown blocks stay registered for existing bushes, dye recipes and pots. Related: [patchermod-coremod](patchermod-coremod.md), memory `scratch-server-verify`, [deploy-pipeline](deploy-pipeline.md).
+**Why:** the Flower Patch mechanics work better. **How to apply:** don't re-enable bushier growth; the grown blocks stay registered for existing bushes, dye recipes and pots. Related: [creative-common-coremod](creative-common-coremod.md), memory `scratch-server-verify`, [deploy-pipeline](deploy-pipeline.md).

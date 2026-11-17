@@ -10,6 +10,6 @@ Built 2026-10-04 in Creative Common (1.0.4 jar in build/libs): `CEConfig.DEBUG` 
 
 Scratch-server baseline: 761,052 states / 14,243 blocks. Vanilla blocks carry extra states from some mod (stone 3, grass_block 44, podzol 4) - a mod adding properties to vanilla blocks is the first suspect for a client/server mismatch (not yet identified). Mixin side is untested in game.
 
-Related: memory `scratch-server-verify`, [patchermod-coremod](patchermod-coremod.md), memory `debugging-with-latest-log`.
+Related: memory `scratch-server-verify`, [creative-common-coremod](creative-common-coremod.md), memory `debugging-with-latest-log`.
 
 **ROOT CAUSE (2026-10-04, after the user's dumps showed identical client/server ranges):** vanilla 1.19.2 `ClientboundSectionBlocksUpdatePacket.write` packs `Block.getId(state) << 12 | pos` in INT math (ishl) then i2l; ids >= 2^19 (524,288) go negative, the reader decodes id - 2^20, byId returns null, NPE. ~237k states / 4,708 blocks affected (neapolitan beanstalk, supplementaries flax, quark, everycomp...). Singleplayer is exempt: local connections have no encoder/decoder in the pipeline. Fix built in Creative Common (1.0.4 jar in build/libs, not in mods/): `mixin/SectionUpdateEncodeFixMixin` (common; redirects writeVarLong m_130103_ in m_5779_ to mask to 32 bits) + client repair in `SectionUpdateNullStateMixin` (id < 0 -> +2^20) via `util/BlockStateIdOverflow`. Scratch server booted with it, mixin applied; real client/server join not yet tested. Repair only works below 2^20 = 1,048,576 states (pack has 761,052).

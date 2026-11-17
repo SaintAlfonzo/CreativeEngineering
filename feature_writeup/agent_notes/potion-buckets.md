@@ -126,7 +126,7 @@ multiple debugging rounds — wrong `@At` owner class (vanilla's `this.getY()` c
 silently matched 0 call sites and did nothing); then a hard boot-crashing
 `InvalidInjectionException` (`@Redirect` always needs the call's receiver as an **explicit
 first handler parameter**, even when the receiver is `this`). Both are now-documented lessons
-in [patchermod-coremod](patchermod-coremod.md) / memory `rhino-fieldandmethods-gotcha` for any *future* vanilla-class
+in [creative-common-coremod](creative-common-coremod.md) / memory `rhino-fieldandmethods-gotcha` for any *future* vanilla-class
 mixin here, but even after both fixes the user still couldn't confirm the sphere actually
 working in-game — **ripped out entirely** (`AreaEffectCloudSphereMixin.java` deleted, removed
 from `creativeengineering.mixins.json`, jar rebuilt+reinstalled clean) in favor of the

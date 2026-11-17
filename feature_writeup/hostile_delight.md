@@ -547,7 +547,7 @@ Notes, as rows:
   recipe or a loot source except the drops.
 - Loot dump: `minecraft:entities/ghast` and `guardian` equal the 2026-10-22 vanilla rows; `endermite` empty.
 - `python3 tools/changelog_lint.py`.
-- Creative Common: headless harness for the Dioxiding mix (memory `patchermod-headless-smoke-test`).
+- Creative Common: headless harness for the Dioxiding mix (memory `creative-common-headless-smoke-test`).
 
 ## 8. In-game test suite (drafted)
 

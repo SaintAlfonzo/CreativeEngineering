@@ -8,7 +8,7 @@ Merged 2026-10-19 from 4 memories (index compaction).
 
 ## ie-refinery-lingerification
 
-Added 2026-09-07 (Creative Common [patchermod-coremod](patchermod-coremod.md)). The IE **Refinery** counterpart to the
+Added 2026-09-07 (Creative Common [creative-common-coremod](creative-common-coremod.md)). The IE **Refinery** counterpart to the
 Create-mixer fluid brew [am-potion-brewing-fix](am-potion-brewing-fix.md) / `DragonBreathBrewing`: for every registered
 potion, both `create:potion{REGULAR}` **and** `{SPLASH}` + `forge:fluid/dragon_breath` fluid
 -> `create:potion{LINGERING}`. Coexists with the Create-mixer path and the IE-Mixer item path
@@ -123,7 +123,7 @@ name + effect line shown.
 
 ## ie-bottler-nbt-fluids
 
-Added 2026-09-06 (Creative Common [patchermod-coremod](patchermod-coremod.md)). Lets the IE Bottling Machine bottle
+Added 2026-09-06 (Creative Common [creative-common-coremod](creative-common-coremod.md)). Lets the IE Bottling Machine bottle
 `create:potion` fluid into potion / splash potion / lingering potion items.
 
 ## Architecture (after the 2026-09-06 rework)

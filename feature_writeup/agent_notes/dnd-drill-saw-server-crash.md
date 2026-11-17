@@ -10,6 +10,6 @@ The follow-up watchdog crash 60s later ("single server tick took 60s") was only 
 
 Fix: `mixin/ExcavationDrillItemMixin` (onBlockDestroyed+destroyVein, require=2) + `mixin/DeforesterSawItemMixin` (destroyTree, require=1). Each has static `@Redirect`s on `SimpleChannel#sendToServer` (no-op) and `ConfigBase$ConfigBool#get` (returns FALSE, the config default) when `!FMLEnvironment.dist.isClient()`. SP/LAN behavior is unchanged. The D&D jar was copied to `patcherMod/libs/Create-DnDesire-1.19.2-1.2c.jar`. Built and deployed to mods/, server_mods/, and the local CreEngServer/mods. **Not boot-tested** (not enough free RAM with the client running). Re-check the call sites if create_dd updates.
 
-Related: [patchermod-coremod](patchermod-coremod.md), [creengserver-dedicated-server](creengserver-dedicated-server.md), memory `debugging-with-latest-log`.
+Related: [creative-common-coremod](creative-common-coremod.md), [creengserver-dedicated-server](creengserver-dedicated-server.md), memory `debugging-with-latest-log`.
 
 2026-09-29: the external server ran jar 1.0.1 (with these mixins) from 2026-09-27 with players breaking blocks and never hit this crash again, so the fix works in practice. See [server-crash-triage-0929](server-crash-triage-0929.md).

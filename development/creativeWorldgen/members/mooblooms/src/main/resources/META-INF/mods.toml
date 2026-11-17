@@ -42,14 +42,6 @@ versionRange="[11,)"
 ordering="NONE"
 side="BOTH"
 
-# Blueprint: the Two by Two advancement modifier.
-[[dependencies.${mod_id}]]
-modId="blueprint"
-mandatory=false
-versionRange="[6,)"
-ordering="NONE"
-side="BOTH"
-
 # Tag-compat packs only (no code): the moobloom joins that mod's cow tags.
 [[dependencies.${mod_id}]]
 modId="alexsmobs"

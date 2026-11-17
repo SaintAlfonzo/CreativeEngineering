@@ -39,10 +39,6 @@
 	emptyHostilesTag = true
 	#Hide Buzzier Bees' moobloom spawn egg from creative tabs and JEI.
 	hideSpawnEgg = true
-	#Two by Two asks for a bred More Mooblooms moobloom instead of Buzzier Bees' one.
-	replaceTwoByTwo = true
-	#How Did We Get Here no longer needs Sunny.
-	removeSunnyFromAllEffects = true
 	#No buttercup patches in new chunks.
 	removeButtercupWorldgen = true
 	#The Wandering Trader stops selling buttercups.

@@ -105,7 +105,7 @@ mixin errors (all mixins disabled until their phase).
 |---|---|
 | Code | `electricity/sim` (72 files), `circuits/thermal` |
 | Changes | Catnip `Pair` to Create 0.5.1 `Pair`; no Minecraft types expected; any found are moved behind an interface |
-| Harness | javac/java harness (as for Creative Common, memory `patchermod-headless-smoke-test`) with EJML on the classpath: voltage divider, RC charge to 63 % within 2 %, ideal transformer 1:10 under load, diode forward drop near 0.7 V, floating grid stays finite (power_grid.md 7). Add: a 1000-node ladder (time per solve, input for SQ-PWG-04) |
+| Harness | javac/java harness (as for Creative Common, memory `creative-common-headless-smoke-test`) with EJML on the classpath: voltage divider, RC charge to 63 % within 2 %, ideal transformer 1:10 under load, diode forward drop near 0.7 V, floating grid stays finite (power_grid.md 7). Add: a 1000-node ladder (time per solve, input for SQ-PWG-04) |
 
 Gate: harness passes; timings written to `PORT_NOTES.md`.
 
