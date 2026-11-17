@@ -23,7 +23,10 @@ feature reader only. Output `[cdevtest] verb=<verb> key=value ...`, every call e
 - **No boot unless asked.** Start a server or client only when the user asked for a run in this conversation. Without
   that, every live check goes into the queue (part A).
 - **One game JVM at a time.** `bash tools/scratch_query/game_jvms.sh` must print nothing before every boot and every
-  client launch (it also skips Gradle). Never kill a JVM you did not start; record your pids.
+  client launch (it also skips Gradle). One exception (owner ruling 2026-11-16): a run may have its own dedicated
+  server plus its own client up together for rows that need both (`eval_client.py launch ... ownsrv=PID`, `qrun.py
+  pair`); then the only JVM listed before the client launch is that server. Never kill a JVM you did not start;
+  record your pids.
 - **One runner.** Claim [RUNNER.md](../../../feature_writeup/testing/RUNNER.md) before preflight and release it at the
   end (B1, B7). If another session holds it, do not run: report that, and offer to queue or wait.
 - **Scripts, probes, batch files live in `tools/`**, never only in the scratchpad (it gets wiped mid-run).

@@ -493,9 +493,10 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 
 ## Clients
 
-- Rows that need a client AND a dedicated server up together cannot be run by an agent (one game JVM at a time, no
-  exceptions): give them to the owner as test IDs (r1108cge2). r1115 phase 10 ran rows needing your own server plus a
-  client with `eval_client.py launch ... ownsrv=PID`. One-off client steps: `tools/scratch_query/cli_do.py`.
+- Rows that need a client AND a dedicated server up together are run by the agent (owner ruling 2026-11-16; the
+  r1108cge2 note that they go to the owner is void): boot the run's own server, then the client with
+  `eval_client.py launch ... ownsrv=PID` (r1115 phase 10), or `qrun.py pair` (qpair.py). Both JVMs are the run's own;
+  nothing else may be up. One-off client steps: `tools/scratch_query/cli_do.py`.
 - `eval_client.py` hard-links the instance `mods/`, so a jar only in build/libs is not in the client. A scratch world goes
   into the client with `sp_world.py` (allowCommands on). `qrun.py client` types chat via xdotool.
 - 420 or more jars in the client's mods/ kill it natively at window creation (`*** stack smashing detected ***:
