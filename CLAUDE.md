@@ -129,7 +129,10 @@ handling event`, the mod/feature name) before reasoning from code. It is the rea
   whether a bullet was added (or why not).
 - Status lives in the repo docs, not memory or agent notes: [feature_writeup/README.md](feature_writeup/README.md)
   (index + status legend), [todo/TODO.md](feature_writeup/todo/TODO.md) (open work),
-  `plan_*.md` and [deploy.md](feature_writeup/deploy.md) (releases).
+  `plan_*.md` and [deploy.md](feature_writeup/deploy.md) (releases). A change updates its writeup, its TODO row and its
+  row in `feature_writeup/status/features.tsv` by hand, then runs `python3 tools/status_index.py`. The README index
+  status, the TODO snapshot counts and the queue coverage block are generated: never hand-edit inside
+  `generated:status_index` markers, and never paste run results into README cells.
 - New tests and queue rows take their prefix from [test_prefix_index.md](feature_writeup/testing/test_prefix_index.md)
   (a new feature adds its row first).
 - Hand over with the exact test IDs to run in game, and any jar still waiting to be copied to `mods/`.
