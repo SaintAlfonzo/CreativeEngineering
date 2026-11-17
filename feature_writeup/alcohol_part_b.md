@@ -756,7 +756,7 @@ our own jar. The D6 decision (WTHIT, not Foundation's overlay) is unchanged.
   wears 15+ armor, bottles left.
 - Toggles: `vinery:grapevine_pot`, `fermentation_barrel`, `apple_press`, `storage`, `stackable_log` (WTHIT config,
   "Vinery" page). Lines reuse upstream's `hud.vinery.*` / `tooltip.vinery.fermentation_barrel.*` strings where they
-  exist; the rest are `wthit.vinery_backport.*` in the port's lang.
+  exist; the rest are `wthit.vinerybackport.*` in the port's lang.
 - Not built: "leaves pending" for stems, and the 1.3.10 legacy wine racks (only the port's storage blocks and pots).
 
 ### 4.7 Winemaker set bonus settings (D11, decided 2026-10-14)
@@ -870,7 +870,7 @@ booted yet.
   - Press block entity id is 1.3.10's `wine_press`: old presses load straight into the new one (W4).
   - Barrel: a 1.3.10 barrel (no `FluidLevel` key) converted on load per W3 (removed 2026-10-27).
   - Winemaker job site: the Aging Barrel (1.5.5); 1.3.10's was the wine press.
-  - Port-only text lives in `assets/vinery_backport/lang/` (keys are global; the path never matches upstream's).
+  - Port-only text lives in `assets/vinerybackport/lang/` (keys are global; the path never matches upstream's).
 - **Open decisions built with the recommendation:** D3 (trippy kept as a client post shader, `improved_*` remapped
   to vanilla, remap removed 2026-10-27), D4 (1.5.5 effect list, plus praetorian Glowing and king danis Instant Health), D5 (1.5.5 numbers;
   aging per 4.5), D7 (Foundation bundled), D8 (no village houses), D9 (no hanging sign), D10 (rotten cherry kept,
@@ -1276,7 +1276,7 @@ This replaces 4.5's "sleeping doesn't age wine" (marked there).
   - Tooltips (`tooltip.vinery.fermentation_barrel.*`) and WTHIT lines.
   - The pack's own text: [vinery.md](vinery.md), this file's player-facing tests, `names.md` if it lists it.
 - **How:** the same keys in the port's own `assets/vinery/lang/en_us.json` (upstream lang can't be edited).
-  - Find every key by grepping the 1.5.5 and 1.3.10 jars' `en_us.json` and the port's `vinery_backport` lang for
+  - Find every key by grepping the 1.5.5 and 1.3.10 jars' `en_us.json` and the port's `vinerybackport` lang for
     "arrel".
   - Not the dark-cherry chest barrel or the 1.3.10 decorative barrel, which are storage, not wine.
 - **Ids stay** (`vinery:fermentation_barrel`). Display names only.

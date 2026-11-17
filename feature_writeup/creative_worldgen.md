@@ -45,7 +45,7 @@ own Java plus two nested members. Same behavior as before the carve; every regis
   `global.NCH.registerConfig('creativeworldgen', ...CWGConfig)` (startup `cwg_core.js`).
 - **Resources in the jar** (same paths, `creativeengineering` namespace): `data/creativeengineering/dimension` (11),
   `dimension_type` (1), `worldgen/noise_settings` (3), the named-mob chat lang key; the data tree
-  `data/more_mooblooms/moobloom_spawns/` (authored in the pack folder, copied at build).
+  `data/moremooblooms/moobloom_spawns/` (authored in the pack folder, copied at build).
 - **Scripts:** startup `kubejs_startup/creativeworldgen/cwg_core.js` (`global.CWG`: `modId`, `on()`, `recipes()`);
   server `kubejs/data/creativeworldgen/kubejs/`: `worldgen/` (11), `other/removed_mobs.js`, `tags/entitytags.js`, the Worldgen
   half of `blocktags.js` (villager ladders, ground match, earth fill, template trim, wild plant soils),
@@ -53,7 +53,7 @@ own Java plus two nested members. Same behavior as before the carve; every regis
   framework (`loot/`, its json tables, `loottags.js`, `global.CWG.lootRules`) moved to Creative Loot on 2026-11-17
   ([creative_loot.md](creative_loot.md)), as `global.LOOT.rules`.
 - **Members** (`development/creativeWorldgen/members/`, mod ids unchanged, no swap list): More Mooblooms
-  (`more_mooblooms`, a standalone jar before) and Baby Mobs (`baby_mobs`, in Creative Delight 2026-11-01 to 2026-11-02).
+  (`moremooblooms`, a standalone jar before) and Baby Mobs (`babymobs`, in Creative Delight 2026-11-01 to 2026-11-02).
 
 ## 2. Edges
 
@@ -127,6 +127,8 @@ config defaults. How old worlds carry over:
 
 ## 6. History
 
+- 2026-11-17: members renamed (plan_rules_fixes.md section 14): `moremooblooms` and `babymobs`; the constructor carries
+  their old config files over (`ConfigRename.carryOver`); the pack data tree is `data/moremooblooms/moobloom_spawns`.
 - 2026-11-17: the loot framework moved to Creative Loot (plan_rules_fixes.md section 5b): `loot/`, its json tables,
   `tags/loottags.js`, `CWGResources` (now `CLResources`) and `global.CWG.lootRules` (now `global.LOOT.rules`); the LootJS
   dependency went with it, Worldgen requires `creativeloot`. Rebuilt and installed with `creativeloot-1.0.0.jar`.

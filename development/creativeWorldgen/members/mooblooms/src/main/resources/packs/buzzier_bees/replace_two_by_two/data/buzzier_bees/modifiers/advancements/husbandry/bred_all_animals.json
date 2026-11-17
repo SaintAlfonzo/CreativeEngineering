@@ -6,16 +6,16 @@
       "type": "criteria",
       "config": {
         "criteria": {
-          "more_mooblooms:moobloom": {
+          "moremooblooms:moobloom": {
             "trigger": "minecraft:bred_animals",
             "conditions": {
               "child": [
-                { "condition": "minecraft:entity_properties", "entity": "this", "predicate": { "type": "more_mooblooms:moobloom" } }
+                { "condition": "minecraft:entity_properties", "entity": "this", "predicate": { "type": "moremooblooms:moobloom" } }
               ]
             }
           }
         },
-        "requirements": [["more_mooblooms:moobloom"]],
+        "requirements": [["moremooblooms:moobloom"]],
         "should_replace_requirements": false
       }
     }

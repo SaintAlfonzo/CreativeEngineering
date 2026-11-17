@@ -47,7 +47,7 @@ import java.util.List;
  */
 public class GrapePlantingCategory extends PortCategory<GrapePlantingCategory.Display> {
     public static final RecipeType<Display> TYPE = RecipeType.create(Vinery.MOD_ID, "grape_planting", Display.class);
-    private static final String LANG = "jei.vinery_backport.grape_planting";
+    private static final String LANG = "jei.vinerybackport.grape_planting";
     private static final int WIDTH = 150;
     private static final int X0 = (WIDTH - 104) / 2;
     private static final int SEED_X = X0 + 1, SUPPORT_X = X0 + 19, ROW_Y = 5;

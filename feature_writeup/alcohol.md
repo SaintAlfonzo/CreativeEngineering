@@ -1081,6 +1081,8 @@ This also ticks the "quiche: sequenced assembly" item in cooking.md (the cooking
 - 2026-10-31: port `-04`: the food effects of Mead, Pale Jane, Saccharine Rum and the six Brewin' dishes show their
   HUD icon (6-arg `MobEffectInstance`, TODO `potions/effects #8`). Installed in `mods/` 2026-10-31 00:30, not yet booted.
 - 2026-11-17: Part B (Vinery) moved to [alcohol_part_b.md](alcohol_part_b.md), sections B0 to B9 renumbered 0 to 9 (design_rules.md V-52).
+- 2026-11-17: the Vinery port's own lang namespace `vinery_backport` is `vinerybackport` (plan_rules_fixes.md section 14,
+  V-11): `assets/vinerybackport/lang/en_us.json`, the lang keys and the in-memory wine box models; no shown text changed.
 
 ## 10. Third list (2026-10-18 late, BUILT, not tested in game)
 
@@ -1424,7 +1426,7 @@ stays as it is.
 - **Magnetic's box look:** Strad's model with `strad_wine.png` recoloured in Magnetic's palette, the same way.
 - **Built in memory, nothing shipped (your call, same day):** `forge.upstream.SlimBottles`, called from
   `UpstreamTranslator.patchAssets`, ports the swap tool's plain mapping to Java (checked pixel-identical to the tool on
-  all 10 wines) and adds `vinery_backport:block/wine_slim/<id>` and `.../wine_box/<id>` (models and textures) to the
+  all 10 wines) and adds `vinerybackport:block/wine_slim/<id>` and `.../wine_box/<id>` (models and textures) to the
   upstream asset pack at load. The recolours come from the donor jars like all other upstream art (D13), so the port
   jar holds none. Wines come from the registry (medium size), so a size change needs no regeneration.
   `SLIM_SKIP` (Praetorian) and `BOX_SHAPES` (magnetic -> strad) are at the top of the class. A first version wrote

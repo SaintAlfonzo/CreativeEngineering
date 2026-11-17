@@ -592,8 +592,8 @@
         BABY_KILLS.forEach(t => check(orbs(t[2]) == 0, 'baby ' + t[0] + ' left ' + orbs(t[2]) + ' experience orbs'))
     }
     function baby(level) {
-        const $Ages = Java.loadClass('com.SaintAlfonzo.baby_mobs.age.BabyAges')
-        const $BM = Java.loadClass('com.SaintAlfonzo.baby_mobs.BMConfig')
+        const $Ages = Java.loadClass('com.SaintAlfonzo.babymobs.age.BabyAges')
+        const $BM = Java.loadClass('com.SaintAlfonzo.babymobs.BMConfig')
         let x = 210
         // drops: adult squid as the control, babies nothing. Items drop at death; experience only when the death
         // animation ends (20 ticks), so `babyxp` counts the orbs a second later

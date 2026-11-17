@@ -15,16 +15,16 @@
 @@table
 ## SQ-BM-01 | Baby Mobs on a dedicated server: members line, no client class
 @group A
-@commands Dedicated server boot with the CD jar; `grep -E "Baby Mobs\|baby_mobs\|BabyKit\|LivingEntityRendererBabyMixin" logs/latest.log logs/debug.log \| head -20`; `grep -c "Error occurred while handling event" logs/kubejs/server.log`
-@pass members line lists `baby_mobs`; no `Baby Mobs:` error, no client class (`BabyRender`, `net.minecraft.client`) named in a crash or mixin error; the client mixins (`mixin/client/*`) are not applied on the server
-@fails a client mixin not listed under `client` in `baby_mobs.mixins.json`; a common class importing `client/`
+@commands Dedicated server boot with the CD jar; `grep -E "Baby Mobs\|babymobs\|BabyKit\|LivingEntityRendererBabyMixin" logs/latest.log logs/debug.log \| head -20`; `grep -c "Error occurred while handling event" logs/kubejs/server.log`
+@pass members line lists `babymobs`; no `Baby Mobs:` error, no client class (`BabyRender`, `net.minecraft.client`) named in a crash or mixin error; the client mixins (`mixin/client/*`) are not applied on the server
+@fails a client mixin not listed under `client` in `babymobs.mixins.json`; a common class importing `client/`
 @from batches/r1102b/s3_A.qb
 bootexpect Done \(
-bootexpect \[creativedelight\] members: \[.*\bbaby_mobs\b
+bootexpect \[creativedelight\] members: \[.*\bbabymobs\b
 bootreject (?i)baby ?mobs:.*(error|exception)
 bootreject (?i)(BabyRender|BabyKit|LivingEntityRendererBabyMixin).*(error|exception|crash|not found)
-bootreject (?i)baby_mobs\S*(mixin|class).*(error|exception|invalid dist)
-shell grep -hE "Baby Mobs|baby_mobs|BabyKit|LivingEntityRendererBabyMixin" logs/latest.log logs/debug.log 2>/dev/null | head -20; echo "kjs handler errors: $(grep -c 'Error occurred while handling event' logs/kubejs/server.log)"; true
+bootreject (?i)babymobs\S*(mixin|class).*(error|exception|invalid dist)
+shell grep -hE "Baby Mobs|babymobs|BabyKit|LivingEntityRendererBabyMixin" logs/latest.log logs/debug.log 2>/dev/null | head -20; echo "kjs handler errors: $(grep -c 'Error occurred while handling event' logs/kubejs/server.log)"; true
 # lane and probe chunks for the whole batch (superflat generates fast; 30 s before any block tick)
 > forceload add 96 496 300 560
 > forceload add 400 400
@@ -129,7 +129,26 @@ look the two entities reads at x 145 z 505 (by_type): the cat (minecraft:cat) ri
 @draft no batch holds this row yet
 ## CQ-BM-07
 @group client
-@commands BM-15 (adults and log); then `babyModels = false` in `config/baby_mobs-common.toml` (restart)
+@commands BM-15 (adults and log); then `babyModels = false` in `config/babymobs-common.toml` (restart)
 @pass adults of every mob above unchanged, inventory and spawn egg previews fine; `latest.log` has no `Baby Mobs:` error and no `piglin default poses not reachable`; with the switch off all babies are 1.19.2 half-size adults
 @fails `BMConfig`; `LivingEntityRendererBabyMixin` restore at RETURN
 @draft no batch holds this row yet
+
+@@section 2
+@@title SQ-BM Baby Mobs mod id `babymobs` (was `baby_mobs`), old-id save, 2026-11-17 ([baby_mobs.md](../baby_mobs.md) 8, [plan_rules_fixes.md](../plan_rules_fixes.md) 14; TODO `conventions #30`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativeworldgen
+@@sources development/creativeWorldgen/members/babymobs/src/main development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CreativeWorldgen.java
+@@text
+@@text Runs in the two boots of SQ-RFX-25 (rows/RFX.qb section 6). Baby Mobs registers nothing, so only the config file and the saved `Age` matter.
+@@table
+## SQ-BM-03 | baby squid from the old world stays a baby; config carried
+@group A (old save, boot 2 of SQ-RFX-25)
+@commands `> data get entity @e[type=minecraft:squid,limit=1,sort=nearest,x=0,y=-59,z=12] Age`; `grep -n squidBabyChance config/babymobs-common.toml`; `grep -E "babymobs.mixins.json" logs/debug.log \| head -3`
+@pass the squid's `Age` is still negative (about -24000 plus the ticks since boot 1); `squidBabyChance = 0.75` in `babymobs-common.toml`, no `baby_mobs-common.toml` left; the common mixins apply from `babymobs.mixins.json`, no mixin error naming `babymobs`
+@fails Age 0: `MobBabyMixin` did not run (the mixin config name in the member manifest); the chance back at 0.05: `ConfigRename.carryOver` in `CreativeWorldgen`
+> data get entity @e[type=minecraft:squid,limit=1,sort=nearest,x=0,y=-59,z=12] Age
+expect Age: -
+shell grep -n squidBabyChance config/babymobs-common.toml; ls config | grep -c "^baby_mobs-common.toml$" || true
+shell ! grep -E "babymobs\S*mixins.*(error|Error|failed)" logs/latest.log

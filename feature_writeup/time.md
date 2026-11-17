@@ -415,7 +415,7 @@ No conversions between versions: the ports are in development, so nothing below 
 
 | Where | Keys / place | How |
 |---|---|---|
-| Port's own lang (`vinery_backport`) | `tooltip.vinery_backport.age`, `command.vinery_backport.wine.time.units`, `jei.vinery_backport.wine_aging.year` / `.level`, `wthit.vinery_backport.wine` | edit the text |
+| Port's own lang (`vinerybackport`) | `tooltip.vinerybackport.age`, `command.vinerybackport.wine.time.units`, `jei.vinerybackport.wine_aging.year` / `.level`, `wthit.vinerybackport.wine` | edit the text |
 | Upstream lang (in the 1.5.5 jar, can't be edited) | `hud.vinery.wine.age` ("Aged %s Years"), `command.vinery.wine.info.age`, `command.vinery.wine.time`, `vinery.configuration.daysPerYear` / `yearsPerEffectLevel` / `durationPerYear`, `advancement.vinery.vintage_perfection.desc` ("aged ... for 15 years") | same keys in the port's own `assets/vinery/lang/en_us.json`, our own wording, which layers above the donor jar (B4.8, check with VB-43) |
 | Config | `[wine] daysPerYear`, `yearsPerEffectLevel`, `durationPerYear` | renamed as above; the master supplies `daysPerMonth` and `monthsPerEffectLevel` (the port reads `time.WineTime`) |
 | `/wine clock add <n> years` | command argument | `months` (keep `days`) |

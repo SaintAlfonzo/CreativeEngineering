@@ -130,6 +130,23 @@ def registries():
     return reg
 
 
+@lru_cache(maxsize=None)
+def swap_aliases():
+	"""Old ids the swap lists keep as permanent aliases (`replaces` values in development/**/data/*/swaps/*.json):
+	they still resolve in NBT, so an old-id save row may name them."""
+	out = set()
+	for f in (ROOT / 'development').glob('**/src/**/data/*/swaps/*.json'):
+		if '/build/' in str(f):
+			continue
+		try:
+			rep = json.loads(f.read_text()).get('replaces', {})
+		except (OSError, ValueError):
+			continue
+		for olds in rep.values():
+			out.update(o for o in (olds if isinstance(olds, list) else [olds]) if isinstance(o, str))
+	return frozenset(out)
+
+
 def _clean(cmd):
     cmd = re.sub(r'"(?:[^"\\]|\\.)*"', lambda m: m.group(0) if 'id:' in cmd else '""', cmd)
     return cmd
@@ -154,13 +171,13 @@ def dead_ids(cmd):
         if tag:
             if ident not in reg['tag']:
                 out.append(('E', '#' + ident, 'tag'))
-        elif ident not in reg.get(kind, ()) and ident not in reg.get(kind + '_alias', ()):
+        elif ident not in reg.get(kind, ()) and ident not in reg.get(kind + '_alias', ()) and ident not in swap_aliases():
             out.append(('E', ident, kind))
     # item stacks in NBT: {id:"x",Count:1b} or {Count:1b,id:"x"} (not enchantment or effect ids)
     for m in re.finditer(r'\bid: *"([a-z0-9_.\-]+:[a-z0-9_.\-/]+)" *, *Count\b|\bCount: *\d+b? *, *id: *"([a-z0-9_.\-]+:'
                          r'[a-z0-9_.\-/]+)"', cmd):
         ident = m.group(1) or m.group(2)
-        if ident not in reg.get('item', ()):
+        if ident not in reg.get('item', ()) and ident not in swap_aliases():
             out.append(('E', ident, 'item'))
         checked.add(m.start(1) if m.group(1) else m.start(2))
     for m in ID_RE.finditer(_clean(cmd)):
@@ -172,7 +189,7 @@ def dead_ids(cmd):
         if m.group(1):
             if ident not in reg['tag']:
                 out.append(('W', '#' + ident, 'tag'))
-        elif ident not in reg['any']:
+        elif ident not in reg['any'] and ident not in swap_aliases():
             out.append(('W', ident, 'any'))
     return out
 

@@ -21,7 +21,7 @@ console.log('sample_syringe func loading')
     // Written out one entry per line on purpose - add more as they're needed.
     const SAMPLES = {}
     SAMPLES['minecraft:cow'] = { name: 'Cow', filledId: i.cow_sample_syringe }
-    if (global.has('more_mooblooms')) SAMPLES['more_mooblooms:moobloom'] = { name: 'Moobloom', filledId: i.cow_sample_syringe }
+    if (global.has('moremooblooms')) SAMPLES['moremooblooms:moobloom'] = { name: 'Moobloom', filledId: i.cow_sample_syringe }
     SAMPLES['minecraft:pig'] = { name: 'Pig', filledId: i.pig_sample_syringe }
     SAMPLES['minecraft:chicken'] = { name: 'Chicken', filledId: i.chicken_sample_syringe }
     SAMPLES['minecraft:sheep'] = { name: 'Sheep', filledId: i.sheep_sample_syringe }

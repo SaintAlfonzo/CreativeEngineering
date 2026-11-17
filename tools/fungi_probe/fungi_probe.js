@@ -349,7 +349,7 @@
             a.discard(); b.discard()
         })
         let moo = make('red', 90), mb = null
-        try { mb = spawn(level, 'more_mooblooms:moobloom', 92, 8) } catch (e) { }
+        try { mb = spawn(level, 'moremooblooms:moobloom', 92, 8) } catch (e) { }
         if (mb == null) { check('moobloom x mooshroom', false, 'moobloom entity id not found'); return }
         moo.setInLove(null); mb.setInLove(null)
         check('moobloom x mooshroom cannot mate', !moo.canMate(mb) && !mb.canMate(moo), 'moo->mb ' + moo.canMate(mb) + ', mb->moo ' + mb.canMate(moo))

@@ -44,7 +44,7 @@ Part 2: every recipe type with no JEI category, and every category that drops so
   stem pruning, kitchen sink, Nock Enough Arrows paint arrow, Cloud Storage balloon arrow.
 - Vinery is now a Creative Brewing member (`development/creativeBrewing/members/vinery`). Its Grape Planting pages
   already say how bushes, stems and lattices are picked and that shears give the seed back
-  (`assets/vinery_backport/lang/en_us.json` lines 45-49), so bush harvesting and stem pruning may be covered; leaf
+  (`assets/vinerybackport/lang/en_us.json` lines 45-49), so bush harvesting and stem pruning may be covered; leaf
   harvesting lives in `core/block/AppleLeavesBlock.java` and `DarkCherryLeavesBlock.java`. No sink block class was
   found under `core/block` (kitchen sink id unverified).
 

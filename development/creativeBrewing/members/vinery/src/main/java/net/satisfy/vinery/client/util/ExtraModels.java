@@ -17,7 +17,7 @@ public final class ExtraModels {
     private static final ResourceLocation[] WHITE_POT_CONTENT = potContent("white");
 
     /** alcohol.md 10.17: the port's own bottle variants, built in memory by forge.upstream.BottleLooks. */
-    private static final String BOTTLE_NAMESPACE = "vinery_backport";
+    private static final String BOTTLE_NAMESPACE = "vinerybackport";
     /** A medium wine's look lying in the wine box and (smaller) the 4x rack. */
     public static final String BOX = "wine_box";
 

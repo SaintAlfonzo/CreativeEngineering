@@ -16,7 +16,7 @@ Inputs:
   rules, which are written as they are and never recomputed.
 
 Writes:
-- kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json (copied into the Creative Worldgen jar at
+- kubejs/data/moremooblooms/moobloom_spawns/creativeengineering.json (copied into the Creative Worldgen jar at
   build, so a change needs a :creativeWorldgen: rebuild and install)
 - feature_writeup/mooblooms.md: the parts between the gen_moobloom_rules markers in 2.8 and 4.9
 """
@@ -31,11 +31,11 @@ import gen_wild_flowers as wf  # noqa: E402
 g = wf.g
 INSTANCE = wf.INSTANCE
 CONFIG = INSTANCE / 'kubejs/generation_scripts/worldgen/moobloom_rules.json'
-RULES_OUT = INSTANCE / 'kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json'
-VARIANTS = INSTANCE / 'development/creativeWorldgen/members/mooblooms/src/main/resources/data/more_mooblooms/moobloom_variants'
+RULES_OUT = INSTANCE / 'kubejs/data/moremooblooms/moobloom_spawns/creativeengineering.json'
+VARIANTS = INSTANCE / 'development/creativeWorldgen/members/mooblooms/src/main/resources/data/moremooblooms/moobloom_variants'
 SPAWNS = INSTANCE / 'kubejs/exported/spawns.json'
 DOC = INSTANCE / 'feature_writeup/mooblooms.md'
-NS = 'more_mooblooms:'
+NS = 'moremooblooms:'
 WARN = []
 
 

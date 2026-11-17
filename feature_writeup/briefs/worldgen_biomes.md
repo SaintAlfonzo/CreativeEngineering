@@ -216,7 +216,7 @@ Decide whether the four Terralith skylands stay at 0.15x, given how many feature
   skylands "on purpose".
 - Pack features that target them:
   - permanent seasons, `kubejs/generation_scripts/worldgen/season_types.json:149-160`;
-  - moobloom rules, skylands summer 50 % and spring 75 % of cows (`kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json`)
+  - moobloom rules, skylands summer 50 % and spring 75 % of cows (`kubejs/data/moremooblooms/moobloom_spawns/creativeengineering.json`)
     plus cows added to skylands spring (`kubejs/data/creativeengineering/forge/biome_modifier/moobloom_cows.json`);
   - chickens in every skylands biome (`kubejs/generation_scripts/worldgen/mob_spawns.json:121`);
   - bee nests `bloom_woods` (`bee_nests.json`);

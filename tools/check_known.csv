@@ -3,3 +3,4 @@
 check,regex,reason,date
 test_crop_growth,UNKNOWN: hearthandharvest:hops_vine,Hops vine has no crop growth rule; tracked as largecontent/mod-additions #64 (WTHIT growth line),2026-11-16
 test_prefix_lint,FAIL \(20 failures\),"20 queue ids defined twice in rows/*.qb before the lint existed (plan_rules_fixes.md Owner list (P1)); a new failure changes the count and fails",2026-11-17
+queue_rows,"SQ-SMK-31: dead id: moremooblooms:moobloom not in the entity dump\n(baseline[^\n]*\n)?qrowlint: \d+ file\(s\), 1 error\(s\)",More Mooblooms renamed to moremooblooms (plan_rules_fixes.md section 14); the entity dump in kubejs/exported is older than the rename. Remove after the next /dumpall,2026-11-17

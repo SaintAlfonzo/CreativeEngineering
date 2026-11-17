@@ -12522,9 +12522,9 @@ i.goose_nest        = 'creativedelight:goose_nest';
 i.duck_egg_crate    = 'creativedelight:duck_egg_crate';
 i.goose_egg_crate   = 'creativedelight:goose_egg_crate';
 
-// ===== more_mooblooms  -  1 new =====
+// ===== moremooblooms  -  1 new =====
 // One egg for every variant: the variant is EntityTag.Variant NBT (moreMooblooms item/MoobloomSpawnEggItem.java)
-i.more_moobloom_spawn_egg = 'more_mooblooms:moobloom_spawn_egg';
+i.more_moobloom_spawn_egg = 'moremooblooms:moobloom_spawn_egg';
 
 // ===== chalk  -  1 new  (17 items, 16 already mapped) =====
 i.chalk_box = 'chalk:chalk_box';

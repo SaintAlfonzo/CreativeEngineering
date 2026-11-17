@@ -185,7 +185,7 @@ IN_TREE_EXTRA_SRC = {
     'creativeCompat': ['kubejs/data/creativecompat/kubejs', 'kubejs/assets/creativecompat/kubejs'],
     'creativeLoot': ['kubejs/data/creativeloot/kubejs'],
     'creativeWorldgen': ['development/creativeWorldgen/members', 'kubejs/data/creativeworldgen/kubejs',
-                         'kubejs/data/more_mooblooms/moobloom_spawns', 'development/shared'],
+                         'kubejs/data/moremooblooms/moobloom_spawns', 'development/shared'],
     'creativeMagic': ['kubejs/data/creativemagic/kubejs', 'kubejs/assets/creativemagic/kubejs', 'development/shared'],
     'creativeEquipment': ['kubejs/data/creativeequipment/kubejs', 'kubejs/assets/creativeequipment/kubejs',
                           'development/shared'],
@@ -291,7 +291,7 @@ KUBEJS_CLASSES = [
     # Creative Worldgen's server script tree and the moobloom spawn rules it ships as a data tree: the same, shipped only
     # inside the creativeworldgen jar
     ('data/creativeworldgen/kubejs/*', 'dev'),
-    ('data/more_mooblooms/*', 'dev'),
+    ('data/moremooblooms/*', 'dev'),
     # Creative Magic's script trees: the same, shipped only inside the creativemagic jar
     ('data/creativemagic/kubejs/*', 'dev'),
     ('assets/creativemagic/kubejs/*', 'dev'),

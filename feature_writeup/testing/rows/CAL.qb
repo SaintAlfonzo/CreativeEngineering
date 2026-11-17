@@ -114,3 +114,21 @@ look wine clock moves 8 days with the month
 @pass "Mid Spring (Day n/24) 7:30 pm" style HUD; tooltip "Year 1, ..." and "Here: ..."; Xaero "Day n, HH:MM"; wheat shows "Fertile: Spring" (or its type) and a "here" line; "Crop Seasons" listed in WTHIT's plugin config; no rain particles in the desert (Pretty Rain)
 @fails client mixins (`SeasonHudCurrentSeason`, `XaeroTimeInfo`, `PrettyRainSeason`, `SeasonRainColumn`) not applied, or the lang file missing from the Calendar jar
 @draft no batch holds this row yet
+
+@@section 2
+@@title SQ-CAL Calendar config carried by Common's ConfigRename, 2026-11-17 ([creative_calendar.md](../creative_calendar.md) 4.3, design_rules V-07; TODO `conventions #30`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecalendar
+@@sources development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CreativeCalendar.java
+@@text
+@@text `CalendarConfigMigration` is gone: a missing `creativecalendar-common.toml` is written at construction from the `[seasons]`, `[crop_seasons]`, `[time]`, `[perf]` and `[wthit]` tables of `creativeengineering-common.toml` (`ConfigRename.carrySections`). An existing calendar file is no longer patched. Supersedes the migration half of SQ-CAL-02.
+@@table
+## SQ-CAL-09 | a fresh calendar file takes the old sections from creativeengineering-common.toml
+@group A (config setup before boot)
+@commands Before boot: write `config/creativeengineering-common.toml` holding `[time.day]` `dayMinutes = 50` (and the rest of `[time]`, `[seasons]`, `[crop_seasons]` as in `configs_edited/root_config/creativecalendar-common.toml`), `[perf] seasonsMeltIntervalTicks = 8` plus one unrelated `[perf]` key, `[wthit] cropSeasons = false`; delete `config/creativecalendar-common.toml`; boot; read both files; `/ccaltime`
+@pass `[swaps] config sections [seasons, crop_seasons, time, perf, wthit] carried over from creativeengineering-common.toml to creativecalendar-common.toml`; the calendar file has `dayMinutes = 50`, `seasonsMeltIntervalTicks = 8`, `cropSeasons = false` with their comments, and not the unrelated `[perf]` key (Forge's correction dropped it); `/ccaltime` reports the 50-minute day; a second boot logs no carry line
+@fails defaults in the new file: `ConfigRename.carrySections` called after `registerConfig` or the section names wrong; the unrelated `[perf]` key still there: the file was not corrected (Forge logs `Configuration file ... is not correct`)
+@draft the config files must be written before boot; qrun has no pre-boot file step, the runner writes them by hand in OUT/srv/config
+shell grep -hE "\[swaps\] config sections" logs/latest.log
+shell grep -nE "dayMinutes|seasonsMeltIntervalTicks|cropSeasons" config/creativecalendar-common.toml

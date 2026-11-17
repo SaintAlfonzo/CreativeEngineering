@@ -3,7 +3,7 @@
 // loaded by patcherMod's startup loader after the pack's startup_scripts folder, so global.NCH, global.tags and the
 // dicts already exist here. The server scripts are in kubejs/data/creativeworldgen/kubejs/ (_worldgen_core.js).
 //
-//   global.CWG.on('more_mooblooms')     mod loaded; read it inside an event callback
+//   global.CWG.on('moremooblooms')     mod loaded; read it inside an event callback
 //   global.CWG.recipes(() => { ... })   every recipe id the NCH helpers write inside is creativeworldgen:<type>/<suffix>
 //                                       (no Worldgen script writes recipes yet)
 // Loot rules go to Creative Loot's engine: global.LOOT.rules(L => { ... }) (kubejs_startup/creativeloot/loot_core.js).

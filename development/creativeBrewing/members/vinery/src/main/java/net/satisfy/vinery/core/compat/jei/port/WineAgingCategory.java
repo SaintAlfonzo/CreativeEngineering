@@ -35,7 +35,7 @@ import java.util.Set;
  */
 public class WineAgingCategory extends PortCategory<WineAgingCategory.Display> {
     public static final RecipeType<Display> TYPE = RecipeType.create(Vinery.MOD_ID, "wine_aging", Display.class);
-    private static final String LANG = "jei.vinery_backport.wine_aging";
+    private static final String LANG = "jei.vinerybackport.wine_aging";
     private static final int WIDTH = 150;
     private static final int X0 = (WIDTH - 125) / 2;
     private static final int RACK_X = X0 + 1, FRESH_X = X0 + 50, RESULT_X = X0 + 104, ROW_Y = 5;

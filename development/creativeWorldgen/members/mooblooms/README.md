@@ -1,6 +1,6 @@
 # moreMooblooms
 
-**More Mooblooms** (`more_mooblooms`): mooblooms in many flower variants, on a cow of our own. Jar:
+**More Mooblooms** (`moremooblooms`): mooblooms in many flower variants, on a cow of our own. Jar:
 `moreMooblooms-<mod_version>.jar`. GPLv3 (LICENSE.txt).
 
 Full reference, decisions and tests: [feature_writeup/mooblooms.md](../../feature_writeup/mooblooms.md) section 4, `MB-`.
@@ -9,7 +9,7 @@ Full reference, decisions and tests: [feature_writeup/mooblooms.md](../../featur
 
 | Feature | Where |
 |---|---|
-| `more_mooblooms:moobloom`: a cow (milk, size, sounds) with a synced `Variant`, `Sheared` and `Flowers` | `entity/Moobloom`, `entity/MMEntities` |
+| `moremooblooms:moobloom`: a cow (milk, size, sounds) with a synced `Variant`, `Sheared` and `Flowers` | `entity/Moobloom`, `entity/MMEntities` |
 | Variants are data: `data/<ns>/moobloom_variants/<path>.json`, 11 shipped (`moobloom` is the default), each with a weighted flower pool (optional entries for other mods' flowers); synced to clients on login and /reload | `variant/`, `network/SyncVariantsPacket` |
 | Each of the three flower spots grows its own roll from the pool, saved on the moobloom; re-rolled on regrowth | `Moobloom.refreshFlowers` |
 | Two-stage shearing: grown -> the flowers it carries, goes bare; bare -> back to a cow (+ three weighted pool drops). Players, deployers and dispensers all take the same path | `Moobloom.shearInternal` |
@@ -18,11 +18,11 @@ Full reference, decisions and tests: [feature_writeup/mooblooms.md](../../featur
 | A spawn egg used on a moobloom makes a calf of the egg's variant | `MoobloomSpawnEggItem.spawnOffspringFromSpawnEgg` |
 | A plain cow fed any variant's flower converts at `feedChance` (babies too, the flower is always used); a flower in several pools picks a variant by `feed_weight` | `entity/CowFeeding` |
 | Natural spawning: cows the spawner adds may become mooblooms by `moobloom_spawns` rules + `rareChance` (default 0, no cow rules shipped). Mooblooms a biome modifier spawns directly take their biome's rule | `spawn/MoobloomSpawns`, `mixin/NaturalSpawnerMixin` |
-| Witherblooms, rarely, in soul sand valleys (config `witherbloomSpawns`): biome modifier + spawn rule in a built-in pack; witherbloom's `spawns_in_dark_on` lets it (and only it) spawn on soul sand / soul soil without grass or light | `packs/more_mooblooms/witherbloom_spawns/`, `MMEntities.checkMoobloomSpawnRules`, `Moobloom.checkSpawnRules` |
+| Witherblooms, rarely, in soul sand valleys (config `witherbloomSpawns`): biome modifier + spawn rule in a built-in pack; witherbloom's `spawns_in_dark_on` lets it (and only it) spawn on soul sand / soul soil without grass or light | `packs/moremooblooms/witherbloom_spawns/`, `MMEntities.checkMoobloomSpawnRules`, `Moobloom.checkSpawnRules` |
 | One spawn egg, one stack per variant (creative + JEI), name and colours follow the variant | `item/MoobloomSpawnEggItem`, `client/ClientSetup` |
 | Flowers drawn in three fixed slots (back front, back rear, head) | `client/MoobloomFlowerLayer` |
 
-Config: `config/more_mooblooms-common.toml` (`MMConfig`).
+Config: `config/moremooblooms-common.toml` (`MMConfig`).
 
 ## Content sets
 
@@ -47,7 +47,7 @@ only through our own data files, Forge events and mixins into vanilla classes. S
 
 A JSON in any data pack (`kubejs/data/<ns>/moobloom_variants/<path>.json`), a texture at
 `assets/<ns>/textures/entity/moobloom/<path>.png` (64x32, cow layout) and a lang key
-`entity.more_mooblooms.moobloom.<path>` (`.<ns>.<path>` outside our namespace), the name alone ("Sunbloom").
+`entity.moremooblooms.moobloom.<path>` (`.<ns>.<path>` outside our namespace), the name alone ("Sunbloom").
 Format in mooblooms.md 4.4 (variants) and 4.8 (breeding). `python3 tools/check_moobloom_data.py` (instance
 root) checks the JSON, textures, lang and breeding files.
 

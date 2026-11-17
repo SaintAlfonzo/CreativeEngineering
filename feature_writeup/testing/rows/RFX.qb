@@ -310,3 +310,63 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @pass the coaster on the counter sits on the worktop (no gap, not sunk), the drinks with it; the one on stone as before; no `CoasterRendererOffsetMixin` in the log
 @fails floating 1 px: the renderer did not shift (Delight's Cooking for Blockheads compartment off, or Brewing older than 2026-11-17); a crash naming `CounterToppers`: Delight older than the Brewing jar
 @draft placing a coaster with drinks needs a driver step for block-entity contents; owner LOOK
+
+@@section 6
+@@title SQ-RFX Rules fixes P4 on an old-id save: More Mooblooms, Baby Mobs and Exposure Extras ids, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) 14 and 12 V-06; TODO `conventions #30`, `conventions #23`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativeworldgen creativecommon exposure
+@@sources development/creativeWorldgen/members/mooblooms/src/main development/creativeWorldgen/members/babymobs/src/main/java development/creativeWorldgen/src/main/java/com/SaintAlfonzo/creativeworldgen/CreativeWorldgen.java development/exposureBackport/src/extras
+@@text
+@@text Mod ids `more_mooblooms` -> `moremooblooms` and `baby_mobs` -> `babymobs` (Worldgen members). Saves: `data/moremooblooms/swaps/owner_namespace.json` (namespace move plus aliases for the entity type and the spawn egg), saved `Variant` ids read through `MoobloomVariants.legacy`, member config files carried by Worldgen's `ConfigRename.carryOver`. Exposure Extras: the `creativeengineering:<tier>_camera_bag` ids are `replaces` entries now (the hand `MissingMappingsEvent` is gone). One old-id world: boot 1 writes it with the pre-rename Worldgen jar `jar_archive/p4_oldid/creativeworldgen-1.0.0.jar` (commit 5d1ed0a1; every other jar the installed one), boot 2 loads it after `tools/scratch_query/oldsave_swap.sh OUT` (the 2026-11-17 builds). The world must be fresh: a world opened once with the new jars and no swap list loses the old ids from level.dat ([forge-missing-mappings-staging](../agent_notes/forge-missing-mappings-staging.md)). SQ-BM-03 and SQ-EX-01 run in the same two boots.
+@@table
+## SQ-RFX-25 | old-id world: written with the pre-rename Worldgen, loaded with the new jars, no missing ids
+@group A (old save, two boots)
+@commands Boot 1: `NOSWAP=1` prep, replace `OUT/srv/mods/creativeworldgen-1.0.0.jar` with `jar_archive/p4_oldid/creativeworldgen-1.0.0.jar`, new superflat world; set `squidBabyChance = 0.75` in `config/baby_mobs-common.toml` and `regrowChance = 0.6` in `config/more_mooblooms-common.toml` (stop, edit, start); `> summon more_mooblooms:moobloom 0 -60 4 {NoAI:1b,Variant:"more_mooblooms:sunbloom",Tags:["p4a"]}`, the same with `more_mooblooms:rosebloom` at 0 -60 6 and an `Age:-24000` calf of `more_mooblooms:lilybloom` at 0 -60 8; `> setblock 0 -61 10 chest{Items:[{Slot:0b,id:"more_mooblooms:moobloom_spawn_egg",Count:3b,tag:{EntityTag:{Variant:"more_mooblooms:peonybloom"}}}]}`; `> summon squid 0 -59 12 {Age:-24000,NoAI:1b}` in a water pool; `> save-all`; stop. Run `oldsave_swap.sh OUT`; boot 2 on the SAME world; grep latest.log
+@pass boot 2 log: `[swaps] ... namespace move(s)` counts the list, `[swaps] minecraft:entity_type: 1 id(s) remapped` and the same for `minecraft:item`; `[swaps] config more_mooblooms-common.toml carried over to moremooblooms-common.toml` and the `baby_mobs` one; no `Identifier .* is missing` / missing registry entry naming `more_mooblooms` or `baby_mobs`; `config/` holds `moremooblooms-common.toml` (`regrowChance = 0.6`) and `babymobs-common.toml` (`squidBabyChance = 0.75`), the old files gone
+@fails ids missing: the swap list is not in the moreMooblooms member jar (`data/moremooblooms/swaps/`) or the world was opened once without it; a config at defaults: `CreativeWorldgen` did not call `carryOver` before Forge read the COMMON configs
+@draft boot 1 needs the archived jar swapped into OUT/srv/mods and a stop, config edit and restart in the middle; qrun has no step for a jar swap inside one row. Boot 2 checks below are runnable once the world exists
+shell ! grep -E "Identifier .* is missing|[Mm]issing.*(more_mooblooms|baby_mobs):" logs/latest.log
+shell grep -hE "\[swaps\]" logs/latest.log | head -12
+shell grep -n "regrowChance\|squidBabyChance" config/moremooblooms-common.toml config/babymobs-common.toml; ls config | grep -E "mooblooms|baby_?mobs"
+## SQ-RFX-26 | old-id world: mooblooms keep their variants, eggs keep theirs
+@group A (old save, boot 2 of SQ-RFX-25)
+@commands `/cdevtest entities 0 -60 6 8 type=moremooblooms:moobloom`; `> data get entity @e[type=moremooblooms:moobloom,tag=p4a,limit=1,sort=nearest] Variant` for each; `> data get block 0 -61 10 Items`; take one egg and use it on the ground at 4 -60 4; `> data get entity @e[type=moremooblooms:moobloom,limit=1,sort=nearest,x=4,y=-60,z=4] Variant`
+@pass three mooblooms load as `moremooblooms:moobloom` with `Variant: "moremooblooms:sunbloom"`, `"moremooblooms:rosebloom"`, `"moremooblooms:lilybloom"` (the calf still a calf), no `unknown variant` WARN; the chest holds 3 `moremooblooms:moobloom_spawn_egg`; the egg spawns a peonybloom
+@fails a moobloom gone: the entity type was not remapped (SQ-RFX-25); a plain `moremooblooms:moobloom` variant with an `unknown variant` WARN: `MoobloomVariants.legacy` not applied in `Moobloom.readAdditionalSaveData`; an egg giving a random variant: `MoobloomSpawnEggItem.variantOf`
+> cdevtest entities 0 -60 6 8 type=moremooblooms:moobloom
+> data get block 0 -61 10 Items
+expect moremooblooms:moobloom_spawn_egg
+shell ! grep -E "has unknown variant 'more_mooblooms:" logs/latest.log
+look each moobloom's Variant reads the moremooblooms: id it was summoned with; the egg used on the ground gives a peonybloom
+## SQ-RFX-27 | old ids in NBT on a fresh world resolve through the aliases (mooblooms, camera bags)
+@group A
+@commands Fresh world, new jars: `> setblock 20 -61 0 chest{Items:[{Slot:0b,id:"more_mooblooms:moobloom_spawn_egg",Count:1b},{Slot:1b,id:"creativeengineering:leather_camera_bag",Count:1b},{Slot:2b,id:"creativeengineering:iron_camera_bag",Count:1b},{Slot:3b,id:"creativeengineering:netherite_camera_bag",Count:1b},{Slot:4b,id:"exposure_extras:camera_bag",Count:1b}]}`; `> data get block 20 -61 0 Items`; `> setblock 22 -61 0 spawner{SpawnData:{entity:{id:"more_mooblooms:moobloom"}}}`; `> data get block 22 -61 0 SpawnData`
+@pass the chest lists `moremooblooms:moobloom_spawn_egg`, `exposureextras:leather_camera_bag`, `exposureextras:iron_camera_bag`, `exposureextras:netherite_camera_bag`, `exposureextras:camera_bag` (5 stacks, none `minecraft:air`); the spawner keeps a moobloom; boot log: `[swaps] N permanent alias(es) in the active registries` (N counts these 6 ids among the rest)
+@fails a camera bag gone: the `creativeengineering:` ids are not `replaces` entries in Exposure's `owner_namespace.json` (V-06); the egg gone: the moremooblooms `replaces` entry
+> setblock 20 -61 0 chest{Items:[{Slot:0b,id:"more_mooblooms:moobloom_spawn_egg",Count:1b},{Slot:1b,id:"creativeengineering:leather_camera_bag",Count:1b},{Slot:2b,id:"creativeengineering:iron_camera_bag",Count:1b},{Slot:3b,id:"creativeengineering:netherite_camera_bag",Count:1b},{Slot:4b,id:"exposure_extras:camera_bag",Count:1b}]}
+> data get block 20 -61 0 Items
+expect moremooblooms:moobloom_spawn_egg
+expect exposureextras:leather_camera_bag
+expect exposureextras:iron_camera_bag
+expect exposureextras:netherite_camera_bag
+expect exposureextras:camera_bag
+> setblock 22 -61 0 spawner{SpawnData:{entity:{id:"more_mooblooms:moobloom"}}}
+> data get block 22 -61 0 SpawnData
+expect moremooblooms:moobloom
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+
+@@section 7
+@@title CQ-RFX Rules fixes P4 on a client: renamed lang namespaces and textures, 2026-11-17 ([plan_rules_fixes.md](../plan_rules_fixes.md) 14; TODO `conventions #30`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativebrewing creativeworldgen
+@@sources development/creativeBrewing/members/vinery/src/main/resources/assets/vinerybackport development/creativeWorldgen/members/mooblooms/src/main/resources/assets/moremooblooms development/creativeWorldgen/members/babymobs/src/main/resources/assets/babymobs
+@@text
+@@table
+## CQ-RFX-05 | Vinery port text, moobloom names and baby mob textures after the namespace renames
+@group client
+@commands Hover a red wine (age, storage and bottle size lines), a wine box (open hint); JEI: open Grape Stomping, Wine Aging and Grape Planting; `/wine time`; look at a wine box holding a medium wine; summon a sunbloom and a baby squid and look at both (WTHIT name); hover a sunbloom spawn egg
+@pass every line shows text, none shows a raw key (`tooltip.vinerybackport.*`, `jei.vinerybackport.*`, `command.vinerybackport.*`, `label.vinerybackport.*`, `wthit.vinerybackport.*`); the wine box shows the recolored bottle (no missing-texture checker); the moobloom reads `Sunbloom`, the egg `Sunbloom Spawn Egg`; the baby squid has its 26.1 baby texture
+@fails a raw key: the lang file is not at `assets/vinerybackport/lang/en_us.json` in the Vinery member, or a key kept the old prefix; a checker on the baby squid: `assets/babymobs/textures` missing from the babyMobs member
+@draft hover, JEI and look steps need the capture driver session (qrun.py client: shot per step); the owner can LOOK by hand

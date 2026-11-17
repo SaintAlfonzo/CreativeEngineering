@@ -85,7 +85,7 @@ copies the server script tree into the jar, and fails the jar task when `kubejs_
   `TimePresets::onConfigLoading`, and on the Forge bus `TimePush`, `SeasonClock`, `TimeCommand` (the registrations that
   were at `CreativeEngineering.java` 225-231). `SeasonTypes`, `CropSeasons`, `CropSeasonTooltip` (client) and `TimeClient`
   (client) subscribe themselves (`@Mod.EventBusSubscriber(modid = creativecalendar)`). Logs
-  `[creativecalendar] time, seasons and crop seasons loaded`; `CalendarConfigMigration` moves the old keys once (4.3).
+  `[creativecalendar] time, seasons and crop seasons loaded`; a fresh calendar file takes the old sections through `ConfigRename.carrySections` (4.3).
 - `compat/CalendarMixinPlugin`: the table form of `GatedMixinPlugin`. Each mixin applies only when one of its mods is
   loaded: Serene Seasons for the 10 Serene Seasons mixins and `SeasonRainColumnMixin` (vanilla target, reads
   `SeasonTypes`), `betterdays`, `seasonhud`, `xaerominimap`, `particlerain`; `CropSeasonGrowHookMixin` on any of
@@ -124,7 +124,7 @@ The feature switches are the three `enabled` keys: `CalendarConfig.feature("seas
 scripts `global.CAL.feature(id)`. Every edited value in `config/creativeengineering-common.toml` equalled the default on
 2026-11-01; the new file was written by hand with Forge's comments (`config/` and
 `configs_edited/root_config/creativecalendar-common.toml`). The moved sections were deleted from
-`configs_edited/root_config/creativeengineering-common.toml`. Forge's correction never dropped them from the live file (r1103 still had them), so 2026-11-03 (plan_scratch_bugfix_1103 7.7): the 29 values were diffed against the new file (all equal), and the three sections plus the three strays were deleted from `config/creativeengineering-common.toml` by hand. `CalendarConfigMigration` does the same on any other install (the server): at construction, before configs load, it reads the moved keys from the CE file and strips them (with their comments) from it; when `creativecalendar-common.toml` first loads, each kept value whose new key still holds the default is written in and saved, logged as `[creativecalendar] moved edited values into ...`. A value already edited in the new file wins.
+`configs_edited/root_config/creativeengineering-common.toml`. Forge's correction never dropped them from the live file (r1103 still had them), so 2026-11-03 (plan_scratch_bugfix_1103 7.7): the 29 values were diffed against the new file (all equal), and the three sections plus the three strays were deleted from `config/creativeengineering-common.toml` by hand. On any other install a missing `creativecalendar-common.toml` is made at construction from those sections of the CE file by Common's `ConfigRename.carrySections` (`[seasons]`, `[crop_seasons]`, `[time]`, `[perf]`, `[wthit]`; Forge's correction drops the keys Calendar does not define). An existing calendar file is left as it is (since 2026-11-17, V-07; `CalendarConfigMigration` did a key-by-key merge before).
 
 ### 4.4 Scripts
 
@@ -218,3 +218,7 @@ own code" holds against the built jar. Summary row in [creative_brewing.md](crea
   Creative Delight calls `GrassSeasonHook.refuse` itself); `time.DateMoves`: jars register a listener that
   `/ccaltime date` calls on a backward move; the Vinery class-name fallback stays until the Vinery port registers
   (Creative Brewing, P3c). Queue SQ-PST-10c.
+- 2026-11-17: `CalendarConfigMigration` deleted (design_rules V-07): a fresh `creativecalendar-common.toml` now takes
+  `[seasons]`, `[crop_seasons]`, `[time]`, `[perf]` and `[wthit]` from `creativeengineering-common.toml` through Common's
+  `ConfigRename.carrySections` (Forge's correction drops the other `[perf]` and `[wthit]` keys). The old file is no longer
+  stripped and an existing Calendar file is no longer patched.

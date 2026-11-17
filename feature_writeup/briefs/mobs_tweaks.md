@@ -131,7 +131,7 @@ types over to its keys.
   - [server_scripts/tags/entitytags.js](../../kubejs/server_scripts/tags/entitytags.js) 7-12: 11 ids in
     `creativeengineering:bubble_column_immune`, already through `global.tags.add`.
   - [startup_scripts/func/sample_syringe.js](../../kubejs/startup_scripts/func/sample_syringe.js) 17-24: the `SAMPLES`
-    table is keyed by 8 entity ids (`minecraft:cow`, `more_mooblooms:moobloom`, pig, chicken, sheep, rabbit, cod,
+    table is keyed by 8 entity ids (`minecraft:cow`, `moremooblooms:moobloom`, pig, chicken, sheep, rabbit, cod,
     salmon). Its values are item ids (`creativeengineering:*_sample_syringe`) that aren't in `item_dict` either.
   - Dev dumps (`server_scripts/_lib/villager_trades_dump.js` 113 `vinery:wandering_winemaker`) can stay as they are.
   - JSON data (`generation_scripts/worldgen/mob_spawns.json`, `structure_config.json`) holds entity ids as data. JSON
@@ -161,7 +161,7 @@ types over to its keys.
    // ############################## Alex's Mobs ##############################
    en.orca = 'alexsmobs:orca'; // ... cachalot_whale, seal, giant_squid, giant_squid_part, hammerhead_shark, frilled_shark
    // ############################## More Mooblooms ##############################
-   en.moobloom = 'more_mooblooms:moobloom';
+   en.moobloom = 'moremooblooms:moobloom';
    ```
    Key style follows item_dict: the bare path, plus a mod prefix only on a clash (item_dict's `i.neapolitan_banana`).
    Known clash: `untitledduckmod:goose` vs `upgrade_aquatic:goose`. Recommend `en.goose` = the duck mod's (it's the

@@ -78,6 +78,11 @@ public class CreativeWorldgen {
         boolean carried = ConfigRename.carrySections(OLD_FILE, FILE, CWGConfig.SECTIONS);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CWGConfig.SPEC, FILE);
         if (!carried) warnOldKeys();
+        // The members' config files under their mod ids before the naming-rule rename (no underscore in own ids):
+        // the whole file moves to the new name. The members do not depend on Common, so the bundle carries them;
+        // Forge reads every COMMON config after all constructors, so the order against the members does not matter.
+        ConfigRename.carryOver("more_mooblooms-common.toml", "moremooblooms-common.toml");
+        ConfigRename.carryOver("baby_mobs-common.toml", "babymobs-common.toml");
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(CreativeWorldgen::commonSetup);

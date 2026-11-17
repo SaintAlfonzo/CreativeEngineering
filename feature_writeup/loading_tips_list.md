@@ -530,11 +530,11 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 507. `loading_tips:the_chestplate_is_the_only_armor_piece_with_no` The chestplate is the only armor piece with no exclusive enchantments! *(removed by creative_tips:tips)*
 508. `loading_tips:ocelots_are_passive_in_minecraft_but_cant_spawn` Ocelots are passive in Minecraft, but can't spawn in Peaceful difficulty due to a bug! *(removed by creative_tips:tips)*
 509. `loading_tips:place_lava_or_water_above_pointed_dripstone_to` Place lava or water above Pointed Dripstone to slowly drip it into a Cauldron below! *(replaced by creative_tips:tips)*
-510. `loading_tips:baby_mobs_now_have_unique_models_instead_of` Baby mobs now have unique models instead of being shrunken adults! *(replaced by creative_tips:tips)*
-511. `loading_tips:golden_dandelions_keep_baby_mobs_young_forever` Golden Dandelions keep baby mobs young forever — craft one with a dandelion and 8 gold nuggets! *(removed by creative_tips:tips)*
+510. `loading_tips:babymobs_now_have_unique_models_instead_of` Baby mobs now have unique models instead of being shrunken adults! *(replaced by creative_tips:tips)*
+511. `loading_tips:golden_dandelions_keep_babymobs_young_forever` Golden Dandelions keep baby mobs young forever — craft one with a dandelion and 8 gold nuggets! *(removed by creative_tips:tips)*
 512. `loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden` Breed a mob at least once to unlock the Golden Dandelion crafting recipe. *(removed by creative_tips:tips)*
 513. `loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let` Feed a baby mob a Golden Dandelion again to let it grow up normally. *(removed by creative_tips:tips)*
-514. `loading_tips:golden_dandelions_dont_work_on_undead_baby_mobs` Golden Dandelions don't work on undead baby mobs or baby Villagers. *(removed by creative_tips:tips)*
+514. `loading_tips:golden_dandelions_dont_work_on_undead_babymobs` Golden Dandelions don't work on undead baby mobs or baby Villagers. *(removed by creative_tips:tips)*
 515. `loading_tips:piglins_will_pick_up_golden_dandelions_off_the` Piglins will pick up Golden Dandelions off the ground — be careful in the Nether! *(removed by creative_tips:tips)*
 516. `loading_tips:golden_dandelions_can_be_placed_in_flower_pots` Golden Dandelions can be placed in flower pots and used to craft yellow dye. *(removed by creative_tips:tips)*
 517. `loading_tips:wandering_traders_may_randomly_sell_a_golden` Wandering Traders may randomly sell a Golden Dandelion for 2 emeralds. *(removed by creative_tips:tips)*
@@ -547,7 +547,7 @@ Attribution: `resourcepacks/loading_tips/CREDITS.txt`.
 524. `loading_tips:copper_blocks_under_note_blocks_now_produce` Copper blocks under Note Blocks now produce trumpet sounds! *(removed by creative_tips:tips)*
 525. `loading_tips:the_trumpet_pitch_changes_depending_on_the` The trumpet pitch changes depending on the copper block's oxidation level. *(removed by creative_tips:tips)*
 526. `loading_tips:wax_your_copper_block_under_a_note_block_to_lock` Wax your copper block under a Note Block to lock in your trumpet's pitch forever! *(removed by creative_tips:tips)*
-527. `loading_tips:baby_mobs_now_have_their_own_dedicated_sounds` Baby mobs now have their own dedicated sounds — listen for kittens, piglets, and chicks! *(removed by creative_tips:tips)*
+527. `loading_tips:babymobs_now_have_their_own_dedicated_sounds` Baby mobs now have their own dedicated sounds — listen for kittens, piglets, and chicks! *(removed by creative_tips:tips)*
 528. `loading_tips:saddles_and_armor_no_longer_visually_render_on` Saddles and armor no longer visually render on baby mobs. *(removed by creative_tips:tips)*
 529. `loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny` Rabbits got a complete model overhaul in Tiny Takeover — fluffier than ever! *(removed by creative_tips:tips)*
 530. `loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long` Baby Polar Bears no longer attack Foxes — a long overdue fix! *(removed by creative_tips:tips)*
@@ -766,7 +766,7 @@ Creative Tips: Creative Engineering tips for the world loading screen (pack-held
 204. `loading_tips:basalt_deltas_are_home_to_magma_cubes_and_ash` Basalt Deltas are home to Magma Cubes and ash particles *(replacement)*
 205. `loading_tips:crafting_coal_into_a_block_of_coal_gives_you_8` A coal block smelts 80 items, 8 more than its nine coal; a dried kelp block smelts 20 and bamboo only 0.25 *(replacement)*
 206. `loading_tips:place_lava_or_water_above_pointed_dripstone_to` Place lava or water above pointed dripstone to slowly drip it into a cauldron below! *(replacement)*
-207. `loading_tips:baby_mobs_now_have_unique_models_instead_of` Baby mobs have their own models instead of being shrunken adults *(replacement)*
+207. `loading_tips:babymobs_now_have_unique_models_instead_of` Baby mobs have their own models instead of being shrunken adults *(replacement)*
 208. `loading_tips:wolves_love_bones_to_tame_and_meat_to_heal` Tame wolves with bones and heal them with any meat, rotten flesh included *(replacement)*
 209. `loading_tips:blast_protection_reduces_explosion_damage_and` Protection, Fire, Blast and Projectile Protection exclude each other; each specific one guards best against its own damage *(replacement)*
 210. `loading_tips:frost_walker_boots_let_you_walk_on_water_and` Frost Walker boots freeze the water under you so you can walk on it *(replacement)*
@@ -948,10 +948,10 @@ Removes:
 - `loading_tips:you_are_now_a_minecraft_master_good_luck`
 - `loading_tips:the_chestplate_is_the_only_armor_piece_with_no`
 - `loading_tips:ocelots_are_passive_in_minecraft_but_cant_spawn`
-- `loading_tips:golden_dandelions_keep_baby_mobs_young_forever`
+- `loading_tips:golden_dandelions_keep_babymobs_young_forever`
 - `loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden`
 - `loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let`
-- `loading_tips:golden_dandelions_dont_work_on_undead_baby_mobs`
+- `loading_tips:golden_dandelions_dont_work_on_undead_babymobs`
 - `loading_tips:piglins_will_pick_up_golden_dandelions_off_the`
 - `loading_tips:golden_dandelions_can_be_placed_in_flower_pots`
 - `loading_tips:wandering_traders_may_randomly_sell_a_golden`
@@ -964,7 +964,7 @@ Removes:
 - `loading_tips:copper_blocks_under_note_blocks_now_produce`
 - `loading_tips:the_trumpet_pitch_changes_depending_on_the`
 - `loading_tips:wax_your_copper_block_under_a_note_block_to_lock`
-- `loading_tips:baby_mobs_now_have_their_own_dedicated_sounds`
+- `loading_tips:babymobs_now_have_their_own_dedicated_sounds`
 - `loading_tips:saddles_and_armor_no_longer_visually_render_on`
 - `loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny`
 - `loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long`

@@ -39,11 +39,11 @@ look merge names the six sections and perf; CD file emptyCanChance = 0.5, [perf]
 
 ## SQ-CDJ4-03 | CD members, nested Baby Mobs and Incubation Additions
 @group A
-@commands Same boot: `grep "\[creativedelight\] members" logs/latest.log`; `grep -E "baby_mobs\|incubation_additions" logs/latest.log \| head`
-@pass Member list ends with `baby_mobs, incubation_additions`; no "is loaded from ... not from the Creative Delight jar" ERROR
+@commands Same boot: `grep "\[creativedelight\] members" logs/latest.log`; `grep -E "babymobs\|incubation_additions" logs/latest.log \| head`
+@pass Member list ends with `babymobs, incubation_additions`; no "is loaded from ... not from the Creative Delight jar" ERROR
 @fails A standalone jar left in `mods/`, or the bundle missed a member
 @from batches/r1101/cs4_boot3.qb passed
-bootexpect \[creativedelight\] members: .*baby_mobs, incubation_additions
+bootexpect \[creativedelight\] members: .*babymobs, incubation_additions
 bootreject is loaded from .* not from the Creative Delight jar
 shell grep -E "\[creativedelight\] members" logs/latest.log | cut -c60-400; ls mods | grep -iE "babymobs|incubationAdditions" || echo "no standalone jars"
 
