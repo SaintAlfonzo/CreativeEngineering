@@ -9,10 +9,10 @@
 
 var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
-    var i = global.item
-    reg.item(e, i.frosting).displayName('Frosting').texture('creativedelight:item/frosting')
-    reg.item(e, i.cookie_dough).displayName('Cookie Dough').texture('creativedelight:item/cookie_dough')
-    reg.item(e, i.powdered_sugar).displayName('Powdered Sugar').texture('creativedelight:item/powdered_sugar')
+	var i = global.item
+	reg.item(e, i.frosting).displayName('Frosting').texture('creativedelight:item/frosting')
+	reg.item(e, i.cookie_dough).displayName('Cookie Dough').texture('creativedelight:item/cookie_dough')
+	reg.item(e, i.powdered_sugar).displayName('Powdered Sugar').texture('creativedelight:item/powdered_sugar')
 })
 
 // Dough blocks (TODO baking/baked-goods #27): 9-dough storage blocks with Create Compressed's dough block stats (sand,
@@ -20,19 +20,19 @@ StartupEvents.registry('item', e => {
 // assets/creativedelight/ in this jar (cube_all, texture at creativedelight:block/dough_block/<id>.png, made in
 // textureswapper/baking/dough/out/). textureAll sets the same texture: KubeJS's generated block model wins over the jar's. Recipes: server_scripts/cooking/cooking.js.
 StartupEvents.registry('block', e => {
-    var i = global.item
-    var doughBlocks = [
-        [i.gingerdough_block, 'Gingerdough Block'],
-        [i.cookie_dough_block, 'Cookie Dough Block'],
-        [i.sweet_potato_dough_block, 'Sweet Potato Dough Block'],
-        [i.oat_dough_block, 'Oat Dough Block'],
-        [i.cucumber_dough_block, 'Cucumber Dough Block'],
-        [i.sourdough_block, 'Sourdough Block'],
-    ]
-    doughBlocks.forEach(d => {
-        reg.block(e, d[0]).displayName(d[1])
-            .material('sand').soundType('slime_block').hardness(0.5).resistance(10.0)
-            .textureAll(d[0].replace(':', ':block/dough_block/'))
-            .model(d[0].replace(':', ':block/'))
-    })
+	var i = global.item
+	var doughBlocks = [
+		[i.gingerdough_block, 'Gingerdough Block'],
+		[i.cookie_dough_block, 'Cookie Dough Block'],
+		[i.sweet_potato_dough_block, 'Sweet Potato Dough Block'],
+		[i.oat_dough_block, 'Oat Dough Block'],
+		[i.cucumber_dough_block, 'Cucumber Dough Block'],
+		[i.sourdough_block, 'Sourdough Block'],
+	]
+	doughBlocks.forEach(d => {
+		reg.block(e, d[0]).displayName(d[1])
+			.material('sand').soundType('slime_block').hardness(0.5).resistance(10.0)
+			.textureAll(d[0].replace(':', ':block/dough_block/'))
+			.model(d[0].replace(':', ':block/'))
+	})
 })

@@ -61,7 +61,7 @@ function physicsFromTag(event, behaviour, sourceTags, opts) {
 // ── small builders for the tedious vanilla families ─────────────────────────
 // (KubeJS' Rhino has NO spread inside array literals — build with .concat(), never [...x])
 const COLORS = ['white','orange','magenta','light_blue','yellow','lime','pink','gray',
-                'light_gray','cyan','purple','blue','brown','green','red','black']
+				'light_gray','cyan','purple','blue','brown','green','red','black']
 // copper block/cut/slab/stairs, all 4 oxidation stages × waxed/unwaxed
 const COPPER = (() => {
 	const ox = ['', 'exposed_', 'weathered_', 'oxidized_']
@@ -93,7 +93,7 @@ ServerEvents.tags('item', e => {
 	})
 
 	// Adjustments
-	// Totem sinks, crossbow sinks, armor stand sinks, shields sink, trident is fireproof, 
+	// Totem sinks, crossbow sinks, armor stand sinks, shields sink, trident is fireproof,
 
 	// Not done yet (feature_writeup/todo/TODO.md items/item-physics #2, item_physics.md F4):
 	// Most create components will sink and be fireproof, belts will float, flour/cinder flour float

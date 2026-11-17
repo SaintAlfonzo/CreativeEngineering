@@ -53,7 +53,7 @@ ServerEvents.recipes(e => {
 	const f = global.fluid
 	const inc = i.incomplete
 
-    // TODO: change helper to return recipe for all valid sequence processes, make comment explaining in each helper func
+	// TODO: change helper to return recipe for all valid sequence processes, make comment explaining in each helper func
 
 	R.createSequencedAssembly(Item.of(i.nether_star, 1), i.nether_star, [
 

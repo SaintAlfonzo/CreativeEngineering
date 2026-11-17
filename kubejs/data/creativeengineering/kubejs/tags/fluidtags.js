@@ -28,7 +28,7 @@ ServerEvents.tags('fluid', e => {
 		['forge:fluid/concrete', f.concrete],
 		['forge:fluid/plastic', f.plastic],
 
- 		// creosote
+		// creosote
 		['forge:fluid/creosote', f.creosote],
 
 		// oil chain

@@ -30,9 +30,9 @@ R.viLaserCutting(Item.of(i.copper_bars, 64),i.block_copper, e, 'copper_bar_laser
 const incCopperBars = R.incomplete('copper_bars')
 R.createSequencedAssembly(Item.of(i.copper_bars, 12), i.rod_copper, [e.recipes.create.deploying(incCopperBars, [incCopperBars, i.rod_copper])], ['copper_bars'], e, 'copper_bars_sequenced_assembly', 5);
 R.shaped(Item.of(i.copper_bars, 9), ['RRR', 'RRR'], {R: i.rod_copper}, e)
-R.shaped(Item.of(i.ornate_copper_bars, 3), ['B', 'B', 'B'], {B: i.copper_bars}, e, 'copper_bars_ornate') 
+R.shaped(Item.of(i.ornate_copper_bars, 3), ['B', 'B', 'B'], {B: i.copper_bars}, e, 'copper_bars_ornate')
 R.shaped(Item.of(i.copper_bars, 3), ['B', 'B', 'B'], {B: i.ornate_copper_bars}, e, 'copper_bars_deornate')
-R.shaped(Item.of(i.raw_copper_bars, 5), ['B B', ' B ', 'B B'], {B: i.copper_bars}, e, 'copper_bars_raw') 
+R.shaped(Item.of(i.raw_copper_bars, 5), ['B B', ' B ', 'B B'], {B: i.copper_bars}, e, 'copper_bars_raw')
 R.shaped(Item.of(i.copper_bars, 5), ['B B', ' B ', 'B B'], {B: i.raw_copper_bars}, e, 'copper_bars_deraw')
 
 //Iron
@@ -50,8 +50,8 @@ R.viLaserCutting(Item.of(i.gold_bars, 64),i.block_gold, e, 'gold_bar_laser_cutti
 const incGoldBars = R.incomplete('gold_bars')
 R.createSequencedAssembly(Item.of(i.gold_bars, 12), i.rod_gold, [e.recipes.create.deploying(incGoldBars, [incGoldBars, i.rod_gold])], ['gold_bars'], e, 'gold_bars_sequenced_assembly', 5);
 R.shaped(Item.of(i.gold_bars, 9), ['RRR', 'RRR'], {R: i.rod_gold}, e)
-R.shaped(Item.of(i.ornate_gold_bars, 3), ['B', 'B', 'B'], {B: i.gold_bars}, e, 'gold_bars_ornate') 
-R.shaped(Item.of(i.gold_bars, 3), ['B', 'B', 'B'], {B: i.ornate_gold_bars}, e, 'gold_bars_deornate') 
+R.shaped(Item.of(i.ornate_gold_bars, 3), ['B', 'B', 'B'], {B: i.gold_bars}, e, 'gold_bars_ornate')
+R.shaped(Item.of(i.gold_bars, 3), ['B', 'B', 'B'], {B: i.ornate_gold_bars}, e, 'gold_bars_deornate')
 
 R.viLaserCutting(Item.of(i.zinc_bars, 64),i.block_zinc, e, 'zinc_bar_laser_cutting', 16000, 800)
 const incZincBars = R.incomplete('zinc_bars')
@@ -59,15 +59,15 @@ R.createSequencedAssembly(Item.of(i.zinc_bars, 12), i.rod_zinc, [e.recipes.creat
 R.shaped(Item.of(i.zinc_bars, 9), ['RRR', 'RRR'], {R: i.rod_zinc}, e)
 
 R.viLaserCutting(Item.of(i.andesite_bars, 64),i.block_andesite_alloy, e, 'andesite_bar_laser_cutting', 16000, 800)
-R.shaped(Item.of(i.ornate_andesite_bars, 3), ['B', 'B', 'B'], {B: i.andesite_bars}, e, 'andesite_bars_ornate') 
-R.shaped(Item.of(i.andesite_bars, 3), ['B', 'B', 'B'], {B: i.ornate_andesite_bars}, e, 'andesite_bars_deornate') 
+R.shaped(Item.of(i.ornate_andesite_bars, 3), ['B', 'B', 'B'], {B: i.andesite_bars}, e, 'andesite_bars_ornate')
+R.shaped(Item.of(i.andesite_bars, 3), ['B', 'B', 'B'], {B: i.ornate_andesite_bars}, e, 'andesite_bars_deornate')
 
 R.viLaserCutting(Item.of(i.brass_bars, 64),i.block_brass, e, 'brass_bar_laser_cutting', 16000, 800)
 const incBrassBars = R.incomplete('brass_bars')
 R.createSequencedAssembly(Item.of(i.brass_bars, 12), i.rod_brass, [e.recipes.create.deploying(incBrassBars, [incBrassBars, i.rod_brass])], ['brass_bars'], e, 'brass_bars_sequenced_assembly', 5);
 R.shaped(Item.of(i.brass_bars, 9), ['RRR', 'RRR'], {R: i.rod_brass}, e)
-R.shaped(Item.of(i.ornate_brass_bars, 3), ['B', 'B', 'B'], {B: i.brass_bars}, e, 'brass_bars_ornate') 
-R.shaped(Item.of(i.brass_bars, 3), ['B', 'B', 'B'], {B: i.ornate_brass_bars}, e, 'brass_bars_deornate') 
+R.shaped(Item.of(i.ornate_brass_bars, 3), ['B', 'B', 'B'], {B: i.brass_bars}, e, 'brass_bars_ornate')
+R.shaped(Item.of(i.brass_bars, 3), ['B', 'B', 'B'], {B: i.ornate_brass_bars}, e, 'brass_bars_deornate')
 
 R.viLaserCutting(Item.of(i.netherite_bars, 64),i.block_netherite, e, 'netherite_bar_laser_cutting', 16000, 800)
 

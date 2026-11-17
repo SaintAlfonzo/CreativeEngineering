@@ -22,35 +22,35 @@ function parseRe(s) { const m = /^\/(.*)\/([a-z]*)$/.exec(s); return m ? new Reg
 function ent(tag) { if (!entries[tag]) entries[tag] = (dumpTags[tag] || []).map(v => ({t:'id', v})); return entries[tag] }
 const warnings = []
 function resolve(tag, seen) {
-  seen = seen || new Set(); if (seen.has(tag)) return []; seen.add(tag)
-  if (!entries[tag] && !dumpTags[tag]) return []
-  const out = new Set()
-  ent(tag).forEach(e => e.t === 'id' ? out.add(e.v) : resolve(e.v, seen).forEach(x => out.add(x)))
-  return [...out]
+	seen = seen || new Set(); if (seen.has(tag)) return []; seen.add(tag)
+	if (!entries[tag] && !dumpTags[tag]) return []
+	const out = new Set()
+	ent(tag).forEach(e => e.t === 'id' ? out.add(e.v) : resolve(e.v, seen).forEach(x => out.add(x)))
+	return [...out]
 }
 const event = {
-  add(tag, x) {
-    const s = String(x), L = ent(tag)
-    if (s[0] === '#') { if (!dumpTags[s.slice(1)] && !entries[s.slice(1)]) warnings.push('missing tag ' + s); L.push({t:'tag', v:s.slice(1)}); return }
-    const re = parseRe(s)
-    if (re) { const hits = registry.filter(id => re.test(id)); if (!hits.length) warnings.push('regex matched nothing: ' + s + ' -> ' + tag); hits.forEach(id => L.push({t:'id', v:id})); return }
-    if (s[0] === '@') { registry.filter(id => id.startsWith(s.slice(1) + ':')).forEach(id => L.push({t:'id', v:id})); return }
-    if (!regSet.has(s)) warnings.push('unknown id ' + s + ' -> ' + tag)
-    L.push({t:'id', v:s})
-  },
-  remove(tag, x) {
-    const s = String(x), L = ent(tag)
-    const re = parseRe(s)
-    for (let i = L.length - 1; i >= 0; i--) {
-      const e = L[i]
-      if (s[0] === '#' ? (e.t === 'tag' && e.v === s.slice(1)) : (e.t === 'id' && (re ? re.test(e.v) : e.v === s))) L.splice(i, 1)
-    }
-  },
-  removeAll(tag) { entries[tag] = [] },
-  get(tag) { const ids = resolve(tag); return { getObjectIds: () => ({ size: () => ids.length, get: i => ids[i] }) } },
-  getElementIds: () => ({ toArray: () => registry }),
-  getClass: () => ({ getSimpleName: () => 'TagEventJS' }),
-  getType: () => 'minecraft:block',
+	add(tag, x) {
+		const s = String(x), L = ent(tag)
+		if (s[0] === '#') { if (!dumpTags[s.slice(1)] && !entries[s.slice(1)]) warnings.push('missing tag ' + s); L.push({t:'tag', v:s.slice(1)}); return }
+		const re = parseRe(s)
+		if (re) { const hits = registry.filter(id => re.test(id)); if (!hits.length) warnings.push('regex matched nothing: ' + s + ' -> ' + tag); hits.forEach(id => L.push({t:'id', v:id})); return }
+		if (s[0] === '@') { registry.filter(id => id.startsWith(s.slice(1) + ':')).forEach(id => L.push({t:'id', v:id})); return }
+		if (!regSet.has(s)) warnings.push('unknown id ' + s + ' -> ' + tag)
+		L.push({t:'id', v:s})
+	},
+	remove(tag, x) {
+		const s = String(x), L = ent(tag)
+		const re = parseRe(s)
+		for (let i = L.length - 1; i >= 0; i--) {
+			const e = L[i]
+			if (s[0] === '#' ? (e.t === 'tag' && e.v === s.slice(1)) : (e.t === 'id' && (re ? re.test(e.v) : e.v === s))) L.splice(i, 1)
+		}
+	},
+	removeAll(tag) { entries[tag] = [] },
+	get(tag) { const ids = resolve(tag); return { getObjectIds: () => ({ size: () => ids.length, get: i => ids[i] }) } },
+	getElementIds: () => ({ toArray: () => registry }),
+	getClass: () => ({ getSimpleName: () => 'TagEventJS' }),
+	getType: () => 'minecraft:block',
 }
 let handler
 global.ServerEvents = { tags: (type, fn) => { if (type === 'block') handler = fn } }

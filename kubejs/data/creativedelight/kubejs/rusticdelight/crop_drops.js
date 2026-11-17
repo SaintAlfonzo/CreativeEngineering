@@ -18,69 +18,69 @@
 
 (function () {
 
-    var TAG = '[crop-drops] '
-    var SKIP = '[skip] crop-drops' // a table left as the mod ships it; the engine logs nothing for '[skip]'
+	var TAG = '[crop-drops] '
+	var SKIP = '[skip] crop-drops' // a table left as the mod ships it; the engine logs nothing for '[skip]'
 
-    function names(pool) {
-        return (pool.entries || []).map(function (e) { return e.name })
-    }
+	function names(pool) {
+		return (pool.entries || []).map(function (e) { return e.name })
+	}
 
-    function hasChance(pool) {
-        return (pool.conditions || []).some(function (c) { return c.condition === 'minecraft:random_chance' })
-    }
+	function hasChance(pool) {
+		return (pool.conditions || []).some(function (c) { return c.condition === 'minecraft:random_chance' })
+	}
 
-    var PEPPER_DEFAULTS = {
-        bellPeppers: true,
-        redWeight: 1, greenWeight: 1, yellowWeight: 1,
-        redBonusChance: 0.15, greenBonusChance: 0.15, yellowBonusChance: 0.15,
-    }
+	var PEPPER_DEFAULTS = {
+		bellPeppers: true,
+		redWeight: 1, greenWeight: 1, yellowWeight: 1,
+		redBonusChance: 0.15, greenBonusChance: 0.15, yellowBonusChance: 0.15,
+	}
 
-    function bellPeppers(pools, i) {
-        var cfg = global.NCH.cfg(PEPPER_DEFAULTS, 'CROP_DROPS')
-        if (String(cfg.bellPeppers) !== 'true') throw new Error(SKIP)
-        var colours = [i.bell_pepper_red, i.bell_pepper_green, i.bell_pepper_yellow]
-        var weight = {}, chance = {}
-        weight[i.bell_pepper_red] = Number(cfg.redWeight)
-        weight[i.bell_pepper_green] = Number(cfg.greenWeight)
-        weight[i.bell_pepper_yellow] = Number(cfg.yellowWeight)
-        chance[i.bell_pepper_red] = Number(cfg.redBonusChance)
-        chance[i.bell_pepper_green] = Number(cfg.greenBonusChance)
-        chance[i.bell_pepper_yellow] = Number(cfg.yellowBonusChance)
-        var main = pools.filter(function (p) {
-            var n = names(p)
-            return n.length === colours.length && colours.every(function (c) { return n.indexOf(c) >= 0 })
-        })[0]
-        var bonus = function (item) {
-            return pools.filter(function (p) {
-                var n = names(p)
-                return n.length === 1 && n[0] === item && hasChance(p)
-            })[0]
-        }
-        if (!main || !bonus(i.bell_pepper_green)) throw new Error('table shape changed, left as is')
-        main.entries.forEach(function (e) { e.weight = weight[e.name] })
-        if (!bonus(i.bell_pepper_red)) {
-            var red = JSON.parse(JSON.stringify(bonus(i.bell_pepper_green)))
-            red.entries[0].name = i.bell_pepper_red
-            pools.push(red)
-        }
-        colours.forEach(function (c) {
-            bonus(c).conditions.forEach(function (k) {
-                if (k.condition === 'minecraft:random_chance') k.chance = chance[c]
-            })
-        })
-        console.info(TAG + 'bell peppers: weights ' + cfg.redWeight + ':' + cfg.greenWeight + ':' + cfg.yellowWeight
-            + ' (red:green:yellow), bonus ' + cfg.redBonusChance + ' / ' + cfg.greenBonusChance + ' / ' + cfg.yellowBonusChance)
-    }
+	function bellPeppers(pools, i) {
+		var cfg = global.NCH.cfg(PEPPER_DEFAULTS, 'CROP_DROPS')
+		if (String(cfg.bellPeppers) !== 'true') throw new Error(SKIP)
+		var colours = [i.bell_pepper_red, i.bell_pepper_green, i.bell_pepper_yellow]
+		var weight = {}, chance = {}
+		weight[i.bell_pepper_red] = Number(cfg.redWeight)
+		weight[i.bell_pepper_green] = Number(cfg.greenWeight)
+		weight[i.bell_pepper_yellow] = Number(cfg.yellowWeight)
+		chance[i.bell_pepper_red] = Number(cfg.redBonusChance)
+		chance[i.bell_pepper_green] = Number(cfg.greenBonusChance)
+		chance[i.bell_pepper_yellow] = Number(cfg.yellowBonusChance)
+		var main = pools.filter(function (p) {
+			var n = names(p)
+			return n.length === colours.length && colours.every(function (c) { return n.indexOf(c) >= 0 })
+		})[0]
+		var bonus = function (item) {
+			return pools.filter(function (p) {
+				var n = names(p)
+				return n.length === 1 && n[0] === item && hasChance(p)
+			})[0]
+		}
+		if (!main || !bonus(i.bell_pepper_green)) throw new Error('table shape changed, left as is')
+		main.entries.forEach(function (e) { e.weight = weight[e.name] })
+		if (!bonus(i.bell_pepper_red)) {
+			var red = JSON.parse(JSON.stringify(bonus(i.bell_pepper_green)))
+			red.entries[0].name = i.bell_pepper_red
+			pools.push(red)
+		}
+		colours.forEach(function (c) {
+			bonus(c).conditions.forEach(function (k) {
+				if (k.condition === 'minecraft:random_chance') k.chance = chance[c]
+			})
+		})
+		console.info(TAG + 'bell peppers: weights ' + cfg.redWeight + ':' + cfg.greenWeight + ':' + cfg.yellowWeight
+			+ ' (red:green:yellow), bonus ' + cfg.redBonusChance + ' / ' + cfg.greenBonusChance + ' / ' + cfg.yellowBonusChance)
+	}
 
-    // A table rewrite of Creative Loot's drops engine (loot/09_drops.js, L.rewrite), queued with global.LOOT.rules
-    global.LOOT.rules(function (L) {
-        if (!global.CD || !global.CD.on('rusticdelight')) return
-        var i = global.item
-        L.rewrite('rusticdelight:blocks/bell_peppers', function (pools) {
-            if (!pools.length) throw new Error(SKIP)
-            bellPeppers(pools, i)
-            return true
-        }, 'crop-drops bell peppers')
-    })
+	// A table rewrite of Creative Loot's drops engine (loot/09_drops.js, L.rewrite), queued with global.LOOT.rules
+	global.LOOT.rules(function (L) {
+		if (!global.CD || !global.CD.on('rusticdelight')) return
+		var i = global.item
+		L.rewrite('rusticdelight:blocks/bell_peppers', function (pools) {
+			if (!pools.length) throw new Error(SKIP)
+			bellPeppers(pools, i)
+			return true
+		}, 'crop-drops bell peppers')
+	})
 
 })()

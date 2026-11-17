@@ -8,27 +8,27 @@
 // hand-authored JSONs in this jar would be ignored; do not add them back (they rendered untextured after the jar move).
 
 const COIL_BLOCK_METALS = [
-    'aluminum', 'brass', 'constantan', 'gold', 'iron',
-    'lead', 'nickel', 'silver', 'zinc', 'steel'
+	'aluminum', 'brass', 'constantan', 'gold', 'iron',
+	'lead', 'nickel', 'silver', 'zinc', 'steel'
 ];
 
 var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('block', e => {
-    COIL_BLOCK_METALS.forEach(metal => {
-        const name = metal.charAt(0).toUpperCase() + metal.slice(1);
-        const top = 'creativeengineering:block/coil_block/coil_' + metal + '_top';
-        const side = 'creativeengineering:block/coil_block/coil_' + metal + '_side';
-        reg.block(e, 'coil_' + metal)
-            .displayName(name + ' Coil Block')
-            .material('metal')
-            .soundType('metal')
-            .hardness(3.0)
-            .resistance(6.0)
-            .requiresTool(true)
-            .texture('up', top).texture('down', top)
-            .texture('north', side).texture('south', side)
-            .texture('east', side).texture('west', side)
-            .texture('particle', side);
-        // Mining tags (pickaxe, iron): tags/storageblocktags.js in this jar's server scripts
-    });
+	COIL_BLOCK_METALS.forEach(metal => {
+		const name = metal.charAt(0).toUpperCase() + metal.slice(1);
+		const top = 'creativeengineering:block/coil_block/coil_' + metal + '_top';
+		const side = 'creativeengineering:block/coil_block/coil_' + metal + '_side';
+		reg.block(e, 'coil_' + metal)
+			.displayName(name + ' Coil Block')
+			.material('metal')
+			.soundType('metal')
+			.hardness(3.0)
+			.resistance(6.0)
+			.requiresTool(true)
+			.texture('up', top).texture('down', top)
+			.texture('north', side).texture('south', side)
+			.texture('east', side).texture('west', side)
+			.texture('particle', side);
+		// Mining tags (pickaxe, iron): tags/storageblocktags.js in this jar's server scripts
+	});
 });

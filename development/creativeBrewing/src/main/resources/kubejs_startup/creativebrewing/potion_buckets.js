@@ -22,50 +22,50 @@
 //   /give @s creativebrewing:lingering_potion_bucket{Potion:"minecraft:strong_regeneration"}
 
 StartupEvents.registry('item', e => {
-    const SimpleColor = Java.loadClass('dev.latvian.mods.rhino.mod.util.color.SimpleColor')
-    const $PotionUtils = Java.loadClass('net.minecraft.world.item.alchemy.PotionUtils')
+	const SimpleColor = Java.loadClass('dev.latvian.mods.rhino.mod.util.color.SimpleColor')
+	const $PotionUtils = Java.loadClass('net.minecraft.world.item.alchemy.PotionUtils')
 
-    // Same blend as global.potionArea's blendColor() (potion_area.js (this folder)) -
-    // deliberately NOT PotionUtils.getColor(stack): this Rhino build (rhino-forge
-    // 1902.2.3-build.284) throws "ambiguous method" on it (3 same-arity overloads:
-    // Potion/ItemStack/Collection). getMobEffects() is a single unambiguous overload, and
-    // MobEffect.getColor() is a single no-arg method, so blend from those instead. See
-    // memory note rhino-fieldandmethods-gotcha.
-    function potionTint(stack) {
-        try {
-            const tag = stack && stack.getOrCreateTag() // getTag() is invisible to Rhino here
-            if (tag && tag.contains('CustomPotionColor')) return new SimpleColor(tag.getInt('CustomPotionColor'))
-        } catch (err) {}
+	// Same blend as global.potionArea's blendColor() (potion_area.js (this folder)) -
+	// deliberately NOT PotionUtils.getColor(stack): this Rhino build (rhino-forge
+	// 1902.2.3-build.284) throws "ambiguous method" on it (3 same-arity overloads:
+	// Potion/ItemStack/Collection). getMobEffects() is a single unambiguous overload, and
+	// MobEffect.getColor() is a single no-arg method, so blend from those instead. See
+	// memory note rhino-fieldandmethods-gotcha.
+	function potionTint(stack) {
+		try {
+			const tag = stack && stack.getOrCreateTag() // getTag() is invisible to Rhino here
+			if (tag && tag.contains('CustomPotionColor')) return new SimpleColor(tag.getInt('CustomPotionColor'))
+		} catch (err) {}
 
-        const effects = stack ? $PotionUtils.getMobEffects(stack) : null
-        if (!effects || effects.isEmpty()) return SimpleColor.WHITE
-        let r = 0, g = 0, b = 0, n = 0
-        effects.forEach(inst => {
-            const c = inst.getEffect().getColor()
-            r += (c >> 16) & 255
-            g += (c >> 8) & 255
-            b += c & 255
-            n++
-        })
-        return new SimpleColor((Math.round(r / n) << 16) | (Math.round(g / n) << 8) | Math.round(b / n))
-    }
+		const effects = stack ? $PotionUtils.getMobEffects(stack) : null
+		if (!effects || effects.isEmpty()) return SimpleColor.WHITE
+		let r = 0, g = 0, b = 0, n = 0
+		effects.forEach(inst => {
+			const c = inst.getEffect().getColor()
+			r += (c >> 16) & 255
+			g += (c >> 8) & 255
+			b += c & 255
+			n++
+		})
+		return new SimpleColor((Math.round(r / n) << 16) | (Math.round(g / n) << 8) | Math.round(b / n))
+	}
 
-    const mk = (id, name) => e.create('creativebrewing:' + id)
-        .texture('layer0', 'creativebrewing:item/' + id)
-        .texture('layer1', 'creativebrewing:item/' + id + '_liquid')
-        .unstackable() // like vanilla buckets - each one carries its own potion contents
-        .group('brewing')
-        .displayName(name)
-        // layer0 = bucket body (untinted, white = no-op), layer1 = liquid (potion color)
-        .color((stack, layer) => layer === 0 ? SimpleColor.WHITE : potionTint(stack))
-        // crafting remainder for the potion_bucket_drain shapeless recipes
-        // (CB server creativebrewing/potion_bottling.js) - same idiom as
-        // CD's kubejs_startup/creativedelight/sample_syringe_items.js containerItem calls.
-        .containerItem(global.item.bucket)
+	const mk = (id, name) => e.create('creativebrewing:' + id)
+		.texture('layer0', 'creativebrewing:item/' + id)
+		.texture('layer1', 'creativebrewing:item/' + id + '_liquid')
+		.unstackable() // like vanilla buckets - each one carries its own potion contents
+		.group('brewing')
+		.displayName(name)
+		// layer0 = bucket body (untinted, white = no-op), layer1 = liquid (potion color)
+		.color((stack, layer) => layer === 0 ? SimpleColor.WHITE : potionTint(stack))
+		// crafting remainder for the potion_bucket_drain shapeless recipes
+		// (CB server creativebrewing/potion_bottling.js) - same idiom as
+		// CD's kubejs_startup/creativedelight/sample_syringe_items.js containerItem calls.
+		.containerItem(global.item.bucket)
 
-    mk('potion_bucket',           'Potion Bucket')
-    mk('splash_potion_bucket',    'Splash Potion Bucket')
-    mk('lingering_potion_bucket', 'Lingering Potion Bucket')
+	mk('potion_bucket',           'Potion Bucket')
+	mk('splash_potion_bucket',    'Splash Potion Bucket')
+	mk('lingering_potion_bucket', 'Lingering Potion Bucket')
 })
 
 // Crafting remainder for the potion_bucket_fill shapeless recipes (potion_bottling.js): each
@@ -78,12 +78,12 @@ StartupEvents.registry('item', e => {
 // @RemapPrefixForJS('kjs$') — see [[tune-tools-func]] — so `.setCraftingRemainder(...)`, a
 // DIFFERENT name AND it takes a real Item object, not a string id).
 ItemEvents.modification(event => {
-    var glassBottle = Item.of(global.item.glass_bottle).getItem()
-    ;[global.item.potion, global.item.splash_potion, global.item.lingering_potion].forEach(id => {
-        try {
-            event.modify(id, item => item.setCraftingRemainder(glassBottle))
-        } catch (err) {
-            console.warn('[potion_buckets] could not set glass_bottle crafting remainder on ' + id + ': ' + err)
-        }
-    })
+	var glassBottle = Item.of(global.item.glass_bottle).getItem()
+	;[global.item.potion, global.item.splash_potion, global.item.lingering_potion].forEach(id => {
+		try {
+			event.modify(id, item => item.setCraftingRemainder(glassBottle))
+		} catch (err) {
+			console.warn('[potion_buckets] could not set glass_bottle crafting remainder on ' + id + ': ' + err)
+		}
+	})
 })

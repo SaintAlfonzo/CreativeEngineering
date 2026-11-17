@@ -14,20 +14,20 @@
 // and tool-tier tags for every plate block in one place, so tags don't fight between two files.
 
 const PLATE_BLOCK_METALS = [
-    'aluminum', 'cast_iron', 'constantan', 'electrum', 'lead',
-    'netherite', 'nickel', 'silver', 'steel', 'uranium', 'zinc',
+	'aluminum', 'cast_iron', 'constantan', 'electrum', 'lead',
+	'netherite', 'nickel', 'silver', 'steel', 'uranium', 'zinc',
 ];
 
 var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('block', e => {
-    PLATE_BLOCK_METALS.forEach(metal => {
-        reg.block(e, metal + '_plate_block')
-            .displayName(metal.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Plate Block')
-            .material('metal')
-            .soundType('metal')
-            .hardness(5.0)
-            .resistance(5.0)
-            .requiresTool(true)
-            .textureAll('creativeengineering:block/plate_block/' + metal + '_plate_block');
-    });
+	PLATE_BLOCK_METALS.forEach(metal => {
+		reg.block(e, metal + '_plate_block')
+			.displayName(metal.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Plate Block')
+			.material('metal')
+			.soundType('metal')
+			.hardness(5.0)
+			.resistance(5.0)
+			.requiresTool(true)
+			.textureAll('creativeengineering:block/plate_block/' + metal + '_plate_block');
+	});
 });

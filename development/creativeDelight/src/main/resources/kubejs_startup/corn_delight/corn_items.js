@@ -6,30 +6,30 @@
 
 var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
-    var i = global.item
+	var i = global.item
 
-    // Corncob (2.1): the most kernels per item on the cutting board, a 10% side output of corn milling and crushing,
-    // 25% from mature corn broken with a knife
-    reg.item(e, i.corncob).displayName('Corncob')
+	// Corncob (2.1): the most kernels per item on the cutting board, a 10% side output of corn milling and crushing,
+	// 25% from mature corn broken with a knife
+	reg.item(e, i.corncob).displayName('Corncob')
 
-    // Corn Popsicle (2.2), frozen/popsicle family: upstream's 4 hunger, 0.2 modifier and quick eating (12 ticks);
-    // the stick comes back, as Fruits Delight's popsicles
-    reg.item(e, i.corn_popsicle).displayName('Corn Popsicle').food(f => {
-        f.hunger(4).saturation(0.2).fastToEat(true)
-        f.eaten(ev => {
-            var p = ev.player
-            if (p && !p.isCreative()) p.give(i.stick)
-        })
-    })
+	// Corn Popsicle (2.2), frozen/popsicle family: upstream's 4 hunger, 0.2 modifier and quick eating (12 ticks);
+	// the stick comes back, as Fruits Delight's popsicles
+	reg.item(e, i.corn_popsicle).displayName('Corn Popsicle').food(f => {
+		f.hunger(4).saturation(0.2).fastToEat(true)
+		f.eaten(ev => {
+			var p = ev.player
+			if (p && !p.isCreative()) p.give(i.stick)
+		})
+	})
 
-    // Cob Pipe (2.3): cosmetic, no stats. Head slot and Curios: Creative Common compat/CobPipe; 3D model through Forge's
-    // separate_transforms, the flat sprite in the GUI, on the ground and in frames. The model is set here with modelJson:
-    // KubeJS otherwise generates a flat item/generated model that outranks the jar's models/item/cob_pipe.json (which stays
-    // as the reference copy, and its cob_pipe_3d.json is the base model)
-    var flat = {parent: 'minecraft:item/generated', textures: {layer0: 'creativedelight:item/cob_pipe'}}
-    reg.item(e, i.cob_pipe).displayName('Cob Pipe').maxStackSize(1).modelJson({
-        loader: 'forge:separate_transforms',
-        base: {parent: 'creativedelight:item/cob_pipe_3d'},
-        perspectives: {gui: flat, ground: flat, fixed: flat}
-    })
+	// Cob Pipe (2.3): cosmetic, no stats. Head slot and Curios: Creative Common compat/CobPipe; 3D model through Forge's
+	// separate_transforms, the flat sprite in the GUI, on the ground and in frames. The model is set here with modelJson:
+	// KubeJS otherwise generates a flat item/generated model that outranks the jar's models/item/cob_pipe.json (which stays
+	// as the reference copy, and its cob_pipe_3d.json is the base model)
+	var flat = {parent: 'minecraft:item/generated', textures: {layer0: 'creativedelight:item/cob_pipe'}}
+	reg.item(e, i.cob_pipe).displayName('Cob Pipe').maxStackSize(1).modelJson({
+		loader: 'forge:separate_transforms',
+		base: {parent: 'creativedelight:item/cob_pipe_3d'},
+		perspectives: {gui: flat, ground: flat, fixed: flat}
+	})
 })

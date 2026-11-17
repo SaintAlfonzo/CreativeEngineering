@@ -89,7 +89,7 @@ StartupEvents.registry('item', e => {
 	const coilBlockSide = m =>
 		m === 'copper'   ? 'immersiveengineering:block/metal_decoration/coil_lv_side' :
 		m === 'electrum' ? 'immersiveengineering:block/metal_decoration/coil_mv_side' :
-		                   'creativeengineering:block/coil_block/coil_' + m + '_side'
+						   'creativeengineering:block/coil_block/coil_' + m + '_side'
 
 	COIL_METALS.forEach(m => {
 		SEQUENCED_ASSEMBLIES.push(['coil_' + m, coilSprite(m)])

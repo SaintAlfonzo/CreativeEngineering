@@ -18,7 +18,7 @@ R.remove({id: 'supplementaries:pulley'}, e)
 // Soap
 // Replace pork with animal fat
 R.replaceInput({ id: 'supplementaries:soap' },
-  i.porkchop, [Item.of(i.animal_fat, 1), Item.of(i.animal_oil_bottle, 1), Item.of(i.fish_oil, 1), Item.of(i.tallow, 1)], e)
+	i.porkchop, [Item.of(i.animal_fat, 1), Item.of(i.animal_oil_bottle, 1), Item.of(i.fish_oil, 1), Item.of(i.tallow, 1)], e)
 //Efficient heating
 if (global.has(i.soap, i.ash, i.animal_fat, i.animal_oil_bottle, i.fish_oil, i.tallow)) R.createMixing(Item.of(i.soap, 9), [[Item.of(i.animal_fat, 1), Item.of(i.animal_oil_bottle, 1), Item.of(i.fish_oil, 1), Item.of(i.tallow, 1)], Item.of(i.ash, 3), Fluid.of(f.water, 500)], e, 'soap_heated_mixing', 'heated')
 if (global.has(i.soap, i.ash, f.plantoil)) R.createMixing(Item.of(i.soap, 2), [Item.of(i.ash, 2), Fluid.of(f.water, 250), Fluid.of(f.plantoil, 250)], e, 'soap_vegan_heated_mixing', 'heated')
@@ -35,7 +35,7 @@ R.remove({id: 'create:milling/compat/supplementaries/flax'}, e)
 // Fodder
 //Replace flax bale w/ rice and straw bale
 R.replaceInput({ id: 'supplementaries:fodder' },
-  i.flax_block, [Item.of(i.rice_bale, 1), Item.of(i.straw_bale, 1)], e)
+	i.flax_block, [Item.of(i.rice_bale, 1), Item.of(i.straw_bale, 1)], e)
 
 //Remove supplementaries crank
 R.remove({id: 'supplementaries:crank'}, e)

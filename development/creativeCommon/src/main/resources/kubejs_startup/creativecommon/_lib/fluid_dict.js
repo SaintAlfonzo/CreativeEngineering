@@ -33,10 +33,10 @@ f.milk = 'minecraft:milk';
 f.chocolate = 'create:chocolate';
 
 f.honey = 'create:honey';
-    f.t_honey = '#forge:fluid/honey';
+	f.t_honey = '#forge:fluid/honey';
 
 f.create_potion = 'create:potion';
-    f.t_potion = '#forge:fluid/potion';
+	f.t_potion = '#forge:fluid/potion';
 f.tea = 'create:tea';
 
 //Brewin' and Chewin' (backport): keg tank fluids, 250 mB per drink (alcohol.md 3.4)
@@ -77,7 +77,7 @@ f.rose_hip_tea = 'create_central_kitchen:rose_hip_tea';
 f.gamblers_tea = 'create_central_kitchen:gamblers_tea';
 f.chorus_fruit_milk_tea = 'create_central_kitchen:chorus_fruit_milk_tea';
 f.coffee = 'create_central_kitchen:coffee';   // Rustic Delight's Coffee (Respite's is purged, item_merges.md 2.8)
-    f.cck_hot_cocoa = 'create_central_kitchen:hot_cocoa';
+	f.cck_hot_cocoa = 'create_central_kitchen:hot_cocoa';
 
 f.melon_juice = 'create_central_kitchen:melon_juice';
 f.t_melon_juice = '#forge:fluid/melon_juice';
@@ -192,7 +192,7 @@ f.white_chocolate = 'create_confectionery:white_chocolate';
 //Create: Enchantment Industry
 f.experience = 'create_enchantment_industry:experience';
 f.flowing_experience = 'create_enchantment_industry:flowing_experience';
-    f.xp = 'create_enchantment_industry:experience';
+	f.xp = 'create_enchantment_industry:experience';
 f.hyper_experience = 'create_enchantment_industry:hyper_experience';
 f .hyper_xp = 'create_enchantment_industry:hyper_experience';
 f.ink = 'create_enchantment_industry:ink';
@@ -207,55 +207,55 @@ f.redstone_acid = 'immersiveengineering:redstone_acid';
 f.herbicide = 'immersiveengineering:herbicide';
 
 f.phenolic_resin = 'immersiveengineering:phenolic_resin';
-    f.t_phenolic_resin = '#forge:fluid/phenolic_resin';
+	f.t_phenolic_resin = '#forge:fluid/phenolic_resin';
 
 //PneumaticCraft
 f.etching_acid = 'pneumaticcraft:etching_acid';
 f.plastic = 'pneumaticcraft:plastic';
 f.yeast_culture = 'pneumaticcraft:yeast_culture';
-    f.t_yeast_culture = '#forge:fluid/yeast_culture';
+	f.t_yeast_culture = '#forge:fluid/yeast_culture';
 
 //Oil Chain
 f.acetaldehyde = 'immersiveengineering:acetaldehyde';
 f.benzene = 'immersivepetroleum:benzene';
 f.creosote = 'immersiveengineering:creosote';
-    f.t_creosote = '#forge:fluid/creosote';
+	f.t_creosote = '#forge:fluid/creosote';
 
 f.crude_oil = 'immersivepetroleum:crudeoil';
-    f.pc_oil = 'pneumaticcraft:oil';
+	f.pc_oil = 'pneumaticcraft:oil';
 
 f.diesel_sulfur = 'immersivepetroleum:diesel_sulfur';
 f.ethylene = 'immersivepetroleum:ethylene';
 
 f.plantoil = 'immersiveengineering:plantoil';
-    f.seed_oil = 'createaddition:seed_oil';
-    f.vegetable_oil = 'pneumaticcraft:vegetable_oil';
-    f.t_plantoil = '#forge:plantoil'; // all three oils (flesh cultivation, plan_flesh_recipes.md)
-        
+	f.seed_oil = 'createaddition:seed_oil';
+	f.vegetable_oil = 'pneumaticcraft:vegetable_oil';
+	f.t_plantoil = '#forge:plantoil'; // all three oils (flesh cultivation, plan_flesh_recipes.md)
+
 // Visceral Heap (Biomes O' Plenty): flesh blood mixes and porous flesh cultivation (plan_flesh_recipes.md)
 f.blood = 'biomesoplenty:blood';
 
 f.ip_diesel = 'immersivepetroleum:diesel';
-    f.pc_diesel = 'pneumaticcraft:diesel';
+	f.pc_diesel = 'pneumaticcraft:diesel';
 
 f.ie_biodiesel = 'immersiveengineering:biodiesel';
-    f.pc_biodiesel = 'pneumaticcraft:biodiesel';
+	f.pc_biodiesel = 'pneumaticcraft:biodiesel';
 
 f.ie_ethanol = 'immersiveengineering:ethanol';
-    f.pc_ethanol = 'pneumaticcraft:ethanol';
+	f.pc_ethanol = 'pneumaticcraft:ethanol';
 
-    f.bioethanol = 'createaddition:bioethanol';
+	f.bioethanol = 'createaddition:bioethanol';
 
 f.ip_kerosene = 'immersivepetroleum:kerosene';
-    f.pc_kerosene = 'pneumaticcraft:kerosene';
+	f.pc_kerosene = 'pneumaticcraft:kerosene';
 
 f.ip_gasoline = 'immersivepetroleum:gasoline';
-    f.pc_gasoline = 'pneumaticcraft:gasoline';
+	f.pc_gasoline = 'pneumaticcraft:gasoline';
 
 f.gasoline_additives = 'immersivepetroleum:gasoline_additives';
 
 f.ip_lubricant = 'immersivepetroleum:lubricant';
-    f.pc_lubricant = 'pneumaticcraft:lubricant';
+	f.pc_lubricant = 'pneumaticcraft:lubricant';
 
 f.lpg = 'pneumaticcraft:lpg';
 f.lubricant_cracked = 'immersivepetroleum:lubricant_cracked';

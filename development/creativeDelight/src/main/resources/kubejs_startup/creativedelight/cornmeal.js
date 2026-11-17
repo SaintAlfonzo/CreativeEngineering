@@ -8,5 +8,5 @@
 
 var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
-    reg.item(e, global.item.cornmeal).displayName('Cornmeal')
+	reg.item(e, global.item.cornmeal).displayName('Cornmeal')
 })

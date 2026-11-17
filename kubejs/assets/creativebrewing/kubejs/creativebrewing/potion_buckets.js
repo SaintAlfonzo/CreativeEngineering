@@ -28,45 +28,45 @@ const $PB_StringUtil      = Java.loadClass('net.minecraft.util.StringUtil')
 const $PB_MobEffectCategory = Java.loadClass('net.minecraft.world.effect.MobEffectCategory')
 
 const PB_TOOLTIP_IDS = [
-    global.item.ce_potion_bucket,
-    global.item.ce_splash_potion_bucket,
-    global.item.ce_lingering_potion_bucket,
+	global.item.ce_potion_bucket,
+	global.item.ce_splash_potion_bucket,
+	global.item.ce_lingering_potion_bucket,
 ]
 
 // "M:SS" (StringUtil.formatTickDuration - same helper vanilla's own tooltip uses) or the
 // translated infinite-duration marker. isInfiniteDuration() may not exist on every MC/Forge
 // build - fall back to treating a negative duration as infinite if the call itself fails.
 function pbDurationText(inst) {
-    let infinite
-    try { infinite = inst.isInfiniteDuration() } catch (err) { infinite = inst.getDuration() < 0 }
-    return infinite
-        ? Text.translatable('effect.duration.infinite')
-        : Text.literal($PB_StringUtil.formatTickDuration(inst.getDuration()))
+	let infinite
+	try { infinite = inst.isInfiniteDuration() } catch (err) { infinite = inst.getDuration() < 0 }
+	return infinite
+		? Text.translatable('effect.duration.infinite')
+		: Text.literal($PB_StringUtil.formatTickDuration(inst.getDuration()))
 }
 
 ItemEvents.tooltip(e => {
-    PB_TOOLTIP_IDS.forEach(id => {
-        e.addAdvanced(id, (item, advanced, text) => {
-            const fx = $PB_PotionUtils.getMobEffects(item)
-            if (fx.isEmpty()) {
-                text.add(Text.translatable('effect.none').gray())
-                return
-            }
-            fx.forEach(raw => {
-                const inst = global.potionArea.scaled(id, raw)
-                let line = Text.translatable(inst.getEffect().getDescriptionId())
-                if (inst.getAmplifier() > 0) {
-                    line = Text.translatable('potion.withAmplifier', line,
-                        Text.translatable('potion.potency.' + inst.getAmplifier()))
-                }
-                if (inst.getDuration() > 20) {
-                    line = Text.translatable('potion.withDuration', line, pbDurationText(inst))
-                }
+	PB_TOOLTIP_IDS.forEach(id => {
+		e.addAdvanced(id, (item, advanced, text) => {
+			const fx = $PB_PotionUtils.getMobEffects(item)
+			if (fx.isEmpty()) {
+				text.add(Text.translatable('effect.none').gray())
+				return
+			}
+			fx.forEach(raw => {
+				const inst = global.potionArea.scaled(id, raw)
+				let line = Text.translatable(inst.getEffect().getDescriptionId())
+				if (inst.getAmplifier() > 0) {
+					line = Text.translatable('potion.withAmplifier', line,
+						Text.translatable('potion.potency.' + inst.getAmplifier()))
+				}
+				if (inst.getDuration() > 20) {
+					line = Text.translatable('potion.withDuration', line, pbDurationText(inst))
+				}
 
-                let harmful = false
-                try { harmful = inst.getEffect().getCategory() === $PB_MobEffectCategory.HARMFUL } catch (err) {}
-                text.add(harmful ? line.red() : line.blue())
-            })
-        })
-    })
+				let harmful = false
+				try { harmful = inst.getEffect().getCategory() === $PB_MobEffectCategory.HARMFUL } catch (err) {}
+				text.add(harmful ? line.red() : line.blue())
+			})
+		})
+	})
 })

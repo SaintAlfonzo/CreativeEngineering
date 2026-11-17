@@ -16,28 +16,28 @@
 // Reload with /reload. Filter tokens: 'ns:id' | '#ns:tag' | '@modid' | /regex/ | ItemFilter.XXX.
 
 LootJS.modifiers(event => {
-  const L = global.LOOT
-  const R = global.NCH.forPack('creativeloot')
+	const L = global.LOOT
+	const R = global.NCH.forPack('creativeloot')
 
-  // Botania and CC:Tweaked stay out of village chests (owner, plan_scratch_bugfix_1103 7.3, SQ-GLD-09). Both inject a
-  // nested table in code (Botania LootHandler: temple, toolsmith, weaponsmith; CC:Tweaked CommonHooks: cartographer),
-  // which the pre-roll framework cannot edit, so their items are taken out after the roll.
-  L.tables(event, /^minecraft:chests\/village\//)
-    .removeLoot('@botania')
-    .removeLoot('@computercraft')
-    .logName(R.logName('removals/village_botania_cc'))
+	// Botania and CC:Tweaked stay out of village chests (owner, plan_scratch_bugfix_1103 7.3, SQ-GLD-09). Both inject a
+	// nested table in code (Botania LootHandler: temple, toolsmith, weaponsmith; CC:Tweaked CommonHooks: cartographer),
+	// which the pre-roll framework cannot edit, so their items are taken out after the roll.
+	L.tables(event, /^minecraft:chests\/village\//)
+		.removeLoot('@botania')
+		.removeLoot('@computercraft')
+		.logName(R.logName('removals/village_botania_cc'))
 
-  // ── context-scoped removals (examples — uncomment & edit) ─────────────────
+	// ── context-scoped removals (examples — uncomment & edit) ─────────────────
 
-  // no rotten flesh in any chest inside a village, whatever table it rolled
-  // L.chestType(event)
-  //   .anyStructure(['#minecraft:village'], false)
-  //   .removeLoot('minecraft:rotten_flesh')
-  //   .logName(R.logName('removals/village_flesh'))
+	// no rotten flesh in any chest inside a village, whatever table it rolled
+	// L.chestType(event)
+	//   .anyStructure(['#minecraft:village'], false)
+	//   .removeLoot('minecraft:rotten_flesh')
+	//   .logName(R.logName('removals/village_flesh'))
 
-  // no fire charges in Nether chests
-  // L.chestType(event)
-  //   .anyDimension('minecraft:the_nether')
-  //   .removeLoot('minecraft:fire_charge')
-  //   .logName(R.logName('removals/nether_fire_charge'))
+	// no fire charges in Nether chests
+	// L.chestType(event)
+	//   .anyDimension('minecraft:the_nether')
+	//   .removeLoot('minecraft:fire_charge')
+	//   .logName(R.logName('removals/nether_fire_charge'))
 })

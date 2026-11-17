@@ -10,90 +10,90 @@ var NCH_TipRL = Java.loadClass('net.minecraft.resources.ResourceLocation');
 // missing id of a loaded mod still goes to KubeJS as before, so pack typos stay visible. Tags and non-strings pass.
 var tipAbsentCounts = {};
 function tipAbsent(id) {
-    if (typeof id !== 'string' || id === '' || id.charAt(0) === '#' || id.indexOf(':') < 0) return false;
-    var ns = global.has.namespace(id);
-    if (global.has.mod(ns)) return false;
-    try { if (NCH_MCRegistry.ITEM.containsKey(new NCH_TipRL(id))) return false; } catch (err) {}
-    if (!tipAbsentCounts[ns]) console.info('[tooltips] skipping tooltip rows for ' + ns + ', which is not loaded');
-    tipAbsentCounts[ns] = (tipAbsentCounts[ns] || 0) + 1;
-    return true;
+	if (typeof id !== 'string' || id === '' || id.charAt(0) === '#' || id.indexOf(':') < 0) return false;
+	var ns = global.has.namespace(id);
+	if (global.has.mod(ns)) return false;
+	try { if (NCH_MCRegistry.ITEM.containsKey(new NCH_TipRL(id))) return false; } catch (err) {}
+	if (!tipAbsentCounts[ns]) console.info('[tooltips] skipping tooltip rows for ' + ns + ', which is not loaded');
+	tipAbsentCounts[ns] = (tipAbsentCounts[ns] || 0) + 1;
+	return true;
 }
 
 // The ids of one row without the absent mods' ones; null when nothing is left.
 function tipIds(id) {
-    if (!Array.isArray(id)) return tipAbsent(id) ? null : id;
-    var kept = [];
-    for (var k = 0; k < id.length; k++) if (!tipAbsent(id[k])) kept.push(id[k]);
-    return kept.length ? kept : null;
+	if (!Array.isArray(id)) return tipAbsent(id) ? null : id;
+	var kept = [];
+	for (var k = 0; k < id.length; k++) if (!tipAbsent(id[k])) kept.push(id[k]);
+	return kept.length ? kept : null;
 }
 
 function buildTooltipLine(line) {
-    var data = { text: line[0], color: line[1] };
-    var modifiers = line[2];
-    if (modifiers) {
-        if (modifiers.bold !== undefined) data.bold = modifiers.bold;
-        if (modifiers.italic !== undefined) data.italic = modifiers.italic;
-        if (modifiers.underlined !== undefined) data.underlined = modifiers.underlined;
-        if (modifiers.strikethrough !== undefined) data.strikethrough = modifiers.strikethrough;
-        if (modifiers.obfuscated !== undefined) data.obfuscated = modifiers.obfuscated;}
-    return data;
+	var data = { text: line[0], color: line[1] };
+	var modifiers = line[2];
+	if (modifiers) {
+		if (modifiers.bold !== undefined) data.bold = modifiers.bold;
+		if (modifiers.italic !== undefined) data.italic = modifiers.italic;
+		if (modifiers.underlined !== undefined) data.underlined = modifiers.underlined;
+		if (modifiers.strikethrough !== undefined) data.strikethrough = modifiers.strikethrough;
+		if (modifiers.obfuscated !== undefined) data.obfuscated = modifiers.obfuscated;}
+	return data;
 }
 
 function addTooltips(e) {
-    var entries = Array.prototype.slice.call(arguments, 1);
-    for (var i = 0; i < entries.length; i++) {
-        var entry = entries[i];
-        var id = tipIds(entry[0]);
-        if (id === null) continue;
-        var lines = entry.slice(1);
-        if (lines.length === 1) {
-            e.add(id, buildTooltipLine(lines[0]));
-        } else {
-            var tipLines = [];
-            for (var j = 0; j < lines.length; j++) {
-                tipLines.push(buildTooltipLine(lines[j]));}
-            e.add(id, tipLines);}}      
+	var entries = Array.prototype.slice.call(arguments, 1);
+	for (var i = 0; i < entries.length; i++) {
+		var entry = entries[i];
+		var id = tipIds(entry[0]);
+		if (id === null) continue;
+		var lines = entry.slice(1);
+		if (lines.length === 1) {
+			e.add(id, buildTooltipLine(lines[0]));
+		} else {
+			var tipLines = [];
+			for (var j = 0; j < lines.length; j++) {
+				tipLines.push(buildTooltipLine(lines[j]));}
+			e.add(id, tipLines);}}
 }
 
 function addTooltipPattern(e, pattern) {
-    var idx = 2;
-    var excludeIds = [];
-    if (arguments.length > 2 && arguments[2] && arguments[2].exclude) {
-        excludeIds = arguments[2].exclude;
-        idx = 3;}
-    var lines = Array.prototype.slice.call(arguments, idx);
-    var data;
-    if (lines.length === 1) {
-        data = buildTooltipLine(lines[0]);
-    } else {
-        data = [];
-        for (var j = 0; j < lines.length; j++) {
-            data.push(buildTooltipLine(lines[j]));}}
-    var regex = new RegExp('^' + pattern.replace(/[.+^${}()|[\]\\?]/g, '\\$&').replace(/\*/g, '.*') + '$');
-    var keys = NCH_MCRegistry.ITEM.keySet();
-    var it = keys.iterator();
-    var matchCount = 0;
-    while (it.hasNext()) {
-        var rl = it.next();
-        var id = rl.toString();
-        if (regex.test(id) && excludeIds.indexOf(id) === -1) {
-            e.add(id, data);
-            matchCount++;}}
-    console.log('[addTooltipPattern] ' + pattern + ' -> ' + matchCount + ' matches (excluded ' + excludeIds.length + ')');
+	var idx = 2;
+	var excludeIds = [];
+	if (arguments.length > 2 && arguments[2] && arguments[2].exclude) {
+		excludeIds = arguments[2].exclude;
+		idx = 3;}
+	var lines = Array.prototype.slice.call(arguments, idx);
+	var data;
+	if (lines.length === 1) {
+		data = buildTooltipLine(lines[0]);
+	} else {
+		data = [];
+		for (var j = 0; j < lines.length; j++) {
+			data.push(buildTooltipLine(lines[j]));}}
+	var regex = new RegExp('^' + pattern.replace(/[.+^${}()|[\]\\?]/g, '\\$&').replace(/\*/g, '.*') + '$');
+	var keys = NCH_MCRegistry.ITEM.keySet();
+	var it = keys.iterator();
+	var matchCount = 0;
+	while (it.hasNext()) {
+		var rl = it.next();
+		var id = rl.toString();
+		if (regex.test(id) && excludeIds.indexOf(id) === -1) {
+			e.add(id, data);
+			matchCount++;}}
+	console.log('[addTooltipPattern] ' + pattern + ' -> ' + matchCount + ' matches (excluded ' + excludeIds.length + ')');
 }
 
 function removeTooltips(e) {
-    var ids = Array.prototype.slice.call(arguments, 1);
-    for (var i = 0; i < ids.length; i++) {
-        var tipId = tipIds(ids[i]);
-        if (tipId === null) continue;
-        e.addAdvanced(tipId, function(item, advanced, text) {
-            // Keep index 0 (display name), strip every line after it
-            while (text.size() > 1) {
-                text.remove(1);
-            }
-        });
-    }
+	var ids = Array.prototype.slice.call(arguments, 1);
+	for (var i = 0; i < ids.length; i++) {
+		var tipId = tipIds(ids[i]);
+		if (tipId === null) continue;
+		e.addAdvanced(tipId, function(item, advanced, text) {
+			// Keep index 0 (display name), strip every line after it
+			while (text.size() > 1) {
+				text.remove(1);
+			}
+		});
+	}
 }
 
 // Strip only the lines built from one translation key (a mod's own flavor text), leaving the name
@@ -104,27 +104,27 @@ function removeTooltips(e) {
 // Removes from a tooltip's lines (index 0, the name, is kept) every line whose translation key is in keys; a key ending
 // in '*' matches as a prefix. For tooltip callbacks that strip lines themselves (addAdvancedToAll).
 function stripTooltipKeys(text, keys) {
-    for (var n = text.size() - 1; n >= 1; n--) {
-        var lineKey = null;
-        try { lineKey = String(text.get(n).getContents().getKey()); } catch (err) {}
-        if (lineKey === null) continue;
-        for (var k = 0; k < keys.length; k++) {
-            var key = keys[k];
-            var hit = key.charAt(key.length - 1) === '*' ? lineKey.indexOf(key.substring(0, key.length - 1)) === 0 : lineKey === key;
-            if (hit) { text.remove(n); break; }
-        }
-    }
+	for (var n = text.size() - 1; n >= 1; n--) {
+		var lineKey = null;
+		try { lineKey = String(text.get(n).getContents().getKey()); } catch (err) {}
+		if (lineKey === null) continue;
+		for (var k = 0; k < keys.length; k++) {
+			var key = keys[k];
+			var hit = key.charAt(key.length - 1) === '*' ? lineKey.indexOf(key.substring(0, key.length - 1)) === 0 : lineKey === key;
+			if (hit) { text.remove(n); break; }
+		}
+	}
 }
 
 function removeTooltipKey(e, key) {
-    var ids = Array.prototype.slice.call(arguments, 2);
-    for (var k = 0; k < ids.length; k++) {
-        var tipId = tipIds(ids[k]);
-        if (tipId === null) continue;
-        e.addAdvanced(tipId, function(item, advanced, text) {
-            stripTooltipKeys(text, [key]);
-        });
-    }
+	var ids = Array.prototype.slice.call(arguments, 2);
+	for (var k = 0; k < ids.length; k++) {
+		var tipId = tipIds(ids[k]);
+		if (tipId === null) continue;
+		e.addAdvanced(tipId, function(item, advanced, text) {
+			stripTooltipKeys(text, [key]);
+		});
+	}
 }
 
 // ############################## Color ##############################

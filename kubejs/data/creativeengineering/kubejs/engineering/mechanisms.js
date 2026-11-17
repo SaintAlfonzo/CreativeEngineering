@@ -15,7 +15,7 @@ R.replaceInput(
 )
 //Blueprint recipe
 R.ieBlueprint(Item.of(i.precision_mechanism, 1), [Item.of(i.cog, 5), Item.of(i.large_cog, 5), Item.of(i.nugget_iron, 5), i.plate_brass], 'components', e)
- 
+
 // ############################## Vibration ##############################
 
 //Replace w/ Echo shard recipe
@@ -29,7 +29,7 @@ R.createSequencedAssembly(Item.of(i.vibration_mechanism, 1), i.echo_shard, [
 	], i.i_vibration_mechanism, e, 'vibration_mechanism_sequenced_assembly', 3)
 //Blueprint recipe
 R.ieBlueprint(Item.of(i.vibration_mechanism, 1), [Item.of(i.rose_quartz_plate, 2), Item.of(i.amethyst_shard, 2), Item.of(i.cog, 2), Item.of(i.redstone, 2), i.echo_shard], 'redstonecomponents', e)
- 
+
 // ############################## Redstone ##############################
 
 //Replace w/ component recipe

@@ -7,15 +7,15 @@ console.log('Hello! The computing event has started!')
 const R = global.NCH.forPack('creativeengineering')
 var i = global.item;
 
-// ############################## CC ##############################  
+// ############################## CC ##############################
 
 //Speaker craft change
 R.replaceInput(
-  { id: 'computercraft:speaker' },
-  i.noteblock,
-  i.speaker, e
+	{ id: 'computercraft:speaker' },
+	i.noteblock,
+	i.speaker, e
 )
- 
+
 console.log('The computing event has finished!')
 })
 

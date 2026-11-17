@@ -35,7 +35,7 @@ var i = global.item;
 	['Yellow', col.yellow],
 	['White', col.white]]
 	);
-		
+
 // ############################## Material Information ##############################
 
 	addTooltips(e,
@@ -284,15 +284,15 @@ var i = global.item;
 	);
 
 	// Stepstools: Creative Equipment (assets/creativeequipment/kubejs/tooltips.js).
-				
-// ############################## Crafting Materials ##############################	
+
+// ############################## Crafting Materials ##############################
 
 	//Mineral chain
 	// Netherite
 	addTooltips(e,
 			[i.netherite_shard, ['Not craftable by hand', col.warn]]
 	);
-	
+
 	//Basic materials
 	addTooltips(e,
 		[i.gunpowder, ['Usable as flammable fuse, speeds up TNT explosion', col.norm]],
@@ -303,9 +303,9 @@ var i = global.item;
 		[i.shulker_shell, ['Can be worn, hold in both hands and shift + right click to pack a chest', col.norm]]
 	);
 
-// ############################## Blocks ##############################	
-    
-    addTooltips(e,
+// ############################## Blocks ##############################
+
+	addTooltips(e,
 		[i.hay_bale, ['Reduces fall damage', col.good]],
 		[i.crying_obsidian, ['Ignite to light permanent soul fire', col.rare]],
 		[i.chain, ["Ends of chain stick to blocks w/o glue, and sides won't stick to slime blocks", col.uncm]]
@@ -318,8 +318,8 @@ var i = global.item;
 		[i.rich_farmland, ['Growth speed in Botany Pots +10%', col.norm], ['Does not change yield', col.norm]],
 		[i.fertile_soil, ['Growth speed in Botany Pots +20%', col.norm], ['Does not change yield', col.norm]]
 	);
-		
-// ############################## Decor ##############################	
+
+// ############################## Decor ##############################
 
 	addTooltipPattern(e, 'minecraft:*_banner', ['Placeable underneath blocks and rope', col.norm]);
 	addTooltips(e,
@@ -329,10 +329,10 @@ var i = global.item;
 		[i.sponge, ['Can be placed on top of water', col.norm]]
 	);
 
-// ############################## Immersive Engineering ##############################	
+// ############################## Immersive Engineering ##############################
 
 		// Misc tips
-    addTooltips(e,
+	addTooltips(e,
 		[i.sawdust, ['Place in coke oven to soak up creosote oil', col.eng]],
 		[i.lead_wire, ['Usable as solder in Engineer\'s Circuit Table', col.eng]],
 		[i.copper_wire, ['Usable as solder in Engineer\'s Circuit Table', col.eng]]
@@ -348,8 +348,8 @@ var i = global.item;
 			text.add(Text.of(buildTooltipLine(['Unprogrammed — blueprint with a shape to set a profile', col.data])));
 		}
 	});
-		
-// ############################## Create ##############################	
+
+// ############################## Create ##############################
 
 	addTooltips(e,
 		[i.cr_filter, ['Craftable with tough fabric', col.eng]],
@@ -363,22 +363,22 @@ var i = global.item;
 		[i.cinder_flour, ['A powerful reagent, changes form when mixed with potions', col.eng]],
 		[i.cinder_flour_pile, ['A powerful reagent, changes form when mixed with potions', col.eng]]
 	);
-	
+
 	//Remove create compress compatability tooltip
 	removeTooltips(e, i.crushed_block_aluminum, i.crushed_block_lead, i.crushed_block_silver, i.crushed_block_nickel, i.crushed_block_uranium);
 
 	// Remove Immersive Petroleum's "Increases walking speed by 20.0%": BlockRunner's asphalt tier sets
 	// the real speed and shows it in its own "Speed Multiplier" line (feature_writeup/tooltips.md)
 	removeTooltipKey(e, 'desc.immersivepetroleum.flavour.asphalt', i.asphalt, i.asphalt_slab, i.asphalt_stair);
-	
-// ############################## Transport ##############################	 
-   
-   	addTooltips(e,
+
+// ############################## Transport ##############################
+
+	addTooltips(e,
 		[i.ghost_rail, ['Launches minecarts and allows them to pass through blocks, effect stopped by dreamwood', col.epic]]
 	);
-    
+
 // ############################## Food / Farmers Delight ##############################
-    
+
 	// Bowl, basket and soil lines: Creative Delight (assets/creativedelight/kubejs/farmersdelight/client.js). Food
 	// tooltips (Farmer's Delight villager soil line, foods, kitchen blocks) moved to Creative Delight:
 	// kubejs/assets/creativedelight/kubejs/<mod>/client.js
@@ -387,16 +387,16 @@ var i = global.item;
 	addTooltipPattern(e, 'fantasyfurniture:*/oven', ['Works like a smoker', col.norm]);
 
 	// Brewin' and Chewin' keg temperature blocks: Creative Brewing (assets/creativebrewing/kubejs/brewinandchewin/tooltips.js).
-		
+
 // ############################## Archery ##############################
 
 		/*addTooltips(e,
 				[i.ghost_rail, ['Launches minecarts and allows them to pass through blocks, effect stopped by dreamwood', col.epic]]
 		);*/
-  	
+
 // ############################## Etched/music ##############################
-  	
-  	addTooltips(e,
+
+	addTooltips(e,
 		[i.jukebox,
 			['Please stop inserting pancakes. -Management', col.norm]],
 		[i.radio,
@@ -419,7 +419,7 @@ var i = global.item;
 			['Autogenerates cover art from BandCamp or SoundCloud URLs', col.norm],
 			['First disc inserted determines album art, use grindstone to remove', col.norm]]
 	);
-  	
+
 // ############################## Misc Mods, Quark, Supplementaries, Framed ##############################
 
 	// Creative Compat (assets/creativecompat/kubejs/tooltips.js).

@@ -8,5 +8,5 @@
 // is registered last and runs after every tag script's adds (tags/loottags.js and the rest).
 
 ServerEvents.tags('item', event => {
-    global.lootTuning.captureTags(event)
+	global.lootTuning.captureTags(event)
 })

@@ -5,14 +5,14 @@
 
 var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('block', e => {
-    // Layered Obsidian — vanilla-obsidian stats (hard, blast-resistant, needs a diamond pick).
-    reg.block(e, 'layered_obsidian')
-        .displayName('Layered Obsidian')
-        .material('stone')
-        .soundType('stone')
-        .hardness(50.0)
-        .resistance(1200.0)
-        .requiresTool(true)
-        .model('creativeengineering:block/layered_obsidian');
-    // Mining tags (pickaxe, diamond): server_scripts/tags/blocktags.js
+	// Layered Obsidian — vanilla-obsidian stats (hard, blast-resistant, needs a diamond pick).
+	reg.block(e, 'layered_obsidian')
+		.displayName('Layered Obsidian')
+		.material('stone')
+		.soundType('stone')
+		.hardness(50.0)
+		.resistance(1200.0)
+		.requiresTool(true)
+		.model('creativeengineering:block/layered_obsidian');
+	// Mining tags (pickaxe, diamond): server_scripts/tags/blocktags.js
 });

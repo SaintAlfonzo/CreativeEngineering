@@ -21,20 +21,20 @@ R.bulk('remove', [
 // Shaped Crafts
 // ============================================================
 R.bulk('shaped', [
-    [Item.of(i.ce_copper_shield, 1), ['RWR','WPW', 'RWR'], {W: i.planks, R: i.rod_copper, P: i.plate_copper}, e],
+	[Item.of(i.ce_copper_shield, 1), ['RWR','WPW', 'RWR'], {W: i.planks, R: i.rod_copper, P: i.plate_copper}, e],
 	[Item.of(i.shield, 1), ['RWR','WPW', 'RWR'], {W: i.planks, R: i.rod_iron, P: i.plate_iron}, e],
-    [Item.of(i.ce_gold_shield, 1), ['RWR','WPW', 'RWR'], {W: i.planks, R: i.any_rod_gold, P: i.any_plate_gold}, e],
+	[Item.of(i.ce_gold_shield, 1), ['RWR','WPW', 'RWR'], {W: i.planks, R: i.any_rod_gold, P: i.any_plate_gold}, e],
 ]);
 
 // ============================================================
 // Smithing
 // ============================================================
 R.bulk('smithing', [
-    [Item.of(i.shield, 1), i.ce_copper_shield, i.ingot_iron, e],
-    [Item.of(i.ce_gold_shield, 1), i.ce_copper_shield, i.any_ingot_gold, e],
-    [Item.of(i.ce_diamond_shield, 1), i.shield, i.diamond, e],
-    [Item.of(i.ce_diamond_shield, 1), i.ce_gold_shield, i.diamond, e],
-    [Item.of(i.ce_netherite_shield, 1), i.ce_diamond_shield, i.ingot_netherite, e],
+	[Item.of(i.shield, 1), i.ce_copper_shield, i.ingot_iron, e],
+	[Item.of(i.ce_gold_shield, 1), i.ce_copper_shield, i.any_ingot_gold, e],
+	[Item.of(i.ce_diamond_shield, 1), i.shield, i.diamond, e],
+	[Item.of(i.ce_diamond_shield, 1), i.ce_gold_shield, i.diamond, e],
+	[Item.of(i.ce_netherite_shield, 1), i.ce_diamond_shield, i.ingot_netherite, e],
 ]);
 
 console.log('The shield event has finished!')
