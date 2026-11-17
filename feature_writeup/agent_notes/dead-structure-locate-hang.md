@@ -9,7 +9,7 @@ first tick unpacked `monobank:monobank/village/<biome>`, which rolls an explorat
 We disable all ruined portals (structure_overrides.js writes the set at frequency 0), and vanilla
 `ChunkGenerator#findNearestMapStructure` (m_223037_) ignores frequency, so it scanned ~10k candidates for 60 s.
 
-**Fix (deployed: the 2026-09-27 16:51 jar in mods/ already had it; since [structure-groups](structure-groups.md) emptied sets have no members at all):**
+**Fix (since [structure-groups](structure-groups.md) emptied sets have no members at all):**
 - `mixin/ChunkGeneratorLocateMixin` @Inject RETURN on private `getPlacementsForStructure` (m_223138_, sole caller is
   findNearestMapStructure) → `worldgen/DeadPlacementFilter` drops placements with `frequency` (f_227024_) <= 0.
   Covers maps, /locate, cartographer trades, dolphins.

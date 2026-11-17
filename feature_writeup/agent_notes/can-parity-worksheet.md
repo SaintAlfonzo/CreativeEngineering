@@ -1,6 +1,6 @@
 # can-parity-worksheet
 
-> feature_writeup/can_parity.md (CP-) hand-kept per-food can coverage sheet; 2026-10-13 raw can removals, white strawberry can, cactus flesh rename; newcan sprites deployed
+> feature_writeup/can_parity.md (CP-) hand-kept per-food can coverage sheet; 2026-10-13 raw can removals, white strawberry can, cactus flesh rename; newcan sprites
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
@@ -13,7 +13,7 @@ Same day (from the user's notes in cans.js): removed canned mint, acorn, grape, 
 kangaroo/moose/bison/bunfungus (items, dict keys, recipes, servings, food_types, grape tags in cantags.js);
 `canned_white_strawberry` split from strawberries; `canned_cactus` -> `canned_cactus_flesh` and delightful:cactus_flesh
 renamed "Cactus Flesh" in namechanges.js. gen_can_types.py ANCHOR now the canned_raw_rabbit dict line.
-The removed ids and canned_cactus shipped in 1.0.4: no remap yet.
+The removed ids and canned_cactus shipped in 1.0.4: no remap (closed as no issue in can_parity.md).
 
 Sprites (10-13): textureswapper/canned/newcan -> 19 CE cans in kubejs/assets/creativeengineering/textures/item (cans.js
 drops .texture() for them) + 9 overrides in kubejs/assets/canned_goods/textures/items (fish, cooked_salmon, mushrooms,

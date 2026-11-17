@@ -32,7 +32,7 @@ General lesson for future patcherMod `@Redirect`/`@Inject` mixins: match the han
 `static`-ness to the **target method's** modifier (`javap -p` the real target class to check),
 not to the modifier of whatever call/field the injection point happens to touch.
 
-## Status (superseded text below, kept for implementation history): IMPLEMENTATION COMPLETE, built + deployed, NOT yet verified in-game
+## Implementation history (status: fixes_compat.md row 2.2)
 
 `./gradlew build` succeeded, `reobfJar` ran, and every vanilla method/field reference in the new
 code was cross-checked byte-for-byte against both the real SRG mapping table

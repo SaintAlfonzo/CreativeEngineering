@@ -19,7 +19,7 @@ Audit 2026-10-05 (bytecode call-graph scan of mods/, then decompiled each hit). 
 - TrashSlotGuiHandler.onScreenDrawn confirmed (renderComponentTooltip(List)).
 Checked fine: vanilla recipe book (Forge passes stack), Polymorph, Sol food book UIItemStack, CFB recipe book, Create blueprint, all JEI categories (none draw items outside slots; Create GuiGameElement = blocks).
 
-**Fixed 2026-10-20** (patcherMod 1.1.01, Brewin -03, Vinery -04 rebuilt at same versions, installed in mods/ + jar_archive refreshed; tooltips.md TT-19..30, fixes_compat 2.24):
+**Fixed 2026-10-20** (status: tooltips.md TT-19..30, fixes_compat 2.24):
 - `compat/MealSlotTooltip` + Redirects of `m_96597_` (owner = the screen class itself) in CookingPotScreen/KettleScreen.renderMealDisplayTooltip and CCK Cooking/BrewingGuideScreen.m_7025_. OvenScreen + Vinery StationRecipeBook + Brewin KegScreen/KegRecipeBookComponent: direct source edits (Forge overload with stack; keg passes BnCFluidItemDisplays item).
 - JEI keg: JeiRecipeLayoutTooltipMixin now, when the hovered slot shows no item, attaches a RENDER_ONLY item slot under the same mouse point (JEI keeps slots in add order for both draw and hover, so reordering would hide the tankard). Side effect of the JEI fix: recipe slots now get JEI's mod-name line (ModNameFormat override active).
 - TrashSlotGuiHandlerMixin redirect; PrettyPipesTerminalTooltipMixin; WaresAgreementTooltipMixin; PatchouliBookTooltipMixin (ordinal 0).

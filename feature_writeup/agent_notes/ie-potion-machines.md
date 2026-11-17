@@ -72,7 +72,7 @@ Mirrors IE's own `immersiveengineering:mixer_potion_list` mechanism:
 - lang key `creativeengineering.jei.lingerification` = "Lingerification".
 
 ## Status
-Lingerification confirmed working in-game 2026-09-07. Two follow-up fixes built + deployed same
+Lingerification confirmed working in-game 2026-09-07. Two follow-up fixes the same
 day:
 1. `JEIHelperMixin` `ordinal = 0` (above) — first cut broke every IE JEI page after the Refinery
    (bottling machine, arc furnace, IE mixer). Fixed.
@@ -116,7 +116,7 @@ Squeezer/Fermenter are consistency-only (no potion recipes for them in the pack)
 if IE ever changes those categories and they break.
 
 ## Status
-Built + deployed 2026-09-07 (`./gradlew build --offline` clean, no refmap — JEI isn't obfuscated,
+Built 2026-09-07 (`./gradlew build --offline` clean, no refmap — JEI isn't obfuscated,
 IE targets use literal names). Client-only; needs a client restart to verify. Verify: hover the
 `create:potion` input on a Bottling Machine per-potion recipe / a Lingerification recipe → potion
 name + effect line shown.
@@ -141,7 +141,7 @@ shows properly in JEI, and needs no per-recipe Java. What remains:
 2. Fluid-by-id in `deserialize` (`"fluid":"<id>"` → `Either.right(List.of(rl))`) — **dormant**,
    nothing uses it, and kjs-ie blocks `"fluid"` keys anyway (see below). Kept, harmless.
 
-Built + deployed to `mods/creativeengineering-1.0.0.jar`. The old bottling mixins
+Built into patcherMod 1.0.0. The old bottling mixins
 (`MultiblockProcessBottlingMixin`, `BottlingMachineRecipe(Serializer)Mixin`,
 `BottlingMachineBlockEntityMixin`, `bottling/` package, the 3 `forceLoad`s) are **deleted**.
 
@@ -183,8 +183,7 @@ kubejs-immersive-engineering intercepts **every** `immersiveengineering:*` recip
 - `redstone_from_cinder_flour_potion` + `create:potion` bottle-filling: **working in-game** (user
   confirmed). Create *filling* with `create:potion` nbt also confirmed.
 - 2026-09-06 rework (remove IE potion bottling + generate per-potion + strip patcherMod dynamic
-  code): built/deployed, needs `/reload` + restart (potion_bottling.js is new;
-  patcherMod jar changed → full restart).
+  code).
 
 ## IE Mixer → create:potion  — DONE (see [am-potion-brewing-fix](am-potion-brewing-fix.md) "2026-09-07")
 
@@ -207,7 +206,7 @@ findRecipe/getRecipeForId/JEI mixins, no recipe generation. Makes `immersiveengi
 fluid survival-unobtainable (bottling list already gone). Chemthrower potion spray + potion
 bullets keep working (shared tag / item-based).
 
-**BUILT + DEPLOYED 2026-09-06, TWO redirects in `mixin/PotionRecipeGeneratorsMixin`** (both on
+**2026-09-06: TWO redirects in `mixin/PotionRecipeGeneratorsMixin`** (both on
 `registerPotionRecipe`):
 1. `getFluidStackForType(to,1000)` (OUTPUT) → `PotionFluidHandler.getFluidFromPotion(to,REGULAR,1000)`
    = `create:potion{Bottle:REGULAR,Potion:to}`.

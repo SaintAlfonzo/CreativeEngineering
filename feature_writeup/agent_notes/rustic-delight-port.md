@@ -25,5 +25,5 @@ Gotchas found (add to the Miner's list):
   feature uses the `requires` key (`_biome_rules.js`).
 - The 1.3.0-id `kubejs/data/rusticdelight/worldgen/*_feature.json` overrides and the pack recolours left kubejs on 11-10.
 
-**Why:** owner asked to fold Rustic into CD; the 1.3.0 jar stays live until CD is installed. **How to apply:** check
+**Why:** owner asked to fold Rustic into CD (the 1.3.0 jar is out of `mods/`; state in rustic_delight.md). **How to apply:** check
 rustic_delight.md 5.7 (cutover) before touching Rustic rows.

@@ -125,6 +125,7 @@ HISTORY = os.path.join(DEPLOY, 'history')
 CHANGELOG_RESTYLES = os.path.join(DEPLOY, 'changelog_restyles.json')  # approved rewrites of shipped changelogs
 LOG = os.path.join(DEPLOY, 'DEPLOY_LOG.md')
 DEPLOYED = os.path.join(DEPLOY, 'DEPLOYED.json')
+DEPLOY_DOC = os.path.join(ROOT, 'feature_writeup', 'deploy.md')  # section 8 "History" gets one bullet per snapshot
 RUNBOOK = os.path.join(DEPLOY, 'RUNBOOK.md')  # operator one-pager (perf capture, dumps), copied into every payload
 WORLDGEN = os.path.join(ROOT, 'kubejs', 'generation_scripts', 'worldgen')
 SERVER_CONFIG_EDITS = os.path.join(ROOT, 'configs_edited', 'server_config')
@@ -1062,6 +1063,8 @@ def snapshot(version, targets, date, notes):
         json.dump(out, f, indent=1, ensure_ascii=False)
         f.write('\n')
     mark_log(version, deployed)
+    append_history_rows([{'version': version, 'date': date, 'targets': list(targets),
+                          **({'notes': notes} if notes else {}), **({'stamps': stamps} if stamps else {})}])
     freeze_changelog(version)
     print(f"snapshot: {', '.join(targets)} at {version} ({date}); next update builds from "
           f"{default_base(deployed)}")
@@ -1085,6 +1088,82 @@ def mark_log(version, deployed):
         sec = re.sub(r'(?m)^(- Since: .*)$', lambda mm: mm.group(1) + '\n' + line, sec, count=1)
     with open(LOG, 'w', encoding='utf8') as f:
         f.write(text[:m.start()] + sec + text[m.end():])
+
+
+def _hm(date):
+    """'2026-11-09T17:59(:20)' -> '2026-11-09 17:59'; a date with no time stays as it is."""
+    return date.replace('T', ' ')[:16]
+
+
+def _log_payload(version, log_path):
+    """The `- Payload:` line of the version's DEPLOY_LOG section, without the per-category counts."""
+    if not os.path.isfile(log_path):
+        return ''
+    text = open(log_path, encoding='utf8').read()
+    m = re.search(rf'(?ms)^<!-- deploy:{re.escape(version)} -->.*?(?=^<!-- deploy:|\Z)', text)
+    p = m and re.search(r'(?m)^- Payload: (.*)$', m.group(0))
+    return re.sub(r'\s*\(.*\)\s*$', '', p.group(1)) if p else ''
+
+
+def history_row(entry, log_path=None):
+    """One deploy.md History bullet for a DEPLOYED.json log entry (version, date, targets, notes, stamps)."""
+    row = f"- {_hm(entry['date'])}: {entry['version']} recorded as deployed with `--snapshot` ({', '.join(entry['targets'])})."
+    payload = _log_payload(entry['version'], log_path or LOG)
+    if payload:
+        row += f' Payload: {payload}.'
+    if entry.get('stamps'):
+        row += f" Build stamps for {len(entry['stamps'])} own jars."
+    if entry.get('notes'):
+        row += f" Notes: {entry['notes'].rstrip('.')}."
+    return row
+
+
+def append_history_rows(entries, doc=None, log_path=None):
+    """Append a History bullet to deploy.md section 8 for each entry, oldest first. An entry is skipped when a
+    bullet in that section already names its version and its date (YYYY-MM-DD HH:MM), so a rerun adds nothing.
+    Entries with the same version and date (one snapshot logged per target) become one bullet."""
+    doc = doc or DEPLOY_DOC
+    if not os.path.isfile(doc):
+        return []
+    merged = {}
+    for e in sorted(entries, key=lambda e: e['date']):
+        k = (e['version'], _hm(e['date']))
+        if k in merged:
+            merged[k]['targets'] = merged[k]['targets'] + [t for t in e['targets'] if t not in merged[k]['targets']]
+        else:
+            merged[k] = dict(e, targets=list(e['targets']))
+    for e in merged.values():
+        e['targets'].sort(key=lambda t: t != 'server')
+    text = open(doc, encoding='utf8').read()
+    m = re.search(r'(?ms)^## \d+\. History\n.*?(?=^## |\Z)', text)
+    if not m:
+        print(f'history: no "History" section in {os.path.relpath(doc, ROOT)}; nothing appended')
+        return []
+    sec = m.group(0)
+    bullets = re.split(r'(?m)^(?=- )', sec)
+    rows = []
+    for (version, hm), e in merged.items():
+        if any(version in b and (hm in b or hm.replace(' ', 'T') in b) for b in bullets):
+            continue
+        rows.append(history_row(e, log_path))
+    if rows:
+        body = sec.rstrip('\n') + '\n' + '\n'.join(rows) + '\n\n'
+        with open(doc, 'w', encoding='utf8') as f:
+            f.write(text[:m.start()] + body + text[m.end():])
+    for r in rows:
+        print(f'history: {os.path.relpath(doc, ROOT)} += {r[:100]}')
+    return rows
+
+
+def backfill_history(versions, doc=None, deployed_path=None, log_path=None):
+    """--backfill-history: add the missing History bullets for these versions from DEPLOYED.json's log
+    (read only; one-time use for snapshots taken before the bullet was automatic, 1.2.00 to 1.2.02)."""
+    log = json.load(open(deployed_path or DEPLOYED, encoding='utf8')).get('log', [])
+    entries = [e for e in log if e['version'] in versions]
+    missing = [v for v in versions if not any(e['version'] == v for e in entries)]
+    if missing:
+        print(f"history: no DEPLOYED.json log entry for {', '.join(missing)}; no bullet")
+    return append_history_rows(entries, doc, log_path)
 
 
 # ── payload ──────────────────────────────────────────────────────────────────
@@ -1722,10 +1801,15 @@ def main():
     ap.add_argument('--snapshot', nargs='?', const='', metavar='VERSION',
                     help='record that VERSION (default: the one in deploy/latest/) was copied to the machines; '
                          'builds nothing')
+    ap.add_argument('--backfill-history', nargs='+', metavar='VERSION',
+                    help='append the missing deploy.md History bullets for these versions from DEPLOYED.json (one-time)')
     ap.add_argument('--target', choices=('both', 'server', 'client'), default='both', help='with --snapshot')
     ap.add_argument('--date', help='with --snapshot: when it was deployed (default: now), e.g. 2026-09-30T01:00')
     args = ap.parse_args()
 
+    if args.backfill_history:
+        backfill_history(args.backfill_history)
+        return
     if args.snapshot is not None:
         snapshot(args.snapshot, ('server', 'client') if args.target == 'both' else (args.target,), args.date, args.notes)
         return

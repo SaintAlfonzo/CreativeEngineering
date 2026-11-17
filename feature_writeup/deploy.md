@@ -10,6 +10,8 @@ update payloads; 1.0.5 was staged (2026-10-11) but never copied out; 1.0.6 (2026
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Deploy pipeline (deployment snapshot, update/install payloads, verify scripts, kubejs file classes, gzipped climate samples). Status: BUILT, used for the 1.0.3, 1.0.4, 1.0.6, 1.0.7, 1.0.8, 1.0.9, 1.1.01 to 1.1.06 and 1.2.00 deploys (server 1.1.05 since 2026-10-31; client 1.2.00 full install since 2026-11-03); 1.0.5 staged but never deployed; DP-01, DP-02, DP-06 PASSED, DP-03 to DP-05, DP-07 pending; DP-08 world serverconfig scratch server PASSED 2026-10-22 (SQ-OM-17, SQ-OM-18), carried by the 1.1.02 to 1.1.04 payloads; preflight stops on two jars with one mod id since 1.0.9
+
 | Part | Status | Open |
 |---|---|---|
 | Deployment snapshot (`--snapshot`, `deploy/DEPLOYED.json`) | BUILT; server 1.1.03 (2026-10-26 19:04), client 1.1.04 (2026-10-29 17:16); 1.1.02 on both sides before (2026-10-23) | [tools/build_deploy.py](../tools/build_deploy.py), [deploy/DEPLOYED.json](../deploy/DEPLOYED.json) |
@@ -276,6 +278,10 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
 
 ## 8. History
 
+`--snapshot` appends its own bullet here (date, version, targets, the DEPLOY_LOG payload line, stamp count, notes)
+from the DEPLOYED.json mark it writes; `--backfill-history VERSION...` adds missing ones once (1.2.00 to 1.2.02 added
+2026-11-16). Other bullets (staging, tool changes) are still written by hand.
+
 - 2026-09-30: built. Deployment snapshot + update/install modes + verify scripts; kubejs classes; climate samples gzipped into `generation_scripts/worldgen/climate/` (patcherMod 1.0.3 rebuilt and copied to `mods/`). 1.0.2 snapshotted as deployed on both sides ("last night", the 00:14 staging).
 - 2026-10-02: the server never got 1.0.2, so DEPLOYED.json marks the server 1.0.1 and the client 1.0.2. Payload
   files come from the older mark, but removals and verify lists are per target (`fromByTarget`,
@@ -372,6 +378,10 @@ just stops working (at most a log warning) or breaks later in play. The pack's m
   changes. Applied 2026-11-03 20:40 to CreativeEngineeringClient (`apply.sh client --no-world`: old jars to
   `mods_before_1.2.00/`, 1085 removals, verify --installed OK, 407 jars); snapshot client 1.2.00, server still 1.1.05. The dev
   instance is the build source (already 1.2.00). Not booted on these jars yet.
+- 2026-11-03 20:55: 1.2.00 recorded as deployed with `--snapshot` (server, client). Payload: install, config functional: 2870 files, 549.2 MB.
+- 2026-11-04 22:15: 1.2.01 recorded as deployed with `--snapshot` (server, client). Payload: update from 1.2.00, config functional: 65 files, 15.9 MB.
+- 2026-11-09 17:46: 1.2.02 recorded as deployed with `--snapshot` (client). Payload: update from 1.2.01, config functional: 191 files, 32.9 MB.
+- 2026-11-09 17:59: 1.2.02 recorded as deployed with `--snapshot` (server). Payload: update from 1.2.01, config functional: 191 files, 32.9 MB.
 
 ## Owner notes (scratchpad 2026-11-07)
 

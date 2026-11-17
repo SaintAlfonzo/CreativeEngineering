@@ -9,7 +9,7 @@ User's rules (2026-10-19): campfires (and soul campfires) place unlit (Unlit Cam
 - unlitcampfire-server.toml (world serverconfig + defaultconfigs + configs_edited/server_config): campfireLitTime 0, soulCampfireLitTime 0, campfireRainUnlitTime -1, soulCampfireRainParticleFactor 1. LitTime 0 makes the mod's `burnsInfinite()` true, which also skips ITS rain check and its add-burnables/magma-cream paths, so rain had to move to patcherMod.
 - patcherMod `campfire/CampfireRain` + `mixin/CampfireRainMixin` (RETURN of CampfireBlockEntity.cookTick m_155306_, duck `CampfireRainTicks`, count not saved). Tags `creativeengineering:campfire/rain_douses` (minecraft:campfire) and `campfire/rain_proof_fuel` (coal block, quark + architects_palette charcoal blocks), filled in blocktags.js. CEConfig [campfire] rainDouses, rainOutTicks 160.
 - Tinted Campfires' ColorCampfire extends BaseEntityBlock, not CampfireBlock: Unlit Campfire's mixins never touch them.
-- Built into creativeengineering-1.0.9.jar in mods/ 10-19 19:48 (same version number as the deployed one).
+- Lives in Creative Delight since 2026-11-04 (creative_compat.md history); status: [barbeques_delight.md](../barbeques_delight.md) weather row and the campfire writeups.
 
 Related: [patchermod-coremod](patchermod-coremod.md), memory `configs-edited-backup`.
 - 2026-10-22: scratch server PASSED (SQ-OM-06): plain campfire on stone out in rain, on a coal block / Quark charcoal block lit, soul campfire lit; Unlit Campfire campfireLitTime 0 from the world serverconfig (SQ-OM-18).

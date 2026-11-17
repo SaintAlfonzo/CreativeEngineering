@@ -87,7 +87,7 @@ warnings). No potion server scripts remain.
   converts a bucket of splash potion; Create/IE in step for lingering.
 - Splash / lingering: vanilla `CONTAINER_MIXES` + patcherMod dragon-breath fluid brew.
 
-## patcherMod mixins (rebuilt + deployed 2026-09-07)
+## patcherMod mixins (2026-09-07; status: potions.md section 0)
 - **`PotionRecipeGeneratorsMixin`** (existing) — `CREATIVEENGINEERING$AMOUNT` = **1500 mB**
   (pack design; IE stock + Create Automatic Brewing are 1000). Briefly set to 1000 then reverted
   2026-09-07 — user wants the IE-Mixer multiblock to brew in 1500 mB batches specifically.
@@ -105,7 +105,7 @@ warnings). No potion server scripts remain.
 
 ## 2026-09-07 (session 2) — IE splash/lingering parity + AM bottle-base fixes
 
-Five holes closed (all rebuilt + deployed):
+Five holes closed:
 - **`potions.js` postInit `.class` bug** — `PMR.class` / `.class` is Nashorn syntax; KubeJS Rhino
   (`Java.loadClass` → NativeJavaClass) has no `.class` (hunts a `$class` nested class, throws).
   Fix: `PMR.__javaObject__` (Rhino's real-`java.lang.Class` accessor, verified in rhino jar

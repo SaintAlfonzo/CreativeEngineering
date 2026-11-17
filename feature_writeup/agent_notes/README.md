@@ -7,6 +7,7 @@ Rules: status (built, deployed, tested, versions) lives in [README.md](../README
 ## Standing rules (core ones are in CLAUDE.md: helpers, one-place items, no emoji, GPLv3, no artifacts, configs_edited, no conversions, no advancements, redact token if reading process cmd lines)
 - [NCH.cfg config values](config-driven-recipe-values.md); [Git setup](git-repo-setup.md)
 - [TODO layout](todo-layout.md)
+- [Status pass 2026-11-16](status_pass_2026-11-16.md) — status lines stripped from 33 notes (pointers to the owning docs), 31 checked and left; doc disagreements for the owner
 ## Tooling, debugging, testing
 - Process cmd lines OK only with token redacted (CLAUDE.md), never bare `pgrep -af`/`ps -f`: [CreEngServer](creengserver-dedicated-server.md)
 - [/cdevgen](cdevgen-generator-runner.md); [/dumpall refresh](dumpall-refresh-workflow.md); [/dumptags](dump-tags-script.md); [perf JFR](perf-profiling-jfr.md); [item-loss repro](item-loss-repro.md)
