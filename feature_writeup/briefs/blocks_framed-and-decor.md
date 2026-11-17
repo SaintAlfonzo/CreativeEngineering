@@ -17,7 +17,7 @@ the Vinery port in `development/creativeBrewing/members/vinery`. Bytecode read w
 | 1 | `framed-and-decor #6` fixes D3, D6 | KubeJS tags | Smallest open fixes of the audit; the rest wait on owner decisions |
 | 2 | `framed-and-decor #2` Copycat pack names | resource pack edit | Client only, no code |
 | 3 | `framed-and-decor #1` Flowers on framed / copycat dirt | patcherMod | One mixin per mod family, reuses `CamoSpeed.camo` |
-| 4 | `framed-and-decor #8`, `#10` vines | patcherMod + tags | Same `VineBlock` neighbour hook; build together |
+| 4 | `framed-and-decor #8`, `#10` vines | patcherMod + tags | Same `VineBlock` neighbor hook; build together |
 | 5 | `framed-and-decor #7` Fairy lights | patcherMod + tags | Independent |
 | 6 | `framed-and-decor #11` Random flower offset | patcherMod | Needs a dump first |
 | 7 | `framed-and-decor #3` Trapdoor / shutter variants | KubeJS / data | Waits on "which" |
@@ -77,7 +77,7 @@ Verified: class names and method lists above (javap). New: one tag, one config k
 - **D3 Farmland.** Recommend no (a framed farmland can't be tilled or hydrated).
 
 ### Gotchas
-- A plant placed on a camo dirt must pop off when the camo is removed or changed: neighbour updates fire on camo change
+- A plant placed on a camo dirt must pop off when the camo is removed or changed: neighbor updates fire on camo change
   in FramedBlocks (it calls `level.sendBlockUpdated`, not necessarily `updateNeighbors`); check in game.
 - BlockRunner and the sinking render also read camos: no conflict, but keep one lookup.
 
@@ -99,7 +99,7 @@ names. The pack is off by default on player clients.
 - The zip (pack_format 8, "Turns the framed blocks to Create's Copycat block!") holds textures and
   `assets/framedblocks/lang/en_us.json` (~300 keys), edited 2026-09-27 to "Framed Copycat ..." (tooltips.md "Renamed",
   lines 104-109); backup in `configs_edited/resourcepacks/Copycat Framed Block.zip` and `.../original/`.
-- Shipped to clients as a zip by `build_deploy.py` (resourcepacks → client); players' `options.txt` is not shipped, so
+- Shipped to clients as a zip by `build_deploy.py` (resourcepacks -> client); players' `options.txt` is not shipped, so
   it is off for them by default. On the dev client it is enabled (`options.txt:40`; listed as incompatible at line 41
   because of the old pack format).
 - So players see "Framed Slab", the dev client "Framed Copycat Slab".
@@ -170,7 +170,7 @@ flower, and fix the audit's bugs.
   `/dumppots`, `tools/flower_pot_audit.py`); SQ-POT-01 to -04 ran; SQ-POT-05 (read the 427 mismatches) and CQ-POT-01 open.
 - Since then (not in the TODO row's text): flower pot tweaks **built 2026-10-31** (flower_pots.md 3.2: framed pot
   before framing, box plant models, plant lists in `misctags.js:47-56`, Rich Hanging Pot, Large Flower Box, WTHIT
-  "Contains", silt pot as soil, Vinery box centred), patcherMod 1.1.04 + Vinery port `-07`, not installed;
+  "Contains", silt pot as soil, Vinery box centered), patcherMod 1.1.04 + Vinery port `-07`, not installed;
   POT-09 to POT-17, SQ-POT-07, SQ-POT-08. Floral large pots hidden 2026-10-31 (3.2.9; D4 decided, replacement in
   `potions/enchanting #7`).
 - Bugs still open: F1 (planter box `ClassCastException` on 4 Fungi Delight items: nothing in
@@ -246,7 +246,7 @@ Status **Planned** · Work: patcherMod · id `blocks/framed-and-decor #8`
 Vines can grow on and under non-full blocks such as stacked logs.
 
 ### Now
-- Vanilla `VineBlock` attaches only to a full face (`isAcceptableNeighbour` → `Block.isFaceFull(collisionShape, dir)`),
+- Vanilla `VineBlock` attaches only to a full face (`isAcceptableNeighbour` -> `Block.isFaceFull(collisionShape, dir)`),
   for placing, surviving and spreading.
 - `vinery:stackable_log` (Vinery port `StackableLogBlock extends SlabBlock`,
   [StackableLogBlock.java:245-257](../../development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/core/block/StackableLogBlock.java#L245-L257))
@@ -258,7 +258,7 @@ Vines can grow on and under non-full blocks such as stacked logs.
 1. Tag `#creativeengineering:vine_supports` (blocktags.js): `vinery:stackable_log`, Dave's log piles, lattices (with #10),
    fences? (D1).
 2. Mixin on `VineBlock.isAcceptableNeighbour` (static, SRG name from the mappings: look it up in a `mappings.tsrg`
-   under `development/*/build/reobfJar/`): return true when the neighbour is in the tag. This covers placing, survival
+   under `development/*/build/reobfJar/`): return true when the neighbor is in the tag. This covers placing, survival
    and spreading for vanilla and subclassing modded vines.
 3. Other vine-like blocks not subclassing `VineBlock` (Quark / IW ivy?) are #10's job.
 
@@ -307,7 +307,7 @@ Every vine type can grow on or through lattices. Related: #8 and the Decorative 
 Status **Planned** · Work: patcherMod · id `blocks/framed-and-decor #11`
 
 ### Goal
-Flower blocks that sit dead centre get the random XZ offset vanilla flowers have; the trowel may change it.
+Flower blocks that sit dead center get the random XZ offset vanilla flowers have; the trowel may change it.
 
 ### Now
 - Vanilla flowers use offset type XZ (1.19.2: `Block.getOffsetType()`, applied by `BlockState.getOffset` in rendering and
@@ -332,4 +332,4 @@ Flower blocks that sit dead centre get the random XZ offset vanilla flowers have
 
 ### Tests
 (proposed, numbered when queued)
-- POT-new1 a row of the listed flowers: each sits off-centre like a poppy, outline matches the model.
+- POT-new1 a row of the listed flowers: each sits off-center like a poppy, outline matches the model.

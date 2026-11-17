@@ -10,7 +10,7 @@ Delight (CD); test prefix `TSK-`.
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 0 Complete.
 <!-- generated:status_index end open_work -->
 
-## 1. Behaviour
+## 1. Behavior
 
 - Right-click a block face with a treated stick (after the clicked block's own use passed, the same order as
   Supplementaries' sticks): places `creativedelight:treated_stick` on that face's axis. Clicking a placed treated
@@ -19,7 +19,7 @@ Delight (CD); test prefix `TSK-`.
 - Breaking drops one treated stick per axis; pick-block gives a treated stick. The block has no item of its own.
 - Tomatoes:
   - Right-click a bottom FD tomato vine (not on a rope) with a treated stick: it becomes
-    `creativedelight:treated_stick_tomatoes` at the same age (Supplementaries' stick behaviour).
+    `creativedelight:treated_stick_tomatoes` at the same age (Supplementaries' stick behavior).
   - A tomato vine below a placed treated stick climbs onto it (30% per growth tick or bone meal, at most three vines
     high, only with FD's `enableTomatoVineClimbingTaggedRopes` on), from FD's vine, Supplementaries' stick/rope vines,
     or a treated-stick vine.
@@ -53,10 +53,10 @@ joins IE, Supplementaries and FD, so no member namespace fits.
 ## 3. Decisions
 
 - **Own blocks, not Supplementaries' API.** Supplementaries (ARR) registers its own placeable sticks through
-  internals; the pack re-implements the stick and stick-vine behaviour instead of calling them, so nothing breaks if
+  internals; the pack re-implements the stick and stick-vine behavior instead of calling them, so nothing breaks if
   Supplementaries changes. Its models are used only as parents (by id), as for other ARR mods.
 - **Textures:** Supplementaries' `blocks/stick.png` and `stick_cross.png` recoloured to the treated stick item's
-  palette (the 4 colours of Updated Engineering's `material_stick_treated.png`, the texture players see) by
+  palette (the 4 colors of Updated Engineering's `material_stick_treated.png`, the texture players see) by
   luminance, darkest to darkest. Being derived from an ARR texture, they live in `kubejs/assets/` beside the pack, not
   in the GPL jar (the pack's route for ARR-derived files, `ends_delight.md` 5).
 - **Not in `farmersdelight:ropes`.** FD's own climb would turn a tagged block into its rope-logged vine (and leave an

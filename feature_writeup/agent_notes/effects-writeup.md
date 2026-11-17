@@ -8,7 +8,7 @@ Written 2026-10-19 at the user's request ("effect writeup, starting with vanilla
 The first section is ONE table (mod as a column, the user asked for one table): effect, mod, Brew, Arrow (tipped arrow
 has its own name), Super (only works as other effects combined, or vanilla plus extra), Fluid (JEI create:potion),
 Desc (JEED text Y / N / Partial / Wrong, PROPOSED replacement text when not Y), Food, Subset, Overlaps
-(slight/total), Brief, Detailed. Behaviour was read from decompiled jars (scratch subset decompile of
+(slight/total), Brief, Detailed. Behavior was read from decompiled jars (scratch subset decompile of
 effect/potion/brew/event classes) and the Vinery/Brewin port sources, not guessed.
 
 - `python3 tools/effect_audit.py` (`--json` for the table): names incl. AM's `alexsmobs.potion.*` keys, JEED
@@ -26,7 +26,7 @@ effect/potion/brew/event classes) and the Vinery/Brewin port sources, not guesse
 - effect_audit.py `no JEI source` check (reads effect id literals in jeed_providers.js + registries + wine config).
 - Category audit = effects.md 2.4; overrides in CEConfig `[effects] categoryOverrides` (patcherMod
   potion/EffectCategories + MobEffectCategoryMixin on getCategory m_19483_ / isBeneficial m_19486_). Only red vs blue
-  is visible (NEUTRAL renders blue), so only colour-wrong effects were overridden (6).
+  is visible (NEUTRAL renders blue), so only color-wrong effects were overridden (6).
 - User: "leave TODO for any effect description missing" -> 10 placeholders stay until they write text.
 
 Related: [jeed-effect-descriptions](jeed-effect-descriptions.md), memory `feature-writeup-pattern`, [am-potion-brewing-fix](am-potion-brewing-fix.md), [backported-vinery](backported-vinery.md).

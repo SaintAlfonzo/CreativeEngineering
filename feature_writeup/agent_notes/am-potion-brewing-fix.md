@@ -23,7 +23,7 @@ Added 2026-09-06. Audit of every potion brew in the pack for modifier order-inte
   (long+strong), clinging (long), speed_iii (`alexsmobs:gazelle_horn` on `minecraft:strong_swiftness`,
   terminal). No FSE negations defined for any AM potion.
 - **Buzzier Bees** (luck/long/strong, unluck/long/strong, sunny): `blueprint DataUtil.addMix`
-  → reflectively calls vanilla `PotionBrewing.addMix`. Fine.
+  -> reflectively calls vanilla `PotionBrewing.addMix`. Fine.
 - **Geode Plus** (`geodeforge`): custom `IBrewingRecipe` but written correctly — `isInput` compares
   `PotionUtils.getPotion` only, `getOutput` does `new ItemStack(input.getItem())` then setPotion, so
   container item is preserved. Fine.
@@ -91,15 +91,15 @@ warnings). No potion server scripts remain.
 - **`PotionRecipeGeneratorsMixin`** (existing) — `CREATIVEENGINEERING$AMOUNT` = **1500 mB**
   (pack design; IE stock + Create Automatic Brewing are 1000). Briefly set to 1000 then reverted
   2026-09-07 — user wants the IE-Mixer multiblock to brew in 1500 mB batches specifically.
-  2 redirects on `registerPotionRecipe`: output →
-  `create:potion{Bottle:REGULAR}`, input → by-id `create:potion` with same NBT (except
+  2 redirects on `registerPotionRecipe`: output ->
+  `create:potion{Bottle:REGULAR}`, input -> by-id `create:potion` with same NBT (except
   `from==Potions.WATER` keeps `#minecraft:water`).
 - **`PotionHelperMixin`** (NEW) — `IE PotionHelper.applyToAllPotionRecipes` hard-skips any mix
   whose OUTPUT potion `== Potions.MUNDANE` (`f_43600_`) or `== Potions.THICK` (`f_43601_`), so
   the IE Mixer could never make `create:potion{thick/mundane}` and every thick/mundane-based
   brew (health_boost, absorption, hunger, nausea, blindness, darkness, wither, saturation) was
-  uncraftable there. Fix: 2 `@Redirect` on the `GETSTATIC` of those SRG fields → `return null`
-  (output never null → neither `==` matches → branch skipped). `remap=false`, SRG field target
+  uncraftable there. Fix: 2 `@Redirect` on the `GETSTATIC` of those SRG fields -> `return null`
+  (output never null -> neither `==` matches -> branch skipped). `remap=false`, SRG field target
   strings, `opcode = Opcodes.GETSTATIC` — same shape as `PneumaticCraftUtilsMixin`. In
   `creativeengineering.mixins.json` `mixins`.
 
@@ -107,18 +107,18 @@ warnings). No potion server scripts remain.
 
 Five holes closed:
 - **`potions.js` postInit `.class` bug** — `PMR.class` / `.class` is Nashorn syntax; KubeJS Rhino
-  (`Java.loadClass` → NativeJavaClass) has no `.class` (hunts a `$class` nested class, throws).
+  (`Java.loadClass` -> NativeJavaClass) has no `.class` (hunts a `$class` nested class, throws).
   Fix: `PMR.__javaObject__` (Rhino's real-`java.lang.Class` accessor, verified in rhino jar
-  `NativeJavaClass.get`). Also `const` inside the `try` → "redeclaration of var" (same Rhino quirk
-  as the while-loop note) → function-scoped `var`. The whole `postInit` block was silently dead
+  `NativeJavaClass.get`). Also `const` inside the `try` -> "redeclaration of var" (same Rhino quirk
+  as the while-loop note) -> function-scoped `var`. The whole `postInit` block was silently dead
   before this.
 - **dragon-breath lingering gone from Create Automatic Brewing JEI** — `DragonBreathBrewing.build()`
   (commonSetup) appends 94 fluid recipes to `PMR.ALL`; the postInit rebuild's `PMR.ALL.clear()`
   (runs later) wiped them. Fix: `potions.js` re-appends `DragonBreathBrewing.FLUID_BREWING` after
-  the rebuild (they carry no item ingredient → dragon_breath blacklist loop skips them). The
+  the rebuild (they carry no item ingredient -> dragon_breath blacklist loop skips them). The
   Create *mixer* itself was fine all along (`MechanicalMixerBlockEntityMixin` reads FLUID_BREWING).
 - **IE Mixer had NO splash/lingering, of anything** — IE `PotionHelper.applyToAllPotionRecipes`
-  only walks `POTION_MIXES` (potion→potion) + `Items.POTION`-output BrewingRecipes; never
+  only walks `POTION_MIXES` (potion->potion) + `Items.POTION`-output BrewingRecipes; never
   `CONTAINER_MIXES` or splash/lingering forms. Fix: `PotionRecipeGeneratorsMixin` new
   `@Inject(method="initPotionRecipes", at=@At("RETURN"), cancellable)` — appends, as
   `create:potion` NBT fluids @1500 mB: SPLASH+LINGERING of every `POTION_MIXES` step, plus
@@ -130,18 +130,18 @@ Five holes closed:
   in this no-refmap project (see [patchermod-coremod](patchermod-coremod.md)).
 - **lava_vision / poison_resistance uncraftable in both mixers** — AM registers their base brews
   from non-potion items (`alexsmobs:lava_bottle`, `alexsmobs:poison_bottle`), so
-  `PotionUtils.getPotion` = EMPTY → Create Phase D skips them, IE builds an unobtainable
+  `PotionUtils.getPotion` = EMPTY -> Create Phase D skips them, IE builds an unobtainable
   `create:potion{Potion:"minecraft:empty"}` input. Fix: `PotionRecipeGeneratorsMixin` new
   `@Inject(method="registerPotionRecipe", at=@At("HEAD"), cancellable)` cancels when
   `from == Potions.EMPTY`; then:
-  - **lava_vision** → explicit recipes in `kubejs/server_scripts/magic/lava_vision.js`:
+  - **lava_vision** -> explicit recipes in `kubejs/server_scripts/magic/lava_vision.js`:
     `create:mixing` 1000 mB `minecraft:lava` + `alexsmobs:bone_serpent_tooth` (heated) and
-    `immersiveengineering:mixer` 1500 mB lava + tooth → `create:potion{alexsmobs:lava_vision}`.
+    `immersiveengineering:mixer` 1500 mB lava + tooth -> `create:potion{alexsmobs:lava_vision}`.
     IE mixer `result` NBT must be an SNBT **string** (`ApiUtils.jsonDeserializeFluidStack` reads
     `tag` via `GsonHelper.getAsString`).
-  - **poison_resistance** → re-based onto Potion of Poison II: added
+  - **poison_resistance** -> re-based onto Potion of Poison II: added
     `['alexsmobs:centipede_leg','minecraft:strong_poison','alexsmobs:poison_resistance']` to
-    `AM_POTION_MIXES` in `potions.js`. Now a real `PotionBrewing$Mix` → brews everywhere +
+    `AM_POTION_MIXES` in `potions.js`. Now a real `PotionBrewing$Mix` -> brews everywhere +
     gets splash/lingering parity free. AM's poison-bottle stand recipe still works.
   - `long_lava_vision` / `long_poison_resistance` were never broken (their `from` is a real potion).
 
@@ -149,19 +149,19 @@ New files: `mixin` additions in `PotionRecipeGeneratorsMixin` (no new mixin clas
 route abandoned), `kubejs/server_scripts/magic/lava_vision.js`.
 
 ### round 2b (same day) — from user testing feedback
-- **`const DBB` in the nested `try`** → `redeclaration of var` (yet again). Moved to the
+- **`const DBB` in the nested `try`** -> `redeclaration of var` (yet again). Moved to the
   function-scoped `var` line. This is why the dragon-breath fluid re-add silently failed and
   "fluid dragon breath mixing with create was totally missing" from JEI. `var` now, works.
 - **lava_vision IE mixer recipe can't be a KubeJS `e.custom`** — kjs-ie ships
   `MixerRecipeSchema` (`result`=OutputFluid, `fluid`=InputFluid, `inputs`, `energy`); `e.custom`
   routes through it and the `create:potion` NBT is stripped off `result`. Moved the IE recipe
   into `PotionRecipeGeneratorsMixin` (`creativeengineering$addLavaVision`, appended in the
-  parity inject): `new FluidTagInput(FluidTags.LAVA, 1500)` + `bone_serpent_tooth` →
+  parity inject): `new FluidTagInput(FluidTags.LAVA, 1500)` + `bone_serpent_tooth` ->
   `create:potion{lava_vision}`. `lava_vision.js` now only does the Create `R.createMixing`
   (KubeJS's *create* schema handles NBT fluids fine).
 - **duplicate modifier recipe per AM potion** (the "extra redstone mixing recipe") — AM registers
   each modifier step as a Forge `BrewingRecipe` AND the pack re-adds it as a `PotionBrewing.Mix`
-  (`AM_POTION_MIXES`); Create phase 4 + IE loop 2 both also walk `BrewingRecipeRegistry` → dup.
+  (`AM_POTION_MIXES`); Create phase 4 + IE loop 2 both also walk `BrewingRecipeRegistry` -> dup.
   Fix: `PotionMixDedup.withoutMixDuplicates()` filters `BrewingRecipeRegistry.getRecipes()` to
   drop any `instanceof BrewingRecipe` whose `from>to` potion pair a `PotionBrewing.Mix` covers.
   Applied via `@Redirect` on the `getRecipes()` INVOKE in **both** `PotionHelperMixin`
@@ -169,7 +169,7 @@ route abandoned), `kubejs/server_scripts/magic/lava_vision.js`.
   Only ever touches AM recipes (vanilla/Quark/BuzzierBees are `PotionBrewing.Mix` / non-`BrewingRecipe`
   `VanillaBrewingRecipe`, never filtered). Reagents in `AM_POTION_MIXES` match AM's so nothing lost.
 - **IE Mixer JEI showed only fluid name, no potion effect lines** — Create's own JEI categories add
-  those via `CreateRecipeCategory` (checks `fs.getFluid().isSame(AllFluids.POTION)` → sets
+  those via `CreateRecipeCategory` (checks `fs.getFluid().isSame(AllFluids.POTION)` -> sets
   `tooltip[0] = fs.getDisplayName()` + `PotionFluidHandler.addPotionTooltip(fs, tooltip, 1f)`); it's
   NOT on the fluid type, so IE categories don't get it. Fix: **`MixerRecipeCategoryMixin`** (client),
   `@Redirect` on the 2 `IRecipeSlotBuilder.addTooltipCallback(...)` calls in `setRecipe` — chains an
@@ -178,24 +178,24 @@ route abandoned), `kubejs/server_scripts/magic/lava_vision.js`.
 ### round 3 — dedicated JEI category
 - **Lingering IE-mixer recipes now run at 1000 mB**, everything else stays 1500 —
   `CREATIVEENGINEERING$LINGERING_AMOUNT` in `PotionRecipeGeneratorsMixin.creativeengineering$addMixer`,
-  branch on `toType == LINGERING`. So one dragon's-breath bottle = one bucket of splash → lingering.
+  branch on `toType == LINGERING`. So one dragon's-breath bottle = one bucket of splash -> lingering.
 - **"Automated Potion Mixing" JEI category** (like Create's Automatic Brewing, separate from the
   real IE Mixer page). `compat/AutomatedPotionMixingCategory` **extends** IE's `MixerRecipeCategory`
   (reuses all slot layout / tank art / the tooltip mixin) — `IERecipeCategory.getRecipeType()` is
   `final` so the `private final type` field is swapped by **reflection** in the ctor (non-static
-  final instance field → writable after `setAccessible(true)` on Java 17), plus `this.title`.
+  final instance field -> writable after `setAccessible(true)` on Java 17), plus `this.title`.
   `isPotionMixer(r)` = `r.fluidOutput.getFluid().isSame(AllFluids.POTION.get())`.
   Registered in the existing `DragonBreathingJEI` `@JeiPlugin` (categories + recipes filtered by
   `isPotionMixer` + IE Mixer multiblock as catalyst). **`JEIHelperMixin`** (client) `@Redirect`s the
   `getFiltered(MixerRecipe.RECIPES, …)` call in `JEIHelper.registerRecipes` (pinned by a `@Slice`
-  from the `MixerRecipe.RECIPES` GETSTATIC) to also drop `isPotionMixer` recipes → they leave IE's
+  from the `MixerRecipe.RECIPES` GETSTATIC) to also drop `isPotionMixer` recipes -> they leave IE's
   Mixer page. Lang key `creativeengineering.jei.automated_potion_mixing`.
   - **Crash gotcha (fixed after 2 crashes):** that `@Redirect` handler must be **non-static**
     (matches `registerRecipes`) AND keep the receiver param — final working signature
     `private List<MixerRecipe> h(JEIHelper self, CachedRecipeList list, Predicate ieFilter)`.
-    `private static` → `'static' modifier ... does not match target`; non-static without `self` →
+    `private static` -> `'static' modifier ... does not match target`; non-static without `self` ->
     `unexpected argument type CachedRecipeList at index 0, expected JEIHelper`. Either failure fails
-    the whole `required:true` config → hard crash at JEI common_setup.
+    the whole `required:true` config -> hard crash at JEI common_setup.
   - `AutomatedPotionMixingCategory.ACTIVE` (volatile bool, set in `DragonBreathingJEI.registerCategories`
     inside a `try/catch(Throwable)`) — the category ctor's reflection failing now degrades gracefully
     (potions stay in IE's Mixer page, `JEIHelperMixin` skips its filter) instead of crashing.
@@ -203,13 +203,13 @@ route abandoned), `kubejs/server_scripts/magic/lava_vision.js`.
 Potion display names: `kubejs/assets/kubejs/lang/en_us.json` — every `long_`/`strong_` variant
 needs its own `item.minecraft.{potion,splash_potion,lingering_potion,tipped_arrow}.effect.<path>`
 key (KubeJS uses the registry PATH as the potion name; vanilla shares the base name).
-`dump_potions.js` (`/dumppotions`) → `kubejs/exported/{mob_effects,potions}.json`.
+`dump_potions.js` (`/dumppotions`) -> `kubejs/exported/{mob_effects,potions}.json`.
 
-## Note: needs a restart (patcherMod jar changed → full restart, not just /reload).
+## Note: needs a restart (patcherMod jar changed -> full restart, not just /reload).
 In-game verify:
-- Brewing stand brews awkward+iron_block → Potion of Resistance, thick+golden_apple → Health Boost,
+- Brewing stand brews awkward+iron_block -> Potion of Resistance, thick+golden_apple -> Health Boost,
   levitation via awkward + shulker filet.
 - JEI: custom potions show in Create **Automatic Brewing** (not a separate Mixing recipe) @ 1000 mB.
-- IE Mixer: water+redstone→create:potion{mundane}, then +golden_apple→absorption; wither (Decay)
+- IE Mixer: water+redstone->create:potion{mundane}, then +golden_apple->absorption; wither (Decay)
   long/strong chain now completes.
-- AM: brew lava_vision → linger → +redstone still lengthens.
+- AM: brew lava_vision -> linger -> +redstone still lengthens.

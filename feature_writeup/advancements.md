@@ -97,12 +97,12 @@ progress through advancements. Use FTB Quests, loot or code.
 
 ## 7. In-game test suite
 
-- [ ] **AV-01 Empty screen:** open the advancement screen (L) → no tabs, no advancements.
-- [ ] **AV-02 No toasts:** craft a crafting table, pick up a log, enter the Nether → no toast, no chat line.
-- [ ] **AV-03 Grant fails:** `/advancement grant @s only minecraft:story/root` → error, unknown advancement.
-- [ ] **AV-04 Switch back on:** set `[advancements] enabled = true`, `/reload` → the screen fills again (progress from
-  before the switch is gone, 3.1); set it back to `false`, `/reload` → empty again.
-- [ ] **AV-05 Dedicated server:** first join on the updated server → `latest.log` has the "left out" line once per
+- [ ] **AV-01 Empty screen:** open the advancement screen (L) -> no tabs, no advancements.
+- [ ] **AV-02 No toasts:** craft a crafting table, pick up a log, enter the Nether -> no toast, no chat line.
+- [ ] **AV-03 Grant fails:** `/advancement grant @s only minecraft:story/root` -> error, unknown advancement.
+- [ ] **AV-04 Switch back on:** set `[advancements] enabled = true`, `/reload` -> the screen fills again (progress from
+  before the switch is gone, 3.1); set it back to `false`, `/reload` -> empty again.
+- [ ] **AV-05 Dedicated server:** first join on the updated server -> `latest.log` has the "left out" line once per
   data load and "Ignored advancement" lines for the joining player; no error.
 
 ## 8. History

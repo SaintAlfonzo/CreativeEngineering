@@ -13,7 +13,7 @@ Delight and Creative Brewing jars of the same pass (section 7).
 Written for: the owner and the split agents, as the working reference for Calendar. Same shape as
 [creative_brewing.md](creative_brewing.md); the systems themselves stay documented in [time.md](time.md),
 [weather.md](weather.md) (season types), [weather_by_biome.md](weather_by_biome.md) and [crops.md](crops.md) 2.12.1
-(crop seasons). Same behaviour as before the carve: no player changelog bullet.
+(crop seasons). Same behavior as before the carve: no player changelog bullet.
 
 ## 0. At a glance
 
@@ -51,7 +51,7 @@ crop season) and **Creative Brewing** (Vinery's wine clock) both require it. pat
 | Calendar and the `[time]` master (day length, season length, pause when empty, `/ccaltime`) | `PM/time/`: CalendarDate, SeasonClock, TimeClient, TimeCommand, TimeDate, TimePause, TimePresets, TimePush, TimeSettings |
 | Wine clock | `PM/time/WineTime.java`, `[time.wine]`, `[time.wine.boosts]`; read by CB's Vinery (`net/satisfy/vinery/forge/PackTime.java`) |
 | Day and night cycle (Better Days) | mixins BetterDaysConfig, BetterDaysTimePause, ServerLevelTimePause |
-| Seasons (Serene Seasons clock, types, colours, melt, time skip; SeasonHUD; Xaero's time line) | `PM/seasons/SeasonTypes.java`; 11 Season* / SereneSeasons* / SeasonHud* / XaeroTimeInfo mixins; `[seasons]` |
+| Seasons (Serene Seasons clock, types, colors, melt, time skip; SeasonHUD; Xaero's time line) | `PM/seasons/SeasonTypes.java`; 11 Season* / SereneSeasons* / SeasonHud* / XaeroTimeInfo mixins; `[seasons]` |
 | Crop seasons | `PM/seasons/CropSeasons.java`, `CropSeasonTooltip.java`, `compat/WthitCropSeasons`; mixins CropSeasonGrowHook, SeasonFertility; `[crop_seasons]`; `server_scripts/tags/cropseasontags.js` |
 | Weather by biome | mixins SeasonRainColumn, PrettyRainSeason; `server_scripts/tags/seasontags.js` |
 
@@ -199,7 +199,7 @@ the same four jars at the next deploy. Calendar's `creativeengineering` range `[
 |---|---|---|
 | Q1 | patcherMod's version: the carve leaves it at 1.1.04 | Bump with the wave-1 commit and set Calendar's range to that version, so an old patcherMod beside Calendar refuses to load instead of doubling the mixins |
 | Q2 | Calendar's `creativecompat` dependency | Added when Compat is carved (creative_split.md 7.6) |
-| Q3 | Licence audit for publishing (Q7: CB's chain) | Calendar is all own code (GPLv3); no donor files, no ARR content |
+| Q3 | License audit for publishing (Q7: CB's chain) | Calendar is all own code (GPLv3); no donor files, no ARR content |
 
 ## 9. History
 
@@ -208,7 +208,7 @@ the same four jars at the next deploy. Calendar's `creativeengineering` range `[
   keys, 2 server scripts, 31 lang keys and the WTHIT entry moved; CD and CB require Calendar; Vinery's `PackTime` calls
   it directly. patcherMod, Calendar, CD and CB compile; SQ-CAL rows queued; not installed.
 
-## 10. Licence audit (2026-11-04, plan_cb_publish.md Step 2)
+## 10. License audit (2026-11-04, plan_cb_publish.md Step 2)
 
 `creativecalendar-1.0.0.jar` (23:34): 65 classes, 25 mixins (Serene Seasons, Better Days, IW, Botania, Vinery, Vintage,
 Xaero, SeasonHUD, Pretty Rain, Cool Rain), 4 scripts, lang, `waila_plugins.json`. No textures, no `@Overwrite`, no shaded

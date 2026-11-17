@@ -8,32 +8,32 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=6459f5300d32 -->
+<!-- generated:status_index begin open_work sha1=d80339e2af87 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 1, Pinned 1, Testing 6), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `largecontent/stickynotes #6` | Planned | S C P | Colourful ink |
+| `largecontent/stickynotes #6` | Planned | S C P | Colorful ink |
 | `largecontent/stickynotes #5` | Pinned | C P | Own art for Creative Labels, then drop both donor jars |
 | `cooking/kitchen #5` | Testing | C P | Returned serve items don't stack |
 | `largecontent/stickynotes #1` | Testing | S+ C P | Creative Labels: `face_paper` block + placed sticky notes |
 | `largecontent/stickynotes #2` | Testing | S+ C P | Creative Labels: note items, screen, item labels, eraser, tooltips |
 | `largecontent/stickynotes #3` | Testing | S+ C P | Creative Labels: labels on `face_paper` |
 | `largecontent/stickynotes #4` | Testing | S+ C P | Donor jars with gameplay off (Sticky It, Labels) |
-| `largecontent/stickynotes #7` | Testing | S~ C P | Labels on non-full blocks; centred notes on jars, sacks, trash cans, Pickling Jars, botany pots |
+| `largecontent/stickynotes #7` | Testing | S~ C P | Labels on non-full blocks; centered notes on jars, sacks, trash cans, Pickling Jars, botany pots |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |
 |---|---|
-| Investigation of Sticky It 1.2.1 and Labels 1.10 (both decompiled, every class read; licences read) | done 2026-10-20 (section 2) |
+| Investigation of Sticky It 1.2.1 and Labels 1.10 (both decompiled, every class read; licenses read) | done 2026-10-20 (section 2) |
 | Creative Labels mod (`development/creativeLabels`, mod id `creativelabels`, GPLv3) | BUILT 2026-10-20 (`creativeLabels-1.0.0.jar`), installed in `mods/` 2026-10-21; [README](../development/creativeLabels/README.md) maps every part to its class |
 | Mod id rename `creative_labels` -> `creativelabels` (namespace_move.md D-LABELS; swap list `data/creativelabels/swaps/owner_namespace.json`, configs `creative_labels-*.toml` renamed on first load) | BUILT 2026-11-10, not yet installed; test SQ-NSM-09 |
 | Phase 1: `face_paper` block, sticky notes placed by host shape, directional floors and ceilings, per-note dye / open / remove / erase, covered face | BUILT (3.2 to 3.5) |
-| Phase 2: note items (leather-style colour in the grid and when placed, 4 specials, recipes), note screen with Sticky It's screen art, text labels on items (inventory, anvil, off hand), eraser, tooltips | BUILT (3.6 to 3.9) |
-| Phase 3: labels on `face_paper` (Labels' interactions, real-colour icon, dyed icon, close-only drawing) | BUILT (3.10, 3.11) |
+| Phase 2: note items (leather-style color in the grid and when placed, 4 specials, recipes), note screen with Sticky It's screen art, text labels on items (inventory, anvil, off hand), eraser, tooltips | BUILT (3.6 to 3.9) |
+| Phase 3: labels on `face_paper` (Labels' interactions, real-color icon, dyed icon, close-only drawing) | BUILT (3.10, 3.11) |
 | Phase 4: donor jars with gameplay off (recipes, JEI, Sticky It's tooltip handler) | BUILT (3.13): mod side (creative-tab hiding, tooltip mixin) and pack side (JEI hiding, recipes) |
 | Phase 5: our own textures and models, then drop both donor jars | PLANNED, later (3.14) |
-| Labels on non-full blocks (surface test) and centred notes on jars, sacks, trash cans, Pickling Jars, botany pots | BUILT 2026-11-02 in `creativeLabels-1.0.1.jar` (3.3a), NOT installed (waiting in `build/libs`); headless 325 + 142 + 1828 + 394 pass; scratch test queued (SQ-LBS-00 to -05, CQ-LBS-01); SN-56 to SN-60 pending |
+| Labels on non-full blocks (surface test) and centered notes on jars, sacks, trash cans, Pickling Jars, botany pots | BUILT 2026-11-02 in `creativeLabels-1.0.1.jar` (3.3a), NOT installed (waiting in `build/libs`); headless 325 + 142 + 1828 + 394 pass; scratch test queued (SQ-LBS-00 to -05, CQ-LBS-01); SN-56 to SN-60 pending |
 | Headless tests | `tools/creative_labels_test/run.sh`: 4 suites, all pass (2026-10-21, section 6) |
 | Scratch server tests | 2026-10-21: boots on a dedicated server; 60 checks over 41 SN- tests, all PASSED after 3 fixes (Moonlight range, FastWorkbench crafting path, mixin-package crash); section 6.1 |
 | In-game tests | not run yet (shipped in 1.1.01, deployed 2026-10-22); first in game: SN-10, SN-12, SN-23, SN-28, SN-29, SN-39, SN-47, SN-48 (client-only), then SN-55 with the crafting table |
@@ -57,19 +57,19 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
   Up to five per face, spaced out: four corners and the centre. On floors and ceilings the paper faces the way the
   player faced when the first piece went on that face.
 - Notes go only on standard shapes: full faces (chests and barrels too, sneaking to place); stairs: bottom and back
-  faces, 3 on each side; slabs: 4 on the top or bottom, 2 on each side; fences, walls, bars and rods: the centre spot
+  faces, 3 on each side; slabs: 4 on the top or bottom, 2 on each side; fences, walls, bars and rods: the center spot
   on top and bottom; similar rules for other standard shapes.
 - Each note on its own: dye (right-click with a dye, mixed like leather), open (empty-hand right-click), remove
   (sneak + empty-hand right-click), wipe (eraser). All five spots filled: the host's face can't be used.
 - Breaking is quick, like carpet. Explosions don't touch the paper; when the host block breaks by any means, notes
   drop with their data and labels drop blank.
-- **Note items:** every Sticky It colour is its own variant, shown in JEI like potions, with crafting recipes; the 16
-  dye colours plus the leftovers and specials. Stack to 64 without data. Written in hand on an edit screen that uses
+- **Note items:** every Sticky It color is its own variant, shown in JEI like potions, with crafting recipes; the 16
+  dye colors plus the leftovers and specials. Stack to 64 without data. Written in hand on an edit screen that uses
   Sticky It's screen textures.
 - **Text labels on items** stay: applied in the inventory, in the anvil, or with the off-hand method. The eraser
   takes them off, wipes a note in the crafting grid, and wipes a placed note.
-- **Labels:** work like Labels without the entity problems. Sneak + empty hand clears the picture. A dye colours the
-  icon, not the paper. Pictures are drawn in real colours (the recommended approach), only up close, configurable
+- **Labels:** work like Labels without the entity problems. Sneak + empty hand clears the picture. A dye colors the
+  icon, not the paper. Pictures are drawn in real colors (the recommended approach), only up close, configurable
   (16 blocks for pictures, 6 for text).
 - **Tooltips:** the label lists every interaction; the note says how to write, that it can be placed, that it can be
   dyed when placed, and that it is added to items in the inventory, one item per line.
@@ -96,15 +96,15 @@ MCreator, All Rights Reserved, `both` in `mod_sides.md` since 2026-10-13.
   surface**. A 3 px flat face, then folds of 0.94 px at 20 degrees and 1.41 px at 45 degrees, ending in a 1 px lip
   at 90 degrees. Its texture uses a 6x14 px strip of a 16x16 file.
 - **Screen:** `textures/screens/stickygui.png` (352x16 text bar) and `stickyguidatee.png` (70x16 date bar) drawn above
-  the screen centre, text in dark grey; `sticky_note_text.png` is referenced with a zero size.
+  the screen center, text in dark gray; `sticky_note_text.png` is referenced with a zero size.
 - **Tooltip bug:** its `ItemTooltipEvent` handler reads with `getOrCreateTag()`, writing `tag: {}` onto every hovered
   stack. `{}` stacks don't stack with clean ones: the bowl bug of 2026-10-20. No other handler in the pack does it.
 
-**Every Sticky It note texture** (`assets/sticky_it/textures/entities/`; main colour, then how Sticky It uses it):
+**Every Sticky It note texture** (`assets/sticky_it/textures/entities/`; main color, then how Sticky It uses it):
 
-| File | Main colour | In Sticky It |
+| File | Main color | In Sticky It |
 |---|---|---|
-| `sticky` | #ece44c yellow | index 0; also the base texture drawn under every colour layer |
+| `sticky` | #ece44c yellow | index 0; also the base texture drawn under every color layer |
 | `sticky_blue` | #29abd1 | index 1 |
 | `sticky_green` | #a3c832 | index 2 |
 | `sticky_light_blue` | #90c8b5 (mint) | index 3 |
@@ -135,12 +135,12 @@ MehVahdJukaar, All Rights Reserved, `both` since 2026-10-18. Uses Moonlight (GPL
 - **Interactions:** sneak + right-click with an item shows it (a copy; not used up); dye recolours it; glow ink sac
   makes it full-bright, ink sac undoes it; feather toggles the item's name; anything else is passed to the host.
 - **Picture:** Moonlight's `requestFlatItemTexture(id, item, 16, postProcess)` renders the item into a framebuffer;
-  Labels repaints it in a two-colour ink ramp per dye. Paper model and picture drawn every frame.
-- **Why they disappear:** any damage kills a hanging entity and drops a blank label (a left-click on the labelled
+  Labels repaints it in a two-color ink ramp per dye. Paper model and picture drawn every frame.
+- **Why they disappear:** any damage kills a hanging entity and drops a blank label (a left-click on the labeled
   chest is enough; also arrows, shrapnel, explosions); a survival check every 100 ticks pops it when the host is moved,
   swapped or no longer solid, or an item frame overlaps it.
 
-### 2.3 Licences
+### 2.3 Licenses
 
 - **Sticky It:** CurseForge "All Rights Reserved unless otherwise explicitly stated", nothing stated; no source.
 - **Labels:** CurseForge "All Rights Reserved"; its repo's "Supplementaries Team License" 1.1 forbids public
@@ -177,7 +177,7 @@ it (3.14).
 - **Breaking:** hardness 0.1 and no tool, like carpet. Only the piece under the crosshair breaks
   (`onDestroyedByPlayer` removes that piece and keeps the block while anything is left). `RenderHighlightEvent.Block`
   outlines only that piece. Middle-click gives that piece's item (hit-aware `getCloneItemStack`).
-- **Drops:** a note drops **with** its colour and text; a label drops **blank** (spec: labels without data), both
+- **Drops:** a note drops **with** its color and text; a label drops **blank** (spec: labels without data), both
   when broken directly and when the host goes.
 - **Host gone (any means):** mined, exploded, pushed, swapped, burnt. `updateShape` sees the host face's spots no
   longer fit (3.3) and drops those pieces as above. A face with nothing left clears its boolean; an empty cell turns
@@ -221,7 +221,7 @@ boundary, or inset by at most 1/16 (chests, ender chests, barrels), plus the sha
 | Slab, top or bottom (the half-height face, drawn 8 px in) | all 5 (no label: labels need a face at the boundary or 1/16 in) |
 | Slab, each side (16x8) | 2: the bottom corners of a bottom slab, the top corners of a top slab |
 | Double slab | all 5 (a full block) |
-| Fences, walls, iron bars, panes, end rods, lightning rods, chains (vertical) | the centre spot on the top and on the bottom (the note overhangs the post); horizontal rods and chains: the centre on each end |
+| Fences, walls, iron bars, panes, end rods, lightning rods, chains (vertical) | the center spot on the top and on the bottom (the note overhangs the post); horizontal rods and chains: the center on each end |
 | Anything else (carpets, buttons, ladders, doors, trapdoors, plants, heads, odd modded shapes) | none |
 
 How it is decided: block class first (`StairBlock`, `SlabBlock`, `FenceBlock`, `WallBlock`, `IronBarsBlock`,
@@ -230,17 +230,17 @@ How it is decided: block class first (`StairBlock`, `SlabBlock`, `FenceBlock`, `
 rotated floors and ceilings are worked out in the face's frame after the face's rotation, so a stair's top-back corner
 lands on the right side whatever way the stair faces.
 
-### 3.3a Labels by surface, centred notes (2026-11-02)
+### 3.3a Labels by surface, centered notes (2026-11-02)
 
 The original Labels mod put a label on any solid block, at the outermost point of its shape. Our five-spot rule
 refused jars, sacks, trash cans, botany pots and cauldrons. Labels now have their own test; notes keep the table above
-except for the centre-note hosts.
+except for the center-note hosts.
 
 **Label surface test** (`Spots.labelSurface`): the host's outline shape seen from the face, sampled on a half-pixel
 grid (32 x 32). Each sample records the depth of the first surface behind it (the merged outline, so a cauldron's
 2 px walls count and no thickness limit applies). The outermost surface `d0` may be at most 8 px deep. Samples
 within 1 px of `d0` are usable (the trash can's rim and body together; a jar's lid is 2 px off its body and stays
-out). The label is the largest usable square nearest the face centre, capped at 10 px; it shrinks down to 6 px, and
+out). The label is the largest usable square nearest the face center, capped at 10 px; it shrinks down to 6 px, and
 under 6 px nothing fits. Full faces, chests and barrels get the standard label exactly as before.
 
 | Host | Label |
@@ -249,7 +249,7 @@ under 6 px nothing fits. Full faces, chests and barrels get the standard label e
 | Doors, trapdoors (owner, 2026-11-02) | none (they swing) |
 | No collision shape (plants, pressure plates), posts, heads, fence gates, the deny tag | none |
 | Supplementaries Jar side | 10 px, 3 px in |
-| Sack side | 10 px, 2 px in, 1 px below centre (under the neck) |
+| Sack side | 10 px, 2 px in, 1 px below center (under the neck) |
 | Trash cans side | 10 px, 2 px in (rim) |
 | Pickling Jar side | 10 px, 3.25 px in |
 | Botany pot side | 8 px, 2 px in, filling the pot's height |
@@ -258,20 +258,20 @@ under 6 px nothing fits. Full faces, chests and barrels get the standard label e
 | Botany pot top | 10 px on the soil, 8 px in |
 | Flower pot side | 6 px |
 
-**Centred notes** (`Spots.centreNoteFit`, block tag `creativelabels:paper/centre_note`, user 2026-11-02): Supplementaries
+**Centered notes** (`Spots.centreNoteFit`, block tag `creativelabels:paper/centre_note`, user 2026-11-02): Supplementaries
 Jar and Sack, the four trash cans, Vintage Delight's Pickling Jar (`vintagedelight:fermenting_jar`) and
-`#botanypots:all_botany_pots`. Each side face takes one note, the centre spot moved to the middle of the host's
+`#botanypots:all_botany_pots`. Each side face takes one note, the center spot moved to the middle of the host's
 visible side (the bounding box of the usable samples, same 1 px window), at that surface's depth. The note's 9
 sample points must lie on that surface. Shifts: jar 1 px down, sack 2, trash can and Pickling Jar 1.25, botany pot 4.
 Tops (owner, 2026-11-03, plan_scratch_bugfix_1103 4.4, SQ-LBS-03): only hosts in `creativelabels:paper/note_on_top` (the
-jar and the Pickling Jar) take one note on top, centred on the lid by the same centre-note test (the Pickling Jar's lid
-is 2.5 px down, too deep for the shape test's 2 px). Every other centre-note top (sack neck, trash can rim, botany pot
+jar and the Pickling Jar) take one note on top, centered on the lid by the same center-note test (the Pickling Jar's lid
+is 2.5 px down, too deep for the shape test's 2 px). Every other center-note top (sack neck, trash can rim, botany pot
 soil) and every bottom takes none; before, tops used the shape test, which let the jar lid and the sack neck carry spot C.
 
 **Stored placement:** `FaceContent` keeps a shift (px) and the label edge beside the inset (`Spots.Place`); NBT
 `OffX`, `OffY`, `Size` are written only when they differ from 0, 0, 10, so labels and notes placed earlier load
 unchanged. A host change re-fits: a label moves or shrinks to its new square and drops only when nothing fits;
-centred notes follow the new centre.
+centered notes follow the new centre.
 
 **Covered face:** when all five spots of a five-spot face hold notes, the hit shape becomes the whole face panel; a
 right-click that lands between notes does nothing, so the crafting table, furnace or chest behind can't be used
@@ -282,13 +282,13 @@ through that face. Faces that can't hold five notes never count as covered (owne
 | Action | Result |
 |---|---|
 | Right-click a host face with a note | placed in the free spot under the click, else the nearest free allowed spot; no free spot, nothing. On blocks with their own use (chests, barrels, furnaces), sneak + right-click places, a plain right-click opens the block. A plain yellow note has a 1 % chance to land as a **gold** note, with Sticky It's firework spark |
-| Right-click a note with a dye | **mixes** the dye into the note's colour like leather (an undyed note takes the dye's colour; a dyed one averages with it, 3.6); one dye used unless creative. Special notes (3.6) don't take dye |
+| Right-click a note with a dye | **mixes** the dye into the note's color like leather (an undyed note takes the dye's color; a dyed one averages with it, 3.6); one dye used unless creative. Special notes (3.6) don't take dye |
 | Right-click a note with an empty hand | opens the note screen (3.7) |
-| Sneak + right-click a note with an empty hand | removes that note into your inventory with its colour and text (dropped if full). A special note keeps its look only while `keepSpecialColor` is on (default on); off, it comes back as a plain note |
-| Right-click a note with the eraser | a written note loses its text; a blank note goes back to plain yellow (colour or special look removed) |
+| Sneak + right-click a note with an empty hand | removes that note into your inventory with its color and text (dropped if full). A special note keeps its look only while `keepSpecialColor` is on (default on); off, it comes back as a plain note |
+| Right-click a note with the eraser | a written note loses its text; a blank note goes back to plain yellow (color or special look removed) |
 | Right-click a note with another note | places it on the same face (as above) |
 | Right-click a note with anything else | passed to the host block, unless the face is covered |
-| Left-click | breaks that note quickly; it drops with colour and text |
+| Left-click | breaks that note quickly; it drops with color and text |
 
 Special looks come only from crafting (and gold from the 1 % placing chance).
 
@@ -297,18 +297,18 @@ Special looks come only from crafting (and gold from the 1 % placing chance).
 Paper on an up or down face turns to the player's horizontal facing when the face's first note or label is placed,
 and keeps that rotation until the face is empty. Notes' curls and labels' pictures follow it.
 
-### 3.6 Note items and colours
+### 3.6 Note items and colors
 
-**Colour like leather** (owner, 2026-10-20; replaces the 23 fixed variants):
+**Color like leather** (owner, 2026-10-20; replaces the 23 fixed variants):
 
-- One item, `creativelabels:sticky_note`, stack 64. It implements vanilla `DyeableLeatherItem`, so the colour is any
-  RGB value in `display.color`, mixed by vanilla's `dyeArmor` formula (average of the old colour and the new dyes,
-  kept as bright as the brightest). A plain note has no colour tag and shows Sticky It's yellow paper.
-- **Crafting:** any number of identical notes + **one** dye → that many notes with the dye mixed in, text kept
+- One item, `creativelabels:sticky_note`, stack 64. It implements vanilla `DyeableLeatherItem`, so the color is any
+  RGB value in `display.color`, mixed by vanilla's `dyeArmor` formula (average of the old color and the new dyes,
+  kept as bright as the brightest). A plain note has no color tag and shows Sticky It's yellow paper.
+- **Crafting:** any number of identical notes + **one** dye -> that many notes with the dye mixed in, text kept
   (`NoteDyeRecipe`, a Java special recipe; its JSON through a new NCH helper). One note + several dyes also works
-  through vanilla's own armour-dye recipe, which accepts any `DyeableLeatherItem`. Crafting again mixes again, so
-  colours combine over several crafts.
-- **Placed:** a dye on a placed note mixes the same way (3.4). This is the main way to colour notes.
+  through vanilla's own armor-dye recipe, which accepts any `DyeableLeatherItem`. Crafting again mixes again, so
+  colors combine over several crafts.
+- **Placed:** a dye on a placed note mixes the same way (3.4). This is the main way to color notes.
 - **Specials:** four fixed looks from Sticky It, stored as `tag.Special`, not dyeable:
 
 | Special | Crafted from (plain notes + 1) | Look |
@@ -321,26 +321,26 @@ and keeps that rotation until the face is empty. Notes' curls and labels' pictur
   Any number of plain (undyed, non-special) notes + one ingredient. A special note **stays special when broken**
   (left-clicked, or dropped because its host broke). Only a sneak + empty-hand pick-up is governed by
   `keepSpecialColor` (`creativelabels-common.toml`, default on): off, the picked-up note comes back plain.
-- **Eraser:** on a written note, wipes the text; on a blank note, returns it to plain yellow (colour and special
+- **Eraser:** on a written note, wipes the text; on a blank note, returns it to plain yellow (color and special
   removed). In the grid (note + eraser, the eraser stays as the remainder) and on placed notes alike. Unbreakable,
   stack 1.
 - **JEI:** the plain note and the four specials are listed (a subtype interpreter on `Special`); dyed notes are not
   separate entries, like leather armour. Example recipes are registered for JEI: the 16 single-dye crafts and the
   four specials.
-- **Stacking:** plain notes stack to 64; notes stack only with identical colour, special and text.
+- **Stacking:** plain notes stack to 64; notes stack only with identical color, special and text.
 
-**Colour reevaluation** (what happens to Sticky It's files under dynamic colour):
+**Color reevaluation** (what happens to Sticky It's files under dynamic color):
 
 | File | Fate |
 |---|---|
 | `sticky` (yellow) | **kept**, by reference: the plain note; also the source of the greyscale tint base |
 | `sticky_gold`, `sticky_creeper`, `sticky_smile`, `sticky_inverted` | **kept**, by reference: the four specials |
-| `sticky_blue`, `_green`, `_light_blue`, `_light_pink`, `_orange`, `_pink`, `_cyan`, `_dark_green`, `_lavander`, `_light_gray`, `_red`, `_magenta`, `_purple` | **dropped**: any colour now comes from tinting, so fixed colour files aren't needed |
-| greyscale note paper (from `sticky`) | **generated** in memory: luminance kept, brightened so a tint shows the true dye colour |
-| greyscale item icon (from `sticky_it:item/stickyitem`) | **generated** in memory, tinted through `ItemColors` like leather armour |
+| `sticky_blue`, `_green`, `_light_blue`, `_light_pink`, `_orange`, `_pink`, `_cyan`, `_dark_green`, `_lavander`, `_light_gray`, `_red`, `_magenta`, `_purple` | **dropped**: any color now comes from tinting, so fixed color files aren't needed |
+| greyscale note paper (from `sticky`) | **generated** in memory: luminance kept, brightened so a tint shows the true dye color |
+| greyscale item icon (from `sticky_it:item/stickyitem`) | **generated** in memory, tinted through `ItemColors` like leather armor |
 | four special item icons | **generated** in memory: the icon recoloured with each special's palette |
 
-No per-colour recolours are generated at all, so the "only where no near colour exists" rule has nothing left to
+No per-color recolours are generated at all, so the "only where no near color exists" rule has nothing left to
 apply to. For reference, single-dye results against Sticky It's files (redmean distance): light blue 33 (`blue`),
 red 38 (`red`), yellow 45 (`sticky`) are near; orange 74, cyan 75, purple 77 (`lavander`), magenta 86 (`pink`),
 light gray 90, blue 91, green 97, and the rest 116 or more are not. Swapping in a hand-made file for those three exact
@@ -348,8 +348,8 @@ results would make one dye look different from every mix around it, so it isn't 
 
 - **Recipes kept** from the donors (spec): note = 4 paper + 3 iron nuggets makes 2; eraser = 6 dried kelp; label = 8
   paper + antique ink makes 16. They now make our items; the donors' own recipes are removed (3.13).
-- **Copying a note** (owner, 2026-10-20): one written note + 8 blank notes (any colour) in the grid makes 9 copies of
-  the written note: its text, colour and special look. A Java special recipe like the others (`NoteCopyRecipe`).
+- **Copying a note** (owner, 2026-10-20): one written note + 8 blank notes (any color) in the grid makes 9 copies of
+  the written note: its text, color and special look. A Java special recipe like the others (`NoteCopyRecipe`).
 
 ### 3.7 Writing notes: the note screen
 
@@ -357,14 +357,14 @@ results would make one dye look different from every mix around it, so it isn't 
   from the stack (a C2S packet; the server checks the length, `noteLength` 32). Empty text clears it.
 - **Placed:** empty-hand right-click opens the same screen for that note; Done rewrites it.
 - **Look:** Sticky It's screen art by reference: `sticky_it:textures/screens/stickygui.png` as the text bar,
-  `stickyguidatee.png` as the date bar above it. The text is an edit field on the bar, dark grey as in Sticky It. The
+  `stickyguidatee.png` as the date bar above it. The text is an edit field on the bar, dark gray as in Sticky It. The
   date bar shows the in-game day the note was placed, and who placed it (D7).
 
 ### 3.8 Text labels on items
 
 Kept from Sticky It, with clean NBT: up to 3 lines in `CreativeLabels.Lines` (C5), written only when a line exists;
 removing the last line removes the key, and the tag if it's then empty. A note must have text to label anything, and
-**labelling uses up the note**, one per line, whichever way it's done.
+**labeling uses up the note**, one per line, whichever way it's done.
 
 | Way | How |
 |---|---|
@@ -372,20 +372,20 @@ removing the last line removes the key, and the tag if it's then empty. A note m
 | Anvil | item on the left, written note on the right: the output is the item with the line added; costs `anvilCost` (1 level; vanilla won't let an output with cost 0 be taken); one note used (`AnvilUpdateEvent`) |
 | Off hand | written note in the main hand, item in the off hand, sneak + right-click in the air (not at a block) |
 
-- **Eraser on items:** the eraser on the cursor, right-click a labelled item's slot: removes its last line.
+- **Eraser on items:** the eraser on the cursor, right-click a labeled item's slot: removes its last line.
 - **Full:** a fourth line is refused with a bass note and "No room for another label" on the action bar; nothing used.
 - **One label per click** (owner, 2026-10-20): a right-click drag with a note on the cursor (Mouse Tweaks) must not
-  label every slot it crosses. The server allows one cursor labelling per player per 5 ticks; drag clicks arrive
+  label every slot it crosses. The server allows one cursor labeling per player per 5 ticks; drag clicks arrive
   within a tick or two of each other, so only the first slot is labelled.
-- **Labelled items can't be used in crafting** (owner, 2026-10-20): while `blockLabelledCrafting` is on
-  (`creativelabels-common.toml`, default on), a crafting grid (inventory or crafting table) with any labelled item
+- **Labeled items can't be used in crafting** (owner, 2026-10-20): while `blockLabelledCrafting` is on
+  (`creativelabels-common.toml`, default on), a crafting grid (inventory or crafting table) with any labeled item
   in it gives no result. Erase the labels first. A mixin on the menus' shared result update
   (`CraftingMenu.slotChangedCraftingGrid`, used by both). Machines (furnaces, Create, IE) are not covered.
   FastWorkbench (in the pack) overwrites both grids' `slotsChanged` to queue its own
   `FastBenchUtil.slotChangedCraftingGrid`, so vanilla's is never called; `FastBenchResultMixin` makes the same check
   there and resends the empty result slot (FastWorkbench sends results in its own packet). Found and fixed on the
   scratch server, 2026-10-21 (6.1).
-- **Tooltip on a labelled item:** its lines under the name, in grey; no header, no `[Shift]`.
+- **Tooltip on a labeled item:** its lines under the name, in gray; no header, no `[Shift]`.
 
 ### 3.9 Tooltips
 
@@ -431,9 +431,9 @@ A label takes a face only where it fits (3.3) and only if the face has no notes.
 | Action | Result |
 |---|---|
 | Right-click a host face with a label | placed (sneak on chests and other usable blocks) |
-| Sneak + right-click with an item | shows that item (a one-count copy with its tag, so potions and dyed leather keep their colours); not used up |
+| Sneak + right-click with an item | shows that item (a one-count copy with its tag, so potions and dyed leather keep their colors); not used up |
 | Sneak + right-click with an empty hand | clears the picture |
-| Right-click with a dye | colours the **icon** (3.11); one dye used |
+| Right-click with a dye | colors the **icon** (3.11); one dye used |
 | Right-click with a glow ink sac / an ink sac | glow on / off; one used |
 | Right-click with a feather | shows or hides the item's name under the picture |
 | Anything else, or an empty hand | passed to the host with the hit moved onto its face: chests, barrels and drawers open through the label |
@@ -443,12 +443,12 @@ A label takes a face only where it fits (3.3) and only if the face has no notes.
 
 | Piece | How | Per-frame cost |
 |---|---|---|
-| Notes and label paper | one Forge `IDynamicBakedModel` for the block; the block entity hands each face's content to it as `ModelData` (kind, rotation, note slots with colour / special and written flag, host inset). Quads are built per piece and baked into the chunk mesh; a dyed note uses the greyscale base with its RGB baked into the vertex colours (any colour, no texture per colour); plain and special notes use their own textures | none; the section rebuilds when paper changes |
+| Notes and label paper | one Forge `IDynamicBakedModel` for the block; the block entity hands each face's content to it as `ModelData` (kind, rotation, note slots with color / special and written flag, host inset). Quads are built per piece and baked into the chunk mesh; a dyed note uses the greyscale base with its RGB baked into the vertex colors (any color, no texture per color); plain and special notes use their own textures | none; the section rebuilds when paper changes |
 | Note shape | Sticky It's model: at client resource load our code bakes its entity layer `sticky_it:model_sticky` from the game's `EntityModelSet` and captures the polygons; the same shape is used on every side, rotated per face | none |
-| Written notes | a few darker pen strokes over the paper, drawn by our code onto each colour in memory | none |
+| Written notes | a few darker pen strokes over the paper, drawn by our code onto each color in memory | none |
 | Label paper | Labels' `labels:block/label` model (10x10 px), registered as an extra model and moved onto each face | none |
 | Label icon, undyed | real colours: Moonlight `requestFlatItemStackTexture(id, stack, 16)` (renders the stack, so NBT tints show) in a block-entity renderer | one quad per label within `pictureDistance` |
-| Label icon, dyed | Moonlight `requestTexture(id, 16, consumer, false)`: the consumer draws the stack (`drawItem`), reads the pixels (`download` / `getPixels`), maps each pixel's brightness onto a dark-to-light ramp of the dye's colour (our own code), and uploads it. Cached per stack + dye | same quad |
+| Label icon, dyed | Moonlight `requestTexture(id, 16, consumer, false)`: the consumer draws the stack (`drawItem`), reads the pixels (`download` / `getPixels`), maps each pixel's brightness onto a dark-to-light ramp of the dye's color (our own code), and uploads it. Cached per stack + dye | same quad |
 | Glow | full-bright light on the icon quad | none extra |
 | Name (feather) | same renderer, within `textDistance` | only near |
 
@@ -472,22 +472,22 @@ B4.8). Our own code, so it can be copied over.
 | Piece | Source | How |
 |---|---|---|
 | Note shape | `ModelSticky` (code) | baked from their entity layer at runtime (3.11) |
-| Note paper, 17 Sticky It colours | `sticky_it:textures/entities/sticky*.png` | entity textures aren't on the block atlas: added with `TextureStitchEvent.Pre`, loaded from their jar |
+| Note paper, 17 Sticky It colors | `sticky_it:textures/entities/sticky*.png` | entity textures aren't on the block atlas: added with `TextureStitchEvent.Pre`, loaded from their jar |
 | Greyscale tint base for dyed notes | from `sticky.png`, brightened greyscale | in-memory pack |
 | Special looks | `sticky_gold`, `sticky_creeper`, `sticky_smile`, `sticky_inverted` | stitched like the plain paper |
-| Pen strokes | ours | drawn in memory over each colour |
+| Pen strokes | ours | drawn in memory over each color |
 | Note item icons | `sticky_it:item/stickyitem` (yellow) | plain by reference; a greyscale copy tinted by `ItemColors` for dyed notes; 4 special icons recoloured in memory with each special's palette |
 | Note screen | `stickygui.png`, `stickyguidatee.png` | referenced |
 | Eraser icon | `sticky_it:item/eraser` | our item model's parent / texture reference |
 | Label item icon | `labels:item/label` | our item model with `"parent": "labels:item/label"` |
 | Label paper | `labels:block/label` + `labels:entity/label` | extra model, referenced |
 
-Heads-up: the deploy payload ships jars directly ([deploy.md](deploy.md)). Labels' licence allows private sharing and
+Heads-up: the deploy payload ships jars directly ([deploy.md](deploy.md)). Labels' license allows private sharing and
 modpacks that download the jar, the same position as the Vinery donor jars; a published pack would download both.
 
 ### 3.13 Donor jars, gameplay off (phase 4)
 
-- **Sticky It's tooltip handler** cancelled at its head (a Creative Labels mixin on
+- **Sticky It's tooltip handler** canceled at its head (a Creative Labels mixin on
   `net.mcreator.sticky_it.procedures.TooltipRenderProcedure.execute`, targeted by name). Ends the `{}` tags (the bowl
   bug, TODO `cooking/kitchen #5`, [kitchen.md](kitchen.md)) and its `[Shift]` text. Can ship ahead of everything else.
   Items already tagged keep their `{}`.
@@ -511,7 +511,7 @@ the note screen, the eraser, the label paper and the item icons. When they exist
 
 ### 3.15 WTHIT
 
-One plugin, per piece under the crosshair: a note shows "Sticky Note", its colour and text; a label uses
+One plugin, per piece under the crosshair: a note shows "Sticky Note", its color and text; a label uses
 `IBlockComponentProvider.getOverride` (WTHIT 5.36.1) to show the host's name and icon, plus "Label: <item>".
 `getOverride` swaps the state, not the position, so other mods' lines that read the host's block entity may be missing
 while you look at a label.
@@ -521,7 +521,7 @@ while you look at a label.
 | Phase | Size |
 |---|---|
 | 1. Block, block entity, spot rules, dynamic model with Sticky It's shape, per-note actions, WTHIT | large: the bulk; the first dynamic baked model in the pack |
-| 2. Note items: leather-style dyeing, specials, JEI subtypes and example recipes, colour and eraser recipes, screen + packet, item labels (3 ways), tooltips, in-memory art pack | medium |
+| 2. Note items: leather-style dyeing, specials, JEI subtypes and example recipes, color and eraser recipes, screen + packet, item labels (3 ways), tooltips, in-memory art pack | medium |
 | 3. Labels: interactions, pass-through, icon renderer (real and dyed), distances | medium |
 | 4. Donor jars off (the tooltip fix can go first, alone) | small |
 | 5. Own art, drop donors | art work, then small |
@@ -538,20 +538,20 @@ a choice (Q1 to Q6 in 4.2).
 | # | Issue | Handling |
 |---|---|---|
 | C1 | **Explosion shielding.** A very high blast resistance in an air cell would also block explosion rays and shield the blocks behind the paper | carpet-like resistance for the ray maths; Forge `onBlockExploded` overridden to do nothing, so paper is never removed by the blast itself; the host's removal still drops it (3.2) |
-| C2 | **Picture NBT bloat.** A label storing a full copy of a shulker box, backpack or written book puts that whole inventory into chunk data and packets | store the item id plus only render-relevant tags (enchantment glint, potion, dye colour, custom model data); drop `BlockEntityTag`, inventories, pages, backpack data; cap the tag size, else id only |
+| C2 | **Picture NBT bloat.** A label storing a full copy of a shulker box, backpack or written book puts that whole inventory into chunk data and packets | store the item id plus only render-relevant tags (enchantment glint, potion, dye color, custom model data); drop `BlockEntityTag`, inventories, pages, backpack data; cap the tag size, else id only |
 | C3 | **Icon texture cache growth.** One Moonlight texture per distinct stack + dye; damage values and unique tags multiply them | key the cache on the stripped stack of C2 (no damage); textures freed on resource reload |
 | C4 | **Dedicated server.** Screens, the baked model, the icon renderer and Moonlight texture calls are client-only | keep them in client-only classes reached through client event subscribers (the D&D drill crash was this mistake); scratch-server boot test before shipping |
-| C5 | **NBT key clashes.** Bare `Text`, `Special`, `CELabels` could collide with other mods' tags | one compound `CreativeLabels {Text, Special}` on notes and `CreativeLabels.Lines` on labelled items; colour stays vanilla's `display.color` |
+| C5 | **NBT key clashes.** Bare `Text`, `Special`, `CELabels` could collide with other mods' tags | one compound `CreativeLabels {Text, Special}` on notes and `CreativeLabels.Lines` on labeled items; color stays vanilla's `display.color` |
 | C6 | **Text packets.** A client can send anything | server checks: length (`noteLength`), single line, `§` codes stripped, the player within reach, and (for placed notes) the note still there; last write wins if two players edit at once; an open screen closes if its note is removed |
 | C7 | **Structure rotation and mirroring.** Templates, villages and schematics rotate blocks | `rotate` / `mirror` move the face booleans and the block entity's face slots and floor rotations together |
 | C8 | **Create schematic cannon** (`CreateFastSchematicCannon` is in the pack). A block with no item can't be placed by the cannon, or could dupe | item requirement = the pieces' items (notes with their data, blank labels) |
 | C9 | **Slab tops and bottoms** put notes 8 px inside the slab's cell, so the hit shape reaches outside the block's own cell. Legal, and rays from above work, but unusual | test first (SN-05); if a mod chokes on it, slab half-faces fall back to no notes |
 | C10 | **Create contraptions.** If a papered cell is glued into a moving contraption, Create renders it without our model data | mark `face_paper` non-movable for Create so a moved host simply drops its paper (3.2) |
-| C11 | **Mob spawning, light, occlusion** | not a spawn surface; no light blocking; never culls neighbour faces |
+| C11 | **Mob spawning, light, occlusion** | not a spawn surface; no light blocking; never culls neighbor faces |
 | C12 | **Flowing water.** A waterloggable block stops flowing water like a sign | accepted |
 | C13 | **Gold roll and spark** | the 1 % roll on the server; the spark is a client particle from `animateTick` |
 | C14 | **Pack chores** | root `settings.gradle`, `IN_TREE_MODS`, `mod_sides.md` row (`both`), `instance.json` user-added entry, pack manifest, GPLv3 file, jar archive; `item_dict.js` keys; lang plus the name audit ([names.md](names.md)); tooltip lines recorded in [tooltips.md](tooltips.md) |
-| C15 | **Testing** | headless tests for spots, rotation, colour mixing and NBT; a scratch dedicated server ([deploy.md](deploy.md) tooling) for C4; then the SN- suite in game |
+| C15 | **Testing** | headless tests for spots, rotation, color mixing and NBT; a scratch dedicated server ([deploy.md](deploy.md) tooling) for C4; then the SN- suite in game |
 
 **Settled (owner, 2026-10-20):**
 
@@ -559,10 +559,10 @@ a choice (Q1 to Q6 in 4.2).
 |---|---|---|
 | Q1 | Placing a block into a papered cell | refused; take the paper off first |
 | Q2 | Is paper flammable? | no |
-| Q3 | Mouse Tweaks right-click drag labelling every slot | **not allowed**: one label per click (3.8); labelling always uses up the note |
+| Q3 | Mouse Tweaks right-click drag labeling every slot | **not allowed**: one label per click (3.8); labeling always uses up the note |
 | Q4 | Right-clicking a backpack, shulker box or bundle slot with a note on the cursor | labels the container; left-click still puts the note in |
-| Q5 | What a label picture keeps (C2) | id plus glint, potion, dye colour, custom model data |
-| Q6 | Labelled items in crafting | **blocked**, configurable (`blockLabelledCrafting`, default on; 3.8) |
+| Q5 | What a label picture keeps (C2) | id plus glint, potion, dye color, custom model data |
+| Q6 | Labeled items in crafting | **blocked**, configurable (`blockLabelledCrafting`, default on; 3.8) |
 
 ## 4. Decisions
 
@@ -571,32 +571,32 @@ a choice (Q1 to Q6 in 4.2).
 - New mod Creative Labels; block `face_paper`; one label **or** notes per face.
 - Notes: Sticky It's size and curled model on every side; five spots, spaced; directional floors and ceilings.
 - Shapes: full faces (sneak on chests and barrels), stairs bottom/back + 3 per side, slabs 4 top/bottom + 2 per side,
-  posts centre top and bottom, nothing on non-standard shapes.
+  posts center top and bottom, nothing on non-standard shapes.
 - Per-note dye (mixed like leather) / open / remove / eraser wipe; five notes cover the face; faces that can't hold five never cover.
 - Carpet-speed breaking; explosions don't touch paper; host broken by any means: notes drop with data, labels blank.
-- Colour like leather: any number of notes + 1 dye in the grid, mixes over several crafts, and dye on placed notes; Sticky It's colour files ignored. Specials: inverted (ink sac), smile (glow berries), creeper (gunpowder), gold (gold nugget, and 1 % when a plain note is placed, firework kept); `keepSpecialColor` on by default and only for sneak pick-ups; broken specials stay special. Eraser on a blank note returns it to yellow; eraser unbreakable. No Create mixing recipe (skipped). Stack 64 without data.
+- Color like leather: any number of notes + 1 dye in the grid, mixes over several crafts, and dye on placed notes; Sticky It's color files ignored. Specials: inverted (ink sac), smile (glow berries), creeper (gunpowder), gold (gold nugget, and 1 % when a plain note is placed, firework kept); `keepSpecialColor` on by default and only for sneak pick-ups; broken specials stay special. Eraser on a blank note returns it to yellow; eraser unbreakable. No Create mixing recipe (skipped). Stack 64 without data.
 - Slabs: 5 on top and bottom; stairs: also 2 on the front and 2 on the top. Posts: fences, walls, iron bars, glass panes, end rods, lightning rods, chains (not fence gates). Old donor items removed from play, recipes kept for ours.
 - Note screen with Sticky It's screen art. Item labels kept: inventory, anvil, off hand. Eraser on items, in the grid
   and on placed notes.
-- Labels: sneak + empty hand clears the picture; dye colours the icon; real colours; picture 16 and text 6 blocks,
+- Labels: sneak + empty hand clears the picture; dye colors the icon; real colors; picture 16 and text 6 blocks,
   configurable.
 - Current recipes for now; donor art now, own art later (phase 5); no converter; no asking the authors.
 - Specials stay special when broken; `keepSpecialColor` only for sneak pick-ups. Smile from glow berries; any number
-  of notes + one dye per craft. Copying: 1 written + 8 blank notes makes 9. Labelling uses up the note, one label per
-  click; labelled items blocked from crafting (configurable, default on). Q1, Q2, Q4, Q5 as recommended.
+  of notes + one dye per craft. Copying: 1 written + 8 blank notes makes 9. Labeling uses up the note, one label per
+  click; labeled items blocked from crafting (configurable, default on). Q1, Q2, Q4, Q5 as recommended.
 
 ### 4.2 Open
 
-Only the colourful ink idea below. O1 to O9, P1 (smile uses glow berries) and P2 (any number of notes + one dye per craft) and Q1 to Q6 are all
+Only the colorful ink idea below. O1 to O9, P1 (smile uses glow berries) and P2 (any number of notes + one dye per craft) and Q1 to Q6 are all
 settled (4.1, 3.17).
 
 Carried over, recommended and assumed unless changed: D7 (the in-game day and placer on the note screen and in WTHIT),
 L6 (Create contraptions: later).
 
-New idea, open (scratchpad 2026-10-21, [TODO](todo/TODO.md) `largecontent/stickynotes #6`): **colourful ink**, crafted
-from ancient ink + 8 different dyes. On a label it gives realistic item colours; it also works as a dye, or used in the
-world (an item with durability) gives a random dye colour per use. Open: how it sits next to phase 3's undyed icons,
-which already show real colours (3.10).
+New idea, open (scratchpad 2026-10-21, [TODO](todo/TODO.md) `largecontent/stickynotes #6`): **colorful ink**, crafted
+from ancient ink + 8 different dyes. On a label it gives realistic item colors; it also works as a dye, or used in the
+world (an item with durability) gives a random dye color per use. Open: how it sits next to phase 3's undyed icons,
+which already show real colors (3.10).
 
 The same scratchpad's sticky note list is this design and needs no new work: own logic in place of the donor mods
 (3.1), a block not an entity (3.2, 4.3), several notes per face (3.3), right-click in the inventory (3.8), a short
@@ -607,8 +607,8 @@ entity dying to any damage (2.2); `face_paper` replaces it (`largecontent/sticky
 
 - Keeping the entities and hardening them (one mixin): fixes the popping but keeps an entity per piece and two
   systems. Blocks chosen.
-- A block-entity renderer for all paper; a finite state model (6 faces x 5 spots x any colour); Labels' item-only
-  picture call (loses stack tints); copying either mod's art into our jar (licences).
+- A block-entity renderer for all paper; a finite state model (6 faces x 5 spots x any color); Labels' item-only
+  picture call (loses stack tints); copying either mod's art into our jar (licenses).
 
 ### 4.4 Limits
 
@@ -646,7 +646,7 @@ Planned, `development/creativeLabels/src/main/java/.../creativelabels/`:
     half, slabs, double slab, posts, deny/posts predicates), face frames, floor rotation, piece boxes, hit
     resolution, the covered-face rule, interactions (spot choice, host-gone re-fit, removal, pick-up and eraser).
   - `NbtTest`: note item NBT, item label lines, label picture stripping (C2), face / note / label round trips, the
-    Mask remap (C7), colour mixing against vanilla's `dyeArmor`, the note text sanitiser (C6), the four recipe
+    Mask remap (C7), color mixing against vanilla's `dyeArmor`, the note text sanitizer (C6), the four recipe
     matchers on a 3x3 grid.
   - `NoteShapeTest`: the fallback note shape on every face (paper plane, curl direction, winding), the label model
     mapping, DonorArt's image maths on the decompiled donor PNGs.
@@ -654,7 +654,7 @@ Planned, `development/creativeLabels/src/main/java/.../creativelabels/`:
     text rotation quaternion.
   - 2026-10-21 run: 235 + 142 + 1828 + 394 checks, all pass.
   - 2026-11-02 run (3.3a added to `SpotsTest`: label surface on the modded shapes read from their jars and on
-    vanilla blocks, stairs/slabs/doors/trapdoors denied, centred notes, shifted boxes and hits, re-fit, NBT keys):
+    vanilla blocks, stairs/slabs/doors/trapdoors denied, centered notes, shifted boxes and hits, re-fit, NBT keys):
     325 + 142 + 1828 + 394, all pass.
 
 ### 6.1 Scratch server (2026-10-21)
@@ -696,122 +696,122 @@ play only; "server half PASSED" notes are from the scratch server (6.1).
 
 Placing and shapes:
 
-- [ ] **SN-01 five spots:** right-click a stone face aiming at each corner and the centre → five notes, spaced, none
+- [ ] **SN-01 five spots:** right-click a stone face aiming at each corner and the center -> five notes, spaced, none
   overlapping; a sixth does nothing. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-02 nearest free spot:** click an occupied spot → the note lands on the nearest free spot. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-02 nearest free spot:** click an occupied spot -> the note lands on the nearest free spot. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-03 chests and barrels:** plain right-click opens them; sneak + right-click places a note; five notes fit on
   a chest's front. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-04 stairs:** bottom and back faces take five; each side takes three (bottom corners, top corner on the back
   half); the front and the top take two each; for all four stair facings and upside-down stairs. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-05 slabs:** a bottom slab's top takes five; a top slab's bottom takes five; sides take two (the
   half's corners); a double slab takes five. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-06 posts:** fence, wall, iron bars, glass pane, end rod, lightning rod, chain → one note on the centre of
+- [ ] **SN-06 posts:** fence, wall, iron bars, glass pane, end rod, lightning rod, chain -> one note on the center of
   top and bottom only. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-07 non-standard:** carpet, button, ladder, door, trapdoor, flower, head → no note. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-08 floor direction:** place the first note on a floor facing north, then one facing east → both point north;
-  break all, place facing east → east. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-07 non-standard:** carpet, button, ladder, door, trapdoor, flower, head -> no note. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-08 floor direction:** place the first note on a floor facing north, then one facing east -> both point north;
+  break all, place facing east -> east. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-09 notes or label:** a face with notes refuses a label and the other way round; notes on one face and a
   label on another face of the same cell both show. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-10 model:** placed notes have Sticky It's curled shape and size on walls, floors and ceilings.
 
 Per-note actions:
 
-- [ ] **SN-11 dye placed:** red dye on one note → only it turns red, one dye used; then blue → a red-blue mix (the same
-  colour as leather dyed red then blue); a special note refuses dye. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-12 open:** empty-hand right-click → the note screen with Sticky It's bars, the text and the placing day; edit,
-  Done → WTHIT shows the new text.
-- [ ] **SN-13 remove:** sneak + empty-hand right-click → that note in your inventory with colour and text. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-14 eraser on a placed note:** right-click a written red note with the eraser → text gone, still red; again →
+- [ ] **SN-11 dye placed:** red dye on one note -> only it turns red, one dye used; then blue -> a red-blue mix (the same
+  color as leather dyed red then blue); a special note refuses dye. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-12 open:** empty-hand right-click -> the note screen with Sticky It's bars, the text and the placing day; edit,
+  Done -> WTHIT shows the new text.
+- [ ] **SN-13 remove:** sneak + empty-hand right-click -> that note in your inventory with color and text. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-14 eraser on a placed note:** right-click a written red note with the eraser -> text gone, still red; again ->
   plain yellow. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-15 covered face:** five notes on a crafting table → clicks between them don't open it; remove one → the
+- [ ] **SN-15 covered face:** five notes on a crafting table -> clicks between them don't open it; remove one -> the
   empty spot opens it. Three notes on a stair side or two on its front never block anything. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-16 pass-through:** two notes on a furnace; right-click a note holding a coal → the furnace opens. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-17 break:** left-click one note → breaks about as fast as carpet, drops with its data; the others stay;
+- [ ] **SN-16 pass-through:** two notes on a furnace; right-click a note holding a coal -> the furnace opens. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-17 break:** left-click one note -> breaks about as fast as carpet, drops with its data; the others stay;
   only the hovered note is outlined; middle-click in creative gives that note. Scratch server 2026-10-21: server half PASSED.
 
 Breaking the host, damage:
 
-- [ ] **SN-18 host mined:** mine a block with five notes and a label on another of its faces → notes drop with data,
+- [ ] **SN-18 host mined:** mine a block with five notes and a label on another of its faces -> notes drop with data,
   the label drops blank. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-19 explosion:** TNT beside a papered wall that survives → no paper lost; TNT that destroys the wall → notes
+- [ ] **SN-19 explosion:** TNT beside a papered wall that survives -> no paper lost; TNT that destroys the wall -> notes
   drop with data, labels blank, none destroyed by the blast. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-20 shrapnel, arrows, punches:** shoot and punch papered blocks → nothing pops.
-- [ ] **SN-21 pistons:** push a papered block → its paper drops as in SN-18. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-20 shrapnel, arrows, punches:** shoot and punch papered blocks -> nothing pops.
+- [ ] **SN-21 pistons:** push a papered block -> its paper drops as in SN-18. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-22 water:** notes under water keep the water. Scratch server 2026-10-21: server half PASSED.
 
 Note items:
 
 - [ ] **SN-23 JEI:** JEI lists the plain note and the four specials, with example recipes for the 16 dyes and the
   specials.
-- [ ] **SN-24 any colour:** notes dyed with each of the 16 dyes, and mixes, look like their leather armour colour when
-  placed and as items; place 200 plain notes → about 2 come out gold, with the firework spark. Scratch server 2026-10-21: server half PASSED (gold rate only: 4 of 400; colours need a client).
+- [ ] **SN-24 any colour:** notes dyed with each of the 16 dyes, and mixes, look like their leather armor color when
+  placed and as items; place 200 plain notes -> about 2 come out gold, with the firework spark. Scratch server 2026-10-21: server half PASSED (gold rate only: 4 of 400; colors need a client).
 - [ ] **SN-25 stacking:** 64 plain notes stack; red notes stack with red; a written note doesn't stack with blank ones. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-26 colour in the grid:** 12 plain notes + red dye → 12 red notes; 12 red + blue dye → 12 red-blue mixes;
-  the text of a written note survives; 8 plain notes + gunpowder → 8 creeper notes. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-27 eraser in the grid:** red "Iron" + eraser → blank red note, eraser stays; that note + eraser → plain
+- [ ] **SN-26 color in the grid:** 12 plain notes + red dye -> 12 red notes; 12 red + blue dye -> 12 red-blue mixes;
+  the text of a written note survives; 8 plain notes + gunpowder -> 8 creeper notes. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-27 eraser in the grid:** red "Iron" + eraser -> blank red note, eraser stays; that note + eraser -> plain
   yellow. The eraser never breaks. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-28 write in hand:** right-click a stack of notes in the air → screen; "Iron", Done → one written note, the
+- [ ] **SN-28 write in hand:** right-click a stack of notes in the air -> screen; "Iron", Done -> one written note, the
   rest unchanged.
 - [ ] **SN-29 tooltips:** note, label and eraser show the lines of 3.9, each on its own line, no `[Shift]`.
 
 Item labels:
 
-- [ ] **SN-30 inventory:** written note on the cursor, right-click 32 cobblestone in a chest → all 32 show the line;
+- [ ] **SN-30 inventory:** written note on the cursor, right-click 32 cobblestone in a chest -> all 32 show the line;
   one note used. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-31 anvil:** cobblestone left, written note right → output with the line, 1 level; one note used. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-32 off hand:** note in the main hand, sword in the off hand, sneak + right-click in the air → the sword has
+- [ ] **SN-31 anvil:** cobblestone left, written note right -> output with the line, 1 level; one note used. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-32 off hand:** note in the main hand, sword in the off hand, sneak + right-click in the air -> the sword has
   the line. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-33 three lines:** a fourth line is refused, nothing used. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-34 eraser on items:** eraser on the cursor, right-click until no line is left → the stack merges with clean
+- [ ] **SN-34 eraser on items:** eraser on the cursor, right-click until no line is left -> the stack merges with clean
   cobblestone. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-35 creative tab:** SN-30 and SN-34 in the creative inventory tab.
 
-- [ ] **SN-53 copy:** written red "Iron" + 8 blank notes of mixed colours → 9 red "Iron" notes. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-54 drag:** Mouse Tweaks right-click drag with a written stack of notes across 5 cobblestone slots → only
-  the first slot is labelled, one note used. Scratch server 2026-10-21: server half PASSED (5-tick gate; a real drag needs a client).
-- [ ] **SN-55 crafting blocked:** a labelled plank in the inventory grid → no result; set `blockLabelledCrafting =
-  false` → it crafts, unlabelled output. Scratch server 2026-10-21: server half PASSED (after the FastWorkbench fix).
+- [ ] **SN-53 copy:** written red "Iron" + 8 blank notes of mixed colors -> 9 red "Iron" notes. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-54 drag:** Mouse Tweaks right-click drag with a written stack of notes across 5 cobblestone slots -> only
+  the first slot is labeled, one note used. Scratch server 2026-10-21: server half PASSED (5-tick gate; a real drag needs a client).
+- [ ] **SN-55 crafting blocked:** a labeled plank in the inventory grid -> no result; set `blockLabelledCrafting =
+  false` -> it crafts, unlabelled output. Scratch server 2026-10-21: server half PASSED (after the FastWorkbench fix).
 
-Labels by surface and centred notes (3.3a, `creativeLabels-1.0.1`):
+Labels by surface and centered notes (3.3a, `creativeLabels-1.0.1`):
 
 - [ ] **SN-56 labels on odd blocks:** a label on the side of a Supplementaries Jar, a Sack, each trash can, a
-  Pickling Jar, a botany pot, a cauldron and a composter → placed flat on the block's surface, not floating more
-  than 1 px; the botany pot's label is smaller (8 px) and fills the pot's height; show an item on each → the icon
+  Pickling Jar, a botany pot, a cauldron and a composter -> placed flat on the block's surface, not floating more
+  than 1 px; the botany pot's label is smaller (8 px) and fills the pot's height; show an item on each -> the icon
   and name scale with the label.
 - [ ] **SN-57 labels refused:** a label on a door, a trapdoor, a slab's top half-face, a stair's side, front or top,
-  a cauldron's top, a pressure plate, a flower → nothing placed, label not used up. Full blocks, chests and barrels
+  a cauldron's top, a pressure plate, a flower -> nothing placed, label not used up. Full blocks, chests and barrels
   take a label as before.
-- [ ] **SN-58 centred note:** a sticky note on the side of each centre-note host (Jar, Sack, trash cans, Pickling Jar,
-  botany pot) → one note in the middle of that side; a second note on the same side → refused; their tops → refused,
-  except the jar and the Pickling Jar (one note centred on the lid).
-- [ ] **SN-59 old placements:** a world with labels and notes placed under 1.0.0 → all still in place after updating.
-- [ ] **SN-60 re-fit:** a label on a botany pot side, then break the pot → the label drops; a note on a jar side, then
-  break the jar → the note drops with its text.
-- [ ] **SN-61 jar tops and pushed hosts:** a note on top of a Jar and of a Pickling Jar → accepted, centred on the lid;
-  on top of a Sack → refused. A piston pushes a stone host with a note on its side → the note drops with its text.
+- [ ] **SN-58 centered note:** a sticky note on the side of each center-note host (Jar, Sack, trash cans, Pickling Jar,
+  botany pot) -> one note in the middle of that side; a second note on the same side -> refused; their tops -> refused,
+  except the jar and the Pickling Jar (one note centered on the lid).
+- [ ] **SN-59 old placements:** a world with labels and notes placed under 1.0.0 -> all still in place after updating.
+- [ ] **SN-60 re-fit:** a label on a botany pot side, then break the pot -> the label drops; a note on a jar side, then
+  break the jar -> the note drops with its text.
+- [ ] **SN-61 jar tops and pushed hosts:** a note on top of a Jar and of a Pickling Jar -> accepted, centered on the lid;
+  on top of a Sack -> refused. A piston pushes a stone host with a note on its side -> the note drops with its text.
 
 Labels:
 
 - [ ] **SN-36 place:** a label on a chest front sits flush on its face. Scratch server 2026-10-21: server half PASSED (placement; the look needs a client).
-- [ ] **SN-37 picture:** sneak + right-click with a diamond → the diamond in real colours, not used up. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-38 stack tints:** labels showing a healing potion and dyed leather armour → their colours. Scratch server 2026-10-21: server half PASSED (picture NBT kept and stripped; the colours need a client).
-- [ ] **SN-39 special renderers:** a chest, a shield, a Create cogwheel → like their inventory icons.
-- [ ] **SN-40 dyed icon:** red dye → the icon turns red shades, the paper stays. Scratch server 2026-10-21: server half PASSED (dye stored; the icon needs a client).
-- [ ] **SN-41 clear:** sneak + empty hand → picture cleared. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-42 glow, feather:** glow ink sac → full-bright; ink sac → normal; feather → name under the icon. Scratch server 2026-10-21: server half PASSED (flags stored; the look needs a client).
-- [ ] **SN-43 open through:** empty-hand right-click the label → the chest opens. Scratch server 2026-10-21: server half PASSED.
-- [ ] **SN-44 break:** left-click the label → breaks like carpet, drops a blank label. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-37 picture:** sneak + right-click with a diamond -> the diamond in real colors, not used up. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-38 stack tints:** labels showing a healing potion and dyed leather armor -> their colours. Scratch server 2026-10-21: server half PASSED (picture NBT kept and stripped; the colors need a client).
+- [ ] **SN-39 special renderers:** a chest, a shield, a Create cogwheel -> like their inventory icons.
+- [ ] **SN-40 dyed icon:** red dye -> the icon turns red shades, the paper stays. Scratch server 2026-10-21: server half PASSED (dye stored; the icon needs a client).
+- [ ] **SN-41 clear:** sneak + empty hand -> picture cleared. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-42 glow, feather:** glow ink sac -> full-bright; ink sac -> normal; feather -> name under the icon. Scratch server 2026-10-21: server half PASSED (flags stored; the look needs a client).
+- [ ] **SN-43 open through:** empty-hand right-click the label -> the chest opens. Scratch server 2026-10-21: server half PASSED.
+- [ ] **SN-44 break:** left-click the label -> breaks like carpet, drops a blank label. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-45 floor label:** a label on a floor turns to your facing. Scratch server 2026-10-21: server half PASSED.
 - [ ] **SN-46 distances:** pictures disappear past 16 blocks (paper stays), names past 6; change both in
-  `creativelabels-client.toml` → they follow.
-- [ ] **SN-47 WTHIT:** a note → "Sticky Note", colour, text; a label → the chest's name and icon plus "Label: Diamond".
+  `creativelabels-client.toml` -> they follow.
+- [ ] **SN-47 WTHIT:** a note -> "Sticky Note", color, text; a label -> the chest's name and icon plus "Label: Diamond".
 
 Donor jars and performance:
 
-- [ ] **SN-48 bowls stack:** hover a bowl, put it with fresh bowls → they stack.
+- [ ] **SN-48 bowls stack:** hover a bowl, put it with fresh bowls -> they stack.
 - [ ] **SN-49 donors off:** no `sticky_it:` or `labels:` recipe or item in JEI. Scratch server 2026-10-21: server half PASSED (recipes and creative tabs; JEI needs a client).
-- [ ] **SN-50 resource reload:** F3+T → notes, labels and icons still right.
-- [ ] **SN-51 performance:** 200 labels and 1,000 notes in view → JFR shows the icon renderer as the only per-frame
+- [ ] **SN-50 resource reload:** F3+T -> notes, labels and icons still right.
+- [ ] **SN-51 performance:** 200 labels and 1,000 notes in view -> JFR shows the icon renderer as the only per-frame
   cost.
 - [ ] **SN-52 phase 5:** with our own art and both donor jars removed, everything above still passes.
 
@@ -822,27 +822,27 @@ Donor jars and performance:
 - 2026-10-20: the user clarified the "disappearing labels" are the Labels mod; Labels 1.10 investigated
   (`HangingEntity` popped by any damage or a failed survival check); labels planned as faces of the same block.
 - 2026-10-20: spec round 1: one face-paper block, five notes per face, per-note dye / open / remove, covered face,
-  carpet-speed breaking, real-colour pictures investigated (Moonlight `requestFlatItemStackTexture`).
-- 2026-10-20: spec round 2: converter dropped; pictures only up close; both mods' art wanted; licences read (no
+  carpet-speed breaking, real-color pictures investigated (Moonlight `requestFlatItemStackTexture`).
+- 2026-10-20: spec round 2: converter dropped; pictures only up close; both mods' art wanted; licenses read (no
   redistribution), so donor jars + in-memory derivatives (the Vinery route).
 - 2026-10-20: spec round 3 (this version): new mod Creative Labels; notes the size and curled model of Sticky It's
   (measured from `ModelSticky`: 6 x 5.35 px, 2.76 px curl) on every side; directional floors and ceilings; spots by
   host shape (stairs, slabs, posts, inset faces); explosions don't touch paper, host breaks drop notes with data and
-  labels blank; 23 note variants in JEI with recipes (Sticky It's colours listed, including three unused textures);
+  labels blank; 23 note variants in JEI with recipes (Sticky It's colors listed, including three unused textures);
   Sticky It's screen art; item labels by inventory, anvil and off hand; eraser on items, in the grid and on placed
   notes; dyed label icons via Moonlight `requestTexture` + our own recolour; distances 16 / 6, configurable; phase 5
   (own art, drop donors) planned. Test suite rewritten (nothing had run).
-- 2026-10-20: spec round 4: colour like leather (any number of notes + 1 dye in the grid, mixes over crafts, dye mixes
-  on placed notes, Sticky It's colour files dropped); specials inverted / smile / creeper / gold by crafting, gold also
+- 2026-10-20: spec round 4: color like leather (any number of notes + 1 dye in the grid, mixes over crafts, dye mixes
+  on placed notes, Sticky It's color files dropped); specials inverted / smile / creeper / gold by crafting, gold also
   1 % on placing, `keepSpecialColor` default on; eraser on a blank note returns plain yellow, unbreakable; slabs 5 on
   top and bottom, stair fronts and tops 2; faces that can't hold five never cover; old donor items removed from play,
   recipes kept; Create mixing recipe considered (needs a `BasinRecipe.apply` hook, results are static) and skipped by
-  the user. Colour reevaluation: 5 donor files kept, 13 dropped, greyscale bases and special icons generated.
+  the user. Color reevaluation: 5 donor files kept, 13 dropped, greyscale bases and special icons generated.
 - 2026-10-20: specials stay special when broken (`keepSpecialColor` only for sneak pick-ups); pre-build review added
   (3.17: C1 to C15 handled, Q1 to Q6 to choose), incl. explosion shielding, picture NBT bloat, dedicated-server
   safety, NBT key namespacing, schematic cannon and slab-top hit shapes.
-- 2026-10-20: last choices settled: one label per click (drag labelling blocked, 5-tick server gate), note copying
-  (1 written + 8 blank = 9), labelled items blocked from crafting grids (`blockLabelledCrafting`, default on), smile
+- 2026-10-20: last choices settled: one label per click (drag labeling blocked, 5-tick server gate), note copying
+  (1 written + 8 blank = 9), labeled items blocked from crafting grids (`blockLabelledCrafting`, default on), smile
   from glow berries, one dye per multi-note craft, Q1/Q2/Q4/Q5 as recommended. `CELabels` renamed
   `CreativeLabels.Lines` in 3.8 (C5). SN-53 to SN-55 added. No open decisions.
 - 2026-10-20: phases 1 to 4 built (`development/creativeLabels`, `creativeLabels-1.0.0.jar`) with four headless
@@ -855,10 +855,10 @@ Donor jars and performance:
 - 2026-11-02: labels went on no non-full block (the user: sacks, jars, Pickling Jars, botany pots, trash cans,
   cauldrons; the original mod allowed them). Cause: the five-spot rule plus the 2 px inset limit and the per-box 4 px
   thickness. Built 3.3a: label surface test, stairs and slabs keep the old label rule, doors and trapdoors none,
-  centred notes by tag; `creativeLabels-1.0.1`, not installed. SN-56 to SN-60 added.
-- 2026-11-03 (plan_scratch_bugfix_1103 4.4, 4.5): jar and Pickling Jar tops take one centred note (tag
-  `creativelabels:paper/note_on_top`), other centre-note tops none (SQ-LBS-03 found the jar and sack tops open). SQ-LBS-04
+  centered notes by tag; `creativeLabels-1.0.1`, not installed. SN-56 to SN-60 added.
+- 2026-11-03 (plan_scratch_bugfix_1103 4.4, 4.5): jar and Pickling Jar tops take one centered note (tag
+  `creativelabels:paper/note_on_top`), other center-note tops none (SQ-LBS-03 found the jar and sack tops open). SQ-LBS-04
   (no drops when a host went to air) was not a probe fault (the probe already used flag 3) and the Labels code path
-  drops; suspected cause is Creative Worldgen's FirstTickWater drop flag left set after a cancelled or failed fluid
+  drops; suspected cause is Creative Worldgen's FirstTickWater drop flag left set after a canceled or failed fluid
   tick, now cleared every level tick and checked per thread. The probe gained a wall-torch control and a piston case.
   Rebuilt into `creativeLabels-1.0.1` (still not installed). SN-61 added.

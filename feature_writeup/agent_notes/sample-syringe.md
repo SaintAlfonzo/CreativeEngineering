@@ -14,11 +14,11 @@ All 7 animals are wired: cow, pig, chicken, sheep, rabbit, cod, salmon.
 Registration: `startup_scripts/items/sample_syringe.js` (each filled variant uses
 `.containerItem('creativeengineering:sample_syringe')` and `.glow(true)` — see
 memory `kubejs-itembuilder-glow` for why glow is a builder flag now, not NBT).
-Shared logic: `startup_scripts/func/sample_syringe.js` → `global.sampleSyringe`
+Shared logic: `startup_scripts/func/sample_syringe.js` -> `global.sampleSyringe`
 (`SAMPLES` map, `isSampleable`, `isFull`, `buildFilledStack`). Handlers (right-click/attack)
 live in `server_scripts/engineering/sample_syringe.js`.
 
 **Consuming it in a recipe**: `server_scripts/cooking/cultivated_meat.js` has shapeless recipes
-for all 7 filled syringes (+ culture_base + slime → `creativeengineering:culture_*` meat
+for all 7 filled syringes (+ culture_base + slime -> `creativeengineering:culture_*` meat
 precursors for `cooking.js`). Because each filled syringe is its own item id, these recipes
 match by plain id — no NBT ingredient tricks needed anymore.

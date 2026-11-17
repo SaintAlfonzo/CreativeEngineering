@@ -129,7 +129,7 @@ per tree and section 2 of the report measures the real trees and nests per chunk
 - `TreeFeatureBeeNestsMixin`: at `TreeFeature.place` HEAD the biome at the tree's origin is looked up (worldgen
   only: the level must be a `WorldGenRegion`); both reads of `config.decorators` return the tuned list.
 - `BeehiveDecoratorBeeNestsMixin` exposes the decorator's private probability and counts a nest when one is placed;
-  `ChunkGeneratorBeeNestsMixin` counts chunks per biome (centre surface) for `/dumpbeenests`.
+  `ChunkGeneratorBeeNestsMixin` counts chunks per biome (center surface) for `/dumpbeenests`.
 
 ### 3.3 Calibration baseline
 
@@ -149,7 +149,7 @@ with the rules emptied (the generator refuses a baseline taken with rules).
 - **Saplings are untouched**, so boosted biomes don't become nest farms.
 - **New chunks only.** Existing terrain keeps its trees.
 - **Counters are per server session** (or since `/dumpbeenests reset`), by the biome at the tree's origin and at
-  each chunk's centre surface: a few edge chunks land in a neighbour's row. Biomes with fewer than ~50 chunks in a
+  each chunk's center surface: a few edge chunks land in a neighbor's row. Biomes with fewer than ~50 chunks in a
   dump are noisy.
 - Distant Horizons generates its own LOD terrain on the server; the scratch-server measurement ran without it.
 
@@ -162,7 +162,7 @@ Brief: [briefs/mobs_bees.md](briefs/mobs_bees.md). Built so far: honeycomb shear
   `mixin/BeehiveHoneycombMixin` multiplies that constant by `[bees] honeycombMultiplier` in creativecommon-common.toml
   (default 2, so 6; 1 = vanilla; 1 to 16; read live). Hand shearing and dispenser shearing both go through that method.
   Hives from other mods with their own drop code are untouched. Test BN-HC-01: shear a full (honey level 5) hive with
-  shears → 6 honeycombs; a dispenser with shears facing a full nest → 6; set the key to 1 → 3. See `dishes/ingredients #22`
+  shears -> 6 honeycombs; a dispenser with shears facing a full nest -> 6; set the key to 1 -> 3. See `dishes/ingredients #22`
   for honeycomb as sugar.
 
 ## 5. File map

@@ -83,7 +83,7 @@ Know where wild bees come from and how often, and tune it where it is wrong.
 
 ## Writeup corrections made
 
-- [bee_nests.md](../bee_nests.md) 0: starter rules "ship as they are in 1.0.5 (staged)" → DEPLOYED with pack 1.0.6; the
-  jar note "ships in pack 1.0.5" → shipped with 1.0.6.
+- [bee_nests.md](../bee_nests.md) 0: starter rules "ship as they are in 1.0.5 (staged)" -> DEPLOYED with pack 1.0.6; the
+  jar note "ships in pack 1.0.5" -> shipped with 1.0.6.
 - [mob_spawns.md](../mob_spawns.md) 9 "Investigate": the beehive line now says it was investigated and tuned in
   bee_nests.md (2026-10-10) and names the TODO rows.

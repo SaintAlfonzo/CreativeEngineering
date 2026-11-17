@@ -189,7 +189,7 @@ sub-season tint (weather.md 4, "Adaptive tint is per biome").
   - It is called from `SereneSeasons.clientSetup` through `enqueueWork(() -> SeasonColorHandlers.setup())`, so it runs
     on the main thread, before any level exists.
 - **What the pack does.** `mixin/SeasonColorUtilMixin.java:28-48` HEAD-injects both `SeasonColorUtil` methods:
-  - year-round types return the original colour;
+  - year-round types return the original color;
   - permanent seasons re-call with their own sub-season.
 
   It has no x/z. An adaptive biome gets `usesTropicalSeasons` = `SeasonTypes.wetDryCycle(ADAPTIVE)`, false
@@ -203,7 +203,7 @@ sub-season tint (weather.md 4, "Adaptive tint is per biome").
 synthetic lambdas. Instead, wrap the resolver field right after Serene Seasons assigns it:
 - record the column in a ThreadLocal;
 - delegate to Serene Seasons' resolver;
-- let `SeasonColorUtilMixin`, which already intercepts the colour call, read the column.
+- let `SeasonColorUtilMixin`, which already intercepts the color call, read the column.
 
 Every hook is on a named method.
 
@@ -211,7 +211,7 @@ Every hook is on a named method.
 
 1. **Column holder.** In `seasons/SeasonTypes.java`, or a new `seasons/TintColumn.java`:
    `ThreadLocal<long[]>` or two ints, plus a depth flag; `set(x, z)`, `clear()`, `get()`. It must be a ThreadLocal:
-   Rubidium builds chunk meshes and blends biome colours on worker threads.
+   Rubidium builds chunk meshes and blends biome colors on worker threads.
 2. **Wrap the resolvers.** New client mixin `mixin/SeasonColorHandlersMixin.java`:
    `@Mixin(value = SeasonColorHandlers.class, remap = false)`,
    `@Inject(method = "registerGrassAndFoliageColorHandlers", at = @At("RETURN"), remap = false, require = 1)`:
@@ -234,10 +234,10 @@ Every hook is on a named method.
          calendar.getSubSeason()`).
      - If the provider differs from the one passed in, `cir.setReturnValue(SeasonColorUtil.applySeasonal...(landProvider,
        biome, originalColour))`.
-   - Keep `biome` (the river), not `land`, in that call. The river's own base colour and `lessColorChange` stay; only
+   - Keep `biome` (the river), not `land`, in that call. The river's own base color and `lessColorChange` stay; only
      the season overlay comes from the land.
    - **Clear the column before the re-call** (or check the depth flag), or the nested call resolves again.
-4. **Optional: birch leaves.** Serene Seasons' birch handler (`registerBirchColorHandler`, a block colour lambda with
+4. **Optional: birch leaves.** Serene Seasons' birch handler (`registerBirchColorHandler`, a block color lambda with
    `pos`) reads `level.getBiome(pos)` and `usesTropicalSeasons`. Same fix: a `@Redirect` would have to target the
    lambda, so skip it unless birch on river banks looks wrong.
 5. Update weather.md:
@@ -268,21 +268,21 @@ Every hook is on a named method.
 ### Gotchas
 
 - **Order.** `ClientLevel` builds its `tintCaches` keyed by resolver identity when it is constructed, and so does
-  Rubidium's colour cache. The wrap must happen before the first level loads. Serene Seasons' setup runs at client
+  Rubidium's color cache. The wrap must happen before the first level loads. Serene Seasons' setup runs at client
   setup, and the RETURN inject runs with it, so this holds. Don't wrap later, for example on level load.
-- **Meshes built before the neighbouring chunks load** get an incomplete `resolve`: the river's own tint, not cached.
+- **Meshes built before the neighboring chunks load** get an incomplete `resolve`: the river's own tint, not cached.
   They keep it until that section is re-meshed. Expect a few river sections with the old tint right after joining; F3+A
   fixes them. Acceptable.
-- **Changing the season doesn't re-mesh by itself** in Serene Seasons either. Same behaviour as today.
+- **Changing the season doesn't re-mesh by itself** in Serene Seasons either. Same behavior as today.
 - **Contention.** `resolve`'s cache lock is taken once per tint call in adaptive biomes, from several mesh threads.
-  Rubidium computes colours per column per section, so this is a few thousand lookups per section at worst. Check FPS
+  Rubidium computes colors per column per section, so this is a few thousand lookups per section at worst. Check FPS
   near large rivers (WE-41).
-- **Distant Horizons' LOD colours** may or may not go through `BiomeColors` (unverified). If they do, they follow too.
+- **Distant Horizons' LOD colors** may or may not go through `BiomeColors` (unverified). If they do, they follow too.
 
 ### Tests
 
 - **WE-40 river tint:** river through a desert, `/season set MID_WINTER` then `MID_SUMMER` -> bank grass keeps one
-  colour (like the desert's, no seasonal shift). River through a jungle -> tropical shift. River through plains ->
+  color (like the desert's, no seasonal shift). River through a jungle -> tropical shift. River through plains ->
   temperate shift as before. A beach next to snowy plains -> no tint change.
 - **WE-41 tint cost and safety:** fly along a large river with Rubidium for 2 minutes -> no exception in `latest.log`,
   FPS within noise of the same flight with `[seasons] enabled = false`.

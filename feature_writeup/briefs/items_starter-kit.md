@@ -49,7 +49,7 @@ comb and needle and thread in the kit too, and made single-use.
    from `keep` any stack that is `#forge:books`-like or a `patchouli:guide_book` (`i.guide_book`); see Decisions.
 4. Consumable comb and needle: a KubeJS `ItemEvents.rightClicked` on `i.comb` / `i.needle_and_thread` (and
    `ItemEvents.entityInteracted` for the villager path) that shrinks the held stack by 1 on the server after MCA opens
-   its screen (`e.item.count--`, not cancelled). If KubeJS sees the event before MCA's `use` and the order matters,
+   its screen (`e.item.count--`, not canceled). If KubeJS sees the event before MCA's `use` and the order matters,
    move it to a patcherMod mixin on `NeedleAndThreadItem#use` / `CombItem#use` RETURN (and `interactLivingEntity`).
 5. Tooltips: one lang line each ("Single use") through the pack's tooltip route (`ui/tooltips`), so players know.
 6. Writeup: feature_porting.md 1.1 (kit contents), the starter_kit.js header comment line 13.

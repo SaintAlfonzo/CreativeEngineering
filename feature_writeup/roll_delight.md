@@ -5,8 +5,8 @@ Investigation written 2026-10-30 for TODO `largecontent/mod-additions #12` (the 
 installed, nothing run in game.
 Jar: `devmods/toBackport/[1.20.1] Roll Delight-1.3.1-forge-.jar` (file 1.3.1, `mods.toml` version 1.3.0), unpacked to
 `DecompiledMods/roll_delight-1.3.1/`, code in `DecompiledMods/roll_delight-1.3.1-src/` (31 classes, MCreator). Forge
-1.20.1 only, so a **port is needed**. Licence **All Rights Reserved**: the Vinery / Miner's / Rustic donor-jar route (jar
-kept unmodified in `roll_upstream/`, our code written from behaviour). "Roll" in this file is Roll Delight. Test
+1.20.1 only, so a **port is needed**. License **All Rights Reserved**: the Vinery / Miner's / Rustic donor-jar route (jar
+kept unmodified in `roll_upstream/`, our code written from behavior). "Roll" in this file is Roll Delight. Test
 prefix `ROLL-`.
 
 **Owner rulings, 2026-10-31** (they override the older recommendations in sections 2 to 5 where they differ):
@@ -112,7 +112,7 @@ that hand out rolls, a pot-cooked nether wart, and chopsticks that eat the off-h
 | Ancient Roll / Slice | none (pitcher plant, torchflower upstream) | Both upstream ingredients are 1.20-only (B2) | **added** (owner): Ancient Fruit + Chorus Flower (3.1) |
 | Nether Roll | none (raw porkchop + cooked nether wart upstream) | | **added** (owner): raw pork, raw bacon or Prepared Flesh (3.1) |
 | Cooked Nether Wart | Farmer's Respite Nether Wart Sourdough uses wart, no cooked form exists | bowl food | **added** (owner); family and stack in 4.1 |
-| Legendary / Mythical Roll Medley | *overlaps w/ FD Rice Roll Medley* (`RiceRollMedleyBlock`, a `FeastBlock`, 8 servings, taken with an empty hand) | The FD medley already hands out rolls with no bowl, so the upstream behaviour is the FD behaviour | **added** (owner), built as the FD medley (3.2); D8 settled |
+| Legendary / Mythical Roll Medley | *overlaps w/ FD Rice Roll Medley* (`RiceRollMedleyBlock`, a `FeastBlock`, 8 servings, taken with an empty hand) | The FD medley already hands out rolls with no bowl, so the upstream behavior is the FD behavior | **added** (owner), built as the FD medley (3.2); D8 settled |
 | Chopsticks, Wrapped Chopsticks | none in the pack (no chopsticks item in any mod dump) | new tool and decoration | **added** (owner), redesigned (3.3) |
 
 ### 2.2 Systems
@@ -222,7 +222,7 @@ cooked = 1.0) stands unchanged.
 
 ### 3.2 Blocks
 
-| Block | Recipe | Servings | Behaviour |
+| Block | Recipe | Servings | Behavior |
 |---|---|---|---|
 | Legendary Roll Medley (stack 1) | 3 mushroom roll slice, 3 salmon maki, 2 tobiko roll, bowl | 8: an empty hand takes 3 mushroom slices, 3 salmon slices, 2 tobiko, in that order | breaking part-eaten drops what is left plus the bowl |
 | Mythical Roll Medley (stack 1) | 3 ancient roll slice, 3 golden roll slice, 2 nether roll, bowl | 8, same pattern | Ancient Roll is back (owner) |
@@ -233,7 +233,7 @@ A medley returns exactly what went in (no food gained); it is storage and displa
 **Build (owner, 2026-10-31, D8 settled).** The Roll medleys are written as the FD Rice Roll Medley is: a `FeastBlock`
 subclass with an 8-entry serving list (`riceRollServings` pattern: the serving item is picked by the remaining-servings
 index) and an `IntegerProperty` of servings. FD's block takes its servings with an empty hand (its servings have no
-container), which is the behaviour the owner wants kept, and being a `FeastBlock` it shows in the Feast Plating tab and
+container), which is the behavior the owner wants kept, and being a `FeastBlock` it shows in the Feast Plating tab and
 WTHIT with no extra work. Rules:
 
 - **Taking:** empty hand or chopsticks only. Any other held item, and any held block item, returns `PASS` so the held block can

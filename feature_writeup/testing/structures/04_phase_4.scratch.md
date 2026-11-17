@@ -80,7 +80,7 @@
 | ST-46 | PASSED | `[structure-biome-rules] off in CEConfig` |
 | ST-37 | PASSED | `[structure-frequency] off in CEConfig ...`, no below-1 roll line |
 | ST-38 | PASSED | report warning "pool tuning is off"; 24 of 25 generated plains villages have Create Dynamic Village houses |
-| ST-55 | PASSED | earth fill off: 0 [earth-fill] lines over 18 new starts, nothing cancelled; villages exist with it on (Phase 3) |
+| ST-55 | PASSED | earth fill off: 0 [earth-fill] lines over 18 new starts, nothing canceled; villages exist with it on (Phase 3) |
 | ST-75 | PASSED | `0 meta structure(s) (22 left out)` + WARN; report marks metas "not built: switched off"; no meta start in new chunks |
 | ST-60 | PASSED | earth/water fill off: 0 [water-fill] lines in new chunks; on (log ALL): lines only for tagged Hopo structures, none for a Better Jungle Temple in the same area |
 | ST-65 | PARTLY | TA off: own beard flattens the ring (550 vs 153, 559 vs 363 columns at floor height); templateTrim=false part not run ([game]) |

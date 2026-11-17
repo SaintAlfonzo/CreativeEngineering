@@ -277,7 +277,7 @@ vanilla composter: same chance table, hoppers, comparator, bone meal output.
   same list as the Create saw shapes). Bamboo, Botania and other woods keep the plain composter through
   `composter_other_slabs`.
 - **Farmer job site:** vanilla ties the farmer's job site to `Blocks.COMPOSTER` (the `PoiTypes.FARMER` states), and
-  the farmer's `WorkAtComposter` behaviour checks `is(Blocks.COMPOSTER)` (from vanilla source, not checked against a
+  the farmer's `WorkAtComposter` behavior checks `is(Blocks.COMPOSTER)` (from vanilla source, not checked against a
   mapped jar). So variants would **not** be job sites, and farmers wouldn't compost into them. Recommend shipping them
   as non-job-site blocks first and noting it in the tooltip or the writeup. If wanted later, it takes a patcherMod
   mixin on how the FARMER POI matches states (Forge 1.19.2 builds `PoiTypes` state lookups from each `PoiType`'s

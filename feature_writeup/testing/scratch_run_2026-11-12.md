@@ -39,7 +39,7 @@ Scratch servers get COPIES of the build jars.
 - 21:18 RUNNER.md claimed. No game JVM, 21 GB free. Perf session r1112 open.
 - 21:20 rp boot 1 CRASHED in mod loading: `Mod solraspberrypie requires solapplepie 2.2.0, Currently, solapplepie is
   1.19.2-2.2.0` (Apple Pie's jar version is `1.19.2-2.2.0`; the range `[2.2.0]` never matches). Blocks the pack's
-  client and server too. Fix (boot metadata only, no behaviour change): `mods.toml` range `[1.19.2-2.2.0]`.
+  client and server too. Fix (boot metadata only, no behavior change): `mods.toml` range `[1.19.2-2.2.0]`.
   Rebuilt 21:21, rebooted: Done, `Diet ladder: 38 rungs, 5 slots, 14 pool effects`.
 - 21:23 rp1.qb: SQ-RP-01, -02 PASS, -05, -06 judged PASS (below). Apple Pie's `solapplepie:food_book` recipe is
   already removed: `diet_log.js` loads from the pack's `kubejs/data/creativedelight/kubejs/` folder, so SQ-RP-06 (now SQ-RPI-06)'s
@@ -64,7 +64,7 @@ Scratch servers get COPIES of the build jars.
 - 22:14 hhg boot (Loading Protection protectionDuration 1 in srv config): hh_gear.qb, then rowtext.qb (SQ-HH-412,
   -1524, -1529, -1590, SQ-OB-03 with the corrected ids).
 - 22:25 hh_gear.qb LOOK 25 judged by a subagent (`perf/runs/r1112/verdicts/hhg.md`): PASS 21, FAIL 1 (1555), BATCH-FAULT
-  2 (1540 expect 3 vs 2 with a hoe at Damage 248, behaviour right; 1524 recipe ingredients not printed by `zq makes`),
+  2 (1540 expect 3 vs 2 with a hoe at Damage 248, behavior right; 1524 recipe ingredients not printed by `zq makes`),
   INCONCLUSIVE 1 (1534). rowtext.qb: SQ-HH-412, -1590, SQ-OB-03 PASS; -1529 rejudged (below).
 - 22:26 bw boot (normal world seed 8675309, `zq_heapcol.js`): Done 82.5 s; b_vh.qb.
 - 22:30 b_vh.qb: SQ-VH-06, SQ-OB-04 LOOK (judged below). SQ-OB-09 found no rabbit at all: every summoned animal

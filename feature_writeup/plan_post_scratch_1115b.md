@@ -1,6 +1,6 @@
 # Post-scratch plan 2: pass-through rework (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=b707ced72bf0 -->
+<!-- generated:status_index begin open_work sha1=6046a23d5992 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 16 open TODO rows (Planned 9, In Progress 1, Testing 6), 0 Complete.
 
 | Id | Status | Tests | Change |
@@ -17,8 +17,8 @@
 | `tooling/scratch-1115-follow-ups-2 #7` | In Progress | S C | Broken config switches (timing, denseWalk, wthit passThrough) |
 | `tooling/scratch-1115-follow-ups-2 #1` | Testing | S | Cobweb fall distance reset |
 | `tooling/scratch-1115-follow-ups-2 #2` | Testing | S | Stopped break-group projectiles break as a fallback |
-| `tooling/scratch-1115-follow-ups-2 #3` | Testing | S P | Neighbour model: 4 sides for crops, 6 faces for webs, dense 3 / 3, surrounded 6 |
-| `tooling/scratch-1115-follow-ups-2 #4` | Testing | S P | Neighbour count cached per block; recount only on break or place |
+| `tooling/scratch-1115-follow-ups-2 #3` | Testing | S P | Neighbor model: 4 sides for crops, 6 faces for webs, dense 3 / 3, surrounded 6 |
+| `tooling/scratch-1115-follow-ups-2 #4` | Testing | S P | Neighbor count cached per block; recount only on break or place |
 | `tooling/scratch-1115-follow-ups-2 #5` | Testing | S C | Layer height blocks: leaf piles, ash, snow slow by height |
 | `tooling/scratch-1115-follow-ups-2 #6` | Testing | S C | Solid threshold for leaf piles (default 2 stages below full) |
 <!-- generated:status_index end open_work -->
@@ -35,7 +35,7 @@ Test rows: "SQ-PS15B" at the end of [scratch_queue.md](testing/scratch_queue.md)
 two D questions (section "Open"); D0 dump and E2's `/cdevreload compat` built in Devtools 15:50 (not run). Live checks: SQ-PS15B-01 to -12,
 SQ-PTH-25c, -28c, CQ-PS15B-01, -02.
 
-Order: A (bug fix, independent), B (projectile fallback, independent), C (neighbour model, the big change), D (layer
+Order: A (bug fix, independent), B (projectile fallback, independent), C (neighbor model, the big change), D (layer
 heights, builds on C's config shape), E (config switches). C changes the config tables, so D and E follow it.
 
 ## A. Cobweb fall distance reset (SQ-PTH-03)
@@ -72,7 +72,7 @@ and on) and hung there, never breaking; the pearl never teleported.
   (PassValues format 2). Harness: SQ-PTH-11 snowball breaks on web tick 6 (stalls on 4), 0 = off, moving resets the
   count, hovering pearl breaks on its 3rd stalled tick. Live: SQ-PS15B-02.
 
-## C. Neighbour counting: fewer cells, cached per block
+## C. Neighbor counting: fewer cells, cached per block
 
 Owner decisions (2026-11-15). Today: crops count a ring of 8 (same layer), webs a cube of 26, dense at `denseFrom` 6,
 surrounded at 26 of 26, recomputed on every evaluation (SQ-PTH-25: web cube 2029 ns against a 1000 ns budget; SQ-PTH-28:
@@ -96,19 +96,19 @@ surrounded at 26 of 26, recomputed on every evaluation (SQ-PTH-25: web cube 2029
 
 ### C2. Bake the count into the block, recheck only on change
 
-- Each counted block keeps its neighbour count in a cache keyed by block position (per level), computed once on first
+- Each counted block keeps its neighbor count in a cache keyed by block position (per level), computed once on first
   use. It is **not** recomputed per tick.
-- Invalidate (recount the block and its counted neighbours) only when a neighbour is **broken or planted/placed**:
+- Invalidate (recount the block and its counted neighbors) only when a neighbor is **broken or planted/placed**:
   block place, block break, explosion and piston/fluid replacement events, and `neighborChanged` for tier blocks.
 - **Auto-harvest and replant do not invalidate.** A crop reset to age 0 by harvest (Create harvester, farmer, right-click
   harvest) is a state change of the same block, not a break or a place; the hook must key on the block type changing,
   not on the state changing. Tier membership, not growth, is what counts.
-- Growth rule vs neighbours: a freshly planted crop **counts as a neighbour** even below its growth stage. Slowdown on a
+- Growth rule vs neighbours: a freshly planted crop **counts as a neighbor** even below its growth stage. Slowdown on a
   block applies only if that block itself is at the growth level its tier asks for (`growth` HALF / TALL_HALF). So a
   young crop next to a grown one adds to the grown one's density but is not slowed itself.
 - Storage: **saved in chunk data** (owner, 2026-11-15). A chunk capability on `LevelChunk`, attached with
   `AttachCapabilitiesEvent<LevelChunk>` (never a mixin on `CapabilityProvider`: see memory
-  mixin-capabilityprovider-crash) and serialised into the chunk NBT. Sparse: one entry per counted block
+  mixin-capabilityprovider-crash) and serialized into the chunk NBT. Sparse: one entry per counted block
   (packed chunk-local position to count, 3 bits), only for tier blocks of a tier with density, so field-sized chunks stay
   small. Entries for a block that is gone are dropped on the invalidating event and on save. A chunk with no entry for a
   tier block (older world, first load after the update) is counted once on first use and written back; the data is
@@ -135,7 +135,7 @@ capability `creativecompat:pass_counts` via `AttachCapabilitiesEvent<LevelChunk>
 hash as data version, entries of gone blocks left out on save; client copy unsaved), `PassChunkHolder` +
 `mixin/LevelChunkPassMixin` (field on the chunk; RETURN of `setBlockState`, which covers place, break, explosion,
 piston, fluid and the client's block update packets). Keyed on the **tier** at the position changing (harvest,
-replant and growth keep counts; a same-tier swap too). Chunk load drops its edge entries and the loaded neighbours'
+replant and growth keep counts; a same-tier swap too). Chunk load drops its edge entries and the loaded neighbors'
 facing edges (client: the whole set). Deviation: a shape change (SIDES / FACES) is caught per entry (shape bit) rather
 than by a set-wide version; same effect, no mass discard. The per-tick `PassCountCache` is no longer read by movement;
 its `clear()` (the bench's cold cases) now makes every chunk recount. Harness: count data, keying, growth rule.
@@ -248,7 +248,7 @@ Rows SQ-TX-18, CQ-TXR-01; SQ-PS15B-12 can run on this build.
 
 ## Writeups and docs to update
 
-plan_passthrough.md (sections 1, 2, 3.1, 4.3, 5, 7, 10: neighbour model, layer model, break fallback, perf numbers),
+plan_passthrough.md (sections 1, 2, 3.1, 4.3, 5, 7, 10: neighbor model, layer model, break fallback, perf numbers),
 blockrunner.md 3.10, the pass-through tooltip text in `PassThroughFormat`, [TODO.md](todo/TODO.md) family
 "Scratch 1115 Follow-ups 2". Player changelog bullets in
 `kubejs/assets/creativecompat/changelog/unreleased.md` per CLAUDE.md under a pass-through family: web and crop

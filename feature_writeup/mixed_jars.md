@@ -24,7 +24,7 @@
 | Layers drawn per item (placed jar, jar item) | BUILT 2026-10-21 | `mixin/SupplementariesJarRendererMixin`, `mixin/SupplementariesJarItemRendererMixin` (client) |
 | Jar item tooltip, one line per kind | BUILT 2026-10-21 | `mixin/SupplementariesJarItemTooltipMixin` |
 | WTHIT "Contents" line lists kinds | BUILT 2026-10-21 | `compat/WthitHolderContents` ([wthit_lines.md](wthit_lines.md) 2.3) |
-| Every soup and stew as a jar soft fluid (section 9) | built, scratch server PASSED 2026-10-22 (SQ-MJ-01, SQ-MJ-02: registry, pour in and out, containers; data, KubeJS tree); in game: colours and WTHIT (MJ-11, MJ-12) | `kubejs/data/creativeengineering/moonlight/soft_fluids/`, `tools/gen_soup_soft_fluids.py` |
+| Every soup and stew as a jar soft fluid (section 9) | built, scratch server PASSED 2026-10-22 (SQ-MJ-01, SQ-MJ-02: registry, pour in and out, containers; data, KubeJS tree); in game: colors and WTHIT (MJ-11, MJ-12) | `kubejs/data/creativeengineering/moonlight/soft_fluids/`, `tools/gen_soup_soft_fluids.py` |
 
 Scratch server 2026-10-21: `/jartest` 18 pass, 0 fail (server side: tags, storage, item handler, comparator, old jars,
 jar item). patcherMod jar installed in `mods/` 2026-10-21. In game: MJ-01 to MJ-10 pending (rendering, tooltip, WTHIT are
@@ -152,29 +152,29 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-JFP-03, -04, -05; rerun pending (batch fault) SQ-JFP-01, -02.
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-JFP-01, -02.
 
-- [ ] **MJ-01 Cookies mix:** right-click an empty jar with a cookie, a lemon cookie, a golden cookie → three layers,
+- [ ] **MJ-01 Cookies mix:** right-click an empty jar with a cookie, a lemon cookie, a golden cookie -> three layers,
   each its own cookie, in that order.
-- [ ] **MJ-02 Other family refused:** jar with cookies, right-click with an apple → nothing goes in.
-- [ ] **MJ-03 Take top:** empty hand on the MJ-01 jar → you get the golden cookie, then the lemon cookie.
+- [ ] **MJ-02 Other family refused:** jar with cookies, right-click with an apple -> nothing goes in.
+- [ ] **MJ-03 Take top:** empty hand on the MJ-01 jar -> you get the golden cookie, then the lemon cookie.
 - [ ] **MJ-04 Each family:** a jar each of candied apples (caramel + honeyed apple), candied berries (two glazed
   berries), candies (candy cane + honey candy), marshmallows, chocolate bars, apples, berries (sweet berries + a
-  grape), dried fruit → each mixes, and an item from another family is refused.
+  grape), dried fruit -> each mixes, and an item from another family is refused.
 - [ ] **MJ-05 Every cookie jarable:** each cookie in the cookies row of section 2 goes into an empty jar and stacks to
   12 (was BG-J1 in the brief).
 - [ ] **MJ-06 Look:** the MJ-04 jars render layer by layer; apples and bars look acceptable stacked flat.
-- [ ] **MJ-07 Jar item:** break the MJ-01 jar → the item shows the three layers in hand and in the inventory, the
-  tooltip reads "Cookie x1 / Lemon Cookie x1 / Golden Cookie x1"; place it again → same layers.
-- [ ] **MJ-08 WTHIT:** look at a mixed jar → "Contents: 1 Cookie, 1 Lemon Cookie, 1 Golden Cookie (3 / 12)"; a one-kind
-  jar → "Contents: Cookie (5 / 12)".
-- [ ] **MJ-09 Hopper:** a hopper with 20 mixed cookies above an empty jar → the jar fills to 12 in order; a
+- [ ] **MJ-07 Jar item:** break the MJ-01 jar -> the item shows the three layers in hand and in the inventory, the
+  tooltip reads "Cookie x1 / Lemon Cookie x1 / Golden Cookie x1"; place it again -> same layers.
+- [ ] **MJ-08 WTHIT:** look at a mixed jar -> "Contents: 1 Cookie, 1 Lemon Cookie, 1 Golden Cookie (3 / 12)"; a one-kind
+  jar -> "Contents: Cookie (5 / 12)".
+- [ ] **MJ-09 Hopper:** a hopper with 20 mixed cookies above an empty jar -> the jar fills to 12 in order; a
   comparator next to it reads 15. An apple in the hopper stays there.
 - [ ] **MJ-10 Old jar:** a cookie jar filled before this update (one kind, 5 cookies) still shows 5 and gives 5 back.
-- [ ] **MJ-11 Soup in, soup out** (counts: scratch server PASSED 2026-10-22, SQ-MJ-02; client: the colour and the WTHIT line): right-click an empty jar with a bowl of Corn Soup → soup-coloured liquid, one bowl
-  back in hand; right-click with an empty bowl → Corn Soup. Six bowls fill it; a seventh stays in hand. WTHIT reads
+- [ ] **MJ-11 Soup in, soup out** (counts: scratch server PASSED 2026-10-22, SQ-MJ-02; client: the color and the WTHIT line): right-click an empty jar with a bowl of Corn Soup -> soup-colored liquid, one bowl
+  back in hand; right-click with an empty bowl -> Corn Soup. Six bowls fill it; a seventh stays in hand. WTHIT reads
   "Contents: Corn Soup (2 / 12)" after one bowl.
-- [ ] **MJ-12 Every soup** (in and out: scratch server PASSED 2026-10-22, SQ-MJ-01 / SQ-MJ-02, all 24 as themselves; client: the colours): each soup in section 9 goes into an empty jar, and each shows a colour close to its texture
-  (none black, purple-black or grey). Golden and Enchanted Golden soups come back out as the same item.
-- [x] **MJ-13 Shulker bowl only** (scratch server PASSED 2026-10-22, SQ-MJ-02; nothing client-only): Chorus Stew into a jar, one bowl → the shulker bowl comes back; an empty wooden
+- [ ] **MJ-12 Every soup** (in and out: scratch server PASSED 2026-10-22, SQ-MJ-01 / SQ-MJ-02, all 24 as themselves; client: the colors): each soup in section 9 goes into an empty jar, and each shows a color close to its texture
+  (none black, purple-black or gray). Golden and Enchanted Golden soups come back out as the same item.
+- [x] **MJ-13 Shulker bowl only** (scratch server PASSED 2026-10-22, SQ-MJ-02; nothing client-only): Chorus Stew into a jar, one bowl -> the shulker bowl comes back; an empty wooden
   bowl on the jar does nothing; an empty shulker bowl takes the Chorus Stew out and the jar is empty again (2 units in,
   2 out, no extra stew).
 - [ ] **MJ-14 Bottle soup** (one bottle: scratch server PASSED 2026-10-22, SQ-MJ-02; 12 bottles: client): a Bayberry Soup bottle pours 1 unit (12 bottles fill a jar); an empty glass bottle takes
@@ -186,9 +186,9 @@ item keeps layers). Rendering, tooltip and WTHIT need a client (section 7).
 - 2026-10-23: 8 more soup fluids (Veggies, Vintage) and 5 hand-written drink fluids; the generator keeps the
   hand-written ones (its delete pass would have removed `nut_milk.json`). Not run in game (VTD-53).
 - 2026-10-22: soups and stews in jars (section 9, TODO `dishes/ingredients #13`): 24 generated soft fluids, own
-  colour each. Data only; not tested in game (MJ-11 to MJ-14).
+  color each. Data only; not tested in game (MJ-11 to MJ-14).
 - 2026-10-22 (doc audit): soups in jars not run yet; scratch checks queued (SQ-MJ-01, SQ-MJ-02,
-  `tools/food_drinks_probe/food_drinks_probe.js`, `/fdtest soupjar`), colours and WTHIT stay in game.
+  `tools/food_drinks_probe/food_drinks_probe.js`, `/fdtest soupjar`), colors and WTHIT stay in game.
 - 2026-10-22 (second bulk run): SQ-MJ-01, SQ-MJ-02 PASS on the scratch server (24 soups; the first try failed only
   because Moonlight's soft-fluid map is empty before a player joins, probe fixed). MJ-13 done; MJ-11, MJ-12, MJ-14
   client halves stay in game.
@@ -221,11 +221,11 @@ liquid, `equivalent_fluids`) and Fermented Garlic Honey. Vintage's own jar conte
 
 **Generator:** `python3 tools/gen_soup_soft_fluids.py` (`/cdevgen run soup_soft_fluids`, reads `/dumpfood`'s
 foods.json for each item's empty container) writes one json per uncovered soup and deletes stale ones; the folder is
-the tool's, except the `HAND_WRITTEN` drink files. A soup a mod already covers is skipped (its colour stays the mod's). New soups: put the key in the soup
+the tool's, except the `HAND_WRITTEN` drink files. A soup a mod already covers is skipped (its color stays the mod's). New soups: put the key in the soup
 type in food_types.json and rerun. Applies on `/reload`.
 
-**Colour:** each soup its own, decided 2026-10-22 (not one shared soup colour). The tool takes the largest
-one-colour patch of the item texture that is not the bowl's colours; `COLOR_OVERRIDE` in the tool fixes the eight
+**Colour:** each soup its own, decided 2026-10-22 (not one shared soup color). The tool takes the largest
+one-color patch of the item texture that is not the bowl's colors; `COLOR_OVERRIDE` in the tool fixes the eight
 where that picked garnish, shadow or a gold bowl (acacia blossom, bone broth, blazing chili, chorus, endermite,
 sinigang, both golden mushroom stews). Contact sheet checked against the textures.
 
@@ -251,11 +251,11 @@ Moonlight soft-fluid tank block entity: the jar and the goblet. Any Forge fluid 
 
 Tests (in game; server half in the scratch queue, SQ-JFP-):
 
-- [ ] **MJ-15 Pump in:** Create pump from a water tank into an empty jar → the jar fills to 12 bottles and stops; a
+- [ ] **MJ-15 Pump in:** Create pump from a water tank into an empty jar -> the jar fills to 12 bottles and stops; a
   glass bottle on it gives water bottles.
-- [ ] **MJ-16 Pump out:** jar of 12 honey bottles, pump pulling from it into a Fluid Tank → the tank gets 3000 mB of
+- [ ] **MJ-16 Pump out:** jar of 12 honey bottles, pump pulling from it into a Fluid Tank -> the tank gets 3000 mB of
   honey, the jar empties.
-- [ ] **MJ-17 Potion:** Spout or pump of Create potion fluid (Swiftness) into a jar → bottles out are Potions of
+- [ ] **MJ-17 Potion:** Spout or pump of Create potion fluid (Swiftness) into a jar -> bottles out are Potions of
   Swiftness; a jar filled with Swiftness by hand also takes the piped Swiftness.
-- [ ] **MJ-18 Refused:** jar holding cookies next to a pumping pipe → nothing goes in; jar of soup → a pump pulls
+- [ ] **MJ-18 Refused:** jar holding cookies next to a pumping pipe -> nothing goes in; jar of soup -> a pump pulls
   nothing.

@@ -11,14 +11,14 @@ pile rule already live). Follow-up: swim speed audit, TODO `gameplay/blockrunner
 
 1. One system sets, per block, how fast you **walk through** it (horizontal) and **fall through** it (vertical), for
    every block you stand *in* rather than *on*: no collision box (grass, crops, ropes, cobwebs, leaf piles, bushes).
-2. Some blocks slow more when **dense**: enough neighbours of the same kind around them.
+2. Some blocks slow more when **dense**: enough neighbors of the same kind around them.
 3. The Immersive Weathering leaf pile rule moves into this system (today it is a one-off mixin).
-4. Cobwebs and barbed wire are reworked (section 4); items and projectiles get web behaviour (sections 4.2, 5).
-5. The WTHIT Run Speed line shows the combined walking speed (with the soil), the fall speed and a neighbour counter.
+4. Cobwebs and barbed wire are reworked (section 4); items and projectiles get web behavior (sections 4.2, 5).
+5. The WTHIT Run Speed line shows the combined walking speed (with the soil), the fall speed and a neighbor counter.
 6. No walking speed change from BlockRunner or this system changes the field of view.
 
 Non-goals: blocks you stand *on* (stays BlockRunner tiers); swimming (left alone, audited in `#11`); powder snow,
-bamboo spikes and Create crushing wheels (they keep their own behaviour; the WTHIT line keeps showing them through
+bamboo spikes and Create crushing wheels (they keep their own behavior; the WTHIT line keeps showing them through
 `StuckInBlock`).
 
 ## Owner rulings (2026-11-14)
@@ -27,10 +27,10 @@ Plants:
 - Every planted crop: **0.75** walk. Short crops slow only from **half grown**.
 - **Tall crops** slow as soon as their **lower block is half grown** (both blocks). A tall crop with no half-grown
   one-block stage slows as a whole, always.
-- Dense crops: **0.50** at **6 or more** neighbours (ring): corn, hemp, rice, oats, wheat, tomatoes on vines, ropes
+- Dense crops: **0.50** at **6 or more** neighbors (ring): corn, hemp, rice, oats, wheat, tomatoes on vines, ropes
   and sticks. Rice: the top block (panicles) slows walking like a tall crop; **swimming is never slowed**.
 - Farmer's Respite coffee stem: a normal crop.
-- **Vines**: their own tier for **every vine**, 0.75; they keep their usual vine behaviour and slow you only while you
+- **Vines**: their own tier for **every vine**, 0.75; they keep their usual vine behavior and slow you only while you
   **move horizontally through the vine's hitbox**.
 - **Wild crops: 0.75.**
 - 2-tall plants (tall grass, large fern, Biomes O' Plenty eyebulb, double flowers): **0.75**, no density.
@@ -40,10 +40,10 @@ Plants:
 Ropes and falling (revised 2026-11-14, fourth pass):
 - Rope: **0.75 walk**, no fall or descent slowdown (vanilla ladder rules), no density.
 - A fall slowdown also **scales the fall distance** that counts for fall damage, by its factor per block passed (webs).
-- **Vines** (every vine): **0.75**, only while moving horizontally through the vine; vine behaviour otherwise unchanged.
+- **Vines** (every vine): **0.75**, only while moving horizontally through the vine; vine behavior otherwise unchanged.
 
 Cobwebs and barbed wire (one tier):
-- Speeds as proposed (0.50 walk / 0.85 fall; dense 0.35 / 0.20); neighbours in the full **3x3x3**; dense from **6**;
+- Speeds as proposed (0.50 walk / 0.85 fall; dense 0.35 / 0.20); neighbors in the full **3x3x3**; dense from **6**;
   dense **resets fall damage**; 26 of 26 **stops falling**. **Climbing and descending match the slowdown.**
 - "Surrounded" counts when **any** web cell the entity overlaps is surrounded.
 - **Items stop in every web**, even a single one, at a random point along their path through it.
@@ -138,7 +138,7 @@ A **pass-through tier** is a block tag `blockrunner:passthrough/<tier>` (filled 
 | `fall` | multiplier on downward speed each tick, and on fall distance per block passed | 0.0-1.0 |
 | `growth` | `any`, `half` (own block half grown) or `tall_half` (lower block half grown, section 1.1) | enum |
 | `neighbours` | `none`, `sides` (the 4 side-adjacent cells, same layer) or `faces` (the 6 face-adjacent cells); was `ring` (8) / `cube` (26) until 2026-11-15, an old file is migrated | enum |
-| `denseFrom` | neighbour count at which the dense values apply (default 3) | 1-6 |
+| `denseFrom` | neighbor count at which the dense values apply (default 3) | 1-6 |
 | `surroundedAt` | count that makes a `surrounded = web` block surrounded, clamped to the shape's max (default 6) | 1-6 |
 | `denseWalk`, `denseFall` | values once dense | as above |
 | `denseResetsFall` | fall damage resets every tick while dense | bool |
@@ -152,8 +152,8 @@ Plus `[surface.passthrough] enabled` (master switch, also used by the benchmark)
 default 3). The layer tier's table `[surface.passthrough.layers]` has its own keys (section 2.1): `layerMaxSlow`,
 `solidBelowFull`, `minLayers`, `solidBelowFullOverrides`, `fall`, `depthStriderPasses`.
 
-**Neighbours** are blocks in the **same tier tag** (rice and rice panicles count for each other; cobweb, reinforced
-cobweb and barbed wire count for each other). Solid blocks never count. A neighbour counts whatever its growth: a
+**Neighbors** are blocks in the **same tier tag** (rice and rice panicles count for each other; cobweb, reinforced
+cobweb and barbed wire count for each other). Solid blocks never count. A neighbor counts whatever its growth: a
 freshly planted crop adds density to a grown one, but is itself slowed only once it passes its own growth rule.
 Sides (since 2026-11-15, plan_post_scratch_1115b.md C1): a field's inside has 4, an edge 3, a corner 2, so 3+ means
 "inside the field or on its edge, not a corner". Faces: a web with webs on 3 of its 6 faces is dense; all 6 (open
@@ -163,7 +163,7 @@ neither above nor below) is surrounded.
 use, kept in a chunk capability (saved on the server, one entry per counted block; the client keeps its own unsaved
 copy), dropped only when a block of another tier replaces one in or next to the cell (break, plant, place,
 explosion, piston, fluid). Harvest and replant (age reset of the same block) keep them. A chunk that loads drops its
-edge entries and its loaded neighbours' facing ones; a tag reload makes every chunk recount.
+edge entries and its loaded neighbors' facing ones; a tag reload makes every chunk recount.
 
 **Which block counts:** each tick, every tier block whose cell the entity's box overlaps (deflated 1e-7, like vanilla)
 and whose **outline shape** the box touches, and that passes its growth rule. Several blocks at once (feet in corn,
@@ -195,7 +195,7 @@ and leaf pile = foxes and bees (vanilla and IW rules, kept). Every other mob, vi
 - **Fall:** if moving down, `dy x= fall` each tick. **Fall distance:** multiplied by `fall` **once per tier block the
   entity passes through** (entering a new cell), not every tick, so falling through one lone web gives x0.85, through
   three webs about x0.61. Dense with `denseResetsFall`: `fallDistance = 0` every tick.
-- **Neutralise the old slowdown:** a mixin on `Entity#makeStuckInBlock` (`m_7601_`) at HEAD cancels the call when the
+- **Neutralize the old slowdown:** a mixin on `Entity#makeStuckInBlock` (`m_7601_`) at HEAD cancels the call when the
   state is in any pass-through tier. One hook covers vanilla, IW, Twigs, berry bushes, webs and barbed wire; their
   other `entityInside` effects (berry, thorn and wire damage) stay.
 
@@ -216,7 +216,7 @@ by the item's normal position updates.
 
 ## 2. Tiers
 
-| Tier | Members | walk | fall | growth | Neighbours | Dense from | denseWalk / denseFall | Other |
+| Tier | Members | walk | fall | growth | Neighbors | Dense from | denseWalk / denseFall | Other |
 |---|---|---|---|---|---|---|---|---|
 | `dense_crop` | corn, IE hemp, FD rice + rice panicles, Vintage Delight oats, wheat, tomatoes (FD tomatoes and budding tomatoes, Supplementaries rope and stick tomatoes, Creative Delight treated stick tomatoes) | 0.75 | 1.00 | `tall_half` (wheat: `half`) | sides (was ring) | 3 of 4 (was 6 of 8) | 0.50 / 1.00 | rice base is in water: wading drag |
 | `crop` | every other planted crop (`#minecraft:crops` and modded crop blocks minus `dense_crop`), Farmer's Respite coffee stem | 0.75 | 1.00 | `half` (coffee: `tall_half`) | none | | | |
@@ -259,7 +259,7 @@ Copycats layers.
   `surface/PassConfigMigration` (after `LeafPileMigration`) drops `[surface.passthrough.leaf_pile]` and carries its
   edited values into `[surface.passthrough.layers]` (`minLayers` unless the old default 4, `fall`,
   `depthStriderPasses`, `walk` as `layerMaxSlow`).
-- IW's `leaf_piles_slow` no longer matters (its `makeStuckInBlock` is cancelled); say so in creative_compat.md.
+- IW's `leaf_piles_slow` no longer matters (its `makeStuckInBlock` is canceled); say so in creative_compat.md.
 - IW spruce thorns (6+ layers) stay IW's.
 
 ### 3.2 Ropes
@@ -272,7 +272,7 @@ Copycats layers.
 ## 4. Cobwebs and barbed wire
 
 ### 4.1 Mobs and players
-Vanilla's slowdown is cancelled by the generic hook. Instead (barbed wire the same, plus its damage):
+Vanilla's slowdown is canceled by the generic hook. Instead (barbed wire the same, plus its damage):
 - Up to 2 of the 6 face neighbours: walk 0.50, fall 0.85 (a small vertical drag; fall distance x0.85 per web passed;
   vanilla's fast-fall reset clip leaves such webs out, scratch fixes 2026-11-15).
 - 3 or more: walk 0.35, fall 0.20, fall damage reset every tick.
@@ -305,17 +305,17 @@ Vanilla's slowdown is cancelled by the generic hook. Instead (barbed wire the sa
 
 ## 5. Projectiles
 
-### 5.1 Behaviour groups
-Each projectile gets one behaviour, chosen by an entity-type tag `creativecompat:passthrough/projectile/<group>`; with
+### 5.1 Behavior groups
+Each projectile gets one behavior, chosen by an entity-type tag `creativecompat:passthrough/projectile/<group>`; with
 no tag, a default by its base class (arrow-like -> `hang`, throwable -> `break`, self-propelled -> `break`, other ->
 `slow`). Everything except `exempt` takes the web slowdown (whole velocity x `walk`, plus x `fall` downward; dense
 values when dense) in every web. The group decides what happens in a **surrounded** web (`snag`: in **any** web):
 
 | Group | What happens | Members |
 |---|---|---|
-| `break` | in a surrounded web, breaks **in the middle** of the web block: the impact is run as a block hit at the cell centre, as if the web were a full block. Fallback (plan_post_scratch_1115b.md B): stopped in **any** web (under 0.05 b/t for `breakStallTicks` ticks in a row, default 3, 0 = off), the impact runs **where it stopped** (an ender pearl teleports there), then it is discarded | snowball, fireballs (small, large, dragon), wither skull, llama spit, shulker bullet, ender pearl; eggs (vanilla, Untitled Duck Mod, Alex's Mobs emu and cockroach, Quark parrot); Twigs pebble; Supplementaries bomb, thrown brick, slingshot shot; Alex's Mobs tossed item and enderiophage rocket; Botania vine ball, magic missile; PneumaticCraft micromissile and vortex; Immersive Petroleum molotov; Creative Compat shrapnel; Farmer's Delight rotten tomato; Hearth and Harvest manure; Canned Goods Mini Fizz; Create Misc and Things Blaze Ballon fire |
-| `settle` | in a surrounded web, loses all horizontal motion, moves to the cell's centre line and **sinks slowly** (dense fall speed) down the middle; breaks when it hits a block or leaves the webs and lands | thrown potions (splash, lingering); experience bottle; Create Enchantment Industry hyper experience bottle; Splash Milk bottle; Botania ender air bottle |
-| `snag` | in **any** web, stuck in the middle of the web block it entered (centre of the cell), held until pulled back, picked up or the web breaks | fishing bobber; Domestication Innovation feather on a stick; Quark pickarangs (all kinds); Botania thorn chakram |
+| `break` | in a surrounded web, breaks **in the middle** of the web block: the impact is run as a block hit at the cell center, as if the web were a full block. Fallback (plan_post_scratch_1115b.md B): stopped in **any** web (under 0.05 b/t for `breakStallTicks` ticks in a row, default 3, 0 = off), the impact runs **where it stopped** (an ender pearl teleports there), then it is discarded | snowball, fireballs (small, large, dragon), wither skull, llama spit, shulker bullet, ender pearl; eggs (vanilla, Untitled Duck Mod, Alex's Mobs emu and cockroach, Quark parrot); Twigs pebble; Supplementaries bomb, thrown brick, slingshot shot; Alex's Mobs tossed item and enderiophage rocket; Botania vine ball, magic missile; PneumaticCraft micromissile and vortex; Immersive Petroleum molotov; Creative Compat shrapnel; Farmer's Delight rotten tomato; Hearth and Harvest manure; Canned Goods Mini Fizz; Create Misc and Things Blaze Ballon fire |
+| `settle` | in a surrounded web, loses all horizontal motion, moves to the cell's center line and **sinks slowly** (dense fall speed) down the middle; breaks when it hits a block or leaves the webs and lands | thrown potions (splash, lingering); experience bottle; Create Enchantment Industry hyper experience bottle; Splash Milk bottle; Botania ender air bottle |
+| `snag` | in **any** web, stuck in the middle of the web block it entered (center of the cell), held until pulled back, picked up or the web breaks | fishing bobber; Domestication Innovation feather on a stick; Quark pickarangs (all kinds); Botania thorn chakram |
 | `linger` | in a surrounded web, **stays** (stopped at the point it entered the surrounded cell) until its flight time ends, then explodes (if it has stars) or despawns | firework rocket |
 | `hang` | in a surrounded web, **hangs where it is** on that tick (5.3) | arrows, spectral and tipped arrows, tridents, Dragon Loot dragon trident, Nock Enough Arrows' 25 arrows, Neapolitan bananarrow, Alex's Mobs shark tooth arrow, Supplementaries rope arrow, Quark torch arrow, Hearth and Harvest thrown cleaver, horseshoe, pitchfork and thrown tools, Create Misc and Things neon tube |
 | `slow` | dense slowdown only, never stopped | Botania throwable copy (no caller found in Botania 440.2; kept slowed only); any future projectile with no tag and no matching default |
@@ -424,7 +424,7 @@ The count runs on the client against the looked-at block, once per WTHIT refresh
 
 ### 7.3 Real play (owner: needed)
 - Dev config `[debug.passthrough] timing` (off by default): every 200 ticks, logs the hook's total and maximum time,
-  the number of entities that were inside a tier block, and how many neighbour counts ran, on the server and the
+  the number of entities that were inside a tier block, and how many neighbor counts ran, on the server and the
   client separately.
 - The owner plays a normal session with it on (farm, village, a web build). `tools/perf/log_timings.py` (or a small
   new parser beside it) reads those lines from `logs/latest.log` and reports the share of tick time. A JFR recording
@@ -484,11 +484,11 @@ The count runs on the client against the looked-at block, once per WTHIT refresh
 ### Phase 7: close out
 - blockrunner.md 3.10 (model, tiers, ropes, cobwebs, items, projectiles, field of view, WTHIT, performance), section 4
   limits, file map, BR-67.. tests; creative_compat.md config table; mob_block_tweaks.md MT-25 points here.
-- Scratch queue rows (skill `scratch-test`): stuck slowdown cancelled for tiered blocks, items stick in a single web
+- Scratch queue rows (skill `scratch-test`): stuck slowdown canceled for tiered blocks, items stick in a single web
   and stay stuck after a restart, arrow hang and pickup, each projectile group in a surrounded web, config migration,
   synced values on join, the benchmark.
 - Player changelog family `## Walking through plants and webs`: arrows last 10 minutes (was 1), crops, dense crops, tall plants, canes, vines, ropes,
-  cobwebs and barbed wire (old behaviour in brackets), items in webs, projectiles in webs, no field of view change on
+  cobwebs and barbed wire (old behavior in brackets), items in webs, projectiles in webs, no field of view change on
   fast blocks; then `python3 tools/changelog_lint.py`.
 - Build `:creativeCompat:build` (and `:creativeDevtools:`), install when the game is closed, restart.
 
@@ -591,7 +591,7 @@ parser over the jars plus the 1.19.2 SRG client jar, walking superclasses to `Pr
   the phase 4 tags exist). Files in `development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/`:
   - new `surface/`: `PassTier` (11 tiers, defaults per section 2 + seventh pass, nested enums `Growth`, `Neighbours`,
     `Surround`, `ItemRule`, record `Values`), `PassRule` (one block: `cell(tier, values, neighbours)` -> `Cell`),
-    `PassResult` (per-entity tick: lowest walk / fall with tier, dense flag and neighbour count each, `surrounded` +
+    `PassResult` (per-entity tick: lowest walk / fall with tier, dense flag and neighbor count each, `surrounded` +
     `surroundedCell`, `resetFall`, `projectiles`, the counted cells), `PassMath` (growth, modifier, wading, fall,
     attribute / FOV math, `stickPoint` for 4.2), `PassGrowth`, `PassThrough`, `PassState` + `PassHolder` (per-entity
     state, duck interface on `Entity`), `PassOwner` (SecurityCraft owner pass by reflection on `IOwnable`),
@@ -605,14 +605,14 @@ parser over the jars plus the 1.19.2 SRG client jar, walking superclasses to `Pr
     `PassValues::onConfig` on the mod bus, login send, client logout reset).
   - API for phases 2, 3, 5: `PassThrough.evaluate(entity, PassValues.of(level.isClientSide), result)`,
     `PassThrough.state(entity, create).result` (this tick's result after the hook), `cellAt(level, pos, state,
-    values)` (one block, no entity: WTHIT), `tierOf`, `neighbours`, `grown`, `skipsEntity`, `exempt`, tag getters,
+    values)` (one block, no entity: WTHIT), `tierOf`, `neighbors`, `grown`, `skipsEntity`, `exempt`, tag getters,
     `MODIFIER_UUID`; `PassValues.tier(t)`, `.arrowLifeTicks`, `.arrowLongLifeCap`; `PassMath.stickPoint`.
   - Deviations: (1) per-block growth `any` (tomato segments, coffee) is a block tag
     `creativecompat:passthrough_growth_any` for phase 4 to fill, not a config key; (2) a different same-tier block
-    right below also makes a block "upper" under `tall_half` (rice panicles on rice); (3) neighbours count by tag
+    right below also makes a block "upper" under `tall_half` (rice panicles on rice); (3) neighbors count by tag
     only, no growth test; (4) fall distance: cells side by side on one layer are one block passed (lowest factor),
     each new layer multiplies; (5) wading drag assumes vanilla water keep 0.8 (0.9 sprinting), Depth Strider not
-    modelled; (6) `minLayers` range 1-9 (9 = never) so phase 3 can carry `slowFromLayers = 9`; (7) movement effects
+    modeled; (6) `minLayers` range 1-9 (9 = never) so phase 3 can carry `slowFromLayers = 9`; (7) movement effects
     only for living entities, but the stuck cancel covers every entity (items, orbs, bobbers, fireworks lose vanilla
     web slowdown once tagged: phase 2); (8) FOV: BlockRunner's `shouldRemoveBlockSpeedModifier` answers false except
     when `PassFov` asks, so only `PassFovMixin` recomputes (skips BlockRunner's UUID when BlockRunner would, ours
@@ -654,7 +654,7 @@ parser over the jars plus the 1.19.2 SRG client jar, walking superclasses to `Pr
     discards on the server if the projectile's own `onHit` did not; (8) `hang` also sets `shakeTime` 7 and clears crit
     like a vanilla block hit, no hit sound; an arrow that later falls and lands runs its block hit then; (9) a `hang`
     tag on a non-arrow acts as `slow`; (10) snag, linger and settle let go when the web cell is gone; the snag state is
-    not saved (a reloaded pickarang re-snags from the cell centre); the chakram's `tickCount` is held at 50 and a set
+    not saved (a reloaded pickarang re-snags from the cell center); the chakram's `tickCount` is held at 50 and a set
     return cleared; (11) arrow sets are lazy: join on the first despawn tick in a chunk, leave on
     `EntityLeaveLevelEvent`, stale members pruned when the set overflows; (12) climb and descend act through
     `handleOnClimbable` (land travel), so flying mobs only get the 0.35 walk; (13) torch arrow fix only matters with
@@ -768,7 +768,7 @@ parser over the jars plus the 1.19.2 SRG client jar, walking superclasses to `Pr
     `InsideBlocksMixin` times `PassThrough.afterInsideBlocks` while on; `PassThrough.neighbours` counts; server and
     client tick START/END listeners (client one registered on `Dist.CLIENT` only) log every 200 ticks
     `[passthrough-timing] side=<server|client> ticks calls total_us max_us inside inside_peak counts tick_us`.
-    `PassItems.pathStop(...)` split out of `afterInsideBlocks` (no behaviour change; the bench calls it).
+    `PassItems.pathStop(...)` split out of `afterInsideBlocks` (no behavior change; the bench calls it).
     `PassValues.refresh()` (rebuild the snapshot and re-send now).
   - Devtools: new `perf/PassBenchCommand` (registered in `CreativeDevtools` when `creativecompat` is loaded):
     `/cdevbench passthrough [calls]` (op 3, default 1,000,000, 20 batches, warmup max(10000, calls/5)), 10 cases
@@ -828,7 +828,7 @@ parser over the jars plus the 1.19.2 SRG client jar, walking superclasses to `Pr
     berry included) are left out too, so bushes never cancel fall damage (rebuilt 14:59, changelog bullet added).
     Climbables, water and dense webs keep vanilla's reset.
   - SQ-PTH-11 (owner ruling 2026-11-15): a `break` projectile slower than 0.05 b/t (after the tick's web slowdown) in
-    any web breaks at that web cell's centre (`PassProjectiles.BREAK_STALL_SPEED`, constant: a config key would need a
+    any web breaks at that web cell's center (`PassProjectiles.BREAK_STALL_SPEED`, constant: a config key would need a
     sync packet field). Other groups unchanged.
   - Performance (SQ-PTH-25, -28; plan 7.2 fallback): JFR of pt2 showed `tierOf`'s ConcurrentHashMap lookup as a third
     (PT01) to half (PT03) of the hook, and PT04's cost as the held items' own zero-length `Entity#move` (entity
@@ -856,7 +856,7 @@ parser over the jars plus the 1.19.2 SRG client jar, walking superclasses to `Pr
   section 7 "Phase 12" (jar copies in perf/runs/r1115/pth_jars2/: Compat 14:59, Devtools 14:39). The fixes for the
   phase 11 FAILs are built and headless-tested (226 OK) but not yet verified in game.
 - 2026-11-15 rework (plan_post_scratch_1115b.md A to E; Creative Compat 1.0.0, build/libs 2026-11-15 15:42, not
-  installed; carries another session's uncommitted Compat edits, e.g. `mixin/IPExitLiftMixin`). Neighbour model
+  installed; carries another session's uncommitted Compat edits, e.g. `mixin/IPExitLiftMixin`). Neighbor model
   sides 4 / faces 6, dense from 3, surrounded at 6 (`surroundedAt`); counts baked into the chunk (`PassCounts`,
   `PassCountData`, `mixin/LevelChunkPassMixin`, chunk capability `creativecompat:pass_counts`); layer tier `layers`
   (tag `creativecompat:passthrough_layers`, 2.1) replaces `leaf_pile`; `breakStallTicks` (5.1); sync message 1, format 2;

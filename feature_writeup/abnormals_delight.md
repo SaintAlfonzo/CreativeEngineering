@@ -34,7 +34,7 @@ smelting XP, and 4 Milk Bottles per bucket (all built). The rest is the 1.21 / F
 - `python3 tools/jar_diff.py` (530 -> 667 files; 416 added, 279 removed, 107 changed; en_us lang **+9 / -1 / ~0**). Most
   added / removed paths are the 1.21 folder renames (`recipes` -> `recipe`, `tags/items` -> `tags/item`) and recipes moved
   from `data/abnormals_delight/recipes/<mod>/` into the host mod's namespace.
-- Recipes compared semantically by type and result, after normalising 1.21 formats (`id` / `item`, `c:` / `forge:` tags,
+- Recipes compared semantically by type and result, after normalizing 1.21 formats (`id` / `item`, `c:` / `forge:` tags,
   `tool` as item ability, default cooking time, `recipe_book_tab`). Tags compared by value with the folder renames folded.
 - Both jars decompiled with Vineflower. `ADItems$ADFoods` compared line by line (SRG names mapped by hand).
   `ADEvents`, `ADConfig`, `ADItemTiers` / `ADTiers` read.
@@ -49,7 +49,7 @@ smelting XP, and 4 Milk Bottles per bucket (all built). The rest is the 1.21 / F
 
 | Change | Host mod | Proposed |
 |---|---|---|
-| 8 Copper Knives (plain, exposed, weathered, oxidized, and waxed of each), `WeatheringKnifeItem`; Caverns and Chasms copper tier (Stone tier without it); crafted from a copper block and a stick; oxidise and wax via C&C data maps | Caverns and Chasms | **postponed** (owner, 2026-10-25): part of the Caverns and Chasms port ([TODO.md](todo/TODO.md) ports #1); the copper tier and weathering belong to that port, the knives follow it |
+| 8 Copper Knives (plain, exposed, weathered, oxidized, and waxed of each), `WeatheringKnifeItem`; Caverns and Chasms copper tier (Stone tier without it); crafted from a copper block and a stick; oxidize and wax via C&C data maps | Caverns and Chasms | **postponed** (owner, 2026-10-25): part of the Caverns and Chasms port ([TODO.md](todo/TODO.md) ports #1); the copper tier and weathering belong to that port, the knives follow it |
 | Plum Cabinet | Environmental 1.21 (plum wood) | **no** (owner, 2026-10-25): no new cabinets |
 | Cherry Cabinet removed (vanilla cherry has an FD cabinet in 1.20) | Environmental | no: no new cabinets, and not obtainable in the pack today |
 
@@ -70,7 +70,7 @@ FD's `DrinkableItem` with an always-edible food carrying the same 15 s Slow Fall
 | Salvaging (FD 1.3 cutting-board recycling, 75% plank): Boatload furnace boats -> boat + furnace (hoe, vanilla woods and modded woods); Upgrade Aquatic driftwood and river furniture (door, trapdoor, sign, fence, gate, plate, button, boat, cabinet) -> 1 plank at 75% (axe), driftwood / river chest and furnace boats -> boat + part (hoe) | **BUILT 2026-10-25 (3.1)**: inside the FD salvaging row ([farmers_delight.md](farmers_delight.md) section 3, Salvaging TODO): add the Boatload furnace boats and the driftwood set (incl. Driftwood Cabinet) to the same `NCH.fdCutting` loop. Skip river wood (removed, `removed_woods.js`), hanging signs, bamboo raft, cherry |
 | Adzuki Curry grid craft: Banana + Adzuki Beans -> Dried Banana + Roasted Adzuki Beans (both exist in Neapolitan 4.1.0). The Cooking Pot recipe keeps the raw ones | **BUILT 2026-10-25 (3.2)** |
 | Perch / Pike slice smelting, smoking, campfire: 1.0 XP -> 0.35 (also Abnormals' copy of FD's Fried Egg smelting) | **BUILT 2026-10-25 (3.5)**. Only the two furnace recipes were at 1.0 in 4.1.2 (smoking and campfire were already 0.35, as in 6.0.3); FD's own cod / salmon slices are 0.35 in 1.2.4 and 1.3.4 |
-| Pickerelweed Juice and Pike with Beetroot take 2 `upgrade_aquatic:pickerelweed` (UA 1.21 merged blue and purple) | **BUILT 2026-10-25 (3.3)**: 1.19.2 UA has the two colours, so the two slots take any two pickerelweed |
+| Pickerelweed Juice and Pike with Beetroot take 2 `upgrade_aquatic:pickerelweed` (UA 1.21 merged blue and purple) | **BUILT 2026-10-25 (3.3)**: 1.19.2 UA has the two colors, so the two slots take any two pickerelweed |
 | Milk Bottles: 4 per bucket both ways (was 3) | **BUILT 2026-10-25 (3.4)**: the pack gets 3 from Neapolitan's recipes, not from this mod's override |
 | `farmersdelight:pumpkin_slice`, cake slices, perch / pike cutting: knife tag -> item ability | skip: format only, see 3.6 |
 | Old overrides of FD recipes dropped (Cooking Pot with any water bucket, Wheat Dough from water, Barbecue Stick with `abnormals_delight:barbecue_stick_ingredients`) because FD 1.3 does it itself | skip: the pack keeps 4.1.2's versions; dough is owned by the pack's dough rules |
@@ -105,7 +105,7 @@ Extend the `NCH.fdCutting` salvaging block in `farmersdelight/recipes.js` ([farm
   plank at 75% (axe); driftwood chest boat -> boat + Chest, furnace boat -> boat + Furnace.
 - Skip: river wood (removed, `removed_woods.js`), hanging signs, bamboo raft, cherry, absent hosts. Check each item key
   exists in `item_dict.js` first; add missing keys there (define once). The 4.1.2 driftwood door / sign / trapdoor cutting
-  recipes (`abnormals_delight:upgrade_aquatic/cutting/driftwood_*`) are removed in favour of the one recipe.
+  recipes (`abnormals_delight:upgrade_aquatic/cutting/driftwood_*`) are removed in favor of the one recipe.
 
 As built (`farmersdelight/recipes.js`, after the minecarts; ids `salvaging/<wood>_furnace_boat`,
 `salvaging/driftwood_furniture`, `salvaging/driftwood_chest_boat`, `salvaging/driftwood_furnace_boat`):

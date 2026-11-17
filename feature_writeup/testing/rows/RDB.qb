@@ -45,7 +45,7 @@ look every [rdb] line SAME (recipes 270); a DIFF names the entry: check its bake
 ## SQ-RDB-04
 @group B
 @commands New world; `/place feature rusticdelight:wild_bell_peppers_placed`, `wild_cotton_placed`, `wild_coffee_placed`, `bell_pepper_block_patch_placed` on grass; a jungle temple and village chest roll (loot tables `/loot spawn`) and a Wandering Trader
-@pass Patches place (peppers base colours only); chest seeds and trader seeds as in SQ-RD-24, -26
+@pass Patches place (peppers base colors only); chest seeds and trader seeds as in SQ-RD-24, -26
 @fails `base_patch` rule or a worldgen file missing
 @reviewed 2026-11-16
 # a grass platform at y 199 far from spawn (the placed features follow the heightmap onto it)

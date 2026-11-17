@@ -74,7 +74,7 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
 - Wandering trader and Winemaker pools have no enchanted books ([wandering_trader_catalog.md](../wandering_trader_catalog.md)).
 - MCA Reborn villagers use the vanilla profession tables (unverified whether DVT's `VillagerEntityMixin` applies to
   them; the removal covers both).
-- Enchanted tools / armour (`EnchantedItemForEmeralds`: armorer, weaponsmith, toolsmith, fletcher) are not books
+- Enchanted tools / armor (`EnchantedItemForEmeralds`: armorer, weaponsmith, toolsmith, fletcher) are not books
   and are out of this row's scope (see Decisions).
 
 ### Update 2026-11-01 (`loot/tables #10`)
@@ -126,7 +126,7 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
   villager books would otherwise be the cheapest route to every enchantment including Mending.
 - **Existing librarians on the live world.** Recommend cleaning them with the `playerStartTrading` handler (step 3),
   otherwise the change only affects villagers that level up or get a profession after the update.
-- **Enchanted tools / armour trades.** Recommend leaving them for now (one random enchant at modest levels); revisit
+- **Enchanted tools / armor trades.** Recommend leaving them for now (one random enchant at modest levels); revisit
   with #3 if they undercut the table.
 - **Quark tome exchange.** Recommend keep (needs a max-level book you already have).
 
@@ -140,8 +140,8 @@ printing (the Printer copies a book for liquid XP, recipe in [xp.js:19-20](../..
 
 ### Tests
 - **ENC-01 No books:** spawn a librarian, give it a lectern, trade it up to master (`/data merge entity` its
-  `VillagerData.level`, or trade) → no enchanted book at any level; paper, bookshelf, compass, clock etc. still there.
-- **ENC-02 Old villager:** a librarian that had a book offer before the update → the offer is gone or disabled (if
+  `VillagerData.level`, or trade) -> no enchanted book at any level; paper, bookshelf, compass, clock etc. still there.
+- **ENC-02 Old villager:** a librarian that had a book offer before the update -> the offer is gone or disabled (if
   step 3 is built).
 - **ENC-03 Other paths intact:** the CEI Printer still copies an enchanted book; Quark's master-librarian tome exchange
   still shows when holding an Ancient Tome.
@@ -168,7 +168,7 @@ curve is chosen against the enchantments actually in the pack.
   `max(j, 2*power)` for the top slot with `j = rand(8) + 1 + power/2 + rand(power+1)` (so 30 at power 15; slot 0 is
   `max(j/3, 1)`, slot 1 `j*2/3 + 1`). Raising `max_enchanting_power` alone only makes 30 need more shelves; it can't
   push the cost past 30.
-- With `max_enchanting_power = 15` the normalisation is the identity (power = summed bonus).
+- With `max_enchanting_power = 15` the normalization is the identity (power = summed bonus).
 - MoreJS's enchanting-table events (`enchantmentTableChanged` etc.) hook `EnchantmentMenu.slotsChanged`, which Easy
   Magic overrides without calling super: **don't plan on them**. `filterAvailableEnchantments` hooks
   `EnchantmentHelper.getAvailableEnchantmentResults` and still works (Easy Magic calls the vanilla list method).
@@ -213,7 +213,7 @@ curve is chosen against the enchantments actually in the pack.
 - `i.enchanting_table` (item_dict.js:2251), `i.bookshelf` (2071).
 
 ### Decisions
-- **Top cost ("levels").** Recommend `powerCap = 20` → top cost 40: max-level Protection IV / Sharpness V on diamond
+- **Top cost ("levels").** Recommend `powerCap = 20` -> top cost 40: max-level Protection IV / Sharpness V on diamond
   become regular instead of lucky, the jump is visible, and the 32-position ring can still reach it with plain
   bookshelves (20 of 32 slots), so #4's extras are a convenience, not a gate. Confirm with the step-1 table.
 - **What the player pays.** Vanilla consumes only 1 / 2 / 3 levels (slot + 1) even at cost 40; the cost is a
@@ -232,7 +232,7 @@ curve is chosen against the enchantments actually in the pack.
 - The client draws whatever costs the server sends; no client change needed.
 
 ### Tests
-- **ENC-10 Cap:** 15 bookshelves → top cost 30 (as now); 20 → 40 with `powerCap = 20`; 25 → still 40.
+- **ENC-10 Cap:** 15 bookshelves -> top cost 30 (as now); 20 -> 40 with `powerCap = 20`; 25 -> still 40.
 - **ENC-11 Easy Magic:** re-roll still works and its costs are as configured.
 - **ENC-12 Tooltip:** table and bookshelf tooltips show the configured numbers.
 - **ENC-13 Dump:** `/dumpenchants` writes the file; spot-check Sharpness's min/max costs.
@@ -333,8 +333,8 @@ pile and pedestal values.
 ### Tests
 - **ENC-20 Values:** for each source, a table with only that source in the ring; read the power with a Create Display
   Link "enchant power" source on the table (Create ships `EnchantPowerDisplaySource`) and compare with the config.
-- **ENC-21 Book pile:** 3 enchanted books in one pile → power 1 (after step 3); 4 plain books → 1.
-- **ENC-22 Lit candles:** unlit candle → 0, lit → its value.
+- **ENC-21 Book pile:** 3 enchanted books in one pile -> power 1 (after step 3); 4 plain books -> 1.
+- **ENC-22 Lit candles:** unlit candle -> 0, lit -> its value.
 
 ---
 
@@ -351,7 +351,7 @@ automation recipe; storage cap tuned for enchanting, crafting and player-to-play
   RIGHTCLICK TO CONVERT"). Verified by decompiling `bl4ckscor3.mod.xptome`:
   - Registered `stacksTo(1)`. Stored XP is the int NBT `xp` (points, not levels). `use`: sneak + right-click stores
     as much of the player's XP as fits, right-click returns all (config switches below); returns early if the stack
-    count is > 1. Glint when `xp > 0`; durability bar shows fill; anvils refuse it (`AnvilUpdateEvent` cancelled);
+    count is > 1. Glint when `xp > 0`; durability bar shows fill; anvils refuse it (`AnvilUpdateEvent` canceled);
     not enchantable or repairable.
   - Tooltip: `xpbook.tooltip.1/2` (use lines) and `xpbook.tooltip.3` = `"%1$s/%2$s XP stored"` (points).
   - Recipe `data/xpbook/recipes/xp_tome.json` (id `xpbook:xp_tome`): shaped `_E_ / EBE / _E_`, E = ender pearl,
@@ -387,13 +387,13 @@ automation recipe; storage cap tuned for enchanting, crafting and player-to-play
      `xp` would also stack (harmless: the mod refuses to use a stack, so no dupe, but confusing).
 4. **Tooltip in levels** (client, [tooltips.js](../../kubejs/client_scripts/tooltips.js), dynamic like the
    `precision_sawblade` entry at line 446): `e.addAdvanced(i.xp_tome, (item, adv, text) => { ... })` reading
-   `item.nbt?.xp`, converting points → level from 0 (total points to reach level L: `L²+6L` up to 16,
+   `item.nbt?.xp`, converting points -> level from 0 (total points to reach level L: `L²+6L` up to 16,
    `2.5L²-40.5L+360` up to 31, `4.5L²-162.5L+2220` above), and replacing the mod's points line (find the line whose
    string ends with "XP stored", or blank `xpbook.tooltip.3` via a `kubejs/assets/xpbook/lang/en_us.json` override)
    with "Stored: 12.4 / 30 levels (from 0)". The max comes from the server config; the client can't read it, so
    hard-code it next to the config default with a comment (or derive it from `getBarWidth` if wanted).
 5. **Cap:** ship `defaultconfigs/xptome-server.toml` with `max_xp` = points for #3's top cost from level 0
-   (30 → 1395, 40 → 2920, 50 → 5345). Existing worlds already have `serverconfig/xptome-server.toml` generated:
+   (30 -> 1395, 40 -> 2920, 50 -> 5345). Existing worlds already have `serverconfig/xptome-server.toml` generated:
    edit the live server's copy too (deploy note).
 6. **Filling automation:** patcherMod `AttachCapabilitiesEvent<ItemStack>` for `xp_tome` providing an
    `IFluidHandlerItem` (one tank, capacity `Configuration.CONFIG.maxXP`, contents `FluidStack(FluidBridge

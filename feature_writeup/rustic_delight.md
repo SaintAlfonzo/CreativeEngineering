@@ -66,11 +66,11 @@ config conditions on every recipe, biome tags in place of `#minecraft:is_jungle`
 
 | Group | 1.7.0 detail | Pack overlap | Proposed |
 |---|---|---|---|
-| Six more pepper colours | Pale seeds grow white, pink, orange; Dark seeds grow blue, purple, black. Two new crops, seeds, seed bags, crates (6), wild Pale / Dark peppers (jungle, inside the same wild patch feature), potted wilds | none; the colours are a wish already noted in `farming/crops #9` | needs new crops: section 3 |
-| Pepper slices, roasted slices, rolls | every pepper cuts into 2 slices (10% seed back), slices roast, 2 slices + cooked rice -> 2 rolls (7 / 0.8); slice -> seed craft | none | section 3 (rolls for the 3 current colours are the cheapest subset) |
-| Stuffed peppers in all 9 colours; Bell Pepper Medley, Pale and Dark Medley (feasts, 3 stuffed peppers + bowl); Rice Roll Royale (feast: kelp roll slices + pepper rolls) | | Veggies' Stuffed Bell Peppers feast (marked merge with Rustic's, veggies_delight.md 5.1); FD Rice Roll Medley | section 3; the Medley overlaps the Veggies feast |
+| Six more pepper colors | Pale seeds grow white, pink, orange; Dark seeds grow blue, purple, black. Two new crops, seeds, seed bags, crates (6), wild Pale / Dark peppers (jungle, inside the same wild patch feature), potted wilds | none; the colors are a wish already noted in `farming/crops #9` | needs new crops: section 3 |
+| Pepper slices, roasted slices, rolls | every pepper cuts into 2 slices (10% seed back), slices roast, 2 slices + cooked rice -> 2 rolls (7 / 0.8); slice -> seed craft | none | section 3 (rolls for the 3 current colors are the cheapest subset) |
+| Stuffed peppers in all 9 colors; Bell Pepper Medley, Pale and Dark Medley (feasts, 3 stuffed peppers + bowl); Rice Roll Royale (feast: kelp roll slices + pepper rolls) | | Veggies' Stuffed Bell Peppers feast (marked merge with Rustic's, veggies_delight.md 5.1); FD Rice Roll Medley | section 3; the Medley overlaps the Veggies feast |
 | Giant bell pepper blocks (9, from 9 slices) and a giant pepper patch in jungles (48 tries, red / yellow / green 90 each, the others 5) | | none | section 3; would need a [crops_by_biome.md](crops_by_biome.md) and worldgen pass |
-| Pancakes rework | plain Pancakes (syrup topping), Pumpkin and Coffee Pancakes added; every stack is now a block you take single Pancake items from (6 per recipe, stack up to 12 by placing pancakes back); pot recipes for each stack | Supplementaries `pancake`; Veggies `sweet_potato_pancakes` | code (block behaviour + 7 serving items): section 3 only |
+| Pancakes rework | plain Pancakes (syrup topping), Pumpkin and Coffee Pancakes added; every stack is now a block you take single Pancake items from (6 per recipe, stack up to 12 by placing pancakes back); pot recipes for each stack | Supplementaries `pancake`; Veggies `sweet_potato_pancakes` | code (block behavior + 7 serving items): section 3 only |
 | Syrup line | Syrup (pot: apple or beetroot + sugar), Syrup Coffee, Syrup Cookie, Syrup Cheesecake, Syrup Sandwich, Sweet Salad (honey or syrup); syrup -> 3 sugar | none (Hostile Delight's slime syrup is unrelated) | section 3 |
 | Coffee foods | Coffee Cookie, Coffee Cheesecake + slice, Coffee Pancakes, Pumpkin Coffee, Roasted Coffee Beans bag | Farmer's Respite coffee cake (now on Rustic beans) | section 3; new coffees would also need the Caffeinated swap and the Kettle (`food/drinks #7`) |
 | Fried foods | Fried Dough (oil + dough), Fried Dumplings (oil + 2 FD dumplings), Fried Fish (oil + batter + any raw fish) | Fried Fish = the pack's Fish Tempura chain (`dishes/meals #7`) | Fried Fish **skip**; dough and dumplings section 3 |
@@ -81,7 +81,7 @@ config conditions on every recipe, biome tags in place of `#minecraft:is_jungle`
 
 | Change | Proposed |
 |---|---|
-| Bell Pepper Pasta: any 3 bell peppers (tag) [one green, one yellow, one red] | **carry over** (`NCH` replace; fits the even colour roll) |
+| Bell Pepper Pasta: any 3 bell peppers (tag) [one green, one yellow, one red] | **carry over** (`NCH` replace; fits the even color roll) |
 | Bell Pepper Soup: 3 peppers [4] | owner's call (cheaper soup) |
 | Golden Coffee Beans: raw or roasted bean in the middle [raw only] | **carry over** |
 | Honey Coffee: no sugar (grid, from coffee or milk coffee) | carry over, owner's call |
@@ -114,7 +114,7 @@ config conditions on every recipe, biome tags in place of `#minecraft:is_jungle`
 | Chest loot swaps (configurable): jungle temple 50% coffee beans x2 for bamboo; cotton seeds for pumpkin / wheat seeds in savanna, snowy, taiga village houses, mineshafts and shipwreck supply; Pale and Dark seeds in jungle temples | coffee and cotton: owner's call, through the pack's loot scripts ([loot.md](loot.md)); seeds only with section 3 |
 | Village farm plots grow Rustic crops (processor rules on `farm_plains`, `desert`, `savanna`, `taiga`) | owner's call; 1.19.2 processor lists are data, so a datapack override can do it without code. Check first what FD and other mods already put in those lists |
 | Wandering Trader sells Pale and Dark seeds | only with section 3 |
-| Wild plants: shears or silk touch give the plant only; seeds otherwise, red pepper only when not sheared | skip (behaviour almost the same) |
+| Wild plants: shears or silk touch give the plant only; seeds otherwise, red pepper only when not sheared | skip (behavior almost the same) |
 | Wild patches read `rusticdelight:has_wild_*` biome tags [`#minecraft:is_jungle` / `is_forest`] | skip (pack overrides the features already, crops.md V7) |
 | Pancake stack block loot: a partial stack drops nothing, a full one drops itself | only with section 3 |
 
@@ -133,10 +133,10 @@ config conditions on every recipe, biome tags in place of `#minecraft:is_jungle`
 | Option | Brings | Cost | Notes |
 |---|---|---|---|
 | **A. Data only** | section 2.2 carry-overs, optional loot and village farm data | small (one KubeJS pass) | no new items; 1.3.0 jar stays |
-| **B. Donor-jar backport** (`development/backportedRustic`, mod id `rusticdelight`) | everything in 2.1 | large: crops (3), wild crops, pancake block, 3 feasts, giant pepper blocks, loot modifiers, village processors, trades, written from behaviour; data translated by the port tooling | 1.7.0 keeps every 1.3.0 id, so the swap needs no conversion; the 1.7.0 jar becomes the donor in its own folder, like `miners_upstream/`. Mod id unchanged = no `mod_sides.md` edit |
-| **C. Pack items with our own art** | a chosen subset (e.g. slices, rolls, medley for the 3 current colours; syrup line) | medium per group, art needed | no upstream assets; [texture_reuse.md](texture_reuse.md) lists usable textures |
+| **B. Donor-jar backport** (`development/backportedRustic`, mod id `rusticdelight`) | everything in 2.1 | large: crops (3), wild crops, pancake block, 3 feasts, giant pepper blocks, loot modifiers, village processors, trades, written from behavior; data translated by the port tooling | 1.7.0 keeps every 1.3.0 id, so the swap needs no conversion; the 1.7.0 jar becomes the donor in its own folder, like `miners_upstream/`. Mod id unchanged = no `mod_sides.md` edit |
+| **C. Pack items with our own art** | a chosen subset (e.g. slices, rolls, medley for the 3 current colors; syrup line) | medium per group, art needed | no upstream assets; [texture_reuse.md](texture_reuse.md) lists usable textures |
 
-Recommendation: A now in every case. Choose B if the six colours and pancakes are wanted (that is most of the gap);
+Recommendation: A now in every case. Choose B if the six colors and pancakes are wanted (that is most of the gap);
 choose C only for a small subset.
 
 ## 4. Open questions for the owner (all answered 2026-10-25 to 2026-11-02; kept for the record, see 5.11 for the last ones)
@@ -162,8 +162,8 @@ cut, a syrup for the maple foods.
 | Project | `development/creativeDelight/members/rustic` (Gradle `:backportedRustic`, `bundled_in=creativeDelight`) | Mod id `rusticdelight`, display name "Rustic Delight (Creative Delight)", version `1.7.0-ce-19.2-02` (since the 2026-11-10 bake, 5.14). Own package `com.SaintAlfonzo.creativedelight.rustic`. Licence: MIT upstream art and data (`NOTICE-upstream-MIT.txt`, Copyright (c) 2025 PhantomWing), our code GPLv3 |
 | Upstream files | baked into `src/main/resources` by `tools/bake_upstream.py` from `rusticdelight-forge-1.20.1-1.7.0.jar` (sha1 `bca9adf6...`, Modrinth `foa4fGIH/z29Gd3ec`; the jar stays in `rustic_upstream/` on the dev machine only, never deployed) | Since 2026-11-10 (5.14). Until then read at runtime from the donor as two built-in packs (`UpstreamJars`, `RusticTranslator`, both deleted). `tools/bake_manifest.json` lists every baked file, its upstream sha1 and the rules applied; `tools/own_overrides.json` lists our own files at baked paths (pancake recolours) |
 | Registry | `registry/RDBlocks`, `RDItems`, `RDFoods`, `RDPotions`, `RDLoot`, `RDTab` | Every 1.7.0 id (162) but `fruit_beignet` (and, since 2026-11-01, `pancake` and `fried_dough`, 5.10; plus the pack's `glowing_calamari_crate`); every 1.3.0 id kept, so old worlds need no conversion. `tools/check_donor.py` (until 2026-11-10; now `bake_upstream.py --check` and `--selftest`) compared the ids with the donor (0 problems) |
-| Blocks written from behaviour | `content/` | `PancakeStackBlock` (6 per placed plate, take one, sneak-use puts one back up to 12; keeps upstream's `servings` numbering so 1.3.0 plates load as they were), `PepperMedleyBlock` and `RiceRollRoyaleBlock` (FD `FeastBlock` with their own `servings` range), crops (bell peppers 8 stages, coffee 6, cotton 4), wild crops on `#minecraft:dirt`, coffees that clear one effect (`EffectClearingDrinkItem`) |
-| Translation rules | `tools/bake_upstream.py` (was `upstream/RusticTranslator` until 2026-11-10) | Drops advancements, the biome modifiers (the pack places every patch, 5.4), upstream's edits of five FD recipes, the 8 chest seed and bean swaps, Fruit Beignet; renames 1.20 loot `any_of` and rewrites `all_of`; makes other-namespace tag entries optional; drops a recipe whose item or type this game lacks; cherry blossom tag to `vinery:cherry_leaves` + `quark:pink_blossom_leaves`; wild and giant patches to the three base colours; in models, FD 1.20's `template_crop_cross` to 1.19.2's `crop_cross` (same model; coffee and the three pepper crops rendered missing without it, fixed 2026-10-26). FD 1.20's `platter` texture (the three medleys) ships in repackedFarmers at FD's own path |
+| Blocks written from behavior | `content/` | `PancakeStackBlock` (6 per placed plate, take one, sneak-use puts one back up to 12; keeps upstream's `servings` numbering so 1.3.0 plates load as they were), `PepperMedleyBlock` and `RiceRollRoyaleBlock` (FD `FeastBlock` with their own `servings` range), crops (bell peppers 8 stages, coffee 6, cotton 4), wild crops on `#minecraft:dirt`, coffees that clear one effect (`EffectClearingDrinkItem`) |
+| Translation rules | `tools/bake_upstream.py` (was `upstream/RusticTranslator` until 2026-11-10) | Drops advancements, the biome modifiers (the pack places every patch, 5.4), upstream's edits of five FD recipes, the 8 chest seed and bean swaps, Fruit Beignet; renames 1.20 loot `any_of` and rewrites `all_of`; makes other-namespace tag entries optional; drops a recipe whose item or type this game lacks; cherry blossom tag to `vinery:cherry_leaves` + `quark:pink_blossom_leaves`; wild and giant patches to the three base colors; in models, FD 1.20's `template_crop_cross` to 1.19.2's `crop_cross` (same model; coffee and the three pepper crops rendered missing without it, fixed 2026-10-26). FD 1.20's `platter` texture (the three medleys) ships in repackedFarmers at FD's own path |
 | Data types | `logic/` | `squids_drop_calamari_modifier` (its drop is replaced: every squid kill, Looting or not, player or not, gives exactly one `miners_delight:squid` through the LootJS rule in `miners_delight/loot.js`, which removes all other loot; checked 2026-11-03, plan_scratch_bugfix_1103 7.4), `config_boolean` (always on: no families config), `configurable_rarity_filter` (fixed N: cotton 96 as the pack's 1.3.0 config, peppers 15, coffee 15, giant 64 [1.7.0: 16]). The village farm processor is Creative Delight's, not Rustic's (5.4) |
 | Not ported | | Config and item families, Thirst compat, advancements, the brewing steps (the pack's `potions.js` mixes brew the three Haste potions), upstream's Pale and Dark trader offers (pack trade, 5.4) |
 
@@ -177,12 +177,12 @@ craft to brown dye. 1.7.0's pot coffees (3 beans, raw or roasted) come too; the 
 Pack rows (`kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js` unless noted):
 
 - Baking overhaul: syrup, coffee and cherry blossom cookies oven only (cookie dough + 2 syrup / roasted beans / pink
-  leaves -> 12); the three cheesecakes as pies (pie crust + 2 flavour + 2 sweet). Maple Cookie: dough + syrup + honey
+  leaves -> 12); the three cheesecakes as pies (pie crust + 2 flavor + 2 sweet). Maple Cookie: dough + syrup + honey
   (so it does not clash with the Syrup Cookie). Maple Glazed Bacon: cooked bacon + syrup (+ honey since 2026-11-01, 5.10).
-- `cooking.js`: the heatless Bell Pepper Pasta takes any 3 roasted peppers [one of each colour]; Brewin's pizza is the
+- `cooking.js`: the heatless Bell Pepper Pasta takes any 3 roasted peppers [one of each color]; Brewin's pizza is the
   Supreme Pizza: bell pepper, cheese, onion, mushroom, tomato sauce, cooked meat on a dough [cheese, 2 toppings, sauce].
-- Stuffed peppers (2026-10-28, scratchpad): a second pot recipe per colour, roasted pepper + rice + one stuffed pepper
-  filling -> the stuffed pepper of that colour (9 recipes; upstream's raw pepper recipe stays). The roasted pepper is an
+- Stuffed peppers (2026-10-28, scratchpad): a second pot recipe per color, roasted pepper + rice + one stuffed pepper
+  filling -> the stuffed pepper of that color (9 recipes; upstream's raw pepper recipe stays). The roasted pepper is an
   ingredient, not the container: the pot matches ingredients only, so 9 recipes differing by container would all match
   the first colour. Time and experience as upstream; Slice & Dice copies each. RD-33.
 - Potato slices (2026-11-01, TODO `dishes/ingredients #26` follow-up): a knife cuts a potato into 3 slices [2]; upstream's
@@ -190,7 +190,7 @@ Pack rows (`kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js` unless 
   Dice's slicer copies it (it copies every cutting board recipe after KubeJS runs). The baked potato's 2 baked slices stay.
   Veggies' sweet potato cuts the same way into 3 Sliced Sweet Potatoes (veggies_delight.md 5.6), which borrow the slices'
   sprite in place. RD-34.
-- Tags: bell peppers in `#brewinandchewin:foods/pizza_topping` (`cookingtags.js`); the six new roasted colours in the
+- Tags: bell peppers in `#brewinandchewin:foods/pizza_topping` (`cookingtags.js`); the six new roasted colors in the
   roasted pepper and cooked veggie tags (`rusticdelight/tags.js`).
 
 ### 5.3 Values
@@ -204,7 +204,7 @@ saturation [0.8], Chocolate and Vegetable pancake servings 4 / 0.6 [3 / 0.6], ho
 
 - Dark seeds: `minecraft:chests/ancient_city` and `ancient_city_ice_box`, share 0.04, 1-3. Pale seeds: the 11
   `skyvillages:chests/sky_village_*` tables and `cloudstorage:chests/loot_balloon`, same share (`rusticdelight/loot.js`;
-  marked for the loot overhaul, TODO). Crates and bags of the new colours unpack like the base ones.
+  marked for the loot overhaul, TODO). Crates and bags of the new colors unpack like the base ones.
 - Rare Wandering Trader offer: Pale or Dark seeds, 1 seed for 48 emeralds (5 until 2026-11-02, 5.11), 3 uses (`rusticdelight/trades.js`). The port keeps
   1.3.0's farmer, fisherman and common trader offers.
 - Giant peppers: 1 in 64 chunks (2026-10-25, owner: fairly rare; upstream 1 in 16). `wild_crops.json` row `giant_bell_pepper`, `warm dry grassy`, with the new `requires: creativedelight`
@@ -228,7 +228,7 @@ saturation [0.8], Chocolate and Vegetable pancake servings 4 / 0.6 [3 / 0.6], ho
 ### 5.6 Tests (RD-)
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-RD-02, -04, -05, -06, -07, -13, -14, -15, -16, -17, -18, -19, -20, -21, -23, -27, -28, -33, SQ-RDX-03, -03b, -06, -07, -08, -08b, -09, -10, -11, -12, -14; FAIL SQ-RD-22: every Rustic food lost Nourishment: `comfort_nourishment.json` (2026-10-27) had no `rusticdelight:` entries; owner regenerated 19:50, rerun pending; OPEN (no verdict, rerun row written) SQ-RD-24; rerun pending (batch fault) SQ-RD-08, -10, -11, -26, SQ-RDX-12b; not run SQ-RD-03, -03a.
-- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RD-08, -11, SQ-RDX-12b, SQ-RD-10, -22; SQ-RD-24 OPEN: rare colours and wild patches pass; the grass-only half is unread (`/zq count ... on:` reads no block below); SQ-RD-10b BATCH-FAULT: the plains box missed the village; needs a group B world; SQ-RD-26 OPEN: jungle half passes; savanna wild cotton 0 (r1102b found 6), needs a second savanna count.
+- **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RD-08, -11, SQ-RDX-12b, SQ-RD-10, -22; SQ-RD-24 OPEN: rare colors and wild patches pass; the grass-only half is unread (`/zq count ... on:` reads no block below); SQ-RD-10b BATCH-FAULT: the plains box missed the village; needs a group B world; SQ-RD-26 OPEN: jungle half passes; savanna wild cotton 0 (r1102b found 6), needs a second savanna count.
 
 Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-RDB-03 PASS (aggregate of the r1113 bake reruns), SQ-RDB-05 PASS (old-save crops, plates, crates), SQ-RDX-13 PASS for the plate half (the item half needs a pre-11-02 save); SQ-RD-26 PARTIAL as r1102b: wild bell peppers 0 in every jungle box (owner TODO).
 
@@ -254,18 +254,18 @@ and the generators (food types, cans, compost, placeable) for the about 100 new 
 
 **Giant bell peppers: placed and crafted.** Nine blocks, `bell_pepper_<colour>_block` (`RDBlocks.GIANT_PEPPERS`, a plain
 block with the melon's properties: same hardness and sound, axe is the fast tool through upstream's `mineable/axe` tag).
-No behaviour of their own; they are a storage block for slices.
+No behavior of their own; they are a storage block for slices.
 
 | Route | Data (donor, loaded as is) |
 |---|---|
-| Craft | 9 slices of one colour in a 3x3 -> 1 giant pepper (`bell_pepper_<colour>_block_from_bell_pepper_slice_<colour>`), all 9 colours |
+| Craft | 9 slices of one color in a 3x3 -> 1 giant pepper (`bell_pepper_<colour>_block_from_bell_pepper_slice_<colour>`), all 9 colors |
 | Cut | giant pepper on the Cutting Board with a knife -> 9 slices (`cutting/bell_pepper_<colour>_block`) |
 | Break | 1 to 9 slices (uniform, explosion decay); never the block itself, silk touch included. Breaking loses about half; cut it instead |
 | Worldgen | `rusticdelight:bell_pepper_block_patch_placed`: 1 in 64 chunks [upstream 16], 48 tries in a 7-block spread, only on `minecraft:grass_block`; pack row `giant_bell_pepper` (`warm dry grassy`), red, yellow and green only (translator) |
 
 **Obtainable without natural spawning: yes, every colour.** Grow peppers (base seeds from wild patches;
 Pale and Dark seeds from chests and the trader, 5.4), cut each into 2 slices, craft 9 slices into the block: 4.5 peppers
-per giant pepper. The six rare colours are craft-only by design (the patch keeps the three base colours), so the craft is
+per giant pepper. The six rare colors are craft-only by design (the patch keeps the three base colors), so the craft is
 their only source. No pack script removes or changes these recipes (checked: `cooking.js` only removes Rustic's cooking
 oil). Tests: RD-13, RD-24.
 
@@ -304,12 +304,12 @@ SQ-RDX-14 in [testing/scratch_queue.md](testing/scratch_queue.md) (RD-35 to RD-4
 
 | Row | Built | Where |
 |---|---|---|
-| `members #11` coffee | The Farmer's Respite coffee merge (startup pairs and server removals) moved into the Rustic tree, rows unchanged: `kubejs_startup/rusticdelight/coffee_merge.js`, `data/creativedelight/kubejs/rusticdelight/coffee_merge.js` (were `farmersrespite/item_merges.js`). Syrup, Pumpkin and Cherry Blossom Coffee join the Caffeinated swap at 900 ticks, level I, like Honey and Chocolate Coffee (same recipe shape: 3 beans, milk, a flavour); 1.7.0 had Syrup 1800, Pumpkin and Cherry Blossom 1200 with one effect at level II. The swap is not in the Rustic tree: it moved to Creative Brewing on 2026-11-01 with the other effect swaps (`creativeBrewing/.../kubejs_startup/creativeengineering/effect_swaps.js`, creative_brewing.md 4.5); the durations it reads are set in `RDFoods`. Not moved: names (the only coffee name is Coffee Pie, below), tags (none), compost (generated per mod by `gen_compost_values.py`), trades (no coffee trade; a comment only), canned coffee berries (generated can, `gen_can_types.py`) | `RDFoods`, `effect_swaps.js` (CB) |
-| `members #15` pancakes | Rustic's plain single `rusticdelight:pancake` is not registered (`RusticTranslator.REMOVED`, as Fruit Beignet; old-world copies are dropped, no conversion). `RusticTranslator.REPLACED` turns every `"rusticdelight:pancake"` in upstream data into `"supplementaries:pancake"`, so the plain plate's recipes keep working on Supplementaries' pancake: 6 pancakes + bowl -> plate, plate -> 6 pancakes (grid and knife, the knife also gives the bowl back), and the plate's loot. `PancakeStackBlock` for `pancakes` serves and takes back `supplementaries:pancake`. The batter routes to the plain plate (grid and pot) stay. The six flavoured singles and plates are unchanged. Supplementaries' pancake is named "Pancake" again (was Stackable Pancake, 1.1.05) with a gray tooltip line "Stackable: place up to 8 on top of each other" (`supplementaries/client.js`) | `RDItems`, `RDBlocks`, `RDFoods`, `RusticTranslator`, `names.js`, `tools/check_donor.py` |
+| `members #11` coffee | The Farmer's Respite coffee merge (startup pairs and server removals) moved into the Rustic tree, rows unchanged: `kubejs_startup/rusticdelight/coffee_merge.js`, `data/creativedelight/kubejs/rusticdelight/coffee_merge.js` (were `farmersrespite/item_merges.js`). Syrup, Pumpkin and Cherry Blossom Coffee join the Caffeinated swap at 900 ticks, level I, like Honey and Chocolate Coffee (same recipe shape: 3 beans, milk, a flavor); 1.7.0 had Syrup 1800, Pumpkin and Cherry Blossom 1200 with one effect at level II. The swap is not in the Rustic tree: it moved to Creative Brewing on 2026-11-01 with the other effect swaps (`creativeBrewing/.../kubejs_startup/creativeengineering/effect_swaps.js`, creative_brewing.md 4.5); the durations it reads are set in `RDFoods`. Not moved: names (the only coffee name is Coffee Pie, below), tags (none), compost (generated per mod by `gen_compost_values.py`), trades (no coffee trade; a comment only), canned coffee berries (generated can, `gen_can_types.py`) | `RDFoods`, `effect_swaps.js` (CB) |
+| `members #15` pancakes | Rustic's plain single `rusticdelight:pancake` is not registered (`RusticTranslator.REMOVED`, as Fruit Beignet; old-world copies are dropped, no conversion). `RusticTranslator.REPLACED` turns every `"rusticdelight:pancake"` in upstream data into `"supplementaries:pancake"`, so the plain plate's recipes keep working on Supplementaries' pancake: 6 pancakes + bowl -> plate, plate -> 6 pancakes (grid and knife, the knife also gives the bowl back), and the plate's loot. `PancakeStackBlock` for `pancakes` serves and takes back `supplementaries:pancake`. The batter routes to the plain plate (grid and pot) stay. The six flavored singles and plates are unchanged. Supplementaries' pancake is named "Pancake" again (was Stackable Pancake, 1.1.05) with a gray tooltip line "Stackable: place up to 8 on top of each other" (`supplementaries/client.js`) | `RDItems`, `RDBlocks`, `RDFoods`, `RusticTranslator`, `names.js`, `tools/check_donor.py` |
 | `members #16` maple | Maple is half Rustic's syrup, half honey: Maple Glazed Bacon = cooked bacon + syrup + honey bottle [cooked bacon + syrup]; Maple Cookie stays oven cookie dough + syrup + honey -> 12 (the duplicate 2-syrup row in `creativedelight/baking.js` is gone, it lost to the Rustic row by load order) | `rusticdelight/recipes.js`, `baking.js` |
 | `members #20` pizza | Supreme Pizza (`brewinandchewin:pizza`): shaped `cmf / upo / xtx`: cheese (`#forge:cheese`), cooked meat (`#creativedelight:food_type/cooked/meat`, no fish), cooked fish (`food_type/cooked/fish`), any mushroom (`#forge:mushrooms`), a bell pepper (raw or sliced `#forge:vegetables/bell_pepper`, roasted `#creativedelight:roasted_bell_pepper`, roasted slice `#creativedelight:roasted_bell_pepper_slice`, new, filled in `rusticdelight/tags.js`), onion; bottom row any dough, tomato sauce, any dough. Id `pizza_manual_only`, plus a sequenced assembly on any dough (sauce, dough, then the six toppings), incomplete item `pizza`. Was bell pepper, cheese wedge, onion, mushroom, tomato sauce, `#forge:cooked_meat` (fish counted) on one wheat dough. Vintage Delight's Cheese and Meat Pizza already are dough, sauce, dough on any dough; Vegan Pizza was done with `members #30` R5 | `brewinandchewin/recipes.js`, `transition_items.js` |
-| `members #25` crate, rename, removal | New block `rusticdelight:glowing_calamari_crate` (`RDBlocks.GLOWING_CALAMARI_CRATE`, the crate properties); 9 Glowing Calamari <-> crate (`rusticdelight/recipes.js`); `forge:storage_blocks/glowing_calamari`, `mineable/axe` (`tags.js`); name in `rusticdelight/client.js`; blockstate, models, loot table and PLACEHOLDER art in the member's own resources (upstream crate with the calamari's blue mapped onto the glowing calamari colours; notice beside it). Coffee Pie rename: already shipped in 1.1.05 (`creativedelight/names.js`), nothing to do. Fried Dough removed: in `RusticTranslator.REMOVED`, so its item, lang, models and its one recipe (pot, oil + dough) are gone; no pack script named it | Java, resources, scripts |
-| `members #26` sushi, heated manual | Scope (from the code): every Rustic roll craft and the pack's glowing one, each shapeless 2 fillings + cooked rice -> 2: the 9 Bell Pepper Rolls (2 slices of the colour), Cherry Blossom Roll (2 blossom leaves), Calamari Roll (2 Calamari Slices; the tag's glowing slices are left to their own roll so the two assemblies do not share a first step), Glowing Calamari Roll; plus Rice Roll Royale (the roll platter, on a bowl, its 8 parts in grid order). Each gets `F.assemble` beside the shapeless recipe, same output. Farmer's rolls already had theirs; spring rolls are fried, not sushi. "Heated manual recipes" read as the heatless meal rule's `_cooked_manual_only` grid routes for Rustic pot meals that had none: Bell Pepper Soup (bone broth + 4 roasted peppers), Calamari Soup (bone broth + 2 cooked calamari, baked potato, onion, milk), Coffee-Braised Beef (2 cooked beef, a coffee, carrot, baked potato, bowl). Fried foods, spring rolls, stuffed peppers and pancakes keep the pot only | `rusticdelight/recipes.js`, `transition_items.js` (13 incomplete items) |
+| `members #25` crate, rename, removal | New block `rusticdelight:glowing_calamari_crate` (`RDBlocks.GLOWING_CALAMARI_CRATE`, the crate properties); 9 Glowing Calamari <-> crate (`rusticdelight/recipes.js`); `forge:storage_blocks/glowing_calamari`, `mineable/axe` (`tags.js`); name in `rusticdelight/client.js`; blockstate, models, loot table and PLACEHOLDER art in the member's own resources (upstream crate with the calamari's blue mapped onto the glowing calamari colors; notice beside it). Coffee Pie rename: already shipped in 1.1.05 (`creativedelight/names.js`), nothing to do. Fried Dough removed: in `RusticTranslator.REMOVED`, so its item, lang, models and its one recipe (pot, oil + dough) are gone; no pack script named it | Java, resources, scripts |
+| `members #26` sushi, heated manual | Scope (from the code): every Rustic roll craft and the pack's glowing one, each shapeless 2 fillings + cooked rice -> 2: the 9 Bell Pepper Rolls (2 slices of the color), Cherry Blossom Roll (2 blossom leaves), Calamari Roll (2 Calamari Slices; the tag's glowing slices are left to their own roll so the two assemblies do not share a first step), Glowing Calamari Roll; plus Rice Roll Royale (the roll platter, on a bowl, its 8 parts in grid order). Each gets `F.assemble` beside the shapeless recipe, same output. Farmer's rolls already had theirs; spring rolls are fried, not sushi. "Heated manual recipes" read as the heatless meal rule's `_cooked_manual_only` grid routes for Rustic pot meals that had none: Bell Pepper Soup (bone broth + 4 roasted peppers), Calamari Soup (bone broth + 2 cooked calamari, baked potato, onion, milk), Coffee-Braised Beef (2 cooked beef, a coffee, carrot, baked potato, bowl). Fried foods, spring rolls, stuffed peppers and pancakes keep the pot only | `rusticdelight/recipes.js`, `transition_items.js` (13 incomplete items) |
 | `framework #12` (Rustic part) | Glowing calamari cut on `F.fishSlice` (2 slices + bone meal, as before; id now `glowing_calamari_slice_from_glowing_calamari`); Bell Pepper Pasta heatless row on `F.mealCraft` (same id); the new heatless and roll rows above use `F.soupCraft` / `F.mealCraft` / `F.assemble`; Golden Coffee Beans on `F.goldenGild` in the new `rusticdelight/golden.js`: raw or roasted beans (`#rusticdelight:coffee_ingredients`) in a ring of 8 of any gold nugget [vanilla gold nugget], plus heated mixer (6 nuggets) and Arc Furnace (5 nuggets), both new | `rusticdelight/recipes.js`, `rusticdelight/golden.js` |
 
 Item keys added (`item_dict.js`): `rice_roll_royale`, `glowing_calamari_crate`, `t_coffee_ingredients`, `t_coffee_food_ingredients`,
@@ -353,13 +353,13 @@ Still open (not decisions): final Glowing Calamari Crate art (`members #25`), SQ
 - **Install and tests:** in the CD jar installed 2026-11-03 00:08, not booted. Queue section SQ-CDJ7: SQ-CDM2-04 (potato salad),
   SQ-RD-22 (rerun, Comfort), SQ-CDF-08 (rerun, after `/dumpcompost`).
 
-### 5.13 Licence answer, 2026-11-10: what changes
+### 5.13 License answer, 2026-11-10: what changes
 
 PhantomWing confirmed MIT for the Forge builds and welcomed the port. Effects:
 
 - **Nothing breaks and nothing must be redone.** The donor-jar route stays valid; the port is built on 1.7.0 and the author's 1.19.2 build (1.3.0) is the base we already replaced, so there is no newer 1.19.2 source to pull from.
 - **Donor route is now optional.** MIT allows copying the textures, models, lang and data into `members/rustic` and shipping them, so `rustic_upstream/` would no longer be needed on clients and servers (no `DonorJars` / `RusticTranslator` runtime read for these files). Cost: the translator's 1.20 to 1.19.2 fixes would have to be applied once at build time and the result committed. Not started; owner decides (open question below).
-- **Required either way:** keep the MIT licence text and PhantomWing's copyright notice in the jar and in the notices page for any copied file. Our own code stays GPLv3. Check the CD notices file lists Rustic as MIT with the author's name.
+- **Required either way:** keep the MIT license text and PhantomWing's copyright notice in the jar and in the notices page for any copied file. Our own code stays GPLv3. Check the CD notices file lists Rustic as MIT with the author's name.
 - **Cleanup that is now allowed:** drop the "treat as All Rights Reserved" caution; the Rustic cutover note (5.7) still needs `rustic_upstream/` copied only while the donor route stays.
 - **Answered 2026-11-10: bake in** ([plan_rustic_fold_in.md](plan_rustic_fold_in.md), built: 5.14). Was: keep the donor route (no work, jar read at runtime) or bake the files in (removes the extra folder and the upstream-jar dependency, one build-tool task)? Recommendation: bake in only if you want to drop `rustic_upstream/`; otherwise leave as is.
 
@@ -378,8 +378,8 @@ PhantomWing confirmed MIT for the Forge builds and welcomed the port. Effects:
 - **Equivalence.** The real `RusticTranslator` was run offline (registry lookups stubbed from the same dumps) and its 1351
   files compared with the Python bake: 0 differences before the fix below.
 - **Fix found by the bake (player-visible).** The translator dropped `models/coaster/pancake.json` and
-  `textures/block/coaster/pancake.png` with the removed plain Pancake, but that model is the parent of all six flavoured
-  pancake coaster models, so a flavoured pancake on a Brewin' coaster had a missing model (latest.log: `Unable to load
+  `textures/block/coaster/pancake.png` with the removed plain Pancake, but that model is the parent of all six flavored
+  pancake coaster models, so a flavored pancake on a Brewin' coaster had a missing model (latest.log: `Unable to load
   model: 'rusticdelight:coaster/pancake'`). Both files are kept now (`KEPT_SHARED`). Changelog bullet under Rustic Delight.
 - **Member.** `upstream/RusticTranslator.java`, `upstream/UpstreamJars.java` and the built-in pack registration are gone;
   `shared_sources`, `resource_guard_*` and the donor lines are out of `gradle.properties`; `mod_license` = MIT (upstream art

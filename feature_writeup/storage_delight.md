@@ -12,7 +12,7 @@ non-member.
 **Licence:** MIT in both jars. Code and art can be reused with the notice kept.
 
 **Result in one line:** 94 new blocks, all the same block types as today on new woods and new countertop stones; no new
-block type, no behaviour change. 64 of the 94 could exist in the pack (4 new countertops on the 9 current woods, plus
+block type, no behavior change. 64 of the 94 could exist in the pack (4 new countertops on the 9 current woods, plus
 bamboo and cherry sets); pale oak and poplar have no wood here.
 
 ## 0. At a glance
@@ -34,7 +34,7 @@ bamboo and cherry sets); pale oak and poplar have no wood here.
 - Registered ids from the `BlockRegistry` string constants (90 old, 184 new) and the blockstates (91 / 185; the extra
   one is `oak_pantry_cabinet`, an asset with no block, recipe or name in either jar).
 - Recipes and loot tables of the 90 shared blocks compared semantically (1.21 bare-string ingredients and `result.id`
-  normalised).
+  normalized).
 - Block entity classes read with `javap -c -p -constants`: every container opens `ChestMenu.threeRows` (27 slots) in
   both. Fuel from `FuelBlockItem` (old) and `data/neoforge/data_maps/item/furnace_fuels.json` (new).
 - Pack side: `kubejs/exported/items_by_mod` for the slabs and trapdoors the recipes need, `item_dict.js`,
@@ -52,7 +52,7 @@ bookshelf with door, cabinet with glass doors, glass cabinet, and the countertop
 |---|---|---|---|
 | Countertops in Polished Blackstone, Polished Diorite, Stone Bricks on the 9 current woods | 27 | vanilla slab (`AAA` stone slab, `C C` trapdoor, `BBB` wood slab) | yes, all vanilla 1.19.2 |
 | Countertop in Polished Tuff on the 9 current woods | 9 | `minecraft:polished_tuff_slab` | no vanilla block; Quark `polished_tuff_slab` exists (twigs has only tuff brick slabs) |
-| Bamboo set (every type, 6 countertops) | 14 | `minecraft:bamboo_slab`, `bamboo_trapdoor` | Quark `bamboo_planks_slab` and `bamboo_trapdoor`; art matches (average colour 196,176,82 against Quark planks 193,173,80) |
+| Bamboo set (every type, 6 countertops) | 14 | `minecraft:bamboo_slab`, `bamboo_trapdoor` | Quark `bamboo_planks_slab` and `bamboo_trapdoor`; art matches (average color 196,176,82 against Quark planks 193,173,80) |
 | Cherry set | 14 | `minecraft:cherry_slab`, `cherry_trapdoor` | Vinery `cherry_slab` and `cherry_trapdoor`, but that is the port's dark cherry ([storage_audit.md](storage_audit.md)); Storage Delight's art is vanilla pink cherry (average 224,174,168), so it would not match |
 | Pale oak set (incl. plain cabinet) | 15 | `minecraft:pale_oak_*` | no wood |
 | Poplar set (incl. plain cabinet) | 15 | `minecraft:poplar_*` (26.x vanilla wood) | no wood |
@@ -63,7 +63,7 @@ poplar are in 26.10.05 only.
 
 **Proposed:**
 - Countertops in Polished Blackstone, Polished Diorite, Stone Bricks on the 9 woods (27 blocks): carry over.
-- Polished Tuff countertops (9) with the Quark slab: owner's call (Quark's polished tuff colour against 26.10.05's art
+- Polished Tuff countertops (9) with the Quark slab: owner's call (Quark's polished tuff color against 26.10.05's art
   not checked).
 - Bamboo set (14) on Quark bamboo: carry over; the art is already in the installed jar.
 - Cherry set (14): skip, or retexture onto Vinery's dark cherry (owner's call).
@@ -80,7 +80,7 @@ poplar are in 26.10.05 only.
 
 | Change | Class | Proposed |
 |---|---|---|
-| Cabinet with Glass Doors recipe: `forge:glass_panes` -> `c:glass_panes` | data (1.21 tag) | skip: same behaviour |
+| Cabinet with Glass Doors recipe: `forge:glass_panes` -> `c:glass_panes` | data (1.21 tag) | skip: same behavior |
 | All other 81 recipes, all loot tables (drop self, survives explosion), axe tag, 27 slots, names | none | none |
 | Fuel: 300 ticks for every overworld-wood block (nether woods none) | value, unchanged | none |
 | Creative tab via NeoForge, item model definitions, `pack.mcmeta`, logo removed | code / assets | skip |

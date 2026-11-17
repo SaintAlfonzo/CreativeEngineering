@@ -10,7 +10,7 @@ Merged 2026-10-19 from 4 memories (index compaction).
 
 Create's `create:sequenced_assembly` recipe (used by `NCH.echoAssembly` / `felsicAssembly` /
 `dragonAssembly` in [end_gear.js](kubejs/server_scripts/equipment/end_gear.js) for the
-netherite→echo→felsic→dragon gear progression) has **zero NBT passthrough by design**: decompiled
+netherite->echo->felsic->dragon gear progression) has **zero NBT passthrough by design**: decompiled
 `SequencedAssemblyRecipe.advance(ItemStack)` builds every intermediate "incomplete" stack from the
 recipe's own transitional-item template, and the final step's `rollResult()` builds the finished
 item from the result-pool template — neither ever reads the real stack being processed. So
@@ -69,11 +69,11 @@ like the horse-armor one — the player-tick pass can never see it.
 `ArmorItem`, NOT an `ElytraItem`, and adds no "flight modifier" attribute. **Easy Elytra
 Takeoff** gates its firework-rocket takeoff on
 `ForgeElytraEventHelper.isWearingAnElytra(player)`, which only accepts `instanceof ElytraItem`
-in an armour slot (+ a Curios "flight modifier" attribute ≥ 1). So the chestplate never gets
+in an armor slot (+ a Curios "flight modifier" attribute ≥ 1). So the chestplate never gets
 rocket-takeoff, only jump-in-air.
 
 **Fix:** `patcherMod/.../mixin/EasyElytraTakeoffHelperMixin.java` — `@Mixin(ForgeElytraEventHelper.class,
-remap=false)`, `@Inject` at HEAD of `isWearingAnElytra` (cancellable): if any armour-slot stack
+remap=false)`, `@Inject` at HEAD of `isWearingAnElytra` (cancellable): if any armor-slot stack
 is in `#creativeengineering:elytra_chestplates` OR `stack.canElytraFly(player)` (Forge), return
 true. Once EET's flow starts it force-sets the fall-flying flag for ~6 ticks and DragonLoot's
 own `updateFallFlying` mixin sustains the glide — so nothing else is needed.
@@ -95,8 +95,8 @@ chestplate rocket-took-off only on thick terrain / at a jump apex, not on a lone
 over air or mid-fall. Fix: `mixin/EasyElytraTakeoffGroundCheckMixin` —
 `@ModifyVariable(method="onFirework", at=@At("LOAD"), index=8, remap=false)` (local 8 = `inAir`
 in easyelytratakeoff-1.19.2-4.2, single load), forces `inAir=false` when
-`ElytraChestplates.isWorn(player)` (tag-only; vanilla elytra keep stock behaviour). Added to
-`creativeengineering.mixins.json`. Tag key now centralised in
+`ElytraChestplates.isWorn(player)` (tag-only; vanilla elytra keep stock behavior). Added to
+`creativeengineering.mixins.json`. Tag key now centralized in
 `com/SaintAlfonzo/creativeengineering/util/ElytraChestplates.java` (`TAG` + `isWorn`); both EET
 mixins read it. `collective-1.19.2-7.64.jar` added to `patcherMod/libs/` (compile-only — Mixin
 AP resolves `ElytraEvent`'s `collective` refs).
@@ -106,7 +106,7 @@ reusable modded rocket. Its `use()` only spawns `EntityEnderiophageRocket` when
 `player.isFallFlying()` is already true — else returns PASS, i.e. it has NO takeoff of its own.
 EET won't help it either: `onFirework`'s first gate is
 `!item.equals(Items.FIREWORK_ROCKET) && (!name.contains("booster_") || name.contains("_empty"))
-→ PASS`, and the enderiophage rocket is neither a vanilla firework nor a "booster_" item, so
+-> PASS`, and the enderiophage rocket is neither a vanilla firework nor a "booster_" item, so
 EET bails immediately. To give it takeoff: either (a) a patcherMod `@Inject` at HEAD of
 `ItemEnderiophageRocket.use` that, when `!isFallFlying` and wearing `#…:elytra_chestplates`
 (and not `inAir`-blocked, or ignoring that), sets the fall-flying flag + spawns the entity +

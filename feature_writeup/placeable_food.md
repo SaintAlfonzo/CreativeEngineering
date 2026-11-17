@@ -1,6 +1,6 @@
 # Placeable food
 
-Test prefix **PL-** · Last updated **2026-10-30** · Overall status **DEPLOYED with 1.0.6 (2026-10-14), coaster line with 1.0.8 (2026-10-19), not run in game; 2026-10-25 produce on the coaster and 9 Display Delight egg dishes shipped with 1.1.03 (2026-10-26); coaster contents limited to modelled items 2026-10-29 ([kitchen.md](kitchen.md) 2.3, TODO `cooking/kitchen #21`)** (catalog rerun on the 2026-10-24 live `/dumpplaceable`; a newer `placeable.json` export came with the 2026-10-30 00:42 `/dumpall`, catalog not rerun)
+Test prefix **PL-** · Last updated **2026-10-30** · Overall status **DEPLOYED with 1.0.6 (2026-10-14), coaster line with 1.0.8 (2026-10-19), not run in game; 2026-10-25 produce on the coaster and 9 Display Delight egg dishes shipped with 1.1.03 (2026-10-26); coaster contents limited to modeled items 2026-10-29 ([kitchen.md](kitchen.md) 2.3, TODO `cooking/kitchen #21`)** (catalog rerun on the 2026-10-24 live `/dumpplaceable`; a newer `placeable.json` export came with the 2026-10-30 00:42 `/dumpall`, catalog not rerun)
 live `/dumpplaceable` export of 2026-10-18, rerun 2026-10-20; the tags and client script loaded
 without errors in single player 2026-10-11)
 
@@ -26,13 +26,13 @@ and "Placeable on a coaster". The lines come from five item tags generated from 
 | Part | Where | Status |
 |---|---|---|
 | `/dumpplaceable` (live Display Delight links + every food-looking block item) | [dump_placeable.js](../kubejs/server_scripts/_lib/dump_placeable.js), also in `/dumpall` | DEPLOYED with 1.0.6, run 2026-10-18 |
-| Catalog + tag lists generator | [tools/placeable_catalog.py](../tools/placeable_catalog.py) → [placeable_catalog.md](placeable_catalog.md), [placeable.json](../kubejs/generation_scripts/food/placeable.json) | BUILT, run on the 2026-10-18 live dump |
+| Catalog + tag lists generator | [tools/placeable_catalog.py](../tools/placeable_catalog.py) -> [placeable_catalog.md](placeable_catalog.md), [placeable.json](../kubejs/generation_scripts/food/placeable.json) | BUILT, run on the 2026-10-18 live dump |
 | Tags `#creativedelight:placeable`, `placeable/sneak`, `placeable_on_plate`, `placeable_on_small_plate`, `placeable_on_coaster` | [placeable_tags.js](../kubejs/data/creativedelight/kubejs/creativedelight/placeable_tags.js) | DEPLOYED with 1.0.6 (coaster tag 2026-10-18, with 1.0.8) |
 | Tooltip lines + removal of DD / Fruits Delight placement lines | [placeable_tooltip.js](../kubejs/assets/creativedelight/kubejs/_qol/placeable_tooltip.js) | DEPLOYED with 1.0.6 (coaster line with 1.0.8); moved into Creative Delight 2026-10-25 (QoL-2, switch `[qol] placeableTooltips`, in the `mods/` Creative Delight jar; creative_delight.md 22, SQ-CDQ-04 client) |
 
 **Counts (live dump of 2026-10-24, catalog of 2026-10-25):** 507 items. 161 placeable (103 only while sneaking), 34 on a Food Plate, 13 on a Small Food Plate, 392 on a coaster (every raw, cooked, egg and dairy food). 9 patcherMod Display Delight egg dishes join "placeable" after the next dump.
 **Open first:** the rules at the top of `tools/placeable_catalog.py` (`INCLUDE`, `EXCLUDE`, `SNEAK_ITEM_CLASSES`).
-**Refresh:** `/dumpplaceable` (or `/dumpall`) in game → `python3 tools/placeable_catalog.py` (or `/cdevgen run placeable_catalog`) →
+**Refresh:** `/dumpplaceable` (or `/dumpall`) in game -> `python3 tools/placeable_catalog.py` (or `/cdevgen run placeable_catalog`) ->
 `/reload` for the tags (restart if the tool added item_dict keys).
 
 ## 1. Overview
@@ -56,8 +56,8 @@ There are three ways to put food down in this pack:
    goes on exactly those; the Vinery and Farmer's Respite drinks lost it. A sneak right click with an item
    skips the coaster, so a Display Delight food then tries to put its own display block on top (AL-52).
 
-Data flow: `/dumpplaceable` → `kubejs/exported/food/placeable.json` → `tools/placeable_catalog.py` →
-`generation_scripts/food/placeable.json` (item_dict keys) → CD `creativedelight/placeable_tags.js` (tags) → `placeable_tooltip.js` (lines).
+Data flow: `/dumpplaceable` -> `kubejs/exported/food/placeable.json` -> `tools/placeable_catalog.py` ->
+`generation_scripts/food/placeable.json` (item_dict keys) -> CD `creativedelight/placeable_tags.js` (tags) -> `placeable_tooltip.js` (lines).
 
 ## 2. Reference
 
@@ -145,14 +145,14 @@ Data flow: `/dumpplaceable` → `kubejs/exported/food/placeable.json` → `tools
 Restart the game (new item_dict keys, new client script). Hover items in JEI or the inventory.
 
 - [ ] **PL-01 Load** (server half: scratch r1031 SQ-KT-21 PASS, the `[placeable]` counts line with no `not item ids` warning; r1102b SQ-CDFW-03 PASS, tags; deep scan 2026-11-02)**:** `logs/latest.log` has `[placeable] placeable=161, placeable/sneak=103, placeable_on_plate=34, placeable_on_small_plate=13, placeable_on_coaster=392` (2026-10-24 dump; the 9 egg dishes add to `placeable` after the next dump) and no `[placeable]` warning. No `Error occurred while handling event 'item.tooltip'`.
-- [ ] **PL-02 DD placed:** hover Beef Stew. → "Placeable (while sneaking)" in gray, and no "Can be placed while sneaking" line. Sneak + right click a block top places it.
-- [ ] **PL-03 DD plate:** hover Hamburger. → "Placeable on plate" only; no "Can be plated on:" / "Food Plate" lines. Right click an empty Food Plate plates it.
-- [ ] **PL-04 DD small plate:** hover Cake Slice. → "Placeable on small plate". Right click an empty Small Food Plate plates it.
-- [ ] **PL-05 Both plates:** hover Stuffed Potato. → "Placeable on plate" and "Placeable on small plate".
-- [ ] **PL-06 Own block:** hover Cake, Apple Pie and Pizza. → "Placeable" each, no "(while sneaking)". Cherry Wine → "Placeable (while sneaking)"; it places only on a sneak right click.
-- [ ] **PL-07 Jam:** hover Apple Jam. → "Placeable (while sneaking)", and Fruits Delight's "Shift right click to place down" is gone.
-- [ ] **PL-08 Not tagged:** hover a Handcrafted plate and the Food Plate item. → No placeable line; the Food Plate still shows its name. Carrot and Sweet Berries show only "Placeable on a coaster" (2026-10-25).
-- [ ] **PL-09 Dump:** run `/dumpplaceable`. → Chat reports about 50 + 29 + 11 = 90 Display Delight links. Then `python3 tools/placeable_catalog.py` prints `[dump]` and the catalog's source line says "/dumpplaceable (live)". Review the "Review" section.
+- [ ] **PL-02 DD placed:** hover Beef Stew. -> "Placeable (while sneaking)" in gray, and no "Can be placed while sneaking" line. Sneak + right click a block top places it.
+- [ ] **PL-03 DD plate:** hover Hamburger. -> "Placeable on plate" only; no "Can be plated on:" / "Food Plate" lines. Right click an empty Food Plate plates it.
+- [ ] **PL-04 DD small plate:** hover Cake Slice. -> "Placeable on small plate". Right click an empty Small Food Plate plates it.
+- [ ] **PL-05 Both plates:** hover Stuffed Potato. -> "Placeable on plate" and "Placeable on small plate".
+- [ ] **PL-06 Own block:** hover Cake, Apple Pie and Pizza. -> "Placeable" each, no "(while sneaking)". Cherry Wine -> "Placeable (while sneaking)"; it places only on a sneak right click.
+- [ ] **PL-07 Jam:** hover Apple Jam. -> "Placeable (while sneaking)", and Fruits Delight's "Shift right click to place down" is gone.
+- [ ] **PL-08 Not tagged:** hover a Handcrafted plate and the Food Plate item. -> No placeable line; the Food Plate still shows its name. Carrot and Sweet Berries show only "Placeable on a coaster" (2026-10-25).
+- [ ] **PL-09 Dump:** run `/dumpplaceable`. -> Chat reports about 50 + 29 + 11 = 90 Display Delight links. Then `python3 tools/placeable_catalog.py` prints `[dump]` and the catalog's source line says "/dumpplaceable (live)". Review the "Review" section.
 
 ## 8. History
 
@@ -172,7 +172,7 @@ Restart the game (new item_dict keys, new client script). Hover items in JEI or 
   Respite drinks. Rerun on today's live `/dumpplaceable`: 269 items, 160 on a coaster. Test AL-52 in alcohol.md.
 - 2026-10-19: coaster tag and line STAGED in pack 1.0.8 ([plan_1.0.8.md](plan_1.0.8.md) PL).
 - 2026-10-19: status sweep: pack 1.0.6 was DEPLOYED 2026-10-14 and 1.0.8 (coaster line and tag) 2026-10-19 10:20. PL-01 to PL-09 pending.
-- **2026-10-20:** coaster tag = modelled items only (alcohol.md 12): `add_coaster()` reads the port's coaster files and
+- **2026-10-20:** coaster tag = modeled items only (alcohol.md 12): `add_coaster()` reads the port's coaster files and
   the pack's generated Display Delight ones; `COASTER_DRINK_MODS` removed. Rerun on the last dump: 152 on a coaster
   (60 Vinery / Farmer's Respite drinks out, 56 DD foods in). Tests AL-91 to AL-93.
 - **2026-10-27:** the tag script moved into Creative Delight as `kubejs/data/creativedelight/kubejs/creativedelight/placeable_tags.js`

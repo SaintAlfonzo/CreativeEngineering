@@ -8,13 +8,13 @@ Built 2026-10-19 into patcherMod 1.0.9 (rebuilt in mods/). Writeup: feature_writ
 2.5 (MT-13..18; scratch server passed 13-16); TODO `farming/trees #1`.
 
 - Hook: HEAD of `LeavesBlock#randomTick` (m_213898_); Fast Leaf Decay and the pack's fruit leaves all end there.
-  `block/LeafDecayRange.keep` BFS through distance-7 leaves only; neighbour with d<7 at k steps = log at k+d.
+  `block/LeafDecayRange.keep` BFS through distance-7 leaves only; neighbor with d<7 at k steps = log at k+d.
 - Separated Leaves rules read by reflection (`Reload.LEAVES_RULES`, record `leaves()`).
 - maxDistance semantics: longest surviving leaf path, vanilla 6 (an early draft had an off-by-one).
 - Default 12 chosen from measurement: all 310 tree features placed on a scratch server (tools/leaf_path_probe.js):
   longest path 10 (Terralith swamp_small / cave jungle / max_spruce_big, Vinery apple 7). Templates
   (tools/leaf_path_scan.py): none past 6.
-- Timing (user liked this approach): randomTick decay cancelled; `tick` TAIL (`afterTick`) decides: before<7 -> recheck
+- Timing (user liked this approach): randomTick decay canceled; `tick` TAIL (`afterTick`) decides: before<7 -> recheck
   in decayMin..MaxTicks, before==7 -> keep() or drop. Fast Leaf Decay ported as `block/FastLeafDecayPort`
   (NeighborNotifyEvent on air -> scheduleTick); FastLeafDecay-30.jar in disabledmods/, mod_sides row gone,
   pack/ + server_mods regenerated.

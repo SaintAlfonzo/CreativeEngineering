@@ -72,7 +72,7 @@ look no grass slab around the walls; the large-ruins cluster looks the same (ST-
 ## SQ-TER-05 | beard footprint calibration (W1c, beardFootprint = true)
 @group B
 @commands toml `[worldgen.earth_fill] log = "ALL"`, `beardFootprint = true`; Chunky r 300 in hills with outposts and villages; `grep 'under built floors' latest.log`
-@pass lines show `(N under built floors)`; cancels rise for outposts on cliff edges; tabulate cancels per family against `tools/earth_fill_sim.sh 4242 60 footprint` (outposts 23%, villages 2 to 18% newly over) and look at 3 cancelled and 3 kept starts (ST-304). Calibration only: turn the switch back off unless the user decides
+@pass lines show `(N under built floors)`; cancels rise for outposts on cliff edges; tabulate cancels per family against `tools/earth_fill_sim.sh 4242 60 footprint` (outposts 23%, villages 2 to 18% newly over) and look at 3 canceled and 3 kept starts (ST-304). Calibration only: turn the switch back off unless the user decides
 @fails no `under built floors` line at all: the switch did not load (check the toml); every outpost cancelled: limits too tight for footprint mounds, report numbers
 @from batches/r1031/w1_earthfill.qb
 > execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills

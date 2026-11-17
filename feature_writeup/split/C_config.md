@@ -51,7 +51,7 @@ Facts that frame every row:
 | `leaf_piles` (LeafPiles) | 903-927 | 1 | Compat | mixin/LeafPileSlowMixin; surface/StuckInBlock (Run Speed line) | Compat; Engineering | SPLIT (one key read from two jars; see 2) |
 | `dandelion_maturing` (DandelionMaturing) | 928-949 | 2 | CD? | crops/DandelionMaturing | CD (`crops/` routes to CD; dandelions are a wild flower, Worldgen is the alternative) | |
 | `moss` (Moss) | 950-975 | 2 | Worldgen? | block/MossTint | Worldgen? (biome-tinted vanilla block, client only; Common is the alternative) | |
-| `vine_shearing` (VineShearing) | 976-1004 | 3 | Worldgen? | block/VineShearing, block/VineShearingClient | Worldgen? (plant behaviour; the sheared state's WTHIT line is `[wthit] sheared`) | |
+| `vine_shearing` (VineShearing) | 976-1004 | 3 | Worldgen? | block/VineShearing, block/VineShearingClient | Worldgen? (plant behavior; the sheared state's WTHIT line is `[wthit] sheared`) | |
 | `campfire` (Campfire) | 1005-1049 | 7 | CD | campfire/CampfireComfort, campfire/CampfireRain, compat/WthitCampfire, compat/jei/world/CampfireRows | CD (the WTHIT and JEI rows show only campfire data) | |
 | `raids` (Raids) | 1050-1066 | 2 | Worldgen | mixin/RaidGlowingMixin | Worldgen | |
 | `monster_box` (MonsterBox) | 1067-1098 | 6 | Worldgen? | mobs/MonsterBoxVault | Worldgen (`mobs/`); Compat if the owner treats it as a Quark tweak | |

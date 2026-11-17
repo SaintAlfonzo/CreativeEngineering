@@ -11,8 +11,8 @@ Generated 2026-11-05 by `python3 tools/terrain_adaptation_scan.py` (re-run after
 - **Strong**: surface structure, at least 30% of the box unbuilt and 12+ pad or air-only columns. **Mild**: 15% and 6+. Totals over multi-template structures add every reachable variant once, so a jigsaw structure with many alternatives counts each of them.
 
 **Choosing tags** (add ids to `kubejs/data/creativeworldgen/kubejs/worldgen/terrain_adaptation.js`, then rejoin; new chunks only):
-- `soft` + `template_trim`: a building on a pad. The pad and the air around it go, the ground is levelled only under the building and blends out in 4 blocks (+ `skirtBump`).
-- `soft` alone: keeps the template's pad and courtyards (they are levelled too) but rounds and shortens the skirt. For walled compounds and forts whose yards should stay flat.
+- `soft` + `template_trim`: a building on a pad. The pad and the air around it go, the ground is leveled only under the building and blends out in 4 blocks (+ `skirtBump`).
+- `soft` alone: keeps the template's pad and courtyards (they are leveled too) but rounds and shortens the skirt. For walled compounds and forts whose yards should stay flat.
 - `template_trim` alone: for `none` structures (and YUNG's, which ignore the mode tags): no more air notches or floating pad, nothing else changes.
 - The suggestion column is a starting point from the numbers only; look at a structure with `/cdevplace` or `/locate` before tagging a whole family.
 

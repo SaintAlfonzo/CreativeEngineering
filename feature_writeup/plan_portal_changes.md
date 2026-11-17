@@ -16,7 +16,7 @@ The Portal Gun items of the same notes (names, hotbar desaturation, exit lift, d
 | N1 | Ordinary fire lights an Immersive Portals Nether portal; the failure (crying obsidian, soul fire) never happens | IP `@Redirect`s `PortalShape.findEmptyPortalShape` in `BaseFireBlock#onPlace`: when it builds its own portal it returns empty, so Forge's `PortalSpawnEvent` never fires and `PortalFailureHandler` never runs | Mixin: IP's fire hook no longer builds portals; Dark Fire hands a valid frame to IP instead of placing vanilla portal blocks | Creative Magic | none needed |
 | N2 | Cut the distance seen through a Nether portal | IP loads and draws the other side up to `indirectLoadingRadiusCap` (8 chunks) | Config: lower the cap | config | D1: 4 chunks |
 | N3 | Nether portal tint, and fog on the far side to hide the short distance | IP has an overlay switch (`netherPortalOverlay`, off) that draws the portal block over its portal entity; nothing fogs the far side | Config: overlay on. Client mixin: while IP draws through a Nether portal, fog from 4 blocks out to full at the 4-chunk limit (configurable) | config + Creative Compat (client) | D2: tint on; fog 4 blocks to 64 blocks |
-| G5 | Opaque gun portal option | New feature | Client config: gun portals are not rendered through (`Portal#isVisible` false on the client) and draw a flat fill in the portal colour | Creative Compat (client) | D3: off by default |
+| G5 | Opaque gun portal option | New feature | Client config: gun portals are not rendered through (`Portal#isVisible` false on the client) and draw a flat fill in the portal color | Creative Compat (client) | D3: off by default |
 | M2 | Rename the tinted glass types to "Smooth Tinted Glass" | Design and Decor's three tinted framed glass blocks carry the same names as Create Framed's | Lang override | Creative Compat names.js | D4: Design and Decor set, "Smooth Tinted Glass" |
 | M3 | Mirror limits: distance from the player, bounces, view distance inside a mirror | IP has only global knobs (`maxPortalLayer` 5, `portalRenderLimit` 200), shared with the gun | Own client config for mirrors: rendered within 24 blocks, 4 bounces, 4 chunks seen inside a mirror (no fog) | Creative Compat (client) | D5: 24 blocks, 4 bounces, 4 chunks; D7: mirror fog off |
 | G6 | Gun portals despawn when the owner is too far away | Portals persist until replaced; `PortalGunRecord` tracks each owner's two portals | Owner tells its portals to dissolve on logout or dimension change; each portal heartbeats (10 s) and dissolves past `despawnDistance` from its owner | Creative Compat | D8: owner message plus heartbeat; distance value open |
@@ -64,7 +64,7 @@ constant pools), so returning false has no other effect.
 - Fog: client mixin in Creative Compat on `FogRenderer.setupFog` (TAIL) or `RenderSystem.setShaderFogEnd`: when IP
   is rendering a portal layer (`PortalRendering.isRendering()`) and the outermost rendered portal is a
   `NetherPortalEntity`, set linear fog from 4 blocks past the portal plane to full at 64 blocks (the 4-chunk
-  limit), so the far side fades out gradually (D2). Distances are measured from the portal plane, not the camera. Uses the far dimension's fog colour (IP already swaps fog context per dimension, `MixinFogRenderer`).
+  limit), so the far side fades out gradually (D2). Distances are measured from the portal plane, not the camera. Uses the far dimension's fog color (IP already swaps fog context per dimension, `MixinFogRenderer`).
   One `PortalFog` helper picks the settings by the type of the portal being drawn through: Nether portal
   (`NetherPortalEntity`), gun portal (`portalgun:custom_portal`), mirror (`Mirror` / `BreakableMirror`) (D7).
 - Client config `config/creativecompat-client.toml` (or the existing Compat config if it has a client section),
@@ -84,9 +84,9 @@ constant pools), so returning false has no other effect.
 - Portal Gun's portal is `portalgun:custom_portal`, an IP `Portal` subclass. IP skips drawing through a portal whose
   `isVisible()` is false; teleport does not read it.
 - Client mixin on `Portal#isVisible` (or on IP's render-candidate filter) returning false for gun portals when
-  `[portalgun] opaquePortals` is on (default off, D3). The gun's own edge overlay still draws; add a flat quad in the portal colour
-  (`CustomPortalColors`, read from the entity's synced colour) at the portal plane so the wall does not show.
-- Check: the colour reaches the client entity (the gun's renderer already tints, so it should); IP's
+  `[portalgun] opaquePortals` is on (default off, D3). The gun's own edge overlay still draws; add a flat quad in the portal color
+  (`CustomPortalColors`, read from the entity's synced color) at the portal plane so the wall does not show.
+- Check: the color reaches the client entity (the gun's renderer already tints, so it should); IP's
   `renderingMergable` grouping does not re-enable the view.
 
 ## 4. Mirrors
@@ -172,7 +172,7 @@ one heartbeat; the owner messages are immediate.
    - SQ-PRT-03: `isGlass` accepts each `mirror_glass` member (flint and steel creates `imm_ptl_core:breakable_mirror`).
    - CQ-PRT-01: through a Nether portal: far side ends at 4 chunks, clear for the first 4 blocks then fading to full
      fog at the limit; portal tinted by the overlay; changing `nether.start` / `nether.end` changes the fog; `nether.enabled` false removes it.
-   - CQ-PRT-02: opaque gun portals: off by default (view through); on: no view through, colour fill matches the dye,
+   - CQ-PRT-02: opaque gun portals: off by default (view through); on: no view through, color fill matches the dye,
      teleport works.
    - CQ-PRT-03: a mirror more than 24 blocks away shows glass, within 24 it reflects; two facing mirrors show 4
      bounces; the reflection stops at 4 chunks with no fog; turning `mirror` fog on in the config fades it;
@@ -198,7 +198,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 |---|---|---|
 | N1 | Magic `mixin/IPFireGateMixin` (HEAD on `onFireLitOnObsidian` and `onCrouchingPlayerIgnite`), `dimension/IPNetherPortalBridge`, `block/DarkFireBlock#onPlace` | Only callers of the two methods in IP 2.3.7: `MixinAbstractFireBlock`, `MixinFlintAndSteelItem` (checked). IP's frame search skips the starting cell, so Dark Fire (not air) there works like fire. The diagnostic log in `PortalFailureHandler` stays until NP-01..05 pass (TODO #4). **Fix 2026-11-07 17:05 (after the first in-game try):** in `normal` mode IP's redirect returns an empty shape whatever `onFireLitOnObsidian` returns, so gating it alone left no event; Smaller Nether Portals' delayed flint-and-steel task then filled the frame with vanilla portal blocks and posted the event itself (Collective ignores the cancel), and the handler's flood fill gave up on the portal blocks (51 `state=minecraft:nether_portal` events in latest.log, no crying obsidian). Now the gate posts the vanilla event itself (`IPNetherPortalBridge.postVanillaSpawnEvent`), and the handler counts `minecraft:nether_portal` as interior, so a Smaller Nether Portals frame also fails |
 | N2, N3 | `config/immersive_portals_forge.json` (+ configs_edited copy); Compat `portals/PortalFog`, `mixin/IPPortalFogMixin` (TAIL of `FogRenderer.setupFog`, `m_234172_`, terrain fog only), `mixin/IPPortalRenderingAccessor` | Fog is never pushed farther than vanilla's (water, blindness stay). Offset by the real camera's distance to the outermost portal. Config lives in `creativecompat-common.toml` `[immersive_portals.fog.*]` (the file already has client sections) |
-| G5 | `portals/PortalLimits` via `mixin/IPPortalRenderLimitsMixin` (HEAD of `PortalRenderer.shouldSkipRenderingPortal`), `mixin/PortalGunRendererOpaqueMixin` | Not `Portal#isVisible` (IP also reads it for block interaction, and the gun sets it for unlinked portals). The fill is the gun's own `overlay_filled.png` disc, tinted in the portal colour, not a new quad |
+| G5 | `portals/PortalLimits` via `mixin/IPPortalRenderLimitsMixin` (HEAD of `PortalRenderer.shouldSkipRenderingPortal`), `mixin/PortalGunRendererOpaqueMixin` | Not `Portal#isVisible` (IP also reads it for block interaction, and the gun sets it for unlinked portals). The fill is the gun's own `overlay_filled.png` disc, tinted in the portal color, not a new quad |
 | M2 | `kubejs/assets/creativecompat/kubejs/names.js` | none |
 | M3 | `PortalLimits.skip` (distance from the current camera, bounces when the whole layer chain is mirrors) and `renderDistance` (RETURN of `getPortalRenderDistance`) | The view inside a mirror is cut in whole chunks (64 blocks = 4 chunks) around the reflected camera |
 | M4 | `mixin/IPMirrorGlassMixin` (RETURN of `isGlass`, `isGlassPane`), tags in `kubejs/data/creativecompat/kubejs/tags/blocktags.js`, dict keys `b.t_mirror_glass`, `b.t_mirror_glass_panes`, nine new `item_dict` ids (Create Framed tinted, Reinforced Tinted Glass) | Frosty glass needs no ordering code: IW melts it in the block's `use`, which vanilla skips while sneaking with an item, so sneak + flint and steel reaches IP's mirror check. A pane tag member also counts for `isGlass` (IP's own `isGlass` takes panes too) |

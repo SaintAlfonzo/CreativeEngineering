@@ -24,7 +24,7 @@
 @@text One group B fresh world, seed 8675309, scratch toml `[worldgen.earth_fill] log = "ALL"`. Chunky each square
 @@text (`chunky center <x> <z>`, `chunky radius 300`, `chunky start`) and wait for it to finish before probing; a square is
 @@text probed in 9 tiles of `rChunks` 6 (the verb prints at most 30 starts per call). The rows run in order in one boot: later
-@@text rows reuse the squares' captured centres (`{PL}`, `{RV}`, `{DS}`) and the probe lines in `logs/latest.log`.
+@@text rows reuse the squares' captured centers (`{PL}`, `{RV}`, `{DS}`) and the probe lines in `logs/latest.log`.
 @@text
 @@table
 ## SQ-EFB-00 | offline: worldgen tool tests (GroundMatch, EarthFill 113+, Meta print ALL)
@@ -113,7 +113,7 @@ shell python3 -I $INST/tools/scratch_query/efb_judge.py log logs/latest.log --bo
 ## SQ-EFB-03 (air, mounds)
 @group B
 @commands hills square (`/locate biome minecraft:windswept_hills` or `terralith:highlands`), Chunky r 300; `grep 'mound columns'`
-@pass every start whose line shows mound columns within its limit is kept and the probe shows `air-below 0` under it (the beard built the mound); every start over the mound limit is CANCELLED and has no probe line; LOOK at two mound starts from the side: an earth slope, no overhang, no stone pillar
+@pass every start whose line shows mound columns within its limit is kept and the probe shows `air-below 0` under it (the beard built the mound); every start over the mound limit is CANCELED and has no probe line; LOOK at two mound starts from the side: an earth slope, no overhang, no stone pillar
 @fails air under a kept mound start: the beard reach is shorter than the mound counted (`maxMoundHeight` 8 vs the size limit); note gap and size
 @reviewed 2026-11-16
 shell grep -cE "nearest minecraft:windswept_hills is at|Could not find" logs/latest.log > ../efb_loc_hl.n || true
@@ -173,7 +173,7 @@ look two kept mound starts (mound columns > 0 in their [earth-fill] line) from t
 ## SQ-EFB-04 (air, earthless pieces)
 @group B
 @commands same squares plus a desert and a jungle square; `/cdevtest under` filtered `pyramid`, `igloo`, `jungle`, `camp`, `ruin` (`/cdevtest under <x> <z> 6 camp`)
-@pass legacy and earthless pieces (spans, 3.28): `over6 0` for kept ones; a camp or ruin with a column more than 6 over air has a CANCELLED line, not a world entry; tents and plinths sit on the ground (LOOK one camp, one ruin)
+@pass legacy and earthless pieces (spans, 3.28): `over6 0` for kept ones; a camp or ruin with a column more than 6 over air has a CANCELED line, not a world entry; tents and plinths sit on the ground (LOOK one camp, one ruin)
 @fails floating camp kept: the span rule skipped it (`surface_structures` step or above sea level less `baseLayers`), note the structure id for `footprintAllPieces`
 @reviewed 2026-11-16
 shell grep -cE "nearest minecraft:desert is at|Could not find" logs/latest.log > ../efb_loc_dt.n || true
@@ -280,7 +280,7 @@ look one camp and one ruin from the side: tents and plinths sit on the ground (j
 ## SQ-EFB-05 (water, lakes)
 @group B
 @commands check the scratch toml has `[worldgen.earth_fill] maxWaterSurplus = 0.5` (instance value since 2026-11-02); lake / river square (the SQ-EF-09 kind, `/locate biome minecraft:river` near plains), Chunky r 300; `grep -E 'too wet\|wet only\|footprint'`; `/cdevtest under` tiles
-@pass kept starts: `water-below` only with `max` 2 or less (`waterReach`; deeper water under earth counts, and over `maxOverWater` 24 the start goes), `base water 0` (no flooded floor) except `wet_ok` and pond structures; every `too wet` start has no probe line; no kept start has footprint water above 1.5 x its ground (60:40 passes, 61:39 goes) in its log line; record how many kept starts sit between 50:50 and 60:40 (kept at 0.5, cancelled at 0.0)
+@pass kept starts: `water-below` only with `max` 2 or less (`waterReach`; deeper water under earth counts, and over `maxOverWater` 24 the start goes), `base water 0` (no flooded floor) except `wet_ok` and pond structures; every `too wet` start has no probe line; no kept start has footprint water above 1.5 x its ground (60:40 passes, 61:39 goes) in its log line; record how many kept starts sit between 50:50 and 60:40 (kept at 0.5, canceled at 0.0)
 @fails water under a kept piece deeper than 2: `waterReach` not read (toml key missing, fallback) or the piece has no earth (add its base to `stone_base` / `sand_base`); base water in a house: the ground-level column was counted as ground (E12 lowest-layer rule); a kept start over 60:40: `maxWaterSurplus` not read (still 0.0 or the code default)
 @reviewed 2026-11-16
 shell grep -nE '^\s*maxWaterSurplus' config/creativeworldgen-common.toml; grep -qE '^\s*maxWaterSurplus = 0\.5' config/creativeworldgen-common.toml
@@ -796,11 +796,11 @@ look the three count blocks (plains, river, desert village; box = start box, 8 l
 shell n=$(grep -c '\[cdevtest\] verb=under id=' logs/latest.log); echo "under start lines this boot: $n"; [ "$n" -ge 20 ]
 shell python3 -I $INST/tools/scratch_query/efb_judge.py vslog logs/latest.log
 look RECORD the vslog pairs (start, logged over water / over air, probe water_max / over6) as a table in the run doc; a flag = the probe far worse than its line
-## SQ-EFB-12 (cancelled really gone)
+## SQ-EFB-12 (canceled really gone)
 @group B
 @commands after 02 to 09: `save-all flush`; `efb_judge.py gone <level> logs/latest.log` checks every CANCELLED line's chunk in the region files (replaces `/cdevtest under <chunkX*16> <chunkZ*16> 0 <id>` per line); census `/cwglocate census 96 {PL}`
-@pass no start of that id in that chunk (the slot is empty or a priority / group neighbour); the census (`/cwglocate census 96 <x> <z>`) counts the cancels as EARTH_FILL rejects
-@fails a cancelled start in the world: the mixin's STORE slot (index 15) missed on this path; check `ChunkGeneratorEarthFillMixin` applied at boot
+@pass no start of that id in that chunk (the slot is empty or a priority / group neighbor); the census (`/cwglocate census 96 <x> <z>`) counts the cancels as EARTH_FILL rejects
+@fails a canceled start in the world: the mixin's STORE slot (index 15) missed on this path; check `ChunkGeneratorEarthFillMixin` applied at boot
 @reviewed 2026-11-16
 > save-all flush
 sleep 10
@@ -861,7 +861,7 @@ look no meta part over the water (dropped parts are not in the world)
 ## SQ-EFB-16 (switch off)
 @group B, second fresh world (new level-name)
 @commands scratch toml `[worldgen.systems] earthFill = false`, Chunky the SQ-EFB-05 lake square again; `/cdevtest under` tiles
-@pass with earth fill off the probe finds floating or flooded starts the first world cancelled (at least a few `over6` > 0 or `base water` > 0); this shows the probe and the system each catch the real cases
+@pass with earth fill off the probe finds floating or flooded starts the first world canceled (at least a few `over6` > 0 or `base water` > 0); this shows the probe and the system each catch the real cases
 @fails no difference: the lake square had no hard cases, take a wider square or the coast
 @reviewed 2026-11-16
 shell grep -nE '^\s*earthFill' config/creativeworldgen-common.toml; grep -qE '^\s*earthFill = false' config/creativeworldgen-common.toml
@@ -949,7 +949,7 @@ reject \[cdevtest\] verb=tag .*done=0
 ## SQ-EFB-21 (sand base, counted)
 @group B
 @commands a desert square with villages and a river or oasis (`/locate biome minecraft:desert`, `terralith:desert_oasis`), and a badlands square (`/locate structure towns_and_towers:village_badlands`); Chunky r 300 each; `grep -E 'village_desert\|fortified_desert\|village_badlands\|village_wooded_badlands\|pillager_outpost_desert\|pillager_outpost_badlands\|desert_structures\|badlands_start_dungeon\|village_temple' logs/latest.log`; `/cdevtest under` tiles
-@pass their lines show earth counts that include the sandstone / terracotta floor (a T&T badlands village logs hundreds of earth, not 0 to 16; size medium or larger); a house over a river or a cliff now logs over water / air and is pruned or the start cancelled; kept ones: `over6 0`, water-below max 2
+@pass their lines show earth counts that include the sandstone / terracotta floor (a T&T badlands village logs hundreds of earth, not 0 to 16; size medium or larger); a house over a river or a cliff now logs over water / air and is pruned or the start canceled; kept ones: `over6 0`, water-below max 2
 @fails earth still near 0: the structure tag did not load (`earth_fill.js`, `/reload`) or `withBases` not reached; check `/zq` that the structure is in `#creativeworldgen:earth_fill/sand_base`
 @reviewed 2026-11-16
 shell grep -cE "nearest terralith:desert_oasis is at|Could not find" logs/latest.log > ../efb_loc_oa.n || true

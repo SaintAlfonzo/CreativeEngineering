@@ -145,7 +145,7 @@ look; structure_tuning.md new subsection "3.20 Pillager garrisons" with the fina
 - **Weight.** Recommendation 3 (mob_spawns.md example used 2).
 - **Camps' vindicator cap.** Independent pool rolls can't cap at 2; a 3 : 1 camp pool gives about 1-2 on average.
   Recommendation: accept the average, or (exact) replace the camp grunt slots with fixed templates.
-- **Takes a Pillage lists.** Recommendation: leave (they are that mod's flavour, evoker already 1 in 44).
+- **Takes a Pillage lists.** Recommendation: leave (they are that mod's flavor, evoker already 1 in 44).
 
 ### Gotchas
 - **Bad Omen from lone pillagers:** natural pillagers become patrol captains with an ominous banner 6 % of the time
@@ -339,7 +339,7 @@ Pillagers in the End (the Mysticrift End tower) wear Create diving gear, as if t
 ### Gotchas
 - The handler also runs for mobs loaded from disk; the flag keeps it to once, and mobs that already exist in the End
   get gear the next time they load (fine).
-- A pillager wearing a backtank shows the backtank model; armour-points: Create's diving gear gives 1-2 armour, so End
+- A pillager wearing a backtank shows the backtank model; armor-points: Create's diving gear gives 1-2 armor, so End
   pillagers get a little tougher.
 - Captains wear the ominous banner in the head slot; overwriting it would remove the raid captain. The sketch skips the
   helmet for captains.

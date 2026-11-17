@@ -2,7 +2,7 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=fde163958e44 -->
+<!-- generated:status_index begin open_work sha1=92253107440f -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 14 open TODO rows (Planned 11, Testing 3), 2 Complete.
 
 | Id | Status | Tests | Change |
@@ -11,7 +11,7 @@
 | `engineering/dreams-and-desires #8` | Planned | S P T | Tune sulfuric acid lava generation |
 | `engineering/sawmill-and-components #2` | Planned | S | Sawmill recipes off the manual pipeline |
 | `engineering/sawmill-and-components #3` | Planned | C P | JEI doesn't show the sawmill blade |
-| `engineering/sawmill-and-components #4` | Planned | S P | One centre per component |
+| `engineering/sawmill-and-components #4` | Planned | S P | One center per component |
 | `engineering/sawmill-and-components #6` | Planned | none | Tier names in comments |
 | `engineering/sawmill-and-components #8` | Planned | S P | Metal component chains generated |
 | `engineering/sawmill-and-components #9` | Planned | S P | Wire alternatives by conductivity |
@@ -49,7 +49,7 @@
 ## 1. Overview
 
 - **IE Sawmill:** takes a log or plank and a sawblade, outputs the recipe's result plus sawdust. IE picks the first
-  recipe whose input matches and stops, so with several recipes for one input (planks → stairs, door, slab...) only
+  recipe whose input matches and stops, so with several recipes for one input (planks -> stairs, door, slab...) only
   one is reachable, and which one depends on recipe-map order.
 - **Create fans:** an encased fan blowing through a catalyst block (water, lava, fire, soul fire) processes items in
   its stream (washing, smelting, smoking, haunting). Create: Halitosis (1.20) added a dragon-head catalyst; it isn't
@@ -66,14 +66,14 @@
   IE sawblade has none. The tooltip shows "Sawmill profile: Stairs" or "Unprogrammed".
 - **Rule** (`SawbladeRouting.route`): among recipes whose input matches,
   1. a recipe whose `"blade"` equals the blade's profile;
-  2. else the first recipe with no `"blade"` (the default, e.g. planks → slab);
+  2. else the first recipe with no `"blade"` (the default, e.g. planks -> slab);
   3. else nothing: the item passes through unchanged.
 - **Profiles** (from the generator's `profileFor`): `stairs`, `fence_gate`, `fence`, `door`, `trapdoor`,
   `pressure_plate`, `button`, `sign`, `railing`, `ladder`, `vertical_slab`, `vertical_planks`. Slabs and anything
   unrecognised are the default.
 - **Making a blade:** Engineer's Workbench, `precision_sawblades` blueprint (steel plate + sawblade + steel rod over
   blue dye and paper, or over an empty schematic): IE sawblade + a shape reference (any `#minecraft:wooden_stairs`,
-  `#creativeengineering:vertical_planks`, `#creativeengineering:railings`, ...) + 2 steel plates → precision sawblade
+  `#creativeengineering:vertical_planks`, `#creativeengineering:railings`, ...) + 2 steel plates -> precision sawblade
   with that profile. 12 recipes, one per profile.
 - **Recipes:** 211 sawmill JSONs in patcherMod's `data/creativeengineering/recipes/sawmill/` (800 RF, sawdust
   secondary, optional `"blade"`), plus 2 non-wood ones in `kubejs/data/creativeengineering/recipes/sawmill/` (layered
@@ -106,11 +106,11 @@
 
 ### 2.3 Components
 
-Every component has three recipes and a disassembly. Crafting: 4 of the part (`P P / _C_ / P P`) around a centre;
-sequenced assembly: the centre as base, deploy 1 part, 3 loops; blueprint (`components`): 2 parts + the centre.
-Disassembly (`disassembly_components` blueprint): component → 2 parts, centre lost.
+Every component has three recipes and a disassembly. Crafting: 4 of the part (`P P / _C_ / P P`) around a center;
+sequenced assembly: the center as base, deploy 1 part, 3 loops; blueprint (`components`): 2 parts + the centre.
+Disassembly (`disassembly_components` blueprint): component -> 2 parts, center lost.
 
-| Component | Name | Part | Centre (crafting / assembly) | Centre (blueprint) |
+| Component | Name | Part | Center (crafting / assembly) | Center (blueprint) |
 |---|---|---|---|---|
 | iron (IE) | Iron Mechanical | iron plate | copper rod | **copper ingot** (F4) |
 | steel (IE) | Steel Mechanical | steel plate | iron rod | iron rod |
@@ -138,10 +138,10 @@ blocks are IE's LV and MV; the pack adds 9 coil items and 10 coil blocks).
 
 | Make | Crafting | Sequenced assembly | Blueprint (`electricalcomponents`) | Disassembly blueprint |
 |---|---|---|---|---|
-| Wire coil | 4 wire + spool → 4 | spool, deploy wire, 3 loops → 4 | 6 wire + spool → 8 | 4 coils → 3 wire (`disassembly_wire_coils`) |
-| Coil block | 8 coils around an iron rod | iron rod, deploy coil, 6 loops | 4 coils + iron rod | block → 4 coils (`disassembly_coil_blocks`) |
-| HV wire coil (`immersiveengineering:wirecoil_steel`) | 2 steel + 2 aluminum wire + spool → 4 | spool, steel then aluminum wire, 3 loops → 8 | 3 steel + 3 aluminum wire + spool → 8 | 8 coils → 3 steel or 3 aluminum wire |
-| HV coil block (`immersiveengineering:coil_hv`) | 8 HV coils around an iron rod | 6 loops | 4 HV coils + iron rod | wirecutter + block → 4 HV coils |
+| Wire coil | 4 wire + spool -> 4 | spool, deploy wire, 3 loops -> 4 | 6 wire + spool -> 8 | 4 coils -> 3 wire (`disassembly_wire_coils`) |
+| Coil block | 8 coils around an iron rod | iron rod, deploy coil, 6 loops | 4 coils + iron rod | block -> 4 coils (`disassembly_coil_blocks`) |
+| HV wire coil (`immersiveengineering:wirecoil_steel`) | 2 steel + 2 aluminum wire + spool -> 4 | spool, steel then aluminum wire, 3 loops -> 8 | 3 steel + 3 aluminum wire + spool -> 8 | 8 coils -> 3 steel or 3 aluminum wire |
+| HV coil block (`immersiveengineering:coil_hv`) | 8 HV coils around an iron rod | 6 loops | 4 HV coils + iron rod | wirecutter + block -> 4 HV coils |
 
 Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/coil_blocks.js)): metal, hardness
 3, pickaxe, iron tier.
@@ -151,7 +151,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
 - **Items:** `creativeengineering:sample_syringe` (empty) and 7 filled ones (cow, pig, chicken, sheep, rabbit, cod,
   salmon), all unstackable, filled ones glinting; filled ones leave the empty syringe behind when used in crafting.
   Separate items rather than NBT so recipes can match by plain id.
-- **Use:** right-click or hit a sampleable mob with the empty syringe in the main hand → it becomes the matching filled
+- **Use:** right-click or hit a sampleable mob with the empty syringe in the main hand -> it becomes the matching filled
   syringe, bottle-fill sound, "Sampled Cow." in chat. A filled syringe says "This syringe already has a sample."
 - **Mobs:** cow, pig, chicken, sheep, rabbit, cod, salmon, and a More Mooblooms moobloom (gives a cow sample).
 - **Recipe:** iron rod + 4 glass panes + iron plate. Filled syringes start the cultivated meat cultures
@@ -217,7 +217,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
 
 ### Findings (2026-10-18)
 
-- **F1. The sawmill recipes are on a manual pipeline.** `node sawmill.js` → hand copy into patcherMod → jar rebuild,
+- **F1. The sawmill recipes are on a manual pipeline.** `node sawmill.js` -> hand copy into patcherMod -> jar rebuild,
   211 copies. The file's TODO plans an NCH helper adding them as raw JSON from `ServerEvents.highPriorityData`.
   In [TODO](todo/TODO.md) `engineering/sawmill-and-components #2`.
 - **F2. JEI probably can't tell which blade a sawmill recipe needs. Your call.** The `"blade"` field is the pack's; IE's
@@ -227,9 +227,9 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
   `kubejs/data/creativeengineering/recipes/blueprint/`, and the `vertical_planks` / `railings` shape tags in
   [engineeringtags.js](../kubejs/data/creativeengineering/kubejs/tags/engineeringtags.js) list literal ids, against the NCH /
   item-dictionary rules (`R.ieBlueprint` handles NBT outputs).
-- **F4. Component centres differ by route. Your call.** The iron component's blueprint takes a copper ingot where
+- **F4. Component centers differ by route. Your call.** The iron component's blueprint takes a copper ingot where
   crafting and assembly take a copper rod; the diamond component's blueprint takes a gold component where the others
-  take an electrum one. Pick one centre each. The comments are off too ("4 plates around a copper ingot", "deploy 3
+  take an electrum one. Pick one center each. The comments are off too ("4 plates around a copper ingot", "deploy 3
   plates onto a copper ingot", "2 plates + 1 copper ingot"). Owner asked for more info 2026-10-30 (brief recommends the copper rod and the electrum
   component).
 - **F5. Component tier names are decided in the item names but not in the code comments.** `components.js` lines 18 and
@@ -241,7 +241,7 @@ Coil blocks are KubeJS blocks ([coil_blocks.js](../development/creativeEngineeri
   disassembly comments say a screwdriver or wire cutters is spent per craft; only the HV coil block's recipe lists the
   wirecutter. The wire-coil one also says "6 wire coils" (code: 4), and the HV assembly comment says 4 coils (code:
   8). Either add the tool or fix the comments.
-- **F7. The bucket → shulker shell fan recipe eats buckets** 3 times in 4. Intended as a cost, or add the bucket back as
+- **F7. The bucket -> shulker shell fan recipe eats buckets** 3 times in 4. Intended as a cost, or add the bucket back as
   a 75% output. DECIDED 2026-10-29: keep (3 in 4 eaten); nothing to build.
 - **F8. `cultivated_meat.js` redefines `i.culture_base`** (line 18) although `item_dict.js` already has it. Harmless
   (same value), against the define-once rule. Belongs to backlog row 20.
@@ -302,43 +302,43 @@ patcherMod's copies to see whether the jar is current.
 
 ## 7. In-game test suite
 
-- [ ] **EN-01 Plain blade default:** IE Sawmill with a plain sawblade, feed oak planks → oak slabs (and sawdust).
+- [ ] **EN-01 Plain blade default:** IE Sawmill with a plain sawblade, feed oak planks -> oak slabs (and sawdust).
 - [ ] **EN-02 Profiled blade:** make a stairs precision sawblade (blueprint: sawblade + any wooden stairs + 2 steel
-  plates), install it, feed oak planks → oak stairs. Tooltip says "Sawmill profile: Stairs".
-- [ ] **EN-03 Fallback:** install a `sign` blade, feed something with no sign recipe but a default (e.g. a log) → the
+  plates), install it, feed oak planks -> oak stairs. Tooltip says "Sawmill profile: Stairs".
+- [ ] **EN-03 Fallback:** install a `sign` blade, feed something with no sign recipe but a default (e.g. a log) -> the
   default output.
-- [ ] **EN-04 JEI (F2):** JEI on oak planks (U) → note whether the sawmill pages say which blade each output needs.
-- [ ] **EN-05 Client matches:** watch items in the running sawmill with a door blade → the item shown on the saw is the
+- [ ] **EN-04 JEI (F2):** JEI on oak planks (U) -> note whether the sawmill pages say which blade each output needs.
+- [ ] **EN-05 Client matches:** watch items in the running sawmill with a door blade -> the item shown on the saw is the
   door path's, and the output is a door.
-- [ ] **EN-06 Reload mid-cut:** `/reload` (or leave and rejoin) while planks are in a profiled sawmill → they finish as
+- [ ] **EN-06 Reload mid-cut:** `/reload` (or leave and rejoin) while planks are in a profiled sawmill -> they finish as
   the profiled output; no crash.
-- [ ] **EN-07 Dragon Breathing:** encased fan blowing into the back of a dragon head, drop cobblestone in the stream →
+- [ ] **EN-07 Dragon Breathing:** encased fan blowing into the back of a dragon head, drop cobblestone in the stream ->
   end stone; purple particles.
-- [ ] **EN-08 Thick potion → dragon's breath:** throw a thick potion into the stream → dragon's breath bottle.
-- [ ] **EN-09 Orientation:** rotate the head so it faces sideways to the fan → no processing.
-- [ ] **EN-10 Over water:** dragon head in a water source in the stream → still Dragon Breathing, not washing.
-- [ ] **EN-11 Stream damage:** stand in the stream → about 4 damage at a time, armor doesn't reduce it.
-- [ ] **EN-12 JEI page:** JEI shows "Dragon Breathing" with the fan and dragon head as catalysts, bucket → shulker shell
+- [ ] **EN-08 Thick potion -> dragon's breath:** throw a thick potion into the stream -> dragon's breath bottle.
+- [ ] **EN-09 Orientation:** rotate the head so it faces sideways to the fan -> no processing.
+- [ ] **EN-10 Over water:** dragon head in a water source in the stream -> still Dragon Breathing, not washing.
+- [ ] **EN-11 Stream damage:** stand in the stream -> about 4 damage at a time, armor doesn't reduce it.
+- [ ] **EN-12 JEI page:** JEI shows "Dragon Breathing" with the fan and dragon head as catalysts, bucket -> shulker shell
   at 25%.
-- [ ] **EN-13 Component routes:** JEI on the gold component → crafting (4 gold plates + copper wire), sequenced assembly
+- [ ] **EN-13 Component routes:** JEI on the gold component -> crafting (4 gold plates + copper wire), sequenced assembly
   (3 loops), blueprint (2 plates + copper wire), disassembly (2 plates).
-- [ ] **EN-14 IE components replaced:** JEI on the iron mechanical component → only the pack's recipes, not IE's.
-- [ ] **EN-15 Coils:** 4 aluminum wire + spool → 4 aluminum wire coils; 8 around an iron rod → an aluminum coil block;
+- [ ] **EN-14 IE components replaced:** JEI on the iron mechanical component -> only the pack's recipes, not IE's.
+- [ ] **EN-15 Coils:** 4 aluminum wire + spool -> 4 aluminum wire coils; 8 around an iron rod -> an aluminum coil block;
   the workbench disassembly gives 4 coils back.
-- [ ] **EN-16 HV coil:** 2 steel + 2 aluminum wire + spool → 4 HV wire coils.
-- [ ] **EN-17 Syringe:** right-click a cow with an empty syringe → glinting Sample Syringe (Cow), "Sampled Cow."; a
-  moobloom gives the cow one too; right-click a zombie → nothing. Hitting a cow with the empty syringe samples it too
+- [ ] **EN-16 HV coil:** 2 steel + 2 aluminum wire + spool -> 4 HV wire coils.
+- [ ] **EN-17 Syringe:** right-click a cow with an empty syringe -> glinting Sample Syringe (Cow), "Sampled Cow."; a
+  moobloom gives the cow one too; right-click a zombie -> nothing. Hitting a cow with the empty syringe samples it too
   (F10, fixed 2026-10-22).
-- [ ] **EN-18 Syringe used up:** cow syringe + culture base + slimeball → culture beef, empty syringe left in the grid.
-- [ ] **EN-19 Sanding split:** encased fan through sand onto a belt, 64 rose quartz through it → exactly 64 items out,
+- [ ] **EN-18 Syringe used up:** cow syringe + culture base + slimeball -> culture beef, empty syringe left in the grid.
+- [ ] **EN-19 Sanding split:** encased fan through sand onto a belt, 64 rose quartz through it -> exactly 64 items out,
   about 51 rose quartz and 13 polished; no stack ever grows or loses items.
-- [ ] **EN-20 Loop:** feed the rough output back through the fan (funnel loop) until none is left → 64 polished.
-- [ ] **EN-21 JEI and log:** *Recipe and log half: scratch server PASSED r1031 (2026-10-31, SQ-EN-21, -21b).* JEI on rose quartz (U) → the D&D sanding page shows only the pack recipe (80 % / 20 %), not
+- [ ] **EN-20 Loop:** feed the rough output back through the fan (funnel loop) until none is left -> 64 polished.
+- [ ] **EN-21 JEI and log:** *Recipe and log half: scratch server PASSED r1031 (2026-10-31, SQ-EN-21, -21b).* JEI on rose quartz (U) -> the D&D sanding page shows only the pack recipe (80 % / 20 %), not
   D&D's 100 % one; `latest.log` has no `[exclusive-results]` warning.
-- [ ] **EN-22 Pools roll:** crushing wheels, 200 flesh in stacks of 64 → every crush gives exactly 1 meat-pool item, the
+- [ ] **EN-22 Pools roll:** crushing wheels, 200 flesh in stacks of 64 -> every crush gives exactly 1 meat-pool item, the
   totals match [plan_flesh_recipes.md](plan_flesh_recipes.md) section 3 within sampling error, nothing is lost (count the
   output); repeat on a millstone with a few flesh. Run as VH-17.
-- [ ] **EN-23 Pools JEI:** JEI on flesh (R) → crushing page with 4 output slots (meat, bone, eye, misc) cycling their items,
+- [ ] **EN-23 Pools JEI:** JEI on flesh (R) -> crushing page with 4 output slots (meat, bone, eye, misc) cycling their items,
   the shown item's tooltip has its chance and the pool line ("1 pick from this group", "75% chance of 1 pick from this
   group"); the millstone page shows the same 4 slots in a 2x2 grid; JEI on hoglin ear (R) finds both pages; other
   crushing and milling pages (e.g. any ore) are unchanged. Run as VH-18.

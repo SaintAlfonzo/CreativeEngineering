@@ -181,7 +181,7 @@ Status Planned / Work KubeJS / data (+ config) / TODO `merges/materials #2` (scr
 
 ### Goal
 One rope. Flax goes. Rope arrows use the surviving rope, and tomato vines keep climbing it (Farmer's Delight's
-behaviour).
+behavior).
 
 Folded scope (scratchpad 2026-10-24): the flax bale becomes a grass bale. The flax bale is Supplementaries'
 `flax_block` (`i.flax_block`); [misc_mods.js](../../kubejs/server_scripts/other/misc_mods.js) lines 25-27 already
@@ -235,7 +235,7 @@ straw replacement and drop the bale. Recommend the rename plus a craft from gras
      rope; climbing tagged ropes is already on).
    - `config/quark-common.toml`: leave `Rope = true` if Quark's rope stays registered for old worlds and is just
      hidden (recommended: the flag also gates Quark's rope recipe, which the merge removes anyway). Turning the module
-     off can change Quark behaviour beyond the recipe (**unverified**: whether disabled-module items stay registered
+     off can change Quark behavior beyond the recipe (**unverified**: whether disabled-module items stay registered
      in Quark 3.4).
    - `config/` is what ships (`tools/build_deploy.py` header: `config/` files, filtered by CONFIG_CLASSES).
      `configs_edited/root_config/` holds hand-edited copies (a quark-common.toml among them). Update the matching copy

@@ -38,7 +38,7 @@ when so many Debugify fixes end up off that a port is cleaner (owner, 2026-11-13
 tag that was too big"), the chunk packet buffer cap ("Chunk Packet trying to allocate too much memory on read"), the
 compressed and framed packet caps, the 1 MiB clientbound and 32 KiB serverbound custom payload caps, and the connection
 timeouts. It applies the same limits on both sides (serverbound too). Its Forge 1.19 mixins all use `defaultRequire: 0`:
-an injection that does not match is skipped silently, so only behaviour checks prove it works.
+an injection that does not match is skipped silently, so only behavior checks prove it works.
 
 **Debugify Reforged** is an unofficial Forge port of Debugify (isXander) by murao.kun: 69 fixes for open Mojira bugs,
 each behind a key in `config/debugify.json`; its mixin plugin skips the mixins of a disabled fix at load (a toggle needs
@@ -131,7 +131,7 @@ reason given.
 | MC-121706 | Skeletons do not look up or down while strafing | server | - | - | off: cosmetic, needs a moving target |
 | MC-160095 | End rods break cactus only via pistons | server | - | - | off: no player impact |
 | MC-100991 | Fishing rod kills do not count | server | - | - | off: needs a kill by bobber damage, not stageable |
-| MC-228976 | Entity collision run on the render thread | client | - | - | off: internal, no observable behaviour to test |
+| MC-228976 | Entity collision run on the render thread | client | - | - | off: internal, no observable behavior to test |
 | MC-22882 | Ctrl+Q on macOS | client | - | - | off: macOS only (upstream default off) |
 | MC-121772 | Shift scroll on macOS | client | - | - | off: macOS only |
 | MC-145748 | Double click sound on a slider | client | - | - | off: needs audio |

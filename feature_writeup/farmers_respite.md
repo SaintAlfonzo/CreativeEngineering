@@ -43,7 +43,7 @@ fix, two cake-slice effect changes and a death-message fix (section 2).
 
 The owner's notes replace the earlier "do not port" proposal. The pack keeps the installed 2.0 jar and **patches** its Kettle (Creative
 Delight `farmersrespite` compartment, next to the three Remainder mixins) to take the useful parts of 2.1's fluid design without
-2.1's 4-bottle yield. All code and art are our own (licence above); only data facts from 2.1 (which drinks, bottle <-> 250 mB) are reused.
+2.1's 4-bottle yield. All code and art are our own (license above); only data facts from 2.1 (which drinks, bottle <-> 250 mB) are reused.
 Items marked **(detail)** are my reading of the notes where they were short; correct them before the build.
 
 ### 2.1 The patched Kettle
@@ -148,7 +148,7 @@ Decisions taken during the build (correct them if wrong):
 2. **Recipes that took milk** (hot cocoa's milk-bottle container, Delightful's matcha latte and builder's tea, End's
    chorus fruit milk tea) use milk (`minecraft:milk`) as their base and bottle in glass.
 3. **Rustic coffees:** Coffee = water + 2 roasted beans; Milk and Dark Coffee build on Coffee in the tank (+ milk,
-   + 2 beans); Honey, Chocolate, Syrup, Pumpkin, Cherry Blossom build on Milk Coffee (+ the flavour). Rustic Coffee uses
+   + 2 beans); Honey, Chocolate, Syrup, Pumpkin, Cherry Blossom build on Milk Coffee (+ the flavor). Rustic Coffee uses
    Central Kitchen's coffee fluid (Respite's coffee is purged, so it was free).
 4. **Fruits Delight teas:** two-fruit teas = leaves + 1 fruit; Hawberry and Lychee Cherry (four fruit in the pot) = 2
    fruit, no leaves / spore blossom (the Kettle has two slots).
@@ -172,7 +172,7 @@ Scratch (deep scan 2026-11-02): SQ-RSP-01 PASS (r1101 boot), -09 PASS (r1101), -
 - RSP-06 Create pump fills in 250 mB steps (a 100 mB offer is refused, 600 mB gives 500); a pump pulls it empty from below and each side.
 - RSP-07 Spout and Item Drain: each new drink fluid both ways; Water Cup <-> Copper Cup + 250 mB water.
 - RSP-08 Right-click: water bottle +1, glass bottle takes one as the drink, empty bucket takes a full tank of water.
-- RSP-09 GUI bar: four steps in the fluid's colour, tooltip "Black Tea: 2 / 4" and mB.
+- RSP-09 GUI bar: four steps in the fluid's color, tooltip "Black Tea: 2 / 4" and mB.
 - RSP-10 Kettle item tooltip "Tank: Water, 3 / 4"; placing it back gives level 3.
 - RSP-11 WTHIT "Tank: Black Tea 2 / 4" beside the Holding line.
 - RSP-12 JEI Kettle page shows the base fluid in the bar; Rustic coffees and the five Fruits Delight teas listed.
@@ -184,4 +184,4 @@ Scratch (deep scan 2026-11-02): SQ-RSP-01 PASS (r1101 boot), -09 PASS (r1101), -
 
 ## Owner drink rules (2026-11-02)
 
-Coffee in the Kettle builds the same milk and flavoured coffees as the pot, step by step or straight from the coffee tank; new fruit teas and the heated-mixer variants follow [creative_delight_drinks.md](creative_delight_drinks.md). Nothing built; TODO `food/drinks #15`.
+Coffee in the Kettle builds the same milk and flavored coffees as the pot, step by step or straight from the coffee tank; new fruit teas and the heated-mixer variants follow [creative_delight_drinks.md](creative_delight_drinks.md). Nothing built; TODO `food/drinks #15`.

@@ -16,13 +16,13 @@ overlap table, [unusual_delight.md](../../../feature_writeup/unusual_delight.md)
 ## 0. Gather (before writing)
 
 1. **Jar and facts.** Locate the jar (`mods/`, `devmods/`, a donor folder). Mod id, version, MC/loader version,
-   licence (decides the delivery path: GPL-compatible = fork allowed; ARR/AFL/Abnormals = untouched jar or donor
-   jar, our code written from behaviour), dependencies. Unpack to `DecompiledMods/<jar-name>/`;
+   license (decides the delivery path: GPL-compatible = fork allowed; ARR/AFL/Abnormals = untouched jar or donor
+   jar, our code written from behavior), dependencies. Unpack to `DecompiledMods/<jar-name>/`;
    `python3 tools/decompile_mod.py <jar> <out>` for code. Updated jar: `python3 tools/jar_diff.py OLD NEW`
    (method: [devmods_evaluation.md](../../../feature_writeup/devmods_evaluation.md) section 1).
 2. **Inventory** by registry id and data path: items, blocks, effects, potions, recipes (count by type), tags, loot
    (added vs replaced tables, GLMs), worldgen, entities, trades, structures, config, advancements, lang, tooltips,
-   code-only behaviour (on-eat procedures, events, mixins). Note upstream bugs (`logs/latest.log`:
+   code-only behavior (on-eat procedures, events, mixins). Note upstream bugs (`logs/latest.log`:
    `Failed to parse`, the mod id).
 3. **Pack state.** grep for the namespace in `kubejs/`, `development/*/src`, `item_dict.js`. Check whether the
    dumps in `kubejs/exported/` predate the jar (then `/dumpall` is step 0 of the fold-in).
@@ -31,13 +31,13 @@ overlap table, [unusual_delight.md](../../../feature_writeup/unusual_delight.md)
 
 **Full report.**
 
-Title `# <Mod>: overlap and integration report`. Opening paragraph: date, "nothing built", jar, licence,
+Title `# <Mod>: overlap and integration report`. Opening paragraph: date, "nothing built", jar, license,
 whether a port is needed, short name used in the file, test prefix (3+ letters, grep-safe, unused; add its row to
 [test_prefix_index.md](../../../feature_writeup/testing/test_prefix_index.md) first, section 0 there). Scope rule paragraph: integration adds no recipe or mechanic that is not in the
 mod or defined by a pack rule unless the owner asks by name; upstream bugs are fixed.
 
 - **0. At a glance**: table Part / Where / Status (inventory counts, bugs, overlap, fold-in, decisions D1-Dn,
-  tests PREFIX-01..NN drafted); bullets for jar, licence, dependencies, pack references, already-live effects.
+  tests PREFIX-01..NN drafted); bullets for jar, license, dependencies, pack references, already-live effects.
 - **1. Overview** and **Facts** table (mod id, items, blocks, effects, potions, recipes by type, loot, tags,
   advancements "the pack drops all advancements", lang, tooltips, config).
 - **2. Overlap (first)**. Every item and system checked against the pack and every installed mod:

@@ -185,7 +185,7 @@ poppy), "fruit, milk, egg, sugar, flour", served on paper, a sequenced assembly,
    - `lemon_poppy_muffin`: lemon + poppy; haste 10 s + refreshing 10 s.
    - veggie muffins from row #32: carrot, zucchini, pumpkin (and the existing sweet potato).
    Dict keys next to `i.blueberry_muffin` (item_dict 12411); Fruits Delight effects as `ef.fd_<name>` in effect_dict.js.
-3. Recipes: one `F.muffinBake` per single-fruit muffin; two-fruit muffins need a 2-flavour form: extend `muffinBake(fruit,
+3. Recipes: one `F.muffinBake` per single-fruit muffin; two-fruit muffins need a 2-flavor form: extend `muffinBake(fruit,
    output, second)` the way `cakeBake` takes `second` (cd_food.js 136-143).
 4. Assembly: add to `muffinBake`: `F.assemble(i.paper, [flour-or-cornmeal, i.eggs, SWEET, fruit, fruit or second,
    { fill: Fluid.of(global.fluid.milk, 250) }], output)` -> yields 1 by the helper; for 4 per run pass the output as
@@ -222,7 +222,7 @@ juice.
   recipe" and the planned R6 "assembly for every pie" (food_families.md `pie/whole`) are this row.
 - `PIES` ([baking.js](../../kubejs/data/creativedelight/kubejs/creativedelight/baking.js) 57-71): apple, chocolate,
   chorus, mulberry, pumpkin, rose hip, salmonberry, durian, pineapple, sweet berry cheesecake (Sweet Berry Pie), sweet
-  potato, truffle, End's chorus fruit pie; oven: crust + 2 flavour + 2 sugar. Sponge Pie is a one-off (154-155).
+  potato, truffle, End's chorus fruit pie; oven: crust + 2 flavor + 2 sugar. Sponge Pie is a one-off (154-155).
 - Chorus juice is a fluid now (`f.chorus_juice` `creativeengineering:chorus_juice`, fluid_dict 89; mixing, spout,
   drain and IE bottler in `endersdelight/recipes.js` 19-26; `food/drinks #4` built 2026-10-22).
 - `F.assemble` (cd_food.js 183-193) builds an assembly from a step list; it needs #37's fix for list steps.
@@ -254,10 +254,10 @@ items are unused and could be hidden.
 
 ### Gotchas
 - Two assemblies on one input whose first step is the same item shadow each other in Create: every pie starts with its
-  own flavour, so never start one with the sweetener.
+  own flavor, so never start one with the sweetener.
 
 ### Tests (proposed)
-- FF-16 Pie assembly: every `PIES` pie assembles from a crust in a Create line (2 loops, flavour + sweetener); JEI lists
+- FF-16 Pie assembly: every `PIES` pie assembles from a crust in a Create line (2 loops, flavor + sweetener); JEI lists
   one assembly per pie.
 - FF-17 Chorus pie spout: the chorus pie assembly takes a chorus fruit and 250 mB chorus juice per loop.
 
@@ -274,7 +274,7 @@ the spout 129).
 
 ### Now
 - Cakes: `CAKES` ([baking.js](../../kubejs/data/creativedelight/kubejs/creativedelight/baking.js) 48-56) through
-  `F.cakeBake` (cd_food.js 136-143): baked base + frosting + 2 flavour by hand, raw base in the oven (cake pan).
+  `F.cakeBake` (cd_food.js 136-143): baked base + frosting + 2 flavor by hand, raw base in the oven (cake pan).
 - (b) `fruitsdelight:mangosteen_cake` (`i.mangosteen_cake` 12461) is a sneak-placed bowl food, now a `CAKES` row (54);
   no rename in any lang file (grep 2026-10-31).
 - (c) Cake slices with no cake in the pack: CCK `aloe_cake_slice`, `passionfruit_cake_slice`, `yucca_cake_slice`,
@@ -331,7 +331,7 @@ retextured, owner 2026-10-21), with more variants.
 ### Now
 - `create_factory:cake_paste` (`i.cake_paste` 5348): only Create Factory's heated mixing (sugar, `create:dough`, egg,
   250 mB milk) **(jar)**; nothing in the pack touches it (grep 2026-10-31). `uncooked_waffle` presses from paste
-  (`create_factory:uncooked_waffle`, dump), `waffle` smokes, flavoured waffles spout 250 mB onto a waffle.
+  (`create_factory:uncooked_waffle`, dump), `waffle` smokes, flavored waffles spout 250 mB onto a waffle.
 - Tarts: `F.tartBake` ([baking.js](../../kubejs/data/creativedelight/kubejs/creativedelight/baking.js) 149-150,
   cd_food.js 170-173): fruit + crust + egg + sugar + milk bottle -> 2 on the baking sheet; the Fruits Delight pot
   recipes stay. No rename yet (no lang entry). The filling cans are already Canned Fig / Lemon Pie Filling.
@@ -457,7 +457,7 @@ Status In Progress / Work KubeJS / TODO `baking/baked-goods #9` (cooking plan ba
 
 Superseded by row #28 (owner, 2026-10-29, built, shipped in 1.1.05): any bread works in any bread recipe, no burger, bun or
 square-slice restrictions. [bread_recipes.js](../../kubejs/data/creativedelight/kubejs/creativedelight/bread_recipes.js)
-swaps every vanilla-bread / bread-slice slot for `#forge:bread` (loaves, flavoured breads, slice, toast); toast-only slots
+swaps every vanilla-bread / bread-slice slot for `#forge:bread` (loaves, flavored breads, slice, toast); toast-only slots
 stay toast; RC-170, RC-171 ([recipes_cooking.md](../recipes_cooking.md)). The 2026-10-21 per-sandwich audit (slices vs
 rolls vs buns) is dropped. What could remain: a burger bun item (oven, dough + egg -> 4 on the baking sheet, in
 `#forge:bread`), only if the owner wants one for looks; it would not be required by any recipe. Recommendation: close the
@@ -659,7 +659,7 @@ merged cupcakes into muffins (decided 2026-10-29).
 
 ### Build
 1. cd_food.js: `brownieBake(flavours, output)`: sweep, oven `[i.t_flour_or_cornmeal, i.eggs, SWEET, n(i.cocoa_beans, 2)]
-   .concat(flavours)` within 6 slots, `ware.cake` (or `ware.dish` once #30 lands), 1 tray; hand route `_manual_only` on the
+   .concat(flavors)` within 6 slots, `ware.cake` (or `ware.dish` once #30 lands), 1 tray; hand route `_manual_only` on the
    same inputs if the family keeps a grid recipe.
 2. Beetroot: `F.brownieBake([i.beetroot], i.beetroot_brownie_tray)` (one beetroot slot; the 3 beetroot of the original
    need `F.slot(i.beetroot, 3)` and 1 cocoa to fit 6 slots).
@@ -896,7 +896,7 @@ A glass baking dish next to the baking sheet, muffin tin, pie tin and cake pan, 
 Status Planned / Work KubeJS / TODO `baking/baked-goods #34` (owner, 2026-10-27, [food_families.md](../food_families.md) 4.6)
 
 ### Goal
-Every cake can be assembled on a baked base (frosting, flavour steps); the two existing spouts get more steps.
+Every cake can be assembled on a baked base (frosting, flavor steps); the two existing spouts get more steps.
 
 ### Now
 - Cakes: `CAKES` (baking.js 48-56: adzuki, banana, chocolate, honey, mint, strawberry, vanilla, coffee, mangosteen,
@@ -907,7 +907,7 @@ Every cake can be assembled on a baked base (frosting, flavour steps); the two e
 
 ### Build
 1. cd_food.js: `cakeAssemble(flavour, output, second)`: `F.assemble(i.cake_base_baked, [{ fill:
-   Fluid.of(global.fluid.frosting, 250) }, flavour, second || flavour], output)`; call it from `cakeBake`.
+   Fluid.of(global.fluid.frosting, 250) }, flavor, second || flavor], output)`; call it from `cakeBake`.
 2. Replace the two spouts with assemblies: plain cake = frosting 250 mB x3 steps (or frosting + red berry); chocolate
    cake = 250 mB frosting, 500 mB chocolate.
 3. Transition rows per cake (cakes are block items: pass `<ns>:item/<cake>` texture overrides where the auto sprite is
@@ -915,11 +915,11 @@ Every cake can be assembled on a baked base (frosting, flavour steps); the two e
 4. Needs #37's fix only if a step is a list (the red berry choice is one).
 
 ### Decisions
-- **Transition item per cake** (TODO decision). Recommendation: one per cake (each shows its own grey sprite), not the
+- **Transition item per cake** (TODO decision). Recommendation: one per cake (each shows its own gray sprite), not the
   shared `i.incomplete`.
 
 ### Tests (proposed)
-- FF-30 Cake assembly: each cake assembles on a baked base (frosting fill, two flavour deploys); plain and chocolate cake
+- FF-30 Cake assembly: each cake assembles on a baked base (frosting fill, two flavor deploys); plain and chocolate cake
   show their new steps.
 
 ---
@@ -978,7 +978,7 @@ of cookie / cake / pie shapes.
 
 ## Built, needs play
 
-- `baked-goods #3` Cookie recipes: oven only, cookie dough + 2 flavour -> 12 ([oven.md](../oven.md) 2.6, OV-30); open S P.
+- `baked-goods #3` Cookie recipes: oven only, cookie dough + 2 flavor -> 12 ([oven.md](../oven.md) 2.6, OV-30); open S P.
 - `baked-goods #11` Mixed cookie jars (patcherMod, every cookie jarable): [mixed_jars.md](../mixed_jars.md), MJ-01 to MJ-10;
   scratch passed (`/jartest`); open C P.
 - `baked-goods #15` Maple cookie: cookie dough + 2 Rustic syrup -> 12 (baking.js 82), [food_families.md](../food_families.md)

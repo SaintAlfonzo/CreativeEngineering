@@ -184,7 +184,7 @@ Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_t
 Settle how the Soap Washing tab groups its rows and whether soap removes copper oxidation.
 
 ### Now
-- `tab_tools.py` `_soaping` groups by target (`_group_by_target`): every dyed glass colour is the input list of one
+- `tab_tools.py` `_soaping` groups by target (`_group_by_target`): every dyed glass color is the input list of one
   "-> glass" row and every copper variant the input list of one "-> copper block" row (input `blocks(froms)`, so the row
   cycles). The dump has 2,736 soap pairs: 2,400 `color`, 221 `name` (waxed to plain), 114 `unoxidise`, 1 `piston`.
 - **The oxidation question is already answered by the data:** the `unoxidise` rule (`oxidized_copper`,
@@ -194,8 +194,8 @@ Settle how the Soap Washing tab groups its rows and whether soap removes copper 
 
 ### Build
 1. Regenerate (`/cdevgen run jei_world`) and look at the tab.
-2. Decide the grouping; if one row per colour is wanted, drop `_group_by_target` for `how == 'color'` only.
-3. No code for oxidation: it already works in the data; if the user wants a different behaviour it is a Supplementaries
+2. Decide the grouping; if one row per color is wanted, drop `_group_by_target` for `how == 'color'` only.
+3. No code for oxidation: it already works in the data; if the user wants a different behavior it is a Supplementaries
    config / mixin question (`supplementaries-common.toml` `functional.soap`).
 
 ### Decisions
@@ -203,7 +203,7 @@ Cycle (current, fewer pages) or split. Recommend keep cycling for dyed glass and
 close the oxidation question as "already true".
 
 ### Tests (JW-)
-- JW-20 (proposed): Uses of Soap -> a "washes the dye out" glass row cycling all 16 colours; an oxidised copper row
+- JW-20 (proposed): Uses of Soap -> a "washes the dye out" glass row cycling all 16 colors; an oxidized copper row
   cycling exposed, weathered, oxidized and waxed variants.
 
 ---
@@ -215,20 +215,20 @@ Status **Testing** (BUILT 2026-10-26, [plan_jei_tab_tweaks.md](../plan_jei_tab_t
 Every dye input cycles in the Block Dyeing tab (not a subset); Create sails show up. Performance checked first.
 
 ### Now
-- `tab_tools.py` `_dyeing`: for each of the dump's 159 colour sets and each of 16 colours one row (target colour block,
+- `tab_tools.py` `_dyeing`: for each of the dump's 159 color sets and each of 16 colors one row (target color block,
   sources `blocks(members, label='Any other colour')`, action tag `forge:dyes/<colour>`): up to about 2,500 rows when
   regenerated, against 5 rows in the stale `generated.json`; `manual.json` has 49 hand rows (Create sails, seats, valve
   handles: `CREATE_SELF_DYED` skips those sets in the generator, line 32).
 - `manual.json` already holds `create:*_sail` rows, so "sails do not show" is not a missing row. Unverified cause: check
-  the in-game tab after regenerating (the row may show only the colour target, not the undyed `create:white_sail` /
+  the in-game tab after regenerating (the row may show only the color target, not the undyed `create:white_sail` /
   `create:sail_frame` input).
 - Pages cost: JEI builds a layout per row; the Moobloom and cycling-crafting code has timing logs (`[jei cycle] built in
   N ms`) to copy.
 
 ### Build
 1. Regenerate, then time JEI start and the page flip on Block Dyeing (log `[jei_world] N rows in N tabs`).
-2. If too slow: merge the 16 colours into rows with the dye as a cycling ingredient (`action: tag`), one row per
-   colour set (159) instead of 16 per set.
+2. If too slow: merge the 16 colors into rows with the dye as a cycling ingredient (`action: tag`), one row per
+   color set (159) instead of 16 per set.
 3. Sails: add the undyed sail and `sail_frame` as cycling inputs in `jei_world/dyeing/manual.json`.
 
 ### Decisions
@@ -365,16 +365,16 @@ Jar Storage shows one row per potion type with a real potion fluid and bottle, n
 
 ### Now
 - `tools/jei_world/tab_drops.py` `filled_ing` (183-187) emits one row for all potions: bottle input `items:
-  [potion, splash, lingering]` with NBT `{Potion:"minecraft:swiftness"}` labelled "Any potion", output jar with
+  [potion, splash, lingering]` with NBT `{Potion:"minecraft:swiftness"}` labeled "Any potion", output jar with
   `moonlight:potion` fluid and `create:potion` 250 mB with no NBT (the "uncraftable potion" fluid).
-- Related `jei/jei-coverage #10` (jars with black liquid; the jar colour comes from `CachedColor`, fixed by `jar_color`).
+- Related `jei/jei-coverage #10` (jars with black liquid; the jar color comes from `CachedColor`, fixed by `jar_color`).
 - The pack already builds per-potion pages in Java: `PotionPagesJEI` (Tipped Arrows, Potion Buckets), a model for
   looping over `ForgeRegistries.POTIONS`.
 
 ### Build
 1. Drop the generic potion row from `tab_drops.py` and add a Java provider (like `BurnRows`: `WorldRows.add` at JEI
    start) that loops over the registered potions (skip water, awkward, thick, mundane as `N-06` does) and builds, per
-   potion, the bottle (`PotionUtils.setPotion`), the potion fluid with the `Potion` tag, and the jar colour
+   potion, the bottle (`PotionUtils.setPotion`), the potion fluid with the `Potion` tag, and the jar color
    (`PotionUtils.getColor`).
 2. One row per potion type; a long list pages like the Potion Buckets tab.
 
@@ -382,7 +382,7 @@ Jar Storage shows one row per potion type with a real potion fluid and bottle, n
 All potions or only those a jar can hold (`preserved_tags_from_item` means one potion kind per jar). Recommend all.
 
 ### Tests (JW-)
-- JW-24 (proposed): Uses of a Healing potion -> Jar Storage row with Healing in colour, not Swiftness, fluid tooltip names Healing.
+- JW-24 (proposed): Uses of a Healing potion -> Jar Storage row with Healing in color, not Swiftness, fluid tooltip names Healing.
 
 ---
 

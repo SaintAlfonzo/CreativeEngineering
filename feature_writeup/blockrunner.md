@@ -27,13 +27,13 @@ the block you're looking at.
 | Audit 2026-11-10: every walkable block tiered, 2 new 1.00 tiers (`furniture`, `flora`), `@mod` filter fix, watcher (`/dumpsurface` + `--audit`) | KubeJS tags, Creative Common `has.js`, Creative Compat `SurfaceTier`, Creative Devtools `SurfaceAudit` | Sim 13828 ids, 0 overlaps. Jars built, not installed (game open); restart needed. BR-59..64 |
 | 28 surface tiers + 6 empty basic tiers | KubeJS tags + `[surface.speed]` (basic tiers in `blockrunner.json`) | Loads in game with 0 overlaps: 15:21 world load on 2026-09-27, including the 3 ids added for the newest mods (log `6085 ids, 0 overlap(s)`; the log counts low, the sim holds 6129). 2026-10-02: 1.0.4 mods tiered, sim 6355 ids, 0 overlaps; needs a restart (new item_dict keys), BR-52. The 11:54 `/dumptags` export matched the sim exactly |
 | SecurityCraft reinforced blocks and mines copy their vanilla block's tier | KubeJS `t.mirror()` | Loaded since the 14:49 restart (Rhino harness tested); untested in game (BR-38) |
-| Sticky tier checks facing | patcherMod mixin | Mixin applies (log 2026-09-26); behaviour untested |
-| Visual sinking (camera + models) | patcherMod mixins | Both mixins apply (log 2026-09-26); behaviour untested |
+| Sticky tier checks facing | patcherMod mixin | Mixin applies (log 2026-09-26); behavior untested |
+| Visual sinking (camera + models) | patcherMod mixins | Both mixins apply (log 2026-09-26); behavior untested |
 | Framed / copycat blocks sink like their newest camo | patcherMod (`SinkingRender`) | In game since the 14:49 restart (13:12 jar); untested |
 | Sinking follows the block holding the feet (no pop between sunken blocks), even depth on honey/mud, items lie on top | Creative Compat (`SinkingRender`), tag `#creativecompat:sinking_hides_items` | Built 2026-11-10, not installed (game open); BR-53..56 |
 | Visceral Heap flesh: flesh spongy, porous flesh very sticky with honey's jump | KubeJS tags + `block_properties.js` | Built 2026-11-10 (Common rebuilt for the `porous_flesh` dict key); BR-57 |
 | Every surface setting in one `[surface]` config section: per-tier speeds, sticky, camouflage, sinking, wthit | patcherMod (`SurfaceTier`, `SurfaceSpeeds`, `BlockRunnerSpeedConfigMixin`) | Working in game: the mixin applies and the log has `[surface] 26 tier speeds applied` (15:21). The old `[block_sinking]`/`[camouflage_speed]` sections were dropped on first load; they held the defaults, so nothing was lost. The trimmed `blockrunner.json` was put in place at 16:45, so it needs a restart |
-| WTHIT "Run Speed" line on the looked-at block | patcherMod WTHIT plugin (`WthitRunSpeed`, `RunSpeed`, `StuckInBlock`), `[surface.wthit]` | First version loaded in game (plugin initialised 14:50, no errors). The second version (hideUntyped, passable blocks, thin layers, inside slowdowns, own speed) is headless-tested 31/31 and was deployed at 16:45, so it needs a restart |
+| WTHIT "Run Speed" line on the looked-at block | patcherMod WTHIT plugin (`WthitRunSpeed`, `RunSpeed`, `StuckInBlock`), `[surface.wthit]` | First version loaded in game (plugin initialized 14:50, no errors). The second version (hideUntyped, passable blocks, thin layers, inside slowdowns, own speed) is headless-tested 31/31 and was deployed at 16:45, so it needs a restart |
 | Camouflage copies camo speed, "newest camo" for multi-material (hybrid) blocks | patcherMod mixins | Newest-camo rule confirmed in game on framed double slabs (BR-17, 2026-09-27); rest untested |
 | D&D asphalt friction reset (its own ~3.4× speed boost removed) | KubeJS startup `BlockEvents.modification` | Loaded since the 14:49 restart; untested (BR-28) |
 | Pass-through blocks (3.10): walking and falling through crops, plants, vines, ropes, cobwebs, barbed wire, bushes, leaf piles; items, projectiles and arrows in webs; no field of view change; WTHIT Walk Through lines; `/cdevbench passthrough`, perf suite plan, timing log | Creative Compat `surface/Pass*` + 13 mixins, tags `passthrough_tags.js` (in the Compat jar), Creative Devtools `PassBenchCommand` | Built, untested: Compat and Devtools 1.0.0 build/libs 2026-11-15 00:40, not installed; headless 203/203; BR-67..88, SQ-PTH-01..28, CQ-PTH-01..05 |
@@ -41,7 +41,7 @@ the block you're looking at.
 
 **Open first:** `config/creativeengineering-common.toml` `[surface.speed]` (values),
 [blocktags.js L76-435](../kubejs/server_scripts/tags/blocktags.js#L76-L435) (tier contents),
-[patcherMod surface/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/) (Java behaviour).
+[patcherMod surface/](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/) (Java behavior).
 
 **Knobs:** everything is under `[surface]` in `creativeengineering-common.toml`, which shows as one
 "surface" folder in Create's Configs screen (3.7):
@@ -67,14 +67,14 @@ dedicated server copy was still behind then (4, Limits; caught up since).
 `/attribute @s minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002`
 prints BlockRunner's own modifier, nothing else. A player's base speed is 0.1, so a tier `m` reads
 **0.1 × (m − 1)**: asphalt +0.05, concrete +0.04, sand −0.015, honey −0.055. A 1.00 tier has no
-modifier at all, so the command answers "no modifier". Sprinting, potions and armour don't affect this number.
+modifier at all, so the command answers "no modifier". Sprinting, potions and armor don't affect this number.
 
 ---
 
 ## 1. Overview: what BlockRunner does out of the box
 
 BlockRunner 4.2.2 (Fuzs) maps blocks to walk-speed multipliers. `config/blockrunner.json` holds
-`"#tag"` or `"block_id"` → multiplier; the server sends the values to clients on join and on `/reload`.
+`"#tag"` or `"block_id"` -> multiplier; the server sends the values to clients on join and on `/reload`.
 
 - **Which block counts:** the block about 0.2 below your feet (vanilla `getBlockStateOn`). Anything
   thinner than that never registers and the block beneath it counts instead: carpets, 1–2-layer snow,
@@ -91,7 +91,7 @@ BlockRunner 4.2.2 (Fuzs) maps blocks to walk-speed multipliers. `config/blockrun
 - **One tier per block:** BlockRunner reads tags into a HashSet with putIfAbsent, so a block in two
   tagged tiers gets a random one on every reload. A `"block_id"` key in the json always beats tags.
 - **Stock tags:** six basic tiers, `blockrunner:{very_quick, quick, slightly_quick, slightly_slow, slow, very_slow}_blocks`.
-  The jar seeds `dirt_path` → quick and `#minecraft:stone_bricks` → slightly_quick. This pack wipes those seeds.
+  The jar seeds `dirt_path` -> quick and `#minecraft:stone_bricks` -> slightly_quick. This pack wipes those seeds.
 - **Client options** (`blockrunner-client.toml`): `block_speed_multiplier_tooltip` adds a gray
   "Speed Multiplier: X" line to block items; the pack turns it off (2026-11-02, `gameplay/blockrunner #6`: walk speed
   shows in WTHIT only, 3.8); `disable_field_of_view_changes = true` stops the speed
@@ -104,7 +104,7 @@ blocks that carry no tags (see 6). Tiers are listed fastest first; `[surface.spe
 
 | Tier (`blockrunner:surface/…`) | × | # | What belongs | Examples |
 |---|---|---|---|---|
-| `asphalt` | 1.50 | 19 | Asphalt | IP asphalt + slab/stair, D&D Painted Asphalt (16 colours, renamed 2026-10-30; friction reset, see 3.5) |
+| `asphalt` | 1.50 | 19 | Asphalt | IP asphalt + slab/stair, D&D Painted Asphalt (16 colors, renamed 2026-10-30; friction reset, see 3.5) |
 | `concrete` | 1.40 | 75 | Concrete | 16 vanilla concretes, IE concrete (leaded, tile, brick, sheet…) and hempcrete, Engineer's Decor rebar concrete, Dustrial Decor cinder blocks |
 | `grating` | 1.30 | 52 | See-through walkway floors | Create Deco / Design n' Decor catwalks, Engineer's Decor steel catwalks and floor grating, Quark grate, Everything is Copper grates, Create and IE metal scaffolding (grate-top + standard), Dustrial Decor chain and iron-bar trapdoors |
 | `metal` | 1.25 | 1261 | Solid metal | storage blocks, every copper stage incl. waxed, sheet metal and plating (IE, Create Deco, Design n' Decor, Dustrial Decor, Architect's Palette), Railways locometal, davebuildingmod steel and boilers, Create copper shingles/tiles, metal fences, gates and trapdoors, CE plate and coil blocks, Canned Goods' sealed canned dirt |
@@ -140,7 +140,7 @@ one-off overrides. A block can only sit in one tier, so to override a block, rem
 tier first, or add a `"namespace:block": 1.2` key to the json (block-id keys always win).
 
 **Deliberately untiered:**
-- **Soul sand and soul soil:** a tier would stop Soul Speed from cancelling the slowdown.
+- **Soul sand and soul soil:** a tier would stop Soul Speed from canceling the slowdown.
 - **Magma:** left out (`auditSkip` in blocktags.js) until decided; the audit (`--audit`, 6) lists it.
 - **Fluids, portals, moving pistons, SecurityCraft fake water/lava, reinforced soul soil:** `auditSkip`.
 - **Anything too thin to register** (section 1), and plants with no collision (`#minecraft:flowers`,
@@ -180,9 +180,9 @@ in speed order:
 - **SecurityCraft copies:** `t.mirror(e, runnerTags, rename)` ([L420](../kubejs/server_scripts/tags/blocktags.js#L420),
   helper [tag_helper L212](../kubejs/startup_scripts/func/tag_helper.js#L212)) puts every registered
   `securitycraft:reinforced_<x>` and `securitycraft:<x>_mine` in the tier of `minecraft:<x>`
-  (`<x>_ore` → `<x>_mine`). A mine with a speed of its own would give itself away. SecurityCraft's own
-  names: terracotta → `hardened_clay`, dirt path → `grass_path`, stone slab → `normal_stone_slab`, smooth
-  stone slab → `stone_slab`, nether quartz ore → `quartz_mine`. The helper checks the registry
+  (`<x>_ore` -> `<x>_mine`). A mine with a speed of its own would give itself away. SecurityCraft's own
+  names: terracotta -> `hardened_clay`, dirt path -> `grass_path`, stone slab -> `normal_stone_slab`, smooth
+  stone slab -> `stone_slab`, nether quartz ore -> `quartz_mine`. The helper checks the registry
   (`getElementIds()`), so guessed names that don't exist are dropped. It runs after `dirt`, so dirt mines
   are covered too.
 - **Strays removed:** wildcards like `polished_*` also catch buttons and pressure plates, so a final
@@ -247,7 +247,7 @@ disguised as: framed concrete runs like concrete, framed honey drags like honey.
   - **Storage detail:** FramedBlocks gets its own top-level key. Copycats+ gets a flag *inside* the
     newest part's entry, because Copycats+ turns every top-level key into a part, so a separate key
     would create a phantom part. Removing patcherMod later leaves both mods loading cleanly.
-- **Fallback when the newest part has been emptied:** framed → the other half. Copycats+ → what's
+- **Fallback when the newest part has been emptied:** framed -> the other half. Copycats+ -> what's
   left, if it's all one material. Otherwise the flat tier. Blocks filled before this feature have no
   record until a part is re-filled; until then framed doubles use their first half.
 - **Tooltip:** [CamoSpeedTooltip](../development/creativeEngineering/src/main/java/com/SaintAlfonzo/creativeengineering/surface/CamoSpeedTooltip.java)
@@ -269,11 +269,11 @@ only: collision, hitboxes, movement, mob AI and spawning are untouched.
 - **Even depth (2026-11-10):** a sinking block that already sinks for real by up to the visual depth only adds the
   rest: honey (15/16) adds 1 px, mud (14/16) adds nothing at the default 2 px. Every sunken block looks equally deep,
   so slime to honey or wool to mud keeps the same eye height. (Before, honey showed only its own 1 px.)
-- **Which block decides (2026-11-10):** the block under the centre, when it is the one holding the feet. When it
-  isn't (the centre is already over a lower block, a honey/mud block the feet haven't dropped onto yet, or a gap),
+- **Which block decides (2026-11-10):** the block under the center, when it is the one holding the feet. When it
+  isn't (the center is already over a lower block, a honey/mud block the feet haven't dropped onto yet, or a gap),
   the blocks under the hitbox corners that hold the feet decide. The sink only changes once the next block really
   carries the entity. Before, crossing from a full sunken block onto honey, mud, a path or an edge popped the camera
-  up 2 px for the moment the centre was past the edge, then dropped it: the "bump" at sunken-block edges. Collision
+  up 2 px for the moment the center was past the edge, then dropped it: the "bump" at sunken-block edges. Collision
   was never changed; stepping up onto a block from a real-sink block (honey, mud, soul sand) is vanilla step-up and
   stays, but the camera no longer moves for it.
 - **Dropped items (2026-11-10):** by default an item lies on top of a sinking block at its real height, so
@@ -305,7 +305,7 @@ BlockRunner only overrides a block's speed factor (section 1), so a mod's own fr
 tweaks still stack on top of the tier. [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js)
 resets them with `BlockEvents.modification` (startup, so it needs a game restart).
 
-- **Create D&D asphalt** (16 colours): D&D registers these with `friction(0.35)`, `speedFactor(0.001)` and
+- **Create D&D asphalt** (16 colors): D&D registers these with `friction(0.35)`, `speedFactor(0.001)` and
   `jumpFactor(1.25)`. Vanilla blocks use friction 0.6. At 0.35 you accelerate about 5× harder and
   keep about 3.4× the top walking speed, which was the big boost on top of the 1.50 tier.
   Friction is reset to 0.6, and the speed factor to 1.0: BlockRunner hides the 0.001 while the block is
@@ -429,7 +429,7 @@ the blocks touching the entity's sides.
 - **Blocks:** `#creativecompat:wall_slide` in `blocktags.js` (reloadable). Now: porous flesh, Alex's Mobs Banana Slug Slime
   Block (added 2026-11-10 from the survey; the slide replaces its own x0.8 drag while you touch its side). Honey and Fruits Delight
   jelly blocks (they extend HoneyBlock) already slide and are skipped.
-- **Numbers are honey's:** falling faster than 0.08 b/tick, off the ground, feet below the block's top → throttled to
+- **Numbers are honey's:** falling faster than 0.08 b/tick, off the ground, feet below the block's top -> throttled to
   0.05 b/tick (horizontal cut too above 0.13), fall distance reset (no fall damage). Honey's slide sound, the wall's
   own block particles, each 1 tick in 5, sent from the server.
 - Works on non-full blocks too (it uses the block's collision box), so any block can join by tag.
@@ -456,7 +456,7 @@ the blocks touching the entity's sides.
 ### 3.10 Pass-through blocks: walking and falling through plants and webs (Creative Compat, 2026-11-15)
 
 Status: **built, untested** (Creative Compat and Creative Devtools 1.0.0, build/libs 2026-11-15 00:40, not
-installed; the rework of [plan_post_scratch_1115b.md](plan_post_scratch_1115b.md) (4 / 6 neighbours, baked counts,
+installed; the rework of [plan_post_scratch_1115b.md](plan_post_scratch_1115b.md) (4 / 6 neighbors, baked counts,
 layer tier, stall break) built 15:42, not installed). Plan, rulings and per-phase deviations:
 [plan_passthrough.md](plan_passthrough.md) ("Execution status").
 TODO `gameplay/blockrunner #10`. Tests BR-67 to BR-88; scratch rows SQ-PTH-01 to -28, CQ-PTH-01 to -05.
@@ -467,7 +467,7 @@ webs, leaf piles) never had a speed. This system covers every block you stand **
 
 **Model.** A tier is a block tag `creativecompat:passthrough/<tier>` (filled in Compat's
 `kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js`, one tier per block, `t.overlaps` checked) plus a config
-table `[surface.passthrough.<tier>]` (15 keys: walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall,
+table `[surface.passthrough.<tier>]` (15 keys: walk, fall, growth, neighbors, denseFrom, denseWalk, denseFall,
 denseResetsFall, surrounded, minLayers, walkOnlyMoving, items, itemStickChance, projectiles, depthStriderPasses).
 Each tick, at the end of `Entity#checkInsideBlocks` (`InsideBlocksMixin`, after the wall slide of 3.9),
 `PassThrough` takes every tier block whose cell the entity's box overlaps and whose outline it touches, that passes
@@ -482,7 +482,7 @@ its growth rule and `minLayers`, for an entity not exempt. Several at once: the 
   fast-fall reset (`Entity#move` clips a path of a block or more per tick against `#minecraft:fall_damage_resetting`,
   which holds cobwebs) leaves out webs with a fall rule, so a lone or stacked web scales the fall instead of zeroing
   it (scratch fix 2026-11-15, SQ-PTH-03). Bush-tier blocks (sweet berry included) never reset it either, fast or
-  slow (owner ruling 2026-11-15; vanilla's sweet berry bush cancelled fall damage); climbables, water and exempt
+  slow (owner ruling 2026-11-15; vanilla's sweet berry bush canceled fall damage); climbables, water and exempt
   entities keep vanilla's reset.
 - **Old slowdowns cancelled:** `MakeStuckInBlockMixin` cancels `Entity#makeStuckInBlock` for any tiered block, so
   vanilla's and mods' "stuck" slowdowns (webs, berry bushes, IW leaf piles, Twigs bamboo leaves, barbed wire) stop;
@@ -491,7 +491,7 @@ its growth rule and `minLayers`, for an entity not exempt. Several at once: the 
 - **Growth:** `any`; `half` (own `age`, or hemp's growth enum, at least half); `tall_half` (a tall crop's lower block
   decides for both; the upper block looks down). `#creativecompat:passthrough_growth_any` makes a block in a growth
   tier always count (tomato segments, coffee).
-- **Neighbours** (since 2026-11-15): same-tier blocks on the 4 sides, same layer (`SIDES`: a field's inside 4, edge
+- **Neighbors** (since 2026-11-15): same-tier blocks on the 4 sides, same layer (`SIDES`: a field's inside 4, edge
   3, corner 2) or the 6 faces (`FACES`). Counted by tag only (no growth test: a young crop adds density to a grown one
   but is not slowed itself). Counts are baked into the chunk (`PassCounts`, a chunk capability saved on the server),
   dropped only when a block of another tier replaces one in or next to the cell; harvest and replant keep them.
@@ -545,7 +545,7 @@ dense values when dense). A `break` projectile stopped in **any** web (under 0.0
 a row, default 3, 0 = off) runs its impact where it stopped (SQ-PTH-11, plan_post_scratch_1115b.md B; the pearl
 teleports there). In a **surrounded** web: `break`
 (snowball, eggs, fireballs, wither skull, llama spit, shulker bullet, ender pearl, 30 ids) runs the impact at the cell
-centre; `settle` (thrown potions, XP bottles,
+center; `settle` (thrown potions, XP bottles,
 5 ids) loses horizontal motion and sinks down the middle, breaking below; `linger` (firework) stays until its flight
 time ends; `hang` (arrows, tridents, thrown tools, 38 ids) stops in vanilla's stuck-in-ground state with no hit
 effect (5.3 of the plan); `snag` (fishing bobber, feather on a stick, Quark pickarangs, Botania thorn chakram) stops
@@ -588,7 +588,7 @@ numbers pending (SQ-PTH-25c, SQ-PTH-28c). Tools:
   500 items thrown into webs, 100 arrows a second into a 9x9x9 web block, a bot walking a corn strip.
 - `[debug.passthrough] timing` (Compat, off): every 200 ticks one `[passthrough-timing]` line per side (server and
   client separately): hook calls, total and longest time, entity-ticks inside a tier block and the peak per tick,
-  neighbour counts, tick time. `python3 tools/perf/passthrough_timing.py logs/latest.log` reports the share of tick
+  neighbor counts, tick time. `python3 tools/perf/passthrough_timing.py logs/latest.log` reports the share of tick
   time. The owner's real-play check (plan 7.3, BR-88) goes here with a JFR of the same session.
 - Results r1115 (Compat 11:31): bench `tick_field` 749 ns (green), `tick_web_cube` 2029 ns and `tick_horse_field`
   2537 ns (red); suite on minus off PT01 +0.57 ms, PT02 +0.32, PT03 +0.36, PT04 +3.17, PT05 -5.22, PT06 -0.04. JFR:
@@ -606,16 +606,16 @@ numbers pending (SQ-PTH-25c, SQ-PTH-28c). Tools:
 **Deviations from the plan, collected** (details in the plan's status entries):
 - Tags live in Compat's script tree (`kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js`, in the jar), not
   `blocktags.js`; namespace `creativecompat:`.
-- Per-block growth `any` is the tag `passthrough_growth_any`, not a config key; neighbours count by tag only; a
+- Per-block growth `any` is the tag `passthrough_growth_any`, not a config key; neighbors count by tag only; a
   different same-tier block right below makes a block "upper" under `tall_half` (rice panicles on rice).
 - Fall distance: cells side by side on one layer count as one block passed. Wading drag assumes vanilla water
-  (Depth Strider not modelled). `minLayers` range 1-9 (9 = never).
+  (Depth Strider not modeled). `minLayers` range 1-9 (9 = never).
 - Movement effects only for living entities; items react only to `items = stick` tiers and follow their position
   point (an item grazing a web beside it does not stick). Stuck orbs do not home.
 - Vanilla projectiles get their group from the base class even without tags; non-living non-projectiles get `slow`.
   `break` fires Forge's impact event and discards the projectile if its own hit did not. `hang` also sets the shake
   time and clears crit, with no hit sound. The snag state is not saved (a reloaded pickarang re-snags at the cell
-  centre). Flying mobs in a surrounded web only get the 0.35 walk (climbing acts through the ladder code).
+  center). Flying mobs in a surrounded web only get the 0.35 walk (climbing acts through the ladder code).
 - The leaf pile migration lives in Compat (`LeafPileMigration`; the old `LeafPileSlow.set` call was in Compat, not
   Engineering). IW's `leaf_piles_slow` still gates spruce thorn damage.
 - WTHIT: the soil is the first standable block below, looking past up to two more pass-through blocks; an inert tier
@@ -659,7 +659,7 @@ and powdered sugar got `StuckInBlock` lines.
   - Mobs in a surrounded web with nothing to climb stay there until the web is broken. Mob pathing does not avoid
     slow blocks (vanilla does not avoid webs either).
   - Fast arrows can cross a single web in one tick and skip it (accepted). Items cannot: their path is clipped.
-  - Cost scales with the cells an entity overlaps (a horse covers 2x2) and with neighbour counts; measured by
+  - Cost scales with the cells an entity overlaps (a horse covers 2x2) and with neighbor counts; measured by
     `/cdevbench passthrough` and the perf suite plan, not yet run.
   - A projectile from a mod added later falls back to its base-class group until tagged; `tools/projectile_scan.py`
     flags it. A new no-collision plant has no tier until tagged; `blockrunner_scan.py --audit` lists it.
@@ -733,7 +733,7 @@ and powdered sugar got `StuckInBlock` lines.
   `no dead patterns / unknown ids`. It reads the last `/dumptags` export plus the untagged list above.
   Add a path argument to dump every tier's members.
 - **What's left untiered:** `node tools/blockrunner_tag_sim.js /tmp/t.json && python3 tools/blockrunner_scan.py /tmp/t.json`
-  prints every untiered block that could register, per mod, colours and wood types collapsed. Re-run
+  prints every untiered block that could register, per mod, colors and wood types collapsed. Re-run
   `/dumptags` and `/kubejs export` in game after adding mods, then this, to tier the newcomers.
   Names alone decide "thin" here, so it misses walkable tables, shelves and lamps; the audit below does not.
 - **Watcher (2026-11-10):** `/dumpsurface` in game (or `/cdevgen run blockrunner_audit`), then
@@ -763,92 +763,92 @@ and powdered sugar got `StuckInBlock` lines.
 - Expected `M` values are for a player (base 0.1). Floating point may print e.g. `0.04999…`.
 
 **Tier data**
-- [x] **BR-01 Tags load clean:** after world load, search `logs/latest.log` for `BlockRunner tier overlaps checked`. → `… ids, 0 overlap(s)`. PASSED 2026-09-26 at 1927 ids and 2026-09-27 after the whole-pack scan (log `6062 ids, 0 overlap(s)`). The log's id count runs lower than the real tier size: the 11:54 `/dumptags` export has 6126 tiered ids, which matches the sim exactly. Treat the dump as the count and the log line as the overlap check.
-- [x] **BR-02 Basic tiers are empty:** stand on a dirt path. `T blockrunner:quick_blocks` → fails; `T blockrunner:surface/natural_path` → passes.
-- [x] **BR-03 Fast tiers:** `M` on asphalt → **+0.05**; on concrete → **+0.04**; on a Quark grate → **+0.03**; on stone → **+0.005**.
-- [x] **BR-04 Slow tiers:** `M` on sand → **−0.015**; on wool → **−0.012**; on a honey block → **−0.055** (jumping on honey is still damped).
-- [x] **BR-05 1.00 tiers:** `M` on glass and on grass → "no modifier". `T blockrunner:surface/glass` on glass passes.
+- [x] **BR-01 Tags load clean:** after world load, search `logs/latest.log` for `BlockRunner tier overlaps checked`. -> `… ids, 0 overlap(s)`. PASSED 2026-09-26 at 1927 ids and 2026-09-27 after the whole-pack scan (log `6062 ids, 0 overlap(s)`). The log's id count runs lower than the real tier size: the 11:54 `/dumptags` export has 6126 tiered ids, which matches the sim exactly. Treat the dump as the count and the log line as the overlap check.
+- [x] **BR-02 Basic tiers are empty:** stand on a dirt path. `T blockrunner:quick_blocks` -> fails; `T blockrunner:surface/natural_path` -> passes.
+- [x] **BR-03 Fast tiers:** `M` on asphalt -> **+0.05**; on concrete -> **+0.04**; on a Quark grate -> **+0.03**; on stone -> **+0.005**.
+- [x] **BR-04 Slow tiers:** `M` on sand -> **−0.015**; on wool -> **−0.012**; on a honey block -> **−0.055** (jumping on honey is still damped).
+- [x] **BR-05 1.00 tiers:** `M` on glass and on grass -> "no modifier". `T blockrunner:surface/glass` on glass passes.
 - ~~**BR-06 Tooltips**~~ moved to [TT-03](tooltips.md).
-- [x] **BR-07 FOV stays put:** sprint from stone onto asphalt → no FOV zoom beyond normal sprinting.
-- [ ] **BR-08 Mobs too:** walk a horse onto asphalt, then `/attribute @e[type=minecraft:horse,limit=1,sort=nearest] minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002` → half the horse's base speed (a positive number).
-- [ ] **BR-09 Soul sand untouched:** `M` on soul sand → "no modifier". You are still slowed, and Soul Speed boots still cancel it.
-- [ ] **BR-10 Thin blocks don't register:** put a carpet on concrete and stand on it. `M` → **+0.04** (the concrete's value).
+- [x] **BR-07 FOV stays put:** sprint from stone onto asphalt -> no FOV zoom beyond normal sprinting.
+- [ ] **BR-08 Mobs too:** walk a horse onto asphalt, then `/attribute @e[type=minecraft:horse,limit=1,sort=nearest] minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002` -> half the horse's base speed (a positive number).
+- [ ] **BR-09 Soul sand untouched:** `M` on soul sand -> "no modifier". You are still slowed, and Soul Speed boots still cancel it.
+- [ ] **BR-10 Thin blocks don't register:** put a carpet on concrete and stand on it. `M` -> **+0.04** (the concrete's value).
 
 **Sticky facing (3.2)**
-- [x] **BR-11 Sticky piston:** facing up → `M` **−0.035**. Facing sideways → "no modifier". Facing down → "no modifier".
-- [x] **BR-12 Piston heads:** extend an upward sticky piston with redstone and stand on the head → **−0.035**. An upward *plain* piston's head → "no modifier".
-- [x] **BR-13 Other sticky blocks:** Create sticky mechanical piston facing up → **−0.035**. CTM sticky launcher (any placement) → **−0.035**. Supplementaries spring launcher → "no modifier".
+- [x] **BR-11 Sticky piston:** facing up -> `M` **−0.035**. Facing sideways -> "no modifier". Facing down -> "no modifier".
+- [x] **BR-12 Piston heads:** extend an upward sticky piston with redstone and stand on the head -> **−0.035**. An upward *plain* piston's head -> "no modifier".
+- [x] **BR-13 Other sticky blocks:** Create sticky mechanical piston facing up -> **−0.035**. CTM sticky launcher (any placement) -> **−0.035**. Supplementaries spring launcher -> "no modifier".
 
 **Camouflage speed (3.3)**
-- [x] **BR-14 Empty frame:** `M` on an empty framed cube → "no modifier".
-- [x] **BR-15 Copies camo:** right-click the frame with concrete → step off/on → **+0.04**. Re-camo with honey → **−0.055**, with wool → **−0.012**.
-- [x] **BR-16 Create copycat:** a copycat step with concrete as its material → **+0.04**.
+- [x] **BR-14 Empty frame:** `M` on an empty framed cube -> "no modifier".
+- [x] **BR-15 Copies camo:** right-click the frame with concrete -> step off/on -> **+0.04**. Re-camo with honey -> **−0.055**, with wool -> **−0.012**.
+- [x] **BR-16 Create copycat:** a copycat step with concrete as its material -> **+0.04**.
 - [x] **BR-17 Newest wins (FramedBlocks):** PASSED 2026-09-27.
   - Place a framed slab on a framed slab (makes a framed double slab).
-  - Camo the bottom half with oak planks, then the top half with concrete. → **+0.04**.
-  - Remove the concrete with the Framed Hammer, step off/on → **+0.01** (falls back to the oak half).
-- [ ] **BR-18 Survives reloads:** redo BR-17's end state (oak first, concrete second). Relog or reload the chunk → still **+0.04**.
-- [ ] **BR-19 Newest wins (Copycats+):** a Copycats+ copycat slab doubled up: wool first, concrete second → **+0.04**. Swap the order on a fresh one → **−0.012**.
+  - Camo the bottom half with oak planks, then the top half with concrete. -> **+0.04**.
+  - Remove the concrete with the Framed Hammer, step off/on -> **+0.01** (falls back to the oak half).
+- [ ] **BR-18 Survives reloads:** redo BR-17's end state (oak first, concrete second). Relog or reload the chunk -> still **+0.04**.
+- [ ] **BR-19 Newest wins (Copycats+):** a Copycats+ copycat slab doubled up: wool first, concrete second -> **+0.04**. Swap the order on a fresh one -> **−0.012**.
 - ~~**BR-20 Tooltips**~~ moved to [TT-04](tooltips.md).
-- [ ] **BR-21 copyCamo off:** set `[surface.camouflage] copyCamo = false` and save (live reload). Step off and back onto the concrete-camo frame from BR-15 → "no modifier". Set it back to `true`. (The tooltip half is [TT-05](tooltips.md).)
+- [ ] **BR-21 copyCamo off:** set `[surface.camouflage] copyCamo = false` and save (live reload). Step off and back onto the concrete-camo frame from BR-15 -> "no modifier". Set it back to `true`. (The tooltip half is [TT-05](tooltips.md).)
 
 **Visual sinking (3.4)**
-- [x] **BR-22 Camera drop:** set `[surface.sinking] depthPixels = 8` for visibility. In first person, walk from stone onto wool and back. → The view drops half a block, and rises back smoothly over a tick.
-- [x] **BR-23 Third person:** F5 on sand. → The body sits in the sand, the shadow stays on the sand's top, and F3+B's hitbox box stays on top.
+- [x] **BR-22 Camera drop:** set `[surface.sinking] depthPixels = 8` for visibility. In first person, walk from stone onto wool and back. -> The view drops half a block, and rises back smoothly over a tick.
+- [x] **BR-23 Third person:** F5 on sand. -> The body sits in the sand, the shadow stays on the sand's top, and F3+B's hitbox box stays on top.
 - [x] **BR-24 Others sink:** a pig on wool, a dropped item on sand and a ridden horse on sand all sit lower. The rider sinks with the horse.
-- [ ] **BR-25 No sink where it shouldn't:** carpet on wool, a thatch slab, mid-jump over sand → no extra sink. (Honey changed 2026-11-10, see BR-54.)
-- [ ] **BR-26 Off switch:** `depthPixels = 0` → nothing sinks. Set it back to `2` afterwards.
-- [ ] **BR-53 No bump between sunken blocks (2026-11-10):** default `depthPixels = 2`, first person. Walk slowly across slime → honey → slime, wool → mud → wool, and wool → dirt path. → The view never pops up at the seam; it only moves once you are on the next block (none at all slime/honey and wool/mud, a 1 px drop onto the path). Queue: CQ-SINK-01.
-- [ ] **BR-54 Even depth:** F5 beside a pig on wool and one on a honey block. → Both sit equally deep (honey 1 px real + 1 px drawn). Queue: CQ-SINK-02.
-- [ ] **BR-55 Edge stays sunk:** on wool, walk toward an edge over a 1-block drop until the hitbox is half over air. → Still sunk; it rises only as you fall. Queue: CQ-SINK-01.
-- [ ] **BR-56 Items lie on top:** drop items on wool, sand and a slime block. → Each lies on the texture at its real height (not hidden 2 px inside). Then add `t.add(e, 'creativecompat:sinking_hides_items', ['minecraft:sand'])` in `blocktags.js`, `/reload` → the item on sand sinks in; wool unchanged. Remove the line afterwards. Queue: CQ-SINK-03.
+- [ ] **BR-25 No sink where it shouldn't:** carpet on wool, a thatch slab, mid-jump over sand -> no extra sink. (Honey changed 2026-11-10, see BR-54.)
+- [ ] **BR-26 Off switch:** `depthPixels = 0` -> nothing sinks. Set it back to `2` afterwards.
+- [ ] **BR-53 No bump between sunken blocks (2026-11-10):** default `depthPixels = 2`, first person. Walk slowly across slime -> honey -> slime, wool -> mud -> wool, and wool -> dirt path. -> The view never pops up at the seam; it only moves once you are on the next block (none at all slime/honey and wool/mud, a 1 px drop onto the path). Queue: CQ-SINK-01.
+- [ ] **BR-54 Even depth:** F5 beside a pig on wool and one on a honey block. -> Both sit equally deep (honey 1 px real + 1 px drawn). Queue: CQ-SINK-02.
+- [ ] **BR-55 Edge stays sunk:** on wool, walk toward an edge over a 1-block drop until the hitbox is half over air. -> Still sunk; it rises only as you fall. Queue: CQ-SINK-01.
+- [ ] **BR-56 Items lie on top:** drop items on wool, sand and a slime block. -> Each lies on the texture at its real height (not hidden 2 px inside). Then add `t.add(e, 'creativecompat:sinking_hides_items', ['minecraft:sand'])` in `blocktags.js`, `/reload` -> the item on sand sinks in; wool unchanged. Remove the line afterwards. Queue: CQ-SINK-03.
 
 **Camo sinking (3.4, needs the rebuilt patcherMod jar)** (`[surface.sinking] depthPixels = 8` makes these easy to see)
-- [ ] **BR-30 Frames sink like their camo:** a framed cube camo'd with wool → you sink on it (camera and model). Re-camo with stone → no sink. An empty frame → no sink.
-- [ ] **BR-31 Hybrids use the newest camo:** framed double slab, stone first, then wool → sinks. On a fresh one, wool first, then stone → no sink.
-- [ ] **BR-32 Non-full frames don't sink:** a single framed slab camo'd with wool → no sink.
-- [ ] **BR-33 Independent switch:** set `[surface.sinking] copyCamo = false` → the wool frame from BR-30 no longer sinks, but `M` on it still reads wool's **−0.012** (walk speed follows `[surface.camouflage]`). Set it back to `true`.
+- [ ] **BR-30 Frames sink like their camo:** a framed cube camo'd with wool -> you sink on it (camera and model). Re-camo with stone -> no sink. An empty frame -> no sink.
+- [ ] **BR-31 Hybrids use the newest camo:** framed double slab, stone first, then wool -> sinks. On a fresh one, wool first, then stone -> no sink.
+- [ ] **BR-32 Non-full frames don't sink:** a single framed slab camo'd with wool -> no sink.
+- [ ] **BR-33 Independent switch:** set `[surface.sinking] copyCamo = false` -> the wool frame from BR-30 no longer sinks, but `M` on it still reads wool's **−0.012** (walk speed follows `[surface.camouflage]`). Set it back to `true`.
 
 **Surface config (3.7, in game since 14:49; the trimmed json needs a restart)**
-- [ ] **BR-39 Section is there:** open Create's Configs screen for Creative Engineering, Common → a **surface** folder holding speed, sticky, camouflage and sinking. `speed` lists all 26 tiers, each showing its description. No `block_sinking` or `camouflage_speed` left at the top level.
-- [ ] **BR-40 Speeds come from the toml:** `latest.log` has `[surface] 26 tier speeds applied to BlockRunner from [surface.speed]` and no `without BlockRunnerSpeedConfigMixin` error (log half seen 2026-09-27 15:21, with the old json still listing the tiers). After a restart with the trimmed json: `M` on asphalt → **+0.05**, on sand → **−0.015**.
-- [ ] **BR-41 Live edit:** in the Configs screen set `surface.speed.asphalt` to 2.0 and save. Step off and back onto asphalt → `M` **+0.1**, and WTHIT on placed asphalt reads the 2.0 speed. Set it back to 1.5.
-- [ ] **BR-42 Sticky switch:** set `[surface.sticky] faceUpOnly = false`. Step onto a sideways sticky piston → **−0.035**. Set it back to `true` → "no modifier" after stepping off and on.
-- [ ] **BR-43 Hybrid wording:** framed slab, framed panel, a framed double slab, a Copycats+ copycat slab → "Speed Multiplier: matches its camo (newest camo sets walk behaviors for hybrid blocks)". Framed cube → "…matches its camo". (Needs `[surface.camouflage] copyCamo = true`; with false every frame reads "1.0, no matter its camo".)
+- [ ] **BR-39 Section is there:** open Create's Configs screen for Creative Engineering, Common -> a **surface** folder holding speed, sticky, camouflage and sinking. `speed` lists all 26 tiers, each showing its description. No `block_sinking` or `camouflage_speed` left at the top level.
+- [ ] **BR-40 Speeds come from the toml:** `latest.log` has `[surface] 26 tier speeds applied to BlockRunner from [surface.speed]` and no `without BlockRunnerSpeedConfigMixin` error (log half seen 2026-09-27 15:21, with the old json still listing the tiers). After a restart with the trimmed json: `M` on asphalt -> **+0.05**, on sand -> **−0.015**.
+- [ ] **BR-41 Live edit:** in the Configs screen set `surface.speed.asphalt` to 2.0 and save. Step off and back onto asphalt -> `M` **+0.1**, and WTHIT on placed asphalt reads the 2.0 speed. Set it back to 1.5.
+- [ ] **BR-42 Sticky switch:** set `[surface.sticky] faceUpOnly = false`. Step onto a sideways sticky piston -> **−0.035**. Set it back to `true` -> "no modifier" after stepping off and on.
+- [ ] **BR-43 Hybrid wording:** framed slab, framed panel, a framed double slab, a Copycats+ copycat slab -> "Speed Multiplier: matches its camo (newest camo sets walk behaviors for hybrid blocks)". Framed cube -> "…matches its camo". (Needs `[surface.camouflage] copyCamo = true`; with false every frame reads "1.0, no matter its camo".)
 
 **WTHIT Run Speed line (3.8, needs a restart after the 16:45 deploy)**
-- [ ] **BR-44 Line shows:** look at IP asphalt → "Run Speed: 1.50× (Asphalt)", number green. Sand → "0.85× (Dust)", red. Stone → "1.05× (Natural Smooth)". Glass and grass → no line (1.00, `hideNormal`).
-- [ ] **BR-45 Frames and sticky:** a framed cube camo'd with concrete → "1.40× (Concrete, from camo)". A sticky piston facing up → "0.65× (Sticky)". Facing sideways → no line; with `hideNormal = false` → "1.00× (Sticky, sticky face not up)".
-- [ ] **BR-46 Live and configurable:** set `[surface.speed] asphalt = 2.0` and save → the asphalt line reads 2.00× without relooking. `format = PERCENT` → "+100%". `showTier = false` → number only. `enabled = false` → no line. Put everything back.
+- [ ] **BR-44 Line shows:** look at IP asphalt -> "Run Speed: 1.50× (Asphalt)", number green. Sand -> "0.85× (Dust)", red. Stone -> "1.05× (Natural Smooth)". Glass and grass -> no line (1.00, `hideNormal`).
+- [ ] **BR-45 Frames and sticky:** a framed cube camo'd with concrete -> "1.40× (Concrete, from camo)". A sticky piston facing up -> "0.65× (Sticky)". Facing sideways -> no line; with `hideNormal = false` -> "1.00× (Sticky, sticky face not up)".
+- [ ] **BR-46 Live and configurable:** set `[surface.speed] asphalt = 2.0` and save -> the asphalt line reads 2.00× without relooking. `format = PERCENT` -> "+100%". `showTier = false` -> number only. `enabled = false` -> no line. Put everything back.
 - [ ] **BR-47 Plugin loads:** WTHIT's plugin list (its config screen, Plugins) includes `creativecompat:run_speed`; `latest.log` has no WTHIT plugin error for it (log half seen 2026-09-27 14:50 with the first version).
-- [ ] **BR-48 Passable blocks:** tall grass, a flower, a wheat seedling, a pressure plate → no line, even with `hideNormal = false` and `hideUntyped = false`. A cobweb on grass → "0.11× (walking through)". A grown sweet berry bush → "0.36× (walking through)". A 5-layer IW leaf pile → "0.45× (walking through)"; 2 layers → no line.
-- [ ] **BR-49 Layers and powder snow:** a 1-layer and a 2-layer snow on sand → "0.85× (Dust, block below)"; 3 layers → "0.75× (Snow)". A carpet on planks → "1.10× (Wood, block below)". Powder snow bare-footed → "0.41× (walking through)"; in leather boots → "0.75× (Snow)".
-- [ ] **BR-50 Own speed:** soul sand → "0.58× (own speed)".
-- [ ] **BR-51 Hide switches:** set `hideNormal = false` (keep `hideUntyped = true`) → glass shows "1.00× (Glass)", a crafting table shows nothing. Then `hideUntyped = false` → the crafting table shows "1.00×". Put both back to `true`.
+- [ ] **BR-48 Passable blocks:** tall grass, a flower, a wheat seedling, a pressure plate -> no line, even with `hideNormal = false` and `hideUntyped = false`. A cobweb on grass -> "0.11× (walking through)". A grown sweet berry bush -> "0.36× (walking through)". A 5-layer IW leaf pile -> "0.45× (walking through)"; 2 layers -> no line.
+- [ ] **BR-49 Layers and powder snow:** a 1-layer and a 2-layer snow on sand -> "0.85× (Dust, block below)"; 3 layers -> "0.75× (Snow)". A carpet on planks -> "1.10× (Wood, block below)". Powder snow bare-footed -> "0.41× (walking through)"; in leather boots -> "0.75× (Snow)".
+- [ ] **BR-50 Own speed:** soul sand -> "0.58× (own speed)".
+- [ ] **BR-51 Hide switches:** set `hideNormal = false` (keep `hideUntyped = true`) -> glass shows "1.00× (Glass)", a crafting table shows nothing. Then `hideUntyped = false` -> the crafting table shows "1.00×". Put both back to `true`.
 
 **Native property resets (3.5)**
-- [ ] **BR-28 D&D asphalt matches IP asphalt:** lay a strip alternating IP asphalt and D&D asphalt, and walk (then sprint) along it. → `M` reads **+0.05** on both. The pace doesn't change between them; before the fix you'd shoot ahead on the D&D blocks and slide when stopping.
-- [ ] **BR-29 D&D asphalt is walkable if untiered** (optional): temporarily remove `create_dd:*_asphalt_block` from the asphalt tier and `/reload` → normal walking speed, not frozen. Put it back afterwards.
+- [ ] **BR-28 D&D asphalt matches IP asphalt:** lay a strip alternating IP asphalt and D&D asphalt, and walk (then sprint) along it. -> `M` reads **+0.05** on both. The pace doesn't change between them; before the fix you'd shoot ahead on the D&D blocks and slide when stopping.
+- [ ] **BR-29 D&D asphalt is walkable if untiered** (optional): temporarily remove `create_dd:*_asphalt_block` from the asphalt tier and `/reload` -> normal walking speed, not frozen. Put it back afterwards.
 
 **Whole-pack scan (2026-09-27, needs a game restart: tag_helper.js and item_dict.js are startup scripts)**
-- [ ] **BR-34 Modded tiers:** `M` on a Create Deco brick → **+0.025**; a Dustrial Decor cinder block → **+0.04**; an Engineer's Decor steel catwalk → **+0.03**; Railways locometal → **+0.025**; an Architect's Palette oak board → **+0.01**.
-- [ ] **BR-35 Fence tops and beds:** stand on top of an oak fence → **+0.01** (wood). On a bed → **−0.012** (soft), and with `depthPixels = 8` you don't sink into it.
-- [ ] **BR-36 Gourds don't sink:** `M` on a pumpkin → **−0.015** (confectionery). With `depthPixels = 8` no sink; a froglight next to it (soft, full block) does sink.
-- [ ] **BR-37 Blocks with no tags:** a froglight → **−0.012**; D&D padded rubber → **−0.012**; tilled end stone → **−0.02**. These only work because the scan found them.
-- [ ] **BR-38 SecurityCraft copies:** reinforced stone and a stone mine → **+0.005** (same as stone); reinforced concrete → **+0.04**; a reinforced sticky piston facing up → **−0.035**, sideways → "no modifier".
+- [ ] **BR-34 Modded tiers:** `M` on a Create Deco brick -> **+0.025**; a Dustrial Decor cinder block -> **+0.04**; an Engineer's Decor steel catwalk -> **+0.03**; Railways locometal -> **+0.025**; an Architect's Palette oak board -> **+0.01**.
+- [ ] **BR-35 Fence tops and beds:** stand on top of an oak fence -> **+0.01** (wood). On a bed -> **−0.012** (soft), and with `depthPixels = 8` you don't sink into it.
+- [ ] **BR-36 Gourds don't sink:** `M` on a pumpkin -> **−0.015** (confectionery). With `depthPixels = 8` no sink; a froglight next to it (soft, full block) does sink.
+- [ ] **BR-37 Blocks with no tags:** a froglight -> **−0.012**; D&D padded rubber -> **−0.012**; tilled end stone -> **−0.02**. These only work because the scan found them.
+- [ ] **BR-38 SecurityCraft copies:** reinforced stone and a stone mine -> **+0.005** (same as stone); reinforced concrete -> **+0.04**; a reinforced sticky piston facing up -> **−0.035**, sideways -> "no modifier".
 
-- [ ] **BR-52 1.0.4 mod blocks:** after a restart, a Fruits Delight crate → wood tier; a Farmer's Respite tea leaves sack and a Corn Kernel Bag → soft; a placed Hamimelon and a Coffee Cake → confectionery; an apple jelly block and an apple jello block → very sticky (same as honey / slime). The tier overlap log line still says 0 overlaps.
+- [ ] **BR-52 1.0.4 mod blocks:** after a restart, a Fruits Delight crate -> wood tier; a Farmer's Respite tea leaves sack and a Corn Kernel Bag -> soft; a placed Hamimelon and a Coffee Cake -> confectionery; an apple jelly block and an apple jello block -> very sticky (same as honey / slime). The tier overlap log line still says 0 overlaps.
 
-- [ ] **BR-57 Visceral Heap flesh (2026-11-10):** after a restart, in the Heap (or placed): `M` on flesh → **−0.04** (spongy); on porous flesh → **−0.055** (very sticky). Jump on porous flesh → about half a normal jump, no bounce when landing from a height. Both sink 2 px. Queue: CQ-VH-04.
-- [ ] **BR-58 Wall slide (3.9):** survival, build a 10-high porous flesh pillar beside a honey pillar. Jump off the top pressed against each side. → Both slide down at the same slow speed with the slide sound and particles (flesh-coloured on flesh), no fall damage at the bottom. Standing on top, or jumping next to it without touching → no slide. A pig pushed off beside it slides too. Plain flesh → no slide. A Banana Slug Slime Block pillar slides the same way, with yellow particles, no fall damage. Queue: CQ-VH-05.
-- [ ] **BR-59 Audit dump (2026-11-10):** after installing Creative Compat + Creative Devtools, `/dumpsurface`. → `kubejs/exported/surface_audit.json` written, `errors` empty or listed. In it: `immersivepetroleum:asphalt` has tier `asphalt`; `minecraft:soul_sand` no tier, speedFactor 0.4; `minecraft:white_carpet` collisionTop 0.0625. Queue: SQ-BRA-02.
-- [ ] **BR-60 Watcher lists nothing:** `python3 tools/blockrunner_scan.py --audit kubejs/exported/surface_audit.json`. → Only magma in the untiered list (exit 3 for it alone), or empty if magma has been decided. Every block in the outlier list gets a decision (reset in `block_properties.js`, or recorded in 3.5). Queue: SQ-BRA-03.
-- [ ] **BR-61 Watcher catches a gap:** remove `upgrade_aquatic:*_beehive` from the wood entries, `/reload`, `/dumpsurface`, rerun `--audit`. → The two beehives are listed under upgrade_aquatic. Put the line back.
-- [ ] **BR-62 Framed blocks copy their camo again:** a framed block with a stone camo and a Copycats+ block with planks. `M` on each → stone's and wood's modifier (+0.005, +0.01), WTHIT "from camo". An empty framed block → no modifier. (The `@mod` entries were dropped from every tag from 2026-11-06 until the `has.js` fix.) Queue: CQ-BRA-01.
-- [ ] **BR-63 New tiers feel right:** `M` on: a Neapolitan chocolate brick and a placed Display Delight plate → −0.015 (confectionery); an Upgrade Aquatic coralstone → +0.005 (natural smooth); a kelpy stone brick → +0.025 (constructed brick); a Comforts sleeping bag → −0.012 (soft) or, if it is too thin to register, the block under it; a Vintage jam block → −0.055 (very sticky, honey jump kept); a Create mechanical press, a crafting table and a Handcrafted counter → no modifier. WTHIT: `hideNormal = false` shows "1.00× (Machinery)", "(Functional)", "(Furniture)". Queue: SQ-BRA-04, SQ-BRA-05, CQ-BRA-01.
-- [ ] **BR-64 Reload time:** `/reload` with the audit block. → The `block tags finished` line follows `block tags starting` within a few seconds; the log line says 0 overlaps. Queue: SQ-BRA-01.
-- [ ] **BR-65 Changelog values (2026-11-11):** `M` on a sleeping bag, hammock, pet bed, thatch and cardboard box → **−0.012**; a cake and a placed roast chicken → **−0.015**; a tube coral block → **−0.008**; kelpy cobblestone → **+0.015**; scute pavement, polished manure, manure bricks → **+0.025**; a carrot crate and a beehive → **+0.01**; a Vintage Delight jello block → **−0.055**. Queue: SQ-BRA-06.
-- [ ] **BR-66 Mod filters:** Mosaic Masonry common and English bond, a Metal Fences copper fence and closed gate (stand on top) → **+0.025** each. Queue: SQ-BRA-07.
+- [ ] **BR-57 Visceral Heap flesh (2026-11-10):** after a restart, in the Heap (or placed): `M` on flesh -> **−0.04** (spongy); on porous flesh -> **−0.055** (very sticky). Jump on porous flesh -> about half a normal jump, no bounce when landing from a height. Both sink 2 px. Queue: CQ-VH-04.
+- [ ] **BR-58 Wall slide (3.9):** survival, build a 10-high porous flesh pillar beside a honey pillar. Jump off the top pressed against each side. -> Both slide down at the same slow speed with the slide sound and particles (flesh-colored on flesh), no fall damage at the bottom. Standing on top, or jumping next to it without touching -> no slide. A pig pushed off beside it slides too. Plain flesh -> no slide. A Banana Slug Slime Block pillar slides the same way, with yellow particles, no fall damage. Queue: CQ-VH-05.
+- [ ] **BR-59 Audit dump (2026-11-10):** after installing Creative Compat + Creative Devtools, `/dumpsurface`. -> `kubejs/exported/surface_audit.json` written, `errors` empty or listed. In it: `immersivepetroleum:asphalt` has tier `asphalt`; `minecraft:soul_sand` no tier, speedFactor 0.4; `minecraft:white_carpet` collisionTop 0.0625. Queue: SQ-BRA-02.
+- [ ] **BR-60 Watcher lists nothing:** `python3 tools/blockrunner_scan.py --audit kubejs/exported/surface_audit.json`. -> Only magma in the untiered list (exit 3 for it alone), or empty if magma has been decided. Every block in the outlier list gets a decision (reset in `block_properties.js`, or recorded in 3.5). Queue: SQ-BRA-03.
+- [ ] **BR-61 Watcher catches a gap:** remove `upgrade_aquatic:*_beehive` from the wood entries, `/reload`, `/dumpsurface`, rerun `--audit`. -> The two beehives are listed under upgrade_aquatic. Put the line back.
+- [ ] **BR-62 Framed blocks copy their camo again:** a framed block with a stone camo and a Copycats+ block with planks. `M` on each -> stone's and wood's modifier (+0.005, +0.01), WTHIT "from camo". An empty framed block -> no modifier. (The `@mod` entries were dropped from every tag from 2026-11-06 until the `has.js` fix.) Queue: CQ-BRA-01.
+- [ ] **BR-63 New tiers feel right:** `M` on: a Neapolitan chocolate brick and a placed Display Delight plate -> −0.015 (confectionery); an Upgrade Aquatic coralstone -> +0.005 (natural smooth); a kelpy stone brick -> +0.025 (constructed brick); a Comforts sleeping bag -> −0.012 (soft) or, if it is too thin to register, the block under it; a Vintage jam block -> −0.055 (very sticky, honey jump kept); a Create mechanical press, a crafting table and a Handcrafted counter -> no modifier. WTHIT: `hideNormal = false` shows "1.00× (Machinery)", "(Functional)", "(Furniture)". Queue: SQ-BRA-04, SQ-BRA-05, CQ-BRA-01.
+- [ ] **BR-64 Reload time:** `/reload` with the audit block. -> The `block tags finished` line follows `block tags starting` within a few seconds; the log line says 0 overlaps. Queue: SQ-BRA-01.
+- [ ] **BR-65 Changelog values (2026-11-11):** `M` on a sleeping bag, hammock, pet bed, thatch and cardboard box -> **−0.012**; a cake and a placed roast chicken -> **−0.015**; a tube coral block -> **−0.008**; kelpy cobblestone -> **+0.015**; scute pavement, polished manure, manure bricks -> **+0.025**; a carrot crate and a beehive -> **+0.01**; a Vintage Delight jello block -> **−0.055**. Queue: SQ-BRA-06.
+- [ ] **BR-66 Mod filters:** Mosaic Masonry common and English bond, a Metal Fences copper fence and closed gate (stand on top) -> **+0.025** each. Queue: SQ-BRA-07.
 
 **Pass-through blocks (3.10, 2026-11-15).** Needs the Creative Compat jar built 2026-11-15 00:40 or later (it carries
 the tags) and a restart. `P` = `/attribute @s minecraft:generic.movement_speed modifier value get
@@ -856,29 +856,29 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
 `@e[type=...,limit=1,sort=nearest]`).
 - [ ] **BR-67 Wheat field:** plant a 9x9 wheat field on farmland. Freshly planted: no `P`. Bone-meal to half grown: on the edge row `P` -0.25, two rows in -0.5; WTHIT `Neighbors: 5` on the edge, `Neighbors: 8` and `(Dense neighbors)` inside; the walk line reads `Walk Through: 0.50x (Dense neighbors) on Farmland (Tilled)`. Queue: CQ-PTH-01, CQ-PTH-04.
 - [ ] **BR-68 Corn:** corn with the lower block at age 3: no slowdown; at age 4 (the top appears): both blocks slow, the top block's WTHIT names the farmland. Queue: CQ-PTH-01.
-- [ ] **BR-69 Single-tier plants:** half-grown carrots, wild rice, tall grass, a rose bush → -0.25 each; sugar cane and a propelplant cane → -0.5. WTHIT shows no Neighbors line on them. Queue: SQ-PTH-20.
-- [ ] **BR-70 Tomatoes and coffee:** a 3x3 block of tomatoes on ropes at age 0 → centre -0.5 (dense, age ignored); budding tomatoes age 1 none, age 2 -0.25; a coffee stem at age 0 -0.25, no Neighbors line. Queue: SQ-PTH-22.
+- [ ] **BR-69 Single-tier plants:** half-grown carrots, wild rice, tall grass, a rose bush -> -0.25 each; sugar cane and a propelplant cane -> -0.5. WTHIT shows no Neighbors line on them. Queue: SQ-PTH-20.
+- [ ] **BR-70 Tomatoes and coffee:** a 3x3 block of tomatoes on ropes at age 0 -> center -0.5 (dense, age ignored); budding tomatoes age 1 none, age 2 -0.25; a coffee stem at age 0 -0.25, no Neighbors line. Queue: SQ-PTH-22.
 - [ ] **BR-71 Vines:** vanilla vine, twisting vines, cave vines, a grape vine: walking through -0.25; standing still in them no `P`; climbing the vine as before. Queue: CQ-PTH-01.
-- [ ] **BR-72 Rope:** walk through the bottom block of a hanging Farmer's Delight rope and a Quark rope → -0.25; climb (jump), slide, sneak on them → no `P`, vanilla speeds; jump down past a rope → no fall damage. Queue: CQ-PTH-03.
-- [ ] **BR-73 Rice paddy:** wade through rice in water → slower than wading in plain water beside it; swim in deep water beside it → normal swim speed. Queue: CQ-PTH-01.
-- [ ] **BR-74 Creative:** walking through a half-grown wheat field in creative → slowed; flying through it → not. Queue: CQ-PTH-01.
-- [ ] **BR-75 Cobwebs:** a single web: walk about half speed, falling a little slower; drop 20 blocks into it → damage about 0.85x of a plain fall; through 3 stacked webs about 0.61x. A web with 6+ web neighbours: land from 20 blocks with no damage. A 3x3x3 web cube: drop in, stop in the middle; jump climbs slowly, sneak sinks slowly, no input hangs; walk sideways out at 0.35x. Queue: SQ-PTH-02, -03, -09.
+- [ ] **BR-72 Rope:** walk through the bottom block of a hanging Farmer's Delight rope and a Quark rope -> -0.25; climb (jump), slide, sneak on them -> no `P`, vanilla speeds; jump down past a rope -> no fall damage. Queue: CQ-PTH-03.
+- [ ] **BR-73 Rice paddy:** wade through rice in water -> slower than wading in plain water beside it; swim in deep water beside it -> normal swim speed. Queue: CQ-PTH-01.
+- [ ] **BR-74 Creative:** walking through a half-grown wheat field in creative -> slowed; flying through it -> not. Queue: CQ-PTH-01.
+- [ ] **BR-75 Cobwebs:** a single web: walk about half speed, falling a little slower; drop 20 blocks into it -> damage about 0.85x of a plain fall; through 3 stacked webs about 0.61x. A web with 6+ web neighbours: land from 20 blocks with no damage. A 3x3x3 web cube: drop in, stop in the middle; jump climbs slowly, sneak sinks slowly, no input hangs; walk sideways out at 0.35x. Queue: SQ-PTH-02, -03, -09.
 - [ ] **BR-76 Barbed wire:** same speeds as a web; still hurts while you move. Queue: SQ-PTH-23.
 - [ ] **BR-77 Who is slowed:** a spider and a cave spider cross webs at full speed; a villager, a zombie and a ridden horse in a wheat field are slowed (`P` on each); a fox in a sweet berry bush is not. A SecurityCraft reinforced cobweb does not slow its owner. Queue: SQ-PTH-02, -04, -23.
-- [ ] **BR-78 Items in webs:** throw 10 items into a single web from different sides → each stops inside it at a different depth; one dropped straight through stops near the bottom; XP orbs stop and do not fly to you while you stand beside; break the web → they fall; save, restart → still stuck. Repeat with ItemPhysic's item ticking. Queue: SQ-PTH-06, -07, -08.
-- [ ] **BR-79 Surrounded web, projectiles:** into the centre of a 3x3x3 cube: a tipped arrow hangs and is picked up as the same tipped arrow; a Nock Enough Arrows explosive arrow hangs without exploding; a hanging arrow is still there after 5 minutes; a snowball and an ender pearl break in the middle (the pearl puts you in the middle, hanging); a splash potion sinks down the middle and splashes below; a crossbow firework with a star hangs, then pops; an Old Guns bullet and a Blocky Siege cannonball fly straight through unslowed. Queue: SQ-PTH-10, -11, -24.
-- [ ] **BR-80 Snag in a single web:** a fishing bobber (reel it back in), a feather on a stick and a Quark pickarang stop in the middle of a lone web; walk into the pickarang → you get it back with its damage; snag another, break the web → it drops. Botania thorn chakram the same. Queue: SQ-PTH-12.
+- [ ] **BR-78 Items in webs:** throw 10 items into a single web from different sides -> each stops inside it at a different depth; one dropped straight through stops near the bottom; XP orbs stop and do not fly to you while you stand beside; break the web -> they fall; save, restart -> still stuck. Repeat with ItemPhysic's item ticking. Queue: SQ-PTH-06, -07, -08.
+- [ ] **BR-79 Surrounded web, projectiles:** into the center of a 3x3x3 cube: a tipped arrow hangs and is picked up as the same tipped arrow; a Nock Enough Arrows explosive arrow hangs without exploding; a hanging arrow is still there after 5 minutes; a snowball and an ender pearl break in the middle (the pearl puts you in the middle, hanging); a splash potion sinks down the middle and splashes below; a crossbow firework with a star hangs, then pops; an Old Guns bullet and a Blocky Siege cannonball fly straight through unslowed. Queue: SQ-PTH-10, -11, -24.
+- [ ] **BR-80 Snag in a single web:** a fishing bobber (reel it back in), a feather on a stick and a Quark pickarang stop in the middle of a lone web; walk into the pickarang -> you get it back with its damage; snag another, break the web -> it drops. Botania thorn chakram the same. Queue: SQ-PTH-12.
 - [ ] **BR-81 Arrow despawn:** a player's arrow in the ground: still there after 5 minutes, gone after 10; a non-Loyalty trident the same; a Loyalty trident returns as usual; a skeleton's arrow is gone after 1 minute and cannot be picked up from a web. With `arrowLongLifeCap` 3 in one chunk: a fourth arrow makes the oldest despawn at once if it is over a minute old, else after its first minute. Queue: SQ-PTH-13, -14.
 - [ ] **BR-82 Picked up as themselves:** from a web: a tipped arrow, a spectral arrow, a Nock Enough Arrows explosive arrow and a Supplementaries rope arrow all come back as themselves (the rope arrow with its rope). Queue: SQ-PTH-10.
 - [ ] **BR-83 Leaf piles:** an oak leaf pile at 3 layers: no `P`; at 4: -0.55 (0.45x); with Depth Strider boots: none. Twigs bamboo leaves: 3 layers none, 4 layers -0.55; an ocelot is slowed in them, a fox is not. IW spruce thorns still hurt at 6+ layers. Queue: SQ-PTH-17, -18.
 - [ ] **BR-84 Bushes:** a sweet berry bush feels as before (0.36x) and still hurts; a Vinery taiga grape bush now slows the same. Queue: SQ-PTH-22.
-- [ ] **BR-85 Field of view:** with BlockRunner's `disable_field_of_view_changes` on, walk onto asphalt, onto honey, into a wheat field and into a web → the field of view does not change; sprinting still widens it. Queue: CQ-PTH-01.
-- [ ] **BR-86 Server values:** two players on the dedicated server in a wheat field; change `[surface.passthrough.dense_crop] denseWalk` to 0.2 on the server and save → both walk at the new speed with no rubber-banding. Queue: CQ-PTH-02.
-- [ ] **BR-87 WTHIT lines:** look at ripe wheat inside a field (walk, Neighbors), wheat at age 2 (no line), a lone web (`Walk Through: 0.50x`, `Fall Through: 0.85x`, `Neighbors: 0`), the centre of a web cube (`Fall Through: stopped`), a vine ("while moving through"), a 3- and a 4-layer leaf pile (line only on the 4-layer one), powder snow (the old walking-through Run Speed line). Queue: CQ-PTH-04.
-- [ ] **BR-88 Performance:** `/cdevbench passthrough` → the field and web-cube entity ticks under 1000 ns; then play a normal session (farm, village, a web build) with `[debug.passthrough] timing = true` and a JFR recording; `python3 tools/perf/passthrough_timing.py logs/latest.log` → record the share of tick time in 3.10 Performance (decides whether the per-tick count cache is built). Queue: SQ-PTH-25 to -28, CQ-PTH-05.
+- [ ] **BR-85 Field of view:** with BlockRunner's `disable_field_of_view_changes` on, walk onto asphalt, onto honey, into a wheat field and into a web -> the field of view does not change; sprinting still widens it. Queue: CQ-PTH-01.
+- [ ] **BR-86 Server values:** two players on the dedicated server in a wheat field; change `[surface.passthrough.dense_crop] denseWalk` to 0.2 on the server and save -> both walk at the new speed with no rubber-banding. Queue: CQ-PTH-02.
+- [ ] **BR-87 WTHIT lines:** look at ripe wheat inside a field (walk, Neighbors), wheat at age 2 (no line), a lone web (`Walk Through: 0.50x`, `Fall Through: 0.85x`, `Neighbors: 0`), the center of a web cube (`Fall Through: stopped`), a vine ("while moving through"), a 3- and a 4-layer leaf pile (line only on the 4-layer one), powder snow (the old walking-through Run Speed line). Queue: CQ-PTH-04.
+- [ ] **BR-88 Performance:** `/cdevbench passthrough` -> the field and web-cube entity ticks under 1000 ns; then play a normal session (farm, village, a web build) with `[debug.passthrough] timing = true` and a JFR recording; `python3 tools/perf/passthrough_timing.py logs/latest.log` -> record the share of tick time in 3.10 Performance (decides whether the per-tick count cache is built). Queue: SQ-PTH-25 to -28, CQ-PTH-05.
 
 **Server side (only when the dedicated server is back)**
-- [ ] **BR-27 Server parity:** with the new patcherMod jar on the server, repeat BR-11, BR-15 and BR-17 while connected. → Same values, and no rubber-banding when walking across camo'd frames.
+- [ ] **BR-27 Server parity:** with the new patcherMod jar on the server, repeat BR-11, BR-15 and BR-17 while connected. -> Same values, and no rubber-banding when walking across camo'd frames.
 
 ## 8. History
 
@@ -891,15 +891,15 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
   - Facing-aware sticky mixin.
   - You retuned the values.
 - **2026-09-27:**
-  - Whole-pack scan in JEI mod order → added `grating` (1.30), `camouflage` (1.00) and `confectionery` (0.85); glass split into its own tier; Supplementaries spring launcher removed from sticky.
+  - Whole-pack scan in JEI mod order -> added `grating` (1.30), `camouflage` (1.00) and `confectionery` (0.85); glass split into its own tier; Supplementaries spring launcher removed from sticky.
   - Camo walk speed with the newest-material rule and tooltip; wording changed to "no matter its camo".
   - This writeup and `tools/blockrunner_tag_sim.js` added.
   - BR-17 passed in game: the newest camo sets the speed on combined framed slabs.
   - Framed slab/panel count as hybrid-capable for the Speed Multiplier line (wording "the newest one in a hybrid"). The hybrid and schematic tooltips and the "Framed Copycat" rename are in [tooltips.md](tooltips.md).
   - Framed/copycat blocks sink like their newest camo, behind a new independent `[block_sinking] copyCamo` (BR-30..33; now `[surface.sinking]`).
   - D&D asphalt's own friction boost removed (`block_properties.js`); IP asphalt's "Increases walking speed" tooltip removed; tooltip tests moved to [tooltips.md](tooltips.md) (BR-06, BR-20 retired).
-  - Whole-pack scan over every jar + KubeJS (new `tools/blockrunner_scan.py`): tiered ids 2278 → 6120, 0 overlaps.
-    All modded brick/stone/metal/wood families, wooden fences/gates/trapdoors, beds → soft, gourds →
+  - Whole-pack scan over every jar + KubeJS (new `tools/blockrunner_scan.py`): tiered ids 2278 -> 6120, 0 overlaps.
+    All modded brick/stone/metal/wood families, wooden fences/gates/trapdoors, beds -> soft, gourds ->
     confectionery, ores via `#forge:ores`, untagged blocks (froglights, rubber, catwalks). New `t.mirror()`
     helper puts SecurityCraft reinforced blocks and mines in their vanilla block's tier. The sim now loads
     the item/block dicts and the untagged-block list. BR-34..38 added.
@@ -921,16 +921,16 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
     `pack/` manifest regenerated. Writeup reviewed end to end; Twigs bamboo leaves noted as a leaves-tier
     member that can't register.
   - Re-check against the newest mods (houses, boats, Breezy, Golden Food, Canned Goods, Tobacconist, Create Fast
-    Schematic Cannon), using the 11:54 dumps. Only 4 walkable-ish new blocks: Golden Food's two cakes → confectionery,
-    Canned Goods' sealed canned dirt → metal. Opened canned dirt shows dirt on top and stays untiered (1.00, same as
+    Schematic Cannon), using the 11:54 dumps. Only 4 walkable-ish new blocks: Golden Food's two cakes -> confectionery,
+    Canned Goods' sealed canned dirt -> metal. Opened canned dirt shows dirt on top and stays untiered (1.00, same as
     dirt); the hookah (furniture) and tobacco crops are left out like other thin/functional blocks. The house, boat and
     cannon mods add no blocks. 6129 ids, 0 overlaps. In game, the pre-change set loaded with 0 overlaps (BR-01 passed).
 - **2026-10-02** Re-check for the mods added since 2026-09-27 (Fruits Delight, Farmer's Respite, Corn Delight, More
   Delight, Well, Untitled Duck Mod, Blue Flame, plus redeco / Floral Enchantment / Upgrade Aquatic blocks the scan now
-  sees), from the `/dumpall` tag export. Tiered by the existing precedents: `fruitsdelight:*_crate` + Corn Crate → wood
-  (like FD crates); Farmer's Respite `*_sack` + Corn Kernel Bag → soft (sacks and bags); Hamimelon (a melon-like gourd),
-  Coffee Cake, Rose Hip Pie, Fig Pudding, Mangosteen Cake, Pineapple Fried Rice, Nachos and Popcorn Box → confectionery;
-  Fruits Delight jelly blocks (`HoneyBlock` subclass) and jello blocks (`SlimeBlock` subclass) → very sticky. Left out
+  sees), from the `/dumpall` tag export. Tiered by the existing precedents: `fruitsdelight:*_crate` + Corn Crate -> wood
+  (like FD crates); Farmer's Respite `*_sack` + Corn Kernel Bag -> soft (sacks and bags); Hamimelon (a melon-like gourd),
+  Coffee Cake, Rose Hip Pie, Fig Pudding, Mangosteen Cake, Pineapple Fried Rice, Nachos and Popcorn Box -> confectionery;
+  Fruits Delight jelly blocks (`HoneyBlock` subclass) and jello blocks (`SlimeBlock` subclass) -> very sticky. Left out
   like before: cauldrons, jelly bottles, plants, the kettle and the wells (furniture). New single ids come from new
   item_dict keys (173 added for the new mods), so a restart is needed. Sim: 6355 ids, 0 overlaps, no dead patterns.
   BR-52 added.
@@ -943,7 +943,7 @@ a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 read
   bales and the Salt Blocks (The Salt's Salt Block and raw rock salt block, Vintage's Salt Block) stay in `soft` (0.88x,
   `blocktags.js` lines 327 and 341-346); the changelog bullet now says 0.88x. SQ-VTD7-02 rewritten to expect `soft`.
 - 2026-11-10: sinking reworked in Creative Compat `SinkingRender` (3.4): the block holding the feet decides (hitbox
-  corners when the centre is past an edge), so crossing between sunken blocks no longer pops the camera; sinking blocks
+  corners when the center is past an edge), so crossing between sunken blocks no longer pops the camera; sinking blocks
   with a real sink of their own (honey, mud) add only the rest of the depth; dropped items lie on top unless the block is
   in the new `#creativecompat:sinking_hides_items` (empty). Visceral Heap flesh tiered: flesh spongy, porous flesh very
   sticky with honey's jump factor (3.5). BR-25 edited, BR-53..57 added. Built, not installed (game open).

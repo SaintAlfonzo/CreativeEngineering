@@ -231,7 +231,7 @@ Done 2026-11-14 by the write-back agent (documentation only, nothing booted):
   circuit at progress 0.5 then done), -80 PASS (items first: acid 250 + water 750, etch to incomplete_circuit with
   Schematic, acid 1000 -> 750), -82 INCONCLUSIVE (assembly on the belt done: circuit_board x1 Schematic components=3,
   B25 stone depot skipped; the arm left the part stacks loose on the belt, x6 connectors and x7 resistors, instead of in
-  their depots: upstream Create arm behaviour not checked). pwg17r2 stopped 02:47.
+  their depots: upstream Create arm behavior not checked). pwg17r2 stopped 02:47.
 - 02:48 cq_pwg17 client: `eval_client.py setup $S/cli17` (instance mods/: Common 1.1.0 on the client), -17 jar copied into
   the client's mods only, `config/debugify.json` = @s1 (without it Debugify runs all 69, MC-121706 crashed the server
   boot), sp copy of the pwg17r world with the SHOW17 showcase (`sp_world.py`), launch with JFR.
@@ -347,7 +347,7 @@ Done 2026-11-14 by the write-back agent (documentation only, nothing booted):
   block. SQ-NSM-08r: meta/waystone_ruins at -464 -192 (422 blocks); `/cwglocate census 32` done in 10 s, 273 starts,
   0 false negatives, 16 creativeworldgen:group/* sets, none under creativeengineering. SQ-HH-328r: corn maze found from
   spawn after 424 s (16 misses, 1681 candidates) at 7457 7455, 10612 blocks away: corn 350, oak fence 8, two Lootr
-  chests, centre table hearthandharvest:chests/corn_maze_center. With the shipped 120 s deadline a player's /locate
+  chests, center table hearthandharvest:chests/corn_maze_center. With the shipped 120 s deadline a player's /locate
   from spawn fails. 09:57 stopped; game_jvms.sh empty.
 - Coverage check: every row of the phase 3 batches (c2_l1, c2_l1b, c2_l2, c2_nobrew, c1_g1/g2, c3_co, c3_co2, c3_cc1,
   c3_cc2, c3_ch1, ch2, ch2b, ch3, c3_b1, c3_b1r, c1_b1, c3_b2, c3_cdw1 to 3, rerun_b, c4_b, c4_br) has a verdict in
@@ -522,7 +522,7 @@ Detail per row: `perf/runs/r1114/verdicts/fix_c2a1.md`, `fix_c3a1.md`; reruns ju
 | SQ-FCB-09 | PASS | cooking pot, copper pot, kettle items keep their contents (carrot, bowls, soup; bone, lichen; tea) |
 | SQ-FCB-10 | PASS | hung skillet (named, Sharpness II) drops when the wall goes |
 | SQ-IP-01 (now SQ-PRT-01) | PASS | five frames: crying obsidian edges, soul fire, no portal entity, no vanilla portal blocks |
-| SQ-PG-01a | FAIL | flag reads by colour, not geometry: wall-to-wall blue 0b / orange 1b (both should be false); wall portal with floor partner 0b (should be true). Creative Compat `portalgun/PortalGunExitLift.java` rotates the already rotated content direction; `mixin/PortalGunExitLiftMixin.java` misses portals linked in PortalGunItem (default 1b) |
+| SQ-PG-01a | FAIL | flag reads by color, not geometry: wall-to-wall blue 0b / orange 1b (both should be false); wall portal with floor partner 0b (should be true). Creative Compat `portalgun/PortalGunExitLift.java` rotates the already rotated content direction; `mixin/PortalGunExitLiftMixin.java` misses portals linked in PortalGunItem (default 1b) |
 | SQ-PG-01b | FAIL | after the restart pg's blue wall portal (floor partner) recomputes to 0b (should be true): same cause. qa's pair went at the stop (logout dissolve) |
 | SQ-IP-04 (now SQ-PRT-04) | PASS | 4 -> 2 on qa's logout, new pair 4, 2 after the Nether tp, 4 after a new pair |
 | SQ-IP-05 (now SQ-PRT-05) | PASS | distance half (fix_c3a1): 4 at 120 blocks, 2 at 140 after 12 s; `fix_c3a1r` boot r1 heartbeat 2: 2 then 0 five s after the move to 140; boot r2 despawnDistance 0: 2 after 14 s at 300 blocks |
@@ -544,7 +544,7 @@ Detail per row: `perf/runs/r1114/verdicts/fix_c2a1.md`, `fix_c3a1.md`; reruns ju
 | SQ-PWG-79 | PASS | unetched circuit made on the belt (progress 0.5 then done) |
 | SQ-PWG-80 | PASS | `pwg17r2` items before water: acid 250 + water 750; etch: incomplete_circuit with Schematic, acid 1000 -> 750. pwg17r finding: water first lets Creative Delight's heated water-to-salt mixing (2 salt dust) take the water: pack recipe clash a player can hit (TODO candidate) |
 | SQ-PWG-81 | PASS | cog -64, arm 64; depot result circuit_board x1 Schematic components=3; parts 8 -> 6 and 8 -> 7 |
-| SQ-PWG-82 | INCONCLUSIVE | assembly on the belt works (circuit_board x1 components=3, lockedExternally, B25 stone depot skipped); the arm drops the part stacks loose on the belt (x6, x7) instead of leaving them in their depots: compare with upstream Create arm behaviour |
+| SQ-PWG-82 | INCONCLUSIVE | assembly on the belt works (circuit_board x1 components=3, lockedExternally, B25 stone depot skipped); the arm drops the part stacks loose on the belt (x6, x7) instead of leaving them in their depots: compare with upstream Create arm behavior |
 | CQ-PWG-22 | PASS (automatable part) | ponder scenes (resistor, triode, potentiometer, display module, via, encased fan) play with traces; "Received 28 component items"; board shots BATCH-FAULT (pitch puts them behind the WTHIT tooltip) |
 | CQ-PWG-24 | BATCH-FAULT | unpowered-table shot taken after the perfeval teleport (table out of frame); SQ-PWG-73 frame inconclusive; editor steps are owner hand steps |
 | CQ-PWG-26 | PASS (automatable part) | acid overlay from inside, survival damage, bucket icon; flow and pool shot spoiled by the perfeval teleport |
@@ -613,7 +613,7 @@ cpp_chain: no Debugify / Packet Fixer). Common 1.2.0 (build/libs) on every set.
 | SQ-RD-10 | INCONCLUSIVE | c4_br (c4_b capture BATCH-FAULT: waitlog took rerun_b's pending corn maze reply): farm line "63 pool elements of 54 templates"; two savanna villages (272 -1312, 880 2640) carry warm_dry crops (tomatoes, cabbages, onions, peanut, corn, tea) but no cotton; cotton is 1 of 11 crops per rolled field, too rare to show in two villages |
 | SQ-NSM-08 | PASS | c4_b + c4_br: 11 creativeworldgen dimensions load full chunks; dimensions/ has creativeworldgen, ae2, l2library (no creativeengineering); level.dat's 641 creativeengineering strings are Forge registry aliases only; sky_island, meta/waystone_ruins (c4_br; c4_b used `#` on a structure id: BATCH-FAULT) and a settlements member (village_savanna) locate; census (c4_br, radius 32) lists 16 group sets; 0 worldgen/calendar tags under creativeengineering. Flower Test preset is client (CQ) |
 | SQ-GAP-03 | PASS | c4_b: 5 Bushier Flowers modifiers each forge:none; 0 bushierflowers blocks in 1444 pregenerated chunks |
-| SQ-HH-328 | PASS (finding) | c4_br with searchTimeoutSeconds 600 (scratch only): corn maze found from spawn after 424 s, 10612 blocks away, 1681 candidates; generated with corn 350, oak fence 8 (row: 16; the 38-block box may clip), Lootr centre chest with table corn_maze_center. rerun_b: three locates hit the shipped 120 s deadline (BATCH-FAULT for the row's longer budget). Finding: with the shipped config a player's /locate and maps cannot reach a corn maze from this spawn |
+| SQ-HH-328 | PASS (finding) | c4_br with searchTimeoutSeconds 600 (scratch only): corn maze found from spawn after 424 s, 10612 blocks away, 1681 candidates; generated with corn 350, oak fence 8 (row: 16; the 38-block box may clip), Lootr center chest with table corn_maze_center. rerun_b: three locates hit the shipped 120 s deadline (BATCH-FAULT for the row's longer budget). Finding: with the shipped config a player's /locate and maps cannot reach a corn maze from this spawn |
 
 Phase 3 totals: 49 rows, PASS 41 (SQ-PST-12 row stale, SQ-HH-328 with a finding), FAIL 6 (SQ-DEP-02, MIN-03, CDW-02, CDW-01,
 CDW-03b minor, CBP-11 owner call), INCONCLUSIVE 2 (SQ-FCK-08b, RD-10), BATCH-FAULT 0 left (all rerun), not run 0.

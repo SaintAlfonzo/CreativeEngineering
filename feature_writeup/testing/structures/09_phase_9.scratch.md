@@ -6,7 +6,7 @@
 - Tests: ST-39 (preview), ST-41 (templates), ST-42 (status and stop), ST-40 (all of Towns & Towers in rows; walking the
   rows = [game]).
 - Server: M7/M8 scratch server, patcherMod 1.0.7 jar (worldgen = 1.0.8). World st_9: level-type flat,
-  generate-structures false, seed 8675309. Toml = base with density 1.0 and fill logs CANCELLED (no worldgen here).
+  generate-structures false, seed 8675309. Toml = base with density 1.0 and fill logs CANCELED (no worldgen here).
 - Running: nothing; Phase 9 done 07:42. Next: writeup 09_phase_9.md.
 
 ## Log (append-only)

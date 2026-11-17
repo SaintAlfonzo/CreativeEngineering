@@ -1,4 +1,4 @@
-# Gear tuning: the netherite → echo → felsic → dragon ladder, stat overrides, autorepair, elytra extras
+# Gear tuning: the netherite -> echo -> felsic -> dragon ladder, stat overrides, autorepair, elytra extras
 
 ## 0. At a glance
 
@@ -62,7 +62,7 @@ The end-game gear comes from three mods, each with its own stats and recipes:
   made by smithing with dragon scales; the `upgraded_dragon_chestplate` glides like an elytra (DragonLoot's own
   mixins; it is a plain `ArmorItem`, not an `ElytraItem`).
 
-The pack turns them into one ladder, netherite → echo → felsic → dragon, all made by sequenced assembly, and tunes
+The pack turns them into one ladder, netherite -> echo -> felsic -> dragon, all made by sequenced assembly, and tunes
 every piece so each step is a clear upgrade. CDD ships only a sword, so the pack adds the other four echo tools.
 
 ## 2. Reference
@@ -71,10 +71,10 @@ every piece so each step is a clear upgrade. CDD ships only a sword, so the pack
 
 | Step | Input | Assembly (one loop) | Loops |
 |---|---|---|---|
-| Echo | netherite piece | fill 250 mB lava → deploy echo ingot → deploy amethyst dust → vibrate → fill 250 mB Darkness → fill 250 mB Weakness (tools) or Night Vision (armor, shield) | 1 |
-| Felsic | echo piece | fill *n* mB Long Reach → deploy felsic ingot → hammer (*b* blows) → fill *n* mB Magic Resistance | from config, 1 |
-| Dragon | felsic piece (vanilla bow / crossbow / trident / diamond horse armor / anvil for the specials) | fill 250 mB dragon's breath → deploy dragon scale → laser cut → fill 250 mB lingering potion | per item, below |
-| Felsic ingot | netherite sheet | deploy felsic scrap → deploy brass ingot → fill 250 mB dragon's breath → press | 4 |
+| Echo | netherite piece | fill 250 mB lava -> deploy echo ingot -> deploy amethyst dust -> vibrate -> fill 250 mB Darkness -> fill 250 mB Weakness (tools) or Night Vision (armor, shield) | 1 |
+| Felsic | echo piece | fill *n* mB Long Reach -> deploy felsic ingot -> hammer (*b* blows) -> fill *n* mB Magic Resistance | from config, 1 |
+| Dragon | felsic piece (vanilla bow / crossbow / trident / diamond horse armor / anvil for the specials) | fill 250 mB dragon's breath -> deploy dragon scale -> laser cut -> fill 250 mB lingering potion | per item, below |
+| Felsic ingot | netherite sheet | deploy felsic scrap -> deploy brass ingot -> fill 250 mB dragon's breath -> press | 4 |
 
 Felsic *n* / *b*: armor 500 mB, 5 blows; tools 250 mB, 3 blows; shield 250 mB, 8 blows. *n* is used by both fills (F2).
 
@@ -178,7 +178,7 @@ other mod data (F5). Applies to every sequenced assembly, but only does anything
 
 ### 2.8 Elytra: dragon scale duplication and rocket takeoff
 
-- **Duplication:** crafting grid, any `ElytraItem` + a dragon scale → a fresh vanilla elytra; the original stays in the
+- **Duplication:** crafting grid, any `ElytraItem` + a dragon scale -> a fresh vanilla elytra; the original stays in the
   grid untouched (enchantments, durability, Customizable Elytra styling). Any third item breaks the recipe. Quark's
   own version needs `quark:dragon_scale`, which is removed. Recipe id
   `creativeengineering:elytraduplication/dragon_scale_elytra`, type `creativeequipment:elytra_duplication`
@@ -263,7 +263,7 @@ unknown until checked (GR-44). Appearance of the kept sets was not checked in a 
   `PlayerTickEvent` (END phase) listener, because elytra flight is client-predicted and a server-only change is
   overwritten by the next movement packet. The stall clears the fall-flying flag through `Entity#setSharedFlag`
   (reflection on the SRG name `m_20115_`; the Mojmap name threw `NoSuchMethodException` at runtime).
-- **Tooltips:** flavour lines for the felsic pieces ("Capable of binding to dragon scale"), dragon scale, dragon anvil
+- **Tooltips:** flavor lines for the felsic pieces ("Capable of binding to dragon scale"), dragon scale, dragon anvil
   ("Unbreakable!"), dragon tools, the elytra and the air brake are in [tooltips.js](../kubejs/client_scripts/tooltips.js)
   lines 697 and 801-819 ([tooltips.md](tooltips.md)).
 
@@ -379,68 +379,68 @@ over the one below it (the F9 kind of slip), and cross-checks `R.cfg` paths agai
 
 Survival unless noted. `/dumpgear` after a restart gives every stat for GR-01 to GR-03.
 
-- [ ] **GR-01 Tool stats:** hover the echo, felsic and dragon pickaxe and sword → damage and speed as in 2.2; all epic
+- [ ] **GR-01 Tool stats:** hover the echo, felsic and dragon pickaxe and sword -> damage and speed as in 2.2; all epic
   (purple name). `/dumpgear tools` matches the table.
-- [ ] **GR-02 Armor stats:** wear a full felsic set → 24 armor on the HUD; each piece's tooltip shows +4 Armor
-  Toughness. Full dragon set → 36 armor (F13, cap 50); `/attribute @s minecraft:generic.armor get` gives 36.
+- [ ] **GR-02 Armor stats:** wear a full felsic set -> 24 armor on the HUD; each piece's tooltip shows +4 Armor
+  Toughness. Full dragon set -> 36 armor (F13, cap 50); `/attribute @s minecraft:generic.armor get` gives 36.
   The bar draws extra rows past 20 (armor bar fix, backlog row 10). `/attribute @s minecraft:generic.armor_toughness get`
   gives 18 (4 x 4.5; dragonloot-common.toml, F13).
-- [ ] **GR-03 Fireproof:** throw a felsic sword and an echo helmet into lava → both survive.
+- [ ] **GR-03 Fireproof:** throw a felsic sword and an echo helmet into lava -> both survive.
 - [ ] **GR-04 Echo tools exist:** JEI shows Echo Pickaxe, Axe, Shovel, Hoe with animated textures; the echo pickaxe
   mines obsidian and ancient debris.
 - [ ] **GR-05 Mining level (F4):** with an echo pickaxe, mine a block from `#forge:needs_netherite_tool` (check
-  `/dumpall` tag export for one) → note whether it drops.
+  `/dumpall` tag export for one) -> note whether it drops.
 - [ ] **GR-06 Echo assembly:** Create assembly line: netherite pickaxe through lava, echo ingot, amethyst dust,
-  vibrating, Darkness, Weakness → echo pickaxe. JEI shows the same, and no CDD echo recipe remains.
+  vibrating, Darkness, Weakness -> echo pickaxe. JEI shows the same, and no CDD echo recipe remains.
 - [ ] **GR-07 Felsic assembly:** echo helmet through 500 mB Long Reach, felsic ingot, 5 hammer blows, 500 mB Magic
-  Resistance → felsic helmet.
-- [ ] **GR-08 Felsic config:** `[crafting.felsic_sword] hammerBlows = 6`, `/reload` → log line
+  Resistance -> felsic helmet.
+- [ ] **GR-08 Felsic config:** `[crafting.felsic_sword] hammerBlows = 6`, `/reload` -> log line
   `[NCH.cfg] CRAFTING.FELSIC_SWORD.blows overridden: default 3 -> 6`, JEI shows 6 blows. Put it back.
-- [ ] **GR-09 Felsic shield config (F1):** `/reload` → log has `[NCH.cfg] no CEConfig.CRAFTING.FELSIC_SHIELD section`.
+- [ ] **GR-09 Felsic shield config (F1):** `/reload` -> log has `[NCH.cfg] no CEConfig.CRAFTING.FELSIC_SHIELD section`.
   (After the fix: no such line.)
 - [ ] **GR-10 Dragon assembly:** felsic chestplate through dragon's breath, dragon scale, laser cutting, lingering Long
-  Resistance, 4 loops → dragon chestplate; 4 scales used.
-- [ ] **GR-11 Felsic ingot:** netherite sheet, 4 loops of felsic scrap, brass ingot, 250 mB dragon's breath, press →
+  Resistance, 4 loops -> dragon chestplate; 4 scales used.
+- [ ] **GR-11 Felsic ingot:** netherite sheet, 4 loops of felsic scrap, brass ingot, 250 mB dragon's breath, press ->
   felsic ingot. Felsic Gear's own ingot recipe is gone.
-- [ ] **GR-12 Removed recipes:** JEI on a dragon sword → only the assembly, no smithing table recipe; same for a felsic
+- [ ] **GR-12 Removed recipes:** JEI on a dragon sword -> only the assembly, no smithing table recipe; same for a felsic
   sword. The upgraded dragon chestplate keeps its recipe.
-- [ ] **GR-13 NBT carried:** enchant (Sharpness V) and rename a netherite sword, run it through echo assembly → the echo
-  sword has the name and Sharpness V. Carry it on to felsic and dragon → still there.
-- [ ] **GR-14 Damage not carried (F5):** a half-broken netherite sword through echo assembly → the echo sword is at full
+- [ ] **GR-13 NBT carried:** enchant (Sharpness V) and rename a netherite sword, run it through echo assembly -> the echo
+  sword has the name and Sharpness V. Carry it on to felsic and dragon -> still there.
+- [ ] **GR-14 Damage not carried (F5):** a half-broken netherite sword through echo assembly -> the echo sword is at full
   durability.
-- [ ] **GR-15 Plain inputs unchanged:** a plain netherite sword through echo assembly → plain echo sword with no
+- [ ] **GR-15 Plain inputs unchanged:** a plain netherite sword through echo assembly -> plain echo sword with no
   `CEStash` tag (`/data get entity @s SelectedItem`).
 - [ ] **GR-16 Armor enchantability:** enchanting table with echo boots vs netherite boots at 30 levels, a few rolls each
-  → echo rolls are on average better (18 vs 15). Felsic (21) better still.
-- [ ] **GR-17 Enchantability live:** `[armor_enchantability] overrides` → `"echo_armor:40"` → echo boots roll
+  -> echo rolls are on average better (18 vs 15). Felsic (21) better still.
+- [ ] **GR-17 Enchantability live:** `[armor_enchantability] overrides` -> `"echo_armor:40"` -> echo boots roll
   noticeably higher enchantments. Put it back.
-- [ ] **GR-18 Autorepair worn:** damage a dragon helmet (`/item modify` or fight), wear it → +50 durability every 10 s
+- [ ] **GR-18 Autorepair worn:** damage a dragon helmet (`/item modify` or fight), wear it -> +50 durability every 10 s
   (F3+H).
-- [ ] **GR-19 Autorepair held, not carried:** damaged dragon sword in the main hand → repairs; the same sword in a hotbar
-  slot not selected → doesn't.
-- [ ] **GR-20 Autorepair config:** `[dragon_gear.autorepair] enabled = false` → no repair. `intervalTicks = 20` → once a
+- [ ] **GR-19 Autorepair held, not carried:** damaged dragon sword in the main hand -> repairs; the same sword in a hotbar
+  slot not selected -> doesn't.
+- [ ] **GR-20 Autorepair config:** `[dragon_gear.autorepair] enabled = false` -> no repair. `intervalTicks = 20` -> once a
   second. Put both back.
 - [x] **GR-21 Horse armor repair:** dropped 2026-10-28; horse armor has no durability.
-- [ ] **GR-22 Elytra duplication:** crafting grid, enchanted elytra (Unbreaking III, part-damaged) + dragon scale → a
-  new plain elytra; the enchanted one stays in the grid unchanged; the scale is gone. Elytra + scale + anything else →
+- [ ] **GR-22 Elytra duplication:** crafting grid, enchanted elytra (Unbreaking III, part-damaged) + dragon scale -> a
+  new plain elytra; the enchanted one stays in the grid unchanged; the scale is gone. Elytra + scale + anything else ->
   no result.
 - [ ] **GR-23 Rocket takeoff, dragon chestplate:** wear `upgraded_dragon_chestplate`, stand on one glass block over a
-  drop, use a firework → launch into gliding. Same while falling from a ledge without jumping.
-- [ ] **GR-24 Air brake slows:** glide fast, hold right click with the air brake → bow pose; forward speed drops
+  drop, use a firework -> launch into gliding. Same while falling from a ledge without jumping.
+- [ ] **GR-24 Air brake slows:** glide fast, hold right click with the air brake -> bow pose; forward speed drops
   steadily; climbing stops; a dive is only trimmed. Watch for stutter (F8).
-- [ ] **GR-25 Air brake stall:** keep braking → after about a second you drop out of gliding.
-- [ ] **GR-26 Air brake config:** `stallEnabled = false` → braking slows you but you keep gliding.
-  `requireFallFlying = false` → holding it on the ground does nothing visible but no error; jumping off a ledge while
+- [ ] **GR-25 Air brake stall:** keep braking -> after about a second you drop out of gliding.
+- [ ] **GR-26 Air brake config:** `stallEnabled = false` -> braking slows you but you keep gliding.
+  `requireFallFlying = false` -> holding it on the ground does nothing visible but no error; jumping off a ledge while
   holding it slows the fall slightly. Put both back.
-- [ ] **GR-27 Air brake off:** `[air_brake] enabled = false` → holding it changes nothing. Put it back.
-- [ ] **GR-28 Use duration (F7):** set `useDurationTicks = 40`, restart, hold the brake while gliding → if it keeps
+- [ ] **GR-27 Air brake off:** `[air_brake] enabled = false` -> holding it changes nothing. Put it back.
+- [ ] **GR-28 Use duration (F7):** set `useDurationTicks = 40`, restart, hold the brake while gliding -> if it keeps
   braking past 2 s, F7 is confirmed. Put it back.
 - [ ] **GR-29 Vanilla elytra rocket rule unchanged:** vanilla elytra, standing on one glass block over a drop, firework
-  → stock Easy Elytra Takeoff behaviour (no forced takeoff).
+  -> stock Easy Elytra Takeoff behavior (no forced takeoff).
 - [ ] **GR-30 Tooltips:** felsic pieces show "Capable of binding to dragon scale"; the air brake, dragon scale and
   dragon anvil show their lines.
 - [ ] **GR-31 Felsic Long Reach fill (F2):** JEI on the felsic helmet assembly: 500 mB Long Reach, then 500 mB Magic
-  Resistance. Set `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` → log `CRAFTING.FELSIC_HELMET.reachMb
+  Resistance. Set `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload` -> log `CRAFTING.FELSIC_HELMET.reachMb
   overridden: default 500 -> 100`; JEI shows 100 mB Long Reach, 500 mB Magic Resistance. Put it back.
 - [ ] **GR-43 Trims on standard armor only (2.10):** smithing table with a trim template and a material: an iron
   chestplate takes the trim; an Immersive Armors chestplate, a Wardrobe hat and a Create backtank give no result. JEI

@@ -25,9 +25,9 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 | Part | Status |
 |---|---|
 | Bark: stripping a log on the Create saw or Farmer's Delight cutting board gives that species' Immersive Weathering bark; bark reattaches for 6 species | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
-| Sawdust (IE wood dust) from logs, planks, stairs, fences, slabs and Create scrap wood; ash, creosote sawdust, wood pellets, mud → dirt | DEPLOYED; IE plank crushing missing (F1) |
+| Sawdust (IE wood dust) from logs, planks, stairs, fences, slabs and Create scrap wood; ash, creosote sawdust, wood pellets, mud -> dirt | DEPLOYED; IE plank crushing missing (F1) |
 | Compost, fertile soil and nulch from mulches and bark | DEPLOYED |
-| Create saw: planks → every wood shape for 13 species; IE sawmill door and stair recipes removed | DEPLOYED |
+| Create saw: planks -> every wood shape for 13 species; IE sawmill door and stair recipes removed | DEPLOYED |
 | Soot from Sooty Chimneys scraping (75 % / 50 %); torches ×12 from animal fat | DEPLOYED |
 | Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood was merged into oak 2026-11-02 (shipped 1.2.00) and is restored 2026-11-07 (`farming/trees #7`, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; patcherMod `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
 
@@ -54,7 +54,7 @@ of by-products: species bark from stripping, IE sawdust from crushing, and soil 
 
 ### 2.1 Bark (`bark.js`)
 
-| Machine | Log → | Wood → |
+| Machine | Log -> | Wood -> |
 |---|---|---|
 | Create saw | stripped log + 50 % bark | stripped wood + 75 % bark |
 | Farmer's Delight cutting board (axe) | stripped log + 50 % bark | stripped wood + 75 % bark |
@@ -63,9 +63,9 @@ of by-products: species bark from stripping, IE sawdust from crushing, and soil 
 
 Species: oak, spruce, birch, dark oak, acacia, jungle, mangrove, crimson, warped, Architect's Palette twisted, Quark
 blossom, ancient, azalea, Upgrade Aquatic driftwood (2026-10-23: Abnormals Delight's cutting-board and Create's compat
-saw recipes replaced, IW driftwood bark); bamboo on the saw only. Reattach (shapeless bark + stripped log → log, bark + stripped wood →
-wood, bark + log → wood) for mangrove, twisted, blossom, ancient, azalea and bamboo, the species that had it before.
-Create's, Farmer's Delight's, Quark Delight's and Abnormals Delight's (driftwood) own stripping recipes are removed; FD's tree bark → paper is removed.
+saw recipes replaced, IW driftwood bark); bamboo on the saw only. Reattach (shapeless bark + stripped log -> log, bark + stripped wood ->
+wood, bark + log -> wood) for mangrove, twisted, blossom, ancient, azalea and bamboo, the species that had it before.
+Create's, Farmer's Delight's, Quark Delight's and Abnormals Delight's (driftwood) own stripping recipes are removed; FD's tree bark -> paper is removed.
 
 ### 2.2 Sawdust and what it makes (`sawdust.js`)
 
@@ -76,10 +76,10 @@ Create's, Farmer's Delight's, Quark Delight's and Abnormals Delight's (driftwood
 | Stairs, fences, medium and small scrap wood | 1 + 25 % | 2 |
 | Slab | 75 % | 1 |
 
-- Sawdust or creosote sawdust → smelt to ash.
-- 3 mud + sawdust → 4 dirt.
+- Sawdust or creosote sawdust -> smelt to ash.
+- 3 mud + sawdust -> 4 dirt.
 - Creosote sawdust: spout or Bottler, 250 mB creosote per sawdust.
-- Wood pellets: 4 sawdust + 4 creosote sawdust → 4 by hand, 6 by mixing.
+- Wood pellets: 4 sawdust + 4 creosote sawdust -> 4 by hand, 6 by mixing.
 - Create's scrap wood crushing and FD's compost from rotten flesh and from tree bark are removed.
 
 ### 2.3 Soils
@@ -240,38 +240,38 @@ None.
 
 ## 7. In-game test suite
 
-- [ ] **RW-01 Saw bark:** an oak log on the Create saw → stripped oak log, about half the time oak bark.
-- [ ] **RW-02 Cutting board:** a spruce wood on the cutting board with an axe → stripped spruce wood + spruce bark 3 times
+- [ ] **RW-01 Saw bark:** an oak log on the Create saw -> stripped oak log, about half the time oak bark.
+- [ ] **RW-02 Cutting board:** a spruce wood on the cutting board with an axe -> stripped spruce wood + spruce bark 3 times
   in 4.
-- [ ] **RW-03 IE crusher (F1):** an oak log → note 2 or 3 sawdust; oak planks → note whether accepted.
-- [ ] **RW-04 Crushing wheels:** 10 planks → about 15 sawdust; a millstone takes them too.
-- [ ] **RW-05 Reattach:** mangrove bark + stripped mangrove log → mangrove log; oak bark + stripped oak log → nothing.
-- [ ] **RW-06 Creosote sawdust:** spout 250 mB creosote on sawdust → creosote sawdust; mix 4 + 4 → 6 wood pellets.
-- [ ] **RW-07 Soils:** mixer recipe for compost and fertile soil ×6 → as 2.3.
-- [ ] **RW-31 Rich soil to fertile soil:** 3 Rich Soil anywhere in the crafting grid → 1 Fertile Soil; JEI shows it beside the mulch recipes.
-- [ ] **RW-08 Saw shapes:** blossom planks on the saw with a filter → each shape in JEI, slabs ×2.
-- [ ] **RW-09 Soot:** scrape a dirty brick chimney with an axe 20 times → about 15 soot.
-- [ ] **RW-10 Torch:** animal fat over a stick → 12 torches.
-- [ ] **RW-15 River set gone [game: JEI and names; the startup log lines: scratch server PASSED 2026-10-22, SQ-MB-00, 92 purged, no recipe makes one]:** JEI search `river` → only Mulberry Leaves, Mulberry Sapling, Pile of Mulberry Leaves,
+- [ ] **RW-03 IE crusher (F1):** an oak log -> note 2 or 3 sawdust; oak planks -> note whether accepted.
+- [ ] **RW-04 Crushing wheels:** 10 planks -> about 15 sawdust; a millstone takes them too.
+- [ ] **RW-05 Reattach:** mangrove bark + stripped mangrove log -> mangrove log; oak bark + stripped oak log -> nothing.
+- [ ] **RW-06 Creosote sawdust:** spout 250 mB creosote on sawdust -> creosote sawdust; mix 4 + 4 -> 6 wood pellets.
+- [ ] **RW-07 Soils:** mixer recipe for compost and fertile soil ×6 -> as 2.3.
+- [ ] **RW-31 Rich soil to fertile soil:** 3 Rich Soil anywhere in the crafting grid -> 1 Fertile Soil; JEI shows it beside the mulch recipes.
+- [ ] **RW-08 Saw shapes:** blossom planks on the saw with a filter -> each shape in JEI, slabs ×2.
+- [ ] **RW-09 Soot:** scrape a dirty brick chimney with an axe 20 times -> about 15 soot.
+- [ ] **RW-10 Torch:** animal fat over a stick -> 12 torches.
+- [ ] **RW-15 River set gone [game: JEI and names; the startup log lines: scratch server PASSED 2026-10-22, SQ-MB-00, 92 purged, no recipe makes one]:** JEI search `river` -> only Mulberry Leaves, Mulberry Sapling, Pile of Mulberry Leaves,
   Mulberry Leaf Carpet, Mulberry Hedge, Mulberry Leaf Pile (IW); the hedge recipe takes river leaves over an oak log (x2).
   The startup log shows `[removedWoods] 1 woods merged into oak` and no `[item_dict] Missing` line for river or oak ids.
-- [ ] **RW-16 Mulberry tree [feature: scratch server PASSED 2026-10-22, SQ-MB-01, SQ-MB-04 through the holder / game: new chunks rarely have a river tree, see the 2.6 finding; driftwood half open, TODO `structures/contents #2`]:** `/place feature upgrade_aquatic:river_tree` on grass → oak trunk, mulberry leaves, some
+- [ ] **RW-16 Mulberry tree [feature: scratch server PASSED 2026-10-22, SQ-MB-01, SQ-MB-04 through the holder / game: new chunks rarely have a river tree, see the 2.6 finding; driftwood half open, TODO `structures/contents #2`]:** `/place feature upgrade_aquatic:river_tree` on grass -> oak trunk, mulberry leaves, some
   mulberry vines; new chunks along a river show the same trees, about 4x as many as before on river banks (8 tries per
   chunk); `zfw rivertrees R` on a river with dry banks places some.
-- [x] **RW-17 Mulberry sapling [scratch server PASSED 2026-10-22, SQ-MB-02, switch off gives river logs]:** bone-meal a Mulberry Sapling → the oak-trunk tree (patcherMod `MulberrySapling`).
-- [ ] **RW-18 Old river items [block drops: scratch server PASSED 2026-10-22, SQ-MB-03, x5 each / game for the inventory swap]:** `/setblock ~ ~ ~ upgrade_aquatic:river_log` and break it → an oak log;
-  `/give @s upgrade_aquatic:river_planks 4` → 4 oak planks in the inventory; same for an Every Compat one
-  (`everycomp:hc/upgrade_aquatic/river_chair` → Handcrafted oak chair).
+- [x] **RW-17 Mulberry sapling [scratch server PASSED 2026-10-22, SQ-MB-02, switch off gives river logs]:** bone-meal a Mulberry Sapling -> the oak-trunk tree (patcherMod `MulberrySapling`).
+- [ ] **RW-18 Old river items [block drops: scratch server PASSED 2026-10-22, SQ-MB-03, x5 each / game for the inventory swap]:** `/setblock ~ ~ ~ upgrade_aquatic:river_log` and break it -> an oak log;
+  `/give @s upgrade_aquatic:river_planks 4` -> 4 oak planks in the inventory; same for an Every Compat one
+  (`everycomp:hc/upgrade_aquatic/river_chair` -> Handcrafted oak chair).
 - [ ] **RW-19 Mulberry names [game]:** the river leaves, sapling, potted sapling, leaf pile, carpet, hedge and the IW
   leaf pile show as Mulberry (Mulberry Leaves, Mulberry Sapling, ...) in hand, JEI and WTHIT; no "River" name left.
 - [ ] **RW-20 Hedge recipe [scratch server PASSED 2026-10-22, SQ-MB-00, one recipe, oak log, x2 / game]:** JEI shows one Mulberry Hedge recipe: Mulberry Leaves over an
   Oak Log -> 2; `upgrade_aquatic:river_hedge` (the old recipe id) is gone.
-- [ ] **RW-21 Driftwood bark:** a driftwood log on the cutting board with an axe → stripped driftwood log, about half
-  the time Driftwood Bark (no Tree Bark); driftwood (wood) → 75 %; the same on the Create saw. JEI shows no Abnormals
+- [ ] **RW-21 Driftwood bark:** a driftwood log on the cutting board with an axe -> stripped driftwood log, about half
+  the time Driftwood Bark (no Tree Bark); driftwood (wood) -> 75 %; the same on the Create saw. JEI shows no Abnormals
   Delight driftwood cutting recipe.
-- [ ] **RW-22 Quark stairs:** JEI → blossom planks stairs → U: no Quark Engineering sawmill recipe back to planks.
-- [ ] **RW-23 Smoking:** *r1031 FAIL (SQ-RW-23), allow-list fix 2026-11-01, rerun.* oak, spruce and mangrove: log, wood, stripped, planks, stairs, door in a smoker (or Create fan with a Smoking Sail) → the smoked version; all 13 shapes show a recipe in JEI listing only the seven vanilla overworld woods; crimson, warped, a Quark wood (azalea), Botania and driftwood planks are not accepted; a smoked log does not smoke into itself, vertical / polished planks are not accepted.
-- [ ] **RW-24 Create filling:** oak planks + 125 mB creosote under a spout → treated wood; spruce planks the same; smoked planks with 100 mB → treated wood.
+- [ ] **RW-22 Quark stairs:** JEI -> blossom planks stairs -> U: no Quark Engineering sawmill recipe back to planks.
+- [ ] **RW-23 Smoking:** *r1031 FAIL (SQ-RW-23), allow-list fix 2026-11-01, rerun.* oak, spruce and mangrove: log, wood, stripped, planks, stairs, door in a smoker (or Create fan with a Smoking Sail) -> the smoked version; all 13 shapes show a recipe in JEI listing only the seven vanilla overworld woods; crimson, warped, a Quark wood (azalea), Botania and driftwood planks are not accepted; a smoked log does not smoke into itself, vertical / polished planks are not accepted.
+- [ ] **RW-24 Create filling:** oak planks + 125 mB creosote under a spout -> treated wood; spruce planks the same; smoked planks with 100 mB -> treated wood.
 - [ ] **RW-25 IE bottling:** the same three cases in the Bottling Machine; smoked planks with 100 mB works, oak planks with 100 mB does not.
 - [ ] **RW-26 No overlap:** JEI shows smoked planks only in the 100 mB recipes, and the createaddition recipe is gone.
 - [ ] **RW-28 D&D woods gone [game]:** JEI search `rose`, `rubber`, `spirit`: no log, wood, planks, door, Every Compat furniture, sign, track or bark of those woods (rose gold, rose quartz, raw rubber and rubber blocks stay); the item list has no D&D bark. `/give @s create_dd:rose_planks 4` gives 4 oak planks. Startup log: `[removedWoods] 4 woods merged into oak`, no `[item_dict] Missing` line.

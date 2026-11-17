@@ -1,6 +1,6 @@
 # Coaster model candidates
 
-Status: ANALYSIS 2026-10-26; partly applied 2026-10-29 ([kitchen.md](kitchen.md) 2.3, TODO `cooking/kitchen #21`). Read-only comparison. Open: recoloured models for the Good / Fair matches that would show the wrong colour on a borrowed model.
+Status: ANALYSIS 2026-10-26; partly applied 2026-10-29 ([kitchen.md](kitchen.md) 2.3, TODO `cooking/kitchen #21`). Read-only comparison. Open: recoloured models for the Good / Fair matches that would show the wrong color on a borrowed model.
 
 **2026-10-29 update.** The 56 pack coaster files were gone by 2026-10-27 (the generator could not read Display Delight
 1.7.0's multipart blockstates) and the tag was the port's 96. `tools/gen_coaster_models.py` now reads them and every
@@ -8,7 +8,7 @@ jar link: 155 Display Delight foods (many of the references and matches below, f
 teas and coffee, now have their own DD model), 26 Vinery wines and 8 Vintage Delight jars from their own block
 models, and 19 borrows in its `BORROW` table. Only same-picture matches were borrowed (Farmer's Respite long/strong
 drinks, Create Central Kitchen pumpkin pie slice, Enchanted Golden Carrot with glint): the score below ignores hue,
-so a Good or Fair match can still show the wrong colour on a borrowed model (golden foods, other teas, cookies).
+so a Good or Fair match can still show the wrong color on a borrowed model (golden foods, other teas, cookies).
 Those stay out until they get a recoloured model. Tag 304.
 
 ## 0. At a glance
@@ -19,7 +19,7 @@ Those stay out until they get a recoloured model. Tag 304.
 
 ## 1. Tag state
 
-`#creativedelight:placeable_on_coaster` (and through it `#brewinandchewin:placeable_on_coaster`) already holds only foods with a coaster model: 152 entries in `kubejs/generation_scripts/food/placeable.json`, 152 coaster model files (96 from the Brewin' port, 56 pack files from `tools/gen_coaster_models.py`). The cut of unmodelled foods was made 2026-10-25 ([food_families.md](food_families.md) 4.4; `tools/placeable_catalog.py` `add_coaster` only adds modelled items). Nothing was left to cut.
+`#creativedelight:placeable_on_coaster` (and through it `#brewinandchewin:placeable_on_coaster`) already holds only foods with a coaster model: 152 entries in `kubejs/generation_scripts/food/placeable.json`, 152 coaster model files (96 from the Brewin' port, 56 pack files from `tools/gen_coaster_models.py`). The cut of unmodelled foods was made 2026-10-25 ([food_families.md](food_families.md) 4.4; `tools/placeable_catalog.py` `add_coaster` only adds modeled items). Nothing was left to cut.
 
 Two things found while checking:
 
@@ -28,7 +28,7 @@ Two things found while checking:
 
 ## 2. Method
 
-Item sprite of each food in `kubejs/exported/food/foods.json` (1437 foods), resolved through its item model from the pack's kubejs assets, then the mod jars, then vanilla. 1069 foods have a flat item sprite and are not on the tag; each was compared with the 142 tagged foods that have one. Score = half silhouette overlap (alpha, IoU) plus half brightness-pattern correlation inside the shared silhouette; hue is ignored, so colour shifts do not cost anything and shape changes do. Pairs scoring 0.75 or more (354) were checked by eye side by side and the shape mismatches thrown out.
+Item sprite of each food in `kubejs/exported/food/foods.json` (1437 foods), resolved through its item model from the pack's kubejs assets, then the mod jars, then vanilla. 1069 foods have a flat item sprite and are not on the tag; each was compared with the 142 tagged foods that have one. Score = half silhouette overlap (alpha, IoU) plus half brightness-pattern correlation inside the shared silhouette; hue is ignored, so color shifts do not cost anything and shape changes do. Pairs scoring 0.75 or more (354) were checked by eye side by side and the shape mismatches thrown out.
 
 - **Good**: same shape and shading, recolour or small detail change. Safe to reuse the model.
 - **Fair**: same container or silhouette, contents differ (bowls, mugs, rolls). Reusable, but check the contents read right.
@@ -37,7 +37,7 @@ Not compared: 226 foods without a flat item sprite (block-model cakes, feasts, p
 
 Coaster models used as references that matched at least one food: 74 of 152.
 
-## 3. Matches by modelled food
+## 3. Matches by modeled food
 
 Each heading is a food that already has a coaster model; the list under it is the foods whose sprite looks like it. Counts: 89 Good, 144 Fair, 233 foods in total.
 

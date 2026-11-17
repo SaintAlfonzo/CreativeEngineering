@@ -4,7 +4,7 @@ Written 2026-11-04 (Creative Split wave 7, [creative_split.md](creative_split.md
 Status: **carved 2026-11-04, built, installed 2026-11-04 19:17 (`mods/creativeequipment-1.0.0.jar`, with patcherMod 1.1.09 and Creative Magic); nothing booted; scratch SQ-CEQ queued.**
 
 Written for: the owner and agents working on the split. Own mod `creativeequipment` (development/creativeEquipment,
-`creativeequipment-1.0.0.jar`, side both): the pack's gear. Same behaviour as before the carve; every registry id keeps
+`creativeequipment-1.0.0.jar`, side both): the pack's gear. Same behavior as before the carve; every registry id keeps
 `creativeengineering:`. The Magic rows that were to ride here (2.3) went to their own jar, Creative Magic, one wave
 earlier ([creative_magic.md](creative_magic.md)).
 

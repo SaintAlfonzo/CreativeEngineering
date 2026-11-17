@@ -124,7 +124,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24.
 Plans only; nothing here is built. The newer jars sit in `DecompiledMods/` as references and are **not** 1.19.2 builds, so
 nothing is installed from them: `oceanic_delight-1.0.4-forge-1.20.1.jar` (installed is 1.0.1) and
 `oceansdelight-neoforge-1.0.4-1.21.1.jar` (installed is 1.0.2). Both are MIT. Anything adopted is rebuilt in the pack
-(KubeJS, or a pack-namespace item), same behaviour, no old-version conversions. The diff was made against the installed jars.
+(KubeJS, or a pack-namespace item), same behavior, no old-version conversions. The diff was made against the installed jars.
 
 **Unchanged in the newer jars (no work):** Oceanic's fishing net recipe and loot (so section 5.1 stands), caviar toast,
 sea grape / sea pickle crates and unpacking, sea grape juice, sponge cake, seafood skewer, sea salad, caesar salad.
@@ -252,7 +252,7 @@ their name. Caviar in the sea pickle roll was deferred by the user to the caviar
   (owner, 2026-10-25): glowing calamari and its slice cook into Rustic's Cooked Calamari and Cooked Calamari Slice (cooking
   trio, CD `rusticdelight/recipes.js`). Knife cut 2 slices + bone meal; roll from 2 raw slices + cooked rice -> 2. In
   `#forge:raw_fishes/calamari`, so Fried Calamari, Calamari Soup and the plain roll take it.
-- Open: Rustic's licence file (the sprites are recolours of its art); glowing cans (need `/dumpfood`, then the can generator).
+- Open: Rustic's license file (the sprites are recolours of its art); glowing cans (need `/dumpfood`, then the can generator).
 
 ### 5.4 Braised sea pickle from slices (2026-10-25, TODO `dishes/pickles-and-ferments #4`)
 
@@ -278,7 +278,7 @@ data are read at load from the unmodified upstream jar:
 - **Ids:** the 47 items, 8 blocks (same block state properties), Instant Breath, the three Mining Fatigue potions and the loot
   modifier type `oceanic_delight:oceanic_delight_loot_modifier` keep upstream's ids, so old worlds and upstream's data load
   unchanged. `tools/check_donor.py` (in the member) compares them with the last dump and the donor (0 problems 2026-11-01).
-- **Behaviour kept:** food values, stack sizes, rarities and eating times; containers (bowl, glass bottle, stick, nautilus
+- **Behavior kept:** food values, stack sizes, rarities and eating times; containers (bowl, glass bottle, stick, nautilus
   shell); Comfort / Nourishment 3:00 or 5:00 on the eight dishes (dropped from the code 2026-11-02, section 8: the pack's Comfort / Nourishment rule sets them now), Instant Breath on Sea Grape, Sea Grape Juice and Squid Salad,
   and their blue tooltip lines; the sea grape crop (grows 1 tick in 10 into still water above, the third plant tops out with a
   fruit, bone meal adds a plant), wild sea grape, the two placed dishes (bowl needed, four servings; the paella pan stays empty
@@ -316,7 +316,7 @@ Tests: SQ-DNR-O-01 to -05 (scratch queue). Old-world check: a 1.1.03+ world with
 | DA-06 | Glow squids | Kill one; cut the item; cut, cook and roll the glowing calamari | Glow squid item; glowing calamari and glow ink sacs; slices, Cooked Calamari from cooking, and 2 rolls |
 | VTD-58 | A cooking pot | 2 sea pickle slices + 2 brown mushrooms + a bowl | Braised sea pickle |
 | DA-08 | JEI | Look up Caviar, the roll, the slice, the noodle soup; open the Caviar and Shrimp info pages | Names read Caviar, Caviar Roll, Caviar Roll Slice, Caviar Noodle Soup; Ancient Fish Eggs unchanged; the pages name the knife, the net and the biomes |
-| DA-09 | Upgrade Aquatic kelp (any colour) with kelp above; tall seagrass; wild sea grape; pickerelweed | Search each | Kelps give the kelp table (kelp item, clay); the others the sea grass table (no kelp item, scute possible) |
+| DA-09 | Upgrade Aquatic kelp (any color) with kelp above; tall seagrass; wild sea grape; pickerelweed | Search each | Kelps give the kelp table (kelp item, clay); the others the sea grass table (no kelp item, scute possible) |
 | DA-10 | A stack of nets, an ocean | Search about 200 times | A few nautilus shells; a heart of the sea is rare; junk about 1 in 20; never a lily pad, water bottle, rod or ink sacs |
 | DA-11 | `latest.log` after start and `/reload` | grep `fishing_net`, `biome_tag`, `oceanic_upstream` | No loot table parse error; both upstream packs listed (the mixin is gone since 5.6) |
 

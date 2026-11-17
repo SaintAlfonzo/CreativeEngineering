@@ -11,7 +11,7 @@
 @@text Run 2026-11-01 (rcs1, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 6): SQ-CAL-01 to -07 PASS; CQ-CAL-08 OPEN.
 @@text Needs `creativecalendar-1.0.0.jar` (`development/creativeCalendar/build/libs/`, `prep_srv.sh` adds it) with the patcherMod,
 @@text Creative Delight and Creative Brewing jars built in the same pass (patcherMod without `time/` and `seasons/`; CD and CB
-@@text requiring `creativecalendar`). Same behaviour as before the carve: every row checks that the moved code still runs from
+@@text requiring `creativecalendar`). Same behavior as before the carve: every row checks that the moved code still runs from
 @@text the new jar. Group A world that already has a `[time]` history; the first boot runs on an instance config that still
 @@text holds the old sections in `creativeengineering-common.toml`.
 @@text

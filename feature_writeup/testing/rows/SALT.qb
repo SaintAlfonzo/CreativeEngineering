@@ -81,7 +81,7 @@
 @@text   crash, the winding recursion server crash (B19) and the battery charge loss (B20). Resume point: [scratch_run_2026-11-13.md](scratch_run_2026-11-13.md) 10.
 @@text
 @@text - **r1112, 2026-11-12 21:18 to 22:35 (PASS 64, FAIL 3, INCONCLUSIVE 1), SQ-RP server rows and the r1111 batch-fault reruns; 9 boots.** Worlds: group A `rp` (3 boots: fresh, edited ladder, broken ladder), `hhm12` (2 boots, salt caves band 0..0 then off), `hhc12` (Crow, Loading Protection 1 s in srv config), `hhg12` (Gear + row-text reruns), group B `bw12` (seed 8675309, 2 boots; spawn-animals must be true). Jars: build/libs of 2026-11-12 20:46 to 20:47 (Common, Compat, Calendar, Brewing), Delight 2026-11-11 16:52, Raspberry Pie 21:21 rebuild (the 20:47 jar did not load: `solapplepie` range `[2.2.0]` vs `1.19.2-2.2.0`; fixed, 21:27 jar installed). FAIL: SQ-HH-474 (dust places a salt layer on stage 0, owner question), -482 (`mod-additions #76`), -1555 (`#75`). Row texts fixed: SQ-HH-206, -223, -233, -266, -319, -412, -1524, -1529, -1540, -1590, SQ-OB-03, -06, SQ-RPI-06. Perf: `perf/sessions/r1112/summary.md`. Doc: [scratch_run_2026-11-12.md](scratch_run_2026-11-12.md) 8.
-@@text - **r1111 step 5, 2026-11-12 00:32 to 04:10 (SQ-HH rest, SQ-VH, SQ-OB, SQ-SCAT; 11 boots, 2 crashes).** Worlds: group A `hhm` (5 boots: Machines, worldgen A, Machines boot 2 + Crow D + Gear A, Crow F + Gear B (crashed at SQ-HH-1574), Gear rest (boot 4 crashed at -1575, boot 5)), group B `bw` and `wc` (seed 8675309; `wc` without Biomes O' Plenty, salt toml), `vh10` (A + real TerraBlender), `scat` (Structure Catalogue preset, 2 boots). SQ-HH 317 rows: PASS 233, FAIL 15, BATCH-FAULT 67, open 2; SQ-VH PASS 9, BATCH-FAULT 1, RECORD 1; SQ-OB PASS 5, FAIL 1, BATCH-FAULT 5; SQ-SCAT 4 PASS. **Server crash found:** Quark seed pouch in a dispenser (TODO `largecontent/mod-additions #65`). Other FAILs: TODO `#66` to `#72`, `dishes/ingredients #43`; owner questions `#73`. Jars: Common, Compat, Delight 2026-11-11 16:50 to 16:52, the rest 2026-11-10 (build/libs, as step 4). Perf session r1111 (closed, `perf/sessions/r1111/summary.md`). Per-row verdicts `perf/runs/r1111/verdicts/`; [scratch_run_2026-11-11.md](scratch_run_2026-11-11.md) 7, 8.
+@@text - **r1111 step 5, 2026-11-12 00:32 to 04:10 (SQ-HH rest, SQ-VH, SQ-OB, SQ-SCAT; 11 boots, 2 crashes).** Worlds: group A `hhm` (5 boots: Machines, worldgen A, Machines boot 2 + Crow D + Gear A, Crow F + Gear B (crashed at SQ-HH-1574), Gear rest (boot 4 crashed at -1575, boot 5)), group B `bw` and `wc` (seed 8675309; `wc` without Biomes O' Plenty, salt toml), `vh10` (A + real TerraBlender), `scat` (Structure Catalog preset, 2 boots). SQ-HH 317 rows: PASS 233, FAIL 15, BATCH-FAULT 67, open 2; SQ-VH PASS 9, BATCH-FAULT 1, RECORD 1; SQ-OB PASS 5, FAIL 1, BATCH-FAULT 5; SQ-SCAT 4 PASS. **Server crash found:** Quark seed pouch in a dispenser (TODO `largecontent/mod-additions #65`). Other FAILs: TODO `#66` to `#72`, `dishes/ingredients #43`; owner questions `#73`. Jars: Common, Compat, Delight 2026-11-11 16:50 to 16:52, the rest 2026-11-10 (build/libs, as step 4). Perf session r1111 (closed, `perf/sessions/r1111/summary.md`). Per-row verdicts `perf/runs/r1111/verdicts/`; [scratch_run_2026-11-11.md](scratch_run_2026-11-11.md) 7, 8.
 @@text - **r1111 step 4, 2026-11-11 20:55 to 21:18 (PASS 4, PARTIAL 3), SQ-NSM old-save rows and SQ-HCS-09.** Fixture built on the 1.2.02 jars (`tools/scratch_query/nsm_fixture.sh` + `nsm_fixture.js`, group A superflat; Biomes O' Plenty and Devtools left out, not in 1.2.02), booted on the new jars (`nsm_newjars.sh`, probe `nsm_probe.js`). PASS: SQ-NSM-02, -03, -09, SQ-HCS-09; PASS (server part) SQ-NSM-10; PARTIAL SQ-NSM-05 (client parts), -07 (dimension half PASS; sky island, meta structure, waystone not in a superflat fixture). No old id left in the saved world. Perf session r1111 (open). Fixture world and logs `perf/runs/r1111/nsm/`. [scratch_run_2026-11-11.md](scratch_run_2026-11-11.md) 7, 8.
 @@text - **b1110, 2026-11-10 21:13 to 21:26 (PASS), rebuild-all boot and exit check.** Every top-level jar rebuilt and installed (namespace move jars included), group A server, `NOSWAP=1`, 4 boots, no perf session. Fixed on the way: Worldgen `ResourceKeyLegacyDimensionMixin` null-key boot crash; echo tools, Equipment recipe types and the Netherite Lunchbox still registered under the old namespaces; Devtools `flower_test` world preset path; Labels test tools package. Final boot: KubeJS errors 0, no ERROR from our jars, clean stop. Not run: client, SQ-NSM. [scratch_run_2026-11-10.md](scratch_run_2026-11-10.md) 11.
 @@text - **r1110, 2026-11-10 00:13 to 01:47 (STOPPED on a crash in our jars), SQ-CDNS and SQ-WO.** Old-id fixture built (`perf/runs/r1110/fixture`, 95 holders). SQ-CDNS: PASS 01, 02 (rescoped), 03, 04, 06, 08, 09 (row rewritten); 05 recorded; 07 FAIL, fixed by the namespace session, rerun confirms alias and replaceItems only. SQ-WO-14 to -34, -37: PASS 14 by `qrun` (setup rows included) plus 6 LOOK judged, -27 and -34 BATCH-FAULT, -32 OPEN. SQ-CDNS-07, -10, -11 PASS on a later group A boot. SQ-WO-35, -36 blocked by the `creativedelight/members #54` crow crash on every normal world. Perf `perf/sessions/r1110/summary.md`. Run doc [scratch_run_2026-11-10.md](scratch_run_2026-11-10.md).
@@ -385,7 +385,7 @@ look night: pillager, vindicator, evoker, illusioner, witch present (counts), ra
 > time set 18000
 
 ## SQ-EF-06 | undead castles kept on slopes (same world plus a highlands square)
-@group owner call: 1 of 3 undead castles kept; 2 cancelled over-air 708 / 562 against limit 320
+@group owner call: 1 of 3 undead castles kept; 2 canceled over-air 708 / 562 against limit 320
 @jars creativecommon
 @from batches/r1031/w1_earthfill.qb
 > chunky center {AH1} {AH3}
@@ -486,7 +486,7 @@ bootreject (?i)(FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound).
 bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 
 ## SQ-GFB-02
-@group Partial: falling blocks 193 to 102, not near 0; red sand gone, most sand stays. Next: which trigger is left (13.2: neighbour updates across chunk borders after post-processing? a feature tick outside ProtoChunkTicks?)
+@group Partial: falling blocks 193 to 102, not near 0; red sand gone, most sand stays. Next: which trigger is left (13.2: neighbor updates across chunk borders after post-processing? a feature tick outside ProtoChunkTicks?)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-HRU-01
 @group PASS: 20 lines, all at 20:51:31 to :32 on `main` (mod loading, before the world): MoreWires connectors, Immersive Petroleum and IE multiblock / cloth / concrete blocks. So the unkeyed holders are asked during block construction, not only at pregen
@@ -711,7 +711,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text    Syringe JEI world rows were never added. `const` -> `let`; after a restart the class loads with no warning. Bullet added.
 @@text 3. 29 soups had no jar fluid (Miner's cups and bowls, Hostile, Oceanic, End's, Fungi): `gen_soup_soft_fluids.py` only read
 @@text    top-level `mods/*.jar`, so the nested CD members and the `*_upstream` donors gave no texture. It now opens jarjar jars and
-@@text    donor jars; rerun wrote 29 new fluids (bell pepper soup colour now from Rustic 1.7.0). `/fdtest soupjar` PASS after a
+@@text    donor jars; rerun wrote 29 new fluids (bell pepper soup color now from Rustic 1.7.0). `/fdtest soupjar` PASS after a
 @@text    restart (Moonlight reads soft fluids at world load). Bullet added.
 @@text 4. `Item.of(i.<tag key>, n)` as a recipe input collapses to the tag's first item (Cake Base wanted 2 Parrot Eggs and plain
 @@text    Sugar). 16 grid recipes, 3 Create mixes and 3 IE blueprints fixed: repeated keys for `R.shapeless` / `R.createMixing`,
@@ -786,7 +786,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text Probe updates (expectations that went stale with the CD move, not pack bugs): `fungi_probe.js` grid / pot meal ids are
 @@text `creativedelight:`, colony Serene Seasons checks dropped (FD's colonies are in neither tag; fungi_delight.md corrected);
 @@text `vintage_probe.js` resolves a `creativeengineering:` id to its `creativedelight:` twin, jar bottom side is 3 slots (the
-@@text -04 remainder slot), roasted pepper tag holds all 9 colours, Berserker's Brew under `creativedelight:pickling/`.
+@@text -04 remainder slot), roasted pepper tag holds all 9 colors, Berserker's Brew under `creativedelight:pickling/`.
 @@text
 @@text | Entries | Result |
 @@text |---|---|

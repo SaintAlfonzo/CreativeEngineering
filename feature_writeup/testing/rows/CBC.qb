@@ -10,7 +10,7 @@
 @@text
 @@text Not run. Follows r1106cbb ([scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 3, open issues 2.2 #2 to #4). Needs the
 @@text 2026-11-06 13:17 builds of Creative Common, Creative Delight, Creative Engineering (full pack only) and Creative Brewing,
-@@text plus Creative Compat once its licence rebuild lands, copied into `CEPortTesting/mods/` (`port_chain.sh check`). Boots:
+@@text plus Creative Compat once its license rebuild lands, copied into `CEPortTesting/mods/` (`port_chain.sh check`). Boots:
 @@text (1) chain A: CBC-01, -03, -05; (2) cooking A: CBC-02; (3) the full pack (prep_srv, group B): CBC-04; then CQ-CBC-01 in the
 @@text owner's client.
 @@text

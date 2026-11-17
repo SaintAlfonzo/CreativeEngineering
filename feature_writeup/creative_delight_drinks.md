@@ -100,20 +100,20 @@ already merges into it).
 
 Ingredient per flavour: chocolate = chocolate or cocoa, pumpkin = pumpkin, syrup = Rustic syrup, honey = honey.
 
-### 4.1 Coffee in the Kettle and the flavour chain (owner, 2026-11-02)
+### 4.1 Coffee in the Kettle and the flavor chain (owner, 2026-11-02)
 
-The Kettle makes the same milk coffee and flavoured coffees as the pot, by any number of steps. A flavoured coffee is
+The Kettle makes the same milk coffee and flavored coffees as the pot, by any number of steps. A flavored coffee is
 reached three ways, all giving the same item:
 
 | Route | Kettle | Pot (hand) |
 |---|---|---|
-| Step by step | coffee tank + milk -> milk coffee; milk coffee tank + additive -> flavoured | 3 roasted beans + 1 milk, then the additive on that |
-| Straight from plain coffee | coffee tank + milk + additive -> flavoured (one craft, 5 ingredients counting the beans) | 3 roasted beans + 1 milk + additive (the table in 4) |
+| Step by step | coffee tank + milk -> milk coffee; milk coffee tank + additive -> flavored | 3 roasted beans + 1 milk, then the additive on that |
+| Straight from plain coffee | coffee tank + milk + additive -> flavored (one craft, 5 ingredients counting the beans) | 3 roasted beans + 1 milk + additive (the table in 4) |
 | Straight from beans | 2 roasted beans + 250 mb water + milk + additive | same |
 
-Built today (`farmersrespite/kettle.js` section 2): coffee from beans on water, milk coffee from the coffee tank, the flavours only
-from the milk coffee tank, dark coffee from the coffee tank. To add: the flavours from the plain coffee tank with milk +
-additive in the same craft, and (mixing) the same chain below. Dark coffee keeps its own line (not a flavour base).
+Built today (`farmersrespite/kettle.js` section 2): coffee from beans on water, milk coffee from the coffee tank, the flavors only
+from the milk coffee tank, dark coffee from the coffee tank. To add: the flavors from the plain coffee tank with milk +
+additive in the same craft, and (mixing) the same chain below. Dark coffee keeps its own line (not a flavor base).
 
 ### 4.2 Fluids and mixing
 
@@ -123,9 +123,9 @@ additive in the same craft, and (mixing) the same chain below. Dark coffee keeps
 - Every coffee gets a **heated** Create mixing recipe (confirmed 2026-11-02). Coffee and dark coffee need +3 roasted beans
   over their kettle cost.
 - Coffee + milk mixes to milk coffee. Milk coffee + the additive (honey, chocolate, syrup, pumpkin, sweet blossom and
-  cherry leaves) mixes to that flavour; coffee + milk + additive mixes to the flavour straight; plain coffee to flavoured in
+  cherry leaves) mixes to that flavor; coffee + milk + additive mixes to the flavor straight; plain coffee to flavored in
   one mixer step is allowed (any number of steps).
-- A flavour made from another flavour is not a route: flavours branch off milk coffee or coffee, never off each other.
+- A flavor made from another flavor is not a route: flavors branch off milk coffee or coffee, never off each other.
 
 ## 5. Parked
 
@@ -207,7 +207,7 @@ Build choices (not decided by the owner; change freely):
 Not built:
 
 - **Plain matcha**: settled 2026-11-02 (owner): plain matcha is the input drink of Ice Berry Matcha, i.e. the Matcha Latte (`delightful:matcha_latte`), which already has the +1 powder. No new item.
-- **Kettle "straight from beans" flavours** (beans + water + milk + additive): the Kettle takes two ingredients.
+- **Kettle "straight from beans" flavors** (beans + water + milk + additive): the Kettle takes two ingredients.
 - **Serene blossom leaves** for lavender tea: no such item found; lavender takes amethyst shards and `#forge:lavender` (Quark
   lavender blossom leaves).
 - **`flowers #5` item merge**: only the recipe side (`#creativedelight:azalea_flowers` holds both); the two flower items

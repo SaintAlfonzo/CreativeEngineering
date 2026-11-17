@@ -28,7 +28,7 @@
   full 235 s 3.5%, biomes 195 s 2.9%, carvers 66 s 1.0%, rest ~4 s. Boot (spawn prep): 202 s, noise 45%,
   structure_starts 24% (one 11.7 s start at chunk [-1, -1]).
 - structure_starts repeats: all on Worker-Main; 22,801 distinct chunks = the 129 x 129 square + an 11-chunk fringe;
-  22,194 judged more than once, up to 23 times (placement-priority neighbour pass / meta prediction rebuilding nearby
+  22,194 judged more than once, up to 23 times (placement-priority neighbor pass / meta prediction rebuilding nearby
   starts, seen in M7 as doubled earth-fill lines). Cheap: the repeats return in ~0 ms.
 - Worker-Main by mod: minecraft/forge 75.7 (PalettedContainer#get 12%, ImprovedNoise 5%), creativeengineering 6.8
   (EarthFill predicted-terrain lambda 62%, MetaStructure#generate 11%), blueprint 3.7 (BiomeUtil

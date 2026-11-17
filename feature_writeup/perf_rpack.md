@@ -127,7 +127,7 @@ real pace).
 Built on the integrated server in the End at x 500, z 0, y 100 (void between the main island and the outer islands;
 the start checks the site is empty and logs `site`). A 48 x 48 smooth stone floor; the pack's blocks on every other
 column and row, up to 6 states per block spread over its state list (so crops show several ages, pipes several
-shapes), the list repeated to fill up to 3 layers. Set with flags 2 | 16 (no neighbour updates). Entities: up to 96
+shapes), the list repeated to fill up to 3 layers. Set with flags 2 | 16 (no neighbor updates). Entities: up to 96
 summoned frozen (NoAI, NoGravity, Silent, Invulnerable). Random ticks, fire spread, mob spawning, daylight and
 weather are off. The camera is a spectator 14 blocks back and 18 up, pitch 40, GUI hidden.
 
@@ -293,9 +293,9 @@ block or entity.
 
 **Other findings from the JFR (whole run, client):**
 
-- Render thread (`main`, 46.9% of samples): JEI 12.2%, its top method `MMCQ$VBox#avg` (the colour quantizer for
-  JEI's colour search), which runs on each ingredient-list rebuild (every reload and world join).
-  `jei-client.ini` has `ColorSearchMode = REQUIRE_PREFIX`; DISABLED would skip the colour pass at the cost of `^colour`
+- Render thread (`main`, 46.9% of samples): JEI 12.2%, its top method `MMCQ$VBox#avg` (the color quantizer for
+  JEI's color search), which runs on each ingredient-list rebuild (every reload and world join).
+  `jei-client.ini` has `ColorSearchMode = REQUIRE_PREFIX`; DISABLED would skip the color pass at the cost of `^colour`
   search. Owner's call, not changed.
 - CullThread (Entity Culling) 5.5% of all samples, 89% of it in `ArrayOcclusionCache#resetCache`.
 - Server thread (integrated): modernfix 15.3%, alexsmobs 8.4%, creativeengineering 6.2% of its samples (an idle

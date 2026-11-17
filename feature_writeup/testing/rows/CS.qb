@@ -59,7 +59,7 @@ look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperat
 @group server
 @commands Two 16x16 wheat fields on hydrated farmland, plains, one roofed with glass 3 blocks up; `/season set mid_winter`; `/gamerule randomTickSpeed 30`; wait 2 min; count ripe wheat in each (`/execute store` or eyeball). Repeat in `mid_spring`
 @pass winter: open field behind the glass field (about 3/4 of it); spring: open field ahead of the glass field (about 5/4)
-@fails off penalty or fertile bonus not cancelled under glass, or glass not counted
+@fails off penalty or fertile bonus not canceled under glass, or glass not counted
 @from batches/r1031/a2_variants.qb
 @reviewed 2026-11-16
 # measure = mean wheat age per field (`cdevtest ages`), first line open field (x 100), second glass field (x 120);

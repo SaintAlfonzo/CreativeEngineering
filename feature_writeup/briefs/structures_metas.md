@@ -11,7 +11,7 @@ pool `kaisyn:ships/wreckage_ocean/wreckage`, one template `kaisyn:ships/wreckage
 log, 14 spruce slab, 5 dark oak planks, 3 black wool, 3 barrels); the three villager raft templates in
 `kubejs/data/villager_rafts/structures/` read with the NBT reader of `tools/port_structure_jars.py` (raft1 5x9x7: 11
 white wool, 4 white carpet, 2 white beds, a villager, 4 item frames; raft2 the same size, 11 wool, 6 carpet; raft3
-7x14x11: 42 white wool, 8 carpet, 2 beds). Meta behaviour from `worldgen/MetaStructure.java` and
+7x14x11: 42 white wool, 8 carpet, 2 beds). Meta behavior from `worldgen/MetaStructure.java` and
 `structure_overrides.js` in the repo.
 
 Proposed test ids: **ST-240 to ST-259** (renumber at build time; other worldgen briefs propose ST- ids too).
@@ -128,7 +128,7 @@ Status Planned · Work data / templates · TODO `structures/metas #2`
 
 ### Goal
 Only the 3 villager rafts and the one T&T wreckage template exist. Save damaged raft variants and load them into the
-pack; random wool colour per raft; more floating debris with a random wood type; peaceful raft variants.
+pack; random wool color per raft; more floating debris with a random wood type; peaceful raft variants.
 
 ### Now
 - Rafts: structures `villager_rafts:raft_1..3` (ported data, `kubejs/data/villager_rafts/worldgen/`), one-piece
@@ -144,10 +144,10 @@ pack; random wool colour per raft; more floating debris with a random wood type;
   `<world>/generated/<ns>/structures/` (11_fixes_1_0_8.md).
 
 ### Build
-1. **Colour and wood variants (no code, can go first).** New `tools/gen_template_variants.py` + spec
+1. **Color and wood variants (no code, can go first).** New `tools/gen_template_variants.py` + spec
    `kubejs/generation_scripts/worldgen/template_variants.json`:
    `{"villager_rafts:raft1": {"swap": {"minecraft:white_wool": "minecraft:{c}_wool", "minecraft:white_carpet":
-   "minecraft:{c}_carpet", "minecraft:white_bed": "minecraft:{c}_bed"}, "values": {"c": [16 dye colours]}, "pool":
+   "minecraft:{c}_carpet", "minecraft:white_bed": "minecraft:{c}_bed"}, "values": {"c": [16 dye colors]}, "pool":
    "villager_rafts:raft_1"}}`. The tool reads the template (NBT functions imported from `port_structure_jars.py`),
    rewrites the palette names (properties kept), writes `kubejs/data/<ns>/structures/<name>_<value>.nbt`, and
    rewrites the pool JSON with one element per variant (weights: original 1, each variant 1, or by a `weights` map).
@@ -160,7 +160,7 @@ pack; random wool colour per raft; more floating debris with a random wood type;
    villager_rafts:raft1 ~ ~ ~` on water, damage it, then a structure block in SAVE mode named
    `villager_rafts:raft1_damaged_a` (include entities: on if the villager / item frames stay). The file lands in
    `saves/<world>/generated/villager_rafts/structures/`. Copy it to `kubejs/data/villager_rafts/structures/`, add it
-   to the variant spec (so it gets colour variants too) and to its pool. Do the same for new peaceful raft designs
+   to the variant spec (so it gets color variants too) and to its pool. Do the same for new peaceful raft designs
    (a fishing raft, a trader raft): new elements of the same pools, or a new `villager_rafts:raft_4` structure (the
    `villager_rafts:*` glob puts it in `meta/flotilla_rafts`; it needs a `group/boats` entry: sync gives a new
    structure weight 100 / 1.0, set it to 83 like the others).
@@ -177,17 +177,17 @@ Templates `villager_rafts:raft1..3`, `kaisyn:ships/wreckage_ocean/wreckage_1` (v
 _bed`, `minecraft:<wood>_log / _slab / _planks` (all exist in 1.19.2; mangrove included, no cherry or bamboo).
 
 ### Decisions
-- **Template source** (the row's decision): the user builds the damaged and peaceful variants; the colour and wood
+- **Template source** (the row's decision): the user builds the damaged and peaceful variants; the color and wood
   variants are generated. Recommend generating first.
 - **Offline variants vs a processor:** a patcherMod structure processor that picks one palette per piece (seeded by
   the piece origin) would cover any template without files, but needs a registered `StructureProcessorType` and
   testing. Recommend offline variants (small files, deterministic, visible in `/cdevplace templates`).
-- **Colour weights:** all 16 equal, or mostly white/brown/grey. Recommend white 4, each other colour 1.
+- **Color weights:** all 16 equal, or mostly white/brown/grey. Recommend white 4, each other color 1.
 
 ### Gotchas
 - Chests opened before saving bake their loot into the template; save from a fresh `/place template` without opening
   them, or check `LootTable` tags in the saved NBT (the raft chests use `villager_rafts:chests/fixed/*`).
-- Beds in 1.19.2 store colour in the block id (no block entity data), so the palette swap is enough.
+- Beds in 1.19.2 store color in the block id (no block entity data), so the palette swap is enough.
 - `legacy_single_pool_element` is kept for the wreckage elements (T&T's choice); new elements can be the same type.
 - Variant elements share their structure's piece-count limit (size 1: a one-piece structure), nothing else changes.
 
@@ -195,7 +195,7 @@ _bed`, `minecraft:<wood>_log / _slab / _planks` (all exist in 1.19.2; mangrove i
 - ST-244 Pools load: `pool_tag_report.md` lists `villager_rafts:raft_1` with its variants and
   `kaisyn:ships/wreckage_ocean/wreckage` with the wood variants; no "missing template" error in the log.
 - ST-245 `/cdevplace templates villager_rafts:*` and `kaisyn:ships/wreckage_ocean/*` show every variant intact.
-- ST-246 A raft convoy found by `/locate` shows rafts of different colours; a shipwreck debris meta shows wreckage of
+- ST-246 A raft convoy found by `/locate` shows rafts of different colors; a shipwreck debris meta shows wreckage of
   a non-spruce wood in some runs.
 
 ---
@@ -249,11 +249,11 @@ from an earlier jar read.
 
 ---
 
-## structures/metas #4: Travelling boats in groups
+## structures/metas #4: Traveling boats in groups
 Status Planned · Work data · TODO `structures/metas #4`
 
 ### Goal
-A boat-group meta: boats travelling together (scratchpad 2026-10-19 "travellings boats, in groups"; the "peaceful raft
+A boat-group meta: boats traveling together (scratchpad 2026-10-19 "travellings boats, in groups"; the "peaceful raft
 variants" of the same note are in #2).
 
 ### Now
@@ -308,7 +308,7 @@ avoid a nearby beach or river fail (three failed at -104 -150, 32 blocks from a 
 
 ### Now
 - `MetaStructure` (line 85 doc, `generate` / `placeStructures` take an `avoid` predicate, `reaches`, `avoidsCoasts`
-  line 420): with the switch on, no part may start in, or reach with its box centre or a corner into, a
+  line 420): with the switch on, no part may start in, or reach with its box center or a corner into, a
   `creativeengineering:coast_river` biome (beaches, stony shore, gravel beach, every river); an anchor there leaves
   the slot to the plain anchor; the 6 water metas in `meta/coast_ok` and feature parts are exempt. A failed meta is
   the plain anchor, so no anchor's rate changes; only fewer metas near coasts.

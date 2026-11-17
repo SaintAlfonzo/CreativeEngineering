@@ -280,7 +280,7 @@ look watch lines: loaded states (grape none), then grape=hops after the 75 rando
 @group client
 @commands Place hops vines at age 0 to 3 on a log, and lattices with hops at age 1 to 4; open JEI on `hearthandharvest:hops`
 @pass vine and lattice stages show the white jungle grape art (tinted green, cutout, no missing texture); JEI: Grape Planting has a vine page (logs) and a lattice page for hops; Grape Stomping has no hops page; lattice tooltip "Plant jungle grape seeds or hops on it"
-@fails `VineryHopsModels` (BakingCompleted alias, log line `hops states drawn with the white jungle grape models: N`), `blockstates/hops_vine.json`, `HHClient` colours and cutout
+@fails `VineryHopsModels` (BakingCompleted alias, log line `hops states drawn with the white jungle grape models: N`), `blockstates/hops_vine.json`, `HHClient` colors and cutout
 @reviewed 2026-11-16
 > fill 0 100 0 8 104 0 minecraft:oak_log
 > setblock 0 101 1 hearthandharvest:hops_vine[north=true,age=0]

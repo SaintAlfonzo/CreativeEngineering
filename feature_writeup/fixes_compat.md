@@ -146,7 +146,7 @@ Create update: [deploy.md](deploy.md) "Mod updates". Used by e.g. `[crafting.fel
 
 ### 2.9 Bonemeal charm
 
-Lets Do: Vinery's Winemaker set refunds bone meal; the pack generalises it to one held item. Using bone meal with an
+Lets Do: Vinery's Winemaker set refunds bone meal; the pack generalizes it to one held item. Using bone meal with an
 item from `#creativeequipment:bonemeal_charms` in the **other** hand: `chance` 0.5 to give the bone meal back,
 `damageChance` 0.1 to take `damagePerUse` 1 durability from the charm. Today the tag holds only the dragon hoe
 ([gear_tuning.md](gear_tuning.md)). Any error falls back to vanilla bone meal.
@@ -186,7 +186,7 @@ Lightman's Currency's cashier maps and Cloud Storage's balloon salesman maps sea
 thread when the offer was made: a 60 s freeze until the watchdog killed the server on a scratch run. `AsyncMapTrades`
 (with `LCItemsForMapTradeMixin`, `CSSellingMapMixin`) does what Async Locator does for vanilla maps: hand out a
 "Working..." map at once, search on Async Locator's thread, then fill the map in (and apply each mod's lock or
-colour). See [locate.md](locate.md) and [plan_1.0.3.md](plan_1.0.3.md) AM.
+color). See [locate.md](locate.md) and [plan_1.0.3.md](plan_1.0.3.md) AM.
 
 ### 2.14 to 2.17
 
@@ -214,7 +214,7 @@ vanilla's label drawing are touched. `[gui_title] stretchPlaque`, `logOverflow` 
 | Fix | What |
 |---|---|
 | `CreativeMenuDisableMixin` | creative players get the survival inventory: the creative tab screen builds a cache of every item on first open (a multi-second freeze in this pack); JEI's cheat mode covers giving items |
-| XP fluid merge: `XpHelperMixin`, `XpPumpUpgradeWrapperMixin`, `XPFluidManagerMixin`, `MemoryStickItemMixin`, `PneumaticCraftUtilsMixin` | every liquid XP is Create: Enchantment Industry's experience (Sophisticated Backpacks' ratio 20 → 1 mB per point, its XP pump fills the CEI fluid, PneumaticCraft's memory stick and orb absorber use it without dividing by zero) |
+| XP fluid merge: `XpHelperMixin`, `XpPumpUpgradeWrapperMixin`, `XPFluidManagerMixin`, `MemoryStickItemMixin`, `PneumaticCraftUtilsMixin` | every liquid XP is Create: Enchantment Industry's experience (Sophisticated Backpacks' ratio 20 -> 1 mB per point, its XP pump fills the CEI fluid, PneumaticCraft's memory stick and orb absorber use it without dividing by zero) |
 | `IETagUtilsMixin` | IE's recycling picked a material from an item's tags in hash order, so `forge:rods/all_metal` could win over `forge:rods/iron` and recycle to air; now the first candidate with a real ingot tag wins |
 | `CopperPickaxeItemMixin` | Everything Copper's copper pickaxe gets the pack's copper tier instead of stone (`CEQTiers.COPPER`) |
 
@@ -344,13 +344,13 @@ but changed nothing on the server.
 
 ### 2.30 Biome-tinted moss
 
-Moss Block and Moss Carpet take the biome's grass colour (`gameplay/misc #13`), client only. Vanilla moss has no tint
+Moss Block and Moss Carpet take the biome's grass color (`gameplay/misc #13`), client only. Vanilla moss has no tint
 index, so with `[moss] biomeTint` on (default) `block/MossTint` swaps every moss block / carpet state and item model at
 bake time for `creativecompat:block/moss_block_tinted` / `moss_carpet_tinted` (tint index 0 on a grayscale copy of
 the vanilla texture). Off: nothing is swapped, moss is vanilla. Read at model load (F3+T or restart).
 
 - Tint = `0x738E3A` (the fit that turns the grayscale texture back into vanilla moss, max 13 per channel off on the
-  6 texture colours) times biome grass / Lush Caves grass per channel, scaled by `[moss] tintStrength` (0-1, default
+  6 texture colors) times biome grass / Lush Caves grass per channel, scaled by `[moss] tintStrength` (0-1, default
   1). Moss in Lush Caves stays vanilla green; elsewhere it moves as far as grass does (yellower in deserts and
   savannas, darker in swamps). Uses `BiomeColors.getAverageGrassColor`, so the biome blend radius and anything that
   recolours grass applies.
@@ -469,45 +469,45 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 
 ## 7. In-game test suite
 
-- [ ] **FX-01 Forgiving void:** jump into the void at 1000, 0, 1000 in the Overworld → land 20-25 blocks closer to 0, 0;
-  repeat → closer again.
-- [ ] **FX-02 Forgiving void config:** `direction = "AWAY"` → each fall lands farther. Put it back.
-- [ ] **FX-03 Bed patterns:** a bed decorated with a Botania and an IE banner pattern → the patterns show on the bed; a
+- [ ] **FX-01 Forgiving void:** jump into the void at 1000, 0, 1000 in the Overworld -> land 20-25 blocks closer to 0, 0;
+  repeat -> closer again.
+- [ ] **FX-02 Forgiving void config:** `direction = "AWAY"` -> each fall lands farther. Put it back.
+- [ ] **FX-03 Bed patterns:** a bed decorated with a Botania and an IE banner pattern -> the patterns show on the bed; a
   vanilla creeper pattern still looks right.
-- [ ] **FX-04 Elytra patterns:** a Customizable Elytra with a Buzzier Bees banner → the pattern shows on the wings.
+- [ ] **FX-04 Elytra patterns:** a Customizable Elytra with a Buzzier Bees banner -> the pattern shows on the wings.
 - [ ] **FX-05 D&D drill on the server:** on the dedicated server, break any block, then mine with the excavation drill
-  → no crash; the drill vein-mines unless sneaking.
-- [ ] **FX-06 D&D saw on the server:** fell a tree with the deforester saw on the dedicated server → whole tree, no crash.
-- [ ] **FX-07 Client exits:** quit the game (NVIDIA, Distant Horizons on) → the Java process ends and ATLauncher comes back.
-- [ ] **FX-08 Axes work:** an iron axe on an oak log → fast; WTHIT shows the axe.
-- [ ] **FX-09 Armor bar icons:** wear terrasteel armor → coloured icons, not grey.
-- [ ] **FX-10 Armor overflow:** a full dragon set → a second row of armor icons above the first; `compact = true` tucks it.
-- [ ] **FX-11 Config text field:** Create's config screen, `[crafting.felsic_sword] potion` → editable text.
-- [ ] **FX-12 Bonemeal charm:** dragon hoe in the off hand, bone meal on saplings 20 times → about half refunded; the hoe
+  -> no crash; the drill vein-mines unless sneaking.
+- [ ] **FX-06 D&D saw on the server:** fell a tree with the deforester saw on the dedicated server -> whole tree, no crash.
+- [ ] **FX-07 Client exits:** quit the game (NVIDIA, Distant Horizons on) -> the Java process ends and ATLauncher comes back.
+- [ ] **FX-08 Axes work:** an iron axe on an oak log -> fast; WTHIT shows the axe.
+- [ ] **FX-09 Armor bar icons:** wear terrasteel armor -> colored icons, not grey.
+- [ ] **FX-10 Armor overflow:** a full dragon set -> a second row of armor icons above the first; `compact = true` tucks it.
+- [ ] **FX-11 Config text field:** Create's config screen, `[crafting.felsic_sword] potion` -> editable text.
+- [ ] **FX-12 Bonemeal charm:** dragon hoe in the off hand, bone meal on saplings 20 times -> about half refunded; the hoe
   loses a little durability.
 - [ ] **FX-13 Ghost blocks:** on the dedicated server, break and place Quark and Every Compat blocks in a section with
-  other changes (an explosion near them) → every change shows; no "Error executing task on Client" in the client log.
-- [ ] **FX-14 Wind vane:** place a Supplementaries wind vane with Breezy installed → it turns, no crash.
-- [ ] **FX-15 Random:** a few hours on the server with Distant Horizons generating → no LegacyRandomSource crash.
-- [ ] **FX-16 Map trades:** level a Lightman's Currency cashier to its map trade in unexplored land → "Working..." map,
+  other changes (an explosion near them) -> every change shows; no "Error executing task on Client" in the client log.
+- [ ] **FX-14 Wind vane:** place a Supplementaries wind vane with Breezy installed -> it turns, no crash.
+- [ ] **FX-15 Random:** a few hours on the server with Distant Horizons generating -> no LegacyRandomSource crash.
+- [ ] **FX-16 Map trades:** level a Lightman's Currency cashier to its map trade in unexplored land -> "Working..." map,
   then a real map, no server freeze.
-- [ ] **FX-17 Title plaque:** rename a chest to a 30-character name, open it with the GUI pack → the plaque stretches;
+- [ ] **FX-17 Title plaque:** rename a chest to a 30-character name, open it with the GUI pack -> the plaque stretches;
   `latest.log` has the overflow line.
-- [ ] **FX-18 Creative inventory:** creative mode, press E → the survival inventory, no freeze.
-- [ ] **FX-19 XP fluid:** fill a Sophisticated Backpack XP pump, drain to a Create tank → Create's liquid experience, 1 mB
+- [ ] **FX-18 Creative inventory:** creative mode, press E -> the survival inventory, no freeze.
+- [ ] **FX-19 XP fluid:** fill a Sophisticated Backpack XP pump, drain to a Create tank -> Create's liquid experience, 1 mB
   per point.
-- [ ] **FX-20 IE recycling:** recycle an iron rod in the IE arc furnace (or JEI) → iron, never air.
+- [ ] **FX-20 IE recycling:** recycle an iron rod in the IE arc furnace (or JEI) -> iron, never air.
 - [ ] **FX-21 Trinket case, any item:** put cobblestone, a sword and a stack of food in a Trinket Case by clicking in
-  its screen, by shift-click and by clicking the stack onto the case item in the inventory → all accepted, a shulker
+  its screen, by shift-click and by clicking the stack onto the case item in the inventory -> all accepted, a shulker
   box and a second Trinket Case too. With the case open, hover an empty case slot and press the hotbar key of the
-  case itself → nothing moves. Close and reopen → contents kept. (Scratch server 2026-10-22: canPlaceItem, slot
+  case itself -> nothing moves. Close and reopen -> contents kept. (Scratch server 2026-10-22: canPlaceItem, slot
   mayPlace and shift-click PASS for every item, the open case refused; the clicks themselves need a client.)
-- [ ] **FX-22 Trinket case sort and search:** open the case with mixed items → Quark's sort button and search bar
-  show; sort → items grouped, none lost; the sort keybind works; search dims non-matching slots; the deposit /
+- [ ] **FX-22 Trinket case sort and search:** open the case with mixed items -> Quark's sort button and search bar
+  show; sort -> items grouped, none lost; the sort keybind works; search dims non-matching slots; the deposit /
   restock buttons move items in and out. (Scratch server: menu is `IQuarkButtonAllowed`, Quark's transfer handler
   accepts it, a sort keeps every count and packs to the front, NBT read back 132 of 132: PASS.)
 - [ ] **FX-23 Trinket case equip:** a trinket in the case still quick-equips from its screen; cobblestone doesn't.
-- [x] **FX-24 Config off:** `trinketCaseAnyItem = false`, restart → only trinkets, rods, mana items and curios
+- [x] **FX-24 Config off:** `trinketCaseAnyItem = false`, restart -> only trinkets, rods, mana items and curios
   (shulker boxes, through Shulker Box Slot) fit; the open case still refused. Scratch server PASS 2026-10-22.
 - [ ] **FX-25 JEI tooltip search needs `$`** (client only): in JEI type `edible`: no items match by tooltip text alone; `$edible`
   matches. Name search still works without a prefix. `jei-client.ini TooltipSearchMode = REQUIRE_PREFIX`
@@ -559,7 +559,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
   crafting table's Polymorph button, JEI transfer into both grids, Crafting Terminal ghost items and Request button.
 - [ ] **FX-43 Moss follows the biome** (in game, client): place moss block and moss carpet in Plains, Desert, Swamp
   and Lush Caves: they match the grass shade of each (desert yellower, swamp darker, Lush Caves the vanilla green).
-  Across a biome border the colour blends like grass. Breaking particles share the tint.
+  Across a biome border the color blends like grass. Breaking particles share the tint.
 - [ ] **FX-44 Moss items and off switch** (in game, client): moss in the inventory, JEI and in hand is the vanilla
   green, not gray. Set `[moss] biomeTint = false`, F3+T: placed moss is vanilla everywhere. `tintStrength = 0.5`, F3+A:
   moss shifts half as far.
@@ -588,7 +588,7 @@ All in patcherMod `src/main/java/com/SaintAlfonzo/creativeengineering/` unless n
 - 2026-10-02: map trades through Async Locator (1.0.3); Exposure kick and refmap (1.0.4).
 - 2026-10-05 to 2026-10-11: ghost blocks, Breezy compat, tooltip fixes, title plaque (staged for 1.0.5, shipped in 1.0.6).
 - 2026-10-18: this writeup; findings F1 to F6; tests FX-01 to FX-20. No code changed.
-- 2026-10-19: catalogue entries 2.20 to 2.23 for the fixes in 1.0.7 (Quark sort, Exposure viewfinder, grass slab
+- 2026-10-19: catalog entries 2.20 to 2.23 for the fixes in 1.0.7 (Quark sort, Exposure viewfinder, grass slab
   crash) and 1.0.8 (IE hammer); each keeps its tests in its own writeup.
 - 2026-10-19: F1 and F6 fixed (ForgivingVoidMixin javadoc, CopperPickaxeItemMixin javadoc; source only, ship with the next patcherMod build).
 - 2026-10-22: 2.25 Trinket Case any item plus Quark sort / search (`recipes/magic #3`); tests FX-21 to FX-24.
@@ -649,4 +649,4 @@ client, `/reload` is not enough. `[-]` and `[/]` are the owner's partial marks, 
 - [ ] **N-08 Quark Engineering stairs:** the sawmill recipes for the quark trio (blossom, ancient, azalea) stairs in JEI are the
   pack's only ones; the bookshelf recipes remain.
 - [ ] **N-09 Food types:** Cheese Pasta and the sweet entries changed in `food_types.json`: hover them, the type line and AppleSkin
-  values match their neighbours (spot check three).
+  values match their neighbors (spot check three).

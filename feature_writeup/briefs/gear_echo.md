@@ -68,7 +68,7 @@ five echo tools including the sword.
    `global.toolEffects.held(i.echo_pickaxe, { effect: 'minecraft:haste', amplifier: 0, duration: 50 })`.
 3. Echo sword into the framework (D2):
    - patcherMod mixin `EchoSwordEffectProcedureMixin`, `@Mixin(value = EchoSwordEffectProcedure.class, remap = false)`,
-     `@Inject(method = "execute(Lnet/minecraftforge/eventbus/api/Event;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)` → `ci.cancel()`.
+     `@Inject(method = "execute(Lnet/minecraftforge/eventbus/api/Event;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/entity/Entity;)V", at = @At("HEAD"), cancellable = true)` -> `ci.cancel()`.
    - Tooltip: `@Redirect` the three `List.add` calls in `EchoSwordItem#m_7373_` (`remap = false` for the class,
      the method is SRG `m_7373_`) to no-ops, so the framework's tooltip (client_scripts/tool_effects_tooltip.js) is
      the only one. Pattern: `EchoArmorTooltipMixin` / `EchoArmorEffectProcedureMixin`.
@@ -96,10 +96,10 @@ Effects `minecraft:weakness`, `minecraft:slowness`, `minecraft:haste`. Items `i.
 - Startup script: restart, not `/reload`, for the tooltip side; the server handler reads the same data.
 
 ### Tests
-- AE-13 (update): echo axe on a zombie → Weakness II + Slowness II; no Darkness.
+- AE-13 (update): echo axe on a zombie -> Weakness II + Slowness II; no Darkness.
 - AE-new1 (proposed, numbered when queued; AE-25 to AE-28 are taken by the potions_effects brief): echo pickaxe in
-  either hand → Haste I icon; tooltip "While held: Haste I (infinite)".
-- AE-new2 (after D2): echo sword tooltip shows only the framework lines (no duplicate "On hit" header); hit a zombie →
+  either hand -> Haste I icon; tooltip "While held: Haste I (infinite)".
+- AE-new2 (after D2): echo sword tooltip shows only the framework lines (no duplicate "On hit" header); hit a zombie ->
   the new effects, no Darkness.
 
 ---
@@ -112,12 +112,12 @@ four textures are still the generated ones, untouched since `609cd21`)
 Hand-drawn sprites for the four echo tools, keeping the CDD-style animated glow.
 
 ### Now
-- `echo_pickaxe/axe/shovel/hoe.png` are 16x192 (12 frames) with `.png.mcmeta` (`frametime 2`, frames 11 → 0), made by
+- `echo_pickaxe/axe/shovel/hoe.png` are 16x192 (12 frames) with `.png.mcmeta` (`frametime 2`, frames 11 -> 0), made by
   `tools/echo_texture.py starter` (a recolour of vanilla diamond tools) then `animate`. In git since the initial
   commit (`609cd21`). They live in KubeJS assets, not a resource pack.
 - The echo sword is CDD's own sprite (human-made). The echo shield sprites
   (`textures/entity/shield/echo_shield_base[_nopattern].png`) are not covered by this row.
-- `echo_texture.py animate <frame0.png>` takes a 16x16 drawing; pixels painted in the 12 `RAMP` colours (lines 45-49)
+- `echo_texture.py animate <frame0.png>` takes a 16x16 drawing; pixels painted in the 12 `RAMP` colors (lines 45-49)
   crawl, `OUTLINE` (53) and `HANDLE` (54) stay static. Needs Pillow.
 
 ### Build
@@ -133,7 +133,7 @@ Hand-drawn sprites for the four echo tools, keeping the CDD-style animated glow.
 - None. (Optional: the echo shield sprites too, if they were also generated; check with the user.)
 
 ### Gotchas
-- Any colour that is not exactly a `RAMP` entry is static; anti-aliased glow pixels won't animate.
+- Any color that is not exactly a `RAMP` entry is static; anti-aliased glow pixels won't animate.
 - The files are KubeJS assets (the TODO Work column now says so).
 - Player-visible: changelog bullet under the echo gear family (new echo tool textures).
 

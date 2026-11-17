@@ -91,7 +91,7 @@ table and the loot writeups' numbers are true.
 ### Gotchas
 - Run after the eugene fixed-container conversion (`loot/lootr #1` step 1) if that lands first, or re-run: it adds
   `eugene:chests/fixed/*` tables.
-- Three tables can't be serialised by `/dumploot` (keg, kettle, wooden bucket block tables): expected warnings.
+- Three tables can't be serialized by `/dumploot` (keg, kettle, wooden bucket block tables): expected warnings.
 
 ### Tests
 - **LT-28 index current:** after the regeneration, `python3 tools/loot_census.py` reports 0 "chest tables missing

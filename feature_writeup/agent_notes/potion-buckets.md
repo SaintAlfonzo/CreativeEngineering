@@ -23,7 +23,7 @@ details:
   inlined via a local `potionTint()`) for layer 1. This needed splitting the old single-layer
   "re-tinted vanilla water_bucket" texture into two layers: `tools/potion_bucket_texture.py` now
   writes `<id>.png` (steel body only, liquid pixels transparent) + `<id>_liquid.png` (liquid
-  pixels only, recolored to neutral grey so the runtime tint multiplies cleanly), and each bucket
+  pixels only, recolored to neutral gray so the runtime tint multiplies cleanly), and each bucket
   id got an explicit two-layer model at
   `assets/creativeengineering/models/item/<id>.json` (`layer0`/`layer1`). All three tiers
   currently share the identical body/liquid split (same vanilla source shape) — kept as separate
@@ -61,17 +61,17 @@ details:
   melon_juice/tomato_sauce/apple_cider + decorative_blocks:thatch). See
   memory `kubejs-api-notes` for the underlying API.
 
-## 2026-09-13 update: vanilla-style coloured tooltip
+## 2026-09-13 update: vanilla-style colored tooltip
 
 `client_scripts/potion_buckets.js` (item tooltip, item #4 below) rewritten to match vanilla's
 `PotionUtils.addPotionTooltip` — colored "Name II (0:30)" lines (blue beneficial/neutral, red
-harmful, grey "No Effects"), same wording/format as `minecraft:potion`/`splash_potion`/
+harmful, gray "No Effects"), same wording/format as `minecraft:potion`/`splash_potion`/
 `lingering_potion` bottles. Superseded the old plain-uncolored version (which existed only
 because `Component.withStyle(ChatFormatting)` is the ambiguous-overload bug below) — turns out
 KubeJS's own `MutableComponent.blue()`/`.red()`/`.gray()` extension methods sidestep `withStyle`
 entirely; see memory `kubejs-api-notes` for the mechanism. Deliberately still skips
 vanilla's attribute-modifier appendix lines (Strength/Weakness/Speed/Slowness/Luck's "+N Attack
-Damage" etc.) — untested extra Java surface for a rarely-scrutinised detail.
+Damage" etc.) — untested extra Java surface for a rarely-scrutinized detail.
 
 Three items that burst an **expanding, domed stack of AreaEffectClouds** ("rings", positive
 RadiusPerTick, RadiusOnUse 0) on right-click: `creativeengineering:potion_bucket` /
@@ -96,7 +96,7 @@ ripped back out — see "Abandoned" below):
 - `server_scripts/engineering/potion_buckets.js` — `ItemEvents.rightClicked(id, e=>…)`; only
   fires against a block hit (`t.type === 'BLOCK'`, no air-placing); spawns at `t.hit.{x,y,z}()`
   + a flat `+0.1` Y nudge; consumes stack + returns `minecraft:bucket`; `e.success()`.
-- `client_scripts/potion_buckets.js` — `ItemEvents.tooltip` → effect lines (no color styling,
+- `client_scripts/potion_buckets.js` — `ItemEvents.tooltip` -> effect lines (no color styling,
   see gotcha below).
 - item_dict keys `i.ce_potion_bucket` etc. (`i.potion_bucket` is IE's).
 - Textures: re-tinted vanilla water_bucket, `tools/potion_bucket_texture.py`.
@@ -151,7 +151,7 @@ TODO / follow-ups:
   (2026-09-12):** the first attempt called `item.containerItem('minecraft:glass_bottle')` there,
   which is WRONG — decompiling the jar (see memory `tune-tools-func`) showed the modification event's
   runtime `Item` has no `containerItem` method at all; the real accessor is
-  `kjs$setCraftingRemainder(Item)` → unprefixed `.setCraftingRemainder(Item)`, and it takes a
+  `kjs$setCraftingRemainder(Item)` -> unprefixed `.setCraftingRemainder(Item)`, and it takes a
   real `Item` object, not a string. Fixed to
   `item.setCraftingRemainder(Item.of('minecraft:glass_bottle').getItem())`. Still wrapped in
   try/catch as a matter of habit, but this version should actually work — not yet confirmed
@@ -163,7 +163,7 @@ TODO / follow-ups:
 
 ## potion-bucket-dispenser
 
-Dispenser support for the creativeengineering potion buckets ([potion-buckets](potion-buckets.md)) is implemented via a Java→KubeJS callback bridge, not a Java reimplementation of the dome logic.
+Dispenser support for the creativeengineering potion buckets ([potion-buckets](potion-buckets.md)) is implemented via a Java->KubeJS callback bridge, not a Java reimplementation of the dome logic.
 
 - `patcherMod/.../potion/PotionBucketDispenser.java` — registers a `DefaultDispenseItemBehavior` for each of the 3 bucket ids (via `DispenserBlock.registerBehavior`, called from `CreativeEngineering#commonSetup` through `event.enqueueWork`, since it needs the item registry fully populated). On dispense it computes the position one block in front of the dispenser's facing, then calls a static `SpawnHandler` interface (`spawn(ServerLevel, x, y, z, itemId, ItemStack)`) if one has been installed — falls back to vanilla eject-as-item behavior with a warning log if not. Returns `new ItemStack(Items.BUCKET)` to replace the dispensed bucket in the slot (buckets are `.unstackable()`, so the slot always holds exactly 1).
 - `kubejs/startup_scripts/func/potion_area.js` calls `PotionBucketDispenser.setHandler(...)` once at startup with a JS lambda that just calls `global.potionArea.spawn(level, x, y, z, itemId, stack, null)` — the SAME function the right-click path (`server_scripts/engineering/potion_buckets.js`) uses. This keeps ring count/radius/color/effect tuning in exactly one place (potion_area.js), matching the pack's "centralize" preference — Java never duplicates the dome logic.

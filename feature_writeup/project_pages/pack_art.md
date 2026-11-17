@@ -4,17 +4,17 @@ Audit 2026-11-07 (resource packs added the same day). Question: which installed 
 logo, gallery images, screenshots composed from block and item renders).
 
 Sources: the `license` field in each jar's `META-INF/mods.toml` (all 414 jars in `mods/`, plus the nested Creative
-Delight members), the licence files inside the jars, `DecompiledMods/create-1.19.2-0.5.1.i/LICENSE_create-1.19.2`,
+Delight members), the license files inside the jars, `DecompiledMods/create-1.19.2-0.5.1.i/LICENSE_create-1.19.2`,
 and the upstream repositories' LICENSE files fetched 2026-11-07. A `mods.toml` field is the author's one-line claim;
 it often does not say what covers the art. **Anything marked "verify" has not been checked against the upstream
-repository.** This is a licence reading, not legal advice.
+repository.** This is a license reading, not legal advice.
 
 ## 1. Verdicts for the three families asked about
 
-| Mod (installed version) | Licence | Art usable for pack art? | Conditions |
+| Mod (installed version) | License | Art usable for pack art? | Conditions |
 |---|---|---|---|
 | Create 0.5.1.i (1.19.2) | MIT, whole jar; the LICENSE shipped in the jar has no assets carve-out | **Yes** | Keep the MIT notice and credit "Create, simibubi / The Creators of Create". See the warning below. |
-| Immersive Engineering 9.2.4-170 | "Blu's License of Common Sense" (custom) | **Not without permission** | The licence says always ask before copying assets. Only addon mods may reuse and remix art, and only to be addons. A pack banner is not an addon. Ask Blu (BluSunrize) first; credit the artists regardless. |
+| Immersive Engineering 9.2.4-170 | "Blu's License of Common Sense" (custom) | **Not without permission** | The license says always ask before copying assets. Only addon mods may reuse and remix art, and only to be addons. A pack banner is not an addon. Ask Blu (BluSunrize) first; credit the artists regardless. |
 | Farmer's Delight 1.2.4 (nested in Creative Delight) | MIT | **Yes** | Keep the MIT notice, credit vectorwing. |
 
 Create warning: the 1.21.1 branch of Create (`DecompiledMods/create-1.21.1-6.0.10/LICENSE.md_create-1.21.1`) splits the
@@ -30,11 +30,11 @@ the rest.
 
 Asked 2026-11-07: which of these may supply art, in particular a calendar item.
 
-| Mod | Licence | Art usable? | Calendar-type art | Notes |
+| Mod | License | Art usable? | Calendar-type art | Notes |
 |---|---|---|---|---|
 | Brewin' And Chewin' 4.5.0 (Creative Brewing member, `members/brewin`) | MIT upstream (Umpaz, Probleyes, MerchantCalico); port is GPLv3 | **Yes** with the MIT notice in `members/brewin/NOTICE-upstream-MIT.txt` and credit | None. The only book-like texture is the keg recipe book GUI. | One texture, `fd_tray.png`, is Farmer's Delight (MIT). The upstream NeoForge milk textures (LGPL 2.1) are not in the port. |
 | Vinery (Let's Do Vinery 1.5.5 and 1.3.10, Creative Brewing member) | Code MIT, everything under `src/main/resources/` All Rights Reserved | **No** without permission from satisfy / Cristelknight | None found | The port ships no upstream textures; they are read at runtime from `vinery_upstream/`, so nothing of Vinery's art is in the repo to reuse. |
-| Serene Seasons 8.1.0.24 (Glitchfiend) | All Rights Reserved (`mods.toml`; the GitHub page shows "All rights reserved", no licence grant, no assets carve-out) | **No** without permission from Glitchfiend | The calendar item: `assets/sereneseasons/textures/item/calendar_00` to `calendar_11`, `calendar_null` and `tropical_calendar_*` | The only calendar art among the three, and not usable. |
+| Serene Seasons 8.1.0.24 (Glitchfiend) | All Rights Reserved (`mods.toml`; the GitHub page shows "All rights reserved", no license grant, no assets carve-out) | **No** without permission from Glitchfiend | The calendar item: `assets/sereneseasons/textures/item/calendar_00` to `calendar_11`, `calendar_null` and `tropical_calendar_*` | The only calendar art among the three, and not usable. |
 
 Result for the calendar item: there is no usable calendar texture in these three. Options: draw an original one (Creative
 Calendar is the pack's own mod, so the art is the owner's GPLv3), or ask Glitchfiend for written permission to reuse
@@ -43,12 +43,12 @@ Serene Seasons' calendar sprites.
 ## 2. Delight mods (top-level jars and Creative Delight members)
 
 Creative Delight's own code is GPLv3 (own work, free to use), but the members are repacks and ports of other authors'
-mods. The "GPL-3.0-only" in a member's `mods.toml` is the pack's licence on its own changes, not the upstream
-author's licence on the art. The upstream column is what governs textures.
+mods. The "GPL-3.0-only" in a member's `mods.toml` is the pack's license on its own changes, not the upstream
+author's license on the art. The upstream column is what governs textures.
 
-### 2.1 Usable with credit and the licence notice
+### 2.1 Usable with credit and the license notice
 
-| Mod | Upstream licence | Notes |
+| Mod | Upstream license | Notes |
 |---|---|---|
 | Farmer's Delight 1.2.4 | MIT | |
 | Ocean's Delight | MIT | |
@@ -61,19 +61,19 @@ author's licence on the art. The upstream column is what governs textures.
 | Brewin' And Chewin' 4.5.0 (Creative Brewing member) | MIT | checked against upstream LICENSE per the writeups |
 | Alex's Delight, Chef's Delight, Corn Delight, More Delight, Storage Delight | MIT | `mods.toml` only |
 | Engineer's Delight (`tmted`) | MPL-2.0 | file-level copyleft on source; art is fine with credit, verify if you alter it |
-| Hostile Delight, Canned Goods 3, Create Confectionery, Create Misc and Things | Academic Free License 3.0 | permissive, needs attribution and the licence text |
+| Hostile Delight, Canned Goods 3, Create Confectionery, Create Misc and Things | Academic Free License 3.0 | permissive, needs attribution and the license text |
 
 ### 2.2 Usable only under copyleft terms
 
-| Mod | Licence | Notes |
+| Mod | License | Notes |
 |---|---|---|
-| Barbeque's Delight 1.3.0 | LGPL-2.1 | credit and keep licence notice; derivative art inherits LGPL conditions in the strict reading |
+| Barbeque's Delight 1.3.0 | LGPL-2.1 | credit and keep license notice; derivative art inherits LGPL conditions in the strict reading |
 | Display Delight 1.7.0 | LGPLv3 | its tray textures are Farmer's Delight's (MIT) |
-| Ports with no upstream licence recorded here: Oceanic Delight, Veggies Delight, Vintage Delight, Fungi Delight, Large Meals | jar says GPL-3.0-only (the pack's own) | **verify** the upstream licence before use |
+| Ports with no upstream license recorded here: Oceanic Delight, Veggies Delight, Vintage Delight, Fungi Delight, Large Meals | jar says GPL-3.0-only (the pack's own) | **verify** the upstream license before use |
 
 ### 2.3 Do not use without permission (All Rights Reserved or unconfirmed)
 
-| Mod | Licence | Notes |
+| Mod | License | Notes |
 |---|---|---|
 | Fruits Delight 0.5.11 | All rights reserved | |
 | Ender's Delight 1.19-1.2.2 (the standalone jar) | All rights reserved | the 1.1.4 content the pack carries has its own MIT notice (see `feature_writeup/ends_delight.md`); use only those |
@@ -83,7 +83,7 @@ author's licence on the art. The upstream column is what governs textures.
 | Miner's Delight 1.4.5 / 1.1.2 | ARR | |
 | Rustic Delight 1.7.0 | not confirmed | treat as ARR until the upstream file is read |
 | Vinery (Creative Brewing member) | code MIT, assets and data All Rights Reserved | |
-| Abnormals Delight and other Team Abnormals mods (Neapolitan, Buzzier Bees, Berry Good, Clayworks, Incubation, Upgrade Aquatic, Allurement, Boatload, Blueprint) | Abnormals licence (custom, restrictive) | do not use; Incubation also reads NC-style |
+| Abnormals Delight and other Team Abnormals mods (Neapolitan, Buzzier Bees, Berry Good, Clayworks, Incubation, Upgrade Aquatic, Allurement, Boatload, Blueprint) | Abnormals license (custom, restrictive) | do not use; Incubation also reads NC-style |
 | Farmer's Structures | All Rights Reserved | |
 
 ### 2.4 Pack's own art
@@ -95,28 +95,28 @@ LGPLv3), which keep their source's terms. Check the notice file before using a r
 
 ## 3. Resource packs in `resourcepacks/`
 
-Checked 2026-11-07 against each pack's CurseForge page (licence field and description). The zips carry no licence
+Checked 2026-11-07 against each pack's CurseForge page (license field and description). The zips carry no license
 files, so the page is the only source. "Enabled" is from `options.txt`.
 
-| Pack | Author | Licence | Enabled | Art usable for pack art? |
+| Pack | Author | License | Enabled | Art usable for pack art? |
 |---|---|---|---|---|
 | Engineers GUIs 1.18.2 v.01.0 | schaeferd_cz (contributor Pabilo8, from the Immersive Intelligence team) | MIT | yes (flagged incompatible) | **Yes** with the MIT notice and credit. It restyles vanilla, JEI and JER GUIs, so the art is mostly its own, but it imitates IE's look; confirm no IE texture is copied in before using a close-up. |
-| Updated Engineering v1.7 | tdstress | All Rights Reserved | yes | **Not for pack art.** The page says "Feel free to include this resource pack in your modpack, just provide credit or a link", which covers shipping it in the pack, not using its art in a banner. It is also a retexture of IE (plus Immersive Posts), so IE's licence sits underneath. Ask tdstress, and Blu for the IE part. |
+| Updated Engineering v1.7 | tdstress | All Rights Reserved | yes | **Not for pack art.** The page says "Feel free to include this resource pack in your modpack, just provide credit or a link", which covers shipping it in the pack, not using its art in a banner. It is also a retexture of IE (plus Immersive Posts), so IE's license sits underneath. Ask tdstress, and Blu for the IE part. |
 | Iteratively Engineered 1.5 | Paxilmaniac | MIT | no (installed, not enabled) | **Pack author's grant only.** MIT on the pack, but it is a resprite of IE, so IE's "ask before copying assets" still applies to anything derived from IE art. |
 | IE: Reimmersed v1.1 (Forge) | RUBA (RUBABLADADUDI) | All Rights Reserved | no | **No.** Also derived from IE. |
 
-The three IE retexture packs are derivative works of Immersive Engineering's art. A permissive licence from the pack
-author does not remove Blu's licence on the underlying design, so treat all of them as needing IE permission, the same
+The three IE retexture packs are derivative works of Immersive Engineering's art. A permissive license from the pack
+author does not remove Blu's license on the underlying design, so treat all of them as needing IE permission, the same
 as section 1.
 
-Other packs on disk (not asked about; licences not checked): Create Tweaks Compats, Create-Energistics (AE2 restyle),
+Other packs on disk (not asked about; licenses not checked): Create Tweaks Compats, Create-Energistics (AE2 restyle),
 Created Pretty Pipes, moromoro's Create style Pretty Pipes, Create style Pretty Fluid Pipes, CreateSophBackpacks,
 LCVP Create Style, Copycat Framed Block, Fancy Crops, Fancy Beds, Clear Glass Pack, Modded Omelet, Quark and
 SecurityCraft Programmer Art, Lootr Chest Retexture, Waystones 26.2, Eclectic Trove, Golden crit, Low On Fire, Lower
 Shield, SHC Enhanced Fire, Squirming Silverfish, IE Breaker Switch Sound, CE2 Iron Armor Fix. Most retexture another
-mod's art, so the underlying mod's licence applies as well. Treat as not usable until checked.
+mod's art, so the underlying mod's license applies as well. Treat as not usable until checked.
 
-## 4. Everything else in `mods/` (declared licence, art not verified)
+## 4. Everything else in `mods/` (declared license, art not verified)
 
 Classified from `mods.toml`. Counts of the 414 jars excluding the Create, Immersive and Delight families above.
 
@@ -126,21 +126,21 @@ Classified from `mods.toml`. Counts of the 414 jars excluding the Create, Immers
   Controllers, Create Fast Schematic Cannon, Create Goggles, Compressed Creativity, Vintage Improvements, Railways.
   Others: Engineer's Decor, Decorative Blocks, Dramatic Doors, Project Red, Storage Drawers, JEI, Fairy Lights, Chalk,
   Sooty Chimneys, Another Furniture, Design Decor, Yuushya, Astikor Carts.
-- **LGPL / GPL, about 90 jars.** Usable if the credit and licence terms are respected: Immersive Weathering (LGPLv3),
+- **LGPL / GPL, about 90 jars.** Usable if the credit and license terms are respected: Immersive Weathering (LGPLv3),
   Immersive Armors (GNU), Immersive Paintings (GPL-3.0), Alex's Mobs, PneumaticCraft, Sophisticated Backpacks and
   Core, KubeJS, MCA, Exposure, Moonlight, Comforts, Curios. Compressed
-  Engineering (LGPL 2.1) and Full Engineering (LGPL) are IE addons whose own licence applies.
+  Engineering (LGPL 2.1) and Full Engineering (LGPL) are IE addons whose own license applies.
 - **Non-commercial or no-derivatives (CC BY-NC-SA, NC-ND, custom), about 19 jars.** Avoid for anything monetised
   (CurseForge projects can earn Points): Patchouli, WTHIT, Legendary Tooltips, Nature's Compass, Explorer's Compass,
-  Highlighter, Better Beacons, Handcrafted ("Terrarium Licence"), Campsite Structures, Paintings Pack 1, Incubation.
-  The NC-ND ones also forbid edits. `detailab` is declared "MIT Licence" and was caught by the filter by mistake; verify.
+  Highlighter, Better Beacons, Handcrafted ("Terrarium License"), Campsite Structures, Paintings Pack 1, Incubation.
+  The NC-ND ones also forbid edits. `detailab` is declared "MIT License" and was caught by the filter by mistake; verify.
 - **All Rights Reserved, about 89 jars.** Not usable without permission: Create Deco, Create Compressed, Create Deep
   Dark, Create Questing, Create Guardian Beam Defense, Create Recycle, Create Ultimate Factory, Create Liquid Fuel,
   Immersive Petroleum, Supplementaries and Supplementaries Squared, Twigs, Waystones, Architect's Palette,
   Cooking for Blockheads, Lightman's Currency, FTB Quests / Teams / Library / Chunks, Xaero's maps, Every Compat,
   Copycats+, Serene Seasons, More Mob Variants, Trash Cans, Wardrobe, and the rest.
   Dummmmmmy is code Public Domain, assets ARR.
-- **Custom licences, about 31 jars (read before use):** Quark (own LICENSE.md), Botania (Botania License), AE2 and
+- **Custom licenses, about 31 jars (read before use):** Quark (own LICENSE.md), Botania (Botania License), AE2 and
   AE Bot ("see GitHub"), ComputerCraft (Public License), Slice and Dice, Lootr, Cosmetic Armor Reworked (MMPL),
   Splash Milk (WTFPL).
 
@@ -148,20 +148,20 @@ Classified from `mods.toml`. Counts of the 414 jars excluding the Create, Immers
 
 1. Safest set for a banner or logo: Create (1.19.2 jar), Farmer's Delight and its MIT siblings, the pack's own art.
    These cover most of the pack's look.
-2. If IE imagery matters for the pack's identity, ask Blu for permission; the licence invites asking.
+2. If IE imagery matters for the pack's identity, ask Blu for permission; the license invites asking.
 3. Put a credits block in the project description (the CurseForge page draft is
    [creative_common_curseforge.md](creative_common_curseforge.md)): "Art includes textures from Create (MIT, Creators
    of Create), Farmer's Delight (MIT, vectorwing) ..." and ship the MIT notice if the art file is distributed on its
    own.
 4. Vanilla textures and screenshots including vanilla blocks fall under Mojang's own brand and asset guidelines, not
    any mod's licence.
-5. In-game screenshots of ARR mods' blocks are a grey area (they are renders, but still the author's art). Prefer to
+5. In-game screenshots of ARR mods' blocks are a gray area (they are renders, but still the author's art). Prefer to
    keep them out of the hero image.
 
 ## 6. Open items
 
 - Read the upstream LICENSE for: Oceanic, Veggies, Vintage, Fungi, Large Meals, Rustic Delight, Engineer's Delight.
-- Licence check for the other resource packs listed in section 3.
+- License check for the other resource packs listed in section 3.
 - Spot-check Create 0.5.1.i textures for third-party art before a large composite.
 - Re-run the audit if mods change; the jar scan is a few lines of Python over `META-INF/mods.toml`.
 
@@ -171,9 +171,9 @@ Generated 2026-11-07 from each jar's `mods.toml` `license` field and sorted by c
 
 ### 7.1 Permissive (144)
 
-Usable with credit and the licence notice.
+Usable with credit and the license notice.
 
-| Mod | Jar | Declared licence |
+| Mod | Jar | Declared license |
 |---|---|---|
 | Alex | alexsdelight-1.4.1.jar | MIT License |
 | Another Furniture | another_furniture-forge-1.19.2-2.1.4.jar | MIT |
@@ -228,7 +228,7 @@ Usable with credit and the licence notice.
 | Create: Vintage Improvements | vintageimprovements-1.19.2-0.2.0.3.jar | MIT |
 | Dave | dbExtended-1.19.2-6.0.1.jar | MIT License |
 | Decorative Blocks | Decorative Blocks-forge-1.19.2-3.0.0.jar | MIT |
-| Detail Armor Bar | DetailArmorBar-2.6.4+1.19.2-forge.jar | MIT Licence |
+| Detail Armor Bar | DetailArmorBar-2.6.4+1.19.2-forge.jar | MIT License |
 | Dimensional Paintings | Dimensional-Paintings-1.19.2-1.4.1.jar | MIT |
 | Don | don't void arrows V.1.1-1.19.2.jar | Academic Free License v3.0 |
 | Dramatic Doors | DramaticDoors-QuiFabrge-1.19.2-3.2.7.jar | MIT |
@@ -318,13 +318,13 @@ Usable with credit and the licence notice.
 | Well Mod | well-1.19.2-1.0.0.jar | Apache License 2.0 |
 | Witch Mobility | witchmobility-1.3.2-1.19.2.jar | MIT |
 | WTHIT Harvestability | wthitharvestability-mc1.19.2-2.1.0.jar | The Unlicense |
-| Yuushya Modelling | yuushya-modelling-1.19.2-forge-2.2.0.jar | MIT |
+| Yuushya Modeling | yuushya-modeling-1.19.2-forge-2.2.0.jar | MIT |
 
 ### 7.2 Copyleft (GPL / LGPL / MPL) (97)
 
-Usable if credit and licence terms are kept; release the finished art under GPLv3.
+Usable if credit and license terms are kept; release the finished art under GPLv3.
 
-| Mod | Jar | Declared licence |
+| Mod | Jar | Declared license |
 |---|---|---|
 | Architectury | architectury-6.6.92-forge.jar | GNU LGPLv3 |
 | Bedspreads | bedspreads-forge-6.0.0+1.19.2.jar | LGPL-3.0-or-later |
@@ -426,9 +426,9 @@ Usable if credit and licence terms are kept; release the finished art under GPLv
 
 ### 7.3 Custom, non-commercial or unclear (69)
 
-Read the licence first; avoid for monetised pages; verify.
+Read the license first; avoid for monetised pages; verify.
 
-| Mod | Jar | Declared licence |
+| Mod | Jar | Declared license |
 |---|---|---|
 |  | DustrialDecor-1.3.3-1.19.2.jar | Forge said I needed a license |
 | Abnormals Delight | abnormals_delight-1.19.2-4.1.2.jar | https://github.com/team-abnormals/abnormals-delight/blob/main/LICENSE.txt |
@@ -460,7 +460,7 @@ Read the licence first; avoid for monetised pages; verify.
 | EntityCulling | entityculling-forge-1.6.1-mc1.19.2.jar | tr7zw Protective License |
 | Explorer | ExplorersCompass-1.19.2-1.3.0-forge.jar | CC BY-NC-SA 4.0 |
 | Fantasy | fantasyfurniture-1.19.2-6.7.0.jar | GNU General Public License v3.0 |
-| Handcrafted | handcrafted-forge-1.19.2-2.0.6.jar | Terrarium Licence |
+| Handcrafted | handcrafted-forge-1.19.2-2.0.6.jar | Terrarium License |
 | Highlighter | Highlighter-1.19.1-1.1.4.jar | CC BY-NC-ND 4.0 |
 | Iceberg | Iceberg-1.19.2-forge-1.1.4.jar | CC BY-NC-ND 4.0 |
 | Immersive Engineering | ImmersiveEngineering-1.19.2-9.2.4-170.jar | Blu |
@@ -504,7 +504,7 @@ Read the licence first; avoid for monetised pages; verify.
 
 Not usable without permission.
 
-| Mod | Jar | Declared licence |
+| Mod | Jar | Declared license |
 |---|---|---|
 | Advanced Peripherals | AdvancedPeripherals-1.19.2-0.7.37r.jar | All rights reserved |
 | Alex | alexsabnormalities-1.3.jar | All rights reserved |

@@ -8,7 +8,7 @@ summary above "8.0.7 Phase 7".
 
 - Same scratch server as M5 (patcherMod `build/libs` 1.0.6 of 12:44, seed 8675309, density 1, baseline toml with
   the three log switches). A new world, `st_p`, with 4 locator threads.
-- **Area:** Chunky square, radius 96 chunks, centred on 2144 -2592 (92% land) instead of spawn (76% ocean). That's
+- **Area:** Chunky square, radius 96 chunks, centered on 2144 -2592 (92% land) instead of spawn (76% ocean). That's
   37,249 chunks in 64 min.
 - **Census:** run on a separate fresh square (radius 96 at -1700 1500, 90% land), not over the pregenerated one. Its
   own docs say a chunk generated before the census only counts as "known".
@@ -41,7 +41,7 @@ Notes:
 - **ST-74:** two flotillas sit in a `plains` biome. Generating those chunks showed every log floating on water at
   least 6 blocks deep: a plains-biome lake or coast, not a beach.
 - **LO-12:** the 91 sections below y 48 that are entirely air are scattered over every Y level, 1 to 3 per chunk in
-  neighbouring chunks. That's big caves, not the distant-terrain clip leaking into real chunks.
+  neighboring chunks. That's big caves, not the distant-terrain clip leaking into real chunks.
 - **ST-20:** its text names 5 chunks for ruins; the ruins grid is 16/8 now, so the real minimum is 9.
 
 ## 3. Bugs

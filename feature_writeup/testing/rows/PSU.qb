@@ -1734,7 +1734,7 @@ look the faced side's bit is false (the facing line names the one fruit side wit
 @group A
 @commands Continue SQ-PSF-05: `/setblock` a melon on the 4th (empty) side by hand; `/setblock` the faced melon to air
 @pass the stem stays `attached_melon_stem`, `facing` turns to one of the two grown sides, that side's bit now `false`, the hand-placed side stays `false`; break both remaining grown melons: the stem becomes `minecraft:melon_stem[age=7]` even with the hand-placed melon beside it
-@fails re-points at the hand-placed melon: old any-neighbour rule still active
+@fails re-points at the hand-placed melon: old any-neighbor rule still active
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_A.qb
 > setblock {S5H1+29} {S5H2} {S5H3+76} minecraft:melon

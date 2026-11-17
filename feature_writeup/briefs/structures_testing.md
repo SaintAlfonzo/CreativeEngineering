@@ -106,7 +106,7 @@ All 34 are still unticked (checked 2026-10-21).
    still open) and add TODO rows.
 
 ### Decisions
-- None for the run. If a test's wording no longer fits the shipped behaviour (as ST-53 and ST-160 needed after
+- None for the run. If a test's wording no longer fits the shipped behavior (as ST-53 and ST-160 needed after
   Phase 7), correct the wording in the same edit.
 
 ### Gotchas

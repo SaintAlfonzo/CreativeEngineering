@@ -180,7 +180,7 @@ foods, and eating each gives that effect at the listed length.
 ## Built, needs play
 
 - `dishes/ocean #1` Fishing net: cooldown, tooltips, loot by biome: [ocean_delight.md](../ocean_delight.md) 5.1; open: S~ (SQ-FN-02, -03 need group B biomes), C P T (DA-01 to DA-03, DA-09 to DA-11).
-- `dishes/ocean #3` Squid and glow squid items, calamari chain: [ocean_delight.md](../ocean_delight.md) 5.3; open: S~ (SQ-CDB-05 JEI), C P (DA-05, DA-06); Rustic's licence file and glowing cans still open.
+- `dishes/ocean #3` Squid and glow squid items, calamari chain: [ocean_delight.md](../ocean_delight.md) 5.3; open: S~ (SQ-CDB-05 JEI), C P (DA-05, DA-06); Rustic's license file and glowing cans still open.
 - `dishes/ocean #4` Remove tentacles; all tentacles to calamari: [ocean_delight.md](../ocean_delight.md) 5.5; open: S (rerun SQ-CM-32, SQ-CM-35 on the 2026-10-31 12:32 CD jar), C P.
 - `dishes/ocean #5` Salmon eggs become caviar: [ocean_delight.md](../ocean_delight.md) 5.2; open: C P (DA-08); the sea pickle roll moved to row 6.
 

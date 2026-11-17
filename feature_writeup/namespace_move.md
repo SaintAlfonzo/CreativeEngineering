@@ -183,7 +183,7 @@ Corrections to the scan (section 2):
   registration script sits in the pack's `kubejs/startup_scripts/items/decor_blocks.js`.
 - D-LUNCH covers one id. `lunchbag`, `lunchbox` and `golden_lunchbox` are Spice of Life's own items; only
   `netherite_lunchbox` was registered by Creative Delight under `solapplepie:`. It moved to `creativedelight:`.
-- The 15 textures in `kubejs/assets/creativeengineering/` were the Canned Golem dye colours (Creative Delight), not
+- The 15 textures in `kubejs/assets/creativeengineering/` were the Canned Golem dye colors (Creative Delight), not
   shield art; they moved to `kubejs/assets/creativedelight/`.
 - Section 2.5 was already done: `config/creativeengineering-common.toml` no longer exists.
 - Paintings: Immersive Paintings stores the full png id only on the placed entity (the item has none), so D-PAINT is a

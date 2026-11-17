@@ -4,7 +4,7 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# potions`, Sub `effects` (r
 Feature writeup: [armor_effects.md](../armor_effects.md) (test prefix `AE-`, last id AE-24).
 
 **2026-10-31:** `effects #3` and `#4` BUILT (Testing; armor_effects.md 2.2, 2.5, F6, F9). #3 went wider than this brief:
-Poison and Wither ticks at or below the Magic Resistance level are cancelled, and AE-29 / AE-30 are the new tests (not
+Poison and Wither ticks at or below the Magic Resistance level are canceled, and AE-29 / AE-30 are the new tests (not
 the AE-29 / AE-30 proposed under #3 and #6 below). Rows #8 to #11 are in [effects.md](../effects.md) 2.5 to 2.8.
 
 ## Scope and order
@@ -23,7 +23,7 @@ profile in hand.
 member of `#creativeengineering:bonemeal_charms` ([equipmenttags.js:31](../../kubejs/server_scripts/tags/equipmenttags.js)),
 so `BonemealCharmMixin` refunds bone meal used with the hoe in the other hand (`[bonemeal_charm]` `chance` 0.5,
 `damageChance` 0.1, `damagePerUse` 1, all live config), tooltip at [tooltips.js:820](../../kubejs/client_scripts/tooltips.js).
-That is exactly "a Vinery bone-meal buff with a configurable durability cost" (it was modelled on Vinery's Winemaker set
+That is exactly "a Vinery bone-meal buff with a configurable durability cost" (it was modeled on Vinery's Winemaker set
 mixin). Shipped since the initial commit; documented in [fixes_compat.md](../fixes_compat.md) 2.9, test FX-12. Only the
 pickaxe is left in `effects #6`.
 
@@ -94,10 +94,10 @@ Close armor_effects.md F3, F5, F7 and F8.
      `ThrownTrident` extends `AbstractArrow`, so this tags tridents too (the trident is still in the hand when it spawns:
      `TridentItem#releaseUsing` adds the entity before it removes the item, vanilla code from memory).
    - In `EntityEvents.hurt`, pick the item id in this order:
-     1. `source.getDirectEntity()` has `persistentData.ce_launcher` → that id;
-     2. the direct entity is a `ThrownTrident` without the tag (thrown before the update) → `direct.getNbt().getCompound('Trident').getString('id')`;
-     3. the direct entity **is** the attacker (a melee hit) → the attacker's main-hand item (today's rule);
-     4. otherwise → nothing. That drops thorns, explosions and other credited damage.
+     1. `source.getDirectEntity()` has `persistentData.ce_launcher` -> that id;
+     2. the direct entity is a `ThrownTrident` without the tag (thrown before the update) -> `direct.getNbt().getCompound('Trident').getString('id')`;
+     3. the direct entity **is** the attacker (a melee hit) -> the attacker's main-hand item (today's rule);
+     4. otherwise -> nothing. That drops thorns, explosions and other credited damage.
    - Keep the `$Tool...` prefix on new top-level `const`s: all server scripts share one scope (armor_effects.md 3).
 3. **F7 (patcherMod):** in `EchoArmorEffectProcedureMixin.java` line 64 pass `0` instead of `original.getAmplifier()`
    for Phantom Bane. Optionally line 56 too: Night Vision has no levels. The tooltip already says "Phantom Bane", so no
@@ -128,10 +128,10 @@ Close armor_effects.md F3, F5, F7 and F8.
 - Don't strip `duration` from `onHit()` specs: there it is required (tool_effects.js:86-92).
 
 ### Tests (new ids in armor_effects.md 7)
-- **AE-25 Thrown trident:** throw the dragon trident at a zombie → Mining Fatigue II 3 s (AE-18's "thrown → nothing" changes).
-- **AE-26 Bow swapped hands:** shoot the dragon bow, switch to a sword before the arrow lands → the bow's on-hit still applies.
-  Off-hand bow → applies.
-- **AE-27 Thorns doesn't count:** wear Thorns armor, hold the dragon sword, let a zombie hit you → the zombie gets thorns
+- **AE-25 Thrown trident:** throw the dragon trident at a zombie -> Mining Fatigue II 3 s (AE-18's "thrown -> nothing" changes).
+- **AE-26 Bow swapped hands:** shoot the dragon bow, switch to a sword before the arrow lands -> the bow's on-hit still applies.
+  Off-hand bow -> applies.
+- **AE-27 Thorns doesn't count:** wear Thorns armor, hold the dragon sword, let a zombie hit you -> the zombie gets thorns
   damage but no Weakness / Exsanguination.
 - **AE-28 Held duration warning:** `logs/kubejs/startup.log` has no `duration is ignored` warning (all fields removed).
 - AE-10 changes to expect Amplifier 0.
@@ -153,7 +153,7 @@ crossbow **inflicts** bleeding (Exsanguination) and Weakness.
 | `i.dragon_bow` | Invisibility II, 60 t | Slowness IV (`duration: 50`), Glowing III (`duration: 500`) |
 | `i.dragon_crossbow` | Resistance II, 60 t | Exsanguination II (`duration: 150`), Weakness III (`duration: 250`) |
 
-No flavour lines for either in [tooltips.js](../../kubejs/client_scripts/tooltips.js) (the dragon block ends at 815-820).
+No flavor lines for either in [tooltips.js](../../kubejs/client_scripts/tooltips.js) (the dragon block ends at 815-820).
 
 ### Build
 1. Replace lines 150-156:
@@ -171,7 +171,7 @@ No flavour lines for either in [tooltips.js](../../kubejs/client_scripts/tooltip
    ```
    with `var ef = global.effect` next to `var i = global.item` (line 107). The durations are the ones already written on
    today's held specs. Glowing has no levels, so amplifier 0 (today's III only changes the numeral).
-2. Add flavour lines to the dragon block in tooltips.js after line 819, same `col.epic` style:
+2. Add flavor lines to the dragon block in tooltips.js after line 819, same `col.epic` style:
    `[i.dragon_bow, ['Slow and reveal your target', col.epic], ['Turns you invisible while held', col.epic]]`,
    `[i.dragon_crossbow, ['Weaken and bleed your target', col.epic], ['Hardens you while held', col.epic]]`.
 3. Update armor_effects.md 2.3 table, F4 (fixed, with the date), AE-19 and AE-20.
@@ -193,7 +193,7 @@ effect_dict); `alexsmobs:exsanguination` (Alex's Mobs 1.21.1, already resolved b
 - Without F5 the bow's new on-hit only lands while the bow is still in the main hand. Build F5 first or in the same commit.
 
 ### Tests
-Rewrite **AE-19** (bow: shoot a zombie → Slowness IV 2.5 s, Glowing 25 s; holding it → `/data get entity @s ActiveEffects`
+Rewrite **AE-19** (bow: shoot a zombie -> Slowness IV 2.5 s, Glowing 25 s; holding it -> `/data get entity @s ActiveEffects`
 shows Invisibility, hidden) and **AE-20** (crossbow: target gets Exsanguination II 7.5 s and Weakness III 12.5 s; holding it
 gives Resistance II).
 
@@ -246,10 +246,10 @@ Tag `creativeengineering:magic` (data, reloadable). Config `[magic_resistance] r
 - `/reload` with a datapack that edits `magic.json` changes Magic Resistance too. Worth a sentence in shields.md 2.9.
 
 ### Tests
-- **AE-29 Tag-driven cut:** with Magic Resistance I, hold another player's Botania relic (`botania-relic`, 2 damage) →
+- **AE-29 Tag-driven cut:** with Magic Resistance I, hold another player's Botania relic (`botania-relic`, 2 damage) ->
   1.6 per tick instead of 2. AE-22 (Instant Damage) unchanged.
 - **AE-30 Reload:** a datapack override of `magic.json` without `indirectMagic`, `/reload`, a splash Instant Damage potion
-  thrown by a witch → full damage. Remove the override.
+  thrown by a witch -> full damage. Remove the override.
 
 ---
 
@@ -322,7 +322,7 @@ unless crouching), the bow and crossbow (`effects #2`) and the fishing rod (`gea
    With a 5-tick refresh, Haste is gone a quarter second after you crouch, and nothing has to be removed.
 4. **Tooltip:** in `armor_effects.js` `buildTooltipLines` (line 137-144), append `spec.note` when present:
    `'§7- §' + d.color + d.name + ' §7(infinite' + (spec.note ? ', ' + spec.note : '') + ')'`. Set
-   `note: 'not while sneaking'` on the pickaxe spec. Add a flavour line in tooltips.js:
+   `note: 'not while sneaking'` on the pickaxe spec. Add a flavor line in tooltips.js:
    `[i.dragon_pickaxe, ['Mines faster unless sneaking', col.epic]]`.
 5. Docs: armor_effects.md 2.3 (pickaxe row; also a hoe row pointing at fixes_compat.md 2.9), 2.6 (the new spec fields).
 
@@ -340,11 +340,11 @@ unless crouching), the bow and crossbow (`effects #2`) and the fishing rod (`gea
 
 ### Gotchas
 - Crouching is also how players mine carefully at edges. That is the point (precise mining without Haste overshooting).
-- Haste hides the vanilla mining-speed tooltip gain; the flavour line covers it.
+- Haste hides the vanilla mining-speed tooltip gain; the flavor line covers it.
 - Every held effect is one client packet per tick (F8). A 5-tick refresh doesn't change that.
 
 ### Tests
-- **AE-31 Dragon pickaxe Haste:** hold it → Haste II in `ActiveEffects` (hidden); crouch → gone within 0.5 s; stand →
+- **AE-31 Dragon pickaxe Haste:** hold it -> Haste II in `ActiveEffects` (hidden); crouch -> gone within 0.5 s; stand ->
   back. Tooltip: "Haste II (infinite, not while sneaking)".
 - FX-12 already covers the hoe.
 
@@ -381,7 +381,7 @@ unchanged)" subsection, then run AE-32 / AE-33.
 ### Decisions
 - **Extend the suit to the pack's `electric` tag** (lightning, Create Additions tesla, SecurityCraft, razor shock)? That
   would be a patcherMod `LivingHurtEvent` listener: four `armor_faraday_*` pieces worn and
-  `DamageTags.is(source, DamageTags.id("electric"))` → cancel, or scale like IE's two bands. **Recommend: not now.**
+  `DamageTags.is(source, DamageTags.id("electric"))` -> cancel, or scale like IE's two bands. **Recommend: not now.**
   Record the answer, and open a row only if the user wants lightning immunity from a cheap IE suit. Pairs with
   `potions/potions #9` (shock effects).
 
@@ -390,10 +390,10 @@ A partial suit gives **nothing** against low-level shocks (all-or-nothing mask).
 Worth a tooltip line if the row is extended.
 
 ### Tests
-- **AE-32 Faraday vs wires:** full suit, walk into a live uninsulated HV (steel) wire span → no damage. Take one piece
-  off → full damage.
-- **AE-33 Faraday vs tesla:** full suit next to a high-power IE Tesla coil → hurt (1.2x) and the suit loses durability; low
-  power → no damage.
+- **AE-32 Faraday vs wires:** full suit, walk into a live uninsulated HV (steel) wire span -> no damage. Take one piece
+  off -> full damage.
+- **AE-33 Faraday vs tesla:** full suit next to a high-power IE Tesla coil -> hurt (1.2x) and the suit loses durability; low
+  power -> no damage.
 
 ---
 

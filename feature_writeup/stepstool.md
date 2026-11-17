@@ -15,7 +15,7 @@ Test prefix **STL-** · Last updated **2026-10-31** · Overall status **BUILT 20
 | Part | Where | Status |
 |---|---|---|
 | 16 items `creativeengineering:<colour>_stepstool`, Another Furniture tall stool models | [stepstools.js](../kubejs/startup_scripts/items/stepstools.js), `item_dict.js` | BUILT, needs restart |
-| Recipe: Create seat of the colour on top of an oak fence | [stepstool.js](../kubejs/server_scripts/equipment/stepstool.js) | BUILT |
+| Recipe: Create seat of the color on top of an oak fence | [stepstool.js](../kubejs/server_scripts/equipment/stepstool.js) | BUILT |
 | Tags `#creativeequipment:stepstools`, `#curios:feet` | [curiostags.js](../kubejs/server_scripts/tags/curiostags.js) | BUILT |
 | Curios Feet slot (vanilla boots icon) | patcherMod `compat/CuriosSlots.java` (IMC; the old feet.json was never read by Curios 5.1.x), [curios_slots.md](curios_slots.md) | BUILT 2026-11-01, jar not installed |
 | Step up / step off, collision, server checks, sync | patcherMod `stepstool/Stepstool.java` | BUILT |
@@ -37,14 +37,14 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 - Step up needs: on the ground, not moving, not crouching, not riding, sleeping, gliding, flying or swimming, a
   stepstool in a Curios slot, and room for the player one block up. Client and server run the same check
   (`Stepstool.canStepUp`); the server decides.
-- Server steps off by itself when: drift from the stool centre over `maxDrift`; height off the stool top (below
+- Server steps off by itself when: drift from the stool center over `maxDrift`; height off the stool top (below
   -0.05 or above +0.6); any of the step-up conditions breaks (incl. crouch); the worn stool is gone or changed; a
   block's collision fills the space the player stood in; damage (`stepOffWhenHurt`); death, respawn, dimension
   change, logout.
 - Client steps off at once (before the server agrees) on movement input, crouch, or a fresh jump press. Holding the
   jump half of the combo after stepping up does not step off; it has to be released and pressed again.
 - Examples: under a 2-high ceiling nothing happens (no room). On a carpet the stool stands on the carpet. Next to a
-  wall the stool (a whole block centred on the player) sinks into the wall by up to 0.2 of a block.
+  wall the stool (a whole block centered on the player) sinks into the wall by up to 0.2 of a block.
 
 ## 3. What the pack changes
 
@@ -86,21 +86,21 @@ its colour. They stay up until they move, crouch, jump or something else knocks 
 
 ## 7. In-game test suite
 
-- [ ] **STL-01 boot:** start the game → no `Mixin apply failed` / `InvalidInjectionException` naming `Stepstool`; `latest.log` no KubeJS errors from `stepstools.js`, `stepstool.js`, `curiostags.js`.
-- [ ] **STL-02 items:** JEI shows 16 stepstools, each looking like that colour's tall stool, names "<Colour> Stepstool", tooltip: Curios' "Slot: Feet" and the two use lines (the pack's "Worn in the Feet slot" line dropped 2026-11-02, `ui/tooltips #8`).
+- [ ] **STL-01 boot:** start the game -> no `Mixin apply failed` / `InvalidInjectionException` naming `Stepstool`; `latest.log` no KubeJS errors from `stepstools.js`, `stepstool.js`, `curiostags.js`.
+- [ ] **STL-02 items:** JEI shows 16 stepstools, each looking like that color's tall stool, names "<Colour> Stepstool", tooltip: Curios' "Slot: Feet" and the two use lines (the pack's "Worn in the Feet slot" line dropped 2026-11-02, `ui/tooltips #8`).
 - [ ] **STL-03 recipe:** red seat above an oak fence gives a Red Stepstool; same for one other colour.
 - [ ] **STL-04 slot:** the Curios screen has a Feet slot (boots icon, "Feet"); a stepstool goes in, other items do not.
-- [ ] **STL-05 step up:** wear one, stand still, hold Sprint + Jump → after about a quarter second you are a block higher, the stool is drawn under you (first and third person), no jump happens, wood sound.
-- [ ] **STL-06 quick press:** tap Sprint + Jump → nothing.
-- [ ] **STL-07 stay:** release the keys → you stay up; stand for 10 seconds → no "Flying is not enabled" kick (test on a dedicated server).
-- [ ] **STL-08 step off moving:** press W → you drop off and walk; same for A/S/D.
-- [ ] **STL-09 step off crouch / jump:** crouch → drop off. Step up again, release, press Jump → drop off, no jump.
-- [ ] **STL-10 held jump:** step up and keep holding Jump (let go of Sprint) → you stay up.
-- [ ] **STL-11 refusals:** while moving, in the air, crouching, under a 2-high ceiling, without a stepstool worn → nothing happens.
-- [ ] **STL-12 server step off:** on the stool: get hit by a mob, unequip the stool, place a block in the space under you → each steps you off; no fall damage.
-- [ ] **STL-13 other player:** a second player sees you on the stool in its colour; joins/walks into range while you are up → sees it too.
-- [ ] **STL-14 rebind:** bind Step Up to a key, set `sprintJump=false` → only the key steps up; Sprint + Jump jumps normally.
-- [ ] **STL-15 relog / dimension:** log out while up, log in → on the ground, no floating stool. Same through a portal.
+- [ ] **STL-05 step up:** wear one, stand still, hold Sprint + Jump -> after about a quarter second you are a block higher, the stool is drawn under you (first and third person), no jump happens, wood sound.
+- [ ] **STL-06 quick press:** tap Sprint + Jump -> nothing.
+- [ ] **STL-07 stay:** release the keys -> you stay up; stand for 10 seconds -> no "Flying is not enabled" kick (test on a dedicated server).
+- [ ] **STL-08 step off moving:** press W -> you drop off and walk; same for A/S/D.
+- [ ] **STL-09 step off crouch / jump:** crouch -> drop off. Step up again, release, press Jump -> drop off, no jump.
+- [ ] **STL-10 held jump:** step up and keep holding Jump (let go of Sprint) -> you stay up.
+- [ ] **STL-11 refusals:** while moving, in the air, crouching, under a 2-high ceiling, without a stepstool worn -> nothing happens.
+- [ ] **STL-12 server step off:** on the stool: get hit by a mob, unequip the stool, place a block in the space under you -> each steps you off; no fall damage.
+- [ ] **STL-13 other player:** a second player sees you on the stool in its color; joins/walks into range while you are up -> sees it too.
+- [ ] **STL-14 rebind:** bind Step Up to a key, set `sprintJump=false` -> only the key steps up; Sprint + Jump jumps normally.
+- [ ] **STL-15 relog / dimension:** log out while up, log in -> on the ground, no floating stool. Same through a portal.
 - [ ] **STL-16 reach:** on the stool you can reach and place one block higher than from the ground.
 
 ## 8. History

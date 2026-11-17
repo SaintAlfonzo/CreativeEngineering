@@ -5,7 +5,7 @@
 Moved from agent memory 2026-11-16 (last edited there 2026-10-02). Repo status docs win over any status line here.
 
 2026-10-02: the user asked for hoe harvest areas per hoe (copper/gold 2x2, iron 3x3, diamond/netherite
-4x4, end gear 5x5) with an auto tooltip. Quark only does odd centred squares (radius r -> 2r-1).
+4x4, end gear 5x5) with an auto tooltip. Quark only does odd centered squares (radius r -> 2r-1).
 
 - Tags `creativeengineering:hoe_harvest/<N>x<N>` (N 1..9, largest wins) in kubejs equipmenttags.js
   "Hoe harvest area". I chose the unlisted ones: wood/stone 1x1, IE steel + manasteel 3x3, elementium

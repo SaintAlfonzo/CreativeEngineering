@@ -28,7 +28,7 @@ placement). findNearestMapStructure only handles ConcentricRings/RandomSpread pl
 SkyTempleStructure builds from context.chunkPos + random, so it can be re-run at an offset. "Clouds" = cloudstorage:sky_temple.
 
 Earlier design (frequency-raising part rejected): a pure-function predictor (mirrors the vanilla selection, cached, thread-safe for DH), tiers so
-lower tiers only check higher ones, Matérn type-II thinning within a tier, hash-based cluster centres for grouping,
+lower tiers only check higher ones, Matérn type-II thinning within a tier, hash-based cluster centers for grouping,
 and a /structuremap preview command as the tuning tool and test oracle. Only new chunks are affected.
 Related: [structure-gen-framework](structure-gen-framework.md), [jigsaw-pool-tuning](jigsaw-pool-tuning.md), [dead-structure-locate-hang](dead-structure-locate-hang.md).
 

@@ -9,7 +9,7 @@
 - Server: session 4 (d6feb4e4) scratchpad srv/ (373 mods, patcherMod build/libs 1.0.6 of 12:44, md5 5acd69dc).
   Toml = scratchpad toml_m5_base.toml (instance defaults + earth_fill log ALL, meta log true, placement log true),
   density 1. srv-only kubejs/server_scripts/zz_scratch_tick.js (tick gaps) still in place.
-- World st_p, seed 8675309, 4 locator threads. Deviation: area centred on 2144 -2592 (92% land) instead of spawn
+- World st_p, seed 8675309, 4 locator threads. Deviation: area centered on 2144 -2592 (92% land) instead of spawn
   (76% ocean): Chunky square radius 1536 blocks (96 chunks), census 96 at 2144 -2592.
 - Known while running: census loads stall the server thread (Phase 5 LO-05 bug), only slower, not wrong.
 - Running: nothing (stopped 17:40, toml diffed = base). Phase 6 tests all run. Next: writeup 06_phase_6.md.
@@ -37,12 +37,12 @@
   the peaceful structure's (21 x 3 remote, 3 x 5 settlements; no big-settlement drop in the area). 22 unique drops: the
   loser's start is absent from its chunk and the winner's start is present in 22/22 (ST-142 scratch part).
 - lo12.py full area: 37778 full chunks, 264446 sections y -64..47: ores 97%, deepslate 73%, air 76%, fluids 28%; 91
-  sections all air = scattered over Y -3..2, 1-3 per chunk in neighbouring chunks = big caves, not a clip pattern.
-- ST-74: 7 driftwood flotillas, all placed with 11-16 logs (meta log "N/N"); piece-centre biomes: 4 ocean, 1 mixed
+  sections all air = scattered over Y -3..2, 1-3 per chunk in neighboring chunks = big caves, not a clip pattern.
+- ST-74: 7 driftwood flotillas, all placed with 11-16 logs (meta log "N/N"); piece-center biomes: 4 ocean, 1 mixed
   beach/ocean/orchid swamp (6 ocean, 6 beach-mixed pieces), 2 "plains" (east of the square). forceload both plains ones:
-  every piece centre column is water 6+ deep under the log (plains-biome water body), none on land. forceload removed.
+  every piece center column is water 6+ deep under the log (plains-biome water body), none on land. forceload removed.
 - ST-114 block part: 14 entrance dungeons (11 spider, 3 zombie); the 11 in full chunks: surface block above the box
-  centre is grass/leaves/stone, never water; 3 in fringe chunks not checked.
+  center is grass/leaves/stone, never water; 3 in fringe chunks not checked.
 - ST-107: group/witch_huts 6 starts (3 swamp_hut, 3 YUNG witch_hut), none closer than 9 chunks, no shared cell.
   (ST-106 ratio skipped as a rate; its "no slot holds both" part holds.)
 - 17:25 restart (7.5 s) with zz_scratch_bmap.js. /zbmap land shares (r 1536): 2144 1200 25%, 5500 -2592 29%,
@@ -50,7 +50,7 @@
 - 17:25:59 census 96 at -1700 1500: done 17:36:35, 635 s: 100329/100329 slot chunks, 2366 starts, 1 miss, 0 false
   negatives. Totals over 305 structure rows: slots 179710, setSkipped 111242, predictedMaybe 23, known 142971, built
   2366; predictedNo placement 36051, biome 665. Every group set row "known" (village_plains 16/16, spider_dungeon
-  36/36, mineshaft 37249/37249). During the census the log had 79 placement drops + 48 earth-fill CANCELLED, none in
+  36/36, mineshaft 37249/37249). During the census the log had 79 placement drops + 48 earth-fill CANCELED, none in
   the report (only 1 miss, reason no_start). Saved: census_p.json.
 - 17:37 small check `cwglocate census 4 -9000 9000` (untouched terrain): 218 slots, 1 s; known 351 of 432 member-slots;
   the only predictions: buried_treasure 81 slots (80 placement-no, 1 known) + 1 ancient_city. -> CENSUS BUG: enumerate
@@ -68,7 +68,7 @@
 | ST-141 | PASSED | 15 rank drops, loser rank below winner in 15/15 |
 | ST-154 | PASSED | 24 peaceful drops, all hostile losers, radius = the peaceful structure's (3 or 5) |
 | ST-142 | PASSED (scratch part) | 22 unique drops: loser start absent, winner start present; looking at them stays [game] |
-| ST-114 | PARTLY | 11 entrance dungeons in full chunks: dry surface above every box centre; the "surface check dropped" count not taken (DEBUG log, and the census reasons are broken) |
+| ST-114 | PARTLY | 11 entrance dungeons in full chunks: dry surface above every box center; the "surface check dropped" count not taken (DEBUG log, and the census reasons are broken) |
 | ST-107 | PASSED | 6 witch-group starts, none closer than 9 chunks, no shared cell |
 | ST-106 | SKIPPED (rate) | ratio is a rate; its "no slot holds both" part holds (no shared cells) |
 | ST-20 | PASSED | Region files: settlements 7 starts >= 13 chunks, ruins 105 >= 9, surface dungeons 10 >= 11; all 30 sets clean |

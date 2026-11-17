@@ -327,7 +327,7 @@
 ## SQ-HH-C02
 @group A
 @commands new world; `/locate structure hearthandharvest:corn_maze`, teleport in plains
-@pass a maze stands, walls are mature corn on farmland, gates at both ends, centre chest
+@pass a maze stands, walls are mature corn on farmland, gates at both ends, center chest
 @fails `CornMazeStructure`, `CornMazePiece` **Superseded by SQ-HH-323, -328, CQ-HH-301.**
 @draft no batch holds this row yet
 @superseded Superseded by SQ-HH-323, -328, CQ-HH-301 (2026-11-17, from the row text)
@@ -5103,7 +5103,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @group A
 @commands Plot 112 112. `/setblock 112 -61 112 minecraft:water`; `/setblock 112 -60 112 hearthandharvest:sprinkler`; `sleep 7`; `/cdevtest tank 112 -60 112`
 @pass `: minecraft:water (200\|300\|400) / 10000` (the `Direction.DOWN` source below the sprinkler counts; 100 mB every 2 s after the first passes) (HNH-75 endless refill)
-@fails `SprinklerBlockEntity.refill` (`waterCheckDue`, J48); value 0 = the refill bug J48 says was fixed, or the DOWN neighbour check
+@fails `SprinklerBlockEntity.refill` (`waterCheckDue`, J48); value 0 = the refill bug J48 says was fixed, or the DOWN neighbor check
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-16
 > setblock 112 -61 112 minecraft:water
@@ -5113,10 +5113,10 @@ sleep 7
 look `: minecraft:water (200|300|400) / 10000` (the `Direction.DOWN` source below the sprinkler counts; 100 mB every 2 s after the first passes) (HNH-75 endless refill)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-235 | first `empty 0 / 10000` (no water, no rain, no neighbour source); seco
+## SQ-HH-235 | first `empty 0 / 10000` (no water, no rain, no neighbor source); seco
 @group A
 @commands Plot 144 112. `/setblock 144 -60 112 hearthandharvest:sprinkler`; `sleep 5`; `/cdevtest tank 144 -60 112`; `weather rain 600`; `sleep 8`; `/cdevtest tank 144 -60 112`; `weather clear 600`
-@pass first `empty 0 / 10000` (no water, no rain, no neighbour source); second `: minecraft:water (140\|160\|180) / 10000` (20 mB per s, rounded to the 20-tick timer). If rain never arrives, compare `/cdevtest season minecraft:plains` before reading it as a sprinkler bug
+@pass first `empty 0 / 10000` (no water, no rain, no neighbor source); second `: minecraft:water (140\|160\|180) / 10000` (20 mB per s, rounded to the 20-tick timer). If rain never arrives, compare `/cdevtest season minecraft:plains` before reading it as a sprinkler bug
 @fails `refill` rain branch, `isRainingAt`, Creative Calendar weather
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-16
@@ -5205,7 +5205,7 @@ look first `Test passed` (moisture still 0 under a signal); second `Test passed`
 ## SQ-HH-240 | `insert minecraft:bone_meal x16: remainder empty`; wheat age above 0 (
 @group A
 @commands Plot 304 112. `/setblock 304 -60 112 hearthandharvest:sprinkler`; `/zhh2 fill 304 -60 112 minecraft:water 1000`; `/setblock 306 -61 112 minecraft:farmland[moisture=7]`; `/setblock 306 -60 112 minecraft:wheat[age=0]`; `/zhh2 insert 304 -60 112 minecraft:bone_meal 16`; `sleep 14`; `/cdevtest ages 300 -60 108 308 -60 116 minecraft:wheat`; `data get block 304 -60 112 Fertilizer.Items[0].Count`
-@pass `insert minecraft:bone_meal x16: remainder empty`; wheat age above 0 (`ages` mean > 0); fertiliser count below 16 (`Count: ?(1[0-5]\|[1-9])b` or lower) (J48: only real growth spends one; HNH-75)
+@pass `insert minecraft:bone_meal x16: remainder empty`; wheat age above 0 (`ages` mean > 0); fertilizer count below 16 (`Count: ?(1[0-5]\|[1-9])b` or lower) (J48: only real growth spends one; HNH-75)
 @fails `fertilize`, `isCrop`, `WateringCanItem.BONEMEAL_SUBSTITUTES`
 @from batches/r1111/hh_mach.qb
 @reviewed 2026-11-16
@@ -5288,7 +5288,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-245 | Count `: 3b`; hopper still holds the dirt (`minecraft:dirt`) and no bo
 @group A
 @commands Plot 144 144. `/setblock 144 -60 144 hearthandharvest:sprinkler`; `/setblock 144 -59 144 minecraft:hopper[facing=down]`; `data merge block 144 -59 144 {Items:[{Slot:0b,id:"minecraft:bone_meal",Count:3b},{Slot:1b,id:"minecraft:dirt",Count:2b}]}`; `sleep 4`; `data get block 144 -60 144 Fertilizer.Items[0].Count`; `data get block 144 -59 144 Items`
-@pass Count `: 3b`; hopper still holds the dirt (`minecraft:dirt`) and no bone meal (the sprinkler's ITEM_HANDLER takes fertiliser only) (B05 hopper bone meal)
+@pass Count `: 3b`; hopper still holds the dirt (`minecraft:dirt`) and no bone meal (the sprinkler's ITEM_HANDLER takes fertilizer only) (B05 hopper bone meal)
 @fails `SprinklerBlockEntity` item handler `isItemValid`, hopper capability hook
 @from batches/r1111/hh_mach.qb
 > setblock 144 -60 144 hearthandharvest:sprinkler
@@ -6044,7 +6044,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-306 | `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines ab
 @group A
 @commands Plot 4352 32. `/place feature creativeengineering:wild_flowers/mums/r5 4352 -60 32`; `/place feature creativeengineering:wild_flowers/mums/r5 4376 -60 32`; `/place feature creativeengineering:wild_flowers/mums/r5 4352 -60 56`; `/zhh2 countset 4340 -60 20 4388 -56 68 hearthandharvest:white_mum,hearthandharvest:yellow_mum,hearthandharvest:orange_mum,hearthandharvest:red_mum,hearthandharvest:pink_mum,hearthandharvest:purple_mum,hearthandharvest:blue_mum,hearthandharvest:light_blue_mum`
-@pass `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines above 0; `columns skipped: 0` (J26, one equal-weight patch of all 8; 3 patches keep the chance of a missed colour under 1 %)
+@pass `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines above 0; `columns skipped: 0` (J26, one equal-weight patch of all 8; 3 patches keep the chance of a missed color under 1 %)
 @fails `wild_flowers.json` mums blocks and weights; `kubejs/data/creativeworldgen/kubejs/worldgen/wild_flowers.js` generation
 @from batches/r1111/hh_wga.qb
 > place feature creativeworldgen:wild_flowers/mums/r5 4352 -60 32
@@ -6053,10 +6053,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > zhh2 countset 4340 -60 20 4388 -56 68 hearthandharvest:white_mum,hearthandharvest:yellow_mum,hearthandharvest:orange_mum,hearthandharvest:red_mum,hearthandharvest:pink_mum,hearthandharvest:purple_mum,hearthandharvest:blue_mum,hearthandharvest:light_blue_mum
 look `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines above 0; `columns skipped: 0` (J26, one equal-weight patch of all 8; 3 patches keep the chance of a missed colour under 1 %)
 
-## SQ-HH-307 | sum over the 8 colours at least 8 (rate 1/5 per chunk over 64 plains c
+## SQ-HH-307 | sum over the 8 colors at least 8 (rate 1/5 per chunk over 64 plains c
 @group B
 @commands Same world as SQ-HH-304. `/locate biome minecraft:plains` capture R; `forceload add {R1-64} {R3-64} {R1+63} {R3+63}` (64 chunks); `/zhh2 countset {R1-64} 50 {R3-64} {R1+63} 100 {R3+63} hearthandharvest:white_mum,hearthandharvest:yellow_mum,hearthandharvest:orange_mum,hearthandharvest:red_mum,hearthandharvest:pink_mum,hearthandharvest:purple_mum,hearthandharvest:blue_mum,hearthandharvest:light_blue_mum`
-@pass sum over the 8 colours at least 8 (rate 1/5 per chunk over 64 plains chunks, about 12 patches; HNH-06 first half)
+@pass sum over the 8 colors at least 8 (rate 1/5 per chunk over 64 plains chunks, about 12 patches; HNH-06 first half)
 @fails the biome modifier `creativeengineering:wild_flowers/mums/r5`, `heightmap` in `wild_flowers.json`
 @from batches/r1111/hh_wgb.qb
 > locate biome minecraft:plains
@@ -6067,10 +6067,10 @@ sleep 90
 > zhh2 countset {R1-64} 50 {R3-64} {R1+63} 100 {R3+63} hearthandharvest:white_mum,hearthandharvest:yellow_mum,hearthandharvest:orange_mum,hearthandharvest:red_mum,hearthandharvest:pink_mum,hearthandharvest:purple_mum,hearthandharvest:blue_mum,hearthandharvest:light_blue_mum
 look sum over the 8 colours at least 8 (rate 1/5 per chunk over 64 plains chunks, about 12 patches; HNH-06 first half)
 
-## SQ-HH-308 | 8 `Test passed` (HNH-06: every colour goes in a flower pot). `Stack` o
+## SQ-HH-308 | 8 `Test passed` (HNH-06: every color goes in a flower pot). `Stack` o
 @group A
 @commands Plot 4480 32. Eight `/setblock 4482n -60 32 minecraft:flower_pot` (n = 0..7); for each colour: `pbot hold hb1 hearthandharvest:<colour>_mum`, `pbot use hb1 4482n -60 32 up`, `execute if block 4482n -60 32 hearthandharvest:potted_<colour>_mum` with colours white, yellow, orange, red, pink, purple, blue, light_blue
-@pass 8 `Test passed` (HNH-06: every colour goes in a flower pot). `Stack` of the bot's mum consumed each time
+@pass 8 `Test passed` (HNH-06: every color goes in a flower pot). `Stack` of the bot's mum consumed each time
 @fails `HHBlocks.POTTED_MUMS`, the `addPlant` call in common setup, `#minecraft:flower_pot` not involved
 @from batches/r1111/hh_wga.qb
 > setblock 4482 -60 32 minecraft:flower_pot
@@ -6110,7 +6110,7 @@ look 8 `Test passed` (HNH-06: every colour goes in a flower pot). `Stack` of the
 ## SQ-HH-309 | rerun: all 8 mums in each listed tag and in minecraft:small_flowers (item and block)
 @group A
 @commands `/cdevtest tag block minecraft:small_flowers`; `/cdevtest tag item minecraft:small_flowers`; `/cdevtest rdetail red_dye_from_mum`
-@pass `blocktag minecraft:small_flowers` holds `hearthandharvest:red_mum` etc. (all 8 colours, regex each) and `hearthandharvest:four_leaf_clover`; `itemtag minecraft:small_flowers` holds the 8 mum items; `rdetail` has `red_dye_from_mum {minecraft:crafting_shapeless} -> .*dye`
+@pass `blocktag minecraft:small_flowers` holds `hearthandharvest:red_mum` etc. (all 8 colors, regex each) and `hearthandharvest:four_leaf_clover`; `itemtag minecraft:small_flowers` holds the 8 mum items; `rdetail` has `red_dye_from_mum {minecraft:crafting_shapeless} -> .*dye`
 @fails `kubejs/data/creativedelight/kubejs/hearthandharvest/tags.js`, `worldgen_tags.js` (clover block tag)
 @from batches/r1115/p4_a1.qb passed
 @reviewed 2026-11-16
@@ -6165,7 +6165,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > zhh2 countset 4088 -60 88 4112 -57 104 hearthandharvest:four_leaf_clover
 look `[Pp]laced feature` twice; `countset hearthandharvest:four_leaf_clover: [1-9]` (J28, tries 6, spread 3/2)
 
-## SQ-HH-313 | clover patches place both colours (rerun, 3 placements)
+## SQ-HH-313 | clover patches place both colors (rerun, 3 placements)
 @group A
 @commands Plot 4160 96. `/place feature creativeengineering:wild_flowers/clover_patches_rare/r48 4160 -60 96`; `/zhh2 countset 4152 -60 88 4168 -57 104 buzzier_bees:white_clover,buzzier_bees:pink_clover`
 @pass `[Pp]laced feature`; `countset buzzier_bees:white_clover: [1-9]` and `countset buzzier_bees:pink_clover: [1-9]` (J29, the rare clover patch is Buzzier Bees' flowers)
@@ -6417,7 +6417,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## CQ-HH-301
 @group client
 @commands Window client with the installed mods (`sp_world.py` world or `/place feature` near the player). Corn maze: `/place structure hearthandharvest:corn_maze` on flat ground, walk the corridors
-@pass LOOK: mature corn walls with a gate at each end, hay and pumpkin decor, chests in dead ends, centre chest; you can walk through the corn walls, J38 known limitation
+@pass LOOK: mature corn walls with a gate at each end, hay and pumpkin decor, chests in dead ends, center chest; you can walk through the corn walls, J38 known limitation
 @fails `CornMazePiece`; J38 solid walls are a separate decision
 @reviewed 2026-11-16
 # setup: client through run_captures.py serve (creative superflat); every position is relative to the player (~), so a row runs wherever the last one left the player
@@ -7212,7 +7212,7 @@ look UNPARSED CMD: crow.fleeing
 @group A
 @commands Boot D. HNH-63: alarm reaches wild crows in the 16-block box only; tame crow and the crow 20 out stay calm; NoAI crows, so positions are fixed. J65 "alarmed wild crow drops its target".; `forceload add 13295 -25 13345 25`; `sleep 3`; `fill 13295 -61 -25 13345 -50 25 minecraft:glass hollow`; `pbot spawn b423 13321 -60 3 minecraft:overworld survival`; `sleep 2`; `summon hearthandharvest:crow 13320 -60 0 {NoAI:1b,Tags:["c423hit"]}`; `summon hearthandharvest:crow 13328 -60 0 {NoAI:1b,Tags:["c423near"]}`; `summon hearthandharvest:crow 13335 -60 0 {NoAI:1b,Tags:["c423edge"]}`; `summon hearthandharvest:crow 13340 -60 0 {NoAI:1b,Tags:["c423far"]}`; `summon hearthandharvest:crow 13312 -60 0 {NoAI:1b,Tags:["c423tame"]}`; `sleep 1`; `zhh3 tame b423 13312 -60 0 1`; `/pbot attack b423 @e[type=hearthandharvest:crow,x=13320,y=-60,z=0,distance=..2,sort=nearest,limit=1]`; `sleep 1`; `zhh3 log crow 13320 -60 0 30`
 @pass `expect \[zhh3\] log hearthandharvest:crow pos=13320\.5,-60\.\d,0\.5 .*trust=0 alarm=([4-9]\d\|1[01]\d\|120)`; `expect \[zhh3\] log hearthandharvest:crow pos=13328\.5,-60\.\d,0\.5 .*alarm=([4-9]\d\|1[01]\d\|120)`; `expect \[zhh3\] log hearthandharvest:crow pos=13335\.5,-60\.\d,0\.5 .*alarm=([4-9]\d\|1[01]\d\|120)`; `expect \[zhh3\] log hearthandharvest:crow pos=13340\.5,-60\.\d,0\.5 .*alarm=0`; `expect \[zhh3\] log hearthandharvest:crow pos=13312\.5,-60\.\d,0\.5 .*tame=true .*alarm=0`
-@fails `CrowEvents.raiseAlarm` (box `ALARM_RANGE` 16, `entity != crow && !entity.isTame()`), `CrowWariness.alarm`; `/zhh3 hit` uses `DamageSource.playerAttack`. `summon` centres integer x and z on .5, hence `pos=...\.5`.
+@fails `CrowEvents.raiseAlarm` (box `ALARM_RANGE` 16, `entity != crow && !entity.isTame()`), `CrowWariness.alarm`; `/zhh3 hit` uses `DamageSource.playerAttack`. `summon` centers integer x and z on .5, hence `pos=...\.5`.
 @from batches/r1111/hh_crow_d.qb passed
 @reviewed 2026-11-16
 > forceload add 13295 -25 13345 25
@@ -9820,10 +9820,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 > execute if block 502 -60 500 minecraft:oak_log
 look "Test passed"
 
-## SQ-HH-1520 | pumpkin count 1 or more, or the stem at age 7 when no neighbour spot t
+## SQ-HH-1520 | pumpkin count 1 or more, or the stem at age 7 when no neighbor spot t
 @group A
 @commands `/setblock 504 -61 500 minecraft:farmland`; `/setblock 504 -60 500 minecraft:pumpkin_stem[age=0]`; bag; `/pbot use G 504 -60 500 up`; `/cdevtest count 501 -60 497 507 -60 503 minecraft:pumpkin`
-@pass pumpkin count 1 or more, or the stem at age 7 when no neighbour spot took it (16 forced ticks)
+@pass pumpkin count 1 or more, or the stem at age 7 when no neighbor spot took it (16 forced ticks)
 @fails stem branch
 @from batches/r1111/hh_gear_b.qb
 @reviewed 2026-11-16
@@ -10071,7 +10071,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-1533 | farmland count 16; `damage=16` (HNH-93); with yaw -45 the 4x4 reaches
 @group A
 @commands `/fill 548 -61 536 556 -61 544 minecraft:grass_block`; `/item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:2s}]}`; `/pbot sneak G on`; `/tp G 552 -60 532 -45 0`; `/pbot use G 552 -61 540 up`; `/pbot sneak G off`; `/cdevtest count 548 -61 536 556 -61 544 minecraft:farmland`; `/cdevtest player G`; `/execute if block 551 -61 539 minecraft:farmland`; `/execute unless block 550 -61 538 minecraft:farmland`
-@pass farmland count 16; `damage=16` (HNH-93); with yaw -45 the 4x4 reaches +x and +z from the centre, so both executes pass
+@pass farmland count 16; `damage=16` (HNH-93); with yaw -45 the 4x4 reaches +x and +z from the center, so both executes pass
 @fails `TillingEvents` span and `till`
 @from batches/r1111/hh_gear_b.qb
 @reviewed 2026-11-16
@@ -11063,7 +11063,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @group A
 @commands `/fill 500 -61 563 504 -61 567 minecraft:farmland[moisture=7]`; `/fill 500 -60 563 504 -60 567 minecraft:wheat[age=0]`; `/item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5,BonemealLevel:5,FertilizerItem:"minecraft:bone_meal"}`; `/pbot use G 502 -60 565 up`; `/cdevtest player G`; `/cdevtest ages 500 -60 563 504 -60 567 minecraft:wheat`
 @pass `WaterLevel:4`, `BonemealLevel:4`; mean age above 0 in a 3x3; the outer ring still age 0 (HNH-28)
-@fails `tier.area`, fertiliser spend
+@fails `tier.area`, fertilizer spend
 @from batches/r1111/hh_boot5.qb
 @reviewed 2026-11-16
 > fill 500 -61 563 504 -61 567 minecraft:farmland[moisture=7]
@@ -11110,10 +11110,10 @@ look no `FertilizerItem` key left; levels 0 (HNH-30)
 reject verb=player name=G .*main=\S*FertilizerItem
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-HH-1605 | "Test passed" at centre and corners of the 3x3; `WaterLevel:4` (HNH-32
+## SQ-HH-1605 | "Test passed" at center and corners of the 3x3; `WaterLevel:4` (HNH-32
 @group A
 @commands `/fill 530 -61 563 534 -61 567 immersive_weathering:mulch_block[moisture=0]`; `/item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5}`; `/pbot use G 532 -61 565 up`; `/cdevtest count 531 -61 564 533 -61 566 immersive_weathering:mulch_block`; `/execute if block 532 -61 565 immersive_weathering:mulch_block[moisture=7]`; `/cdevtest player G`
-@pass "Test passed" at centre and corners of the 3x3; `WaterLevel:4` (HNH-32; a "soaked" look is the client half). `/data get block` the moisture property name if `moisture` is absent on this block
+@pass "Test passed" at center and corners of the 3x3; `WaterLevel:4` (HNH-32; a "soaked" look is the client half). `/data get block` the moisture property name if `moisture` is absent on this block
 @fails `isSoil` property test
 @from batches/r1111/hh_boot5.qb
 @reviewed 2026-11-16
@@ -11289,7 +11289,7 @@ look FD tab holds the pips and the cans (HNH-34); can tier names, "Area: NxN" an
 ## SQ-SPD-01 | pouch x30 wheat facing air (east) over a 5x5 farmland layer: 24 or 25 wheat, itemCount 5 or 6
 @group A
 @commands `/fill X-2 -61 Z-2 X+2 -61 Z+2 minecraft:farmland` (Z centre 2 blocks in front of a dispenser at -60 facing it horizontally, front block air); dispenser holds `quark:seed_pouch` `{storedItem:{id:"minecraft:wheat_seeds",Count:1b},itemCount:30}`; redstone pulse
-@pass 24 `minecraft:wheat` at -60 over the 5x5 centred on the front block (the sideways dispenser stands in its own 5x5, so one cell is the dispenser); `itemCount` 6; pouch still in slot 0; no `Exception` in the log
+@pass 24 `minecraft:wheat` at -60 over the 5x5 centered on the front block (the sideways dispenser stands in its own 5x5, so one cell is the dispenser); `itemCount` 6; pouch still in slot 0; no `Exception` in the log
 @fails `SeedContainerDispense.soilCentre` / `plantPattern`; `QuarkCompat.plantFromPouch`
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
@@ -11386,10 +11386,10 @@ expect has the following block data: \[\{Slot: 0b, id: "quark:seed_pouch"
 reject Exception
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-SPD-06 | bundle seeds x3 then dirt: 1 wheat on the centre, Items[0].Count 2, dirt kept, bundle in slot 0
+## SQ-SPD-06 | bundle seeds x3 then dirt: 1 wheat on the center, Items[0].Count 2, dirt kept, bundle in slot 0
 @group A
 @commands Dispenser facing air over farmland, holding `minecraft:bundle{Items:[{id:"minecraft:wheat_seeds",Count:3b},{id:"minecraft:dirt",Count:1b}]}`; pulse
-@pass 1 wheat on the centre; bundle `Items[0].Count` 2, entry 1 still dirt; bundle in slot 0
+@pass 1 wheat on the center; bundle `Items[0].Count` 2, entry 1 still dirt; bundle in slot 0
 @fails `SeedContainerDispense.plantFromBundle`
 @from batches/r1115/p4_a1.qb passed
 @reviewed 2026-11-16
@@ -11828,10 +11828,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass rubber logs (`myrtrees:rubberwood_log`) in a located jungle box
 @fails `kubejs/data/creativedelight/worldgen/placed_feature/wild/rubber_tree.json` (now `MOTION_BLOCKING_NO_LEAVES`, no `would_survive`); cause was a suspicion (plan 10.2), a second pass may be needed
 @superseded SQ-CDW-02 in rows/MIN.qb (rubber logs counted near a located jungle)
-## SQ-SPD-08b | Nether pouch of wart x10 at roof y 129 and at y 61: 10 wart each, pouch emptied and kept; Nether bundle plants 1 on the centre; overworld control 10
+## SQ-SPD-08b | Nether pouch of wart x10 at roof y 129 and at y 61: 10 wart each, pouch emptied and kept; Nether bundle plants 1 on the center; overworld control 10
 @group B-nether
 @commands Needs the CD jar built 2026-11-15 03:19 (fix-2, r1115) installed. As SQ-SPD-08 (Nether roof y 129 and Nether y 61, 5x5 soul sand, dispenser facing air, pouch of `minecraft:nether_wart` x10), plus a bundle holding nether wart facing soul sand in the Nether
-@pass 10 `minecraft:nether_wart` on the soul sand, pouch empty and kept; the bundle plants 1 wart on the centre; overworld soul sand control (SQ-SPD-08x) still 10
+@pass 10 `minecraft:nether_wart` on the soul sand, pouch empty and kept; the bundle plants 1 wart on the center; overworld soul sand control (SQ-SPD-08x) still 10
 @fails `SeedContainerDispense.plantOne`: the `UseOnContext` must carry the dispenser's level (fake player is cached per profile, overworld)
 @from batches/r1115/p6_a1.qb
 @reviewed 2026-11-16

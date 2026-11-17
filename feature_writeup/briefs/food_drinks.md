@@ -26,7 +26,7 @@ bunch; #11 and #12 are new sections. Status per TODO.
 | `food/drinks #7` Kettle drinks: the rest of the move | In Progress | medium | after #12; with #8 |
 | `food/drinks #8` Juice and tea rule | In Progress | medium | with #7 (one table) |
 | `food/drinks #10` Azalea tea and tea audit | Planned | small | with #7 / #8 (the audit table) |
-| `food/drinks #2` Tea cleanup | In Progress | medium | names and colours any time; mixing with #8 |
+| `food/drinks #2` Tea cleanup | In Progress | medium | names and colors any time; mixing with #8 |
 | `food/drinks #1` Lemonade | Planned | medium (3 fluids, 3 items) | after #12 (it needs bottle pairs) |
 | `food/drinks #11` Cherry Cream Soda and fruit sodas | Planned | small to medium | after the decisions |
 
@@ -69,7 +69,7 @@ A lemonade fluid with pink and blue variants; their effects come from what goes 
 - No lemonade. Fruits Delight has Lemon Juice: item `fruitsdelight:lemon_juice` (`i.lemon_juice`, item_dict.js:12449;
   1 / 0.2, Haste 10 s + Refreshing 10 s, bottle) and fluid `fruitsdelight:lemon_juice` (250 mB per bottle). Recipes
   (verified): shapeless `[water bottle (l2library:potion water), sugar, #forge:fruits/lemon x2]`; Create mixing
-  `fruitsdelight:mixing/flowing_lemon_juice` `[sugar, 2 lemons, 250 mB water]` → 250 mB; emptying / filling.
+  `fruitsdelight:mixing/flowing_lemon_juice` `[sugar, 2 lemons, 250 mB water]` -> 250 mB; emptying / filling.
 - Canned Goods' "Oculemonade" (`canned_goods:oculemonade`, `i.oculemonade`) is an unrelated can drink (name only).
   Fruits Delight's `fruitsdelight:lemonade_cauldron` (`i.lemonade_cauldron`, lang "Lemonade Cauldron") is its cauldron
   of lemon juice; the name overlaps a pack lemonade.
@@ -85,7 +85,7 @@ A lemonade fluid with pink and blue variants; their effects come from what goes 
 3. Recipes in a Creative Delight tree (food code routes there, memory `creative-delight-routing`; e.g.
    `kubejs/data/creativedelight/kubejs/fruitsdelight/` for the lemon routes, Kettle ones in `farmersrespite/kettle.js`):
    - Create: `R.createMixing(Fluid.of(f.lemonade, 500), [Fluid.of(f.lemon_juice, 250), Fluid.of(f.water, 250), i.any_sugar], e, 'lemonade')`;
-     pink: `[Fluid.of(f.lemonade, 500), i.t_fruits_strawberry]` → 500 pink; blue: `[Fluid.of(f.lemonade, 500), i.t_fruits_blueberry]` → 500 blue.
+     pink: `[Fluid.of(f.lemonade, 500), i.t_fruits_strawberry]` -> 500 pink; blue: `[Fluid.of(f.lemonade, 500), i.t_fruits_blueberry]` -> 500 blue.
    - Spout / drain per variant: `R.createBottle(i.lemonade, f.lemonade, e, 'lemonade')` (after #12 is fixed).
    - Kettle (water base): `R.frBrewing([i.t_fruits_lemon, i.t_fruits_lemon], i.lemonade, e, 'lemonade')`; pink / blue as
      tiers on the lemonade in the tank: `R.frBrewing([i.t_fruits_strawberry], i.pink_lemonade, e, 'pink_lemonade',
@@ -112,8 +112,8 @@ Verified: lemon juice item / fluid / recipes above. New: 3 fluids, 3 items under
   `i.water_bottle`; leave that recipe alone.
 
 ### Tests
-- RC-33 kettle: 2 lemon + sugar → lemonade; lemonade + strawberry / blueberry → pink / blue.
-- RC-34 mixer → lemonade fluid; spout fills a bottle, drain empties it, for all three.
+- RC-33 kettle: 2 lemon + sugar -> lemonade; lemonade + strawberry / blueberry -> pink / blue.
+- RC-34 mixer -> lemonade fluid; spout fills a bottle, drain empties it, for all three.
 - RC-35 drinking: drink animation, effects, bottle back.
 
 ---
@@ -130,14 +130,14 @@ bottle or need plating by hand.
 - **"Duplicates" are FR's own tiers.** Each FR drink has base, `long_` (+ `#forge:milk`) and `strong_` (+ honey bottle)
   versions (verified recipes `farmersrespite:brewing/<x>`, 2400 ticks). The long and strong items use the **same name**
   (FR lang: `item.farmersrespite.long_green_tea = Green Tea`) and the **same model and texture** as the base
-  (`models/item/long_green_tea.json` → `farmersrespite:item/green_tea`, mug parent). Nothing tells them apart but the
+  (`models/item/long_green_tea.json` -> `farmersrespite:item/green_tea`, mug parent). Nothing tells them apart but the
   tooltip effect. That is the "duplicate" and "recolour" problem.
 - Other teas: Delightful lavender and azalea tea (kettle), Fruits Delight hawberry / lychee cherry / mango / mangosteen /
   peach tea (shapeless and Fruits Delight fluids), Create builder's tea. Delightful's own green tea leaf is switched off
   (`green_tea_leaf = false`, delightful-common.toml:104), so FR's leaves are the only ones.
 - **Create mixing already exists** for the base FR teas via CCK's built-in `datapacks/farmersrespite`:
   `create_central_kitchen:mixing/{green,yellow,black,dandelion,rose_hip,purulent}_tea`, `coffee`,
-  `builders_tea_from_tea_leaves` (green tea checked: heated, 2 leaves + 250 mB water → 250 mB = one bottle, **the same
+  `builders_tea_from_tea_leaves` (green tea checked: heated, 2 leaves + 250 mB water -> 250 mB = one bottle, **the same
   cost as the kettle**; read the others before rewriting them),
   plus filling / emptying for every FR drink and fluids `create_central_kitchen:<drink>` (all registered: FR is loaded).
   No mixing for long / strong tiers. CCK also has `mixing/apple_cider`, `melon_juice`, `hot_cocoa` (FD datapack).
@@ -163,19 +163,19 @@ bottle or need plating by hand.
    `'Strong Green Tea'`, likewise for yellow, black, rose hip, dandelion, purulent, gambler's tea, coffee, apple cider,
    strong hot cocoa, strong melon juice (19 keys, listed in the FR lang file). Keep the item ids.
 2. **Recolour.** Give long and strong their own sprites and models: `kubejs/assets/farmersrespite/models/item/long_<x>.json`
-   → `farmersrespite:item/long_<x>` with a lighter (milk) / darker (honey) liquid, sprites in
+   -> `farmersrespite:item/long_<x>` with a lighter (milk) / darker (honey) liquid, sprites in
    `kubejs/assets/farmersrespite/textures/item/`. Display Delight models from `placeable #3` then pick up the colour.
 3. **Dearer mixing.** Remove CCK's 7 tea mixing recipes (`R.remove({ id: 'create_central_kitchen:mixing/green_tea' })` ...)
    and re-add through NCH at 3 leaves per 250 mB:
    `R.createMixing(Fluid.of('create_central_kitchen:green_tea', 250), [Item.of(i.green_tea_leaves, 3), Fluid.of(f.water, 250)], e, 'green_tea', 'heated')`
    (keys exist: `f.green_tea`, `f.black_tea` ... fluid_dict.js lines 71-72). Upgrades by fluid: `[Fluid.of(green_tea, 250), Fluid.of(f.milk, 250)]`
-   → 250 long green tea (half the milk is lost, so it stays dearer than the kettle's 1 tea + 1 milk bottle); honey
+   -> 250 long green tea (half the milk is lost, so it stays dearer than the kettle's 1 tea + 1 milk bottle); honey
    `Fluid.of(f.honey, 250)` for strong. CCK's filling recipes then bottle them.
 4. **Upgrade plating.** No code. Run RB-03; if it passes, the remainder half of this row is done.
 5. **Placeable:** build in `food/placeable #3`.
 6. ~~**Fluid effect tooltip**~~ (done 2026-10-22, `DrinkFluidEffects`; text kept for reference): a patcherMod client hook. JEI draws fluid tooltips through its Forge fluid helper
    (`mezz.jei.forge.platform.FluidHelper#getTooltip`, unverified, decompile the JEI jar first). Append the effect lines
-   of the item the fluid fills: build a fluid → item map from `create:filling` recipes whose input is a glass bottle (or
+   of the item the fluid fills: build a fluid -> item map from `create:filling` recipes whose input is a glass bottle (or
    bowl), then reuse vanilla `PotionUtils.addPotionTooltip` style lines from the item's `FoodProperties` effects.
 
 ### Ids and data
@@ -200,7 +200,7 @@ bottle or need plating by hand.
 
 ### Tests
 - RC-36 JEI: long and strong teas show their own names and colours.
-- RC-37 mixer: 3 leaves + 250 mB water heated → 250 mB tea; tea + milk → long tea fluid; spout bottles both.
+- RC-37 mixer: 3 leaves + 250 mB water heated -> 250 mB tea; tea + milk -> long tea fluid; spout bottles both.
 - RC-38 (= RB-03) kettle strong green tea: no item thrown, the drink plates itself, one bottle in the buffer.
 
 ---
@@ -446,7 +446,7 @@ Verified: item id, removed recipe JSON, empty cherry tag, `i.dried_vanilla_pods`
 - Pot (the original) or Kettle: recommendation pot, as upstream, so the soda stays a cheap side drink.
 - Fruit sodas: recommendation 3 to 4 bottled sodas (cherry, orange, lemon-lime, grape) and no new cans (the can family
   already has Soda and Reef-Cola); effects none or a 5 s Speed, saturation below the juices.
-- Dyes: recommendation only as colour hints in the recipe (one dye each), not a dye-to-variant system.
+- Dyes: recommendation only as color hints in the recipe (one dye each), not a dye-to-variant system.
 
 ### Gotchas
 - `removedItems` strips tags and hides JEI entries; after un-removing, `/reload` is not enough (startup list): restart.

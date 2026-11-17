@@ -83,7 +83,7 @@ Run log entry in the queue, results into the feature writeups' test lists, READM
   (15:01). Cause: Creative Calendar 14:08 `ModdedGrassSpreadSeasonMixin` (and `IWGrowthSeasonMixin`) hold
   `@Unique static final boolean = ModList.get().isLoaded("sereneseasons")`; Mixin merges it into Immersive Weathering's
   `ModGrassBlock.<clinit>`, which IW runs from `Blocks.<clinit>` before ModList exists: NPE, no boot. The `mods/` jar
-  (14:08) cannot boot a dedicated server (the client most likely crashes the same way). FIX (no behaviour change, run
+  (14:08) cannot boot a dedicated server (the client most likely crashes the same way). FIX (no behavior change, run
   default 1: boot blocker): both fields read `LoadingModList.get().getModFileById(...) != null`; creativeCalendar built
   15:04 into build/libs, copied into the scratch srv only. `mods/` still holds the 14:08 jar: owner installs.
 - 15:05 Boot O with the fix: Done. First tick crashed: the old `backportedVinery-...-06` calls

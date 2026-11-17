@@ -25,7 +25,7 @@ correctness part was run.
     (92% land, 35 biomes).
 - Offline analysis (scratchpad scripts, not in the repo):
   - The structure starts, entities and biomes were read straight from the region files.
-  - Biome checks use the point vanilla checks: the centre of the jigsaw start piece, at its floor.
+  - Biome checks use the point vanilla checks: the center of the jigsaw start piece, at its floor.
   - The peaceful-radius check reimplements `PlacementPriority.withinRadius`: piece boxes, radius x 16 blocks, XZ
     only, touching counts.
 
@@ -38,8 +38,8 @@ correctness part was run.
 | ST-172 | PASSED | Each camp kind only ever uses its own templates; mobs present |
 | ST-173 | PASSED | Passive camps keep a witch hut, dungeons, a vehicle, outposts and hostile camps out at 3 chunks; 0 violations over 78 peaceful / 26 hostile starts |
 | ST-174 | PASSED | Hostile camps dropped at 3 (houses/camps), 5 (villages) and 8 chunks (town metas); 0 violations |
-| ST-175 | PASSED | 0 out-of-fit starts of 5,530; every kept camp 0 over water, 0 over air; fisher on a beach, one shore fisher cancelled |
-| ST-176 | PARTLY | Sizes sensible; undead castle cancelled 4 of 5 over slopes; drum tower "small" (stone base, see 4) |
+| ST-175 | PASSED | 0 out-of-fit starts of 5,530; every kept camp 0 over water, 0 over air; fisher on a beach, one shore fisher canceled |
+| ST-176 | PARTLY | Sizes sensible; undead castle canceled 4 of 5 over slopes; drum tower "small" (stone base, see 4) |
 | ST-177 | PASSED, [game] part left | No `eugene:castle` start; all three castles generate correctly (boss bar needs a client) |
 | ST-178 | PASSED | Undead castle in `surface_dungeons`, kept away by the peaceful radius |
 | ST-179 | PASSED | Red roof castle: no hostile within 8 chunks, no overlap, not pruned, way-sign destination |
@@ -67,7 +67,7 @@ correctness part was run.
 
 ## 4. Open issues (for you)
 
-1. **The undead castle rarely survives:** in area 2, 4 of 5 rolled castles were cancelled by earth fill (huge,
+1. **The undead castle rarely survives:** in area 2, 4 of 5 rolled castles were canceled by earth fill (huge,
    bearded, on slopes in its plains/highlands/taiga fits). The terrain under two of them varies by 30 and 12-15
    blocks. The fifth was dropped by the peaceful radius. Earth fill is doing its job; the options are to narrow
    the fits (for example drop `land/highlands`) or relax its mound limit. Your call.
@@ -95,6 +95,6 @@ correctness part was run.
 - `/reload` removes Chunky's commands; restart the server instead.
 - In chunks that stopped at `structure_starts` (/locate answers), the region biomes are placeholders. Read the
   biome source instead (a scratch probe calling `getNoiseBiome`, no chunk load).
-- Jigsaw starts are biome-checked at the centre of the start piece, not the chunk corner.
+- Jigsaw starts are biome-checked at the center of the start piece, not the chunk corner.
 - A Chunky square of radius 800 takes 25-34 min in this pack (5-12 chunks/s).
 - Send console commands one at a time to a busy server. 15 commands sent 1 s apart lost the last 6.

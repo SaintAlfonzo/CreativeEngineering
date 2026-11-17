@@ -283,7 +283,7 @@ reject verb=\S+ .*done=0
 expect verb=makes item=neapolitan:strawberry_banana_smoothie n=0
 reject verb=\S+ .*done=0
 
-## SQ-KT-21 | coaster accepts modelled drinks and food, refuses others (fake player)
+## SQ-KT-21 | coaster accepts modeled drinks and food, refuses others (fake player)
 @group A
 @commands boot with current kubejs
 @pass latest.log has `[placeable] ... placeable_on_coaster=` with the new count and no `not item ids` warning; a Coaster accepts `vinery:red_wine`, `farmersdelight:hamburger`, `farmersrespite:long_black_tea`, refuses `fruitsdelight:apple_jelly`, `goldenfood:golden_cookie`

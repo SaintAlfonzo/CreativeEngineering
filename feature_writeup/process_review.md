@@ -44,7 +44,7 @@ files. Run results are pasted as prose into README status cells, the queue's Run
 Drift found on 2026-11-16:
 - TODO.md "Status snapshot (2026-11-03, counts 2026-11-04)" says 1,220 open rows. A recount of the tables gives
   ~1,357: 705 Testing, 469 Planned, 142 In Progress, 26 Bug, 15 Pinned.
-- Statuses that are not in the legend are back after the 2026-11-03 sweep normalised them: 24 "Built", 8 "Built <date>",
+- Statuses that are not in the legend are back after the 2026-11-03 sweep normalized them: 24 "Built", 8 "Built <date>",
   3 "Open", 9 "Done", 17 "Complete" in open tables.
 - [deploy.md](deploy.md) history stops at 2026-11-03 ("server still 1.1.05"). DEPLOYED.json has 1.2.00, 1.2.01 and
   1.2.02 after that.
@@ -70,7 +70,7 @@ copy is a place to drift, and agents spend a large share of each session on it.
 - **Verdict quality:**
   - Of ~95 final FAIL / INCONCLUSIVE rows, ~68% are real product bugs.
   - About 10 were wrong or stale rows, ~9 harness faults (mostly INCONCLUSIVE), ~3 environment drift, ~8 other
-    (not reproduced, upstream behaviour, owner spec).
+    (not reproduced, upstream behavior, owner spec).
   - Before judging, the raw picture is much noisier: 2 to 8 BATCH-FAULTs per real FAIL (162 mentions). In one
     batch, 12 qrun FAILs became 2 real ones (scratch_run_2026-11-14.md:392,399).
 - **Stale rows:**

@@ -34,7 +34,7 @@ Test prefix `CM-` (the backlog proposed `CP-`, which [can_parity.md](can_parity.
 
 ## 1. Overview
 
-Vanilla's composter reads one map, item → chance of adding a layer (7 layers fill it, then bone meal comes out). Vanilla
+Vanilla's composter reads one map, item -> chance of adding a layer (7 layers fill it, then bone meal comes out). Vanilla
 registers its items in five levels (0.3, 0.5, 0.65, 0.85, 1.0); every mod registers its own items however it likes, or
 not at all. In a pack with hundreds of food and plant mods the table was patchy: many plants missing, some odd items
 compostable. Hoppers and every modded composter read the same map.
@@ -95,7 +95,7 @@ the first rebuild), `now` (each item's chance, whether a value or a rule put it 
 - **When it runs:** a Forge `TagsUpdatedEvent` listener (registered from the startup script) rebuilds the table: at server
   start, on `/reload`, and on each client when it receives the server's tags. So a dedicated server and its clients
   build the same table from the same scripts, and categories that read tags see the live tags.
-- **Rebuild order:** clear → rules → values (beat rules) → exclusions (beat both). The log has `[compost] <cause>: N
+- **Rebuild order:** clear -> rules -> values (beat rules) -> exclusions (beat both). The log has `[compost] <cause>: N
   compostable (...)` and warnings for values naming items that don't exist or an unknown tier.
 - **Seed milling (2026-10-30, TODO `farming/composting #4`):** `server_scripts/wood/compost.js` mills any seed in
   `#creativedelight:millable_seeds` into bone meal at 15 % (Create millstone and crushing wheels; the tag is built in
@@ -151,16 +151,16 @@ have no row yet.
 
 Use a composter and watch its level; or read `/dumpcompost`.
 
-- [ ] **CM-01 Rebuild log:** `/reload` → `[compost] ...: N compostable` in the log; no "do not exist" warnings.
+- [ ] **CM-01 Rebuild log:** `/reload` -> `[compost] ...: N compostable` in the log; no "do not exist" warnings.
 - [ ] **CM-02 Seeds and flowers:** wheat seeds raise the level about 3 times in 10; any flower (vanilla or Botania) every
   time.
-- [ ] **CM-03 Modded crop:** a Farmer's Delight tomato → about 65 %.
-- [ ] **CM-04 Baked:** bread → about 85 %; a pie → always.
-- [ ] **CM-05 Excluded:** a Canned Goods can, a golden carrot and a Botania world seed → refused.
-- [ ] **CM-06 Dump:** `/dumpcompost` → `kubejs/exported/compost/compost.json` with `original`, `now`, `excluded`; skim
+- [ ] **CM-03 Modded crop:** a Farmer's Delight tomato -> about 65 %.
+- [ ] **CM-04 Baked:** bread -> about 85 %; a pie -> always.
+- [ ] **CM-05 Excluded:** a Canned Goods can, a golden carrot and a Botania world seed -> refused.
+- [ ] **CM-06 Dump:** `/dumpcompost` -> `kubejs/exported/compost/compost.json` with `original`, `now`, `excluded`; skim
   `now` for odd items (F1).
-- [ ] **CM-07 Hopper:** a hopper feeding seeds into a composter → accepted at the same chance.
-- [ ] **CM-08 Client agrees:** on the dedicated server, right-click a composter with a modded crop → the client shows
+- [ ] **CM-07 Hopper:** a hopper feeding seeds into a composter -> accepted at the same chance.
+- [ ] **CM-08 Client agrees:** on the dedicated server, right-click a composter with a modded crop -> the client shows
   the fill (no desync), same as the server.
 
 ## 8. History

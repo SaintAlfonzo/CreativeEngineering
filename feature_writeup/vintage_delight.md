@@ -192,7 +192,7 @@ This file has three parts:
   conversion.
 - **Vine Net** (top, middle or bottom slab-like net; 4 vanilla vines) and **Vine Tile / Slab / Stairs** (tile from the
   Create or cutting-board cut of a stripped magic vine; slab and stairs from tiles). Kept; the tiles come from the magic vine logs of the tree.
-- **Chef hats** (16 colours, head slot, swap on use), **Ghost Charcoal** (fuel, smelted from ghost peppers).
+- **Chef hats** (16 colors, head slot, swap on use), **Ghost Charcoal** (fuel, smelted from ghost peppers).
 - **Mob food** (static edits, access transformer): chickens eat the 3 seeds, parrots tame with them, pigs eat cucumber,
   ghost pepper, raw oats, peanut; villagers pick up ghost pepper, cucumber, peanut, oat. Accepted; audit due (S12).
 - **Purged mechanics, for the record:** the gearo bush pick and the Dehydrated
@@ -281,7 +281,7 @@ when it is about to lay.
 - Lives in `development/incubationAdditions` beside the goose mixin; active only when both Untitled Duck Mod and Vintage
   are loaded. Where exactly the egg timer ends and the nest goal starts is read from Incubation's code at build time.
 - **Away from walls.** On a winning roll the goose looks for a drop spot before laying: candidate ground spots within
-  3 blocks of it, scored by solid blocks around the spot at foot and head height (the 8 neighbours). It lays at the first
+  3 blocks of it, scored by solid blocks around the spot at foot and head height (the 8 neighbors). It lays at the first
   spot with none, else the spot with the fewest; if no candidate is better than where it stands, it lays where it stands
   (so "avoid walls when possible"). Since 2026-10-25 the egg is placed as a block at the best spot other than the
   goose's own (never on the goose, never over a torch, flower or rail); only with no such spot (a closed 1x1 pen) is it
@@ -428,7 +428,7 @@ No overlap for oats, peanuts, cucumbers, ghost peppers, the pickling jar, pickle
 | Cheese (`dishes/ingredients #9`) | Second cheese line | Ships; marked (§3.1) |
 | Salt (`food/seasoning #1`) | Second salt line | Ships; marked. Step 6 of that row (merge) waits on the review |
 | Vinegar (`dishes/ingredients #6`) | The vinegar that row planned | Source = Vintage's (S9) |
-| Jar fluids ([mixed_jars.md](mixed_jars.md)) | Soft fluids with their own colours | All jarable (S10) |
+| Jar fluids ([mixed_jars.md](mixed_jars.md)) | Soft fluids with their own colors | All jarable (S10) |
 | Chest loot ([loot.md](loot.md)) | 7 GLM injections | Not shipped; tables unwired (§2.7) |
 | Mob food | Static edits to chicken, pig, parrot, villager | Accepted; audit due |
 | Advancements | A set | Dropped at load |
@@ -451,7 +451,7 @@ back to this table; removal of a side is a separate change at that point.
   - 6 Vintage dishes given Veggies ingredients (pad thai and ghostly chili with garlic, pickle soup with turnip, cheese
     burger, deluxe burger and stuffed burrito with the vegetarian patty or smoked bell pepper). All six Vintage dishes
      exist now (S2). Smoked bell pepper is dropped by Veggies D2; every recipe that took it takes **any Rustic roasted
-     bell pepper** (any colour, as the Veggies plan decided), through a tag, not a Vintage item;
+     bell pepper** (any color, as the Veggies plan decided), through a tag, not a Vintage item;
   - fermented garlic honey (`vintagedelight:fermenting`: garlic cloves + honey bottle). **It is made in the pickling
     jar**, which replaces Veggies D6.
 - The Veggies crops (bell pepper, broccoli, cauliflower, garlic, sweet potato, turnip, zucchini) are marked for the
@@ -616,7 +616,7 @@ detail.
 14. **Placeables and stack sizes.** `/dumpplaceable` + `placeable_catalog.py` for mason jars (1 to 4 per block),
     pizzas, cheese mold, golden egg; `gen_stack_sizes.py` rules for bottles, jars and pizzas per the stack size policy.
 15. **Jar fluids.** Every liquid the port adds (the 8 jar contents and the nut milk bottle) gets a file under
-    `kubejs/data/creativeengineering/moonlight/soft_fluids/`, colours by the pack's jar rules ([mixed_jars.md](mixed_jars.md)),
+    `kubejs/data/creativeengineering/moonlight/soft_fluids/`, colors by the pack's jar rules ([mixed_jars.md](mixed_jars.md)),
     WTHIT contents line. `VTD-26` checks each one in a Supplementaries jar.
 16. **Loot.** The 8 loot tables ship unwired. **Crops loot tables TODO:** add, as a single item and as a crate drop,
     the new crops: oats (oat bag / bale), peanuts, cucumbers, ghost peppers (Vintage) and bell pepper, broccoli,
@@ -643,13 +643,13 @@ vanilla crop model with bushier textures, stage 7 is a two-block-tall six-plane 
 random per position from three textures (7, 7a, 7b), so a ripe field has three heights and shapes.
 
 - Overrides in `kubejs/assets/vintagedelight/` (pack level, not the port jar: the shapes are Fancy Crops' work, whose
-  licence is not stated, so the derived files stay beside the pack that uses the resource pack):
+  license is not stated, so the derived files stay beside the pack that uses the resource pack):
   `blockstates/oat_crop.json` (age 7 = a weighted-equal list of `oat_stage7`, `oat_stage7a`, `oat_stage7b`),
   `models/block/tall_oat_crop.json` (Fancy Crops' tall model, unchanged), `models/block/oat_stage7{,a,b}.json`,
   `textures/block/oat_stage0..6, 7, 7a, 7b.png`. Stages 0 to 6 keep the port's own models (vanilla `block/crop`).
-- Textures: Fancy Crops' `wheat_stageN` shapes recoloured with the port's `oat_stageN` colours, stage by stage (both
-  have ages 0 to 7). Mapping by luminance rank, pixel-weighted: the wheat texture's colours sorted by brightness take
-  the oat colour at the same brightness quantile, alpha kept. The three ripe variants all take `oat_stage7`'s colours.
+- Textures: Fancy Crops' `wheat_stageN` shapes recoloured with the port's `oat_stageN` colors, stage by stage (both
+  have ages 0 to 7). Mapping by luminance rank, pixel-weighted: the wheat texture's colors sorted by brightness take
+  the oat color at the same brightness quantile, alpha kept. The three ripe variants all take `oat_stage7`'s colours.
   Redo with a short PIL script by this rule if either texture set changes (none is kept in tools/).
 - Unused now: the port's own `oat_stage7.png` (16x20) and `tall_crop` model stay in the jar, shadowed.
 - Test VTD-78.
@@ -810,7 +810,7 @@ Loot, mobs, geese, hats
   the golden egg on the open ground, not against the wall; in a closed 1x1 pen it drops where it stands.
 - [ ] VTD-35 Century egg: the jar takes any egg (hen, duck, goose, emu) + coal + salt and gives a century egg after 3
   hours.
-- [ ] VTD-33 Vintage chef hats exist in 16 colours; Simple Hats' chef's hat is gone from hat bags and recipes.
+- [ ] VTD-33 Vintage chef hats exist in 16 colors; Simple Hats' chef's hat is gone from hat bags and recipes.
 - [ ] VTD-34 Advancement files are present in the jar and the pack still drops all advancements at load.
 
 Overlap review and UI
@@ -838,7 +838,7 @@ Overlap review and UI
 - [ ] VTD-52 **Veggies compat folded:** Cesar Salad takes garlic or cheese, the Stuffed Zucchini Boat milk or cheese,
   both by hand only; the Chicken Fajitas Wrap has no dough recipe.
 - [ ] VTD-53 **Types, fluids, compost:** `/dumpfood` then `python3 tools/food_catalog.py --check` lists no new
-  Vintage food; Pickle Soup, Ghostly Chili and Oatmeal go in a Supplementaries jar in their own colour (VD: Carrot
+  Vintage food; Pickle Soup, Ghostly Chili and Oatmeal go in a Supplementaries jar in their own color (VD: Carrot
   Juice, Dandelion Juice, Turnip Water, Fermented Garlic Honey too, and a jar of carrot juice fills from a tank);
   Pickled Egg and Century Egg compost (0.6, 0.9), a Cucumber Crate composts at 1.0.
 - [ ] VTD-54 **Block drops (after `vintageport #18`):** in survival, break a placed Magic Peanut, Smooth Salt Block and
@@ -860,11 +860,11 @@ Overlap review and UI
 - [ ] VTD-71 **No slime from the jar:** Slime Block has no Pickling Jar recipe in JEI.
 - [ ] VTD-72 **Any salt:** Berserker's Brew and leather (rotten flesh, tree bark, vinegar) pickle with Create: The Salt's
   salt as well as Vintage's salt dust.
-- [ ] VTD-73 **Honey jar fluid:** a Honey Jar empties into a Supplementaries jar as honey (honey colour, "Honey"), and
+- [ ] VTD-73 **Honey jar fluid:** a Honey Jar empties into a Supplementaries jar as honey (honey color, "Honey"), and
   fills back into an empty mason jar; it no longer counts as apple sauce.
 - [ ] VTD-75 **Ghost pepper soil:** ghost pepper seeds plant on Soul Soil, Rich Soul Soil and Nulch only; farmland, Rich
   Farmland, Fertile Soil, dirt, grass and nylium refuse them. A wild ghost pepper places on nylium and those three, not on
-  grass or dirt. A ghost pepper already on farmland (old save) breaks when a neighbour updates.
+  grass or dirt. A ghost pepper already on farmland (old save) breaks when a neighbor updates.
 - [ ] VTD-77 **Salt layer icon** (port `-07`): the Salt layer item in JEI, the inventory and the hand is a thin pink-white
   slab like the snow layer's item, not the salt dust pile. Placing it still places one layer.
 - [ ] VTD-76 **Own pick, not Quark:** ripe cucumber, ghost pepper and zucchini with an empty hand: 1 to 2 cucumbers (1
@@ -878,7 +878,7 @@ Overlap review and UI
 Oat look (2026-10-31)
 
 - [ ] VTD-78 Plant oats beside wheat on farmland and grow them with bone meal: every stage has the bushy wheat shape in
-  oat colours; ripe oats are two blocks tall and vary between three shapes by position, like the ripe wheat next to
+  oat colors; ripe oats are two blocks tall and vary between three shapes by position, like the ripe wheat next to
   them. Break a ripe oat: same drops as before. F3+T with Fancy Crops off: oats still use these textures.
 
 Pickles (2026-10-25)
@@ -892,7 +892,7 @@ Vintage work run (2026-11-03)
 Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Creative Brewing jar the same time, kimchi removal); not booted. Scratch rows SQ-VTDA-10 to -13 and client row CQ-VTDA-01 (queue section SQ-CDJ7) cover VTD-80 to VTD-86 server-side.
 
 - [ ] VTD-80 **Wild ghost pepper soil** (port `-14`, `vintageport #7`): with Terralith, a wild ghost pepper does not stay on
-  grass, mycelium or moss (it breaks on the next neighbour update); it places on crimson and warped nylium, Soul Soil,
+  grass, mycelium or moss (it breaks on the next neighbor update); it places on crimson and warped nylium, Soul Soil,
   Rich Soul Soil and Nulch.
 - [ ] VTD-81 **Salt layer from inside** (`food/seasoning #7`): stand in a 2-layer salt patch and use Salt Dust on it up to 8
   layers: the layer grows, you are not pushed up. Walk onto a 6-layer salt block from the side: you still step up.
@@ -996,7 +996,7 @@ Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Crea
   `vintageport #7`). `SaltLayerBlock.getCollisionShape` cuts the collision at the feet of an entity whose box overlaps the
   block and whose feet are below the layer's top, so a layer grown under you does not push you up; outside the block the
   full snow-like shape stays (`food/seasoning #7`; side effect: while already standing in salt you can walk into a thicker
-  neighbouring layer instead of stepping up). JEI (`jei-coverage #15`): Organic Mash text fixed, new pages on the Salt
+  neighboring layer instead of stepping up). JEI (`jei-coverage #15`): Organic Mash text fixed, new pages on the Salt
   Layer (grown by the Evaporator; Salt Blocks no longer grow salt since the salt merge), the Cheese Mold and jar stacking
   (every `MasonJarBlock`); keys in `src/own` lang. The stale pack overrides `kubejs/data/vintagedelight/moonlight/
   soft_fluids/pepper_jam.json`, `relish.json` (they dropped the `_bottle` container, SQ-VP-06) moved to

@@ -31,7 +31,7 @@ mixin, driven by two CEConfig switches. Every other toast is left alone. Test pr
 ## 1. Overview
 
 Every toast in the game, vanilla's and the mods', is queued through `ToastComponent.addToast` (`m_94922_`). The mixin
-injects at its head and cancels the call when the toast belongs to a family that is switched off. A cancelled toast
+injects at its head and cancels the call when the toast belongs to a family that is switched off. A canceled toast
 never takes one of the five slots and never plays its sound. The code that made it keeps the object and may still
 call `hide()` on it, which does nothing for a toast that was never added.
 
@@ -121,19 +121,19 @@ Those toggles still work on top of the filter, per player.
 Before testing, set Rubidium Extra's `tutorial_toast` and `advancement_toast` back to `true` (Video Settings > Extras)
 so only the filter is being tested; put them back afterwards if wanted.
 
-- [ ] **TO-01 Config section:** launch → `[toasts]` in `creativeengineering-common.toml` with `tutorial = false`,
+- [ ] **TO-01 Config section:** launch -> `[toasts]` in `creativeengineering-common.toml` with `tutorial = false`,
   `advancement = false`; no mixin error in `latest.log`.
-- [ ] **TO-02 Vanilla tutorial:** set `tutorialStep:movement` in `options.txt`, start a world → no "Move" / "Look
-  around" toast; walk, look, punch a tree → no toasts.
+- [ ] **TO-02 Vanilla tutorial:** set `tutorialStep:movement` in `options.txt`, start a world -> no "Move" / "Look
+  around" toast; walk, look, punch a tree -> no toasts.
 - [ ] **TO-03 Exposure hints:** set `attachments_show_info_toast = true` in `exposure-client.toml`, open a camera's
-  attachments screen → no hint toast. Develop film in the lightroom → no "develop film" toast.
-- [ ] **TO-04 Fairy Lights:** set `progress = "none"` in `fairylights-client.toml`, pick up a light item → no
+  attachments screen -> no hint toast. Develop film in the lightroom -> no "develop film" toast.
+- [ ] **TO-04 Fairy Lights:** set `progress = "none"` in `fairylights-client.toml`, pick up a light item -> no
   "craft hanging lights" balloon.
-- [ ] **TO-05 Switch back on:** set `[toasts] tutorial = true`, repeat TO-02 → the movement toast shows; set it back to
+- [ ] **TO-05 Switch back on:** set `[toasts] tutorial = true`, repeat TO-02 -> the movement toast shows; set it back to
   `false`.
 - [ ] **TO-06 Other toasts still show:** press Ctrl+B twice (narrator toast), finish a long AE2 autocraft, complete an
-  FTB quest task → each toast shows.
-- [ ] **TO-07 Dedicated server:** join the updated server → no error; the server log has no `ToastFilterMixin` line
+  FTB quest task -> each toast shows.
+- [ ] **TO-07 Dedicated server:** join the updated server -> no error; the server log has no `ToastFilterMixin` line
   (client-only mixin).
 
 ## 8. History

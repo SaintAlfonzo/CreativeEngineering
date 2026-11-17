@@ -406,7 +406,7 @@ New leather fermenting recipes: any tree bark ferments into leather.
 
 ### Build
 One recipe, e.g. `R.vdPickling(Item.of(i.leather, 1), [Item.of(i.any_bark, N), i.salt, ...], e, 'leather_from_bark')`
-in a new section of bark.js (or sawdust.js neighbours); N and the second input are the numbers to set.
+in a new section of bark.js (or sawdust.js neighbors); N and the second input are the numbers to set.
 
 ### Decisions
 Machine and cost: the Pickling Jar (recommend, matches "fermenting" and needs no fluid) or the keg with water and a

@@ -1,4 +1,4 @@
-# Plan: Structure Catalogue world type
+# Plan: Structure Catalog world type
 
 Owner request 2026-11-09 (scratchpad "all structures flatworld generation type"). **BUILT 2026-11-09, jar installed in `mods/`, scratch test queued** (`SQ-SCAT` / `CQ-SCAT`). Never run in the game yet: refusals, build time and meta structures are still unknown. Built notes in section 8.
 Home: Creative Devtools, beside Flower Test ([creative_devtools.md](creative_devtools.md)). TODO row `tooling/generators-and-tests #13`.
@@ -8,17 +8,17 @@ Dev-only: no player changelog bullet, no new `mod_sides.md` row.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=847913386180 -->
+<!-- generated:status_index begin open_work sha1=b7cab285729a -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Testing 1), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `tooling/generators-and-tests #13` | Testing | S C | Structure Catalogue world type: flat world laying out every structure by family |
+| `tooling/generators-and-tests #13` | Testing | S C | Structure Catalog world type: flat world laying out every structure by family |
 <!-- generated:status_index end open_work -->
 
 ## 1. Goal
 
-A flat world type that lays out every structure in the pack as a browsable catalogue, sorted by family. It builds itself on the first start of such a world.
+A flat world type that lays out every structure in the pack as a browsable catalog, sorted by family. It builds itself on the first start of such a world.
 
 Owner decisions (2026-11-09):
 
@@ -125,7 +125,7 @@ Village pieces, first match on the path:
 | Decor and Infrastructure | Lamps | `lamp`, `lantern`, `torch` |
 | Decor and Infrastructure | Trees | `/trees/`, `tree_`, `sapling` |
 | Decor and Infrastructure | Decor | `decor`, `deco_`, `accessory`, `/decays/`, `table` (not `stable`), `bench`, `fence`, `statue`, `sign`, `planter`, `plants_`, `waystone`, `wood_pile` |
-| Villager Structures | Town centres | `town_cent`, `center`, `meeting`, `fountain`, `well`, `plaza`, `square`, `base_plate`, `start_castle` |
+| Villager Structures | Town centers | `town_cent`, `center`, `meeting`, `fountain`, `well`, `plaza`, `square`, `base_plate`, `start_castle` |
 | Villager Houses | Armorer to Weaponsmith (profession words) | `armorer`, `butcher`, `cartograph`, `cleric`, `alchemist`, `farmer`, `fisher`, `fletcher`, `leather`, `tanner`, `librar`, `mason`, `shepherd`, `toolsmith`, `weaponsmith`, `blacksmith`, `forge`, `loom` |
 | Villager Structures | Temples | `temple`, `church`, `chapel`, `shrine` |
 | Villager Structures | Farms | `_farm`, `greenhouse`, `garden`, `orchard`, `vinery`, `winery` |

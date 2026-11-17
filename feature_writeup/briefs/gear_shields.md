@@ -41,12 +41,12 @@ and fix the misfits.
   order is fixed in [ShieldCategory.java:37-43](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldCategory.java):
   explosion, projectile, magic, elemental, melee, then other (physical).
 - The verdict is `ShieldBlocking.verdict` ([ShieldBlocking.java:42-77](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlocking.java)):
-  invulnerability-bypass, piercing arrow, unblockable effect tick, tick gate, 0% reduction, armour-piercing physical,
+  invulnerability-bypass, piercing arrow, unblockable effect tick, tick gate, 0% reduction, armor-piercing physical,
   then facing.
 - [tools/shield_check.py](../../tools/shield_check.py) (187 lines) already loads the live toml, the `ShieldTier.java`
   defaults and every tag with `#include`s resolved (`load_tags`, `members`). Section 4 lists only ids in more than one
   category tag. There is no per-id table.
-- The source catalogue with live flags is [damage_types_findings.md](../../damage_types_findings.md) sections 3-4
+- The source catalog with live flags is [damage_types_findings.md](../../damage_types_findings.md) sections 3-4
   (~127 message ids). Every flag tag also has an explicit json listing the known ids (since 2026-09-24), so a static
   classification is possible for everything except `mob`, `player` and the bare `arrow`, which only the live flag tells
   apart.
@@ -64,7 +64,7 @@ and fix the misfits.
      (parse the backticked ids out of its tables; flag them `untagged`).
    - Columns: category (first match in `CATEGORIES`, else `other`), group, elemental kind (first of fire / electric /
      cold / chemical), gate (`burn_tick` / `contact_tick` membership, not for `projectile` ids), `armor_piercing`
-     membership. Then per tier one cell: `%` blocked, or the reason it isn't attempted: `AP` (physical + armour-piercing),
+     membership. Then per tier one cell: `%` blocked, or the reason it isn't attempted: `AP` (physical + armor-piercing),
      `gate`, `0`, `eff` (an effect tick in `unblockableEffectTicks`; mark the msgIds of the seven effects by hand: `magic`
      for poison and the AM ones, `wither`, `everythingcopper.copper_poisoning*`, `wasWatered`).
    - `--md` prints a markdown table to paste into shields.md as a new section "2.10 What each tier blocks (generated)".
@@ -74,7 +74,7 @@ and fix the misfits.
      drill, `dragonBreath`, `wither`, `inWall`, `starve`; anything else is a candidate to retag);
    - ids that a cheap tier (copper, gold, iron) blocks **fully** (100% or 1-damage round-down) but diamond doesn't. The
      ladder should be monotonic per id; gold's blanket 30% vs diamond's 0 cold / chemical / electric is the known case;
-   - `untagged` catalogue ids (they fall to `other` / physical by default).
+   - `untagged` catalog ids (they fall to `other` / physical by default).
 3. **Review with the user**, then fix by data only: add ids to finer tags, or move `#include`s in `elemental.json` /
    `magic.json` (shields.md 2.9: no Java either way). Record each decision in shields.md 4 as findings F9+.
 4. **In game** for the dynamic ids: `[damage_tags] logSeenSources = true`, play a session (zombie, skeleton, player
@@ -132,7 +132,7 @@ What is actually left (shields.md 2.8):
 
 ### Build (if powder snow should be excluded below echo)
 Add a third tick gate. It's the existing pattern: [ShieldTickGate.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldTickGate.java)
-generalises burn and contact.
+generalizes burn and contact.
 1. `ShieldTickGate`: `FREEZE("freeze_tick", "blocksFreezeTicks", "Blocks freezing")`.
 2. New data file `damage_tags/freeze_tick.json`: `{"description": "Freezing ticks: powder snow ...", "values": ["freeze"]}`.
    Not `icicle` / `fallingIcicle` (one-off hits).
@@ -161,11 +161,11 @@ Damage tag `creativeengineering:freeze_tick` (new). Config `[shields.<tier>] blo
 ### Gotchas
 - `ShieldTickGate.of` returns the **first** gate whose tag the hit carries (BURN, CONTACT, then FREEZE). Don't put one msgId
   in two gate tags.
-- A gated tick ignores facing and armour-piercing (ShieldBlocking.java:69-71). Powder snow has no position anyway.
+- A gated tick ignores facing and armor-piercing (ShieldBlocking.java:69-71). Powder snow has no position anyway.
 
 ### Tests
-- **SH-new2 Powder snow below echo:** stand in powder snow with gold raised → you freeze and take damage, no shield sound.
-- **SH-new3 Powder snow from echo:** echo raised in powder snow → no freeze damage, shield sound every 2 s. Shift tooltip:
+- **SH-new2 Powder snow below echo:** stand in powder snow with gold raised -> you freeze and take damage, no shield sound.
+- **SH-new3 Powder snow from echo:** echo raised in powder snow -> no freeze damage, shield sound every 2 s. Shift tooltip:
   "Blocks freezing: Yes" on echo, "No" on gold.
 
 ---
@@ -180,7 +180,7 @@ The `TODO` at [ShieldTier.java:46](../../development/creativeCommon/src/main/jav
 ### Now
 - **Knockback:** `ShieldBlockHandler.onShieldBlock` ([ShieldBlockHandler.java:80-82](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/shield/ShieldBlockHandler.java))
   flags the holder when `remaining < knockbackThreshold(tier)`. `onKnockback` (103-109) then cancels the holder's next
-  `LivingKnockBackEvent`. Binary: a full push or none. Thresholds are 1, 2, 3, 4, 5, 6, 7, 8 (copper → dragon), the same in
+  `LivingKnockBackEvent`. Binary: a full push or none. Thresholds are 1, 2, 3, 4, 5, 6, 7, 8 (copper -> dragon), the same in
   code and toml (checked 2026-10-31). The physical % in the table below are the live toml's; the code defaults are higher
   (see `shields #4` Now), which changes the push columns if the toml is ever regenerated.
 - **Why it reads as unreasonable:** the threshold rises up the ladder while the damage that gets through falls, so the two
@@ -192,8 +192,8 @@ The `TODO` at [ShieldTier.java:46](../../development/creativeCommon/src/main/jav
   | iron (40, 3) | 1.8 no | 7.8 push | 7.2 push | 18 push |
   | diamond (50, 4) | 1.5 no | 6.5 push | 6 push | 15 push |
   | netherite (60, 5) | 1.2 no | 5.2 push | 4.8 **no** | 12 push |
-  | echo (70, 6) | 0.9→0 no | 3.9 no | 3.6 no | 9 push |
-  | felsic (80, 7) | 0.6→0 no | 2.6 no | 2.4 no | 6 **no** |
+  | echo (70, 6) | 0.9->0 no | 3.9 no | 3.6 no | 9 push |
+  | felsic (80, 7) | 0.6->0 no | 2.6 no | 2.4 no | 6 **no** |
   | dragon (100, 8) | 0 no | 0 no | 0 no | 0 no |
 
   (The mob damage numbers are vanilla values from memory. Check one in game before tuning on them.) From felsic up nothing
@@ -257,9 +257,9 @@ Config `[shields.<tier>] disableCooldownTicks` (new, -1 default) and `[shields.<
 - Toml first: run once, then set values (the Conventions above).
 
 ### Tests
-- **SH-new4 Per-tier cooldown:** `[shields.dragon] disableCooldownTicks = 5`, a vindicator disables your dragon shield → back
-  up in 0.25 s; copper (40) → 2 s; `-1` → the global 20.
-- **SH-new5 Scaled push:** diamond raised, a zombie hit above the threshold → visibly shorter push than with no shield; SH-16
+- **SH-new4 Per-tier cooldown:** `[shields.dragon] disableCooldownTicks = 5`, a vindicator disables your dragon shield -> back
+  up in 0.25 s; copper (40) -> 2 s; `-1` -> the global 20.
+- **SH-new5 Scaled push:** diamond raised, a zombie hit above the threshold -> visibly shorter push than with no shield; SH-16
   re-run with the new thresholds.
 
 ---
@@ -275,4 +275,4 @@ Config `[shields.<tier>] disableCooldownTicks` (new, -1 default) and `[shields.<
 
 - [shields.md](../shields.md) 4 F6: the stale list (magma, stoves, copper poisoning, modded magic ticks are now gated or
   unblockable) cut down to what is left: powder snow and etching acid.
-- [shields.md](../shields.md) 0, damage-tag row: `burn_tick` / `contact_tick` "BUILT 2026-10-05" → shipped with 1.0.6.
+- [shields.md](../shields.md) 0, damage-tag row: `burn_tick` / `contact_tick` "BUILT 2026-10-05" -> shipped with 1.0.6.

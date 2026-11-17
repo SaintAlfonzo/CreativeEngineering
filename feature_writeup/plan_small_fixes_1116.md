@@ -88,7 +88,7 @@ scripts call. P2 to P6 in any order. Every Java or startup change needs a full r
 - **Blueprint repeats** (`tooling/conventions #7`): in `NCH.ieBlueprint`, compute the recipe id first, then merge
   identical inputs (same item or tag and NBT) into one counted ingredient. Comment: two different tags that overlap can
   still starve each other. Affects 9 recipes (archery, `redstone.js` 55 / 64 / 69 / 229, `music.js` 12 / 18).
-- **Headless test:** new `tools/test_nch_blueprint.sh`, modelled on `tools/test_cd_food.sh` (pack Rhino, prelude):
+- **Headless test:** new `tools/test_nch_blueprint.sh`, modeled on `tools/test_cd_food.sh` (pack Rhino, prelude):
   load the real `neoCraftHelper.js` and dicts, stub `e.custom` to record the JSON; assert `[x, x, y]` gives one input
   with count 2 and that the id is unchanged. `check_all.py` picks up `tools/test_*.sh` itself.
 - Live: recipe dump before and after (only the 9 recipes change); one blueprint craft in the IE workbench.

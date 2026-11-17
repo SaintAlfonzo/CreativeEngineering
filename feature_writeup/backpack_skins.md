@@ -56,8 +56,8 @@ look is drawn from that value, so storage, upgrades, dyeing, tier upgrades and t
 2. **Held, dropped, in inventory.** The item renderer draws the skin block's own item (its model, texture, hand poses and
    tint).
 3. **Placed.** The block entity gives the skin to the baked model, which shows the skin block's model and render layers.
-   If the skin block has a facing, it is set to the backpack's facing. SB's block colour handler uses the skin block's
-   colours instead of the backpack's cloth colour.
+   If the skin block has a facing, it is set to the backpack's facing. SB's block color handler uses the skin block's
+   colors instead of the backpack's cloth colour.
 4. **Worn.** Only when the switch is on: after SB positions the pack on the back, the skin block is drawn scaled down
    instead of the backpack model. Same for the chest layer and Curios.
 5. **Equip block.** Config switch in the common config, default `false`. Off: a skinned backpack can't be put in the
@@ -93,7 +93,7 @@ type only).
 patcherMod `com.SaintAlfonzo.creativeengineering.backpackskin`: `BackpackSkins` (stack tag `CESkin`, skin state),
 `BackpackSkinRecipe` + `BackpackSkinClearRecipe` + `BackpackSkinSerializers`, `BackpackSkinCurios` (denies
 `CurioEquipEvent`, registered only with Curios), `BackpackSkinsClient` (model data, quads, worn draw),
-`BackpackSkinColors` (replaces SB's block colour handler, lowest priority). Mixins in `mixin/`:
+`BackpackSkinColors` (replaces SB's block color handler, lowest priority). Mixins in `mixin/`:
 `BackpackSkinItemRendererMixin` (held/dropped/GUI), `BackpackSkinBakedModelMixin` (placed quads, render types,
 particle), `BackpackSkinBlockEntityMixin` (model data), `BackpackSkinBlockShapeMixin` (hitbox),
 `BackpackSkinWornMixin` (worn), `BackpackSkinEquipMixin` (chest slot). Config `[backpackSkins] allowEquip`
@@ -115,7 +115,7 @@ Compiles; mixin descriptors checked with javap against SB 3.20.2. Recipes not ye
 
 ## 8. History
 
-- 2026-10-22: built (recipes, six mixins, colour handler, config switch, Curios deny, NCH methods, tag with the basket). Not run in game.
+- 2026-10-22: built (recipes, six mixins, color handler, config switch, Curios deny, NCH methods, tag with the basket). Not run in game.
 - 2026-10-22: investigated, decisions recorded (basket only, skin hitbox, clear by crafting, no upgrade or display
   drawing, per-skin display position as future work).
 - 2026-11-04: moved to Creative Equipment ([creative_equipment.md](creative_equipment.md)): `backpackskin/`, the six mixins, `[backpackSkins]` (`config/creativeequipment-common.toml`), `kubejs/data/creativeequipment/kubejs/other/backpack_skins.js`. Same behaviour.

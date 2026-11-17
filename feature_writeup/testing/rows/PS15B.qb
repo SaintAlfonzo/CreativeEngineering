@@ -149,10 +149,10 @@ sleep 1
 sleep 9
 look bot walk through the middle row (x 1002) vs open grass (x 1006): speed_bps about half inside the field (plus farmland); P standing mods above
 
-## SQ-PS15B-04 | webs: cross (3 faces) dense; cube centre surrounded (hangs, bot jump climbs, sneak sinks); cube open above: dense, falls slowly
+## SQ-PS15B-04 | webs: cross (3 faces) dense; cube center surrounded (hangs, bot jump climbs, sneak sinks); cube open above: dense, falls slowly
 @group A
 @commands Webs: a cross (web with webs on 3 faces), a 3x3x3 cube (centre), the cube with the block above the centre removed; zombie in each, a bot jumping and sneaking in the cube centre
-@pass 3 faces: dense (0.35 / 0.20, no fall damage); cube centre (6 of 6): falling stops, hangs, jump climbs about 0.07 b/t, sneak sinks about 0.05; open above: dense, not surrounded (falls slowly)
+@pass 3 faces: dense (0.35 / 0.20, no fall damage); cube center (6 of 6): falling stops, hangs, jump climbs about 0.07 b/t, sneak sinks about 0.05; open above: dense, not surrounded (falls slowly)
 @fails `PassRule.cell` `surroundedCount`, `[surface.passthrough.cobweb] surroundedAt`
 @from batches/r1116/ps15b_a.qb
 > setblock 1000 -60 1180 minecraft:cobweb
@@ -229,7 +229,7 @@ look timing lines: counts= high in the first window after the setup, then near 0
 ## SQ-PS15B-06 | 5x5 field: edge cell (3 of 4) dense; break its inner neighbour: 2 of 4 at once (0.75); plant it again: dense again with the seedling
 @group A
 @commands Same field: break one crop next to the bot's cell, then plant it again; read the speed in the cell beside it each time
-@pass break: the neighbour drops to 3 of 4 or less at once (0.75 at 2); plant: back to dense at once, with the new seedling (age 0) counting
+@pass break: the neighbor drops to 3 of 4 or less at once (0.75 at 2); plant: back to dense at once, with the new seedling (age 0) counting
 @fails `PassCounts.blockChanged`, `PassCountData.remove`
 @from batches/r1116/ps15b_a.qb
 > fill 1060 -61 1150 1064 -61 1154 minecraft:farmland[moisture=7]

@@ -103,8 +103,8 @@ New house entries use `skyvillages:house_processor` like the 13 base houses; dec
 Placed foods are set full. Facing on the Brewery bench to Vinery chair swap is unchecked (SVA-05).
 
 Hops (owner, 2026-10-30): ripe jungle red grape lattices. A lattice only survives with a full face behind it (opposite
-its `facing`; any neighbour update otherwise breaks it and drops grapes), so the `attach` rule sets facing per block:
-away from an adjacent full block, else back to back with a neighbouring lattice (each panel holds the other; a maximum
+its `facing`; any neighbor update otherwise breaks it and drops grapes), so the `attach` rule sets facing per block:
+away from an adjacent full block, else back to back with a neighboring lattice (each panel holds the other; a maximum
 matching, wall-backed lattices may partner the rest), else air. In `letsdo_brewery_0`: 24 hops blocks, 20 lattices
 (16 back to back, 4 on a wall), 4 air (7 lattices in the y 18 layer leave one over; three are boxed in by air or the
 keg). Set `"unsupported": "keep"` to keep those as fragile lattices. Every lattice in the new templates (the Vinery

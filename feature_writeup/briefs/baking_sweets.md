@@ -34,7 +34,7 @@ restart), server `kubejs/data/creativedelight/kubejs/creativedelight/sweets.js` 
 | `baking/sweets #1` Gummies | medium (10-ish new items) | same table as #2 |
 | `baking/sweets #3` Cold sweets variants | medium (new items) | same table; `dishes/ingredients #5` (ice cubes) is built (Testing) |
 
-Order: #4 b/e → #2 → #1 → #3 → #4 c/d/f/g.
+Order: #4 b/e -> #2 -> #1 -> #3 -> #4 c/d/f/g.
 
 **Shared infrastructure for #1, #2, #3, #4f (build once, with whichever comes first):**
 - Item ids in [item_dict.js](../../kubejs/startup_scripts/_lib/item_dict.js): a new hand-written block
@@ -50,7 +50,7 @@ Order: #4 b/e → #2 → #1 → #3 → #4 c/d/f/g.
   `ef.lozenge`, `ef.appetizing` (all `fruitsdelight:`), ids listed in [effects.md](../effects.md). Effect text and
   changes are reserved for Creative Brewing, but the dict stays shared (creative_brewing.md 4), so adding keys is fine.
 - One table + one registration loop: CD startup `creativeengineering/sweets.js` holds
-  `global.sweets = { gummy: [...], rock_candy: [...], ... }`, each entry `{ key, name, flavour (dict key), effects:
+  `global.sweets = { gummy: [...], rock_candy: [...], ... }`, each entry `{ key, name, flavor (dict key), effects:
   [[effKey, ticks, amp]], texture }`, and registers the items in `StartupEvents.registry('item')`, the same shape as the
   generated-can loop in [cans.js:40-66](../../development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cans.js#L40-L66).
   CD server `creativeengineering/sweets.js` reads the same table and writes the recipes through NCH. Per-fruit effects:
@@ -62,7 +62,7 @@ Order: #4 b/e → #2 → #1 → #3 → #4 c/d/f/g.
   live since 1.1.03): `f.eaten(ev => { var p = ev.player; if (p && !p.isCreative()) p.give('minecraft:stick') })`
   (cans.js:37 uses `ev.entity`; both work). Also set `.containerItem(...)` so the item leaves its container when used as
   a crafting ingredient.
-- After any new food: `/dumpfood` → `python3 tools/food_catalog.py` (types them into `food_types.json`; new ids go
+- After any new food: `/dumpfood` -> `python3 tools/food_catalog.py` (types them into `food_types.json`; new ids go
   under `sweet`), `tools/gen_stack_sizes.py` (ice creams and custards sit in the 32 group of
   `generation_scripts/stacks/stack_sizes.json`), the family in `generation_scripts/food/food_families.json`
   (food_families.md 3.1), compost values (Delightful gives its gummy 0.65:
@@ -97,9 +97,9 @@ Cooking Pot recipe, and a bulk Create recipe.
   Hostile Delight adds `hostiledelight:glowgummy` (not a fruit gummy, leave it).
 - Recipes (verified): `delightful:gummy/salmonberries` FD pot `[#forge:fruits/salmonberries, minecraft:sugar,
   minecraft:honey_bottle, minecraft:kelp]` → 1, 200 ticks, 1.0 xp, no container; `delightful:mixing/salmonberry_gummy`
-  Create heated mixing `[salmonberries, sugar, honey_block, kelp]` → 9. The cantaloupe and matcha gummies copy that
+  Create heated mixing `[salmonberries, sugar, honey_block, kelp]` -> 9. The cantaloupe and matcha gummies copy that
   shape in CD [delightful/recipes.js:39-46](../../kubejs/data/creativedelight/kubejs/delightful/recipes.js#L39-L46)
-  (`GUMMIES` loop: pot `[fruit, i.any_sweetener, i.honey_bottle, i.kelp]` → 1, heated mixing with a honey block → 9).
+  (`GUMMIES` loop: pot `[fruit, i.any_sweetener, i.honey_bottle, i.kelp]` -> 1, heated mixing with a honey block -> 9).
   The pack's sugar swap ([CD minecraft/recipes.js:42-47](../../kubejs/data/creativedelight/kubejs/minecraft/recipes.js#L42-L47))
   turns `minecraft:sugar` into `i.any_sweetener` (`#creativeengineering:sweeteners`) in most recipes.
 - Slice & Dice copies every pot recipe to heated mixing after KubeJS runs, unless the id ends in `_manual_only`
@@ -183,7 +183,7 @@ echo shard variants; identify other crystals usable for rock candy (D1 below lis
   prismarine `minecraft:prismarine_crystals`, certus quartz (`ae2:certus_quartz_crystal`, charged too), fluix
   `ae2:fluix_crystal`, ruby / sapphire / peridot (`projectred_core:`), plus diamond, emerald, lapis, Botania's
   dragonstone and mana diamond, Vintage Improvements' sulfur. Echo shard `minecraft:echo_shard` has no gem tag. Quark
-  corundum clusters (9 colours, `i.<c>_corundum_cluster`, `i.any_corundum = '#quark:corundum'` item_dict.js:156) are
+  corundum clusters (9 colors, `i.<c>_corundum_cluster`, `i.any_corundum = '#quark:corundum'` item_dict.js:156) are
   the other "crystal" option the original row named.
 - Dict keys: `i.quartz` 1365, `i.amethyst_shard` 1356, `i.echo_shard` 1364, `i.prismarine_crystals` 1361,
   `i.rose_quartz` 1487, `i.t_gems_certus_quartz` 2034. No `i.t_gems_quartz` / `i.t_gems_amethyst` keys yet.
@@ -199,7 +199,7 @@ echo shard variants; identify other crystals usable for rock candy (D1 below lis
    values), the effect (D2), the stick back (Shared), `.containerItem(i.stick)`.
 3. Recipes in CD server `creativeengineering/sweets.js`:
    `R.fdCooking([gem, gem, i.any_sugar], Item.of(candy, 1), e, '<crystal>_rock_candy', 0.35, 200, i.stick)`, gem = the
-   tag key (echo: `i.echo_shard`, 1 shard → 2 candies, D3). Slice & Dice adds the heated mixing copy by itself (fine
+   tag key (echo: `i.echo_shard`, 1 shard -> 2 candies, D3). Slice & Dice adds the heated mixing copy by itself (fine
    here: same yield). Use `i.any_sugar` (plain sugar), not `i.any_sweetener`: honey is not rock candy.
 4. Sprites: recolour `assets/delightful/textures/item/rock_candy.png` (white for quartz, purple for amethyst, dark teal
    for echo).
@@ -209,13 +209,13 @@ echo shard variants; identify other crystals usable for rock candy (D1 below lis
 Verified: everything under Now (dump of 2026-10-30). New: `creativeengineering:<crystal>_rock_candy`.
 
 ### Decisions
-- **D1 Other crystals.** Recommend adding prismarine (sea candy, its own colour) and one Quark corundum family
-  candy taking `#quark:corundum` clusters only if a colour set is wanted later. Skip diamond, emerald, lapis (money
+- **D1 Other crystals.** Recommend adding prismarine (sea candy, its own color) and one Quark corundum family
+  candy taking `#quark:corundum` clusters only if a color set is wanted later. Skip diamond, emerald, lapis (money
   and enchanting), AE2 crystals and fluix (machine progression), Project Red gems (tech), Botania gems, sulfur.
-- **D2 Effects.** Recommend Speed 6 s on all of them, like the original, plus one small flavour per crystal: quartz
+- **D2 Effects.** Recommend Speed 6 s on all of them, like the original, plus one small flavor per crystal: quartz
   Haste 6 s, amethyst Night Vision 10 s, echo Slow Falling 6 s, prismarine Water Breathing 10 s. Owner to pick;
   "Speed only" is the safe default.
-- **D3 Echo cost.** One echo shard is worth more than 2 quartz: recommend 1 shard + sugar → 2 candies.
+- **D3 Echo cost.** One echo shard is worth more than 2 quartz: recommend 1 shard + sugar -> 2 candies.
 
 ### Gotchas
 - `delightful:cooking/rock_candy` is gated on `forge:gems/rose_quartz` being filled; the new recipes use their own tags,
@@ -224,7 +224,7 @@ Verified: everything under Now (dump of 2026-10-30). New: `creativeengineering:<
 
 ### Tests
 (proposed, numbered when queued; were RC-22 / RC-23 in the 2026-10-21 brief, since used by other docs)
-- RC-new1 every crystal: the pot recipe (2 gems + sugar + stick; echo 1 shard → 2) makes the candy; eating hands back a stick.
+- RC-new1 every crystal: the pot recipe (2 gems + sugar + stick; echo 1 shard -> 2) makes the candy; eating hands back a stick.
 - RC-new2 the rose quartz candy still has its recipe and eats at 4 / 0.5.
 
 ---
@@ -297,14 +297,14 @@ Verified: the table above (`i.glow_berry_custard` 11608, `i.blueberry_custard` 1
 Status **In Progress** · Work: KubeJS / data (+ textures) · id `baking/sweets #4`
 
 ### Goal
-One recipe shape for every ice cream, a fluid per flavour with mixing recipes, bowl spouting, an ice cream block per
-flavour that is sticky and sinks you in (BlockRunner), more flavours. The matcha and salmonberry ice creams stop
+One recipe shape for every ice cream, a fluid per flavor with mixing recipes, bowl spouting, an ice cream block per
+flavor that is sticky and sinks you in (BlockRunner), more flavours. The matcha and salmonberry ice creams stop
 being gross. All ice creams match each other (scratchpad 2026-10-21: "ice cream parity"). Fungi Delight's Truffle Ice
-Cream joins as a flavour (TODO row, its grid recipe is a placeholder).
+Cream joins as a flavor (TODO row, its grid recipe is a placeholder).
 
 ### Now
 - Ice creams (all bowl foods, stack 32 in the pack's `stack_sizes.json` `sizes/32`): Neapolitan vanilla, chocolate,
-  strawberry, banana, mint, adzuki (6 / 0.4 each, one flavour effect each) and the mixed
+  strawberry, banana, mint, adzuki (6 / 0.4 each, one flavor effect each) and the mixed
   `neapolitan:neapolitan_ice_cream` (12 / 0.4); Delightful `matcha_ice_cream` (Slowness III 5 s, Vitality II 60 s,
   Caffeinated 60 s) and `salmonberry_ice_cream` (Slowness III 5 s, Water Breathing 60 s), both at **6 / 0.3** since the
   3.8.1 values ([delightful_foods.js:14-15](../../development/creativeDelight/src/main/resources/kubejs_startup/delightful/delightful_foods.js#L14-L15);
@@ -314,28 +314,28 @@ Cream joins as a flavour (TODO row, its grid recipe is a placeholder).
 - Fungi Delight's `fungidelight:truffle_ice_cream` (7 / 0.5, Haste 10 s, bowl, stack 16, fungi_delight.md) has only the
   placeholder grid recipe `truffle_ice_cream_manual_only` (slice, snowball, sweetener, milk, bowl;
   [CD fungidelight/cooking.js:22](../../kubejs/data/creativedelight/kubejs/fungidelight/cooking.js#L22)); it joins as a
-  flavour (TODO).
+  flavor (TODO).
 - Shapeless recipes (verified): Neapolitan `[bowl, flavour, #forge:milk, neapolitan:ice_cubes (item), minecraft:sugar]`,
-  flavour = vanilla pods, chocolate bar, `#forge:fruits/strawberry`, `#forge:fruits/banana`, mint leaves, roasted adzuki
+  flavor = vanilla pods, chocolate bar, `#forge:fruits/strawberry`, `#forge:fruits/banana`, mint leaves, roasted adzuki
   beans; Delightful `[bowl, matcha | #forge:fruits/salmonberries, #forge:milk, #forge:ice_cubes (tag), #forge:sugar]`
   (its `_no_neapolitan` copies with `minecraft:ice` load only while `#forge:ice_cubes` is empty, so they're off).
-- **Fluids already exist for the 6 Neapolitan flavours**, from CCK (verified: `NeapolitanFluidEntries`, registered
+- **Fluids already exist for the 6 Neapolitan flavors**, from CCK (verified: `NeapolitanFluidEntries`, registered
   because Neapolitan is loaded; recipes in CCK's built-in `datapacks/neapolitan`):
   `create_central_kitchen:<flavour>_ice_cream` (500 mB per bowl) and `<flavour>_milkshake` (250 mB per bottle).
-  Recipes: `create_central_kitchen:mixing/<f>_ice_cream` (unheated: ice cubes item, sugar, flavour, 250 mB
-  `#forge:milk` → 500 mB), `mixing/chocolate_ice_cream_from_fluid_chocolate`, `filling/<f>_ice_cream` (bowl + 500 mB →
+  Recipes: `create_central_kitchen:mixing/<f>_ice_cream` (unheated: ice cubes item, sugar, flavor, 250 mB
+  `#forge:milk` -> 500 mB), `mixing/chocolate_ice_cream_from_fluid_chocolate`, `filling/<f>_ice_cream` (bowl + 500 mB ->
   ice cream = bowl spouting), `emptying/<f>_ice_cream`, `mixing/<f>_milkshake` and `_from_ice_cream`, filling /
   emptying of milkshakes, two sequenced assemblies for the Neapolitan ice cream. None of these is in the repo, so none
   is listed in a writeup; the live fluid list needs `/dumpfluids`.
 - No fluid and no spouting for matcha or salmonberry. **Milkshakes exist since the 3.8.1 repack (2026-10-25):**
-  `delightful:matcha_milkshake`, `salmonberry_milkshake` (`ShakeItem`), grid `[3 bottles, ice cream, milk]` → 3
+  `delightful:matcha_milkshake`, `salmonberry_milkshake` (`ShakeItem`), grid `[3 bottles, ice cream, milk]` -> 3
   ([CD delightful/recipes.js:62-63](../../kubejs/data/creativedelight/kubejs/delightful/recipes.js#L62-L63)), plus the
   Neapolitan milk-cauldron interaction in the repack (delightful.md 3, DF-07). No milkshake fluid for them.
 - Create: Dreams and Desires also registers milkshake fluids (`create_dd:chocolate|glowberry|pumpkin|strawberry|vanilla_milkshake`,
   live `kubejs/exported/fluids.json`); its mixing recipes are already handled in CD `minecraft/recipes.js:39` (sugar
   swap list). Two vanilla / chocolate / strawberry milkshake fluids exist side by side (CCK and D&D).
 - Blocks: `neapolitan:<f>_ice_cream_block` (6) and `delightful:matcha_ice_cream_block`, `salmonberry_ice_cream_block`;
-  plain `Block`, snow material, hardness 0.2, snow sound; recipe 8 snow blocks around 1 ice cream → 8 (verified).
+  plain `Block`, snow material, hardness 0.2, snow sound; recipe 8 snow blocks around 1 ice cream -> 8 (verified).
   No mixed-Neapolitan block.
 - BlockRunner: `delightful:*_ice_cream_block` is in the `confectionery` tier (0.85,
   [blocktags.js:380-382](../../kubejs/server_scripts/tags/blocktags.js#L380-L382)). The Neapolitan blocks are not named in
@@ -379,17 +379,17 @@ c. **Fluids for matcha and salmonberry.** In the shared startup fluid file `deve
    `R.createEmptying([i.bowl, Fluid.of(f.matcha_ice_cream, 500)], i.matcha_ice_cream, e, 'matcha_ice_cream')`.
 d. **Milkshake fluids for them** (D3): the items and the shapeless recipe exist (Delightful 3.8.1 repack, Now). Left:
    fluids `creativeengineering:matcha_milkshake`, `salmonberry_milkshake` and the CCK-style mixing (500 ice cream + 250
-   milk → 750) / filling (bottle + 250) / emptying. Same for the truffle flavour if it gets a milkshake.
+   milk -> 750) / filling (bottle + 250) / emptying. Same for the truffle flavor if it gets a milkshake.
 e. **Blocks sticky and sinking.** blocktags.js: drop `'delightful:*_ice_cream_block'` from `confectionery` (line 382)
    and add `'neapolitan:*_ice_cream_block', 'delightful:*_ice_cream_block'` to the `very_sticky` list (line 416). That
    puts them in `#creativeengineering:sinking` too. Optional honey-like jump: `block.setJumpFactor(0.5)` in
    [block_properties.js](../../kubejs/startup_scripts/changes/block_properties.js) (jump is not a BlockRunner speed, so it
-   doesn't stack). Optional block → items back: `R.shapeless(Item.of(iceCream, 8), [block, Item.of(i.bowl, 8)])`,
+   doesn't stack). Optional block -> items back: `R.shapeless(Item.of(iceCream, 8), [block, Item.of(i.bowl, 8)])`,
    as Fruits Delight does for jelly blocks.
-f. **Truffle and more flavours** (D4). Truffle first: in CD server `fungidelight/cooking.js:22` replace the placeholder
+f. **Truffle and more flavors** (D4). Truffle first: in CD server `fungidelight/cooking.js:22` replace the placeholder
    with the unified shape `R.shapeless(i.truffle_ice_cream, [i.bowl, i.truffle_slice, i.milk, i.t_ice_cubes,
    i.any_sweetener], e, 'truffle_ice_cream')`, then its fluid / mixing / filling / emptying as in step c (no block: Fungi
-   Delight has none; add one only with the new flavours). Per new flavour: bowl item (KubeJS, stack 32, `f.eaten` gives the bowl back,
+   Delight has none; add one only with the new flavors). Per new flavour: bowl item (KubeJS, stack 32, `f.eaten` gives the bowl back,
    `.containerItem(i.bowl)`), block (`StartupEvents.registry('block')`, `.material('snow').hardness(0.2).soundType('snow')`,
    block tags as in step e), fluid (step c, using the block texture), the unified shapeless recipe, mixing, filling,
    emptying, 8-snow block recipe, sprites (item and block).
@@ -405,17 +405,17 @@ g. **Bowl spouting:** done by CCK for the Neapolitan six; steps c and f add it f
   milkshake fluids, plus D4 items, blocks, fluids.
 
 ### Decisions
-- **D1 Parity values.** Recommend every single-flavour ice cream at 6 / 0.4 + 200 freeze ticks + its own effect; the
+- **D1 Parity values.** Recommend every single-flavor ice cream at 6 / 0.4 + 200 freeze ticks + its own effect; the
   Neapolitan mixed one stays 12 / 0.4. Matcha keeps Vitality and Caffeinated and loses the Slowness. This overrides the
   3.8.1 value 6 / 0.3 now set for matcha and salmonberry. Truffle (7 / 0.5, Haste) comes down to 6 / 0.4 + Haste.
 - **D2 Saturation instead?** The scratchpad asks "saturation?". The values above already match Neapolitan's; with the
   Slowness gone, no saturation bump is needed.
-- **D3 Milkshakes for the Delightful flavours (and new ones).** The items came with the repack; recommend the fluids
+- **D3 Milkshakes for the Delightful flavors (and new ones).** The items came with the repack; recommend the fluids
   too: parity means every ice cream has a milkshake, fluid, spout recipe and block. A smoothie type (the removed
   `baking/sweets #5`) can join here as one more drink per fruit pair, if wanted.
 - **D6 Two milkshake fluid sets (CCK and D&D).** Out of scope here; note it for `merges` (recommend CCK's as the pack
-  set, since it covers all six Neapolitan flavours).
-- **D4 New flavours.** Recommend 3 to start: sweet berry, lemon, mango (distinct colours, existing fruit effects).
+  set, since it covers all six Neapolitan flavors).
+- **D4 New flavours.** Recommend 3 to start: sweet berry, lemon, mango (distinct colors, existing fruit effects).
 - **D5 BlockRunner tier.** `very_sticky` (recommended) or a new "ice cream" tier, which would mean a new `[surface.speed]`
   entry and patcherMod `SurfaceTier` change.
 
@@ -454,7 +454,7 @@ only by this brief, TODO and SQ-CM-24) and the parity note into food_families.md
   `kubejs/data/supplementaries/moonlight/soft_fluids/strawberry_banana_smoothie.json` (jar fill for a hidden item),
   [food_values.js:18](../../kubejs/startup_scripts/cooking/food_values.js#L18) (Agility tooltip list),
   `food_dict.js:1168`, rows in food_catalog.md, food_families.md, can_parity.md (regenerated by the next
-  `/dumpfood` → `food_catalog.py`; move it to `excluded` in food_types.json then).
+  `/dumpfood` -> `food_catalog.py`; move it to `excluded` in food_types.json then).
 - Open: the "parity expansion" (smoothies as a type) is not a separate build; it joins `baking/sweets #4` D3.
 - Tests: RC-164 (JEI has no smoothie; no recipe makes it), SQ-CM-24 queued. Tiers S P open.
 
@@ -467,7 +467,7 @@ Built 2026-10-23, shipped 1.1.03; the writeup covers it: [recipes_cooking.md](..
 2026-10-23 log line. As built (owner: oranges or slices): Fruits Delight's 2-orange pot and heated mixing recipes stay;
 CD [fruitsdelight/recipes.js:39-46](../../kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js#L39-L46) adds pot
 `orange_jam_from_slices` (4 slices, `i.any_sweetener`, lemon slice, bottle) and the heated mixing (4 slices, lemon slice,
-sweetener, 100 mB water → 125 mB `f.orange_jam`, fluid_dict.js:118). The test is RC-79, not RC-31 / RC-32 (those ids
+sweetener, 100 mB water -> 125 mB `f.orange_jam`, fluid_dict.js:118). The test is RC-79, not RC-31 / RC-32 (those ids
 belong to other briefs). Tiers S P open.
 
 ## Writeup corrections made

@@ -122,7 +122,7 @@ with `[worldgen.debug] testOverrides = true` (share 1 for the meta), as the META
 
 | Step | What | Rows |
 |---|---|---|
-| L1 | SQ-WGP-07 pregen recipe (2601 chunks) on the current jar, JFR on: pregen time against 3:50, `[earth-fill]` CANCELLED count against SQ-WG30-E01 (15 inland) | SQ-EF-07 |
+| L1 | SQ-WGP-07 pregen recipe (2601 chunks) on the current jar, JFR on: pregen time against 3:50, `[earth-fill]` CANCELED count against SQ-WG30-E01 (15 inland) | SQ-EF-07 |
 | L2 | Perf suite on the current jars: `python3 tools/perf/suite/perf_suite.py selftest` style check first (`tools/perf/suite/selftest/selftest.py`, 12/12), then `setsid nohup python3 tools/perf/suite/perf_suite.py run general g2 > /dev/null 2>&1 &` (about 2 h 15), `perf_suite.py report g2`, compare with `g1`. The G04 four-bot scenario covers SQ-PF16-04 and SQ-MCL-06 (run G04 again with `mobCapForceLevel` 1 and 2 for MCL-06's per-level numbers), G03a / G04 / G12 cover SQ-IWF-05 | SQ-PF16-04, SQ-MCL-06, SQ-IWF-05 |
 | L3 | Resource pack bench (client, about 1 h): `python3 tools/perf/rpack/selftest/run_selftest.py` (4/4), then CQ-RP-01 (now CQ-RPB-01) to -03 as queued | CQ-RP-01 to -03 |
 | L4 | DH flight in the Nether and the End with DH generating (client) | CQ-WG30-A04 |
@@ -173,7 +173,7 @@ ground, no monsters); SQ-MCL-05 and SQ-PF16-03 need caves (B1).
 2. Move results into each feature writeup's test list (the IDs in brackets in each row) and the status words
    ("built, scratch server PASSED") in `feature_writeup/README.md`.
 3. Copy the server-safe dumps back if a `/dumpall` was taken (setup notes in the queue).
-4. FAILs: debug from `RES/rows/<ID>.log` and the perf segment of that row; a fix that changes behaviour goes to the
+4. FAILs: debug from `RES/rows/<ID>.log` and the perf segment of that row; a fix that changes behavior goes to the
    owner first.
 
 ## 7. Run notes (execution, started 2026-10-31 01:05)
@@ -187,7 +187,7 @@ Running log of the execution: steps done, problems met, decisions. Results per r
     terrain_adaptation/sunk_start but its start pool has a terrain_matching piece; ignored`. The crypt was added to
     `sunk_start` in batch 3 (structure_tuning.md "Sunk starts (#3)") and is now refused by the same jar's guard, so
     the crypt is not sunk (ST-238 expects no warning). Counts: 109 tagged, 99 trimmed, 1 air-trimmed, 7 sunk starts.
-    Not fixed here (worldgen behaviour, owner decides: drop the tag or narrow the guard to the start element).
+    Not fixed here (worldgen behavior, owner decides: drop the tag or narrow the guard to the start element).
 - 01:20 a1_data: PASS 31 after re-judging, LOOK 17 (judged at the end). SQ-STL-02 and SQ-DD-08 failed on batch
   regexes (recipe ids contain a digit, `_seat_to_1_`; `/zq` prints output ids without namespace): fixed in
   `a1_data.qb`, rerun PASS (16 stepstool recipes, both tags 16; 16 painted asphalt + soap recipe, no D&D decor asphalt).
@@ -218,11 +218,11 @@ Running log of the execution: steps done, problems met, decisions. Results per r
   - SQ-WC-03 / -05: see next note (bot use path).
 - 02:10 More batch fixes, all rerun on A1:
   - Bot use path: `pbot use` is a block use only (`useItemOn`); the client follows a PASS with an air use, the bot
-    does not. The watering can loads fertiliser in `Item.use` (air use), so SQ-WC-03 never loaded. Added
+    does not. The watering can loads fertilizer in `Item.use` (air use), so SQ-WC-03 never loaded. Added
     `/zq useitem <player>` to `tools/scratch_query/zq_probe.js` (scratch-only; perfBot is another session's tool, left
     alone). SQ-WC-03 rerun: BonemealLevel 3, bone meal 61 (LOOK -> PASS).
   - SQ-WC-05: mature wheat takes the right-click as a harvest (CONSUME) before the can's `useOn`; the row now uses
-    age 0 wheat (no fertiliser in the can, so age is irrelevant). Dry farmland drops 7 -> 6 by random tick within
+    age 0 wheat (no fertilizer in the can, so age is irrelevant). Dry farmland drops 7 -> 6 by random tick within
     seconds (vanilla), so the check now runs at `randomTickSpeed 0`; the count was also wrong (4 setup fills also log
     "filled 9"). Rerun: 9 farmland and 9 mulch soaked, WaterLevel 15, second use spends nothing: PASS.
   - SQ-VG-01 / -02: zombies from the SQ-MB waves killed the villager; VG rows now set Peaceful (villager AI is the
@@ -236,7 +236,7 @@ Running log of the execution: steps done, problems met, decisions. Results per r
     PASS; EFX-09 six ticks after the give: Poison I, Duration 155 (160 at start), Health 24 (no direct damage) PASS.
   - SQ-MB rows on A1 ran at Normal (SQ-MB-02 sets it); the A1 world is now Normal again after the VG rows.
 - 02:40 A1 LOOK rows judged offline (subagent; table in `perf/runs/r1031/judged_a1.md`): PASS 17, FAIL 6, OPEN 9.
-  Real pack problems (not fixed here: recipe and tag behaviour, owner decides):
+  Real pack problems (not fixed here: recipe and tag behavior, owner decides):
   - SQ-CM-32 (+ SQ-R31-BOOT / -KJS): `kubejs/data/creative_delight/kubejs/oceansdelight/recipes.js` removes every
     recipe with a tentacle input (line 39) BEFORE the tentacle -> calamari `replaceInput`s (41 to 47): squid_rings,
     glow_squid_stew, seafood_skewer, squid_and_pickles are gone; sea_pickle_roll, shrimp_rice, squid_salad,
@@ -267,7 +267,7 @@ Running log of the execution: steps done, problems met, decisions. Results per r
   - SQ-CS-03 / -04: ripe counts after 2 min at speed 30 were 0 to 3 (noise). New `/zq ages` (mean age per field) in
     zq_probe.js; rows rewritten. Winter open 2.30 vs glass 2.84 (0.81, expected 0.75): PASS. Spring vs summer, open
     fields, 6 and 5 field runs: mean 3.27 vs 2.78 (1.17; the clean replicate 3.30 vs 2.73 = 1.21, expected 1.25):
-    PASS. Spring glass 2.95 (neutral, about the summer level): bonus cancelled under glass.
+    PASS. Spring glass 2.95 (neutral, about the summer level): bonus canceled under glass.
   - SQ-EFX-04 (rerun here, animals kept): Regeneration II, Resistance II, Health Boost II; Health 61.0 before and
     after the 5 s refresh: PASS.
   - Follow-ups (`a1_followup.qb`, new): RW-23b confirms the RW-23 FAIL (13 smoked-shape recipes; botania, driftwood,
@@ -360,7 +360,7 @@ Log kept as perf/runs/r1031/w1a_latest.log.
 - SQ-EF-05 FAIL, same cause as SQ-TER-01 (ancient_crypt "ignored" at boot); "7 sunk starts" present. Crypt and
   ocean_ruins placed; ocean_fortress printed no "Generated" line. Seabed look stays for the client block.
 - SQ-EF-06 LOOK, below the bar: the highlands square had no undead castle; across the world 3 castles, 1 kept
-  (mound 275), 2 CANCELLED for over-air-after-beard 708 and 562 (limit 320). Row wants at least half kept: owner call
+  (mound 275), 2 CANCELED for over-air-after-beard 708 and 562 (limit 320). Row wants at least half kept: owner call
   whether the 320 air limit is too tight for huge castles.
 - SQ-EF-08 PASS after a rerun: the row's coordinates (x -80..-40, z -16..100) are ocean and beach on this seed, so
   all four "no anchor fits" were correct. Rerun on plains near 1762 -3249: farmers_camp, house_camp, ruin_scatter
@@ -381,14 +381,14 @@ Log kept as perf/runs/r1031/w1a_latest.log.
 
 **10:55. W1c.** SQ-TER-05 LOOK, calibration table (beardFootprint = true, windswept hills square, unique real starts;
 "newly over" = mound columns over the limit only because of the columns under built floors):
-| family | starts | cancelled | newly over by floors | sim (tools/earth_fill_sim.sh) |
+| family | starts | canceled | newly over by floors | sim (tools/earth_fill_sim.sh) |
 |---|---|---|---|---|
 | outposts / pillager towers | 51 | 6 | 3 (6%) | 23% |
 | villages | 21 | 17 | 1 (5%) | 2 to 18% |
 | other | 669 | 53 | 24 (4%) | - |
 88 "under built floors" lines. Outposts come in well under the sim's 23%; villages inside its range. 17 of 21
-villages cancelled in this mountain square (mostly over the mound limit even without the floor columns). The 3
-cancelled + 3 kept look goes to the client block. Calibration only; the switch lived only in the W1c scratch copy.
+villages canceled in this mountain square (mostly over the mound limit even without the floor columns). The 3
+canceled + 3 kept look goes to the client block. Calibration only; the switch lived only in the W1c scratch copy.
 
 **11:00. Scope cut (user, relayed by the main session).** Client block (c1_client.qb, 32 rows) and long operations
 L1 to L4 (SQ-WGP-07, the perf suite, the rpack bench, CQ-WG30-A04 DH flight) are DEFERRED, not run in r1031. Rows
@@ -424,7 +424,7 @@ Counts: BATCH-FAULT 5, FAIL 10, OPEN 18, PASS 134 (total 167 row results, reruns
 | FAIL | SQ-TER-01 | philipsruins:ancient_crypt refused by terrain adaptation (terrain_matching start piece) |
 | OPEN | SQ-EF-02 | client look deferred |
 | OPEN | SQ-EF-03 | client look deferred |
-| OPEN | SQ-EF-06 | 1 of 3 castles kept; 2 cancelled over-air 708/562 vs limit 320: owner call |
+| OPEN | SQ-EF-06 | 1 of 3 castles kept; 2 canceled over-air 708/562 vs limit 320: owner call |
 | OPEN | SQ-EF-10 | needs a hand-made shore case (deferred) |
 | OPEN | SQ-MB-05 | judged_a1.md: `#minecraft:mineable/pickaxe` and `#minecraft:needs_diamond_tool` both Test passed. |
 | OPEN | SQ-MG-18 | judged_b1.md: Kill -> `No entity was found` (no chimpanzees: that half passes). 3 gorillas summoned, time set. |

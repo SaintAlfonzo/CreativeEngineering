@@ -76,7 +76,7 @@ From the scratch runs in [testing/structures/](testing/structures/00_plan.md) an
 | Phase 3 | Ocean geodes: the 10-block drop does nothing useful over deep floors near y 0 (ST-133 partly) | geodes behave much like before | tuning |
 | Phase 2 | Cave biomes not in `land/any`: skeleton dungeon, bone dungeon, lost soul city never start (7.3.3 waits for the cave pass) | those 3 structures absent | bug, fixed in 1.0.7 (DEPLOYED 2026-10-18) (`land/any/deep`) |
 | Phase 2 | ST-135 open: fortified metas rare against the 120 s locate timeout; bastille dropped by peaceful radius | `/locate` of them may time out | open |
-| M2 | Undead castle cancelled 4 of 5 times by earth fill on slopes | very rare castle | decision (narrow fits or relax mound limit) |
+| M2 | Undead castle canceled 4 of 5 times by earth fill on slopes | very rare castle | decision (narrow fits or relax mound limit) |
 | M2 | Earth fill counts only earth base blocks, not stone bases (drum tower, piglin camp) | a stone-based structure can overhang | bug, fixed in 1.0.7 (DEPLOYED 2026-10-18) (opt-in tag, drum tower) |
 | M2 | `/celocate census` reports every slot "known" | census numbers meaningless (debug tool only) | bug, fixed in 1.0.7 (DEPLOYED 2026-10-18) |
 | Phase 4 | ST-65 `templateTrim = false` half not run | none | test gap |

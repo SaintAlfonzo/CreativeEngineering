@@ -13,7 +13,7 @@
 | Part | Status | Files | Knobs |
 |---|---|---|---|
 | Shears stop modded vines (Floral Enchantment, Botania solid vine, any later `VineBlock`) | BUILT 2026-10-31, patcherMod 1.1.04 installed 2026-10-31 00:44; scratch server PASSED r1031 (2026-10-31, SQ-VS-01 to -08) | `block/VineShearing`, `mixin/VineBlockShearMixin` | `[vine_shearing] enabled`, `cutBelow` |
-| Shears stop weeping, twisting, cave vine and kelp tips (1.20 behaviour) | BUILT 2026-10-31, same jar | `block/VineShearing` | `[vine_shearing] enabled` |
+| Shears stop weeping, twisting, cave vine and kelp tips (1.20 behavior) | BUILT 2026-10-31, same jar | `block/VineShearing` | `[vine_shearing] enabled` |
 | Trimmed look for sheared modded vines (Quark's cut vine look) | BUILT 2026-10-31, same jar | `block/VineShearingClient` | `[vine_shearing] trimmedLook` (client) |
 | WTHIT lines "Sheared, stops growing" / "Stopped growing" | BUILT 2026-10-31, same jar | `compat/WthitSheared` | `[wthit] sheared` |
 
@@ -76,14 +76,14 @@ Question asked: can Quark's trimmed vine texture be used by other modded vines?
 
 - Quark's `cut_vine.png` is vanilla's `vine.png` with every pixel in rows 11 to 15 cleared (row 10 partly); no pixel
   is recoloured (pixel diff 2026-10-31). Its 11 models are the old 1.12 vine model set (`_1`, `_1u`, `_2`, ...).
-- Floral Enchantment's 17 vine textures are pre-coloured (flowers drawn in) but share vanilla's silhouette in rows 0
+- Floral Enchantment's 17 vine textures are pre-colored (flowers drawn in) but share vanilla's silhouette in rows 0
   to 9, and its models are the same 11-model set with `tintindex 0`. Botania's solid vine uses `minecraft:block/vine`.
 - Using Quark's texture directly would draw a plain green vine (Botania: fine; Floral Enchantment: loses the flowers).
   Making cut copies of the Floral Enchantment textures would work visually, but the mod is All Rights Reserved, so
   the pack would ship derived art.
 - Chosen: `block/VineShearingClient` wraps the baked model of every `fertile=false` state and moves the lower vertices
   of each wall quad up by 5/16 of its height, with the UVs following. The vine's own texture shows with its bottom
-  5 rows cut, matching Quark's cut vine, for any vine, coloured or tinted, with no texture or blockstate file shipped.
+  5 rows cut, matching Quark's cut vine, for any vine, colored or tinted, with no texture or blockstate file shipped.
   Ceiling faces stay whole (the cut is where the vine hangs). The blockstate files need no `fertile` key: variant
   keys that do not name a property match both values.
 - Rejected: per-mod blockstate overrides with new models (one set per mod, ARR blockstate paths to override in
@@ -128,17 +128,17 @@ Scratch-server checks: [scratch_queue.md](testing/scratch_queue.md) "Vine sheari
 fake-player shears rows SQ-VS-05 to -08 (server halves of VS-01, VS-03, VS-05 to VS-07): all PASSED r1031 (2026-10-31).
 The looks, WTHIT lines and VS-09 to VS-11 are still in game only.
 
-- [ ] **VS-01 Flower vine:** shears on a Floral Enchantment poppy vine hanging 4 blocks → sheep-shear sound, 1 durability, the vines below it vanish, the cut block shows its bottom trimmed like Quark's cut vine (flowers kept above the cut), WTHIT "Sheared, stops growing".
-- [ ] **VS-02 Stays put:** `/gamerule randomTickSpeed 300` near a sheared and an unsheared flower vine for a minute → the sheared one does not spread; the unsheared one does.
-- [ ] **VS-03 Second shear:** shears again on a sheared vine → nothing (no sound, no durability).
-- [ ] **VS-04 Botania solid vine:** shear it → trimmed look in vanilla green (tinted), stops spreading.
-- [ ] **VS-05 Weeping vine tip:** shears on the bottom tip → crop sound, 1 durability, WTHIT "Stopped growing", no new growth at high tick speed; bone meal still adds blocks.
+- [ ] **VS-01 Flower vine:** shears on a Floral Enchantment poppy vine hanging 4 blocks -> sheep-shear sound, 1 durability, the vines below it vanish, the cut block shows its bottom trimmed like Quark's cut vine (flowers kept above the cut), WTHIT "Sheared, stops growing".
+- [ ] **VS-02 Stays put:** `/gamerule randomTickSpeed 300` near a sheared and an unsheared flower vine for a minute -> the sheared one does not spread; the unsheared one does.
+- [ ] **VS-03 Second shear:** shears again on a sheared vine -> nothing (no sound, no durability).
+- [ ] **VS-04 Botania solid vine:** shear it -> trimmed look in vanilla green (tinted), stops spreading.
+- [ ] **VS-05 Weeping vine tip:** shears on the bottom tip -> crop sound, 1 durability, WTHIT "Stopped growing", no new growth at high tick speed; bone meal still adds blocks.
 - [ ] **VS-06 Kelp and twisting vine tips:** same as VS-05 (kelp under water; twisting tip at the top).
-- [ ] **VS-07 Cave vine with berries:** shears on a berry tip → berries picked, tip not capped; shears again (no berries) → capped.
-- [ ] **VS-08 Vanilla vine:** shears → Quark's cut vine as before (no `fertile` line).
-- [ ] **VS-09 Grape vine and ivy:** jungle grape vine sheared → "Sheared, stops growing"; IW ivy sheared → "Stopped growing".
-- [ ] **VS-10 Look toggle:** `[vine_shearing] trimmedLook = false`, F3+T → sheared flower vines draw whole.
-- [ ] **VS-11 Breaking:** break a sheared flower vine with shears and place it → grows again (unsheared).
+- [ ] **VS-07 Cave vine with berries:** shears on a berry tip -> berries picked, tip not capped; shears again (no berries) -> capped.
+- [ ] **VS-08 Vanilla vine:** shears -> Quark's cut vine as before (no `fertile` line).
+- [ ] **VS-09 Grape vine and ivy:** jungle grape vine sheared -> "Sheared, stops growing"; IW ivy sheared -> "Stopped growing".
+- [ ] **VS-10 Look toggle:** `[vine_shearing] trimmedLook = false`, F3+T -> sheared flower vines draw whole.
+- [ ] **VS-11 Breaking:** break a sheared flower vine with shears and place it -> grows again (unsheared).
 
 ## 8. History
 

@@ -70,7 +70,7 @@ Writeup: feature_writeup/exposure.md (EX- tests; EX-11/EX-17 passed; EX-50 old-w
 
 **2026-10-14: stale viewfinder could eat clicks (fixed, `-04`, in mods/ + instance.json).**
 - Found while triaging a player's "mouse clicks stopped working" report (debug/latest.log). It is NOT proven to be that player's cause: on a server it only blocks left clicks with viewfinder_attacking=false or in selfie mode.
-- Bugs: `MouseButton.Pre` fires before screens get the click, so a viewfinder cancelled clicks inside GUIs too. `CameraClient.activeViewfinder` is static and was never cleared on logout, respawn or dimension change. The client tick's "camera inactive -> remove" check went through getActiveExposureCamera(), which already returns null for inactive cameras, so it never fired.
+- Bugs: `MouseButton.Pre` fires before screens get the click, so a viewfinder canceled clicks inside GUIs too. `CameraClient.activeViewfinder` is static and was never cleared on logout, respawn or dimension change. The client tick's "camera inactive -> remove" check went through getActiveExposureCamera(), which already returns null for inactive cameras, so it never fired.
 - Fixes: `MouseHandler.buttonPressed` requires `screen == null` (MouseHandler added to hand_ported.txt). PlayerMixin checks the raw field. `PlayerClientHooks.onLocalPlayerTick` drops the viewfinder when the ticking player has no camera. A LoggingOut handler clears it too.
 - Build trap seen again: the polaroid refmap had vanished from build/tmp and the jar backstop failed the build. Fix: `./gradlew :exposureBackport:compilePolaroidJava --rerun`.
 

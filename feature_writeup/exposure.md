@@ -18,7 +18,7 @@
 | Exposure: Expanded 1.0.1 (`exposure_expanded`): 2 lenses, 16 filters, palette / hicap / hires films, 6 instant slides | DEPLOYED, in-game test pending |
 | Build-time merge of addon tags and global loot modifiers into the base mod's files | BUILT, offline checks pass |
 | Exposure Catalog 1.1.2 (`exposure_catalog`) | not ported, on hold (owner, 2026-10-01) |
-| Pack customisation (KubeJS recipes, tags, loot rules) | none yet; everything is upstream behaviour |
+| Pack customization (KubeJS recipes, tags, loot rules) | none yet; everything is upstream behavior |
 
 - **What it is:** our own port of Exposure 1.9.19 and two of its addons from NeoForge 1.21.1 to Forge 1.19.2.
   Everything is in one jar, `mods/exposureBackport-1.9.19-ce-19.2-04.jar` (DEPLOYED with pack 1.0.7; `-02` shipped with 1.0.4, `-03` with 1.0.6), built from
@@ -187,7 +187,7 @@ palette with `/exposure palette export <id> json <file>`.
 - **Client:**
   - `[capture.loading]`: URL loading for the projector, `ONLY_ALLOWED_DOMAINS` (imgur, discord, githubusercontent).
   - `[export]`: `export_viewed_photographs = true` saves every photo you view, and that you took, as a PNG
-    under `exposures/`, organised by world at 2x size.
+    under `exposures/`, organized by world at 2x size.
   - `[render]`: frame culling distance 64.
 
 ### Commands (op level 2)
@@ -297,9 +297,9 @@ palette with `/exposure palette export <id> json <file>`.
   Last run 2026-10-02: all PASS. INFO lists 11 lang names upstream ships for items it never registers.
 - **Server smoke test:** follow the scratch-server recipe: the jar alone, Trash CreEngServer libraries, stdin
   fifo. Then:
-  - `/exposure palette export exposure_expanded:cga json t.json` → "Exported palette".
+  - `/exposure palette export exposure_expanded:cga json t.json` -> "Exported palette".
   - Run `/loot spawn 0 -60 0 loot minecraft:chests/simple_dungeon` 40 times, then
-    `execute if entity @e[type=item,nbt={Item:{id:"exposure_expanded:antialias_filter"}}]` → passes
+    `execute if entity @e[type=item,nbt={Item:{id:"exposure_expanded:antialias_filter"}}]` -> passes
     (2026-10-01: count 2).
 - **Dev client:** `./gradlew :exposureBackport:runClient` reaches the main menu with no "Unable to load model"
   or missing-texture lines for `exposure*` (2026-10-01).
@@ -310,60 +310,60 @@ palette with `/exposure palette export <id> json <file>`.
 ## 7. In-game tests
 
 Base (camera, film, printing):
-- [x] **EX-01 attachments:** craft a camera, Sneak + Use → attachments screen; insert color film, a redstone lamp, a spyglass and a red pane → each shows on the camera.
-- [x] **EX-02 shoot:** Use raises the viewfinder, Use again → shutter sound, film counter goes to 1/16.
-- [ ] **EX-03 controls:** Sneak in the viewfinder → controls; change shutter speed, zoom with scroll, set the self-timer → the shot fires after the timer.
+- [x] **EX-01 attachments:** craft a camera, Sneak + Use -> attachments screen; insert color film, a redstone lamp, a spyglass and a red pane -> each shows on the camera.
+- [x] **EX-02 shoot:** Use raises the viewfinder, Use again -> shutter sound, film counter goes to 1/16.
+- [ ] **EX-03 controls:** Sneak in the viewfinder -> controls; change shutter speed, zoom with scroll, set the self-timer -> the shot fires after the timer.
 - [x] **EX-04 lens range:** without a lens the zoom stops at 18-55mm; with a spyglass 55-200mm.
-- [ ] **EX-05 flash:** shoot in a dark room with the flash on → the photo is lit.
-- [ ] **EX-06 develop by crafting:** color film + awkward, thick, mundane potions → developed color film; B&W film + water bottle → developed B&W film.
-- [ ] **EX-07 develop with Create:** run exposed color film through spouts (awkward, thick, mundane, 250 mB each) → developed film that still has its frames in the Lightroom.
-- [ ] **EX-08 print B&W:** Lightroom in light 13+, developed B&W film + paper + black dye → photograph, XP; in the dark → "Not enough light".
-- [ ] **EX-09 print color:** developed color film + paper + cyan, magenta, yellow, black dyes → color photograph.
-- [ ] **EX-10 chromatic:** shoot three B&W frames through red, green, blue panes; Tinted Glass on top of the Lightroom → chromatic mode prints a color photograph.
+- [ ] **EX-05 flash:** shoot in a dark room with the flash on -> the photo is lit.
+- [ ] **EX-06 develop by crafting:** color film + awkward, thick, mundane potions -> developed color film; B&W film + water bottle -> developed B&W film.
+- [ ] **EX-07 develop with Create:** run exposed color film through spouts (awkward, thick, mundane, 250 mB each) -> developed film that still has its frames in the Lightroom.
+- [ ] **EX-08 print B&W:** Lightroom in light 13+, developed B&W film + paper + black dye -> photograph, XP; in the dark -> "Not enough light".
+- [ ] **EX-09 print color:** developed color film + paper + cyan, magenta, yellow, black dyes -> color photograph.
+- [ ] **EX-10 chromatic:** shoot three B&W frames through red, green, blue panes; Tinted Glass on top of the Lightroom -> chromatic mode prints a color photograph.
 
 Photographs:
-- [x] **EX-11 stack paging:** stack 3+ photos, Use → the viewer pages with the arrows, A/D and the arrow keys. PASSED 2026-10-01 (after the fix).
-- [ ] **EX-12 stack cycling:** Sneak + Use with a stack in hand → the top photo moves to the bottom.
-- [ ] **EX-13 album:** put photos in an album with notes, sign it → signed album glints, readable by another player.
+- [x] **EX-11 stack paging:** stack 3+ photos, Use -> the viewer pages with the arrows, A/D and the arrow keys. PASSED 2026-10-01 (after the fix).
+- [ ] **EX-12 stack cycling:** Sneak + Use with a stack in hand -> the top photo moves to the bottom.
+- [ ] **EX-13 album:** put photos in an album with notes, sign it -> signed album glints, readable by another player.
   - 2026-10-05 (`-03`): note and title boxes took no keys (1.19.2 screen focus never set the widget's focused flag); fixed in the backport screens. Retest typing/backspace/Enter in a note, Esc to unfocus, right-click to clear, and the signing title box focused on open.
-- [ ] **EX-14 frames:** place a Photograph Frame on a wall with 3x3 space → 3x3; in a 1-block gap → 1x1; on the floor and the ceiling; insert a photo; Glow Ink Sac → it glows.
-- [ ] **EX-15 glass frame:** place a Glass Photograph Frame and insert a photo → the photo shows; sizes and Glow Ink Sac work as in EX-14.
-- [ ] **EX-16 copy and age:** photo + paper + dyes → a copy; photo + brown dye (or antique ink) → aged photograph.
+- [ ] **EX-14 frames:** place a Photograph Frame on a wall with 3x3 space -> 3x3; in a 1-block gap -> 1x1; on the floor and the ceiling; insert a photo; Glow Ink Sac -> it glows.
+- [ ] **EX-15 glass frame:** place a Glass Photograph Frame and insert a photo -> the photo shows; sizes and Glow Ink Sac work as in EX-14.
+- [ ] **EX-16 copy and age:** photo + paper + dyes -> a copy; photo + brown dye (or antique ink) -> aged photograph.
 
 Camera stand and projector:
-- [x] **EX-17 stand film count:** a camera on a stand, take shots remotely → the film count updates without opening the menu. PASSED 2026-10-01 (after the fix).
-- [ ] **EX-18 stand control:** place a camera on a stand, Use → you look through it; walk past 100 blocks → control stops.
-- [ ] **EX-19 projector:** rename an Interplanar Projector to an imgur image URL, use it as the filter, shoot → the photo is that image; the projector is consumed only in consume mode.
+- [x] **EX-17 stand film count:** a camera on a stand, take shots remotely -> the film count updates without opening the menu. PASSED 2026-10-01 (after the fix).
+- [ ] **EX-18 stand control:** place a camera on a stand, Use -> you look through it; walk past 100 blocks -> control stops.
+- [ ] **EX-19 projector:** rename an Interplanar Projector to an imgur image URL, use it as the filter, shoot -> the photo is that image; the projector is consumed only in consume mode.
 
 Server and sharing:
-- [ ] **EX-20 shared photos:** on the dedicated server, player A prints a photo and gives it to player B → B sees the image.
-- [ ] **EX-21 persistence:** take photos, restart the server, relog → the photos and the film in cameras are intact.
-- [ ] **EX-22 export:** view a photo you took → a PNG appears under `exposures/<world>/`.
+- [ ] **EX-20 shared photos:** on the dedicated server, player A prints a photo and gives it to player B -> B sees the image.
+- [ ] **EX-21 persistence:** take photos, restart the server, relog -> the photos and the film in cameras are intact.
+- [ ] **EX-22 export:** view a photo you took -> a PNG appears under `exposures/<world>/`.
 - [ ] **EX-23 JEI:** JEI shows Photograph Printing (catalyst Lightroom), Photograph Stacking, and the developing recipes, including the Create ones.
-- [ ] **EX-24 base loot:** open fresh village plains house and shipwreck map chests → aged photographs that show images.
-- [ ] **EX-25 viewfinder and screens (`-04`):** raise the viewfinder, then die and respawn, change dimension, and relog, each with the camera still in hand → after each, open the inventory and a chest and click items → every click moves items, no shutter sound, no shot taken. Also with the viewfinder up: open the inventory (E) and click items → items move, no shot taken.
+- [ ] **EX-24 base loot:** open fresh village plains house and shipwreck map chests -> aged photographs that show images.
+- [ ] **EX-25 viewfinder and screens (`-04`):** raise the viewfinder, then die and respawn, change dimension, and relog, each with the camera still in hand -> after each, open the inventory and a chest and click items -> every click moves items, no shutter sound, no shot taken. Also with the viewfinder up: open the inventory (E) and click items -> items move, no shot taken.
 
 Polaroid:
-- [ ] **EX-30 instant camera:** craft it, load 12 instant color slides, shoot → the print appears in the inventory and the slide count drops to 11.
-- [ ] **EX-31 print merging:** shoot with a photo already in the inventory → they become a stack; with a stack → the print goes on top; with a full inventory → the print drops.
-- [ ] **EX-32 cooldown:** shooting twice quickly → the second waits about 2 seconds.
+- [ ] **EX-30 instant camera:** craft it, load 12 instant color slides, shoot -> the print appears in the inventory and the slide count drops to 11.
+- [ ] **EX-31 print merging:** shoot with a photo already in the inventory -> they become a stack; with a stack -> the print goes on top; with a full inventory -> the print drops.
+- [ ] **EX-32 cooldown:** shooting twice quickly -> the second waits about 2 seconds.
 - [ ] **EX-33 slides only:** instant slides don't fit a normal camera's film slot, and film doesn't fit the instant camera.
-- [ ] **EX-34 high sensitivity:** a high-sensitivity slide in a dim room → brighter, grainier than a normal slide.
+- [ ] **EX-34 high sensitivity:** a high-sensitivity slide in a dim room -> brighter, grainier than a normal slide.
 
 Expanded:
-- [ ] **EX-40 lenses:** telescopic lens → zoom 200-300mm; panoramic lens → 10-18mm.
+- [ ] **EX-40 lenses:** telescopic lens -> zoom 200-300mm; panoramic lens -> 10-18mm.
 - [ ] **EX-41 filters:** each Expanded filter fits the filter slot and changes the viewfinder; Shift on the item shows its tooltip.
   - Flip lense failed, sky fails to render upside down
-- [ ] **EX-42 palette films:** shoot, develop and print each of Game Boy, NES, C64, CGA film → the photo uses only that palette's colors.
+- [ ] **EX-42 palette films:** shoot, develop and print each of Game Boy, NES, C64, CGA film -> the photo uses only that palette's colors.
 - [ ] **EX-43 hicap:** hicap film shows 32 frames on the counter.
 - [ ] **EX-44 hires:** a hires photo in a 3x3 frame is visibly sharper than a normal one.
 - [ ] **EX-45 instant slides:** palette and hires instant slides load into the Instant Camera and print in their palette / at higher resolution.
-- [ ] **EX-46 Create developing:** an exposed Expanded film through spouts → developed film with its frames.
+- [ ] **EX-46 Create developing:** an exposed Expanded film through spouts -> developed film with its frames.
 - [ ] **EX-47 Expanded loot:** fresh village houses (plains, desert, savanna, snowy) sometimes hold palette films, some pre-exposed with pictures; a fresh dungeon sometimes has the antialias filter.
 - [ ] **EX-48 JEI:** JEI shows the Expanded recipes and the 8 Create developing recipes.
 
 Before deploying 1.0.3:
-- [ ] **EX-50 old world:** load a copy of the server world (winecraft) with the new jar → no crash; note what happened to 1.6.0 cameras, photos, wall photographs and lightrooms (expected: blank photos, empty cameras, wall photographs gone).
+- [ ] **EX-50 old world:** load a copy of the server world (winecraft) with the new jar -> no crash; note what happened to 1.6.0 cameras, photos, wall photographs and lightrooms (expected: blank photos, empty cameras, wall photographs gone).
 
 ## 8. History
 

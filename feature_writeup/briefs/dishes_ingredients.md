@@ -187,7 +187,7 @@ A cut sweet potato gives 3 sweet potato slices.
 
 ### Now (checked 2026-10-31)
 - No sweet potato slice item (Veggies port and `item_dict.js`: `sweet_potato` 14284, `baked_sweet_potato` 14295, dough, pie,
-  cupcake). The potato analogue is Rustic's `potato_slices` (`i.potato_slices` 12743; knife on a potato -> 2) and
+  cupcake). The potato analog is Rustic's `potato_slices` (`i.potato_slices` 12743; knife on a potato -> 2) and
   `baked_potato_slices` (12720).
 - Fries and cod and chips read `#forge:sliced_potato` (`i.t_sliced_potato`; [pneumaticcraft/recipes.js:60-61](../../kubejs/data/creativedelight/kubejs/pneumaticcraft/recipes.js));
   More Delight's dishes read `#forge:sliced_potatoes` (row 26).
@@ -262,7 +262,7 @@ Honeycomb counts as sugar in heated mixing (2 sugar per honeycomb), as honey in 
    (keep the bottle recipe).
 2. 2 per comb: since the tag already makes 1 comb = 1 sugar in every slot, add one conversion instead of twin recipes:
    `R.createMixing(Item.of(i.sugar, 2), [i.honeycomb], e, 'sugar_from_honeycomb', 'heated')` in CD `minecraft/recipes.js`.
-3. Honey: list the recipes taking `i.honey_bottle` as a flavour (pies via the `SWEET` slot, cookies); add the comb where it
+3. Honey: list the recipes taking `i.honey_bottle` as a flavor (pies via the `SWEET` slot, cookies); add the comb where it
    reads as a comb dish, as honey cake does.
 
 ### Decisions
@@ -429,7 +429,7 @@ cooking oil, more fish into fish oil.
 Status **In Progress** / Work: KubeJS / Creative Brewing jar / id `dishes/ingredients #9`
 
 ### Goal
-More cheese types (red mushroom, warped fungus), new colours, longer ageing, more per slice; cheese making to the
+More cheese types (red mushroom, warped fungus), new colors, longer ageing, more per slice; cheese making to the
 Vintage Delight method; a stackable cheese ripening shelf; 9 wedges craft back to the cheese block, for each cheese
 (scratchpad 2026-10-23).
 

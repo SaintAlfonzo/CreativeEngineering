@@ -116,7 +116,7 @@ Tests: SQ-CBO-12, -13, -15 rerun on the chain, plus a Common + Compat + Equipmen
 (guard `forge:ingots/zinc`, output `forge:plates/zinc` etc.) have empty output tags in the cooking set, and every
 output-filtered remove tests every recipe. NCH `_pruneEmptyIeOutputs` removes such IE recipes by id once per recipe
 event before the first filter (one `[NCH] removed N ...` line). (3) Loot tables: new Common `LootTablesOptionalModsMixin`
-honours a top-level `forge:conditions` and drops item entries of absent mods (one `[absent mods] loot tables:` line);
+honors a top-level `forge:conditions` and drops item entries of absent mods (one `[absent mods] loot tables:` line);
 no JSON edits needed. Horror lasagna: `createSequencedAssembly` skips (counted) an assembly whose step has an empty
 fluid and drops its steps. Compost: values for items of absent mods, or of an absent compat folder
 (`immersive_weathering:<mod>/...`), are counted, not warned.
@@ -252,7 +252,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 Built 18:51-18:54, not installed (TODO `creativeengineering/carve #1`, tests SQ-ENGM). Owner targets: XP to Magic;
 BlockRunner walk speeds, Ore Excavation, TNT shrapnel to Compat; wooden bucket, arrow fletching to Equipment; Vinery tags
 to Brewing; animal-fat torch, seed milling, mulch to Delight; prepared flesh and hemp-for-wool stay in Engineering;
-paintings to Compat (NOT done: vanilla Mojang art, kept pack-only by the licence audit, owner to confirm); sky islands,
+paintings to Compat (NOT done: vanilla Mojang art, kept pack-only by the license audit, owner to confirm); sky islands,
 waystone ruins, driftwood, deadwood, Scarlet mountains, Moobloom, azalea, wild mushrooms, cave carrots, ghost peppers to
 Worldgen (optional-mod files in `packs/<modid>/`, `compat/ModDataPacks`); seasoned and culture models to Delight; all
 Engineering assets into its jar (229 files). Generators repointed: `gen_nether_worldgen.py` writes into the Worldgen

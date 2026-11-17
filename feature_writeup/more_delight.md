@@ -74,7 +74,7 @@ All other hunger, saturation and effects are unchanged.
 
 | Change | Proposed |
 |---|---|
-| Pot meals name the bowl container | skip: same behaviour on FD 1.2.4 (remainder fallback) |
+| Pot meals name the bowl container | skip: same behavior on FD 1.2.4 (remainder fallback) |
 | Create cutting: Potato -> 2 Diced Potatoes, Bread -> 4 Bread Slices. The installed jar has both in `data/create/cutting/` (never loaded) with the potato recipe on the crop block | skip: Slice and Dice already turns the cutting-board Bread -> slices recipe into a slicer recipe, and diced potatoes are merged into Rustic's slices |
 | Tag `forge:sliced_potatoes` renamed `forge:sliced_potato` | **Decided: follow it** (section 5.3). Correction 2026-11-01: the installed 25.07.28 cooking recipes (mashed potatoes, potato salad, the four diced potatoes with ...) read the plural `forge:sliced_potatoes`; with the diced potatoes merged it was empty, so CD fills it with Rustic's slices too (`dishes/ingredients #26`) |
 | Brewin' cheese recipes for Hamburger with Cheese and Toast with Cheese | skip as is (items need Casualness Delight). **Decided:** the Cheese Toast is added (section 5.1), no Casualness Delight items. The cheeseburger exists twice already (Delightful, Vintage) |

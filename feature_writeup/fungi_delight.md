@@ -263,7 +263,7 @@ Steps that match the Veggies or Vintage ports are only named; see [veggies_delig
 2. **Ids and tags in one place.** Every item in `item_dict.js`, blocks in the block dict; `#forge:mushrooms/*` and
    storage block tags as shipped; check the `#forge:mushrooms` users.
 3. **Mushroom parity.** Colonies like FD's (rich soil growth, cutting board, `#farmersdelight:mushroom_colony_growable_on`);
-   rows in [crops.md](crops.md); Quark and hoe-area behaviour as for FD colonies; WTHIT growth line for colonies.
+   rows in [crops.md](crops.md); Quark and hoe-area behavior as for FD colonies; WTHIT growth line for colonies.
 4. **Wild placement.** Fungi's 12 feature modifiers off through `disable_modifiers`; patches and colonies in
    `wild_crops.json` with the biome words in §2.2; huge mushrooms in `mushroom`; rooted dirt and truffle dirt in
    `coniferous` and `dark_oak`. `wild_crops.js` only places in `vegetal_decoration`, so it gains a per-rule `step`
@@ -324,7 +324,7 @@ with the mean of brown and red):
 | cave patches (cave) | every overworld biome | inky 1024, morel 1024 (8 floor tries per rolled chunk) |
 | cave colonies (cave) | every overworld biome | 120 each, all four |
 
-Open values: pairing by colour instead of the mean (inky 1/1024, morel 1/2048 singles); swamp morel colonies borrow
+Open values: pairing by color instead of the mean (inky 1/1024, morel 1/2048 singles); swamp morel colonies borrow
 the dark-forest 1/60 (swamps have no FD colony); cave count 8 and 16-block scan are guesses, and `crops_by_biome.md`
 counts all 8 tries, so its cave rows read high; Terralith Mirage Isles has no `mushroom` / `dark_oak` word, so no
 Fungi mushrooms there (its mooshroom and Fungi cow spawns do apply). Surface heightmap MOTION_BLOCKING_NO_LEAVES
@@ -582,7 +582,7 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 | FGD-37 | JEI on Burrowing and Weak Stomach | mod description text shown |
 | FGD-38 | Bake a truffle pie | recipe in JEI, pie obtainable |
 | FGD-39 | Farmer level 3 and wandering trader; pig and wolf sounds | trades appear; sounds play |
-| FGD-40 | Seasons: inky cap, morel and colonies in winter | same behaviour as brown/red |
+| FGD-40 | Seasons: inky cap, morel and colonies in winter | same behavior as brown/red |
 
 ## 9. History
 

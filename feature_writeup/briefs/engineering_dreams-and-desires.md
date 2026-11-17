@@ -414,12 +414,12 @@ Status Testing (built 2026-10-30, `engineering/dreams_desires.js`, SQ-DD-08 scra
 
 Built 2026-10-30 as planned (`dreams_desires.js` lines 7-19, with dict key `i.t_painted_asphalt` for
 `#create_dd:asphalt_blocks`; 16 names by a loop in `namechanges.js` line 345; right-clicking with soap still gives white
-painted asphalt, Supplementaries' colour set). Fold into a D&D writeup (`dreams_desires.md`, DD-08 to DD-10) when one is
+painted asphalt, Supplementaries' color set). Fold into a D&D writeup (`dreams_desires.md`, DD-08 to DD-10) when one is
 written, then delete this section; the plan below is kept as written.
 
 ### Goal
 
-D&D's 16 coloured asphalt blocks become "Painted Asphalt": made by painting Immersive Petroleum asphalt (8 asphalt +
+D&D's 16 colored asphalt blocks become "Painted Asphalt": made by painting Immersive Petroleum asphalt (8 asphalt +
 1 dye -> 8), washed back with soap, and running like IP asphalt.
 
 ### Now
@@ -436,7 +436,7 @@ D&D's 16 coloured asphalt blocks become "Painted Asphalt": made by painting Imme
   -> 0.6 and speed factor 0.001 -> 1.0 (jump factor 1.25 kept), and `blocktags.js` line 125 puts
   `create_dd:*_asphalt_block` in BlockRunner's `asphalt` tier with IP asphalt (1.50). BR-28 / BR-29 untested.
 - Supplementaries soap recipes are plain shapeless crafts (e.g. `supplementaries:soap/piston`: sticky piston + soap ->
-  piston); its `supplementaries:soap_clearing` special recipe uses Moonlight's colour sets, which have no uncoloured
+  piston); its `supplementaries:soap_clearing` special recipe uses Moonlight's color sets, which have no uncoloured
   member for D&D asphalt, so soap does nothing to it today (unverified in game).
 - Names: D&D lang `block.create_dd.<colour>_asphalt_block` = "<Colour> Asphalt Block".
 
@@ -468,7 +468,7 @@ Verified: the 16 D&D recipe ids, `#create_dd:asphalt_blocks` (16 blocks), IP asp
 - **Re-dyeing**: the sketch accepts painted asphalt as the "A" ingredient too (8 red + white dye -> 8 white).
   Recommendation: yes, it costs nothing.
 - **Soap ratio**: 8 painted + 1 soap -> 8 asphalt (mirrors the paint recipe). Recommendation over 1 + 1 -> 1.
-- **Textures**: keep D&D's. A "painted" look (IP asphalt texture with a coloured stripe) would need new textures in
+- **Textures**: keep D&D's. A "painted" look (IP asphalt texture with a colored stripe) would need new textures in
   the resource pack; not in the row's scope.
 - **Slabs / stairs**: IP's slab and stair recipes take `#forge:asphalt`; painted asphalt is not in it, so painted
   asphalt has no slabs or stairs. Recommendation: leave it (adding it would turn painted asphalt into plain IP slabs).
@@ -482,7 +482,7 @@ Verified: the 16 D&D recipe ids, `#create_dd:asphalt_blocks` (16 blocks), IP asp
 ### Tests
 
 - **DD-08 Paint:** 8 IP asphalt + red dye -> 8 Red Painted Asphalt; the old scorchia recipe is gone from JEI.
-- **DD-09 Soap:** 8 painted (mixed colours) + soap -> 8 IP asphalt.
+- **DD-09 Soap:** 8 painted (mixed colors) + soap -> 8 IP asphalt.
 - **DD-10 Speed:** BR-28 (blockrunner.md): IP and painted asphalt read the same `M`.
 
 ---

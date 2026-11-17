@@ -32,7 +32,7 @@ look rows/<ID>.shell.txt: merge harness ALL PASS (6 ok lines); groups check list
 ## SQ-WGE-01a (A1)
 @group B, fresh world
 @commands before boot: `grep -n -A2 'nullscape:shadowlands' kubejs/generation_scripts/worldgen/biome_config.json` (multiplier 0.75); boot; `grep -i 'BiomeLayoutTuner\|biome solver' OUT/srv/logs/latest.log`
-@pass the solver summary names `nullscape:shadowlands` with a modelled End share near 14 % (aim about 16 % of the surface); no solver note for it, `crystal_peaks` still 3 and `void_barrens` 2 (3.95 % / 5.41 % in the old samples); no ERROR from the tuner
+@pass the solver summary names `nullscape:shadowlands` with a modeled End share near 14 % (aim about 16 % of the surface); no solver note for it, `crystal_peaks` still 3 and `void_barrens` 2 (3.95 % / 5.41 % in the old samples); no ERROR from the tuner
 @fails cached layout used: delete `biome_layout_cache.json.gz` in the scratch `OUT/srv` and reboot; multiplier not 0.75
 @reviewed 2026-11-16
 shell grep -n -A2 'nullscape:shadowlands' $INST/kubejs/generation_scripts/worldgen/biome_config.json | head -4
@@ -111,7 +111,7 @@ look rows/<ID>.shell.txt: undead_castle True for land/plains and land/taiga, Fal
 ## SQ-WGE-03b (A3)
 @group B
 @commands SQ-EF-06 again, two r 400 squares (plains/taiga and highlands, `/locate biome terralith:alpine_highlands`); `/cwglocate census 96 <x> <z>` for `eugene:undead_castle` over 4 centres; `grep 'eugene:undead_castle'` earth-fill log lines (`log = ALL`)
-@pass no castle starts in a highlands biome (`getNoiseBiome` probe per start); every plains/taiga castle that the old limit cancelled with 562 to 708 over air is now kept (log shows kept, air value, limit 800); castle count in the census about the same as before per area (fits no longer include highlands, so a drop in highland-adjacent area is expected, not a fail); `tp` to one kept castle on a slope: no earth over more than 6 blocks of air (ST-240)
+@pass no castle starts in a highlands biome (`getNoiseBiome` probe per start); every plains/taiga castle that the old limit canceled with 562 to 708 over air is now kept (log shows kept, air value, limit 800); castle count in the census about the same as before per area (fits no longer include highlands, so a drop in highland-adjacent area is expected, not a fail); `tp` to one kept castle on a slope: no earth over more than 6 blocks of air (ST-240)
 @fails cancels still logged with air over 800: the beard sees terrain far below, raise the limit and note the measured value; castles in highlands: groups not regenerated, `structure_group_estimates.md` castle row should read spacing 100
 @draft needs a judgement on generated castles (slope earth over air, ST-240) after two r 400 Chunky squares and four censuses: write the census and earth-fill grep steps when the row is run with `log = ALL`; the highlands start check needs a per-start biome readback no verb has (`cdevtest under` lists starts without biomes)
 ## SQ-WGE-04a (A4)
@@ -232,7 +232,7 @@ look toml frequency 60 and forceSpawnInVillages true; the shell's summed count o
 ## SQ-WGE-05b (A5)
 @group B
 @commands find 10 villages (`/locate structure minecraft:village_plains` and the other four kinds), `tp` to each, look for a waystone within 20 blocks of the village centre (probe: nearest `waystones:` block entity)
-@pass at least 8 of 10 villages have one, near the centre (accepted 2026-11-03: r1103w found 8 of 10, none at -240 1120 and 2496 -1488); each waystone is registered (right-click shows a name)
+@pass at least 8 of 10 villages have one, near the center (accepted 2026-11-03: r1103w found 8 of 10, none at -240 1120 and 2496 -1488); each waystone is registered (right-click shows a name)
 @fails fewer than 8 (list the villages without one): `forceSpawnInVillages` not read, or a village mod (Towns and Towers, Villages and Pillages) without the waystone piece, list which
 @reviewed 2026-11-16
 > execute in minecraft:overworld positioned 0 70 0 run locate structure minecraft:village_plains
@@ -442,7 +442,7 @@ look against the SQ-META31 census: camp ruin metas about 1.7x (share 0.25 [0.15]
 ## SQ-WGE-12 (B2)
 @group B
 @commands Needs the Creative Worldgen jar of 2026-11-03 or later (`punch` accepted by `structure_overrides.js`; before, the definition was dropped). SQ-META31-04b: `/place structure creativeengineering:meta/meteorite_desert_pyramid` 3 times on desert ground, and 2 found with `/locate`; grep `[meta-structures] ... meteorite_desert_pyramid` (log on); LOOK at each from the ground and from the side
-@pass log line has `punch r <n> column <c> y <from>-<top>`; the meteorite centre within 4 blocks of the pyramid centre; the pyramid above ground stands (walls, towers, roof) except a round shaft over the meteorite; sky stone sphere under or through the floor; no crater, no fallout, no cleared sand around the pyramid; no `could not rebuild an AE2 meteorite piece` error
+@pass log line has `punch r <n> column <c> y <from>-<top>`; the meteorite center within 4 blocks of the pyramid center; the pyramid above ground stands (walls, towers, roof) except a round shaft over the meteorite; sky stone sphere under or through the floor; no crater, no fallout, no cleared sand around the pyramid; no `could not rebuild an AE2 meteorite piece` error
 @fails crater still there: crater type not rewritten (AE2 tag keys changed: read `MeteoriteStructurePiece` save keys); no shaft: `topOver` found no box (meteorite missed the pyramid)
 @owner true
 @draft the pass is a look at three placed meteorite pyramids from the ground and the side (shaft, sphere, no crater): owner or agent judgement in a client; the log half (`punch r` line, no rebuild error) goes in when the row is run
@@ -455,7 +455,7 @@ look against the SQ-META31 census: camp ruin metas about 1.7x (share 0.25 [0.15]
 ## SQ-WGE-14 (A6)
 @group B
 @commands `/locate structure creativeengineering:meta/waystone_ruins` 4 times (log on); tp to each; right-click the waystone
-@pass a small ruin with one waystone 4 to 12 blocks from its centre, standing on the ground (beard), not inside a wall; the waystone is registered (name screen); `/locate structure creativeengineering:waystone_ruin_part` alone finds only the ones inside metas (no structure set); ruin_scatter still found; plain stone waystone in every biome (Waystones' BIOME style only covers its lone waystones)
+@pass a small ruin with one waystone 4 to 12 blocks from its center, standing on the ground (beard), not inside a wall; the waystone is registered (name screen); `/locate structure creativeengineering:waystone_ruin_part` alone finds only the ones inside metas (no structure set); ruin_scatter still found; plain stone waystone in every biome (Waystones' BIOME style only covers its lone waystones)
 @fails `no satellite fitted` for most: margin 1 too tight, raise distance; waystone not registered: template block entity, compare with a village waystone
 @reviewed 2026-11-16
 > execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/waystone_ruins
@@ -571,7 +571,7 @@ look grove creature list has minecraft:allay 3 (1-2); allays counted in the grov
 ## SQ-MOB-N8 | End pillagers wear the copper diving gear, Overworld ones do not
 @group B, End
 @commands `/execute in minecraft:the_end run summon minecraft:pillager ~ ~ ~`; `/data get entity @e[type=pillager,limit=1,sort=nearest] ArmorItems`; kill it; same in the Overworld; End tower: `/cwgspawnbox` inside, wait
-@pass End pillager has the copper diving helmet, backtank and boots and drops none; Overworld pillager has none; probe answers `end_tower` and box mobs all wear the gear; the gear is not drawn on the model (known, no armour layer on illagers) (MS-34, MS-35)
+@pass End pillager has the copper diving helmet, backtank and boots and drops none; Overworld pillager has none; probe answers `end_tower` and box mobs all wear the gear; the gear is not drawn on the model (known, no armor layer on illagers) (MS-34, MS-35)
 @fails `getDimension` string differs; Rhino overload error from `end_divers.js` in latest.log
 @from batches/r1103w/w_12_B.qb
 > execute in minecraft:the_end run forceload add 1488 -16 1519 15

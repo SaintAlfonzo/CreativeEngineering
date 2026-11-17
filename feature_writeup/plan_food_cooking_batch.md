@@ -47,7 +47,7 @@ Row corrections: `dishes/ingredients #26` is already Testing (fixed 2026-11-01, 
 | Row | Approach |
 |---|---|
 | `dishes/jams #7` | Salmonberry and raspberry jam, new ids in `item_dict.js`, jam tags, textures. |
-| `food/drinks #15` | Build the drink rules exactly as decided in [creative_delight_drinks.md](creative_delight_drinks.md): new teas and juices on reserved ids, kettle flavoured coffees, heated mixing, renames, matcha +1 powder, cloud latte; folds `food/drinks #8`, `#10`, `merges/drinks #1`, `flowers #5`. Largest row; do last in the wave. |
+| `food/drinks #15` | Build the drink rules exactly as decided in [creative_delight_drinks.md](creative_delight_drinks.md): new teas and juices on reserved ids, kettle flavored coffees, heated mixing, renames, matcha +1 powder, cloud latte; folds `food/drinks #8`, `#10`, `merges/drinks #1`, `flowers #5`. Largest row; do last in the wave. |
 | `cooking/kitchen #25` | Stone cutting boards: granite, andesite, diorite. Textures are the polished granite/andesite/diorite textures painted onto the cutting board model (not swapped in as the whole texture), without the block edge texture. Recipes via `global.NCH`. |
 
 ## Wave C: patcherMod (one rebuild, install, restart; never while the game runs)
@@ -126,7 +126,7 @@ in `mods/`.
 **`dishes/meals #40` proposal (pinned 2026-11-02, owner: no medleys for now; kept for later).** Four feast blocks in the Rustic member, built like Rice Roll Royale
 (FD feast, 8 servings, FD's rice roll medley models with a recoloured `food` texture):
 Hostile Roll Medley (Hostile Delight's guardian rolls and sashimi, Elder Guardian Roll), Egg Roll Medley (Oceanic's egg
-roll x 8), Bell Pepper Roll Medley (Rustic's pepper rolls, 8 of the 9 colours or 9 servings), Shrimp and Sea Pickle Roll
+roll x 8), Bell Pepper Roll Medley (Rustic's pepper rolls, 8 of the 9 colors or 9 servings), Shrimp and Sea Pickle Roll
 Medley (Oceanic's shrimp roll and sea pickle roll slices; the sea pickle roll recipe takes raw or sliced sea pickle).
 Needed: the roll list and serving count per medley, and whether placeholder recolours are fine for the art.
 

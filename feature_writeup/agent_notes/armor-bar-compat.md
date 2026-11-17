@@ -14,7 +14,7 @@ copied to `patcherMod/libs/DetailArmorBar-2.6.4+1.19.2-forge.jar`, compileOnly) 
 before building against it. Its `ArmorBarRenderManager` color arg is a straight RGBA tint
 (`RenderSystem#setShaderColor` under the draw call) — any `java.awt.Color` works, it's not a
 fixed palette. Proof: DetailArmorBar's own leather-armor entry reads the dye color off the
-ItemStack and tints its neutral grey icon with it. One quirk: alpha divides by 100, not 255 —
+ItemStack and tints its neutral gray icon with it. One quirk: alpha divides by 100, not 255 —
 values above ~100 just clamp to fully opaque.
 
 `DetailArmorBarCompat.recolor()` tints the plain IRON icon (sheet coords x=63 full / x=54 half
@@ -25,7 +25,7 @@ tile-by-tile mapping of the sheet (visually confirmed via ImageMagick crops at y
 authoritative by resolving each SRG field against patcherMod's own `build/createMcpToSrg/output.tsrg`
 — e.g. `f_42480_` = `Items.NETHERITE_HELMET` — rather than trusting the visual guess alone): x=9
 netherite (dark/black), x=27 diamond (cyan), x=45 turtle (green, single-item group), x=63 iron
-(white/silver, = DEFAULT), x=81 chainmail (grey checkered), x=99 gold (yellow), x=117 leather
+(white/silver, = DEFAULT), x=81 chainmail (gray checkered), x=99 gold (yellow), x=117 leather
 (plain white/grey, dynamically tinted from dye color). `NETHERITE_ICON_X/HALF_X` constants reuse
 x=9/x=0 untinted for "matches real netherite" cases (Create's netherite diving gear, below).
 
@@ -45,9 +45,9 @@ with two entry points, called from `CreativeEngineering.ClientModEvents#onClient
 
 `register()` now has 3 real `recolor()` calls, all texture-reuse (default sheet's neutral icon,
 no new art), colors sampled from each mod's own item texture with ImageMagick histograms:
-- `felsic_gear:felsic_{helmet,chestplate,leggings,boots}` → `0xB89B6A` khaki/tan (felsic_chestplate.png averages ~#585639)
-- `create_deep_dark:echo_armor_{helmet,chestplate,leggings,boots}` → `0x17A8B8` teal (echo_shard_chestplate.png averages ~#0D626C)
-- `dragonloot:dragon_{chestplate,leggings,boots}` + `dragonloot:upgraded_dragon_chestplate` → `0x9B30FF` Ender-purple (its own texture is near-black/grey and unreadable against the dark HUD, so this leans into End/Ender Dragon branding instead of sampling the item texture directly)
+- `felsic_gear:felsic_{helmet,chestplate,leggings,boots}` -> `0xB89B6A` khaki/tan (felsic_chestplate.png averages ~#585639)
+- `create_deep_dark:echo_armor_{helmet,chestplate,leggings,boots}` -> `0x17A8B8` teal (echo_shard_chestplate.png averages ~#0D626C)
+- `dragonloot:dragon_{chestplate,leggings,boots}` + `dragonloot:upgraded_dragon_chestplate` -> `0x9B30FF` Ender-purple (its own texture is near-black/grey and unreadable against the dark HUD, so this leans into End/Ender Dragon branding instead of sampling the item texture directly)
 - `dragonloot:dragon_helmet` deliberately pulled OUT of that recolor (2026-09-17, on request) as a
   worked `texture()` example: same plain-iron coordinates `recolor()` itself uses (x=63/54) but
   untinted `Color.WHITE`, i.e. renders exactly like `CustomArmorBar.DEFAULT`'s own fallback —
@@ -130,11 +130,11 @@ one `tintedArmor()` call, same pattern as every other bespoke set in this file.
 2026-09-17 (third follow-up): added `creategoggles`'s "Goggle Helmet" family - confirmed via
 `javap -p -c` on `com/robocraft999/creategoggles/registry/CGItems.class` that each one is built
 directly on a REAL vanilla `ArmorMaterials` value (not its own material), same 1:1-reuse pattern
-as the backtanks already in this file: `goggle_chainmail_helmet`→CHAIN, `goggle_diamond_helmet`→
-DIAMOND, `goggle_golden_helmet`→GOLD, `goggle_turtle_helmet`→TURTLE (new `TURTLE_ICON_X=45`/
+as the backtanks already in this file: `goggle_chainmail_helmet`->CHAIN, `goggle_diamond_helmet`->
+DIAMOND, `goggle_golden_helmet`->GOLD, `goggle_turtle_helmet`->TURTLE (new `TURTLE_ICON_X=45`/
 `TURTLE_ICON_HALF_X=36` constants, straight off this file's own documented tile map - turtle was
-listed there but never had constants until now), `goggle_netherite_helmet`→NETHERITE,
-`goggle_leather_helmet`→`DyableGoggleHelmet implements DyeableLeatherItem` (dynamic dye path, not
+listed there but never had constants until now), `goggle_netherite_helmet`->NETHERITE,
+`goggle_leather_helmet`->`DyableGoggleHelmet implements DyeableLeatherItem` (dynamic dye path, not
 fixed). `goggle_iron_helmet` needs no entry (IRON, matches the DEFAULT fallback already).
 `goggle_diving_helmet`/`goggle_netherite_diving_helmet` are `DivingGoggleHelmet` on Create's own
 `AllArmorMaterials.COPPER` / vanilla NETHERITE respectively (mirrors `create:copper_diving_helmet`/

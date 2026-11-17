@@ -30,7 +30,7 @@
 In vanilla 1.19.2 a fire placed inside an obsidian frame (flint and steel, fire charge, dispenser, lightning, spreading
 fire) runs `BaseFireBlock#onPlace`: in the Overworld or the Nether it looks for a valid empty frame
 (`PortalShape.findEmptyPortalShape`, both axes), asks Forge (`PortalSpawnEvent`, cancellable) and fills it with portal
-blocks. Travelling through creates the matching portal on the other side through `PortalForcer`, without that event.
+blocks. Traveling through creates the matching portal on the other side through `PortalForcer`, without that event.
 Smaller Nether Portals (in the pack) lowers the minimum frame size.
 
 The pack gates the Nether behind Botania: only Dark Fire, from Flint and Terrasteel, lights a portal, and an
@@ -150,25 +150,25 @@ None. The flood fill could be unit-tested headlessly like the worldgen tools (`t
 
 Survival, Overworld, a fresh obsidian frame (4 × 5, corners optional) each time.
 
-- [ ] **NP-01 Flint and steel fails:** light the frame → no portal, fire-extinguish sound, a soul-fire puff, every
+- [ ] **NP-01 Flint and steel fails:** light the frame -> no portal, fire-extinguish sound, a soul-fire puff, every
   frame block except corners is now crying obsidian. `latest.log` has the `PortalSpawnEvent fired` line.
 - [ ] **NP-02 Fire charge and dispenser fail:** same result with a fire charge and with a dispenser firing one.
 - [ ] **NP-03 Dark Fire works:** craft Flint and Terrasteel (flint + terrasteel ingot), use it on the inside bottom of
-  the frame → portal forms; the item loses 1 durability.
-- [ ] **NP-04 Z axis:** build the frame along the other axis → same result for NP-01 and NP-03.
-- [ ] **NP-05 Travel and return:** go through the NP-03 portal → a portal forms in the Nether; walk back through it →
+  the frame -> portal forms; the item loses 1 durability.
+- [ ] **NP-04 Z axis:** build the frame along the other axis -> same result for NP-01 and NP-03.
+- [ ] **NP-05 Travel and return:** go through the NP-03 portal -> a portal forms in the Nether; walk back through it ->
   back in the Overworld.
-- [ ] **NP-06 Smaller frame:** the smallest frame Smaller Nether Portals allows → Dark Fire lights it; flint and steel
+- [ ] **NP-06 Smaller frame:** the smallest frame Smaller Nether Portals allows -> Dark Fire lights it; flint and steel
   ruins it.
-- [ ] **NP-07 Big frame:** a 23 × 23 frame (vanilla's largest) → Dark Fire lights it; flint and steel turns it all to
+- [ ] **NP-07 Big frame:** a 23 × 23 frame (vanilla's largest) -> Dark Fire lights it; flint and steel turns it all to
   crying obsidian.
-- [ ] **NP-08 Open frame:** a frame with one block missing → flint and steel just lights fire (no portal shape, so
+- [ ] **NP-08 Open frame:** a frame with one block missing -> flint and steel just lights fire (no portal shape, so
   nothing happens to the obsidian).
-- [ ] **NP-09 Dark Fire anywhere (F1):** use Flint and Terrasteel on a dirt floor → Dark Fire stays there, lights the
+- [ ] **NP-09 Dark Fire anywhere (F1):** use Flint and Terrasteel on a dirt floor -> Dark Fire stays there, lights the
   area slightly, sets a zombie walking into it on fire, doesn't spread to nearby wood.
-- [ ] **NP-10 Dark Fire on a wall:** use it on the side of a stone wall → Dark Fire placed beside the wall stays.
-  Break the wall → it disappears.
-- [ ] **NP-11 Other dimension (F2):** in the End, build a frame and use Flint and Terrasteel → note whether a portal
+- [ ] **NP-10 Dark Fire on a wall:** use it on the side of a stone wall -> Dark Fire placed beside the wall stays.
+  Break the wall -> it disappears.
+- [ ] **NP-11 Other dimension (F2):** in the End, build a frame and use Flint and Terrasteel -> note whether a portal
   forms and where it leads.
 - [ ] **NP-12 Old portal:** a portal lit before the feature (or one in an old world) still works.
 

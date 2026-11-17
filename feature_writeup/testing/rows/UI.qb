@@ -78,11 +78,11 @@ look WTHIT names, not translation keys, in each shot (an "Unknown block" chat er
 > item replace entity @s hotbar.0 with vintagedelight:ghost_pepper_seeds
 look hand: open the inventory, hover slot 1: "Requires a soul soil and the heat of the nether to grow"
 
-## CQ-UI-04 | Kettle fluid bar 3 px, centred (screen and JEI)
+## CQ-UI-04 | Kettle fluid bar 3 px, centered (screen and JEI)
 @group client
 @commands needs the creativeDelight jar installed: open a Kettle with tea, the JEI Kettle page
-@pass bar is 3 px wide, centred in its old 5 px slot; hover tooltip matches
-@fails bar off-centre or tooltip gap
+@pass bar is 3 px wide, centered in its old 5 px slot; hover tooltip matches
+@fails bar off-center or tooltip gap
 @from batches/r1101/c1_client.qb
 > tp @s 3 -55 5 180 20
 sleep 3

@@ -36,7 +36,7 @@ shared one spot even though each tier has a different panel size, and it never a
   `_large` for double chests. Backpacks now add the tier item:
   `net/p3pp3rf1y/sophisticatedbackpacks/client/gui/BackpackScreen#sophisticatedbackpacks:iron_backpack`.
 - **Position.** x = panel left + panel width * anchorX + slotX; y = panel top + panel height * anchorY + slotY.
-  The slot is 28x28. TrashSlot's default is anchor 0.5 (panel centre) with offsets that land it under the
+  The slot is 28x28. TrashSlot's default is anchor 0.5 (panel center) with offsets that land it under the
   bottom-right corner. Examples:
   - `...|1.0|1.0|-28|0`: under the bottom-right corner, at any panel size (backpacks).
   - `...|1.0|1.0|0|-28`: right of the panel, bottom aligned (creative; under the corner is the Survival
@@ -97,23 +97,23 @@ shared one spot even though each tier has a different panel size, and it never a
 
 ## 7. In-game tests
 
-- [ ] **TS-01 inventory:** open the player inventory in survival → slot under the bottom-right corner.
-- [ ] **TS-02 workstations:** open each of furnace, blast furnace, smoker, anvil, smithing table, grindstone, stonecutter, loom, cartography table, enchanting table, brewing stand, crafting table → slot shows on every one.
-- [ ] **TS-03 chests:** chest, double chest, barrel → slot shows (no regression).
-- [ ] **TS-04 off by default:** shulker box, hopper, a modded machine → no slot; `T` shows it.
-- [ ] **TS-05 toggle sticks:** press `T` on the furnace to hide it, close, reopen, relog → still hidden.
-- [ ] **TS-06 backpack tiers:** open a leather and a netherite backpack → slot under each panel's bottom-right corner.
-- [ ] **TS-07 backpack split:** drag the slot on an iron backpack, then open a gold one → gold is still at its default; the iron one keeps the dragged spot after relog.
-- [ ] **TS-08 creative screen:** creative mode, open the inventory → slot right of the panel; drop an item on it from any tab → item gone, nothing else in the inventory changes.
-- [ ] **TS-09 creative right click:** right click a stack onto the slot → one item removed from the cursor.
-- [ ] **TS-10 creative delete key:** hover a hotbar item in the creative inventory tab, press Delete → that item (only) is deleted.
-- [ ] **TS-11 survival undo:** survival, drop a stack on the slot, click the slot with an empty cursor → stack comes back.
-- [ ] **TS-12 GUI scale:** GUI scale 4 (or the largest), open a netherite backpack → slot fully on screen.
-- [ ] **TS-13 existing players:** a client whose save state had a screen off (e.g. backpacks) → on after this update, once.
+- [ ] **TS-01 inventory:** open the player inventory in survival -> slot under the bottom-right corner.
+- [ ] **TS-02 workstations:** open each of furnace, blast furnace, smoker, anvil, smithing table, grindstone, stonecutter, loom, cartography table, enchanting table, brewing stand, crafting table -> slot shows on every one.
+- [ ] **TS-03 chests:** chest, double chest, barrel -> slot shows (no regression).
+- [ ] **TS-04 off by default:** shulker box, hopper, a modded machine -> no slot; `T` shows it.
+- [ ] **TS-05 toggle sticks:** press `T` on the furnace to hide it, close, reopen, relog -> still hidden.
+- [ ] **TS-06 backpack tiers:** open a leather and a netherite backpack -> slot under each panel's bottom-right corner.
+- [ ] **TS-07 backpack split:** drag the slot on an iron backpack, then open a gold one -> gold is still at its default; the iron one keeps the dragged spot after relog.
+- [ ] **TS-08 creative screen:** creative mode, open the inventory -> slot right of the panel; drop an item on it from any tab -> item gone, nothing else in the inventory changes.
+- [ ] **TS-09 creative right click:** right click a stack onto the slot -> one item removed from the cursor.
+- [ ] **TS-10 creative delete key:** hover a hotbar item in the creative inventory tab, press Delete -> that item (only) is deleted.
+- [ ] **TS-11 survival undo:** survival, drop a stack on the slot, click the slot with an empty cursor -> stack comes back.
+- [ ] **TS-12 GUI scale:** GUI scale 4 (or the largest), open a netherite backpack -> slot fully on screen.
+- [ ] **TS-13 existing players:** a client whose save state had a screen off (e.g. backpacks) -> on after this update, once.
 
 ## 8. History
 
 - 2026-09-30: investigated (plan_1.0.3 section 5.5), then built; compiled as patcherMod 1.0.3 (in `development/creativeCommon/build/libs/` and `jar_archive/`, not in `mods/`, not deployed).
 - 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
 - 2026-10-19: status sweep: went out with pack 1.0.3 (DEPLOYED 2026-10-02); TS-01 to TS-13 pending.
-- 2026-11-06: `onScreenInit` overwrite replaced by four redirects and one inject (licence, TODO `licence/compat #3`; [creative_compat.md](creative_compat.md) 6.4); same behaviour. Compat jar built 13:17, not installed; CQ-TSL-01, -02 queued.
+- 2026-11-06: `onScreenInit` overwrite replaced by four redirects and one inject (license, TODO `licence/compat #3`; [creative_compat.md](creative_compat.md) 6.4); same behaviour. Compat jar built 13:17, not installed; CQ-TSL-01, -02 queued.

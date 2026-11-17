@@ -22,7 +22,7 @@ is marked unverified.
 | crops #3 | Harvest / replant audit for every crop | KubeJS dump + tool | B: audit first |
 | crops #1 | G8, G9/G13, G12, G15 (G14 reject) | data + patcherMod | C: one patcherMod build |
 | crops #2 | Parity for hemp, grapes, flax, corn, tea, pineapple, weeds, coffee | data + patcherMod + Vinery port | C |
-| crops #4 | Weeds behaviour, none on rich soil | data + patcherMod | C |
+| crops #4 | Weeds behavior, none on rich soil | data + patcherMod | C |
 | crops #29 | Tomato ropes and sticks in the hoe area harvest | tag (+ patcherMod for tall vines) | C |
 | crops #17 | Wet farmland from buckets and water bottles | KubeJS (or patcherMod) | C |
 | crops #21 | Melon stems and fertile soil (question first) | data / patcherMod | D: owner answers first |
@@ -284,7 +284,7 @@ replant, hoe area replant, hoe area break. Follow the §2.6 checklist (crops.md 
 
 ---
 
-## crops #4: Weeds behaviour
+## crops #4: Weeds behavior
 
 Status Planned · Work data / patcherMod · TODO `farming/crops #4`
 
@@ -358,7 +358,7 @@ A pumpkin or melon starts small beside the stem and grows to full size, instead 
 - Fruits Delight `hamimelon_stem` is a `StemBlock` subclass (crops.md §2.1), same path.
 - Models: Fantasy Furniture 6.7.0 ships `fantasyfurniture:block/decorations/stackable_pumpkins_0/1/2` (1, 2 or 3
   small pumpkins; verified names). A model in the pack can `"parent"` those by id while Fantasy Furniture is
-  installed; do not copy its textures (licence not checked).
+  installed; do not copy its textures (license not checked).
 - Large 2x2 / 3x3 pumpkins are `ports/autumnityport #3`; this row only adds the stages before full size.
 
 ### Build
@@ -375,7 +375,7 @@ A pumpkin or melon starts small beside the stem and grows to full size, instead 
    etc.). Put them in patcherMod assets (the pack's "resource pack" option only reskins, it cannot add stages).
 5. WTHIT: add the growing blocks to `crop_growth.json` (age 0-2). Hoe area break: they are not plants, so the hoe break
    ignores them (good).
-6. Config switch `[crop_growth] fruitStages` (off = vanilla behaviour) in `CEConfig`.
+6. Config switch `[crop_growth] fruitStages` (off = vanilla behavior) in `CEConfig`.
 7. Dict: `b.growing_pumpkin`, `b.growing_melon` in block_dict.js.
 
 ### Ids and data
@@ -395,7 +395,7 @@ New blocks above. Vanilla `minecraft:pumpkin_stem`, `attached_pumpkin_stem`, `me
   added to its stem's type in `kubejs/generation_scripts/worldgen/crop_seasons.json`, or it grows at full speed off
   season.
 - Extra stem fruit (`crops/StemExtraFruit`, crops.md 2.10) places `fruit.defaultBlockState()` directly and counts
-  neighbours with `is(fruit)`: route its placement through the same fruit -> growing block map, and count a growing
+  neighbors with `is(fruit)`: route its placement through the same fruit -> growing block map, and count a growing
   block as a fruit for the cap and for `reattach`. Do this in one build with `farming/crops #20`, which changes the
   same attached-stem code.
 - New chunks: worldgen pumpkin patches place the full pumpkin block directly, unaffected.
@@ -752,7 +752,7 @@ Rustic Delight crops appear in village farms only in the climates where their wi
   `giant_bell_pepper` warm dry grassy (a decoration block, not a farm crop).
 - Pale and dark bell peppers (`rusticdelight:pale_bell_peppers`, `dark_bell_peppers`, CD `rustic` member
   `RDBlocks.java` line 82 on) are in no group; their wild forms come inside the bell pepper patch
-  ([rustic_delight.md](../rustic_delight.md) 2.1, "Six more pepper colours").
+  ([rustic_delight.md](../rustic_delight.md) 2.1, "Six more pepper colors").
 
 ### Build
 1. Edit the crops.md 2.11 table first (it is the review copy): bell peppers and coffee warm wet only, cotton warm dry
@@ -843,7 +843,7 @@ Soul Soil (Nulch), with Rich Soul Soil an input of the Nulch recipe. Maybe recol
    the place Rich Soil has in the Fertile Soil recipes (e.g. 3 Rich Soul Soil + the nether mulch set -> 3 or 6 Nulch),
    shaped and Create mixing through `global.NCH`; `R.remove` stays for the IW recipe.
 3. Optional recolour: a texture override at `kubejs/assets/nethersdelight/textures/block/rich_soul_soil.png` (client;
-   from Nether's Delight's own texture, licence check first).
+   from Nether's Delight's own texture, license check first).
 4. crops.md 2.4 soil table and composting.md F4.
 
 ### Decisions
@@ -865,7 +865,7 @@ Status **Planned** · Work patcherMod · id `farming/crops #20`
 
 **BUILT 2026-11-02** (pre-scratch pass, Creative Delight): steps 1-4 and 6 as written (vanilla block properties, not
 a new block); `<init>` re-registers the default with all sides false (a boolean's first value is true). Step 5: no
-per-neighbour chance (the waits stay; all same-kind neighbours still count toward the cap). Blockstates in
+per-neighbor chance (the waits stay; all same-kind neighbors still count toward the cap). Blockstates in
 `kubejs/assets/` (above every mod jar). crops.md CR-103. `#10` (growth stages) not built.
 
 ### Goal
@@ -881,7 +881,7 @@ a fruit it did not grow. Extra-fruit growth stays slowed by the fruits around it
   `facing` at any remaining same-kind neighbour. Saved data holds only the last-fruit time per stem
   (`creativeengineering_stem_fruit.dat`).
 - The pacing is the minimum waits (10 / 20 / 40 min, `[stem_fruit]`) plus vanilla's growth speed; there is no "chance
-  per neighbouring melon" today. Vanilla's row penalty (same crop in rows) is inside `growthSpeed`.
+  per neighboring melon" today. Vanilla's row penalty (same crop in rows) is inside `growthSpeed`.
 - Stems: `minecraft:attached_melon_stem`, `attached_pumpkin_stem`, `fruitsdelight:attached_hamimelon_stem` (blockstate
   in `fruitsdelight-0.5.11.jar`). No resource pack in `resourcepacks/` overrides these blockstates (checked).
 
@@ -890,18 +890,18 @@ a fruit it did not grow. Extra-fruit growth stays slowed by the fruits around it
    ("grown here"), default false. Check the hamimelon attached stem calls super (Fruits Delight subclass).
 2. `StemExtraFruit.randomTick`: after placing an extra fruit, set the bit for that side on the stem's state. The first
    fruit (vanilla `StemBlock.randomTick`) sets `facing`; treat `facing` as connected.
-3. `reattach` / `updateShape`: when a connected neighbour is no longer the fruit, clear its bit; when the `facing` fruit
-   goes, re-point only at a side whose bit is set (today: any same-kind neighbour), and clear that bit. No bit left:
+3. `reattach` / `updateShape`: when a connected neighbor is no longer the fruit, clear its bit; when the `facing` fruit
+   goes, re-point only at a side whose bit is set (today: any same-kind neighbor), and clear that bit. No bit left:
    vanilla (back to a plain stem).
 4. Blockstate overrides in patcherMod assets for the three attached stems: multipart, the vanilla attached model per
    side `when` `{"OR": [{"facing": "<side>"}, {"<side>": "true"}]}`, rotated like vanilla.
-5. Cap and pacing: keep counting every same-kind neighbour toward the cap (the row: "hampered by neighbouring grown
-   melons"); optionally lower the roll per neighbour (`[stem_fruit] neighbourPenalty`, e.g. x0.75 per fruit) if the
+5. Cap and pacing: keep counting every same-kind neighbor toward the cap (the row: "hampered by neighboring grown
+   melons"); optionally lower the roll per neighbor (`[stem_fruit] neighbourPenalty`, e.g. x0.75 per fruit) if the
    owner wants a chance rather than the waits.
 6. crops.md 2.10 (Harvesting, Own fruit only) and CR-72 (re-point) text.
 
 ### Decisions
-- Per-neighbour chance on top of the waits? Recommendation: no; the waits already slow the 2nd to 4th fruit. Ask.
+- Per-neighbor chance on top of the waits? Recommendation: no; the waits already slow the 2nd to 4th fruit. Ask.
 - Properties on the vanilla block (recommended; state ids are rebuilt at load, both sides run patcherMod) or a new
   `creativeengineering:` attached stem block? The new block avoids touching vanilla states but needs swaps in every
   stem path (vanilla, extra fruit, Fruits Delight).
@@ -1027,7 +1027,7 @@ Rows at Testing: nothing to build. Open tiers from the TODO Tests cell; the feat
 | crops #5 Realistic growth seasons | Testing (S C P T) | Built 2026-10-30, [crops.md](../crops.md) 2.12.1; patcherMod installed 2026-10-31, not yet booted; SQ-CS-01 to -09, CQ-CS-07 (2026-10-31 bulk run), CR-89 to CR-99, CR-76. Open owner points in the TODO row (Floral Enchantment bushes, temperate grapes, greenhouse column rule, bone meal) |
 | crops #6 Apples only from apple trees | Testing (S+ P) | Shipped 1.1.01 (`loot/08_leaf_apples.js`, rubberwood added), [crops.md](../crops.md) V17; scratch SQ-CD-02 PASSED 2026-10-22; CR-57 in game |
 | crops #8 Watering can | Testing (S C P) | Built 2026-10-30, moved into the CD `hearth` member with six tiers 2026-10-31, [hearth_and_harvest.md](../hearth_and_harvest.md) 4.0; patcherMod and CD built, not installed (install together); SQ-WC-01 to -05, CQ-WC-04, SQ-WCT-01 to -05; HNH-25 to HNH-33, HNH-38 to HNH-44 in game |
-| crops #9 Bell pepper colours | Testing (S+ P T) | Shipped 1.1.01, now CD `rusticdelight/crop_drops.js`, [crops.md](../crops.md) 3; scratch SQ-CD-01 and SQ-SY-06 PASSED; CR-69, CR-70 in game |
+| crops #9 Bell pepper colors | Testing (S+ P T) | Shipped 1.1.01, now CD `rusticdelight/crop_drops.js`, [crops.md](../crops.md) 3; scratch SQ-CD-01 and SQ-SY-06 PASSED; CR-69, CR-70 in game |
 | crops #11 Extra stem fruit | Testing (S+ P T) | Shipped 1.1.01, [crops.md](../crops.md) 2.10; SQ-SF 17 of 17 PASSED 2026-10-22; CR-71 to CR-75 in game |
 | crops #12 Extra stem fruit ignores seasons | Testing (S P) | Fixed 2026-10-30 by crop seasons (attached stems typed), [crops.md](../crops.md) 4 F-SS1; SQ-CS (bulk run), CR-76 |
 | crops #13 All seeds in seed pouches | Testing (S P) | Built 2026-10-29 (`tags/misctags.js:58-59`: tobacco, hamimelon, lemon seeds into `#forge:seeds`); SQ-SPC-01, -02, CQ-SPC-01 (bulk run). No writeup section yet; fold a line into crops.md 3 when tested |

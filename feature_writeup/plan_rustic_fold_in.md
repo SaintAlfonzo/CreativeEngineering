@@ -32,14 +32,14 @@ memory by `RusticTranslator`. After this plan the member jar carries those files
 | D2 | Display name suffix | **Decided 2026-11-10: keep "Rustic Delight (Creative Delight)"** |
 | D3 | Keep the `rustic_upstream/` jar on the dev machine as the pinned source for the bake script? | Yes, dev only, never deployed (upstream-jar policy) |
 
-## 2. Licence and notices (first, blocks everything)
+## 2. License and notices (first, blocks everything)
 
 1. Add `NOTICE-upstream-MIT.txt` and `LICENSE` to the member, like `members/oceans`: MIT text, "Copyright (c) PhantomWing"
-   (check the `version/1.21` branch licence file for the exact holder and year line; the 1.7.0 tag has none). Mention the
+   (check the `version/1.21` branch license file for the exact holder and year line; the 1.7.0 tag has none). Mention the
    2026-11-10 confirmation and the screenshot path.
 2. `gradle.properties`: `mod_license=MIT (upstream art and data); GPL-3.0-only (port code)`; rewrite the header comment
    (it still says All Rights Reserved) and `mod_description` (no longer "reads its art from the upstream jar").
-3. Add Rustic to the CD `NOTICE-thirdparty.txt` as MIT, `creative_delight.md` licence table (line 54 area) and the notices
+3. Add Rustic to the CD `NOTICE-thirdparty.txt` as MIT, `creative_delight.md` license table (line 54 area) and the notices
    check (TODO `licence/cd #3`).
 4. Keep upstream-derived files and our own files distinguishable (see step 3 layout) so the notice stays accurate.
 
@@ -63,7 +63,7 @@ Rule translation, from `RusticTranslator` (every rule gets a Python function and
 | 1.20 loot `any_of` / `all_of`, conditions | Rewritten to 1.19.2 `alternative` / inverted forms once |
 | Tag entries from other mods | `required: false` once |
 | Cherry blossom tag to Vinery / Quark leaves | Written as the 1.19.2 tag |
-| Wild and giant patches keep three base colours | Patch JSON written without the rare colours |
+| Wild and giant patches keep three base colors | Patch JSON written without the rare colors |
 | Renamed model refs (`template_crop_cross` to `crop_cross`, etc.) | Rewritten once |
 | **Runtime check**: drop a recipe or file naming an unregistered item / serializer (`missingRecipeId`, `missingItem`) | The one rule that needs the game. Bake as a static decision against the pack's mod list; where the missing item belongs to another optional mod, keep the recipe with a `forge:mod_loaded` condition instead of dropping it |
 
@@ -126,7 +126,7 @@ says to; skill `scratch-test`), prefix `SQ-RDB`:
 
 ## 8. Order of work
 
-1. Licence files and gradle.properties text (section 2).
+1. License files and gradle.properties text (section 2).
 2. Pre-change runtime dump for the equivalence test (7).
 3. Write `bake_upstream.py` rule by rule, bake, run the equivalence diff (3, 7).
 4. Restructure the member, delete the reader, drop the guard, build (4).
@@ -147,5 +147,5 @@ says to; skill `scratch-test`), prefix `SQ-RDB`:
 ## 10. Done means
 
 Writeup and test list updated; TODO row `creativedelight/members #55`; deploy note in [deploy.md](deploy.md) that
-`rustic_upstream/` is no longer shipped. **Player changelog: no bullet** (same behaviour); mention only if a player-visible
+`rustic_upstream/` is no longer shipped. **Player changelog: no bullet** (same behavior); mention only if a player-visible
 difference turns up in the equivalence diff. Hand over with the SQ-RDB / CQ-RDB ids and the CD jar waiting to be installed.

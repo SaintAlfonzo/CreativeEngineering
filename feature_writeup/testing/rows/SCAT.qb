@@ -3,7 +3,7 @@
 # Run: qrun.py run OUT feature_writeup/testing/rows/SCAT.qb RES [--section KEY] [--rows ID,...]
 
 @@section 1
-@@title SQ-SCAT Structure Catalogue world type, 2026-11-09 ([plan_structure_catalogue.md](../plan_structure_catalogue.md) 7, TODO `tooling/generators-and-tests #13`)
+@@title SQ-SCAT Structure Catalog world type, 2026-11-09 ([plan_structure_catalogue.md](../plan_structure_catalogue.md) 7, TODO `tooling/generators-and-tests #13`)
 @@date 2026-11-09
 @@jars creativedevtools
 @@sources feature_writeup/plan_structure_catalogue.md
@@ -12,7 +12,7 @@
 @@text
 @@table
 ## SQ-SCAT-07 | preview counts while the build runs
-@group Catalogue preset, fresh level
+@group Catalog preset, fresh level
 @commands Boot; console `/cdevplace catalogue preview`; compare with the report after SQ-SCAT-08
 @pass Chat and log line `1328 pieces, 279 whole, 44 unmapped; skipped 133 biome markers, 46 entity pieces; 32 replaced by pieces, 1 placed whole for lack of pieces` (on the 2026-11-09 mod set); same numbers in `kubejs/exported/structure_catalogue_report.json` `counts`
 @fails `CatalogueRules.build`, `structure_world.json`; a changed mod set moves the numbers, so compare preview with the report rather than the literal
@@ -22,7 +22,7 @@ sleep 5
 look preview counts line (pieces, whole, unmapped, skipped biome markers, entity pieces, replaced, placed whole); compare with the report counts after SQ-SCAT-08
 
 ## SQ-SCAT-06 | first boot: plan logged, gamerules, spawn
-@group Catalogue preset, fresh level
+@group Catalog preset, fresh level
 @commands Boot and let it build; log `[catalogue] new Structure Catalogue world`; `/stop`; boot the same level again
 @pass First boot logs `[catalogue] plan:` and `Structure Catalogue built`; `/gamerule doMobSpawning`, `doFireTick`, `doWeatherCycle` read false; world spawn (0, 65, 0). Second boot logs no `[catalogue] plan:`
 @fails `StructureCatalogue.onServerStarted`, `isPreset` (layer stack), `Marker` saved data
@@ -37,7 +37,7 @@ shell grep -E "^(level-type|level-name)" server.properties
 look gamerules false; build started; spawn checked from level.dat after the stop (0 65 0)
 
 ## SQ-SCAT-08 | build finishes; record time, refusals, heap
-@group Catalogue preset, fresh level
+@group Catalog preset, fresh level
 @commands Same boot as SQ-SCAT-06; watch `/cdevplace catalogue status`; on finish read the report
 @pass Build ends with `Structure Catalogue built`; no `Watchdog` or `OutOfMemoryError` in the log; no `[catalogue] build aborted`. RECORD: seconds, refused count, refused ids and reasons, peak heap. Refusals are not a FAIL unless the build stops; every meta structure outcome is recorded
 @fails Item step in `StructureCatalogue.stepPlace`; tick budget `[worldgen.mass_place] tickBudgetMs`; add a `template` override in `structure_world.json` per refusal
@@ -53,7 +53,7 @@ look build ended; RECORD seconds, refused count, ids and reasons
 ## CQ-SCAT-05
 @group client
 @commands Create World on a dev client, More World Options, cycle World Type; repeat with the Devtools jar removed
-@pass LOOK: "Structure Catalogue" listed with Devtools, absent without it
+@pass LOOK: "Structure Catalog" listed with Devtools, absent without it
 @fails `data/minecraft/tags/worldgen/world_preset/normal.json`, lang key in Devtools
 @draft Create World screen with and without the Devtools jar: two client launches with a mods/ change between them; driver steps not written in the 2026-11-16 pass
 ## CQ-SCAT-09

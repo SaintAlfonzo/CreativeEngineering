@@ -38,7 +38,7 @@
 
 Vanilla has drinkable, splash and lingering bottles. A lingering bottle makes one flat `AreaEffectCloud` (radius 3,
 shrinking, 30 s, quarter-length effects). Tipped arrows are made only in the crafting grid: 8 arrows around a
-lingering potion → 8 tipped arrows (Arrow of X with one eighth of the potion's duration).
+lingering potion -> 8 tipped arrows (Arrow of X with one eighth of the potion's duration).
 
 The pack adds a bucket-sized potion container in three tiers that bursts a bigger, short-lived, growing cloud where
 you click, and lets Create and IE machines tip arrows from the potion fluid ([potions.md](potions.md)).
@@ -73,7 +73,7 @@ Unstackable, Brewing tab, carry the potion as vanilla bottles do (`Potion`, `Cus
   the stack shrinks; until 2026-10-23 it was read after and landed on air, so survival had no cooldown). A bucket of a
   potion with no effects (awkward, thick, mundane, water) does nothing and is kept; only a bucket with no potion NBT
   at all bursts the Night Vision default.
-- **Dispenser:** bursts at the centre of the block in front, + 0.1 up, with no owner; the dispenser keeps the empty
+- **Dispenser:** bursts at the center of the block in front, + 0.1 up, with no owner; the dispenser keeps the empty
   bucket. If the KubeJS handler failed to install, it ejects the bucket like vanilla and logs a warning.
 
 ### 2.3 Making and emptying them
@@ -111,7 +111,7 @@ Lingering `create:potion` only; one recipe pair per potion.
 ## 3. What the pack changes
 
 - **Items:** KubeJS ([startup_scripts/items/potion_buckets.js](../kubejs/startup_scripts/items/potion_buckets.js)):
-  `.color()` tints layer 1 (the liquid) with the potion colour; `.containerItem('minecraft:bucket')` is the crafting
+  `.color()` tints layer 1 (the liquid) with the potion color; `.containerItem('minecraft:bucket')` is the crafting
   remainder for the drain recipe. Textures and models: `textures/item/<id>.png` + `<id>_liquid.png`,
   [tools/potion_bucket_texture.py](../tools/potion_bucket_texture.py).
 - **Bottle remainder:** `ItemEvents.modification` sets a glass-bottle crafting remainder on `minecraft:potion`,
@@ -121,9 +121,9 @@ Lingering `create:potion` only; one recipe pair per potion.
 - **Cloud logic:** one function, `global.potionArea.spawn` ([potion_area.js](../kubejs/startup_scripts/func/potion_area.js)),
   used by both the right click and the dispenser. An earlier single spherical cloud by mixin was removed for the ring
   stack (pure KubeJS, no rebuild).
-- **Dispenser:** KubeJS can't register a dispenser behaviour, so patcherMod's `PotionBucketDispenser` registers one per
+- **Dispenser:** KubeJS can't register a dispenser behavior, so patcherMod's `PotionBucketDispenser` registers one per
   bucket in common setup and calls a handler that `potion_area.js` installs at startup.
-- **Rhino workarounds** (all commented in place): colour blended by hand because `PotionUtils.getColor` is an
+- **Rhino workarounds** (all commented in place): color blended by hand because `PotionUtils.getColor` is an
   ambiguous overload; `getOrCreateTag()` because `getTag()` isn't visible; `getLevel()` / `x()` methods instead of
   the same-named fields; a fixed 0.1 nudge because `Direction.getStepX()` isn't found; the bucket id list read from
   `global.potionArea.BUCKETS` so no top-level name collides across server scripts.
@@ -199,38 +199,38 @@ recipes)` with N > 0.
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-LE-01, -03, -03b, -03c, -04, -05.
 
-- [ ] **PB-01 Looks:** `/give` each bucket with `{Potion:"minecraft:swiftness"}` → light-blue liquid, bucket body
+- [ ] **PB-01 Looks:** `/give` each bucket with `{Potion:"minecraft:swiftness"}` -> light-blue liquid, bucket body
   untinted; a blank bucket's liquid is white.
-- [ ] **PB-02 Tooltip:** hover a strong regeneration lingering bucket → "Regeneration II (0:22)" in blue (vanilla
-  bottle wording); a blank bucket → grey "No Effects".
-- [ ] **PB-03 Burst, regular:** right-click the ground with a Swiftness potion bucket → one small cloud grows for under
+- [ ] **PB-02 Tooltip:** hover a strong regeneration lingering bucket -> "Regeneration II (0:22)" in blue (vanilla
+  bottle wording); a blank bucket -> gray "No Effects".
+- [ ] **PB-03 Burst, regular:** right-click the ground with a Swiftness potion bucket -> one small cloud grows for under
   2 s; standing in it gives Swiftness. The bucket becomes an empty bucket.
-- [ ] **PB-04 Dome:** lingering bucket on flat ground → four stacked rings, widest at the bottom, the top ring about 1.5
+- [ ] **PB-04 Dome:** lingering bucket on flat ground -> four stacked rings, widest at the bottom, the top ring about 1.5
   blocks up, fading after 5 s. Record how it looks (F7).
-- [ ] **PB-05 Full-length effects:** stand in a Swiftness (3:00) lingering bucket's cloud → about 3:36 of Swiftness
+- [ ] **PB-05 Full-length effects:** stand in a Swiftness (3:00) lingering bucket's cloud -> about 3:36 of Swiftness
   (3:00 × 1.2), not 0:45.
-- [ ] **PB-06 Air click does nothing:** right-click the sky → nothing, bucket kept.
-- [ ] **PB-07 Off hand:** bucket in the off hand, right-click a block → nothing.
+- [ ] **PB-06 Air click does nothing:** right-click the sky -> nothing, bucket kept.
+- [ ] **PB-07 Off hand:** bucket in the off hand, right-click a block -> nothing.
 - [ ] **PB-08 Creative keeps it:** in creative the bucket isn't used up.
-- [ ] **PB-09 Cooldown:** two clicks within a second → the second does nothing.
-- [ ] **PB-10 Dispenser:** dispenser with a poison bucket, powered → cloud in front of it; the dispenser now holds an
+- [ ] **PB-09 Cooldown:** two clicks within a second -> the second does nothing.
+- [ ] **PB-10 Dispenser:** dispenser with a poison bucket, powered -> cloud in front of it; the dispenser now holds an
   empty bucket.
-- [ ] **PB-11 Fill by hand:** crafting grid, empty bucket + 4 Potions of Swiftness → Swiftness Potion Bucket, 4 glass
-  bottles left in the grid. 3 Swiftness + 1 Healing → no result.
-- [ ] **PB-12 Tier must match:** empty bucket + 4 splash Swiftness → splash bucket, not a regular one.
-- [ ] **PB-13 Drain by hand:** Swiftness bucket + 4 glass bottles → 4 Potions of Swiftness, empty bucket left in the
+- [ ] **PB-11 Fill by hand:** crafting grid, empty bucket + 4 Potions of Swiftness -> Swiftness Potion Bucket, 4 glass
+  bottles left in the grid. 3 Swiftness + 1 Healing -> no result.
+- [ ] **PB-12 Tier must match:** empty bucket + 4 splash Swiftness -> splash bucket, not a regular one.
+- [ ] **PB-13 Drain by hand:** Swiftness bucket + 4 glass bottles -> 4 Potions of Swiftness, empty bucket left in the
   grid.
-- [ ] **PB-14 Spout:** 1000 mB lingering Swiftness `create:potion`, Spout over an empty bucket on a depot → lingering
+- [ ] **PB-14 Spout:** 1000 mB lingering Swiftness `create:potion`, Spout over an empty bucket on a depot -> lingering
   Swiftness bucket.
-- [ ] **PB-15 Item Drain:** that bucket into an Item Drain → 1000 mB lingering Swiftness + empty bucket.
-- [ ] **PB-16 IE Bottling:** Bottling Machine with 1000 mB `create:potion` and an empty bucket → potion bucket.
-- [ ] **PB-17 Bottle remainder:** vanilla tipped arrow craft (8 arrows + lingering potion) → 8 tipped arrows and a glass
+- [ ] **PB-15 Item Drain:** that bucket into an Item Drain -> 1000 mB lingering Swiftness + empty bucket.
+- [ ] **PB-16 IE Bottling:** Bottling Machine with 1000 mB `create:potion` and an empty bucket -> potion bucket.
+- [ ] **PB-17 Bottle remainder:** vanilla tipped arrow craft (8 arrows + lingering potion) -> 8 tipped arrows and a glass
   bottle stays in the grid.
-- [ ] **PB-18 Bottler tipping:** Bottling Machine with lingering Poison `create:potion` and arrows → Arrows of Poison, 20
+- [ ] **PB-18 Bottler tipping:** Bottling Machine with lingering Poison `create:potion` and arrows -> Arrows of Poison, 20
   mB each.
-- [ ] **PB-19 Spout tipping:** Spout with lingering Poison over arrows → one tipped arrow per 25 mB.
-- [ ] **PB-20 JEI:** look up Arrow of Poison → crafting, Bottling Machine and Spout recipes; look up the potion bucket →
-  crafting, Spout, Bottling Machine; U on it → drain and Item Drain.
+- [ ] **PB-19 Spout tipping:** Spout with lingering Poison over arrows -> one tipped arrow per 25 mB.
+- [ ] **PB-20 JEI:** look up Arrow of Poison -> crafting, Bottling Machine and Spout recipes; look up the potion bucket ->
+  crafting, Spout, Bottling Machine; U on it -> drain and Item Drain.
 - [ ] **PB-21 No noise:** JEI: Arrow of Awkward and Water Potion Bucket have no recipe; Swiftness bucket recipes are
   still there; the `potion bottling done (N recipes)` log count drops.
 - [ ] **PB-22 No-effect bucket:** `/give @s creativeengineering:potion_bucket{Potion:"minecraft:awkward"}`, right-click

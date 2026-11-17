@@ -99,7 +99,7 @@ engine" now means these scripts.
 
 ### 0.2 Third-party native 1.19.2 jars (no port; today only pack integration)
 
-| Mod | Jar in `mods/` | Mod id | Licence (from `mods.toml`) | Writeup | Integration so far |
+| Mod | Jar in `mods/` | Mod id | License (from `mods.toml`) | Writeup | Integration so far |
 |---|---|---|---|---|---|
 | End's Delight | `ends_delight-1.19.2-2.1.jar` | `ends_delight` | MIT (FoggyHillside) | [ends_delight.md](ends_delight.md) | CD member `repackedEnds` -03 (overlay: dragon loot, tooth tier mixin, 13 textures; since 2026-11-02 also the `enders_additions` code, ends_delight.md 5.9) and rows in CD `ends_delight/`, BUILT 2026-10-25, -03 installed 2026-11-02 23:16, not booted |
 | Nether's Delight | `NethersDelight-1.19-3.1.jar` (until the CD install moves it out) | `nethersdelight` | MIT (Umpaz) | [nethers_delight.md](nethers_delight.md) | CD member `repackedNethers` -01 (overlay: Potted Mimicarnation, Fungus Colony 4.0 rules mixin, 4.0 recipe paths) and rows in CD `nethersdelight/`, BUILT 2026-11-01, nested in the installed CD jar (2026-11-02; the standalone jar is out of `mods/`) (nethers_delight.md 4.9) |
@@ -178,7 +178,7 @@ the goose golden egg
 - **A merge, not just a port:** the live 1.1.2 (Forge 1.19.2) and 1.4.5 in one jar, mod id `miners_delight`; 69 items,
   10 blocks, 4 potions, 18 loot modifiers; Union of ids, 1.4.5 wins; `hot_cocoa_cup` dropped (not in 1.4.5, no art).
 - **Licence: all rights reserved, code too.** The strictest of the six: the jar holds only a fresh implementation (about
-  3,100 lines written from behaviour, not translated) and reads art, data, recipes, loot and lang from the donor
+  3,100 lines written from behavior, not translated) and reads art, data, recipes, loot and lang from the donor
   `miners_upstream/miners_delight-1.20.1-1.4.5-backport.jar` (sha1-pinned in `UpstreamJars`). Pack data changes go through
   a translator, never a file at an upstream path.
 - **Mechanics kept intact on purpose:** class names `CopperPotBlockEntity` and `StickyBasketBlockEntity` and method shapes,
@@ -303,7 +303,7 @@ the Creative Delight jar or to patcherMod. Counts below are literal `namespace:`
 |---|---|---|
 | Namespaces | `veggiesdelight`, `vintagedelight`, `fungidelight`, `miners_delight`, `ends_delight`, `oceansdelight`, `oceanic_delight` are used by worlds, scripts and other mods | Each stays a mod id (or at least the registry namespace); no renames, no conversions. Only display names gain " (Creative Delight)" |
 | Precedent | Vinery's jar already holds two `[[mods]]` entries (`vinery`, `foundation`) with own `@Mod` classes | One jar with several `[[mods]]` and `@Mod` classes is a pattern this pack already ships |
-| Licences | Veggies, Fungi MIT; Vintage MIT 0.1.6 / GPL-3.0 KOTS; End's, Ocean's, Oceanic MIT; Miner's all rights reserved (code too); Ender's all rights reserved | Merged jar is GPLv3 with the MIT notices kept (per-source `NOTICE-upstream-MIT.txt`); it **may not contain** Miner's or Ender's upstream assets, data or code |
+| Licenses | Veggies, Fungi MIT; Vintage MIT 0.1.6 / GPL-3.0 KOTS; End's, Ocean's, Oceanic MIT; Miner's all rights reserved (code too); Ender's all rights reserved | Merged jar is GPLv3 with the MIT notices kept (per-source `NOTICE-upstream-MIT.txt`); it **may not contain** Miner's or Ender's upstream assets, data or code |
 | Donors | `miners_upstream/` (one jar), outside `mods/`, sha1-pinned, own deploy category (Ender's would need one under route 2.1 b) | Unchanged by a merge; `UPSTREAM_DONORS` in `tools/build_deploy.py` keys donors to the port name `backportedMiners` |
 | Build | `ce.forge-mod` assumes one `mod_id` per project; mixin configs, refmaps and ATs are per project | Flat shape: a multi-mod variant with merged refmaps and ATs. **Nested shape (14.1 to 14.3): not needed**, each member keeps its own; new work is the repack and bundle plugins |
 | Scripts | CD's KubeJS scripts live in the jar (section 10.3) and are authored in the pack's `kubejs/data/creativedelight/kubejs/` and `kubejs/assets/creativedelight/kubejs/` (10.4) | The build copies those two trees into the jar at the same paths; a script error is a KubeJS error in `server.log` / `client.log`, never a crash |
@@ -349,7 +349,7 @@ Removed from this plan on 2026-10-25 (owner). They stay separate jars (`backport
 projects, `IN_TREE_MODS` entries and writeups ([alcohol.md](alcohol.md) and [alcohol_part_b.md](alcohol_part_b.md), tests `AL-` and `VB-`). Facts kept here so
 a later plan can pick them up without re-reading everything:
 
-- Vinery's second mod id `foundation`, and its licence split (code MIT, assets and data All Rights Reserved, runtime donors in
+- Vinery's second mod id `foundation`, and its license split (code MIT, assets and data All Rights Reserved, runtime donors in
   `vinery_upstream/`), is the reason the merge process needs the donor path anyway.
 - Brewin' is MIT with notice; `replaces_jars=BrewinAndChewin-1.19-*.jar`; Vinery replaces Vinery 1.3.10 and `doapi-*`.
 - Brewin', Vinery and Vintage share the heat/cold and storage-temperature tags, and Vintage's pickling jar takes Brewin's
@@ -365,7 +365,7 @@ a later plan can pick them up without re-reading everything:
   running machines; snow, powder snow, IW ice).
 - **Effects and drinks:** Tipsy rework, Intoxication / Raging, Tipsy and Intoxicated visuals; every alcoholic drink is half
   a rotten shank with Intoxication + Nausea ("Intoxicating Drink" in Quark's saturation word).
-- **Pack side:** coasters as modelled items with Display Delight models and WTHIT, compost and BlockRunner rows, tooltips,
+- **Pack side:** coasters as modeled items with Display Delight models and WTHIT, compost and BlockRunner rows, tooltips,
   all advancements dropped, recipe changes in the pack not the jar, village houses in vanilla villages (port `-04` per
   alcohol.md 13).
 - **Build tooling:** `tools/check_data.py`, `gen_at.py`, `port_resources.py`; 139 Java files; MIT upstream, notice kept.
@@ -379,7 +379,7 @@ a later plan can pick them up without re-reading everything:
 - **Mechanics:** Aging Barrel holds juice as a fluid level (6000 ticks per wine), two-stage Apple Press, wines age in
   storage blocks (faster in the dark) on the sun clock (months; sleep ages wine), cold/warm storage kinds, wine racks
   merged, sizes from the per-block limit, hopper jams on press and cask, village houses in vanilla villages.
-- **Licence handling, the one that constrains the merge:** code MIT, assets and data **All Rights Reserved** (Satisfy
+- **License handling, the one that constrains the merge:** code MIT, assets and data **All Rights Reserved** (Satisfy
   refused redistribution). So the jar ships only our code and reads art and data from the **unmodified upstream jars in
   `vinery_upstream/`** at runtime (`UpstreamJars` sha1 pins, `UpstreamTranslator`, `checkNoUpstreamResources`). Deploy
   has a `vinery_upstream` category; the game stops with a message if the donors are missing.
@@ -739,7 +739,7 @@ Decisions for the owner (defaults taken; renaming is a find-and-replace while no
 Members that ship as upstream Forge 1.19.2 jars: End's Delight 2.1 (MIT, 64 items), Ocean's Delight 1.0.2 (MIT), Oceanic
 Delight 1.0.1 (MIT, MCreator build). Ender's Delight (all rights reserved) is outside this question (section 15).
 
-| | Approach | What is in our tree | Edits to upstream behavior | Licence work | Risk |
+| | Approach | What is in our tree | Edits to upstream behavior | License work | Risk |
 |---|---|---|---|---|---|
 | 1 | **Decompile to source** | Java we own, Mojmap names | Free | Source is a derivative of MIT code: keep notice, our changes GPLv3 | Decompiler errors; MCreator output is generated, ugly code and a pile of `Procedure` classes; large diff; must recompile and re-test every item, block and loot table |
 | 2 | **Binary repack** (copy classes and resources unchanged into the bundle at build time from a sha1-pinned upstream jar) | Only the pin, build script and our overlay | Only by overlay (extra mixins, replaced resource files, new classes) | Keep upstream MIT notice per source; our overlay GPLv3 | Cannot fix an upstream bug in a class except by a mixin; refmaps and `mods.toml` need merging |
@@ -860,7 +860,7 @@ the Creative Delight jar itself follows the pack's own scheme: starts at 1.0.0, 
 - **Donor jars** (Vinery 1.3.10/1.5.5 sources, Ender's Delight, Miner's upstream): copied by hand into the donor folder today;
   later downloaded from their source by the build/launch step. The existing `UpstreamJars` sha1 pin and `UPSTREAM_DONORS` in
   `tools/build_deploy.py` stay the mechanism; a download step would verify the same sha1 and refuse otherwise.
-- **Ender's Delight:** any needed code is **rebuilt licence-compliant** (fresh implementation, no upstream code), as a later
+- **Ender's Delight:** any needed code is **rebuilt license-compliant** (fresh implementation, no upstream code), as a later
   submod. It is **left until later**; the earlier "leave it a separate jar for the first release" stands in the meantime.
   Found 2026-10-25 (devmods evaluation, [ends_delight.md](ends_delight.md) 3.2): the 1.20.1 build `endersdelight-1.1.4`
   declares MIT (author Axedgaming only), while the installed 1.2.2 is ARR. If upstream confirms the grant covers the shared
@@ -1086,7 +1086,7 @@ FD's `lang/en_us.json` and `sounds.json` (`replaced_resources`). Member scripts:
 ## 22. Built 2026-10-25: the QoL moves (QoL-1, 2, 4, 5, 6)
 
 Owner: "build all of the QoL changes as part of Creative Delight". QoL-3 stays pinned (owner, same day: the food type
-rules are still in development and its tables are to be keyed by the food dict). Behaviour is meant to be unchanged with
+rules are still in development and its tables are to be keyed by the food dict). Behavior is meant to be unchanged with
 every switch on; nothing here is installed (19.5: patcherMod and CD go in together).
 
 ### 22.1 Config (framework #5) and compartments (framework #8)
@@ -1527,7 +1527,7 @@ in the pack folder until 2026-11-01, moved with Creative Split wave 4). Every sc
   the culture keys in `item_dict.js`.
 
 Cooking pot growth (2026-10-27): one `R.fdCooking` row per mixer row, culture + bone meal + Rustic Delight cooking oil
-→ 3 cultures, 0.35 xp, 200 ticks, ids `creativedelight:farmersdelightcooking/<animal>_culture_cooking` (beef, pork,
+-> 3 cultures, 0.35 xp, 200 ticks, ids `creativedelight:farmersdelightcooking/<animal>_culture_cooking` (beef, pork,
 poultry, mutton, rabbit, cod, salmon); only with `global.CD.on('rusticdelight')`. Bone meal stands in for diluted
 bonemeal, cooking oil for plant oil. Test RC-82 ([recipes_cooking.md](recipes_cooking.md)).
 
@@ -1536,7 +1536,7 @@ bonemeal, cooking oil for plant oil. Test RC-82 ([recipes_cooking.md](recipes_co
 Backups of every source file: `development/creativeDelight/moved_code_backup/2026-10-27/`. Rows unchanged unless noted.
 Client scripts are in `kubejs/assets/creativedelight/kubejs/<mod>/` (bundled by the CD build like the server tree);
 they use KubeJS's own `e.add(id, Text.<colour>(...))` and `e.renameItem` because the pack's `tooltips.js` helpers
-(`addTooltips`, `col`) are top-level functions CD cannot see (finding 33); colours kept (`uncm` green, `norm` gray,
+(`addTooltips`, `col`) are top-level functions CD cannot see (finding 33); colors kept (`uncm` green, `norm` gray,
 `rare` dark blue, `epic` dark purple, `warn` dark red).
 
 | From | To |
@@ -1579,7 +1579,7 @@ Read from this file, `todo/TODO.md`, `mod_sides.md` and `mods/` on 2026-10-25. T
   overlay, config keys, compartment pattern, QoL-1, 2, 4, 5, 6, food dict (1542 keys), wild crops, village farm crops,
   all pack food and cooking scripts in the CD trees, offline move-diff harness, generator `outRoot`, stale member jar warning.
 - **Open framework:** #1 scratch tests, #2 formal install (row and table disagree with the install above), #3 Oceanic
-  licence (jar says MIT, Modrinth says All Rights Reserved), #4 and #6 (dict remainder, harness dump half), #9 donor download (pinned).
+  license (jar says MIT, Modrinth says All Rights Reserved), #4 and #6 (dict remainder, harness dump half), #9 donor download (pinned).
 - **Open members:** #1 bundle the four ports, #6 Ocean's / Oceanic pass, #7 End's pass, #8 mooshroom family into
   moreMooblooms, #10 cutover release.
 
@@ -1591,7 +1591,7 @@ Read from this file, `todo/TODO.md`, `mod_sides.md` and `mods/` on 2026-10-25. T
 | Rustic Delight | Nested in CD (1.7.0 port) | Member, installed, not run |
 | Delightful | Nested in CD (3.4.1 plus 3.8.1 items) | Member, installed, not run |
 | Ocean's Delight | Nested in CD | Member; only caviar names done; pass planned (members #6) |
-| Oceanic Delight | Nested in CD (fishing-net overlay) | Member; licence conflict open; fishing tags and loot still in the pack (members #6) |
+| Oceanic Delight | Nested in CD (fishing-net overlay) | Member; license conflict open; fishing tags and loot still in the pack (members #6) |
 | End's Delight | Nested in CD | Member; pass planned (members #7) |
 | Veggies Delight | Own port, `backportedVeggies-...-03.jar` in `mods/` | Rows moved into CD trees; jar not bundled (members #1) |
 | Vintage Delight | Own port, `backportedVintage-...-04.jar` in `mods/` | Rows moved into CD trees; jar not bundled (members #1) |
@@ -1680,7 +1680,7 @@ SQ-CM-33, -34 (Storage Delight JEI order and name) not run: repack jar not insta
 - Ocean's Delight: disable all tentacles (`dishes/ocean #4`); seagrass salad takes 2 sea grass.
 - Rustic Delight: glow calamari crate; sequenced assembly for every sushi craft; rename Coffee Cheesecake to Coffee Pie;
   remove fried dough (the note had a question mark: confirm first); retexture the current single pancakes and put each
-  pancake colour on the Supplementaries pancake item (`merges/baking #1`); pepper blocks may not connect; the bell
+  pancake color on the Supplementaries pancake item (`merges/baking #1`); pepper blocks may not connect; the bell
   pepper medley plate block renders as the missing texture; add heated manual recipes; remove Veggies Delight's stuffed
   peppers (`merges/dishes #3`).
 - Ender's Delight: names do not render for most items.
@@ -1718,7 +1718,7 @@ Recorded in the Decisions column of each TODO row; this is the index. Nothing he
 | Vintage | Only nut mash, renamed Nut Butter, takes peanuts or acorns. Mason jar is the only jam jar. Pickled Sea Pickle = 5 sea pickles + salt. Fermented garlic honey 4 hearts = Health Boost II (already built) | `merges/dishes #7`, `dishes/jams #1`, `pickles-and-ferments #1 #10` |
 | Miner's | Before / after comparison graphic made (miners_delight.md 11). Haste: one Creative Engineering effect shared by all haste sources | `potions/effects #17` |
 | Rustic | Rustic pancake dropped for Supplementaries' (Stackable Pancake), which is an ingredient of the Rustic pancake plate. Cherry blossom foods take both leaf kinds. Pizza: dough - tomato sauce - dough; Supreme has topping slots (cheese, non-fish meat, fish, any mushroom, bell pepper in any raw / sliced / roasted form, onion). Maple foods: 50/50 maple syrup and honey split as the main ingredient type, per the food families. Fried dough removed. Pepper blocks do not connect (as is); medley plate renders correctly. New coffees' Caffeinated durations match the bean-input coffees | `members #11 #15 #16 #19 #20 #25 #27`, `merges/baking #1`, `merges/dishes #8`, `baking/baked-goods #15` |
-| Ender's | Donor-jar route (Miner's method) in case of licence issues; the shipped `enders_additions` member (MIT 1.1.4 art and data in our jar) is to be reviewed against this | `members #9` |
+| Ender's | Donor-jar route (Miner's method) in case of license issues; the shipped `enders_additions` member (MIT 1.1.4 art and data in our jar) is to be reviewed against this | `members #9` |
 | Ocean's | Calamari swaps run before the tentacle recipes are removed: already so in `oceansdelight/recipes.js`; retest SQ-CM-32 | `members #29` |
 
 Durian and pineapple pie (`baking/baked-goods #12`): retextured, block texture, rebuilt as pie block items. Pepper blocks stay unconnected and the medley plate renders correctly today (`members #27` closed).
@@ -1726,7 +1726,7 @@ Durian and pineapple pie (`baking/baked-goods #12`): retextured, block texture, 
 ## 34. Creative Split CD carve: kitchen and food Java out of patcherMod (2026-11-01)
 
 Creative Split wave 4 ([creative_split.md](creative_split.md) 7.6 step 4, TODO `creativesplit/cdcb #7`). **Status: built
-2026-11-01 (patcherMod 1.1.07, CD 1.0.0); not installed, nothing booted, waves 2 and 3 untested.** Same behaviour as
+2026-11-01 (patcherMod 1.1.07, CD 1.0.0); not installed, nothing booted, waves 2 and 3 untested.** Same behavior as
 before: no gameplay change, so no changelog bullet.
 
 ### 34.1 What moved (patcherMod -> CD, `com.SaintAlfonzo.creativedelight`)
@@ -1817,10 +1817,10 @@ were repointed to the new class names but not rerun.
 
 Recorded from the owner's notes; none of it is built yet. TODO rows carry the same text.
 
-- **Oceanic Delight** becomes a donor jar (Miner's route, section 15): the upstream jar is read at runtime, nothing of it in the CD jar. Removes the licence conflict of 28.1 (`framework #3`). The fishing net overlay is redone as our own code.
+- **Oceanic Delight** becomes a donor jar (Miner's route, section 15): the upstream jar is read at runtime, nothing of it in the CD jar. Removes the license conflict of 28.1 (`framework #3`). The fishing net overlay is redone as our own code.
 - **Food dict:** fruit juice keys are `fruit_juice_` (`framework #4`).
 - **Generators:** cans, food types, placeable and mortar all move into the CD tree, can startup data included (`framework #7`).
-- **Rustic:** every pepper colour and pepper medley stays; the Veggies Delight peppers and stuffed peppers are dropped (`members #14`, `#30`). Fried foods and calamari have no overlap now (`members #18`). The Rustic pancake block and Supplementaries' pancake stay; only Rustic's single pancake item is removed (`members #15`).
+- **Rustic:** every pepper color and pepper medley stays; the Veggies Delight peppers and stuffed peppers are dropped (`members #14`, `#30`). Fried foods and calamari have no overlap now (`members #18`). The Rustic pancake block and Supplementaries' pancake stay; only Rustic's single pancake item is removed (`members #15`).
 - **Vintage Mixed Seeds** are built as written in vintage_delight.md 2.3a (`members #32`).
 - **Floral enchantment pot** is hosted in Creative Compat ([creative_compat.md](creative_compat.md); `potions/enchanting #7`).
 - **Just a Well tank** (`farming/crops #30`) waits for the Hearth and Harvest port.
@@ -1929,7 +1929,7 @@ Live: SQ-CDFW-05 to -08 (a removal by tag input, as for pear and persimmon, is t
 
 ## 36. Oceanic and Ender's Delight on the donor route (2026-11-01)
 
-Owner decisions of 33.1 (Oceanic, `framework #3`) and `members #9` (Ender's, "in case of licence issues"), built the same day.
+Owner decisions of 33.1 (Oceanic, `framework #3`) and `members #9` (Ender's, "in case of license issues"), built the same day.
 Both follow section 15 and the Miner's method: the unmodified upstream jar sits in a donor folder of the game directory,
 sha1-pinned in the member's `upstream/UpstreamJars`, read at load into two bottom built-in packs (`DonorJars`, `BuiltInPacks`,
 `MemoryPackResources` from `development/shared/`); nothing of it is in our jar (`checkNoUpstreamResources` on the build,
@@ -1941,7 +1941,7 @@ sha1-pinned in the member's `upstream/UpstreamJars`, read at load into two botto
 | `endersAdditions`, mod id `enders_additions`, `1.1.4-ce-19.2-03` (since 2026-11-02 inside `repackedEnds` -03, `1.1.4-ce-19.2-04`; section 39) | `enders_upstream/endersdelight-1.1.4.jar` | `d1541d70...` | Modrinth 2uEhdGKt / Jaf9wxnO |
 
 - **Oceanic** (ocean_delight.md 5.6): the repack is replaced by our own code (47 items, 8 blocks, Instant Breath, three
-  potions, the loot modifier type, all upstream ids). The licence conflict of 28.1 no longer matters: no upstream class or
+  potions, the loot modifier type, all upstream ids). The license conflict of 28.1 no longer matters: no upstream class or
   file ships, and the MIT notice is dropped with them. The fishing net is our own item reading the pack's tags; its five loot
   tables moved to `kubejs/data/creativedelight/loot_tables/gameplay/fishing_net/` (a new CD `dataTrees` entry), ids
   `creativedelight:gameplay/fishing_net/*`. Project renamed in root `settings.gradle` and `bundle_members`.
@@ -1976,7 +1976,7 @@ Plan, nothing built:
    server and clients get `enders_upstream/` with the 1.2.2 file.
 5. Same checks as Oceanic: SQ-DNR rows for a missing and a wrong jar, an old world with End plants.
 
-The 1.2.2 licence stays ARR; this is the Miner's method, no copied file. The open question from `members #9` (does the 1.1.4
+The 1.2.2 license stays ARR; this is the Miner's method, no copied file. The open question from `members #9` (does the 1.1.4
 MIT grant cover shared content) becomes moot for the new member.
 
 ### 38.2 Cooking and food mods not in Creative Delight
@@ -1989,7 +1989,7 @@ Harvest, Roll, Large Meals, Barbeque's, Cooking for Blockheads Additions, Baby M
 |---|---|---|
 | Veggies, Vintage, Fungi, Miner's, Display Delight ports (`backported*`) | Own jars, pack rows already in CD trees | Bundling is `members #1`; Display is not in that list |
 | Ender's Delight 1.2.2 | Standalone ARR jar | To become a member (38.1) |
-| Fruits Delight, Farmer's Respite, Corn Delight, More Delight, Abnormals Delight, Alex's Delight, Quark Delight, Hostile Delight | Standalone jars, CD script folders for their rows | Third-party; can only nest if MIT/repack-able or by donor route; licences not yet checked per mod |
+| Fruits Delight, Farmer's Respite, Corn Delight, More Delight, Abnormals Delight, Alex's Delight, Quark Delight, Hostile Delight | Standalone jars, CD script folders for their rows | Third-party; can only nest if MIT/repack-able or by donor route; licenses not yet checked per mod |
 | Chefs Delight, Engineers Delight, KubeJSDelight | Standalone | No CD folder and no integration found |
 | Storage Delight | `repackedStorage` own jar, not a member | Built but not nested |
 | Cooking for Blockheads | Standalone, ARR | Stays; `blockheads_additions` is the member |
@@ -2002,7 +2002,7 @@ the first to decide.
 **Owner note 2026-11-06 (repack investigation, Fruits / Hostile / More):**
 - **More Delight: repack** (MIT; 6 classes, no mixins, Ocean's pattern). `TierRegistry` replaced for the knife stats (fixes SQ-MRD-01), `ItemRegistry` for fast toasts and the Cheese Toast. Do first.
 - **Hostile Delight: repack** (AFL 3.0, Canned Goods precedent: `replaced_classes`, AFL section 6 marks, overlay GPL-3.0-only). Needed for `mod-additions #43` (native tooltips, effects as food properties) and B4/B11; the rest of the 2026-11-04 plan stays KubeJS/data. Upstream `mods.toml` says 1.0.0, so the repack version must sort above it.
-- **Fruits Delight: status quo.** Standalone ARR jar plus the CD fix mixins (version-gated to 0.5.11). Revisit only if its Java behaviour must change; then prefer an LGPL-2.1 port of 1.1.3 (Barbeque's precedent; 1.20.1, bundles Registrate/MixinExtras/l2serial) over the donor route.
+- **Fruits Delight: status quo.** Standalone ARR jar plus the CD fix mixins (version-gated to 0.5.11). Revisit only if its Java behavior must change; then prefer an LGPL-2.1 port of 1.1.3 (Barbeque's precedent; 1.20.1, bundles Registrate/MixinExtras/l2serial) over the donor route.
 
 
 ### 38.3 Drinks, pancakes, reviews, release numbers
@@ -2041,7 +2041,7 @@ Question: does a `portedEnders` donor member help the mod or make changes easier
 - The donor route would rewrite those 30 classes (stove block entity and renderer, Phasing effect, `wasWatered`,
   JEI plugin) with old-world risk, and the unmodified jar would still have to be on every client and server as the
   `enders_upstream/` file. The jar leaves `mods/` but nothing leaves the install.
-- The only gain is freedom to change Java. A mixin does that without a licence problem (the pack already mixes into
+- The only gain is freedom to change Java. A mixin does that without a license problem (the pack already mixes into
   ARR Cooking for Blockheads), and nothing planned needs it.
 
 Decision (final, owner 2026-11-02): no donor member. Ender's stays its own ARR jar in `mods/`. The `enders_additions` content (1.1.4:
@@ -2053,11 +2053,11 @@ TODO `members #46`. Nothing built.
 
 ### 38.6 Salt, Create: The Salt, Canned Goods and Golden Food into CD (owner, 2026-11-02)
 
-| Mod | Jar | Licence | Size | Route | Pack code already in CD |
+| Mod | Jar | License | Size | Route | Pack code already in CD |
 |---|---|---|---|---|---|
 | Salt | `salt-1.19.2-1.2.4.1.jar` (`salt`) | MIT | 76 classes, access transformer | repack member (references checked: plan J2) | `salt/SaltBlockTicks`, 3 salt mixins |
 | Create: The Salt | `create_salt 1.19.2-1.1.0.jar` (`create__the_salt`) | MIT | 1 class, data | repack member, loads only with Create | none found |
-| Canned Goods | `CannedGoods-1.19.2-3.jar` (`canned_goods`) | AFL 3.0 (keep notice, mark changes) | 87 classes | repack member | golem colour and renderer mixins, `CanPagesJEI`, can types |
+| Canned Goods | `CannedGoods-1.19.2-3.jar` (`canned_goods`) | AFL 3.0 (keep notice, mark changes) | 87 classes | repack member | golem color and renderer mixins, `CanPagesJEI`, can types |
 | Golden Food | `goldenfood-1.19.2-2.0.0.jar` (`goldenfood`) | **All rights reserved** | 17 classes (cakes, enchanted foods, anvil event) | donor route (Miner's method) or own rewrite; cannot be repacked | `goldenfood/` scripts only (placeable, food types) |
 
 Mod ids and registry namespaces stay (old worlds), display names "<Name> (Creative Delight)", rows merged into the CD row of
@@ -2074,19 +2074,19 @@ repack plugin's `replaced_classes` is now used for direct edits of upstream clas
 entity and renderer). Swap lists carry CD's item merges (`merges`, `requires`; [item_merges.md](item_merges.md) 6). Run
 record, install state and follow-ups: [plan_creative_delight.md](plan_creative_delight.md) section K.
 
-## 40. Licence audit (2026-11-04, plan_cb_publish.md Step 2)
+## 40. License audit (2026-11-04, plan_cb_publish.md Step 2)
 
 Audit of `creativedelight-1.1.0.jar` (23:35) and its 20 nested members, every file hash-compared against the
 `*_upstream/` donors, the CfB, Incubation and Ender's 1.2.2 jars and every jar in `mods/`. Summary row in
 [creative_brewing.md](creative_brewing.md) 9.2. The CfB and Incubation members were folded into CD's own jar (M8) as
 code plus built-in packs `packs/cookingforblockheads/`, `packs/incubation/`.
 
-| Part | Source licence | In the jar | Verdict |
+| Part | Source license | In the jar | Verdict |
 |---|---|---|---|
 | CD own code (182 classes) | own, GPLv3 | `creativedelight-LICENSE.txt`, `GPL-3.0-only` | OK |
 | CfB pack: 19 fruit basket textures | were byte copies of planks (Quark, Botania, Architects Palette, myrtrees, IE, Upgrade Aquatic, D&D, vanilla) | **no: built on the client since 2026-11-05** (`compat/art/CompartmentArt`) | OK |
 | CfB pack: 38 rack textures | were recolours of CfB's rack art with plank palettes | **no: built on the client since 2026-11-05** | OK |
-| Incubation pack: 11 nest, egg and crate PNGs | were 6 copies and 5 colour-mapped Incubation textures (Abnormals License) | **no: built on the client since 2026-11-05**; the owner's 2 egg item PNGs stay | OK |
+| Incubation pack: 11 nest, egg and crate PNGs | were 6 copies and 5 color-mapped Incubation textures (Abnormals License) | **no: built on the client since 2026-11-05**; the owner's 2 egg item PNGs stay | OK |
 | `powdered_sugar_block.png` | IW `vitrified_sand` recolour (LGPLv3; owner confirmed 2026-11-05, `make_moss_candidates.py` output) | yes | OK: IW notice added 2026-11-05 |
 | `powdered_sugar_bucket.png` | `make_psugar.py` `bucket_soft` (byte-identical): vanilla powder snow bucket recoloured | yes | low ([creative_brewing.md](creative_brewing.md) 9.3) |
 | display | Display Delight LGPLv3, 5 Farmers 3D models (MIT); tray textures are FD's (MIT) | LICENSE + NOTICE (LGPL text, MIT) | OK; NOTICE names FD's tray textures (2026-11-05) |
@@ -2103,7 +2103,7 @@ code plus built-in packs `packs/cookingforblockheads/`, `packs/incubation/`.
 | hearth (port) | Hearth and Harvest 1.4.1, MIT | MIT NOTICE; `mod_license` `MIT (upstream assets) / GPL-3.0-only` (2026-11-05) | OK |
 
 Repacks: every upstream entry is byte-identical or a listed replacement; no upstream ships a LICENSE file, so our NOTICE is
-the only licence text. No member needs removing. Pack folder, not audited: the 12 Ender's retextures in
+the only license text. No member needs removing. Pack folder, not audited: the 12 Ender's retextures in
 `kubejs/assets/endersdelight/`.
 
 Fixes: TODO `licence/cd #1` (CfB baskets and racks), `#2` (Rustic crate placeholders), `#3` (notices and the sugar
@@ -2121,14 +2121,14 @@ vanilla pack), and serves them as the hidden resource pack `creativedelight_comp
 (added in `CompartmentPacks`; resource packs and kubejs/assets still override). Recipes in `compat/art/ArtRecipes`:
 
 - 19 fruit baskets: the wood's planks as they are.
-- 19 spice racks: CfB's `spicerack.png` palette-swapped with the planks' colours (textureswapper/palette_swap.py's default
+- 19 spice racks: CfB's `spicerack.png` palette-swapped with the planks' colors (textureswapper/palette_swap.py's default
   mode, ported in `Recolour`); 19 tool racks: CfB's `tool_rack.png` the same way, its 6 hook pixels kept.
 - Incubation: duck and goose nests (block, item) = `hay_nest`, duck eggs = `duck_eggs`, goose eggs = `turkey_eggs`; emu
-  eggs and the 4 duck / goose crate faces = Incubation's turkey eggs and chicken crate through a fixed colour map.
+  eggs and the 4 duck / goose crate faces = Incubation's turkey eggs and chicken crate through a fixed color map.
 - A wood whose mod is missing falls back to oak planks; an Incubation row only builds with its mod loaded.
 
 Checked offline: 66 of 68 equal the removed PNGs byte for byte; the two vertical treated wood racks differ in 30 and 20
-pixels between equally bright colours (Python set order broke the tie in the owner's art). The 68 PNGs left the source
+pixels between equally bright colors (Python set order broke the tie in the owner's art). The 68 PNGs left the source
 tree; `gen_cfb_racks.py` no longer copies rack art; `textureswapper/rack/` keeps the reference art. Tests CQ-LCA-01 to -04.
 
 

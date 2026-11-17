@@ -200,7 +200,7 @@ feature table, the only place status is written, and generates the rest.
      - a TODO id cited in features.tsv that does not exist;
      - a queue code with no feature;
      - hand edits inside a generated block.
-3. Normalise the off-legend statuses once: "Built" to Testing or In Progress, "Done" / "Complete" to the archive,
+3. Normalize the off-legend statuses once: "Built" to Testing or In Progress, "Done" / "Complete" to the archive,
    "Open" to Planned. 61 rows, done by script with a list for the owner.
 4. Update "Done means" in CLAUDE.md and the [feature-writeup pattern](README.md) wording (owner decision D3).
    - A change updates its writeup, its TODO row and its features.tsv row by hand, then runs `status_index.py`.
@@ -271,7 +271,7 @@ Starts after P1.2 (stamps) and P1.4 (verdict and feature data). Builds on qrun's
    directly; batches are selected from it by metadata, never rewritten per run.
    - `scratch_queue.md` becomes a generated view: per-section tables (id, group, commands summary, pass, if it fails)
      plus the P1.4 coverage block, written by `status_index.py` between markers.
-   - Migration generalises `hh_queue_to_qb.py`, newest sections first.
+   - Migration generalizes `hh_queue_to_qb.py`, newest sections first.
 2. Each row carries metadata:
    - `jars` (own jars it tests), `group`, `tier` (P2.2);
    - `sources` (the files or writeup section it was written from, for TX-46);

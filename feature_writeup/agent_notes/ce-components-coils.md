@@ -22,8 +22,8 @@ models + textures hand-authored on disk under `kubejs/assets/creativeengineering
   — 10 `creativeengineering:coil_<m>`: the 9 wire-coil metals **+ steel** (added 2026-09-08).
   Hand-authored blockstate + `cube_bottom_top` model + block-item model on disk
   (`{blockstates,models/block,models/item}/coil_<m>.json`), textures
-  `creativeengineering:block/coil_block/coil_<m>_{side,top}` (bottom = top). copper → IE
-  `coil_lv`, electrum → IE `coil_mv` (still aliases in `item_dict`; steel is no longer an alias —
+  `creativeengineering:block/coil_block/coil_<m>_{side,top}` (bottom = top). copper -> IE
+  `coil_lv`, electrum -> IE `coil_mv` (still aliases in `item_dict`; steel is no longer an alias —
   it has its own block now).
 
 ## Recipes — DONE
@@ -32,15 +32,15 @@ models + textures hand-authored on disk under `kubejs/assets/creativeengineering
 Data-driven from `const COIL_METALS` (12: the 9 + copper, steel, electrum). **The same list is
 duplicated in `startup_scripts/changes/transition_items.js` — keep both in sync.** `R.bulk(name,
 COIL_METALS.map(m => [...]))` families per metal:
-- wire coil: shaped (4 wire + spool → 4), sequenced-assembly (spool base, deploy wire, loops 3),
-  workbench blueprint `electricalcomponents` (3 wire + spool → 6), **disassembly** blueprint
+- wire coil: shaped (4 wire + spool -> 4), sequenced-assembly (spool base, deploy wire, loops 3),
+  workbench blueprint `electricalcomponents` (3 wire + spool -> 6), **disassembly** blueprint
   (`[wirecutter, 6 wirecoil] → 3 wire`).
-- coil block: shaped (8 wirecoil + iron rod → 1), sequenced-assembly (iron-rod base, deploy
-  wirecoil ×6), blueprint `electricalcomponents` (4 wirecoil + iron rod → 1), **disassembly**
+- coil block: shaped (8 wirecoil + iron rod -> 1), sequenced-assembly (iron-rod base, deploy
+  wirecoil ×6), blueprint `electricalcomponents` (4 wirecoil + iron rod -> 1), **disassembly**
   (`[wirecutter, 1 coil_block] → 4 wirecoil`).
 - Disassembly reverses the workbench blueprint minus spool/rod; exploit-safe. IE's
   `WirecutterItem.getCraftingRemainingItem` damages the wirecutter 1/craft and
-  `BlueprintCraftingRecipe.consumeInputs` honours remainders, so it survives in the workbench.
+  `BlueprintCraftingRecipe.consumeInputs` honors remainders, so it survives in the workbench.
 - Recipe ids: `<m>_wire_coil`, `<m>_coil_block`, `<m>_{wire_coil,coil_block}_sequenced_assembly`,
   `<m>_{wire_coil,coil_block}_disassembly`. Coil-block core is always an **iron rod**.
 - copper/steel/electrum recipes are extra paths alongside IE's stock `crafting/wirecoil_*` /
@@ -61,8 +61,8 @@ COIL_METALS.map(m => [...]))` families per metal:
   `createsequencedassembly/component_<m>_sequenced_assembly`.
 
 ## Transition / incomplete items — `startup_scripts/changes/transition_items.js`
-`StartupEvents.registry('item')` → **full restart** to pick up new keys, then `/reload` for
-recipes. Registered: `coil_<m>` (12, auto grey-tint of the `wirecoil_<m>` sprite),
+`StartupEvents.registry('item')` -> **full restart** to pick up new keys, then `/reload` for
+recipes. Registered: `coil_<m>` (12, auto gray-tint of the `wirecoil_<m>` sprite),
 `coil_block_<m>` (12, explicit side texture — `creativeengineering:block/coil_block/coil_<m>_side`
 for the 10, `immersiveengineering:block/metal_decoration/coil_{lv,mv}_side` for copper/electrum),
 `component_iron`/`component_steel` (explicit, `material_component_<m>` sprite), and `component_<m>`

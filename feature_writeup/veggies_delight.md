@@ -54,7 +54,7 @@ This file has four parts:
 - **Source to port from:** `~/.local/share/atlauncher/downloads/VeggiesDelight-1.20.1-1.9.2.jar` (Forge, closest API to
   1.19.2). `DecompiledMods/VeggiesDelight-1.21.1-1.9.3.jar` is the NeoForge build, not decompiled, same content.
   Re-decompile with `python3 tools/decompile_mod.py <jar> <out dir>` (36 classes).
-- **Licence:** MIT (owner-supplied 2026-10-25; `mods.toml` agrees) for the whole mod (code and assets; unlike Vinery's split licence there is no
+- **Licence:** MIT (owner-supplied 2026-10-25; `mods.toml` agrees) for the whole mod (code and assets; unlike Vinery's split license there is no
   separate assets clause). A GPLv3 port may include MIT code and assets as long as the MIT notice is kept.
 - **Dependencies:** Forge and Farmer's Delight only (`farmersdelight [1.2.3,)`). Every FD type it uses exists in the
   pack's FD 1.19.2-1.2.4: `WildCropBlock` / `wild_crop` feature, `add_features_by_filter` biome modifier,
@@ -214,9 +214,9 @@ port `1.9.2-ce-19.2-03` (in `mods/`); VD-41.
 
 | VD item(s) | Pack item(s) already there | Decision |
 |---|---|---|
-| Bell pepper, seeds, crop, crate, wild bell peppers | Rustic Delight red / green / yellow peppers, seeds, crop, crates, wild bell peppers (`#forge:crops/bell_pepper`); colour split CEConfig `[crop_drops.bell_peppers]` ([crops.md](crops.md) §3) | **Dropped** (overlap). Every VD input of `#forge:crops/bellpepper` or `veggiesdelight:bellpepper` takes Rustic's `#forge:crops/bell_pepper` |
-| Smoked Bell Pepper | Rustic Roasted Bell Pepper (3 colours) | **Dropped** (decided 2026-10-22, user). Every VD input of the smoked pepper takes Rustic's roasted pepper of any colour |
-| Stuffed Bell Peppers feast + Stuffed Bell Pepper serving | Rustic Stuffed Bell Pepper (3 colours, single items) | **Kept** (placed feast and serving), made from Rustic peppers. **Marked merge** with Rustic's (§5.1) |
+| Bell pepper, seeds, crop, crate, wild bell peppers | Rustic Delight red / green / yellow peppers, seeds, crop, crates, wild bell peppers (`#forge:crops/bell_pepper`); color split CEConfig `[crop_drops.bell_peppers]` ([crops.md](crops.md) §3) | **Dropped** (overlap). Every VD input of `#forge:crops/bellpepper` or `veggiesdelight:bellpepper` takes Rustic's `#forge:crops/bell_pepper` |
+| Smoked Bell Pepper | Rustic Roasted Bell Pepper (3 colors) | **Dropped** (decided 2026-10-22, user). Every VD input of the smoked pepper takes Rustic's roasted pepper of any color |
+| Stuffed Bell Peppers feast + Stuffed Bell Pepper serving | Rustic Stuffed Bell Pepper (3 colors, single items) | **Kept** (placed feast and serving), made from Rustic peppers. **Marked merge** with Rustic's (§5.1) |
 | Fish and Chips | PneumaticCraft Cod 'n' Chips, named Fish and Chips by the pack, fried in the pot with cooking oil ([recipes_cooking.md](recipes_cooking.md) §2.3) | **Kept, marked merge** (§5.1) |
 | Mashed Potatoes | More Delight Mashed Potatoes | **Pinned, marked merge** (§5.1); both stay |
 | Sweet Potato Dough | Create dough, `#forge:dough` | **Kept as is** (VD recipes); marked for the dough unification (§5.2) |
@@ -358,7 +358,7 @@ Breaking a wild plant keeps VD's drops: the planting item plus a 20 % roll of th
   `wild_flowers.js` places the entry from that list. Rate 1/8 (one patch per 8 chunks), above every wild crop above.
   No Flower Patch share (no patch block exists for it).
 - **Drops (new loot table):** always 1 dandelion and 0 to 3 dandelion leaves (uniform), any tool. Shears give the
-  block, as for every other wild plant (VD's own behaviour).
+  block, as for every other wild plant (VD's own behavior).
 - Bone meal on one pops another Mature Dandelion item (VD, kept). Luck in suspicious stew (VD, kept).
 
 ### 4.5 Crops and seasons
@@ -375,7 +375,7 @@ Breaking a wild plant keeps VD's drops: the planting item plus a 20 % roll of th
 - Cans: `tools/gen_can_types.py` picks up the new raw and cooked veggies by type.
 - **Every soup and stew jarable:** broccoli soup, cauliflower soup, garlic chicken stew, turnip beef stew and
   cacciatore get `food_type/soup`; `/cdevgen run soup_soft_fluids` (`tools/gen_soup_soft_fluids.py`) then gives each a
-  Supplementaries soft fluid with its own colour ([mixed_jars.md](mixed_jars.md), `dishes/ingredients #13`).
+  Supplementaries soft fluid with its own color ([mixed_jars.md](mixed_jars.md), `dishes/ingredients #13`).
 - Stack sizes by `gen_stack_sizes.py` rules (bowl meals 32, drinks 32, placed cakes and feasts 8); placeables through
   `/dumpplaceable` + `placeable_catalog.py`; feasts in the Feast Plating JEI tab.
 - Own values (Creative Delight `veggiesdelight/veggies_foods.js`, 2026-10-28, owner): Coleslaw 11 hunger (was 8),
@@ -389,7 +389,7 @@ Breaking a wild plant keeps VD's drops: the planting item plus a 20 % roll of th
 Where a pack rule exists ([recipes_cooking.md](recipes_cooking.md)), the VD recipe follows it:
 
 - **Bell pepper inputs:** raw -> `#forge:crops/bell_pepper` (Rustic); VD's smoked pepper (dropped) -> Rustic's roasted
-  bell peppers (any colour). Stuffed Bell Peppers feast: 3 Rustic peppers.
+  bell peppers (any color). Stuffed Bell Peppers feast: 3 Rustic peppers.
 - **Wraps require a tortilla:** Chicken Fajitas Wrap and Vegetables Wrap take `corn_delight:tortilla` in place of
   `#forge:dough` (VD's Corn Delight compat recipes, made the only ones), plus a sequenced assembly like the Mutton Wrap.
 - **Fermented garlic honey:** Vintage Delight's Pickling Jar, 4 garlic cloves + honey bottle, 600 ticks (VD's compat

@@ -18,7 +18,7 @@ art the pack already has, **by group**, so a drop or a keep is a visual decision
 | `feature_writeup/extra_delight_textures/README.md` | generated index: group, sheet, pair count, date, jars and pack versions used |
 
 Each sheet is a grid; a row is one pair: **ED texture on the left, pack texture on the right**, both scaled with nearest
-neighbour (4x for 16px, 2x above 32px, same pixel scale left and right), the two ids under them, and a coloured edge
+neighbor (4x for 16px, 2x above 32px, same pixel scale left and right), the two ids under them, and a colored edge
 (green = ED planned to be kept, red = ED dropped, amber = eval). Items with no pack counterpart (new content, 3.1) are
 **not** in the sheets except where a group says so. Sheets stay under 2000 px wide so they open in an editor preview.
 
@@ -37,7 +37,7 @@ One sheet per group; the pair sources are the 2.1 / 2.3 / 2.6 tables.
 | 7 | Fluids and buckets | the 35 fluids that map to an existing fluid (juice, oil, vinegar, broth, jam, ketchup, mayo, milkshake, chocolate syrups, honey and similar) | pack fluids (alcohol.md 4.1, Central Kitchen, potion buckets) |
 | 8 | Workstations | oven, 8 pans, mortar, juicer, melting pot, vat, evaporator, keg, mixing bowl | pack oven and bakeware, `foodGrinding` mortar, Apple Press, Create mixer, Vintage fermenting jar and evaporator, Brewin' / H&H keg |
 | 9 | Furniture: cabinets, stools, kitchen | half cabinets (13 woods + cinnamon + fruit), step stools, sinks, counters, spice racks, food displays, knife blocks | H&H half cabinets, `creativeengineering:*_stepstool` |
-| 10 | Decor | wallpapers (one wood, 16 colours each), bowls, boxes, gingham, ribbons, wreaths | `design_decor` wavy wallpaper, `creativedelight:*_fruit_basket` |
+| 10 | Decor | wallpapers (one wood, 16 colors each), bowls, boxes, gingham, ribbons, wreaths | `design_decor` wavy wallpaper, `creativedelight:*_fruit_basket` |
 | 11 | Effects | Pickled, Pucker Up, Sunshine | H&H Clarity, Fruits Delight Brightening |
 | 12 | Cornfield | corn husk doll, dried corn fence, corn items in the confiscate tag | H&H corn husk, Corn Delight |
 

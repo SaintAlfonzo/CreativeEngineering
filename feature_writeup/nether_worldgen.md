@@ -299,7 +299,7 @@ listed by id), `philipsruins:sculk_dungeon` (sculk, sculk bone bricks, catalysts
 `philipsruins:bone_dungeon` (5 sculk in `bone_dungeon_start`; keeps its 2 soul lanterns). No structure tag marks sculk
 structures; the list is recomputed on every generator run, so a new sculk structure is excluded without a rule edit.
 
-How the mix works: per 16-block Y band, a `vertical_gradient` condition whose gradient spans 1900 blocks centred
+How the mix works: per 16-block Y band, a `vertical_gradient` condition whose gradient spans 1900 blocks centered
 so its chance is 10 % in the middle of the band (about 9.6 % to 10.4 % across it), then jasper. Each choice of a
 mix has its own random name, so the picks are independent. Measured in a new scratch world: 4,454 crimsite in 45,066
 blocks of the mountain layer (9.9 %).
@@ -391,7 +391,7 @@ How each remaining kind of decision would be built:
   have no breccia or glowstone at Y 0 and below (gabbro left: D&D's separate blob); moonlight grove at 11520 11296
   (25 chunks, generated only after the flower snapshot was rebuilt): cornflower 432, blue orchid 153, their Flower
   Patch versions 106, no nether sprouts, warped roots or nylium. Chunks decorated before the snapshot rebuild still
-  had a few sprouts (spill-over into neighbours), so only fresh chunks prove it.
+  had a few sprouts (spill-over into neighbors), so only fresh chunks prove it.
 - Scratch server run 2026-10-19 (session scratchpad, seed 7379340783510277000, world `nw2`): boot and world creation
   clean with the noise settings copies; Scarlet Mountains at -800 608 (25 chunks): jasper 40,612, crimsite 4,454 in
   Y 162 to 217, no netherrack, crimson nylium or roots; Mirage Isles at -2976 -2816 (25 chunks): 137 stripped acacia
@@ -401,35 +401,35 @@ How each remaining kind of decision would be built:
 
 All in a world created after these changes (new chunks only).
 
-- [ ] **NW-01 Scarlet stone:** `/locate biome terralith:scarlet_mountains`, go there → the mountain is jasper with
+- [ ] **NW-01 Scarlet stone:** `/locate biome terralith:scarlet_mountains`, go there -> the mountain is jasper with
   scattered crimsite (about 1 block in 10), with blackstone and deepslate stripes; no netherrack anywhere.
-- [ ] **NW-02 Scarlet top:** same place → no crimson nylium and no crimson roots on top; the top is the same stone mix
+- [ ] **NW-02 Scarlet top:** same place -> no crimson nylium and no crimson roots on top; the top is the same stone mix
   (or snow up high).
-- [ ] **NW-03 Moonlight:** `/locate biome terralith:moonlight_grove` → no warped nylium in its ponds, no warped roots.
-- [ ] **NW-04 Mirage Isles:** `/locate biome terralith:mirage_isles` → the enchanted oaks have stripped acacia trunks.
-- [ ] **NW-05 Large biomes:** a world of type Large Biomes → NW-01 holds there too (the `large_biomes` copy).
-- [ ] **NW-06 Bunker:** find an underground bunker (`/locate structure underground_bunkers:underground_bunker`) → the
+- [ ] **NW-03 Moonlight:** `/locate biome terralith:moonlight_grove` -> no warped nylium in its ponds, no warped roots.
+- [ ] **NW-04 Mirage Isles:** `/locate biome terralith:mirage_isles` -> the enchanted oaks have stripped acacia trunks.
+- [ ] **NW-05 Large biomes:** a world of type Large Biomes -> NW-01 holds there too (the `large_biomes` copy).
+- [ ] **NW-06 Bunker:** find an underground bunker (`/locate structure underground_bunkers:underground_bunker`) -> the
   basalt farm room has no nether wart.
-- [ ] **NW-07 Red roof castle:** `/locate structure eugene:red_roof_castle` → magma where the netherrack was.
-- [ ] **NW-08 Moonlight flowers:** NW-03's grove → patches of cornflowers and blue orchids (with ferns and grass);
+- [ ] **NW-07 Red roof castle:** `/locate structure eugene:red_roof_castle` -> magma where the netherrack was.
+- [ ] **NW-08 Moonlight flowers:** NW-03's grove -> patches of cornflowers and blue orchids (with ferns and grass);
   no nether sprouts.
-- [ ] **NW-09 Deep layer:** mine around Y -40 for a while (or spectator through caves) → granite blobs, no breccia
+- [ ] **NW-09 Deep layer:** mine around Y -40 for a while (or spectator through caves) -> granite blobs, no breccia
   and no glowstone in the stone. (Gabbro blobs in deepslate are D&D's own and stay.)
-- [ ] **NW-10 Ancient city fire:** `/locate structure minecraft:ancient_city` → the city centre fires are orange
+- [ ] **NW-10 Ancient city fire:** `/locate structure minecraft:ancient_city` -> the city center fires are orange
   fire on soul sand; break a block next to one and note whether it turns blue (expected, see section 4).
-- [ ] **NW-11 Gothic church:** `/locate structure gothic_church:church` → yellow corundum lights where the glowstone
+- [ ] **NW-11 Gothic church:** `/locate structure gothic_church:church` -> yellow corundum lights where the glowstone
   was.
-- [ ] **NW-13 Spire lanterns:** `/locate structure terralith:spire` → plain lanterns, no soul lanterns; the hanging
+- [ ] **NW-13 Spire lanterns:** `/locate structure terralith:spire` -> plain lanterns, no soul lanterns; the hanging
   ones still hang from their chains, the standing ones stand; the wall torch at the base is a plain torch on the wall.
 - [ ] **NW-14 Jungle temple torches:** `/locate structure betterjungletemples:jungle_temple`, the water parkour and
-  floor 2 parkour rooms → plain wall torches, attached to the wall (not floating, not facing into it).
+  floor 2 parkour rooms -> plain wall torches, attached to the wall (not floating, not facing into it).
 - [x] **NW-15 Ancient city and sculk structures keep theirs:** `/locate structure minecraft:ancient_city` and
-  `philipsruins:bone_dungeon` → soul lanterns still there. (Scratch PASSED 2026-10-30, SQ-WG30-B03.)
+  `philipsruins:bone_dungeon` -> soul lanterns still there. (Scratch PASSED 2026-10-30, SQ-WG30-B03.)
 - [x] **NW-16 YUNG dungeons:** a few zombie and small dungeons (`/locate structure betterdungeons:zombie_dungeon`,
-  `betterdungeons:small_dungeon`) → no soul lantern, soul campfire or soul sand. (Scratch PASSED 2026-10-30, SQ-WG30-B04.)
-- [ ] **NW-17 Snowy depot house:** a snowy village with Veggies Delight's depot house → plain wall torches.
+  `betterdungeons:small_dungeon`) -> no soul lantern, soul campfire or soul sand. (Scratch PASSED 2026-10-30, SQ-WG30-B04.)
+- [ ] **NW-17 Snowy depot house:** a snowy village with Veggies Delight's depot house -> plain wall torches.
 - [ ] **NW-21 Glowstone census:** fresh world, Chunky radius 1000 around spawn plus one deep cave region, stop the
-  server, `python3 tools/block_census.py <save> minecraft:glowstone minecraft:soul_fire minecraft:soul_lantern` →
+  server, `python3 tools/block_census.py <save> minecraft:glowstone minecraft:soul_fire minecraft:soul_lantern` ->
   0 glowstone in the Overworld (any hit: read its chunk and y, then find the source; player-placed blocks excluded);
   a gothic church found in that area (NW-11) shows yellow corundum.
 - Scratch 2026-10-30 (SQ-WG30-B01, B02 PASSED): load line `1412 block swap(s) in 105 template(s)`; `/place template`

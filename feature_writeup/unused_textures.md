@@ -29,7 +29,7 @@ not spare art:
 - Connected textures and states: `*_connected`, `*_on`, `*_powered`, `*_open`, AE2 glass frames, IE capacitor
   `*_in/_out/_none` sides.
 - Fluid `*_flow` (Immersive Petroleum, PneumaticCraft, Create Confectionery).
-- Colour or variant sets: Create belt scrolls, IE shader layers, ProjectRed gate surfaces, Simple Hats `_e`
+- Color or variant sets: Create belt scrolls, IE shader layers, ProjectRed gate surfaces, Simple Hats `_e`
   overlays, Ender Storage pouch buttons.
 - Material sets that are generated per wood or stone: Every Compat (504), Dramatic Doors, Create and Create
   D&D `palettes/stone_types/alternatives`, Storage Delight bamboo and cherry.
@@ -45,7 +45,7 @@ nothing is copied. If the mod is ever removed, the item shows the missing textur
 
 | Texture | Looks like | Possible use | License |
 |---|---|---|---|
-| `create_dd:item/{chocolate,glowberry,pumpkin,strawberry,vanilla}_milkshake` | glass mug, coloured shake + straw | milkshake set (pack already has `chocolate_milkshake` from another mod; the other four are new flavours) | MIT |
+| `create_dd:item/{chocolate,glowberry,pumpkin,strawberry,vanilla}_milkshake` | glass mug, colored shake + straw | milkshake set (pack already has `chocolate_milkshake` from another mod; the other four are new flavors) | MIT |
 | `create_dd:item/hot_chocolate`, `hot_chocolate_bucket` | mug, bucket | hot chocolate drink and fluid bucket | MIT |
 | `create_dd:item/crystallized_sap` | amber chunk | sap/syrup product, candy | MIT |
 | `create_dd:item/frozen_nugget` | ice cube | ice cube for drinks or cooling | MIT |
@@ -77,14 +77,14 @@ suit a cantaloupe block or a cut-melon block.
 | `create:item/integrated_circuit` | blue board | circuit tier between pack circuits | MIT |
 | `create:item/lapis_sheet`, `copper_ingot`, `antioxidant`, `logistical_dial` | sheet, ingot, vial, dial | lapis sheet; alternate copper ingot; coolant or anti-corrosion item; gauge part | MIT |
 | `create_dd:item/inductive_mechanism` (+ `incomplete_`) | mechanism with coil | electrical-tier mechanism, sequenced-assembly ready | MIT |
-| `create_dd:item/boat_mechanism`, `compound_base`, `magnet`, `rubber_belt` | linkage, grey lump, horseshoe magnet, black belt | ship part; alloy base; magnet; belt component | MIT |
+| `create_dd:item/boat_mechanism`, `compound_base`, `magnet`, `rubber_belt` | linkage, gray lump, horseshoe magnet, black belt | ship part; alloy base; magnet; belt component | MIT |
 | `create_dd:item/mithril_{ingot,nugget,sheet}`, `blaze_gold`(+`_sheet`), `overcharge_alloy`(+`_sheet`) | ingots and sheets | extra alloy tiers with matching sheets | MIT |
 | `create_dd:item/shadow_steel_sheet`, `refined_radiance_sheet`, `experience_ingot`, `spectral_ruby`, `stargaze_singularity` | sheets, ingot, gem | late-game materials | MIT |
-| `create_dd:item/pipebomb` | grey canister | explosive charge | MIT |
+| `create_dd:item/pipebomb` | gray canister | explosive charge | MIT |
 | `createaddition:item/iron_spool`, `overcharged_capacitor`, `connector_gold` | spool, glowing capacitor, connector | iron wire spool; capacitor tier; gold connector | MIT |
 | `create_things_and_misc:items/obsidian_sandpaper`, `railway_casing` | sandpaper, framed casing | sandpaper tier; casing | AFL 3.0 |
 | `ae2:item/wooden_gear`, `nether_quartz_dust` | gear, dust | wooden gear; quartz dust (IE `metal_dust_quartz` is a second option) | AE2 (see repo) |
-| `immersiveengineering:item/metal_dust_quartz` | grey dust | quartz dust | Blu (IE) |
+| `immersiveengineering:item/metal_dust_quartz` | gray dust | quartz dust | Blu (IE) |
 | `pneumaticcraft:item/drill_bit` | drill bit | generic drill bit part | GPLv3 |
 | `projectred_fabrication:item/valid_die_template`, `ic_inert` | chip template, blue IC | chip blank; inert IC | MIT |
 | `projectred_core:item/null_routing_chip` | card chip | blank chip or punch card | MIT |
@@ -94,7 +94,7 @@ suit a cantaloupe block or a cut-melon block.
 | `lightmanscurrency:item/upgrade_smithing_template` | template | 1.20-style smithing template stand-in | ARR |
 | `yuushya:item/tool_bundle` | green screen device | handheld terminal or tablet | see mod |
 | `create_enchantment_industry:item/printing_template` | printed plate | printing plate or stencil | MIT |
-| `davebuildingmod:items/{green,red}_circuit_*`, `vocalcard` | green and red circuit cards, many variants | circuit card set (empty card plus a dozen stamped variants per colour) | MIT |
+| `davebuildingmod:items/{green,red}_circuit_*`, `vocalcard` | green and red circuit cards, many variants | circuit card set (empty card plus a dozen stamped variants per color) | MIT |
 | `oldguns:item/*` parts (see below) | gunsmith parts | mechanical parts | AGPL-3.0 |
 
 oldguns has about 200 unused textures, mostly cut gun variants. The parts on the sheet are general enough to be

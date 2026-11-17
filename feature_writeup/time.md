@@ -312,7 +312,7 @@ world days, and a year is `daysPerYear` sun days long however the day speeds cha
 - `PLAYTIME` (recommended, B4.5): ages while a player is online. Sleeping doesn't age wine. A year of 16 "days" is 16
   world days of play, about 15 days of sun for a player who sleeps every night.
 - `SUN` (the port's `WORLD_TIME`): ages with `dayTime` like the seasons. Sleeping and `/time` age wine. This is the
-  1.3.10 behaviour, and the reason B4.5 moved away from it.
+  1.3.10 behavior, and the reason B4.5 moved away from it.
 
 **Boosts:** the boost is fixed when the bottle goes into storage (`storageRate`), so a boost has to depend only on the
 position, not on something that changes while the bottle sits there.
@@ -446,7 +446,7 @@ No conversions between versions: the ports are in development, so nothing below 
 - **The Serene Seasons calendar takes over its tooltip** (patcherMod, `ItemTooltipEvent` on `sereneseasons:calendar`):
   - Line 1: season and day: "Mid Spring, day 3 of 8".
   - Line 2: year and time: "Year 2, 7:30 pm".
-  - Line 3 (grey): "Next: Late Spring in 5 days (about 5 h)".
+  - Line 3 (gray): "Next: Late Spring in 5 days (about 5 h)".
   - The same two lines show in the action bar while the calendar is held, as the Vinery calendar did.
   - The date comes from Serene Seasons' state (`SeasonHelper.getSeasonState`): sub-season, day within it, and
     year = cycle ticks / year length + 1. Arid, frozen and permanent-season biomes use the names from
@@ -466,7 +466,7 @@ is in `mods/` and `server_mods/`. `creativeengineering-common.toml` gets `[time]
 | SUN seasons | `time/SeasonClock`, `SereneSeasonsClockMixin` (server), `SereneSeasonsClientClockMixin` (client mixin since 2026-10-19: as one common mixin its `Minecraft` reference crashed dedicated servers), `SereneSeasonsTimeSkipMixin` | Serene Seasons' +1 per tick **and** its time-skip handler stand down, and patcherMod counts every forward dayTime step itself (the design changed the skip threshold to 0, which needs the same cancel anyway). It syncs every second and at once after a jump. **Client:** between syncs Serene Seasons' client counter also ran +1 per tick, so by day it ran ahead about 3.7 times and snapped back each second, with a full chunk re-render whenever that crossed a sub-season. In SUN mode it follows the client's own dayTime |
 | Sunrise offset | `SeasonClock.migrate` | the counter is lined up with `dayStart` once per level, so the day changes at 6:00 am |
 | Migration | `SeasonClock.Marker` (`data/creativeengineering_season_clock.dat` per level) | keeps sub-season and day number, read with Serene Seasons' lengths from **before** this start's push. Switching back to TICKS clears the marker, so a later switch migrates again |
-| Pause | `BetterDaysTimePauseMixin` (whole tick) + `ServerLevelTimePauseMixin` | Vanilla's `tickTime` isn't cancelled, only its `setDayTime`: cancelling it would also stop game time, and scheduled block ticks run on game time |
+| Pause | `BetterDaysTimePauseMixin` (whole tick) + `ServerLevelTimePauseMixin` | Vanilla's `tickTime` isn't canceled, only its `setDayTime`: canceling it would also stop game time, and scheduled block ticks run on game time |
 | Time of day | `TimeSettings.clock` | as 3.7 (T12) |
 | SeasonHUD | `SeasonHudCurrentSeasonMixin` appends the time; `config/seasonhud-client.toml` `enable_show_day = "SHOW_WITH_TOTAL_DAYS"` (backed up in `configs_edited/root_config/`) | not shown in dimensions with a fixed time (Nether, End) |
 | Calendar | `time/TimeClient`, `time/CalendarDate` | Serene Seasons' own two lines stay (sub-season, "Day x/8"); added: "Year N, 7:30 pm", "Next: Late Spring in 5 days (about 5 h)", and "Here: Arid, no seasons" style lines for the season types. The action bar shows the same while it is held. **Year:** Serene Seasons wraps its counter every year and keeps no year count, so the year is the world's sunrises since dayTime 0, less the day of the year. After a `/season set` it can read one off until the next new year. It shows only on the SUN clock |
@@ -708,7 +708,7 @@ TI-27 cover what the build added (3.8).
   and migration, pause when empty, SeasonHUD totals and time of day, the calendar tooltip and action bar, `/ccaltime`.
   T1, T3, T4 and T7 built with the recommendation. Found while building:
   - Serene Seasons' client counter would run ahead between syncs, so in SUN mode it follows the client's dayTime.
-  - Cancelling `tickTime` would also stop game time, so only its dayTime step is skipped.
+  - Canceling `tickTime` would also stop game time, so only its dayTime step is skipped.
   - Serene Seasons keeps no year count, so the year comes from the world's day count.
   TI-25 to TI-27 added. Not built: `tools/time_table.py`, the GameTest, T5 boosts.
 - 2026-10-18 late: presets built (3.9): SINGLEPLAYER (default, 1 month per wine level) / SERVER (3) / CUSTOM, the

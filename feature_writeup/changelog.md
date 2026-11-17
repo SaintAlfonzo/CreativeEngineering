@@ -24,7 +24,7 @@ checks pass; the owner has used the button in game (CL-13 found 2026-10-27, fixe
 | Version list + read marker (newest version the player has opened) | BUILT | `changelog/ChangelogStore.java`; `config/creativecommon/changelog_seen.txt` (player config, git-ignored) |
 | Deploy integration (ship `unreleased.md` as `<version>.md`, rename on snapshot, deployed files frozen, lint) | BUILT | `tools/build_deploy.py` (`check_changelog`, `freeze_changelog`), `tools/changelog_lint.py` |
 | Writing rules for entries | DESIGN | section 3.6 of this file |
-| 1.1.01 changelog (every change since 1.0.9) | DEPLOYED 2026-10-22, frozen as `changelog/1.1.01.md`. 1.1.02 deployed 2026-10-23, frozen as `changelog/1.1.02.md`; `unreleased.md` now holds the 1.1.03 working list. Written 2026-10-21, audited 2026-10-22 (section 8) | `unreleased.md`: one bullet per player-visible change in 9 families, kept true as work lands (re-synced 2026-10-22 against the working tree); lint 0 errors, length warnings only (the lint counts sub-bullets into the 300, every single bullet and sub-bullet is under it). Same-behaviour ports (tier 1, Glowing Illagers, Comfortable Campfires, Bottled Air, Fast Leaf Decay's cascade) have no bullet |
+| 1.1.01 changelog (every change since 1.0.9) | DEPLOYED 2026-10-22, frozen as `changelog/1.1.01.md`. 1.1.02 deployed 2026-10-23, frozen as `changelog/1.1.02.md`; `unreleased.md` now holds the 1.1.03 working list. Written 2026-10-21, audited 2026-10-22 (section 8) | `unreleased.md`: one bullet per player-visible change in 9 families, kept true as work lands (re-synced 2026-10-22 against the working tree); lint 0 errors, length warnings only (the lint counts sub-bullets into the 300, every single bullet and sub-bullet is under it). Same-behavior ports (tier 1, Glowing Illagers, Comfortable Campfires, Bottled Air, Fast Leaf Decay's cascade) have no bullet |
 | Historic changelogs 1.0.0 to 1.0.9 | WRITTEN 2026-10-31: 1.0.1 to 1.0.9 brief; 1.0.0 complete (424 bullets, 57 families: the whole pack against vanilla and the stock mods, owner request). Not shipped yet | `changelog/1.0.0.md` to `1.0.9.md`; TODO `ui/changelog #2` |
 
 Knobs (CEConfig `[changelog]`, client side): `enabled` (true), `titleButton` (true), `pauseButton` (true),
@@ -62,7 +62,7 @@ changes again.
 | Screen layout | Forge `net.minecraftforge.client.gui.ModListScreen` | a list on the left and an `InfoPanel` on the right that wraps text and opens clicked links; we copy its shape |
 | Scrolling text area | Forge `net.minecraftforge.client.gui.widget.ScrollPanel` | scrollbar, mouse wheel and clipping done; `ModListScreen.InfoPanel` extends it |
 | Version list | vanilla `ObjectSelectionList` | same as the Forge mod list |
-| Styling | vanilla `Component` + `Style` (bold, italic, colour, `ClickEvent.OPEN_URL`), `Font.split` for wrapping | links get vanilla's "open this link?" confirm screen through `Screen.handleComponentClicked` |
+| Styling | vanilla `Component` + `Style` (bold, italic, color, `ClickEvent.OPEN_URL`), `Font.split` for wrapping | links get vanilla's "open this link?" confirm screen through `Screen.handleComponentClicked` |
 | Book icon | vanilla's written book item (`ItemRenderer.renderGuiItem`, 1.19.2 has no `GuiGraphics`) | no new texture; the same call JEI and WTHIT use |
 | Markdown parsing | **commonmark-java** (BSD-2-Clause, about 200 KB, no dependencies), shaded into the patcherMod jar | the reference CommonMark parser; handles nesting, escapes and emphasis edge cases a hand parser gets wrong |
 | Text files players get without a restart | KubeJS's `kubejs/assets/` resource pack | loaded before the title screen, reloaded by F3+T, already shipped by build_deploy (`KUBEJS_CLASSES`) |
@@ -72,7 +72,7 @@ changes again.
 - No mod in `mods/` bundles a Markdown library (searched every jar for commonmark, flexmark and intellij-markdown).
 - FancyMenu is not installed (only its library Konkrete). Adding FancyMenu for one button would bring a whole
   menu editor and its own layout files.
-- Quark's Q button (`QButtonHandler`) finds the title-screen button labelled "Mods", "Realms", "Options" or
+- Quark's Q button (`QButtonHandler`) finds the title-screen button labeled "Mods", "Realms", "Options" or
   "Mod Options" and sits beside it. The book button must not take that spot; see 3.3.
 - Quark's popup (`QButton`, `GeneralConfig.enableOnboarding`): a bubble with "Configure Quark Here!"
   (`quark.misc.configure_quark_here`) bobs beside the Q button on a sine of the client tick counter, until the
@@ -134,10 +134,10 @@ kubejs/assets/creativecommon/changelog/
 | Element | Write | Shows as |
 |---|---|---|
 | Version title | `# 1.1.01` or `# 1.1.01 - The Brewing Update` (first line) | list entry + big title |
-| Release date | `Released 2026-10-25` (second line; build_deploy writes it) | grey line under the title |
+| Release date | `Released 2026-10-25` (second line; build_deploy writes it) | gray line under the title |
 | Intro | a plain paragraph before the first `##` (optional, 1 to 3 sentences) | normal text |
 | Family | `## Food & Cooking`, optionally `## Food & Cooking <!-- icon: farmersdelight:cooking_pot -->` | heading, with the item's icon when given |
-| Change | `- **New:** text` (label one of New, Changed, Fixed, Removed) | bullet; label coloured green / yellow / aqua / red |
+| Change | `- **New:** text` (label one of New, Changed, Fixed, Removed) | bullet; label colored green / yellow / aqua / red |
 | Detail | two-space indent: `  - text` (one level only) | indented smaller bullet |
 | Emphasis | `**bold**`, `*italic*` | bold / italic |
 | In-game name, command, key | `` `text` `` | gold text (no monospace font in vanilla) |
@@ -193,7 +193,7 @@ enjoy it.)
   Wine Rack."). Detail lists go in sub-bullets.
 - Use in-game names exactly as the game shows them. Never registry ids, file names, config keys, mod internals,
   test ids or TODO ids.
-- Fixes state the bug in past tense ("The Oven accepted no fuel."), adding the new behaviour only if it is not
+- Fixes state the bug in past tense ("The Oven accepted no fuel."), adding the new behavior only if it is not
   obvious from the bug.
 - Intro: one plain line of scope ("All changes since 1.0.9."), no summary of highlights.
 - Commands only when players can run them, in backticks. Settings only if players can change them (client
@@ -203,8 +203,8 @@ enjoy it.)
 **What gets no bullet.**
 - Tooling, generators, writeups, deploy changes, refactors, dev-only commands.
 - Ports of a mod into the pack that behave the same as before (Glowing Illagers, Comfortable Campfires and Bottled
-  Air in 1.1.01 changed nothing players can notice). A port that changes behaviour gets a bullet about the
-  behaviour change only.
+  Air in 1.1.01 changed nothing players can notice). A port that changes behavior gets a bullet about the
+  behavior change only.
 - Performance work players won't notice. Noticeable gains get one bullet under a performance heading ("Large
   villages generate with fewer lag spikes").
 
@@ -294,7 +294,7 @@ is not run in dev.
 `bash tools/test_changelog.sh` (build the patcherMod classes first) runs:
 - `ChangelogTest.java` (headless, real patcherMod classes + the relocated commonmark): version ordering (`1.0.10`
   after `1.0.9`, `1.1.01` after `1.0.10`, `1.1.01` equal to `1.1.1`), bullet detection, and Markdown -> blocks on
-  the 2.3 example: kinds, title / date, label colours, bold label, italic, gold backticks, link click action
+  the 2.3 example: kinds, title / date, label colors, bold label, italic, gold backticks, link click action
   (http/https only), sub-bullet depth, icon id, hidden HTML comment. Then every file in the changelog folder
   parses with no raw Markdown left.
 - `changelog_lint.py --self-test` (24 cases: every error rule fails for its own reason, the long-bullet warning,
@@ -310,30 +310,30 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
 
 ## 7. In-game test suite (planned)
 
-- [ ] **CL-01 button:** open the title screen → a book button right of Singleplayer, no overlap with Quark's Q
+- [ ] **CL-01 button:** open the title screen -> a book button right of Singleplayer, no overlap with Quark's Q
   button or any other button; tooltip "What's New".
-- [ ] **CL-02 screen:** press it → version list newest first, the newest selected, text wraps inside the panel,
+- [ ] **CL-02 screen:** press it -> version list newest first, the newest selected, text wraps inside the panel,
   scrollbar works with the wheel and by dragging.
 - [ ] **CL-03 formatting:** family headings show their icons where given; New / Changed / Fixed / Removed labels
-  coloured; bold, italic and backtick text styled; sub-bullets indented; no raw Markdown visible.
-- [ ] **CL-04 links:** click a link → vanilla confirm screen; Yes opens the browser, No returns to the changelog.
-- [ ] **CL-05 popup:** with a read marker older than the newest version → the bubble bobs beside the book button
-  on the title screen; open the changelog, go back → bubble gone; restart → still gone.
-- [ ] **CL-06 update brings it back:** apply an update payload → the bubble shows again with the new version's
+  colored; bold, italic and backtick text styled; sub-bullets indented; no raw Markdown visible.
+- [ ] **CL-04 links:** click a link -> vanilla confirm screen; Yes opens the browser, No returns to the changelog.
+- [ ] **CL-05 popup:** with a read marker older than the newest version -> the bubble bobs beside the book button
+  on the title screen; open the changelog, go back -> bubble gone; restart -> still gone.
+- [ ] **CL-06 update brings it back:** apply an update payload -> the bubble shows again with the new version's
   number; versions skipped since the marker carry a `*` in the list on that first visit.
-- [ ] **CL-07 reload:** edit a bullet in the dev instance, F3+T, reopen → new text.
-- [ ] **CL-08 resize:** change the window size and GUI scale with the screen open → text rewraps, nothing cut off;
+- [ ] **CL-07 reload:** edit a bullet in the dev instance, F3+T, reopen -> new text.
+- [ ] **CL-08 resize:** change the window size and GUI scale with the screen open -> text rewraps, nothing cut off;
   the bubble stays on screen.
-- [ ] **CL-09 in development:** dev instance with bullets in `unreleased.md` → "In development" at the top, no
+- [ ] **CL-09 in development:** dev instance with bullets in `unreleased.md` -> "In development" at the top, no
   popup for it; a payload staged with `--version X` has `X.md` with the date and no `unreleased.md`.
-- [ ] **CL-10 pause menu:** in a world, Esc → the book button right of "Back to Game", the bubble too if unread;
+- [ ] **CL-10 pause menu:** in a world, Esc -> the book button right of "Back to Game", the bubble too if unread;
   Done returns to the pause menu.
 - [ ] **CL-11 server:** dedicated server boots with the jar (no client classes loaded server-side). Scratch server
   2026-10-21: Done in 10.8 s, `[changelog]` written to the toml, no log line from the changelog classes. Two more
   `PoseStack ... invalid dist` lines than a boot with the previous 1.1.01 dev jar (19 vs 17), both in the KubeJS load
   phase like the rest, not traced (that jar also lacks other uncommitted changes); worth a look on the real server.
-- [ ] **CL-12 fresh install:** delete `config/creativecommon/changelog_seen.txt` → the bubble shows once.
-- [ ] **CL-13 tooltip not covered:** with the bubble showing, hover or Tab-focus the book button → the bubble hides
+- [ ] **CL-12 fresh install:** delete `config/creativecommon/changelog_seen.txt` -> the bubble shows once.
+- [ ] **CL-13 tooltip not covered:** with the bubble showing, hover or Tab-focus the book button -> the bubble hides
   and the "What's New" tooltip is fully visible; it returns when the button loses hover and focus.
 
 ## 8. History
@@ -362,7 +362,7 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
 - 2026-10-22 (doc sweep against the code): every 2026-10-22 feature has a bullet. Fixed: hand-only meals line
   (no Create recipe makes Pie Crust since the baking overhaul; Scrambled Eggs, Vegetable Omelet, Quiche and Frosting
   have Create routes through the new fluids), Dragon Bow / Crossbow lines (hits not only arrows, old value wording,
-  "bleeding" is Exsanguination II), sacks "place 1" sub-bullet removed (Supplementaries' own behaviour), undo refusal
+  "bleeding" is Exsanguination II), sacks "place 1" sub-bullet removed (Supplementaries' own behavior), undo refusal
   covers every block with stored data, camera bag flashes named. Added: the `/undo_excavation` logout crash fix.
   Conditional: if extra stem fruit keeps ignoring seasons (TODO `farming/crops #12`), its bullet needs "Extra fruit
   grows in any season."
@@ -377,7 +377,7 @@ NOTICE, and the MC overrides reobfuscated (`m_6303_`, `m_5646_`, ...).
 - 2026-10-31: historic changelogs 1.0.1 to 1.0.8 written (1.0.6 includes 1.0.5, which never deployed; 1.0.2 says it
   reached clients only, the server going from 1.0.1 to 1.0.3). Sources: plan docs, deploy log entries, git commits
   for 1.0.1 and 1.0.2 (no plans), feature writeups. Same brevity and leave-outs as 1.0.9. 1.0.0 not written.
-- 2026-10-31: historic changelog 1.0.0 written at the owner's request as a complete catalogue, not brief (exception to
+- 2026-10-31: historic changelog 1.0.0 written at the owner's request as a complete catalog, not brief (exception to
   the 3.6 brevity rule for this one file): everything the pack adds, changes or removes against vanilla 1.19.2 and the
   stock mods, 424 bullets in 57 families. Sources: the deploy record `deploy/history/1.0.0.json` (mod list, file
   hashes), the initial commit 609cd21 (657 of 687 kubejs files and every config byte-identical to the record), and the

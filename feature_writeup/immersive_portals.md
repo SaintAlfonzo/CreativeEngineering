@@ -26,7 +26,7 @@ Owner notes of 2026-11-06, written down as the plan. Nothing is built or install
 | Part | Status |
 |---|---|
 | Tempad 1.4.5 loaded cleanly (2026-11-06 session); jar now in `disabledmods/` | superseded by the port |
-| Tempad 3.0.4 ported to Forge 1.19.2 (2.1.1), its own jar `backportedTempad` since 2026-11-07 (a Creative Compat member before; planned to fold into Creative Computing); all four phases (core; workstation, cards, wallet, broadcaster, screening device; projector, markers, metronome, time twister; Curios, FTB Teams, WTHIT instead of Jade, handbook as upstream's own screen) | BUILT 2026-11-07, not installed; scratch r1107tp 2026-11-07 ([run doc](testing/scratch_run_2026-11-07.md) 1): server rows PASS 26, FAIL 2 (SQ-TP-08 creative workstation break drops, SQ-TP-25 marker anchor id lost on load), plus all five block loot tables dropped by the translator (TODO `gameplay/tnt-and-portal #10..#12`, all three fixed and built 12:01; scratch r1107tp2 ([run doc](testing/scratch_run_2026-11-07.md) 2): SQ-TP-31..39 PASS, reruns of SQ-TP-24, -25 and the break steps of -08, -13, -14, -15 PASS; CQ-TP-16 not run); SQ-TP-17, -29, CQ-TP-01..15 not run (21..30 / 12..15 added 2026-11-07: bug-fix checks and whole-mod gaps); 5 upstream bugs fixed 2026-11-07 at the owner's request, before testing (TODO `gameplay/tnt-and-portal #9`, PORT_NOTES 6.12), plus 2 lang bugs found while fixing (missing `intradimensional_all` key; array lang lines stopped 1.19.2 loading the end of `tempad_static` lang); WTHIT bar colours approved 2026-11-07 |
+| Tempad 3.0.4 ported to Forge 1.19.2 (2.1.1), its own jar `backportedTempad` since 2026-11-07 (a Creative Compat member before; planned to fold into Creative Computing); all four phases (core; workstation, cards, wallet, broadcaster, screening device; projector, markers, metronome, time twister; Curios, FTB Teams, WTHIT instead of Jade, handbook as upstream's own screen) | BUILT 2026-11-07, not installed; scratch r1107tp 2026-11-07 ([run doc](testing/scratch_run_2026-11-07.md) 1): server rows PASS 26, FAIL 2 (SQ-TP-08 creative workstation break drops, SQ-TP-25 marker anchor id lost on load), plus all five block loot tables dropped by the translator (TODO `gameplay/tnt-and-portal #10..#12`, all three fixed and built 12:01; scratch r1107tp2 ([run doc](testing/scratch_run_2026-11-07.md) 2): SQ-TP-31..39 PASS, reruns of SQ-TP-24, -25 and the break steps of -08, -13, -14, -15 PASS; CQ-TP-16 not run); SQ-TP-17, -29, CQ-TP-01..15 not run (21..30 / 12..15 added 2026-11-07: bug-fix checks and whole-mod gaps); 5 upstream bugs fixed 2026-11-07 at the owner's request, before testing (TODO `gameplay/tnt-and-portal #9`, PORT_NOTES 6.12), plus 2 lang bugs found while fixing (missing `intradimensional_all` key; array lang lines stopped 1.19.2 loading the end of `tempad_static` lang); WTHIT bar colors approved 2026-11-07 |
 | Immersive Portal Gun added, with Immersive Portals as its dependency | PLANNED |
 | Immersive Portals limited to the features below | PLANNED |
 | Nether portal test of the visual effect and the missing load screen | PLANNED, a trial for stability and performance |
@@ -51,13 +51,13 @@ out whether they are stable and how they perform. Everything else Immersive Port
 - Add the mod. The 1.19.2 jar (1.4.5) now loads; the earlier load error did not recur on 2026-11-06.
 - **Backport (owner note 2026-11-06):** 1.4.5 is very limited compared with the Tempad wiki, which describes the newer
   releases. Backport the newer feature set to Forge 1.19.2 (skill `port`). First steps: list the features the wiki
-  and newer releases have that 1.4.5 lacks; settle the licence route (the 1.19.2 jar's metadata says "All rights
-  reserved", so check the upstream repository's licence for each version before choosing a source port or the
+  and newer releases have that 1.4.5 lacks; settle the license route (the 1.19.2 jar's metadata says "All rights
+  reserved", so check the upstream repository's license for each version before choosing a source port or the
   donor-jar method); keep the `tempad` mod id and item ids so existing Tempads in worlds stay valid.
 - **Investigation (2026-11-06).** Donor: `DecompiledMods/tempad-1.21.1-3.0.4-all` (NeoForge 1.21.1, compiled Kotlin
   classes only, `mods.toml` says ARR). Real source: github.com/terrarium-earth/Tempad, branch `1.21.1` (= 3.0.4;
   `1.21.x` carries the same version). 190 files, about 14.7k lines, almost all Kotlin.
-  - **Licence route: split.** Since the 1.21 rewrite the repo uses "Terrarium License v1": `.kt`/`.java` source and
+  - **License route: split.** Since the 1.21 rewrite the repo uses "Terrarium License v1": `.kt`/`.java` source and
     `data/` files are MIT; everything else (textures, models, lang, sounds, blockstates) is All Rights Reserved. The
     `1.19.2` (1.4.7) and `1.20.1` (2.3.4) branches are fully ARR. So: port the 3.0.4 source (MIT, GPLv3-compatible,
     keep the MIT notice); load the ARR assets at runtime from the unmodified upstream 3.0.4 jar in `tempad_upstream/`
@@ -84,7 +84,7 @@ out whether they are stable and how they perform. Everything else Immersive Port
 
 ### 2.1.1 Tempad port: approach (decided 2026-11-06)
 
-- **TP-D1 Licence route (owner: "if code is MIT and assets ARR, go the donor jar route").** The CurseForge and GitHub
+- **TP-D1 License route (owner: "if code is MIT and assets ARR, go the donor jar route").** The CurseForge and GitHub
   copies of Terrarium License v1 agree: `.java`/`.kt` source, `data/` files, build and config files are MIT; all else
   (textures, models, blockstates, lang, sounds, shaders' `.json`) is All Rights Reserved. The CurseForge copy also
   lists `neoforge.mods.toml` as Code. So: Java translated from the MIT source of branch `1.21.1` (3.0.4), with the
@@ -112,11 +112,11 @@ out whether they are stable and how they perform. Everything else Immersive Port
   file naming an item not registered yet (phased build).
 - **TP-D7 Phase 1 = playable core, as upstream, no tweaks:** Tempad, time steel, chronon cell / battery / generator,
   chronometer, creative chronometer, new-location and player-teleport upgrades and the upgrade recipe; chronon and
-  upgrade capabilities; locations, favourites and travel-history data; default and player location handlers; macros;
+  upgrade capabilities; locations, favorites and travel-history data; default and player location handlers; macros;
   timedoor entity, renderer and shader; Teleport, New Location and Settings apps with their screens; config.
   Later: 2 workstation, portal setup, location card, wallet, broadcaster, screening device; 3 timedoor projector,
   marker, chronomark, metronome, time twister + timeline; 4 compat (Curios, FTB Teams, WTHIT in place of upstream's Jade plugin; upstream has no JEI plugin), guide/handbook (upstream's own screen, no Patchouli).
-  Tempad behaviour that needs a later item (time-twister stacking, the timeline app) arrives with that item.
+  Tempad behavior that needs a later item (time-twister stacking, the timeline app) arrives with that item.
 - **TP-D8 Portable member (owner, 2026-11-06).** The Tempad member must be able to move to its own jar or another bundle
   (likely Creative Engineering once crafting is integrated, or a future computing jar for high-level redstone, advanced
   controls and capabilities) by editing only the host's `bundle_members` / `replaces_jars`, its own `bundled_in`,
@@ -128,7 +128,7 @@ out whether they are stable and how they perform. Everything else Immersive Port
 ### 2.2 Immersive Portal Gun
 
 - Add the mod. It needs Immersive Portals, so that comes in with it.
-- Fixes and portal colour dyeing (2026-11-07 owner notes: names, hotbar desaturation, exit lift, dyeing): [plan_portal_gun.md](plan_portal_gun.md),
+- Fixes and portal color dyeing (2026-11-07 owner notes: names, hotbar desaturation, exit lift, dyeing): [plan_portal_gun.md](plan_portal_gun.md),
   TODO `gameplay/tnt-and-portal #13..#16`. All four built in Creative Compat 2026-11-07 (plan section 7); tests
   SQ-PG-01, -02, CQ-PG-01..05.
 - Opaque gun portal option: [plan_portal_changes.md](plan_portal_changes.md) G5, TODO #20.
@@ -138,11 +138,11 @@ out whether they are stable and how they perform. Everything else Immersive Port
 | Feature | Decision |
 |---|---|
 | New portal shapes | Disabled |
-| Vanilla portal behaviour | In place |
+| Vanilla portal behavior | In place |
 | The pack's failure mechanic (ordinary ignition fails and ruins the frame, only Dark Fire lights a portal) | In place with Immersive Portals since 2026-11-07: IP's fire hook is gated (Creative Magic `IPFireGateMixin`), Dark Fire builds the IP portal ([nether_portal.md](nether_portal.md) 3) |
 | Nether portal | Trial of the visual effect and of the missing load screen |
 | Nether portal link mode | `Mode: normal`: a portal only links to an obsidian frame with the exact same shape and orientation |
-| End portals | Vanilla behaviour |
+| End portals | Vanilla behavior |
 | Mirrors | Implemented (enabled). Since 2026-11-07: more glass and panes (tags `creativecompat:mirror_glass`, `_panes`; frosty glass needs sneaking), rendered within 12 blocks, 4 bounces, 32 blocks inside (Creative Compat `[immersive_portals]`); Design and Decor's tinted framed glass named Smooth Tinted Glass |
 | Global portals | Excluded |
 | Vertical dimension stacking | Disabled |
@@ -171,9 +171,9 @@ BUILT and installed 2026-11-07 16:44 (Magic, Compat, Common), scratch rows SQ-PR
 
 ## 3. Work
 
-1. Tempad backport (section 2.1): feature gap list, licence route, then the port. The 1.4.5 jar stays in `mods/`
+1. Tempad backport (section 2.1): feature gap list, license route, then the port. The 1.4.5 jar stays in `mods/`
    until the backport replaces it.
-2. Pick the Immersive Portals and Portal Gun jars for Forge 1.19.2, check licences and sides, add rows to
+2. Pick the Immersive Portals and Portal Gun jars for Forge 1.19.2, check licenses and sides, add rows to
    [mod_sides.md](../mod_sides.md) (skill `add-mod`; `integration-report` for overlap with Smaller Nether Portals,
    NetherPortalFix and End Portal).
 3. Write the Immersive Portals config for the table in 2.3 and copy it to `configs_edited/root_config/`.
@@ -215,6 +215,6 @@ TODO `gameplay/tnt-and-portal #27` to `#37`.
 - **Naming:** chronons become chronitons ([Futurama](https://futurama.fandom.com/wiki/Chronitons)); fix the projector line "hold {X} chronotons"; timesteel becomes temporal steel, recipe a felsic/steel alloy (ender pearl or ender grain additive?). Tempad recipes overall much more complex, with intermediate and unusual steps.
 - **Knowledge projector:** recipes follow the real recipes; no TVA lore; larger screen; a tooltip for every item from its entry; use the projector in the timedoor projector, and that in the Tempad. Categories basic vs advanced instead of iron vs steel (advanced harder, basic lower storage).
 - **Mechanics:** Tempad time in game time; several chronometers cancel each other's charging (bug); bracelet Curios slot; timedoor projector door angle 180 degrees (behind the station).
-- **Bugs to confirm:** marker name and colour fields not drawn until clicked, colour update inconsistent; default app, single macro option, locked workstation, empty or marked location card on the Tempad, card stuck in the wallet, timeline language entry, every app present in the Tempad, location broadcaster in multiplayer.
+- **Bugs to confirm:** marker name and color fields not drawn until clicked, color update inconsistent; default app, single macro option, locked workstation, empty or marked location card on the Tempad, card stuck in the wallet, timeline language entry, every app present in the Tempad, location broadcaster in multiplayer.
 - **Server:** chronomarker navigation of mining and resource dimensions; better dimensions need an own Tempad; location cards as unlocks (rare wandering trader, End chests).
-- **Portal Gun:** placement must not be blocked by the position of the colour being moved (a blue portal could not move up or down at the same spot).
+- **Portal Gun:** placement must not be blocked by the position of the color being moved (a blue portal could not move up or down at the same spot).

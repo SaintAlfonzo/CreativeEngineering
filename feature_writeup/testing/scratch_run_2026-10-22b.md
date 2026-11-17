@@ -64,7 +64,7 @@ Feature: [../recipes_cooking.md](../recipes_cooking.md) 2.3 (RC-75, RC-76), TODO
 #### SQ-MJ: soups and stews in jars
 
 Feature: [../mixed_jars.md](../mixed_jars.md) 9 (MJ-11 to MJ-14), TODO `dishes/ingredients #13`. 24 files in
-`kubejs/data/creativeengineering/moonlight/soft_fluids/`. Colours and WTHIT: in game.
+`kubejs/data/creativeengineering/moonlight/soft_fluids/`. Colors and WTHIT: in game.
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
@@ -166,7 +166,7 @@ Registry checks only, so superflat is fine.
 | SQ-WC-04 | A | same | PASS savanna cotton, jungle pepper + coffee generate; PASS bone meal in savanna / jungle / plains grows no `rusticdelight:` patch | `kubejs/data/rusticdelight/worldgen/configured_feature/*` overrides not loaded |
 | SQ-WC-05 | A | `/zfw straw` | PASS y 200 white, y 191 red, y 150 red; config min height 192 | `neapolitan-common.toml`; `>` vs `>=` at 192 |
 
-#### SQ-CD: crop drop tables (apples from apple trees only, bell pepper colours)
+#### SQ-CD: crop drop tables (apples from apple trees only, bell pepper colors)
 
 Feature: [../crops.md](../crops.md) 3, V17, CR-57, CR-69, TODO `farming/crops #6`, `#9`. Built 2026-10-21, not in the
 2026-10-22 run. Any 1.1.01 jar.
@@ -174,7 +174,7 @@ Feature: [../crops.md](../crops.md) 3, V17, CR-57, CR-69, TODO `farming/crops #6
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-CD-00 | A | boot | `[leaf-apples] apples removed from 3 of 3 leaf tables`, `[crop-drops] rewrote 1 of 1 crop tables` | Script ran before the tables / pool match |
-| SQ-CD-01 | A | `/zfw loot` | PASS each pepper colour 0.40 to 0.56 per ripe harvest (600 rolls); PASS unripe drops no pepper | `09_crop_drops.js` weights / CEConfig `[crop_drops.bell_peppers]` defaults |
+| SQ-CD-01 | A | `/zfw loot` | PASS each pepper color 0.40 to 0.56 per ripe harvest (600 rolls); PASS unripe drops no pepper | `09_crop_drops.js` weights / CEConfig `[crop_drops.bell_peppers]` defaults |
 | SQ-CD-02 | A | same | PASS no apples from oak, dark oak, rubberwood leaves (2000 rolls each) | `08_leaf_apples.js` TABLES |
 
 #### SQ-MB: river wood removed, Mulberry tree
@@ -312,7 +312,7 @@ TODO `alcohol/brewinport #7`, `#6` (slot half; the leftover overflow and stall, 
 |---|---|---|---|---|
 | SQ-OM-01 | A | `/omprobe keg` | 9 slots; wheat into the grid from side, bottom and top, dirt refused; tankard into the container slot, dirt refused; a honey bottle skips the grid from side and bottom and goes into the fluid slot, not the container slot; output, empty-container and leftover slots take nothing from any face; an 8-slot (`-02`) keg NBT loads wheat 3 / tankard 2 / beer 1 / glass bottle 4 into the same slots of 9; bottom and sides pull output, empties and leftovers, the top only ingredients | Slot counts: `KegItemHandlerForge.readFromNbt`; face rules: `SidedKegWrapper`; slot validity: `KegBlockEntity.isItemValidForSlot` |
 
-#### SQ-OM-COA: coasters take modelled items only
+#### SQ-OM-COA: coasters take modeled items only
 
 Feature: [alcohol.md](../alcohol.md) 12 (logic of AL-91); TODO `alcohol/brewinport #8`.
 
@@ -381,7 +381,7 @@ range, it stays in game) and 1.1 (FP-15, recipe half of FP-09); TODO `ports/feat
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
 | SQ-OM-10 | A | `/omprobe raid` | A pillager added to a raid wave gets Glowing at `glowingAmplifier`, no particles, no icon | No effect: `RaidGlowingMixin` (`m_37718_`) not applied |
-| SQ-OM-11 | A | `/omprobe air` | INFO fake player in water and under water; glass bottle right-click: air 0 -> 150 (`airPerBottle`); with a lava bucket in the other hand the water bottle in slot 10 is gone; a water bottle under water: the right-click is cancelled | "not in water": the fake player's baseTick did not update the water state, check it in game (FP-13); air unchanged: `BottledAir.onRightClickItem` registration |
+| SQ-OM-11 | A | `/omprobe air` | INFO fake player in water and under water; glass bottle right-click: air 0 -> 150 (`airPerBottle`); with a lava bucket in the other hand the water bottle in slot 10 is gone; a water bottle under water: the right-click is canceled | "not in water": the fake player's baseTick did not update the water state, check it in game (FP-13); air unchanged: `BottledAir.onRightClickItem` registration |
 | SQ-OM-12 | A | `/omprobe tier1` | 311 AE2 cable, 26 recycle smelting, 33 copper splashing recipes; name tag (leather, paper, 2 string), recycle hopper -> iron ingot, rail -> nugget, anvil -> iron block, copper block splashing -> exposed copper; no `createmixing/generator_*` or `create_generators:*` recipe; one `obsidian_generation_heated`; copper ore x10 -> 1 raw copper each, deepslate copper ore -> 1, silk touch -> the ore | Counts / ids: `feature_ports.js` (NCH ids); drops: `kubejs/data/minecraft/loot_tables/blocks/*copper_ore.json` |
 
 #### SQ-OM-BM: baby squid, glow squid and dolphin

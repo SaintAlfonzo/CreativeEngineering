@@ -97,7 +97,7 @@ walkable block that nothing gives a speed to, so the next mod added doesn't sile
   `RunSpeed.standTop` (174) with `REGISTER_HEIGHT` (82, private) is the "collision top >= 0.2 registers" rule.
 
 ### Build
-1. **Dump command (patcherMod devtools).** New `devtools/SurfaceAudit.java`, modelled on
+1. **Dump command (patcherMod devtools).** New `devtools/SurfaceAudit.java`, modeled on
    [devtools/WthitIconDump.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/devtools/WthitIconDump.java)
    (registration, JSON writing to `kubejs/exported/`, try/catch per block). A server command `/dumpsurface` (op 2;
    tags are loaded on the server) writes `kubejs/exported/surface_audit.json`, one row per block (default state):
@@ -159,7 +159,7 @@ asphalt, and no block keeps a speed of its own on top of a tier.
 
 ### Now
 - "IE asphalt" in the row is Immersive Petroleum asphalt (`i.asphalt`, `i.asphalt_slab`, `i.asphalt_stair`, item_dict.js
-  4233-4235); "painted asphalt" is D&D's 16 coloured asphalt blocks (`i.<colour>_asphalt_block`, item_dict.js
+  4233-4235); "painted asphalt" is D&D's 16 colored asphalt blocks (`i.<colour>_asphalt_block`, item_dict.js
   1519-1534), renamed "Painted Asphalt" with new recipes 2026-10-30 (`engineering/dreams-and-desires #6`, Testing,
   SQ-DD-08); it stays in the asphalt tier.
 - **Done:**
@@ -212,7 +212,7 @@ listed in the writeup; optionally a tooltip says so.
 ### Now
 - **The soap block's effect (verified, `net.mehvahdjukaar.supplementaries.common.block.blocks.SoapBlock`):**
   `stepOn` (`m_141947_`), run on the server and for the `LocalPlayer` on the client, unless the entity is sneaking
-  (`isSteppingCarefully`): with chance 0.14 per call and horizontal speed² > 8e-4, it takes the motion, normalises it,
+  (`isSteppingCarefully`): with chance 0.14 per call and horizontal speed² > 8e-4, it takes the motion, normalizes it,
   scales it to 0.1-0.23, rotates it by 20-93 degrees left or right, adds it to the motion, and fires block event 0
   (suds particles above the block, `triggerEvent`).
 - **Its friction (verified, `ModRegistry` lambda for `soap_block`):** `friction(0.94f)`, strength 1.25 / 4.0, Material
@@ -289,7 +289,7 @@ listed in the writeup; optionally a tooltip says so.
 - Client and server must both run the shove for the local player only on the client (as Supplementaries does), or the
   player rubber-bands.
 - The shove only fires while moving faster than about 0.03 blocks/tick, so standing still on ice is safe.
-- Ice's friction already makes BlockRunner's 1.25 feel faster than 1.25 (blockrunner.md 3.8 "not modelled").
+- Ice's friction already makes BlockRunner's 1.25 feel faster than 1.25 (blockrunner.md 3.8 "not modeled").
 
 ### Tests
 - **BR-56 Ice slip:** walk across packed ice -> every few steps a sideways nudge, like on a soap block; sneak -> none;

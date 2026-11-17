@@ -48,7 +48,7 @@ not by hand.
 1. **Inventory of sort paths** (write it into fixes_compat 2.20 as a table): each screen above, the backpack sort, the
    player sort; per path, which handler it sorts (`InvWrapper`, Balm `CombinedContainer`, SB `InventoryHandler`) and
    whether it goes through `QuarkSafeSort`.
-2. **Generalise the fridge harness** into `feature_writeup/testing/sort_audit/zz_scratch_sortaudit.js` (scratch server
+2. **Generalize the fridge harness** into `feature_writeup/testing/sort_audit/zz_scratch_sortaudit.js` (scratch server
    only, never in `kubejs/`): a `zsortaudit run` console command that, for every block in a list (chest, barrel, shulker,
    CfB fridge 1- and 2-tall, counter, IE crate, ender chest, framed chest, cloud chest), places it, fills it with a fixed
    set (an oversized stack, an NBT item, a damaged tool, a full stack, singles), totals by `id+nbt`, sorts through
@@ -200,7 +200,7 @@ deleting at once.
 
 ### Gotchas
 - A server crash or kick mid-screen: `removed` still runs on disconnect; on a crash the buffer is lost, which equals
-  the old behaviour (deleted).
+  the old behavior (deleted).
 - Creative mode: vanilla's creative inventory does not open this menu, so creative uses the same path as survival.
 - The 9 filter slots are ghost slots handled in `clicked`; keep the new slot indices after them so the mod's index
   checks still hit the filter slots.

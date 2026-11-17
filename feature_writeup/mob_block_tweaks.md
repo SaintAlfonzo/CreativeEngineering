@@ -5,7 +5,7 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=fcc9442b5307 -->
+<!-- generated:status_index begin open_work sha1=5d5937bfdcb1 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 1, Testing 8), 0 Complete.
 
 | Id | Status | Tests | Change |
@@ -17,7 +17,7 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 | `mobs/tweaks #5` | Testing | S P T | Quark monster boxes |
 | `mobs/tweaks #6` | Testing | S C P | Named mobs |
 | `mobs/tweaks #7` | Testing | S P | Seagulls can't take lunchboxes |
-| `mobs/tweaks #12` | Testing | C | MCA villager eye colour |
+| `mobs/tweaks #12` | Testing | C | MCA villager eye color |
 | `mobs/tweaks #15` | Testing | S P | Villagers: gates solid, Dramatic Doors usable, ladders |
 <!-- generated:status_index end open_work -->
 
@@ -28,7 +28,7 @@ listed here in the backlog, are in [gear_tuning.md](gear_tuning.md).
 | Quark feeding trough: a hungry animal that finds no trough waits 30 s before searching again | DEPLOYED with 1.0.4 (perf fix); scratch server checked the mixin applies, not measured under load |
 | Create: Dreams & Desires asphalt: friction and speed factor reset to vanilla (BlockRunner tiers it instead) | DEPLOYED; BR-28 pending |
 | Alex's Mobs seagulls never take a lunchbox: not from the inventory, not dropped (patcherMod `AlexsMobsSeagull*Mixin`, every Spice of Life food container; the `seagullStealingBlacklist` config entries from 2026-10-22 stay; [lunchboxes.md](lunchboxes.md)) | Mixins BUILT 2026-10-29 (patcherMod 1.1.04 in `mods/`), not deployed; config list load scratch server PASSED 2026-10-22 (SQ-GM-07); MT-26 in game |
-| MCA Comb sets eye colour (11 colours) and eye shape (2) on its hairstyle page, for the player's own look and for a combed villager | BUILT 2026-10-22, DEPLOYED with 1.1.01 (2026-10-22); MT-40 pending in game |
+| MCA Comb sets eye color (11 colors) and eye shape (2) on its hairstyle page, for the player's own look and for a combed villager | BUILT 2026-10-22, DEPLOYED with 1.1.01 (2026-10-22); MT-40 pending in game |
 | Leaf decay: natural leaves live up to 12 leaf steps from a log (vanilla 6), decay only after a block next to them changes (never from random ticks), and fall fast once their tree is cut (Fast Leaf Decay ported in, its jar removed) | BUILT 2026-10-19, DEPLOYED with 1.1.01 (2026-10-22, changelog Farming & Nature); scratch server PASSED (MT-13 to MT-16, MT-19 to MT-23, MT-24 decay piles); MT-13 to MT-24 pending in game |
 | Named mobs: a naturally spawned farm animal (cow, mooshroom, pig, sheep, chicken, goat) has a 1 in 100 chance of a random name (MCA citizen names); every player sees its death message ("Bessie the Cow was slain by Steve") (patcherMod `mobs.NamedMobs`, `[named_mobs]`, TODO `mobs/tweaks #6`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-NM-01 to -03); MT-31 to MT-33 pending in game |
 | Villagers treat fence gates as walls (open or closed) and path through Dramatic Doors' tall and short wooden doors, opening them (patcherMod `McaVillagerPathGatesMixin`, `WalkNodeEvaluatorVillagerGateMixin`, TODO `mobs/tweaks #15`) | BUILT 2026-10-30 (patcherMod 1.1.04 in `mods/`), not deployed; scratch server PASSED r1031 (2026-10-31, SQ-VG-00 to -03); MT-41 to MT-43 pending in game |
@@ -93,11 +93,11 @@ for them. Players, items, boats and every other mob are unchanged.
 
 | Path | Before | Now |
 |---|---|---|
-| Bone meal on a vanilla flower | grown bush | vanilla bone meal (Flower Patch's behaviour) |
+| Bone meal on a vanilla flower | grown bush | vanilla bone meal (Flower Patch's behavior) |
 | Bone meal on a grown bush | pops a loose flower | vanilla bone meal |
 | Dispenser with bone meal | same as above | vanilla |
 | Worldgen | grown bushes in plains, meadow, flower forest, swamp, default | none (5 biome modifiers replaced by `forge:none`) |
-| Crafting | | 4 of a flower → its grown bush, shapeless (13 bushes: allium, azure bluet, blue orchid, cornflower, dandelion, lily of the valley, orange / pink / red / white tulip, oxeye daisy, poppy, wither rose) |
+| Crafting | | 4 of a flower -> its grown bush, shapeless (13 bushes: allium, azure bluet, blue orchid, cornflower, dandelion, lily of the valley, orange / pink / red / white tulip, oxeye daisy, poppy, wither rose) |
 
 Existing bushes, their dye recipes and potted versions stay.
 
@@ -110,7 +110,7 @@ speed. Detail and measurements: [perf.md](perf.md) 7.
 
 ### 2.4 Block properties
 
-All 16 D&D asphalt colours (`create_dd:<colour>_asphalt_block`): friction 0.6 and speed factor 1.0 (vanilla), jump
+All 16 D&D asphalt colors (`create_dd:<colour>_asphalt_block`): friction 0.6 and speed factor 1.0 (vanilla), jump
 factor 1.25 kept. Their walk speed comes from BlockRunner's asphalt tier (1.50), like Immersive Petroleum's asphalt
 ([blockrunner.md](blockrunner.md)).
 
@@ -185,7 +185,7 @@ mob list, farm animals only for now; a large karma loss once karma exists).
   region, random male or female pool), else a random `fallbackNames` entry, and the mark becomes 2. The split exists
   because chunk generation and structure spawns run on worldgen threads and MCA's name pool uses one shared random
   (`API.getRng()`), which is not thread safe. MCA answers "Unnamed" while its lists are empty; that counts as no answer.
-- **Death** (`LivingDeathEvent`, lowest priority, cancelled deaths skipped): a mob marked 2 that still has a name
+- **Death** (`LivingDeathEvent`, lowest priority, canceled deaths skipped): a mob marked 2 that still has a name
   sends vanilla's death message to every player, its victim argument swapped for `"%s the %s"`
   (`chat.creativeengineering.named_mob.title`), so "Bessie the Cow was slain by Steve". Any cause counts, not only
   player kills. Follows `showDeathMessages`. A tamed mob's owner already gets vanilla's copy and is skipped.
@@ -284,7 +284,7 @@ dead.
 - **Every box.** Generated and placed boxes behave alike: with the box gone from the reward table, creative is the
   only other source.
 - **Limits.** One reward per wave for whoever is there (no per-player list). Other machine breakers that post no
-  `BreakEvent` (not checked beyond Create) could still break a box. `vaultMode = false` returns Quark's behaviour,
+  `BreakEvent` (not checked beyond Create) could still break a box. `vaultMode = false` returns Quark's behavior,
   except that the hardness and tags stay (KubeJS).
 
 ### 2.10 Giant squid flee distance (added 2026-11-02, TODO `mobs/tweaks #18`)
@@ -336,7 +336,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
   for tagged entity types. Hooking the block rather than `Entity#onAboveBubbleCol` / `onInsideBubbleColumn` also covers
   mobs that override those without calling super.
 - **Bushier Flowers:** `BushierFlowersDisableMixin` empties `ModBlocks.validFlowers` and `grownFlowers` after the class
-  initialises, so both of the mod's growth paths miss every check and fall through to vanilla. Worldgen: the mod's 5
+  initializes, so both of the mod's growth paths miss every check and fall through to vanilla. Worldgen: the mod's 5
   biome modifier files are overridden with `{"type": "forge:none"}` in `kubejs/data/bushierflowers/forge/biome_modifier/`.
   Recipes: [flowers.js](../kubejs/server_scripts/other/flowers.js).
 - **Trough:** `FeedingTroughModuleMixin` (head and return of `FeedingTroughModule#temptWithTroughs`) with the stamp on
@@ -346,7 +346,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
   decaying leaf (not persistent, distance 7: vanilla's `decaying()` test, inlined) it asks `LeafDecayRange.keep`,
   and cancels the decay on true. `keep` walks breadth-first from the leaf through the connected distance-7 leaves
   (loaded chunks only); a leaf `k` steps away with a real distance `d < 7` means a log at `k + d`, kept when that
-  is at most `maxDistance`. With `onlyWhenDisturbed` (default) the random-tick decay is cancelled outright instead
+  is at most `maxDistance`. With `onlyWhenDisturbed` (default) the random-tick decay is canceled outright instead
   and the search runs only from the scheduled tick (below). Only distance-7 leaves are walked (the leaves nearer a log already carry their distance),
   so a search stays small; it gives up (the leaf decays) after `maxSearchBlocks` leaves. Leaves connect as in vanilla
   (any `LeavesBlock`) unless Separated Leaves has a rule for the leaf: then only that rule's `leaves` set connects
@@ -355,14 +355,14 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
   override it (Fruits Delight durian / passable / peach, Vinery `FruitLeavesBlock`) all call super. Block states are
   not touched: the `distance` property still stops at 7.
 - **Decay timing:** the same mixin injects at the tail of `LeavesBlock#tick` (SRG `m_213897_`), the scheduled tick
-  vanilla queues from `updateShape` when a neighbour changes; it has just stored the recomputed distance.
+  vanilla queues from `updateShape` when a neighbor changes; it has just stored the recomputed distance.
   `LeafDecayRange.afterTick`: still natural and at 7 afterwards? If it was below 7 when the tick started (its log is
   gone) it queues another tick `decayMinTicks`-`decayMaxTicks` later; if it was already 7 it runs `keep` and drops the
   leaf (drops + `removeBlock`, as vanilla's random-tick decay) when no log is in range. A dropped leaf updates its
-  neighbours, so a cut canopy cascades. No leaf subclass in the pack overrides `tick` or `updateShape` (jar scan).
+  neighbors, so a cut canopy cascades. No leaf subclass in the pack overrides `tick` or `updateShape` (jar scan).
 - **Fast Leaf Decay port:** `FastLeafDecayPort` (Forge `BlockEvent.NeighborNotifyEvent`): when the changed block is
-  now air, each notified neighbour that is a natural `LeavesBlock` gets a vanilla scheduled tick
-  `decayMinTicks`-`decayMaxTicks` out (a tick already queued wins). That covers removals that notify neighbours but
+  now air, each notified neighbor that is a natural `LeavesBlock` gets a vanilla scheduled tick
+  `decayMinTicks`-`decayMaxTicks` out (a tick already queued wins). That covers removals that notify neighbors but
   skip shape updates (flag 16). The mod kept its own unbounded list and called `tick` + `randomTick` itself;
   scheduled ticks are saved with the chunk and the decay decision is the shared one above. Every
   `#minecraft:leaves` block in the pack is a `LeavesBlock` (scratch check), so nothing lost fast decay.
@@ -392,8 +392,8 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
   `swamp_small` lost its 14 floating leaves within 4 s; `max_spruce_big` kept all of them). Everything connected
   within 12 survives that check. Options, not built: let the search step diagonally, or skip the check for leaves
   ticked by that edge pass.
-- **F7. Removals with no neighbour notification don't trigger decay** (setBlock flags without 1 and with 16, e.g.
-  some contraption moves): the leaves stay until another neighbour changes. Fast Leaf Decay behaved the same. Scratch:
+- **F7. Removals with no neighbor notification don't trigger decay** (setBlock flags without 1 and with 16, e.g.
+  some contraption moves): the leaves stay until another neighbor changes. Fast Leaf Decay behaved the same. Scratch:
   flags 18 kept all 575 leaves; flags 19 (notify, no shape update) cleared 987 through the ported event.
 
 ### Pending review with the mob food overhaul (TODO `tweaks #13`)
@@ -418,7 +418,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 - **Hooking `Entity#onAboveBubbleCol`:** some mobs override it without calling super.
 - **Widening the leaf `distance` property past 7:** adds block states to every leaf block. State ids are already
   near the 2^19 chunk-packet limit (ghost blocks), and every client would need the same jar.
-- **Recomputing distances further in `updateDistance`:** runs on every neighbour change of every leaf (and is where
+- **Recomputing distances further in `updateDistance`:** runs on every neighbor change of every leaf (and is where
   Separated Leaves hooks); the decay-time search only runs for leaves that are about to fall.
 - **Keeping every natural leaf of a worldgen tree:** chopped trees would never lose their canopy.
 - **A "disturbed" marker per leaf** (to tell worldgen leaves from cut ones): needs a block state or per-chunk
@@ -452,115 +452,115 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 
 ## 7. In-game test suite
 
-- [ ] **MT-01 Squid ignore columns:** soul sand column in a 1 × 1 water pillar, push a squid in → it swims normally,
+- [ ] **MT-01 Squid ignore columns:** soul sand column in a 1 × 1 water pillar, push a squid in -> it swims normally,
   not shot up. Same for a dolphin and a turtle.
-- [ ] **MT-02 Magma column:** magma column, a glow squid inside → not pulled to the floor.
-- [ ] **MT-03 Alex's Mobs:** an orca or hammerhead shark in a column → unaffected.
-- [ ] **MT-04 Others still pushed:** a cod, a player and a boat in the soul sand column → pushed up as in vanilla.
-- [ ] **MT-05 Tag reload:** remove `minecraft:squid` from the tag in a datapack override, `/reload` → squid pushed
+- [ ] **MT-02 Magma column:** magma column, a glow squid inside -> not pulled to the floor.
+- [ ] **MT-03 Alex's Mobs:** an orca or hammerhead shark in a column -> unaffected.
+- [ ] **MT-04 Others still pushed:** a cod, a player and a boat in the soul sand column -> pushed up as in vanilla.
+- [ ] **MT-05 Tag reload:** remove `minecraft:squid` from the tag in a datapack override, `/reload` -> squid pushed
   again. Remove the override.
-- [ ] **MT-06 No bush from bone meal:** bone meal on a poppy → vanilla behaviour (or Flower Patch's), no grown poppy.
-- [ ] **MT-07 Grown bush, bone meal:** bone meal on an existing grown poppy → no loose poppy popped off.
-- [ ] **MT-08 Dispenser:** dispenser with bone meal facing a dandelion → no grown dandelion.
-- [ ] **MT-09 No worldgen:** new chunks in plains, meadow, flower forest and swamp → no Bushier Flowers bushes.
-- [ ] **MT-10 Craft a bush:** 4 cornflowers in the grid → 1 grown cornflower.
+- [ ] **MT-06 No bush from bone meal:** bone meal on a poppy -> vanilla behavior (or Flower Patch's), no grown poppy.
+- [ ] **MT-07 Grown bush, bone meal:** bone meal on an existing grown poppy -> no loose poppy popped off.
+- [ ] **MT-08 Dispenser:** dispenser with bone meal facing a dandelion -> no grown dandelion.
+- [ ] **MT-09 No worldgen:** new chunks in plains, meadow, flower forest and swamp -> no Bushier Flowers bushes.
+- [ ] **MT-10 Craft a bush:** 4 cornflowers in the grid -> 1 grown cornflower.
 - [ ] **MT-11 Trough still works:** two adult cows, a Quark feeding trough with wheat within 10 blocks, no player
-  nearby → they eat from it and breed.
-- [ ] **MT-12 Trough off switch:** `[perf] troughMissCooldownTicks = 0` → same as MT-11 (and vanilla-Quark cost). Put
+  nearby -> they eat from it and breed.
+- [ ] **MT-12 Trough off switch:** `[perf] troughMissCooldownTicks = 0` -> same as MT-11 (and vanilla-Quark cost). Put
   it back to 600.
 - [ ] **MT-13 Leaf line:** at y 250 (or any open air) an oak log with 16 oak leaves in a straight line from it, placed
-  as `oak_leaves[persistent=false]` (`/fill`) → within a second leaves 13 to 16 decay (placing them is a change next to
+  as `oak_leaves[persistent=false]` (`/fill`) -> within a second leaves 13 to 16 decay (placing them is a change next to
   them), 1 to 12 stay. Scratch server PASSED 2026-10-19 (first with a manual trigger, again with the timing change).
-- [ ] **MT-14 Chop:** break the log of MT-13 → the whole line decays. Scratch server PASSED 2026-10-19.
-- [ ] **MT-15 Separated Leaves kept:** oak log, oak leaves 1 to 6, then birch leaves 7 to 12, all non-persistent →
+- [ ] **MT-14 Chop:** break the log of MT-13 -> the whole line decays. Scratch server PASSED 2026-10-19.
+- [ ] **MT-15 Separated Leaves kept:** oak log, oak leaves 1 to 6, then birch leaves 7 to 12, all non-persistent ->
   the birch leaves decay (birch doesn't count oak). Scratch server PASSED 2026-10-19.
-- [ ] **MT-16 Vanilla setting:** `[leaf_decay] maxDistance = 6` (server stopped), MT-13 again → only leaves 1 to 6
+- [ ] **MT-16 Vanilla setting:** `[leaf_decay] maxDistance = 6` (server stopped), MT-13 again -> only leaves 1 to 6
   stay. Scratch server PASSED 2026-10-19. Put it back to 12.
 - [ ] **MT-17 Big trees in a new world:** fly through a Terralith cherry grove, snowy spruce or violet jungle and an
-  orchard of Vinery apple trees in fresh chunks, wait a few in-game minutes nearby → the canopies stay full (before:
+  orchard of Vinery apple trees in fresh chunks, wait a few in-game minutes nearby -> the canopies stay full (before:
   outer leaves dropped as saplings and apples).
-- [ ] **MT-18 Player leaves unchanged:** leaves picked with shears and placed far from any log → never decay.
+- [ ] **MT-18 Player leaves unchanged:** leaves picked with shears and placed far from any log -> never decay.
 - [ ] **MT-19 Untouched tree ignores random ticks:** `/gamerule randomTickSpeed 1000` next to a big Terralith spruce or
-  a bone-mealed dark oak for a minute → no leaves fall. Put it back to 3. Scratch server PASSED 2026-10-19 (randomTick
+  a bone-mealed dark oak for a minute -> no leaves fall. Put it back to 3. Scratch server PASSED 2026-10-19 (randomTick
   called on every leaf of `max_spruce_big`: 647 -> 647; `swamp_small` 45 -> 45).
-- [ ] **MT-20 Fast fall:** cut every log of a big tree (or fell it with TreeChop) → the canopy is gone within a couple
+- [ ] **MT-20 Fast fall:** cut every log of a big tree (or fell it with TreeChop) -> the canopy is gone within a couple
   of seconds, drops on the ground. Scratch server PASSED 2026-10-19 (1351 leaves gone within 12 s of `/fill`ing the
   logs away, most within 1 s).
-- [ ] **MT-21 No lag spike:** F3 or `/forge tps` while MT-20 runs → no visible hitch. Scratch server: worst tick 146 ms
+- [ ] **MT-21 No lag spike:** F3 or `/forge tps` while MT-20 runs -> no visible hitch. Scratch server: worst tick 146 ms
   in the second the 109 logs were removed (including the `/fill` commands), mean tick 2.9 ms afterwards.
 - [ ] **MT-22 No Fast Leaf Decay jar:** `mods/` has no FastLeafDecay jar; `/forge mods` doesn't list `fastleafdecay`;
   `[leaf_decay] decayMinTicks` / `decayMaxTicks` in the toml. Scratch server PASSED 2026-10-19.
-- [ ] **MT-23 Vanilla switch:** `[leaf_decay] enabled = false` (server stopped), MT-20 again → the canopy thins slowly
+- [ ] **MT-23 Vanilla switch:** `[leaf_decay] enabled = false` (server stopped), MT-20 again -> the canopy thins slowly
   over minutes (vanilla, no fast decay). Put it back to true.
-- [ ] **MT-24 Leaf piles from decay:** fell an oak in grass → roughly a third of the canopy's leaves leave leaf piles
-  that fall to the ground (as with the old Fast Leaf Decay jar). `[leaf_decay] leafPiles = false` → items only.
+- [ ] **MT-24 Leaf piles from decay:** fell an oak in grass -> roughly a third of the canopy's leaves leave leaf piles
+  that fall to the ground (as with the old Fast Leaf Decay jar). `[leaf_decay] leafPiles = false` -> items only.
   Ground piles: stand under an untouched oak for a few in-game days (or `/gamerule randomTickSpeed 300` for a minute,
-  then back to 3) → thin leaf piles appear on the grass under its canopy, as before the decay port. Decay piles and
+  then back to 3) -> thin leaf piles appear on the grass under its canopy, as before the decay port. Decay piles and
   the switch: scratch server PASSED 2026-10-22; the fall in a real forest, ground piles and particles: in game.
-- [ ] **MT-25 Pile slow height:** *Superseded 2026-11-15: leaf piles are the pass-through `leaf_pile` tier, `[surface.passthrough.leaf_pile] minLayers` replaces `slowFromLayers` (same default 4); run BR-83 and BR-87 in [blockrunner.md](blockrunner.md) 3.10 instead (queue SQ-PTH-16 to -18, CQ-PTH-04). Kept for the record.* *Logic half: scratch server PASSED 2026-10-22 (SQ-OM-09: 3 layers no slow, 4 and 5 slow; SQ-OM-14 with 6: 5 no slow, 6 and 7 slow); walking and WTHIT: in game.* default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles → only the
-  4-layer one slows you, and WTHIT shows a Run Speed line on the 4-layer one only. Set 6 (game closed), repeat → 4 and
+- [ ] **MT-25 Pile slow height:** *Superseded 2026-11-15: leaf piles are the pass-through `leaf_pile` tier, `[surface.passthrough.leaf_pile] minLayers` replaces `slowFromLayers` (same default 4); run BR-83 and BR-87 in [blockrunner.md](blockrunner.md) 3.10 instead (queue SQ-PTH-16 to -18, CQ-PTH-04). Kept for the record.* *Logic half: scratch server PASSED 2026-10-22 (SQ-OM-09: 3 layers no slow, 4 and 5 slow; SQ-OM-14 with 6: 5 no slow, 6 and 7 slow); walking and WTHIT: in game.* default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles -> only the
+  4-layer one slows you, and WTHIT shows a Run Speed line on the 4-layer one only. Set 6 (game closed), repeat -> 4 and
   5 no longer slow or show; 6 and up do. Depth Strider boots still walk through.
 - [ ] **MT-26 Seagulls skip lunchboxes** (needs a real player: gulls only target players in the world): all four
   lunchboxes (Lunchbag, Copper, Iron, Netherite), with food inside, anywhere in the inventory on a beach with seagulls
   (no other food): no gull takes one in a few minutes. With a carrot added, a gull still steals the carrot. Drop a
   lunchbox near gulls: none picks it up. Mixins `AlexsMobsSeagullStealMixin` / `AlexsMobsSeagullItemMixin`
   (2026-10-29; the 2026-10-22 config list alone had not stopped them, owner report). Same check as LB-12.
-- [ ] **MT-31 Name rolls:** set `[named_mobs] chance = 1.0` (read live), fly into new chunks → every cow, mooshroom,
+- [ ] **MT-31 Name rolls:** set `[named_mobs] chance = 1.0` (read live), fly into new chunks -> every cow, mooshroom,
   pig, sheep, chicken and goat shows a name when looked at; other animals (horses, rabbits) none. Breed two named cows
-  and use a cow spawn egg → no names. Leave and come back (chunks unload) → the same names. Set `chance` back to 0.01.
-- [ ] **MT-32 Announce:** kill a named cow → one chat line for every player, "<name> the Cow was slain by <you>". A
-  named animal killed by lava or a fall → its vanilla message, same form. `/gamerule showDeathMessages false` → no line.
-- [ ] **MT-33 Rename and plain names:** rename a named pig with a name tag, kill it → announced with the new name. A
-  name-tagged pig that never rolled → no announcement. With MCA's names seen (MT-31), names look like real first names,
+  and use a cow spawn egg -> no names. Leave and come back (chunks unload) -> the same names. Set `chance` back to 0.01.
+- [ ] **MT-32 Announce:** kill a named cow -> one chat line for every player, "<name> the Cow was slain by <you>". A
+  named animal killed by lava or a fall -> its vanilla message, same form. `/gamerule showDeathMessages false` -> no line.
+- [ ] **MT-33 Rename and plain names:** rename a named pig with a name tag, kill it -> announced with the new name. A
+  name-tagged pig that never rolled -> no announcement. With MCA's names seen (MT-31), names look like real first names,
   not "Unnamed".
 - [ ] **MT-41 Gates are walls:** a pen of fences with a closed oak gate, a villager inside with its job site or bed
-  outside the pen (or the reverse) → it never walks into the gate and stays put (or finds another opening). Open the
-  gate → it still does not walk through. Same with a Gates mod metal gate. A cow or horse still walks out of the open gate.
+  outside the pen (or the reverse) -> it never walks into the gate and stays put (or finds another opening). Open the
+  gate -> it still does not walk through. Same with a Gates mod metal gate. A cow or horse still walks out of the open gate.
 - [ ] **MT-42 Tall doors:** a closed house whose only door is a Dramatic Doors tall oak door, the villager's bed inside,
-  the villager outside at dusk → it walks to the door, the door opens, it goes in, and the door closes behind it. Same
-  out of the house in the morning. A tall iron door instead → it does not path through and does not open it.
+  the villager outside at dusk -> it walks to the door, the door opens, it goes in, and the door closes behind it. Same
+  out of the house in the morning. A tall iron door instead -> it does not path through and does not open it.
 - [ ] **MT-43 Short doors and vanilla doors:** a baby villager uses a short oak door (opens it); an adult does not get
   stuck at it. Vanilla oak doors are used as before.
 - [ ] **MT-44 Up a ladder:** a 6-block wall with a ladder from the ground to its top, a platform on top with the
-  villager's bed (or job site), the villager on the ground → it walks to the ladder, climbs, steps onto the platform.
+  villager's bed (or job site), the villager on the ground -> it walks to the ladder, climbs, steps onto the platform.
   Same with a Quark spruce ladder and a Create andesite ladder.
-- [ ] **MT-45 Down a ladder:** the reverse (villager on the platform, target on the ground) → it steps into the ladder,
+- [ ] **MT-45 Down a ladder:** the reverse (villager on the platform, target on the ground) -> it steps into the ladder,
   slides down rung by rung without climbing back up, walks off at the bottom; no fall damage. Also a 1 x 1 shaft
   through a floor with a ladder up to the floor level, both ways.
-- [ ] **MT-46 Not ladders:** a vine-covered wall or a scaffolding tower as the only way up → the villager does not path
-  up it. A ladder that stops one block short of the platform → not used (expected).
-- [ ] **MT-40 Comb eye colour** (client only): hold an MCA Comb, right-click the air. The hairstyle page has `<` `Brown Eyes` `>`
-  top right and `Eye Shape 1` top left. Step the colour through all 11 and toggle the shape → the hair previews show
-  the new eyes each time. Press Done → your villager-model look keeps the eyes (switch to the villager model in the
+- [ ] **MT-46 Not ladders:** a vine-covered wall or a scaffolding tower as the only way up -> the villager does not path
+  up it. A ladder that stops one block short of the platform -> not used (expected).
+- [ ] **MT-40 Comb eye color** (client only): hold an MCA Comb, right-click the air. The hairstyle page has `<` `Brown Eyes` `>`
+  top right and `Eye Shape 1` top left. Step the color through all 11 and toggle the shape -> the hair previews show
+  the new eyes each time. Press Done -> your villager-model look keeps the eyes (switch to the villager model in the
   full editor if needed), the comb lost 1 use. Repeat by using the comb on an MCA villager: its eyes change in the
-  world, also after a relog. Change the eyes, press Escape → nothing saved, no use lost. Pick a hairstyle after
-  changing the eyes → both saved, 2 uses lost. A heterochromia villager shows its fixed two-colour art.
+  world, also after a relog. Change the eyes, press Escape -> nothing saved, no use lost. Pick a hairstyle after
+  changing the eyes -> both saved, 2 uses lost. A heterochromia villager shows its fixed two-color art.
 
-- [ ] **MT-34 Box stays:** find or `/setblock` a `quark:monster_box`, walk up → it growls, mobs spawn, the box stays
+- [ ] **MT-34 Box stays:** find or `/setblock` a `quark:monster_box`, walk up -> it growls, mobs spawn, the box stays
   and its flames stop.
-- [ ] **MT-35 Reward:** kill the wave → one stack pops out of the box top once (ender chest sound); walking up again
+- [ ] **MT-35 Reward:** kill the wave -> one stack pops out of the box top once (ender chest sound); walking up again
   within the cooldown does nothing.
-- [ ] **MT-36 Re-arm:** `[monster_box] cooldownTicks = 200` (game stopped), repeat → 10 s after the reward the
+- [ ] **MT-36 Re-arm:** `[monster_box] cooldownTicks = 200` (game stopped), repeat -> 10 s after the reward the
   flames are back and it growls again.
-- [ ] **MT-37 Off switch:** `vaultMode = false` → Quark behaviour (the box breaks itself after spawning).
+- [ ] **MT-37 Off switch:** `vaultMode = false` -> Quark behavior (the box breaks itself after spawning).
 - [ ] **MT-47 Single item:** over several waves, each reward is exactly one stack from the reward table; never a
   monster box, TNT or infested block. Wave mobs drop only their normal loot.
-- [ ] **MT-48 Obsidian hardness:** survival, diamond pickaxe → about 9.4 s, same as obsidian next to it; iron pickaxe
-  → barely progresses; TNT beside it → the box survives.
-- [ ] **MT-49 Sneak to break:** mine it standing → aqua warning in chat, the box stays (it reappears if it vanished
-  client side); mine it sneaking → it breaks, nothing drops. Same in creative.
-- [ ] **MT-50 Create:** a powered drill against a box, and a drill on a moving contraption → the box doesn't break;
+- [ ] **MT-48 Obsidian hardness:** survival, diamond pickaxe -> about 9.4 s, same as obsidian next to it; iron pickaxe
+  -> barely progresses; TNT beside it -> the box survives.
+- [ ] **MT-49 Sneak to break:** mine it standing -> aqua warning in chat, the box stays (it reappears if it vanished
+  client side); mine it sneaking -> it breaks, nothing drops. Same in creative.
+- [ ] **MT-50 Create:** a powered drill against a box, and a drill on a moving contraption -> the box doesn't break;
   a contraption doesn't pick the box up.
 - [ ] **MT-51 Giant squid flee distance [scratch]:** a giant squid and a cachalot whale summoned 30 blocks apart in deep
-  open water → the squid does not flee; whale moved to 12 blocks → it swims away and stops once more than 24 off. With
+  open water -> the squid does not flee; whale moved to 12 blocks -> it swims away and stops once more than 24 off. With
   `whaleFleeStart = 50`, `whaleFleeStop = 60` it flees at 30 again (Alex's Mobs' own).
 
 - [ ] **MT-52 Golem cooldown [scratch]:** a village with a bell: summon and kill 5 iron golems by the bell within 10 minutes
-  → the villagers summon no golem for one in-game day, even when panicking or gossiping; after it they summon again. A
+  -> the villagers summon no golem for one in-game day, even when panicking or gossiping; after it they summon again. A
   village 200 blocks away is not affected. 4 deaths, or 5 spread over more than 10 minutes, start nothing.
-- [ ] **MT-53 Player golems:** build an iron golem from blocks by the same bell and kill it, 5 times → no cooldown;
+- [ ] **MT-53 Player golems:** build an iron golem from blocks by the same bell and kill it, 5 times -> no cooldown;
   during a cooldown a player can still build one.
-- [ ] **MT-54 Boats on ice [client]:** row a boat on a long road of ice, then packed ice, then blue ice → each faster than
+- [ ] **MT-54 Boats on ice [client]:** row a boat on a long road of ice, then packed ice, then blue ice -> each faster than
   the last and all slower than before (blue ice clearly below the old top speed); walking and a dropped item still
   slide as before. With `[boat_friction] enabled = false` the old speeds are back.
 - [ ] **MT-55 Quark nerfs:** an enderman by a grass field never picks up a block; a creeper blows up blocks; killing a
@@ -577,7 +577,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 - 2026-10-19: leaf decay range ([TODO](todo/TODO.md) `farming/trees #1`): `[leaf_decay]` (default 12), `LeavesDecayRangeMixin`
   + `LeafDecayRange`, patcherMod 1.0.9 rebuilt into `mods/` (not deployed). Every tree feature and template measured
   (longest 10); scratch server: MT-13 to MT-16 passed. Findings F5, F6; tools leaf_path_scan.py, leaf_path_probe.js.
-- 2026-10-19 (later): decay only after a neighbour change (`onlyWhenDisturbed`, tick hook) and Fast Leaf Decay ported
+- 2026-10-19 (later): decay only after a neighbor change (`onlyWhenDisturbed`, tick hook) and Fast Leaf Decay ported
   into patcherMod (`FastLeafDecayPort`, `decayMinTicks` / `decayMaxTicks`); FastLeafDecay-30.jar to `disabledmods/`,
   `mod_sides.md` row deleted, `pack/` and `server_mods/` regenerated. Scratch server: MT-13, MT-15, MT-19 to MT-22
   passed; F6 corrected (diagonal leaves fall at placement, `TreeFeature`'s edge shape updates), F7 added.
@@ -587,7 +587,7 @@ Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice R
 - 2026-10-22: leaf piles from decay passed on the scratch server (SQ-LP-00 to SQ-LP-06, `tools/leaf_pile_probe.js`,
   patcherMod md5 37bb7049; probe fixed in the run: `scheduleTick` overload, Vinery apple leaves set non-persistent).
   MT-24 ground piles and the fall in a real forest, and MT-25, stay in game.
-- 2026-10-22: MCA Comb eye colour and shape (`McaCombEyeColourMixin`, TODO `mobs/tweaks #12`); patcherMod 1.1.01
+- 2026-10-22: MCA Comb eye color and shape (`McaCombEyeColourMixin`, TODO `mobs/tweaks #12`); patcherMod 1.1.01
   rebuilt into `mods/`. MT-40 untested.
 - 2026-10-22: seagulls skip lunchboxes (`mobs/tweaks #7`): Alex's Mobs `seagullStealingBlacklist` holds the three
   Spice of Life lunchboxes (config only; the dropped-box mixin not built). MT-26 untested.

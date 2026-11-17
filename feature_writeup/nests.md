@@ -245,7 +245,7 @@ and snow get none. New chunks only. Quick look: `/place feature creativedelight:
    item, as before. The goose's own sound before it and its 6000 + rand(6000)
    reset after it are unchanged. Drop spot (`goldenegg.DropSpot`): standable spots within 3 blocks (circle,
    one block up or down, nearest first) in the goose's line of sight, scored by solid blocks among the 8
-   neighbours at foot and head height; the first with 0 wins, else the lowest if it beats the goose's own
+   neighbors at foot and head height; the first with 0 wins, else the lowest if it beats the goose's own
    spot, else where it stands (item drop). `pickBlock` is the same without the goose's own spot: the first
    with 0, else the lowest, else none. Not saved: a goose reloaded inside the 400-tick window rolls again. If the item
    is gone at drop time the normal egg drops.

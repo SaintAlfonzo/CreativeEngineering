@@ -56,7 +56,7 @@ just the standard way to write one); low risk, see Decisions.
      `goose_eggs.png`. Unchanged look. Or paint a real goose sheet (the user wanted distinct eggs, nests.md 4
      "Egg geometry follows the painted layout").
 2. **Emu egg sheet:** repaint from scratch on the turkey layout (UV table in nests.md 2.3), or reference
-   `incubation:block/turkey_eggs` and accept turkey-coloured emu eggs. Recommend repaint (emu eggs are dark green in
+   `incubation:block/turkey_eggs` and accept turkey-colored emu eggs. Recommend repaint (emu eggs are dark green in
    Alex's Mobs).
 3. **Nest base + item (4 PNGs):** repaint duck and goose as two different nests (this is #3's "new textures for the
    duplicated nests"), 16x16, block sheet read by the twig-nest geometry (u/v 0-16 x 0-3 for the rims, 3-13 for the

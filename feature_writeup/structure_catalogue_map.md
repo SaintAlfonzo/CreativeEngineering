@@ -73,7 +73,7 @@ Live build differs from this snapshot in two places (plan section 8): `towns_and
 - Terralith Fortified (1): `terralith:village/fortified/houses/church`
 - Tudor (1): `kaisyn:village/exclusives/tudor/houses/tudor_temple_1`
 
-**Town centres** (68)
+**Town centers** (68)
 
 - Badlands Pueblo (1): `kaisyn:village/badlands_pueblo/town_centers/badlands_meeting_point_1`
 - Beach Lighthouse (1): `kaisyn:village/beach_lighthouse/town_centers/beach_meeting_point_1`
@@ -770,7 +770,7 @@ Live build differs from this snapshot in two places (plan section 8): `towns_and
 
 - Sky (6): `skyvillages:farm_{1-3}`, `skyvillages:letsdo_vinery/sky_village_letsdo_vinery_{0-2}`
 
-**Town centres** (1)
+**Town centers** (1)
 
 - Sky (1): `skyvillages:fountain`
 

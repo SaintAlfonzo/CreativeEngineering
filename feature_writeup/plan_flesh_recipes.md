@@ -114,7 +114,7 @@ Costs, with 250 mb blood = 1 flesh of blood (a heated flesh or tendon returns 25
      client.
    - **Output limit:** crushing allows 7 outputs and a flesh crush has 17 distinct items. Create only warns on `validate`, but
      patch `getMaxOutputCount` (crushing and milling) up to 24 so the log stays clean. Check milling's own limit first.
-   - **JEI (Create's `CrushingCategory` and `MillingCategory`):** today `setRecipe` makes one slot per output, centred in a
+   - **JEI (Create's `CrushingCategory` and `MillingCategory`):** today `setRecipe` makes one slot per output, centered in a
      row. Patch it so each pool is one slot holding all its items (JEI cycles a slot's list, so the pool rotates through its
      items like a tag ingredient), and each non-pool output keeps its own slot. Slots are ordered meat, bone, eye, misc, then
      the rest. The tooltip on the shown item keeps Create's chance line (its overall chance per crush, as listed in section

@@ -25,7 +25,7 @@ still holds the older Vinery rows until `creativebrewing/move #1`.
 | 5 | `#5` `#missing` models | new jar | 14 WARN lines now, not 4; I25 belongs to `pack/release #5` |
 | 6 | `#15` ingredient audit | KubeJS | Candidate list below from the 2026-10-30 recipe dump |
 | 7 | `#22` cellar audit and player docs | docs / maybe lang | Most player text exists already (JEI Wine Aging page, rack tooltips, WTHIT) |
-| 8 | `#8` 1.3.10 reference tests | docs | Recommend retiring VN- and VJ-, carrying 6 behaviours into VB- |
+| 8 | `#8` 1.3.10 reference tests | docs | Recommend retiring VN- and VJ-, carrying 6 behaviors into VB- |
 | 9 | `#4` upstream jars on publish | tool | Only when the pack is published |
 | - | `#3` wine effect reshuffle | Pinned | Waits for `alcohol/decisions #2`; the multi-effect format is already built |
 | - | `#1`, `#2`, `#6`, `#7`, `#9`, `#10`, `#13`, `#14`, `#16`, `#23`, `#27` | play | Built, needs play (table at the end) |
@@ -140,7 +140,7 @@ Ground grape bushes plant only on soil (today any full solid block), and the JEI
   (savanna bushes generate on grass, not sand).
 
 ### Gotchas
-- A bush already standing on stone pops off on its next neighbour update once this ships (it fails `canSurvive`); mention
+- A bush already standing on stone pops off on its next neighbor update once this ships (it fails `canSurvive`); mention
   it in the changelog bullet.
 
 ### Tests
@@ -318,12 +318,12 @@ Settle VN-01 to VN-20 (1.3.10) and VJ-01 to VJ-10 (patcherMod's deleted Vinery p
   soil), VN-18 (VB-17 fruit leaves), VN-19 (the aging block of VB-). Unchecked against VB-: VN-02, VN-04, VN-06, VN-07
   (pot type lock, press and barrel timing, barrel output). VN-20 (kitchen sink) is gone with the removed block (alcohol.md 10.10).
 - Not covered by any VB- test: VN-03 mob stomp, VN-09 / VN-10 stem pair and harvest, VN-15 savanna light, VN-16 bush seed
-  drop, VN-17 sterilised vine, VN-12 taiga seed on a stem. VN-11 (stem seed loss) becomes #24's VB-99.
+  drop, VN-17 sterilized vine, VN-12 taiga seed on a stem. VN-11 (stem seed loss) becomes #24's VB-99.
 
 ### Build
 1. Decide `alcohol/decisions #12` (recommend A, retire).
 2. vinery.md 7: mark every VN- row retired with its VB- replacement; vinery_jei.md 7: mark VJ- retired.
-3. alcohol_part_b.md 8: add VB-105 (proposed) "Port behaviours from 1.3.10" covering mob stomping, stem pair and harvest,
+3. alcohol_part_b.md 8: add VB-105 (proposed) "Port behaviors from 1.3.10" covering mob stomping, stem pair and harvest,
    savanna bush light 14, bush seed drop by stage, vine shears toggle, taiga seeds on a stem (no soil rule).
 
 ### Decisions

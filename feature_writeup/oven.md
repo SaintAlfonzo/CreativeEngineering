@@ -37,7 +37,7 @@ The ask, from cooking.md:
 | Oven block, block entity, menu/screen, `creativedelight:baking` recipe type, JEI page (patcherMod `oven/`) | BUILT 2026-10-18: compiles against Forge 43.3.9 + JEI 11.8.1; 8 server GameTests pass with FD 1.2.4 loaded (6). First version DEPLOYED with 1.0.7; the 1.0.8 jar (with the counts option) DEPLOYED with 1.0.8 and loaded in single player 2026-10-19. JEI [+] fix DEPLOYED with 1.0.9 (patcherMod 1.0.9) ([plan_1.0.9.md](plan_1.0.9.md)); not tested in game (OV-01 to OV-19) |
 | Bakeware items: baking sheet, cake pan, pie tin, muffin tin (KubeJS, own textures 2026-10-19 with the muffin tin on the baking sheet's, no durability) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
 | (Superseded 2026-10-22) Baking recipes: 38, from every live muffin, cookie, tart, pie and cake recipe (pot and crafting) with cooking.md's baked changes (flour, pie crust, cake base), each needing its bakeware; muffins plate on paper. Originals kept (2.6) | BUILT 2026-10-18, DEPLOYED with 1.0.8; loaded in single player 2026-10-19 (no script errors), not tested |
-| Baking overhaul: all cake, pie, cookie, crust and cake base recipes removed and rebuilt on shared bases (cake base, pie crust, frosting, cookie dough) + 2 flavour; pies and cookies oven only; pot pie fillings; crust + filling bakes (2.6) | built, scratch server PASSED 2026-10-22 (probe `tools/baking_probe/baking_probe.js`, 19 of 19: items, no other mod's recipe left, every expected id, no Create / IE base recipe, oven matching, spout recipe). Needs a restart (new items). In game: OV-25 to OV-32 |
+| Baking overhaul: all cake, pie, cookie, crust and cake base recipes removed and rebuilt on shared bases (cake base, pie crust, frosting, cookie dough) + 2 flavor; pies and cookies oven only; pot pie fillings; crust + filling bakes (2.6) | built, scratch server PASSED 2026-10-22 (probe `tools/baking_probe/baking_probe.js`, 19 of 19: items, no other mod's recipe left, every expected id, no Create / IE base recipe, oven matching, spout recipe). Needs a restart (new items). In game: OV-25 to OV-32 |
 | Opened cans refused as oven ingredients (`BakingRecipe`) | built, scratch server PASSED 2026-10-22 (opened can refused, full can and plain fillings bake); patcherMod 1.1.01, deployed 2026-10-22; OV-29 in game |
 | Ingredient `count` in `creativedelight:baking` (one slot gives up n items), behind `[cooking] ovenIngredientCounts`, off by default. Off: repeats take one slot each and 9 recipes over 6 slots drop items (2.6.1) | BUILT 2026-10-18, in patcherMod 1.0.8: DEPLOYED with 1.0.8 |
 | Muffin pot recipes on `#forge:dough` | SUPERSEDED 2026-10-29: muffins have no Cooking Pot recipe (3.8, OV-13 dropped, OV-36); scratch server PASSED r1031 (SQ-BJ-01: no pot muffin recipe; deep scan 2026-11-02), OV-36 in game. TODO `cooking/oven #3` closed by it |
@@ -248,11 +248,11 @@ block stats (sand, slime block sounds, strength 0.5 / 10, shovel). 9 dough <-> 1
 in `#forge:storage_blocks/<dough>` and BlockRunner's spongy surface. Hand-authored cube_all models under
 `kubejs/assets/creativeengineering/`. Create's own dough keeps Create Compressed's block.
 
-**Cakes** (`CAKES`): baked base + frosting + 2 flavour (manual craft), or raw base + frosting + 2 flavour (oven, cake
+**Cakes** (`CAKES`): baked base + frosting + 2 flavor (manual craft), or raw base + frosting + 2 flavor (oven, cake
 pan). Plain `minecraft:cake`: 3 frosting, or 2 frosting + one sweet berry, cranberry or cherry (`vinery:cherry`), both ways.
 A spout also tops a baked base with 750 mB frosting fluid -> plain cake (2026-10-22, TODO `dishes/ingredients #2`).
 
-| Cake | Flavour (2) |
+| Cake | Flavor (2) |
 |---|---|
 | `adzuki_cake`, `banana_cake`, `mint_cake`, `strawberry_cake`, `vanilla_cake` (neapolitan) | roasted adzuki beans / banana / mint leaves / strawberry / dried vanilla pods |
 | `chocolate_cake` (createaddition; Neapolitan's merges into it, item_merges.js). Also a spout recipe: baked base + 500 mB `create:chocolate` (C&A's own, restored 2026-10-22, `chocolate_cake_spout`) | `#forge:bars/chocolate` |
@@ -296,9 +296,9 @@ It needs an item that places the block first (TODO `baking/baked-goods #13`).
 A partly eaten can is no ingredient in the oven (patcherMod `BakingRecipe.slotCounts` skips `CanServings.isPartial`).
 That keeps the old craft's full-can rule.
 
-**Cookies** (`COOKIES`, baking sheet, oven only): cookie dough + 2 flavour -> 12.
+**Cookies** (`COOKIES`, baking sheet, oven only): cookie dough + 2 flavor -> 12.
 
-| Cookie | Flavour (2) |
+| Cookie | Flavor (2) |
 |---|---|
 | `cookie` | cocoa beans |
 | `honey_cookie`, `sweet_berry_cookie` | honey bottle / sweet berries |
@@ -354,7 +354,7 @@ Smoker-only foods that now cook in the CfB oven include `farmersdelight:ham` -> 
 
 ### 3.2 Stove heat on top
 
-The oven is in `#farmersdelight:heat_sources`, and FD's `HeatableBlockEntity` honours `lit`, so a cooking pot, skillet
+The oven is in `#farmersdelight:heat_sources`, and FD's `HeatableBlockEntity` honors `lit`, so a cooking pot, skillet
 or kettle on the oven heats only while the oven itself is heated. Proven by GameTest OV-T5.
 
 ### 3.3 Baking and plating
@@ -571,10 +571,10 @@ Needs a patcherMod build in `mods/`.
 - [ ] **OV-33 Chocolate cake spout** (recipe loaded: scratch server PASSED 2026-10-22; the Spout run: in game): a Spout with 500 mB chocolate over a Baked Cake Base on a depot gives a
   Chocolate Cake; JEI shows the filling recipe on the chocolate cake.
 - [ ] **OV-34 Dough textures:** Create Dough has the Farmer's Delight look; Ginger Dough is the same shape in its
-  ginger colours; Cookie Dough is Create's old dough shape in oat-dough tan; Frosting is no longer the cotton boll; the
-  Create Compressed Dough Block matches the new dough colour (inventory, placed, JEI). Cotton Boll unchanged.
+  ginger colors; Cookie Dough is Create's old dough shape in oat-dough tan; Frosting is no longer the cotton boll; the
+  Create Compressed Dough Block matches the new dough color (inventory, placed, JEI). Cotton Boll unchanged.
 - [ ] **OV-35 Dough blocks:** JEI shows Gingerdough, Cookie Dough, Sweet Potato Dough, Oat Dough, Cucumber Dough and
-  Sourdough Blocks, each in its dough's colour (inventory, placed, held, breaking particles). 9 of a dough in the grid
+  Sourdough Blocks, each in its dough's color (inventory, placed, held, breaking particles). 9 of a dough in the grid
   gives its block; the block alone gives 9 back. A shovel breaks them fast, they drop themselves, they sound like slime.
 - [ ] **OV-36 No pot muffins** (recipe half: scratch server PASSED r1031, SQ-BJ-01; JEI: in game): JEI blueberry, cranberry and sweet potato muffin -> R: no Cooking Pot and no Create
   mixing recipe; the oven (muffin tin, paper) recipe is there for each. Sweet potato muffin also shows its grid craft.
@@ -618,9 +618,9 @@ Needs a patcherMod build in `mods/`.
   OV-20, OV-23, OV-24.
 - 2026-10-22: baking overhaul (user's scratchpad): every cake, pie, cookie, pie crust and cake base recipe removed
   (slices -> whole kept) and rebuilt (2.6): cake base crafted raw or baked in the oven, crust 3 a craft (manual), new
-  frosting and cookie dough items (cotton boll texture for now), cakes = base + frosting + 2 flavour (craft or oven),
+  frosting and cookie dough items (cotton boll texture for now), cakes = base + frosting + 2 flavor (craft or oven),
   pies = crust + 2 fruit + 2 sugar or crust + canned filling (oven only; filling from the pot), cookies = dough + 2
-  flavour -> 12 (oven only). Crust + filling moved from crafting (canning.js) to the oven. The oven refuses opened cans
+  flavor -> 12 (oven only). Crust + filling moved from crafting (canning.js) to the oven. The oven refuses opened cans
   (patcherMod `BakingRecipe`). OV-25 to OV-31.
 - 2026-10-22 (user follow-up): the hand craft filling + crust -> pie is back beside the oven one; cookie dough on
   Create Confectionery's gingerdough texture; no Create / IE recipe for the bases (crust compacting dropped, raw cake

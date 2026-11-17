@@ -61,7 +61,7 @@ now adds a `@JeiPlugin` (`VineryJEI`) with four pages:
 
 ## 3. What the pack changes
 
-Display only. No Vinery behaviour, recipe or config is changed.
+Display only. No Vinery behavior, recipe or config is changed.
 
 ## 4. Limits and decisions
 
@@ -102,20 +102,20 @@ Brief: [briefs/alcohol_vineryport.md](briefs/alcohol_vineryport.md). Nothing her
 
 ## 7. In-game test suite
 
-- [ ] **VJ-01 plugin loads:** start the client, open JEI → four new tabs appear on Vinery items; `logs/latest.log` has no `[CE] Vinery JEI` warnings.
-- [ ] **VJ-02 fermentation uses:** R on `vinery:red_wine` → Aging Barrel page with its ingredients in the 2x2 grid, a wine bottle in the lower slot, the wine in the large slot.
-- [ ] **VJ-03 fermentation count:** cycle the Aging Barrel tab (click the barrel catalyst) → 29 pages (Vinery's stock count, more if the pack adds recipes).
-- [ ] **VJ-04 fermentation arrow:** hover the arrow → "90 seconds"; the arrow fills slowly. *(Expected value is wrong until the 1800 -> 50 fix; see §4.)*
-- [ ] **VJ-05 apple press:** R on Apple Mash → apple -> apple mash page; arrow hover "3.6 seconds"; U on Apple also lists it.
-- [ ] **VJ-06 grape stomping:** R on any grape juice → 6 matching grapes + 2 wine bottles -> 2 juice, "Jump on the pot 3 times"; grape tooltip mentions the first grape; 8 pages total.
-- [ ] **VJ-07 stomping in world:** do it for real: 6 grapes, jump 3 times, 2 bottles → 2 juice, matching the page.
-- [ ] **VJ-08 wine aging page:** R or U on a wine → Wine Aging page: barrel, wine with "Year of Production" = current year, aged wine with potency VI; text lines show 4 years / VI / 16 days.
-- [ ] **VJ-09 aging arrows:** hover the first arrow → "Aging Barrel writes NBT Year: N" (current year); hover the second → "20 years later (320 days)".
-- [ ] **VJ-10 aging matches real wine:** take a wine fresh from a barrel → its tooltip year equals the page's fresh-wine year.
+- [ ] **VJ-01 plugin loads:** start the client, open JEI -> four new tabs appear on Vinery items; `logs/latest.log` has no `[CE] Vinery JEI` warnings.
+- [ ] **VJ-02 fermentation uses:** R on `vinery:red_wine` -> Aging Barrel page with its ingredients in the 2x2 grid, a wine bottle in the lower slot, the wine in the large slot.
+- [ ] **VJ-03 fermentation count:** cycle the Aging Barrel tab (click the barrel catalyst) -> 29 pages (Vinery's stock count, more if the pack adds recipes).
+- [ ] **VJ-04 fermentation arrow:** hover the arrow -> "90 seconds"; the arrow fills slowly. *(Expected value is wrong until the 1800 -> 50 fix; see §4.)*
+- [ ] **VJ-05 apple press:** R on Apple Mash -> apple -> apple mash page; arrow hover "3.6 seconds"; U on Apple also lists it.
+- [ ] **VJ-06 grape stomping:** R on any grape juice -> 6 matching grapes + 2 wine bottles -> 2 juice, "Jump on the pot 3 times"; grape tooltip mentions the first grape; 8 pages total.
+- [ ] **VJ-07 stomping in world:** do it for real: 6 grapes, jump 3 times, 2 bottles -> 2 juice, matching the page.
+- [ ] **VJ-08 wine aging page:** R or U on a wine -> Wine Aging page: barrel, wine with "Year of Production" = current year, aged wine with potency VI; text lines show 4 years / VI / 16 days.
+- [ ] **VJ-09 aging arrows:** hover the first arrow -> "Aging Barrel writes NBT Year: N" (current year); hover the second -> "20 years later (320 days)".
+- [ ] **VJ-10 aging matches real wine:** take a wine fresh from a barrel -> its tooltip year equals the page's fresh-wine year.
 
 ## 8. History
 
 - 2026-10-01: built (patcherMod 1.0.3). Not copied to `mods/` because a game instance was running.
-- 2026-10-01: the real barrel time is about 50 ticks, not 1800 (from the decompiled jar); fix open. Full Vinery behaviour reference: [vinery.md](vinery.md).
+- 2026-10-01: the real barrel time is about 50 ticks, not 1800 (from the decompiled jar); fix open. Full Vinery behavior reference: [vinery.md](vinery.md).
 - 2026-10-02: in `mods/` (patcherMod 1.0.3 copied in, confirmed against the jar contents); not deployed.
 - 2026-10-24: planned from the scratchpad: shorter Vinery port JEI descriptions (`alcohol/vineryport #26`). No code changed.

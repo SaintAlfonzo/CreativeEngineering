@@ -42,7 +42,7 @@ Every feature below works without any other Creative mod. Features that touch an
 
 ## Optional pack settings
 
-<div class="spoiler"><p>Out of the box, Creative Common leaves vanilla behaviour alone (the Create: Gravity limit below is the one performance setting that is on). The *Creative Engineering* pack turns these on in its own config, and any pack can do the same in <code>config/creativecommon-common.toml</code>:</p><table><thead><tr><th>Setting</th><th>What it does</th></tr></thead><tbody><tr><td><code>[advancements] enabled = false</code></td><td>Loads no advancements at all (vanilla, mods and datapacks)</td></tr><tr><td><code>[wandering_trader] enabled = true</code></td><td>Sets the Wandering Trader's spawn interval and number of offers</td></tr><tr><td><code>[perf] gravityLimitDimensions = true</code></td><td>Create: Gravity's per-entity work and Creative Common's low gravity for items, blocks and projectiles only run in the listed dimensions (default the End)</td></tr><tr><td><code>[creative_menu] disabled = true</code></td><td>Creative players open the survival inventory, which avoids the long freeze of building the creative search in large packs; JEI's cheat mode covers item browsing</td></tr></tbody></table><p>Most other features have a switch in the same file. With Create and Creative Compat installed, the file can also be edited in game through Create's config screen.</p></div>
+<div class="spoiler"><p>Out of the box, Creative Common leaves vanilla behavior alone (the Create: Gravity limit below is the one performance setting that is on). The *Creative Engineering* pack turns these on in its own config, and any pack can do the same in <code>config/creativecommon-common.toml</code>:</p><table><thead><tr><th>Setting</th><th>What it does</th></tr></thead><tbody><tr><td><code>[advancements] enabled = false</code></td><td>Loads no advancements at all (vanilla, mods and datapacks)</td></tr><tr><td><code>[wandering_trader] enabled = true</code></td><td>Sets the Wandering Trader's spawn interval and number of offers</td></tr><tr><td><code>[perf] gravityLimitDimensions = true</code></td><td>Create: Gravity's per-entity work and Creative Common's low gravity for items, blocks and projectiles only run in the listed dimensions (default the End)</td></tr><tr><td><code>[creative_menu] disabled = true</code></td><td>Creative players open the survival inventory, which avoids the long freeze of building the creative search in large packs; JEI's cheat mode covers item browsing</td></tr></tbody></table><p>Most other features have a switch in the same file. With Create and Creative Compat installed, the file can also be edited in game through Create's config screen.</p></div>
 
 ***
 
@@ -67,7 +67,7 @@ Both client and server need it.
 
 ***
 
-## Source, issues and licence
+## Source, issues and license
 
 *   Source code and issue tracker: [github.com/SaintAlfonzo/CreativeEngineering](https://github.com/SaintAlfonzo/CreativeEngineering)
 *   Licence: GNU GPL v3. Includes code adapted from Immersive Weathering by Ordana, MehVahdJukaar and Keybounce (LGPL v3), a shaded copy of commonmark-java (BSD 2-Clause), and loading screen tips from Loading Tips by Naw7k (MIT). The tip format follows Loading Screen Tips by UltrusBot (MIT). The full notices are in the jar.

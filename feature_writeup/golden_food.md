@@ -95,7 +95,7 @@ vanilla village chest tables (`chests/village/*`): each is vanilla's table with 
 `development/creativeDelight/members/golden/`, Gradle project `:portedGolden`, package
 `com.SaintAlfonzo.creativedelight.golden`, shared sources `packs,upstream` (`DonorJars`, `BuiltInPacks`).
 
-| Our class | Upstream behaviour it carries |
+| Our class | Upstream behavior it carries |
 |---|---|
 | `GoldenFoodMod` | mod class; verifies the donor first (stops the game with the missing / wrong-file message), registers, adds the two built-in packs |
 | `upstream/UpstreamJars` | sha1 pin and donor reader (the line `tools/build_deploy.py` reads) |
@@ -111,7 +111,7 @@ unchanged. The removed `goldenfood:gf_enchantment` is in CD `data/creativedeligh
 I1 format), so a world that has it loads without the missing-registry warning; an old book keeps the unknown id in its
 NBT and shows no enchantment line.
 
-## 3. Behaviour (matched)
+## 3. Behavior (matched)
 
 ### 3.1 Foods
 As section 1. Upstream quirks kept: golden and enchanted milk buckets are milk (clear all effects); their food values
@@ -134,7 +134,7 @@ candle cake (the golden cake lost). The golden cakes join the candle integration
 ### 3.3 Chorus fruit
 Eating first does the vanilla chorus teleport (16 blocks), then a second one: up to `reach` tries, each up to `reach`
 blocks sideways and from 8 below to `reach - 9` above, clamped to the dimension's logical height; the cooldown becomes
-10 ticks (golden) or 5 ticks (enchanted) instead of 20. A cancelled teleport event stops it and keeps the 20-tick cooldown.
+10 ticks (golden) or 5 ticks (enchanted) instead of 20. A canceled teleport event stops it and keeps the 20-tick cooldown.
 
 ### 3.4 Enchanted golden foods: sequenced assembly (owner, 2026-11-02)
 Upstream made them on an anvil: a Golden Food Enchantment book plus a golden food, either slot, 1 level (24 pairs:

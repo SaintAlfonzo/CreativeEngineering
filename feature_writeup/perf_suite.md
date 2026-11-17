@@ -266,7 +266,7 @@ probes) does the setup that commands can't.
 | C23 | Seasons flip with a full farm: `season set` across spring to winter over the C04 field | Season change work, crop checks, snow and ice |
 | C24 | Salt: 10,000 salt blocks and layers (The Salt and Vintage salt random ticks, SQ-SALT-07 at play scale) | Random-tick cost of salt |
 | C25 | Campfires in rain: 100 campfires and cooking pots under rain (campfire rain feature, Unlit Campfires) | Weather and campfire checks |
-| C26 | Wild crops and flowers spreading: the C04 field's wild-crop neighbours (Creative Delight wild crops) | Spread random ticks |
+| C26 | Wild crops and flowers spreading: the C04 field's wild-crop neighbors (Creative Delight wild crops) | Spread random ticks |
 | C27 | Storage Delight and repacked storage: 100 cabinets full of food, hoppers pulling | Container block entities |
 | C28 | Moobloom and mooshroom herds: 100 mooblooms placing flowers | Moobloom flower placement |
 
@@ -351,4 +351,4 @@ The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Re
 - 2026-10-28: built the mod, the runner, the G- plan and the self-test; C- and W- proposed for veto. Split agreed with
   the parallel "Scratch server performance tests 2" session. This session owns perfBot, `tools/perf/suite/` and this
   file. That session owns `scratch_server.sh`, its session collector (queue runs) and feature tests that use
-  `/pbot`. Its benchmark rows were dropped in favour of the G- ids.
+  `/pbot`. Its benchmark rows were dropped in favor of the G- ids.

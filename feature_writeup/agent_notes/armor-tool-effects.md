@@ -59,13 +59,13 @@ effect id's path if omitted; an explicit name matching vanilla's real wording is
 **Set bonuses actually registered (2026-09-12), bottom of armor_effects.js** (needed
 `// priority: -100` added to the file once it started reading `global.item` at top level — same
 load-order gotcha as tune_tools.js/tune_armor.js):
-- gold (`golden_helmet/chestplate/leggings/boots`) → Luck.
-- netherite → Fire Resistance + `alexsmobs:knockback_resistance` (vanilla has no "knockback
+- gold (`golden_helmet/chestplate/leggings/boots`) -> Luck.
+- netherite -> Fire Resistance + `alexsmobs:knockback_resistance` (vanilla has no "knockback
   resistance" MobEffect at all — Alex's Mobs does, and it's already a live dependency of this
   pack per `am-potion-brewing-fix`/potions.js's `AM_POTION_MIXES`).
-- felsic (`felsic_gear:felsic_*`) → `better_beacons:long_reach` (real effect, see
+- felsic (`felsic_gear:felsic_*`) -> `better_beacons:long_reach` (real effect, see
   `CEPotions.java` / potions.js) + Jump Boost.
-- dragon (`dragonloot:dragon_*`) → Resistance + Fire Resistance + `alexsmobs:poison_resistance` +
+- dragon (`dragonloot:dragon_*`) -> Resistance + Fire Resistance + `alexsmobs:poison_resistance` +
   `alexsmobs:knockback_resistance`. Registered as **two** `.set()` calls sharing one
   `dragonEffects` array — once with `dragon_chestplate`, once with `upgraded_dragon_chestplate`
   (the elytra-capable variant, see [dragon-gear-notes](dragon-gear-notes.md)) — since a player wears one
@@ -124,7 +124,7 @@ same wall for stat tuning — see its own comment at the dragon_horse_armor line
 - `server_scripts/magic/armor_effects.js` gained a second handler, `LevelEvents.tick`,
   that walks `level.getAllEntities()`, filters `instanceof AbstractHorse`, reads the
   armor stack via `entity.getSlot(401).get()`, and applies effects the same way
-  `applyEffects()` already did for players (renamed param `player` → `target` since it's
+  `applyEffects()` already did for players (renamed param `player` -> `target` since it's
   now called with either a Player or an AbstractHorse).
 - dragon_horse_armor is registered with `minecraft:regeneration` (amplifier 0). UPDATE 2026-10-03: it was registered as `minecraft:strong_regeneration` (a potion id) until then, so it never worked; and the per-tick walk was disabled for perf, now back as a pass every `perf.mountEffectIntervalTicks` (100) ticks. See [perf-known-issues-fixes](perf-known-issues-fixes.md).
 

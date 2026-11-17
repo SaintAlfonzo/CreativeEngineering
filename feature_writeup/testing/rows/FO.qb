@@ -37,7 +37,7 @@ look the rdetail line: pie crust, minecraft:sponge, minecraft:prismarine_shard, 
 @group A
 @commands same probe for output `createaddition:honey_cake`
 @pass oven recipe (cake pan): cake base, frosting, 1 honey bottle, 1 honeycomb; hand recipe `creativedelight:shapeless/honey_cake_manual_only`: baked cake base, frosting, honey bottle, honeycomb; no 2-honey-bottle recipe, no Crafts & Additions recipe
-@fails `baking.js` CAKES line 51; `cd_food.js` `cakeBake` second flavour
+@fails `baking.js` CAKES line 51; `cd_food.js` `cakeBake` second flavor
 @from batches/r1103/sB_2.qb
 @reviewed 2026-11-16
 > cdevtest makes createaddition:honey_cake
@@ -837,7 +837,7 @@ look the held line after 30 ticks of use shows one toast gone (fast food: about 
 ## CQ-ABD-01
 @group client
 @commands JEI: R on Perch Slice and Pike Slice (furnace), U on a driftwood door, R on Adzuki Curry, Pickerelweed Juice, Pike with Beetroot, Milk Bottle
-@pass LOOK: furnace XP 0.35; driftwood parts salvage to planks on the cutting board; Adzuki Curry grid recipe; both pot recipes take two pickerelweed of any colour; bucket + 4 bottles -> 4 Milk Bottles and back
+@pass LOOK: furnace XP 0.35; driftwood parts salvage to planks on the cutting board; Adzuki Curry grid recipe; both pot recipes take two pickerelweed of any color; bucket + 4 bottles -> 4 Milk Bottles and back
 @fails recipe exists (SQ-ABD passed) but JEI hides it: JEI hide list
 @reviewed 2026-11-16
 do {"wait": "jei"}

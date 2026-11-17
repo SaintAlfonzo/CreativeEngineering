@@ -39,7 +39,7 @@ Know which items breed bees, and make every flower the pack has count, consisten
   | Mod | Item tag | Block tag |
   |---|---|---|
   | Buzzier Bees | `small_flowers`: buttercup, white clover, pink clover (buttercup stripped from every tag by More Mooblooms' `TagLoaderStripMixin`) | same |
-  | Botania | `small_flowers`: `#botania:mystical_flowers` (16 colours) **and `#botania:special_flowers`** (every functional flower: Endoflame, Pure Daisy ...); `tall_flowers`: `#botania:double_mystical_flowers` | `small_flowers`: mystical only; `tall_flowers`: double mystical |
+  | Botania | `small_flowers`: `#botania:mystical_flowers` (16 colors) **and `#botania:special_flowers`** (every functional flower: Endoflame, Pure Daisy ...); `tall_flowers`: `#botania:double_mystical_flowers` | `small_flowers`: mystical only; `tall_flowers`: double mystical |
   | Upgrade Aquatic | `small_flowers`: white / pink searocket; `tall_flowers`: flowering rush | same |
   | Twigs | `small_flowers`: `twigs:azalea_flowers` | same |
   | Flower Patch | none (patches have no items) | `flowers`: 9 `flowerpatch:*_patch` blocks, **including `wither_rose_patch`** |
@@ -129,7 +129,7 @@ comes back to its hive later instead of being lost, the way Domestication Innova
   game time and name into a `RespawnRequest` stored in level SavedData (`DIWorldData.addRespawnRequest`);
   `onLivingDrops` cancels its drops; `PetBedBlockEntity`'s tick looks up requests for its pos and re-adds the entity
   (`addAndRemoveEntity`). DI is in the pack, but only for tamed pets; bees aren't tameable there.
-- Vanilla hive behaviour (from memory): a bee remembers `HivePos` (NBT) and goes back to it; `BeehiveBlockEntity`
+- Vanilla hive behavior (from memory): a bee remembers `HivePos` (NBT) and goes back to it; `BeehiveBlockEntity`
   holds up to 3 occupants as saved NBT (`addOccupantWithPresetTicks(Entity, boolean hasNectar, int ticksInHive)`,
   `releaseOccupant`); a bee whose hive is gone or full forgets it and looks for another.
 - WTHIT shows "Bees: n / 3" on hives (patcherMod `compat/WthitHive`, `[wthit] hiveBees`).
@@ -211,7 +211,7 @@ Status **Planned** / Work data / KubeJS (a patcherMod mixin is the likely route)
 Shearing a beehive or bee nest with a full honey level gives 2.5 honeycombs on average; Looting adds more.
 
 ### Now
-- Vanilla 1.19.2 gives a fixed 3 honeycombs: `BeehiveBlock.use` (shears) and the dispenser shears behaviour both call
+- Vanilla 1.19.2 gives a fixed 3 honeycombs: `BeehiveBlock.use` (shears) and the dispenser shears behavior both call
   `BeehiveBlock.dropHoneycomb` -> `popResource(level, pos, new ItemStack(Items.HONEYCOMB, 3))`. Unverified in this jar
   (read it with `javap`); it is code, not a loot table, so a KubeJS loot edit cannot change it.
 - Nothing in the pack touches the amount: patcherMod's bee code is `worldgen/BeeNests`, `BeehiveDecoratorBeeNestsMixin`,

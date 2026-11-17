@@ -308,7 +308,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
     `loot/09_crop_drops.js` (Rustic Delight bell-pepper drops, built 2026-10-21 and not moved; creative_delight.md 29.3 does
     not exempt it), `tags/placeabletags.js` (its tooltip moved to CD `_qol/placeable_tooltip.js`, the tags stayed).
 27. **Food rows in pack client scripts.** **FIXED 2026-10-27** (section 9). `client_scripts/seasoning_lang.js` (CD's seasoning lang),
-    `tooltips.js` `fdVillagerLine` rows (CD repack behaviour, finding 5), 7 food renames in `namechanges.js:74-77`, 12
+    `tooltips.js` `fdVillagerLine` rows (CD repack behavior, finding 5), 7 food renames in `namechanges.js:74-77`, 12
     food tooltips in `tooltips.js` (:495, :501, :508, :586-587, :723, :785, ...). Judgement: `items/misc_items.js:17`
     mortar and pestle (CD `bakeware.js` holds the other kitchen tools).
 28. **Meal tooltip mixins in patcherMod.** **FIXED 2026-10-27** (section 9). Judgement. `mixin/CookingPotMealTooltipMixin.java:14` (Farmer's Delight) and
@@ -471,8 +471,8 @@ new patcherMod, CD, Brewin', Vinery, Miner's, Creative Labels, More Mooblooms an
 | PH-33 | Hover the finished-meal slot of a cooking pot and a Farmer's Respite kettle; open the Central Kitchen cooking and brewing guides | AppleSkin bars show in all four |
 | PH-34 | JEI "culture"; a beef culture's uses; cook one with bone meal and cooking oil; mine a culture block with a hoe; cow syringe + culture base + slimeball | 7 cultures and 7 blocks with art and names; a cooking pot recipe for each culture, 3 out; the block mines fast; a beef culture |
 | PH-35 | Plant ghost pepper seeds on soul soil and on dirt; hover a pie; put food on a coaster | Soul soil only; the Placeable line; the coaster takes it |
-| PH-36 | Hover candy, pancakes, fish and chips, a fishing net, the Blockheads oven, white strawberries, rich farmland, a seasoned food; check the names Fish and Chips, Egg Fried Rice, Canned Tough Jerky, Sweet Berry Pie, Rose Rock Candy, Coffee Plant; use a mortar and pestle | Same tooltip lines and colours as before; seasoning name, not a lang key; the names; mortar has 512 durability and grinds |
-| PH-37 | JEI: an incomplete coil (`kubejs:incomplete_coil_iron`); recipes for shields, ender chest, vessel charger, felsic deploying, ink arrow, sawdust | Grey wire-coil sprite; every recipe listed with its inputs |
+| PH-36 | Hover candy, pancakes, fish and chips, a fishing net, the Blockheads oven, white strawberries, rich farmland, a seasoned food; check the names Fish and Chips, Egg Fried Rice, Canned Tough Jerky, Sweet Berry Pie, Rose Rock Candy, Coffee Plant; use a mortar and pestle | Same tooltip lines and colors as before; seasoning name, not a lang key; the names; mortar has 512 durability and grinds |
+| PH-37 | JEI: an incomplete coil (`kubejs:incomplete_coil_iron`); recipes for shields, ender chest, vessel charger, felsic deploying, ink arrow, sawdust | Gray wire-coil sprite; every recipe listed with its inputs |
 
 ## 9. History
 

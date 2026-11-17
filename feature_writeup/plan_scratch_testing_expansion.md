@@ -35,7 +35,7 @@ This replaces "a later session reads the PNGs" in [client_capture.md](client_cap
   probes, not only the new ones.
 - D3 closed: `xvfb` installed by the owner. Xvfb runs are an EXPERIMENTAL option (`--display xvfb|real`, TX-07), used
   only for tests that cannot be run otherwise (unattended or overnight client blocks), never the default; the real
-  window stays the default and is required for colour rows. LOW priority: built after items 1 to 5, and first
+  window stays the default and is required for color rows. LOW priority: built after items 1 to 5, and first
   validated by running CC-02 on both displays (llvmpipe may fail for Immersive Portals, Distant Horizons, shaders).
 
 ## 1. Inventory
@@ -83,8 +83,8 @@ Counts from the queue (2026-11-15): 2607 `SQ-` rows, 511 `CQ-` rows, 160 rows wi
 | H4 | **Client-only data** (names from client lang scripts, tooltips, stack sizes shown, effects text, AppleSkin) | dedicated-server dumps cannot see them | SQ-OB-02 reclassed as client; gotchas "names, stacks, effects, gear, food ... need the client" |
 | H5 | **Player-gated server mechanics** (eating over time, damage to a player, sleeping, crows stealing from a hotbar, Loading Protection) | FakePlayer does not tick; perfBot is invulnerable and has few verbs | SQ-HH-424/-425/-453; SQ-ROLL-11 INCONCLUSIVE (food values off by 4) |
 | H6 | **Client + server together** (config sync, registry mismatch refusal, TradeSync, multiplayer location broadcaster) | one-game-JVM rule; `ownsrv=` exists but no batch form drives both sides | Power Grid client joining a server without it crashed instead of refusing (found by chance in phase 10) |
-| H7 | **Time-scaled behaviour** (crop growth, random ticks, decay, melt, seasons) | 1.19.2 has no `/tick`; random ticks need a player near; counts too small for statistics | SQ-FCK-08b INCONCLUSIVE (4 vs 6), SQ-HH-1534 INCONCLUSIVE, rerun_a2 (no random ticks after restart) |
-| H8 | **Rare worldgen** (rare structures, wild crops, nests) | `/locate` of a rare meta runs 30+ min and cannot be cancelled; pregen + region reads per feature | SQ-HOP-06 0 hops over 740 chunks; SQ-RD-26 0 bell peppers |
+| H7 | **Time-scaled behavior** (crop growth, random ticks, decay, melt, seasons) | 1.19.2 has no `/tick`; random ticks need a player near; counts too small for statistics | SQ-FCK-08b INCONCLUSIVE (4 vs 6), SQ-HH-1534 INCONCLUSIVE, rerun_a2 (no random ticks after restart) |
+| H8 | **Rare worldgen** (rare structures, wild crops, nests) | `/locate` of a rare meta runs 30+ min and cannot be canceled; pregen + region reads per feature | SQ-HOP-06 0 hops over 740 chunks; SQ-RD-26 0 bell peppers |
 | H9 | **Old-save / migration** | fixtures hand-written per feature, incomplete | SQ-NSM-04 not run (no painting or banner step) |
 | H10 | **Live config reload** | config watcher parked on scratch servers | SQ-MELT-P1b clause not judgeable |
 | H11 | **Client crashes** | qrun client mode does not watch for a dead JVM or `hs_err` (2026-11-15: crash watch TX-06 built, live check SQ-TXQ-02 queued) | SQ-PG-01c SIGSEGV found by watching |
@@ -94,7 +94,7 @@ Cross-cutting costs (not a test kind, but where the time goes):
 
 - **Batch faults.** r1113: 25 BATCH-FAULT of 124 judged rows; r1111 SQ-HH: 67 BATCH-FAULT against 233 PASS. Causes
   repeat across runs: `grep -c` exit 1, `--from` dropping captures, stale coordinates and markers, row text out of
-  date with the behaviour, `waitlog` matching a previous row's reply.
+  date with the behavior, `waitlog` matching a previous row's reply.
 - **Probe fragility.** Rhino `Error`s crash the server, chunk-load deadlocks, ambiguous overloads, private JDK
   collections; each new probe needs a live trial call before its batch can rely on it.
 - **INCONCLUSIVE from missing readback.** Probes report an action but not the end state (SQ-SALT2-06).
@@ -116,7 +116,7 @@ Effort: S (hours), M (a session), L (several sessions). Ranked by rows unblocked
 | TX-04 | **Tick-exact movement steps**: `walk <ticks> <keys>`, `jump`, `sneak <ticks>`, `fly`, `look yaw pitch`, with position sampled per tick into the log | H2: CQ-PTH speeds, elytra, ropes, portal exits | S after TX-02 |
 | TX-05 | **Widget actions**: `click_slot <i>`, `click_widget <label or index>`, `type_into <field>`, `scroll` resolved from the open screen's widget list, not screen pixels | H3: editor GUIs, anvils, sticky notes, JEI search, creative tabs | M |
 | TX-06 | **Client crash watch** in qrun / the runner: dead pid, `hs_err_pid*.log`, `crash-reports/` = row CRASH, copy evidence, relaunch | H11 | S |
-| TX-07 | **BUILT 2026-11-16** (`--display xvfb` on `run_captures.py` / `eval_client.py`, CQ-TXC-11). **(experimental, low priority) Xvfb display** (client_capture D2): runs unattended off the owner's desktop; software rendering is slower and colours may differ, so keep the real window for colour rows | runs at night without stealing the desktop | S (owner installs `xvfb`) |
+| TX-07 | **BUILT 2026-11-16** (`--display xvfb` on `run_captures.py` / `eval_client.py`, CQ-TXC-11). **(experimental, low priority) Xvfb display** (client_capture D2): runs unattended off the owner's desktop; software rendering is slower and colors may differ, so keep the real window for color rows | runs at night without stealing the desktop | S (owner installs `xvfb`) |
 | TX-08 | `sp_world.py --no-cheats` and a client config profile switch (`--fresh-config`) | CQ-TPF-46, pack-default checks | S |
 | TX-09 | **Client data dump** through the capture driver: names, tooltips (shift and plain), stack sizes, effect text for every item into `kubejs/exported/`, diffed between runs | H4 at scale; feeds the names/tooltip catalogs | M |
 
@@ -147,7 +147,7 @@ Effort: S (hours), M (a session), L (several sessions). Ranked by rows unblocked
 |---|---|---|---|
 | TX-40 | **Batch lint** (`qrun.py lint BATCH`): `grep -c` without `; true`, uses of captures set in skipped rows, `waitlog` patterns that also match the previous row's reply, unknown markers, coordinates outside forceloaded boxes | most BATCH-FAULTs before boot | S |
 | TX-41 | **`qrun.py dry`**: parse, substitute vars, print every command and check without a server | batch review by a second agent | S |
-| TX-42 | **BUILT 2026-11-16** (process overhaul P2.1: `testing/rows/<CODE>.qb`, `qrows.py`; queue tables generated). **Machine-readable rows**: a fenced `qb` block under each queue row (or one `.qb` per section next to the queue) so batches are extracted, not rewritten each run; generalise `hh_queue_to_qb.py` | batch writing time, stale batches | M |
+| TX-42 | **BUILT 2026-11-16** (process overhaul P2.1: `testing/rows/<CODE>.qb`, `qrows.py`; queue tables generated). **Machine-readable rows**: a fenced `qb` block under each queue row (or one `.qb` per section next to the queue) so batches are extracted, not rewritten each run; generalize `hh_queue_to_qb.py` | batch writing time, stale batches | M |
 | TX-43 | **Per-row isolation**: a `plot` directive that gives each row its own forceloaded area at a fixed offset and clears it, so rows do not share markers or coordinates | BATCH-FAULTs from shared world state, reruns on a fresh world | S |
 | TX-44 | **BUILT 2026-11-16** (process overhaul P2.4: `qrun.py drive`, `qdrive.py`). **Resumable run driver** on the `perf_suite.py` pattern: state file, auto RUNNER.md updates, resume after a dead runner, server stopped when the runner dies | orchestration losses (r1114 phase 3) | M |
 | TX-45 | **Verdict file** written by qrun (JSON per row with checks, LOOK text, shots), and a judge step that only fills LOOKs; run doc tables generated from it | write-back time | S |

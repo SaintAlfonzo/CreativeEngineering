@@ -226,35 +226,35 @@ weight, then the per-category gap check. Regenerate after any stock change: `/du
 
 ## 7. In-game test suite
 
-- [ ] **WT-01 config:** Create's config screen for Creative Engineering → a Wandering Trader section with
+- [ ] **WT-01 config:** Create's config screen for Creative Engineering -> a Wandering Trader section with
   `enabled`, `traderIntervalTicks` 96000, `commonTrades` 25, `rareTrades` 5, `winemakerEnabled`,
   `winemakerIntervalTicks` 96000.
-- [ ] **WT-02 offer count:** summon a trader, open it → 31 offers: the Pathfinder's Quill first, 25 common, 5 rare.
-- [ ] **WT-03 no repeats:** in WT-02's list → no rare item twice; common items repeat only for Wares agreements.
-- [ ] **WT-04 rare count live:** set `rareTrades` to 2, summon a new trader → 28 offers. Set it back to 5.
-- [ ] **WT-05 off switch:** set `enabled` false, summon a trader → 7 offers (quill + 5 + 1). Turn it back on.
+- [ ] **WT-02 offer count:** summon a trader, open it -> 31 offers: the Pathfinder's Quill first, 25 common, 5 rare.
+- [ ] **WT-03 no repeats:** in WT-02's list -> no rare item twice; common items repeat only for Wares agreements.
+- [ ] **WT-04 rare count live:** set `rareTrades` to 2, summon a new trader -> 28 offers. Set it back to 5.
+- [ ] **WT-05 off switch:** set `enabled` false, summon a trader -> 7 offers (quill + 5 + 1). Turn it back on.
 - [ ] ~~**WT-06 Winemaker unchanged**~~: retired 2026-10-03, the Winemaker's pool changed; see WT-09.
-- [ ] **WT-07 trader wait (new world):** create a world, `/save-all`, read level.dat →
+- [ ] **WT-07 trader wait (new world):** create a world, `/save-all`, read level.dat ->
   `WanderingTraderSpawnDelay` is 96000 or a little less.
 - [ ] **WT-08 trader wait (existing world):** in the dev world, after the current wait runs out, it resets to
   96000, not 24000.
-- [ ] **WT-09 Winemaker offers:** use a Wandering Winemaker spawn egg a few times → 9 offers each (quill + 8);
+- [ ] **WT-09 Winemaker offers:** use a Wandering Winemaker spawn egg a few times -> 9 offers each (quill + 8);
   across them Fruits Delight saplings and white jungle grape seeds turn up.
-- [ ] **WT-10 Winemaker wait saved:** play 2 minutes, `/save-all` → `<world>/data/vinery_winemaker_spawner.dat` (before 2026-10-27: `creativeengineering_winemaker_spawner.dat`)
+- [ ] **WT-10 Winemaker wait saved:** play 2 minutes, `/save-all` -> `<world>/data/vinery_winemaker_spawner.dat` (before 2026-10-27: `creativeengineering_winemaker_spawner.dat`)
   exists with `SpawnDelay` below 96000.
 - [ ] **WT-11 no Vinery swap:** `latest.log` has no `[trades] ... wine_trader_chance` warning at server start.
-- [ ] **WT-12 removed stock:** across several summoned traders → no CC: Tweaked, Advanced Peripherals or Lightman's
+- [ ] **WT-12 removed stock:** across several summoned traders -> no CC: Tweaked, Advanced Peripherals or Lightman's
   Currency item, no glowstone, sunstone or moonstone.
-- [ ] **WT-13 delivery agreements:** across several traders → usually 3 to 7 Sealed Delivery Agreements each, some at
+- [ ] **WT-13 delivery agreements:** across several traders -> usually 3 to 7 Sealed Delivery Agreements each, some at
   6 emeralds and some at 12.
-- [ ] **WT-14 golden listings:** across several traders → rare offers include a golden food (6 emeralds) and a
+- [ ] **WT-14 golden listings:** across several traders -> rare offers include a golden food (6 emeralds) and a
   canned golden food (12), with different golden foods on different traders.
-- [ ] **WT-15 reload:** `/reload`, then check `logs/kubejs/server.log` → the `[wandering trades]` line shows the
+- [ ] **WT-15 reload:** `/reload`, then check `logs/kubejs/server.log` -> the `[wandering trades]` line shows the
   same counts as at startup.
 - [ ] **WT-16 natural spawns:** in a test world set both intervals to 1200, stand near a village with
-  `doMobSpawning` on and wait 20 to 30 minutes → both a Wandering Trader (with llamas) and a Winemaker (with two
+  `doMobSpawning` on and wait 20 to 30 minutes -> both a Wandering Trader (with llamas) and a Winemaker (with two
   mules) arrive on their own, separately. Set the intervals back to 96000.
-- [ ] **WT-17 no Fruits Delight apple sapling:** `/reload`, then summon several Winemakers → Fruits Delight
+- [ ] **WT-17 no Fruits Delight apple sapling:** `/reload`, then summon several Winemakers -> Fruits Delight
   saplings on offer, never `fruitsdelight:apple_sapling`. Scratch server PASSED 2026-10-22 (SQ-MG-05).
 
 ## 8. History

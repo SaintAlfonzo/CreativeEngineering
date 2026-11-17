@@ -139,7 +139,7 @@ the food catalog and the can generators (`/cdevgen`) so the new values reach the
   tag, so the juice cannot be made in survival today. The Long Prickly Pear Juice needs the same tag. **Decided 2026-10-25:** Prickly Pear Juice is removed
   (`prickly_pear_juice = false` in `delightful-common.toml`, in `removed_items.js`); the Long Prickly Pear Juice is not added.
 - **Miner's Delight Copper Cup:** it was **not** removed. The port dropped only the **Hot Cocoa Cup** (in upstream 1.1.2
-  but not the 1.4.5 donor; licence is all rights reserved and the donor jar has no art for it,
+  but not the 1.4.5 donor; license is all rights reserved and the donor jar has no art for it,
   [miners_delight.md](miners_delight.md) D2/D3). The earlier line saying the cup items needed a cup the port dropped
   was wrong. The empty Copper Cup is registered with a stack size of 16 (filled water, milk and powder snow cups 1,
   soup cups 16), from the port's code in `MDItems.java`; no pack stack-size row overrides it.

@@ -33,7 +33,7 @@ to target a CreativeMD mod; needed `ItemPhysic` + `CreativeCore` jars in `libs/`
 
 2026-09-10: tried + **removed** `mixin/AreaEffectCloudSphereMixin` (`@Redirect`s on
 `AreaEffectCloud.tick()` `m_8119_`) — meant to veto victims outside a true 3D sphere and
-randomise particle Y, opt-in via `getPersistentData().getBoolean("CESphere")`. Hit two real
+randomize particle Y, opt-in via `getPersistentData().getBoolean("CESphere")`. Hit two real
 Mixin lessons worth keeping even though the mixin itself is gone:
 - **`@At` INVOKE target owner must match the receiver's compile-time class in the original
   vanilla source, not wherever the method is declared.** `this.getY()` called from inside

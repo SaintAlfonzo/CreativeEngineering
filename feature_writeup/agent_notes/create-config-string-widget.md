@@ -32,19 +32,19 @@ vanilla classes to **friendly Mojang names at dev time** (confirmed: `Minecraft.
 `EditBox.setValue()`, etc. all compile fine directly), while Create's shipped jar was built/reobbed
 independently and kept the raw official-but-unnamed placeholder for this one method. Net rule that
 actually matters for writing new code against these `libs/*.jar` classes:
-- Calling into **pure vanilla/Forge API** (from the `minecraft` dependency) → use friendly names
+- Calling into **pure vanilla/Forge API** (from the `minecraft` dependency) -> use friendly names
   (`getInstance()`, `setValue()`, `children()`, `x`/`y` fields, etc.) - reobfuscation will rewrite
   the call site to the matching SRG name automatically for the shipped jar.
 - Calling into a **third-party mod class's own override of a vanilla method** via `super.xxx()`
-  (e.g. `ValueEntry`/`LabeledEntry`) → must use that mod's actual raw compiled name directly (found
+  (e.g. `ValueEntry`/`LabeledEntry`) -> must use that mod's actual raw compiled name directly (found
   via decompiling their jar), since there's no friendly-named method there to resolve against.
-- Declaring **your own override** of a vanilla method (like `StringEntry#render`) → use the
+- Declaring **your own override** of a vanilla method (like `StringEntry#render`) -> use the
   friendly name in source; ForgeGradle's `reobfJar` renames it to the matching SRG name in the
   final jar automatically, so it correctly overrides/gets called by the third-party class's
   identically-SRG-named implementation at runtime. Verified end to end: compiled
-  `StringEntry.render(...)` → confirmed via javap on `build/libs/*.jar` (post-`reobfJar`) that it
+  `StringEntry.render(...)` -> confirmed via javap on `build/libs/*.jar` (post-`reobfJar`) that it
   became `m_6311_(...)`, and every vanilla EditBox/Minecraft/AbstractWidget call inside it was
-  correctly rewritten too (`setValue`→`m_94144_`, `getInstance`→`m_91087_`, `children`→`m_6702_`,
+  correctly rewritten too (`setValue`->`m_94144_`, `getInstance`->`m_91087_`, `children`->`m_6702_`,
   etc.) - exact same names Create's own compiled classes use.
 - Mixin's own string-based targets (`method = "..."`, `@At(target = "...")`) stay in raw/SRG form
   regardless, per the existing `remap = false` convention (see build.gradle's comment on this) -

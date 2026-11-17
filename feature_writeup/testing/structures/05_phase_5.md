@@ -115,7 +115,7 @@ Idle baseline: 20 TPS, max gap 51 to 69 ms.
 
 - Batch rows for searches that were still queued say `error: java.util.concurrent.CancellationException` instead
   of `stopped`. The report is complete otherwise.
-- **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): a cancelled search's row says `stopped`. LO-17.
+- **Fixed in source 2026-10-18** (patcherMod 1.0.7, not built or shipped): a canceled search's row says `stopped`. LO-17.
 
 ## 4. Values changed and restored
 

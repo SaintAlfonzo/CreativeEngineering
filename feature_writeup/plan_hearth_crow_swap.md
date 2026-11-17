@@ -3,7 +3,7 @@
 Status: **BUILT 2026-11-10, not installed (the game was running), not run.** Creative Delight and Creative Common jars built; scratch rows SQ-HCS-01 to -12, CQ-HCS-01, rewritten SQ-HH crow rows. Deviations in section 10. Was: PLANNED. One build (owner, 2026-11-10): crash fix, H&H crow port, AM crow drop, nest-driven
 spawning and the new nest placements land together. Supersedes the "mechanics on Alex's Mobs' crow" route (D2) in
 [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) and [hearth_and_harvest.md](hearth_and_harvest.md) 3.2 / 5.4, and
-settles the crow evaluation of N21 / N26-2 in favour of the Hearth and Harvest crow. TODO rows: `creativedelight/members #54`
+settles the crow evaluation of N21 / N26-2 in favor of the Hearth and Harvest crow. TODO rows: `creativedelight/members #54`
 (crash), `blocks/new #19` (crow mechanics), `largecontent/mod-additions #10` (H&H port), `#60` (nests), `mobs/tweaks #23`
 (crows and nests in villages).
 
@@ -89,7 +89,7 @@ crash. So "crows spawn near nests" cannot be built as a filter. It has to be inv
 - **Config** (`hearthandharvest-common.toml [crow]`): `nestFlockSize` 2 to 3, `nestCrowCap` 3, `nestCrowRange` 24,
   `nestRespawnMinutes` 5, `nestPlayerRange` 48, `playerNestsSpawnCrows` false. Removed: `spawnNearNests`, `spawnRadius`,
   `cropRequirement`, `denySpawnsElsewhere`.
-- **Crops** no longer affect spawning. They still draw crows through behaviour (`CrowEatCropsGoal`), and village roof nests
+- **Crops** no longer affect spawning. They still draw crows through behavior (`CrowEatCropsGoal`), and village roof nests
   put crows beside village farms.
 
 ## 3. O3 broken down: animations (resolved, no call needed)

@@ -11,7 +11,7 @@
 @@text Run 2026-11-01 (rcs1, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 6): SQ-CDV-01 to -04 PASS. SQ-CAL-06's locate and
 @@text `/dumpclimatecaves` need a group B world (superflat has no arid biome and no multi_noise overworld).
 @@text Needs `creativedevtools-1.0.0.jar` (`development/creativeDevtools/build/libs/`, `prep_srv.sh` adds it) and the patcherMod
-@@text jar built in the same pass (no `devtools/`, with `util/BlockStateLookupHook` and `util/LevelRandomHook`). Same behaviour
+@@text jar built in the same pass (no `devtools/`, with `util/BlockStateLookupHook` and `util/LevelRandomHook`). Same behavior
 @@text as before the carve: every row checks that the moved tools still run from the new jar. Group A.
 @@text
 @@table

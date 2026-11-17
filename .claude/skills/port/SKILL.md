@@ -1,6 +1,6 @@
 ---
 name: port
-description: Port or backport a mod (or a feature of one) to the pack's Forge 1.19.2 - licence route, in-tree mod or CD member, format changes, id rules. Use for "backport X", "port feature Y", newer-upstream carry-overs.
+description: Port or backport a mod (or a feature of one) to the pack's Forge 1.19.2 - license route, in-tree mod or CD member, format changes, id rules. Use for "backport X", "port feature Y", newer-upstream carry-overs.
 ---
 
 # Port or backport
@@ -12,11 +12,11 @@ Models: [veggies_delight.md](../../../feature_writeup/veggies_delight.md) 4.1 (f
 
 1. **Survey first.** Run the `integration-report` skill (or extend the mod's writeup) so overlaps and decisions
    exist before code. Owner decides drops after seeing overlaps.
-2. **Licence route** (record it in the writeup):
+2. **License route** (record it in the writeup):
    - GPL-compatible / MIT code and assets: fork into `development/backported<Name>`, our code GPLv3, keep the
      upstream notice.
    - ARR (code or assets): upstream jar unmodified in `<name>_upstream/` as a donor; our jar ships only our own
-     code written from behaviour, never translated from the decompile (memories `miners-delight-backport-plan`,
+     code written from behavior, never translated from the decompile (memories `miners-delight-backport-plan`,
      `backported-vinery`, `farmers-structures-donor`).
      Donor jars go unmodified to local dev instances only; at publish the pack links official sources and Creative
      Common files the detected jars into the upstream folder (note [upstream-jar-distribution-policy](../../../feature_writeup/agent_notes/upstream-jar-distribution-policy.md)). Do not
@@ -34,4 +34,4 @@ Models: [veggies_delight.md](../../../feature_writeup/veggies_delight.md) 4.1 (f
 6. **Build**: `./gradlew :<mod>:build --offline`, logic tests in a javac harness, then `:<mod>:installToMods`
    only with the game closed. Live checks go to [scratch_queue.md](../../../feature_writeup/testing/scratch_queue.md).
 7. **Integrate** the fold-in steps of the report; then the `add-mod` docs steps (sides, dumps, changelog).
-   Same-behaviour ports get no changelog bullet; new content does.
+   Same-behavior ports get no changelog bullet; new content does.

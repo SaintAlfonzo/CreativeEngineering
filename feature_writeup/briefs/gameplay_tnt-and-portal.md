@@ -113,7 +113,7 @@ Settle whether the player who lit the TNT is hit by its shrapnel, and make the c
   using TNT as a safe ranged weapon). Keep the config key so it can be flipped without a build.
 
 ### Gotchas
-- Pieces spawn at the explosion centre, not at the owner, so there is no point-blank self-hit at spawn.
+- Pieces spawn at the explosion center, not at the owner, so there is no point-blank self-hit at spawn.
 
 ### Tests (TN-)
 - **TN-new4** (replaces TN-03): stand 8 blocks from TNT you lit -> you are hit; `hitsOwner = false` -> you are not.
@@ -154,7 +154,7 @@ and soul-fire sustain block (more magic sustain blocks to come).
 3. **Dark Fire life**: give it an `AGE` property (0-15, like fire) and a scheduled tick (`tick`, 30-40 ticks like
    `FireBlock`): on a `dark_fire_base` block below it never ages; elsewhere it ages and goes out at 15. Keep the
    "any sturdy face" survival so a frame can be lit from the side (portal lighting runs in `onPlace` first).
-4. **Burning wood**: in the same tick, for each neighbour in `#minecraft:logs_that_burn` / `#minecraft:planks` (or a pack
+4. **Burning wood**: in the same tick, for each neighbor in `#minecraft:logs_that_burn` / `#minecraft:planks` (or a pack
    tag `#creativeengineering:dark_fire_burns`), with a high chance remove it and place Supplementaries ash (`i.ash`
    layer) with chance ~0.7, else air. Does not create new Dark Fire (no spreading).
 5. **Animation**: in the KubeJS texture copies, reverse the frame order of both strips and set `frametime 1` (faster);
@@ -178,7 +178,7 @@ tick rate; the SRG of `BaseFireBlock#tick` is not needed (own override in the pa
 - Obsidian is not a sustain block: a Dark Fire left in a frame that failed to form (open frame) ages out, which is
   wanted.
 - Adding `AGE` changes the block's states: Dark Fire already placed in worlds loads with the default age, fine.
-- The fire tag makes portal detection treat Dark Fire as interior; burning neighbours must not touch obsidian.
+- The fire tag makes portal detection treat Dark Fire as interior; burning neighbors must not touch obsidian.
 
 ### Tests (NP-)
 - NP-09 / NP-10 are replaced by: **NP-new1**: Flint and Terrasteel on air in front of a fence or a slab top (not
@@ -205,7 +205,7 @@ Dark Fire opens a Nether portal only in the Overworld (decided 2026-10-29).
 ### Build
 1. In `DarkFireBlock#onPlace`: return before the shape search unless `level.dimension() == Level.OVERWORLD`.
 2. Nether side: an ordinary flint and steel there still ruins the frame (PortalFailureHandler); Dark Fire there now
-   just burns. Destination portals made by travelling are unaffected (`PortalForcer` fires no event).
+   just burns. Destination portals made by traveling are unaffected (`PortalForcer` fires no event).
 3. nether_portal.md F2 resolved, NP-11 rewritten.
 
 ### Decisions

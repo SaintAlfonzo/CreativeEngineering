@@ -51,11 +51,11 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 |---|---|
 | One flour and one dough (Create's), from crushing, pressure chamber, explosions; dough from water or eggs; bread blocks | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |
 | Cornmeal (new item): from corn and kernels on every crusher and PNC; required in tortillas and cornbread batter; a flour in pancakes, pies and cakes. Pie crust from 3 flour + milk by hand and compacting (×2 when built; the 2026-10-22 baking overhaul makes 3, [oven.md](oven.md)) | DEPLOYED (built 2026-10-19, shipped in 1.0.8; 2.1); recipe level scratch server PASSED 2026-10-22 (SQ-OF-04), RC-15 to RC-17 in game |
-| Fluids: tomato sauce and melon juice by squeezer and bottler; sugar → `#forge:sugar` in every recipe | DEPLOYED |
+| Fluids: tomato sauce and melon juice by squeezer and bottler; sugar -> `#forge:sugar` in every recipe | DEPLOYED |
 | Prepared food: about 25 meals get shapeless, sequenced assembly or mixing routes; FD's shaped ones removed | DEPLOYED |
 | Golden carrot / apple by heated mixing and arc furnace; enchanted golden apple by assembly | DEPLOYED |
 | Ruby chocolate with dragon's breath | DEPLOYED |
-| Cultivated meat: sample syringe → culture → ×3 by mixing → raw meat on the cutting board | DEPLOYED |
+| Cultivated meat: sample syringe -> culture -> ×3 by mixing -> raw meat on the cutting board | DEPLOYED |
 | Removals: vanilla smoker and cake, Quark crop crates, duplicate pie, egg, bread recipes | DEPLOYED; smoker made by Quark's deepslate / blackstone smoker recipes (F1), cake by the baking overhaul's recipes and slice reassembly (F2); both closed 2026-10-22 |
 | Meals (TODO `dishes/meals` #1 to #3): heatless grid routes from cooked ingredients (rule in 2.3), all `_manual_only`; per-meal fixes (cooked eggs, tortilla wrap, dearer scrambled eggs, fruit tags, shaped burgers, one quiche); assemblies for 8 burgers, mutton wrap, fruit salad, shepherd's pie, horror lasagna, stuffed potato, crispy skewer, crawling sandwich, steak and potatoes | built, scratch server PASSED 2026-10-22 (SQ-OF-07, SQ-OF-08: ids, inputs, removed ids, one grid recipe per burger), DEPLOYED 1.1.01 (2.3); in game RC-55 to RC-64 |
 | Meals (TODO `dishes/meals` #4, #7, #8): grid routes for 8 more pot meals plus dog food; squid ink pasta by two-fluid heated mixing; fish frying in the pot with cooking oil for any whole fish (Fish Tempura, Fries, Fish and Chips), PneumaticCraft's Thermopneumatic frying removed | built, scratch server PASSED 2026-10-22 (SQ-OF-09 to SQ-OF-11), DEPLOYED 1.1.01 (2.3); in game RC-66 to RC-69 |
@@ -64,7 +64,7 @@ fixes in [food.md](food.md); the sample syringe in [engineering.md](engineering.
 | Cooking fluids (TODO `dishes/ingredients #2`): egg solution (1 egg + 250 mB milk -> 500 mB) with Create routes for dough, cornbread batter, pancakes, batter, scrambled eggs, vegetable omelet, potato salad, two custards, vanilla pudding and quiche; frosting fluid (mixer, compactor, cake spout) | built, scratch server PASSED 2026-10-22 (SQ-FL-01, SQ-FL-02), DEPLOYED 1.1.01 (2.2); in game RC-77, RC-78. Needs a restart (new fluids) |
 | Golden food real gold only, smaller machine discount (TODO `dishes/meals #9`) | BUILT 2026-10-21, scratch probe PASSED 2026-10-22, DEPLOYED 1.1.01 (2.4); RC-70 |
 | Feast Plating JEI tab (TODO `dishes/meals #5` part a): what a placed feast gives per right-click, the container it takes and its leftovers | BUILT 2026-10-21, DEPLOYED 1.1.01 (2.3); RC-65 |
-| Food grinding by hand: every grinding recipe of the pack's own goes through NCH `foodGrinding` (crushing wheels + Millstone + a mortar and pestle craft with the pack's own mortar); other mods' food milling gets mortar crafts from a generated catalogue; hay bale on the Millstone | BUILT 2026-10-21, `mortar_probe.js` 33 checks pass, DEPLOYED 1.1.01 (2.1; the mortar and the catalogue are written up in [kitchen.md](kitchen.md) 2.6) |
+| Food grinding by hand: every grinding recipe of the pack's own goes through NCH `foodGrinding` (crushing wheels + Millstone + a mortar and pestle craft with the pack's own mortar); other mods' food milling gets mortar crafts from a generated catalog; hay bale on the Millstone | BUILT 2026-10-21, `mortar_probe.js` 33 checks pass, DEPLOYED 1.1.01 (2.1; the mortar and the catalog are written up in [kitchen.md](kitchen.md) 2.6) |
 
 - **Pending:** everything built up to 2026-10-22 (cornmeal millstone mirrors, `foodGrinding` mortar crafts, F8
   cornmeal fixes, the meals, fluids, bone broth and ice rows above) DEPLOYED with 1.1.01 (2026-10-22); later rows
@@ -89,10 +89,10 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 
 - **One flour, one dough:** tmted's flour and FD's dough are replaced by Create's in every recipe's inputs and outputs
   (`i.in_flour`, `#forge:flour/wheat`, `#forge:dough/wheat`).
-- **Flour:** IE crusher wheat → 2, hay bale → 18; crushing wheels and (since 2026-10-21) the Millstone hay bale → 13 +
-  25 % 2; mortar and pestle hay bale → 13, wheat → 1 (Create's own wheat milling, through the mortar catalogue); PNC
-  pressure chamber wheat → 3 at 1.5 bar; explosion crafting 1 per wheat (loss rate 50).
-- **Dough:** flour + water bucket; Bottler 250 mB water per flour, 1000 mB per flour pile → dough block; 3 flour + egg → 6.
+- **Flour:** IE crusher wheat -> 2, hay bale -> 18; crushing wheels and (since 2026-10-21) the Millstone hay bale -> 13 +
+  25 % 2; mortar and pestle hay bale -> 13, wheat -> 1 (Create's own wheat milling, through the mortar catalog); PNC
+  pressure chamber wheat -> 3 at 1.5 bar; explosion crafting 1 per wheat (loss rate 50).
+- **Dough:** flour + water bucket; Bottler 250 mB water per flour, 1000 mB per flour pile -> dough block; 3 flour + egg -> 6.
   FD's, tmted's and Create Central Kitchen's dough recipes and tmted's slime ball from dough are removed.
 - **Cornmeal** (`creativeengineering:cornmeal`, KubeJS item `development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/cornmeal.js`, recolored-flour texture;
   tags `#forge:flour/corn` and `#creativedelight:flour_or_cornmeal` = wheat flour or cornmeal). From cooking.md:
@@ -124,16 +124,16 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 - **Pie crust:** 3 flour or cornmeal in a bowl shape with milk (bucket or bottle) in the middle -> 2; unheated
   compacting 3 flour or cornmeal + 250 mB milk -> 2. FD's 3 wheat + milk -> 1 stays. (An egg in place of the milk was
   asked first; it was dropped because the shapeless 3 flour + egg -> 6 dough craft matches the same grid.)
-- **Bread:** FD's furnace and smoker bread removed; dough block → smoke to bread block → saw or knife to 16 bread;
+- **Bread:** FD's furnace and smoker bread removed; dough block -> smoke to bread block -> saw or knife to 16 bread;
   stonecutter for slab, crustless block, nub (Architect's Palette's own recipes replaced).
-- **Sourdough (PNC):** 8 dough + yeast culture bucket; mixer 500 mB yeast culture + 8 dough heated → 8; Bottler 50 mB per
+- **Sourdough (PNC):** 8 dough + yeast culture bucket; mixer 500 mB yeast culture + 8 dough heated -> 8; Bottler 50 mB per
   dough; smoke to sourdough bread, knife to 3 bread.
-- **Pasta:** IE press with the wire mold, dough → 2 pasta.
+- **Pasta:** IE press with the wire mold, dough -> 2 pasta.
 
 ### 2.2 Fluids and sugar
 
 - **Tomato sauce:** IE squeezer 250 mB per tomato, Bottler into a bowl; 4 tomatoes + bowl shapeless. tmted's removed.
-- **Melon juice:** squeezer 125 mB per slice, 1250 per melon; Bottler 250 mB per bottle; unheated mixing sugar + 3 slices →
+- **Melon juice:** squeezer 125 mB per slice, 1250 per melon; Bottler 250 mB per bottle; unheated mixing sugar + 3 slices ->
   250 mB. tmted's and Create Central Kitchen's removed.
 - **Chorus juice** (TODO `food/drinks #4`): the pack's first own fluid, `creativeengineering:chorus_juice`
   (`development/creativeDelight/src/main/resources/kubejs_startup/creativeengineering/fluids.js`; no block, no bucket, like Central Kitchen's drink fluids; `f.chorus_juice`,
@@ -157,7 +157,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 - **Frosting fluid** (TODO `dishes/ingredients #2`): `creativeengineering:frosting` (tank-only, `#forge:fluid/frosting`),
   the Create route to oven.md 2.6's frosting item (baking.js): heated mixer sugar + 250 mB milk -> 500 mB (the grid's
   sugar + 2 milk -> 2); compacting 250 mB -> 1 frosting (fluid-only, like Create's chocolate bar); spout 750 mB on a
-  baked cake base -> plain cake (`cake_frosting_spout`, beside the chocolate cake spout). Flavoured cakes stay on the
+  baked cake base -> plain cake (`cake_frosting_spout`, beside the chocolate cake spout). Flavored cakes stay on the
   item. Beetroot soup as an efficient beetroot was deferred to `ingredients #13` (the user, 2026-10-22).
 - **Berry matcha latte** (TODO `food/drinks #5`): with Farmer's Respite loaded Delightful drops its grid lattes, so the
   berry latte had only `food/berry_matcha_latte_from_matcha_latte_neapolitan` (bottle + latte + berries + ice), which
@@ -177,9 +177,9 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 
 | Food | Pack routes |
 |---|---|
-| Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen → 2; shapeless 1 |
+| Bone broth | pot: bone or bone meal + glow berries / mushrooms / hanging roots / glow lichen -> 2; shapeless 1 |
 | Beef stew, baked cod stew, noodle soup, chicken soup, cooked rice | shapeless with bone broth; since 2026-10-21 baked cod stew takes a fried egg, baked potato and tomato sauce, chicken soup two cooked veggies (`#creativedelight:soup_veggie_cooked`) in place of the raw veggie and carrot |
-| Orange and lemon jam | Fruits Delight's pot (2 fruit + sugar + lemon slice, mason jar) and heated mixing (+ 100 mB water → 125 mB) recipes; since 2026-11-02 each whole-fruit slot also takes that fruit's slice, one for one (orange or orange slice; lemon or lemon slice). The separate from-slices recipes (orange 4 slices 2026-10-23, lemon 5 slices) are removed (TODO `baking/sweets #6`, `dishes/jams #6`) |
+| Orange and lemon jam | Fruits Delight's pot (2 fruit + sugar + lemon slice, mason jar) and heated mixing (+ 100 mB water -> 125 mB) recipes; since 2026-11-02 each whole-fruit slot also takes that fruit's slice, one for one (orange or orange slice; lemon or lemon slice). The separate from-slices recipes (orange 4 slices 2026-10-23, lemon 5 slices) are removed (TODO `baking/sweets #6`, `dishes/jams #6`) |
 | Fruit beignet | removed item since 2026-10-23 (TODO `dishes/meals #19`): every recipe with it as output removed |
 | Fried rice, mushroom rice, sinigang | shapeless with cooked rice; fried rice takes 2 fried eggs, mushroom rice a baked potato and a second brown mushroom, sinigang a second cooked fish, so each costs one more than the pot (2026-10-21) |
 | Vegetable soup, vegetable noodles, ratatouille, corn soup | heatless shapeless from cooked ingredients (2026-10-21) |
@@ -209,7 +209,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Kelp roll, rice roll medley, roasted mutton chops | assembly |
 | Fish stew, cabbage rolls, horror lasagna, pasta with mutton (and heated mixing ×4) | shapeless from cooked ingredients |
 | Fish Tempura (PneumaticCraft salmon tempura, renamed) | raw: any whole fish (`#creativedelight:food_type/raw/fish`) + batter (was salmon + sourdough); pot: cooking oil + raw tempura. PneumaticCraft's Thermopneumatic recipe and the pack's plant-oil mixing removed |
-| Fries (PneumaticCraft chips, renamed) | pot: cooking oil + 2 `#forge:sliced_potato` (Rustic Delight slices, More Delight diced potatoes) → 2. Thermopneumatic chips removed |
+| Fries (PneumaticCraft chips, renamed) | pot: cooking oil + 2 `#forge:sliced_potato` (Rustic Delight slices, More Delight diced potatoes) -> 2. Thermopneumatic chips removed |
 | Fish and Chips (PneumaticCraft cod 'n' chips, renamed) | pot: cooking oil + any whole fish + 2 sliced potatoes, plated on paper; shapeless fries + cooked fish + paper (`_manual_only`). Tooltip: the chips are fries |
 | Blueberry and cranberry muffins | pot recipes on `#forge:dough` ([oven.md](oven.md)) |
 | Stuffed shulker, ender paella, pearl pasta (Ender's Delight) | shapeless |
@@ -242,7 +242,7 @@ is a block interaction, not a recipe, so JEI showed nothing. The tab has one pag
   left).
 - Not on the tab: pies and Rustic Delight pancakes (eaten or cut in place; FD's cutting-board recipes show pie slices).
 
-Fish on the cutting board give more: salmon and cod → 6 slices + bone meal, catfish → 6 slices.
+Fish on the cutting board give more: salmon and cod -> 6 slices + bone meal, catfish -> 6 slices.
 
 ### 2.4 Golden food (`golden.js`)
 
@@ -259,13 +259,13 @@ reverted.
 
 ### 2.5 Ruby chocolate and cultivated meat
 
-- **Ruby chocolate** (Create Confectionery): heated mixing 250 mB milk + 250 mB dragon's breath + cocoa beans + sugar →
+- **Ruby chocolate** (Create Confectionery): heated mixing 250 mB milk + 250 mB dragon's breath + cocoa beans + sugar ->
   250 mB (the mod's own recipe removed).
 - **Cultivated meat:** sample syringe (iron rod, 4 glass panes, iron plate); a filled syringe + `#creativedelight:culture_base`
-  + slime ball → a culture (beef, pork, poultry, mutton, rabbit, cod, salmon); heated mixing culture + 250 mB diluted
-  bone meal + 250 mB plant oil → 3; knife on the cutting board → 4 raw beef / pork / mutton, 3 chicken / rabbit, 8 cod or
+  + slime ball -> a culture (beef, pork, poultry, mutton, rabbit, cod, salmon); heated mixing culture + 250 mB diluted
+  bone meal + 250 mB plant oil -> 3; knife on the cutting board -> 4 raw beef / pork / mutton, 3 chicken / rabbit, 8 cod or
   salmon slices. Culture blocks 9 ↔ 1. Since 2026-10-27 the cooking pot grows them too: culture + bone meal + Rustic
-  Delight cooking oil → 3 (0.35 xp, 200 ticks; `creativedelight:farmersdelightcooking/<animal>_culture_cooking`, only
+  Delight cooking oil -> 3 (0.35 xp, 200 ticks; `creativedelight:farmersdelightcooking/<animal>_culture_cooking`, only
   with Rustic Delight on).
 - **Creative Cultivation reservation (2026-10-27):** all cultivated-meat code (sample syringe, cultures, culture blocks,
   recipes, tags, lang, textures) is marked for a future own mod, Creative Cultivation, the way brewing and alcohol are
@@ -421,7 +421,7 @@ until a row is built.
 - [TODO](todo/TODO.md) `baking/baked-goods #24`: remove the shapeless pie-to-crust recipes. No such recipe was found in the
   dumps or jars; check in game first.
 - [TODO](todo/TODO.md) `baking/baked-goods #25`: sponge cake renamed sponge pie (Oceanic Delight; its recipe already uses a pie crust).
-- [TODO](todo/TODO.md) `baking/baked-goods #26`: honey cake flavour split between honey and honeycomb, 50 / 50.
+- [TODO](todo/TODO.md) `baking/baked-goods #26`: honey cake flavor split between honey and honeycomb, 50 / 50.
 - [TODO](todo/TODO.md) `baking/baked-goods #27`: a recoloured dough block and a dough texture for each dough (with `#17`).
 
 **Other**
@@ -448,21 +448,21 @@ None.
 
 - **r1103 2026-11-03** (scratch server; verdicts in `perf/runs/r1103/` FINAL.md and the slice judged.md): PASS SQ-RCO-01, -02.
 
-- [ ] **RC-01 Smoker (F1):** (recipe level: SQ-RCO-01) JEI `minecraft:smoker` → Quark's deepslate and blackstone smoker (furnace in a plus of 4
+- [ ] **RC-01 Smoker (F1):** (recipe level: SQ-RCO-01) JEI `minecraft:smoker` -> Quark's deepslate and blackstone smoker (furnace in a plus of 4
   logs) and Nether's Delight's nether brick smoker; no vanilla cobblestone recipe.
-- [ ] **RC-02 Cake (F2):** (recipe level: SQ-RCO-02) JEI `minecraft:cake` → oven (cake base + 3 frosting, or + 2 frosting + red berry), the same
-  two by hand from a baked cake base, and 7 cake slices → cake; no vanilla, FD milk-bottle, Neapolitan or Create grid cake.
-- [ ] **RC-03 One flour:** JEI wheat flour → only Create's; tmted's flour absent from recipes.
-- [ ] **RC-04 Flour machines:** IE crusher on a hay bale → 18 flour; crushing wheels → 13-15.
-- [ ] **RC-05 Dough:** 3 flour + an egg → 6 dough; Bottler with water on a flour pile → dough block.
-- [ ] **RC-06 Bread block:** smoke a dough block → bread block; saw → 16 bread.
-- [ ] **RC-07 Sourdough:** heated mixer, 8 dough + 500 mB yeast culture → 8 sourdough.
-- [ ] **RC-08 Tomato sauce:** squeezer on a tomato → 250 mB; Bottler into a bowl → tomato sauce.
+- [ ] **RC-02 Cake (F2):** (recipe level: SQ-RCO-02) JEI `minecraft:cake` -> oven (cake base + 3 frosting, or + 2 frosting + red berry), the same
+  two by hand from a baked cake base, and 7 cake slices -> cake; no vanilla, FD milk-bottle, Neapolitan or Create grid cake.
+- [ ] **RC-03 One flour:** JEI wheat flour -> only Create's; tmted's flour absent from recipes.
+- [ ] **RC-04 Flour machines:** IE crusher on a hay bale -> 18 flour; crushing wheels -> 13-15.
+- [ ] **RC-05 Dough:** 3 flour + an egg -> 6 dough; Bottler with water on a flour pile -> dough block.
+- [ ] **RC-06 Bread block:** smoke a dough block -> bread block; saw -> 16 bread.
+- [ ] **RC-07 Sourdough:** heated mixer, 8 dough + 500 mB yeast culture -> 8 sourdough.
+- [ ] **RC-08 Tomato sauce:** squeezer on a tomato -> 250 mB; Bottler into a bowl -> tomato sauce.
 - [ ] **RC-09 Sugar tag:** a recipe asking for sugar accepts another `#forge:sugar` item.
-- [ ] **RC-10 Assembly meal:** bacon and eggs by sequenced assembly on a bowl → 1 after 2 loops.
-- [ ] **RC-11 Golden carrot:** arc furnace, carrot + 3 gold nuggets → golden carrot.
-- [ ] **RC-12 Enchanted golden apple:** assembly on a golden apple, 4 loops → enchanted golden apple.
-- [ ] **RC-13 Ruby chocolate:** heated mixer with milk, dragon's breath, cocoa beans, sugar → 250 mB ruby chocolate.
+- [ ] **RC-10 Assembly meal:** bacon and eggs by sequenced assembly on a bowl -> 1 after 2 loops.
+- [ ] **RC-11 Golden carrot:** arc furnace, carrot + 3 gold nuggets -> golden carrot.
+- [ ] **RC-12 Enchanted golden apple:** assembly on a golden apple, 4 loops -> enchanted golden apple.
+- [ ] **RC-13 Ruby chocolate:** heated mixer with milk, dragon's breath, cocoa beans, sugar -> 250 mB ruby chocolate.
 - [ ] **RC-15 Cornmeal item** (tag: scratch server PASSED 2026-10-22, SQ-OF-04; name and texture: in game): shows as "Cornmeal" with the yellow flour texture; in `#forge:flour/corn`.
 - [ ] **RC-16 Cornmeal machines** (knife, IE crusher, PNC recipes, Corn Delight ids gone: scratch server PASSED 2026-10-22, SQ-OF-04; crushing wheels, millstone, JEI: in game): crushing wheels on corn give 1-2 cornmeal and sometimes a kernel; the millstone
   gives the same (from the 2026-10-20 change; on 1.0.9 it may take no corn); a knife on corn gives 2 kernels and no straw; IE crusher on corn -> 2 cornmeal (+ kernel half the time), on a crate
@@ -540,19 +540,19 @@ None.
   solution spout step; run it on a pie crust -> quiche. No KubeJS errors for cooking.js in `logs/kubejs/server.log`.
 - [ ] **RC-78 Frosting fluid** (fluid, tag and ids: scratch server PASSED 2026-10-22, SQ-FL-02; client: the machine runs, JEI): heated basin sugar + 250 mB milk -> 500 mB frosting; compactor over a basin with
   250 mB -> 1 Frosting item; spout 750 mB on a Baked Cake Base -> Cake. JEI lists the Frosting fluid next to the item.
-- [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball → beef culture; heated mixer with diluted
-  bone meal and plant oil → 3; knife → 4 raw beef.
-- [ ] **RC-82 Culture in the cooking pot:** JEI beef culture → U: a cooking pot recipe beef culture + bone meal +
-  cooking oil → 3 beef cultures (`creativedelight:farmersdelightcooking/beef_culture_cooking`); same for the other 6
-  cultures. Cook one on a lit stove → 3 cultures.
-- [ ] **RC-79 Orange and lemon jam from slices (reworked 2026-11-02):** JEI orange jam → R: the pot recipe cycles
+- [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball -> beef culture; heated mixer with diluted
+  bone meal and plant oil -> 3; knife -> 4 raw beef.
+- [ ] **RC-82 Culture in the cooking pot:** JEI beef culture -> U: a cooking pot recipe beef culture + bone meal +
+  cooking oil -> 3 beef cultures (`creativedelight:farmersdelightcooking/beef_culture_cooking`); same for the other 6
+  cultures. Cook one on a lit stove -> 3 cultures.
+- [ ] **RC-79 Orange and lemon jam from slices (reworked 2026-11-02):** JEI orange jam -> R: the pot recipe cycles
   Orange / Orange Slice in both fruit slots (mason jar container), no separate 4-slice recipe; the heated mixing recipe
   the same. Lemon jam: both lemon slots cycle Lemon / Lemon Slice, the extra Lemon Slice slot stays; no 5-slice recipe.
   Cook 2 Orange Slices + Sugar + Lemon Slice in the pot: Orange Jam.
-- [ ] **RC-80 FD ids and crab bars:** JEI grilled salmon, bacon and eggs, salmon roll, cod roll → one shapeless recipe
+- [ ] **RC-80 FD ids and crab bars:** JEI grilled salmon, bacon and eggs, salmon roll, cod roll -> one shapeless recipe
   each under `farmersdelight:` (F3 + advanced tooltips show the id), plus the sequenced assembly; crab bars: shapeless
   `creativeengineering:shapeless/crab_bars_manual_only` (2), not offered by a Create mixer.
-- [ ] **RC-81 Beignet gone, egg fried rice:** JEI search "beignet" → nothing; `/give` one → red REMOVED line. Fried
+- [ ] **RC-81 Beignet gone, egg fried rice:** JEI search "beignet" -> nothing; `/give` one -> red REMOVED line. Fried
   rice shows as "Egg Fried Rice", placed on a block as "Placed Egg Fried Rice".
 
 - [ ] **RC-170 Any bread (baking/baked-goods #28):** (recipe level: scratch server PASSED r1031 2026-10-31, SQ-BJ-02, -02b; JEI: in game) JEI `#forge:bread` -> U: the burgers, FD chicken / egg / bacon
@@ -591,7 +591,7 @@ None.
   jello with bowls. A jam block slows you and you slide down its side; a jello block bounces; a piston moves a jam block with
   a jello block of the same jam stuck to it, not one of another jam.
 - [ ] **RC-182 Jam cauldrons:** (in game) a water cauldron + a Lemon Slice -> Lemonade Cauldron; over a lit campfire, 12
-  cherries -> a full Cherry Cauldron (water in the jam colour); sugar -> Cherry Jam Cauldron; 3 Empty Mason Jars take 3
+  cherries -> a full Cherry Cauldron (water in the jam color); sugar -> Cherry Jam Cauldron; 3 Empty Mason Jars take 3
   Cherry Jam Jars and leave a cauldron. Again with a Slime Ball before emptying: Cherry Jello Cauldron, 3 bowls -> 3 Cherry
   Jello. Fruits Delight's Apple Jam Cauldron fills an Empty Mason Jar, not a glass bottle; JEI's cauldron pages show both.
 - [ ] **RC-183 Create jams:** (SQ-PJL-04) Spout an Empty Mason Jar with 125 mB cherry jam -> Cherry Jam Jar, drain it back;
@@ -624,7 +624,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 - 2026-10-20 (c82dd31): millstone mirrors of the four corn crushing recipes; not shipped.
 - 2026-10-21: the pack's own food grinding (corn, crate, kernels, bag, hay bale) moved to NCH `foodGrinding`:
   crushing wheels + Millstone + a mortar and pestle craft; the hay bale gained its Millstone recipe; other mods' food
-  milling got mortar crafts from a catalogue ([kitchen.md](kitchen.md) 2.6, TODO `cooking/kitchen #10`). RC-19. Not
+  milling got mortar crafts from a catalog ([kitchen.md](kitchen.md) 2.6, TODO `cooking/kitchen #10`). RC-19. Not
   shipped.
 - 2026-10-21: cornmeal fixes (`dishes/ingredients #14`, F8): raw tortilla takes a water bottle, washing cornmeal ->
   raw tortilla, Bottler cornmeal + 250 mB water -> raw tortilla, mortar corn 2 -> 3 (the Create machines' average),
@@ -672,7 +672,7 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
   ids unchanged), their tags in `creativedelight/cultivated_meat_tags.js`; cooking pot culture growth added (7 rows);
   all cultivated-meat code reserved for Creative Cultivation (creative_delight.md 29.5). Test RC-82. Not run in game.
 
-- 2026-10-28: planned from the scratchpad: raise coleslaw nutrition (TODO `dishes/meals #42`), rename cucumber pasta to Veggie Pasta with more vegetables and a less minty colour (`dishes/meals #43`). Tropical Pizza stays `dishes/meals #27`. No code changed.
+- 2026-10-28: planned from the scratchpad: raise coleslaw nutrition (TODO `dishes/meals #42`), rename cucumber pasta to Veggie Pasta with more vegetables and a less minty color (`dishes/meals #43`). Tropical Pizza stays `dishes/meals #27`. No code changed.
 
 - 2026-10-29: any bread in any bread recipe (`baking/baked-goods #28`, CD `creativedelight/bread_recipes.js`; ham and
   cheese sandwich in cooking.js). Jams: the jam and relish bottles and Vintage's sweet berry and glow berry jams removed,

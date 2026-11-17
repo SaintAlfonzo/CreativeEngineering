@@ -24,7 +24,7 @@ CEPortTesting through ATLauncher). Targeted run: no perf session.
   `{output: undefined}`, matched everything: `kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js:110`
   `R.remove({ output: fd.dish_stuffed_bellpepper }, e)`; `fd.dish_stuffed_bellpepper` is not in food_dict.js. New in the
   2026-11-06 split commit, inside the CD jar installed in the pack 01:30; the pack has not booted since (last KubeJS log 2026-11-05
-  22:39), so the full pack is hit too. Not fixed (behaviour change, owner).
+  22:39), so the full pack is hit too. Not fixed (behavior change, owner).
 - 10:23 decision: the wrapper now SKIPS top-level undefined/null filter values (srv-only shim) so the CB rows test the
   rest: removed 3823 -> 312. SQ-CBA-09 rerun: keg pouring 24, wine fermentation 26, apple mashing 2 (pack 24/27/2);
   fermenting 17 (pack 21): kombucha (needs farmersrespite, create_central_kitchen; expected), kippers (removed by CD's
@@ -349,7 +349,7 @@ rows. Targeted run: no perf session (11 GB free on `/`). Client rows (CQ-CBP-01,
   evidence.
 - Cause of SQ-CBP-03 (read-only): kubejs-create 1902.2.4 builds `create:filling` with `FluidComponents.INPUT_OR_ITEM_ARRAY`,
   so each input value is a `com.mojang.datafixers.util.Either`; `NCH._stepHasEmptyFluid` only tests class names with
-  "Fluid" and never unwraps `left()` / `right()`, so the empty `CreateInputFluid` is never seen. Not fixed (behaviour
+  "Fluid" and never unwraps `left()` / `right()`, so the empty `CreateInputFluid` is never seen. Not fixed (behavior
   change, owner decides).
 - 17:32 p2 (cooking): `Empty array?` 0 (r1106cbo 77), failures 6 (82), `[NCH] removed 2 Immersive Engineering recipes
   whose output tag is empty: crusher/ore_nickel (#forge:dusts/platinum), blastfurnace/steel_bloc...` (in startup.log;
@@ -496,7 +496,7 @@ Devtools), jx_* (one jar out), b2 / b2r / b2s (B world). Results `perf/runs/r110
 | SQ-SPF-31 | PASS | boots without Devtools; Devtools scripts `Skipped ... not loaded`; /dumpall, /cegen unknown; one WARN `Missing data pack mod:creativedevtools` (world remembers it) |
 | SQ-SPF-40 | PASS | flint and steel: PortalFailureHandler fired, no portal; Flint and Terrasteel: `creativeengineering:dark_fire`, portal opened; `creativemagic:` recipes. Crying obsidian not seen on the corner block checked |
 | SQ-SPF-41 | PASS | `[XPFluidBridge] Startup OK: create_enchantment_industry:experience` from `creativemagic`; `#forge:experience` = CEI experience + flowing; SQ-CMG-05 tcprobe 0 fail |
-| SQ-SPF-50 | PASS | chest NBT kept over two restarts (backpack colours, sawblade Damage 5); tags equal to base (16/16/17/1/1, needs_copper_tool 14); 167 `creativeequipment:` recipes; dragon helmet repaired 50 -> 0 |
+| SQ-SPF-50 | PASS | chest NBT kept over two restarts (backpack colors, sawblade Damage 5); tags equal to base (16/16/17/1/1, needs_copper_tool 14); 167 `creativeequipment:` recipes; dragon helmet repaired 50 -> 0 |
 | SQ-SPF-51 | client | bot bucket use raycasts its own look (PASS, nothing placed); bucket and fletching recipes present |
 | SQ-SPF-52 | PASS (data) / client | SQ-STL-01, -02 PASS (recipes now `creativeequipment:shaped/*_stepstool`, 16); Curios slot and step-up: client |
 | SQ-SPF-60 | PASS | dragon breathing 14 recipes (= base); fan + dragon head turns cobblestone into end stone (60b); sawmill 241 (= base) |

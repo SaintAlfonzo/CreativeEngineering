@@ -450,7 +450,7 @@ parser and sort key in a harness (order below came out as designed). **Nothing h
 - Type order item, multiblock, fluid, effect; everything else unplaced, in JEI's own order after the placed
   entries of its type.
 
-### 12.3 Behaviour as built
+### 12.3 Behavior as built
 
 - An ingredient's place: its deepest `creativecompat:jei/...` tag (item tags only, not a block's tags);
   else the first node whose `list` names it. Tag on two branches, or tag vs a list elsewhere: kept by definition

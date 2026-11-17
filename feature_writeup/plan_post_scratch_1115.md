@@ -78,7 +78,7 @@ ice, packed ice, blue ice, snow layers, snow block, powder snow, and whatever B8
 | Step | Decision | Notes |
 |---|---|---|
 | B1 | Salt placed on a frozen block does not melt it; it places a salt layer (what salt dust does today). | The old writeup (salt.md, plan 3.8) said the click goes through `meltStep`; rewrite it. SQ-MELT-08 closes as "by design, writeup fixed". **Built 2026-11-15** (no code change: salt dust's own click already places a layer; the Salt member's `tryMeltFromItem` is now only the dispenser path; salt.md 7.1, melting.md rewritten). Verify SQ-PS15-01. |
-| B2 | Dispenser, salt dust: on air (nothing to melt in front) it places a layer; facing a frozen block it makes **one melt action** and spends 1 salt. | Today the dispenser behaviour is registered for `salt:salt` and returns unless the stack is in `#forge:salts`, so it does nothing. Register it on the real item, route to `meltStep`. **Built 2026-11-15**: Salt member `Melting.SaltItemDispenseBehavior` (no `#forge:salts` gate; melt one stage or place a layer on air or onto a layer below 8, else drop), registered on `vintagedelight:salt_dust` by CD `salt/SaltLayerMelt` (common setup); `[salt.Melting] SaltItemMeltingEnabled` now governs this. Verify SQ-PS15-02. |
+| B2 | Dispenser, salt dust: on air (nothing to melt in front) it places a layer; facing a frozen block it makes **one melt action** and spends 1 salt. | Today the dispenser behavior is registered for `salt:salt` and returns unless the stack is in `#forge:salts`, so it does nothing. Register it on the real item, route to `meltStep`. **Built 2026-11-15**: Salt member `Melting.SaltItemDispenseBehavior` (no `#forge:salts` gate; melt one stage or place a layer on air or onto a layer below 8, else drop), registered on `vintagedelight:salt_dust` by CD `salt/SaltLayerMelt` (common setup); `[salt.Melting] SaltItemMeltingEnabled` now governs this. Verify SQ-PS15-02. |
 | B3 | A salt layer has a small chance, **configurable**, of disappearing when it melts a frozen block. | New key in the CD salt config, **default 5 percent** (owner, 2026-11-15). Applies only to salt layers: salt blocks that are not made of layers (Salt Block, Raw Rock Salt Block, other full blocks) never vanish. Backup in `configs_edited/`. **Built 2026-11-15**: `[salt.Melting] SaltLayerVanishChance = 0.05` (Salt member `Configuration`, mirrored); Common `Melting.setSaltMeltListener` (called after a salt source melts by random tick), CD `salt/SaltLayerMelt` removes one layer from a `SnowLayerBlock` salt source by chance (the last layer leaves air). Verify SQ-PS15-03. |
 | B4 | A falling salt layer (layers obey gravity) that lands on a salt lick moves into the lick and refills it. | Lick refill path shared with B7. **Open, waiting for owner**: salt layers do not fall today (Vintage's `SaltLayerBlock` is a `SnowLayerBlock`, no gravity; a layer without support breaks on the next block update). Either make salt layers fall like sand (then the landing hook) or drop B4. Placed and dispensed layers on a worn lick already refill it (B7). SQ-PS15-04 waits. |
 | B5 | A lick with salt layers on top pulls a layer from the top when it is licked, instead of shrinking the lick. | The lick size stays; layers are consumed first, top down. **Built 2026-11-15**: hearth `SaltLick.wear` takes one layer from the topmost salt layer resting on the lick (a stack of full layer blocks counts, top block first) before it wears a stage; players and animals both go through `wear`. Verify SQ-PS15-05. |
@@ -102,7 +102,7 @@ Immersive Weathering 1.2.10, Architect's Palette 1.3.5 jars, `melting_tags.js`, 
   The product is a `slowSteps` row (slow tier only, the target's **default** state), else water for `#minecraft:ice`
   outside ultra-warm, else air. There is no "melts into X" for the fast tier and no property copy, so a stair, slab or
   wall cannot keep its shape.
-- Immersive Weathering melts its own blocks already: snowy blocks un-snow on a random tick when a neighbour has block
+- Immersive Weathering melts its own blocks already: snowy blocks un-snow on a random tick when a neighbor has block
   light above 11 and on water or lava contact (they drop a snowball); frosty blocks un-frost from block light; thin ice
   natural melting is off in our IW config. This runs whatever `vanillaLightMelting` says (the toml comment notes it).
 - No mod in the pack has "frozen bricks" as such; the nearest are IW's snow bricks and snowy stone bricks (rows 1, 6).
@@ -194,7 +194,7 @@ coffee and cotton JSONs say `MOTION_BLOCKING`; Neapolitan adzuki uses `HEIGHTMAP
 Ruled out: biome tags (r1115 probe: carrot tag 25 biomes, adzuki 18, both with forest; bell pepper tag 11 with every
 jungle); the Rustic chance (`ChanceFilter` holds 15 for peppers and coffee in code; `config/rusticdelight-common.toml`
 is a leftover upstream file the port never reads); peppers versus coffee (same block class, rarity, heightmap and
-ground rule: the jungle split 0 versus 5 is one coffee patch in a clearing, chance). Also: the r1115 boxes were centred on
+ground rule: the jungle split 0 versus 5 is one coffee patch in a clearing, chance). Also: the r1115 boxes were centered on
 `/locate` results and nobody counted their biome make-up, so "N chunks" below is an upper bound on tag chunks.
 `crop_worldgen.json` (2026-11-14) lacks the four Rustic features although the generator knows them: stale export, rerun
 `gen_crop_worldgen_table.py`.
@@ -352,7 +352,7 @@ Facts (2026-11-16): the lick chain is `salt:salt_block` (stage 0) -> lightly, we
 layers above (B7). Licking eats layers on top first (B5). Names: `salt:raw_rock_salt` "Raw Rock Salt",
 `salt:raw_rock_salt_block` "Block of Raw Rock Salt", **`salt:rock_salt_ore` is already "Rock Salt"**,
 `salt:salt_block` "Salt Block", `vintagedelight:salt_dust` "Salt", `salt:salt_lamp` "Large Salt Lamp" (namechanges.js)
-next to Vintage's "Salt Lamp" and its 16 coloured lamps. Recipes (`creativedelight/salt.js`): raw rock salt -> 4 salt;
+next to Vintage's "Salt Lamp" and its 16 colored lamps. Recipes (`creativedelight/salt.js`): raw rock salt -> 4 salt;
 heated mixing 1000 mB water -> 2 salt (`water_salt`); Large Salt Lamp = 7 Salt Block + glowstone + deepslate tiles.
 
 | Step | What | Notes |
@@ -360,7 +360,7 @@ heated mixing 1000 mB water -> 2 salt (`water_salt`); Large Salt Lamp = 7 Salt B
 | G2a | Renames: Raw Rock Salt -> **Rock Salt**; Block of Raw Rock Salt -> **Rock Salt Block**; Salt Block -> **Salt Dust Block**; licks -> "{Waxed} {Lightly/Well/Heavily} Licked Rock Salt Block" (waxed stage 0 "Waxed Rock Salt Block"); Vintage salt decor (Salt Bricks, Salt Brick Slab/Stairs/Wall, Salt Pillar) -> "Smooth Salt ..."; Mixed Salt names unchanged. | Lang only, ids unchanged (CD lang overlays and namechanges.js). **Clash:** the ore is already "Rock Salt" (G6-7). "Salt Dust Block" is made of an item named "Salt" (G6-8). The Vintage decor list and whether "Smooth Salt Block" and the lamps are in it: G6-9. JEI info text, salt.md, the changelog and tooltips that name these blocks all need the new names. |
 | G2b | The lick's root block becomes the **Rock Salt Block**; a Rock Salt Block is **4 Rock Salt**. Rock Salt (the item) refills a lick by hand or dispenser. **Salt layer refilling is removed.** | `SaltLick.SALT_BLOCK_ID` -> `salt:raw_rock_salt_block`, `isSalt` -> rock salt item, waxing applies to the new root. 4 stages = 4 Rock Salt, so one wear = one Rock Salt and one refill = one stage. Check the current Rock Salt Block recipe (upstream may be 9) and change it to 4 both ways. **Conflicts with built and planned steps:** B7 (salt dust and layer refill, built), B5 (licking eats layers on top first, built), E4 (falling layers exist mainly to refill licks), and changelog bullets "A salt layer placed on a licked salt block refills it", "Salt in a dispenser restores a licked salt block", "Licking a salt block with salt layers on top eats the top layer". Decision G6-10 covers B5, E4, the last-wear drop (salt or rock salt) and existing Salt Dust Block licks in worlds (they stop being licks). |
 | G2c | Salt / acid: remove `water_salt` (heated water -> 2 salt); add heated water + Rock Salt Block -> Rock Salt Block + 2 salt. | Through `global.NCH` (`createMixing` with the block both in and out). **Integration with D4:** acid-in-water was made unheated only because heated `water_salt` used up water poured first. With `water_salt` gone that reason ends: keep D4 unheated, or make it heated like #82 (G6-11). Check that no heated recipe with flesh or redstone and a Rock Salt Block in the basin matches both. Amount: 1000 mB per 2 salt as now unless the owner says otherwise. Cauldron evaporation (8, 5, 3) is unchanged. |
-| G2d | Large Salt Lamp takes the Rock Salt item instead of Salt Block, and a wooden slab instead of deepslate tiles. | Same 3x3 shape, `S` = rock salt, `D` = `#minecraft:wooden_slabs`. Only The Salt's lamp; Vintage's coloured lamps are unchanged unless G6-9 says otherwise. |
+| G2d | Large Salt Lamp takes the Rock Salt item instead of Salt Block, and a wooden slab instead of deepslate tiles. | Same 3x3 shape, `S` = rock salt, `D` = `#minecraft:wooden_slabs`. Only The Salt's lamp; Vintage's colored lamps are unchanged unless G6-9 says otherwise. |
 | G2e | Salt Melt stacks to 16 when its uses match. | Vanilla never stacks a damageable item (`Item.Properties.durability` forces stack size 1). Move uses to an NBT counter with its own durability bar (`isBarVisible`, `getBarWidth`), max stack 16, so equal counters stack through NBT equality. **Hole:** using one item from a stack of 16 has to split it off (like a potion) or the whole stack shares one counter (G6-12). The dispenser path needs the same split. Existing Salt Melts with vanilla damage need a one-time convert on load (inventory tick). |
 | G2f | Salt Melt and its mechanics apply to IW snowy blocks (the "snowy" forms that only exist under snow). | Covered by E1 row 1 once built: `meltStep` and the Salt Melt use the same tags. Add explicit rows (Salt Melt on snowy stone stairs keeps its shape) to SQ-PS15-08. Nothing extra to build. |
 | G2g | Salt JEI: displayed yield follows the configured yield; refresh other out-of-date JEI tabs, salt's included. | **Which yield and which tab is not known** (G6-13): the CD salt config has no yield key; yields live in `salt.js` (4 per rock salt, 2 per 1000 mB) and the evaporation loot tables (8, 5, 3). JEI recipe pages already read recipes, so the stale one is probably an info page or The Salt's evaporation category. Needs a list of tabs from the owner, or a JEI sweep against the recipes as its own investigation row. |
@@ -399,7 +399,7 @@ netherite chestplate for toughness and the shield for knockback resistance; the 
 | G5a | Back to a single page: `doublePage` default off. | Existing clients keep their own config value; the owner's client needs it set by hand (mirror to `configs_edited/`). Should the "Counting foods" and "Older foods" split go back too? (G6-23). |
 | G5b | Book page size scaled by config, default **125%**. Icons and text that run off the book are fixed by the scale. | Client config `[dietLog] bookScale = 1.25`. Apple Pie's UI kit draws in fixed pixels, so this is a pose-stack scale around the whole page. Check narrow screens (the 380 px rule of #31). |
 | G5c | Diet buffs screen: slots laid out horizontally; space between the permanent buffs and their label; the "needs diversity" line replaced by a progress bar across the full width of the slots, with tick marks and diversity labels at each slot. A green fill runs from 0 to the current diversity and is full at the highest slot's diversity on that screen. | "Diet buffs screen" is assumed to be the effect screen (11.2, P key). If it is the Diet Log ladder page instead, say so (G6-24). The new bar is separate from the windowed Diet Log bar (#32). |
-| G5d | Icons: permanent unlock = Monobank `replacement_lock` if loaded, else an awkward potion (configurable); permanent buff = Create Recycling `diamond_shard` (mod id `create_crush_everything`) if loaded, else a diamond; knockback resistance = shield, shown in the key; toughness = netherite armour; unlockable slot = Supplementaries Squared `metal_frame` if loaded, else an item frame. | Shield and netherite already used (#37); "show in key" means adding the shield to the legend. All three mods are in the pack today. Item ids go through the client config with a fallback, not `global.item` (Java client code). |
+| G5d | Icons: permanent unlock = Monobank `replacement_lock` if loaded, else an awkward potion (configurable); permanent buff = Create Recycling `diamond_shard` (mod id `create_crush_everything`) if loaded, else a diamond; knockback resistance = shield, shown in the key; toughness = netherite armor; unlockable slot = Supplementaries Squared `metal_frame` if loaded, else an item frame. | Shield and netherite already used (#37); "show in key" means adding the shield to the legend. All three mods are in the pack today. Item ids go through the client config with a fallback, not `global.item` (Java client code). |
 
 ### G6. Decisions (owner round 2026-11-16; G7 holds the design that follows)
 
@@ -493,7 +493,7 @@ cryosol). Gated on G7.1's method choice.
   melting as a full block (whole block per melt). 1115b F2 (snow keeps `solidBelowFull`) and its default overrides are
   dropped for snow. Rewrite the D table, harness cases and SQ-PS15B-10/-11 at build.
 
-**G7.5 All layers fall and stack (E4 generalised).** Every layer block (snow layers, leaf piles, bamboo leaves and its
+**G7.5 All layers fall and stack (E4 generalized).** Every layer block (snow layers, leaf piles, bamboo leaves and its
 full version, salt, IW sand, red sand and ash, Supplementaries ash and fodder, IE sawdust) falls when unsupported and
 merges on landing, like IW's falling layers. E4's rules apply to all of them (merge capped at max, remainder above, item drop
 if it cannot place, pistons, chunk load, `layersFall` switch). Snow merging to 8 becomes a snow block (G7.4). The salt
@@ -516,7 +516,7 @@ torchConsumed = true`). In rain (exposed to sky, raining): the extinguish sound,
 lit state is set the way flint and steel does it.
 
 **G7.9 Bamboo leaf drops and full bamboo leaves.**
-- Source: grown bamboo's leafy top blocks (`leaves` = small or large). The 4 horizontal neighbours of each leafy block are
+- Source: grown bamboo's leafy top blocks (`leaves` = small or large). The 4 horizontal neighbors of each leafy block are
   "pseudo leaf" positions that behave like a leaf block for IW's leaf pile drops: periodic drop with the same chance as
   other trees, dropping Twigs bamboo leaves. A position occupied by any block other than air does not drop.
 - Trigger: bamboo random-ticks only while it can grow (stage 0), so a grown stalk never ticks. Hook IW's leaf-pile timer,
@@ -524,7 +524,7 @@ lit state is set the way flint and steel does it.
   reading IW's leaf pile code.
 - Full block: a new 8-layer block whose layers 5 to 8 are the 4-layer model stacked on a full 4-layer base (model JSONs
   only, no new texture). Placing a 5th layer on 4 Twigs bamboo leaves converts to the new block; it fills and walks like any
-  leaf stack (G7.4). Id in Creative Compat's namespace (ids follow the owning mod; check Twigs' licence before copying
+  leaf stack (G7.4). Id in Creative Compat's namespace (ids follow the owning mod; check Twigs' license before copying
   its models).
 
 **G7.10 Snow melts by layer.** A melt removes one snow layer; the chance per layer is its own key (`[melting]
@@ -608,8 +608,8 @@ shield icon missing from the key (the knockback resistance entry); the effect sc
     owns seasons and time; memory `creative-delight-routing`) and weather (rain, clear sun). Covers: hook point (random
     tick target side, or G7.1's chosen method), cost per tick, what is readable on the server (season API, sky light, day
     time), interaction with snowfall placing snow back, and with vanilla light melting (off).
-  - Audit 2 (behaviour): a table of every biome in the pack (vanilla and Terralith and the rest) with today's melting and
-    freezing behaviour (snowfall, ice formation, the IW snowy and frosty ticks, Melting's tags) and what ambient melting
+  - Audit 2 (behavior): a table of every biome in the pack (vanilla and Terralith and the rest) with today's melting and
+    freezing behavior (snowfall, ice formation, the IW snowy and frosty ticks, Melting's tags) and what ambient melting
     would change there.
   - Until the audits are done and approved: packed ice, blue ice, cryosol and IW permafrost **never melt from ambient
     conditions**, and no ambient melt path is added for any block. Heat-source melting (G7.3) is unaffected.
@@ -620,7 +620,7 @@ melting except from salt**: no fire, no lava, no ambient, no heat-source (G7.3) 
 sources. Salt keeps the rules already decided: packed ice and cryosol are saltable (a step down: ice, dirt); blue ice
 and permafrost are not saltable (E1, G7.11), so in practice they do not melt at all until the audit. Build: drop them
 from the fire and lava target path (a `salt_only` flag on `meltable_slow`, or move the fire and lava tiers off them),
-and keep them out of `extraRandomTickBlocks` (nothing needs to tick them). Current behaviour changes: packed and blue
+and keep them out of `extraRandomTickBlocks` (nothing needs to tick them). Current behavior changes: packed and blue
 ice stop melting beside fire and lava (today `slowFireRange` 1, `slowLavaRange` 2). Changelog bullet at build.
 
 ## Not decided or not in this pass
@@ -628,7 +628,7 @@ ice stop melting beside fire and lava (today `slowFireRange` 1, `slowLavaRange` 
 Still on the owner list, unchanged: SQ-QN-02 elytra feel (LOOK), CQ-PWG-66 hookup rewrite, SQ-NSM-04 fixture (tooling),
 SQ-RDX-13 (needs a pre-11-02 save), Power Grid client joining a server without it (registry crash, owner note),
 SQ-CDNS-12 / CQ-HOP-01 notes, SQ-HH-474 (see B7). SQ-HOP-05 waits on the pass-through session (Compat owner).
-Behaviour-neutral fixes from the run (SQ-MELT-09, -P1, SQ-SPD-08, SQ-BBQW-02s, SQ-SLK-01) are already built and re-run.
+Behavior-neutral fixes from the run (SQ-MELT-09, -P1, SQ-SPD-08, SQ-BBQW-02s, SQ-SLK-01) are already built and re-run.
 The write-back of the run's "to write back" rows (row text fixes) is separate.
 
 ## Done means (per step)

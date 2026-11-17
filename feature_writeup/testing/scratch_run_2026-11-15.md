@@ -1,7 +1,7 @@
 # Scratch run 2026-11-15 (r1115)
 
 Owner request 00:10: "act as the scratch test orchestrator; coordinate with the passthrough agent and give its work
-priority; run the tests in order; pass bugs to agents to fix when it would not change behaviour, note otherwise."
+priority; run the tests in order; pass bugs to agents to fix when it would not change behavior, note otherwise."
 Main session (creativeengineering2-82 [319bcc]) as orchestrator; each phase runs in one runner subagent (one at a time,
 one game JVM at a time). Runners append to sections 7 and 8; the orchestrator keeps sections 1, 4 and 9 current.
 
@@ -39,7 +39,7 @@ Taken, in queue order (everything added or rewritten since r1114 ended, 2026-11-
 
 Not taken: client rows pinned until wave 8+ (queue PINNED note, 2026-11-01); SQ-WO-34 (inotify limit, owner).
 
-Bug policy (owner): a FAIL whose fix does not change behaviour (crash, error, missing lang, tooling, batch fault, code
+Bug policy (owner): a FAIL whose fix does not change behavior (crash, error, missing lang, tooling, batch fault, code
 not doing what its writeup already says) goes to a fix agent; anything needing a value or design choice is noted as a
 TODO row for the owner. Fix agents build only; the orchestrator installs between boots (no JVM up) and queues a rerun.
 
@@ -80,7 +80,7 @@ Batches in `tools/scratch_query/batches/r1115/<phase>_*.qb`; results `perf/runs/
 
 Done 2026-11-15 by the write-back agent (documentation only, nothing booted, built or installed):
 - Queue: Run log entry r1115 and header line; "Latest" pointer moved to r1115. Row texts fixed from section 9:
-  SQ-HH-328 (census box and forceload centred on the maze), SQ-PWG-54r (`controller=none` not a criterion), SQ-PWG-06
+  SQ-HH-328 (census box and forceload centered on the maze), SQ-PWG-54r (`controller=none` not a criterion), SQ-PWG-06
   (thyratron heater 6.5 V), SQ-SPD-01, -02 (24 planted, itemCount 6), SQ-HH-482 (cow b note), SQ-SY-14 (`35 crops`),
   SQ-SY-15 (sweet potato ripe `age=5`), SQ-SLK-01c (air also passes), SQ-DEP-09a (pancakes 4 + bowl), SQ-DEP-09b (four
   cascades named, Quark through Botania), SQ-DEP-02 (Keg mixin, item_dict and grape bush WARNs expected), SQ-HOP-01
@@ -159,8 +159,8 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 - 00:47 CDW3 `NOSWAP=1 prep_srv.sh $S/p1cdw3 p1cdw3 B level-seed=424242`, endersdelight removed, logMissesAtLeast 0
   (srv only); Done 76.7 s; `p1_cdw3.qb`: off none; corn maze `[locate]` hit at -3408 -639 after 3 misses, 297
   candidates, 39446 ms. The census box of the row (M-2..M+36) holds one quadrant (the locate point is the maze centre:
-  the centre chest sits on it), hence oak_fence 8 on all three seeds (and in r1114): `p1_cdw3b.qb` (SQ-HH-328b) over
-  M-40..M+40: corn 1026, oak_fence 16, 8 chests (centre table, 4 corn_maze tables). Row box to fix at write-back.
+  the center chest sits on it), hence oak_fence 8 on all three seeds (and in r1114): `p1_cdw3b.qb` (SQ-HH-328b) over
+  M-40..M+40: corn 1026, oak_fence 16, 8 chests (center table, 4 corn_maze tables). Row box to fix at write-back.
   Stopped 00:53:16, JVM gone 00:53:27; game_jvms.sh empty. Runner-1 done.
 - 00:55 runner-2 (phase 2, SQ-PWG P11 fixes): batches `batches/r1115/p2_r1.qb` (P11B boot check, -91, -97, -43 servo
   part, -06 with the rewritten thyratron, prereqs -76, -78, -79, then -80, -80b, -82, and -54 at X 1340 for -54r) and
@@ -201,7 +201,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   water 17 to 170 ticks; packed by fire and at 2 from lava stepped, at 2 from fire and 3 from lava kept); -05, -07,
   SALT2-06b PASS; -08 FAIL (bot click with `salt:salt`: use SUCCESS, blue ice unchanged, stack turned into
   `vintagedelight:salt_dust`, later clicks FAIL; the salt member calls `tryMeltFromItem` only from its dispenser
-  behaviour). -02, -03, -06 qrun FAIL: every distance-4 control melted, and so did the unlit campfire, sea lantern,
+  behavior). -02, -03, -06 qrun FAIL: every distance-4 control melted, and so did the unlit campfire, sea lantern,
   redstone torch, jelly torch and unlit brazier ice, also at randomTickSpeed 3, minutes after placement. Not Immersive
   Weathering (its overworld ice melt needs day; time 18000). Taken as Serene Seasons' seasonal surface melt (heightmap
   top, melting.md 6): `p3_a1r.qb` reruns -01, -02, -03, -06 part 1, SALT2-06 overworld with a glass block over every
@@ -239,7 +239,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   (-08 on the Nether roof y 128), SQ-HH-1574, -1575, -309, -1593, -1505, -1507, -1534, SQ-SLK-02, -03, -04, SQ-HH-434,
   -440, -440b, -482, SQ-SLK-01, SQ-FDI-03, -03b, SQ-BBQW-02s (+ -02), SQ-CBW-03) and `p4_b1.qb` (fresh B world, SQ-CDW-02
   last). SQ-DEP-02, SQ-MIN-03: phase 7. CQ-SPD-01, CQ-SLK-01: client, deferred. Code reading: the seed container 5x5 is
-  centred on the block in front (plan_bugfix_1114 1), so a horizontal dispenser stands in its own 5x5: SQ-SPD-01/-02 can
+  centered on the block in front (plan_bugfix_1114 1), so a horizontal dispenser stands in its own 5x5: SQ-SPD-01/-02 can
   plant 24, not 25.
 - 02:31 A1 `NOSWAP=1 prep_srv.sh $S/p4a1 p4a1 A difficulty=normal` (378 jars, unlisted only cdevperfbot), probes
   zz_hh_crow, zz_hh_gear, zz_zc4, zz_c2, zz_zp, zz_zact; srv toml `[salt] saltLickInterval 200, saltSearchInterval 20,
@@ -360,7 +360,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   dependant removed too.
 - 05:07 A0 `NOSWAP=1 prep_srv.sh $S/p7a0 p7a0 A difficulty=normal` (378 jars, unlisted only cdevperfbot), probes zz_c3,
   zz_hh2, zz_zqn; boot 05:07:54, Done 05:09:03 (pid 3787739). `p7_a0.qb`: SQ-DEP-09a all ten `creativedelight:mods/*`
-  packs enabled; corn maze 10 rolls 24 ids (corn, seeds, cornbread, popcorn, caramel apple, apple cider), centre 10 rolls
+  packs enabled; corn maze 10 rolls 24 ids (corn, seeds, cornbread, popcorn, caramel apple, apple cider), center 10 rolls
   21 ids; `/loot spawn` Dropped 5; jam jar 3 lemon_jelly, clover 1 buzzier_bees clover; ERR lines 0. Pancakes
   `servings=2` give 4 `supplementaries:pancake` + bowl, not 3: the stack keeps Rustic's numbering (servings = eaten, the
   CD table drops 6 - servings), so the row's "3" is a row-text error (batch now expects x4). `p8_a0.qb` (phase 8 extra on
@@ -513,7 +513,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
   never registers; hold it (`cli_do.py walk:0.3:space`). (2) A chat command typed right after closing a screen, or
   while the client hitches after a join, can lose the opening `t`: the letters then act as hotkeys (SeasonHud options
   opened twice) or go out as a chat message; screenshot before a command burst and space commands 1 s apart after a
-  join. (3) `zc3 shoot PerfEval` works on the SP player: wall portals from 2.5 blocks at pitch 20 sit at centre y -59
+  join. (3) `zc3 shoot PerfEval` works on the SP player: wall portals from 2.5 blocks at pitch 20 sit at center y -59
   (walkable from a superflat floor); flatter shots land at -59.5 (bottom below the floor, not walkable); a shot onto
   an existing portal's spot returns false. (4) Gun portals are gone after quit-and-reload (despawn by design), so
   "repeat after a reload" needs fresh portals. (5) Vanilla flint and steel lights soul fire and no portal (Creative
@@ -630,7 +630,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 | SQ-VH-06 | PASS | B1 (Heap at -10 6): bedrock 2304/2304 at y 0 and 127; interior Heap cells (27 cells all Heap): netherrack 0 of 142461; 945 netherrack only in border cells. Floors flesh+porous 1942/2926, ceilings 2767/3866: rest structure (fortress bricks) and Heap decor (tendons, hair, pus); natural non-flesh floor 51 (97 %), ceiling 35 + 258 tendons |
 | SQ-VH-06b | PASS | B1: cave_air 4704 in Heap cells; `minecraft:nether_carver_replaceables` holds flesh and porous_flesh |
 | SQ-VH-06c | PASS (finding) | B1: nether_wastes, crimson, warped, soul sand, basalt keep vanilla blocks; wastes quartz 267, gold 74; flesh 0 in four biomes. Warped box 32 blocks from the Heap: 2212 flesh in warped cells, 213 interior, all within 12 blocks of a Heap cell, zoomed biome warped at each: spill at the Heap border (features), not the surface rule (qrun FAIL was the per-cell regex) |
-| SQ-HH-328 | PASS | three seeds, shipped 120 s: 8675309 77 s (4 misses, 264 candidates, 3315 blocks); 20261115 7.9 s (18 candidates); 424242 39.4 s (297 candidates); centred census (seed 424242): corn 1026, oak_fence 16, centre chest `corn_maze_center`. Row box M-2..M+36 covers one quadrant (fence 8): batch/row fix. `zq under` lists no corn_maze start (probe gap; under-base check not judged) |
+| SQ-HH-328 | PASS | three seeds, shipped 120 s: 8675309 77 s (4 misses, 264 candidates, 3315 blocks); 20261115 7.9 s (18 candidates); 424242 39.4 s (297 candidates); centered census (seed 424242): corn 1026, oak_fence 16, center chest `corn_maze_center`. Row box M-2..M+36 covers one quadrant (fence 8): batch/row fix. `zq under` lists no corn_maze start (probe gap; under-base check not judged) |
 | SQ-CDW-01 | PASS | CDW1/2/3 (myrtrees, fruitsdelight, endersdelight removed): Done, no datapack error; off [myrtrees] / [fruitsdelight] / none; srv kubejs/data/creativedelight has no worldgen |
 | SQ-CDW-03b | PASS | CDW2: 17 skip lines, all `<rule>: needs fruitsdelight` (hamimelon + 16), 0 naming a fruitsdelight feature, apple not skipped |
 | SQ-PWG-91 | PASS | p2_r1 (-18): all four attaches SUCCESS, stone PASS x2; helpers south/east x3; drops (B36) every read lists tile + attachment: lamp 2/2 (tile, factory_light, light_bulb), connector 2/2, junction and solar 2/2 after wrench and reattach; wrench lamp gives bulb + light, others their attachment |
@@ -658,12 +658,12 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 | SQ-SALT2-06b | PASS | Nether, survival bot: placed snow layer and snow block air at once (no state seen by the per-tick watch), stacks 4 -> 3; setblock powder snow air; dispenser placed and melted a snow block (Items 4 -> 3, no item entity). Particles not checkable on a server |
 | SQ-AZW-01 | PASS | rerun: 30 `quark:azalea_log` in the tree box, 0 oak log; give keeps `quark:azalea_log` x4; `[removedWoods] 4 woods merged into oak`; no `[item_dict] Missing`, no sunflower_stem line |
 | SQ-DCM-02 | PASS | rerun: 0 KubeJS errors after /reload; `[absent mods]` names none of towns_and_towers, hopo, unwrecked_ships, yuushya, cozys-improved-cats; recipes 32042 vs pack dump 32168, the 126 missing are Power Grid (gate jar not in scratch boots) |
-| SQ-SPD-01 | PASS (row text) | 24 wheat over the 5x5, itemCount 30 -> 6, pouch in slot 0, no Exception. The dispenser stands in its own 5x5 (centre = block in front, plan_bugfix_1114 1), so 25 is unreachable sideways: row text fix |
+| SQ-SPD-01 | PASS (row text) | 24 wheat over the 5x5, itemCount 30 -> 6, pouch in slot 0, no Exception. The dispenser stands in its own 5x5 (center = block in front, plan_bugfix_1114 1), so 25 is unreachable sideways: row text fix |
 | SQ-SPD-02 | PASS (row text) | front block farmland: 24 wheat at -59, 0 at -60, itemCount 6 (dispenser cell, as -01) |
 | SQ-SPD-03 | PASS | 4 wheat; pouch in slot 0 with `tag: {}` (no storedItem / itemCount) |
 | SQ-SPD-04 | PASS | over stone: 0 wheat, itemCount 30, pouch in slot 0 (fail-click sound not readable on a server) |
 | SQ-SPD-05 | PASS | empty pouch: 0 wheat, pouch in slot 0 |
-| SQ-SPD-06 | PASS | bundle: 1 wheat on the centre; Items wheat_seeds 2b then dirt 1b; bundle in slot 0 |
+| SQ-SPD-06 | PASS | bundle: 1 wheat on the center; Items wheat_seeds 2b then dirt 1b; bundle in slot 0 |
 | SQ-SPD-07 | PASS | dirt first: nothing planted, NBT unchanged |
 | SQ-SPD-08 | FAIL | Nether pouch of nether wart plants 0 at y 129 and y 61, itemCount stays 10; overworld soul sand control plants 10; Nether dispenser fires (cobblestone 3 -> 2); `SeedContainerDispense.plantOne` fake player cached by profile (evidence restored by the orchestrator from runner-4's report, 03:25) |
 | SQ-HH-1574 | PASS | rerun: no crash; 20 wheat under the down-facing dispenser; pouch kept with `tag: {}` |
@@ -693,7 +693,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 | SQ-HOP-02 | PASS | A1: use CONSUME, `hops_vine[north=true,age=0]` Test passed, hand hops x1 |
 | SQ-HOP-03 | PASS | A1 (mid autumn, sky 15): age 0 -> 1 -> 2 -> 3 within 15 ticks at randomTickSpeed 3000 |
 | SQ-HOP-04 | FAIL (owner) | age 3 + stick x3: 2, 1, 1 hops, age 1 each; age 2: 0 hops, age 1. Age 1 + stick: `use` PASS from the vine, then Supplementaries places `supplementaries:stick` in the vine's space (vine replaced, -04x). Any placeable item does the same (vines are replaceable) |
-| SQ-HOP-05 | FAIL | -05x: 1st shears use = Compat VineShearing (`fertile=false`, event cancelled, STERILIZED untouched); 2nd use toggles `sterilized=true`, 3rd back to false. `fertile=false` does not stop growth (HopsVineBlock overrides randomTick): 606 grew age 1 -> 3 at fertile=false |
+| SQ-HOP-05 | FAIL | -05x: 1st shears use = Compat VineShearing (`fertile=false`, event canceled, STERILIZED untouched); 2nd use toggles `sterilized=true`, 3rd back to false. `fertile=false` does not stop growth (HopsVineBlock overrides randomTick): 606 grew age 1 -> 3 at fertile=false |
 | SQ-HOP-06 | FAIL (owner) | B1 seed 8675309: 0 `hops_vine` over 3 forest boxes (site 2: 256 chunks, 2572 oak + 2634 birch logs; site 1b 256 chunks; site 3 225 chunks). `/place feature creativedelight:wild/wild_hops` at 25 forest points (16 apart): placed once (3 vines), 24 "Failed". Carrot comparison void: wild carrots 0 and adzuki 0 in the same boxes although forest is in both crop tags |
 | SQ-HOP-07 | PASS | A1: use SUCCESS, `lattice[age=1,grape=hops]`, hand x1 |
 | SQ-HOP-08 | PASS | A1: open lattice age 1 -> 4 in 3 ticks of growth at 3000; dark one (block 0, sky 0) stayed age 1 |
@@ -710,7 +710,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 | SQ-MELT-P1b | PASS (1 clause inconclusive) | MSPT 3.193 (glacier) vs 3.235 ms (control); Melting#onRandomTick 0.30 % / 0.10 % of Server thread samples (P1: 1.00 / 1.19 %); no ConfigValue frame under onRandomTick in the boot (P1: 267). Toml-edit clause: the Forge config watcher never reported a change (no "Config file ... changed" debug line for 4 edits; watcher thread in ModernFix NightConfigWatchThrottler), so a live edit cannot be judged here; a restart picks the value up (rare ice row) |
 | SQ-HH-304 | FAIL (owner) | rewritten row: sum of hops_vine counts 0 over the sites (see SQ-HOP-06); site 1 first try: `forceload` "Too many chunks (289)" for an unaligned 256-block box (batch: boxes now 240 blocks) |
 | CQ-HOP-01 | deferred | client |
-| SQ-SPD-08b | PASS | p6 A1 (CD 03:18 fix-2): Nether roof y 129 pouch 10 wart, Nether y 61 pouch 10 wart, overworld soul sand control 10; all three pouches `tag: {}` in slot 0; Nether bundle 1 wart on the centre (711 61 508), bundle wart 3 -> 2 |
+| SQ-SPD-08b | PASS | p6 A1 (CD 03:18 fix-2): Nether roof y 129 pouch 10 wart, Nether y 61 pouch 10 wart, overworld soul sand control 10; all three pouches `tag: {}` in slot 0; Nether bundle 1 wart on the center (711 61 508), bundle wart 3 -> 2 |
 | SQ-BBQW-02t | PASS | p6 A1: stick on slot 0 (beef) and slot 1 (empty): `useat main CONSUME; main now 1 minecraft:stick` both; basin `0:1 minecraft:beef`; air above; 0 `supplementaries:stick` in the 5x3x5 box |
 | SQ-BBQW-02 | PASS | p6 A1 (same boot): 2 beef + stick + cabbage off hand gives `raw_beef_skewer` |
 | SQ-SLK-01c | PASS | p6 A1: cow from 18 reaches the salt (s3 minD 1.99, StayNearSaltGoal seen); block `minecraft:air` after 1600 ticks (batch regex wanted a licked stage only). Follow-up SQ-SLK-01d (p6_a2, 5 s samples): salt_block 10 s, `lightly_licked` from about 15 s, then well, heavily, air from about 50 s (4 licks in 80 s) |
@@ -723,7 +723,7 @@ Done 2026-11-15 by the write-back agent (documentation only, nothing booted, bui
 | SQ-SY-20 | PASS | berry cane pick pearls 1.50 (netherrack) / 1.93 (Rich Soul Soil) |
 | SQ-SY-21 | PASS | `[botany_pots] 3 soils set (Rich x1.1, Fertile x1.2)`; wheat pots (soil and seed put in by `/syt potset`): required 7999 Fertile Soil, 8727 Rich Farmland and Rich Soil, 9600 dirt; growth 120 -> 601 in 20 s |
 | CQ-SY-22 | deferred | client |
-| SQ-DEP-09a | PASS (row text) | p7a0 full pack: all ten `creativedelight:mods/*` packs enabled; corn maze 10 rolls 24 ids incl. corn_delight corn / cornbread / popcorn, caramel apple, vinery apple_cider (centre 21 ids); jam jar 3 lemon_jelly; clover 1 buzzier_bees clover; ERR 0. Pancakes `servings=2` drop 4 `supplementaries:pancake` + bowl (servings = eaten in Rustic's numbering, table gives 6 - servings): the row's "3" is wrong |
+| SQ-DEP-09a | PASS (row text) | p7a0 full pack: all ten `creativedelight:mods/*` packs enabled; corn maze 10 rolls 24 ids incl. corn_delight corn / cornbread / popcorn, caramel apple, vinery apple_cider (center 21 ids); jam jar 3 lemon_jelly; clover 1 buzzier_bees clover; ERR 0. Pancakes `servings=2` drop 4 `supplementaries:pancake` + bowl (servings = eaten in Rustic's numbering, table gives 6 - servings): the row's "3" is wrong |
 | SQ-DEP-09b supplementaries, upgrade_aquatic, quark, immersiveengineering | SKIP (cascade) | FML: supplementaries <- suppsquared; upgrade_aquatic <- alexsabnormalities; quark <- quarkengineering; immersiveengineering <- quarkengineering, more_immersive_wires, compressedengineering, controlengineering, immersiveposts, immersivepetroleum, kubejs_immersive_engineering, tmted |
 | SQ-DEP-09b buzzier_bees, create_factory, hostiledelight, moredelight | PASS | Done; ERR 0 naming the mod; pack not listed; corn maze items (create_factory: two mod_items WARNs only); `placed_omelette` / `placed_suspicious_bacon_and_eggs` Unknown block type, zq 0 |
 | SQ-DEP-09b fruitsdelight, corn_delight | PASS | group B new level: Done 80 s; ERR 0; pack not listed; corn_delight: six corn maze mod_items WARNs, 5 rolls 16 ids |
@@ -800,17 +800,17 @@ soil 0.8.
 | ID | Result | Evidence |
 |---|---|---|
 | SQ-PTH-01 | PASS | no mixin error; `[surface.passthrough]` has enabled, arrowLifeTicks, arrowLongLifeCap and 11 tier tables |
-| SQ-PTH-02 | PASS | (-02, -02r) lone web -0.500, cube centre -0.650, IE razor wire -0.500 (and hurts); a pushed zombie crosses a lone web on the same path as the open-grass control (no stuck stop); barbed wire hurts only while moving (20 -> 14.2) |
-| SQ-PTH-03 | FAIL | (-03, -03s, 100 hp zombies, 20-block drops) plain 16 dmg; into a lone web at ground level 0 (expected about 0.85x), 3 stacked webs 0 (expected about 0.61x), cube 0 and hangs (ok). Per-tick: fall distance 14.55 at y -54.55 -> 1.1 on entering a lone web 5 blocks up (then 3 dmg from the 5 blocks below): the web RESETS fall distance instead of scaling it. Suspect `PassThrough.newCellsFallFactor` / `resetFall` (reset should be dense-only, `denseResetsFall`) or vanilla `Entity.makeStuckInBlock` fallDistance reset not cancelled by `MakeStuckInBlockMixin` |
+| SQ-PTH-02 | PASS | (-02, -02r) lone web -0.500, cube center -0.650, IE razor wire -0.500 (and hurts); a pushed zombie crosses a lone web on the same path as the open-grass control (no stuck stop); barbed wire hurts only while moving (20 -> 14.2) |
+| SQ-PTH-03 | FAIL | (-03, -03s, 100 hp zombies, 20-block drops) plain 16 dmg; into a lone web at ground level 0 (expected about 0.85x), 3 stacked webs 0 (expected about 0.61x), cube 0 and hangs (ok). Per-tick: fall distance 14.55 at y -54.55 -> 1.1 on entering a lone web 5 blocks up (then 3 dmg from the 5 blocks below): the web RESETS fall distance instead of scaling it. Suspect `PassThrough.newCellsFallFactor` / `resetFall` (reset should be dense-only, `denseResetsFall`) or vanilla `Entity.makeStuckInBlock` fallDistance reset not canceled by `MakeStuckInBlockMixin` |
 | SQ-PTH-04 | PASS | reinforced cobweb placed by bot P (block data owner P): P walks through with mod none, bot Q -0.500 in the cell |
 | SQ-PTH-05 | PASS | no phase 2 mixin error |
 | SQ-PTH-06 | PASS | 16 slow items and the -2 b/t diamond held in the web cell at different heights (y -56.0 to -56.99), NoGravity on; the three 0.1 b/t items drifted past the 1-block cell and fell (path never crossed it) |
 | SQ-PTH-07 | PASS | (-06r/-07r) after a restart the five items sit at the same positions, ng=true, `CreativeCompatPass: {StuckX..., PriorNoGravity: 0b}`; web removed: all at y -60, ng=false. First try: the -06 items despawned at their vanilla 5 min before the restart |
 | SQ-PTH-08 | PASS | (-08r) orbs held in the lone web (one merged orb, same position over 8 s) with the bot 4 blocks away; walked in: collected, 25 XP. First try: the bot stood 4 blocks off while the orbs were still falling, they homed before reaching the web (row design) |
 | SQ-PTH-09 | PASS | bot falls in and stops (mod -0.65, y -58.07, top layer); sneak sinks 0.0525 b/t; jump from the bottom (-09r) climbs 0.07 b/t to the top; zombie hangs |
-| SQ-PTH-10 | PASS | tipped arrow (bot bow) hangs at the centre, bot walks in and picks up `tipped_arrow{Potion:slowness}`; no-pickup arrow hangs (not picked up, despawns at 1 min); (-10b) explosive arrow hangs at the centre, no blast, webs intact; centre broken: it drops into the cell below |
-| SQ-PTH-11 | FAIL | break group can stall in an outer cell: bot snowball and pearl thrown from z 995.5 stop in the edge cell (z 1000.69, speed x0.35 a tick: 1.44 -> 0.50 -> 0.17 ...) and hang, sinking 0.002 b/t, never breaking (pearl: no teleport); thrown from z 994.5 and 996.2 they break at the centre and the pearl puts the bot in the cube (-0.65). Splash potion settles and sinks 0.004 b/t (edge column); firework holds and explodes at its flight time; fireball explodes on entering the middle layer. Suspect `PassProjectiles.breakIn` (breaks only on reaching a surrounded cell; slowing in a dense outer cell can stop short of it) |
-| SQ-PTH-12 | PASS | bobber stops at the web centre and reels in; pickarang held past 10 s, picked up whole (`Damage: 0`); (-12c) web broken: item `quark:pickarang` Damage 0; thorn chakram held and picked up |
+| SQ-PTH-10 | PASS | tipped arrow (bot bow) hangs at the center, bot walks in and picks up `tipped_arrow{Potion:slowness}`; no-pickup arrow hangs (not picked up, despawns at 1 min); (-10b) explosive arrow hangs at the center, no blast, webs intact; center broken: it drops into the cell below |
+| SQ-PTH-11 | FAIL | break group can stall in an outer cell: bot snowball and pearl thrown from z 995.5 stop in the edge cell (z 1000.69, speed x0.35 a tick: 1.44 -> 0.50 -> 0.17 ...) and hang, sinking 0.002 b/t, never breaking (pearl: no teleport); thrown from z 994.5 and 996.2 they break at the center and the pearl puts the bot in the cube (-0.65). Splash potion settles and sinks 0.004 b/t (edge column); firework holds and explodes at its flight time; fireball explodes on entering the middle layer. Suspect `PassProjectiles.breakIn` (breaks only on reaching a surrounded cell; slowing in a dense outer cell can stop short of it) |
+| SQ-PTH-12 | PASS | bobber stops at the web center and reels in; pickarang held past 10 s, picked up whole (`Damage: 0`); (-12c) web broken: item `quark:pickarang` Damage 0; thorn chakram held and picked up |
 | SQ-PTH-13 | PASS | (watch lines) bot arrow lived 3609 ticks after landing, plain trident 3602, no-pickup arrow 1202; Loyalty trident returned to the bot |
 | SQ-PTH-14 | PASS | (-14e) 4th arrow 72 s after three: the oldest gone the same tick; (-14c/-14d) 4th after 10 s: the oldest (life 1165 at reboot) vanished at 1200 after the restart, the other three stayed. First try (-14/-14b) BATCH-FAULT: the 4th came after the first three had reached 3 min |
 | SQ-PTH-15 | PASS | (-15c) scratch `kubejs/data` exempt tag + /reload: snowball in `passthrough_exempt/all` and flies through the cube at 1.41 b/t; cart under a web slowed (0.1 to 0.3 b/t) and rolls on to x 1017. -15 / -15b BATCH-FAULT (datapack not enabled; lane outside the forceload after the restart) |
@@ -820,7 +820,7 @@ soil 0.8.
 | SQ-PTH-19 | PASS | overlap checks 0 (399 / 114 ids); sizes bush 10 (8 + salmonberry, cranberry), cobweb 6 (+ razor wire), grass 194 (119 + Botania), others as the intro; exempt 34 (Power Grid absent on the scratch server); projectile_scan no ungrouped / two-group ids |
 | SQ-PTH-20 | PASS | every tier sample in its tag only (incl. the new bush, cobweb, grass members; -20x sugar cane, quark rope with support); left-out five in none; rope tomatoes not rope; growth_any tomatoes yes, budding no |
 | SQ-PTH-21 | PASS | summon tests for snowball, potion, arrows, fire bomb, spider, fox as stated; pickarang, firework, revolver shot and mana burst discard themselves on the summon tick: their groups from the in-game /dumptags export (snag, linger, exempt + exempt/all) |
-| SQ-PTH-22 | PASS | rope tomatoes centre -0.500, budding age 1 none, age 2 -0.250, coffee stem age 0 -0.250, taiga grape bush -0.640 |
+| SQ-PTH-22 | PASS | rope tomatoes center -0.500, budding age 1 none, age 2 -0.250, coffee stem age 0 -0.250, taiga grape bush -0.640 |
 | SQ-PTH-23 | PASS | spider none in reinforced cobweb and barbed wire (pushed spider hurt 16 -> 8), zombie -0.500, fox none, poppy bush no modifier and a pushed zombie moves 0.225 per push vs 0.5 (vanilla stuck kept) |
 | SQ-PTH-24 | PASS | IE revolver shot (-24s, motion in the summon) and Blocky Siege cannon ball cross the cube at 1.41 to 1.44 b/t; snowball breaks at x 1011.7 |
 | SQ-PTH-25 | FAIL | 10 cases, tagged=true, enabled=true, json `cases` with median_ns / p99_ns, no fixture left, no watchdog (one 9 s "Can't keep up"); tick_air lowest (130 ns); tick_field 749 / 796 ns (green); **tick_web_cube 2029 / 2135 ns (red, budget 1000)**; tick_horse_field 2537 / 2853 ns. Record in blockrunner.md 3.10, caching per plan 7.2 is the owner's call |
@@ -832,7 +832,7 @@ soil 0.8.
 | CQ-PTH-02 | FAIL | denseWalk 0.2 saved in the server toml while walking: speed stayed 0.087 and modifier -0.500 (not applied; same watcher cause as SQ-PTH-27); no "moved wrongly" lines |
 | CQ-PTH-03 | PASS (partial) | ground walk through the bottom block of FD and Quark rope 0.150 (0.69x, row 0.75x); climbing vanilla; 20-block drop down a FD rope column at 0.15 b/t, hp 20 at the bottom. Sneak on the rope: the player slid down at 0.15 b/t (xdotool Shift_L hold may not register): owner look |
 | CQ-PTH-05 | PASS | single player, timing on: parser prints server (3.67 inside per tick, 0.98 % of tick) and client blocks (inside 0.34 per tick while walking the field, 0.39 %) |
-| CQ-PTH-04 | FAIL (partial) | wheat 7 middle `Walk Through: 0.40x (Dense neighbors) on Farmland (Til...`, `Neighbors: 8`; wheat 2 no line; lone web `Walk Through: 0.50x`, `Fall Through: 0.85x`; cube face cell `0.35x` / `0.20x (Dense neighbors)` (the centre cannot be targeted through the face); 3-layer pile no line, 5-layer pile no line because this server's minLayers was 6 after SQ-PTH-16; `[surface.wthit] passThrough = false` saved in the client toml did not remove the line after 8 s (live toml edit not applied). Vine and powder snow not captured (aim): owner look |
+| CQ-PTH-04 | FAIL (partial) | wheat 7 middle `Walk Through: 0.40x (Dense neighbors) on Farmland (Til...`, `Neighbors: 8`; wheat 2 no line; lone web `Walk Through: 0.50x`, `Fall Through: 0.85x`; cube face cell `0.35x` / `0.20x (Dense neighbors)` (the center cannot be targeted through the face); 3-layer pile no line, 5-layer pile no line because this server's minLayers was 6 after SQ-PTH-16; `[surface.wthit] passThrough = false` saved in the client toml did not remove the line after 8 s (live toml edit not applied). Vine and powder snow not captured (aim): owner look |
 
 ### Phase 12
 
@@ -851,23 +851,23 @@ Stopped by the owner at 15:01, before the first boot: no row ran.
 
 | ID | Finding | Route (fix agent / owner TODO) | State |
 |---|---|---|---|
-| SQ-VH-06c | Heap features (flesh, 2212 blocks) spill up to 12 blocks into a neighbouring warped forest; surface rule fine | owner TODO (design: is border spill acceptable) | to write back |
-| SQ-HH-328 | row census box M-2..M+36 covers one quadrant (locate point is the maze centre) | row text fix at write-back (batch side, no behaviour) | to write back |
+| SQ-VH-06c | Heap features (flesh, 2212 blocks) spill up to 12 blocks into a neighboring warped forest; surface rule fine | owner TODO (design: is border spill acceptable) | to write back |
+| SQ-HH-328 | row census box M-2..M+36 covers one quadrant (locate point is the maze center) | row text fix at write-back (batch side, no behavior) | to write back |
 | SQ-PWG-82 | arm takes the whole wire_connector x8 / resistor x8 stacks from the depots, circuit stalls at Assembly 1/3 (twice); r1114 passed only because parts were added after the lock | owner TODO (port choice: one-part pickup / held-stack fallback in `ArmInteractionPointMixin`/`ArmBlockEntityMixin`, or row back to "parts after the lock"); TODO `#83` | to write back |
 | SQ-PWG-80b | water-first: CD water_salt takes the water, then Create: The Salt salts the rotten flesh; no acid and the flesh is used up | owner TODO: add to `#82` | to write back |
 | SQ-PWG-54r | probe prints `controller=none` before and after restart; re-attach itself passes | row text fix at write-back | to write back |
 | SQ-PWG-06 | heater runs at 6.5 V (pwg12 batch fix), row says 6 V | row text fix at write-back | to write back |
-| SQ-MELT-08 | no per-click salt melt exists: a salt_dust click places a `vintagedelight:salt` layer (a salt source; the ice steps later at block rate); `tryMeltFromItem` is reached only from `SaltItemDispenseBehavior`, registered for `salt:salt` but returning at once unless `#forge:salts` (only salt_dust), so a salt:salt dispenser is a no-op and a salt_dust dispenser just drops dust (members/salt/.../Melting.java 147-163); salt.md / plan 3.8 say the click goes through meltStep | owner TODO (wire a salt_dust click / dispenser = new behaviour, or fix the writeup to the layer route) | to write back |
+| SQ-MELT-08 | no per-click salt melt exists: a salt_dust click places a `vintagedelight:salt` layer (a salt source; the ice steps later at block rate); `tryMeltFromItem` is reached only from `SaltItemDispenseBehavior`, registered for `salt:salt` but returning at once unless `#forge:salts` (only salt_dust), so a salt:salt dispenser is a no-op and a salt_dust dispenser just drops dust (members/salt/.../Melting.java 147-163); salt.md / plan 3.8 say the click goes through meltStep | owner TODO (wire a salt_dust click / dispenser = new behavior, or fix the writeup to the layer route) | to write back |
 | SQ-MELT-10 | boot warns `architects_palette:glowstone_cage_lantern` (light 3 lit, 0 unlit) is in the fire tag but does not random tick | owner TODO (make it source-driven or drop it from the fire tag) | to write back |
-| SQ-MELT-09 | Common's Rare Ice pseudo mixin logs `Error loading class: me/shedaniel/rareice/forge/blocks/RareIceBlock` when Rare Ice is absent | fix agent fix-1 (behaviour-neutral: mixin plugin skip) | built 02:27 (creativecommon-1.2.0, CommonMixinPlugin NEEDS_MOD rare_ice; Melting Values cache); installed 03:15 (installToMods rebuilt it: same three source files plus another session's unreleased.md); rerun SQ-MELT-09b, -P1b in phase 5 |
-| SQ-MELT-P1 | `Melting.onRandomTick` reads ForgeConfigSpec values every tick (267 JFR samples; Melting 1.0 % of server samples) | fix agent fix-1 (behaviour-neutral: cache config values, refresh on config load) | built 02:27 (creativecommon-1.2.0, CommonMixinPlugin NEEDS_MOD rare_ice; Melting Values cache); installed 03:15 (installToMods rebuilt it: same three source files plus another session's unreleased.md); rerun SQ-MELT-09b, -P1b in phase 5 |
-| SQ-SPD-08 | nether wart seed pouch in a Nether dispenser plants 0: `SeedContainerDispense.plantOne` uses `FakePlayerFactory.getMinecraft(level)`, cached by profile, so `UseOnContext` acts in the overworld | fix agent fix-2 (behaviour-neutral: explicit-level context) | built 03:18 (creativedelight-1.1.0, fix-2; changelog bullets added); install at the phase 5/6 boundary; reruns SQ-SPD-08b, SQ-BBQW-02t, SQ-SLK-01c in phase 6 |
-| SQ-BBQW-02s | stick on a barbeque basin with no recipe is placed as a `supplementaries:stick` block: `StorageBlock.use` tool branch returns PASS | fix agent fix-2 (behaviour-neutral: CONSUME, as its comment and writeup say) | built 03:18 (creativedelight-1.1.0, fix-2; changelog bullets added); install at the phase 5/6 boundary; reruns SQ-SPD-08b, SQ-BBQW-02t, SQ-SLK-01c in phase 6 |
+| SQ-MELT-09 | Common's Rare Ice pseudo mixin logs `Error loading class: me/shedaniel/rareice/forge/blocks/RareIceBlock` when Rare Ice is absent | fix agent fix-1 (behavior-neutral: mixin plugin skip) | built 02:27 (creativecommon-1.2.0, CommonMixinPlugin NEEDS_MOD rare_ice; Melting Values cache); installed 03:15 (installToMods rebuilt it: same three source files plus another session's unreleased.md); rerun SQ-MELT-09b, -P1b in phase 5 |
+| SQ-MELT-P1 | `Melting.onRandomTick` reads ForgeConfigSpec values every tick (267 JFR samples; Melting 1.0 % of server samples) | fix agent fix-1 (behavior-neutral: cache config values, refresh on config load) | built 02:27 (creativecommon-1.2.0, CommonMixinPlugin NEEDS_MOD rare_ice; Melting Values cache); installed 03:15 (installToMods rebuilt it: same three source files plus another session's unreleased.md); rerun SQ-MELT-09b, -P1b in phase 5 |
+| SQ-SPD-08 | nether wart seed pouch in a Nether dispenser plants 0: `SeedContainerDispense.plantOne` uses `FakePlayerFactory.getMinecraft(level)`, cached by profile, so `UseOnContext` acts in the overworld | fix agent fix-2 (behavior-neutral: explicit-level context) | built 03:18 (creativedelight-1.1.0, fix-2; changelog bullets added); install at the phase 5/6 boundary; reruns SQ-SPD-08b, SQ-BBQW-02t, SQ-SLK-01c in phase 6 |
+| SQ-BBQW-02s | stick on a barbeque basin with no recipe is placed as a `supplementaries:stick` block: `StorageBlock.use` tool branch returns PASS | fix agent fix-2 (behavior-neutral: CONSUME, as its comment and writeup say) | built 03:18 (creativedelight-1.1.0, fix-2; changelog bullets added); install at the phase 5/6 boundary; reruns SQ-SPD-08b, SQ-BBQW-02t, SQ-SLK-01c in phase 6 |
 | SQ-SLK-01 | cow reaches the salt lick (2.25 blocks) but never licks in 1600 ticks; `StayNearSaltGoal.closeEnough` dist sq <= 4 on block positions | fix-2 checks the writeup: fix if it says the cow licks after the trip, else owner TODO | built 03:18 (creativedelight-1.1.0, fix-2; changelog bullets added); install at the phase 5/6 boundary; reruns SQ-SPD-08b, SQ-BBQW-02t, SQ-SLK-01c in phase 6 |
-| SQ-SPD-01, -02 | row says 25 planted; the 5x5 is centred on the block in front, so a sideways dispenser stands in it: 24 | row text fix at write-back | to write back |
+| SQ-SPD-01, -02 | row says 25 planted; the 5x5 is centered on the block in front, so a sideways dispenser stands in it: 24 | row text fix at write-back | to write back |
 | SQ-HH-482 | cow at 24 strolls to 22 and is pulled in (radius 22) | row text note at write-back | to write back |
-| SQ-HOP-05 | Compat `VineShearing` gives `hearthandharvest:hops_vine` a `fertile` state: first shears use sets fertile=false and cancels, so `sterilized` needs a second use; fertile=false does not stop growth (HopsVineBlock overrides randomTick) | behaviour-neutral (add `HopsVineBlock` to VineShearing's own-handling list, as both writeups say); Compat is owned by the pass-through session: sent there 04:40 | waiting on pass-through session |
-| SQ-HOP-04 | age-1 hops vine `use` returns PASS, so a stick (any placeable) replaces the vine (vines are replaceable) | owner TODO (block placement on an age-1 vine, or accept vanilla vine behaviour and rewrite the row) | to write back |
+| SQ-HOP-05 | Compat `VineShearing` gives `hearthandharvest:hops_vine` a `fertile` state: first shears use sets fertile=false and cancels, so `sterilized` needs a second use; fertile=false does not stop growth (HopsVineBlock overrides randomTick) | behavior-neutral (add `HopsVineBlock` to VineShearing's own-handling list, as both writeups say); Compat is owned by the pass-through session: sent there 04:40 | waiting on pass-through session |
+| SQ-HOP-04 | age-1 hops vine `use` returns PASS, so a stick (any placeable) replaces the vine (vines are replaceable) | owner TODO (block placement on an age-1 vine, or accept vanilla vine behavior and rewrite the row) | to write back |
 | SQ-HOP-06, SQ-HH-304 | 0 wild hops over about 740 forest chunks (seed 8675309); `/place feature` works 1 in 25: `TrunkVineFeature` trunk search (24 columns, radius 6) x rarity 96 is far rarer than the planned 1 in 96 chunks | owner TODO (rarity or trunk search; `TrunkVineFeature.java`, `wild_hops.json`) | to write back |
 | (SQ-HOP-06 side) | wild carrots and adzuki also 0 in the same forest boxes though forest is in both crop tags | owner TODO: worth a look (wild crop placement) | to write back |
 | SQ-MELT-P1b | live toml edit clause not judgeable on scratch (config watcher parked); restart picks values up | note at write-back | to write back |
@@ -880,7 +880,7 @@ Stopped by the owner at 15:01, before the first boot: no row ran.
 | SQ-FDI-04 side | a lunchbox slot accepted vanilla pumpkin pie, which is not a food in this pack | owner TODO (lunchbox filter: edible-only or keep) | to write back |
 | SQ-RDB-03 side | Rustic pancake plate `servings` 4 -> 5 after taking one | none: servings counts eaten slices (Rustic numbering, as SQ-DEP-09a) | closed |
 | SQ-OB-08, -11, -02, SQ-NSM, SQ-RDX-13, SQ-BREED-01 | row text: Street Corn has no Nourishment (comfort_nourishment rule); expect the swap summary line; OB-02 is a client row; RDX-13 needs a pre-11-02 save; BREED-01 dump via zp9 until /dumpbreeding exists, results to breeding_audit.md 3 and 4 | row text fix and writeup fill at write-back | to write back |
-| SQ-PG-01c | lighting a Flint and Terrasteel Nether portal kills the client within 3 s (3 of 3, also with the jar handle fix off): SIGSEGV in libc from `nglDrawElements` via Immersive Portals `ViewAreaRenderer` / `RendererUsingStencil`; first see-through IP portal on a client; hs_err in the phase 10 scratch dir `p10cli/old_launch1,2,4/` | owner TODO, URGENT (render-mod conflict, investigation; not a known behaviour-neutral fix) | to write back |
+| SQ-PG-01c | lighting a Flint and Terrasteel Nether portal kills the client within 3 s (3 of 3, also with the jar handle fix off): SIGSEGV in libc from `nglDrawElements` via Immersive Portals `ViewAreaRenderer` / `RendererUsingStencil`; first see-through IP portal on a client; hs_err in the phase 10 scratch dir `p10cli/old_launch1,2,4/` | owner TODO, URGENT (render-mod conflict, investigation; not a known behavior-neutral fix) | to write back |
 | SQ-PG-01b | floor portal -> wall portal leaves the player at y -61.0 inside the ground, cannot move or jump (2 of 2); likely `IPExitLiftMixin` skipping IP's adjust on wall exits | owner TODO (exit-lift rule for wall exits) | to write back |
 | CQ-PWG-66 | creative motor stand-in: display board at a 16 RPM shaft end reads Speed 0.0 on three facings; the row's hookup needs rewriting | owner (row rewrite) | to write back |
 | (phase 10 extra) | a client with Power Grid joining a server without it crashes ("Registry entry not present: powergrid:electrozapper") instead of being refused | owner TODO (Power Grid port: network/registry refusal) | to write back |

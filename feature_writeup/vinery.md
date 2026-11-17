@@ -16,9 +16,9 @@ Test prefix **VN-** · Last updated **2026-10-01** · Overall status **reference
 
 | Part | Where | Status |
 |---|---|---|
-| Block behaviour reference (pot, press, barrel, stems, lattice, bushes, vines, leaves, sink, log, storage) | §2, read from the decompiled `letsdo-vinery-forge-1.3.10.jar` | reference; VN-01 to VN-20 check the surprising parts |
+| Block behavior reference (pot, press, barrel, stems, lattice, bushes, vines, leaves, sink, log, storage) | §2, read from the decompiled `letsdo-vinery-forge-1.3.10.jar` | reference; VN-01 to VN-20 check the surprising parts |
 | Wine aging and wine effects | §2.10, §2.11 | reference |
-| Grape and grape seed flavour lines removed | [tooltips.js](../kubejs/client_scripts/tooltips.js) Vinery section, see [tooltips.md](tooltips.md) | DEPLOYED (client script), TT-14 pending |
+| Grape and grape seed flavor lines removed | [tooltips.js](../kubejs/client_scripts/tooltips.js) Vinery section, see [tooltips.md](tooltips.md) | DEPLOYED (client script), TT-14 pending |
 | Tooltip lines for the main Vinery blocks | same section, `TODO` placeholders | placeholders only, text not written yet |
 | JEI pages (fermentation, press, stomping, aging) | patcherMod, see [vinery_jei.md](vinery_jei.md) | REMOVED 2026-10-27 (the port ships its own) |
 | Other pack changes (oil, compost, crates, recipes, tags) | §3 | DEPLOYED |
@@ -64,7 +64,7 @@ The juice is the matching `*_grapejuice_*_bottle` for the 8 grape types. An unse
 | | |
 |---|---|
 | Slots | 0 = input, 1 = output. In the GUI the input accepts **any item**, but only vanilla `minecraft:apple` is processed. The output takes nothing in the GUI. |
-| Recipe | 1 apple → 1 `vinery:apple_mash`, hardcoded (no recipe type, no datapack control). |
+| Recipe | 1 apple -> 1 `vinery:apple_mash`, hardcoded (no recipe type, no datapack control). |
 | Time | **72 ticks (3.6 s)** per apple. Runs while slot 0 holds an apple and the output is empty or Apple Mash below 64. |
 | Progress | Goes back to 0 the moment the recipe stops being valid (input removed, output full). Saved in the block's NBT. |
 | Hoppers | The block exposes both slots on every side and accepts any item into either slot. A hopper can put items straight into the output: a non-apple, or an apple that overflows a full input stack, lands in slot 1 and **jams the press**. Hoppers can also pull apples back out of the input. |
@@ -109,7 +109,7 @@ was waiting finishes on its next tick.
 |---|---|
 | Placing | On a wall face. Clicking a top or bottom face faces it toward you. The block behind needs a **full face**. |
 | Planting | Jungle seeds only, on an empty lattice. No lattice below needed. |
-| Growth | Same as the stem: every random tick, raw light 9 or more, stage 1 → 4. |
+| Growth | Same as the stem: every random tick, raw light 9 or more, stage 1 -> 4. |
 | Harvest | Main-hand right-click with an empty hand or any non-shears, non-seed item at stage 3 or more. Stage 3 drops 2, stage 4 drops 3-4. Resets to **stage 1**. The held item loses 1 durability if it has any. |
 | Shears | Drop the grapes (if 3+) and the seed, empty the lattice, and cost 1 durability. |
 | Bone meal | Since 2026-11-16 (Creative Brewing `LegacyLatticeStemBlock.isValidBonemealTarget`: stage above 0 and not ripe; `farming/crops #52`, R6) any planted lattice takes bone meal, alone or stacked; the stem's "trunk" check (another lattice below) is gone from the lattice and stays on the stem (2.4). A right-click at stage 3 harvests before bone meal is used, so by hand bone meal grows stages 1 and 2; a dispenser also grows stage 3. Before: only with another lattice directly below. |
@@ -127,8 +127,8 @@ The seed items are what place the bushes (red, white, savanna and taiga types). 
 
 - **Light:** this is the block's raw light level, so time of day doesn't matter. Open sky is always 15.
 - **Ground:** the block below must be a full opaque block (`isSolidRender`). Farmland doesn't count. The six ground seeds carry a tooltip saying so (Creative Brewing `vinery/tooltips.js`, 2026-11-07, Q13).
-- **Survival:** the light and ground rules are also the survival rules. A bush pops when a neighbour update finds them broken.
-- **Stages:** 0 → 3.
+- **Survival:** the light and ground rules are also the survival rules. A bush pops when a neighbor update finds them broken.
+- **Stages:** 0 -> 3.
 - **Harvest:** right-click at stage 2 or more. Stage 2 drops 0-1 grapes and stage 3 drops 1-2. Resets to stage 1.
 - **Bone meal:** +1 stage, always works. Right-clicking an unripe bush with bone meal lets the bone meal act.
 - **Breaking:** stage 2 or 3 drops 1 seed. Stage 0-1 drops **nothing**.
@@ -138,7 +138,7 @@ The seed items are what place the bushes (red, white, savanna and taiga types). 
 ### 2.7 Jungle grape vines (jungle seeds placed on a wall)
 
 - **Vine behaviour:** a vanilla `VineBlock` subclass, so it attaches and spreads like vines.
-- **Growth:** 1/5 chance per random tick, needing raw light 9 or more at the block **above**, stage 0 → 3.
+- **Growth:** 1/5 chance per random tick, needing raw light 9 or more at the block **above**, stage 0 -> 3.
 - **Harvest, bone meal and loot:** the same as the bushes (§2.6).
 - **Shears:** right-click toggles `sterilized`. A sterilized vine gets **no random ticks**: it neither ripens nor spreads. The shears lose no durability.
 
@@ -149,7 +149,7 @@ The seed items are what place the bushes (red, white, savanna and taiga types). 
 | Food values | sweet berries (2 hunger, 0.1 saturation modifier) | baked potato (5 hunger, 0.6 saturation modifier) |
 | Seed back on eating | 20% | 20% |
 
-Vinery's per-variant flavour lines on grapes and seeds are removed by the pack (§3). Those lines said:
+Vinery's per-variant flavor lines on grapes and seeds are removed by the pack (§3). Those lines said:
 - grapes: "can be found in temperate / warm / cold / jungle biomes"
 - seeds: the bush requirements, with "needs Coarse Dirt or Podzol" for taiga. That claim was incomplete, because grass blocks also count.
 
@@ -193,7 +193,7 @@ Vinery's per-variant flavour lines on grapes and seeds are removed by the pack (
 | Trippy | jo_special_mixture | client shader only (the pack also uses it in the echo tool "discombobulate" on-hit list) |
 | Experience | cristel_wine | XP orbs worth +50% per level |
 | Creeper | creepers_crush (1 tick) | a power-4 explosion at you that breaks blocks (not in creative) |
-| vanilla | aegis_wine (Night Vision), noir_wine (Instant Health, 5 ticks), cherry_wine (Regeneration), praetorian_wine and glowing_wine (Glowing) | vanilla behaviour |
+| vanilla | aegis_wine (Night Vision), noir_wine (Instant Health, 5 ticks), cherry_wine (Regeneration), praetorian_wine and glowing_wine (Glowing) | vanilla behavior |
 
 Improved Night Vision exists, but no wine gives it. Its mixin would make you invisible.
 
@@ -238,7 +238,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 
 - **Tooltips** ([tooltips.js](../kubejs/client_scripts/tooltips.js), Vinery section; recorded in [tooltips.md](tooltips.md)):
   - Removed Vinery's per-variant grape and grape seed lines (`item.vinery.grape.tooltip.*`, `item.vinery.grapeseed.tooltip.*`). `removeTooltipKey` now accepts a key ending in `*` as a prefix, because Vinery builds the key from the item id.
-  - Added `TODO` placeholder lines for the pot, press, barrel, stem, lattice, apple/cherry leaves and saplings, kitchen sink, stackable log and the wine storage blocks. **The placeholders show in game until written.** Vinery's own grey lines on those blocks are kept.
+  - Added `TODO` placeholder lines for the pot, press, barrel, stem, lattice, apple/cherry leaves and saplings, kitchen sink, stackable log and the wine storage blocks. **The placeholders show in game until written.** Vinery's own gray lines on those blocks are kept.
 - **JEI:** patcherMod's four 1.3.10 pages were removed 2026-10-27 ([vinery_jei.md](vinery_jei.md)); the port ships its own.
 - **Plant oil:** every grape seed squeezes into 50 mB of plant oil in the IE Squeezer at 6400 energy ([oil.js](../kubejs/data/creativeengineering/kubejs/engineering/oil.js)).
 - **Composting:**
@@ -262,7 +262,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
   - wood tier: cherry fence gate, cherry beams and floorboards, stackable log, crates
   - dirt tier: Vinery dirt/grass slabs and loam
 - **BlockRunner display:** the taiga bush is listed as a 0.8 slow block in patcherMod `StuckInBlock` (display only).
-- **Flower box and flower pot** (port `-07`, 2026-10-31): the box takes `#creativecompat:flower_box_plants` and sits centred on floors (`wall` state); the pot takes any plant a planter grows; both draw Supplementaries' flower box models. [flower_pots.md](flower_pots.md) 3.2.
+- **Flower box and flower pot** (port `-07`, 2026-10-31): the box takes `#creativecompat:flower_box_plants` and sits centered on floors (`wall` state); the pot takes any plant a planter grows; both draw Supplementaries' flower box models. [flower_pots.md](flower_pots.md) 3.2.
 - **Lava Walker** (port, 2026-11-12, [raspberry_pie.md](raspberry_pie.md) 4): standing on lava burns like a magma block
   (1 damage, invulnerability frames) unless the walker has Fire Resistance, is fire immune or sneaks; falling into lava
   burns as usual. `LavaWalkerEffect.applyEffectTick`. Built in Creative Brewing source, jar not rebuilt yet; test
@@ -292,7 +292,7 @@ Wild jungle vines spawn at a random stage from 0 to 2.
   - Gone with the 1.5.5 port: every slot takes only what a recipe uses there and outputs are take-only (B7.2).
   - The jams the port still had (cask ingredient overflow and mixed recipes, other-type juice, mismatched press
     inputs) are fixed in the port's face rules since 2026-10-20 ([alcohol.md](alcohol.md) 10.19, VB-93, VB-94).
-- **Breaking a planted stem loses the seed.** Vinery behaviour, left as is. The stem and lattice tooltips say so since 2026-10-19 ([alcohol.md](alcohol.md) 10.15).
+- **Breaking a planted stem loses the seed.** Vinery behavior, left as is. The stem and lattice tooltips say so since 2026-10-19 ([alcohol.md](alcohol.md) 10.15).
 - **Seed tooltips removed rather than corrected.** The bush requirements now live here. A short pack line on the seeds can come later if wanted.
 - **Placeholder tooltips** were written for the 1.5.5 port on 2026-10-19 ([alcohol.md](alcohol.md) 10.15). Bushes have no item of their own, so any bush text has to go on the seed items.
 - **This file is a code reading of 1.3.10.** Numbers come from the decompiled jar, not from play. Re-check after a Vinery update (rerun §6).
@@ -325,40 +325,40 @@ Wild jungle vines spawn at a random stage from 0 to 2.
 Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are VJ- in [vinery_jei.md](vinery_jei.md).
 
 **Machines**
-- [ ] **VN-01 Pot fill and stomp:** put 6 red grapes in a Grapevine Pot one at a time → the floor drops on the 6th. A 7th grape is refused. Jump on it 3 times → 2 empty wine bottles give 2 red grape juices, and the pot is empty afterwards.
-- [ ] **VN-02 Pot type lock:** 1 white grape, then 5 red → the juice is white.
-- [ ] **VN-03 Mob stomp:** fill a pot, push a mob onto it from 1 block up 3 times → the pot reaches the bottling stage.
-- [ ] **VN-04 Press timing:** 10 apples in the Apple Press → 10 Apple Mash after about 36 s (3.6 s each).
-- [ ] ~~**VN-05 Press hopper jam**~~ retired 2026-10-20: 1.3.10 behaviour; the port refuses junk, see VB-93.
-- [ ] **VN-06 Barrel time:** fill an Aging Barrel with a valid recipe → the wine appears in about 2.5 s, not 90 s.
-- [ ] **VN-07 Barrel output stacks:** 8 wine bottles and 8 of each ingredient, leave the wine in the output → it keeps crafting and the output stack grows to 8 with no one taking it. A wine with a different `Year` in the output stops it.
-- [ ] ~~**VN-08 Barrel hopper**~~ retired 2026-10-20: 1.3.10 behaviour; the port refuses junk, see VB-94.
+- [ ] **VN-01 Pot fill and stomp:** put 6 red grapes in a Grapevine Pot one at a time -> the floor drops on the 6th. A 7th grape is refused. Jump on it 3 times -> 2 empty wine bottles give 2 red grape juices, and the pot is empty afterwards.
+- [ ] **VN-02 Pot type lock:** 1 white grape, then 5 red -> the juice is white.
+- [ ] **VN-03 Mob stomp:** fill a pot, push a mob onto it from 1 block up 3 times -> the pot reaches the bottling stage.
+- [ ] **VN-04 Press timing:** 10 apples in the Apple Press -> 10 Apple Mash after about 36 s (3.6 s each).
+- [ ] ~~**VN-05 Press hopper jam**~~ retired 2026-10-20: 1.3.10 behavior; the port refuses junk, see VB-93.
+- [ ] **VN-06 Barrel time:** fill an Aging Barrel with a valid recipe -> the wine appears in about 2.5 s, not 90 s.
+- [ ] **VN-07 Barrel output stacks:** 8 wine bottles and 8 of each ingredient, leave the wine in the output -> it keeps crafting and the output stack grows to 8 with no one taking it. A wine with a different `Year` in the output stops it.
+- [ ] ~~**VN-08 Barrel hopper**~~ retired 2026-10-20: 1.3.10 behavior; the port refuses junk, see VB-94.
 
 **Growing**
-- [ ] **VN-09 Stem pair:** place a stem with 2+ in hand on grass → 2-high stem, 2 used. Red seeds on the lower stem are refused; on the upper stem they plant.
-- [ ] **VN-10 Stem harvest:** grow to stage 4 → right-click drops 3-4 grapes and the stem shows the stage-2 model. Shears on a planted stem drop the seed back and keep full durability.
-- [ ] **VN-11 Stem seed loss:** break a planted stem by hand → no seed drops.
-- [ ] **VN-12 Taiga seed on stem:** taiga seeds on an upper stem with no podzol, coarse dirt or grass nearby → plants and grows.
-- [ ] **VN-13 Lattice bone meal** (rewritten 2026-11-16): jungle seeds on a single lattice → bone meal grows it (stage 1 → 2 → 3); a stacked lattice the same; an empty lattice takes none. Bone meal on an upper stem with no stem below still does nothing.
-- [ ] **VN-14 Taiga bush grass:** taiga seeds on dirt with only grass blocks nearby (no podzol or coarse dirt) → it can be planted.
-- [ ] **VN-15 Savanna light:** savanna seeds under a 1-block roof at night with no torches → can't be planted.
-- [ ] **VN-16 Bush seed drop:** break a stage-1 bush → nothing. Break a stage-3 bush → 1 seed.
-- [ ] **VN-17 Sterilized vine:** shear a jungle grape vine → it stops ripening and spreading (watch several minutes). Shear again → it resumes.
-- [ ] **VN-18 Placed leaves:** place apple leaves in survival and wait → no apples ever. Fruiting leaves on a sapling-grown variant tree regrow apples after picking.
+- [ ] **VN-09 Stem pair:** place a stem with 2+ in hand on grass -> 2-high stem, 2 used. Red seeds on the lower stem are refused; on the upper stem they plant.
+- [ ] **VN-10 Stem harvest:** grow to stage 4 -> right-click drops 3-4 grapes and the stem shows the stage-2 model. Shears on a planted stem drop the seed back and keep full durability.
+- [ ] **VN-11 Stem seed loss:** break a planted stem by hand -> no seed drops.
+- [ ] **VN-12 Taiga seed on stem:** taiga seeds on an upper stem with no podzol, coarse dirt or grass nearby -> plants and grows.
+- [ ] **VN-13 Lattice bone meal** (rewritten 2026-11-16): jungle seeds on a single lattice -> bone meal grows it (stage 1 -> 2 -> 3); a stacked lattice the same; an empty lattice takes none. Bone meal on an upper stem with no stem below still does nothing.
+- [ ] **VN-14 Taiga bush grass:** taiga seeds on dirt with only grass blocks nearby (no podzol or coarse dirt) -> it can be planted.
+- [ ] **VN-15 Savanna light:** savanna seeds under a 1-block roof at night with no torches -> can't be planted.
+- [ ] **VN-16 Bush seed drop:** break a stage-1 bush -> nothing. Break a stage-3 bush -> 1 seed.
+- [ ] **VN-17 Sterilized vine:** shear a jungle grape vine -> it stops ripening and spreading (watch several minutes). Shear again -> it resumes.
+- [ ] **VN-18 Placed leaves:** place apple leaves in survival and wait -> no apples ever. Fruiting leaves on a sapling-grown variant tree regrow apples after picking.
 
 **Aging and utility**
-- [ ] **VN-19 Aging:** take a fresh wine and note its potency, then `/time add 1536000` (64 days) → its tooltip potency is one level higher.
-- [ ] **VN-20 Sink:** place a Kitchen Sink (creative) → an empty-hand click fills it. A bucket gives a water bucket. An empty hand refills it, so it's endless.
+- [ ] **VN-19 Aging:** take a fresh wine and note its potency, then `/time add 1536000` (64 days) -> its tooltip potency is one level higher.
+- [ ] **VN-20 Sink:** place a Kitchen Sink (creative) -> an empty-hand click fills it. A bucket gives a water bucket. An empty hand refills it, so it's endless.
 - [ ] **VN-21 Lattice bone meal, server** (2026-11-16, SQ-VN-01): a planted jungle lattice on a wall with nothing below grows one or more stages per bone meal at stages 1 and 2; at stage 3 the click harvests (2 grapes, back to stage 1).
 
 ## 8. History
 
 - **2026-10-01:**
   - Writeup created from the decompiled 1.3.10 jar (`tools/decompile_mod.py` added).
-  - Grape and grape seed flavour lines removed. `removeTooltipKey` takes a `*` prefix key. Vinery tooltip placeholders added.
+  - Grape and grape seed flavor lines removed. `removeTooltipKey` takes a `*` prefix key. Vinery tooltip placeholders added.
   - Found the 50-tick barrel time (the JEI page says 1800, open).
 - 2026-10-19: this file describes 1.3.10, which left the pack in 1.0.7 (DEPLOYED 2026-10-18) for the port; the port's
-  behaviour is in [alcohol_part_b.md](alcohol_part_b.md). Kept as the reference for what changed.
+  behavior is in [alcohol_part_b.md](alcohol_part_b.md). Kept as the reference for what changed.
 - 2026-10-31: scratchpad notes translated into TODO rows (`alcohol/vineryport #28`). No code changed.
 - 2026-10-31: port `-07` flower box and flower pot changes ([flower_pots.md](flower_pots.md) 3.2); built, not installed.
 - 2026-11-12: Lava Walker burns on lava without Fire Resistance (section 3), for Raspberry Pie's slot pool.

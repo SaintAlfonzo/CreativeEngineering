@@ -37,7 +37,7 @@ dyeable. The leather bag keeps its current look.
 - Tint: `camerabag/client/CameraBagClient.java:24-27` tints layer 0 with `DyeableLeatherItem.getColor(stack)` for every
   tier; `CameraBagItem` (line 33) does not override `getColor`, so undyed bags get leather brown `0xA06540`.
 - Lunchbox art (built 2026-10-29, [lunchboxes.md](../lunchboxes.md) section on looks):
-  `kubejs/assets/solapplepie/textures/items/iron_lunchbox.png`, `netherite_lunchbox.png` (16x16 full colour, the undyed
+  `kubejs/assets/solapplepie/textures/items/iron_lunchbox.png`, `netherite_lunchbox.png` (16x16 full color, the undyed
   look) and outline masks `iron_lunchbox_outline.png`, `netherite_lunchbox_outline.png`.
   [gen_lunchbox_looks.py](../../tools/gen_lunchbox_looks.py) splits each into `lunchbox_dye/<look>_base.png` (greyscale,
   tinted layer 0) and `<look>_overlay.png` (outline and latches, layer 1), and writes `lunchbox_look/<look>.json` (plain)
@@ -76,7 +76,7 @@ recipe change. Items `i.iron_camera_bag`, `i.netherite_camera_bag` (`exposure_ex
 - **Copper look for leather:** recommend no; the leather bag keeps its own look (the decision names iron and netherite).
 
 ### Gotchas
-- `item/generated` gives layer N tint index N: the plain (undyed) model has the full-colour art on layer 0, so the tint
+- `item/generated` gives layer N tint index N: the plain (undyed) model has the full-color art on layer 0, so the tint
   handler must return -1 for it or it gets dyed brown.
 - Keep the outline / latch art on layer 1 in the dyed model.
 - The lunchbox override numbers (`lunchbox_skin`) do not apply to bags; do not copy the skin overrides.

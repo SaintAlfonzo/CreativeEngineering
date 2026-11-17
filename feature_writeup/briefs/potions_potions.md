@@ -45,17 +45,17 @@ Only add the brewing mixes Buzzier Bees doesn't already have.
 
 ### Now
 - `potions.js` lines 87-93, `LUCK_POTION_MIXES`:
-  1. `four_leaf_clover` + `minecraft:awkward` → `minecraft:luck`
-  2. `redstone` + `minecraft:luck` → `buzzier_bees:long_luck`
-  3. `buzzier_bees:silverfish_bottle` + `minecraft:awkward` → `buzzier_bees:unluck`
-  4. `redstone` + `buzzier_bees:unluck` → `buzzier_bees:long_unluck`
+  1. `four_leaf_clover` + `minecraft:awkward` -> `minecraft:luck`
+  2. `redstone` + `minecraft:luck` -> `buzzier_bees:long_luck`
+  3. `buzzier_bees:silverfish_bottle` + `minecraft:awkward` -> `buzzier_bees:unluck`
+  4. `redstone` + `buzzier_bees:unluck` -> `buzzier_bees:long_unluck`
 - Buzzier Bees 5.0.1 `BBMobEffects.registerRecipes()` (run from `BuzzierBees.commonSetup` `enqueueWork`) adds, through
-  Blueprint `DataUtil.addMix` → `PotionBrewing.addMix` (`m_43513_`), i.e. real item-agnostic `Mix` entries (verified):
-  awkward + clover → luck; luck + redstone → long_luck; luck + glowstone → strong_luck; luck + fermented spider eye →
-  unluck; unluck + redstone → long_unluck; unluck + glowstone → strong_unluck; long_luck / strong_luck + fermented
-  spider eye → long_unluck / strong_unluck.
+  Blueprint `DataUtil.addMix` -> `PotionBrewing.addMix` (`m_43513_`), i.e. real item-agnostic `Mix` entries (verified):
+  awkward + clover -> luck; luck + redstone -> long_luck; luck + glowstone -> strong_luck; luck + fermented spider eye ->
+  unluck; unluck + redstone -> long_unluck; unluck + glowstone -> strong_unluck; long_luck / strong_luck + fermented
+  spider eye -> long_unluck / strong_unluck.
 - So pack rows 1, 2 **and 4** are exact duplicates (the TODO row and effects.md F6 said rows 1 and 2; F6 corrected).
-  Only row 3 (silverfish bottle → Bad Luck) is new.
+  Only row 3 (silverfish bottle -> Bad Luck) is new.
 - Duplicate `Mix` entries are not caught by `PotionMixDedup` (it only drops Forge `BrewingRecipe`s a `Mix` covers), so
   each duplicate becomes two Create Automatic Brewing recipes per bottle type and two IE Mixer recipes.
 - The comment at `potions.js` lines 80-84 says there is no "Luck II" in vanilla or buzzier_bees; wrong,
@@ -79,9 +79,9 @@ None.
 - The log count `[CE potions] added N item-agnostic potion mixes` drops by 3; update any note that quotes N.
 
 ### Tests
-- **PO-27 Luck once:** JEI → Potion of Luck → R: one brewing recipe per route; Create Automatic Brewing page shows one
-  awkward + clover → Luck per bottle type (EF-05 covers the same).
-- **PO-28 Bad Luck from silverfish:** awkward + silverfish bottle → Potion of Bad Luck; + redstone → long (BB's step).
+- **PO-27 Luck once:** JEI -> Potion of Luck -> R: one brewing recipe per route; Create Automatic Brewing page shows one
+  awkward + clover -> Luck per bottle type (EF-05 covers the same).
+- **PO-28 Bad Luck from silverfish:** awkward + silverfish bottle -> Potion of Bad Luck; + redstone -> long (BB's step).
 - PO-25 stays valid.
 
 ---
@@ -134,7 +134,7 @@ clover, `TODO` comment at `potions.js` line 86).
 - JEI and Create Automatic Brewing are rebuilt only at startup.
 
 ### Tests
-- **PO-29 Magic Resistance reagent:** thick + new reagent → Magic Resistance on the stand, Create mixer and IE Mixer;
+- **PO-29 Magic Resistance reagent:** thick + new reagent -> Magic Resistance on the stand, Create mixer and IE Mixer;
   amethyst shard no longer brews it. Update PO-24 to the new reagent.
 
 ---
@@ -159,9 +159,9 @@ Decide how much a Potion of Saturation should feed, and give it a strong step if
 - `CUSTOM_POTIONS` already supports an amplifier: `amp` (line 149, `p.amp || 0`) and `strong: [dur, amp]`.
 
 ### Build
-1. Confirm the instant behaviour in game first (test PO-30 below).
+1. Confirm the instant behavior in game first (test PO-30 below).
 2. Set the amplifier, e.g. `saturation: { effect: 'minecraft:saturation', dur: 1, amp: 5, strong: [1, 9], base: 'thick', reagent: global.item.golden_carrot }`
-   (amp 5 → 6 hunger / 12 saturation, about a golden carrot; strong amp 9 → 10 / 20, a full bar). No `long`: duration
+   (amp 5 -> 6 hunger / 12 saturation, about a golden carrot; strong amp 9 -> 10 / 20, a full bar). No `long`: duration
    doesn't matter.
 3. Update potions.md 2.1 (Saturation row) and F8.
 
@@ -180,7 +180,7 @@ Decide how much a Potion of Saturation should feed, and give it a strong step if
 - AppleSkin shows the restore amount on the potion only if it reads effects; verify with the hunger bar instead.
 
 ### Tests
-- **PO-30 Saturation is instant:** at 10 hunger, drink a base Potion of Saturation with AppleSkin → hunger +amp+1 at
+- **PO-30 Saturation is instant:** at 10 hunger, drink a base Potion of Saturation with AppleSkin -> hunger +amp+1 at
   once, no lingering effect icon.
 - **PO-31 Saturation cloud:** lingering Saturation potion and lingering Saturation bucket on yourself at low hunger;
   record how much they restore.
@@ -197,14 +197,14 @@ Settle one rule for potion batch sizes, especially the dragon's breath exchange 
 | Machine | Batch | Where (`CE/` unless noted) |
 |---|---|---|
 | Create Automatic Brewing (every mix) | 1000 mB | Create `PotionMixingRecipes.createRecipes()` (Create's own, hardcoded) |
-| Create mixer, splash + 250 mB dragon's breath fluid → lingering, heated | 1000 mB | `fluidbrewing/DragonBreathBrewing.java` `AMOUNT` line 56, `DRAGON_BREATH_AMOUNT` line 59 |
+| Create mixer, splash + 250 mB dragon's breath fluid -> lingering, heated | 1000 mB | `fluidbrewing/DragonBreathBrewing.java` `AMOUNT` line 56, `DRAGON_BREATH_AMOUNT` line 59 |
 | IE Mixer, every mix (regular, splash, lingering) | 1500 mB | `mixin/PotionRecipeGeneratorsMixin.java` `CREATIVEENGINEERING$AMOUNT` line 73 |
 | IE Mixer, conversion into lingering (splash + dragon's breath item) | 1000 mB | same file, `LINGERING_AMOUNT` line 80, used at lines 211-214 |
 | IE Refinery Lingerification, regular or splash + 250 mB `#forge:fluid/dragon_breath` | 1500 mB | `fluidbrewing/Lingerification.java` `POTION_AMOUNT` line 63, `DRAGON_BREATH_AMOUNT` line 66, `ENERGY` 120 line 69 |
 | Lava Vision base (IE / Create) | 1500 / 1000 mB lava | `PotionRecipeGeneratorsMixin` `addLavaVision`; [lava_vision.js](../../kubejs/server_scripts/magic/lava_vision.js) |
 
-The dragon's breath rate is the inconsistent part: 250 mB → 1000 mB lingering (Create), 1 bottle → 1000 mB (IE Mixer),
-250 mB → 1500 mB (Refinery). The IE Mixer comment (lines 75-79) says lingering runs at 1000 "so Create / IE stay in
+The dragon's breath rate is the inconsistent part: 250 mB -> 1000 mB lingering (Create), 1 bottle -> 1000 mB (IE Mixer),
+250 mB -> 1500 mB (Refinery). The IE Mixer comment (lines 75-79) says lingering runs at 1000 "so Create / IE stay in
 step". The `potions.js` header (line 19) still says the IE Mixer runs at "1000 mB"; stale code comment.
 
 ### Build
@@ -225,7 +225,7 @@ Recommended version (see Decisions):
 `#forge:fluid/dragon_breath` (Refinery); `minecraft:dragon_breath` item (IE Mixer).
 
 ### Decisions
-- **One size or not.** Recommend: one exchange rate for lingering everywhere (250 mB fluid or 1 bottle → 1000 mB),
+- **One size or not.** Recommend: one exchange rate for lingering everywhere (250 mB fluid or 1 bottle -> 1000 mB),
   i.e. only Lingerification drops to 1000; keep the IE Mixer's 1500 mB for regular and splash brewing as the
   multiblock's throughput perk. Alternative: everything 1000 (IE stock), which loses that perk.
 - **Config knobs.** Recommend skipping them unless you expect to retune; the constants are one line each.
@@ -235,13 +235,13 @@ Recommended version (see Decisions):
 - `FluidTagInputMixin` matches NBT as a subset, so changing amounts doesn't affect matching.
 
 ### Tests
-- **PO-32 Lingerification rate:** IE Refinery, 1000 mB splash Resistance + 250 mB dragon's breath → 1000 mB lingering
+- **PO-32 Lingerification rate:** IE Refinery, 1000 mB splash Resistance + 250 mB dragon's breath -> 1000 mB lingering
   Resistance (update PO-17).
 - PO-11, PO-14 unchanged.
 
 ---
 
-## potions #3: Refinery regular → lingering shortcut
+## potions #3: Refinery regular -> lingering shortcut
 Status **Planned** · Work: patcherMod · id `potions/potions #3`
 
 ### Goal
@@ -269,7 +269,7 @@ None new.
 - Halves the Lingerification JEI page if dropped; nothing else reads those ids.
 
 ### Tests
-- Keep: PO-17 as is. Drop: **PO-33** Refinery with regular Resistance + dragon's breath → nothing; splash still works.
+- Keep: PO-17 as is. Drop: **PO-33** Refinery with regular Resistance + dragon's breath -> nothing; splash still works.
 
 ---
 
@@ -307,7 +307,7 @@ Of the 12 total-overlap groups ([effects.md](../effects.md) 2.3, F5), trim the t
    `@Inject(method = "m_6742_", at = @At("HEAD"), cancellable = true)` (SRG name, as `BonemealCharmMixin` does for
    `m_6225_`). Replace the reset with "pause": for a `ServerPlayer`, read
    `getStats().getValue(Stats.CUSTOM.get(Stats.TIME_SINCE_REST))` and write it back minus 1 (floor 0) so the
-   per-tick increment is cancelled while caffeinated, then `ci.cancel()`. The speed and attack-speed attribute
+   per-tick increment is canceled while caffeinated, then `ci.cancel()`. The speed and attack-speed attribute
    modifiers in the constructor stay. Register in `creativeengineering.mixins.json`. Optional CEConfig `[effects]`
    switch `caffeinatedPausesRest` (default true) so it can be turned back.
 3. Update effects.md 2.3 / F5 and its Caffeinated description (JEED lang overlay, `kubejs/assets/creativeengineering/lang/en_us.json`:
@@ -337,7 +337,7 @@ Of the 12 total-overlap groups ([effects.md](../effects.md) 2.3, F5), trim the t
 ### Tests
 - **PO-34 Resilience gone:** JEI shows no Potion of Stability / Resilience recipe; "How Did We Get Here?" criteria no
   longer list Resilience; Knockback Resistance still brews (bear fur).
-- **PO-35 Caffeinated pauses rest:** scoreboard on `minecraft.time_since_rest`; drink coffee → value stops rising; when
+- **PO-35 Caffeinated pauses rest:** scoreboard on `minecraft.time_since_rest`; drink coffee -> value stops rising; when
   the effect ends it resumes from the same value (not negative).
 
 ---
@@ -373,7 +373,7 @@ stay unbrewable (`alcohol/decisions #13`), Fruits Delight stays food-only for no
   `lingering_potion`, `tipped_arrow` keys, e.g. lines 35-40, 74-79, 113-118 for Long Reach / Magic Resistance).
 
 ### Build
-1. patcherMod: new `CE/potion/ModdedEffectPotions.java`, generalising `BetterBeaconsPotions`: a table of
+1. patcherMod: new `CE/potion/ModdedEffectPotions.java`, generalizing `BetterBeaconsPotions`: a table of
    `{name, modid, effectPath, base, long, strongDur, strongAmp}`; in `register(IEventBus)`, for each row whose
    `ModList.get().isLoaded(modid)`, call `POTIONS.register(name, supplier)` (the supplier looks the effect up at
    `RegisterEvent<Potion>` time, after every mod's effects exist). Register the class next to lines 85-86.
@@ -456,7 +456,7 @@ Effect ids verified (IE jar, effects.md table). Damage tag file above.
 - `potions/effects #7` (Faraday armor shock check) needs the same damage-source list; reuse it.
 
 ### Tests
-- Only for the extension: **PO-38** iron armor, stand by an active CCA tesla coil → damage 1.5× the unarmored-by-iron
+- Only for the extension: **PO-38** iron armor, stand by an active CCA tesla coil -> damage 1.5× the unarmored-by-iron
   baseline.
 
 ---
@@ -471,7 +471,7 @@ Effect ids verified (IE jar, effects.md table). Damage tag file above.
 
 - [effects.md](../effects.md) F6: Buzzier Bees also lengthens / amplifies Bad Luck, so pack rows 1, 2 **and 4** are
   duplicates (jar-verified); added the verification note.
-- [potions.md](../potions.md) 2.3 (Buzzier Bees row): "first two rows are duplicates" → rows 1, 2 and 4.
+- [potions.md](../potions.md) 2.3 (Buzzier Bees row): "first two rows are duplicates" -> rows 1, 2 and 4.
 - [potions.md](../potions.md) F6: `createEmptying` is no longer missing (line 1449); noted that `ieBottling` drops
   result NBT.
-- [potions.md](../potions.md) section 5: `CreativeEngineering.java` lines 262-263 → 287-288.
+- [potions.md](../potions.md) section 5: `CreativeEngineering.java` lines 262-263 -> 287-288.

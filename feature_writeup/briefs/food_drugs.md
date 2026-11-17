@@ -46,7 +46,7 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
   `tobacco` and three `*_package` items (8x storage). Every item stacks to 16 (`m_41487_(16)` in each item class).
   - Cigarettes: `cigarette`, `blue_`, `light_blue_`, `light_gray_`, `magenta_`, `orange_`, `red_`, `yellow_cigarette`,
     `black_light_`, `light_gray_light_`, `white_light_cigarette`, `light_gray_`, `orange_`, `pink_`, `red_ultralight_cigarette`.
-  - Cigars: the same colours as `*_cigar`, `black_slim_` / `light_gray_slim_` / `white_slim_cigar`, `*_ultraslim_cigar`.
+  - Cigars: the same colors as `*_cigar`, `black_slim_` / `light_gray_slim_` / `white_slim_cigar`, `*_ultraslim_cigar`.
 - **Recipes** (shapeless, `data/the_dirty_stuff/recipes/`): cigarette = `tobacco` + `paper` (+ one flower);
   cigar = 2 `tobacco` + `dried_tobacco_leafs` (+ the same flower). Flower per colour:
   - blue: cornflower; light_blue: blue orchid; light_gray: oxeye daisy; magenta: allium; orange: sunflower;
@@ -58,14 +58,14 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
   **So flower "herb additives" already exist.** Workstation: `workstation.json` (iron ingots + nuggets).
 - **Workstation** (`WorkstationOnTickUpdateProcedure`): 4 `tobacco_leafs` in slot 0 are processed over 200 ticks
   (`craftingTime`) into `dried_tobacco_leafs`, then `tobacco` (slot 1, up to 64). Check the exact slot flow in game.
-- **Smoking** (`item/*Item.use` → `procedures/*RightclickedProcedure.execute(LevelAccessor, x, y, z, Entity, ItemStack)`):
+- **Smoking** (`item/*Item.use` -> `procedures/*RightclickedProcedure.execute(LevelAccessor, x, y, z, Entity, ItemStack)`):
   - It needs a flint and steel (damaged 1) or a fire charge (used up) in the **off hand**; otherwise it shows the
     action-bar message "You need to hold a flint and steel in your off hand". The SRG `Items.f_42409_` / `f_42613_`
     are read as flint and steel / fire charge from memory of the 1.19.2 tables, not checked.
   - Every smoke gives **Nausea V for 5 s**, an effect A at once and an effect B after A ends
     (`TheDirtyStuffMod.queueServerWork`), with a **20 s cooldown** on that item.
   - Cigarettes: A 15 s, B 5 s. Cigars: A 30 s, B 15 s. Light / slim / ultra variants: A 5 or 15 s, then B 20 or 35 s.
-  - Effects by colour (SRG ids mapped from memory, unchecked):
+  - Effects by color (SRG ids mapped from memory, unchecked):
 
 | Variant | A (now) | B (after) |
 |---|---|---|
@@ -78,7 +78,7 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
 | light_gray_light / _slim | Blindness | Night Vision |
 | black_light / _slim | Wither | Resistance |
 | white_light / _slim | Poison | Regeneration |
-| *_ultralight / *_ultraslim (4 colours, identical) | Weakness | Strength |
+| *_ultralight / *_ultraslim (4 colors, identical) | Weakness | Strength |
 
 - **World:** tobacco seeds from the wandering trader (1 emerald); villagers buy 7 leaves for 1 emerald; a loot modifier
   adds `chests/tobacco_village_chest` to `chests/village/village_plains_house`.
@@ -105,8 +105,8 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
 
 **Phase A: one smoking system over The Dirty Stuff (KubeJS).**
 1. **Data, both sides:** `kubejs/startup_scripts/cooking/smoking.js` defines `global.smoking`:
-   - `items`: item_dict key → `{ kind: 'cigarette'|'cigar'|'pipe', base: [...effects], delayed: [...], herb: '<flower key>' }`.
-   - `herbs`: herb key → effects.
+   - `items`: item_dict key -> `{ kind: 'cigarette'|'cigar'|'pipe', base: [...effects], delayed: [...], herb: '<flower key>' }`.
+   - `herbs`: herb key -> effects.
    - Limits: `limit`, `windowTicks`, `nauseaStepTicks`, tolerance numbers.
 
    Effects are `[global.effect key, seconds, amplifier]`. Model the table on `global.alcohol` in
@@ -119,7 +119,7 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
    avoids a generic name). Add `ef.comfort = 'farmersdelight:comfort'` and the new effect key (below) to
    [effect_dict.js](../../kubejs/startup_scripts/_lib/effect_dict.js) (it has a modded block since, e.g. `ef.caffeinated`
    line 51; no `ef.comfort` yet).
-3. **New effect:** `creativeengineering:smoked` (KubeJS `mob_effect` registry, `'basic'`, harmful = false, grey colour),
+3. **New effect:** `creativeengineering:smoked` (KubeJS `mob_effect` registry, `'basic'`, harmful = false, gray color),
    as in magic_resistance.js. Its **amplifier is the smoke count in the current window**, so the player sees the limit
    coming. The effect does nothing itself; the server script reads it.
 4. **Take over the use:** `kubejs/server_scripts/cooking/smoking.js`:
@@ -148,7 +148,7 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
 6. **Tooltips:** one line per smokable listing its effects, the way the pack draws food effect lines
    ([tooltips.md](../tooltips.md); [client_scripts/tooltips.js](../../kubejs/client_scripts/tooltips.js)), read
    from `global.smoking` so the table stays the only source. Plus a JEED page:
-   `global.NCH.jeedProvider(effect, providers, e)` (`neoCraftHelper.js:2065`) for each effect → the smokables that give it.
+   `global.NCH.jeedProvider(effect, providers, e)` (`neoCraftHelper.js:2065`) for each effect -> the smokables that give it.
 7. **Lang:** `creativeengineering.smoking.need_lighter`, effect name and description in
    `kubejs/assets/creativeengineering/lang/en_us.json`. Run `tools/gen_effect_descriptions.py` if it covers new effects
    (alcohol.md line 446 notes it prunes placeholders).
@@ -175,13 +175,13 @@ The pack already ships **The Dirty Stuff 2.1** (`the_dirty_stuff`, `the_dirty_st
 
 **Phase C: rolling.**
 1. Rolling paper: `creativeengineering:rolling_paper` (KubeJS item, key `i.rolling_paper`). Made from paper with
-   `global.NCH.fdCutting` (`neoCraftHelper.js:1093`, paper + knife → 4 rolling paper; NCH has no Create cutting helper)
+   `global.NCH.fdCutting` (`neoCraftHelper.js:1093`, paper + knife -> 4 rolling paper; NCH has no Create cutting helper)
    or `stonecutting` (`:929`).
 2. Swap paper for rolling paper in the 15 cigarette recipes:
    `global.NCH.replaceInput({ mod: 'the_dirty_stuff', output: '#...' }, 'minecraft:paper', i.rolling_paper, e)`
    (`neoCraftHelper.js:635`).
 3. Automation: `global.NCH.createDeploying` (`:1694`, rolling paper onto tobacco) or `createSequencedAssembly`
-   (`:1737`) for the coloured ones (deploy flower, deploy paper). Register the transitional item with
+   (`:1737`) for the colored ones (deploy flower, deploy paper). Register the transitional item with
    `NCH.registerIncomplete` (`:1789`), as the pack does for other sequences. Note `food/drinks #12`: NCH fluid steps in
    sequenced assemblies fail to load today; these steps carry no fluid.
 
@@ -193,7 +193,7 @@ effects table in `global.smoking`.
 ### Ids and data
 - Verified in `the_dirty_stuff-2.1-forge-1.19.2.jar`: item ids, stack 16, recipes and ingredients, the off-hand check
   structure, durations, the 400-tick cooldown, loot modifier and trades.
-- Unchecked: the SRG → vanilla effect and item names (from memory; confirm with `/dumpall` `mob_effects.json` or by
+- Unchecked: the SRG -> vanilla effect and item names (from memory; confirm with `/dumpall` `mob_effects.json` or by
   smoking one in game). The KubeJS player-wrapper names for cooldowns and status messages.
 - New ids: effect `creativeengineering:smoked`; items `creativeengineering:smoking_pipe`, `rolling_paper` (+ maybe
   `smokeleaf`, `smokeleaf_seeds`); keys `i.cigarette` ... `i.dirty_stuff_workstation`, `i.smoking_pipe`,
@@ -210,7 +210,7 @@ effects table in `global.smoking`.
   (3 smokes per 5 in-game minutes; each smoke over it adds 5 s to the Nausea) plus a slowly decaying tolerance that
   shortens the positive effects. Add the SoL-style variety history only if repeats should matter beyond the limit. It
   costs one list in persistentData and gives herb additives a reason to exist.
-- **Keep The Dirty Stuff's colour variants?** 30 smokables with heavy duplication (red = orange, yellow = light_blue,
+- **Keep The Dirty Stuff's color variants?** 30 smokables with heavy duplication (red = orange, yellow = light_blue,
   four identical ultralights). Recommend keeping the items (tobacco crop, trades and loot stay) and retuning them in
   `global.smoking`. Each flower then acts as one herb additive with one distinct effect. Hide nothing.
 - **Lighter:** keep "flint and steel or fire charge in the off hand" (the mod's rule, players know it). Optionally add a
@@ -226,7 +226,7 @@ effects table in `global.smoking`.
 ### Gotchas
 - `ItemEvents.rightClicked` fires for the main and the off hand. With a smokable in the off hand and a lighter in the
   main hand the mod refuses; keep that, or swap the roles explicitly.
-- Cancelling only on the server leaves the client running the mod's `use()` (sound, a ghost shrink, a client-side cooldown).
+- Canceling only on the server leaves the client running the mod's `use()` (sound, a ghost shrink, a client-side cooldown).
 - `queueServerWork` effects from the mod no longer run once `use()` is cancelled. Nothing is left over, but check that
   the mod has no other path that calls the procedures (dispensers, for example; none seen).
 - `player.persistentData` survives logout. Whether it survives death in this KubeJS build is unchecked; a reset on death
@@ -236,13 +236,13 @@ effects table in `global.smoking`.
 
 ### Tests
 Prefix `SM-` (new writeup):
-- **SM-01 Lighter:** right click a Cigarette with an empty off hand → the message, nothing used. With flint and steel →
+- **SM-01 Lighter:** right click a Cigarette with an empty off hand -> the message, nothing used. With flint and steel ->
   one cigarette used, the flint and steel loses 1 durability, the effects apply, a 20 s cooldown.
-- **SM-02 Limit:** four smokes inside the window → the fourth gives Nausea 5 s longer than the third; the
+- **SM-02 Limit:** four smokes inside the window -> the fourth gives Nausea 5 s longer than the third; the
   `creativeengineering:smoked` level shows the count.
-- **SM-03 Tolerance:** ten smokes over an in-game day → the positive effect is shorter; after a smoke-free stretch it recovers.
+- **SM-03 Tolerance:** ten smokes over an in-game day -> the positive effect is shorter; after a smoke-free stretch it recovers.
 - **SM-04 Client:** no double sound, no ghost item count change on a dedicated server.
-- **SM-05 Pipe (phase B):** load a pipe with tobacco + dandelion → 4 puffs with the dandelion effect, then empty.
+- **SM-05 Pipe (phase B):** load a pipe with tobacco + dandelion -> 4 puffs with the dandelion effect, then empty.
 - **SM-06 Rolling (phase C):** cigarette recipes take rolling paper; the Create deploying recipe makes one.
 
 ---

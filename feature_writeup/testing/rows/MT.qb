@@ -47,7 +47,7 @@ look sheep: mutton, no wool; golems: iron ingots; stone count below 25
 @group A
 @commands a bell (meeting point) at 820 -60 700 with villagers; summon 5 iron golems (`PlayerCreated:0b`) and kill them within 10 minutes; make the villagers want a golem (3 villagers panicking near a zombie, or gossip at the bell); repeat with `PlayerCreated:1b` golems by a second bell 200 blocks away
 @pass after the 5 deaths no iron golem appears near the first bell for 24000 ticks while the villagers panic; after the cooldown one does; the second bell's village summons normally; `data/creativecompat_golem_cooldown.dat` holds the first village after `/save-all`
-@fails `GolemCooldown` death listener (`isPlayerCreated`), meeting point POI lookup (64 blocks), `VillagerGolemCooldownMixin` not cancelling
+@fails `GolemCooldown` death listener (`isPlayerCreated`), meeting point POI lookup (64 blocks), `VillagerGolemCooldownMixin` not canceling
 @draft villager golem summoning needs panicking or sleeping villagers over game time; write the steps with /cdevtest tickwarp and a POI-ready bell when a runner picks it up
 
 ## CQ-MT-01 | boats on ice: blue ice, packed ice, ice each slower than vanilla, in that order; walking unchanged

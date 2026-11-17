@@ -258,7 +258,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - A salt or snow layer resting ON ice pops as an item the moment the ice melts (support loss in the same `setBlock`), so
   a melt listener that removes the source layer never sees it. Put the source beside the target (r1116 phase 3).
 - Melt targets in 1-deep holes (y -61 on the flat world) keep the melt water from flowing; `randomtick` only the target
-  cell (`nofluids`) so neighbouring salt does not get its own dissolving tick (r1116 phase 3).
+  cell (`nofluids`) so neighboring salt does not get its own dissolving tick (r1116 phase 3).
 
 ## Difficulty, spawning and mobs
 
@@ -425,7 +425,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   `<id>@fortune=N` (r1115). `/cbo effects` counts ITEM namespaces of the Armor / Tool Effects rows; a mod that only
   contributes effect ids never appears there (r1106cbo).
 
-## Mod-specific behaviour
+## Mod-specific behavior
 
 - Create: machines placed before their creative motor often stay at speed 0: place the motor (and shaft or gearbox)
   first, then the machine, and read `speed` before relying on it; creative motor default is 16 RPM (r1113). A mixer or
@@ -482,7 +482,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   census <radius>` (the radius is required) (r1114) (partly checked: qrowlint.py flags an unknown `#tag` in row
   commands).
 - Seed 8675309: spawn area is 76% ocean; 2144 -2592 is 92% land. structure_starts-status chunks have placeholder biomes
-  (use getNoiseBiome). Jigsaw biome check point = centre of the start piece.
+  (use getNoiseBiome). Jigsaw biome check point = center of the start piece.
 - `locate structure #tag` logging `NamedSet(...)[[]]` = the tag is empty at runtime.
 - Checks: `[structure-tuning]`, `[structure-frequency]`, `[pool-tuning]`, `[biome-merges]` lines; `dumpstructuregen` then
   `tools/check_structure_live.py`; `/cdevplace structures @ns ...` proves templates load.

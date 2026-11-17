@@ -77,7 +77,7 @@ Bamboo Shoots, Seared Venison, Yucca Gateau slice; `removed_items.js`).
 Kept although nothing links to them today: 5 Ender's and 8 Delightful blocks for 1.20-only foods (Delightful 3.8.1,
 `mod-additions #23`), Onion Soup. They link by themselves if the food ever arrives.
 
-### 2.3 Interaction and behaviour changes (all taken with the port)
+### 2.3 Interaction and behavior changes (all taken with the port)
 
 | Change | As built |
 |---|---|

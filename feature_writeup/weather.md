@@ -69,7 +69,7 @@ This is the mod alone, before the pack's season types. The per-biome result is s
 
 Serene Seasons has only two classes, tropical and temperate, plus blacklisted biomes where it does nothing. What a
 biome actually does also depends on two fields the class never looks at: its declared precipitation
-(`none` / `rain` / `snow`) and its base temperature. That splits the two classes into several behaviours (2.2 to 2.5).
+(`none` / `rain` / `snow`) and its base temperature. That splits the two classes into several behaviors (2.2 to 2.5).
 
 ### 2.1 Where in the code
 
@@ -158,7 +158,7 @@ look at temperature only.
 ### 2.6 Not weather, but by class too
 
 - **Grass and foliage tint:** tropical biomes use the wet/dry palette, temperate ones the sub-season palette. A
-  hardcoded list (swamp and some Biomes O' Plenty biomes) changes colour less.
+  hardcoded list (swamp and some Biomes O' Plenty biomes) changes color less.
 - **Crop fertility:** tropical biomes grow summer crops (and unlisted crops) all year; temperate biomes by season;
   anywhere below 0.15 right now grows winter crops only. A hardcoded infertile list names only a Biomes O' Plenty
   biome, so it does nothing here.
@@ -169,9 +169,9 @@ look at temperature only.
   spring cuts them to 0.5-4 days, summer brings thunder within 0.5-1.5 days.
 - **SeasonHUD** shows Wet/Dry in tropical biomes and the four seasons elsewhere.
 
-### 2.7 Summary: the effective behaviours
+### 2.7 Summary: the effective behaviors
 
-| Behaviour | Class | Weather over the year |
+| Behavior | Class | Weather over the year |
 |---|---|---|
 | tropical-wet | tropical, declares rain | rain except Mid Dry |
 | tropical-dry | tropical, declares none | dry except forced Mid Wet rain |
@@ -190,8 +190,8 @@ beaches off the gradient onto their land.
 
 | Type | Weather | Temperature | Tint | Crops (Serene Seasons fertility) | SeasonHUD |
 |---|---|---|---|---|---|
-| arid | none, all year (renderer and gameplay rain) | base, no seasonal offset | none | tropical rule: summer + unlisted crops, all year | Dry icon and colour, name "Arid", day N of the year / year length |
-| frozen | snow all year | at most 0.1, no offset; nothing melts | none | winter crops only | Winter icon and colour, name "Frozen", day N of the year |
+| arid | none, all year (renderer and gameplay rain) | base, no seasonal offset | none | tropical rule: summer + unlisted crops, all year | Dry icon and color, name "Arid", day N of the year / year length |
+| frozen | snow all year | at most 0.1, no offset; nothing melts | none | winter crops only | Winter icon and color, name "Frozen", day N of the year |
 | dry | wet/dry cycle, rain in Mid Wet only (Late Winter, Early Spring), whatever the biome declares | base | tropical | tropical rule | Dry / Wet |
 | tropical | wet/dry cycle, rain except Mid Dry (Serene Seasons' own rule for a biome that declares rain) | base | tropical | tropical rule | Dry / Wet |
 | temperate | Serene Seasons' temperate rain/snow by base temperature | seasonal offset, also above 0.8 | temperate | temperate rule | four seasons |
@@ -345,20 +345,20 @@ a DH update that renames `preRender` will fail the mixin at startup (require 1),
   (`shouldFreezeWarmEnoughToRainHook`, inside `Biome.shouldFreeze`) with vanilla's temperature for any ocean that is
   not frozen-tagged, so they never ice over. Frozen oceans keep the seasonal value, held at 0.1, so their open-water
   patches (temperature modifier `frozen`, 0.2) freeze over with time and never melt. Warm and lukewarm oceans never
-  cool. Rivers and beaches are not oceans: they freeze when their land does. Lukewarm, ocean and deep ocean were not in the request; they were tagged to match their neighbours
+  cool. Rivers and beaches are not oceans: they freeze when their land does. Lukewarm, ocean and deep ocean were not in the request; they were tagged to match their neighbors
   (lukewarm borders jungles and savannas, ocean borders plains and forests). Untag a list entry to give that ocean
   back to the blacklist.
 - **Frozen is capped, not offset:** frozen biomes read min(temperature, 0.1). Height still makes peaks colder.
   `siberian_taiga` and `skylands_winter` (base 0.2) now snow all year instead of raining in summer.
 - **Adaptive tint is per biome:** Serene Seasons' grass/foliage tint gets the biome but no position inside its
-  colour helpers (`SeasonColorUtil`), so river and beach grass keeps the temperate tint. The resolvers that do
+  color helpers (`SeasonColorUtil`), so river and beach grass keeps the temperate tint. The resolvers that do
   have x/z are Serene Seasons' own lambdas assigned to `BiomeColors.GRASS_COLOR_RESOLVER` / `FOLIAGE_COLOR_RESOLVER`
   at client setup; patching them means targeting synthetic `lambda$` methods, which is fragile. Not done.
 - **Adaptive on the renderer uses a recorded column:** the alternative, redirecting the biome lookup in
   LevelRenderer, collides with Serene Seasons' own @Redirect on the same call (a second redirect fails to apply).
 - **The HUD's own setting "show tropical seasons"** is not consulted for arid/frozen: they always show.
 - **SeasonHUD uses Dry/Winter icons:** its season enum can't take new entries; arid and frozen borrow the Dry and
-  Winter icon and colour, with their own names.
+  Winter icon and color, with their own names.
 - **Other dimensions:** Serene Seasons only runs in the overworld; the tags do nothing in the pack's own
   dimensions (vanilla rules there).
 - **Worldgen** (WorldGenRegion) keeps vanilla rules, as Serene Seasons does: freeze-top-layer and snow at
@@ -390,7 +390,7 @@ So:
 - **Volcanoes do sit among jungles.** volcanic_peaks borders jungles (21%) about as often as savannas and brushland
   (28%), plus badlands, and reaches into the temperate band (forest, spruce taiga) about a fifth of the time.
 - **stony_peaks is hot only.** All its samples are in the warm band, and it pairs with volcanic_peaks. Its
-  neighbours are jungles and savannas; it is never near snow apart from where a range runs into frozen peaks (2%).
+  neighbors are jungles and savannas; it is never near snow apart from where a range runs into frozen peaks (2%).
 - **The snowy peaks are not cold-band biomes.** jagged_peaks and frozen_peaks sit mostly in the temperate band, so
   half of what surrounds them is meadow, dark forest, plains and taiga, all untagged temperate, which rain in summer
   while the peaks snow all year. That's the "out of step" rows in weather_by_biome.md 2.3; height makes them cold
@@ -400,7 +400,7 @@ So:
 - **Peaks are picked by erosion and weirdness, temperature picks which peak.** The same mountain ridge changes name
   as it crosses bands: stony_peaks/volcanic_peaks in the warm band, rocky_mountains, jagged/frozen peaks in the
   temperate and cold bands, scarlet/emerald peaks in the frozen band. That's why volcanic_peaks shows frozen/jagged
-  peaks as a neighbour 5% of the time.
+  peaks as a neighbor 5% of the time.
 
 ### 4.2 How often it rains
 
@@ -551,42 +551,42 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
 `LATE_WINTER`; it jumps to the start of that sub-season) and force rain with `/weather rain`. The deployed pack
 (patcherMod 1.0.6 or later, live since pack 1.0.6) has everything below; no jar to install.
 
-- [ ] **WE-01 boot:** start the game and join a world → no mixin errors in `logs/latest.log` mentioning `Season` (grep `InvalidInjection\|Season.*Mixin`)
-- [ ] **WE-02 desert dry:** desert, rain, any season → no rain drawn, no rain sound, a fire on sand keeps burning
-- [ ] **WE-03 badlands dry:** eroded badlands, rain, `/season set spring` (Mid Wet early on) → no rain
-- [ ] **WE-04 savanna Mid Wet only (changed 2026-10-09):** savanna, rain: `LATE_WINTER` and `EARLY_SPRING` → rain; `EARLY_WINTER`, `MID_SPRING`, `MID_SUMMER` → no rain
-- [ ] **WE-05 jungle:** jungle, rain, summer → rain except in late summer / early autumn (Mid Dry)
-- [ ] **WE-06 frozen summer:** snowy plains or siberian taiga, rain, `/season set summer` → snow falls; snow layers stay
-- [ ] **WE-07 temperate unchanged:** plains, rain → rain in summer, snow in winter
-- [ ] **WE-08 desert river:** river (or warm river) through a desert, rain, winter → no rain or snow over the water
-- [ ] **WE-09 jungle river:** river through a jungle, rain, winter → rain, no snow
-- [ ] **WE-10 plains river:** river through plains, rain, winter → snow, like the plains around it
-- [ ] **WE-11 beach:** beach next to a desert, rain → dry; beach next to plains in winter → snow
-- [ ] **WE-12 HUD arid:** SeasonHUD in a desert → Dry icon, "Arid", with day N / year length counting up
-- [ ] **WE-13 HUD frozen:** SeasonHUD in snowy plains → Winter icon, "Frozen", day N / year length
-- [ ] **WE-14 HUD river:** stand in a river in a desert → "Arid"; in a jungle river → Wet/Dry
-- [ ] **WE-15 tint:** badlands grass and savanna-badlands trees keep one colour through `/season set` changes; plains change
+- [ ] **WE-01 boot:** start the game and join a world -> no mixin errors in `logs/latest.log` mentioning `Season` (grep `InvalidInjection\|Season.*Mixin`)
+- [ ] **WE-02 desert dry:** desert, rain, any season -> no rain drawn, no rain sound, a fire on sand keeps burning
+- [ ] **WE-03 badlands dry:** eroded badlands, rain, `/season set spring` (Mid Wet early on) -> no rain
+- [ ] **WE-04 savanna Mid Wet only (changed 2026-10-09):** savanna, rain: `LATE_WINTER` and `EARLY_SPRING` -> rain; `EARLY_WINTER`, `MID_SPRING`, `MID_SUMMER` -> no rain
+- [ ] **WE-05 jungle:** jungle, rain, summer -> rain except in late summer / early autumn (Mid Dry)
+- [ ] **WE-06 frozen summer:** snowy plains or siberian taiga, rain, `/season set summer` -> snow falls; snow layers stay
+- [ ] **WE-07 temperate unchanged:** plains, rain -> rain in summer, snow in winter
+- [ ] **WE-08 desert river:** river (or warm river) through a desert, rain, winter -> no rain or snow over the water
+- [ ] **WE-09 jungle river:** river through a jungle, rain, winter -> rain, no snow
+- [ ] **WE-10 plains river:** river through plains, rain, winter -> snow, like the plains around it
+- [ ] **WE-11 beach:** beach next to a desert, rain -> dry; beach next to plains in winter -> snow
+- [ ] **WE-12 HUD arid:** SeasonHUD in a desert -> Dry icon, "Arid", with day N / year length counting up
+- [ ] **WE-13 HUD frozen:** SeasonHUD in snowy plains -> Winter icon, "Frozen", day N / year length
+- [ ] **WE-14 HUD river:** stand in a river in a desert -> "Arid"; in a jungle river -> Wet/Dry
+- [ ] **WE-15 tint:** badlands grass and savanna-badlands trees keep one color through `/season set` changes; plains change
 - [ ] **WE-16 crops:** superseded by crop seasons (crops.md CR-90, CR-96): wheat in a desert reads off in the dry season, wheat in snowy plains (frozen) off all year. Was: wheat on farmland in a desert in winter grows; wheat in snowy plains in summer does not (Serene Seasons fertility)
-- [ ] **WE-18 dry grasslands:** arid highlands and hot shrubland (declares rain), rain: `LATE_WINTER` → rain; `MID_SPRING` → none. HUD shows Wet/Dry
-- [ ] **WE-19 painted mountains:** rain, any sub-season → nothing falls; HUD "Arid"
-- [ ] **WE-20 temperate highlands:** rain, `MID_WINTER` → snow; `MID_SUMMER` → rain. HUD shows Winter/Summer, not Wet/Dry
-- [ ] **WE-21 cold ocean:** out at sea in a cold or plain ocean, rain, `MID_WINTER` → snow over the water, but no ice forms along the shore even after several minutes; `MID_SUMMER` → rain
-- [ ] **WE-22 warm ocean:** rain, `MID_WINTER` → rain (no snow, no ice); `LATE_SUMMER` → nothing (Mid Dry)
-- [ ] **WE-23 frozen ocean:** rain, `MID_SUMMER` → snow; open water between ice sheets freezes over with time
-- [ ] **WE-24 Pretty Rain:** warm river through a desert, rain, any season → no rain particles or rain sound over the water (sand dust where the bed is sand is fine); plains, rain, `MID_WINTER` → snow particles, not rain
-- [ ] **WE-25 Cool Rain:** Cool Rain (added in 1.0.5) plays its own per-block rain sounds from a HEAD inject in the client rain tick and reads the biome's own precipitation (`Biome.getPrecipitation`), not `SeasonTypes.precipitationAt`; not checked against the season types. Warm river through a desert, rain, any season → no rain sound over the water (if Cool Rain's sounds play there, it needs the same treatment as `PrettyRainSeasonMixin`); plains, rain, `MID_SUMMER` → Cool Rain's per-block sounds (leaves, metal, glass) play
-- [ ] **WE-26 skylands summer:** `terralith:skylands_summer` (`/locate biome`), rain, `EARLY_SPRING`, `MID_SPRING` and `MID_WINTER` → rain every time, never snow; HUD "Summer"
-- [ ] **WE-27 ocean winter only:** `minecraft:ocean` out at sea, rain: `EARLY_SPRING` and `LATE_AUTUMN` → rain; `EARLY_WINTER` → snow. `minecraft:cold_ocean` (cold): `EARLY_SPRING` and `LATE_AUTUMN` → snow, `MID_SPRING` → rain, no ice forms in any season
-- [ ] **WE-28 snow line:** plains or birch forest, rain, `MID_SUMMER`: stand on the highest ground below y320 → rain, not snow; generated snow on high ground (birch taiga) melts over time
-- [ ] **WE-29 frozen keeps snow:** frozen peaks or jagged peaks, rain, `MID_SUMMER` → snow at the summit
+- [ ] **WE-18 dry grasslands:** arid highlands and hot shrubland (declares rain), rain: `LATE_WINTER` -> rain; `MID_SPRING` -> none. HUD shows Wet/Dry
+- [ ] **WE-19 painted mountains:** rain, any sub-season -> nothing falls; HUD "Arid"
+- [ ] **WE-20 temperate highlands:** rain, `MID_WINTER` -> snow; `MID_SUMMER` -> rain. HUD shows Winter/Summer, not Wet/Dry
+- [ ] **WE-21 cold ocean:** out at sea in a cold or plain ocean, rain, `MID_WINTER` -> snow over the water, but no ice forms along the shore even after several minutes; `MID_SUMMER` -> rain
+- [ ] **WE-22 warm ocean:** rain, `MID_WINTER` -> rain (no snow, no ice); `LATE_SUMMER` -> nothing (Mid Dry)
+- [ ] **WE-23 frozen ocean:** rain, `MID_SUMMER` -> snow; open water between ice sheets freezes over with time
+- [ ] **WE-24 Pretty Rain:** warm river through a desert, rain, any season -> no rain particles or rain sound over the water (sand dust where the bed is sand is fine); plains, rain, `MID_WINTER` -> snow particles, not rain
+- [ ] **WE-25 Cool Rain:** Cool Rain (added in 1.0.5) plays its own per-block rain sounds from a HEAD inject in the client rain tick and reads the biome's own precipitation (`Biome.getPrecipitation`), not `SeasonTypes.precipitationAt`; not checked against the season types. Warm river through a desert, rain, any season -> no rain sound over the water (if Cool Rain's sounds play there, it needs the same treatment as `PrettyRainSeasonMixin`); plains, rain, `MID_SUMMER` -> Cool Rain's per-block sounds (leaves, metal, glass) play
+- [ ] **WE-26 skylands summer:** `terralith:skylands_summer` (`/locate biome`), rain, `EARLY_SPRING`, `MID_SPRING` and `MID_WINTER` -> rain every time, never snow; HUD "Summer"
+- [ ] **WE-27 ocean winter only:** `minecraft:ocean` out at sea, rain: `EARLY_SPRING` and `LATE_AUTUMN` -> rain; `EARLY_WINTER` -> snow. `minecraft:cold_ocean` (cold): `EARLY_SPRING` and `LATE_AUTUMN` -> snow, `MID_SPRING` -> rain, no ice forms in any season
+- [ ] **WE-28 snow line:** plains or birch forest, rain, `MID_SUMMER`: stand on the highest ground below y320 -> rain, not snow; generated snow on high ground (birch taiga) melts over time
+- [ ] **WE-29 frozen keeps snow:** frozen peaks or jagged peaks, rain, `MID_SUMMER` -> snow at the summit
 - [ ] **WE-30 rain height and gauge:** plains, rain, `MID_SUMMER`, fly (creative) up from the ground: rain around you up to y319, snow from y320 to about y360, nothing above. F3 particle count (`P:`) stays at or below the ground-level count
-- [ ] **WE-31 snow seasons reload:** move a biome into `snow_seasons` (e.g. `"minecraft:plains": ["mid_winter"]`), `/reload`, rain, `EARLY_WINTER` in plains → rain
-- [ ] **WE-32 cold:** taiga, rain: `LATE_AUTUMN`, `MID_WINTER`, `EARLY_SPRING` → snow; `MID_SPRING`, `MID_AUTUMN` → rain (before: snow). Windswept hills `LATE_SPRING` → rain. HUD shows the normal four seasons
-- [ ] **WE-33 skylands winter:** `terralith:skylands_winter`, rain, `MID_SUMMER` → snow; HUD shows "Winter" (not "Frozen") with day N of the year; grass keeps its colour across `/season set`; wheat does not grow, a winter crop does
-- [ ] **WE-34 skylands spring:** HUD with sub-seasons on: `/season set EARLY_WINTER` → "Early Spring", day 1 of 30 (24 in single-player), rain → snow; `/season set EARLY_SPRING` → "Mid Spring", day 1 of 60 (48), rain → rain; `/season set EARLY_AUTUMN` → "Late Spring", day 1 of 30 (24). Grass tint follows (Early Spring tint in world winter). Spring crops grow in world summer
-- [ ] **WE-35 skylands autumn:** `/season set EARLY_SPRING` → "Early Autumn" day 1 of 30 (24 in single-player), rain; `EARLY_SUMMER` → "Mid Autumn" day 1 of 60 (48); `EARLY_WINTER` → "Late Autumn" day 1 of 30 (24), snow. HUD with sub-seasons off: "Autumn", day N of 120 (96)
-- [ ] **WE-36 clouds:** overworld, look up from the ground and fly up: Distant Horizons' clouds at y350 (fly through them there; nothing at y520); rain particles reach the cloud layer. Turn vanilla clouds on (Video Settings) → vanilla layer at the same height
-- [ ] **WE-17 switch off:** `[seasons] enabled = false` in creativecalendar-common.toml, rejoin → deserts rain again in Mid Wet (Serene Seasons alone)
+- [ ] **WE-31 snow seasons reload:** move a biome into `snow_seasons` (e.g. `"minecraft:plains": ["mid_winter"]`), `/reload`, rain, `EARLY_WINTER` in plains -> rain
+- [ ] **WE-32 cold:** taiga, rain: `LATE_AUTUMN`, `MID_WINTER`, `EARLY_SPRING` -> snow; `MID_SPRING`, `MID_AUTUMN` -> rain (before: snow). Windswept hills `LATE_SPRING` -> rain. HUD shows the normal four seasons
+- [ ] **WE-33 skylands winter:** `terralith:skylands_winter`, rain, `MID_SUMMER` -> snow; HUD shows "Winter" (not "Frozen") with day N of the year; grass keeps its color across `/season set`; wheat does not grow, a winter crop does
+- [ ] **WE-34 skylands spring:** HUD with sub-seasons on: `/season set EARLY_WINTER` -> "Early Spring", day 1 of 30 (24 in single-player), rain -> snow; `/season set EARLY_SPRING` -> "Mid Spring", day 1 of 60 (48), rain -> rain; `/season set EARLY_AUTUMN` -> "Late Spring", day 1 of 30 (24). Grass tint follows (Early Spring tint in world winter). Spring crops grow in world summer
+- [ ] **WE-35 skylands autumn:** `/season set EARLY_SPRING` -> "Early Autumn" day 1 of 30 (24 in single-player), rain; `EARLY_SUMMER` -> "Mid Autumn" day 1 of 60 (48); `EARLY_WINTER` -> "Late Autumn" day 1 of 30 (24), snow. HUD with sub-seasons off: "Autumn", day N of 120 (96)
+- [ ] **WE-36 clouds:** overworld, look up from the ground and fly up: Distant Horizons' clouds at y350 (fly through them there; nothing at y520); rain particles reach the cloud layer. Turn vanilla clouds on (Video Settings) -> vanilla layer at the same height
+- [ ] **WE-17 switch off:** `[seasons] enabled = false` in creativecalendar-common.toml, rejoin -> deserts rain again in Mid Wet (Serene Seasons alone)
 
 ## 9. History
 
@@ -598,10 +598,10 @@ Set the season with `/season set <SUB_SEASON>` (Serene Seasons takes the sub-sea
   quirks, blacklist, tint/fertility/frequency, summary of effective behaviours. Savanna wet season marked as a design
   choice awaiting confirmation.
 - 2026-10-09: user decisions. New type **dry** (every savanna, shrublands, brushland, arid_highlands,
-  savanna_badlands): rain in Mid Wet only, Serene Seasons' own savanna behaviour; the three-wet-season rule is gone.
+  savanna_badlands): rain in Mid Wet only, Serene Seasons' own savanna behavior; the three-wet-season rule is gone.
   New type **temperate** (seasonal offset even above 0.8): temperate_highlands, ocean, cold ocean. painted_mountains
   arid. Oceans tagged (frozen -> frozen, warm/lukewarm -> tropical) and tagged biomes now override the blacklist.
-  Rain frequency, mountain neighbours and generation snow written up in section 4.1-4.3. Scratch probe 6.3. Then: rocky_mountains frozen, stony/volcanic peaks and crater tropical; jar installed in mods/.
+  Rain frequency, mountain neighbors and generation snow written up in section 4.1-4.3. Scratch probe 6.3. Then: rocky_mountains frozen, stony/volcanic peaks and crater tropical; jar installed in mods/.
   Then: cold and plain oceans no longer ice over (snow only); frozen oceans still freeze. Probe in 6.3, jar reinstalled.
 - 2026-10-09: "arid warm river rains" traced to Pretty Rain replacing the vanilla weather renderer (section 7).
   `PrettyRainSeasonMixin` + `SeasonTypes.precipitationAt`; jar built, not installed.

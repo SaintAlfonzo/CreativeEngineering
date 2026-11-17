@@ -142,7 +142,7 @@ One type per food. A `/` nests a type under its parent, and the tag of a nested 
 | `baked` | bread and buns | 12 | 5 / 0.4 | bread, sourdough bread, banana bread, adzuki bun |
 | `dairy` | cheese | 2 | 4 / 1 | flaxen and scarlet cheese wedges |
 | `sweet` | cake/pie slices, cookies, candy, chocolate, ice cream | 185 | 4 / 0.35 | cake slice, cookie, candies, waffles, ice cream |
-| `sweet/pancake` | pancakes eaten as items (added 2026-11-02, pancake family, [food_families.md](food_families.md) 4.7) | 7 | 4 / 0.6 | Rustic's six flavoured pancakes, Sweet Potato Pancakes |
+| `sweet/pancake` | pancakes eaten as items (added 2026-11-02, pancake family, [food_families.md](food_families.md) 4.7) | 7 | 4 / 0.6 | Rustic's six flavored pancakes, Sweet Potato Pancakes |
 | `handheld` | sandwiches, burgers, wraps, rolls, skewers, stuffed veg | 52 | 10 / 0.8 | hamburger, kelp roll, barbecue stick, pizza slice |
 | `salad` | salads | 11 | 6 / 0.6 | mixed salad, fruit salad, potato salad |
 | `soup` | soups, stews, broths | 31 | 10 / 0.7 | beef stew, chicken soup, bone broth, rabbit stew |
@@ -418,7 +418,7 @@ rule fits servings well: a can of n x source holds n servings, each worth one so
 **Servings, not durability.** The servings left are an NBT int (`CanServings`), written only on a can that has
 been opened. Real durability would force a stack size of 1 (cans stack to 64) and make cans enchantable. A full
 can carries no NBT, so new cans stack as before. An opened can draws a bar like a damaged tool's (width and
-green-to-red colour from the servings left), and every can with more than one serving has a tooltip line
+green-to-red color from the servings left), and every can with more than one serving has a tooltip line
 `Servings: x / y`.
 
 **Eating.** A mixin on `ItemStack#finishUsingItem` runs the can's own `finishUsingItem` on a one-can copy, so
@@ -470,7 +470,7 @@ eggs, noodle soup, the deploying step in cooking.js) needed a cotton farm first.
 **Fix.** cooking.js re-adds Farmer's Delight's three recipes through NCH with its values: furnace 200 ticks, smoker
 100, campfire 600, 0.35 xp each, input the vanilla egg (as Farmer's Delight had it; see 3.8). Ids are
 `creativeengineering:smelting|smoking|campfirecooking/...`. Incubation's fried egg stays removed. NCH `smoking` now
-takes `xp` and `cookingtime` like `smelting` (defaults 0 and 100, the old behaviour).
+takes `xp` and `cookingtime` like `smelting` (defaults 0 and 100, the old behavior).
 
 **Cooking oil.** `rusticdelight:cooking_oil` is a drinkable bottle (stacks to 16, 2 hunger, 50% Nausea 20 s, gives the
 bottle back). It feeds fried chicken, fried calamari, fried mushrooms, fruit beignet, spring rolls, the oil fried
@@ -637,7 +637,7 @@ seasoning list, cleared on resource reload; custom-rendered items are left alone
 salted overlay in three shades of the seasoning's own item (cheese wedge, onion bulb, garlic, sugar), made by
 [textureswapper/seasoning/make_seasoning.py](../textureswapper/seasoning/make_seasoning.py) into `kubejs/assets/creativeengineering/textures/item/seasoned/`
 (a new seasoning needs a source texture and a row in the script; they were hand-picked shades before the move to the
-texture swapper, so the colours shifted slightly). Salt's own overlay is off (`config/salt-client.toml` `SaltingOverlayEnabled =
+texture swapper, so the colors shifted slightly). Salt's own overlay is off (`config/salt-client.toml` `SaltingOverlayEnabled =
 false`, backup in `configs_edited/`): Salt caches its layered model per item, so it would show the first seasoned stack's
 icon on every salted one. All overlays share one shape, so on a food with several the last one drawn covers the
 others. FO-55. **Top right (2026-11-02, TODO `food/seasoning #15`):** every overlay, Salt's salted overlay included
@@ -759,13 +759,13 @@ Vanilla ratios: hunger x1 (apple to golden apple) and x2 (carrot to golden carro
 
 ### 3.17 Raw meat, cans and Spice of Life (DECIDED 2026-11-02, not built)
 
-- **Raw meat Hunger chance.** All raw meat and fish (and raw skewers) use raw chicken's Hunger chance and show it the same way in AppleSkin (the shank colour of a food that can give Hunger). **Raw chicken alone** keeps an additional poison chance. No new "nasty" food type: the downside is folded into the vanilla raw-chicken behaviour. Supersedes the "nasty food type" wording of the Barbeque's Delight owner decisions O26 and O27.
+- **Raw meat Hunger chance.** All raw meat and fish (and raw skewers) use raw chicken's Hunger chance and show it the same way in AppleSkin (the shank color of a food that can give Hunger). **Raw chicken alone** keeps an additional poison chance. No new "nasty" food type: the downside is folded into the vanilla raw-chicken behaviour. Supersedes the "nasty food type" wording of the Barbeque's Delight owner decisions O26 and O27.
 - **Cans in Spice of Life.** A can is not a unique food. It counts as the food that went into it (the `canned` parity rule's "source's Spice of Life value" stays; the separate-food reading is rejected).
 - **Out-of-band values** are reviewed and exempted, not snapped (D1).
 
 ### 3.18 Canned effects and canned golden food (DECIDED 2026-11-02, not built)
 
-**General rule.** A canned food gains the effects of its input food, and the length and strength of each effect roughly match the total of the input (a can of N servings is worth N of the food, per serving). This replaces the "one level stronger than the source" behaviour of Canned Goods' own code for foods that have a source.
+**General rule.** A canned food gains the effects of its input food, and the length and strength of each effect roughly match the total of the input (a can of N servings is worth N of the food, per serving). This replaces the "one level stronger than the source" behavior of Canned Goods' own code for foods that have a source.
 
 **Canned golden food.** Golden and gilded cans follow one value rule: a can's hunger and saturation come from the canned parity rule applied to the golden or gilded food's own (multiplied, capped, 3.16) values. Canned golden apples and canned gilded (enchanted) apples follow it like every other golden can. Their effects follow the general rule from the golden and gilded apple.
 
@@ -806,7 +806,7 @@ Vanilla ratios: hunger x1 (apple to golden apple) and x2 (carrot to golden carro
    (canned suspicious stew 11.98, canned steak 10.17): 16 cans reach every threshold.
 2. **Canned Goods ids are crossed.** `canned_carrots` is "Canned Pumpkin Pies" (sized for 2 pies) and the 2-carrot
    recipe makes it too, so carrots have no can of their own; `canned_pumpkin_pie` is "Canned Golden Carrots";
-   `canned_golden_carrot` is a second golden carrot can with no recipe; `canned_beetroot_soup` is labelled
+   `canned_golden_carrot` is a second golden carrot can with no recipe; `canned_beetroot_soup` is labeled
    "Canned Bread"; `canned_mushrooms` ("Canned Mushroom Stew") is made from 1 brown + 1 red mushroom but valued as 2
    stews. Canned cookies and the golden and notch apple cans are flagged as meat. Oculemonade runs Soda's effect
    (Speed II). The golden apple cans amplify their source (regeneration III, absorption V).
@@ -975,7 +975,7 @@ FO-14 to FO-22 cans ran as SQ-OF-00 to -03 (PASS 2026-10-22); FO-23 to FO-27 fri
 - [ ] **FO-20 effects per serving:** eat a Canned Golden Apples twice: its effects apply both times.
 - [ ] **FO-21 config:** set `[canning] emptyCanChance = 0`, `crushedCanChance = 1` in the Configs screen, empty a
   can: always a crushed can. `enabled = false`: no tooltip line, no bar, eating gives an empty can every time
-  (Canned Goods behaviour). Put both back.
+  (Canned Goods behavior). Put both back.
 - [ ] **FO-22 crafting:** add the `uncan_beef` example from canning.js's header comment as a real line (or any recipe with `cans`),
   `/reload`. One full Canned Beef in the grid -> cooked beef, and the grid keeps the can at 1 / 2; craft again ->
   cooked beef and the rolled return in the grid. No `[NCH] ... KubeJSCanAction not available` warning in the log.

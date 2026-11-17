@@ -197,7 +197,7 @@ shrimp route, and a balance check of that route.
 
 ### Build
 1. New `kubejs/assets/creativedelight/kubejs/alexsmobs/client.js` (`// requires: alexsmobs`): `ItemEvents.tooltip`
-   adding "You're telling me a shrimp fried this rice?" (gray italic, flavour) to `i.shrimp_fried_rice`; JEI page "Hand
+   adding "You're telling me a shrimp fried this rice?" (gray italic, flavor) to `i.shrimp_fried_rice`; JEI page "Hand
    rice to a tamed Mantis Shrimp next to a furnace: it fries the whole stack." on the same item.
 2. Balance (decision below), then the changelog bullet under the existing shrimp fried rice bullet's family.
 
@@ -284,7 +284,7 @@ Tag `#creativeengineering:food_type/sweet/pancake` (new).
 
 ### Decisions
 - Which pancakes survive: recommend all three lines stay (Supplementaries = the stackable topping block, Rustic = the
-  flavoured stacks, Veggies = a bowl dish); settle overlaps in `creativedelight/members #15`, not here.
+  flavored stacks, Veggies = a bowl dish); settle overlaps in `creativedelight/members #15`, not here.
 - Type name `sweet/pancake` (recommend, nests under sweet for tuning) vs a top-level `pancake`.
 
 ### Gotchas
@@ -583,7 +583,7 @@ A veggie omelette recipe where one ingredient is swapped for tomato, beetroot, a
 [brewinandchewin/recipes.js](../../kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js): the pot
 `brewinandchewin:cooking/vegetable_omelet` (cheese wedge, carrot, onion, eggs made `#forge:cooked_eggs` by
 `R.replaceInput`, line 86, bowl), the grid fold of 2 omelettes + cheese + onion + carrot + bowl (line 87), and the heated
-egg-solution mixing (line 17). Bell pepper `i.any_bell_pepper` (`#forge:crops/bell_pepper`, 9 Rustic colours), ghost
+egg-solution mixing (line 17). Bell pepper `i.any_bell_pepper` (`#forge:crops/bell_pepper`, 9 Rustic colors), ghost
 pepper `i.ghost_pepper`, `i.tomato`, `i.beetroot` (crop tags).
 
 ### Build
@@ -962,16 +962,16 @@ jam's colour.
 1. Audit in game: which items apply which covering (Supplementaries code: `PancakeBlock` topping by item / tag), what JEI
    and the tooltip say; write the list here.
 2. Jam colour: per-jam tint of `pancake_top_jam` / `pancake_side_jam` by a patcherMod `BlockColor` on
-   `supplementaries:pancake` keyed on the stored topping item (the block entity holds it: check), colours from
+   `supplementaries:pancake` keyed on the stored topping item (the block entity holds it: check), colors from
    `dishes/jams #1`. Or one texture per jam if jams stay a handful (resource pack).
 3. A JEI information page on `i.pancakes` listing the coverings (`JEIEvents.information`, CD `supplementaries/client.js`).
 
 ### Decisions
-Tint (one mixin or colour handler, any number of jams) vs per-jam textures: recommend the tint, after `jams #1` settles
+Tint (one mixin or color handler, any number of jams) vs per-jam textures: recommend the tint, after `jams #1` settles
 the jam set.
 
 ### Tests
-RC-137 Each jam covering shows its colour; JEI page and tooltip match the real options.
+RC-137 Each jam covering shows its color; JEI page and tooltip match the real options.
 
 ---
 
@@ -1013,15 +1013,15 @@ the bell pepper rolls.
 - Rustic port (CD member `rustic`, built 2026-10-25): `RiceRollRoyaleBlock` (`members/rustic/.../content/RiceRollRoyaleBlock.java`,
   `extends FeastBlock`, 8 servings from a fixed `ROLLS` list: cherry blossom, calamari, yellow, red, green pepper rolls, 3 kelp
   roll slices), registered `rusticdelight:rice_roll_royale` (`RDBlocks.java` line 66), and **the bell pepper rolls
-  already exist**: `bell_pepper_roll_<colour>` for all 9 colours (`RDItems.java` line 111). None of these has an item_dict key.
+  already exist**: `bell_pepper_roll_<colour>` for all 9 colors (`RDItems.java` line 111). None of these has an item_dict key.
 - Roll items for the new medleys (dict keys exist): Hostile `i.ghastroll`, `i.guardianroll`; Ocean's `i.elder_guardian_roll`;
   Oceanic `i.shrimp_roll`, `i.sea_pickle_roll` / `_slice`, `i.egg_roll`, `i.fish_egg_roll` / `_slice`.
 
 ### Build
-1. Generalise the Royale block: a `RollMedleyBlock(List<Supplier<Item>> rolls)` in the Rustic member (or the CD
+1. Generalize the Royale block: a `RollMedleyBlock(List<Supplier<Item>> rolls)` in the Rustic member (or the CD
    `farmers` member), servings = list size, shape and leftovers as the Royale. Register 4 blocks + block items:
    `hostile_roll_medley` (ghast, guardian, elder guardian rolls), `ocean_roll_medley` (shrimp and sea pickle rolls and
-   slices), `egg_roll_medley` (egg and fish egg rolls and slices), `bell_pepper_roll_medley` (the 9 colours or the 3 common
+   slices), `egg_roll_medley` (egg and fish egg rolls and slices), `bell_pepper_roll_medley` (the 9 colors or the 3 common
    ones). Models: recolours of `rice_roll_medley_block` stages; loot tables (full drops itself, as the Royale).
 2. Dict keys for the 4 medleys and the Rustic rolls; recipes in the CD tree of the namespace: shapeless rolls + bowl
    (as FD's medley), plus one assembly each on `i.bowl` with a unique first roll.
@@ -1036,7 +1036,7 @@ not read for this brief).
 - Namespace: `rusticdelight:` (the Royale's home; one class) vs `creativedelight:` vs each roll's own mod (needs a CD
   additions member per ARR mod). Recommend `rusticdelight:` for the pepper medley and a `creativedelight:` namespace for
   the three cross-mod ones, since they mix mods.
-- Bell pepper medley: 9 colours or 3: recommend the 3 common (green, yellow, red), like the Royale.
+- Bell pepper medley: 9 colors or 3: recommend the 3 common (green, yellow, red), like the Royale.
 
 ### Gotchas
 Create picks a sequenced assembly by its first step: every bowl-based medley needs a different first roll (rice medley
@@ -1138,7 +1138,7 @@ shape: change it too only if asked.
 Status: In Progress (rename built 2026-10-30, unreleased) / Work: KubeJS / data / id `merges/dishes #10`
 
 ### Goal
-Owner 2026-10-27: drop More Delight's loaded burger in favour of Vintage's "The Burger", renamed Loaded Burger, which
+Owner 2026-10-27: drop More Delight's loaded burger in favor of Vintage's "The Burger", renamed Loaded Burger, which
 accepts any cheese; mark every burger for an ingredient-variant audit and balancing.
 
 ### Now

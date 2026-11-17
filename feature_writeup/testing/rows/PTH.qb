@@ -25,10 +25,10 @@ bootreject (InsideBlocksMixin|MakeStuckInBlockMixin).*(rror|xception|fail)
 shell grep -cE '^\s*\[surface\.passthrough\.[a-z_]+\]' config/creativecompat-common.toml; grep -nE '^\s*(enabled|arrowLifeTicks|arrowLongLifeCap)\s*=' config/creativecompat-common.toml | sed -n '1,40p' | grep -A0 -E 'arrow|enabled'; awk '/^\s*\[surface\.passthrough\]/{f=1} f&&/^\s*\[surface\.passthrough\./{exit} f' config/creativecompat-common.toml | grep -E '='
 look shell: 11 tier tables; enabled, arrowLifeTicks, arrowLongLifeCap under [surface.passthrough]
 
-## SQ-PTH-02 | cobweb tier: lone web -0.5, cube centre -0.65, keeps moving, barbed wire hurts (razor wire added)
+## SQ-PTH-02 | cobweb tier: lone web -0.5, cube center -0.65, keeps moving, barbed wire hurts (razor wire added)
 @group A
 @commands Datapack: cobweb tier = `minecraft:cobweb`, `createaddition:barbed_wire`. Zombie in a lone web, then in a 3x3x3 web cube; `/attribute @e[type=zombie,limit=1,sort=nearest] minecraft:generic.movement_speed modifier value get a1386f64-4583-4798-9b29-f040c59b8574`
-@pass value -0.5 in the lone web, -0.65 in the cube centre; the zombie keeps moving (vanilla stuck cancelled); barbed wire still hurts
+@pass value -0.5 in the lone web, -0.65 in the cube center; the zombie keeps moving (vanilla stuck canceled); barbed wire still hurts
 @fails `PassThrough.cancelsStuck`, the tag; `PassRule.cell`
 @from batches/r1115/pth_a1.qb
 > setblock 1000 -60 1070 minecraft:cobweb
@@ -127,7 +127,7 @@ look bP: mod=none in the web cell (z 1100..1101); bQ: mod=-0.500 there; owner fi
 @@text
 @@text Creative Compat 1.0.0 built 2026-11-15 (build/libs, not installed). Same scratch datapack as phase 1 until phase 4:
 @@text block tag `passthrough/cobweb` = `minecraft:cobweb`; projectile groups come from the class defaults unless a row adds
-@@text `data/creativecompat/tags/entity_types/passthrough/projectile/<group>.json`. "Cube" = a 3x3x3 web cube (centre
+@@text `data/creativecompat/tags/entity_types/passthrough/projectile/<group>.json`. "Cube" = a 3x3x3 web cube (center
 @@text surrounded). Arrow despawn (SQ-PTH-12, -13) needs no datapack.
 @@text
 @@table
@@ -215,7 +215,7 @@ look both mod passes: orbs inside x 1000..1001 y -60..-59 z 1130..1131, same pos
 ## SQ-PTH-09 | bot falls 3 blocks into a cube: stops; jump climbs about 0.07 b/t, sneak sinks about 0.05; zombie hangs
 @group A
 @commands Player falls 3 blocks into the cube; probe vertical motion each tick (`/data get entity @s Motion`) with no input, holding jump, sneaking; a zombie dropped in
-@pass stops falling in the centre, no damage; jump climbs about 0.07 b/t, sneak sinks about 0.05 b/t; zombie hangs
+@pass stops falling in the center, no damage; jump climbs about 0.07 b/t, sneak sinks about 0.05 b/t; zombie hangs
 @fails `LivingClimbMixin` (`m_21297_` RETURN), `PassThrough.surroundedMotion`, `PassResult.surroundedTier`
 @from batches/r1115/pth_a1.qb
 @reviewed 2026-11-16
@@ -238,10 +238,10 @@ sleep 2
 look bP stops in the cube (y about -59, vy 0); jump: y rises about 0.07 per tick; sneak: falls about 0.05; z09 hangs (y about -59)
 reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
-## SQ-PTH-10 | cube: bot's tipped arrow, a no-pickup arrow, an explosive arrow hang at the centre; bot picks up the tipped one; breaking the centre drops the rest
+## SQ-PTH-10 | cube: bot's tipped arrow, a no-pickup arrow, an explosive arrow hang at the center; bot picks up the tipped one; breaking the center drops the rest
 @group A
 @commands Cube: fire a tipped arrow (player, survival) into the centre; a skeleton shoots one in; explosive arrow (Nock Enough Arrows) in; then walk in and pick up; break the centre web
-@pass arrows hang at the tick they reach the centre (no explosion); the tipped one is picked up as the same tipped arrow; the skeleton's cannot be picked up; breaking the web drops the hanging arrows
+@pass arrows hang at the tick they reach the center (no explosion); the tipped one is picked up as the same tipped arrow; the skeleton's cannot be picked up; breaking the web drops the hanging arrows
 @fails `ArrowPassMixin.creativecompat$hangInWeb`, `PassProjectiles` HANG, `PassGroup` default
 @from batches/r1115/pth_a2.qb
 @reviewed 2026-11-16
@@ -285,10 +285,10 @@ expect PTH10-centre-intact$
 look arrows stop near 1081.5 -58.x 1001.5 (vel 0) the tick they reach the centre; explosive no blast; P inventory: tipped_arrow Potion slowness; no-pickup arrow stays; after the break the rest fall
 reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
-## SQ-PTH-11 | elevated cube: snowball and pearl break in the middle (bot to the centre), splash potion sinks and splashes below, firework holds then explodes, fireball explodes in the centre
+## SQ-PTH-11 | elevated cube: snowball and pearl break in the middle (bot to the center), splash potion sinks and splashes below, firework holds then explodes, fireball explodes in the center
 @group A
 @commands Cube: throw a snowball, an ender pearl (the player is teleported), a splash potion of slowness, fire a firework from a crossbow with a star; separately a fireball (`/summon fireball ... {power:[0d,-0.1d,0d]}`)
-@pass snowball and pearl break in the middle (player ends in the centre, hanging); potion sinks down the centre line and splashes below the cube; firework holds still and explodes at its flight time; fireball explodes in the centre
+@pass snowball and pearl break in the middle (player ends in the center, hanging); potion sinks down the center line and splashes below the cube; firework holds still and explodes at its flight time; fireball explodes in the center
 @fails `PassProjectiles.breakIn` (`ProjectilePassMixin`), `settle`, `FireworkPassMixin` / `fireworkTail`
 @from batches/r1115/pth_a2.qb
 @reviewed 2026-11-16
@@ -330,7 +330,7 @@ reject \[cdevtest\] verb=pbot\.\S+ .*error=
 ## SQ-PTH-12 | lone webs: fishing bobber stops and reels in; pickarang held past its timeout, picked up whole; broken web drops it; thorn chakram the same
 @group A
 @commands Lone web: cast a fishing bobber into it, reel in; throw a Quark pickarang into it (survival), walk into it; throw another, break the web; Botania thorn chakram the same
-@pass bobber stops at the web centre and reels in; pickarang held at the centre past its timeout, picked up whole on touch (same damage and enchantments); breaking the web drops it as an item; chakram the same
+@pass bobber stops at the web center and reels in; pickarang held at the center past its timeout, picked up whole on touch (same damage and enchantments); breaking the web drops it as an item; chakram the same
 @fails `PassProjectiles` SNAG, `QuarkPickarangPassMixin` (liveTime), `BotaniaChakramPassMixin` (tickCount, return), `EntityPassMixin` touch
 @from batches/r1115/pth_a2.qb
 @reviewed 2026-11-16
@@ -1105,10 +1105,10 @@ reject MISSING
 > kill @e[tag=e21_spider]
 > kill @e[tag=e21_fox]
 
-## SQ-PTH-22 | rope tomatoes 3x3 age 0 centre -0.5; budding age 1 none, age 2 -0.25; coffee stem age 0 -0.25; taiga grape bush -0.64
+## SQ-PTH-22 | rope tomatoes 3x3 age 0 center -0.5; budding age 1 none, age 2 -0.25; coffee stem age 0 -0.25; taiga grape bush -0.64
 @group A
 @commands A zombie standing in each of: a 3x3 block of supplementaries rope tomatoes at age 0, FD budding tomatoes age 1 and age 2, a Farmer's Respite coffee stem age 0, a Vinery taiga grape bush; read the modifier each (`/attribute @e[type=zombie,limit=1,sort=nearest] minecraft:generic.movement_speed modifier value get <uuid>`)
-@pass rope tomatoes centre -0.5 (dense, age ignored); budding age 1 none, age 2 -0.25; coffee age 0 -0.25; taiga grape bush -0.64
+@pass rope tomatoes center -0.5 (dense, age ignored); budding age 1 none, age 2 -0.25; coffee age 0 -0.25; taiga grape bush -0.64
 @fails `passthrough_growth_any` members; `PassThrough.grown` (growth_any check before the age rule)
 @from batches/r1115/pth_a1.qb passed
 > fill 999 -61 1159 1020 -61 1161 minecraft:farmland
@@ -1179,10 +1179,10 @@ expect \[zpth\] mod f23 .* mod=none
 expect \[zpth\] mod z23c .* mod=none
 look s23b hp drops (barbed wire still hurts a spider); z23m slows hard in the poppy bush (vanilla stuck)
 
-## SQ-PTH-24 | IE revolver shot and Blocky Siege cannon ball pass a cube at full speed; snowball breaks in the centre
+## SQ-PTH-24 | IE revolver shot and Blocky Siege cannon ball pass a cube at full speed; snowball breaks in the center
 @group A
 @commands 3x3x3 cobweb cube: `/summon immersiveengineering:revolver_shot` and `blocky_siege:projectile_cannon_ball_projectile_projectile` aimed through it (`Motion:[1.5d,0d,0d]`), then a snowball the same way
-@pass both munitions leave the far side at the same speed; the snowball breaks in the centre
+@pass both munitions leave the far side at the same speed; the snowball breaks in the center
 @fails IE shots extend AbstractArrow: without the exempt tag they hang; `PassProjectiles.groupOf` reads `passthrough_exempt/all` first
 @from batches/r1115/pth_a1.qb
 > fill 1010 -60 1179 1012 -58 1181 minecraft:cobweb

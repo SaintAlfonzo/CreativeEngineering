@@ -34,7 +34,7 @@ in-game test.
 |---|---|---|---|
 | EX | Exposure 1.9.19 backport (base + Polaroid + Expanded) replaces Exposure 1.6.0 | in `mods/`, EX-11/EX-17 passed, rest pending | [exposure.md](exposure.md) (`EX-`) |
 | CB | Camera bags (leather, iron, netherite) | DEPLOYED in 1.0.3 (patcherMod), boot-tested only; moved to Exposure Extras in 1.0.4 | none yet |
-| VJ | Vinery JEI pages + Vinery behaviour reference | in `mods/`, VJ-/VN- pending, barrel time bug open | [vinery_jei.md](vinery_jei.md), [vinery.md](vinery.md) |
+| VJ | Vinery JEI pages + Vinery behavior reference | in `mods/`, VJ-/VN- pending, barrel time bug open | [vinery_jei.md](vinery_jei.md), [vinery.md](vinery.md) |
 | CU | Culture storage blocks (7 meats) | scripts live, untested | none yet |
 | CN | Canning recipe changes: alternative additives, canned cookies and bread | scripts live, untested | [food.md](food.md) 3.6 (cans) |
 | NM | Display Delight + Rustic Delight names, three food renames | live, NM-01..08 pending | [names.md](names.md) (`NM-`) |
@@ -69,7 +69,7 @@ iron and netherite: smithing upgrades that keep the contents. Slot counts are CE
 - Writeup: none yet; the camera-equipment tag belongs next to [exposure.md](exposure.md).
 
 **VJ: Vinery JEI and reference.** JEI pages for Vinery's Aging Barrel fermentation, Apple Press, Grape
-Stomping and Wine Aging (Vinery 1.3.10 ships REI support only). Alongside it: a behaviour reference for
+Stomping and Wine Aging (Vinery 1.3.10 ships REI support only). Alongside it: a behavior reference for
 Vinery from the decompiled jar, a prefix form of `removeTooltipKey` (`'key.*'`) in
 [tooltips.js](../kubejs/client_scripts/tooltips.js), and commented-out Vinery tooltip placeholders.
 - Where: patcherMod [compat/vinery/](../development/patcherMod/src/main/java/com/SaintAlfonzo/creativeengineering/compat/vinery/),
@@ -371,7 +371,7 @@ short time. The first job is to find out which of two layers is wrong, because t
 - **H1, render rebuild missed (client).** Rubidium 0.6.2c (unmaintained) loses section rebuilds under
   bursts of updates. The checkerboard fits: whole 16x16x16 sections not rebuilt. Test: F3+A. Fix candidates:
   replace Rubidium with Embeddium (its maintained successor, has 1.19.2 builds; check rubidium-extra and
-  Oculus compatibility), or a patcherMod client mixin that re-marks neighbouring sections dirty after a
+  Oculus compatibility), or a patcherMod client mixin that re-marks neighboring sections dirty after a
   multi-block update packet.
 - **H2, updates never sent (server).** Something sets blocks without the "notify clients" flag: WorldEdit's
   fast/side-effect settings on Forge, TreeChop's leaf breaking, or FastLeafDecay's scheduled removal. The
@@ -539,7 +539,7 @@ each tick. Logs are in `tools/item_repro/runs/2026-09-30/`.
   folder (git-ignored, never deployed). Each screen class has `isEnabled`, a position and a lock. New screens
   get defaults; the `T` key toggles the slot on the screen you're looking at.
 - This dev client's file has `InventoryScreen` and `sophisticatedbackpacks ... BackpackScreen` **enabled**
-  (backpack at x 87, y 147 from the screen centre) and `CuriosScreen` **disabled**. So either the client
+  (backpack at x 87, y 147 from the screen center) and `CuriosScreen` **disabled**. So either the client
   showing the bug has a different file, or the slot is enabled but drawn somewhere hidden (off screen,
   under the JEI overlay or a mod's side panel), or something stops it drawing on those screens.
 - TrashSlot reads `TrashSlotSaveState.default.json` when the save state doesn't exist yet and copies it
@@ -554,7 +554,7 @@ each tick. Logs are in `tools/item_repro/runs/2026-09-30/`.
    for the conditions that hide the slot (recipe book open, screen-size checks, unsupported screen types),
    and check whether the Curios / Cosmetic Armor inventory buttons swap the screen for a different class.
 4. For Sophisticated Backpacks: its screen size changes with the backpack tier and upgrades, so a fixed
-   offset from the centre can land off the panel or off screen. TrashSlot's API (`IGuiContainerLayout`,
+   offset from the center can land off the panel or off screen. TrashSlot's API (`IGuiContainerLayout`,
    `Snap`) supports per-screen layouts that snap to the panel edge.
 5. Check whether the slot is still clickable while it isn't drawn. If so, this is a direct lead for IM.
 
@@ -590,7 +590,7 @@ visibility problem, not a crash. The causes found in the code, in order of likel
    plan was being written and is now disabled (file saved 18:51), so pressing `T` once hides the slot on
    that screen class for good. Nothing ships or resets this file.
 3. **Backpack positions don't survive a size change.** The position is stored per screen class as an
-   offset from an anchor point (`anchorX`/`anchorY`, 0.5 = the panel centre): x = leftPos + width*anchorX +
+   offset from an anchor point (`anchorX`/`anchorY`, 0.5 = the panel center): x = leftPos + width*anchorX +
    slotX. The saved backpack entry (87, 147) is the default bottom-right spot for a 230x294 panel, which is
    whichever backpack was opened first. Sophisticated Backpacks changes the panel size with tier, upgrades and
    screen height, so on a smaller backpack the slot floats below the panel and on a larger one it sits over
@@ -638,7 +638,7 @@ other container is one config line away (`allContainers`, off).
   `configs_edited/`, per the configs-edited rule.
 - It's a common config in `config/`, not a per-world serverconfig, so the server picks it up on restart
   after the deploy: no manual serverconfig step.
-- Check once whether protection ends early when the player moves or attacks (mod behaviour). If it does,
+- Check once whether protection ends early when the player moves or attacks (mod behavior). If it does,
   150 s is a ceiling, not a guarantee, and the writeup should say so.
 
 **SP-01** join the server, stand still: the protection message and invulnerability last 150 s.

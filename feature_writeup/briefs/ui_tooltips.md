@@ -2,7 +2,7 @@
 
 Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# ui`, Sub `tooltips` (rows 2, 3 and 5 open; 1 Complete, 4 Testing).
 Feature writeup: [tooltips.md](../tooltips.md) (test prefix `TT-`, last id TT-30). Hand-written lines live in
-[tooltips.js](../../kubejs/client_scripts/tooltips.js) (helpers L1-86, colour legend `col.*` L95-125, sections from L153).
+[tooltips.js](../../kubejs/client_scripts/tooltips.js) (helpers L1-86, color legend `col.*` L95-125, sections from L153).
 
 ## Scope and order
 
@@ -59,7 +59,7 @@ the wrench, (f) lunchbox slot count.
   20). AppleSkin itself writes "xN" only when a row would exceed 10 icons. It also posts its API event
   `squeek.appleskin.api.event.TooltipOverlayEvent.Render` (item, x, y, pose) before drawing.
 - **(d) Chalk (verified, Chalk 1.6.4 jar).** `ChalkItem.useOn`: right-click a block face draws a mark (a regular mark:
-  a dot or an arrow, depending on where on the face you click; the dot/arrow split is the mod's documented behaviour,
+  a dot or an arrow, depending on where on the face you click; the dot/arrow split is the mod's documented behavior,
   not read from code); **sneak + right-click opens the symbol picker** (`openSymbolSelectionScreen`). The TODO / tooltips.md
   wording "hold right click to change mark" was wrong (tooltips.md 8 corrected). Off hand is ignored when the main hand
   holds chalk. Uses: `ChalkUses = 64` ([chalk-common.toml](../../config/chalk-common.toml) line 3). Symbols unlock by
@@ -141,7 +141,7 @@ the wrench, (f) lunchbox slot count.
      @Inject(method = "m_183452_", at = @At("TAIL"))                                // renderImage
      private void creativeengineering$draw(Font font, int x, int y, PoseStack pose, ItemRenderer ir, int z, CallbackInfo ci) { ... }
      ```
-     Draw the label once, vertically between the two rows (`y + 6`), right of the wider row, grey `0xAAAAAA` like
+     Draw the label once, vertically between the two rows (`y + 6`), right of the wider row, gray `0xAAAAAA` like
      AppleSkin's own "xN", with `pose.translate(0, 0, z)`. `CanServingsAppleSkin` (new, in `food/`) returns
      `"x" + CanServings.servingsLeft(stack)` when `maxServings > 1` and the `[canning] appleSkinServings` switch is on.
    - CEConfig `Canning`: `appleSkinServings` (boolean, default true, "client side: AppleSkin's bars on a can show one
@@ -161,7 +161,7 @@ the wrench, (f) lunchbox slot count.
 
 ### Decisions
 - **D1 Line text (a, d, e, f).** Proposed wording above; recommend the user reads all six in one pass (same as `#3`).
-- **D2 Food type line format.** Recommend just the label ("Feast"), grey, at the end of the tooltip; cans read
+- **D2 Food type line format.** Recommend just the label ("Feast"), gray, at the end of the tooltip; cans read
   "Canned: <source type>" from the `canned` map. Alternative: "Food type: Feast" (clearer, longer).
 - **D3 Can label: servings left or full count.** Recommend servings left ("x3" on a can with 3 of 4 left), matching the
   "Servings: 3 / 4" line; the bars are always one serving.
@@ -202,8 +202,8 @@ Botania and Cloud Storage get the practical lines a player needs without opening
   inputs). Open rows that will need a line later: `recipes/magic #3` (trinket case takes any item),
   `dishes/ingredients #11` (a use for the bowl of water).
 - **Cloud Storage 1.3.4 (verified, the mod's guide book `storage_clouds.txt`).** No pack lines. Mechanics: a Balloon
-  (dyeable, colour = cloud account) tied to a chest and released uploads that chest's space to the colour's cloud; a
-  Cloud Chest with a balloon of that colour opens it, needs sky access, not in the Nether, private to you (hoppers
+  (dyeable, color = cloud account) tied to a chest and released uploads that chest's space to the color's cloud; a
+  Cloud Chest with a balloon of that color opens it, needs sky access, not in the Nether, private to you (hoppers
   can't reach it); a Static Cloud Chest (from Static Cloud blocks) is shared, filled with static balloons (a balloon used
   on a Static Cloud block); Balloon Arrows (balloon + 8 arrows) fly straight and lift the mob hit; held balloons slow
   falls; the Cloud Blower runs on cloud bottles and changes mode on swing. Dict keys exist: `i.balloon` (1753),
@@ -212,24 +212,24 @@ Botania and Cloud Storage get the practical lines a player needs without opening
 
 ### Build
 1. tooltips.js: new "Cloud Storage" section after "Botania", `addTooltips` with `col.norm` / `col.uncm`. PROPOSED text:
-   - Balloon: "Tie it to a chest and let it go: the chest's space joins your cloud of that colour" / "Dye it to pick
+   - Balloon: "Tie it to a chest and let it go: the chest's space joins your cloud of that color" / "Dye it to pick
      the cloud"
-   - Cloud Chest: "Put a balloon on it to open that colour's cloud; needs open sky, not in the Nether" / "Only you can
+   - Cloud Chest: "Put a balloon on it to open that color's cloud; needs open sky, not in the Nether" / "Only you can
      open it; hoppers can't reach it"
    - Static Cloud Chest: "A cloud everyone shares; fill it with static balloons (a balloon used on a Static Cloud block)"
    - Balloon Arrow: "Flies straight; the mob it hits floats up"
-   - Balloon Stand: "Shows how many cloud slots each colour has" (from `cloudstorage.container.balloon_stand.*`)
+   - Balloon Stand: "Shows how many cloud slots each color has" (from `cloudstorage.container.balloon_stand.*`)
 2. Botania: recommend a short onboarding set, not one line per flower: Lexica Botania ("Botania's guide: start here"),
    mystical flowers and petals ("Petals go in a Petal Apothecary filled with water"), Petal Apothecary, Pure Daisy
    ("Turns the 8 blocks around it into living rock / wood"), Mana Spreader and Mana Pool ("Generating flowers fill
    spreaders; spreaders fill pools"), Wand of the Forest ("Links spreaders and flowers; sneak to switch mode"), using the
    dict keys `i.lexicon`, `i.white_mystical_flower` (pattern `botania:*_mystical_flower`), `i.white_petal` (pattern
    `botania:*_petal`), `i.apothecary_default`, `i.pure_daisy`, `i.mana_spreader`, `i.mana_pool`, `i.twig_wand`.
-   Use `addTooltipPattern` for the 16 colours (check the log line for the match count).
+   Use `addTooltipPattern` for the 16 colors (check the log line for the match count).
 3. tooltips.md 8 "Mods to Cover": tick both.
 
 ### Ids and data
-Cloud Storage facts from its jar's guide book (verified text, behaviour not tested in game). Botania facts from its
+Cloud Storage facts from its jar's guide book (verified text, behavior not tested in game). Botania facts from its
 lang and Lexicon (general knowledge, unverified against 440.2 code for the Pure Daisy count and wand modes).
 
 ### Decisions

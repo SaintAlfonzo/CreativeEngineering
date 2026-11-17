@@ -11,7 +11,7 @@ Merged 2026-10-19 from 4 memories (index compaction).
 Added 2026-09-07 (patcherMod [patchermod-coremod](patchermod-coremod.md)). The IE **Refinery** counterpart to the
 Create-mixer fluid brew [am-potion-brewing-fix](am-potion-brewing-fix.md) / `DragonBreathBrewing`: for every registered
 potion, both `create:potion{REGULAR}` **and** `{SPLASH}` + `forge:fluid/dragon_breath` fluid
-→ `create:potion{LINGERING}`. Coexists with the Create-mixer path and the IE-Mixer item path
+-> `create:potion{LINGERING}`. Coexists with the Create-mixer path and the IE-Mixer item path
 (user chose coexist). No catalyst item. **1500 mB** potion in/out (matches IE-Mixer potion
 amount); dragon's breath 250 mB (catalyst-style quarter-bucket); energy 120/op.
 
@@ -46,8 +46,8 @@ Mirrors IE's own `immersiveengineering:mixer_potion_list` mechanism:
   `isLingerification(r)` = output fluid isSame `AllFluids.POTION` && tag `Bottle == "LINGERING"`
   (within `RefineryRecipe.RECIPES` those are only ever ours).
 - `compat/DragonBreathingJEI` (the pack's existing `@JeiPlugin`) — third category wired next to
-  `potionMixing`: `registerCategories` (try/catch → `ACTIVE`), `registerRecipes`
-  (`RefineryRecipe.RECIPES.getRecipes(level)` filtered by `isLingerification` →
+  `potionMixing`: `registerCategories` (try/catch -> `ACTIVE`), `registerRecipes`
+  (`RefineryRecipe.RECIPES.getRecipes(level)` filtered by `isLingerification` ->
   `addRecipes(TYPE, ...)`), `registerRecipeCatalysts`
   (`new ItemStack(IEBlocks.Multiblocks.REFINERY)`).
 - `mixin/JEIHelperMixin` — SECOND `@Redirect` (first is the Mixer one). IE's `registerRecipes`
@@ -78,7 +78,7 @@ day:
    (bottling machine, arc furnace, IE mixer). Fixed.
 2. `PotionRecipeGeneratorsMixin.creativeengineering$addMixer` — the 1000 mB "lingering" batch was
    also applied to `lingering + redstone/glowstone → modified lingering` steps; now gated
-   `toType == LINGERING && fromType != LINGERING` so only the splash→lingering *conversion* is
+   `toType == LINGERING && fromType != LINGERING` so only the splash->lingering *conversion* is
    1000, modifiers are 1500. See [am-potion-brewing-fix](am-potion-brewing-fix.md).
 Re-verify after a client restart (status: feature_writeup/potions.md).
 
@@ -94,7 +94,7 @@ the potion display name + per-effect duration/amplifier lines (Create-style,
 `public static final IRecipeSlotTooltipCallback POTION_EFFECTS` — reads the slot's displayed
 `ForgeTypes.FLUID_STACK`; if it has a `Potion` tag, sets tooltip line 0 to `fs.getDisplayName()`
 and calls `PotionFluidHandler.addPotionTooltip(fs, tooltip, 1f)`. **Pure no-op for any fluid
-without a `Potion` tag** → safe to attach to every fluid slot. Loaded lazily on first JEI view;
+without a `Potion` tag** -> safe to attach to every fluid slot. Loaded lazily on first JEI view;
 no `forceLoad` (the category mixins already ref Create classes fine).
 
 ## The category mixins (all `@Mixin(remap=false)`, `creativeengineering.mixins.json` `client`)
@@ -118,7 +118,7 @@ if IE ever changes those categories and they break.
 ## Status
 Built 2026-09-07 (`./gradlew build --offline` clean, no refmap — JEI isn't obfuscated,
 IE targets use literal names). Client-only; needs a client restart to verify. Verify: hover the
-`create:potion` input on a Bottling Machine per-potion recipe / a Lingerification recipe → potion
+`create:potion` input on a Bottling Machine per-potion recipe / a Lingerification recipe -> potion
 name + effect line shown.
 
 ## ie-bottler-nbt-fluids
@@ -135,10 +135,10 @@ shows properly in JEI, and needs no per-recipe Java. What remains:
 ### patcherMod — `mixin/FluidTagInputMixin` only (`@Mixin(FluidTagInput.class, remap=false)`)
 `FluidTagInput` is IE's shared fluid-input predicate (Bottler + Mixer + Refinery). Two tweaks:
 1. **Subset NBT match** — `@Redirect` the single `CompoundTag.equals` in `testIgnoringAmount`
-   → `NbtUtils.compareNbt(recipeNbt, stackTag, true)`. So a recipe `nbt:{Bottle,Potion}` matches
+   -> `NbtUtils.compareNbt(recipeNbt, stackTag, true)`. So a recipe `nbt:{Bottle,Potion}` matches
    a `create:potion` stack that also carries `CustomPotionColor` etc. nbt-less recipes unchanged.
    **This is the essential piece.**
-2. Fluid-by-id in `deserialize` (`"fluid":"<id>"` → `Either.right(List.of(rl))`) — **dormant**,
+2. Fluid-by-id in `deserialize` (`"fluid":"<id>"` -> `Either.right(List.of(rl))`) — **dormant**,
    nothing uses it, and kjs-ie blocks `"fluid"` keys anyway (see below). Kept, harmless.
 
 Built into patcherMod 1.0.0. The old bottling mixins
@@ -148,12 +148,12 @@ Built into patcherMod 1.0.0. The old bottling mixins
 ### KubeJS — `kubejs/server_scripts/engineering/potion_bottling.js`
 - `e.remove({id:'immersiveengineering:potion_bottling_list'})` — IE's own potion bottling is a
   single `generated_list` container recipe (`PotionRecipeGenerators.getPotionBottlingRecipes()`,
-  `immersiveengineering:potion` fluid → potion, regular only). Sub-recipes aren't individual
+  `immersiveengineering:potion` fluid -> potion, regular only). Sub-recipes aren't individual
   RecipeManager entries; `CachedRecipeList` expands the container. Remove container = all gone.
   (Parallel: `immersiveengineering:mixer_potion_list` for IE-mixer potion mixing — leave for the
   mixer task.)
 - Loop `Java.loadClass('net.minecraft.core.Registry').POTION.keySet()` (skip `minecraft:empty`),
-  per potion × {REGULAR→potion, SPLASH→splash_potion, LINGERING→lingering_potion} emit
+  per potion × {REGULAR->potion, SPLASH->splash_potion, LINGERING->lingering_potion} emit
   `e.custom({type:'immersiveengineering:bottling_machine',
   fluid:{tag:'forge:fluid/potion', amount:250, nbt:'{Bottle:"..",Potion:"<id>"}'},
   inputs:[{item:'minecraft:glass_bottle'}], results:[{item:<out>, nbt:'{Potion:"<id>"}'}]})`.
@@ -164,14 +164,14 @@ Built into patcherMod 1.0.0. The old bottling mixins
   nbt:'{Bottle:"REGULAR",Potion:"minecraft:strength"}'}, i.cinder_flour, e,
   'redstone_from_cinder_flour_potion', 250)` — **confirmed working in-game + shows in JEI**.
   New dict key `f.t_potion = '#forge:fluid/potion'` in `fluid_dict.js`.
-- `mob_resources.js:28-29` — creosote → prepared_flesh(_block) `R.ieBottling` uncommented.
+- `mob_resources.js:28-29` — creosote -> prepared_flesh(_block) `R.ieBottling` uncommented.
 - JEI: `BottlingMachineRecipeCategoryMixin` adds the potion name + effect lines to the
   `create:potion` input slot tooltip — see [ie-potion-machines](ie-potion-machines.md).
 
 ## kjs-ie interception rules (learned 2026-09-06)
 
 kubejs-immersive-engineering intercepts **every** `immersiveengineering:*` recipe (raw JSON too):
-1. `IERecipeJS.readInputFluid` **hard-throws** on a by-id `"fluid"` key → recipe silently fails
+1. `IERecipeJS.readInputFluid` **hard-throws** on a by-id `"fluid"` key -> recipe silently fails
    to register. **Always use a fluid `#tag` in IE recipes**, never `"fluid":"<id>"`.
 2. For cleanly-parsed recipes (tag fluid), `deserialize()` leaves `RecipeJS.json` untouched and
    `getOriginalRecipe()` re-serializes it verbatim to IE's serializer — so **unknown keys and
@@ -185,21 +185,21 @@ kubejs-immersive-engineering intercepts **every** `immersiveengineering:*` recip
 - 2026-09-06 rework (remove IE potion bottling + generate per-potion + strip patcherMod dynamic
   code).
 
-## IE Mixer → create:potion  — DONE (see [am-potion-brewing-fix](am-potion-brewing-fix.md) "2026-09-07")
+## IE Mixer -> create:potion  — DONE (see [am-potion-brewing-fix](am-potion-brewing-fix.md) "2026-09-07")
 
 `PotionRecipeGeneratorsMixin` (output + input redirects) + `PotionHelperMixin` (un-skip
 thick/mundane bases) shipped; amount now 1000 mB. All pack potion brewing/mixing logic
 consolidated into `kubejs/startup_scripts/cooking/potions.js`. The draft below is the
 original plan, kept for context.
 
-## (original plan) Next — IE Mixer → create:potion  (plan refined 2026-09-06)
+## (original plan) Next — IE Mixer -> create:potion  (plan refined 2026-09-06)
 
 `~/.claude/plans/ie-mixer-create-potion-mixing.md` — **much simpler than the old draft.**
 `IETags.fluidPotion` is `forge:fluid/potion` (`forgeLoc("potion")`), which the pack tag
 (`fluidtags.js`) already fills with `create:potion`; IE's own `PotionRecipeGenerators` mixer
 recipes therefore already *accept* `create:potion` as input via the subset-NBT `FluidTagInputMixin`.
 Only the **output** is wrong. Fix = ONE mixin: `@Mixin(PotionRecipeGenerators.class)` `@Redirect`
-the `PotionFluid.getFluidStackForType(to,1000)` call in `registerPotionRecipe` →
+the `PotionFluid.getFluidStackForType(to,1000)` call in `registerPotionRecipe` ->
 `PotionFluidHandler.getFluidFromPotion(potion, BottleType.REGULAR, amount)` (create:potion).
 KEEP `immersiveengineering:mixer_potion_list` (we want those recipes, just redirected). No
 findRecipe/getRecipeForId/JEI mixins, no recipe generation. Makes `immersiveengineering:potion`
@@ -208,9 +208,9 @@ bullets keep working (shared tag / item-based).
 
 **2026-09-06: TWO redirects in `mixin/PotionRecipeGeneratorsMixin`** (both on
 `registerPotionRecipe`):
-1. `getFluidStackForType(to,1000)` (OUTPUT) → `PotionFluidHandler.getFluidFromPotion(to,REGULAR,1000)`
+1. `getFluidStackForType(to,1000)` (OUTPUT) -> `PotionFluidHandler.getFluidFromPotion(to,REGULAR,1000)`
    = `create:potion{Bottle:REGULAR,Potion:to}`.
-2. `PotionHelper.getFluidTagForType(from,1000)` (INPUT) → by-id `create:potion` FluidTagInput
+2. `PotionHelper.getFluidTagForType(from,1000)` (INPUT) -> by-id `create:potion` FluidTagInput
    (`new FluidTagInput(Either.right(List.of("create:potion")), 1000, {Bottle:REGULAR,Potion:from})`),
    EXCEPT `from==Potions.WATER` keeps `new FluidTagInput(FluidTags.WATER, 1000)` (awkward base step).
    Redirect #2 added after the user reported the IE mixer still *displayed/took* IE potion inputs —
@@ -218,15 +218,15 @@ bullets keep working (shared tag / item-based).
    first and the create:potion output didn't visually chain. Now in == out shape.
 
 Registered in `creativeengineering.mixins.json`, `./gradlew build --offline` clean (reobf maps
-`Potions.WATER`→`f_43599_`, `FluidTags.WATER`→`f_13131_`), jar in `mods/`. Needs restart +
+`Potions.WATER`->`f_43599_`, `FluidTags.WATER`->`f_13131_`), jar in `mods/`. Needs restart +
 verify (JEI `immersiveengineering:mixer` shows create:potion both sides & chains; water + nether
-wart → create:potion awkward; feed that awkward output back + glowstone → night vision).
+wart -> create:potion awkward; feed that awkward output back + glowstone -> night vision).
 Amounts already matched Create (both 1000 mB). `immersiveengineering:potion` now never produced
 *or* consumed. `fluidtags.js` cleanup still optional/not-done.
 
 ## Engineer's Workbench NBT ingredients — DONE 2026-09-06
 
-IE `IngredientWithSize` / vanilla `Ingredient` already honour `forge:partial_nbt`/`forge:nbt`
+IE `IngredientWithSize` / vanilla `Ingredient` already honor `forge:partial_nbt`/`forge:nbt`
 everywhere (Workbench `getMaxCrafted`/`consumeInputs` are NBT-aware); the only blocker was
 `NCH._itemJson` stripping NBT. Fix (workbench-only, per user): new private helper
 `NCH._nbtItemJson(v, opts)` in `neoCraftHelper.js` (right after `_itemJson`) handles raw
@@ -235,7 +235,7 @@ everywhere (Workbench `getMaxCrafted`/`consumeInputs` are NBT-aware); the only b
 now maps inputs/result through `_nbtItemJson` (`role:'input'|'result'`). **No other ie\*/create\*
 helper touched.** Enabled: `redstone.js` `thunder_detector_ie_workbench` (mundane potion) +
 `archery.js` `dousing_arrow` (water bottle). Plan: `~/.claude/plans/ie-nbt-ingredients.md`
-(other processes surveyed there, deferred). Server-script change → `/reload`.
+(other processes surveyed there, deferred). Server-script change -> `/reload`.
 
 ## tipped-arrow-machine-tipping
 
@@ -254,7 +254,7 @@ skips `minecraft:empty`), same as [ie-potion-machines](ie-potion-machines.md)'s 
   Spout fills ONE item per op (`FillingBySpout.fillItem` shrinks stack by 1), so 250/8=31.25 is floored
   to **31 mB/arrow** (~0.8% player-favorable vs hand craft — Create can't express the exact ratio).
 
-`R.ieBottling` / `_itemJson` can't emit result NBT → raw `e.custom` used for the bottler (same as
+`R.ieBottling` / `_itemJson` can't emit result NBT -> raw `e.custom` used for the bottler (same as
 potion_bottling.js). Exact-NBT match on the Create side means potions carrying extra NBT
 (CustomPotionColor) won't match — fine for vanilla lingering potions.
 

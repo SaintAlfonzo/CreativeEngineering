@@ -8,7 +8,7 @@
 @@jars creativebrewing creativecommon
 @@sources feature_writeup/creative_brewing.md feature_writeup/plan_cb_publish.md
 @@text
-@@text Not run. Every Creative Brewing (CB) behaviour, booted three ways: (1) the bare **chain** (only CB's hard dependencies:
+@@text Not run. Every Creative Brewing (CB) behavior, booted three ways: (1) the bare **chain** (only CB's hard dependencies:
 @@text nothing optional), (2) **optional** = the chain plus all 24 optional dependencies in CB's `mods.toml` and their own
 @@text required jars, (3) the chain plus **one** optional mod at a time (proves each guard alone: a guard that checks one mod
 @@text but names another fails only here). Needs the 2026-11-06 13:23 builds of Creative Brewing and Creative Common and the 13:17 Creative

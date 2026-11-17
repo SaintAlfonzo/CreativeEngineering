@@ -368,7 +368,7 @@ look the debug.log count is >= 1 (the watcher saw the edit); honeycomb:6 again w
 @group A
 @commands 5x5 `farmland[moisture=0]`, no water; fake player (not sneaking) uses a water bucket on the top of the centre; check moisture of the 3x3 and the ring; held item; repeat on `rich_soil_farmland` and `mulch_block[moisture=0]`
 @pass 3x3 at 7, ring at 0, holds `minecraft:bucket` (CR-105)
-@fails `WaterOnSoil` not registered; event cancelled too late
+@fails `WaterOnSoil` not registered; event canceled too late
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb passed
 > fill 1018 -61 1018 1022 -61 1022 minecraft:farmland[moisture=0]
@@ -746,7 +746,7 @@ look every state in display [...] carries half=lower
 @group A
 @commands Fake player in survival: `/setblock` a `farmersdelight:cooking_pot` with an ingredient in slot 0, bowls in slot 7, a meal in slot 6, a glass bottle in its remainder buffer; break it; repeat for `miners_delight:copper_pot` (bottle in slot 7) and `farmersrespite:kettle` (tank fluid, item in slot 0); then the sneak right-click pickup on each; place each item; break one in creative
 @pass the item has `BlockEntityTag.Inventory` with every kept slot (pot 0-8, copper 0-6, kettle 0-4 plus `CETankLevel`); only the bottle drops; placing restores every slot and the tank; the creative break drops loose; `[qol] cookwareKeepContents = false` restores upstream drops and the #27 pickup (KT-26)
-@fails `CookwareContents` not registered (no mark); BreakEvent cancelled by protection; loot run on another tick
+@fails `CookwareContents` not registered (no mark); BreakEvent canceled by protection; loot run on another tick
 @jars creativecommon creativedelight
 @reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb

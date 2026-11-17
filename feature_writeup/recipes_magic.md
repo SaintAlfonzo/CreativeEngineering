@@ -82,7 +82,7 @@ for the biome compass, Create's experience block for the XP machines.
   names through `global.tags._clean`. An NCH helper for `enderstorage:create_recipe` would fit the rule.
 - **F3. Dict duplicates:** `item_dict.js` defines `i.xp_block` and `i.any_sandpaper` three times each, `i.disenchanter`
   twice, `i.explorers_compass` and `i.explore_compass` for one item (same values).
-- **F4. Sculk loop:** 2 sculk + 50 mB XP → 4 sculk, and sculk is what echo shards are made of
+- **F4. Sculk loop:** 2 sculk + 50 mB XP -> 4 sculk, and sculk is what echo shards are made of
   ([recipes_engineering.md](recipes_engineering.md) 2.7), so echo shards cost XP rather than Deep Dark trips. Intended.
 
 ### Known limits
@@ -105,14 +105,14 @@ None.
 
 ## 7. In-game test suite
 
-- [ ] **RA-01 Disenchanter:** JEI → sandpaper, item drain, 3 experience blocks; craft it.
-- [ ] **RA-02 Printer and rotor:** JEI each → the recipes in 2.1.
-- [ ] **RA-03 Sculk:** unheated mixer, 2 sculk + 50 mB liquid XP → 4 sculk.
-- [ ] **RA-04 Ender chest:** JEI ender chest → Botania third eye; third eye → ender pearl.
-- [ ] **RA-05 Ender Storage:** craft an ender pouch with hemp fabric and modded leather → works, frequency set.
-- [ ] **RA-06 Cloud chest:** JEI cloud chest → ender chest in the centre.
-- [ ] **RA-07 Explorer's Compass (F1):** JEI → note any recipe.
-- [ ] **RA-08 Nature's Compass:** JEI → terrasteel ingot.
+- [ ] **RA-01 Disenchanter:** JEI -> sandpaper, item drain, 3 experience blocks; craft it.
+- [ ] **RA-02 Printer and rotor:** JEI each -> the recipes in 2.1.
+- [ ] **RA-03 Sculk:** unheated mixer, 2 sculk + 50 mB liquid XP -> 4 sculk.
+- [ ] **RA-04 Ender chest:** JEI ender chest -> Botania third eye; third eye -> ender pearl.
+- [ ] **RA-05 Ender Storage:** craft an ender pouch with hemp fabric and modded leather -> works, frequency set.
+- [ ] **RA-06 Cloud chest:** JEI cloud chest -> ender chest in the centre.
+- [ ] **RA-07 Explorer's Compass (F1):** JEI -> note any recipe.
+- [ ] **RA-08 Nature's Compass:** JEI -> terrasteel ingot.
 
 ## 8. History
 

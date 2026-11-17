@@ -180,7 +180,7 @@ the sky village (lower it if common; maybe more settlements over water), and the
 2. Jungle temples: done by #10's split (a `jungle_temples` group with a bigger separation). Do them together.
 3. Fresh watchtower: `python3 tools/gen_structure_groups.py --fit-rates`, then `git diff
    kubejs/generation_scripts/worldgen/structure_groups.json`. The run re-solves every fitted structure; if more than
-   the watchtower moves, either accept (the others moved because 7.4 added neighbours) or revert all but the
+   the watchtower moves, either accept (the others moved because 7.4 added neighbors) or revert all but the
    watchtower's entry. Read its new "1 per" in `structure_group_estimates.md`.
 4. Sky village (after an in-game look, see Decisions): to lower it, its frequency (1.0 -> 0.5 halves it). For "more
    over water": the existing group-level `biome_frequency` would scale the meteorite and balloons too, so either
@@ -457,7 +457,7 @@ floors sit near y 0 (ST-133 partly, [testing/structures/03_phase_3.md](../testin
 3. CEConfig `[worldgen.ocean_geodes]`: `mode = "FLOOR" | "FIXED"` (default FLOOR), `clearance = 3`,
    `cancelIfNoRoom = true`; `WorldgenConfig` getters.
 4. Headless check in `tools/worldgen_test/` (a fake level column: floor y 2, origin y 20 -> target below or
-   cancelled).
+   canceled).
 
 ### Ids and data
 `minecraft:budding_amethyst`, `geode:budding_prismarine` (Geode Plus, untouched list). patcherMod files:
@@ -466,12 +466,12 @@ floors sit near y 0 (ST-133 partly, [testing/structures/03_phase_3.md](../testin
 
 ### Decisions
 - Retune (floor-relative) or drop the system. Recommend floor-relative with cancel: amethyst stays on land and in
-  shallow seas, and deep-sea floors stop showing shells. Cancelling some ocean geodes lowers amethyst under oceans
+  shallow seas, and deep-sea floors stop showing shells. Canceling some ocean geodes lowers amethyst under oceans
   only.
 
 ### Gotchas
 - Geode Plus geodes are not reproducible per seed (03_phase_3.md), compare distributions, not chunks.
-- The decision is per geode origin column; a geode near a shore may still reach a shallower neighbour column.
+- The decision is per geode origin column; a geode near a shore may still reach a shallower neighbor column.
 
 ### Tests
 - ST-133 rerun: shells reaching the floor in ocean chunks drop to under a quarter of the off-switch count; land
@@ -584,7 +584,7 @@ structures.
   `config/waystones-common.toml` (line 109, **25**). A chunk qualifies when `(chunkX + offX) % 25 == 0` and the same
   for z, with offsets drawn from a `java.util.Random` seeded by `seed * chunkX*13 * chunkZ*13`, i.e. a new offset per
   chunk: not a grid. Simulated for seed 8675309 (scratchpad script): about **1 per 684 chunks** (1 per 26 x 26), but
-  clustered: median nearest neighbour 7.8 chunks, 10 % within 2.8 chunks. At 50: 1 per 2,500 chunks, median 13.4.
+  clustered: median nearest neighbor 7.8 chunks, 10 % within 2.8 chunks. At 50: 1 per 2,500 chunks, median 13.4.
 - The rate is the same in every biome; deserts look worst because the sandy stone stands on open flat ground (and
   the row x = 0 / z = 0 chunks share one seed, a small artefact).
 - `dimensionAllowList = ["minecraft:overworld", "minecraft:the_nether", "minecraft:the_end"]`, `spawnInVillages = true`

@@ -29,8 +29,8 @@ except the parts that already have a writeup: components, coils and the sample s
 | Redstone: vanilla, Create, Gates and Project Red parts rebuilt with assembly and blueprint routes; transmitter and redstone links | DEPLOYED |
 | Rails and Little Logistics: iron-rod rails, plates, Create tanks, redstone links instead of LL wireless | DEPLOYED |
 | Resource stones: Create ore stones by compacting, 3-heat stone generators, crushing tables for 20 stones | DEPLOYED |
-| Dusts: cinder flour + potion → 10 resources, amethyst / diamond dust, sulfur, TNT, obsidian | DEPLOYED; amethyst crushing clash fixed 2026-11-01 (F3) |
-| Smaller files: crystals, power (Create Crafts & Additions), music, bandage, plant oil, leather from flesh, wool → hemp, seashells, bottles, CC speaker | DEPLOYED |
+| Dusts: cinder flour + potion -> 10 resources, amethyst / diamond dust, sulfur, TNT, obsidian | DEPLOYED; amethyst crushing clash fixed 2026-11-01 (F3) |
+| Smaller files: crystals, power (Create Crafts & Additions), music, bandage, plant oil, leather from flesh, wool -> hemp, seashells, bottles, CC speaker | DEPLOYED |
 | Buckets (`process.js`, patcherMod `bucket/`): iron bucket from 3 iron plates; Wooden Bucket (3 planks, water only, stacks to 16) | BUILT 2026-10-29 (patcherMod 1.1.04 rebuilt 2026-10-30, installed 2026-10-31 00:44); RE-28 scratch server PASSED r1031 (2026-10-31, SQ-RE-28); RE-29, RE-30 in game pending; TODO `recipes/engineering #5`, [brief](briefs/recipes_engineering.md) |
 
 - **Pending:** buckets (built 2026-10-29, jar installed 2026-10-31 00:44; RE-28 PASSED r1031 2026-10-31, RE-29, RE-30 in game). Otherwise nothing built and unshipped. RE-01 to RE-20 have never been run. Findings F1 to F10 (section 4); F1 and F2
@@ -71,7 +71,7 @@ Workbench blueprint (usually the best yield).
 | IE cast iron | alloy kiln: iron ingot + coke dust or petcoke dust | |
 | IE blast brick (×3) | 4 nether bricks, 4 cast iron, molten nether bricks | IE blast furnace, steel |
 | Engineer's Workbench | steel instead of iron | every blueprint |
-| Steel (PneumaticCraft) | pressure chamber: iron ingot → steel ingot, iron block → steel block at 6 bar | a second steel route |
+| Steel (PneumaticCraft) | pressure chamber: iron ingot -> steel ingot, iron block -> steel block at 6 bar | a second steel route |
 | Vanilla blast furnace | vanilla recipe removed; Quark's deepslate / blackstone furnace recipes still make it (F1) | |
 
 Compressed iron is gone as its own material: the PNC recipes making it are removed, IE steel is tagged
@@ -93,8 +93,8 @@ steel ↔ 1 block replaces both mods' storage recipes (IE's slab recipes are poi
   glowstone block); daylight sensor (assembly on a wood slab with quartz or rose quartz plates, then glass);
   dropper (stone, a Quark wooden chute, redstone); dispenser crafting removed (F2); observer and piston take any stone;
   sticky piston by filling 50 mB slime; hopper blueprint.
-- **Create:** rose quartz (heated mixing 6 redstone + quartz → 1; arc furnace 4 redstone; pressure chamber 3 quartz + 9
-  redstone → 3 at 3 bar); polished rose quartz by charging (Create Crafts & Additions); rose quartz plate ×2 by saw
+- **Create:** rose quartz (heated mixing 6 redstone + quartz -> 1; arc furnace 4 redstone; pressure chamber 3 quartz + 9
+  redstone -> 3 at 3 bar); polished rose quartz by charging (Create Crafts & Additions); rose quartz plate ×2 by saw
   (sawmill version with redstone back is a datapack JSON, [engineering.md](engineering.md)); electron tube (deploy an iron
   plate on polished rose quartz, arc furnace, blueprint ×2); rose quartz lamp (shaped with zinc nuggets, assembly,
   blueprint).
@@ -111,7 +111,7 @@ steel ↔ 1 block replaces both mods' storage recipes (IE's slab recipes are poi
 
 - Rail ×12 from 6 iron rods + a stick (assembly ×8, blueprint `railtransport` ×12); detector, activator, powered and
   Create controller rails ×6 from rails (blueprints ×8).
-- Little Logistics: iron ingots → any iron plate in the whole mod; vehicle link from iron wire, 2 from a chain, assembly
+- Little Logistics: iron ingots -> any iron plate in the whole mod; vehicle link from iron wire, 2 from a chain, assembly
   ×6, blueprint; seater car ×4 (planks + iron blocks); fluid car and barge with a Create fluid tank; locomotive and tug
   take a blast furnace (F1); seater barge takes a Create seat; rapid hopper with brass; fluid hopper rebuilt; vessel
   charger with an MV coil, vacuum tubes and redstone blocks.
@@ -137,7 +137,7 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
 
 ### 2.6 Dusts (`dust.js`, `end.js`)
 
-- **Cinder flour + potion:** 8 cinder flour + a potion bottle → 8 of a resource (bottle back); IE Bottler 20 mB per flour,
+- **Cinder flour + potion:** 8 cinder flour + a potion bottle -> 8 of a resource (bottle back); IE Bottler 20 mB per flour,
   180 mB per flour pile (×9); Create filling 25 mB per flour, 225 mB per pile.
 
   | Potion | Resource | Potion | Resource |
@@ -148,27 +148,27 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   | Long fire resistance | sulfur dust | Resistance (`kubejs:resistance`) | powdered obsidian |
   | Long invisibility | saltpeter | Strong slowness | coke dust |
 
-- **Other dusts:** amethyst shard → amethyst dust; diamond → diamond dust (Create Crafts & Additions' own removed);
-  amethyst shard → amethyst dust also on the millstone (no glowstone from shards since 2026-11-01, F3); ender pearl → 2-3 ender shards (Ender's
+- **Other dusts:** amethyst shard -> amethyst dust; diamond -> diamond dust (Create Crafts & Additions' own removed);
+  amethyst shard -> amethyst dust also on the millstone (no glowstone from shards since 2026-11-01, F3); ender pearl -> 2-3 ender shards (Ender's
   Delight).
-- **Sulfur:** Vintage Improvements' scoria → sulfur removed; blaze powder → 75 % sulfur. **TNT ×4** from 5 gunpowder + 4
+- **Sulfur:** Vintage Improvements' scoria -> sulfur removed; blaze powder -> 75 % sulfur. **TNT ×4** from 5 gunpowder + 4
   sulfur (vanilla recipe removed), so TNT needs the Nether.
-- **Obsidian:** powdered obsidian block + 2000 mB lava, superheated → layered obsidian; saw → 12 sturdy plates.
+- **Obsidian:** powdered obsidian block + 2000 mB lava, superheated -> layered obsidian; saw -> 12 sturdy plates.
 
 ### 2.7 Crystals and the smaller files
 
 | File | What |
 |---|---|
-| `crystal.js` | budding amethyst (assembly on an amethyst block: amethyst dust, 250 mB thick potion, 4 loops); amethyst lens (cut + polish, 5 loops); diamond from 9 coal blocks at 8 bar, diamond shard from 4 at 8 bar or compacting 9 + 250 mB lava superheated (Create Ultimate Factory and PNC coal → diamond removed); echo shard from 4 sculk around an amethyst shard, or assembly |
+| `crystal.js` | budding amethyst (assembly on an amethyst block: amethyst dust, 250 mB thick potion, 4 loops); amethyst lens (cut + polish, 5 loops); diamond from 9 coal blocks at 8 bar, diamond shard from 4 at 8 bar or compacting 9 + 250 mB lava superheated (Create Ultimate Factory and PNC coal -> diamond removed); echo shard from 4 sculk around an amethyst shard, or assembly |
 | `power.js` | Create Crafts & Additions: spools, relay and connectors removed; IE light bulb (carbon ×1, or steel spring ×3); vacuum tube ×3 (nickel plate, bulb glass, copper wire, redstone); capacitor (electrum + constantan plates, electron tube); portable energy interface ×2; modular accumulator from an IE HV accumulator |
 | `music.js` | note block with an amethyst shard; jukebox with a note block + diamond; Etched radio with a transmitter; Supplementaries speaker block ×2 from railway casings, filters and a vibration mechanism (its own recipe and Create Things and Misc's brass speaker recipe removed) |
 | `computing.js` | CC speaker takes the Supplementaries speaker instead of a note block |
 | `health.js` | PNC bandage: canvas or hemp fabric + 4 honey bottles or 4 glycerol; Bottler / Spout with honey (1) or phenolic resin (2) |
-| `oil.js` | flax seeds and the 8 grape seed kinds squeeze to 50-60 mB plant oil; PNC crops → vegetable oil removed |
-| `mob_resources.js` | jrftl rotten flesh → leather removed; ersatz leather from honeycomb + hemp fabric; rotten flesh + 250 mB creosote → prepared flesh → smoke to leather (and blocks) |
+| `oil.js` | flax seeds and the 8 grape seed kinds squeeze to 50-60 mB plant oil; PNC crops -> vegetable oil removed |
+| `mob_resources.js` | jrftl rotten flesh -> leather removed; ersatz leather from honeycomb + hemp fabric; rotten flesh + 250 mB creosote -> prepared flesh -> smoke to leather (and blocks) |
 | `fabric.js` | about 50 recipes take hemp fabric as well as wool; frames and paintings also take paper or canvas |
 | `vibrating.js` | vibrating sand: four seashells 22.5 % each, nautilus shell 9 %, heart of the sea 1 % |
-| `laser_cutting.js` | glass → 3 bottles |
+| `laser_cutting.js` | glass -> 3 bottles |
 
 ## 3. What the pack changes
 
@@ -176,7 +176,7 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   `R.incomplete(key)`, `R.ieBlueprint(output, inputs, category, e)`, `R.pcPressureChamber`, ...). Ids are generated from
   output, input and process (`creativeengineering:createcrushing/...` and so on) unless an id is given.
 - Blueprint items (`blueprints.js`): each category from a Create empty schematic, most also from paper + dye (the
-  original IE shape); any blueprint + an empty schematic → 2 copies. IE's molds blueprint recipe is replaced.
+  original IE shape); any blueprint + an empty schematic -> 2 copies. IE's molds blueprint recipe is replaced.
 - The old commented-out `global.CE` version of `resource_blocks.js` (from line 257) was deleted 2026-10-22 ([TODO](todo/TODO.md) `tooling/conventions #3`).
 
 ## 4. Limits and decisions
@@ -192,12 +192,12 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   `variant_furnaces` on) still make `minecraft:blast_furnace`, which is what the comment asks for; not yet seen in JEI
   ([brief](briefs/recipes_engineering.md)).
 - **F2. The dispenser has no recipe. Your call.** `redstone.js` removes it ("must be crafted from dropper") and adds
-  nothing. Unless a mod adds dropper → dispenser, dispensers are loot only. Check with RE-08.
+  nothing. Unless a mod adds dropper -> dispenser, dispensers are loot only. Check with RE-08.
 - **F3. Amethyst shards had two crushing recipes in each machine. FIXED 2026-11-01** (user call): no glowstone from
   shards. One recipe per machine: millstone and crushing wheels 75 % amethyst dust, IE crusher amethyst dust + 25 %
   amethyst dust (1.25 average). Glowstone keeps its other sources (cinder flour + night vision, soul sandstone, Create's
   glowstone block crushing). Verify with RE-16.
-- **F4. Coal blocks in the pressure chamber:** 9 blocks → diamond and 4 blocks → diamond shard at the same pressure.
+- **F4. Coal blocks in the pressure chamber:** 9 blocks -> diamond and 4 blocks -> diamond shard at the same pressure.
   With 9 or more in the chamber which one runs depends on PNC's recipe order (not checked). Check with RE-12.
   **Fixed 2026-11-16:** the diamond takes 8 coal blocks (`crystal.js`), the same rate as the shard (4 blocks); RE-31.
 - **F5. Cinder flour routes don't line up.** Redstone, glowstone and gunpowder have no single-flour Create filling (only
@@ -210,7 +210,7 @@ tuff. Stone recipes in Gates, Create Things and Misc, stonecutter, repeater and 
   `i.incomplete` instead of `R.incomplete(key)`; an `R.viVibrating` step form would fit the helper rule.
 - **F8. Comments that no longer match:** the mechanical press comment says "replace brass with gold" (it uses stiff
   springs and an iron block); the vehicle link step ids say `step2_ingot` for a nugget step. **Fixed 2026-11-16:**
-  the `process.js` comments rewritten, the `transport.js` step ids removed (no behaviour change).
+  the `process.js` comments rewritten, the `transport.js` step ids removed (no behavior change).
 - **F9. Thunder detector filling NBT** omits `Bottle:"REGULAR"`, so splash and lingering mundane potion fluid probably
   match too (Create's fluid NBT match is partial; not checked). **Fixed 2026-11-16:** the filling NBT is
   `{Bottle:"REGULAR",Potion:"minecraft:mundane"}` (`redstone.js`); RE-33.
@@ -252,47 +252,47 @@ None. KubeJS logs a validation error for any helper call naming an item that doe
 
 Use JEI (recipe and usage views) and a creative test world with Create, IE and PNC machines.
 
-- [ ] **RE-01 Log:** `/reload` → no `_validateAny` errors from engineering scripts in `server.log`.
-- [ ] **RE-02 Deployer early:** JEI brass hand → gold plates; no brass needed.
-- [ ] **RE-03 Blast furnace (F1):** JEI `minecraft:blast_furnace` → note whether any recipe exists; JEI locomotive → needs
+- [ ] **RE-01 Log:** `/reload` -> no `_validateAny` errors from engineering scripts in `server.log`.
+- [ ] **RE-02 Deployer early:** JEI brass hand -> gold plates; no brass needed.
+- [ ] **RE-03 Blast furnace (F1):** JEI `minecraft:blast_furnace` -> note whether any recipe exists; JEI locomotive -> needs
   one.
-- [ ] **RE-04 Press, saw, drill:** JEI each → the recipes in 2.1, including deploying the sawblade and drillhead.
-- [ ] **RE-05 Nether lock:** JEI alloy brick → only blackstone + nether brick routes; blast brick → cast iron + molten
+- [ ] **RE-04 Press, saw, drill:** JEI each -> the recipes in 2.1, including deploying the sawblade and drillhead.
+- [ ] **RE-05 Nether lock:** JEI alloy brick -> only blackstone + nether brick routes; blast brick -> cast iron + molten
   nether bricks.
-- [ ] **RE-06 Workbench:** JEI Engineer's Workbench → steel.
-- [ ] **RE-07 Steel:** pressure chamber at 6 bar with an iron ingot → IE steel; 9 steel → the steel block; a PNC recipe
+- [ ] **RE-06 Workbench:** JEI Engineer's Workbench -> steel.
+- [ ] **RE-07 Steel:** pressure chamber at 6 bar with an iron ingot -> IE steel; 9 steel -> the steel block; a PNC recipe
   that asks for compressed iron accepts steel.
-- [ ] **RE-08 Dispenser (F2):** JEI dispenser → note any recipe.
+- [ ] **RE-08 Dispenser (F2):** JEI dispenser -> note any recipe.
 - [ ] **RE-09 Mechanisms:** sequenced assembly of a vibration mechanism from an echo shard runs 3 loops; redstone
   mechanism with a vibrating step completes on a vibrating table.
 - [ ] **RE-10 Transmitter and links:** craft a transmitter, then 2 redstone links; Etched radio and display link use it.
-- [ ] **RE-11 Rails:** 6 iron rods + stick → 12 rails; workbench `railtransport` blueprint → 12.
-- [ ] **RE-12 Coal (F4):** 9 coal blocks in a pressure chamber at 8 bar → note diamond or shard. Since 2026-11-16 see RE-31.
-- [ ] **RE-13 Stone generator:** mixer with water + lava, unheated / heated / superheated → 1 / 5 / 10 cobblestone per
+- [ ] **RE-11 Rails:** 6 iron rods + stick -> 12 rails; workbench `railtransport` blueprint -> 12.
+- [ ] **RE-12 Coal (F4):** 9 coal blocks in a pressure chamber at 8 bar -> note diamond or shard. Since 2026-11-16 see RE-31.
+- [ ] **RE-13 Stone generator:** mixer with water + lava, unheated / heated / superheated -> 1 / 5 / 10 cobblestone per
   batch.
-- [ ] **RE-21 Obsidian generator:** heated mixer with 250 mB water + 250 mB lava → 1 obsidian, both fluids used up;
-  unheated → nothing.
-- [ ] **RE-28 Iron bucket [scratch]:** *PASS r1031 (2026-10-31, SQ-RE-28; JEI look in game).* JEI `minecraft:bucket` → only `shaped/bucket_from_plates` (3 iron plates, V shape).
+- [ ] **RE-21 Obsidian generator:** heated mixer with 250 mB water + 250 mB lava -> 1 obsidian, both fluids used up;
+  unheated -> nothing.
+- [ ] **RE-28 Iron bucket [scratch]:** *PASS r1031 (2026-10-31, SQ-RE-28; JEI look in game).* JEI `minecraft:bucket` -> only `shaped/bucket_from_plates` (3 iron plates, V shape).
 - [ ] **RE-29 Wooden bucket [scratch]:** craft from 3 planks; scoops and places water only (lava, a cow's milk do nothing);
   placing returns the wooden bucket; texture and names show.
 - [ ] **RE-30 Wooden bucket in machines [scratch]:** Create spout / basin / FD cooking pot drain the wooden water bucket
   and return the empty one; it fills from water only.
-- [ ] **RE-31 Coal blocks (F4 fixed, brief RE-24) [scratch]:** 9 coal blocks in a pressure chamber at 8 bar → a diamond
+- [ ] **RE-31 Coal blocks (F4 fixed, brief RE-24) [scratch]:** 9 coal blocks in a pressure chamber at 8 bar -> a diamond
   (1 block left) or 2 shards (1 left); either is one diamond's worth. JEI shows 8 blocks for the diamond. Queue SQ-RE-31.
 - [ ] **RE-32 Cinder singles (F5 fixed, brief RE-25) [scratch]:** a spout pours 25 mB strength / night vision / harming
-  potion onto one cinder flour → 1 redstone / glowstone dust / gunpowder. Queue SQ-RE-32.
+  potion onto one cinder flour -> 1 redstone / glowstone dust / gunpowder. Queue SQ-RE-32.
 - [ ] **RE-33 Thunder detector NBT (F9 fixed, brief RE-26) [scratch]:** the assembly's filling step lists the regular
   mundane potion only; a spout with splash mundane potion fluid does not advance it, regular mundane does. Queue SQ-RE-33.
-- [ ] **RE-14 Ore stone:** compact 6 iron nuggets + 2 gravel + 250 mB lava → crimsite; IE crush → 5 iron nuggets.
-- [ ] **RE-15 Cinder flour:** 8 cinder flour + a strength potion → 8 redstone and a glass bottle; a pile in the Bottler
-  with 180 mB strength → 9 redstone.
+- [ ] **RE-14 Ore stone:** compact 6 iron nuggets + 2 gravel + 250 mB lava -> crimsite; IE crush -> 5 iron nuggets.
+- [ ] **RE-15 Cinder flour:** 8 cinder flour + a strength potion -> 8 redstone and a glass bottle; a pile in the Bottler
+  with 180 mB strength -> 9 redstone.
 - [ ] **RE-16 Amethyst crushing (F3):** JEI uses of an amethyst shard: millstone and crushing wheels each show one
   recipe (75 % amethyst dust), IE crusher one (amethyst dust + 25 % amethyst dust); no glowstone recipe from shards.
-- [ ] **RE-17 TNT:** JEI TNT → only gunpowder + sulfur, ×4.
-- [ ] **RE-18 Layered obsidian:** superheated mixer, powdered obsidian block + 2000 mB lava → layered obsidian; saw → 12
+- [ ] **RE-17 TNT:** JEI TNT -> only gunpowder + sulfur, ×4.
+- [ ] **RE-18 Layered obsidian:** superheated mixer, powdered obsidian block + 2000 mB lava -> layered obsidian; saw -> 12
   sturdy plates.
-- [ ] **RE-19 Leather from flesh:** spout 250 mB creosote on rotten flesh → prepared flesh; smoker → leather.
-- [ ] **RE-20 Seashells:** sand on a vibrating table → seashells, sometimes a nautilus shell.
+- [ ] **RE-19 Leather from flesh:** spout 250 mB creosote on rotten flesh -> prepared flesh; smoker -> leather.
+- [ ] **RE-20 Seashells:** sand on a vibrating table -> seashells, sometimes a nautilus shell.
 
 ## 8. History
 

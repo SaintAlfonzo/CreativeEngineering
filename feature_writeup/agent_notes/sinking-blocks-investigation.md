@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-Full reference and tests BR-22…26 and BR-30…33: `feature_writeup/blockrunner.md` §3.4. Since 2026-09-27, full framed/copycat blocks sink like their newest camo (`SinkingRender.depthAt` → `CamoSpeed.camo`), gated by `[surface.sinking] copyCamo` (default true, independent of `[surface.camouflage] copyCamo`; both moved from `[block_sinking]`/`[camouflage_speed]` on 2026-09-27). User rule: camo sinking only on frames whose own shape is a full block (isCollisionShapeFullBlock, same as any sinking block), and no tooltip mentions it. Built, but still not in mods/ as of 2026-09-27 12:43 (the game was open for every build; the user noticed it missing in game).
+Full reference and tests BR-22…26 and BR-30…33: `feature_writeup/blockrunner.md` §3.4. Since 2026-09-27, full framed/copycat blocks sink like their newest camo (`SinkingRender.depthAt` -> `CamoSpeed.camo`), gated by `[surface.sinking] copyCamo` (default true, independent of `[surface.camouflage] copyCamo`; both moved from `[block_sinking]`/`[camouflage_speed]` on 2026-09-27). User rule: camo sinking only on frames whose own shape is a full block (isCollisionShapeFullBlock, same as any sinking block), and no tooltip mentions it. Built, but still not in mods/ as of 2026-09-27 12:43 (the game was open for every build; the user noticed it missing in game).
 
 **Decision (owner, 2026-09-26):** no collision/hitbox changes — visual only. Soul sand's real sink is its 14/16 collision box (support/visual shape stay full), and copying that would break iron golem spawns on sand, drowned beach AI, shulker attaching, etc. (entityCanStandOn callers). So that route was dropped.
 

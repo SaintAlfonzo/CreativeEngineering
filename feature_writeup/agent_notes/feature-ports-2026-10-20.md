@@ -6,7 +6,7 @@ Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs
 
 2026-10-20 (feature_porting.md 1.1 + 2.4, FP-08..14; TODO largecontent/featureporting #2 Testing, #3 In Progress):
 - Tier 1 in `kubejs/server_scripts/other/feature_ports.js` (377 recipes through NCH; AE2's 311 generated from 19
-  templates x 16 colours + 7 fluix; 85 `ae2:*_cable` keys added to item_dict), `tags/feature_port_tags.js`
+  templates x 16 colors + 7 fluix; 85 `ae2:*_cable` keys added to item_dict), `tags/feature_port_tags.js`
   (`ae2:can_remove_color`, `forge:buckets/water`, `creativeengineering:bottled_air/fire_sources`),
   `kubejs/data/minecraft/loot_tables/blocks/{copper_ore,deepslate_copper_ore}.json` (Copper Drops: 1 raw copper),
   `other/starter_kit.js`. Jars (11) in `disabledmods/`, rows out of mod_sides.md, configs deleted, server_mods/pack regenerated.

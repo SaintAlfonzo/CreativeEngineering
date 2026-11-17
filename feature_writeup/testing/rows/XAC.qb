@@ -3,7 +3,7 @@
 # Run: qrun.py run OUT feature_writeup/testing/rows/XAC.qb RES [--section KEY] [--rows ID,...]
 
 @@section 1
-@@title CQ-XAC Xaero's World Map colours from the block atlas, 2026-11-07 ([perf.md](../perf.md) section 18; Compat 13:35 installed)
+@@title CQ-XAC Xaero's World Map colors from the block atlas, 2026-11-07 ([perf.md](../perf.md) section 18; Compat 13:35 installed)
 @@date 2026-11-07
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
@@ -13,7 +13,7 @@
 ## CQ-XAC-01
 @group client
 @commands Open a world, open the world map over grass, water, sand, leaves, a modded block area; F3+T, look again; `grep -c "Leaked resource.*Finalizer" logs/latest.log`; `grep -i "XaeroAtlasColour\|xaero.map.MapWriter" logs/latest.log`
-@pass map colours as before (no grey or black blocks), no mixin apply errors, leaked-resource warnings from Xaero gone (reload-listener ones may remain)
+@pass map colors as before (no gray or black blocks), no mixin apply errors, leaked-resource warnings from Xaero gone (reload-listener ones may remain)
 @fails redirect not applied (Xaero updated, ordinal moved) or sampling differs
 @reviewed 2026-11-16
 shell ! grep -iE "Mixin apply.*(XaeroAtlasColour|xaero)|InvalidInjectionException.*xaero" logs/latest.log

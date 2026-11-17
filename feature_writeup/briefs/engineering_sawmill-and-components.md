@@ -28,7 +28,7 @@ Open rows: #5 (Bug), #2, #3, #4, #6, #8, #9, #10, #11, #12, #13, #14 (Planned). 
 #7 (bucket -> shulker shell eats buckets) was decided 2026-10-29: keep, nothing to build (TODO Complete); its section is
 removed.
 
-1. **Cleanups, one sitting (KubeJS, `/reload`):** #6 tier comments, #5 disassembly comments / tool, #4 one centre per
+1. **Cleanups, one sitting (KubeJS, `/reload`):** #6 tier comments, #5 disassembly comments / tool, #4 one center per
    component. All in `components.js` and `metal_base_materials.js`. If #8 is
    built right after, #4 and #5 become columns of its table; they are small enough to do first anyway.
 2. **Sawmill:** #2 (move the 211 recipes into a KubeJS data helper), then #3 (JEI shows the blade; patcherMod). #3 does
@@ -275,12 +275,12 @@ sawblade for a profiled recipe; U on a stairs blade lists the stairs recipes.
 
 ---
 
-## sawmill-and-components #4: One centre per component
+## sawmill-and-components #4: One center per component
 Status Planned / Work KubeJS / `engineering/sawmill-and-components #4` (owner asked for more info 2026-10-30; line refs
 re-checked 2026-10-31)
 
 ### Goal
-Each component has one centre item across crafting, sequenced assembly and blueprint.
+Each component has one center item across crafting, sequenced assembly and blueprint.
 
 ### Now
 - Iron: crafting `components.js` 36 and assembly 55 use `i.rod_copper`; blueprint 74 `i.ingot_copper`. IE's own
@@ -288,12 +288,12 @@ Each component has one centre item across crafting, sequenced assembly and bluep
   `blueprint/component_iron`), so the blueprint line is IE's leftover.
 - Diamond: crafting 40 and assembly 59 `i.component_electrum`; blueprint 78 `i.component_gold`.
 - Stale comments: 29 ("4 plates around a copper ingot"), 30 ("uses minecraft:diamond in the plate slots": it uses
-  `i.dust_diamond`), 53 ("deploy 3 plates onto a copper ingot": 1 plate per loop, 3 loops, onto the centre), 72
+  `i.dust_diamond`), 53 ("deploy 3 plates onto a copper ingot": 1 plate per loop, 3 loops, onto the center), 72
   ("2 plates + 1 copper ingot").
 
 ### Build
 1. Line 74: `i.ingot_copper` -> `i.rod_copper`. Line 78: `i.component_gold` -> `i.component_electrum`.
-2. Fix comments 29, 30, 53, 72 ("centre per component, table in engineering.md 2.3").
+2. Fix comments 29, 30, 53, 72 ("center per component, table in engineering.md 2.3").
 3. engineering.md 2.3 table: drop the two **(F4)** marks; mark F4 fixed.
 
 ### Decisions
@@ -388,7 +388,7 @@ written by hand.
      already tabled and balanced, recipes_metal 2.2);
    - `metals`: one row string per metal, e.g. `copper: 'Y Y Y Y Y Y Y Y Y'`, `uranium: 'Y Y Y - - - - - Y'`, with
      `H` = exists, made by hand elsewhere (diamond component, HV coil and block, any chain you want to tweak);
-   - `centre`: per metal component centre (the #4 table: `iron: 'rod_copper'`, `aluminum: ['ingot_nickel','ingot_silver']`, ...)
+   - `centre`: per metal component center (the #4 table: `iron: 'rod_copper'`, `aluminum: ['ingot_nickel','ingot_silver']`, ...)
      and `part` overrides (`diamond: 'dust_diamond'`).
    Validation at load: a `Y` cell must resolve to a real item (not `i.na` / `i.none`), else warn with the key.
 3. **Startup consumers read it:** `transition_items.js` 169-193 registers `coil_<m>`, `coil_block_<m>`, `component_<m>`
@@ -405,7 +405,7 @@ written by hand.
    | wire -> coil | `shaped` 4 + spool -> 4, `createSequencedAssembly` 3 loops -> 4, `ieBlueprint` `electricalcomponents` 6 + spool -> 8, disassembly 4 -> 3 | |
    | coil -> coil block | `shaped` 8 + iron rod, assembly 6 loops, blueprint 4 + rod, disassembly -> 4 | |
    | rod -> spring, wire -> small spring | **new `NCH.viCoiling(output, input, e, idOverride, opts)`**: `{type:'vintageimprovements:coiling', ingredients:[..], results:[..], processingTime:120 (wire 60), springColor:'828282'}` (shape verified on VI's `coiling/iron_rod.json`); spring disassembly blueprints | 1 |
-   | plates + centre -> component | `shaped` `P P / _C_ / P P`, assembly 3 loops, blueprint 2 + centre, disassembly -> 2 | |
+   | plates + center -> component | `shaped` `P P / _C_ / P P`, assembly 3 loops, blueprint 2 + center, disassembly -> 2 | |
 
    For each generated cell, first remove the foreign recipes of that step:
    `R.remove({ input: i[src + '_' + m], output: i[dst + '_' + m] }, e)`. This only touches datapack recipes (verified:
@@ -521,7 +521,7 @@ Unknown: the row says "a cover for IE wire connectors", decision "what it is". A
   Engineer's Hammer" (IE manual `wiring.txt`, verified). No recipe; nothing to build except telling players (tooltip on
   the connectors in `client_scripts/tooltips.js`, IE section from line 442).
 - **Cosmetic cover block** (KubeJS startup block, thin plate with a hole): can't share the block space with the
-  connector, so it only frames it from a neighbouring block. Low value.
+  connector, so it only frames it from a neighboring block. Low value.
 - **Camouflage on the connector** (patcherMod): right-click a connector with a block to store a `BlockState` in the
   connector's block entity and render it as a casing. Needs mixins on IE's connector block entity (NBT, sync) and its
   model / renderer; large and fragile. Framed Blocks / Create copycats can't hold a connector.
@@ -619,7 +619,7 @@ in for redstone dust in high-tier components.
    stockpile switch ×2. Shaped + blueprint (`redstonecomponents`) each.
 4. High tier: replace redstone dust with the mechanism via `replaceInput` by id in IE `blueprint/component_electronic`
    (`#forge:dusts/redstone`, verified JSON), IE `crafting/logic_unit`, and in the pack's high components if you want
-   (Gold / Electrum Electrical centres are wires today).
+   (Gold / Electrum Electrical centers are wires today).
 
 ### Ids and data
 `i.redstone_mechanism` (dict 1710), `i.i_redstone_mechanism` (19), `i.rose_quartz_plate` (1489,

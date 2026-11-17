@@ -3,7 +3,7 @@
 Owner request (2026-10-28 01:10): run the performance stress-test queue. Block 1 is the recent feature checks
 from [scratch_queue.md](scratch_queue.md). Block 2 is the perfBot rows (SQ-PB-01 (now SQ-PFS-01) to -05) and the perf suite. Capture
 performance the whole way through. Summaries are saved regularly and never truncated (raw recordings may be capped).
-When a bug blocks a test, debug it. When the only fix would change a feature's behaviour, record it here for review
+When a bug blocks a test, debug it. When the only fix would change a feature's behavior, record it here for review
 and leave the feature as it is. This file is updated after every step, so it survives a machine crash.
 
 ## Status (newest first)
@@ -149,7 +149,7 @@ Arrows 1.7% (`TemptByWhistleGoal#canUse` on every mob), Regrowth 1.6%, Domestica
 (`tool_effects.js:49` and `armor_effects.js:47` PlayerEvents.tick, 0.39% and 0.33% of tick). GC: 660 collections,
 7.4 s paused in 5.5 min, longest 1784 ms = the 1837 ms tick. Bees tick underground (y -27, y 0) at several spots.
 
-## Findings for review (not fixed: would change feature behaviour)
+## Findings for review (not fixed: would change feature behavior)
 
 1. **Salt merge leftovers (SQ-SALT-01).** The swap missed the custom recipe types `vintagedelight:fermenting` (3
    froglight recipes take `vintagedelight:salt_block`) and `tactical_fishing:fishing` (catches `vintagedelight:salt_bucket`).
