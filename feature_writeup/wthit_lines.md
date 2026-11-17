@@ -47,7 +47,7 @@ campfire, sheetmetal tank, kitchen station and keg lines, and the coverage audit
 | "Fertile Seasons: Spring, Summer" and red "Out of season here" on Serene Seasons crops | BUILT 2026-10-28, shipped in 1.1.04 (client 2026-10-29) | here, 2.12 |
 | Barriers, structure voids, light blocks shown to operators only | BUILT 2026-10-28, shipped in 1.1.04 (client 2026-10-29) | here, 2.13 |
 | Brewin' keg: temperature, "Fermenting: Beer 45%", "Must Be Cold" (in the Brewin' port) | BUILT 2026-10-20 | here, 2.8 |
-| Vinery lines (grapevine pot, barrel, press, storage, lattice vines) | BUILT in the Vinery port's own plugin (`vinery:info`) | [alcohol.md](alcohol.md) B4.6 |
+| Vinery lines (grapevine pot, barrel, press, storage, lattice vines) | BUILT in the Vinery port's own plugin (`vinery:info`) | [alcohol_part_b.md](alcohol_part_b.md) 4.6 |
 
 - **Pending:** WL-01 to WL-42 in game. The scratch server run (section 6) proved every plugin loads on both sides
   and showed seven lines in a world before the last round of changes; everything else is unseen.

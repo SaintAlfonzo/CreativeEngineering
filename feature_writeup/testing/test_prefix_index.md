@@ -205,7 +205,7 @@ same pass as the renames.
 | `TT-` | [tooltips.md](../tooltips.md) |  |  |  |
 | `TX-` | [plan_scratch_testing_expansion.md](../plan_scratch_testing_expansion.md) | CQ-TX (4), SQ-TX (18) |  | not in the README index yet |
 | `UD-` | [unusual_delight.md](../unusual_delight.md) |  |  |  |
-| `VB-` | [alcohol.md](../alcohol.md) |  | briefs/alcohol_vineryport.md |  |
+| `VB-` | [alcohol_part_b.md](../alcohol_part_b.md) |  | briefs/alcohol_vineryport.md, alcohol.md |  |
 | `VD-` | [veggies_delight.md](../veggies_delight.md) |  |  |  |
 | `VH-` | [visceral_heap.md](../visceral_heap.md) | CQ-VH (5), SQ-VH (14) | plan_visceral_heap.md |  |
 | `VJ-` | [vinery_jei.md](../vinery_jei.md) |  |  |  |

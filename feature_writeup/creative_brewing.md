@@ -16,7 +16,7 @@ later moves (section 2) is in place with no feature moved yet; the move plan is 
 
 Written for: the owner, as the working reference for the Creative Brewing moves. Same shape as Creative Delight
 ([creative_delight.md](creative_delight.md)); this file only records where CB differs or what is specific to it.
-Ports' own content and tests stay in [alcohol.md](alcohol.md) (Part A Brewin', `AL-`; Part B Vinery, `VB-`).
+Ports' own content and tests stay in [alcohol.md](alcohol.md) (Brewin', `AL-`) and [alcohol_part_b.md](alcohol_part_b.md) (Vinery, `VB-`).
 
 ## 0. At a glance
 

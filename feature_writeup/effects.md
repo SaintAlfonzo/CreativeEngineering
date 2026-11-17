@@ -239,7 +239,7 @@ Mods are in alphabetical order after vanilla. Numbers are per level unless state
 | No World Map `xaeroworldmap:no_world_map_harmful` | Xaero's World Map | N | - | N | N | N | | | No World Map: total | Same, harmful category. | PROPOSED: Disables and hides Xaero's World Map. |
 
 Not in the table: `vinery:health_effect`, `vinery:luck_effect` and `vinery:resistance_effect`. The Vinery port
-dropped them (alcohol.md B7.3); its wines give vanilla Health Boost, Luck and Resistance instead. Botania's brews also
+dropped them (alcohol_part_b.md 7.3); its wines give vanilla Health Boost, Luck and Resistance instead. Botania's brews also
 carry vanilla effects; only the six Botania effects are listed under Botania.
 
 ### 2.2 Counts

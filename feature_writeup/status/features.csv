@@ -34,7 +34,7 @@ Mixed jars,mixed_jars.md,MJ-,BUILT,"creativecompat, creativedelight",SQ-JFP,DEPL
 Placeable food catalog,placeable_catalog.md,,reference,,,"reference, regenerate with `python3 tools/placeable_catalog.py` after `/dumpplaceable`",,,
 Coaster model candidates,coaster_model_candidates.md,,reference,,,ANALYSIS 2026-10-26,,,
 Oven,oven.md,OV-,BUILT,creativedelight,SQ-DB,first version DEPLOYED with 1.0.7,,,
-Remainder buffer,remainder_buffer.md,RB-,BUILT,"creativecommon, creativedelight","SQ-RB, SQ-STN","BUILT 2026-11-03, scratch test queued (SQ-STN-01 to -05, CQ-STN-01, SQ-RB-21b rerun",,,
+Remainder buffer,"remainder_buffer.md, plan_remainder_buffer_old.md",RB-,BUILT,"creativecommon, creativedelight","SQ-RB, SQ-STN","BUILT 2026-11-03, scratch test queued (SQ-STN-01 to -05, CQ-STN-01, SQ-RB-21b rerun",,,
 Item merges,item_merges.md,MG-,BUILT,"creativecommon, creativedelight","CQ-MG, SQ-CM, SQ-MG, SQ-SALT, SQ-SWP, SQ-VTDA","2026-11-02/03: swap-list merges and world half (6) BUILT, patcherMod 1.1.08 and CD jar installed 2026-11-02 ...",,,
 Texture sources,texture_sources.md,,reference,,,"audit 2026-11-13: 4 swap, 27 redo, 349 confirm",reference,audit 2026-11-16: reference document; its TODO rows belong to other features,2026-11-16
 Texture reuse,texture_reuse.md,,reference,,,"research only, 2026-10-22",,,
@@ -42,7 +42,7 @@ Kitchen,kitchen.md,KT-,BUILT,"creativecommon, creativedelight","CQ-FAU, CQ-FCB, 
 Stack sizes,stack_sizes.md,,reference,,,"reference from the 2026-10-02 `/dumpstacks` (2141 items), before the stack size policy (DEPLOYED with 1.0.6): ...",reference,audit 2026-11-16: reference document; TODO rows cite it as their writeup,2026-11-16
 Exposure cameras and photographs,exposure.md,EX-,BUILT,exposure,,DEPLOYED (1.0.3,,,
 Alcohol: Brewin' and Chewin' backport,alcohol.md,AL-,BUILT,creativebrewing,,port `-01` DEPLOYED with 1.0.7 (beside the 2.0 jar,,,
-Alcohol: Vinery backport,alcohol.md,VB-,BUILT,creativebrewing,,port `-01` DEPLOYED with 1.0.7 (replaces Vinery 1.3.10 + doapi,,,
+Alcohol: Vinery backport,alcohol_part_b.md,VB-,BUILT,creativebrewing,,port `-01` DEPLOYED with 1.0.7 (replaces Vinery 1.3.10 + doapi,,,
 Veggies Delight backport and implementation description,veggies_delight.md,VD-,BUILT,creativedelight,"SQ-DM, SQ-VDF","2026-11-02 night: R7 pancakes BUILT, CD jar installed 2026-11-02 23:16, not booted (SQ-PCK, SQ-CDJ6)",,,
 Vintage Delight backport and integration plan,vintage_delight.md,VTD-,BUILT,creativedelight,"CQ-VTDA, SQ-MXS, SQ-VP, SQ-VTD4, SQ-VTD5, SQ-VTD6, SQ-VTD7, SQ-VTD8, SQ-VTD9",SQ-VTD6-02 open (hand-check),,,
 Miner's Delight merged backport,miners_delight.md,MND-,BUILT,"creativedelight, creativeworldgen","CQ-MND, SQ-CUP, SQ-MD, SQ-MDL, SQ-MDP","2026-11-02 night: loot modifiers replaced by pack loot rules (8.1) BUILT, CD jar installed 2026-11-02 23:16 ...",,,

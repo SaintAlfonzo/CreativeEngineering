@@ -10,7 +10,7 @@ been seen in game: the first build ships everything, and the drops are decided i
 Test prefix `MND-`.
 
 **Licence (owner, 2026-10-24): all rights reserved.** So the port is done **like the Vinery port**
-([alcohol.md](alcohol.md) Part B, note [backported-vinery](agent_notes/backported-vinery.md)): the pack never redistributes upstream art, data or code.
+([alcohol_part_b.md](alcohol_part_b.md), note [backported-vinery](agent_notes/backported-vinery.md)): the pack never redistributes upstream art, data or code.
 The unmodified upstream jar travels as a resource donor in its own folder, the port reads art and data out of it at
 load time (sha1-pinned), and everything the port ships is our own GPLv3 code. See D2, D12 and D13.
 

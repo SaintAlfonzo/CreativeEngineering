@@ -2,7 +2,7 @@
 
 Written 2026-10-24 from [todo/TODO.md](../todo/TODO.md) `# alcohol`, Sub `vineryport` (row 26); extended 2026-10-31 to every
 open row (3, 4, 5, 8, 15, 22, 24, 25, 26, 28) and checked against the pack. Layout per [README.md](README.md). Writeups:
-[alcohol.md](../alcohol.md) Part B (test prefix `VB-`, last id VB-98), [vinery.md](../vinery.md) (1.3.10 reference, `VN-`),
+[alcohol_part_b.md](../alcohol_part_b.md) (test prefix `VB-`, last id VB-98), [vinery.md](../vinery.md) (1.3.10 reference, `VN-`),
 [jei_world_tabs.md](../jei_world_tabs.md) (Grape Planting page, `JW-`, last JW-27), [vinery_jei.md](../vinery_jei.md)
 (history only since 2026-10-27), [creative_brewing.md](../creative_brewing.md) (the bundle).
 
@@ -194,7 +194,7 @@ Status **Planned** / Work: tool / new jar / id `alcohol/vineryport #5`
 Rerun the generators after the port (I25), and stop the `#missing` texture faces on the wine models.
 
 ### Now
-- **I25 is `pack/release #5`'s work.** alcohol.md B3.4 I25 lists `crop_growth_coverage.py`, `placeable_catalog.py`,
+- **I25 is `pack/release #5`'s work.** alcohol_part_b.md 3.4 I25 lists `crop_growth_coverage.py`, `placeable_catalog.py`,
   `stack_sizes.py`, `gen_spawn_table.py`, `food_catalog.py` and `/dumpall`. The dumps with the port exist (2026-10-26 scratch,
   2026-10-30 client), and the generated files already carry Vinery keys (37 in food_types.json, 28 in stack_sizes.json). The
   last four tools are in `tools/generators.json` (`/cdevgen`); `crop_growth_coverage.py` is not.
@@ -203,7 +203,7 @@ Rerun the generators after the port (I25), and stop the `#missing` texture faces
   models `vinery_backport:block/wine_box/{aegis_wine, apple_cider, chenet_wine, creepers_crush, eiswein, glowing_wine,
   magnetic_wine, mellohi_wine, stal_wine, strad_wine}`. The wine box models are copies of Strad's model
   (`members/vinery/java/net/satisfy/vinery/forge/upstream/BottleLooks.java`, `BOX_SHAPE = "strad_wine"`), so they inherit
-  its `#missing` faces. In Stal / Strad the faces are the zero-thick label's underside (alcohol.md B4.9).
+  its `#missing` faces. In Stal / Strad the faces are the zero-thick label's underside (alcohol_part_b.md 4.9).
 
 ### Build
 1. I25: drop it from this row and leave it with `pack/release #5` (CQ-DUMP-04). Run `python3 tools/crop_growth_coverage.py`
@@ -253,7 +253,7 @@ Non-Vinery ingredients by family, with the audit question each raises:
 2. For each accepted change: `R.remove({ id: 'vinery:<id>' }, e)` and rebuild with the matching `global.NCH` helper
    (`R.shaped`, `R.shapeless`; the wine fermentation and apple press types need a `vineryFermenting` / `vineryPress` helper
    in neoCraftHelper.js if any of those change: patcherMod rebuild). Tags (cherry) through `global.tags`.
-3. Record the outcome in alcohol.md B3.4 (pack integration).
+3. Record the outcome in alcohol_part_b.md 3.4 (pack integration).
 
 ### Decisions
 - Sugar in wines: `#forge:sugar` minus glycerol, i.e. a pack key for sugar + powdered sugar (recommend), or leave plain sugar.
@@ -323,7 +323,7 @@ Settle VN-01 to VN-20 (1.3.10) and VJ-01 to VJ-10 (patcherMod's deleted Vinery p
 ### Build
 1. Decide `alcohol/decisions #12` (recommend A, retire).
 2. vinery.md 7: mark every VN- row retired with its VB- replacement; vinery_jei.md 7: mark VJ- retired.
-3. alcohol.md B8: add VB-105 (proposed) "Port behaviours from 1.3.10" covering mob stomping, stem pair and harvest,
+3. alcohol_part_b.md 8: add VB-105 (proposed) "Port behaviours from 1.3.10" covering mob stomping, stem pair and harvest,
    savanna bush light 14, bush seed drop by stage, vine shears toggle, taiga seeds on a stem (no soil rule).
 
 ### Decisions
@@ -379,7 +379,7 @@ Two effects per wine, food-mod effects with fallbacks, picked with a `tools/wine
 - **No fallbacks:** if any effect id in an entry is not registered, the whole entry is dropped with a WARN (lines 98-107).
 - `tools/wine_effect_candidates.py` does not exist. The effect data it would read: `kubejs/exported/mob_effects.json`
   (2026-10-30) and the JEED texts in `kubejs/assets/creativeengineering/lang/en_us.json`.
-- VB-52 (effect fallbacks) is struck out as pinned in alcohol.md B8.
+- VB-52 (effect fallbacks) is struck out as pinned in alcohol_part_b.md 8.
 
 ### Build (when unpinned)
 1. Fallback syntax: `a|b` is taken, so use `effect?fallback` per slot (`fruitsdelight:x?minecraft:y`); the parser takes the
@@ -402,11 +402,11 @@ Two effects per wine, food-mod effects with fallbacks, picked with a `tools/wine
 
 | Row | Change | Status | Note |
 |---|---|---|---|
-| vineryport #1 | Vinery 1.5.5 port | Testing | alcohol.md Part B; VB-01 to VB-98; open S~ C~ P. Now `-08` nested in Creative Brewing 1.0.0, booted 2026-10-31 17:15 (the row still says `-06` not booted) |
-| vineryport #2 | Decisions built with the recommendation (D4, D5, D7, D8, D9, D10, D12) | Testing | alcohol.md B5; open S~ C~ P |
+| vineryport #1 | Vinery 1.5.5 port | Testing | alcohol_part_b.md; VB-01 to VB-98; open S~ C~ P. Now `-08` nested in Creative Brewing 1.0.0, booted 2026-10-31 17:15 (the row still says `-06` not booted) |
+| vineryport #2 | Decisions built with the recommendation (D4, D5, D7, D8, D9, D10, D12) | Testing | alcohol_part_b.md 5; open S~ C~ P |
 | vineryport #6 | Grass slab biome tint | Testing | alcohol.md 10.16; `#c:blendable_blocks` in blocktags.js; open C P |
 | vineryport #7 | Hopper jams | Testing | vinery.md 4, alcohol.md 10.19; VB-93, VB-94; open S+ C P (SQ-OM-07 PASSED) |
-| vineryport #9 | Grape stomping: 12 grapes, 4 stomps, 4 bottles | Testing | alcohol.md B7.14; VB-10; open S C P T |
+| vineryport #9 | Grape stomping: 12 grapes, 4 stomps, 4 bottles | Testing | alcohol_part_b.md 7.14; VB-10; open S C P T |
 | vineryport #10 | Wine case and rack fit bugs | Testing | alcohol.md 10.9 to 10.14, 10.18; VB-67, VB-71, VB-72 still unreported; open C~ P |
 | vineryport #13 | Duplicate blocks removed, "Cherry" names | Testing | alcohol.md 10.10, 10.11; VB-68 to VB-72; open S C P |
 | vineryport #14 | Vinery village houses | Testing | alcohol.md 13; VB-95 to VB-98; open S+ C P (SQ-OM-08, -14, -15 PASSED) |

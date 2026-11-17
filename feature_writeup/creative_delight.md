@@ -346,7 +346,7 @@ the Creative Delight jar or to patcherMod. Counts below are literal `namespace:`
 built on the same `ce.forge-bundle` plugin; CB depends on CD (Farmer's Delight, `global.CD`). The text below is the 2026-10-25 record.
 
 Removed from this plan on 2026-10-25 (owner). They stay separate jars (`backportedBrewin`, `backportedVinery`) with their own
-projects, `IN_TREE_MODS` entries and writeups ([alcohol.md](alcohol.md) Parts A and B, tests `AL-` and `VB-`). Facts kept here so
+projects, `IN_TREE_MODS` entries and writeups ([alcohol.md](alcohol.md) and [alcohol_part_b.md](alcohol_part_b.md), tests `AL-` and `VB-`). Facts kept here so
 a later plan can pick them up without re-reading everything:
 
 - Vinery's second mod id `foundation`, and its licence split (code MIT, assets and data All Rights Reserved, runtime donors in
