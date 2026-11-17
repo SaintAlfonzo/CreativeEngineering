@@ -454,7 +454,7 @@ Audit of the built `creativebrewing-1.0.0.jar` and its two nested members (TODO 
 | Part | Source licence | In the jar | Verdict |
 |---|---|---|---|
 | CB's own jar (Java, config, 3 KubeJS scripts) | own, GPLv3 | `creativebrewing-LICENSE.txt` | OK |
-| Vinery member: code (port of Let's Do Vinery 1.5.5 / 1.3.10 + Foundation) | MIT code; upstream `*/src/main/resources/` All Rights Reserved (Satisfy, 2022) | GPLv3 `LICENSE` + `backportedVinery-NOTICE-upstream-MIT.txt` (CurseForge licence text verbatim: ARR scope and both MIT notices); same file copied to `creativebrewing-NOTICE-vinery-upstream.txt` in the outer jar | OK. No upstream resources shipped (read from `vinery_upstream/` at runtime); NOTICE updated 2026-11-05 |
+| Vinery member: code (port of Let's Do Vinery 1.5.5 / 1.3.10 + Foundation) | MIT code; upstream `*/src/main/resources/` All Rights Reserved (Satisfy, 2022) | GPLv3 `LICENSE` + `backportedVinery-NOTICE-upstream-MIT.txt` (CurseForge licence text verbatim: ARR scope and both MIT notices); same file copied to `creativebrewing-NOTICE-vinery-MIT.txt` in the outer jar | OK. No upstream resources shipped (read from `vinery_upstream/` at runtime); NOTICE updated 2026-11-05 |
 | Brewin' member: code, textures, models, data, `logo.png` | Brewin' And Chewin' 4.5.0, MIT (Umpaz; checked against upstream `LICENSE`) | GPLv3 `LICENSE` + MIT notice in `backportedBrewin-NOTICE-upstream-MIT.txt` | OK. NeoForge milk textures (LGPL 2.1) left out |
 | Brewin' `fd_tray.png` | Farmer's Delight 1.21, MIT (vectorwing) | named in the same NOTICE | OK |
 | Vinery member: code (Vinery 1.5.5, 1.3.10 blocks, Foundation 1.0.1) | MIT (satisfy, Cristelknight) | GPLv3 `LICENSE` + both MIT notices | OK |

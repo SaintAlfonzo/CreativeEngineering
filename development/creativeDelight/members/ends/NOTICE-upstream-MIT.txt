@@ -4,7 +4,7 @@ Source: the End's Delight 1.19.2-2.1 release jar (CurseForge, by FoggyHillside; 
 The classes and resources of the upstream jar are distributed under the MIT License below. The overlay added for
 Creative Delight (mods.toml, the Dragon Tooth tier mixin, the edited loot modifier files) is GNU GPL3; the 13 replaced
 textures are End's Delight 2.6.1 files and stay under the MIT License below. The enders_additions code is covered by
-NOTICE-upstream-MIT-enders.txt, like the rest of the pack's code.
+NOTICE-enders-MIT.txt, like the rest of the pack's code.
 
 MIT License
 

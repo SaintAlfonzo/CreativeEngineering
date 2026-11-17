@@ -216,7 +216,7 @@ Status: **built 2026-11-06 13:17, NOT installed** (`creativecompat-1.0.0.jar` in
 - **Offline check:** against `mods/` the builder reproduces all 73 old files pixel for pixel, and adds 4 for Neapolitan
   (`chimpanzee`, `mca_chimpanzee`; installed after the generators last ran): 27 bed and 25 elytra patterns.
 - **Generators retired:** both scripts deleted from `tools/` and from `tools/generators.json`'s hand-run note.
-- **Notice:** `NOTICE-thirdparty.txt` says no banner art ships and credits the pattern sources (Botania, IE, Alex's Mobs,
+- **Notice:** `NOTICE-thirdparty-various.txt` says no banner art ships and credits the pattern sources (Botania, IE, Alex's Mobs,
   Buzzier Bees and Neapolitan) and the layouts measured from Bedspreads and Customizable Elytra.
 - Tests: CQ-BPT-01 to -03, SQ-BPT-01 (scratch_queue.md).
 

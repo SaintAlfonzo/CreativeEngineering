@@ -167,7 +167,7 @@ if wants('sides'):
     ids = set(re.findall(r'^\|[^|]*\|[^|]*\| `([^`]+)` \|', sides, re.M))
     jars_col = set(re.findall(r'\| `([^`]+\.jar)` \|', sides))
     found, nomatch = set(), []
-    for jar in sorted((ROOT / 'mods').glob('*.jar')):
+    for jar in sorted([*(ROOT / 'mods').glob('*.jar'), *(ROOT / 'client_mods').glob('*.jar')]):
         try:
             with zipfile.ZipFile(jar) as z:
                 toml = z.read('META-INF/mods.toml').decode('utf-8', 'replace') if 'META-INF/mods.toml' in z.namelist() else ''
@@ -180,10 +180,10 @@ if wants('sides'):
         if jar_ids:
             found.update(jar_ids)
             if not any(m in ids for m in jar_ids):
-                nomatch.append((f'mods/{jar.name}', 0, ','.join(jar_ids)))
+                nomatch.append((jar.relative_to(ROOT).as_posix(), 0, ','.join(jar_ids)))
         elif jar.name not in jars_col:
-            nomatch.append((f'mods/{jar.name}', 0, 'no mods.toml and no Jar column row'))
-    report('DR-W16', 'jars in mods/ with no mod_sides.md row', nomatch, 'jars')
+            nomatch.append((jar.relative_to(ROOT).as_posix(), 0, 'no mods.toml and no Jar column row'))
+    report('DR-W16', 'jars in mods/ and client_mods/ with no mod_sides.md row (mod id cell must be exactly `id`)', nomatch, 'jars')
 
 # DR-C10: underscores in own mod ids, packages, config names, script folders.
 if wants('naming'):
@@ -221,6 +221,9 @@ if wants('licence'):
     roots = sorted({str(Path(h[0]).parent) for h in hits})
     nolic = [r for r in roots if not any((ROOT / r).glob('LICENSE*'))]
     print(f'   mod roots without a LICENSE file: {len(nolic)}' + (': ' + ', '.join(nolic) if nolic else ''))
+    bad = [p for p in FILES if p.startswith('development/') and Path(p).name.startswith('NOTICE')
+           and not re.fullmatch(r'NOTICE-[a-z0-9]+-[A-Za-z0-9.]+\.txt', Path(p).name)]
+    print(f'   NOTICE files not named NOTICE-<scope>-<licence>.txt: {len(bad)}' + (': ' + ', '.join(bad) if bad else ''))
     print()
 
 # DR-C1, DR-C2: raw recipe calls and literal ids in scripts (judgement of each hit is in design_rules.md 10).

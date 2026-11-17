@@ -115,7 +115,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Create: Ultimate Factory | `create_ultimate_factory` | `create_ultimate_factory-1.9.0-forge-1.19.2.jar` |  |
 | both | Create: Vintage Improvements | `vintageimprovements` | `vintageimprovements-1.19.2-0.2.0.3.jar` |  |
 | both | Creative Common | `creativecommon` | `creativecommon-1.2.0.jar` | The pack's own core (development/creativeCommon; patcherMod until the Creative Split swap, 2026-11-04, creative_split.md 7.13): config framework, KubeJS startup loader and shared helpers, swap lists, damage tags, trades and trade sync, engine fixes and perf, the interface (JEI, WTHIT, tooltips, toasts, GUI title plaques, armor bar, changelog viewer); every Creative jar requires it; client-only parts are guarded. Displaces the old `creativeengineering-1.x` jars |
-| both | Creative Labels | `creativelabels` (was `creative_labels` until 2026-11-10) | `creativeLabels-1.0.1.jar` | This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
+| both | Creative Labels | `creativelabels` | `creativeLabels-1.0.1.jar` | Mod id `creative_labels` until 2026-11-10. This pack's own mod (development/creativeLabels): sticky notes and labels as one `face_paper` block (feature_writeup/sticky_notes.md). Needs Moonlight; Sticky It! and Labels are its art donors until phase 5. Added 2026-10-20 |
 | both | CreativeCore | `creativecore` | `CreativeCore_FORGE_v2.11.28_mc1.19.2.jar` | Required by: ItemPhysic |
 | both | Curios API | `curios` | `curios-forge-1.19.2-5.1.6.4.jar` | Required by: Botania, Charm of Undying, Elytra Slot, corpsecurioscompat |
 | both | Customizable Elytra | `customizableelytra` | `customizableelytra-1.19.0-1.7.4.jar` |  |
@@ -235,7 +235,7 @@ Mods are matched by **mod id**, so updating a mod to a new version needs no edit
 | both | Portable Mobs | `portablemobs` | `portablemobs-1.2.1-forge-mc1.19.jar` |  |
 | both | PortableWardrobe | `portablewardrobe` | `portablewardrobearmorswap-1.0.2-forge-1.19.2.jar` |  |
 | both | Potion Bundles | `potionbundles` | `potionbundles-1.19.1-1.6.jar` |  |
-| both | Power Grid | `powergrid` | `backportedPowerGrid-0.6.2-ce-19.2-19.jar` | This pack's backport of Power Grid 0.6.2 (development/backportedPowerGrid; plan_power_grid.md); blocks, block entities, network and menus on both sides. In `mods/` since 2026-11-16 (process overhaul P3.1, owner ruling D11; supersedes plan_power_grid.md E1) |
+| both | Power Grid | `powergrid` | `backportedPowerGrid-0.6.2-ce-19.2-19.jar` | This pack's backport of Power Grid 0.6.2 (development/backportedPowerGrid; plan_power_grid.md); blocks, block entities, network and menus on both sides. In `mods/` since 2026-11-16 for development testing (process overhaul P3.1, owner ruling D11; supersedes plan_power_grid.md E1); not distributed until finished: `tools/build_deploy.py` never stages it until energy_advanced.md stage 5 (`IN_TREE_MODS` not required) |
 | both | Pretty Pipes | `prettypipes` | `PrettyPipes-1.13.6.jar` | Required by: Pretty Pipes: Fluids |
 | both | Pretty Pipes: Fluids | `ppfluids` | `ppfluids-1.19.2-2.0.1.jar` |  |
 | both | ProjectRed Core | `projectred_core` | `ProjectRed-1.19.2-4.19.0-beta+33-core.jar` | Required by: ProjectRed Fabrication, ProjectRed Illumination, ProjectRed Integration, ProjectRed Transmission |

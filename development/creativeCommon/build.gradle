@@ -20,7 +20,7 @@ configurations {
 dependencies {
     // Third-party mod jars copied from ../mods (git-ignored). They are SRG-named, see the note below.
     compileOnly fileTree(dir: 'libs', include: '*.jar')
-    // Markdown parser for the changelog screen (changelog/ChangelogMarkdown). BSD-2-Clause, see NOTICE-commonmark.txt.
+    // Markdown parser for the changelog screen (changelog/ChangelogMarkdown). BSD-2-Clause, see NOTICE-commonmark-BSD.txt.
     shade 'org.commonmark:commonmark:0.21.0'
 }
 
