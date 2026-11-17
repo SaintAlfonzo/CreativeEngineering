@@ -10,8 +10,7 @@
 @@text Creative Common 1.1.03 with `WorldEditSkipStateIdInitMixin` and `WorldEditBlockStateIdAccessMixin` (TODO server #17,
 @@text perf.md 11.2 #1). Group A. Any player with op; WorldEdit 7.2.12 in the scratch `mods/`.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-WE-01
 @group A
 @commands Boot; grep latest.log for `WorldEdit`, `Mixin`, `BlockStateIdAccess`, `Capability`

@@ -187,3 +187,13 @@ Arrows 1.7% (`TemptByWhistleGoal#canUse` on every mob), Regrowth 1.6%, Domestica
 
 - Perf session: `perf/sessions/q1028/` (summary.md, summary.json, worst_ticks.tsv, boots/NN/report.html).
 - Perf suite: `perf/suite/g1/` (summary.md rewritten after each scenario, results.jsonl).
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the 2026-10-28 night run (recent feature block, bot players, perf suite g1; [scratch_run_2026-10-28.md](scratch_run_2026-10-28.md))
+- the 2026-10-27 evening run measuring the perf fixes (wgp_* worlds, group A qa_1027; perf.md 10.9)
+- the 2026-10-27 perf evaluation (pe1-pe3; its probe and queue fixes are listed under it, ready for a rerun)
+- the 2026-10-26 afternoon run (group B nb2: dumps, generators, SQ-SNF, SQ-PF, SQ-INV-01 to -06; perf mixin fix)
+- the 2026-10-26 run (group A qb1 and one group B boot nb1, Creative Common 1.1.03 and the 2026-10-25 23:59 jars) passed the Creative Delight boot, Abnormals, Storage, End's server half and Farmer's Structures placement entries; its "Not run" row lists what is still open (group B worldgen counts and all client rows)

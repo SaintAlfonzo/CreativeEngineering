@@ -12,8 +12,7 @@
 @@text JVM may run; `eval_client.py launch` refuses). Targets the instance's `mods/` and `resourcepacks/` as they are at the
 @@text run. Offline first: `python3 tools/perf/rpack/selftest/run_selftest.py` (4/4 PASS). G = a scratchpad dir.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## CQ-RPB-01
 @group copy of the smallest save (or `--world`), scenes in the End void
 @commands `python3 tools/perf/rpack/rp_bench.py setup $G`; `setsid nohup python3 tools/perf/rpack/rp_bench.py drive $G perf/reports/rpbench-1 > perf/reports/rpbench-1.out 2>&1 &`; follow `perf/reports/rpbench-1/timeline.txt`

@@ -10,8 +10,7 @@
 @@text
 @@text Targets the Creative Delight jar with blockheadsAdditions built after 2026-11-03 (not built yet: the Vintage member did not compile when this was written); install it first.
 @@text
-@@text | ID | Group | Commands | Pass | If it fails |
-@@text | --- | --- | --- | --- | --- |
+@@table
 ## SQ-CFS-01 | CfB oven gets lit=false on a fresh oven and a full-height shape; oven mixins apply
 @group A
 @commands boot; `grep -nE "CfbOven(Lit\|LitSync\|Shape\|Renderer)Mixin\|blockheads_additions.mixins\|InvalidInjectionException" logs/latest.log`; `/setblock` a `cookingforblockheads:oven`; probe its block state and shape

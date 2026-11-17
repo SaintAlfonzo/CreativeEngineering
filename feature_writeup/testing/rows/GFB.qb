@@ -11,8 +11,7 @@
 @@text Creative Common 1.1.03 (20:44) with `FallingBlockHoldMixin`, `ProtoChunkTicksFallingMixin`, `HolderReferenceUnboundMixin`
 @@text and the `SeasonTypes` cache. Group A, fresh world on the overall-run seed (-8188900049893920259) unless stated.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-GFB-01 | generated falling blocks mixins
 @group A
 @commands Boot; `grep -i -E "FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound|Mixin.*(error|fail)" logs/latest.log`

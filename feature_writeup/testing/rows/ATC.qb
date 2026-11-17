@@ -14,8 +14,7 @@
 @@text `logs/latest.log`. Optional baseline for SQ-ATC-03: boot once with the 2026-10-26 jar from `mods/`; the probe then
 @@text shows the uncached timing (ATC-03 and ATC-06 FAIL there, which is expected).
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-ATC-01
 @group A
 @commands Boot; grep latest.log for `ArmorTrimsLargeItemListsMixin`, `armor_trims`, `LargeItemLists`

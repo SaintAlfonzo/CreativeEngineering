@@ -13,8 +13,7 @@
 @@text NDM-08 (a copy of a save made before the install). Client rows (Potted Mimicarnation cutout render, "Hoglin Trophy" and
 @@text "Potted Mimicarnation" names) are in the in-game suite.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-NDM-01 | Nether's Delight member: one mod, mixin applies
 @group A
 @commands Boot; `grep -n "nethersdelight" logs/latest.log \| grep -i "error\|exception\|mixin\|duplicate" \| head`; mod list / `creativedelight_members.txt`

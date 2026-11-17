@@ -10,8 +10,7 @@
 @@text Needs `kubejs/generation_scripts/stacks/stack_sizes.json` from this tree (1341 entries, 2026-11-01). Startup data: full
 @@text restart. Group A.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-STK-01 | stack sizes applied, no missing dict key
 @group A
 @commands Boot; `grep -nE "\[stack_sizes\]\|no item_dict key" logs/latest.log logs/kubejs/startup.log \| head`

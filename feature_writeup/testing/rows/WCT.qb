@@ -13,8 +13,7 @@
 @@text Creative Common build note of SQ-WC (the SQ-WC checks still apply, on `golden_watering_can` for the 16 / 3x3 numbers).
 @@text Group A (superflat), a bot player.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-WCT-01 | six watering can ids, recipes
 @group A
 @commands Boot; grep latest.log for `hearthandharvest`, `watering_can`, `Error occurred while handling event`, `duplicate`

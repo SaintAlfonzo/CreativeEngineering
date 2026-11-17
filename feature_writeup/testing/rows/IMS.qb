@@ -12,8 +12,7 @@
 @@text startup and server files, both in the scratch `mods/`; KubeJS working tree. Group A. Probes: `/mgcore`
 @@text (`tools/item_merges_probe/merge_core_probe.js`), `/fdtest coffee` (`tools/food_drinks_probe/food_drinks_probe.js`).
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-IMS-01
 @group A
 @commands Boot; grep latest.log for `[itemMerges]`

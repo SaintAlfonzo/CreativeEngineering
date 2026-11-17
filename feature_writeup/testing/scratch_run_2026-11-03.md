@@ -312,3 +312,10 @@ agent, regex fix applied): PASS 73, FAIL 10, BATCH-FAULT 4, OPEN 7, LOOK-client 
 
 Perf session `r1103w` (4 boots, JFR 200 MB cap, no prune): `perf/sessions/r1103w/summary.md`. W1 boot 1 OOM
 recording `w1/srv/perf/exit/w1_oom.jfr` (scratchpad) and histogram `perf/runs/r1103w/w1_oom_histo.txt`.
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the 2026-11-03 worldgen run r1103w ([scratch_run_2026-11-03.md](scratch_run_2026-11-03.md) section 9, stopped by the owner after W1c)
+- the 2026-11-03 run r1103 ([scratch_run_2026-11-03.md](scratch_run_2026-11-03.md), FAILs in perf/runs/r1103/FINAL.md)

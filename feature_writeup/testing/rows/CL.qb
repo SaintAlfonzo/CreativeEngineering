@@ -10,8 +10,7 @@
 @@text
 @@text Creative Common 1.1.03 (19:58 source, in the 20:44 jar). Client only, Round 2 (creative superflat, any world).
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## CQ-CL-13
 @group client, title screen and pause menu
 @commands With an unread marker (delete `config/creativecommon/changelog_seen.txt`), hover the book button, then Tab to focus it

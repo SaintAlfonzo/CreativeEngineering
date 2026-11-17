@@ -8,8 +8,7 @@
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
 @@text
-@@text | ID | Side | Check | Expect | Failure means |
-@@text |---|---|---|---|---|
+@@table
 ## CQ-PNE-01
 @group client
 @commands Boot; `grep -iE "DhNoGenerationMixin\|SeasonServerConfigMixin\|SeasonBiomeConfigMixin\|SeasonColorUtilMixin\|LogSpamFilter\|Distant Horizons (dimension overrides\|refused)" logs/latest.log`

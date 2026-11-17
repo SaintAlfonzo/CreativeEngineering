@@ -10,8 +10,7 @@
 @@text Needs Creative Common 1.1.07 built 2026-11-02 00:06 or later (installed) and a full restart (the PneumaticCraft listener is a
 @@text startup script). Client only; no server half (all three are client tooltip code).
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## CQ-TTP-01
 @group client, creative
 @commands TT-39: GUI scale 4 or a small window; hover a Logistics Module or a shulker box full of named items; then `[tooltips] keepTopOnScreen = false` in `creativeengineering-common.toml` and hover again; set it back

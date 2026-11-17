@@ -2336,8 +2336,7 @@ look server log says `members on: vinery` after the first reload; set back to tr
 @@text Feature: [../creative_delight.md](../creative_delight.md) 13.5, test CDT-08. Scratch `mods/`: the live pack's (no jar change; the
 @@text three `_lib` files are in `kubejs/startup_scripts/`). Any boot of the pack covers it, so it can ride on another row's boot.
 @@text
-@@text | ID | World | Steps | Pass | Fail means |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-FD-01 | food dict loads; veggie_slice_cooked_potato resolves
 @group A
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Boot; grep `logs/latest.log` for `food dict:` and `food_grammar.js` / `food_dict.js` errors; `/kubejs eval global.food.veggie_slice_cooked_potato` (or any startup-side print)
@@ -2356,8 +2355,7 @@ look global.food.veggie_slice_cooked_potato = rusticdelight:baked_potato_slices 
 @@text
 @@text #### SQ-VTD5: Vintage port -05 (added 2026-10-25)
 @@text
-@@text | ID | World | Steps | Pass | Fail means |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-VTD5-01 | cheese wheel and pizzas: 4 slices at bites 0, 2 at bites 2, none from a blast
 @group A
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) `/setblock` a Cheese Wheel, Cheese Pizza and Meat Pizza at `bites=0` and one at `bites=2`; break each as a fake player with an empty hand; then one at `bites=0` by `/summon tnt`
@@ -2399,8 +2397,7 @@ look a fifth entities line with grass / dirt only (blast); 4 slices x 3 breaks a
 @@text `-06`, Creative Common 1.1.03 from `build/libs` and the Creative Delight jar of the same tree (the own-pick tag is filled by CD
 @@text scripts), Veggies `-03`.
 @@text
-@@text | ID | World | Steps | Pass | Fail means |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-VTD6-01 | ghost pepper crop on the three soul soils only; wild ghost peppers also on nylium
 @group A
 @commands `/setblock` farmland, Soul Soil, Rich Soul Soil, Nulch, grass and nylium in a lit row; `/setblock` `vintagedelight:ghost_pepper_crop[age=0]` on each, then a block update next to each; same with `vintagedelight:wild_ghost_peppers`; then as a survival player right-click ghost pepper seeds on grass, dirt, farmland, crimson nylium and each soul soil
@@ -5754,8 +5751,7 @@ look offers: stockpile / recovery / cycle books are printed as minecraft:enchant
 @@text (`/syt roll`) rolls the loot table on placed blocks instead of counting harvests. Count drops over 30+ harvests per case (`/fill` the soil, place ripe crops with `/setblock ...[age=7]`,
 @@text `/fill ... air destroy`, count with a hopper or `/clear @s <item> 0`).
 @@text
-@@text | ID | Group | Run | Pass | If not |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-SY-01
 @group A
 @commands Boot with every crop `false` (then `/reload` once: still off)
@@ -5811,8 +5807,7 @@ look offers: stockpile / recovery / cycle books are printed as minecraft:enchant
 @@text `richFarmlandBonus`, `fertileSoilBonus`, `richSoilBonus`, every crop `true` by default. Scratch `mods/`: Creative Delight
 @@text jar of 2026-11-03 or later. Use `/syt roll` (400+ rolls per case).
 @@text
-@@text | ID | Group | Run | Pass | If not |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-SY-08
 @group A
 @commands Boot on a fresh config

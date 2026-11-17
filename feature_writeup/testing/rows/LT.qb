@@ -10,8 +10,7 @@
 @@text
 @@text Creative Common 1.1.0 jar built 17:51 (not installed yet). Client only, Round 2 (any world). TODO `ui/loadingtips #1`.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## CQ-LTP-01
 @group client, new singleplayer world
 @commands Create a world and watch the chunk progress screen
@@ -54,8 +53,7 @@
 @@text Creative Common 1.2.0 installed 23:22. Client only; LTP-08 needs a server (CreEngServer or a scratch one). TODO `ui/loadingtips #5`.
 @@text Test packs for LTP-11 to LTP-13: a folder in `resourcepacks/` with `pack.mcmeta` (format 9) and `assets/cqlt/loading_tips/tips.json`.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## CQ-LTP-07
 @group client
 @commands Open an existing world; create a new one; `grep "Loading tips: bar on" logs/latest.log`

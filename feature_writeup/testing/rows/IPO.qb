@@ -11,8 +11,7 @@
 @@text Creative Common 1.1.03 with `ImmersivePostsRegistrationMixin` and `ImmersivePostsValidItemMixin`. Group A. Any player
 @@text with op; Immersive Posts 4.3.0 and Immersive Engineering in the scratch `mods/`.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-IPO-01
 @group A
 @commands Boot; grep latest.log for `ImmersivePosts`, `Mixin`, `immersiveposts`; `/setblock ~ ~ ~ immersiveposts:ironpost`, then `immersiveposts:silverpost`

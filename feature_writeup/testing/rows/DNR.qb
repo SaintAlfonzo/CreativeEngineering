@@ -12,8 +12,7 @@
 @@text
 @@text > Rerun SQ-DNR-E-01 to -04 on the CD jar that nests `repackedEnds-1.19.2-2.1-ce-19.2-03` (Ender's 1.1.4 content merged into the End's member, ends_delight.md 5.9) and no `endersAdditions-*` jar. Same rows, same expected text: the startup message still names "Ender's Delight Additions (Creative Delight)"; the donor folder and sha1 are unchanged.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-DNR-O-01
 @group old world
 @commands Scratch server and client with the new CD jar plus both donor folders; load a copy of a 1.1.03+ world that has a placed paella plate (part eaten), a stuffed pufferfish, a sponge cake with bites, a sea grape column with fruit, wild sea grape and both crates; `grep -iE "oceanic_upstream\|Missing\|remap\|oceanic_delight" logs/latest.log`

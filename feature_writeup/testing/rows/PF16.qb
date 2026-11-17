@@ -11,8 +11,7 @@
 @@text Creative Common 1.1.03 with `NeaWhistleGoalSkipMixin`, `MobBeeIdleMixin`, `perf.WhistleArrowTracker`. Group A, one player
 @@text or bot unless stated.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-PF16-01 | whistle goal skip and underground bees mixins
 @group A
 @commands Boot; `grep -i -E "NeaWhistleGoalSkip|MobBeeIdle|Mixin.*(error|fail)" logs/latest.log`

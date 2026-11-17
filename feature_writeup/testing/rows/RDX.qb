@@ -12,8 +12,7 @@
 @@text
 @@text Needs the CD jar and the Creative Brewing jar built 2026-11-01 20:30 (or later), plus the pack's item_dict.js, block_dict.js and transition_items.js: full restart. Group A (superflat), except RDX-13 (an old save).
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-RDX-01 | Rustic member (baked): no recipe or NCH error
 @group A
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Boot; `grep -n "rusticdelight\|Rustic Delight upstream" logs/latest.log \| grep -i "error\|exception\|data:" \| head`; `grep -n "rusticdelight\|pizza\|golden_coffee" logs/kubejs/server.log \| grep -i "error\|warn" \| head`

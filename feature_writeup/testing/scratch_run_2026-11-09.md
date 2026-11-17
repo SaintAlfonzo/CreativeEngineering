@@ -62,3 +62,11 @@ PASS 9 (counting -10r with -10), FAIL 5, LOOK 0 open. Not run: SQ-WO-14 to -37, 
 - `b7_worldgen.qb` uses `execute positioned {A1} ...` with `capture` variables of the `at [x, y, z]` locate line; 1.19.2 `/locate biome` prints `at [x, ~, z]`, so `{A2}` is `~`. Check the capture and the `execute positioned` lines with a first live call. `forceload add {A1-32}` arithmetic is supported by `qrun.py`'s `{NAME-N}`.
 - `b6_strace.qb`/`wo_run.sh s` use `strace --seccomp-bpf` (strace 5.16 present); the control count is a rough grep.
 - The A2 rows were written around timers of 5 s; the queue text assumed pace 2, so they use pace 0.2 or 0.5.
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the partial run r1109wo (SQ-WO Wise Oak, [scratch_run_2026-11-09.md](scratch_run_2026-11-09.md) 1)
+- the partial run r1108hh (SQ-HH full suite, 2026-11-09)
+- 2026-11-09: added SQ-VH and CQ-VH at the end (Visceral Heap); BOP, Common and Worldgen installed 23:00.

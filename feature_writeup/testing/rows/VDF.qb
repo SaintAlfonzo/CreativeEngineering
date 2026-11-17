@@ -13,8 +13,7 @@
 @@text `compost_rules.js`; second batch 2026-11-01 evening: SQ-VDF-07 to -10) and the
 @@text pack's `transition_items.js` (5 new incomplete items): full restart. Port `-04` is not needed for these. Group A.
 @@text
-@@text | ID | Group | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-MG-21 | Cod 'n' Chips merged into Fish and Chips
 @group A
 @commands Boot; `grep -n "itemMerges\|cod_n_chips" logs/kubejs/server.log \| head`; `/kubejs dump recipes` or the recipe probe for outputs `veggiesdelight:fish_and_chips` and `pneumaticcraft:cod_n_chips`; `/give @p pneumaticcraft:cod_n_chips` then check the inventory

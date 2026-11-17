@@ -129,3 +129,9 @@ Boots (each: fresh prep, Done, startup errors, `stop`, JVM gone):
 Verdict: PASS (load and exit, server). Not covered: the client (the original symptom was the client's notice), old-save
 migration (SQ-NSM rows; build the NSM fixture from `deploy/latest/mods/`, the 1.2.02 jars, since `mods/` now holds the
 moved jars).
+
+## Queue banner lines
+
+Moved from the top of [scratch_queue.md](scratch_queue.md) on 2026-11-17 (banner cap, plan_rules_fixes.md V-58):
+
+- the boot and exit check b1110 ([scratch_run_2026-11-10.md](scratch_run_2026-11-10.md) 11)

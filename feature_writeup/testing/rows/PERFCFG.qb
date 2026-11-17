@@ -12,8 +12,7 @@
 @@text added). Group A. Copy `config/DistantHorizons.toml` and the ModernFix jar into the scratch dirs. Create Deco, Immersive
 @@text Weathering and the ATLauncher debug log config are unchanged by decision (perf.md 11.2 #5, #8).
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-PERFCFG-01
 @group A
 @commands Boot with DH and ModernFix in `mods/`; `grep -i -E "modernfix|Mixin.*(error|fail)|Exception" logs/latest.log`

@@ -15,8 +15,7 @@
 @@text Target: current `kubejs/server_scripts` (script only, `/reload` on a running server). Needs a tamed horse with
 @@text `dragonloot:dragon_horse_armor` near the player.
 @@text
-@@text | ID | World | Commands | Expected | If it fails |
-@@text |---|---|---|---|---|
+@@table world
 ## SQ-HT-01
 @group A
 @commands Boot; `/reload`; grep latest.log for `armor_effects.js`, `dragon_autorepair.js`
