@@ -5,10 +5,14 @@ running the cdevcapture driver -> crop.py -> test_captures/judgement/<run>/ for 
     run_captures.py --list [GROUP ...] [--check]          tests per group (captures / text readback); --check: specs
                                                            parse, ids unique, item_dict keys resolve, covers in the queue
     run_captures.py GROUP ... [--only ID,ID] [--jar PATH]... [--fresh-config] [--game DIR] [--plan-only]
+                    [--display real|xvfb]
                                                            a run; --plan-only writes the run folder and plan, no launch
     run_captures.py --resume RUN                          continue a run after the runner itself stopped
     run_captures.py --recrop RUN                          refresh run.json from the specs and re-crop raw/ (no game)
     run_captures.py serve [--game DIR] [--join HOST:PORT] [--ownsrv PID] [--jar PATH]... [--world NAME]
+                          [--drop GLOB]... [--config FILE:SECTION:KEY=VALUE]... [--display real|xvfb]
+                                                           --drop: unlink matching jars from GAME/mods; --config: set
+                                                           a toml key in GAME (VALUE is raw toml); both per launch
                                                            start a client whose driver serves the file channel
                                                            GAME/cdev_channel (qrun.py client drives it), then return
     run_captures.py stop [--game DIR]                     ask the serving driver to quit the client
@@ -17,6 +21,10 @@ Specs: feature_writeup/testing/capture_specs/<GROUP>.json (+ _macros.json). Outp
 git-ignored and wiped after the owner has judged it; no tool or agent gives a visual verdict there (plan
 scratch_testing_expansion 0). Game dir default ~/.cache/ce_capture/game (eval_client.py setup, then the driver jar
 from development/creativeDevtools/build/libs swapped in, the perf-eval scripts removed, options.txt for captures).
+
+--display xvfb is EXPERIMENTAL (TX-07, owner D3): an own Xvfb per launch, stopped with the client. Only for tests
+that cannot run otherwise (unattended blocks); the real window stays the default and is required for colour rows.
+run.json records the display, so the owner sees it when judging.
 
 One-JVM rule: refuses to start while any game JVM is up (prints pid and cwd only). Only ever kills the pid it
 launched. Never touches the instance's mods/, logs/, saves/ or config/.
@@ -299,6 +307,9 @@ def prepare_game(game, jars=(), fresh_config=False, client_config=None, world=No
             if j.startswith("creative")}
 
 
+DISPLAY_MODE = "real"  # --display
+
+
 def launch(game, plan_path, server=None, ownsrv=None):
     """eval_client launch with -Dcdevcapture.plan through JAVA_TOOL_OPTIONS; returns the client pid."""
     import eval_client
@@ -307,7 +318,7 @@ def launch(game, plan_path, server=None, ownsrv=None):
     buf = io.StringIO()
     try:
         with contextlib.redirect_stdout(buf):
-            eval_client.launch(game, server=server, ownsrv=ownsrv)
+            eval_client.launch(game, server=server, ownsrv=ownsrv, display=DISPLAY_MODE)
     except SystemExit as e:
         sys.exit(f"launch refused: {e}")
     finally:
@@ -514,11 +525,17 @@ def serve(a):
     game = os.path.abspath(opt(a, "--game", GAME))
     join, ownsrv, world = opt(a, "--join"), opt(a, "--ownsrv"), opt(a, "--world", "flat_creative")
     jars = opts(a, "--jar")
+    drops, configs = opts(a, "--drop"), opts(a, "--config")
+    set_display(opt(a, "--display", "real"))
+    bad = [c for c in configs if not re.match(r"[^:]+:[^:]+:[^=]+=", c)]
+    if bad:
+        sys.exit("--config wants FILE:SECTION:KEY=VALUE, got: " + ", ".join(bad))
     preflight(ownsrv)
     from chan import Channel
     chan_dir = os.path.join(game, "cdev_channel")
     shutil.rmtree(chan_dir, ignore_errors=True)
     prepare_game(game, jars, world=None if join else world)
+    apply_client_changes(game, drops, configs)
     w = {"name": world}
     if join:
         w["join"] = "server"
@@ -542,6 +559,34 @@ def serve(a):
         time.sleep(3)
     sys.exit(f"driver not serving after {BOOT_TIMEOUT_S} s (client pid {pid} left running; stop it with "
              f"run_captures.py stop, or kill that pid)")
+
+
+def set_display(d):
+    global DISPLAY_MODE
+    if d not in ("real", "xvfb"):
+        sys.exit("--display wants real or xvfb")
+    DISPLAY_MODE = d
+
+
+def apply_client_changes(game, drops=(), configs=()):
+    """serve --drop / --config (TX-31 client side). GAME/mods holds hard links: unlink only, never write through.
+    eval_client.setup rebuilds mods/ and config/ on every launch, so nothing carries over to the next launch."""
+    mods = os.path.join(game, "mods")
+    for g in drops:
+        hit = glob.glob(os.path.join(mods, g))
+        if not hit:
+            sys.exit(f"--drop {g}: no jar in {mods} matches")
+        for f in hit:
+            os.unlink(f)
+            print("dropped", os.path.basename(f))
+    for c in configs:
+        m = re.match(r"([^:]+):([^:]+):([^=]+)=(.*)", c)
+        f, sec, k, v = m.groups()
+        path = os.path.normpath(os.path.join(game, f))
+        if not path.startswith(game + os.sep):
+            sys.exit(f"--config {c}: path leaves the game dir")
+        toml_set(path, sec, k.strip(), v.strip())
+        print(f"config {f}: [{sec}] {k.strip()} = {v.strip()}")
 
 
 def main():
@@ -591,9 +636,11 @@ def main():
     jars = [os.path.abspath(j) for j in opts(a, "--jar")]
     fresh = flag(a, "--fresh-config")
     plan_only = flag(a, "--plan-only")
+    disp = opt(a, "--display")
     if resume:
         run = os.path.abspath(resume)
         meta = jread(os.path.join(run, "run.json"))
+        set_display(disp or meta.get("display", "real"))
     else:
         groups = a
         if not groups:
@@ -608,7 +655,8 @@ def main():
             sys.exit("groups with different client_config: run them separately")
         run = os.path.join(OUT, time.strftime("%Y-%m-%d_%H%M_") + "+".join(groups))
         os.makedirs(os.path.join(run, "raw"), exist_ok=True)
-        meta = {"groups": groups, "world": world, "tests": tests, "git": git_state(), "game": game,
+        set_display(disp or "real")
+        meta = {"groups": groups, "world": world, "tests": tests, "git": git_state(), "game": game, "display": DISPLAY_MODE,
                 "created": time.strftime("%Y-%m-%d %H:%M:%S")}
         with open(os.path.join(run, "run.json"), "w") as f:
             json.dump(meta, f, indent=1)

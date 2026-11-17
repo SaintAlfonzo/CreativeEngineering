@@ -307,6 +307,112 @@ def t28():
     assert 'SQ-ZD-02' in new and 'SQ-ZD-01 ...' not in new, new[-400:]
 
 
+sys.path.insert(0, str(HERE.parent / 'client_capture'))
+sys.path.insert(0, str(HERE.parent / 'perf/eval'))
+
+
+@case('TXQ-OFF-01 qpair refusal regexes: Forge 43.3.9 handshake lines match, a plain quit does not')
+def tx01():
+    import re
+    import qpair
+    for l in ('[Netty Client IO #1/ERROR] [ne.mi.ne.NetworkRegistry/]: Terminating connection with server, '
+              'mismatched mod list',
+              'Connection closed - mismatched mod channel list', 'Failed to synchronize registry data from server',
+              'Your client is missing the following mods, install these mods to join this server:'):
+        assert re.search(qpair.CLI_REFUSAL, l), l
+    for l in ('Terminating connection with client, mismatched mod list',
+              'Connection closed - mismatched mod channel list'):
+        assert re.search(qpair.SRV_REFUSAL, l), l
+    for l in ('PerfEval lost connection: Disconnected', 'Stopping server', 'Mod rejections []'):
+        assert not re.search(qpair.SRV_REFUSAL, l) and not re.search(qpair.CLI_REFUSAL, l), l
+
+
+def pair_fixture(name, launch='sleep 30'):
+    import qpair
+    out, game = TMP / (name + '_out'), TMP / (name + '_game')
+    (out / 'srv/logs').mkdir(parents=True)
+    (out / 'srv/logs/latest.log').write_text('')
+    (game / 'logs').mkdir(parents=True)
+    (game / 'logs/latest.log').write_text('')
+    os.environ['QPAIR_CLI_LAUNCH'] = launch
+    return qpair.Pair(str(out), str(game), str(TMP / (name + '_res')), log=lambda *a: None), game
+
+
+@case('TXQ-OFF-02 qpair: a previous launch\'s pid and SERVE heartbeat are not read as the new client\'s join')
+def tx02():
+    p, game = pair_fixture('stale')
+    ch = game / 'cdev_channel'
+    ch.mkdir()
+    (ch / 'pid').write_text(str(os.getpid()))
+    (ch / 'state.json').write_text(json.dumps({'phase': 'SERVE', 'time': int(time.time() * 1000)}))
+    try:
+        p.launch_client()
+        assert not (ch / 'pid').exists() and not (ch / 'state.json').exists(), os.listdir(ch)
+        out, ev = p.wait_join(3)
+        assert out == 'HANG', (out, ev)
+        # a heartbeat written after the launch is a join
+        (ch / 'state.json').write_text(json.dumps({'phase': 'SERVE', 'time': int(time.time() * 1000)}))
+        out, ev = p.wait_join(3)
+        assert out == 'JOINED', (out, ev)
+    finally:
+        p.serve.kill()
+
+
+@case('TXQ-OFF-03 qpair hold: a client that dies after joining is CRASH-CLIENT; one that lives is not')
+def tx03():
+    p, game = pair_fixture('hold')
+    try:
+        p.launch_client()
+        short = subprocess.Popen(['sleep', '1'])
+        p.cli_pid = short.pid
+        out, ev = p.hold(6)
+        short.wait()
+        assert out == 'CRASH-CLIENT', (out, ev)
+        p.cli_pid = p.serve.pid
+        out, ev = p.hold(3)
+        assert out is None, (out, ev)
+    finally:
+        p.serve.kill()
+
+
+@case('TXQ-OFF-04 serve --drop / --config: link unlinked (source kept), toml key set, bad glob and path refused')
+def tx04():
+    import run_captures as rc
+    game = TMP / 'drop_game'
+    (game / 'mods').mkdir(parents=True)
+    (game / 'config').mkdir()
+    src = TMP / 'creativelabels-1.0.0.jar'
+    src.write_bytes(b'jar')
+    os.link(src, game / 'mods/creativelabels-1.0.0.jar')
+    (game / 'config/x-client.toml').write_text('[general]\n\ta = 1\n')
+    rc.apply_client_changes(str(game), ['creativelabels-*.jar'], ['config/x-client.toml:general:a=5'])
+    assert not (game / 'mods/creativelabels-1.0.0.jar').exists() and src.read_bytes() == b'jar'
+    assert 'a = 5' in (game / 'config/x-client.toml').read_text()
+    for drops, cfgs in ((['nothing-*.jar'], []), ([], ['../escape.toml:s:k=1'])):
+        try:
+            rc.apply_client_changes(str(game), drops, cfgs)
+            raise AssertionError('not refused: %s %s' % (drops, cfgs))
+        except SystemExit:
+            pass
+
+
+@case('TXQ-OFF-05 xvfb display (TX-07): own Xvfb starts, reports a display, pid file written (skipped without Xvfb)')
+def tx05():
+    if not shutil.which('Xvfb'):
+        return
+    import eval_client
+    game = TMP / 'xvfb_game'
+    game.mkdir()
+    x, disp = eval_client.start_xvfb(str(game))
+    try:
+        assert disp.startswith(':') and disp[1:].isdigit(), disp
+        assert (game / 'xvfb.pid').read_text() == str(x.pid)
+        assert x.poll() is None
+    finally:
+        x.kill()
+        x.wait()
+
+
 def main():
     try:
         for name, ok, why in results:

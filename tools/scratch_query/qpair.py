@@ -2,7 +2,7 @@
 """Paired client + own scratch server runs (TX-30) and the registry / config mismatch matrix (TX-31). Called through
 qrun.py:
 
-    qrun.py pair OUT GAME BATCH RES [--jar PATH]... [--default srv|cli] [--join-secs N] [run options]
+    qrun.py pair OUT GAME BATCH RES [--jar PATH]... [--drop GLOB]... [--config FILE:SECTION:KEY=VALUE]... [--default srv|cli] [--join-secs N] [run options]
     qrun.py matrix SPEC RES [--only ID,ID] [--plan]
 
 Owner decision D2 (plan_scratch_testing_expansion.md 0): a paired launch is valid when ONE driver starts and stops
@@ -25,17 +25,22 @@ matrix SPEC (JSON):
                 "srv_drop": ["backportedPowerGrid-*.jar"],     globs removed from OUT/srv/mods (unlink only)
                 "srv_toml": [["config/x-common.toml", "section", "key", "value"]],
                 "cli_jars": ["jar_archive/pwg_gate/x.jar"],   added to the client (run_captures serve --jar)
+                "cli_drop": ["creativelabels-*.jar"],          globs removed from GAME/mods (serve --drop)
+                "cli_config": [["config/x-client.toml", "section", "key", "value"]],   (serve --config)
+                "hold_secs": 30,                               after JOINED, watch both JVMs this long (spec or case)
                 "expect": "refuse" | "join",
                 "refusal": "regex the refusal text must match (optional)",
                 "batch": "path.qb run in pair mode when the client joined (optional)"}]}
-Outcome per case: JOINED (driver reached SERVE), REFUSED (refusal text in either log, client alive), CRASH-CLIENT,
+Outcome per case: JOINED (driver reached SERVE and both JVMs lived through hold_secs, default 30: a client that
+joins and then crashes, like the Power Grid client without the server jar, TODO #90, is CRASH-CLIENT), REFUSED (refusal text in either log, client alive), CRASH-CLIENT,
 CRASH-SERVER, BOOT-FAIL (server never Done), HANG (none within --join-secs, default 600). Verdict PASS when the outcome
 is the expected one (a refusal also matching "refusal"), else FAIL; a crash is always FAIL. Results: RES/<case>/ (logs,
 crash evidence, pair batch results), RES/verdicts/<case>.json, RES/matrix.md. --plan prints the cases and commands
 and launches nothing.
 
-Client-side jar drops and client config edits need run_captures.py serve options that do not exist yet (--drop,
---config); cases asking for them are refused with a message.
+Refusal text is Forge 1.19.2-43.3.9 (HandshakeHandler, NetworkRegistry, assets/forge/lang/en_us.json; checked in the
+Forge jar 2026-11-16) plus the registry refusal seen in run r1111 (SQ-CDNS-12). Screen texts only reach the log when
+the driver or a mod logs the disconnect screen; the log lines are the reliable part.
 
 Commands are overridable for offline tests: env QPAIR_SRV_BOOT, QPAIR_SRV_STOP, QPAIR_CLI_LAUNCH (placeholders {OUT},
 {GAME}, {PORT}, {SRVPID}, {JARARGS}).
@@ -63,11 +68,14 @@ CLI_LAUNCH = ('python3 "$INST/tools/client_capture/run_captures.py" serve --game
               '--ownsrv {SRVPID} {JARARGS}')
 PREP = 'NOSWAP=1 bash "$INST/tools/scratch_query/prep_srv.sh" {OUT} txp A'
 GAME_DEFAULT = os.path.expanduser("~/.cache/ce_capture/game")
-# refusal text: Forge 1.19.2 handshake and vanilla disconnect lines (owner to confirm against a real refusal)
-CLI_REFUSAL = (r"(?i)(disconnected from server|connection lost|lost connection|mod rejections|missing mods|"
-               r"mismatched mod channel|incompatible fml|channel mismatch|server is not running fml|kicked|"
-               r"failed to connect|disconnect\.|requires mods)")
-SRV_REFUSAL = r"(?i)(mod rejections|mismatched|missing mods|lost connection: (?!Disconnected$)|tried to connect|kicked)"
+# refusal text: Forge 1.19.2-43.3.9 strings (see the docstring); client log first, then the disconnect screen texts
+CLI_REFUSAL = (r"(Terminating connection with server, mismatched mod list|Connection closed - mismatched mod channel list|"
+               r"Failed to synchronize registry data from server|Missing required datapack registr|"
+               r"Incompatible FML modded server|Incompatible Vanilla server|Server mod list is not compatible|"
+               r"Server network message list is not compatible|Your client is missing the following mods|"
+               r"The server is missing the following mods|The following mod versions do not match)")
+SRV_REFUSAL = (r"(Terminating connection with client, mismatched mod list|Connection closed - mismatched mod channel list|"
+               r"Missing required datapack registr)")
 SRV_FAIL = r"Failed to start the minecraft server|Failed to load datapacks|Missing or unsupported mandatory dependencies"
 
 
@@ -174,10 +182,12 @@ class PairTarget:
 class Pair:
     """Lifecycle of one paired scratch test: boot server, launch client, wait for the join, stop both."""
 
-    def __init__(self, out, game, res, jars=(), log=print):
+    def __init__(self, out, game, res, jars=(), log=print, drop=(), config=()):
         self.out, self.game, self.res = os.path.abspath(out), os.path.abspath(game), res
         self.srv_dir = os.path.join(self.out, "srv")
         self.jars, self.log = list(jars), log
+        self.drop, self.config = list(drop), [list(c) for c in config]
+        self.launched = None
         self.srv_pid = self.cli_pid = None
         self.serve = None
         self.wsrv = self.wcli = None
@@ -224,6 +234,17 @@ class Pair:
 
     def launch_client(self):
         jarargs = " ".join("--jar " + shlex.quote(os.path.join(INST, j) if not os.path.isabs(j) else j) for j in self.jars)
+        jarargs += "".join(" --drop " + shlex.quote(g) for g in self.drop)
+        jarargs += "".join(" --config " + shlex.quote(f"{f}:{sec}:{k}={v}") for f, sec, k, v in self.config)
+        # an earlier launch's pid / heartbeat must not be read as this client's (serve also wipes the dir, but only
+        # once its process has started; wait_join polls before that)
+        chan_dir = os.path.join(self.game, "cdev_channel")
+        for f in ("pid", "state.json"):
+            try:
+                os.remove(os.path.join(chan_dir, f))
+            except OSError:
+                pass
+        self.cli_pid = None
         cmd = fill(os.environ.get("QPAIR_CLI_LAUNCH", CLI_LAUNCH), GAME=shlex.quote(self.game), PORT=self.port(),
                    SRVPID=self.srv_pid or 0, JARARGS=jarargs, OUT=shlex.quote(self.out))
         self.cli_files0 = qwatch.crash_files(self.game)
@@ -238,8 +259,11 @@ class Pair:
     def _client_pid(self):
         if self.cli_pid:
             return self.cli_pid
+        pf = os.path.join(self.game, "cdev_channel", "pid")
         try:
-            self.cli_pid = int(open(os.path.join(self.game, "cdev_channel", "pid")).read().strip())
+            if self.launched and os.path.getmtime(pf) < self.launched - 1:
+                raise OSError("pid file older than this launch")
+            self.cli_pid = int(open(pf).read().strip())
         except (OSError, ValueError):
             m = re.search(r"client pid (\d+)", open(self.serve_out, errors="replace").read())
             self.cli_pid = int(m.group(1)) if m else None
@@ -266,7 +290,8 @@ class Pair:
                 return "CRASH-CLIENT", [f"client pid {pid} gone before joining"]
             if self.serve.poll() not in (None, 0) and not pid:
                 return "CRASH-CLIENT", ["launch failed: " + open(self.serve_out, errors="replace").read().strip()[-300:]]
-            if chan.serving():
+            st = chan.state()
+            if st and st.get("phase") == "SERVE" and st["age_s"] < 60 and st.get("time", 0) / 1000.0 >= self.launched - 1:
                 return "JOINED", ["driver SERVE"]
             hits = [("cli", l) for l in cl.since(self.cli_off) if re.search(cli_refusal, l)]
             hits += [("srv", l) for l in sl.since(self.srv_off) if re.search(srv_refusal, l)]
@@ -278,6 +303,24 @@ class Pair:
                     return "REFUSED", ev
             time.sleep(2)
         return "HANG", ev or ["no join, refusal or crash"]
+
+    def hold(self, secs):
+        """After JOINED: both JVMs must live SECS more. Returns (outcome, evidence) or (None, [])."""
+        end = time.time() + secs
+        while time.time() < end:
+            if self.wsrv:
+                try:
+                    self.wsrv.check()
+                except qwatch.Crashed as e:
+                    return "CRASH-SERVER", [e.reason]
+            new = sorted(qwatch.crash_files(self.game) - self.cli_files0)
+            if new:
+                return "CRASH-CLIENT", ["client crash file(s) after joining: " + ", ".join(new)]
+            pid = self._client_pid()
+            if pid and not qwatch.alive(pid):
+                return "CRASH-CLIENT", [f"client pid {pid} gone {int(secs - (end - time.time()))} s after joining"]
+            time.sleep(2)
+        return None, []
 
     def target(self, default="srv"):
         t = PairTarget(self.out, self.game, default)
@@ -339,7 +382,8 @@ def main_pair(a):
     if len(a) < 4:
         sys.exit(__doc__)
     out, game, batch, res = a[:4]
-    p = Pair(out, game, res, opts(a, "--jar"))
+    p = Pair(out, game, res, opts(a, "--jar"), drop=opts(a, "--drop"),
+             config=[re.match(r"([^:]+):([^:]+):([^=]+)=(.*)", x).groups() for x in opts(a, "--config")])
     ok, why = p.boot_server()
     print("server:", why)
     if not ok:
@@ -368,6 +412,9 @@ def case_plan(spec, c, res):
     lines += [f"srv drop: {g}" for g in c.get("srv_drop", [])]
     lines += [f"srv toml: {' '.join(map(str, x))}" for x in c.get("srv_toml", [])]
     lines += [f"cli jar: {j}" for j in c.get("cli_jars", [])]
+    lines += [f"cli drop: {g}" for g in c.get("cli_drop", [])]
+    lines += [f"cli config: {' '.join(map(str, x))}" for x in c.get("cli_config", [])]
+    lines.append(f"hold: {c.get('hold_secs', spec.get('hold_secs', 30))} s after a join")
     lines.append(f"expect: {c.get('expect')}" + (f" /{c['refusal']}/" if c.get("refusal") else "")
                  + (f", then batch {c['batch']}" if c.get("batch") else ""))
     return lines
@@ -384,49 +431,52 @@ def run_case(spec, c, res):
     def chk(step, arg, ok, detail):
         checks.append({"step": step, "arg": arg, "ok": ok, "detail": detail})
 
-    bad = [k for k in ("cli_drop", "cli_config") if c.get(k)]
-    if bad:
-        chk("spec", ",".join(bad), False, f"{', '.join(bad)} need run_captures.py serve options that do not exist yet")
-        outcome, ev = "NOT-RUN", []
+    r = sh(fill(spec.get("prep", PREP), OUT=shlex.quote(out)), capture_output=True, text=True,
+           stdin=subprocess.DEVNULL, env=dict(os.environ, INST=INST, **c.get("srv_env", {})))
+    open(os.path.join(cres, "prep.out"), "w").write(r.stdout + r.stderr)
+    if r.returncode:
+        chk("prep", "", False, f"prep exit {r.returncode}: {(r.stderr or r.stdout).strip()[-200:]}")
+        outcome, ev = "BOOT-FAIL", []
     else:
-        r = sh(fill(spec.get("prep", PREP), OUT=shlex.quote(out)), capture_output=True, text=True,
-               stdin=subprocess.DEVNULL, env=dict(os.environ, INST=INST, **c.get("srv_env", {})))
-        open(os.path.join(cres, "prep.out"), "w").write(r.stdout + r.stderr)
-        if r.returncode:
-            chk("prep", "", False, f"prep exit {r.returncode}: {(r.stderr or r.stdout).strip()[-200:]}")
-            outcome, ev = "BOOT-FAIL", []
-        else:
-            for g in c.get("srv_drop", []):
-                for f in glob.glob(os.path.join(out, "srv/mods", g)):
-                    os.remove(f)  # unlink: hard links to mods/ stay intact
-            for f, sec, k, v in c.get("srv_toml", []):
-                qrun_toml(os.path.join(out, "srv", f), sec, k, v)
-            p = Pair(out, game, cres, c.get("cli_jars", []))
-            try:
-                ok, why = p.boot_server()
-                if not ok:
-                    outcome, ev = "BOOT-FAIL", [why]
-                else:
-                    p.launch_client()
-                    outcome, ev = p.wait_join(float(spec.get("join_secs", 600)),
-                                              spec.get("cli_refusal", CLI_REFUSAL), spec.get("srv_refusal", SRV_REFUSAL))
-                    if outcome == "JOINED" and c.get("batch"):
-                        bres = qrun.run_batch(["pair", out, c["batch"], os.path.join(cres, "batch"), "--no-lint"], "pair",
-                                              p.target())
-                        nb = [k for k, v in bres.items() if v["result"] in ("FAIL", "CRASH")]
-                        chk("batch", c["batch"], not nb, f"batch rows not passing: {', '.join(nb)}" if nb else
-                            f"{len(bres)} rows, none FAIL / CRASH")
-            finally:
-                probs = p.stop()
-                for f in ("logs/latest.log", "crash-reports"):
-                    for d, tag in ((os.path.join(out, "srv"), "srv"), (game, "cli")):
-                        src = os.path.join(d, f)
-                        if os.path.isfile(src):
-                            subprocess.run(["cp", src, os.path.join(cres, f"{tag}_latest.log")])
-                        elif os.path.isdir(src) and os.listdir(src):
-                            subprocess.run(["cp", "-r", src, os.path.join(cres, f"{tag}_crash-reports")])
-                if probs:
-                    chk("stop", "", False, "; ".join(probs))
+        for g in c.get("srv_drop", []):
+            for f in glob.glob(os.path.join(out, "srv/mods", g)):
+                os.remove(f)  # unlink: hard links to mods/ stay intact
+        for f, sec, k, v in c.get("srv_toml", []):
+            qrun_toml(os.path.join(out, "srv", f), sec, k, v)
+        p = Pair(out, game, cres, c.get("cli_jars", []), drop=c.get("cli_drop", []),
+                 config=c.get("cli_config", []))
+        try:
+            ok, why = p.boot_server()
+            if not ok:
+                outcome, ev = "BOOT-FAIL", [why]
+            else:
+                p.launch_client()
+                outcome, ev = p.wait_join(float(spec.get("join_secs", 600)),
+                                          spec.get("cli_refusal", CLI_REFUSAL), spec.get("srv_refusal", SRV_REFUSAL))
+                if outcome == "JOINED":
+                    hs = float(c.get("hold_secs", spec.get("hold_secs", 30)))
+                    o2, e2 = p.hold(hs)
+                    if o2:
+                        outcome, ev = o2, ev + e2
+                    else:
+                        ev = ev + [f"both JVMs alive {hs:.0f} s after joining"]
+                if outcome == "JOINED" and c.get("batch"):
+                    bres = qrun.run_batch(["pair", out, c["batch"], os.path.join(cres, "batch"), "--no-lint"], "pair",
+                                          p.target())
+                    nb = [k for k, v in bres.items() if v["result"] in ("FAIL", "CRASH")]
+                    chk("batch", c["batch"], not nb, f"batch rows not passing: {', '.join(nb)}" if nb else
+                        f"{len(bres)} rows, none FAIL / CRASH")
+        finally:
+            probs = p.stop()
+            for f in ("logs/latest.log", "crash-reports"):
+                for d, tag in ((os.path.join(out, "srv"), "srv"), (game, "cli")):
+                    src = os.path.join(d, f)
+                    if os.path.isfile(src):
+                        subprocess.run(["cp", src, os.path.join(cres, f"{tag}_latest.log")])
+                    elif os.path.isdir(src) and os.listdir(src):
+                        subprocess.run(["cp", "-r", src, os.path.join(cres, f"{tag}_crash-reports")])
+            if probs:
+                chk("stop", "", False, "; ".join(probs))
     exp = c.get("expect", "refuse")
     want = {"refuse": "REFUSED", "join": "JOINED"}.get(exp, exp.upper())
     ok = outcome == want

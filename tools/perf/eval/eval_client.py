@@ -60,7 +60,26 @@ def setup(game, world=None):
     print("client dir ready:", len(os.listdir(mods)), "jars")
 
 
-def launch(game, nodebuglog=False, maxage="60m", maxsize="1g", server=None, ownsrv=None):
+def start_xvfb(game):
+    """EXPERIMENTAL (plan_scratch_testing_expansion TX-07, owner D3): an own Xvfb display for an unattended client.
+    Software rendering (llvmpipe): slower, colours may differ; never for colour rows. Returns the DISPLAY string.
+    The display's pid goes to GAME/xvfb.pid; a detached reaper stops it once the client pid is gone."""
+    r, w = os.pipe()
+    x = subprocess.Popen(["Xvfb", "-displayfd", str(w), "-screen", "0", "1280x720x24", "-nolisten", "tcp"],
+                         pass_fds=(w,), stdout=subprocess.DEVNULL, stderr=open(os.path.join(game, "xvfb.out"), "w"),
+                         start_new_session=True)
+    os.close(w)
+    num = b""
+    with os.fdopen(r, "rb") as f:
+        num = f.readline().strip()
+    if not num:
+        x.kill()
+        sys.exit("Xvfb did not report a display (see %s)" % os.path.join(game, "xvfb.out"))
+    open(os.path.join(game, "xvfb.pid"), "w").write(str(x.pid))
+    return x, ":" + num.decode()
+
+
+def launch(game, nodebuglog=False, maxage="60m", maxsize="1g", server=None, ownsrv=None, display="real"):
     live = subprocess.run(["bash", os.path.join(INST, "tools/scratch_query/game_jvms.sh")],
                           capture_output=True, text=True).stdout.strip()
     # ownsrv=PID: the caller's own scratch server for a row that needs a server and a client (server first)
@@ -81,8 +100,18 @@ def launch(game, nodebuglog=False, maxage="60m", maxsize="1g", server=None, owns
     if nodebuglog:
         args = [a for a in args if not (a.startswith("-Dlog4j.configurationFile=") and a.endswith("-debug.xml"))]
     env = dict(os.environ, DISPLAY=os.environ.get("DISPLAY", ":1"))
+    xvfb = None
+    if display == "xvfb":
+        xvfb, env["DISPLAY"] = start_xvfb(game)
+    elif display != "real":
+        sys.exit("display must be real or xvfb")
     f = open(os.path.join(game, "launch.out"), "w")
     p = subprocess.Popen(args, cwd=game, stdout=f, stderr=subprocess.STDOUT, env=env, start_new_session=True)
+    if xvfb:
+        # reaper: the Xvfb lives exactly as long as this client (only these two own pids)
+        subprocess.Popen(["sh", "-c", "while kill -0 %d 2>/dev/null; do sleep 5; done; kill %d" % (p.pid, xvfb.pid)],
+                         stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, start_new_session=True)
+        print("display", env["DISPLAY"], "(xvfb, experimental)")
     print("client pid", p.pid)
 
 
@@ -94,6 +123,7 @@ if __name__ == "__main__":
         opts = sys.argv[3:]
         srv = next((o.split("=", 1)[1] for o in opts if o.startswith("server=")), None)
         own = next((o.split("=", 1)[1] for o in opts if o.startswith("ownsrv=")), None)
-        launch(game, "nodebuglog" in opts, server=srv, ownsrv=own)
+        disp = next((o.split("=", 1)[1] for o in opts if o.startswith("display=")), "real")
+        launch(game, "nodebuglog" in opts, server=srv, ownsrv=own, display=disp)
     else:
         sys.exit(__doc__)
