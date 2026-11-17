@@ -119,6 +119,13 @@ class Server:
         set_prop(sp, "max-tick-time", "60000" if watchdog else "-1")
         for k, v in (props or {}).items():
             set_prop(sp, k, v)
+        # PERF_JARS="a.jar b.jar" (r1115 phase 11): build jars measured instead of the mods/ jar of the same name prefix
+        # (e.g. creativecompat-1.0.0.jar replaces srv/mods/creativecompat-*.jar); copied, never linked
+        for extra in os.environ.get("PERF_JARS", "").split():
+            stem = os.path.basename(extra).split("-")[0]
+            for old in glob.glob(os.path.join(self.srv, "mods", stem + "-*.jar")):
+                os.remove(old)
+            shutil.copy2(extra, os.path.join(self.srv, "mods"))
         jars = sorted(glob.glob(os.path.join(BOT_JAR, "cdevperfbot-*.jar")), key=os.path.getmtime)
         if not jars:
             raise RuntimeError("no cdevperfbot jar: ./gradlew :perfBot:build --offline")
@@ -133,7 +140,7 @@ class Server:
         # which build of our own jars this run measured (results are only comparable at the same builds)
         ours = {f: time.strftime("%m-%d %H:%M", time.localtime(os.path.getmtime(os.path.join(self.srv, "mods", f))))
                 for f in os.listdir(os.path.join(self.srv, "mods"))
-                if f.startswith(("creativeengineering", "creativedelight", "cdevperfbot"))}
+                if f.startswith(("creativeengineering", "creativedelight", "creativecompat", "creativedevtools", "cdevperfbot"))}
         return {"jars": len(os.listdir(os.path.join(self.srv, "mods"))), "bot_jar": os.path.basename(jars[-1]),
                 "our_jars": ours}
 

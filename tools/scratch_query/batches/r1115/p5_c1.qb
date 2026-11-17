@@ -1,0 +1,67 @@
+# r1115 phase 5 (runner-5), boot C1: SQ-MELT-09b, rerun of p3_c1.qb (SQ-MELT-09) with Common fix-1 (mods/ 03:15), on the Common + Compat set (no Creative Delight, so no Salt or Vintage).
+# Server: NOSWAP=1 bash tools/scratch_query/cpp_chain_srv.sh OUT p3c1 compat   (Common, Compat, Calendar, Serene
+#   Seasons, KubeJS stack, perfBot; group B world seed 8675309; no config/, empty kubejs/ apart from the probes)
+# Before boot: copy zmelt_probe.js as OUT/srv/kubejs/server_scripts/zz_zmelt_probe.js.
+# Every target has a glass block above it (Serene Seasons, in this set, melts open surface ice and snow: r1115 p3_a1r).
+# Layout: a stone platform at y 198..199 over spawn, pits at y 199; fire pair x 10, lava pair x 40.
+pace 1
+
+## SQ-MELT-09b | Common + Compat: fire and lava melt as in -02 / -03; [melting] tags salt 0; no melting error or warning
+bootreject (?i)rareice|RareIceLightMeltMixin
+bootexpect \[melting\] tags: \d+ meltable, \d+ slow, 0 salt
+# Forge fills a fresh config with "Incorrect key melting... corrected" WARN lines (no config/ in this set): not a fault
+bootreject (?i)(ERROR|WARN)(?!.*Incorrect key).*melting|melting.*(Exception|NoClassDefFound)
+shell grep -hiE "melting" logs/latest.log | sed -E 's/^.*\]: //' | cut -c1-300 | head -12
+shell ls mods; ls mods | grep -ci rare; grep -iE 'rare.?ice' logs/latest.log | head -3
+> forceload add 0 0 63 31
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> fill 0 198 0 63 199 31 minecraft:stone
+sleep 3
+> pbot spawn m9b 25 200 20 minecraft:overworld survival
+> setblock 10 198 10 minecraft:netherrack
+> setblock 13 199 10 minecraft:ice
+> setblock 13 200 10 minecraft:glass
+> setblock 6 199 10 minecraft:ice
+> setblock 6 200 10 minecraft:glass
+> setblock 10 199 13 minecraft:snow
+> setblock 10 200 13 minecraft:glass
+> setblock 10 199 6 minecraft:snow
+> setblock 10 200 6 minecraft:glass
+> setblock 10 199 10 minecraft:fire
+> setblock 44 199 10 minecraft:ice
+> setblock 44 200 10 minecraft:glass
+> setblock 35 199 10 minecraft:ice
+> setblock 35 200 10 minecraft:glass
+> setblock 40 199 10 minecraft:lava
+> zmelt w m09_fire_ice3 overworld 13 199 10
+> zmelt w m09_fire_ice4 overworld 6 199 10
+> zmelt w m09_fire_snow3 overworld 10 199 13
+> zmelt w m09_fire_snow4 overworld 10 199 6
+> zmelt w m09_lava_ice4 overworld 44 199 10
+> zmelt w m09_lava_ice5 overworld 35 199 10
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|zmelt\] error)
+> gamerule randomTickSpeed 1000
+sleep 90
+> gamerule randomTickSpeed 3
+> zmelt show
+waitlog \[zmelt\] show done 30
+> execute if block 13 199 10 minecraft:water run say SQ-MELT-09b-fire_ice3_water
+> execute if block 6 199 10 minecraft:ice run say SQ-MELT-09b-fire_ice4_ice
+> execute if block 10 199 13 minecraft:air run say SQ-MELT-09b-fire_snow3_air
+> execute if block 10 199 6 minecraft:snow run say SQ-MELT-09b-fire_snow4_snow
+> execute if block 44 199 10 minecraft:water run say SQ-MELT-09b-lava_ice4_water
+> execute if block 35 199 10 minecraft:ice run say SQ-MELT-09b-lava_ice5_ice
+expect SQ-MELT-09b-fire_ice3_water$
+expect SQ-MELT-09b-fire_ice4_ice$
+expect SQ-MELT-09b-fire_snow3_air$
+expect SQ-MELT-09b-fire_snow4_snow$
+expect SQ-MELT-09b-lava_ice4_water$
+expect SQ-MELT-09b-lava_ice5_ice$
+> reload
+sleep 15
+shell grep -hiE "melting" logs/latest.log | grep -iE "error|warn|exception" | head -5; grep -ciE "\[ERROR\]" logs/kubejs/server.log; true
+look no Rare Ice line in the log (bootreject); fire and lava pairs as in -02 / -03; tags line salt 0; no melting error after /reload either

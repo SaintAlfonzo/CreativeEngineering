@@ -280,7 +280,7 @@ Status Planned · Work patcherMod / data · TODO `structures/rates-and-groups #4
 User (2026-10-19): "placement order doesnt work how i thought, amend placement order for importance and hard to place
 structures instead of structure 'age'". Today a group's rank decides who wins an overlap; the user wants the
 structures that matter more or are harder to place (big, rare, picky about ground) to win, whatever group they are in.
-The source memory `placement-priority` is not in the repo; confirm the reading with the user (see Decisions).
+The source note [placement-priority](../agent_notes/placement-priority.md) is not in the repo; confirm the reading with the user (see Decisions).
 
 ### Now
 - Ranks: `structure_groups.json` `priority` (line 2453): `groups` (settlements 95 ... flotsam 25) and `structures`

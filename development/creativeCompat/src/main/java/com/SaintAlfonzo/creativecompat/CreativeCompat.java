@@ -20,9 +20,10 @@ import com.SaintAlfonzo.creativecompat.shrapnel.ShrapnelEntities;
 import com.SaintAlfonzo.creativecompat.shrapnel.ShrapnelSpawner;
 import com.SaintAlfonzo.creativecompat.shrapnel.TntShrapnelHandler;
 import com.SaintAlfonzo.creativecompat.surface.CamoSpeedTooltip;
-import com.SaintAlfonzo.creativecompat.surface.LeafPileSlow;
 import com.SaintAlfonzo.creativecompat.surface.PassSync;
 import com.SaintAlfonzo.creativecompat.surface.PassSyncClient;
+import com.SaintAlfonzo.creativecompat.surface.LeafPileMigration;
+import com.SaintAlfonzo.creativecompat.surface.PassConfigMigration;
 import com.SaintAlfonzo.creativecompat.surface.PassThrough;
 import com.SaintAlfonzo.creativecompat.surface.PassValues;
 import com.SaintAlfonzo.creativecompat.surface.SurfaceSpeeds;
@@ -98,11 +99,17 @@ public class CreativeCompat {
         if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS))
             ConfigRename.mergeSections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS);
         ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.COMMON_SECTIONS);
+        // [leaf_piles] slowFromLayers -> [surface.passthrough.leaf_pile] minLayers (plan_passthrough.md 3.1, 2026-11-15),
+        // then the neighbour model and the layer tier (plan_post_scratch_1115b.md C1, D: surface/PassConfigMigration)
+        migrateLeafPiles();
+        migratePassThrough();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, FILE);
         if (!carried) warnOldKeys();
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(CreativeCompat::commonSetup);
+        // on-demand reload of this file (/cdevreload compat in Creative Devtools; plan_post_scratch_1115b.md E2)
+        CompatConfigReload.init(modEventBus);
 
         // Known harmless log lines repeated by the hundred thousand (compat/LogSpamFilter, perf.md 19)
         com.SaintAlfonzo.creativecompat.compat.LogSpamFilter.install();
@@ -134,20 +141,33 @@ public class CreativeCompat {
         // Walking on blocks (surface/, from Creative Engineering 2026-11-06; [surface]). Framed / copycat blocks: say
         // on BlockRunner's speed tooltip line whether they walk like their camo. BlockRunner tier speeds come from
         // [surface.speed] (mixin/BlockRunnerSpeedConfigMixin): re-apply them when the toml is saved, and log an error
-        // if the mixin never ran. The WTHIT Run Speed line (waila_plugins.json) reads [leaf_piles] slowFromLayers.
+        // if the mixin never ran.
         MinecraftForge.EVENT_BUS.register(CamoSpeedTooltip.class);
         modEventBus.addListener(SurfaceSpeeds::onConfigReload);
         MinecraftForge.EVENT_BUS.register(SurfaceSpeeds.class);
-        LeafPileSlow.set(() -> CompatConfig.SPEC.isLoaded() ? CompatConfig.LEAF_PILES.slowFromLayers.get() : LeafPileSlow.DEFAULT);
         // Pass-through blocks (surface/PassThrough, plan_passthrough.md): the block -> tier cache follows tag reloads; the
         // value snapshot follows the toml, and the server sends its values to players on join and on save (PassSync).
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, TagsUpdatedEvent.class,
-                event -> PassThrough.clearCache());
+        MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, TagsUpdatedEvent.class, event -> {
+            PassThrough.clearCache();
+            com.SaintAlfonzo.creativecompat.surface.PassCounts.onTagsUpdated();
+        });
+        // neighbour counts baked into the chunk (surface/PassCounts, plan_post_scratch_1115b.md C2): a chunk capability,
+        // saved on the server; block changes drop them through mixin/LevelChunkPassMixin
+        modEventBus.addListener(com.SaintAlfonzo.creativecompat.surface.PassCounts::registerCaps);
+        MinecraftForge.EVENT_BUS.addGenericListener(net.minecraft.world.level.chunk.LevelChunk.class,
+                com.SaintAlfonzo.creativecompat.surface.PassCounts::attach);
+        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.PassCounts::onChunkLoad);
         modEventBus.addListener(PassValues::onConfig);
         PassSync.register();
         MinecraftForge.EVENT_BUS.addListener(PassSync::onLogin);
+        // [debug.passthrough] timing: the 200-tick timing lines (surface/PassTiming, plan 7.3)
+        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.PassTiming::onServerTick);
+        // phase 2: per-chunk long-life arrow sets (surface/PassArrows, plan 5.4)
+        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.PassArrows::onLeave);
+        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.PassArrows::onLevelUnload);
         if (FMLEnvironment.dist == Dist.CLIENT) {
             MinecraftForge.EVENT_BUS.addListener(PassSyncClient::onLoggingOut);
+            MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.PassTiming::onClientTick);
         }
 
         // What Creative Common's WTHIT and JEI code reads from here, through its own holders (no Common class loads this
@@ -235,6 +255,36 @@ public class CreativeCompat {
             Class.forName(className, true, CreativeCompat.class.getClassLoader());
         } catch (Throwable t) {
             LOGGER.error("[creativecompat] failed to pre-load {}", className, t);
+        }
+    }
+
+    /** The leaf pile mixin's old key moves into the pass-through table (surface/LeafPileMigration). */
+    private static void migrateLeafPiles() {
+        try {
+            LeafPileMigration.Result r = LeafPileMigration.run(FMLPaths.CONFIGDIR.get().resolve(FILE));
+            if (r != null) {
+                LOGGER.info("[creativecompat] config/{}: [leaf_piles] slowFromLayers ({}) moved to "
+                        + "[surface.passthrough.leaf_pile] minLayers ({})", FILE, r.oldValue(),
+                        r.carried() != null ? r.carried() : "kept");
+            }
+        } catch (IOException e) {
+            LOGGER.error("[creativecompat] could not move [leaf_piles] in config/{}", FILE, e);
+        }
+    }
+
+    /**
+     * RING / CUBE neighbours become SIDES / FACES, the old denseFrom default 6 becomes 3, and the leaf_pile table moves
+     * into [surface.passthrough.layers] (surface/PassConfigMigration). Before Forge loads the file.
+     */
+    private static void migratePassThrough() {
+        try {
+            PassConfigMigration.Result r = PassConfigMigration.run(FMLPaths.CONFIGDIR.get().resolve(FILE));
+            if (r != null) {
+                LOGGER.info("[creativecompat] config/{}: pass-through tables moved to the 2026-11-15 model: {}", FILE,
+                        String.join("; ", r.notes()));
+            }
+        } catch (IOException e) {
+            LOGGER.error("[creativecompat] could not update the pass-through tables in config/{}", FILE, e);
         }
     }
 

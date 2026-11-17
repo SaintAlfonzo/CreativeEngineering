@@ -1,0 +1,124 @@
+# r1115 phase 11 (runner-11), boot 2 of the p11a world (after pth_a2.qb and save-all): SQ-PTH-16 (value 6 migrated),
+# SQ-PTH-07 (items held across a restart), SQ-PTH-14d (the demoted arrow of SQ-PTH-14c keeps its demotion).
+# srv toml before this boot: a [leaf_piles] table with slowFromLayers = 6 put back at the top of
+# config/creativecompat-common.toml (the live file's shape before the migration).
+pace 1
+
+## SQ-PTH-16 | boot 2: [leaf_piles] slowFromLayers 6 moved to [surface.passthrough.leaf_pile] minLayers 6
+bootexpect Done \(
+bootexpect \[leaf_piles\] slowFromLayers \(6\) moved to \[surface\.passthrough\.leaf_pile\] minLayers \(6\)
+bootreject LeafPileSlowMixin
+bootreject Mixin apply failed
+shell grep -c '^\[leaf_piles\]' config/creativecompat-common.toml || true; awk '/\[surface\.passthrough\.leaf_pile\]/{f=1} f&&/minLayers/{print; exit}' config/creativecompat-common.toml; grep -n 'moved to' logs/latest.log | cut -c1-260
+
+## SQ-PTH-14d | after the restart: the demoted arrow (x 1156) vanishes at its first minute, the other three stay
+> pbot spawn P 1150.5 -60 990.5 minecraft:overworld survival
+sleep 5
+> execute as @e[type=minecraft:arrow,x=1150,y=-62,z=995,dx=16,dy=6,dz=10] run data get entity @s life
+> execute as @e[type=minecraft:arrow,x=1150,y=-62,z=995,dx=16,dy=6,dz=10] run data get entity @s Pos
+> zpth watch a14c 700 100
+waitlog watch done a14c 60
+> execute as @e[type=minecraft:arrow,x=1150,y=-62,z=995,dx=16,dy=6,dz=10] run data get entity @s Pos
+look the x 1156.5 arrow gone (gone line) once its life passes 1200; 1158, 1160, 1162 stay
+
+## SQ-PTH-07 | items of SQ-PTH-06 still held after the restart, CreativeCompatPass in their data; web removed: they fall, NoGravity back to 0b
+> zpth mod i06
+> data get entity @e[tag=i06fast,limit=1]
+> setblock 1000 -57 1120 minecraft:air
+sleep 3
+> zpth mod i06
+look before: same positions as SQ-PTH-06, ng=true, data has a CreativeCompatPass key; after: y -60 (ground), ng=false
+
+## SQ-PTH-12b | the item dropped when the web holding the second pickarang was broken (pth_a2 SQ-PTH-12)
+> execute as @e[type=minecraft:item,x=1106,y=-62,z=999,dx=5,dy=5,dz=5] run data get entity @s Item
+look one item is quark:pickarang
+
+## SQ-PTH-10b | explosive arrow from the far side (bot turned by tp; zpth face was broken in pth_a2), then both cells holding the hanging no-pickup arrow broken
+> fill 1080 -60 1000 1082 -58 1002 minecraft:cobweb
+> zpth watchnew nock_enough_arrows:explosive_arrow e10b 400 2 1081.5 -59 1001.5 7
+> clear P
+> tp P 1081.5 -60 1007.5 180 0
+> item replace entity P weapon.mainhand with minecraft:bow
+> give P nock_enough_arrows:explosive_arrow 1
+> zpth use P
+> zpth release P 20
+sleep 4
+> zpth mod e10b
+> execute if block 1081 -59 1001 minecraft:cobweb run say PTH10b-centre-intact
+> execute if block 1081 -59 1002 minecraft:cobweb run say PTH10b-edge-intact
+> zpth near minecraft:arrow 1081.5 -58.5 1001.5 2
+> zpth watchnew minecraft:arrow a10b 100 2 1081.5 -58.5 1001 1
+> setblock 1081 -59 1001 minecraft:air destroy
+> setblock 1081 -59 1000 minecraft:air destroy
+sleep 4
+> zpth near minecraft:arrow 1081.5 -59 1001 3
+expect PTH10b-centre-intact$
+look e10b stops in the cube with no blast (webs intact); the no-pickup arrow falls once both cells are gone
+
+## SQ-PTH-11b | snowballs and a pearl thrown into a rebuilt elevated cube from three distances (entry phase), bot turned by tp
+> kill @e[type=minecraft:snowball]
+> kill @e[type=minecraft:ender_pearl]
+> kill @e[type=minecraft:potion]
+> fill 1090 -57 1000 1092 -55 1002 minecraft:cobweb
+> setblock 1091 -58 994 minecraft:stone
+> setblock 1091 -58 995 minecraft:stone
+> setblock 1091 -58 996 minecraft:stone
+> clear P
+> zpth watchnew minecraft:snowball s11b 600 1 1091.5 -56 999 7
+> item replace entity P weapon.mainhand with minecraft:snowball
+> tp P 1091.5 -57 994.5 0 0
+> zpth use P
+sleep 2
+> item replace entity P weapon.mainhand with minecraft:snowball
+> tp P 1091.5 -57 995.5 0 0
+> zpth use P
+sleep 2
+> item replace entity P weapon.mainhand with minecraft:snowball
+> tp P 1091.5 -57 996.2 0 0
+> zpth use P
+sleep 2
+> zpth watchnew minecraft:ender_pearl p11b 300 1 1091.5 -56 999 7
+> item replace entity P weapon.mainhand with minecraft:ender_pearl
+> tp P 1091.5 -57 994.5 0 0
+> zpth use P
+sleep 4
+> zpth player P
+> zpth mod s11b
+look per snowball: gone in the centre cell (z 1001..1002) or hung in the edge cell; pearl: P teleported to the cube or not
+
+## SQ-PTH-15b | scratch kubejs data tag exempt + snowball, /reload: snowball flies through the cube; carts from 2.5 blocks before the web (empty carts lose 4 % a tick on rails), control lane without web
+> fill 1010 -60 1179 1012 -58 1181 minecraft:cobweb
+shell mkdir -p kubejs/data/creativecompat/tags/entity_types/passthrough/projectile && printf '{"replace":false,"values":["minecraft:snowball"]}' > kubejs/data/creativecompat/tags/entity_types/passthrough/projectile/exempt.json
+> reload
+sleep 25
+> summon minecraft:snowball 1004.5 -58.5 1180.5 {NoGravity:1b,Tags:["m15b"]}
+> execute as @e[tag=m15b] if entity @s[type=#creativecompat:passthrough_exempt/all] run say PTH15b-snowball-exempt
+> zpth watch m15b 45 1
+> zpth launch m15b none 1.5 0 0
+sleep 3
+> fill 1000 -60 1192 1024 -60 1192 minecraft:rail[shape=east_west]
+> summon minecraft:minecart 1009.5 -60 1190.5 {Tags:["c15b"]}
+> summon minecraft:minecart 1009.5 -60 1192.5 {Tags:["c15c"]}
+> zpth watch c15b 100 2
+> zpth watch c15c 100 2
+> zpth motion c15b 0.4 0 0
+> zpth motion c15c 0.4 0 0
+sleep 6
+shell rm -f kubejs/data/creativecompat/tags/entity_types/passthrough/projectile/exempt.json
+> reload
+sleep 25
+expect PTH15b-snowball-exempt$
+look m15b passes x 1013 at mot x about 1.4; c15b slowed under the web (x 1011.5..1013) but not stopped dead, compared with c15c
+
+## SQ-PTH-14e | test 1 again (the pth_a2 run put the 4th arrow after the first three had reached their 3 min life): 3 arrows, a 4th after 72 s
+> zpth watchnew minecraft:arrow a14e 3000 100 1175 -59 1000 6
+> summon minecraft:arrow 1172.5 -58 1000.5 {pickup:1b,Motion:[0d,-1d,0d]}
+sleep 1
+> summon minecraft:arrow 1174.5 -58 1000.5 {pickup:1b,Motion:[0d,-1d,0d]}
+sleep 1
+> summon minecraft:arrow 1176.5 -58 1000.5 {pickup:1b,Motion:[0d,-1d,0d]}
+sleep 70
+> summon minecraft:arrow 1178.5 -58 1000.5 {pickup:1b,Motion:[0d,-1d,0d]}
+sleep 3
+> zpth mod a14e
+look the x 1172 arrow gone at the 4th arrow (gone line right after it); 1174, 1176, 1178 stay

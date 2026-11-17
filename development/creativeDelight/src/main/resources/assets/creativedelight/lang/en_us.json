@@ -29,7 +29,7 @@
   "creativeengineering.jei.feast_plating.leftovers.break": "Right-click the empty plate to break it",
   "creativeengineering.jei.feast_plating.leftovers.given": "Given with the last serving",
   "creativeengineering.can.servings": "Servings: %s / %s",
-  "creativeengineering.lunchbox.slots": "Slots: %s",
+  "creativeengineering.lunchbox.slots": "Food slots: %s",
   "creativeengineering.seasoning.line": "%s: %s",
   "creativeengineering.seasoning.nutrition": "+%s nutrition",
   "creativeengineering.seasoning.saturation": "+%s saturation",

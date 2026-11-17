@@ -19,7 +19,7 @@ Models: [veggies_delight.md](../../../feature_writeup/veggies_delight.md) 4.1 (f
      code written from behaviour, never translated from the decompile (memories `miners-delight-backport-plan`,
      `backported-vinery`, `farmers-structures-donor`).
      Donor jars go unmodified to local dev instances only; at publish the pack links official sources and Creative
-     Common files the detected jars into the upstream folder (memory `upstream-jar-distribution-policy`). Do not
+     Common files the detected jars into the upstream folder (note [upstream-jar-distribution-policy](../../../feature_writeup/agent_notes/upstream-jar-distribution-policy.md)). Do not
      raise rehosting as a blocker.
    - Small feature: tier it as in feature_porting.md (KubeJS / data, or one patcherMod handler or mixin).
 3. **Home.** Food content: Creative Delight member or CD tree (memory `creative-delight-routing`); else its own

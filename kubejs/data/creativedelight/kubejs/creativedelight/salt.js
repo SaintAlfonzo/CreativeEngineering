@@ -1,5 +1,5 @@
 // requires: creativedelight
-// The pack's salt routes: raw rock salt -> 4 salt, heated basin water -> salt, the Large Salt Lamp. Moved from the
+// The pack's salt routes: raw rock salt -> 4 salt, heated basin water -> salt, the Large Salt Lamp, the Salt Melt. Moved from the
 // pack's kubejs/server_scripts/cooking/salt.js 2026-10-25. Salt is Vintage Delight's salt dust since the salt merge
 // (food/seasoning #6, vintage_items.js); The Salt's salt only if the Vintage member is off.
 ServerEvents.recipes(e => {
@@ -47,5 +47,10 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'salt:salt_lamp' }, e)
 		R.shaped(i.salt_lamp, ['SSS', 'SGS', 'SDS'], { S: i.salt_salt_block, G: i.glowstone_block, D: i.deepslate_tiles }, e,
 			'large_salt_lamp')
+
+		// ============================================================
+		// Salt Melt (salt member, 64 uses; plan_post_scratch_1115 B6, salt.md 7): 2 salt + 2 raw rock salt
+		// ============================================================
+		R.shapeless(i.salt_melt, [SALT, SALT, i.raw_rock_salt, i.raw_rock_salt], e, 'salt_melt')
 	})
 })

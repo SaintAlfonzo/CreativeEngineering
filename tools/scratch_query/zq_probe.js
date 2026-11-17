@@ -8,6 +8,7 @@
 //   /zq makes <item id>      every recipe whose result is the item (no ':' = result id contains the text)
 //   /zq food <item id>       nutrition, saturation modifier, effects (amplifier, ticks, chance)
 //   /zq item <item id>       item class, max damage, max stack size
+//   /zq items <text>, /zq blocks <text>   item / block registry ids containing text ("items id <id> class <class>" lines, then the count)
 //   /zq potion <id> [a,b]    potion registered?; with ingredients: what each brews the potion into (Forge registry)
 //   /zq season <b1,b2,..>    SeasonTypes.tagged (cached season type) of each biome
 //   /zq count x1 y1 z1 x2 y2 z2 <block> [dim]   blocks of that id in a box and what they stand on (loaded chunks only)
@@ -25,6 +26,11 @@
 //                            the off-hand item if the main hand did not consume the action
 //   /zq states all           block-state id count (Block.BLOCK_STATE_REGISTRY) against the 2^20 ceiling
 // Output: "[zq] ..." lines in logs/latest.log, then "[zq] done".
+// MIGRATED 2026-11-15 to Creative Devtools' Java /cdevtest (feature_writeup/creative_devtools.md, /cdevtest); new rows use
+// those verbs, old batches keep /zq: recipes, rdetail, bytype, uses, makes, food, item, items/blocks -> reg item|block,
+// potion, count, ages, chunk, biometag/itemtag/blocktag -> tag biome|item|block, tagsof, useitem -> useair as=NAME
+// hand=both, states. Left here only (one-off or KubeJS-specific): season (Creative Calendar), floating, under (SQ-EFB
+// judges), nbt (how KubeJS scripts see NBT).
 (() => {
     const $ZQArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $ZQReg = Java.loadClass('net.minecraft.core.Registry')
@@ -112,6 +118,14 @@
                     ef.push(String($ZQReg.MOB_EFFECT.getKey(i.getEffect())) + ' amp ' + i.getAmplifier() + ' ' + i.getDuration() + 't x' + pr.getSecond())
                 })
                 out('food ' + arg + ': nutrition ' + fp.getNutrition() + ', modifier ' + fp.getSaturationModifier() + ', effects [' + ef.join('; ') + ']')
+            } else if (what == 'items' || what == 'blocks') {
+                // registry ids containing arg (r1115 SQ-HOP rows): one line per id, then the count
+                let reg = what == 'items' ? $ZQReg.ITEM : $ZQReg.BLOCK
+                let ids = []
+                reg.keySet().forEach(k => { let s = String(k); if (s.indexOf(arg) >= 0) ids.push(s) })
+                ids.sort()
+                ids.forEach(s => out(what + ' id ' + s + ' class ' + reg.get(new $ZQRL(s)).getClass().getName()))
+                out(what + ' matching ' + arg + ': ' + ids.length)
             } else if (what == 'item') {
                 let it = Item.of(arg).getItem()
                 out('item ' + arg + ': class ' + it.getClass().getSimpleName() + ', max damage ' + it.getMaxDamage() + ', max stack ' + it.getMaxStackSize())

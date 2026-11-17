@@ -210,7 +210,7 @@ Examples:
   - Side effect: JEI recipe slots, FTB item hovers and AE2 table entries now go through the normal item tooltip path,
     so they also get the JEI mod-name line / tooltip images / Legendary Tooltips frame like inventory tooltips.
 - **D&D Jetpack tooltip crash:** `JetpackItemTooltipMixin` stops a crash that used to break client
-  tag loading, which delayed JEI (memory `axe-tag-ghost-entries`).
+  tag loading, which delayed JEI (note [axe-tag-ghost-entries](agent_notes/axe-tag-ghost-entries.md)).
 - **WTHIT growth line** for hemp, tobacco, berry bushes, grapes and other plants WTHIT skips: Creative Delight `compat/wthit/WthitCropGrowth` (QoL-6), written up in [crops.md](crops.md) 2.9 (tests CR-59 to CR-66).
 
 **Creative Labels** (2026-10-20, [sticky_notes.md](sticky_notes.md) 3.9 and 3.13)

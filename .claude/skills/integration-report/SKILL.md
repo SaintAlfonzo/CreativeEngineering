@@ -28,8 +28,8 @@ section you are writing, not the whole file.
 ## 1. Report order (sections)
 
 Title `# <Mod>: overlap and integration report`. Opening paragraph: date, "nothing built", jar, licence,
-whether a port is needed, short name used in the file, test prefix (3+ letters, grep-safe, unused: grep
-`feature_writeup` for it). Scope rule paragraph: integration adds no recipe or mechanic that is not in the
+whether a port is needed, short name used in the file, test prefix (3+ letters, grep-safe, unused; add its row to
+[test_prefix_index.md](../../../feature_writeup/testing/test_prefix_index.md) first, section 0 there). Scope rule paragraph: integration adds no recipe or mechanic that is not in the
 mod or defined by a pack rule unless the owner asks by name; upstream bugs are fixed.
 
 - **0. At a glance**: table Part / Where / Status (inventory counts, bugs, overlap, fold-in, decisions D1-Dn,
@@ -47,7 +47,7 @@ mod or defined by a pack rule unless the owner asks by name; upstream bugs are f
   effects, new mechanics, recipes, loot, upstream bugs (B1-Bn, with log evidence).
 - **4. Fold-in, in build order**: numbered steps, each naming the pack system and its doc. Walk this checklist
   and write a step for every one that applies ("None (reason)" for the rest):
-  dumps + generators (memory `dumpall-refresh-workflow`); ids in `item_dict.js` / block dict; tags via
+  dumps + generators (note [dumpall-refresh-workflow](../../../feature_writeup/agent_notes/dumpall-refresh-workflow.md)); ids in `item_dict.js` / block dict; tags via
   `global.tags`; upstream recipe removals, literal inputs to tags; mob loot ([loot.md](../../../feature_writeup/loot.md));
   item merges; potions ([potions.md](../../../feature_writeup/potions.md), mixers, [potion_buckets.md](../../../feature_writeup/potion_buckets.md), tipped arrows);
   recipes by pack rules through `global.NCH` ([recipes_cooking.md](../../../feature_writeup/recipes_cooking.md): heatless `_manual_only`, rolls,

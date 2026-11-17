@@ -22,6 +22,9 @@ import java.util.stream.Stream;
  * Moved from the pack's kubejs/data/creativeengineering on 2026-11-06, ids under creativeworldgen: since 2026-11-10: upgrade_aquatic (driftwood on
  * land, the flotilla driftwood meta part), farmersdelight and fungidelight (wild mushroom colonies and patches),
  * miners_delight (cave carrots), vintagedelight (wild ghost peppers).
+ * Since 2026-11-15 also Upgrade Aquatic's own overridden ids (upgrade_aquatic:river_tree configured feature, trees_river
+ * and driftwood_* placed features), moved from kubejs/data/upgrade_aquatic/worldgen so a pack without Upgrade Aquatic
+ * boots (plan_post_scratch_1115.md D5). UA registers those in Java, so a datapack entry here still overrides them.
  */
 public final class ModDataPacks {
 

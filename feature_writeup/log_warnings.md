@@ -413,7 +413,7 @@ Every one is a deliberate 1.2.00 removal with a changelog bullet:
 
 Unlike the jams, bottles and Fish and Chips (which have Forge remaps to their replacements and do not show here), these have
 no replacement, so Forge drops them. If a future release removes items players may be holding, a remap to a near item
-(memory `forge-missing-mappings-staging`) avoids the loss.
+(note [forge-missing-mappings-staging](agent_notes/forge-missing-mappings-staging.md)) avoids the loss.
 
 ### 10.3 Pack-side follow-ups (all low priority, none player-visible except the pie values)
 

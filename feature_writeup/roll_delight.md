@@ -395,7 +395,7 @@ Code goes into a Creative Delight member (memory `creative-delight-routing`, Rus
 0. **Port (Java):** register the ids kept by D3 (the Ancient Roll ids are back); foods as plain items with the values D6 fixes; Cooked Nether Wart
    as a bowl food (stack per 4.1); chopsticks (3.3) and wrapped chopsticks; medleys as `FeastBlock` subclasses (3.2); B1-B9 fixed.
    Donor translation: 1.20 data to 1.19.2 (the recipe `category` fields are ignored on 1.19.2; drop the 1.21 tag).
-1. **Dumps and generators:** after install, `/dumpall`, then `/cdevgen` (memory `dumpall-refresh-workflow`).
+1. **Dumps and generators:** after install, `/dumpall`, then `/cdevgen` (note [dumpall-refresh-workflow](agent_notes/dumpall-refresh-workflow.md)).
 2. **Ids:** every kept id in `item_dict.js` (and the block dict for the three blocks) before any script uses them.
 3. **Tags** via `global.tags`: slices and rolls into the `roll` food type; `#forge:cooked_rice`-style inputs where the
    pack has one; Cooked Nether Wart into the vegetable / side food type.

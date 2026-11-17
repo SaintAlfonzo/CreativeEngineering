@@ -75,6 +75,9 @@ final class CatalogueRules {
 	private final List<BiomeRule> pieceBiomeRules = new ArrayList<>();
 	private final List<String> wholeWords, pieceWords;
 	private final Map<String, String> wordAliases = new LinkedHashMap<>();
+	/** Column name to its biome family, from {@code biomeFamilies}; names not listed keep their own column. */
+	private final Map<String, String> biomeFamily = new LinkedHashMap<>();
+	private final List<Reroute> pieceReroutes = new ArrayList<>();
 	private final String landPrefix, zombieMark, zombieSuffix;
 	private final JsonObject overrides;
 
@@ -99,6 +102,9 @@ final class CatalogueRules {
 	private record PieceMatch(Pattern id, String pieces) {}
 
 	private record BiomeRule(Pattern id, String prefix) {}
+
+	/** Pieces whose id matches go to this category and subfamily; their own subfamily becomes the function. */
+	private record Reroute(Pattern id, String category, String subfamily) {}
 
 	CatalogueRules(JsonObject o) {
 		JsonObject gaps = o.getAsJsonObject("gaps");
@@ -159,6 +165,14 @@ final class CatalogueRules {
 		zombieMark = pb.get("zombie").getAsString();
 		zombieSuffix = pb.get("zombieSuffix").getAsString();
 		zombieMerged = new LinkedHashSet<>(strings(pb.get("zombieMergedIn")));
+		if (pieces.has("reroute")) for (JsonElement e : pieces.getAsJsonArray("reroute")) {
+			JsonObject r = e.getAsJsonObject();
+			pieceReroutes.add(new Reroute(Pattern.compile(r.get("id").getAsString()), r.get("category").getAsString(), r.get("subfamily").getAsString()));
+		}
+		if (o.has("biomeFamilies")) for (Map.Entry<String, JsonElement> f : o.getAsJsonObject("biomeFamilies").entrySet()) {
+			if (f.getKey().startsWith("_")) continue;
+			for (String member : strings(f.getValue())) biomeFamily.put(member, f.getKey());
+		}
 
 		JsonObject dry = o.getAsJsonObject("drying");
 		dryCategories = new LinkedHashSet<>(strings(dry.get("categories")));
@@ -246,7 +260,7 @@ final class CatalogueRules {
 			} else {
 				subfamily = choose(r.subfamily(), path, types);
 			}
-			return new Home(r.category(), subfamily, choose(r.function(), path, types), wholeBiome(id, tags), null);
+			return new Home(r.category(), subfamily, choose(r.function(), path, types), fold(wholeBiome(id, tags)), null);
 		}
 		throw new IllegalStateException("no whole-structure rule matched " + id + " (the rule file needs a last rule with no 'when')");
 	}
@@ -283,7 +297,10 @@ final class CatalogueRules {
 			if (r.notLeaf() != null && r.notLeaf().matcher(leaf).find()) continue;
 			if (r.skip() != null) return new Home(null, null, null, null, r.skip());
 			if (skyId.matcher(id).find()) return new Home(skyCategory, skySubfamilyPrefix + r.subfamily(), r.function(), skyBiome, null);
-			return new Home(pieceCategory, r.subfamily(), r.function(), pieceBiome(id, r.function()), null);
+			String biome = fold(pieceBiome(id, r.function()));
+			for (Reroute re : pieceReroutes)
+				if (re.id().matcher(id).find()) return new Home(re.category(), re.subfamily(), r.subfamily(), biome, null);
+			return new Home(pieceCategory, r.subfamily(), r.function(), biome, null);
 		}
 		throw new IllegalStateException("no piece rule matched " + id + " (the rule file needs a last rule that matches anything)");
 	}
@@ -297,6 +314,11 @@ final class CatalogueRules {
 		String path = pathOf(id);
 		for (String word : pieceWords) if (path.contains(word)) return title(word) + suffix;
 		return ANY;
+	}
+
+	/** The biome family a column name folds into, or the name itself. */
+	String fold(String biome) {
+		return biomeFamily.getOrDefault(biome, biome);
 	}
 
 	/** Python's str.title() over the name with underscores as spaces: "flower_forest" is "Flower Forest". */

@@ -8,6 +8,8 @@ import com.mojang.brigadier.arguments.IntegerArgumentType;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import com.mojang.brigadier.builder.LiteralArgumentBuilder;
+import net.minecraft.commands.CommandBuildContext;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.commands.arguments.DimensionArgument;
@@ -56,6 +58,27 @@ import java.util.TreeMap;
  *   hold NAME ITEM [COUNT]        main hand
  *   use NAME POS [FACE]           right-click a block with the main hand item (as a client would)
  *   mark LABEL...                 marker line in the tick log
+ * Test verbs (plan_scratch_testing_expansion.md TX-22), output "[cdevtest] verb=pbot.VERB key=value ..." lines:
+ *   attack NAME TARGET [weak]     the bot's left click on an entity (Player.attack: crits, sweep, enchantments);
+ *                                 charged as after the cooldown unless weak; target health before and after
+ *   interact NAME TARGET [main|off]   right click on an entity (Player.interactOn), sneaking if the bot is
+ *   punch NAME POS [FACE]         left click on a block (start and abort digging: Block.attack, note blocks)
+ *   break NAME POS                survival break through ServerPlayerGameMode.destroyBlock (no dig time)
+ *   useitem NAME [main|off] [TICKS]   starts using the held item (the item's air use); the bot's own tick counts the
+ *                                 use down; released after TICKS (0 or none = until it finishes). End lines:
+ *                                 "verb=pbot.useitem ... end=finish" (food, sat after) or "end=released"
+ *   eat NAME [main|off]           useitem until it finishes (needs food below 20 unless always-edible: see hunger)
+ *   hunger NAME FOOD [SAT]        food level and saturation
+ *   sneak NAME on|off             shift held (sneak-use, crouch pose) or released
+ *   look NAME YAW PITCH | lookat NAME POS
+ *   moveto NAME X Z [walk|sprint] [TIMEOUT]   real movement to X Z (forward input, the server's physics, jumps
+ *                                 when blocked); end line "verb=pbot.moveto ... end=reached|stuck|timeout|stopped"
+ *                                 with ticks, distance and speed; moveto-stop NAME
+ *   inv NAME get | set SLOT ITEM [COUNT] | clear | select SLOT   inventory slots (0-8 hotbar, 9-35 main,
+ *                                 36-39 armour feet to head, 40 off hand)
+ *   vulnerable NAME on|off        takes damage (default off: invulnerable); kept across a respawn
+ *   pickup NAME on|off            picks up items and XP orbs (default on); kept across a respawn
+ * Every bot is exempt from Loading Protection one tick after it spawns (Bots.onLogin).
  *   census TAG                    &lt;out&gt;/census-TAG.json: entities by type per dimension, block entities by
  *                                 type in loaded chunks within the view distance of each bot
  *   status
@@ -76,11 +99,13 @@ final class BotCommands {
 
     @SubscribeEvent
     public void onRegister(RegisterCommandsEvent event) {
-        register(event.getDispatcher());
+        register(event.getDispatcher(), event.getBuildContext());
     }
 
-    private void register(CommandDispatcher<CommandSourceStack> d) {
-        d.register(Commands.literal("pbot").requires(s -> s.hasPermission(2))
+    private void register(CommandDispatcher<CommandSourceStack> d, CommandBuildContext build) {
+        LiteralArgumentBuilder<CommandSourceStack> root = Commands.literal("pbot").requires(s -> s.hasPermission(2));
+        BotTestVerbs.register(root, bots, build);
+        d.register(root
                 .then(Commands.literal("spawn").then(Commands.argument("name", StringArgumentType.word())
                         .then(Commands.argument("pos", Vec3Argument.vec3())
                                 .executes(c -> spawn(c, c.getSource().getLevel(), "survival"))

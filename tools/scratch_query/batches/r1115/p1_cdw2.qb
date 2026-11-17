@@ -1,0 +1,23 @@
+# r1115 phase 1, boot p1cdw2: SQ-CDW-01 rerun with fruitsdelight removed. Group B fresh normal world, seed 8675309, full pack minus one jar
+# (installed mods/ only, NOSWAP=1).
+# Server: NOSWAP=1 bash tools/scratch_query/prep_srv.sh OUT p1cdw2 B level-seed=8675309
+# Before boot: rm OUT/srv/mods/fruitsdelight*.jar (a hard link: the pack's mods/ keeps its jar); probes zz_hh_mw_probe.js.
+pace 1
+
+## SQ-CDW-01b | fruitsdelight removed: no datapack error, level created, wild crop packs line lists it under off
+bootexpect Done \(
+bootreject ^(?!.*json id corn_delight:).*(Failed to validate datapack|Unknown registry key|Errors in currently selected datapacks)
+bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): \[[^]]*fruitsdelight[^]]*\]
+shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
+shell test "$(ls mods | grep -c '^fruitsdelight')" = 0 && echo "jar gone"
+shell ls kubejs/data/creativedelight/
+look the level is created (Done); no worldgen dir in srv kubejs/data/creativedelight; the packs line as expected
+
+## SQ-CDW-03b | fruitsdelight removed: its 17 rules skip quietly through requires; no skip line names a fruitsdelight feature; apple rule runs
+shell grep -h "\[wild-crops\] mod not loaded, skipped" logs/kubejs/server.log | sed 's/.*skipped //' | sort | uniq -c | cut -c1-200
+shell echo "skip lines $(grep -c '\[wild-crops\] mod not loaded, skipped' logs/kubejs/server.log), needs-fruitsdelight $(grep -c '\[wild-crops\] mod not loaded, skipped .*: needs fruitsdelight' logs/kubejs/server.log), naming a fruitsdelight feature $(grep -c '\[wild-crops\] mod not loaded, skipped .*: fruitsdelight:' logs/kubejs/server.log)"
+shell test "$(grep -c '\[wild-crops\] mod not loaded, skipped .*: fruitsdelight:' logs/kubejs/server.log)" = 0
+shell test "$(grep -c '\[wild-crops\] mod not loaded, skipped .*: needs fruitsdelight' logs/kubejs/server.log)" = 17
+shell grep -h "\[wild-crops\]" logs/kubejs/server.log | grep -viE "skipped" | cut -c1-200 | head -5
+shell grep -n '"apple' $INST/kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json | head -3; true
+look 17 "<rule>: needs fruitsdelight" lines (hamimelon and the 16 tree/bush rules), none naming a fruitsdelight: feature; no apple skip line (the apple rule, a Vinery feature, still runs)

@@ -1,0 +1,32 @@
+# r1115 phase 3 (runner-3), boot A2: the p3a1 world restarted after
+#   qrun.py toml OUT/srv/config/creativecommon-common.toml melting vanillaLightMelting true   (scratch srv only)
+# SQ-MELT-06 part 2: with the switch on, vanilla light melt is back (ice touching a sea lantern melts).
+# Witnesses: the roofed rerun's sea-lantern ice (2241 -61 2072) and redstone-torch ice (2241 -61 2084), still ice after
+# p3_a1r. Every target has a glass block above it (Serene Seasons skips covered blocks, p3_a1r P3-RC).
+pace 1
+
+## SQ-MELT-06b | part 2: vanillaLightMelting true: ice touching a sea lantern melts (vanilla light melt back)
+shell grep -nE "vanillaLightMelting" config/creativecommon-common.toml
+bootexpect \[melting\] tags:
+> pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+> pbot spawn m3r 2210 -60 2060 minecraft:overworld survival
+> gamerule randomTickSpeed 3
+> setblock 2091 -61 2120 minecraft:ice
+> setblock 2090 -61 2120 minecraft:sea_lantern
+> setblock 2091 -60 2120 minecraft:glass
+> zmelt w m06b_sl_ice1 overworld 2091 -61 2120
+> zmelt w m06_sealantern_ice1 overworld 2241 -61 2072
+> zmelt w m06_redstonetorch_ice1 overworld 2241 -61 2084
+> zmelt light overworld 2091 -61 2120
+sleep 2
+> gamerule randomTickSpeed 1000
+sleep 90
+> gamerule randomTickSpeed 3
+> zmelt show
+waitlog \[zmelt\] show done 30
+> execute if block 2091 -61 2120 minecraft:water run say SQ-MELT-06b-new_sl_ice_water
+> execute if block 2241 -61 2072 minecraft:water run say SQ-MELT-06b-old_sl_ice_water
+> execute if block 2241 -61 2084 minecraft:ice run say SQ-MELT-06b-redstonetorch_ice_kept
+expect SQ-MELT-06b-new_sl_ice_water$
+expect SQ-MELT-06b-old_sl_ice_water$
+look redstone torch (light 7, under vanilla's 11) keeps its ice with the switch on too

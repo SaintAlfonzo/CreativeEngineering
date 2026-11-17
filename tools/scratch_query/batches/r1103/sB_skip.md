@@ -29,7 +29,7 @@ unfixed r1102b FAILs.
 | SQ-FFB-01 | client | needs the `/dumpfood` food export (client-only dump, gotchas.md "Logs and results") copied into the instance, then `tools/food_families.py` | from r1102b s2_skip.md |
 | SQ-FSD-04 | stale (already run) | farmers_structures.md 4: 2026-10-26 run PASSED SQ-FSD-04 (all 7 kinds place); the contents half (chests, frames, pots) is a client look | from r1102b s3_skip.md |
 | SQ-FSD-06 | stale (already run) | farmers_structures.md 4: SQ-FSD-06 PASSED 2026-10-26 (carp not locatable, squids at 552 blocks); SQ-FSD-07 (s3_A) checks the sets again from the dump | from r1102b s3_skip.md |
-| SQ-INV-09 | client | generators read the client dumps (food, stacks, names) and write pack files; hand step after CQ-DUMP (memory `dumpall-refresh-workflow`) | from r1102b s2_skip.md |
+| SQ-INV-09 | client | generators read the client dumps (food, stacks, names) and write pack files; hand step after CQ-DUMP (note [dumpall-refresh-workflow](../../../../feature_writeup/agent_notes/dumpall-refresh-workflow.md)) | from r1102b s2_skip.md |
 | SQ-INV-13 | client | Comfort-food count comes from the food dump (client-only) | from r1102b s2_skip.md |
 | SQ-INV-15 | client | `/cegen run jei_world` / `gen_jei_world.py` is an in-game generator run on the instance (writes `generated.json`), after `/dumpworldjei` | from r1102b s2_skip.md |
 | SQ-INV-16 | client | `/cegen run loot dumps` is an in-game generator run on the instance (writes `loot_index.json`, `loot_config.json`) | from r1102b s2_skip.md |

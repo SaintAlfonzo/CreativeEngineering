@@ -171,7 +171,7 @@ to Creative Brewing. Phases 2 and 3 were built on 2026-11-01 (4.6); phase 1 runs
    `jeedPotionProvider` stay in neoCraftHelper.js; CB calls them. Dict keys (`global.item`, `global.fluid`,
    `global.effect`) stay in the pack dicts (one place per item).
 3. **Top-level names.** Before moving a startup script into the jar, grep the pack for its top-level `var` names: each
-   jar pack has its own scope, only `global` is shared (memory `kubejs-jar-startup-scripts`). Known globals that cross:
+   jar pack has its own scope, only `global` is shared (note [kubejs-jar-startup-scripts](agent_notes/kubejs-jar-startup-scripts.md)). Known globals that cross:
    `global.alcohol` (read by patcherMod `IntoxicatingDrinkTooltip`), `global.potionArea` (patcherMod
    `PotionBucketDispenser`, server `potion_buckets.js`), `global.foodEffectSwaps`, `global.effect`.
 4. **Each moved file leaves no copy behind** and its old path gets a one-line entry in this section's log (4.5), so a
@@ -452,7 +452,7 @@ Open before upload:
   private server; a public pack must make players download them instead.
 - GPLv3: the upload must link the source (the GitHub repo, public, with the commit or tag of each released file).
 - Hard dependencies `creativeengineering` (patcherMod) and `creativedelight` must be published too, or CB can't be
-  installed outside the pack. CD carries ARR overrides of its own (memory `arr-mod-overrides-route`); audit it separately.
+  installed outside the pack. CD carries ARR overrides of its own (note [arr-mod-overrides-route](agent_notes/arr-mod-overrides-route.md)); audit it separately.
 - The Vinery donor jars can't be CurseForge "Required dependencies": CurseForge would put Vinery 1.3.10 in `mods/`
   (same mod id `vinery`, duplicate-id crash) and can't install a Fabric 1.21.1 file into a Forge 1.19.2 profile. The
   route is the existing `vinery_upstream/` check (sha1-pinned, stops the game with the file name and source). The 1.3.10

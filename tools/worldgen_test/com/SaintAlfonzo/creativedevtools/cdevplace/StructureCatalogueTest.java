@@ -102,8 +102,8 @@ public class StructureCatalogueTest {
 		piece("minecraft:village/plains/houses/plains_butcher_shop_1", "Villager Houses", "Butcher", "Plains");
 		piece("minecraft:village/desert/houses/desert_temple_1", "Villager Structures", "Temples", "Desert");
 		piece("minecraft:village/desert/town_centers/desert_fountain_01", "Villager Structures", "Town centres", "Desert");
-		piece("kaisyn:village/exclusives/iberian/houses/iberian_temple_1", "Villager Structures", "Temples", "Iberian");
-		piece("kaisyn:village/flower_forest_japanese/houses/flower_forest_stable_1", "Villager Structures", "Animal pens", "Flower Forest Japanese");
+		piece("kaisyn:village/exclusives/iberian/houses/iberian_temple_1", "Villager Structures", "Temples", "Savanna");
+		piece("kaisyn:village/flower_forest_japanese/houses/flower_forest_stable_1", "Villager Structures", "Animal pens", "Flower Forest");
 		piece("wares:village/houses/plains_warehouse", "Villager Structures", "Workplaces", "Plains");
 		eq(rules.piece("minecraft:village/common/iron_golem").skip(), "entity", "SCAT-01 golem piece skipped");
 		Home sky = rules.piece("skyvillages:bridge_1");
@@ -139,10 +139,10 @@ public class StructureCatalogueTest {
 
 	static void scat03() {
 		int[] g = rules.levelGaps;
-		eq(Arrays.toString(g), "[50, 25, 10, 5]", "SCAT-03 level gaps from the rule file");
-		eq(rules.variationGap, 5, "SCAT-03 variation gap");
+		eq(Arrays.toString(g), "[20, 12, 6, 3]", "SCAT-03 level gaps from the rule file");
+		eq(rules.variationGap, 3, "SCAT-03 variation gap");
 		CatalogueLayout l = new CatalogueLayout(g, rules.variationGap, rules.originX, rules.originZ, false);
-		int[][] steps = {{0, 0}, {5, 3}, {10, 2}, {25, 1}, {50, 0}};
+		int[][] steps = {{0, 0}, {3, 3}, {6, 2}, {12, 1}, {20, 0}};
 		List<List<String>> paths = List.of(p("A", "s", "f", "b1"), p("A", "s", "f", "b2"), p("A", "s", "g", "b1"), p("A", "t", "f", "b1"), p("B", "s", "f", "b1"));
 		int prevMax = 0;
 		for (int i = 0; i < paths.size(); i++) {
@@ -150,14 +150,14 @@ public class StructureCatalogueTest {
 			if (i == 0) eq(at.minX(), 16, "SCAT-03 first mapped column at x=16");
 			else eq(at.minX() - prevMax - 1, steps[i][0], "SCAT-03 gap at boundary " + i);
 			eq(at.minZ()[0], 8, "SCAT-03 column starts at z=8");
-			eq(at.minZ()[1] - at.minZ()[0] - 4, 5, "SCAT-03 variation gap in column");
+			eq(at.minZ()[1] - at.minZ()[0] - 4, 3, "SCAT-03 variation gap in column");
 			prevMax = at.maxX();
 		}
 		CatalogueLayout un = new CatalogueLayout(g, rules.variationGap, rules.originX, rules.originZ, true);
 		Placement a = un.place(p("Unmapped", null, null, "a"), List.of(new Size(9, 3)));
 		Placement b = un.place(p("Unmapped", null, null, "b"), List.of(new Size(4, 3)));
 		eq(a.maxX(), -16, "SCAT-03 first unmapped column ends at x=-16");
-		eq(a.minX() - b.maxX() - 1, 5, "SCAT-03 mirrored side keeps the gap");
+		eq(a.minX() - b.maxX() - 1, 3, "SCAT-03 mirrored side keeps the gap");
 
 		Random r = new Random(1234);
 		for (int side = 0; side < 2; side++) {
@@ -182,8 +182,8 @@ public class StructureCatalogueTest {
 	}
 
 	static void scat04() {
-		eq(CatalogueLayout.gapBetween(rules.levelGaps, p("A", "s", null, "b1"), p("A", "s", null, "b2")), 5, "SCAT-04 no function level: biome gap");
-		eq(CatalogueLayout.gapBetween(rules.levelGaps, p("A", "s", null, "b1"), p("A", "s", "f", "b1")), 10, "SCAT-04 skipped function vs present");
+		eq(CatalogueLayout.gapBetween(rules.levelGaps, p("A", "s", null, "b1"), p("A", "s", null, "b2")), 3, "SCAT-04 no function level: biome gap");
+		eq(CatalogueLayout.gapBetween(rules.levelGaps, p("A", "s", null, "b1"), p("A", "s", "f", "b1")), 6, "SCAT-04 skipped function vs present");
 		eq(CatalogueLayout.signLevels(null, p("A", null, null, "b")), List.of(0, 3), "SCAT-04 skipped levels get no sign");
 		eq(CatalogueLayout.signLevels(p("A", "s", "f", "b"), p("A", "s", "g", "b")), List.of(2, 3), "SCAT-04 a change re-signs deeper levels");
 		eq(CatalogueLayout.signZ(0, 4), -8, "SCAT-04 category sign furthest out");
@@ -192,7 +192,22 @@ public class StructureCatalogueTest {
 		Home street = rules.piece("minecraft:village/plains/zombie/streets/straight_01");
 		eq(street.function(), "Streets", "SCAT-04 zombie street is a street");
 		eq(street.biome(), "Plains", "SCAT-04 zombie street merged into its base biome");
-		eq(rules.piece("minecraft:village/plains/zombie/houses/plains_small_house_1").biome(), "Plains zombie", "SCAT-04 other zombie pieces keep their own column");
+		eq(rules.piece("minecraft:village/plains/zombie/houses/plains_small_house_1").biome(), "Plains", "SCAT-04 zombie pieces fold into their base biome");
+
+		// biome families: one column per family whatever the mod or style
+		eq(rules.piece("minecraft:village/savanna/houses/savanna_weaponsmith_1").biome(), "Savanna", "SCAT-12 vanilla savanna smith in Savanna");
+		eq(rules.piece("kaisyn:village/exclusives/iberian/professions_misc/iberian_weaponsmith_1").biome(), "Savanna", "SCAT-12 Iberian smith folds into Savanna");
+		eq(rules.piece("terralith:village/desert/houses/weaponsmith1").biome(), "Desert", "SCAT-12 Terralith desert smith folds into Desert");
+		eq(rules.piece("kaisyn:village/badlands_pueblo/houses/badlands_mason_1").biome(), "Badlands", "SCAT-12 pueblo folds into Badlands");
+		Map<String, Set<String>> tt = tagsFor("mysticrift_pillagers_towers_aris:acacia_pillager_tower", "enemy_building", "tower");
+		eq(rules.whole("mysticrift_pillagers_towers_aris:acacia_pillager_tower", List.of("enemy_building", "tower"), tt).biome(), "Savanna", "SCAT-12 whole acacia structure folds into Savanna");
+		eq(rules.piece("kaisyn:village/meadow_swiss/houses/meadow_toolsmith_and_weaponsmith_1").biome(), "Mountain", "SCAT-12 Swiss meadow folds into Mountain");
+
+		// ruined villages go to Ruins, their piece subfamily becomes the function
+		Home ruin = rules.piece("kaisyn:village/forest_ruins/houses/forest_weaponsmith_1");
+		eq(Arrays.asList(ruin.category(), ruin.subfamily(), ruin.function(), ruin.biome()), Arrays.asList("Ruins", "Village ruins", "Villager Houses", "Forest"), "SCAT-13 Forest Ruins house in Ruins");
+		Home ruinStreet = rules.piece("kaisyn:village/forest_ruins/streets/straight_1");
+		eq(Arrays.asList(ruinStreet.category(), ruinStreet.function()), Arrays.asList("Ruins", "Decor and Infrastructure"), "SCAT-13 Forest Ruins street in Ruins");
 
 		eq(CatalogueRules.natural("a_2", "a_10") < 0, true, "SCAT-04 natural order");
 		eq(CatalogueRules.title("flower_forest"), "Flower Forest", "SCAT-04 title");
@@ -207,6 +222,7 @@ public class StructureCatalogueTest {
 		List<String> structures = ids(d.getAsJsonObject("worldgen")), templates = ids(d.getAsJsonObject("templates"));
 		JsonObject tagFile = CatalogueRules.parseLenient(Files.readString(root.resolve("kubejs/generation_scripts/worldgen/structure_tags.json")));
 		Plan p = rules.build(structures, templates, CatalogueRules.resolveTags(tagFile.getAsJsonObject("tags"), structures));
+		eq(p.mapped().stream().filter(c -> "Village ruins".equals(c.path().get(1))).mapToInt(c -> c.items().size()).sum(), 52, "SCAT-13 snapshot Forest Ruins pieces in Ruins");
 		long sky = p.mapped().stream().filter(c -> "Sky".equals(c.path().get(0))).flatMap(c -> c.items().stream()).filter(e -> e.kind() == Kind.PIECE).count();
 		eq(p.count(p.mapped(), Kind.PIECE) - sky, 1292L, "snapshot village pieces");
 		eq(sky, 36L, "snapshot sky village pieces");
@@ -217,8 +233,8 @@ public class StructureCatalogueTest {
 		eq(p.noPieces(), List.of("towns_and_towers:village_ocean"), "snapshot villages with no pieces");
 		eq(p.replaced().size(), 32, "snapshot villages replaced by pieces (32 less the ocean village, plus sky villages)");
 		List<Column> streets = p.mapped().stream().filter(c -> "Village".equals(c.path().get(0)) && "Streets".equals(c.path().get(2))).toList();
-		eq(streets.size(), 25, "snapshot street columns");
-		eq(streets.stream().mapToInt(c -> c.items().size()).max().orElse(0), 41, "snapshot longest street column");
+		eq(streets.size(), 13, "snapshot street columns (one per biome family)");
+		eq(streets.stream().mapToInt(c -> c.items().size()).max().orElse(0), 71, "snapshot longest street column (Plains family)");
 		long dry = p.columns().stream().flatMap(c -> c.items().stream()).filter(CatalogueRules.Entry::dry).count();
 		eq(dry, 35L, "snapshot dried structures (the map's 33, the T&T ocean village, Terralith's sunken tower)");
 		eq(p.mapped().get(0).path().get(0), "Village", "snapshot Village first");

@@ -20,10 +20,10 @@ import java.util.List;
 
 /**
  * Creative Devtools (feature_writeup/creative_devtools.md): the pack's developer tools, carved out of patcherMod in the
- * Creative Split. Dev {@code mods/} only, never in a player payload. Holds {@code /cdevgen}, {@code /cdevperf},
+ * Creative Split. Dev {@code mods/} only, never in a player payload. Holds {@code /cdevgen}, {@code /cdevperf}, {@code /cdevbench},
  * {@code /cdevplace}, the {@code /dump*} commands (KubeJS server scripts under {@code data/creativedevtools/kubejs/}), the
  * block-state and Level-random probes (subscribed to patcherMod's hooks in {@code util/}), the IE recycling log, and
- * nests CE Perf Bot and CE Client Capture. Registers nothing.
+ * nests CE Perf Bot and CE Client Capture, and holds {@code /cdevtest} (test/). Registers nothing.
  */
 @Mod(CreativeDevtools.MOD_ID)
 public class CreativeDevtools {
@@ -54,7 +54,21 @@ public class CreativeDevtools {
         BlockStateSyncDebug.register();
         LevelRandomProbe.register();
 
+        // /cdevbench passthrough: Creative Compat's pass-through micro benchmark (plan_passthrough.md 7.1)
+        if (ModList.get().isLoaded("creativecompat")) {
+            MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.perf.PassBenchCommand::onRegisterCommands);
+            // /cdevreload compat (server) and /cdevreloadclient compat (client): CompatConfigReload (plan_post_scratch_1115b.md E2)
+            MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.compat.CompatReloadCommand::onRegisterCommands);
+            if (net.minecraftforge.fml.loading.FMLEnvironment.dist == net.minecraftforge.api.distmarker.Dist.CLIENT) {
+                MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.compat.CompatReloadClient::onRegisterClientCommands);
+            }
+        }
+
         if (ModList.get().isLoaded("immersiveengineering")) MinecraftForge.EVENT_BUS.register(IeRecyclingDiagnostics.class);
+
+        // /cdevtest: the scratch-test probe verbs in Java, tick warp and random ticks (creative_devtools.md, /cdevtest)
+        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.test.TestCommand::onRegisterCommands);
+        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.test.TestTicks::onServerTick);
 
         List<String> missing = MEMBERS.stream().filter(id -> !ModList.get().isLoaded(id)).toList();
         LOGGER.info("[creativedevtools] loaded, members: {}{}", MEMBERS, missing.isEmpty() ? "" : " (NOT loaded: " + missing + ")");

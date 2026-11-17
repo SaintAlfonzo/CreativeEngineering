@@ -12,10 +12,12 @@
 //   /zhh2 stomp x y z                     basin.tryProcess with the nearest living entity within 3 blocks (cooldown 5 ticks per entity)
 //   /zhh2 sneak name true|false           setShiftKeyDown on a bot or player
 //   /zhh2 useat name x y z face hx hy hz  block use with the hit at x+hx y+hy z+hz (pbot use always hits the face centre)
-//   /zhh2 countset x1 y1 z1 x2 y2 z2 a,b,c    how many of each block id in the box, one scan (loaded chunks only)
+//   /zhh2 countset x1 y1 z1 x2 y2 z2 a,b,c    how many of each block id in the box, one scan (loaded chunks only), and in how many chunks
 //   /zhh2 chests x1 y1 z1 x2 y2 z2        every chest in the box: position and LootTable
 //   /zhh2 unpack x y z                    rolls a chest's loot table now and lists its items
 //   /zhh2 lootroll table n                rolls a chest loot table n times: item histogram
+// MIGRATED 2026-11-15 in part (creative_devtools.md): tank -> /cdevtest tank, sneak -> /pbot sneak, useat -> /cdevtest
+// use as=NAME hit=hx,hy,hz face=F. basin, stomping, unpack and the rest stay here.
 (() => {
     const $HArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $HReg = Java.loadClass('net.minecraft.core.Registry')
@@ -121,7 +123,8 @@
                 }
             } else if (what == 'countset') {
                 let want = {}
-                a[6].split(',').forEach(id => { want[id] = 0 })
+                let chunks = {}
+                a[6].split(',').forEach(id => { want[id] = 0; chunks[id] = {} })
                 let x1 = Math.min(+a[0], +a[3]), x2 = Math.max(+a[0], +a[3])
                 let y1 = Math.min(+a[1], +a[4]), y2 = Math.max(+a[1], +a[4])
                 let z1 = Math.min(+a[2], +a[5]), z2 = Math.max(+a[2], +a[5])
@@ -130,10 +133,11 @@
                     if (!lv.hasChunk(x >> 4, z >> 4)) { skipped++; continue }
                     for (let y = y1; y <= y2; y++) {
                         let id = String($HReg.BLOCK.getKey(lv.getBlockState(new $HPos(x, y, z)).getBlock()))
-                        if (want[id] !== undefined) want[id]++
+                        if (want[id] !== undefined) { want[id]++; chunks[id][(x >> 4) + ',' + (z >> 4)] = 1 }
                     }
                 }
-                Object.keys(want).forEach(id => out('countset ' + id + ': ' + want[id]))
+                // r1115: "(in K chunks)" = chunks holding the id, a patch / cluster count for rarity comparisons
+                Object.keys(want).forEach(id => out('countset ' + id + ': ' + want[id] + ' (in ' + Object.keys(chunks[id]).length + ' chunks)'))
                 out('countset columns skipped: ' + skipped)
             } else if (what == 'chests') {
                 let x1 = Math.min(+a[0], +a[3]), x2 = Math.max(+a[0], +a[3])

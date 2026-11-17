@@ -1,0 +1,31 @@
+# r1115 phase 5 (runner-5), boot B1 follow-up (same server): SQ-HH-304 site 1 redone with a 240-block box (at most 16 x 16
+# = 256 chunks whatever the alignment; P1-128..P1+127 spans 17 chunks per axis when unaligned: "Too many chunks ... 289"),
+# a third forest, and the biome tags the wild crop rules wrote (is minecraft:forest in the hops and carrot tags?).
+pace 1
+
+## SQ-HH-304-tags | biome tags of the two counted features
+> zq biometag creativedelight:wild_crops/wild_hops
+> zq biometag creativedelight:wild_crops/wild_carrots
+waitlog \[zq\] biometag creativedelight:wild_crops/wild_carrots 30
+look is minecraft:forest in each tag
+
+## SQ-HH-304-site1b | site 1 (P from p5_b1.qb vars) with an aligned-safe box
+> forceload remove all
+> forceload add {P1-120} {P3-120} {P1+119} {P3+119}
+sleep 120
+> zhh2 countset {P1-120} 40 {P3-120} {P1+119} 120 {P3+119} hearthandharvest:hops_vine,farmersdelight:wild_carrots,minecraft:oak_log,minecraft:birch_log
+waitlog \[zhh2\] countset columns skipped 900
+reject Too many chunks
+look hops_vine count; columns skipped 0
+
+## SQ-HH-304-site3 | a third forest (more chunks for the 1-in-96 rate)
+> forceload remove all
+> execute positioned -3000 70 3000 run locate biome minecraft:forest
+waitlog (is at \[|Could not find) 300
+capture R is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {R1-120} {R3-120} {R1+119} {R3+119}
+sleep 120
+> zhh2 countset {R1-120} 40 {R3-120} {R1+119} 120 {R3+119} hearthandharvest:hops_vine,farmersdelight:wild_carrots,minecraft:oak_log,minecraft:birch_log
+waitlog \[zhh2\] countset columns skipped 900
+reject Too many chunks
+look hops_vine count; columns skipped 0

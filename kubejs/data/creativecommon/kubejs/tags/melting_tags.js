@@ -28,7 +28,8 @@ ServerEvents.tags('block', e => {
 	if (global.has('fairylights')) t.add(e, b.t_melt_fire, [b.melt_fire_fairylights_candle_lantern, b.melt_fire_fairylights_oil_lantern,
 		b.melt_fire_fairylights_paper_lantern, b.melt_fire_fairylights_jack_o_lantern])
 	if (global.has('architects_palette')) t.add(e, b.t_melt_fire, [b.melt_fire_ap_nether_brass_torch, b.melt_fire_ap_nether_brass_wall_torch,
-		b.melt_fire_ap_nether_brass_lantern, b.melt_fire_ap_glowstone_cage_lantern])
+		b.melt_fire_ap_nether_brass_lantern])
+	// Glowstone cage lantern left out (SQ-MELT-10): light 3 and no random tick, so it could never melt anything.
 	if (global.has('twigs')) t.addMatching(e, b.t_melt_fire, b.melt_fire_twigs_paper_lanterns)
 	if (global.has('quark')) t.add(e, b.t_melt_fire, [b.blaze_lantern, b.melt_fire_quark_paper_lantern,
 		b.melt_fire_quark_paper_lantern_sakura, b.melt_fire_quark_duskbound_lantern])

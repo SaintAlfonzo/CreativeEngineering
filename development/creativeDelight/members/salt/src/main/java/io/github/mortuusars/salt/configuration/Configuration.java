@@ -7,6 +7,7 @@
 // compat.SaltConfigBridge, and refresh() when its file loads (the config events reach Creative Delight's mod bus, not
 // Salt's). Defaults are the pack's: rain dissolving off, Salt's butcher trades off (the pack sells salt itself).
 // Without Creative Delight the class builds and registers its own salt-common.toml as upstream did.
+// Since 2026-11-15 (plan_post_scratch_1115 B3) [salt.Melting] also has SaltLayerVanishChance.
 // CLIENT (salt-client.toml: the salted overlay, JEI categories) is unchanged: Creative Delight has no client config.
 package io.github.mortuusars.salt.configuration;
 
@@ -38,6 +39,8 @@ public class Configuration {
     public static ForgeConfigSpec.BooleanValue MELTING_BY_BLOCK_ENABLED;
     public static ForgeConfigSpec.DoubleValue MELTING_BLOCK_CHANCE;
     public static ForgeConfigSpec.BooleanValue MELTING_PLACES_WATER;
+    /** Creative Delight (plan_post_scratch_1115 B3): read by Creative Delight's salt.SaltLayerMelt. */
+    public static ForgeConfigSpec.DoubleValue SALT_LAYER_VANISH_CHANCE;
     public static ForgeConfigSpec.BooleanValue EVAPORATION_ENABLED;
     public static ForgeConfigSpec.DoubleValue EVAPORATION_CHANCE;
     public static ForgeConfigSpec.BooleanValue SALT_CLUSTER_GROWING_ENABLED;
@@ -128,7 +131,8 @@ public class Configuration {
         builder.pop();
 
         builder.push("Melting");
-        MELTING_ITEM_ENABLED = builder.comment("Salt (item) will melt clicked blocks defined in tag 'salt/tags/blocks/meltables'.")
+        MELTING_ITEM_ENABLED = builder.comment("Salt in a dispenser facing ice or snow melts it one stage and uses 1 salt (Creative Common's",
+                        "melting targets). A salt click by hand places a salt layer instead. Off: the dispenser drops the salt.")
                 .define("SaltItemMeltingEnabled", true);
         MELTING_BY_BLOCK_ENABLED = builder.comment("Unused in this pack: salt blocks melting ice and snow is Creative Common's melting system,",
                         "[melting] in creativecommon-common.toml. This switch and the chance below have no effect.")
@@ -138,6 +142,9 @@ public class Configuration {
         MELTING_PLACES_WATER = builder.comment("Melted ice is replaced with a water source block outside ultra-warm dimensions (the Nether).",
                         "Off: always air. Snow always leaves air.")
                 .define("SaltMeltingPlaceWater", true);
+        SALT_LAYER_VANISH_CHANCE = builder.comment("Chance that a salt layer loses one layer each time it melts ice or snow (the last layer goes).",
+                        "Only salt layers: full salt blocks never vanish.")
+                .defineInRange("SaltLayerVanishChance", 0.05, 0.0, 1.0);
         builder.pop();
 
         builder.push("Evaporation");

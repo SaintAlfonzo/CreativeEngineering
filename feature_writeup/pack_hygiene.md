@@ -353,7 +353,7 @@ effects reserved for Creative Brewing). The Brewin' / alcohol rows in `cooking/c
 
 ### J. Tools
 
-44. **Generators missing from the manifest.** **FIXED 2026-10-27** (section 9). Rule (memory `cdevgen-generator-runner`). `gen_stack_sizes.py` (writes
+44. **Generators missing from the manifest.** **FIXED 2026-10-27** (section 9). Rule (note [cdevgen-generator-runner](agent_notes/cdevgen-generator-runner.md)). `gen_stack_sizes.py` (writes
     `generation_scripts/stacks/stack_sizes.json`, read by `startup_scripts/changes/stack_sizes.js`),
     `gen_nether_swaps.py` (writes `nether_block_swaps.json`, read by patcherMod `TemplateBlockSwaps`), `food_catalog.py`
     (writes `food_types.json` and `item_dict.js`), and the dump readers `jei_coverage.py` and `stack_sizes.py` (in the

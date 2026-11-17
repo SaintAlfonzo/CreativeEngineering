@@ -70,7 +70,10 @@ EOF
 boot)
   cd "$SRV" || exit 1
   rm -f logs/latest.log console.log
-  [ -p in.fifo ] || mkfifo in.fifo
+  # a stale feeder (stop cut short) keeps an old fifo open with a buffered "stop" the next JVM would read at once
+  # (r1115 p4): kill it and make a fresh fifo
+  if [ -f feeder.pid ]; then kill "$(cat feeder.pid)" 2>/dev/null || true; fi; rm -f feeder.pid in.fifo
+  mkfifo in.fifo
   # own feeder pid: stop kills only this one, not other sessions' feeders
   (sleep infinity > in.fifo & echo $! > feeder.pid)
   nohup bash -c 'bash run.sh nogui < in.fifo > console.log 2>&1' >/dev/null 2>&1 &
@@ -89,10 +92,11 @@ stop)
     alive=0
     for p in $(pgrep -x java); do case "$(readlink /proc/$p/cwd)" in "$SRV"*) alive=$p;; esac; done
     [ "$alive" = 0 ] && break
-    grep -q "All dimensions are saved" "$SRV/logs/latest.log" 2>/dev/null && sleep 5 && kill -9 "$alive" 2>/dev/null
+    # || true: under set -e a failed kill (JVM already gone) ended stop before the feeder kill below (r1115 p4)
+    grep -q "All dimensions are saved" "$SRV/logs/latest.log" 2>/dev/null && sleep 5 && kill -9 "$alive" 2>/dev/null || true
     sleep 1
   done
-  [ -f "$SRV/feeder.pid" ] && kill "$(cat "$SRV/feeder.pid")" 2>/dev/null; rm -f "$SRV/feeder.pid"
+  if [ -f "$SRV/feeder.pid" ]; then kill "$(cat "$SRV/feeder.pid")" 2>/dev/null || true; fi; rm -f "$SRV/feeder.pid"
   echo stopped
   ;;
 esac

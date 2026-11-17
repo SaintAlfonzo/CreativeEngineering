@@ -1,13 +1,4 @@
 
-#Immersive Weathering leaf piles (1-8 layers). Their slowdown is still IW's own (on/off: IW
-#leaf_piles_slow; Depth Strider, foxes and bees walk through); this sets the height it starts at.
-[leaf_piles]
-	#Layers a leaf pile needs before it slows walking, and before WTHIT shows a Run Speed line for it.
-	#IW's own rule is 4 (more than 3 layers). 9 = piles never slow. Movement is worked out on the
-	#client too, so keep this the same on the server and every client.
-	#Range: 1 ~ 9
-	slowFromLayers = 4
-
 #Moss block and moss carpet colour (client only; the server ignores this section).
 [moss]
 	#On: moss block and moss carpet take the biome's grass colour, like grass blocks.
@@ -188,13 +179,13 @@
 		#Raw rock: stone, deepslate, tuff, calcite, terracotta, ores, obsidian.
 		#Range: 0.05 ~ 4.0
 		natural_smooth = 1.05
-		#Reserved for Create/IE machines. Not filled yet.
+		#Machines and plumbing: processing machines, belts, shafts, casings, tanks, pumps, boilers, logic gates and computers.
 		#Range: 0.05 ~ 4.0
 		machinery = 1.0
-		#Reserved for chests, furnaces and workstations. Not filled yet.
+		#Workstations and magic blocks: altars, apothecaries, waystones, anvils, crafting stations.
 		#Range: 0.05 ~ 4.0
 		functional = 1.0
-		#Reserved for furniture, lamps and signage. Not filled yet.
+		#Decor that is not furniture: trim, girders, vents, stepping stones, statues, trophies, coin piles.
 		#Range: 0.05 ~ 4.0
 		decorative = 1.0
 		#Framed / copycat blocks. Only used by an empty frame, or by every frame when [surface.camouflage] copyCamo is false.
@@ -224,7 +215,7 @@
 		#Leaves and hedges.
 		#Range: 0.05 ~ 4.0
 		leaves = 0.78
-		#Snow block, snow layers (3+), powder snow.
+		#Snow block, coarse snow, powder snow. Snow layers slow by height instead ([surface.passthrough.layers]).
 		#Range: 0.05 ~ 4.0
 		snow = 0.75
 		#One sticky face: sticky pistons and their heads, sticky launchers (see [surface.sticky]).
@@ -236,6 +227,12 @@
 		#Whole slime and honey blocks. Full blocks also sink.
 		#Range: 0.05 ~ 4.0
 		very_sticky = 0.45
+		#Furniture and storage: benches, desks, counters, couches, chests, crates, barrels, drawers, cabinets.
+		#Range: 0.05 ~ 4.0
+		furniture = 1.0
+		#Plants and nature props tall enough to stand on: pots, stumps, coral, mushrooms, nests.
+		#Range: 0.05 ~ 4.0
+		flora = 1.0
 
 	#The sticky tier (sticky pistons, piston heads, sticky launchers).
 	[surface.sticky]
@@ -265,7 +262,8 @@
 
 	#A 'Run Speed' line in WTHIT's look-at overlay: the speed you'd walk at on that block, by
 	#the same rules as movement (camo and sticky facing included). Blocks you pass through
-	#(plants) get no line unless they slow you from inside (cobwebs, berry bushes, leaf piles);
+	#get no Run Speed line: pass-through blocks get the passThrough lines below, and the few
+	#others that slow you from inside (powder snow, bamboo spikes) a 'walking through' line;
 	#thin layers (carpet, 1-2 snow layers) show the block beneath, which is the one you walk on.
 	#Client-side only; it reads BlockRunner's own speed table, no server traffic.
 	[surface.wthit]
@@ -284,6 +282,517 @@
 		#entry, no speed of their own, and they don't slow you from inside. Those are always 1.0,
 		#so this only matters with hideNormal = false: tiered 1.0 blocks (Glass, Dirt) still show.
 		hideUntyped = true
+		#Pass-through blocks ([surface.passthrough]: crops, ropes, vines, cobwebs, layered blocks):
+		#'Walk Through: 0.50× (Dense neighbors) on Farmland (Tilled)' (the block's walk value times
+		#the soil's speed; the soil is named only when its speed is not 1.00; layered blocks add '3 of 8
+		#layers'), 'Fall Through: 0.20×' or 'Fall Through: stopped' (a surrounded web), and
+		#'Neighbors: 3 of 4' for tiers that count them. A pile high enough to act whole gets the Run Speed line.
+		#hideNormal hides a 1.00 walk or fall line. No line for a crop below its growth rule or when
+		#you are exempt (Depth Strider on a leaf pile). Uses the server's values. false = no lines.
+		#Read on every overlay refresh, so a saved change applies at once (see [surface.passthrough]).
+		passThrough = true
+
+	#Walking and falling through blocks you stand in rather than on: crops, grass, ropes, vines,
+	#cobwebs, barbed wire, berry bushes, layered blocks (snow, leaf piles). Tier contents are the
+	#creativecompat:passthrough/<tier> block tags (layers: creativecompat:passthrough_layers; kubejs
+	#passthrough_tags.js); a block slows you while your box touches its outline. Several at once: the
+	#lowest walk and the lowest fall win. Soil speed (the surface tiers) multiplies with the walk value.
+	#Spectators, flying players, elytra gliding and swimming are never slowed. The server's values are
+	#sent to players on join and on save. A saved edit applies when Forge's file watcher sees it; an
+	#editor that saves by replacing the file is missed: then run /cdevreload compat (Creative
+	#Devtools) or restart.
+	[surface.passthrough]
+		#Master switch. false = every pass-through block behaves as before this system (its
+		#own vanilla or mod slowdown).
+		enabled = true
+		#Ticks a pickable arrow stuck in a block or a web lasts before it despawns (vanilla 1200 = 1
+		#minute). Unpickable arrows (skeletons, Infinity, multishot) keep vanilla's minute.
+		#Range: 1200 ~ 1728000
+		arrowLifeTicks = 12000
+		#Long-life arrows per chunk. When one more sticks, the oldest drops to vanilla's minute (and
+		#despawns at once if it is already past it).
+		#Range: 0 ~ 4096
+		arrowLongLifeCap = 128
+		#Snowballs, ender pearls, fireballs and the other projectiles that break on impact: ticks one
+		#must stay stopped (under 0.05 blocks per tick) inside a web before it breaks where it stopped
+		#(an ender pearl teleports there). 0 = off (they break only in a web enclosed on every side).
+		#Range: 0 ~ 100
+		breakStallTicks = 3
+
+		#Crops grown in thick fields: corn, IE hemp, rice and rice panicles, Vintage Delight oats, wheat, tomatoes.
+		[surface.passthrough.dense_crop]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.75
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "TALL_HALF"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "SIDES"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.5
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Every other planted crop, Farmer's Respite coffee.
+		[surface.passthrough.crop]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.75
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "HALF"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "NONE"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.75
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Wild crops (Farmer's Delight and other mods).
+		[surface.passthrough.wild_crop]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.75
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "ANY"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "NONE"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.75
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Every vine: vanilla, twisting, weeping and cave vines, grape vines, modded vines. Slows only while moving through it.
+		[surface.passthrough.vine]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.75
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "ANY"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "NONE"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.75
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = true
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#2-tall plants: tall grass, large fern, double flowers, eyebulb.
+		[surface.passthrough.tall_plant]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.75
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "ANY"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "NONE"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.75
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Sugar cane, Nether's Delight propelplant.
+		[surface.passthrough.cane]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.5
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "ANY"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "NONE"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.5
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Ropes (Farmer's Delight, Supplementaries, Quark). Not while climbing: ladder rules stay vanilla.
+		[surface.passthrough.rope]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.75
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "ANY"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "NONE"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.75
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Cobwebs, reinforced cobwebs, Fantasy Furniture webs, Create Crafts & Additions barbed wire, IE razor wire.
+		[surface.passthrough.cobweb]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.5
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 0.85
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "ANY"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "FACES"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.35
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 0.2
+			#Fall damage resets every tick while dense.
+			denseResetsFall = true
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "WEB"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "STICK"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = true
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Berry bushes: sweet berry, raspberry, grape bushes.
+		[surface.passthrough.bush]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 0.36
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "ANY"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "NONE"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 0.36
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Short grass, fern and other short plants. 1.0 = no effect; listed so it can be tuned.
+		[surface.passthrough.grass]
+			#Horizontal speed multiplier while inside (1.0 = normal).
+			#Range: 0.05 ~ 1.5
+			walk = 1.0
+			#Multiplier on downward speed each tick, and on fall distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.
+			#Allowed Values: ANY, HALF, TALL_HALF
+			growth = "ANY"
+			#Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6
+			#face-adjacent blocks). Same-tier blocks count, grown or not.
+			#Allowed Values: NONE, SIDES, FACES
+			neighbours = "NONE"
+			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Range: 1 ~ 6
+			denseFrom = 3
+			#Walk multiplier once dense.
+			#Range: 0.05 ~ 1.5
+			denseWalk = 1.0
+			#Fall multiplier once dense.
+			#Range: 0.0 ~ 1.0
+			denseFall = 1.0
+			#Fall damage resets every tick while dense.
+			denseResetsFall = false
+			#What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).
+			#Allowed Values: NONE, WEB
+			surrounded = "NONE"
+			#Walk slowdown only while moving horizontally through the block (vines).
+			walkOnlyMoving = false
+			#Dropped items and experience orbs: NONE, or STICK (they stop inside the block).
+			#Allowed Values: NONE, STICK
+			items = "NONE"
+			#With items = STICK: chance per tick that an item inside stops where it is.
+			#Range: 0.0 ~ 1.0
+			itemStickChance = 0.35
+			#Projectiles are slowed in every direction (modded bullets never are).
+			projectiles = false
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = false
+			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Range: 1 ~ 6
+			surroundedAt = 6
+
+		#Layer height blocks: snow layers, leaf piles, ash and sand layers, bamboo leaves, fodder, sawdust. The walk value falls with the height (layerMaxSlow at the highest walk-through layer); high piles act whole.
+		[surface.passthrough.layers]
+			#Walk multiplier at the highest walk-through layer H (5 of 8 at the defaults). One layer
+			#does not slow; from 2 layers the value falls in equal steps to this one at H.
+			#Range: 0.05 ~ 1.0
+			layerMaxSlow = 0.5
+			#Stages below full at which a pile stops being walk-through and acts whole (normal
+			#collision and speed, no slowdown): 2 = 6, 7 and 8 of 8 act whole, so H = max - 3. 0 = only
+			#the full block acts whole. The max is read from each block's own layers property (IE
+			#sawdust 9, Twigs bamboo leaves 4). A value that leaves H under 2 means the block never slows.
+			#Range: 0 ~ 16
+			solidBelowFull = 2
+			#Piles with fewer layers than this are ignored (one layer never slows).
+			#Range: 1 ~ 16
+			minLayers = 2
+			#Per-block solidBelowFull, entries 'blockid=value'. Twigs bamboo leaves (4 layers) walk
+			#through up to one layer below full: layers 1 to 3, 0.5 at layer 3.
+			solidBelowFullOverrides = ["twigs:bamboo_leaves=0"]
+			#Multiplier on downward speed each tick inside a walk-through pile, and on fall
+			#distance per block passed.
+			#Range: 0.0 ~ 1.0
+			fall = 1.0
+			#Depth Strider boots walk through unslowed.
+			depthStriderPasses = true
 
 #Ore Excavation's /undo_excavation. An undo is refused when the vein mine broke a block in
 ##creativecompat:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient
@@ -538,4 +1047,17 @@
 	#Server side. Seconds between a gun portal's distance checks.
 	#Range: 1 ~ 600
 	heartbeatSeconds = 10
+
+#Developer switches (all off by default).
+[debug]
+
+	#Pass-through blocks ([surface.passthrough], plan_passthrough.md 7.3).
+	[debug.passthrough]
+		#true: time the pass-through hook and log one '[passthrough-timing]' line every 200 ticks, for
+		#the server and the client separately: hook calls, total and longest time, entity-ticks inside a
+		#pass-through block, neighbour counts, and the tick time they share. Read them with
+		#python3 tools/perf/passthrough_timing.py logs/latest.log. Read every tick, so it applies as soon
+		#as the file is reloaded (an editor that saves by replacing the file is missed by Forge's watcher:
+		#run /cdevreload compat or restart).
+		timing = false
 

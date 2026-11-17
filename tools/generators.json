@@ -309,10 +309,20 @@
       "script": "tools/blockrunner_scan.py",
       "args": ["--audit", "kubejs/exported/surface_audit.json"],
       "groups": ["reports", "blockrunner"],
-      "dumps": ["dumpsurface"],
-      "apply": "report only: tier the listed blocks in kubejs/server_scripts/tags/blocktags.js, then /reload and rerun",
+      "dumps": ["dumpsurface", "dumptags block"],
+      "apply": "report only: tier the listed blocks in kubejs/server_scripts/tags/blocktags.js (surface) or Creative Compat's passthrough_tags.js (pass-through, plan_passthrough.md), then /reload and rerun",
       "warnExit": [3],
-      "highlight": ["^# walkable, no tier: [1-9]", "^## "]
+      "highlight": ["^# walkable, no tier: [1-9]", "^# no collision, plant-like class, no pass-through tier: [1-9]", "^## "]
+    },
+    {
+      "id": "projectile_scan",
+      "script": "tools/projectile_scan.py",
+      "groups": ["reports", "blockrunner"],
+      "dumps": ["dumptags entity_type"],
+      "outputs": ["tools/projectile_scan.json"],
+      "apply": "report only: give each listed projectile a group in Creative Compat's passthrough_tags.js (plan_passthrough.md 5.1), then /reload and rerun",
+      "warnExit": [3],
+      "highlight": ["^# no group tag \\(base-class default applies\\): [1-9]", "^# ids in two groups"]
     },
     {
       "id": "display_delight_names",

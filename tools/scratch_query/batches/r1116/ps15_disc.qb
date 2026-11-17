@@ -1,0 +1,25 @@
+# r1116 phase 3 (SQ-PS15 group A), boot 1 p3a: discovery (not rows): default states of the vine crops, ids, recipes.
+pace 1
+
+## P3-DISC | vine crop states, Salt Melt recipe, lunchbox ids, fire tag (not a row)
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 0
+> gamerule doDaylightCycle false
+> time set noon
+> weather clear
+> forceload add 280 280 380 420
+sleep 3
+> kill @e[type=!minecraft:player,x=280,y=-64,z=280,dx=100,dy=40,dz=140]
+> cdevtest tag block creativedelight:crops/vine_crops
+> cdevtest place 300 -55 300 vinery:jungle_grape_bush_red flags=18
+> cdevtest place 302 -55 300 neapolitan:vanilla_vine flags=18
+> cdevtest place 304 -55 300 neapolitan:vanilla_vine_plant flags=18
+> cdevtest place 306 -55 300 upgrade_aquatic:mulberry_vine flags=18
+> cdevtest place 308 -55 300 hearthandharvest:hops_vine flags=18
+> cdevtest reg item salt:salt_melt|salt:raw_rock_salt|vintagedelight:salt_dust|solapplepie:.*lunch.*|farmersdelight:apple_pie|neapolitan:vanilla_pods?|upgrade_aquatic:mulberry|vinery:jungle_grape_seeds_red
+> cdevtest makes salt:salt_melt
+> cdevtest tag block creativecommon:melting/fire
+> cdevtest reg block vintagedelight:salt|hearthandharvest:.*salt.*
+> cdevtest item salt:salt_melt
+sleep 1
+look discovery

@@ -48,6 +48,35 @@
 - **Changed:** Sleeping bags, hammocks, bedrolls, pet beds, nests, kelp and thatch blocks, licked salt blocks and cardboard boxes walk at 0.88x [1x].
 - **Changed:** Vintage Delight jam and jello blocks walk at 0.45x [1x]; crates of produce, eggs and animals and beehives at 1.1x [1x].
 
+## Walking through plants and webs <!-- icon: minecraft:cobweb -->
+
+- **Changed:** Planted crops slow walking to 0.75x once half grown [no slowdown]; tall crops slow on both blocks once the lower block is half grown.
+- **Changed:** Corn, hemp, rice, oats, wheat and tomatoes slow walking to 0.50x with the same crop on 3 or 4 of their 4 sides [no slowdown]; newly planted crops count as neighbours. Swimming in a rice paddy is not slowed.
+- **Changed:** Wild crops, tall grass, large ferns and tall flowers slow walking to 0.75x [no slowdown].
+- **Changed:** Sugar cane slows walking to 0.50x [no slowdown]; propelplant cane 0.50x [about 0.35x].
+- **Changed:** Vines of every kind slow walking to 0.75x while you move through them [no slowdown]; climbing is unchanged.
+- **Changed:** Ropes slow walking through them to 0.75x [no slowdown]; climbing, sliding and sneaking on them are unchanged.
+- **Changed:** Cobwebs, barbed wire and razor wire slow walking to 0.50x [about 0.1x] and falling to 0.85x, and cut fall damage by 0.85x per web passed. Barbed wire and razor wire still hurt; Spiders and Cave Spiders are not slowed.
+- **Changed:** Cobwebs with webs on 3 or more of their 6 sides slow walking to 0.35x and falling to 0.20x, with no fall damage.
+- **Fixed:** Falling into a single cobweb or a short stack of cobwebs cancelled all fall damage.
+- **Changed:** In a cobweb with webs on all 6 sides, falling stops; jump climbs slowly, sneak sinks slowly.
+- **Changed:** Taiga grape bushes, salmonberry bushes and cranberry bushes slow walking like sweet berry bushes [no slowdown].
+- **Changed:** Sweet berry bushes and the other berry bushes no longer cancel fall damage [sweet berry bushes did].
+- **Changed:** Snow layers, leaf piles, ash and sand layers, Fodder and Sawdust slow walking by height, 0.875x at 2 layers down to 0.50x at 5 of 8 (Sawdust 6 of 9); 6 or more layers walk normally [snow 0.75x from 3 layers, leaf piles 0.45x from 4, the others no slowdown].
+- **Changed:** Bamboo Leaves slow walking to 0.75x at 2 layers and 0.50x at 3, normal at 4 [about 0.35x from 3 layers], and now slow ocelots, pandas and parrots too.
+- **Changed:** Villagers, horses and every mob are slowed by these blocks like players; flying, gliding and swimming are not.
+- **Changed:** Dropped items and experience orbs stop inside any cobweb and hang there until the web is broken [they sank slowly through].
+- **Changed:** Projectiles slow down in cobwebs [no effect]. Guns, turrets and siege munitions are not affected.
+- **Changed:** Snowballs, eggs, fireballs, ender pearls and similar break in the middle of a cobweb with webs on all 6 sides, and where they stop in any other cobweb; an ender pearl teleports you there.
+- **Changed:** Projectiles in a cobweb enclosed on every side by webs:
+  - Thrown potions and bottles o' enchanting sink down the middle and break below.
+  - Firework rockets stay until they explode.
+- **Changed:** Arrows, tridents and thrown tools hang in a cobweb enclosed on every side by webs, without their hit effect, and are picked up as the same item.
+- **Changed:** Fishing bobbers, Feathers on a Stick, pickarangs and the Thorn Chakram snag in any cobweb; snagged pickarangs and chakrams are picked up by walking into them and drop when the web breaks.
+- **Changed:** Arrows, tridents and thrown tools players can pick up stay stuck for 10 minutes [1 minute], up to 128 per chunk; Loyalty tridents and tools still never despawn.
+- **Changed:** Walking through these blocks does not change the field of view.
+- **New:** WTHIT shows Walk Through, Fall Through and Neighbors lines on these blocks; the walk speed includes the block underneath.
+
 ## Wise Oak <!-- icon: minecraft:oak_log -->
 
 - **New:** At high trust, each conversation with a Wise Oak has a 5% chance to drop a sapling, a fruit tree sapling, 4 tree fruit or 16 leaves.
@@ -99,7 +128,7 @@
 ## Seed Pouches and Bundles <!-- icon: quark:seed_pouch -->
 
 - **Fixed:** A Seed Pouch in a dispenser crashed the server.
-- **Changed:** A Seed Pouch in a dispenser plants up to 25 seeds in a 5x5 in front of it and stays in the dispenser.
+- **Changed:** A Seed Pouch in a dispenser plants up to 25 seeds in a 5x5 in front of it, Nether Wart in the Nether included, and stays in the dispenser.
 - **New:** A Bundle in a dispenser plants its first seed in front of it and stays in the dispenser.
 
 ## Horseshoes <!-- icon: hearthandharvest:horseshoe -->
@@ -158,8 +187,13 @@
 - **Changed:** Salt Dust is named Salt.
 - **Changed:** Licked salt blocks are rock salt layers 12, 8 and 4 pixels high [full blocks].
 - **New:** A salt layer placed on a licked salt block refills it one stage per layer; waxed blocks stay waxed.
-- **New:** Salt in a dispenser restores a licked salt block.
+- **New:** Salt in a dispenser restores a licked salt block, waxed or not, and puts a salt layer on top of a full one.
+- **New:** Licking a salt block with salt layers on top eats the top layer; the block keeps its size until the layers are gone.
+- **New:** Salt Melt: a 64-use tool made from 2 Salt and 2 Raw Rock Salt. Right-click ice or snow to melt it at once; Packed Ice and Blue Ice go down one tier per use. Works in a dispenser.
+- **Changed:** Salt in a dispenser melts the ice or snow in front, one tier per Salt, or places a salt layer on the ground in front [did nothing].
+- **Changed:** A salt layer has a 5 % chance to lose a layer each time it melts ice or snow; Salt Blocks never wear away.
 - **Fixed:** Animals more than 16 blocks from a salt lick never walked to it.
+- **Fixed:** Animals that reached a salt lick could stand beside it without licking.
 
 ## Melting <!-- icon: minecraft:ice -->
 
@@ -200,6 +234,7 @@
 
 - **Fixed:** The Immersive Portals portal block has a name.
 - **Fixed:** Walking out of a Portal Gun portal on a wall still lifted the player one block, and Nether and End portals did the same. Only portals in a floor lift the player now.
+- **Fixed:** Falling from a floor portal into a wall portal left the player stuck in the floor in front of the wall.
 
 ## Rose Gold <!-- icon: mca:rose_gold_ingot -->
 
@@ -221,11 +256,16 @@
 
 - **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
 - **Removed:** Golden and gilded mushroom stew, beetroot soup and rabbit stew, their cans and jar fluids. Existing ones in worlds are deleted.
-- **Changed:** Lunchboxes show as not counting for food diversity; the food eaten out of them still counts.
 - **Fixed:** Flavoured Rustic Delight pancakes placed on a coaster showed a missing model.
 - **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
-- **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost.
+- **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost or placed on top of the basin; it stays in the hand.
 - **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
+
+## Lunchboxes <!-- icon: solapplepie:lunchbox -->
+
+- **Changed:** Lunchboxes show as not counting for food diversity; the food eaten out of them still counts.
+- **Changed:** The lunchbox tooltip reads Food slots [Slots].
+- **Fixed:** Lunchboxes filled other than through their screen accepted items that are not food.
 
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
@@ -247,6 +287,7 @@
 - **Changed:** Mending repairs gear from collected XP [only by an anvil and a Mending book].
 - **Changed:** Elytra fly in every dimension [the End only].
 - **Fixed:** Rubber trees did not generate in jungles.
+- **Fixed:** Placing a block or item against a hops vine, jungle grape vine, vanilla vine or mulberry vine replaced the vine.
 
 ## Performance & Stability
 

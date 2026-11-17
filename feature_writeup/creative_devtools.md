@@ -64,6 +64,7 @@ Package `com.SaintAlfonzo.creativedevtools` (PM = patcherMod's `com.SaintAlfonzo
 | PM `devtools/DisplayNameDump`, `WthitIconDump`, `WorldJeiDump`, `WorldJeiMobBuckets`, `WorldJeiToolPairs` | `dump/` | `/cdevdumpnames`, `/cdevdumpicons`, `/dumpworldjei` |
 | PM `worldgen/SpawnDump` | `dump/` | `/dumpspawns` backing class (script loads the new class name) |
 | PM `perf/PerfCommand` | `perf/` | `/cdevperf`; `PerfEvents`, `PerfJfrEvents`, `MobCapLevels` stay (Common perf mixins use them) |
+| new 2026-11-15 `perf/PassBenchCommand` | `perf/` | `/cdevbench passthrough [calls]` and `... enabled <bool>`: pass-through micro benchmark and master switch (blockrunner.md 3.10, plan_passthrough.md 7.1); registered only with Creative Compat loaded |
 | PM `worldgen/MassPlacer` | `cdevplace/` | `/cdevplace`; `CEConfig.VerticalAlign` and the `WorldgenConfig.place*` readers moved into `DevtoolsConfig`; `BiomeLayoutTuner.WORLDGEN_DIR` and `PoolTuner.parseLenient` made public for it; its offline test is `tools/worldgen_test/com/SaintAlfonzo/creativedevtools/cdevplace/MassPlacerTest.java` (`tools/test_worldgen_tools.sh` test 2) |
 | `CreativeEngineering.onServerStarted` IE recycling log | `ie/IeRecyclingDiagnostics` | same log lines, registered only when IE is loaded |
 | `kubejs/server_scripts/_lib/dump_*.js`, `loot_dump.js`, `structure_dump.js`, `villager_trades_dump.js` (25 files) | `kubejs/data/creativedevtools/kubejs/dump/` | command names unchanged |
@@ -95,6 +96,77 @@ Tooling repointed: `tools/generators.json` readme, `tools/perf/suite/server.py` 
 
 World type "Structure Catalogue" (`data/creativedevtools/worldgen/world_preset/structure_catalogue.json`): on first start it lays out every structure by family. `/cdevplace catalogue build | preview | status | stop`, switch `[features] structureCatalogue`, rules `kubejs/generation_scripts/worldgen/structure_world.json`, report `kubejs/exported/structure_catalogue_report.json`. Details and tests: [plan_structure_catalogue.md](plan_structure_catalogue.md).
 
+### /cdevtest and the perfBot test verbs (added 2026-11-15)
+
+[plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md) item 3 (TX-20, TX-21, TX-22, owner decision
+D4). Built 2026-11-15, harness-tested (`bash tools/scratch_query/cdevtest_harness/run.sh`: parser and line format),
+not booted; live rows SQ-TX-01 to -16 in the queue.
+
+**`/cdevtest <verb> [args] [key=value ...]`** (permission 2; code `src/main/java/.../creativedevtools/test/`). Every
+line is `[cdevtest] verb=<verb> key=value ...` in `logs/latest.log` (and the reply to a player or RCON caller); a value
+with a space, `"` or `=` is double-quoted (a block state prints `state="minecraft:wheat[age=7]"`). Every call ends with
+`verb=<verb> done=1`, or `error=... done=0` (bad argument, unloaded position, exception: every Throwable is caught, so
+a verb cannot crash the server). Positions are integers; `dim=<id>` picks the level (default: the caller's, the
+console's is the overworld). Nothing loads a chunk: an unloaded position is an error (`forceload add` first), box scans
+skip unloaded columns and report `skipped_columns`. Item arguments: `id`, `id*N`, `id{snbt}` with single-quoted SNBT
+strings (the splitter strips double quotes), `none`. Unknown options and extra words are errors, not ignored.
+
+| Verb | Syntax | Prints |
+|---|---|---|
+| state | `state X Y Z` | state, fluid, block entity type, shape top, random ticking, block and sky light, biome, game time |
+| be | `be X Y Z` | block entity NBT |
+| inv / tank / energy | `inv X Y Z [face=up\|...\|null]` (same for tank, energy) | item handler (else Container) slots; fluid tanks with capacity; Forge Energy |
+| count | `count X1 Y1 Z1 X2 Y2 Z2 BLOCK\|#TAG` | `n`, `on` (block below each match), `ids` for a tag |
+| ages | `ages X1 Y1 Z1 X2 Y2 Z2 BLOCK\|#TAG [prop=age]` | `n`, `mean`, `hist` of an integer property |
+| place | `place X Y Z STATE [flags=3]` | setBlock with those flags (18 = no updates) |
+| items | `items X Y Z R [keep]` | item entities summed by id, XP orb value; discarded unless keep |
+| entities | `entities X Y Z R [type=ID\|#TAG] [nbt]` | one line per entity (type, uuid, pos, health, name, NBT), then `n`, `by_type` |
+| use | `use X Y Z [as=NAME] [held=ITEM] [face=up] [hit=dx,dy,dz] [hand=main\|off\|both\|client] [sneak]` | block right click per hand, then both hands and the block state |
+| useair | `useair [as=NAME] [held=ITEM] [hand=both]` | the item's air use (`zq useitem`) |
+| break | `break X Y Z [as=NAME] [held=ITEM] [keep]` | survival break (BreakEvent, harvest check, tool damage), drops within 3 |
+| kill | `kill X Y Z TYPE [n=1] [held=ITEM] [as=NAME] [fire] [keep]` | N mobs summoned as /summon and killed by a player hit of 1000; drops within 4 (XP orbs come 20 ticks later) |
+| loot | `loot X Y Z [tool=ITEM] [rolls=1]` | Block.getDrops rolled N times, summed (the block stays) |
+| player | `player NAME` | position, rotation, health, food, saturation, exhaustion, air, XP, mode, shift, pose, sprint, using, hands, effects |
+| chunk | `chunk X Z` | ticket level, status, tickets |
+| randomtick | `randomtick X1 Y1 Z1 X2 Y2 Z2 N [nofluids]` | each randomly ticking block and fluid in the box gets N random ticks, no player needed; `changed`, `equiv_game_ticks` (N x 4096 / randomTickSpeed) |
+| blocktick | `blocktick X Y Z [fluid]` | the scheduled tick run now; state before and after |
+| tickwarp | `tickwarp N` / `stop` / `status` | the next N server ticks back to back (full ticks: only the wait goes); end line `end=done ticks= ms= tps=` |
+| watch | `watch X Y Z TICKS EVERY [what=state\|inv\|tank\|be] [face=]` | a `t=` line every EVERY ticks, then `end=done` |
+| recipes, rdetail, bytype, uses, makes | as `/zq` (`TEXT`, `SERIALIZER`, `ITEM`; `max=`) | recipe lines (`part=results\|start\|fields\|stepN` extras in rdetail) |
+| food, item, attrs | `food ITEM` etc. | food values read stack-sensitive; item class, stack size, use ticks; attribute modifiers per slot |
+| reg, tag, tagsof | `reg KIND REGEX`, `tag KIND TAG`, `tagsof ID` | KIND item, block, fluid, entity, block_entity_type, effect, potion, enchantment, recipe_serializer, menu, sound, attribute, biome |
+| potion, states | `potion ID [ING,ING]`, `states` | registered and brewing outputs; block-state count against 2^20 |
+| layerdump | `layerdump` | plan_post_scratch_1115b.md D0: every block with an integer `layers` / `layer` / `height` / `snow_layers` / `thickness` property, min, max, collision and outline height per value (pixels), class `in_tag` (`creativecompat:passthrough_layers`), `d1_out` (D1's out rows) or `new` (owner question); `tag_without_property` lines; file `kubejs/exported/passthrough_layers_dump.json` |
+
+Acting player: `as=NAME` is an online player or perfBot bot; without it a Forge fake player of that dimension (profile
+`[cdevtest:<dim>]`, one per dimension: a cached fake player keeps its first level) stands above the target, inventory
+cleared each call. `tickwarp` pulls `MinecraftServer.nextTickTime` (SRG `f_129726_`, reflection) back to now at the end
+of each tick; random ticks near players, block ticks and every tick event run as normal. Random ticks still need a
+player near the chunk (bot or real): for a box without one, `randomtick`.
+
+**perfBot test verbs** (`/pbot`, member `members/perfbot`, code `BotTestVerbs.java`, lines `[cdevtest] verb=pbot.<verb>`):
+`attack NAME TARGET [weak]` (Player.attack, charged unless weak), `interact NAME TARGET [main|off]`, `punch NAME POS
+[FACE]` (left click on a block), `break NAME POS`, `useitem NAME [main|off] [TICKS]` and `eat NAME [main|off]` (a real
+ticked use: the bot's own tick counts the use down; end lines `end=finish` with food and saturation, or `end=released`),
+`hunger NAME FOOD [SAT]`, `sneak NAME on|off`, `look NAME YAW PITCH`, `lookat NAME X Y Z`, `moveto NAME X Z
+[walk|sprint] [TIMEOUT]` (forward input and yaw each tick, the server's physics, a jump when blocked; end line
+`end=reached|stuck|timeout|stopped` with ticks, distance and speed; `moveto-stop NAME`), `inv NAME get | set SLOT ITEM
+[COUNT] | clear | select SLOT` (0-8 hotbar, 9-35 main, 36-39 armour feet to head, 40 off hand), `vulnerable NAME on|off`
+(default off), `pickup NAME on|off` (items and XP orbs; default on). Both flags survive a respawn. **Loading Protection:**
+every bot is exempt one tick after it spawns: a HIGHEST-priority login listener puts the bot one block above its target
+before that mod records the login spot, so the spawn teleport counts as a move (the mod is not read or patched).
+
+**Creative Compat reload** (plan_post_scratch_1115b.md E2; registered only when `creativecompat` is loaded, classes in
+`creativedevtools/compat/`): `/cdevreload compat` (server, permission 3) and `/cdevreloadclient compat` (client
+command, the client's own config; registered on a client only) call `CompatConfigReload.reload()` and print
+`[cdevreload] compat: <result>`. Forge's watcher misses a save by rename (`sed -i`, atomic-save editors). `/cdevbench
+passthrough` now names `Neighbours.SIDES` / `FACES` (Compat keeps `RING` / `CUBE` only as deprecated aliases).
+
+Moved from the KubeJS probes (D4): the reusable verbs of `zq_probe.js`, `c2`, `c3`, `zact`, `wo`, `zp`, `zsneak`,
+`leaf_pile`, `leaf_decay` and the generic verbs of the `hh_*`, `s5`, `zc4`, `zp9`, `pwg_p6/7/8`, `zpth`, `ztp` probes;
+each file's header names the replacing verb and what stays (a `MIGRATED 2026-11-15` line). Left as KubeJS: `zq season`
+(Creative Calendar), `floating`, `under` (SQ-EFB judges), `nbt` (how KubeJS sees NBT), and every feature reader.
+
 ## 3. Rules
 
 - Commands keep their names; config keys keep their names and comments.
@@ -119,6 +191,8 @@ Scratch server (SQ-CDV, [scratch_queue.md](testing/scratch_queue.md)) and in gam
 - [ ] **CDV-05 Without Devtools:** with only patcherMod (no Devtools jar), the server starts, no `/dumpall`, no
   `/cdevgen`, no Flower Test world type, removed items still lose their tags (`/recipescan` gone).
 - [ ] **CDV-06 Flower Test:** the world type "Flower Test" is listed on a dev client and builds its table.
+- [ ] **CDV-07 /cdevtest and bot verbs:** scratch rows SQ-TX-01 to -18, CQ-TXR-01 (layer dump, Compat reload) (queue section "Scratch testing tools, item 3").
+  Headless: `bash tools/scratch_query/cdevtest_harness/run.sh` prints `PASS 27` (2026-11-15).
 
 ## 5. Install (game closed)
 
@@ -129,3 +203,7 @@ loses the tools, Devtools without the new patcherMod fails on the missing hooks.
 
 - 2026-11-01: carved (wave 1, beside Calendar). Framework, Java and script moves, hooks in Common, dev-only side,
   perfBot and clientCapture nested. Compile-verified; not installed or booted.
+- 2026-11-15: `/cdevtest` (world, data, tick warp and random tick verbs) and the perfBot test verbs with the Loading
+  Protection exemption (scratch testing expansion item 3). Built, harness PASS, not installed or booted; SQ-TX queued.
+  Same day 15:50: `/cdevtest layerdump` (pass-through D0), `/cdevreload compat` and `/cdevreloadclient compat` (E2),
+  `/cdevbench` on `Neighbours.SIDES` / `FACES`.

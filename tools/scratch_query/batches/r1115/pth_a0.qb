@@ -1,0 +1,66 @@
+# r1115 phase 11 (runner-11), boot A1 (p11a): setup, boot checks, tags (SQ-PTH-01, -05, -16 first half, -19, -20, -21).
+# Server: prep_srv.sh with SKIPSWAP (only creativecompat 11:31 and creativedevtools 00:40 swapped), group A superflat,
+# difficulty normal, animals/npcs on. srv toml before boot: [surface.passthrough] arrowLifeTicks 3600,
+# arrowLongLifeCap 3 (SQ-PTH-13, -14), [debug.passthrough] timing true (SQ-PTH-27). Live [leaf_piles] slowFromLayers 4
+# is migrated on this boot (SQ-PTH-16 first half). Probe zz_zpth_probe.js (tools/scratch_query/zpth_probe.js).
+# Superflat: ground top -61, stand at -60. Test area x 1000..1200 z 990..1100; bot P (and Q) for player rows.
+pace 1
+
+## P11-setup | gamerules, night (zombies), forceloads, bots (not a test row)
+bootexpect Done \(
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule doFireTick false
+> gamerule randomTickSpeed 0
+> gamerule doInsomnia false
+> gamerule doPatrolSpawning false
+> gamerule doTraderSpawning false
+> time set 18000
+> weather clear 1000000
+> forceload add 992 976 1231 1111
+> forceload add 576 496 671 559
+sleep 5
+> pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+> pbot spawn Q 1002.5 -60 990.5 minecraft:overworld survival
+> pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 3
+> clear P
+> clear Q
+> clear G
+> effect clear P
+> effect clear Q
+> zpth player P
+> zpth states immersive_weathering:oak_leaf_pile immersive_weathering:spruce_leaf_pile twigs:bamboo_leaves supplementaries:rope_tomatoes farmersdelight:budding_tomatoes farmersrespite:coffee_stem vinery:taiga_grape_bush_red minecraft:wheat createaddition:barbed_wire immersiveengineering:razor_wire securitycraft:reinforced_cobweb floralench:poppy_bush farmersdelight:rope quark:rope
+reject Unknown or incomplete command
+
+## SQ-PTH-01 | boot: no pass-through mixin error; [surface.passthrough] keys and 11 tier tables
+bootreject Mixin apply failed
+bootreject InvalidMixin
+bootreject (InsideBlocksMixin|MakeStuckInBlockMixin).*(rror|xception|fail)
+shell grep -cE '^\s*\[surface\.passthrough\.[a-z_]+\]' config/creativecompat-common.toml; grep -nE '^\s*(enabled|arrowLifeTicks|arrowLongLifeCap)\s*=' config/creativecompat-common.toml | sed -n '1,40p' | grep -A0 -E 'arrow|enabled'; awk '/^\s*\[surface\.passthrough\]/{f=1} f&&/^\s*\[surface\.passthrough\./{exit} f' config/creativecompat-common.toml | grep -E '='
+look shell: 11 tier tables; enabled, arrowLifeTicks, arrowLongLifeCap under [surface.passthrough]
+
+## SQ-PTH-05 | boot: no phase 2 mixin error
+bootreject (EntityPassMixin|LivingClimbMixin|ArrowPassMixin|FireworkPassMixin|ProjectilePassMixin|QuarkPickarangPassMixin|QuarkTorchArrowPickupMixin|BotaniaChakramPassMixin).*(rror|xception|fail)
+bootreject Mixin apply failed
+bootreject InvalidMixin
+shell grep -nE 'PassMixin|LivingClimbMixin|QuarkTorchArrowPickupMixin' logs/latest.log | head -20
+
+## SQ-PTH-16a | boot 1: live [leaf_piles] slowFromLayers 4 migrated
+bootexpect \[leaf_piles\] slowFromLayers \(4\) moved to \[surface\.passthrough\.leaf_pile\] minLayers \(4\)
+bootreject LeafPileSlowMixin
+shell grep -c '^\[leaf_piles\]' config/creativecompat-common.toml || true; awk '/\[surface\.passthrough\.leaf_pile\]/{f=1} f&&/minLayers/{print; exit}' config/creativecompat-common.toml
+
+## SQ-PTH-19 | tags load: no script error, overlap checks 0, tier sizes
+bootexpect Pass-through tier overlaps checked: .* 0 overlap\(s\)
+bootexpect Projectile group overlaps checked: .* 0 overlap\(s\)
+bootreject overlap:
+bootreject passthrough_tags\.js.*(rror|xception)
+kjsreject passthrough_tags\.js.*(rror|xception)
+shell grep -nE 'passthrough_tags|overlaps checked|overlap:' logs/latest.log logs/kubejs/server.log | cut -c1-300 | head -20
+> dumptags block,entity_type
+sleep 20
+> dumpsurface
+sleep 20
+shell ls -la kubejs/exported/tags/ kubejs/exported/surface_audit.json 2>&1 | head -20
+look tier sizes vs the intro (bush 8 + 2 new, cobweb 5 + 1 razor wire, grass 119 + Botania)

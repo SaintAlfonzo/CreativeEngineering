@@ -13252,6 +13252,7 @@ i.salt_item                     = 'salt:salt';
 i.raw_rock_salt                 = 'salt:raw_rock_salt'; // the salt crystals: cluster / ore drop, ground into salt
 i.salt_salt_block               = 'salt:salt_block';    // the one Salt Block (Vintage Delight's merges into it)
 i.salt_lamp                     = 'salt:salt_lamp';     // named Large Salt Lamp
+i.salt_melt                     = 'salt:salt_melt';     // 64 uses, melts ice and snow one stage (Creative Delight salt member)
 // ingredient groups (whole + sliced, or colours/varieties canned into one can)
 i.any_potato                    = '#forge:vegetables/potato';       // potato, potato slices
 i.any_bell_pepper               = '#forge:crops/bell_pepper';       // green, red, yellow

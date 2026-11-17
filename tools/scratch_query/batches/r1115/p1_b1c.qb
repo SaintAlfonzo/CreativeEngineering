@@ -1,0 +1,23 @@
+# r1115 phase 1, boot B1 second follow-up (same server): where the 213 interior flesh blocks of the warped forest box
+# sit (zqh 10th argument, r1115), and SQ-HH-328's `zq under` reread (p1_b1 printed "0 starts" in radius 2 with the
+# corn_maze filter: wider radius, no filter).
+pace 1
+
+## SQ-VH-06cw | warped forest interior flesh: positions, zoomed biome, distance to the nearest Heap cell
+shell cp $INST/tools/scratch_query/zq_heapcol.js kubejs/server_scripts/zz_zq_heapcol.js
+> reload
+sleep 30
+> execute in minecraft:the_nether run forceload add 6 -10 37 21
+sleep 20
+> zqh minecraft:warped_forest 6 -10 37 21 minecraft:the_nether 1 126 minecraft:warped_nylium biomesoplenty:flesh
+waitlog \[zqh\] done 300
+> execute in minecraft:the_nether run forceload remove all
+look where lines: flesh in warped interior cells next to the Heap (feature spill) or far from it (rule leak)
+
+## SQ-HH-328u | corn maze start judged by zq under (radius 4, no filter)
+> forceload add 769 3214 848 3293
+sleep 20
+> zq under 801 3246 4
+waitlog \[zq\] done 120
+> forceload remove 769 3214 848 3293
+look a hearthandharvest:corn_maze start line with air-below / gaps; no large air gaps under the built base

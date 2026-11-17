@@ -339,7 +339,7 @@ Feature: [alcohol.md](../alcohol.md) 11 (logic of AL-85 to AL-87; the Quark word
 #### SQ-OM-WN: wine storage boosts and campfire rain (one setup, then wait)
 
 Feature: wine storage [alcohol.md](../alcohol.md) 10.13, [time.md](../time.md) 4 T5 (logic of VB-76); campfire rain
-(patcherMod `CampfireRain`, memory `campfire-rain`; no writeup section yet). TODO `alcohol/pack #2`, `gameplay/misc #2`
+(patcherMod `CampfireRain`, note [campfire-rain](../agent_notes/campfire-rain.md); no writeup section yet). TODO `alcohol/pack #2`, `gameplay/misc #2`
 (the built part: coal / charcoal block fuel, soul campfire, Unlit Campfire burns forever).
 
 | ID | Group | Commands | Pass | If it fails |

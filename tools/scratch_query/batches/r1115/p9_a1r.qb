@@ -1,0 +1,88 @@
+# r1115 phase 9, boot A1 (same boot, /reload after the zp9 probe fix): SQ-FDI-04 rerun and an isolating extra.
+pace 1
+
+## RELOAD | /reload for the zp9 probe fix
+> reload
+sleep 45
+> zp9 nothing
+waitlog \[zp9\] unknown subcommand nothing 120
+
+## SQ-FDI-04 | (rerun, probe describe fixed) eat out of each lunchbox tier: the food is tasted in both books, the lunchbox is not; one queue entry per bite
+> pbot spawn fd5 18 -60 1000 minecraft:overworld survival
+sleep 3
+> clear fd5
+> zc4 sol fd5
+waitlog \[zc4\] sol fd5 20
+> zc4 hunger fd5 2
+> zp9 lbfill fd5 solapplepie:lunchbag minecraft:cooked_beef 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:cooked_beef
+waitlog \[zc4\] sol fd5 20
+> zc4 sol fd5 solapplepie:lunchbag
+waitlog \[zc4\] sol fd5 20
+> zc4 hunger fd5 2
+> zp9 lbfill fd5 solapplepie:lunchbox minecraft:baked_potato 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:baked_potato
+waitlog \[zc4\] sol fd5 20
+> zc4 sol fd5 solapplepie:lunchbox
+waitlog \[zc4\] sol fd5 20
+> zc4 hunger fd5 2
+> zp9 lbfill fd5 solapplepie:golden_lunchbox minecraft:cookie 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:cookie
+waitlog \[zc4\] sol fd5 20
+> zc4 sol fd5 solapplepie:golden_lunchbox
+waitlog \[zc4\] sol fd5 20
+> zc4 hunger fd5 2
+> zp9 lbfill fd5 creativedelight:netherite_lunchbox minecraft:pumpkin_pie 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:pumpkin_pie
+waitlog \[zc4\] sol fd5 20
+> zc4 sol fd5 creativedelight:netherite_lunchbox
+waitlog \[zc4\] sol fd5 20
+# a second bite of the same food: the queue grows by one, the tasted count does not
+> zc4 hunger fd5 2
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:pumpkin_pie
+waitlog \[zc4\] sol fd5 20
+count \[zp9\] heldeat fd5 \S+lunch\S+ -> .* food= >= 5
+count carrotHas=true applepieHas=true >= 4
+reject \[zp9\] error|\[zc4\] .*error
+look per box: the food line carrotHas=true applepieHas=true, the lunchbox line carrotHas=false applepieHas=false; carrot and applepie counts +1 per new food; applepieEntries +1 per bite (also the repeated pumpkin pie bite)
+
+
+## SQ-FDI-04x | isolate the netherite box: netherite with cooked beef (a food the other boxes passed), golden box with pumpkin pie
+> pbot spawn fd6 22 -60 1004 minecraft:overworld survival
+sleep 3
+> clear fd6
+> zc4 hunger fd6 2
+> zp9 lbfill fd6 creativedelight:netherite_lunchbox minecraft:cooked_beef 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd6
+waitlog \[zp9\] done 20
+> zc4 sol fd6 minecraft:cooked_beef
+waitlog \[zc4\] sol fd6 20
+> zc4 hunger fd6 2
+> zp9 lbfill fd6 solapplepie:golden_lunchbox minecraft:pumpkin_pie 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd6
+waitlog \[zp9\] done 20
+> zc4 sol fd6 minecraft:pumpkin_pie
+waitlog \[zc4\] sol fd6 20
+look netherite + beef: beef tasted in both? golden + pumpkin pie: pie tasted in both?
+
+## SQ-BREED-01 | breeding dump: Animal.isFood x every item, flower blocks and the F-B7 candidates by class
+> zp9 breed
+waitlog \[zp9\] breed done 900
+shell ls -l kubejs/exported/breeding_dump.json; python3 -c "import json;d=json.load(open('kubejs/exported/breeding_dump.json'));print('animals',len(d['animals']),'flowers',len(d['flowers']),'cands',len(d['candidates']))"
+look rows in breeding_audit.md 3 and 4 (maned wolf, duck, goose, crab, toretoise) get their food lists; F-B7 candidates classed

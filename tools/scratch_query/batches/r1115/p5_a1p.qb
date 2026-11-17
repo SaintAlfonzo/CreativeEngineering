@@ -1,0 +1,66 @@
+# r1115 phase 5 (runner-5), boot A1 continued (same server as p5_a1.qb): SQ-MELT-P1b (perf rerun of SQ-MELT-P1 on the
+# fix-1 Common jar, boxes and timing as p3_a1b.qb) and the config-reload check of its pass text.
+# qrun marks each row id in the open perf session r1115; JFR windows from RES/timeline.tsv.
+pace 1
+
+## SQ-MELT-P1b-glacier | perf: 64 x 64 x 16 packed ice box (ice, snow layer on top), randomTickSpeed 3, 10 min
+> gamerule randomTickSpeed 3
+> forceload add 2288 1984 2367 2079
+sleep 5
+> fill 2300 -61 2000 2363 -48 2031 minecraft:packed_ice
+> fill 2300 -61 2032 2363 -48 2063 minecraft:packed_ice
+> fill 2300 -47 2000 2363 -47 2063 minecraft:ice
+> fill 2300 -46 2000 2363 -46 2063 minecraft:snow
+> pbot spawn m5p 2332 -45 2032 minecraft:overworld survival
+sleep 60
+repeat 10
+> forge tps
+sleep 58
+end
+> zq count 2300 -61 2000 2363 -46 2063 minecraft:water
+waitlog \[zq\] count minecraft:water: \d+ 60
+look Overworld mean tick time per sample (forge tps), against the control row; water count (Serene Seasons open-air melt expected, as P1)
+
+## SQ-MELT-P1b-control | perf: the same box as stone, 10 min
+> fill 2300 -61 2000 2363 -54 2063 minecraft:stone
+> fill 2300 -53 2000 2363 -46 2063 minecraft:stone
+sleep 60
+repeat 10
+> forge tps
+sleep 58
+end
+look Overworld mean tick time against the glacier row (difference under 0.5 ms); JFR: Melting share and no ConfigValue frames under Melting.onRandomTick
+
+## SQ-MELT-P1b-cfg | [melting] enabled false in the srv toml mid-run stops fire melt (reload refresh); true again melts
+> forceload add 2448 2096 2495 2143
+sleep 3
+> pbot spawn m5c 2470 -60 2100 minecraft:overworld survival
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecommon-common.toml melting enabled false; sed -n "/^\[melting\]/,/^\[/p" config/creativecommon-common.toml | grep -E "^\s*enabled ="
+sleep 8
+> setblock 2460 -61 2120 minecraft:netherrack
+> setblock 2460 -60 2120 minecraft:fire
+> setblock 2462 -60 2120 minecraft:ice
+> setblock 2462 -59 2120 minecraft:glass
+> setblock 2460 -60 2122 minecraft:snow
+> setblock 2460 -59 2122 minecraft:glass
+> zmelt w p1bcfg_off_ice overworld 2462 -60 2120
+> zmelt w p1bcfg_off_snow overworld 2460 -60 2122
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block 2462 -60 2120 minecraft:ice run say P1bcfg-off-ice-kept
+> execute if block 2460 -60 2122 minecraft:snow run say P1bcfg-off-snow-kept
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecommon-common.toml melting enabled true; sed -n "/^\[melting\]/,/^\[/p" config/creativecommon-common.toml | grep -E "^\s*enabled ="
+sleep 8
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block 2462 -60 2120 minecraft:water run say P1bcfg-on-ice-water
+> execute if block 2460 -60 2122 minecraft:air run say P1bcfg-on-snow-air
+> zmelt show
+> zmelt clear
+expect P1bcfg-off-ice-kept$
+expect P1bcfg-off-snow-kept$
+expect P1bcfg-on-ice-water$
+expect P1bcfg-on-snow-air$
+look off: kept for 60 s at randomTickSpeed 1000; on again: melted (watch lines give the tick); toml edit is srv only

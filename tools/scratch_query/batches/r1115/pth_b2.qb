@@ -1,0 +1,31 @@
+# r1115 phase 11 (runner-11), boot 2 continued: items for the SQ-PTH-07 restart check (the SQ-PTH-06 items despawned at
+# their 5 minutes before the first restart), the SQ-PTH-12 web-break drop again (that item despawned too), then save-all.
+pace 1
+
+## SQ-PTH-06r | 20 items into a lone web 3 blocks up (for SQ-PTH-07r after boot 3)
+> setblock 1010 -57 1120 minecraft:cobweb
+> summon minecraft:item 1010.5 -54 1120.5 {Item:{id:"minecraft:stone",Count:1b},PickupDelay:32767,Motion:[0.02d,0d,0.01d],Tags:["i07"]}
+> summon minecraft:item 1010.5 -54 1120.5 {Item:{id:"minecraft:stone",Count:1b},PickupDelay:32767,Motion:[-0.02d,0d,0.02d],Tags:["i07"]}
+> summon minecraft:item 1010.5 -54 1120.5 {Item:{id:"minecraft:stone",Count:1b},PickupDelay:32767,Motion:[0.01d,0d,-0.02d],Tags:["i07"]}
+> summon minecraft:item 1010.5 -54 1120.5 {Item:{id:"minecraft:stone",Count:1b},PickupDelay:32767,Motion:[-0.01d,0d,-0.01d],Tags:["i07"]}
+> summon minecraft:item 1010.5 -50 1120.5 {Item:{id:"minecraft:diamond",Count:1b},PickupDelay:32767,Motion:[0d,-2d,0d],Tags:["i07","i07fast"]}
+sleep 5
+> zpth mod i07
+look all five in x 1010..1011 y -57..-56 z 1120..1121, ng=true
+
+## SQ-PTH-12c | a pickarang held in a lone web; web broken: it drops as an item
+> setblock 1116 -59 1000 minecraft:cobweb
+> clear P
+> tp P 1116.5 -60 996.5 0 0
+> zpth watchnew quark:pickarang k12c 300 10 1116.5 -59 999 5
+> pbot hold P quark:pickarang 1
+> zpth use P
+sleep 4
+> setblock 1116 -59 1000 minecraft:air destroy
+sleep 3
+> execute as @e[type=minecraft:item,x=1114,y=-62,z=998,dx=5,dy=5,dz=5] run data get entity @s Item
+look an item quark:pickarang (Damage as thrown) near 1116 -60 1000
+
+## P11-save | save before the stop (not a test row)
+> save-all
+waitlog Saved the game 60

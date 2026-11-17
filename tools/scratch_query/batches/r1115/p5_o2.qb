@@ -1,0 +1,32 @@
+# r1115 phase 5 (runner-5), boot O2 (rerun of p5_o1, fresh world p5a2): SQ-HOP-11 / SQ-HH-1546b old-save fixture on the PREVIOUS Creative Delight jar.
+# Server: NOSWAP=1 prep_srv.sh OUT p5a2 A spawn-animals=true difficulty=normal, then srv/mods/creativedelight-1.1.0.jar
+#   replaced by the 11-14 03:46 build (nests backportedHearth -04, which still registers hearthandharvest:hops and
+#   hearthandharvest:tilled_end_stone blocks; copied from the r1114 scratchpad pwgperf/srv/mods into
+#   scratchpad/r1115/oldcd/). Everything else = installed mods/ jars. Boot A2 (p5_a2.qb) is the same world on mods/ jars.
+pace 1
+
+## SQ-HOP-11-fixture2 | old jar: place H&H hops (age 4 and 2, stone behind) and H&H tilled end stone, then save
+bootexpect Done \(
+> forceload add 576 496 671 559
+> gamerule doDaylightCycle false
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 0
+sleep 3
+> zq blocks hearthandharvest:hops
+> zq blocks tilled_end_stone
+waitlog \[zq\] blocks matching tilled_end_stone 20
+> setblock 620 -60 520 minecraft:stone
+> setblock 622 -60 520 minecraft:stone
+> setblock 620 -60 521 hearthandharvest:hops[age=4,facing=south]
+> setblock 622 -60 521 hearthandharvest:hops[age=2,facing=south]
+> setblock 624 -61 520 hearthandharvest:tilled_end_stone
+> execute if block 620 -60 521 hearthandharvest:hops[age=4,facing=south] run say O1-hops4-placed
+> execute if block 622 -60 521 hearthandharvest:hops[age=2,facing=south] run say O1-hops2-placed
+> execute if block 624 -61 520 hearthandharvest:tilled_end_stone run say O1-tes-placed
+expect O1-hops4-placed$
+expect O1-hops2-placed$
+expect O1-tes-placed$
+reject (Unknown block type|Incorrect argument for command|Block property)
+> save-all flush
+waitlog Saved the game 60
+look old jar registers hearthandharvest:hops and tilled_end_stone blocks; the three fixture blocks placed and saved

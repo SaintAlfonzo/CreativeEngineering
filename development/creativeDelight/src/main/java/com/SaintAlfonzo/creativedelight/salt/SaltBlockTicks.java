@@ -74,6 +74,7 @@ public final class SaltBlockTicks {
             melters = Set.of();
         }
         LOGGER.info("[salt] {} Vintage salt blocks random tick like The Salt's", melters.size());
+        SaltLayerMelt.init(); // salt layer vanish chance, salt dust dispenser (plan_post_scratch_1115 B2, B3)
     }
 
     private static Set<Block> resolve(String[] ids) {

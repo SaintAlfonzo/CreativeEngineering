@@ -26,12 +26,28 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   an any-of table plus an all-of table (`NEEDS_ALL`) for the Polymorph pairs (with sophisticatedcore, IE, Pretty Pipes),
   Breezy with Supplementaries, and the Create breaker with Quark. Ungated vanilla targets: own-stack fill, botanist pot
   template, vine shear.
-- **Config:** `config/creativecompat-common.toml` (`CompatConfig`): `[leaf_piles]`, `[moss]`, `[vine_shearing]`,
+- **Config:** `config/creativecompat-common.toml` (`CompatConfig`): `[leaf_piles]` (until 2026-11-15, see below), `[moss]`, `[vine_shearing]`,
   `[monster_box]`, `[trash_slot]`, keys, comments and defaults unchanged. On the first boot after the
   carve, Common's `ConfigRename.carrySections` copies those tables with their values from
   `creativeengineering-common.toml` into the new file (only when the new file does not exist yet); patcherMod's own
   config correction then drops them from its file. If nothing could be carried, Compat warns about the leftover
   section headers (Calendar's pattern).
+- **Leaf piles (2026-11-15, pass-through phase 3, [plan_passthrough.md](plan_passthrough.md) 3.1):** `LeafPileSlowMixin`
+  and `surface/LeafPileSlow` are gone; IW leaf piles and Twigs bamboo leaves are the `leaf_pile` pass-through tier,
+  threshold `[surface.passthrough.leaf_pile] minLayers` (default 4). `surface/LeafPileMigration` moves an old
+  `[leaf_piles] slowFromLayers` value there on boot (the old value wins unless it is the default 4 and `minLayers`
+  exists) and drops the section. IW's `leaf_piles_slow` no longer sets the slowdown (the tier cancels IW's
+  `makeStuckInBlock`), but it still gates IW's spruce thorn damage, which sits in the same branch: thorns need
+  `leaf_piles_slow = true` and, with the mixin gone, IW's own 4+ layers (6+ for damage), whatever `minLayers` says.
+- **Pass-through config (2026-11-15, [plan_passthrough.md](plan_passthrough.md), feature doc [blockrunner.md](blockrunner.md) 3.10):**
+
+  | Table | Keys (default) | Side |
+  |---|---|---|
+  | `[surface.passthrough]` | `enabled` (true; false = every block back to its own slowdown), `arrowLifeTicks` (12000), `arrowLongLifeCap` (128) | common; the server's values are sent to clients on join and save |
+  | `[surface.passthrough.<tier>]`, one per tier: `dense_crop`, `crop`, `wild_crop`, `vine`, `tall_plant`, `cane`, `rope`, `cobweb`, `bush`, `leaf_pile`, `grass` | `walk`, `fall`, `growth` (ANY / HALF / TALL_HALF), `neighbours` (NONE / RING / CUBE), `denseFrom`, `denseWalk`, `denseFall`, `denseResetsFall`, `surrounded` (NONE / WEB), `minLayers` (1-9, 9 = never), `walkOnlyMoving`, `items` (NONE / STICK), `itemStickChance`, `projectiles`, `depthStriderPasses`; defaults per tier in blockrunner.md 3.10 | common, synced |
+  | `[surface.wthit] passThrough` | true: Walk Through / Fall Through / Neighbors lines | client |
+  | `[debug.passthrough] timing` | false; true logs a `[passthrough-timing]` line per side every 200 ticks (`tools/perf/passthrough_timing.py` reads them) | both, applies on save |
+
 - **Resources in the jar** (paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
   flower box models, `tags/items/physics/`, 13
   lang keys (MCA eyes, monster box), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
@@ -52,7 +68,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 | `WthitCampfire` | filled by Creative Delight since 2026-11-04 (`campfire/CampfireRainInfo` suppliers); `CampfireRainTicks` accessor stays Common |
 | `WthitHolderContents` | `compat/JarContents` kinds / total hooks (fallback: per-slot list) |
 | `WthitPotContents` | `compat/PottedPlantHolder`, implemented by the botanist pot block entity |
-| `surface/StuckInBlock` (Engineering) | `surface/LeafPileSlow` live reader (default 4) |
+| `surface/StuckInBlock` (Engineering) | `surface/LeafPileSlow` live reader (default 4); gone 2026-11-15 with the leaf pile mixin (pass-through phase 3) |
 | Compat `ItemBurnTransform` -> shrapnel (Engineering) | `util/BurnBursts`, registered by the shrapnel side |
 
 ## 3. Left in the pack folder or elsewhere on purpose
@@ -80,6 +96,10 @@ and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colours a
 - 2026-11-04 (creative_split.md 7.14): from Creative Common, the Create: Dreams & Desires jetpack tooltip null-level
   guard (`JetpackItemTooltipMixin`) and the falling-block water splash (`FallingBlockWaterSplashMixin`): third-party
   and vanilla behaviour fixes, not interface or perf. Common keeps its interface, API and engine/perf rows (2.4).
+- 2026-11-14 to 11-15: pass-through blocks (blockrunner.md 3.10): `surface/Pass*`, 13 new mixins (`WallSlideMixin`
+  renamed `InsideBlocksMixin`), `[surface.passthrough]`, `[surface.wthit] passThrough`, `[debug.passthrough]`; the
+  tier tags `kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js` ship in the jar from the 2026-11-15 00:40
+  build; `[leaf_piles]` and `LeafPileSlowMixin` removed (migration above). Built, not installed.
 
 ## 6. Licence audit (2026-11-04, plan_cb_publish.md Step 2)
 

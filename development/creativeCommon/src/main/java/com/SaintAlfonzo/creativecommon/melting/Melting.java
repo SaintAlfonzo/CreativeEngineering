@@ -23,6 +23,7 @@ import net.minecraft.world.level.chunk.LevelChunkSection;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.event.TagsUpdatedEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.tags.ITagManager;
@@ -72,7 +73,49 @@ public final class Melting {
     private static List<? extends String> stepsSource;
     private static Map<Block, BlockState> steps = Map.of();
 
+    /**
+     * The [melting] config values the tick paths read, copied from the spec on config load and reload so a random
+     * tick reads plain fields instead of ForgeConfigSpec values (SQ-MELT-P1). Before the first load: melting and the
+     * ultra-warm melt off, vanilla light melting as vanilla, the same as the former isLoaded() checks.
+     */
+    private record Values(boolean enabled, int saltRange, int fireRange, int lavaRange, int slowFireRange,
+            int slowLavaRange, double meltChance, double slowMeltChance, boolean placeWater,
+            boolean vanillaLightMelting, boolean ultraWarmInstantMelt) {
+        static final Values UNLOADED = new Values(false, 0, 0, 0, 0, 0, 0, 0, true, true, false);
+
+        static Values read() {
+            CommonConfig.MeltingConfig c = CommonConfig.MELTING;
+            return new Values(c.enabled.get(), c.saltRange.get(), c.fireRange.get(), c.lavaRange.get(),
+                    c.slowFireRange.get(), c.slowLavaRange.get(), c.meltChance.get(), c.slowMeltChance.get(),
+                    c.placeWater.get(), c.vanillaLightMelting.get(), c.ultraWarmInstantMelt.get());
+        }
+    }
+
+    private static volatile Values cfg = Values.UNLOADED;
+
+    /**
+     * Told after a salt source melted a target by its random tick (plan_post_scratch_1115 B3): Creative Delight removes a
+     * salt layer by chance. Not called for {@link #meltStep} (the caller spends its own salt).
+     */
+    @FunctionalInterface
+    public interface SaltMeltListener {
+        void onSaltMelt(ServerLevel level, BlockPos source, BlockState sourceState, RandomSource random);
+    }
+
+    private static volatile SaltMeltListener saltListener;
+
+    /** One listener (the last set wins); null removes it. */
+    public static void setSaltMeltListener(SaltMeltListener listener) {
+        saltListener = listener;
+    }
+
     private Melting() {}
+
+    /** Mod bus: ModConfigEvent.Loading and Reloading of Common's main config refresh {@link #cfg}. */
+    public static void onConfig(ModConfigEvent event) {
+        if (event.getConfig().getSpec() == CommonConfig.COMMON_SPEC && CommonConfig.COMMON_SPEC.isLoaded())
+            cfg = Values.read();
+    }
 
     // ------------------------------------------------------------------ setup
 
@@ -164,7 +207,7 @@ public final class Melting {
     public static boolean onRandomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         byte f = flags.getByte(state.getBlock());
         if (f == 0 || (f & (MELTABLE | SLOW | DRIVEN)) == 0) return false;
-        if (!CommonConfig.COMMON_SPEC.isLoaded() || !CommonConfig.MELTING.enabled.get()) return false;
+        if (!cfg.enabled()) return false;
         if ((f & (MELTABLE | SLOW)) != 0) return targetTick(state, f, level, pos, random);
         if (fireActive(state)) sourceTick(level, pos, random);
         return false;
@@ -174,7 +217,7 @@ public final class Melting {
     public static void onPlaced(BlockState state, Level level, BlockPos pos) {
         if (level.isClientSide || !level.dimensionType().ultraWarm()) return;
         if ((flags.getByte(state.getBlock()) & INSTANT) == 0) return;
-        if (!CommonConfig.COMMON_SPEC.isLoaded() || !CommonConfig.MELTING.ultraWarmInstantMelt.get()) return;
+        if (!cfg.ultraWarmInstantMelt()) return;
         if (level.getBlockState(pos) != state) return; // already replaced by the block's own onPlace
         level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
         level.levelEvent(1501, pos, 0); // lava fizz: hiss and smoke
@@ -182,11 +225,11 @@ public final class Melting {
 
     /** The light vanilla IceBlock / SnowLayerBlock (and Rare Ice) melt by: 0 unless vanillaLightMelting is on. */
     public static int vanillaLight(ServerLevel level, LightLayer layer, BlockPos pos) {
-        if (CommonConfig.COMMON_SPEC.isLoaded() && !CommonConfig.MELTING.vanillaLightMelting.get()) return 0;
+        if (!cfg.vanillaLightMelting()) return 0;
         return level.getBrightness(layer, pos);
     }
 
-    // ------------------------------------------------------------------ public API (Salt item click, other jars)
+    // ------------------------------------------------------------------ public API (salt dispenser, Salt Melt, other jars)
 
     /** Whether the state is a melting target (meltable or meltable_slow). */
     public static boolean isTarget(BlockState state) {
@@ -195,7 +238,8 @@ public final class Melting {
 
     /**
      * Melts one stage at once, no roll and no source needed: a meltable target melts fully, a meltable_slow one steps
-     * down one tier. Used by The Salt's item click. False when the block is not a target.
+     * down one tier. Used by a salt dispenser and the Salt Melt (plan_post_scratch_1115 B2, B6); a salt click by hand
+     * places a salt layer instead (B1). False when the block is not a target.
      */
     public static boolean meltStep(ServerLevel level, BlockPos pos) {
         BlockState state = level.getBlockState(pos);
@@ -211,7 +255,7 @@ public final class Melting {
             BlockState step = steps().get(state.getBlock());
             if (step != null) return step;
         }
-        if (!level.dimensionType().ultraWarm() && CommonConfig.MELTING.placeWater.get() && state.is(BlockTags.ICE))
+        if (!level.dimensionType().ultraWarm() && cfg.placeWater() && state.is(BlockTags.ICE))
             return Blocks.WATER.defaultBlockState();
         return Blocks.AIR.defaultBlockState();
     }
@@ -219,19 +263,21 @@ public final class Melting {
     // ------------------------------------------------------------------ rules
 
     private static boolean targetTick(BlockState state, byte f, ServerLevel level, BlockPos pos, RandomSource random) {
-        CommonConfig.MeltingConfig c = CommonConfig.MELTING;
+        Values c = cfg;
         boolean slow = (f & MELTABLE) == 0; // in both tags: the faster rule wins
-        if (random.nextDouble() >= (slow ? c.slowMeltChance.get() : c.meltChance.get())) return false;
-        int saltR = c.saltRange.get();
-        int fireR = slow ? c.slowFireRange.get() : c.fireRange.get();
-        int lavaR = slow ? c.slowLavaRange.get() : c.lavaRange.get();
+        if (random.nextDouble() >= (slow ? c.slowMeltChance() : c.meltChance())) return false;
+        int saltR = c.saltRange();
+        int fireR = slow ? c.slowFireRange() : c.fireRange();
+        int lavaR = slow ? c.slowLavaRange() : c.lavaRange();
 
         // 1. the 6 neighbours (loaded: they border a ticking chunk at most)
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
         for (Direction d : DIRECTIONS) {
             m.setWithOffset(pos, d);
-            if (isSource(level.getBlockState(m), saltR >= 1, fireR >= 1, lavaR >= 1)) {
+            BlockState s = level.getBlockState(m);
+            if (isSource(s, saltR >= 1, fireR >= 1, lavaR >= 1)) {
                 melt(level, pos, state, slow);
+                afterMelt(level, m, s, saltR >= 1, random);
                 return true;
             }
         }
@@ -251,6 +297,7 @@ public final class Melting {
             BlockState s = reader.get(m);
             if (s != null && isSource(s, d2 <= s2, d2 <= f2, d2 <= l2)) {
                 melt(level, pos, state, slow);
+                afterMelt(level, m, s, d2 <= s2, random);
                 return true;
             }
         }
@@ -259,13 +306,13 @@ public final class Melting {
 
     /** A dim fire source's own random tick: every target in its reach rolls its own chance. */
     private static void sourceTick(ServerLevel level, BlockPos pos, RandomSource random) {
-        CommonConfig.MeltingConfig c = CommonConfig.MELTING;
-        int fireR = c.fireRange.get(), slowR = c.slowFireRange.get();
+        Values c = cfg;
+        int fireR = c.fireRange(), slowR = c.slowFireRange();
         int r = Math.max(fireR, slowR);
         if (r < 1) return;
         ChunkReader reader = new ChunkReader(level);
         if (!reader.mayHaveTargets(pos, r)) return;
-        double chance = c.meltChance.get(), slowChance = c.slowMeltChance.get();
+        double chance = c.meltChance(), slowChance = c.slowMeltChance();
         int f2 = fireR * fireR, s2 = slowR * slowR, max2 = r * r;
         BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
         for (int[] o : OFFSETS) {
@@ -280,6 +327,13 @@ public final class Melting {
             if (d2 > (slow ? s2 : f2)) continue;
             if (random.nextDouble() < (slow ? slowChance : chance)) melt(level, m.immutable(), s, slow);
         }
+    }
+
+    /** A salt source in salt range did the melt: tell the listener (B3). */
+    private static void afterMelt(ServerLevel level, BlockPos source, BlockState s, boolean saltInRange, RandomSource random) {
+        SaltMeltListener l = saltListener;
+        if (l != null && saltInRange && (flags.getByte(s.getBlock()) & SALT) != 0)
+            l.onSaltMelt(level, source.immutable(), s, random);
     }
 
     private static boolean isSource(BlockState s, boolean salt, boolean fire, boolean lava) {

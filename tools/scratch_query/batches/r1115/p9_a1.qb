@@ -1,0 +1,179 @@
+# r1115 phase 9, boot A1 part 2 (same boot, after p9_wo_a2.qb): SQ-RP-07, SQ-OB-07, -08, -10, SQ-FDI-04, SQ-FLR-02,
+# SQ-BREED-01. Group A fresh superflat (level p9a). Probes: zz_zc4_probe.js (zc4_probe.js), zz_zp9_probe.js
+# (zp9_probe.js), zz_wo_probe.js; /zq is prep_srv's. SQ-OB rows are group B in the queue; their checks are recipes,
+# items and food effects (world independent), so they run here (noted in the run doc).
+# Areas: RP / OB / FDI bots at z 1000; Create rig at x 40220 z 40000 (r1113 c4_ar2 SQ-FLR-02b lines).
+pace 1
+
+## SQ-RP-07 | /solrp reset clears the Apple Pie food list and the Raspberry Pie diet cap
+> forceload add 0 990 40 1010
+> pbot spawn rp7 10 -60 1000 minecraft:overworld survival
+sleep 3
+> zc4 hunger rp7 2
+> zc4 eat rp7 minecraft:apple
+> zc4 eat rp7 minecraft:bread
+> zc4 eat rp7 minecraft:cooked_beef
+> zc4 sol rp7
+waitlog \[zc4\] sol rp7 20
+> data get entity rp7 ForgeCaps
+sleep 1
+> solrp reset rp7
+sleep 1
+expect Reset the diet of 1 players
+> zc4 sol rp7
+> data get entity rp7 ForgeCaps
+sleep 1
+look ForgeCaps after the reset: Apple Pie food list foodsEaten 0, foodList [] and solrp_gateFoods []; solraspberrypie:diet maxDiversity 0, slots [], drinks []; zc4 sol counts 0 after (3 before)
+
+## SQ-OB-07 | biscuits and gravy and glazed carrots pot recipes
+> zq makes hearthandharvest:biscuits_and_gravy
+waitlog \[zq\] done 20
+> zq rdetail biscuits_and_gravy
+waitlog \[zq\] done 20
+> zq makes hearthandharvest:glazed_carrots
+waitlog \[zq\] done 20
+> zq rdetail glazed_carrots
+waitlog \[zq\] done 20
+> zq uses miners_delight:cave_carrot
+waitlog \[zq\] done 20
+look no shapeless (crafting_shapeless) biscuits recipe; one cooking pot recipe: any dough, raw sausage, salt, milk (bowl); glazed carrots pot recipe accepts cave carrot
+
+## SQ-OB-08 | Street Corn: Fire Resistance 30 s plus Nourishment and Haste
+> pbot spawn ob8 14 -60 1000 minecraft:overworld survival
+sleep 3
+> effect clear ob8
+> zq food hearthandharvest:street_corn
+waitlog \[zq\] done 20
+> zc4 hunger ob8 2
+> zc4 eat ob8 hearthandharvest:street_corn
+waitlog \[zc4\] eat ob8 20
+> data get entity ob8 ActiveEffects
+sleep 1
+expect minecraft:fire_resistance|fire_resistance
+look ActiveEffects: fire resistance 600 ticks plus Nourishment and Haste (zq food line lists the same)
+
+## SQ-OB-10 | wooden buckets exist; one tree tapper recipe accepts either bucket; bucket from planks
+> zq items creativedelight:wooden_
+waitlog \[zq\] done 20
+> give ob8 creativedelight:wooden_bucket
+> give ob8 creativedelight:wooden_water_bucket
+> give ob8 creativedelight:wooden_sap_bucket
+> give ob8 creativedelight:wooden_milk_bucket
+> give ob8 creativedelight:wooden_honey_bucket
+sleep 1
+count Gave 1\s+\[.*\] to ob8 >= 5
+reject Unknown item
+> zq makes hearthandharvest:tree_tapper
+waitlog \[zq\] done 20
+> zq rdetail tree_tapper
+waitlog \[zq\] done 20
+> zq makes creativedelight:wooden_bucket
+waitlog \[zq\] done 20
+bootreject \[creativedelight\].*(Exception|ERROR)
+shell grep -cE "ERROR.*creativedelight|creativedelight.*Exception" logs/latest.log; true
+look one tree tapper recipe, B slot accepts minecraft:bucket and creativedelight:wooden_bucket; a wooden bucket recipe from planks
+
+## SQ-FDI-04 | eat out of each lunchbox tier: the food is tasted in both books, the lunchbox is not; one queue entry per bite
+> pbot spawn fd4 18 -60 1000 minecraft:overworld survival
+sleep 3
+> clear fd4
+> zc4 sol fd4
+waitlog \[zc4\] sol fd4 20
+> zc4 hunger fd4 2
+> zp9 lbfill fd4 solapplepie:lunchbag minecraft:cooked_beef 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd4
+waitlog \[zp9\] done 20
+> zc4 sol fd4 minecraft:cooked_beef
+waitlog \[zc4\] sol fd4 20
+> zc4 sol fd4 solapplepie:lunchbag
+waitlog \[zc4\] sol fd4 20
+> zc4 hunger fd4 2
+> zp9 lbfill fd4 solapplepie:lunchbox minecraft:baked_potato 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd4
+waitlog \[zp9\] done 20
+> zc4 sol fd4 minecraft:baked_potato
+waitlog \[zc4\] sol fd4 20
+> zc4 sol fd4 solapplepie:lunchbox
+waitlog \[zc4\] sol fd4 20
+> zc4 hunger fd4 2
+> zp9 lbfill fd4 solapplepie:golden_lunchbox minecraft:cookie 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd4
+waitlog \[zp9\] done 20
+> zc4 sol fd4 minecraft:cookie
+waitlog \[zc4\] sol fd4 20
+> zc4 sol fd4 solapplepie:golden_lunchbox
+waitlog \[zc4\] sol fd4 20
+> zc4 hunger fd4 2
+> zp9 lbfill fd4 creativedelight:netherite_lunchbox minecraft:pumpkin_pie 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd4
+waitlog \[zp9\] done 20
+> zc4 sol fd4 minecraft:pumpkin_pie
+waitlog \[zc4\] sol fd4 20
+> zc4 sol fd4 creativedelight:netherite_lunchbox
+waitlog \[zc4\] sol fd4 20
+# a second bite of the same food: the queue grows by one, the tasted count does not
+> zc4 hunger fd4 2
+> zp9 heldeat fd4
+waitlog \[zp9\] done 20
+> zc4 sol fd4 minecraft:pumpkin_pie
+waitlog \[zc4\] sol fd4 20
+count \[zp9\] heldeat fd4 \S+lunch\S+ -> .* food= >= 5
+count carrotHas=true applepieHas=true >= 4
+reject \[zp9\] error|\[zc4\] .*error
+look per box: the food line carrotHas=true applepieHas=true, the lunchbox line carrotHas=false applepieHas=false; carrot and applepie counts +1 per new food; applepieEntries +1 per bite (also the repeated pumpkin pie bite)
+
+## SQ-FLR-02 | crushing wheels fed by a hopper: 200 flesh, then 200 porous flesh, outputs by pool
+> forceload add 40190 39990 40270 40010
+> execute unless block 40220 -58 40000 create:crushing_wheel run setblock 40220 -58 40000 create:crushing_wheel[axis=z]
+> execute unless block 40222 -58 40000 create:crushing_wheel run setblock 40222 -58 40000 create:crushing_wheel[axis=z]
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40220 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40222 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+sleep 5
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40220 -58 39999 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40222 -58 40001 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40220 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40222 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+sleep 5
+> execute if block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run say FLR crusher valid ok
+expect FLR crusher valid ok
+> kill @e[type=minecraft:item,x=40215,y=-64,z=39995,dx=12,dy=12,dz=10]
+> setblock 40221 -57 40000 minecraft:hopper[facing=down]
+> zc4 put 40221 -57 40000 biomesoplenty:flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:flesh 8
+waitlog \[zc4\] put .* inserted=8 20
+sleep 90
+> zc4 inv 40221 -57 40000
+> zc4 inv 40221 -58 40000
+sleep 90
+> zc4 inv 40221 -57 40000
+> zc4 inv 40221 -58 40000
+sleep 10
+> zc4 pools 40221 -59 40000 -5
+waitlog \[zc4\] pools 20
+> zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 8
+waitlog \[zc4\] put .* inserted=8 20
+sleep 90
+> zc4 inv 40221 -57 40000
+> zc4 inv 40221 -58 40000
+sleep 90
+> zc4 inv 40221 -57 40000
+> zc4 inv 40221 -58 40000
+sleep 10
+> zc4 pools 40221 -59 40000 -5
+waitlog \[zc4\] pools 20
+look first pools line (flesh): meat=200 exactly, bone near 150, eye near 50, misc near 50, other 0; second (porous): meat 275 to 325, eye=200 exactly, misc near 100, bone=0. Hopper and controller empty before each count (inv lines total=0)
+
+## SQ-BREED-01 | breeding dump: Animal.isFood x every item, flower blocks and the F-B7 candidates by class
+> zp9 breed
+waitlog \[zp9\] breed done 900
+shell ls -l kubejs/exported/breeding_dump.json; python3 -c "import json;d=json.load(open('kubejs/exported/breeding_dump.json'));print('animals',len(d['animals']),'flowers',len(d['flowers']),'cands',len(d['candidates']))"
+look rows in breeding_audit.md 3 and 4 (maned wolf, duck, goose, crab, toretoise) get their food lists; F-B7 candidates classed

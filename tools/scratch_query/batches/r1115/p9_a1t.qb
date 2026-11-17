@@ -1,0 +1,14 @@
+# r1115 phase 9, boot A1: SQ-BREED-01 after the zp9 tag-read fix (/reload first).
+pace 1
+
+## RELOAD2 | /reload for the zp9 breed fix
+> reload
+sleep 45
+> zp9 nothing
+waitlog \[zp9\] unknown subcommand nothing 120
+
+## SQ-BREED-01 | breeding dump: Animal.isFood x every item, flower blocks and the F-B7 candidates by class
+> zp9 breed
+waitlog \[zp9\] breed done 900
+shell ls -l kubejs/exported/breeding_dump.json; python3 -c "import json;d=json.load(open('kubejs/exported/breeding_dump.json'));print('animals',len(d['animals']),'flowers',len(d['flowers']),'cands',len(d['candidates']))"
+look rows in breeding_audit.md 3 and 4 (maned wolf, duck, goose, crab, toretoise) get their food lists; F-B7 candidates classed

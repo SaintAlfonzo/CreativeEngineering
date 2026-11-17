@@ -402,7 +402,7 @@ become their own TODO rows, not part of this step.
 | Creative Common | all Java, the dicts and helpers after M1, every resource file | fixes and perf mixins that copy upstream code; the dicts are id lists (fine); any donor files |
 | Creative Compat | everything | the 950 painting files (creative_split Q7): authors and licences of each source |
 | Creative Calendar | confirm creative_calendar.md Q3 ("all own code") against the built jar | none known |
-| Creative Delight | own jar and all 22 members | ARR overrides (CfB, Ender's: memory `arr-mod-overrides-route`), Incubation-derived nest textures (`mobs/nests #2`, repaint open), Oceanic licence conflict (creative_delight.md 28), Rustic and Oceanic upstream licences (7), every repack's NOTICE matching its upstream licence |
+| Creative Delight | own jar and all 22 members | ARR overrides (CfB, Ender's: note [arr-mod-overrides-route](agent_notes/arr-mod-overrides-route.md)), Incubation-derived nest textures (`mobs/nests #2`, repaint open), Oceanic licence conflict (creative_delight.md 28), Rustic and Oceanic upstream licences (7), every repack's NOTICE matching its upstream licence |
 | All five | `mods.toml` `license=` text, the GPLv3 file present (M6), NOTICE files for every MIT / LGPL / AFL upstream | `mod_license` reads `GPL-3.0-only` (D4); project pages pick GPL-3.0-only |
 
 Per jar: list every file with an origin (own, upstream with licence, generated from what); compare against the upstream

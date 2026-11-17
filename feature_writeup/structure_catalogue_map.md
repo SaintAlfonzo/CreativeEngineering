@@ -6,6 +6,8 @@ Reading a line: `- <biome column> (<count>): <items>`. Each item goes one after 
 
 Every other level runs along +X. Function headings are in bold; families without a function heading skip that level.
 
+**Since 2026-11-15 the biome columns below are folded into biome families and the Forest Ruins pieces are under Ruins (plan section 4, "Biome families" and "Ruined villages").** This file still lists the unfolded names.
+
 Live build differs from this snapshot in two places (plan section 8): `towns_and_towers:village_ocean` is placed whole, and 35 structures are dried rather than 33.
 
 | Count | What |

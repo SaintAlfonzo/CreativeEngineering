@@ -1,0 +1,133 @@
+# r1115 phase 1, boot B1: group B fresh normal world, seed 8675309, full pack (NOSWAP=1), level p1b1.
+# Server: NOSWAP=1 bash tools/scratch_query/prep_srv.sh OUT p1b1 B difficulty=normal
+# Before boot: zz_c3_probe.js, zz_zact_probe.js, zz_hh_mw_probe.js, zz_zq_heapcol.js (r1115 copy: blocks/air lines).
+# Rows: SQ-CBP-11, SQ-OB-05, SQ-VH-06, -06b, -06c (fresh Nether), SQ-HH-328 seed 8675309 (shipped 120 s deadline).
+pace 1
+
+## SQ-P1B-setup | gamerules, spawn platform, bot (not a test row)
+> gamerule doDaylightCycle false
+> gamerule doMobSpawning false
+> time set noon
+> weather clear
+> forceload add 0 0
+> setblock 0 199 0 minecraft:stone
+> setblock 0 199 2 minecraft:stone
+> pbot spawn cb 0.5 200 0.5 minecraft:overworld survival
+sleep 3
+
+## SQ-CBP-11 | transitions in Equipment (37); felsic_gear pack on; no incomplete or duplicate error; felsic ore in End highlands; block drops 1-2 scrap
+shell grep -hE "transition items|end gear transition|mod data packs" logs/kubejs/startup.log logs/latest.log | cut -c1-220
+shell grep -qE "\[creativeequipment\] end gear transition items \(37\)" logs/kubejs/startup.log
+bootreject incomplete\('[^']*'\) not registered
+bootreject (Duplicate|duplicate).*kubejs:incomplete_
+> datapack list
+waitlog data packs? enabled 30
+expect felsic_gear
+> zq bytype create:sequenced_assembly
+waitlog \[zq\] bytype create:sequenced_assembly: \d+ 60
+> execute in minecraft:the_end run locate biome minecraft:end_highlands
+waitlog nearest minecraft:end_highlands is at|Could not find 300
+capture EH minecraft:end_highlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_end run forceload add {EH1-40} {EH3-40} {EH1+39} {EH3+39}
+sleep 60
+> zq count {EH1-40} 0 {EH3-40} {EH1+39} 120 {EH3+39} felsic_gear:felsic_block minecraft:the_end
+waitlog \[zq\] count felsic_gear:felsic_block: \d+ 300
+expect \[zq\] count felsic_gear:felsic_block: [1-9]
+> execute in minecraft:the_end run forceload remove {EH1-40} {EH3-40} {EH1+39} {EH3+39}
+> setblock 0 200 2 felsic_gear:felsic_block
+> zact break 0 200 2 minecraft:netherite_pickaxe
+waitlog \[zact\] done 20
+expect \[zact\] break.*creativeequipment:felsic_scrap x[1-2]\b
+> setblock 0 200 2 felsic_gear:felsic_block
+> zc3 loot 0 200 2 minecraft:netherite_pickaxe 50
+waitlog \[c3\] done 20
+> setblock 0 200 2 minecraft:air
+expect \[c3\] loot .*creativeequipment:felsic_scrap x(5\d|6\d|7\d|8\d|9\d|100)\b
+look Equipment 37 transitions, Engineering count lower; felsic_gear pack enabled; ore in End highlands; one break 1-2 scrap; 50 rolls between 50 and 100 (uniform 1-2 = about 75)
+
+## SQ-OB-05 | cave carrot cutting and baked cutting, and their Slice & Dice copies: 2 raw / 2 cooked veggie patties
+> give cb miners_delight:cave_carrot 4
+> zq rdetail veggie_patty_from
+waitlog \[zq\] rdetail matching veggie_patty_from: \d+ 30
+expect raw_veggie_patty_from_cave_carrot .*2 
+expect cooked_veggie_patty_from_baked_cave_carrot .*2 
+reject veggie_patty_from.*(minecraft:air|-> 0 )
+look 4 recipes (2 cutting, 2 S&D copies): results 2 raw / 2 cooked veggie patties, inputs cave carrot / baked cave carrot, never air
+
+## SQ-VH-06 | Heap: every non-air block in a 3x3 chunk area flesh or structure, 0 netherrack; floors/ceilings flesh 95 %; bedrock at 0 and 127
+> execute in minecraft:the_nether run locate biome biomesoplenty:visceral_heap
+waitlog (is at \[|Could not find) 120
+capture H is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {H1-24} {H3-24} {H1+23} {H3+23}
+sleep 45
+> zq count {H1-24} 0 {H3-24} {H1+23} 0 {H3+23} minecraft:bedrock minecraft:the_nether
+waitlog \[zq\] count minecraft:bedrock: \d+ 120
+> zq count {H1-24} 127 {H3-24} {H1+23} 127 {H3+23} minecraft:bedrock minecraft:the_nether
+waitlog \[zq\] count minecraft:bedrock: \d+ 120
+> zqh biomesoplenty:visceral_heap {H1-24} {H3-24} {H1+23} {H3+23} minecraft:the_nether
+waitlog \[zqh\] done 300
+reject \[zqh\] error
+look bedrock counts 2304 each (48 x 48); blocks line netherrack 0; floor and ceiling flesh + porous_flesh >= 95 % of surfaces, the rest structure blocks
+
+## SQ-VH-06b | caves inside the Heap (cave air, flesh walls); carver tag lists flesh and porous_flesh
+> kubejs list_tag minecraft:block minecraft:nether_carver_replaceables
+> zq blocktag minecraft:nether_carver_replaceables
+waitlog \[zq\] blocktag minecraft:nether_carver_replaceables 30
+expect blocktag minecraft:nether_carver_replaceables \(\d+\): .*biomesoplenty:flesh
+expect blocktag minecraft:nether_carver_replaceables \(\d+\): .*biomesoplenty:porous_flesh
+> execute in minecraft:the_nether run forceload remove {H1-24} {H3-24} {H1+23} {H3+23}
+look the SQ-VH-06 "[zqh] air" line shows minecraft:cave_air inside the Heap (carved caves); tag holds both flesh blocks
+
+## SQ-VH-06c | vanilla Nether biomes keep their blocks; no flesh outside the Heap; quartz and gold ore in nether wastes
+> execute in minecraft:the_nether run locate biome minecraft:nether_wastes
+waitlog nearest minecraft:nether_wastes is at|Could not find 120
+capture NW minecraft:nether_wastes is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run locate biome minecraft:crimson_forest
+waitlog nearest minecraft:crimson_forest is at|Could not find 120
+capture CF minecraft:crimson_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run locate biome minecraft:warped_forest
+waitlog nearest minecraft:warped_forest is at|Could not find 120
+capture WF minecraft:warped_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run locate biome minecraft:soul_sand_valley
+waitlog nearest minecraft:soul_sand_valley is at|Could not find 120
+capture SS minecraft:soul_sand_valley is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run locate biome minecraft:basalt_deltas
+waitlog nearest minecraft:basalt_deltas is at|Could not find 120
+capture BD minecraft:basalt_deltas is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {NW1-16} {NW3-16} {NW1+15} {NW3+15}
+> execute in minecraft:the_nether run forceload add {CF1-16} {CF3-16} {CF1+15} {CF3+15}
+> execute in minecraft:the_nether run forceload add {WF1-16} {WF3-16} {WF1+15} {WF3+15}
+> execute in minecraft:the_nether run forceload add {SS1-16} {SS3-16} {SS1+15} {SS3+15}
+> execute in minecraft:the_nether run forceload add {BD1-16} {BD3-16} {BD1+15} {BD3+15}
+sleep 45
+> zqh minecraft:nether_wastes {NW1-16} {NW3-16} {NW1+15} {NW3+15} minecraft:the_nether 1 126 minecraft:netherrack
+waitlog \[zqh\] done 300
+> zqh minecraft:crimson_forest {CF1-16} {CF3-16} {CF1+15} {CF3+15} minecraft:the_nether 1 126 minecraft:crimson_nylium
+waitlog \[zqh\] done 300
+> zqh minecraft:warped_forest {WF1-16} {WF3-16} {WF1+15} {WF3+15} minecraft:the_nether 1 126 minecraft:warped_nylium
+waitlog \[zqh\] done 300
+> zqh minecraft:soul_sand_valley {SS1-16} {SS3-16} {SS1+15} {SS3+15} minecraft:the_nether 1 126 minecraft:soul_sand
+waitlog \[zqh\] done 300
+> zqh minecraft:basalt_deltas {BD1-16} {BD3-16} {BD1+15} {BD3+15} minecraft:the_nether 1 126 minecraft:basalt
+waitlog \[zqh\] done 300
+> execute in minecraft:the_nether run forceload remove all
+reject \[zqh\] error
+reject \[zqh\] blocks minecraft:\S+ netherrack \d+, flesh [1-9]
+reject \[zqh\] blocks minecraft:\S+ netherrack \d+, flesh \d+, porous_flesh [1-9]
+look each biome's blocks line keeps its vanilla blocks (netherrack / nylium / soul sand and soil / basalt and blackstone); flesh 0 outside the Heap; nether_wastes quartz_ore and gold_ore above 0
+
+## SQ-HH-328 | corn maze locate from spawn within the shipped 120 s deadline (seed 8675309), then the maze census
+> locate structure hearthandharvest:corn_maze
+waitlog (?:The nearest hearthandharvest:corn_maze is at|Could not find) 200
+shell grep -E "\[locate\].*corn_maze" logs/latest.log | tail -2 | cut -c1-260
+capture M The nearest hearthandharvest:corn_maze is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {M1-16} {M3-16} {M1+47} {M3+47}
+sleep 90
+> zq under {M1} {M3} 2 corn_maze
+waitlog \[zq\] done 120
+> zhh2 countset {M1-2} 50 {M3-2} {M1+36} 110 {M3+36} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest,lootr:lootr_chest
+> zhh2 chests {M1-2} 50 {M3-2} {M1+36} 110 {M3+36}
+sleep 5
+> forceload remove {M1-16} {M3-16} {M1+47} {M3+47}
+expect The nearest hearthandharvest:corn_maze is at
+look locate time and candidates ([locate] line); corn_crop > 100, oak_fence 16, a chest with corn_maze_center; under: no large air gap

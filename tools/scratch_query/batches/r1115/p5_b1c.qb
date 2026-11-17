@@ -1,0 +1,45 @@
+# r1115 phase 5 (runner-5), boot B1 follow-up 2 (same server, site 3 still forceloaded): the carrot tag is
+# creativedelight:wild_crops/carrot (not wild_carrots); adzuki shares the hops rule class ("temperate grassy forest").
+pace 1
+
+## SQ-HOP-06c | carrot tag, and typical crops counted over site 3
+> zq biometag creativedelight:wild_crops/carrot
+> zq biometag creativedelight:wild_crops/adzuki
+waitlog \[zq\] biometag creativedelight:wild_crops/adzuki 30
+> zhh2 countset {R1-120} 40 {R3-120} {R1+119} 120 {R3+119} hearthandharvest:hops_vine,farmersdelight:wild_carrots,neapolitan:adzuki_sprouts
+waitlog \[zhh2\] countset columns skipped 900
+look is minecraft:forest in the carrot tag; carrots and adzuki "in K chunks" against hops_vine
+
+## SQ-HOP-06p | the feature itself: /place feature creativedelight:wild/wild_hops at 25 points (16 apart) of site 2's forest (oak and birch, ground about y 70)
+> forceload remove all
+> forceload add {Q1-48} {Q3-48} {Q1+47} {Q3+47}
+sleep 30
+> place feature creativedelight:wild/wild_hops {Q1-32} 70 {Q3-32}
+> place feature creativedelight:wild/wild_hops {Q1-32} 70 {Q3-16}
+> place feature creativedelight:wild/wild_hops {Q1-32} 70 {Q3}
+> place feature creativedelight:wild/wild_hops {Q1-32} 70 {Q3+16}
+> place feature creativedelight:wild/wild_hops {Q1-32} 70 {Q3+32}
+> place feature creativedelight:wild/wild_hops {Q1-16} 70 {Q3-32}
+> place feature creativedelight:wild/wild_hops {Q1-16} 70 {Q3-16}
+> place feature creativedelight:wild/wild_hops {Q1-16} 70 {Q3}
+> place feature creativedelight:wild/wild_hops {Q1-16} 70 {Q3+16}
+> place feature creativedelight:wild/wild_hops {Q1-16} 70 {Q3+32}
+> place feature creativedelight:wild/wild_hops {Q1} 70 {Q3-32}
+> place feature creativedelight:wild/wild_hops {Q1} 70 {Q3-16}
+> place feature creativedelight:wild/wild_hops {Q1} 70 {Q3}
+> place feature creativedelight:wild/wild_hops {Q1} 70 {Q3+16}
+> place feature creativedelight:wild/wild_hops {Q1} 70 {Q3+32}
+> place feature creativedelight:wild/wild_hops {Q1+16} 70 {Q3-32}
+> place feature creativedelight:wild/wild_hops {Q1+16} 70 {Q3-16}
+> place feature creativedelight:wild/wild_hops {Q1+16} 70 {Q3}
+> place feature creativedelight:wild/wild_hops {Q1+16} 70 {Q3+16}
+> place feature creativedelight:wild/wild_hops {Q1+16} 70 {Q3+32}
+> place feature creativedelight:wild/wild_hops {Q1+32} 70 {Q3-32}
+> place feature creativedelight:wild/wild_hops {Q1+32} 70 {Q3-16}
+> place feature creativedelight:wild/wild_hops {Q1+32} 70 {Q3}
+> place feature creativedelight:wild/wild_hops {Q1+32} 70 {Q3+16}
+> place feature creativedelight:wild/wild_hops {Q1+32} 70 {Q3+32}
+> zhh2 countset {Q1-48} 40 {Q3-48} {Q1+47} 120 {Q3+47} hearthandharvest:hops_vine,minecraft:oak_log,minecraft:birch_log
+waitlog \[zhh2\] countset columns skipped 300
+count Failed to place feature >= 0
+look how many of the 25 placements succeed (no "Failed to place feature") and the vine count after: the feature works where it runs

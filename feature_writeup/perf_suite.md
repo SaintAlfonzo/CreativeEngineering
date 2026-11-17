@@ -175,6 +175,18 @@ setup. View distance 10, simulation distance 8, `-Xmx6G`, JFR on, as shipped.
 | G12 | N | Soak: two bots for 45 min; 5-minute slices show MSPT drift and the heap floor trend (leaks, the G1Full spiral of perf.md 7) | 60 / 2700 s |
 | G01b | N | Restart of the same world, twice | |
 
+### 5.1 Pass-through blocks (PT-, built 2026-11-15, not run)
+
+Plan `tools/perf/suite/plans/passthrough.py`, group P (flat lab, `enable-command-block`, `randomTickSpeed 0`), for
+[plan_passthrough.md](plan_passthrough.md) 7.2 and [blockrunner.md](blockrunner.md) 3.10. Every scene runs twice on
+twin sites: `a` with `[surface.passthrough] enabled = true`, `b` with false, switched over RCON by
+`cdevbench passthrough enabled <bool>` (Creative Devtools, so Devtools and the Compat jar with the pass-through tags
+must be in the scratch server's mods). PT00 baseline; PT01 200 cows in a 32x32 corn field; PT02 50 farmer villagers in
+a wheat field with composters; PT03 100 zombies in a roofed 9x9x5 web block; PT04 500 items thrown into a web slab;
+PT05 100 arrows a second (five repeating command blocks) into a 9x9x9 web block; PT06 a bot walking a 16x96 corn strip
+(one `pbot path` target, so a line, not circles); PT99 switches the system back on. Budget: each `a` minus its `b`
+under 0.5 ms mean tick time. Run: `perf_suite.py run passthrough pt1` (about 40 min), queue row SQ-PTH-28.
+
 ## 6. Offline checks
 
 `python3 tools/perf/suite/selftest/selftest.py [WORKDIR]` (2026-10-28: 12/12 PASS, twice) runs the real runner
@@ -317,6 +329,7 @@ The queue in [testing/scratch_queue.md](testing/scratch_queue.md) runs first. Re
 | `tools/perf/suite/server.py` | setup on `eval_server.sh`, boot, liveness, RCON calls, stop, triage, JFR salvage |
 | `tools/perf/suite/rcon.py`, `ticklog.py`, `builders.py` | RCON client, tick log reader and window stats, command builders |
 | `tools/perf/suite/plans/general.py` | the G- scenarios |
+| `tools/perf/suite/plans/passthrough.py` | the PT- scenarios (5.1) |
 | `tools/perf/suite/selftest/` | offline self-test and the fake server |
 | `perf/suite/<run>/` (untracked) | state, results, runner log, tick logs, JFR windows, census, endings |
 

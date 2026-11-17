@@ -15,6 +15,8 @@ Reference: [deploy.md](../../../feature_writeup/deploy.md) (read section 0 and t
    - Every jar has a `mod_sides.md` row; new kubejs files classified in `KUBEJS_CLASSES`.
    - `unreleased.md` covers the release; `python3 tools/changelog_lint.py` clean.
    - Release plan `feature_writeup/plan_<ver>.md` (if one exists) and README statuses current.
+   - No open TODO row says "Blocks the next release" (`grep -n "Blocks the next release" feature_writeup/todo/TODO.md`);
+     report any to the owner before staging.
 3. **Stage**: `python3 tools/build_deploy.py --notes "..."` (add `--version X`, `--config full`, `--mode install`
    only when asked). Report the preflight warnings and the `- Payload:` line of `deploy/DEPLOY_LOG.md`.
 4. **Optional scratch boot** of `deploy/latest/` only if the user asks (memory `scratch-server-verify`).

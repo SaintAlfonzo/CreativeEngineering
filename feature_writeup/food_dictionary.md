@@ -28,6 +28,8 @@ rename the two books.
 
 ## Tests (prefix FDI)
 
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-FDI-03, -03b PASS (bitten vanilla and double cakes count as cake slices in both books), SQ-FDI-04 PASS (a bite from each lunchbox tastes the food); found: a lunchbox slot accepts vanilla pumpkin pie, not a food in this pack (owner TODO).
+
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-FDI-01, -02 PASS (no Carrot hearts; max health 22 is the Raspberry Pie rung; the batch's 20th food, pumpkin pie, is not edible in this pack: swap it); SQ-FDI-03 FAIL: bitten cakes become Supplementaries directional cakes and count in neither book (TODO `food/types-and-tuning #39`).
 
 | ID | Test | Pass |

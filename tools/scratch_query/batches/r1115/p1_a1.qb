@@ -1,0 +1,168 @@
+# r1115 phase 1, boot A1: group A superflat, full pack (installed mods/ only, NOSWAP=1), fresh level p1a1.
+# Server: NOSWAP=1 bash tools/scratch_query/prep_srv.sh OUT p1a1 A spawn-animals=true spawn-npcs=true difficulty=normal
+# Before boot: the instance config/debugify.json and packetfixer.properties come in unchanged with config/ (no
+#   tpf_debugify_cfg.py); copy tpf_probe.js as zz_tpf_probe.js, c3_probe.js as zz_c3_probe.js.
+# Rows: SQ-TPF-00, -01 (+ s1_fix rows SQ-TPF-11 to -17 with the shipped file), SQ-PG-01a, SQ-GAP-04, SQ-T1-04, SQ-LGM-13.
+pace 2
+
+## SQ-TPF-00 | boot with both jars and the shipped configs: Debugify Enabled N/.., no mixin errors, packetfixer file
+bootreject Mixin apply failed|InvalidMixinException|InvalidInjectionException|MixinTransformerError
+bootexpect (?i)debugify
+bootexpect (?i)packetfixer
+bootexpect Enabled [0-9]+/[0-9]+
+shell grep -hE "Enabled [0-9]+/[0-9]+" logs/latest.log | cut -c1-200; true
+shell grep -hiE "packetfixer|packet fixer" logs/latest.log | cut -c1-200 | head -5; true
+shell cat config/packetfixer.properties | grep -v '^#' | tr '\n' ' '; true
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 6000
+> difficulty normal
+> forceload add 1000 1000 1599 1015
+sleep 8
+look Enabled N/M with N the server-side count of the 9 shipped fixes; packetfixer named and its file present
+
+## SQ-TPF-01 | shipped debugify.json: boot Done, no MC-121706 crash, 9 fixes applied; file unchanged by the boot
+bootexpect Done \(
+bootreject mc121706|BowAttackGoalMixin
+shell sha1sum config/debugify.json $INST/configs_edited/root_config/debugify.json $INST/config/debugify.json
+shell diff config/debugify.json $INST/configs_edited/root_config/debugify.json && echo "diff empty"; true
+shell grep -hiE "debugify" logs/latest.log | grep -iE "MC-[0-9]+|unknown|invalid|enabled" | cut -c1-220 | head -20; true
+look Enabled line recorded; diff empty (the post-stop diff is in the run notes); TPF-11 to -17 below carry the fix verdicts
+## SQ-TPF-11 | MC-84873 a dead cow with DeathTime 25 is removed (fixed) or stays forever (bug)
+# @e and @e[tag=] skip dead entities (EntitySelector adds Entity::isAlive): select the dead cow by UUID (r1114)
+> summon minecraft:cow 1400 -60 1000 {DeathTime:25s,Health:0f,UUID:[I;84873,1,2,3]}
+sleep 5
+> data get entity 00014b89-0000-0001-0000-000200000003 DeathTime
+expect No entity was found
+
+## SQ-TPF-12 | MC-200418 a cured baby zombie villager on a chicken: the villager is not left riding (fixed)
+> fill 1198 -60 998 1202 -56 1002 minecraft:glass hollow
+> summon minecraft:chicken 1200 -59 1000 {Tags:["c200418"],Passengers:[{id:"mca:male_zombie_villager",IsBaby:1b,Age:-24000,ConversionTime:60,PersistenceRequired:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}]}]}
+sleep 8
+# MCA (overwriteOriginalZombieVillagers) replaces a summoned minecraft:zombie_villager on join, dropping its vehicle and
+# ConversionTime: summon the MCA one, the pack's real path; it converts to mca:male_villager (#zq:villagers) (r1114)
+> execute positioned 1200 -59 1000 if entity @e[type=#zq:villagers,distance=..4]
+> data get entity @e[tag=c200418,limit=1] Passengers[0].id
+expect Test passed, count: 1
+expect (?i)no elements matching Passengers
+
+## SQ-TPF-13 | MC-214147 a skeleton in leather armor stays a skeleton in powder snow (fixed) or turns stray (bug)
+> fill 1099 -60 999 1101 -57 1001 minecraft:glass
+> fill 1100 -59 1000 1100 -58 1000 minecraft:powder_snow
+> summon minecraft:skeleton 1100 -59 1000 {PersistenceRequired:1b,ArmorItems:[{},{},{id:"minecraft:leather_chestplate",Count:1b},{id:"minecraft:leather_helmet",Count:1b}]}
+sleep 30
+> execute positioned 1100 -59 1000 if entity @e[type=stray,distance=..3]
+> execute positioned 1100 -59 1000 if entity @e[type=skeleton,distance=..3]
+expect Test failed
+expect Test passed, count: 1
+
+## SQ-TPF-14 | MC-72151 a snow golem's snowball does not hurt a wolf (fixed: 8.0 health) or takes 0.5 (bug: 7.5)
+> summon minecraft:snow_golem 1500 -60 1014 {NoAI:1b,UUID:[I;72151,1,2,3]}
+> summon minecraft:wolf 1500 -60 1010 {Health:8f,NoAI:1b,Tags:["w72151"]}
+sleep 1
+> summon minecraft:snowball 1500 -57 1010 {Motion:[0.0d,-1.0d,0.0d],Owner:[I;72151,1,2,3]}
+sleep 3
+> data get entity @e[tag=w72151,limit=1] Health
+expect entity data: 8\.0f
+
+## SQ-TPF-16 | MC-223153 Block of Raw Copper uses the copper sound type (fixed) or stone (bug)
+> ztpf sound
+expect \[ztpf\] raw_copper_block sound=copper
+
+## SQ-TPF-17 | MC-121903 a command block minecart saves its LastExecuted cooldown (fixed) or not (bug)
+> summon minecraft:command_block_minecart 1450 -60 1000 {Tags:["m121903"]}
+sleep 1
+> data get entity @e[tag=m121903,limit=1] LastExecuted
+expect has the following entity data
+
+## SQ-TPF-15 | MC-232869 adult striders summoned in Peaceful never carry a saddle (fixed; bug: about 1 in 30)
+> difficulty peaceful
+pace 0
+repeat 150
+> summon minecraft:strider 1550 -60 1005
+end
+pace 2
+sleep 4
+> execute positioned 1550 -60 1005 if entity @e[type=strider,distance=..30]
+> execute positioned 1550 -60 1005 if entity @e[type=strider,distance=..30,nbt={Saddle:1b}]
+> kill @e[type=strider]
+> difficulty normal
+expect Test passed, count: 1[0-9][0-9]
+expect Test failed
+
+
+## SQ-PG-01a | server side: no PortalGunExitLift class or mixin; gun portals carry portalgun's own flag, unchanged
+bootreject PortalGunExitLift|IPExitLiftMixin.*(fail|error)
+shell grep -hE "IPExitLiftMixin|PortalGunExitLift" logs/latest.log | cut -c1-200 | head; echo "lines $(grep -cE 'IPExitLiftMixin|PortalGunExitLift' logs/latest.log)"; true
+shell unzip -l mods/creativecompat-*.jar | grep -iE "ExitLift|portalgun" ; unzip -p mods/creativecompat-*.jar creativecompat.mixins.json | tr -d ' \n' | head -c 1500; echo; true
+> forceload add 1280 1020 1320 1060
+> fill 1290 -60 1040 1310 -50 1040 minecraft:stone
+> pbot spawn pg 1300 -60 1030 minecraft:overworld survival
+sleep 4
+> clear pg
+> give pg portalgun:portal_gun 1
+sleep 1
+> execute as pg at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot pg blue
+sleep 2
+> execute as pg at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot pg orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+> execute as pg at @s run tp @s ~ ~ ~ 0 60
+> zc3 shoot pg orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+reject \[c3\] error
+look no ExitLift class/mixin in the jar or log; the flag values are portalgun's own (no recompute by colour/geometry); old-save half needs a fixture world (none kept)
+
+## SQ-GAP-04 | rose gold in gold plate/wire/block tags; gold-input recipes and golden apple/pickaxe/chestplate/carrot take the tag; gold ingot and block literal
+> zq itemtag forge:plates/gold
+> zq itemtag forge:wires/gold
+> zq blocktag forge:storage_blocks/gold
+> zq rdetail minecraft:clock
+> zq rdetail minecraft:powered_rail
+> zq rdetail mechanical_crafter
+> zq rdetail minecraft:golden_apple
+> zq rdetail minecraft:golden_pickaxe
+> zq rdetail minecraft:golden_chestplate
+> zq rdetail minecraft:golden_carrot
+> zq makes minecraft:gold_ingot
+waitlog \[zq\] makes minecraft:gold_ingot 30
+> zq makes minecraft:gold_block
+waitlog \[zq\] makes minecraft:gold_block 30
+expect itemtag forge:plates/gold \(\d+\): .*rose_gold
+expect itemtag forge:wires/gold \(\d+\): .*rose_gold
+expect blocktag forge:storage_blocks/gold \(\d+\): .*rose_gold
+look clock, rail, crafter, golden apple/pickaxe/chestplate/carrot: gold ingredient is a tag holding rose gold; gold ingot (nuggets) and gold block recipes take literal gold only
+
+## SQ-T1-04 | tag probe and recipe probes: gold components and golden pickaxe/apple take the gold tag; gold block and bars literal
+> zq itemtag forge:plates/gold
+> zq itemtag forge:wires/gold
+waitlog \[zq\] itemtag forge:wires/gold 30
+> zq uses mca:rose_gold_ingot
+waitlog \[zq\] uses mca:rose_gold_ingot: 60
+expect (shared|alone) minecraft:clock$
+expect (shared|alone) minecraft:powered_rail$
+expect (shared|alone) [a-z_]+:.*mechanical_crafter
+expect (shared|alone) minecraft:golden_pickaxe$
+expect (shared|alone) minecraft:golden_apple$
+reject (shared|alone) minecraft:gold_block$
+reject (shared|alone) .*gold_bars$
+> zq uses vintageimprovements:rose_gold_sheet
+waitlog \[zq\] uses vintageimprovements:rose_gold_sheet: 60
+look component_gold craft takes the plate or wire tag; gold block and gold bars not in the rose gold uses
+
+## SQ-LGM-13 | food families of Large Meals dishes (generated catalog) and the whole-block tags live
+shell python3 $INST/tools/scratch_query/c2_famcheck.py families largemeals:mushroom_pot_pie largemeals:mushroom_pot_pie_block largemeals:omurice largemeals:omurice_block largemeals:tomato_egg_soup largemeals:cod_deluxe largemeals:hearty_lunch
+> kubejs list_tag minecraft:item creativedelight:food_family/feast/whole
+> kubejs list_tag minecraft:item creativedelight:food_family/cake/whole
+> zq itemtag creativedelight:food_family/feast/whole
+> zq itemtag creativedelight:food_family/cake/whole
+waitlog \[zq\] itemtag creativedelight:food_family/cake/whole 30
+bootreject Couldn't load tag.*food_family
+expect itemtag creativedelight:food_family/cake/whole \(\d+\): .*minecraft:cake
+look pot pie block feast/whole, serving feast/serving; omurice feast/*; tomato egg soup soup/soup; cod deluxe and hearty lunch meal/plate; both tags list block items

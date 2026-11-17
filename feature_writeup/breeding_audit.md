@@ -4,7 +4,7 @@ Run 2026-11-10 from [plan_breeding_audit.md](plan_breeding_audit.md). TODO `mobs
 Method: static. `python3 tools/breeding_audit.py` reads every jar's bytecode (76,637 classes), finds classes under a
 vanilla animal class and lists the constants of their `isFood` and goal setup; tags come from the 2026-11-10 dumps
 in `kubejs/exported/tags/`. Raw output: `kubejs/exported/breeding_audit.json`. Where the answer is computed at run
-time (config, lambda, a tag read through a mixin) the row says **check in game**; one scratch row covers them (SQ-BREED-01).
+time (config, lambda, a tag read through a mixin) the row said **check in game**; SQ-BREED-01 measured them in scratch run r1115 (rows now say "measured").
 
 Not covered: the roster is the 131 animals in `spawns.json` (mobs that can spawn); modded animals that never spawn
 naturally are absent. Mobs that are not `Animal` (fish, jellyfish, lobster) are not breedable and are skipped.
@@ -70,7 +70,7 @@ Food read from the jar (own `isFood`, or the goal setup when `isFood` is inherit
 | Hummingbird | `#minecraft:flowers` (160 items, all of section 4) | tag; F-B5 |
 | Kangaroo, rhinoceros | dead bush, grass | code |
 | Laviathan | mosquito larva | code |
-| Maned wolf | apple, `allFoods` list | **check in game** |
+| Maned wolf | chicken, cooked chicken, rabbit, cooked rabbit | measured (r1115 dump) |
 | Mantis shrimp, mudskipper | lobster tail (cooked), mudskipper also insects | code |
 | Mimic octopus | tropical fish | code |
 | Moose | dandelion | code |
@@ -94,10 +94,11 @@ Food read from the jar (own `isFood`, or the goal setup when `isFood` is inherit
 | Grizzly bear (Buzzier Bees) | `#buzzier_bees:grizzly_bear_food` = salmon, cooked salmon, salmon bucket | tag |
 | Chimpanzee (Neapolitan) | `#neapolitan:chimpanzee_food` = banana bunch | tag |
 | Crow (Hearth and Harvest port, CD) | `#creativedelight:crow_food` (43) | tag |
-| Duck, goose (Untitled Duck) | own `BREEDING_INGREDIENT` | **check in game** (set in a Forge subclass) |
-| Goose (Upgrade Aquatic) | chicken seeds (extends `Chicken`) | inherited |
+| Duck, goose (Untitled Duck) | wheat, pumpkin, melon, beetroot seeds (both) | measured (r1115 dump; Forge subclasses `DuckEntityForge`, `GooseEntityForge`) |
+| Goose (Upgrade Aquatic) | chicken seeds (extends `Chicken`): 18 items, the four vanilla seeds plus rice, cabbage, tomato, broccoli, cauliflower, turnip, zucchini, oat, ghost pepper, cucumber seeds, strawberry pips, sweet berry and glow berry pips, flax seeds | inherited; measured (r1115 dump) |
 | Little gingerbread man (Create Confectionery) | sugar | code |
-| Crab, Toretoise (Quark) | `Crab.getTemptationItems`, `Toretoise.getGoodFood` | **check in game** |
+| Crab (Quark) | 23 items: wheat, chicken and every raw or cooked fish / squid item in the pack (cod, salmon, tropical fish, pufferfish, Alex's Mobs blobfish, catfish, flying fish, Rustic calamari, Miner's squid, Upgrade Aquatic pike, lionfish, perch) | measured (r1115 dump) |
+| Toretoise (Quark) | glow berries | measured (r1115 dump) |
 | Shiba (Quark, disabled) | meat | code |
 | Emu, bison, Vinery mule | wheat, wheat, hay bale | code |
 | Spectre, leafcutter ant, sunbird, cachalot whale, enderiophage | not breedable by hand (no food) | code |
@@ -130,6 +131,16 @@ and flower crown, Vintage Delight wild cucumbers, ghost peppers, oats and peanut
 **Wild crops are flowers on purpose** (Farmer's Delight, Rustic Delight, Veggies, H&H, Delightful): 24 wild items breed
 bees. Keep, document (F-B6).
 
+**Measured 2026-11-15 (scratch run r1115, probe `zp9 breed`, `perf/runs/r1115_p9_a1/breeding_dump.json`; stands in
+for the unwritten `/dumpbreeding`):** 104 `Animal` types tested against 20477 items, none failed; 190 `FlowerBlock` /
+`TallFlowerBlock` blocks (169 / 21). 96 of them are in no block flower tag: 71 Botania (shiny flowers, motifs, functional
+flowers; pollinated through Botania's mixin where special), the wild crops outside the three pollinating ones (F-B6
+decision), `fireflybushport:firefly_bush` and `buzzier_bees:buttercup` (neither tag, item not in the item tag either).
+Block tag without the item: wild onions, carrots, potatoes (kept on purpose), `hearthandharvest:four_leaf_clover` (no item)
+and the 13 Flower Patch patches. Candidate classes: Botania shiny flowers are `GlimmeringFlowerBlock` (a `FlowerBlock`),
+Floral Enchantment `*_bush` and `dancing_sunflower` are vine / own classes (not flowers), `vinery:creepers_crush` is a
+`WineBottleBlock` (a drink, not a plant). F-B7 stays closed (owner 2026-11-10: no tag needed).
+
 **Plant-like pack blocks in no flower tag** (candidates, need a look at the block class to confirm):
 Botania shiny flowers (16 colours), `buzzier_bees:four_leaf_clover` (item only), `vinery:creepers_crush`,
 `fireflybushport:firefly_bush` (a `FlowerBlock`, no tags), Floral Enchantment: `dancing_sunflower` and the 17 `*_bush`
@@ -155,9 +166,11 @@ variants of vanilla flowers, Upgrade Aquatic pickerelweed (aquatic, leave out), 
   recipe on each spawn egg. Not built here.
 - `#1` (bee flowers): decide F-B3, F-B4, F-B7 (small tag edits, `/reload`).
 
-## 7. Scratch row (queued, not run)
+## 7. Scratch rows
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-BREED-03 PASS (a hive bee carries the wild carrot as FlowerPos with nectar; the batch's count line reads only bees outside a hive).
+
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-BREED-01 PASS by the scratch probe `zp9 breed` (not Devtools); sections 3 and 4 filled from `perf/runs/r1115_p9_a1/breeding_dump.json`.
 
 SQ-BREED-01 (in [scratch_queue.md](testing/scratch_queue.md)): add `/dumpbreeding` to Creative Devtools (for each animal
 type, `isFood` for every registered item; for bees, block class and both flower tags), run, replace the **check in

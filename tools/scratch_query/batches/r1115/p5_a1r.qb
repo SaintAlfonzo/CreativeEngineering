@@ -1,0 +1,24 @@
+# r1115 phase 5 (runner-5), boot A1 restarted with [melting] vanillaLightMelting true in the srv toml (set while stopped):
+# part 2 of SQ-MELT-09b-rareice3 (p5_a1z.qb placed the blocks). The redirect makes Rare Ice's light melt follow the config.
+pace 1
+
+## SQ-MELT-09b-rareice3b | after restart at vanillaLightMelting true: rare ice and vanilla ice beside sea lanterns melt
+bootexpect Done \(
+shell sed -n "/^\[melting\]/,/^\[/p" config/creativecommon-common.toml | grep -E "^\s*vanillaLightMelting ="
+> forceload add 2400 2400 2431 2431
+> pbot spawn m5r 2416 -60 2410 minecraft:overworld survival
+sleep 3
+> zmelt w rareice overworld 2422 -60 2422
+> zmelt w vice overworld 2426 -60 2422
+> data get block 2422 -60 2422 Items
+> gamerule randomTickSpeed 1000
+sleep 90
+> gamerule randomTickSpeed 3
+> execute unless block 2422 -60 2422 rare-ice:rare_ice run say MELT09b-rareice-melted-on
+> execute unless block 2426 -60 2422 minecraft:ice run say MELT09b-vice-melted-on
+> zmelt show
+> zmelt clear
+> zhh5 items 2422 -60 2422 3
+expect MELT09b-rareice-melted-on$
+expect MELT09b-vice-melted-on$
+look both melt at true (watch ticks); the diamond drops from the rare ice

@@ -165,7 +165,7 @@ and `development/creativeDelight/src/main/resources/kubejs_startup/largemeals/` 
 0. **Port (Java):** items and the three feasts on FD's `FeastBlock` / `ConsumableItem` (MIT base classes), our own
    food-value table, feast shapes; GLMs as FD `add_item` data (ours) or per D3. Donor translation: drop recipe
    `category`, the 1.20 creative-tab list (`CREATIVE_TAB_ITEMS`) becomes an FD tab entry.
-1. **Dumps and generators:** `/dumpall`, then `/cdevgen` (memory `dumpall-refresh-workflow`).
+1. **Dumps and generators:** `/dumpall`, then `/cdevgen` (note [dumpall-refresh-workflow](agent_notes/dumpall-refresh-workflow.md)).
 2. **Ids:** all 18 items and 3 blocks in `item_dict.js` / block dict.
 3. **Tags** via `global.tags`: food types; bowls meals in the soup / stew / meal types, desserts in `dessert/pudding`.
 4a. **Egg tag:** no change; re-scan the item dump after `/dumpall` for any raw egg added since 2026-10-24 and add it if found.

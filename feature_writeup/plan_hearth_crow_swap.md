@@ -139,7 +139,7 @@ pass in the hearth member:
   so many nests hold nothing.
 - `hearthandharvest:chests/crow_nest_village` for roof nests: the same table with more emeralds, plus the small things
   villagers own (wheat seeds, bread, a book, a lead).
-- Values go in through the pack's loot route (memory `loot-system`); the shiny tag is not expanded unless asked (TODO #60
+- Values go in through the pack's loot route (note [loot-system](agent_notes/loot-system.md)); the shiny tag is not expanded unless asked (TODO #60
   mentions it).
 - Ground nests (the current `nest.json` biome modifier, 1 in 32 chunks in `#has_crows`) are dropped: tree tops and roofs
   replace them. Already generated ground nests stay.

@@ -1,6 +1,6 @@
 # Structure tuning report
 
-Written 2026-11-14 05:00:47 UTC at world load by `kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js` (Creative Worldgen). Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
+Written 2026-11-16 23:27:32 UTC at world load by `kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js` (Creative Worldgen). Do not edit, it is rewritten every load. Edit `structure_groups.json` (rates) or the `group/*` tags in `structure_tags.json` (membership), then rejoin the world. Expected rates per biome: `structure_group_estimates.md` (`python3 tools/gen_structure_groups.py --check`).
 
 ## Biome rules
 
@@ -486,7 +486,7 @@ Grid: spacing 24, separation 12, salt 419617315. Members never start closer than
 | `forest_watchtower:forest_watchtower` | 135 | 0.954795 | 25 | `forest_watchtower:forest_watchtower` |  |
 | `gothic_church:church` | 100 | 1 | 24 | `gothic_church:church` |  |
 | `greek_villager_house:greek_house` | 100 | 1 | 24 | `greek_villager_house:greek_house` |  |
-| `hearthandharvest:corn_maze` | 400 | 1 | 24 | `hearthandharvest:corn_maze` |  |
+| `hearthandharvest:corn_maze` | 850 | 1 | 24 | `hearthandharvest:corn_maze` |  |
 | `hobbit_house_:hobbit_house` | 100 | 1 | 24 | `hobbit_house_:hobbit_house` |  |
 | `llama_stable:llama_stable` | 100 | 1 | 24 | `llama_stable:llama_stable` |  |
 | `minecraft:igloo` | 100 | 0.502816 | 34 | `minecraft:igloos` |  |

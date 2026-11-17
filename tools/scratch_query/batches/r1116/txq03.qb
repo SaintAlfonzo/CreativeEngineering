@@ -1,0 +1,11 @@
+# r1116 phase 1: SQ-TXQ-03 crash watch with --relaunch (runner kill -9s the server about 20 s in).
+pace 1
+
+## SQ-TXQ-03 | say then a long sleep; JVM killed during the sleep
+> say a
+sleep 60
+
+## SQ-TXQ-03b | next row after the relaunch
+> say b
+sleep 2
+expect \[Server\] b

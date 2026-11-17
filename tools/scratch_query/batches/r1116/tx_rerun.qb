@@ -1,0 +1,114 @@
+# r1116 phase 1, boot 3 (same world p1tx, Devtools rebuilt 00:08 with the tickwarp count and watch t=0 fixes):
+# reruns of tx.qb rows on a fresh world p1tx2 (the setup row rebuilds the chest, field and golem). Batch faults fixed: -01 verb list order; -05 sand falls 2 ticks after setblock, so blocktick
+# goes in with pace 0; -08 the 40-tick watch ended before the bread went in (pace 0 now); -12 the weak attack needs
+# pace 0 (2 s recharges fully) and the respawn hit also has strength=1; -14 group A is peaceful (food refills),
+# difficulty easy for the row. -11 xp: 1.19.2 drops orbs inside die(), xp>0 is right (queue text wrong).
+pace 2
+
+## SQ-TX-00r | setup
+> forceload add 896 880 1007 927
+> time set noon
+> gamerule doDaylightCycle false
+> weather clear
+> cdevtest place 900 -60 900 minecraft:chest[facing=north]
+> item replace block 900 -60 900 container.0 with minecraft:apple 5
+> fill 920 -61 902 935 -61 917 minecraft:farmland
+> summon minecraft:iron_golem 961 -60 900 {NoAI:1b}
+sleep 2
+
+## SQ-TX-01r | help, unknown verb, unloaded pos, missing arg
+> cdevtest help
+> cdevtest bogus
+> cdevtest state 0 -60 4000
+> cdevtest count 1 2 3
+expect \[cdevtest\] verb=help verbs=\S*\bstate,\S*\bstates,tickwarp,
+expect \[cdevtest\] verb=bogus error="unknown verb
+expect \[cdevtest\] verb=bogus done=0
+expect \[cdevtest\] verb=state error="unloaded 0,-60,4000
+expect \[cdevtest\] verb=count error="missing to x"
+reject Exception|\tat 
+
+## SQ-TX-05r | blocktick on sand, sent in the same tick as the setblock
+pace 0
+> setblock 905 -55 901 minecraft:sand
+> cdevtest blocktick 905 -55 901
+pace 2
+sleep 3
+> cdevtest items 905 -60 901 2
+> cdevtest state 905 -60 901
+expect verb=blocktick before=minecraft:sand after=minecraft:air
+expect verb=state pos=905,-60,901 state=minecraft:sand
+
+## SQ-TX-06r | tickwarp 2400
+> time query gametime
+capture G0 The time is (\d+)
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 120
+> time query gametime
+> cdevtest tickwarp status
+expect verb=tickwarp started=2400
+expect verb=tickwarp end=done ticks=2400 asked=2400 .*tps=([4-9]\d|\d{3,})
+expect verb=tickwarp running=false
+look game time after the warp is at least {G0+2400}
+
+## SQ-TX-07r | tickwarp 6000 with a bot near the second wheat field (field replanted at age 0)
+> fill 920 -60 902 935 -60 917 minecraft:wheat
+> pbot spawn T 927 -60 920 minecraft:overworld creative
+> cdevtest ages 920 -60 902 935 -60 917 minecraft:wheat
+> cdevtest tickwarp 6000
+waitlog verb=tickwarp end=done 400
+> cdevtest ages 920 -60 902 935 -60 917 minecraft:wheat
+expect verb=ages .*n=256 mean=0.000
+expect verb=tickwarp end=done ticks=6000 asked=6000 .*tps=([2-9]\d|\d{3,})
+expect verb=ages .*n=256 mean=(0\.[1-9]|0\.0[1-9]|[1-9])
+
+## SQ-TX-08r | watch the chest inventory, bread added during the watch
+> item replace block 900 -60 900 container.1 with minecraft:air
+pace 0
+> cdevtest watch 900 -60 900 40 10 what=inv
+sleep 0.6
+> item replace block 900 -60 900 container.1 with minecraft:bread 2
+pace 2
+waitlog verb=watch end=done t=40 30
+expect verb=watch t=0 .*items=0:minecraft:apple\*5
+expect verb=watch t=40 .*1:minecraft:bread\*2
+count verb=watch t=(0|10|20|30|40) == 5
+
+## SQ-TX-12r | Loading Protection and attack (weak with pace 0)
+> pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 1
+> pbot inv A set 0 minecraft:iron_sword
+pace 0
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest] weak
+pace 2
+> pbot remove A
+> pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 1
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
+expect Player A logged in, protection active for 150 seconds
+count verb=pbot.attack bot=A target=minecraft:iron_golem strength=1 == 2
+expect verb=pbot.attack bot=A target=minecraft:iron_golem strength=0\.[0-2]\d*\b
+look each attack line health_after below health_before
+
+## SQ-TX-14r | eat bread (difficulty easy for the row), shoot a bow
+> difficulty easy
+> pbot hunger A 10
+> pbot inv A set 0 minecraft:bread 2
+> pbot inv A select 0
+> pbot eat A
+sleep 3
+> cdevtest food minecraft:bread
+> pbot inv A set 0 minecraft:bow
+> pbot inv A set 9 minecraft:arrow 16
+> pbot look A 0 0
+> pbot useitem A main 20
+sleep 2
+> cdevtest entities 960 -60 900 40 type=minecraft:arrow
+> difficulty peaceful
+expect verb=pbot.eat bot=A .*result=CONSUME using=true use_ticks=32 .*food=10
+expect verb=pbot.useitem bot=A end=finish item=minecraft:bread
+expect verb=pbot.useitem bot=A .*using=true use_ticks=\d+ release_after=20
+expect verb=pbot.useitem bot=A end=released
+expect verb=entities n=[12]\b
+look finish line food = 10 + bread nutrition (5) and sat = cdevtest food saturation; finish tick 32 after the eat line's tick

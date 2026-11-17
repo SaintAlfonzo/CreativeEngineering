@@ -1,0 +1,22 @@
+# r1115 phase 4, A1 follow-up (same boot): SQ-SLK-01b, the 18-block cow of SQ-SLK-01 watched 80 s for a lick
+# (SQ-SLK-01 reached the salt at about 420 ticks but walked off before its 500-tick watch ended, salt unlicked).
+pace 1
+
+## SQ-SLK-01b | cow at 18 blocks: reaches the salt and licks it (lick interval 200, stage chance 1.0 in this boot)
+> forceload add 21690 3994 21750 4006
+sleep 3
+> kill @e[type=!player,x=21690,y=-62,z=3994,dx=60,dy=8,dz=12]
+> fill 21690 -61 3994 21750 -56 4006 minecraft:glass hollow
+> pbot spawn c502 21691 -60 3995 minecraft:overworld creative
+sleep 2
+> setblock 21720 -60 4000 salt:salt_block
+> summon minecraft:cow 21738 -60 4000 {NoAI:1b,Tags:["s502"]}
+> zhh3 watch minecraft:cow 21720 -60 4000 3 80 20 s2 21720.5,-59.5,4000.5
+> execute as @e[tag=s502] run data merge entity @s {NoAI:0b}
+waitlog \[zhh3\] watch s2 done 120
+> zhh3 block 21720 -60 4000
+> pbot remove c502
+> kill @e[type=minecraft:cow,x=21690,y=-62,z=3994,dx=60,dy=8,dz=12]
+> forceload remove 21690 3994 21750 4006
+expect \[zhh3\] watch s2 done samples=\d+ count=[1-9]
+expect \[zhh3\] block 21720 -60 4000 hearthandharvest:\w*licked_salt_block|\[zhh3\] block 21720 -60 4000 minecraft:air

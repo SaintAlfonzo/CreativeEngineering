@@ -21,8 +21,10 @@ import net.minecraftforge.server.ServerLifecycleHooks;
  * Server to client sync of the pass-through values (plan 1.4). Tags already sync; {@code [surface.passthrough]} is a
  * common config, so a client would otherwise move by its own toml and rubber-band against the server. The server
  * sends its {@link PassValues} on login and whenever its toml is saved; the client uses them until it disconnects
- * ({@link PassSyncClient}). Channel {@code creativecompat:surface}, message 0; a side without the channel is accepted
- * (the client then uses its own values).
+ * ({@link PassSyncClient}). Channel {@code creativecompat:surface}, message 1 (format {@link PassValues#FORMAT},
+ * 2026-11-15; message 0 was the first layout and is no longer registered, so an older client drops the new message and
+ * keeps its own values, and a newer reader of another format switches the system off on the client); a side without the
+ * channel is accepted (the client then uses its own values).
  */
 public final class PassSync {
 
@@ -36,7 +38,7 @@ public final class PassSync {
 
     /** Mod construction. */
     public static void register() {
-        CHANNEL.registerMessage(0, Values.class, Values::encode, Values::decode, Values::handle,
+        CHANNEL.registerMessage(1, Values.class, Values::encode, Values::decode, Values::handle,
                 Optional.of(NetworkDirection.PLAY_TO_CLIENT));
     }
 

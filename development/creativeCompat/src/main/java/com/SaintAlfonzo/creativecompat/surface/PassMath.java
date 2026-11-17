@@ -123,4 +123,135 @@ public final class PassMath {
         }
         return p;
     }
+
+    /**
+     * Entry and exit fractions {@code {t0, t1}} of the segment {@code from -> to} inside the unit cell at {@code cell}
+     * (its minimum corner), or null when the segment misses it. A zero-length segment gives {@code {0, 0}} when the
+     * point is inside.
+     */
+    public static double[] clip(double[] from, double[] to, double[] cell) {
+        double t0 = 0.0, t1 = 1.0;
+        for (int a = 0; a < 3; a++) {
+            double d = to[a] - from[a];
+            double lo = cell[a], hi = cell[a] + 1.0;
+            if (Math.abs(d) < 1.0E-12) {
+                if (from[a] < lo || from[a] > hi) return null;
+                continue;
+            }
+            double ta = (lo - from[a]) / d, tb = (hi - from[a]) / d;
+            if (ta > tb) { double s = ta; ta = tb; tb = s; }
+            t0 = Math.max(t0, ta);
+            t1 = Math.min(t1, tb);
+            if (t0 > t1) return null;
+        }
+        return new double[]{t0, t1};
+    }
+
+    /**
+     * Plan 4.2 over every stick cell along one tick's path (phase 2, {@code surface.PassItems}). {@code cells} are the
+     * minimum corners of the stick-tier cells the path box covers (first {@code n} used, any order). The path's first
+     * run of touching web cells decides: a roll hit ({@code roll} 0..1) stops the item {@code roll} of the way along
+     * that run; no hit ({@code roll < 0}) stops it just inside the run's exit when the path leaves the webs this tick,
+     * or returns null when the path ends inside them (roll again next tick). A path with no length inside a web sticks
+     * where it is. The point is always inside one of the cells, at least {@code inset} from its faces. Null when the
+     * path enters no cell.
+     */
+    public static double[] stickAlong(double[] from, double[] to, double[][] cells, int n, double roll, double inset) {
+        double dx = to[0] - from[0], dy = to[1] - from[1], dz = to[2] - from[2];
+        if (dx * dx + dy * dy + dz * dz < 1.0E-10) {
+            for (int i = 0; i < n; i++) {
+                if (clip(from, from, cells[i]) != null) return clampInto(from, cells[i], inset);
+            }
+            return null;
+        }
+        double[] t0 = new double[n], t1 = new double[n];
+        int[] idx = new int[n];
+        int m = 0;
+        for (int i = 0; i < n; i++) {
+            double[] c = clip(from, to, cells[i]);
+            if (c == null || c[1] - c[0] < 1.0E-9) continue; // missed, or only grazes an edge
+            // insertion by entry fraction
+            int k = m++;
+            while (k > 0 && t0[k - 1] > c[0]) {
+                t0[k] = t0[k - 1];
+                t1[k] = t1[k - 1];
+                idx[k] = idx[k - 1];
+                k--;
+            }
+            t0[k] = c[0];
+            t1[k] = c[1];
+            idx[k] = i;
+        }
+        if (m == 0) return null;
+        double runStart = t0[0], runEnd = t1[0];
+        int last = 0, end = 1;
+        for (; end < m; end++) {
+            if (t0[end] > runEnd + 1.0E-9) break;
+            if (t1[end] > runEnd) {
+                runEnd = t1[end];
+                last = end;
+            }
+        }
+        double t;
+        int in;
+        if (roll >= 0.0) {
+            t = runStart + (runEnd - runStart) * Math.min(1.0, roll);
+            in = 0;
+            for (int k = 0; k < end; k++) {
+                if (t0[k] <= t + 1.0E-12 && t <= t1[k] + 1.0E-12) in = k;
+            }
+        } else {
+            if (runEnd >= 1.0 - 1.0E-12) return null;
+            t = runEnd;
+            in = last;
+        }
+        double[] p = {from[0] + dx * t, from[1] + dy * t, from[2] + dz * t};
+        return clampInto(p, cells[idx[in]], inset);
+    }
+
+    private static double[] clampInto(double[] p, double[] cell, double inset) {
+        double[] q = new double[3];
+        for (int a = 0; a < 3; a++) q[a] = Math.max(cell[a] + inset, Math.min(cell[a] + 1.0 - inset, p[a]));
+        return q;
+    }
+
+    // ---- surrounded webs (plan 4.3) ----
+
+    /** Vanilla ladder climb speed while jumping ({@code LivingEntity#travel}). */
+    public static final double LADDER_CLIMB = 0.2;
+    /** Vanilla ladder slide cap ({@code LivingEntity#handleOnClimbable}). */
+    public static final double LADDER_SLIDE = 0.15;
+
+    /**
+     * Vertical speed in a surrounded web (plan 4.3): jumping climbs at ladder speed x the dense walk value, sneaking
+     * descends at ladder slide speed x the same value, no input hangs (0).
+     */
+    public static double surroundedVertical(boolean jumping, boolean sneaking, double denseWalk) {
+        if (jumping) return LADDER_CLIMB * denseWalk;
+        if (sneaking) return -LADDER_SLIDE * denseWalk;
+        return 0.0;
+    }
+
+    // ---- arrow despawn (plan 5.4) ----
+
+    /** Vanilla's stuck-arrow life ({@code AbstractArrow#tickDespawn}). */
+    public static final int VANILLA_ARROW_LIFE = 1200;
+
+    /**
+     * Despawn limit for a stuck arrow: -1 = leave vanilla's code alone (not pickable, or the system is off), vanilla's
+     * minute when demoted by the per-chunk cap, else the long life.
+     */
+    public static int despawnLimit(boolean enabled, boolean pickable, boolean demoted, int longLife) {
+        if (!enabled || !pickable) return -1;
+        return demoted ? VANILLA_ARROW_LIFE : longLife;
+    }
+
+    /** Index of the oldest arrow (highest {@code life}; the earliest listed on a tie), -1 for none. */
+    public static int oldestIndex(int[] lives, int n) {
+        int best = -1;
+        for (int i = 0; i < n; i++) {
+            if (best < 0 || lives[i] > lives[best]) best = i;
+        }
+        return best;
+    }
 }

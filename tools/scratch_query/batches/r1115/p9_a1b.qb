@@ -1,0 +1,20 @@
+# r1115 phase 9, boot A1b (same world p9a, restarted): SQ-RP-08. Before the boot, in p9a/serverconfig/solapplepie-server.toml:
+# thresholds = [0.0], benefitsUnparsed = ["attribute,generic.max_health,4"], minFoodsToActivate = 0. Then p9_wo_a3.qb.
+pace 1
+
+## SQ-RP-08 | Apple Pie benefits left in its config: warning at boot, no max-health bonus applied
+bootexpect Apple Pie still has its own benefits configured
+shell grep -nE "thresholds|benefitsUnparsed|minFoodsToActivate" p9a/serverconfig/solapplepie-server.toml | grep -v "#"
+> forceload add 0 990 40 1010
+> pbot spawn rp8 22 -60 1000 minecraft:overworld survival
+sleep 4
+> pbot spawn rp7 10 -60 1000 minecraft:overworld survival
+sleep 4
+> attribute rp8 minecraft:generic.max_health get
+> attribute rp7 minecraft:generic.max_health get
+> data get entity rp8 Attributes
+> data get entity rp7 Attributes
+sleep 1
+count Value of attribute .* for (entity )?rp[78] is 20\.0 == 2
+reject _modifier_
+look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attributes

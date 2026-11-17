@@ -1,0 +1,22 @@
+# r1115 phase 2 boot 2: restart of the p2_r1 server (same OUT, level p2pwg), jar -18. SQ-PWG-54r (BX = 1380: -54 ran
+# shifted as in r1114). The "read before" of the row is the last `contraptions all` of SQ-PWG-54 in p2_r1 (then stop).
+pace 1
+
+## SQ-PWG-54r | solar contraption after a restart: re-attaches on its first tick in a forceloaded chunk
+bootexpect Done \(
+> forceload add 1380 1500 1395 1515
+> time set 6000
+> weather clear
+sleep 5
+> forceload query
+> zpwg6 contraptions all 1380 -60 1510
+waitlog \[zpwg6\] (bearing|done) 20
+sleep 1
+> zpwg6 solar 1380 -60 1510
+sleep 1
+expect \[zpwg6\] controlled id=\d+ .*removed=false.*type=powergrid:solar_panel blocks=2 .*controller=\S+ attachedToBearing=true
+expect \[zpwg6\] bearing at 1380 -60 1510 movedContraption=set
+expect \[zpwg6\] solar powergrid:solar_panel_bearing
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look solar output non-zero at noon; one controlled entity; record controller= (p2_r1b before the restart: controller=none with attachedToBearing=true)

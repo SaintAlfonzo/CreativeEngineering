@@ -17,6 +17,10 @@ also ship blockstates for optional-compat blocks that never get registered.
       top >= the dump's registerHeight, has an item) with no tier, no json override and no native speed
       factor, grouped per mod; then the friction / jump / speed factor outliers, tiered or not.
       Exit 3 when the first list is not empty.
+      Then the pass-through audit (plan_passthrough.md phase 4, report only): every block with no collision box (the
+      blocks you stand in) and no creativecompat:passthrough/<tier>, plant-like ones listed per mod, the rest counted.
+      Tiers come from the last /dumptags (kubejs/exported/tags/block_tags_by_block.json), or offline from
+      `--tiers out.json` written by node tools/passthrough_tag_sim.js.
 
 Re-run /dumptags and /kubejs export in game after adding mods.
 """
@@ -49,7 +53,43 @@ def print_groups(groups):
         print('## %s %d' % (ns, sum(groups[ns].values())))
         print(' '.join(p + ('x%d' % n if n > 1 else '') for p, n in groups[ns].items()))
 
-def audit(path):
+PLANT = re.compile(r'(Crop|Bush|Plant|Vine|Stem|Grass|Fern|Flower|Rope|Cane|Reed|Web|Strand|Moss|Sprout|Weed|Leaves|Pile'
+    r'|Tendon|Silk|Root|Berry|Tomato|Rice|Hemp|Sapling|Shrub|Clover|Kelp|Coral|Lichen|Petal|Mushroom|Fungus|Propagule'
+    r'|Wire|Thorn|Pickerel|Lily|Dripleaf|Spore|Shroom|Colony|Succulent)')
+NOT_PLANT = re.compile(r'(Potted|FlowerPot|Wall(Sign|Torch|Banner)|Sign|Button|PressurePlate|Carpet|Rail)')
+
+
+def pass_audit(dump, tiers_path):
+    if tiers_path:
+        members = json.load(open(tiers_path))
+        tiered = {b for k, v in members.items() if (k.startswith('creativecompat:passthrough/') and '/projectile/' not in k) or k == 'creativecompat:passthrough_layers' for b in v}
+        src = tiers_path if os.path.relpath(tiers_path, ROOT).startswith('..') else os.path.relpath(tiers_path, ROOT)
+    else:
+        tiered = set()
+        for mod in json.load(open(os.path.join(ROOT, 'kubejs/exported/tags/block_tags_by_block.json'))).values():
+            for b, tags in mod.items():
+                if any(t.startswith('creativecompat:passthrough/') or t == 'creativecompat:passthrough_layers' for t in tags): tiered.add(b)
+        src = 'kubejs/exported/tags/block_tags_by_block.json'
+    plants, other = collections.defaultdict(collections.Counter), collections.Counter()
+    n_open = 0
+    for row in dump['blocks']:
+        if 'error' in row or row['collisionTop'] >= 0: continue
+        n_open += 1
+        if row['id'] in tiered: continue
+        ns, p = row['id'].split(':', 1)
+        cls = row['class'].rsplit('.', 1)[-1]
+        if PLANT.search(cls) and not NOT_PLANT.search(cls): plants[ns][collapse(p)] += 1
+        else: other[ns] += 1
+    total = sum(sum(c.values()) for c in plants.values())
+    print('# pass-through: %d blocks with no collision, %d tiered (tiers from %s)' % (n_open, len(tiered), src))
+    if not tiered: print('  no creativecompat:passthrough tags found: run /dumptags with the tags loaded, or pass --tiers')
+    print('# no collision, plant-like class, no pass-through tier: %d blocks in %d mods' % (total, len(plants)))
+    print_groups(plants)
+    print('# no collision, other classes (torches, signs, fluids, decor...), no tier: %d in %d mods: %s' % (
+        sum(other.values()), len(other), ' '.join('%s %d' % kv for kv in other.most_common())))
+
+
+def audit(path, tiers_path=None):
     dump = json.load(open(path))
     reg = dump.get('registerHeight', 0.2)
     untiered = collections.defaultdict(collections.Counter)
@@ -75,10 +115,11 @@ def audit(path):
     if errors:
         print('# errors: %d' % len(errors))
         for r in errors: print(r['id'], r['error'])
+    pass_audit(dump, tiers_path)
     sys.exit(3 if total else 0)
 
 if len(sys.argv) > 2 and sys.argv[1] == '--audit':
-    audit(sys.argv[2])
+    audit(sys.argv[2], sys.argv[sys.argv.index('--tiers') + 1] if '--tiers' in sys.argv else None)
 elif len(sys.argv) > 1 and sys.argv[1] == '--audit':
     sys.exit('usage: blockrunner_scan.py --audit kubejs/exported/surface_audit.json')
 

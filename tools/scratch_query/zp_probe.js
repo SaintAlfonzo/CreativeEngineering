@@ -8,6 +8,8 @@
 //   /zp food NAME             food level and saturation
 //   /zp inv NAME              non-empty inventory slots: slot count id
 // Output: "[zp] ..." lines in logs/latest.log, then "[zp] done".
+// MIGRATED 2026-11-15 (creative_devtools.md): sneak -> /pbot sneak, eat -> /pbot eat (ticked use, not finishUsingItem),
+// hunger -> /pbot hunger, effects and food -> /cdevtest player, inv -> /pbot inv NAME get.
 (() => {
     const $ZPArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $ZPReg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')

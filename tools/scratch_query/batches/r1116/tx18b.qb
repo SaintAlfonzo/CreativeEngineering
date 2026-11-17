@@ -1,0 +1,10 @@
+# r1116 phase 1, boot 2: SKIPSWAP=creativecompat, Compat jar removed from OUT/srv/mods. SQ-TX-18 second part.
+pace 2
+
+## SQ-TX-18b | no Compat: cdevreload absent, cdevtest works, no load errors naming creativecompat
+> cdevreload compat
+> cdevtest help
+sleep 2
+expect Unknown or incomplete command
+expect \[cdevtest\] verb=help verbs=
+bootreject (ERROR|NoClassDefFoundError).*creativecompat

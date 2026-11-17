@@ -66,6 +66,11 @@ final class Steps {
 
         void onFrameEnd(CaptureDriver d) throws Exception {}
 
+        /** Ticks before the step times out; long holds (walk) raise it. */
+        int maxTicks(CaptureDriver d) {
+            return d.plan.stepTimeoutTicks();
+        }
+
         /** One line for the step log; set while running (command result, wait reason). */
         String note = "";
     }
@@ -84,6 +89,10 @@ final class Steps {
         if (o.has("key")) return new Key(o.get("key"));
         if (o.has("reload")) return new Reload();
         if (o.has("capture")) return new CaptureShot(o.getAsJsonObject("capture"));
+        Step s = Reads.parse(o);
+        if (s == null) s = Moves.parse(o);
+        if (s == null) s = Widgets.parse(o);
+        if (s != null) return s;
         throw new IllegalArgumentException("unknown step " + o);
     }
 
@@ -135,7 +144,16 @@ final class Steps {
             Minecraft mc = d.mc;
             if (result == null) {
                 IntegratedServer server = mc.getSingleplayerServer();
-                if (server == null || mc.player == null) throw new IllegalStateException("no integrated server");
+                if (mc.player == null) throw new IllegalStateException("no player");
+                if (server == null) {
+                    // Joined a server (plan world.join = server): send it as a chat command; no result code.
+                    String c = cmd.startsWith("/") ? cmd.substring(1) : cmd;
+                    if (!mc.player.commandUnsigned(c)) mc.player.commandSigned(c, null);
+                    result = CompletableFuture.completedFuture(new int[]{1});
+                    note = "/" + c + " -> sent to server";
+                    doneAt = ticks + 3; // a few ticks for the reply and block updates
+                    return false;
+                }
                 UUID uuid = mc.player.getUUID();
                 CommandSource collector = new CommandSource() {
                     @Override
@@ -171,6 +189,7 @@ final class Steps {
             if (!result.isDone()) return false;
             if (doneAt < 0) {
                 int r = result.get()[0];
+                CaptureDriver.LOG.info("[cdevcapture] CMD /{} -> {}", cmd, r);
                 synchronized (feedback) {
                     note = "/" + cmd + " -> " + r + (feedback.isEmpty() ? "" : " " + String.join(" | ", feedback));
                 }
@@ -187,6 +206,7 @@ final class Steps {
     /**
      * {@code {"from": "x y z", "at": "x y z"}} or {@code {"from": ..., "yaw": a, "pitch": b}}. {@code from} is the
      * camera (eye) position; {@code at} aims at the centre of that block. Flies, so the player doesn't fall.
+     * {@code {"yaw": a, "pitch": b}} without {@code from} only turns the player where it stands (no teleport).
      */
     static class Look extends Step {
         final Cmd tp;
@@ -194,6 +214,12 @@ final class Steps {
 
         Look(JsonObject o) {
             super("look");
+            if (!o.has("from")) {
+                tp = null;
+                yaw = o.get("yaw").getAsFloat();
+                pitch = o.get("pitch").getAsFloat();
+                return;
+            }
             double[] from = pos(o.get("from").getAsString());
             double ex = from[0] + 0.5, ey = from[1], ez = from[2] + 0.5;
             if (o.has("at")) {
@@ -212,6 +238,14 @@ final class Steps {
         @Override
         boolean tick(CaptureDriver d) throws Exception {
             LocalPlayer p = d.mc.player;
+            if (tp == null) {
+                p.setYRot(yaw);
+                p.setXRot(pitch);
+                p.yRotO = yaw;
+                p.xRotO = pitch;
+                note = "yaw " + yaw + " pitch " + pitch;
+                return ticks >= 1;
+            }
             if (tp.ticks == 0 && p.getAbilities().mayfly) {
                 p.getAbilities().flying = true;
                 p.onUpdateAbilities();

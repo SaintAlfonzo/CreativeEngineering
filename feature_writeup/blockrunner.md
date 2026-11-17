@@ -1,6 +1,6 @@
 # BlockRunner: walk speed by surface
 
-Test prefix **BR-** · Last updated **2026-11-10** · Overall status **DEPLOYED (2026-09-27 16:45; live in every pack release since, 1.0.9 on 2026-10-19), in-game tests pending**
+Test prefix **BR-** · Last updated **2026-11-15** · Overall status **DEPLOYED (2026-09-27 16:45; live in every pack release since, 1.0.9 on 2026-10-19), in-game tests pending**
 
 ## 0. At a glance
 
@@ -24,6 +24,7 @@ the block you're looking at.
 | WTHIT "Run Speed" line on the looked-at block | patcherMod WTHIT plugin (`WthitRunSpeed`, `RunSpeed`, `StuckInBlock`), `[surface.wthit]` | First version loaded in game (plugin initialised 14:50, no errors). The second version (hideUntyped, passable blocks, thin layers, inside slowdowns, own speed) is headless-tested 31/31 and was deployed at 16:45, so it needs a restart |
 | Camouflage copies camo speed, "newest camo" for multi-material (hybrid) blocks | patcherMod mixins | Newest-camo rule confirmed in game on framed double slabs (BR-17, 2026-09-27); rest untested |
 | D&D asphalt friction reset (its own ~3.4× speed boost removed) | KubeJS startup `BlockEvents.modification` | Loaded since the 14:49 restart; untested (BR-28) |
+| Pass-through blocks (3.10): walking and falling through crops, plants, vines, ropes, cobwebs, barbed wire, bushes, leaf piles; items, projectiles and arrows in webs; no field of view change; WTHIT Walk Through lines; `/cdevbench passthrough`, perf suite plan, timing log | Creative Compat `surface/Pass*` + 13 mixins, tags `passthrough_tags.js` (in the Compat jar), Creative Devtools `PassBenchCommand` | Built, untested: Compat and Devtools 1.0.0 build/libs 2026-11-15 00:40, not installed; headless 203/203; BR-67..88, SQ-PTH-01..28, CQ-PTH-01..05 |
 | Tooltips (Speed Multiplier line, camo rewrite, IP asphalt line removed) | see [tooltips.md](tooltips.md) | tests moved to TT-01..05 |
 
 **Open first:** `config/creativeengineering-common.toml` `[surface.speed]` (values),
@@ -115,7 +116,7 @@ blocks that carry no tags (see 6). Tiers are listed fastest first; `[surface.spe
 | `confectionery` | 0.85 | 630 | Edible blocks | Create Confectionery chocolate/caramel/gingerbread, cake, pies, feasts (pizza, quiche, pancakes), ice cream blocks, FD ham/roast blocks, AP bread, sugar cube, melon, pumpkins, chorus fruit block, Golden Food's golden and enchanted golden cakes |
 | `tilled` | 0.80 | 5 | Crop fields | farmland, FD rich soil farmland, tilled end stone |
 | `leaves` | 0.78 | 71 | Canopy | all leaves, Quark hedges, Twigs bamboo leaves |
-| `snow` | 0.75 | 5 | Snow | snow block, snow layers (3+ layers register), powder snow (standable in leather boots), coarse snow |
+| `snow` | 0.75 | 3 | Snow | snow block, powder snow (standable in leather boots), coarse snow; snow layers left since 2026-11-15 (they slow by height, 3.10 layer tier) |
 | `sticky` | 0.65 | 8 | One sticky face (facing-aware, see 3.2) | sticky piston, vanilla/Create piston heads, Create sticky mechanical piston, CTM sticky launchers, SecurityCraft reinforced sticky piston + head |
 | `spongy` | 0.60 | 27 | Squelching ground | mud, muddy mangrove roots, wet sponge, clay, dough block, rotten flesh and entrails, CE prepared flesh block, Visceral Heap flesh |
 | `very_sticky` | 0.45 | 69 | Whole slime/honey blocks | honey block, slime block, banana slug slime, Visceral Heap porous flesh (honey jump) |
@@ -410,7 +411,7 @@ Slower blocks show red. Frames add "from camo"; a sticky piston that isn't facin
 Vanilla only slides you down a Honey Block's side because honey's collision is inset 1/16, so pressing against it
 counts as being inside it. A full block never does that, so
 [WallSlide](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/WallSlide.java)
-runs from `WallSlideMixin` at the end of `Entity#checkInsideBlocks`, the same point honey's slide runs, and checks
+runs from `InsideBlocksMixin` (was `WallSlideMixin`) at the end of `Entity#checkInsideBlocks`, the same point honey's slide runs, and checks
 the blocks touching the entity's sides.
 
 - **Blocks:** `#creativecompat:wall_slide` in `blocktags.js` (reloadable). Now: porous flesh, Alex's Mobs Banana Slug Slime
@@ -440,6 +441,186 @@ the blocks touching the entity's sides.
 | Sticky pistons, sticky launchers (one sticky face) | sticky tier, face-up only | no: would need a facing check like 3.2; niche |
 | Miner's Delight sticky basket, Fungi Delight inky goo veil | furniture / thin veil | no |
 
+### 3.10 Pass-through blocks: walking and falling through plants and webs (Creative Compat, 2026-11-15)
+
+Status: **built, untested** (Creative Compat and Creative Devtools 1.0.0, build/libs 2026-11-15 00:40, not
+installed; the rework of [plan_post_scratch_1115b.md](plan_post_scratch_1115b.md) (4 / 6 neighbours, baked counts,
+layer tier, stall break) built 15:42, not installed). Plan, rulings and per-phase deviations:
+[plan_passthrough.md](plan_passthrough.md) ("Execution status").
+TODO `gameplay/blockrunner #10`. Tests BR-67 to BR-88; scratch rows SQ-PTH-01 to -28, CQ-PTH-01 to -05.
+
+BlockRunner (3.1 to 3.8) only reads the block **under** your feet, so a block with no collision (crops, grass, ropes,
+webs, leaf piles) never had a speed. This system covers every block you stand **in**: how fast you walk through it
+(horizontal) and fall through it (vertical).
+
+**Model.** A tier is a block tag `creativecompat:passthrough/<tier>` (filled in Compat's
+`kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js`, one tier per block, `t.overlaps` checked) plus a config
+table `[surface.passthrough.<tier>]` (15 keys: walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall,
+denseResetsFall, surrounded, minLayers, walkOnlyMoving, items, itemStickChance, projectiles, depthStriderPasses).
+Each tick, at the end of `Entity#checkInsideBlocks` (`InsideBlocksMixin`, after the wall slide of 3.9),
+`PassThrough` takes every tier block whose cell the entity's box overlaps and whose outline it touches, that passes
+its growth rule and `minLayers`, for an entity not exempt. Several at once: the lowest walk and the lowest fall win.
+- **Walk on land:** a transient `MULTIPLY_TOTAL` speed modifier (`walk - 1`, UUID
+  `a1386f64-4583-4798-9b29-f040c59b8574`, "Pass-through block speed"); it multiplies with BlockRunner's surface tier.
+  Momentum is kept, so 0.75 really is 0.75x.
+- **Walk while wading** (feet in water, eyes out: rice paddies): the speed attribute does nothing in water, so the
+  value becomes a horizontal drag of the same strength. Swimming is never touched.
+- **Fall:** downward speed x `fall` each tick; the fall distance x `fall` once per new layer of tier blocks passed
+  (one web 0.85, three webs about 0.61). Dense with `denseResetsFall`: fall distance 0 every tick. Vanilla's
+  fast-fall reset (`Entity#move` clips a path of a block or more per tick against `#minecraft:fall_damage_resetting`,
+  which holds cobwebs) leaves out webs with a fall rule, so a lone or stacked web scales the fall instead of zeroing
+  it (scratch fix 2026-11-15, SQ-PTH-03). Bush-tier blocks (sweet berry included) never reset it either, fast or
+  slow (owner ruling 2026-11-15; vanilla's sweet berry bush cancelled fall damage); climbables, water and exempt
+  entities keep vanilla's reset.
+- **Old slowdowns cancelled:** `MakeStuckInBlockMixin` cancels `Entity#makeStuckInBlock` for any tiered block, so
+  vanilla's and mods' "stuck" slowdowns (webs, berry bushes, IW leaf piles, Twigs bamboo leaves, barbed wire) stop;
+  their other effects (berry, thorn and wire damage) stay. Untiered blocks (powder snow, bamboo spikes, Floral
+  Enchantment bushes, wither roots, beanstalk thorns, pickerelweed) keep their own slowdown.
+- **Growth:** `any`; `half` (own `age`, or hemp's growth enum, at least half); `tall_half` (a tall crop's lower block
+  decides for both; the upper block looks down). `#creativecompat:passthrough_growth_any` makes a block in a growth
+  tier always count (tomato segments, coffee).
+- **Neighbours** (since 2026-11-15): same-tier blocks on the 4 sides, same layer (`SIDES`: a field's inside 4, edge
+  3, corner 2) or the 6 faces (`FACES`). Counted by tag only (no growth test: a young crop adds density to a grown one
+  but is not slowed itself). Counts are baked into the chunk (`PassCounts`, a chunk capability saved on the server),
+  dropped only when a block of another tier replaces one in or next to the cell; harvest and replant keep them.
+- **Who is skipped:** spectators, flying players (creative or not), elytra gliding, swimming (eyes in a fluid or the
+  swimming pose), no-physics entities. Exempt entity tags `creativecompat:passthrough_exempt/<tier>` (cobweb: spiders,
+  cave spiders; bush and layers: foxes, bees) and `.../all` (modded bullets). The owner of a SecurityCraft
+  reinforced cobweb walks through his own web unslowed. Creative walking players are slowed.
+- **Sync:** the server sends its values on login and on every config save (channel `creativecompat:surface`), the
+  client uses them while connected, so player movement agrees with the server.
+
+**Tiers (defaults, seventh-pass rulings).**
+
+| Tier | Members (tag sizes 2026-11-15) | walk | fall | growth | dense | Other |
+|---|---|---|---|---|---|---|
+| `dense_crop` (11) | corn, IE hemp, FD rice and rice panicles, Vintage Delight oats, wheat, tomatoes (FD, budding, Supplementaries rope and stick, CD treated stick) | 0.75 | 1.00 | `tall_half` (tomatoes `any`, budding tomatoes and oats one-block `half`) | sides, 3+ of 4: walk 0.50 | rice base: wading drag |
+| `crop` (41) | every other planted crop, nether wart, attached stems, tea bushes, cantaloupe, pineapple, sprouts, Farmer's Respite coffee (`any`) | 0.75 | 1.00 | `half` | none | |
+| `wild_crop` (30) | Farmer's Delight and other mods' wild crops, FR wild coffee bush | 0.75 | 1.00 | `any` | none | |
+| `vine` (35) | every vine (vanilla, twisting, weeping, cave vines, Vinery grape vines, Hearth hops vine, modded vines) | 0.75 | 1.00 | `any` | none | `walkOnlyMoving`: only while moving horizontally; climbing as before |
+| `tall_plant` (26) | tall grass, large fern, tall flowers, small dripleaf, eyebulb, UA tall beachgrass | 0.75 | 1.00 | `any` | none | |
+| `cane` (5) | sugar cane, propelplant cane | 0.50 | 1.00 | `any` | none | |
+| `rope` (3) | Farmer's Delight, Supplementaries and Quark rope | 0.75 | 1.00 | `any` | none | not while climbing (on the rope and moving up or down, sneaking, or off the ground); ladder rules unchanged |
+| `cobweb` (5) | cobweb, SecurityCraft reinforced cobweb, Fantasy Furniture webs (2), Create Crafts & Additions barbed wire | 0.50 | 0.85 | `any` | faces, 3+ of 6: walk 0.35, fall 0.20, fall damage reset | `surrounded = web` at 6 of 6, `items = stick` (0.35 per tick), `projectiles`; spiders exempt |
+| `bush` (8) | sweet berry bush, Hearth and Harvest raspberry bush, every Vinery grape bush | 0.36 | 1.00 | `any` | none | today's real berry bush speed; foxes and bees exempt |
+| `layers` (44, tag `creativecompat:passthrough_layers`; was `leaf_pile`) | snow layers, every IW leaf pile, IW ash, sand and red sand layers, Twigs bamboo leaves, Supplementaries ash and fodder, IE sawdust | by height: 1 layer 1.0, then equal steps to `layerMaxSlow` 0.5 at the highest walk-through layer H (5 of 8; sawdust 6 of 9; bamboo leaves 3 of 4); higher piles act whole | 1.00 | `any` | none | `minLayers = 2`, `solidBelowFull = 2` (bamboo leaves 0), `depthStriderPasses`; foxes and bees exempt |
+| `grass` (119) | short grass, fern, dead bush, roots, small flowers, saplings, flower patches | 1.00 | 1.00 | `any` | none | inert (skipped) until tuned |
+
+Out of the system: Biomes O' Plenty barley, cattail, reed (not registered here); Supplementaries flax and wild flax;
+Beautify rope (a solid chain); the stuck plants above.
+
+**Ropes.** Walking through the bottom of a hanging rope: 0.75x. Climbing, sliding and sneaking: vanilla ladder rules
+(fall distance reset every tick inside a climbable block, so falling past a rope still cancels fall damage). Vanilla
+also caps horizontal speed at 0.15 b/t on any climbable block, so a plain walk (0.216 b/t) through a rope measures
+0.150 b/t (0.69x, CQ-PTH-03): the cap is below 0.75x and wins; vines (also climbable) show the same 0.69x.
+
+**Cobwebs and barbed wire.** Up to 2 of the 6 face neighbours: walk 0.50, fall 0.85 (about 0.11x walking before). 3
+or more: walk 0.35, fall 0.20, no fall damage. **Surrounded** (any overlapped web cell with webs on all 6 faces):
+falling stops;
+jump climbs at ladder speed x 0.35 (0.07 blocks per tick), sneak sinks at slide speed x 0.35 (about 0.05), no input
+hangs, sideways 0.35x (`LivingClimbMixin`). Mobs hang and climb only while jumping. Barbed wire keeps its damage.
+
+**Items and XP orbs** (`PassItems`): every tick an item's path crosses a web cell it rolls 0.35; a hit stops it at a
+random point along the path inside the webs, a miss on a tick that would carry it out stops it just inside the exit,
+so every item that enters a web stays in it. Stuck: NoGravity, no motion, held in place (orbs do not home) until the
+web is broken. Saved with the entity (NBT `CreativeCompatPass`), so stuck items stay stuck after a reload; ItemPhysic
+reads the same NoGravity. A stuck item or orb skips its own move (HEAD of `Entity#move`): per tick it only rereads its
+cell's block state (scratch fix 2026-11-15, SQ-PTH-28 PT04).
+
+**Projectiles** (`PassProjectiles`, groups by entity tag `creativecompat:passthrough/projectile/<group>`, else a
+default by base class): every group but `exempt` is slowed in every web (whole velocity x walk, downward x fall,
+dense values when dense). A `break` projectile stopped in **any** web (under 0.05 b/t for `breakStallTicks` ticks in
+a row, default 3, 0 = off) runs its impact where it stopped (SQ-PTH-11, plan_post_scratch_1115b.md B; the pearl
+teleports there). In a **surrounded** web: `break`
+(snowball, eggs, fireballs, wither skull, llama spit, shulker bullet, ender pearl, 30 ids) runs the impact at the cell
+centre; `settle` (thrown potions, XP bottles,
+5 ids) loses horizontal motion and sinks down the middle, breaking below; `linger` (firework) stays until its flight
+time ends; `hang` (arrows, tridents, thrown tools, 38 ids) stops in vanilla's stuck-in-ground state with no hit
+effect (5.3 of the plan); `snag` (fishing bobber, feather on a stick, Quark pickarangs, Botania thorn chakram) stops
+in the middle of **any** web, pickarangs and chakrams are picked up by touch and drop when the web breaks; `slow`
+(none today) only slows; `exempt` (35 ids: Old Guns, IE revolver, railgun, chemthrower and sawblade shots,
+SecurityCraft, Create potato cannon, Create Misc and Things spout gun, Power Grid zap, Botania mana burst and
+friends, Blocky Siege, PneumaticCraft tumbling block) is never touched. Minecarts, boats, falling blocks and TNT get
+the `slow` treatment. `tools/projectile_scan.py` flags a new projectile with no group.
+
+**Arrows** (`PassArrows`, `ArrowPassMixin`): every pickable arrow, non-Loyalty trident and thrown tool, in a web or
+in a block, lasts `[surface.passthrough] arrowLifeTicks` 12000 (10 minutes, was 1), at most `arrowLongLifeCap` 128 per
+chunk; the 129th demotes the oldest to the vanilla minute (gone at once if it is already past it). Unpickable arrows
+(skeletons, Infinity, multishot) keep the minute; Loyalty tridents never despawn. A web-stuck pickable arrow comes
+back as itself (tipped, spectral, Nock Enough Arrows types, rope arrows; Quark torch arrow fixed).
+
+**Field of view.** `PassFovMixin` recomputes the speed part of the field of view without the pass-through modifier
+(and without BlockRunner's, when BlockRunner's `disable_field_of_view_changes` is on). Walking into a field, a web or
+onto asphalt never changes the field of view; sprinting and potions still do.
+
+**WTHIT** (`PassThroughFormat`, `[surface.wthit] passThrough`): a tiered block shows `Walk Through: 0.40x (Dense
+neighbors) on Farmland (Tilled)` (block walk x the soil's speed; the soil named only when its speed is not 1.00),
+`Fall Through: 0.20x` or `Fall Through: stopped` (surrounded web), `Neighbors: 3 of 4` (or `of 6`) for counting
+tiers, "while moving through" on vines, "3 of 8 layers" on layered blocks (a pile high enough to act whole gets the
+Run Speed line instead). No line below the growth rule or when the viewer is exempt. Untiered inside-slowdowns keep the
+`StuckInBlock` line (3.8).
+
+**Performance** (plan 7). Budget accepted for now: under 1 microsecond per entity-tick in the dense field and the web
+cube; under 0.5 ms added mean tick time at 500 affected entities. Since 2026-11-15 (plan_post_scratch_1115b.md C)
+counts are 4 or 6 cells and baked into the chunk, so after the first entity a counted cell is a map lookup; new
+numbers pending (SQ-PTH-25c, SQ-PTH-28c). Tools:
+- `/cdevbench passthrough [calls]` (Creative Devtools, dev-only, op 3): fixtures near the build limit above the
+  caller (16x16 ripe wheat field, a sparse field, a 5x5x5 web cube, a lone carrot, air), 12 cases (ring and cube
+  counts, entity ticks in air, lone crop, field middle, sparse field, web cube middle, a horse over 2x2 field cells,
+  the field and web cube again with their cells already counted this tick (`_shared`), one item stick roll with its
+  path clip; the field, web cube and horse cases empty the per-tick count cache before each call), median and p99 of 20 batches, to chat and
+  `kubejs/exported/perf/passthrough_bench.json`; blocks restored after. `/cdevbench passthrough enabled <bool>` sets
+  the master switch, saves and re-sends it (used by the suite).
+- Perf suite plan `tools/perf/suite/plans/passthrough.py` (group P, PT00 to PT06, each scene `a` on and `b` off on
+  twin sites): 200 cows in a 32x32 corn field, 50 farmer villagers in a wheat field, 100 zombies in a 9x9x5 web block,
+  500 items thrown into webs, 100 arrows a second into a 9x9x9 web block, a bot walking a corn strip.
+- `[debug.passthrough] timing` (Compat, off): every 200 ticks one `[passthrough-timing]` line per side (server and
+  client separately): hook calls, total and longest time, entity-ticks inside a tier block and the peak per tick,
+  neighbour counts, tick time. `python3 tools/perf/passthrough_timing.py logs/latest.log` reports the share of tick
+  time. The owner's real-play check (plan 7.3, BR-88) goes here with a JFR of the same session.
+- Results r1115 (Compat 11:31): bench `tick_field` 749 ns (green), `tick_web_cube` 2029 ns and `tick_horse_field`
+  2537 ns (red); suite on minus off PT01 +0.57 ms, PT02 +0.32, PT03 +0.36, PT04 +3.17, PT05 -5.22, PT06 -0.04. JFR:
+  a third to a half of the hook was `tierOf`'s map lookup, PT04 was the held items' zero-length moves (entity
+  collision queries; `Entity#move` samples 1802 on vs 812 off).
+- Scratch fixes 2026-11-15 (plan 7.2 fallback, built): the tier is kept in a slot on each block state
+  (`BlockStatePassMixin`, `PassTierSlot`; a tag reload bumps a generation), the per-tick count cache
+  (`PassCountCache`, per thread, by position and tier), the counts of all of an entity's cells from one read of the
+  blocks around them (`countRegion`: zombie in the web cube 36 block reads instead of 52, horse in the field 16 instead
+  of 32), exempt asked once per tier per entity, a full-block outline (webs) accepted without the box walk, held
+  items skip their move. Estimates (not measured in game; SQ-PTH-25b, -28b): `tick_web_cube` about 0.8 to 1.0 us
+  cold, `tick_field` about 0.4 us, `tick_horse_field` about 1.2 us cold; PT01 about +0.1 to +0.25 ms, PT04 about
+  0 ms or below (held items now cheaper than grounded ones, which still move every 4th tick).
+
+**Deviations from the plan, collected** (details in the plan's status entries):
+- Tags live in Compat's script tree (`kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js`, in the jar), not
+  `blocktags.js`; namespace `creativecompat:`.
+- Per-block growth `any` is the tag `passthrough_growth_any`, not a config key; neighbours count by tag only; a
+  different same-tier block right below makes a block "upper" under `tall_half` (rice panicles on rice).
+- Fall distance: cells side by side on one layer count as one block passed. Wading drag assumes vanilla water
+  (Depth Strider not modelled). `minLayers` range 1-9 (9 = never).
+- Movement effects only for living entities; items react only to `items = stick` tiers and follow their position
+  point (an item grazing a web beside it does not stick). Stuck orbs do not home.
+- Vanilla projectiles get their group from the base class even without tags; non-living non-projectiles get `slow`.
+  `break` fires Forge's impact event and discards the projectile if its own hit did not. `hang` also sets the shake
+  time and clears crit, with no hit sound. The snag state is not saved (a reloaded pickarang re-snags at the cell
+  centre). Flying mobs in a surrounded web only get the 0.35 walk (climbing acts through the ladder code).
+- The leaf pile migration lives in Compat (`LeafPileMigration`; the old `LeafPileSlow.set` call was in Compat, not
+  Engineering). IW's `leaf_piles_slow` still gates spruce thorn damage.
+- WTHIT: the soil is the first standable block below, looking past up to two more pass-through blocks; an inert tier
+  (grass) shows the Run Speed path.
+- Phase 4 extras: `crop` takes planted crops outside `#minecraft:crops`; Hearth hops vine is a `vine`; FR wild coffee
+  bush is a `wild_crop` (its 0.8 stuck slowdown replaced by 0.75).
+- Phase 6: the benchmark builds near the build limit above the caller (always loaded), not in a far-off area; the
+  suite's bot walks a straight line (one `pbot path` target), not circles; the suite toggles the switch with
+  `/cdevbench passthrough enabled` on twin sites; the timing parser is a new `tools/perf/passthrough_timing.py`
+  (`log_timings.py` reads startup times only). The item benchmark case runs the real `PassItems.pathStop` (split out
+  of `PassItems.afterInsideBlocks` for it).
+
+**Settled (owner 2026-11-15):** Delightful salmonberry bush and Fruits Delight cranberry bush in `bush`; IE razor wire
+in `cobweb` (its damage stays); Botania mystical, shiny and special flowers and mushrooms in `grass` (floating flowers
+are solid, out); Supplementaries wild flax stays out. Display only: the sticky basket, mulberry jam, guardian spine
+and powdered sugar got `StuckInBlock` lines.
+
 ## 4. Limits and decisions
 
 **Limits**
@@ -457,8 +638,20 @@ the blocks touching the entity's sides.
   dedicated server has run the same patcherMod as the clients since the pack deploys resumed (1.0.9 on 2026-10-19),
   so facing, camo and `[surface.speed]` run server-side too; BR-27 is still untested.
 - **Twigs bamboo leaves are in the `leaves` tier but can never register:** the block has no collision,
-  so you always stand on the block beneath. The tier entry is harmless dead weight. The WTHIT line
-  treats the block as a slow-while-inside block (0.34× at 3+ layers).
+  so you always stand on the block beneath. The tier entry is harmless dead weight. Since 2026-11-15 the block is in
+  the pass-through `leaf_pile` tier (3.10): 0.45x from 4 layers, WTHIT Walk Through line.
+- **Pass-through (3.10) limits:**
+  - One tier per block: a block in two tier tags gets a random one per reload (`t.overlaps` warns at load).
+  - The stuck cancel is keyed by tag: a tiered block loses all of its own stuck slowdown. Powder snow stays out
+    for that reason.
+  - Mobs in a surrounded web with nothing to climb stay there until the web is broken. Mob pathing does not avoid
+    slow blocks (vanilla does not avoid webs either).
+  - Fast arrows can cross a single web in one tick and skip it (accepted). Items cannot: their path is clipped.
+  - Cost scales with the cells an entity overlaps (a horse covers 2x2) and with neighbour counts; measured by
+    `/cdevbench passthrough` and the perf suite plan, not yet run.
+  - A projectile from a mod added later falls back to its base-class group until tagged; `tools/projectile_scan.py`
+    flags it. A new no-collision plant has no tier until tagged; `blockrunner_scan.py --audit` lists it.
+  - Swimming is never slowed and the swim speed itself is not audited yet (TODO `gameplay/blockrunner #11`).
 - **Stray camouflage members:** the tier includes a few technical/thin blocks (`copycats:copycat_base`,
   framed rails/torches). Harmless; they never register or are never walked on.
 - **The scan only sees untagged modded blocks that have an item:** jars also ship blockstates for
@@ -471,7 +664,8 @@ the blocks touching the entity's sides.
 - **Sinking by lowering the hitbox:** rejected by you. It breaks iron golem spawns on sand, drowned
   beach AI and shulker attaching (everything that asks "can an entity stand here").
 - **Tiering soul sand:** rejected, because it breaks Soul Speed.
-- **Tiering carpets or leaf piles:** pointless, they can't register.
+- **Tiering carpets or leaf piles:** pointless as surface tiers, they can't register. Leaf piles slow you from
+  inside through the pass-through `leaf_pile` tier instead (3.10).
 - **HappyTrails:** uninstalled 2026-09-26. It duplicated this, used permanent modifiers and warped FOV.
 - **Doing state checks in KubeJS:** impossible, because block tags can't see blockstate or block
   entities; that's why 3.2 and 3.3 are mixins.
@@ -499,6 +693,23 @@ the blocks touching the entity's sides.
 - Audit dump: `/dumpsurface` (in `/dumpall`), [SurfaceAudit.java](../development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/dump/SurfaceAudit.java)
   in Creative Devtools, writes `kubejs/exported/surface_audit.json`; reads `RunSpeed.REGISTER_HEIGHT` and `RunSpeed.runnerFactor`
   from Creative Compat (install both jars together). Generator entry `blockrunner_audit` in [tools/generators.json](../tools/generators.json)
+- Pass-through (3.10), all in [Creative Compat surface/](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/):
+  `PassTier` (tiers, defaults), `PassThrough` (block -> tier cache, rule per entity, movement), `PassRule`,
+  `PassResult`, `PassMath`, `PassGrowth`, `PassState` / `PassHolder`, `PassOwner`, `PassValues` / `PassSync` /
+  `PassSyncClient`, `PassFov` / `BlockRunnerFov`, `PassItems`, `PassProjectiles`, `PassGroup`, `PassArrows`,
+  `PassSave`, `PassThroughFormat` (WTHIT), `LeafPileMigration`, `PassTiming` (`[debug.passthrough] timing`)
+- Pass-through mixins (Compat [mixin/](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/)):
+  `InsideBlocksMixin` (was WallSlideMixin), `MakeStuckInBlockMixin`, `EntityPassMixin`, `LivingClimbMixin`,
+  `ArrowPassMixin`, `FireworkPassMixin`, `ProjectilePassMixin`; gated `QuarkPickarangPassMixin`,
+  `QuarkTorchArrowPickupMixin`, `BotaniaChakramPassMixin`; client `PassFovMixin`, `BlockRunnerFovMixin`
+- Pass-through config: `config/creativecompat-common.toml` `[surface.passthrough]` (`enabled`, `arrowLifeTicks`,
+  `arrowLongLifeCap`, one table per tier), `[surface.wthit] passThrough`, `[debug.passthrough] timing`
+- Pass-through tags: [passthrough_tags.js](../kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js) (copied
+  into the Compat jar); offline sim [tools/passthrough_tag_sim.js](../tools/passthrough_tag_sim.js); projectile scan
+  [tools/projectile_scan.py](../tools/projectile_scan.py); headless tests [tools/test_passthrough.sh](../tools/test_passthrough.sh) (203 checks)
+- Pass-through performance: `/cdevbench passthrough` [PassBenchCommand.java](../development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/perf/PassBenchCommand.java)
+  (writes `kubejs/exported/perf/passthrough_bench.json`); suite plan [plans/passthrough.py](../tools/perf/suite/plans/passthrough.py);
+  timing parser [tools/perf/passthrough_timing.py](../tools/perf/passthrough_timing.py)
 
 ## 6. Offline checks
 
@@ -627,6 +838,33 @@ the blocks touching the entity's sides.
 - [ ] **BR-65 Changelog values (2026-11-11):** `M` on a sleeping bag, hammock, pet bed, thatch and cardboard box → **−0.012**; a cake and a placed roast chicken → **−0.015**; a tube coral block → **−0.008**; kelpy cobblestone → **+0.015**; scute pavement, polished manure, manure bricks → **+0.025**; a carrot crate and a beehive → **+0.01**; a Vintage Delight jello block → **−0.055**. Queue: SQ-BRA-06.
 - [ ] **BR-66 Mod filters:** Mosaic Masonry common and English bond, a Metal Fences copper fence and closed gate (stand on top) → **+0.025** each. Queue: SQ-BRA-07.
 
+**Pass-through blocks (3.10, 2026-11-15).** Needs the Creative Compat jar built 2026-11-15 00:40 or later (it carries
+the tags) and a restart. `P` = `/attribute @s minecraft:generic.movement_speed modifier value get
+a1386f64-4583-4798-9b29-f040c59b8574` (the pass-through modifier: walk 0.75 reads -0.25, 0.50 reads -0.5; on a mob use
+`@e[type=...,limit=1,sort=nearest]`).
+- [ ] **BR-67 Wheat field:** plant a 9x9 wheat field on farmland. Freshly planted: no `P`. Bone-meal to half grown: on the edge row `P` -0.25, two rows in -0.5; WTHIT `Neighbors: 5` on the edge, `Neighbors: 8` and `(Dense neighbors)` inside; the walk line reads `Walk Through: 0.50x (Dense neighbors) on Farmland (Tilled)`. Queue: CQ-PTH-01, CQ-PTH-04.
+- [ ] **BR-68 Corn:** corn with the lower block at age 3: no slowdown; at age 4 (the top appears): both blocks slow, the top block's WTHIT names the farmland. Queue: CQ-PTH-01.
+- [ ] **BR-69 Single-tier plants:** half-grown carrots, wild rice, tall grass, a rose bush → -0.25 each; sugar cane and a propelplant cane → -0.5. WTHIT shows no Neighbors line on them. Queue: SQ-PTH-20.
+- [ ] **BR-70 Tomatoes and coffee:** a 3x3 block of tomatoes on ropes at age 0 → centre -0.5 (dense, age ignored); budding tomatoes age 1 none, age 2 -0.25; a coffee stem at age 0 -0.25, no Neighbors line. Queue: SQ-PTH-22.
+- [ ] **BR-71 Vines:** vanilla vine, twisting vines, cave vines, a grape vine: walking through -0.25; standing still in them no `P`; climbing the vine as before. Queue: CQ-PTH-01.
+- [ ] **BR-72 Rope:** walk through the bottom block of a hanging Farmer's Delight rope and a Quark rope → -0.25; climb (jump), slide, sneak on them → no `P`, vanilla speeds; jump down past a rope → no fall damage. Queue: CQ-PTH-03.
+- [ ] **BR-73 Rice paddy:** wade through rice in water → slower than wading in plain water beside it; swim in deep water beside it → normal swim speed. Queue: CQ-PTH-01.
+- [ ] **BR-74 Creative:** walking through a half-grown wheat field in creative → slowed; flying through it → not. Queue: CQ-PTH-01.
+- [ ] **BR-75 Cobwebs:** a single web: walk about half speed, falling a little slower; drop 20 blocks into it → damage about 0.85x of a plain fall; through 3 stacked webs about 0.61x. A web with 6+ web neighbours: land from 20 blocks with no damage. A 3x3x3 web cube: drop in, stop in the middle; jump climbs slowly, sneak sinks slowly, no input hangs; walk sideways out at 0.35x. Queue: SQ-PTH-02, -03, -09.
+- [ ] **BR-76 Barbed wire:** same speeds as a web; still hurts while you move. Queue: SQ-PTH-23.
+- [ ] **BR-77 Who is slowed:** a spider and a cave spider cross webs at full speed; a villager, a zombie and a ridden horse in a wheat field are slowed (`P` on each); a fox in a sweet berry bush is not. A SecurityCraft reinforced cobweb does not slow its owner. Queue: SQ-PTH-02, -04, -23.
+- [ ] **BR-78 Items in webs:** throw 10 items into a single web from different sides → each stops inside it at a different depth; one dropped straight through stops near the bottom; XP orbs stop and do not fly to you while you stand beside; break the web → they fall; save, restart → still stuck. Repeat with ItemPhysic's item ticking. Queue: SQ-PTH-06, -07, -08.
+- [ ] **BR-79 Surrounded web, projectiles:** into the centre of a 3x3x3 cube: a tipped arrow hangs and is picked up as the same tipped arrow; a Nock Enough Arrows explosive arrow hangs without exploding; a hanging arrow is still there after 5 minutes; a snowball and an ender pearl break in the middle (the pearl puts you in the middle, hanging); a splash potion sinks down the middle and splashes below; a crossbow firework with a star hangs, then pops; an Old Guns bullet and a Blocky Siege cannonball fly straight through unslowed. Queue: SQ-PTH-10, -11, -24.
+- [ ] **BR-80 Snag in a single web:** a fishing bobber (reel it back in), a feather on a stick and a Quark pickarang stop in the middle of a lone web; walk into the pickarang → you get it back with its damage; snag another, break the web → it drops. Botania thorn chakram the same. Queue: SQ-PTH-12.
+- [ ] **BR-81 Arrow despawn:** a player's arrow in the ground: still there after 5 minutes, gone after 10; a non-Loyalty trident the same; a Loyalty trident returns as usual; a skeleton's arrow is gone after 1 minute and cannot be picked up from a web. With `arrowLongLifeCap` 3 in one chunk: a fourth arrow makes the oldest despawn at once if it is over a minute old, else after its first minute. Queue: SQ-PTH-13, -14.
+- [ ] **BR-82 Picked up as themselves:** from a web: a tipped arrow, a spectral arrow, a Nock Enough Arrows explosive arrow and a Supplementaries rope arrow all come back as themselves (the rope arrow with its rope). Queue: SQ-PTH-10.
+- [ ] **BR-83 Leaf piles:** an oak leaf pile at 3 layers: no `P`; at 4: -0.55 (0.45x); with Depth Strider boots: none. Twigs bamboo leaves: 3 layers none, 4 layers -0.55; an ocelot is slowed in them, a fox is not. IW spruce thorns still hurt at 6+ layers. Queue: SQ-PTH-17, -18.
+- [ ] **BR-84 Bushes:** a sweet berry bush feels as before (0.36x) and still hurts; a Vinery taiga grape bush now slows the same. Queue: SQ-PTH-22.
+- [ ] **BR-85 Field of view:** with BlockRunner's `disable_field_of_view_changes` on, walk onto asphalt, onto honey, into a wheat field and into a web → the field of view does not change; sprinting still widens it. Queue: CQ-PTH-01.
+- [ ] **BR-86 Server values:** two players on the dedicated server in a wheat field; change `[surface.passthrough.dense_crop] denseWalk` to 0.2 on the server and save → both walk at the new speed with no rubber-banding. Queue: CQ-PTH-02.
+- [ ] **BR-87 WTHIT lines:** look at ripe wheat inside a field (walk, Neighbors), wheat at age 2 (no line), a lone web (`Walk Through: 0.50x`, `Fall Through: 0.85x`, `Neighbors: 0`), the centre of a web cube (`Fall Through: stopped`), a vine ("while moving through"), a 3- and a 4-layer leaf pile (line only on the 4-layer one), powder snow (the old walking-through Run Speed line). Queue: CQ-PTH-04.
+- [ ] **BR-88 Performance:** `/cdevbench passthrough` → the field and web-cube entity ticks under 1000 ns; then play a normal session (farm, village, a web build) with `[debug.passthrough] timing = true` and a JFR recording; `python3 tools/perf/passthrough_timing.py logs/latest.log` → record the share of tick time in 3.10 Performance (decides whether the per-tick count cache is built). Queue: SQ-PTH-25 to -28, CQ-PTH-05.
+
 **Server side (only when the dedicated server is back)**
 - [ ] **BR-27 Server parity:** with the new patcherMod jar on the server, repeat BR-11, BR-15 and BR-17 while connected. → Same values, and no rubber-banding when walking across camo'd frames.
 
@@ -715,5 +953,10 @@ the blocks touching the entity's sides.
   collision, fluids, thin blocks and `auditSkip`. Watcher tooling: `/dumpsurface`, `blockrunner_scan.py --audit`
   (6). The friction/jump outlier pass (`#5`) waits for the first dump. BR-59..64 added. Jars built, not installed
   (game open): Common, Compat, Devtools.
+- **2026-11-14 to 11-15** Pass-through blocks (3.10, [plan_passthrough.md](plan_passthrough.md), TODO
+  `gameplay/blockrunner #10`): phases 0 to 7 built in Creative Compat (core, cobwebs, items, projectiles, arrow
+  despawn, leaf piles and ropes, tags and tools, WTHIT lines, timing log) and Creative Devtools (`/cdevbench
+  passthrough`); perf suite plan `passthrough.py`; `LeafPileSlowMixin` and `[leaf_piles]` replaced by the `leaf_pile`
+  tier. Headless 203/203. BR-67..88 added. Jars built 2026-11-15 00:40, not installed; status built, untested.
 
 Scratchpad 2026-11-13: jello blocks are in the very sticky tier; they still bounce (SlimeBlock). Honey's jump factor for them is TODO `gameplay/blockrunner #9`.

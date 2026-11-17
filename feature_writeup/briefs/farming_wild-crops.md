@@ -39,7 +39,7 @@ density table); #6 needs only the ocean `add` list and a generator sea-floor row
 
 Every change here is worldgen: **new chunks only**, rejoin to apply (switch `config/creativedelight-common.toml`
 `[worldgen] wildCrops`, line 41), and rerun `python3 tools/gen_crop_worldgen_table.py` plus `tools/test_wild_crops.sh`
-after each edit. Wild crops moved into Creative Delight on 2026-10-25 (memory `vegetation-worldgen-system`): tags are
+after each edit. Wild crops moved into Creative Delight on 2026-10-25 (note [vegetation-worldgen-system](../agent_notes/vegetation-worldgen-system.md)): tags are
 `creativedelight:wild_crops/<key>`, pack features `creativedelight:wild/*`. Files (checked 2026-10-31):
 - [wild_crops.json](../../kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json) (404 lines: `_readme`, `crops`
   69 rules; the jar copy is read when the pack folder copy is absent, via `CDResources.text`);

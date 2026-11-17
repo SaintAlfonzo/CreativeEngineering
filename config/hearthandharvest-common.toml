@@ -22,7 +22,7 @@
 	#Chance of a Corn Husk when harvesting corn.
 	#Range: 0.0 ~ 1.0
 	cornHuskHarvestChance = 0.25
-	#Hops only grow when the bottom of their lattice column stands on farmland.
+	#Ignored since 2026-11-14: hops grow as a vine on a wall or on Vinery's grapevine lattice, never on farmland. Kept so old files load.
 	hopsRequireFarmland = true
 
 [machines]

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.SaintAlfonzo.creativecompat.surface.PassTier;
+import com.SaintAlfonzo.creativecompat.surface.PassValues;
 import com.SaintAlfonzo.creativecompat.surface.SurfaceTier;
 
 import net.minecraftforge.common.ForgeConfigSpec;
@@ -20,7 +21,6 @@ import net.minecraftforge.common.ForgeConfigSpec;
 public final class CompatConfig {
 
     public static final ForgeConfigSpec SPEC;
-    public static final LeafPiles LEAF_PILES;
     public static final Moss MOSS;
     public static final VineShearing VINE_SHEARING;
     public static final MonsterBox MONSTER_BOX;
@@ -39,6 +39,7 @@ public final class CompatConfig {
     public static final Wthit WTHIT;
     public static final ImmersivePortals IMMERSIVE_PORTALS;
     public static final PortalGun PORTAL_GUN;
+    public static final Debug DEBUG;
 
     /** Sections taken over from Creative Common's creativecommon-common.toml (interface carve, 2026-11-07). */
     public static final List<String> COMMON_SECTIONS = List.of("jei", "gui_title", "toasts", "tooltips", "coaster", "wthit");
@@ -50,6 +51,8 @@ public final class CompatConfig {
      * The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]} (added 2026-11-01,
      * after the carve) and {@code [giant_squid]} (2026-11-02) are new in this file and are not carried. {@code [campfire]}
      * moved on to Creative Delight's file on 2026-11-04 (creative_split.md 7.9 step 1), which carries it from here.
+     * {@code [leaf_piles]} has no spec since 2026-11-15: carried from an old file, {@code surface.LeafPileMigration}
+     * then moves its value to {@code [surface.passthrough.leaf_pile] minLayers} and drops it.
      */
     public static final List<String> SECTIONS =
             List.of("leaf_piles", "moss", "vine_shearing", "monster_box", "trash_slot");
@@ -59,7 +62,6 @@ public final class CompatConfig {
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        LEAF_PILES = new LeafPiles(builder);
         MOSS = new Moss(builder);
         VINE_SHEARING = new VineShearing(builder);
         MONSTER_BOX = new MonsterBox(builder);
@@ -80,33 +82,12 @@ public final class CompatConfig {
         // Immersive Portals and the Portal Gun (feature_writeup/plan_portal_changes.md, 2026-11-07)
         IMMERSIVE_PORTALS = new ImmersivePortals(builder);
         PORTAL_GUN = new PortalGun(builder);
+        // developer switches (plan_passthrough.md 7.3, 2026-11-15)
+        DEBUG = new Debug(builder);
         SPEC = builder.build();
     }
 
     private CompatConfig() {}
-
-    /**
-     * Immersive Weathering leaf piles: how tall a pile must be to slow you ({@code mixin/LeafPileSlowMixin},
-     * read by the WTHIT Run Speed line in {@code surface.StuckInBlock} through {@code surface.LeafPileSlow}, set from it in {@link CreativeCompat}). Read on every entity-in-pile tick.
-     */
-    public static final class LeafPiles {
-        public final ForgeConfigSpec.IntValue slowFromLayers;
-
-        private LeafPiles(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Immersive Weathering leaf piles (1-8 layers). Their slowdown is still IW's own (on/off: IW",
-                    "leaf_piles_slow; Depth Strider, foxes and bees walk through); this sets the height it starts at."
-            ).push("leaf_piles");
-
-            slowFromLayers = b.comment(
-                    "Layers a leaf pile needs before it slows walking, and before WTHIT shows a Run Speed line for it.",
-                    "IW's own rule is 4 (more than 3 layers). 9 = piles never slow. Movement is worked out on the",
-                    "client too, so keep this the same on the server and every client."
-            ).defineInRange("slowFromLayers", 4, 1, 9);
-
-            b.pop(); // leaf_piles
-        }
-    }
 
     /** Biome-tinted moss block and moss carpet ({@code block.MossTint}). Client side only. */
     public static final class Moss {
@@ -560,16 +541,22 @@ public final class CompatConfig {
             public final ForgeConfigSpec.BooleanValue enabled;
             public final ForgeConfigSpec.IntValue arrowLifeTicks;
             public final ForgeConfigSpec.IntValue arrowLongLifeCap;
+            public final ForgeConfigSpec.IntValue breakStallTicks;
             public final Map<PassTier, Tier> tiers = new EnumMap<>(PassTier.class);
+            /** {@code [surface.passthrough.layers] solidBelowFullOverrides} (set by the layer tier's table). */
+            public ForgeConfigSpec.ConfigValue<List<? extends String>> solidBelowFullOverrides;
 
             private Passthrough(ForgeConfigSpec.Builder b) {
                 b.comment(
                         "Walking and falling through blocks you stand in rather than on: crops, grass, ropes, vines,",
-                        "cobwebs, barbed wire, berry bushes, leaf piles. Tier contents are the",
-                        "creativecompat:passthrough/<tier> block tags (kubejs blocktags.js); a block slows you while your",
-                        "box touches its outline. Several at once: the lowest walk and the lowest fall win. Soil speed",
-                        "(the surface tiers) multiplies with the walk value. Spectators, flying players, elytra gliding",
-                        "and swimming are never slowed. The server's values are sent to players on join and on save."
+                        "cobwebs, barbed wire, berry bushes, layered blocks (snow, leaf piles). Tier contents are the",
+                        "creativecompat:passthrough/<tier> block tags (layers: creativecompat:passthrough_layers; kubejs",
+                        "passthrough_tags.js); a block slows you while your box touches its outline. Several at once: the",
+                        "lowest walk and the lowest fall win. Soil speed (the surface tiers) multiplies with the walk value.",
+                        "Spectators, flying players, elytra gliding and swimming are never slowed. The server's values are",
+                        "sent to players on join and on save. A saved edit applies when Forge's file watcher sees it; an",
+                        "editor that saves by replacing the file is missed: then run /cdevreload compat (Creative",
+                        "Devtools) or restart."
                 ).push("passthrough");
 
                 enabled = b.comment("Master switch. false = every pass-through block behaves as before this system (its",
@@ -583,15 +570,23 @@ public final class CompatConfig {
                         "Long-life arrows per chunk. When one more sticks, the oldest drops to vanilla's minute (and",
                         "despawns at once if it is already past it).")
                         .defineInRange("arrowLongLifeCap", 128, 0, 4096);
+                breakStallTicks = b.comment(
+                        "Snowballs, ender pearls, fireballs and the other projectiles that break on impact: ticks one",
+                        "must stay stopped (under 0.05 blocks per tick) inside a web before it breaks where it stopped",
+                        "(an ender pearl teleports there). 0 = off (they break only in a web enclosed on every side).")
+                        .defineInRange("breakStallTicks", PassValues.DEFAULT_STALL_TICKS, 0, 100);
 
                 for (PassTier t : PassTier.values()) {
-                    tiers.put(t, new Tier(b, t));
+                    tiers.put(t, new Tier(b, t, this));
                 }
 
                 b.pop(); // passthrough
             }
 
-            /** One {@code [surface.passthrough.<tier>]} table. */
+            /**
+             * One {@code [surface.passthrough.<tier>]} table. The layer tier's table holds only the keys its rule uses
+             * (fall, depthStriderPasses, the layer keys); the others keep their defaults there and are null.
+             */
             public static final class Tier {
                 public final ForgeConfigSpec.DoubleValue walk;
                 public final ForgeConfigSpec.DoubleValue fall;
@@ -602,36 +597,87 @@ public final class CompatConfig {
                 public final ForgeConfigSpec.DoubleValue denseFall;
                 public final ForgeConfigSpec.BooleanValue denseResetsFall;
                 public final ForgeConfigSpec.EnumValue<PassTier.Surround> surrounded;
+                public final ForgeConfigSpec.IntValue surroundedAt;
                 public final ForgeConfigSpec.IntValue minLayers;
                 public final ForgeConfigSpec.BooleanValue walkOnlyMoving;
                 public final ForgeConfigSpec.EnumValue<PassTier.ItemRule> items;
                 public final ForgeConfigSpec.DoubleValue itemStickChance;
                 public final ForgeConfigSpec.BooleanValue projectiles;
                 public final ForgeConfigSpec.BooleanValue depthStriderPasses;
+                public final ForgeConfigSpec.DoubleValue layerMaxSlow;
+                public final ForgeConfigSpec.IntValue solidBelowFull;
+                private final PassTier.Values defaults;
 
-                private Tier(ForgeConfigSpec.Builder b, PassTier t) {
+                private Tier(ForgeConfigSpec.Builder b, PassTier t, Passthrough parent) {
                     PassTier.Values d = t.defaults();
+                    defaults = d;
                     b.comment(t.description()).push(t.key());
+                    if (t.layered()) {
+                        walk = null;
+                        growth = null;
+                        neighbours = null;
+                        denseFrom = null;
+                        denseWalk = null;
+                        denseFall = null;
+                        denseResetsFall = null;
+                        surrounded = null;
+                        surroundedAt = null;
+                        walkOnlyMoving = null;
+                        items = null;
+                        itemStickChance = null;
+                        projectiles = null;
+                        layerMaxSlow = b.comment(
+                                "Walk multiplier at the highest walk-through layer H (5 of 8 at the defaults). One layer",
+                                "does not slow; from 2 layers the value falls in equal steps to this one at H.")
+                                .defineInRange("layerMaxSlow", d.layerMaxSlow(), 0.05, 1.0);
+                        solidBelowFull = b.comment(
+                                "Stages below full at which a pile stops being walk-through and acts whole (normal",
+                                "collision and speed, no slowdown): 2 = 6, 7 and 8 of 8 act whole, so H = max - 3. 0 = only",
+                                "the full block acts whole. The max is read from each block's own layers property. A",
+                                "value that leaves H under 2 means the block never slows. Snow layers only; leaf layers never act whole.")
+                                .defineInRange("solidBelowFull", d.solidBelowFull(), 0, 16);
+                        minLayers = b.comment("Piles with fewer layers than this are ignored (one layer never slows).")
+                                .defineInRange("minLayers", d.minLayers(), 1, 16);
+                        parent.solidBelowFullOverrides = b.comment(
+                                "Per-block solidBelowFull, entries 'blockid=value'. Empty by default. Leaf piles and",
+                                "bamboo leaves never act whole (tag passthrough_layers_open) and ignore this.")
+                                .defineListAllowEmpty(List.of("solidBelowFullOverrides"),
+                                        () -> PassValues.DEFAULT_OVERRIDES.entrySet().stream()
+                                                .map(e -> e.getKey() + "=" + e.getValue()).toList(),
+                                        o -> PassValues.parseOverride(o) != null);
+                        fall = b.comment("Multiplier on downward speed each tick inside a walk-through pile, and on fall",
+                                        "distance per block passed.")
+                                .defineInRange("fall", d.fall(), 0.0, 1.0);
+                        depthStriderPasses = b.comment("Depth Strider boots walk through unslowed.")
+                                .define("depthStriderPasses", d.depthStriderPasses());
+                        b.pop();
+                        return;
+                    }
+                    layerMaxSlow = null;
+                    solidBelowFull = null;
+                    minLayers = null;
                     walk = b.comment("Horizontal speed multiplier while inside (1.0 = normal).")
                             .defineInRange("walk", d.walk(), 0.05, 1.5);
                     fall = b.comment("Multiplier on downward speed each tick, and on fall distance per block passed.")
                             .defineInRange("fall", d.fall(), 0.0, 1.0);
                     growth = b.comment("ANY: always. HALF: own growth at least half. TALL_HALF: a tall crop's lower block decides for both.")
                             .defineEnum("growth", d.growth());
-                    neighbours = b.comment("Density count: NONE, RING (8 around, same layer) or CUBE (26 around, 3x3x3). Same-tier blocks count.")
-                            .defineEnum("neighbours", d.neighbours());
-                    denseFrom = b.comment("Neighbour count at which the dense values apply.")
-                            .defineInRange("denseFrom", d.denseFrom(), 1, 26);
+                    neighbours = b.comment(
+                                    "Density count: NONE, SIDES (the 4 side-adjacent blocks, same layer) or FACES (the 6",
+                                    "face-adjacent blocks). Same-tier blocks count, grown or not.")
+                            .defineEnum("neighbours", d.neighbours(), PassTier.Neighbours.CONFIG);
+                    denseFrom = b.comment("Neighbour count at which the dense values apply (above the shape's max: never).")
+                            .defineInRange("denseFrom", d.denseFrom(), 1, 6);
                     denseWalk = b.comment("Walk multiplier once dense.")
                             .defineInRange("denseWalk", d.denseWalk(), 0.05, 1.5);
                     denseFall = b.comment("Fall multiplier once dense.")
                             .defineInRange("denseFall", d.denseFall(), 0.0, 1.0);
                     denseResetsFall = b.comment("Fall damage resets every tick while dense.")
                             .define("denseResetsFall", d.denseResetsFall());
-                    surrounded = b.comment("What a full neighbour count does: NONE, or WEB (falling stops; hang, climb and sink at web speed).")
+                    surrounded = b.comment("What a count of surroundedAt does: NONE, or WEB (falling stops; hang, climb and sink at web speed).")
                             .defineEnum("surrounded", d.surrounded());
-                    minLayers = b.comment("Blocks with layers (leaf piles, bamboo leaves): fewer layers than this are ignored. 9 = never.")
-                            .defineInRange("minLayers", d.minLayers(), 1, 9);
+                    surroundedAt = b.comment("Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).")
+                            .defineInRange("surroundedAt", d.surroundedAt(), 1, 6);
                     walkOnlyMoving = b.comment("Walk slowdown only while moving horizontally through the block (vines).")
                             .define("walkOnlyMoving", d.walkOnlyMoving());
                     items = b.comment("Dropped items and experience orbs: NONE, or STICK (they stop inside the block).")
@@ -645,12 +691,22 @@ public final class CompatConfig {
                     b.pop();
                 }
 
+                private static <T> T or(ForgeConfigSpec.ConfigValue<T> v, T d) {
+                    return v == null ? d : v.get();
+                }
+
                 /** The live values as one snapshot. */
                 public PassTier.Values values() {
-                    return new PassTier.Values(walk.get(), fall.get(), growth.get(), neighbours.get(), denseFrom.get(),
-                            denseWalk.get(), denseFall.get(), denseResetsFall.get(), surrounded.get(), minLayers.get(),
-                            walkOnlyMoving.get(), items.get(), itemStickChance.get(), projectiles.get(),
-                            depthStriderPasses.get());
+                    PassTier.Values d = defaults;
+                    return new PassTier.Values(or(walk, d.walk()), fall.get(), or(growth, d.growth()),
+                            or(neighbours, d.neighbours()).canonical(), or(denseFrom, d.denseFrom()),
+                            or(denseWalk, d.denseWalk()), or(denseFall, d.denseFall()),
+                            or(denseResetsFall, d.denseResetsFall()), or(surrounded, d.surrounded()),
+                            or(surroundedAt, d.surroundedAt()), or(minLayers, d.minLayers()),
+                            or(walkOnlyMoving, d.walkOnlyMoving()), or(items, d.items()),
+                            or(itemStickChance, d.itemStickChance()), or(projectiles, d.projectiles()),
+                            depthStriderPasses.get(), or(layerMaxSlow, d.layerMaxSlow()),
+                            or(solidBelowFull, d.solidBelowFull()));
                 }
             }
         }
@@ -662,12 +718,14 @@ public final class CompatConfig {
             public final ForgeConfigSpec.BooleanValue hideNormal;
             public final ForgeConfigSpec.BooleanValue showTier;
             public final ForgeConfigSpec.EnumValue<SpeedFormat> format;
+            public final ForgeConfigSpec.BooleanValue passThrough;
 
             private Wthit(ForgeConfigSpec.Builder b) {
                 b.comment(
                         "A 'Run Speed' line in WTHIT's look-at overlay: the speed you'd walk at on that block, by",
                         "the same rules as movement (camo and sticky facing included). Blocks you pass through",
-                        "(plants) get no line unless they slow you from inside (cobwebs, berry bushes, leaf piles);",
+                        "get no Run Speed line: pass-through blocks get the passThrough lines below, and the few",
+                        "others that slow you from inside (powder snow, bamboo spikes) a 'walking through' line;",
                         "thin layers (carpet, 1-2 snow layers) show the block beneath, which is the one you walk on.",
                         "Client-side only; it reads BlockRunner's own speed table, no server traffic."
                 ).push("wthit");
@@ -692,6 +750,17 @@ public final class CompatConfig {
 
                 format = b.comment("MULTIPLIER: 1.50\u00d7 / 0.88\u00d7. PERCENT: +50% / -12%.")
                         .defineEnum("format", SpeedFormat.MULTIPLIER);
+
+                passThrough = b.comment(
+                        "Pass-through blocks ([surface.passthrough]: crops, ropes, vines, cobwebs, layered blocks):",
+                        "'Walk Through: 0.50\u00d7 (Dense neighbors) on Farmland (Tilled)' (the block's walk value times",
+                        "the soil's speed; the soil is named only when its speed is not 1.00; layered blocks add '3 of 8",
+                        "layers'), 'Fall Through: 0.20\u00d7' or 'Fall Through: stopped' (a surrounded web), and",
+                        "'Neighbors: 3 of 4' for tiers that count them. A pile high enough to act whole gets the Run Speed line.",
+                        "hideNormal hides a 1.00 walk or fall line. No line for a crop below its growth rule or when",
+                        "you are exempt (Depth Strider on a leaf pile). Uses the server's values. false = no lines.",
+                        "Read on every overlay refresh, so a saved change applies at once (see [surface.passthrough])."
+                ).define("passThrough", true);
 
                 b.pop(); // wthit
             }
@@ -1167,6 +1236,26 @@ public final class CompatConfig {
             ).defineInRange("heartbeatSeconds", 10, 1, 600);
 
             b.pop(); // portalgun
+        }
+    }
+
+    /** Developer switches; all off by default. */
+    public static final class Debug {
+        public final ForgeConfigSpec.BooleanValue passthroughTiming;
+
+        private Debug(ForgeConfigSpec.Builder b) {
+            b.comment("Developer switches (all off by default).").push("debug");
+            b.comment("Pass-through blocks ([surface.passthrough], plan_passthrough.md 7.3).").push("passthrough");
+            passthroughTiming = b.comment(
+                    "true: time the pass-through hook and log one '[passthrough-timing]' line every 200 ticks, for",
+                    "the server and the client separately: hook calls, total and longest time, entity-ticks inside a",
+                    "pass-through block, neighbour counts, and the tick time they share. Read them with",
+                    "python3 tools/perf/passthrough_timing.py logs/latest.log. Read every tick, so it applies as soon",
+                    "as the file is reloaded (an editor that saves by replacing the file is missed by Forge's watcher:",
+                    "run /cdevreload compat or restart)."
+            ).define("timing", false);
+            b.pop(); // passthrough
+            b.pop(); // debug
         }
     }
 }

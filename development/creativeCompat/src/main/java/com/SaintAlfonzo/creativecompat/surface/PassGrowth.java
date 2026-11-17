@@ -23,8 +23,8 @@ import net.minecraft.world.level.block.state.properties.Property;
  *   <li>Upper block of a tall crop: {@code upper=true} (Corn Delight), {@code half=upper} (double plants, coffee), a
  *       {@code top*} growth value (hemp), or a different block of the same tier right below (rice panicles on rice).
  *       Under {@code tall_half} an upper block looks down one block and uses that block's growth.</li>
- *   <li>Layers: an integer {@code layers} property (IW leaf piles 0-8, Twigs bamboo leaves 1-8), compared with the
- *       tier's {@code minLayers}.</li>
+ *   <li>Layers: an integer {@code layers} property (snow 1-8, IW leaf piles 0-8, Twigs bamboo leaves 1-4, IE sawdust
+ *       1-9) and its highest value, for the layer height rule ({@link PassRule#layerWalk}).</li>
  * </ul>
  * What a block has is read once per block and cached ({@link #clear} on tag reload, with the tier cache).
  */
@@ -34,7 +34,7 @@ final class PassGrowth {
 
     /** The growth-related properties of one block. */
     private record Info(IntegerProperty age, int ageMin, int ageMax, Property<?> growth, List<String> lowerStages,
-                        BooleanProperty upper, Property<?> half, IntegerProperty layers) {
+                        BooleanProperty upper, Property<?> half, IntegerProperty layers, int layersMax) {
 
         boolean isUpper(BlockState state) {
             if (upper != null && state.getValue(upper)) return true;
@@ -98,7 +98,11 @@ final class PassGrowth {
         } else {
             growth = null;
         }
-        return new Info(age, min, max, growth, List.copyOf(lower), upper, half, layers);
+        int lmax = -1;
+        if (layers != null) {
+            for (int v : layers.getPossibleValues()) lmax = Math.max(lmax, v);
+        }
+        return new Info(age, min, max, growth, List.copyOf(lower), upper, half, layers, lmax);
     }
 
     /** Serialized names of a property's values, in its own order (an enum's declaration order). */
@@ -136,5 +140,10 @@ final class PassGrowth {
     static int layers(BlockState state) {
         IntegerProperty p = info(state.getBlock()).layers();
         return p == null ? -1 : state.getValue(p);
+    }
+
+    /** The highest value of the block's {@code layers} property, or -1 when it has none. */
+    static int layersMax(BlockState state) {
+        return info(state.getBlock()).layersMax();
     }
 }

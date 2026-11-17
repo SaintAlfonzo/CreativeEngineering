@@ -12,7 +12,7 @@ resources only, no member Java change): golden recipes on 8 nuggets (3.4a), gild
 `CQ-GLD2-`, queue sections SQ-CDJ6 and SQ-CDJ7). Server by hand: copy `goldenfood_upstream/` beside `mods/`.
 
 **Licence: All rights reserved** (upstream `mods.toml`). So the route is the Miner's Delight / Oceanic one (port skill,
-memory `miners-delight-backport-plan`): the unmodified upstream jar is a sha1-pinned donor in
+note [miners-delight-backport-plan](agent_notes/miners-delight-backport-plan.md)): the unmodified upstream jar is a sha1-pinned donor in
 `goldenfood_upstream/goldenfood-1.19.2-2.0.0.jar` (sha1 `4109e4d6d484892b8efc201b1a32b9361df930cd`); the member reads
 its textures, models, lang, recipes and loot tables from it at load time; everything the member ships is our own GPLv3
 code written from the mod's behaviour. Nothing of the upstream jar ships (`checkNoUpstreamResources`, `check_donor.py`).

@@ -47,6 +47,7 @@ Defaults chosen from the brief; each is marked **[default]** where it is used.
 
 ## 1. Seed pouch and bundle in dispensers (B; TODO `largecontent/mod-additions #65`)
 Status: DONE 2026-11-14 (cd-a). Quark pickup check: no double count (Quark fills only a held pouch; both shrink the same ground stack).
+2026-11-15 (fix-2, r1115): SQ-SPD-08 FAILed in the Nether (the cached fake player is the overworld one and `UseOnContext` took its level); the context now gets the dispenser's level. Rerun SQ-SPD-08b.
 
 ### 1.1 Behaviour
 - Crash cause: HH `gear/QuarkCompat.java:40-47`. The anonymous `DefaultDispenseItemBehavior.execute` calls `dispense(source, pouch)`,
@@ -182,7 +183,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
     - `V/core/mixin/FoxEatBerriesGoalMixin.java:56`: skip hops **[default]**.
     - `V/core/command/VineryCommands.java:271`: list it.
   - Rendering hops on the lattice without touching Vinery's files:
-    - Vinery's assets are All Rights Reserved, and Satisfy refused redistribution (memory `backported-vinery`; alcohol.md
+    - Vinery's assets are All Rights Reserved, and Satisfy refused redistribution (note [backported-vinery](agent_notes/backported-vinery.md); alcohol.md
       B3.6). The port reads them from the unmodified donor jar in `vinery_upstream/`. So no Vinery model, texture or
       blockstate is copied or edited.
     - The `vinery:grapevine_lattice` blockstate file belongs to Vinery and has no `grape=hops` variants. A client
@@ -200,7 +201,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
   - Old worlds: swap entries `hearthandharvest:<lattice> -> vinery:grapevine_lattice` and the hops-on-lattice block to
     `vinery:grapevine_lattice[grape=hops]`, keeping the age where it lines up.
     - An H&H lattice standing on farmland with no wall behind it pops off and drops a Vinery lattice item: no item loss.
-    - Test on a fresh old-id save (memory `forge-missing-mappings-staging`).
+    - Test on a fresh old-id save (note [forge-missing-mappings-staging](agent_notes/forge-missing-mappings-staging.md)).
 - Models and textures for the wild vine (`hearthandharvest:hops_vine`, our block):
   - We write our own blockstate. Its multipart cases point at Vinery's models by id
     (`vinery:block/jungle_grape_vine_stage0`, `_stage1`, `_white_stage2`, `_white_stage3`).
@@ -266,7 +267,7 @@ Status: dict part DONE 2026-11-14 (common): `item_dict.js` `i.tilled_end_stone =
 - Tags: `KJ/hearthandharvest/tags.js:60` mineable/pickaxe now targets the Ender Crop block, guarded `// requires: endercrop`.
   Check `kubejs/server_scripts/tags/blocktags.js:374,475`.
 - Swap entry `hearthandharvest:tilled_end_stone -> endercrop:tilled_end_stone` in `swap_merges.js`, plus a fresh old-id save
-  test (memory `forge-missing-mappings-staging`).
+  test (note [forge-missing-mappings-staging](agent_notes/forge-missing-mappings-staging.md)).
 - Docs:
   - Retire `texture_sources/ledger.tsv:977-978`.
   - Update `hearth_and_harvest.md` J75 and `tools/blockrunner_untagged_blocks.json:528`.
@@ -286,7 +287,7 @@ Status: DONE 2026-11-14 (cd-a).
 ### 3.4 Syrup to sugar (TODO `#72`; B rustic member)
 Status: DONE 2026-11-14 (cd-a). Dropped through the Rustic bake (`DROPPED_FILES` in bake_upstream.py), not a hand delete. `#72b` row added.
 - Delete `members/rustic/src/main/resources/data/rusticdelight/recipes/sugar_from_syrup.json`. Clean-build the member
-  (memory `repack-stale-resources`). The CD recipe `KJ/hearthandharvest/recipes.js:174` (4 sugar) stays.
+  (note [repack-stale-resources](agent_notes/repack-stale-resources.md)). The CD recipe `KJ/hearthandharvest/recipes.js:174` (4 sugar) stays.
 - Later, a separate step, not in this run: add a heated Create mixing recipe with a better yield (`R.createMixing(..., 'heated')`,
   the pattern at `recipes.js:173`). The owner picks the value. TODO row to add: `#72b`.
 - Verify: SQ-HH-1593 rerun (only the 4-sugar recipe).
@@ -331,6 +332,7 @@ Status: DONE 2026-11-14 (cd-a). Unshoe item rule: empty hand, shears or a horses
 
 ### 3.7 Salt lick: edge bug and layered stages (TODO `#76`; B + texture rule)
 Status: DONE 2026-11-14 (cd-a). Rows renamed: SQ-HH-483/-486/-487 were taken, so SQ-SLK-01 to -04 and CQ-SLK-01. Layers: partial stages cannot hold a layer (not a full top face), so the refill is `LickableSaltBlock.neighborChanged`, and Vintage `SaltLayerBlock.onPlace` notifies the block below. Old stage textures deleted, ledger rerun.
+2026-11-15 (fix-2, r1115): SQ-SLK-01b, a cow beside the block never licked (block-position distance > 2 where navigation stopped); `closeEnough` also accepts the body within 1 block of the block. Rerun SQ-SLK-01c.
 - Edge bug: `salt/StayNearSaltGoal.java:182-202` `findTrip` needs a full path (`canReach`), but cow FOLLOW_RANGE (16) is
   shorter than `animalRadius` (20).
   - Fix: when the salt is farther than follow range minus 2, accept a partial path toward it and re-plan on arrival.
@@ -607,6 +609,7 @@ Status: DONE 2026-11-14 (cd-a).
 
 ### 4.6 Barbeque's Delight basin eats the stick (B; TODO `dishes/meals #67`)
 Status: DONE 2026-11-14 (cd-a). The exact loss path was not proven by reading; a stick is now never stored and passes without a recipe.
+2026-11-15 (fix-2, r1115): SQ-BBQW-02s FAILed (PASS let Supplementaries place the stick on the basin); the tool branch now returns CONSUME. Rerun SQ-BBQW-02t.
 - Not in the owner brief by name, but it is an item-loss FAIL. Fix with the batch: on a one-beef basin the stick
   interaction must return PASS and keep the stick.
 - Verify: SQ-BBQW-02s rerun.
@@ -818,7 +821,7 @@ below was read from source, with no game run.
   - Verify: SQ-PWG-80 rewritten (acid needs the flesh; items first, then water, gives acid). New SQ-PWG-80b: water first,
     to record what happens.
   - Changelog: under Power Grid when it ships.
-- Every change gets a B entry and a gate jar in `jar_archive/pwg_gate/`, never `mods/` (memory `power-grid-port`).
+- Every change gets a B entry and a gate jar in `jar_archive/pwg_gate/`, never `mods/` (note [power-grid-port](agent_notes/power-grid-port.md)).
 
 ## 9. Order and tests
 
@@ -832,6 +835,8 @@ below was read from source, with no game run.
 6. 5.2 audit after 1 to 4, then its fixes.
 7. Scratch queue (skill `scratch-test`; rows written in the build session, run only when the owner says): every row named
    above. Rubber tree SQ-CDW-02 goes last.
+
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8; findings routing in section 9 there): sections 1 (SQ-SPD-01 to -07, SQ-HH-1574, -1575; SQ-SPD-08 Nether pouch fixed by fix-2, rerun -08b PASS), 2 (SQ-TPF-00, -01), 3.2 (SQ-HH-1546 to -1546c), 3.3 to 3.6, 3.7 (SQ-SLK-02 to -04; SQ-SLK-01 reach fixed by fix-2, -01c PASS), 3.10 (SQ-HH-266 to -266c), 4.2, 4.3, 4.4, 4.5, 4.6 (SQ-BBQW-02s fixed by fix-2: CONSUME, -02t PASS), 5 (SQ-DEP, 7.21 of creative_split.md), 6.3 (SQ-HH-328), 6.4 (SQ-VH-06 to -06c), 7.1 to 7.4, 8 PASS. FAIL for the owner: 3.1 hops (SQ-HOP-04 stick on an age-1 vine, -05 Compat shearing (pass-through session), -06 no wild hops), 3.8 (SQ-MELT-08 no per-click salt melt, -10 fire-tag lantern), 4.1 (SQ-PG-01c client crash at a Flint and Terrasteel portal, URGENT; SQ-PG-01b stuck in the ground after floor-to-wall), 8 (SQ-PWG-82).
 
 ## 10. Open items for the owner (breakdown 2026-11-14, owner answers the same day)
 

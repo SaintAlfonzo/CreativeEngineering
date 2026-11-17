@@ -19,6 +19,7 @@ import net.minecraft.world.entity.animal.horse.AbstractHorse;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.pathfinder.Path;
+import net.minecraft.world.phys.AABB;
 
 /**
  * Keeps a licker animal near a salt lick and sends it to lick (plan_hearth_crow_salt.md S4). The search is the vanilla POI
@@ -30,6 +31,7 @@ public class StayNearSaltGoal extends Goal {
     private static final int TRIP_TICKS = 300;
     private static final int PATH_CANDIDATES = 3;
     private static final double LICK_DISTANCE_SQR = 4.0D;
+    private static final double LICK_REACH_SQR = 1.0D;
 
     private final PathfinderMob mob;
     @Nullable
@@ -152,8 +154,25 @@ public class StayNearSaltGoal extends Goal {
         }
     }
 
+    /**
+     * At the block: the old block-position rule, or the mob's box within one block of the salt block's box. The box check
+     * covers where a trip to a standing spot ends (navigation stops up to half a body width past the spot, so a cow beside
+     * the block could sit two block positions away and never lick, SQ-SLK-01b).
+     */
     private boolean closeEnough() {
-        return mob.blockPosition().distSqr(salt) <= LICK_DISTANCE_SQR;
+        if (mob.blockPosition().distSqr(salt) <= LICK_DISTANCE_SQR) {
+            return true;
+        }
+        AABB box = mob.getBoundingBox();
+        double gx = gap(box.minX, box.maxX, salt.getX());
+        double gy = gap(box.minY, box.maxY, salt.getY());
+        double gz = gap(box.minZ, box.maxZ, salt.getZ());
+        return gx * gx + gy * gy + gz * gz <= LICK_REACH_SQR;
+    }
+
+    /** Gap on one axis between [min, max] and the unit block starting at {@code block}; 0 when they overlap. */
+    private static double gap(double min, double max, int block) {
+        return Math.max(0.0D, Math.max(block - max, min - (block + 1.0D)));
     }
 
     private void lick() {
