@@ -220,6 +220,41 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | 1.1.02: Vintage Delight, Veggies Delight and Fungi Delight ports, mooshroom breeding, Sky Structures, spawn and worldgen tuning (notes in `changelog/1.1.02.md`); **does not load** (Vintage placed features), hotfix 1.1.03 built and installed 2026-10-26, not yet staged | [deploy log](../deploy/DEPLOY_LOG.md) | DEPLOYED 2026-10-23 (server + clients; time not recorded) |
 | 1.1.03: Vintage load hotfix, Creative Delight member jars, Corn / Miner's / Veggies / Vintage additions and fixes, golden goose egg, patcherMod 1.1.03 (working notes in `kubejs/assets/creativecommon/changelog/unreleased.md`) | [deploy log](../deploy/DEPLOY_LOG.md) | NOT STAGED: all jars built and installed 2026-10-26, game not started since 2026-10-24; boot check `SQ-VP-00` first (TODO `pack/release`) |
 
+## Plans and reference docs
+
+Docs with no index row of their own: batch plans that span features, and plans, audits and reports of one feature.
+Status is in each doc's header or Open work block and in the TODO rows, not here.
+
+| Doc | File | Feature |
+|---|---|---|
+| Batch plan: pre-scratch fix pass (2026-11-02) | [plan_prescratch_fixes.md](plan_prescratch_fixes.md) | several |
+| Batch plan: fixes from the 2026-11-02/03 scratch runs | [plan_scratch_bugfix_1103.md](plan_scratch_bugfix_1103.md) | several |
+| Batch plan: farming, cooking and homesteading (2026-11-07) | [plan_farming_cooking_batch.md](plan_farming_cooking_batch.md) | several |
+| Batch plan: after scratch run r1115 | [plan_post_scratch_1115.md](plan_post_scratch_1115.md) | several |
+| Batch plan: small fixes (2026-11-16) | [plan_small_fixes_1116.md](plan_small_fixes_1116.md) | several |
+| Scratch testing expansion (inventory, hurdles, proposals) | [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md) | [client_capture.md](client_capture.md) |
+| BlockRunner audit | [plan_blockrunner_audit.md](plan_blockrunner_audit.md) | [blockrunner.md](blockrunner.md) |
+| Pass-through blocks | [plan_passthrough.md](plan_passthrough.md) | [blockrunner.md](blockrunner.md) |
+| Pass-through rework after r1115 | [plan_post_scratch_1115b.md](plan_post_scratch_1115b.md) | [blockrunner.md](blockrunner.md) |
+| Animal breeding item audit | [plan_breeding_audit.md](plan_breeding_audit.md) | [breeding_audit.md](breeding_audit.md) |
+| Creative Delight execution plan (2026-11-02) | [plan_creative_delight.md](plan_creative_delight.md) | [creative_delight.md](creative_delight.md) |
+| Rustic Delight baked into its member | [plan_rustic_fold_in.md](plan_rustic_fold_in.md) | [rustic_delight.md](rustic_delight.md) |
+| Extra Delight texture comparison | [extra_delight_textures.md](extra_delight_textures.md) | [extra_delight.md](extra_delight.md) |
+| Flesh recipes | [plan_flesh_recipes.md](plan_flesh_recipes.md) | [visceral_heap.md](visceral_heap.md) |
+| Visceral Heap | [plan_visceral_heap.md](plan_visceral_heap.md) | [visceral_heap.md](visceral_heap.md) |
+| Hearth and Harvest: crow and salt lick (crow part superseded) | [plan_hearth_crow_salt.md](plan_hearth_crow_salt.md) | [hearth_and_harvest.md](hearth_and_harvest.md) |
+| Food Dictionary and Diet Tracker | [food_dictionary.md](food_dictionary.md) | [food.md](food.md) |
+| Item physics family audit | [item_physics_audit.md](item_physics_audit.md) | [item_physics.md](item_physics.md) |
+| Loading screen tips, by pack | [loading_tips_list.md](loading_tips_list.md) | [loading_tips.md](loading_tips.md) |
+| Custom JEI tab tweaks | [plan_jei_tab_tweaks.md](plan_jei_tab_tweaks.md) | [jei_world_tabs.md](jei_world_tabs.md) |
+| Immersive Portals changes | [plan_portal_changes.md](plan_portal_changes.md) | [immersive_portals.md](immersive_portals.md) |
+| Portal Gun fixes and portal color dyeing | [plan_portal_gun.md](plan_portal_gun.md) | [immersive_portals.md](immersive_portals.md) |
+| Create: Power Grid backport, plan per phase | [plan_power_grid.md](plan_power_grid.md) | [power_grid.md](power_grid.md) |
+| Worldgen edit plan (2026-11-01) | [plan_worldgen_edit.md](plan_worldgen_edit.md) | [creative_worldgen.md](creative_worldgen.md) |
+| Structure Catalog: family map and its preview | [structure_catalogue_map.md](structure_catalogue_map.md), [structure_catalogue_map_preview.md](structure_catalogue_map_preview.md) | [plan_structure_catalogue.md](plan_structure_catalogue.md) |
+| Comment rewrites for owner review | [history_extract_review.md](history_extract_review.md) | [plan_rules_fixes.md](plan_rules_fixes.md) |
+| Namespace report (generated) | [namespace_report.md](namespace_report.md) | [plan_rules_fixes.md](plan_rules_fixes.md) |
+
 ## Backlog: the rest of the pack, one small chunk at a time
 
 All 21 rows written as of 2026-10-18; each row links its writeup and the index above has a row for each. New

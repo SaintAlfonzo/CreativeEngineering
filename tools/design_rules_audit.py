@@ -406,6 +406,22 @@ if wants('testlines'):
 		   for l in out if l.startswith('AMBIGUOUS ')]
 	report('DR-W3', 'test lines the fixer cannot read (WARNING: fix by hand or leave as prose)', amb)
 
+# DR-W6: docs directly in feature_writeup/ with no index row (features.csv `file` or a README link), and index notes
+# longer than status plus one line (features.csv `note` over 160 characters; the log goes to the writeup History).
+if wants('index'):
+	import csv
+	feats = list(csv.DictReader(open(ROOT / 'feature_writeup/status/features.csv', encoding='utf-8')))
+	listed = {f.strip() for x in feats for f in x['file'].split(',')}
+	readme = (ROOT / 'feature_writeup/README.md').read_text(encoding='utf-8')
+	listed |= set(re.findall(r'\]\(([^)#]+)', readme))
+	hits = [(p, 0, 'no README index row') for p in FILES if re.fullmatch(r'feature_writeup/[^/]+\.md', p)
+			and p[len('feature_writeup/'):] not in listed and not p.endswith('README.md')]
+	report('DR-W6', 'docs with no README index row (add one to features.csv or the Plans and reference docs table)',
+		   hits, 'files', top=20)
+	hits = [('feature_writeup/status/features.csv', 0, f"{x['key']}: {len(x['note'])} characters") for x in feats
+			if len(x['note']) > 160]
+	report('DR-W6', 'index notes over 160 characters (status plus one line; move the log to the writeup History)', hits)
+
 # DR-W11: doc file names.
 if wants('docnames'):
 	hits = [(p, 0, Path(p).name) for p in FILES if p.startswith('feature_writeup/') and p.endswith('.md')
