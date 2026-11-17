@@ -11,7 +11,9 @@ Reference: [deploy.md](../../../feature_writeup/deploy.md) (read section 0 and t
 1. **Version.** Ask if not given; the owner sets numbers (format `1.1.NN`). Omitting `--version` bumps the
    patch. Never rebuild a deployed version (`deploy/DEPLOYED.json`).
 2. **Pre-checks.**
-   - In-tree jars in `mods/` match their builds (`IN_TREE_MODS`); build/install any pending one (game closed).
+   - `python3 tools/check_all.py --full` exits 0 (stage runs it too and stops on a FAIL).
+   - In-tree jars in `mods/` match their builds: `python3 tools/jarstamp.py pending` empty; build/install any pending
+     one. Stamps of a dirty build warn at stage: commit first.
    - Every jar has a `mod_sides.md` row; new kubejs files classified in `KUBEJS_CLASSES`.
    - `unreleased.md` covers the release; `python3 tools/changelog_lint.py` clean.
    - Release plan `feature_writeup/plan_<ver>.md` (if one exists) and README statuses current.

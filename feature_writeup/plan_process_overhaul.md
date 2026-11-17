@@ -1,7 +1,8 @@
 # Plan: process overhaul (checks, build identity, design intake, status as data, scratch queue tiers)
 
 Status: Planned 2026-11-16. Owner rulings the same evening (section "Owner decisions"). Done the same evening:
-P1.5 commit rule (CLAUDE.md) and P1.6 memory move (136 notes to `agent_notes/`). Nothing else built. Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
+P1.5 commit rule (CLAUDE.md) and P1.6 memory move (136 notes to `agent_notes/`). P1.1 to P1.3 BUILT 2026-11-16 night
+(offline tests PROC-01 to -09 and -15, -18 pass; PROC-16, -17 need the owner at the dialog; SQ-PROC-01 queued). Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
 `tooling/process #1` to `#5`. Code owner: `tools/` and `build-logic/`. Jar changes are limited to a build stamp
 added by the shared Gradle plugin; no gameplay change, so no changelog bullet. Phase 2 continues
 [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md): TX-40, TX-41 and TX-45 were built 2026-11-15;
@@ -64,7 +65,7 @@ P1.1 for its lint and P1.2 for jar state).
 - A seeded break fails it: an unguarded optional id in a Creative Delight script, or a test path renamed.
 - `installToMods` refuses on that break.
 
-**Tests:** PO-01 to PO-05 (offline, in process_review.md, section 7 of the plan below).
+**Tests:** PROC-01 to PROC-05 (offline, in process_review.md, section 7 of the plan below).
 
 ### P1.2 Build stamps and an install ledger
 
@@ -110,7 +111,7 @@ P1.1 for its lint and P1.2 for jar state).
 - The boot line appears in a scratch `latest.log`.
 - A deploy with mismatched server and client stamps is refused.
 
-**Tests:** PO-06 to PO-09, PO-15 to PO-18 offline. SQ-PO-01 (boot line, stamps match the ledger), queued when built.
+**Tests:** PROC-06 to PROC-09, PROC-15 to PROC-18 offline. SQ-PROC-01 (boot line, stamps match the ledger), queued when built.
 
 ### P1.3 Design intake before building
 
@@ -198,7 +199,7 @@ feature table, the only place status is written, and generates the rest.
 - `status_index.py --check` passes in `check_all.py`.
 - A test change (flip one TODO row to Testing, add a verdict file) shows up in all three blocks after one command.
 
-**Tests:** PO-10 to PO-14 offline.
+**Tests:** PROC-10 to PROC-14 offline.
 
 ### P1.5 Commit per plan phase (rule in place 2026-11-16)
 
@@ -353,39 +354,70 @@ Today a row is a markdown table line (`| ID | Group | Commands | Pass | If it fa
 
 
 
-## Test list (PO-)
+## Test list (PROC-)
 
 Offline (checked by the building agent, results in [process_review.md](process_review.md) History):
-- [ ] **PO-01 check_all clean:** `python3 tools/check_all.py --fast` on a clean tree -> exit 0, under 60 s, one line
+- [x] **PROC-01 check_all clean:** `python3 tools/check_all.py --fast` on a clean tree -> exit 0, under 60 s, one line
   per check.
-- [ ] **PO-02 seeded break:** add an unguarded optional id to a Creative Delight script -> `guard_check` FAIL, exit 1.
-- [ ] **PO-03 install gate:** with the PO-02 break, `./gradlew :creativeDelight:installToMods --offline` -> refused,
+- [x] **PROC-02 seeded break:** add an unguarded optional id to a Creative Delight script -> `guard_check` FAIL, exit 1.
+- [x] **PROC-03 install gate:** with the PROC-02 break, `./gradlew :creativeDelight:installToMods --offline` -> refused,
   names the check, `mods/` unchanged; with `-PskipChecks` -> installs, ledger row says skipChecks.
-- [ ] **PO-04 KNOWN aging:** a KNOWN entry dated 31 days ago -> warning line.
-- [ ] **PO-05 Stop hook:** end a session with the PO-02 break -> FAIL lines shown.
-- [ ] **PO-06 stamp:** two builds of Common with one change between -> different `Implementation-Version` and
+- [x] **PROC-04 KNOWN aging:** a KNOWN entry dated 31 days ago -> warning line.
+- [x] **PROC-05 Stop hook:** end a session with the PROC-02 break -> FAIL lines shown.
+- [x] **PROC-06 stamp:** two builds of Common with one change between -> different `Implementation-Version` and
   `ce-build.json`.
-- [ ] **PO-07 ledger:** install -> `jar_archive/installed.tsv` row with both stamps.
-- [ ] **PO-08 pending:** `jarstamp.py pending` lists a built-not-installed jar and nothing else.
-- [ ] **PO-09 deploy mismatch:** staged payload with server and client stamps differing -> `build_deploy.py` refuses.
-- [ ] **PO-10 generated README:** `status_index.py` -> README index block regenerated, no hand text lost outside markers.
-- [ ] **PO-11 snapshot:** flip one TODO row to Testing -> snapshot counts change by one.
-- [ ] **PO-12 verdict to README:** add a verdict file -> the feature's last-run cell updates.
-- [ ] **PO-13 legend check:** a row with status "Done" outside the archive -> `--check` FAIL.
-- [ ] **PO-14 hand edit:** edit inside a generated block -> `--check` FAIL.
-- [ ] **PO-15 install, game closed:** no java with the instance cwd -> `installToMods` installs, no dialog.
-- [ ] **PO-16 Install now while running:** owner client running -> dialog; Install now -> dialog shown again with
+- [x] **PROC-07 ledger:** install -> `jar_archive/installed.tsv` row with both stamps.
+- [x] **PROC-08 pending:** `jarstamp.py pending` lists a built-not-installed jar and nothing else.
+- [x] **PROC-09 deploy mismatch:** staged payload with server and client stamps differing -> `build_deploy.py` refuses.
+- [ ] **PROC-10 generated README:** `status_index.py` -> README index block regenerated, no hand text lost outside markers.
+- [ ] **PROC-11 snapshot:** flip one TODO row to Testing -> snapshot counts change by one.
+- [ ] **PROC-12 verdict to README:** add a verdict file -> the feature's last-run cell updates.
+- [ ] **PROC-13 legend check:** a row with status "Done" outside the archive -> `--check` FAIL.
+- [ ] **PROC-14 hand edit:** edit inside a generated block -> `--check` FAIL.
+- [x] **PROC-15 install, game closed:** no java with the instance cwd -> `installToMods` installs, no dialog.
+- [ ] **PROC-16 Install now while running:** owner client running -> dialog; Install now -> dialog shown again with
   "game still running"; close the game, Install now -> installed, ledger row.
-- [ ] **PO-17 Install on exit:** dialog -> Install on exit -> Gradle returns; close the game -> jar swapped,
+- [ ] **PROC-17 Install on exit:** dialog -> Install on exit -> Gradle returns; close the game -> jar swapped,
   `notify-send` shown, ledger row `on-exit`; a second rebuild before exit replaces the first watcher.
-- [ ] **PO-18 Skip and no display:** Skip -> `mods/` unchanged, `jarstamp.py pending` lists it; `DISPLAY` unset ->
+- [x] **PROC-18 Skip and no display:** Skip -> `mods/` unchanged, `jarstamp.py pending` lists it; `DISPLAY` unset ->
   behaves as Skip with a reason printed.
-- [x] **PO-19 notes move:** 136 notes in `agent_notes/`, memory 48 files plus index, no `[[x]]` link left pointing at
+- [x] **PROC-19 notes move:** 136 notes in `agent_notes/`, memory 48 files plus index, no `[[x]]` link left pointing at
   a moved memory, CLAUDE.md imports the index (2026-11-16, script output and diff).
 
 Live (queued when built, per skill `scratch-test`):
-- SQ-PO-01: scratch boot shows the `[creativecommon] builds:` line, and its stamps match `jar_archive/installed.tsv`.
-- Phase 2 rows (SQ-PO-10 onward) are written when P2.1 is built.
+- SQ-PROC-01: scratch boot shows the `[creativecommon] builds:` line, and its stamps match `jar_archive/installed.tsv`.
+- Phase 2 rows (SQ-PROC-10 onward) are written when P2.1 is built.
+
+## Build notes (2026-11-16 night)
+
+P1.1:
+- 12 failing tests: 10 repaired (paths, packages, `genText`/`has` in the Rhino harnesses, stubs); passthrough was stale
+  `build/classes`, not config drift; the worldgen snapshot was a dump from before the `creativeworldgen` rename (the
+  test now maps the namespace and notes it), FitTest 189 -> 190 (corn maze). Two real gaps stay KNOWN in
+  `tools/check_known.tsv`: hops vine growth rule (`largecontent/mod-additions #64`), Rustic wild crops in
+  `gen_crop_worldgen_table.py` (`farming/wild-crops #11`, new Bug row). `test_remainder_buffer` is now a headless javac
+  test; the old GameTest script is `tools/gametest_remainder_buffer.sh` (stale, needs retargeting to Creative Delight).
+- guard_check 27 -> 0: real guards added in Common's `botanySoil` and Creative Delight's can effects (`cans.js`, optional
+  effect ids); tooltip and table rows in Hearth and Harvest, crop and crow tags, transition items and potions marked or
+  guarded; the tool now reads `global.has.mod(...)`, per-element `has(id)` checks and skips generated can parts.
+- `check_all.py`: parallel, `--fast` 34 s (skips `test_worldgen_tools`, about 75 s alone), full 102 s. Class-based tests
+  compile stale mods first; inside Gradle they SKIP instead (nested Gradle would deadlock), and the gate runs after
+  the installing project's `classes`.
+- Stop hook: `tools/check_stop_hook.py`, cached on the changed-file state (Stop fires every turn), also counts
+  uncommitted tracked files (P1.5 "to build later").
+
+P1.2:
+- Stamp time: the commit time for a clean tree, else the newest mtime of the dirty input files, plus a content hash
+  (`.dirty-<hash6>`). Plan said build time; that would break the reproducible-jar rule in `ce.forge-mod.gradle`
+  (a rebuild of unchanged source must give the same jar). Checked: same source -> same stamp and sha1; one change ->
+  new stamp.
+- Install: `tools/install_jar.py` (called by `installToMods`). Game detection is a `java` with the instance cwd that
+  holds `logs/latest.log` open: the headless test JVMs also run from the instance root, and one even had a `mods/` jar
+  open, so cwd alone gave false "game running".
+- Deploy: `build_deploy.py` records `stamps` in `history/<version>.json` and the `--snapshot` marks, refuses a mod id
+  whose `mods/` and `client_mods/` jars differ in stamp, and warns on dirty builds.
+
+P1.3: skill `.claude/skills/intake/SKILL.md`; CLAUDE.md line. Measure starts with the next scratchpad intake.
 
 ## History
 
@@ -396,3 +428,4 @@ Live (queued when built, per skill `scratch-test`):
     Done means.
   - P1.6 memory move done.
   - P1.2 item 7 install dialog, P1.5 and P1.6 added.
+- 2026-11-16 night: P1.1 to P1.3 built (Build notes above). CLAUDE.md backed up to `CLAUDE.md.bak-2026-11-16-p1`, then: `intake` line, install line (dialog built), Checks line. Tests renamed PO- to PROC- (PO- is potions.md's).
