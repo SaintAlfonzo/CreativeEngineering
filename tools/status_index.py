@@ -384,6 +384,45 @@ def view_queue(queue, rindex, seen):
     return out
 
 
+# ---------------------------------------------------------------- rows sections (plan P2.1, P2.5)
+
+ARCHIVE = FW / 'testing' / 'scratch_queue_archive.md'
+ARCHIVE_HEAD = ['# Scratch queue archive', '',
+                'Queue sections whose rows all PASSed on the jars still installed (`qrun.py archive`, plan_process_overhaul.md '
+                'P2.5), with their verdict history. Generated from `feature_writeup/testing/rows/*.qb` (`@@archived`) by '
+                '`python3 tools/status_index.py`; never hand-edited. The rows stay data: `qrun.py plan` plans them again when '
+                'a jar or source changes.', '']
+
+
+def rows_views(runs):
+    """({block name: lines}, {block name: QUEUE or ARCHIVE})"""
+    hist = defaultdict(list)
+    for rid, run in runs.items():
+        for row, word in run['results'].items():
+            hist[row].append((run['date'], rid, word))
+    views, where = {}, {}
+    for name, (_, sec) in qrows.sections_by_block().items():
+        lines = qrows.render(sec)
+        if sec['meta'].get('archived'):
+            lines += ['', '**Verdict history** (archived %s):' % sec['meta']['archived'], '']
+            for kind, r in sec['items']:
+                if kind == 'row':
+                    h = sorted(hist.get(r['id'], ()), reverse=True)[:5]
+                    lines.append('- %s: %s' % (r['id'], '; '.join('%s %s (%s)' % (w, run, d) for d, run, w in h) or 'none'))
+            where[name] = ARCHIVE
+        else:
+            where[name] = QUEUE
+        views[name] = lines
+    return views, where
+
+
+def rows_spans(path):
+    if not path.exists():
+        return [], {}
+    lines = path.read_text().split('\n')
+    return lines, {n: v for n, v in block_spans(lines).items() if n.startswith('rows_')}
+
+
 # ---------------------------------------------------------------- main
 
 def build():
@@ -394,7 +433,7 @@ def build():
     rindex, seen = run_index(runs)
     views = {'readme': view_readme(feats, rindex, jar_states()), 'todo': view_todo(todo),
              'queue': view_queue(queue, rindex, seen)}
-    views['rows'] = {name: qrows.render(sec) for name, (_, sec) in qrows.sections_by_block().items()}
+    views['rows'], views['rows_where'] = rows_views(runs)
     return feats, todo, queue, views
 
 
@@ -440,26 +479,29 @@ def check(feats, todo, queue, views):
                          'TODO.md and rerun tools/status_index.py' % (rel, name, b + 2, e))
         elif content != views[name]:
             warns.append('%s: block %s is out of date; run python3 tools/status_index.py' % (rel, name))
-    # queue sections rendered from rows/*.qb (plan P2.1)
+    # queue sections rendered from rows/*.qb (plan P2.1); archived ones live in the archive file (P2.5)
     qfails, _ = qrows.check()
     fails += qfails
-    lines = QUEUE.read_text().split('\n')
-    rel = QUEUE.relative_to(ROOT)
-    spans = {n: v for n, v in block_spans(lines).items() if n.startswith('rows_')}
-    for name, (b, e, stored) in sorted(spans.items(), key=lambda kv: kv[1][0]):
-        if e is None:
-            fails.append('%s: generated block %s unterminated' % (rel, name))
-            continue
-        content = lines[b + 1:e]
-        if sha(content) != stored:
-            fails.append('%s: hand edit inside generated block %s (lines %d-%d); edit the .qb in '
-                         'feature_writeup/testing/rows/ and rerun tools/status_index.py' % (rel, name, b + 2, e))
-        elif name not in views['rows']:
-            fails.append('%s: block %s has no section in feature_writeup/testing/rows/' % (rel, name))
-        elif content != views['rows'][name]:
-            warns.append('%s: block %s is out of date; run python3 tools/status_index.py' % (rel, name))
-    for name in sorted(set(views['rows']) - set(spans)):
-        warns.append('%s: rows section %s not in the queue yet; run python3 tools/status_index.py' % (rel, name))
+    present = {}
+    for path in (QUEUE, ARCHIVE):
+        lines, spans = rows_spans(path)
+        rel = path.relative_to(ROOT)
+        for name, (b0, e, stored) in sorted(spans.items(), key=lambda kv: kv[1][0]):
+            present[name] = path
+            if e is None:
+                fails.append('%s: generated block %s unterminated' % (rel, name))
+                continue
+            content = lines[b0 + 1:e]
+            if sha(content) != stored:
+                fails.append('%s: hand edit inside generated block %s (lines %d-%d); edit the .qb in '
+                             'feature_writeup/testing/rows/ and rerun tools/status_index.py' % (rel, name, b0 + 2, e))
+            elif name not in views['rows']:
+                fails.append('%s: block %s has no section in feature_writeup/testing/rows/' % (rel, name))
+            elif content != views['rows'][name] or views['rows_where'][name] != path:
+                warns.append('%s: block %s is out of date or in the wrong file; run python3 tools/status_index.py' % (
+                    rel, name))
+    for name in sorted(set(views['rows']) - set(present)):
+        warns.append('rows section %s not in the queue yet; run python3 tools/status_index.py' % name)
     return fails, warns
 
 
@@ -477,25 +519,32 @@ def write(views):
             lines[b:e + 1] = new
             path.write_text('\n'.join(lines))
             changed.append(name)
-    # rows sections: regenerate each block; a section without a block is appended at the end of the queue
-    lines = QUEUE.read_text().split('\n')
-    spans = block_spans(lines)
+    # rows sections: regenerate each block in its file (queue, or the archive for @@archived sections); a block in the
+    # wrong file is removed there and appended to the right one; a section without a block is appended at the end
     n = 0
-    for name, (b, e, _) in sorted(((k, v) for k, v in spans.items() if k.startswith('rows_') and v[1] is not None),
-                                  key=lambda kv: -kv[1][0]):
-        if name in views['rows']:
-            new = empty_block(name, views['rows'][name])
-            if lines[b:e + 1] != new:
-                lines[b:e + 1] = new
-                n += 1
-    for name in sorted(set(views['rows']) - set(spans)):
-        while lines and not lines[-1].strip():
-            lines.pop()
-        lines += [''] + empty_block(name, views['rows'][name]) + ['']
-        n += 1
+    for path in (QUEUE, ARCHIVE):
+        lines, spans = rows_spans(path)
+        if not lines and path == ARCHIVE:
+            if not any(w == ARCHIVE for w in views['rows_where'].values()):
+                continue
+            lines = list(ARCHIVE_HEAD)
+        orig = list(lines)
+        for name, (b0, e, _) in sorted(((k, v) for k, v in spans.items() if v[1] is not None), key=lambda kv: -kv[1][0]):
+            if views['rows_where'].get(name) != path:
+                del lines[b0:e + 2 if e + 1 < len(lines) and not lines[e + 1].strip() else e + 1]
+            elif lines[b0:e + 1] != empty_block(name, views['rows'][name]):
+                lines[b0:e + 1] = empty_block(name, views['rows'][name])
+        have = set(rows_spans(path)[1]) if path.exists() else set()
+        for name in sorted((k for k, w in views['rows_where'].items() if w == path and k not in have),
+                           key=lambda k: (k.rsplit('_', 1)[0], int(k.rsplit('_', 1)[1]))):
+            while lines and not lines[-1].strip():
+                lines.pop()
+            lines += [''] + empty_block(name, views['rows'][name]) + ['']
+        if lines != orig:
+            path.write_text('\n'.join(lines))
+            n += 1
     if n:
-        QUEUE.write_text('\n'.join(lines))
-        changed.append('%d rows sections' % n)
+        changed.append('rows sections (%d file%s)' % (n, 's' if n > 1 else ''))
     return changed
 
 
@@ -511,6 +560,9 @@ def main(argv):
             'FAIL %d' % len(fails) if fails else 'OK', len(feats), len(todo['open']), len(queue['codes'])))
         return 1 if fails else 0
     changed = write(views)
+    if any(c.startswith('rows') for c in changed):
+        # new or moved rows sections change the queue's row counts: rebuild once so the coverage block agrees
+        changed += [c for c in write(build()[3]) if c not in changed]
     print('status_index: %s' % ('updated ' + ', '.join(changed) if changed else 'no change'))
     return 0
 

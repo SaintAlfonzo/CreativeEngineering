@@ -22,6 +22,9 @@ without a recorded stamp, its last jar_archive/installed.tsv row (else its file 
     qrun.py plan --release        T3: T3 rows, T1 of every own jar, the owner playtest list (see playtest)
     qrun.py playtest [--out FILE] the owner playtest checklist: @owner rows and client rows nobody automates
     qrun.py states [--code C]     per rows file: counts by state
+    qrun.py archive [--apply]     sections whose rows are all current (P2.5); --apply marks them @@archived, then
+                                  status_index.py moves them to scratch_queue_archive.md with their verdict history
+    qrun.py never [--out FILE]    never-run rows per section (runnable / draft / client), for the owner (P2.5)
 """
 import collections
 import json
@@ -121,7 +124,9 @@ def row_states(changed_jars=()):
                 m = qrows.effective(sec, r)
                 last = hist.get(r['id'])
                 x = {'file': p, 'code': f['code'], 'sec': sec, 'row': r, 'meta': m, 'last': last, 'why': ''}
-                if m.get('owner') == 'true':
+                if m.get('superseded'):
+                    x['state'] = 'superseded'
+                elif m.get('owner') == 'true':
                     x['state'] = 'owner'
                 elif not qrows.runnable(r):
                     x['state'] = 'draft'
@@ -209,12 +214,14 @@ def plan(argv):
                 want = bool(set(jars_of(m)) & changed) and st != 'current'
             elif st in ('jar-changed', 'stale'):
                 want = True
-            if '--never' in argv and st == 'never':
+            if '--never' in argv and (st == 'never' or st == 'draft' and not x['last']):
                 want = True
             if '--failed' in argv and st == 'failed':
                 want = True
         if st == 'owner':
             owner.append(x)
+            continue
+        if st == 'superseded':
             continue
         if not want:
             continue
@@ -297,13 +304,70 @@ def states_cmd(argv):
         if codes and x['code'] not in codes:
             continue
         per[x['code']][x['state']] += 1
-    cols = ('current', 'jar-changed', 'stale', 'failed', 'never', 'draft', 'owner')
+    cols = ('current', 'jar-changed', 'stale', 'failed', 'never', 'draft', 'owner', 'superseded')
     print('%-10s ' % 'code' + ' '.join('%11s' % c for c in cols))
     tot = collections.Counter()
     for code in sorted(per):
         tot.update(per[code])
         print('%-10s ' % code + ' '.join('%11d' % per[code][c] for c in cols))
     print('%-10s ' % 'total' + ' '.join('%11d' % tot[c] for c in cols))
+    return 0
+
+
+def archive(argv):
+    """P2.5: sections whose rows (superseded ones aside) are all current get @@archived (with --apply)."""
+    by = collections.OrderedDict()
+    for x in row_states():
+        by.setdefault((x['file'], x['sec']['key']), []).append(x)
+    elig = []
+    for (p, key), xs in by.items():
+        live = [x for x in xs if x['state'] != 'superseded']
+        if live and all(x['state'] == 'current' for x in live) and not xs[0]['sec']['meta'].get('archived'):
+            elig.append((p, key, len(live)))
+    for p, key, n in elig:
+        print('  %s section %d (%d rows current)' % (os.path.relpath(p, ROOT), key, n))
+    print('archive: %d section(s) eligible%s' % (len(elig), '' if '--apply' in argv or not elig else
+                                                 '; --apply marks them @@archived'))
+    if '--apply' in argv and elig:
+        day = time.strftime('%Y-%m-%d')
+        for p in sorted({e[0] for e in elig}):
+            f = qrows.load(p)
+            keys = {k for q, k, _ in elig if q == p}
+            for sec in f['sections']:
+                if sec['key'] in keys:
+                    sec['meta']['archived'] = day
+            hdr = [l for l in p.read_text().split('\n')[:3] if l.startswith('#')]
+            qrows.write_qb(p, f['code'], f['sections'], hdr)
+        print('marked; run python3 tools/status_index.py to move them to scratch_queue_archive.md')
+    return 0
+
+
+def never(argv):
+    """P2.5 item 3: never-run rows per section, runnable or draft, as a markdown list for the owner."""
+    by = collections.OrderedDict()
+    for x in row_states():
+        if x['state'] in ('never', 'draft') and not (x['state'] == 'draft' and x['last']):
+            by.setdefault((x['file'], x['sec']['key']), []).append(x)
+    tot = collections.Counter()
+    lines = ['| Rows file | Section | Never run, runnable | Never run, draft | Client | First rows |', '|---|---|---|---|---|---|']
+    for (p, key), xs in by.items():
+        c = collections.Counter(x['state'] for x in xs)
+        cl = sum(1 for x in xs if x['meta'].get('client') == 'true')
+        tot.update(c)
+        tot['client'] += cl
+        title = xs[0]['sec']['meta'].get('title', '')[:70].replace('|', '/')
+        lines.append('| %s | %d: %s | %d | %d | %d | %s |' % (p.name, key, title, c['never'], c['draft'], cl,
+                                                            ', '.join(x['row']['id'] for x in xs[:3])))
+    lines.append('')
+    lines.append('Total: %d never-run rows with steps, %d drafts (no steps yet), %d of them client rows.' % (
+        tot['never'], tot['draft'], tot['client']))
+    text = '\n'.join(lines)
+    out = argv[argv.index('--out') + 1] if '--out' in argv else None
+    if out:
+        Path(out).write_text(text + '\n')
+        print('never: %d sections -> %s' % (len(by), out))
+    else:
+        print(text)
     return 0
 
 
@@ -318,6 +382,10 @@ def main(argv):
         return playtest(rest)
     if cmd == 'states':
         return states_cmd(rest)
+    if cmd == 'archive':
+        return archive(rest)
+    if cmd == 'never':
+        return never(rest)
     print(__doc__)
     return 2
 

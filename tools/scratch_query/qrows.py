@@ -16,6 +16,9 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @@tier T2                   T1 smoke, T2 feature (default), T3 release gate
     @@reviewed YYYY-MM-DD     the rows were last matched to their sources that day (default: @@date); qrowlint.py
                               flags a row whose sources changed later (stale)
+    @@archived YYYY-MM-DD     every row PASSed on the jars still installed (qrun.py archive): the section is shown in
+                              scratch_queue_archive.md with its verdict history instead of the queue; it stays data
+                              (qrun.py plan still plans it when a jar or source changes)
     @@text LINE               one markdown line of the section, verbatim ('@@text' alone = blank line)
     @@table                   the standard table header: | ID | Group | Commands | Pass | If it fails | and |---|...
     ## ID | title             a row (ID exactly as the queue shows it)
@@ -25,6 +28,8 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @client true              needs a client (default: true for CQ- ids)
     @reviewed YYYY-MM-DD      as @@reviewed, for this row
     @from PATH [passed]       where the steps came from (a past batch; "passed" = a run with that text passed)
+    @superseded TEXT          the row no longer applies (feature removed or replaced; TEXT names the replacement):
+                              never planned, not counted as never-run
     @draft TEXT               no runnable steps yet: the next runner writes them here once (the reason in TEXT)
     > cmd / waitlog / ...     the row's steps (qrun format)
 
@@ -53,8 +58,8 @@ CELL_KEYS = ['id', 'group', 'commands', 'pass', 'fails']
 ROW_RE = re.compile(r'^\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-\S')
 CODE_RE = re.compile(r'\b(?:SQ|CQ)-([A-Za-z][A-Za-z0-9]*)(?=-[A-Za-z0-9])')
 BLOCK_BEGIN = re.compile(r'^<!-- generated:status_index begin (rows_(\w+?)_(\d+)) sha1=([0-9a-f]+) -->$')
-SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier')
-ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'owner', 'client', 'reviewed', 'from', 'draft')
+SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier', 'archived')
+ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded')
 TIERS = ('T1', 'T2', 'T3')
 
 
@@ -440,7 +445,8 @@ def check(argv=()):
                 if m['tier'] not in TIERS:
                     fails.append('%s:%d: %s tier %r not in %s' % (os.path.relpath(p, ROOT), r['line'], r['id'], m['tier'],
                                                                   '/'.join(TIERS)))
-                if not runnable(r) and 'draft' not in r['meta'] and m.get('owner') != 'true':
+                if not runnable(r) and 'draft' not in r['meta'] and m.get('owner') != 'true' and \
+                        'superseded' not in r['meta']:
                     fails.append('%s:%d: %s has no steps and no @draft' % (os.path.relpath(p, ROOT), r['line'], r['id']))
     return fails, secs
 

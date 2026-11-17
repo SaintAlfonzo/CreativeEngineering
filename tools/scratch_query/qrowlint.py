@@ -51,6 +51,7 @@ def _dump_files():
                                   'spawns.json', 'structures.json', 'biome_data.json', 'paintings.json')]
     for d in ('items_by_mod', 'loot_tables', 'tags'):
         out += sorted((EXPORTED / d).glob('*.json'))
+    out.append(EXPORTED / 'recipes' / 'recipe_types.json')
     return [p for p in out if p.exists()]
 
 
@@ -92,6 +93,11 @@ def _build():
         f = EXPORTED / name
         if f.exists():
             reg[kind].update(m.group(0) for m in ID_RE.finditer(f.read_text(errors='replace')) if not m.group(1))
+    f = EXPORTED / 'recipes' / 'recipe_types.json'     # recipe types and serializers
+    if f.exists():
+        for k, v in json.loads(f.read_text()).items():
+            reg['other'].add(k)
+            reg['other'].update((v or {}).get('serializers', {}) if isinstance(v, dict) else ())
     reg['block'] |= reg['item']                  # block items share the block id; tagless blocks are rare
     return reg
 

@@ -602,7 +602,7 @@ def main():
     if a[0] == "drive":
         import qdrive
         sys.exit(qdrive.main(a[1:]))
-    if a[0] in ("plan", "playtest", "states"):
+    if a[0] in ("plan", "playtest", "states", "archive", "never"):
         import qplan
         sys.exit(qplan.main(a))
     if a[0] in ("pair", "matrix"):
