@@ -1,0 +1,18 @@
+# Scratch queue rows PROC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PROC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-PROC Build stamps boot line, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P1.2; TODO `tooling/process #2`)
+@@date 2026-11-16
+@@sources feature_writeup/plan_process_overhaul.md
+@@text
+@@text Needs a Creative Common jar built after 2026-11-16 21:30 (BuildStamps); any scratch run with it covers the row.
+@@text
+@@table
+## SQ-PROC-01
+@group A
+@commands Boot the scratch server; `grep "\[creativecommon\] builds:" logs/latest.log`; `python3 tools/jarstamp.py <srv>/mods`
+@pass one boot line listing every own jar with its stamp; each stamp equals the `jarstamp.py` stamp of the jar in `srv/mods`, and for jars installed from `mods/`, the last `jar_archive/installed.tsv` row of that jar
+@fails `creativecommon.util.BuildStamps` (ModList mod files, `findResource("META-INF","ce-build.json")`); no line at all: Common jar older than the stamp build
+@draft no batch holds this row yet

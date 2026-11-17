@@ -1,0 +1,148 @@
+# Scratch queue rows META31 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/META31.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-META31 meta batch: sky, caravans, meteorite strikes, temples with ruins, 2026-10-30
+@@date 2026-10-30
+@@jars creativecommon
+@@text
+@@text patcherMod 1.1.04 (new part field `overlap`) installed in `mods/` 2026-10-30 17:06; data in `meta_structures.json`,
+@@text `structure_tags.json`, `structure_groups.json`, `kubejs/data/creativeengineering/worldgen/{structure,template_pool}/sky_island.json`.
+@@text Full restart, new chunks only. Writeup [structure_tuning.md](../structure_tuning.md) 3.31 (ST-306 to ST-315). All in group B
+@@text (fresh normal world, toml `[worldgen.meta_structures] log = true`); one world for all rows.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-META31-01 | metas take slots, replacements, no part errors
+@group B
+@commands boot; `grep 'meta structure(s) take slots\|replacement(s)\|failed to generate as a part' logs/latest.log`
+@pass metas 13 higher than the last run's count, `4 replacement(s)`, no share-above-100% warning, no part error (ST-306)
+@fails count short: a meta not in its group tag (structure_overrides report); part error for `ae2:meteorite`: AE2 jar changed
+@from batches/r1031/w2_metas_spawns.qb
+bootexpect meta structure\(s\) take slots
+bootexpect 4 replacement\(s\)
+bootreject (?i)share above 100
+bootreject failed to generate as a part
+look meta count 13 higher than the 10-30 W30 boots (perf/sessions or the WG30 rows' logs)
+
+## SQ-META31-02 | sky metas: clouds, balloons, sky village islands
+@group B
+@commands `/locate structure creativeengineering:meta/cloud_cluster`, `balloon_fleet`, `cloud_balloons`, `sky_village_islands`; tp to each (spectator)
+@pass 2-4 clouds; 2-6 balloons; 1-2 of each; 2-5 islands near the sky village's height, none inside it (ST-307, ST-308)
+@fails islands at the wrong height: `sky_island.json` start height; none placed: `/place structure creativeengineering:sky_island` alone, check the pool's template ids
+@from batches/r1031/w2_metas_spawns.qb
+> locate structure creativeengineering:meta/cloud_cluster
+waitlog nearest creativeengineering:meta/cloud_cluster is at|type "?creativeengineering:meta/cloud_cluster|creativeengineering:meta/cloud_cluster.*timed out 330
+> locate structure creativeengineering:meta/balloon_fleet
+waitlog nearest creativeengineering:meta/balloon_fleet is at|type "?creativeengineering:meta/balloon_fleet|creativeengineering:meta/balloon_fleet.*timed out 330
+> locate structure creativeengineering:meta/cloud_balloons
+waitlog nearest creativeengineering:meta/cloud_balloons is at|type "?creativeengineering:meta/cloud_balloons|creativeengineering:meta/cloud_balloons.*timed out 330
+> locate structure creativeengineering:meta/sky_village_islands
+waitlog nearest creativeengineering:meta/sky_village_islands is at|type "?creativeengineering:meta/sky_village_islands|creativeengineering:meta/sky_village_islands.*timed out 330
+count nearest creativeengineering:meta/(cloud_cluster|balloon_fleet|cloud_balloons|sky_village_islands) is at == 4
+look meta log lines: 2-4 clouds, 2-6 balloons, 1-2 of each, 2-5 islands near the sky village height and none inside it (ST-307, ST-308); visual check in the client block at the logged positions
+
+## SQ-META31-03 | caravans
+@group B
+@commands `/locate` `witch_cart_caravan`, `pillager_caravan`, `trader_caravan`
+@pass wagons/carriages/camps together; a swamp witch caravan has a hut; trader caravan has a way sign (ST-309)
+@fails none found in 300 s: rates are 1 per 152/273/193 chunks, widen with test overrides (share 1)
+@from batches/r1031/w2_metas_spawns.qb
+> locate structure creativeengineering:meta/witch_cart_caravan
+waitlog nearest creativeengineering:meta/witch_cart_caravan is at|type "?creativeengineering:meta/witch_cart_caravan|creativeengineering:meta/witch_cart_caravan.*timed out 330
+> locate structure creativeengineering:meta/pillager_caravan
+waitlog nearest creativeengineering:meta/pillager_caravan is at|type "?creativeengineering:meta/pillager_caravan|creativeengineering:meta/pillager_caravan.*timed out 330
+> locate structure creativeengineering:meta/trader_caravan
+waitlog nearest creativeengineering:meta/trader_caravan is at|type "?creativeengineering:meta/trader_caravan|creativeengineering:meta/trader_caravan.*timed out 330
+count nearest creativeengineering:meta/(witch_cart_caravan|pillager_caravan|trader_caravan) is at == 3
+look meta lines: wagons / carriages / camps together; the swamp witch caravan has a hut; trader caravan has a way sign (ST-309). Not found in 300 s: rerun this row on a W2 boot with testOverrides (share 1)
+
+## SQ-META31-04 | meteorite strikes
+@group B
+@commands `/locate` `meteorite_village` (twice, two village types), `meteorite_desert_pyramid`, `minecraft:desert_pyramid`, `underwater_meteorite`, `pillager_camp_meteorite` (two)
+@pass crater through the village middle, no floating house; struck pyramid has a crater and the plain one still exists; sky stone sphere in a sunken ruin; camp strikes on and beside camps (ST-310, ST-311, ST-313, ST-314)
+@fails meteorite missing: log `0/1 #creativeengineering:meta/meteorites` (reach: the meteorite chunk must be within 3 chunks of the start); no crater cut: piece order (anchor first) changed
+@from batches/r1031/w2_metas_spawns.qb
+> locate structure creativeengineering:meta/meteorite_village
+waitlog nearest creativeengineering:meta/meteorite_village is at|type "?creativeengineering:meta/meteorite_village|creativeengineering:meta/meteorite_village.*timed out 330
+> locate structure creativeengineering:meta/meteorite_desert_pyramid
+waitlog nearest creativeengineering:meta/meteorite_desert_pyramid is at|type "?creativeengineering:meta/meteorite_desert_pyramid|creativeengineering:meta/meteorite_desert_pyramid.*timed out 330
+> locate structure minecraft:desert_pyramid
+waitlog nearest minecraft:desert_pyramid is at|type "?minecraft:desert_pyramid|minecraft:desert_pyramid.*timed out 330
+> locate structure creativeengineering:meta/underwater_meteorite
+waitlog nearest creativeengineering:meta/underwater_meteorite is at|type "?creativeengineering:meta/underwater_meteorite|creativeengineering:meta/underwater_meteorite.*timed out 330
+> locate structure creativeengineering:meta/pillager_camp_meteorite
+waitlog nearest creativeengineering:meta/pillager_camp_meteorite is at|type "?creativeengineering:meta/pillager_camp_meteorite|creativeengineering:meta/pillager_camp_meteorite.*timed out 330
+count nearest .* is at >= 5
+reject 0/1 #creativeengineering:meta/meteorites
+look crater through the village middle, no floating house; struck pyramid has a crater and a plain pyramid still exists; sky stone sphere in a sunken ruin; camp strikes on and beside camps (ST-310, ST-311, ST-313, ST-314): client block at the logged positions
+
+## SQ-META31-05 | temples with ruins
+@group B
+@commands `/locate` `desert_temple_ruins`, `jungle_temple_ruins`
+@pass 2-4 small ruins of the right biome around each temple, none touching it (ST-312)
+@fails ruins of a wrong biome: a small ruin without a biome fit
+@from batches/r1031/w2_metas_spawns.qb
+> locate structure creativeengineering:meta/desert_temple_ruins
+waitlog nearest creativeengineering:meta/desert_temple_ruins is at|type "?creativeengineering:meta/desert_temple_ruins|creativeengineering:meta/desert_temple_ruins.*timed out 330
+> locate structure creativeengineering:meta/jungle_temple_ruins
+waitlog nearest creativeengineering:meta/jungle_temple_ruins is at|type "?creativeengineering:meta/jungle_temple_ruins|creativeengineering:meta/jungle_temple_ruins.*timed out 330
+count nearest .* is at == 2
+look 2-4 small ruins of the right biome around each temple, none touching it (ST-312)
+
+## SQ-META31-06 | meteor shower, struck monument
+@group B
+@commands (patcherMod jar of 17:44, adds `cluster`) `/locate` `meta/meteor_shower`, `meta/struck_monument`
+@pass 2-4 craters in a sand desert; a sky stone sphere in or by a monument, guardians respawn there (ST-316, ST-319)
+@fails shower not found in 300 s: about 1 per 240 chunks of desert, use a test override (share 1)
+@from batches/r1031/w2_metas_spawns.qb
+> locate structure creativeengineering:meta/meteor_shower
+waitlog nearest creativeengineering:meta/meteor_shower is at|type "?creativeengineering:meta/meteor_shower|creativeengineering:meta/meteor_shower.*timed out 330
+> locate structure creativeengineering:meta/struck_monument
+waitlog nearest creativeengineering:meta/struck_monument is at|type "?creativeengineering:meta/struck_monument|creativeengineering:meta/struck_monument.*timed out 330
+capture SM is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+count nearest .* is at == 2
+look 2-4 craters in a sand desert; a sky stone sphere in or by the monument (ST-316)
+
+## SQ-META31-07 | witch coven: witch respawns in the hut, not on the wagons
+@group B
+@commands `/locate` `meta/witch_coven`; night, kill the hut's witch, wait
+@pass circle + hut + 1-2 wagons; a witch respawns in the hut, none on the wagons (ST-317)
+@fails no respawn: patcherMod older than 2026-10-30 17:55 (per-part lookup)
+@from batches/r1031/w2_metas_spawns.qb
+> locate structure creativeengineering:meta/witch_coven
+waitlog nearest creativeengineering:meta/witch_coven is at|type "?creativeengineering:meta/witch_coven|creativeengineering:meta/witch_coven.*timed out 330
+capture WC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {WC1} 90 {WC3}
+sleep 30
+> execute positioned {WC1} 70 {WC3} run kill @e[type=minecraft:witch,distance=..64]
+sleep 240
+> execute positioned {WC1} 70 {WC3} as @e[type=minecraft:witch,distance=..64] run data get entity @s Pos
+look a witch respawned and its Pos is in the hut, none on the wagons (ST-317); no witch = patcherMod older than 10-30 17:55
+
+## SQ-META31-09 | struck monument: guardians in the monument only
+@group B
+@commands `/locate` `meta/struck_monument`, `meta/pillager_tower_siege`; night, peaceful off, wait in each
+@pass guardians respawn in the monument but not out over the meteorite's water; pillagers in the tower and outworks (ST-319, ST-320)
+@fails guardians across the meteorite area: the meta's `spawn_overrides` not empty (staged json)
+@from batches/r1031/w2_metas_spawns.qb
+> tp qa {SM1} 70 {SM3}
+> difficulty normal
+sleep 240
+> execute positioned {SM1} 50 {SM3} if entity @e[type=minecraft:guardian,distance=..30]
+> execute positioned {SM1} 50 {SM3} as @e[type=minecraft:guardian,distance=..96] run data get entity @s Pos
+look guardians respawn inside the monument (first check passes) and none out over the meteorite's water (Pos list all within the monument box, ST-319)
+
+## SQ-META31-08 | village sieges: ring and one-side camp
+@group B
+@commands `/locate` `meta/village_siege_ring`, `meta/village_siege_camp` (plains)
+@pass ring: 2-6 weapons around, none in the village; camp: grouped on one side (ST-318)
+@fails camp spread all round: `cluster` not in the jar (old patcherMod)
+@from batches/r1031/w2_metas_spawns.qb
+> locate structure creativeengineering:meta/village_siege_ring
+waitlog nearest creativeengineering:meta/village_siege_ring is at|type "?creativeengineering:meta/village_siege_ring|creativeengineering:meta/village_siege_ring.*timed out 330
+> locate structure creativeengineering:meta/village_siege_camp
+waitlog nearest creativeengineering:meta/village_siege_camp is at|type "?creativeengineering:meta/village_siege_camp|creativeengineering:meta/village_siege_camp.*timed out 330
+count nearest .* is at == 2
+look ring: 2-6 weapons around, none in the village; camp: grouped on one side (ST-318), from the meta log part offsets

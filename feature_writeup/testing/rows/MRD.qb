@@ -1,0 +1,43 @@
+# Scratch queue rows MRD (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/MRD.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title More Delight 26.05.20 (mod-additions #25)
+@@text
+@@text Needs the patcherMod and Creative Delight jars rebuilt and installed. Details: [../more_delight.md](../more_delight.md) 4.
+@@text
+@@text | ID | Group | Action | Expect | Depends on |
+@@text |---|---|---|---|---|
+## SQ-MRD-01 | More Delight knives in the gear dump (queue group B: no terrain needed)
+@group B
+@commands `/dumpgear` knives; survival: mine a cobweb and a hay bale with each knife, `/data get entity @s SelectedItem` for damage
+@pass Wooden Knife 1.5 / 2.0, mining speed 2, level 0; Stone Knife 2.5 / 2.0, speed 4, level 1 (the dump's speed column is the tier speed, now set with the dig speed); the stone knife cuts visibly faster than the wooden one and slower than a flint knife on hay
+@fails speed 8 still: `tuneTools` set only the item's dig speed, not the tier copy (`tune_tools.js` applySpec `t.setSpeed`)
+@from batches/r1102b/s3_A.qb
+> dumpgear
+waitlog \[dumpgear\] \d+ armor pieces 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py gear moredelight:wooden_knife attackDamage=1.5 attackSpeed=2 miningSpeed=2 harvestLevel=0 moredelight:stone_knife attackDamage=2.5 attackSpeed=2 miningSpeed=4 harvestLevel=1
+
+## SQ-MRD-02 | toasts flagged fast; Cheese Toast 5 / 0.7
+@group B
+@commands `/dumpfood`
+@pass Toast, the 5 topped toasts, Caviar Toast and Cheese Toast flagged fast; Cheese Toast 5 hunger, 0.7
+@fails CD `moredelight/toast.js`
+@from batches/r1102b/s3_A.qb passed
+> dumpfood
+waitlog Dumped \d+ foods 600
+shell python3 -I $INST/tools/scratch_query/dumpq.py food moredelight:toast fast=True moredelight:toast_with_chocolate fast=True moredelight:toast_with_egg fast=True moredelight:toast_with_glow_berries fast=True moredelight:toast_with_honey fast=True moredelight:toast_with_sweet_berries fast=True oceanic_delight:caviar_toast fast=True creativeengineering:cheese_toast fast=True nutrition=5 saturationModifier=0.7
+
+## SQ-MRD-03 | cheese toast, sliced potato tags
+@group B
+@commands `/dumpall` recipe dump, `/dumptags`
+@pass `creativedelight:...cheese_toast` shapeless (Toast + Flaxen Cheese Wedge); `forge:sliced_potato` and `forge:sliced_potatoes` both hold Rustic's slices (More Delight's six potato recipes read the plural, `dishes/ingredients #26`); the four renamed pack tags filled
+@fails tags
+@from batches/r1101/w2_worldgen.qb
+> zq rdetail cheese_toast
+> zq itemtag forge:sliced_potato
+> zq itemtag forge:sliced_potatoes
+> zq rdetail moredelight:mashed_potatoes
+expect itemtag forge:sliced_potatoes .*rusticdelight
+look cheese toast shapeless (toast + flaxen cheese wedge); both slice tags hold Rustic's slices; More Delight potato recipes show a slice item

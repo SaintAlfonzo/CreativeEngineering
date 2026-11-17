@@ -1,0 +1,124 @@
+# Scratch queue rows EN (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/EN.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title End's and Ender's Delight, 2026-10-25 ([ends_delight.md](../ends_delight.md) 5.6)
+@@date 2026-10-25
+@@jars creativedelight
+@@sources feature_writeup/ends_delight.md
+@@text
+@@text Needs the CD jar built 2026-10-25 (`repackedEnds -02`, `endersAdditions -01`) and the patcherMod it needs, installed; full
+@@text restart (new items, member, worldgen). New End chunks for EN-02, EN-06, EN-10. Then `/dumpall` and `/cdevgen run worldgen`.
+@@text
+@@text > Since 2026-11-02 the `enders_additions` mod is inside `repackedEnds-...-ce-19.2-03` (ends_delight.md 5.9). Rerun SQ-EN-01 (boot: both `ends_delight` and `enders_additions` listed, from the one jar), SQ-EN-03 (soils now tagged from `endersdelight/additions.js`), SQ-EN-05 (the 5 dishes and Crushed Void Pepper in JEI; meal rows now gated on `endersdelight`) and SQ-EN-07 (End House from the merged jar's donor pack) on that jar. SQ-EN-02, -04, -06, -08 are End's or 1.2.2 content and unaffected.
+@@text
+@@text | ID | Group | Action | Expect | Depends on |
+@@text |---|---|---|---|---|
+## SQ-EN-01 | librarians: no Nock Enough Arrows enchantments in trades
+@group A
+@commands Boot; `logs/latest.log`
+@pass `enders_additions` and `ends_delight.ce.mixins.json` load; no missing model / texture for `endersdelight:` plants; no script error in `ends_delight/*.js`, `endersdelight/*.js`; wild-crops log lists the 5 End rules (EN-16)
+@fails
+@from batches/r1101/w2_worldgen.qb
+> forceload add -16 -16 16 16
+> setblock 2 100 2 minecraft:lectern
+> summon minecraft:villager 2 101 3 {VillagerData:{profession:"minecraft:librarian",level:1,type:"minecraft:plains"},NoAI:1b,Tags:["en1"]}
+> data get entity @e[tag=en1,limit=1] Offers
+> data merge entity @e[tag=en1,limit=1] {VillagerData:{level:5},Offers:{}}
+sleep 2
+> data get entity @e[tag=en1,limit=1] Offers
+> dumptrades
+sleep 5
+reject nock_enough_arrows:(stockpile|recovery|cycle)
+shell ! grep -rqE "nock_enough_arrows:(stockpile|recovery|cycle)" kubejs/exported/villager_trades.json
+look librarians offer enchanted books; Offers reset at a level change may need a trade-up; record what the level-5 librarian offered
+
+## SQ-EN-02 | Lightman's Currency cashiers: no NEA enchantments
+@group A
+@commands Break a Chorus Crate and an Endstone Stove (EN-01)
+@pass Each drops itself
+@fails
+@from batches/r1101/w2_worldgen.qb
+> summon lightmanscurrency:cashier 6 101 3 {Tags:["en2"]}
+sleep 2
+> execute as @e[tag=en2] run data get entity @s
+reject nock_enough_arrows:(stockpile|recovery|cycle)
+look cashiers still offer enchanted books; the cashier trader type may not use villager offers: record what data shows
+
+## SQ-EN-03 | void pepper half: spreads then fruits; fruiting sprout drops 3, plain sprout 1 (soils / growth passed in r1102b s3)
+@group A
+@commands Place the 4 plants on end stone, tilled end stone, dirt, farmland (EN-03); random tick speed 100 on both soils (EN-04, EN-05)
+@pass Only the two soils; faster on tilled; void pepper spreads then fruits, 3 / 1 drops
+@fails
+@from batches/r1103/p2_R.qb
+> fill 320 -61 520 334 -61 534 minecraft:end_stone
+> fill 320 -60 520 334 -57 534 minecraft:air
+> setblock 327 -60 527 endersdelight:voidpepper_block[down=true,spreading=true,pepper=false]
+# r1103 p2: no player near, so the forceloaded chunk got no random ticks (1.19 ticks blocks only within 128 blocks of
+# a player) and the sprout never spread: a bot stands beside the lane for the 20 s
+> pbot spawn en3 327 -60 538 minecraft:overworld survival
+sleep 2
+> gamerule randomTickSpeed 300
+sleep 20
+> gamerule randomTickSpeed 3
+> pbot remove en3
+> zcount 320 -60 520 334 -57 534
+waitlog \[zcount\] entities 30
+expect \[zcount\] blocks .*endersdelight:voidpepper_block=([2-9]|\d\d)
+> execute if block 327 -60 527 endersdelight:voidpepper_block[spreading=false,pepper=true] run say EN03 origin fruited
+> execute if block 327 -60 527 endersdelight:voidpepper_block[spreading=true] run say EN03 origin still spreading
+> fill 320 -60 520 334 -57 534 minecraft:air
+> setblock 322 -60 522 endersdelight:voidpepper_block[down=true,spreading=false,pepper=true]
+> zact break 322 -60 522 none
+> setblock 324 -60 522 endersdelight:voidpepper_block[down=true,spreading=false,pepper=false]
+> zact break 324 -60 522 none
+expect \[zact\] break 322 -60 522 endersdelight:voidpepper_block held none: true, now minecraft:air, drops endersdelight:voidpepper x3
+expect \[zact\] break 324 -60 522 endersdelight:voidpepper_block held none: true, now minecraft:air, drops endersdelight:voidpepper x1
+look the spread count (more than one sprout after 20 s at tick speed 300) and the origin line ("fruited" once spreading ends; "still spreading" is not a fail by itself)
+
+## SQ-EN-04 | Ender Dragon drops bare hand, knife, machete
+@group A
+@commands Kill the Ender Dragon bare-handed, with a knife, with a machete (`/summon`) (EN-07)
+@pass 5-7 meat, 2 legs, 1-2 teeth; +2 meat +1 tooth with knife or machete
+@fails
+@from batches/r1102b/s3_A.qb passed
+> cbetest dragon
+waitlog \[cbetest\] done dragon 300
+expect \[cbetest\] PASS dragon dragon bare: 5-7 meat, 2 legs, 1-2 teeth per kill
+count \[cbetest\] PASS dragon dragon (knife|machete): \+2 meat, \+1 tooth per kill == 2
+
+## SQ-EN-05
+@group A
+@commands JEI and tooltips: the 10 drop items; Dragon Tooth Knife; the 5 dishes; Crushed Void Pepper; crate unpack; End's grid meals (EN-08, EN-09, EN-11 to EN-14)
+@pass As ends_delight.md 5.6
+@fails SQ-EN-01
+@draft no batch holds this row yet
+## SQ-EN-06 | Dragon Tooth Knife repairs with a Dragon Tooth
+@group A
+@commands Anvil: damaged Dragon Tooth Knife + Dragon Tooth (EN-09)
+@pass Repairs
+@fails
+@from batches/r1102b/s3_A.qb passed
+> cbetest anvil
+waitlog \[cbetest\] done anvil 60
+expect \[cbetest\] PASS anvil dragon tooth knife repairs with a dragon tooth
+
+## SQ-EN-07
+@group A
+@commands New End world: `/locate structure endersdelight:end_house`, fly the highlands; earth fill log ALL (EN-06, EN-02, EN-10)
+@pass Houses only in highlands / midlands, on ground, no chests; plants and succulent wild on end stone
+@fails SQ-EN-01
+@draft no batch holds this row yet
+## SQ-EN-08
+@group A
+@commands Look at the 25 retextured items; eat Stuffed Shulker with an empty hand (EN-15)
+@pass New art; message names the Shulker Bowl
+@fails
+@draft no batch holds this row yet
+## SQ-LR-01
+@group A
+@commands Set `debug.level_random.probe = true`, play a session with Distant Horizons generating and mobs near (Regrowth); `grep LevelRandomProbe logs/latest.log`
+@pass No crash; each `[LevelRandomProbe]` entry names the off-thread caller (or none appears, then DH FEATURES mode was not the cause). Reset to false after
+@fails
+@draft no batch holds this row yet

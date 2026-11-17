@@ -1,0 +1,799 @@
+# Scratch queue rows PS15 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PS15.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-PS15 / CQ-PS15 Post-scratch r1115 follow-ups, 2026-11-15 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md); TODO `tooling/scratch-1115-follow-ups`)
+@@date 2026-11-15
+@@sources feature_writeup/plan_post_scratch_1115.md
+@@text
+@@text Only CQ-PS15-01 to -03 have code or a question today (Compat built, not installed). The SQ rows are written ahead of the builds; each is run when its step ships. SQ-PS15-01 to -03, -05 to -07, -09 to -11b (salt, vine crops, wild hops) have code since 2026-11-15 (Common 1.2.0, Creative Delight 1.1.0 build/libs; -04 waits on the owner). SQ-PS15-13 to -16 (D1 lunchbox half, D3, D4, D5) have code since 2026-11-15: Creative Delight and Creative Worldgen build/libs, Power Grid `jar_archive/pwg_gate/` -19, acid script-only.
+@@text
+@@table
+## CQ-PS15-01
+@group client
+@commands Compat with the wall-exit lift installed. Portal Gun: floor portal, wall portal; fall through the floor portal 3 times; then walk out of a wall portal 3 times (no fall)
+@pass falling into the wall portal: player ends standing in front of the wall, can walk and jump, no `y` inside the floor; walking out: no one-block lift (as 11-14)
+@fails read `Adjusting Client Player Position` lines; adjust the in-front test in `IPExitLiftMixin`
+@draft no batch holds this row yet
+## CQ-PS15-02
+@group client
+@commands Bisect SQ-PG-01c, one change per launch, same save: (1) `fast_buffer_upload: false` in `config/immediatelyfast.json`; (2) `hud_batching: false`; (3) Rubidium and Rubidium Extra out of `mods/`; (4) Distant Horizons out. Light a Flint and Terrasteel Nether portal each time
+@pass first change after which the portal renders and the client survives 30 s is the cause; record it
+@fails all four still crash: take a fresh hs_err and check `GL_ELEMENT_ARRAY_BUFFER_BINDING` with a GL debug launch
+@draft no batch holds this row yet
+## CQ-PS15-03
+@group client
+@commands Fly to a Visceral Heap whose edge meets a warped forest (`/locate`); screenshots from 3 sides
+@pass spill into the forest reads as a natural border
+@fails owner decides: clamp the heap feature to its biome
+@draft no batch holds this row yet
+## SQ-PS15-01 | salt dust click on ice, packed ice, snow layer (1 and 3): a salt layer on top, target not melted; then the layer melts it
+@group A
+@commands Salt dust click on ice, packed ice, snow layer (CD 1.1.0 with Salt -04, Common 1.2.0 of 2026-11-15)
+@pass a salt layer is placed on top; the ice is not melted by the click; the layer then melts it at block rate
+@fails route the click through the layer place only
+@from batches/r1116/ps15_a.qb
+> setblock 300 -61 300 minecraft:ice
+> setblock 303 -61 300 minecraft:packed_ice
+> setblock 306 -60 300 minecraft:snow[layers=1]
+> setblock 309 -60 300 minecraft:snow[layers=3]
+> cdevtest use 300 -61 300 held=vintagedelight:salt_dust*4 face=up
+> cdevtest state 300 -60 300
+> cdevtest use 303 -61 300 held=vintagedelight:salt_dust*4 face=up
+> cdevtest state 303 -60 300
+> cdevtest use 306 -60 300 held=vintagedelight:salt_dust*4 face=up
+> cdevtest state 306 -59 300
+> cdevtest use 309 -60 300 held=vintagedelight:salt_dust*4 face=up
+> cdevtest state 309 -59 300
+sleep 1
+> say ps01 random ticks
+> cdevtest randomtick 300 -61 300 300 -61 300 40 nofluids
+> cdevtest randomtick 303 -61 300 303 -61 300 200 nofluids
+> cdevtest state 300 -61 300
+> cdevtest state 300 -60 300
+> cdevtest state 303 -61 300
+> cdevtest state 303 -60 300
+> cdevtest items 304 -60 300 8
+count \[cdevtest\] verb=use who=fake hand=main action=block result=(CONSUME|SUCCESS) == 4
+count \[cdevtest\] verb=use main=vintagedelight:salt_dust\*3 off=empty state="?minecraft:(ice|packed_ice)\b == 2
+count \[cdevtest\] verb=state pos=30[03],-60,300 state="vintagedelight:salt\[layers=1\]" == 2
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
+look before the ticks: ice and packed ice kept with a 1-layer salt layer above, dust 4 -> 3; snow 1 and 3: record (layer on top, or replaced); after the ticks: ice -> water, packed -> ice; layer above popped or kept (record)
+
+## SQ-PS15-02 | dispenser with salt dust facing air over grass, air over air, ice, packed ice, snow layer, salt layer 3, stone
+@group A
+@commands Dispenser with salt dust facing air over grass; facing air over air; facing ice, packed ice, a snow layer; facing a salt layer of 3; facing a stone block. Then `[salt.Melting] SaltItemMeltingEnabled = false`, restart, facing ice
+@pass air over grass: a layer placed, dust -1; air over air: dust dropped as an item; ice: water, packed ice: ice, snow layer: air, dust -1 each; salt layer: 4 layers; stone: dust dropped; switch off: ice kept, dust dropped
+@fails `SaltLayerMelt.init` registration on `vintagedelight:salt_dust` (log), `Melting.SaltItemDispenseBehavior`
+@from batches/r1116/ps15_a.qb
+> setblock 300 -60 310 minecraft:dispenser[facing=east]
+> data merge block 300 -60 310 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 305 -57 310 minecraft:dispenser[facing=east]
+> data merge block 305 -57 310 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 310 -61 310 minecraft:dispenser[facing=east]
+> setblock 311 -61 310 minecraft:ice
+> data merge block 310 -61 310 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 315 -61 310 minecraft:dispenser[facing=east]
+> setblock 316 -61 310 minecraft:packed_ice
+> data merge block 315 -61 310 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 320 -60 310 minecraft:dispenser[facing=east]
+> setblock 321 -60 310 minecraft:snow[layers=1]
+> data merge block 320 -60 310 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 325 -60 310 minecraft:dispenser[facing=east]
+> setblock 326 -60 310 vintagedelight:salt[layers=3]
+> data merge block 325 -60 310 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 330 -60 310 minecraft:dispenser[facing=east]
+> setblock 331 -60 310 minecraft:stone
+> data merge block 330 -60 310 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+sleep 1
+> say ps02 grass
+> setblock 300 -59 310 minecraft:redstone_block
+sleep 1
+> cdevtest state 301 -60 310
+> cdevtest inv 300 -60 310
+> cdevtest items 301 -60 310 3
+> say ps02 air
+> setblock 305 -56 310 minecraft:redstone_block
+sleep 1
+> cdevtest state 306 -57 310
+> cdevtest inv 305 -57 310
+> cdevtest items 306 -60 310 3
+> say ps02 ice
+> setblock 310 -60 310 minecraft:redstone_block
+sleep 1
+> cdevtest state 311 -61 310
+> cdevtest inv 310 -61 310
+> cdevtest items 311 -60 310 3
+> say ps02 packed
+> setblock 315 -60 310 minecraft:redstone_block
+sleep 1
+> cdevtest state 316 -61 310
+> cdevtest inv 315 -61 310
+> cdevtest items 316 -60 310 3
+> say ps02 snow
+> setblock 320 -59 310 minecraft:redstone_block
+sleep 1
+> cdevtest state 321 -60 310
+> cdevtest inv 320 -60 310
+> cdevtest items 321 -60 310 3
+> say ps02 layer3
+> setblock 325 -59 310 minecraft:redstone_block
+sleep 1
+> cdevtest state 326 -60 310
+> cdevtest inv 325 -60 310
+> cdevtest items 326 -60 310 3
+> say ps02 stone
+> setblock 330 -59 310 minecraft:redstone_block
+sleep 1
+> cdevtest state 331 -60 310
+> cdevtest inv 330 -60 310
+> cdevtest items 331 -60 310 3
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
+look grass: front salt[layers=1], dust 3, no item; air: item dropped (vintagedelight:salt_dust:1), dust 3; ice: water; packed: ice; snow layer: air; dust 3 each; layer3: layers=4; stone: dust dropped
+
+## SQ-PS15-03 | SaltLayerVanishChance 1.0: 20 ice under a 1-layer salt layer (L1), beside a Salt Block (L2), beside a 1-layer salt layer (L3)
+@group A
+@commands `[salt.Melting] SaltLayerVanishChance` 1.0, then 0.0 (restart each): 20 ice each under a 1-layer salt layer and 20 ice each beside a Salt Block; wait for all to melt
+@pass 1.0: every 1-layer salt layer air after its ice melts, every Salt Block stays; 0.0: no layer lost; default 0.05: about 1 of 20
+@fails key present in `config/creativedelight-common.toml` and `configs_edited/`; `Melting.setSaltMeltListener` set (CD `SaltLayerMelt.init`); CD reads the field by reflection (needs Salt -04)
+@from batches/r1116/ps15_a.qb
+> fill 298 -61 328 362 -58 340 minecraft:grass_block replace minecraft:water
+> fill 298 -60 328 362 -58 340 minecraft:air
+> fill 298 -61 328 362 -61 340 minecraft:grass_block
+> kill @e[type=minecraft:item]
+> setblock 300 -61 330 minecraft:ice
+> setblock 300 -60 330 vintagedelight:salt[layers=1]
+> setblock 300 -61 334 minecraft:ice
+> setblock 301 -61 334 salt:salt_block
+> setblock 300 -61 338 minecraft:ice
+> setblock 301 -61 338 vintagedelight:salt[layers=1]
+> setblock 303 -61 330 minecraft:ice
+> setblock 303 -60 330 vintagedelight:salt[layers=1]
+> setblock 303 -61 334 minecraft:ice
+> setblock 304 -61 334 salt:salt_block
+> setblock 303 -61 338 minecraft:ice
+> setblock 304 -61 338 vintagedelight:salt[layers=1]
+> setblock 306 -61 330 minecraft:ice
+> setblock 306 -60 330 vintagedelight:salt[layers=1]
+> setblock 306 -61 334 minecraft:ice
+> setblock 307 -61 334 salt:salt_block
+> setblock 306 -61 338 minecraft:ice
+> setblock 307 -61 338 vintagedelight:salt[layers=1]
+> setblock 309 -61 330 minecraft:ice
+> setblock 309 -60 330 vintagedelight:salt[layers=1]
+> setblock 309 -61 334 minecraft:ice
+> setblock 310 -61 334 salt:salt_block
+> setblock 309 -61 338 minecraft:ice
+> setblock 310 -61 338 vintagedelight:salt[layers=1]
+> setblock 312 -61 330 minecraft:ice
+> setblock 312 -60 330 vintagedelight:salt[layers=1]
+> setblock 312 -61 334 minecraft:ice
+> setblock 313 -61 334 salt:salt_block
+> setblock 312 -61 338 minecraft:ice
+> setblock 313 -61 338 vintagedelight:salt[layers=1]
+> setblock 315 -61 330 minecraft:ice
+> setblock 315 -60 330 vintagedelight:salt[layers=1]
+> setblock 315 -61 334 minecraft:ice
+> setblock 316 -61 334 salt:salt_block
+> setblock 315 -61 338 minecraft:ice
+> setblock 316 -61 338 vintagedelight:salt[layers=1]
+> setblock 318 -61 330 minecraft:ice
+> setblock 318 -60 330 vintagedelight:salt[layers=1]
+> setblock 318 -61 334 minecraft:ice
+> setblock 319 -61 334 salt:salt_block
+> setblock 318 -61 338 minecraft:ice
+> setblock 319 -61 338 vintagedelight:salt[layers=1]
+> setblock 321 -61 330 minecraft:ice
+> setblock 321 -60 330 vintagedelight:salt[layers=1]
+> setblock 321 -61 334 minecraft:ice
+> setblock 322 -61 334 salt:salt_block
+> setblock 321 -61 338 minecraft:ice
+> setblock 322 -61 338 vintagedelight:salt[layers=1]
+> setblock 324 -61 330 minecraft:ice
+> setblock 324 -60 330 vintagedelight:salt[layers=1]
+> setblock 324 -61 334 minecraft:ice
+> setblock 325 -61 334 salt:salt_block
+> setblock 324 -61 338 minecraft:ice
+> setblock 325 -61 338 vintagedelight:salt[layers=1]
+> setblock 327 -61 330 minecraft:ice
+> setblock 327 -60 330 vintagedelight:salt[layers=1]
+> setblock 327 -61 334 minecraft:ice
+> setblock 328 -61 334 salt:salt_block
+> setblock 327 -61 338 minecraft:ice
+> setblock 328 -61 338 vintagedelight:salt[layers=1]
+> setblock 330 -61 330 minecraft:ice
+> setblock 330 -60 330 vintagedelight:salt[layers=1]
+> setblock 330 -61 334 minecraft:ice
+> setblock 331 -61 334 salt:salt_block
+> setblock 330 -61 338 minecraft:ice
+> setblock 331 -61 338 vintagedelight:salt[layers=1]
+> setblock 333 -61 330 minecraft:ice
+> setblock 333 -60 330 vintagedelight:salt[layers=1]
+> setblock 333 -61 334 minecraft:ice
+> setblock 334 -61 334 salt:salt_block
+> setblock 333 -61 338 minecraft:ice
+> setblock 334 -61 338 vintagedelight:salt[layers=1]
+> setblock 336 -61 330 minecraft:ice
+> setblock 336 -60 330 vintagedelight:salt[layers=1]
+> setblock 336 -61 334 minecraft:ice
+> setblock 337 -61 334 salt:salt_block
+> setblock 336 -61 338 minecraft:ice
+> setblock 337 -61 338 vintagedelight:salt[layers=1]
+> setblock 339 -61 330 minecraft:ice
+> setblock 339 -60 330 vintagedelight:salt[layers=1]
+> setblock 339 -61 334 minecraft:ice
+> setblock 340 -61 334 salt:salt_block
+> setblock 339 -61 338 minecraft:ice
+> setblock 340 -61 338 vintagedelight:salt[layers=1]
+> setblock 342 -61 330 minecraft:ice
+> setblock 342 -60 330 vintagedelight:salt[layers=1]
+> setblock 342 -61 334 minecraft:ice
+> setblock 343 -61 334 salt:salt_block
+> setblock 342 -61 338 minecraft:ice
+> setblock 343 -61 338 vintagedelight:salt[layers=1]
+> setblock 345 -61 330 minecraft:ice
+> setblock 345 -60 330 vintagedelight:salt[layers=1]
+> setblock 345 -61 334 minecraft:ice
+> setblock 346 -61 334 salt:salt_block
+> setblock 345 -61 338 minecraft:ice
+> setblock 346 -61 338 vintagedelight:salt[layers=1]
+> setblock 348 -61 330 minecraft:ice
+> setblock 348 -60 330 vintagedelight:salt[layers=1]
+> setblock 348 -61 334 minecraft:ice
+> setblock 349 -61 334 salt:salt_block
+> setblock 348 -61 338 minecraft:ice
+> setblock 349 -61 338 vintagedelight:salt[layers=1]
+> setblock 351 -61 330 minecraft:ice
+> setblock 351 -60 330 vintagedelight:salt[layers=1]
+> setblock 351 -61 334 minecraft:ice
+> setblock 352 -61 334 salt:salt_block
+> setblock 351 -61 338 minecraft:ice
+> setblock 352 -61 338 vintagedelight:salt[layers=1]
+> setblock 354 -61 330 minecraft:ice
+> setblock 354 -60 330 vintagedelight:salt[layers=1]
+> setblock 354 -61 334 minecraft:ice
+> setblock 355 -61 334 salt:salt_block
+> setblock 354 -61 338 minecraft:ice
+> setblock 355 -61 338 vintagedelight:salt[layers=1]
+> setblock 357 -61 330 minecraft:ice
+> setblock 357 -60 330 vintagedelight:salt[layers=1]
+> setblock 357 -61 334 minecraft:ice
+> setblock 358 -61 334 salt:salt_block
+> setblock 357 -61 338 minecraft:ice
+> setblock 358 -61 338 vintagedelight:salt[layers=1]
+sleep 1
+> cdevtest count 298 -61 330 362 -61 338 minecraft:ice
+> cdevtest count 298 -61 328 362 -60 340 vintagedelight:salt
+> cdevtest items 330 -60 334 40
+> cdevtest randomtick 300 -61 330 300 -61 330 40 nofluids
+> cdevtest randomtick 303 -61 330 303 -61 330 40 nofluids
+> cdevtest randomtick 306 -61 330 306 -61 330 40 nofluids
+> cdevtest randomtick 309 -61 330 309 -61 330 40 nofluids
+> cdevtest randomtick 312 -61 330 312 -61 330 40 nofluids
+> cdevtest randomtick 315 -61 330 315 -61 330 40 nofluids
+> cdevtest randomtick 318 -61 330 318 -61 330 40 nofluids
+> cdevtest randomtick 321 -61 330 321 -61 330 40 nofluids
+> cdevtest randomtick 324 -61 330 324 -61 330 40 nofluids
+> cdevtest randomtick 327 -61 330 327 -61 330 40 nofluids
+> cdevtest randomtick 330 -61 330 330 -61 330 40 nofluids
+> cdevtest randomtick 333 -61 330 333 -61 330 40 nofluids
+> cdevtest randomtick 336 -61 330 336 -61 330 40 nofluids
+> cdevtest randomtick 339 -61 330 339 -61 330 40 nofluids
+> cdevtest randomtick 342 -61 330 342 -61 330 40 nofluids
+> cdevtest randomtick 345 -61 330 345 -61 330 40 nofluids
+> cdevtest randomtick 348 -61 330 348 -61 330 40 nofluids
+> cdevtest randomtick 351 -61 330 351 -61 330 40 nofluids
+> cdevtest randomtick 354 -61 330 354 -61 330 40 nofluids
+> cdevtest randomtick 357 -61 330 357 -61 330 40 nofluids
+sleep 3
+> say ps03 L1 read
+> cdevtest count 298 -61 330 362 -61 330 minecraft:ice
+> cdevtest count 298 -61 330 362 -61 330 minecraft:water
+> cdevtest count 298 -61 330 362 -60 330 vintagedelight:salt
+> cdevtest count 298 -61 330 362 -61 330 salt:salt_block
+> cdevtest items 330 -60 330 34
+> cdevtest randomtick 300 -61 334 300 -61 334 40 nofluids
+> cdevtest randomtick 303 -61 334 303 -61 334 40 nofluids
+> cdevtest randomtick 306 -61 334 306 -61 334 40 nofluids
+> cdevtest randomtick 309 -61 334 309 -61 334 40 nofluids
+> cdevtest randomtick 312 -61 334 312 -61 334 40 nofluids
+> cdevtest randomtick 315 -61 334 315 -61 334 40 nofluids
+> cdevtest randomtick 318 -61 334 318 -61 334 40 nofluids
+> cdevtest randomtick 321 -61 334 321 -61 334 40 nofluids
+> cdevtest randomtick 324 -61 334 324 -61 334 40 nofluids
+> cdevtest randomtick 327 -61 334 327 -61 334 40 nofluids
+> cdevtest randomtick 330 -61 334 330 -61 334 40 nofluids
+> cdevtest randomtick 333 -61 334 333 -61 334 40 nofluids
+> cdevtest randomtick 336 -61 334 336 -61 334 40 nofluids
+> cdevtest randomtick 339 -61 334 339 -61 334 40 nofluids
+> cdevtest randomtick 342 -61 334 342 -61 334 40 nofluids
+> cdevtest randomtick 345 -61 334 345 -61 334 40 nofluids
+> cdevtest randomtick 348 -61 334 348 -61 334 40 nofluids
+> cdevtest randomtick 351 -61 334 351 -61 334 40 nofluids
+> cdevtest randomtick 354 -61 334 354 -61 334 40 nofluids
+> cdevtest randomtick 357 -61 334 357 -61 334 40 nofluids
+sleep 3
+> say ps03 L2 read
+> cdevtest count 298 -61 334 362 -61 334 minecraft:ice
+> cdevtest count 298 -61 334 362 -61 334 minecraft:water
+> cdevtest count 298 -61 334 362 -60 334 vintagedelight:salt
+> cdevtest count 298 -61 334 362 -61 334 salt:salt_block
+> cdevtest items 330 -60 334 34
+> cdevtest randomtick 300 -61 338 300 -61 338 40 nofluids
+> cdevtest state 301 -61 338
+> cdevtest randomtick 303 -61 338 303 -61 338 40 nofluids
+> cdevtest state 304 -61 338
+> cdevtest randomtick 306 -61 338 306 -61 338 40 nofluids
+> cdevtest state 307 -61 338
+> cdevtest randomtick 309 -61 338 309 -61 338 40 nofluids
+> cdevtest state 310 -61 338
+> cdevtest randomtick 312 -61 338 312 -61 338 40 nofluids
+> cdevtest state 313 -61 338
+> cdevtest randomtick 315 -61 338 315 -61 338 40 nofluids
+> cdevtest state 316 -61 338
+> cdevtest randomtick 318 -61 338 318 -61 338 40 nofluids
+> cdevtest state 319 -61 338
+> cdevtest randomtick 321 -61 338 321 -61 338 40 nofluids
+> cdevtest state 322 -61 338
+> cdevtest randomtick 324 -61 338 324 -61 338 40 nofluids
+> cdevtest state 325 -61 338
+> cdevtest randomtick 327 -61 338 327 -61 338 40 nofluids
+> cdevtest state 328 -61 338
+> cdevtest randomtick 330 -61 338 330 -61 338 40 nofluids
+> cdevtest state 331 -61 338
+> cdevtest randomtick 333 -61 338 333 -61 338 40 nofluids
+> cdevtest state 334 -61 338
+> cdevtest randomtick 336 -61 338 336 -61 338 40 nofluids
+> cdevtest state 337 -61 338
+> cdevtest randomtick 339 -61 338 339 -61 338 40 nofluids
+> cdevtest state 340 -61 338
+> cdevtest randomtick 342 -61 338 342 -61 338 40 nofluids
+> cdevtest state 343 -61 338
+> cdevtest randomtick 345 -61 338 345 -61 338 40 nofluids
+> cdevtest state 346 -61 338
+> cdevtest randomtick 348 -61 338 348 -61 338 40 nofluids
+> cdevtest state 349 -61 338
+> cdevtest randomtick 351 -61 338 351 -61 338 40 nofluids
+> cdevtest state 352 -61 338
+> cdevtest randomtick 354 -61 338 354 -61 338 40 nofluids
+> cdevtest state 355 -61 338
+> cdevtest randomtick 357 -61 338 357 -61 338 40 nofluids
+> cdevtest state 358 -61 338
+sleep 3
+> say ps03 L3 read
+> cdevtest count 298 -61 338 362 -61 338 minecraft:ice
+> cdevtest count 298 -61 338 362 -61 338 minecraft:water
+> cdevtest count 298 -61 338 362 -60 338 vintagedelight:salt
+> cdevtest count 298 -61 338 362 -61 338 salt:salt_block
+> cdevtest items 330 -60 338 34
+sleep 1
+count \[cdevtest\] verb=randomtick .*changed=[1-9] == 60
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
+look chance 1.0: per layout ice 0 / water 20; L1 salt layers left and item drops (support loss pops the layer before the listener can roll); L2 salt_block 20 kept; L3 layers left (1.0: 0, 0.0: 20 unless washed) and drops; the L3 state read right after each melt shows the same-tick vanish
+
+## SQ-PS15-04
+@group A
+@commands **Waits on the owner (plan B4: salt layers have no gravity today).** Drop a salt layer onto a salt lick from 3 blocks
+@pass the layer lands in the lick and refills it; no layer block remains
+@fails gravity entity landing hook
+@draft no batch holds this row yet
+## SQ-PS15-05 | full lick with a 2-layer salt layer, cow licks 3 times (interval 200, chance 1.0); player licks a stack (8 + 1 layers) twice
+@group A
+@commands Full Salt Block lick with a salt layer of 2 on top; stage chance 1.0; a cow licks it 3 times; then a full lick under a stack of an 8-layer salt block and a 1-layer salt block, player licks at chance 1.0 twice
+@pass layers 2 -> 1 -> air, the lick stays `salt:salt_block`; the third lick makes it lightly licked; stack: the 1-layer block goes first, then the 8-layer one becomes 7
+@fails `SaltLick.wear` / `topLayer`
+@from batches/r1116/ps15_a.qb
+> fill 339 -61 349 342 -58 351 minecraft:glass hollow
+> setblock 340 -60 350 salt:salt_block
+> setblock 340 -59 350 vintagedelight:salt[layers=2]
+> zmelt clear
+> zmelt w lick overworld 340 -60 350
+> zmelt w layer overworld 340 -59 350
+> summon minecraft:cow 341 -60 350.5 {Tags:["ps05"],PersistenceRequired:1b}
+sleep 1
+> cdevtest tickwarp 900
+waitlog \[cdevtest\] verb=tickwarp end=done 120
+> zmelt show
+> cdevtest entities 341 -60 350 3 type=minecraft:cow
+> setblock 350 -60 350 salt:salt_block
+> setblock 350 -59 350 vintagedelight:salt[layers=8]
+> setblock 350 -58 350 vintagedelight:salt[layers=1]
+sleep 1
+> cdevtest use 350 -60 350 held=none face=north
+> cdevtest state 350 -59 350
+> cdevtest state 350 -58 350
+> cdevtest use 350 -60 350 held=none face=north
+> cdevtest state 350 -59 350
+> cdevtest state 350 -58 350
+> cdevtest items 350 -60 350 4
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
+look zmelt changes in order: layer 2 -> 1 -> air while the lick stays salt:salt_block, then the lick -> lightly_licked; stack: use 1 removes the 1-layer block (state -58 air), use 2 makes -59 layers=7, lick stays salt:salt_block
+
+## SQ-PS15-06 | salt dust onto worn licks (hand, dispenser, layer above), waxed by dispenser, full lick by hand and by dispenser
+@group A
+@commands Salt dust onto a worn lick: by hand, by dispenser, as a layer above (`/setblock` a layer of 2 on heavily licked); waxed heavily licked by dispenser; then onto a full lick by hand and by dispenser
+@pass worn: one stage per salt in all three (layer of 2: two stages, layer gone); waxed: waxed well licked; full: a salt layer on top (dispenser: dust -1)
+@fails `SaltLick.refill`, `addLayerOnTop`
+@from batches/r1116/ps15_a.qb
+> setblock 300 -60 360 hearthandharvest:heavily_licked_salt_block
+> cdevtest use 300 -60 360 held=vintagedelight:salt_dust*4 face=up
+> setblock 304 -60 360 hearthandharvest:heavily_licked_salt_block
+> setblock 304 -60 361 minecraft:dispenser[facing=north]
+> data merge block 304 -60 361 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 304 -59 361 minecraft:redstone_block
+sleep 1
+> cdevtest state 304 -60 360
+> cdevtest inv 304 -60 361
+> setblock 308 -60 360 hearthandharvest:heavily_licked_salt_block
+> setblock 308 -59 360 vintagedelight:salt[layers=2]
+sleep 1
+> cdevtest state 308 -60 360
+> cdevtest state 308 -59 360
+> setblock 312 -60 360 hearthandharvest:waxed_heavily_licked_salt_block
+> setblock 312 -60 361 minecraft:dispenser[facing=north]
+> data merge block 312 -60 361 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 312 -59 361 minecraft:redstone_block
+sleep 1
+> cdevtest state 312 -60 360
+> cdevtest inv 312 -60 361
+> setblock 316 -60 360 salt:salt_block
+> cdevtest use 316 -60 360 held=vintagedelight:salt_dust*4 face=up
+> cdevtest state 316 -59 360
+> setblock 320 -60 360 salt:salt_block
+> setblock 320 -60 361 minecraft:dispenser[facing=north]
+> data merge block 320 -60 361 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 320 -59 361 minecraft:redstone_block
+sleep 1
+> cdevtest state 320 -60 360
+> cdevtest state 320 -59 360
+> cdevtest inv 320 -60 361
+> cdevtest items 310 -60 360 14
+expect \[cdevtest\] verb=use main=vintagedelight:salt_dust\*3 off=empty state="?hearthandharvest:well_licked_salt_block
+expect \[cdevtest\] verb=state pos=304,-60,360 state="?hearthandharvest:well_licked_salt_block
+expect \[cdevtest\] verb=state pos=308,-60,360 state="?hearthandharvest:lightly_licked_salt_block
+expect \[cdevtest\] verb=state pos=308,-59,360 state="?minecraft:air
+expect \[cdevtest\] verb=state pos=312,-60,360 state="?hearthandharvest:waxed_well_licked_salt_block
+expect \[cdevtest\] verb=state pos=316,-59,360 state="vintagedelight:salt\[layers=1\]"
+expect \[cdevtest\] verb=state pos=320,-60,360 state="?salt:salt_block
+expect \[cdevtest\] verb=state pos=320,-59,360 state="vintagedelight:salt\[layers=1\]"
+count \[cdevtest\] verb=inv .*vintagedelight:salt_dust\*3 == 3
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
+look all three refills one stage per salt (layer of 2: two stages, layer gone); waxed -> waxed well licked; full lick: layer on top by hand and by dispenser (dust 4 -> 3); no item entities
+
+## SQ-PS15-07 | Salt Melt: recipe, melts ice, packed, blue, snow block, powder snow; stone nothing; 64 uses; dispenser on ice and on stone
+@group A
+@commands Craft Salt Melt (shapeless: 2 salt dust, 2 raw rock salt); use on ice, packed ice, blue ice, snow block, powder snow, stone; use 65 times; then a dispenser facing ice, then facing stone; JEI info page
+@pass 64 uses, 1 durability per melt, breaks at the 64th; packed -> ice, blue -> packed; stone: nothing, no durability; dispenser on ice melts and damages, on stone fails and keeps it; icon is The Salt's salt crystal; name "Salt Melt"; JEI page present
+@fails `SaltMeltRegistry` (annotation scan), recipe `creativedelight:salt_melt`
+@from batches/r1116/ps15_a.qb
+> cdevtest rdetail creativedelight:shapeless/salt_melt
+> cdevtest item salt:salt_melt
+> pbot spawn SM 300.5 -60 376.5 minecraft:overworld survival
+sleep 3
+> pbot inv SM clear
+> pbot inv SM set 0 salt:salt_melt 1
+> pbot inv SM select 0
+> setblock 300 -61 370 minecraft:ice
+> setblock 302 -61 370 minecraft:packed_ice
+> setblock 304 -61 370 minecraft:blue_ice
+> setblock 306 -61 370 minecraft:snow_block
+> setblock 308 -61 370 minecraft:powder_snow
+> setblock 310 -61 370 minecraft:stone
+> cdevtest use 300 -61 370 as=SM face=up
+> cdevtest use 302 -61 370 as=SM face=up
+> cdevtest use 304 -61 370 as=SM face=up
+> cdevtest use 306 -61 370 as=SM face=up
+> cdevtest use 308 -61 370 as=SM face=up
+> cdevtest use 310 -61 370 as=SM face=up
+> say ps07 loop
+repeat 58
+> setblock 320 -61 370 minecraft:ice
+> cdevtest use 320 -61 370 as=SM face=up
+end
+> say ps07 use64
+> setblock 320 -61 370 minecraft:ice
+> cdevtest use 320 -61 370 as=SM face=up
+> say ps07 use65
+> setblock 320 -61 370 minecraft:ice
+> cdevtest use 320 -61 370 as=SM face=up
+> cdevtest state 320 -61 370
+> pbot inv SM get
+> say ps07 dispenser
+> setblock 330 -61 370 minecraft:ice
+> setblock 330 -60 370 minecraft:dispenser[facing=down]
+> data merge block 330 -60 370 {Items:[{Slot:0b,id:"salt:salt_melt",Count:1b,tag:{Damage:0}}]}
+> setblock 334 -61 370 minecraft:stone
+> setblock 334 -60 370 minecraft:dispenser[facing=down]
+> data merge block 334 -60 370 {Items:[{Slot:0b,id:"salt:salt_melt",Count:1b,tag:{Damage:0}}]}
+> setblock 330 -59 370 minecraft:redstone_block
+> setblock 334 -59 370 minecraft:redstone_block
+sleep 1
+> cdevtest state 330 -61 370
+> cdevtest inv 330 -60 370
+> cdevtest state 334 -61 370
+> cdevtest inv 334 -60 370
+> cdevtest items 332 -60 370 5
+> pbot remove SM
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:1\} off=empty state="?minecraft:water
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:2\} off=empty state="?minecraft:ice
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:3\} off=empty state="?minecraft:packed_ice
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:5\} off=empty state="?minecraft:(?!stone)
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:5\} off=empty state="?minecraft:stone
+expect \[cdevtest\] verb=use main=salt:salt_melt\*1\{Damage:63\} off=empty state="?minecraft:water
+count \[cdevtest\] verb=use main=empty off=empty state="?minecraft:water == 1
+count \[cdevtest\] verb=use main=empty off=empty state="?minecraft:ice == 1
+expect \[cdevtest\] verb=state pos=330,-61,370 state="?minecraft:water
+expect \[cdevtest\] verb=state pos=334,-61,370 state="?minecraft:stone
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
+look recipe 2 salt dust + 2 raw rock salt; Damage 1 per melt, stone no damage; use 64 breaks it (main=empty, ice melted), use 65 nothing; dispensers: ice -> water and Damage:1, stone kept and Damage:0, no item dropped
+
+## SQ-PS15-08
+@group A
+@commands After the frozen decor report: the melt rule rows for each listed block
+@pass per the report
+@fails per block
+@draft no batch holds this row yet
+## SQ-PS15-09 | glowstone cage lantern out of the fire tag; no SQ-MELT-10 warning
+@group A
+@commands Boot; `/zq blocktag` the fire tag
+@pass `glowstone_cage_lantern` not in the fire tag; no SQ-MELT-10 warning
+@fails tag edit
+@from batches/r1116/ps15_a.qb passed
+shell grep -hE "\[melting\]" logs/latest.log | sed -E "s/^.*\[melting\]/[melting]/" | cut -c1-300
+> cdevtest tag block creativecommon:melting/fire
+expect \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/fire n=\d+
+reject glowstone_cage_lantern
+bootreject glowstone_cage_lantern
+bootexpect \[melting\] tags: .* fire
+
+## SQ-PS15-10 | stick, torch, dirt clicked onto age-1 hops, red jungle grape, vanilla vine, mulberry vine: nothing replaces a vine; hops adds a face; tag lists 6
+@group A
+@commands Place a stick (Supplementaries), torch and dirt block by clicking an age-1 hops vine, a red jungle grape vine, a Neapolitan vanilla vine and an Upgrade Aquatic mulberry vine; then hops onto a hops vine's free face
+@pass nothing replaces a vine (the item goes beside it or nowhere); hops still adds a face; `/zq blocktag creativedelight:crops/vine_crops` lists 6 blocks
+@fails `VineCropNoReplaceMixin` applied (mixin log), tag contents
+@from batches/r1116/ps15_a.qb
+> cdevtest tag block creativedelight:crops/vine_crops
+> setblock 300 -60 379 minecraft:oak_log
+> setblock 300 -60 380 hearthandharvest:hops_vine[age=1,north=true]
+> cdevtest state 300 -60 380
+> setblock 304 -60 379 minecraft:oak_log
+> setblock 304 -60 380 vinery:jungle_grape_bush_red[age=1,north=true]
+> cdevtest state 304 -60 380
+> setblock 308 -60 380 neapolitan:vanilla_vine[facing=up]
+> cdevtest state 308 -60 380
+> setblock 312 -59 380 minecraft:oak_leaves[persistent=true]
+> setblock 312 -60 380 upgrade_aquatic:mulberry_vine[age=1,double=false]
+> cdevtest state 312 -60 380
+sleep 1
+> cdevtest use 300 -60 380 held=minecraft:stick face=south
+> cdevtest state 300 -60 381
+> setblock 300 -60 381 minecraft:air
+> cdevtest use 300 -60 380 held=minecraft:torch face=south
+> cdevtest state 300 -60 381
+> setblock 300 -60 381 minecraft:air
+> cdevtest use 300 -60 380 held=minecraft:dirt face=south
+> cdevtest state 300 -60 381
+> setblock 300 -60 381 minecraft:air
+> cdevtest use 304 -60 380 held=minecraft:stick face=south
+> cdevtest state 304 -60 381
+> setblock 304 -60 381 minecraft:air
+> cdevtest use 304 -60 380 held=minecraft:torch face=south
+> cdevtest state 304 -60 381
+> setblock 304 -60 381 minecraft:air
+> cdevtest use 304 -60 380 held=minecraft:dirt face=south
+> cdevtest state 304 -60 381
+> setblock 304 -60 381 minecraft:air
+> cdevtest use 308 -60 380 held=minecraft:stick face=south
+> cdevtest state 308 -60 381
+> setblock 308 -60 381 minecraft:air
+> cdevtest use 308 -60 380 held=minecraft:torch face=south
+> cdevtest state 308 -60 381
+> setblock 308 -60 381 minecraft:air
+> cdevtest use 308 -60 380 held=minecraft:dirt face=south
+> cdevtest state 308 -60 381
+> setblock 308 -60 381 minecraft:air
+> cdevtest use 312 -60 380 held=minecraft:stick face=south
+> cdevtest state 312 -60 381
+> setblock 312 -60 381 minecraft:air
+> cdevtest use 312 -60 380 held=minecraft:torch face=south
+> cdevtest state 312 -60 381
+> setblock 312 -60 381 minecraft:air
+> cdevtest use 312 -60 380 held=minecraft:dirt face=south
+> cdevtest state 312 -60 381
+> setblock 312 -60 381 minecraft:air
+> setblock 301 -60 380 minecraft:oak_log
+> cdevtest use 300 -60 380 held=hearthandharvest:hops face=south
+> cdevtest state 300 -60 380
+> cdevtest items 306 -60 380 10
+expect \[cdevtest\] verb=tag kind=block tag=creativedelight:crops/vine_crops n=6 
+reject verb=use main=\S+ off=empty state="?minecraft:(stick|torch|wall_torch|dirt|air)\b
+count verb=use main=\S+ off=empty state="?(hearthandharvest:hops_vine|vinery:jungle_grape_bush_red|neapolitan:vanilla_vine|upgrade_aquatic:mulberry_vine)\b == 13
+bootreject VineCropNoReplace.*(fail|error|Exception)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
+look each of the 12 clicks: the vine state unchanged (state= line names the vine); the item went beside it (z 381) or nowhere; hops: a new face (east=true) on the hops vine; record where stick/torch/dirt went
+
+## SQ-PS15-11
+@group B
+@commands After the hops fix (C3 built 2026-11-15, rarity 96): 240-block census over the 3 r1115 forest sites, seed 8675309
+@pass 4 or more hops trees over the three sites (about 1 per 100 forest chunks, plan C1 findings)
+@fails trunk search and rarity
+@draft no batch holds this row yet
+## SQ-PS15-11b
+@group B
+@commands After C3 (exhaustive trunk search, plan C1 findings): seed 8675309, forest site 2 (1472 -3264); `/place feature creativedelight:wild/wild_hops` at the 25 r1115 points (16 apart), then the SQ-PS15-11 census over sites 1b, 2 and 3
+@pass 22 or more of 25 placed (r1115: 1); census 4 or more hops trees (about 1 per 100 forest chunks)
+@fails trunk detection (NO_LEAVES top not a log under branches), face check, `canSurvive`
+@draft no batch holds this row yet
+## SQ-PS15-12
+@group B
+@commands Wild crop census table (carrot, adzuki, bell pepper, all rules) in their biomes
+@pass every rule at its expected presence, or a named cause
+@fails per rule
+@draft no batch holds this row yet
+## SQ-PS15-12b
+@group B
+@commands Canopy A/B, before any heightmap fix (plan C4 findings). Seed 8675309, forest site 2 and jungle -1380 -2724: `/place feature farmersdelight:patch_wild_carrots` (forest) and `/place feature rusticdelight:wild_bell_peppers` (jungle) at 25 ground points under the canopy and 25 points one block above the leaves; count placed blocks per point
+@pass ground: most points place plants; canopy: none. Confirms the `MOTION_BLOCKING` canopy cause; the fix is a canopy-proof heightmap
+@fails ground also fails: the feature or its ground rule (air check against grass cover, `#minecraft:dirt`), not the heightmap
+@draft no batch holds this row yet
+## SQ-PS15-12c
+@group B
+@commands Biome-aware census (plan C4 table): per box, sample the surface biome at each chunk centre and count chunks in the crop's tag; boxes: 3 forest (carrot, onion, adzuki), 2 jungle (bell pepper, coffee, mini melon, rice, tea), 1 plains (carrot, onion control). Adzuki needs 700 or more tag chunks for a meaningful 0
+@pass plains carrots near 1 patch per 120 tag chunks; adzuki present (expected 1 per 128, canopy-proof); forest and jungle MOTION rules low or 0 before the fix, near their rarity after it
+@fails adzuki still 0 over 700 tag chunks: its patch (grass check, 256 tries within 3) or rule binding, not the canopy
+@draft no batch holds this row yet
+## SQ-PS15-13 | Copper Lunchbox item handler refuses pumpkin pie, apple pie, stick; takes cooked beef (server half; screen and tooltip are client)
+@group A
+@commands Lunchbox food only (D1, Creative Delight `LunchboxFoodOnlyMixin`, build 2026-11-15). Give a Copper Lunchbox; open it and try to put a vanilla pumpkin pie, a Farmer's Delight apple pie and a stick in a slot; then by script insert the pumpkin pie through the item handler (`ForgeCapabilities.ITEM_HANDLER` on the held box, `insertItem(0, pie, false)`, as SQ-FDI-04 did); then a cooked beef the same two ways; hover the box
+@pass screen and handler refuse the pie, apple pie and stick (handler returns the stack unchanged, slot 0 empty); cooked beef goes in both ways; tooltip `Food slots: 9` [Slots: 9]; latest.log has no mixin apply error for `LunchboxFoodOnlyMixin`
+@fails pie accepted by the handler: the mixin did not apply (`grep -n LunchboxFoodOnly logs/latest.log`, target `FoodContainerCapabilityProvider$1`, gated on solapplepie); food refused: `isEdible` on that food. Pies placing as blocks is not part of this row (D1 pie half open, waiting for owner)
+@from batches/r1116/ps15_a.qb
+> pbot spawn LB 300.5 -60 396.5 minecraft:overworld survival
+sleep 3
+> pbot inv LB clear
+> zp9 lbfill LB solapplepie:lunchbox minecraft:pumpkin_pie 1
+sleep 1
+> zp9 lbfill LB solapplepie:lunchbox farmersdelight:apple_pie 1
+sleep 1
+> zp9 lbfill LB solapplepie:lunchbox minecraft:stick 1
+sleep 1
+> zp9 lbfill LB solapplepie:lunchbox minecraft:cooked_beef 1
+sleep 1
+> zp9 lbfill LB creativedelight:netherite_lunchbox minecraft:pumpkin_pie 1
+sleep 1
+> cdevtest item solapplepie:lunchbox
+> pbot remove LB
+shell grep -n "LunchboxFoodOnly" logs/latest.log | head -5
+count \[zp9\] lbfill LB solapplepie:lunchbox .*notInserted=1 == 3
+count \[zp9\] lbfill LB solapplepie:lunchbox .*notInserted=0 == 1
+expect \[zp9\] lbfill LB solapplepie:lunchbox .*cooked_beef.*notInserted=0
+bootreject LunchboxFoodOnly.*(fail|error|Exception)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(salt|hearth|creativedelight|creativecommon|vintagedelight)
+look pie, apple pie and stick: notInserted=1 and the box empty; cooked beef inside; netherite box refuses the pie too; no mixin error in the shell lines
+
+## SQ-PS15-14 | SQ-PWG-82 rerun on -19 (D3): the arm takes 1 circuit component per grab; circuit locks, 1/3 -> 3/3, board at the end depot; part depots lose only what went in; stone x64
+@group A
+@commands Power Grid arm takes 1 circuit component per grab (D3, `ArmBlockEntityMixin` `getDistributableAmount` cap, jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-19.jar`). Rerun SQ-PWG-82 as written (Z 1906; parts x8 in the depots before the circuit arrives); then `zpwg9c show 1146 -60 1908` (the arm) and the two part depots
+@pass the arm's held item is never more than 1 part (`HeldItem` count 1 or empty); the circuit locks, Assembly goes 1/3 to 3/3 and the end depot holds `powergrid:circuit_board x1 Schematic components=3`; part depots lose only what went into the board or onto the belt one at a time (record how many loose single parts rode to the end depot before the circuit arrived: upstream fallback to the belt insert); stone depot x64 unchanged
+@fails arm holds x7 again: the cap did not apply (wrong jar, or `getDistributableAmount` signature on Create 0.5.1.i); stall at 1/3 with the arm empty: belt lock window (SQ-PWG-82 failure column)
+@from batches/r1116/ps15_pwg.qb
+> zpwg9c line 1142 -60 1906 plain
+waitlog \[zpwg9c\] done 20
+sleep 0.5
+> zpwg9c lineck 1142 -60 1906
+sleep 1
+> zpwg9c lineck 1142 -60 1906
+> zpwg9c depot 1145 -60 1910 powergrid:wire_connector 8
+> zpwg9c depot 1147 -60 1910 powergrid:resistor 8
+> zpwg9c depot 1148 -60 1909 minecraft:stone 64
+> zpwg9c arm2 1146 -60 1908 1148 -60 1909 1146 -60 1906 1145 -60 1910 1147 -60 1910
+sleep 1
+> zpwg9c show 1146 -60 1908
+> zpwg9c feed 1142 -60 1906 inc 1140 -60 1858
+sleep 0.5
+> zpwg9c show 1146 -60 1908
+sleep 1
+> zpwg9c show 1146 -60 1908
+sleep 1
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+sleep 1
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+sleep 2
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+sleep 3
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+sleep 5
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1146 -60 1906
+sleep 10
+> zpwg9c show 1146 -60 1906
+> zpwg9c show 1152 -60 1906
+> zpwg9c same 1152 -60 1906 1140 -60 1858
+> zpwg9c show 1148 -60 1909
+> zpwg9c show 1146 -60 1908
+> zpwg9c show 1145 -60 1910
+> zpwg9c show 1147 -60 1910
+> cdevtest items 1149 -60 1906 4 keep
+sleep 1
+expect \[zpwg9c\] line plain belt Block\{create:belt\}
+count \[zpwg9c\] lineck belt facing=east speed=-?[1-9] >= 1
+expect \[zpwg9c\] arm at 1146 -60 1908 points=4$
+count \[zpwg9c\] arm point .*Mode:"TAKE" == 2
+count \[zpwg9c\] arm point .*Mode:"DEPOSIT" == 2
+expect \[zpwg9c\] feed powergrid:incomplete_circuit x1 Schematic components=3 inserted on the belt at 1142 -60 1906
+expect \[zpwg9c\] belt facing=\S+ speed=\S+ items .*powergrid:incomplete_circuit x1 Schematic components=3 .*lockedExternally
+expect \[zpwg9c\] items 0:powergrid:circuit_board x1 Schematic components=3$
+expect \[zpwg9c\] same powergrid:circuit_board x1 Schematic components=3 design=true$
+expect \[zpwg9c\] items 0:minecraft:stone x64$
+reject \[zpwg9c\] arm .*held(Item)?=?\S* x([2-9]|\d\d)
+reject \[zpwg9c\] arm: no interaction point
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look arm show lines: HeldItem never more than 1 part; circuit locked about @4.5, Assembly 1/3 -> 3/3; end depot circuit_board, design same; part depots: 8 minus what went in or onto the belt (count loose single parts at the end: items line); stone x64
+
+## SQ-PS15-15 | acid in water (D4): unheated basin, water first, rotten flesh + spider eye -> 250 mB acid; heated basin water first (SQ-PWG-80b) recorded; both acid recipes listed
+@group A
+@commands Acid in water (D4, `kubejs/server_scripts/other/power_grid.js` `powergrid_acid_in_water`: rotten flesh + spider eye + 250 mB water, no heat -> 250 mB acid; `/reload` is enough). Rerun SQ-PWG-80b with an unheated basin: `zpwg9c basin 1150 -60 1894` and remove the blaze burner under it (or a basin on plain ground with a mixer above); `zpwg9c bfill 1150 -60 1894 minecraft:water 1000`; wait 5; `zpwg9c put 1150 -60 1894 minecraft:rotten_flesh 1`; `zpwg9c put 1150 -60 1894 minecraft:spider_eye 1`; wait 200; `zpwg9c show 1150 -60 1894`. Then the same in a heated basin (SQ-PWG-80b setup, water first) and record. `zpwg3 recipes powergrid` / JEI: both acid recipes listed
+@pass unheated: `tanks minecraft:water 750` and `powergrid:acid 250`, no items left, no salt; heated, water first: record (expected: Creative Delight `water_salt` still takes the 1000 mB first, as SQ-PWG-80b; then the flesh and eye stay, no acid; not a FAIL); no ERROR
+@fails no acid unheated: script error (`power grid recipes done` missing) or another unheated mixing took the flesh (record its id)
+@from batches/r1116/ps15_pwg.qb
+> zpwg3 recipes powergrid
+waitlog \[zpwg3\] recipes \d+ 30
+> cdevtest recipes powergrid_acid
+> cdevtest makes powergrid:acid_bucket
+> zpwg9c basin 1150 -60 1894
+waitlog \[zpwg9c\] done 20
+> setblock 1150 -61 1894 minecraft:stone
+sleep 0.5
+> zpwg9c show 1150 -61 1894
+> cdevtest state 1150 -61 1894
+> zpwg9c bfill 1150 -60 1894 minecraft:water 1000
+sleep 0.25
+> zpwg9c put 1150 -60 1894 minecraft:rotten_flesh 1
+> zpwg9c put 1150 -60 1894 minecraft:spider_eye 1
+sleep 10
+> zpwg9c show 1150 -60 1894
+> zpwg9c show 1150 -58 1894
+> say ps15 heated
+> zpwg9c basin 1142 -60 1894
+waitlog \[zpwg9c\] done 20
+> zpwg9c bfill 1142 -60 1894 minecraft:water 1000
+sleep 0.25
+> zpwg9c put 1142 -60 1894 minecraft:rotten_flesh 1
+> zpwg9c put 1142 -60 1894 minecraft:spider_eye 1
+sleep 10
+> zpwg9c show 1142 -60 1894
+> zpwg9c show 1142 -58 1894
+sleep 1
+kjsexpect power grid recipes done
+expect \[zpwg9c\] fill minecraft:water 1000/1000 at 1150 -60 1894
+expect \[cdevtest\] verb=state pos=1150,-61,1894 state="?minecraft:stone
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject An unexpected error occurred trying to execute that command
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look unheated 1150: tanks water 750 + powergrid:acid 250, no items left, no salt; heated 1142 (water first): record what ran (expected salt from water_salt, flesh and eye left, no acid; not a FAIL); recipes list both acid recipes; mixer speed non-zero
+
+## SQ-PS15-16 | boot 1 (full pack): upgrade_aquatic in the on list; /place feature upgrade_aquatic:river_tree: oak trunk, mulberry leaves
+@group A
+@commands Upgrade Aquatic guard (D5: the 7 `upgrade_aquatic` worldgen JSONs moved from `kubejs/data/upgrade_aquatic/worldgen` into Creative Worldgen `packs/upgrade_aquatic/`, build 2026-11-15). Boot 1 with the full pack: `grep -n "mod data packs on" logs/latest.log`; `/place feature upgrade_aquatic:river_tree` on river bank grass; locate a river and check mulberry trees and driftwood as before. Boot 2: SQ-DEP-09b extra pair, `upgrade_aquatic` and `alexsabnormalities` removed from a scratch `mods/`
+@pass boot 1: `upgrade_aquatic` in the `on` list; the tree has an oak trunk and mulberry leaves (the override still wins over UA's Java registration); boot 2: `Done (`, no `Unknown registry key ... upgrade_aquatic:river_tree`, no other ERR naming upgrade_aquatic; `upgrade_aquatic` in the `off` list
+@fails boot 1 tree has a river log trunk: the pack override lost (pack position); boot 2 fails on another file: grep the error's path and move that file too
+@from batches/r1116/ps15_a.qb
+shell grep -n "mod data packs on" logs/latest.log | cut -c1-300
+> forceload add 400 400 420 420
+sleep 2
+> fill 400 -60 400 420 -40 420 minecraft:air
+> execute in minecraft:overworld run place feature upgrade_aquatic:river_tree 410 -60 410
+sleep 1
+> cdevtest count 402 -60 402 418 -45 418 #minecraft:logs
+> cdevtest count 402 -60 402 418 -45 418 #minecraft:leaves
+bootexpect \[creativeworldgen\] mod data packs on: \[[^]]*upgrade_aquatic
+expect \[cdevtest\] verb=count .*ids=[^ ]*minecraft:oak_log
+reject \[cdevtest\] verb=count .*upgrade_aquatic:river_log
+look tree placed (place feature reply in the log); logs = oak only; leaves = mulberry (upgrade_aquatic:mulberry_leaves or the override id); the river walk (mulberry trees, driftwood) needs a group B world: not run here

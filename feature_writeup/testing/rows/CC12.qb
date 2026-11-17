@@ -1,0 +1,59 @@
+# Scratch queue rows CC12 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CC12.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CC12 Creative Common 1.2.0 publish re-check, 2026-11-13 ([creative_engineering.md](../creative_engineering.md) 7.5, TODO `creativecommon/publish #1`)
+@@date 2026-11-13
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/creative_engineering.md
+@@text
+@@text Jar: `development/creativeCommon/build/libs/creativecommon-1.2.0.jar` (22:40). The 11-10 SQ-CDNS runs predate the chat mixins
+@@text and the 11-13 dict; these rows re-run the earlier publish boots on 1.2.0. Swap aliases, capability keys and the load
+@@text report are already covered by SQ-CDNS-01 to -04, -06 (r1110); the chat fix by CQ-CHK-01 (owner, 2026-11-13).
+@@text
+@@table
+## SQ-CC12-01 | Common 1.2.0 with its optional mods only: no mixin or class error, swap summary with capability keys
+@group B (Common only)
+@commands SQ-CCO-01 on the 1.2.0 jar (`cc_only_srv.sh`, `full` set; replace the Common jar with 1.2.0)
+@pass as SQ-CCO-01; also `[swaps] ... capability key(s)` in the list summary line, no error naming `ChatOpen`, `SwapReport` or `SwapCapabilityKeys`; on stop `[swaps] load report: every listed id resolved`
+@fails new mixin SRG names (`m_188230_`, `m_41712_`, `m_91326_`, `m_90893_`, `m_90889_`); a client mixin loaded on the dedicated server
+@from batches/r1114cc12/cc12_01.qb
+bootreject Mixin apply failed|InvalidMixinException|outside the tested range|^(?!.*Error loading class).*(ClassNotFoundException|NoClassDefFoundError)
+bootreject creativecompat|creativecalendar|creativeengineering|creativeequipment|creativemagic|creativedelight|creativebrewing
+bootreject (?i)(ChatOpen|SwapReport|SwapCapabilityKeys).*(error|exception|fail)
+bootreject (?i)(m_188230_|m_41712_|m_91326_|m_90893_|m_90889_).*(error|fail|not found|could not)
+bootexpect \[perf\] Immersive Weathering callTick handler .* now calls IwGrowthFast\.blockTick
+bootexpect \[compat\] Immersive Portals overwrites conform to target visibility
+bootexpect \[swaps\] \d+ list file\(s\): .* \d+ capability key\(s\)
+kjsreject (?i)error
+shell ls mods | grep -i creative; grep -m1 -E "\[swaps\] [0-9]+ list file" logs/latest.log | cut -c1-260; grep -c "creativecommon: .* files loaded" logs/kubejs/startup.log; grep -cE "\[ERROR\]" logs/kubejs/startup.log; true
+shell grep -iE "mixin.*(client|Minecraft|Screen|ChatScreen)" logs/latest.log | grep -iE "creativecommon" | grep -viE "skipp|not loaded|dist" | head -5; true
+look mods: creativecommon-1.2.0 only; swap summary with capability keys; Common startup files loaded, 0 startup errors; no client mixin applied on the server
+
+## SQ-CC12-02 | Common + Compat + Calendar: boots, reloads, tag scripts skip absent mods
+@group B (Common + Compat + Calendar)
+@commands SQ-CC-03 on the 1.2.0 jar
+@pass as SQ-CC-03; 0 KubeJS errors from `plantabletags.js`, `smokable_tags.js` with their mods absent
+@fails dict key of an absent mod not skipped in the tag scripts
+@from batches/r1114cc12/cc12_02.qb
+bootexpect Done \(
+bootreject NoClassDefFoundError|ClassNotFoundException|Mixin apply failed|InvalidMixinException
+> reload
+sleep 25
+kjsreject (?i)error
+shell ls mods; test -f config/creativecommon-common.toml && echo "config written"; grep -ciE "error" logs/kubejs/server.log; grep -iE "plantabletags|smokable_tags" logs/kubejs/server.log | grep -iE "error|exception" | head -5; grep -ciE "\[ERROR\]" logs/kubejs/startup.log; true
+look config written; 0 KubeJS errors (server and startup), none from plantabletags.js or smokable_tags.js
+
+## SQ-CC12-03 | full pack on Common 1.2.0: no mixin or class error, startup files loaded, swap aliases installed
+@group A (full pack)
+@commands SQ-CC-02 with the 1.2.0 jar in place of `mods/creativecommon-1.1.0.jar` (scratch copy, never the instance's `mods/`)
+@pass as SQ-CC-02; `[swaps] N permanent alias(es)` with N > 0; no `[swaps] unresolved`
+@fails swap list parse (`capabilities` block); alias install before the registry freeze
+@from batches/r1114cc12/cc12_03.qb
+bootexpect Done \(
+bootreject Mixin apply failed|InvalidMixinException
+bootexpect \[swaps\] \d+ permanent alias
+bootreject \[swaps\] .*unresolved|\[swaps\] .*had no survivor
+shell ls mods | grep -i creativecommon; grep -nE "Mixin apply failed|InvalidMixinException|outside the tested range|ClassNotFoundException|NoClassDefFoundError" logs/latest.log | cut -c1-220 | head -12; echo "---"; grep -m3 -E "\[swaps\] [0-9]+ permanent alias|\[swaps\] [0-9]+ list file" logs/latest.log | cut -c1-240; grep -n "creativecommon: .* files loaded" logs/kubejs/startup.log | cut -c1-200; echo "startup ERROR lines: $(grep -c ERROR logs/kubejs/startup.log)"; true
+look no mixin or class error from our jars (third-party optional-class lines named); no out-of-range WARN; Common files loaded; 0 startup ERROR; N permanent aliases N > 0

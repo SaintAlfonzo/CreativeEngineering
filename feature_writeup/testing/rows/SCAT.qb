@@ -1,0 +1,82 @@
+# Scratch queue rows SCAT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SCAT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-SCAT Structure Catalogue world type, 2026-11-09 ([plan_structure_catalogue.md](../plan_structure_catalogue.md) 7, TODO `tooling/generators-and-tests #13`)
+@@date 2026-11-09
+@@jars creativedevtools
+@@sources feature_writeup/plan_structure_catalogue.md
+@@text
+@@text Targets Creative Devtools 22:58 (installed in `mods/`). Needs a fresh level on the new preset: in `OUT/srv/server.properties` set `level-type=creativedevtools\:structure_catalogue` and a new `level-name`. The rule file is read from `kubejs/generation_scripts/worldgen/structure_world.json`. The IDs follow the plan's SCAT numbers; SCAT-01 to -04 are offline (`tools/test_worldgen_tools.sh` 2b). SQ-SCAT-07, -06 and -08 share one first boot: preview works while the build runs.
+@@text
+@@table
+## SQ-SCAT-07 | preview counts while the build runs
+@group Catalogue preset, fresh level
+@commands Boot; console `/cdevplace catalogue preview`; compare with the report after SQ-SCAT-08
+@pass Chat and log line `1328 pieces, 279 whole, 44 unmapped; skipped 133 biome markers, 46 entity pieces; 32 replaced by pieces, 1 placed whole for lack of pieces` (on the 2026-11-09 mod set); same numbers in `kubejs/exported/structure_catalogue_report.json` `counts`
+@fails `CatalogueRules.build`, `structure_world.json`; a changed mod set moves the numbers, so compare preview with the report rather than the literal
+@from batches/r1111/scat.qb
+> cdevplace catalogue preview
+sleep 5
+look preview counts line (pieces, whole, unmapped, skipped biome markers, entity pieces, replaced, placed whole); compare with the report counts after SQ-SCAT-08
+
+## SQ-SCAT-06 | first boot: plan logged, gamerules, spawn
+@group Catalogue preset, fresh level
+@commands Boot and let it build; log `[catalogue] new Structure Catalogue world`; `/stop`; boot the same level again
+@pass First boot logs `[catalogue] plan:` and `Structure Catalogue built`; `/gamerule doMobSpawning`, `doFireTick`, `doWeatherCycle` read false; world spawn (0, 65, 0). Second boot logs no `[catalogue] plan:`
+@fails `StructureCatalogue.onServerStarted`, `isPreset` (layer stack), `Marker` saved data
+@from batches/r1111/scat.qb
+bootexpect \[catalogue\] new Structure Catalogue world
+bootexpect \[catalogue\] plan:
+> gamerule doMobSpawning
+> gamerule doFireTick
+> gamerule doWeatherCycle
+shell grep -E "^(level-type|level-name)" server.properties
+> execute in minecraft:overworld run data get entity @r Pos
+look gamerules false; build started; spawn checked from level.dat after the stop (0 65 0)
+
+## SQ-SCAT-08 | build finishes; record time, refusals, heap
+@group Catalogue preset, fresh level
+@commands Same boot as SQ-SCAT-06; watch `/cdevplace catalogue status`; on finish read the report
+@pass Build ends with `Structure Catalogue built`; no `Watchdog` or `OutOfMemoryError` in the log; no `[catalogue] build aborted`. RECORD: seconds, refused count, refused ids and reasons, peak heap. Refusals are not a FAIL unless the build stops; every meta structure outcome is recorded
+@fails Item step in `StructureCatalogue.stepPlace`; tick budget `[worldgen.mass_place] tickBudgetMs`; add a `template` override in `structure_world.json` per refusal
+@from batches/r1111/scat.qb
+> cdevplace catalogue status
+waitlog Structure Catalogue built 14400
+> cdevplace catalogue status
+reject Watchdog|OutOfMemoryError|\[catalogue\] build aborted
+shell python3 -c 'import json;d=json.load(open("kubejs/exported/structure_catalogue_report.json"));print({k:d[k] for k in d if k in ("counts","seconds","secs","refused_count")});r=d.get("refused",[]);print(len(r));[print(x) for x in (r[:60] if isinstance(r,list) else list(r.items())[:60])]' 2>&1 | cut -c1-300
+shell grep -cE "\[catalogue\] .* failed" logs/latest.log; true
+look build ended; RECORD seconds, refused count, ids and reasons
+
+## CQ-SCAT-05
+@group client
+@commands Create World on a dev client, More World Options, cycle World Type; repeat with the Devtools jar removed
+@pass LOOK: "Structure Catalogue" listed with Devtools, absent without it
+@fails `data/minecraft/tags/worldgen/world_preset/normal.json`, lang key in Devtools
+@draft no batch holds this row yet
+## CQ-SCAT-09
+@group client
+@commands In a built world, walk +X along z = -9
+@pass LOOK: gaps of 20, 12, 6 and 3 between category, subfamily, function and biome columns, 3 between items in a column (rule file 2026-11-15); order Village, Pillager, Ruins, and on as in the rule file; every level has a sign at z = -8 to -2; each item has a sign two blocks in front
+@fails `CatalogueLayout`, `levelSigns`
+@draft no batch holds this row yet
+## CQ-SCAT-14
+@group client
+@commands In a world built with the 2026-11-15 rules (Devtools 11-15), walk Village > Villager Houses > Weaponsmith, then Ruins
+@pass LOOK: one Savanna column holds the vanilla savanna, Iberian and Mediterranean smiths (no separate Iberian, Savanna zombie or Acacia column); no Terralith Desert or Badlands Pueblo columns anywhere; Ruins has a Village ruins subfamily with 3 columns of Forest Ruins pieces, and Village has none
+@fails `biomeFamilies` and `pieces.reroute` in `structure_world.json`, `CatalogueRules.fold`
+@draft no batch holds this row yet
+## CQ-SCAT-10
+@group client
+@commands Walk -X from spawn
+@pass LOOK: one column per mod running -X then +Z, first column ending at x = -16; every item's sign reads "(needs type tag)"; the same ids are in the report's `unmapped`
+@fails `CatalogueRules.build` unmapped branch
+@draft no batch holds this row yet
+## CQ-SCAT-11
+@group client
+@commands Teleport to an ocean monument, a shipwreck and an ocean ruin in the Underwater columns; wait 5 minutes in each; then a village well in Town centres
+@pass LOOK: no water, kelp or seagrass in the three structures after 5 minutes; the well still holds water
+@fails `dryChunk`; if water returns on first tick see note [first-tick-postprocess-water](../agent_notes/first-tick-postprocess-water.md)
+@draft no batch holds this row yet

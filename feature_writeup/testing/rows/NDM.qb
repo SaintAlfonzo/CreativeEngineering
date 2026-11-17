@@ -1,0 +1,152 @@
+# Scratch queue rows NDM (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/NDM.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-NDM Nether's Delight 4.0 member, 2026-11-01 ([nethers_delight.md](../nethers_delight.md) 4.7, 4.9; TODO `largecontent/mod-additions #16`, `creativesplit/cdfinish #11` step 2)
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/nethers_delight.md
+@@text
+@@text Needs the Creative Delight jar with the `repackedNethers` member (built 2026-11-01), `NethersDelight-1.19-3.1.jar` moved out
+@@text of `mods/` and `server_mods/`, and the pack's `item_dict.js` / `block_dict.js`: full restart. Group A (superflat), except
+@@text NDM-08 (a copy of a save made before the install). Client rows (Potted Mimicarnation cutout render, "Hoglin Trophy" and
+@@text "Potted Mimicarnation" names) are in the in-game suite.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-NDM-01 | Nether's Delight member: one mod, mixin applies
+@group A
+@commands Boot; `grep -n "nethersdelight" logs/latest.log \| grep -i "error\|exception\|mixin\|duplicate" \| head`; mod list / `creativedelight_members.txt`
+@pass one `nethersdelight` mod, version `1.19-3.1-ce-19.2-01`, display name "Nether's Delight (Creative Delight)"; `nethersdelight.ce.mixins.json` applies `FungusColonyRulesMixin` with no error; no duplicate-mod crash
+@fails duplicate id: the 3.1 jar still in `mods/` or `server_mods/`; mixin error: the `m_213897_` constant or the class changed
+@from batches/r1102b/s3_A.qb
+bootexpect \[creativedelight\] members: \[.*\bnethersdelight\b
+bootreject (?i)nethersdelight.*(duplicate|mixin.*(error|fail)|exception)
+bootreject (?i)duplicate mods? .*nethersdelight
+shell ! ls mods | grep -i "^NethersDelight-1.19-3.1"
+shell grep -hE "nethersdelight.ce.mixins|FungusColonyRulesMixin|nethersdelight.*1.19-3.1-ce" logs/latest.log logs/debug.log 2>/dev/null | head -8; true
+look rows/SQ-NDM-01.shell.txt: version 1.19-3.1-ce-19.2-01 and the mixin config listed; the display name "Nether's Delight (Creative Delight)" is a client mod-list check
+
+## SQ-NDM-02 | Mimicarnation in a flower pot (pot at 256)
+@group A
+@commands `/setblock ~ ~ ~ minecraft:flower_pot`; bot uses `nethersdelight:mimicarnation` on it; check block state; bot uses empty hand on it; plant it again, then break it
+@pass pot becomes `nethersdelight:potted_mimicarnation`; empty hand gives the Mimicarnation back and leaves `minecraft:flower_pot`; breaking drops a Flower Pot and a Mimicarnation
+@fails no block: the `RegisterEvent` subscriber did not run; planting refused: `addPlant` missing (common setup)
+@from batches/r1102b/s3_A.qb passed
+> setblock 256 -60 500 minecraft:flower_pot
+> pbot spawn ndm2 256 -60 503 minecraft:overworld survival
+> pbot hold ndm2 nethersdelight:mimicarnation
+> pbot use ndm2 256 -60 500 up
+> execute if block 256 -60 500 nethersdelight:potted_mimicarnation run say NDM02 potted
+> pbot hold ndm2 minecraft:air
+> pbot use ndm2 256 -60 500 up
+> execute if block 256 -60 500 minecraft:flower_pot run say NDM02 empty pot back
+> clear ndm2 nethersdelight:mimicarnation 0
+> pbot hold ndm2 nethersdelight:mimicarnation
+> pbot use ndm2 256 -60 500 up
+> zact break 256 -60 500 none
+expect NDM02 potted
+expect NDM02 empty pot back
+expect Found 1 matching item
+expect \[zact\] break 256 -60 500 nethersdelight:potted_mimicarnation held none: true, .*minecraft:flower_pot x1
+expect \[zact\] break 256 -60 500 nethersdelight:potted_mimicarnation held none: true, .*nethersdelight:mimicarnation x1
+> pbot remove ndm2
+
+## SQ-NDM-03 | potted mimicarnation and meal_item tags
+@group A
+@commands `/dumptags` block `minecraft:flower_pots`, item `nethersdelight:meal_item`
+@pass flower_pots holds `nethersdelight:potted_mimicarnation`; meal_item holds `farmersdelight:stuffed_potato`
+@fails CD `nethersdelight/tags.js` not in the jar, or `global.CD.on('nethersdelight')` false
+@from batches/r1102b/s3_A.qb passed
+> zq blocktag minecraft:flower_pots
+> zq itemtag nethersdelight:meal_item
+expect blocktag minecraft:flower_pots \(\d+\): .*nethersdelight:potted_mimicarnation
+expect itemtag nethersdelight:meal_item \(\d+\): .*farmersdelight:stuffed_potato
+
+## SQ-NDM-04 | Stuffed Hoglin and netherite machete ids; the pot cooks it (pot at 295)
+@group A
+@commands Recipe lookup by id: `farmersdelight:cooking/stuffed_hoglin`, `minecraft:netherite_machete_smithing`, `nethersdelight:cooking/stuffed_hoglin`, `nethersdelight:netherite_machete_smithing`; bot cooks Stuffed Hoglin in a heated Cooking Pot (2 Nether Salad, Raw Stuffed Hoglin)
+@pass the first two exist (Cooking Pot; smithing table: Diamond Machete + Netherite Ingot), the old two do not; the pot gives Stuffed Hoglin
+@fails old ids present: `replaced_resources` not applied
+@from batches/r1102b/s3_A.qb
+> zq rdetail stuffed_hoglin
+> zq rdetail netherite_machete_smithing
+expect \[zq\] farmersdelight:cooking/stuffed_hoglin \{
+expect \[zq\] minecraft:netherite_machete_smithing \{
+reject \[zq\] nethersdelight:cooking/stuffed_hoglin \{
+reject \[zq\] nethersdelight:netherite_machete_smithing \{
+> setblock 295 -60 500 minecraft:campfire[lit=true]
+> setblock 295 -59 500 farmersdelight:cooking_pot
+> data merge block 295 -59 500 {Inventory:{Items:[{Slot:0b,id:"farmersdelight:nether_salad",Count:1b},{Slot:1b,id:"farmersdelight:nether_salad",Count:1b},{Slot:2b,id:"nethersdelight:raw_stuffed_hoglin",Count:1b}]}}
+sleep 25
+> data get block 295 -59 500 Inventory
+expect Slot: [68]b?, id: "nethersdelight:stuffed_hoglin"
+look rdetail: the pot recipe's inputs and the smithing table Diamond Machete + Netherite Ingot
+
+## SQ-NDM-05 | fungus colony survival on dirt by daylight (262 open, 268 boxed, 274 rich soul soil)
+@group A
+@commands `/time set noon`; `/setblock` dirt, then `nethersdelight:crimson_fungus_colony` on it under open sky, then `/setblock` a block beside it; repeat under a 3-block roof in the dark; repeat on `nethersdelight:rich_soul_soil` in daylight; bot tries to place a colony item on dirt at noon
+@pass open-sky colony on dirt breaks on the neighbour update (drops the item); the roofed one and the rich soul soil one stay; placing on dirt in daylight is refused
+@fails survive check not merged (mixin)
+@from batches/r1102b/s3_A.qb
+> time set noon
+> setblock 262 -60 500 minecraft:dirt
+> setblock 262 -59 500 nethersdelight:crimson_fungus_colony
+> setblock 263 -59 500 minecraft:stone
+> execute unless block 262 -59 500 nethersdelight:crimson_fungus_colony run say NDM05 open-sky colony broke
+> fill 266 -60 498 270 -57 502 minecraft:stone hollow
+> setblock 268 -59 500 minecraft:dirt
+> setblock 268 -58 500 nethersdelight:crimson_fungus_colony
+> setblock 269 -58 500 minecraft:stone
+> execute if block 268 -58 500 nethersdelight:crimson_fungus_colony run say NDM05 roofed colony stays
+> setblock 274 -61 500 nethersdelight:rich_soul_soil
+> setblock 274 -60 500 nethersdelight:crimson_fungus_colony
+> setblock 275 -60 500 minecraft:stone
+> execute if block 274 -60 500 nethersdelight:crimson_fungus_colony run say NDM05 rich soul soil colony stays
+> setblock 278 -61 500 minecraft:dirt
+> pbot spawn ndm5 278 -60 503 minecraft:overworld survival
+> pbot hold ndm5 nethersdelight:crimson_fungus_colony
+> pbot use ndm5 278 -61 500 up
+> execute unless block 278 -60 500 nethersdelight:crimson_fungus_colony run say NDM05 placing on dirt in daylight refused
+expect NDM05 open-sky colony broke
+expect NDM05 roofed colony stays
+expect NDM05 rich soul soil colony stays
+expect NDM05 placing on dirt in daylight refused
+> pbot remove ndm5
+look the broken open-sky colony dropped its item (an item entity at 262 -59 500)
+
+## SQ-NDM-06 | 50 colonies on rich soul soil grow with random ticks (bot near them, x 280..289)
+@group A
+@commands 50 colonies at age 0 on rich soul soil, `/gamerule randomTickSpeed 30`, wait 1200 ticks; `grep -i "fungus\|colony\|CropGrow" logs/latest.log`
+@pass colonies reach age 3; no errors; Calendar's crop-grow hook still runs (season type nether, no penalty)
+@fails growth stuck: Calendar event refused, check CropSeasons type for the colonies
+@from batches/r1102b/s3_A.qb
+> fill 280 -61 500 289 -61 504 nethersdelight:rich_soul_soil
+> fill 280 -60 500 289 -60 504 nethersdelight:crimson_fungus_colony[age=0]
+> pbot spawn ndm6 285 -60 507 minecraft:overworld survival
+> gamerule randomTickSpeed 30
+sleep 60
+> zq ages 280 -60 500 289 -60 504 nethersdelight:crimson_fungus_colony
+> gamerule randomTickSpeed 3
+> pbot remove ndm6
+expect ages nethersdelight:crimson_fungus_colony: 50 blocks, mean [1-3]\.
+reject (?i)(fungus|colony|CropGrow).*(error|exception)
+look the histogram reaches age 3 (season type nether: no growth penalty)
+
+## SQ-NDM-07 | Hoglin Mount takes wool or hemp fabric
+@group A
+@commands Recipe `nethersdelight:hoglin_mount` inputs
+@pass accepts White Wool or Hemp Fabric (fabric.js through `i.hoglin_mount`)
+@fails dict key missing
+@from batches/r1102b/s3_A.qb
+> zq rdetail hoglin_mount
+expect \[zq\] nethersdelight:\S*hoglin_mount\S* \{
+look one ingredient slot lists minecraft:white_wool and the hemp fabric (i.hoglin_mount)
+
+## SQ-NDM-08
+@group B (pre-install save copy)
+@commands Load a world saved with the 3.1 jar that has a placed Hoglin Mount, a Blackstone Stove with items, a Fungus Colony on rich soul soil, an empty flower pot
+@pass all blocks still there with the same ids, the stove keeps its items, no missing-registry warning for `nethersdelight:`
+@fails id changed or save format changed: compare against 3.1
+@draft no batch holds this row yet

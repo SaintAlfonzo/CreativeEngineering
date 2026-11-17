@@ -1,0 +1,48 @@
+# Scratch queue rows CL (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CL.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Changelog bubble hides on hover, 2026-10-27 ([changelog.md](../changelog.md) CL-13)
+@@date 2026-10-27
+@@jars creativecommon
+@@sources feature_writeup/changelog.md
+@@text
+@@text patcherMod 1.1.03 (19:58 source, in the 20:44 jar). Client only, Round 2 (creative superflat, any world).
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## CQ-CL-13
+@group client, title screen and pause menu
+@commands With an unread marker (delete `config/creativecommon/changelog_seen.txt`), hover the book button, then Tab to focus it
+@pass Bubble disappears while hovered or focused, "What's New" tooltip fully visible; bubble back when the mouse leaves
+@fails Bubble still drawn over the tooltip: `ChangelogButtons` render hook not reached (check the jar time)
+@draft no batch holds this row yet
+## SQ-MG-16 | (server half) Old and Weathered Cardboard Box made only by washing; weathered box tags
+@group C
+@commands Full restart; look at a Wares package block, Wares cardboard box block and both items in JEI; `/give` and place a Weathered Cardboard Box and an Old Cardboard Box; wash a Dustrial Decor Cardboard Box in a Create fan, then wash the result; check JEI for any other recipe of the Old or Weathered box
+@pass Wares boxes brown; Weathered box grey-brown with light tape, Old box keeps its original pale texture and name; the first wash gives an Old box, the second a Weathered box, and no crafting recipe makes either; weathered box mines with an axe at Dustrial-box speed, walking on it is soft-tier speed and it sinks slightly; no purple-black squares
+@fails Path or namespace wrong: check `kubejs/assets/wares/textures/` and `design_decor/`
+@jars creativecommon creativedelight
+@from batches/r1113/c1_a1.qb
+# ids: Old box = design_decor:cardboard_box, Weathered = creativecompat:weathered_cardboard_box (Common item_dict),
+# Dustrial box = dustrial_decor:cardboard_box
+> zq makes design_decor:cardboard_box
+waitlog \[zq\] makes design_decor:cardboard_box: \d+ 30
+> zq makes creativecompat:weathered_cardboard_box
+waitlog \[zq\] makes creativecompat:weathered_cardboard_box: \d+ 30
+> zq rdetail cardboard_box
+waitlog \[zq\] rdetail matching cardboard_box: \d+ 30
+> zq tagsof creativecompat:weathered_cardboard_box
+waitlog \[zq\] block tags of 30
+expect \[zq\] makes design_decor:cardboard_box: 1$
+expect \[zq\] makes creativecompat:weathered_cardboard_box: 1$
+expect \{create:splashing\} -> 1 cardboard_box <- dustrial_decor:cardboard_box
+expect \{create:splashing\} -> 1 weathered_cardboard_box <- design_decor:cardboard_box
+expect block tags of creativecompat:weathered_cardboard_box: .*minecraft:mineable/axe
+expect block tags of creativecompat:weathered_cardboard_box: .*blockrunner:surface/soft
+look client half (textures, names, JEI, walking feel, sinking) stays open; the two makes lines are the splashing recipes only
+
+@@text | BR-01 | A | Give honey bread, toast, bread slice, banana bread; craft a hamburger (burger, patty, tomato, onion, salad), a chicken sandwich and a pb_j with each; `/reload` first | Each bread works in each recipe; JEI shows #forge:bread listing all of them | bread_tags.js not loaded (CD jar/patcherMod stale) or tag add rejected: grep latest.log for `bread_tags` |
+@@text | BR-02 | A | Craft garlic bread with a garlic bread + 4 roasted garlic cloves; cut a bread slice with a knife; look both up in JEI | No recipe from garlic bread or a slice; plain bread, cornbread, sourdough and cauliflower bread still work | replaceInput missed: check ids veggiesdelight:garlic_bread and veggiesdelight:compat/moredelight/cutting/bread_slice |
+@@text | BR-03 | A | Caviar toast in JEI; roast chicken, caesar salad, guardian sandwich, crawling sandwich and a sweet roll filling with toast | Caviar toast needs toast (not bread); the others accept any bread | replaceInput id wrong for that recipe |

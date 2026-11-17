@@ -1,0 +1,89 @@
+# Scratch queue rows BREED (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/BREED.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-BREED Animal breeding and bee flower audit, 2026-11-10 ([breeding_audit.md](../breeding_audit.md) section 7; TODO `mobs/tweaks #14`, `mobs/bees #1`)
+@@date 2026-11-10
+@@sources feature_writeup/breeding_audit.md
+@@text
+@@table
+## SQ-BREED-01 | breeding dump: Animal.isFood x every item, flower blocks and the F-B7 candidates by class
+@group A
+@commands needs a new `/dumpbreeding` in Creative Devtools (not written yet; until then the scratch probe `zp9 breed` writes the same dump, r1115 `perf/runs/r1115_p9_a1/breeding_dump.json`, results in breeding_audit.md 3 and 4): for every `Animal` entity type, `isFood` against every registered item; for every block that is a `FlowerBlock` or `TallFlowerBlock`, whether item and block are in `#minecraft:flowers`; write `kubejs/exported/breeding_dump.json`
+@pass maned wolf, duck, goose, Crab, Toretoise rows filled; F-B7 candidates (shiny flowers, Creeper's Crush, firefly bush, Floral Enchantment bushes, Buzzier Bees four-leaf clover) classed by block class
+@fails edit the section 3 and 4 rows of the report
+@from batches/r1115/p9_a1t.qb
+> zp9 breed
+waitlog \[zp9\] breed done 900
+shell ls -l kubejs/exported/breeding_dump.json; python3 -c "import json;d=json.load(open('kubejs/exported/breeding_dump.json'));print('animals',len(d['animals']),'flowers',len(d['flowers']),'cands',len(d['candidates']))"
+look rows in breeding_audit.md 3 and 4 (maned wolf, duck, goose, crab, toretoise) get their food lists; F-B7 candidates classed
+
+## SQ-BREED-02 | flower and breeding tags (server half; JEI pages are client)
+@group A+client
+@commands after the Creative Compat and Creative Delight jars are installed: `/reload`, then `/dumptags item,block`; JEI, Just Enough Breeding pages
+@pass `#minecraft:flowers` items have no `wild_` item, no `botania:special_flowers` member, no flower crown or leaf pile; block flowers hold `wild_onions`, `wild_carrots`, `wild_potatoes` and no other `wild_`; `blueprint:pig_food` 3 items, `cat_food` and `ocelot_food` 2; no `alexmobs:bison_breedables`; JEI shows breeding pages for duck, goose, BB grizzly bear, both Fungi cows and the Cozy cat; latest.log has `[jei] Just Enough Breeding: 6 extra breeding page(s)`
+@fails wild list: `animal_tags.js` regex; page missing: entity id in `BreedingPagesJEI`
+@from batches/r1113/c4_a.qb
+> zq itemtag minecraft:flowers
+> zq blocktag minecraft:flowers
+> zq itemtag blueprint:pig_food
+> zq itemtag blueprint:cat_food
+> zq itemtag blueprint:ocelot_food
+> zq itemtag alexmobs:bison_breedables
+> zq itemtag botania:special_flowers
+waitlog \[zq\] itemtag botania:special_flowers 30
+reject \[zq\] itemtag minecraft:flowers \(\d+\): .*\b[a-z_]+:wild_
+reject \[zq\] itemtag minecraft:flowers \(\d+\): .*(flower_crown|leaf_pile)
+expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_onions
+expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_carrots
+expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_potatoes
+reject \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_rice
+expect \[zq\] itemtag blueprint:pig_food \(3\)
+expect \[zq\] itemtag blueprint:cat_food \(2\)
+expect \[zq\] itemtag blueprint:ocelot_food \(2\)
+reject \[zq\] itemtag alexmobs:bison_breedables \([1-9]
+look block flowers: no wild_ id other than wild_onions, wild_carrots, wild_potatoes; no botania:special_flowers member in the item flowers line (compare the two lines); JEI breeding pages and the "6 extra breeding page(s)" line are client (CQ)
+
+## SQ-BREED-03 | a bee pollinates a wild carrot (poppy hive as control; isfood half PASSed in c4_ar)
+@group B
+@commands `/reload`; feed a pig carrot, a cat and an ocelot cod, a bee a wild carrot item and a poppy; place a wild carrot and a wild rice near a hive
+@pass pig, cat, ocelot breed; the bee refuses the wild carrot and accepts the poppy; bees pollinate the wild carrot and ignore the wild rice
+@fails tags above
+@from batches/r1113/c4_ar2.qb
+> forceload add 40705 39985 40750 40015
+> time set 1000
+> weather clear 100000
+sleep 3
+> fill 40710 -60 39990 40745 -50 40010 minecraft:air
+> kill @e[type=minecraft:bee,x=40705,y=-64,z=39985,dx=45,dy=20,dz=30]
+> setblock 40720 -60 40000 minecraft:beehive[facing=south]
+> setblock 40723 -60 40000 farmersdelight:wild_carrots
+> setblock 40736 -60 40000 minecraft:beehive[facing=south]
+> setblock 40739 -60 40000 minecraft:poppy
+> execute if block 40723 -60 40000 farmersdelight:wild_carrots run say BREED3 carrot placed
+> execute if block 40739 -60 40000 minecraft:poppy run say BREED3 poppy placed
+> pbot spawn b3 40728.5 -60 40006.5 minecraft:overworld survival
+> summon minecraft:bee 40720.5 -58 40002.5 {HivePos:{X:40720,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40721.5 -58 40002.5 {HivePos:{X:40720,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40719.5 -58 40002.5 {HivePos:{X:40720,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40736.5 -58 40002.5 {HivePos:{X:40736,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40737.5 -58 40002.5 {HivePos:{X:40736,Y:-60,Z:40000},PersistenceRequired:1b}
+> summon minecraft:bee 40735.5 -58 40002.5 {HivePos:{X:40736,Y:-60,Z:40000},PersistenceRequired:1b}
+sleep 30
+> zc4 bees 40721 -58 40000 6
+waitlog \[zc4\] done 20
+> zc4 bees 40737 -58 40000 6
+waitlog \[zc4\] done 20
+sleep 150
+> zc4 bees 40721 -58 40000 12
+waitlog \[zc4\] done 20
+> zc4 bees 40737 -58 40000 12
+waitlog \[zc4\] done 20
+> data get block 40720 -60 40000 Bees
+> data get block 40736 -60 40000 Bees
+> pbot remove b3
+expect BREED3 carrot placed
+expect BREED3 poppy placed
+count \[zc4\] bee .* flower=40723,-60,40000 >= 1
+look bee positions change between the readings (the bees move); a carrot-hive bee records flower=40723,-60,40000 (or FlowerPos 40723 -60 40000 in the first hive's Bees); the control hive's bees record the poppy 40739 -60 40000. Poppy found and carrot never = real (wild carrot not pollinable); neither found and the bees still frozen = environment (INCONCLUSIVE)

@@ -1,0 +1,89 @@
+# Scratch queue rows WGP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/WGP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Worldgen hot spots, 2026-10-27 ([perf.md](../perf.md) 10.8, TODO `perf #13`)
+@@date 2026-10-27
+@@sources feature_writeup/perf.md
+@@text
+@@text Target: patcherMod built 2026-10-27 with `DimensionFilter`, the shared terrain cache and `sampleGrid` 4 (NOT yet in
+@@text `mods/`: install it first, `./gradlew :creativeCommon:build --offline` then `:creativeCommon:installToMods`, game closed), plus
+@@text the pack file `kubejs/data/tectonic/worldgen/density_function/overworld/legacy/cliffs.json`. Group B worlds on the eval
+@@text seed -8188900049893920259 with `tools/perf/eval/eval_server.sh setup OUT LEVEL` (JFR on; it copies
+@@text `tools/worldgen_perf_probe/wgp_probe.js` as `/wgp`). Edit `OUT/srv/config/creativeengineering-common.toml` before the
+@@text first boot of each level; `dimensionFilter` and `sharedTerrainCache` are new `[worldgen.systems]` keys, so add the lines
+@@text if the copied toml lacks them. "No override" = `rm OUT/srv/kubejs/data/tectonic/worldgen/density_function/overworld/legacy/cliffs.json`
+@@text (the scratch `kubejs/` is a copy). One server at a time; a new level name each.
+@@text
+@@text | Level | `dimensionFilter` | `sharedTerrainCache` | `sampleGrid` | cliffs override | `[worldgen.earth_fill] log` |
+@@text |---|---|---|---|---|---|
+@@text | `wgp_old` | false | false | 2 | removed | `"ALL"` |
+@@text | `wgp_df` | true | false | 2 | removed | `"ALL"` |
+@@text | `wgp_tc` | false | true | 2 | removed | `"ALL"` |
+@@text | `wgp_g4` | false | false | 4 | removed | as shipped |
+@@text | `wgp_cl` | false | false | 2 | kept | as shipped |
+@@text | `wgp_new` | true | true | 4 | kept | as shipped |
+@@text
+@@text Pregen (where an entry says so): `/chunky center 4000 4000`, `/chunky radius 400`, `/chunky start`, then
+@@text `eval_server.sh wait OUT "Task finished" 900`; note Chunky's total time. Baseline (perf.md 10.2 #4, same seed and
+@@text square): 5:26, `Done` 119 s. Fill lines: `grep -E '\[(earth|water)-fill\]' logs/latest.log | sed 's/^.*\(\[\(earth\|water\)-fill\]\)/\1/' | sort -u > fill.txt`.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-WGP-01
+@group `wgp_new`
+@commands Boot; grep latest.log for `ChunkGeneratorStructureFrequencyMixin`, `density_function`, `cliffs`, `DimensionFilter`; check the toml has `dimensionFilter`, `sharedTerrainCache` and `sampleGrid = 4`
+@pass No mixin or density-function error; `Done` at or under the eval's 119 s
+@fails A parse error on `cliffs.json`: compare it with Tectonic 2.3.5a's `resourcepacks/terratonic/.../legacy/cliffs.json`
+@draft no batch holds this row yet
+## SQ-WGP-02
+@group `wgp_new`, then `wgp_old`
+@commands `/wgp cliffs` and `/wgp dims` in each
+@pass `wgp_new`: `PASS cliffs override` (flat_cache 3), Overworld skips `twigs:bloodstone_obelisk` and the other Nether/End structures (count noted), Nether keeps the obelisk, End lists the Overworld and Nether structures. `wgp_old`: flat_cache 0 (Tectonic's file), 0 skipped everywhere
+@fails flat_cache 0 in `wgp_new`: KubeJS's `kubejs/data` pack sits under `tectonic/terratonic` (`Pack.Position.TOP`); ship the file from the patcherMod jar or a TOP pack instead. Obelisk not skipped: `MetaSlots.canSpawnAmong` / the biome fits widened its biomes
+@draft no batch holds this row yet
+## SQ-WGP-03
+@group `wgp_old` vs `wgp_df` (option 1 is exact)
+@commands In each: pregen, then `/cwglocate census 96 4000 4000`; keep `kubejs/exported/worldgen/locate_census.json` and `fill.txt`
+@pass Identical census member counts and identical `fill.txt` (same starts, same earth-fill verdicts). `wgp_df` JFR: no `ObeliskStructure` or `NetherFossilStructure` frames in the Overworld; pregen faster
+@fails Any count differs: a structure was skipped that could start. Diff the census by structure; check its `biomes()` against the dimension's `possibleBiomes()` (a mod that tests the biome its own way)
+@draft no batch holds this row yet
+## SQ-WGP-04
+@group `wgp_old` vs `wgp_tc` (option 3 is exact)
+@commands Same as SQ-WGP-03
+@pass Identical census and identical `fill.txt`; JFR: `EarthFill.predicted` -> `getBaseColumn` share well under `wgp_old`'s (eval: 8.7% of worker CPU)
+@fails `fill.txt` differs: a cached column did not match a fresh read. Offline check `tools/test_worldgen_tools.sh` (EarthFillTest 7) first; then look for a second generator or height range sharing a key
+@draft no batch holds this row yet
+## SQ-WGP-05
+@group `wgp_old` vs `wgp_g4` (option 4)
+@commands Pregen in each; `grep -cE '\[(earth\|water)-fill\].*CANCELLED$' logs/latest.log` (`wgp_old` logs ALL: count only the CANCELLED lines) and the census as above
+@pass Census member counts within a few percent of `wgp_old`; cancels close to the offline sim (perf.md 10.8 table); EarthFill JFR share about a quarter of `wgp_old`'s
+@fails A structure family loses many more starts: `sampleGrid` is global, so note the family and decide between 2, 3 and 4
+@draft no batch holds this row yet
+## SQ-WGP-06
+@group `wgp_old` vs `wgp_cl` (option 2)
+@commands Pregen in each; `/wgp cliffs`; in the JFR compare the noise fill share and the `NormalNoise`/`BlendedNoise` frames under `NoiseChunk#fillSlice`
+@pass `wgp_cl`: flat_cache 3; noise fill per chunk down (eval: cliffs term 9.9% + 3.6% of worker CPU); pregen faster
+@fails No speedup: the wraps did not reach the per-block path (check that terratonic's `final_density` still points at `tectonic:overworld/legacy/cliffs`)
+@draft no batch holds this row yet
+## SQ-WGP-07
+@group `wgp_new`
+@commands Pregen; note Chunky's total and `Done`
+@pass Faster than the 5:26 baseline by roughly the sum of options 1-4 (perf.md 10.8)
+@fails Slower than any single-option world: the options interact (look at the JFR top frames)
+@draft no batch holds this row yet
+## SQ-WGP-08
+@group `wgp_cl_seam`: as `wgp_old`
+@commands Pregen radius 200 at 4000 4000, `stop`; copy `kubejs/data/tectonic/...` back into `OUT/srv/kubejs/`; boot; pregen radius 400
+@pass Boots with the override (`/wgp cliffs` PASS); the outer ring generates. The seam itself is CQ-WGP-01
+@fails -
+@draft no batch holds this row yet
+@@text
+@@text Client checks: **CQ-WGP-01** open `wgp_cl_seam` in a throwaway client (or copy the world): fly the radius-200 boundary
+@@text (chunks 3 x 200 / 16 from 4000 4000) over mountains and note any step at cliff faces between old and new chunks
+@@text (expected: none or under a block, cliffs move a fraction of a block). **CQ-WGP-02** in `wgp_new` look at a few
+@@text structures on shores and cliff edges (`/cwglocate` a village, a ruin, a camp): none hangs over water or air more than in
+@@text `wgp_old`.
+@@text
+@@text Results 2026-10-27 evening run (Run log): see Run log and perf.md 10.9. SQ-WGP-01, -02 (probe fixed), -03, -04 (fill-only), -05 (cancel count only), -07 PASS; SQ-WGP-06 open (cliffs world stalled on a corrupt chunk, rerun); SQ-WGP-08, CQ-WGP-01/-02 not run. Owner request 2026-10-27: census dropped from the remaining runs (general performance only), so SQ-WGP-03 / -04 / -05 compare `fill.txt` over the pregen square instead of the census (weaker: only starts the pregen reaches); the census ran for `wgp_old` and `wgp_new` only.

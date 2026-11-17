@@ -1,0 +1,49 @@
+# Scratch queue rows STD (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/STD.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Storage Delight additions (storage_delight.md section 5)
+@@jars storagedelight
+@@text
+@@text Needs `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` installed (`:repackedStorage:installToMods`).
+@@text
+@@text | ID | Group | Action | Expect | Depends on |
+@@text |---|---|---|---|---|
+## SQ-STD-01
+@group B
+@commands Boot a server with the jar and the pack's Quark; `/dumpall`
+@pass No `storagedelight` error in `logs/latest.log`; 140 `storagedelight:` blocks, 50 of them new; the 50 recipes load (`storagedelight:` recipe ids for the 36 stone countertops and 14 bamboo blocks)
+@fails repackedStorage jar
+@draft no batch holds this row yet
+## SQ-STD-02 | Storage Delight drawer and cabinets: 27 slots, dropped with contents (x 100..104; queue group B)
+@group B
+@commands `/give` and place a `storagedelight:bamboo_drawer`, a `storagedelight:oak_cabinet_with_polished_tuff_countertop` and a `storagedelight:warped_cabinet_with_stone_bricks_countertop`; open and close each, break with an axe
+@pass Opens as 27 slots, no block entity error, item kept and dropped
+@fails repackedStorage jar
+@from batches/r1102b/s3_A.qb
+> setblock 100 -60 500 storagedelight:bamboo_drawer
+> setblock 102 -60 500 storagedelight:oak_cabinet_with_polished_tuff_countertop
+> setblock 104 -60 500 storagedelight:warped_cabinet_with_stone_bricks_countertop
+> item replace block 100 -60 500 container.26 with minecraft:stick
+> item replace block 102 -60 500 container.26 with minecraft:stick
+> item replace block 104 -60 500 container.26 with minecraft:stick
+> item replace block 100 -60 500 container.27 with minecraft:stick
+> item replace block 102 -60 500 container.27 with minecraft:stick
+> item replace block 104 -60 500 container.27 with minecraft:stick
+count Replaced a slot at == 3
+count does not have slot == 3
+> pbot spawn std 102 -60 503 minecraft:overworld survival
+> pbot hold std minecraft:air
+> pbot use std 100 -60 500 south
+> pbot use std 102 -60 500 south
+> pbot use std 104 -60 500 south
+> zact break 100 -60 500 minecraft:iron_axe
+> zact break 102 -60 500 minecraft:iron_axe
+> zact break 104 -60 500 minecraft:iron_axe
+expect \[zact\] break 100 -60 500 storagedelight:bamboo_drawer held \S+: true, .*drops minecraft:stick x1, storagedelight:bamboo_drawer x1
+expect \[zact\] break 102 -60 500 \S+ held \S+: true, .*storagedelight:oak_cabinet_with_polished_tuff_countertop x1
+expect \[zact\] break 104 -60 500 \S+ held \S+: true, .*storagedelight:warped_cabinet_with_stone_bricks_countertop x1
+reject (?i)(block ?entity|storagedelight).*(exception|error)
+> pbot remove std
+look the three `pbot use` replies (a menu opened = SUCCESS / CONSUME); the stick in slot 26 dropped with each block

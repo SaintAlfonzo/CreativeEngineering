@@ -1,0 +1,129 @@
+# Scratch queue rows RW (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RW.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Gap fill, 2026-10-30: changelog bullets that had no row (oldest to newest)
+@@date 2026-10-30
+@@text
+@@text Added by the 2026-10-30 coverage pass over `unreleased.md`: seed pouch tags and smoked wood (the Autumn painting rename was dropped, TODO `#7` closed as not implemented). Both are
+@@text script or data only; a full restart with the current kubejs and the installed patcherMod 1.1.04 covers them.
+@@text
+@@table
+## SQ-SPC-01 | seeds tag
+@group A
+@commands boot; tag probe (`Ingredient.of('#forge:seeds').getStacks()` or `/dumptags`)
+@pass `#forge:seeds` contains tobacco, hamimelon and lemon seeds; no Botania mana seed or Mungal spore in it
+@fails `tags/misctags.js` line 46 (`farming/crops #13`)
+@from batches/r1106spf/b1.qb passed
+> zq itemtag forge:seeds
+expect itemtag forge:seeds .*the_dirty_stuff:tobacco_seeds|itemtag forge:seeds .*tobacco_seeds
+expect itemtag forge:seeds .*hamimelon_seeds
+expect itemtag forge:seeds .*lemon_seeds
+reject itemtag forge:seeds .*(botania:[a-z_]*mana[a-z_]*seed|mungal)
+
+## SQ-SPC-02 | seed pouch tag
+@group A
+@commands same probe, `#quark:seed_pouch_holdable` (the pouch tag that nests `#forge:seeds`)
+@pass the three seeds are members
+@fails Quark tag name differs: dump `#quark:*` tags that contain `minecraft:wheat_seeds`
+@from batches/r1106spf/b1.qb passed
+> zq itemtag quark:seed_pouch_holdable
+expect itemtag quark:seed_pouch_holdable .*tobacco_seeds
+expect itemtag quark:seed_pouch_holdable .*hamimelon_seeds
+expect itemtag quark:seed_pouch_holdable .*lemon_seeds
+
+## SQ-RW-23 | smoked wood smoking recipes
+@group A
+@commands boot; recipe id dump for `smoking` outputs of `create_dd:smoked_*`
+@pass 13 smoking recipes, cook time 200, one per smoked shape (log, wood, stripped log, stripped wood, planks, slab, stairs, fence, fence gate, door, trapdoor, button, pressure plate); `creativeengineering:smokable/*` tags each hold oak and spruce, none hold `botania:*` or driftwood
+@fails `server_scripts/wood/smoked_wood.js`, `tags/wood_tags.js` 36-40 (RW-23)
+@from batches/r1031/a1_data.qb
+> zq recipes smoked
+> zq itemtag creativeengineering:smokable/planks
+look 13 smoking recipes, one per smoked shape, cook time 200 (rdetail if unsure); smokable tags hold oak and spruce, no botania:* and no driftwood
+
+## SQ-RW-24 | treated wood spout recipes
+@group A
+@commands same dump; `create:filling` outputs of `immersiveengineering:treated_wood_horizontal`
+@pass two recipes: `#creativeengineering:unsmoked_planks` + 125 mB creosote, and `create_dd:smoked_planks` + 100 mB; `createaddition` treated-wood filling absent
+@fails `smoked_wood.js` 33-37 (RW-24, RW-26)
+@from batches/r1031/a1_data.qb
+> zq makes immersiveengineering:treated_wood_horizontal
+count filling.* -> \d+ immersiveengineering:treated_wood_horizontal >= 2
+reject createaddition:.*treated
+look two create:filling (unsmoked planks + 125 mB, smoked planks + 100 mB) and two IE bottling (SQ-RW-25) in the same list
+
+## SQ-RW-25 | treated wood bottling
+@group A
+@commands same dump; IE `bottling_machine` outputs of `treated_wood_horizontal`
+@pass two recipes, creosote 125 and 100 mB, same inputs as SQ-RW-24
+@fails `NCH.ieBottling` (RW-25)
+@from batches/r1031/a1_data.qb passed
+> zq rdetail treated_wood
+count bottling.*treated_wood == 2
+
+## SQ-RW-26 | unsmoked planks tag
+@group A
+@commands tag probe `#creativeengineering:unsmoked_planks`
+@pass contains oak and spruce planks, not `create_dd:smoked_planks`
+@fails `wood_tags.js` line 32
+@from batches/r1031/a1_data.qb passed
+> zq itemtag creativeengineering:unsmoked_planks
+expect itemtag creativeengineering:unsmoked_planks .*minecraft:oak_planks
+expect itemtag creativeengineering:unsmoked_planks .*minecraft:spruce_planks
+reject itemtag creativeengineering:unsmoked_planks .*create_dd:smoked_planks
+
+## SQ-RW-27 | leather from bark
+@group A
+@commands boot; recipe dump for `vintagedelight:fermenting` outputs of `minecraft:leather`; tag probe `#immersive_weathering:bark`
+@pass one recipe `creativeengineering:pickling/leather_from_bark`: 4 `#immersive_weathering:bark` + `#forge:salt`, 2400 ticks; the tag holds every species' bark (oak to azalea, crimson / warped scales, Upgrade Aquatic driftwood bark)
+@fails `server_scripts/wood/bark.js` (RW-27)
+@from batches/r1031/a1_data.qb
+> zq makes minecraft:leather
+> zq itemtag immersive_weathering:bark
+expect creativeengineering:pickling/leather_from_bark -> 1 minecraft:leather
+look the bark tag holds every species (oak to azalea, crimson and warped scales, Upgrade Aquatic driftwood bark)
+
+## SQ-DD-08 | painted asphalt
+@group A
+@commands boot; recipe dump for `create_dd:*_asphalt_block` outputs
+@pass 16 shaped recipes `creativeengineering:*_painted_asphalt` (8 out, `#create_dd:asphalt_blocks` or Immersive Petroleum asphalt around a dye), none of the 16 `create_dd:crafting/decor/*_asphalt_block`; 1 recipe `asphalt_from_painted_asphalt_soap` (8 Immersive Petroleum asphalt out)
+@fails `server_scripts/engineering/dreams_desires.js` (DD-08, DD-09)
+@from batches/r1031/a1_data.qb passed
+> zq recipes painted_asphalt
+count creative(engineering|equipment):shaped/[a-z_]*_painted_asphalt -> 8 [a-z_]*_asphalt_block == 16
+expect asphalt_from_painted_asphalt_soap -> 8 asphalt$
+> zq recipes create_dd:crafting/decor
+reject create_dd:crafting/decor/[a-z_]*_asphalt_block
+
+## SQ-CP-01 | seed milling to bone meal
+@group A
+@commands boot; tag probe `#creativeengineering:millable_seeds`; recipe dump for `create:milling` outputs of `minecraft:bone_meal`
+@pass tag holds the vanilla and modded seeds, not `farmersdelight:rice` nor corn kernels; one milling recipe `creativeengineering:createmilling/seeds_bone_meal`, chance 0.15
+@fails `tags/wood_tags.js`, `wood/compost.js` (CP-01)
+@from batches/r1031/a1_data.qb passed
+> zq makes minecraft:bone_meal
+> zq itemtag creativeengineering:millable_seeds
+expect creativeengineering:createmilling/seeds_bone_meal
+reject itemtag creativeengineering:millable_seeds .*(farmersdelight:rice |farmersdelight:rice$|corn_kernels)
+
+## CQ-SPC-01 | seeds go into a seed pouch
+@group client
+@commands put tobacco, hamimelon and lemon seeds into a Quark seed pouch
+@pass each is accepted (`farming/crops #13` test)
+@fails server rows above
+@from batches/r1101/c1_client.qb
+> item replace entity @s hotbar.0 with quark:seed_pouch
+> item replace entity @s hotbar.1 with the_dirty_stuff:tobacco_seeds 16
+> item replace entity @s hotbar.2 with fruitsdelight:hamimelon_seeds 16
+> item replace entity @s hotbar.3 with fruitsdelight:lemon_seeds 16
+look hand: drop each stack onto the pouch in the inventory: all three accepted (seed ids from the SQ-SPC-01 tag dump if one is unknown)
+
+## CQ-RW-23 | smoked wood in the smoker, Create fan, spout and Bottling Machine (RW-23 to RW-26)
+@group client
+@commands RW-23 to RW-26 in [../recipes_wood.md](../recipes_wood.md): smoker and Create fan with a Smoking Sail on oak, spruce, azalea, crimson; spout and IE Bottling Machine fills; JEI shows smoked planks only in the 100 mB recipes
+@pass all 13 shapes smoke; creosote costs match; 100 mB with plain oak planks does not work
+@fails server rows above
+@from batches/r1101/c1_client.qb
+look hand: recipes_wood.md RW-23 to RW-26: smoker and a Create fan with a Smoking Sail on oak, spruce, azalea, crimson; spout and IE Bottling Machine creosote fills; JEI shows smoked planks only in the 100 mB recipes; 100 mB with plain oak planks does not work

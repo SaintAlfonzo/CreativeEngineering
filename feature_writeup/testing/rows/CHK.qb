@@ -1,0 +1,19 @@
+# Scratch queue rows CHK (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CHK.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-CHK Chat key typed into the chat box, 2026-11-12 ([fixes_compat.md](../fixes_compat.md) 2.33, FX-50)
+@@date 2026-11-12
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/fixes_compat.md
+@@text
+@@text Client only (keyboard events); no server half. **CQ-CHK-01 PASS 2026-11-13 (owner, in play).** Needs Creative Common built 2026-11-12 (in `mods/`), any world.
+@@text
+@@table
+## CQ-CHK-01
+@group client
+@commands Press `/` 30 times to open chat (Escape between), normal and fast tapping; then T 30 times; in an open chat type `/` and hold `/`; rebind Command to `.` and open with `.`
+@pass LOOK: always a single `/` (T: empty box); a typed `/` in an open chat appears; holding repeats; `.` opens with `/` and no `.`; no error naming `ChatOpen` in `latest.log`
+@fails `ChatOpenKeyGuard.shouldDrop` (250 ms window, key-held check, `glfwGetKeyName` match); mixin SRG names `m_91326_`, `m_90893_`, `m_90889_`
+@draft no batch holds this row yet

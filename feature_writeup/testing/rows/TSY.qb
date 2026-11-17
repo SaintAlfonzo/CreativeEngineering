@@ -1,0 +1,49 @@
+# Scratch queue rows TSY (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TSY.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-TSY Trade sync, split-jar lang, Barbeque's Delight icons, 2026-11-03 ([trade_sync.md](../trade_sync.md), [barbeques_delight.md](../barbeques_delight.md) 4.6)
+@@date 2026-11-03
+@@jars creativecommon
+@@sources feature_writeup/trade_sync.md feature_writeup/barbeques_delight.md
+@@text
+@@text Target: `creativeengineering-1.1.08.jar` (new `trader/TradeSync`), `creativedelight`, `creativebrewing`, `creativecalendar`,
+@@text `creativecompat`, `creativeworldgen` 1.0.0, all built and installed in this instance's `mods/` 2026-11-03 (each Creative
+@@text jar's lang moved from `assets/creativeengineering/lang/` to `assets/<modid>/lang/`). The trade rows need a **dedicated**
+@@text scratch server and a client joined to it (singleplayer shares the tables and is skipped on purpose).
+@@text
+@@table
+## SQ-TSY-01
+@group A
+@commands boot the dedicated scratch server; join with the scratch client; grep the server log
+@pass `[trade sync] built N trade list(s), M listing(s) sampled` once (N = professions + 1), then `[trade sync] sent N trade list(s) to 1 player(s)`; no exception naming `TradeSync`; no hang at login (sampling skips map listings)
+@fails a hang: a listing's `getOffer(null, ...)` locates; add its class to the skip test in `TradeSync.sample`
+@draft no batch holds this row yet
+## SQ-TSY-02
+@group A
+@commands `/reload` with the client joined
+@pass the `sent` line again, no second `built` line; client log shows `applied` again before JEI's reload lines
+@fails `OnDatapackSyncEvent` player-list branch
+@draft no batch holds this row yet
+@@text
+@@text Client:
+@@text - CQ-TSY-01 (on the dedicated scratch server): client `latest.log` has `[trade sync] applied the server's villager and
+@@text   wandering trader trades` **before** `[jei] Seasoning page`. JER villager pages: Butcher level 1 lists the six Barbeque's
+@@text   Delight seasonings (64 cumin / pepper / chili powder, 16 of each sauce, 12 emeralds) and 64 salt; the Mechanical Engineer
+@@text   and Chef pages show the pack trades; the Cleric shows only the pack's trades; the Wandering Trader page shows the pack
+@@text   wandering list; vanilla rows (Farmer, Librarian books) still show. Pressing U on cumin powder opens the Butcher page.
+@@text   Then leave and open a singleplayer world: same pages, no duplicates. Fails with `applied` after the JEI line: the
+@@text   packet came too late; move the send earlier (login-phase packet).
+@@text - CQ-LNG-01: JEI tabs Seasoning, Canning, Using Cans, Feast Plating show their titles; a Creative Brewing, Calendar, Compat
+@@text   and Worldgen string shows text, not a key (pick one key from each `assets/<modid>/lang/en_us.json`).
+@@text - CQ-BBQF-02: a skewer seasoned with each of cumin, pepper, chili and each sauce, and a skewer grilled on the Grill, show the
+@@text   salt sparkle overlay; client log has no `Unable to load model: 'barbequesdelight:item/seasoned/`. WTHIT on a burnt
+@@text   skewer on a Grill reads "Burnt".
+@@text - SQ-CS-F1 (2026-11-04, curios_slots.md, corn_delight.md 2.1; needs patcherMod rebuilt for the icon only): tag dump
+@@text   `#curios:face` holds `simplehats:smokingpipe`; recipe dump: `creativedelight:cutting/corncob_kernels` gives 2
+@@text   `corn_delight:corn_seeds`, `createcrushing/corncob_kernels`, `createmilling/corncob_kernels` and the IE crusher
+@@text   `corncob_kernels` give 4 kernels + 0.5 cornmeal, `mortar/corncob_kernels` gives 3 kernels. Fails: script error in
+@@text   `curiostags.js`, `corn_delight/recipes.js`, `creativedelight/recipes.js`, `immersiveengineering/recipes.js`.
+@@text - CQ-CS-F1 (2026-11-04, patcherMod rebuilt): Curios screen, empty Face slot shows the helmet outline (no purple-black
+@@text   square); the Smoking Pipe goes in Face and draws on the face in F5.

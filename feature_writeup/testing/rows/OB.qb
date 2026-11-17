@@ -1,0 +1,278 @@
+# Scratch queue rows OB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/OB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-OB Owner batch of easy rows, 2026-11-09 (TODO `food/seasoning #24`, `largecontent/mod-additions #54`, `#56`, `#62`, `gameplay/tnt-and-portal #26`, `ui/tooltips #15`, `farming/crops #47`, `#48`, `baking/baked-goods #41`, `dishes/ingredients #43`, `dishes/meals #63`, `#64`, `mobs/tweaks #24`)
+@@date 2026-11-09
+@@jars creativedelight
+@@text
+@@text Targets the rebuilt Creative Common, Creative Delight and Creative Compat jars (built 2026-11-09, not installed because the game was running) and the edited `breedablekillerrabbit.json5`.
+@@text
+@@table
+## SQ-OB-01 | no script error on the batch's food items
+@group B, fresh world
+@commands Boot to `Done (`; `grep -E "Error occurred while handling event\|Exception" logs/kubejs/*.log logs/latest.log \| grep -iE "corn\|pie\|patty\|biscuit\|glazed\|salt\|summerhat\|farmers_hats"`
+@pass Nothing printed; no startup script error
+@fails Read the failing script named in the line; the batch touched `cd_food.js`, `effect_swaps.js`, `item_dict.js`, corn and veggiesdelight recipes
+@from batches/r1111/bw.qb
+shell grep -E "Error occurred while handling event|Exception" logs/kubejs/*.log logs/latest.log | grep -iE "corn|pie|patty|biscuit|glazed|salt|summerhat|farmers_hats" | head -5 | cut -c1-300; true
+look nothing printed
+
+## SQ-OB-02 | display names after /dumpall
+@group client
+@commands Client row: the names come from client lang scripts (`names.js`, `namechanges.js`), not visible to a server (r1112, r1115). `/kubejs dump_registry minecraft:item`; in JEI data or `kubejs/exported/display_names.json` after `/dumpall` check names
+@pass `vintagedelight:salt_dust` is Salt; `corn_delight:corn` is Corn; spool is Spool of String; veggie patties are Veggie Patty
+@fails Lang not picked up: check jar order and `names.js` gating
+@from batches/r1111/bw.qb
+> dumpall
+waitlog \[dumpall\].*(ok|done) 900
+shell python3 -c 'import json;d=json.load(open("kubejs/exported/display_names.json"));d=d.get("items",d) if isinstance(d,dict) else d;ids=["vintagedelight:salt_dust","corn_delight:corn"];print({k:(d.get(k) if isinstance(d,dict) else None) for k in ids});print([(k,v) for k,v in (d.items() if isinstance(d,dict) else []) if "spool" in k or "patty" in k][:10])'
+look salt dust Salt; corn Corn; spool Spool of String; veggie patties Veggie Patty
+
+## SQ-OB-03 | farmers_hats tag (hearthandharvest namespace): no summer hat
+@group B
+@commands `/zq itemtag hearthandharvest:farmers_hats`
+@pass Contains the H&H hat, Wardrobe hat, Vinery straw hat, Simple Hats farmerbrim; no `simplehats:summerhat`
+@fails Tag script not applied
+@from batches/r1112/rowtext.qb passed
+> zq itemtag hearthandharvest:farmers_hats
+waitlog \[zq\] done 20
+expect farmers_hats .*hearthandharvest:farmers_hat
+expect farmers_hats .*wardrobe:farmers_hat_helmet
+expect farmers_hats .*vinery:straw_hat
+expect farmers_hats .*simplehats:farmerbrim
+reject farmers_hats .*summerhat
+
+## SQ-OB-04 | fruit pies and a Rustic cheesecake take 3 fruit; filling cans unchanged (one narrow query per pie)
+@group B
+@commands Every fruit pie recipe via `/kubejs dump_recipes` grep `pie`; check apple, pumpkin, sweet berry, grape pie and a Rustic cheesecake
+@pass Each takes 3 fruit; filling cans unchanged
+@fails Recipe still on 2: `pieBake` call site
+@from batches/r1112/b_vh.qb
+> zq rdetail creativedelight:baking/apple_pie
+> zq rdetail creativedelight:baking/pumpkin_pie
+> zq rdetail creativedelight:baking/sweet_berry_cheesecake
+> zq rdetail creativedelight:baking/grape_pie
+> zq rdetail creativedelight:baking/syrup_cheesecake
+> zq rdetail canned_apple_pie_filling_pot
+> zq rdetail canned_pumpkin_pie_filling_pot
+> zq rdetail canned_sweet_berry_pie_filling_pot
+expect baking/apple_pie \{\S+\} -> 1 apple_pie <- farmersdelight:pie_crust
+expect baking/grape_pie \{\S+\} -> 1 grape_pie <- farmersdelight:pie_crust
+expect baking/syrup_cheesecake \{\S+\} -> 1 syrup_cheesecake <- farmersdelight:pie_crust
+look each pie and the cheesecake: crust + 3 of its fruit + 2 sweet (pumpkin_pie: 3 pumpkin slices, grape: 3 grapes, syrup cheesecake: 3 syrup); the _from_filling recipes are crust + can; the three canned_*_pie_filling_pot recipes keep 3 fruit + 2 sweet + empty can (unchanged)
+
+## SQ-OB-05 | cave carrot cutting and baked cutting, and their Slice & Dice copies: 2 raw / 2 cooked veggie patties
+@group B
+@commands Give cave carrot; recipe check for cutting and baked cutting, and their Slice & Dice copies (rerun after the 2026-11-14 `Item.of` fix, plan_bugfix_1114.md 4.4)
+@pass 2 raw / 2 cooked veggie patties, never air
+@fails Miner's Delight guard or NCH id
+@from batches/r1115/p1_b1.qb
+> give cb miners_delight:cave_carrot 4
+> zq rdetail veggie_patty_from
+waitlog \[zq\] rdetail matching veggie_patty_from: \d+ 30
+expect raw_veggie_patty_from_cave_carrot .*2 
+expect cooked_veggie_patty_from_baked_cave_carrot .*2 
+reject veggie_patty_from.*(minecraft:air|-> 0 )
+look 4 recipes (2 cutting, 2 S&D copies): results 2 raw / 2 cooked veggie patties, inputs cave carrot / baked cave carrot, never air
+
+## SQ-OB-06 | corn processing
+@group B
+@commands Corn: cutting corn and wild corn recipes; cob mortar, hand mill, IE crusher recipes
+@pass Cut gives 6 kernels and a 75% cob and 33% husk for both (as SQ-OB-12); cob milling and crusher 3 kernels; wild corn crusher 2 cornmeal, 50% kernel, 10% cob
+@fails Compare with `corn_delight/recipes.js`, creativeengineering and IE recipe files
+@from batches/r1111/bw.qb
+> zq uses corn_delight:corn
+> zq uses corn_delight:corn_cob
+> zq uses corn_delight:wild_corn
+look cut corn and wild corn 6 kernels, 75% cob, 75% husk; cob milling and crusher 3 kernels; wild corn crusher 2 cornmeal, 50% kernel, 10% cob
+
+## SQ-OB-07 | biscuits and gravy and glazed carrots pot recipes
+@group B
+@commands Biscuits and gravy and glazed carrot recipes in the pot
+@pass Shapeless biscuits recipe gone; pot recipe takes any dough, raw sausage, salt, milk; glazed carrots take cave carrot
+@fails Check `hearthandharvest/recipes.js`
+@from batches/r1115/p9_a1.qb
+> zq makes hearthandharvest:biscuits_and_gravy
+waitlog \[zq\] done 20
+> zq rdetail biscuits_and_gravy
+waitlog \[zq\] done 20
+> zq makes hearthandharvest:glazed_carrots
+waitlog \[zq\] done 20
+> zq rdetail glazed_carrots
+waitlog \[zq\] done 20
+> zq uses miners_delight:cave_carrot
+waitlog \[zq\] done 20
+look no shapeless (crafting_shapeless) biscuits recipe; one cooking pot recipe: any dough, raw sausage, salt, milk (bowl); glazed carrots pot recipe accepts cave carrot
+
+## SQ-OB-08 | Street Corn: Fire Resistance 30 s plus Nourishment and Haste
+@group B
+@commands Eat Street Corn, `/effect` check
+@pass Fire Resistance 30 s plus Haste (no Nourishment: the Comfort/Nourishment rule removes it from every other food, r1115)
+@fails `effect_swaps.js` modification not applied
+@from batches/r1115/p9_a1.qb
+> pbot spawn ob8 14 -60 1000 minecraft:overworld survival
+sleep 3
+> effect clear ob8
+> zq food hearthandharvest:street_corn
+waitlog \[zq\] done 20
+> zc4 hunger ob8 2
+> zc4 eat ob8 hearthandharvest:street_corn
+waitlog \[zc4\] eat ob8 20
+> data get entity ob8 ActiveEffects
+sleep 1
+expect minecraft:fire_resistance|fire_resistance
+look ActiveEffects: fire resistance 600 ticks plus Nourishment and Haste (zq food line lists the same)
+
+## SQ-OB-09 | no killer rabbit babies (25 pairs spaced 6 apart, cramming off, births counted by tag)
+@group B
+@commands Spawn rabbits repeatedly or breed 200 rabbits (`/summon`, breeding with carrots)
+@pass No killer rabbit babies; `grep chanceBabyRabbitIsKiller config/breedablekillerrabbit.json5` is 0.0
+@fails Config not read at boot
+@from batches/r1112/b_vh.qb
+shell grep chanceBabyRabbitIsKiller config/breedablekillerrabbit.json5; true
+> gamerule maxEntityCramming 0
+> gamerule doMobSpawning false
+> forceload add 31 31 61 61
+sleep 5
+> fill 31 120 31 61 124 61 minecraft:glass hollow
+> summon minecraft:rabbit 34 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 34 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 40 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 46 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 52 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 34 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 40 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 46 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 52 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+> summon minecraft:rabbit 58 121 58 {InLove:600,Age:0,RabbitType:0,Tags:["r1112a"]}
+sleep 30
+> execute if entity @e[type=minecraft:rabbit,x=46,y=122,z=46,distance=..30,tag=r1112a]
+> execute if entity @e[type=minecraft:rabbit,x=46,y=122,z=46,distance=..30,tag=!r1112a]
+> execute if entity @e[type=minecraft:rabbit,x=46,y=122,z=46,distance=..30,nbt={RabbitType:99}]
+> kill @e[type=minecraft:rabbit,x=46,y=122,z=46,distance=..30]
+> gamerule maxEntityCramming 24
+> forceload remove 31 31 61 61
+look config 0.0; first count 50 (no adult died); second (babies) Test passed with count at least 15; RabbitType 99 Test failed
+
+## CQ-OB-01
+@group client
+@commands Hover Goat Milk Bottle and Chocolate Milk Bottle
+@pass LOOK: FD tooltip line "Clears 1 Effect" shows
+@fails Bottle class does not use custom tooltips: needs Java
+@draft no batch holds this row yet
+## CQ-OB-02
+@group client
+@commands Look at a thrown cleaver and pitchfork name (death message, F3+B), the Immersive Portals portal block (WTHIT or give)
+@pass LOOK: Cleaver, Pitchfork, Nether Portal names; no raw keys
+@fails Lang or `names.js` not loaded
+@draft no batch holds this row yet
+## CQ-OB-03
+@group client
+@commands Hover Farmer's Hat harvest tooltip
+@pass LOOK: Summer Hat not listed
+@fails `client.js` list
+@draft no batch holds this row yet
+## SQ-OB-10 | wooden buckets exist; one tree tapper recipe accepts either bucket; bucket from planks
+@group B
+@commands `/give @p creativedelight:wooden_bucket`, and `wooden_water_bucket`, `wooden_sap_bucket`, `wooden_milk_bucket`, `wooden_honey_bucket`; recipe check for the tree tapper with an iron and a wooden bucket, and the wooden bucket from planks
+@pass All five items exist; one tapper recipe accepts either bucket; boot log has no Creative Delight error
+@fails Registry or recipe id
+@from batches/r1115/p9_a1.qb
+> zq items creativedelight:wooden_
+waitlog \[zq\] done 20
+> give ob8 creativedelight:wooden_bucket
+> give ob8 creativedelight:wooden_water_bucket
+> give ob8 creativedelight:wooden_sap_bucket
+> give ob8 creativedelight:wooden_milk_bucket
+> give ob8 creativedelight:wooden_honey_bucket
+sleep 1
+count Gave 1\s+\[.*\] to ob8 >= 5
+reject Unknown item
+> zq makes hearthandharvest:tree_tapper
+waitlog \[zq\] done 20
+> zq rdetail tree_tapper
+waitlog \[zq\] done 20
+> zq makes creativedelight:wooden_bucket
+waitlog \[zq\] done 20
+bootreject \[creativedelight\].*(Exception|ERROR)
+shell grep -cE "ERROR.*creativedelight|creativedelight.*Exception" logs/latest.log; true
+look one tree tapper recipe, B slot accepts minecraft:bucket and creativedelight:wooden_bucket; a wooden bucket recipe from planks
+
+## SQ-OB-11 | old creativeengineering wooden buckets load as Creative Delight wooden buckets
+@group Old save
+@commands Copy a save holding `creativeengineering:wooden_bucket` and `wooden_water_bucket` (chest and inventory); boot with the new jars
+@pass the `[swaps] minecraft:item: N id(s) remapped to their survivors` summary line (no per-id line), nothing unresolved; items load as Creative Delight wooden buckets
+@fails Swap list not read: `data/creativedelight/swaps/wooden_buckets.json`
+@from batches/r1115/p9_o2.qb
+bootexpect \[swaps\].*wooden_bucket
+bootexpect \[swaps\].*wooden_water_bucket
+bootreject \[swaps\] unresolved .*wooden
+shell grep -nE "\[swaps\]" logs/latest.log | grep -iE "wooden|permanent|load report|unresolved" | cut -c1-260 | head -12
+> forceload add 192 192 223 223
+> forceload add -16 -16 63 63
+sleep 4
+> data get block 200 -60 205 Items
+> pbot spawn ob11 205 -60 207 minecraft:overworld survival
+sleep 4
+> data get entity ob11 Inventory
+sleep 1
+expect has the following block data: .*creativedelight:wooden_bucket.*creativedelight:wooden_water_bucket
+expect ob11 has the following entity data: .*creativedelight:wooden_bucket.*creativedelight:wooden_water_bucket|ob11 has the following entity data: .*creativedelight:wooden_water_bucket.*creativedelight:wooden_bucket
+
+## SQ-OB-12 | corn cutting
+@group B
+@commands Corn cutting recipe check
+@pass 6 kernels, cob 75%, husk 33%
+@fails `corn_delight/recipes.js`
+@from batches/r1111/bw.qb
+> zq rdetail cutting/corn
+look 6 kernels, cob 75%, husk 33%
+
+## CQ-OB-04
+@group client
+@commands Tree tapper on a log, wait for sap, right-click with a wooden bucket; pour into a Create tank and back. Right-click a cow and a goat with a wooden bucket; drink the milk with an effect active. Fill a wooden bucket from a Create honey tank
+@pass LOOK: Wooden Sap Bucket fills and drains back to empty; milking gives a Wooden Milk Bucket, drinking clears effects and returns the empty bucket; honey fills; filled buckets use the water texture
+@fails `WoodenBucketItem` wrapper or `WoodenBucketMilking`
+@draft no batch holds this row yet

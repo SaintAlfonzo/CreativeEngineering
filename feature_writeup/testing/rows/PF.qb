@@ -1,0 +1,71 @@
+# Scratch queue rows PF (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PF.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Pack perf events, 2026-10-26 (TODO `server #9`, perf.md 3.6)
+@@date 2026-10-26
+@@text
+@@text Needs patcherMod 1.1.03 rebuilt 2026-10-26 (the perf mixins) and the server booted with the recording, which
+@@text `scratch_server.sh setup` now adds by itself (2026-10-28; `/cdevperf dump` still works, its window is the whole boot). Grep `latest.log` for
+@@text `Perf` / `KubeJSEventHandler` mixin warnings first.
+@@text
+@@text | ID | Group | Action | Expect | Depends on |
+@@text |---|---|---|---|---|
+## SQ-PF-01
+@group A
+@commands Boot; `/cdevperf status` (PF-14)
+@pass Recording `ce` running; all 10 events recorded; hooks: all run except possibly chunk wait; KubeJS handlers wrapped > 0; no mixin warning for the 9 perf mixins
+@fails
+@draft no batch holds this row yet
+## SQ-PF-02 | /ceperf dump and the perf report
+@group A
+@commands After 2 min, `/cdevperf dump smoke`; copy the file here, `python3 tools/perf/perf_report.py <file>` (PF-15)
+@pass Chat says saved; the report's "Measured by the pack's hooks" has ticks, a row per dimension, handlers as `server_scripts:<file>:<line>`, entity and block entity types
+@fails SQ-PF-01
+@from batches/r1102b/s3_A.qb
+> ceperf status
+expect recording '
+> ceperf dump smoke
+waitlog \[ceperf\] recording saved to 300
+capture PFF recording saved to (\S+)
+shell python3 -I $INST/tools/perf/perf_report.py {PFF} > ../pf02_report.txt 2>&1; echo "exit $?"; grep -n -A25 "Measured by the pack" ../pf02_report.txt | head -60
+look rows/SQ-PF-02.shell.txt: ticks, a row per dimension, handlers as server_scripts:<file>:<line>, entity and block entity types
+
+## SQ-PF-03
+@group B
+@commands New world: `/tp` 5 times to unexplored land 2000+ blocks apart, then `/cdevperf dump tp` and report (PF-16)
+@pass Chunk waits lists waits over 1 ms with a caller and phase; totals non-zero
+@fails SQ-PF-01
+@draft no batch holds this row yet
+## SQ-PF-04
+@group B
+@commands Chunky pregen 2601 chunks with the jfc as is, then with every `creativecommon.*` set to `enabled=false` (PF-17)
+@pass Same time within noise (1:34 in the 2026-09-28 A/B)
+@fails SQ-PF-01
+@draft no batch holds this row yet
+## SQ-PF-05 | /reload twice keeps the wrapped KubeJS handler count
+@group A
+@commands `/reload` twice, `/cdevperf status` (PF-18)
+@pass Wrapped-handler count unchanged; no KubeJS errors
+@fails SQ-PF-01
+@from batches/r1102b/s3_A.qb passed
+> ceperf status
+capture PFW (\d+) KubeJS handlers wrapped
+> reload
+waitlog Loaded \d+ pocket computer upgrades 300
+sleep 10
+> reload
+sleep 60
+count Loaded \d+ pocket computer upgrades >= 2
+> ceperf status
+sleep 2
+shell n=$(grep -o "[0-9]* KubeJS handlers wrapped" logs/latest.log | tail -1 | cut -d" " -f1); echo "before {PFW} after $n"; [ "$n" = "{PFW}" ]
+reject /ERROR\] \[KubeJS Server
+
+## SQ-PF-06
+@group client
+@commands Single player without a recording: play a minute, `/cdevperf status` (PF-19)
+@pass No errors; "no JFR recording is running"; events listed as not recorded
+@fails
+@draft no batch holds this row yet

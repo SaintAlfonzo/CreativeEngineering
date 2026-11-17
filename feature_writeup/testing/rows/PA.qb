@@ -1,0 +1,77 @@
+# Scratch queue rows PA (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PA.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-PA Immersive Paintings built from the installed jars, 2026-11-05 ([writeup](../immersive_paintings.md) section 3, TODO `licence/compat #1`)
+@@date 2026-11-05
+@@jars creativecompat
+@@sources feature_writeup/immersive_paintings.md
+@@text
+@@text Not run. Built 2026-11-05 00:42 (`creativecompat-1.0.0.jar` in `development/creativeCompat/build/libs/`), NOT installed
+@@text (`mods/` still has the 11-04 19:05 jar with the 950 generated files). The vanilla 30 are in
+@@text `kubejs/data/creativeengineering/paintings/minecraft/`. Offline check passed: the Java builder reproduces all 445 modded
+@@text entries from `mods/*.jar` with no pixel or json difference, and a test zip overrides one painting's art.
+@@text
+@@table
+## SQ-PA-01 | [paintings] N of N modded variants built, no WARN, no Couldn't load painting
+@group A
+@commands Boot; grep `srv/logs/latest.log` for `\[paintings\]` and `Couldn't load painting`
+@pass one line `[paintings] 445 of 445 modded painting variants built from <n> sources`, no `[paintings]` WARN, no `Couldn't load painting`
+@fails `paintings/PaintingPack` (registry or mod file lookup); WARN lines name the variant; old jar still in `mods/` (no line at all)
+@from batches/r1113/c3_a1.qb
+bootexpect \[paintings\] (\d+) of \1 modded painting variants built from \d+ sources
+bootreject WARN.*\[paintings\]
+bootreject Couldn't load painting
+shell grep -h "\[paintings\]" logs/latest.log | cut -c1-250 | head -5
+look count was 445 when the row was written; another number is fine if it is N of N
+
+## SQ-PA-02 | 60 vanilla painting files in the scratch kubejs; no second built line and no painting error after /reload
+@group A
+@commands `ls srv/kubejs/data/creativeengineering/paintings/minecraft \| wc -l`; `/reload`, then grep the log again
+@pass 60 files; after `/reload` no second `[paintings] ... built` line (cached) and no painting error
+@fails prep_srv.sh copy of `kubejs/data`; cache in `PaintingPack.files()`
+@from batches/r1113/c3_a1.qb
+shell ls kubejs/data/creativecompat/paintings/minecraft | wc -l
+shell test "$(ls kubejs/data/creativecompat/paintings/minecraft | wc -l)" = 60
+> reload
+waitlog Reloading!|reload 60
+sleep 20
+reject \[paintings\] .*modded painting variants built
+reject Couldn't load painting
+look path moved: kubejs/data/creativecompat/paintings/minecraft (row said creativeengineering); no `[paintings] ... built` line in this row's segment (cached)
+
+## SQ-PA-03 | extraSources: art for toomanypaintings:afternoon from pa_test.zip; WARN for no_such.zip; still N of N built
+@group A
+@commands Stop; `python3 tools/scratch_query/painting_test_zip.py OUT/srv/pa_test.zip`; `qrun.py toml` set `[paintings] extraSources = ["pa_test.zip", "no_such.zip"]` in `srv/config/creativecompat-common.toml`; boot
+@pass `[paintings] art for toomanypaintings:afternoon from pa_test.zip (over toomanypaintings-...jar)`; WARN `extraSources no_such.zip: no such file or folder`; still 445 built
+@fails `PaintingPack.extraSources` path resolution (game folder = `srv/`)
+@from batches/r1113/c3_a2.qb
+shell grep -n "extraSources" config/creativecompat-common.toml; ls -l pa_test.zip
+bootexpect \[paintings\] art for toomanypaintings:afternoon from pa_test\.zip \(over toomanypaintings
+bootexpect \[paintings\] extraSources no_such\.zip: no such file or folder
+bootexpect \[paintings\] (\d+) of \1 modded painting variants built
+look WARN text is "extraSources no_such.zip: no such file or folder (<path>)" in the current jar (row text without the path)
+
+## SQ-PA-04 | [paintings] enabled = false: no built line, boots clean
+@group A
+@commands Stop; set `[paintings] enabled = false`; boot
+@pass no `[paintings] ... built` line; boots clean
+@fails `CompatConfig.Paintings.enabled`
+@from batches/r1113/c3_a3.qb passed
+bootreject \[paintings\] .*modded painting variants built
+bootexpect Done \(
+shell grep -n -A3 "^\[paintings\]" config/creativecompat-common.toml | head -4
+
+## CQ-PA-01
+@group client
+@commands Single player, Immersive Paintings Datapacks page: then run the writeup's PA-01 to PA-06
+@pass modded and vanilla paintings listed at 32 px per block as before; LOOK: an old save with a modded painting placed before this jar keeps its picture
+@fails ids must stay `creativeengineering:paintings/<ns>/<id>.png` (`PaintingArt.OUT_NAMESPACE`)
+@draft no batch holds this row yet
+## CQ-PA-02
+@group client
+@commands With SQ-PA-03's zip set in the client's own config (single player), open the Datapacks page, search `afternoon`
+@pass LOOK: Afternoon is solid magenta
+@fails Immersive keys client images by painting id, so an older copy may be cached on the client: new world or relaunch, then retry; else the server log of SQ-PA-03
+@draft no batch holds this row yet

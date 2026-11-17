@@ -1,0 +1,71 @@
+# Scratch queue rows GFB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/GFB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Overall-run follow-ups: season cache, generated falling blocks, unkeyed holders, 2026-10-27 late ([perf.md](../perf.md) 13, TODO `server #24` to `#26`)
+@@date 2026-10-27
+@@sources feature_writeup/perf.md
+@@text
+@@text patcherMod 1.1.03 (20:44) with `FallingBlockHoldMixin`, `ProtoChunkTicksFallingMixin`, `HolderReferenceUnboundMixin`
+@@text and the `SeasonTypes` cache. Group A, fresh world on the overall-run seed (-8188900049893920259) unless stated.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-GFB-01 | generated falling blocks mixins
+@group A
+@commands Boot; `grep -i -E "FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound|Mixin.*(error|fail)" logs/latest.log`
+@pass No mixin error; server reaches `Done`
+@fails Name the mixin; SRG ids m_7417_, m_183393_, m_203373_
+@from batches/r1106spf/b1.qb passed
+bootreject (?i)(FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound).*(error|fail)
+bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
+
+## SQ-GFB-02
+@group A
+@commands Done + 2 min: `tools/perf/eval/entity_census.py` on the world as in perf.md 12
+@pass `minecraft:falling_block` near 0 (193 in the overall run); gravel item count lower than 21
+@fails Falling blocks remain: check whether they come from a mod's own falling block class or the window was off
+@draft no batch holds this row yet
+## SQ-GFB-03
+@group A
+@commands Find floating sand or gravel over a cave (or `/fill` sand over air in a freshly generated chunk with `/cdevplace`); break the block next to it, or place a block beside it
+@pass The block falls on that update, as vanilla
+@fails It never falls: the post-process flag stuck on (exception in postProcessGeneration?)
+@draft no batch holds this row yet
+## SQ-GFB-04
+@group A
+@commands Set `[worldgen.systems] holdGeneratedFallingBlocks = false`, new world, repeat SQ-GFB-02
+@pass Falling blocks back near vanilla counts (about 190)
+@fails Switch not read
+@draft no batch holds this row yet
+## SQ-HRU-01
+@group A
+@commands After a pregen (`chunky radius 200`), `grep "Holder with no registry key" logs/latest.log`
+@pass Up to 20 lines naming the unkeyed value classes; record them in perf.md 13.3
+@fails None: no unkeyed holders reached `is()` on this run; then the 558 samples came from elsewhere, recheck with JFR
+@draft no batch holds this row yet
+## SQ-HRU-02
+@group A
+@commands Pregen `chunky radius 400` with JFR as perf.md 12; `perf_report.py` against `ov1-pregen.summary.json`
+@pass Copycats share of Worker-Main below 3.2%, no `StringConcatHelper` under `customOcclusion`
+@fails Mixin did not apply or Copycats changed its handler
+@draft no batch holds this row yet
+## SQ-STC-01
+@group A
+@commands `/reload` twice; place grass in a temperate, an arid and a frozen biome (`/cdevplace` or `/tp`), read `/cebiome` or the HUD
+@pass Season types unchanged (arid/frozen year-round, temperate seasonal)
+@fails A stale type after reload: the cache was not swapped
+@draft no batch holds this row yet
+## SQ-STC-02
+@group A
+@commands Datapack edit: add a temperate biome to `creativeengineering:seasons/arid`, `/reload`, check the HUD there
+@pass Reads Arid at once
+@fails Cache not cleared on TagsUpdatedEvent
+@draft no batch holds this row yet
+@@text
+@@text Results 2026-10-27 late (ov2, run log): GFB-01 PASS, GFB-02 partial (102 falling blocks), HRU-01 PASS, HRU-02 PASS by summary.
+@@text
+@@text Client check CQ-STC-01: launch the client with JFR (`tools/perf/eval/eval_client.py`), run `client_drive.sh`, report with
+@@text `--mods mods`: `SeasonTypes#tagged` well under the 20% of `Chunk Render Task Executor` in `ov1-client`; grass and leaves
+@@text tint as before in each season type.

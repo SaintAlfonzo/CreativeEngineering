@@ -1,0 +1,19 @@
+# Scratch queue rows CDTX (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CDTX.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-CDTX Cooking textures in the Creative Delight jar, 2026-11-06 ([creative_delight.md](../creative_delight.md) 40.2)
+@@date 2026-11-06
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight.md
+@@text
+@@text Not run. Built 2026-11-06, not installed (`development/creativeDelight/build/libs/creativedelight-1.1.0.jar`).
+@@text
+@@table
+## CQ-CDTX-01
+@group client
+@commands Full pack client with the new Creative Delight jar; JEI search `@creativeengineering canned`, `tea`, `juice`, `culture`, `dough block`; place one culture block and one dough block; `grep -n "Missing texture\|missing textures" logs/latest.log \| grep -iE "canned_\|_tea\|_juice\|culture\|dough_block"`
+@pass every can, tea, juice, culture and placed block shows its own sprite (no purple-black); the grep prints nothing
+@fails the jar missing `assets/creativeengineering/textures/...` (`unzip -Z1` the jar) or an old Creative Delight jar still in `mods/`
+@draft no batch holds this row yet

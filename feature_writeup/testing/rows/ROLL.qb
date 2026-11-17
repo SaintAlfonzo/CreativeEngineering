@@ -1,0 +1,208 @@
+# Scratch queue rows ROLL (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/ROLL.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-ROLL Roll Delight port, 2026-11-01 ([roll_delight.md](../roll_delight.md) 8, TODO `largecontent/mod-additions #39`)
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/roll_delight.md
+@@text
+@@text Needs the Creative Delight jar nesting `backportedRoll 1.3.1-ce-19.2-01` (built 2026-11-01, not installed) and
+@@text `roll_upstream/roll_delight-1.3.1-forge-1.20.1.jar` next to `mods/`; full restart (new member, items, startup scripts).
+@@text Group A (superflat) and a bot player. ROLL- ids are the in-game list in roll_delight.md 8.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-ROLL-01 | Roll Delight member loads (ROLL-01)
+@group A
+@commands Boot; `grep -nE "roll_delight\|Roll Delight\|Error occurred while handling event" logs/latest.log \| head -30`; `grep -c "Error" logs/kubejs/server.log`
+@pass members line lists `roll_delight`; `Roll Delight upstream assets: N files`; no `Failed to parse` / loot table error naming `roll_delight`; no error in `roll_delight/*.js` (ROLL-01)
+@fails donor missing or sha1 changed; generated loot JSON rejected (state range syntax)
+@from batches/r1102b/s3_A.qb
+bootexpect \[creativedelight\] members: \[.*\broll_delight\b
+bootexpect Found new data pack roll_upstream_data
+bootreject (?i)(failed to parse|loot table).*roll_delight
+kjsreject (?i)(error|exception).*roll_delight/
+shell echo "kubejs server.log Error lines: $(grep -c Error logs/kubejs/server.log)"; true
+
+## SQ-ROLL-02 | chopstick foods and nether roll meat tags
+@group A
+@commands `/kubejs hand`-style checks or `/dumptags`: `#creativeengineering:chopstick_foods` holds `roll_delight:rice_roll_slice`, `farmersdelight:salmon_slice`, `minecraft:pufferfish`, `minecraft:cooked_cod`; `#roll_delight:nether_roll_meat` holds porkchop, bacon, prepared flesh
+@pass all present
+@fails tag script not run / helper name
+@from batches/r1102b/s3_A.qb passed
+> zq itemtag creativeengineering:chopstick_foods
+> zq itemtag roll_delight:nether_roll_meat
+expect itemtag creativeengineering:chopstick_foods \(\d+\): .*roll_delight:rice_roll_slice
+expect itemtag creativeengineering:chopstick_foods \(\d+\): .*farmersdelight:salmon_slice
+expect itemtag creativeengineering:chopstick_foods \(\d+\): .*minecraft:pufferfish
+expect itemtag creativeengineering:chopstick_foods \(\d+\): .*minecraft:cooked_cod
+expect itemtag roll_delight:nether_roll_meat \(\d+\): .*minecraft:porkchop
+expect itemtag roll_delight:nether_roll_meat \(\d+\): .*bacon
+expect itemtag roll_delight:nether_roll_meat \(\d+\): .*prepared_flesh
+
+## SQ-ROLL-03 | chopsticks lengthen the off-hand food's effects 1.5x (Glowing Calamari Roll; bot at 150)
+@group A
+@commands Bot: hunger 19 (`/effect give @p minecraft:hunger 2 255` then wait), main hand `roll_delight:chopsticks`, off hand `farmersdelight:cooked_rice`, use until eaten; `/data get entity @p foodLevel`; `/data get entity @p ActiveEffects`; `/data get entity @p SelectedItem`
+@pass hunger 20 (capped), no Comfort (cooked rice has none; use a Comfort food to check the 1.5x duration), chopsticks Damage 1 (ROLL-07)
+@fails Start/Finish hook: off-hand identity check, `getUsedItemHand`
+@from batches/r1103/p2_R.qb
+# r1103 p2: cooked rice has had no Comfort since the 2026-11-02 Comfort / Nourishment rules (comfort_nourishment.json
+# "none"), so its read could not show the lengthening; hunger 19 -> 20 and chopsticks Damage 1 passed there
+> zq food creativeengineering:glowing_calamari_roll
+> pbot spawn rl3 150 -60 503 minecraft:overworld survival
+sleep 2
+> clear rl3
+> effect give rl3 minecraft:hunger 1 255
+sleep 3
+> data get entity rl3 foodLevel
+> pbot hold rl3 roll_delight:chopsticks
+> item replace entity rl3 weapon.offhand with creativeengineering:glowing_calamari_roll
+> zq useitem rl3
+sleep 5
+> data get entity rl3 foodLevel
+> data get entity rl3 ActiveEffects
+expect has the following entity data: \[\{.*Duration
+> data get entity rl3 SelectedItem
+> data get entity rl3 Inventory
+expect useitem rl3 offhand (CONSUME|SUCCESS)
+expect has the following entity data: \{.*id: "roll_delight:chopsticks".*Damage: 1\b
+> pbot remove rl3
+look each ActiveEffects Duration is 1.5x the roll's own (the zq food line above; less the 5 s already ticked); off-hand roll gone
+
+## SQ-ROLL-04 | chopsticks: no durability or extra food on dirt, bread, or at full hunger (bot at 150)
+@group A
+@commands Same with a dirt block, then `minecraft:bread` (not listed), then a listed food at hunger 20
+@pass no durability lost, nothing extra eaten (ROLL-08)
+@fails B5 regression
+@from batches/r1102b/s3_A.qb
+> pbot spawn rl4 150 -60 506 minecraft:overworld survival
+> effect give rl4 minecraft:hunger 1 255
+sleep 3
+> pbot hold rl4 roll_delight:chopsticks
+> item replace entity rl4 weapon.offhand with minecraft:dirt
+> zq useitem rl4
+sleep 3
+> item replace entity rl4 weapon.offhand with minecraft:bread
+> zq useitem rl4
+sleep 3
+> effect give rl4 minecraft:saturation 2 10
+sleep 3
+> item replace entity rl4 weapon.offhand with farmersdelight:cooked_rice
+> zq useitem rl4
+sleep 3
+> data get entity rl4 SelectedItem
+> data get entity rl4 Inventory
+> data get entity rl4 foodLevel
+reject id: "roll_delight:chopsticks".*Damage: [1-9]
+> pbot remove rl4
+look the bread and the rice still in the off hand (slot -106), dirt kept; foodLevel 20 after the saturation; no Damage tag above 0 (ROLL-08)
+
+## SQ-ROLL-05 | Legendary Roll Medley servings by empty hand, dirt, chopsticks (medley at 155)
+@group A
+@commands `/setblock ~ ~ ~ roll_delight:legendary_roll_medley`; bot right-clicks with an empty hand 9 times, counting items; again with a held dirt block; then with chopsticks at hunger 10
+@pass 3 mushroom slices, 3 Salmon Maki, 2 Tobiko in that order, then the plate stays (servings 0) and the 9th click breaks it for a bowl; held dirt places against it; chopsticks eat one serving in place, 1 damage (ROLL-10, ROLL-14, ROLL-18)
+@fails `use` override, FeastBlock super
+@from batches/r1102b/s3_A.qb
+> setblock 155 -60 500 roll_delight:legendary_roll_medley
+> pbot spawn rl5 155 -60 503 minecraft:overworld survival
+repeat 9
+> pbot hold rl5 minecraft:air
+> pbot use rl5 155 -60 500 up
+> data get entity rl5 SelectedItem
+> clear rl5
+> data get block 155 -60 500
+end
+> execute if block 155 -60 500 minecraft:air run say ROLL05 medley gone after 9
+> zcount 151 -61 496 159 -57 506
+> setblock 155 -60 500 roll_delight:legendary_roll_medley
+> pbot hold rl5 minecraft:dirt
+> pbot use rl5 155 -60 500 north
+> execute if block 155 -60 499 minecraft:dirt run say ROLL05 dirt placed against the medley
+> setblock 155 -60 499 minecraft:air
+> effect give rl5 minecraft:hunger 2 255
+sleep 3
+> data get entity rl5 foodLevel
+> pbot hold rl5 roll_delight:chopsticks
+> pbot use rl5 155 -60 500 up
+> data get entity rl5 foodLevel
+> data get entity rl5 SelectedItem
+expect ROLL05 medley gone after 9
+expect ROLL05 dirt placed against the medley
+> pbot remove rl5
+look the nine SelectedItem lines: 3 mushroom slices, 3 Salmon Maki, 2 Tobiko, then nothing (plate at servings 0), the 9th click breaks it (a bowl in zcount); chopsticks: foodLevel up, one serving gone, Damage 1
+
+## SQ-ROLL-06 | Mythical Roll Medley drops its servings and a bowl (medley at 160)
+@group A
+@commands `/setblock ~ ~ ~ roll_delight:mythical_roll_medley[servings=5]`, break it in survival
+@pass drops the 5 servings still on the plate (2 Nether Rolls, 3 Golden Roll Slices) and 1 bowl; at `[servings=8]` the medley itself (ROLL-11)
+@fails loot table generator
+@from batches/r1102b/s3_A.qb
+> setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=5]
+> zact break 160 -60 500 none
+> setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=8]
+> zact break 160 -60 500 none
+expect \[zact\] break 160 -60 500 roll_delight:mythical_roll_medley held none: true, .*minecraft:bowl x1
+expect \[zact\] break 160 -60 500 roll_delight:mythical_roll_medley held none: true, .*drops roll_delight:mythical_roll_medley x1$
+look servings=5 drops 2 Nether Rolls and 3 Golden Roll Slices with the bowl
+
+## SQ-ROLL-07 | Wrapped Chopsticks block: add 3, take 4, break at 3 (block at 165)
+@group A
+@commands `/setblock ~ ~ ~ roll_delight:wrapped_chopsticks`; bot uses wrapped chopsticks on it 3 times, then empty hand 4 times; place again with `[chopsticks=3]` and break
+@pass 4 pairs, then 4 plain Chopsticks back and the block gone; breaking at 3 drops 3 Wrapped Chopsticks (ROLL-12)
+@fails `use`, set_count conditions
+@from batches/r1102b/s3_A.qb passed
+> setblock 165 -60 500 roll_delight:wrapped_chopsticks
+> pbot spawn rl7 165 -60 503 minecraft:overworld survival
+> pbot hold rl7 roll_delight:wrapped_chopsticks 3
+repeat 3
+> pbot use rl7 165 -60 500 up
+end
+> data get block 165 -60 500
+> pbot hold rl7 minecraft:air
+repeat 4
+> pbot use rl7 165 -60 500 up
+> clear rl7 roll_delight:chopsticks
+end
+count Removed 1 item == 4
+> execute unless block 165 -60 500 roll_delight:wrapped_chopsticks run say ROLL07 block gone
+expect ROLL07 block gone
+> setblock 165 -60 500 roll_delight:wrapped_chopsticks[chopsticks=3]
+> zact break 165 -60 500 none
+expect \[zact\] break 165 -60 500 roll_delight:wrapped_chopsticks held none: true, .*roll_delight:wrapped_chopsticks x3
+> pbot remove rl7
+
+## SQ-ROLL-08 | frogspawn: shears drop it, a hand does not (on water at 170)
+@group A
+@commands `/setblock ~ ~ ~ minecraft:frogspawn` on water; break with shears in survival; again by hand
+@pass shears: 1 frogspawn item; hand: nothing (ROLL-05)
+@fails BreakEvent hook
+@from batches/r1102b/s3_A.qb passed
+> fill 169 -61 499 171 -61 501 minecraft:water
+> setblock 170 -60 500 minecraft:frogspawn
+> zact break 170 -60 500 minecraft:shears
+> setblock 170 -60 500 minecraft:frogspawn
+> zact break 170 -60 500 none
+expect \[zact\] break 170 -60 500 minecraft:frogspawn held minecraft:shears: true, .*drops minecraft:frogspawn x1
+expect \[zact\] break 170 -60 500 minecraft:frogspawn held none: true, .*drops none
+
+## SQ-ROLL-09 | Unbreaking applies to chopsticks (server half; anvil plank repair is CQ-ROLL-10)
+@group A
+@commands `/enchant @p minecraft:unbreaking 3` with chopsticks held; anvil: damaged chopsticks + oak planks (bot can't use anvils: check `isValidRepairItem` via JEI anvil page client side if needed)
+@pass Unbreaking applies (ROLL-16 server half)
+@fails enchant category / Apotheosis filter
+@from batches/r1102b/s3_A.qb passed
+> pbot spawn rl9 175 -60 506 minecraft:overworld survival
+> pbot hold rl9 roll_delight:chopsticks
+> enchant rl9 minecraft:unbreaking 3
+expect Applied enchantment
+reject (?i)(can't|cannot) (be )?(enchant|apply)|does not support
+> pbot remove rl9
+
+## CQ-ROLL-10
+@group client
+@commands ROLL-02, 03, 13, 15, 17, 19 to 22 (JEI recipes, names Salmon Maki Roll / Salmon Maki / Rice Roll Slice, golden gild page, tooltips on chopsticks and chopstick foods, Spice of Life count, anvil plank repair), medley and wrapped chopsticks models at every serving count and facing
+@pass as roll_delight.md 8
+@fails translator blockstate rewrite (servings = 8 - upstream blockstate; chopsticks = upstream + 1)
+@draft no batch holds this row yet

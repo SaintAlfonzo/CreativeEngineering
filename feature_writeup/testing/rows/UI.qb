@@ -1,0 +1,90 @@
+# Scratch queue rows UI (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/UI.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title UI renames, names and Kettle bar, 2026-10-30
+@@date 2026-10-30
+@@text
+@@text | Entry | Tier | Steps | Pass | Fail meaning |
+@@text |---|---|---|---|---|
+## CQ-UI-01 | renamed items (hotbar name popup)
+@group client
+@commands JEI search each rename: Cheesy Fish Pasta (and canned, plated), Loaded Burger, Stackable Pancake, Bread with Jam, Coffee Pie and its slice, the three tobacco bundles
+@pass new names show; no old name left
+@fails a resource-pack zip beats the lang override
+@from batches/r1101/c1_client.qb
+> item replace entity @s hotbar.0 with brewinandchewin:cheesy_pasta
+> item replace entity @s hotbar.1 with vintagedelight:deluxe_burger
+> item replace entity @s hotbar.2 with supplementaries:pancake
+> item replace entity @s hotbar.3 with fruitsdelight:jelly_bread
+> item replace entity @s hotbar.4 with rusticdelight:coffee_cheesecake
+> item replace entity @s hotbar.5 with the_dirty_stuff:tobacco_package
+> item replace entity @s hotbar.6 with vintagedelight:cucumber_noodles
+> item replace entity @s hotbar.7 with veggiesdelight:sweet_potato_cupcake
+> item replace entity @s hotbar.8 with oceansdelight:elder_guardian_roll
+key 9
+key 1
+shot cheesy_fish_pasta
+key 2
+shot loaded_burger
+key 3
+shot stackable_pancake
+key 4
+shot bread_with_jam
+key 5
+shot coffee_pie
+key 6
+shot tobacco_bundle
+key 7
+shot veggie_noodles
+key 8
+shot sweet_potato_muffin
+key 9
+shot elder_guardian_roll
+look each shot shows the new name above the hotbar: Cheesy Fish Pasta, Loaded Burger, Stackable Pancake, Bread with Jam, Coffee Pie, a tobacco bundle, Veggie Noodles (green zucchini texture), Sweet Potato Muffin, Elder Guardian Roll. hand: JEI search for the canned and plated pasta, the Coffee Pie slice and the other two tobacco bundles
+
+## CQ-UI-02 | Ender's Delight and Veggies Delight crop blocks show names in WTHIT
+@group client
+@commands look at Amberveils, Ethereal Saffron, Chorusflame and Void Pepper Sprout with WTHIT, and Veggies Delight crop blocks (broccoli, cauliflower, garlic, sweet potato, turnip, zucchini); hover the Ender's Delight dishes
+@pass names, not keys
+@fails ops lang route does not reach the member keys
+@from batches/r1101/c1_client.qb
+> tp @s 0 -55 68 180 20
+sleep 3
+> fill 0 -60 60 20 -60 60 minecraft:air
+> setblock 0 -61 60 minecraft:farmland
+> setblock 0 -60 60 veggiesdelight:broccoli_crop
+> tp @s 0 -59 57 0 30
+shot broccoli
+> setblock 0 -60 60 veggiesdelight:cauliflower_crop
+shot cauliflower
+> setblock 0 -60 60 veggiesdelight:garlic_crop
+shot garlic
+> setblock 0 -60 60 veggiesdelight:sweet_potato_crop
+shot sweet_potato
+> setblock 0 -60 60 veggiesdelight:turnip_crop
+shot turnip
+> setblock 0 -60 60 veggiesdelight:zucchini_crop
+shot zucchini
+look WTHIT names, not translation keys, in each shot (an "Unknown block" chat error = crop id differs: read the id from the item_dict). hand: Amberveils, Ethereal Saffron, Chorusflame, Void Pepper Sprout the same way on end stone; hover the Ender's Delight dishes
+
+## CQ-UI-03 | ghost pepper planting tooltip
+@group client
+@commands ghost pepper tooltip
+@pass "Requires a soul soil and the heat of the nether to grow"
+@fails old soils line
+@from batches/r1101/c1_client.qb
+> item replace entity @s hotbar.0 with vintagedelight:ghost_pepper_seeds
+look hand: open the inventory, hover slot 1: "Requires a soul soil and the heat of the nether to grow"
+
+## CQ-UI-04 | Kettle fluid bar 3 px, centred (screen and JEI)
+@group client
+@commands needs the creativeDelight jar installed: open a Kettle with tea, the JEI Kettle page
+@pass bar is 3 px wide, centred in its old 5 px slot; hover tooltip matches
+@fails bar off-centre or tooltip gap
+@from batches/r1101/c1_client.qb
+> tp @s 3 -55 5 180 20
+sleep 3
+> setblock 3 -60 -3 farmersrespite:kettle
+look hand: put water and tea leaves in the Kettle, open it, screenshot with the bar at GUI scale 2; JEI Kettle page: bar 3 px wide centred in the old 5 px slot, tooltip hover matches

@@ -1,0 +1,155 @@
+# Scratch queue rows CDFW (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CDFW.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CDFW CD framework: juice keys, generators into CD, family rows, 2026-11-01 ([creative_delight.md](../creative_delight.md) 35; TODO `creativedelight/framework #4`, `#7`, `#12`)
+@@date 2026-11-01
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight.md
+@@text
+@@text Needs the Creative Delight jar built 2026-11-01 20:38 or later (cd_core genPut/genMerge, startup `<mod>/can_types.js` and `can_servings.js`, cans.js) and the pack's `kubejs/data/creativedelight/kubejs` tree: full restart. Group A (superflat). Offline already PASSED: CDT-08, CDT-10, CDT-13, CDT-14, FFH-03.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-CDFW-01 | CD framework counts at boot
+@group A
+@commands Boot; `grep -n "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log \| head -20`; `grep -n "Error occurred while handling event" logs/latest.log \| head`
+@pass `[cans] registered 276 generated cans`; `[food types] ... in 31 types`; `[placeable]` counts; `[can servings] 313 cans` (less any whose mod is absent); `[mortar] 6 of 6 catalog crafts`; no "no ... member scripts loaded" error
+@fails a member script did not load: check its `// requires:` mod id and that the jar loader honours `requires`; rerun `tools/test_gen_members.py`
+@from batches/r1102b/s3_A.qb
+bootexpect \[cans\] registered \d+ generated cans
+bootexpect \[food types\] \d+ foods in 31 types
+bootexpect \[placeable\]
+bootexpect \[can servings\] 31\d cans
+bootexpect \[mortar\] 6 of 6 catalog crafts
+bootreject (?i)no .* member scripts loaded
+shell grep -hn "\[cans\]\|\[food types\]\|\[placeable\]\|\[can servings\]\|\[mortar\]\|genPut\|genMerge" logs/kubejs/startup.log logs/kubejs/server.log | head -20; true
+look [can servings] is 313 less cans of absent mods (rows/SQ-CDFW-01.shell.txt); a different [cans] count after a later generator run is not a fail by itself
+
+## SQ-CDFW-02 | food type, canned source and servings tags unchanged
+@group A
+@commands `/dumptags item`; compare `creativeengineering:food_type/*`, `creativeengineering:canned_source`, `creativeengineering:cans/servings/*` sizes with `python3 tools/test_gen_members.py` (46 tags, 2724 entries)
+@pass same members as before the change (sizes equal to the last dump less items of absent mods)
+@fails genMerge lost a part: compare the merged data with the JSON records
+@from batches/r1102b/s3_A.qb
+> dumptags item
+waitlog \[dumptags\] wrote 600
+shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativeengineering:food_type creativeengineering:canned_source creativeengineering:cans/servings
+look sizes equal to the 10-30 instance dump except items of absent mods and the 11-01 additions (test_gen_members.py: 46 tags, 2724 entries offline)
+
+## SQ-CDFW-03 | placeable tags unchanged (tooltips: client)
+@group A
+@commands `/dumptags item` placeable tags; hover a Farmer's Delight pie and a Vinery wine bottle
+@pass `#creativeengineering:placeable`, `/sneak`, `_on_plate`, `_on_small_plate`, `_on_coaster` as before; tooltip lines shown
+@fails placeable member scripts or reader
+@from batches/r1102b/s3_A.qb
+shell python3 -I $INST/tools/scratch_query/dumpq.py tagdiff $INST/kubejs/exported creativeengineering:placeable
+look #creativeengineering:placeable, /sneak, _on_plate, _on_small_plate, _on_coaster as in the instance dump (reads SQ-CDFW-02's /dumptags)
+
+## SQ-CDFW-04 | mortar crafts (can servings tooltip: client)
+@group A
+@commands Recipe lookup: `creativedelight:shapeless/*` mortar crafts (create_wheat, create_sugar_cane, farmersdelight rice x2, cocoa powder, garlic clove); craft one canned food and one Canned Goods can, check the Servings line
+@pass 6 mortar crafts; cans craft, servings bar and tooltip as before
+@fails canning.js / can_tags.js reader
+@from batches/r1102b/s3_A.qb
+> zq rdetail creativedelight:shapeless/
+> zq recipes mortar
+look 6 mortar crafts (create wheat, create sugar cane, farmersdelight rice x2, cocoa powder, garlic clove) among the lines; crafting a can and the Servings line are client checks
+
+## SQ-CDFW-05 | baked durian, baked pear, dried persimmon: one recipe per cooker
+@group A
+@commands Recipe lookup for outputs Baked Durian, Baked Pear, Dried Persimmon
+@pass exactly one furnace, one smoker and one campfire recipe each, all `creativedelight:`, 0.35 xp, 200 / 100 / 600 ticks; no `fruitsdelight:*_smoking` / `*_campfire` left
+@fails the family removal does not match a tag input: add id removals or fix `_cook`'s filter
+@from batches/r1102b/s3_A.qb passed
+> zq makes fruitsdelight:baked_durian
+> zq makes fruitsdelight:baked_pear
+> zq makes fruitsdelight:dried_persimmon
+expect makes fruitsdelight:baked_durian: 3$
+expect makes fruitsdelight:baked_pear: 3$
+expect makes fruitsdelight:dried_persimmon: 3$
+reject \[zq\] fruitsdelight:\S*_(smoking|campfire)\S* ->
+count \[zq\] creativedelight:(smelting|smoking|campfirecooking)/\S+ -> 1 fruitsdelight:(baked_durian|baked_pear|dried_persimmon) == 9
+
+## SQ-CDFW-06 | cooked family: three recipes each, old mod ids gone
+@group A
+@commands Same lookup for Grilled Ghast, Cooked Rotten Ham, Fried Turtle Egg, Cooked Arthropod, Cooked Duck Fillet, Cooked Perch / Pike Slice, Roasted Acorn, Farmer's Delight Fried Egg
+@pass three recipes each, `creativedelight:`, 0.35 xp, 200 / 100 / 600; no `hostiledelight:cghast_*`, `cookrothamrecp*`, `fteggrecp*`, `miners_delight:cooked_arthropod`, `abnormals_delight:upgrade_aquatic/cooked_*_slice*`
+@fails family removal missed a mod recipe
+@from batches/r1102b/s3_A.qb
+> zq makes grilled_ghast
+> zq makes cooked_rotten_ham
+> zq makes fried_turtle_egg
+> zq makes miners_delight:cooked_arthropod
+> zq makes cooked_duck_fillet
+> zq makes cooked_perch_slice
+> zq makes cooked_pike_slice
+> zq makes roasted_acorn
+> zq makes farmersdelight:fried_egg
+reject \[zq\] hostiledelight:(cghast_|cookrothamrecp|fteggrecp)
+reject \[zq\] miners_delight:cooked_arthropod \S* ->
+reject \[zq\] abnormals_delight:upgrade_aquatic/cooked_\S*_slice
+look each item: three creativedelight: smelting / smoking / campfirecooking lines (0.35 xp, 200 / 100 / 600 ticks are in the recipe dump only)
+
+## SQ-CDFW-07 | knife cuts of catfish, salmon, cod, duck
+@group A
+@commands Cutting board with a knife: raw catfish, salmon, cod; `#forge:raw_duck` item
+@pass catfish 6 slices + bone meal; salmon / cod 6 + bone meal; Untitled Duck raw duck 2 fillets; a duck fillet has no cutting recipe (no fillet -> fillet loop, plan_scratch_bugfix_1103 2.1); no `alexsdelight:cutting/raw_catfish_slice`, `farmersdelight:cutting/salmon`, `/cod`
+@fails `_board` removal
+@from batches/r1102b/s3_A.qb
+> zq uses alexsmobs:raw_catfish
+> zq uses minecraft:salmon
+> zq uses minecraft:cod
+> zq itemtag forge:raw_duck
+reject alexsdelight:cutting/raw_catfish_slice
+reject farmersdelight:cutting/salmon$
+reject farmersdelight:cutting/cod$
+expect (alone|shared) creativedelight:farmersdelightcutting/\S*catfish
+expect (alone|shared) creativedelight:farmersdelightcutting/\S*salmon
+expect (alone|shared) creativedelight:farmersdelightcutting/\S*cod
+look yields (catfish 6 slices + bone meal, salmon / cod 6 + bone meal, duck 2 fillets) via `zq rdetail farmersdelightcutting/` if needed; the board run is not repeated here
+
+## SQ-CDFW-08 | golden gilding routes
+@group A
+@commands Craft a Golden Apple from 8 rose gold ingots + apple, and a Golden Carrot; recipe lookup `creativedelight:shaped/golden_apple`, `golden_carrot`, `createmixing/golden_*_gilding`, `iearcfurnace/golden_*_arc_gilding`, `createsequencedassembly/enchanted_golden_apple_sequenced_assembly`
+@pass both craft; no `minecraft:golden_apple` / `minecraft:golden_carrot` shaped recipe; mixer 6, arc 5, assembly 4 loops
+@fails goldenGild / goldenEnchant
+@from batches/r1102b/s3_A.qb
+> zq rdetail golden_apple
+> zq rdetail golden_carrot
+> zq rdetail enchanted_golden_apple_sequenced_assembly
+reject \[zq\] minecraft:golden_apple \{
+reject \[zq\] minecraft:golden_carrot \{
+expect \[zq\] creativedelight:shaped/golden_apple \{
+expect \[zq\] creativedelight:shaped/golden_carrot \{
+expect \[zq\] creativedelight:createmixing/golden_\S*_gilding \{
+expect \[zq\] creativedelight:iearcfurnace/golden_\S*_arc_gilding \{
+expect \[zq\] creativedelight:createsequencedassembly/enchanted_golden_apple_sequenced_assembly \{
+look the shaped ring accepts rose gold ingots (ring slot /+N); mixer 6, arc 5, assembly 4 loops are in the recipe dump only
+
+## SQ-CDFW-09 | Farmer's assemblies and heatless rows
+@group A
+@commands Recipe lookup: Farmer's assemblies (`barbecue_stick_`, `grilled_salmon_`, `bacon_and_eggs_`, `salmon_roll_`, `cod_roll_`, `kelp_roll_`, `rice_roll_medley_block_`, `roasted_mutton_chops_`, `shepherds_pie_block_`, `stuffed_potato_`, `steak_and_potatoes_`, `mutton_wrap_`, `fruit_salad_sequenced_assembly`); heatless `*_cooked_manual_only` of Farmer's, Fruits, Alex's, Abnormals, Delightful
+@pass all present with the old steps and loops (rolls make 3, fruit salad 2); heatless rows unchanged; `logs/kubejs/server.log` no "incomplete(... not registered"
+@fails incKey picked the wrong transition item key
+@from batches/r1102b/s3_A.qb
+> zq recipes barbecue_stick_
+> zq recipes grilled_salmon_
+> zq recipes bacon_and_eggs_
+> zq recipes salmon_roll_
+> zq recipes cod_roll_
+> zq recipes kelp_roll_
+> zq recipes rice_roll_medley_block_
+> zq recipes roasted_mutton_chops_
+> zq recipes shepherds_pie_block_
+> zq recipes stuffed_potato_
+> zq recipes steak_and_potatoes_
+> zq recipes mutton_wrap_
+> zq recipes fruit_salad_sequenced_assembly
+> zq recipes _cooked_manual_only
+count \[zq\] creativedelight:createsequencedassembly/(barbecue_stick|grilled_salmon|bacon_and_eggs|salmon_roll|cod_roll|kelp_roll|rice_roll_medley_block|roasted_mutton_chops|shepherds_pie_block|stuffed_potato|steak_and_potatoes|mutton_wrap|fruit_salad)_\S* -> >= 13
+expect createsequencedassembly/salmon_roll_\S* -> 3
+expect createsequencedassembly/fruit_salad_sequenced_assembly -> 2
+kjsreject incomplete\(.*not registered
+look heatless _cooked_manual_only of Farmer's, Fruits, Alex's, Abnormals, Delightful present (count line)

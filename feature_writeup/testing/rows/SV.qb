@@ -1,0 +1,24 @@
+# Scratch queue rows SV (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SV.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Server fixes, 2026-10-26 (TODO `server #3`, `server #6`)
+@@date 2026-10-26
+@@text
+@@text Needs patcherMod 1.1.03 built 2026-10-26 (in `mods/`). SQ-SV-02 needs a client connected to the scratch server.
+@@text
+@@text | ID | Group | Action | Expect | Depends on |
+@@text |---|---|---|---|---|
+## SQ-SV-01
+@group A
+@commands End: `/execute in minecraft:the_end run tp` an armor stand to 300016 100 300016 (ST-232); then a pearl onto Myalite at a spire viaduct
+@pass The tp takes milliseconds, no "ticks behind", no region file at the target; the viaduct warp still works
+@fails
+@draft no batch holds this row yet
+## SQ-SV-02
+@group client
+@commands Blow up a spot with Quark / Every Compat blocks and vanilla blocks (FX-47, FX-13)
+@pass Every change shows; no "Error executing task on Client"; `[debug.block_state_sync]` on: no unresolved id
+@fails
+@draft no batch holds this row yet

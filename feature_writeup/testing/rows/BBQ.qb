@@ -1,0 +1,191 @@
+# Scratch queue rows BBQ (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/BBQ.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-BBQ Barbeque's Delight port, 2026-11-01 ([barbeques_delight.md](../barbeques_delight.md) 4, 7; TODO `largecontent/mod-additions #37`)
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/barbeques_delight.md
+@@text
+@@text Needs the Creative Delight jar with the `backportedBarbeques` member (built 2026-11-01) and the patcherMod jar with the
+@@text `bbqSkewering` / `bbqGrilling` / `bbqCombine` emitters (same day), plus the pack's `item_dict.js`, `block_dict.js`,
+@@text `food_dict.js`, `food_types.json`: full restart. Group A (superflat). Client rows (BBQ-04 WTHIT, renderers, the flip
+@@text hint) are in the in-game suite, not here.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-BBQ-01 | Barbeque's Delight member loads, no recipe or compost warning
+@group A
+@commands Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|failed to parse\|missing" \| head`; `grep -n "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startup.log \| grep -i "warn\|error" \| head`
+@pass mod `barbequesdelight` loads from the CD jar (`creativedelight_members.txt`); no recipe parse errors; no NCH warning for the 26 recipes; no compost warning for the 24 rows
+@fails `CampfireRainInfo` missing (patcherMod old); an unknown item key in `recipes.js`
+@from batches/r1102b/s3_A.qb passed
+bootexpect \[creativedelight\] members: \[.*\bbarbequesdelight\b
+bootreject (?i)barbequesdelight.*(exception|failed to parse|missing)
+kjsreject (?i)(warn|error).*(barbequesdelight|bbqSkewering|bbqGrilling|bbqCombine)
+shell grep -hn "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startup.log | grep -i "warn\|error" | head; true
+
+## SQ-BBQ-02 | Barbeque's recipes: 26, all creativedelight ids
+@group A
+@commands Recipe lookup: types `barbequesdelight:skewering` (10), `barbequesdelight:grilling` (10), `barbequesdelight:combine` (3); ids `creativedelight:shaped/bbq_grill`, `creativedelight:stonecutting/bbq_basin_from_logs`, `bbq_tray_from_logs`
+@pass 26 recipes, all `creativedelight:` ids; none under `barbequesdelight:` (the port ships no recipe data); skewering inputs are the `forge:` tags of 3.1 (beef: 2 `#forge:raw_beef` + 2 `#forge:crops/cabbage`)
+@fails NCH emitters missing (patcherMod jar not rebuilt)
+@from batches/r1102b/s3_A.qb
+> zq rdetail creativedelight:skewering/
+> zq rdetail creativedelight:grilling/
+> zq rdetail creativedelight:combine/
+> zq recipes barbequesdelight:
+> zq rdetail bbq_grill
+> zq rdetail bbq_basin_from_logs
+> zq rdetail bbq_tray_from_logs
+count \[zq\] creativedelight:skewering/\S+ \{ == 10
+count \[zq\] creativedelight:grilling/\S+ \{ == 10
+count \[zq\] creativedelight:combine/\S+ \{ == 3
+expect recipes matching barbequesdelight:: 0$
+expect \[zq\] creativedelight:shaped/bbq_grill \{
+expect \[zq\] creativedelight:stonecutting/bbq_basin_from_logs \{
+expect \[zq\] creativedelight:stonecutting/bbq_tray_from_logs \{
+look skewering inputs are the forge: tags of barbeques_delight.md 3.1 (beef: 2 #forge:raw_beef + 2 #forge:crops/cabbage)
+
+## SQ-BBQ-03 | Barbeque's item and block tags
+@group A
+@commands `/dumptags` item and block: `barbequesdelight:raw_skewers`, `grilled_skewers`; block `creativecommon:campfire/rain_douses`, `blockrunner:surface/metal`, `blockrunner:surface/wood`, `minecraft:mineable/pickaxe`, `mineable/axe`; `creativeengineering:food_type/handheld`, `/meal`, `/hazard`
+@pass 10 + 10 skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
+@fails `tags.js` not loaded (`global.CD.on`)
+@from batches/r1102b/s3_A.qb
+bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
+> zq itemtag barbequesdelight:raw_skewers
+> zq itemtag barbequesdelight:grilled_skewers
+> zq blocktag creativeengineering:campfire/rain_douses
+> zq blocktag blockrunner:surface/metal
+> zq blocktag blockrunner:surface/wood
+> zq tagsof barbequesdelight:grill
+> zq tagsof barbequesdelight:basin
+> zq itemtag creativeengineering:food_type/handheld
+> zq itemtag creativeengineering:food_type/meal
+> zq itemtag creativeengineering:food_type/hazard
+> zq tagsof barbequesdelight:raw_beef_skewer
+expect itemtag barbequesdelight:raw_skewers \(10\)
+expect itemtag barbequesdelight:grilled_skewers \(10\)
+expect blocktag creativeengineering:campfire/rain_douses \(\d+\): .*minecraft:campfire
+expect blocktag creativeengineering:campfire/rain_douses \(\d+\): .*barbequesdelight:grill
+expect blocktag blockrunner:surface/metal \(\d+\): .*barbequesdelight:grill
+expect blocktag blockrunner:surface/wood \(\d+\): .*barbequesdelight:basin
+expect blocktag blockrunner:surface/wood \(\d+\): .*barbequesdelight:tray
+expect itemtag creativeengineering:food_type/handheld \(\d+\): .*barbequesdelight:kebab_wrap
+expect itemtag creativeengineering:food_type/handheld \(\d+\): .*barbequesdelight:kebab_sandwich
+expect itemtag creativeengineering:food_type/meal \(\d+\): .*barbequesdelight:bibimbap
+expect itemtag creativeengineering:food_type/hazard \(\d+\): .*barbequesdelight:burnt_skewer
+reject item tags of barbequesdelight:raw_beef_skewer: .*food_type
+look the 10 grilled skewers in handheld; the grill / basin / tray mineable tags as upstream (block tags lines)
+
+## SQ-BBQ-04 | Barbeque's compost rows
+@group A
+@commands Compost probe or `/dumpcompost`: the 24 items of 3.7; a seasoning, the grill, basin, tray
+@pass raw 25 %, cooked 50 %, burnt 25 %, wrap 50 %, sandwich 75 %, bibimbap 100 %; the seasonings and blocks have no row
+@fails CD startup `barbequesdelight/compost.js` not in the jar
+@from batches/r1102b/s3_A.qb
+> dumpcompost
+waitlog Dumped compost table 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py compost barbequesdelight:raw_beef_skewer=0.25 barbequesdelight:grilled_beef_skewer=0.5 barbequesdelight:burnt_skewer=0.25 barbequesdelight:kebab_wrap=0.5 barbequesdelight:kebab_sandwich=0.75 barbequesdelight:bibimbap=1 barbequesdelight:chili_powder=absent barbequesdelight:barbeque_sauce=absent barbequesdelight:grill=absent barbequesdelight:basin=absent barbequesdelight:tray=absent
+look the other 18 rows of barbeques_delight.md 3.7 by tier in kubejs/exported/compost/compost.json
+
+# ---------------------------------------------------------------- block and bot rows (lane z 500)
+
+## SQ-BBQ-05 | grill on a campfire: lights, goes out in rain on stone, stays lit on coal (212 stone, 216 coal block)
+@group A
+@commands Bot: place a grill on a placed campfire (`/setblock` campfire then use the grill item on it); `/data get block` / block state; `/setblock ~ ~-1 ~ minecraft:stone`, `/weather rain`, light it with flint and steel, wait 200 ticks; repeat on `minecraft:coal_block`
+@pass state `has_campfire=true,lit=false` on placing; lit by flint and steel (light 15); out in rain after `rainOutTicks` (160) on stone; still lit on the coal block; breaking drops the grill and a campfire
+@fails rain rule: grill not in `rain_douses`, or Creative Compat not filling CampfireRainInfo
+@from batches/r1102b/s3_A.qb
+> setblock 212 -61 500 minecraft:stone
+> setblock 216 -61 500 minecraft:coal_block
+> setblock 212 -60 500 minecraft:campfire[lit=false]
+> setblock 216 -60 500 minecraft:campfire[lit=false]
+> pbot spawn bbq5 214 -60 503 minecraft:overworld survival
+> pbot hold bbq5 barbequesdelight:grill
+> pbot use bbq5 212 -60 500 up
+> pbot hold bbq5 barbequesdelight:grill
+> pbot use bbq5 216 -60 500 up
+> execute if block 212 -60 500 barbequesdelight:grill[has_campfire=true,lit=false] run say BBQ05 grill on campfire 212
+> execute if block 216 -60 500 barbequesdelight:grill[has_campfire=true,lit=false] run say BBQ05 grill on campfire 216
+> pbot hold bbq5 minecraft:flint_and_steel
+> pbot use bbq5 212 -60 500 up
+> pbot hold bbq5 minecraft:flint_and_steel
+> pbot use bbq5 216 -60 500 up
+> execute if block 212 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 lit 212
+> execute if block 216 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 lit 216
+> weather rain 600
+sleep 15
+> execute if block 212 -60 500 barbequesdelight:grill[lit=false] run say BBQ05 out in rain on stone
+> execute if block 216 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 still lit on coal
+> weather clear 100000
+> zact break 212 -60 500 none
+expect BBQ05 grill on campfire 212
+expect BBQ05 grill on campfire 216
+expect BBQ05 lit 212
+expect BBQ05 lit 216
+expect BBQ05 out in rain on stone
+expect BBQ05 still lit on coal
+expect \[zact\] break 212 -60 500 barbequesdelight:grill held none: true, .*drops barbequesdelight:grill x1, minecraft:campfire x1
+> pbot remove bbq5
+look if the grill landed one block up (y -59) instead of replacing the campfire, the execute lines are silent: check `data get block` / zq count by hand; light level 15 is not probed
+
+## SQ-BBQ-06 | an unflipped skewer burns at 640 ticks, its entry stays still (grill at 220; the flip half needs sneak: s3_skip.md)
+@group A
+@commands Bot: grill on a lit campfire, put `raw_beef_skewer` on a slot (use on the top), wait 160 ticks, sneak-use empty hand, wait 160, take; second skewer left 640 ticks unflipped; `/data get block` on the grill during the burnt state twice, 20 ticks apart
+@pass flip allowed at 160; Cooked Beef Skewer at 320; the unflipped one becomes Burnt Skewer at 640; the burnt entry's Time keeps counting between reads (after the B1 fix) and no block update spam
+@fails tick order; entry time not saved
+@from batches/r1102b/s3_A.qb
+> setblock 220 -60 500 minecraft:campfire[lit=true]
+> pbot spawn bbq6 220 -60 503 minecraft:overworld survival
+> pbot hold bbq6 barbequesdelight:grill
+> pbot use bbq6 220 -60 500 up
+> pbot hold bbq6 minecraft:flint_and_steel
+> pbot use bbq6 220 -60 500 up
+> pbot hold bbq6 barbequesdelight:raw_beef_skewer
+> pbot use bbq6 220 -60 500 up
+> data get block 220 -60 500
+sleep 36
+> data get block 220 -60 500
+sleep 1
+> data get block 220 -60 500
+expect has the following block data: .*barbequesdelight:burnt_skewer
+> pbot remove bbq6
+look the two last reads (20 ticks apart) are the same burnt entry; no block-update spam lines
+
+## SQ-BBQ-07 | seasonings: sauce refused on a raw skewer, powder taken, sauce on a cutting board (grill 226, board 229)
+@group A
+@commands Bot: `/give` a `chili_powder` and a `barbeque_sauce`; raw beef skewer on the grill, right-click it with the sauce, then the powder; put a cooked beef skewer on an FD cutting board and right-click it with the sauce; then craft a cooked beef skewer with the chili powder in the grid (shapeless) and grill a raw one seasoned the same way
+@pass right-click seasoning does nothing on the grill or the cutting board (use retired, BBQ-28), seasonings stack to 64; the shapeless craft gives the "Chili Flavored" skewer and the grilled one keeps the prefix
+@fails shapeless season recipes missing (seasoning framework fold, barbeques_delight.md 4.5); member `GrillBlock` still handling the click
+@from batches/r1102b/s3_A.qb
+> setblock 226 -60 500 minecraft:campfire[lit=true]
+> pbot spawn bbq7 227 -60 503 minecraft:overworld survival
+> pbot hold bbq7 barbequesdelight:grill
+> pbot use bbq7 226 -60 500 up
+> pbot hold bbq7 barbequesdelight:raw_beef_skewer
+> pbot use bbq7 226 -60 500 up
+> pbot hold bbq7 barbequesdelight:barbeque_sauce
+> pbot use bbq7 226 -60 500 up
+> data get block 226 -60 500
+> pbot hold bbq7 barbequesdelight:chili_powder
+> pbot use bbq7 226 -60 500 up
+> data get block 226 -60 500
+> setblock 229 -60 500 farmersdelight:cutting_board
+> pbot hold bbq7 barbequesdelight:grilled_beef_skewer
+> pbot use bbq7 229 -60 500 up
+> pbot hold bbq7 barbequesdelight:barbeque_sauce
+> pbot use bbq7 229 -60 500 up
+> data get entity bbq7 SelectedItem
+> data get block 229 -60 500
+> pbot remove bbq7
+look sauce use on the raw skewer: no BBQSeasoning in the first grill read; chili powder: BBQSeasoning in the second; board: the cooked skewer gets the sauce, sauce Damage 1 (16 -> 15)
+
+## SQ-BBQ-08
+@group A
+@commands Bot: craft Kebab Wrap from bread, a seasoned cooked beef skewer and cabbage; `/data get entity @p SelectedItem`; eat it
+@pass result has `Skewers:[{id:"barbequesdelight:grilled_beef_skewer",...,tag:{BBQSeasoning:...}}]`; a stick returned to the grid; eating applies Nourishment chance and the skewer's Strength (BBQ-13)
+@fails combine serializer not registered
+@draft no batch holds this row yet

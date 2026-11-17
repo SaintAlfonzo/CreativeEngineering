@@ -1,0 +1,61 @@
+# Scratch queue rows RB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-RB2 Copper pot and pickling jar recycle, 2026-11-02 ([remainder_buffer.md](../remainder_buffer.md) 3.7, TODO `food/drinks #17`; in-game RB-15, RB-16)
+@@date 2026-11-02
+@@jars creativecommon creativedelight
+@@sources feature_writeup/remainder_buffer.md
+@@text
+@@text Target: `creativedelight-1.0.0.jar` built 2026-11-02 13:19 (members miners and vintage), not yet in `mods/`. Client rows
+@@text CQ-FO-60, CQ-FO-61 (seasoned icon corner, powdered sugar WTHIT name) are client only: [food.md](../food.md) FO-60, FO-61.
+@@text
+@@table
+## SQ-RB-21 | Copper Pot recycles a bowl-food ingredient's bowl into the container (1 meal)
+@group A
+@commands `/setblock` a lit campfire and `miners_delight:copper_pot` on it; `/data merge block` the pot's slots 0-3 with a bowl-served FD cooking recipe that takes a bowl-food ingredient (probe the recipe manager for a `farmersdelight:cooking` recipe whose ingredient has a bowl remainder and whose container is a bowl), container slot (5) empty; wait for one cook; `/data get block`. Repeat with 3 meals' inputs and 1 bowl in slot 5
+@pass First case: slot 6 holds the plated meal, slots 5 and 7 empty, no item entity near the pot. Second (rule of 2026-11-03, remainder_buffer.md 3.8): recycled bowls stack in slot 5 up to 64, slot 7 holds only non-bowl leftovers; every bowl accounted for (bowls before = slot 5 + slot 7 + meals plated)
+@fails `CopperPotBlockEntity.recycleRoom` / `storeOrThrowLeftover`; `getContainer()` empty because `mealContainerStack` was not set before the leftovers
+@from batches/r1102b/s5_R_A.qb
+> s5 potrecipe
+waitlog \[s5\] potrecipe: \d+ found 30
+capture S5PA \[s5\] potnbt1 \S+ (\{.*\})$
+capture S5PB \[s5\] potnbt3 \S+ (\{.*\})$
+capture S5PC \[s5\] potrecipe \S+ cook (\d+)
+> kill @e[type=minecraft:item]
+> setblock {S5H1+50} {S5H2} {S5H3+20} minecraft:campfire[lit=true]
+> setblock {S5H1+50} {S5H2+1} {S5H3+20} miners_delight:copper_pot
+> data merge block {S5H1+50} {S5H2+1} {S5H3+20} {S5PA}
+shell sleep $(( {S5PC} / 20 + 15 ))
+> data get block {S5H1+50} {S5H2+1} {S5H3+20}
+> zcount {S5H1+48} {S5H2} {S5H3+18} {S5H1+52} {S5H2+3} {S5H3+22}
+waitlog \[zcount\] entities 30
+expect has the following block data: .*\{(?=[^{}]*Slot: 6b?\b)[^{}]*\}.*miners_delight:copper_pot
+reject has the following block data: .*\{[^{}]*Slot: [57]b?\b[^{}]*\}.*miners_delight:copper_pot
+reject \[zcount\] entities .*item:
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the probe's recipe (potrecipe line) takes a bowl food; slot 6 holds the plated meal; no recipe found = row N/A, not a FAIL
+
+## SQ-RB-22 | Pickling Jar recycles a container ingredient's leftover into the container slot
+@group A
+@commands Place `vintagedelight:fermenting_jar`; probe for a fermenting recipe with a container ingredient whose input leaves that container; `/data merge block` ingredients for 3 batches and 1 container in slot 6; wait 3 x processing time; `/data get block`
+@pass 3 outputs in slot 7; slot 6 holds 1 container; slot 9 empty or holding only the extra leftovers; no item entity on the jar. No such recipe in the pack: note it, the row is N/A
+@fails `FermentingJarBlockEntity.recycleRoom` (container taken before the leftovers); `remaindersFit` stalls when slot 9 is full
+@from batches/r1102b/s5_R_A.qb
+> s5 jarrecipe
+waitlog \[s5\] jarrecipe: \d+ found 30
+capture S5JA \[s5\] jarnbt3 \S+ (\{.*\})$
+capture S5JT \[s5\] jarrecipe \S+ time (\d+)
+> kill @e[type=minecraft:item]
+> setblock {S5H1+54} {S5H2} {S5H3+20} vintagedelight:fermenting_jar
+> data merge block {S5H1+54} {S5H2} {S5H3+20} {S5JA}
+shell sleep $(( {S5JT} * 3 / 20 + 15 ))
+> data get block {S5H1+54} {S5H2} {S5H3+20}
+> zcount {S5H1+53} {S5H2} {S5H3+19} {S5H1+55} {S5H2+2} {S5H3+21}
+waitlog \[zcount\] entities 30
+expect has the following block data: .*\{(?=[^{}]*Slot: 7b?\b)(?=[^{}]*Count: 3b)[^{}]*\}
+expect has the following block data: .*\{(?=[^{}]*Slot: 6b?\b)(?=[^{}]*Count: 1b)[^{}]*\}
+reject \[zcount\] entities .*item:
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the jarrecipe line names a recipe whose ingredient leaves its container; slot 9 empty or holding only extra leftovers. 'jarrecipe: 0 found' (capture FAIL) = no such recipe in the pack: row N/A

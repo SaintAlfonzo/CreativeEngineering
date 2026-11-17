@@ -1,0 +1,40 @@
+# Scratch queue rows FDR (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/FDR.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-FDR Jar handle leak: Creative Common 1.2.0, 2026-11-14 ([jar_handle_leak.md](../jar_handle_leak.md), TODO `pack/server #39`)
+@@date 2026-11-14
+@@jars creativecommon
+@@sources feature_writeup/jar_handle_leak.md
+@@text
+@@text Client rows. Setup: `eval_client.py setup GAME` (hard-links the instance `mods/`, 421 jars on 2026-11-14), delete
+@@text `GAME/kubejs/server_scripts/zz_perfeval_drive.js`, launch with `eval_client.py launch GAME nodebuglog`. Grep `GAME/launch.out`
+@@text for `[jar handles]`. CQ-FDR-01 was run once by hand on 2026-11-14 (1091 -> 672, title screen, GLFW sockets at about
+@@text 235 to 250); the rows below are the regression set.
+@@text
+@@table
+## CQ-FDR-01
+@group client, instance mods (421 jars)
+@commands launch to the title screen; list `/proc/PID/fd` there
+@pass "Sound engine started"; `[jar handles] closed N stale mod jar filesystems (N zip files)` with N about the mod jar count and the open count dropping by about N; no socket or pipe numbered 1024 or higher
+@fails no `[jar handles]` line: FdReleaseMixin did not apply (grep latest.log); `layout check failed` or `unexpected securejarhandler layout`: securejarhandler changed, read section 2
+@draft no batch holds this row yet
+## CQ-FDR-02
+@group client, instance mods
+@commands Singleplayer, create or open a world, play 5 minutes (sounds, chat, JEI, one dimension change), F3+T once
+@pass no native crash; latest.log has no `ClosedFileSystemException` or `ClosedChannelException`; mod textures and lang present after F3+T
+@fails a ClosedFileSystemException names who still reads the discovery copy: exclude that jar in `StaleJarHandles`
+@draft no batch holds this row yet
+## CQ-FDR-03
+@group client, `FdReleaseMixin` disabled (mixin config toggle or an old Common jar), 421 jars
+@commands launch
+@pass dies in window creation (`stack smashing detected` or SIGSEGV in libglfw.so): proves the fix is what keeps it alive
+@fails reaches the title screen: the jar count fell below the limit, add jars until it dies
+@draft no batch holds this row yet
+## CQ-FDR-04
+@group dedicated scratch server, instance mods
+@commands boot to "Done", join with a client
+@pass no `[jar handles]` line on the server (client-only mixin); join works
+@fails n/a
+@draft no batch holds this row yet

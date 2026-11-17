@@ -1,0 +1,133 @@
+# Scratch queue rows POT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/POT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Flower potting audit, 2026-10-27 ([flower_pots.md](../flower_pots.md), TODO `blocks/framed-and-decor #6`)
+@@date 2026-10-27
+@@jars creativecommon
+@@sources feature_writeup/flower_pots.md
+@@text
+@@text Audit tooling only, no pack behaviour change; none of these blocks another feature. Target: the instance's
+@@text `kubejs/` as of 2026-10-27 (new `server_scripts/_lib/dump_flower_pots.js`) and the jars in `mods/`; no new jar.
+@@text Probe: copy `tools/flower_pot_test/pot_probe.js` into `srv/kubejs/server_scripts/zz_pot_probe.js` before boot.
+@@text Output lines `[pottest] PASS|FAIL|INFO <id> ...` in `logs/latest.log`; the probe runs one holder per few ticks, 30
+@@text plants per tick (about 370 plants x 12 holders, expect 1-3 minutes). After the run copy
+@@text `srv/kubejs/exported/blocks/flower_pots.json` and `pot_probe.json` into the instance's `kubejs/exported/blocks/`,
+@@text then `python3 tools/flower_pot_audit.py` (prints mismatches and exceptions; read the matrix's "Probe against
+@@text prediction" section).
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-POT-01
+@group A or B
+@commands `/dumppots`
+@pass `Dumped N potted blocks, M other pot-like blocks, P plants`; `fullPots` has `farmersrespite:wild_tea_bush`, the 5 `rusticdelight:wild_*`, `supplementaries:flax`, 35 `quark:` entries and no `vinery:` key (F2); `potLike` lists flower_box, hanging_flower_pot, planter(s), planter boxes, large_pot, vinery pot / box, silt pots, Handcrafted pots, framed pot; no `planter_rich_soul` (F4)
+@fails `getFullPotsView` hidden from Rhino: read the map with `Blocks.FLOWER_POT.fullPots` through reflection; empty `plants`: check `instanceof $BlockItem` in Rhino
+@draft no batch holds this row yet
+## SQ-POT-02
+@group A
+@commands `forceload add 290 290 350 310`, wait 5 s, `/pottest all`, wait for `PP-DONE`
+@pass `PASS PP-01` (vanilla pot = map), `PASS PP-02` for the framed and hanging pots; `PP-SUM` lines give per-holder counts close to [flower_pots.md](../flower_pots.md) 1
+@fails PP-01 FAIL naming a plant: a potted block whose plant item differs from the block (record it in POTTED_ITEM in `tools/flower_pot_audit.py`); hanging pot all refused: the probe clicks its north face, try `up` from below; `holder did not place`: the spec's state props (flower box `floor`, AF `facing`)
+@draft no batch holds this row yet
+## SQ-POT-03 | /pottest all: no exception except the Another Furniture planter box (F1)
+@group same run (probe copied fresh from `tools/flower_pot_test/pot_probe.js`)
+@commands grep `PP-03`; for any FAIL read the `stack` field of that row in `kubejs/exported/blocks/pot_probe.json`
+@pass `PASS PP-03` for every holder, 0 `minecraft:hanging_roots` exceptions (Immersive Weathering wall roots no longer get `facing=up`: hanging roots against the top of a holder do nothing); planter box and fungi caps pass (F1 struck)
+@fails `Cannot set property ... facing ... to up` again: `WallRootsVerticalFaceMixin` (CD `mixin/immersive_weathering`) not applied, check the boot log for the CD mixin config; another exception: its frames are in `stack`
+@from batches/r1102b/s3_A.qb
+> dumppots
+waitlog Dumped \d+ potted blocks 300
+> pottest all
+waitlog \[pottest\] INFO PP-DONE 900
+count \[pottest\] FAIL PP-03: == 1
+expect \[pottest\] FAIL PP-03: another_furniture:oak_planter_box .*ClassCastException
+expect \[pottest\] FAIL PP-03: another_furniture:oak_planter_box .*fungidelight:cleaned_cap
+look the server is still running after the planter box (the next row answers); the four Fungi ids named
+
+## SQ-POT-04 | accepted plants come back when the holder breaks
+@group same run
+@commands grep `PP-04`
+@pass `PASS PP-04` for every `pot` holder: an accepted plant comes back when the holder breaks; `beautify:hanging_pot` rows carry `toggle: true` (the second click takes the plant back, the probe replants once) and drop the pot plus the plant
+@fails `beautify:hanging_pot` drops only the pot without `toggle`: old probe copied (r1103 broke an empty pot after plant, take back, plant, take back); another holder eating the plant: new finding in flower_pots.md 3
+@from batches/r1102b/s3_A.qb
+> pottest all
+waitlog \[pottest\] INFO PP-DONE 900
+count \[pottest\] FAIL PP-04: == 0
+count \[pottest\] PASS PP-04: >= 1
+
+## SQ-POT-04v | hand check: vanilla flower pot with Gossypium and IE hemp seed gives the plant back on a survival break
+@group A
+@commands Survival: place a flower pot, plant `miners_delight:gossypium`, break it by hand; same with `immersiveengineering:seed` (makes `immersiveengineering:potted_hemp`); also one explosion (`/summon tnt`) next to a third potted one
+@pass Each break drops `minecraft:flower_pot` plus the plant (gossypium, or the IE hemp seed); the explosion drops what survives it, not air
+@fails Nothing drops: the pack tables `kubejs/data/miners_delight/loot_tables/blocks/potted_gossypium.json` / `kubejs/data/immersiveengineering/loot_tables/blocks/potted_hemp.json` not loaded (`/reload`, check for a datapack error)
+@from batches/r1102b/r_A.qb
+> setblock 290 -60 500 minecraft:flower_pot
+> setblock 292 -60 500 minecraft:flower_pot
+> pbot spawn pot4 291 -60 504 minecraft:overworld survival
+sleep 2
+> clear pot4
+> pbot hold pot4 miners_delight:gossypium
+> pbot use pot4 290 -60 500 up
+> pbot hold pot4 immersiveengineering:seed
+> pbot use pot4 292 -60 500 up
+> pbot remove pot4
+> zcount 290 -60 500 292 -60 500
+waitlog \[zcount\] entities 30
+> zact break 290 -60 500 none
+> zact break 292 -60 500 none
+look zcount: does each pot hold the plant (a potted_* id) or stay minecraft:flower_pot (refused, then nothing to lose)? A held plant must come back in the zact drops (flower_pot x1 plus the plant); flower_pot x1 alone on a filled pot = item loss
+
+## SQ-POT-05
+@group same run
+@commands `python3 tools/flower_pot_audit.py` after copying both files back
+@pass Planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, red mushroom `Y` (survive on the planter); silt pot column = the `FlowerBlock` plants; "Probe against prediction" lists only explainable rows (Supplementaries special models, Floral doubles)
+@fails a planter refusing crops: `SelfPlanterMixin` not applied (grep `supplementaries` mixin warnings)
+@draft no batch holds this row yet
+@@text
+@@text Run 1 (2026-10-27, pe3) FAIL (setup): `/dumppots` used `java.lang.Class` (class filter); fixed the same day, rerun
+@@text needed. The rest of the dump had not run live yet.
+@@text
+@@text Client checks (no scratch server): **CQ-POT-01** Vinery pot with `farmersdelight:wild_rice` and a Botania double
+@@text flower, flower box with a sunflower, Floral large pot with a lilac: both halves drawn, no render crash, note how much
+@@text the Floral pot blocks the view (F8, F9).
+@@text
+@@text **SQ-POT-06** (patcherMod 1.1.04 built 2026-10-29, copy into the scratch `mods/`; [flower_pots.md](../flower_pots.md) 3.1):
+@@text boot, grep latest.log for `BotanistWorkbenchPotMixin` / `StructureTemplateBotanistPotMixin` warnings; then
+@@text `/place structure beautify:botanist_house_plains ~ ~ ~` (and `_desert`), find the workbench and
+@@text `/data get block <pos>` → `Plant: "minecraft:<flower>"` with a vanilla flower (no wither rose), different ones across
+@@text a few placements; `/setblock <pos2> beautify:botanist_workbench` then `/data get block <pos2>` → no `Plant`. If it fails: no
+@@text NBT at all = the mixin did not apply (Beautify class name, `@Pseudo`); `Plant` missing on placed houses only = the
+@@text pool places the bench through another path (check `processBlockInfos` callers).
+@@text
+@@text Client check **CQ-POT-02**: test POT-08 in [flower_pots.md](../flower_pots.md) 7 (render, facing, tint, F3+T).
+@@text
+@@text **SQ-POT-07** (patcherMod 1.1.04 built 2026-10-31 with the Flower Test preset; [flower_pots.md](../flower_pots.md) 5):
+@@text in the scratch `server.properties` set `level-type=creativeengineering\:flower_test` and a fresh `level-name`; boot;
+@@text grep `[flowerworld]` in latest.log → `Flower Test world without a table: building`, then one `holder ... of N` line per
+@@text holder, `rows N (...)`, `DONE`; no `Error occurred while handling event` naming `flower_world.js`. Restart → no
+@@text `building` line. Probe: `/data get block 2 -60 -2` is a sign; `execute if block 6 -59 0 supplementaries:hanging_flower_pot`
+@@text and `if block 6 -60 0 minecraft:air` (hanging pot one up); no block at x > 26 in the table area (12 holders); no
+@@text `handcrafted:` or `floralench:` block and no melon / pumpkin / moss block in the table; no `fill click did not take`
+@@text line (if there is one, the silt pots were forced filled: record it, Twigs' fill click needs another face or hand);
+@@text `execute if block 20 -60 0 twigs:silt_pot[filled=true]` (silt pot column, 10th holder, x = 2 x 10). If it fails: no
+@@text `building` line = layer signature (`isPresetWorld`; log the generator class and layers), `settings()` / `getLayersInfo()`
+@@text not resolved by Rhino; `holder did not place` for a hanging holder = glass at y+2 not under it.
+@@text
+@@text **SQ-POT-08** (patcherMod 1.1.04 and backportedVinery `-07` built 2026-10-31; [flower_pots.md](../flower_pots.md) 3.2):
+@@text boot; grep latest.log: the four mixins `FramedFlowerPotUnframedMixin`, `SuppFlowerBoxPlantsMixin`, `SiltPotSoilMixin`
+@@text applied (and `AnotherFurniturePlanterRenderMixin` on a client), no `Failed to load model` for
+@@text `creativeengineering:block/flower_box/*` or `vinery:block/flower_box_centered`, no blockstate error for
+@@text `vinery:flower_box`. Tags: `#creativeengineering:flower_box_plants` has `minecraft:cactus`, `minecraft:glow_berries`,
+@@text `minecraft:poppy` and not `minecraft:azalea`; `#another_furniture:planter_box_banned` has azalea. A survival fake player
+@@text (like `/flowerworld`'s) clicks: an unframed `framedblocks:framed_flower_pot` with a poppy → BE `flower` = poppy;
+@@text `supplementaries:flower_box` with azalea → empty, with glow berries / glow lichen → filled; an oak planter box with
+@@text cactus, nether wart, glow lichen → filled, with azalea → empty; `vinery:flower_box` with cactus → filled; a
+@@text `vinery:flower_pot` with wheat seeds and an oak sapling → filled; a `twigs:silt_pot[filled=true]` → wheat seeds and
+@@text sugar cane plant on top; `beautify:botanist_workbench` with glow lichen → `Plant: "minecraft:glow_lichen"`. Recipe
+@@text manager: `beautify:hanging_pot` gone, one shaped recipe for it with `farmersdelight:rich_soil`. If it fails: a mixin
+@@text "target not found" = class or SRG name changed (FramedBlocks 6.8.6, Supplementaries 2.4.20); tags empty = KubeJS did
+@@text not expand the nested AF tag in `addMatching` (list members instead).
+@@text
+@@text Results 2026-10-27 evening run (Run log): SQ-POT-01 PASS after two dump fixes (121 potted, 101 pot-like, 543 plants); SQ-POT-02 to -04 ran, audit regenerated `flower_pots_matrix.md` (427 probe mismatches, 6 probe exceptions): framed pot 5 and Supplementaries hanging pot 0 accepted (probe face, see "If it fails"), `minecraft:hanging_roots` throws `Cannot set property DirectionProperty` in 6 holders, the expected F1 `ClassCastException` on the planter box did not show. For the flower-pot owner to read; SQ-POT-05 analysis not done.

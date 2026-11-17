@@ -1,0 +1,162 @@
+# Scratch queue rows FDI (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/FDI.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-FDI Food Dictionary and Diet Tracker, 2026-11-10 ([food_dictionary.md](../food_dictionary.md); TODO `food/types-and-tuning #16`)
+@@date 2026-11-10
+@@sources feature_writeup/food_dictionary.md
+@@text
+@@table
+## SQ-FDI-01 | Carrot Edition loads, no parse error, Food Dictionary item
+@group A
+@commands After the jar is in `mods/`: boot; `grep -n "solcarrot\|Failed to parse" logs/latest.log`; `/give @s solcarrot:food_book`
+@pass mod loads, no parse errors; item named Food Dictionary
+@fails check `defaultconfigs/solcarrot-server.toml` parses (milestones list)
+@from batches/r1113/c4_a.qb
+bootexpect Done \(
+bootreject (?i)Failed to parse.*solcarrot|solcarrot.*(exception|could not)
+shell grep -nE "solcarrot|Failed to parse" logs/latest.log | cut -c1-250 | head -20; ls mods | grep -i carrot
+> zq item solcarrot:food_book
+waitlog \[zq\] done 30
+expect \[zq\] item solcarrot:food_book: class
+look item name "Food Dictionary" is a lang check (client); here: the item exists and the mod loaded without errors
+
+## SQ-FDI-02 | which of the 20 foods fdj ate (c4_ar) did not count (carrot=19 applepie=19)
+@group A
+@commands Eat 20 different foods, `/attribute @s minecraft:generic.max_health get`
+@pass 20.0 (no Carrot hearts)
+@fails `heartsPerMilestone` not read from the world's serverconfig copy: edit `saves/<world>/serverconfig/solcarrot-server.toml`
+@from batches/r1113/c4_ar2.qb
+> pbot spawn fdj 40600.5 -60 40010.5 minecraft:overworld survival
+sleep 3
+> zc4 sol fdj minecraft:apple
+> zc4 sol fdj minecraft:bread
+> zc4 sol fdj minecraft:cooked_beef
+> zc4 sol fdj minecraft:baked_potato
+> zc4 sol fdj minecraft:carrot
+> zc4 sol fdj minecraft:cooked_chicken
+> zc4 sol fdj minecraft:cooked_porkchop
+> zc4 sol fdj minecraft:cooked_mutton
+> zc4 sol fdj minecraft:cooked_cod
+> zc4 sol fdj minecraft:cooked_salmon
+> zc4 sol fdj minecraft:cookie
+> zc4 sol fdj minecraft:melon_slice
+> zc4 sol fdj minecraft:pumpkin_pie
+> zc4 sol fdj minecraft:mushroom_stew
+> zc4 sol fdj minecraft:beetroot
+> zc4 sol fdj minecraft:sweet_berries
+> zc4 sol fdj minecraft:rabbit_stew
+> zc4 sol fdj minecraft:dried_kelp
+> zc4 sol fdj minecraft:golden_carrot
+> zc4 sol fdj minecraft:potato
+waitlog \[zc4\] sol fdj .*maxhealth 20
+> pbot remove fdj
+count \[zc4\] sol fdj .*carrotHas=true >= 19
+look the one line with carrotHas=false (and applepieHas=false) names the food neither book counted; check that item for a food blacklist or a non-food override in the pack before calling it a bug. Max health 22 is Spice of Life: Raspberry Pie's health rung at 5 diet foods (ladder.json), not Carrot hearts
+
+## SQ-FDI-03 | rerun: vanilla cake bitten 3 times (Supplementaries directional cakes on): every bite counts cake_slice in both books
+@group A
+@commands Creative Delight jar of 2026-11-10 23:24 and the Carrot jar installed. Survival: bite a placed Farmer's Delight pie, a vanilla cake, a vanilla candle cake and a Creative Delight cake; open the Food Dictionary (FDI-06). Also cut a pie with a knife (FDI-07)
+@pass each slice item (vanilla cake: Cake Slice) moves to Already Tasted; Diet Tracker records each once (vanilla cake not twice); the knife cut unlocks nothing until the slice is eaten
+@fails `PlacedFoodSol$CarrotBridge` missing from the jar (stale jar) or `isLoaded("solcarrot")` false
+@from batches/r1115/p4_a1.qb
+> forceload add 40590 39990 40620 40020
+sleep 3
+> fill 40595 -60 39995 40615 -55 40015 minecraft:air
+> setblock 40612 -60 40000 minecraft:cake
+> pbot spawn fd4 40613.5 -60 40002.5 minecraft:overworld survival
+sleep 3
+> clear fd4
+> pbot hold fd4 minecraft:air
+> zc4 sol fd4 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fd4 4
+> pbot use fd4 40612 -60 40000 up
+sleep 1
+> zc2 state 40612 -60 40000
+> zc4 sol fd4 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fd4 4
+> pbot use fd4 40612 -60 40000 up
+sleep 1
+> zc2 state 40612 -60 40000
+> zc4 sol fd4 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fd4 4
+> pbot use fd4 40612 -60 40000 up
+sleep 1
+> zc2 state 40612 -60 40000
+> zc4 sol fd4 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 sol fd4 minecraft:cake
+waitlog \[zc4\] done 20
+> pbot remove fd4
+look before: carrotHas=false; after bite 1 carrotHas=true applepieHas=true; applepieEntries +1 per bite (3 total); state supplementaries:directional_cake after bite 1 (bites 1, 2, 3); minecraft:cake applepieHas=false
+
+## SQ-FDI-04 | (rerun, probe describe fixed) eat out of each lunchbox tier: the food is tasted in both books, the lunchbox is not; one queue entry per bite
+@group A
+@commands Eat food from each lunchbox tier (lunchbag, lunchbox, golden, netherite), check both books (FDI-09)
+@pass food tasted, lunchbox not; Diet Tracker queue gets one entry per bite
+@fails add a lunchbox Finish handler calling the `PlacedFoodSol` bridges (food_dictionary.md P3 fallback)
+@from batches/r1115/p9_a1r.qb
+> pbot spawn fd5 18 -60 1000 minecraft:overworld survival
+sleep 3
+> clear fd5
+> zc4 sol fd5
+waitlog \[zc4\] sol fd5 20
+> zc4 hunger fd5 2
+> zp9 lbfill fd5 solapplepie:lunchbag minecraft:cooked_beef 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:cooked_beef
+waitlog \[zc4\] sol fd5 20
+> zc4 sol fd5 solapplepie:lunchbag
+waitlog \[zc4\] sol fd5 20
+> zc4 hunger fd5 2
+> zp9 lbfill fd5 solapplepie:lunchbox minecraft:baked_potato 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:baked_potato
+waitlog \[zc4\] sol fd5 20
+> zc4 sol fd5 solapplepie:lunchbox
+waitlog \[zc4\] sol fd5 20
+> zc4 hunger fd5 2
+> zp9 lbfill fd5 solapplepie:golden_lunchbox minecraft:cookie 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:cookie
+waitlog \[zc4\] sol fd5 20
+> zc4 sol fd5 solapplepie:golden_lunchbox
+waitlog \[zc4\] sol fd5 20
+> zc4 hunger fd5 2
+> zp9 lbfill fd5 creativedelight:netherite_lunchbox minecraft:pumpkin_pie 2
+waitlog \[zp9\] done 20
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:pumpkin_pie
+waitlog \[zc4\] sol fd5 20
+> zc4 sol fd5 creativedelight:netherite_lunchbox
+waitlog \[zc4\] sol fd5 20
+# a second bite of the same food: the queue grows by one, the tasted count does not
+> zc4 hunger fd5 2
+> zp9 heldeat fd5
+waitlog \[zp9\] done 20
+> zc4 sol fd5 minecraft:pumpkin_pie
+waitlog \[zc4\] sol fd5 20
+count \[zp9\] heldeat fd5 \S+lunch\S+ -> .* food= >= 5
+count carrotHas=true applepieHas=true >= 4
+reject \[zp9\] error|\[zc4\] .*error
+look per box: the food line carrotHas=true applepieHas=true, the lunchbox line carrotHas=false applepieHas=false; carrot and applepie counts +1 per new food; applepieEntries +1 per bite (also the repeated pumpkin pie bite)
+
+## SQ-FDI-05 | lunchbox blacklist in the new world's server configs (static half)
+@group A
+@commands Blacklist is set in `defaultconfigs/` (new worlds) and the three worlds' Apple Pie copies; check `saves/<world>/serverconfig/solcarrot-server.toml` has it too. Put each food kind into a lunchbox; open both books; hover a lunchbox (FDI-08, FDI-10)
+@pass no lunchbox listed in the Food Dictionary; lunchbox still accepts foods; lunchbox tooltip says it does not contribute to food diversity
+@fails blacklist hits the container slots: drop it and filter the book list instead
+@from batches/r1113/c4_a.qb
+shell for f in r1113c4a/serverconfig/solcarrot-server.toml r1113c4a/serverconfig/solapplepie-server.toml; do echo "== $f"; grep -n "blacklist" "$f" | cut -c1-300; done
+look both files list solapplepie:lunchbox, lunchbag, golden_lunchbox and creativedelight:netherite_lunchbox; book listing and the lunchbox tooltip are client (CQ)

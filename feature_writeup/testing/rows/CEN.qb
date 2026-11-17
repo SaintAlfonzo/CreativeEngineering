@@ -1,0 +1,110 @@
+# Scratch queue rows CEN (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CEN.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CEN Creative Engineering carve and the creativecommon swap, 2026-11-04 ([creative_engineering.md](../creative_engineering.md) 5, [creative_split.md](../creative_split.md) 7.13, TODO `creativesplit/engineering #10`)
+@@date 2026-11-04
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/creative_engineering.md feature_writeup/creative_split.md
+@@text
+@@text Not run. Built 2026-11-04, NOT installed. Targets `creativecommon-1.0.0.jar` (replaces `creativeengineering-1.1.09.jar`),
+@@text `creativeengineering-2.0.0.jar` (new) and every Creative jar rebuilt against them (Compat, Calendar, Devtools, Delight,
+@@text Brewing, Worldgen, Magic, Equipment: each now requires `creativecommon`). The 1.1.09 jars can no longer be rebuilt from the
+@@text tree, so SQ-CMG and SQ-CEQ run on these jars too: read their `creativeengineering-common.toml` checks as "the carried
+@@text tables are not in the Common or Engineering file". One save carried across: boot 1 on the jars in `mods/` today (1.1.09,
+@@text Magic, Equipment); in the world: an IE sawmill with a precision sawblade cutting logs, a chest with a wooden water bucket,
+@@text creosote-soaked sawdust and a precision sawblade, a dragon head facing away from an encased fan, a framed block with camo,
+@@text an asphalt path; before boot 1 set `[shrapnel] count = 12`, `[surface.wthit] format = "PERCENT"`, `[toasts]` or `[jei]` one
+@@text non-default value, and make sure `creativeengineering-swaps.toml` exists; `/save-all`; boot 2 on the new jars with no
+@@text `creativecommon-common.toml`. Recipe and registry dumps from both boots (`/dumpall`) for the diffs.
+@@text
+@@table
+## SQ-CEN-01 | Common 1.1.0 and Engineering 2.0.0 load; every jar finds creativecommon; mixins apply
+@group A
+@commands Boot 2: mod list; `grep -E "creativecommon.mixins.json\|creativeengineering.mixins.json\|in both module\|split package" logs/latest.log`; `grep -c "from creativecommon.mixins.json" logs/debug.log`, same for `creativeengineering`
+@pass Server boots; `creativecommon` 1.0.0 and `creativeengineering` 2.0.0 in the list, no other jar missing its `creativecommon` dependency; Common's 74 and Engineering's 29 mixins apply (gated ones with their mod), no apply error
+@fails a jar still requires `creativeengineering [1.1.09,)`; package overlap between two jars; a gate id wrong (`EngineeringMixinPlugin`)
+@from batches/r1113/c2_a1.qb
+bootreject Missing or unsupported mandatory dependencies
+bootreject (creativecommon|creativeengineering)\.mixins\.json.*(rror|ailed|could not)
+bootreject in both module|split package
+shell grep -oE "creative[a-z]+-[0-9.]+\.jar" logs/latest.log | sort -u | tr '\n' ' '; echo; grep -cE "from (mixins\.)?creativecommon\.mixins\.json" logs/debug.log; grep -cE "from (mixins\.)?creativeengineering\.mixins\.json" logs/debug.log
+look jar list has creativecommon-1.1.0 and creativeengineering-2.0.0 (row said 1.0.0: Common is 1.1.0 since 11-06); mixing counts: Common up to 46 common mixins, Engineering up to 17 (row's 74 / 29 predate later moves out); no apply error
+
+## SQ-CEN-02 | Common's tables and the swaps file carried; interface tables reach Compat; values kept
+@group A
+@commands Same boot: read `config/creativecommon-common.toml`, `creativeengineering-common.toml`, `creativecommon-swaps.toml`; restart, read again
+@pass Log `[swaps] config sections ... carried over` into `creativecommon-common.toml`; the edited `[toasts]`/`[jei]` value is there; `creativeengineering-swaps.toml` renamed to `creativecommon-swaps.toml`; after the restart the CE file holds only `[shrapnel]` (count 12), `[surface]` (format PERCENT) and `[vein_undo]`
+@fails `CommonConfig.SECTIONS` incomplete; carry ran after Forge read the file
+@from batches/r1113/c2_l1.qb
+bootexpect \[swaps\] config sections \[changelog, damage_tags, perf, wandering_trader, advancements, mod_names\] carried over from creativeengineering-common.toml to creativecommon-common.toml
+bootexpect \[swaps\] config creativeengineering-swaps.toml carried over to creativecommon-swaps.toml
+bootexpect \[swaps\] config sections \[leaf_piles, moss, vine_shearing, monster_box, trash_slot\] carried over from creativeengineering-common.toml to creativecompat-common.toml
+bootexpect \[swaps\] config sections \[shrapnel, surface, vein_undo\] merged from creativeengineering-common.toml into creativecompat-common.toml
+bootexpect \[swaps\] config sections \[jei, gui_title, toasts, tooltips, coaster, wthit\] merged from creativeengineering-common.toml into creativecompat-common.toml
+shell ls config | grep -E "^creative"; grep -nE "^\s*count *=" config/creativecompat-common.toml | head -2; grep -nE "^\s*format *=" config/creativecompat-common.toml | head -3; grep -nE "^\s*tutorial *=" config/creativecompat-common.toml
+look counts: shrapnel count = 12, [surface.wthit] format = "PERCENT", [toasts] tutorial = true in Compat's file; creativecommon-swaps.toml exists. Superseded parts of the row text: [toasts]/[jei] and [shrapnel]/[surface]/[vein_undo] now end in creativecompat-common.toml (moved 11-06 / 11-07), not in Common's or Engineering's file; Engineering 2.0.0 has no config of its own
+
+## SQ-CEN-03 | startup packs: creativecommon first, then the pack folder, then the jars; no global.CEN missing
+@group A
+@commands Same boot: `grep -E "startup script packs in order\|global.CEN missing\|in any registered config" logs/kubejs/startup.log logs/kubejs/server.log`; registry dump diff (items, blocks) boot 1 vs boot 2
+@pass Packs: `creativecommon` first, then the pack folder, then the jars (`creativeengineering` among them); no `global.CEN missing`, no NCH.cfg section miss; same item and block ids (components, coils, plates, dust piles, misc parts, wood pellets, amethyst dust and lens, every transition item)
+@fails `HELPERS_MOD_ID` not `creativecommon` (helpers load late, every jar script fails); Engineering startup pack not in the jar
+@from batches/r1113/c2_a1.qb
+shell grep -nE "startup script packs in order|global\.CEN missing|in any registered config" logs/kubejs/startup.log logs/kubejs/server.log | head -10 | cut -c1-300
+> zc2 reg item ^creativeengineering:
+> zc2 reg block ^creativeengineering:
+waitlog reg block 20
+shell python3 -c "import json;print('exported creativeengineering items', len(json.load(open('$INST/kubejs/exported/items_by_mod/creativeengineering.json'))['items']))"
+kjsreject global\.CEN missing
+look packs order creativecommon, then the pack folder, then the jars with creativeengineering among them; live item count equals the exported (11-10) count (the row's boot-1 diff against 1.1.09 is not possible: no 1.1.09 jar left; this compares with the last dump instead)
+
+## SQ-CEN-04 | sawmill recipe ids unchanged; no purged-wood outputs
+@group A
+@commands Recipe dump diff boot 1 vs boot 2: ids under `creativeengineering:`, count of `creativeengineering:sawmill/` recipes; JEI-free check that no recipe outputs a removed wood item (`global.removedWoods` outputs)
+@pass Same recipe ids and count (moved scripts keep NCH's default namespace); 211 jar sawmill recipes plus the pack's 5; no purged-wood output and no duplicate oak-twin recipes
+@fails an Engineering script failed (server.log); `removed_woods.js` order vs `item_merges.js`
+@from batches/r1113/c2_a1.qb
+> zq recipes creativeengineering:sawmill/
+waitlog recipes matching creativeengineering:sawmill/ 30
+expect recipes matching creativeengineering:sawmill/: 216
+shell grep -cE "^creativeengineering:sawmill/" $INST/kubejs/exported/recipes/all.csv
+look 216 = 211 jar + 5 pack (and = the 11-10 dump count from the shell line); removed-wood output check: no shown line outputs a removed wood item (global.removedWoods; judge only the first 80 shown)
+
+## SQ-CEN-05
+@group A
+@commands Same save: `/data get block` the chest; `/summon minecraft:tnt ~ ~ ~ {Fuse:1}` near the bot, then `/execute if entity @e[type=creativeengineering:shrapnel]` count over 5 ticks
+@pass Wooden water bucket, sawblade and sawdust keep their ids and NBT; 12 shrapnel pieces per TNT
+@fails Engineering registries not created (`CreativeEngineering` constructor); config not read
+@draft no batch holds this row yet
+## SQ-CEN-06
+@group A
+@commands Same save: an item on the belt under the dragon-head fan (dragon breathing recipe); the sawmill cutting a log; `grep -iE "FluidBridge\|liquid xp\|dragon_breathing" logs/latest.log`
+@pass Fan output as before; sawmill gives the routed sawdust with the precision blade; the XP bridge startup line names the CEI fluid; dragon breathing type registered once
+@fails fan type not registered (`DragonBreathingFanProcessingType::register` in Engineering setup); sawmill classes not pre-loaded (crash on first sawmill tick)
+@draft no batch holds this row yet
+## SQ-CEN-07
+@group A
+@commands Bot vein mines a small ore vein (Ore Excavation), `/undo_excavation`; then vein mine dirt, undo twice quickly
+@pass Ore undo refused (`vein_undo_denied`); dirt undo works, the second inside the 5 s cooldown refused
+@fails Ore Excavation mixins gated off (`oreexcavation` id)
+@draft no batch holds this row yet
+## SQ-CEN-08 | Creative Brewing armor effects read Common's config; mount effects tick
+@group A
+@commands Same boot: Creative Brewing armor effects and CD JEI flags read Common's config: `grep -E "ArmorFx\|mountEffectInterval\|CommonConfig" logs/kubejs/server.log`; a horse with a mount-effect armor
+@pass No class-load error for `com.SaintAlfonzo.creativecommon.CommonConfig`; mount effects tick at `[perf] mountEffectIntervalTicks`
+@fails `armor_effects.js` still loads the old class (falls back to the default)
+@from batches/r1113/c2_a1.qb
+shell grep -nE "ArmorFx|mountEffectInterval|CommonConfig" logs/kubejs/server.log | head -8 | cut -c1-240; grep -nE "mountEffectIntervalTicks" config/creativecommon-common.toml
+kjsreject NoClassDefFoundError.*CommonConfig|ClassNotFoundException.*CommonConfig
+look no class-load error for com.SaintAlfonzo.creativecommon.CommonConfig; the interval is read (horse with mount armor effect: client / CQ row)
+
+## CQ-CEN-01
+@group client
+@commands Client: WTHIT on asphalt (Run Speed line, percent format), on a 5-layer leaf pile with `[leaf_piles] slowFromLayers = 5` in Compat's file, on a framed block (camo line); stand in mud (sinking view); JEI dragon breathing category; names of the wooden bucket and the surface tiers; Common's lang (changelog button, WTHIT hive and campfire lines); Mods screen
+@pass LOOK: lines and names as before; leaf pile slows from 5 layers; Mods screen shows Creative Common and Creative Engineering with their descriptions
+@fails `LeafPileSlow` hook not set (Engineering constructor); a lang file at a shared path
+@draft no batch holds this row yet
+@@text
+@@text Results: not run yet.

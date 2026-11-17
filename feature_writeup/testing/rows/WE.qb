@@ -1,0 +1,52 @@
+# Scratch queue rows WE (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/WE.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title WorldEdit lazy state ids, 2026-10-27
+@@date 2026-10-27
+@@text
+@@text patcherMod 1.1.03 with `WorldEditSkipStateIdInitMixin` and `WorldEditBlockStateIdAccessMixin` (TODO server #17,
+@@text perf.md 11.2 #1). Group A. Any player with op; WorldEdit 7.2.12 in the scratch `mods/`.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-WE-01
+@group A
+@commands Boot; grep latest.log for `WorldEdit`, `Mixin`, `BlockStateIdAccess`, `Capability`
+@pass Both mixins apply, no error; the gap between FTB Quests loading and `Done` is about 13 s shorter than perf.md 11.1's 44 s
+@fails A mixin did not apply: check the target `Capability$4` (enum body class order changes between WorldEdit versions)
+@draft no batch holds this row yet
+## SQ-WE-02
+@group A
+@commands `//pos1 0 -60 0`, `//pos2 15 -50 15`, `//set oak_stairs[facing=east,half=top]`, then `//replace oak_stairs[facing=east,half=top] stone`, `//set air`
+@pass Every block placed with the given state, replace matches it, no exception in the log
+@fails Wrong state placed: the lazy id and vanilla's id differ (`transmogToMinecraft` vs `Block.getId`)
+@draft no batch holds this row yet
+## SQ-WE-03 | WorldEdit copy / paste / undo / redo through the API (the `//` commands by a player: s3_skip.md)
+@group A
+@commands Build a mixed region (stairs, walls, a chest with items, a sign); `//copy`, move, `//paste`, `//undo`, `//redo`
+@pass Paste and undo restore every state and the chest contents exactly
+@fails States lost in `Int2BaseBlockMap`: `getBlockStateById` returned null for an id from `getBlockStateId`
+@from batches/r1102b/s3_A.qb
+> wetest
+waitlog \[wetest\] DONE 300
+count \[wetest\] FAIL == 0
+expect \[wetest\] PASS SQ-WE-03
+expect \[wetest\] PASS SQ-WE-ids
+look the copy-with-chest and sign lines match; undo leaves air, redo restores
+
+## SQ-WE-04 | lazy state ids for many-state blocks (first half; after the restart: SQ-WE-04b in s3_A2.qb)
+@group A
+@commands `//wand` query tool (`/tool info`) on a few modded blocks with many states (an Immersive Posts truss, a Create Deco block); `/stop`, boot again, repeat SQ-WE-02
+@pass Info shows the block and its internal id; after the restart everything still works (`clear()` reset the ids)
+@fails Stale ids after a restart in single player: `clear()` did not reset the lazily set ids
+@from batches/r1102b/s3_A.qb passed
+> wetest
+waitlog \[wetest\] DONE 300
+count \[wetest\] FAIL == 0
+expect \[wetest\] PASS SQ-WE-04: immersiveposts:ironpost_truss
+expect \[wetest\] PASS SQ-WE-04: createdeco:andesite_catwalk
+
+@@text
+@@text Results 2026-10-27 night: console `//` commands are ignored by WorldEdit on Forge (players only), so SQ-WE-02 to -04 ran through WorldEdit's API (`tools/worldedit_probe/we_probe.js`, `/wetest`, 10/10 PASS before and after a restart): lazy id = vanilla id and reads back for 64 region states and every state of `immersiveposts:ironpost_truss` (3,072), `createdeco:andesite_catwalk`, `quark:oak_vertical_slab`; copy with a chest (items) and a sign matches; undo leaves air, redo restores; replace (52) and set (64) and their undo exact. SQ-WE-01 PASS: no mixin error; WorldEdit frames in the start window about 16 samples (11.2 #1: 13 s). Open: the `//` commands by a real player (optional).

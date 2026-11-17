@@ -1,0 +1,99 @@
+# Scratch queue rows SPFX (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/SPFX.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-SPFX Split regression fixes: Immersive Portals with Serene Seasons, felsic guards, horror lasagna, script guards, dict checks, sky islands, 2026-11-06 night ([scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 6 findings, TODO `creativesplit/regression #15` to `#19`)
+@@date 2026-11-06
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/testing/scratch_run_2026-11-06.md
+@@text
+@@text Not run. Targets the builds of 2026-11-06 22:07-22:09 (all ten Creative jars rebuilt: Common's
+@@text `ChunkMapPortalsVisibilityMixin` and NCH empty-fluid check, Equipment's `packs/felsic_gear+nullscape/`, Worldgen's
+@@text `structure_set/sky_island.json` and group `sky` member, `// requires:` headers on every jar script, dict validators).
+@@text `prep_srv.sh` swaps them in; none is in `mods/` yet. Unlike r1106spf, leave Immersive Portals, Portal Gun and Portal
+@@text Gels IN the srv for SQ-SPFX-01 (other rows may take them out).
+@@text
+@@table
+## SQ-SPFX-01
+@group A
+@commands full pack with `immersive-portals-2.3.7`, `portalgun`, `portalgels` kept in srv/mods; boot; `grep -E "Immersive Portals overwrites conform\|MixinChunkMap_C" logs/latest.log logs/debug.log \| head`; then a second boot with Immersive Portals and Portal Gun moved out
+@pass first boot reaches `Done (` (world created), one `[compat] Immersive Portals overwrites conform to target visibility` line, one `Static binding violation ... m_183760_ in imm_ptl.mixins.json:common.chunk_sync.MixinChunkMap_C` WARN, no `Mixin apply failed ... MixinChunkMap_C`; second boot: no `[compat] Immersive Portals` line, Done
+@fails `[compat] imm_ptl.mixins.json not found` / `could not set conformVisibility` (Mixin internals differ); IP outside `[2.3.7,2.4)` (one "outside the tested range" warning); another IP overwrite clashes with an access transformer (read the crash: the method name). Rewritten 2026-11-07 for the acceptTargets fix (the preApply fix FAILED r1106spfx)
+@draft no batch holds this row yet
+## SQ-SPFX-02 | horror lasagna sequenced assembly in the full pack
+@group A
+@commands full pack: `/zq rdetail horror_lasagna_sequenced_assembly`; `grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log \| grep -iE "error\|fail"`; spout + deployer rig is CQ-SPFX-01
+@pass the recipe `creativedelight:createsequencedassembly/horror_lasagna_sequenced_assembly` is listed with 7 steps, the filling step names `create_central_kitchen:tomato_sauce` 250 mB, result 2 `brewinandchewin:horror_lasagna`; 0 error lines
+@fails `brewinandchewin/recipes.js` guard `global.has(f.tomato_sauce)` false in the full pack (Central Kitchen id changed)
+@from batches/r1106spfx/a1.qb
+> zq rdetail horror_lasagna_sequenced_assembly
+waitlog \[zq\] done 60
+expect creativedelight:createsequencedassembly/horror_lasagna_sequenced_assembly
+expect tomato_sauce
+shell grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log | grep -iE "error|fail" | head -5; echo "errlines=$(grep -h horror_lasagna logs/kubejs/server.log logs/latest.log | grep -ciE 'error|fail')"
+look 7 steps, filling create_central_kitchen:tomato_sauce 250 mB, result 2 brewinandchewin:horror_lasagna; errlines=0
+
+## SQ-SPFX-03
+@group A + chain
+@commands (a) full pack with `tools/scratch_query/nch_empty_fluid_probe.js` copied to `srv/kubejs/server_scripts/zz_nch_probe.js`: `grep "\[zqnch\]" logs/latest.log`; `grep -c "zz_probe_empty_fluid" logs/kubejs/server.log`; (b) port chain p1 (`tools/scratch_query/batches/r1106cbp/run_boots.sh '^p1$'` with the 22:07 Common, CD, CB copied into CEPortTesting): `grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log`
+@pass (a) `[zqnch] zz_probe_empty_fluid: skipped (... minecraft:empty ...)`, `[zqnch] zz_probe_good: built`, no `Error parsing recipe` naming `zz_probe` and no loose `create:kjs_` filling recipe; (b) no `Error parsing recipe ...horror_lasagna`, `with 0 failed recipes`
+@fails `NCH._stepJsonHasEmptyFluid` (step `serialize()` / `json` not reachable in kubejs 1902.6: print `step.json` in the probe); `dropSteps` (newRecipe)
+@draft no batch holds this row yet
+## SQ-SPFX-04
+@group chain + A
+@commands (a) p6 (Equipment, no Felsic Gear, no CB); (b) p6f (+ Felsic Gear, no Nullscape): `grep -h "mod data packs on\|Error parsing recipe\|Unbound values" logs/latest.log logs/kubejs/*.log`; (c) full pack B world: `/execute in minecraft:the_end run locate biome nullscape:crystal_peaks`, tp there, `/zq count` the felsic ore block over 4 chunks
+@pass (a) no `Error parsing recipe` (felsic ingot assembly skipped by `global.has(i.ingot_felsic, f.dragon_breath)`); (b) boots, `mod data packs on: [felsic_gear]; off (mod not loaded): [felsic_gear+nullscape]`, no `Unbound values`; (c) both packs on, felsic ore present in the Nullscape biome
+@fails `ModDataPacks` "+" split (Equipment); pack files left in `packs/felsic_gear/`; the end_gear.js guard
+@draft no batch holds this row yet
+## SQ-SPFX-05
+@group A
+@commands the five jar-out restarts of SQ-SPF-111 again (`tools/scratch_query/batches/r1106spf/jx_run.sh OUT magic equipment worldgen`), plus Brewing, Delight (with Brewing), Engineering, Calendar (with CD, CB, Vinery) and Compat (with every jar that needs it) out
+@pass each boots; `grep -hE "Error occurred while handling event\|ReferenceError" logs/kubejs/*.log` empty; `Skipped creative<jar>:kubejs/... Mod creative<jar> is not loaded` lines for the removed jar; Worldgen out: no `dump_bee_nests.js` / `dump_structuregen.js` error (both `requires: creativeworldgen`)
+@fails a script without `// requires: <jar>` (the 2026-11-06 sweep added it to 346 files)
+@draft no batch holds this row yet
+## SQ-SPFX-06 | dict validators clean
+@group A
+@commands full pack boot: `grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] Missing" logs/latest.log`; `grep -c "is not validated" logs/latest.log`; `grep "tag entries not checked" logs/latest.log`
+@pass no `Missing/invalid` list from any of the three dicts (or only ids whose mod is loaded and that a writeup expects); 0 `is not validated` lines; one `[block_dict] N tag entries not checked` and one `[fluid_dict] ...` info line
+@fails a dict id whose item is gone (remove it, and its uses); the validators' `global.has` / glob skip
+@from batches/r1106spfx/a1.qb
+bootreject \[(item|block|fluid)_dict\] Missing
+bootreject is not validated
+shell grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] Missing" logs/latest.log | head -40; echo "notvalidated=$(grep -c 'is not validated' logs/latest.log)"; grep "tag entries not checked" logs/latest.log | head
+look one [block_dict] and one [fluid_dict] 'tag entries not checked' info line, nothing else
+
+## SQ-SPFX-07 | sky island generates
+@group B (fresh world)
+@commands `> locate structure creativeengineering:sky_island` (Async Locator: waitlog); tp a creative bot there; `/zq under` is not meaningful (floating): `> execute at qa run zq count ~-40 100 ~-40 ~40 250 ~40 minecraft:grass_block` with literal coordinates from the locate; `shell grep -n "sky_island" kubejs/generation_scripts/worldgen/structure_tag_report.md` after the world load writes it
+@pass locate finds one within about 2000 blocks (group `sky`, 0.22 of its slots); grass blocks at 135-165 above the ground at that spot; the report lists the island in `group/sky`
+@fails `structure_set/sky_island.json` missing from the jar, or `type/sky` tag / `structure_groups.json` member not read (structure_overrides.js log)
+@from batches/r1106spfx/b1.qb
+bootexpect Done \(
+> pbot spawn qa 0 200 0 minecraft:overworld creative
+> locate structure creativeengineering:sky_island
+waitlog (nearest|Could not find).*sky_island 300
+capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {P1} 200 {P3}
+sleep 25
+> zq count {P1-40} 100 {P3-40} {P1+40} 250 {P3+40} minecraft:grass_block
+waitlog \[zq\] 120
+> zq count {P1-40} 0 {P3-40} {P1+40} 99 {P3+40} minecraft:grass_block
+waitlog \[zq\] 120
+shell sleep 5; grep -n "sky_island" $INST/kubejs/generation_scripts/worldgen/structure_tag_report.md | head -5; grep -n "sky_island" logs/latest.log | head -5
+look locate within ~2000 blocks; grass between y100-250 at the spot; report lists it under group/sky
+
+## CQ-SPFX-01
+@group client
+@commands client on SQ-SPFX-02's save: JEI the horror lasagna (sequenced assembly page); a spout + deployer belt with the 7 inputs runs one bowl through; fly to the SQ-SPFX-07 island
+@pass LOOK: JEI shows the 7-step sequence with tomato sauce; the belt makes 2 Horror Lasagna; the floating island renders with its trees
+@fails as SQ-SPFX-02 / -07
+@draft no batch holds this row yet
+## CQ-SPFX-02
+@group client
+@commands client (the dev instance is enough) with Immersive Portals 2.3.7 and Heartstone 1.1.2 in mods/, Common 23:11 or later: launch to the title screen; `grep -E "Heartstone LevelRendererMixin priority\|Mixin apply failed heartstone\|could not reorder Heartstone" logs/latest.log`; in a world, bond two players with a Heartstone (or a bot) and look at the partner; then launch once with Immersive Portals and Portal Gun moved out and grep again
+@pass first launch reaches the title screen, one `[compat] Heartstone LevelRendererMixin priority 1000 -> 999 so it applies before Immersive Portals' renderEntity redirect` line, no `Mixin apply failed heartstone`; LOOK: the bonded partner still gets the Heartstone outline; second launch: no `Heartstone LevelRendererMixin` line (guard: IP not loaded)
+@fails `could not reorder` ERROR (Unsafe read of `Config.config` / `MixinConfig.pendingMixins` / `MixinInfo.priority`: Mixin field names); only `not prepared yet ... will retry` and no priority line (Heartstone config prepared in a later batch than the last Common mixin: hook a later point); outline missing (redirect still drops the arg: read IP's `redirectRenderEntity`)
+@draft no batch holds this row yet
+@@text
+@@text Results: run r1106spfx (Run log; [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 7).

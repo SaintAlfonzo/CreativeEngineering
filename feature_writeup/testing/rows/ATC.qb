@@ -1,0 +1,74 @@
+# Scratch queue rows ATC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/ATC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Armor Trims list cache, 2026-10-27 ([perf.md](../perf.md) 10.3, TODO `perf #10`)
+@@date 2026-10-27
+@@sources feature_writeup/perf.md
+@@text
+@@text Target: patcherMod 1.1.03 built 2026-10-27 13:08 (in `mods/` since 13:22, rebuilt with the first-tick water fix below); copy it
+@@text into the scratch `mods/` over the 2026-10-26 jar. Probe: copy `tools/armor_trims_cache_test/atc_probe.js` into
+@@text `srv/kubejs/server_scripts/zz_atc_probe.js` before boot. Output `[atctest] PASS|FAIL|INFO ATC-nn ...` in
+@@text `logs/latest.log`. Optional baseline for SQ-ATC-03: boot once with the 2026-10-26 jar from `mods/`; the probe then
+@@text shows the uncached timing (ATC-03 and ATC-06 FAIL there, which is expected).
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-ATC-01
+@group A
+@commands Boot; grep latest.log for `ArmorTrimsLargeItemListsMixin`, `armor_trims`, `LargeItemLists`
+@pass No mixin warning or error for the new mixin; Armor Trims' common setup runs (no exception from `LargeItemLists`)
+@fails Injection failure: the 1.3.3 method descriptors in the mixin (`getAllItemsOfType(Ljava/lang/Class;)`, `getAllTrimmable()`); a crash at setup: `ArmorTrimsItemCache.ready()` true too early
+@draft no batch holds this row yet
+## SQ-ATC-02 | Armor Trims cache correctness
+@group same
+@commands `/atctest` (correctness)
+@pass `INFO ATC-01` 1 class; `PASS ATC-02` (trimmable items = every ArmorItem + every item of Armor Trims' trimmable tags, none missing or extra); `PASS ATC-04` (ArmorItem list = registry scan); `PASS ATC-05` (chestplate in, stick out)
+@fails Missing / extra ids: compare with the uncached jar's ATC-02 line; an entry present only uncached means the cache was filled before tags loaded
+@from batches/r1102b/s3_A.qb
+> atctest
+waitlog \[atctest\] (PASS|FAIL) ATC-06 300
+expect \[atctest\] INFO ATC-01: 1 trimmable class
+expect \[atctest\] \S+ ATC-02: getAllTrimmable 50 entries
+expect \[atctest\] PASS ATC-04
+expect \[atctest\] PASS ATC-05
+
+## SQ-ATC-03 | Armor Trims cache performance
+@group same
+@commands Same run (performance): read `ATC-03`, `ATC-06`
+@pass `PASS ATC-03` (second call returns the same list); `PASS ATC-06`: 288 calls of each list well under 50 ms in total (the uncached jar: roughly 0.2 s per call, the 58 s JEI page)
+@fails ATC-03 FAIL: `ready()` false on a running server (registry not reported locked), so nothing is cached
+@from batches/r1102b/s3_A.qb passed
+> atctest
+waitlog \[atctest\] (PASS|FAIL) ATC-06 300
+expect \[atctest\] PASS ATC-03
+expect \[atctest\] PASS ATC-06
+
+## SQ-ATC-04 | Armor Trims list rebuilt after the tag reload (follows SQ-PF-05's reloads)
+@group same
+@commands `/reload`, wait for it, `/atctest` again
+@pass `PASS ATC-07` (trimmable list rebuilt after the tag reload), ATC-02 to -06 PASS again, same counts as before the reload; reload time no worse than 28 s
+@fails NOT rebuilt: `TagsUpdatedEvent` listener not registered (`ArmorTrimsItemCache.init` in `CreativeEngineering`)
+@from batches/r1102b/s3_A.qb
+> reload
+waitlog Loaded \d+ pocket computer upgrades 300
+sleep 10
+> atctest
+waitlog \[atctest\] (PASS|FAIL) ATC-07 300
+expect \[atctest\] PASS ATC-07
+count \[atctest\] PASS ATC-0[3-6] == 4
+look counts against SQ-ATC-02's lines; the reload (Reloading! to the pocket computer line) no worse than 28 s
+
+@@text
+@@text Client checks (no scratch server; throwaway client or the user's game after the jar is installed):
+@@text
+@@text - **CQ-ATC-01** (performance) Join the pe3 world (or any existing world): latest.log `[jei] Armor Trims pages: 288 trim
+@@text   recipe(s)` and JEI's start time. Expected: JEI start about 60 s shorter than 89 s / 77 s (perf.md 10.1); join to
+@@text   playable about 60 s shorter. A JFR from join, if taken, shows no `LargeItemLists.getAllItems` hot spot.
+@@text - **CQ-ATC-02** (correctness) JEI Armor Trimming page: 288 recipes, the same templates, armor and materials as before;
+@@text   the Item Upgrading page and the hidden netherite smithing recipes unchanged (SmithingTemplateJEI log lines).
+@@text - **CQ-ATC-03** (correctness) Trim a chestplate at the smithing table (preview shows, result trimmed), trimmed armor
+@@text   draws its trim in the inventory and hotbar, untrim it in the crafting grid; after `/reload` the same still works.
+@@text
+@@text Results 2026-10-27 evening run (Run log): SQ-ATC-01 to -04 PASS (probe fixed: `java.lang.System` is class-filtered): 226 items = registry scan, 288 calls 0-2 ms, list rebuilt after `/reload`. CQ-ATC-01 to -03 open (client). 2026-10-27 night (perf.md 12, throwaway client, three joins): CQ-ATC-01 PASS: `[jei] Armor Trims pages: 288 trim recipe(s), 25 template upgrade recipe(s)`, JEI start 15.8 / 18.6 / 17.0 s (89 / 77 s), Play to playable 47-48 s; no JEI plugin over 1.2 s. CQ-ATC-02, -03 not run (need eyes on the page and a smithing table).

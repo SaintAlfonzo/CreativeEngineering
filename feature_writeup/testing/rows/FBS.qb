@@ -1,0 +1,31 @@
+# Scratch queue rows FBS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/FBS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Falling block water splash, 2026-10-28 ([fixes_compat.md](../fixes_compat.md) 2.32, test FX-49)
+@@date 2026-10-28
+@@sources feature_writeup/fixes_compat.md
+@@text
+@@text patcherMod 1.1.03 (`FallingBlockWaterSplashMixin`, client list). Client only: a dedicated server cannot show it. Needs the
+@@text real client with a creative world; Effective installed.
+@@text
+@@table
+## CQ-FBS-01
+@group client
+@commands Launch; grep latest.log for `FallingBlockWaterSplash` and `Mixin` errors
+@pass No mixin error; client reaches the title screen
+@fails Name the mixin; SRG id m_8119_ (FallingBlockEntity.tick)
+@draft no batch holds this row yet
+## CQ-FBS-02
+@group client
+@commands Over a pool: `/summon falling_block ~ ~20 ~ {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}`; sand from 2 blocks up
+@pass Each splashes once on entering water (Effective model, droplets, sound); the high drop splashes larger
+@fails No splash: tail inject not reached or `level` not ClientLevel
+@draft no batch holds this row yet
+## CQ-FBS-03
+@group client
+@commands Same drops over dry ground; watch a block in water
+@pass No splash on dry ground; no sideways push by the water
+@fails Splash on land: fluid check wrong
+@draft no batch holds this row yet

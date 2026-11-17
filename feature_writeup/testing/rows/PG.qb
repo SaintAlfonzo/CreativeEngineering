@@ -1,0 +1,122 @@
+# Scratch queue rows PG (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PG.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-PG Portal Gun fixes and dyeing, 2026-11-07 ([plan_portal_gun.md](../plan_portal_gun.md), TODO `gameplay/tnt-and-portal #13..#16`)
+@@date 2026-11-07
+@@jars creativecompat creativedelight powergrid tempad
+@@sources feature_writeup/plan_portal_gun.md
+@@text
+@@text Not run. Targets `creativecompat-1.0.0.jar` built 2026-11-07 15:58; the 16:44 build in `mods/` carries it (with SQ-IP). Unlike SQ-TP, keep
+@@text `portalgun`, `immersive-portals` and `geckolib` in the server and client; ImmediatelyFast in the client. Boot check
+@@text first: `grep -E "IPExitLiftMixin|GeckoItemHudBatchMixin|creativecompat:portal_gun_dye" logs/latest.log` shows
+@@text no mixin apply failure and no recipe parse error. #15 rows rewritten 2026-11-14 for `creativecompat-1.0.0.jar` of 2026-11-14 22:23
+@@text (installed; [plan_bugfix_1114.md](../plan_bugfix_1114.md) 4.1): the lift is a client mixin (`IPExitLiftMixin` on Immersive Portals
+@@text `ClientTeleportationManager.teleportPlayer`), decided by exit geometry for every IP portal; the old `PortalGunExitLiftMixin` is gone.
+@@text
+@@table
+## SQ-PG-01a | server side: no PortalGunExitLift class or mixin; gun portals carry portalgun's own flag, unchanged
+@group A
+@commands #15 server side (rewritten 2026-11-14, was SQ-PG-01): boot; `grep -E "IPExitLiftMixin|PortalGunExitLift" logs/latest.log`; load a world copy with gun portals saved by the 11-07 to 11-13 jars (`adjustPositionAfterTeleport` 0b on some); `/data get entity @e[type=portalgun:custom_portal,limit=1,sort=nearest]`
+@pass no mixin error; no `PortalGunExitLift` class or mixin named anywhere (the jar no longer has them; the client mixin is not applied on a dedicated server); old portals load without error, their saved flag unchanged and harmless
+@fails `creativecompat.mixins.json` still lists `PortalGunExitLiftMixin`, or `CompatMixinPlugin` gate wrong
+@from batches/r1115/p1_a1.qb
+bootreject PortalGunExitLift|IPExitLiftMixin.*(fail|error)
+shell grep -hE "IPExitLiftMixin|PortalGunExitLift" logs/latest.log | cut -c1-200 | head; echo "lines $(grep -cE 'IPExitLiftMixin|PortalGunExitLift' logs/latest.log)"; true
+shell unzip -l mods/creativecompat-*.jar | grep -iE "ExitLift|portalgun" ; unzip -p mods/creativecompat-*.jar creativecompat.mixins.json | tr -d ' \n' | head -c 1500; echo; true
+> forceload add 1280 1020 1320 1060
+> fill 1290 -60 1040 1310 -50 1040 minecraft:stone
+> pbot spawn pg 1300 -60 1030 minecraft:overworld survival
+sleep 4
+> clear pg
+> give pg portalgun:portal_gun 1
+sleep 1
+> execute as pg at @s run tp @s ~ ~ ~ -20 0
+> zc3 shoot pg blue
+sleep 2
+> execute as pg at @s run tp @s ~ ~ ~ 20 0
+> zc3 shoot pg orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+> execute as pg at @s run tp @s ~ ~ ~ 0 60
+> zc3 shoot pg orange
+sleep 2
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+reject \[c3\] error
+look no ExitLift class/mixin in the jar or log; the flag values are portalgun's own (no recompute by colour/geometry); old-save half needs a fixture world (none kept)
+
+## SQ-PG-01b | after the restart the saved gun portals keep the flag (read before the first beat)
+@group client (scratch client, singleplayer, needs a window)
+@commands #15 geometry: shoot gun portal pairs for wall to wall, wall to floor (exit on the floor) and floor to wall; walk (not jump) through each both ways; count `Adjusting Client Player Position` per pass in `logs/latest.log` (`Client Teleported` gives the portal); quit to title, reload the world, repeat once
+@pass the adjust line appears only on passes that exit through a floor portal, never on a wall or ceiling exit; the same after the reload, also for portals placed before 2026-11-14
+@fails sign or space of the test: `IPExitLiftMixin` reads `getContentDirection().y > 0.5` (destination space, not transformed again); a missing adjust line on floor exits means the redirect target (GETFIELD `adjustPositionAfterTeleport`) moved
+@from batches/r1113/c3_a2.qb
+> forceload add 1000 1000 1480 1080
+> zc3 portals
+waitlog \[c3\] portals: \d+ 20
+expect \[c3\] portals: [1-9]
+look the pg pair at x 1290-1310 z 1040 shows the same adjust values as the last SQ-PG-01a read (wall portal true, floor portal false); qa's spawn pair near x 0 z 10 also listed. Old-jar portals: not available (no pre-11-07 Compat jar kept), not judged
+
+## SQ-PG-01c
+@group client (scratch client, singleplayer)
+@commands #15 nether frame: build a Nether portal frame, light it, go through and back; the exit frames are vertical (wall facing)
+@pass no `Adjusting Client Player Position` line for either pass; the player arrives standing in the frame, not lifted onto the obsidian
+@fails the mixin applies to every IP portal: if nether portals still lift, check `IMM_PTL` gate (`imm_ptl_core`) and the client mixin list
+@draft no batch holds this row yet
+## SQ-PG-02 | Portal Gun dye recipe: columns, mixing, kept NBT, no output for the bad grids
+@group A
+@commands #16 recipe: give `qa` a gun and dyes; craft in a crafting table (or `/ztp`-style grid fill) with: blue dye left of the gun; red dye right; lime dye under it; red and yellow both left; on a gun with a custom blue colour, white dye left; a gun renamed and damaged by `/data`; two guns + a dye; gun + dye + stick; gun alone
+@pass `CustomPortalColors.blue` set; `.orange` set; both set; the average (orange-ish), not either dye; a mix with the old colour, not pure white; name and other NBT kept; no output for the last three
+@fails `PortalGunDyeRecipe` (column rule or `mix`); missing output on every case: the recipe JSON did not load (`portal_gun_dye` in the log)
+@from batches/r1113/c3_a1.qb
+> zc3 craft G minecraft:blue_dye|portalgun:portal_gun|-|-|-|-|-|-|-
+waitlog \[c3\] craft 20
+expect craft: recipe .* -> 1 portalgun:portal_gun nbt .*CustomPortalColors:\{blue:
+> zc3 craft G -|portalgun:portal_gun|minecraft:red_dye|-|-|-|-|-|-
+expect craft: recipe .* -> 1 portalgun:portal_gun nbt .*CustomPortalColors:\{orange:
+> zc3 craft G -|portalgun:portal_gun|-|-|minecraft:lime_dye|-|-|-|-
+expect craft: recipe .* nbt .*CustomPortalColors:\{.*blue:.*orange:|CustomPortalColors:\{.*orange:.*blue:
+> zc3 craft G minecraft:red_dye|portalgun:portal_gun|-|minecraft:yellow_dye|-|-|-|-|-
+> zc3 craft G minecraft:white_dye|portalgun:portal_gun{CustomPortalColors:{blue:255}}|-|-|-|-|-|-|-
+> zc3 craft G minecraft:blue_dye|portalgun:portal_gun{Damage:5,display:{Name:'{"text":"GunC3"}'}}|-|-|-|-|-|-|-
+expect nbt .*GunC3
+> zc3 craft G portalgun:portal_gun|portalgun:portal_gun|minecraft:blue_dye|-|-|-|-|-|-
+> zc3 craft G portalgun:portal_gun|minecraft:blue_dye|minecraft:stick|-|-|-|-|-|-
+> zc3 craft G portalgun:portal_gun|-|-|-|-|-|-|-|-
+count craft: no recipe >= 3
+reject \[c3\] error
+look red+yellow left: blue = an orange-ish average, not either dye; white on a gun with blue 255: a mix with the old colour, not pure white; the renamed damaged gun keeps Name and Damage; the last three grids print `no recipe` (row cells: three trailing grids). Lime under the gun sets both
+
+## CQ-PG-01
+@group client
+@commands #13 names: look at a gun portal and at a breakable mirror (flint and steel on glass in a frame) with WTHIT; `/kill` one of each with chat on
+@pass "Portal", "Mirror", no raw `entity.` keys
+@fails names.js not in the jar (`assets/creativecompat/kubejs/names.js`), or F3+T needed
+@draft no batch holds this row yet
+## CQ-PG-02
+@group client
+@commands #14 hotbar: gun in slot 5, block items in 1-4, flat items (dye, stick) in 6-9; compare with the same items in the inventory screen; move the gun to slots 1 and 9
+@pass no slot faded, the gun looks as in the inventory screen
+@fails `GeckoItemHudBatchMixin` not applied, or the `[creativecompat] ImmediatelyFast BatchingBuffers` warning in the log (field renamed); quick proof of the cause: `hud_batching: false` in `config/immediatelyfast.json` once
+@draft no batch holds this row yet
+## CQ-PG-03
+@group client
+@commands #15 feel (owner): walk (not jump) through wall-to-wall, wall-to-floor and floor-to-wall gun portal pairs and a nether frame, both directions
+@pass LOOK: no lift on wall or ceiling exits; on a floor exit the player ends up on the floor, not inside it
+@fails run SQ-PG-01b first; `IPExitLiftMixin` (rewritten 2026-11-14)
+@draft no batch holds this row yet
+## CQ-PG-04
+@group client
+@commands #16 in game: dye a gun both sides, shoot both portals; hover it; `/customportalcolors` set and clear; JEI uses of the Portal Gun
+@pass each portal drawn in its dyed colour; tooltip lists both colours; the command still overrides and clears; JEI shows 32 one-dye pages plus the both-sides and same-column pages
+@fails JEI pages: `portalgun/PortalGunDyeJEI`
+@draft no batch holds this row yet
+## CQ-PG-05
+@group client
+@commands mirror creation (flint and steel on glass in a frame) beside Creative Magic's flint-and-steel portal rule
+@pass the mirror still forms; Nether portal ignition unchanged
+@fails not from this change; report to `gameplay/tnt-and-portal #4`
+@draft no batch holds this row yet

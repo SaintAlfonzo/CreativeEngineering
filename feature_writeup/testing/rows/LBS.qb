@@ -1,0 +1,88 @@
+# Scratch queue rows LBS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/LBS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-LBS Creative Labels: labels by surface, centred notes, 2026-11-02 ([sticky_notes.md](../sticky_notes.md) 3.3a, in-game SN-56 to SN-60)
+@@date 2026-11-02
+@@jars creativelabels
+@@sources feature_writeup/sticky_notes.md
+@@text
+@@text Targets `creativeLabels-1.0.1.jar` (built 2026-11-02, in `development/creativeLabels/build/libs/`, not in `mods/`; prep_srv.sh swaps it in). The probe group `/cltest surface` does not exist yet: write it in `tools/creative_labels_test/server_probe.js` during the run (fake-player `useItemOn` on the north side of each host, like the `place` group; read the face with `FacePaperBlockEntity.face(dir)` and log `inset`, `offX`, `offY`, `labelSize`). Expected numbers: 3.3a tables.
+@@text
+@@table
+## SQ-LBS-00 | Creative Labels 1.0.1: centre_note tag loads, no creative_labels error
+@group A
+@commands boot
+@pass `latest.log` has no `Couldn't load tag creative_labels:paper/centre_note` and no `creative_labels` error
+@fails tag JSON `data/creative_labels/tags/blocks/paper/centre_note.json` (optional entries; `#botanypots:all_botany_pots` id)
+@from batches/r1103/sB_2.qb passed
+bootreject Couldn't load tag creative_labels:paper/centre_note
+bootreject (?i)(ERROR|Exception).*creative_labels
+shell ls mods | grep -i creativeLabels; ls mods | grep -q "creativeLabels-1.0.1"
+
+## SQ-LBS-01 | labels by surface: face Place per host (zlbs labels)
+@group A
+@commands `/cltest surface` part `labels`: place `supplementaries:jar`, `supplementaries:sack`, the four `trashcans:*_trash_can`, `vintagedelight:fermenting_jar`, `botanypots:terracotta_botany_pot`, `minecraft:cauldron`, `minecraft:composter`, `minecraft:stone`, `minecraft:chest`; a label on each north side
+@pass `[cltest] PASS` per host; face values: jar 0.1875/0/0/10, sack 0.125/0/-1/10, trash cans 0.125/0/0/10, Pickling Jar 0.203/0/0/10, botany pot 0.125/0/-4/8, cauldron and composter 0/0/0/10, stone 0/0/0/10, chest 0.0625/0/0/10
+@fails `Spots.labelSurface` (headless `SpotsTest` "labels: surface test" passes, so the live shape differs: log `host.getShape` boxes) or `placeLabel` not reached (sneak needed on usable hosts)
+@from batches/r1103/sB_2.qb
+> zlbs labels
+waitlog \[zlbs\] DONE labels 60
+count \[zlbs\] PASS labels == 12
+reject \[zlbs\] FAIL
+look on a FAIL, the line's place (inset/offX/offY/size) against the wanted value; "labels left" 3 = one label used
+
+## SQ-LBS-02 | labels refused on doors, trapdoors, slabs, stairs, cauldron top, pressure plate, poppy (zlbs refused)
+@group A
+@commands `/cltest surface` part `refused`: a label on `oak_door`, `oak_trapdoor`, a bottom `oak_slab` top, `oak_stairs` side, front and top, `cauldron` top, `oak_pressure_plate` top, `poppy`
+@pass `[cltest] PASS` per host: no `face_paper` in the cell, label count unchanged
+@fails `Spots.fit` class order (stairs/slabs before the surface test; door/trapdoor check; collision-shape check)
+@from batches/r1103/sB_2.qb passed
+> zlbs refused
+waitlog \[zlbs\] DONE refused 60
+count \[zlbs\] PASS refused == 9
+reject \[zlbs\] FAIL
+
+## SQ-LBS-03 | centre notes: spot C at the host's offY, second note and top note refused (zlbs centre)
+@group A
+@commands `/cltest surface` part `centre` (or `/zlbs centre`): a sticky note on the north side of each centre-note host (jar, sack, 4 trash cans, Pickling Jar, botany pot), then a second note on the same side, then a note on top
+@pass first note on spot C with offY jar -1, sack -2, trash cans -1.25, Pickling Jar -1.25, botany pot -4; second note refused; top note accepted on the jar and the Pickling Jar (one note centred on the lid; owner 2026-11-03, tag `creative_labels:paper/note_on_top`) and refused on the sack, the 4 trash cans and the botany pot (`FAIL` result, note count unchanged)
+@fails host missing from `creative_labels:paper/centre_note` or `paper/note_on_top` (tag not loaded or id wrong), Labels jar older than 2026-11-03 (sack top accepted), or `Spots.centreNoteFit`
+@from batches/r1103/sB_2.qb
+> zlbs centre
+waitlog \[zlbs\] DONE centre 60
+count \[zlbs\] PASS centre == 24
+reject \[zlbs\] FAIL
+
+## SQ-LBS-04 | host set to air: label and written note drop, cell air (zlbs refit, after -01 and -03)
+@group A
+@commands `/zlbs refit` after -01 and -03 (hosts set to air with `setBlockAndUpdate`, flag 3); first line is a control: a wall torch on a stone host that goes to air; last line (10 ticks later) a piston pushing a noted stone host. By hand once: a labelled stone broken in survival
+@pass control: a torch drops; every host: the label (blank) and the note (with its Text) drop as item entities at the cell, the cell is air (20 of 20); piston line PASS (note dropped with Text, cell air); survival break drops the label
+@fails control drops nothing too: every block drop is skipped (Creative Worldgen `FirstTickWater` flag; needs the 2026-11-03 Worldgen jar, which clears it each level tick); control drops but paper does not: `FacePaperInteractions.hostChanged` / `refit`
+@from batches/r1103/sB_2.qb
+> zlbs refit
+waitlog \[zlbs\] DONE refit 60
+count \[zlbs\] PASS refit == 20
+reject \[zlbs\] FAIL
+look the label drops are blank (no NBT), the note drops carry their Text
+
+## SQ-LBS-05 | old save from 1.0.0 (sB_1) on 1.0.1: notes and labels kept, no OffX / OffY / Size keys
+@group A
+@commands Old saves: boot once with `creativeLabels-1.0.0.jar` (from `jar_archive/` or `mods/` before the install), `/cltest place` and `/cltest labels`, `save-all`, stop; swap in 1.0.1, boot the same level
+@pass every note and label still in place with the same spots; face NBT has no `OffX`/`OffY`/`Size` keys until a host changes
+@fails `FaceContent.load` defaults (`Size` absent must read as 10)
+@from batches/r1103/sB_2.qb
+> zlbs dump -4 -4 170 14
+waitlog \[zlbs\] DONE dump 60
+expect \[zlbs\] INFO dump \S+ \S+ \S+ \S+: [1-9]\d* face_paper block entities
+reject \[zlbs\] be .*\b(OffX|OffY|Size)\b
+shell pre=$(for f in $(ls logs/*.log.gz | grep -v debug); do zcat "$f"; done | grep -o '\[zlbs\] be .*' | sort); post=$(grep -o '\[zlbs\] be .*' logs/latest.log | sort); echo "pre $(printf '%s\n' "$pre" | grep -c 'be ') post $(printf '%s\n' "$post" | grep -c 'be ')"; diff <(printf '%s\n' "$pre") <(printf '%s\n' "$post") && echo SAME
+look rows/SQ-LBS-05.shell.txt: SAME, or only differences that keep every note and label with the same spots (and no OffX / OffY / Size key); the pre lines come from sB_1's rotated log
+
+## CQ-LBS-01
+@group client
+@commands In the SQ-LBS-01/-03 world: look at each label and centred note up close, show an item on the botany pot label (sneak + right-click), feather for the name
+@pass LOOK: labels flat on each block's surface, no gap over 1 px, the botany pot label smaller and filling the pot's height, icon and name scaled with it; centred notes in the middle of each side, not floating
+@fails `LabelQuads.map` / `LabelLayout.at` with the `Place` (client), `FacePaperModel` cache key
+@draft no batch holds this row yet

@@ -1,0 +1,169 @@
+# Scratch queue rows LGM (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/LGM.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-LGM Large Meals port, 2026-11-01 ([large_meals.md](../large_meals.md) 8, TODO `largecontent/mod-additions #12`)
+@@date 2026-11-01
+@@jars creativedelight
+@@sources feature_writeup/large_meals.md
+@@text
+@@text Needs the Creative Delight jar nesting `backportedLargeMeals 1.3.0-ce-19.2-01` (built 2026-11-01, not installed),
+@@text `largemeals_upstream/largemeals-1.20.1-1.3.0.jar` next to `mods/`, and the rebuilt Display Delight jar (13 `lm_` blocks); full
+@@text restart (new member, items, startup scripts). Group A (superflat) and a bot player. LGM- ids are the in-game list in large_meals.md 8.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-LGM-01 | Large Meals member loads (LGM-01)
+@group A
+@commands Boot; `grep -nE "largemeals\|Large Meals\|Item is not food\|Error occurred while handling event" logs/latest.log \| head -30`; `grep -c "Error" logs/kubejs/server.log`
+@pass members line lists `largemeals`; `Large Meals upstream assets: N files`; no `Item is not food: largemeals:`; no KubeJS recipe errors naming largemeals
+@fails missing dict key, jar missing/sha1 (LGM-01)
+@from batches/r1102b/s3_A.qb
+bootexpect \[creativedelight\] members: \[.*\blargemeals\b
+bootexpect Found new data pack largemeals_upstream_data
+bootreject Item is not food: largemeals:
+kjsreject (?i)(error|exception).*largemeals
+
+## SQ-LGM-02 | Large Meals registry: 18 items, 3 blocks
+@group A
+@commands `/give @p largemeals:potato_soup`, `/kubejs`-style JEI-free check: `/dumpall` then count `largemeals:` in `kubejs/exported/items_by_mod/`
+@pass 18 items, 3 blocks
+@fails registry (LGM-02)
+@from batches/r1102b/s3_A.qb
+> dumpitemsbymod
+waitlog \[dumpitemsbymod\] wrote 300
+shell python3 -I $INST/tools/scratch_query/dumpq.py mod largemeals 18; python3 -I -c "import json;print(sorted(json.load(open('kubejs/exported/items_by_mod/largemeals.json'))['items']))"
+look rows/SQ-LGM-02.shell.txt: 18 items plus the 3 feast blocks (omurice_block, mushroom_pot_pie_block, roasted_mutton_rack_block)
+
+## SQ-LGM-03 | Potato Soup: with a bowl it comes out, without one the pot keeps it (pots 180, 183)
+@group A
+@commands Place a Cooking Pot over a campfire, insert 2 potato, onion, milk bucket, bowl; wait 200 ticks
+@pass Potato Soup out, bowl consumed; without a bowl the pot holds the meal (LGM-03)
+@fails recipe/container
+@from batches/r1102b/s3_A.qb
+> setblock 180 -60 500 minecraft:campfire[lit=true]
+> setblock 180 -59 500 farmersdelight:cooking_pot
+> data merge block 180 -59 500 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> setblock 183 -60 500 minecraft:campfire[lit=true]
+> setblock 183 -59 500 farmersdelight:cooking_pot
+> data merge block 183 -59 500 {Inventory:{Items:[{Slot:0b,id:"minecraft:potato",Count:1b},{Slot:1b,id:"minecraft:potato",Count:1b},{Slot:2b,id:"farmersdelight:onion",Count:1b},{Slot:3b,id:"minecraft:milk_bucket",Count:1b}]}}
+sleep 25
+> data get block 180 -59 500 Inventory
+> data get block 183 -59 500 Inventory
+expect Slot: 8b?, id: "largemeals:potato_soup"
+expect Slot: 6b?, id: "largemeals:potato_soup"
+reject Slot: 7b?, id: "minecraft:bowl"
+
+## SQ-LGM-04 | Sweet Berry Custard stack size (the pot half runs in the block rows)
+@group A
+@commands Same for Sweet Berry Custard with a glass bottle
+@pass custard; stack size per the stack-size pass (LGM-04)
+@fails
+@from batches/r1102b/s3_A.qb
+> zq item largemeals:sweet_berry_custard
+look max stack against food_stack-sizes (a drink-like custard in a glass bottle: 16 or 32)
+
+## SQ-LGM-05 | knife kills drop racks of mutton (sheep at 190)
+@group A
+@commands Summon 20 sheep, bot kills each with a knife in the main hand; again burning; again with a stone sword
+@pass about half drop a Raw Rack of Mutton; burning ones the Cooked Rack; none with the sword (LGM-05, 06)
+@fails loot modifier (`data/forge/loot_modifiers`)
+@from batches/r1102b/s3_A.qb
+> zact kill 190 -60 500 minecraft:sheep 20 farmersdelight:iron_knife
+> zact kill 190 -60 500 minecraft:sheep 20 farmersdelight:iron_knife fire
+> zact kill 190 -60 500 minecraft:sheep 20 minecraft:stone_sword
+expect \[zact\] kill minecraft:sheep x20 held farmersdelight:iron_knife dead 20: .*largemeals:raw_mutton_rack x([5-9]|1[0-5])\b
+expect \[zact\] kill minecraft:sheep x20 held farmersdelight:iron_knife fire dead 20: .*largemeals:cooked_mutton_rack x([5-9]|1[0-5])\b
+expect \[zact\] kill minecraft:sheep x20 held minecraft:stone_sword dead 20: (?!.*mutton_rack)
+look about half of each knife batch drops a rack; the burning batch has no raw rack
+
+## SQ-LGM-06 | mutton rack cooking recipes (the cutting board half runs in the block rows)
+@group A
+@commands Cutting board: raw and cooked rack with a knife; furnace, smoker, campfire with a raw rack
+@pass 4 mutton chops / 4 cooked mutton chops; cooked rack from all three (LGM-07, 08)
+@fails
+@from batches/r1102b/s3_A.qb passed
+> zq makes largemeals:cooked_mutton_rack
+> zq rdetail cooked_mutton_rack
+expect makes largemeals:cooked_mutton_rack: [3-9]
+expect \{minecraft:smelting\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
+expect \{minecraft:smoking\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
+expect \{minecraft:campfire_cooking\} -> 1 \S*cooked_mutton_rack <- largemeals:raw_mutton_rack
+
+## SQ-LGM-07 | Omurice feast: 4 bowls then the plate; full and part-eaten drops (block at 200)
+@group A
+@commands `/setblock ~ ~ ~ largemeals:omurice_block`, bot right-clicks with bowls 5 times; break a full and a `[servings=2]` one
+@pass 4 Bowl of Omurice, then the plate leftover; full drops the feast item, part-eaten a bowl (LGM-09, 10)
+@fails FeastBlock property names
+@from batches/r1102b/s3_A.qb
+> setblock 200 -60 500 largemeals:omurice_block
+> pbot spawn lg7 200 -60 503 minecraft:overworld survival
+> pbot hold lg7 minecraft:bowl 5
+repeat 5
+> pbot use lg7 200 -60 500 up
+end
+> clear lg7 largemeals:omurice 0
+> data get block 200 -60 500
+expect Found 4 matching item
+> setblock 200 -60 500 largemeals:omurice_block
+> zact break 200 -60 500 none
+> setblock 200 -60 500 largemeals:omurice_block[servings=2]
+> zact break 200 -60 500 none
+expect \[zact\] break 200 -60 500 largemeals:omurice_block held none: true, .*drops largemeals:omurice_block x1$
+expect \[zact\] break 200 -60 500 largemeals:omurice_block held none: true, .*drops minecraft:bowl x1$
+> pbot remove lg7
+look after the 4th bowl the block is the plate leftover (5th use); the setblock state name servings fits FeastBlock
+
+## SQ-LGM-08 | Roasted Rack feast from the pot, both ways; grid craft manual_only (pots 205, 208)
+@group A
+@commands Roasted Rack feast: pot with raw rack + 2 cooked rice + carrot + baked potato + bowl; then cooked rack + 2 rice + carrot + 2 baked potato + bowl; hand grid craft
+@pass each gives the feast (LGM-17); grid craft listed `_manual_only`
+@fails pot ingredient limit 6
+@from batches/r1102b/s3_A.qb
+> zq recipes roasted_mutton_rack
+> setblock 205 -60 500 minecraft:campfire[lit=true]
+> setblock 205 -59 500 farmersdelight:cooking_pot
+> data merge block 205 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:raw_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+> setblock 208 -60 500 minecraft:campfire[lit=true]
+> setblock 208 -59 500 farmersdelight:cooking_pot
+> data merge block 208 -59 500 {Inventory:{Items:[{Slot:0b,id:"largemeals:cooked_mutton_rack",Count:1b},{Slot:1b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:2b,id:"farmersdelight:cooked_rice",Count:1b},{Slot:3b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"minecraft:baked_potato",Count:1b},{Slot:5b,id:"minecraft:baked_potato",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:1b}]}}
+sleep 30
+> data get block 205 -59 500 Inventory
+> data get block 208 -59 500 Inventory
+count Slot: [68]b?, id: "largemeals:roasted_mutton_rack_block" == 2
+expect \[zq\] creativedelight:\S*roasted_mutton_rack\S*_manual_only ->
+
+## SQ-LGM-09 | egg dishes accept duck, goose, parrot, turtle eggs; not the dragon egg
+@group A
+@commands Egg recipes: Tomato Egg Soup, Omurice and Sweet Berry Custard with a duck, goose, parrot and turtle egg; a dragon egg
+@pass the four accepted, dragon egg rejected (LGM-18)
+@fails `#forge:eggs`
+@from batches/r1102b/s3_A.qb
+> zq uses untitledduckmod:duck_egg
+> zq uses untitledduckmod:goose_egg
+> zq uses quark:egg_parrot_red_blue
+> zq uses minecraft:turtle_egg
+count (alone|shared) \S*tomato_egg_soup >= 4
+count (alone|shared) \S*omurice >= 4
+count (alone|shared) \S*sweet_berry_custard >= 4
+> zq uses minecraft:dragon_egg
+look the minecraft:dragon_egg uses list (last block of lines) has no tomato_egg_soup, omurice or sweet_berry_custard
+
+## SQ-LGM-10 | after /reload: 13 manual_only and 3 assemblies make Large Meals food
+@group A
+@commands `/reload`, then `/kubejs dump_recipes`-style listing (or the recipe export) filtered on `creativedelight:` ids containing `manual_only` and a largemeals output
+@pass 13 `_manual_only` shapeless (4 soups, 6 meals and desserts, 3 feasts) + 3 sequenced assemblies on a bowl, none in the mechanical crafter (LGM-13); Large Meals Chicken Curry has its pot recipe `chicken_curry` and `chicken_curry_cooked_manual_only`, Ender's End Chicken Curry has `ender_chicken_curry` and `ender_chicken_curry_cooked_manual_only`; no duplicate recipe id line in the log (plan_scratch_bugfix_1103 5.2)
+@fails
+@from batches/r1102b/s3_A.qb
+> zq makes largemeals
+count \[zq\] creativedelight:\S*_manual_only -> \d+ largemeals: == 13
+count \[zq\] creativedelight:createsequencedassembly/\S+ -> \d+ largemeals: == 3
+look 4 soups, 6 meals and desserts, 3 feasts among the manual_only ids; the assemblies start on a bowl
+
+## CQ-LGM-11
+@group client
+@commands LGM-11 Feast Plating tab (3 pages), LGM-12 both curries' names, LGM-14 and 20 Display Delight placement (13 blocks), LGM-15, 16 Spice of Life (Hearty Lunch complexity 6, servings counted from the placed feast and the hand), LGM-19 Knife and Machete Drops tab, tooltips on the racks
+@pass as the test list
+@fails
+@draft no batch holds this row yet

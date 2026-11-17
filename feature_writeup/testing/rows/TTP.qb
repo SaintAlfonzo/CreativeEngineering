@@ -1,0 +1,32 @@
+# Scratch queue rows TTP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TTP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-TTP Tall tooltips, Curios slot line, PneumaticCraft text, 2026-11-02 ([tooltips.md](../tooltips.md) 3 and 7; TODO `ui/tooltips #5`, `#8`, `#9`)
+@@date 2026-11-02
+@@sources feature_writeup/tooltips.md
+@@text
+@@text Needs patcherMod 1.1.07 built 2026-11-02 00:06 or later (installed) and a full restart (the PneumaticCraft listener is a
+@@text startup script). Client only; no server half (all three are client tooltip code).
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## CQ-TTP-01
+@group client, creative
+@commands TT-39: GUI scale 4 or a small window; hover a Logistics Module or a shulker box full of named items; then `[tooltips] keepTopOnScreen = false` in `creativeengineering-common.toml` and hover again; set it back
+@pass Name at the top of the screen, the end cut off at the bottom; with the key off the name is cut off (vanilla); a short tooltip near the bottom still moves up
+@fails `grep -i "ScreenTooltipTopMixin" logs/latest.log` (mixin apply error: the local slot 9 changed); a frame drawn by Iceberg's `Tooltips.calculateRect` needs brief step 2
+@draft no batch holds this row yet
+## CQ-TTP-02
+@group same
+@commands TT-40: hover a Stepstool, a Simple Hats mask, the Falconry Glove, a Sophisticated Backpack, a Lightman's wallet, stone
+@pass Each curio item shows one gold "Slot: ..." line under the name; stepstool has no "Worn in the Feet slot"; stone none
+@fails A doubled line means a mod's own line does not use the `curios.slot` key: note the item for `CuriosSlotTooltip`
+@draft no batch holds this row yet
+## CQ-TTP-03
+@group same
+@commands TT-41: hover Air Canister, Pressure Gauge Module, Glycerol without Shift, then with Shift
+@pass Without Shift: the description in plain gray, wrapped, no "Hold Shift" line, no blue/aqua; Glycerol "Tastes sweet!"; with Shift: PNC's aqua text
+@fails `grep -n "pnc_tooltips" logs/kubejs/startup.log` (a Rhino error naming `getTranslationKey`, `I18n.get` or `splitString`)
+@draft no batch holds this row yet

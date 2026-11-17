@@ -1,0 +1,494 @@
+# Scratch queue rows TPF (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TPF.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-TPF Third-party bug fixes: Packet Fixer and Debugify Reforged, 2026-11-13 ([thirdparty_fixes.md](../thirdparty_fixes.md) sections 2 and 7, TODO `largecontent/mod-additions #80`)
+@@date 2026-11-13
+@@jars creativecommon
+@@sources feature_writeup/thirdparty_fixes.md
+@@text
+@@text Targets `packetfixer-3.3.2-1.18-1.20.4-merged.jar` and `debugify-1.1.0-forge-1.19.2.jar`. Both are in the
+@@text instance's `mods/` since 2026-11-13 23:20. Packet Fixer has a `both` row since 2026-11-13 (shipped to clients and server with one
+@@text bounded config): `prep_srv.sh` and `eval_client.py setup` copy it into every scratch server and client, so rows that
+@@text need a side without it delete it from `srv/mods` or `GAME/mods`. Debugify has a `both` row and ships `config/debugify.json` (9 fixes) since 2026-11-14 (plan_bugfix_1114.md 2); rows that write their own config still overwrite it per boot. `prep_srv.sh` copies the jar into every scratch server: rows that need a side WITHOUT one delete it from `OUT/srv/mods` (or `GAME/mods`) before the boot; reference
+@@text copies in `jar_archive/thirdparty_fixes/`. Write the Debugify and Packet Fixer configs into the scratch dir every boot
+@@text (the instance `debugify.json` is the shipped set since 2026-11-14; Packet Fixer's instance file is unlimited). Phases, boots and setup: thirdparty_fixes.md section 7 (P1 to P7). Debugify config per boot:
+@@text `tools/scratch_query/tpf_debugify_cfg.py CONFIG/debugify.json [@set ...]` (no set = every fix off). Probe:
+@@text `tools/scratch_query/tpf_probe.js` as `zz_tpf_probe.js` (written, not yet run). Every fix row runs twice: "base" (fix
+@@text off: the bug must reproduce) and "fix" (its tranche on: the bug must be gone); a fix whose base does not reproduce stays
+@@text off (thirdparty_fixes.md rule 2). Server batches ready: `tools/scratch_query/batches/r1113tpf/s1_base.qb` and
+@@text `s1_fix.qb` (generated from `s1_common.inc` by `s1_gen.py`); client batches are written by the runner from these rows.
+@@text
+@@table
+## SQ-TPF-00 | setup and boot: both jars load, no mixin errors from them
+@group A
+@commands `s1_base.qb` / `s1_fix.qb` row SQ-TPF-00: boot with both jars, gamerules, forceload; prints both configs. Rerun 2026-11-14 with the shipped `config/debugify.json` (9 fixes on; plan_bugfix_1114.md 2): also `grep "Enabled [0-9]*/" logs/latest.log`
+@pass `Enabled N/..` with N the server-side count of the 9 shipped fixes; no `Mixin apply failed`, `InvalidInjectionException`, `MixinTransformerError`; log names debugify and packetfixer; `config/packetfixer.properties` generated (record its defaults for SQ-TPF-30)
+@fails mixin error naming debugify/packetfixer: a clash with an installed mixin (thirdparty_fixes.md 6 lists the shared targets)
+@from batches/r1113tpf/s1_fix.qb passed
+bootreject Mixin apply failed|InvalidMixinException|InvalidInjectionException|MixinTransformerError
+bootexpect (?i)debugify
+bootexpect (?i)packetfixer
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 6000
+> difficulty normal
+> forceload add 1000 1000 1599 1015
+sleep 8
+shell cat config/packetfixer.properties config/debugify.json | tr '\n' ' ' | head -c 600
+shell grep -ciE "debugify|packetfixer" logs/latest.log
+
+## SQ-TPF-01 | shipped debugify.json: boot Done, no MC-121706 crash, 9 fixes applied; file unchanged by the boot
+@group A
+@commands Rewritten 2026-11-14 (plan_bugfix_1114.md 2): the SHIPPED file. Copy the instance `config/debugify.json` into the scratch `config/` unchanged (no `tpf_debugify_cfg.py` call); `sha1sum` it; boot; `grep -E "Enabled [0-9]+/|Mixin apply failed|mc121706" logs/latest.log`; after `stop`, `diff` the scratch file against `configs_edited/root_config/debugify.json`; then `s1_fix.qb`
+@pass boot reaches `Done (`; no MC-121706 (`BowAttackGoalMixin`) crash; the 9 shipped fixes applied (MC-84873, -200418, -214147, -232869, -223153, -121903, -72151, -206922, -237493; record Debugify's "Enabled N/M" line, N = the server-side count of those 9); diff empty, or only formatting (then copy the rewritten form to `config/` and `configs_edited/`); SQ-TPF-11 to -17 fix verdicts as in r1114
+@fails a key Debugify does not know (typo MC-124117 for MC-124177 is expected), or Debugify rewrote values: read its log line; crash: a fix turned on that is not in the list
+@from batches/r1115/p1_a1.qb
+bootexpect Done \(
+bootreject mc121706|BowAttackGoalMixin
+shell sha1sum config/debugify.json $INST/configs_edited/root_config/debugify.json $INST/config/debugify.json
+shell diff config/debugify.json $INST/configs_edited/root_config/debugify.json && echo "diff empty"; true
+shell grep -hiE "debugify" logs/latest.log | grep -iE "MC-[0-9]+|unknown|invalid|enabled" | cut -c1-220 | head -20; true
+look Enabled line recorded; diff empty (the post-stop diff is in the run notes); TPF-11 to -17 below carry the fix verdicts
+
+## SQ-TPF-10 | MC-206922 lightning kills three cows: their drops survive (fixed) or vanish (bug)
+@group A
+@commands batch row (MC-206922): three 1-health cows, lightning on each, count items within 20 blocks
+@pass base: cows dead, no item; fix: at least 1 item
+@fails base shows items: ItemPhysic or another mod already keeps them, fix stays off; fix shows none: 4.5 export check of `mc206922.ItemEntityMixin`
+@from batches/r1113tpf/s1_fix.qb passed
+# NoAI: a cow that wandered off the strike point survived (r1114)
+> summon minecraft:cow 1300 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}
+> summon minecraft:cow 1310 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}
+> summon minecraft:cow 1320 -60 1000 {Health:1f,NoAI:1b,Tags:["l206922"]}
+sleep 2
+> summon minecraft:lightning_bolt 1300 -60 1000
+> summon minecraft:lightning_bolt 1310 -60 1000
+> summon minecraft:lightning_bolt 1320 -60 1000
+sleep 5
+> execute unless entity @e[tag=l206922]
+> execute positioned 1310 -60 1000 if entity @e[type=item,distance=..20]
+expect Test passed$
+expect Test passed, count: [1-9]
+
+## SQ-TPF-11 | MC-84873 a dead cow with DeathTime 25 is removed (fixed) or stays forever (bug)
+@group A
+@commands batch row (MC-84873): cow summoned dead with `DeathTime:25s`
+@pass base: still there after 5 s; fix: gone
+@fails -
+@from batches/r1115/p1_a1.qb passed
+# @e and @e[tag=] skip dead entities (EntitySelector adds Entity::isAlive): select the dead cow by UUID (r1114)
+> summon minecraft:cow 1400 -60 1000 {DeathTime:25s,Health:0f,UUID:[I;84873,1,2,3]}
+sleep 5
+> data get entity 00014b89-0000-0001-0000-000200000003 DeathTime
+expect No entity was found
+
+## SQ-TPF-12 | MC-200418 a cured baby zombie villager on a chicken: the villager is not left riding (fixed)
+@group A
+@commands batch row (MC-200418): baby zombie villager with `ConversionTime:60` riding a chicken, in a glass box
+@pass both: a villager exists; base: the chicken carries the villager; fix: it does not
+@fails no villager: conversion blocked (difficulty, Forge `LivingConversionEvent` from a pack mod)
+@from batches/r1115/p1_a1.qb passed
+> fill 1198 -60 998 1202 -56 1002 minecraft:glass hollow
+> summon minecraft:chicken 1200 -59 1000 {Tags:["c200418"],Passengers:[{id:"mca:male_zombie_villager",IsBaby:1b,Age:-24000,ConversionTime:60,PersistenceRequired:1b,ArmorItems:[{},{},{},{id:"minecraft:leather_helmet",Count:1b}]}]}
+sleep 8
+# MCA (overwriteOriginalZombieVillagers) replaces a summoned minecraft:zombie_villager on join, dropping its vehicle and
+# ConversionTime: summon the MCA one, the pack's real path; it converts to mca:male_villager (#zq:villagers) (r1114)
+> execute positioned 1200 -59 1000 if entity @e[type=#zq:villagers,distance=..4]
+> data get entity @e[tag=c200418,limit=1] Passengers[0].id
+expect Test passed, count: 1
+expect (?i)no elements matching Passengers
+
+## SQ-TPF-13 | MC-214147 a skeleton in leather armor stays a skeleton in powder snow (fixed) or turns stray (bug)
+@group A
+@commands batch row (MC-214147): skeleton with leather helmet and chestplate inside 2 blocks of powder snow, 30 s
+@pass base: a stray; fix: still a skeleton
+@fails base no stray: a mod changes skeleton freezing; fix stays off
+@from batches/r1115/p1_a1.qb passed
+> fill 1099 -60 999 1101 -57 1001 minecraft:glass
+> fill 1100 -59 1000 1100 -58 1000 minecraft:powder_snow
+> summon minecraft:skeleton 1100 -59 1000 {PersistenceRequired:1b,ArmorItems:[{},{},{id:"minecraft:leather_chestplate",Count:1b},{id:"minecraft:leather_helmet",Count:1b}]}
+sleep 30
+> execute positioned 1100 -59 1000 if entity @e[type=stray,distance=..3]
+> execute positioned 1100 -59 1000 if entity @e[type=skeleton,distance=..3]
+expect Test failed
+expect Test passed, count: 1
+
+## SQ-TPF-14 | MC-72151 a snow golem's snowball does not hurt a wolf (fixed: 8.0 health) or takes 0.5 (bug: 7.5)
+@group A
+@commands batch row (MC-72151): snowball owned by a snow golem (fixed UUID) dropped on an 8-health wolf
+@pass base: `7.5f`; fix: `8.0f`
+@fails Owner not resolved (both 8.0): summon the golem first, check its UUID with `data get`
+@from batches/r1115/p1_a1.qb passed
+> summon minecraft:snow_golem 1500 -60 1014 {NoAI:1b,UUID:[I;72151,1,2,3]}
+> summon minecraft:wolf 1500 -60 1010 {Health:8f,NoAI:1b,Tags:["w72151"]}
+sleep 1
+> summon minecraft:snowball 1500 -57 1010 {Motion:[0.0d,-1.0d,0.0d],Owner:[I;72151,1,2,3]}
+sleep 3
+> data get entity @e[tag=w72151,limit=1] Health
+expect entity data: 8\.0f
+
+## SQ-TPF-15 | MC-232869 adult striders summoned in Peaceful never carry a saddle (fixed; bug: about 1 in 30)
+@group A
+@commands batch row (MC-232869): Peaceful, 150 `summon strider` (no NBT, so spawn setup runs)
+@pass both: 100+ striders; base: at least 1 with `Saddle:1b` (about 99.4 % chance); fix: none
+@fails base 0: rerun once before calling it not reproduced
+@from batches/r1115/p1_a1.qb passed
+> difficulty peaceful
+repeat 150
+> summon minecraft:strider 1550 -60 1005
+end
+sleep 4
+> execute positioned 1550 -60 1005 if entity @e[type=strider,distance=..30]
+> execute positioned 1550 -60 1005 if entity @e[type=strider,distance=..30,nbt={Saddle:1b}]
+> kill @e[type=strider]
+> difficulty normal
+expect Test passed, count: 1[0-9][0-9]
+expect Test failed
+
+## SQ-TPF-16 | MC-223153 Block of Raw Copper uses the copper sound type (fixed) or stone (bug)
+@group A
+@commands batch row (MC-223153): `/ztpf sound`
+@pass base: `sound=stone`; fix: `sound=copper`
+@fails probe error: tooling, fix the probe
+@from batches/r1115/p1_a1.qb passed
+> ztpf sound
+expect \[ztpf\] raw_copper_block sound=copper
+
+## SQ-TPF-17 | MC-121903 a command block minecart saves its LastExecuted cooldown (fixed) or not (bug)
+@group A
+@commands batch row (MC-121903): command block minecart, `data get ... LastExecuted`
+@pass base: no element; fix: has the data
+@fails -
+@from batches/r1115/p1_a1.qb passed
+> summon minecraft:command_block_minecart 1450 -60 1000 {Tags:["m121903"]}
+sleep 1
+> data get entity @e[tag=m121903,limit=1] LastExecuted
+expect has the following entity data
+
+## SQ-TPF-18 | MC-2025 25 cows in a fenced pen through 12 chunk unload and reload cycles: none outside (fixed)
+@group A
+@commands batch row (MC-2025): 25 cows in a 5x5 oak fence pen, 12 forceload remove / add cycles
+@pass fix: `AABB` saved and the inside count stays 25 every cycle; base: `AABB` absent, any cycle below 25 = bug reproduced (LOOK at the counts)
+@fails base never below 25 in 12 cycles: not reproduced with this setup; record and keep the fix only if the owner wants it on evidence of the saved `AABB` alone
+@from batches/r1113tpf/s1_fix.qb
+> forceload add 1990 1990 2010 2010
+sleep 4
+# 25 cows in 25 blocks die of cramming (maxEntityCramming 24) after a reload: the r1114 losses were deaths (beef and
+# leather by the pen), not escapes. Off for this row only.
+> gamerule maxEntityCramming 0
+> kill @e[tag=p2025]
+> fill 1995 -60 1995 2001 -60 2001 minecraft:oak_fence
+> fill 1996 -60 1996 2000 -60 2000 minecraft:air
+repeat 25
+> summon minecraft:cow 1998 -60 1998 {Tags:["p2025"],PersistenceRequired:1b}
+end
+sleep 10
+> data get entity @e[tag=p2025,limit=1] AABB
+repeat 12
+> forceload remove 1990 1990 2010 2010
+sleep 12
+> execute if entity @e[tag=p2025]
+> forceload add 1990 1990 2010 2010
+sleep 10
+> execute if entity @e[tag=p2025,x=1996,y=-61,z=1996,dx=4,dy=3,dz=4]
+> execute as @e[tag=p2025] unless entity @s[x=1996,y=-61,z=1996,dx=4,dy=3,dz=4] run say p2025-out
+end
+> execute if entity @e[tag=p2025]
+> gamerule maxEntityCramming 24
+look no "p2025-out" line in fix (an escape = MC-2025); base: any "p2025-out" = bug reproduced; a total below 25 with no "out" line is a death (r1114: cramming, suffocation), not the bug; the 12 "unloaded" checks print Test failed
+expect has the following entity data
+
+## SQ-TPF-19 | MC-224729 partially generated chunks are saved at shutdown (fixed) or lost (bug)
+@group B (two fresh levels)
+@commands P3b. Level 1 all off, level 2 `@s1`: `forceload add 3000 3000`, `sleep 40`, then `stop` (no `save-all` before it); after the JVM is gone `python3 tools/scratch_query/tpf_chunkstatus.py OUT/srv/<level>/region 177 177 197 197`
+@pass base: `proto=0` (partial chunks lost at shutdown); fix: `proto` above 0
+@fails base proto above 0: the chunks were saved on unload during the wait, shorten the sleep; fix 0: 4.5 export check of `mc224729.ThreadedAnvilChunkStorageMixin`
+@from batches/r1113tpf/s19.qb passed
+> forceload add 3000 3000
+sleep 40
+> forceload query 3000 3000
+expect (?i)is marked for force loading
+
+# r1114: with sleep 40 the base saved 416 proto chunks (dependency chunks unload and save during the wait). Short
+# variant: stop 8 s after the ticket, while generation is still running; read with
+#   tpf_chunkstatus.py OUT/srv/<level>/region 365 365 385 385
+
+## SQ-TPF-30
+@group A
+@commands P4 setup: write three `packetfixer.properties` files from thirdparty_fixes.md 4.2: `vanilla` (every size at the vanilla value its header gives, `allSizesUnlimited=false`), `client` and `server` (the candidates)
+@pass keys match the generated file (`chunkPacketData`, `varLong`, `nbtMaxSize`, `allSizesUnlimited`, `forceUnlimitedNbtEnabled`, `decoderSize`, `packetSize`, `stringSize`, `timeout`, `varInt21`, `varInt`); boot logs no packetfixer error; the Immersive Portals payload conflict warning is expected
+@fails a key ignored: read the config class strings in the jar
+@draft no batch holds this row yet
+## CQ-TPF-31
+@group client joined to A
+@commands Packet Fixer on both sides with the `vanilla` file; `eval_client.py launch GAME server=localhost:25599`; `op PerfEval` from the console
+@pass joins; no `packetfixer` errors either side; moving and chat work
+@fails join fails: the jar alone breaks networking (Badpackets, Immersive Portals payload mixin)
+@draft no batch holds this row yet
+## CQ-TPF-32
+@group client joined to A
+@commands Neither side has Packet Fixer. `ztpf bignbt PerfEval 1500 plain` (3 MiB quota, small on the wire), then `ztpf bignbt PerfEval 3000 rand` on a fresh join
+@pass base repro: the client is disconnected with `Tried to read NBT tag that was too big` (plain) and a frame or compression error (rand)
+@fails plain does not kick: the quota is not checked on this path (record), the NBT part of 4.2 is moot
+@draft no batch holds this row yet
+## CQ-TPF-33
+@group client joined to A
+@commands Storage-heavy chunk, Packet Fixer on neither side. (a) `ztpf worstchunk 4000 4000` (section buffer upper bound, server only). (b) client away (`tp @p 0 -60 0`), `ztpf heavychunk 4100 4100 64 64` (64 campfires x 4 papers x 64 KB, about 16 MB of sync data in one chunk), then `tp PerfEval 4100 -59 4100`. (c) the same with the pack's storage blocks: a chunk of Storage Drawers, AE2 drives and chests filled with heavy items from `ztpf bignbt` (record which of them carry their items in the sync tag: only those count)
+@pass (a) records `sectionBytes` (expected about 250 KB). (b) and (c): base repro = the client disconnects on entering the chunk; record the exact message (per-tag quota, frame, decompressed or chunk buffer)
+@fails (b) no disconnect: raise COUNT or KB until it does; record the threshold
+@draft no batch holds this row yet
+## CQ-TPF-34
+@group client joined to A
+@commands Packet Fixer with the `client` file on the client and the `server` file on the server; repeat CQ-TPF-32, -33 (b) and (c), and `ztpf bigpayload PerfEval 1500`
+@pass no disconnect; the paper is in the inventory (LOOK: hover shows it); the heavy chunk renders; `bigpayload sent` and no client error (Immersive Portals' raised limit)
+@fails still kicked: candidate limits too low, raise the one named in the message
+@draft no batch holds this row yet
+## CQ-TPF-35
+@group client joined to A
+@commands Packet Fixer on the client only with the shipped `config/packetfixer.properties` (delete the jar from `srv/mods`). Run with -34 and -36 first in P4 to measure each side. Join, 5 minutes of play (no new errors either side), then repeat CQ-TPF-32 to -34 and -38, -39
+@pass joins and plays as without it; record which repros pass; expected: clientbound ones pass, CQ-TPF-38 and -39 kick (server quota), and a heavy chunk may still fail on the server's frame writer
+@fails join fails or a new error: report it; Packet Fixer is shipped on both sides, so a failure needs a rollback decision (row, jar, bullet)
+@draft no batch holds this row yet
+## CQ-TPF-36
+@group client joined to A
+@commands Packet Fixer on the server only (delete the jar from `GAME/mods`); repeat CQ-TPF-32 and -34
+@pass record which repros pass (shows what the server side contributes, e.g. the 3-byte frame length)
+@fails - (measures)
+@draft no batch holds this row yet
+## CQ-TPF-37
+@group client joined to A
+@commands Packet Fixer both sides, candidate config: walk and fly for 5 minutes, open chests, a JEI recipe, a quest book
+@pass no new errors either side compared with CQ-TPF-31
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-38
+@group client joined to A
+@commands Serverbound item (thirdparty_fixes.md 4.7), survival: client with the `client` file; run once with the server on the `vanilla` file, once on the `server` file. `ztpf bignbt PerfEval 2500 plain` (fits the client), open the inventory, pick the paper up and put it in another slot; then put it in a chest
+@pass `vanilla` server: the player is kicked on the click (server log `Tried to read NBT tag that was too big`); `server` file: no kick, the paper moves
+@fails no kick with `vanilla`: the server does not read that stack on this path; record
+@draft no batch holds this row yet
+## CQ-TPF-39
+@group client joined to A
+@commands Serverbound creative pick (4.7): creative, `ztpf heavychunk 4200 4200 1 512` (one heavy campfire), Ctrl+middle-click it; then JEI cheat-give of the heavy paper (JEI cheat mode on)
+@pass `vanilla` server: the pick kicks the player; `server` file: the picked campfire item arrives; JEI give: record whether JEI's packet hits the 32 KiB payload limit (a reason to raise `packetSize` on the server, or to leave it)
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-40
+@group client SP
+@commands c1 (MC-31819): Peaceful, `effect clear @s`, `data get entity @s foodSaturationLevel`, sprint-jump 30 s (xdotool hold `w`, `ctrl`, `space`), read again
+@pass base: saturation lower; fix: unchanged
+@fails base unchanged: Spice of Life or AppleSkin changes exhaustion in Peaceful, fix stays off
+@draft no batch holds this row yet
+## CQ-TPF-41
+@group client SP
+@commands c1 (MC-93018): survival, `summon wolf ~2 ~ ~ {NoAI:1b,Tags:["w93018"]}`, hold beef, right-click it, `data get entity @e[tag=w93018,limit=1] InLove`
+@pass base: InLove above 0 (hearts); fix: 0
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-42
+@group client SP
+@commands c1 (MC-155509): survival, `summon pufferfish ~1 ~ ~ {PuffState:2,NoAI:1b,Tags:["p155509"]}` in a 1-block water pocket at the player, `kill @e[tag=p155509]`, wait 2 s, `data get entity @s Health`
+@pass base: below 20 (hurt while dying); fix: 20
+@fails base 20: increase to 3 pufferfish
+@draft no batch holds this row yet
+## CQ-TPF-43
+@group client SP
+@commands c1 (MC-231743): `scoreboard objectives add pot minecraft.custom:minecraft.pot_flower`, place a flower pot, right-click it with an oak sapling, `scoreboard players get PerfEval pot`
+@pass base: 0; fix: 1
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-44
+@group client SP
+@commands c1 (MC-124117): `effect give @s speed 600 1`, `xp add @s 30 levels`, `execute in minecraft:the_nether run tp @s 0 100 0`, then back; then the same through a Nether portal and an Immersive Portals portal if one is placeable
+@pass fix: effect icons and the XP bar shown after each change (shots); base: something missing (record which state)
+@fails portal path differs from the command path: Immersive Portals overlap (thirdparty_fixes.md 4.3)
+@draft no batch holds this row yet
+## CQ-TPF-45
+@group client SP
+@commands c1 (MC-135971): give 8 oak logs, open a crafting table, put them in, hover the result, Ctrl+Q
+@pass base: nothing or one item dropped; fix: the whole craftable stack dropped (items on the ground: `execute if entity @e[type=item,distance=..5]`)
+@fails Fast Workbench owns the crafting table menu here (memory fastworkbench-crafting-path): record whether the fix reaches it
+@draft no batch holds this row yet
+## CQ-TPF-46
+@group client SP, world with cheats off
+@commands c1 (MC-14923): type 40 chat lines quickly (xdotool)
+@pass base: kicked for spam; fix: not kicked
+@fails needs `sp_world.py` with `allowCommands` off; skip if it cannot be made
+@draft no batch holds this row yet
+## CQ-TPF-47
+@group client SP
+@commands c1 (MC-12829): creative, a wall 1 block thick and 6 long of ladders, then vines, then scaffolding; `tp @s` 8 blocks before it facing it, fly forward (xdotool hold `w` with flying on) for 3 s, `data get entity @s Pos`
+@pass fix: the distance covered through the wall equals the distance in open air (same run without the wall); base: shorter (slowed)
+@fails base not slowed: another mod already changes climbable movement; fix stays off
+@draft no batch holds this row yet
+## CQ-TPF-48
+@group client SP (scratch) + owner client (optional)
+@commands c1 (MC-237493, thirdparty_fixes.md 4.6): scratch client with `-Dmixin.debug.export=true` (add to the launch JVM args), join the world, then `javap -c GAME/.mixin.out/class/net/minecraft/client/ClientTelemetryManager.class`; four boots: Kiwi `noMicrosoftTelemetry` true/false x Debugify MC-237493 on/off
+@pass Kiwi on: `Canceling Microsoft telemetry` in the log; Debugify on: its handler in the exported constructor; both on: either both handlers chain or one conflict warning, and the constructor still takes the DISABLED branch; both off: the vanilla `newTelemetrySession` call only. Optional owner step (real signed-in client): a forwarder for the four `minecraft.api.*.host` properties logging method and path only shows no `POST /events` with each kill on
+@fails a mixin error naming mc237493 or Kiwi's telemetry mixin: keep Kiwi's (already proven in play) and leave Debugify's off
+@draft no batch holds this row yet
+## CQ-TPF-50
+@group client SP
+@commands c2 (MC-577): bind Inventory to mouse button 4 and Drop to button 5 (options.txt `key_key.inventory:key.mouse.4`, `key_key.drop:key.mouse.5`), open a chest, click button 4, then over a stack button 5
+@pass fix: the chest closes, the stack drops one item; pick block, hotbar and swap still act once (no double action with Forge's own handling)
+@fails double action: Forge already handles that key, the fix must stay off
+@draft no batch holds this row yet
+## CQ-TPF-51
+@group client SP
+@commands c2 (MC-143474): select hotbar slot 5, `kill @s`, respawn
+@pass fix: slot 5 still selected (shot); base: slot 1
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-52
+@group client SP
+@commands c2 (MC-231097): hold right-click with a bow, drop it with Q while holding, walk
+@pass fix: normal speed (compare `data get entity @s Motion` or a timed walk); base: slow
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-53
+@group client SP
+@commands c2 (MC-80859): two stacks of 32 stone in the inventory, start a left-drag with a third over them (shot mid-drag)
+@pass fix: both stacks visible; base: hidden
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-54
+@group client SP
+@commands c2 (MC-147605, MC-140646): anvil rename field and the JEI search field; click one, then the other; type a long name and shift-select with arrows
+@pass fix: one cursor; the field scrolls with the selection (shots)
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-55
+@group client SP + portal
+@commands c2 (MC-249059): `execute in minecraft:the_nether run tp @s 0 100 0`; time the terrain screen (client log timestamps or screenshots every 0.5 s); then an Immersive Portals portal
+@pass fix: screen gone under 2 s once the terrain is ready; no stuck screen through a portal
+@fails stuck or blank screen through a portal: Immersive Portals clash, fix off
+@draft no batch holds this row yet
+## CQ-TPF-56
+@group client SP
+@commands c2 (MC-165381): survival, start breaking stone with a pickaxe, press Q mid-break
+@pass fix: breaking continues with the hand at hand speed; base: breaking restarts or stalls
+@fails Immersive Portals' MultiPlayerGameMode mixin changes the outcome: record
+@draft no batch holds this row yet
+## CQ-TPF-57
+@group client SP
+@commands c2 (MC-183776): F3+F4, pick a gamemode, release, then F3 once
+@pass fix: the debug screen opens on the first F3
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-58
+@group client SP
+@commands c2 (MC-79545): `xp set @s 2147483 levels` (shot)
+@pass fix: the XP bar drawn; base: bar gone
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-59
+@group client
+@commands c2 (MC-122627, MC-151412, MC-233042): type `/give ` in chat (shot of the suggestion box); Multiplayer > Add Server; Direct Connection
+@pass fix: padding on the right; the name field and address field focused (type at once, shot)
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-60
+@group client SP
+@commands MC-122477 baseline: scratch Common jar with `ChatOpenArmMixin` and `ChatOpenCharDropMixin` removed from its mixins json, Debugify MC-122477 off. 50 times: xdotool `/` then Escape (0.3 s apart); 50 times `t`; read the box after each open (shot or `ChatScreen` log line from a scratch client script)
+@pass records the doubled-key rate with both fixes off; also log the gap between key and character if a client script can
+@fails rate 0: xdotool does not reproduce it on this machine; the comparison falls back to the owner's hand test (CQ-CHK-01 method) and to CQ-TPF-64 side effects
+@draft no batch holds this row yet
+## CQ-TPF-61
+@group client SP
+@commands as CQ-TPF-60 with Debugify MC-122477 on, ours removed
+@pass doubled rate 0
+@fails rate above 0: Debugify misses the late-poll case (thirdparty_fixes.md 4.1)
+@draft no batch holds this row yet
+## CQ-TPF-62
+@group client SP
+@commands as CQ-TPF-60 with ours (the normal Common jar), Debugify off
+@pass doubled rate 0
+@fails rate above 0: improve ours (window, release check) in Creative Common
+@draft no batch holds this row yet
+## CQ-TPF-63
+@group client SP
+@commands both on
+@pass rate 0, no lost characters
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-64
+@group client SP
+@commands side effects of each: open chat with T and type `abc` with no delay (xdotool type --delay 0); open the anvil and type at once; JEI search box focus and type at once; hold `/` in an open chat
+@pass ours: `abc` intact, every box keeps its first character, holding `/` repeats; record the same for Debugify
+@fails the one that eats a legitimate character is the more intrusive one: keep the other
+@draft no batch holds this row yet
+## CQ-TPF-70
+@group client SP
+@commands c3 (MC-4490, MC-116379): cast a fishing rod, F5 third person, crouch (shot); then rod in the off-hand cast, punch with the main hand (shot)
+@pass fix: the line stays attached to the rod in both shots
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-71
+@group client SP
+@commands c3 (MC-127970): rain (`weather rain`), riptide trident in the main hand, shield in the off-hand, throw (shot mid-spin)
+@pass fix: the off-hand shield drawn normally
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-72
+@group client SP
+@commands c3 (MC-108948): a boat on slime blocks, side view (shot)
+@pass fix: the boat sits on the slime
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-73
+@group client SP
+@commands c3 (MC-197260): armor stand with armor, head inside a stone block (`summon armor_stand ~ ~-1.5 ~` under a stone block) (shot)
+@pass fix: stand lit normally
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-74
+@group client SP
+@commands c3 (MC-93384): `summon zombie` in a 1x2 water column, wait for drowning damage (shot)
+@pass fix: bubbles at the head
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-75
+@group client SP
+@commands c3 (MC-165595): `time add 2147483000`, summon a guardian and an armor stand target (or watch it target the player) (shot)
+@pass fix: the beam drawn
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-76
+@group client SP
+@commands c3 (MC-90084): `summon boat`, ride it, F5 (shot)
+@pass fix: legs not through the hull
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-80
+@group client SP
+@commands c4 (MC-69216, MC-129909, MC-119754): cast a rod then `gamemode spectator`; start eating then switch; elytra and a firework boost then switch
+@pass fix: the bobber is gone, eating stops, the boost stops
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-81
+@group client SP
+@commands c4 (MC-215530, MC-215531, MC-217716, MC-193343): stand in powder snow, carved pumpkin on the head, `effect give @s nausea`, soul speed boots on soul sand, then `gamemode spectator` (shots)
+@pass fix: no freeze overlay, no pumpkin overlay, no nausea warp, no soul speed
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-82
+@group client SP
+@commands c4 (MC-119417, MC-179072, MC-46766): sleep in a bed then switch to spectator; a creeper hissing at the player then `gamemode creative`; start breaking a block then switch to spectator
+@pass fix: out of the bed; the creeper stops swelling; no break animation or sound
+@fails -
+@draft no batch holds this row yet
+## CQ-TPF-90
+@group client SP, group B world with mountains
+@commands c5 (MC-162253): fly a fixed route across 40 chunk borders at the same speed, base and fix; client JFR (`jcmd <pid> JFR.dump`)
+@pass fix: fewer frames over 50 ms on border crossings than base (tools/perf/eval report); Rubidium and Distant Horizons loaded in both
+@fails no lag spikes in base: not reproduced, fix stays off
+@draft no batch holds this row yet
+## CQ-TPF-91
+@group client joined to A + SP
+@commands P6: candidate Debugify set and candidate Packet Fixer config on both sides: 20 minutes of a route (portal, Create contraption, JEI, chat, a quest book, a backpack)
+@pass no new ERROR lines in either log compared with CQ-TPF-31; no disconnect
+@fails bisect the candidate set by tranche
+@draft no batch holds this row yet

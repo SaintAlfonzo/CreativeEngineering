@@ -1,0 +1,94 @@
+# Scratch queue rows CBW (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CBW.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CBW Wood cutting boards, 2026-11-04 ([kitchen.md](../kitchen.md) 2.11, TODO `cooking/kitchen #38`; Creative Delight jar installed 2026-11-04)
+@@date 2026-11-04
+@@jars creativecommon creativedelight
+@@sources feature_writeup/kitchen.md
+@@text
+@@table
+## SQ-CBW-01 | wood cutting board recipes on the plank tags; board tags
+@group A
+@commands Boot; grep `latest.log` for `could not add the stone and wood cutting boards` and `invalid for block`; recipe dump `creativedelight:shaped/oak_cutting_board` (and the other 7), `creativedelight:shaped/cutting_board`; check `farmersdelight:cutting_board` recipe id is gone; tag probe `#creativedelight:cutting_board_planks`, `#minecraft:mineable/axe`, `#creativeengineering:counter_toppers`, `#creativeengineering:hammer_no_rotate`
+@pass No log line; 8 wood recipes (2 sticks + 4 of that wood's planks) plus the spruce board's on `#creativedelight:cutting_board_planks`; that tag holds spruce and modded / vertical / polished planks but none of the 8 vanilla planks; the 8 boards in the three block tags
+@fails `allowExtraBoards` not run; `addMatching` except not applied (the tag then still has oak planks: two recipes match oak)
+@from batches/r1113/c2_a1.qb
+bootreject could not add the stone and wood cutting boards|invalid for block
+> zq recipes _cutting_board
+> zq recipes farmersdelight:cutting_board
+> zq rdetail creativedelight:shaped/oak_cutting_board
+> zq rdetail creativedelight:shaped/cutting_board
+> zq itemtag creativedelight:cutting_board_planks
+> zq blocktag minecraft:mineable/axe
+> zq blocktag creativedelight:counter_toppers
+> zq blocktag creativedelight:hammer_no_rotate
+waitlog blocktag creativedelight:hammer_no_rotate 20
+count creativedelight:shaped/(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|crimson|warped)_cutting_board -> >= 8
+expect recipes matching farmersdelight:cutting_board: 0
+reject itemtag creativedelight:cutting_board_planks \(\d+\): .*minecraft:(oak|birch|jungle|acacia|dark_oak|mangrove|crimson|warped)_planks
+look oak board = 2 sticks + 4 oak planks (each wood's own planks); shaped/cutting_board (spruce board) on #creativedelight:cutting_board_planks, which holds spruce and modded / vertical / polished planks; the 8 wood boards in mineable/axe, counter_toppers and hammer_no_rotate (tags moved from creativeengineering: to creativedelight:). Spruce board's own id is the plain farmersdelight:cutting_board
+
+## SQ-CBW-02 | oak and crimson boards cut raw beef with a knife, drop themselves with or without an axe
+@group A
+@commands Place `farmersdelight:oak_cutting_board` and `crimson_cutting_board`; `/data get block`; fake player right-clicks a carrot then a knife; break each with and without an axe; reload the chunk
+@pass Each has a `farmersdelight:cutting_board` block entity, cuts the carrot, drops itself both ways, keeps its item over the reload
+@fails as SQ-FCB-07
+@from batches/r1113/fix_c2a1.qb
+> setblock 300 -60 360 farmersdelight:oak_cutting_board[facing=north]
+> setblock 302 -60 360 farmersdelight:crimson_cutting_board[facing=north]
+> pbot hold c2b minecraft:beef 1
+> pbot use c2b 300 -60 360
+> pbot hold c2b farmersdelight:iron_knife 1
+> pbot use c2b 300 -60 360
+> pbot hold c2b minecraft:beef 1
+> pbot use c2b 302 -60 360
+> pbot hold c2b farmersdelight:iron_knife 1
+> pbot use c2b 302 -60 360
+sleep 2
+> zc2 inv 300 -60 360
+> zc2 inv 302 -60 360
+> kill @e[type=minecraft:item,x=296,y=-62,z=356,dx=10,dy=6,dz=8]
+> zact break 300 -60 360 none
+> zact break 302 -60 360 minecraft:iron_axe
+> setblock 300 -60 360 farmersdelight:oak_cutting_board[facing=north]
+> setblock 302 -60 360 farmersdelight:crimson_cutting_board[facing=north]
+> zact break 300 -60 360 minecraft:iron_axe
+> zact break 302 -60 360 none
+expect \[zc2\] inv 300 -60 360: .*Inventory\[\]
+expect \[zc2\] inv 302 -60 360: .*Inventory\[\]
+look the beef left both boards after the knife use (Inventory[]), the kill line removed the cut result items (minced beef, farmersdelight:cutting/beef); each zact break sums 1 of its own board (c2a1 already passed the drops)
+> clear c2b
+
+## SQ-CBW-03 | rerun: a pumpkin pie goes on a birch board sitting on a CfB counter; no pie block placed
+@group A
+@commands `/setblock` a CfB counter, a `birch_cutting_board` and a `granite_cutting_board` on two counters; fake player places a vanilla pumpkin pie on the birch board
+@pass Pie not placed on the board (it stays in hand or goes on top as FD's board allows); no error in the log
+@fails `FDBackportEvents` check
+@from batches/r1115/p4_a1.qb
+> setblock 304 -60 360 cookingforblockheads:counter[facing=north]
+> setblock 306 -60 360 cookingforblockheads:counter[facing=north]
+> setblock 304 -59 360 farmersdelight:birch_cutting_board[facing=north]
+> setblock 306 -59 360 farmersdelight:granite_cutting_board[facing=north]
+> pbot hold c2b minecraft:pumpkin_pie 1
+> pbot use c2b 304 -59 360 up
+sleep 1
+> zc2 state 304 -59 360
+> zc2 inv 304 -59 360
+> zc2 state 304 -58 360
+> zp inv c2b
+waitlog \[zp\] done 20
+reject Exception|\[zc2\] error
+look board inv holds minecraft:pumpkin_pie; state at 304 -58 360 air; the bot no longer holds the pie
+> clear c2b
+> pbot remove c2b
+> pbot remove G
+
+@@text
+@@text Client:
+@@text - CQ-CBW-01: the 8 wood boards render with their wood colours (item, placed, all four facings); FD's board reads
+@@text   "Spruce Cutting Board"; a wood and a stone board on a CfB counter sit on the worktop like FD's board, not at the
+@@text   plate height; JEI shows the 8 recipes and the spruce board's planks list without the 8 vanilla planks.
+@@text
+@@text Results: not run yet.

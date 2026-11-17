@@ -1,0 +1,303 @@
+# Scratch queue rows HCS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/HCS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-HCS Hearth crow swap: spawn crash fix, H&H crow, nest spawning, tree and roof nests, 2026-11-10 ([plan_hearth_crow_swap.md](../plan_hearth_crow_swap.md) section 8, TODO `creativedelight/members #54`, `largecontent/mod-additions #60`)
+@@date 2026-11-10
+@@jars creativedelight
+@@sources feature_writeup/plan_hearth_crow_swap.md
+@@text
+@@text Jars: Creative Delight and Creative Common built 2026-11-10, NOT installed (the game was running). Install both, then run. SQ-HH-401 to -502 and CQ-HH-401 to -405 were rewritten 2026-11-10 for `hearthandharvest:crow` (note in that section); run them with this set. Fixture for SQ-HCS-09: a 1.2.02 save with a tamed AM crow, an AM crow carrying an item and a generated ground nest.
+@@text
+@@table
+## SQ-HCS-01 | fresh normal world boots past spawn prep with no crow scan errors
+@group B
+@commands Fresh normal world (default type, random seed); boot to `Done`; `shell grep -c "out of bound" logs/latest.log`; `shell grep -c "Exception generating new chunk" logs/latest.log`; `shell grep -c "CrowEvents" logs/latest.log`
+@pass Reaches `Done`; all three counts 0
+@fails Crash report under `crash-reports/`; a scan left in `hearth/crow/CrowEvents` or `nest/`
+@from batches/r1111/b1.qb
+bootexpect Done \(
+shell for p in "out of bound" "Exception generating new chunk" "CrowEvents"; do echo "$p: $(grep -c "$p" logs/latest.log)"; done; ls crash-reports 2>/dev/null | head
+bootreject out of bound
+bootreject Exception generating new chunk
+bootreject CrowEvents
+
+## SQ-HCS-02 | 40 new chunks of forest and plains by bot, no long tick naming crow code
+@group B
+@commands Same boot: `/tp` through 40 new chunks of forest and plains (`zq` path or 40 `tp` steps of 128 blocks); watch tick times
+@pass No crash; no tick over 200 ms naming `Crow`, `Nest` or `RoofNests` in the log or a JFR hot method
+@fails `RoofNests.decorate` or `NestCrows` in the profile: the structure-start read or an entity query is too wide
+@from batches/r1111/b1.qb
+> locate biome minecraft:forest
+waitlog (nearest minecraft:forest is at|Could not find) 600
+capture FO nearest minecraft:forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> pbot spawn hcs2 {FO1} 150 {FO3}
+> effect give hcs2 minecraft:slow_falling 600 0 true
+> effect give hcs2 minecraft:resistance 600 4 true
+repeat 20
+> execute as hcs2 at @s run tp @s ~128 150 ~
+sleep 3
+end
+> locate biome minecraft:plains
+waitlog (nearest minecraft:plains is at|Could not find) 600
+capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp hcs2 {PL1} 150 {PL3}
+repeat 20
+> execute as hcs2 at @s run tp @s ~ 150 ~128
+sleep 3
+end
+> pbot remove hcs2
+reject (?i)Exception.*(Crow|Nest|RoofNests)
+shell grep -nE "Can't keep up" logs/latest.log | tail -5; grep -nE "Exception|ERROR" logs/latest.log | grep -iE "crow|nest" | head -5
+look no Can't keep up during the walk worth attention; no crow / nest exception (JFR hot methods checked after the run)
+
+## SQ-HCS-03 | Chunky 30 x 30 chunks of forest: nests on leaves, about 1 in 6 chunks
+@group B
+@commands Chunky 30 x 30 chunks in `minecraft:forest` (seed with a large forest); then a script or `/cdevfind hearthandharvest:nest` count over the area
+@pass Every nest sits on leaves with nothing above; count near 150 (1 in 6 chunks, about 100 to 200); none on grass or the ground
+@fails No nests: biome tag `creativedelight:crow_nest_forests` empty or modifier `nest_tree_top` not loaded (`/cdevplace` the placed feature); nests on the ground: heightmap in `placed_feature/nest_tree_top.json`
+@from batches/r1111/b1.qb
+> chunky world minecraft:overworld
+> chunky shape square
+> chunky center {FO1} {FO3}
+> chunky radius 240
+> chunky start
+waitlog Task finished 1800
+> save-all flush
+sleep 10
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks world 'hearthandharvest:nest' --box $(( {FO1} - 240 )) $(( {FO3} - 240 )) $(( {FO1} + 240 )) $(( {FO3} + 240 )) --near 'leaves' 2>&1 | tail -40
+look nest count about 100 to 200 over the 900 chunks of the forest square, every nest with a leaves neighbour and depth 0 (top block), none on grass
+
+## SQ-HCS-04 | villages: a quarter of houses carry one roof nest
+@group B
+@commands `/place structure minecraft:village_plains` x 5 at spread positions (and one each of desert, savanna, taiga, snowy); look at every house roof
+@pass About a quarter of houses carry one nest, on a full block on the roof, never two on one house, none in a street or on a lamp post
+@fails None at all: mixin `ChunkGeneratorCrowNestMixin` not applied (log `hearthandharvest.ce.mixins.json`), or `/place` skips `applyBiomeDecoration` (then test with Chunky over a seed with villages); far below a quarter: the middle-third column misses sloped roofs, widen `ROOF_DEPTH` in `nest/RoofNests`
+@from batches/r1111/b1.qb
+> forceload add 6000 6000 6200 6200
+> place structure minecraft:village_plains 6100 64 6100
+> forceload add 7000 6000 7200 6200
+> place structure minecraft:village_plains 7100 64 6100
+> forceload add 8000 6000 8200 6200
+> place structure minecraft:village_desert 8100 64 6100
+> forceload add 9000 6000 9200 6200
+> place structure minecraft:village_savanna 9100 64 6100
+> forceload add 10000 6000 10200 6200
+> place structure minecraft:village_taiga 10100 64 6100
+> forceload add 11000 6000 11200 6200
+> place structure minecraft:village_snowy 11100 64 6100
+sleep 10
+> save-all flush
+sleep 10
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks world 'hearthandharvest:nest' --box 5900 5900 11300 6300 2>&1 | tail -25
+look nests on roofs (depth 0, above the ground band), never two per house, none in streets; if none: /place skips applyBiomeDecoration, use Chunky over villages (row note)
+
+## SQ-HCS-05 | generated nest refills one crow per 5 game minutes up to 3, none with the player 60 away
+@group A
+@commands New world; `/place feature hearthandharvest:nest_tree_top` on a tree until one places (or find one from SQ-HCS-03); count crows within 24; kill them; stay within 48 blocks for 6 minutes of game time (`/time add` does not advance random ticks: wait, or `/gamerule randomTickSpeed 300` for 30 s)
+@pass 2 to 3 crows at the nest after generation; after the kill, crows come back one at a time, never more than 3 within 24 blocks; with the player 60 blocks away none come back
+@fails No refill: `NestBlock.isRandomlyTicking` false for `generated=true`; too many: cap in `NestCrows.tick`
+@from batches/r1113/rerun_a.qb
+> gamerule randomTickSpeed 3
+> fill 30495 -61 29995 30525 -45 30025 minecraft:glass hollow
+> fill 30496 -60 29996 30524 -46 30024 minecraft:air
+> setblock 30510 -55 30010 minecraft:oak_log
+> setblock 30510 -54 30010 hearthandharvest:nest[generated=true]
+> kill @e[type=hearthandharvest:crow]
+> pbot spawn hcs5 30505 -60 30010 minecraft:overworld creative
+sleep 2
+> gamerule randomTickSpeed 300
+repeat 5
+> zwo skip 6100
+sleep 8
+> execute positioned 30510 -54 30010 if entity @e[type=hearthandharvest:crow,distance=..24]
+end
+> gamerule randomTickSpeed 3
+expect Test passed, count: 1\b
+expect Test passed, count: 3\b
+reject Test passed, count: [4-9]
+> kill @e[type=hearthandharvest:crow]
+> tp hcs5 30570 -60 30010
+> gamerule randomTickSpeed 300
+> zwo skip 6100
+sleep 10
+> gamerule randomTickSpeed 3
+> execute positioned 30510 -54 30010 if entity @e[type=hearthandharvest:crow,distance=..24]
+expect Test failed|Test passed, count: 0
+> pbot remove hcs5
+look the five counts rise one at a time (1, 2, 3, 3, 3) and never pass 3; last count 0 with the bot 60 blocks away
+
+## SQ-HCS-06 | hand-placed nest makes no crows; summon and egg do
+@group A
+@commands Place a nest by hand; `/gamerule randomTickSpeed 300` for 60 s within 10 blocks; `/summon hearthandharvest:crow`; use `hearthandharvest:crow_spawn_egg`
+@pass The hand-placed nest makes no crows; summon and egg both make a crow
+@fails Player nest spawns: `playerNestsSpawnCrows` true in config, or `GENERATED` set on placement
+@from batches/r1111/a2.qb passed
+> forceload add 1300 -40 1400 40
+> kill @e[type=hearthandharvest:crow]
+> setblock 1350 -60 0 hearthandharvest:nest[generated=false]
+> pbot spawn hcs6 1355.5 -60 0.5
+> gamerule randomTickSpeed 300
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if entity @e[type=hearthandharvest:crow]
+expect (Test failed|Test passed, count: 0)
+> summon hearthandharvest:crow 1352 -60 4
+sleep 1
+> execute if entity @e[type=hearthandharvest:crow]
+expect Test passed, count: 1
+> pbot hold hcs6 hearthandharvest:crow_spawn_egg
+> pbot use hcs6 1355 -61 3 up
+sleep 1
+> execute if entity @e[type=hearthandharvest:crow]
+expect Test passed, count: 2
+> pbot remove hcs6
+
+## SQ-HCS-07 | nest loot: rolled on first touch, once; breaking drops the rolled items; roof table items
+@group A
+@commands A generated tree nest and a roof nest: `/data get block` each (LootTable key present), right-click one empty-handed, take everything, break the other
+@pass First touch rolls loot (or nothing: about half the tree nests are empty); `LootTable` gone after; the same nest gives no new items on reopen; breaking drops the rolled items; roof nests can hold seeds, bread, a book or a lead
+@fails Loot rolled twice: `NestBlockEntity.unpackLoot` not clearing the table first
+@from batches/r1113/c4_ar.qb
+> forceload add 39990 39990 40040 40020
+sleep 3
+# the feature nest placed in c4_a (40005 -55 40005, generated=true) is still there: is it on leaves?
+> execute if block 40005 -55 40005 hearthandharvest:nest run say HCS7 feature nest present
+> execute if block 40005 -56 40005 #minecraft:leaves run say HCS7 feature nest on leaves
+> execute if block 40005 -54 40005 #minecraft:leaves run say HCS7 feature nest under leaves
+> fill 40018 -60 39998 40032 -58 40004 minecraft:air
+> kill @e[type=minecraft:item,x=40015,y=-62,z=39995,dx=20,dy=6,dz=12]
+> setblock 40020 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:11L}
+> setblock 40022 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:12L}
+> setblock 40024 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:13L}
+> setblock 40026 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest_village",LootTableSeed:14L}
+> setblock 40030 -60 40000 hearthandharvest:nest[generated=true]{LootTable:"hearthandharvest:chests/crow_nest",LootTableSeed:21L}
+> data get block 40020 -60 40000 LootTable
+expect has the following block data: "hearthandharvest:chests/crow_nest_village"
+> pbot spawn n8 40021.5 -60 40002.5 minecraft:overworld survival
+sleep 2
+> clear n8
+# sneaking with an empty hand takes every stack in one use (NestBlock.use loops while shift is down)
+> zhh3 sneak n8 on
+> pbot use n8 40020 -60 40000 up
+sleep 1
+> data get block 40020 -60 40000 LootTable
+expect Found no elements matching LootTable
+> data get block 40020 -60 40000 Inventory
+> zhh3 inv n8
+waitlog \[zhh3\] done 20
+# reopen the emptied nest with an empty hand: nothing new
+> clear n8
+> pbot use n8 40020 -60 40000 up
+sleep 1
+> zhh3 inv n8
+waitlog \[zhh3\] done 20
+> data get block 40020 -60 40000 Inventory
+> clear n8
+> pbot spawn n8 40023.5 -60 40002.5 minecraft:overworld survival
+> zhh3 sneak n8 on
+> pbot use n8 40022 -60 40000 up
+sleep 1
+> zhh3 inv n8
+waitlog \[zhh3\] done 20
+> clear n8
+> pbot spawn n8 40025.5 -60 40002.5 minecraft:overworld survival
+> zhh3 sneak n8 on
+> pbot use n8 40024 -60 40000 up
+sleep 1
+> zhh3 inv n8
+waitlog \[zhh3\] done 20
+> zhh3 sneak n8 off
+> kill @e[type=minecraft:item,x=40015,y=-62,z=39995,dx=20,dy=6,dz=12]
+> setblock 40026 -60 40000 minecraft:air destroy
+> setblock 40030 -60 40000 minecraft:air destroy
+sleep 2
+> zhh3 items 40026 -60 40000 2
+> zhh3 items 40030 -60 40000 2
+> pbot remove n8
+expect HCS7 feature nest present
+look the first sneak-use moved the 40020 roll to n8 (inv line: seeds, bread, book, lead, nuggets or shiny items; c4_a showed iron ingot + constantan nugget for seed 11) and its Inventory is empty after; LootTable gone after the first touch; the reopen added nothing (second inv empty); 40022 / 40024 gave their rolls (or nothing); the broken village nest dropped its rolled items plus the nest, the tree-table nest at 40030 its roll or only the nest; "feature nest on leaves" or "under leaves" says where the oak feature put it
+
+## SQ-HCS-08 | no natural Alex's Mobs crow; summon works
+@group B
+@commands 20 minutes (or Chunky plus a walk) in plains and forest; `zq` entity count `alexsmobs:crow`; `/summon alexsmobs:crow`
+@pass No natural `alexsmobs:crow`; the summon works; JEI hides `alexsmobs:spawn_egg_crow`
+@fails AM crows still spawning: rule `no_alexsmobs_crow` in `mob_spawns.json` not applied (log `[mob_spawns]`), `crowSpawnWeight` not 0
+@from batches/r1111/b1.qb
+shell python3 $INST/tools/scratch_query/region_blocks.py entities world 'alexsmobs:crow|hearthandharvest:crow' 2>&1 | tail -15
+> execute if entity @e[type=alexsmobs:crow]
+> summon alexsmobs:crow {FO1} 120 {FO3}
+> execute if entity @e[type=alexsmobs:crow]
+expect Test passed, count: [1-9]
+shell grep -nE "\[mob_spawns\].*(crow|no_alexsmobs_crow)" logs/latest.log | head -5
+look region census: alexsmobs:crow 0 saved in chunks, hearthandharvest:crow present near nests
+
+## SQ-HCS-09
+@group A
+@commands 1.2.02 fixture save: boot; find both AM crows and the ground nest; stand near the nest 6 minutes (or random tick speed up)
+@pass Boots without errors; both AM crows still there, the tamed one still owned, the carrier still holding; the ground nest starts producing `hearthandharvest:crow`; no log line about `crow_wariness` beyond Forge's unknown-capability notice
+@fails Error on the AM crows: a leftover reference to `CrowAccess` or the removed mixin
+@draft no batch holds this row yet
+## SQ-HCS-10
+@group A
+@commands H&H crow mechanics: the rewritten SQ-HH-401 to -502
+@pass All pass
+@fails The row's own failure note
+@draft no batch holds this row yet
+## SQ-HCS-11 | crow nest to straw recipes
+@group A
+@commands Craft a Crow Nest into Straw; mill one in a Millstone; JEI on the nest
+@pass 2 Straw by hand, 3 from the Millstone; the block is named Crow Nest
+@fails Recipe missing: `crow_salt_recipes.js` (creativedelight `shapeless/straw_from_crow_nest`, `createmilling/straw_from_crow_nest`)
+@from batches/r1111/a1.qb
+> zq rdetail straw_from_crow_nest
+waitlog \[zq\] done 20
+expect creativedelight:shapeless/straw_from_crow_nest
+expect creativedelight:createmilling/straw_from_crow_nest
+look shapeless gives 2 straw, milling 3
+
+## SQ-HCS-12 | tame crow on the shoulder hops off to fetch a dropped and a thrown item, then perches again
+@group A
+@commands Tame a crow (crow food, 1 in 5); let it sit on the shoulder; drop an item 6 blocks away; then throw one
+@pass The crow hops off and brings the item, perching back on the shoulder; thrown items are fetched too (`fetchThrownItems` true)
+@fails Never hops off: `CrowShoulder` reflection names `m_36362_` / `m_36364_` (log `NoSuchMethod`)
+@from batches/r1113/c4_ar.qb
+> forceload add 40087 39987 40113 40013
+sleep 3
+> kill @e[type=!player,x=40087,y=-62,z=39987,dx=26,dy=17,dz=26]
+> fill 40087 -61 39987 40113 -47 40013 minecraft:glass hollow
+> pbot spawn c13 40100.5 -60 40000.5 minecraft:overworld survival
+sleep 2
+> clear c13
+> summon hearthandharvest:crow 40101 -59 40001
+> zhh3 tame c13 40100 -54 40000 13
+waitlog \[zhh3\] tamed 20
+expect \[zhh3\] tamed 1
+sleep 45
+> zhh3 tally 40100 -55 40000 14
+waitlog \[zhh3\] tally 20
+expect \[zhh3\] tally crows=1 tamed=1 .*shoulder=1
+> summon minecraft:item 40106.5 -60 40000.5 {Item:{id:"minecraft:gold_nugget",Count:1b},PickupDelay:0s}
+sleep 30
+> zhh3 inv c13 minecraft:gold_nugget
+waitlog \[zhh3\] invcount c13 20
+expect \[zhh3\] invcount c13 minecraft:gold_nugget 1
+sleep 30
+> zhh3 tally 40100 -55 40000 14
+waitlog \[zhh3\] tally 20
+> zhh3 throw c13 40106 -60 40000 minecraft:gold_nugget 1
+sleep 40
+> zhh3 inv c13 minecraft:gold_nugget
+waitlog \[zhh3\] invcount c13 minecraft:gold_nugget 2 30
+> pbot remove c13
+> kill @e[type=hearthandharvest:crow,x=40087,y=-62,z=39987,dx=26,dy=18,dz=26]
+reject (?i)NoSuchMethod|m_36362_|m_36364_
+look the second tally shows shoulder=1 again (perched back after the first fetch)
+
+## CQ-HCS-01
+@group client
+@commands Watch a crow walk, idle, take off, fly, glide, sit (tame, right-click), ride a shoulder; give it an item
+@pass Each pose animates; flight banks and tilts; the held item shows in the beak; the shoulder crow renders on both skins; sounds play (squawk, hurt) with subtitles
+@fails Missing model: layer `hearthandharvest:crow#main` not registered (`CrowClient`); silent: `sounds.json` entries
+@draft no batch holds this row yet

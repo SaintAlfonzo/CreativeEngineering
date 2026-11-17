@@ -1,0 +1,213 @@
+# Scratch queue rows CDJ4 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CDJ4.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CDJ4 Creative Delight carve: kitchen and food Java, members, 2026-11-01 ([creative_delight.md](../creative_delight.md) 34, TODO `creativesplit/cdcb #7`)
+@@date 2026-11-01
+@@jars creativecommon creativedelight
+@@sources feature_writeup/creative_delight.md
+@@text
+@@text Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): -01 crashed the server first (`MobCobPipeSlotMixin` on the wrong class), -05 / -06 FAILED (`NCH.cfg` returned undefined for moved sections); both fixed, then -01 to -07 PASS (-07 server half); -08 PARTIAL (nest id is `incubation_additions:emu_nest`; a baby squid needs `spawn-animals=true`). Client rows open.
+@@text
+@@text Run after SQ-CS2, SQ-CMP and SQ-CBJ4 pass, in the same boot as SQ-CDS. Jars: `creativeengineering-1.1.07.jar`,
+@@text `creativedelight-1.0.0.jar` (nests Baby Mobs and Incubation Additions; CD requires `[1.1.07,)`), Compat, Calendar, CB;
+@@text no standalone `babyMobs-*` / `incubationAdditions-*` in the scratch `mods/`. Scratch copy: put the old sections back in
+@@text the scratch `creativeengineering-common.toml` with one edited value (`[canning] emptyCanChance = 0.5`, `[perf]
+@@text troughMissCooldownTicks = 300`) and delete them from the scratch `creativedelight-common.toml`, so the merge path runs.
+@@text
+@@table
+## SQ-CDJ4-01 | CD mixins
+@group A
+@commands `grep -E "creativedelight.mixins.json\|Mixin apply.*creativedelight\|\[creativedelight\]" logs/latest.log`; `grep -c "from creativedelight.mixins.json" logs/debug.log`
+@pass No mixin apply error; the 22 moved common mixins apply on a server (compartments `minecraft`, `quark`, `alexsmobs`, `immersive_weathering`, `farmersdelight`, `canned_goods`, `the_dirty_stuff`, `salt` with their mods loaded); none from `creativeengineering.mixins.json` for these names
+@fails A compartment name is not the mod id, or patcherMod still lists a moved mixin
+@from batches/r1101/cs4_boot3.qb
+bootreject creativedelight\.mixins\.json.*(Error|error|failed)
+shell grep -c "from creativedelight.mixins.json" logs/debug.log; grep -o "Mixing [A-Za-z_.]* from creativedelight.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u > cd_mx.txt; wc -l < cd_mx.txt; echo "also from CE:"; grep -o "Mixing [A-Za-z_.]* from creativeengineering.mixins.json" logs/debug.log | sed 's/Mixing //;s/ from.*//' | sort -u | comm -12 - cd_mx.txt; rm -f cd_mx.txt
+look the moved common mixins apply from creativedelight.mixins.json, none also from creativeengineering.mixins.json
+
+## SQ-CDJ4-02 | CD sections merged
+@group A
+@commands Same boot: `grep "\[swaps\] config sections" logs/latest.log`; read `config/creativedelight-common.toml`; restart, `grep "still has entries that moved" logs/latest.log`
+@pass Merge line names the six sections and `perf`; CD file has `emptyCanChance = 0.5` and `[perf]` with only `troughMissCooldownTicks = 300`; CE file has none of them after the boot; second boot no WARN
+@fails `mergeSections` ran after config load, or Forge kept the other `[perf]` keys
+@from batches/r1101/cs4_boot3.qb
+bootexpect \[swaps\] config sections .*canning.* merged from creativeengineering-common.toml into creativedelight-common.toml
+shell grep -E "\[swaps\] config sections" logs/latest.log | cut -c60-300; grep -nE "^\s*\[|emptyCanChance|troughMissCooldownTicks" config/creativedelight-common.toml; echo "CD [perf] keys:"; awk '/^\[perf\]/{f=1;next} /^\[/{f=0} f && /=/' config/creativedelight-common.toml; echo CE:; grep -nE "^\[(crop_growth|dandelion_maturing|crop_drops|stem_fruit|canning|cooking)\]" config/creativeengineering-common.toml || echo "CE has none of the six"; grep -n "troughMissCooldownTicks" config/creativeengineering-common.toml || echo "CE has no troughMissCooldownTicks"
+look merge names the six sections and perf; CD file emptyCanChance = 0.5, [perf] only troughMissCooldownTicks = 300; CE lost them
+
+## SQ-CDJ4-03 | CD members, nested Baby Mobs and Incubation Additions
+@group A
+@commands Same boot: `grep "\[creativedelight\] members" logs/latest.log`; `grep -E "baby_mobs\|incubation_additions" logs/latest.log \| head`
+@pass Member list ends with `baby_mobs, incubation_additions`; no "is loaded from ... not from the Creative Delight jar" ERROR
+@fails A standalone jar left in `mods/`, or the bundle missed a member
+@from batches/r1101/cs4_boot3.qb passed
+bootexpect \[creativedelight\] members: .*baby_mobs, incubation_additions
+bootreject is loaded from .* not from the Creative Delight jar
+shell grep -E "\[creativedelight\] members" logs/latest.log | cut -c60-400; ls mods | grep -iE "babymobs|incubationAdditions" || echo "no standalone jars"
+
+## SQ-CDJ4-04 | oven from CD
+@group A
+@commands Same boot: `/give @p creativeengineering:oven`, place it over a lit campfire, `/data get block ~ ~ ~`
+@pass Block and block entity exist (`creativeengineering:oven`); no missing registry lines for `oven`, `powdered_sugar_block`, `placed_*`
+@fails `OvenRegistry` / `PowderedSugarRegistry` / `DisplayDelightDishes` not registered from CD
+@from batches/r1101/cs4_boot3.qb passed
+> setblock {H1-8} {H2} {H3} minecraft:campfire[lit=true]
+> setblock {H1-8} {H2+1} {H3} creativeengineering:oven
+> data get block {H1-8} {H2+1} {H3}
+> give qa creativeengineering:oven
+> give qa creativeengineering:powdered_sugar_bucket
+reject Unknown (block|item)
+expect has the following block data
+shell grep -iE "missing.*(oven|powdered_sugar_block|placed_)|Registry Object not present" logs/latest.log | head -3
+
+## SQ-CDJ4-05 | NCH.cfg finds CDConfig
+@group A
+@commands Same boot: `grep -E "NCH.cfg\] (no .*COOKING\|no .*CROP_DROPS\|creativedelight:)" logs/kubejs/server.log \| head`; `grep "creativedelight config class" logs/kubejs/server.log`
+@pass No "no COOKING section" / "no CROP_DROPS section" warning; overridden values name `creativedelight:`
+@fails `cd_core.js` did not register CDConfig, or ran after the first `cfg` call
+@from batches/r1101/cs4_boot3.qb
+shell grep -E "NCH.cfg\] (no .*COOKING|no .*CROP_DROPS|creativedelight:)" logs/kubejs/server.log | head -5 | cut -c1-200; grep "creativedelight config class" logs/kubejs/server.log | head -2 | cut -c1-200; grep -cE "section in any registered config" logs/kubejs/server.log
+kjsreject no COOKING section|no CROP_DROPS section
+look no missing-section WARN; overrides name creativedelight:
+
+## SQ-CDJ4-06 | soil yield and crop drops after /reload (last: /reload truncates server.log)
+@group A
+@commands Same boot: `/reload`, `grep -iE "soil_yield\|crop_drops" logs/kubejs/server.log \| head`
+@pass Soil yield and bell pepper tables built as before, no "no switch in CDConfig" warnings
+@fails `soil_yield.js` still loading CEConfig
+@from batches/r1101/cs4_boot3.qb
+> reload
+waitlog (Reloaded|reload) 180
+sleep 15
+shell grep -iE "soil_yield|crop_drops|no switch in CDConfig" logs/kubejs/server.log | head -5 | cut -c1-200; grep -cE "Error occurred while handling event|ReferenceError" logs/kubejs/server.log
+kjsreject no switch in CDConfig
+
+## SQ-CDJ4-07 | lunchbox serializers
+@group A
+@commands Same boot: `/give @p solapplepie:lunchbag`, `/give @p minecraft:smithing_table`; check the recipe list for `creativeengineering:lunchbox_*` (`/recipe give @p *` then search the log or JEI dump)
+@pass Lunchbox serializers present (`LunchboxRecipes` registered from CD when Spice of Life is loaded)
+@fails Lunchbox registration guard or class path wrong
+@from batches/r1101/cs4_boot3.qb
+> give qa solapplepie:lunchbag
+> zq recipes creativeengineering:lunchbox
+sleep 5
+shell grep -E "lunchbox" logs/latest.log | grep -iE "error|unknown|serializer" | head -3 | cut -c1-200
+look lunchbox recipes present (zq lists them), no unknown serializer
+
+## SQ-CDJ4-08 | nested member content
+@group A
+@commands Same boot: `/summon minecraft:squid ~ ~ ~ {Age:-24000}`; `/give @p incubation_additions:emu_nest`
+@pass Baby squid exists; nest item exists
+@fails Member not nested or its mixin config missing in the nested jar
+@from batches/r1101/cs4_boot3.qb
+> fill {H1-1} {H2} {H3+9} {H1+1} {H2+1} {H3+11} minecraft:water
+> summon minecraft:squid {H1} {H2} {H3+10} {Age:-24000,Tags:["cdj4sq"],PersistenceRequired:1b}
+> data get entity @e[type=minecraft:squid,tag=cdj4sq,limit=1] Age
+> give qa incubation_additions:emu_nest
+reject Unknown item
+expect has the following entity data: -2
+look baby squid keeps its negative Age; nest item exists
+
+## SQ-CDJ4-08b | baby squid keeps its age (spawn-animals=true; water at 130)
+@group A
+@commands Scratch server with `spawn-animals=true` (prep_srv.sh `spawn-animals=true`): `/summon minecraft:squid ~ ~ ~ {Age:-24000}` in water, `/data get entity @e[type=squid,limit=1,sort=nearest] Age`
+@pass Age stays negative (Baby Mobs from the CD jar); with `spawn-animals=false` vanilla discards the squid on its next tick
+@fails Baby Mobs member not nested
+@from batches/r1102b/s3_A.qb passed
+> fill 129 -61 499 131 -61 501 minecraft:water
+> summon minecraft:squid 130 -61 500 {Age:-24000,Tags:["cdj408b"]}
+sleep 5
+> data get entity @e[type=minecraft:squid,tag=cdj408b,limit=1] Age
+expect has the following entity data: -2\d{4}
+reject No entity was found
+
+@@text
+@@text In game (client): CDJ4-C1 bake one oven recipe with a bowl ingredient, WTHIT shows "Holding: 1 Bowl" on the oven, a
+@@text cooking pot and a kettle (Common reads through RemainderView); CDJ4-C2 upgrade a lunchbox to Netherite, dye it, read
+@@text "Slots"; CDJ4-C3 season a food (tooltip line), open a can ("Servings" line), JEI Seasoning, Canning, Using Cans, Feast
+@@text Plating and Baking pages; CDJ4-C4 Quark hoe 3x3 on wheat and an animal near a feeding trough; CDJ4-C5 seagulls ignore a
+@@text lunchbox, a dyed canned golem keeps its colour, a cob pipe renders on the head.
+@@text
+## SQ-LEM-01 | ripe lemon tree: pick 10 times, break 10 times (tree at 135)
+@group A
+@commands boot; harvest a ripe lemon tree (age 4, lower half), by right-click pick and by breaking, 10 times each; grep `latest.log` for `LemonTreePickYieldMixin`
+@pass each pick gives 2 to 5 lemons (rerun after the 2026-11-02 mixin; r1102b gave 1 to 2) and resets the tree to age 2; each break 2 to 5 (more with Fortune); no mixin apply error
+@fails `farming/trees #3`, CD `LemonTreePickYieldMixin` (pick), `data/fruitsdelight/loot_tables/blocks/lemon_tree.json` (break)
+@from batches/r1102b/s3_A.qb
+> pbot spawn lem 135 -60 503 minecraft:overworld survival
+> pbot hold lem minecraft:air
+repeat 10
+> setblock 135 -60 500 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 135 -59 500 fruitsdelight:lemon_tree[age=4,half=upper]
+> pbot use lem 135 -60 500 south
+> execute if block 135 -60 500 fruitsdelight:lemon_tree[age=2] run say LEM01 reset to age 2
+end
+sleep 2
+> zcount 131 -61 496 139 -56 506
+> clear lem fruitsdelight:lemon 0
+count LEM01 reset to age 2 == 10
+> kill @e[type=minecraft:item,x=135,y=-60,z=500,distance=..8]
+> clear lem
+repeat 10
+> setblock 135 -60 500 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 135 -59 500 fruitsdelight:lemon_tree[age=4,half=upper]
+> zact break 135 -60 500 none
+end
+count \[zact\] break 135 -60 500 fruitsdelight:lemon_tree held none: true, .*fruitsdelight:lemon x[2-5]\b == 10
+> pbot remove lem
+look pick: zcount item:fruitsdelight:lemon plus the bot's "Found N" = 20 to 50 over 10 picks
+
+## SQ-LEM-02 | lemon cutting yields 8 slices
+@group A
+@commands recipe probe (RecipeManager id dump) or JEI: `creative_delight:farmersdelightcutting/lemon_slice` (knife) and `creative_delight:createsaw/lemon_slice` (saw)
+@pass both give 8 Lemon Slices (knife also 1 Lemon Seeds); `fruitsdelight:lemon_cutting` and `fruitsdelight:cutting/lemon_slice` absent (remade 2026-11-02, r1102b gave 4)
+@fails `fruitsdelight/recipes.js` Lemon yield
+@from batches/r1102b/s3_A.qb
+> zq rdetail lemon_cutting
+> zq rdetail cutting/lemon_slice
+expect \[zq\] fruitsdelight:lemon_cutting \{.*-> 8 \S*lemon_slice
+expect \[zq\] fruitsdelight:cutting/lemon_slice \{.*-> 8 \S*lemon_slice
+look knife recipe also gives 1 Lemon Seeds (second result, not printed by rdetail: recipe dump or JEI)
+
+## SQ-JSL-01 | jams and jellies take slices; the old _from_slices recipes are gone
+@group A
+@commands recipe probe: `farmersdelight:cooking/orange_jelly`, `farmersdelight:cooking/lemon_jelly`, `fruitsdelight:mixing/flowing_orange_jam`, `fruitsdelight:mixing/flowing_lemon_jam` ingredient lists
+@pass each whole-fruit slot is `#forge:fruits/orange` or Orange Slice (lemon: `#forge:fruits/lemon` or Lemon Slice); the lemon recipes keep their separate Lemon Slice slot; pot container `vintagedelight:empty_mason_jar`; `creative_delight:farmersdelightcooking/{orange,lemon}_jam_from_slices`, `creative_delight:createmixing/{orange,lemon}_jam_from_slices` and their `sliceanddice:cooking/creative_delight/...` copies absent
+@fails `baking/sweets #6`, `dishes/jams #6`, CD `fruitsdelight/recipes.js` Jams take slices
+@from batches/r1103/sB_2.qb
+> zq rdetail farmersdelight:cooking/orange_jelly
+> zq rdetail farmersdelight:cooking/lemon_jelly
+> zq rdetail fruitsdelight:mixing/flowing_orange_jam
+> zq rdetail fruitsdelight:mixing/flowing_lemon_jam
+> zq recipes jam_from_slices
+waitlog \[zq\] recipes matching jam_from_slices: 30
+expect \[zq\] recipes matching jam_from_slices: 0
+count \[zq\] rdetail matching \S+: [1-9]\d*$ == 4
+look each whole-fruit slot lists the fruit (#forge:fruits/orange / lemon) and the slice; the lemon recipes keep a separate Lemon Slice slot; the pot recipes' container is vintagedelight:empty_mason_jar (rdetail+ fields)
+
+## SQ-JSL-02 | Cooking Pot with an Empty Mason Jar: orange jam from slices, then lemon jam (x 130, 134)
+@group A
+@commands Cooking Pot (heated, Empty Mason Jar in the container slot): 2 Orange Slices + Sugar + Lemon Slice; then 3 Lemon Slices + Sugar
+@pass Orange Jam, then Lemon Jam, each in the mason jar
+@fails same
+@from batches/r1103/sB_2.qb
+> zsb potnbt fruitsdelight:orange_jelly
+> zsb potnbt fruitsdelight:lemon_jelly
+waitlog \[zsb\] potnbt fruitsdelight:lemon_jelly 30
+capture JT1 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ fruitsdelight:orange_jelly
+capture JT2 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ fruitsdelight:lemon_jelly
+> setblock 130 -60 500 minecraft:campfire[lit=true]
+> setblock 130 -59 500 farmersdelight:cooking_pot
+> data merge block 130 -59 500 {Inventory:{Size:9,Items:[{Slot:0b,id:"fruitsdelight:orange_slice",Count:1b},{Slot:1b,id:"fruitsdelight:orange_slice",Count:1b},{Slot:2b,id:"minecraft:sugar",Count:1b},{Slot:3b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:7b,id:"vintagedelight:empty_mason_jar",Count:1b}]}}
+> setblock 134 -60 500 minecraft:campfire[lit=true]
+> setblock 134 -59 500 farmersdelight:cooking_pot
+> data merge block 134 -59 500 {Inventory:{Size:9,Items:[{Slot:0b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:1b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:2b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:3b,id:"minecraft:sugar",Count:1b},{Slot:7b,id:"vintagedelight:empty_mason_jar",Count:1b}]}}
+shell m={JT1}; [ {JT2} -gt $m ] && m={JT2}; sleep $(( m / 20 + 15 )); echo "waited $(( m / 20 + 15 )) s"
+> data get block 130 -59 500 Inventory
+> data get block 134 -59 500 Inventory
+expect 130, -59, 500 has the following block data: .*Slot: 8b, id: "fruitsdelight:orange_jelly"
+expect 134, -59, 500 has the following block data: .*Slot: 8b, id: "fruitsdelight:lemon_jelly"
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zq|zsb|zlbs)\] (error|unknown))
+look slot 8 holds the jam (Orange Jam / Lemon Jam = orange_jelly / lemon_jelly) and the mason jar was used; on a FAIL check whether slot 6 holds the meal (no container taken) or the inputs stayed (no recipe matched)

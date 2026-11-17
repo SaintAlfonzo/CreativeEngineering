@@ -1,0 +1,54 @@
+# Scratch queue rows FF (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/FF.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Firefly bush biomes, 2026-10-30
+@@date 2026-10-30
+@@jars creativecommon creativedelight
+@@text
+@@text | Entry | Tier | Steps | Pass | Fail meaning |
+@@text |---|---|---|---|---|
+## CQ-FF-01 | firefly bushes in savanna, shrubland, brushland, mangrove and orchid swamps
+@group server
+@commands fresh world, `/locate biome` or fly through savanna, Terralith shrubland and brushland, mangrove swamp, orchid swamp; look for firefly bushes
+@pass bushes found in each, plus river and swamp
+@fails none found in a new biome: kubejs/data override not winning over the mod's own modifier
+@from batches/r1031/b1_gameplay.qb
+> execute positioned 0 70 0 run locate biome minecraft:savanna
+waitlog nearest minecraft:savanna is at 300
+capture SV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SV1} 200 {SV3}
+sleep 30
+> zq count {SV1-48} 40 {SV3-48} {SV1+48} 140 {SV3+48} fireflybushport:firefly_bush
+> execute positioned 0 70 0 run locate biome minecraft:mangrove_swamp
+waitlog nearest minecraft:mangrove_swamp is at 300
+capture MS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {MS1} 200 {MS3}
+sleep 30
+> zq count {MS1-48} 40 {MS3-48} {MS1+48} 140 {MS3+48} fireflybushport:firefly_bush
+> execute positioned 0 70 0 run locate biome terralith:shrubland
+> execute positioned 0 70 0 run locate biome terralith:brushland
+> execute positioned 0 70 0 run locate biome terralith:orchid_swamp
+sleep 60
+# Terralith biomes (added 10-31 after the first pass counted only savanna and mangrove)
+> execute positioned 0 70 0 run locate biome terralith:shrubland
+waitlog nearest terralith:shrubland is at 300
+capture SH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {SH1} 200 {SH3}
+sleep 30
+> zq count {SH1-48} 40 {SH3-48} {SH1+48} 140 {SH3+48} fireflybushport:firefly_bush
+> execute positioned 0 70 0 run locate biome terralith:brushland
+waitlog nearest terralith:brushland is at 300
+capture BR is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {BR1} 200 {BR3}
+sleep 30
+> zq count {BR1-48} 40 {BR3-48} {BR1+48} 140 {BR3+48} fireflybushport:firefly_bush
+> execute positioned 0 70 0 run locate biome terralith:orchid_swamp
+waitlog nearest terralith:orchid_swamp is at 300
+capture OS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {OS1} 200 {OS3}
+sleep 30
+> zq count {OS1-48} 40 {OS3-48} {OS1+48} 140 {OS3+48} fireflybushport:firefly_bush
+look all five counts above 0
+sleep 3

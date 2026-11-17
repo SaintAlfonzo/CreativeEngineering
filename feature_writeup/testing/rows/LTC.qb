@@ -1,0 +1,18 @@
+# Scratch queue rows LTC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/LTC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-LTC Loading tip bar settings moved to a per-client file, 10 s default, 2026-11-08 ([loading_tips.md](../loading_tips.md))
+@@date 2026-11-08
+@@sources feature_writeup/loading_tips.md
+@@text
+@@text Not run. Common built 2026-11-08, needs the game closed to go into CEPortTesting. Keys in `config/creativecommon-client.toml`, no longer in `creativecommon-common.toml`, so CQ-LT-04 and -06 edit that file.
+@@text
+@@table
+## CQ-LTC-01
+@group client, CEPortTesting
+@commands launch; `grep -n "cycleSeconds" config/creativecommon-client.toml config/creativecommon-common.toml`; load a world and time the tips
+@pass client file has `cycleSeconds = 10`, the common file has none; a new tip about every 10 s
+@fails `registerConfig` CLIENT line, `LoadingTipBar` reading `CommonClientConfig`
+@draft no batch holds this row yet

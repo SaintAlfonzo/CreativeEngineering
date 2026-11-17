@@ -1,0 +1,89 @@
+# Scratch queue rows MG (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/MG.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Monkey merge, 2026-10-30 ([item_merges.md](../item_merges.md) 2.1, TODO `merges/mobs #1`)
+@@date 2026-10-30
+@@jars creativecommon creativedelight
+@@sources feature_writeup/item_merges.md
+@@text
+@@text Needs the creativeDelight jar of 2026-10-30 installed and a full restart (mixins, startup scripts, Neapolitan config).
+@@text
+@@text | Entry | Tier | Steps | Pass | Fail meaning |
+@@text |---|---|---|---|---|
+## SQ-MG-17 | monkey merge mixins
+@group server
+@commands Boot; grep latest.log for `GorillaForageBananaMixin`, `SugarGliderForageBananaMixin`, `Mixin apply`, `[creativedelight]`
+@pass No mixin apply error; the alexsmobs compartment is on
+@fails target changed (Alex's Mobs updated) or the compartment gate is off
+@from batches/r1031/a1_boot.qb passed
+bootreject (Mixin apply failed|InvalidInjectionException).*(GorillaForageBananaMixin|SugarGliderForageBananaMixin)
+
+## SQ-MG-18 | no chimpanzees in a jungle; gorillas forage Neapolitan bananas
+@group server
+@commands Fresh world; `/locate biome minecraft:jungle`; `/place feature neapolitan:banana_plant` 20 times around; `/kill @e[type=neapolitan:chimpanzee]` count; then summon 3 gorillas by jungle leaves, `/time add` until they forage
+@pass No chimpanzees (kill count 0); gorillas drop and eat Neapolitan bananas, never Alex's Mobs'
+@fails chimps: config not read (check the group chance line); Alex's banana: gorilla mixin not applied
+@from batches/r1031/b1_gameplay.qb
+> execute positioned 0 70 0 run locate biome minecraft:jungle
+waitlog nearest minecraft:jungle is at 300
+capture JG is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {JG1} 200 {JG3}
+sleep 20
+repeat 10
+> execute at qa run spreadplayers ~ ~ 1 24 false qa
+> execute at qa run place feature neapolitan:banana_plant ~ ~ ~
+end
+> execute at qa run tp qa ~ ~ ~
+> kill @e[type=neapolitan:chimpanzee]
+> execute at qa run summon alexsmobs:gorilla ~2 ~ ~
+> execute at qa run summon alexsmobs:gorilla ~-2 ~ ~
+> execute at qa run summon alexsmobs:gorilla ~ ~ ~2
+> time add 6000
+sleep 120
+> execute at qa if entity @e[type=item,nbt={Item:{id:"alexsmobs:banana"}},distance=..48]
+> execute at qa if entity @e[type=item,nbt={Item:{id:"neapolitan:banana"}},distance=..48]
+expect No entity was found
+look the chimp kill finds nothing; the alexsmobs banana check fails and the neapolitan one passes (if neither, gorillas did not forage in 2 min: zq count leaves near qa, wait longer); spreadplayers moves the bot across the canopy
+# `if entity ...nbt` and `place feature` left no log line on 10-31 B1: data get probes instead
+> execute at qa run tp qa ~ ~ ~
+sleep 1
+capture QA Teleported qa to (-?\d+)\.\d+, (-?\d+)\.\d+, (-?\d+)
+> zq count {QA1-32} {QA2-40} {QA3-32} {QA1+32} {QA2+20} {QA3+32} neapolitan:banana_stalk
+> execute at qa as @e[type=minecraft:item,distance=..48] run data get entity @s Item.id
+> execute at qa as @e[type=alexsmobs:gorilla,distance=..48] run data get entity @s HandItems
+reject alexsmobs:banana
+look at least one neapolitan:banana among the item ids or hands; banana_stalk count above 0 (plants placed)
+sleep 3
+
+## SQ-MG-19 | sugar gliders drop Neapolitan bananas
+@group server
+@commands Summon 3 sugar gliders by jungle leaves, wait for them to forage; check dropped items with `/data get entity @e[type=item,limit=5,sort=nearest]`
+@pass Neapolitan bananas among the drops, no `alexsmobs:banana`
+@fails sugar glider mixin not applied
+@from batches/r1031/b1_gameplay.qb
+> execute at qa run summon alexsmobs:sugar_glider ~1 ~ ~1
+> execute at qa run summon alexsmobs:sugar_glider ~-1 ~ ~1
+> execute at qa run summon alexsmobs:sugar_glider ~1 ~ ~-1
+sleep 120
+> execute at qa if entity @e[type=item,nbt={Item:{id:"alexsmobs:banana"}},distance=..48]
+> execute at qa if entity @e[type=item,nbt={Item:{id:"neapolitan:banana"}},distance=..48]
+look first check fails, second passes
+# `if entity ...nbt` and `place feature` left no log line on 10-31 B1: data get probes instead
+> execute at qa run tp qa ~ ~ ~
+sleep 1
+capture QA Teleported qa to (-?\d+)\.\d+, (-?\d+)\.\d+, (-?\d+)
+> zq count {QA1-32} {QA2-40} {QA3-32} {QA1+32} {QA2+20} {QA3+32} neapolitan:banana_stalk
+> execute at qa as @e[type=minecraft:item,distance=..48] run data get entity @s Item.id
+> execute at qa as @e[type=alexsmobs:sugar_glider,distance=..48] run data get entity @s HandItems
+reject alexsmobs:banana
+look at least one neapolitan:banana among the item ids or hands; banana_stalk count above 0 (plants placed)
+sleep 3
+
+## SQ-MG-20
+@group client
+@commands JEI: search chimpanzee
+@pass Banner pattern only; no spawn egg, no head
+@fails removed items list not reloaded (full restart)
+@draft no batch holds this row yet

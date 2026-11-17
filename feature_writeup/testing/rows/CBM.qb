@@ -1,0 +1,92 @@
+# Scratch queue rows CBM (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CBM.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CBM Creative Brewing phase 1 script moves, 2026-11-01 ([creative_brewing.md](../creative_brewing.md) 4.2, 4.5, TODO `creativesplit/cdcb #7`)
+@@date 2026-11-01
+@@sources feature_writeup/creative_brewing.md
+@@text
+@@text Run 2026-11-01 (rcs234, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CBM-01 to -05 PASS; -06 LOOK. Client rows open.
+@@text
+@@text Run after SQ-CS2 and SQ-CMP pass (waves 2 and 3 are the base), in the same boot as SQ-CBJ4 (the moved startup scripts
+@@text are in the rebuilt `creativebrewing-1.0.0.jar`; the server and client trees are copied into it from the pack folder).
+@@text
+@@table
+## SQ-CBM-01 | CB startup pack
+@group A
+@commands `grep -E "Error\|creativebrewing\|potion_area\|Tool Effects\|\[alcohol\]\|\[food values\]\|CE potions" logs/kubejs/startup.log \| head -40`
+@pass CB pack lists `creativeengineering/potions.js` ... `vinery/winemaker_trades.js`; `[alcohol] food values set on 44 of 44 drinks` (as before the move); `[food values] 12 effect swaps`; no `could not install dispenser handler`; no `global.trades missing`
+@fails A moved startup file reads a pack top-level name at load (4.1 rule 3), or a renamed Java class (PotionBucketDispenser, DragonBreathBrewing, WinemakerTrades) is not in the CB jar
+@from batches/r1101/cs4_boot3.qb
+shell grep -E "Error|creativebrewing\]|potion_area|Tool Effects|\[alcohol\]|\[food values\]|CE potions|could not install|global.trades missing|jar-startup" logs/kubejs/startup.log | cut -c1-220 | head -40
+kjsreject could not install dispenser handler
+kjsreject global\.trades missing
+look CB pack lists its startup files; [alcohol] food values set on 44 of 44 drinks; [food values] 12 effect swaps
+
+## SQ-CBM-02 | CB-registered items, effect, potion
+@group A
+@commands Same boot: `/give` `creativeengineering:potion_bucket`, `creativeengineering:magic_resistance` via `/effect give`, a `minecraft:potion{Potion:"creativeengineering:long_reach"}`
+@pass Items, effect and potion exist (registered from the CB startup pack)
+@fails Registry callbacks from jar packs not fired
+@from batches/r1101/cs4_boot3.qb passed
+> give qa creativeengineering:potion_bucket
+> effect give qa creativeengineering:magic_resistance 10
+> give qa minecraft:potion{Potion:"creativeengineering:long_reach"}
+reject Unknown (item|effect)
+expect Applied effect
+expect Gave 1 +\[.*\] to qa
+
+## SQ-CBM-03 | CB recipes and ids
+@group A
+@commands Same boot: `grep -E "potion bottling done\|tipped arrow\|alcohol recipes\|jeed_providers.js:" logs/kubejs/server.log`; `/kubejs dump_recipes`-style check or `/recipe` count of `creativebrewing:` ids
+@pass Same recipe counts as before the move; recipe ids now `creativebrewing:<type>/...` (were `creativeengineering:`); Brewin' upstream ids (`brewinandchewin:fermenting/beer_from_water` ...) still removed
+@fails `global.CB.recipes` missing, or a removal ran after its own add
+@from batches/r1101/cs4_boot3.qb
+shell grep -E "potion bottling done|tipped arrow|alcohol recipes|jeed_providers.js:" logs/kubejs/server.log | cut -c1-200 | head -10
+> zq recipes creativebrewing:
+sleep 5
+look bottling 1710, tipped 94 x 2 as in boot 2; recipe ids creativebrewing:<type>/...
+
+## SQ-CBM-04 | wandering trades after /reload
+@group A
+@commands Same boot: `/reload`; `grep "wandering trades" logs/kubejs/server.log`
+@pass `[wandering trades] common 208, rare 39` from the pack and `[wandering trades] winemaker 34` from CB (the last pre-move log: 208 / 39 / 34)
+@fails Winemaker helpers not added to `global.trades`
+@from batches/r1101/cs4_boot3.qb passed
+shell grep "wandering trades" logs/kubejs/server.log | cut -c1-200
+kjsexpect \[wandering trades\] common 208, rare 39
+kjsexpect \[wandering trades\] winemaker 34
+
+## SQ-CBM-05 | CB fluid tags
+@group A
+@commands Same boot: `/dumptags` fluid `forge:fluid/potion`, `forge:fluid/dragon_breath`
+@pass `create:potion` in the first, IE's potion fluid not; dragon's breath in the second
+@fails CB fluid tag script not loaded
+@from batches/r1101/cs4_boot3.qb
+> dumptags
+waitlog (dumptags|tags).*(done|written|wrote) 300
+shell python3 -c "import json;d=json.load(open('kubejs/exported/tags/fluid_tags.json'));print({k:v for k,v in d.items() if k in ('forge:fluid/potion','forge:fluid/dragon_breath','forge:potion')})" 2>&1 | cut -c1-600
+look create:potion in forge:fluid/potion, IE potion fluid not; dragon's breath in the second
+
+## SQ-CBM-06 | tool and armor effects
+@group A
+@commands Same boot: hold a dragon sword (tool effects) and wear the echo armor set (armor effects) for 5 s; `/data get entity @p ActiveEffects`
+@pass Held and set effects applied as before
+@fails `global.armorEffects` / `toolEffects` missing in the CB server pack
+@from batches/r1101/cs4_boot3.qb
+> effect clear qa
+> item replace entity qa weapon.mainhand with dragonloot:dragon_sword
+> item replace entity qa armor.head with create_deep_dark:echo_armor_helmet
+> item replace entity qa armor.chest with create_deep_dark:echo_armor_chestplate
+> item replace entity qa armor.legs with create_deep_dark:echo_armor_leggings
+> item replace entity qa armor.feet with create_deep_dark:echo_armor_boots
+sleep 8
+> data get entity qa ActiveEffects
+look held and set effects present (compare tool_effects / armor_effects rows for the two)
+
+@@text
+@@text In game (client): CBM-C1 Vinery tooltips on a grapevine pot and the flower box (no "Can be placed" line from Vinery),
+@@text keg heat line on a heating cask; CBM-C2 names "Hard Cider", "Short Cherry Door", villager "Winemaker"; CBM-C3 a potion
+@@text bucket tooltip shows its scaled effects; armor and tool effect tooltips on dragon and echo gear; CBM-C4 JEI fluid list
+@@text has one `create:potion` stack per potion.

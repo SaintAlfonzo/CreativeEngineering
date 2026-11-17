@@ -1,0 +1,165 @@
+# Scratch queue rows JFP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/JFP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Jar fluid pipes, 2026-11-02 ([mixed_jars.md](../mixed_jars.md) 10, TODO `items/jars #7`)
+@@date 2026-11-02
+@@sources feature_writeup/mixed_jars.md
+@@text
+@@text Target: `creativecompat-1.0.0.jar` built 2026-11-02 (compat/JarFluidPipes), not yet in `mods/`. Needs Create and
+@@text Supplementaries. A player is needed for the soft-fluid map (see SQ-MJ run log).
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-JFP-01 | pump water from a Create tank into a Supplementaries jar (both pump directions tried)
+@group A
+@commands Place `supplementaries:jar`; `/setblock` a `create:fluid_tank` beside it with `/data merge block` 4000 mB water (or a creative fluid tank), mechanical pump + pipe from the tank to the jar, creative motor 64 RPM; wait 20 s; `/data get block <jar>`
+@pass `FluidHolder` water, count 12; no `Error occurred` in latest.log
+@fails No capability: `JarFluidPipes.register` not reached (Supplementaries check) or the attach event filter
+@from batches/r1102b/s5_R_A.qb
+# layout at x+400 (forceloaded): tank T, pump P (small cog, axis x), jar J along +x; cogwheel above P, creative motor
+# above T facing east drives it at 64 RPM (ScrollValue 64; Speed read back). Create's flow direction depends on facing and rotation sign, so each phase is run
+# with the pump facing east and then west; one of them fills the jar (JFP-01), the next drains it back (JFP-02).
+> fill {S5H1+399} {S5H2} {S5H3-1} {S5H1+403} {S5H2+2} {S5H3+1} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+402} {S5H2} {S5H3} supplementaries:jar
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+> setblock {S5H1+401} {S5H2+1} {S5H3} create:cogwheel[axis=x]
+> setblock {S5H1+400} {S5H2+1} {S5H3} create:creative_motor[facing=east]{ScrollValue:64}
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+sleep 2
+> data get block {S5H1+400} {S5H2+1} {S5H3} Speed
+> data get block {S5H1+401} {S5H2} {S5H3} Speed
+sleep 58
+> say JFP phase 1 pump east
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+count has the following block data: -?64\.0f$ >= 2
+expect has the following block data: .*FluidHolder
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look phase 1 or phase 2 (next row) ends with the jar FluidHolder water, count 12, and the tank down to 1000 mB; no Error occurred line
+
+## SQ-JFP-02 | reverse the pump: the jar drains back into the tank
+@group same
+@commands Reverse the pump; empty tank on the far side
+@pass Tank 3000 mB water, jar `FluidHolder` empty, `ForgeCaps` has no PendingMb
+@fails Drain returns the wrong fluid: `contents()` / `getForgeFluid`
+@from batches/r1102b/s5_R_A.qb
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=west]
+sleep 60
+> say JFP phase 2 pump west
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+sleep 60
+> say JFP phase 3 pump east
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+shell ! grep -n 'Error occurred' logs/latest.log | grep -iE 'jar|fluid|supplementaries'
+look across phases 1-3: one direction fills the jar to water 12 from the tank, the other empties the jar and the tank gets the water back (row: tank 3000 mB from an empty far-side tank; here the same tank holds 4000 again); after a drain the jar FluidHolder is empty and ForgeCaps has no PendingMb
+
+## SQ-JFP-03 | motor stopped mid-fill: PendingMb kept over a chunk unload and reload
+@group same
+@commands Stop the motor mid-fill (between bottles); `/data get block <jar>`
+@pass `ForgeCaps.creativeengineering:jar_fluid_pipes.PendingMb` 1-249; after a save and reload it is still there
+@fails Buffer not saved: ForgeCaps serialisation
+@from batches/r1102b/s5_A.qb
+> setblock {S5H1+400} {S5H2+1} {S5H3} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+402} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+402} {S5H2} {S5H3} supplementaries:jar
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+> setblock {S5H1+401} {S5H2+1} {S5H3} create:cogwheel[axis=x]
+> setblock {S5H1+400} {S5H2+1} {S5H3} create:creative_motor[facing=east]
+sleep 2
+> setblock {S5H1+400} {S5H2+1} {S5H3} minecraft:air
+sleep 3
+> say JFP03 jar east before unload
+> data get block {S5H1+402} {S5H2} {S5H3}
+> fill {S5H1+399} {S5H2} {S5H3+3} {S5H1+403} {S5H2+2} {S5H3+5} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3+4} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3+4} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+402} {S5H2} {S5H3+4} minecraft:air
+> setblock {S5H1+402} {S5H2} {S5H3+4} supplementaries:jar
+> setblock {S5H1+401} {S5H2} {S5H3+4} create:mechanical_pump[facing=west]
+> setblock {S5H1+401} {S5H2+1} {S5H3+4} create:cogwheel[axis=x]
+> setblock {S5H1+400} {S5H2+1} {S5H3+4} create:creative_motor[facing=east]
+sleep 2
+> setblock {S5H1+400} {S5H2+1} {S5H3+4} minecraft:air
+sleep 3
+> say JFP03 jar west before unload
+> data get block {S5H1+402} {S5H2} {S5H3+4}
+> save-all flush
+waitlog Saved the game 120
+> forceload remove {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 20
+> forceload add {S5H1+384} {S5H3-16} {S5H1+432} {S5H3+48}
+sleep 5
+> say JFP03 after reload
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+402} {S5H2} {S5H3+4}
+count has the following block data: .*PendingMb: (?:[1-9]\d?|1\d\d|2[0-4]\d)[,}] >= 2
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the filling-direction jar shows ForgeCaps creativeengineering:jar_fluid_pipes PendingMb 1-249 before the unload and the same value after it (the other jar pulled nothing)
+
+## SQ-JFP-04 | potion fluid keeps its NBT into the jar
+@group same
+@commands Fill a tank with `create:potion` NBT `{Potion:"minecraft:swiftness",Bottle:"REGULAR"}`, pump into an empty jar
+@pass Jar fluid `minecraft:potion` (soft fluid), tank NBT Potion swiftness
+@fails Wrong NBT keys: `preserved()`
+@from batches/r1102b/s5_A.qb
+> setblock {S5H1+400} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3} {TankContent:{FluidName:"create:potion",Amount:4000,Tag:{Potion:"minecraft:swiftness",Bottle:"REGULAR"}}}
+> setblock {S5H1+402} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+402} {S5H2} {S5H3} supplementaries:jar
+> setblock {S5H1+400} {S5H2+1} {S5H3} create:creative_motor[facing=east]
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+sleep 25
+> say JFP phase 4a pump east
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=west]
+sleep 25
+> say JFP phase 4b pump west
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+expect has the following block data: .*(?i:potion)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look in the filling phase the jar FluidHolder is minecraft:potion (soft fluid) with Potion swiftness, the tank TankContent keeps Potion swiftness / Bottle REGULAR
+
+## SQ-JFP-05 | jar holding cookies is not filled by a pump
+@group same
+@commands Jar with 3 cookies, pump water at it
+@pass Jar unchanged
+@fails `canInteractWithSoftFluidTank` guard
+@from batches/r1102b/s5_A.qb
+> setblock {S5H1+400} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+400} {S5H2} {S5H3} create:fluid_tank
+sleep 2
+> data merge block {S5H1+400} {S5H2} {S5H3} {TankContent:{FluidName:"minecraft:water",Amount:4000}}
+> setblock {S5H1+402} {S5H2} {S5H3} minecraft:air
+> setblock {S5H1+402} {S5H2} {S5H3} supplementaries:jar
+> item replace block {S5H1+402} {S5H2} {S5H3} container.0 with minecraft:cookie 3
+> data get block {S5H1+402} {S5H2} {S5H3}
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=east]
+sleep 20
+> say JFP phase 5a pump east
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+> setblock {S5H1+401} {S5H2} {S5H3} create:mechanical_pump[facing=west]
+sleep 20
+> say JFP phase 5b pump west
+> data get block {S5H1+402} {S5H2} {S5H3}
+> data get block {S5H1+400} {S5H2} {S5H3} TankContent
+> setblock {S5H1+400} {S5H2+1} {S5H3} minecraft:air
+expect has the following block data: .*minecraft:cookie
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+look the jar holds the 3 cookies in every reading and no water (FluidHolder empty or absent); tank stays 4000

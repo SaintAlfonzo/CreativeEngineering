@@ -1,0 +1,236 @@
+# Scratch queue rows EFX (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/EFX.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-EFX effect changes, 2026-10-31 ([effects.md](../effects.md) 2.6 to 2.9, [armor_effects.md](../armor_effects.md) 2.2, 2.5, TODO `potions/effects #3, #4, #8, #9, #10, #11`)
+@@date 2026-10-31
+@@sources feature_writeup/effects.md feature_writeup/armor_effects.md
+@@text
+@@text Jars built 2026-10-31 00:28-00:30: patcherMod 1.1.04 (`MagicResistanceEffect`, `CopperPoisoningHandler`, `EffectRules`,
+@@text `PhantomBaneRules`, `CompoundEffects`, mixins `CopperPoisoningEffectMixin`, `LivingEntityEffectRemapMixin`,
+@@text `FruitsDelightEffectFuncMixin`, `CaffeinatedEffectMixin`, client `GuiEffectIconMixin`, `JeedEffectRendererMixin`,
+@@text `JeedEffectInfoMixin`), backportedVinery -06 (multi-effect wines, Jellie effect gone), backportedBrewin -04 (food effect
+@@text icons), creativedelight 1.0.0 (Baklava icon). Group A (superflat), bot player for the player checks. Client rows (HUD,
+@@text tooltips, JEI) are in-game checks EF-22 to EF-30.
+@@text
+@@table
+## SQ-EFX-01 | effect mixins apply
+@group A
+@commands Boot; grep latest.log for the seven mixin names above and `Mixin apply`
+@pass `Done (`; no apply error; `[potions]`/`[CE potions]` line with no `removeByPotion` error
+@fails SRG names (`m_147207_`, `m_6742_`), or a target class renamed in the jar
+@from batches/r1031/a1_effects.qb passed
+bootreject (Mixin apply failed|InvalidInjectionException).*(CopperPoisoningEffectMixin|LivingEntityEffectRemapMixin|FruitsDelightEffectFuncMixin|CaffeinatedEffectMixin|LivingEntityUseItemIconMixin|CreateTeaPipeIconMixin|MobEffectTickContextMixin)
+bootreject (?i)removeByPotion.*(error|fail)
+bootreject Ignoring invalid wine effect entry
+bootexpect \[(CE )?potions\]
+
+## SQ-EFX-02 | Magic Resistance I stops Poison I
+@group A
+@commands `/effect give <bot> creativeengineering:magic_resistance 60 0`; `/effect give <bot> minecraft:poison 10 0`; read health over 5 s
+@pass Health unchanged, no hurt flash
+@fails `MagicResistanceEffect.onAttack`: `EffectTickContext` not set (MobEffectTickContextMixin) or config `[magic_resistance] negatedEffectTicks`
+@from batches/r1031/a1_effects.qb
+# perfBot bots are invulnerable (Bots.java setInvulnerable): damage reads use a NoAI pillager "qp" on Normal
+# (zombies are undead: no Poison). Pillager max health 24.
+> difficulty normal
+> kill @e[type=minecraft:pillager]
+> summon minecraft:pillager -46 -60 -46 {NoAI:1b,PersistenceRequired:1b,Tags:["qp"]}
+sleep 1
+> effect give @e[tag=qp,limit=1] creativeengineering:magic_resistance 60 0
+> effect give @e[tag=qp,limit=1] minecraft:poison 10 0
+> data get entity @e[tag=qp,limit=1] Health
+sleep 6
+> data get entity @e[tag=qp,limit=1] Health
+look the two Health reads are equal (24.0f)
+> effect clear @e[tag=qp,limit=1]
+
+## SQ-EFX-03 | Poison II at 80 %, Wither I none
+@group A
+@commands As 02 with `minecraft:poison 10 1` (Poison II), then `minecraft:wither 10 0`
+@pass Poison II: damage taken at 80 %; Wither I: none
+@fails Level compare or tick cover
+@from batches/r1031/a1_effects.qb
+# control first: Poison II without Magic Resistance, then with; same 6 s window
+> effect give @e[tag=qp,limit=1] minecraft:instant_damage 1 0
+> effect give @e[tag=qp,limit=1] minecraft:instant_health 1 5
+> effect give @e[tag=qp,limit=1] minecraft:poison 10 1
+> data get entity @e[tag=qp,limit=1] Health
+sleep 6
+> data get entity @e[tag=qp,limit=1] Health
+> effect clear @e[tag=qp,limit=1]
+> effect give @e[tag=qp,limit=1] minecraft:instant_health 1 5
+> effect give @e[tag=qp,limit=1] creativeengineering:magic_resistance 60 0
+> effect give @e[tag=qp,limit=1] minecraft:poison 10 1
+> data get entity @e[tag=qp,limit=1] Health
+sleep 6
+> data get entity @e[tag=qp,limit=1] Health
+> effect clear @e[tag=qp,limit=1] minecraft:poison
+> effect give @e[tag=qp,limit=1] minecraft:instant_health 1 5
+sleep 1
+> effect give @e[tag=qp,limit=1] minecraft:wither 10 0
+> data get entity @e[tag=qp,limit=1] Health
+sleep 6
+> data get entity @e[tag=qp,limit=1] Health
+look reads in pairs: control drop D (no Magic Resistance); with it, about 0.8 x D; Wither I pair equal
+> effect clear @e[tag=qp,limit=1]
+
+## SQ-EFX-04 | Dragon Horse Armor: Regeneration II, Health Boost II, Resistance II
+@group A
+@commands Spawn a horse, tame it (`/data merge entity @e[type=horse,limit=1] {Tame:1b}`), `/item replace entity @e[type=horse,limit=1] horse.armor with dragonloot:dragon_horse_armor`; wait 10 s; `/data get entity @e[type=horse,limit=1] ActiveEffects`; read Health twice 6 s apart
+@pass Regeneration, Health Boost, Resistance all Amplifier 1; Health does not drop at each 5 s refresh
+@fails `armor_effects.js` mount list; health restore in `applyEffects`
+@from batches/r1031/a1_effects.qb
+> summon minecraft:horse -46 -60 -50 {Tame:1b}
+> item replace entity @e[type=minecraft:horse,limit=1,sort=nearest] horse.armor with dragonloot:dragon_horse_armor
+sleep 10
+> data get entity @e[type=minecraft:horse,limit=1] ActiveEffects
+> data get entity @e[type=minecraft:horse,limit=1] Health
+sleep 6
+> data get entity @e[type=minecraft:horse,limit=1] Health
+expect Id: 10, Amplifier: 1b
+expect Id: 21, Amplifier: 1b
+expect Id: 11, Amplifier: 1b
+look Ids 10, 21 and 11 at Amplifier 1b; the second Health read not lower than the first (no drop at the 5 s refresh)
+> kill @e[type=minecraft:horse]
+
+## SQ-EFX-05 | Agility -> Climbing, Resilience -> Knockback Resistance, Chorus -> Teleport
+@group A
+@commands `/effect give <bot> neapolitan:agility 30 0`; `/effect give <bot> quark:resilience 30 0`; `/effect give <bot> fruitsdelight:chorus 1 0`; `/data get entity <bot> ActiveEffects`
+@pass Climbing and Knockback Resistance present, no Agility / Resilience; Chorus gave Teleport (position changed)
+@fails `LivingEntityEffectRemapMixin`, config `[effects] remap`
+@from batches/r1031/a1_effects.qb
+> data get entity qe Pos
+> effect give qe neapolitan:agility 30 0
+> effect give qe quark:resilience 30 0
+> effect give qe fruitsdelight:chorus 1 0
+sleep 2
+> data get entity qe ActiveEffects
+> data get entity qe Pos
+reject has the following entity data.*(neapolitan:agility|quark:resilience)
+expect has the following entity data.*vinery:climbing_effect
+expect has the following entity data.*alexsmobs:knockback_resistance
+look the second Pos differs from the first (Teleport); an "Unknown effect" for agility or resilience means it is removed from the registry instead of remapped: read effects.md 2.7
+> effect clear qe
+
+## SQ-EFX-06 | Restfulness and Power Outage do nothing; no Flare
+@group A
+@commands `/effect give <bot> upgrade_aquatic:restfulness 1 0`, `alexsmobs:power_down 10 0`; `/summon upgrade_aquatic:flare`
+@pass No effect added; no Flare (`/execute if entity @e[type=upgrade_aquatic:flare]` fails)
+@fails `[effects] removed`; `removed_mobs.js` (server scripts loaded?)
+@from batches/r1031/a1_effects.qb passed
+> effect give qe upgrade_aquatic:restfulness 1 0
+> effect give qe alexsmobs:power_down 10 0
+> data get entity qe ActiveEffects
+> summon upgrade_aquatic:flare -50 -55 -50
+sleep 2
+> execute if entity @e[type=upgrade_aquatic:flare]
+reject has the following entity data.*(restfulness|power_down)
+expect Test failed
+
+## SQ-EFX-07 | Caffeinated holds Phantom Bane; time since rest untouched, reset when it ends
+@group A
+@commands `/effect give <bot> farmersrespite:caffeinated 30 0`; `/data get entity <bot> ActiveEffects`; `/scoreboard objectives add rest minecraft.custom:minecraft.time_since_rest`, read it during and 2 s after the effect ends
+@pass Phantom Bane present (hidden); rest score keeps rising during (not set to -24000), reads 0 right after Phantom Bane expires
+@fails `PhantomBaneRules`, `CaffeinatedEffectMixin`
+@from batches/r1031/a1_effects.qb
+> scoreboard objectives add rest minecraft.custom:minecraft.time_since_rest
+sleep 3
+> scoreboard players get qe rest
+> effect give qe farmersrespite:caffeinated 30 0
+sleep 2
+> data get entity qe ActiveEffects
+> scoreboard players get qe rest
+sleep 31
+> scoreboard players get qe rest
+expect has the following entity data.*phantom_bane
+look rest score: rises between the first two reads (not -24000), reads 0 (or a few ticks) right after the effect ends
+> scoreboard objectives remove rest
+
+## SQ-EFX-08 | oxidized copper armor poisons (interval 10 s, chance 1.0 in the scratch toml)
+@group A
+@commands Give the bot oxidized copper armor (`/give <bot> everythingcopper:copper_helmet{state:"oxidized"}`, all four pieces, equip); set `[copper_poisoning] intervalSeconds` 10, `jitterSeconds` 0, `chancePerPiece` 1.0 in the scratch config; wait 25 s
+@pass Poison I, about 10 s (4 + 3 x 2); unoxidized armor: never
+@fails `CopperPoisoningHandler` (persistent key `ce_copper_poison_roll`), `isOxidized` NBT check
+@from batches/r1031/a1_effects.qb
+> effect clear qe
+> item replace entity qe armor.head with everythingcopper:copper_helmet{state:"oxidized"}
+> item replace entity qe armor.chest with everythingcopper:copper_chestplate{state:"oxidized"}
+> item replace entity qe armor.legs with everythingcopper:copper_leggings{state:"oxidized"}
+> item replace entity qe armor.feet with everythingcopper:copper_boots{state:"oxidized"}
+sleep 25
+> data get entity qe ActiveEffects
+> effect clear qe
+> item replace entity qe armor.head with everythingcopper:copper_helmet
+> item replace entity qe armor.chest with everythingcopper:copper_chestplate
+> item replace entity qe armor.legs with everythingcopper:copper_leggings
+> item replace entity qe armor.feet with everythingcopper:copper_boots
+sleep 25
+> data get entity qe ActiveEffects
+expect has the following entity data.*Id: 19
+look the first read has Poison (Id 19), Duration about 200 ticks (4 + 3 x 2 s); the second (unoxidized) read has no Poison ("Found no elements" or no Id 19)
+> clear qe
+
+## SQ-EFX-09 | Copper Poisoning gives Poison I 8 s, no direct damage
+@group A
+@commands Bot eats `everythingcopper:copper_nugget` (or `/effect give <bot> everythingcopper:copper_poisoning 1 1`)
+@pass Poison I 8 s; no direct damage
+@fails `CopperPoisoningEffectMixin` not applied
+@from batches/r1031/a1_effects.qb
+> effect give @e[tag=qp,limit=1] minecraft:instant_health 1 5
+sleep 1
+> data get entity @e[tag=qp,limit=1] Health
+> effect give @e[tag=qp,limit=1] everythingcopper:copper_poisoning 1 1
+sleep 1
+> data get entity @e[tag=qp,limit=1] ActiveEffects
+> data get entity @e[tag=qp,limit=1] Health
+expect has the following entity data.*Id: 19
+look Poison Duration about 160 ticks, Amplifier 0b; Health right after the give not lower by 4 (no direct damage)
+> effect clear @e[tag=qp,limit=1]
+
+## SQ-EFX-10 | Jellie Wine: four effects at the wine's level
+@group A
+@commands `/vinery effect vinery:jellie_wine <bot>` (or drink a Jellie Wine)
+@pass Regeneration, Absorption, Resistance, Fire Resistance, same level; no `Ignoring invalid wine effect entry` in the log
+@fails `config/vinery-common.toml` entry, `WineEffects.parse` `+` split
+@from batches/r1031/a1_effects.qb
+> vinery effect vinery:jellie_wine qe
+sleep 1
+> data get entity qe ActiveEffects
+expect Id: 10, Amplifier
+expect Id: 22, Amplifier
+expect Id: 11, Amplifier
+expect Id: 12, Amplifier
+reject Ignoring invalid wine effect entry
+look a "vinery effect" syntax error = drink a Jellie Wine in the client block instead (CQ-EFX)
+> effect clear qe
+
+## SQ-EFX-11 | Awkward + Crab Shell brews Knockback Resistance; cocoa beans nothing
+@group A
+@commands Brewing stand: Awkward Potion + Crab Shell
+@pass Potion of Knockback Resistance; Awkward + cocoa beans gives nothing
+@fails `potions.js` AM_POTION_MIXES row, REMOVED_POTIONS
+@from batches/r1031/a1_effects.qb passed
+> zq potion minecraft:awkward quark:crab_shell,minecraft:cocoa_beans
+expect quark:crab_shell -> minecraft:potion .*(?i)knockback
+expect minecraft:cocoa_beans -> nothing
+
+## SQ-EFX-12
+@group A
+@commands `/effect give <bot> vinery:double_jump 60 0`, `/effect give <bot> minecraft:jump_boost 60 1`; probe `<bot>.getJumpBoostPower()` (KubeJS `/kubejs eval` or a server script log)
+@pass 0.2 (Jump Boost II), not 0.1
+@fails Vinery mixin still at HEAD (old jar)
+@draft no batch holds this row yet
+## SQ-EFX-13
+@group A
+@commands Bot eats `canned_goods:canned_pufferfishs` and an Immersive Weathering food; `/data get entity <bot> ActiveEffects`
+@pass Their effects have `ShowIcon:1b`; Fire Resistance from the dragon set still `ShowIcon:0b`
+@fails `LivingEntityUseItemIconMixin` (`m_8095_`), `[effects] forceHudIconItems`
+@draft no batch holds this row yet
+## SQ-EFX-14
+@group A
+@commands Fluid tank of Builder's Tea feeding an open-ended pipe, bot standing under it 2 s; `/data get entity <bot> ActiveEffects`
+@pass Haste with `ShowIcon:1b`; boot log has no `CreateTeaPipeIconMixin` warning
+@fails `require = 0` let it miss: constructor descriptor `(MobEffect;IIZZZ)V` in `TeaEffectHandler#applyEffects`
+@draft no batch holds this row yet

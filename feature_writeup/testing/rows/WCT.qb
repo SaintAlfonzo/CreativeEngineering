@@ -1,0 +1,138 @@
+# Scratch queue rows WCT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/WCT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-WCT watering can tiers, 2026-10-31 ([hearth_and_harvest.md](../hearth_and_harvest.md) 4.0, HNH-38 to HNH-44)
+@@date 2026-10-31
+@@jars creativedelight
+@@sources feature_writeup/hearth_and_harvest.md
+@@text
+@@text Needs patcherMod and Creative Delight both built 2026-10-31 after 14:45 (can moved into `backportedHearth`
+@@text 1.4.1-ce-19.2-02; patcherMod without `wateringcan/`) and CD `hearthandharvest/recipes.js`, `tags.js`. Supersedes the
+@@text patcherMod build note of SQ-WC (the SQ-WC checks still apply, on `golden_watering_can` for the 16 / 3x3 numbers).
+@@text Group A (superflat), a bot player.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-WCT-01 | six watering can ids, recipes
+@group A
+@commands Boot; grep latest.log for `hearthandharvest`, `watering_can`, `Error occurred while handling event`, `duplicate`
+@pass six can ids registered once; recipes `creativedelight:...watering_can` and the five `smithing/..._watering_can` loaded; no error
+@fails stale patcherMod still registering the id; NCH key missing in item_dict
+@from batches/r1101/p1_server.qb
+bootreject (?i)duplicate.*watering_can
+> zq item hearthandharvest:watering_can
+> zq item hearthandharvest:iron_watering_can
+> zq item hearthandharvest:golden_watering_can
+> zq item hearthandharvest:diamond_watering_can
+> zq item hearthandharvest:netherite_watering_can
+> zq item hearthandharvest:dragon_watering_can
+> zq makes watering_can
+reject Unknown item
+expect creativedelight:.*watering_can -> 1 hearthandharvest:watering_can
+count smithing/[a-z_]*watering_can >= 5
+look six ids resolve once; base can recipe under creativedelight; five smithing recipes
+
+## SQ-WCT-02 | cauldron fills by tier
+@group A
+@commands `/fill ~ ~ ~ ~ ~ ~ minecraft:water_cauldron[level=3]`; bot holds `hearthandharvest:watering_can`, uses it on the cauldron; `data get entity <bot> SelectedItem`; `/execute if block ~ ~ ~ minecraft:water_cauldron[level=2]`. Repeat with `diamond_watering_can` (level 3 -> 1), `netherite_watering_can` (-> `minecraft:cauldron`), and an empty `diamond_watering_can` on `level=1`, an empty `netherite_watering_can` on `level=2`
+@pass WaterLevel 8, cauldron level 2; diamond WaterLevel 20, level 1; netherite WaterLevel 32, empty cauldron; diamond on level 1: WaterLevel 10, empty cauldron; netherite on level 2: WaterLevel 21, empty cauldron
+@fails cauldron interaction map claimed the click; level or partial-fill math
+@from batches/r1101/p1_server.qb passed
+> setblock -30 -60 -15 minecraft:water_cauldron[level=3]
+> tp qa -30 -60 -13
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+> execute if block -30 -60 -15 minecraft:water_cauldron[level=2]
+expect WaterLevel: 8
+> setblock -30 -60 -15 minecraft:water_cauldron[level=3]
+> item replace entity qa weapon.mainhand with hearthandharvest:diamond_watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+> execute if block -30 -60 -15 minecraft:water_cauldron[level=1]
+expect WaterLevel: 20
+> setblock -30 -60 -15 minecraft:water_cauldron[level=3]
+> item replace entity qa weapon.mainhand with hearthandharvest:netherite_watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+> execute if block -30 -60 -15 minecraft:cauldron
+expect WaterLevel: 32
+> setblock -30 -60 -15 minecraft:water_cauldron[level=1]
+> item replace entity qa weapon.mainhand with hearthandharvest:diamond_watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+expect WaterLevel: 10
+> setblock -30 -60 -15 minecraft:water_cauldron[level=2]
+> item replace entity qa weapon.mainhand with hearthandharvest:netherite_watering_can
+> pbot use qa -30 -60 -15 up
+> data get entity qa SelectedItem
+expect WaterLevel: 21
+count Test passed >= 3
+
+## SQ-WCT-03 | Just a Well fills an iron can (lower and roof half)
+@group A
+@commands Place a Just a Well (`well:well`), wait for it to fill (or `/data merge block` its tank); bot uses `iron_watering_can` on the lower half, then on the roof half with an emptied can; `data get block <well>`
+@pass WaterLevel 12 each time; tank down 1000 mB per fill
+@fails well did not pass the click (fluid item check); roof half not routed below
+@from batches/r1101/p1_server.qb
+> setblock -36 -60 -15 well:well
+> data get block -36 -60 -15
+> data get block -36 -59 -15
+sleep 20
+> data get block -36 -60 -15
+> tp qa -36 -60 -13
+> item replace entity qa weapon.mainhand with hearthandharvest:iron_watering_can
+> pbot use qa -36 -60 -15 north
+> data get entity qa SelectedItem
+> data get block -36 -60 -15
+> item replace entity qa weapon.mainhand with hearthandharvest:iron_watering_can
+> pbot use qa -36 -59 -15 north
+> data get entity qa SelectedItem
+> data get block -36 -60 -15
+look WaterLevel 12 after each use; well tank down 1000 mB per fill; an empty well (no rain / no water below) = setup, not the can: record the tank NBT
+
+## SQ-WCT-04 | dragon can soaks 7x7, copper can the centre only
+@group A
+@commands `/fill ~-3 ~-1 ~-3 ~3 ~-1 ~3 minecraft:farmland[moisture=0]`, `/fill ~-3 ~ ~-3 ~3 ~ ~3 minecraft:wheat[age=7]`; bot with `dragon_watering_can{WaterLevel:64}` uses it on the centre; `/execute if block ~3 ~-1 ~3 minecraft:farmland[moisture=7]` and the corner `~-3 ~-1 ~-3`; repeat on fresh soil with `watering_can{WaterLevel:8}`, check `~1 ~-1 ~` stays dry
+@pass 7x7 soaked, WaterLevel 63; copper soaks the centre only
+@fails area spans
+@from batches/r1101/p1_server.qb passed
+> gamerule randomTickSpeed 0
+> fill -43 -61 -33 -37 -61 -27 minecraft:farmland[moisture=0]
+> fill -43 -60 -33 -37 -60 -27 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:dragon_watering_can{WaterLevel:64}
+> item replace entity qa weapon.offhand with minecraft:air
+> tp qa -40 -60 -35
+> pbot use qa -40 -60 -30 up
+> data get entity qa SelectedItem
+> execute if block -37 -61 -27 minecraft:farmland[moisture=7]
+> execute if block -43 -61 -33 minecraft:farmland[moisture=7]
+expect WaterLevel: 63
+count Test passed >= 2
+> fill -43 -61 -33 -37 -61 -27 minecraft:farmland[moisture=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:8}
+> pbot use qa -40 -60 -30 up
+> execute if block -40 -61 -30 minecraft:farmland[moisture=7]
+> execute if block -39 -61 -30 minecraft:farmland[moisture=0]
+count Test passed >= 4
+> gamerule randomTickSpeed 3
+
+## SQ-WCT-05 | diamond can smithing recipe; over-full can clamps
+@group A
+@commands Bot has `golden_watering_can{WaterLevel:5,BonemealLevel:3,FertilizerItem:"minecraft:bone_meal"}`, a diamond in the inventory; smithing is a GUI, so check the recipe instead: grep the recipe dump for `smithing/diamond_watering_can`; give `watering_can{WaterLevel:16,BonemealLevel:16}` and `data get` after a soil use
+@pass recipe base golden can, addition diamond; old can reads 8, drops to 7 after the use
+@fails recipe id; clamp on read
+@from batches/r1101/p1_server.qb
+> zq rdetail smithing/diamond_watering_can
+expect golden_watering_can
+> gamerule randomTickSpeed 0
+> setblock -48 -61 -30 minecraft:farmland[moisture=0]
+> setblock -48 -60 -30 minecraft:wheat[age=0]
+> item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:16,BonemealLevel:16}
+> tp qa -48 -60 -32
+> pbot use qa -48 -60 -30 up
+> data get entity qa SelectedItem
+> gamerule randomTickSpeed 3
+look smithing base golden can, addition diamond; old can reads 8 and drops to 7 after the use (WaterLevel 7 in the NBT, or 15 if the clamp is on read only: record)

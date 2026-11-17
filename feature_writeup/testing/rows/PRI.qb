@@ -1,0 +1,216 @@
+# Scratch queue rows PRI (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PRI.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Priority run: everything since the 1.1.05 snapshot (updated 2026-10-31, run this BEFORE the rest of the queue)
+@@date 2026-10-31
+@@jars creativebrewing creativecommon creativedelight
+@@text
+@@text > **PINNED (owner, 2026-11-01):** client rows from the creative split (waves 2 to 7) are not run until wave 8+; they run as one bulk client session. Server rows still run per carve.
+@@text > **RUN 2026-11-01 (r1101):** server rows, bug batch, deferred W2 / W3 rows and the client block ran; per-row results in
+@@text > [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) sections 1 to 5 (server rows all PASS apart from SQ-CDF-07's
+@@text > without-Brewin' half, SQ-CBJ-05, SQ-TL-09; client hand steps still OPEN).
+@@text
+@@text Short on purpose: one group A superflat boot (plus one flower_test boot and one fresh normal world), and one client
+@@text session. Everything below is built (patcherMod, Creative Delight, Creative Brewing, backportedVinery
+@@text as of 2026-10-31); confirm the jars in `mods/` match before booting (not re-checked 2026-10-31 evening); the long r1031 batch and the older rounds wait until this passes. Rows already written
+@@text further down are listed by ID, new rows are here. Order = cheapest first; stop and report on the first boot failure.
+@@text
+@@text **Boot 1, group A (superflat), one server:**
+@@text
+@@text | Order | IDs | What |
+@@text |---|---|---|
+@@text | 1 | SQ-CBJ-01 to -03 | Creative Brewing bundle loads, nested Vinery and Brewin' ports, startup script order |
+@@text | 2 | SQ-KT-22 to -25 | Cooking for Blockheads member (`blockheads_additions`), 40 wood racks, `/kttest`, `/kctest` |
+@@text | 3 | SQ-CDF-07, SQ-PRI-01 | Brewin' dishes and tags now in Creative Delight |
+@@text | 4 | SQ-WCT-01 to -05, SQ-WC-01 to -05 | Watering can tiers and soil |
+@@text | 5 | SQ-HR-01 to -04 | Raspberries (SQ-HR-05 is the normal-world boot below) |
+@@text | 6 | SQ-SB31-01, SQ-NS-01, SQ-SVA-05, SQ-TSK-02, -03, SQ-DM-03 | Spout gun, nightstands, brewery herbs, treated sticks, dandelion odds |
+@@text | 7 | SQ-POT-08, SQ-PRI-02 | Flower pot rules, Floral large pots hidden |
+@@text | 8 | SQ-JRFTL-01, SQ-PRI-03 | JRFTL jar gone, no stale config or errors |
+@@text
+@@text **Boot 2, flower_test world:** SQ-POT-07. **Boot 3, fresh normal world (seed 8675309):** SQ-HR-05.
+@@text
+@@text **Client session:** CQ-KT-22, CQ-HR-06, CQ-WC-06, -07, CQ-SG-01, CQ-NS-02, CQ-OAT-01, CQ-TSK-01, CQ-CSR-01, CQ-JB-01,
+@@text CQ-WT-01 (superseded by CQ-PRI-01 below), CQ-PRI-02 to -04.
+@@text
+@@text New rows (written 2026-10-31, not in the sections below):
+@@text
+@@table
+## SQ-PRI-01 | Brewin' tags moved to CD; emptied pack scripts silent
+@group A
+@commands (r1101 PASS; no 'Supreme Pizza' item exists, use `brewinandchewin:pizza`; the two emptied scripts are comment-only stubs, not empty files) `/dumptags`; grep latest.log for `brewinandchewin/tags.js`, `Error occurred while handling event`; `kubejs/server_scripts/tags/cookingtags.js` and `cooking/cooking.js` are now empty files
+@pass `#brewinandchewin:cooked_horror_lasagna_meats` holds beef, mutton, beef patty, cooked mutton chops; the soup-veggie cooked tag holds kimchi; the pizza topping tag holds the bell peppers; no tag or recipe error from the two emptied scripts; Supreme Pizza, Ham and Cheese Sandwich, Scarlet Pierogi recipes still load (recipe dump)
+@fails CD `brewinandchewin/tags.js` / `recipes.js` `requires` header; a stale copy of the old scripts
+@from batches/r1101/p1_server.qb
+> zq itemtag brewinandchewin:cooked_horror_lasagna_meats
+> zq tagsof farmersdelight:beef_patty
+> zq tagsof brewinandchewin:kimchi
+> zq tagsof vintagedelight:green_bell_pepper
+> zq makes supreme_pizza
+> zq makes ham_and_cheese_sandwich
+> zq makes scarlet_pierogi
+shell test ! -s kubejs/server_scripts/tags/cookingtags.js && test ! -s kubejs/server_scripts/cooking/cooking.js
+bootreject brewinandchewin/tags\.js.*(Error|error)
+kjsreject Error occurred while handling event
+expect itemtag brewinandchewin:cooked_horror_lasagna_meats .*minecraft:beef
+expect itemtag brewinandchewin:cooked_horror_lasagna_meats .*minecraft:mutton
+look lasagna meats = beef, mutton, beef patty, cooked mutton chops; kimchi in the cooked soup-veggie tag; bell peppers in the pizza topping tag; the three dishes have recipes
+
+## SQ-PRI-02 | Floral Enchantment large pots: recipe gone, block kept
+@group A
+@commands recipe dump and `/give @s floralench:` large pot ids (31)
+@pass the Floral Enchantment large pot recipe is gone; the 31 large pots are not in JEI or the creative tabs; a pot placed with `/setblock` still renders and keeps its plant
+@fails `removed_items.js` (`floral_large_` prefix), `other/flowers.js` recipe removal
+@from batches/r1101/p1_server.qb
+> zq recipes floral_large
+> zq makes floralench:
+> setblock 60 -60 30 floralench:floral_large_pot_poppy
+> execute if block 60 -60 30 floralench:floral_large_pot_poppy
+look no floral large pot recipe; the setblock works or names the real id (31 ids, prefix floral_large_); JEI / creative tabs hiding is CQ-PRI-02 side
+
+## SQ-PRI-03 | JRFTL gone
+@group A
+@commands boot; `ls mods config \| grep -i jrftl`; grep latest.log for `jrftl`
+@pass no JRFTL jar and no `jrftl-common.toml`; no log line naming jrftl; rotten flesh in a Create or IE recipe is unchanged (prepared flesh route, SQ-JRFTL-01)
+@fails stale file in the scratch `mods/`
+@from batches/r1101/p1_server.qb
+shell ! ls mods config | grep -qi jrftl
+bootreject (?i)jrftl
+> zq item jrftl:prepared_flesh
+> zq uses minecraft:rotten_flesh
+look prepared_flesh: a CE or KubeJS replacement item resolves, or the route lists the pack's own prepared flesh; rotten flesh still in the Create / IE recipes
+
+## CQ-PRI-01 | WTHIT silk touch lines
+@group client
+@commands WTHIT on glass, ice, grass block, iron ore, stone, dirt, oak log, leaves (replaces the book-icon wording of CQ-WT-01)
+@pass (r1101: glass, ice, iron ore, stone are yellow 'Drops Differently' in this pack, since glass drops shards, ice cubes, raw iron; green 'True' needs a block with no drop at all) glass, ice, iron ore: green "Silk Touch Required: True"; grass block and other blocks that drop something else: yellow "Drops Differently"; dirt, oak log: no line; no book icon anywhere; with the Silk Touch pickaxe the line follows the wthit_lines.md WL-37 rule; the `[wthit]` option that shows "Silk Touch Required: False" (default off) turns red False lines on for dirt and oak log
+@fails `WthitSilkTouch.java`, `silk_touch_blocks.json` (run `tools/gen_silk_touch_blocks.py`)
+@from batches/r1101/c0_priority.qb
+> tp @s 200 -55 8 180 20
+sleep 3
+> fill 200 -60 0 216 -60 0 minecraft:air
+> setblock 200 -60 0 minecraft:glass
+> setblock 202 -60 0 minecraft:ice
+> setblock 204 -60 0 minecraft:grass_block
+> setblock 206 -60 0 minecraft:iron_ore
+> setblock 208 -60 0 minecraft:stone
+> setblock 210 -60 0 minecraft:dirt
+> setblock 212 -60 0 minecraft:oak_log
+> setblock 214 -60 0 minecraft:oak_leaves[persistent=true]
+> item replace entity @s weapon.mainhand with minecraft:air
+> tp @s 200.5 -60 2.5 180 30
+shot glass
+> tp @s 202.5 -60 2.5 180 30
+shot ice
+> tp @s 204.5 -60 2.5 180 30
+shot grass
+> tp @s 206.5 -60 2.5 180 30
+shot iron_ore
+> tp @s 208.5 -60 2.5 180 30
+shot stone
+> tp @s 210.5 -60 2.5 180 30
+shot dirt
+> tp @s 212.5 -60 2.5 180 30
+shot oak_log
+> tp @s 214.5 -60 2.5 180 30
+shot leaves
+> item replace entity @s weapon.mainhand with minecraft:diamond_pickaxe{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
+> tp @s 200.5 -60 2.5 180 30
+shot glass_silk
+> tp @s 204.5 -60 2.5 180 30
+shot grass_silk
+look glass, ice, iron ore: green "Silk Touch Required: True"; grass: yellow "Drops Differently"; dirt, oak log: no line; no book icon; silk pickaxe rows per WL-37
+
+## CQ-PRI-02 | powdered sugar block texture
+@group client
+@commands look at the Powdered Sugar block (`creativeengineering:powdered_sugar_block`); JEI
+@pass the new texture, no missing texture, edge tiling seamless
+@fails `powdered_sugar_block.png`
+@from batches/r1101/c0_priority.qb
+> tp @s 220 -55 8 180 20
+sleep 3
+> setblock 220 -60 0 creativedelight:powdered_sugar_block
+> setblock 221 -60 0 creativedelight:powdered_sugar_block
+> setblock 220 -59 0 creativedelight:powdered_sugar_block
+> setblock 221 -59 0 creativedelight:powdered_sugar_block
+> tp @s 220.5 -59 3.5 180 15
+shot powdered_sugar
+look new texture, no magenta checker, edges tile seamlessly (an "Unknown block" = id differs: hand JEI search)
+
+## CQ-PRI-03 | mod names (WTHIT)
+@group client
+@commands mod list screen, JEI mod filter, WTHIT mod name on a Vinery block, a Brewin' keg, a Foundation block, Creative Engineering item, baby mob, incubation nest, moobloom, Exposure camera
+@pass "Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Foundation (Creative Brewing)" (renamed 2026-11-04, plan_cb_publish M5); the pack's own mods show no "(Alfonzo)"
+@fails `credit.txt`, `mods.toml` display names, `waila_plugins.json`
+@from batches/r1101/c0_priority.qb
+> tp @s 230 -55 8 180 20
+sleep 3
+> setblock 230 -60 0 vinery:wine_press
+> setblock 232 -60 0 brewinandchewin:keg
+> setblock 234 -60 0 foundation:chair
+> setblock 236 -60 0 creativeengineering:copper_coil
+> tp @s 230.5 -60 2.5 180 30
+shot vinery_press
+> tp @s 232.5 -60 2.5 180 30
+shot keg
+> tp @s 234.5 -60 2.5 180 30
+shot foundation_chair
+> tp @s 236.5 -60 2.5 180 30
+shot ce_block
+look WTHIT mod line: "Let's Do Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Creative Brewing" for the Foundation chair, Creative Engineering without "(Alfonzo)". hand: Mods list screen
+
+## CQ-PRI-04 | flower pots: WTHIT contents and names
+@group client
+@commands flower pots (flower_pots.md 5 table, built in the flower_test boot): WTHIT on a pot, flower box, planter box and Silt Pot; hover Large Flower Box, Vinery Flower Box, Planter Box, Silt Pot, Rich Hanging Pot
+@pass WTHIT shows the contents; "Can be placed on walls" on the three boxes; the Silt Pot hint; names "Large Flower Box" and "Rich Hanging Pot" (a Rich Pot on the ground); Planter Box plants drawn as in the Large Flower Box
+@fails `tooltips.js` Flower Pots block, `namechanges.js`, `WthitPotContents`
+@from batches/r1101/c0_priority.qb
+> tp @s 240 -55 8 180 20
+sleep 3
+> setblock 240 -60 0 minecraft:potted_poppy
+> setblock 242 -60 0 supplementaries:flower_box[facing=north,floor=true]
+> setblock 244 -60 0 another_furniture:oak_planter_box[facing=north]
+> setblock 246 -60 0 twigs:silt_pot
+> tp @s 240.5 -60 2.5 180 30
+shot pot
+> tp @s 242.5 -60 2.5 180 30
+shot flower_box
+> tp @s 244.5 -60 2.5 180 30
+shot planter_box
+> tp @s 246.5 -60 2.5 180 30
+shot silt_pot
+look WTHIT names; contents shown when planted (hand: plant a flower in each); hover Large Flower Box, Vinery Flower Box, Planter Box, Silt Pot, Rich Hanging Pot tooltips (hand)
+
+@@text
+@@text Live checks waiting for a bulk scratch-server session. A bulk session groups the entries by world group, runs each
+@@text group on one server (`tools/creative_labels_test/scratch_server.sh`, memory `scratch-server-verify`), then marks
+@@text each entry PASS / FAIL here and moves the result into the feature's writeup. One game JVM at a time: check
+@@text `pgrep -c java` is 0 before booting (never `pgrep -af`).
+@@text
+@@text Status word for a feature with entries here: "built, scratch test queued"; once its run passes, "built, scratch
+@@text server PASSED" (legend in [../README.md](../README.md)).
+@@text
+@@text Gap-fill rows (seed pouch, smoked wood) added 2026-10-30 at the bottom. Refreshed 2026-10-27 against the unreleased changelog: new section "Texture fixes, 2026-10-27" at the bottom (crop, platter and fridge
+@@text missing textures), moreMooblooms 1.1.0 rebuilt 2026-10-27 00:14 (needed for CQ-JT-09). Earlier refresh 2026-10-25: new entries SQ-MDP-05 to -13, SQ-RM, SQ-SK, CQ-NEW-04 to -06;
+@@text SQ-FN and the Round 0 / jar-state notes corrected. Every change a player can notice in `unreleased.md` now has a row.
+@@text
+@@text Run results live in the Run log at the bottom, not in the entry rows. Latest: r1115 phase 11 pass-through (2026-11-15 11:33 to 13:40, PASS 27, FAIL 6). Before it: r1115 (10 phases, 2026-11-15 00:10 to 08:18; [scratch_run_2026-11-15.md](scratch_run_2026-11-15.md) 8). Before it: r1114 (whole queue, 2026-11-14 00:00 to 12:08; [scratch_run_2026-11-14.md](scratch_run_2026-11-14.md) 8). Before it: r1113 continuation (PAUSED 19:22; resume point section 12; before it STOPPED for a fresh agent: queue group A part and Power Grid gates P0 to P9d; resume point in [scratch_run_2026-11-13.md](scratch_run_2026-11-13.md) 10). Before it: r1112 (SQ-RP server rows, r1111 batch-fault reruns; [scratch_run_2026-11-12.md](scratch_run_2026-11-12.md)). Before it: r1111 (steps 1 to 5 done, step 5 = SQ-HH rest, SQ-VH, SQ-OB, SQ-SCAT; [scratch_run_2026-11-11.md](scratch_run_2026-11-11.md)). Before it: the boot and exit check b1110 ([scratch_run_2026-11-10.md](scratch_run_2026-11-10.md) 11). Before it: the partial run r1109wo (SQ-WO Wise Oak, [scratch_run_2026-11-09.md](scratch_run_2026-11-09.md) 1). Before it: the partial run r1108hh (SQ-HH full suite, 2026-11-09). Before it: the 2026-11-08 targeted run r1108cge2 (SQ-CGE part 2, [scratch_run_2026-11-08.md](scratch_run_2026-11-08.md) 2). Before it: the 2026-11-08 targeted run r1108cge (Creative Common 11-08: SQ-CGE + SQ-CPP / SQ-CMV-04 reruns, all server rows PASS after 4 fixes, [scratch_run_2026-11-08.md](scratch_run_2026-11-08.md) 1); before it the 2026-11-07 targeted run r1107cco (Creative Common with its optional mods, SQ-CCO server rows, [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 4); before it r1107cc (Creative Common SQ-CC + SQ-CPP server rows, [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 3); before it r1107tp2 (SQ-TP-31..39 + reruns, all PASS, [scratch_run_2026-11-07.md](scratch_run_2026-11-07.md) 2); before it r1107tp (SQ-TP server rows, same doc 1); before it the 2026-11-06 night targeted run r1106spfx (SQ-SPFX, [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 7); before it r1106spf (same doc 6), r1106cbp (5), r1106cbo (SQ-CBC and SQ-CBO server rows, [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 4); before it the 2026-11-06 targeted run r1106cbb (SQ-CBB server rows, [scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 3); before it the 2026-11-06 targeted run r1106cba (SQ-CBA server rows, same doc 1); before it the 2026-11-03 worldgen run r1103w ([scratch_run_2026-11-03.md](scratch_run_2026-11-03.md) section 9, stopped by the owner after W1c); before it the 2026-11-03 run r1103 ([scratch_run_2026-11-03.md](scratch_run_2026-11-03.md), FAILs in perf/runs/r1103/FINAL.md); before it the 2026-11-02 evening bulk run r1102b (stopped by the owner; [scratch_run_2026-11-02b.md](scratch_run_2026-11-02b.md) section 8, handover perf/runs/r1102b/HANDOVER.md); before it the 2026-11-02 targeted run r1102 (SQ-CDJ5, [scratch_run_2026-11-02.md](scratch_run_2026-11-02.md) section 8); before it the 2026-10-31 bulk run r1031 ([scratch_run_2026-10-31.md](scratch_run_2026-10-31.md) sections 7-8; client block, L1-L4, W2 rest and W3 deferred). Before it: the 2026-10-28 night run (recent feature block, bot players, perf suite g1; [scratch_queue_run_2026-10-28.md](scratch_queue_run_2026-10-28.md)). Before it: the 2026-10-27 evening run measuring the perf fixes (wgp_* worlds, group A qa_1027; perf.md 10.9). Before it, the 2026-10-27 perf evaluation (pe1-pe3; its probe and queue fixes are listed under it, ready for a rerun). Before it, the 2026-10-26 afternoon run (group B nb2: dumps, generators, SQ-SNF, SQ-PF, SQ-INV-01 to -06; perf mixin fix). Before it, the 2026-10-26 run (group A qb1 and one group B
+@@text boot nb1, patcherMod 1.1.03 and the 2026-10-25 23:59 jars) passed the Creative Delight boot, Abnormals, Storage, End's server half and
+@@text Farmer's Structures placement entries; its "Not run" row lists what is still open (group B worldgen counts and all client rows).
+@@text 2026-11-09: added SQ-VH and CQ-VH at the end (Visceral Heap); BOP, Common and Worldgen installed 23:00.
+@@text
+@@text Jars in `mods/` now (refreshed 2026-11-14 22:30): creativecommon-1.2.0 11-14 16:02 (build/libs has 22:22, not installed), creativedelight-1.1.0 11-13 17:58, solRaspberryPie 11-13 22:53, packetfixer 3.3.2 11-13 23:20, every other Creative jar 11-10 19:54 to 21:23; build/libs newer than `mods/`: Compat 11-13 17:58, Brewing and Calendar 11-12 20:47, Engineering 11-10 23:06, Worldgen 11-10 22:38 (prep_srv.sh swaps them into scratch srv). Earlier (refreshed 2026-11-07 19:38, after r1107cc): all ten Creative jars installed from build/libs (Common 19:35 with the r1107cc NCH fixes, Brewing / Equipment / Engineering / Magic 19:37, Calendar 19:35, Compat 18:03, Delight 17:03, Devtools 15:15, Worldgen 15:14), `creativeLabels-1.0.1`; `repackedStorage` -01 (a -02 build of 11-07 14:39 is not installed). Earlier: refreshed 2026-11-06 22:44, after r1106spfx): all ten Creative jars of 11-06 22:07-22:43 (`creativecommon-1.1.0`, `creativecompat`, `creativecalendar`, `creativemagic`, `creativeequipment`, `creativeengineering-2.0.0`, `creativedevtools`, `creativeworldgen`, `creativedelight-1.1.0`, `creativebrewing-1.0.0`), `creativeLabels-1.0.1` (11-03; build/libs has an 11-04 build), exposureBackport -04, repackedStorage -01. Unlisted in mod_sides.md: Immersive Portals 2.3.7, Portal Gun, Portal Gels (crash with Serene Seasons, leave out of srv), `loadingscreentips` (Fabric, does nothing). Donor folders beside `mods/`: enders, farmers, goldenfood, largemeals, miners, oceanic, roll, rustic, vinery `_upstream/`. The instance `server_mods/` is stale: build scratch servers with `prep_srv.sh`.
+@@text
+@@text Entry fields: ID, feature, target state, world group, commands, expected log, pass / fail, if it fails.
+@@text
+@@text **Perf session (every bulk run, added 2026-10-28; [../perf.md](../perf.md) 14).** Every `scratch_server.sh` server now
+@@text records JFR (`CE_PERF=0` at setup turns it off). Before the first boot run `bash tools/perf/session/perf_session.sh start`;
+@@text before each entry run `perf_session.sh mark <ID>` (scratch_server.sh logs boot / cmd / stop itself); after the last
+@@text server has stopped run `perf_session.sh stop`, then `perf_session.sh report` (no server up while it parses; no `--prune`, the raw recordings are kept for debugging since 2026-10-31).
+@@text `perf/sessions/<name>/summary.md` gives each boot's launch-to-Done time and each entry's tick median / p95 / ticks over
+@@text 50 ms / CPU / chunk waits, plus the worst ticks with the commands before them. Add a line to the Run log naming the
+@@text session. Disk: `/` is nearly full; one boot's recording is capped at `JFR_MAX` (1g) and `--prune` deletes every raw file, so do not use it; when space runs out, delete by hand the recordings of boots whose rows all passed.
+@@text Benchmarks (boot, idle, pregen, reload) are the perf suite's G scenarios ([../perf_suite.md](../perf_suite.md), its own
+@@text runner), not queue rows.

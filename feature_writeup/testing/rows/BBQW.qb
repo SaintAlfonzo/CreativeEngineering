@@ -1,0 +1,90 @@
+# Scratch queue rows BBQW (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/BBQW.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-BBQW Barbeque's Delight wood basins and trays, 2026-11-04 ([barbeques_delight.md](../barbeques_delight.md) 3.11, O39; Creative Delight jar built 2026-11-04, not installed)
+@@date 2026-11-04
+@@jars creativedelight
+@@sources feature_writeup/barbeques_delight.md
+@@text
+@@text Needs the Creative Delight jar from `development/creativeDelight/build/libs` and the pack's `item_dict.js` /
+@@text `block_dict.js`: full restart. Group A (superflat).
+@@text
+@@table
+## SQ-BBQW-01 | 18 stonecutter recipes for the wood basins and trays; log tags; block tags
+@group A
+@commands Boot; `grep -n "barbequesdelight" logs/latest.log \| grep -i "error\|exception\|missing\|invalid for block" \| head`; recipe dump `creativedelight:stonecutting/bbq_*_from_logs`; tag probe `#creativedelight:bbq_oak_logs`, `#minecraft:mineable/axe`, `#blockrunner:surface/wood`
+@pass No log line; 18 stonecutter recipes (9 basin x2, 9 tray x4), each wood's on its own log tag, oak's on `#creativedelight:bbq_oak_logs`; that tag holds oak logs and modded logs, no spruce/birch/jungle/acacia/dark oak/mangrove logs or crimson/warped stems; the 18 blocks in both block tags; no `bbq_basin_from_logs` / `bbq_tray_from_logs`
+@fails unknown dict key in `recipes.js` / `tags.js`; `addMatching` warning
+@from batches/r1113/c2_a1.qb
+bootreject (?i)barbequesdelight.*(error|exception|invalid for block)
+> zq rdetail _from_logs
+> zq itemtag creativedelight:bbq_oak_logs
+> zq blocktag minecraft:mineable/axe
+> zq blocktag blockrunner:surface/wood
+waitlog blocktag blockrunner:surface/wood 20
+count creativedelight:stonecutting/bbq_[a-z_]+_from_logs \{ == 18
+reject stonecutting/bbq_(basin|tray)_from_logs
+reject itemtag creativedelight:bbq_oak_logs \(\d+\): .*minecraft:(spruce|birch|jungle|acacia|dark_oak|mangrove)_log|minecraft:(crimson|warped)_stem
+look basins x2 and trays x4 output; each wood's on its own log tag, oak's on #creativedelight:bbq_oak_logs (oak logs and modded logs); the 18 blocks in mineable/axe and blockrunner:surface/wood
+
+## SQ-BBQW-02 | skewering on a warped basin still works (2 beef, stick, cabbage in the off hand)
+@group A
+@commands Place `barbequesdelight:basin`, `warped_basin`, `tray`, `crimson_tray`; `/data get block` each; fake player puts a raw beef in the warped basin and skewers with a stick; break each with and without an axe
+@pass One `barbequesdelight:basin` / `tray` block entity type on every wood; skewering works on the warped basin; each drops itself both ways
+@fails block entity type built with the oak block only
+@from batches/r1115/p6_a1.qb passed
+> clear c6b
+> setblock 302 -60 370 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:2b}]}}
+> zc2 inv 302 -60 370
+> pbot hold c6b minecraft:stick 1
+> item replace entity c6b weapon.offhand with farmersdelight:cabbage 2
+> zc2 useat c6b 302 -60 370 0.75 0.2 0.5 up
+sleep 1
+> zc2 inv 302 -60 370
+> zp inv c6b
+waitlog \[zp\] done 20
+expect \[zp\] inv c6b: .*barbequesdelight:raw_beef_skewer
+> clear c6b
+> pbot remove c6b
+
+## SQ-BBQW-03 | mixed-wood trays stack (support=true on the upper two); removing the base block drops the whole stack
+@group A
+@commands `/setblock` an air gap, then a `spruce_tray` hanging, an `oak_tray` on it, a `birch_tray` on that; break the spruce tray's support
+@pass Mixed trays stack (`support=true` on the upper two); removing the base drops the whole stack
+@fails `TrayBlock` still checks `is(this)`
+@from batches/r1113/fix_c2a1.qb
+> setblock 310 -60 370 minecraft:oak_planks
+> setblock 310 -59 370 barbequesdelight:spruce_tray[facing=north]
+> zp sneak c2b on
+> pbot hold c2b barbequesdelight:tray 1
+> pbot use c2b 310 -59 370 up
+> pbot hold c2b barbequesdelight:birch_tray 1
+> pbot use c2b 310 -58 370 up
+> zp sneak c2b off
+sleep 1
+> zc2 state 310 -59 370
+> zc2 state 310 -58 370
+> zc2 state 310 -57 370
+> kill @e[type=minecraft:item,x=306,y=-62,z=366,dx=8,dy=10,dz=8]
+> setblock 310 -60 370 minecraft:air
+sleep 2
+> zc2 state 310 -59 370
+> zc2 state 310 -58 370
+> zc2 state 310 -57 370
+> kill @e[type=minecraft:item,x=306,y=-62,z=366,dx=8,dy=10,dz=8]
+expect \[zc2\] state 310 -58 370: .*barbequesdelight:tray\}.*support=true
+expect \[zc2\] state 310 -57 370: .*birch_tray.*support=true
+look first three states: spruce support=false, oak (barbequesdelight:tray) and birch support=true; after the plank goes all three air and the last kill line says "Killed 3". If the birch use placed at -58 again (the oak use PASSed without placing), BATCH-FAULT: place by hand in a client
+> clear c2b
+
+@@text
+@@text Client:
+@@text - CQ-BBQW-01: the 9 basins show their stripped log, the 9 trays their palette-swapped crate (item, placed, all four
+@@text   facings, the stacked `support` model with legs); names "<Wood> Ingredients Basin" / "<Wood> Tray", oak's "Oak ..."; the
+@@text   JEI Skewering page lists the 9 basins as catalysts; the stonecutter on a spruce log offers only the spruce pair.
+@@text - SQ-JAMT-01: every Fruits Delight jelly pot recipe (22, e.g. apple_jelly, kiwi_jelly) has cookingtime 400 in the loaded recipe set
+@@text   (or in JEI); sweet berry, pepper, glow berry and pack jam pot recipes unchanged at 400; no other pot recipe changed.
+@@text
+@@text Results: not run yet.

@@ -1,0 +1,98 @@
+# Scratch queue rows RDB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RDB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-RDB Rustic Delight baked into its member, 2026-11-10 ([plan_rustic_fold_in.md](../plan_rustic_fold_in.md) 7, [rustic_delight.md](../rustic_delight.md) 5.14, TODO `creativedelight/members #55`)
+@@date 2026-11-10
+@@jars creativedelight
+@@sources feature_writeup/plan_rustic_fold_in.md feature_writeup/rustic_delight.md
+@@text
+@@text Needs the 2026-11-10 Creative Delight jar (nests `backportedRustic-1.7.0-ce-19.2-02`) in `mods/`: full restart. Group A
+@@text (superflat) unless noted. Baseline for -02: the pre-change dumps in `kubejs/exported/` (2026-11-09/10: 270 `rusticdelight`
+@@text recipes in `recipes/all.csv`, items in `items_by_mod/rusticdelight.json`); copy them aside before the run's `/dumpall`.
+@@text
+@@text | ID | Group | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## SQ-RDB-01 | Rustic Delight with no rustic_upstream folder
+@group A
+@commands Boot with no `rustic_upstream/` folder (and no symlink) in the server dir; `grep -i "rustic\|Error occurred while handling event\|Couldn't parse\|Failed to load" logs/latest.log`
+@pass `Done (`; no Rustic error or parse error for a `rusticdelight:` file; `/dumpall` items_by_mod/rusticdelight.json lists the same ids as the baseline (160 port ids plus blocks)
+@fails A missing file: `bake_upstream.py --check`; a parse error: the bake rule for that folder
+@from batches/r1111/a1.qb passed
+bootexpect Done \(
+shell ls -d rustic_upstream 2>&1; grep -iE "rustic" logs/latest.log | grep -iE "error|exception|couldn't parse|failed to load" | head -20; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")" 
+bootreject (?i)(Couldn't parse|Failed to load).*rusticdelight:
+
+## SQ-RDB-02 | /dumpall: Rustic recipes, tags, loot and items equal the 11-10 baseline (kubejs/exported copied in by prep)
+@group A
+@commands `/dumpall`; compare `recipes/all.csv` rusticdelight rows, `tags/item_tags.json` and `tags/block_tags.json` rusticdelight entries, `loot_tables/` rusticdelight with the baseline
+@pass Same recipe ids (270), same tag members, same loot tables
+@fails Diff names the file; check its `bake_manifest.json` rules
+@from batches/r1113/c4_a.qb
+shell rm -rf rdb_base && cp -r kubejs/exported rdb_base && echo "baseline copied: $(grep -c '^rusticdelight:' rdb_base/recipes/all.csv) rusticdelight recipes"
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell python3 $INST/tools/scratch_query/rdb_compare.py rdb_base kubejs/exported rusticdelight
+look every [rdb] line SAME (recipes 270); a DIFF names the entry: check its bake_manifest.json rule. items_by_mod on a dedicated server may lack client-only names (ids still compare)
+
+## SQ-RDB-03
+@group A
+@commands Rerun SQ-RD-08, -10, -11, -22 (open FAIL), -24, -26 and SQ-RDX-01 to -14
+@pass Same results as their last run (-22 may stay FAIL, not a regression)
+@fails Compare with the last run record
+@draft no batch holds this row yet
+## SQ-RDB-04
+@group B
+@commands New world; `/place feature rusticdelight:wild_bell_peppers_placed`, `wild_cotton_placed`, `wild_coffee_placed`, `bell_pepper_block_patch_placed` on grass; a jungle temple and village chest roll (loot tables `/loot spawn`) and a Wandering Trader
+@pass Patches place (peppers base colours only); chest seeds and trader seeds as in SQ-RD-24, -26
+@fails `base_patch` rule or a worldgen file missing
+@draft no batch holds this row yet
+## SQ-RDB-05 | Rustic blocks from the 1.2.02 save keep their states
+@group old world
+@commands Save from the live pack with Rustic plates, crops, crates and potted wild coffee (as SQ-RD-03), opened on the -02 jar
+@pass Every block keeps its state; no missing-registry warning for `rusticdelight:`
+@fails Ids did not change, so a loss is a registry bug, not the bake
+@from batches/r1115/p9_o2.qb passed
+> zp9 bstate 200 -60 200
+> zp9 bstate 202 -60 200
+> zp9 bstate 204 -60 200
+> zp9 bstate 206 -60 200
+> zp9 bstate 208 -60 200
+> zp9 bstate 210 -60 200
+> zp9 bstate 212 -60 200
+> zp9 bstate 214 -60 200
+> zp9 bstate 216 -60 200
+> zp9 bstate 218 -60 200
+> zp9 bstate 220 -60 200
+sleep 1
+expect \[zp9\] bstate 200 -60 200 Block\{rusticdelight:pancakes\}\[facing=east,servings=4\]
+expect \[zp9\] bstate 202 -60 200 Block\{rusticdelight:honey_pancakes\}\[facing=east,servings=7\]
+expect \[zp9\] bstate 204 -60 200 Block\{rusticdelight:cotton\}\[age=3\]
+expect \[zp9\] bstate 206 -60 200 Block\{rusticdelight:coffee\}\[age=4\]
+expect \[zp9\] bstate 208 -60 200 Block\{rusticdelight:bell_peppers\}\[age=6\]
+expect \[zp9\] bstate 210 -60 200 Block\{rusticdelight:bell_pepper_red_crate\}
+expect \[zp9\] bstate 212 -60 200 Block\{rusticdelight:cotton_boll_crate\}
+expect \[zp9\] bstate 214 -60 200 Block\{rusticdelight:potted_wild_coffee\}
+expect \[zp9\] bstate 216 -60 200 Block\{rusticdelight:cherry_blossom_cheesecake\}\[bites=1,facing=north\]
+expect \[zp9\] bstate 218 -60 200 Block\{rusticdelight:wild_coffee\}
+expect \[zp9\] bstate 220 -60 200 Block\{rusticdelight:glowing_calamari_crate\}
+shell echo "missing-registry lines naming rusticdelight: $(grep -ciE '(missing|unidentified|unknown).*rusticdelight' logs/latest.log)"; grep -iE "(missing|unidentified|unknown).*rusticdelight" logs/latest.log | cut -c1-240 | head -8
+
+## SQ-RDB-06 | old rustic_upstream folder beside mods/ is ignored
+@group A
+@commands Boot again with an old `rustic_upstream/` folder (the 1.7.0 jar) left beside `mods/`
+@pass Same as SQ-RDB-01: no duplicate pack, no error, folder ignored
+@fails A pack named `rustic_upstream_assets` in the pack list: an old jar still nested
+@from batches/r1111/a2.qb
+bootexpect Done \(
+bootreject (?i)(Couldn't parse|Failed to load).*rusticdelight:
+bootreject rustic_upstream_assets
+shell ls -ld rustic_upstream; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")"; grep -ciE 'rustic_upstream' logs/latest.log
+
+## CQ-RDB-01
+@group client
+@commands Creative tab and JEI for Rustic: peppers (nine colours), pancake plates, syrup, coffee, cotton; place each flavoured pancake on a Brewin' coaster; hover items with FD tooltips (syrup, pumpkin, cherry blossom tea)
+@pass LOOK: textures and names as before; the six pancake recolours (as in 1.2.02); coaster pancakes render (no magenta cube); `grep "coaster/pancake" logs/latest.log` empty
+@fails Missing texture: `bake_upstream.py --check`; recolour lost: `own_overrides.json`
+@draft no batch holds this row yet

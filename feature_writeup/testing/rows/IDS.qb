@@ -1,0 +1,102 @@
+# Scratch queue rows IDS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/IDS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-IDS / CQ-IDS ids that named the wrong owner jar, and `ce` names outside Engineering, 2026-11-07 ([plan_owner_ids.md](../plan_owner_ids.md) 6, TODO `creativesplit/ids #23`)
+@@date 2026-11-07
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@@sources feature_writeup/plan_owner_ids.md
+@@text
+@@text Not run. Builds of 2026-11-07 (Common, Compat, Calendar, Delight, Equipment, Worldgen, Magic, Brewing, Devtools), on top
+@@text of the 7.19 builds (SQ-CIF). Run with SQ-CIF. Changed: two event subscribers that never registered (title plaques,
+@@text armor bar overflow tint); WTHIT plugin and line ids to `creativecompat:` / `creativecalendar:`; JEI uids and categories
+@@text to `creativecompat:` / `creativedelight:` (`creativeengineering:baking` kept); channels `creativeequipment:stepstool`,
+@@text `creativecompat:sack_bundle`; commands `/ccswap /ccaltime /cwglocate /cwgspawnbox /cdevgen /cdevplace /cdevperf
+@@text /cdevdumpnames /cdevdumpicons`; Devtools members `cdevcapture` and `cdevperfbot` (system properties
+@@text `-Dcdevcapture.plan`, `-Dcdevperfbot.out`); `state_lines.json` now in Compat's `assets/creativecompat/`. NBT keys kept.
+@@text The old `cecapture-*.jar` / `ceperfbot-*.jar` must not sit beside the new ones in any `mods/`.
+@@text
+@@table
+## SQ-IDS-01 | owner-id lint 0 flagged; no duplicate WTHIT plugin or JEI uid line
+@group B (full pack)
+@commands `python3 tools/id_owner_lint.py`; prep_srv with the nine builds; boot; `grep -iE "duplicate (plugin\|uid)\|Duplicate plugin\|already registered" logs/latest.log`; `grep -c "creativecommon:\|creativeengineering:" config/waila/plugin_toggle.json5` (client config, after CQ-IDS-01)
+@pass lint prints `0 flagged`; boot reaches Done; no duplicate WTHIT plugin or JEI uid line; plugin_toggle holds no `creativecommon:` / `creativeengineering:` rows
+@fails an id left in the old namespace; a stale old jar in `mods/`
+@from batches/r1113/c3_b1.qb
+shell cd "$INST" && python3 tools/id_owner_lint.py | tail -1
+shell cd "$INST" && python3 tools/id_owner_lint.py | tail -1 | grep -q "^0 flagged"
+# r1114: "already registered" alone matched AE2's INFO "Not registering BaseClass ... is already registered" (igtooltip)
+bootreject [Dd]uplicate (plugin|uid)|^(?!.*BaseClassRegistrationImpl).*already registered
+look plugin_toggle.json5 half (client config) is CQ-IDS-01's
+
+## SQ-IDS-02 | new commands answer, old names unknown
+@group B (same boot)
+@commands `/ccswap items`, `/ccaltime`, `/cwglocate batch minecraft:village_plains`, `/cwgspawnbox`, `/cdevgen status`, `/cdevgen run food_dict`, `/cdevplace preview structures minecraft:*`, `/cdevperf`, `/cdevdumpnames`; then each old name (`/ceswap`, `/cetime`, `/celocate`, `/cespawnbox`, `/cegen`, `/ceplace`, `/ceperf`, `/cedumpnames`); perf suite smoke (`tools/perf/suite/perf_suite.py`, 1 bot, 1 minute)
+@pass each new command answers (usage or result, no "Unknown command"); each old name is unknown; `/cdevgen run` writes `logs/cdevgen/food_dict.log`; the bot logs in (`pbot status`) and `perf/bot` gains a tick log
+@fails a literal left in a jar; a tool still passing `-Dceperfbot.out` or copying `ceperfbot-*.jar`
+@from batches/r1113/c3_b1.qb
+> ccswap items
+> ccaltime
+# r1114: the filter is a StringArgumentType.string(): a namespaced id must be quoted
+> cwglocate batch "minecraft:village_plains"
+> cwgspawnbox
+> cdevgen status
+> cdevplace preview structures minecraft:*
+> cdevperf
+# r1114: /cdevdumpnames is a client command (RegisterClientCommandsEvent): unknown on a server, left to the client half
+sleep 10
+> ceswap
+> cetime
+> celocate
+> cespawnbox
+> cegen
+> ceplace
+> ceperf
+> cedumpnames
+sleep 3
+count Unknown or incomplete command == 8
+look each new command printed usage or a result (no "Unknown or incomplete command" before the old names); exactly 8 unknowns = the 8 old names. /cdevgen run food_dict and the perf suite smoke are left out (srv/ has no tools/)
+
+## SQ-IDS-03
+@group B (world saved on the 11-06 or 7.19 builds)
+@commands before the swap: kettle with water in its tank, nightstand with items, lunchbox with a skin, backpack with a skin, a half-done sequenced assembly item in a chest; swap to the new builds; reload the world; `/data get block` on kettle and nightstand, `/data get block` on the chest
+@pass kettle tank keeps fluid and level (`CETankFluid`, `CETankLevel`), nightstand keeps `CENightstandItems`, lunchbox and backpack keep `CELunchboxSkin` / `CESkin`, the assembly item keeps `CEStash`
+@fails a saved NBT key renamed with its Java constant
+@draft no batch holds this row yet
+## CQ-IDS-01
+@group client (full pack)
+@commands WTHIT config screen, Plugins; look at a state-line block, hive, campfire, coaster, sheared grass, silk-touch block, flower pot with a plant, cooking pot with leftovers, a crop with Serene Seasons on, a Blockrunner road
+@pass Creative Compat lists its 15 lines (block model icon, coaster, jar contents, hive, servings, campfire, sheetmetal tank, kitchen station, pot and kettle leftovers, sheared, silk touch, operator barriers, flower pot contents, run speed) and Creative Calendar lists Crop Seasons, each with a name (no raw `config.waila.plugin_*`); every line still shows in world
+@fails lang key not renamed with the plugin id
+@draft no batch holds this row yet
+## CQ-IDS-02
+@group client (same)
+@commands JEI: open the World tabs, Canning, Can Uses, Feast Plating, Seasoning, Baking; check the tab order against the 11-06 client
+@pass the 19 World tabs right after Tipped Arrows, the four Delight tabs where they were, Baking unchanged; all pages filled
+@fails `recipe-category-sort-order.ini` not shipped with the new ids
+@draft no batch holds this row yet
+## CQ-IDS-03
+@group client (same)
+@commands rename a chest to a 40-character name in an anvil; place and open it; `ls -l kubejs/exported/gui_title_overflow.json`
+@pass the title plaque stretches to fit; the overflow file gains the chest's entry
+@fails TitlePlaques still not subscribed (mod id)
+@draft no batch holds this row yet
+## CQ-IDS-04
+@group client (same)
+@commands wear armor over 20 points with Detail Armor Bar
+@pass the overflow tint draws over the armor bar
+@fails ArmorOverflowRenderer still not subscribed
+@draft no batch holds this row yet
+## CQ-IDS-05
+@group client on a dedicated server with the new builds
+@commands use the stepstool key on a stepstool; rotate a sack bundle's selection
+@pass the stool works; the sack rotates; no "unknown channel" or disconnect
+@fails client and server on different builds
+@draft no batch holds this row yet
+## CQ-IDS-06
+@group throwaway client
+@commands `/cdevdumpicons`; a capture plan run with `-Dcdevcapture.plan=<plan>` (tools/client_capture)
+@pass the icon dump file is written; the driver loads the world and saves shots
+@fails a capture tool still passing `-Dcecapture.plan`
+@draft no batch holds this row yet

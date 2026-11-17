@@ -1,0 +1,206 @@
+# Scratch queue rows FLR (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/FLR.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-FLR Flesh recipes and Create result pools, 2026-11-10 ([plan_flesh_recipes.md](../plan_flesh_recipes.md) 7, [visceral_heap.md](../visceral_heap.md) 5, [engineering.md](../engineering.md) EN-22 to EN-24, TODO `worldgen/biomes #11`)
+@@date 2026-11-10
+@@jars creativeworldgen
+@@sources feature_writeup/plan_flesh_recipes.md feature_writeup/visceral_heap.md feature_writeup/engineering.md
+@@text
+@@text Targets Creative Common and Creative Engineering built 2026-11-10 (both NOT installed when written: game open) and the BOP jar. Startup dicts changed, so a fresh boot. Recipes are in `kubejs/data/creativeworldgen/kubejs/recipes/visceral_heap.js`.
+@@text
+@@table
+## SQ-FLR-01 | flesh recipes and result pools load
+@group A
+@commands Boot; `grep -nE "result-pools\|has more outputs\|visceral_heap\|\[NCH\].*(flesh\|pus_bubble\|hair\|eyebulb\|blood\|plantoil)\|Mixing (CrushingOutputCap\|ProcessingInventory\|JeiCrushingPools\|JeiMillingPools)" logs/latest.log`
+@pass the 4 `creativeworldgen:create*/visceral_heap/*` crush and mill recipes and 5 mixing recipes load; no `[result-pools]` error, no Create "more outputs" warning, no NCH warning except the one-time `#forge:plantoil` tag note
+@fails a stale Common jar leaves `i.flesh` undefined (NCH `is undefined`); missing mixin lines mean the Engineering jar is stale
+@from batches/r1111/a1.qb
+shell grep -nE "result-pools|has more outputs|visceral_heap|\[NCH\].*(flesh|pus_bubble|hair|eyebulb|blood|plantoil)|Mixing (CrushingOutputCap|ProcessingInventory|JeiCrushingPools|JeiMillingPools)" logs/latest.log | cut -c1-250 | head -40
+bootreject \[result-pools\].*(?i)error
+bootreject has more outputs
+> zq bytype create:crushing
+waitlog \[zq\] done 30
+> zq bytype create:milling
+waitlog \[zq\] done 30
+> zq bytype create:mixing
+waitlog \[zq\] done 30
+count creativeworldgen:create\w*/visceral_heap/ >= 9
+look 4 crush/mill + 5 mixing creativeworldgen visceral_heap recipes listed
+
+## SQ-FLR-02 | crushing wheels fed by a hopper: 200 flesh, then 200 porous flesh, outputs by pool
+@group A
+@commands Crushing wheels fed by a hopper: 200 flesh in stacks of 64, collect everything; then 200 porous flesh; count per item (`/clear @s <item> 0`)
+@pass flesh: meat items total 200 exactly, bone near 150, eye near 50, misc near 50; porous: meat 300 +/- 25, eye 200 exactly, misc near 100, no bone; item splits near plan section 3
+@fails `fan/ResultPools.roll`; a meat total above 200 means pools did not apply (Create's independent roll); any loss means the wheel inventory did not grow (`ProcessingInventoryMixin`)
+@from batches/r1115/p9_a1.qb
+> forceload add 40190 39990 40270 40010
+> execute unless block 40220 -58 40000 create:crushing_wheel run setblock 40220 -58 40000 create:crushing_wheel[axis=z]
+> execute unless block 40222 -58 40000 create:crushing_wheel run setblock 40222 -58 40000 create:crushing_wheel[axis=z]
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40220 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller run setblock 40222 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+sleep 5
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40220 -58 39999 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40222 -58 40001 minecraft:air
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40220 -58 40001 create:creative_motor[facing=north]{ScrollValue:128}
+> execute unless block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run setblock 40222 -58 39999 create:creative_motor[facing=south]{ScrollValue:128}
+sleep 5
+> execute if block 40221 -58 40000 create:crushing_wheel_controller[valid=true] run say FLR crusher valid ok
+expect FLR crusher valid ok
+> kill @e[type=minecraft:item,x=40215,y=-64,z=39995,dx=12,dy=12,dz=10]
+> setblock 40221 -57 40000 minecraft:hopper[facing=down]
+> zc4 put 40221 -57 40000 biomesoplenty:flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:flesh 8
+waitlog \[zc4\] put .* inserted=8 20
+sleep 90
+> zc4 inv 40221 -57 40000
+> zc4 inv 40221 -58 40000
+sleep 90
+> zc4 inv 40221 -57 40000
+> zc4 inv 40221 -58 40000
+sleep 10
+> zc4 pools 40221 -59 40000 -5
+waitlog \[zc4\] pools 20
+> zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 64
+> zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 8
+waitlog \[zc4\] put .* inserted=8 20
+sleep 90
+> zc4 inv 40221 -57 40000
+> zc4 inv 40221 -58 40000
+sleep 90
+> zc4 inv 40221 -57 40000
+> zc4 inv 40221 -58 40000
+sleep 10
+> zc4 pools 40221 -59 40000 -5
+waitlog \[zc4\] pools 20
+look first pools line (flesh): meat=200 exactly, bone near 150, eye near 50, misc near 50, other 0; second (porous): meat 275 to 325, eye=200 exactly, misc near 100, bone=0. Hopper and controller empty before each count (inv lines total=0)
+
+## SQ-FLR-03 | Millstone: 20 flesh give exactly 20 meat items (drained into a chest)
+@group A
+@commands Millstone: 20 flesh one at a time; count
+@pass 20 meat items exactly
+@fails `rollResults` path in `MillstoneBlockEntity`
+@from batches/r1113/c4_ar2.qb
+> forceload add 40190 39990 40270 40010
+sleep 3
+> fill 40195 -60 39995 40205 -50 40005 minecraft:air
+> setblock 40200 -61 40000 minecraft:chest
+> setblock 40200 -60 40000 minecraft:hopper[facing=down]
+> setblock 40200 -59 40000 create:millstone
+> setblock 40201 -60 40000 create:creative_motor[facing=up]{ScrollValue:32}
+> setblock 40201 -59 40000 create:cogwheel[axis=y]
+sleep 3
+> data get block 40200 -59 40000 Speed
+expect 40200, -59, 40000 has the following block data: -?[1-9][0-9]*\.0f
+> zc4 put 40200 -59 40000 biomesoplenty:flesh 20
+waitlog \[zc4\] done 20
+expect \[zc4\] put 40200 -59 40000 biomesoplenty:flesh inserted=20
+sleep 150
+> zc4 inv 40200 -59 40000
+waitlog \[zc4\] done 20
+> zc4 poolsinv 40200 -61 40000
+waitlog \[zc4\] pools by id 20
+count \[zc4\] pools meat=20 bone=\d+ eye=\d+ misc=\d+ >= 1
+reject \[zc4\] inv 40200 -59 40000 total=\d+ .*biomesoplenty:flesh x
+look the chest pools line: meat=20 exactly, flesh used up (millstone inv line empty or near empty); bone near 15, eye near 5, misc near 5; the hopper itself may still hold up to 5 stacks (zc4 inv 40200 -60 40000 by hand if meat is 15-19)
+
+## SQ-FLR-04 | Crushing wheels: 100 pus bubbles about 25 slimeballs, 100 hair about 50 string, nothing else
+@group A
+@commands Crushing wheels: 100 pus bubbles, 100 hair
+@pass about 25 slimeballs, about 50 string, nothing else
+@fails plain chance outputs
+@from batches/r1113/c4_ar2.qb
+> kill @e[type=minecraft:item,x=40215,y=-64,z=39995,dx=12,dy=12,dz=10]
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:64b}}
+sleep 25
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:36b}}
+sleep 40
+> zc4 pools 40221 -59 40000 -4
+waitlog \[zc4\] done 20
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:64b}}
+sleep 25
+> summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:36b}}
+sleep 40
+> zc4 pools 40221 -59 40000 -4
+waitlog \[zc4\] done 20
+count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=(1[5-9]|2\d|3[0-5]) string=0 other=0 >= 1
+count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=0 string=(3[5-9]|[4-5]\d|6[0-5]) other=0 >= 1
+look first pools line ~25 slime only, second ~50 string only; pus_bubble / hair under "others" means the wheels did not take (or not all of) the stack
+
+## SQ-FLR-05 | Mixer and basin, heated half: blood renders (the unheated half PASSed in c4_ar)
+@group A
+@commands Mixer and basin: heated, 1 flesh; 1 porous flesh; 1 flesh tendons. Unheated: 2 porous + 2 flesh + 1000 mB plant oil, again with seed oil and vegetable oil; 2 tendons + 1 flesh + 250 mB blood
+@pass 250 mB blood (+ bone 1 in 4); 500 mB; 250 mB; 2 porous + 3 flesh with each oil; 1 porous flesh
+@fails `createFluidTag` / kubejs-create fluidTag read; no run with one oil = tag not matched
+@from batches/r1113/c4_ar2.qb
+> setblock 40240 -60 40000 create:blaze_burner[blaze=smouldering]
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> setblock 40240 -57 40000 create:mechanical_mixer
+> setblock 40241 -57 40000 create:cogwheel[axis=y]
+> setblock 40241 -58 40000 create:creative_motor[facing=up]{ScrollValue:128}
+sleep 3
+> data get block 40240 -57 40000 Speed
+expect 40240, -57, 40000 has the following block data: -?[1-9][0-9]*\.0f
+> zc4 fuel 40240 -60 40000 minecraft:coal_block
+waitlog \[zc4\] done 20
+sleep 2
+> zc4 fuel 40240 -60 40000 minecraft:coal
+waitlog \[zc4\] done 20
+expect \[zc4\] fuel 40240 -60 40000 .*blaze=kindled
+> zc4 put 40240 -59 40000 biomesoplenty:flesh 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> zc4 put 40240 -59 40000 biomesoplenty:porous_flesh 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 500
+> setblock 40240 -59 40000 minecraft:air
+> setblock 40240 -59 40000 create:basin
+> zc4 put 40240 -59 40000 biomesoplenty:flesh_tendons 1
+sleep 25
+> zc4 inv 40240 -59 40000
+waitlog \[zc4\] done 20
+count \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250 >= 2
+look heated: flesh 250 mB blood (+ a bone 1 in 4), porous 500 mB, tendons 250 mB, the inv lines show the input used up; the first fuel line (coal block) should already say kindled
+
+## SQ-FLR-06 | processing inventories keep their items and Size 32 after a restart
+@group A
+@commands Place a crushing wheel and a saw holding items, save, restart on the same world
+@pass items still there; `/data get block <controller>` shows `Size: 32`
+@fails `ProcessingInventoryMixin.growOnLoad`
+@from batches/r1111/a2.qb passed
+> forceload add 2300 0 2310 10
+sleep 2
+> data get block 2300 -60 2 Inventory
+> data get block 2304 -60 2 Inventory
+count Size: 32, Items: \[\{Slot: 0, id: "biomesoplenty:flesh", Count: 16b\}\] == 2
+
+## CQ-FLR-01
+@group client
+@commands Climb a flesh tendon column and a strand, up and down, and stand on a strand
+@pass ladder speed both ways; can stand
+@fails `minecraft:climbable` in `tags/visceral_heap.js`; `/execute if block ~ ~ ~ #minecraft:climbable`
+@draft no batch holds this row yet
+## CQ-FLR-02
+@group client
+@commands JEI R on flesh and porous flesh; hover each slot; R on hoglin ear and on eyebulb; U on an ore with crushing
+@pass flesh crushing page 4 slots (meat, bone, eye, misc), porous 3, each cycling, tooltips with chance and pool line; millstone pages same slots in a 2x2 grid; hoglin ear and eyebulb find both; ore page unchanged
+@fails `JeiCrushingPoolsMixin` / `JeiMillingPoolsMixin`; empty pools on the client = sync not read (`ProcessingRecipeSerializerMixin.fromNetwork`)
+@draft no batch holds this row yet
+## CQ-FLR-03
+@group client
+@commands Crush flesh until an eyebulb drops; place it on flesh and on stone
+@pass places where BOP allows (plan 2.9); RECORD where
+@fails BOP placement rule
+@draft no batch holds this row yet

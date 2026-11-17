@@ -1,0 +1,131 @@
+# Scratch queue rows CUP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CUP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CUP Copper cup family removed, 2026-11-02 ([miners_delight.md](../miners_delight.md) "Copper cup family removed"; TODO `dishes/meals #53`)
+@@date 2026-11-02
+@@jars creativedelight creativeworldgen
+@@sources feature_writeup/miners_delight.md
+@@text
+@@text Targets the Creative Delight jar built 2026-11-02 21:10 (nests `backportedMiners-1.4.5-ce-19.2-05`, `repackedDelightful-3.4.1-ce-19.2-01`); not in `mods/` yet, install it first. Registry change: also boot once on a copy of a world that holds cups (old ids drop, no conversion).
+@@text
+@@text | ID | Group | Commands | Pass | If it fails |
+@@text | --- | --- | --- | --- | --- |
+## SQ-CUP-01 | Miner's Delight without the copper cup family: data loads, no cup id anywhere
+@group A
+@commands boot; `grep -nE "Cup conversions\|cup_conversion\|miners_delight:[a-z_]*cup\|cactus_soup_cup\|Error occurred while handling event" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log`
+@pass `Done (`; `Miner's Delight upstream data:` line present (count lower than 182: cup recipes, Create fill/empty recipes, cup advancement and cup conversion gone); no `Cup conversions` line; no line naming a cup id; no `Unknown item` from `item_dict.js`, `food_dict.js`, `tool_dict.js`, `stack_sizes.js` or comfort_nourishment
+@fails a cup id still in `MinersTranslator.REMOVED`'s miss list, or a script key (`i.copper_cup` etc.) left in a dict or recipe script
+@from batches/r1103/sB_2.qb
+bootexpect Miner's Delight upstream data: \d+ files
+bootreject Cup conversions
+bootreject (?i)\bminers_delight:(copper|water|milk|powder_snow|beef_stew|onion_soup|[a-z_]+)_cup\b
+bootreject (?i)\bdelightful:cactus_soup_cup\b
+kjsreject (?i)\bminers_delight:[a-z_]*_cup\b|cactus_soup_cup
+shell n=$(grep -oE "Miner's Delight upstream data: [0-9]+" logs/latest.log | grep -oE "[0-9]+$" | head -1); echo "upstream files $n (182 before)"; grep -nE "Unknown item" logs/kubejs/startup.log logs/kubejs/server.log | grep -iE "item_dict|food_dict|tool_dict|stack_sizes|comfort" | head; echo "handler errors: $(grep -c 'Error occurred while handling event' logs/latest.log)"; [ -n "$n" ] && [ "$n" -lt 182 ]
+look rows/SQ-CUP-01.shell.txt: no Unknown item line from the dicts, stack_sizes or comfort_nourishment; any handler error line is unrelated to cups
+
+## SQ-CUP-02 | no cup items: 50 miners_delight items, every cup /give unknown, cactus soup kept
+@group A
+@commands probe: count registry items in namespace `miners_delight`; `/give @p miners_delight:copper_cup`, `water_cup`, `milk_cup`, `powder_snow_cup`, `beef_stew_cup`, `onion_soup_cup`, `delightful:cactus_soup_cup`
+@pass 50 `miners_delight` items; every `/give` fails with unknown item; `delightful:cactus_soup` still exists
+@fails `MDItems` / `DelightfulBackportRegistry`
+@from batches/r1103/sB_2.qb passed
+> zsb ns miners_delight
+> give @p miners_delight:copper_cup
+> give @p miners_delight:water_cup
+> give @p miners_delight:milk_cup
+> give @p miners_delight:powder_snow_cup
+> give @p miners_delight:beef_stew_cup
+> give @p miners_delight:onion_soup_cup
+> give @p delightful:cactus_soup_cup
+> zq item delightful:cactus_soup
+waitlog \[zq\] item delightful:cactus_soup: 30
+expect \[zsb\] ns miners_delight: 50 items, cup ids \(0\)
+count Unknown item >= 7
+expect \[zq\] item delightful:cactus_soup: class (?!AirItem)
+
+## SQ-CUP-03 | Copper Pot: recipe keyed on the water bucket; soups served in bowls (x 110..122)
+@group A
+@commands recipe probe for `miners_delight:copper_pot`; `/setblock` a lit campfire and a copper pot; `/data merge block` the inputs of Cave Soup, Bat Soup, a Farmer's Delight beef stew and Delightful Cactus Soup in turn; wait; `/data get block`
+@pass the Copper Pot recipe exists, its centre key is only `minecraft:water_bucket`; each soup comes out as its bowl item (count as the recipe) with container `minecraft:bowl`
+@fails `MinersTranslator.withoutRemovedAlternatives` (the recipe dropped whole if the patch missed), `CopperPotBlockEntity.servedResult`
+@from batches/r1103/sB_2.qb
+> zq rdetail miners_delight:copper_pot
+> zsb potnbt miners_delight:cave_soup
+> zsb potnbt miners_delight:bat_soup
+> zsb potnbt farmersdelight:beef_stew
+> zsb potnbt delightful:cactus_soup
+waitlog \[zsb\] potnbt delightful:cactus_soup 30
+capture CP1 \[zsb\] potnbt miners_delight:cave_soup (\{.*\})$
+capture CT1 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ miners_delight:cave_soup
+capture CP2 \[zsb\] potnbt miners_delight:bat_soup (\{.*\})$
+capture CT2 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ miners_delight:bat_soup
+capture CP3 \[zsb\] potnbt farmersdelight:beef_stew (\{.*\})$
+capture CT3 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ farmersdelight:beef_stew
+capture CP4 \[zsb\] potnbt delightful:cactus_soup (\{.*\})$
+capture CT4 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ delightful:cactus_soup
+expect \[zq\] miners_delight:copper_pot \{
+> setblock 110 -60 500 minecraft:campfire[lit=true]
+> setblock 110 -59 500 miners_delight:copper_pot
+> data merge block 110 -59 500 {CP1}
+> setblock 114 -60 500 minecraft:campfire[lit=true]
+> setblock 114 -59 500 miners_delight:copper_pot
+> data merge block 114 -59 500 {CP2}
+> setblock 118 -60 500 minecraft:campfire[lit=true]
+> setblock 118 -59 500 miners_delight:copper_pot
+> data merge block 118 -59 500 {CP3}
+> setblock 122 -60 500 minecraft:campfire[lit=true]
+> setblock 122 -59 500 miners_delight:copper_pot
+> data merge block 122 -59 500 {CP4}
+shell m=0; for t in {CT1} {CT2} {CT3} {CT4}; do [ "$t" -gt "$m" ] && m=$t; done; sleep $(( m / 20 + 15 )); echo "waited $(( m / 20 + 15 )) s"
+> data get block 110 -59 500
+> data get block 114 -59 500
+> data get block 118 -59 500
+> data get block 122 -59 500
+expect 110, -59, 500 has the following block data: .*miners_delight:cave_soup
+expect 114, -59, 500 has the following block data: .*miners_delight:bat_soup
+expect 118, -59, 500 has the following block data: .*farmersdelight:beef_stew
+expect 122, -59, 500 has the following block data: .*delightful:cactus_soup
+reject has the following block data: .*_cup"
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zq|zsb|zlbs)\] (error|unknown))
+look the copper_pot rdetail line: the centre ingredient is only minecraft:water_bucket; each pot: the soup served (output slot) in its bowl with the recipe's count, container minecraft:bowl (potrecipe lines)
+
+## SQ-CUP-04 | milk tags without the cup; a Supplementaries jar takes Cave Soup and gives the bowl back (x 140; /reload first)
+@group A
+@commands tag probe `#forge:milk`, `#forge:milk/milk`; `/data get` a Supplementaries jar filled with Cave Soup via fake player
+@pass neither tag names `miners_delight:milk_cup` (tags load without error); the jar fills from a bowl of Cave Soup and gives the bowl back
+@fails translator tag strip; `soft_fluids/cave_soup.json`
+@from batches/r1103/sB_2.qb
+# /reload fills Moonlight's soft-fluid item map (empty on a dedicated server until a player joins or a reload);
+# it truncates logs/kubejs/server.log, so this row is last
+> reload
+waitlog Loaded \d+ pocket computer upgrades 300
+sleep 10
+> zq itemtag forge:milk
+> zq itemtag forge:milk/milk
+waitlog \[zq\] itemtag forge:milk/milk 30
+reject \[zq\] itemtag forge:milk(/milk)? \(\d+\): .*miners_delight:milk_cup
+reject (?i)(failed to load|couldn't load) tag.*milk
+> setblock 140 -60 500 supplementaries:jar
+> pbot spawn cup4 140.5 -60 502.5 minecraft:overworld survival
+> pbot hold cup4 miners_delight:cave_soup
+> pbot use cup4 140 -60 500 up
+> data get block 140 -60 500
+> data get entity cup4 SelectedItem
+> data get entity cup4 Inventory
+> pbot remove cup4
+expect 140, -60, 500 has the following block data: .*cave_soup
+expect cup4 has the following entity data: .*minecraft:bowl
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|No entity was found|no such bot|no such item)
+look the "pbot use" reply is SUCCESS / CONSUME; the jar's fluid is the cave soup; the bot holds a bowl
+
+## SQ-CUP-05
+@group B (copy of a world with cups)
+@commands copy a pre-change world holding copper and soup cups (in a chest, in a copper pot container slot), boot, open the chest and pot
+@pass world loads; the cups are gone (missing-item drop), the pot keeps its meal and serves it in its bowl; no crash
+@fails Forge missing mappings for items; pot `Container` NBT reading an unknown item
+@draft no batch holds this row yet
+@@text
+@@text Client: CQ-CUP-01 JEI search "cup" shows no Miner's or Delightful cup; R on Beef Stew shows the Copper Pot category with a bowl container; Supplementaries jar JEI tab has no cup rows; the Copper Pot recipe in JEI shows only the Water Bucket.

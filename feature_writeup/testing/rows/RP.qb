@@ -1,0 +1,425 @@
+# Scratch queue rows RP (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RP.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Resource pack bench, 2026-10-29 ([perf_rpack.md](../perf_rpack.md) 8, TODO `server #32`)
+@@date 2026-10-29
+@@jars creativebrewing creativedelight solraspberrypie
+@@sources feature_writeup/perf_rpack.md
+@@text
+@@text Client run, not a scratch server: a throwaway client window opens on DISPLAY :1 for about an hour (no other game
+@@text JVM may run; `eval_client.py launch` refuses). Targets the instance's `mods/` and `resourcepacks/` as they are at the
+@@text run. Offline first: `python3 tools/perf/rpack/selftest/run_selftest.py` (4/4 PASS). G = a scratchpad dir.
+@@text
+@@text | ID | World | Commands | Expected | If it fails |
+@@text |---|---|---|---|---|
+## CQ-RP-01
+@group copy of the smallest save (or `--world`), scenes in the End void
+@commands `python3 tools/perf/rpack/rp_bench.py setup $G`; `setsid nohup python3 tools/perf/rpack/rp_bench.py drive $G perf/reports/rpbench-1 > perf/reports/rpbench-1.out 2>&1 &`; follow `perf/reports/rpbench-1/timeline.txt`
+@pass `[rpbench] start` with `"sodium":true`; `site` `nonAirSamples` 0; 23 `reload` lines, each followed by its `scene` lines; `done` with `failed` 0; no `error` lines in `$G/logs/kubejs/client.log`
+@fails No `start`: the click path missed (window not 854x480) or `global.rpbenchPlan` missing; `error` with a Rhino message: the call in `rp_bench.js` named there (overload ambiguity, see memory `rhino-fieldandmethods-gotcha`); site not void: move `SITE` in `rp_bench.py`
+@draft no batch holds this row yet
+## CQ-RP-02
+@group results of RP-01
+@commands `python3 tools/perf/rpack/rp_report.py perf/reports/rpbench-1`
+@pass Control drift under 3%; `all` reload sd under 10% of its mean; block atlas of `all` 8192x4096 (as in the user's latest.log); every target has a reload delta
+@fails Large drift: rerun with `--repeat 2`; no atlas column: latest.log lacks `Created:` lines in the reload window (check the wall-clock fields)
+@draft no batch holds this row yet
+## CQ-RP-03
+@group none
+@commands Copy the per-pack table and the all vs none table into perf_rpack.md 9
+@pass Any pack that steps the atlas, lowers the mip level or costs over 3% of frame time gets a TODO row for the owner
+@fails
+@draft no batch holds this row yet
+
+@@section 2
+@@title SQ-RP Spice of Life: Raspberry Pie Addition, 2026-11-12 ([raspberry_pie.md](../raspberry_pie.md) section 14, TODO `food/types-and-tuning #21`)
+@@date 2026-11-12
+@@jars creativebrewing creativedelight solraspberrypie
+@@sources feature_writeup/raspberry_pie.md
+@@text
+@@text Targets `solRaspberryPie-1.0.0.jar` of 2026-11-12 20:47 (installed in `mods/`) with Apple Pie 2.2.0, the edited
+@@text `defaultconfigs/solapplepie-server.toml` (benefits empty, `resetOnDeath = false`, drink blacklist) and
+@@text `defaultconfigs/solraspberrypie/ladder.json`. Use a **fresh world** (both configs only reach new worlds). Rows marked
+@@text "rebuild" also need Common + Creative Delight rebuilt (Diet Log name, Apple Pie potato recipe removed) or Creative
+@@text Brewing rebuilt (Lava Walker burn); those two jars carry other unbuilt commits, so the owner rebuilds them. Most rows
+@@text need a real player eating, so they are client rows (group `client`, a fresh superflat survival world, `/gamemode
+@@text survival`; feed with `/give @s <food>`). Ladder thresholds below are the pack ladder's (slots at 2, 10, 30, 50, 75;
+@@text flat Speed I at 20; 1 heart at 5, 15, ...); scale a check to what the world's diversity reaches.
+@@text
+@@table
+## SQ-RP-01 | boot: ladder loaded, no mixin errors, no Apple Pie warnings
+@group A
+@commands Boot. `grep -nE "solraspberrypie\|Raspberry Pie\|Mixin apply.*solraspberrypie\|InvalidInjectionException" logs/latest.log` (RP-01)
+@pass `Diet ladder: 38 rungs, 5 slots, 14 pool effects`; no mixin or injection error; no "Apple Pie still has its own benefits" warning; no "resetOnDeath is true" warning
+@fails mixin target names in `development/solRaspberryPie/.../mixin/` (Apple Pie `initPages`, `m_7856_`, `updateFoodList`, `addFood`); world copied an old `serverconfig/solapplepie-server.toml` (fresh world needed)
+@from batches/r1112/rp1.qb passed
+bootexpect Diet ladder: 38 rungs, 5 slots, 14 pool effects
+bootreject InvalidInjectionException|Mixin apply.*solraspberrypie.*failed|MixinApplyError
+bootreject Apple Pie still has its own benefits
+bootreject Apple Pie resetOnDeath is true
+shell grep -nE "solraspberrypie|Raspberry Pie" logs/latest.log | cut -c1-300 | head -40
+
+## SQ-RP-02 | ladder.json seeded from defaultconfigs
+@group A
+@commands Same boot: `ls saves/<world>/serverconfig/solraspberrypie/ladder.json`; `diff` it with `defaultconfigs/solraspberrypie/ladder.json`
+@pass file exists, identical (seeded from defaultconfigs)
+@fails `LadderLoader.load` seeding path (`FMLPaths.GAMEDIR/defaultconfigs`)
+@from batches/r1112/rp1.qb passed
+bootexpect Seeded .*ladder\.json from .*defaultconfigs
+shell ls -l rp/serverconfig/solraspberrypie/ladder.json && diff rp/serverconfig/solraspberrypie/ladder.json defaultconfigs/solraspberrypie/ladder.json && echo IDENTICAL
+
+## SQ-RP-03 | unregistered and unsafe entries skipped, ladder still 38 rungs
+@group A
+@commands Stop. In the world's `ladder.json` add `{"threshold": 3, "type": "unlock", "effect": "nosuchmod:thing"}` and `{"threshold": 4, "type": "flat", "effect": "minecraft:absorption"}`; boot (RP-20, RP-35, V10)
+@pass exactly one line `skipped 1 entries naming effects or attributes that are not registered: unlock nosuchmod:thing at 3.0`; one `V10: flat minecraft:absorption` warning; still `Diet ladder: 38 rungs`
+@fails `LadderLoader.parse` skipped / warnings lists
+@from batches/r1112/rp2.qb
+bootexpect skipped 1 entries naming effects or attributes that are not registered: unlock nosuchmod:thing at 3\.0
+bootexpect V10: flat minecraft:absorption
+bootexpect Diet ladder: 38 rungs
+shell grep -cE "skipped [0-9]+ entries" logs/latest.log; grep -cE "V10: flat minecraft:absorption" logs/latest.log
+look exactly one skipped line and one absorption V10 line (counts above both 1)
+
+## SQ-RP-04 | broken ladder file: loud error, built-in ladder, server runs
+@group A
+@commands Stop. Break the world's `ladder.json` (delete a comma); boot (V13, Q-H)
+@pass `DIET LADDER FILE IS BROKEN OR MISSING` block; `Diet ladder` line absent but the server runs on the built-in ladder (`/solrp pause list` works)
+@fails `LadderLoader.load` catch path; `default_ladder.json` in the jar
+@from batches/r1112/rp3.qb passed
+bootexpect DIET LADDER FILE IS BROKEN OR MISSING
+bootreject Diet ladder: 38 rungs
+> solrp pause list
+expect rpb|paused
+
+## SQ-RP-05 | pause / resume commands
+@group A
+@commands Restore the ladder. Console: `/solrp pause list`, then with a bot or player `<name>`: `/solrp pause <name>`, `/solrp pause list`, `/solrp resume <name>`, `/solrp pause list` (RP-37 commands)
+@pass "No player has paused diet bonuses"; "Paused diet bonuses for 1 players"; list names the player; "Resumed ..."; list empty again. Stop and boot: list state survives
+@fails `RpCommands`, `PauseRegistry` (world `data/solraspberrypie_paused.dat`)
+@from batches/r1112/rp1.qb
+> pbot spawn rpb 0 -60 0 minecraft:overworld survival
+sleep 3
+> solrp pause list
+> solrp pause rpb
+> solrp pause list
+> solrp resume rpb
+> solrp pause list
+> solrp pause rpb
+> solrp pause list
+expect No player has paused diet bonuses|solraspberrypie\.cmd\.none_paused
+expect Paused diet bonuses for 1 players|solraspberrypie\.cmd\.paused
+expect rpb
+look none -> paused 1 -> list names rpb -> resumed -> empty -> paused again (left paused to check it survives the restart in rp2)
+
+## SQ-RP-06 | Raspberry Pie recipes loaded (CD half waits for a Creative Delight rebuild)
+@group A
+@commands `/kubejs` probe or JEI dump: recipes of type `solraspberrypie:diet_book` and `solraspberrypie:liquid_diet_log` loaded; `/zq recipes food_book` (`diet_log.js` loads from the pack's `kubejs/data/creativedelight/kubejs/`, no rebuild needed)
+@pass both Raspberry Pie recipes load; Apple Pie's `solapplepie:food_book` recipe is removed (0 matches), no NCH remove error
+@fails `data/solraspberrypie/recipes/`; `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js`
+@from batches/r1112/rp1.qb
+> zq bytype solraspberrypie:diet_book
+waitlog \[zq\] done 30
+> zq recipes diet_log
+waitlog \[zq\] done 30
+expect solraspberrypie:diet_log
+expect solraspberrypie:liquid_diet_log
+shell grep -n "solapplepie:food_book" logs/kubejs/server.log | head; grep -cE "NCH.*(error|fail)" logs/kubejs/server.log; true
+look both Raspberry Pie recipes listed; record whether solapplepie:food_book is still present (expected until the CD rebuild)
+
+## CQ-RP-01
+@group client
+@commands New survival world. Check the inventory on first join (RP-25)
+@pass one Diet Log and one Liquid Diet Log in the inventory (alongside the starter kit)
+@fails `ServerEvents.giveBooks` (LEAVE_GAME stat must be 0); starter kit clears and gives back
+@draft no batch holds this row yet
+## CQ-RP-02
+@group client
+@commands Craft book + bread, book + apple juice (or any drink), book + carrot, book + potion (RP-36)
+@pass bread: Diet Log; juice: Liquid Diet Log; carrot: Food Dictionary only (no Diet Log); potion: Liquid Diet Log
+@fails `DietBookRecipe.matches` and tag `solraspberrypie:diet_log_excluded`
+@draft no batch holds this row yet
+## CQ-RP-03
+@group client
+@commands Eat 4 different foods: no bonus, effect screen (P) says "Eat 1 more foods". Eat a 5th: watch the action bar (RP-02, gate)
+@pass nothing before the 5th; then green / blue "You gained a bonus due to your diet: ..." lines one at a time, 3 s each, none lost (RP-14)
+@fails `DietEngine.compute` gate (`minFoodsToActivate` 5); `MessageQueue.tick`
+@draft no batch holds this row yet
+## CQ-RP-04
+@group client
+@commands With slots 1 and 2 active and empty, open P, Choose on slot 2's row, pick Speed (RP-04, Q1)
+@pass Speed lands in slot 1; no message; Speed icon on the inventory bar, not on the HUD (RP-12)
+@fails `SlotActions FILL` target choice; `EffectFilter.hud`
+@draft no batch holds this row yet
+## CQ-RP-05
+@group client
+@commands Slot an effect with 2 unlocked levels; press - and + (RP-05)
+@pass level changes at once, no diversity change, no message
+@fails `SlotActions LEVEL`
+@draft no batch holds this row yet
+## CQ-RP-06
+@group client
+@commands Eat about 20 different foods. Change slot 1 to another effect: read the confirm panel, Confirm. Without eating, change again (RP-06, RP-30)
+@pass panel: diversity now and after, 8 food icons, list of lost bonuses; after confirm the Diet Log history shows those 8 foods past 32 meals; second change takes the next 8 and costs more; diversity after = panel value
+@fails `SlotActions.simulate` / `FoodWindow.moveOut`; Apple Pie sync (`CapabilityHandler.syncFoodList`)
+@draft no batch holds this row yet
+## CQ-RP-07
+@group client
+@commands Slots 1-3 active with Speed, Haste, Luck (or any three); Drop slot 1 (RP-07)
+@pass Haste in slot 1, Luck in slot 2, slot 3 empty and greyed; red lost lines queue (RP-32)
+@fails `SlotActions.simulate` drop branch (shift loop)
+@draft no batch holds this row yet
+## CQ-RP-08
+@group client
+@commands With slot effects on: drink milk; `/effect clear @s`; use a totem (`/give @s totem_of_undying`, `/kill @s` is death, so take lava damage instead) (RP-08)
+@pass each removes the diet effects and they are back the next tick (watch the inventory bar); totem: Regeneration II from the totem, ours returns under it
+@fails `ServerEvents.effectRemoved` marker check; `EffectApplier.chainHasMarker`
+@draft no batch holds this row yet
+## CQ-RP-09
+@group client
+@commands Eat one of the aged-out foods from CQ-RP-06 again; open the Diet Log (RP-09)
+@pass it is back at the top of the history and diversity rises by its full value
+@fails Apple Pie's own count reset
+@draft no batch holds this row yet
+## CQ-RP-10
+@group client
+@commands With bonuses on: die and respawn. Open P and the Diet Log (RP-10, RP-31)
+@pass one red "You lost every diet bonus due to death"; all slots greyed with choices kept; unlocks kept; P says "Eat 5 more foods"; Diet Log foods past 32 meals
+@fails `ServerEvents.respawn`; `resetOnDeath` must be false in the world's Apple Pie config
+@draft no batch holds this row yet
+## CQ-RP-11
+@group client
+@commands Inventory: hover the bar; Shift+T; drag it near each inventory edge; release; reopen the inventory; relog. Open the recipe book; open the Curios panel; check JEI's item list beside it (RP-11)
+@pass Shift+T toggles lock (TrashSlot's lock toggles too); bar snaps to edges on both axes; position kept after relog; bar hidden with the recipe book and on the Curios screen; JEI list does not overlap it
+@fails `InventoryWidget`; `RpJeiPlugin`; client config `solraspberrypie-client.toml`
+@draft no batch holds this row yet
+## CQ-RP-12
+@group client
+@commands Set `[widget] enabled = false` in `config/solraspberrypie-client.toml`, reopen the inventory and look at the HUD (RP-12, RP-26)
+@pass slot effects show on the HUD and in the inventory list like any effect; flat Speed still never on the HUD but in the inventory list
+@fails `EffectFilter`
+@draft no batch holds this row yet
+## CQ-RP-13
+@group client
+@commands Slot Speed I; drink a Speed I potion (8 min); then a Speed II potion; drop the slot while the potion is on (RP-13, 9.4)
+@pass potion time shows and survives the drop; Speed II stays after the drop
+@fails `EffectApplier.strip` (cases A, B)
+@draft no batch holds this row yet
+## CQ-RP-14
+@group client
+@commands Open the Diet Log (rebuild for the name) (RP-15, 6.3)
+@pass item named Diet Log; a "Diet Bonuses" button under the book opens P; after the diversity page a Diet Ladder page with the progress bar and rung icons (hover gives the value; details CQ-RP-33) and Milestones pages
+@fails `FoodBookScreenMixin`; `DietLogPages`
+@draft no batch holds this row yet
+## CQ-RP-15
+@group client
+@commands Note diversity and foods-eaten (P). Drink 10 drinks (juice, tea, wine, milk bucket, a potion); open both logs (RP-16, RP-24)
+@pass diversity and "foods" unchanged, no food aged in the Diet Log, no drink in the Diet Log; Liquid Diet Log lists each drink once, newest first; no bonus from drinking
+@fails `FoodListMixin` (drink tag `solraspberrypie:drinks`); `Drinks.onDrink`
+@draft no batch holds this row yet
+## CQ-RP-16
+@group client
+@commands Dedicated scratch server + client: repeat CQ-RP-03, -04 and -06 (RP-17)
+@pass same as single player; no "Network Protocol Error" or missing-packet disconnect
+@fails `RpNetwork` registration (both sides need the jar)
+@draft no batch holds this row yet
+## CQ-RP-17
+@group client
+@commands With a slot greyed (eat repeated foods or die), open P (RP-18)
+@pass greyed slot shows its stored choice dimmed, no buttons on its row
+@fails `EffectScreen.buildSlots`
+@draft no batch holds this row yet
+## CQ-RP-18
+@group client
+@commands Slot Regeneration I; take some damage; `/data get entity @s ActiveEffects` every few seconds, then drink milk twice, then fill another slot (RP-19, 9.2.1)
+@pass heals keep a 50-tick rhythm (health log or duration readings mod 50 stay in step) across the 20 s refresh, milk re-adds and the fill
+@fails `EffectApplier.add` regen anchor
+@draft no batch holds this row yet
+## CQ-RP-19
+@group client
+@commands Open the confirm panel for a change; in another window `/give @s bread` and eat it; then press Confirm (RP-21)
+@pass nothing happens except a fresh panel with "Your diet changed"
+@fails `SlotActions CONFIRM_*` stamp check
+@draft no batch holds this row yet
+## CQ-RP-20
+@group client
+@commands On a world that ran Apple Pie benefits before (an existing save): log in, `/attribute @s minecraft:generic.max_health get` (RP-22)
+@pass 20 plus Raspberry Pie hearts only; log has "Removed N leftover Apple Pie attribute modifiers" once
+@fails `ServerEvents.stripApplePieLeftovers` name pattern
+@draft no batch holds this row yet
+## CQ-RP-21
+@group client
+@commands Around a rung, alternate eating a repeated food and a new food 10 times (RP-23, Q-A)
+@pass LOOK: is the gained/lost flicker acceptable? (owner judges; fallback is the margin option)
+@fails design question, raspberry_pie.md 12.0 Q-A
+@owner true
+@draft no batch holds this row yet
+## CQ-RP-22
+@group client
+@commands While a jukebox "Now playing" line shows, gain a bonus (RP-27)
+@pass our line waits until the other is gone
+@fails `MessageQueue.tick` overlay check
+@draft no batch holds this row yet
+## CQ-RP-23
+@group client
+@commands Reach diversity 20 (flat Speed I) with Speed in slot 1, then fall below 20 (RP-28, RP-34, RP-38, RP-39)
+@pass green flat line then yellow "Your slotted Speed I is covered ..."; Speed hidden from the picker while flat is on; on losing the flat bonus the slot's Speed is back; losing slot 1 while flat Speed is on gives the yellow "sustained" line, no red
+@fails `DietEngine.announce`; `SlotActions.pickable`
+@draft no batch holds this row yet
+## CQ-RP-24
+@group client
+@commands Respec that drops diversity below the changed slot's own milestone (small window: eat 3 foods past slot 1) (RP-29, Q-C)
+@pass allowed; panel says the slot switches off; new choice stored greyed
+@fails `Sim.preview slotGreyedAfter`
+@draft no batch holds this row yet
+## CQ-RP-25
+@group client
+@commands `/solrp pause @s`; `/effect clear @s`; eat a new food; die and respawn; open P; inventory bar; `/solrp resume @s` (RP-37)
+@pass effects stay gone, no messages; Diet Log and counters still update, death still ages the window; P shows PAUSED, no buttons; bar icons greyed; resume brings effects back with gained lines
+@fails `RpData.paused` checks in `DietEngine`, `SlotActions`, `ServerEvents.tick`
+@draft no batch holds this row yet
+## CQ-RP-26
+@group client
+@commands Two players (scratch server + 2 clients) with Fleet-Footed in a slot; one sprint-jumps, the other walks (RP-33, 12.2)
+@pass walker's speed attribute has no "fleetfooted speed bonus" modifier while the other jumps; no flicker
+@fails `FleetFootedMixin` (applied only with Alex's Mobs; check the mixin log line)
+@draft no batch holds this row yet
+## CQ-RP-27
+@group client
+@commands Rebuild Creative Brewing. Slot Lava Walker (or `/effect give @s vinery:lava_walker 60`); stand on lava without and with Fire Resistance (4)
+@pass burns like a magma block without Fire Resistance, no damage with it; falling into lava burns as usual
+@fails `LavaWalkerEffect.applyEffectTick` (Vinery member)
+@draft no batch holds this row yet
+## CQ-RP-28
+@group client
+@commands Slot Shrinking (Fruits Delight) and stand in a 1-block-high gap through two refreshes (40 s) and a milk drink (9.2)
+@pass no suffocation damage, no push out of the gap
+@fails Shrinking's hitbox recalculation on each re-add; take Shrinking out of the pool if it fails
+@draft no batch holds this row yet
+@@text
+@@text ### SQ-RP 12.4 owner notes, 2026-11-13 ([raspberry_pie.md](../raspberry_pie.md) 12.4, TODO `food/types-and-tuning #29` to `#38`)
+@@text
+@@text Targets `solRaspberryPie-1.0.0.jar` of 2026-11-13 17:57 and `creativedelight-1.1.0.jar` of 17:58 (both in `mods/`),
+@@text plus `SoL-Carrot-1.19.2-1.14.0.jar` (now in `mods/`). Fresh world unless the row says otherwise.
+@@text
+@@table
+## SQ-RP-07 | /solrp reset clears the Apple Pie food list and the Raspberry Pie diet cap
+@group A
+@commands Fresh world, bot `<name>`: `/solrp reset <name>`; `/data get entity <name> ForgeCaps` (#30)
+@pass "Reset the diet of 1 players"; the bot gets "Your diet was reset"; Apple Pie's food list has `foodsEaten` 0, an empty `foodList` and an empty `solrp_gateFoods`; Raspberry Pie's `diet` cap has `maxDiversity` 0 and empty `slots` and `drinks`
+@fails `RpCommands.reset`; `FoodListMixin.solrp$save`
+@from batches/r1115/p9_a1.qb
+> forceload add 0 990 40 1010
+> pbot spawn rp7 10 -60 1000 minecraft:overworld survival
+sleep 3
+> zc4 hunger rp7 2
+> zc4 eat rp7 minecraft:apple
+> zc4 eat rp7 minecraft:bread
+> zc4 eat rp7 minecraft:cooked_beef
+> zc4 sol rp7
+waitlog \[zc4\] sol rp7 20
+> data get entity rp7 ForgeCaps
+sleep 1
+> solrp reset rp7
+sleep 1
+expect Reset the diet of 1 players
+> zc4 sol rp7
+> data get entity rp7 ForgeCaps
+sleep 1
+look ForgeCaps after the reset: Apple Pie food list foodsEaten 0, foodList [] and solrp_gateFoods []; solraspberrypie:diet maxDiversity 0, slots [], drinks []; zc4 sol counts 0 after (3 before)
+
+## SQ-RP-08 | Apple Pie benefits left in its config: warning at boot, no max-health bonus applied
+@group A
+@commands Stop. In the world's `serverconfig/solapplepie-server.toml` set `thresholds = [0.0]`, `benefitsUnparsed = ["attribute,generic.max_health,4"]`, `minFoodsToActivate = 0`; boot; bot joins; `/attribute <name> minecraft:generic.max_health get`; `/data get entity <name> Attributes` (#33)
+@pass boot log has "Apple Pie still has its own benefits configured"; max health 20; no attribute modifier named `..._modifier_...` (Apple Pie would add 4 at login without the fix)
+@fails `BenefitsHandlerMixin` (`updateBenefits`, `tickBenefits`)
+@from batches/r1115/p9_a1b.qb
+bootexpect Apple Pie still has its own benefits configured
+shell grep -nE "thresholds|benefitsUnparsed|minFoodsToActivate" p9a/serverconfig/solapplepie-server.toml | grep -v "#"
+> forceload add 0 990 40 1010
+> pbot spawn rp8 22 -60 1000 minecraft:overworld survival
+sleep 4
+> pbot spawn rp7 10 -60 1000 minecraft:overworld survival
+sleep 4
+> attribute rp8 minecraft:generic.max_health get
+> attribute rp7 minecraft:generic.max_health get
+> data get entity rp8 Attributes
+> data get entity rp7 Attributes
+sleep 1
+count Value of attribute .* for (entity )?rp[78] is 20\.0 == 2
+reject _modifier_
+look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attributes
+
+## CQ-RP-29
+@group client
+@commands Hover Raspberry Pie and a Raspberry Pie slice (#29)
+@pass grey italic line "Doesn't run programs"
+@fails `hearthandharvest/client.js` in the Creative Delight jar
+@draft no batch holds this row yet
+## CQ-RP-30
+@group client
+@commands Book + carrot in a crafting grid; use it (#34)
+@pass Food Dictionary crafts and opens; no "not found"; FDI-01 to FDI-10 ([food_dictionary.md](../food_dictionary.md))
+@fails Carrot jar in `mods/`; `food_dictionary.md`
+@draft no batch holds this row yet
+## CQ-RP-31
+@group client
+@commands Fresh world: eat the same food 5 times, open the Diet Log (#36)
+@pass diversity page says "Need 4 more different foods" and the Diet Ladder page "Eat 4 more different foods ..."; P screen the same; after 4 more different foods both warnings are gone
+@fails `DiversityPageMixin`, `FoodBookScreenMixin.solrp$gateCount`, `S2CState.uniqueGate`
+@draft no batch holds this row yet
+## CQ-RP-32
+@group client
+@commands Diet Log: page through to the end (#38)
+@pass pages: diversity, Diet Ladder, Milestones, food history; no "Active benefits" / "Inactive benefits" pages
+@fails `DietLogPages.insert` (`BenefitsPage` removal)
+@draft no batch holds this row yet
+## CQ-RP-33
+@group client
+@commands Diet Ladder page at diversity 0, about 6 and about 22 (#32, #37)
+@pass the bar spans a window: at 0 it ends at 7 with icons at 2, 5, 7; at 6 it starts a little before 5 and ends at 12; values printed under both ends, "..." when more lie ahead, "<" on the left when earlier milestones exist; icons: heart, effect sprites (Speed, Haste, ...), slot box (holding the chosen effect), chestplate or shield for attributes; reached icons in colour with a coloured frame, unreached greyed; hover gives the value; legend shows the five icons
+@fails `DietLogPages.ProgressPage`, `Window.of`, `drawIcon`
+@draft no batch holds this row yet
+## CQ-RP-34
+@group client
+@commands Milestones pages (#37)
+@pass every row has its icon (greyed when not reached); no overlap with the page number at the bottom
+@fails `DietLogPages.ListPage` (12 px rows, 11 per page)
+@draft no batch holds this row yet
+## CQ-RP-35
+@group client
+@commands Client config `config/solraspberrypie-client.toml` `[dietLog] progressAhead = 1`, reopen the book (#32)
+@pass the bar ends at the next milestone only
+@fails `RpConfig.CLIENT.progressAhead`
+@draft no batch holds this row yet
+## CQ-RP-36
+@group client
+@commands Client config `[dietLog] doublePage = true`, window at least 380 px wide (GUI scale), eat 40+ foods so some leave the window; open the Diet Log; then a narrow window (#31)
+@pass book moves left, a second book on the right shows "Older foods (N)" page 1; the left food pages read "Counting foods (N)" then older foods page 2+; item tooltips work on both; Diet Bonuses button centred under the pair; narrow window falls back to one book
+@fails `FoodBookScreenMixin.solrp$placeBook`, `DietLogPages.splitFoodPages`, `renderCompanion`
+@draft no batch holds this row yet
+## CQ-RP-37
+@group client
+@commands At full health with a heart rung active, drop below its threshold (respec); then at half health with two heart rungs, drop one (#33 rule)
+@pass full: health falls to the new maximum, no hurt flash; hurt: health unchanged unless above the new maximum
+@fails `DietEngine.apply` clamp
+@draft no batch holds this row yet
+## CQ-RP-38
+@group client
+@commands Fresh world: eat the same food 6 times, then 5 different foods; `/data get entity @s ForgeCaps` after each step; then `/solrp reset @s` (#36, #30)
+@pass after the repeats `solrp_gateFoods` holds 1 id and no diet bonus is active; after the 5 different foods it holds 6 ids and the ladder evaluates; reset empties it
+@fails `FoodListMixin` (`solrp$countUnique`, `solrp$resetUnique`), `GateFoods.count`
+@draft no batch holds this row yet
+## CQ-RP-39
+@group client
+@commands World config `serverconfig/solraspberrypie-server.toml` `uniqueFoodsToActivate = false`; restart the world; eat one food 5 times (#36 switch)
+@pass the gate opens after 5 repeats; the book warnings use the plain "foods" wording
+@fails `GateFoods.count` config read
+@draft no batch holds this row yet
+## CQ-RP-40
+@group client
+@commands Open `New World` (made before this jar) with the replaced Apple Pie config; `/data get entity @s ForgeCaps` (#36 backfill, stale config)
+@pass `solrp_gateFoods` present, holding the remembered foods eaten since the counter last reset; the book says minimum 5 (not 10); no Apple Pie bonus pages
+@fails `FoodListMixin.solrp$load` backfill; world `serverconfig/solapplepie-server.toml`
+@draft no batch holds this row yet

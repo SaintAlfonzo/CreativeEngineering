@@ -1,0 +1,163 @@
+# Scratch queue rows CDB (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CDB.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Creative Delight food batch, 2026-10-25 (TODO rows in each ID's writeup column)
+@@date 2026-10-25
+@@jars creativecommon creativedelight
+@@text
+@@text Needs the Creative Delight jar built 2026-10-25 22:48 (installed in `mods/`). Startup changes (new items, removed items,
+@@text the merge): restart. Then `/dumpfood`, `/cdevgen run` the can generator, restart again for the can changes.
+@@text
+@@text | ID | Group | Action | Expect | Depends on |
+@@text |---|---|---|---|---|
+## SQ-CDB-01
+@group A
+@commands Boot; `logs/latest.log`
+@pass No startup or server script error for `glow_calamari.js`, `veggies_items.js`, `vintage_items.js`, `minecraft/recipes.js`, `miners_delight/*.js`, `oceansdelight/recipes.js`; `[itemMerges]` count one higher
+@fails
+@draft no batch holds this row yet
+## SQ-CDB-02
+@group A
+@commands `/dumpall`; look up the four `#creativeengineering:sweeteners` tags and sugar recipes
+@pass Cooking (pumpkin pie, a Fruits Delight jam) takes all five; drinks (`farmersdelight:cooking/hot_cocoa`, a Fruits Delight tea mix, a Create DD milkshake mix) sugar, powdered sugar, honey bottle; Brewin' keg recipes all but glycerol; Botania mana powder, a Pretty Pipes module, the fermented spider eye jar recipe sugar or powdered sugar; powdered sugar and the sugar cube plain sugar (RC-25)
+@fails
+@draft no batch holds this row yet
+## SQ-CDB-03
+@group A
+@commands Same dump: `creativedelight:farmersdelightcutting/squid_to_calamari`, `glow_squid_to_calamari`, `baked_squid_to_calamari`; `miners_delight` squid cuts
+@pass The three present (calamari 1 + 50 %, ink 1 + 50 % 2); no Miner's squid-to-tentacles cut
+@fails
+@draft no batch holds this row yet
+## SQ-CDB-04
+@group A
+@commands Summon a squid and a glow squid, kill each with a sword, then with a knife (DA-05, DA-06)
+@pass One squid item / glow squid item each kill; no ink sac, calamari or tentacles
+@fails
+@draft no batch holds this row yet
+## SQ-CDB-05 | Glowing Calamari recipes (server half; the JEI sprites are client: s3_skip.md)
+@group A
+@commands JEI: Glowing Calamari line
+@pass 3 items with the palette-swapped sprites (Pickled Sea Pickle too); cut, roll recipes; furnace, smoker and campfire give Cooked Calamari; fried calamari lists glowing calamari
+@fails
+@from batches/r1102b/s3_A.qb passed
+> zq makes creativeengineering:glowing_calamari_slice
+> zq makes creativeengineering:glowing_calamari_roll
+> zq uses creativeengineering:glowing_calamari
+> zq uses creativeengineering:glowing_calamari_slice
+expect makes creativeengineering:glowing_calamari_slice: [1-9]
+expect makes creativeengineering:glowing_calamari_roll: [1-9]
+expect (alone|shared) \S*smelting/cooked_calamari_from_glowing_calamari
+expect (alone|shared) \S*smoking/cooked_calamari_from_glowing_calamari
+expect (alone|shared) \S*campfirecooking/cooked_calamari_from_glowing_calamari
+expect (alone|shared) \S*fried_calamari
+
+## SQ-CDB-06 | lava bottle into a jar and back (/cbetest jars at 400 400)
+@group A
+@commands Fill a jar with a lava bottle, then empty it
+@pass Lava goes in and comes back out into a glass bottle
+@fails
+@from batches/r1102b/s3_A.qb passed
+> cbetest jars
+waitlog \[cbetest\] done jars 120
+expect \[cbetest\] PASS jars lava bottle goes in
+expect \[cbetest\] PASS jars lava comes back out into a bottle
+
+## SQ-CDB-07 | milkshakes and Splash Milk's bottle into a jar
+@group A
+@commands Fill a jar with a Neapolitan milkshake and with Splash Milk's milk bottle
+@pass Each goes in; the milk bottle shows milk
+@fails
+@from batches/r1102b/s3_A.qb
+> cbetest jars
+waitlog \[cbetest\] done jars 120
+expect \[cbetest\] PASS jars neapolitan:chocolate_milkshake goes in
+expect \[cbetest\] PASS jars neapolitan:vanilla_milkshake goes in
+expect \[cbetest\] PASS jars splash_milk:milk_bottle goes in
+look the splash_milk line's fluid is milk ("the milk bottle shows milk" in the jar is the client half)
+
+## SQ-CDB-08 | Pickled Sea Pickle: Pickling Jar recipe, Pickled Pickles merge
+@group A
+@commands JEI: Pickled Sea Pickle, Pickled Pickles (VTD-55)
+@pass Sea pickle art in pickle shape; Pickling Jar 5 sea pickles + salt -> 5; Pickled Pickles hidden; an old Pickled Pickles stack turns into Pickled Sea Pickles
+@fails
+@from batches/r1102b/s3_A.qb
+> zq makes creativeengineering:pickled_sea_pickle
+> zq rdetail pickled_sea_pickle
+> pbot spawn cdb8 110 -60 512 minecraft:overworld survival
+> give cdb8 brewinandchewin:pickled_pickles 3
+sleep 3
+> clear cdb8 creativeengineering:pickled_sea_pickle 0
+> clear cdb8 brewinandchewin:pickled_pickles 0
+expect -> 5 \S*pickled_sea_pickle <- .*sea_pickle
+expect Found 3 matching item
+expect No items were found on player cdb8
+> pbot remove cdb8
+look rdetail: Pickling Jar recipe 5 sea pickles + salt -> 5; "Pickled Pickles hidden" is JEI (client)
+
+## SQ-CDB-09 | pickle soup and braised sea pickle cook (pots at 115 and 118)
+@group A
+@commands Cooking pot: pickle soup with pickled onion, cauliflower, broccoli, beetroot, cabbage leaf (VTD-57); braised sea pickle from 2 slices + 2 brown mushrooms (VTD-58)
+@pass Both cook
+@fails
+@from batches/r1102b/s3_A.qb
+> zq rdetail pickle_soup
+> zq rdetail braised_sea_pickle
+> setblock 115 -60 500 minecraft:campfire[lit=true]
+> setblock 115 -59 500 farmersdelight:cooking_pot
+> data merge block 115 -59 500 {Inventory:{Items:[{Slot:0b,id:"vintagedelight:pickled_onion",Count:1b},{Slot:1b,id:"veggiesdelight:cauliflower",Count:1b},{Slot:2b,id:"veggiesdelight:broccoli",Count:1b},{Slot:3b,id:"minecraft:beetroot",Count:1b},{Slot:4b,id:"farmersdelight:cabbage_leaf",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:4b}]}}
+> setblock 118 -60 500 minecraft:campfire[lit=true]
+> setblock 118 -59 500 farmersdelight:cooking_pot
+> data merge block 118 -59 500 {Inventory:{Items:[{Slot:0b,id:"oceanic_delight:sea_pickle_slices",Count:1b},{Slot:1b,id:"oceanic_delight:sea_pickle_slices",Count:1b},{Slot:2b,id:"minecraft:brown_mushroom",Count:1b},{Slot:3b,id:"minecraft:brown_mushroom",Count:1b},{Slot:7b,id:"minecraft:bowl",Count:4b}]}}
+count Modified block data of == 2
+sleep 25
+> data get block 115 -59 500 Inventory
+> data get block 118 -59 500 Inventory
+expect Slot: [68]b?, id: "vintagedelight:pickle_soup"
+expect Slot: [68]b?, id: "oceansdelight:braised_sea_pickle"
+look if a pot did not cook, compare its inputs with the rdetail lines (VTD-57 / VTD-58 may name a tag or a different slice item)
+
+## SQ-CDB-10
+@group A
+@commands JEI: mhadjeb, potato noodle (RC-132, RC-133)
+@pass No mhadjeb or uncooked mhadjeb; Gnocchi and Creamy Gnocchi names; knife on sweet potato dough gives 2 gnocchi; Creamy Gnocchi takes milk, 2 gnocchi, onion / garlic / pickled onion
+@fails
+@draft no batch holds this row yet
+## SQ-CDB-11
+@group A
+@commands JEI: Bayberry Juice; heatless cacciatore (RC-D2, RC-136)
+@pass The bottle, the fluid and the can read Bayberry Juice; 12 bottles fill a jar (MJ-14); the cacciatore grid recipe cycles cooked chicken cuts
+@fails
+@draft no batch holds this row yet
+## SQ-CDB-12
+@group A
+@commands After `/dumpfood` and `/cdevgen`: can generator output
+@pass No `canned_mhadjeb`; `canned_pickled_pickles` named Canned Pickles from pickle or pickled sea pickle
+@fails SQ-CDB-01
+@draft no batch holds this row yet
+## SQ-CDB-13 | Bowl of Water has no tags (server half; JEI hiding is client)
+@group A
+@commands JEI search Bowl of Water; `/give @s botania:water_bowl`, hover it
+@pass Not in JEI; the item has no tags
+@fails
+@from batches/r1102b/s3_A.qb passed
+> zq tagsof botania:water_bowl
+expect item tags of botania:water_bowl: ?$
+
+## SQ-CDB-14
+@group client
+@commands JEI uses of the empty Sample Syringe (fixed 2026-10-26 run, `sample_syringe.js` `const` -> `let`)
+@pass The world page lists each mob and its filled syringe; no `redeclaration of var $WorldRows` in `logs/latest.log`
+@fails
+@draft no batch holds this row yet
+## SQ-CDB-15 | Cake Base, Pie Crust, Cacciatore inputs (Item.of(tag, n) fix; server half of a client row)
+@group client
+@commands Craft Cake Base with 2 chicken eggs, 3 flour and 2 honey bottles; Pie Crust from cornmeal; Cacciatore with cooked chicken cuts
+@pass All three craft (fixed 2026-10-26 run, `Item.of(tag, n)`)
+@fails
+@from batches/r1102b/s3_A.qb
+> zq rdetail cake_base
+> zq rdetail pie_crust
+> zq rdetail cacciatore
+look cake base takes 2 chicken eggs, 3 flour, 2 honey bottles (not the first item of a tag only); pie crust has a cornmeal recipe; the cacciatore grid recipe slot holds several cooked chicken cuts (/+N). Crafting it by hand is the client half

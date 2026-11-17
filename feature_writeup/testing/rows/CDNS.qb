@@ -1,0 +1,122 @@
+# Scratch queue rows CDNS (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CDNS.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CDNS Creative Delight namespace move, 2026-11-10 ([plan_cd_namespace.md](../plan_cd_namespace.md) section 5, TODO `creativesplit/ids #24`)
+@@date 2026-11-10
+@@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
+@@sources feature_writeup/plan_cd_namespace.md
+@@text
+@@text Fixture: a save built on the jars in `mods/` before the move (Common 11-09 23:00, Compat 17:28, Delight 11-09 00:08, Equipment 17:29), content per plan 5.1, kept untouched; every row boots its own copy. Forceload the fixture area and run `/save-all flush` before stopping, so decoded stacks are rewritten. Baseline: `python3 tools/scratch_query/cdns_probe.py scan <world> base.json` on the untouched copy. After each boot: `cdns_probe.py scan <world> now.json`, then `cdns_probe.py compare base.json now.json`. Swapper rows (01, 02, 04, 05, 06) run on `jar_archive/cdns_step2/` (Common 11-10 00:12 with the swapper; Delight, Equipment, Compat 11-09 23:39 with the bucket move) and the kubejs/ tree of that state. SQ-CDNS-03 and the move rows wait for the full build.
+@@text
+@@table
+## SQ-CDNS-01
+@group Old save (CDNS fixture)
+@commands Boot a fixture copy on the cdns_step2 jars; `/save-all flush`; stop; scan and compare
+@pass Log: `[swaps]` remap lines for `wooden_bucket` and `wooden_water_bucket`, `[swaps] N permanent alias(es)` with N > 0, `[swaps] load report: every listed id resolved`, no `[swaps] unresolved`; compare prints EQUAL for the bucket rows (the other moved ids are unchanged on this set)
+@fails `swap/SwapRemapper.java`, `swap/SwapReport.java`; a boot crash naming `SwapReport*Mixin` or `SwapCapabilityKeysMixin` is the mixin target or signature
+@draft no batch holds this row yet
+## SQ-CDNS-02
+@group Old save (CDNS fixture)
+@commands Same boot: `/data merge block <chest> {Items:[{Slot:0b,id:"creativeengineering:wooden_bucket",Count:1b}]}`; `/data get block <chest>` after `/save-all flush` and a chunk reload
+@pass Reads back `creativedelight:wooden_bucket`. Typed commands (`/give` with the old id) are out of scope: they answer Unknown item (plan 3.1)
+@fails Aliases not installed: `SwapRemapper.onIdMapping`, `IdMappingEvent` not fired, or Forge rebuilt ACTIVE after it
+@draft no batch holds this row yet
+## SQ-CDNS-03
+@group Old save (CDNS fixture)
+@commands FULL BUILD ONLY. Boot a copy with a Cooking for Blockheads corner and a remainder buffer holding contents; `/save-all flush`; stop; scan; boot again; scan
+@pass Contents present in both boots (`/data get`); caps in the probe list only `creativedelight:corner_storage` and `creativedelight:remainder_buffer`, none under `creativeengineering:`
+@fails `SwapCapabilityKeysMixin`, `SwapLists.renameCapabilityKeys`, capability ids in `CornerStorage`, `RemainderBufferStorage`
+@draft no batch holds this row yet
+## SQ-CDNS-04
+@group Old save (CDNS fixture)
+@commands Boot the SQ-CDNS-01 copy a second and a third time, `/save-all flush` each
+@pass No `[swaps] ... remapped` line for the buckets (already saved under the new ids); compare EQUAL; no `[swaps] unresolved`
+@fails Saved snapshot still names the old id, or the alias hides it
+@draft no batch holds this row yet
+## SQ-CDNS-05 | rollback: a save written by the new jars, booted on the 1.2.02 jars; record what is lost
+@group Old save (CDNS fixture)
+@commands Copy of a save written by the new jars, booted on the jars in `mods/` (rollback); `/save-all flush`; stop; scan; compare
+@pass RECORD what is lost; the release notes must say a rollback is not supported if anything is
+@fails Not a failure: record the losses in plan_cd_namespace.md section 7
+@from batches/r1115/p9_rb.qb
+shell grep -ciE "unidentified|missing registry|Registry .* missing|unknown (item|block)" logs/latest.log; grep -iE "unidentified|missing.*mapping|registry.*missing" logs/latest.log | cut -c1-260 | head -8
+> forceload add -16 -16 63 63
+> forceload add 192 192 223 223
+sleep 8
+> data get block 200 -60 205 Items
+> data get block 4 -60 0 Items
+> save-all flush
+sleep 6
+look RECORD the losses (scan compare after the stop)
+
+## SQ-CDNS-06
+@group Old save (CDNS fixture)
+@commands Copy of the cdns_step2 Delight jar with an added `data/creativedelight/swaps/zz_test.json`: `{"replaces":{"creativedelight:does_not_exist":["creativeengineering:wooden_water_bucket"]}}`. Boot a fixture copy; stop
+@pass `left missing` warning for that id, boot completes, `[swaps] unresolved creativeengineering:wooden_water_bucket: <n>` with n > 0
+@fails `SwapRemapper.remap`, `SwapReport.noteEmptyStack`, `noteChunk`
+@draft no batch holds this row yet
+## SQ-CDNS-07
+@group Fresh world
+@commands FULL BUILD. Boot; grep `logs/latest.log` and `logs/kubejs/*.log` for errors and for `creativeengineering:` naming a moved id or tag (list: `tools/cd_namespace_ids.json`)
+@pass Clean boot; none found
+@fails A missed reference: extend `tools/cd_namespace_move.py`, rerun
+@draft no batch holds this row yet
+## SQ-CDNS-08
+@group Fresh world
+@commands FULL BUILD. `/kubejs dump_registry` for items, blocks, block entity types, menus, recipe serializers, recipe types; tag dump
+@pass Every id and tag in `tools/cd_namespace_ids.json` under its target namespace (smokable and plantable under `creativecommon`); 376 items and 26 blocks for the mods present
+@fails `tools/cd_namespace_ids.py` list against the registers
+@draft no batch holds this row yet
+## SQ-CDNS-09
+@group Old save (CDNS fixture)
+@commands FULL BUILD. Boot the full fixture copy with every new jar; `/save-all flush`; stop; scan; compare
+@pass compare EQUAL holder by holder and in the block census; moved ids left under `creativeengineering` in `ns` are only stacks nothing decoded on this boot (nested item NBT, drive cells, `data/*.dat`, resolved by alias when read); no `[swaps] unresolved`
+@fails Compare names the holder and id; `strings` in the scan names ids a mod keeps as plain text
+@draft no batch holds this row yet
+## SQ-CDNS-10
+@group A
+@commands FULL BUILD. Static part: `tools/scratch_query/batches/r1110/cdns_10_11.qb`. Hand crafting goes with CQ-CDNS-01. Oven baking, seasoning, lunchbox recipes, a KubeJS recipe with `can_serving`, fishing net loot with `biome_tag`, block loot of each moved block, tag-driven recipes (`food_type`, `bakeware`, `cans/servings`); `/kubejs dump_recipes`
+@pass All load and work; no `minecraft:air` input or output in Creative Delight recipes
+@fails A reference left on the old namespace (plan D4)
+@draft no batch holds this row yet
+## SQ-CDNS-11 | Display Delight dish placement on the new namespace (sneak-use by a bot); food types resolve
+@group A
+@commands FULL BUILD. Static part: same batch, row SQ-CDNS-11a; pouring goes with CQ-CDNS-01. Supplementaries soft fluids (pour jars and cans), Display Delight dish placement, food-type tooltips through the probe
+@pass Jars and cans pour; dishes place; food types resolve
+@fails `data/creativedelight/moonlight/soft_fluids`, `displaydelight_dishes.json` loader path
+@from batches/r1113/c4_a.qb
+> forceload add 40490 39990 40510 40010
+sleep 3
+> fill 40495 -60 39995 40505 -55 40005 minecraft:air
+> setblock 40500 -61 40000 minecraft:stone
+> pbot spawn d11 40500.5 -60 40002.5 minecraft:overworld survival
+sleep 2
+> clear d11
+> zhh3 sneak d11 on
+> pbot hold d11 brewinandchewin:vegetable_omelet
+> pbot use d11 40500 -61 40000 up
+sleep 1
+> zhh3 block 40500 -60 40000
+waitlog \[zhh3\] block 40500 -60 40000 20
+expect \[zhh3\] block 40500 -60 40000 creativedelight:placed_vegetable_omelet
+> zq tagsof creativedelight:canned_corn
+waitlog \[zq\] done 20
+expect item tags of creativedelight:canned_corn: .*creativedelight:food_type/
+> zhh3 sneak d11 off
+> pbot remove d11
+look supplementaries jar and can pouring stay with CQ-CDNS-01 (client)
+
+## SQ-CDNS-12
+@group client
+@commands FULL BUILD. Dedicated server on the new jars: a client with the new jars joins; then a client with the old Delight jar tries to join
+@pass New client joins and sees the items; old client refused with the mod mismatch message, no crash
+@fails Network version or registry sync; aliases in the snapshot
+@draft no batch holds this row yet
+## CQ-CDNS-01
+@group client
+@commands FULL BUILD. On a fixture copy: textures and models of moved items and blocks, names, JEI mod name, kitchen corner and oven GUIs
+@pass LOOK: no purple-black; names unchanged; JEI shows Creative Delight; GUIs show the old contents
+@fails `assets/creativedelight` move, texture paths in blockstates and models
+@draft no batch holds this row yet

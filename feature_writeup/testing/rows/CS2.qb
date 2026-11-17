@@ -1,0 +1,135 @@
+# Scratch queue rows CS2 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CS2.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CS2 Creative Split wave 2: CD and CB rename, swap lists, prep, 2026-11-01 ([creative_split.md](../creative_split.md) 7.7, TODO `creativesplit/prep #3`, `creativedelight/swappers #1`)
+@@date 2026-11-01
+@@sources feature_writeup/creative_split.md
+@@text
+@@text Run 2026-11-01 (rcs234 / rcs234r, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 7): SQ-CS2-01, -04 to -08 PASS (-07 server half); -02 / -03 FAILED on 1.1.06 (`SwapRemapper` looked in Forge's staging registry), fixed in 1.1.07, PASS on rcs234r. The old CD had no items, only the two stick blocks and the processor type: the item parts of -01 / -03 do not apply.
+@@text
+@@text Two boots of one group A world. Boot 1 runs the OLD jars (`creative_delight-1.0.0.jar`, `creative_brewing-1.0.0.jar`,
+@@text patcherMod 1.1.05, from `development/*/jar_archive/` or the current `mods/`) to make the save; boot 2 swaps in
+@@text patcherMod 1.1.06, `creativedelight-1.0.0.jar`, `creativebrewing-1.0.0.jar` (and `creativecompat`, wave 3) with the old
+@@text underscore jars removed and the old `config/creative_delight-common.toml` / `creative_brewing-common.toml` left in place
+@@text with one edited value each.
+@@text
+@@table
+## SQ-CS2-01 | old-id save: placed sticks and a village start
+@group A
+@commands Boot 1 (old jars): `setblock` a `creative_delight:treated_stick` and a tomato-grown treated stick next to spawn, put 3 treated sticks in a chest and 2 in the player's (bot's) inventory, drop 1 on the ground; `/locate structure minecraft:village_plains` and teleport so a village start with an unplaced farm piece is saved (do not walk into the farm); stop
+@pass Save written; no error
+@fails Old jar set wrong
+@from batches/r1101/cs2_boot1.qb
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=cshome] run summon minecraft:marker ~ ~ ~ {Tags:["cshome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=cshome,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> setblock {H1+2} {H2} {H3} creative_delight:treated_stick[axis_y=true,axis_x=false,axis_z=false]
+> setblock {H1+3} {H2-1} {H3+3} minecraft:farmland
+> setblock {H1+3} {H2} {H3+3} creative_delight:treated_stick_tomatoes[age=2]
+> setblock {H1+4} {H2} {H3} minecraft:chest{Items:[{Slot:0b,id:"immersiveengineering:stick_treated",Count:3b}]}
+> execute if block {H1+2} {H2} {H3} creative_delight:treated_stick[axis_y=true] run say CS2 stick placed
+> execute if block {H1+3} {H2} {H3+3} creative_delight:treated_stick_tomatoes[age=2] run say CS2 tomato stick placed
+expect CS2 stick placed
+expect CS2 tomato stick placed
+reject Unknown block type|Expected integer
+> locate structure minecraft:village_plains
+waitlog (The nearest|Could not find) 300
+capture V is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+# 7 chunks off the village: its start is saved, its farm pieces not placed
+> forceload add {V1+112} {V3}
+sleep 40
+> forceload remove {V1+112} {V3}
+sleep 10
+> save-all flush
+waitlog Saved the game 120
+look save written; a village located
+
+## SQ-CS2-02 | swap lists and registry remap
+@group A
+@commands Boot 2 (new jars): `grep -E "\[swaps\]" logs/latest.log`
+@pass `[swaps] 2 list file(s): 2 namespace move(s), 0 single id(s)`; `[swaps] minecraft:block: N id(s) remapped`, the same for `minecraft:item`; no `left missing` WARN; no `Missing Registry Entries` / "missing blocks" world-load screen or log block
+@fails `SwapRemapper` not registered, lists not in the jars (`data/creativedelight/swaps/`), or a survivor id not registered
+@from batches/r1101/cs2_boot2.qb
+bootexpect \[swaps\] 2 list file\(s\): 2 namespace move\(s\), 0 single id\(s\)
+bootexpect \[swaps\] minecraft:block: \d+ id\(s\) remapped
+bootreject left missing
+bootreject Missing Registry Entries|missing blocks
+shell grep -E "\[swaps\]" logs/latest.log | cut -c1-220
+
+## SQ-CS2-03 | remapped blocks keep their states; chest unchanged (the old CD had no items)
+@group A
+@commands Same boot: `/data get block` on both placed sticks, `/data get block` on the chest, check the bot's inventory, and the dropped item entity (`/data get entity @e[type=item,limit=1,sort=nearest]`)
+@pass Every id reads `creativedelight:treated_stick*`, counts 3 / 2 / 1 unchanged, block states (stick shape, tomato age) kept
+@fails A registry the remapper skipped, or NBT ids not aliased
+@from batches/r1101/cs2_boot2.qb
+> pbot spawn qa {H1} {H2} {H3} minecraft:overworld creative
+sleep 5
+> data get block {H1+2} {H2} {H3}
+> execute if block {H1+2} {H2} {H3} creativedelight:treated_stick[axis_y=true] run say CS2 stick ok
+> execute if block {H1+3} {H2} {H3+3} creativedelight:treated_stick_tomatoes[age=2] run say CS2 tomato stick ok
+> data get block {H1+4} {H2} {H3} Items
+expect CS2 stick ok
+expect CS2 tomato stick ok
+expect immersiveengineering:stick_treated", Count: 3b
+reject creative_delight:
+
+## SQ-CS2-04 | saved village farm places
+@group A
+@commands Same boot: walk into the saved village farm; `grep -E "village_farm_crops\|Failed to load structure\|Unknown processor" logs/latest.log`
+@pass Farm places with the extra crops (village_farms.json share); no decode error; after `/save-all`, the chunk's start NBT names `creativedelight:village_farm_crops` (the alias is load-only)
+@fails Legacy alias `creative_delight:village_farm_crops` not registered
+@from batches/r1101/cs2_boot2.qb
+> tp qa {V1} 200 {V3}
+sleep 45
+> save-all flush
+waitlog Saved the game 120
+shell grep -E "village_farm_crops|Failed to load structure|Unknown processor|Failed to parse" logs/latest.log | head -5; echo "---"; python3 $INST/tools/scratch_query/region_ids.py cs234/region "creative_?delight:[a-z_]+"
+look farm pieces placed with no decode error; region files name creativedelight:village_farm_crops (old id none or only in chunks not resaved)
+
+## SQ-CS2-05 | config files carried over
+@group A
+@commands Same boot: `ls config/ \| grep -i creative`; read the two new files
+@pass `creativedelight-common.toml` and `creativebrewing-common.toml` hold the edited values; the underscore files are gone; log has `[swaps] config creative_delight-common.toml carried over` (and brewing)
+@fails `ConfigRename.carryOver` ran after the config was registered (defaults written)
+@from batches/r1101/cs2_boot2.qb
+bootexpect \[swaps\] config creative_delight-common.toml carried over to creativedelight-common.toml
+bootexpect \[swaps\] config creative_brewing-common.toml carried over to creativebrewing-common.toml
+shell ls config/ | grep -i creative; grep -n "placeableTooltips" config/creativedelight-common.toml; head -2 config/creativebrewing-common.toml
+look creativedelight file has placeableTooltips = false; underscore files gone; CB marker comment kept or not (Forge may rewrite)
+
+## SQ-CS2-06 | script packs, no old namespace
+@group A
+@commands Same boot: `grep -E "startup script packs in order\|\[creativedelight\]\|\[creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log`; `/recipescan` (Devtools)
+@pass Packs `creativecalendar`, `creativedelight`, `creativebrewing` load; CD and CB core lines present; no `creative_delight` anywhere in either log; no recipe names an unknown `creative_delight:` id; wild crop features place (no `Unknown feature creative_delight:wild/...` in latest.log)
+@fails A script tree or a datapack id still on the old namespace
+@from batches/r1101/cs2_boot2.qb
+shell grep -E "startup script packs in order|\[creativedelight\]|\[creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-220 | head -12; echo "old ns in kjs logs: $(grep -c creative_delight logs/kubejs/startup.log logs/kubejs/server.log | tr '\n' ' ')"; grep -c "Unknown feature creative_delight" logs/latest.log
+kjsreject creative_delight
+bootreject Unknown feature creative_delight
+> recipescan
+waitlog Scan complete 300
+look packs creativecalendar, creativedelight, creativebrewing load with core lines; recipescan clean of creative_delight ids
+
+## SQ-CS2-07 | NCH.cfg lookup and the can action
+@group A
+@commands Same boot: `grep -E "NCH.cfg\|IngredientActions\|can_serving" logs/kubejs/server.log \| head`; craft a recipe that uses part of a can (a can-serving recipe)
+@pass No `no ... section in any registered config` WARN; no `IngredientActions not available` / `no creativeengineering:can_serving` WARN; the can comes back with one serving fewer
+@fails NCH.cfg lookup or the action registry broken
+@from batches/r1101/cs2_boot2.qb
+shell grep -E "NCH.cfg|IngredientActions|can_serving" logs/kubejs/server.log | head -8 | cut -c1-220
+kjsreject section in any registered config
+kjsreject IngredientActions not available|no creativeengineering:can_serving
+look no NCH.cfg / IngredientActions WARN (the craft half is a client check)
+
+## SQ-CS2-08 | CE mixin plugin gate, IW fast path
+@group A
+@commands Same boot: `grep -E "creativeengineering.mixins.json\|IwServerLevelTick" logs/debug.log \| head`; with Immersive Weathering in the pack
+@pass IwServerLevelTickMixin applied and the `[perf]` IW fast path log line as before; no mixin config error
+@fails `CommonMixinPlugin` gate or shared plugin source missing
+@from batches/r1101/cs2_boot2.qb
+shell grep -E "creativeengineering.mixins.json" logs/debug.log | grep -iE "error|fail" | head -3; grep -c "IwServerLevelTick" logs/debug.log; grep -E "IwServerLevelTick" logs/debug.log | head -2 | cut -c1-200; grep -iE "\[perf\].*(immersive|IW)" logs/latest.log | head -2 | cut -c1-200
+look IwServerLevelTickMixin applied, IW fast path line, no mixin config error

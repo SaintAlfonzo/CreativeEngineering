@@ -1,0 +1,74 @@
+# Scratch queue rows CDV (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CDV.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CDV Creative Devtools carve, 2026-11-01 ([creative_devtools.md](../creative_devtools.md) 4, TODO `creativesplit/devtools #4`)
+@@date 2026-11-01
+@@jars creativecommon creativedevtools
+@@sources feature_writeup/creative_devtools.md
+@@text
+@@text Run 2026-11-01 (rcs1, [scratch_run_2026-11-01.md](scratch_run_2026-11-01.md) 6): SQ-CDV-01 to -04 PASS. SQ-CAL-06's locate and
+@@text `/dumpclimatecaves` need a group B world (superflat has no arid biome and no multi_noise overworld).
+@@text Needs `creativedevtools-1.0.0.jar` (`development/creativeDevtools/build/libs/`, `prep_srv.sh` adds it) and the patcherMod
+@@text jar built in the same pass (no `devtools/`, with `util/BlockStateLookupHook` and `util/LevelRandomHook`). Same behaviour
+@@text as before the carve: every row checks that the moved tools still run from the new jar. Group A.
+@@text
+@@table
+## SQ-CDV-01 | devtools loads
+@group A
+@commands Boot; `grep -E "\[creativedevtools\]\|creativedevtools" logs/latest.log \| head`; `grep -E "\[creativedevtools\]" logs/kubejs/server.log logs/kubejs/startup.log`
+@pass `[creativedevtools] loaded, members: [cdevperfbot, cdevcapture]` with no `NOT loaded`; startup log `[creativedevtools] core finished`; server log `[creativedevtools] server scripts ready`; no ERROR naming creativedevtools; `config/creativedevtools-common.toml` has `[debug.*]`, `[worldgen.mass_place]`, `[features]`, and the CE toml lost `[debug]` and `[worldgen.mass_place]` after Forge's correction
+@fails patcherMod jar older than the hooks (NoClassDefFoundError `BlockStateLookupHook`), or the script trees missing from the jar
+@from batches/r1106spf/b1.qb
+bootexpect \[creativedevtools\] loaded, members: \[ceperfbot, cecapture\]
+bootreject \[creativedevtools\].*NOT loaded
+bootreject NoClassDefFoundError.*(BlockStateLookupHook|LevelRandomHook)
+kjsexpect \[creativedevtools\] server scripts ready
+shell grep -E "\[creativedevtools\]" logs/kubejs/startup.log; grep -E "ERROR.*creativedevtools" logs/latest.log | head -5; grep -nE "^\s*\[" config/creativedevtools-common.toml; echo CE:; grep -nE "^\s*\[(debug|worldgen\.mass_place)" config/creativeengineering-common.toml || echo "CE has no debug/mass_place"
+look startup core finished; toml has [debug.*], [worldgen.mass_place], [features]; CE toml lost [debug] and [worldgen.mass_place]
+
+## SQ-CDV-02 | devtools commands answer
+@group A
+@commands `/cdevgen list`; `/cdevperf status`; `/cdevplace status`; `/recipescan`; `/dumpworldjei`; `/dumpspawns`; `/flowerworld` is in tab completion (do not run it in a shared world)
+@pass Each command answers (no "Unknown command"); `/recipescan` prints its summary line; `/dumpspawns` writes `kubejs/exported/spawns.json`
+@fails A script without `global.CDV`, or `SpawnDump` class name not updated in `dump_spawns.js`
+@from batches/r1106spf/b1.qb
+> cegen list
+> ceperf status
+> ceplace status
+> recipescan
+waitlog (?i)(recipescan|recipe scan).*(done|summary|checked|recipes|references) 300
+> dumpworldjei
+sleep 10
+> dumpspawns
+sleep 10
+reject Unknown command
+shell ls -la kubejs/exported/spawns.json; grep -rn "flowerworld" kubejs/server_scripts logs/kubejs/server.log | head -3
+look every command answered; /recipescan summary line; spawns.json written now; /flowerworld registered (not run)
+
+## SQ-CDV-03 | /dumpall (about 5 min)
+@group A
+@commands `/dumpall` (about 5 min, includes dumpclimate); then `grep -E "ReferenceError\|guardThrowable\|writeExportJson" logs/kubejs/server.log`
+@pass `[dumpall] all 25 dumps done`; no ReferenceError: the Devtools wrappers reach `global.guardThrowable` / `global.writeExportJson` from the pack's `_lib`
+@fails `java_guard.js` / `export_io.js` not exporting their globals
+@from batches/r1106spf/b1.qb passed
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+expect \[dumpall\] (all 25 dumps done|2[45]/25 (dumps )?ok)
+kjsreject ReferenceError
+kjsreject guardThrowable.*(not|undefined)|writeExportJson.*(not|undefined)
+
+> save-all flush
+sleep 5
+
+## SQ-CDV-04 | devtools test recipes under the creativedevtools namespace (probe half in cs1b)
+@group A
+@commands `/dumprecipes create`, then `grep -rho "creativedevtools:[^\"]*" kubejs/exported/recipes/ \| sort -u \| head`; set `[debug.level_random] probe = true`, restart, `grep LevelRandomProbe logs/latest.log`; set it back to false
+@pass The test recipes are listed under `creativedevtools:` ids (one `*_mech_crafting` per metal and wood, netherite, one sequenced assembly); with the probe on the world loads, and only `[LevelRandomProbe] off-thread` WARN lines (or none) appear
+@fails Recipes still under `creativeengineering:` (NCH namespace not switched), or the probe factory not registered on the hook
+@from batches/r1106spf/b1.qb
+> dumprecipes create
+sleep 20
+shell grep -rho "creativedevtools:[^\"]*" kubejs/exported/recipes/ | sort -u | head -30
+look one *_mech_crafting per metal and wood, netherite, one sequenced assembly, all creativedevtools:

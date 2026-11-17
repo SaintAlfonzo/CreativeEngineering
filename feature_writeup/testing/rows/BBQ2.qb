@@ -1,0 +1,243 @@
+# Scratch queue rows BBQ2 (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/BBQ2.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Large Meals, Roll Delight and Barbeque's Delight changes, 2026-11-04 ([plan_meals_rolls_bbq.md](../plan_meals_rolls_bbq.md))
+@@date 2026-11-04
+@@jars creativecommon creativedelight
+@@sources feature_writeup/plan_meals_rolls_bbq.md
+@@text
+@@text CD jar built 2026-11-04 20:33 (not installed: see the plan's build note). Before the run: `/dumpall`, then remove
+@@text `largemeals` and `roll_delight` from `AWAIT_DUMP` in `tools/gen_can_types.py`, run `python3 tools/gen_can_types.py`, `/cdevgen`
+@@text (food families, placeables, stack sizes), `python3 tools/food_families.py --check`. One group A boot covers every server row.
+@@text
+@@table
+## SQ-LGM-11 | pufferfish broth gives Comfort 1200 and Nausea 100, no poison
+@group A
+@commands Bot eats `largemeals:pufferfish_broth`; `/data get entity` the bot `ActiveEffects`
+@pass Comfort 1200 ticks and Nausea (`minecraft:nausea`) 100 ticks; no poison (LGM-22)
+@fails `MealItems.java` not in the nested jar
+@jars creativedelight
+@from batches/r1113/c2_a1.qb
+> zp hunger c2b 4
+> pbot hold c2b largemeals:pufferfish_broth 1
+> zp eat c2b
+> zp effects c2b
+waitlog \[zp\] effects 20
+expect \[zp\] effects c2b: .*farmersdelight:comfort amp 0 1[12]\d\dt
+expect \[zp\] effects c2b: .*minecraft:nausea amp 0 \d+t
+reject \[zp\] effects c2b: .*minecraft:poison
+look Nausea about 100 ticks
+> effect clear c2b
+
+## SQ-LGM-12 | feast can recipes for omurice, pot pie, mutton rack; no can takes a raw / cooked rack
+@group A
+@commands Recipe dump: `canned_omurice`, `canned_mushroom_pot_pie`, `canned_roasted_mutton_rack`; uses of `largemeals:raw_mutton_rack` / `cooked_mutton_rack`
+@pass three feast can recipes on the placed block, uncanning gives the serving; no can recipe takes either rack (LGM-23, -24)
+@fails `largemeals` still in `AWAIT_DUMP`
+@jars creativedelight
+@from batches/r1113/c2_a1.qb
+> zq rdetail canned_omurice
+> zq rdetail canned_mushroom_pot_pie
+> zq rdetail canned_roasted_mutton_rack
+> zq uses largemeals:raw_mutton_rack
+> zq uses largemeals:cooked_mutton_rack
+waitlog uses largemeals:cooked_mutton_rack 20
+reject (alone|shared) creativedelight:\S*canned_\S*
+look each can recipe takes the placed feast block (or its servings) and an empty can; uncanning (if listed) gives the serving; note: tools/gen_can_types.py AWAIT_DUMP still lists largemeals and roll_delight (the row's pre-run step was not done), so judge the live recipes as they are
+
+## SQ-LGM-13 | food families of Large Meals dishes (generated catalog) and the whole-block tags live
+@group A
+@commands `food_families.json` after `/cdevgen` (rerun after 2026-11-14, plan_bugfix_1114.md 7.4: whole blocks now in the JSON; offline regeneration already shows all five); `/kubejs list_tag minecraft:item creativedelight:food_family/feast/whole` and `.../cake/whole`
+@pass Mushroom Pot Pie block `feast/whole`, serving `feast/serving`; Omurice `feast/*`; Tomato Egg Soup `soup/soup`; Cod Deluxe and Hearty Lunch `meal/plate`; both tags list their block items (cake/whole holds `minecraft:cake`), no tag load error
+@fails name rule ahead of `FAMILY_OVERRIDE`; members filter in `food_families.py` main()
+@jars creativedelight
+@from batches/r1115/p1_a1.qb
+shell python3 $INST/tools/scratch_query/c2_famcheck.py families largemeals:mushroom_pot_pie largemeals:mushroom_pot_pie_block largemeals:omurice largemeals:omurice_block largemeals:tomato_egg_soup largemeals:cod_deluxe largemeals:hearty_lunch
+> kubejs list_tag minecraft:item creativedelight:food_family/feast/whole
+> kubejs list_tag minecraft:item creativedelight:food_family/cake/whole
+> zq itemtag creativedelight:food_family/feast/whole
+> zq itemtag creativedelight:food_family/cake/whole
+waitlog \[zq\] itemtag creativedelight:food_family/cake/whole 30
+bootreject Couldn't load tag.*food_family
+expect itemtag creativedelight:food_family/cake/whole \(\d+\): .*minecraft:cake
+look pot pie block feast/whole, serving feast/serving; omurice feast/*; tomato egg soup soup/soup; cod deluxe and hearty lunch meal/plate; both tags list block items
+
+## SQ-LGM-14 | every Large Meals food with an lm_ block is placeable
+@group A
+@commands `placeable.json` after `/cdevgen`
+@pass all 13 Large Meals foods with an `lm_` block listed placeable (LGM-21)
+@fails DD link missing
+@jars creativedelight
+@from batches/r1113/c2_a1.qb
+shell python3 $INST/tools/scratch_query/c2_famcheck.py lmplaceable
+look "lm blocks 13, not placeable 0"
+
+## SQ-ROLL-10 | cooked nether wart is an ingredient, not a cooked veggie; its can recipe exists
+@group A
+@commands `/dumptags` item `creativeengineering:food_type/cooked/veggie` and `.../ingredient`; recipe dump for `canned_cooked_nether_wart`
+@pass Cooked Nether Wart in `ingredient`, not in `cooked/veggie`; the can recipe exists (ROLL-23)
+@fails `food_types.js` member script not regenerated
+@jars creativedelight
+@from batches/r1113/c2_a1.qb passed
+> zq itemtag creativedelight:food_type/cooked/veggie
+> zq itemtag creativedelight:food_type/ingredient
+> zq recipes canned_cooked_nether_wart
+waitlog recipes matching canned_cooked_nether_wart 20
+expect itemtag creativedelight:food_type/ingredient \(\d+\): .*roll_delight:cooked_nether_wart
+reject itemtag creativedelight:food_type/cooked/veggie \(\d+\): .*roll_delight:cooked_nether_wart
+expect creativedelight:shapeless/canned_cooked_nether_wart ->
+
+## SQ-ROLL-11 | golden roll +20, slice +10 hunger; not eaten at full hunger; control eat measures any hunger offset
+@group A
+@commands Bot eats `roll_delight:golden_roll` and `golden_roll_slice` from hunger 4; `startup.log` grep `golden values`
+@pass +20 / +10 hunger, no effects; the `[golden values]` line counts one more food; neither eaten at full hunger (ROLL-25)
+@fails `PAIRS` skipped (mod id)
+@jars creativedelight
+@from batches/r1113/fix_c2a1.qb
+> effect clear c2b
+> zp hunger c2b 0
+> pbot hold c2b minecraft:bread 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 0
+> pbot hold c2b roll_delight:golden_roll_slice 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 4
+> pbot hold c2b roll_delight:golden_roll 1
+> zp eat c2b
+> zp hunger c2b 20
+> pbot hold c2b roll_delight:golden_roll 1
+> zq useitem c2b
+waitlog useitem c2b 20
+expect \[zp\] eat c2b 1 minecraft:bread: .*food 5,
+expect \[zp\] eat c2b 1 roll_delight:golden_roll_slice: .*food 10,
+expect \[zp\] eat c2b 1 roll_delight:golden_roll: .*food 20,
+look bread from 0 must read food 5: if it reads 9, the +4 is a pack-wide eat bonus (find its source before judging the rolls) and the slice's 14 is that, not a roll value. Effects: Nourishment 2400t on both is the comfort_nourishment golden rule (120 s), not a fault; useitem at full hunger FAIL/PASS (not eaten)
+> effect clear c2b
+> clear c2b
+
+## SQ-ROLL-12 | golden roll slice only from cutting; no gild / enchant recipe; no roll can
+@group A
+@commands Recipe dump filtered on `golden_roll_slice` and on `canned_` + `roll_delight:`
+@pass slice only as a cutting result; no gild or enchant recipe; no roll can (ROLL-26, -27)
+@fails
+@jars creativedelight
+@from batches/r1113/c2_a1.qb
+> zq makes roll_delight:golden_roll_slice
+> zq recipes golden_roll
+> zq recipes canned_
+waitlog recipes matching canned_ 30
+reject canned_\S*roll\S* ->
+look golden_roll_slice made only by creativedelight:farmersdelightcutting/golden_roll_slice; no recipe id with gild or enchant on golden rolls (canned_ list is long: only the first 80 shown, the reject covers those; the count line is the total)
+
+## SQ-BBQ2-01 | after /reload no skewer script error; the 8 pack raw skewers exist under their mods
+@group A
+@commands `grep -E "barbequesdelight\|skewers.js\|F.skewer" logs/kubejs/server.log` after `/reload`; registry check for the 8 raw ids (`/give` each)
+@pass no script error; all 8 raw skewers exist under their mods' namespaces
+@fails `PackRawSkewers` not registered
+@from batches/r1113/c2_a1.qb
+> zc2 reg item ^(farmersdelight:raw_barbecue_stick|hostiledelight:raw_caveskewer|endersdelight:raw_crispy_skewer|ends_delight:raw_end_barbecue_stick|miners_delight:raw_improvised_barbecue_stick|nethersdelight:raw_nether_skewer|oceanic_delight:raw_seafood_skewer|veggiesdelight:raw_turnip_mutton_skewer)$
+> reload
+sleep 25
+shell grep -nE "barbequesdelight|skewers\.js|F\.skewer" logs/kubejs/server.log | grep -iE "error|warn" | head -8 | cut -c1-240; true
+expect \[zc2\] reg item \S+: 8\b
+look no error / warn line from the shell grep (server.log restarted by the reload)
+
+## SQ-BBQ2-02 | every route of each pack skewer; Nether and Cave have no heatless craft; End raw and heatless shapeless
+@group A
+@commands Recipe dump for each pack skewer: raw craft, `_from_smelting`, `_from_smoking`, `_from_campfire`, grilling, `_from_cooked_manual_only`, assembly
+@pass every route present; Nether and Cave have no heatless craft; End raw and heatless shapeless, 1 result; upstream crafts gone (BBQ-35)
+@fails id clash in the log
+@from batches/r1113/c2_a1.qb
+> zq recipes barbecue_stick
+> zq recipes caveskewer
+> zq recipes nether_skewer
+> zq recipes crispy_skewer
+> zq recipes seafood_skewer
+> zq recipes turnip_mutton_skewer
+waitlog recipes matching turnip_mutton_skewer 20
+reject creativedelight:\S*(caveskewer|nether_skewer)_from_cooked_manual_only
+look per skewer: raw craft (shaped/raw_*), _from_smelting, _from_smoking, _from_campfire, grilling, _from_cooked_manual_only (not Nether, not Cave), assembly; End: raw and heatless shapeless with 1 result; no upstream craft ids (endersdelight: / hostiledelight: / nethersdelight: / ends_delight: crafting of the cooked skewer)
+
+## SQ-BBQ2-03 | the six dump skewer ids not seen live in c2a1 (past the 80 cut)
+@group A
+@commands Recipe ids of the ten BBQ lines against the 11-03 dump
+@pass identical ids and results (BBQ-39)
+@fails helper id naming
+@from batches/r1113/fix_c2a1.qb passed
+> zq recipes creativedelight:campfirecooking/grilled_pork_sausage_skewer_from_campfire
+> zq recipes creativedelight:grilling/grilled_rabbit_skewer
+> zq recipes creativedelight:skewering/raw_chicken_skewer
+> zq recipes creativedelight:smelting/grilled_vegetable_skewer_from_smelting
+> zq recipes creativedelight:smoking/grilled_salmon_skewer_from_smoking
+> zq recipes creativedelight:smoking/grilled_vegetable_skewer_from_smoking
+waitlog recipes matching creativedelight:smoking/grilled_vegetable_skewer_from_smoking 20
+count recipes matching creativedelight:\S+: 1$ == 6
+
+## SQ-BBQ2-04 | 18 raw skewers in barbequesdelight:raw_skewers (seasoning craft: client)
+@group A
+@commands `/dumptags` item `barbequesdelight:raw_skewers`; bot crafts a raw pack skewer with a cumin powder, then with a barbeque sauce
+@pass 18 raws in the tag; powder craft works, sauce refused (BBQ-36)
+@fails
+@from batches/r1113/c2_a1.qb
+> zq itemtag barbequesdelight:raw_skewers
+waitlog itemtag barbequesdelight:raw_skewers 20
+expect itemtag barbequesdelight:raw_skewers \(18\)
+look the powder vs sauce craft needs a crafting grid (client part of the row, CQ)
+
+## SQ-BBQ2-05 | kebab wrap, kebab sandwich, bibimbap hunger, no skewer effects (effects cleared before each eat)
+@group A
+@commands Recipe dump for `kebab_wrap`, `kebab_sandwich`, `bibimbap`; bot eats each from hunger 2
+@pass shaped + assembly (wrap, sandwich), shapeless `_cooked_manual_only` (bibimbap), no `barbequesdelight:combine`; +10 / +16 / +16 hunger, no skewer effects (BBQ-38)
+@fails incomplete item missing (transition_items.js)
+@from batches/r1113/fix_c2a1.qb
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:kebab_wrap 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:kebab_sandwich 1
+> zp eat c2b
+> effect clear c2b
+> zp hunger c2b 2
+> pbot hold c2b barbequesdelight:bibimbap 1
+> zp eat c2b
+waitlog \[zp\] eat c2b 1 barbequesdelight:bibimbap 20
+expect \[zp\] eat c2b 1 barbequesdelight:kebab_wrap: .*food 12,
+expect \[zp\] eat c2b 1 barbequesdelight:kebab_sandwich: .*food 18,
+expect \[zp\] eat c2b 1 barbequesdelight:bibimbap: .*food 18,
+look effects: only an ambient Raspberry Pie diet effect (800t, e.g. Speed after enough foods) may show; any other effect the food gave is a FAIL. Hunger: subtract the offset ROLL-11's bread showed (if any)
+> effect clear c2b
+> clear c2b
+
+## SQ-BBQ2-06 | the Shulker Mollusk cuts to 2 filets
+@group A
+@commands Bot kills a shulker with a knife (10 tries); cuts a Shulker Mollusk on a board; recipe dump `stuffed_shulker`
+@pass mollusk drops; 2 filets; stuffed shulker takes `ends_delight:shulker_meat` (BBQ-40)
+@fails merge still active (old jar)
+@from batches/r1113/fix_c2a1.qb
+> zq rdetail shulker_filet
+waitlog rdetail matching shulker_filet 20
+look a cutting recipe (endersdelight:cutting/shulker_filet or a CD copy) with input endersdelight:shulker_mollusk and 2 endersdelight:shulker_filet (rdetail+ results)
+
+## SQ-BBQ2-07 | all cooked skewers in family skewer; no skewer can (generated catalog)
+@group A
+@commands `food_families.json`, `can_types.json` after `/cdevgen`
+@pass all 18 cooked skewers in `skewer`; no skewer can (BBQ-37)
+@fails
+@from batches/r1113/c2_a1.qb
+shell python3 $INST/tools/scratch_query/c2_famcheck.py skewers
+look "in family skewer 18" (23 ids end in skewer/stick: the other 5 are upstream or pack extras, check they are the incomplete or non-food ones) and "skewer cans 0"
+
+## CQ-BBQ2-01
+@group client
+@commands Hover the six seasonings and a skewer seasoned with each (BBQ-34); names of the 3 renamed skewers, their plated blocks and the 8 raws; Salmon Maki Roll Slice (ROLL-24); JEI pages of raws and combos; Large Meals placeable tooltips (LGM-21)
+@pass LOOK: the seasoning lines match; names as listed; raw cod texture on all raws
+@fails
+@draft no batch holds this row yet
+@@text
+@@text Results: not run yet.

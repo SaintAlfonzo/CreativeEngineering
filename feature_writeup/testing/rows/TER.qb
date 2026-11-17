@@ -1,0 +1,106 @@
+# Scratch queue rows TER (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TER.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Terrain batch 4, beard footprint, geode floor (structures/terrain #1, #2, #6), 2026-10-30
+@@date 2026-10-30
+@@jars creativecommon
+@@text
+@@text patcherMod built (compileJava); installed 2026-10-30 17:06 with the meta batch below (SQ-META31): `TemplateTrim#trimAir` + tag `template_trim/air`, `EarthFill`
+@@text `beardFootprint` (default off), `OceanGeodes` `floorPatch` (OFF / CUT / SWAP, default SWAP). Data: `kubejs/server_scripts/worldgen/terrain_adaptation.js`
+@@text (batch 4). Install the patcherMod jar and copy the toml (new keys `[worldgen.earth_fill] beardFootprint`,
+@@text `[worldgen.ocean_geodes] floorPatch`), full restart, new chunks only. Writeup [structure_tuning.md](../structure_tuning.md) 3.30.
+@@text
+@@table
+## SQ-TER-01 | terrain adaptation batch 4 load line
+@group A
+@commands boot; `grep '\[terrain-adaptation\] world load' latest.log`
+@pass `trimmed` up by 4 (ponds x3, level-three ruins), `1 air-trimmed`, sunk starts up by 1 (carp pond); no warning naming a batch-4 id (ST-303)
+@fails warning `sunk_start ... ignored`: the carp pond's start height is not a constant below 0 in this jar
+@from batches/r1031/a1_boot.qb
+bootexpect \[terrain-adaptation\] world load
+bootreject \[terrain-adaptation\].*ignored
+look the world-load line: trimmed up by 4, "1 air-trimmed", sunk starts up by 1 against the 10-30 run (ST-303)
+
+## SQ-TER-02 | ponds and the swamp fisherman house sit on a slope
+@group A
+@commands on a hillside: `/place structure farmers_structures:aquacultures_common`, `_carp`, `old_swamp_fisherman_house:fisherman_house`
+@pass no square pad or air notch, the water stays in the pond, the rim flush with the slope; carp: no 4-block dip or plinth (ST-300)
+@fails pond spills: water fill override `#water_fill/ponds`; plinth: `TerrainAdaptation#sink`
+@from batches/r1031/w3_terrain.qb
+> pbot spawn qa 0 150 0 minecraft:overworld creative
+> execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills
+waitlog nearest minecraft:windswept_hills is at 300
+capture HL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {HL1} 200 {HL3}
+sleep 25
+> execute positioned {HL1} 120 {HL3} run place structure farmers_structures:aquacultures_common
+> execute positioned {HL1+60} 120 {HL3} run place structure farmers_structures:aquacultures_carp
+> execute positioned {HL1-60} 120 {HL3} run place structure old_swamp_fisherman_house:fisherman_house
+reject (?i)failed to place|unknown structure
+look positions {HL1},{HL3} / +60 / -60: no square pad or air notch, water stays in the pond, rim flush with the slope; carp: no 4-block dip or plinth (ST-300)
+
+## SQ-TER-03 | Terralith spire in an ice biome hillside: no square notch
+@group A
+@commands an ice biome hillside: `/place structure terralith:spire` (twice, two spots)
+@pass no 94x98 square cut into the hills round the base; snow on the upper ledges whole (ST-301)
+@fails bare stone ledges: the air trim dropped snow (should never: only air goes), check `TemplateTrim#apply` picked `trimAir`
+@from batches/r1031/w3_terrain.qb
+> execute positioned 2144 70 -2592 run locate biome minecraft:snowy_slopes
+waitlog nearest minecraft:snowy_slopes is at 300
+capture IC is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {IC1} 220 {IC3}
+sleep 25
+> execute positioned {IC1} 150 {IC3} run place structure terralith:spire
+> execute positioned {IC1+120} 150 {IC3} run place structure terralith:spire
+reject (?i)failed to place
+look no 94x98 square cut into the hills round the base, snow on the upper ledges whole (ST-301)
+
+## SQ-TER-04 | level-three ruins and large-ruins meta on a slope: no grass slab pad
+@group A
+@commands a slope: `/place structure philipsruins:level_three_ruins` x2; `/place structure creativeengineering:meta/large_ruins`
+@pass no grass slab around the walls; a large-ruins cluster with one as anchor looks the same (ST-302)
+@fails pad left: template_trim tag not bound (SQ-TER-01)
+@from batches/r1031/w3_terrain.qb
+> execute positioned {HL1} 120 {HL3+120} run place structure philipsruins:level_three_ruins
+> execute positioned {HL1+80} 120 {HL3+120} run place structure philipsruins:level_three_ruins
+> execute positioned {HL1} 120 {HL3+240} run place structure creativeengineering:meta/large_ruins
+reject (?i)failed to place
+look no grass slab around the walls; the large-ruins cluster looks the same (ST-302)
+
+## SQ-TER-05 | beard footprint calibration (W1c, beardFootprint = true)
+@group B
+@commands toml `[worldgen.earth_fill] log = "ALL"`, `beardFootprint = true`; Chunky r 300 in hills with outposts and villages; `grep 'under built floors' latest.log`
+@pass lines show `(N under built floors)`; cancels rise for outposts on cliff edges; tabulate cancels per family against `tools/earth_fill_sim.sh 4242 60 footprint` (outposts 23%, villages 2 to 18% newly over) and look at 3 cancelled and 3 kept starts (ST-304). Calibration only: turn the switch back off unless the user decides
+@fails no `under built floors` line at all: the switch did not load (check the toml); every outpost cancelled: limits too tight for footprint mounds, report numbers
+@from batches/r1031/w1_earthfill.qb
+> execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills
+waitlog nearest minecraft:windswept_hills is at 300
+capture WH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {WH1} {WH3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+expect under built floors
+look tabulate cancels per family (python over RES/rows/SQ-TER-05.log) against tools/earth_fill_sim.sh 4242 60 footprint (outposts 23%, villages 2 to 18% newly over); look at 3 cancelled and 3 kept starts (ST-304). Calibration only: switch back off after
+
+## SQ-TER-06 | ocean geodes covered in the floor block (floorPatch SWAP)
+@group B
+@commands Chunky r 300 over deep ocean; `/locate feature` is not available, so fly the floor (spectator) over 5 geode spots (`/locate biome minecraft:deep_ocean`, look for calcite / basalt)
+@pass `SWAP` (default): no basalt or calcite showing; geodes that reach the floor are mounds of the floor's own sand / gravel, amethyst only in the opening; then set `floorPatch = "CUT"`, restart, a fresh square: geodes cut flush, rim in the floor block; prismarine geodes (Geode Plus) untouched in both (ST-305)
+@fails basalt still showing: `floorPatch` OFF or the RETURN injector failed (mixin error in latest.log); air pocket under water: `patchColumn` water rule
+@from batches/r1031/w3_terrain.qb
+> execute positioned 0 70 0 run locate biome minecraft:deep_ocean
+waitlog nearest minecraft:deep_ocean is at 300
+capture GO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {GO1} {GO3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+> zq count {GO1-300} 20 {GO3-300} {GO1-150} 63 {GO3-150} minecraft:calcite
+> zq count {GO1-150} 20 {GO3-150} {GO1} 63 {GO3} minecraft:calcite
+> zq count {GO1} 20 {GO3} {GO1+150} 63 {GO3+150} minecraft:calcite
+> zq count {GO1-300} 20 {GO3-300} {GO1+300} 63 {GO3+300} minecraft:amethyst_block
+> zq count {GO1-300} 20 {GO3-300} {GO1+300} 63 {GO3+300} minecraft:smooth_basalt
+look zq "count" lines give the blocks and "on:" what they stand on; calcite and smooth basalt seen from the water (first block below water) should be about 0: fly 5 geode spots in the client block for the look (ST-305); prismarine geodes untouched. zq count reads loaded chunks only: run right after Chunky while they are still loaded, else forceload the box first

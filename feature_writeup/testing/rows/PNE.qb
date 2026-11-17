@@ -1,0 +1,65 @@
+# Scratch queue rows PNE (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/PNE.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-PNE Nether Distant Horizons, season colour answers, log filter, 2026-11-07 ([perf.md](../perf.md) section 19; Compat + Calendar built, not installed)
+@@date 2026-11-07
+@@sources feature_writeup/perf.md
+@@text
+@@text | ID | Side | Check | Expect | Failure means |
+@@text |---|---|---|---|---|
+## CQ-PNE-01
+@group client
+@commands Boot; `grep -iE "DhNoGenerationMixin\|SeasonServerConfigMixin\|SeasonBiomeConfigMixin\|SeasonColorUtilMixin\|LogSpamFilter\|Distant Horizons (dimension overrides\|refused)" logs/latest.log`
+@pass no mixin apply errors, no override failure or refusal lines
+@fails DH or Serene Seasons changed a target (redirect count 2, shouldDoWorldGen)
+@draft no batch holds this row yet
+## CQ-PNE-02
+@group client
+@commands Enter the Nether, fly 300+ blocks into unexplored terrain for 3 minutes; F3 DH lines; `grep -c "broken basalt columns" logs/latest.log`
+@pass no LODs appear beyond the chunks actually loaded; DH world-gen threads idle; basalt warning count at most 2 (one per mod) plus the "repeats hidden" note
+@fails generation not stopped in DhClientServerLevel, or filter not on the log4j context
+@draft no batch holds this row yet
+## CQ-PNE-03
+@group client
+@commands In the Nether, look over a large explored area from high up
+@pass LODs end at 32 chunks; DH fog is fully thick at that edge (no hard cut against the sky or void)
+@fails API override not applied (radius still 64) or fog end/max not pinned
+@draft no batch holds this row yet
+## CQ-PNE-04
+@group client
+@commands Return to the overworld; then log out and back in
+@pass overworld LODs to 64 chunks and the configured fog again; `config/DistantHorizons.toml` unchanged (radius 64, fog values as before)
+@fails overrides not cleared on level load / logout, or written to the file
+@draft no batch holds this row yet
+## CQ-PNE-05
+@group client
+@commands Overworld: open the world map over plains, forest, swamp, jungle, a tagged arid biome; wait for a sub-season change (or `/season set`) and look again
+@pass map and block grass/foliage tints as before, and they follow the season change
+@fails answers cached past a season change (they must hold per biome only; season is read live)
+@draft no batch holds this row yet
+## CQ-PNE-06
+@group client
+@commands Edit `serverconfig/sereneseasons-server.toml` blacklist (add minecraft:plains) and save while in game, F3+A
+@pass plains grass loses its seasonal tint after the reload
+@fails cache not cleared on Serene Seasons' ModConfigEvent
+@draft no batch holds this row yet
+## CQ-PNE-07
+@group client
+@commands `tools/perf/sp.sh start`, play 10 min with the world map open part of the time, `tools/perf/sp.sh dump`; compare with perf/reports/sp-20261107-171623
+@pass Xaero `BiomeColorCalculator.getBiomeColor` share of the render thread well under 8.8%; no jdk.Deoptimization events; recording covers the whole window
+@fails cache missing (check SeasonAnswers hits)
+@draft no batch holds this row yet
+## CQ-PNE-08
+@group client
+@commands Stand by a wall of signs (plain, glowing, dyed); back away past 24 blocks; come back; look through a spyglass from 40 blocks
+@pass text disappears past 24 blocks and returns closer; signs themselves always drawn; full text through the spyglass; no other block entities or entities misplaced after a cut sign (pose stack balanced)
+@fails pose not popped (geometry drifts) or SRG target moved
+@draft no batch holds this row yet
+## CQ-PNE-09
+@group client
+@commands Nether: walk crimson forest, warped forest, soul sand valley, basalt deltas, wastes; then step into lava, drink a Blindness potion; look into the Nether through an Immersive Portals portal from the overworld
+@pass the same deep red fog and sky colour (#3F0905) in every biome, DH far fog the same red; lava and Blindness keep vanilla's fog; the portal view shows red fog
+@fails event not reaching vanilla clear colour, or another mod overriding after LOW
+@draft no batch holds this row yet

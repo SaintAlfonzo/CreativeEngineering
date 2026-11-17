@@ -1,0 +1,84 @@
+# Scratch queue rows UC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/UC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title Upgrade Aquatic coral growth, 2026-10-28 ([fixes_compat.md](../fixes_compat.md) 2.31, TODO `gameplay/misc #15`)
+@@date 2026-10-28
+@@sources feature_writeup/fixes_compat.md
+@@text
+@@text Data only: `kubejs/data/immersive_weathering/block_growths/ua_*_coral.json` (11 files from `tools/gen_ua_coral_growths.py`).
+@@text Copy the instance's `kubejs/data` into the scratch instance. Group B (real biomes); can share a boot with SQ-IWF. Any player
+@@text with op; place blocks with `/setblock`, all inside water (`/fill ... water` first).
+@@text
+@@table
+## SQ-UC-01 | Upgrade Aquatic coral growths parse
+@group B
+@commands Boot; grep latest.log for `block_growths`, `ua_`, `upgrade_aquatic:`, `Failed to` near IW's load lines
+@pass IW's `Loaded N block growths` count is 11 higher than the boot before; no parse error naming a `ua_` file
+@fails A block id or property in the template does not exist on UA's block: check the error's block name against the UA jar's blockstates
+@from batches/r1031/a1_boot.qb
+bootexpect Loaded \d+ block growths
+bootreject (?i)(failed|error).*(ua_[a-z_]*coral|upgrade_aquatic:)
+look the "Loaded N block growths" count is 11 higher than a pre-10-28 boot (perf/sessions/q1028 boots)
+
+## SQ-UC-02 | acan coral grows in a warm ocean, dead one does not
+@group B
+@commands `/locate biome minecraft:warm_ocean`, tp there; fill a 7x5x7 water box, `/setblock` `upgrade_aquatic:acan_coral_block` in the middle, `upgrade_aquatic:dead_acan_coral_block` 3 blocks away; `/gamerule randomTickSpeed 1000` 120 s, then 3
+@pass Acan wall fans on the live block's sides and acan fans or acan coral on top (an occasional wet sponge); nothing around the dead block
+@fails Nothing grows: run `/reload` and repeat; still nothing: check the IW fast path (SQ-IWF-01) and `block_growth_blacklist`
+@from batches/r1031/b1_gameplay.qb
+> execute positioned 0 70 0 run locate biome minecraft:warm_ocean
+waitlog nearest minecraft:warm_ocean is at 300
+capture WO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {WO1} 70 {WO3}
+sleep 15
+> fill {WO1-8} 54 {WO3-3} {WO1+14} 60 {WO3+3} minecraft:water
+> setblock {WO1-6} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1-3} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1+3} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1+6} 57 {WO3} upgrade_aquatic:acan_coral_block
+> setblock {WO1+12} 57 {WO3} upgrade_aquatic:dead_acan_coral_block
+> gamerule randomTickSpeed 1000
+sleep 240
+> gamerule randomTickSpeed 3
+> zq count {WO1-7} 56 {WO3-1} {WO1+7} 58 {WO3+1} upgrade_aquatic:acan_coral_wall_fan
+> zq count {WO1-7} 56 {WO3-1} {WO1+7} 58 {WO3+1} upgrade_aquatic:acan_coral_fan
+> zq count {WO1-7} 56 {WO3-1} {WO1+7} 58 {WO3+1} upgrade_aquatic:acan_coral
+> zq count {WO1-7} 56 {WO3-1} {WO1+7} 58 {WO3+1} minecraft:wet_sponge
+> zq count {WO1+11} 56 {WO3-1} {WO1+13} 58 {WO3+1} upgrade_aquatic:acan_coral_wall_fan
+> zq count {WO1+11} 56 {WO3-1} {WO1+13} 58 {WO3+1} upgrade_aquatic:acan_coral_fan
+> zq count {WO1+11} 56 {WO3-1} {WO1+13} 58 {WO3+1} upgrade_aquatic:acan_coral
+look counts 1-4 above 0 in total (about 2.9 growths expected); counts 5-7 all 0
+
+## SQ-UC-03 | prismarine coral grows in a cold ocean; elder prismarine and acan do not
+@group B
+@commands Same box in a `minecraft:cold_ocean`: one `upgrade_aquatic:prismarine_coral_block`, one `upgrade_aquatic:elder_prismarine_coral_block`, one `upgrade_aquatic:acan_coral_block`; `randomTickSpeed 1000` 120 s, then 3
+@pass Prismarine fans / coral around the prismarine block; nothing around the elder prismarine or acan block
+@fails Prismarine silent: the `#minecraft:is_ocean` tag string is not read by IW's `biome_match`; acan grows: the warm ocean predicate is missing
+@from batches/r1031/b1_gameplay.qb
+> execute positioned 0 70 0 run locate biome minecraft:cold_ocean
+waitlog nearest minecraft:cold_ocean is at 300
+capture CO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> tp qa {CO1} 70 {CO3}
+sleep 15
+> fill {CO1-14} 54 {CO3-3} {CO1+14} 60 {CO3+3} minecraft:water
+> setblock {CO1-12} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1-9} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1-6} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1-3} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1} 57 {CO3} upgrade_aquatic:prismarine_coral_block
+> setblock {CO1+6} 57 {CO3} upgrade_aquatic:elder_prismarine_coral_block
+> setblock {CO1+12} 57 {CO3} upgrade_aquatic:acan_coral_block
+> gamerule randomTickSpeed 1000
+sleep 240
+> gamerule randomTickSpeed 3
+> zq count {CO1-13} 56 {CO3-1} {CO1+1} 58 {CO3+1} upgrade_aquatic:prismarine_coral_wall_fan
+> zq count {CO1-13} 56 {CO3-1} {CO1+1} 58 {CO3+1} upgrade_aquatic:prismarine_coral_fan
+> zq count {CO1-13} 56 {CO3-1} {CO1+1} 58 {CO3+1} upgrade_aquatic:prismarine_coral
+> zq count {CO1+5} 56 {CO3-1} {CO1+7} 58 {CO3+1} upgrade_aquatic:elder_prismarine_coral_wall_fan
+> zq count {CO1+5} 56 {CO3-1} {CO1+7} 58 {CO3+1} upgrade_aquatic:elder_prismarine_coral_fan
+> zq count {CO1+11} 56 {CO3-1} {CO1+13} 58 {CO3+1} upgrade_aquatic:acan_coral_wall_fan
+> zq count {CO1+11} 56 {CO3-1} {CO1+13} 58 {CO3+1} upgrade_aquatic:acan_coral_fan
+look counts 1-3 above 0 in total; counts 4-7 all 0

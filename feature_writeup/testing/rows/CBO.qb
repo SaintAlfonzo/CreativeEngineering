@@ -1,0 +1,951 @@
+# Scratch queue rows CBO (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/CBO.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-CBO Creative Brewing with and without its optional dependencies, 2026-11-06 ([creative_brewing.md](../creative_brewing.md) 2.4, 2.5 and 6, [plan_cb_publish.md](../plan_cb_publish.md) M2, TODO `creativebrewing/publish #10`)
+@@date 2026-11-06
+@@jars creativebrewing creativecommon
+@@sources feature_writeup/creative_brewing.md feature_writeup/plan_cb_publish.md
+@@text
+@@text Not run. Every Creative Brewing (CB) behaviour, booted three ways: (1) the bare **chain** (only CB's hard dependencies:
+@@text nothing optional), (2) **optional** = the chain plus all 24 optional dependencies in CB's `mods.toml` and their own
+@@text required jars, (3) the chain plus **one** optional mod at a time (proves each guard alone: a guard that checks one mod
+@@text but names another fails only here). Needs the 2026-11-06 13:23 builds of Creative Brewing and Creative Common and the 13:17 Creative
+@@text Delight (`development/*/build/libs/`) copied into `CEPortTesting/mods/` with the game closed, then `port_chain.sh check`
+@@text clean. CEPortTesting has 10 of the 24 optional mods; `port_chain.sh` takes the rest from the pack's `mods/` (read only).
+@@text Tools (2026-11-06): `port_chain.sh server OUT LEVEL A optional`, `ADD="glob,glob"` (comma-separated, jar names
+@@text with spaces work) on a `chain` server, `port_chain.sh bare optional` for the client; probe `tools/scratch_query/cbo_probe.js`
+@@text (copied into every port_chain server as `zz_cbo_probe.js`: `/cbo mods|effects|potions|all`). All server rows are group
+@@text A (superflat, blocks at y -61). **Effect check pattern** (rows say "golem check"): `> forceload add 0 0`; `> summon
+@@text minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}`; `> effect give @e[tag=cbo] <from> 60 0`; `> data get entity
+@@text @e[tag=cbo,limit=1] ActiveEffects` (Forge writes the effect id as `"forge:id": "<id>"`); `> kill @e[tag=cbo]`.
+@@text **Base checks S** (every boot below): `bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$`;
+@@text `bootreject Missing or unsupported mandatory\|Mixin apply failed\|InvalidMixinException\|creativebrewing.*(NoClassDefFoundError\|ClassNotFoundException)\|Encountered an unexpected exception`;
+@@text `shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log`;
+@@text `> cbo all`: `expect effects leaks 0` (a `leak` line names an Armor or Tool Effects row whose item or effect is not
+@@text registered: a missing `global.has` guard). Boots, one JVM at a time: chain 1, optional 1 (+1 restart for -18), single
+@@text 24, pairs 4: about 30 boots of 2 to 3 min each, about 1.5 h. Client rows after the server rows.
+@@text
+@@table
+## SQ-CBO-01 | chain: optional mods absent, no effect leaks, reference namespaces
+@group A (chain)
+@commands `port_chain.sh server OUT cbo01 A chain`; boot; checks S; `> cbo all`
+@pass `expect mods loaded 0 of 24: -`; `expect effects leaks 0`; `effects items by namespace:` names only vanilla, `creativebrewing`, the members and chain mods (record the line, the reference for the single boots); `expect potion creativebrewing:long_reach registered: false`, same `false` for `buzzier_bees:long_luck`, `alexsmobs:speed_iii`, `quark:resilience`
+@fails a leak line: the row in `armor_effects.js` / `tool_effects.js` (CB `kubejs_startup/creativeengineering/`) without a `global.has` block (`python3 tools/guard_check.py --jar creativebrewing`)
+@from batches/r1106cbp/p1_chain.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 0 of 24: -
+look record the "effects items by namespace" line (reference for the single-mod boots)
+> zq potion creativecommon:long_reach
+> zq potion buzzier_bees:long_luck
+> zq potion alexsmobs:speed_iii
+> zq potion quark:resilience
+sleep 3
+expect potion creativecommon:long_reach registered: false
+expect potion buzzier_bees:long_luck registered: false
+expect potion alexsmobs:speed_iii registered: false
+expect potion quark:resilience registered: false
+
+## SQ-CBO-02 | chain: potion, swap, alcohol, bottling, JEED counts (reference)
+@group A (chain)
+@commands same boot: `shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]" logs/kubejs/startup.log logs/kubejs/server.log`; `bootreject Lingerification:`; `bootreject registered [0-9]+ dragon-breath`
+@pass record every count (reference for -10 and the single boots); `better_beacons not present - skipping` for long_reach and phantom_bane; `re-added 0 dragon-breath`; no Lingerification line (needs Immersive Engineering); no `[CE potions] mix skipped` or `effect .* not registered` WARN (a guarded mix that still ran)
+@fails a `mix skipped` line names the mix: its block in `potions.js` lacks the guard; a Lingerification line: the `CreativeBrewing.commonSetup` Create + IE check
+@from batches/r1106cbp/p1_chain.qb
+shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+bootreject Lingerification:
+bootreject registered [0-9]+ dragon-breath
+shell grep -h "better_beacons not present" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | head -4
+shell grep -c "better_beacons not present" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+shell ! grep -hE "\[CE potions\] mix skipped|effect .* not registered" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+look counts recorded; better_beacons skip lines for long_reach and phantom_bane; re-added 0 dragon-breath
+
+## SQ-CBO-03 | chain: absent-mods summary, NCH failure count
+@group A (chain)
+@commands same boot: `shell grep -h "absent mods" logs/kubejs/server.log`; `shell grep -c "failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log`
+@pass LOOK: the `[absent mods]` lines name only mods missing from the chain (G5 rows handed to NCH, expected: optional ones such as `fruitsdelight`, `neapolitan`); record the failure count (SQ-CBC-03 reference)
+@fails an NCH row of CB failing instead of skipping: the row's script (`jeed_providers.js`, `fluid_tags.js`, G5)
+@from batches/r1106cbp/p1_chain.qb
+shell grep -h "absent mods" logs/kubejs/server.log
+shell grep -c "failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log
+look the [absent mods] lines name only mods missing from the chain; failure count recorded
+
+## SQ-CBO-04 | chain: Poison applies, reload with absent-mod config ids
+@group A (chain)
+@commands same boot: golem check with `minecraft:poison` (the remap list's `from` ids are all absent); `> reload`; `kjsexpect server scripts ready, members on: vinery, brewinandchewin`; checks S script grep again; `> cbo effects`
+@pass Poison applies (`forge:id": "minecraft:poison"`); no `Exception` in `latest.log` after the `reload` line (CBConfig `remap` / `removed` / `categoryOverrides` name absent mods and must be ignored); leaks still 0
+@fails `EffectRules` / `EffectCategories` resolving an absent id eagerly (stack trace frame names the class)
+@from batches/r1106cbp/p1_chain.qb passed
+> forceload add 0 0
+sleep 1
+> kill @e[tag=cbo]
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}
+sleep 1
+> effect give @e[tag=cbo] minecraft:poison 60 0
+sleep 1
+> data get entity @e[tag=cbo,limit=1] ActiveEffects
+sleep 2
+> kill @e[tag=cbo]
+expect "forge:id": "minecraft:poison"
+shell wc -l < logs/latest.log > .preload_n
+> reload
+waitlog Added [0-9]+ recipes, removed 120
+sleep 3
+# "server scripts ready" prints on ServerEvents.loaded only (boot), not on /reload
+bootexpect server scripts ready, members on: vinery, brewinandchewin
+shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe"
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/server.log
+> cbo effects
+waitlog \[cbo\] done 30
+expect effects leaks 0
+
+## SQ-CBO-05 | config read: Magic Resistance 0.5 per level
+@group A (chain)
+@commands stop; `qrun.py toml OUT/srv/config/creativebrewing-common.toml copper_poisoning enabled false`, `magic_resistance reductionPerLevel 0.5`; boot; the SQ-CBA-07 golem pair
+@pass golem A 97.0 after the instant damage (6 x 0.5), golem B 94.0; no config error (`bootreject Incorrect key\|correcting`)
+@fails `CBConfig.Magic` read path; a `correcting` line: the key name in the row is wrong, check the written toml
+@from batches/r1106cbo/c1b_chain_mr.qb passed
+bootreject Incorrect key|correcting
+> forceload add 0 0
+sleep 2
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbaA"],NoAI:1b}
+> summon minecraft:iron_golem 3 -60 5 {Tags:["cbaB"],NoAI:1b}
+> effect give @e[tag=cbaA] creativecommon:magic_resistance 120 0
+> effect give @e[tag=cbaA] minecraft:instant_damage 1 0
+> effect give @e[tag=cbaB] minecraft:instant_damage 1 0
+sleep 2
+> data get entity @e[tag=cbaA,limit=1] Health
+> data get entity @e[tag=cbaB,limit=1] Health
+> effect give @e[tag=cbaA] minecraft:poison 10 0
+sleep 5
+> data get entity @e[tag=cbaA,limit=1] Health
+> kill @e[tag=cbaA]
+> kill @e[tag=cbaB]
+count entity data: 97\.0 == 2
+count entity data: 94\.0 == 1
+
+## SQ-CBO-10 | optional: 24 of 24, namespaces, potions registered
+@group A (optional)
+@commands new OUT: `port_chain.sh server OUT cbo10 A optional`; boot; checks S; `> cbo all`
+@pass `expect mods loaded 24 of 24`; `effects leaks 0`; namespaces now include `alexsmobs`, `botania`, `dragonloot`, `felsic_gear`, `immersive_armors`, `immersiveengineering`, `supplementaries`, `everythingcopper`, `create_deep_dark`; all seven `potion ... registered: true` except `quark:resilience` and `upgrade_aquatic:restfulness` (record: CB removes their brews, the potions stay registered)
+@fails an optional mod failing to load: its own required jar is missing from `OPTIONAL` in port_chain.sh (the FML list names it); a leak: the row's effect id belongs to a mod other than the one its guard checks
+@from batches/r1106cbp/p3_optional.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 24 of 24
+expect effects items by namespace: .*alexsmobs.*botania.*create_deep_dark.*dragonloot.*everythingcopper.*felsic_gear.*immersive_armors.*immersiveengineering.*supplementaries
+> cbo potions
+waitlog \[cbo\] done 30
+look record the potion ... registered lines (all true except quark:resilience and upgrade_aquatic:restfulness expected)
+
+## SQ-CBO-11 | optional: counts above the chain
+@group A (optional)
+@commands same boot: the SQ-CBO-02 grep
+@pass mix count above the chain's; no `better_beacons not present`; `registered [1-9][0-9]* dragon-breath fluid-brewing recipes` and `re-added [1-9]`; `Lingerification: registered refinery list generator`; `potion bottling done \([1-9]`; `jeed_providers.js: [1-9][0-9]* effect provider recipes`; effect swaps count above the chain's; `[alcohol] food values set on 44 of 44`; no `mix skipped` / `not registered` WARN
+@fails each count names its script; `44 of 44` short: `alcohol_drinks.js` item_dict key for the missing drink
+@from batches/r1106cbp/p3_optional.qb
+shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+kjsexpect potion bottling done \([1-9]
+kjsexpect jeed_providers.js: [1-9][0-9]* effect provider recipes
+bootexpect registered [1-9][0-9]* dragon-breath fluid-brewing recipes
+bootexpect Lingerification: registered refinery list generator
+shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "44 of 44"
+shell ! grep -hE "better_beacons not present|\[CE potions\] mix skipped|effect .* not registered" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+look mix and effect swap counts above SQ-CBO-02's; re-added [1-9]
+
+## SQ-CBO-12 | optional: guarded brews
+@group A (optional)
+@commands `> zq potion creativebrewing:long_reach minecraft:redstone`; `> zq potion minecraft:thick geode:wrappist_shard,geode:celestite_shard`; `> zq potion minecraft:awkward buzzier_bees:four_leaf_clover,buzzier_bees:silverfish_bottle`; `> zq potion minecraft:strong_swiftness alexsmobs:gazelle_horn`; `> zq potion alexsmobs:lava_vision minecraft:redstone`
+@pass `-> ... long_long_reach`; wrappist `-> long_reach`, celestite `-> phantom_bane`; clover `-> luck`, silverfish `-> unluck`; `-> speed_iii`; `-> long_lava_vision`
+@fails the guarded block in `potions.js` (lines name the mod)
+@from batches/r1106cbp/p3_optional.qb passed
+> zq potion creativecommon:long_reach minecraft:redstone
+> zq potion minecraft:thick geode:wrappist_shard,geode:celestite_shard
+> zq potion minecraft:awkward buzzier_bees:four_leaf_clover,buzzier_bees:silverfish_bottle
+> zq potion minecraft:strong_swiftness alexsmobs:gazelle_horn
+> zq potion alexsmobs:lava_vision minecraft:redstone
+sleep 3
+expect long_reach \+ minecraft:redstone -> .*long_long_reach
+expect wrappist_shard -> .*long_reach
+expect celestite_shard -> .*phantom_bane
+expect four_leaf_clover -> .*luck
+expect silverfish_bottle -> .*unluck
+expect gazelle_horn -> .*speed_iii
+expect lava_vision \+ minecraft:redstone -> .*long_lava_vision
+
+## SQ-CBO-13 | optional: effect remaps and removals
+@group A (optional)
+@commands golem checks: `neapolitan:agility`, `fruitsdelight:chorus`, `quark:resilience` (remap), then `upgrade_aquatic:restfulness`, `upgrade_aquatic:insomnia`, `alexsmobs:power_down` (removed)
+@pass remaps: `vinery:climbing_effect`, `vinery:teleport`, `alexsmobs:knockback_resistance` in ActiveEffects, the `from` id absent; removed: none of the three in ActiveEffects
+@fails `LivingEntityEffectRemapMixin` (minecraft compartment) or the `[effects] remap` / `removed` defaults in `CBConfig`
+@from batches/r1106cbp/p3_optional.qb passed
+> forceload add 0 0
+sleep 1
+> kill @e[tag=cbo]
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}
+sleep 1
+> effect give @e[tag=cbo] neapolitan:agility 60 0
+> effect give @e[tag=cbo] fruitsdelight:chorus 60 0
+> effect give @e[tag=cbo] quark:resilience 60 0
+> effect give @e[tag=cbo] upgrade_aquatic:restfulness 60 0
+> effect give @e[tag=cbo] upgrade_aquatic:insomnia 60 0
+> effect give @e[tag=cbo] alexsmobs:power_down 60 0
+sleep 1
+> data get entity @e[tag=cbo,limit=1] ActiveEffects
+sleep 2
+> kill @e[tag=cbo]
+expect "forge:id": "vinery:climbing_effect"
+expect "forge:id": "vinery:teleport"
+expect "forge:id": "alexsmobs:knockback_resistance"
+reject "forge:id": "neapolitan:agility"
+reject "forge:id": "fruitsdelight:chorus"
+reject "forge:id": "quark:resilience"
+reject "forge:id": "upgrade_aquatic:restfulness"
+reject "forge:id": "upgrade_aquatic:insomnia"
+reject "forge:id": "alexsmobs:power_down"
+
+## SQ-CBO-14 | optional: no CB server script skipped, winemaker, fermenting, effect providers
+@group A (optional)
+@commands `kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js`; `kjsreject Skipped creativebrewing:kubejs/`; `kjsexpect \[wandering trades\] winemaker [1-9]` (compare with SQ-CBA-10); `> zq bytype brewinandchewin:fermenting`; `> zq bytype jeed:effect_provider`
+@pass no CB server script skipped; winemaker count above the chain's; fermenting 21 or more; effect providers 1 or more with `creativebrewing:` / `vinery:` ids
+@fails `// requires:` header of the skipped script
+@from batches/r1106cbp/p3_optional.qb passed
+kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
+kjsreject Skipped creativebrewing:kubejs/
+kjsexpect \[wandering trades\] winemaker [1-9]
+shell grep -h "\[wandering trades\]" logs/kubejs/server.log logs/kubejs/startup.log
+> zq bytype brewinandchewin:fermenting
+> zq bytype jeed:effect_provider
+sleep 3
+expect bytype brewinandchewin:fermenting: (2[1-9]|[3-9]\d)$
+expect bytype jeed:effect_provider: [1-9]
+expect bytype jeed:effect_provider (creativebrewing|vinery):
+
+## SQ-CBO-15 | optional: Magic Resistance golems and potion bucket dispenser
+@group A (optional)
+@commands the SQ-CBA-07 and -08 checks (Magic Resistance golems, potion bucket dispenser)
+@pass as SQ-CBA-07, -08
+@fails optional mods changed a core behaviour: the mod's own effect or dispenser hook (Alex's Mobs, Quark)
+@from batches/r1106cbp/p3_optional.qb passed
+> forceload add 0 0
+sleep 2
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbaA"],NoAI:1b}
+> summon minecraft:iron_golem 3 -60 5 {Tags:["cbaB"],NoAI:1b}
+> effect give @e[tag=cbaA] creativecommon:magic_resistance 120 0
+> effect give @e[tag=cbaA] minecraft:instant_damage 1 0
+> effect give @e[tag=cbaB] minecraft:instant_damage 1 0
+sleep 2
+> data get entity @e[tag=cbaA,limit=1] Health
+> data get entity @e[tag=cbaB,limit=1] Health
+> effect give @e[tag=cbaA] minecraft:poison 10 0
+sleep 5
+> data get entity @e[tag=cbaA,limit=1] Health
+> kill @e[tag=cbaA]
+> kill @e[tag=cbaB]
+expect Applied effect Magic Resistance
+count entity data: 95\.2 == 2
+count entity data: 94\.0 == 1
+bootexpect potion bucket dispenser behaviors registered
+bootexpect potion bucket dispense handler installed from KubeJS
+> setblock 10 -60 10 minecraft:dispenser[facing=up]{Items:[{Slot:0b,id:"creativebrewing:lingering_potion_bucket",Count:1b,tag:{Potion:"minecraft:regeneration"}}]}
+> setblock 11 -60 10 minecraft:redstone_block
+sleep 2
+> execute if entity @e[type=minecraft:area_effect_cloud,x=10,y=-59,z=10,distance=..8]
+expect Test passed
+reject dispensed with no KubeJS handler installed
+
+## SQ-CBO-16 | optional: absent-mods summary names no optional id
+@group A (optional)
+@commands `shell grep -h "absent mods" logs/kubejs/server.log`; `shell grep -c "failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log`
+@pass `[absent mods]` names none of the 24 optional ids; failure count not above SQ-CBO-03's
+@fails a row naming an optional mod's item that does not exist in that mod's version (the id is wrong, not absent)
+@from batches/r1106cbp/p3_optional.qb
+shell grep -h "absent mods" logs/kubejs/server.log
+shell grep -c "failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log
+shell ! grep -h "absent mods" logs/kubejs/server.log | grep -wE "alexsmobs|appleskin|better_beacons|botania|buzzier_bees|create_central_kitchen|create_deep_dark|dragonloot|everythingcopper|farmersrespite|felsic_gear|fruitsdelight|geode|immersive_armors|immersive_weathering|immersiveengineering|jeed|jei|neapolitan|potionbundles|quark|supplementaries|tmted|upgrade_aquatic"
+look failure count not above SQ-CBO-03's
+
+## SQ-CBO-17 | optional: reload
+@group A (optional)
+@commands `> reload`; the SQ-CBO-04 reload checks; `> cbo effects`
+@pass no script error, leaks 0 after the reload
+@fails a server script that only works on the first load
+@from batches/r1106cbp/p3_optional.qb passed
+shell wc -l < logs/latest.log > .preload_n
+> reload
+waitlog Added [0-9]+ recipes, removed 120
+sleep 3
+# "server scripts ready" prints on ServerEvents.loaded only (boot), not on /reload
+bootexpect server scripts ready, members on: vinery, brewinandchewin
+shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe"
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/server.log
+> cbo effects
+waitlog \[cbo\] done 30
+expect effects leaks 0
+
+## SQ-CBO-18 | optional, both members off
+@group A (optional)
+@commands stop; `qrun.py toml ... members vinery false`, `brewinandchewin false`; boot
+@pass `kjsexpect server scripts ready, members on: $` (both off); no script error; `> cbo effects` leaks 0 (with every optional mod present, member rows off)
+@fails a member row reached through an optional-mod block without the `global.CB.on` early return
+@from batches/r1106cbp/p3b_optional_members_off.qb passed
+kjsexpect server scripts ready, members on: $
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo effects
+waitlog \[cbo\] done 30
+expect effects leaks 0
+
+## SQ-CBO-20 | chain + alexsmobs-*.jar,citadel-*.jar
+@group A (chain + Alex's Mobs)
+@commands new OUT: `ADD="alexsmobs-*.jar,citadel-*.jar" port_chain.sh server OUT cbo20 A chain`; boot; checks S
+@pass `expect mods loaded 1 of 24: alexsmobs`; `kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js`; the Alex's Mobs brews of SQ-CBO-12; golem check `quark:resilience` impossible (Quark absent): instead `alexsmobs:power_down` not applied
+@fails the `has('alexsmobs')` block in `potions.js` or the nested `has('quark')` block inside it (line ~158)
+@from batches/r1106cbp/s20.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: alexsmobs$
+kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
+> zq potion minecraft:strong_swiftness alexsmobs:gazelle_horn
+> zq potion alexsmobs:lava_vision minecraft:redstone
+sleep 3
+expect gazelle_horn -> .*speed_iii
+expect lava_vision \+ minecraft:redstone -> .*long_lava_vision
+> forceload add 0 0
+sleep 1
+> kill @e[tag=cbo]
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}
+sleep 1
+> effect give @e[tag=cbo] alexsmobs:power_down 60 0
+sleep 1
+> data get entity @e[tag=cbo,limit=1] ActiveEffects
+sleep 2
+> kill @e[tag=cbo]
+reject "forge:id": "alexsmobs:power_down"
+> cbo potions
+waitlog \[cbo\] done 30
+shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+
+## SQ-CBO-21 | chain + appleskin-*.jar
+@group A (chain + AppleSkin)
+@commands `ADD="appleskin-*.jar"`; boot; checks S
+@pass mods loaded 1; nothing else (AppleSkin use is client-side, CQ-CBO-03)
+@fails Brewin' member `BnCClientForgeEvents` reaching a client class on the server
+@from batches/r1106cbp/s21.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: appleskin$
+
+## SQ-CBO-22 | chain + CerbonsBetterBeacons-*.jar
+@group A (chain + Better Beacons)
+@commands `ADD="CerbonsBetterBeacons-*.jar"`; boot; checks S; `> cbo potions`; `> zq potion creativebrewing:long_reach minecraft:redstone,minecraft:glowstone_dust`
+@pass long_reach and phantom_bane `true`; `-> long_long_reach`, `-> strong_long_reach`; no `mix skipped` WARN naming `geode:` (Geode absent: its mixes sit inside this block behind their own check)
+@fails `CommonPotions` rows (`needsMod`); a `geode:` WARN: the inner `has('geode')` check
+@from batches/r1106cbp/s22.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: better_beacons$
+> cbo potions
+waitlog \[cbo\] done 30
+expect potion creativecommon:long_reach registered: true
+expect potion creativecommon:phantom_bane registered: true
+> zq potion creativecommon:long_reach minecraft:redstone,minecraft:glowstone_dust
+sleep 3
+expect redstone -> .*long_long_reach
+expect glowstone_dust -> .*strong_long_reach
+shell ! grep -hE "mix skipped.*geode:" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+
+## SQ-CBO-23 | chain + Botania-*.jar,curios-forge-*.jar,Patchouli-*.jar
+@group A (chain + Botania)
+@commands `ADD="Botania-*.jar,curios-forge-*.jar,Patchouli-*.jar"`; boot; checks S; `> cbo effects`
+@pass namespaces include `botania`; leaks 0
+@fails `has('botania')` blocks in armor / tool effects
+@from batches/r1106cbp/s23.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: botania$
+expect effects items by namespace: .*\bbotania=
+
+## SQ-CBO-24 | chain + buzzier_bees-*.jar,blueprint-*.jar
+@group A (chain + Buzzier Bees)
+@commands `ADD="buzzier_bees-*.jar,blueprint-*.jar"`; boot; checks S; `> zq potion minecraft:luck minecraft:redstone,minecraft:glowstone_dust`; `> zq potion minecraft:awkward buzzier_bees:four_leaf_clover`
+@pass `-> buzzier_bees:long_luck`, `-> buzzier_bees:strong_luck`, `-> luck`
+@fails `has('buzzier_bees')` block in `potions.js`; `LUCK_POTIONS` list
+@from batches/r1106cbp/s24.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: buzzier_bees$
+> zq potion minecraft:luck minecraft:redstone,minecraft:glowstone_dust
+> zq potion minecraft:awkward buzzier_bees:four_leaf_clover
+sleep 3
+expect redstone -> .*long_luck
+expect glowstone_dust -> .*strong_luck
+expect four_leaf_clover -> .*luck
+
+## SQ-CBO-25 | chain + create_central_kitchen-*.jar
+@group A (chain + Create Central Kitchen)
+@commands `ADD="create_central_kitchen-*.jar"`; boot; checks S; `shell grep -h "dragon-breath" logs/latest.log logs/kubejs/startup.log`
+@pass `registered [1-9][0-9]* dragon-breath fluid-brewing recipes`; `re-added [1-9]`
+@fails `DragonBreathBrewing.build` (the `not found - dragon's breath fluid brewing disabled` WARN names the missing class)
+@from batches/r1106cbp/s25.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: create_central_kitchen$
+shell grep -h "dragon-breath" logs/latest.log logs/kubejs/startup.log
+bootexpect registered [1-9][0-9]* dragon-breath fluid-brewing recipes
+shell grep -h "re-added [1-9]" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log
+
+## SQ-CBO-26 | chain + create_deep_dark-*.jar
+@group A (chain + Create Deep Dark)
+@commands `ADD="create_deep_dark-*.jar"`; boot; checks S; `> cbo effects`
+@pass namespaces include `create_deep_dark` (echo gear); leaks 0; no mixin error for `EchoArmorEffectProcedureMixin`
+@fails the `create_deep_dark` compartment: target method renamed in this jar version
+@from batches/r1106cbp/s26.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: create_deep_dark$
+expect effects items by namespace: .*\bcreate_deep_dark=
+bootreject EchoArmorEffectProcedureMixin
+
+## SQ-CBO-27 | chain + dragonloot-*.jar
+@group A (chain + DragonLoot)
+@commands `ADD="dragonloot-*.jar"`; boot; checks S; `> cbo effects`
+@pass namespaces include `dragonloot`; leaks 0
+@fails `has('dragonloot')` blocks
+@from batches/r1106cbp/s27.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: dragonloot$
+expect effects items by namespace: .*\bdragonloot=
+
+## SQ-CBO-28 | chain + everythingcopper-*.jar
+@group A (chain + Everything Copper)
+@commands `ADD="everythingcopper-*.jar"`; boot; checks S; `> cbo effects`
+@pass namespaces include `everythingcopper`; leaks 0 (the Immersive Engineering `conductive` row inside the copper block must be skipped or guarded: a leak `effect immersiveengineering:conductive` here is a finding)
+@fails `armor_effects.js` copper block: nest the IE effect in `has('immersiveengineering')`
+@from batches/r1106cbp/s28.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: everythingcopper$
+expect effects items by namespace: .*\beverythingcopper=
+reject leak .*immersiveengineering:conductive
+
+## SQ-CBO-29 | chain + FarmersRespite-*.jar
+@group A (chain + Farmer's Respite)
+@commands `ADD="FarmersRespite-*.jar"`; boot; checks S; the SQ-CBO-02 effect swaps grep; `> zq bytype brewinandchewin:fermenting`
+@pass effect swaps count above the chain's; fermenting count recorded against SQ-CBA-09 and SQ-CBO-14; no `effect swap: ... is not a food` WARN
+@fails `effect_swaps.js` `has('farmersrespite')` rows; `CaffeinatedEffectMixin`
+@from batches/r1106cbp/s29.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: farmersrespite$
+shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+> zq bytype brewinandchewin:fermenting
+sleep 3
+shell ! grep -h "effect swap: .* is not a food" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+look effect swaps above the chain's; fermenting count recorded
+
+## SQ-CBO-30 | chain + Felsic Gear *.jar
+@group A (chain + Felsic Gear)
+@commands `ADD="Felsic Gear *.jar"`; boot; checks S; `> cbo effects`
+@pass namespaces include `felsic_gear`; leaks 0 (its rows name `better_beacons:long_reach`: a leak on that effect means the row needs both guards)
+@fails `has('felsic_gear')` block in `armor_effects.js`
+@from batches/r1106cbp/s30.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: felsic_gear$
+expect effects items by namespace: .*\bfelsic_gear=
+reject leak .*better_beacons
+
+## SQ-CBO-31 | chain + fruitsdelight-*.jar
+@group A (chain + Fruits Delight)
+@commands `ADD="fruitsdelight-*.jar"`; boot; checks S; `[alcohol]` grep; winemaker count; golem check `fruitsdelight:chorus`
+@pass `food values set on 43 of 44`; winemaker above SQ-CBA-10's; `vinery:teleport` applied instead of chorus
+@fails `vinery/wandering_trades.js` guard; `FruitsDelightEffectFuncMixin` / remap
+@from batches/r1106cbp/s31.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: fruitsdelight$
+shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "43 of 44"
+shell grep -h "\[wandering trades\]" logs/kubejs/server.log logs/kubejs/startup.log
+> forceload add 0 0
+sleep 1
+> kill @e[tag=cbo]
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}
+sleep 1
+> effect give @e[tag=cbo] fruitsdelight:chorus 60 0
+sleep 1
+> data get entity @e[tag=cbo,limit=1] ActiveEffects
+sleep 2
+> kill @e[tag=cbo]
+expect "forge:id": "vinery:teleport"
+reject "forge:id": "fruitsdelight:chorus"
+look winemaker count above SQ-CBA-10's
+
+## SQ-CBO-32 | chain + geodeforge-*.jar
+@group A (chain + Geode)
+@commands `ADD="geodeforge-*.jar"`; boot; checks S; `> zq potion minecraft:thick geode:wrappist_shard`
+@pass `-> nothing`, no `mix skipped` WARN (Better Beacons absent)
+@fails the Geode block must stay inside the Better Beacons block
+@from batches/r1106cbp/s32.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: geode$
+> zq potion minecraft:thick geode:wrappist_shard
+sleep 3
+expect wrappist_shard -> nothing
+shell ! grep -hE "mix skipped" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
+
+## SQ-CBO-33 | chain + immersive_armors-*.jar
+@group A (chain + Immersive Armors)
+@commands `ADD="immersive_armors-*.jar"`; boot; checks S; `> cbo effects`
+@pass namespaces include `immersive_armors`; leaks 0 (its block names `immersiveengineering:flammable`: a leak on it is a finding, as SQ-CBO-28)
+@fails `has('immersive_armors')` block
+@from batches/r1106cbp/s33.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: immersive_armors$
+expect effects items by namespace: .*\bimmersive_armors=
+reject leak .*immersiveengineering:flammable
+
+## SQ-CBO-34 | chain + immersive_weathering-*.jar,moonlight-*.jar
+@group A (chain + Immersive Weathering)
+@commands `ADD="immersive_weathering-*.jar,moonlight-*.jar"`; boot; checks S
+@pass mods loaded 1; no WARN naming `immersive_weathering` from CB or Common
+@fails `forceHudIconItems` default; Common's IW perf mixin (`CommonMixinPlugin`)
+@from batches/r1106cbp/s34.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: immersive_weathering$
+shell ! grep -E "WARN.*immersive_weathering" logs/latest.log | grep -iE "creativebrewing|creativecommon"
+
+## SQ-CBO-35 | chain + ImmersiveEngineering-*.jar
+@group A (chain + Immersive Engineering)
+@commands `ADD="ImmersiveEngineering-*.jar"`; boot; checks S; `bootexpect Lingerification: registered refinery list generator`; `shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log`; `> zq recipes creativebrewing:bottling`; `> cbo effects`
+@pass refinery generator line; `generated [1-9]` refinery recipes; bottling count above 0; `creativebrewing:` bottling ids listed; namespaces include `immersiveengineering`; no IE mixin error (`PotionHelperMixin`, `PotionRecipeGeneratorsMixin`)
+@fails `Lingerification`, `potion_bottling.js`, the `immersiveengineering` compartment
+@from batches/r1106cbp/s35.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: immersiveengineering$
+expect effects items by namespace: .*\bimmersiveengineering=
+bootexpect Lingerification: registered refinery list generator
+shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log
+bootexpect Lingerification: generated [1-9]
+kjsexpect potion bottling done \([1-9]
+> zq recipes creativebrewing:bottling
+sleep 3
+expect recipes matching creativebrewing:bottling: [1-9]
+bootreject PotionHelperMixin|PotionRecipeGeneratorsMixin
+
+## SQ-CBO-36 | chain + jeed-*.jar
+@group A (chain + JEED)
+@commands `ADD="jeed-*.jar"`; boot; checks S; `kjsexpect jeed_providers.js: [1-9]`; `> zq bytype jeed:effect_provider`
+@pass provider recipes above 0 with `creativebrewing:magic_resistance` among them; no `no Vinery wine providers` WARN
+@fails `jeed_providers.js`; JEED's recipe type id
+@from batches/r1106cbp/s36.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: jeed$
+kjsexpect jeed_providers.js: [1-9]
+> zq bytype jeed:effect_provider
+sleep 3
+expect bytype jeed:effect_provider: [1-9]
+expect magic_resistance
+kjsreject no Vinery wine providers
+
+## SQ-CBO-37 | chain + jei-*.jar
+@group A (chain + JEI)
+@commands `ADD="jei-*.jar"`; boot; checks S
+@pass mods loaded 1; no `PotionMachinesJEI` / `PotionPagesJEI` / `mezz.jei` frame (the JEI plugin must not run on a dedicated server)
+@fails `@JeiPlugin` classes touching server-only code
+@from batches/r1106cbp/s37.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: jei$
+bootreject PotionMachinesJEI|PotionPagesJEI|mezz\.jei.*Exception
+
+## SQ-CBO-38 | chain + neapolitan-*.jar,blueprint-*.jar
+@group A (chain + Neapolitan)
+@commands `ADD="neapolitan-*.jar,blueprint-*.jar"`; boot; checks S; effect swaps count; golem check `neapolitan:agility`
+@pass swaps above the chain's; `vinery:climbing_effect` applied instead of agility
+@fails `effect_swaps.js` `has('neapolitan')`; remap
+@from batches/r1106cbp/s38.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: neapolitan$
+shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+> forceload add 0 0
+sleep 1
+> kill @e[tag=cbo]
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}
+sleep 1
+> effect give @e[tag=cbo] neapolitan:agility 60 0
+sleep 1
+> data get entity @e[tag=cbo,limit=1] ActiveEffects
+sleep 2
+> kill @e[tag=cbo]
+expect "forge:id": "vinery:climbing_effect"
+reject "forge:id": "neapolitan:agility"
+look effect swaps above the chain's
+
+## SQ-CBO-39 | chain + potionbundles-*.jar
+@group A (chain + Potion Bundles)
+@commands `ADD="potionbundles-*.jar"`; boot; checks S
+@pass mods loaded 1; no mixin error for `PotionFluidHandlerMixin` (the `potionbundles` + `create` compartment applies now)
+@fails `CBMixinPlugin` `NEEDS_MOD` entry; target method in Create 0.5.1.i
+@from batches/r1106cbp/s39.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: potionbundles$
+bootreject PotionFluidHandlerMixin
+
+## SQ-CBO-40 | chain + Quark-*.jar,AutoRegLib-*.jar
+@group A (chain + Quark)
+@commands `ADD="Quark-*.jar,AutoRegLib-*.jar"`; boot; checks S; `> zq potion quark:resilience minecraft:redstone,minecraft:glowstone_dust`; golem check `quark:resilience`
+@pass `-> nothing` for both (Resilience brews removed, `REMOVED_POTIONS`); Resilience applies unchanged OR is dropped, but no exception (the remap target `alexsmobs:knockback_resistance` is absent; record which)
+@fails `LivingEntityEffectRemapMixin` with an unregistered target: must leave the effect alone
+@from batches/r1106cbp/s40.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: quark$
+> zq potion quark:resilience minecraft:redstone,minecraft:glowstone_dust
+sleep 3
+expect resilience \+ minecraft:redstone -> nothing
+expect resilience \+ minecraft:glowstone_dust -> nothing
+> forceload add 0 0
+sleep 1
+> kill @e[tag=cbo]
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}
+sleep 1
+> effect give @e[tag=cbo] quark:resilience 60 0
+sleep 1
+> data get entity @e[tag=cbo,limit=1] ActiveEffects
+sleep 2
+> kill @e[tag=cbo]
+reject Exception
+look record whether Resilience stayed or was dropped (remap target absent)
+
+## SQ-CBO-41 | chain + supplementaries-*.jar,moonlight-*.jar
+@group A (chain + Supplementaries)
+@commands `ADD="supplementaries-*.jar,moonlight-*.jar"`; boot; checks S; `> cbo effects`
+@pass namespaces include `supplementaries`; leaks 0
+@fails `has('supplementaries')` block in `tool_effects.js`
+@from batches/r1106cbp/s41.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: supplementaries$
+expect effects items by namespace: .*\bsupplementaries=
+
+## SQ-CBO-42 | chain + Engineers Delight *.jar,ImmersiveEngineering-*.jar
+@group A (chain + Engineer's Delight)
+@commands `ADD="Engineers Delight *.jar,ImmersiveEngineering-*.jar"` (it requires IE); boot; checks S; `[alcohol]` grep
+@pass `food values set on 43 of 44` (wodka in, bellini out); mods loaded 2
+@fails `alcohol_drinks.js` wodka key
+@from batches/r1106cbp/s42.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 2 of 24: immersiveengineering, tmted$
+shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "43 of 44"
+
+## SQ-CBO-43 | chain + upgrade_aquatic-*.jar,blueprint-*.jar
+@group A (chain + Upgrade Aquatic)
+@commands `ADD="upgrade_aquatic-*.jar,blueprint-*.jar"`; boot; checks S; golem checks `upgrade_aquatic:restfulness`, `upgrade_aquatic:insomnia`; `> zq potion upgrade_aquatic:restfulness minecraft:glowstone_dust`; `> zq potion upgrade_aquatic:insomnia minecraft:glowstone_dust`
+@pass neither effect applied; `-> nothing` for both brews
+@fails `[effects] removed`; `REMOVED_POTIONS` block
+@from batches/r1106cbp/s43.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 1 of 24: upgrade_aquatic$
+> forceload add 0 0
+sleep 1
+> kill @e[tag=cbo]
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}
+sleep 1
+> effect give @e[tag=cbo] upgrade_aquatic:restfulness 60 0
+> effect give @e[tag=cbo] upgrade_aquatic:insomnia 60 0
+sleep 1
+> data get entity @e[tag=cbo,limit=1] ActiveEffects
+sleep 2
+> kill @e[tag=cbo]
+reject "forge:id": "upgrade_aquatic:restfulness"
+reject "forge:id": "upgrade_aquatic:insomnia"
+> zq potion upgrade_aquatic:restfulness minecraft:glowstone_dust
+> zq potion upgrade_aquatic:insomnia minecraft:glowstone_dust
+sleep 3
+reject restfulness \+ minecraft:glowstone_dust -> minecraft
+reject insomnia \+ minecraft:glowstone_dust -> minecraft
+look both brews -> nothing (or the potion unregistered)
+
+## SQ-CBO-50 | chain + CerbonsBetterBeacons-*.jar,geodeforge-*.jar
+@group A (chain + Better Beacons + Geode)
+@commands `ADD="CerbonsBetterBeacons-*.jar,geodeforge-*.jar"`; boot; checks S; `> zq potion minecraft:thick geode:wrappist_shard,geode:celestite_shard`
+@pass `-> long_reach`, `-> phantom_bane`
+@fails the nested Geode block
+@from batches/r1106cbp/s50.qb passed
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 2 of 24: better_beacons, geode$
+> zq potion minecraft:thick geode:wrappist_shard,geode:celestite_shard
+sleep 3
+expect wrappist_shard -> .*long_reach
+expect celestite_shard -> .*phantom_bane
+
+## SQ-CBO-51 | chain + alexsmobs-*.jar,citadel-*.jar,Quark-*.jar,AutoRegLib-*.jar
+@group A (chain + Alex's Mobs + Quark)
+@commands `ADD="alexsmobs-*.jar,citadel-*.jar,Quark-*.jar,AutoRegLib-*.jar"`; boot; checks S; golem check `quark:resilience`; record the mix count
+@pass `alexsmobs:knockback_resistance` applied; mix count above SQ-CBO-20's (the Quark mixes inside the Alex's Mobs block)
+@fails remap; `potions.js` nested `has('quark')`
+@from batches/r1106cbp/s51.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 2 of 24: alexsmobs, quark$
+> forceload add 0 0
+sleep 1
+> kill @e[tag=cbo]
+> summon minecraft:iron_golem 0 -60 5 {Tags:["cbo"],NoAI:1b}
+sleep 1
+> effect give @e[tag=cbo] quark:resilience 60 0
+sleep 1
+> data get entity @e[tag=cbo,limit=1] ActiveEffects
+sleep 2
+> kill @e[tag=cbo]
+expect "forge:id": "alexsmobs:knockback_resistance"
+reject "forge:id": "quark:resilience"
+shell grep -h "\[CE potions\]\|\[food values\].*effect swaps\|\[alcohol\] food values\|tipped arrow tipping done\|potion bottling done\|jeed_providers.js:\|\[fluid_jei\]\|dragon-breath\|Lingerification" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sed -E 's/^\[[^]]*\] \[[^]]*\]: //' | sort | uniq -c
+look mix count above SQ-CBO-20's
+
+## SQ-CBO-52 | chain + everythingcopper-*.jar,ImmersiveEngineering-*.jar
+@group A (chain + Everything Copper + IE)
+@commands `ADD="everythingcopper-*.jar,ImmersiveEngineering-*.jar"`; boot; checks S; `> cbo effects`
+@pass leaks 0, copper armor rows carry `immersiveengineering:conductive`
+@fails as SQ-CBO-28
+@from batches/r1106cbp/s52.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 2 of 24: everythingcopper, immersiveengineering$
+> cbo effects
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+shell grep -c "immersiveengineering:conductive" logs/kubejs/startup.log logs/latest.log
+look copper armor rows carry immersiveengineering:conductive
+
+## SQ-CBO-53 | chain + immersive_armors-*.jar,ImmersiveEngineering-*.jar
+@group A (chain + Immersive Armors + IE)
+@commands `ADD="immersive_armors-*.jar,ImmersiveEngineering-*.jar"`; boot; checks S; `> cbo effects`
+@pass leaks 0, `immersiveengineering:flammable` rows present
+@fails as SQ-CBO-33
+@from batches/r1106cbp/s53.qb
+bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]$
+bootreject Missing or unsupported mandatory|Mixin apply failed|InvalidMixinException|creativebrewing.*(NoClassDefFoundError|ClassNotFoundException)|Encountered an unexpected exception
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+> cbo all
+waitlog \[cbo\] done 30
+expect effects leaks 0$
+reject \[cbo\] leak 
+reject \[cbo\] leak .*echo_
+expect mods loaded 2 of 24: immersive_armors, immersiveengineering$
+> cbo effects
+waitlog \[cbo\] done 30
+expect effects leaks 0
+look immersiveengineering:flammable rows present
+
+## CQ-CBO-01
+@group client (bare chain)
+@commands the CQ-CBA-01 to -03 set (`port_chain.sh bare`); in the same world: hover a golden helmet and a netherite sword (Armor / Tool Effects tooltips); drink a Brewin' beer (Intoxication HUD icon, `forceHudIcon`); place Vinery grapevine planters
+@pass tooltips show their effect lines; Intoxication icon shows top right; planters render (no Supplementaries flower models, no missing-model cube); `grep -nE "Exception\|missing texture" logs/latest.log \| grep -iE "creativebrewing\|vinery\|brewinandchewin"` prints nothing
+@fails client scripts `armor_effects_tooltip.js` / `tool_effects_tooltip.js`; `GuiEffectIconMixin`; Vinery `PlantRenderer` without Supplementaries
+@draft no batch holds this row yet
+## CQ-CBO-02
+@group client (chain + optional)
+@commands quit; `port_chain.sh restore`; `port_chain.sh bare optional` (copies 14 jars from the pack, listed in `cba_parked/.added_from_pack`); launch CEPortTesting; new creative superflat world; JEI: `@creativebrewing`, the Automated Potion Mixing and Lingerification pages, IE Mixer / Refinery / Bottling / Squeezer / Fermenter pages with a potion fluid, Create Spout and Item Drain pages with a potion bundle, the potion bucket and tipped arrow pages
+@pass LOOK: every page opens and shows potions; the bundle shows on Spout / Drain; `grep -n "Found a broken recipe\|couldn't build the Tipped" logs/latest.log` prints nothing for CB
+@fails `PotionMachinesJEI`, `PotionPagesJEI`, the IE JEI mixins, `SpoutCategoryMixin` / `ItemDrainCategoryMixin` (potionbundles compartment)
+@draft no batch holds this row yet
+## CQ-CBO-03
+@group client (chain + optional)
+@commands same world: hover Magic Resistance and a Vinery wine in JEI with JEED (effect page); drink a beer with AppleSkin on; hover echo armor (Create Deep Dark), a Felsic Gear piece; check `neapolitan:slipping` colour (`/effect give @s neapolitan:slipping 30`, inventory list); Create tea pipe icon in JEI; place a Vinery planter (Supplementaries flower models)
+@pass LOOK: JEED pages show CB's descriptions; AppleSkin shows the intoxication overlay; echo armor tooltip has the set line once; Felsic tooltip lists its effects; Slipping is red; tea pipe icon draws; planter flowers use Supplementaries' models
+@fails `JeedEffect*Mixin`, Brewin' `IntoxicationAppleSkinCompat`, `EchoArmorTooltipMixin`, `MobEffectCategoryMixin`, `CreateTeaPipeIconMixin`, Vinery `SupplementariesFlowerModels`
+@draft no batch holds this row yet
+## CQ-CBO-04
+@group client (chain + optional)
+@commands survival, same world: wear a full copper armor set (Everything Copper) for 5 minutes (`/time add` does not speed it: `[copper_poisoning] intervalSeconds` in the client's `config/creativebrewing-common.toml` lowered first, restored after); quit; `port_chain.sh restore`
+@pass LOOK: Copper Poisoning applies; after restore `ls CEPortTesting/mods \| wc -l` equals the count before `bare optional` and `cba_parked/` is gone
+@fails `CopperPoisoningHandler`, `CopperPoisoningEffectMixin`; restore: `.added_from_pack` list
+@draft no batch holds this row yet
