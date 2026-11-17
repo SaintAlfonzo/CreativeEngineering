@@ -24,6 +24,8 @@ def memberPaths = csv('bundle_members')
 ext.shipped_jar_task = 'bundleJar'
 
 memberPaths.each { evaluationDependsOn(it) }
+// The bundle's stamp is dirty when a member's sources are (ce.forge-mod build stamp).
+ext.ceStampDirs += memberPaths.collect { project(it).projectDir }
 
 tasks.named('jar', Jar).configure {
     archiveClassifier = 'own'
@@ -82,7 +84,7 @@ tasks.register('bundleJar', Jar) {
     destinationDirectory = layout.buildDirectory.dir('libs')
 
     from({ zipTree(ownJar.get().asFile) }) {
-        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/MANIFEST.MF', 'META-INF/ce-build.json'   // the bundle carries its own stamp (ce.forge-mod)
     }
     from(metadataDir)
     into('META-INF/jarjar') {

@@ -82,7 +82,7 @@ tasks.register('repackJar', Jar) {
         exclude upstreamExcludes
     }
     from({ zipTree(overlayJar.get().asFile) }) {
-        exclude 'META-INF/MANIFEST.MF'
+        exclude 'META-INF/MANIFEST.MF', 'META-INF/ce-build.json'   // the repack carries its own stamp (ce.forge-mod)
     }
     duplicatesStrategy = DuplicatesStrategy.FAIL
 

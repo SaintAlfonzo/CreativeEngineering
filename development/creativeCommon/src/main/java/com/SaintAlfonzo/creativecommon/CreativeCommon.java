@@ -61,6 +61,8 @@ public class CreativeCommon
     public CreativeCommon() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::commonSetup);
+        // [creativecommon] builds: the stamp of every own jar (plan_process_overhaul.md P1.2)
+        com.SaintAlfonzo.creativecommon.util.BuildStamps.log();
 
         // Must be registered here, during construction - Forge loads every mod's COMMON/CLIENT
         // config immediately after every mod's constructor has run, so anything later (even

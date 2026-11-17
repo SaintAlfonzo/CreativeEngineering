@@ -223,6 +223,72 @@ tasks.named('jar', Jar).configure {
     finalizedBy 'reobfJar'
 }
 
+// Build stamp (plan_process_overhaul.md P1.2, owner ruling D1): every shipped jar names the build it came from, in
+// META-INF/MANIFEST.MF Implementation-Version and META-INF/ce-build.json. File names are unchanged.
+//   <mod_version>+<git short sha>[.dirty-<hash6>].<yyMMddHHmm>
+// Kept reproducible (see below): the time is the commit's for a clean tree, else the newest mtime among the dirty input
+// files, and hash6 hashes those files' content. Rebuilding unchanged source gives the same stamp and jar; one change
+// gives a different one. Inputs: the project folder, its source sets (Common's kubejs trees live outside it),
+// build-logic, and for a bundle its members (ext.ceStampDirs, appended by ce.forge-bundle).
+ext.ceStampDirs = [projectDir, rootProject.file('build-logic')]
+def stampFile = layout.buildDirectory.file('ceStamp/META-INF/ce-build.json')
+def computeStamp = { ->
+    def root = rootProject.projectDir
+    def git = { List<String> args ->
+        def pr = (['git', '-C', root.path] + args).execute()
+        def out = pr.inputStream.text
+        pr.waitFor()
+        pr.exitValue() == 0 ? out.trim() : ''
+    }
+    def dirs = (project.ext.ceStampDirs + sourceSets.collectMany { it.allSource.srcDirs + it.resources.srcDirs })
+            .collect { it.absoluteFile }.findAll { it.exists() }.unique()
+    def rel = dirs.collect { root.toPath().relativize(it.toPath()).toString() ?: '.' }
+    def specs = rel + rel.collectMany { [":(exclude)${it}/build", ":(exclude)${it}/jar_archive", ":(exclude)${it}/run"] }
+    def sha = git(['rev-parse', '--short', 'HEAD']) ?: 'nogit'
+    def dirtyFiles = git(['status', '--porcelain', '--untracked-files=all', '--'] + specs).readLines()
+            .findAll { it.length() > 3 }.collect { it.substring(3).replaceAll(/^.* -> /, '') }.sort().unique()
+    def stampTime
+    def suffix = ''
+    if (dirtyFiles) {
+        def md = java.security.MessageDigest.getInstance('SHA-1')
+        long newest = 0
+        dirtyFiles.each { p ->
+            def f = new File(root, p)
+            md.update((p + '\n').bytes)
+            if (f.isFile()) { md.update(f.bytes); newest = Math.max(newest, f.lastModified()) }
+        }
+        suffix = '.dirty-' + md.digest().encodeHex().toString().substring(0, 6)
+        stampTime = newest ?: System.currentTimeMillis()
+    } else {
+        stampTime = ((git(['log', '-1', '--format=%ct']) ?: '0') as long) * 1000L
+    }
+    def t = new Date(stampTime)
+    def stamp = "${version}+${sha}${suffix}.${t.format('yyMMddHHmm')}"
+    [stamp: stamp, json: [mod_id: modId, mod_version: version.toString(), sha: sha, dirty: !dirtyFiles.isEmpty(),
+                          built_at: t.format("yyyy-MM-dd'T'HH:mm"), gradle_task: prop('shipped_jar_task', 'jar'),
+                          stamp: stamp]]
+}
+def writeBuildStamp = tasks.register('writeBuildStamp') {
+    group = 'ce'
+    description = 'Writes META-INF/ce-build.json (the build stamp) for the shipped jar'
+    outputs.file(stampFile)
+    outputs.upToDateWhen { false }
+    doLast {
+        def s = computeStamp()
+        def f = stampFile.get().asFile
+        def text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(s.json)) + '\n'
+        f.parentFile.mkdirs()
+        if (!f.exists() || f.text != text) f.text = text   // unchanged content keeps the jar up to date
+        logger.info("build stamp ${s.stamp}")
+    }
+}
+ext.ceStampOf = { -> new groovy.json.JsonSlurper().parse(stampFile.get().asFile).stamp }
+tasks.matching { it.name in ['jar', 'repackJar', 'bundleJar'] }.configureEach { t ->
+    t.dependsOn writeBuildStamp
+    t.from(stampFile.map { it.asFile.parentFile.parentFile })
+    t.doFirst { t.manifest.attributes('Implementation-Version': project.ext.ceStampOf()) }
+}
+
 // Reproducible jars: no build timestamp in the manifest, fixed entry order and entry times. Rebuilding
 // unchanged source gives a byte-identical jar, so a root `./gradlew build` that repacks every mod changes
 // nothing downstream (same sha1 in mods/, no false "differs from build/libs" deploy warning).
@@ -269,13 +335,43 @@ def archiveJar = tasks.register('archiveJar', Copy) {
 }
 tasks.named('build').configure { finalizedBy archiveJar }
 
+// Install gate (plan_process_overhaul.md P1.1, owner ruling D2): tools/check_all.py --fast --changed runs after this
+// project's classes compile, before the jar is installed; a FAIL stops the install and names the check. -PskipChecks overrides it (logged in the install ledger, P1.2).
+// Runs once per Gradle invocation, however many projects install.
+def preInstallChecks = tasks.register('preInstallChecks') {
+    group = 'ce'
+    description = 'Runs tools/check_all.py --fast --changed (skipped with -PskipChecks)'
+    onlyIf { !project.hasProperty('skipChecks') }
+    dependsOn 'classes'   // this project's class-based tests read fresh classes; other stale mods SKIP (check_all.py)
+    doLast {
+        if (gradle.ext.has('ceChecksDone')) return
+        gradle.ext.ceChecksDone = true
+        def out = new ByteArrayOutputStream()
+        def r = project.exec {
+            workingDir rootProject.projectDir
+            commandLine 'python3', 'tools/check_all.py', '--fast', '--changed'
+            environment 'CE_IN_GRADLE', '1'
+            standardOutput = out
+            errorOutput = out
+            ignoreExitValue = true
+        }
+        def text = out.toString()
+        text.readLines().findAll { it ==~ /^(FAIL|KNOWN|WARN|check_all).*/ }.each { logger.lifecycle(it) }
+        if (r.exitValue != 0) {
+            def fails = text.readLines().findAll { it.startsWith('FAIL') }.collect { it.split(/\s+/)[1] }
+            throw new GradleException("install refused: check_all FAIL in ${fails.join(', ')} " +
+                    "(python3 tools/check_all.py --only ${fails.join(',')} -v; -PskipChecks overrides)")
+        }
+    }
+}
+
 // Explicit only (never part of `build`): put this build's jar into the instance's mods/. Older versions
 // of this mod and anything matching replaces_jars are MOVED to jar_archive/displaced/, not deleted.
-// Don't run it while the game is running.
+// When the game is running, install_jar.py asks first (dialog); never replaces a jar under a running game.
 tasks.register('installToMods') {
     group = 'ce'
     description = "Builds ${jarName} and swaps it into ../mods (old versions -> jar_archive/displaced/)"
-    dependsOn 'build', { shippedJarTask() }
+    dependsOn preInstallChecks, 'build', { shippedJarTask() }
     doFirst {
         def bundledIn = prop('bundled_in')
         if (bundledIn) {
@@ -283,23 +379,19 @@ tasks.register('installToMods') {
                     "run ./gradlew :${bundledIn}:installToMods")
         }
     }
+    // tools/install_jar.py does the swap, the install ledger (jar_archive/installed.tsv) and, when the owner's game is
+    // running, the Install now / Install on exit / Skip dialog (plan_process_overhaul.md P1.2 item 7).
     doLast {
-        def modsDir = rootProject.file('mods')
         def built = shippedJarTask().archiveFile.get().asFile
-        def displaced = file('jar_archive/displaced')
-        def matchers = (["${jarName}-*.jar"] + csv('replaces_jars')).collect {
-            java.nio.file.FileSystems.default.getPathMatcher("glob:${it}")
+        def args = ['python3', 'tools/install_jar.py', '--jar', built.path, '--name', jarName,
+                    '--displaced', file('jar_archive/displaced').path, '--replaces', csv('replaces_jars').join(',')]
+        if (project.hasProperty('skipChecks')) args << '--skip-checks'
+        project.exec {
+            workingDir rootProject.projectDir
+            commandLine args
+            ['DISPLAY', 'WAYLAND_DISPLAY', 'XAUTHORITY', 'DBUS_SESSION_BUS_ADDRESS'].each { k ->
+                if (System.getenv(k)) environment k, System.getenv(k)
+            }
         }
-        modsDir.listFiles().findAll { f ->
-            f.isFile() && f.name != built.name && matchers.any { it.matches(java.nio.file.Paths.get(f.name)) }
-        }.each { f ->
-            displaced.mkdirs()
-            java.nio.file.Files.move(f.toPath(), new File(displaced, f.name).toPath(),
-                    java.nio.file.StandardCopyOption.REPLACE_EXISTING)
-            logger.lifecycle("moved mods/${f.name} -> ${projectDir.name}/jar_archive/displaced/")
-        }
-        java.nio.file.Files.copy(built.toPath(), new File(modsDir, built.name).toPath(),
-                java.nio.file.StandardCopyOption.REPLACE_EXISTING, java.nio.file.StandardCopyOption.COPY_ATTRIBUTES)
-        logger.lifecycle("installed mods/${built.name}")
     }
 }
