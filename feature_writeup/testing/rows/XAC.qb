@@ -15,4 +15,22 @@
 @commands Open a world, open the world map over grass, water, sand, leaves, a modded block area; F3+T, look again; `grep -c "Leaked resource.*Finalizer" logs/latest.log`; `grep -i "XaeroAtlasColour\|xaero.map.MapWriter" logs/latest.log`
 @pass map colours as before (no grey or black blocks), no mixin apply errors, leaked-resource warnings from Xaero gone (reload-listener ones may remain)
 @fails redirect not applied (Xaero updated, ordinal moved) or sampling differs
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell ! grep -iE "Mixin apply.*(XaeroAtlasColour|xaero)|InvalidInjectionException.*xaero" logs/latest.log
+> fill ~-6 ~-1 ~-6 ~6 ~-1 ~6 minecraft:grass_block
+> fill ~8 ~-1 ~-6 ~14 ~-1 ~6 minecraft:water
+> fill ~-6 ~-1 ~8 ~6 ~-1 ~14 minecraft:sand
+> fill ~-14 ~-1 ~-6 ~-8 ~-1 ~6 minecraft:oak_leaves[persistent=true]
+> fill ~-6 ~-1 ~-14 ~6 ~-1 ~-8 create:andesite_casing
+do {"wait": 60}
+key m
+do {"wait": 40}
+shot worldmap
+do {"press": "escape"}
+do {"reload": true}
+key m
+do {"wait": 40}
+shot worldmap_after_reload
+do {"press": "escape"}
+shell n=$(grep -c "Leaked resource.*Finalizer" logs/latest.log); echo "leaked $n"; grep -iE "XaeroAtlasColour|xaero.map.MapWriter" logs/latest.log | head -5; true
+look both world-map shots: grass, water, sand, leaves and the casing square in their colours, no grey or black blocks; the leaked count is reload-listener ones only (no Xaero Finalizer lines). `m` is Xaero's default world-map key: if the shot shows no map, the key is rebound in the client's options

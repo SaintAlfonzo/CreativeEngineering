@@ -24,13 +24,27 @@
 @commands `/dumppots`
 @pass `Dumped N potted blocks, M other pot-like blocks, P plants`; `fullPots` has `farmersrespite:wild_tea_bush`, the 5 `rusticdelight:wild_*`, `supplementaries:flax`, 35 `quark:` entries and no `vinery:` key (F2); `potLike` lists flower_box, hanging_flower_pot, planter(s), planter boxes, large_pot, vinery pot / box, silt pots, Handcrafted pots, framed pot; no `planter_rich_soul` (F4)
 @fails `getFullPotsView` hidden from Rhino: read the map with `Blocks.FLOWER_POT.fullPots` through reflection; empty `plants`: check `instanceof $BlockItem` in Rhino
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> dumppots
+waitlog Dumped \d+ potted blocks, \d+ other pot-like blocks, \d+ plants 300
+shell python3 -c "import json,sys; d=json.load(open('kubejs/exported/blocks/flower_pots.json')); fp=d['fullPots']; pl=json.dumps(d['potLike']); need=['farmersrespite:wild_tea_bush','supplementaries:flax']; miss=[k for k in need if k not in fp]; rw=[k for k in fp if k.startswith('rusticdelight:wild_')]; q=[k for k in fp if k.startswith('quark:')]; v=[k for k in fp if k.startswith('vinery:')]; print('missing', miss, 'rustic wild', len(rw), 'quark', len(q), 'vinery', v, 'soul planter', 'planter_rich_soul' in pl); sys.exit(0 if not miss and len(rw)==5 and not v and 'planter_rich_soul' not in pl else 1)"
+shell python3 -c "import json; d=json.load(open('kubejs/exported/blocks/flower_pots.json')); print(json.dumps(d['potLike'])[:1500])"
+look quark entries 35 (shell line 1); potLike lists flower_box, hanging_flower_pot, planter(s), planter boxes, large_pot, vinery pot / box, silt pots, Handcrafted pots, framed pot (shell line 2)
 ## SQ-POT-02
 @group A
 @commands `forceload add 290 290 350 310`, wait 5 s, `/pottest all`, wait for `PP-DONE`
 @pass `PASS PP-01` (vanilla pot = map), `PASS PP-02` for the framed and hanging pots; `PP-SUM` lines give per-holder counts close to [flower_pots.md](../flower_pots.md) 1
 @fails PP-01 FAIL naming a plant: a potted block whose plant item differs from the block (record it in POTTED_ITEM in `tools/flower_pot_audit.py`); hanging pot all refused: the probe clicks its north face, try `up` from below; `holder did not place`: the spec's state props (flower box `floor`, AF `facing`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 290 290 350 310
+sleep 5
+> pottest all
+waitlog \[pottest\] INFO PP-DONE 900
+expect \[pottest\] PASS PP-01
+expect \[pottest\] PASS PP-02
+count \[pottest\] FAIL PP-0[12]: == 0
+shell grep -aE '\[pottest\] .*PP-SUM' logs/latest.log | cut -c1-200 | head -30
+look PP-SUM per-holder counts close to flower_pots.md section 1 (probe copied fresh from tools/flower_pot_test/pot_probe.js)
 ## SQ-POT-03 | /pottest all: no exception except the Another Furniture planter box (F1)
 @group same run (probe copied fresh from `tools/flower_pot_test/pot_probe.js`)
 @commands grep `PP-03`; for any FAIL read the `stack` field of that row in `kubejs/exported/blocks/pot_probe.json`
@@ -63,6 +77,7 @@ count \[pottest\] PASS PP-04: >= 1
 @pass Each break drops `minecraft:flower_pot` plus the plant (gossypium, or the IE hemp seed); the explosion drops what survives it, not air
 @fails Nothing drops: the pack tables `kubejs/data/miners_delight/loot_tables/blocks/potted_gossypium.json` / `kubejs/data/immersiveengineering/loot_tables/blocks/potted_hemp.json` not loaded (`/reload`, check for a datapack error)
 @from batches/r1102b/r_A.qb
+@reviewed 2026-11-16
 > setblock 290 -60 500 minecraft:flower_pot
 > setblock 292 -60 500 minecraft:flower_pot
 > pbot spawn pot4 291 -60 504 minecraft:overworld survival
@@ -73,18 +88,23 @@ sleep 2
 > pbot hold pot4 immersiveengineering:seed
 > pbot use pot4 292 -60 500 up
 > pbot remove pot4
-> zcount 290 -60 500 292 -60 500
-waitlog \[zcount\] entities 30
-> zact break 290 -60 500 none
-> zact break 292 -60 500 none
-look zcount: does each pot hold the plant (a potted_* id) or stay minecraft:flower_pot (refused, then nothing to lose)? A held plant must come back in the zact drops (flower_pot x1 plus the plant); flower_pot x1 alone on a filled pot = item loss
+> cdevtest state 290 -60 500
+> cdevtest state 292 -60 500
+> cdevtest break 290 -60 500 held=none
+> cdevtest break 292 -60 500 held=none
+waitlog \[cdevtest\] verb=break done= 30
+count \[cdevtest\] verb=break .*broken=true >= 2
+reject \[cdevtest\] .*(done=0|error=)
+look the two `verb=state` lines: does each pot hold the plant (a potted_* id) or stay minecraft:flower_pot (refused, then nothing to lose)? A held plant must come back in the `verb=break drops=` line (flower_pot:1 plus the plant); flower_pot:1 alone on a filled pot = item loss. The explosion half of the row text is not automated
 
 ## SQ-POT-05
 @group same run
 @commands `python3 tools/flower_pot_audit.py` after copying both files back
 @pass Planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, red mushroom `Y` (survive on the planter); silt pot column = the `FlowerBlock` plants; "Probe against prediction" lists only explainable rows (Supplementaries special models, Floral doubles)
 @fails a planter refusing crops: `SelfPlanterMixin` not applied (grep `supplementaries` mixin warnings)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell cp kubejs/exported/blocks/flower_pots.json kubejs/exported/blocks/pot_probe.json $INST/kubejs/exported/blocks/ && cd $INST && python3 tools/flower_pot_audit.py 2>&1 | tail -30
+look planter column: wheat seeds, cactus, sugar cane, nether wart, oak sapling, red mushroom Y; silt pot column = the FlowerBlock plants; Probe against prediction lists only explainable rows (Supplementaries special models, Floral doubles). The copy overwrites the instance dumps on purpose (the audit reads them there)
 @@text
 @@text Run 1 (2026-10-27, pe3) FAIL (setup): `/dumppots` used `java.lang.Class` (class filter); fixed the same day, rerun
 @@text needed. The rest of the dump had not run live yet.

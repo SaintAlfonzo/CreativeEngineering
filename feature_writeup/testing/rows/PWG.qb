@@ -658,7 +658,7 @@ look first ohm about 120 A; wire count drops; last ohm I=0 or lower
 @commands D4 Overheated Component: `zpwgg loop 1000 -60 1030 12 18 powergrid:iron_wire` (about 60 A through the current gauge, rated 35 W; iron wire is rated 160 A); first set `overheatedDropChance` to 0 explicitly (`qrun.py toml OUT/srv/<level>/serverconfig/powergrid-server.toml electricity overheatedDropChance 0.0`, restart; the default is 0.25, owner decision pending) and run the chance-0 half at Z 1040 first; then this loop: wait 400 ticks; `zpwgg overheated 1003 -60 1030 1`; then set `overheatedDropChance` to 1 (`qrun.py toml OUT/srv/<level>/serverconfig/powergrid-server.toml electricity overheatedDropChance 1.0`, then restart and `forceload add 990 990 1060 1040` again), `setblock 1003 -60 1030 air destroy`, `zpwgg items 1003 -60 1030 2`
 @pass `[zpwgg] overheated at 1003 -60 1030 original=Block{powergrid:current_gauge} data=[...]` with `Temperature` among the data keys; no explosion, the block is not air before the setblock; after the destroy: `item ... current_gauge x1`; with chance 0 (the loop at Z 1040, run first): `items 0`; the wires attached to the overheated gauge drop as items (kept: upstream's explode also broke the block and its wires; PORT_NOTES 11) (fix 2026-11-13, P2 run r1113: rerun on `-04`); `give @p powergrid:overheated_component` fails (no item)
 @fails `electricity/overheated/*`, `ThermalBehaviour.explode` / `overheatBlock`; the gauge did not overheat: the creative resistor index (18 = 0.1 ohm) or `CThermal.maxPower` of the current gauge; a crash in `getShape`: the original state's shape needs its block entity
-@draft no batch holds this row yet
+@draft two boots with different `overheatedDropChance` (powergrid-server.toml is read at world load; qrun has no restart step and a shell edit under a running server is missed): run as two drive sections, chance 0 then chance 1, each with its own toml set before the boot; steps then: `zpwgg loop`, `cdevtest tickwarp 400` + waitlog `end=done`, `zpwgg overheated`, `setblock ... destroy`, `cdevtest items 1003 -60 1030 2`
 ## SQ-PWG-19 | insulated copper and golden wire loops read like copper
 @group A
 @commands `zpwgg loop 1000 -60 1050 12 36 powergrid:insulated_copper_wire`; wait 40 ticks; `zpwgg read 1000 -60 1050`; then one loop with `powergrid:golden_wire` at Z 1060
@@ -1941,10 +1941,11 @@ look entities= for electric_fan (4 in the file), factory_light/factory_light (2)
 
 ## SQ-PWG-48 | PWG-20 heater fan processing (blasting 50 V, smoking 38 V, cold), backstops in the streams, Dragon Breathing kept, Create fan through a 45 V coil, electric fan + dragon head
 @group A
-@commands PWG-20 and the pack's Dragon Breathing hook (memory `create-fan-processing-type`). Check `fanProcessingTime` in `OUT/srv/<level-name>/serverconfig/create-server.toml` (default 150). Heater line, Z 1400: `zpwg3 place 1100 -60 1400 powergrid:electric_fan facing=east`; `zpwg3 src 1100 -60 1402 40`; wires source T0 to fan T0, fan T1 to source T1; `zpwg3 place 1102 -60 1400 powergrid:heating_coil facing=north`; `zpwg3 src 1102 -60 1403 50`; wires source T0 to coil T0, coil T1 to source T1; backstops so the items rest inside the streams (r1113 pwg10: they were blown past the stream end): `zpwg3 place 1109 -60 1400 minecraft:stone`, `zpwg3 place 1106 -60 1406 minecraft:stone`, `zpwg3 place 1105 -60 1410 minecraft:stone`; wait 600 ticks; `zpwg6 heater 1102 -60 1400`; `zpwg6 fan 1100 -60 1400` (if `flow=west`: `zpwg3 src 1100 -60 1402 -40`); `zpwg6 fantype 1102 -60 1400`; `zpwg3 drop 1104 -60 1400 minecraft:raw_iron 1`; `zpwg6 items 1106 -60 1400 4` (the item rests at about 1108.7, against the stone) every 5 ticks for 30 ticks, then every 40 ticks for 240 ticks (the probe reads Create's processing data from the saved entity, `ForgeData/CreateData`: KubeJS's `getPersistentData` is its own tag). Smoking: `zpwg3 src 1102 -60 1403 38`, wait 600, `heater`, `fan`, `zpwg3 drop 1104 -60 1400 minecraft:beef 1`, `items` as before. Cold: `zpwg3 src 1102 -60 1403 0`, wait 600, `heater`, `fan`. Dragon line, Z 1406: `zpwg3 place 1098 -60 1406 create:creative_motor facing=east`; `zpwg3 scroll 1098 -60 1406 64` (the 16 RPM default reaches about 1.25 blocks); `zpwg3 place 1099 -60 1406 create:encased_fan facing=east`; `zpwg3 place 1100 -60 1406 minecraft:dragon_wall_head facing=east`; `zpwg6 fan 1099 -60 1406` (if `flow=west`: `zpwg3 scroll 1098 -60 1406 -64`); `zpwg6 fantype 1100 -60 1406`; `zpwg3 drop 1103 -60 1406 minecraft:apple 1`; `items 1104 -60 1406 4` every 40 ticks for 240 ticks. Create fan through a coil, Z 1410: creative motor (scrolled to 64 RPM) and encased fan as above at 1098 / 1099, `zpwg3 place 1101 -60 1410 powergrid:heating_coil facing=north`, `zpwg3 src 1101 -60 1413 45` wired to it; wait 600; `zpwg6 fan 1099 -60 1410`; `zpwg6 heater 1101 -60 1410`; `zpwg3 drop 1103 -60 1410 minecraft:raw_iron 1`, `items 1104 -60 1410 3` with the apple reads. Electric fan with a dragon head, Z 1414: electric fan at 1100 (40 V source at 1100 -60 1416 as above), `zpwg3 place 1101 -60 1414 minecraft:dragon_wall_head facing=east`; `zpwg6 fan 1100 -60 1414`
+@commands PWG-20 and the pack's Dragon Breathing hook (memory `create-fan-processing-type`). Check `fanProcessingTime` in `OUT/srv/<level-name>/serverconfig/create-server.toml` (default 150). Heater line, Z 1400: `zpwg3 place 1100 -60 1400 powergrid:electric_fan facing=east`; `zpwg3 src 1100 -60 1402 40`; wires source T0 to fan T0, fan T1 to source T1; `zpwg3 place 1102 -60 1400 powergrid:heating_coil facing=north`; `zpwg3 src 1102 -60 1403 50`; wires source T0 to coil T0, coil T1 to source T1; backstops so the items rest inside the streams (r1113 pwg10: they were blown past the stream end): `zpwg3 place 1109 -60 1400 minecraft:stone`, `zpwg3 place 1106 -60 1406 minecraft:stone`, `zpwg3 place 1105 -60 1410 minecraft:stone`; wait 600 ticks; `zpwg6 heater 1102 -60 1400`; `zpwg6 fan 1100 -60 1400` (if `flow=west`: `zpwg3 src 1100 -60 1402 -40`); `zpwg6 fantype 1102 -60 1400`; `zpwg3 drop 1104 -60 1400 minecraft:raw_iron 1`; `cdevtest entities 1106 -60 1400 4 type=minecraft:item nbt` (the item rests at about 1108.7, against the stone) every 5 ticks for 30 ticks, then every 40 ticks for 240 ticks (the probe reads Create's processing data from the saved entity, `ForgeData/CreateData`: KubeJS's `getPersistentData` is its own tag). Smoking: `zpwg3 src 1102 -60 1403 38`, wait 600, `heater`, `fan`, `zpwg3 drop 1104 -60 1400 minecraft:beef 1`, `items` as before. Cold: `zpwg3 src 1102 -60 1403 0`, wait 600, `heater`, `fan`. Dragon line, Z 1406: `zpwg3 place 1098 -60 1406 create:creative_motor facing=east`; `zpwg3 scroll 1098 -60 1406 64` (the 16 RPM default reaches about 1.25 blocks); `zpwg3 place 1099 -60 1406 create:encased_fan facing=east`; `zpwg3 place 1100 -60 1406 minecraft:dragon_wall_head facing=east`; `zpwg6 fan 1099 -60 1406` (if `flow=west`: `zpwg3 scroll 1098 -60 1406 -64`); `zpwg6 fantype 1100 -60 1406`; `zpwg3 drop 1103 -60 1406 minecraft:apple 1`; `items 1104 -60 1406 4` every 40 ticks for 240 ticks. Create fan through a coil, Z 1410: creative motor (scrolled to 64 RPM) and encased fan as above at 1098 / 1099, `zpwg3 place 1101 -60 1410 powergrid:heating_coil facing=north`, `zpwg3 src 1101 -60 1413 45` wired to it; wait 600; `zpwg6 fan 1099 -60 1410`; `zpwg6 heater 1101 -60 1410`; `zpwg3 drop 1103 -60 1410 minecraft:raw_iron 1`, `items 1104 -60 1410 3` with the apple reads. Electric fan with a dragon head, Z 1414: electric fan at 1100 (40 V source at 1100 -60 1416 as above), `zpwg3 place 1101 -60 1414 minecraft:dragon_wall_head facing=east`; `zpwg6 fan 1100 -60 1414`
 @pass heater line: coil `state=BLASTING`, `thermal T=` about 460 at 50 V (100 W; a fan's air current cools the coil by a factor 1 + 0.01 x RPM: 2.28 at 128 RPM, 1.64 at 64 RPM, steady T = 20 + P / (0.1 x factor), BLASTING needs T >= 400; upstream-same: upstream defines `IGNORE_EXTRA_COOLING` but no block sets it); `fan` speed 128 (reads 127.98), the stream after the coil `powergrid:heater_blasting`; `fantype` `powergrid:heater_blasting`; the raw iron rests against the stone inside the stream, shows `processing=powergrid:heater_blasting time=` at most 113 from the first read (151 x 0.75: `FanProcessingMixin`, entity path; without it up to 151) and turns into `minecraft:iron_ingot` within about 120 ticks (the Z 1410 raw iron too); smoking: `state=SMOKING`, T about 270 at 38 V (58 W), stream `powergrid:heater_smoking`, beef to `minecraft:cooked_beef`, time at most 113; cold: `state=COLD`, stream `none` after the coil; dragon line: stream `creativeengineering:dragon_breathing` after the head, the apple turns into `minecraft:chorus_fruit` (the pack's recipe), so the heater types did not displace the pack's type; Create fan through a coil: `state=BLASTING` (45 V, 81 W, T about 510) and stream `powergrid:heater_blasting` after the coil (upstream: heating coils serve Create fans too); electric fan with a dragon head: record the stream (the pack's type requires `create:encased_fan` behind the head, so `none` is expected; integration note); no ERROR
 @fails heater state stays COLD: coil wiring (`be` terminals) or `CThermal.maxPower(60, 1.0)`; a stream without heater types: `HeaterFanProcessingTypes.register` not run (SQ-PWG-46 `check`) or the coil is not fan-transparent (`create:fan_transparent` tag in the jar); time above 113: `FanProcessingMixin` did not apply (`decrementProcessingTime` local ordinal) or `heaterFanProcessingSpeedMultiplier`; dragon breathing gone: compare a boot without the PG jar before blaming PG
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 shell grep -n -E 'fanProcessingTime|fanPushDistance' pwgr/serverconfig/create-server.toml | head
 > zpwg3 place 1100 -60 1400 powergrid:electric_fan facing=east
 waitlog \[zpwg3\] done 20
@@ -1983,11 +1984,11 @@ sleep 30
 > zpwg6 fantype 1102 -60 1400
 > zpwg3 drop 1104 -60 1400 minecraft:raw_iron 1
 repeat 6
-> zpwg6 items 1106 -60 1400 4
+> cdevtest entities 1106 -60 1400 4 type=minecraft:item nbt
 sleep 0.25
 end
 repeat 6
-> zpwg6 items 1106 -60 1400 4
+> cdevtest entities 1106 -60 1400 4 type=minecraft:item nbt
 sleep 2
 end
 > zpwg6 fan 1099 -60 1410
@@ -1997,8 +1998,8 @@ end
 > zpwg6 fantype 1100 -60 1406
 > zpwg3 drop 1103 -60 1406 minecraft:apple 1
 repeat 7
-> zpwg6 items 1104 -60 1406 4
-> zpwg6 items 1104 -60 1410 3
+> cdevtest entities 1104 -60 1406 4 type=minecraft:item nbt
+> cdevtest entities 1104 -60 1410 3 type=minecraft:item nbt
 sleep 2
 end
 > zpwg6 fan 1100 -60 1414
@@ -2009,11 +2010,11 @@ sleep 30
 > zpwg6 fan 1100 -60 1400
 > zpwg3 drop 1104 -60 1400 minecraft:beef 1
 repeat 6
-> zpwg6 items 1106 -60 1400 4
+> cdevtest entities 1106 -60 1400 4 type=minecraft:item nbt
 sleep 0.25
 end
 repeat 6
-> zpwg6 items 1106 -60 1400 4
+> cdevtest entities 1106 -60 1400 4 type=minecraft:item nbt
 sleep 2
 end
 # cold
@@ -2029,15 +2030,15 @@ expect \[zpwg6\] fan create:encased_fan speed=64\b
 expect \[zpwg6\] fan stream .*powergrid:heater_blasting
 expect \[zpwg6\] fan stream .*powergrid:heater_smoking
 expect \[zpwg6\] fantype powergrid:heater_blasting
-expect processing=powergrid:heater_blasting time=
-expect processing=powergrid:heater_smoking time=
-expect \[zpwg6\] item minecraft:iron_ingot
-expect \[zpwg6\] item minecraft:cooked_beef
+expect verb=entities type=minecraft:item .*Processing:\{Time:\d+,Type:\\"powergrid:heater_blasting\\"
+expect verb=entities type=minecraft:item .*Processing:\{Time:\d+,Type:\\"powergrid:heater_smoking\\"
+expect verb=entities type=minecraft:item .*id:\\"minecraft:iron_ingot\\"
+expect verb=entities type=minecraft:item .*id:\\"minecraft:cooked_beef\\"
 expect \[zpwg6\] fan stream .*creativeengineering:dragon_breathing
 expect \[zpwg6\] fantype creativeengineering:dragon_breathing
-expect \[zpwg6\] item minecraft:chorus_fruit
-reject processing=powergrid:heater_\w+ time=(11[4-9]|1[2-9]\d|[2-9]\d\d|\d{4,})
-reject processing=\?
+expect verb=entities type=minecraft:item .*id:\\"minecraft:chorus_fruit\\"
+reject Processing:\{Time:(11[4-9]|1[2-9]\d|[2-9]\d\d|\d{4,}),Type:\\"powergrid:heater_
+reject \[cdevtest\] verb=\S+ done=0
 reject thermal T=\S+ overheated=true
 reject \[zpwg\w*\] error
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
@@ -2047,10 +2048,11 @@ look heater line T about 460 at 50 V, about 270 at 38 V; Z 1410 coil about 510 (
 
 ## SQ-PWG-49 | PWG-21 basin heater: FD cooking pot heat levels, skillet cooks, basin heated mixing (FLR-05 build order: mixer, then motor at 64 by NBT) and its 0 V control
 @group A
-@commands PWG-21 and the Farmer's Delight mixins, Z 1420 to 1430. Pot: `zpwg3 place 1100 -60 1420 powergrid:basin_heater`; `zpwg3 src 1100 -60 1423 0`; wires source T0 to heater T0, heater T1 to source T1; `zpwg3 place 1100 -59 1420 farmersdelight:cooking_pot`; `zpwg6 heater 1100 -60 1420`, `zpwg6 fd 1100 -59 1420`; then the source at 140, 200 and 250 V (`zpwg3 src 1100 -60 1423 V`), wait 100 ticks after each, both reads again. Skillet: `zpwg3 place 1103 -60 1420 powergrid:basin_heater`, `zpwg3 src 1103 -60 1423 200` wired the same, `zpwg3 place 1103 -59 1420 farmersdelight:skillet`; wait 100; `zpwg6 skillet 1103 -59 1420 minecraft:beef`; `zpwg6 fd 1103 -59 1420` now and every 100 ticks for 800 ticks; `zpwg3 count 1103 -59 1420 2 minecraft:cooked_beef`. Basin: `zpwg3 place 1106 -60 1420 powergrid:basin_heater`, `zpwg3 src 1106 -60 1423 200` wired, `zpwg3 place 1106 -59 1420 create:basin`; in the FLR-05 rig's order (r1113 pwg10: a mixer placed under a running motor never joined its network) the mixer first, `setblock 1106 -57 1420 create:mechanical_mixer`, then `setblock 1106 -56 1420 create:creative_motor[facing=down]{ScrollValue:64}`; wait 40; `zpwg4 kin 1106 -57 1420` (mixer; speed 64 before anything else, else stop: the basin part is void); `zpwg4 kin 1106 -56 1420` (motor), `zpwg4 kin 1106 -57 1420` (mixer); `zpwg6 heater 1106 -60 1420`; `zpwg6 insert 1106 -59 1420 minecraft:copper_ingot 1`; `zpwg6 insert 1106 -59 1420 create:zinc_ingot 1`; `zpwg6 inv 1106 -59 1420` every 40 ticks for 400 ticks, `zpwg4 kin 1106 -57 1420`; then `zpwg3 src 1106 -60 1423 0`, wait 100, insert copper and zinc again, `inv` every 40 ticks for 400 ticks
+@commands PWG-21 and the Farmer's Delight mixins, Z 1420 to 1430. Pot: `zpwg3 place 1100 -60 1420 powergrid:basin_heater`; `zpwg3 src 1100 -60 1423 0`; wires source T0 to heater T0, heater T1 to source T1; `zpwg3 place 1100 -59 1420 farmersdelight:cooking_pot`; `zpwg6 heater 1100 -60 1420`, `zpwg6 fd 1100 -59 1420`; then the source at 140, 200 and 250 V (`zpwg3 src 1100 -60 1423 V`), wait 100 ticks after each, both reads again. Skillet: `zpwg3 place 1103 -60 1420 powergrid:basin_heater`, `zpwg3 src 1103 -60 1423 200` wired the same, `zpwg3 place 1103 -59 1420 farmersdelight:skillet`; wait 100; `zpwg6 skillet 1103 -59 1420 minecraft:beef`; `zpwg6 fd 1103 -59 1420` now and every 100 ticks for 800 ticks; `zpwg3 count 1103 -59 1420 2 minecraft:cooked_beef`. Basin: `zpwg3 place 1106 -60 1420 powergrid:basin_heater`, `zpwg3 src 1106 -60 1423 200` wired, `zpwg3 place 1106 -59 1420 create:basin`; in the FLR-05 rig's order (r1113 pwg10: a mixer placed under a running motor never joined its network) the mixer first, `setblock 1106 -57 1420 create:mechanical_mixer`, then `setblock 1106 -56 1420 create:creative_motor[facing=down]{ScrollValue:64}`; wait 40; `zpwg4 kin 1106 -57 1420` (mixer; speed 64 before anything else, else stop: the basin part is void); `zpwg4 kin 1106 -56 1420` (motor), `zpwg4 kin 1106 -57 1420` (mixer); `zpwg6 heater 1106 -60 1420`; `zpwg6 insert 1106 -59 1420 minecraft:copper_ingot 1`; `zpwg6 insert 1106 -59 1420 create:zinc_ingot 1`; `cdevtest inv 1106 -59 1420` every 40 ticks for 400 ticks, `zpwg4 kin 1106 -57 1420`; then `zpwg3 src 1106 -60 1423 0`, wait 100, insert copper and zinc again, `inv` every 40 ticks for 400 ticks
 @pass pot: at 0 V `heat_level=NONE`, `isHeated=false`; at 140 V `heat_level=FADING` (about 400 C), `isHeated=true fdHeatSourceOnly=false` (the HEAD inject: heat level at least fading counts, as upstream); at 200 V `KINDLED` (about 800 C, block light 12, `boilerHeat=1`, `basinSees=KINDLED`); at 250 V `SEETHING` (about 1250 C, light 15, `boilerHeat=2`, `basinSees=SEETHING`: superheated recipes would run); skillet: `isCooking=true isHeated=false` while the beef is on it (the redirect in `isCooking`; no FD heat source below), and the beef turns into `minecraft:cooked_beef` (on the skillet or as a dropped item) within 800 ticks (the `cookingTick` redirect); basin: the motor and the mixer at speed 64 (`kin`), brass (`create:brass_ingot x2`) from copper and zinc at 200 V (heated mixing), none at 0 V; no ERROR
 @fails `isHeated` false over a kindled heater: `CookingPotBlockEntityMixin` did not apply or another mod changed `isHeated` (Create Central Kitchen injects `processCooking` only); skillet never cooks: `SkilletBlockEntityMixin` `cookingTick` redirect; heat level stays none: `BasinHeaterBlockEntity.electricalTick` or the wiring; boiler heat -1: `BoilerHeaters.registerHeater` (`ModdedBlocks.BASIN_HEATER` `onRegister`); basin sees none: `BasinBlockEntity.getHeatLevelOf` reads `blaze` (Create's `HEAT_LEVEL`)
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 > zpwg3 place 1100 -60 1420 powergrid:basin_heater
 waitlog \[zpwg3\] done 20
 > zpwg3 src 1100 -60 1423 0
@@ -2105,7 +2107,7 @@ end
 > zpwg6 insert 1106 -59 1420 minecraft:copper_ingot 1
 > zpwg6 insert 1106 -59 1420 create:zinc_ingot 1
 repeat 10
-> zpwg6 inv 1106 -59 1420
+> cdevtest inv 1106 -59 1420
 sleep 2
 end
 > zpwg4 kin 1106 -57 1420
@@ -2115,7 +2117,7 @@ sleep 5
 > zpwg6 insert 1106 -59 1420 minecraft:copper_ingot 1
 > zpwg6 insert 1106 -59 1420 create:zinc_ingot 1
 repeat 10
-> zpwg6 inv 1106 -59 1420
+> cdevtest inv 1106 -59 1420
 sleep 2
 end
 > zpwg4 kin 1106 -57 1420
@@ -2132,7 +2134,8 @@ expect \[zpwg4\] kin Block\{create:creative_motor\}
 expect \[zpwg4\] kin Block\{create:mechanical_mixer\}
 count \[zpwg4\] speed=-?64(\.0+)? .*overstressed=false >= 4
 reject \[zpwg4\] speed=0 theoretical=0
-expect \[zpwg6\] inv \[.*create:brass_ingot x2
+expect verb=inv slot=\d+ item=create:brass_ingot\*2
+reject \[cdevtest\] verb=\S+ done=0
 reject \[zpwg\w*\] error
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
 look waitlog timeout on the first mixer kin = the mixer did not join the motor's network (Create kinetics, not PG; then the basin part is void); pot T about 400 / 800 / 1250 at 140 / 200 / 250 V (pwg10: 403 / 804 / 1246); mixer speed 64 on all its kin reads; basin at 0 V: no second brass; no brass at 200 V with the mixer turning: BasinRecipeMixin or the basin's heat read
@@ -2141,10 +2144,11 @@ look waitlog timeout on the first mixer kin = the mixer did not join the motor's
 
 ## SQ-PWG-50 | PWG-33 electric fan speed by voltage, pushes an item; chute push and pull (ChuteBlockEntityMixin)
 @group A
-@commands PWG-33 fan and `ChuteBlockEntityMixin`, Z 1440. `zpwg3 place 1100 -60 1440 powergrid:electric_fan facing=east`; `zpwg3 src 1100 -60 1442 20` wired (T0 to T0, T1 to T1); wait 20; `zpwg6 fan 1100 -60 1440`; the same at 40 and 80 V; at 80 V `zpwg3 drop 1103 -60 1440 minecraft:cobblestone 1`, `zpwg6 items 1103 -60 1440 12` now and after 40 ticks. Chute push: `zpwg3 place 1106 -60 1440 powergrid:electric_fan facing=up`, `zpwg3 place 1106 -59 1440 create:chute`, `zpwg3 src 1106 -60 1443 40` wired; `zpwg6 chute 1106 -59 1440`; `zpwg3 src 1106 -60 1443 0`, wait 20, `chute` again. Chute pull: `zpwg3 place 1109 -59 1440 create:chute`, `zpwg3 place 1109 -58 1440 powergrid:electric_fan facing=down`, `zpwg3 src 1109 -60 1443 40` wired to the fan; `zpwg6 chute 1109 -59 1440`
+@commands PWG-33 fan and `ChuteBlockEntityMixin`, Z 1440. `zpwg3 place 1100 -60 1440 powergrid:electric_fan facing=east`; `zpwg3 src 1100 -60 1442 20` wired (T0 to T0, T1 to T1); wait 20; `zpwg6 fan 1100 -60 1440`; the same at 40 and 80 V; at 80 V `zpwg3 drop 1103 -60 1440 minecraft:cobblestone 1`, `cdevtest entities 1103 -60 1440 12 type=minecraft:item` now and after 40 ticks. Chute push: `zpwg3 place 1106 -60 1440 powergrid:electric_fan facing=up`, `zpwg3 place 1106 -59 1440 create:chute`, `zpwg3 src 1106 -60 1443 40` wired; `zpwg6 chute 1106 -59 1440`; `zpwg3 src 1106 -60 1443 0`, wait 20, `chute` again. Chute pull: `zpwg3 place 1109 -59 1440 create:chute`, `zpwg3 place 1109 -58 1440 powergrid:electric_fan facing=down`, `zpwg3 src 1109 -60 1443 40` wired to the fan; `zpwg6 chute 1109 -59 1440`
 @pass `fan` speed 64 at 20 V, 128 at 40 V, 256 at 80 V (reads with decimals, e.g. 63.99 / 127.98 / 255.96; speed = current x 64, capped at 256; 20 ohm), `reach=` grows with speed, `flow=east` (or west with reversed polarity); the cobblestone moves east between the two reads (pushed by the electric fan's air current); chute push: `motion=` non-zero (upward, 0.1) while powered, no push unpowered (-0.2: the item falls; the HEAD inject in `calculatePush`); chute pull: `motion=` non-zero; no ERROR
 @fails speed 0: wiring, or `motor.current()` before the circuit is built; motion 0 while powered: `ChuteBlockEntityMixin` (remap off, `calculatePush` / `calculatePull`; compressedcreativity also injects there, later in the method)
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 > zpwg3 place 1100 -60 1440 powergrid:electric_fan facing=east
 waitlog \[zpwg3\] done 20
 > zpwg3 src 1100 -60 1442 20
@@ -2159,9 +2163,9 @@ sleep 1
 sleep 1
 > zpwg6 fan 1100 -60 1440
 > zpwg3 drop 1103 -60 1440 minecraft:cobblestone 1
-> zpwg6 items 1103 -60 1440 12
+> cdevtest entities 1103 -60 1440 12 type=minecraft:item
 sleep 2
-> zpwg6 items 1103 -60 1440 12
+> cdevtest entities 1103 -60 1440 12 type=minecraft:item
 > zpwg3 place 1106 -60 1440 powergrid:electric_fan facing=up
 > zpwg3 place 1106 -59 1440 create:chute
 > zpwg3 src 1106 -60 1443 40
@@ -2183,24 +2187,27 @@ expect \[zpwg6\] fan powergrid:electric_fan speed=(63\.\d+|64\b)
 expect \[zpwg6\] fan powergrid:electric_fan speed=(127\.\d+|128\b)
 expect \[zpwg6\] fan powergrid:electric_fan speed=(255\.\d+|256\b)
 count \[zpwg6\] chute motion=-?(0\.\d*[1-9]|[1-9]) >= 2
+expect verb=entities type=minecraft:item .*x=
 reject \[zpwg\w*\] error
+reject \[cdevtest\] verb=\S+ done=0
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
-look flow=east (west: reversed polarity, record), reach grows with speed (pwg8: 7.25 / 11.5 / 20.0); the cobblestone x moves east between the two items reads (or leaves the box east); chute motion order: push powered 0.1 (up), push unpowered -0.2 (gravity, no push), pull 0.1
+look flow=east (west: reversed polarity, record), reach grows with speed (pwg8: 7.25 / 11.5 / 20.0); the cobblestone `x=` moves east between the two entities reads (or leaves the box east); chute motion order: push powered 0.1 (up), push unpowered -0.2 (gravity, no push), pull 0.1
 
 # from r1113/pwg12.qb
 
 ## SQ-PWG-51 | PWG-33 electric pump: tank to tank, the pipe placed after the pump starts is picked up (FluidPropagatorMixin); fill diagnostics
 @group A
-@commands PWG-33 pump and `FluidPropagatorMixin`, Z 1450. `zpwg3 place 1100 -60 1450 create:fluid_tank`; `zpwg3 place 1104 -60 1450 create:fluid_tank`; wait 40; `zpwg6 fill 1100 -60 1450 minecraft:water 8000` (the probe builds the FluidStack from NBT: `new FluidStack(fluid, mb)` is ambiguous in Rhino; it prints `fill stack ... amount= handler= tanks= isFluidValid=`, and when the capability takes 0 mB, as on r1113 pwg10, it fills the tank's inventory, the controller's, and names the route `via ...`), `zpwg6 tank 1100 -60 1450`; `zpwg3 place 1101 -60 1450 create:fluid_pipe`; `zpwg3 place 1102 -60 1450 powergrid:electric_pump facing=east`; `zpwg3 src 1102 -60 1453 120` wired to the pump; wait 40; `zpwg6 pump 1102 -60 1450`; then place the last pipe after the pump runs: `zpwg3 place 1103 -60 1450 create:fluid_pipe`; `zpwg6 tank 1104 -60 1450` and `tank 1100 -60 1450` every 40 ticks for 200 ticks; `zpwg3 src 1102 -60 1453 240`, wait 40, `pump`, `tank` twice 40 ticks apart; `zpwg3 src 1102 -60 1453 0`, wait 40, `pump`, `tank` twice 40 ticks apart
+@commands PWG-33 pump and `FluidPropagatorMixin`, Z 1450. `zpwg3 place 1100 -60 1450 create:fluid_tank`; `zpwg3 place 1104 -60 1450 create:fluid_tank`; wait 40; `zpwg6 fill 1100 -60 1450 minecraft:water 8000` (the probe builds the FluidStack from NBT: `new FluidStack(fluid, mb)` is ambiguous in Rhino; it prints `fill stack ... amount= handler= tanks= isFluidValid=`, and when the capability takes 0 mB, as on r1113 pwg10, it fills the tank's inventory, the controller's, and names the route `via ...`), `cdevtest tank 1100 -60 1450`; `zpwg3 place 1101 -60 1450 create:fluid_pipe`; `zpwg3 place 1102 -60 1450 powergrid:electric_pump facing=east`; `zpwg3 src 1102 -60 1453 120` wired to the pump; wait 40; `zpwg6 pump 1102 -60 1450`; then place the last pipe after the pump runs: `zpwg3 place 1103 -60 1450 create:fluid_pipe`; `cdevtest tank 1104 -60 1450` every 40 ticks (tank lines carry no position: 1100 is read only before and at the end) for 200 ticks; `zpwg3 src 1102 -60 1453 240`, wait 40, `pump`, `tank` twice 40 ticks apart; `zpwg3 src 1102 -60 1453 0`, wait 40, `pump`, `tank` twice 40 ticks apart
 @pass `fill minecraft:water 8000 via ...` (record the route and the `fill stack` line); `pump` speed non-zero at 120 V and higher at 240 V (record both; 480 ohm, `electricPumpPower` 2.135), 0 at 0 V; water moves from the first tank to the second after the last pipe is placed (the pipe placed after the pump started is picked up: `FluidPropagatorMixin` calls `updatePipesOnSide`); the rate rises with the voltage; no flow at 0 V; no ERROR
 @fails `fill ... 0` on every route: a probe fault (record the `fill stack` line), not Power Grid; no flow at all: pump facing (try `facing=west`) or pipe connections (re-place a pipe); flow only when the pump is re-placed after the pipes: `FluidPropagatorMixin` (`propagateChangedPipe`, `@Local` ordinal of `target`); speed 0: wiring
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 > zpwg3 place 1100 -60 1450 create:fluid_tank
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1104 -60 1450 create:fluid_tank
 sleep 2
 > zpwg6 fill 1100 -60 1450 minecraft:water 8000
-> zpwg6 tank 1100 -60 1450
+> cdevtest tank 1100 -60 1450
 > zpwg3 place 1101 -60 1450 create:fluid_pipe
 > zpwg3 place 1102 -60 1450 powergrid:electric_pump facing=east
 > zpwg3 src 1102 -60 1453 120
@@ -2209,32 +2216,34 @@ sleep 2
 sleep 2
 > zpwg6 pump 1102 -60 1450
 > zpwg3 place 1103 -60 1450 create:fluid_pipe
+# tank lines carry no position: only the 1104 tank is read in the loop, the 1100 tank once before and once at the end
 repeat 6
-> zpwg6 tank 1104 -60 1450
-> zpwg6 tank 1100 -60 1450
+> cdevtest tank 1104 -60 1450
 sleep 2
 end
 > zpwg3 src 1102 -60 1453 240
 sleep 2
 > zpwg6 pump 1102 -60 1450
-> zpwg6 tank 1104 -60 1450
+> cdevtest tank 1104 -60 1450
 sleep 2
-> zpwg6 tank 1104 -60 1450
+> cdevtest tank 1104 -60 1450
 > zpwg3 src 1102 -60 1453 0
 sleep 2
 > zpwg6 pump 1102 -60 1450
-> zpwg6 tank 1104 -60 1450
+> cdevtest tank 1104 -60 1450
 sleep 2
-> zpwg6 tank 1104 -60 1450
+> cdevtest tank 1104 -60 1450
+> cdevtest tank 1100 -60 1450
 expect \[zpwg6\] fill stack minecraft:water amount=8000 handler=\S+ tanks=\d+ isFluidValid=
 expect \[zpwg6\] fill minecraft:water [1-9]\d* via
-expect \[zpwg6\] tank 0:minecraft:water [1-9]\d*/\d+ at 1100 -60 1450
+expect verb=tank tanks=\d+ fluids=0:minecraft:water\*[1-9]\d*/\d+
 count \[zpwg6\] pump speed=[1-9] >= 2
 expect \[zpwg6\] pump speed=0
-expect \[zpwg6\] tank 0:minecraft:water [1-9]\d*/\d+ at 1104 -60 1450
+count verb=tank tanks=\d+ fluids=0:minecraft:water\*[1-9]\d*/\d+ >= 3
+reject \[cdevtest\] verb=\S+ done=0
 reject \[zpwg\w*\] error
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
-look fill lines: amount, handler class, isFluidValid and the route (capability, or the tank / controller inventory when the capability took 0: record which); pump speed at 120 V vs 240 V (pwg10: 64 / 256); the 1104 tank fills after the last pipe, faster at 240 V, flat at 0 V; fill 0 on every route: record the fill lines (probe fault, not PG)
+look tank reads in order: 1100 once (8000), the 1104 tank in the loop and after 240 V and 0 V, 1100 last (water left: count >= 3 water lines = at least one 1104 read with water); fill lines: amount, handler class, isFluidValid and the route (capability, or the tank / controller inventory when the capability took 0: record which); pump speed at 120 V vs 240 V (pwg10: 64 / 256); the 1104 tank fills after the last pipe, faster at 240 V, flat at 0 V; fill 0 on every route: record the fill lines (probe fault, not PG)
 
 # from r1113/pwg10p6.qb
 
@@ -2296,10 +2305,11 @@ look fixture T about 1450 at 120 V (power=2, emission 15); 60 V: power and emiss
 
 ## SQ-PWG-53 | PWG-22 growth lamp at noon with the daylight cycle off: lamp patch ahead of the open patch in summer and in winter (no season gate upstream)
 @group A
-@commands PWG-22 (records upstream behaviour: the lamp has no season gate), Z 1480 and 1490. Two patches: `fill 1098 -61 1478 1102 -61 1482 minecraft:farmland[moisture=7]`, `setblock 1100 -61 1480 minecraft:water`, `fill 1098 -60 1478 1102 -60 1482 minecraft:wheat`, `setblock 1100 -60 1480 minecraft:air`; the same at Z 1488 to 1492 (centre 1100 -61 1490). Lamp over the first: `zpwg3 place 1100 -58 1480 powergrid:light_fixture facing=down`; `zpwg6 bulb 1100 -58 1480 powergrid:growth_lamp`; `zpwg3 src 1103 -60 1476 240` wired to the fixture; `time set 6000`, `gamerule doDaylightCycle false` (r1113 pwg10 ran this at night: the open patch never grew); `/season set MID_SUMMER`; `zpwg6 light 1100 -58 1480`; `zpwg6 age 1100 -60 1480 2` and `zpwg6 age 1100 -60 1490 2` now and every 200 ticks for 1200 ticks. Then `fill 1098 -60 1478 1102 -60 1482 minecraft:wheat` and the same for 1488 to 1492 (age 0 again, centres back to air), `time set 6000`, `gamerule doDaylightCycle false`, `/season set MID_WINTER` (upper case: the command takes the enum constant), the same reads for 1200 ticks; `gamerule doDaylightCycle true`
+@commands PWG-22 (records upstream behaviour: the lamp has no season gate), Z 1480 and 1490. Two patches: `fill 1098 -61 1478 1102 -61 1482 minecraft:farmland[moisture=7]`, `setblock 1100 -61 1480 minecraft:water`, `fill 1098 -60 1478 1102 -60 1482 minecraft:wheat`, `setblock 1100 -60 1480 minecraft:air`; the same at Z 1488 to 1492 (centre 1100 -61 1490). Lamp over the first: `zpwg3 place 1100 -58 1480 powergrid:light_fixture facing=down`; `zpwg6 bulb 1100 -58 1480 powergrid:growth_lamp`; `zpwg3 src 1103 -60 1476 240` wired to the fixture; `time set 6000`, `gamerule doDaylightCycle false` (r1113 pwg10 ran this at night: the open patch never grew); `/season set MID_SUMMER`; `zpwg6 light 1100 -58 1480`; `cdevtest ages 1098 -60 1478 1102 -60 1482 minecraft:wheat` and `cdevtest ages 1098 -60 1488 1102 -60 1492 minecraft:wheat` now and every 200 ticks for 1200 ticks. Then `fill 1098 -60 1478 1102 -60 1482 minecraft:wheat` and the same for 1488 to 1492 (age 0 again, centres back to air), `time set 6000`, `gamerule doDaylightCycle false`, `/season set MID_WINTER` (upper case: the command takes the enum constant), the same reads for 1200 ticks; `gamerule doDaylightCycle true`
 @pass lamp `power=2` (120 W at 240 V); summer: the lamp patch mean age about 3.6 after 1200 ticks (r1113 pwg10: 3.1; about 24 lamp ticks per block x about 0.15 growth chance; mean 7 is not reachable in 1200 ticks), about 3 stages ahead of the open patch, which grows a little in daylight (record); winter (wheat is temperate: off in winter): the lamp patch still ripens (record its rate against summer; the pack's season gate refuses about a quarter of growth checks through `CropGrowEvent.Pre`, which the lamp's `randomTick` also fires), the open patch slower than in summer; PWG-22's "does not grow out of season" is not met on the port (upstream has no gate; the integration stage decides, power_grid.md 14); no ERROR
 @fails lamp patch no faster than the open one: bulb not lit (`light`), `growthLampChance` / `growthLampRadius`, tag `powergrid:affected_by_lamp` (`#minecraft:bee_growables`, cactus, sugar cane); no season effect at all on either patch: Creative Calendar's `CropSeasonGrowHookMixin` (crops.md 2.12.1), not Power Grid
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 > fill 1098 -61 1478 1102 -61 1482 minecraft:farmland[moisture=7]
 > setblock 1100 -61 1480 minecraft:water
 > fill 1098 -60 1478 1102 -60 1482 minecraft:wheat
@@ -2320,8 +2330,8 @@ waitlog \[zpwg3\] done 20
 sleep 2
 > zpwg6 light 1100 -58 1480
 repeat 7
-> zpwg6 age 1100 -60 1480 2
-> zpwg6 age 1100 -60 1490 2
+> cdevtest ages 1098 -60 1478 1102 -60 1482 minecraft:wheat
+> cdevtest ages 1098 -60 1488 1102 -60 1492 minecraft:wheat
 sleep 10
 end
 > fill 1098 -60 1478 1102 -60 1482 minecraft:wheat
@@ -2332,14 +2342,15 @@ end
 > gamerule doDaylightCycle false
 > season set MID_WINTER
 repeat 7
-> zpwg6 age 1100 -60 1480 2
-> zpwg6 age 1100 -60 1490 2
+> cdevtest ages 1098 -60 1478 1102 -60 1482 minecraft:wheat
+> cdevtest ages 1098 -60 1488 1102 -60 1492 minecraft:wheat
 sleep 10
 end
 > gamerule doDaylightCycle true
 expect \[zpwg6\] bulb powergrid:growth_lamp$
 expect \[zpwg6\] light powergrid:light_fixture power=2
-count \[zpwg6\] age .* crops=24 >= 28
+count verb=ages block=minecraft:wheat prop=age n=24 mean= >= 28
+reject \[cdevtest\] verb=\S+ done=0
 expect Set the time to 6000
 reject Enum constant must be one of
 reject \[zpwg\w*\] error
@@ -2533,10 +2544,11 @@ look shell output: mixin lines name no failure, none naming SheepMixin, PlayerDr
 
 ## SQ-PWG-56 | PWG-34 portable battery block: place (charge and Capacity carried), charge at 40 V to max, comparator, drop keeps Charge
 @group A
-@commands PWG-34 (block side), Z 1530. `zpwg7 fp 1100 -60 1527`; `zpwg7 holdbat 0`; `zpwg7 place 1100 -60 1530`; `zpwg3 src 1100 -60 1533 40`; `zpwg3 w 1100 -60 1533 0 1100 -60 1530 0`; `zpwg3 w 1100 -60 1530 1 1100 -60 1533 1`; `zpwg7 pbat 1100 -60 1530` now, after 100 ticks and after 300 ticks; `zpwg7 pick 1100 -60 1530`; `zpwg7 hold minecraft:iron_pickaxe`; `zpwg7 dig 1100 -60 1530`; `zpwg7 drops 1100 -60 1530 2`. Capacity: `zpwg7 holdbat 30000 1`; `zpwg7 place 1104 -60 1530`; `zpwg3 src 1104 -60 1533 40` wired the same; `zpwg7 pbat 1104 -60 1530` now and after 200 ticks
+@commands PWG-34 (block side), Z 1530. `zpwg7 fp 1100 -60 1527`; `zpwg7 holdbat 0`; `zpwg7 place 1100 -60 1530`; `zpwg3 src 1100 -60 1533 40`; `zpwg3 w 1100 -60 1533 0 1100 -60 1530 0`; `zpwg3 w 1100 -60 1530 1 1100 -60 1533 1`; `zpwg7 pbat 1100 -60 1530` now, after 100 ticks and after 300 ticks; `zpwg7 pick 1100 -60 1530`; `cdevtest break 1100 -60 1530 held=minecraft:iron_pickaxe keep`; `cdevtest entities 1100 -60 1530 3 type=minecraft:item nbt`. Capacity: `zpwg7 holdbat 30000 1`; `zpwg7 place 1104 -60 1530`; `zpwg3 src 1104 -60 1533 40` wired the same; `zpwg7 pbat 1104 -60 1530` now and after 200 ticks
 @pass place: `result=SUCCESS` (or `CONSUME`), `block=powergrid:portable_battery`, the held battery used up; `pbat charge=0 capacityLevel=0`; charging at 40 V across the 25 ohm switch: the charge rises about 80 FE per tick (2 FE per volt; record the 100-tick value, about 8 000) and stops at 20 000 (the switch opens; 64 W, under the 100 W rating: no overheat); comparator follows charge / max x 15 (15 when full); `cloneCharge` equals the charge; `pick result=PASS` (fake players never pick the battery up; upstream-same: CQ-PWG-18 does it by hand); the dig breaks it and `drops` shows `drop powergrid:portable_battery x1 Charge=20000 capacityLevel=0`; Capacity: `pbat charge=30000 capacityLevel=1` at once (placement carries charge and enchantment), then up to 40 000; no ERROR
 @fails no block: `PortableBatteryItem.useOn` (the placeable `BacktankBlockItem`); charge stays 0: wiring (`terminals`), `PortableBatteryBlockEntity.electricalTick`; no drop or `Charge` missing: loot table `blocks/portable_battery` (`copy_nbt`) and `PortableBatteryBlock.getDrops`; capacityLevel 0 after placing an enchanted one: `setPlacedBy`
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 > zpwg7 fp 1100 -60 1527
 > zpwg7 holdbat 0
 > zpwg7 place 1100 -60 1530
@@ -2557,10 +2569,8 @@ sleep 4
 sleep 4
 > zpwg7 pbat 1100 -60 1530
 > zpwg7 pick 1100 -60 1530
-> zpwg7 hold minecraft:iron_pickaxe
-> zpwg7 dig 1100 -60 1530
-sleep 1
-> zpwg7 drops 1100 -60 1530 2
+> cdevtest break 1100 -60 1530 held=minecraft:iron_pickaxe keep
+> cdevtest entities 1100 -60 1530 3 type=minecraft:item nbt
 expect \[zpwg7\] place powergrid:portable_battery result=(SUCCESS|CONSUME) block=powergrid:portable_battery heldNow=\S+x0
 expect \[zpwg7\] pbat charge=0 capacityLevel=0 comparator=0
 expect \[zpwg7\] pbat charge=([4-9]\d{3}|1\d{4}) capacityLevel=0
@@ -2569,8 +2579,11 @@ expect \[zpwg7\] pbat terminals T0=
 expect \[zpwg7\] pbat charge=30000 capacityLevel=1
 expect \[zpwg7\] pbat charge=40000 capacityLevel=1 comparator=15
 expect \[zpwg7\] pick result=PASS block=powergrid:portable_battery
-expect \[zpwg7\] dig result=true after=minecraft:air
-expect \[zpwg7\] drop powergrid:portable_battery x1 Charge=20000 capacityLevel=0
+expect verb=break who=fake broken=true before="?powergrid:portable_battery\S* after=minecraft:air
+expect verb=break drops=powergrid:portable_battery:1 stacks=1
+expect verb=entities type=minecraft:item .*id:\\"powergrid:portable_battery\\",tag:\{.*Charge:20000[^0-9]
+reject verb=entities type=minecraft:item .*id:\\"powergrid:portable_battery\\".*Enchantments
+reject \[cdevtest\] verb=\S+ done=0
 reject \[zpwg7\] pbat none at
 reject \[zpwg\w*\] (error|unknown subcommand)
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
@@ -2624,10 +2637,11 @@ look B20 rerun (-10 failed: held=ae2:wireless_terminal fe 0/3200000 -> 0/3200000
 
 ## SQ-PWG-58 | PWG-35 drill (speed climb, mining flag via DrillBreakActionMixin, wear without power) and saw (tree felling when sneaking)
 @group A
-@commands PWG-35, Z 1550. `fill 1100 -60 1550 1106 -60 1550 minecraft:stone`; `setblock 1100 -60 1552 minecraft:obsidian`; `setblock 1101 -60 1552 minecraft:dirt`; `setblock 1102 -60 1552 minecraft:oak_planks`. Drill: `zpwg7 fp 1100 -60 1547`; `zpwg7 wear 20000`; `zpwg7 hold powergrid:portable_drill`; `zpwg7 dig 1100 -60 1550`, then 1101, 1102, 1103, 1104 (same Y and Z); `zpwg7 drops 1102 -60 1550 4`; `zpwg7 dig 1100 -60 1552`; `zpwg7 drops 1100 -60 1552 1`; `zpwg7 dig 1101 -60 1552`; `zpwg7 dig 1102 -60 1552`. Mining flag: `zpwg7 action 1105 -60 1550 start`, `zpwg7 action 1105 -60 1550 abort`, `zpwg7 action 1105 -60 1550 start`, `zpwg7 action 1105 -60 1550 stop`; `zpwg7 hold minecraft:stick`, `zpwg7 action 1105 -60 1550 start`. Empty battery: `zpwg7 hold powergrid:portable_drill`; `zpwg7 wear 0`; `zpwg7 dig 1105 -60 1550`; no battery: `zpwg7 fp 1100 -60 1547` (clears the chest), `zpwg7 hold powergrid:portable_drill`, `zpwg7 dig 1106 -60 1550`. Saw, Z 1555: `place feature minecraft:oak 1110 -60 1557` (1.19.2 `/place`; or a 5-high `minecraft:oak_log` column with `minecraft:oak_leaves` around its top); `zpwg7 fp 1110 -60 1553`; `zpwg7 wear 20000`; `zpwg7 hold powergrid:portable_saw`; `zpwg7 dig 1110 -60 1557`; `zpwg7 sneak on`; `zpwg7 dig 1110 -59 1557`; `zpwg7 drops 1110 -56 1557 6`; `setblock 1112 -60 1557 minecraft:stone`; `zpwg7 dig 1112 -60 1557`
+@commands PWG-35, Z 1550. `fill 1100 -60 1550 1106 -60 1550 minecraft:stone`; `setblock 1100 -60 1552 minecraft:obsidian`; `setblock 1101 -60 1552 minecraft:dirt`; `setblock 1102 -60 1552 minecraft:oak_planks`. Drill: `zpwg7 fp 1100 -60 1547`; `zpwg7 wear 20000`; `zpwg7 hold powergrid:portable_drill`; `zpwg7 dig 1100 -60 1550`, then 1101, 1102, 1103, 1104 (same Y and Z); `cdevtest items 1102 -60 1550 4`; `zpwg7 dig 1100 -60 1552`; `cdevtest items 1100 -60 1552 1`; `zpwg7 dig 1101 -60 1552`; `zpwg7 dig 1102 -60 1552`. Mining flag: `zpwg7 action 1105 -60 1550 start`, `zpwg7 action 1105 -60 1550 abort`, `zpwg7 action 1105 -60 1550 start`, `zpwg7 action 1105 -60 1550 stop`; `zpwg7 hold minecraft:stick`, `zpwg7 action 1105 -60 1550 start`. Empty battery: `zpwg7 hold powergrid:portable_drill`; `zpwg7 wear 0`; `zpwg7 dig 1105 -60 1550`; no battery: `zpwg7 fp 1100 -60 1547` (clears the chest), `zpwg7 hold powergrid:portable_drill`, `zpwg7 dig 1106 -60 1550`. Saw, Z 1555: `place feature minecraft:oak 1110 -60 1557` (1.19.2 `/place`; or a 5-high `minecraft:oak_log` column with `minecraft:oak_leaves` around its top); `zpwg7 fp 1110 -60 1553`; `zpwg7 wear 20000`; `zpwg7 hold powergrid:portable_saw`; `zpwg7 dig 1110 -60 1557`; `zpwg7 sneak on`; `zpwg7 dig 1110 -59 1557`; `cdevtest items 1110 -56 1557 6`; `setblock 1112 -60 1557 minecraft:stone`; `zpwg7 dig 1112 -60 1557`
 @pass drill on stone: first `digSpeed=6` (base), `correctTool=true`, the block breaks (`after=minecraft:air`), `charge` falls by 25 per block, `dur 250/250` unchanged; `digSpeedNow` and the next dig's `digSpeed` climb 8.5, 11, 13.5, 16 (`speedMult` 0.25, 0.5, 0.75, 1; top speed 16 = `drillMineSpeedBulk`) and stay at 16; `drops`: cobblestone; obsidian breaks and drops obsidian (diamond level); dirt `itemSpeed=6` (shovel blocks too), planks `itemSpeed=1` and `correctTool=false`; mining flag: `mining=true` after start, `false` after abort, `true` after start, `false` after stop (`DrillBreakActionMixin`), unchanged by the stick; empty battery: `charge 0`, `dur 249/250` (wear only without power) and `speedMult=0` after the dig (no power, no speed-up); no battery: `dur` falls by 1 too; saw: the log breaks with `itemSpeed=6`, `charge` -100; not sneaking only that log goes; sneaking: the rest of the tree falls (`drops` shows several `minecraft:oak_log` and the leaves' drops; no log left in the column), `charge` -100 more; stone `itemSpeed=1`; no ERROR
 @fails `digSpeed` divided by 5: the fake player is not on ground (`fp` sets it; re-run `fp`); speed never climbs: `PlayerDrillMixin.powerGrid$blockDrilled` / `getDigSpeed` inject; obsidian not dropping: `isCorrectToolForDrops` (Forge `DiggerItem` checks the tier, `Tiers.DIAMOND`); flag never changes: `DrillBreakActionMixin` (target `handleBlockBreakAction`); no felling: `TreeCutter.findTree` (Create 0.5.1 `foundation.utility.TreeCutter`) or power below 0.3
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 > fill 1100 -60 1550 1106 -60 1550 minecraft:stone
 > setblock 1100 -60 1552 minecraft:obsidian
 > setblock 1101 -60 1552 minecraft:dirt
@@ -2640,9 +2654,9 @@ look B20 rerun (-10 failed: held=ae2:wireless_terminal fe 0/3200000 -> 0/3200000
 > zpwg7 dig 1102 -60 1550
 > zpwg7 dig 1103 -60 1550
 > zpwg7 dig 1104 -60 1550
-> zpwg7 drops 1102 -60 1550 4
+> cdevtest items 1102 -60 1550 4
 > zpwg7 dig 1100 -60 1552
-> zpwg7 drops 1100 -60 1552 1
+> cdevtest items 1100 -60 1552 1
 > zpwg7 dig 1101 -60 1552
 > zpwg7 dig 1102 -60 1552
 > zpwg7 action 1105 -60 1550 start
@@ -2666,7 +2680,7 @@ sleep 1
 > zpwg7 sneak on
 > zpwg7 dig 1110 -59 1557
 sleep 1
-> zpwg7 drops 1110 -56 1557 6
+> cdevtest items 1110 -56 1557 6
 > setblock 1112 -60 1557 minecraft:stone
 > zpwg7 dig 1112 -60 1557
 sleep 1
@@ -2677,9 +2691,9 @@ expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=13\.
 expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=16
 expect \[zpwg7\] dig result=true after=minecraft:air charge=19975/20000 dur=250/250
 expect \[zpwg7\] dig result=true after=minecraft:air charge=19875/20000 dur=250/250 .*speedMult=1 digSpeedNow=16
-expect \[zpwg7\] drop minecraft:cobblestone x
+expect verb=items items=\S*minecraft:cobblestone:[1-9]
 expect \[zpwg7\] dig minecraft:obsidian with powergrid:portable_drill .*correctTool=true
-expect \[zpwg7\] drop minecraft:obsidian x1
+expect verb=items items=minecraft:obsidian:1 
 expect \[zpwg7\] dig minecraft:dirt with powergrid:portable_drill .*itemSpeed=6
 expect \[zpwg7\] dig minecraft:oak_planks with powergrid:portable_drill .*itemSpeed=1 correctTool=false
 expect \[zpwg7\] action START_DESTROY_BLOCK held=powergrid:portable_drill mining=true
@@ -2690,11 +2704,12 @@ expect \[zpwg7\] dig result=true after=minecraft:air charge=0/20000 dur=249/250 
 expect \[zpwg7\] dig result=true after=minecraft:air charge=none dur=249/250
 reject Failed to place feature|Unable to place feature
 expect \[zpwg7\] dig minecraft:oak_log with powergrid:portable_saw .*itemSpeed=6
-expect \[zpwg7\] drop minecraft:oak_log x
+expect verb=items items=\S*minecraft:oak_log:[1-9]
+reject \[cdevtest\] verb=\S+ done=0
 expect \[zpwg7\] dig minecraft:stone with powergrid:portable_saw .*itemSpeed=1
 reject \[zpwg7\] (error|unknown subcommand)
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
-look digSpeed / digSpeedNow climb 6, 8.5, 11, 13.5, 16 and stay 16; charge -25 per drill block (dirt, planks, obsidian too?); saw: first log -100, not sneaking only that log goes; sneaking: whole tree falls (several oak_log drops, leaf drops), -100 more; a /5 digSpeed means the fake player is not on ground
+look digSpeed / digSpeedNow climb 6, 8.5, 11, 13.5, 16 and stay 16; charge -25 per drill block (dirt, planks, obsidian too?); saw: first log -100, not sneaking only that log goes; sneaking: whole tree falls (the last items line: oak_log count over 1, leaf drops), -100 more; a /5 digSpeed means the fake player is not on ground
 
 # from r1113/pwg10b.qb
 
@@ -2934,10 +2949,11 @@ look shell output 1: mixin lines name no failure; shell output 2: no CC error or
 
 ## SQ-PWG-63 | rerun with the p8 direct use (fake-player clicks no longer go through Create's value box handler): PWG-38 modular display: insert, flip coils, module type, dye and wrench on the slot, value box, removal, burnout, drops
 @group A
-@commands PWG-38 (modular display), Z 1600. `zpwg3 place 1100 -60 1600 powergrid:modular_display facing=north`; `zpwg8 fp 1100 -60 1598`; `zpwg8 hold powergrid:display_module 4`; `zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0` (slot 0); `zpwg8 use 1100 -60 1600 north 0.75 0.75 0.0` (slot 1); `zpwg8 md 1100 -60 1600`. Coils (slot 0: positive T0, reset T1, case common T8): `zpwg3 src 1100 -60 1603 0`; `zpwg3 w 1100 -60 1603 0 1100 -60 1600 0`; `zpwg3 w 1100 -60 1603 1 1100 -60 1600 8`; then three pulses: `zpwg3 src 1100 -60 1603 20`, wait 10 ticks, `zpwg8 md 1100 -60 1600`, `zpwg3 src 1100 -60 1603 0`, wait 10, `md`. Type, dye, wrench: `zpwg8 mdtype 1100 -60 1600 0 5`; `zpwg8 hold minecraft:red_dye`; `zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0`; `zpwg8 hold create:wrench`; `zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0`; `md`. Value box (empty hand on the slot centre, not sneaking): `zpwg8 hold minecraft:air`; `zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0`; `md`. Removal: `zpwg8 sneak on`; `zpwg8 use 1100 -60 1600 north 0.75 0.75 0.0`; `md`; `zpwg8 sneak off`. Burnout, Z 1606: `zpwg3 place 1100 -60 1606 powergrid:modular_display facing=north`; `zpwg8 fp 1100 -60 1604`; `zpwg8 hold powergrid:display_module 1`; `zpwg8 use 1100 -60 1606 north 0.25 0.75 0.0`; `zpwg3 src 1100 -60 1609 0`, wired T0 and T8 as above; `zpwg3 src 1100 -60 1609 40`; `md 1100 -60 1606` after 2, 10 and 40 ticks; `zpwg8 drops 1100 -60 1606 3`. Drops: `setblock 1100 -60 1600 minecraft:air destroy`; `zpwg8 drops 1100 -60 1600 2`
+@commands PWG-38 (modular display), Z 1600. `zpwg3 place 1100 -60 1600 powergrid:modular_display facing=north`; `zpwg8 fp 1100 -60 1598`; `zpwg8 hold powergrid:display_module 4`; `zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0` (slot 0); `zpwg8 use 1100 -60 1600 north 0.75 0.75 0.0` (slot 1); `zpwg8 md 1100 -60 1600`. Coils (slot 0: positive T0, reset T1, case common T8): `zpwg3 src 1100 -60 1603 0`; `zpwg3 w 1100 -60 1603 0 1100 -60 1600 0`; `zpwg3 w 1100 -60 1603 1 1100 -60 1600 8`; then three pulses: `zpwg3 src 1100 -60 1603 20`, wait 10 ticks, `zpwg8 md 1100 -60 1600`, `zpwg3 src 1100 -60 1603 0`, wait 10, `md`. Type, dye, wrench: `zpwg8 mdtype 1100 -60 1600 0 5`; `zpwg8 hold minecraft:red_dye`; `zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0`; `zpwg8 hold create:wrench`; `zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0`; `md`. Value box (empty hand on the slot centre, not sneaking): `zpwg8 hold minecraft:air`; `zpwg8 use 1100 -60 1600 north 0.25 0.75 0.0`; `md`. Removal: `zpwg8 sneak on`; `zpwg8 use 1100 -60 1600 north 0.75 0.75 0.0`; `md`; `zpwg8 sneak off`. Burnout, Z 1606: `zpwg3 place 1100 -60 1606 powergrid:modular_display facing=north`; `zpwg8 fp 1100 -60 1604`; `zpwg8 hold powergrid:display_module 1`; `zpwg8 use 1100 -60 1606 north 0.25 0.75 0.0`; `zpwg3 src 1100 -60 1609 0`, wired T0 and T8 as above; `zpwg3 src 1100 -60 1609 40`; `md 1100 -60 1606` after 2, 10 and 40 ticks; `cdevtest items 1100 -60 1606 3`. Drops: `setblock 1100 -60 1600 minecraft:air destroy`; `cdevtest items 1100 -60 1600 2`
 @pass insert: both `use` lines `result=SUCCESS` or `CONSUME`, `held after` 3 then 2, `md slot 0 module=zerotonine:0:false:white`, slot 1 the same, slots 2 and 3 `empty`; pulses: after each 20 V step `index` +1 with `halfClick=true` (`zerotonine:1:true:white`), after each 0 V step `halfClick=false`, ending at `zerotonine:3:false:white` (20 V over the 25 ohm coil = 0.8 A, above 0.5 A; 16 W, under 25 W); `mdtype`: slot 0 `alphabet:0:false:white:0` (colour kept); dye: slot 0 `alphabet:0:false:red:0` (the click reached the block: no value box cancel; port change, PORT_NOTES.md section 19), `held after=minecraft:red_dyex1` (not consumed, upstream-same); wrench: `blankingRemoved=1`; value box: nothing changes (Create's handler takes the click on the slot centre; on a client it opens the module type board; record `result`); removal: slot 1 `empty`, `held after=powergrid:display_modulex1`; burnout: 40 V gives 1.6 A, 64 W: `temp` rises past 125 within 10 ticks, then slot 0 `empty` and `temp=22` (module burnt; no drop: `drops 0`, upstream-same); drops of the first display: `drop powergrid:modular_display x1` and `drop powergrid:display_module x1` (slot 0 left; slot 1 removed); no ERROR
 @fails no insert: `ModularDisplayBlock.use` (face and slot from the hit point); index never moves: `ModularDisplayBlockEntity.electricalTick` (coil switch states `defaultSlotWires`), wiring to T8; dye or wrench do nothing: `CustomValueBoxTransformer.testHit` and `ForgeEvents.recordInteractingItem` (the server side needs the recorded item; Create's `ValueSettingsInputHandler` at NORMAL priority); never burns: `ThermalBehaviour.shouldOverheat` (`overheating` config), `DisplaySlotThermal.tick`
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
 > zpwg3 place 1300 -60 1600 powergrid:modular_display facing=north
 > zpwg8 fp 1300 -60 1598
@@ -2982,10 +2998,10 @@ sleep 0.3
 > zpwg8 md 1300 -60 1606
 sleep 1.4
 > zpwg8 md 1300 -60 1606
-> zpwg8 drops 1300 -60 1606 3
+> cdevtest items 1300 -60 1606 3
 > setblock 1300 -60 1600 minecraft:air destroy
 sleep 1
-> zpwg8 drops 1300 -60 1600 2
+> cdevtest items 1300 -60 1600 2
 expect \[zpwg8\] use direct BlockState\.use
 expect \[zpwg8\] use hit loc=0\.25,0\.75,0 dir=north pos=1300, -60, 1600$
 expect \[zpwg8\] use powergrid:display_modulex4 on powergrid:modular_display face=north at 0\.25,0\.75,0 .*result=(SUCCESS|CONSUME) .*held after=powergrid:display_modulex3$
@@ -3006,9 +3022,9 @@ expect \[zpwg8\] md slot 0 module=alphabet:0:false:red:0 blankingRemoved=1\b
 expect \[zpwg8\] use \S+x0 on powergrid:modular_display face=north at 0\.75,0\.75,0 sneaking=true .*held after=powergrid:display_modulex1$
 expect \[zpwg8\] md slot 1 module=empty\b
 expect \[zpwg8\] md slot 0 module=empty blankingRemoved=\S+ temp=22\b
-expect \[zpwg8\] drops 0$
-expect \[zpwg8\] drop powergrid:modular_display x1
-expect \[zpwg8\] drop powergrid:display_module x1
+expect verb=items items=- stacks=0
+expect verb=items items=\S*powergrid:display_module:1\S*powergrid:modular_display:1\b
+reject \[cdevtest\] verb=\S+ done=0
 reject \[zpwg8\] md: no modular display
 reject An unexpected error occurred trying to execute that command
 reject \[zpwg\w*\] (error|unknown subcommand)
@@ -3021,6 +3037,7 @@ look modules in slots 0 and 1 (not 3) now that the display's use gets the probe'
 @pass electron gun (current gauge value, the anode current): heater 12 V (1 A), grid 0: about 0.1 A (1000 V / (10 x 0.01 x 1) = 10 kohm); grid -5 V: about 0.05 A; grid -10 V: about 0 (cut off); grid 0, heater 8 V (0.67 A, below the 0.8 A minimum): about 0; heater 13 V (1.08 A): about 0.117 A; `crt terminals` T1 - T0 = the heater voltage, T3 - T0 about 1000 minus the gauge drop; encasing: block after `powergrid:andesite_encased_crt[facing=north]`; dye: `color=5` (lime) on the encased CRT; sneak wrench: back to `powergrid:crt[facing=north]` (record whether the casing comes back: upstream sets the block only); brass casing: `powergrid:brass_encased_crt` with `color=14` (red: every case change replaces the block entity, so the colour resets; upstream-same; the sneak-wrench step also reads `color=14`); no ERROR
 @fails current never flows: `CRTBlockEntity.electricalTick` / `tick` (anode-cathode resistance from the grid and heater current), terminal order (`CRTBlock.TERMINALS`: cathode 0, heater 1, grid 2, anode 3, X coil 4, Y coil 5, coil common 6); no encasing: `CRTBlock.use` -> `tryEncase`, `EncasingRegistry.addVariantTo(CRT)` in `ModdedBlocks`
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 > zpwg3 place 1300 -60 1615 powergrid:crt facing=north
 > zpwg3 src 1303 -60 1615 12
 > zpwg3 w 1303 -60 1615 0 1300 -60 1615 1
@@ -3070,7 +3087,7 @@ sleep 2
 > zpwg8 use 1306 -60 1625 up 0.5 0.6875 0.5
 > zpwg8 crt 1306 -60 1625
 sleep 1
-> zpwg8 drops 1306 -60 1625 2
+> cdevtest items 1306 -60 1625 2
 count \[zpwg8\] crt terminals T0= >= 5
 count \[zpwg3\] gauge -?\d == 5
 expect \[zpwg8\] use create:andesite_casingx1 on powergrid:andesite_encased_crt
@@ -3078,6 +3095,7 @@ expect \[zpwg8\] crt block=Block\{powergrid:andesite_encased_crt\}\[.*facing=nor
 expect \[zpwg8\] crt block=Block\{powergrid:crt\}\[.*facing=north.*\] color=14$
 expect \[zpwg8\] crt block=Block\{powergrid:brass_encased_crt\}\[.*facing=north.*\] color=14$
 reject \[zpwg8\] crt: none at
+reject \[cdevtest\] verb=\S+ done=0
 reject \[zpwg\w*\] (error|unknown subcommand)
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
 look the five [zpwg3] gauge values in order (anode current): about 0.1 (grid 0, heater 12 V), about 0.05 (grid -5), about 0 (grid -10), about 0 (grid 0, heater 8 V), about 0.117 (heater 13 V); crt terminals T1 - T0 = the heater voltage, T3 - T0 about 1000 minus the gauge drop; sneak wrench: does the casing come back (drops line or the fake player's hand; upstream sets the block only: record); the colour resets to red (14) on every case change: the block entity is replaced, upstream-same
@@ -3090,6 +3108,7 @@ look the five [zpwg3] gauge values in order (anode current): about 0.1 (grid 0, 
 @pass plotter: `speed=64` (or -64) `fulfilled=true`, `range=1`, `buffer=80` (128 / 64 x 40), `head` moves between calls; samples about 0.5 at +10 V, about -0.5 at -10 V, 1 at 30 V (clamped to the 20 V range); 32 RPM: `buffer=160`; 8 RPM: `fulfilled=false` and `head` unchanged between the two calls (no recording under 16 RPM); dye: `color=14`; reader: before the card `card=none redstone=0`; after `card` (from the top, `ok=true`) `angle=0`, then rising about 1 per 16 ticks at 16 RPM (if it stays 0, the motor sign is wrong for this facing: set +16 and repeat; record), `comparator` and `redstone` = floor(angle), `reader terminals` T1 near T0 (bit 1 closed) on even columns and not on odd ones, `bell volume=` about 0.95 (`volume=0\.9\d+`) `pitch=0.75` on even columns (about 0.476 A through 20 ohm: the reader's closed switch drops about 0.48 V; volume = 2 x current) and `volume=0` on odd ones; after 300 ticks `angle=16`, `redstone=15`; `extract` returns the card with `data=0100...`; side insert: `angle=16` at once and falling (reading backwards), column 15 (0x80: bit 8, T8 near T0) first and column 0 (0xff: every bit) last; `reader class=PunchCardReaderBlockEntityImpl` (forge substitute); hopper: the card goes in from above (`card=powergrid:punch_card`, `angle=0`); B15: `drop powergrid:punch_card_reader x1` and `drop powergrid:punch_card x1 data=01000100...` (port fix: upstream lost the card); no ERROR
 @fails plotter `fulfilled=false` at 64 RPM: the shaft does not reach it (`PlotterBlock.hasShaftTowards`, axis X for facing north); samples stay 0: wiring, `plotterRecordNonconvergence` and `wire.isConverged`; reader angle never moves: `PunchCardReaderBlockEntity.tick` (`getChaseSpeed`), the card (`currentItem` of the forge impl); bit wrong: `electricalTick` (byte per column, bit i to terminal i + 1); card lost on break: `PunchCardReaderBlock.onRemove` order (B15)
 @from batches/r1113pwg/pwgr1.qb
+@reviewed 2026-11-16
 > zpwg3 place 1298 -60 1630 create:creative_motor facing=east
 > zpwg3 place 1299 -60 1630 create:shaft axis=x
 > zpwg3 place 1300 -60 1630 powergrid:plotter facing=north
@@ -3152,7 +3171,7 @@ sleep 1
 > setblock 1300 -59 1645 minecraft:air
 > setblock 1300 -60 1645 minecraft:air destroy
 sleep 1
-> zpwg8 drops 1300 -60 1645 2
+> cdevtest entities 1300 -60 1645 2 type=minecraft:item nbt
 expect \[zpwg8\] plot speed=-?64 fulfilled=true range=1 buffer=80
 expect \[zpwg8\] plot speed=-?32 fulfilled=true range=1 buffer=160
 expect \[zpwg8\] plot speed=-?8 fulfilled=false
@@ -3167,8 +3186,9 @@ expect \[zpwg8\] extract powergrid:punch_card data=01000100010001000100010001000
 expect \[zpwg8\] card insert from north ok=true$
 expect \[zpwg8\] reader class=\S+ card=powergrid:punch_card data=ff000000000000000000000000000080
 expect \[zpwg8\] extract powergrid:punch_card data=ff000000000000000000000000000080$
-expect \[zpwg8\] drop powergrid:punch_card_reader x1
-expect \[zpwg8\] drop powergrid:punch_card x1 data=01000100010001000100010001000100$
+expect verb=entities type=minecraft:item .*Count:1b,id:\\"powergrid:punch_card_reader\\"
+expect verb=entities type=minecraft:item .*Count:1b,id:\\"powergrid:punch_card\\",tag:\{Data:\[B;1B,0B,1B,0B,1B,0B,1B,0B,1B,0B,1B,0B,1B,0B,1B,0B\]
+reject \[cdevtest\] verb=\S+ done=0
 reject \[zpwg8\] (plot: no plotter|reader: none|card: no reader|extract: no reader|bell: none)
 reject \[zpwg8\] card insert from \S+ ok=false
 reject \[zpwg\w*\] (error|unknown subcommand)
@@ -4120,7 +4140,7 @@ sleep 4
 > zpwg9c pick 1170 -60 1862
 > zpwg9c pit 1176 -60 1880
 sleep 12
-shell grep -c -E '\[zpwg9c\] hurt \S*villager source=acid' logs/latest.log
+shell grep -c -E '\[zpwg9c\] hurt \S*villager source=acid' logs/latest.log; true
 shell grep -n -E '\[zpwg9c\] death|[Vv]illager.*died' logs/latest.log | tail -5
 > kill @e[type=!minecraft:player,x=1170,y=-62,z=1874,dx=12,dy=6,dz=12]
 sleep 1

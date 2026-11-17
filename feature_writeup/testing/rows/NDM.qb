@@ -33,7 +33,9 @@ look rows/SQ-NDM-01.shell.txt: version 1.19-3.1-ce-19.2-01 and the mixin config 
 @commands `/setblock ~ ~ ~ minecraft:flower_pot`; bot uses `nethersdelight:mimicarnation` on it; check block state; bot uses empty hand on it; plant it again, then break it
 @pass pot becomes `nethersdelight:potted_mimicarnation`; empty hand gives the Mimicarnation back and leaves `minecraft:flower_pot`; breaking drops a Flower Pot and a Mimicarnation
 @fails no block: the `RegisterEvent` subscriber did not run; planting refused: `addPlant` missing (common setup)
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb passed
+> forceload add 250 495 300 510
 > setblock 256 -60 500 minecraft:flower_pot
 > pbot spawn ndm2 256 -60 503 minecraft:overworld survival
 > pbot hold ndm2 nethersdelight:mimicarnation
@@ -45,12 +47,14 @@ look rows/SQ-NDM-01.shell.txt: version 1.19-3.1-ce-19.2-01 and the mixin config 
 > clear ndm2 nethersdelight:mimicarnation 0
 > pbot hold ndm2 nethersdelight:mimicarnation
 > pbot use ndm2 256 -60 500 up
-> zact break 256 -60 500 none
+> cdevtest break 256 -60 500
 expect NDM02 potted
 expect NDM02 empty pot back
 expect Found 1 matching item
-expect \[zact\] break 256 -60 500 nethersdelight:potted_mimicarnation held none: true, .*minecraft:flower_pot x1
-expect \[zact\] break 256 -60 500 nethersdelight:potted_mimicarnation held none: true, .*nethersdelight:mimicarnation x1
+expect verb=break .*broken=true before="?nethersdelight:potted_mimicarnation
+expect verb=break drops=\S*minecraft:flower_pot:1\b
+expect verb=break drops=\S*nethersdelight:mimicarnation:1\b
+reject \[cdevtest\] .*done=0
 > pbot remove ndm2
 
 ## SQ-NDM-03 | potted mimicarnation and meal_item tags
@@ -58,28 +62,33 @@ expect \[zact\] break 256 -60 500 nethersdelight:potted_mimicarnation held none:
 @commands `/dumptags` block `minecraft:flower_pots`, item `nethersdelight:meal_item`
 @pass flower_pots holds `nethersdelight:potted_mimicarnation`; meal_item holds `farmersdelight:stuffed_potato`
 @fails CD `nethersdelight/tags.js` not in the jar, or `global.CD.on('nethersdelight')` false
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb passed
-> zq blocktag minecraft:flower_pots
-> zq itemtag nethersdelight:meal_item
-expect blocktag minecraft:flower_pots \(\d+\): .*nethersdelight:potted_mimicarnation
-expect itemtag nethersdelight:meal_item \(\d+\): .*farmersdelight:stuffed_potato
+> cdevtest tag block minecraft:flower_pots
+> cdevtest tag item nethersdelight:meal_item
+expect verb=tag kind=block tag=minecraft:flower_pots .*nethersdelight:potted_mimicarnation(,|$)
+expect verb=tag kind=item tag=nethersdelight:meal_item .*farmersdelight:stuffed_potato(,|$)
+reject \[cdevtest\] .*done=0
 
 ## SQ-NDM-04 | Stuffed Hoglin and netherite machete ids; the pot cooks it (pot at 295)
 @group A
 @commands Recipe lookup by id: `farmersdelight:cooking/stuffed_hoglin`, `minecraft:netherite_machete_smithing`, `nethersdelight:cooking/stuffed_hoglin`, `nethersdelight:netherite_machete_smithing`; bot cooks Stuffed Hoglin in a heated Cooking Pot (2 Nether Salad, Raw Stuffed Hoglin)
 @pass the first two exist (Cooking Pot; smithing table: Diamond Machete + Netherite Ingot), the old two do not; the pot gives Stuffed Hoglin
 @fails old ids present: `replaced_resources` not applied
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
-> zq rdetail stuffed_hoglin
-> zq rdetail netherite_machete_smithing
-expect \[zq\] farmersdelight:cooking/stuffed_hoglin \{
-expect \[zq\] minecraft:netherite_machete_smithing \{
-reject \[zq\] nethersdelight:cooking/stuffed_hoglin \{
-reject \[zq\] nethersdelight:netherite_machete_smithing \{
+> cdevtest rdetail stuffed_hoglin
+> cdevtest rdetail netherite_machete_smithing
+expect verb=rdetail id=farmersdelight:cooking/stuffed_hoglin serializer=
+expect verb=rdetail id=minecraft:netherite_machete_smithing serializer=
+reject verb=rdetail id=nethersdelight:cooking/stuffed_hoglin serializer=
+reject verb=rdetail id=nethersdelight:netherite_machete_smithing serializer=
+reject \[cdevtest\] .*done=0
 > setblock 295 -60 500 minecraft:campfire[lit=true]
 > setblock 295 -59 500 farmersdelight:cooking_pot
 > data merge block 295 -59 500 {Inventory:{Items:[{Slot:0b,id:"farmersdelight:nether_salad",Count:1b},{Slot:1b,id:"farmersdelight:nether_salad",Count:1b},{Slot:2b,id:"nethersdelight:raw_stuffed_hoglin",Count:1b}]}}
-sleep 25
+> cdevtest tickwarp 500
+waitlog verb=tickwarp end= 60
 > data get block 295 -59 500 Inventory
 expect Slot: [68]b?, id: "nethersdelight:stuffed_hoglin"
 look rdetail: the pot recipe's inputs and the smithing table Diamond Machete + Netherite Ingot
@@ -121,27 +130,29 @@ look the broken open-sky colony dropped its item (an item entity at 262 -59 500)
 @commands 50 colonies at age 0 on rich soul soil, `/gamerule randomTickSpeed 30`, wait 1200 ticks; `grep -i "fungus\|colony\|CropGrow" logs/latest.log`
 @pass colonies reach age 3; no errors; Calendar's crop-grow hook still runs (season type nether, no penalty)
 @fails growth stuck: Calendar event refused, check CropSeasons type for the colonies
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
 > fill 280 -61 500 289 -61 504 nethersdelight:rich_soul_soil
 > fill 280 -60 500 289 -60 504 nethersdelight:crimson_fungus_colony[age=0]
 > pbot spawn ndm6 285 -60 507 minecraft:overworld survival
-> gamerule randomTickSpeed 30
-sleep 60
-> zq ages 280 -60 500 289 -60 504 nethersdelight:crimson_fungus_colony
-> gamerule randomTickSpeed 3
+> cdevtest randomtick 280 -60 500 289 -60 504 9
+> cdevtest ages 280 -60 500 289 -60 504 nethersdelight:crimson_fungus_colony
 > pbot remove ndm6
-expect ages nethersdelight:crimson_fungus_colony: 50 blocks, mean [1-3]\.
+expect verb=ages block=nethersdelight:crimson_fungus_colony prop=age n=50 mean=[1-3]\.
+reject \[cdevtest\] .*done=0
 reject (?i)(fungus|colony|CropGrow).*(error|exception)
-look the histogram reaches age 3 (season type nether: no growth penalty)
+look the histogram reaches age 3 (season type nether: no growth penalty; 9 random ticks per block = the old 1200 ticks at randomTickSpeed 30)
 
 ## SQ-NDM-07 | Hoglin Mount takes wool or hemp fabric
 @group A
 @commands Recipe `nethersdelight:hoglin_mount` inputs
 @pass accepts White Wool or Hemp Fabric (fabric.js through `i.hoglin_mount`)
 @fails dict key missing
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
-> zq rdetail hoglin_mount
-expect \[zq\] nethersdelight:\S*hoglin_mount\S* \{
+> cdevtest rdetail hoglin_mount
+expect verb=rdetail id=nethersdelight:\S*hoglin_mount\S* serializer=
+reject \[cdevtest\] .*done=0
 look one ingredient slot lists minecraft:white_wool and the hemp fabric (i.hoglin_mount)
 
 ## SQ-NDM-08
@@ -149,4 +160,4 @@ look one ingredient slot lists minecraft:white_wool and the hemp fabric (i.hogli
 @commands Load a world saved with the 3.1 jar that has a placed Hoglin Mount, a Blackstone Stove with items, a Fungus Colony on rich soul soil, an empty flower pot
 @pass all blocks still there with the same ids, the stove keeps its items, no missing-registry warning for `nethersdelight:`
 @fails id changed or save format changed: compare against 3.1
-@draft no batch holds this row yet
+@draft needs a world saved with the old Nether's Delight 3.1 jar (Hoglin Mount, Blackstone Stove with items, colony on rich soul soil, empty pot) as the boot's level: no such save exists in the scratch kit; once one exists the reads are cdevtest state / be at its known positions

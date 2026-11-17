@@ -15,4 +15,7 @@
 @commands launch; `grep -n "cycleSeconds" config/creativecommon-client.toml config/creativecommon-common.toml`; load a world and time the tips
 @pass client file has `cycleSeconds = 10`, the common file has none; a new tip about every 10 s
 @fails `registerConfig` CLIENT line, `LoadingTipBar` reading `CommonClientConfig`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -n "cycleSeconds" config/creativecommon-client.toml config/creativecommon-common.toml; true
+shell grep -qE "^\s*cycleSeconds = 10" config/creativecommon-client.toml && ! grep -q "cycleSeconds" config/creativecommon-common.toml
+look a new loading tip about every 10 s while the world loads (seen at launch, before the driver serves: by the person who launched it)

@@ -32,53 +32,59 @@ shell grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | 
 ## SQ-CBB-02 | NCH remove guard probe
 @group A (chain)
 @commands copy `tools/scratch_query/nch_guard_probe.js` to `srv/kubejs/server_scripts/zz_nch_guard_probe.js` before the boot; `kjsexpect \[nchguard\] normal remove of minecraft:bread done`; `shell grep -c "remove refused" logs/kubejs/server.log logs/kubejs/startup.log`
-@pass 4 `remove refused` lines from the probe (paths `filter.output`, `filter.input`, `filter.not[0].id`, `filter`), every case logs `case done`; `> zq recipes minecraft:bread` lists no `minecraft:bread` id
+@pass 4 `remove refused` lines from the probe (paths `filter.output`, `filter.input`, `filter.not[0].id`, `filter`), every case logs `case done`; `> cdevtest recipes minecraft:bread` lists no `minecraft:bread` id
 @fails `NCH.remove` / `_undefinedIn` in neoCraftHelper.js; a Java Ingredient walked as an object (prototype check)
 @from batches/r1106cbb/c1.qb passed
+@reviewed 2026-11-16
 kjsexpect \[nchguard\] normal remove of minecraft:bread done
 shell grep -h "\[nchguard\] case done" logs/kubejs/server.log | sed 's/.*\] //'
 shell test "$(grep -h "\[nchguard\] case done" logs/kubejs/server.log | wc -l)" = 4
 shell grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | sed 's/.*remove refused/remove refused/'
 shell test "$(grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | wc -l)" = 4
-> zq recipes minecraft:bread
+> cdevtest recipes minecraft:bread
 sleep 2
-reject \[zq\] minecraft:bread ->
+reject verb=recipes id=minecraft:bread result=
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBB-03 | fermenting count, Pale Jane and Steel Toe, bark and metal dust tags in Common
 @group A (chain)
-@commands `> zq bytype brewinandchewin:fermenting`; `> zq recipes creativebrewing:fermenting/pale_jane`; `> zq recipes creativebrewing:fermenting/steel_toe`; `> zq itemtag immersive_weathering:bark`; `> zq itemtag creativeengineering:bark`; `> zq itemtag creativeengineering:metal_dusts`; `bootreject Couldn't load tag\|missing references`
+@commands `> cdevtest bytype brewinandchewin:fermenting`; `> cdevtest recipes creativebrewing:fermenting/pale_jane`; `> cdevtest recipes creativebrewing:fermenting/steel_toe`; `> cdevtest tag item immersive_weathering:bark`; `> cdevtest tag item creativeengineering:bark`; `> cdevtest tag item creativeengineering:metal_dusts`; `bootreject Couldn't load tag\|missing references`
 @pass fermenting 18 or more (21 minus kombucha, kippers until CBB-05 is settled, and steel toe stout while `metal_dusts` has no chain member); `pale_jane_from_rice_wine` listed; `immersive_weathering:bark` empty and `creativeengineering:bark` holds `farmersdelight:tree_bark`; `metal_dusts` exists (0 members on the chain unless the owner added one)
 @fails the tag move into Common (sweep list in the run doc section 2)
 @from batches/r1106cbb/c1.qb passed
-> zq bytype brewinandchewin:fermenting
-> zq recipes creativebrewing:fermenting/pale_jane
-> zq recipes creativebrewing:fermenting/steel_toe
-> zq itemtag immersive_weathering:bark
-> zq itemtag creativeengineering:bark
-> zq itemtag creativeengineering:metal_dusts
+@reviewed 2026-11-16
+> cdevtest bytype brewinandchewin:fermenting
+> cdevtest recipes creativebrewing:fermenting/pale_jane
+> cdevtest recipes creativebrewing:fermenting/steel_toe
+> cdevtest tag item immersive_weathering:bark
+> cdevtest tag item creativeengineering:bark
+> cdevtest tag item creativeengineering:metal_dusts
 sleep 3
-expect bytype brewinandchewin:fermenting: (1[89]|[2-9]\d)$
+expect verb=bytype serializer=brewinandchewin:fermenting n=(1[89]|[2-9]\d)$
 expect pale_jane_from_rice_wine
 expect farmersdelight:tree_bark
 bootreject Couldn't load tag|missing references
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBB-04
 @group A (chain)
 @commands the SQ-CBA-01 to -08 and -10 checks again (batch `r1106cba/b1.qb` minus -09)
 @pass all PASS; SQ-CBA-02 judged on creativebrewing frames only
 @fails as SQ-CBA
-@draft no batch holds this row yet
+@draft a rerun of other rows: run SQ-CBA-01 to -08 and -10 (CBA.qb, `--rows`) on this chain boot instead of copying their steps here
 ## SQ-CBB-05 | kippers and forge:raw_fishes on the chain
 @group A (chain)
-@commands `> zq rdetail brewinandchewin:fermenting/kippers`; `> zq itemtag forge:raw_fishes`; `> zq recipes brewinandchewin:fermenting/kippers`
+@commands `> cdevtest rdetail brewinandchewin:fermenting/kippers`; `> cdevtest tag item forge:raw_fishes`; `> cdevtest recipes brewinandchewin:fermenting/kippers`
 @pass kippers listed; record whether `#forge:raw_fishes` holds `miners_delight:tentacles` and the ingredient list (4th ingredient `[]`)
 @fails kippers gone and tentacles not in the tag: the empty `[]` ingredient matches KubeJS's `{input: X}` filter, so CD `miners_delight/recipes.js` must not remove by input (TODO open-issues list, run doc section 2)
 @from batches/r1106cbb/c1.qb
-> zq rdetail brewinandchewin:fermenting/kippers
-> zq itemtag forge:raw_fishes
-> zq recipes brewinandchewin:fermenting/kippers
+@reviewed 2026-11-16
+> cdevtest rdetail brewinandchewin:fermenting/kippers
+> cdevtest tag item forge:raw_fishes
+> cdevtest recipes brewinandchewin:fermenting/kippers
 sleep 3
 look record whether kippers is listed, whether #forge:raw_fishes holds miners_delight:tentacles, and the ingredient list
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBB-06 | cooking boot: SQ-CBA-01 to -03 checks
 @group A (cooking)
@@ -109,17 +115,19 @@ shell n=$(grep -oE "\[wandering trades\] winemaker [0-9]+" logs/kubejs/server.lo
 
 ## SQ-CBB-08 | cooking: removed count, NCH failures, fermenting count
 @group A (cooking)
-@commands `shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log`; `shell grep -c "\[NCH\].*failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log`; `> zq bytype brewinandchewin:fermenting`
+@commands `shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log`; `shell grep -c "\[NCH\].*failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log`; `> cdevtest bytype brewinandchewin:fermenting`
 @pass removed under 600; NCH failure count recorded and compared with the chain boot (each line: a row for a mod in the cooking set that errors now); fermenting 21 or more (kombucha back with Respite and Central Kitchen)
 @fails the script named in each NCH line
 @from batches/r1106cbb/c2.qb passed
+@reviewed 2026-11-16
 shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
 shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -lt 600
-shell grep -c "\[NCH\].*failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log
+shell grep -c "\[NCH\].*failed and was skipped" logs/kubejs/server.log logs/kubejs/startup.log; true
 shell grep -h "remove refused" logs/kubejs/server.log logs/kubejs/startup.log | head
-> zq bytype brewinandchewin:fermenting
+> cdevtest bytype brewinandchewin:fermenting
 sleep 3
-expect bytype brewinandchewin:fermenting: (2[1-9]|[3-9]\d)$
+expect verb=bytype serializer=brewinandchewin:fermenting n=(2[1-9]|[3-9]\d)$
+reject \[cdevtest\] .*done=0
 
 ## SQ-CBB-09 | cooking: dragon-breath fluid brews re-added
 @group A (cooking)

@@ -599,7 +599,68 @@ look snow 3-5: only the pass-through modifier (a1386f64-...), no BlockRunner sno
 @commands Reload test per switch (needs `/cdevreload compat`): save each with `sed -i` (rename, missed by the watcher), then run the command: `[debug.passthrough] timing` true / false, cobweb `denseWalk` 0.2, `breakStallTicks` 0, cobweb `surroundedAt` 3, layers `layerMaxSlow` 0.3, layers `solidBelowFull` 0; also one save written in place (single write) without the command
 @pass each value applies after the command (timing lines start / stop, speeds change, the client gets the re-sent table: no rubber band); the in-place save applies within a few seconds without the command
 @fails `CompatConfigReload.reload`, `PassValues.onConfig` re-send; night-config watcher (ENTRY_MODIFY, count 1 only)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# every switch is saved by a whole-file rewrite (qrun.py toml), which the watcher misses, then /cdevreload compat;
+# the server copy is restored at the end. Cross web at 1000 -60 1200 (3 faces: dense), zombie z12x in it
+shell cp config/creativecompat-common.toml .ps15b12_compat.toml
+> forceload add 990 1190 1110 1210
+> setblock 1000 -60 1200 minecraft:cobweb
+> setblock 999 -60 1200 minecraft:cobweb
+> setblock 1001 -60 1200 minecraft:cobweb
+> setblock 1000 -60 1201 minecraft:cobweb
+> summon minecraft:zombie 1000.5 -60 1200.5 {Tags:["z12x","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> cdevtest tickwarp 20
+waitlog verb=tickwarp end=done ticks=20 60
+> zpth mod z12x
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecompat-common.toml debug.passthrough timing true
+> cdevreload compat
+waitlog \[passthrough-timing\] side=server 60
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecompat-common.toml surface.passthrough.cobweb denseWalk 0.2
+> cdevreload compat
+> cdevtest tickwarp 21
+waitlog verb=tickwarp end=done ticks=21 60
+> zpth mod z12x
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecompat-common.toml surface.passthrough.cobweb surroundedAt 3
+> cdevreload compat
+> summon minecraft:zombie 1000.5 -59.6 1200.5 {Tags:["z12s","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.max_health",Base:100d}],Health:100f}
+> zpth watch z12s 40 10
+> cdevtest tickwarp 42
+waitlog verb=tickwarp end=done ticks=42 60
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecompat-common.toml surface.passthrough breakStallTicks 0
+> cdevreload compat
+> pbot spawn P12 1100.5 -59 1200.5 minecraft:overworld creative
+> setblock 1100 -60 1200 minecraft:snow[layers=3]
+> zpth attrs P12
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecompat-common.toml surface.passthrough.layers layerMaxSlow 0.3
+> cdevreload compat
+> cdevtest tickwarp 22
+waitlog verb=tickwarp end=done ticks=22 60
+> zpth attrs P12
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecompat-common.toml surface.passthrough.layers solidBelowFull 0
+> cdevreload compat
+> cdevtest tickwarp 23
+waitlog verb=tickwarp end=done ticks=23 60
+> zpth attrs P12
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecompat-common.toml debug.passthrough timing false
+> cdevreload compat
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done ticks=400 120
+# in-place save (one write, no rename), no command: the watcher should pick it up
+shell python3 -c "p='config/creativecompat-common.toml';s=open(p).read().replace('timing = false','timing = true',1);f=open(p,'r+');f.write(s);f.truncate();f.close()"
+sleep 8
+> cdevtest tickwarp 401
+waitlog verb=tickwarp end=done ticks=401 120
+shell cp .ps15b12_compat.toml config/creativecompat-common.toml
+> cdevreload compat
+> pbot remove P12
+> kill @e[tag=z12x]
+> kill @e[tag=z12s]
+> forceload remove 990 1190 1110 1210
+count \[creativecompat\] creativecompat-common.toml reloaded >= 8
+reject reload failed|value\(s\) corrected
+reject verb=pbot\.\S+ .*error=
+reject \[cdevtest\] .*done=0
+look z12x mod after denseWalk 0.2 (second zpth mod line) is lower than before (first line, about -0.65); z12s y stays about -59.6 in the watch (surroundedAt 3: the 3-face web holds it); P12 snow-3 modifier amount changes after layerMaxSlow 0.3 and again after solidBelowFull 0; `[passthrough-timing]` lines stop during the 400-tick warp after timing false and come back within a few seconds of the in-place save (no command); breakStallTicks 0 has no readback here (projectile rows SQ-PS15B-02 cover it)
 ## SQ-PTH-25c | /cdevbench passthrough, run 1: 12 cases
 @group A
 @commands As SQ-PTH-25 with this build: `/cdevbench passthrough` twice
@@ -620,16 +681,34 @@ shell python3 -c "import json;d=json.load(open('kubejs/exported/perf/passthrough
 @pass PT01 and PT04 on minus off under +0.5 ms
 @fails JFR: `PassCounts`, `PassCountData.get`
 @jars creativedevtools
-@draft no batch holds this row yet
+@draft perf suite row (suite P through tools/perf with PERF_JARS, JFR compare on minus off), not a qrun batch: run it from the perf suite, no /cdevtest readback replaces it
 ## CQ-PS15B-01
 @group client
 @commands WTHIT on: the SQ-PS15B-03 field (middle, corner), the -04 webs, a 3-layer and a 6-layer snow pile
 @pass `Neighbors: 4 of 4` / `2 of 4`, `Neighbors: 3 of 6` / `6 of 6` with `Fall Through: stopped`; 3 layers: `Walk Through: 0.75x (3 of 8 layers)`; 6 layers: the Run Speed line, no Walk Through
 @fails `PassThroughFormat`, `WthitRunSpeed.passThrough` layered branch
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# WTHIT text is drawn, not read back: shots for the judge, one per target
+> fill 0 100 10 4 100 14 minecraft:farmland[moisture=7]
+> fill 0 101 10 4 101 14 minecraft:wheat[age=7]
+> fill 10 101 10 12 103 12 minecraft:cobweb
+> setblock 20 101 10 minecraft:snow[layers=3]
+> setblock 23 101 10 minecraft:snow[layers=6]
+do {"look": {"from": "2.5 103.5 7.5", "at": "2.5 101.5 12.5"}}
+do {"wait": "chunks"}
+shot wthit_field_middle
+do {"look": {"from": "-1.5 103.5 8.5", "at": "0.5 101.5 10.5"}}
+shot wthit_field_corner
+do {"look": {"from": "11.5 104.5 7.5", "at": "11.5 102.5 11.5"}}
+shot wthit_web_cube
+do {"look": {"from": "20.5 103.5 8", "at": "20.5 101.2 10.5"}}
+shot wthit_snow_3
+do {"look": {"from": "23.5 103.5 8", "at": "23.5 101.5 10.5"}}
+shot wthit_snow_6
+look middle `Neighbors: 4 of 4`, corner `2 of 4`; web cube `Neighbors: 6 of 6` with `Fall Through: stopped` (a 3-of-6 web cell: the cube face); snow 3: `Walk Through: 0.75x (3 of 8 layers)`; snow 6: the Run Speed line, no Walk Through
 ## CQ-PS15B-02
 @group client
 @commands Client toml `[surface.wthit] passThrough = false` saved with `sed -i`, then the client-side reload of `/cdevreload compat`
 @pass the Walk Through lines go at once after the reload
 @fails client command routing to `CompatConfigReload.reload`
-@draft no batch holds this row yet
+@draft `/cdevreloadclient compat` is a client command: the capture driver's cmd step runs commands on the integrated server, so the batch cannot send it (needs a driver step for client commands, or the owner types it)

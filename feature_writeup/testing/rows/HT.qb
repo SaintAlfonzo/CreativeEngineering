@@ -22,16 +22,57 @@
 @commands Boot; `/reload`; grep latest.log for `armor_effects.js`, `dragon_autorepair.js`
 @pass No script error; no `Error occurred while handling event` on `ServerEvents.tick`
 @fails `level.players()` or `server.getAllLevels()` not visible to Rhino: use `level.getPlayers()`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect Done \(
+> reload
+waitlog Added [0-9]+ recipes 120
+sleep 5
+kjsreject (armor_effects|dragon_autorepair)\.js.*(Error|error)
+reject Error occurred while handling event.*ServerEvents\.tick|Error occurred while handling event
 ## SQ-HT-02
 @group same
 @commands Summon a tamed horse, `/item replace entity @e[type=horse,limit=1,sort=nearest] horse.armor with dragonloot:dragon_horse_armor`; wait 11 s; `/data get entity @e[type=horse,limit=1,sort=nearest] ActiveEffects`; same on the player and on a second horse without armor
 @pass Regeneration (Amplifier 0) on the armored horse only; no repair (armor has no durability, branch removed 2026-10-28)
 @fails Handler never fires: check `event.getServer()` on `ServerEvents.tick`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 320 400 336 416
+> pbot spawn ht 328.5 -60 412.5 minecraft:overworld survival
+sleep 2
+> summon minecraft:horse 326 -60 404 {Tame:1b,Tags:["ht2a"],NoAI:1b}
+> summon minecraft:horse 332 -60 404 {Tame:1b,Tags:["ht2b"],NoAI:1b}
+> item replace entity @e[type=minecraft:horse,tag=ht2a,limit=1] horse.armor with dragonloot:dragon_horse_armor
+> cdevtest tickwarp 220
+waitlog verb=tickwarp end=done ticks=220 30
+> data get entity @e[type=minecraft:horse,tag=ht2a,limit=1] ActiveEffects
+> data get entity @e[type=minecraft:horse,tag=ht2b,limit=1] ActiveEffects
+> cdevtest player ht
+expect has the following entity data: (?=.*Id: 10b?\b)(?=.*Amplifier: 0b)
+expect Found no elements matching ActiveEffects
+reject verb=player name=ht effects=\S*minecraft:regeneration
+reject verb=\S+ .*done=0
+look the armoured horse (first data get) has Regeneration (Id 10) amplifier 0; the second horse and the bot have none
 ## SQ-HT-03
 @group same
 @commands Same horse; `/execute in minecraft:the_nether run tp @s 0 100 0`, `/forceload add` the horse's chunk first, wait 30 s, come back, `/data get` the horse's `ActiveEffects`
 @pass No Regeneration while away (no player in the overworld); back within 10 s after return
 @fails
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# same horses and bot as SQ-HT-02; the horse's chunk stays forceloaded
+> effect clear @e[type=minecraft:horse,tag=ht2a,limit=1]
+> execute in minecraft:the_nether run forceload add 0 0
+> execute in minecraft:the_nether run tp ht 0 120 0
+sleep 2
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done ticks=600 60
+> data get entity @e[type=minecraft:horse,tag=ht2a,limit=1] ActiveEffects
+> execute in minecraft:overworld run tp ht 328.5 -60 412.5
+> cdevtest tickwarp 200
+waitlog verb=tickwarp end=done ticks=200 30
+> data get entity @e[type=minecraft:horse,tag=ht2a,limit=1] ActiveEffects
+> pbot remove ht
+> kill @e[type=minecraft:horse,tag=ht2a]
+> kill @e[type=minecraft:horse,tag=ht2b]
+expect Found no elements matching ActiveEffects
+expect has the following entity data: .*Id: 10b?\b
+reject verb=\S+ .*done=0
+look first read (no player in the overworld for 30 s): no Regeneration; second read (10 s after the return): Regeneration back

@@ -41,6 +41,7 @@ look Worldgen's line also has biomesoplenty now (its pack folder exists since th
 @commands `> datapack list`; `/locate structure creativeengineering:sky_island` and `waystone_ruin` (or `/cdevplace`); `> execute in minecraft:the_nether run locate biome terralith:scarlet_mountains` or the Scarlet biome id; `/zq census` driftwood / deadwood / morel / cave carrot features over a few chunks near spawn
 @pass all `creativeworldgen:<mod>` packs listed and enabled; sky island and waystone ruin locatable; wild mushrooms, cave carrots, driftwood present as before (compare SQ-WGE / SQ-CDW census numbers)
 @fails a feature file left behind in `kubejs/data/creativeengineering/` (now duplicate) or a pack folder missing `pack.mcmeta`
+@reviewed 2026-11-16
 @from batches/r1113/c3_b1.qb
 > datapack list
 waitlog data packs? enabled 30
@@ -53,40 +54,81 @@ waitlog (nearest creativeworldgen:waystone_ruin_part|Could not find|no structure
 waitlog (nearest terralith:scarlet_mountains|Could not find) 300
 > forceload add -80 -80 79 79
 sleep 60
-> zq count -80 50 -80 79 120 79 upgrade_aquatic:driftwood_log
-waitlog \[zq\] count upgrade_aquatic:driftwood_log: \d+ 300
-> zq count -80 -64 -80 79 120 79 fungidelight:morel_mushroom
-waitlog \[zq\] count fungidelight:morel_mushroom: \d+ 300
-> zq count -80 -64 -80 79 60 79 miners_delight:wild_cave_carrots
-waitlog \[zq\] count miners_delight:wild_cave_carrots: \d+ 300
+# a count box is at most 262144 blocks (64x64x64): each box runs as slices; the shell prints the summed n per block
+> say ENGM02 begin
+> cdevtest count -80 50 -80 79 120 -58 upgrade_aquatic:driftwood_log
+> cdevtest count -80 50 -57 79 120 -35 upgrade_aquatic:driftwood_log
+> cdevtest count -80 50 -34 79 120 -12 upgrade_aquatic:driftwood_log
+> cdevtest count -80 50 -11 79 120 11 upgrade_aquatic:driftwood_log
+> cdevtest count -80 50 12 79 120 34 upgrade_aquatic:driftwood_log
+> cdevtest count -80 50 35 79 120 57 upgrade_aquatic:driftwood_log
+> cdevtest count -80 50 58 79 120 79 upgrade_aquatic:driftwood_log
+> cdevtest count -80 -64 -80 79 -55 79 fungidelight:morel_mushroom
+> cdevtest count -80 -54 -80 79 -45 79 fungidelight:morel_mushroom
+> cdevtest count -80 -44 -80 79 -35 79 fungidelight:morel_mushroom
+> cdevtest count -80 -34 -80 79 -25 79 fungidelight:morel_mushroom
+> cdevtest count -80 -24 -80 79 -15 79 fungidelight:morel_mushroom
+> cdevtest count -80 -14 -80 79 -5 79 fungidelight:morel_mushroom
+> cdevtest count -80 -4 -80 79 5 79 fungidelight:morel_mushroom
+> cdevtest count -80 6 -80 79 15 79 fungidelight:morel_mushroom
+> cdevtest count -80 16 -80 79 25 79 fungidelight:morel_mushroom
+> cdevtest count -80 26 -80 79 35 79 fungidelight:morel_mushroom
+> cdevtest count -80 36 -80 79 45 79 fungidelight:morel_mushroom
+> cdevtest count -80 46 -80 79 55 79 fungidelight:morel_mushroom
+> cdevtest count -80 56 -80 79 65 79 fungidelight:morel_mushroom
+> cdevtest count -80 66 -80 79 75 79 fungidelight:morel_mushroom
+> cdevtest count -80 76 -80 79 85 79 fungidelight:morel_mushroom
+> cdevtest count -80 86 -80 79 95 79 fungidelight:morel_mushroom
+> cdevtest count -80 96 -80 79 105 79 fungidelight:morel_mushroom
+> cdevtest count -80 106 -80 79 115 79 fungidelight:morel_mushroom
+> cdevtest count -80 116 -80 79 120 79 fungidelight:morel_mushroom
+> cdevtest count -80 -64 -80 79 60 -68 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 -67 79 60 -55 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 -54 79 60 -42 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 -41 79 60 -29 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 -28 79 60 -16 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 -15 79 60 -3 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 -2 79 60 10 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 11 79 60 23 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 24 79 60 36 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 37 79 60 49 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 50 79 60 62 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 63 79 60 75 miners_delight:wild_cave_carrots
+> cdevtest count -80 -64 76 79 60 79 miners_delight:wild_cave_carrots
+> say ENGM02 end
+waitlog ENGM02 end 300
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" ENGM02
+expect verb=count block=miners_delight:wild_cave_carrots n=\d+
+reject \[cdevtest\] .*done=0
 > forceload remove -80 -80 79 79
-look sky island located (ids are creativeworldgen: since the Worldgen carve; the row's creativeengineering: ids are gone); the waystone ruin is a meta structure (its part is the only registered structure: a "Could not find" is not a FAIL, use /cdevplace later); Scarlet Mountains is an Overworld Terralith biome (the row's Nether execute is wrong); the counts near spawn (mostly ocean) are for the record against SQ-WGE / SQ-CDW census numbers: driftwood > 0 expected on this ocean spawn
+look sky island located (ids are creativeworldgen: since the Worldgen carve; the row's creativeengineering: ids are gone); the waystone ruin is a meta structure (its part is the only registered structure: a "Could not find" is not a FAIL, use /cdevplace later); Scarlet Mountains is an Overworld Terralith biome (the row's Nether execute is wrong); the summed counts near spawn (shell line; mostly ocean) are for the record against SQ-WGE / SQ-CDW census numbers: driftwood > 0 expected on this ocean spawn
 
 ## SQ-ENGM-03 | TNT shrapnel spawns (Compat); torch and seed milling recipes under creativedelight:; tags filled; wooden bucket recipe
 @group B (same boot)
-@commands `> summon minecraft:tnt ~ ~ ~ {Fuse:1}` near a scratch area, `> kill @e[type=creativeengineering:shrapnel]` count; `/zq recipes creativedelight:torch_crafting_animal_fat`, `creativedelight:seeds_bone_meal`; `> forge tags minecraft:item get creativeengineering:millable_seeds`, `vinery` barrel tag, a mulch tag; `/zq recipes` of a wooden bucket recipe
+@commands `> summon minecraft:tnt ~ ~ ~ {Fuse:1}` near a scratch area, `> kill @e[type=creativeengineering:shrapnel]` count; `/cdevtest recipes creativedelight:torch_crafting_animal_fat`, `creativedelight:seeds_bone_meal`; `> forge tags minecraft:item get creativeengineering:millable_seeds`, `vinery` barrel tag, a mulch tag; `/zq recipes` of a wooden bucket recipe
 @pass shrapnel entities spawn (Compat); torch and seed milling recipes present under `creativedelight:`; millable seeds tag has the same members as `kubejs/exported/tags` (11-05 dump); barrel and mulch tags filled; wooden bucket item and its recipe present
 @fails the tag ran before `#forge:seeds` was complete in Delight's script pack order
+@reviewed 2026-11-16
 @from batches/r1113/c3_b1.qb
 > setblock 0 210 0 minecraft:stone
 > summon minecraft:tnt 0 211 0 {Fuse:1}
 sleep 0.4
 > kill @e[type=creativecompat:shrapnel]
 expect Killed [1-9]\d* entit|Killed .*[Ss]hrapnel
-> zq recipes creativedelight:shaped/torch_crafting_animal_fat
-waitlog \[zq\] recipes matching creativedelight:shaped/torch_crafting_animal_fat: 1 30
-> zq recipes creativedelight:createmilling/seeds_bone_meal
-waitlog \[zq\] recipes matching creativedelight:createmilling/seeds_bone_meal: 1 30
-> zq itemtag creativedelight:millable_seeds
-waitlog \[zq\] itemtag creativedelight:millable_seeds \(\d+\) 30
+> cdevtest recipes creativedelight:shaped/torch_crafting_animal_fat max=500
+> cdevtest recipes creativedelight:createmilling/seeds_bone_meal max=500
+> cdevtest tag item creativedelight:millable_seeds
+expect verb=recipes text=creativedelight:shaped/torch_crafting_animal_fat n=1\b
+expect verb=recipes text=creativedelight:createmilling/seeds_bone_meal n=1\b
+expect verb=tag kind=item tag=creativedelight:millable_seeds n=\d+
 shell python3 -c "import json;d=json.load(open('$INST/kubejs/exported/tags/item_tags.json'));v=d.get('creativedelight:millable_seeds',[]);print('pack dump millable_seeds',len(v))"
-> zq itemtag vinery:barrel
-> zq itemtag forge:mulch/green
-waitlog \[zq\] itemtag forge:mulch/green \(\d+\) 30
-expect itemtag vinery:barrel \([1-9]
-expect itemtag forge:mulch/green \([1-9]
-> zq makes creativedelight:wooden_bucket
-waitlog \[zq\] makes creativedelight:wooden_bucket: [1-9] 30
+> cdevtest tag item vinery:barrel
+> cdevtest tag item forge:mulch/green
+expect verb=tag kind=item tag=vinery:barrel n=[1-9]
+expect verb=tag kind=item tag=forge:mulch/green n=[1-9]
+> cdevtest makes creativedelight:wooden_bucket
+expect verb=makes item=creativedelight:wooden_bucket n=[1-9]
+reject \[cdevtest\] .*done=0
 look ids moved since the row: shrapnel is creativecompat:shrapnel, the seeds tag creativedelight:millable_seeds (row: creativeengineering:), the wooden bucket creativedelight:wooden_bucket; millable_seeds count equals the pack dump's (11-10). If no shrapnel is killed, the 0.4 s window may have been too long (shrapnel lifetime): rerun with `sleep 0.1` before judging
 
 ## SQ-ENGM-04 | [surface] [shrapnel] values in Compat's file as in the old Engineering file (excavation half: client)

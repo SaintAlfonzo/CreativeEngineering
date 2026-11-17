@@ -27,16 +27,19 @@ bootreject (?i)(NeaWhistleGoalSkip|MobBeeIdle).*(error|fail)
 @pass Mobs within 12 blocks walk to the arrow as before; after it is picked up or despawns they stop following
 @fails Mobs ignore the arrow: tracker missed the join (check the entity class name)
 @from batches/r1031/a2_variants.qb
+@reviewed 2026-11-16
 > kill @e[type=!minecraft:player]
 > time set noon
 > summon minecraft:cow 6 -60 6
 > summon minecraft:cow 7 -60 5
 > summon minecraft:sheep 5 -60 7
 > summon nock_enough_arrows:whistling_arrow 14 -60 14 {inGround:1b,pickup:0b}
-sleep 15
+> cdevtest tickwarp 300
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=300 60
 > execute positioned 14 -60 14 if entity @e[type=#minecraft:animals_spawnable_on,distance=..4]
 > execute positioned 14 -60 14 if entity @e[type=minecraft:cow,distance=..4]
 > kill @e[type=nock_enough_arrows:whistling_arrow]
+reject \[cdevtest\] .*(done=0|error=)
 look cows and sheep walk to the arrow (second check passes); after the kill they stop following; a summoned arrow that never "joins" the tracker = the whistle needs a shot arrow (client CQ-PF16-02)
 reject (?i)unknown entity
 
@@ -46,25 +49,34 @@ reject (?i)unknown entity
 @pass Near: flies about. Away: Pos unchanged between reads (hovers). Back within 32 blocks: flies again
 @fails Moves while away: mixin did not apply. Falls or takes damage: check flying state
 @from batches/r1031/b1_gameplay.qb
+@reviewed 2026-11-16
 > tp qa {PL1} 150 {PL3}
-sleep 10
+> cdevtest tickwarp 200
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=200 60
 > fill {PL1-4} 20 {PL3-4} {PL1+4} 24 {PL3+4} minecraft:air
 > tp qa {PL1} 20 {PL3}
 > summon minecraft:bee {PL1} 22 {PL3+3}
-sleep 20
+> cdevtest tickwarp 401
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=401 60
 > execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
-sleep 5
+> cdevtest tickwarp 102
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=102 60
 > execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
 > tp qa {PL1} 150 {PL3+3}
-sleep 20
+> cdevtest tickwarp 403
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=403 60
 > execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
-sleep 10
+> cdevtest tickwarp 204
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=204 60
 > execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
 > tp qa {PL1} 20 {PL3}
-sleep 10
+> cdevtest tickwarp 205
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=205 60
 > execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
-sleep 5
+> cdevtest tickwarp 106
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=106 60
 > execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+reject \[cdevtest\] .*(done=0|error=)
 look reads 1-2 differ (qa near), reads 3-4 equal (qa 128 blocks above, same chunk, still entity-ticking), reads 5-6 differ
 
 ## SQ-PF16-04
@@ -72,4 +84,4 @@ look reads 1-2 differ (qa near), reads 3-4 equal (qa 128 blocks above, same chun
 @commands Four bots as suite G04 (perf_suite.md), JFR, `perf_report.py` against `perf/suite/g1/reports/G04.summary.json`
 @pass No `TemptByWhistleGoal` above 0.1%; `Bee.m_8119_` share lower than 5.9%; MSPT mean below 50.1
 @fails Whistle samples remain: tracker set not empty (leak); bees unchanged: few bees below y 32 this run, record the bee heights
-@draft no batch holds this row yet
+@draft a perf-suite measurement (four bots, JFR, perf_report.py against G04.summary.json), run by tools/perf/session, not a qrun row; the bot and tick parts would come from the suite, not /cdevtest

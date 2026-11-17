@@ -130,6 +130,7 @@ look item counts per namespace (displaydelight 212, fungidelight 32, miners_deli
 @pass `Done (`; no error or warning naming displaydelight or a CD script; Display blocks still place and drop (the switch has no CD rows to gate, plan A7); the `members:` line still lists 20
 @fails An error: a CD script that should be gated on `[members] displaydelight` (the switch is generated from `bundle_members`)
 @from batches/r1102/b2_switches.qb
+@reviewed 2026-11-16
 bootexpect Done \(
 bootexpect \[creativedelight\] members: \[([a-z_]+, ){19}[a-z_]+\]$
 bootreject Error occurred while handling event
@@ -142,13 +143,12 @@ capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > setblock {H1} {H2} {H3+50} displaydelight:beef_stew
 reject Unknown block type
 > execute if block {H1} {H2} {H3+50} displaydelight:beef_stew run say CDJ10 stew placed
-> setblock {H1} {H2} {H3+50} minecraft:air destroy
-sleep 3
-> zcount {H1-1} {H2} {H3+49} {H1+1} {H2+2} {H3+51}
-waitlog \[zcount\] entities 30
+> cdevtest break {H1} {H2} {H3+50}
 expect CDJ10 stew placed
-expect \[zcount\] entities item:farmersdelight:beef_stew x1=1$
-look "break it as the bot" done as a no-tool destroy (same loot context); a bot break would need a dig command perfBot does not have
+expect verb=break who=\S+ broken=true before="?displaydelight:beef_stew
+expect verb=break drops=farmersdelight:beef_stew:1 stacks=1\b
+reject \[cdevtest\] verb=\S+ .*error=
+look the break is a survival break by the Devtools fake player (BreakEvent, no tool); same loot context as a bot break
 
 ## CQ-CDJ-01
 @group client
@@ -175,10 +175,11 @@ look [display] in rows/SQ-DDP-06.shell.txt holds takeAll = false and the other e
 @group A (Boots 1 and 2)
 @commands Boot 1 (`takeAll = false`): the bot, sneaking with an empty hand, uses the plate of 3 cookies from SQ-CDJ-11 (or a fresh one); count cookies in its inventory and on the plate. Boot 2 (`takeAll = true`): same on a fresh plate of 3
 @pass Boot 1: 1 cookie taken, 2 stay; Boot 2: all 3 taken, the plate stays (DDP-13, DDP-05)
-@fails Probe cannot sneak-use: add a sneak flag to `tools/scratch_query/zq_probe.js` or move this row to CQ-DDP-01; wrong count: `CdSettings.flag("display.takeAll")` read path in the Display member
+@fails sneak half: `pbot sneak` not held during the use (bot shift flag); wrong count: `CdSettings.flag("display.takeAll")` read path in the Display member
 @from batches/r1102/b1_main.qb
-# perfBot and /zq cannot sneak: the takeAll half (sneaking bare hand: 1 taken, 2 stay) goes to the client row CQ-DDP-01.
-# This half is the plain bare-hand use, which takes 1 whatever takeAll says (InterationManager.tryTakeItemWithBareHand).
+@reviewed 2026-11-16
+# first the plain bare-hand use, which takes 1 whatever takeAll says (InterationManager.tryTakeItemWithBareHand); then the
+# sneaking bare-hand use with takeAll = false (Boot 1): 1 more taken, 1 stays
 > kill @e[type=minecraft:item]
 > pbot spawn ddp7 {H1+2} {H2} {H3-2} minecraft:overworld survival
 > execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=3] run say DDP07 plate holds 3
@@ -187,10 +188,19 @@ look [display] in rows/SQ-DDP-06.shell.txt holds takeAll = false and the other e
 > pbot use ddp7 {H1+2} {H2} {H3} up
 > execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=2] run say DDP07 two left
 > data get entity ddp7 Inventory
+> pbot sneak ddp7 on
+> pbot use ddp7 {H1+2} {H2} {H3} up
+> pbot sneak ddp7 off
+> execute if block {H1+2} {H2} {H3} displaydelight:plated_cookie[stacks=1] run say DDP07 sneak took one
+> pbot inv ddp7 get
 expect DDP07 plate holds 3
 expect DDP07 two left
 expect id: "minecraft:cookie"
-look sneak half not run here (no sneak in perfBot or /zq): CQ-DDP-01 does it with takeAll = false (Boot 2 world has takeAll = true, so set it back to false in the client copy for that half, or judge it in a Boot 1 copy)
+expect DDP07 sneak took one
+expect verb=pbot.inv bot=ddp7 slot=\d+ item=minecraft:cookie\*2$
+reject \[cdevtest\] verb=pbot\.\S+ .*error=
+look Boot 2 (takeAll = true) sneak half: CQ-DDP-01 or a rerun of this row in Boot 2 expecting the plate gone to the pbot inv (3 cookies)
+
 
 ## SQ-VTD8-01 | Vintage config carried; remainderBuffer = false drops the bottles on the jar
 @group A (Boot 1)
@@ -199,6 +209,7 @@ look sneak half not run here (no sneak in perfBot or /zq): CQ-DDP-01 does it wit
 @fails Bottles in slot 9: the switch is read from the wrong key (`vintage.pickling_jar.remainderBuffer` in `VintageDelightCommonConfig`); no move: as SQ-DDP-06
 @jars creativedelight
 @from batches/r1102/b1_main.qb
+@reviewed 2026-11-16
 shell ls config | grep -i vintagedelight
 shell test -f config/vintagedelight-common.toml.moved && test ! -f config/vintagedelight-common.toml
 shell test "$(grep -c 'config/vintagedelight-common.toml carried into' logs/latest.log)" = 1
@@ -207,20 +218,21 @@ shell awk '/^[[:space:]]*\[/{s=$0} s ~ /\[vintage/' config/creativedelight-commo
 shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.pickling_jar\][[:space:]]*$/ && /^[[:space:]]*remainderBuffer[[:space:]]*=[[:space:]]*false/{f=1} END{exit !f}' config/creativedelight-common.toml
 shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.pickling_jar\][[:space:]]*$/ && /^[[:space:]]*stallWhenFull[[:space:]]*=/{f=1} END{exit !f}' config/creativedelight-common.toml
 shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[vintage\.worldgen\][[:space:]]*$/ && /^[[:space:]]*magicVineConvertsDirtToLushGrass[[:space:]]*=/{f=1} END{exit !f}' config/creativedelight-common.toml
-> zq rdetail fermented_garlic
+> cdevtest rdetail fermented_garlic
 > kill @e[type=minecraft:item]
 > setblock {H1} {H2} {H3+16} vintagedelight:fermenting_jar
 # 3 batches of 4 garlic cloves + 1 honey bottle (veggiesdelight compat fermenting recipe, 600 ticks each); put in by
 # NBT instead of from the top: a hopper above the jar would pick up the bottles the row looks for
 > data merge block {H1} {H2} {H3+16} {inventory:{Size:10,Items:[{Slot:0b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:1b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:2b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:3b,id:"veggiesdelight:garlic_clove",Count:3b},{Slot:4b,id:"minecraft:honey_bottle",Count:3b}]}}
-sleep 100
+> cdevtest tickwarp 2000
+waitlog verb=tickwarp end=done 120
 > data get block {H1} {H2} {H3+16} inventory
-> zcount {H1-1} {H2} {H3+15} {H1+1} {H2+2} {H3+17}
-waitlog \[zcount\] entities 30
+> cdevtest items {H1} {H2+1} {H3+16} 1
 expect \{(?=[^{}]*Slot: 7b?[,}])(?=[^{}]*"veggiesdelight:fermented_garlic_honey")(?=[^{}]*Count: 3b)[^{}]*\}
 reject has the following block data: .*Slot: 9b?[,}]
-expect \[zcount\] entities .*item:minecraft:glass_bottle x
-look the rdetail line shows the 4 cloves + honey bottle recipe (else the batch's inputs are wrong: BATCH-FAULT); 3 glass bottles in total lie on the jar
+expect verb=items items=\S*minecraft:glass_bottle:
+reject \[cdevtest\] verb=\S+ .*error=
+look the rdetail line shows the 4 cloves + honey bottle recipe (else the batch's inputs are wrong: BATCH-FAULT); 3 glass bottles in total lie on the jar (items line, summed)
 
 ## SQ-MDP-17 | Miner's member stops startup naming both missing donor jars
 @group A (Boot 3)
@@ -281,20 +293,42 @@ look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id a
 @commands boot; `grep -nE "\[creativedelight\] members:\|NOT loaded\|not nested" logs/latest.log`; `unzip -l mods/creativedelight-1.0.0.jar \| grep jarjar/backported`
 @pass 20 members, none `NOT loaded`; nested `backportedVeggies-1.9.2-ce-19.2-05`, `backportedVintage-0.1.6-ce-19.2-12`, `backportedFungi-1.3-ce-19.2-02`, `backportedMiners-1.4.5-ce-19.2-04`, `backportedDisplay-1.7.0-ce-19.2-03`; error count not above the r1102 Boot 1
 @fails a member missing: root `settings.gradle` CD member map (the four ports were moved there 2026-11-02)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[creativedelight\] members: \[([a-z_]+, ){19}[a-z_]+\]$
+bootreject NOT loaded|not nested
+shell grep -nE "\[creativedelight\] members:|NOT loaded|not nested" logs/latest.log | head -5
+shell unzip -l mods/creativedelight-1.0.0.jar | grep jarjar/backported
+shell J=mods/creativedelight-1.0.0.jar; for m in backportedVeggies-1.9.2-ce-19.2-05 backportedVintage-0.1.6-ce-19.2-12 backportedFungi-1.3-ce-19.2-02 backportedMiners-1.4.5-ce-19.2-04 backportedDisplay-1.7.0-ce-19.2-03; do unzip -l $J | grep -q "$m" || { echo "missing $m"; exit 1; }; done
+shell echo "errors: $(grep -c ERROR logs/latest.log)"; true
+look error count not above the r1102 Boot 1 (run doc); a newer nested member build than the pass cell names is fine (note it)
+
 ## SQ-CDJ-05 / SQ-DDP-01 rerun (I1)
 @group A, the SQ-CDJ-11 Boot 0 world
 @commands as SQ-CDJ-05 (patcherMod 13:04 in `OUT/srv/mods/`); `grep -nE "\[swaps\]\|Unidentified\|od_plated_baked_tentacle" logs/latest.log`
 @pass `[swaps] 3 list file(s): ... 1 removed id(s)` (CD `creative_split.json`, `removed.json`, CB `creative_split.json`); `[swaps] minecraft:block: 1 removed id(s) dropped` and the same for `minecraft:item`; no `Unidentified mapping` and no missing-registry screen line; the rest of SQ-CDJ-05 as before (blocks, contents, region diff empty apart from the one plate)
 @fails swap line missing: the server runs the old patcherMod (no `removed` key; the line would end at "single id(s)")
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[swaps\] 3 list file\(s\): .*1 removed id\(s\)
+bootexpect \[swaps\] minecraft:block: 1 removed id\(s\) dropped
+bootexpect \[swaps\] minecraft:item: 1 removed id\(s\) dropped
+bootreject Unidentified mapping
+shell grep -nE "\[swaps\]|Unidentified|od_plated_baked_tentacle" logs/latest.log | head -20
+look the rest of SQ-CDJ-05 as before (blocks, contents, region diff empty apart from the one plate): rerun SQ-CDJ-05's steps on the Boot 0 world
+
 ## SQ-MDP-13 rerun (I3)
 @group A
 @commands as SQ-MDP-13; `/zq makes miners_delight:cave_hamburger`
 @pass count 12 (was 11: Cave Hamburger back); recipe `creativedelight:shapeless/cave_hamburger`: bread tag, crunchy bar or vegan patty, smoked bat wing, two slots of `rusticdelight:calamari` or brown mushroom
 @fails no recipe: CD `miners_delight/recipes.js` (the tentacle `R.remove({input})` runs before the add; check its order)
 @jars creativedelight creativeworldgen
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest makes miners_delight:cave_hamburger
+> cdevtest rdetail creativedelight:shapeless/cave_hamburger
+expect verb=makes id=creativedelight:shapeless/cave_hamburger result=miners_delight:cave_hamburger\*
+expect verb=rdetail id=creativedelight:shapeless/cave_hamburger serializer=\S+ result=\S+ ingredients=\S*smoked_bat_wing
+look ingredients: bread tag, crunchy bar or vegan patty, smoked bat wing, two slots of rusticdelight:calamari or brown mushroom; the "count 12" half is SQ-MDP-13's own steps (rerun them)
+reject \[cdevtest\] verb=\S+ .*error=
+
 ## SQ-MDP-14 rerun (I4)
 @group A
 @commands as SQ-MDP-14, plus: fill slot 7 (leftover) with 16 glass bottles (or a bucket: max stack 1), empty meal slot, slots 0-3 a recipe with a bottle or bucket ingredient, lit campfire below; wait twice the cook time; `/data get block`
@@ -314,14 +348,40 @@ look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id a
 @commands 300 x `/loot spawn ~ ~ ~ loot farmersdelight:chests/fd_village_plains_house` and the same for `fd_shipwreck_supply`; count crates and bags
 @pass some rolls give `farmersdelight:cabbage_crate`, `tomato_crate`, `onion_crate`, `rice_bag` (or the carrot/potato/beetroot crates) where loose ones were; no error naming `farmersdelight:chests` in `logs/kubejs/server.log`
 @fails FD tables not in `loot_index.json` (nested jars are read since 2026-11-02)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 1200 1200 1215 1215
+> kill @e[type=minecraft:item]
+repeat 300
+> loot spawn 1202 -59 1202 loot farmersdelight:chests/fd_village_plains_house
+> loot spawn 1210 -59 1202 loot farmersdelight:chests/fd_shipwreck_supply
+end
+sleep 3
+> cdevtest items 1202 -59 1202 2
+> cdevtest items 1210 -59 1202 2
+expect verb=items items=\S*farmersdelight:(cabbage_crate|tomato_crate|onion_crate|rice_bag|carrot_crate|potato_crate|beetroot_crate):
+shell ! grep -hiE "farmersdelight:chests.*(error|exception)" logs/kubejs/server.log
+look crates and bags show where loose crops were in both tables (counts per id in the two items lines)
+> forceload remove 1200 1200 1215 1215
+reject \[cdevtest\] verb=\S+ .*error=
+
 ## SQ-MDP-18 (I7)
 @group A
 @commands `/give` the bot a netherite knife; `/summon minecraft:spider` on fire (`/summon minecraft:spider ~ ~ ~ {Fire:200s}`) 20 times and kill each with the knife while burning; 20 more not burning
 @pass burning: `miners_delight:cooked_arthropod` drops, never `miners_delight:arthropod`; not burning: raw arthropod 1 to 3
 @fails translator patch not applied: `MinersTranslator.PATCH_DATA` path key (`data/miners_delight/loot_modifiers/scavenging_spider.json`)
 @jars creativedelight creativeworldgen
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 1220 1200 1235 1215
+> kill @e[type=minecraft:item]
+> cdevtest kill 1225 -60 1205 minecraft:spider n=20 held=farmersdelight:netherite_knife fire
+> cdevtest kill 1225 -60 1205 minecraft:spider n=20 held=farmersdelight:netherite_knife
+count verb=kill type=minecraft:spider n=20 killed=20 == 2
+expect verb=kill drops=\S*miners_delight:cooked_arthropod:
+expect verb=kill drops=(\S*,)?miners_delight:arthropod:([2-5]\d|60)\b
+look drops lines: the first (burning) has cooked_arthropod and no raw miners_delight:arthropod; the second (not burning) raw arthropod 20 to 60 in total (1 to 3 each)
+> forceload remove 1220 1200 1235 1215
+reject \[cdevtest\] verb=\S+ .*error=
+
 ## SQ-VTD8-01 (rewritten, I2)
 @group A
 @commands `[vintage.pickling_jar] remainderBuffer = true`, `stallWhenFull = true`; place a jar; `/data merge block` slots 0-3 with 3 garlic cloves each (`Count:3b`; fermented garlic honey is 4 cloves + 1 honey bottle) and slot 4 with 3 honey bottles; wait 3 recipe times; `/data get block` after each
@@ -342,7 +402,26 @@ look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id a
 @pass (a) 5 pickles in slot 7, slots 0-5 empty; (b) no batch, progress 0, slots unchanged; (c) three batches, each slot loses exactly 1 per batch (3, 2, 1, 0), 15 pickles
 @fails (b) starts or (c) takes 2+ from a slot: `FermentingRecipe.assignSlots` (shared-slot fallback still in the installed jar? check the nested `backportedVintage-...-18`)
 @jars creativedelight
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 1240 1200 1255 1215
+> cdevtest rdetail pickle
+> setblock 1245 -60 1205 vintagedelight:fermenting_jar
+> data merge block 1245 -60 1205 {inventory:{Size:10,Items:[{Slot:0b,id:"vintagedelight:cucumber",Count:1b},{Slot:1b,id:"vintagedelight:cucumber",Count:1b},{Slot:2b,id:"vintagedelight:cucumber",Count:1b},{Slot:3b,id:"vintagedelight:cucumber",Count:1b},{Slot:4b,id:"vintagedelight:cucumber",Count:1b},{Slot:5b,id:"vintagedelight:salt_dust",Count:1b}]}}
+> setblock 1248 -60 1205 vintagedelight:fermenting_jar
+> data merge block 1248 -60 1205 {inventory:{Size:10,Items:[{Slot:0b,id:"vintagedelight:cucumber",Count:2b},{Slot:1b,id:"vintagedelight:cucumber",Count:2b},{Slot:2b,id:"vintagedelight:cucumber",Count:2b},{Slot:3b,id:"vintagedelight:salt_dust",Count:1b}]}}
+> setblock 1251 -60 1205 vintagedelight:fermenting_jar
+> data merge block 1251 -60 1205 {inventory:{Size:10,Items:[{Slot:0b,id:"vintagedelight:cucumber",Count:3b},{Slot:1b,id:"vintagedelight:cucumber",Count:3b},{Slot:2b,id:"vintagedelight:cucumber",Count:3b},{Slot:3b,id:"vintagedelight:cucumber",Count:3b},{Slot:4b,id:"vintagedelight:cucumber",Count:3b},{Slot:5b,id:"vintagedelight:salt_dust",Count:3b}]}}
+> cdevtest tickwarp 3600
+waitlog verb=tickwarp end=done ticks=3600 asked=3600 300
+> cdevtest inv 1245 -60 1205
+> cdevtest inv 1248 -60 1205
+> cdevtest inv 1251 -60 1205
+expect verb=inv slot=7 item=vintagedelight:pickle\*5\b
+expect verb=inv slot=7 item=vintagedelight:pickle\*15\b
+look inv lines per jar: (a) 1245: 5 pickles in slot 7, slots 0-5 empty; (b) 1248 unchanged (2, 2, 2 cucumbers, 1 salt), nothing in slot 7; (c) 1251: 15 pickles, slots 0-5 empty. Salt and pickle ids are from the rdetail line: if it names other ids, fix the merges and rerun; 3600 ticks covers three recipe times up to 1200 each
+> forceload remove 1240 1200 1255 1215
+reject \[cdevtest\] verb=\S+ .*error=
+
 ## SQ-FGD-14 rerun (I6)
 @group B, the SQ-FGDC world
 @commands as SQ-FGD-14, plus a birch forest square (radius 300 each: dark forest, taiga, birch forest, and a conifer biome that is none of these)

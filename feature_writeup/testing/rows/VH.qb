@@ -27,9 +27,15 @@ bootreject Mixin apply.*failed|Couldn't load tag.*biomesoplenty|Failed to load.*
 @pass Kept counts: `worldgen/biome` 1, `block` 8, `item` 9, `fluid` 2, `fluid_type` 1, `worldgen/feature` 3, `worldgen/configured_feature` 9, `worldgen/placed_feature` 9, `particle_type` 4, `sound_event` 1; `block_entity_type`, `entity_type`, `worldgen/carver`, `painting_variant` kept 0
 @fails `HeapAllowlist` names against BOP's `init/` classes; a count of 0 where entries are expected means the registry key string differs.
 @from batches/r1111/bw.qb
+@reviewed 2026-11-16
 shell grep "Visceral Heap: kept" logs/latest.log | cut -c1-400
-> zq blocktag minecraft:mineable/hoe
-shell grep -c "biomesoplenty" logs/latest.log
+> cdevtest reg block ^biomesoplenty:
+> cdevtest reg item ^biomesoplenty:
+> cdevtest reg fluid ^biomesoplenty:
+expect verb=reg kind=block regex=\^biomesoplenty: n=8$
+expect verb=reg kind=item regex=\^biomesoplenty: n=9$
+expect verb=reg kind=fluid regex=\^biomesoplenty: n=2$
+reject \[cdevtest\] verb=\S+ done=0
 look kept counts biome 1, block 8, item 9, fluid 2, fluid_type 1, feature 3, configured_feature 9, placed_feature 9, particle_type 4, sound_event 1; block_entity_type, entity_type, carver, painting_variant 0
 
 ## SQ-VH-03 | TerraBlender stub listed, no BOP region class
@@ -71,19 +77,20 @@ look Heap result_pct 4 to 6; RECORD the others (Wastes 30, Soul Sand 20, Crimson
 @pass 0 `minecraft:netherrack` in the sample; floors and ceilings are `biomesoplenty:flesh` or `porous_flesh` at 95 % or more, the rest structure blocks (Better Fortresses, bastions); bedrock at y 0 and y 127
 @fails `packs/biomesoplenty/.../noise_settings/nether.json` (Heap rule at index 2, ends with an unconditional flesh rule), `tools/gen_visceral_heap.py`
 @from batches/r1115/p1_b1.qb
+@reviewed 2026-11-16
 > execute in minecraft:the_nether run locate biome biomesoplenty:visceral_heap
 waitlog (is at \[|Could not find) 120
 capture H is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > execute in minecraft:the_nether run forceload add {H1-24} {H3-24} {H1+23} {H3+23}
 sleep 45
-> zq count {H1-24} 0 {H3-24} {H1+23} 0 {H3+23} minecraft:bedrock minecraft:the_nether
-waitlog \[zq\] count minecraft:bedrock: \d+ 120
-> zq count {H1-24} 127 {H3-24} {H1+23} 127 {H3+23} minecraft:bedrock minecraft:the_nether
-waitlog \[zq\] count minecraft:bedrock: \d+ 120
+> cdevtest count {H1-24} 0 {H3-24} {H1+23} 0 {H3+23} minecraft:bedrock dim=minecraft:the_nether
+> cdevtest count {H1-24} 127 {H3-24} {H1+23} 127 {H3+23} minecraft:bedrock dim=minecraft:the_nether
 > zqh biomesoplenty:visceral_heap {H1-24} {H3-24} {H1+23} {H3+23} minecraft:the_nether
 waitlog \[zqh\] done 300
 reject \[zqh\] error
-look bedrock counts 2304 each (48 x 48); blocks line netherrack 0; floor and ceiling flesh + porous_flesh >= 95 % of surfaces, the rest structure blocks
+count verb=count block=minecraft:bedrock n=2304 .*skipped_columns=0 == 2
+reject \[cdevtest\] verb=\S+ done=0
+look bedrock counts 2304 each (48 x 48: checked); blocks line netherrack 0; floor and ceiling flesh + porous_flesh >= 95 % of surfaces, the rest structure blocks
 
 ## SQ-VH-06b | caves inside the Heap (cave air, flesh walls); carver tag lists flesh and porous_flesh
 @group B-nether, fresh world, same boot
@@ -91,11 +98,12 @@ look bedrock counts 2304 each (48 x 48); blocks line netherrack 0; floor and cei
 @pass Caves carved inside the Heap (cave air present, carver walls flesh); the tag lists `biomesoplenty:flesh` and `porous_flesh`
 @fails `kubejs/data/creativeworldgen/kubejs/tags/visceral_heap.js` carver tag line
 @from batches/r1115/p1_b1.qb
+@reviewed 2026-11-16
 > kubejs list_tag minecraft:block minecraft:nether_carver_replaceables
-> zq blocktag minecraft:nether_carver_replaceables
-waitlog \[zq\] blocktag minecraft:nether_carver_replaceables 30
-expect blocktag minecraft:nether_carver_replaceables \(\d+\): .*biomesoplenty:flesh
-expect blocktag minecraft:nether_carver_replaceables \(\d+\): .*biomesoplenty:porous_flesh
+> cdevtest tag block minecraft:nether_carver_replaceables
+expect verb=tag kind=block tag=minecraft:nether_carver_replaceables n=\d+ ids=\S*biomesoplenty:flesh\b
+expect verb=tag kind=block tag=minecraft:nether_carver_replaceables n=\d+ ids=\S*biomesoplenty:porous_flesh\b
+reject \[cdevtest\] verb=\S+ done=0
 > execute in minecraft:the_nether run forceload remove {H1-24} {H3-24} {H1+23} {H3+23}
 look the SQ-VH-06 "[zqh] air" line shows minecraft:cave_air inside the Heap (carved caves); tag holds both flesh blocks
 
@@ -148,16 +156,19 @@ look each biome's blocks line keeps its vanilla blocks (netherrack / nylium / so
 @pass No match; `execute if blocks`-style counts find `flesh_tendons`, `eyebulb`, `hair`, `blood`, `minecraft:bone_block`
 @fails `HeapFleshTendonFeatureMixin`; a throw at `lambda$new$0` is row 8
 @from batches/r1111/bw.qb
+@reviewed 2026-11-16
 > execute in minecraft:the_nether run forceload add {H1-128} {H3-128} {H1+127} {H3+127}
 sleep 90
 shell grep -E "Feature placement|FleshTendon|Exception" logs/latest.log | grep -iE "bio|flesh" | head -5 | cut -c1-300; true
-> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:flesh_tendons minecraft:the_nether
-> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:eyebulb minecraft:the_nether
-> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:hair minecraft:the_nether
-> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:blood minecraft:the_nether
-> zq count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} minecraft:bone_block minecraft:the_nether
+> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:flesh_tendons dim=minecraft:the_nether
+> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:eyebulb dim=minecraft:the_nether
+> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:hair dim=minecraft:the_nether
+> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} biomesoplenty:blood dim=minecraft:the_nether
+> cdevtest count {H1-64} 1 {H3-64} {H1+63} 126 {H3+63} minecraft:bone_block dim=minecraft:the_nether
 > execute in minecraft:the_nether run forceload remove {H1-128} {H3-128} {H1+127} {H3+127}
-look grep empty; all five counts above 0
+count verb=count block=\S+ n=[1-9] == 5
+reject \[cdevtest\] verb=\S+ done=0
+look grep empty; all five counts above 0 (checked); skipped_columns 0 on each (else the 90 s wait was short)
 
 ## SQ-VH-08 | is_nether tag, flesh drops flesh
 @group B-nether, same boot
@@ -165,15 +176,21 @@ look grep empty; all five counts above 0
 @pass Tag holds the 5 vanilla biomes and the Heap; flesh drops flesh; axe is faster than hand
 @fails `packs/biomesoplenty` tags, `visceral_heap.js`, `HeapPackResources.DATA`
 @from batches/r1111/bw.qb
-> zq biometag minecraft:is_nether
+@reviewed 2026-11-16
+> cdevtest tag biome minecraft:is_nether
 > forceload add 0 0 15 15
 > setblock 3 200 3 biomesoplenty:flesh
-> loot spawn 3 202 3 mine 3 200 3 minecraft:stick
-> setblock 5 200 3 biomesoplenty:flesh
-> loot spawn 5 202 3 mine 5 200 3 minecraft:iron_axe
-> zq blocktag minecraft:mineable/hoe
-> zq blocktag minecraft:mineable/axe
-look tag holds 5 vanilla Nether biomes and the Heap; both loot lines drop flesh; flesh in a mineable tag that makes the axe faster than the hand (destroy speed itself: client)
+> cdevtest loot 3 200 3 tool=minecraft:stick
+> cdevtest loot 3 200 3
+> cdevtest loot 3 200 3 tool=minecraft:iron_axe
+> cdevtest tag block minecraft:mineable/hoe
+> cdevtest tag block minecraft:mineable/axe
+expect verb=tag kind=biome tag=minecraft:is_nether n=6 ids=\S*biomesoplenty:visceral_heap
+expect verb=tag kind=biome tag=minecraft:is_nether .*minecraft:basalt_deltas,minecraft:crimson_forest,minecraft:nether_wastes,minecraft:soul_sand_valley,minecraft:warped_forest
+count verb=loot state="?biomesoplenty:flesh\b\S* .*drops=biomesoplenty:flesh:1$ == 3
+expect verb=tag kind=block tag=minecraft:mineable/(hoe|axe) n=\d+ ids=\S*biomesoplenty:flesh\b
+reject \[cdevtest\] verb=\S+ done=0
+look tag holds 5 vanilla Nether biomes and the Heap (n=6); every loot roll drops flesh (stick, hand, axe); flesh in a mineable tag that makes the axe faster than the hand (destroy speed itself: client)
 
 ## SQ-VH-09 | Nether fortress (Better Fortresses replaces the vanilla one) and bastion
 @group B-nether, same boot
@@ -193,24 +210,29 @@ look both locate; grep 0
 @commands Add a real TerraBlender 1.19.2 jar to the scratch `mods/`; boot; `grep -iE "terrablender" logs/latest.log \| head`
 @pass RECORD which loads and whether boot fails (plan section 9 question 2)
 @fails If the stub wins or boot fails, the stub has to move to a separate jar shipped only with this pack
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: a separate boot (group A) with a real TerraBlender 1.19.2 jar copied into OUT/srv/mods beside the pack's stub; a boot failure is the answer, so no bootexpect
+shell grep -iE "terrablender" logs/latest.log | head -8 | cut -c1-300; grep -cE "Done \(" logs/latest.log; ls crash-reports 2>/dev/null | tail -2
+look RECORD which TerraBlender loads (the mod list line and version), and whether the boot reached Done (count 1) or crashed (crash-reports names the duplicate mod or the mixin)
 ## SQ-VH-11 | old save: does the Heap appear in new Nether chunks
 @group Existing save copy
 @commands Copy a pre-change world; boot; `tp` to ungenerated Nether; `locate biome` near it; RECORD
 @pass RECORD whether the Heap appears in new chunks (plan section 9 question 1)
 @fails `RegistryLoaderPresetOverworldMixin` comment against the `biome_config.json` readme
 @from batches/r1115/p9_o2.qb
+@reviewed 2026-11-16
 shell ls DIM-1/region 2>/dev/null | head -3; ls nsmfix/DIM-1/region 2>/dev/null | wc -l
 > execute in minecraft:the_nether positioned 3000 64 3000 run locate biome biomesoplenty:visceral_heap
 waitlog (The nearest biomesoplenty:visceral_heap is at|Could not find a biome of type) 120
 capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > execute in minecraft:the_nether run forceload add {P1} {P3}
 sleep 15
-> execute in minecraft:the_nether positioned {P1} 64 {P3} if biome ~ ~ ~ biomesoplenty:visceral_heap run say VH11 heap biome in a new chunk
-> zq count {P1-8} 5 {P3-8} {P1+8} 120 {P3+8} biomesoplenty:flesh minecraft:the_nether
-waitlog \[zq\] done 60
-> zq count {P1-8} 5 {P3-8} {P1+8} 120 {P3+8} minecraft:netherrack minecraft:the_nether
-waitlog \[zq\] done 60
+> cdevtest state {P1} 64 {P3} dim=minecraft:the_nether
+> cdevtest count {P1-8} 5 {P3-8} {P1+8} 120 {P3+8} biomesoplenty:flesh dim=minecraft:the_nether
+> cdevtest count {P1-8} 5 {P3-8} {P1+8} 120 {P3+8} minecraft:netherrack dim=minecraft:the_nether
+expect verb=count block=biomesoplenty:flesh n=[1-9]
+expect verb=state pos=\S+ .*biome=biomesoplenty:visceral_heap
+reject \[cdevtest\] verb=\S+ done=0
 look RECORD: locate answer and distance from 3000 3000; flesh present in the newly generated chunk
 
 ## SQ-VH-12 | boots without BOP; biomesoplenty listed off; vanilla Nether layout
@@ -219,10 +241,14 @@ look RECORD: locate answer and distance from 3000 3000; flesh present in the new
 @pass Boots; `biomesoplenty` listed under off; Nether has the 5 vanilla biomes
 @fails `isAbsent` in `BiomeLayoutTuner`; `kubejs/.../tags/visceral_heap.js` `requires` header. The offline solve already passed this logic (writeup section 4)
 @from batches/r1111/vh12.qb
+@reviewed 2026-11-16
 bootexpect Done \(
 shell grep -iE "mod data packs on|biomesoplenty" logs/latest.log | grep -iE "off|absent|skip|data packs" | head -5 | cut -c1-300
-> zq biometag minecraft:is_nether
+> cdevtest tag biome minecraft:is_nether
 > execute in minecraft:the_nether run locate biome minecraft:crimson_forest
+waitlog (minecraft:crimson_forest is at|Could not find) 120
+expect verb=tag kind=biome tag=minecraft:is_nether n=5 ids=minecraft:basalt_deltas,minecraft:crimson_forest,minecraft:nether_wastes,minecraft:soul_sand_valley,minecraft:warped_forest$
+reject \[cdevtest\] verb=\S+ done=0
 look boots; biomesoplenty under off; is_nether holds the 5 vanilla biomes only
 
 ## CQ-VH-01
@@ -230,28 +256,68 @@ look boots; biomesoplenty under off; is_nether holds the 5 vanilla biomes only
 @commands Launch to the main menu; same grep as SQ-VH-01 on the client log
 @pass Main menu reached; grep prints nothing
 @fails Client-only mixins `HeapColorHandlerMixin`, `HeapEntityRendererHandlerMixin`, `HeapParticleFactoryHandlerMixin`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootreject Mixin apply.*failed|Couldn't load tag.*biomesoplenty|Failed to load.*biomesoplenty|InvalidMixin|Critical injection failure
+> say cqvh01
+look main menu was reached and a world loaded (the driver serves); the bootreject covers the SQ-VH-01 grep on the client log
 ## CQ-VH-02
 @group client, Heap
 @commands Stand in the Heap: place flesh, porous flesh, pus bubble, eyebulb, hair; pour blood; wait for the music
 @pass LOOK: textured, no purple-black; blood renders and drips; music plays; no missing-sound warnings naming `biomesoplenty`
 @fails `HeapPackResources.ASSETS`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:the_nether run locate biome biomesoplenty:visceral_heap
+waitlog (biomesoplenty:visceral_heap is at|Could not find) 120
+capture H is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run tp @s {H1} 100 {H3}
+do {"wait": "chunks"}
+> execute in minecraft:the_nether run fill {H1+2} 99 {H3-2} {H1+12} 99 {H3+2} biomesoplenty:flesh
+> execute in minecraft:the_nether run setblock {H1+3} 100 {H3} biomesoplenty:flesh
+> execute in minecraft:the_nether run setblock {H1+5} 100 {H3} biomesoplenty:porous_flesh
+> execute in minecraft:the_nether run setblock {H1+7} 100 {H3} biomesoplenty:pus_bubble
+> execute in minecraft:the_nether run setblock {H1+9} 100 {H3} biomesoplenty:eyebulb
+> execute in minecraft:the_nether run setblock {H1+11} 100 {H3} biomesoplenty:blood
+do {"look": {"yaw": -90, "pitch": 20}}
+do {"wait": "60"}
+shot heap_blocks
+shell grep -nE "missing.*sound|Unable to play.*biomesoplenty|biomesoplenty.*sound" logs/latest.log | head -5; true
+look flesh, porous flesh, pus bubble, eyebulb and blood textured (no purple-black), blood renders; the shell prints no missing-sound line naming biomesoplenty; the music: owner ear
 ## CQ-VH-03
 @group client, Heap
 @commands Fly generated Heap at chunk borders and biome edges
 @pass LOOK: every `flesh_tendon` strand runs unbroken floor to ceiling; flesh balls whole; no strand in another biome; edge density like the middle
 @fails `creativeworldgen$pullEnd`; plan section 9 question 4 if a strand leaves the biome higher up
-@draft no batch holds this row yet
+@owner true
+@draft flying generated Heap across chunk borders and biome edges to judge tendon strands and edge density is an exploration judgement over a large area: owner playtest (a few shots from the driver would not cover the edges)
+@reviewed 2026-11-16
 ## CQ-VH-04
 @group client, Heap, after a restart with the 2026-11-10 Common jar
 @commands BR-57 in [blockrunner.md](../blockrunner.md): `/attribute @s minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002` on flesh and porous flesh; jump on porous flesh; drop onto it from 5 blocks
 @pass flesh -0.04, porous flesh -0.055; jump about half height; no bounce
 @fails `blocktags.js` spongy / very_sticky entries; `block_properties.js` jump factor; `global.blocks.porous_flesh` missing means the Common jar is stale
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill 0 100 0 4 100 0 biomesoplenty:flesh
+> fill 0 100 2 4 100 2 biomesoplenty:porous_flesh
+> gamemode survival
+> tp @s 2.5 101 0.5
+do {"wait": "10"}
+> attribute @s minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+> tp @s 2.5 101 2.5
+do {"wait": "10"}
+> attribute @s minecraft:generic.movement_speed modifier value get 23237052-61ad-11eb-ae93-0242ac130002
+do {"jump": 20}
+> tp @s 2.5 106 2.5
+do {"wait": "30"}
+do {"player_motion": true}
+> gamemode creative
+expect -0\.04\b
+expect -0\.055\b
+look jump height on porous flesh about half (the jump READ lines: dy); no bounce after the 5-block drop (the after ticks: dy stays 0 once on ground)
 ## CQ-VH-05
 @group client, survival, 2026-11-10 Compat jar
 @commands BR-58 in [blockrunner.md](../blockrunner.md): 10-high porous flesh pillar beside a honey pillar; jump off pressed against each; repeat with a pig; try plain flesh; repeat on a Banana Slug Slime Block pillar
 @pass LOOK: both slide at the same speed with sound and flesh particles, no fall damage; no slide on top, without contact, or on plain flesh
 @fails `Mixing InsideBlocksMixin` in latest.log (was WallSlideMixin); `#creativecompat:wall_slide` holds porous flesh (`/execute if block ~ ~ ~ #creativecompat:wall_slide`)
-@draft no batch holds this row yet
+@owner true
+@draft sliding down a pillar pressed against it (with sound and particles), with a pig and on a slime block pillar, is a movement-feel judgement with mob behaviour: owner playtest (BR-58)
+@reviewed 2026-11-16

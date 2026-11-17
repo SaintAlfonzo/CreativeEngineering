@@ -17,11 +17,13 @@
 @pass `#forge:seeds` contains tobacco, hamimelon and lemon seeds; no Botania mana seed or Mungal spore in it
 @fails `tags/misctags.js` line 46 (`farming/crops #13`)
 @from batches/r1106spf/b1.qb passed
-> zq itemtag forge:seeds
-expect itemtag forge:seeds .*the_dirty_stuff:tobacco_seeds|itemtag forge:seeds .*tobacco_seeds
-expect itemtag forge:seeds .*hamimelon_seeds
-expect itemtag forge:seeds .*lemon_seeds
-reject itemtag forge:seeds .*(botania:[a-z_]*mana[a-z_]*seed|mungal)
+@reviewed 2026-11-16
+> cdevtest tag item forge:seeds
+expect verb=tag kind=item tag=forge:seeds .*tobacco_seeds
+expect verb=tag kind=item tag=forge:seeds .*hamimelon_seeds
+expect verb=tag kind=item tag=forge:seeds .*lemon_seeds
+reject verb=tag kind=item tag=forge:seeds .*(botania:[a-z_]*mana[a-z_]*seed|mungal)
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-SPC-02 | seed pouch tag
 @group A
@@ -29,10 +31,12 @@ reject itemtag forge:seeds .*(botania:[a-z_]*mana[a-z_]*seed|mungal)
 @pass the three seeds are members
 @fails Quark tag name differs: dump `#quark:*` tags that contain `minecraft:wheat_seeds`
 @from batches/r1106spf/b1.qb passed
-> zq itemtag quark:seed_pouch_holdable
-expect itemtag quark:seed_pouch_holdable .*tobacco_seeds
-expect itemtag quark:seed_pouch_holdable .*hamimelon_seeds
-expect itemtag quark:seed_pouch_holdable .*lemon_seeds
+@reviewed 2026-11-16
+> cdevtest tag item quark:seed_pouch_holdable
+expect verb=tag kind=item tag=quark:seed_pouch_holdable .*tobacco_seeds
+expect verb=tag kind=item tag=quark:seed_pouch_holdable .*hamimelon_seeds
+expect verb=tag kind=item tag=quark:seed_pouch_holdable .*lemon_seeds
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-RW-23 | smoked wood smoking recipes
 @group A
@@ -40,8 +44,13 @@ expect itemtag quark:seed_pouch_holdable .*lemon_seeds
 @pass 13 smoking recipes, cook time 200, one per smoked shape (log, wood, stripped log, stripped wood, planks, slab, stairs, fence, fence gate, door, trapdoor, button, pressure plate); `creativeengineering:smokable/*` tags each hold oak and spruce, none hold `botania:*` or driftwood
 @fails `server_scripts/wood/smoked_wood.js`, `tags/wood_tags.js` 36-40 (RW-23)
 @from batches/r1031/a1_data.qb
-> zq recipes smoked
-> zq itemtag creativeengineering:smokable/planks
+@reviewed 2026-11-16
+> cdevtest recipes smoked max=200
+> cdevtest tag item creativeengineering:smokable/planks
+expect verb=tag kind=item tag=creativeengineering:smokable/planks .*minecraft:oak_planks
+expect verb=tag kind=item tag=creativeengineering:smokable/planks .*minecraft:spruce_planks
+reject verb=tag kind=item tag=creativeengineering:smokable/planks .*(botania:|driftwood)
+reject \[cdevtest\] verb=\S+ done=0
 look 13 smoking recipes, one per smoked shape, cook time 200 (rdetail if unsure); smokable tags hold oak and spruce, no botania:* and no driftwood
 
 ## SQ-RW-24 | treated wood spout recipes
@@ -50,9 +59,11 @@ look 13 smoking recipes, one per smoked shape, cook time 200 (rdetail if unsure)
 @pass two recipes: `#creativeengineering:unsmoked_planks` + 125 mB creosote, and `create_dd:smoked_planks` + 100 mB; `createaddition` treated-wood filling absent
 @fails `smoked_wood.js` 33-37 (RW-24, RW-26)
 @from batches/r1031/a1_data.qb
-> zq makes immersiveengineering:treated_wood_horizontal
-count filling.* -> \d+ immersiveengineering:treated_wood_horizontal >= 2
-reject createaddition:.*treated
+@reviewed 2026-11-16
+> cdevtest makes immersiveengineering:treated_wood_horizontal
+count verb=makes id=\S+ result=immersiveengineering:treated_wood_horizontal\S* serializer=create:filling >= 2
+reject verb=makes id=createaddition:\S*treated
+reject \[cdevtest\] verb=\S+ done=0
 look two create:filling (unsmoked planks + 125 mB, smoked planks + 100 mB) and two IE bottling (SQ-RW-25) in the same list
 
 ## SQ-RW-25 | treated wood bottling
@@ -61,8 +72,10 @@ look two create:filling (unsmoked planks + 125 mB, smoked planks + 100 mB) and t
 @pass two recipes, creosote 125 and 100 mB, same inputs as SQ-RW-24
 @fails `NCH.ieBottling` (RW-25)
 @from batches/r1031/a1_data.qb passed
-> zq rdetail treated_wood
-count bottling.*treated_wood == 2
+@reviewed 2026-11-16
+> cdevtest rdetail treated_wood max=100
+count verb=rdetail id=\S+ serializer=\S*bottling\S* result=\S*treated_wood == 2
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-RW-26 | unsmoked planks tag
 @group A
@@ -70,10 +83,12 @@ count bottling.*treated_wood == 2
 @pass contains oak and spruce planks, not `create_dd:smoked_planks`
 @fails `wood_tags.js` line 32
 @from batches/r1031/a1_data.qb passed
-> zq itemtag creativeengineering:unsmoked_planks
-expect itemtag creativeengineering:unsmoked_planks .*minecraft:oak_planks
-expect itemtag creativeengineering:unsmoked_planks .*minecraft:spruce_planks
-reject itemtag creativeengineering:unsmoked_planks .*create_dd:smoked_planks
+@reviewed 2026-11-16
+> cdevtest tag item creativeengineering:unsmoked_planks
+expect verb=tag kind=item tag=creativeengineering:unsmoked_planks .*minecraft:oak_planks
+expect verb=tag kind=item tag=creativeengineering:unsmoked_planks .*minecraft:spruce_planks
+reject verb=tag kind=item tag=creativeengineering:unsmoked_planks .*create_dd:smoked_planks
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-RW-27 | leather from bark
 @group A
@@ -81,9 +96,11 @@ reject itemtag creativeengineering:unsmoked_planks .*create_dd:smoked_planks
 @pass one recipe `creativeengineering:pickling/leather_from_bark`: 4 `#immersive_weathering:bark` + `#forge:salt`, 2400 ticks; the tag holds every species' bark (oak to azalea, crimson / warped scales, Upgrade Aquatic driftwood bark)
 @fails `server_scripts/wood/bark.js` (RW-27)
 @from batches/r1031/a1_data.qb
-> zq makes minecraft:leather
-> zq itemtag immersive_weathering:bark
-expect creativeengineering:pickling/leather_from_bark -> 1 minecraft:leather
+@reviewed 2026-11-16
+> cdevtest makes minecraft:leather
+> cdevtest tag item immersive_weathering:bark
+expect verb=makes id=creativeengineering:pickling/leather_from_bark result=minecraft:leather\*1
+reject \[cdevtest\] verb=\S+ done=0
 look the bark tag holds every species (oak to azalea, crimson and warped scales, Upgrade Aquatic driftwood bark)
 
 ## SQ-DD-08 | painted asphalt
@@ -92,11 +109,13 @@ look the bark tag holds every species (oak to azalea, crimson and warped scales,
 @pass 16 shaped recipes `creativeengineering:*_painted_asphalt` (8 out, `#create_dd:asphalt_blocks` or Immersive Petroleum asphalt around a dye), none of the 16 `create_dd:crafting/decor/*_asphalt_block`; 1 recipe `asphalt_from_painted_asphalt_soap` (8 Immersive Petroleum asphalt out)
 @fails `server_scripts/engineering/dreams_desires.js` (DD-08, DD-09)
 @from batches/r1031/a1_data.qb passed
-> zq recipes painted_asphalt
-count creative(engineering|equipment):shaped/[a-z_]*_painted_asphalt -> 8 [a-z_]*_asphalt_block == 16
-expect asphalt_from_painted_asphalt_soap -> 8 asphalt$
-> zq recipes create_dd:crafting/decor
-reject create_dd:crafting/decor/[a-z_]*_asphalt_block
+@reviewed 2026-11-16
+> cdevtest recipes painted_asphalt max=200
+count verb=recipes id=creative(engineering|equipment):shaped/[a-z_]*_painted_asphalt result=\S*_asphalt_block\*8 == 16
+expect verb=recipes id=\S*asphalt_from_painted_asphalt_soap result=\S*asphalt\*8$
+> cdevtest recipes create_dd:crafting/decor max=1000
+reject verb=recipes id=create_dd:crafting/decor/[a-z_]*_asphalt_block
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-CP-01 | seed milling to bone meal
 @group A
@@ -104,10 +123,12 @@ reject create_dd:crafting/decor/[a-z_]*_asphalt_block
 @pass tag holds the vanilla and modded seeds, not `farmersdelight:rice` nor corn kernels; one milling recipe `creativeengineering:createmilling/seeds_bone_meal`, chance 0.15
 @fails `tags/wood_tags.js`, `wood/compost.js` (CP-01)
 @from batches/r1031/a1_data.qb passed
-> zq makes minecraft:bone_meal
-> zq itemtag creativeengineering:millable_seeds
-expect creativeengineering:createmilling/seeds_bone_meal
-reject itemtag creativeengineering:millable_seeds .*(farmersdelight:rice |farmersdelight:rice$|corn_kernels)
+@reviewed 2026-11-16
+> cdevtest makes minecraft:bone_meal
+> cdevtest tag item creativeengineering:millable_seeds
+expect verb=makes id=creativeengineering:createmilling/seeds_bone_meal
+reject verb=tag kind=item tag=creativeengineering:millable_seeds .*(farmersdelight:rice(,|$)|corn_kernels)
+reject \[cdevtest\] verb=\S+ done=0
 
 ## CQ-SPC-01 | seeds go into a seed pouch
 @group client

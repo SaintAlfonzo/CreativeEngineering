@@ -12,20 +12,21 @@
 @@table
 ## SQ-GAP-01 | jams: one jar per Cooking Pot jam, 400-tick Fruits Delight jams, jars stack to 64
 @group A (full pack)
-@commands jams (TODO `dishes/jams #9`, changelog Jams): `/zq rdetail` on every recipe id that matches `vintagedelight:*jam*` and `fruitsdelight:*jam*` (`/zq recipes` filter, or grep `kubejs/exported/` recipe dump); read output count, cook time
-@pass every Vintage Delight jam recipe outputs 1 item; every Fruits Delight jam cooks 400 ticks in the Cooking Pot; the jam jar items stack to 64 (`/zq item vintagedelight:cherry_jam_jar` or the item dump `maxStackSize`)
+@commands jams (TODO `dishes/jams #9`, changelog Jams): `/cdevtest rdetail` on every recipe id that matches `vintagedelight:*jam*` and `fruitsdelight:*jam*` (`/cdevtest recipes` filter, or grep `kubejs/exported/` recipe dump); read output count, cook time
+@pass every Vintage Delight jam recipe outputs 1 item; every Fruits Delight jam cooks 400 ticks in the Cooking Pot; the jam jar items stack to 64 (`/cdevtest item vintagedelight:cherry_jam_jar` or the item dump `maxStackSize`)
 @fails `jams.js`, jar JSONs in the Delight jar, stack-size policy script
 @from batches/r1113/c4_a.qb
-> zq rdetail jam_jar
-waitlog \[zq\] done 30
-count \[zq\] \S+ \{farmersdelight:cooking\} -> 1 vintagedelight:\S*jam_jar >= 9
-reject \[zq\] \S+ \{farmersdelight:cooking\} -> ([2-9]|\d\d+) vintagedelight:\S*jam_jar
+@reviewed 2026-11-16
+> cdevtest rdetail jam_jar max=400
+waitlog \[cdevtest\] verb=rdetail text=jam_jar n= 30
+count \[cdevtest\] verb=rdetail id=\S+ serializer=farmersdelight:cooking result=vintagedelight:\S*jam_jar\*1 >= 9
+reject \[cdevtest\] verb=rdetail id=\S+ serializer=farmersdelight:cooking result=vintagedelight:\S*jam_jar\*([2-9]|\d\d+)
 > zc4 cooktime jam
 waitlog \[zc4\] done 30
-> zq item vintagedelight:cherry_jam_jar
-waitlog \[zq\] done 30
-expect \[zq\] item vintagedelight:cherry_jam_jar: .*max stack 64
+> cdevtest item vintagedelight:cherry_jam_jar
+expect \[cdevtest\] verb=item item=vintagedelight:cherry_jam_jar .*max_stack=64 
 look every fruitsdelight jam in the zc4 cook lines has time=400 (if none is listed, Fruits Delight jams are not Cooking Pot recipes in this build: record which serializer makes them)
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-GAP-02 | Moobloom rules idempotent, checker clean (offline)
 @group A
@@ -57,28 +58,30 @@ look 5 files each with 1 forge:none; region census finds no bushierflowers: bloc
 
 ## SQ-GAP-04 | rose gold in gold plate/wire/block tags; gold-input recipes and golden apple/pickaxe/chestplate/carrot take the tag; gold ingot and block literal
 @group A
-@commands Rose gold interchange (TODO `recipes/metal #3`, `#7`; rewritten 2026-11-14, plan_bugfix_1114.md 4.2): `/dumptags` item `forge:plates/gold`, `forge:wires/gold`, block `forge:storage_blocks/gold`; `/zq rdetail` on a gold-input recipe (clock, powered rail, mechanical crafter, a component_gold craft); `/zq recipes` that output `minecraft:gold_ingot`, `minecraft:gold_block`, `minecraft:golden_apple`, `minecraft:golden_pickaxe`, `minecraft:golden_chestplate`, `minecraft:golden_carrot`
+@commands Rose gold interchange (TODO `recipes/metal #3`, `#7`; rewritten 2026-11-14, plan_bugfix_1114.md 4.2): `/dumptags` item `forge:plates/gold`, `forge:wires/gold`, block `forge:storage_blocks/gold`; `/cdevtest rdetail` on a gold-input recipe (clock, powered rail, mechanical crafter, a component_gold craft); `/cdevtest recipes` that output `minecraft:gold_ingot`, `minecraft:gold_block`, `minecraft:golden_apple`, `minecraft:golden_pickaxe`, `minecraft:golden_chestplate`, `minecraft:golden_carrot`
 @pass rose gold plate and wire in the gold tags; each gold-input recipe takes a gold tag (rose gold works), the golden apple, golden pickaxe, golden chestplate and golden carrot included; gold ingot (from nuggets) and gold block still take literal gold only
 @fails `metal/rose_gold_interchange.js` `goldOnly` forms list, tag json
 @from batches/r1115/p1_a1.qb
-> zq itemtag forge:plates/gold
-> zq itemtag forge:wires/gold
-> zq blocktag forge:storage_blocks/gold
-> zq rdetail minecraft:clock
-> zq rdetail minecraft:powered_rail
-> zq rdetail mechanical_crafter
-> zq rdetail minecraft:golden_apple
-> zq rdetail minecraft:golden_pickaxe
-> zq rdetail minecraft:golden_chestplate
-> zq rdetail minecraft:golden_carrot
-> zq makes minecraft:gold_ingot
-waitlog \[zq\] makes minecraft:gold_ingot 30
-> zq makes minecraft:gold_block
-waitlog \[zq\] makes minecraft:gold_block 30
-expect itemtag forge:plates/gold \(\d+\): .*rose_gold
-expect itemtag forge:wires/gold \(\d+\): .*rose_gold
-expect blocktag forge:storage_blocks/gold \(\d+\): .*rose_gold
-look clock, rail, crafter, golden apple/pickaxe/chestplate/carrot: gold ingredient is a tag holding rose gold; gold ingot (nuggets) and gold block recipes take literal gold only
+@reviewed 2026-11-16
+> cdevtest tag item forge:plates/gold
+> cdevtest tag item forge:wires/gold
+> cdevtest tag block forge:storage_blocks/gold
+> cdevtest rdetail minecraft:clock
+> cdevtest rdetail minecraft:powered_rail
+> cdevtest rdetail mechanical_crafter
+> cdevtest rdetail minecraft:golden_apple
+> cdevtest rdetail minecraft:golden_pickaxe
+> cdevtest rdetail minecraft:golden_chestplate
+> cdevtest rdetail minecraft:golden_carrot
+> cdevtest makes minecraft:gold_ingot
+waitlog \[cdevtest\] verb=makes item=minecraft:gold_ingot n= 30
+> cdevtest makes minecraft:gold_block
+waitlog \[cdevtest\] verb=makes item=minecraft:gold_block n= 30
+expect \[cdevtest\] verb=tag kind=item tag=forge:plates/gold n=\d+ ids=.*rose_gold
+expect \[cdevtest\] verb=tag kind=item tag=forge:wires/gold n=\d+ ids=.*rose_gold
+expect \[cdevtest\] verb=tag kind=block tag=forge:storage_blocks/gold n=\d+ ids=.*rose_gold
+look rdetail ingredients= of clock, rail, crafter, golden apple/pickaxe/chestplate/carrot: the gold ingredient lists several items (a tag holding rose gold); gold ingot (nuggets) and gold block recipes (makes ids, then rdetail) take literal gold only
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-GAP-05 | golden egg: falls, sinks in water like an ordinary item, in no floating tag
 @group A
@@ -86,13 +89,15 @@ look clock, rail, crafter, golden apple/pickaxe/chestplate/carrot: gold ingredie
 @pass the egg falls (Pos[1] drops about 0.04 per tick squared) and sinks in water like an ordinary item; it is in none of the floating tags (or the owner's wish is recorded as floating)
 @fails `item_physics` tag json, ItemPhysic config
 @from batches/r1113/c4_a.qb
+@reviewed 2026-11-16
 > forceload add 40290 39990 40330 40010
 sleep 3
 > fill 40300 -63 40000 40300 -61 40002 minecraft:water
 > fill 40310 -63 40000 40310 -61 40002 minecraft:lava
-> zq tagsof vintagedelight:golden_egg
-waitlog \[zq\] done 20
-reject item tags of vintagedelight:golden_egg: .*creativecompat:physics/floats
+> cdevtest tagsof vintagedelight:golden_egg
+waitlog \[cdevtest\] verb=tagsof done=1 20
+expect \[cdevtest\] verb=tagsof id=vintagedelight:golden_egg item_tags=
+reject \[cdevtest\] verb=tagsof id=vintagedelight:golden_egg item_tags=\S*creativecompat:physics/floats
 > kill @e[type=minecraft:item,x=40290,y=-64,z=39990,dx=40,dy=20,dz=20]
 > summon minecraft:item 40300.5 -55 40000.5 {Item:{id:"vintagedelight:golden_egg",Count:1b},Tags:["gew"]}
 > summon minecraft:item 40300.5 -55 40002.5 {Item:{id:"minecraft:egg",Count:1b},Tags:["cew"]}
@@ -107,6 +112,7 @@ sleep 4
 > data get entity @e[tag=gel,limit=1] Pos
 > data get entity @e[tag=geg,limit=1] Pos
 look after 10 ticks both golden eggs are below y -55 (falling); after 4 s the water egg sits at the same depth as the plain egg (y -63 to -61), the ground egg at -60.0, the lava egg burns or floats per the lava rule; it is in no floating tag
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-GAP-06 | renames that need no client (lang sources)
 @group A
@@ -260,7 +266,18 @@ look ccaltime date prints the date as SQ-TD-01 describes
 @commands tooltips (changelog Interface & Tooltips, Botany Pots): hover Botany Pot ("Useful for flowers, not great for crops"), Copper Pot (4 ingredients, cooks some of what a Cooking Pot can), grape seeds that grow on the ground (need a full solid block, not farmland), a seasoning; open the JEI Grape Planting page
 @pass each tooltip reads as written, once, no duplicate line; JEI Grape Planting text fits its box (LOOK, expected tight, see SQ-GAP-08)
 @fails Compat / Brewing tooltip scripts, placeable-tooltip helper
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "miners_delight:copper_pot", "expect": "(?i)4 ingredients"}
+do {"tooltip_text": "vinery:red_grape_seeds", "expect": "(?i)full solid block"}
+do {"tooltip_text": "botanypots:black_concrete_botany_pot", "expect": "(?i)Useful for flowers, not great for crops"}
+do {"tooltip": "miners_delight:copper_pot"}
+shot copper_pot
+do {"tooltip": "vinery:red_grape_seeds"}
+shot grape_seeds
+do {"screen": "jei_recipes:vinery:red_grape_seeds"}
+shot jei_grape_planting
+do {"screen": "close"}
+look each tooltip line once, no duplicate (shots); a seasoning hovered by hand; JEI Grape Planting text fits its box (expected tight, SQ-GAP-08)
 ## CQ-GAP-03
 @group client
 @commands Hostile Delight / Delight leftovers: hover Rotten Ham and Cooked Rotten Ham (no raw or cooked meat food-type line), eat one, feed a dog Rotten Flesh and Rotten Ham

@@ -18,28 +18,98 @@
 @commands `logs/latest.log` after the title screen: grep `[compartment art]`
 @pass one line, "68 textures built from installed mods" (57 CfB + 11 Incubation), no "sources not found" in the full pack
 @fails `CompartmentArt.bytes` (mod file lookup or vanilla pack)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[compartment art\] 68 textures built from installed mods
+bootreject \[compartment art\].*sources not found
+shell grep -n "\[compartment art\]" logs/latest.log | cut -c1-240
 ## CQ-LCA-02
 @group client
 @commands Place or JEI-view the 19 spice racks, 19 tool racks, 19 fruit baskets (one of each wood: oak, crimson, twisted, dreamwood, smoked, treated wood, vertical treated wood, rubberwood, ancient, driftwood)
 @pass textured like before (the art in `textureswapper/rack/`), no missing texture; tool rack hooks grey
 @fails `ArtRecipes.PLANKS` path, `TOOL_RACK_HOOKS`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill 0 100 0 10 100 6 minecraft:stone
+> setblock 0 101 2 creativedelight:oak_spice_rack
+> setblock 0 101 4 creativedelight:oak_tool_rack
+> setblock 0 101 6 creativedelight:oak_fruit_basket
+> setblock 1 101 2 creativedelight:crimson_spice_rack
+> setblock 1 101 4 creativedelight:crimson_tool_rack
+> setblock 1 101 6 creativedelight:crimson_fruit_basket
+> setblock 2 101 2 creativedelight:twisted_spice_rack
+> setblock 2 101 4 creativedelight:twisted_tool_rack
+> setblock 2 101 6 creativedelight:twisted_fruit_basket
+> setblock 3 101 2 creativedelight:dreamwood_spice_rack
+> setblock 3 101 4 creativedelight:dreamwood_tool_rack
+> setblock 3 101 6 creativedelight:dreamwood_fruit_basket
+> setblock 4 101 2 creativedelight:smoked_spice_rack
+> setblock 4 101 4 creativedelight:smoked_tool_rack
+> setblock 4 101 6 creativedelight:smoked_fruit_basket
+> setblock 5 101 2 creativedelight:treated_wood_spice_rack
+> setblock 5 101 4 creativedelight:treated_wood_tool_rack
+> setblock 5 101 6 creativedelight:treated_wood_fruit_basket
+> setblock 6 101 2 creativedelight:vertical_treated_wood_spice_rack
+> setblock 6 101 4 creativedelight:vertical_treated_wood_tool_rack
+> setblock 6 101 6 creativedelight:vertical_treated_wood_fruit_basket
+> setblock 7 101 2 creativedelight:rubberwood_spice_rack
+> setblock 7 101 4 creativedelight:rubberwood_tool_rack
+> setblock 7 101 6 creativedelight:rubberwood_fruit_basket
+> setblock 8 101 2 creativedelight:ancient_spice_rack
+> setblock 8 101 4 creativedelight:ancient_tool_rack
+> setblock 8 101 6 creativedelight:ancient_fruit_basket
+> setblock 9 101 2 creativedelight:driftwood_spice_rack
+> setblock 9 101 4 creativedelight:driftwood_tool_rack
+> setblock 9 101 6 creativedelight:driftwood_fruit_basket
+do {"look": {"from": "5 106 -4", "at": "5 101 4"}}
+do {"wait": "chunks"}
+shot racks_placed
+do {"tooltip": "creativedelight:vertical_treated_wood_tool_rack"}
+shot vertical_tool_rack_item
+bootreject (?i)missing texture.*creativedelight:(\w+_)?(spice_rack|tool_rack|fruit_basket)
+look textured like the art in textureswapper/rack/ (one row per kind, 10 woods), no purple-black; tool rack hooks grey
 ## CQ-LCA-03
 @group client
 @commands Duck nest, goose nest (block and item), emu nest with eggs, duck and goose egg crates (top and side), duck and goose eggs in nests
 @pass as before (nests.md 4 table), no missing texture
 @fails `ArtRecipes.INCUBATION` colour maps
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill 0 100 10 8 100 12 minecraft:stone
+> setblock 0 101 11 creativedelight:duck_nest
+> setblock 2 101 11 creativedelight:goose_nest
+> setblock 4 101 11 creativedelight:emu_nest
+> setblock 6 101 11 creativedelight:duck_egg_crate
+> setblock 8 101 11 creativedelight:goose_egg_crate
+do {"look": {"from": "4 104 7", "at": "4 101 11"}}
+do {"wait": "chunks"}
+shot nests_and_crates
+do {"tooltip": "creativedelight:goose_nest"}
+shot goose_nest_item
+look nests and crates (top and side) as nests.md 4; eggs in nests: place them by hand once (the egg item per nest), no missing texture
 ## CQ-LCA-04
 @group client
 @commands F3+T with a resource pack on; then `kubejs/assets/creativedelight/textures/block/emu_eggs.png` test file (NE-10)
 @pass textures still there after reload; the kubejs file overrides the built emu eggs
 @fails pack position (BOTTOM)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill 0 100 10 4 100 12 minecraft:stone
+> setblock 0 101 11 creativedelight:duck_nest
+> setblock 4 101 11 creativedelight:emu_nest
+do {"look": {"from": "2 104 7", "at": "2 101 11"}}
+do {"wait": "chunks"}
+shot before_reload
+key F3+t
+do {"wait": "resources"}
+shot after_reload
+look the built textures still drawn after the reload (the two shots match); the kubejs emu_eggs.png override (NE-10) needs a test copy of the owner's art in kubejs/assets: owner step
 ## CQ-LCA-05
 @group client
 @commands Magic Resistance in the inventory and on the HUD (`/effect give @s creativebrewing:magic_resistance`)
 @pass the vanilla Resistance icon
 @fails CB jar not installed
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> effect give @s creativecommon:magic_resistance 60
+do {"effects": true, "expect": "creativecommon:magic_resistance"}
+do {"screen": "inventory"}
+shot inventory_icon
+do {"screen": "close"}
+shot hud_icon
+look both icons are the vanilla Resistance icon

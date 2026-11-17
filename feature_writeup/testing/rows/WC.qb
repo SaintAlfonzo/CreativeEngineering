@@ -28,8 +28,10 @@ look at most the Forge "Potentially Dangerous alternative prefix" warning for he
 @pass the tag holds `minecraft:bone_meal`
 @fails tag script not loaded
 @from batches/r1031/a1_data.qb passed
-> zq itemtag hearthandharvest:bonemeal_substitutes
-expect itemtag hearthandharvest:bonemeal_substitutes .*minecraft:bone_meal
+@reviewed 2026-11-16
+> cdevtest tag item hearthandharvest:bonemeal_substitutes
+expect verb=tag kind=item tag=hearthandharvest:bonemeal_substitutes n=\d+ ids=\S*minecraft:bone_meal
+reject \[cdevtest\] .*done=0
 
 ## SQ-WC-03 | (rerun on the moved can) bone meal loads from the off hand
 @group A
@@ -37,19 +39,22 @@ expect itemtag hearthandharvest:bonemeal_substitutes .*minecraft:bone_meal
 @pass `tag:{BonemealLevel:3,FertilizerItem:"minecraft:bone_meal"}`, 61 bone meal left
 @fails off-hand load path broken
 @from batches/r1101/p1_server.qb passed
+@reviewed 2026-11-16
 > setblock -20 -61 -20 minecraft:farmland
 > setblock -20 -60 -20 minecraft:wheat[age=0]
 > tp qa -20 -60 -22
 > item replace entity qa weapon.mainhand with hearthandharvest:watering_can{WaterLevel:16}
 > item replace entity qa weapon.offhand with minecraft:bone_meal 64
 repeat 3
-> zq useitem qa
+> cdevtest useair as=qa hand=both
 end
 > data get entity qa SelectedItem
 > data get entity qa Inventory[{Slot:-106b}].Count
 expect BonemealLevel: 3
 expect FertilizerItem: "minecraft:bone_meal"
 expect entity data: 61b
+count verb=useair who=\S*qa\S* hand=main result= >= 3
+reject \[cdevtest\] .*done=0
 > item replace entity qa weapon.offhand with minecraft:air
 
 ## CQ-WC-04 | watering can by hand (HNH-26, HNH-28, HNH-29)

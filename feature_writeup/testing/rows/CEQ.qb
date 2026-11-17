@@ -58,7 +58,27 @@ look packs line lists creativemagic and creativeequipment after the pack folder;
 @pass Ordinary flame fails and the frame turns to crying obsidian; Dark Fire opens the portal; existing portal blocks still there; Flint and Terrasteel, Ender Storage, CEI machine and sculk recipes exist under `creativemagic:`
 @fails `PortalFailureHandler` subscriber not registered (modid); `DARK_FIRE` not registered
 @jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 352 288 384 304
+# two obsidian frames (inside 2 x 3), one per igniter
+> fill 360 -61 300 363 -56 300 minecraft:obsidian
+> fill 361 -60 300 362 -57 300 minecraft:air
+> fill 370 -61 300 373 -56 300 minecraft:obsidian
+> fill 371 -60 300 372 -57 300 minecraft:air
+> cdevtest use 361 -61 300 held=minecraft:flint_and_steel face=up
+sleep 1
+> cdevtest state 361 -60 300
+> cdevtest count 360 -61 300 363 -56 300 minecraft:crying_obsidian
+> cdevtest use 371 -61 300 held=creativemagic:flint_and_terrasteel face=up
+sleep 1
+> cdevtest state 371 -60 300
+> cdevtest recipes creativemagic: max=400
+expect verb=count block=minecraft:crying_obsidian n=[1-9]
+reject verb=state pos=361,-60,300 state="?minecraft:nether_portal
+expect verb=state pos=371,-60,300 state="?minecraft:nether_portal
+expect verb=recipes id=creativemagic:\S*flint_and_terrasteel
+reject verb=\S+ .*done=0
+look recipes list has Ender Storage, CEI machine and sculk recipes under creativemagic:; portal blocks of the old save (same save as SQ-CMG-01) still standing is checked by the runner where that save's portal was
 ## SQ-CMG-05 | Trinket Case probe, experience fluid tag
 @group A
 @commands Same boot: `trinket_case_probe.js` (SQ-TC-01 config, then SQ-TC-02 with the `false` from the carry); `/dumptags` fluid `forge:experience`; MoreJS enchanted book trades
@@ -77,13 +97,29 @@ look one fluid (Create liquid experience); no Cycle, Stockpile, Recovery: checke
 @commands Same save: `/data get` the chest with the skinned backpack and the player inventory (tier shield, stepstool in the Curios feet slot); `/give` each tier shield; `/dumptags` item `creativeengineering:stepstools`, `curios:feet`, `creativeengineering:dragon_gear`, `creativeengineering:elytra_chestplates`, `creativeengineering:bonemeal_charms`
 @pass Items load with their NBT (skin tag kept); `creativeengineering:copper_shield` .. `dragon_shield` exist; the tags hold the same members as on boot 1
 @fails ids registered under the wrong namespace; tag script missing from the jar tree
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest reg item ^creativeequipment:\w+_shield$
+> cdevtest tag item creativeequipment:stepstools
+> cdevtest tag item curios:feet
+> cdevtest tag item creativeequipment:dragon_gear
+> cdevtest tag item creativeequipment:elytra_chestplates
+> cdevtest tag item creativeequipment:bonemeal_charms
+expect verb=reg kind=item id=creativeequipment:copper_shield 
+expect verb=reg kind=item id=creativeequipment:dragon_shield 
+expect verb=tag kind=item tag=creativeequipment:stepstools n=1[6-9]
+expect verb=tag kind=item tag=curios:feet .*ids=\S*creativeequipment:\w+_stepstool
+expect verb=tag kind=item tag=creativeequipment:dragon_gear n=[1-9]
+expect verb=tag kind=item tag=creativeequipment:elytra_chestplates n=[1-9]
+expect verb=tag kind=item tag=creativeequipment:bonemeal_charms n=[1-9]
+reject verb=\S+ .*done=0
+look tag members equal boot 1's lists (r1106 dumps); the skinned backpack chest and the player inventory of the old save are read with /data get where that save put them
 ## SQ-CEQ-02 | bone meal charm refund (dragon hoe in the off hand); bottled air underwater (shield block and air brake glide: client)
 @group A
 @commands Bot player: block a zombie hit with an iron shield and a copper shield; hold the air brake while gliding (`/effect` levitation off, elytra on); bone meal with the dragon hoe in the off hand (100 tries); glass bottle in water with the bot underwater at low air
 @pass Shield wear and reduction as the [shields] values say (SQ-SH rows); air brake slows the glide; bone meal refunds at about `bonemeal_charm.chance`; Bottled Air refills air
 @fails listener not registered in `CreativeEquipment`; config read from the wrong class
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-16
 shell grep -A5 "^\[bonemeal_charm\]" config/creativeequipment-common.toml | grep -vE "^\s*#"; grep -A6 "^\[bottled_air\]" config/creativeequipment-common.toml | grep -vE "^\s*#"
 > setblock 340 -61 320 minecraft:farmland
 > pbot hold c2b minecraft:bone_meal 64
@@ -92,8 +128,7 @@ repeat 60
 > setblock 340 -60 320 minecraft:wheat[age=0]
 > pbot use c2b 340 -60 320
 end
-> zp inv c2b
-waitlog \[zp\] done 20
+> pbot inv c2b get
 look bone meal left = 4 + refunds of 60 uses: with chance 0.5 about 34 (24 to 44 is fine); the hoe in the off hand may have lost durability (damageChance)
 > clear c2b
 > fill 344 -61 318 348 -58 322 minecraft:glass hollow
@@ -101,36 +136,38 @@ look bone meal left = 4 + refunds of 60 uses: with chance 0.5 about 34 (24 to 44
 > tp c2b 346 -60 320
 > pbot hold c2b minecraft:glass_bottle 1
 > zc2 air c2b 30
-> zq useitem c2b
+> cdevtest useair as=c2b hand=both
 sleep 1
 > zc2 air c2b -1
-> zp inv c2b
-waitlog \[zp\] done 20
-look the useitem result and what the bottle became (zp inv); air after the use above 30 if bottled air refills it (airPerBottle 150), or a bottle of air in the inventory to drink (noDrinkingUnderwater = true: drinking underwater refused). Not judged when the bot's view did not hit water (useitem PASS and nothing changed): client row then
+> pbot inv c2b get
+look the useitem result and what the bottle became (pbot inv get); air after the use above 30 if bottled air refills it (airPerBottle 150), or a bottle of air in the inventory to drink (noDrinkingUnderwater = true: drinking underwater refused). Not judged when the bot's view did not hit water (useitem PASS and nothing changed): client row then
 > tp c2b 300 -60 296
 > clear c2b
+reject verb=\S+ .*done=0
 
 ## SQ-CEQ-03
 @group A
 @commands Bot: equip a stepstool in the feet slot, send the step-up packet (or `perfBot` step command); stand on it, move
 @pass Player raised one block, steps off on move; no `creativeengineering:stepstool` channel mismatch on join
 @fails channel not registered (`Stepstool.register`)
-@draft no batch holds this row yet
+@draft the step-up comes from the client's key packet; no /pbot or /cdevtest verb sends it (a client row, or a pbot step verb first)
 ## SQ-CEQ-04 | Equipment recipes under creativeequipment:, felsic assembly reads its potion mB from the Equipment toml
 @group A
 @commands Recipe dump: `grep -c "creativeequipment:" ` in the recipe list; check felsic assembly, End gear, shield, stepstool, archery, bullets, camera bag, backpack skin recipes
 @pass All present under `creativeequipment:` ids; felsic assembly reads its potion mB from `creativeequipment-common.toml`
 @fails `CEQ.recipes` wrapper broken; `NCH.cfg` falls back to defaults
 @from batches/r1113/c2_a1.qb
-> zq recipes creativeequipment:
-> zq rdetail felsic
-> zq recipes stepstool
-> zq recipes shield
-> zq recipes camera_bag
+@reviewed 2026-11-16
+> cdevtest recipes creativeequipment:
+> cdevtest rdetail felsic
+> cdevtest recipes stepstool
+> cdevtest recipes shield
+> cdevtest recipes camera_bag
 waitlog recipes matching camera_bag 30
 shell grep -nE "felsic|potion" config/creativeequipment-common.toml | grep -vE "^\s*[0-9]+:\s*#" | head -8
-expect recipes matching creativeequipment:: \d{3}
+expect verb=recipes text=creativeequipment: n=\d{3}
 look count about 167 (r1106 SPF-50); felsic assembly (sequenced) has a create:filling step whose fluid amount equals the toml's felsic potion mB; end gear, shields, stepstools, archery, bullets, camera bag, backpack skin recipes present under creativeequipment:
+reject verb=\S+ .*done=0
 
 ## SQ-CEQ-05 | needs_copper_tool tier tags; one harvest.js run; a copper pickaxe mines a copper-tier block
 @group A
@@ -138,50 +175,81 @@ look count about 167 (r1106 SPF-50); felsic assembly (sequenced) has a create:fi
 @pass One tier and one tool per listed block, as before; `harvest.js` runs once (one `[tags]` log line, not two); copper pickaxe uses the copper tier
 @fails `harvest.js` in both the CD and Equipment jars; `CopperPickaxeItemMixin` gated off
 @from batches/r1113/c2_a1.qb
-> zq tagsof creativeengineering:aluminum_plate_block
-> zq tagsof creativeengineering:copper_dust_pile
-> zq blocktag creativeequipment:needs_copper_tool
+@reviewed 2026-11-16
+> cdevtest tagsof creativeengineering:aluminum_plate_block
+> cdevtest tagsof creativeengineering:copper_dust_pile
+> cdevtest tag block creativeequipment:needs_copper_tool
 shell grep -cE "\[tags\].*harvest|harvest\.js" logs/kubejs/server.log; grep -nE "\[tags\].*harvest|harvest\.js" logs/kubejs/server.log | head -4 | cut -c1-200
 > setblock 342 -60 300 creativeengineering:aluminum_plate_block
-> zact break 342 -60 300 everythingcopper:copper_pickaxe
+> cdevtest break 342 -60 300 held=everythingcopper:copper_pickaxe
 > setblock 343 -60 300 creativeengineering:aluminum_plate_block
-> zact break 343 -60 300 minecraft:wooden_pickaxe
-expect blocktag creativeequipment:needs_copper_tool \(14\)
+> cdevtest break 343 -60 300 held=minecraft:wooden_pickaxe
+expect verb=tag kind=block tag=creativeequipment:needs_copper_tool n=14 
+count verb=break who=\S+ broken=true == 2
+expect verb=break drops=creativeengineering:aluminum_plate_block:1\b
+expect verb=break drops=- 
 look aluminum plate block: one tier tag (needs_copper_tool) and one tool tag (mineable/pickaxe); copper dust pile likewise (row's plate_block_iron does not exist: iron dust pile is the iron-tier member now); harvest.js line once; copper pickaxe break sums 1 aluminum_plate_block, wooden pickaxe sums 0
+reject verb=\S+ .*done=0
 
 ## SQ-CEQ-06
 @group A
 @commands Dedicated server boot with Nock Enough Arrows; bot joins
 @pass No `DecoderException: readerIndex` kick (NockRecipeBookSync still runs from Equipment's common setup)
 @fails `commonSetup` listener not added
-@draft no batch holds this row yet
+@draft the readerIndex kick is a client decode on a network join; perfBot bots have no connection, so only a real client joining the dedicated server shows it (client pass)
 ## SQ-CEQ-07
 @group A
 @commands Dragon gear worn by the bot at reduced durability, wait 220 ticks
 @pass Durability up by `[dragon_gear.autorepair] amountPerInterval`
 @fails `dragon_autorepair.js` still loads `CEConfig`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -A8 "autorepair" config/creativeequipment-common.toml | grep -E "^\s*(enabled|intervalTicks|amountPerInterval)"
+> pbot spawn c7 330.5 -60 330.5 minecraft:overworld survival
+sleep 2
+> item replace entity c7 armor.head with dragonloot:dragon_helmet{Damage:200}
+> cdevtest tickwarp 220
+waitlog verb=tickwarp end=done ticks=220 30
+> data get entity c7 Inventory[{Slot:103b}].tag.Damage
+> pbot remove c7
+expect c7 has the following entity data: (150|100)$
+reject verb=\S+ .*done=0
+look with amountPerInterval 50 and intervalTicks 200 the helmet goes 200 -> 150 (one pulse in 220 ticks; a second pulse gives 100: fine if the pulse timer started earlier)
 ## SQ-CEQ-08 | tune_tools / tune_armor attributes on echo, felsic, dragon gear and a wooden knife
 @group A
 @commands `tune_tools` / `tune_armor`: `/data get` attributes of an echo sword, felsic pickaxe, dragon helmet and a wooden knife (More Delight)
 @pass Values as the boilerplate in `func/tune_tools.js` / `tune_armor.js` (same as before the carve); echo pickaxe, axe, shovel, hoe and Felsic Scrap exist
 @fails Equipment startup pack not loaded, or loaded before the dicts
 @from batches/r1113/c2_a1.qb
-> zc2 attrs create_deep_dark:echo_sword
-> zc2 attrs creativeequipment:echo_pickaxe
-> zc2 attrs felsic_gear:felsic_pickaxe
-> zc2 attrs dragonloot:dragon_helmet
-> zc2 attrs moredelight:wooden_knife
-> zc2 reg item ^creativeequipment:(echo_(pickaxe|axe|shovel|hoe)|felsic_scrap)$
-waitlog reg item 20
-expect reg item \S+: 5\b
-look attack damage / speed / armor values against the boilerplate in Equipment's kubejs_startup func/tune_tools.js and tune_armor.js (development/creativeEquipment/src/main/resources/kubejs_startup/); same as before the carve (r1106 SPF-50 tags equal)
+@reviewed 2026-11-16
+> cdevtest attrs create_deep_dark:echo_sword
+> cdevtest attrs creativeequipment:echo_pickaxe
+> cdevtest attrs felsic_gear:felsic_pickaxe
+> cdevtest attrs dragonloot:dragon_helmet
+> cdevtest attrs moredelight:wooden_knife
+> cdevtest reg item ^creativeequipment:(echo_(pickaxe|axe|shovel|hoe)|felsic_scrap)$
+expect verb=reg kind=item regex=\S+ n=5\b
+count verb=attrs item=\S+ n=[1-9] == 5
+reject verb=\S+ .*done=0
+look the verb=attrs slot/attribute/amount lines: attack damage / speed / armor values against the boilerplate in Equipment's kubejs_startup func/tune_tools.js and tune_armor.js (development/creativeEquipment/src/main/resources/kubejs_startup/); same as before the carve (r1106 SPF-50 tags equal)
 
 ## CQ-CEQ-01
 @group client
 @commands Client: hold each tier shield and block; wear a skinned backpack (with `allowEquip` on) and place it; stepstool Step Up key in Controls; Iron Shield name; felsic, dragon and stepstool tooltips; Flint and Terrasteel and Dark Fire names and textures; enchanted book with Cycle shows the red line
 @pass LOOK: shields render with their base textures and block pose; backpack shows the skin block; key listed as "Step Up (Stepstool)"; names and tooltips as before; Dark Fire animated as before
 @fails client registrations (`ClientModEvents`) not on `creativeequipment`; lang file under the wrong namespace
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> clear @s
+> give @s creativeequipment:copper_shield
+> give @s minecraft:shield
+> give @s creativeequipment:dragon_shield
+> give @s creativemagic:flint_and_terrasteel
+do {"tooltip_text": {"slot": 36}, "expect": "Shield"}
+do {"tooltip_text": "minecraft:shield", "expect": "Iron Shield"}
+do {"tooltip_text": "creativeequipment:red_stepstool"}
+do {"tooltip_text": "creativemagic:flint_and_terrasteel", "reject": "item\\.creativemagic"}
+do {"slot": 0}
+do {"walk": 10, "keys": "use"}
+shot shield_block
+look shield renders and blocks; tooltips as before; the skinned backpack, the Step Up (Stepstool) key in Controls, Dark Fire animation and the Cycle red line by hand
 @@text
 @@text Results: not run yet.

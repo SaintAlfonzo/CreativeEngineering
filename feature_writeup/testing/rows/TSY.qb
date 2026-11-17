@@ -19,13 +19,17 @@
 @commands boot the dedicated scratch server; join with the scratch client; grep the server log
 @pass `[trade sync] built N trade list(s), M listing(s) sampled` once (N = professions + 1), then `[trade sync] sent N trade list(s) to 1 player(s)`; no exception naming `TradeSync`; no hang at login (sampling skips map listings)
 @fails a hang: a listing's `getOffer(null, ...)` locates; add its class to the skip test in `TradeSync.sample`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[trade sync\] built \d+ trade list\(s\), \d+ listing\(s\) sampled
+bootreject (?i)exception.*TradeSync|TradeSync.*exception
+shell n=$(grep -ac '\[trade sync\] built' logs/latest.log); echo "built lines $n"; grep -aE '\[trade sync\]' logs/latest.log | cut -c1-200 | head -6; [ "$n" = 1 ]
+look N in the built line = professions + 1; the `sent N trade list(s) to 1 player(s)` line and no login hang need the scratch client joined to this dedicated server (client half, run with the client session)
 ## SQ-TSY-02
 @group A
 @commands `/reload` with the client joined
 @pass the `sent` line again, no second `built` line; client log shows `applied` again before JEI's reload lines
 @fails `OnDatapackSyncEvent` player-list branch
-@draft no batch holds this row yet
+@draft needs the scratch client joined to the dedicated server during the /reload (the pass reads the client log `applied` line before JEI's reload); qrun.py client drives an integrated server, so this waits for a dedicated-server client session
 @@text
 @@text Client:
 @@text - CQ-TSY-01 (on the dedicated scratch server): client `latest.log` has `[trade sync] applied the server's villager and

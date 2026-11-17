@@ -36,9 +36,11 @@ shell python3 -I $INST/tools/scratch_query/dumpq.py food moredelight:toast fast=
 @pass `creativedelight:...cheese_toast` shapeless (Toast + Flaxen Cheese Wedge); `forge:sliced_potato` and `forge:sliced_potatoes` both hold Rustic's slices (More Delight's six potato recipes read the plural, `dishes/ingredients #26`); the four renamed pack tags filled
 @fails tags
 @from batches/r1101/w2_worldgen.qb
-> zq rdetail cheese_toast
-> zq itemtag forge:sliced_potato
-> zq itemtag forge:sliced_potatoes
-> zq rdetail moredelight:mashed_potatoes
-expect itemtag forge:sliced_potatoes .*rusticdelight
+@reviewed 2026-11-16
+> cdevtest rdetail cheese_toast
+> cdevtest tag item forge:sliced_potato
+> cdevtest tag item forge:sliced_potatoes
+> cdevtest rdetail moredelight:mashed_potatoes
+expect verb=tag kind=item tag=forge:sliced_potatoes .*.*rusticdelight
 look cheese toast shapeless (toast + flaxen cheese wedge); both slice tags hold Rustic's slices; More Delight potato recipes show a slice item
+reject verb=\S+ .*done=0

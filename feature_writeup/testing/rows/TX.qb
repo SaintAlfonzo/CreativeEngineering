@@ -17,17 +17,54 @@
 @group creative superflat
 @commands Plant Coffee, Bell Pepper, Pale Bell Pepper and Dark Bell Pepper seeds; bone meal each through every stage: no purple-black stage, none of the four crops missing a texture; latest.log has no `Missing textures in model` lines for these crops
 @pass SQ-RD-32
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill ~-4 ~-1 ~3 ~4 ~-1 ~4 minecraft:farmland
+# columns at x -3, -1, 1, 3: at x -4 the near plant sat outside the view (yaw 0, pitch 35, 16:9)
+> setblock ~-3 ~ ~3 rusticdelight:coffee
+> setblock ~-3 ~ ~4 rusticdelight:coffee
+> setblock ~-1 ~ ~3 rusticdelight:bell_peppers
+> setblock ~-1 ~ ~4 rusticdelight:bell_peppers
+> setblock ~1 ~ ~3 rusticdelight:pale_bell_peppers
+> setblock ~1 ~ ~4 rusticdelight:pale_bell_peppers
+> setblock ~3 ~ ~3 rusticdelight:dark_bell_peppers
+> setblock ~3 ~ ~4 rusticdelight:dark_bell_peppers
+do {"look": {"yaw": 0, "pitch": 35}}
+do {"wait": "chunks"}
+shot crops_t0
+> gamerule randomTickSpeed 200
+do {"wait": 60}
+shot crops_t60
+do {"wait": 120}
+shot crops_t180
+do {"wait": 300}
+shot crops_t480
+> gamerule randomTickSpeed 3
+shell ! grep -E "Missing textures in model.*rusticdelight:block/(coffee|bell_pepper|pale_bell_pepper|dark_bell_pepper)" logs/latest.log
+look the four shots walk the four crops (coffee, bell, pale and dark pepper, two of each) through their stages under a high randomTickSpeed: no purple-black stage, none missing a texture
 ## CQ-TX-02
 @group same
 @commands Place a Bell Pepper Medley, Pale Bell Pepper Medley and Dark Bell Pepper Medley: the platter under each shows a texture (new `farmersdelight:block/platter`); take servings down to leftovers, platter still drawn
 @pass SQ-RD-32
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> setblock ~-2 ~ ~3 rusticdelight:bell_pepper_medley
+> setblock ~ ~ ~3 rusticdelight:pale_bell_pepper_medley
+> setblock ~2 ~ ~3 rusticdelight:dark_bell_pepper_medley
+do {"look": {"yaw": 0, "pitch": 35}}
+do {"wait": "chunks"}
+shot medleys_full
+look the platter under each medley has a texture (`farmersdelight:block/platter`); take servings down to leftovers by hand (or `use` with a bowl) and the platter is still drawn
 ## CQ-TX-03
 @group same
 @commands Place a two-high Cooking for Blockheads Fridge: the white box on top has a texture and fills the block (the model now uses CfB's own `fridge_top`, `fridge_side`, `fridge_back`; the custom `fridge_top_fill` is deleted; latest.log has no missing-texture line for `fridge_large_upper`)
 @pass CQ-NEW-05
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> setblock ~ ~ ~3 cookingforblockheads:fridge
+> setblock ~ ~1 ~3 cookingforblockheads:fridge
+do {"look": {"yaw": 0, "pitch": 10}}
+do {"wait": "chunks"}
+shot fridge_two_high
+shell ! grep -E "Missing textures in model.*fridge_large_upper" logs/latest.log
+look the white box on top has a texture and fills the block (CfB's own fridge_top, fridge_side, fridge_back)
 ## CQ-TX-04
 @group same
 @commands Sunbloom (Moobloom) in the world and in the JEI Moobloom Conversion and Shearing pages: sunflower faces show, not the back
@@ -181,18 +218,15 @@ count verb=watch t=(0|10|20|30|40) == 5
 
 ## SQ-TX-09 | data verbs against /zq
 @group A
-@commands Data verbs against `/zq` on the same boot: `cdevtest recipes minecraft:bread` / `zq recipes minecraft:bread`; `cdevtest food minecraft:bread` / `zq food minecraft:bread`; `cdevtest tag item minecraft:logs` / `zq itemtag minecraft:logs`; `cdevtest states` / `zq states all`; `cdevtest rdetail create:crushing/`; `cdevtest bytype minecraft:smelting`; `cdevtest uses minecraft:wheat`; `cdevtest makes minecraft:bread`; `cdevtest tagsof minecraft:oak_log`; `cdevtest attrs minecraft:diamond_sword`; `cdevtest reg item ^minecraft:wheat`; `cdevtest potion minecraft:awkward minecraft:sugar,minecraft:spider_eye`; `cdevtest item minecraft:bread`
-@pass counts and values equal the `/zq` lines (recipe count, nutrition and modifier, tag size, state count); rdetail has `part=results` lines; bytype `n=` over 100; attrs `n=` 2 or more on mainhand; potion `output="minecraft:potion minecraft:swiftness"` and `minecraft:potion minecraft:poison` for the eye (vanilla; r1116); every call `done=1`
+@commands Data verbs (the `/zq` side passed in r1116 and `zq_probe.js` is retired, so the row now checks known vanilla values): `cdevtest recipes minecraft:bread`; `cdevtest food minecraft:bread`; `cdevtest tag item minecraft:logs`; `cdevtest states`; `cdevtest rdetail create:crushing/`; `cdevtest bytype minecraft:smelting`; `cdevtest uses minecraft:wheat`; `cdevtest makes minecraft:bread`; `cdevtest tagsof minecraft:oak_log`; `cdevtest attrs minecraft:diamond_sword`; `cdevtest reg item ^minecraft:wheat`; `cdevtest potion minecraft:awkward minecraft:sugar,minecraft:spider_eye`; `cdevtest item minecraft:bread`
+@pass bread recipe listed, bread `nutrition=5 modifier=0.6`, logs tag `n=` over 20, `states=` with `headroom=`; rdetail has `part=results` lines; bytype `n=` over 100; attrs `n=` 2 or more on mainhand; potion `output="minecraft:potion minecraft:swiftness"` and `minecraft:potion minecraft:poison` for the eye (vanilla; r1116); every call `done=1`
 @fails a mismatch with `/zq`: `TestData` (Ingredient.getItems vs KubeJS getStacks); rdetail extras: reflection names `getRollableResults`, `getSequence`
 @from batches/r1116/tx.qb
+@reviewed 2026-11-16
 > cdevtest recipes minecraft:bread
-> zq recipes minecraft:bread
 > cdevtest food minecraft:bread
-> zq food minecraft:bread
 > cdevtest tag item minecraft:logs
-> zq itemtag minecraft:logs
 > cdevtest states
-> zq states all
 sleep 5
 > cdevtest rdetail create:crushing/
 > cdevtest bytype minecraft:smelting
@@ -209,7 +243,12 @@ expect verb=bytype .*n=[1-9]\d{2,}
 expect output="minecraft:potion minecraft:swiftness"
 reject verb=(recipes|food|tag|states|rdetail|bytype|uses|makes|tagsof|attrs|reg|potion|item) done=0
 count verb=(recipes|food|tag|states|rdetail|bytype|uses|makes|tagsof|attrs|reg|potion|item) done=1 == 13
-look counts and values equal the /zq lines (recipe count, nutrition and modifier, tag size, state count); attrs n= 2+ on mainhand; spider eye gives awkward or nothing
+expect verb=recipes id=minecraft:bread result=minecraft:bread\*1
+expect verb=food item=minecraft:bread\*1 food=true nutrition=5 modifier=0.6 
+expect verb=tag kind=item tag=minecraft:logs n=([2-9]\d|\d{3,}) 
+expect verb=states states=\d+ ceiling=1048576 headroom=
+expect verb=attrs item=minecraft:diamond_sword\*1 n=([2-9]|\d\d)
+look spider eye gives awkward or nothing (the potion line for it)
 
 ## SQ-TX-10 | break, use, loot, useair as the fake player
 @group A
@@ -382,6 +421,89 @@ look dump json: class=in_tag for snow 1-8, 9 IW leaf piles + azalea_flower_pile 
 sleep 2
 expect \[cdevreload\] compat: 
 reject not loaded yet
+
+## SQ-TX-19 | season (moved from /zq, Creative Calendar read reflectively)
+@reviewed 2026-11-17
+@group A
+@jars creativedevtools creativecalendar
+@commands `cdevtest season minecraft:plains,minecraft:desert,minecraft:snowy_plains`; `cdevtest season minecraft:plains minecraft:jungle`; `cdevtest season minecraft:bogus`; `cdevtest tag biome creativecalendar:seasons/arid`
+@pass one line per biome `verb=season biome=<id> type=<TEMPERATE|COLD|TROPICAL|DRY|ARID|FROZEN|PERMANENT_*|null> enabled=true` (3 lines, then 2 for the space form); bogus `error="no biome minecraft:bogus"` `done=0`; desert `type=ARID` exactly when the arid tag lists minecraft:desert; the types match what `/zq season` printed in older run docs
+@fails `TestJudges.season`: `error="Creative Calendar not loaded"` with Calendar in mods = the class name `com.SaintAlfonzo.creativecalendar.seasons.SeasonTypes` moved; `enabled=false` and every type null = Calendar seasons switched off in the scratch toml
+> cdevtest season minecraft:plains,minecraft:desert,minecraft:snowy_plains
+> cdevtest season minecraft:plains minecraft:jungle
+> cdevtest season minecraft:bogus
+> cdevtest tag biome creativecalendar:seasons/arid
+expect verb=season biome=minecraft:plains type=\S+ enabled=true
+expect verb=season biome=minecraft:snowy_plains type=\S+ enabled=
+expect verb=season biome=minecraft:jungle type=
+expect verb=season error="no biome minecraft:bogus"
+expect verb=season done=0
+reject Creative Calendar not loaded|Exception|\tat 
+look desert type=ARID only if the arid tag line lists minecraft:desert; snowy_plains FROZEN or COLD
+
+## SQ-TX-20 | floating (moved from /zq)
+@reviewed 2026-11-17
+@group A
+@commands `setblock 985 -60 893 minecraft:sand` (on grass); `setblock 987 -57 893 minecraft:gravel` (over air, falls); `sleep 3`; `cdevtest floating 985 893 4`; `cdevtest floating 985 893 65`; `cdevtest floating 985 893 2 dim=minecraft:the_nether`
+@pass the 9x9 square after the gravel landed: `n=0 shown=0 skipped_columns=0` (sand on grass does not count); r 65 `error="r out of range 0..64: 65"` `done=0`; Nether (chunks not loaded) `n=0 shown=0 skipped_columns=25`; a real floating hit is checked in SQ-TX-23
+@fails `GroundJudge.floats` (harness: cdevtest_harness/run.sh); n>0 here: an earlier row left sand or gravel over air near 985 893 (read the `block= pos=` lines)
+> setblock 985 -60 893 minecraft:sand
+> setblock 987 -57 893 minecraft:gravel
+sleep 3
+> cdevtest floating 985 893 4
+> cdevtest floating 985 893 65
+> cdevtest floating 985 893 2 dim=minecraft:the_nether
+expect verb=floating n=0 shown=0 skipped_columns=0
+expect verb=floating error="r out of range 0\.\.64: 65"
+expect verb=floating n=0 shown=0 skipped_columns=25
+reject Exception|\tat 
+
+## SQ-TX-21 | under: arguments and output form (moved from /zq)
+@reviewed 2026-11-17
+@group A
+@commands `cdevtest under 985 900 1 -`; `cdevtest under 985 900 1 village`; `cdevtest under 985 900 40`; `cdevtest under 985 900 1 - minecraft:the_nether`; `cdevtest under 985 900 1 - minecraft:overworld dim=minecraft:the_end`
+@pass the forceloaded site: `verb=under starts=<n> skipped_chunks=0` (superflat may have no starts; then 0), with each start line in the form `id= chunk= box= pieces= cols= unloaded_cols= air_below= air_max= over6= water_below= water_max= base_water= base_earth= ring= foreign=`; rChunks 40 `error="rChunks out of range 0..32: 40"`; Nether positional `starts=0 skipped_chunks=9`; positional dim plus dim= `error="dim given twice"`
+@fails `TestJudges.under` / `GroundJudge.under` (harness); skipped_chunks>0 at the site: forceload from the section header not run
+> cdevtest under 985 900 1 -
+> cdevtest under 985 900 1 village
+> cdevtest under 985 900 40
+> cdevtest under 985 900 1 - minecraft:the_nether
+> cdevtest under 985 900 1 - minecraft:overworld dim=minecraft:the_end
+expect verb=under starts=\d+ skipped_chunks=0
+expect verb=under error="rChunks out of range 0\.\.32: 40"
+expect verb=under starts=0 skipped_chunks=9
+expect verb=under error="dim given twice"
+reject Exception|\tat 
+
+## SQ-TX-22 | nbt (moved from /zq)
+@reviewed 2026-11-17
+@group A
+@commands `cdevtest nbt minecraft:potion`; `cdevtest nbt minecraft:potion{Potion:'minecraft:swiftness'}`; `cdevtest nbt minecraft:stick`
+@pass bare potion: `has_tag=true tag="{CustomPotionColor:1,Potion:\"minecraft:water\"}"` (the /zq fixed tag) `share_tag=` same `potion=minecraft:water`; SNBT form `potion=minecraft:swiftness` and no CustomPotionColor; stick (a bare id, so the fixed tag too) `has_tag=true potion=minecraft:water`
+@fails `TestJudges.nbt`, `TestCtx.stack` (SNBT form: single-quoted strings)
+> cdevtest nbt minecraft:potion
+> cdevtest nbt minecraft:potion{Potion:'minecraft:swiftness'}
+> cdevtest nbt minecraft:stick
+expect verb=nbt item=minecraft:potion has_tag=true .*potion=minecraft:water
+expect verb=nbt item=minecraft:potion has_tag=true .*potion=minecraft:swiftness
+expect verb=nbt item=minecraft:stick has_tag=true .*potion=minecraft:water
+reject Exception|\tat 
+
+## SQ-TX-23 | under and floating on natural starts, efb_judge reads the new lines
+@reviewed 2026-11-17
+@group B (normal world, seed 8675309; second boot `prep_srv.sh OUT txb B`)
+@commands `cdevtest under 0 0 4 -`; `cdevtest floating 0 0 48`; then `python3 tools/scratch_query/efb_judge.py under OUT/srv/logs/latest.log`
+@pass `verb=under` start lines for the structures near spawn, then `starts=<n>` and `done=1`; efb_judge's `under: <n> starts` equals the verb's `starts=` and lists the same ids; floating lines (if any) name sand, red sand or gravel over caves, with n at least the number of lines shown; numbers comparable with an older `/zq under 0 0 4 -` run on the same seed (SQ-EFB-01)
+@fails efb_judge `cdevtest_under` (key names air_below, air_max, water_max, base_water, base_earth, foreign); 0 starts: spawn not near any structure on this seed (raise rChunks to 8)
+> cdevtest under 0 0 4 -
+waitlog verb=under starts= 60
+> cdevtest floating 0 0 48
+waitlog verb=floating n= 60
+shell python3 "$INST/tools/scratch_query/efb_judge.py" under logs/latest.log | head -20
+expect verb=under .*done=1
+expect verb=floating .*done=1
+reject Exception|\tat 
+look efb_judge 'under: N starts' matches the verb's starts= and ids; floating hits are real sand/gravel over air
 
 ## CQ-TXR-01
 @group client

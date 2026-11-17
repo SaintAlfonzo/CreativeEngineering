@@ -27,43 +27,118 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @commands Done + 2 min: `tools/perf/eval/entity_census.py` on the world as in perf.md 12
 @pass `minecraft:falling_block` near 0 (193 in the overall run); gravel item count lower than 21
 @fails Falling blocks remain: check whether they come from a mod's own falling block class or the window was off
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# needs natural terrain (the overall run was a normal world): on superflat there is no sand or gravel to hold
+bootexpect Done \(
+> chunky center 0 0
+> chunky radius 200
+> chunky start
+waitlog Task finished 1800
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done ticks=2400 180
+> save-all flush
+sleep 10
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 $INST/tools/perf/eval/entity_census.py "$L" | grep -iE "falling_block|gravel" | head -10
+reject verb=\S+ .*done=0
+look shell: minecraft:falling_block near 0 (193 in the overall run); gravel item count lower than 21
 ## SQ-GFB-03
 @group A
 @commands Find floating sand or gravel over a cave (or `/fill` sand over air in a freshly generated chunk with `/cdevplace`); break the block next to it, or place a block beside it
 @pass The block falls on that update, as vanilla
 @fails It never falls: the post-process flag stuck on (exception in postProcessGeneration?)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 300 300 310 310
+> fill 300 -60 300 306 -50 306 minecraft:air
+> cdevtest place 303 -55 303 minecraft:sand flags=18
+> cdevtest tickwarp 40
+waitlog verb=tickwarp end=done ticks=40 30
+> cdevtest state 303 -55 303
+> setblock 304 -55 303 minecraft:stone
+> cdevtest tickwarp 60
+waitlog verb=tickwarp end=done ticks=60 30
+> cdevtest state 303 -55 303
+> cdevtest state 303 -60 303
+expect verb=state pos=303,-55,303 state=minecraft:sand
+expect verb=state pos=303,-55,303 state=minecraft:air
+expect verb=state pos=303,-60,303 state=minecraft:sand
+reject verb=\S+ .*done=0
+look the sand held over air without an update (flags 18), fell on the neighbour placement and landed at -60; generated floating sand in a real cave is the same check on a /cdevtest floating hit
 ## SQ-GFB-04
 @group A
 @commands Set `[worldgen.systems] holdGeneratedFallingBlocks = false`, new world, repeat SQ-GFB-02
 @pass Falling blocks back near vanilla counts (about 190)
 @fails Switch not read
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# boot a NEW normal-terrain world with [worldgen.systems] holdGeneratedFallingBlocks = false set before the boot
+bootexpect Done \(
+shell grep -nE "holdGeneratedFallingBlocks" config/creativeworldgen-common.toml; grep -qE "holdGeneratedFallingBlocks = false" config/creativeworldgen-common.toml
+> chunky center 0 0
+> chunky radius 200
+> chunky start
+waitlog Task finished 1800
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done ticks=2400 180
+> save-all flush
+sleep 10
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 $INST/tools/perf/eval/entity_census.py "$L" | grep -iE "falling_block|gravel" | head -10
+reject verb=\S+ .*done=0
+look shell: falling blocks back near vanilla counts (about 190); set the switch back to true afterwards
 ## SQ-HRU-01
 @group A
 @commands After a pregen (`chunky radius 200`), `grep "Holder with no registry key" logs/latest.log`
 @pass Up to 20 lines naming the unkeyed value classes; record them in perf.md 13.3
 @fails None: no unkeyed holders reached `is()` on this run; then the 558 samples came from elsewhere, recheck with JFR
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> chunky center 0 0
+> chunky radius 200
+> chunky start
+waitlog Task finished 1800
+shell grep -h "Holder with no registry key" logs/latest.log | head -20; echo "lines=$(grep -c 'Holder with no registry key' logs/latest.log)"; true
+look record the unkeyed value classes (up to 20 lines) in perf.md 13.3; lines=0 means none reached is() on this run (then recheck with JFR)
 ## SQ-HRU-02
 @group A
 @commands Pregen `chunky radius 400` with JFR as perf.md 12; `perf_report.py` against `ov1-pregen.summary.json`
 @pass Copycats share of Worker-Main below 3.2%, no `StringConcatHelper` under `customOcclusion`
 @fails Mixin did not apply or Copycats changed its handler
-@draft no batch holds this row yet
+@draft perf session: chunky radius 400 under JFR and perf_report.py against ov1-pregen.summary.json (perf.md 12); not a scratch-server check
 ## SQ-STC-01
 @group A
-@commands `/reload` twice; place grass in a temperate, an arid and a frozen biome (`/cdevplace` or `/tp`), read `/cebiome` or the HUD
-@pass Season types unchanged (arid/frozen year-round, temperate seasonal)
+@commands `/cdevtest season minecraft:ocean,minecraft:desert,minecraft:snowy_plains,minecraft:plains` (tagged temperate, arid, frozen; plains untagged), `/reload` twice, the same again (the HUD and grass tint read the same cache)
+@pass Season types unchanged after the reloads: `type=TEMPERATE` (ocean), `ARID` (desert), `FROZEN` (snowy plains), `null` (plains) in both reads, `enabled=true`
 @fails A stale type after reload: the cache was not swapped
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest season minecraft:ocean,minecraft:desert,minecraft:snowy_plains,minecraft:plains
+> reload
+sleep 20
+> reload
+sleep 20
+> cdevtest season minecraft:ocean,minecraft:desert,minecraft:snowy_plains,minecraft:plains
+count \[cdevtest\] verb=season biome=minecraft:ocean type=TEMPERATE enabled=true == 2
+count \[cdevtest\] verb=season biome=minecraft:desert type=ARID enabled=true == 2
+count \[cdevtest\] verb=season biome=minecraft:snowy_plains type=FROZEN enabled=true == 2
+count \[cdevtest\] verb=season biome=minecraft:plains type=null == 2
+count \[cdevtest\] verb=season done=1 == 2
+reject \[cdevtest\] verb=season .*done=0
 ## SQ-STC-02
 @group A
-@commands Datapack edit: add a temperate biome to `creativeengineering:seasons/arid`, `/reload`, check the HUD there
-@pass Reads Arid at once
+@commands Datapack edit: a scratch datapack adds `minecraft:plains` (untagged, Serene Seasons temperate) to `#creativecalendar:seasons/arid`, `/reload`, `/cdevtest season minecraft:plains`; remove the pack, `/reload`, read again
+@pass Reads `type=ARID` at once after the first `/reload` (`null` before), `null` again after the pack is removed
 @fails Cache not cleared on TagsUpdatedEvent
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest season minecraft:plains
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); d="$L/datapacks/stc02"; mkdir -p "$d/data/creativecalendar/tags/worldgen/biome/seasons"; printf '{"pack":{"pack_format":10,"description":"SQ-STC-02"}}' > "$d/pack.mcmeta"; printf '{"replace":false,"values":["minecraft:plains"]}' > "$d/data/creativecalendar/tags/worldgen/biome/seasons/arid.json"; ls -R "$d" | head
+> reload
+sleep 20
+> datapack list enabled
+> cdevtest season minecraft:plains
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); rm -rf "$L/datapacks/stc02"
+> reload
+sleep 20
+> cdevtest season minecraft:plains
+expect \[cdevtest\] verb=season biome=minecraft:plains type=ARID enabled=true
+count \[cdevtest\] verb=season biome=minecraft:plains type=null == 2
+count \[cdevtest\] verb=season biome=minecraft:plains type=ARID == 1
+reject \[cdevtest\] verb=season .*done=0
 @@text
 @@text Results 2026-10-27 late (ov2, run log): GFB-01 PASS, GFB-02 partial (102 falling blocks), HRU-01 PASS, HRU-02 PASS by summary.
 @@text

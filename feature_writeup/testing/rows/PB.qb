@@ -20,28 +20,68 @@
 @commands Boot; `pbot status`; `pbot spawn bot1 ~ ~ ~`; `pbot list`; `forge tps`; grep latest.log for `bot1` and `Exception`
 @pass `cdevperfbot ok`; a normal join line, no exception from Forge networking, FTB, KubeJS login handlers or Lightman's; bot listed
 @fails NPE in a mod's login handler: that mod reads something `BotConnection` lacks (remote address, channel attribute); stack names it
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> pbot status
+> pbot spawn bot1 3000 -60 3000 minecraft:overworld survival
+> pbot list
+> forge tps
+expect cdevperfbot ok
+expect bot1 joined the game
+expect bot1
+reject Exception|\tat 
+look the join line is a normal one; no stack from Forge networking, FTB, KubeJS login handlers or Lightman's in the row log
 ## SQ-PB-02
 @group A, `gamerule randomTickSpeed 3`
 @commands `fill` a 9 x 9 farmland + `wheat[age=0]` patch 10 blocks from spawn; `pbot spawn bot1` beside it; 5 min; `execute if block` count of age > 0; repeat with the bot removed
 @pass Wheat grows with the bot, none without
 @fails No growth: `BotPlayer.tick` chunk move not running, or the bot is in spectator
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# tickwarp replaces the 5 min (6000 ticks); the second field is forceloaded without a player, so it gets no random ticks
+> gamerule randomTickSpeed 3
+> fill 2995 -61 3005 3003 -61 3013 minecraft:farmland[moisture=7]
+> fill 2995 -60 3005 3003 -60 3013 minecraft:wheat[age=0]
+> cdevtest tickwarp 6000
+waitlog verb=tickwarp end=done ticks=6000 600
+> cdevtest ages 2995 -60 3005 3003 -60 3013 minecraft:wheat
+> forceload add 2995 3005 3003 3013
+> pbot remove bot1
+> fill 2995 -60 3005 3003 -60 3013 minecraft:wheat[age=0]
+> cdevtest tickwarp 6001
+waitlog verb=tickwarp end=done ticks=6001 600
+> cdevtest ages 2995 -60 3005 3003 -60 3013 minecraft:wheat
+> forceload remove 2995 3005 3003 3013
+> pbot spawn bot1 3000 -60 3000 minecraft:overworld survival
+expect verb=ages .*n=81 mean=([1-9]|0\.[1-9]|0\.0[1-9])
+expect verb=ages .*n=81 mean=0\.000 hist=0:81
+reject \[cdevtest\] .*done=0
+look first verb=ages line (bot beside the field) grew, second (no player) stayed at 0; a second line with growth = a player near 3000 3000 (other rows' bots)
 ## SQ-PB-03
 @group A
 @commands `pbot path bot1 <x+500> 200 <z> 1.5`; after 20 s grep `perf/bot/ticks-*.csv` for `path_done:bot1`; status lines' chunk column; `pbot census t`
 @pass `path_done` after about 334 ticks; loaded chunks follow; `perf/bot/census-t.json` written
 @fails Chunks don't follow: `ServerChunkCache.move` not reached
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# the path is 500 blocks at 1.5 b/t (about 334 ticks): a 400-tick warp replaces the 20 s
+> pbot path bot1 3500 200 3000 1.5
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done ticks=400 120
+> cdevtest player bot1
+> pbot census t
+shell grep -l "path_done:bot1" perf/bot/ticks-*.csv
+shell test -s perf/bot/census-t.json
+expect census t entities \d+ block_entities \d+
+expect verb=player name=bot1 .*x=3(4[89]\d|500)\.
+reject \[cdevtest\] .*done=0
+look the status lines' chunk column follows the bot (perf/bot/ticks-*.csv); path_done near tick 334 of the path
 ## SQ-PB-04
 @group A
 @commands `kill -9` the scratch JVM (recorded pid only); `tail -2` of the tick file; `jfr assemble srv/perf/jfr-repo/<dir> x.jfr`
 @pass Complete lines to the last second; assemble works
 @fails
-@draft no batch holds this row yet
+@draft kills the scratch JVM with kill -9 on purpose: that ends any qrun batch (the crash watch reports CRASH); run it by hand after the last row of a run
 ## SQ-PB-05
 @group suite S and N
 @commands `setsid nohup python3 tools/perf/suite/perf_suite.py run general g1 > /dev/null 2>&1 &` (about 2 h 15 min); then `perf_suite.py report g1`
 @pass Every G row `ok` or a triaged ending in `perf/suite/g1/*/endings/`; G02 about 5-6 ms (perf.md 12.1); record the summary in perf_suite.md
 @fails Read `runner.log`; `resume g1` after fixing
-@draft no batch holds this row yet
+@draft perf suite run (`perf_suite.py run general g1`, about 2 h 15 min, its own boots and bots), not a qrun batch; no /cdevtest readback replaces it

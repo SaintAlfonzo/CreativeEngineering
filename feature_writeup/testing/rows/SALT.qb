@@ -282,7 +282,7 @@
 ## SQ-TER-01, SQ-EF-05
 @group FAIL: `philipsruins:ancient_crypt` is in terrain_adaptation/sunk_start but refused ("start pool has a terrain_matching piece; ignored")
 @jars creativecommon
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-AC-02 | dragon set 36 armor, 18 toughness
 @group FAIL: dragon set 33 armor, not 36; dragonloot-common.toml (7/10/9/7) overrides the KubeJS tune; the cap mixin works
 @from batches/r1101/p1_server.qb
@@ -299,17 +299,23 @@ expect armor_toughness for entity qa is 18
 
 ## SQ-CM-32, SQ-R31-BOOT
 @group FAIL: CD `kubejs/oceansdelight/recipes.js` removes the tentacle recipes (line 39) before the calamari replaceInputs (41-47); 4 dishes gone, empty `#forge:squid_tentacles` slots, NCH error x16
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-RW-23 | smoked wood smoking recipes
 @group FAIL: `#creativeengineering:smokable/*` shape tags include Botania, driftwood, crimson and warped
 @from batches/r1031/a1_data.qb
-> zq recipes smoked
-> zq itemtag creativeengineering:smokable/planks
+@reviewed 2026-11-16
+> cdevtest recipes smoked
+> cdevtest tag item creativeengineering:smokable/planks
+expect verb=recipes text=smoked n=[1-9]
+expect verb=tag kind=item tag=creativeengineering:smokable/planks n=[1-9]
+reject verb=tag kind=item tag=creativeengineering:smokable/planks .*ids=\S*(botania:|driftwood|crimson|warped)
+reject \[cdevtest\] .*done=0
 look 13 smoking recipes, one per smoked shape, cook time 200 (rdetail if unsure); smokable tags hold oak and spruce, no botania:* and no driftwood
 
 ## SQ-MCL-04 | forced level 2: hostiles settle near 25, none far out
 @group FAIL on superflat only: forced level 2 spawned 0 monsters in 8 min (level 0: 13 zombies); normal world passes (SQ-MCL-05)
 @from batches/r1031/a2_variants.qb
+@reviewed 2026-11-16
 # needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
 # run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
 sleep 10
@@ -318,7 +324,8 @@ sleep 160
 > tp qa 0 -60 0
 > time set 18000
 > kill @e[type=!minecraft:player]
-sleep 120
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 300
 > ceperf mobcap
 > execute if entity @e[type=minecraft:zombie]
 > execute if entity @e[type=minecraft:skeleton]
@@ -349,12 +356,15 @@ look crater through the village middle, no floating house; struck pyramid has a 
 @group FAIL, cause not settled: no illager at the lone birch tower by night or day (zombies and a creeper did spawn); may be the monster cap / player distance, see judged_w2.md for the rerun
 @jars creativecommon
 @from batches/r1031/w2_metas_spawns.qb
+@reviewed 2026-11-16
 > locate structure mysticrift_pillagers_towers_aris:birch_pillager_tower
 waitlog nearest mysticrift_pillagers_towers_aris:birch_pillager_tower is at|type "?mysticrift_pillagers_towers_aris:birch_pillager_tower|mysticrift_pillagers_towers_aris:birch_pillager_tower.*timed out 330
 capture BT is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {BT1+30} 100 {BT3}
 > time set 18000
-sleep 240
+> cdevtest tickwarp 4800
+waitlog verb=tickwarp end=done ticks=4800 600
+> cdevtest entities {BT1} 80 {BT3} 48
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:pillager,distance=..48]
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:vindicator,distance=..48]
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:evoker,distance=..48]
@@ -365,7 +375,9 @@ sleep 240
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:creeper,distance=..48]
 > execute positioned {BT1} 80 {BT3} run kill @e[type=!minecraft:player,distance=..64]
 > time set 6000
-sleep 180
+> cdevtest tickwarp 3600
+waitlog verb=tickwarp end=done ticks=3600 600
+> cdevtest entities {BT1} 80 {BT3} 48
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:pillager,distance=..48]
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:vindicator,distance=..48]
 > execute positioned {BT1} 80 {BT3} if entity @e[type=minecraft:witch,distance=..48]
@@ -413,40 +425,40 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 @@text |---|---|
 ## SQ-CM-01 to -09
 @group PASS (CM-06 note: sourdough bread cuts into plain bread)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SALT-01
 @group FAIL: Vintage fermenting froglight recipes still take `vintagedelight:salt_block`; `tactical_fishing:fishing_vintagedelight_salt_bucket` catches `vintagedelight:salt_bucket`
-@commands . Fixed 2026-10-28 (CD recipes.js: froglights on The Salt's block, both fishing recipes removed); retest: `zq uses salt:salt_block` lists the 3 froglight recipes, `zq makes vintagedelight:salt_bucket` and `makes creativeengineering:powdered_sugar_bucket` give 0 fishing recipes
-@draft no batch holds this row yet
+@commands . Fixed 2026-10-28 (CD recipes.js: froglights on The Salt's block, both fishing recipes removed); retest: `cdevtest uses salt:salt_block` lists the 3 froglight recipes, `cdevtest makes vintagedelight:salt_bucket` and `makes creativeengineering:powdered_sugar_bucket` give 0 fishing recipes
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SALT-02, -03
 @group PASS for tags and the give swap; Salting craft and cauldron evaporation not run
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SALT-04
 @group PASS
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SY-01 to -07
 @group PASS; the soil yield switches need a restart, `/reload` does not pick up the toml
 @jars creativecommon
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-STC-01, -02
 @group PASS (logic, via `/zq season`; HUD not looked at)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-HT-02
 @group Regeneration PASS; repair cannot happen (dragon horse armor has max damage 0)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-HT-03
 @group PASS (via Regeneration)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-GFB-03, -04, SQ-FTW-03
 @group PASS
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PB-01 to -04
 @group PASS (PB-02 wheat half; night mobs in the suite)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | SQ-SK / FP-10 | FAIL -> fixed (`starter_kit.js`, three KubeJS API calls) -> PASS on bots |
 ## SQ-PB-05
 @group PASS: suite `g1` every row ok (G02 5.55, G03a 18.5, G04 50.1 ms; G12 heap floor near 6 GB, GC-pause spikes); G09 rerun `g1s` after a group S fix
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Not run | SQ-WGP-08 (with CQ-WGP-01), all CQ- rows |
 @@text
 @@text ### 2026-10-27 late: brief overall rerun (normal world ov2, seed -8188900049893920259, JFR on)
@@ -475,13 +487,13 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 
 ## SQ-GFB-02
 @group Partial: falling blocks 193 to 102, not near 0; red sand gone, most sand stays. Next: which trigger is left (13.2: neighbour updates across chunk borders after post-processing? a feature tick outside ProtoChunkTicks?)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-HRU-01
 @group PASS: 20 lines, all at 20:51:31 to :32 on `main` (mod loading, before the world): MoreWires connectors, Immersive Petroleum and IE multiblock / cloth / concrete blocks. So the unkeyed holders are asked during block construction, not only at pregen
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-HRU-02
 @group PASS by the summary (Copycats no longer in the pregen profile); the per-thread Worker-Main share not read
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Found | Precision sawblade blueprints (added 18:41) were all skipped: `'2x ' + tag` strings are not parsed by `_resolveIdCount`. Fixed in blueprints.js with `{ id, count: 2 }` (the transport.js:76 form); `/reload` on ov2 gave no new errors. Recipe presence in JEI not checked |
 @@text | Not run | SQ-GFB-03/-04, SQ-STC-*, CQ-* |
 @@text
@@ -497,32 +509,32 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text |---|---|
 ## SQ-WE-01 to -04
 @group PASS (API probe, 10/10 twice; console `//` commands do not run on Forge)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-IMS-01 to -03
 @group PASS (`merge_core_probe.js` expectations updated)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-IMS-04
 @group FAIL: salt block / salt bucket leftovers (SQ-SALT-01)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-BLC-01 to -03
 @group PASS
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-RING-01 to -03
 @group PASS after ModernFix's `cache_strongholds` was turned off (it pre-empted the store)
 @jars creativecommon
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-IPO-01, -03
 @group PASS after two fixes (mixin crash; vanilla pickaxe tags failed to load)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-IPO-02
 @group Partial: post growth PASS, arm and truss need a player
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PERFCFG-01, -02
 @group PASS (-02 idle number explained by world age); -03 not run (owner: no isolation)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## CQ-ATC-01
 @group PASS (JEI start 16-19 s)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Not run | SQ-WGP-06 (per-option world, owner: no isolation), CQ-WGP-01/-02, CQ-ATC-02/-03 |
 @@text
 @@text ### 2026-10-27 evening: perf fixes measured (group B worlds wgp_*, seed -8188900049893920259, JFR on; then group A qa_1027)
@@ -538,50 +550,50 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text |---|---|
 ## SQ-WGP-01
 @group PASS: `wgp_new` boots, `Done (85.8s)` (eval 118.7 s), no mixin or density-function error
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-02
 @group PASS after a probe fix: the cliffs override loads (encoded tree 10 flat_cache / 5 interpolated vs 7 / 2 for Tectonic's file; the probe expected 3, it counted the file text); `/wgp dims` fixed (`level.dimension` is a property): Overworld skips 68 of 466, obelisk skipped there and tried in the Nether
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-03
 @group PASS: `wgp_df` fill lines all in `wgp_old`'s; no structure with starts in the filter-off census is skipped (old 2858 vs new 2855 starts)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-04
 @group PASS (fill-only form): `wgp_tc` fill lines all in `wgp_old`'s
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-05
 @group Partial: `wgp_g4` pregen 4:33, `Done` 92.6 s; census half dropped (owner request)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-06
 @group OPEN: `wgp_cl` stalled at 513 chunks on a corrupt chunk (CME in chunk save, perf.md 10.9 problem 1; TODO `perf #23`); the rerun crashed at boot on the 17:47 jar (`ImmersivePostsValidItemMixin`, TODO `perf #21`)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-07
 @group PASS: pregen 3:50 vs the 5:26 baseline (`wgp_old` same day 4:53)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PF-04
 @group Repeat pair done: 3:50 events on, 3:48 off; no measurable cost
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FTW-01, -02
 @group PASS: 72 items at spawn (`wgp_new`) vs 593 with FTW off (`wgp_old`)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FTW-04, -05, -06
 @group PASS (group A, console coordinates instead of `~` / `@s`): torch drops after the window, none inside it, drops with `windowTicks = 0`
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-ATC-01 to -04
 @group PASS after a probe fix (`java.lang.System` class-filtered; `Date.now()`, Rhino `==` identity)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-HT-01
 @group FAIL -> fixed -> PASS (`level.players()` -> `level.getPlayers()` in `armor_effects.js` and `dragon_autorepair.js`)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SALT-05, -06, -07
 @group PASS over two runs: clear weather 19/20 (rain case needs rain), `weather rain` run passes the rain case but rain dissolves the other Salt Layer cases first (they share the open-sky spot): run the rain case alone. Cost 0.001 % at 10 000 bricks
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PF-01, -02, -05
 @group PASS: recording `ce`, 323 handlers wrapped (324 after the reloads: the ATC probe loaded on the first reload); `/cdevperf dump smoke` saved 25 MB
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-POT-01 to -04
 @group Ran after two `/dumppots` fixes (Rhino can't call `iterator()` on `Collections$UnmodifiableMap`'s entry set; copied into Guava with `ImmutableMap['copyOf(java.util.Map)']`); results under the section
 @jars creativecommon
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Not run | SQ-WGP-08, SQ-FTW-03, SQ-HT-02/-03, SQ-SALT-01 to -04, all client rows (CQ-*) |
 @@text
 @@text Other findings: Terralith underground `old_refinery` / `mining_outpost` census false negatives (reason biome) in both
@@ -598,33 +610,33 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text |---|---|
 ## SQ-PF-04
 @group Partial: pregen 5:26 with the pack events, 5:12 with them off (one run each); repeat the pair
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PF-01, -05 (re-check)
 @group `/cdevperf status`: recording `ce`, all hooks run, 321 handlers wrapped
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-INV-01 to -05 (re-check on a new world)
 @group Same as 10-26: `[time]` 16 lines, 14,913 advancements left out, no missing-registry line; `item_dict` lists 26 real missing ids (client-only and removed mods), no tag keys; `[CE potions] added 58`; "metal base event" lines are debug prints (noise); 770,959 block states
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SALT-01
 @group FAIL (one id): `vintagedelight:salt_block` still loads (9 salt dust -> salt block); `salt:salt` only in `salt:salting` and `salt:salt_unpacking` (-> 9 salt dust); `creativedelight:shaped/large_salt_lamp` present; the other removed ids absent. Check whether the merge meant to keep this recipe with a new output
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SALT-02
 @group PASS (tags): `#forge:salts`, `#forge:salt`, `#forge:dusts/salt` = salt dust only
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SALT-05
 @group Log half PASS: `[salt] 30 Vintage salt blocks random tick like The Salt's`, no mixin error; block checks not run
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SALT-07
 @group Not run: forceloaded chunks get no random ticks without a player
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-POT-01 to -05
 @group FAIL (setup): `/dumppots` hit the KubeJS class filter (`java.lang.Class`); fixed by its session afterwards, re-queued
 @jars creativecommon
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Probes | fd 98/98, cdj 23/23, fgd 135/136 (truffle pie), kt 30/34 (as 10-26), sntest 5/5, mgtest 30/30, vtd 354/376: the crop rows (normal world, as 10-26) plus 3 salt rows whose expectations predate the salt merge (`#forge:salt` holds The Salt's salt, VTD-11 both salts, pickling with `salt:salt`): update `vintage_probe.js` |
 ## SQ-PF-06
 @group Not run (the client ran with a recording)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text
 @@text Fixed after the run (2026-10-27, for the next one): `vintage_probe.js` salt rows now expect the merge (`#forge:salt`
 @@text without `salt:salt`, jar recipes take salt dust only, pickling with salt dust only) and its crop survival checks moved
@@ -660,22 +672,22 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text |---|---|
 ## SQ-SNF-01, -02, -03
 @group PASS: the 4 seasonable tags hold only popcorn, no `seasonable/sugar` tag; snack and fruit families as expected; the 5 season recipes present, none for sugar or `_on_corn_delight_popcorn`; `/sntest` 5/5
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PF-01, -02, -05
 @group PASS after fix 1 (320 handlers wrapped, all hooks run; report has ticks, dimensions, `server_scripts:<file>:<line>`, entity / block entity types; 2 reloads keep 320)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PF-03
 @group Partial: no player, so `spreadplayers` stood in for `/tp`: one 22 s sync load listed with caller `Level#getChunk` and phase
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SV-01
 @group Server half PASS: End armor stand tp to 300016 100 300016 in 6 ms, no "ticks behind", no `r.585.585.mca`. Myalite viaduct needs a player
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-INV-01 to -06
 @group Done, results in the TODO rows (`release #3`, `dictionaries #1`, `potions #5`, `metal #4`, `server #6`, `biomes #8`): 770,959 block states; both Nullscape biomes located
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-INV-08, -15, -16
 @group Dump pass and generators as above (`jei_world` 3551 rows, loot census 12342 tables)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | `/fdtest all`, `/cdjtest`, `/fgdtest all`, `/kttest` | 98/98, 23/23, 135/136 (truffle pie), 27/31 (KT-15d, KT-17 x3, as 10-26) |
 @@text | `/vtdtest all` | 358/376: the 18 fails are crop-survival rows; the probe plants at y = -60, underground in a normal world (no light). Not a regression: run it on group A |
 @@text | Not run | SQ-PF-04 (pregen A/B), SQ-PF-06 and all client rows, SQ-INV-07 and -09 to -14, -17, -18, group B worldgen counts |
@@ -712,36 +724,36 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text |---|---|
 ## SQ-CDB-01, SQ-EN-01 (server half), SQ-FFH-01/02 (no `foodFamily` / `cd_food.js` error), SQ-STD-01, SQ-FSD-01
 @group PASS after fix 1. Only NCH error: the known `truffle_pie` (`fungiport #3`). `[itemMerges] 12 merges`; Storage Delight 140 recipes; Farmer's donor 177 files, only Aether / Aquaculture blocks to air, no `Could not translate`
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | `/fgdtest all`, `/vtdtest all`, `/kttest`, `/cdjtest`, `/fdtest all` | fgd 135/136 (truffle pie), vtd 373+ all PASS after the probe update, kt 30/34 (same 4 as 10-25: KT-15d, KT-17 x3), cdj 23/23, fd 97/97 after fixes 3 and the probe alias |
 ## SQ-CDB-02
 @group PASS after fix 5 (all four sweetener tags as the row says)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDB-03, -09, -13; SQ-ABD-01 to -05; SQ-MRD-03 (recipe half)
 @group PASS by `/zq`
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDB-10, -11
 @group PASS after fix 4 (cacciatore now cycles cooked chicken cuts); `canned_mhadjeb` waits for SQ-CDB-12
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDB-04, -06, -07
 @group PASS (`/cbetest squid`, `jars`): one squid / glow squid item per kill, no ink / calamari / tentacles (a knife adds Delightful's animal fat: upstream `fatty_animals` holds squid); lava bottle in and out; milkshakes go in; Splash Milk's bottle shows `moonlight:milk`
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-EN-02, -03, -04, -06
 @group PASS (`/cbetest`): crate and stove drop themselves; the 4 plants survive only on end stone / tilled end stone; chorusflame 9-10 vs 16-24 and void pepper 18 vs 28 growth ticks of 100 (tilled faster); dragon bare 23 meat / 8 legs / 5 teeth in 4 kills, knife and machete 34 / 8 / 9; Dragon Tooth Knife repairs with a tooth
 @jars creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FSD-03, -04 (placement), -06
 @group PASS: all 7 kinds place; carp not locatable, squids at 552 blocks. Chest / frame / pot contents and the cook variety are client checks
 @jars creativecommon
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FSD-05, -08
 @group Upstream finding: Farmer's Structures 1.0.6 templates name `minecraft:cook_end_1_pool` / `cook_additions_N_pool` (no namespace) on the back-connectors and on 4 expansion connectors (`cook_additions_2_6/7/10`, `cook_end_1_15`); log `Empty or non-existent pool`, those 4 never expand. Same on 1.21. Not changed: owner decision (rewrite in the donor converter or leave)
 @jars creativecommon
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-EN-07
 @group Partial: `end_house` found 156 blocks from 1500 0 in a new End; the earth-fill check needs `log = ALL` in the srv toml and a restart (not done)
 @jars creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Not run | Group B worldgen counts (SQ-FGD-12 to -15, SQ-WCD, SQ-DW, SQ-VP-14/15, SQ-MD-01, SQ-RD-09 to -11 / -26 to -28, SQ-OPEN-*, SQ-EN-07 rest, SQ-EN-10), fake-player rows of Round 1 not covered by a probe, all client rows (CDB-05/08/12, EN-05/08, CQ-*) |
 @@text
 @@text Other findings (not fixed): Corn Delight 1.0.3's `village_house` / `shipwreck_loot` loot modifiers use `mmlib:add_loot_table`,
@@ -780,26 +792,26 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text |---|---|
 ## SQ-FGD-00, SQ-VP-00, -01, SQ-MDP-01, SQ-AD-00 (as nested CD members), SQ-FN-01, SQ-LE-00, SQ-TI-00, SQ-KT-00, SQ-VTD4-01, SQ-FDB-01, SQ-FR-01, SQ-RD-01, SQ-RD-25, SQ-CDQ-00, SQ-CDM-00, SQ-CDF-00, SQ-CDF-03, SQ-CN-00, SQ-DDP-01, SQ-RSP-01, SQ-FD-01 (log half)
 @group PASS after fixes 1 to 3: `Done (`, no mixin / registry / `Error occurred while handling event` / NCH failure from our code except the known `truffle_pie` (`fungiport #3`). Only noise: redeco's two `Not a JSON object` tag files (also in the client log). Counts that moved since the rows were written: `[cans] registered 272`, `Cup conversions: 16`, Rustic upstream 452 files (8 dropped), `[jar-startup] creativedelight: 57 of 57`, `[CE potions] 58 item-agnostic mixes`, `[jeiRemove] 349`. FDB toml, `[moss]` keys, displaydelight `[Features]`, simplehats chef hat weight 0 all as the rows say
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SN-00, SQ-PS-00
 @group PASS on `[seasoning] defined` cheese / onion / garlic / sugar; the `seasoning done` / `powdered_sugar done` lines no longer exist (the scripts moved into CD and log nothing): rows stale
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FGD-01 to -06, -08, -10 (`/fgdtest all`)
 @group PASS 135 / 136; the 1 FAIL is the known truffle pie (`fungiport #3`)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-VP-02 to -12 (`/vtdtest all`)
 @group PASS 370 / 375 after fix 4. Remaining FAILs are open TODO rows: ghost pepper survives on farmland (`vintageport #7`), right-click harvest resets cucumber / ghost pepper / zucchini to age 0 (`vintageport #8`)
 @jars creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-KT-01, -02 (`/kttest`)
 @group 30 PASS, 4 FAIL: KT-15d plate over air not refused; KT-17 food plate / plated hamburger do not pop when the stone or counter under them is broken (`above` still the plate, no drops). New since the last run: check the `updateShape` mixin and `popsUnsupported` (row's failure notes)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDJ-01, -06 (`/cdjtest`)
 @group PASS 23 / 23
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SN-01, SQ-PS-01, -02, SQ-DB-01, SQ-VTD4-02, SQ-LE-02, SQ-RM-01, SQ-RM-04
 @group PASS, ids now `creativedelight:` (seasoning, powdered sugar routes, 12 dough block recipes, pickling brew / leather with `#forge:salt`, ghost pepper crushing 2 / milling 2 / IE 3 seeds, no Vintage slime or salted fish, no bedroll / fruit beignet / Design Decor golden apple, the 4 FD dishes and `crab_bars_manual_only`, driftwood log stripping on the board and the Create saw, no Abnormals driftwood cutting). The five removed foods: no recipe, loot table or trade. Not shown by `/zq`: fluid amounts, heat, secondary outputs (orange jam mixer, slime mixer heat, bark output)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Not run | Everything else in Round 1 (fake-player rows, loot rolls, villagers, the B worldgen groups, client rows). Odd finding for a later look: `forge:sugar` also holds `pneumaticcraft:glycerol` |
 @@text
 @@text The scratch `kubejs/exported/` of this run (server-safe dumps) was not copied into the instance.
@@ -821,40 +833,40 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text |---|---|
 ## SQ-CDT-01
 @group PASS. `[jar-startup] creativeengineering: 3 of 3`, `creativedelight: 2 of 3`, order `creativeengineering, startup_scripts, creativedelight`; NCH finished once; members line. Startup errors: the pre-existing `truffle_pie` NCH line (also in the client log, `fungiport #3`) and the deliberate `withNamespace` line only
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDT-02, -04, -05
 @group PASS: startup 7/7, ns 11/11, requires 2/2, tags 1/1, config 5/5, mirror 57/57 (30 helpers)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDT-03
 @group PASS: `server.log` 0 errors; `/dumpcompost` 1171 compostable; cooking twins present
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDT-06
 @group PASS: `/reload` then `/cdtest all` 83/83; row text corrected (`server scripts ready` is start-only)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDT-08
 @group PASS: `oceanic_delight = false`: `CD.on` false, member row skipped, Oceanic items still registered
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDT-09
 @group PASS: folder path ns / mirror / requires / tags all PASS, startup FAIL by design
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDT-10
 @group PASS, stronger than the row: the CD error line is logged, the pack's startup scripts fail, and KubeJS stops the boot ("startup script syntax errors"). The two jars must ship together; **the instance's `mods/` patcherMod is the old one, so the user's client cannot boot with the current `kubejs/` until the built jar is installed**
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-KS-01 to -04
 @group PASS (01 via `/reload` discovery, not a fresh boot): a datapack script sees `global.NCH` / `global.LOOT` and makes `creativeengineering:shapeless/sqks_test`; `kubejs/data` reloads; with both copies one runs and `kubejs/data` wins over the world datapack; the folder `creativedelight/kubejs/_core/cd_server.js` wins over the jar's copy (10.4 dev loop holds); `requires: not_a_mod` skipped
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDJ-01, -06
 @group PASS (server half): the three repacks load from the jar (debug log `Found valid mod file repacked...`); 22 / 47 / 63 items; End's gristle 3 and 5 from 10 knife kills, 0 from 10 bare-hand kills
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CDJ-02
 @group **FAIL**: the stale `oceansdelight-1.0.2-1.19.2.jar` beside CD wins (`JarSelector ... passed in as source ... Using Mod File: mods/oceansdelight-1.0.2-1.19.2.jar`, `1.0.2-1.19.2-ce-19.2-01 -> 1.0.2-1.19.2`). A top-level jar beats a nested one regardless of version; creative_delight.md 14.1 point 4 corrected. `build_deploy.py` half PASS offline (`nested_modids` reads all three ids, `test_suite_entries` flags the cdtest jar)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FN-01
 @group PASS: `oceanic_delight.ce.mixins.json` registered and selected, no mixin or `fishing_net` / `biome_tag` loot error
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FN-04
 @group PASS (by tag lookup in `/cdjtest`, not setblock): all 10 kelp blocks only in `fishing_net/kelp`, all 8 sea grass blocks only in `fishing_net/sea_grass`
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Not run | SQ-CDT-07, SQ-CDJ-03 (client); SQ-CDJ-04 net loot and SQ-FN-02 / -03 (need ocean and river biomes: group B); SQ-CDJ-05 (ports not bundled) |
 @@text
 @@text Performance (boot of the same world, built patcherMod both ways, `bench_boot.sh`): seconds from launch to `Done`, without
@@ -886,7 +898,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text |---|---|
 ## SQ-FGD-00, SQ-VP-00, SQ-VP-01, SQ-VP-17, SQ-AD-00
 @group PASS. No mixin / registry / unknown-item error for the ports; `[cans] registered 252`; item_dict missing list has no Fungi / Vintage / Veggies key; all 17 spawn rules matched (none idle); 8 mushroom modifiers; no `dehydrated`. The 2 redeco `Not a JSON object` tag errors and corn_delight GLM errors are old noise (also in the client log)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FGD-01 | /fgdtest all (FGD-01 to -06, -08, -09, -10 logic)
 @group PASS except **truffle pie**: `create_central_kitchen:truffle_pie` is not an item (CCK registers the pie block, slice and incomplete pie; the whole-pie item comes from Environmental), so `baking/truffle_pie` never loads, also in the client (`fungiport #3`)
 @from batches/r1102/b1_main.qb
@@ -906,25 +918,25 @@ look rows/SQ-FGD-01.log, part tags: all PASS (colonies in the Serene Seasons tag
 
 ## SQ-FGD-03 to SQ-FGD-06, SQ-FGD-08, SQ-FGD-10, SQ-FGD-11
 @group PASS. Breeding (by `getBreedOffspring`, 40 per pair): red x brown 24 / 16, red x inky 20 / 20, inky x morel 21 / 19, same-kind pairs 40 / 40, moobloom cannot mate. Trades: farmer L3 buys the 4 colonies and truffle (4 for 1 emerald); wandering trader sells morel, inky cap, veil
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FGD-07
 @group PASS: 40 pigs, mobGriefing true: 19 of 400 blocks dug in about 4.5 min (podzol and truffle dirt to coarse dirt), a truffle, sticks and clay on the ground, no loot error; false: 0 in about 4 min
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-VP-02 to SQ-VP-12
 @group PASS except the findings below. Burger and burrito assemblies PASS after fix 2. Queue text corrections: plain can recipes carry no `_manual_only` id (45 plain), the `_vinegar` additive covers 75 cans (all 75 of `can_types.json` load), not 66
 @jars creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-VP-08
 @group Honey bottle not returned (known `vintageport #4`, record only)
 @jars creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-VP-13
 @group PASS. Chance 1: 3 of 3 geese drop a golden egg item (nest pen: beside the goose, nest empty; 1x1 pen: where it stands; against a wall: 2 blocks out on open ground). Chance 0: the goose lays into the nest (`eggs=1`). Golden Egg block drops 4 items from `vintagedelight:blocks/golden_egg`
 @jars creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-RS-01
 @group PASS after fix 1: default boot no scan; `/recipescan` 29699 read, 0 unreadable, 64 references to 54 removed items, none a merged id; `runAtLoad`: one scan 2.1 s after `Done (`, none after `/reload`
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text
 @@text Findings (TODO rows, not fixed in the run):
 @@text
@@ -960,32 +972,35 @@ look rows/SQ-FGD-01.log, part tags: all PASS (colonies in the Serene Seasons tag
 @@text |---|---|
 ## SQ-DR-00 to SQ-DR-03, SQ-FL-01, SQ-FL-02, SQ-IN-01, SQ-IN-02, SQ-SOL-01
 @group PASS on the first run
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-MJ-01, SQ-MJ-02
 @group PASS (24 soups; the first run failed only because the soft-fluid map is empty before a player joins)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CO-01, SQ-CO-02
 @group PASS after fixes 1 and 2 (gambler's tea, Canned Coffee Berries and a mortar craft still named Respite's coffee berries)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-GM-00 to SQ-GM-10
 @group PASS; SQ-GM-02 after fix 3 (no tool on-hit effect ever applied), SQ-GM-05 shows the two expected flips
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SF-00 to SQ-SF-05
 @group PASS (17 / 0 after fix 5)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WC-00 to SQ-WC-05, SQ-CD-00 to SQ-CD-02, SQ-MB-00 to SQ-MB-03
 @group PASS. `[wild-crops]` also warns that 5 Terralith cave biomes are not in `wild_crops.json` (no crops there; not an error)
 @jars creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-MB-04 | cooldown ends, a new wave starts (cooldownTicks 200)
 @group PASS through the holder: UA's `trees_river` grows the override (90 river leaves, 21 oak logs, 0 river logs). Worldgen itself gave no river tree at three rivers: the feature needs dry land inside the river biome and the samples had none (0 dry columns in 25 x 25)
 @from batches/r1106spf/b1.qb passed
+@reviewed 2026-11-16
 > tp qa 0 -60 0
 > kill @e[type=item]
-sleep 12
+> cdevtest tickwarp 240
+waitlog verb=tickwarp end=done ticks=240 60
 > data get block 20 -60 -20
 > tp qa 18 -60 -20
-sleep 4
+> cdevtest tickwarp 80
+waitlog verb=tickwarp end=done ticks=80 60
 > data get block 20 -60 -20
 expect creativeengineering:phase": 0b
 expect creativeengineering:phase": 1b
@@ -993,13 +1008,13 @@ expect creativeengineering:phase": 1b
 
 ## SQ-GE-00 to SQ-GE-04
 @group PASS; SQ-GE-03 after fix 6 (prismarine geodes were moved too). 23 of 24 ocean geodes moved, tops 10+ blocks under the floor; 32 land geodes kept their height; system off: 0 moved
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-OF-00 to SQ-OF-12
 @group PASS (`[cans] registered 228`); SQ-OF-03's trade half after fix 4 (butchers still sold Canned Food: 24 of 240 level 2 offers, now 0)
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-OM-00 to SQ-OM-18
 @group PASS. SQ-OM-08: 2 of 8 placed villages have a winery. SQ-OM-14: weight 20, 6-layer piles, no Glowing, 1200 of 1200 baby squid. SQ-OM-15: no `[vinery-houses]` line, template unknown. SQ-OM-16: the Cherry Cream Soda bug stays open (no recipe makes it). SQ-OM-17: 8 `world_serverconfig` files equal to their sources, update build, both README steps name the changed files (after fix 8). SQ-OM-18: mod defaults 2000 / 160 / 2000, then 0 / -1 / 0 from the world's serverconfig
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text
 @@text Fixes made in the run (pack and jar):
 @@text
@@ -1040,15 +1055,15 @@ expect creativeengineering:phase": 1b
 ## SQ-MG-00 to SQ-MG-07, SQ-MG-10 to SQ-MG-15
 @group PASS (the SQ-MG-10 `[jeiRemove]` lines were scan false positives, fixed in `recipe_scan.js`)
 @commands [item_merges.md](../item_merges.md) 4.1
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-TC-00 to SQ-TC-02
 @group PASS after a change: shulker boxes were accepted through Botania's curio check; user decision: any item, only the open case refused
 @commands [fixes_compat.md](../fixes_compat.md) 2.25, FX-21 to FX-24
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-BK-00 to SQ-BK-06
 @group PASS
 @commands [oven.md](../oven.md) 0, 8
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SB-01 | spawn boxes load
 @group PASS, 10 of 10
 @commands [oven.md](../oven.md) OV-32, [can_parity.md](../can_parity.md) CP-26
@@ -1064,20 +1079,20 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 ## SQ-GF-01
 @group PASS at recipe level (`tools/golden_food_probe.js`); crafting in game (RC-70)
 @commands [recipes_cooking.md](../recipes_cooking.md) RC-70
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CL-01
 @group PASS for Canned Dough / Shulker / White Strawberries values, mortar corn, rock salt (hand, crushing, milling, mortar: 4), raw tortilla (grid, fan, bottler), pie filling crafts manual only (`tools/changelog_claims_probe.js`). Not checked: heated-mixing salt chance, cauldron salt bonus (in game)
 @commands this log
 @jars creativecommon
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CF-01
 @group PASS with the deploy's `defaultconfigs` (every value in the new world). Spice of Life warns for 4 Large Meals `complexityUnparsed` entries (placed meals are not food items, so the entries do nothing)
 @commands this log
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-LP-00 to SQ-LP-06
 @group PASS
 @commands [mob_block_tweaks.md](../mob_block_tweaks.md) 2.5, MT-24
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text
 @@text Probe fixes made in the run (all in `tools/`): `merge_probe.js` (getType crash, namespaced ids), `merge_core_probe.js`
 @@text (getStacks, tag check), `sweet_berry_pie_probe.js` (getType, getStacks), `baking_probe.js` (oven slots follow
@@ -1096,35 +1111,35 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 @pass Log `village farm crops added to N pool elements of 54 listed farm templates`, N at least 54 (pools can hold a template twice), no "failed"
 @fails reflection SRG names `f_210411_`/`f_210412_` in `VillageFarmCrops.onServerAboutToStart`
 @jars creativecalendar creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-VF-02
 @group B
 @commands `/locate structure` plains, taiga, snowy, desert, savanna village; look at 3 farms each
 @pass About a third of the wheat/carrot/potato/beetroot fields are half original crop and half a crop from that climate's table column (crops.md 2.11), cut across the field; the other fields untouched
 @fails `process` roll; `CDConfig.worldgen(wildCrops)`
 @jars creativecalendar creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-VF-03
 @group B
 @commands Towns & Towers jungle and sparse jungle villages, a Flower Forest village, a sky village over forest and over jungle, Villager Farmer House, Campsite
 @pass Jungle farms use the warm wet column, sky villages follow the biome (`auto`); the small structures grow added crops
 @fails group `auto`; template ids in `village_farms.json`
 @jars creativecalendar creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-VF-04
 @group B
 @commands In those farms, look for popped-off or floating plants (berry bushes, stems, tea, hemp, corn)
 @pass Every added plant stands on farmland and stays after a few minutes; berries and stems included; no strawberries, mint, adzuki, blue/cranberries, hamimelon or grapes anywhere
 @fails crops that need other ground: remove from the group
 @jars creativecalendar creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-VF-05
 @group B
 @commands `wildCrops = false`, new village
 @pass Farms are vanilla
 @fails the gate in `process`
 @jars creativecalendar creativedelight
-@draft no batch holds this row yet
+@draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 
 @@section 2
 @@title Salt merge, 2026-10-26 ([item_merges.md](../item_merges.md) 2.9, TODO `food/seasoning #6`)
@@ -1141,27 +1156,126 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 @group any
 @commands latest.log: `[itemMerges]` counts include the two salt pairs, no script error; no loaded recipe takes or makes the items `salt:salt`, `vintagedelight:salt_block` or `vintagedelight:salt_bucket`. The recipe id `vintagedelight:salt_block` stays on purpose (item_merges.md 2.9: any `#forge:salt` x9 -> `salt:salt_block`; the 2026-10-27 FAIL read the id as the item); `salt:salt_packing`, `vintagedelight:salt_block_deconstruct`, `vintagedelight:salt_from_smelting`, `vintagedelight:salt_bucket_to_salt`, `salt:salt_lamp` gone; `creativedelight:shaped/large_salt_lamp` present
 @pass MG-30, MG-31
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+kjsexpect \[itemMerges\] \S+: \d+ merges, \d+ recipes swapped
+kjsreject \[itemMerges\] .*(already merged|already ran|unknown group)
+> cdevtest makes salt:salt
+> cdevtest uses salt:salt
+> cdevtest makes vintagedelight:salt_block
+> cdevtest uses vintagedelight:salt_block
+> cdevtest makes vintagedelight:salt_bucket
+> cdevtest recipes salt:salt_packing
+> cdevtest recipes vintagedelight:salt_block_deconstruct
+> cdevtest recipes vintagedelight:salt_from_smelting
+> cdevtest recipes vintagedelight:salt_bucket_to_salt
+> cdevtest recipes salt:salt_lamp
+> cdevtest recipes creativedelight:shaped/large_salt_lamp
+> cdevtest rdetail vintagedelight:salt_block
+expect verb=makes item=salt:salt n=0
+expect verb=uses item=salt:salt alone=0 shared=0
+expect verb=makes item=vintagedelight:salt_block n=0
+expect verb=uses item=vintagedelight:salt_block alone=0 shared=0
+expect verb=makes item=vintagedelight:salt_bucket n=0
+expect verb=recipes text=salt:salt_packing n=0
+expect verb=recipes text=vintagedelight:salt_block_deconstruct n=0
+expect verb=recipes text=vintagedelight:salt_from_smelting n=0
+expect verb=recipes text=vintagedelight:salt_bucket_to_salt n=0
+reject verb=recipes id=salt:salt_lamp result=
+expect verb=recipes id=creativedelight:shaped/large_salt_lamp result=
+expect verb=rdetail id=vintagedelight:salt_block serializer=\S+ result=salt:salt_block\*1
+reject \[cdevtest\] .*done=0
 ## SQ-SALT-02
 @group same
 @commands `#forge:salts`, `#forge:salt`, `#forge:dusts` hold salt dust and not `salt:salt`; Salting craft accepts salt dust
-@pass MG-32
-@draft no batch holds this row yet
+@pass MG-32 (the Salting craft takes `#forge:salts`, so salt dust in that tag is what makes it accept dust)
+@reviewed 2026-11-16
+> cdevtest tag item forge:salts
+> cdevtest tag item forge:salt
+> cdevtest tag item forge:dusts
+expect verb=tag kind=item tag=forge:salts n=[1-9]\d* ids=\S*vintagedelight:salt_dust
+expect verb=tag kind=item tag=forge:salt n=[1-9]\d* ids=\S*vintagedelight:salt_dust
+expect verb=tag kind=item tag=forge:dusts n=[1-9]\d* ids=\S*vintagedelight:salt_dust
+reject verb=tag kind=item tag=forge:(salts|salt|dusts) .*ids=(\S*,)?salt:salt(,|$)
+reject \[cdevtest\] .*done=0
 ## SQ-SALT-03
 @group same
 @commands Give `salt:salt 3`, `vintagedelight:salt_block 1`: swapped to 3 salt dust, 1 `salt:salt_block`. Evaporate a full water cauldron 20 times: only salt dust
 @pass MG-32, MG-33
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# the give swap through a bot's inventory; cauldron evaporation through its three loot tables (the cauldron itself
+# evaporates through The Salt's code, which rolls these tables), 20 rolls of the full one
+> forceload add 0 0
+> pbot spawn salt3 0 -59 0 minecraft:overworld survival
+> pbot inv salt3 clear
+> give salt3 salt:salt 3
+> give salt3 vintagedelight:salt_block 1
+> cdevtest tickwarp 40
+waitlog verb=tickwarp end=done ticks=40 60
+> pbot inv salt3 get
+repeat 20
+> loot spawn 4 -58 4 loot salt:cauldron_evaporation/salt_full
+end
+> loot spawn 4 -58 4 loot salt:cauldron_evaporation/salt_level_1
+> loot spawn 4 -58 4 loot salt:cauldron_evaporation/salt_level_2
+> cdevtest items 4 -58 4 3
+> pbot remove salt3
+expect verb=pbot.inv bot=salt3 slot=\d+ item=vintagedelight:salt_dust\*3
+expect verb=pbot.inv bot=salt3 slot=\d+ item=salt:salt_block\*1
+reject verb=pbot.inv bot=salt3 slot=\d+ item=(salt:salt|vintagedelight:salt_block)\*
+reject verb=pbot\.\S+ .*error=
+expect verb=items items=\S*vintagedelight:salt_dust:\d+
+reject verb=items items=(\S*,)?salt:salt:\d
+reject \[cdevtest\] .*done=0
 ## SQ-SALT-04
 @group new world
 @commands `/place feature vintagedelight:patch_salt` on a beach 10 times: layers on `salt:raw_rock_salt_block`, no `salt:salt_block` / `vintagedelight:salt_block`; after 5 min at `randomTickSpeed 300` no rock salt next to water is gone
 @pass MG-34
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# randomtick replaces 5 min at randomTickSpeed 300: 300 rounds over the patch box (no player needed)
+> locate biome minecraft:beach
+waitlog The nearest minecraft:beach 600
+capture SB The nearest minecraft:beach is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SB1-24} {SB3-24} {SB1+24} {SB3+24}
+repeat 10
+> place feature vintagedelight:patch_salt {SB1} 63 {SB3}
+end
+> cdevtest count {SB1-24} 50 {SB3-24} {SB1+24} 75 {SB3+24} vintagedelight:salt
+> cdevtest count {SB1-24} 50 {SB3-24} {SB1+24} 75 {SB3+24} salt:raw_rock_salt_block
+> cdevtest count {SB1-24} 50 {SB3-24} {SB1+24} 75 {SB3+24} salt:salt_block
+> cdevtest count {SB1-24} 50 {SB3-24} {SB1+24} 75 {SB3+24} vintagedelight:salt_block
+capture RR0 verb=count block=salt:raw_rock_salt_block n=(\d+)
+> cdevtest randomtick {SB1-24} 50 {SB3-24} {SB1+24} 75 {SB3+24} 300
+waitlog verb=randomtick done= 300
+> cdevtest count {SB1-24} 50 {SB3-24} {SB1+24} 75 {SB3+24} salt:raw_rock_salt_block
+> forceload remove {SB1-24} {SB3-24} {SB1+24} {SB3+24}
+expect verb=count block=vintagedelight:salt n=[1-9]\d* on=\S*salt:raw_rock_salt_block
+expect verb=count block=salt:raw_rock_salt_block n=[1-9]
+expect verb=count block=salt:salt_block n=0
+expect verb=count block=vintagedelight:salt_block n=0
+reject \[cdevtest\] .*done=0
+look the raw rock salt count after the 300 random-tick rounds (second count line) is still {RR0}: none beside water dissolved; place lines say the feature placed (a beach without sand at y 63 places nothing: rerun at the beach's surface y)
 ## SQ-SALT-05
 @group same
 @commands patcherMod 23:36 jar. latest.log: `[salt] 30 Vintage salt blocks random tick`, no mixin error for `SaltBlockRandomTickMixin` / `SaltLayerRandomTickMixin` / `SaltRockNoDissolveMixin`. Block half: copy `tools/salt_probe/salt_probe.js` into `srv/kubejs/server_scripts/zz_salt_probe.js`, `/salttest`: `[salttest] PASS ... melts minecraft:snow` and `minecraft:ice` for salt bricks, brick stairs, a Vintage lamp, a Salt Layer, raw rock salt and The Salt's Salt Block
 @pass MG-36
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[salt\] 30 Vintage salt blocks random tick
+bootreject (ERROR|Error|error).*Salt(Block|Layer)RandomTickMixin
+> salttest
+waitlog \[salttest\] done \d+ pass 600
+expect \[salttest\] PASS vintagedelight:salt_bricks melts minecraft:snow
+expect \[salttest\] PASS vintagedelight:salt_bricks melts minecraft:ice
+expect \[salttest\] PASS vintagedelight:salt_brick_stairs melts minecraft:snow
+expect \[salttest\] PASS vintagedelight:salt_brick_stairs melts minecraft:ice
+expect \[salttest\] PASS vintagedelight:salt_lamp_default melts minecraft:snow
+expect \[salttest\] PASS vintagedelight:salt_lamp_default melts minecraft:ice
+expect \[salttest\] PASS vintagedelight:salt melts minecraft:snow
+expect \[salttest\] PASS vintagedelight:salt melts minecraft:ice
+expect \[salttest\] PASS salt:raw_rock_salt_block melts minecraft:snow
+expect \[salttest\] PASS salt:raw_rock_salt_block melts minecraft:ice
+expect \[salttest\] PASS salt:salt_block melts minecraft:snow
+expect \[salttest\] PASS salt:salt_block melts minecraft:ice
+reject \[salttest\] FAIL .* melts minecraft:
 ## SQ-SALT-06 | /salttest dissolving with rain set before the probe (rain cases need isRainingAt true)
 @group same
 @commands same `/salttest` run (it calls `randomTick` itself: forceloaded chunks get no random ticks without a player, 2026-10-27): Salt Layer beside a water source becomes water, Salt Layer in rain in open sky stays (rain dissolving is off since 2026-10-28, `SaltDissolvingInRain = false`; the NOTE line names the biome), layer by a torch stays; raw rock salt beside water and in rain stays; Evaporator by water grows layers to 8; `vintagedelight:salt_block` by water dissolves and grows no layer
@@ -1185,7 +1299,10 @@ expect \[salttest\] NOTE rain cases: .*isRainingAt true
 @group same
 @commands same `/salttest` run, `cost` line: one salt-brick random tick (minus a stone one, both through Rhino) times 146 hits/s for 10 000 bricks under 0.1 % of server time. A JFR with real bricks needs a player (client session)
 @pass none
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> salttest
+waitlog \[salttest\] done \d+ pass 600
+expect \[salttest\] PASS salt brick random tick under 0.1 % of server time at 10 000 bricks
 ## SQ-SALT-08 | rain dissolving off: nothing dissolves in rain, water still dissolves
 @group A
 @commands `config/salt-common.toml` `SaltDissolvingInRain = false` (and the `configs_edited/root_config/` copy): `/weather rain`, `randomTickSpeed 300`, a Salt Block, a Salt Layer, salt ore and a Vintage salt brick in open sky (not a snowing biome) for 2 min; then beside a water source

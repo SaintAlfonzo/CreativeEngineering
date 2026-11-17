@@ -15,12 +15,13 @@
 @pass mod loads, no parse errors; item named Food Dictionary
 @fails check `defaultconfigs/solcarrot-server.toml` parses (milestones list)
 @from batches/r1113/c4_a.qb
+@reviewed 2026-11-16
 bootexpect Done \(
 bootreject (?i)Failed to parse.*solcarrot|solcarrot.*(exception|could not)
 shell grep -nE "solcarrot|Failed to parse" logs/latest.log | cut -c1-250 | head -20; ls mods | grep -i carrot
-> zq item solcarrot:food_book
-waitlog \[zq\] done 30
-expect \[zq\] item solcarrot:food_book: class
+> cdevtest item solcarrot:food_book
+waitlog \[cdevtest\] verb=item done= 30
+expect \[cdevtest\] verb=item item=solcarrot:food_book class=
 look item name "Food Dictionary" is a lang check (client); here: the item exists and the mod loaded without errors
 
 ## SQ-FDI-02 | which of the 20 foods fdj ate (c4_ar) did not count (carrot=19 applepie=19)
@@ -62,6 +63,7 @@ look the one line with carrotHas=false (and applepieHas=false) names the food ne
 @pass each slice item (vanilla cake: Cake Slice) moves to Already Tasted; Diet Tracker records each once (vanilla cake not twice); the knife cut unlocks nothing until the slice is eaten
 @fails `PlacedFoodSol$CarrotBridge` missing from the jar (stale jar) or `isLoaded("solcarrot")` false
 @from batches/r1115/p4_a1.qb
+@reviewed 2026-11-16
 > forceload add 40590 39990 40620 40020
 sleep 3
 > fill 40595 -60 39995 40615 -55 40015 minecraft:air
@@ -72,27 +74,28 @@ sleep 3
 > pbot hold fd4 minecraft:air
 > zc4 sol fd4 farmersdelight:cake_slice
 waitlog \[zc4\] done 20
-> zc4 hunger fd4 4
+> pbot hunger fd4 4
 > pbot use fd4 40612 -60 40000 up
 sleep 1
-> zc2 state 40612 -60 40000
+> cdevtest state 40612 -60 40000
 > zc4 sol fd4 farmersdelight:cake_slice
 waitlog \[zc4\] done 20
-> zc4 hunger fd4 4
+> pbot hunger fd4 4
 > pbot use fd4 40612 -60 40000 up
 sleep 1
-> zc2 state 40612 -60 40000
+> cdevtest state 40612 -60 40000
 > zc4 sol fd4 farmersdelight:cake_slice
 waitlog \[zc4\] done 20
-> zc4 hunger fd4 4
+> pbot hunger fd4 4
 > pbot use fd4 40612 -60 40000 up
 sleep 1
-> zc2 state 40612 -60 40000
+> cdevtest state 40612 -60 40000
 > zc4 sol fd4 farmersdelight:cake_slice
 waitlog \[zc4\] done 20
 > zc4 sol fd4 minecraft:cake
 waitlog \[zc4\] done 20
 > pbot remove fd4
+count \[cdevtest\] verb=state pos=40612,-60,40000 state="?supplementaries:directional_cake >= 3
 look before: carrotHas=false; after bite 1 carrotHas=true applepieHas=true; applepieEntries +1 per bite (3 total); state supplementaries:directional_cake after bite 1 (bites 1, 2, 3); minecraft:cake applepieHas=false
 
 ## SQ-FDI-04 | (rerun, probe describe fixed) eat out of each lunchbox tier: the food is tasted in both books, the lunchbox is not; one queue entry per bite
@@ -101,56 +104,62 @@ look before: carrotHas=false; after bite 1 carrotHas=true applepieHas=true; appl
 @pass food tasted, lunchbox not; Diet Tracker queue gets one entry per bite
 @fails add a lunchbox Finish handler calling the `PlacedFoodSol` bridges (food_dictionary.md P3 fallback)
 @from batches/r1115/p9_a1r.qb
+@reviewed 2026-11-16
 > pbot spawn fd5 18 -60 1000 minecraft:overworld survival
 sleep 3
 > clear fd5
 > zc4 sol fd5
 waitlog \[zc4\] sol fd5 20
-> zc4 hunger fd5 2
+> pbot hunger fd5 2
 > zp9 lbfill fd5 solapplepie:lunchbag minecraft:cooked_beef 2
 waitlog \[zp9\] done 20
-> zp9 heldeat fd5
-waitlog \[zp9\] done 20
+> pbot eat fd5
+> cdevtest tickwarp 41
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=41 60
 > zc4 sol fd5 minecraft:cooked_beef
 waitlog \[zc4\] sol fd5 20
 > zc4 sol fd5 solapplepie:lunchbag
 waitlog \[zc4\] sol fd5 20
-> zc4 hunger fd5 2
+> pbot hunger fd5 2
 > zp9 lbfill fd5 solapplepie:lunchbox minecraft:baked_potato 2
 waitlog \[zp9\] done 20
-> zp9 heldeat fd5
-waitlog \[zp9\] done 20
+> pbot eat fd5
+> cdevtest tickwarp 42
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=42 60
 > zc4 sol fd5 minecraft:baked_potato
 waitlog \[zc4\] sol fd5 20
 > zc4 sol fd5 solapplepie:lunchbox
 waitlog \[zc4\] sol fd5 20
-> zc4 hunger fd5 2
+> pbot hunger fd5 2
 > zp9 lbfill fd5 solapplepie:golden_lunchbox minecraft:cookie 2
 waitlog \[zp9\] done 20
-> zp9 heldeat fd5
-waitlog \[zp9\] done 20
+> pbot eat fd5
+> cdevtest tickwarp 43
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=43 60
 > zc4 sol fd5 minecraft:cookie
 waitlog \[zc4\] sol fd5 20
 > zc4 sol fd5 solapplepie:golden_lunchbox
 waitlog \[zc4\] sol fd5 20
-> zc4 hunger fd5 2
+> pbot hunger fd5 2
 > zp9 lbfill fd5 creativedelight:netherite_lunchbox minecraft:pumpkin_pie 2
 waitlog \[zp9\] done 20
-> zp9 heldeat fd5
-waitlog \[zp9\] done 20
+> pbot eat fd5
+> cdevtest tickwarp 44
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=44 60
 > zc4 sol fd5 minecraft:pumpkin_pie
 waitlog \[zc4\] sol fd5 20
 > zc4 sol fd5 creativedelight:netherite_lunchbox
 waitlog \[zc4\] sol fd5 20
 # a second bite of the same food: the queue grows by one, the tasted count does not
-> zc4 hunger fd5 2
-> zp9 heldeat fd5
-waitlog \[zp9\] done 20
+> pbot hunger fd5 2
+> pbot eat fd5
+> cdevtest tickwarp 45
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=45 60
 > zc4 sol fd5 minecraft:pumpkin_pie
 waitlog \[zc4\] sol fd5 20
-count \[zp9\] heldeat fd5 \S+lunch\S+ -> .* food= >= 5
+count \[cdevtest\] verb=pbot\.useitem bot=fd5 end=finish item=\S*lunch\S* >= 5
 count carrotHas=true applepieHas=true >= 4
-reject \[zp9\] error|\[zc4\] .*error
+reject \[zp9\] error|\[zc4\] .*error|\[cdevtest\] .*(done=0|error=)
 look per box: the food line carrotHas=true applepieHas=true, the lunchbox line carrotHas=false applepieHas=false; carrot and applepie counts +1 per new food; applepieEntries +1 per bite (also the repeated pumpkin pie bite)
 
 ## SQ-FDI-05 | lunchbox blacklist in the new world's server configs (static half)

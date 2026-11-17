@@ -48,13 +48,22 @@ look 0 KubeJS errors after /reload; recipe count equal to the pack dump (or a li
 @commands Old world (pre-migration save): `grep -nE "missing.*registry\|Missing mappings" logs/latest.log \| head`; hold an old `creativeengineering:potion_bucket`, have Magic Resistance active before the update
 @pass no unresolved ids for the moved ones; bucket and effect read as `creativebrewing:`; old bottled potions and potion fluids read as unknown (expected, D5)
 @fails swap list entry missing (`data/creativebrewing/swaps/creative_split.json`). Use a fresh save made with the old ids (memory forge-missing-mappings-staging); also CBR-06 in creative_brewing.md
-@draft no batch holds this row yet
+@draft needs an old-id fixture save made on the pre-2026-11-04 jars (a bucket in a chest, Magic Resistance on a bot) and no fixture builder exists for it (nsm_fixture.js covers the 11-10 move only); write the steps with that builder
 ## CQ-DCM-01
 @group client
 @commands Full pack client: hover a white wool and an Immersive Petroleum asphalt block; open JEI fluid list
 @pass pack tooltips show (wool test lines, asphalt flavour text stripped); `create:potion` in the JEI fluid list; JEI order unchanged
 @fails `global.tooltips` missing (Common client scripts not loaded), `fluid_jei.js` / `jei_order.js` not in the jar
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "minecraft:white_wool"}
+do {"tooltip_text": "immersivepetroleum:asphalt"}
+do {"tooltip": "minecraft:white_wool"}
+shot wool_tooltip
+do {"wait": "jei"}
+do {"screen": "jei_recipes:create:potion"}
+shot jei_potion_fluid
+do {"screen": "close"}
+look pack tooltip lines on the wool (the tooltip_text READ lines), asphalt flavour text stripped; create:potion shows in the JEI fluid list; JEI order unchanged against the last capture
 ## SQ-CBS-01
 @group B
 @commands Superseded by SQ-CBA-01 to -18. **Minimal chain**: fresh server folder with Forge, KubeJS (+ Rhino, Architectury), Common, Compat, Calendar, CD, CB, the Vinery donor jars, no Cooking for Blockheads, Balm or Incubation; empty `kubejs/`
@@ -67,26 +76,37 @@ look 0 KubeJS errors after /reload; recipe count equal to the pack dump (or a li
 @commands Minimal chain plus Alex's Mobs only
 @pass Alex's Mobs potion rows appear; `[absent mods]` lines name the other mods, no errors
 @fails an AM row guarded by the wrong mod id
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: ADD="alexsmobs-*.jar,citadel-*.jar" port_chain.sh server OUT cbs2 B chain (the minimal chain plus Alex's Mobs and its library Citadel)
+bootexpect Done \(
+bootreject (NoClassDefFoundError|ClassNotFoundException).*(creativebrewing|creativedelight)
+kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
+kjsreject Skipped creativebrewing:kubejs/alexsmobs/
+shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/startup.log logs/kubejs/server.log
+shell grep -h "absent mods" logs/kubejs/server.log | sed -E 's/.*absent mods\] //' | sort -u | cut -c1-160 | head -30
+look no absent-mods line names alexsmobs; the others name mods the chain lacks
 ## SQ-CDFO-01
 @group A
 @commands Full pack after M8, old world: placed racks, fridge, corner and oven keep their contents; oven fuel and smoking; emu, duck and goose nests and egg crates; `config/creativedelight-common.toml`
 @pass all work, no missing-registry warnings (old ids read as `creativedelight:`); moved config values present
 @fails swap list (`data/creativedelight/swaps/`), `MemberConfigMove`
-@draft no batch holds this row yet
+@draft needs an old-id fixture save made on the pre-M8 jars (placed racks, fridge, corner, oven, nests and crates with contents, the old config); no fixture builder exists for it; write the steps (cdevtest inv / be per position) with that builder
 ## SQ-CDFO-02 | no Cooking for Blockheads, Balm or Incubation: no class load error, no recipe / tag / loot error naming them
 @group B
 @commands CD chain without Cooking for Blockheads, Balm and Incubation
 @pass boots; no CfB / Incubation class load error, no recipe, tag or loot error naming `cookingforblockheads` or the nests in `latest.log`
 @fails a compartment class referenced outside its `init`
 @from batches/r1113/c3_ch1.qb
+@reviewed 2026-11-16
 bootreject (NoClassDefFoundError|ClassNotFoundException).*(cookingforblockheads|blay09|incubation|balm)
 bootreject (Couldn't parse|Unknown item|Unknown tag|Can't find|Failed to load).*(cookingforblockheads|incubation|_nest\b)
-shell grep -ciE "cookingforblockheads|incubation" logs/latest.log
-> zq item creativedelight:oak_spice_rack
-> zq item creativedelight:duck_nest
-waitlog \[zq\] item creativedelight:duck_nest 20
-look both compartment items absent or inert (class AirItem, or registered but no error); the grep count is for the record (a WARN that says a compartment is off is fine)
+shell grep -ciE "cookingforblockheads|incubation" logs/latest.log; true
+# chain boot: ADD="creativedevtools-*.jar" to port_chain.sh (the /cdevtest reads); an absent item answers error="no such item ..." done=0
+> cdevtest item creativedelight:oak_spice_rack
+> cdevtest item creativedelight:duck_nest
+expect verb=item (item=creativedelight:oak_spice_rack class=|error="no such item creativedelight:oak_spice_rack)
+expect verb=item (item=creativedelight:duck_nest class=|error="no such item creativedelight:duck_nest)
+look both compartment items absent (error line) or inert (class AirItem, or registered but no error); the grep count is for the record (a WARN that says a compartment is off is fine)
 
 ## SQ-CDFO-03 | CfB present, Incubation absent: boots; rack half loads, nest half does not
 @group B
@@ -94,16 +114,17 @@ look both compartment items absent or inert (class AirItem, or registered but no
 @pass each boots; only the present half's content loads. Also CfB installed with `[compartments] cookingforblockheads = false`: no racks, no oven mixins, no rack merges
 @fails built-in pack mod list, mixin gate, `Compartments` switch
 @from batches/r1113/c3_ch2.qb
+@reviewed 2026-11-16
 bootexpect Done \(
 bootreject (NoClassDefFoundError|ClassNotFoundException).*(incubation|cookingforblockheads|blay09)
 bootreject (Couldn't parse|Unknown item|Unknown tag|Failed to load).*(incubation|cookingforblockheads)
-> zq item creativedelight:oak_spice_rack
-waitlog \[zq\] item creativedelight:oak_spice_rack 20
-expect item creativedelight:oak_spice_rack: class (?!AirItem)
-> zq item creativedelight:duck_nest
-waitlog \[zq\] item creativedelight:duck_nest 20
-> zq recipes creativedelight:shaped/oak_spice_rack
-waitlog \[zq\] recipes matching creativedelight:shaped/oak_spice_rack: \d+ 30
+# chain boot: ADD="creativedevtools-*.jar" to port_chain.sh (the /cdevtest reads)
+> cdevtest item creativedelight:oak_spice_rack
+expect verb=item item=creativedelight:oak_spice_rack class=(?!\S*AirItem)
+> cdevtest item creativedelight:duck_nest
+expect verb=item (item=creativedelight:duck_nest class=|error="no such item creativedelight:duck_nest)
+> cdevtest recipes creativedelight:shaped/oak_spice_rack
+expect verb=recipes text=creativedelight:shaped/oak_spice_rack n=[1-9]
 shell grep -A6 "^\[compartments\]" config/creativedelight-common.toml | grep -E "incubation|cookingforblockheads"
 look rack item registered (a CfB compartment class), nest item AirItem or inert; the oven / fridge mixins applied (grep `creativedelight` mixin lines naming cookingforblockheads in latest.log)
 
@@ -112,7 +133,18 @@ look rack item registered (a CfB compartment class), nest item AirItem or inert;
 @commands Rack textures, raised oven and fridge-top fill, duck egg models; mod list
 @pass render as before; the two member mods no longer listed
 @fails packs not registered on the client
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill 0 100 0 10 100 2 minecraft:stone
+> setblock 0 101 1 creativedelight:oak_spice_rack
+> setblock 2 101 1 creativedelight:oak_tool_rack
+> setblock 4 101 1 creativedelight:duck_nest
+> setblock 6 101 1 creativedelight:duck_egg_crate
+> setblock 8 101 1 cookingforblockheads:oven
+> setblock 10 101 1 cookingforblockheads:fridge
+do {"look": {"from": "5 104 -3", "at": "5 101 1"}}
+do {"wait": "chunks"}
+shot compartments
+look racks, raised oven, fridge-top fill and the duck egg crate render as before; mod list (by hand): the two member mods no longer listed
 ## CQ-CBS-01
 @group client
 @commands Superseded by CQ-CBA-01. Mod list; potion buckets and the Magic Resistance icon on the minimal-chain client

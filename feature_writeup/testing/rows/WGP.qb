@@ -37,49 +37,67 @@
 @commands Boot; grep latest.log for `ChunkGeneratorStructureFrequencyMixin`, `density_function`, `cliffs`, `DimensionFilter`; check the toml has `dimensionFilter`, `sharedTerrainCache` and `sampleGrid = 4`
 @pass No mixin or density-function error; `Done` at or under the eval's 119 s
 @fails A parse error on `cliffs.json`: compare it with Tectonic 2.3.5a's `resourcepacks/terratonic/.../legacy/cliffs.json`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect Done \(
+bootreject (?i)(ChunkGeneratorStructureFrequencyMixin|DimensionFilter).*(error|fail)
+bootreject (?i)(density_function|cliffs).*(error|exception|parse)
+shell grep -nE '^\s*(dimensionFilter|sharedTerrainCache|sampleGrid)\s*=' config/creativeworldgen-common.toml; grep -aoE 'Done \([0-9.]+s\)' logs/latest.log
+look toml has dimensionFilter, sharedTerrainCache and sampleGrid = 4 (wgp_new preset; the keys live in creativeworldgen-common.toml since the carve); Done at or under 119 s
 ## SQ-WGP-02
 @group `wgp_new`, then `wgp_old`
 @commands `/wgp cliffs` and `/wgp dims` in each
 @pass `wgp_new`: `PASS cliffs override` (flat_cache 3), Overworld skips `twigs:bloodstone_obelisk` and the other Nether/End structures (count noted), Nether keeps the obelisk, End lists the Overworld and Nether structures. `wgp_old`: flat_cache 0 (Tectonic's file), 0 skipped everywhere
 @fails flat_cache 0 in `wgp_new`: KubeJS's `kubejs/data` pack sits under `tectonic/terratonic` (`Pack.Position.TOP`); ship the file from the patcherMod jar or a TOP pack instead. Obelisk not skipped: `MetaSlots.canSpawnAmong` / the biome fits widened its biomes
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> wgp cliffs
+> wgp dims
+sleep 5
+expect PASS cliffs override
+shell grep -aE '\[wgp\]' logs/latest.log | cut -c1-240 | head -30
+look wgp_new: flat_cache 3; Overworld skips twigs:bloodstone_obelisk and the other Nether/End structures (count), Nether keeps the obelisk, End lists the Overworld and Nether structures. The wgp_old half (flat_cache 0, 0 skipped) runs the same two commands on that level
 ## SQ-WGP-03
 @group `wgp_old` vs `wgp_df` (option 1 is exact)
 @commands In each: pregen, then `/cwglocate census 96 4000 4000`; keep `kubejs/exported/worldgen/locate_census.json` and `fill.txt`
 @pass Identical census member counts and identical `fill.txt` (same starts, same earth-fill verdicts). `wgp_df` JFR: no `ObeliskStructure` or `NetherFossilStructure` frames in the Overworld; pregen faster
 @fails Any count differs: a structure was skipped that could start. Diff the census by structure; check its `biomes()` against the dimension's `possibleBiomes()` (a mod that tests the biome its own way)
-@draft no batch holds this row yet
+@draft compares two levels (wgp_old, wgp_df) with different toml presets, each its own boot, plus JFR frames: a two-boot comparison the run driver sets up, not one qrun row; PASS 2026-10-27 (fill.txt compare)
 ## SQ-WGP-04
 @group `wgp_old` vs `wgp_tc` (option 3 is exact)
 @commands Same as SQ-WGP-03
 @pass Identical census and identical `fill.txt`; JFR: `EarthFill.predicted` -> `getBaseColumn` share well under `wgp_old`'s (eval: 8.7% of worker CPU)
 @fails `fill.txt` differs: a cached column did not match a fresh read. Offline check `tools/test_worldgen_tools.sh` (EarthFillTest 7) first; then look for a second generator or height range sharing a key
-@draft no batch holds this row yet
+@draft two-level comparison (wgp_old vs wgp_tc) with JFR shares, as SQ-WGP-03; PASS 2026-10-27 (fill-only)
 ## SQ-WGP-05
 @group `wgp_old` vs `wgp_g4` (option 4)
 @commands Pregen in each; `grep -cE '\[(earth\|water)-fill\].*CANCELLED$' logs/latest.log` (`wgp_old` logs ALL: count only the CANCELLED lines) and the census as above
 @pass Census member counts within a few percent of `wgp_old`; cancels close to the offline sim (perf.md 10.8 table); EarthFill JFR share about a quarter of `wgp_old`'s
 @fails A structure family loses many more starts: `sampleGrid` is global, so note the family and decide between 2, 3 and 4
-@draft no batch holds this row yet
+@draft two-level comparison (wgp_old vs wgp_g4) against the offline sim and JFR, as SQ-WGP-03; PASS 2026-10-27 (cancel count only)
 ## SQ-WGP-06
 @group `wgp_old` vs `wgp_cl` (option 2)
 @commands Pregen in each; `/wgp cliffs`; in the JFR compare the noise fill share and the `NormalNoise`/`BlendedNoise` frames under `NoiseChunk#fillSlice`
 @pass `wgp_cl`: flat_cache 3; noise fill per chunk down (eval: cliffs term 9.9% + 3.6% of worker CPU); pregen faster
 @fails No speedup: the wraps did not reach the per-block path (check that terratonic's `final_density` still points at `tectonic:overworld/legacy/cliffs`)
-@draft no batch holds this row yet
+@draft two-level JFR comparison (wgp_old vs wgp_cl, noise fill frames), as SQ-WGP-03; open since the cliffs world stalled on a corrupt chunk
 ## SQ-WGP-07
 @group `wgp_new`
 @commands Pregen; note Chunky's total and `Done`
 @pass Faster than the 5:26 baseline by roughly the sum of options 1-4 (perf.md 10.8)
 @fails Slower than any single-option world: the options interact (look at the JFR top frames)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> chunky center 4000 4000
+> chunky radius 400
+> chunky start
+waitlog Task finished 1800
+shell grep -aE 'Task finished|Done \(' logs/latest.log | cut -c1-200 | tail -3
+reject \[wgp\] ERROR
+look Chunky's total time (the Task finished line) against the 5:26 baseline: faster by roughly the sum of options 1-4 (perf.md 10.8); slower than a single-option world = the options interact (JFR top frames)
 ## SQ-WGP-08
 @group `wgp_cl_seam`: as `wgp_old`
 @commands Pregen radius 200 at 4000 4000, `stop`; copy `kubejs/data/tectonic/...` back into `OUT/srv/kubejs/`; boot; pregen radius 400
 @pass Boots with the override (`/wgp cliffs` PASS); the outer ring generates. The seam itself is CQ-WGP-01
 @fails -
-@draft no batch holds this row yet
+@draft needs a stop and a reboot with files copied back between two pregens (a row cannot reboot the server); run as two boots of wgp_cl_seam
 @@text
 @@text Client checks: **CQ-WGP-01** open `wgp_cl_seam` in a throwaway client (or copy the world): fly the radius-200 boundary
 @@text (chunks 3 x 200 / 16 from 4000 4000) over mountains and note any step at cliff faces between old and new chunks

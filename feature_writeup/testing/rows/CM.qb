@@ -17,59 +17,172 @@
 @group any
 @commands latest.log: `[itemMerges] creativedelight` count up by 3 (cantaloupe pairs), no script error from `fruitsdelight/item_merges.js`, `veggies_foods.js`, `canning.js`; no loaded recipe makes `creativeengineering:canned_hamimelon` or `fruitsdelight:hamimelon_popsicle` or takes `fruitsdelight:hamimelon_slice`
 @pass MG-39
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -hE "\[itemMerges\] creativedelight" logs/latest.log logs/kubejs/startup.log | tail -3; grep -hiE "(item_merges|veggies_foods|canning)\.js.*(error|exception)" logs/kubejs/startup.log logs/kubejs/server.log | head -5; true
+> cdevtest makes canned_hamimelon
+> cdevtest makes fruitsdelight:hamimelon_popsicle
+> cdevtest uses fruitsdelight:hamimelon_slice
+expect verb=makes item=canned_hamimelon n=0\b
+expect verb=makes item=fruitsdelight:hamimelon_popsicle n=0\b
+expect verb=uses (item=fruitsdelight:hamimelon_slice alone=0 shared=0|error="no such item)
+bootreject (?i)(item_merges|veggies_foods|canning)\.js.*(error|exception)
+look shell: the [itemMerges] creativedelight count is 3 higher than before the cantaloupe merge (MG-39); no script error line
 ## SQ-CM-02
 @group same
 @commands Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `creativedelight:shaped/mini_cantaloupe`, `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creativedelight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing
 @pass MG-41
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest makes fruitsdelight:hamimelon_seeds
+> cdevtest uses delightful:cantaloupe_slice
+> cdevtest recipes mini_cantaloupe
+> cdevtest recipes creativedelight:shapeless/cantaloupe_seeds
+> cdevtest recipes popsicle
+> cdevtest makes fruitsdelight:hamimelon_popsicle
+expect verb=uses id=\S+ alone=\S+ serializer=\S+
+expect verb=recipes id=creativedelight:shaped/mini_cantaloupe 
+expect verb=recipes id=creativedelight:shapeless/mini_cantaloupe_seeds 
+expect verb=recipes id=creativedelight:shapeless/cantaloupe_seeds_from_mini 
+reject verb=recipes id=creativedelight:shapeless/cantaloupe_seeds 
+count verb=recipes id=delightful:\S*popsicle\S* result=delightful:cantaloupe_popsicle >= 1
+expect verb=makes item=fruitsdelight:hamimelon_popsicle n=0\b
+reject verb=\S+ .*done=0
+look makes fruitsdelight:hamimelon_seeds lists a recipe; the uses lines of the slice include that seeds recipe; Delightful's two popsicle recipes are in the popsicle list
 ## SQ-CM-03
 @group same
 @commands `#creativeengineering:exotic_fruit` holds `delightful:cantaloupe_slice`; `#forge:seeds` holds `fruitsdelight:hamimelon_seeds`; `#forge:pasta` holds `veggiesdelight:potato_noodle`
 @pass MG-43
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest tagsof delightful:cantaloupe_slice
+> cdevtest tagsof fruitsdelight:hamimelon_seeds
+> cdevtest tagsof veggiesdelight:potato_noodle
+expect verb=tagsof id=delightful:cantaloupe_slice item_tags=\S*:exotic_fruit\b
+expect verb=tagsof id=fruitsdelight:hamimelon_seeds item_tags=\S*forge:seeds\b
+expect verb=tagsof id=veggiesdelight:potato_noodle item_tags=\S*forge:pasta\b
+reject verb=\S+ .*done=0
 ## SQ-CM-04
 @group same
 @commands Pasta: every recipe that took `farmersdelight:raw_pasta` or `#forge:pasta/raw_pasta` (FD pasta dishes, Brewin's cheesy pasta, More Delight, Alex's Delight pastas) now takes `#forge:pasta`; count the swapped recipes, none left naming raw pasta alone
 @pass none (TODO `dishes/meals #38`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest uses farmersdelight:raw_pasta
+> cdevtest tag item forge:pasta
+> cdevtest tag item forge:pasta/raw_pasta
+sleep 2
+expect verb=uses item=farmersdelight:raw_pasta alone=0 shared=[1-9]
+expect verb=tag kind=item tag=forge:pasta n=[2-9]\d* ids=\S*farmersdelight:raw_pasta\S*veggiesdelight:potato_noodle
+reject verb=\S+ .*done=0
+look the uses lines of raw pasta (FD pasta dishes, Brewin' cheesy pasta, More Delight, Alex's Delight pastas) all alone=false: count them as the swapped recipes; an alone=true line names a recipe still on raw pasta alone
 ## SQ-CM-05
 @group same
 @commands Food values (the 1.1.04 check, PASSED 2026-10-28 at 11; the 12 of 2026-10-29 is SQ-CM-21): `veggiesdelight:coleslaw` nutrition 11, modifier 0.6, Comfort kept; `veggiesdelight:fermented_garlic_honey` Regeneration amplifier 1 100 ticks, Health Boost amplifier 1 600 ticks, nothing else
 @pass none (TODO `dishes/pickles-and-ferments #10`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest food veggiesdelight:coleslaw
+> cdevtest food veggiesdelight:fermented_garlic_honey
+expect verb=food item=veggiesdelight:coleslaw\*1 food=true nutrition=11 modifier=0\.6 .*effects=\S*comfort
+expect verb=food item=veggiesdelight:fermented_garlic_honey\*1 food=true .*effects=minecraft:(regeneration:1:100:1\.0,minecraft:health_boost:1:600:1\.0|health_boost:1:600:1\.0,minecraft:regeneration:1:100:1\.0)$
+reject verb=\S+ .*done=0
 ## SQ-CM-06
 @group same
 @commands Recipes: `endersdelight:shulker_bowl` gone, `creativedelight:shapeless/shulker_bowl` shell -> 12; `vintagedelight:bread_from_smelting` and `bread_from_smoking` absent, no campfire bread from oat dough, oven `bread_from_dough_1`, `_3`, `_6` present (oat dough bakes in each), `sourdough_bread_1/3/6` make sourdough bread and sourdough never makes plain bread; `creativedelight:shapeless/overnight_oats` present
 @pass none (TODO `recipes/cooking #4`, `baking/baked-goods #29`, `dishes/meals #22`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest recipes endersdelight:shulker_bowl
+> cdevtest rdetail creativedelight:shapeless/shulker_bowl
+> cdevtest recipes vintagedelight:bread_from_smelting
+> cdevtest recipes vintagedelight:bread_from_smoking
+> cdevtest uses vintagedelight:oat_dough
+> cdevtest recipes bread_from_dough_
+> cdevtest recipes sourdough_bread_
+> cdevtest makes minecraft:bread
+> cdevtest recipes creativedelight:shapeless/overnight_oats
+sleep 2
+expect verb=recipes text=endersdelight:shulker_bowl n=0\b
+expect verb=rdetail id=creativedelight:shapeless/shulker_bowl serializer=\S+ result=\S+\*12\b
+expect verb=recipes text=vintagedelight:bread_from_smelting n=0\b
+expect verb=recipes text=vintagedelight:bread_from_smoking n=0\b
+reject verb=uses id=\S+ .*serializer=minecraft:campfire_cooking
+expect verb=recipes id=\S*bread_from_dough_1 
+expect verb=recipes id=\S*bread_from_dough_3 
+expect verb=recipes id=\S*bread_from_dough_6 
+count verb=recipes id=\S*sourdough_bread_[136] result=\S*sourdough_bread\*\d+ >= 3
+reject verb=makes id=\S*sourdough\S* result=minecraft:bread\*
+expect verb=recipes id=creativedelight:shapeless/overnight_oats 
+reject verb=\S+ .*done=0
+look the uses lines of oat dough include the three oven bread_from_dough recipes
 ## SQ-CM-07
 @group same
 @commands `felsic_sword` max damage 2501. `creativeengineering:strong_phantom_bane` not in the potion registry, no brewing mix with glowstone on Phantom Bane, base and long present; latest.log no `[CE potions]` error
 @pass none (gear_tuning F9, armor_effects F7)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest item felsic_gear:felsic_sword
+> cdevtest reg potion phantom_bane
+> cdevtest potion creativebrewing:phantom_bane minecraft:glowstone_dust
+expect verb=item item=felsic_gear:felsic_sword .*max_damage=2501\b
+reject verb=reg kind=potion id=\S*strong_phantom_bane
+expect verb=reg kind=potion id=\S+:phantom_bane 
+expect verb=reg kind=potion id=\S+:long_phantom_bane 
+expect verb=potion potion=creativebrewing:phantom_bane ingredient=minecraft:glowstone_dust output=nothing
+bootreject \[CE potions\].*(error|Error)
+reject verb=\S+ .*done=0
 ## SQ-CM-08
 @group new world
 @commands Echo set on a player (or fake player): Night Vision and Phantom Bane amplifier 0
 @pass AE-10 (expected now 0)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> pbot spawn cm8 0.5 -60 8.5 minecraft:overworld survival
+sleep 2
+> item replace entity cm8 armor.head with create_deep_dark:echo_armor_helmet
+> item replace entity cm8 armor.chest with create_deep_dark:echo_armor_chestplate
+> item replace entity cm8 armor.legs with create_deep_dark:echo_armor_leggings
+> item replace entity cm8 armor.feet with create_deep_dark:echo_armor_boots
+> cdevtest tickwarp 200
+waitlog verb=tickwarp end=done 30
+> cdevtest player cm8
+> pbot remove cm8
+expect verb=player name=cm8 effects=\S*minecraft:night_vision:0:
+expect verb=player name=cm8 effects=\S*phantom_bane:0:
+reject verb=player name=cm8 effects=\S*phantom_bane:[1-9]
+reject verb=\S+ .*done=0
 ## SQ-CM-10 | salt retest (SQ-SALT-01 fix of 10-28)
 @group any
 @commands `creativedelight:...` oven/knife check: `zq makes minecraft:bread` shows the knife cut of `sourdough_bread` giving 3 Bread (was 2); `vintagedelight:fermenting/{ochre,verdant,pearlescent}_froglight_from_fermenting` take `salt:salt_block` and are present once; `tactical_fishing:fishing_vintagedelight_salt_bucket` and `fishing_creativeengineering_powdered_sugar_bucket` absent (retest of SQ-SALT-01 leftovers)
 @pass none
 @from batches/r1031/a1_data.qb passed
-> zq uses salt:salt_block
-> zq makes vintagedelight:salt_bucket
-> zq makes creativeengineering:powdered_sugar_bucket
+@reviewed 2026-11-16
+> cdevtest uses salt:salt_block
+> cdevtest makes vintagedelight:salt_bucket
+> cdevtest makes creativeengineering:powdered_sugar_bucket
 count froglight_from_fermenting == 3
 reject tactical_fishing:fishing_vintagedelight_salt_bucket
 reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
+reject verb=\S+ .*done=0
 
 ## SQ-CM-09
 @group new world
 @commands `/place feature creativedelight:wild/mini_cantaloupe` in a desert 10 times: Mini Cantaloupe blocks on sand / red sand / terracotta; biome tag `creativedelight:wild_crops/cantaloupe` lists deserts and badlands, no savanna
 @pass MG-44
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest tag biome creativedelight:wild_crops/cantaloupe
+expect verb=tag kind=biome tag=creativedelight:wild_crops/cantaloupe n=[1-9]\d* ids=\S*minecraft:desert\S*badlands
+reject verb=tag kind=biome tag=creativedelight:wild_crops/cantaloupe .*savanna
+> locate biome minecraft:desert
+capture D is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {D1-32} {D3-32} {D1+32} {D3+32}
+sleep 10
+> pbot spawn cm9 {D1} 120 {D3} minecraft:overworld creative
+sleep 2
+repeat 10
+> spreadplayers {D1} {D3} 0 24 false cm9
+> execute at cm9 run place feature creativedelight:wild/mini_cantaloupe ~ ~ ~
+end
+> pbot remove cm9
+> cdevtest reg block (hamimelon|cantaloupe)$
+> cdevtest count {D1-32} 55 {D3-32} {D1+32} 100 {D3+32} fruitsdelight:hamimelon
+> forceload remove {D1-32} {D3-32} {D1+32} {D3+32}
+expect verb=count .*n=[1-9]\d* on=(minecraft:(sand|red_sand|\w*terracotta):\d+,?)+$
+reject verb=\S+ .*done=0
+look the reg line names the Mini Cantaloupe block; if it is not fruitsdelight:hamimelon, read the count with that id (the place feature replies say how many placed)
 
 @@section 2
 @@title Food batch: powdered sugar, batter, meals, coasters, 2026-10-29 ([food.md](../food.md) 3.13, 3.15; [briefs/dishes_meals.md](../briefs/dishes_meals.md); [kitchen.md](../kitchen.md) 2.3)
@@ -86,17 +199,19 @@ reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
 @pass `creativedelight:vivacuumizing/powdered_sugar_bucket` has bucket + 4 sugar; `createcrushing/` and `createmilling/sugar_powdered_sugar` each have 2 results (second at chance 0.5); `mortar/sugar_powdered_sugar` takes 3 sugar and gives 4; `shapeless/powdered_sugar_from_bucket` gives 8; `shapeless/powdered_sugar_bucket_from_powder` exists; no `tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket`; `rusticdelight:cooking/batter`, `sliceanddice:cooking/rusticdelight/cooking/batter` and `creativedelight:createmixing/batter_egg_solution` grain slots list wheat flour, cornmeal and `farmersdelight:rice`; no `[NCH]` errors
 @fails food.md 3.13, 3.15 (`dishes/ingredients #23`, `#24`)
 @from batches/r1031/a1_data.qb
-> zq makes creativeengineering:powdered_sugar_bucket
-> zq makes creativeengineering:powdered_sugar
-> zq rdetail batter
-expect vivacuumizing/powdered_sugar_bucket -> 1 creativeengineering:powdered_sugar_bucket
-expect powdered_sugar_bucket_from_powder -> 1 creativeengineering:powdered_sugar_bucket
-expect powdered_sugar_from_bucket -> 8 creativeengineering:powdered_sugar
-expect mortar/sugar_powdered_sugar -> 4 creativeengineering:powdered_sugar
+@reviewed 2026-11-16
+> cdevtest makes creativeengineering:powdered_sugar_bucket
+> cdevtest makes creativeengineering:powdered_sugar
+> cdevtest rdetail batter
+expect id=\S*vivacuumizing/powdered_sugar_bucket result=creativeengineering:powdered_sugar_bucket\*
+expect id=\S*powdered_sugar_bucket_from_powder result=creativeengineering:powdered_sugar_bucket\*
+expect id=\S*powdered_sugar_from_bucket result=creativeengineering:powdered_sugar\*
+expect id=\S*mortar/sugar_powdered_sugar result=creativeengineering:powdered_sugar\*
 expect createmilling/sugar_powdered_sugar
 expect createcrushing/sugar_powdered_sugar
 reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
 look rdetail: vacuum recipe takes bucket + 4 sugar; milling and crushing have a second result at 0.5; the three batter recipes list wheat flour, cornmeal and farmersdelight:rice in the grain slots
+reject verb=\S+ .*done=0
 
 ## SQ-CM-20 | field salad recipes and tags
 @group A
@@ -104,16 +219,18 @@ look rdetail: vacuum recipe takes bucket + 4 sugar; milling and crushing have a 
 @pass `creativedelight:shapeless/field_salad_manual_only` and `field_salad_flowers_manual_only` exist, `delightful:food/field_salad` does not; tags `#creativeengineering:field_salad/root` (5), `/nut` (acorn, peanut), `/green` (8) resolve
 @fails RC-160
 @from batches/r1031/a1_data.qb passed
-> zq recipes field_salad
-> zq itemtag creativeengineering:field_salad/root
-> zq itemtag creativeengineering:field_salad/nut
-> zq itemtag creativeengineering:field_salad/green
+@reviewed 2026-11-16
+> cdevtest recipes field_salad
+> cdevtest tag item creativeengineering:field_salad/root
+> cdevtest tag item creativeengineering:field_salad/nut
+> cdevtest tag item creativeengineering:field_salad/green
 expect creativedelight:shapeless/field_salad_manual_only
 expect creativedelight:shapeless/field_salad_flowers_manual_only
 reject delightful:food/field_salad
-expect itemtag creativeengineering:field_salad/root \(5\)
-expect itemtag creativeengineering:field_salad/nut \(2\)
-expect itemtag creativeengineering:field_salad/green \(8\)
+expect verb=tag kind=item tag=creativeengineering:field_salad/root n=5 
+expect verb=tag kind=item tag=creativeengineering:field_salad/nut n=2 
+expect verb=tag kind=item tag=creativeengineering:field_salad/green n=8 
+reject verb=\S+ .*done=0
 
 ## SQ-CM-21 | coleslaw and shrimp fried rice values
 @group A
@@ -121,11 +238,13 @@ expect itemtag creativeengineering:field_salad/green \(8\)
 @pass `veggiesdelight:coleslaw` nutrition 12, modifier 0.6; `alexsmobs:shrimp_fried_rice` nutrition 20, modifier 0.6, Comfort 4800 ticks
 @fails RC-161, RC-163
 @from batches/r1031/a1_data.qb
-> zq food veggiesdelight:coleslaw
-> zq food alexsmobs:shrimp_fried_rice
-expect food veggiesdelight:coleslaw: nutrition 12, modifier 0\.6
-expect food alexsmobs:shrimp_fried_rice: nutrition 20, modifier 0\.6.*4800
+@reviewed 2026-11-16
+> cdevtest food veggiesdelight:coleslaw
+> cdevtest food alexsmobs:shrimp_fried_rice
+expect verb=food item=veggiesdelight:coleslaw\*\d+ food=true nutrition=12 modifier=0\.6
+expect verb=food item=alexsmobs:shrimp_fried_rice\*\d+ food=true nutrition=20 modifier=0\.6.*4800
 look the shrimp fried rice effect named is Comfort
+reject verb=\S+ .*done=0
 
 ## SQ-CM-22 | veggie noodle dough
 @group A
@@ -133,11 +252,13 @@ look the shrimp fried rice effect named is Comfort
 @pass `creativedelight:shapeless/cucumber_dough` takes `#creativeengineering:veggie_noodle_veg` (6 items); `vintagedelight:cucumber_dough` gone
 @fails RC-162
 @from batches/r1031/a1_data.qb passed
-> zq rdetail cucumber_dough
-> zq itemtag creativeengineering:veggie_noodle_veg
+@reviewed 2026-11-16
+> cdevtest rdetail cucumber_dough
+> cdevtest tag item creativeengineering:veggie_noodle_veg
 expect creativedelight:shapeless/cucumber_dough
-reject vintagedelight:cucumber_dough \{
-expect itemtag creativeengineering:veggie_noodle_veg \(6\)
+reject id=vintagedelight:cucumber_dough serializer=
+expect verb=tag kind=item tag=creativeengineering:veggie_noodle_veg n=6 
+reject verb=\S+ .*done=0
 
 ## SQ-CM-23 | shrimp fried rice in the Cooking Pot
 @group A
@@ -145,9 +266,11 @@ expect itemtag creativeengineering:veggie_noodle_veg \(6\)
 @pass `creativedelight:farmersdelightcooking/shrimp_fried_rice` takes Fried Rice + 2 `#forge:shrimps`
 @fails RC-163
 @from batches/r1031/a1_data.qb
-> zq rdetail farmersdelightcooking/shrimp_fried_rice
+@reviewed 2026-11-16
+> cdevtest rdetail farmersdelightcooking/shrimp_fried_rice
 expect creativedelight:farmersdelightcooking/shrimp_fried_rice
 look inputs: Fried Rice + 2 of #forge:shrimps
+reject verb=\S+ .*done=0
 
 ## SQ-CM-24 | no strawberry banana smoothie
 @group A
@@ -155,8 +278,10 @@ look inputs: Fried Rice + 2 of #forge:shrimps
 @pass no recipe outputs `neapolitan:strawberry_banana_smoothie`; no errors from the edited CD scripts
 @fails RC-164
 @from batches/r1031/a1_data.qb passed
-> zq makes neapolitan:strawberry_banana_smoothie
-expect makes neapolitan:strawberry_banana_smoothie: 0
+@reviewed 2026-11-16
+> cdevtest makes neapolitan:strawberry_banana_smoothie
+expect verb=makes item=neapolitan:strawberry_banana_smoothie n=0
+reject verb=\S+ .*done=0
 
 ## SQ-KT-21 | coaster accepts modelled drinks and food, refuses others (fake player)
 @group A
@@ -193,15 +318,17 @@ look the first three coasters hold their item in the block entity data, the last
 @pass no `farmersdelight:cooking` output of `fruitsdelight:blueberry_muffin`, `cranberry_muffin` or `veggiesdelight:sweet_potato_cupcake`; `creativedelight:farmersdelightcooking/{green_grape,red_grape,cherry}_jam_jar` exist, count 2, container `vintagedelight:empty_mason_jar`; no recipe outputs the 6 removed jam items
 @fails RC-172 to RC-175, OV-36
 @from batches/r1031/a1_data.qb
-> zq makes fruitsdelight:blueberry_muffin
-> zq makes fruitsdelight:cranberry_muffin
-> zq makes veggiesdelight:sweet_potato_cupcake
-> zq rdetail jam_jar
-reject farmersdelight:cooking.*-> \d+ (fruitsdelight:blueberry_muffin|fruitsdelight:cranberry_muffin|veggiesdelight:sweet_potato_cupcake)
+@reviewed 2026-11-16
+> cdevtest makes fruitsdelight:blueberry_muffin
+> cdevtest makes fruitsdelight:cranberry_muffin
+> cdevtest makes veggiesdelight:sweet_potato_cupcake
+> cdevtest rdetail jam_jar max=300
+reject id=farmersdelight:cooking\S* result=(fruitsdelight:blueberry_muffin|fruitsdelight:cranberry_muffin|veggiesdelight:sweet_potato_cupcake)\*
 expect creativedelight:farmersdelightcooking/green_grape_jam_jar
 expect creativedelight:farmersdelightcooking/red_grape_jam_jar
 expect creativedelight:farmersdelightcooking/cherry_jam_jar
 look each new jar recipe gives 2 with container vintagedelight:empty_mason_jar; none of the 6 removed jam items is a result
+reject verb=\S+ .*done=0
 
 ## SQ-BJ-02 | any bread
 @group A
@@ -209,11 +336,13 @@ look each new jar recipe gives 2 with container vintagedelight:empty_mason_jar; 
 @pass `farmersdelight:chicken_sandwich` and the `moredelight` slice sandwiches list `#forge:bread`; `moredelight` bread_slice cutting and `canned_goods:canned_bread` keep their own input; no errors from `bread_recipes.js` or `jams.js`
 @fails RC-170, RC-171
 @from batches/r1031/a1_data.qb
-> zq rdetail chicken_sandwich
-> zq rdetail moredelight
+@reviewed 2026-11-16
+> cdevtest rdetail chicken_sandwich
+> cdevtest rdetail moredelight max=300
 expect farmersdelight:.*chicken_sandwich
 look chicken sandwich and the More Delight slice sandwiches list #forge:bread (rdetail shows the first 3 breads); bread_slice cutting and canned_goods:canned_bread keep their own input
 kjsreject (bread_recipes\.js|jams\.js).*(Error|error)
+reject verb=\S+ .*done=0
 
 ## SQ-BJ-03 | relish jar not a jam
 @group A
@@ -221,12 +350,14 @@ kjsreject (bread_recipes\.js|jams\.js).*(Error|error)
 @pass `vintagedelight:relish_jar` not in `#forge:jam_jars` or `#vintagedelight:savory_jam`; the 3 new jars in `#forge:jams`
 @fails RC-174
 @from batches/r1031/a1_data.qb passed
-> zq tagsof vintagedelight:relish_jar
-> zq itemtag forge:jams
-reject item tags of vintagedelight:relish_jar:.*(forge:jam_jars|vintagedelight:savory_jam)
-expect itemtag forge:jams .*green_grape_jam_jar
-expect itemtag forge:jams .*red_grape_jam_jar
-expect itemtag forge:jams .*cherry_jam_jar
+@reviewed 2026-11-16
+> cdevtest tagsof vintagedelight:relish_jar
+> cdevtest tag item forge:jams
+reject verb=tagsof id=vintagedelight:relish_jar .*item_tags=.*(forge:jam_jars|vintagedelight:savory_jam)
+expect verb=tag kind=item tag=forge:jams .*.*green_grape_jam_jar
+expect verb=tag kind=item tag=forge:jams .*.*red_grape_jam_jar
+expect verb=tag kind=item tag=forge:jams .*.*cherry_jam_jar
+reject verb=\S+ .*done=0
 
 
 @@section 3
@@ -244,11 +375,13 @@ expect itemtag forge:jams .*cherry_jam_jar
 @pass no recipe outputs or takes `rusticdelight:fruit_beignet`; no errors from `rusticdelight/recipes.js` or `removed_items.js`
 @fails `creativedelight/members #22`
 @from batches/r1031/a1_data.qb passed
-> zq makes rusticdelight:fruit_beignet
-> zq uses rusticdelight:fruit_beignet
-expect makes rusticdelight:fruit_beignet: 0
-expect uses rusticdelight:fruit_beignet: 0 alone, 0 with other items
+@reviewed 2026-11-16
+> cdevtest makes rusticdelight:fruit_beignet
+> cdevtest uses rusticdelight:fruit_beignet
+expect verb=makes item=rusticdelight:fruit_beignet n=0
+expect verb=uses item=rusticdelight:fruit_beignet alone=0 shared=0
 kjsreject (rusticdelight/recipes\.js|removed_items\.js).*(Error|error)
+reject verb=\S+ .*done=0
 
 ## SQ-CM-31 | seagrass salad, no tentacles anywhere
 @group A
@@ -256,18 +389,20 @@ kjsreject (rusticdelight/recipes\.js|removed_items\.js).*(Error|error)
 @pass `oceansdelight:seagrass_salad` recipe is `creativedelight:shapeless/seagrass_salad` with 2 `minecraft:seagrass` + bowl; no tentacle item (`miners_delight:tentacles`, `baked_tentacles`, `tentacles_on_a_stick`, `oceansdelight:tentacles`, `cut_tentacles`, `tentacle_on_a_stick`, `baked_tentacle_on_a_stick`, `oceanic_delight:squid_tentacles`, `glow_squid_tentacles`, `grilled_squid_tentacles`) is an output or input of any recipe (`/recipescan`)
 @fails `creativedelight/members #24`, `dishes/ocean #4`
 @from batches/r1031/a1_data.qb
-> zq rdetail seagrass_salad
-> zq uses miners_delight:tentacles
-> zq uses miners_delight:baked_tentacles
-> zq uses oceansdelight:tentacles
-> zq uses oceansdelight:cut_tentacles
-> zq uses oceanic_delight:squid_tentacles
-> zq uses oceanic_delight:glow_squid_tentacles
-> zq makes tentacle
+@reviewed 2026-11-16
+> cdevtest rdetail seagrass_salad
+> cdevtest uses miners_delight:tentacles
+> cdevtest uses miners_delight:baked_tentacles
+> cdevtest uses oceansdelight:tentacles
+> cdevtest uses oceansdelight:cut_tentacles
+> cdevtest uses oceanic_delight:squid_tentacles
+> cdevtest uses oceanic_delight:glow_squid_tentacles
+> cdevtest makes tentacle
 expect creativedelight:shapeless/seagrass_salad
 count : 0 alone, 0 with other items == 6
-expect makes tentacle: 0
+expect verb=makes item=tentacle n=0
 look seagrass salad takes 2 minecraft:seagrass + bowl; the 4 tentacle-on-a-stick and grilled ids are covered by "makes tentacle"
+reject verb=\S+ .*done=0
 
 ## SQ-CM-32 | tentacle dishes take calamari
 @group A
@@ -275,15 +410,17 @@ look seagrass salad takes 2 minecraft:seagrass + bowl; the 4 tentacle-on-a-stick
 @pass `oceansdelight:cooking/squid_rings`, `oceanic_delight:sea_pickle_roll`, `shrimp_rice`, `squid_salad`, `takoyaki` take `#forge:raw_fishes/calamari`; `glow_squid_stew` takes `#forge:raw_fishes/calamari` (glowing and every slice included); `seafood_skewer`, `squid_and_pickles` take `#forge:cooked_fishes/calamari` (the tag replace in the four `#forge:squid_tentacles` recipes is the part most likely to miss)
 @fails replaceInput on a tag
 @from batches/r1031/a1_data.qb
-> zq rdetail squid_rings
-> zq rdetail sea_pickle_roll
-> zq rdetail shrimp_rice
-> zq rdetail squid_salad
-> zq rdetail takoyaki
-> zq rdetail glow_squid_stew
-> zq rdetail seafood_skewer
-> zq rdetail squid_and_pickles
+@reviewed 2026-11-16
+> cdevtest rdetail squid_rings
+> cdevtest rdetail sea_pickle_roll
+> cdevtest rdetail shrimp_rice
+> cdevtest rdetail squid_salad
+> cdevtest rdetail takoyaki
+> cdevtest rdetail glow_squid_stew
+> cdevtest rdetail seafood_skewer
+> cdevtest rdetail squid_and_pickles
 look each takes #forge:raw_fishes/calamari (seafood_skewer, squid_and_pickles: #forge:cooked_fishes/calamari); rdetail lists the tag's first items, so a calamari item there = PASS, a tentacle = FAIL
+reject verb=\S+ .*done=0
 
 ## SQ-CM-33 | (server half) no tag error naming the Storage Delight JEI tag; the tag holds the 140 blocks
 @group A
@@ -291,45 +428,66 @@ look each takes #forge:raw_fishes/calamari (seafood_skewer, squid_and_pickles: #
 @pass the 140 Storage Delight blocks sit together in wood order (oak, spruce, birch, jungle, acacia, dark oak, mangrove, crimson, warped, bamboo); no tag error naming `creativecommon:jei/storage_delight`
 @fails `creativedelight/members #23`
 @from batches/r1113/c1_a1.qb
+@reviewed 2026-11-16
 # id fix: the tag is creativecompat:jei/storage_delight since the 11-09 namespace move (row says creativecommon:)
 bootreject (?i)(error|fail|unknown|invalid|missing).*(creativecompat|creativecommon|creativeengineering):jei/storage_delight
-> zq itemtag creativecompat:jei/storage_delight
-waitlog \[zq\] itemtag creativecompat:jei/storage_delight 30
-expect itemtag creativecompat:jei/storage_delight \(140\)
+> cdevtest tag item creativecompat:jei/storage_delight
+waitlog verb=tag kind=item tag=creativecompat:jei/storage_delight n= 30
+expect verb=tag kind=item tag=creativecompat:jei/storage_delight n=140 
 look client half (JEI item list in wood order) stays open: CQ row / client run
+reject verb=\S+ .*done=0
 
 ## SQ-CM-34
 @group A
 @commands after the repackedStorage install; mod list
 @pass Storage Delight shows as "Storage Delight (Creative Delight)"
 @fails jar not installed
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -hoE "Storage Delight[^\"]*" logs/latest.log | sort -u | head -3; unzip -p mods/repackedStorage*.jar META-INF/mods.toml 2>/dev/null | grep -E "displayName"
+look shell: displayName is "Storage Delight (Creative Delight)"; the mod list name itself is a client screen
 ## SQ-CM-35 | calamari tags and dishes (with SQ-CM-32)
 @group A
 @commands boot with the 2026-10-31 12:32 CD jar; recipe probe + kubejs/startup.log and latest.log
 @pass `#forge:squid_tentacles` and `#forge:foods/tentacles` hold the raw calamari items; `miners_delight:cooking/takoyaki` takes calamari in both tentacle slots; `squid_rings`, `glow_squid_stew`, `seafood_skewer`, `squid_and_pickles` exist (rerun SQ-CM-32 alongside); no `[NCH]` error naming `squid_tentacles` or `truffle_pie`
 @fails `dishes/ocean #4`
 @from batches/r1101/p1_server.qb
-> zq itemtag forge:squid_tentacles
-> zq itemtag forge:foods/tentacles
-> zq rdetail takoyaki
-> zq rdetail squid_rings
-> zq rdetail glow_squid_stew
-> zq rdetail seafood_skewer
-> zq rdetail squid_and_pickles
-> zq rdetail sea_pickle_roll
-> zq rdetail shrimp_rice
-> zq rdetail squid_salad
+@reviewed 2026-11-16
+> cdevtest tag item forge:squid_tentacles
+> cdevtest tag item forge:foods/tentacles
+> cdevtest rdetail takoyaki
+> cdevtest rdetail squid_rings
+> cdevtest rdetail glow_squid_stew
+> cdevtest rdetail seafood_skewer
+> cdevtest rdetail squid_and_pickles
+> cdevtest rdetail sea_pickle_roll
+> cdevtest rdetail shrimp_rice
+> cdevtest rdetail squid_salad
 bootreject \[NCH\].*(squid_tentacles|truffle_pie)
 expect squid_rings
 expect glow_squid_stew
 expect seafood_skewer
 expect squid_and_pickles
 look both tags hold raw calamari; takoyaki (miners_delight) takes calamari in both slots; no empty slots
+reject verb=\S+ .*done=0
 
 ## SQ-CM-36
 @group A
 @commands same boot; recipe probe, `/fgdtest all`, then a client
 @pass `create_central_kitchen:truffle_pie` is an item (Truffle Pie, chocolate pie sprite) that places CCK's truffle pie block; `creativedelight:baking/truffle_pie` exists and takes `fungidelight:truffle`; the placed pie gives truffle pie slices; `/fgdtest` oven truffle pie PASS; no `[NCH] ceBaking ... truffle_pie` error and no `truffle_pie` in the item_dict missing-id list
 @fails `ports/fungiport #3`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest item create_central_kitchen:truffle_pie
+> cdevtest rdetail creativedelight:baking/truffle_pie
+> fgdtest all
+sleep 10
+> forceload add 0 0 15 15
+> setblock 4 -60 4 create_central_kitchen:truffle_pie
+> cdevtest use 4 -60 4 held=farmersdelight:iron_knife
+> cdevtest items 4 -60 4 3
+expect verb=item item=create_central_kitchen:truffle_pie class=\S+ .*block=create_central_kitchen:truffle_pie
+expect verb=rdetail id=creativedelight:baking/truffle_pie .*ingredients=\S*fungidelight:truffle
+expect verb=items items=\S*truffle_pie_slice:1\b
+bootreject \[NCH\] ceBaking .*truffle_pie
+bootreject \[item_dict\] Missing.*truffle_pie
+reject verb=\S+ .*done=0
+look the /fgdtest oven truffle pie line is PASS; Truffle Pie name and the chocolate pie sprite are client (CQ)

@@ -32,21 +32,23 @@ shell grep -hn "barbequesdelight\|bbq" logs/kubejs/server.log logs/kubejs/startu
 @pass 26 recipes, all `creativedelight:` ids; none under `barbequesdelight:` (the port ships no recipe data); skewering inputs are the `forge:` tags of 3.1 (beef: 2 `#forge:raw_beef` + 2 `#forge:crops/cabbage`)
 @fails NCH emitters missing (patcherMod jar not rebuilt)
 @from batches/r1102b/s3_A.qb
-> zq rdetail creativedelight:skewering/
-> zq rdetail creativedelight:grilling/
-> zq rdetail creativedelight:combine/
-> zq recipes barbequesdelight:
-> zq rdetail bbq_grill
-> zq rdetail bbq_basin_from_logs
-> zq rdetail bbq_tray_from_logs
-count \[zq\] creativedelight:skewering/\S+ \{ == 10
-count \[zq\] creativedelight:grilling/\S+ \{ == 10
-count \[zq\] creativedelight:combine/\S+ \{ == 3
-expect recipes matching barbequesdelight:: 0$
-expect \[zq\] creativedelight:shaped/bbq_grill \{
-expect \[zq\] creativedelight:stonecutting/bbq_basin_from_logs \{
-expect \[zq\] creativedelight:stonecutting/bbq_tray_from_logs \{
-look skewering inputs are the forge: tags of barbeques_delight.md 3.1 (beef: 2 #forge:raw_beef + 2 #forge:crops/cabbage)
+@reviewed 2026-11-16
+> cdevtest rdetail creativedelight:skewering/
+> cdevtest rdetail creativedelight:grilling/
+> cdevtest rdetail creativedelight:combine/
+> cdevtest recipes barbequesdelight:
+> cdevtest rdetail bbq_grill
+> cdevtest rdetail bbq_basin_from_logs
+> cdevtest rdetail bbq_tray_from_logs
+count verb=rdetail id=creativedelight:skewering/\S+ serializer= == 10
+count verb=rdetail id=creativedelight:grilling/\S+ serializer= == 10
+count verb=rdetail id=creativedelight:combine/\S+ serializer= == 3
+expect verb=recipes text=barbequesdelight: n=0\b
+expect verb=rdetail id=creativedelight:shaped/bbq_grill serializer=
+expect verb=rdetail id=creativedelight:stonecutting/bbq_basin_from_logs serializer=
+expect verb=rdetail id=creativedelight:stonecutting/bbq_tray_from_logs serializer=
+look skewering inputs (ingredients=, item ids of each tag) are the forge: tags of barbeques_delight.md 3.1 (beef: 2 #forge:raw_beef + 2 #forge:crops/cabbage)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BBQ-03 | Barbeque's item and block tags
 @group A
@@ -54,31 +56,33 @@ look skewering inputs are the forge: tags of barbeques_delight.md 3.1 (beef: 2 #
 @pass 10 + 10 skewers; rain_douses holds `minecraft:campfire` and `barbequesdelight:grill`; metal holds the grill, wood the basin and tray; mineable as upstream; the 10 cooked skewers, wrap and sandwich in handheld, bibimbap in meal, burnt skewer in hazard; raw skewers in no food type; `BlockRunner tier overlaps` 0
 @fails `tags.js` not loaded (`global.CD.on`)
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 bootexpect BlockRunner tier overlaps checked: \d+ ids, 0 overlap
-> zq itemtag barbequesdelight:raw_skewers
-> zq itemtag barbequesdelight:grilled_skewers
-> zq blocktag creativeengineering:campfire/rain_douses
-> zq blocktag blockrunner:surface/metal
-> zq blocktag blockrunner:surface/wood
-> zq tagsof barbequesdelight:grill
-> zq tagsof barbequesdelight:basin
-> zq itemtag creativeengineering:food_type/handheld
-> zq itemtag creativeengineering:food_type/meal
-> zq itemtag creativeengineering:food_type/hazard
-> zq tagsof barbequesdelight:raw_beef_skewer
-expect itemtag barbequesdelight:raw_skewers \(10\)
-expect itemtag barbequesdelight:grilled_skewers \(10\)
-expect blocktag creativeengineering:campfire/rain_douses \(\d+\): .*minecraft:campfire
-expect blocktag creativeengineering:campfire/rain_douses \(\d+\): .*barbequesdelight:grill
-expect blocktag blockrunner:surface/metal \(\d+\): .*barbequesdelight:grill
-expect blocktag blockrunner:surface/wood \(\d+\): .*barbequesdelight:basin
-expect blocktag blockrunner:surface/wood \(\d+\): .*barbequesdelight:tray
-expect itemtag creativeengineering:food_type/handheld \(\d+\): .*barbequesdelight:kebab_wrap
-expect itemtag creativeengineering:food_type/handheld \(\d+\): .*barbequesdelight:kebab_sandwich
-expect itemtag creativeengineering:food_type/meal \(\d+\): .*barbequesdelight:bibimbap
-expect itemtag creativeengineering:food_type/hazard \(\d+\): .*barbequesdelight:burnt_skewer
-reject item tags of barbequesdelight:raw_beef_skewer: .*food_type
-look the 10 grilled skewers in handheld; the grill / basin / tray mineable tags as upstream (block tags lines)
+> cdevtest tag item barbequesdelight:raw_skewers
+> cdevtest tag item barbequesdelight:grilled_skewers
+> cdevtest tag block creativeengineering:campfire/rain_douses
+> cdevtest tag block blockrunner:surface/metal
+> cdevtest tag block blockrunner:surface/wood
+> cdevtest tagsof barbequesdelight:grill
+> cdevtest tagsof barbequesdelight:basin
+> cdevtest tag item creativeengineering:food_type/handheld
+> cdevtest tag item creativeengineering:food_type/meal
+> cdevtest tag item creativeengineering:food_type/hazard
+> cdevtest tagsof barbequesdelight:raw_beef_skewer
+expect verb=tag kind=item tag=barbequesdelight:raw_skewers n=10\b
+expect verb=tag kind=item tag=barbequesdelight:grilled_skewers n=10\b
+expect verb=tag kind=block tag=creativeengineering:campfire/rain_douses .*ids=\S*minecraft:campfire\b
+expect verb=tag kind=block tag=creativeengineering:campfire/rain_douses .*ids=\S*barbequesdelight:grill\b
+expect verb=tag kind=block tag=blockrunner:surface/metal .*ids=\S*barbequesdelight:grill\b
+expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:basin\b
+expect verb=tag kind=block tag=blockrunner:surface/wood .*ids=\S*barbequesdelight:tray\b
+expect verb=tag kind=item tag=creativeengineering:food_type/handheld .*ids=\S*barbequesdelight:kebab_wrap\b
+expect verb=tag kind=item tag=creativeengineering:food_type/handheld .*ids=\S*barbequesdelight:kebab_sandwich\b
+expect verb=tag kind=item tag=creativeengineering:food_type/meal .*ids=\S*barbequesdelight:bibimbap\b
+expect verb=tag kind=item tag=creativeengineering:food_type/hazard .*ids=\S*barbequesdelight:burnt_skewer\b
+reject verb=tagsof id=barbequesdelight:raw_beef_skewer .*item_tags=\S*food_type
+look the 10 grilled skewers in handheld; the grill / basin / tray mineable tags as upstream (block_tags in the tagsof lines)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BBQ-04 | Barbeque's compost rows
 @group A
@@ -99,6 +103,7 @@ look the other 18 rows of barbeques_delight.md 3.7 by tier in kubejs/exported/co
 @pass state `has_campfire=true,lit=false` on placing; lit by flint and steel (light 15); out in rain after `rainOutTicks` (160) on stone; still lit on the coal block; breaking drops the grill and a campfire
 @fails rain rule: grill not in `rain_douses`, or Creative Compat not filling CampfireRainInfo
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 > setblock 212 -61 500 minecraft:stone
 > setblock 216 -61 500 minecraft:coal_block
 > setblock 212 -60 500 minecraft:campfire[lit=false]
@@ -116,21 +121,25 @@ look the other 18 rows of barbeques_delight.md 3.7 by tier in kubejs/exported/co
 > pbot use bbq5 216 -60 500 up
 > execute if block 212 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 lit 212
 > execute if block 216 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 lit 216
+> cdevtest state 212 -60 500
 > weather rain 600
-sleep 15
+> cdevtest tickwarp 300
+waitlog verb=tickwarp end=done 60
 > execute if block 212 -60 500 barbequesdelight:grill[lit=false] run say BBQ05 out in rain on stone
 > execute if block 216 -60 500 barbequesdelight:grill[lit=true] run say BBQ05 still lit on coal
 > weather clear 100000
-> zact break 212 -60 500 none
+> cdevtest break 212 -60 500
 expect BBQ05 grill on campfire 212
 expect BBQ05 grill on campfire 216
 expect BBQ05 lit 212
 expect BBQ05 lit 216
 expect BBQ05 out in rain on stone
 expect BBQ05 still lit on coal
-expect \[zact\] break 212 -60 500 barbequesdelight:grill held none: true, .*drops barbequesdelight:grill x1, minecraft:campfire x1
+expect verb=state pos=212,-60,500 state="?barbequesdelight:grill\[.*lit=true.* light_block=15\b
+expect verb=break drops=barbequesdelight:grill:1,minecraft:campfire:1 stacks=2\b
 > pbot remove bbq5
-look if the grill landed one block up (y -59) instead of replacing the campfire, the execute lines are silent: check `data get block` / zq count by hand; light level 15 is not probed
+look if the grill landed one block up (y -59) instead of replacing the campfire, the execute lines are silent: check the cdevtest state line
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-BBQ-06 | an unflipped skewer burns at 640 ticks, its entry stays still (grill at 220; the flip half needs sneak: s3_skip.md)
 @group A

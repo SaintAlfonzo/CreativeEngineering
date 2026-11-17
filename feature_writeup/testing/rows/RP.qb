@@ -79,7 +79,7 @@ shell ls -l rp/serverconfig/solraspberrypie/ladder.json && diff rp/serverconfig/
 bootexpect skipped 1 entries naming effects or attributes that are not registered: unlock nosuchmod:thing at 3\.0
 bootexpect V10: flat minecraft:absorption
 bootexpect Diet ladder: 38 rungs
-shell grep -cE "skipped [0-9]+ entries" logs/latest.log; grep -cE "V10: flat minecraft:absorption" logs/latest.log
+shell grep -cE "skipped [0-9]+ entries" logs/latest.log; grep -cE "V10: flat minecraft:absorption" logs/latest.log; true
 look exactly one skipped line and one absorption V10 line (counts above both 1)
 
 ## SQ-RP-04 | broken ladder file: loud error, built-in ladder, server runs
@@ -119,14 +119,21 @@ look none -> paused 1 -> list names rpb -> resumed -> empty -> paused again (lef
 @pass both Raspberry Pie recipes load; Apple Pie's `solapplepie:food_book` recipe is removed (0 matches), no NCH remove error
 @fails `data/solraspberrypie/recipes/`; `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js`
 @from batches/r1112/rp1.qb
-> zq bytype solraspberrypie:diet_book
-waitlog \[zq\] done 30
-> zq recipes diet_log
-waitlog \[zq\] done 30
-expect solraspberrypie:diet_log
-expect solraspberrypie:liquid_diet_log
+@reviewed 2026-11-16
+> cdevtest bytype solraspberrypie:diet_book
+waitlog \[cdevtest\] verb=bytype done= 30
+> cdevtest recipes diet_log
+waitlog \[cdevtest\] verb=recipes done= 30
+> cdevtest recipes food_book
+waitlog \[cdevtest\] verb=recipes done= 30
+expect \[cdevtest\] verb=bytype serializer=solraspberrypie:diet_book n=[1-9]
+# liquid_diet_log is a plain crafting_shapeless recipe (only diet_log uses the solraspberrypie:diet_book serializer)
+expect \[cdevtest\] verb=bytype id=solraspberrypie:diet_log result=
+expect \[cdevtest\] verb=recipes id=solraspberrypie:diet_log result=
+expect \[cdevtest\] verb=recipes id=solraspberrypie:liquid_diet_log result=
+reject \[cdevtest\] .*(done=0|error=)
 shell grep -n "solapplepie:food_book" logs/kubejs/server.log | head; grep -cE "NCH.*(error|fail)" logs/kubejs/server.log; true
-look both Raspberry Pie recipes listed; record whether solapplepie:food_book is still present (expected until the CD rebuild)
+look record whether a `verb=recipes id=solapplepie:food_book` line is still present (expected until the CD rebuild; the recipes food_book call lists it)
 
 ## CQ-RP-01
 @group client
@@ -310,13 +317,23 @@ look both Raspberry Pie recipes listed; record whether solapplepie:food_book is 
 @pass "Reset the diet of 1 players"; the bot gets "Your diet was reset"; Apple Pie's food list has `foodsEaten` 0, an empty `foodList` and an empty `solrp_gateFoods`; Raspberry Pie's `diet` cap has `maxDiversity` 0 and empty `slots` and `drinks`
 @fails `RpCommands.reset`; `FoodListMixin.solrp$save`
 @from batches/r1115/p9_a1.qb
+@reviewed 2026-11-16
 > forceload add 0 990 40 1010
 > pbot spawn rp7 10 -60 1000 minecraft:overworld survival
 sleep 3
-> zc4 hunger rp7 2
-> zc4 eat rp7 minecraft:apple
-> zc4 eat rp7 minecraft:bread
-> zc4 eat rp7 minecraft:cooked_beef
+> pbot hunger rp7 2
+> pbot inv rp7 set 0 minecraft:apple 1
+> pbot inv rp7 select 0
+> pbot eat rp7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp7 end=finish item=minecraft:apple 30
+> pbot inv rp7 set 0 minecraft:bread 1
+> pbot inv rp7 select 0
+> pbot eat rp7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp7 end=finish item=minecraft:bread 30
+> pbot inv rp7 set 0 minecraft:cooked_beef 1
+> pbot inv rp7 select 0
+> pbot eat rp7
+waitlog \[cdevtest\] verb=pbot\.useitem bot=rp7 end=finish item=minecraft:cooked_beef 30
 > zc4 sol rp7
 waitlog \[zc4\] sol rp7 20
 > data get entity rp7 ForgeCaps
@@ -327,6 +344,7 @@ expect Reset the diet of 1 players
 > zc4 sol rp7
 > data get entity rp7 ForgeCaps
 sleep 1
+reject \[cdevtest\] verb=pbot\.\S+ bot=rp7 error=
 look ForgeCaps after the reset: Apple Pie food list foodsEaten 0, foodList [] and solrp_gateFoods []; solraspberrypie:diet maxDiversity 0, slots [], drinks []; zc4 sol counts 0 after (3 before)
 
 ## SQ-RP-08 | Apple Pie benefits left in its config: warning at boot, no max-health bonus applied

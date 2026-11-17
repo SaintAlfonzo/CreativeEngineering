@@ -16,19 +16,22 @@
 @commands Compat with the wall-exit lift installed. Portal Gun: floor portal, wall portal; fall through the floor portal 3 times; then walk out of a wall portal 3 times (no fall)
 @pass falling into the wall portal: player ends standing in front of the wall, can walk and jump, no `y` inside the floor; walking out: no one-block lift (as 11-14)
 @fails read `Adjusting Client Player Position` lines; adjust the in-front test in `IPExitLiftMixin`
-@draft no batch holds this row yet
+@draft portal exit feel (falls and walk-outs judged by a person in the client)
+@owner true
 ## CQ-PS15-02
 @group client
 @commands Bisect SQ-PG-01c, one change per launch, same save: (1) `fast_buffer_upload: false` in `config/immediatelyfast.json`; (2) `hud_batching: false`; (3) Rubidium and Rubidium Extra out of `mods/`; (4) Distant Horizons out. Light a Flint and Terrasteel Nether portal each time
 @pass first change after which the portal renders and the client survives 30 s is the cause; record it
 @fails all four still crash: take a fresh hs_err and check `GL_ELEMENT_ARRAY_BUFFER_BINDING` with a GL debug launch
-@draft no batch holds this row yet
+@draft bisect across four launches, each with a config or mods/ change between launches: a person runs it
+@owner true
 ## CQ-PS15-03
 @group client
 @commands Fly to a Visceral Heap whose edge meets a warped forest (`/locate`); screenshots from 3 sides
 @pass spill into the forest reads as a natural border
 @fails owner decides: clamp the heap feature to its biome
-@draft no batch holds this row yet
+@draft whether the spill reads as a natural border is the owner's taste
+@owner true
 ## SQ-PS15-01 | salt dust click on ice, packed ice, snow layer (1 and 3): a salt layer on top, target not melted; then the layer melts it
 @group A
 @commands Salt dust click on ice, packed ice, snow layer (CD 1.1.0 with Salt -04, Common 1.2.0 of 2026-11-15)
@@ -378,7 +381,7 @@ look chance 1.0: per layout ice 0 / water 20; L1 salt layers left and item drops
 @commands **Waits on the owner (plan B4: salt layers have no gravity today).** Drop a salt layer onto a salt lick from 3 blocks
 @pass the layer lands in the lick and refills it; no layer block remains
 @fails gravity entity landing hook
-@draft no batch holds this row yet
+@draft not built: waits on the owner (plan B4, salt layers have no gravity yet); steps once the landing hook exists
 ## SQ-PS15-05 | full lick with a 2-layer salt layer, cow licks 3 times (interval 200, chance 1.0); player licks a stack (8 + 1 layers) twice
 @group A
 @commands Full Salt Block lick with a salt layer of 2 on top; stage chance 1.0; a cow licks it 3 times; then a full lick under a stack of an 8-layer salt block and a 1-layer salt block, player licks at chance 1.0 twice
@@ -534,7 +537,7 @@ look recipe 2 salt dust + 2 raw rock salt; Damage 1 per melt, stone no damage; u
 @commands After the frozen decor report: the melt rule rows for each listed block
 @pass per the report
 @fails per block
-@draft no batch holds this row yet
+@draft waits on the frozen decor report: the blocks to test are not listed yet (one /cdevtest state + randomtick pair per block once they are)
 ## SQ-PS15-09 | glowstone cage lantern out of the fire tag; no SQ-MELT-10 warning
 @group A
 @commands Boot; `/zq blocktag` the fire tag
@@ -619,31 +622,31 @@ look each of the 12 clicks: the vine state unchanged (state= line names the vine
 @commands After the hops fix (C3 built 2026-11-15, rarity 96): 240-block census over the 3 r1115 forest sites, seed 8675309
 @pass 4 or more hops trees over the three sites (about 1 per 100 forest chunks, plan C1 findings)
 @fails trunk search and rarity
-@draft no batch holds this row yet
+@draft fresh group B world (seed 8675309) census: the site boxes and the 25 placement points are not recorded in plan_post_scratch_1115.md C1/C4; the B-world runner pregenerates the sites, then writes /cdevtest count per box (and place feature + count per point)
 ## SQ-PS15-11b
 @group B
 @commands After C3 (exhaustive trunk search, plan C1 findings): seed 8675309, forest site 2 (1472 -3264); `/place feature creativedelight:wild/wild_hops` at the 25 r1115 points (16 apart), then the SQ-PS15-11 census over sites 1b, 2 and 3
 @pass 22 or more of 25 placed (r1115: 1); census 4 or more hops trees (about 1 per 100 forest chunks)
 @fails trunk detection (NO_LEAVES top not a log under branches), face check, `canSurvive`
-@draft no batch holds this row yet
+@draft fresh group B world (seed 8675309) census: the site boxes and the 25 placement points are not recorded in plan_post_scratch_1115.md C1/C4; the B-world runner pregenerates the sites, then writes /cdevtest count per box (and place feature + count per point)
 ## SQ-PS15-12
 @group B
 @commands Wild crop census table (carrot, adzuki, bell pepper, all rules) in their biomes
 @pass every rule at its expected presence, or a named cause
 @fails per rule
-@draft no batch holds this row yet
+@draft fresh group B world (seed 8675309) census: the site boxes and the 25 placement points are not recorded in plan_post_scratch_1115.md C1/C4; the B-world runner pregenerates the sites, then writes /cdevtest count per box (and place feature + count per point)
 ## SQ-PS15-12b
 @group B
 @commands Canopy A/B, before any heightmap fix (plan C4 findings). Seed 8675309, forest site 2 and jungle -1380 -2724: `/place feature farmersdelight:patch_wild_carrots` (forest) and `/place feature rusticdelight:wild_bell_peppers` (jungle) at 25 ground points under the canopy and 25 points one block above the leaves; count placed blocks per point
 @pass ground: most points place plants; canopy: none. Confirms the `MOTION_BLOCKING` canopy cause; the fix is a canopy-proof heightmap
 @fails ground also fails: the feature or its ground rule (air check against grass cover, `#minecraft:dirt`), not the heightmap
-@draft no batch holds this row yet
+@draft fresh group B world (seed 8675309) census: the site boxes and the 25 placement points are not recorded in plan_post_scratch_1115.md C1/C4; the B-world runner pregenerates the sites, then writes /cdevtest count per box (and place feature + count per point)
 ## SQ-PS15-12c
 @group B
 @commands Biome-aware census (plan C4 table): per box, sample the surface biome at each chunk centre and count chunks in the crop's tag; boxes: 3 forest (carrot, onion, adzuki), 2 jungle (bell pepper, coffee, mini melon, rice, tea), 1 plains (carrot, onion control). Adzuki needs 700 or more tag chunks for a meaningful 0
 @pass plains carrots near 1 patch per 120 tag chunks; adzuki present (expected 1 per 128, canopy-proof); forest and jungle MOTION rules low or 0 before the fix, near their rarity after it
 @fails adzuki still 0 over 700 tag chunks: its patch (grass check, 256 tries within 3) or rule binding, not the canopy
-@draft no batch holds this row yet
+@draft fresh group B world (seed 8675309) census: the site boxes and the 25 placement points are not recorded in plan_post_scratch_1115.md C1/C4; the B-world runner pregenerates the sites, then writes /cdevtest count per box (and place feature + count per point)
 ## SQ-PS15-13 | Copper Lunchbox item handler refuses pumpkin pie, apple pie, stick; takes cooked beef (server half; screen and tooltip are client)
 @group A
 @commands Lunchbox food only (D1, Creative Delight `LunchboxFoodOnlyMixin`, build 2026-11-15). Give a Copper Lunchbox; open it and try to put a vanilla pumpkin pie, a Farmer's Delight apple pie and a stick in a slot; then by script insert the pumpkin pie through the item handler (`ForgeCapabilities.ITEM_HANDLER` on the held box, `insertItem(0, pie, false)`, as SQ-FDI-04 did); then a cooked beef the same two ways; hover the box

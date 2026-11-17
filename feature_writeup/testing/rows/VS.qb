@@ -22,27 +22,29 @@
 bootreject (Mixin apply failed|InvalidInjectionException).*VineBlockShearMixin
 bootreject (?i)(missing|exception).*(floralench:[a-z_]*vine|botania:solid_vine)
 
-## SQ-VS-02 | sheared flower vine stays put, unsheared spreads (60 s at randomTickSpeed 300; also runs SQ-VS-03)
+## SQ-VS-02 | sheared flower vine stays put, unsheared spreads (90 random ticks, was 60 s at randomTickSpeed 300; also runs SQ-VS-03)
 @group A
 @commands Stone wall 8 high; `/setblock` at the top on its face `floralench:poppy_vine[north=true,fertile=false]` and 6 blocks along `floralench:poppy_vine[north=true]`
 @pass Sheared: still one block (`/execute if block ... floralench:poppy_vine[fertile=false]`); unsheared: has grown down or sideways
 @fails Sheared one grew: the randomTick cancel is not applied (check the mixin loaded)
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-16
 > setblock 10 -53 9 floralench:poppy_vine[south=true,fertile=false]
 > setblock 16 -53 9 floralench:poppy_vine[south=true]
 > setblock 20 -51 10 minecraft:weeping_vines[age=25]
 > setblock 26 -51 10 minecraft:weeping_vines[age=0]
 > tp qa 15 -60 5
-> gamerule randomTickSpeed 300
-sleep 60
-> gamerule randomTickSpeed 3
+# 90 random ticks per block = the old 60 s at randomTickSpeed 300 (300 / 4096 x 1200)
+> cdevtest randomtick 9 -60 9 27 -50 10 90
+waitlog verb=randomtick done= 120
 > execute if block 10 -53 9 floralench:poppy_vine[fertile=false]
 > execute if block 10 -54 9 minecraft:air
 > execute if block 9 -53 9 minecraft:air
 > execute if block 11 -53 9 minecraft:air
 > execute if block 16 -54 9 floralench:poppy_vine
 count Test passed >= 4
-look the last answer (unsheared grew down) may fail if it spread sideways instead: zq count 13 -60 9 19 -53 9 floralench:poppy_vine in the next row decides
+reject \[cdevtest\] verb=\S+ done=0
+look the last answer (unsheared grew down) may fail if it spread sideways instead: the poppy_vine count in the next row decides
 
 ## SQ-VS-03 | weeping vine age 25 does not grow, age 0 does
 @group A
@@ -50,11 +52,13 @@ look the last answer (unsheared grew down) may fail if it spread sideways instea
 @pass age 25: still one block; age 0: grown down
 @fails Vanilla, not this feature: re-read `GrowingPlantHeadBlock#isRandomlyTicking`
 @from batches/r1106spf/b1.qb
-> zq count 13 -60 9 19 -53 9 floralench:poppy_vine
+@reviewed 2026-11-16
+> cdevtest count 13 -60 9 19 -53 9 floralench:poppy_vine
 > execute if block 20 -52 10 minecraft:air
 > execute if block 26 -52 10 minecraft:weeping_vines_plant
 count Test passed == 2
-look zq count of the unsheared vine area above 1 (VS-02 unsheared spread)
+expect verb=count block=floralench:poppy_vine n=([2-9]|\d{2,})\b
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-VS-04 | flower vine default state is fertile
 @group A
@@ -73,15 +77,16 @@ expect Test passed
 @pass `river`, `rose`, `rubber`, `spirit`; every rose / rubber / spirit id and the 18 track ids in `removedItems`; no `[itemMerges]` skipped or chain line; no `[item_dict] Missing`
 @fails `startup_scripts/_lib/removed_woods.js` (RW-28)
 @from batches/r1031/a1_effects.qb
-> zq makes create_dd:rose_planks
-> zq makes create_dd:rubber_planks
-> zq makes create_dd:spirit_planks
-> zq tagsof create_dd:rose_log
-> zq makes create_dd:smoked_planks
-expect makes create_dd:rose_planks: 0
-expect makes create_dd:rubber_planks: 0
-expect makes create_dd:spirit_planks: 0
-reject item tags of create_dd:rose_log: \S
-reject makes create_dd:smoked_planks: 0
+@reviewed 2026-11-16
+> cdevtest makes create_dd:rose_planks
+> cdevtest makes create_dd:rubber_planks
+> cdevtest makes create_dd:spirit_planks
+> cdevtest tagsof create_dd:rose_log
+> cdevtest makes create_dd:smoked_planks
+expect verb=makes item=create_dd:rose_planks n=0
+expect verb=makes item=create_dd:rubber_planks n=0
+expect verb=makes item=create_dd:spirit_planks n=0
+reject verb=tagsof id=create_dd:rose_log .*_tags=(?!-)\S
+reject verb=makes item=create_dd:smoked_planks n=0
 kjsreject (removed_woods\.js).*(Error|error)
 look smoked planks keep their own recipe (RW-23); the JEI half is RW-28 in the client block

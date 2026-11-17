@@ -17,16 +17,35 @@
 @commands TT-39: GUI scale 4 or a small window; hover a Logistics Module or a shulker box full of named items; then `[tooltips] keepTopOnScreen = false` in `creativeengineering-common.toml` and hover again; set it back
 @pass Name at the top of the screen, the end cut off at the bottom; with the key off the name is cut off (vanilla); a short tooltip near the bottom still moves up
 @fails `grep -i "ScreenTooltipTopMixin" logs/latest.log` (mixin apply error: the local slot 9 changed); a frame drawn by Iceberg's `Tooltips.calculateRect` needs brief step 2
-@draft no batch holds this row yet
+@owner true
+@draft the tooltip position depends on the real window size and GUI scale 4 (options.txt, set before launch) and a hover inside a real GUI (the driver stage screen centres every tooltip); the key flip needs a restart: owner playtest
+@reviewed 2026-11-16
 ## CQ-TTP-02
 @group same
 @commands TT-40: hover a Stepstool, a Simple Hats mask, the Falconry Glove, a Sophisticated Backpack, a Lightman's wallet, stone
 @pass Each curio item shows one gold "Slot: ..." line under the name; stepstool has no "Worn in the Feet slot"; stone none
 @fails A doubled line means a mod's own line does not use the `curios.slot` key: note the item for `CuriosSlotTooltip`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "creativeequipment:red_stepstool", "expect": "creativeequipment:red_stepstool \\d+: Slot:", "reject": "Worn in the Feet slot"}
+do {"tooltip_text": "sophisticatedbackpacks:backpack", "expect": "sophisticatedbackpacks:backpack \\d+: Slot:"}
+do {"tooltip_text": "minecraft:stone", "reject": "Slot:"}
+do {"tooltip": "creativeequipment:red_stepstool"}
+shot stepstool
+count tooltip_text creativeequipment:red_stepstool \d+: Slot: == 1
+count tooltip_text sophisticatedbackpacks:backpack \d+: Slot: == 1
+look the Slot line is gold, under the name (stepstool shot); Simple Hats mask, Falconry Glove and Lightman's wallet: hover by hand once (ids not in this row)
 ## CQ-TTP-03
 @group same
 @commands TT-41: hover Air Canister, Pressure Gauge Module, Glycerol without Shift, then with Shift
 @pass Without Shift: the description in plain gray, wrapped, no "Hold Shift" line, no blue/aqua; Glycerol "Tastes sweet!"; with Shift: PNC's aqua text
 @fails `grep -n "pnc_tooltips" logs/kubejs/startup.log` (a Rhino error naming `getTranslationKey`, `I18n.get` or `splitString`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "pneumaticcraft:air_canister", "reject": "Hold .*Shift"}
+do {"tooltip_text": "pneumaticcraft:glycerol", "expect": "Tastes sweet!", "reject": "Hold .*Shift"}
+do {"tooltip_text": "pneumaticcraft:glycerol", "shift": true}
+do {"tooltip": "pneumaticcraft:air_canister"}
+shot canister_plain
+do {"tooltip": "pneumaticcraft:air_canister", "shift": true}
+shot canister_shift
+kjsreject (?i)pnc_tooltips.*(error|getTranslationKey|splitString)
+look plain: gray wrapped description, no blue or aqua, no Hold Shift line; with Shift: PNC's aqua text (the two shots); Pressure Gauge Module the same by hand

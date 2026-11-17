@@ -19,18 +19,31 @@
 @commands Boot with DH and ModernFix in `mods/`; `grep -i -E "modernfix|Mixin.*(error|fail)|Exception" logs/latest.log`
 @pass Server reaches `Done`; ModernFix prints its patch list and no mixin error or crash; no DH config parse error
 @fails Name the mixin or mod in the stack; ModernFix mixin options are in `config/modernfix-mixins.properties` (written on first boot)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell ls mods | grep -ciE "modernfix|DistantHorizons" | grep -qx 2
+bootexpect Done \(
+bootreject Mixin apply failed|InvalidMixinException|MixinApplyError|Encountered an unexpected exception
+shell grep -iE "modernfix" logs/latest.log | cut -c1-200 | head -8; true
+shell ! grep -iE "DistantHorizons.*(parse|Exception)|Exception.*DistantHorizons" logs/latest.log
+look ModernFix printed its patch list (the modernfix lines above); no mixin error names ModernFix or DH
 ## SQ-PERFCFG-02
 @group A
 @commands `grep -n -E "numberOfThreads|maxGenerationRequestDistance|maxSyncOnLoadRequestDistance" config/DistantHorizons.toml` after boot; `/forge tps` idle after 4 min
 @pass 1 / 256 / 256 kept (DH did not rewrite them); idle MSPT no worse than the 5.5 ms of perf.md 10.1
 @fails DH rewrote the file: check the `_version` header
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# real-time idle on purpose: the MSPT figure is the check
+shell grep -n -E "numberOfThreads|maxGenerationRequestDistance|maxSyncOnLoadRequestDistance" config/DistantHorizons.toml
+shell grep -qE "numberOfThreads\s*=\s*1\b" config/DistantHorizons.toml && grep -qE "maxGenerationRequestDistance\s*=\s*256\b" config/DistantHorizons.toml && grep -qE "maxSyncOnLoadRequestDistance\s*=\s*256\b" config/DistantHorizons.toml
+sleep 240
+> forge tps
+capture PCT Overall: Mean tick time: ([\d.]+) ms
+look idle mean tick {PCT} ms no worse than the 5.5 ms of perf.md 10.1
 ## SQ-PERFCFG-03
 @group A
 @commands Pregen `chunky radius 400` at 4000 4000 as in perf.md 10.1, once with ModernFix and once without (move the jar out); compare `Done` time and pregen time
 @pass Not slower; record both in perf.md 11.2 #9
 @fails Record the numbers; do not ship ModernFix on a loss
-@draft no batch holds this row yet
+@draft two boots compared (ModernFix in mods/, then moved out) with a chunky pregen each: the jar swap between boots and the side-by-side timing are the runner's, not a batch step; record both in perf.md 11.2 #9
 @@text
 @@text Results 2026-10-27 night (overall run, perf.md 12): SQ-PERFCFG-01 PASS (ModernFix patch list, its own "Static binding violation" WARNs only; it carried `cache_strongholds`, which pre-empted the pack's ring cache: now off in `config/modernfix-mixins.properties`). SQ-PERFCFG-02: values kept PASS; idle 5.7-6.0 ms against 5.5 ms not met on the number, the JFR puts the extra on mob ticking of an aged world (pack and DH costs fell, p95 41 -> 6.5 ms). SQ-PERFCFG-03 not run (owner 2026-10-27: overall measurement only, no per-change worlds).

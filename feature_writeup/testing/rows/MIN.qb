@@ -37,6 +37,7 @@ look the level is created (Done); no worldgen dir in srv kubejs/data/creativedel
 @fails packs missing from the line: `CompartmentPacks.addWorldgen` did not find `packs/worldgen` in the jar (check the jar listing); rubber trees 0 but no skip line: the placed feature did not reach the level (pack added only on `SERVER_DATA`)
 @jars creativedelight powergrid
 @from batches/r1115/p4_b1.qb
+@reviewed 2026-11-16
 bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): none
 kjsreject \[wild-crops\].*mod not loaded, skipped
 shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
@@ -47,11 +48,12 @@ capture JG minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 
 > forceload add {JG1-80} {JG3-80} {JG1+79} {JG3+79}
 sleep 90
-> zq count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} myrtrees:rubberwood_log
-waitlog \[zq\] count myrtrees:rubberwood_log: \d+ 600
-> zq count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} minecraft:jungle_log
-waitlog \[zq\] count minecraft:jungle_log: \d+ 600
-expect \[zq\] count myrtrees:rubberwood_log: [1-9]
+> cdevtest count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} myrtrees:rubberwood_log
+waitlog verb=count block=myrtrees:rubberwood_log n= 600
+> cdevtest count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} minecraft:jungle_log
+waitlog verb=count block=minecraft:jungle_log n= 600
+expect verb=count block=myrtrees:rubberwood_log n=[1-9]
+reject \[cdevtest\] .*done=0
 > forceload remove {JG1-80} {JG3-80} {JG1+79} {JG3+79}
 look packs line lists delightful, enders_additions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight (a newer jar may add packs); rubberwood logs in about 1 chunk in 4 of the 10x10 box (log count / about 5 logs a tree).
 
@@ -86,7 +88,7 @@ look 17 "<rule>: needs fruitsdelight" lines, none naming a fruitsdelight: featur
 @pass server: as CDW-01; client: no "Failed to validate datapack" screen, world opens
 @fails pack only reached one side: `AddPackFindersEvent` for `SERVER_DATA` on the integrated server (BuiltInPacks.addFolder)
 @jars creativedelight powergrid
-@draft no batch holds this row yet
+@draft needs a client joining the dedicated server (the datapack-validation screen is client side); no server readback replaces it
 @@text
 @@text #### SQ-MIN: Creative jars in a minimal instance (added 2026-11-06)
 @@text
@@ -102,11 +104,13 @@ look 17 "<rule>: needs fruitsdelight" lines, none naming a fruitsdelight: featur
 @pass no `could not read` / `not found` line; the arid tag has desert biomes
 @fails jar copy missing (`unzip -l creativecalendar*.jar generation_scripts/`), or `WorldgenFiles.existing` not reaching nested jars
 @from batches/r1113/c3_ch1.qb
+@reviewed 2026-11-16
 kjsreject (season-types|crop-seasons|food families).*(could not read|not found)
 shell grep -hE "season-types|crop-seasons|food families" logs/kubejs/server.log logs/kubejs/startup.log | cut -c1-200 | head -6
-> zq biometag creativecalendar:seasons/arid
-waitlog \[zq\] biometag creativecalendar:seasons/arid \(\d+\) 30
-expect biometag creativecalendar:seasons/arid \([1-9]\d*\):.*minecraft:desert
+> cdevtest tag biome creativecalendar:seasons/arid
+waitlog verb=tag kind=biome tag=creativecalendar:seasons/arid n= 30
+expect verb=tag kind=biome tag=creativecalendar:seasons/arid n=[1-9]\d* ids=\S*minecraft:desert
+reject \[cdevtest\] .*done=0
 look tag id is creativecalendar:seasons/arid (row: creativeengineering:seasons/arid, before the 11-09 namespace move)
 
 ## SQ-MIN-02
@@ -114,7 +118,7 @@ look tag id is creativecalendar:seasons/arid (row: creativeengineering:seasons/a
 @commands desert and jungle: `/weather rain`, watch; WTHIT on a wheat crop in a desert
 @pass desert never rains; WTHIT shows the crop-season line ("Season: ...", fertile/offseason here)
 @fails SQ-MIN-01 first; then `[wthit] cropSeasons` in `creativecalendar-common.toml`
-@draft no batch holds this row yet
+@draft needs a client: the WTHIT crop-season line, and rain seen at a desert (no /cdevtest verb reads isRainingAt at a position)
 ## SQ-MIN-03 | reduced set: no Constructor for / errored recipe / incomplete failed / ReferenceError / Couldn't parse loot table; no ERR hit
 @group B
 @commands grep `latest.log` for `Constructor for`, `errored recipe`, `incomplete failed`, `ReferenceError`, `Couldn't parse loot table`
@@ -135,13 +139,20 @@ look none of the five lines; no ERR hit in the row list
 @commands JEI: open Create's mixing category, page through; grep `latest.log` for `Found a broken recipe`
 @pass no Creative Brewing `potion_mixing_dragonbreath_*` errors; without Create Central Kitchen those recipes do not exist, with it they show
 @fails `DragonBreathBrewing.build` guard
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# server half (recipes and the log); the JEI paging is CQ work
+bootreject Found a broken recipe.*potion_mixing_dragonbreath
+shell ls mods | grep -ci "central_kitchen"; true
+> cdevtest recipes potion_mixing_dragonbreath
+expect verb=recipes text=potion_mixing_dragonbreath n=\d+
+reject \[cdevtest\] .*done=0
+look verb=recipes n= is 0 when the shell line printed 0 (no Create Central Kitchen jar), above 0 when it printed 1
 ## SQ-MIN-05
 @group B
 @commands grep `latest.log` for `Using missing texture` with `creativeengineering:` / `creativedelight:`; look at a beef culture block, cookie dough block, sample syringe, corn popsicle
 @pass none; the blocks and items have their textures
 @fails file not in the CD jar (`unzip -l`), or a model still only under `kubejs/assets`
-@draft no batch holds this row yet
+@draft textures and models load on a client only (a dedicated server never logs `Using missing texture`); needs a client run
 ## SQ-MIN-06 | absent mods skip quietly: no DetailArmorBarCompat, Display Delight dish, chopstick lines
 @group B
 @commands grep `latest.log` for `DetailArmorBarCompat`, `Display Delight dish`, `chopstick foods not registered`

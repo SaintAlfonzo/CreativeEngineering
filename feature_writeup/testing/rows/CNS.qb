@@ -31,24 +31,26 @@ look the ruled count is 269 (row text) or the current comfort_nourishment.json c
 @pass Glass matches; both scripts load with no error
 @fails `wthittags.js` TAG strings, `jei_order.js` TAG_ROOT
 @from batches/r1102b/s1_R.qb
-> zq food farmersdelight:noodle_soup
-> zq food farmersdelight:beef_stew
-> zq food farmersdelight:bone_broth
-> zq food farmersdelight:dog_food
-> zq food minecraft:golden_carrot
-> zq food minecraft:enchanted_golden_apple
-> zq food delightful:chunkwich
-> zq food delightful:azalea_tea
-expect food farmersdelight:noodle_soup: .*farmersdelight:nourishment amp 0 4800t
-expect food farmersdelight:beef_stew: .*farmersdelight:comfort amp 0 4800t
-reject food farmersdelight:bone_broth: .*(comfort|nourishment)
-expect food farmersdelight:dog_food: .*farmersdelight:comfort amp 0 1200t
-expect food minecraft:golden_carrot: .*farmersdelight:nourishment amp 0 2400t
-expect food minecraft:enchanted_golden_apple: .*farmersdelight:nourishment amp 0 4800t
-expect food minecraft:enchanted_golden_apple: .*minecraft:absorption
-reject food delightful:chunkwich: .*nourishment
-reject food delightful:azalea_tea: .*(comfort|nourishment)
-reject not a food|\[zq\] error
+@reviewed 2026-11-16
+> cdevtest food farmersdelight:noodle_soup
+> cdevtest food farmersdelight:beef_stew
+> cdevtest food farmersdelight:bone_broth
+> cdevtest food farmersdelight:dog_food
+> cdevtest food minecraft:golden_carrot
+> cdevtest food minecraft:enchanted_golden_apple
+> cdevtest food delightful:chunkwich
+> cdevtest food delightful:azalea_tea
+expect verb=food item=farmersdelight:noodle_soup\S* food=true .*effects=\S*farmersdelight:nourishment:0:4800:
+expect verb=food item=farmersdelight:beef_stew\S* food=true .*effects=\S*farmersdelight:comfort:0:4800:
+reject verb=food item=farmersdelight:bone_broth\S* .*effects=\S*(comfort|nourishment)
+expect verb=food item=farmersdelight:dog_food\S* food=true .*effects=\S*farmersdelight:comfort:0:1200:
+expect verb=food item=minecraft:golden_carrot\S* food=true .*effects=\S*farmersdelight:nourishment:0:2400:
+expect verb=food item=minecraft:enchanted_golden_apple\S* food=true .*effects=\S*farmersdelight:nourishment:0:4800:
+expect verb=food item=minecraft:enchanted_golden_apple\S* food=true .*effects=\S*minecraft:absorption:
+reject verb=food item=delightful:chunkwich\S* .*effects=\S*nourishment
+reject verb=food item=delightful:azalea_tea\S* .*effects=\S*(comfort|nourishment)
+reject verb=food item=\S+ food=false
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-CNS-03 | Comfort / Nourishment on cans match their dishes
 @group A
@@ -56,16 +58,19 @@ reject not a food|\[zq\] error
 @pass Boot 2 runs the merge rewrite once (stamp `creativecommon:swap_merges`); boot 3 skips it
 @fails `swap/ItemMerges` STAMP
 @from batches/r1103/sB_2.qb
-> zq food farmersdelight:noodle_soup
-> zq food creativeengineering:canned_noodle_soup
-> zq food creativeengineering:canned_bone_broth
-> zq food farmersdelight:beef_stew
-> zq food creativeengineering:canned_beef_stew
-waitlog \[zq\] food creativeengineering:canned_beef_stew: 30
-expect \[zq\] food creativeengineering:canned_noodle_soup: .*farmersdelight:nourishment
-reject \[zq\] food creativeengineering:canned_bone_broth: .*farmersdelight:(nourishment|comfort)
-expect \[zq\] food creativeengineering:canned_beef_stew: .*farmersdelight:comfort
-reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|not a food|\[(zq|zsb|zlbs)\] (error|unknown))
+@reviewed 2026-11-16
+# the cans moved to creativedelight: (namespace move 2026-11-10)
+> cdevtest food farmersdelight:noodle_soup
+> cdevtest food creativedelight:canned_noodle_soup
+> cdevtest food creativedelight:canned_bone_broth
+> cdevtest food farmersdelight:beef_stew
+> cdevtest food creativedelight:canned_beef_stew
+expect verb=food item=creativedelight:canned_noodle_soup\S* food=true .*effects=\S*farmersdelight:nourishment:
+reject verb=food item=creativedelight:canned_bone_broth\S* .*effects=\S*farmersdelight:(nourishment|comfort)
+expect verb=food item=creativedelight:canned_beef_stew\S* food=true .*effects=\S*farmersdelight:comfort:
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command)
+reject verb=food item=\S+ food=false
+reject \[cdevtest\] verb=\S+ done=0
 look the canned noodle soup's nourishment ticks equal the noodle soup's; the canned beef stew's comfort ticks equal the beef stew's
 
 ## SQ-CNS-04 | no Compat / CD / Common mixin failures; Curios hands, face, feet slots registered by Equipment
@@ -90,7 +95,7 @@ look the curios list output names the slot types hands, face and feet (registere
 @fails `PerfJfrEvents` names, the parser's prefix
 @from batches/r1113/c2_a1.qb
 shell for p in $(pgrep -x java); do [ "$(readlink /proc/$p/cwd)" = "$PWD" ] && jcmd $p JFR.dump name=ce filename=$PWD/perf/c2_cns05.jfr 2>&1 | tail -1; done; ls -la perf/c2_cns05.jfr 2>&1 | tail -1
-shell rm -rf perf/c2_cns05_parse; java $INST/tools/perf/PerfParse.java perf/c2_cns05_parse perf/c2_cns05.jfr 2>&1 | tail -3; grep -c '"creativecommon.ServerTick"' perf/c2_cns05_parse/events.jsonl; grep -c '"creativecommon.LevelTick"' perf/c2_cns05_parse/events.jsonl
+shell rm -rf perf/c2_cns05_parse; java $INST/tools/perf/PerfParse.java perf/c2_cns05_parse perf/c2_cns05.jfr 2>&1 | tail -3; grep -c '"creativecommon.ServerTick"' perf/c2_cns05_parse/events.jsonl; grep -c '"creativecommon.LevelTick"' perf/c2_cns05_parse/events.jsonl; true
 look both counts above 0 (event type names as written in events.jsonl; if both 0, grep the file for "creativecommon." to see the real names before calling FAIL). If no JFR (CE_PERF=0 at setup) the dump line says no recording: not judged
 
 ## CQ-CNS-01
@@ -98,6 +103,26 @@ look both counts above 0 (event type names as written in events.jsonl; if both 0
 @commands Client on boot 2: WTHIT on a flower pot, a Supplementaries jar, a beehive, a sheared grass block, a glass block, a cake; WTHIT config screen; JEI world tabs (Weathering and Growth, Lightning, Salt) and a cycling crafting page; armor bar with dragon armor; What's New from the menu; hover a Curios item and a Create Central Kitchen cooking guide's meal slot; drop sand into water; open the creative search tab with D&D loaded
 @pass Every line reads as text (no raw `creativecommon.` keys), the plugin group is "Creative Common"; tabs have titles and rows; tinted armor bar; the changelog shows; "Slot:" line and the meal tooltip show; the sand splashes; no crash
 @fails Lang key renamed in Java but not in `assets/creativecommon/lang/en_us.json`, or `kubejs/assets/creativecommon/jei_world` missing
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill -2 100 0 12 100 4 minecraft:stone
+> setblock 0 101 2 minecraft:potted_poppy
+> setblock 2 101 2 supplementaries:jar
+> setblock 4 101 2 minecraft:beehive
+> setblock 6 101 2 minecraft:glass
+> setblock 8 101 2 minecraft:cake
+do {"look": {"from": "0.5 102.6 0.5", "at": "0.5 101.3 2.5"}}
+do {"target": true, "expect": "block minecraft:potted_poppy"}
+shot wthit_pot
+do {"look": {"from": "4.5 102.6 0.5", "at": "4.5 101.5 2.5"}}
+shot wthit_hive
+do {"look": {"from": "8.5 102.6 0.5", "at": "8.5 101.3 2.5"}}
+shot wthit_cake
+do {"tooltip_text": "creativeequipment:red_stepstool", "expect": "Slot:"}
+do {"wait": "jei"}
+do {"screen": "jei_uses:minecraft:copper_block"}
+shot jei_weathering
+do {"screen": "close"}
+reject tooltip_text .*creativecommon\.\w+\.\w+
+look every WTHIT line reads as text (no raw creativecommon. keys); the JEI tab has a title and rows; the rest (config screen group name, armor bar, What's New, meal slot, sand splash, creative search tab) by hand once
 @@text
 @@text Results: not run yet.

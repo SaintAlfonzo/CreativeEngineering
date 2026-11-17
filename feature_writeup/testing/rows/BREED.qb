@@ -24,26 +24,28 @@ look rows in breeding_audit.md 3 and 4 (maned wolf, duck, goose, crab, toretoise
 @commands after the Creative Compat and Creative Delight jars are installed: `/reload`, then `/dumptags item,block`; JEI, Just Enough Breeding pages
 @pass `#minecraft:flowers` items have no `wild_` item, no `botania:special_flowers` member, no flower crown or leaf pile; block flowers hold `wild_onions`, `wild_carrots`, `wild_potatoes` and no other `wild_`; `blueprint:pig_food` 3 items, `cat_food` and `ocelot_food` 2; no `alexmobs:bison_breedables`; JEI shows breeding pages for duck, goose, BB grizzly bear, both Fungi cows and the Cozy cat; latest.log has `[jei] Just Enough Breeding: 6 extra breeding page(s)`
 @fails wild list: `animal_tags.js` regex; page missing: entity id in `BreedingPagesJEI`
+@reviewed 2026-11-16
 @from batches/r1113/c4_a.qb
-> zq itemtag minecraft:flowers
-> zq blocktag minecraft:flowers
-> zq itemtag blueprint:pig_food
-> zq itemtag blueprint:cat_food
-> zq itemtag blueprint:ocelot_food
-> zq itemtag alexmobs:bison_breedables
-> zq itemtag botania:special_flowers
-waitlog \[zq\] itemtag botania:special_flowers 30
-reject \[zq\] itemtag minecraft:flowers \(\d+\): .*\b[a-z_]+:wild_
-reject \[zq\] itemtag minecraft:flowers \(\d+\): .*(flower_crown|leaf_pile)
-expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_onions
-expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_carrots
-expect \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_potatoes
-reject \[zq\] blocktag minecraft:flowers \(\d+\): .*wild_rice
-expect \[zq\] itemtag blueprint:pig_food \(3\)
-expect \[zq\] itemtag blueprint:cat_food \(2\)
-expect \[zq\] itemtag blueprint:ocelot_food \(2\)
-reject \[zq\] itemtag alexmobs:bison_breedables \([1-9]
+> cdevtest tag item minecraft:flowers
+> cdevtest tag block minecraft:flowers
+> cdevtest tag item blueprint:pig_food
+> cdevtest tag item blueprint:cat_food
+> cdevtest tag item blueprint:ocelot_food
+> cdevtest tag item alexmobs:bison_breedables
+> cdevtest tag item botania:special_flowers
+waitlog verb=tag kind=item tag=botania:special_flowers n= 30
+reject verb=tag kind=item tag=minecraft:flowers n=\d+ ids=.*\b[a-z_]+:wild_
+reject verb=tag kind=item tag=minecraft:flowers n=\d+ ids=.*(flower_crown|leaf_pile)
+expect verb=tag kind=block tag=minecraft:flowers n=\d+ ids=.*wild_onions
+expect verb=tag kind=block tag=minecraft:flowers n=\d+ ids=.*wild_carrots
+expect verb=tag kind=block tag=minecraft:flowers n=\d+ ids=.*wild_potatoes
+reject verb=tag kind=block tag=minecraft:flowers n=\d+ ids=.*wild_rice
+expect verb=tag kind=item tag=blueprint:pig_food n=3 
+expect verb=tag kind=item tag=blueprint:cat_food n=2 
+expect verb=tag kind=item tag=blueprint:ocelot_food n=2 
+reject verb=tag kind=item tag=alexmobs:bison_breedables n=[1-9]
 look block flowers: no wild_ id other than wild_onions, wild_carrots, wild_potatoes; no botania:special_flowers member in the item flowers line (compare the two lines); JEI breeding pages and the "6 extra breeding page(s)" line are client (CQ)
+reject \[cdevtest\] .*done=0
 
 ## SQ-BREED-03 | a bee pollinates a wild carrot (poppy hive as control; isfood half PASSed in c4_ar)
 @group B

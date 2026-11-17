@@ -16,16 +16,39 @@
 @commands Launch; grep latest.log for `FallingBlockWaterSplash` and `Mixin` errors
 @pass No mixin error; client reaches the title screen
 @fails Name the mixin; SRG id m_8119_ (FallingBlockEntity.tick)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell ! grep -iE "Mixin apply.*FallingBlockWaterSplash|FallingBlockWaterSplash.*(error|fail)" logs/latest.log
+do {"assert_screen": "none"}
+look the client reached the world (the driver only runs in game, so the title screen was passed)
 ## CQ-FBS-02
 @group client
 @commands Over a pool: `/summon falling_block ~ ~20 ~ {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}`; sand from 2 blocks up
 @pass Each splashes once on entering water (Effective model, droplets, sound); the high drop splashes larger
 @fails No splash: tail inject not reached or `level` not ClientLevel
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill ~-3 ~-1 ~2 ~3 ~-4 ~8 minecraft:water
+do {"look": {"yaw": 0, "pitch": 30}}
+> summon minecraft:falling_block ~ ~20 ~5 {BlockState:{Name:"minecraft:anvil"},HurtEntities:1b}
+do {"wait": 22}
+shot anvil_splash
+> summon minecraft:falling_block ~2 ~2 ~5 {BlockState:{Name:"minecraft:sand"}}
+do {"wait": 6}
+shot sand_splash
+look one splash per block on entering the water (Effective model droplets), the anvil's from 20 up larger than the sand's; sound is not captured (owner, if wanted)
 ## CQ-FBS-03
 @group client
 @commands Same drops over dry ground; watch a block in water
 @pass No splash on dry ground; no sideways push by the water
 @fails Splash on land: fluid check wrong
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> fill ~-3 ~-1 ~-8 ~3 ~-1 ~-2 minecraft:stone
+do {"look": {"yaw": 180, "pitch": 30}}
+> summon minecraft:falling_block ~ ~10 ~-5 {BlockState:{Name:"minecraft:sand"}}
+do {"wait": 16}
+shot dry_landing
+> fill ~-3 ~-1 ~2 ~3 ~-4 ~8 minecraft:water
+> summon minecraft:falling_block ~ ~6 ~5 {BlockState:{Name:"minecraft:gravel"}}
+do {"look": {"yaw": 0, "pitch": 30}}
+do {"wait": 30}
+shot in_water
+look no splash on dry ground; the gravel in water sinks straight (no sideways push)

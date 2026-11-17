@@ -21,7 +21,13 @@
 @commands Boot; grep latest.log for `ArmorTrimsLargeItemListsMixin`, `armor_trims`, `LargeItemLists`
 @pass No mixin warning or error for the new mixin; Armor Trims' common setup runs (no exception from `LargeItemLists`)
 @fails Injection failure: the 1.3.3 method descriptors in the mixin (`getAllItemsOfType(Ljava/lang/Class;)`, `getAllTrimmable()`); a crash at setup: `ArmorTrimsItemCache.ready()` true too early
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect Done \(
+bootreject (Mixin apply failed|InvalidInjectionException|Critical injection failure|InjectionError).*ArmorTrimsLargeItemListsMixin
+bootreject (?i)(WARN|ERROR).*ArmorTrimsLargeItemListsMixin
+bootreject (?i)exception.*(LargeItemLists|armor_?trims)
+shell grep -niE "ArmorTrimsLargeItemListsMixin|LargeItemLists" logs/latest.log logs/debug.log | head -5 | cut -c1-240; true
+look no line above is a warning or error (an INFO mixin line is fine); Armor Trims' setup ran (SQ-ATC-02 answers)
 ## SQ-ATC-02 | Armor Trims cache correctness
 @group same
 @commands `/atctest` (correctness)

@@ -15,7 +15,11 @@
 @commands Boot; `grep -iE "DhNoGenerationMixin\|SeasonServerConfigMixin\|SeasonBiomeConfigMixin\|SeasonColorUtilMixin\|LogSpamFilter\|Distant Horizons (dimension overrides\|refused)" logs/latest.log`
 @pass no mixin apply errors, no override failure or refusal lines
 @fails DH or Serene Seasons changed a target (redirect count 2, shouldDoWorldGen)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -iE "DhNoGenerationMixin|SeasonServerConfigMixin|SeasonBiomeConfigMixin|SeasonColorUtilMixin|LogSpamFilter|Distant Horizons (dimension overrides|refused)" logs/latest.log | cut -c1-200 | head -12; true
+shell ! grep -iE "(Mixin apply failed|InvalidMixinException|MixinApplyError|Critical injection failure).*(DhNoGenerationMixin|SeasonServerConfigMixin|SeasonBiomeConfigMixin|SeasonColorUtilMixin)" logs/latest.log
+shell ! grep -iE "Distant Horizons .*(override.*fail|refused)" logs/latest.log
+look the printed lines show the mixins applied and the overrides registered (no failure or refusal line)
 ## CQ-PNE-02
 @group client
 @commands Enter the Nether, fly 300+ blocks into unexplored terrain for 3 minutes; F3 DH lines; `grep -c "broken basalt columns" logs/latest.log`
@@ -51,7 +55,7 @@
 @commands `tools/perf/sp.sh start`, play 10 min with the world map open part of the time, `tools/perf/sp.sh dump`; compare with perf/reports/sp-20261107-171623
 @pass Xaero `BiomeColorCalculator.getBiomeColor` share of the render thread well under 8.8%; no jdk.Deoptimization events; recording covers the whole window
 @fails cache missing (check SeasonAnswers hits)
-@draft no batch holds this row yet
+@draft perf recording (`tools/perf/sp.sh start` / `dump`, 10 min of play with the world map open, JFR share compared with perf/reports/sp-20261107-171623): a person plays the window; not a batch
 ## CQ-PNE-08
 @group client
 @commands Stand by a wall of signs (plain, glowing, dyed); back away past 24 blocks; come back; look through a spyglass from 40 blocks

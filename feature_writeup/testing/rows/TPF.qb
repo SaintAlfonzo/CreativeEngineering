@@ -38,7 +38,7 @@ bootexpect (?i)packetfixer
 > forceload add 1000 1000 1599 1015
 sleep 8
 shell cat config/packetfixer.properties config/debugify.json | tr '\n' ' ' | head -c 600
-shell grep -ciE "debugify|packetfixer" logs/latest.log
+shell grep -ciE "debugify|packetfixer" logs/latest.log; true
 
 ## SQ-TPF-01 | shipped debugify.json: boot Done, no MC-121706 crash, 9 fixes applied; file unchanged by the boot
 @group A
@@ -106,11 +106,14 @@ expect (?i)no elements matching Passengers
 @commands batch row (MC-214147): skeleton with leather helmet and chestplate inside 2 blocks of powder snow, 30 s
 @pass base: a stray; fix: still a skeleton
 @fails base no stray: a mod changes skeleton freezing; fix stays off
+@reviewed 2026-11-16
 @from batches/r1115/p1_a1.qb passed
 > fill 1099 -60 999 1101 -57 1001 minecraft:glass
 > fill 1100 -59 1000 1100 -58 1000 minecraft:powder_snow
 > summon minecraft:skeleton 1100 -59 1000 {PersistenceRequired:1b,ArmorItems:[{},{},{id:"minecraft:leather_chestplate",Count:1b},{id:"minecraft:leather_helmet",Count:1b}]}
-sleep 30
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end= 60
+expect verb=tickwarp end=done ticks=600
 > execute positioned 1100 -59 1000 if entity @e[type=stray,distance=..3]
 > execute positioned 1100 -59 1000 if entity @e[type=skeleton,distance=..3]
 expect Test failed
@@ -221,7 +224,7 @@ expect (?i)is marked for force loading
 @commands P4 setup: write three `packetfixer.properties` files from thirdparty_fixes.md 4.2: `vanilla` (every size at the vanilla value its header gives, `allSizesUnlimited=false`), `client` and `server` (the candidates)
 @pass keys match the generated file (`chunkPacketData`, `varLong`, `nbtMaxSize`, `allSizesUnlimited`, `forceUnlimitedNbtEnabled`, `decoderSize`, `packetSize`, `stringSize`, `timeout`, `varInt21`, `varInt`); boot logs no packetfixer error; the Immersive Portals payload conflict warning is expected
 @fails a key ignored: read the config class strings in the jar
-@draft no batch holds this row yet
+@draft P4 setup, not a check of its own: the three packetfixer.properties files are composed by hand from thirdparty_fixes.md 4.2 candidates (sizes and units read from the file Packet Fixer generates on its first boot), and they serve the client-joined P4 rows (CQ-TPF-31 to -39), which need a client and a server up together (owner call)
 ## CQ-TPF-31
 @group client joined to A
 @commands Packet Fixer on both sides with the `vanilla` file; `eval_client.py launch GAME server=localhost:25599`; `op PerfEval` from the console

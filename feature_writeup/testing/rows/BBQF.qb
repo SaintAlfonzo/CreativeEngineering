@@ -26,37 +26,37 @@ look defined lines for the 6 BBQ seasonings (barbeque_sauce, buffalo_sauce, chil
 
 ## SQ-BBQF-02 | BBQ seasoning crafts and cooking routes
 @group A
-@commands Recipe dump / `zq makes`
+@commands Recipe dump / `cdevtest makes`
 @pass 6 `shapeless/season/<key>` crafts; 10 each of `_from_smelting`, `_from_smoking`, `_from_campfire`, `_from_cooked_manual_only`
 @fails BBQ `PackSeasonings.java`, `barbequesdelight/recipes.js`; TODO `#11`, `dishes/meals #46`, `#49`
+@reviewed 2026-11-16
 @from batches/r1103/sA_2.qb
-> zq recipes season/
-> zq recipes _from_smelting
-> zq recipes _from_smoking
-> zq recipes _from_campfire
-> zq recipes _from_cooked_manual_only
-waitlog \[zq\] recipes matching _from_cooked_manual_only: \d+ 60
+> cdevtest recipes season/ max=500
+> cdevtest recipes _from_smelting max=500
+> cdevtest recipes _from_smoking max=500
+> cdevtest recipes _from_campfire max=500
+> cdevtest recipes _from_cooked_manual_only max=500
 count barbequesdelight:[a-z_/]*season/[a-z_]+ -> == 6
 count barbequesdelight:[a-z_/]*_from_smelting -> == 10
 count barbequesdelight:[a-z_/]*_from_smoking -> == 10
 count barbequesdelight:[a-z_/]*_from_campfire -> == 10
 count barbequesdelight:[a-z_/]*_from_cooked_manual_only -> == 10
 look if a list is cut at 80 lines the counts can fall short: rerun that query with a barbequesdelight: prefix
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-BBQF-03 | seasonable tags: cumin takes raw and cooked skewers, honey mustard no raw skewer
 @group A
 @commands Tag check
 @pass `#barbequesdelight:seasonable/cumin` holds raw and cooked skewers; `seasonable/honey_mustard` holds no raw skewer
 @fails `creativedelight/seasoning_tags.js`, BBQ `PackSeasonings.java`; TODO `#11`, `#46`
+@reviewed 2026-11-16
 @from batches/r1103/sA_2.qb passed
-> zq itemtag barbequesdelight:seasonable/cumin
-> zq itemtag barbequesdelight:seasonable/honey_mustard
-waitlog \[zq\] itemtag barbequesdelight:seasonable/honey_mustard 30
-expect itemtag barbequesdelight:seasonable/cumin .*barbequesdelight:raw_beef_skewer
-expect itemtag barbequesdelight:seasonable/cumin .*barbequesdelight:grilled_beef_skewer
-reject itemtag barbequesdelight:seasonable/honey_mustard .*barbequesdelight:raw_[a-z_]+_skewer
-reject (Unknown or incomplete command|\[zq\] error)
+> cdevtest tag item barbequesdelight:seasonable/cumin
+> cdevtest tag item barbequesdelight:seasonable/honey_mustard
+expect verb=tag kind=item tag=barbequesdelight:seasonable/cumin .*barbequesdelight:raw_beef_skewer
+expect verb=tag kind=item tag=barbequesdelight:seasonable/cumin .*barbequesdelight:grilled_beef_skewer
+reject verb=tag kind=item tag=barbequesdelight:seasonable/honey_mustard .*barbequesdelight:raw_[a-z_]+_skewer
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-BBQF-04 | level-1 butchers sell the six seasonings (12 emeralds, 64 powders / 16 sauces, maxUses 4, 4 XP)
 @group A
@@ -151,44 +151,45 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @commands Recipe dump
 @pass No recipe makes or takes Brewin' kimchi, nut butter, nut dough or the nut mash bottle; six `kimchi_from_*`, `nut_mash_jar`, `quiche_{meat,fungus,greens}`, `zucchini_quiche` exist
 @fails `vintagedelight/recipes.js`, `brewinandchewin/recipes.js`, `delightful/recipes.js`; TODO `merges/dishes #7`, `#8`, `#9`
+@reviewed 2026-11-16
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
-> zq makes brewinandchewin:kimchi
-> zq uses brewinandchewin:kimchi
-> zq makes delightful:nut_butter_bottle
-> zq uses delightful:nut_butter_bottle
-> zq makes delightful:nut_dough
-> zq uses delightful:nut_dough
-> zq makes vintagedelight:nut_mash_bottle
-> zq uses vintagedelight:nut_mash_bottle
-> zq recipes kimchi_from_
-> zq recipes nut_mash_jar
-> zq recipes quiche_meat
-> zq recipes quiche_fungus
-> zq recipes quiche_greens
-> zq recipes zucchini_quiche
-waitlog \[zq\] recipes matching zucchini_quiche: \d+ 60
-expect \[zq\] makes brewinandchewin:kimchi: 0
-expect \[zq\] uses brewinandchewin:kimchi: 0 alone, 0 with
-expect \[zq\] makes delightful:nut_butter_bottle: 0
-expect \[zq\] uses delightful:nut_butter_bottle: 0 alone, 0 with
-expect \[zq\] makes delightful:nut_dough: 0
-expect \[zq\] uses delightful:nut_dough: 0 alone, 0 with
-expect \[zq\] makes vintagedelight:nut_mash_bottle: 0
-expect \[zq\] uses vintagedelight:nut_mash_bottle: 0 alone, 0 with
-expect \[zq\] recipes matching kimchi_from_: 6
-expect \[zq\] recipes matching nut_mash_jar: [1-9]
-expect \[zq\] recipes matching quiche_meat: [1-9]
-expect \[zq\] recipes matching quiche_fungus: [1-9]
-expect \[zq\] recipes matching quiche_greens: [1-9]
-expect \[zq\] recipes matching zucchini_quiche: [1-9]
-reject (Unknown or incomplete command|\[zq\] error)
+> cdevtest makes brewinandchewin:kimchi
+> cdevtest uses brewinandchewin:kimchi
+> cdevtest makes delightful:nut_butter_bottle
+> cdevtest uses delightful:nut_butter_bottle
+> cdevtest makes delightful:nut_dough
+> cdevtest uses delightful:nut_dough
+> cdevtest makes vintagedelight:nut_mash_bottle
+> cdevtest uses vintagedelight:nut_mash_bottle
+> cdevtest recipes kimchi_from_ max=500
+> cdevtest recipes nut_mash_jar max=500
+> cdevtest recipes quiche_meat max=500
+> cdevtest recipes quiche_fungus max=500
+> cdevtest recipes quiche_greens max=500
+> cdevtest recipes zucchini_quiche max=500
+expect verb=makes item=brewinandchewin:kimchi n=0
+expect verb=uses item=brewinandchewin:kimchi alone=0 shared=0
+expect verb=makes item=delightful:nut_butter_bottle n=0
+expect verb=uses item=delightful:nut_butter_bottle alone=0 shared=0
+expect verb=makes item=delightful:nut_dough n=0
+expect verb=uses item=delightful:nut_dough alone=0 shared=0
+expect verb=makes item=vintagedelight:nut_mash_bottle n=0
+expect verb=uses item=vintagedelight:nut_mash_bottle alone=0 shared=0
+expect verb=recipes text=kimchi_from_ n=6
+expect verb=recipes text=nut_mash_jar n=[1-9]
+expect verb=recipes text=quiche_meat n=[1-9]
+expect verb=recipes text=quiche_fungus n=[1-9]
+expect verb=recipes text=quiche_greens n=[1-9]
+expect verb=recipes text=zucchini_quiche n=[1-9]
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-VTDA-12 | nut butter bottle and Delightful sandwich become Nut Mash and pb_j on relog
 @group A
 @commands Give a nut butter bottle and a Delightful sandwich, relog
 @pass They become Nut Mash and `pb_j`; log shows the merge count (43 per the Vintage agent; recount with the potato salad pairs) and no `merged twice`
 @fails CD `swaps/merges_vintagedelight.json`, `merges_delightful.json`; patcherMod `swap/ItemMerges.java`; TODO `#7`
+@reviewed 2026-11-16
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 > pbot spawn savtd {SAH1+8} {SAH2} {SAH3+38} minecraft:overworld survival
@@ -196,106 +197,120 @@ sleep 2
 > clear savtd
 > give savtd delightful:nut_butter_bottle 1
 > give savtd delightful:nut_butter_and_jelly_sandwich 1
-> zp inv savtd
+> pbot inv savtd get
 > pbot remove savtd
 sleep 1
 > pbot spawn savtd {SAH1+8} {SAH2} {SAH3+38} minecraft:overworld survival
 sleep 2
-> zp inv savtd
-waitlog \[zp\] inv savtd 30
-expect inv savtd: .*vintagedelight:nut_mash_jar
-expect inv savtd: .*vintagedelight:pb_j
+> pbot inv savtd get
+expect verb=pbot.inv bot=savtd slot=\d+ item=vintagedelight:nut_mash_jar
+expect verb=pbot.inv bot=savtd slot=\d+ item=vintagedelight:pb_j
 expect \[swaps\] savtd: \d+ merged stack\(s\) rewritten
 shell grep -hE "\[swaps\].*item merge" logs/latest.log | head -3
 bootreject merged twice
 > pbot remove savtd
 look the merge count line (43 with the potato salad pairs)
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0)
 
 ## SQ-VTDA-13 | quiches: oven with a pie tin only, no grid recipe (recipe half; the physical oven bake: sA_skip.md)
 @group A
 @commands Oven with a pie tin and each quiche set
 @pass Bakes; no grid recipe
 @fails `vintagedelight/recipes.js` oven rows; TODO `#8`
+@reviewed 2026-11-16
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
-> zq rdetail quiche
-waitlog \[zq\] recipes matching quiche|\[zq\] rdetail 30
+> cdevtest rdetail quiche
 sleep 3
 reject \{minecraft:crafting_shape(d|less)\} -> [^<]*quiche
 look each quiche set (quiche_meat, _fungus, _greens, zucchini_quiche, brewinandchewin quiche) is a baking recipe with the pie tin as the tool
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-CDM2-01 | sea grape plant mineable with a hoe
 @group A
 @commands Block tag check on `oceanic_delight:sea_grape_plant`
 @pass In `#minecraft:mineable/hoe`
 @fails `oceanic_delight/tags.js`; TODO `farming/crops #27`
+@reviewed 2026-11-16
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb passed
-> zq blocktag minecraft:mineable/hoe
-waitlog \[zq\] blocktag minecraft:mineable/hoe 30
-expect blocktag minecraft:mineable/hoe .*oceanic_delight:sea_grape_plant( |$)
-reject (Unknown or incomplete command|\[zq\] error)
+> cdevtest tag block minecraft:mineable/hoe
+expect verb=tag kind=block tag=minecraft:mineable/hoe .*oceanic_delight:sea_grape_plant(,|$)
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-CDM2-02 | warm ocean: sea grape patches from the wild crops config, no [wild-crops] errors
 @group B
 @commands Fresh world, warm ocean, scan 64 chunks
 @pass Sea grape patches; no `[wild-crops]` errors; `creativedelight:wild_crops/sea_grape` lists the 3 oceans
 @fails `creativedelight/kubejs/_worldgen/wild_crops.json`; TODO `farming/wild-crops #6`
+@reviewed 2026-11-16
 @jars creativecommon creativedelight
 @from batches/r1103/sA_4.qb
-> zq biometag creativedelight:wild_crops/sea_grape
+> cdevtest tag biome creativedelight:wild_crops/sea_grape
 > locate biome minecraft:warm_ocean
 waitlog The nearest minecraft:warm_ocean 600
 capture SWO The nearest minecraft:warm_ocean is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {SWO1-64} {SWO3-64} {SWO1+63} {SWO3+63}
 sleep 90
-> zq count {SWO1-64} 20 {SWO3-64} {SWO1+63} 64 {SWO3+63} oceanic_delight:wild_sea_grape
-> zq count {SWO1-64} 20 {SWO3-64} {SWO1+63} 64 {SWO3+63} oceanic_delight:sea_grape_plant
-waitlog \[zq\] count oceanic_delight:sea_grape_plant 120
+# a count box is at most 262144 blocks (64x64x64): each box runs as slices; the shell prints the summed n per block
+> say CDM202 begin
+> cdevtest count {SWO1-64} 20 {SWO3-64} {SWO1+63} 64 {SWO3-22} oceanic_delight:wild_sea_grape
+> cdevtest count {SWO1-64} 20 {SWO3-21} {SWO1+63} 64 {SWO3+21} oceanic_delight:wild_sea_grape
+> cdevtest count {SWO1-64} 20 {SWO3+22} {SWO1+63} 64 {SWO3+63} oceanic_delight:wild_sea_grape
+> cdevtest count {SWO1-64} 20 {SWO3-64} {SWO1+63} 64 {SWO3-22} oceanic_delight:sea_grape_plant
+> cdevtest count {SWO1-64} 20 {SWO3-21} {SWO1+63} 64 {SWO3+21} oceanic_delight:sea_grape_plant
+> cdevtest count {SWO1-64} 20 {SWO3+22} {SWO1+63} 64 {SWO3+63} oceanic_delight:sea_grape_plant
+> say CDM202 end
+waitlog CDM202 end 300
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" CDM202
 > forceload remove {SWO1-64} {SWO3-64} {SWO1+63} {SWO3+63}
 shell ! grep -hE "\[wild-crops\].*(rror|xception|unknown|missing)" logs/latest.log logs/kubejs/server.log
-look biometag lists the 3 oceans; one of the counts above 0 (sea grape patches in 64 chunks); no [wild-crops] errors
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)
+look the tag line lists the 3 oceans; one of the two summed totals (shell line) above 0 (sea grape patches in 64 chunks); no [wild-crops] errors
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-CDM2-03 | Globular Rice and Bowl of Paella: Nourishment and Comfort 4:00
 @group A
 @commands Eat Globular Rice and Bowl of Paella; grep log
 @pass Globular Rice Nourishment 4:00, Bowl of Paella Comfort 4:00 (one effect each); log `277 ruled foods set` (8 Miner's cups dropped)
 @fails `generation_scripts/food/comfort_nourishment.json` (`tools/gen_comfort_nourishment.py`), CD `comfort_nourishment.js`; TODO `dishes/ocean #8`
+@reviewed 2026-11-16
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
 > pbot spawn sacdm {SAH1+8} {SAH2} {SAH3+42} minecraft:overworld survival
 sleep 2
 > clear sacdm
 > effect clear sacdm
+> pbot hunger sacdm 10
 > pbot hold sacdm oceanic_delight:globular_rice
-> zp eat sacdm
-> zp effects sacdm
+> pbot eat sacdm
+sleep 3
+> cdevtest player sacdm
 > effect clear sacdm
+> pbot hunger sacdm 10
 > pbot hold sacdm oceanic_delight:bowl_of_paella
-> zp eat sacdm
-> zp effects sacdm
-waitlog \[zp\] effects sacdm 30
-count \[zp\] effects sacdm: .*farmersdelight:nourishment amp 0 4[78]\d\dt == 2
-count \[zp\] effects sacdm: .*farmersdelight:comfort amp 0 4[78]\d\dt == 2
+> pbot eat sacdm
+sleep 3
+> cdevtest player sacdm
+count verb=pbot.useitem bot=sacdm end=finish == 2
+count verb=player name=sacdm effects=farmersdelight:nourishment:0:4[78]\d\d\b == 1
+count verb=player name=sacdm effects=farmersdelight:comfort:0:4[78]\d\d\b == 1
 shell grep -hE "ruled foods set" logs/latest.log logs/kubejs/*.log | head -3
 shell grep -qhE "285 ruled foods set" logs/latest.log logs/kubejs/startup.log logs/kubejs/server.log
 > pbot remove sacdm
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
 
 ## SQ-CDM2-04 | one Potato Salad: Rustic's recipes only; More Delight's becomes Rustic's
 @group A
 @commands Recipes for `rusticdelight:potato_salad`; give `moredelight:potato_salad`
 @pass Pot, `_manual_only` and egg-solution mixing only; the given one becomes Rustic's
 @fails `rusticdelight/recipes.js`, CD `swaps/merges_moredelight.json`, `merges_oceanic_delight_potato.json`; TODO `merges/dishes #4`
+@reviewed 2026-11-16
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
-> zq makes rusticdelight:potato_salad
-> zq rdetail potato_salad
-> zq makes moredelight:potato_salad
-> zq makes oceanic_delight:potato_salad
+> cdevtest makes rusticdelight:potato_salad
+> cdevtest rdetail potato_salad
+> cdevtest makes moredelight:potato_salad
+> cdevtest makes oceanic_delight:potato_salad
 > pbot spawn sapot {SAH1+8} {SAH2} {SAH3+46} minecraft:overworld survival
 sleep 2
 > clear sapot
@@ -304,57 +319,56 @@ sleep 2
 sleep 1
 > pbot spawn sapot {SAH1+8} {SAH2} {SAH3+46} minecraft:overworld survival
 sleep 2
-> zp inv sapot
-waitlog \[zp\] inv sapot 30
-expect inv sapot: .*rusticdelight:potato_salad
-reject inv sapot: .*moredelight:potato_salad
-expect \[zq\] makes moredelight:potato_salad: 0
-expect \[zq\] makes oceanic_delight:potato_salad: 0
+> pbot inv sapot get
+expect verb=pbot.inv bot=sapot slot=\d+ item=rusticdelight:potato_salad
+reject verb=pbot.inv bot=sapot slot=\d+ item=moredelight:potato_salad
+expect verb=makes item=moredelight:potato_salad n=0
+expect verb=makes item=oceanic_delight:potato_salad n=0
 look rusticdelight:potato_salad makers: the Cooking Pot recipe, its _manual_only copy and the egg-solution mixing only
 > pbot remove sapot
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0)
 
 ## SQ-GLD2-01 | golden food grid recipes: food + 8 gold nuggets; golden apple 8 ingots
 @group A
 @commands Grid recipes
 @pass Golden beef = cooked beef + 8 nuggets; the golden cake too; golden apple still 8 ingots
 @fails `creativedelight/kubejs/goldenfood/golden.js`, `minecraft/golden.js`; TODO `food/types-and-tuning #22`
+@reviewed 2026-11-16
 @from batches/r1103/sA_2.qb
-> zq rdetail golden_cooked_beef
-> zq rdetail goldenfood:golden_cake
-> zq makes minecraft:golden_apple
-> zq rdetail minecraft:golden_apple
-waitlog \[zq\] (rdetail|recipes matching) minecraft:golden_apple 60
+> cdevtest rdetail golden_cooked_beef
+> cdevtest rdetail goldenfood:golden_cake
+> cdevtest makes minecraft:golden_apple
+> cdevtest rdetail minecraft:golden_apple
 sleep 2
 expect gold_nugget
 look golden beef = cooked beef + 8 gold nuggets; golden cake also nuggets; golden apple still 8 gold ingots
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-GLD2-02 | gilded carrot and apple: 8 loops of gold ingot + 125 mB + press
 @group A
 @commands JEI / recipe dump for the gilded carrot and apple
 @pass 8 loops of gold ingot + 125 mB + press
 @fails `goldenfood/golden.js`, incomplete items in `startup_scripts/changes/transition_items.js`; TODO `#22`
+@reviewed 2026-11-16
 @from batches/r1103/sA_2.qb
-> zq rdetail enchanted_golden_apple
-> zq rdetail goldenfood:enchanted_golden_carrot
-waitlog \[zq\] (rdetail|recipes matching) goldenfood:enchanted_golden_carrot 60
+> cdevtest rdetail enchanted_golden_apple
+> cdevtest rdetail goldenfood:enchanted_golden_carrot
 sleep 2
 expect rdetail\+ .*enchanted_golden_(apple|carrot).* step
 look steps: deploy gold ingot, spout 125 mB, press; loops 8 (the rdetail+ start / step lines)
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-GLD2-03 | golden values: 46 set, golden and gilded beef hunger
 @group A
 @commands Log + `/dumpfood`
 @pass `[golden values] 46`; golden beef 16 hunger at the input modifier, gilded beef 20
 @fails CD `kubejs_startup/goldenfood/golden_values.js`; TODO `#3`
+@reviewed 2026-11-16
 @from batches/r1103/sA_2.qb
 shell grep -hE "\[golden values\]" logs/kubejs/startup.log logs/latest.log | head -3
 shell grep -qhE "\[golden values\] 46" logs/kubejs/startup.log logs/latest.log
-> zq food goldenfood:golden_cooked_beef
-> zq food goldenfood:enchanted_golden_cooked_beef
-waitlog \[zq\] food goldenfood:enchanted_golden_cooked_beef
+> cdevtest food goldenfood:golden_cooked_beef
+> cdevtest food goldenfood:enchanted_golden_cooked_beef
 look golden beef nutrition 16 (at the input modifier: modifier as cooked beef), gilded (enchanted) beef 20; /dumpfood half: Boot 0's kubejs/exported/food (sA_setup.md)
 
 ## SQ-GLD2-05
@@ -362,28 +376,29 @@ look golden beef nutrition 16 (at the input modifier: modifier as cooked beef), 
 @commands After `/dumpfood`, run `gen_can_types.py`
 @pass Gilded can values follow the new values
 @fails `tools/gen_can_types.py` reads the `/dumpfood` output; TODO `#3`
-@draft no batch holds this row yet
+@draft not automatable on a scratch server: tools/gen_can_types.py reads only the instance's kubejs/exported/food (no --dump option), so it needs /dumpfood in the owner's game, then `python3 tools/gen_can_types.py --check`
 ## SQ-SALT2-01 | #salt:can_be_salted accepts the three, refuses the three
 @group A
 @commands Salting recipe check
 @pass Accepts Calamari Roll, Crab Rangoon, kangaroo burger; refuses bone broth, cooked rice, tomato sauce
 @fails `creativedelight/kubejs/salt/tags.js` (`#salt:can_be_salted`); TODO `food/seasoning #4`
+@reviewed 2026-11-16
 @from batches/r1103/sA_2.qb passed
-> zq itemtag salt:can_be_salted
-waitlog \[zq\] itemtag salt:can_be_salted 30
-expect itemtag salt:can_be_salted .*rusticdelight:calamari_roll( |$)
-expect itemtag salt:can_be_salted .*delightful:crab_rangoon( |$)
-expect itemtag salt:can_be_salted .*alexsmobs:kangaroo_burger( |$)
-reject itemtag salt:can_be_salted .*farmersdelight:bone_broth( |$)
-reject itemtag salt:can_be_salted .*farmersdelight:cooked_rice( |$)
-reject itemtag salt:can_be_salted .*farmersdelight:tomato_sauce( |$)
-reject (Unknown or incomplete command|\[zq\] error)
+> cdevtest tag item salt:can_be_salted
+expect verb=tag kind=item tag=salt:can_be_salted .*rusticdelight:calamari_roll(,|$)
+expect verb=tag kind=item tag=salt:can_be_salted .*delightful:crab_rangoon(,|$)
+expect verb=tag kind=item tag=salt:can_be_salted .*alexsmobs:kangaroo_burger(,|$)
+reject verb=tag kind=item tag=salt:can_be_salted .*farmersdelight:bone_broth(,|$)
+reject verb=tag kind=item tag=salt:can_be_salted .*farmersdelight:cooked_rice(,|$)
+reject verb=tag kind=item tag=salt:can_be_salted .*farmersdelight:tomato_sauce(,|$)
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-SALT2-02 | heated water cauldrons at 3, 2, 1 levels evaporate; harvests give 8, 5, 3 salt dust
 @group A
 @commands Heated water cauldrons (campfire under) at 3, 2 and 1 levels, `randomTickSpeed 1000`, harvest each salt cauldron
 @pass 8, 5 and 3 salt dust
 @fails `kubejs/data/salt/loot_tables/cauldron_evaporation/`; [salt.md](../salt.md) 6 S1; TODO `food/seasoning #1`
+@reviewed 2026-11-16
 @from batches/r1113/c1_a1.qb
 > setblock 1060 -60 1030 minecraft:campfire[lit=true]
 > setblock 1063 -60 1030 minecraft:campfire[lit=true]
@@ -391,42 +406,42 @@ reject (Unknown or incomplete command|\[zq\] error)
 > setblock 1060 -59 1030 minecraft:water_cauldron[level=3]
 > setblock 1063 -59 1030 minecraft:water_cauldron[level=2]
 > setblock 1066 -59 1030 minecraft:water_cauldron[level=1]
-> gamerule randomTickSpeed 1000
-sleep 20
-> gamerule randomTickSpeed 3
+> cdevtest randomtick 1060 -59 1030 1066 -59 1030 100
+expect verb=randomtick .*changed=[1-9]
 > execute if block 1060 -59 1030 salt:salt_cauldron[level=3]
 > execute if block 1063 -59 1030 salt:salt_cauldron[level=2]
 > execute if block 1066 -59 1030 salt:salt_cauldron[level=1]
 > pbot spawn c1sc 1063 -60 1033 minecraft:overworld survival
 sleep 3
 > clear c1sc
-> kill @e[type=minecraft:item]
+> pbot pickup c1sc off
+> cdevtest items 1063 -59 1030 6
 > pbot use c1sc 1060 -59 1030
 sleep 2
-> zcount 1058 -60 1028 1062 -57 1032
-> kill @e[type=minecraft:item]
+> cdevtest items 1060 -59 1030 2
 > pbot use c1sc 1063 -59 1030
 sleep 2
-> zcount 1061 -60 1028 1065 -57 1032
-> kill @e[type=minecraft:item]
+> cdevtest items 1063 -59 1030 2
 > pbot use c1sc 1066 -59 1030
 sleep 2
-> zcount 1064 -60 1028 1068 -57 1032
-waitlog \[zcount\] entities 20
+> cdevtest items 1066 -59 1030 2
+> pbot remove c1sc
 count Test passed == 3
-count \[zcount\] entities .*item:vintagedelight:salt_dust == 3
-look the three zcount lines: salt dust x8, x5, x3 in that order (split stacks add up); "Test failed" on a level = the water did not turn into a salt cauldron of the same level (rerun with a longer sleep before judging the loot)
+count verb=items items=vintagedelight:salt_dust:8 == 1
+count verb=items items=vintagedelight:salt_dust:5 == 1
+count verb=items items=vintagedelight:salt_dust:3 == 1
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
+look "Test failed" on a level = the water did not turn into a salt cauldron of the same level (100 random ticks per block = the old 20 s at randomTickSpeed 1000; rerun with more rounds before judging the loot)
 
 ## SQ-SALT2-03 | water_salt mixing, raw rock salt crushing / milling / hammering, no knife cutting
 @group A
 @commands Recipe check: the `water_salt` mixing, the `raw_rock_salt_salt` crushing, milling and hammering recipes
 @pass Heated, 1000 mB water -> 2 salt dust; crushing and milling 4 + 1 at 0.5; Engineer's Hammer 4 on the cutting board (`farmersdelightcutting/raw_rock_salt_salt_hammering`) and in the grid (`shapeless/raw_rock_salt_salt_hammering`); no knife cutting recipe
 @fails CD `creativedelight/salt.js`; salt.md 6 S2, S6
+@reviewed 2026-11-16
 @from batches/r1113/c1_a1.qb
-> zq rdetail water_salt
-waitlog \[zq\] rdetail matching water_salt: \d+ 30
-> zq rdetail raw_rock_salt_salt
-waitlog \[zq\] rdetail matching raw_rock_salt_salt: \d+ 30
+> cdevtest rdetail water_salt
+> cdevtest rdetail raw_rock_salt_salt
 expect water_salt \{create:mixing\} -> 2 salt_dust
 expect farmersdelightcutting/raw_rock_salt_salt_hammering \{farmersdelight:cutting\}
 expect shapeless/raw_rock_salt_salt_hammering \{
@@ -439,11 +454,10 @@ look mixing: heated, 1000 mB water -> 2 salt dust; crushing and milling rdetail+
 @commands Block tags of `salt:raw_rock_salt_block`, `salt:salt_block`
 @pass Raw rock salt block in `blockrunner:surface/natural_rough`, not `soft`; Salt Block in `soft`
 @fails `server_scripts/tags/blocktags.js`; salt.md 6 S3
+@reviewed 2026-11-16
 @from batches/r1113/c1_a1.qb passed
-> zq tagsof salt:raw_rock_salt_block
-waitlog \[zq\] block tags of salt:raw_rock_salt_block 30
-> zq tagsof salt:salt_block
-waitlog \[zq\] block tags of salt:salt_block 30
+> cdevtest tagsof salt:raw_rock_salt_block
+> cdevtest tagsof salt:salt_block
 expect block tags of salt:raw_rock_salt_block: .*blockrunner:surface/natural_rough
 reject block tags of salt:raw_rock_salt_block: .*blockrunner:surface/soft\b
 expect block tags of salt:salt_block: .*blockrunner:surface/soft\b
@@ -453,13 +467,12 @@ expect block tags of salt:salt_block: .*blockrunner:surface/soft\b
 @commands Log + recipe check after restart
 @pass `[salt] Create salting: N mixes added, M ... removed` (N > 100, M > 0); a mix for `rusticdelight:calamari_roll` exists; `create__the_salt:` bone broth, cooked rice and tomato sauce mixes absent; `create__the_salt:baconandeggs` present
 @fails CD `kubejs/salt/create_salting.js`; salt.md 6 S5
+@reviewed 2026-11-16
 @from batches/r1113/c1_a1.qb
 kjsexpect \[salt\] Create salting: [1-9]\d{2,} mixes added, [1-9]\d*
 shell grep -h "\[salt\] Create salting" logs/kubejs/server.log logs/latest.log | head -3 | cut -c1-300
-> zq makes rusticdelight:calamari_roll
-waitlog \[zq\] makes rusticdelight:calamari_roll: \d+ 30
-> zq recipes create__the_salt:
-waitlog \[zq\] done 30
+> cdevtest makes rusticdelight:calamari_roll
+> cdevtest recipes create__the_salt: max=500
 expect create__the_salt:baconandeggs
 reject create__the_salt:[a-z_]*(bone_broth|cooked_rice|tomato_sauce)[a-z_]* ->
 look the makes list has a mixing id (create__the_salt: or the CD salting namespace) making rusticdelight:calamari_roll; the shell line shows N > 100 added and M > 0 removed
@@ -522,30 +535,31 @@ look carried line says 19 values; ls shows salt-client.toml and salt-common.toml
 @commands `/place feature incubation_additions:nest_duck` (and `nest_goose`, `nest_emu`) on grass
 @pass Nest with 2 to 4 eggs and birds
 @fails Incubation member `packs/<mod>/data/incubation_additions/worldgen/`; TODO `mobs/nests #3`
+@reviewed 2026-11-16
 @from batches/r1103/sA_2.qb
 > place feature incubation_additions:nest_duck {SAH1+70} {SAH2} {SAH3+40}
 > place feature incubation_additions:nest_goose {SAH1+76} {SAH2} {SAH3+40}
 > place feature incubation_additions:nest_emu {SAH1+82} {SAH2} {SAH3+40}
 sleep 3
-> zq count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:duck_egg_nest
-> zq count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:goose_egg_nest
-> zq count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:emu_egg_nest
-> zcount {SAH1+62} {SAH2-1} {SAH3+32} {SAH1+90} {SAH2+4} {SAH3+48}
-waitlog \[zcount\] entities 30
-expect \[zq\] count incubation_additions:duck_egg_nest: [1-9]
-expect \[zq\] count incubation_additions:goose_egg_nest: [1-9]
-expect \[zq\] count incubation_additions:emu_egg_nest: [1-9]
-expect \[zcount\] entities .*untitledduckmod:duck
-expect \[zcount\] entities .*untitledduckmod:goose
-expect \[zcount\] entities .*alexsmobs:emu
-look eggs 2 to 4 per nest: the zq count lines name the blocks; read the eggs state with "data get block" or "execute if block ...[eggs=N]" at the found spot if the row needs it
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)
+> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:duck_egg_nest
+> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:goose_egg_nest
+> cdevtest count {SAH1+64} {SAH2-2} {SAH3+34} {SAH1+88} {SAH2+3} {SAH3+46} incubation_additions:emu_egg_nest
+> cdevtest entities {SAH1+76} {SAH2} {SAH3+40} 16
+expect verb=count block=incubation_additions:duck_egg_nest n=[1-9]
+expect verb=count block=incubation_additions:goose_egg_nest n=[1-9]
+expect verb=count block=incubation_additions:emu_egg_nest n=[1-9]
+expect verb=entities n=\d+ by_type=\S*untitledduckmod:duck:
+expect verb=entities n=\d+ by_type=\S*untitledduckmod:goose:
+expect verb=entities n=\d+ by_type=\S*alexsmobs:emu:
+look eggs 2 to 4 per nest: the count lines give the nests; read the eggs state with "cdevtest state" at a nest if the row needs it
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-NEST-02 | swamp, river, savanna: nests here and there, no worldgen or biome-tag errors
 @group B
 @commands Fresh world: swamp, river, savanna
 @pass Nests here and there; no worldgen or biome-tag errors in the log
 @fails Incubation member `tags/worldgen/` and `forge/biome_modifier/`; TODO `#3`
+@reviewed 2026-11-16
 @from batches/r1103/sA_4.qb
 > locate biome minecraft:swamp
 waitlog The nearest minecraft:swamp 600
@@ -560,38 +574,87 @@ capture SSV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {SRV1-56} {SRV3-56} {SRV1+55} {SRV3+55}
 > forceload add {SSV1-56} {SSV3-56} {SSV1+55} {SSV3+55}
 sleep 120
-> zq count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3+55} incubation_additions:duck_egg_nest
-> zq count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3+55} incubation_additions:goose_egg_nest
-> zq count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3+55} incubation_additions:duck_egg_nest
-> zq count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3+55} incubation_additions:goose_egg_nest
-> zq count {SSV1-56} 55 {SSV3-56} {SSV1+55} 110 {SSV3+55} incubation_additions:emu_egg_nest
-waitlog \[zq\] count incubation_additions:emu_egg_nest 180
+# a count box is at most 262144 blocks (64x64x64): each box runs as slices; the shell prints the summed n per block
+> say NEST02 begin
+> cdevtest count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3-19} incubation_additions:duck_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3-18} {SSW1+55} 110 {SSW3+19} incubation_additions:duck_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3+20} {SSW1+55} 110 {SSW3+55} incubation_additions:duck_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3-56} {SSW1+55} 110 {SSW3-19} incubation_additions:goose_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3-18} {SSW1+55} 110 {SSW3+19} incubation_additions:goose_egg_nest
+> cdevtest count {SSW1-56} 55 {SSW3+20} {SSW1+55} 110 {SSW3+55} incubation_additions:goose_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3-19} incubation_additions:duck_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3-18} {SRV1+55} 110 {SRV3+19} incubation_additions:duck_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3+20} {SRV1+55} 110 {SRV3+55} incubation_additions:duck_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3-56} {SRV1+55} 110 {SRV3-19} incubation_additions:goose_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3-18} {SRV1+55} 110 {SRV3+19} incubation_additions:goose_egg_nest
+> cdevtest count {SRV1-56} 55 {SRV3+20} {SRV1+55} 110 {SRV3+55} incubation_additions:goose_egg_nest
+> cdevtest count {SSV1-56} 55 {SSV3-56} {SSV1+55} 110 {SSV3-19} incubation_additions:emu_egg_nest
+> cdevtest count {SSV1-56} 55 {SSV3-18} {SSV1+55} 110 {SSV3+19} incubation_additions:emu_egg_nest
+> cdevtest count {SSV1-56} 55 {SSV3+20} {SSV1+55} 110 {SSV3+55} incubation_additions:emu_egg_nest
+> say NEST02 end
+waitlog NEST02 end 300
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" NEST02
 > forceload remove {SSW1-56} {SSW3-56} {SSW1+55} {SSW3+55}
 > forceload remove {SRV1-56} {SRV3-56} {SRV1+55} {SRV3+55}
 > forceload remove {SSV1-56} {SSV3-56} {SSV1+55} {SSV3+55}
 shell ! grep -hiE "(incubation|nest).*(rror|xception|unknown|missing|invalid)" logs/latest.log | grep -v "Error loading class" | grep -q .
-look at least one nest across the five counts (sparse: "here and there"); none at all over 147 chunks = LOOK against the placed feature rarity in the member's placed_feature json
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[zq\] error)
+look at least one nest in the summed totals (shell line; duck and goose totals add swamp and river) (sparse: "here and there"); none at all over 147 chunks = LOOK against the placed feature rarity in the member's placed_feature json
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-RD-22 (rerun)
 @group A
 @commands Eat Calamari Soup
 @pass Comfort 4:00, no Nourishment (the rule, not a generator gap)
 @fails `comfort_nourishment.json` rule; TODO `creativedelight/members #43`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> pbot spawn sard {SAH1+8} {SAH2} {SAH3+50} minecraft:overworld survival
+sleep 2
+> clear sard
+> effect clear sard
+> pbot hunger sard 10
+> pbot hold sard rusticdelight:calamari_soup
+> pbot eat sard
+sleep 3
+> cdevtest player sard
+> pbot remove sard
+expect verb=pbot.useitem bot=sard end=finish
+expect verb=player name=sard effects=\S*farmersdelight:comfort:0:4[78]\d\d\b
+reject verb=player name=sard effects=\S*farmersdelight:nourishment
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
 ## SQ-CDF-08 (rerun)
 @group A
 @commands After `/dumpcompost`: `python3 tools/gen_compost_values.py --check`
 @pass Exits 0
 @fails `/dumpcompost` output stale or missing; TODO `creativedelight/members #44`
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> dumpcompost
+sleep 5
+shell test -s kubejs/exported/compost/compost.json && python3 "$INST/tools/gen_compost_values.py" --dump kubejs/exported/compost/compost.json --check && echo "compost check exit 0"
+expect compost check exit 0
 ## SQ-VP-06 (rerun)
 @group A
 @commands As SQ-VP-06; then fill a jar with pepper jam and one with relish and bottle each
 @pass SQ-VP-06 pass text; both fill a glass bottle (the stale pack copies of `pepper_jam.json` and `relish.json` are gone, the member copies are served)
 @fails Pack `kubejs/data/vintagedelight/moonlight/soft_fluids/` copies back (moved to `moved_code_backup/2026-11-02-vintage/`); TODO `ports/vintageport #1`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> vtdtest fluids
+waitlog \[vtdtest\] done fluids 120
+expect \[vtdtest\] done fluids: \d+ pass, 0 fail
+reject \[vtdtest\] FAIL
+> cdevtest place {SAH1+20} {SAH2} {SAH3+60} supplementaries:jar
+> cdevtest use {SAH1+20} {SAH2} {SAH3+60} held=vintagedelight:pepper_jam_jar hand=main
+> cdevtest be {SAH1+20} {SAH2} {SAH3+60}
+> cdevtest use {SAH1+20} {SAH2} {SAH3+60} held=minecraft:glass_bottle hand=main
+> cdevtest place {SAH1+22} {SAH2} {SAH3+60} supplementaries:jar
+> cdevtest use {SAH1+22} {SAH2} {SAH3+60} held=vintagedelight:relish_jar hand=main
+> cdevtest be {SAH1+22} {SAH2} {SAH3+60}
+> cdevtest use {SAH1+22} {SAH2} {SAH3+60} held=minecraft:glass_bottle hand=main
+count verb=place placed=true == 2
+reject verb=use main=vintagedelight:(pepper_jam|relish)_jar\*1 off=
+reject verb=use main=minecraft:glass_bottle\*1 off=
+look the be lines name the pepper jam and relish soft fluids in the jars; each glass-bottle use ends with a filled item in main
+reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 @@text
 @@table
 ## CQ-VTDA-01

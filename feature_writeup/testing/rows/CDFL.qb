@@ -47,17 +47,19 @@ shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" lo
 @pass filling / emptying pairs name `creativedelight:` fluids (carrot juice, coffees, teas); Kettle recipes with pack teas present (counts as SQ-CBA-09 cooking set); egg solution and frosting mixing recipes present; `kjsreject failed and was skipped` count not above SQ-CBC-03
 @fails a recipe built from a literal fluid id string, or a tag that lost its entry
 @from batches/r1106cbp/p5_cd_alone.qb passed
-> zq bytype create:filling
-> zq bytype create:emptying
+@reviewed 2026-11-16
+> cdevtest bytype create:filling max=3000
+> cdevtest bytype create:emptying max=3000
 sleep 3
 expect creativedelight:
 reject creativeengineering:(carrot_juice|egg_solution|frosting|[a-z_]*_coffee|[a-z_]*_tea)\b
-> zq bytype farmersrespite:brewing
-> zq bytype create:mixing
+> cdevtest bytype farmersrespite:brewing
+> cdevtest bytype create:mixing max=3000
 sleep 3
 expect egg_solution
 expect frosting
 shell grep -h "failed and was skipped" logs/kubejs/startup.log logs/kubejs/server.log | wc -l
+reject verb=\S+ .*done=0
 
 ## SQ-CDFL-03 | old world: food fluids remapped to creativedelight:
 @group A (old save, full pack jars)
@@ -87,4 +89,16 @@ shell ! grep -E "WARN.*equivalent_fluids" logs/latest.log
 @commands JEI: search `Carrot Juice`, `Egg Solution`, `Milk Coffee`, `Kiwi Tea` and open the fluid pages (U); hover the fluid in a Create tank
 @pass fluid names show (`Carrot Juice`, not `fluid.creativedelight.carrot_juice`); the bottle effect lines (Common `DrinkFluidEffects`) still show on each fluid; fluid colours as before
 @fails KubeJS lang for the new namespace (displayName), or a client script naming the old id
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"wait": "jei"}
+do {"screen": "jei_uses:creativedelight:carrot_juice"}
+shot jei_carrot_juice
+do {"screen": "jei_uses:creativedelight:egg_solution"}
+shot jei_egg_solution
+do {"screen": "jei_uses:creativedelight:milk_coffee"}
+shot jei_milk_coffee
+do {"screen": "jei_uses:creativedelight:kiwi_tea"}
+shot jei_kiwi_tea
+do {"screen": "close"}
+reject (fluid|block)\.creativedelight\.\w+
+look fluid names read as text (Carrot Juice, not fluid.creativedelight.carrot_juice); bottle effect lines on each fluid; colours as before; the Create tank hover by hand

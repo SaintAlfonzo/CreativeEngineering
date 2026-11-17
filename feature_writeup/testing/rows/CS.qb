@@ -61,7 +61,8 @@ look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperat
 @pass winter: open field behind the glass field (about 3/4 of it); spring: open field ahead of the glass field (about 5/4)
 @fails off penalty or fertile bonus not cancelled under glass, or glass not counted
 @from batches/r1031/a2_variants.qb
-# measure = mean wheat age per field (`zq ages`), first line open field (x 100), second glass field (x 120);
+@reviewed 2026-11-16
+# measure = mean wheat age per field (`cdevtest ages`), first line open field (x 100), second glass field (x 120);
 # 2 min at randomTickSpeed 30 ripens almost nothing, so ripe counts were noise (10-31 first run)
 > kill @e[type=!minecraft:player]
 > forceload add 96 -4 132 12
@@ -77,22 +78,30 @@ look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperat
 > setblock 104 -60 4 minecraft:air
 > setblock 124 -60 4 minecraft:air
 > season set MID_WINTER
-> gamerule randomTickSpeed 30
-sleep 120
-> gamerule randomTickSpeed 3
-> zq ages 100 -60 0 108 -60 8 minecraft:wheat
-> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+# randomtick replaces 2 min at randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block), both
+# fields the same; the tick warp runs queued season extra ticks
+> cdevtest randomtick 100 -60 0 108 -60 8 18
+> cdevtest randomtick 120 -60 0 128 -60 8 18
+> cdevtest tickwarp 20
+waitlog verb=tickwarp end=done ticks=20 60
+> cdevtest ages 100 -60 0 108 -60 8 minecraft:wheat
+> cdevtest ages 120 -60 0 128 -60 8 minecraft:wheat
 > fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
 > fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
 > setblock 104 -60 4 minecraft:air
 > setblock 124 -60 4 minecraft:air
 > season set MID_SPRING
-> gamerule randomTickSpeed 30
-sleep 120
-> gamerule randomTickSpeed 3
-> zq ages 100 -60 0 108 -60 8 minecraft:wheat
-> zq ages 120 -60 0 128 -60 8 minecraft:wheat
-look winter: open mean below glass mean (about 3/4 of the growth); spring: open mean above glass mean (about 5/4)
+# randomtick replaces 2 min at randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block), both
+# fields the same; the tick warp runs queued season extra ticks
+> cdevtest randomtick 100 -60 0 108 -60 8 18
+> cdevtest randomtick 120 -60 0 128 -60 8 18
+> cdevtest tickwarp 21
+waitlog verb=tickwarp end=done ticks=21 60
+> cdevtest ages 100 -60 0 108 -60 8 minecraft:wheat
+> cdevtest ages 120 -60 0 128 -60 8 minecraft:wheat
+count verb=randomtick .*done=1 >= 4
+reject \[cdevtest\] .*done=0
+look verb=ages means (open x 100 first, glass x 120 second): winter: open mean below glass mean (about 3/4 of the growth); spring: open mean above glass mean (about 5/4)
 
 ## SQ-CS-04 | spring field ahead of a summer field (same timing)
 @group server
@@ -100,27 +109,35 @@ look winter: open mean below glass mean (about 3/4 of the growth); spring: open 
 @pass spring run ahead of the summer run (about 5/4)
 @fails fertile bonus not queued / extra tick not run
 @from batches/r1031/a2_variants.qb
+@reviewed 2026-11-16
 > fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
 > fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
 > setblock 104 -60 4 minecraft:air
 > setblock 124 -60 4 minecraft:air
 > season set MID_SPRING
-> gamerule randomTickSpeed 30
-sleep 120
-> gamerule randomTickSpeed 3
-> zq ages 100 -60 0 108 -60 8 minecraft:wheat
-> zq ages 120 -60 0 128 -60 8 minecraft:wheat
+# randomtick replaces 2 min at randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block), both
+# fields the same; the tick warp runs queued season extra ticks
+> cdevtest randomtick 100 -60 0 108 -60 8 18
+> cdevtest randomtick 120 -60 0 128 -60 8 18
+> cdevtest tickwarp 22
+waitlog verb=tickwarp end=done ticks=22 60
+> cdevtest ages 100 -60 0 108 -60 8 minecraft:wheat
+> cdevtest ages 120 -60 0 128 -60 8 minecraft:wheat
 > fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
 > fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
 > setblock 104 -60 4 minecraft:air
 > setblock 124 -60 4 minecraft:air
 > season set MID_SUMMER
-> gamerule randomTickSpeed 30
-sleep 120
-> gamerule randomTickSpeed 3
-> zq ages 100 -60 0 108 -60 8 minecraft:wheat
-> zq ages 120 -60 0 128 -60 8 minecraft:wheat
-look open field (first line of each pair): spring growth about 5/4 of the summer growth (wheat temperate: spring fertile, summer neutral)
+# randomtick replaces 2 min at randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block), both
+# fields the same; the tick warp runs queued season extra ticks
+> cdevtest randomtick 100 -60 0 108 -60 8 18
+> cdevtest randomtick 120 -60 0 128 -60 8 18
+> cdevtest tickwarp 23
+waitlog verb=tickwarp end=done ticks=23 60
+> cdevtest ages 100 -60 0 108 -60 8 minecraft:wheat
+> cdevtest ages 120 -60 0 128 -60 8 minecraft:wheat
+reject \[cdevtest\] .*done=0
+look open field (first verb=ages line of each pair): spring growth about 5/4 of the summer growth (wheat temperate: spring fertile, summer neutral)
 > season set MID_SPRING
 
 ## SQ-CS-05 | off-season crops still grow (mid_winter, randomTickSpeed 100, 1 min)
@@ -203,6 +220,7 @@ count Test failed == 1
 @pass the sapling becomes Vinery's apple tree sapling; no Fruits Delight apple trees; merge count line includes the creativedelight pairs
 @fails biome modifier override not loaded, or merge group skipped by `requires: vinery`
 @from batches/r1031/b1_gameplay.qb
+@reviewed 2026-11-16
 > give qa fruitsdelight:apple_sapling
 > data get entity qa Inventory
 > execute positioned 0 70 0 run locate biome minecraft:flower_forest
@@ -210,10 +228,12 @@ waitlog nearest minecraft:flower_forest is at 300
 capture FF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {FF1} 200 {FF3}
 sleep 30
-> zq count {FF1-48} 40 {FF3-48} {FF1+48} 140 {FF3+48} fruitsdelight:apple_leaves
+> cdevtest count {FF1-48} 40 {FF3-48} {FF1+48} 140 {FF3+48} fruitsdelight:apple_leaves
+expect verb=count block=fruitsdelight:apple_leaves n=0 
+reject \[cdevtest\] .*done=0
 reject fruitsdelight:apple_sapling
 bootexpect \[itemMerges\]
-look the inventory shows the Vinery apple sapling id; the leaves count is 0; the [itemMerges] boot line count includes the creativedelight pairs
+look the inventory shows the Vinery apple sapling id; the leaves count is 0 with skipped_columns well below 9409 (the box was loaded); the [itemMerges] boot line count includes the creativedelight pairs
 
 ## CQ-CS-07 | crop season tooltips and WTHIT lines (CR-89, CR-90)
 @group client

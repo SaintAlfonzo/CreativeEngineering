@@ -52,30 +52,30 @@ look cashiers still offer enchanted books; the cashier trader type may not use v
 @pass Only the two soils; faster on tilled; void pepper spreads then fruits, 3 / 1 drops
 @fails
 @from batches/r1103/p2_R.qb
+@reviewed 2026-11-16
+# no bot here any more (randomtick needs no player), so the lane is forceloaded instead
+> forceload add 320 520 334 534
+sleep 2
 > fill 320 -61 520 334 -61 534 minecraft:end_stone
 > fill 320 -60 520 334 -57 534 minecraft:air
 > setblock 327 -60 527 endersdelight:voidpepper_block[down=true,spreading=true,pepper=false]
-# r1103 p2: no player near, so the forceloaded chunk got no random ticks (1.19 ticks blocks only within 128 blocks of
-# a player) and the sprout never spread: a bot stands beside the lane for the 20 s
-> pbot spawn en3 327 -60 538 minecraft:overworld survival
-sleep 2
-> gamerule randomTickSpeed 300
-sleep 20
-> gamerule randomTickSpeed 3
-> pbot remove en3
-> zcount 320 -60 520 334 -57 534
-waitlog \[zcount\] entities 30
-expect \[zcount\] blocks .*endersdelight:voidpepper_block=([2-9]|\d\d)
+# 30 random ticks per block = the old 20 s at tick speed 300 near a bot (randomtick needs no player)
+> cdevtest randomtick 320 -60 520 334 -57 534 30
+> cdevtest count 320 -60 520 334 -57 534 endersdelight:voidpepper_block
+expect verb=count block=endersdelight:voidpepper_block n=([2-9]|\d\d)\b
 > execute if block 327 -60 527 endersdelight:voidpepper_block[spreading=false,pepper=true] run say EN03 origin fruited
 > execute if block 327 -60 527 endersdelight:voidpepper_block[spreading=true] run say EN03 origin still spreading
 > fill 320 -60 520 334 -57 534 minecraft:air
 > setblock 322 -60 522 endersdelight:voidpepper_block[down=true,spreading=false,pepper=true]
-> zact break 322 -60 522 none
+> cdevtest break 322 -60 522
 > setblock 324 -60 522 endersdelight:voidpepper_block[down=true,spreading=false,pepper=false]
-> zact break 324 -60 522 none
-expect \[zact\] break 322 -60 522 endersdelight:voidpepper_block held none: true, now minecraft:air, drops endersdelight:voidpepper x3
-expect \[zact\] break 324 -60 522 endersdelight:voidpepper_block held none: true, now minecraft:air, drops endersdelight:voidpepper x1
-look the spread count (more than one sprout after 20 s at tick speed 300) and the origin line ("fruited" once spreading ends; "still spreading" is not a fail by itself)
+> cdevtest break 324 -60 522
+expect verb=break who=\S+ broken=true before="?endersdelight:voidpepper_block\S* after=minecraft:air
+expect verb=break drops=endersdelight:voidpepper:3 stacks=\d+\b
+expect verb=break drops=endersdelight:voidpepper:1 stacks=1\b
+> forceload remove 320 520 334 534
+look the spread count (more than one sprout after 30 random ticks per block, about 20 s at tick speed 300) and the origin line ("fruited" once spreading ends; "still spreading" is not a fail by itself)
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-EN-04 | Ender Dragon drops bare hand, knife, machete
 @group A

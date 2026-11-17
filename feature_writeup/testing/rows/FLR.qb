@@ -17,16 +17,17 @@
 @pass the 4 `creativeworldgen:create*/visceral_heap/*` crush and mill recipes and 5 mixing recipes load; no `[result-pools]` error, no Create "more outputs" warning, no NCH warning except the one-time `#forge:plantoil` tag note
 @fails a stale Common jar leaves `i.flesh` undefined (NCH `is undefined`); missing mixin lines mean the Engineering jar is stale
 @from batches/r1111/a1.qb
+@reviewed 2026-11-16
 shell grep -nE "result-pools|has more outputs|visceral_heap|\[NCH\].*(flesh|pus_bubble|hair|eyebulb|blood|plantoil)|Mixing (CrushingOutputCap|ProcessingInventory|JeiCrushingPools|JeiMillingPools)" logs/latest.log | cut -c1-250 | head -40
-bootreject \[result-pools\].*(?i)error
+bootreject (?i)\[result-pools\].*error
 bootreject has more outputs
-> zq bytype create:crushing
-waitlog \[zq\] done 30
-> zq bytype create:milling
-waitlog \[zq\] done 30
-> zq bytype create:mixing
-waitlog \[zq\] done 30
-count creativeworldgen:create\w*/visceral_heap/ >= 9
+> cdevtest bytype create:crushing max=5000
+waitlog \[cdevtest\] verb=bytype serializer=create:crushing n= 30
+> cdevtest bytype create:milling max=5000
+waitlog \[cdevtest\] verb=bytype serializer=create:milling n= 30
+> cdevtest bytype create:mixing max=5000
+waitlog \[cdevtest\] verb=bytype serializer=create:mixing n= 30
+count \[cdevtest\] verb=bytype id=creativeworldgen:create\w*/visceral_heap/ >= 9
 look 4 crush/mill + 5 mixing creativeworldgen visceral_heap recipes listed
 
 ## SQ-FLR-02 | crushing wheels fed by a hopper: 200 flesh, then 200 porous flesh, outputs by pool
@@ -35,6 +36,7 @@ look 4 crush/mill + 5 mixing creativeworldgen visceral_heap recipes listed
 @pass flesh: meat items total 200 exactly, bone near 150, eye near 50, misc near 50; porous: meat 300 +/- 25, eye 200 exactly, misc near 100, no bone; item splits near plan section 3
 @fails `fan/ResultPools.roll`; a meat total above 200 means pools did not apply (Create's independent roll); any loss means the wheel inventory did not grow (`ProcessingInventoryMixin`)
 @from batches/r1115/p9_a1.qb
+@reviewed 2026-11-16
 > forceload add 40190 39990 40270 40010
 > execute unless block 40220 -58 40000 create:crushing_wheel run setblock 40220 -58 40000 create:crushing_wheel[axis=z]
 > execute unless block 40222 -58 40000 create:crushing_wheel run setblock 40222 -58 40000 create:crushing_wheel[axis=z]
@@ -55,13 +57,16 @@ expect FLR crusher valid ok
 > zc4 put 40221 -57 40000 biomesoplenty:flesh 64
 > zc4 put 40221 -57 40000 biomesoplenty:flesh 8
 waitlog \[zc4\] put .* inserted=8 20
-sleep 90
-> zc4 inv 40221 -57 40000
-> zc4 inv 40221 -58 40000
-sleep 90
-> zc4 inv 40221 -57 40000
-> zc4 inv 40221 -58 40000
-sleep 10
+> cdevtest tickwarp 1800
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=1800 90
+> cdevtest inv 40221 -57 40000
+> cdevtest inv 40221 -58 40000
+> cdevtest tickwarp 1801
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=1801 90
+> cdevtest inv 40221 -57 40000
+> cdevtest inv 40221 -58 40000
+> cdevtest tickwarp 202
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=202 60
 > zc4 pools 40221 -59 40000 -5
 waitlog \[zc4\] pools 20
 > zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 64
@@ -69,16 +74,19 @@ waitlog \[zc4\] pools 20
 > zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 64
 > zc4 put 40221 -57 40000 biomesoplenty:porous_flesh 8
 waitlog \[zc4\] put .* inserted=8 20
-sleep 90
-> zc4 inv 40221 -57 40000
-> zc4 inv 40221 -58 40000
-sleep 90
-> zc4 inv 40221 -57 40000
-> zc4 inv 40221 -58 40000
-sleep 10
+> cdevtest tickwarp 1803
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=1803 90
+> cdevtest inv 40221 -57 40000
+> cdevtest inv 40221 -58 40000
+> cdevtest tickwarp 1804
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=1804 90
+> cdevtest inv 40221 -57 40000
+> cdevtest inv 40221 -58 40000
+> cdevtest tickwarp 205
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=205 60
 > zc4 pools 40221 -59 40000 -5
 waitlog \[zc4\] pools 20
-look first pools line (flesh): meat=200 exactly, bone near 150, eye near 50, misc near 50, other 0; second (porous): meat 275 to 325, eye=200 exactly, misc near 100, bone=0. Hopper and controller empty before each count (inv lines total=0)
+look first pools line (flesh): meat=200 exactly, bone near 150, eye near 50, misc near 50, other 0; second (porous): meat 275 to 325, eye=200 exactly, misc near 100, bone=0. Hopper and controller empty before each count (the `verb=inv` summary lines read filled=0)
 
 ## SQ-FLR-03 | Millstone: 20 flesh give exactly 20 meat items (drained into a chest)
 @group A
@@ -86,6 +94,7 @@ look first pools line (flesh): meat=200 exactly, bone near 150, eye near 50, mis
 @pass 20 meat items exactly
 @fails `rollResults` path in `MillstoneBlockEntity`
 @from batches/r1113/c4_ar2.qb
+@reviewed 2026-11-16
 > forceload add 40190 39990 40270 40010
 sleep 3
 > fill 40195 -60 39995 40205 -50 40005 minecraft:air
@@ -100,14 +109,15 @@ expect 40200, -59, 40000 has the following block data: -?[1-9][0-9]*\.0f
 > zc4 put 40200 -59 40000 biomesoplenty:flesh 20
 waitlog \[zc4\] done 20
 expect \[zc4\] put 40200 -59 40000 biomesoplenty:flesh inserted=20
-sleep 150
-> zc4 inv 40200 -59 40000
-waitlog \[zc4\] done 20
+> cdevtest tickwarp 3000
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=3000 150
+> cdevtest inv 40200 -59 40000
+waitlog \[cdevtest\] verb=inv done= 20
 > zc4 poolsinv 40200 -61 40000
 waitlog \[zc4\] pools by id 20
 count \[zc4\] pools meat=20 bone=\d+ eye=\d+ misc=\d+ >= 1
-reject \[zc4\] inv 40200 -59 40000 total=\d+ .*biomesoplenty:flesh x
-look the chest pools line: meat=20 exactly, flesh used up (millstone inv line empty or near empty); bone near 15, eye near 5, misc near 5; the hopper itself may still hold up to 5 stacks (zc4 inv 40200 -60 40000 by hand if meat is 15-19)
+reject \[cdevtest\] verb=inv slot=\d+ item=biomesoplenty:flesh\*
+look the chest pools line: meat=20 exactly, flesh used up (millstone `verb=inv` lines show no flesh); bone near 15, eye near 5, misc near 5; the hopper itself may still hold up to 5 stacks (`cdevtest inv 40200 -60 40000` by hand if meat is 15-19)
 
 ## SQ-FLR-04 | Crushing wheels: 100 pus bubbles about 25 slimeballs, 100 hair about 50 string, nothing else
 @group A
@@ -115,17 +125,22 @@ look the chest pools line: meat=20 exactly, flesh used up (millstone inv line em
 @pass about 25 slimeballs, about 50 string, nothing else
 @fails plain chance outputs
 @from batches/r1113/c4_ar2.qb
+@reviewed 2026-11-16
 > kill @e[type=minecraft:item,x=40215,y=-64,z=39995,dx=12,dy=12,dz=10]
 > summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:64b}}
-sleep 25
+> cdevtest tickwarp 500
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=500 60
 > summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:pus_bubble",Count:36b}}
-sleep 40
+> cdevtest tickwarp 801
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=801 60
 > zc4 pools 40221 -59 40000 -4
 waitlog \[zc4\] done 20
 > summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:64b}}
-sleep 25
+> cdevtest tickwarp 502
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=502 60
 > summon minecraft:item 40221.5 -56.5 40000.5 {Item:{id:"biomesoplenty:hair",Count:36b}}
-sleep 40
+> cdevtest tickwarp 803
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=803 60
 > zc4 pools 40221 -59 40000 -4
 waitlog \[zc4\] done 20
 count \[zc4\] pools meat=0 bone=0 eye=0 misc=0 slime=(1[5-9]|2\d|3[0-5]) string=0 other=0 >= 1
@@ -138,6 +153,7 @@ look first pools line ~25 slime only, second ~50 string only; pus_bubble / hair 
 @pass 250 mB blood (+ bone 1 in 4); 500 mB; 250 mB; 2 porous + 3 flesh with each oil; 1 porous flesh
 @fails `createFluidTag` / kubejs-create fluidTag read; no run with one oil = tag not matched
 @from batches/r1113/c4_ar2.qb
+@reviewed 2026-11-16
 > setblock 40240 -60 40000 create:blaze_burner[blaze=smouldering]
 > setblock 40240 -59 40000 minecraft:air
 > setblock 40240 -59 40000 create:basin
@@ -154,25 +170,31 @@ sleep 2
 waitlog \[zc4\] done 20
 expect \[zc4\] fuel 40240 -60 40000 .*blaze=kindled
 > zc4 put 40240 -59 40000 biomesoplenty:flesh 1
-sleep 25
-> zc4 inv 40240 -59 40000
-waitlog \[zc4\] done 20
-expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250
+> cdevtest tickwarp 500
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=500 60
+> cdevtest inv 40240 -59 40000
+> cdevtest tank 40240 -59 40000
+waitlog \[cdevtest\] verb=tank done= 20
+expect \[cdevtest\] verb=tank tanks=\d+ fluids=\S*biomesoplenty:blood\*250/
 > setblock 40240 -59 40000 minecraft:air
 > setblock 40240 -59 40000 create:basin
 > zc4 put 40240 -59 40000 biomesoplenty:porous_flesh 1
-sleep 25
-> zc4 inv 40240 -59 40000
-waitlog \[zc4\] done 20
-expect \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 500
+> cdevtest tickwarp 501
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=501 60
+> cdevtest inv 40240 -59 40000
+> cdevtest tank 40240 -59 40000
+waitlog \[cdevtest\] verb=tank done= 20
+expect \[cdevtest\] verb=tank tanks=\d+ fluids=\S*biomesoplenty:blood\*500/
 > setblock 40240 -59 40000 minecraft:air
 > setblock 40240 -59 40000 create:basin
 > zc4 put 40240 -59 40000 biomesoplenty:flesh_tendons 1
-sleep 25
-> zc4 inv 40240 -59 40000
-waitlog \[zc4\] done 20
-count \[zc4\] tanks 40240 -59 40000 biomesoplenty:blood 250 >= 2
-look heated: flesh 250 mB blood (+ a bone 1 in 4), porous 500 mB, tendons 250 mB, the inv lines show the input used up; the first fuel line (coal block) should already say kindled
+> cdevtest tickwarp 502
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=502 60
+> cdevtest inv 40240 -59 40000
+> cdevtest tank 40240 -59 40000
+waitlog \[cdevtest\] verb=tank done= 20
+count \[cdevtest\] verb=tank tanks=\d+ fluids=\S*biomesoplenty:blood\*250/ >= 2
+look heated: flesh 250 mB blood (+ a bone 1 in 4), porous 500 mB, tendons 250 mB, the `verb=inv` lines show the input used up; the first fuel line (coal block) should already say kindled
 
 ## SQ-FLR-06 | processing inventories keep their items and Size 32 after a restart
 @group A

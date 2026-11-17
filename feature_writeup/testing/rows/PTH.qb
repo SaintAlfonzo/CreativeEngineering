@@ -218,6 +218,7 @@ look both mod passes: orbs inside x 1000..1001 y -60..-59 z 1130..1131, same pos
 @pass stops falling in the centre, no damage; jump climbs about 0.07 b/t, sneak sinks about 0.05 b/t; zombie hangs
 @fails `LivingClimbMixin` (`m_21297_` RETURN), `PassThrough.surroundedMotion`, `PassResult.surroundedTier`
 @from batches/r1115/pth_a1.qb
+@reviewed 2026-11-16
 > fill 1000 -60 1109 1002 -58 1111 minecraft:cobweb
 > fill 1004 -60 1109 1006 -58 1111 minecraft:cobweb
 > zpth watch bP 80 2
@@ -228,12 +229,14 @@ sleep 4
 > zpth input P jump
 > zpth watch bP 20 1
 sleep 2
-> zpth input P sneak
+> zpth input P none
+> pbot sneak P on
 > zpth watch bP 20 1
 sleep 2
-> zpth input P none
+> pbot sneak P off
 > zpth player P
 look bP stops in the cube (y about -59, vy 0); jump: y rises about 0.07 per tick; sneak: falls about 0.05; z09 hangs (y about -59)
+reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
 ## SQ-PTH-10 | cube: bot's tipped arrow, a no-pickup arrow, an explosive arrow hang at the centre; bot picks up the tipped one; breaking the centre drops the rest
 @group A
@@ -241,24 +244,23 @@ look bP stops in the cube (y about -59, vy 0); jump: y rises about 0.07 per tick
 @pass arrows hang at the tick they reach the centre (no explosion); the tipped one is picked up as the same tipped arrow; the skeleton's cannot be picked up; breaking the web drops the hanging arrows
 @fails `ArrowPassMixin.creativecompat$hangInWeb`, `PassProjectiles` HANG, `PassGroup` default
 @from batches/r1115/pth_a2.qb
+@reviewed 2026-11-16
 > fill 1080 -60 1000 1082 -58 1002 minecraft:cobweb
 > zpth watchnew minecraft:arrow a10 1200 2 1081.5 -59 1001.5 7
 > zpth watchnew nock_enough_arrows:explosive_arrow e10 1200 2 1081.5 -59 1001.5 7
 > clear P
 > tp P 1081.5 -60 995.5
-> zpth face P 0 0
+> pbot look P 0 0
 > item replace entity P weapon.mainhand with minecraft:bow
 > give P minecraft:tipped_arrow{Potion:"minecraft:slowness"} 1
-> zpth use P
-> zpth release P 20
+> pbot useitem P main 20
 sleep 2
 > clear P
 > tp P 1081.5 -60 1007.5
-> zpth face P 180 0
+> pbot look P 180 0
 > item replace entity P weapon.mainhand with minecraft:bow
 > give P nock_enough_arrows:explosive_arrow 1
-> zpth use P
-> zpth release P 20
+> pbot useitem P main 20
 sleep 2
 > summon minecraft:arrow 1081.5 -58.5 997.5 {pickup:0b,NoGravity:1b,Tags:["a10s"]}
 > zpth launch a10s none 0 0 1.5
@@ -281,6 +283,7 @@ sleep 3
 > zpth mod e10
 expect PTH10-centre-intact$
 look arrows stop near 1081.5 -58.x 1001.5 (vel 0) the tick they reach the centre; explosive no blast; P inventory: tipped_arrow Potion slowness; no-pickup arrow stays; after the break the rest fall
+reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
 ## SQ-PTH-11 | elevated cube: snowball and pearl break in the middle (bot to the centre), splash potion sinks and splashes below, firework holds then explodes, fireball explodes in the centre
 @group A
@@ -288,32 +291,33 @@ look arrows stop near 1081.5 -58.x 1001.5 (vel 0) the tick they reach the centre
 @pass snowball and pearl break in the middle (player ends in the centre, hanging); potion sinks down the centre line and splashes below the cube; firework holds still and explodes at its flight time; fireball explodes in the centre
 @fails `PassProjectiles.breakIn` (`ProjectilePassMixin`), `settle`, `FireworkPassMixin` / `fireworkTail`
 @from batches/r1115/pth_a2.qb
+@reviewed 2026-11-16
 > fill 1090 -57 1000 1092 -55 1002 minecraft:cobweb
 > setblock 1091 -58 995 minecraft:stone
 > tag P remove bP
 > clear P
 > tp P 1091.5 -57 995.5
-> zpth face P 0 0
+> pbot look P 0 0
 > zpth watchnew minecraft:snowball s11 100 1 1091.5 -56 999 7
 > item replace entity P weapon.mainhand with minecraft:snowball
-> zpth use P
+> pbot useitem P main
 sleep 3
 > zpth watchnew minecraft:ender_pearl p11 100 1 1091.5 -56 999 7
 > item replace entity P weapon.mainhand with minecraft:ender_pearl
-> zpth use P
+> pbot useitem P main
 sleep 3
 > zpth player P
 sleep 2
 > zpth player P
 > tp P 1091.5 -57 995.5
-> zpth face P 0 0
+> pbot look P 0 0
 > zpth watchnew minecraft:potion q11 300 2 1091.5 -57 999 8
 > item replace entity P weapon.mainhand with minecraft:splash_potion{Potion:"minecraft:slowness"}
-> zpth use P
+> pbot useitem P main
 sleep 8
 > zpth watchnew minecraft:firework_rocket f11 200 2 1091.5 -56 999 7
 > item replace entity P weapon.mainhand with minecraft:crossbow{Charged:1b,ChargedProjectiles:[{id:"minecraft:firework_rocket",Count:1b,tag:{Fireworks:{Flight:1b,Explosions:[{Type:0b,Colors:[I;16711680]}]}}}]}
-> zpth use P
+> pbot useitem P main
 sleep 6
 > tp P 1086.5 -60 990.5
 > summon minecraft:fireball 1091.5 -50 1001.5 {power:[0d,-0.1d,0d],Tags:["fb11"]}
@@ -321,6 +325,7 @@ sleep 6
 sleep 6
 > execute if block 1091 -56 1001 minecraft:cobweb run say PTH11-centre-still-web
 look s11 gone near z 1001.5; P after the pearl inside the cube (about 1091.5 -56 1001.5) and hanging; q11 stops in the cube, sinks to y < -57 and is gone below; f11 holds still in the cube then gone at its flight time; fb11 gone at y about -56 (explosion)
+reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
 ## SQ-PTH-12 | lone webs: fishing bobber stops and reels in; pickarang held past its timeout, picked up whole; broken web drops it; thorn chakram the same
 @group A
@@ -328,25 +333,26 @@ look s11 gone near z 1001.5; P after the pearl inside the cube (about 1091.5 -56
 @pass bobber stops at the web centre and reels in; pickarang held at the centre past its timeout, picked up whole on touch (same damage and enchantments); breaking the web drops it as an item; chakram the same
 @fails `PassProjectiles` SNAG, `QuarkPickarangPassMixin` (liveTime), `BotaniaChakramPassMixin` (tickCount, return), `EntityPassMixin` touch
 @from batches/r1115/pth_a2.qb
+@reviewed 2026-11-16
 > setblock 1100 -59 1000 minecraft:cobweb
 > setblock 1104 -59 1000 minecraft:cobweb
 > setblock 1108 -59 1000 minecraft:cobweb
 > setblock 1112 -59 1000 minecraft:cobweb
 > clear P
 > tp P 1100.5 -60 996.5
-> zpth face P 0 0
+> pbot look P 0 0
 > zpth watchnew minecraft:fishing_bobber b12 200 4 1100.5 -59 999 5
 > pbot hold P minecraft:fishing_rod 1
-> zpth use P
+> pbot useitem P main
 sleep 5
 > zpth reel P
 sleep 1
 > clear P
 > tp P 1104.5 -60 996.5
-> zpth face P 0 0
+> pbot look P 0 0
 > zpth watchnew quark:pickarang k12 400 10 1104.5 -59 999 5
 > pbot hold P quark:pickarang 1
-> zpth use P
+> pbot useitem P main
 sleep 12
 > zpth mod k12
 > tag P add bP
@@ -355,20 +361,20 @@ sleep 5
 > data get entity P Inventory
 > clear P
 > tp P 1108.5 -60 996.5
-> zpth face P 0 0
+> pbot look P 0 0
 > zpth watchnew quark:pickarang k12b 300 10 1108.5 -59 999 5
 > pbot hold P quark:pickarang 1
-> zpth use P
+> pbot useitem P main
 sleep 4
 > setblock 1108 -59 1000 minecraft:air destroy
 sleep 3
 > zpth near minecraft:item 1108.5 -59 1000.5 4
 > clear P
 > tp P 1112.5 -60 996.5
-> zpth face P 0 0
+> pbot look P 0 0
 > zpth watchnew botania:thorn_chakram c12 400 10 1112.5 -59 999 5
 > pbot hold P botania:thorn_chakram 1
-> zpth use P
+> pbot useitem P main
 sleep 6
 > zpth mod c12
 > pbot path P 1112.5 -60 1000.5 0.1
@@ -376,6 +382,7 @@ sleep 5
 > data get entity P Inventory
 > tag P remove bP
 look b12 stops at the web (about 1100.5 -58.x 1000.5) and is gone after the reel; k12 held in the web past 10 s, P inventory then has quark:pickarang (Damage as thrown); k12b: an item quark:pickarang after the break; c12 held, picked up
+reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
 ## SQ-PTH-13 | arrowLifeTicks 3600: bot arrow into the ground, non-Loyalty and Loyalty trident at a wall, a no-pickup arrow (skeleton stand-in)
 @group A
@@ -383,27 +390,25 @@ look b12 stops at the web (about 1100.5 -58.x 1000.5) and is gone after the reel
 @pass player arrow and non-Loyalty trident still there at 2 min, gone by 3.1 min; Loyalty trident flies back; skeleton arrow gone after 1 min
 @fails `ArrowPassMixin` despawn HEAD, `PassArrows.despawnLimit`, `arrowLifeTicks`
 @from batches/r1115/pth_a2.qb
+@reviewed 2026-11-16
 > fill 1123 -60 999 1127 -57 999 minecraft:stone
 > zpth watchnew minecraft:arrow a13 5000 400 1122 -59 998 5
 > zpth watchnew minecraft:trident t13 5000 400 1125 -59 998 5
 > tp P 1120.5 -60 995.5
-> zpth face P 0 60
+> pbot look P 0 60
 > item replace entity P weapon.mainhand with minecraft:bow
 > give P minecraft:arrow 1
-> zpth use P
-> zpth release P 20
+> pbot useitem P main 20
 sleep 2
 > tp P 1124.5 -60 995.5
-> zpth face P 0 0
+> pbot look P 0 0
 > item replace entity P weapon.mainhand with minecraft:trident
-> zpth use P
-> zpth release P 20
+> pbot useitem P main 20
 sleep 2
 > tp P 1126.5 -60 995.5
-> zpth face P 0 0
+> pbot look P 0 0
 > item replace entity P weapon.mainhand with minecraft:trident{Enchantments:[{id:"minecraft:loyalty",lvl:3s}]}
-> zpth use P
-> zpth release P 20
+> pbot useitem P main 20
 > summon minecraft:arrow 1121.5 -58 997.5 {pickup:0b,Motion:[0d,-1d,0d]}
 shell date +%s > zpth_13.t
 sleep 4
@@ -412,6 +417,7 @@ sleep 4
 > execute as @e[tag=a13] run data get entity @s pickup
 > execute as @e[tag=t13] run data get entity @s pickup
 look a13: 2 arrows stuck (one pickup 1, one 0); t13: the plain trident in the wall, the loyalty one returning
+reject \[cdevtest\] verb=pbot\.\S+ .*error=
 
 ## SQ-PTH-14 | arrowLongLifeCap 3, test 1: 3 arrows in one chunk now, a 4th after 70 s (row SQ-PTH-14b)
 @group A
@@ -1334,6 +1340,7 @@ look parser server block; lines after the key went false: none later than 10 s a
 @pass held items and orbs stay put (NoGravity, same position over 30 s), age and despawn as before; web broken: they fall the same tick; after a restart still held
 @fails `PassItems.heldMove` (move skipped while held), `hold` revalidation on a changed block state
 @from batches/r1116/ps15b_a.qb
+@reviewed 2026-11-16
 > setblock 1040 -57 1120 minecraft:cobweb
 > setblock 1044 -57 1120 minecraft:cobweb
 > fill 1047 -59 1119 1049 -57 1121 minecraft:cobweb
@@ -1351,13 +1358,15 @@ look parser server block; lines after the key went false: none later than 10 s a
 > summon minecraft:experience_orb 1048.5 -54 1120.5 {Value:3,Tags:["i6c","i6"]}
 sleep 5
 > zpth mod i6
-sleep 30
+> cdevtest tickwarp 600
+waitlog verb=tickwarp end=done 60
 > zpth mod i6
 > zpth watch i6b 20 1
 > setblock 1044 -57 1120 minecraft:air
 sleep 2
 > zpth mod i6b
 look i6a and i6c: same positions and ng=true at both reads 30 s apart; i6b: y drops from the first tick after the break, ng=false
+reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-PTH-11c
 @group A

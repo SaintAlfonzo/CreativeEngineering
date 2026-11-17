@@ -28,19 +28,21 @@ shell echo "kubejs server.log Error lines: $(grep -c Error logs/kubejs/server.lo
 
 ## SQ-ROLL-02 | chopstick foods and nether roll meat tags
 @group A
-@commands `/kubejs hand`-style checks or `/dumptags`: `#creativeengineering:chopstick_foods` holds `roll_delight:rice_roll_slice`, `farmersdelight:salmon_slice`, `minecraft:pufferfish`, `minecraft:cooked_cod`; `#roll_delight:nether_roll_meat` holds porkchop, bacon, prepared flesh
+@commands `/kubejs hand`-style checks or `/dumptags`: `#creativedelight:chopstick_foods` holds `roll_delight:rice_roll_slice`, `farmersdelight:salmon_slice`, `minecraft:pufferfish`, `minecraft:cooked_cod`; `#roll_delight:nether_roll_meat` holds porkchop, bacon, prepared flesh
 @pass all present
 @fails tag script not run / helper name
 @from batches/r1102b/s3_A.qb passed
-> zq itemtag creativeengineering:chopstick_foods
-> zq itemtag roll_delight:nether_roll_meat
-expect itemtag creativeengineering:chopstick_foods \(\d+\): .*roll_delight:rice_roll_slice
-expect itemtag creativeengineering:chopstick_foods \(\d+\): .*farmersdelight:salmon_slice
-expect itemtag creativeengineering:chopstick_foods \(\d+\): .*minecraft:pufferfish
-expect itemtag creativeengineering:chopstick_foods \(\d+\): .*minecraft:cooked_cod
-expect itemtag roll_delight:nether_roll_meat \(\d+\): .*minecraft:porkchop
-expect itemtag roll_delight:nether_roll_meat \(\d+\): .*bacon
-expect itemtag roll_delight:nether_roll_meat \(\d+\): .*prepared_flesh
+@reviewed 2026-11-16
+> cdevtest tag item creativedelight:chopstick_foods
+> cdevtest tag item roll_delight:nether_roll_meat
+expect \[cdevtest\] verb=tag kind=item tag=creativedelight:chopstick_foods n=\d+ ids=.*\broll_delight:rice_roll_slice\b
+expect \[cdevtest\] verb=tag kind=item tag=creativedelight:chopstick_foods n=\d+ ids=.*\bfarmersdelight:salmon_slice\b
+expect \[cdevtest\] verb=tag kind=item tag=creativedelight:chopstick_foods n=\d+ ids=.*\bminecraft:pufferfish\b
+expect \[cdevtest\] verb=tag kind=item tag=creativedelight:chopstick_foods n=\d+ ids=.*\bminecraft:cooked_cod\b
+expect \[cdevtest\] verb=tag kind=item tag=roll_delight:nether_roll_meat n=\d+ ids=.*\bminecraft:porkchop\b
+expect \[cdevtest\] verb=tag kind=item tag=roll_delight:nether_roll_meat n=\d+ ids=.*bacon\b
+expect \[cdevtest\] verb=tag kind=item tag=roll_delight:nether_roll_meat n=\d+ ids=.*prepared_flesh\b
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-ROLL-03 | chopsticks lengthen the off-hand food's effects 1.5x (Glowing Calamari Roll; bot at 150)
 @group A
@@ -48,9 +50,10 @@ expect itemtag roll_delight:nether_roll_meat \(\d+\): .*prepared_flesh
 @pass hunger 20 (capped), no Comfort (cooked rice has none; use a Comfort food to check the 1.5x duration), chopsticks Damage 1 (ROLL-07)
 @fails Start/Finish hook: off-hand identity check, `getUsedItemHand`
 @from batches/r1103/p2_R.qb
+@reviewed 2026-11-16
 # r1103 p2: cooked rice has had no Comfort since the 2026-11-02 Comfort / Nourishment rules (comfort_nourishment.json
 # "none"), so its read could not show the lengthening; hunger 19 -> 20 and chopsticks Damage 1 passed there
-> zq food creativeengineering:glowing_calamari_roll
+> cdevtest food creativedelight:glowing_calamari_roll
 > pbot spawn rl3 150 -60 503 minecraft:overworld survival
 sleep 2
 > clear rl3
@@ -58,18 +61,19 @@ sleep 2
 sleep 3
 > data get entity rl3 foodLevel
 > pbot hold rl3 roll_delight:chopsticks
-> item replace entity rl3 weapon.offhand with creativeengineering:glowing_calamari_roll
-> zq useitem rl3
+> item replace entity rl3 weapon.offhand with creativedelight:glowing_calamari_roll
+> cdevtest useair as=rl3 hand=both
 sleep 5
 > data get entity rl3 foodLevel
 > data get entity rl3 ActiveEffects
 expect has the following entity data: \[\{.*Duration
 > data get entity rl3 SelectedItem
 > data get entity rl3 Inventory
-expect useitem rl3 offhand (CONSUME|SUCCESS)
+expect \[cdevtest\] verb=useair who=rl3 hand=off result=(CONSUME|SUCCESS)
 expect has the following entity data: \{.*id: "roll_delight:chopsticks".*Damage: 1\b
 > pbot remove rl3
-look each ActiveEffects Duration is 1.5x the roll's own (the zq food line above; less the 5 s already ticked); off-hand roll gone
+look each ActiveEffects Duration is 1.5x the roll's own (effects= of the verb=food line above, id:amp:ticks:chance; less the 5 s already ticked); off-hand roll gone
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-ROLL-04 | chopsticks: no durability or extra food on dirt, bread, or at full hunger (bot at 150)
 @group A
@@ -77,20 +81,21 @@ look each ActiveEffects Duration is 1.5x the roll's own (the zq food line above;
 @pass no durability lost, nothing extra eaten (ROLL-08)
 @fails B5 regression
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 > pbot spawn rl4 150 -60 506 minecraft:overworld survival
 > effect give rl4 minecraft:hunger 1 255
 sleep 3
 > pbot hold rl4 roll_delight:chopsticks
 > item replace entity rl4 weapon.offhand with minecraft:dirt
-> zq useitem rl4
+> cdevtest useair as=rl4 hand=both
 sleep 3
 > item replace entity rl4 weapon.offhand with minecraft:bread
-> zq useitem rl4
+> cdevtest useair as=rl4 hand=both
 sleep 3
 > effect give rl4 minecraft:saturation 2 10
 sleep 3
 > item replace entity rl4 weapon.offhand with farmersdelight:cooked_rice
-> zq useitem rl4
+> cdevtest useair as=rl4 hand=both
 sleep 3
 > data get entity rl4 SelectedItem
 > data get entity rl4 Inventory
@@ -98,6 +103,7 @@ sleep 3
 reject id: "roll_delight:chopsticks".*Damage: [1-9]
 > pbot remove rl4
 look the bread and the rice still in the off hand (slot -106), dirt kept; foodLevel 20 after the saturation; no Damage tag above 0 (ROLL-08)
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-ROLL-05 | Legendary Roll Medley servings by empty hand, dirt, chopsticks (medley at 155)
 @group A
@@ -105,6 +111,7 @@ look the bread and the rice still in the off hand (slot -106), dirt kept; foodLe
 @pass 3 mushroom slices, 3 Salmon Maki, 2 Tobiko in that order, then the plate stays (servings 0) and the 9th click breaks it for a bowl; held dirt places against it; chopsticks eat one serving in place, 1 damage (ROLL-10, ROLL-14, ROLL-18)
 @fails `use` override, FeastBlock super
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 > setblock 155 -60 500 roll_delight:legendary_roll_medley
 > pbot spawn rl5 155 -60 503 minecraft:overworld survival
 repeat 9
@@ -115,23 +122,27 @@ repeat 9
 > data get block 155 -60 500
 end
 > execute if block 155 -60 500 minecraft:air run say ROLL05 medley gone after 9
-> zcount 151 -61 496 159 -57 506
+> cdevtest items 155 -60 500 4 keep
 > setblock 155 -60 500 roll_delight:legendary_roll_medley
 > pbot hold rl5 minecraft:dirt
 > pbot use rl5 155 -60 500 north
 > execute if block 155 -60 499 minecraft:dirt run say ROLL05 dirt placed against the medley
 > setblock 155 -60 499 minecraft:air
-> effect give rl5 minecraft:hunger 2 255
-sleep 3
-> data get entity rl5 foodLevel
+> pbot hunger rl5 10
 > pbot hold rl5 roll_delight:chopsticks
 > pbot use rl5 155 -60 500 up
-> data get entity rl5 foodLevel
+> cdevtest player rl5
+> cdevtest state 155 -60 500
 > data get entity rl5 SelectedItem
 expect ROLL05 medley gone after 9
 expect ROLL05 dirt placed against the medley
+expect verb=items items=\S*minecraft:bowl:1
+expect verb=pbot\.hunger bot=rl5 food=10
+expect verb=player name=rl5 .*food=(1[1-9]|20) 
+reject verb=pbot\.\S+ .*error=
+reject \[cdevtest\] .*done=0
 > pbot remove rl5
-look the nine SelectedItem lines: 3 mushroom slices, 3 Salmon Maki, 2 Tobiko, then nothing (plate at servings 0), the 9th click breaks it (a bowl in zcount); chopsticks: foodLevel up, one serving gone, Damage 1
+look the nine SelectedItem lines: 3 mushroom slices, 3 Salmon Maki, 2 Tobiko, then nothing (plate at servings 0), the 9th click breaks it (the bowl in the verb=items line); chopsticks: food above 10 in the verb=player line, the medley state one serving lower, SelectedItem Damage 1
 
 ## SQ-ROLL-06 | Mythical Roll Medley drops its servings and a bowl (medley at 160)
 @group A
@@ -139,13 +150,16 @@ look the nine SelectedItem lines: 3 mushroom slices, 3 Salmon Maki, 2 Tobiko, th
 @pass drops the 5 servings still on the plate (2 Nether Rolls, 3 Golden Roll Slices) and 1 bowl; at `[servings=8]` the medley itself (ROLL-11)
 @fails loot table generator
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 > setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=5]
-> zact break 160 -60 500 none
+> cdevtest break 160 -60 500
 > setblock 160 -60 500 roll_delight:mythical_roll_medley[servings=8]
-> zact break 160 -60 500 none
-expect \[zact\] break 160 -60 500 roll_delight:mythical_roll_medley held none: true, .*minecraft:bowl x1
-expect \[zact\] break 160 -60 500 roll_delight:mythical_roll_medley held none: true, .*drops roll_delight:mythical_roll_medley x1$
-look servings=5 drops 2 Nether Rolls and 3 Golden Roll Slices with the bowl
+> cdevtest break 160 -60 500
+count \[cdevtest\] verb=break who=fake broken=true before=\"?roll_delight:mythical_roll_medley == 2
+expect \[cdevtest\] verb=break drops=\S*\bminecraft:bowl:1\b
+expect \[cdevtest\] verb=break drops=roll_delight:mythical_roll_medley:1 stacks=1 
+look the drops= line with the bowl (servings=5): 2 Nether Rolls and 3 Golden Roll Slices
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-ROLL-07 | Wrapped Chopsticks block: add 3, take 4, break at 3 (block at 165)
 @group A
@@ -153,6 +167,7 @@ look servings=5 drops 2 Nether Rolls and 3 Golden Roll Slices with the bowl
 @pass 4 pairs, then 4 plain Chopsticks back and the block gone; breaking at 3 drops 3 Wrapped Chopsticks (ROLL-12)
 @fails `use`, set_count conditions
 @from batches/r1102b/s3_A.qb passed
+@reviewed 2026-11-16
 > setblock 165 -60 500 roll_delight:wrapped_chopsticks
 > pbot spawn rl7 165 -60 503 minecraft:overworld survival
 > pbot hold rl7 roll_delight:wrapped_chopsticks 3
@@ -169,9 +184,11 @@ count Removed 1 item == 4
 > execute unless block 165 -60 500 roll_delight:wrapped_chopsticks run say ROLL07 block gone
 expect ROLL07 block gone
 > setblock 165 -60 500 roll_delight:wrapped_chopsticks[chopsticks=3]
-> zact break 165 -60 500 none
-expect \[zact\] break 165 -60 500 roll_delight:wrapped_chopsticks held none: true, .*roll_delight:wrapped_chopsticks x3
+> cdevtest break 165 -60 500
+expect \[cdevtest\] verb=break who=fake broken=true before=\"?roll_delight:wrapped_chopsticks
+expect \[cdevtest\] verb=break drops=roll_delight:wrapped_chopsticks:3 
 > pbot remove rl7
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-ROLL-08 | frogspawn: shears drop it, a hand does not (on water at 170)
 @group A
@@ -179,13 +196,16 @@ expect \[zact\] break 165 -60 500 roll_delight:wrapped_chopsticks held none: tru
 @pass shears: 1 frogspawn item; hand: nothing (ROLL-05)
 @fails BreakEvent hook
 @from batches/r1102b/s3_A.qb passed
+@reviewed 2026-11-16
 > fill 169 -61 499 171 -61 501 minecraft:water
 > setblock 170 -60 500 minecraft:frogspawn
-> zact break 170 -60 500 minecraft:shears
+> cdevtest break 170 -60 500 held=minecraft:shears
 > setblock 170 -60 500 minecraft:frogspawn
-> zact break 170 -60 500 none
-expect \[zact\] break 170 -60 500 minecraft:frogspawn held minecraft:shears: true, .*drops minecraft:frogspawn x1
-expect \[zact\] break 170 -60 500 minecraft:frogspawn held none: true, .*drops none
+> cdevtest break 170 -60 500
+count \[cdevtest\] verb=break who=fake broken=true before=minecraft:frogspawn == 2
+expect \[cdevtest\] verb=break drops=minecraft:frogspawn:1 stacks=1 
+expect \[cdevtest\] verb=break drops=- stacks=0 
+reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-ROLL-09 | Unbreaking applies to chopsticks (server half; anvil plank repair is CQ-ROLL-10)
 @group A

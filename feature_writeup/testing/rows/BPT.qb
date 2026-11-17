@@ -28,28 +28,57 @@ bootreject creativecompat\.mixins\.json.*(fail|error)|Mixin apply failed.*creati
 @commands Launch the client to the title screen; `grep -n "banner_patterns" logs/latest.log`; `grep -n "TrashSlotGuiHandlerMixin" logs/latest.log logs/debug.log \| grep -i "error\|fail"`
 @pass one line `[banner_patterns] 27 Bedspreads and 25 Customizable Elytra pattern textures built from <n> jars`, no `[banner_patterns]` WARN; no TrashSlot mixin error
 @fails `banners/BannerPatternPack.patterns` (jar file system listing) or `BannerPatternArt`; WARN lines name the pattern
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[banner_patterns\] 27 Bedspreads and 25 Customizable Elytra pattern textures built from \d+ jars
+bootreject \[banner_patterns\].*(WARN|warn)|WARN.*\[banner_patterns\]
+shell grep -n "TrashSlotGuiHandlerMixin" logs/latest.log logs/debug.log | grep -iE "error|fail" | head -5; true
+look the shell output is empty (no TrashSlot mixin error)
 ## CQ-BPT-02
 @group client
 @commands Creative world: loom a bed-sized banner with a Botania pattern (Tiny Potato), an IE pattern (Hammer), Buzzier Bees (Honeycomb) and Neapolitan (Chimpanzee); apply each to a Bedspreads bed; apply to a Customizable Elytra and wear it (F5), video setting low and normal elytra quality if offered
 @pass LOOK: each pattern on the bed quilt and on both wings, placed like the mods' own patterns (as with the 11-05 jar); Neapolitan's Chimpanzee now shows (before: nothing)
 @fails atlas: `BannerPatternAtlasCompat` (file check through the resource manager); paths must stay `creativeengineering:textures/entity/<ns>/<id>.png` and `elytra_banner[_low]/<ns>/<id>.png`
-@draft no batch holds this row yet
+@owner true
+@draft loom work, the Bedspreads quilt recipe and the elytra in third person are several GUI and crafting steps whose result is a placement judgement against the mods own patterns: owner playtest (the atlas side is CQ-BPT-01 and -03)
+@reviewed 2026-11-16
 ## CQ-BPT-03
 @group client
 @commands Same world: F3+T
 @pass the `[banner_patterns]` built line does not repeat (cached); patterns still drawn
 @fails cache in `BannerPatternPack.files()`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -c "\[banner_patterns\] .* built from" logs/latest.log; true
+key F3+t
+do {"wait": "resources"}
+shell test "$(grep -c '\[banner_patterns\] .* built from' logs/latest.log)" = 1
+look the shell count is 1 before and after the reload (cached); patterns still drawn: CQ-BPT-02
 ## CQ-TSL-01
 @group client
 @commands Single player, survival: run [trashslot.md](../trashslot.md) 7 TS-01, TS-03, TS-04, TS-06, TS-11; then `/gamemode creative` and run TS-08, TS-09, TS-10, and open the survival inventory tab while creative
 @pass same as the 11-05 jar: slot on the inventory and workstations, off on shulker and hopper; creative screen has the slot and the delete key removes only the hovered item; LOOK: no slot left drawn from the previous screen
 @fails the redirect targets in `TrashSlotGuiHandlerMixin` (TrashSlot 12.1.0 bytecode: `getScreen` ordinal 1, `Abilities.f_35937_`, `Player.m_5833_`, `TrashSlotSaveState.getSettings`)
-@draft no batch holds this row yet
+@owner true
+@draft TrashSlot tests TS-01 to TS-11 click the trash slot and drag items across screens (the slot is drawn by TrashSlot, not a container slot the driver can address): owner playtest
+@reviewed 2026-11-16
 ## CQ-TSL-02
 @group client
 @commands Open a chest (slot shows), close; `/gamemode spectator`; open the inventory or a chest
 @pass no trash slot drawn in spectator; back to survival, chest shows the slot again
 @fails `creativecompat$spectatorClears` redirect
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> setblock 0 101 0 minecraft:chest
+do {"look": {"from": "0.5 102.6 -1.5", "at": "0.5 101.5 0.5"}}
+do {"use": true}
+do {"wait": "screen:ContainerScreen"}
+shot chest_survival
+do {"screen": "close"}
+> gamemode spectator
+do {"screen": "inventory"}
+shot inventory_spectator
+do {"screen": "close"}
+> gamemode creative
+do {"use": true}
+do {"wait": "screen:ContainerScreen"}
+shot chest_back
+do {"screen": "close"}
+look first and last shots show the trash slot; the spectator shot shows none

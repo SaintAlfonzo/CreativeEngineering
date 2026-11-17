@@ -16,12 +16,15 @@
 @@text Earth fill only cancels or prunes; the blocks are replaced by the vanilla beard (water and air under a bearded piece, out
 @@text to `beardReach`; since 2026-11-02 earth over water deeper than `waterReach` 2 already counts toward `maxOverWater`, so deep fill is
 @@text judged even where the beard could reach it) and by ground match (template earth swapped for the native ground). The earlier SQ-EF rows checked the
-@@text log lines; these check that the world matches them. Probe: `/zq under <x> <z> <rChunks> [id text|-]` in
-@@text `tools/scratch_query/zq_probe.js` (prep_srv.sh copies it in), **new 2026-11-02 and untested**: SQ-EFB-01 debugs it first.
+@@text log lines; these check that the world matches them. Probe: `/cdevtest under <x> <z> <rChunks> [id text|-]` (Creative
+@@text Devtools since 2026-11-16, replaces `/zq under`; loaded chunks only, so each tile is force-loaded first), judged offline by
+@@text `tools/scratch_query/efb_judge.py under logs/latest.log` (`--fail over6|deepwater|basewater|foreign`, `--need`; `gone` and
+@@text `vslog` read the region files and the `[earth-fill]` lines). The judge leaves out starts earth fill never judges (underground,
+@@text seabed, sky and exempt ids: one `--except` regex, the same in every row).
 @@text One group B fresh world, seed 8675309, scratch toml `[worldgen.earth_fill] log = "ALL"`. Chunky each square
 @@text (`chunky center <x> <z>`, `chunky radius 300`, `chunky start`) and wait for it to finish before probing; a square is
-@@text probed in tiles of `rChunks` 6 (the probe prints at most 30 starts per call). Every probe line is kept in
-@@text `RES/rows/<ID>.log` for the comparison rows (11 to 13).
+@@text probed in 9 tiles of `rChunks` 6 (the verb prints at most 30 starts per call). The rows run in order in one boot: later
+@@text rows reuse the squares' captured centres (`{PL}`, `{RV}`, `{DS}`) and the probe lines in `logs/latest.log`.
 @@text
 @@table
 ## SQ-EFB-00 | offline: worldgen tool tests (GroundMatch, EarthFill 113+, Meta print ALL)
@@ -34,142 +37,1023 @@ shell bash $INST/tools/test_worldgen_tools.sh > ../twt.txt 2>&1; grep -nE "^==|A
 
 ## SQ-EFB-01 | probe: /zq under at spawn prints full lines; earth-fill log has lines (log = ALL)
 @group B
-@commands boot; `grep -c '\[earth-fill\]' logs/latest.log`; spawn chunks loaded: `/zq under 0 0 4 -`
-@pass probe prints `under ...` lines with all fields and a final `under: N starts`; no `Error occurred while handling event`; the earth-fill log has lines (log = ALL)
-@fails Rhino errors: `getTagOrEmpty`, `getAllStarts`, `Heightmap$Types` names (memory `rhino-fieldandmethods-gotcha`); fix the probe in `tools/`, rerun
+@commands boot; `grep -c '\[earth-fill\]' logs/latest.log`; spawn chunks loaded: `/cdevtest under 0 0 4 -`
+@pass verb prints `[cdevtest] verb=under id=...` lines with every key (pieces, cols, unloaded_cols, air_below, air_max, over6, water_below, water_max, base_water, base_earth, ring, foreign), then `verb=under starts=N skipped_chunks=N` and `done=1`; no `Error occurred while handling event`; the earth-fill log has lines (log = ALL); `efb_judge.py under` parses the lines
+@fails `error=... done=0` names the cause (bad argument, `no level`); the verb is `TestJudges.under` in Creative Devtools (`GroundJudge.java` pure parts, harness `cdevtest_harness/run.sh`)
 @from batches/r1103w/w_1r_B.qb
+@reviewed 2026-11-16
 bootexpect \[earth-fill\]
-> zq under {S1} {S3} 4 -
-waitlog \[zq\] (under: \d+ starts|error) 120
-expect \[zq\] under: \d+ starts
-reject \[zq\] error
+> cdevtest under {S1} {S3} 4 -
+waitlog \[cdevtest\] verb=under (.* )?done=[01] 120
+expect \[cdevtest\] verb=under starts=\d+ skipped_chunks=\d+
+expect \[cdevtest\] verb=under done=1
+reject \[cdevtest\] verb=under .*done=0
 reject Error occurred while handling event
-shell echo "earth-fill lines: $(grep -c "\[earth-fill\]" ../w1_all.log || true)"; grep "\[zq\] under " logs/latest.log | tail -5 | cut -c1-400
-look the under lines carry every field (pieces, cols, air-below, water-below, base water, base earth, ring, foreign); 0 starts at an ocean spawn is a pass for the probe, rerun on a square tile (SQ-EFB-02) if so
+shell echo "earth-fill lines: $(grep -c "\[earth-fill\]" logs/latest.log || true)"; grep "\[cdevtest\] verb=under " logs/latest.log | tail -5 | cut -c1-400
+shell l=$(grep -m1 '\[cdevtest\] verb=under id=' logs/latest.log); [ -z "$l" ] || echo "$l" | grep -qE 'pieces=.* cols=.* unloaded_cols=.* air_below=.* air_max=.* over6=.* water_below=.* water_max=.* base_water=.* base_earth=.* ring=.* foreign='
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log | head -20
+look 0 starts at an ocean spawn is a pass for the verb; rerun on a square tile (SQ-EFB-02) if so
 
 ## SQ-EFB-02 (air)
 @group B
-@commands inland plains / taiga square (`/locate biome minecraft:plains`, a spot with hills nearby), Chunky r 300; `/zq under` tiles over the square
+@commands inland plains / taiga square (`/locate biome minecraft:plains`, a spot with hills nearby), Chunky r 300; `/cdevtest under` tiles over the square
 @pass every kept start: `over6 0` (no column hangs more than `beardReach` over air); `air-below` columns only where the gap is 1 to 6 and the beard rounded them off; no village house standing on air
 @fails `over6` > 0 on a kept start: find its `[earth-fill]` line; if it says `0 over air after beard` the count misses this piece kind (span, sunk piece, rotation), with the piece id
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest minecraft:plains is at|Could not find" logs/latest.log > ../efb_loc_pl.n || true
+> execute positioned 0 70 0 run locate biome minecraft:plains
+shell n=$(cat ../efb_loc_pl.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:plains is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:plains is at|Could not find/ in 600 s"; exit 1
+capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_pl.n || true
+> chunky world minecraft:overworld
+> chunky center {PL1} {PL3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_pl.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {PL1-296} {PL3-296} {PL1-104} {PL3-104}
+sleep 15
+> cdevtest under {PL1-200} {PL3-200} 6 -
+> forceload remove {PL1-296} {PL3-296} {PL1-104} {PL3-104}
+> forceload add {PL1-296} {PL3-96} {PL1-104} {PL3+96}
+sleep 15
+> cdevtest under {PL1-200} {PL3} 6 -
+> forceload remove {PL1-296} {PL3-96} {PL1-104} {PL3+96}
+> forceload add {PL1-296} {PL3+104} {PL1-104} {PL3+296}
+sleep 15
+> cdevtest under {PL1-200} {PL3+200} 6 -
+> forceload remove {PL1-296} {PL3+104} {PL1-104} {PL3+296}
+> forceload add {PL1-96} {PL3-296} {PL1+96} {PL3-104}
+sleep 15
+> cdevtest under {PL1} {PL3-200} 6 -
+> forceload remove {PL1-96} {PL3-296} {PL1+96} {PL3-104}
+> forceload add {PL1-96} {PL3-96} {PL1+96} {PL3+96}
+sleep 15
+> cdevtest under {PL1} {PL3} 6 -
+> forceload remove {PL1-96} {PL3-96} {PL1+96} {PL3+96}
+> forceload add {PL1-96} {PL3+104} {PL1+96} {PL3+296}
+sleep 15
+> cdevtest under {PL1} {PL3+200} 6 -
+> forceload remove {PL1-96} {PL3+104} {PL1+96} {PL3+296}
+> forceload add {PL1+104} {PL3-296} {PL1+296} {PL3-104}
+sleep 15
+> cdevtest under {PL1+200} {PL3-200} 6 -
+> forceload remove {PL1+104} {PL3-296} {PL1+296} {PL3-104}
+> forceload add {PL1+104} {PL3-96} {PL1+296} {PL3+96}
+sleep 15
+> cdevtest under {PL1+200} {PL3} 6 -
+> forceload remove {PL1+104} {PL3-96} {PL1+296} {PL3+96}
+> forceload add {PL1+104} {PL3+104} {PL1+296} {PL3+296}
+sleep 15
+> cdevtest under {PL1+200} {PL3+200} 6 -
+> forceload remove {PL1+104} {PL3+104} {PL1+296} {PL3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {PL1-304} {PL3-304} {PL1+304} {PL3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail over6
+shell python3 -I $INST/tools/scratch_query/efb_judge.py log logs/latest.log --box {PL1-304} {PL3-304} {PL1+304} {PL3+304} | tail -15
 ## SQ-EFB-03 (air, mounds)
 @group B
 @commands hills square (`/locate biome minecraft:windswept_hills` or `terralith:highlands`), Chunky r 300; `grep 'mound columns'`
 @pass every start whose line shows mound columns within its limit is kept and the probe shows `air-below 0` under it (the beard built the mound); every start over the mound limit is CANCELLED and has no probe line; LOOK at two mound starts from the side: an earth slope, no overhang, no stone pillar
 @fails air under a kept mound start: the beard reach is shorter than the mound counted (`maxMoundHeight` 8 vs the size limit); note gap and size
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest minecraft:windswept_hills is at|Could not find" logs/latest.log > ../efb_loc_hl.n || true
+> execute positioned 0 70 0 run locate biome minecraft:windswept_hills
+shell n=$(cat ../efb_loc_hl.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:windswept_hills is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:windswept_hills is at|Could not find/ in 600 s"; exit 1
+capture HL nearest minecraft:windswept_hills is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_hl.n || true
+> chunky world minecraft:overworld
+> chunky center {HL1} {HL3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_hl.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {HL1-296} {HL3-296} {HL1-104} {HL3-104}
+sleep 15
+> cdevtest under {HL1-200} {HL3-200} 6 -
+> forceload remove {HL1-296} {HL3-296} {HL1-104} {HL3-104}
+> forceload add {HL1-296} {HL3-96} {HL1-104} {HL3+96}
+sleep 15
+> cdevtest under {HL1-200} {HL3} 6 -
+> forceload remove {HL1-296} {HL3-96} {HL1-104} {HL3+96}
+> forceload add {HL1-296} {HL3+104} {HL1-104} {HL3+296}
+sleep 15
+> cdevtest under {HL1-200} {HL3+200} 6 -
+> forceload remove {HL1-296} {HL3+104} {HL1-104} {HL3+296}
+> forceload add {HL1-96} {HL3-296} {HL1+96} {HL3-104}
+sleep 15
+> cdevtest under {HL1} {HL3-200} 6 -
+> forceload remove {HL1-96} {HL3-296} {HL1+96} {HL3-104}
+> forceload add {HL1-96} {HL3-96} {HL1+96} {HL3+96}
+sleep 15
+> cdevtest under {HL1} {HL3} 6 -
+> forceload remove {HL1-96} {HL3-96} {HL1+96} {HL3+96}
+> forceload add {HL1-96} {HL3+104} {HL1+96} {HL3+296}
+sleep 15
+> cdevtest under {HL1} {HL3+200} 6 -
+> forceload remove {HL1-96} {HL3+104} {HL1+96} {HL3+296}
+> forceload add {HL1+104} {HL3-296} {HL1+296} {HL3-104}
+sleep 15
+> cdevtest under {HL1+200} {HL3-200} 6 -
+> forceload remove {HL1+104} {HL3-296} {HL1+296} {HL3-104}
+> forceload add {HL1+104} {HL3-96} {HL1+296} {HL3+96}
+sleep 15
+> cdevtest under {HL1+200} {HL3} 6 -
+> forceload remove {HL1+104} {HL3-96} {HL1+296} {HL3+96}
+> forceload add {HL1+104} {HL3+104} {HL1+296} {HL3+296}
+sleep 15
+> cdevtest under {HL1+200} {HL3+200} 6 -
+> forceload remove {HL1+104} {HL3+104} {HL1+296} {HL3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+> save-all flush
+sleep 10
+shell grep -E "\[earth-fill\].*mound columns" logs/latest.log | grep -v predicted | tail -5 | cut -c1-300
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {HL1-304} {HL3-304} {HL1+304} {HL3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail over6
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --box {HL1-304} {HL3-304} {HL1+304} {HL3+304}
+look two kept mound starts (mound columns > 0 in their [earth-fill] line) from the side, client block or a spectator bot: an earth slope, no overhang, no stone pillar
 ## SQ-EFB-04 (air, earthless pieces)
 @group B
-@commands same squares plus a desert and a jungle square; `/zq under` filtered `pyramid`, `igloo`, `jungle`, `camp`, `ruin` (`/zq under <x> <z> 6 camp`)
+@commands same squares plus a desert and a jungle square; `/cdevtest under` filtered `pyramid`, `igloo`, `jungle`, `camp`, `ruin` (`/cdevtest under <x> <z> 6 camp`)
 @pass legacy and earthless pieces (spans, 3.28): `over6 0` for kept ones; a camp or ruin with a column more than 6 over air has a CANCELLED line, not a world entry; tents and plinths sit on the ground (LOOK one camp, one ruin)
 @fails floating camp kept: the span rule skipped it (`surface_structures` step or above sea level less `baseLayers`), note the structure id for `footprintAllPieces`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest minecraft:desert is at|Could not find" logs/latest.log > ../efb_loc_dt.n || true
+> execute positioned 0 70 0 run locate biome minecraft:desert
+shell n=$(cat ../efb_loc_dt.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:desert is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:desert is at|Could not find/ in 600 s"; exit 1
+capture DT nearest minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_dt.n || true
+> chunky world minecraft:overworld
+> chunky center {DT1} {DT3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_dt.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {DT1-296} {DT3-296} {DT1-104} {DT3-104}
+sleep 15
+> cdevtest under {DT1-200} {DT3-200} 6 -
+> forceload remove {DT1-296} {DT3-296} {DT1-104} {DT3-104}
+> forceload add {DT1-296} {DT3-96} {DT1-104} {DT3+96}
+sleep 15
+> cdevtest under {DT1-200} {DT3} 6 -
+> forceload remove {DT1-296} {DT3-96} {DT1-104} {DT3+96}
+> forceload add {DT1-296} {DT3+104} {DT1-104} {DT3+296}
+sleep 15
+> cdevtest under {DT1-200} {DT3+200} 6 -
+> forceload remove {DT1-296} {DT3+104} {DT1-104} {DT3+296}
+> forceload add {DT1-96} {DT3-296} {DT1+96} {DT3-104}
+sleep 15
+> cdevtest under {DT1} {DT3-200} 6 -
+> forceload remove {DT1-96} {DT3-296} {DT1+96} {DT3-104}
+> forceload add {DT1-96} {DT3-96} {DT1+96} {DT3+96}
+sleep 15
+> cdevtest under {DT1} {DT3} 6 -
+> forceload remove {DT1-96} {DT3-96} {DT1+96} {DT3+96}
+> forceload add {DT1-96} {DT3+104} {DT1+96} {DT3+296}
+sleep 15
+> cdevtest under {DT1} {DT3+200} 6 -
+> forceload remove {DT1-96} {DT3+104} {DT1+96} {DT3+296}
+> forceload add {DT1+104} {DT3-296} {DT1+296} {DT3-104}
+sleep 15
+> cdevtest under {DT1+200} {DT3-200} 6 -
+> forceload remove {DT1+104} {DT3-296} {DT1+296} {DT3-104}
+> forceload add {DT1+104} {DT3-96} {DT1+296} {DT3+96}
+sleep 15
+> cdevtest under {DT1+200} {DT3} 6 -
+> forceload remove {DT1+104} {DT3-96} {DT1+296} {DT3+96}
+> forceload add {DT1+104} {DT3+104} {DT1+296} {DT3+296}
+sleep 15
+> cdevtest under {DT1+200} {DT3+200} 6 -
+> forceload remove {DT1+104} {DT3+104} {DT1+296} {DT3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell grep -cE "nearest minecraft:jungle is at|Could not find" logs/latest.log > ../efb_loc_jg.n || true
+> execute positioned 0 70 0 run locate biome minecraft:jungle
+shell n=$(cat ../efb_loc_jg.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:jungle is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:jungle is at|Could not find/ in 600 s"; exit 1
+capture JG nearest minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_jg.n || true
+> chunky world minecraft:overworld
+> chunky center {JG1} {JG3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_jg.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {JG1-296} {JG3-296} {JG1-104} {JG3-104}
+sleep 15
+> cdevtest under {JG1-200} {JG3-200} 6 -
+> forceload remove {JG1-296} {JG3-296} {JG1-104} {JG3-104}
+> forceload add {JG1-296} {JG3-96} {JG1-104} {JG3+96}
+sleep 15
+> cdevtest under {JG1-200} {JG3} 6 -
+> forceload remove {JG1-296} {JG3-96} {JG1-104} {JG3+96}
+> forceload add {JG1-296} {JG3+104} {JG1-104} {JG3+296}
+sleep 15
+> cdevtest under {JG1-200} {JG3+200} 6 -
+> forceload remove {JG1-296} {JG3+104} {JG1-104} {JG3+296}
+> forceload add {JG1-96} {JG3-296} {JG1+96} {JG3-104}
+sleep 15
+> cdevtest under {JG1} {JG3-200} 6 -
+> forceload remove {JG1-96} {JG3-296} {JG1+96} {JG3-104}
+> forceload add {JG1-96} {JG3-96} {JG1+96} {JG3+96}
+sleep 15
+> cdevtest under {JG1} {JG3} 6 -
+> forceload remove {JG1-96} {JG3-96} {JG1+96} {JG3+96}
+> forceload add {JG1-96} {JG3+104} {JG1+96} {JG3+296}
+sleep 15
+> cdevtest under {JG1} {JG3+200} 6 -
+> forceload remove {JG1-96} {JG3+104} {JG1+96} {JG3+296}
+> forceload add {JG1+104} {JG3-296} {JG1+296} {JG3-104}
+sleep 15
+> cdevtest under {JG1+200} {JG3-200} 6 -
+> forceload remove {JG1+104} {JG3-296} {JG1+296} {JG3-104}
+> forceload add {JG1+104} {JG3-96} {JG1+296} {JG3+96}
+sleep 15
+> cdevtest under {JG1+200} {JG3} 6 -
+> forceload remove {JG1+104} {JG3-96} {JG1+296} {JG3+96}
+> forceload add {JG1+104} {JG3+104} {JG1+296} {JG3+296}
+sleep 15
+> cdevtest under {JG1+200} {JG3+200} 6 -
+> forceload remove {JG1+104} {JG3+104} {JG1+296} {JG3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+> save-all flush
+sleep 10
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id 'pyramid|igloo|jungle|camp|ruin' --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail over6
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --id "camp|ruin"
+look one camp and one ruin from the side: tents and plinths sit on the ground (judge list above: their over6 0)
 ## SQ-EFB-05 (water, lakes)
 @group B
-@commands check the scratch toml has `[worldgen.earth_fill] maxWaterSurplus = 0.5` (instance value since 2026-11-02); lake / river square (the SQ-EF-09 kind, `/locate biome minecraft:river` near plains), Chunky r 300; `grep -E 'too wet\|wet only\|footprint'`; `/zq under` tiles
+@commands check the scratch toml has `[worldgen.earth_fill] maxWaterSurplus = 0.5` (instance value since 2026-11-02); lake / river square (the SQ-EF-09 kind, `/locate biome minecraft:river` near plains), Chunky r 300; `grep -E 'too wet\|wet only\|footprint'`; `/cdevtest under` tiles
 @pass kept starts: `water-below` only with `max` 2 or less (`waterReach`; deeper water under earth counts, and over `maxOverWater` 24 the start goes), `base water 0` (no flooded floor) except `wet_ok` and pond structures; every `too wet` start has no probe line; no kept start has footprint water above 1.5 x its ground (60:40 passes, 61:39 goes) in its log line; record how many kept starts sit between 50:50 and 60:40 (kept at 0.5, cancelled at 0.0)
 @fails water under a kept piece deeper than 2: `waterReach` not read (toml key missing, fallback) or the piece has no earth (add its base to `stone_base` / `sand_base`); base water in a house: the ground-level column was counted as ground (E12 lowest-layer rule); a kept start over 60:40: `maxWaterSurplus` not read (still 0.0 or the code default)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -nE '^\s*maxWaterSurplus' config/creativeworldgen-common.toml; grep -qE '^\s*maxWaterSurplus = 0\.5' config/creativeworldgen-common.toml
+shell grep -cE "nearest minecraft:river is at|Could not find" logs/latest.log > ../efb_loc_rv.n || true
+> execute positioned 0 70 0 run locate biome minecraft:river
+shell n=$(cat ../efb_loc_rv.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:river is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:river is at|Could not find/ in 600 s"; exit 1
+capture RV nearest minecraft:river is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_rv.n || true
+> chunky world minecraft:overworld
+> chunky center {RV1} {RV3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_rv.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {RV1-296} {RV3-296} {RV1-104} {RV3-104}
+sleep 15
+> cdevtest under {RV1-200} {RV3-200} 6 -
+> forceload remove {RV1-296} {RV3-296} {RV1-104} {RV3-104}
+> forceload add {RV1-296} {RV3-96} {RV1-104} {RV3+96}
+sleep 15
+> cdevtest under {RV1-200} {RV3} 6 -
+> forceload remove {RV1-296} {RV3-96} {RV1-104} {RV3+96}
+> forceload add {RV1-296} {RV3+104} {RV1-104} {RV3+296}
+sleep 15
+> cdevtest under {RV1-200} {RV3+200} 6 -
+> forceload remove {RV1-296} {RV3+104} {RV1-104} {RV3+296}
+> forceload add {RV1-96} {RV3-296} {RV1+96} {RV3-104}
+sleep 15
+> cdevtest under {RV1} {RV3-200} 6 -
+> forceload remove {RV1-96} {RV3-296} {RV1+96} {RV3-104}
+> forceload add {RV1-96} {RV3-96} {RV1+96} {RV3+96}
+sleep 15
+> cdevtest under {RV1} {RV3} 6 -
+> forceload remove {RV1-96} {RV3-96} {RV1+96} {RV3+96}
+> forceload add {RV1-96} {RV3+104} {RV1+96} {RV3+296}
+sleep 15
+> cdevtest under {RV1} {RV3+200} 6 -
+> forceload remove {RV1-96} {RV3+104} {RV1+96} {RV3+296}
+> forceload add {RV1+104} {RV3-296} {RV1+296} {RV3-104}
+sleep 15
+> cdevtest under {RV1+200} {RV3-200} 6 -
+> forceload remove {RV1+104} {RV3-296} {RV1+296} {RV3-104}
+> forceload add {RV1+104} {RV3-96} {RV1+296} {RV3+96}
+sleep 15
+> cdevtest under {RV1+200} {RV3} 6 -
+> forceload remove {RV1+104} {RV3-96} {RV1+296} {RV3+96}
+> forceload add {RV1+104} {RV3+104} {RV1+296} {RV3+296}
+sleep 15
+> cdevtest under {RV1+200} {RV3+200} 6 -
+> forceload remove {RV1+104} {RV3+104} {RV1+296} {RV3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+> save-all flush
+sleep 10
+shell grep -E "\[earth-fill\].*(too wet|wet only|footprint)" logs/latest.log | grep -v predicted | tail -8 | cut -c1-300
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1-304} {RV3-304} {RV1+304} {RV3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager|swamp_hut|witch_hut|mangrove_pillager_tower|aquaculture|pond|fisherman' --fail deepwater --fail basewater
+shell grep -E '\[earth-fill\].*footprint [0-9]+ water / [0-9]+ ground.*-> kept' logs/latest.log | grep -v predicted | sed -E 's/.*footprint ([0-9]+) water \/ ([0-9]+) ground.*/\1 \2/' | awk '{ if ($1 * 2 > $2 * 3) bad++; else if ($1 >= $2) mid++ } END { print "kept over 60:40: " bad+0 "; kept 50:50 to 60:40: " mid+0; exit (bad > 0) }'
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --box {RV1-304} {RV3-304} {RV1+304} {RV3+304}
+look RECORD the "kept 50:50 to 60:40" count from the awk line (kept at 0.5, cancelled at 0.0) in the run doc
 ## SQ-EFB-06 (water, coast)
 @group B
-@commands beach and coast square with villages (`/locate structure minecraft:village_plains` near an ocean, or `minecraft:beach`), Chunky r 300; `/zq under <x> <z> 6 village`
+@commands beach and coast square with villages (`/locate structure minecraft:village_plains` near an ocean, or `minecraft:beach`), Chunky r 300; `/cdevtest under <x> <z> 6 village`
 @pass no house floor in the sea-level water layer (`base water 0` on every kept village); `water-below` under houses `max` 2 or less; pruned wet houses (log `pruned K of N`) are not in the world: the probe's `pieces` equals N minus K
 @fails a house in the water: pruning kept a piece under `pruneMinWetColumns` 16; record its water columns
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest minecraft:beach is at|Could not find" logs/latest.log > ../efb_loc_bc.n || true
+> execute positioned 0 70 0 run locate biome minecraft:beach
+shell n=$(cat ../efb_loc_bc.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:beach is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:beach is at|Could not find/ in 600 s"; exit 1
+capture BC nearest minecraft:beach is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_bc.n || true
+> chunky world minecraft:overworld
+> chunky center {BC1} {BC3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_bc.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {BC1-296} {BC3-296} {BC1-104} {BC3-104}
+sleep 15
+> cdevtest under {BC1-200} {BC3-200} 6 village
+> forceload remove {BC1-296} {BC3-296} {BC1-104} {BC3-104}
+> forceload add {BC1-296} {BC3-96} {BC1-104} {BC3+96}
+sleep 15
+> cdevtest under {BC1-200} {BC3} 6 village
+> forceload remove {BC1-296} {BC3-96} {BC1-104} {BC3+96}
+> forceload add {BC1-296} {BC3+104} {BC1-104} {BC3+296}
+sleep 15
+> cdevtest under {BC1-200} {BC3+200} 6 village
+> forceload remove {BC1-296} {BC3+104} {BC1-104} {BC3+296}
+> forceload add {BC1-96} {BC3-296} {BC1+96} {BC3-104}
+sleep 15
+> cdevtest under {BC1} {BC3-200} 6 village
+> forceload remove {BC1-96} {BC3-296} {BC1+96} {BC3-104}
+> forceload add {BC1-96} {BC3-96} {BC1+96} {BC3+96}
+sleep 15
+> cdevtest under {BC1} {BC3} 6 village
+> forceload remove {BC1-96} {BC3-96} {BC1+96} {BC3+96}
+> forceload add {BC1-96} {BC3+104} {BC1+96} {BC3+296}
+sleep 15
+> cdevtest under {BC1} {BC3+200} 6 village
+> forceload remove {BC1-96} {BC3+104} {BC1+96} {BC3+296}
+> forceload add {BC1+104} {BC3-296} {BC1+296} {BC3-104}
+sleep 15
+> cdevtest under {BC1+200} {BC3-200} 6 village
+> forceload remove {BC1+104} {BC3-296} {BC1+296} {BC3-104}
+> forceload add {BC1+104} {BC3-96} {BC1+296} {BC3+96}
+sleep 15
+> cdevtest under {BC1+200} {BC3} 6 village
+> forceload remove {BC1+104} {BC3-96} {BC1+296} {BC3+96}
+> forceload add {BC1+104} {BC3+104} {BC1+296} {BC3+296}
+sleep 15
+> cdevtest under {BC1+200} {BC3+200} 6 village
+> forceload remove {BC1+104} {BC3+104} {BC1+296} {BC3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+> save-all flush
+sleep 10
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {BC1-304} {BC3-304} {BC1+304} {BC3+304} --id village --fail basewater --fail deepwater
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --box {BC1-304} {BC3-304} {BC1+304} {BC3+304} --id village
+shell grep -E "\[earth-fill\].*village.*pruned [0-9]+ of [0-9]+ pieces" logs/latest.log | grep -v predicted | tail -5 | cut -c1-300
 ## SQ-EFB-07 (water kept on purpose)
 @group B
 @commands swamp and mangrove square (SQ-EF-04 kind) plus a hillside with `/place structure farmers_structures:aquacultures_common` and `_carp`, and `old_swamp_fisherman_house:fisherman_house`
 @pass swamp huts, witch huts, mangrove towers (`earth_fill/wet_ok`) keep `water-below` > 0 and stand on their stilts (LOOK: water under the hut, not earth); ponds keep their water (`base water` > 0, the pond full, no earth plugging it, rim intact)
 @fails stilts filled with earth: the beard ran on a `wet_ok` start (tag missing on the id); pond drained: template trim dropped water (3.30 says water is a built block)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest minecraft:swamp is at|Could not find" logs/latest.log > ../efb_loc_sw.n || true
+> execute positioned 0 70 0 run locate biome minecraft:swamp
+shell n=$(cat ../efb_loc_sw.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:swamp is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:swamp is at|Could not find/ in 600 s"; exit 1
+capture SW nearest minecraft:swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_sw.n || true
+> chunky world minecraft:overworld
+> chunky center {SW1} {SW3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_sw.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {SW1-296} {SW3-296} {SW1-104} {SW3-104}
+sleep 15
+> cdevtest under {SW1-200} {SW3-200} 6 -
+> forceload remove {SW1-296} {SW3-296} {SW1-104} {SW3-104}
+> forceload add {SW1-296} {SW3-96} {SW1-104} {SW3+96}
+sleep 15
+> cdevtest under {SW1-200} {SW3} 6 -
+> forceload remove {SW1-296} {SW3-96} {SW1-104} {SW3+96}
+> forceload add {SW1-296} {SW3+104} {SW1-104} {SW3+296}
+sleep 15
+> cdevtest under {SW1-200} {SW3+200} 6 -
+> forceload remove {SW1-296} {SW3+104} {SW1-104} {SW3+296}
+> forceload add {SW1-96} {SW3-296} {SW1+96} {SW3-104}
+sleep 15
+> cdevtest under {SW1} {SW3-200} 6 -
+> forceload remove {SW1-96} {SW3-296} {SW1+96} {SW3-104}
+> forceload add {SW1-96} {SW3-96} {SW1+96} {SW3+96}
+sleep 15
+> cdevtest under {SW1} {SW3} 6 -
+> forceload remove {SW1-96} {SW3-96} {SW1+96} {SW3+96}
+> forceload add {SW1-96} {SW3+104} {SW1+96} {SW3+296}
+sleep 15
+> cdevtest under {SW1} {SW3+200} 6 -
+> forceload remove {SW1-96} {SW3+104} {SW1+96} {SW3+296}
+> forceload add {SW1+104} {SW3-296} {SW1+296} {SW3-104}
+sleep 15
+> cdevtest under {SW1+200} {SW3-200} 6 -
+> forceload remove {SW1+104} {SW3-296} {SW1+296} {SW3-104}
+> forceload add {SW1+104} {SW3-96} {SW1+296} {SW3+96}
+sleep 15
+> cdevtest under {SW1+200} {SW3} 6 -
+> forceload remove {SW1+104} {SW3-96} {SW1+296} {SW3+96}
+> forceload add {SW1+104} {SW3+104} {SW1+296} {SW3+296}
+sleep 15
+> cdevtest under {SW1+200} {SW3+200} 6 -
+> forceload remove {SW1+104} {SW3+104} {SW1+296} {SW3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell grep -cE "nearest minecraft:mangrove_swamp is at|Could not find" logs/latest.log > ../efb_loc_mg.n || true
+> execute positioned 0 70 0 run locate biome minecraft:mangrove_swamp
+shell n=$(cat ../efb_loc_mg.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:mangrove_swamp is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:mangrove_swamp is at|Could not find/ in 600 s"; exit 1
+capture MG nearest minecraft:mangrove_swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_mg.n || true
+> chunky world minecraft:overworld
+> chunky center {MG1} {MG3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_mg.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {MG1-296} {MG3-296} {MG1-104} {MG3-104}
+sleep 15
+> cdevtest under {MG1-200} {MG3-200} 6 -
+> forceload remove {MG1-296} {MG3-296} {MG1-104} {MG3-104}
+> forceload add {MG1-296} {MG3-96} {MG1-104} {MG3+96}
+sleep 15
+> cdevtest under {MG1-200} {MG3} 6 -
+> forceload remove {MG1-296} {MG3-96} {MG1-104} {MG3+96}
+> forceload add {MG1-296} {MG3+104} {MG1-104} {MG3+296}
+sleep 15
+> cdevtest under {MG1-200} {MG3+200} 6 -
+> forceload remove {MG1-296} {MG3+104} {MG1-104} {MG3+296}
+> forceload add {MG1-96} {MG3-296} {MG1+96} {MG3-104}
+sleep 15
+> cdevtest under {MG1} {MG3-200} 6 -
+> forceload remove {MG1-96} {MG3-296} {MG1+96} {MG3-104}
+> forceload add {MG1-96} {MG3-96} {MG1+96} {MG3+96}
+sleep 15
+> cdevtest under {MG1} {MG3} 6 -
+> forceload remove {MG1-96} {MG3-96} {MG1+96} {MG3+96}
+> forceload add {MG1-96} {MG3+104} {MG1+96} {MG3+296}
+sleep 15
+> cdevtest under {MG1} {MG3+200} 6 -
+> forceload remove {MG1-96} {MG3+104} {MG1+96} {MG3+296}
+> forceload add {MG1+104} {MG3-296} {MG1+296} {MG3-104}
+sleep 15
+> cdevtest under {MG1+200} {MG3-200} 6 -
+> forceload remove {MG1+104} {MG3-296} {MG1+296} {MG3-104}
+> forceload add {MG1+104} {MG3-96} {MG1+296} {MG3+96}
+sleep 15
+> cdevtest under {MG1+200} {MG3} 6 -
+> forceload remove {MG1+104} {MG3-96} {MG1+296} {MG3+96}
+> forceload add {MG1+104} {MG3+104} {MG1+296} {MG3+296}
+sleep 15
+> cdevtest under {MG1+200} {MG3+200} 6 -
+> forceload remove {MG1+104} {MG3+104} {MG1+296} {MG3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+> forceload add {SW1+202} {SW3+202} {SW1+298} {SW3+298}
+sleep 15
+> place structure farmers_structures:aquacultures_common {SW1+230} 70 {SW3+250}
+> place structure farmers_structures:aquacultures_carp {SW1+270} 70 {SW3+250}
+> place structure old_swamp_fisherman_house:fisherman_house {SW1+250} 70 {SW3+280}
+sleep 10
+> cdevtest under {SW1+250} {SW3+250} 3 -
+> forceload remove {SW1+202} {SW3+202} {SW1+298} {SW3+298}
+reject \[cdevtest\] verb=under .*done=0
+reject (?i)(place structure|structure).*(failed|invalid|unknown)
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id 'swamp_hut|witch_hut|mangrove_pillager_tower' --need waterbelow
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id aquaculture --need basewater
+look one hut and one mangrove tower from the side: water under the hut, not earth, on its stilts; the placed ponds full, no earth plugging them, rim intact
 ## SQ-EFB-08 (earth, desert)
 @group B
-@commands desert square with Philip's ruins and villages (`/locate biome minecraft:desert`; `/place structure philipsruins:ancient_ruins` twice on sand), Chunky r 300; `/zq under` tiles; `/zq count <box> minecraft:grass` and `minecraft:tall_grass` over each probed box
+@commands desert square with Philip's ruins and villages (`/locate biome minecraft:desert`; `/place structure philipsruins:ancient_ruins` twice on sand), Chunky r 300; `/cdevtest under` tiles; `/cdevtest count <box> minecraft:grass` and `minecraft:tall_grass` over each probed box
 @pass `foreign: none` on every start that is not in `ground_match/exempt` (base earth is sand / sandstone, no grass block or dirt in the bottom 3 layers); no grass plants standing on sand (`count` 0 or on `minecraft:grass_block` only)
 @fails grass or dirt under a desert ruin: ground match did not see the chunk as non-native (`nativeShare`, sampling skipped columns under pieces), note the ring counts
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest minecraft:desert is at|Could not find" logs/latest.log > ../efb_loc_ds.n || true
+> execute positioned 0 70 0 run locate biome minecraft:desert
+shell n=$(cat ../efb_loc_ds.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:desert is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:desert is at|Could not find/ in 600 s"; exit 1
+capture DS nearest minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_ds.n || true
+> chunky world minecraft:overworld
+> chunky center {DS1} {DS3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_ds.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {DS1+52} {DS3-48} {DS1+148} {DS3+48}
+> forceload add {DS1-148} {DS3+52} {DS1-52} {DS3+148}
+sleep 15
+> place structure philipsruins:ancient_ruins {DS1+100} 70 {DS3}
+> place structure philipsruins:ancient_ruins {DS1-100} 70 {DS3+100}
+sleep 10
+> cdevtest count {DS1+60} 50 {DS3-40} {DS1+140} 130 {DS3+40} minecraft:grass
+> cdevtest count {DS1+60} 50 {DS3-40} {DS1+140} 130 {DS3+40} minecraft:tall_grass
+> cdevtest count {DS1-140} 50 {DS3+60} {DS1-60} 130 {DS3+140} minecraft:grass
+> cdevtest count {DS1-140} 50 {DS3+60} {DS1-60} 130 {DS3+140} minecraft:tall_grass
+> forceload remove {DS1+52} {DS3-48} {DS1+148} {DS3+48}
+> forceload remove {DS1-148} {DS3+52} {DS1-52} {DS3+148}
+count \[cdevtest\] verb=count block=minecraft:(tall_)?grass n=\d+ >= 4
+reject \[cdevtest\] verb=count block=minecraft:(tall_)?grass n=\d+ on=\S*minecraft:(red_)?sand:
+reject \[cdevtest\] verb=count .*done=0
+> forceload add {DS1-296} {DS3-296} {DS1-104} {DS3-104}
+sleep 15
+> cdevtest under {DS1-200} {DS3-200} 6 -
+> forceload remove {DS1-296} {DS3-296} {DS1-104} {DS3-104}
+> forceload add {DS1-296} {DS3-96} {DS1-104} {DS3+96}
+sleep 15
+> cdevtest under {DS1-200} {DS3} 6 -
+> forceload remove {DS1-296} {DS3-96} {DS1-104} {DS3+96}
+> forceload add {DS1-296} {DS3+104} {DS1-104} {DS3+296}
+sleep 15
+> cdevtest under {DS1-200} {DS3+200} 6 -
+> forceload remove {DS1-296} {DS3+104} {DS1-104} {DS3+296}
+> forceload add {DS1-96} {DS3-296} {DS1+96} {DS3-104}
+sleep 15
+> cdevtest under {DS1} {DS3-200} 6 -
+> forceload remove {DS1-96} {DS3-296} {DS1+96} {DS3-104}
+> forceload add {DS1-96} {DS3-96} {DS1+96} {DS3+96}
+sleep 15
+> cdevtest under {DS1} {DS3} 6 -
+> forceload remove {DS1-96} {DS3-96} {DS1+96} {DS3+96}
+> forceload add {DS1-96} {DS3+104} {DS1+96} {DS3+296}
+sleep 15
+> cdevtest under {DS1} {DS3+200} 6 -
+> forceload remove {DS1-96} {DS3+104} {DS1+96} {DS3+296}
+> forceload add {DS1+104} {DS3-296} {DS1+296} {DS3-104}
+sleep 15
+> cdevtest under {DS1+200} {DS3-200} 6 -
+> forceload remove {DS1+104} {DS3-296} {DS1+296} {DS3-104}
+> forceload add {DS1+104} {DS3-96} {DS1+296} {DS3+96}
+sleep 15
+> cdevtest under {DS1+200} {DS3} 6 -
+> forceload remove {DS1+104} {DS3-96} {DS1+296} {DS3+96}
+> forceload add {DS1+104} {DS3+104} {DS1+296} {DS3+296}
+sleep 15
+> cdevtest under {DS1+200} {DS3+200} 6 -
+> forceload remove {DS1+104} {DS3+104} {DS1+296} {DS3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {DS1-304} {DS3-304} {DS1+304} {DS3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail foreign
 ## SQ-EFB-09 (earth, other grounds)
 @group B
-@commands one square each in snow (`minecraft:snowy_plains`), badlands (`minecraft:badlands`), volcanic peaks (`terralith:volcanic_peaks`); `/zq under` tiles
+@commands one square each in snow (`minecraft:snowy_plains`), badlands (`minecraft:badlands`), volcanic peaks (`terralith:volcanic_peaks`); `/cdevtest under` tiles
 @pass `foreign: none` outside the exempt list; badlands bases are terracotta or red sand, volcanic bases stone or basalt-family (the ring's ids), snowy bases snow or dirt under snow per ring; the exempt structures (ids in `ground_match.js`) keep their own earth and are listed as foreign on purpose
 @fails foreign earth on a non-exempt start: GroundMatch `rewrite()` mode for that family (TERRAIN / PALETTE / REMOVE), check `ground_match/*` block tags
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest minecraft:snowy_plains is at|Could not find" logs/latest.log > ../efb_loc_sn.n || true
+> execute positioned 0 70 0 run locate biome minecraft:snowy_plains
+shell n=$(cat ../efb_loc_sn.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:snowy_plains is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:snowy_plains is at|Could not find/ in 600 s"; exit 1
+capture SN nearest minecraft:snowy_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_sn.n || true
+> chunky world minecraft:overworld
+> chunky center {SN1} {SN3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_sn.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {SN1-296} {SN3-296} {SN1-104} {SN3-104}
+sleep 15
+> cdevtest under {SN1-200} {SN3-200} 6 -
+> forceload remove {SN1-296} {SN3-296} {SN1-104} {SN3-104}
+> forceload add {SN1-296} {SN3-96} {SN1-104} {SN3+96}
+sleep 15
+> cdevtest under {SN1-200} {SN3} 6 -
+> forceload remove {SN1-296} {SN3-96} {SN1-104} {SN3+96}
+> forceload add {SN1-296} {SN3+104} {SN1-104} {SN3+296}
+sleep 15
+> cdevtest under {SN1-200} {SN3+200} 6 -
+> forceload remove {SN1-296} {SN3+104} {SN1-104} {SN3+296}
+> forceload add {SN1-96} {SN3-296} {SN1+96} {SN3-104}
+sleep 15
+> cdevtest under {SN1} {SN3-200} 6 -
+> forceload remove {SN1-96} {SN3-296} {SN1+96} {SN3-104}
+> forceload add {SN1-96} {SN3-96} {SN1+96} {SN3+96}
+sleep 15
+> cdevtest under {SN1} {SN3} 6 -
+> forceload remove {SN1-96} {SN3-96} {SN1+96} {SN3+96}
+> forceload add {SN1-96} {SN3+104} {SN1+96} {SN3+296}
+sleep 15
+> cdevtest under {SN1} {SN3+200} 6 -
+> forceload remove {SN1-96} {SN3+104} {SN1+96} {SN3+296}
+> forceload add {SN1+104} {SN3-296} {SN1+296} {SN3-104}
+sleep 15
+> cdevtest under {SN1+200} {SN3-200} 6 -
+> forceload remove {SN1+104} {SN3-296} {SN1+296} {SN3-104}
+> forceload add {SN1+104} {SN3-96} {SN1+296} {SN3+96}
+sleep 15
+> cdevtest under {SN1+200} {SN3} 6 -
+> forceload remove {SN1+104} {SN3-96} {SN1+296} {SN3+96}
+> forceload add {SN1+104} {SN3+104} {SN1+296} {SN3+296}
+sleep 15
+> cdevtest under {SN1+200} {SN3+200} 6 -
+> forceload remove {SN1+104} {SN3+104} {SN1+296} {SN3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell grep -cE "nearest minecraft:badlands is at|Could not find" logs/latest.log > ../efb_loc_bd.n || true
+> execute positioned 0 70 0 run locate biome minecraft:badlands
+shell n=$(cat ../efb_loc_bd.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest minecraft:badlands is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest minecraft:badlands is at|Could not find/ in 600 s"; exit 1
+capture BD nearest minecraft:badlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_bd.n || true
+> chunky world minecraft:overworld
+> chunky center {BD1} {BD3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_bd.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {BD1-296} {BD3-296} {BD1-104} {BD3-104}
+sleep 15
+> cdevtest under {BD1-200} {BD3-200} 6 -
+> forceload remove {BD1-296} {BD3-296} {BD1-104} {BD3-104}
+> forceload add {BD1-296} {BD3-96} {BD1-104} {BD3+96}
+sleep 15
+> cdevtest under {BD1-200} {BD3} 6 -
+> forceload remove {BD1-296} {BD3-96} {BD1-104} {BD3+96}
+> forceload add {BD1-296} {BD3+104} {BD1-104} {BD3+296}
+sleep 15
+> cdevtest under {BD1-200} {BD3+200} 6 -
+> forceload remove {BD1-296} {BD3+104} {BD1-104} {BD3+296}
+> forceload add {BD1-96} {BD3-296} {BD1+96} {BD3-104}
+sleep 15
+> cdevtest under {BD1} {BD3-200} 6 -
+> forceload remove {BD1-96} {BD3-296} {BD1+96} {BD3-104}
+> forceload add {BD1-96} {BD3-96} {BD1+96} {BD3+96}
+sleep 15
+> cdevtest under {BD1} {BD3} 6 -
+> forceload remove {BD1-96} {BD3-96} {BD1+96} {BD3+96}
+> forceload add {BD1-96} {BD3+104} {BD1+96} {BD3+296}
+sleep 15
+> cdevtest under {BD1} {BD3+200} 6 -
+> forceload remove {BD1-96} {BD3+104} {BD1+96} {BD3+296}
+> forceload add {BD1+104} {BD3-296} {BD1+296} {BD3-104}
+sleep 15
+> cdevtest under {BD1+200} {BD3-200} 6 -
+> forceload remove {BD1+104} {BD3-296} {BD1+296} {BD3-104}
+> forceload add {BD1+104} {BD3-96} {BD1+296} {BD3+96}
+sleep 15
+> cdevtest under {BD1+200} {BD3} 6 -
+> forceload remove {BD1+104} {BD3-96} {BD1+296} {BD3+96}
+> forceload add {BD1+104} {BD3+104} {BD1+296} {BD3+296}
+sleep 15
+> cdevtest under {BD1+200} {BD3+200} 6 -
+> forceload remove {BD1+104} {BD3+104} {BD1+296} {BD3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell grep -cE "nearest terralith:volcanic_peaks is at|Could not find" logs/latest.log > ../efb_loc_vp.n || true
+> execute positioned 0 70 0 run locate biome terralith:volcanic_peaks
+shell n=$(cat ../efb_loc_vp.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest terralith:volcanic_peaks is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest terralith:volcanic_peaks is at|Could not find/ in 600 s"; exit 1
+capture VP nearest terralith:volcanic_peaks is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_vp.n || true
+> chunky world minecraft:overworld
+> chunky center {VP1} {VP3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_vp.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {VP1-296} {VP3-296} {VP1-104} {VP3-104}
+sleep 15
+> cdevtest under {VP1-200} {VP3-200} 6 -
+> forceload remove {VP1-296} {VP3-296} {VP1-104} {VP3-104}
+> forceload add {VP1-296} {VP3-96} {VP1-104} {VP3+96}
+sleep 15
+> cdevtest under {VP1-200} {VP3} 6 -
+> forceload remove {VP1-296} {VP3-96} {VP1-104} {VP3+96}
+> forceload add {VP1-296} {VP3+104} {VP1-104} {VP3+296}
+sleep 15
+> cdevtest under {VP1-200} {VP3+200} 6 -
+> forceload remove {VP1-296} {VP3+104} {VP1-104} {VP3+296}
+> forceload add {VP1-96} {VP3-296} {VP1+96} {VP3-104}
+sleep 15
+> cdevtest under {VP1} {VP3-200} 6 -
+> forceload remove {VP1-96} {VP3-296} {VP1+96} {VP3-104}
+> forceload add {VP1-96} {VP3-96} {VP1+96} {VP3+96}
+sleep 15
+> cdevtest under {VP1} {VP3} 6 -
+> forceload remove {VP1-96} {VP3-96} {VP1+96} {VP3+96}
+> forceload add {VP1-96} {VP3+104} {VP1+96} {VP3+296}
+sleep 15
+> cdevtest under {VP1} {VP3+200} 6 -
+> forceload remove {VP1-96} {VP3+104} {VP1+96} {VP3+296}
+> forceload add {VP1+104} {VP3-296} {VP1+296} {VP3-104}
+sleep 15
+> cdevtest under {VP1+200} {VP3-200} 6 -
+> forceload remove {VP1+104} {VP3-296} {VP1+296} {VP3-104}
+> forceload add {VP1+104} {VP3-96} {VP1+296} {VP3+96}
+sleep 15
+> cdevtest under {VP1+200} {VP3} 6 -
+> forceload remove {VP1+104} {VP3-96} {VP1+296} {VP3+96}
+> forceload add {VP1+104} {VP3+104} {VP1+296} {VP3+296}
+sleep 15
+> cdevtest under {VP1+200} {VP3+200} 6 -
+> forceload remove {VP1+104} {VP3+104} {VP1+296} {VP3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {SN1-304} {SN3-304} {SN1+304} {SN3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail foreign
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {BD1-304} {BD3-304} {BD1+304} {BD3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail foreign
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {VP1-304} {VP3-304} {VP1+304} {VP3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail foreign
+look the judge lists: badlands bases terracotta or red sand, volcanic bases stone or basalt family, snowy bases snow or dirt (base_earth against ring per start)
 ## SQ-EFB-10 (earth, the beard band)
 @group B
-@commands on 3 kept villages from 02, 05 and 08: `/zq count <x1> <y-8> <z1> <x2> <y-1> <z2>` for `minecraft:stone`, `minecraft:dirt`, `minecraft:sand`, the box being the start box 8 layers down from its bottom
+@commands on 3 kept villages from 02, 05 and 08: `/cdevtest count <x1> <y-8> <z1> <x2> <y-1> <z2>` for `minecraft:stone`, `minecraft:dirt`, `minecraft:sand`, the box being the start box 8 layers down from its bottom
 @pass the fill under the houses is native ground (dirt / grass in plains, sand / sandstone in desert); exposed beard sides are not bare stone walls; LOOK at one desert village edge from below the sea level
 @fails stone walls at the beard edge: vanilla Beardifier surface rule, not ours; record and do not fix in this plan
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest #minecraft:village" logs/latest.log > ../efb_vl_vpl.n || true
+> execute positioned {PL1} 70 {PL3} run locate structure #minecraft:village
+shell n=$(cat ../efb_vl_vpl.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest #minecraft:village" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest #minecraft:village/ in 600 s"; exit 1
+capture VPL nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VPL1-64} {VPL3-64} {VPL1+64} {VPL3+64}
+sleep 15
+> cdevtest under {VPL1} {VPL3} 2 village
+capture VPLB verb=under id=\S*village\S* chunk=\S+ box=(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+)
+> cdevtest count {VPLB1} {VPLB2-8} {VPLB3} {VPLB4} {VPLB2-1} {VPLB6} minecraft:stone
+> cdevtest count {VPLB1} {VPLB2-8} {VPLB3} {VPLB4} {VPLB2-1} {VPLB6} minecraft:dirt
+> cdevtest count {VPLB1} {VPLB2-8} {VPLB3} {VPLB4} {VPLB2-1} {VPLB6} minecraft:sand
+> cdevtest count {VPLB1} {VPLB2-8} {VPLB3} {VPLB4} {VPLB2-1} {VPLB6} minecraft:grass_block
+> cdevtest count {VPLB1} {VPLB2-8} {VPLB3} {VPLB4} {VPLB2-1} {VPLB6} minecraft:sandstone
+> forceload remove {VPL1-64} {VPL3-64} {VPL1+64} {VPL3+64}
+shell grep -cE "nearest #minecraft:village" logs/latest.log > ../efb_vl_vrv.n || true
+> execute positioned {RV1} 70 {RV3} run locate structure #minecraft:village
+shell n=$(cat ../efb_vl_vrv.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest #minecraft:village" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest #minecraft:village/ in 600 s"; exit 1
+capture VRV nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VRV1-64} {VRV3-64} {VRV1+64} {VRV3+64}
+sleep 15
+> cdevtest under {VRV1} {VRV3} 2 village
+capture VRVB verb=under id=\S*village\S* chunk=\S+ box=(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+)
+> cdevtest count {VRVB1} {VRVB2-8} {VRVB3} {VRVB4} {VRVB2-1} {VRVB6} minecraft:stone
+> cdevtest count {VRVB1} {VRVB2-8} {VRVB3} {VRVB4} {VRVB2-1} {VRVB6} minecraft:dirt
+> cdevtest count {VRVB1} {VRVB2-8} {VRVB3} {VRVB4} {VRVB2-1} {VRVB6} minecraft:sand
+> cdevtest count {VRVB1} {VRVB2-8} {VRVB3} {VRVB4} {VRVB2-1} {VRVB6} minecraft:grass_block
+> cdevtest count {VRVB1} {VRVB2-8} {VRVB3} {VRVB4} {VRVB2-1} {VRVB6} minecraft:sandstone
+> forceload remove {VRV1-64} {VRV3-64} {VRV1+64} {VRV3+64}
+shell grep -cE "nearest #minecraft:village" logs/latest.log > ../efb_vl_vds.n || true
+> execute positioned {DS1} 70 {DS3} run locate structure #minecraft:village
+shell n=$(cat ../efb_vl_vds.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest #minecraft:village" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest #minecraft:village/ in 600 s"; exit 1
+capture VDS nearest #minecraft:village.* is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {VDS1-64} {VDS3-64} {VDS1+64} {VDS3+64}
+sleep 15
+> cdevtest under {VDS1} {VDS3} 2 village
+capture VDSB verb=under id=\S*village\S* chunk=\S+ box=(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+),(-?\d+)
+> cdevtest count {VDSB1} {VDSB2-8} {VDSB3} {VDSB4} {VDSB2-1} {VDSB6} minecraft:stone
+> cdevtest count {VDSB1} {VDSB2-8} {VDSB3} {VDSB4} {VDSB2-1} {VDSB6} minecraft:dirt
+> cdevtest count {VDSB1} {VDSB2-8} {VDSB3} {VDSB4} {VDSB2-1} {VDSB6} minecraft:sand
+> cdevtest count {VDSB1} {VDSB2-8} {VDSB3} {VDSB4} {VDSB2-1} {VDSB6} minecraft:grass_block
+> cdevtest count {VDSB1} {VDSB2-8} {VDSB3} {VDSB4} {VDSB2-1} {VDSB6} minecraft:sandstone
+> forceload remove {VDS1-64} {VDS3-64} {VDS1+64} {VDS3+64}
+reject \[cdevtest\] verb=(under|count) .*done=0
+look the three count blocks (plains, river, desert village; box = start box, 8 layers under its bottom): the fill is native ground (dirt and grass in plains, sand and sandstone in desert), stone only where the ground was stone; LOOK at one desert village edge from below the sea level: no bare stone walls
 ## SQ-EFB-11 (log vs world)
 @group B
 @commands for 20 kept starts across 02 to 06 with a `log = ALL` line, compare the line's `over water` and `over air after beard` numbers with the probe's columns
 @pass a start logged with 0 over water has no `water-below` deeper than 2 under its earth pieces; logged 0 over air has `over6 0`; no kept start shows the probe far worse than its line (record the pairs in a table in the run doc)
 @fails a systematic gap: the prediction reads `getBaseColumn` before other structures or carvers changed the ground; name the cause in TODO `structures/earthfill`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell n=$(grep -c '\[cdevtest\] verb=under id=' logs/latest.log); echo "under start lines this boot: $n"; [ "$n" -ge 20 ]
+shell python3 -I $INST/tools/scratch_query/efb_judge.py vslog logs/latest.log
+look RECORD the vslog pairs (start, logged over water / over air, probe water_max / over6) as a table in the run doc; a flag = the probe far worse than its line
 ## SQ-EFB-12 (cancelled really gone)
 @group B
-@commands for 10 CANCELLED lines (chunk coords in each line), `/zq under <chunkX*16> <chunkZ*16> 0 <id>`
+@commands after 02 to 09: `save-all flush`; `efb_judge.py gone <level> logs/latest.log` checks every CANCELLED line's chunk in the region files (replaces `/cdevtest under <chunkX*16> <chunkZ*16> 0 <id>` per line); census `/cwglocate census 96 {PL}`
 @pass no start of that id in that chunk (the slot is empty or a priority / group neighbour); the census (`/cwglocate census 96 <x> <z>`) counts the cancels as EARTH_FILL rejects
 @fails a cancelled start in the world: the mixin's STORE slot (index 15) missed on this path; check `ChunkGeneratorEarthFillMixin` applied at boot
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> save-all flush
+sleep 10
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log
+> cwglocate census 96 {PL1} {PL3}
+waitlog \[cwglocate\] census done 1800
+reject census done \(stopped\)
+shell f=kubejs/exported/worldgen/locate_census.json; [ -f $f ] || f=$INST/$f; grep -oiE '"earth_fill"[^,}]*' $f | head -5; grep -qi 'earth_fill' $f
 ## SQ-EFB-13 (pruned pieces gone)
 @group B
-@commands for 5 `pruned K of N pieces` lines (village and `wet only`), `/zq under` at the start's chunk
+@commands for 5 `pruned K of N pieces` lines (village and `wet only`), `/cdevtest under` at the start's chunk
 @pass probe `pieces` = N - K; LOOK at one: no street end ending in a beard blob or a half path into the water (E8), the rest of the village joined
 @fails pieces count N: pruning ran only in the prediction; dead street ends: `forgetJunctions`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> save-all flush
+sleep 10
+shell grep -E '\[earth-fill\].*pruned [0-9]+ of [0-9]+ pieces' logs/latest.log | grep -v predicted | tail -5 | cut -c1-300; grep -qE '\[earth-fill\].*pruned [0-9]+ of [0-9]+ pieces' logs/latest.log
+shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --id village
+look one pruned village (pbot spectator or the client block at its start chunk): no street ending in a beard blob or a half path into the water (E8), the rest of the village joined
 ## SQ-EFB-14 (undead castle, new air limit)
 @group B
-@commands the castles found in SQ-WGE-03b: `/zq under <x> <z> 6 undead_castle`
+@commands the nearest castle (`/locate structure eugene:undead_castle`, as in SQ-WGE-03b), force-loaded: `/cdevtest under <x> <z> 4 undead_castle`, `/cdevtest state` at its centre (biome); `efb_judge.py vslog --id undead_castle`
 @pass each kept castle: `over6` columns only where its line logged them (limit 800), max gap recorded; LOOK from the side: earth under the walls, not a floating wall section over a ravine; no castle in a highland biome
 @fails gaps over 6 under the walls look bad: the 800 limit is too loose for the look, give the measured gaps to the owner (ST-240)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -cE "nearest eugene:undead_castle is at|Could not find" logs/latest.log > ../efb_loc_uc.n || true
+> execute positioned 0 70 0 run locate structure eugene:undead_castle
+shell n=$(cat ../efb_loc_uc.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest eugene:undead_castle is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest eugene:undead_castle is at|Could not find/ in 600 s"; exit 1
+capture UC nearest eugene:undead_castle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {UC1-64} {UC3-64} {UC1+64} {UC3+64}
+sleep 20
+> cdevtest under {UC1} {UC3} 4 undead_castle
+> cdevtest state {UC1} 100 {UC3}
+> forceload remove {UC1-64} {UC3-64} {UC1+64} {UC3+64}
+expect \[cdevtest\] verb=under id=eugene:undead_castle 
+reject \[cdevtest\] verb=(under|state) .*done=0
+reject \[cdevtest\] verb=state .*biome=\S*(highland|peaks|slopes)
+shell grep -oE 'verb=under id=eugene:undead_castle .*(air_max|over6)=[0-9]+' logs/latest.log | tail -3
+shell python3 -I $INST/tools/scratch_query/efb_judge.py vslog logs/latest.log --id undead_castle
+look the castle from the side: earth under the walls, not a floating wall section over a ravine; RECORD air_max and over6 for the owner (ST-240)
 ## SQ-EFB-15 (meta parts)
 @group B
-@commands `/place structure creativeengineering:meta/farmers_camp` and `meta/ruin_scatter` on a slope 40 blocks from a lake; `/zq under <x> <z> 3 meta`
+@commands `/place structure creativeworldgen:meta/farmers_camp` and `meta/ruin_scatter` on a slope 40 blocks from a lake; `/cdevtest under <x> <z> 3 meta`
 @pass the meta's pieces: `over6 0`, `base water 0`, `foreign: none` like single starts; dropped parts (log `dropped K of N parts`) are not in the world
 @fails parts placed over water: `filterParts` judged them at the anchor's height
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add {RV1-24} {RV3-64} {RV1+104} {RV3+64}
+sleep 15
+> place structure creativeworldgen:meta/farmers_camp {RV1+40} 70 {RV3-20}
+> place structure creativeworldgen:meta/ruin_scatter {RV1+40} 70 {RV3+30}
+sleep 10
+> cdevtest under {RV1+40} {RV3} 3 -
+> forceload remove {RV1-24} {RV3-64} {RV1+104} {RV3+64}
+reject \[cdevtest\] verb=under .*done=0
+shell grep -E '\[(earth-fill|meta)\].*dropped [0-9]+ of [0-9]+ parts' logs/latest.log | tail -4 | cut -c1-300
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1-24} {RV3-64} {RV1+104} {RV3+64} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail over6 --fail basewater --fail foreign
+look no meta part over the water (dropped parts are not in the world)
 ## SQ-EFB-16 (switch off)
 @group B, second fresh world (new level-name)
-@commands scratch toml `[worldgen.systems] earthFill = false`, Chunky the SQ-EFB-05 lake square again; `/zq under` tiles
+@commands scratch toml `[worldgen.systems] earthFill = false`, Chunky the SQ-EFB-05 lake square again; `/cdevtest under` tiles
 @pass with earth fill off the probe finds floating or flooded starts the first world cancelled (at least a few `over6` > 0 or `base water` > 0); this shows the probe and the system each catch the real cases
 @fails no difference: the lake square had no hard cases, take a wider square or the coast
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -nE '^\s*earthFill' config/creativeworldgen-common.toml; grep -qE '^\s*earthFill = false' config/creativeworldgen-common.toml
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_rv.n || true
+> chunky world minecraft:overworld
+> chunky center {RV1} {RV3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_rv.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {RV1-296} {RV3-296} {RV1-104} {RV3-104}
+sleep 15
+> cdevtest under {RV1-200} {RV3-200} 6 -
+> forceload remove {RV1-296} {RV3-296} {RV1-104} {RV3-104}
+> forceload add {RV1-296} {RV3-96} {RV1-104} {RV3+96}
+sleep 15
+> cdevtest under {RV1-200} {RV3} 6 -
+> forceload remove {RV1-296} {RV3-96} {RV1-104} {RV3+96}
+> forceload add {RV1-296} {RV3+104} {RV1-104} {RV3+296}
+sleep 15
+> cdevtest under {RV1-200} {RV3+200} 6 -
+> forceload remove {RV1-296} {RV3+104} {RV1-104} {RV3+296}
+> forceload add {RV1-96} {RV3-296} {RV1+96} {RV3-104}
+sleep 15
+> cdevtest under {RV1} {RV3-200} 6 -
+> forceload remove {RV1-96} {RV3-296} {RV1+96} {RV3-104}
+> forceload add {RV1-96} {RV3-96} {RV1+96} {RV3+96}
+sleep 15
+> cdevtest under {RV1} {RV3} 6 -
+> forceload remove {RV1-96} {RV3-96} {RV1+96} {RV3+96}
+> forceload add {RV1-96} {RV3+104} {RV1+96} {RV3+296}
+sleep 15
+> cdevtest under {RV1} {RV3+200} 6 -
+> forceload remove {RV1-96} {RV3+104} {RV1+96} {RV3+296}
+> forceload add {RV1+104} {RV3-296} {RV1+296} {RV3-104}
+sleep 15
+> cdevtest under {RV1+200} {RV3-200} 6 -
+> forceload remove {RV1+104} {RV3-296} {RV1+296} {RV3-104}
+> forceload add {RV1+104} {RV3-96} {RV1+296} {RV3+96}
+sleep 15
+> cdevtest under {RV1+200} {RV3} 6 -
+> forceload remove {RV1+104} {RV3-96} {RV1+296} {RV3+96}
+> forceload add {RV1+104} {RV3+104} {RV1+296} {RV3+296}
+sleep 15
+> cdevtest under {RV1+200} {RV3+200} 6 -
+> forceload remove {RV1+104} {RV3+104} {RV1+296} {RV3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1-304} {RV3-304} {RV1+304} {RV3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager|swamp_hut|witch_hut|mangrove_pillager_tower|aquaculture|pond|fisherman' --need over6 || python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1-304} {RV3-304} {RV1+304} {RV3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager|swamp_hut|witch_hut|mangrove_pillager_tower|aquaculture|pond|fisherman' --need basewater
 ## SQ-EFB-17 (water reach, offline)
 @group none, offline
 @commands `bash tools/test_worldgen_tools.sh`, EarthFillTest
 @pass the new checks pass: `water reach 2 ... (x 3..12 = 10)`, `no water reach ... beard's reach 6 as before`, `water reach leaves air at the beard's reach`, `bury: water reach 2 too`, `water reach above the beard's reach is capped at it`, and the three `withBases` checks (`no base tag`, `sand base`, `stone + sand`); `ALL` for the test
 @fails `EarthFill.Reach.ofWater` / `countEarth`'s water branch; `withBases` cache
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell bash $INST/tools/test_worldgen_tools.sh > ../twt17.txt 2>&1; grep -nE "water reach|withBases|no base tag|sand base|stone \+ sand|EarthFillTest|ALL|FAIL" ../twt17.txt | head -40; ! grep -qE "FAIL|error:|Could not find or load main class" ../twt17.txt
+look the shell output lists the water reach checks and the three withBases checks, and EarthFillTest prints ALL
 ## SQ-EFB-18 (water reach, config)
 @group B
-@commands boot; `grep -n 'waterReach' OUT/srv/config/creativeengineering-common.toml`; `grep -c 'over water' logs/latest.log`
+@commands boot; `grep -n 'waterReach' OUT/srv/config/creativeworldgen-common.toml`; `grep -c 'over water' logs/latest.log`
 @pass Forge wrote `waterReach = 2` under `[worldgen.earth_fill]` with its comment; earth-fill lines still parse (`... over water (limit 24) ...`); no config error
 @fails key missing: the jar in `srv/mods` is not the 00:42 build
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -n -B2 'waterReach' config/creativeworldgen-common.toml | head -8; grep -qE '^\s*waterReach = 2' config/creativeworldgen-common.toml
+bootexpect \[earth-fill\].* over water \(limit \d+\)
+bootreject (?i)creativeworldgen-common\.toml.*(error|invalid|incorrect)
 ## SQ-EFB-19 (water reach, live)
 @group B, plus a second fresh world (new level-name) with `waterReach = 6`
-@commands the SQ-EFB-05 river / lake square and the SQ-EFB-06 coast square in both worlds, Chunky r 300 each; per world: `grep -cE 'CANCELLED' logs/latest.log` over-water lines, `grep -c 'pruned'`, census `/cwglocate census 96 <x> <z>` village and outpost counts; `/zq under` tiles in the 2 world
+@commands the SQ-EFB-05 river / lake square and the SQ-EFB-06 coast square in both worlds, Chunky r 300 each; per world: `grep -cE 'CANCELLED' logs/latest.log` over-water lines, `grep -c 'pruned'`, census `/cwglocate census 96 <x> <z>` village and outpost counts; `/cdevtest under` tiles in the 2 world
 @pass world 2: every kept start `water-below max` 2 or less under its earth; more over-water cancels and prunes than world 6 (record both counts and the share of villages lost near water; flag to the owner if villages drop by more than a third in the river square); the kept villages near rivers stand on filled banks, no house on a 3+ deep fill (LOOK one from the water)
 @fails no difference between worlds: the value is not read per start (`EarthFill.reach()`); villages lost wholesale instead of pruned: `pruneMaxHanging` 8 now trips on water (pieces dropped) and the start still cancels, give the lines
-@draft no batch holds this row yet
+@draft compares two fresh worlds booted with different tomls (waterReach 2 and 6): two boots, which one row cannot hold; per world run the SQ-EFB-05 and -06 steps (/cdevtest under tiles, efb_judge.py under --fail deepwater, efb_judge.py log summary, /cwglocate census 96), then compare the two worlds' counts in the run doc
 ## SQ-EFB-20 (sand base, tags)
 @group B
-@commands `/zq blocktag creativeengineering:earth_fill/sand_base`; `grep -i 'item_dict\|philips_sand' logs/latest.log` at startup; `/reload` then read `[earth-fill] blocks:` warnings
+@commands `/cdevtest tag block creativeworldgen:earth_fill/sand_base`; `grep -i 'item_dict\|philips_sand' logs/latest.log` at startup; `/reload` then read `[earth-fill] blocks:` warnings
 @pass the block tag lists the 8 `forge:sandstone` blocks, the terracottas and the 3 Philip's blocks; no unresolved-key warning for `philips_sand_stone_brick`, `philips_red_sand_stone_brick`, `philips_sandstone_tiles`; no `holds no block` warning
 @fails Philip's ids renamed in the jar: fix the keys in `item_dict.js` (startup, restart)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> cdevtest tag block creativeworldgen:earth_fill/sand_base
+expect verb=tag kind=block tag=creativeworldgen:earth_fill/sand_base n=\d+ (?=.*[=,]minecraft:sandstone\b)(?=.*[=,]minecraft:red_sandstone\b)(?=.*[=,]minecraft:terracotta\b)(?=.*[=,]philipsruins:sand_stone_brick\b)(?=.*[=,]philipsruins:red_sand_stone_brick\b)(?=.*[=,]philipsruins:sandstone_tiles\b)
+bootreject (?i)(unresolved|unknown|missing|not found).*philips_(sand_stone_brick|red_sand_stone_brick|sandstone_tiles)
+> reload
+sleep 20
+reject \[earth-fill\] blocks: .*(holds no block|is not a tag id)
+reject \[cdevtest\] verb=tag .*done=0
 ## SQ-EFB-21 (sand base, counted)
 @group B
-@commands a desert square with villages and a river or oasis (`/locate biome minecraft:desert`, `terralith:desert_oasis`), and a badlands square (`/locate structure towns_and_towers:village_badlands`); Chunky r 300 each; `grep -E 'village_desert\|fortified_desert\|village_badlands\|village_wooded_badlands\|pillager_outpost_desert\|pillager_outpost_badlands\|desert_structures\|badlands_start_dungeon\|village_temple' logs/latest.log`; `/zq under` tiles
+@commands a desert square with villages and a river or oasis (`/locate biome minecraft:desert`, `terralith:desert_oasis`), and a badlands square (`/locate structure towns_and_towers:village_badlands`); Chunky r 300 each; `grep -E 'village_desert\|fortified_desert\|village_badlands\|village_wooded_badlands\|pillager_outpost_desert\|pillager_outpost_badlands\|desert_structures\|badlands_start_dungeon\|village_temple' logs/latest.log`; `/cdevtest under` tiles
 @pass their lines show earth counts that include the sandstone / terracotta floor (a T&T badlands village logs hundreds of earth, not 0 to 16; size medium or larger); a house over a river or a cliff now logs over water / air and is pruned or the start cancelled; kept ones: `over6 0`, water-below max 2
-@fails earth still near 0: the structure tag did not load (`earth_fill.js`, `/reload`) or `withBases` not reached; check `/zq` that the structure is in `#creativeengineering:earth_fill/sand_base`
-@draft no batch holds this row yet
+@fails earth still near 0: the structure tag did not load (`earth_fill.js`, `/reload`) or `withBases` not reached; check `/zq` that the structure is in `#creativeworldgen:earth_fill/sand_base`
+@reviewed 2026-11-16
+shell grep -cE "nearest terralith:desert_oasis is at|Could not find" logs/latest.log > ../efb_loc_oa.n || true
+> execute positioned 0 70 0 run locate biome terralith:desert_oasis
+shell n=$(cat ../efb_loc_oa.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest terralith:desert_oasis is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest terralith:desert_oasis is at|Could not find/ in 600 s"; exit 1
+capture OA nearest terralith:desert_oasis is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_oa.n || true
+> chunky world minecraft:overworld
+> chunky center {OA1} {OA3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_oa.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {OA1-296} {OA3-296} {OA1-104} {OA3-104}
+sleep 15
+> cdevtest under {OA1-200} {OA3-200} 6 -
+> forceload remove {OA1-296} {OA3-296} {OA1-104} {OA3-104}
+> forceload add {OA1-296} {OA3-96} {OA1-104} {OA3+96}
+sleep 15
+> cdevtest under {OA1-200} {OA3} 6 -
+> forceload remove {OA1-296} {OA3-96} {OA1-104} {OA3+96}
+> forceload add {OA1-296} {OA3+104} {OA1-104} {OA3+296}
+sleep 15
+> cdevtest under {OA1-200} {OA3+200} 6 -
+> forceload remove {OA1-296} {OA3+104} {OA1-104} {OA3+296}
+> forceload add {OA1-96} {OA3-296} {OA1+96} {OA3-104}
+sleep 15
+> cdevtest under {OA1} {OA3-200} 6 -
+> forceload remove {OA1-96} {OA3-296} {OA1+96} {OA3-104}
+> forceload add {OA1-96} {OA3-96} {OA1+96} {OA3+96}
+sleep 15
+> cdevtest under {OA1} {OA3} 6 -
+> forceload remove {OA1-96} {OA3-96} {OA1+96} {OA3+96}
+> forceload add {OA1-96} {OA3+104} {OA1+96} {OA3+296}
+sleep 15
+> cdevtest under {OA1} {OA3+200} 6 -
+> forceload remove {OA1-96} {OA3+104} {OA1+96} {OA3+296}
+> forceload add {OA1+104} {OA3-296} {OA1+296} {OA3-104}
+sleep 15
+> cdevtest under {OA1+200} {OA3-200} 6 -
+> forceload remove {OA1+104} {OA3-296} {OA1+296} {OA3-104}
+> forceload add {OA1+104} {OA3-96} {OA1+296} {OA3+96}
+sleep 15
+> cdevtest under {OA1+200} {OA3} 6 -
+> forceload remove {OA1+104} {OA3-96} {OA1+296} {OA3+96}
+> forceload add {OA1+104} {OA3+104} {OA1+296} {OA3+296}
+sleep 15
+> cdevtest under {OA1+200} {OA3+200} 6 -
+> forceload remove {OA1+104} {OA3+104} {OA1+296} {OA3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell grep -cE "nearest towns_and_towers:village_badlands is at|Could not find" logs/latest.log > ../efb_loc_bv.n || true
+> execute positioned 0 70 0 run locate structure towns_and_towers:village_badlands
+shell n=$(cat ../efb_loc_bv.n 2>/dev/null || echo 0); for i in $(seq 600); do [ "$(grep -cE "nearest towns_and_towers:village_badlands is at|Could not find" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /nearest towns_and_towers:village_badlands is at|Could not find/ in 600 s"; exit 1
+capture BV nearest towns_and_towers:village_badlands is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+shell grep -c "Task finished" logs/latest.log > ../efb_ck_bv.n || true
+> chunky world minecraft:overworld
+> chunky center {BV1} {BV3}
+> chunky radius 300
+> chunky start
+shell n=$(cat ../efb_ck_bv.n 2>/dev/null || echo 0); for i in $(seq 1800); do [ "$(grep -cE "Task finished" logs/latest.log)" -gt "$n" ] && exit 0; sleep 1; done; echo "no new line /Task finished/ in 1800 s"; exit 1
+> forceload add {BV1-296} {BV3-296} {BV1-104} {BV3-104}
+sleep 15
+> cdevtest under {BV1-200} {BV3-200} 6 -
+> forceload remove {BV1-296} {BV3-296} {BV1-104} {BV3-104}
+> forceload add {BV1-296} {BV3-96} {BV1-104} {BV3+96}
+sleep 15
+> cdevtest under {BV1-200} {BV3} 6 -
+> forceload remove {BV1-296} {BV3-96} {BV1-104} {BV3+96}
+> forceload add {BV1-296} {BV3+104} {BV1-104} {BV3+296}
+sleep 15
+> cdevtest under {BV1-200} {BV3+200} 6 -
+> forceload remove {BV1-296} {BV3+104} {BV1-104} {BV3+296}
+> forceload add {BV1-96} {BV3-296} {BV1+96} {BV3-104}
+sleep 15
+> cdevtest under {BV1} {BV3-200} 6 -
+> forceload remove {BV1-96} {BV3-296} {BV1+96} {BV3-104}
+> forceload add {BV1-96} {BV3-96} {BV1+96} {BV3+96}
+sleep 15
+> cdevtest under {BV1} {BV3} 6 -
+> forceload remove {BV1-96} {BV3-96} {BV1+96} {BV3+96}
+> forceload add {BV1-96} {BV3+104} {BV1+96} {BV3+296}
+sleep 15
+> cdevtest under {BV1} {BV3+200} 6 -
+> forceload remove {BV1-96} {BV3+104} {BV1+96} {BV3+296}
+> forceload add {BV1+104} {BV3-296} {BV1+296} {BV3-104}
+sleep 15
+> cdevtest under {BV1+200} {BV3-200} 6 -
+> forceload remove {BV1+104} {BV3-296} {BV1+296} {BV3-104}
+> forceload add {BV1+104} {BV3-96} {BV1+296} {BV3+96}
+sleep 15
+> cdevtest under {BV1+200} {BV3} 6 -
+> forceload remove {BV1+104} {BV3-96} {BV1+296} {BV3+96}
+> forceload add {BV1+104} {BV3+104} {BV1+296} {BV3+296}
+sleep 15
+> cdevtest under {BV1+200} {BV3+200} 6 -
+> forceload remove {BV1+104} {BV3+104} {BV1+296} {BV3+296}
+count \[cdevtest\] verb=under done=1 >= 9
+reject \[cdevtest\] verb=under .*done=0
+shell grep -E '\[earth-fill\] \S*(village_desert|fortified_desert|village_badlands|village_wooded_badlands|pillager_outpost_desert|pillager_outpost_badlands|desert_structures|badlands_start_dungeon|village_temple)' logs/latest.log | grep -v predicted | tail -12 | cut -c1-300
+shell grep -E '\[earth-fill\] towns_and_towers:village_badlands .*: [0-9]+\+? earth' logs/latest.log | grep -v predicted | sed -E 's/.*: ([0-9]+)\+? earth.*/\1/' | sort -n | tail -1 | awk '{ print "largest badlands village earth: " $1; exit ($1 < 100) }'
+shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id 'village_desert|fortified_desert|village_badlands|village_wooded_badlands|pillager_outpost_desert|pillager_outpost_badlands|desert_structures|badlands_start_dungeon|village_temple' --fail over6 --fail deepwater
 ## SQ-EFB-22 (deserts still work)
 @group B, both worlds of SQ-EFB-19
 @commands in the desert and badlands squares compare the two worlds: census counts of `minecraft:village_desert`, `terralith:fortified_desert_village`, `towns_and_towers:village_badlands`, the desert and badlands outposts, `minecraft:desert_pyramid`, `betterdeserttemples:desert_temple`; `grep -c` CANCELLED per id
 @pass dry desert (no water near): the same count within 10 % in both worlds (sandstone counted makes the size larger, so the air and mound limits grow with it); losses only at water and cliffs, each with a line naming over water / air; desert pyramids judged by their footprint as before; Better Desert Temples and the desert mimic unchanged (not in the tag); LOOK at 2 kept desert villages by an oasis: houses on sand banks, no floor over water
 @fails dry-desert villages lost: the larger earth count pushed a mound or air limit (sandstone floors on dunes), give the size and mound numbers; consider `sizes` or an override for `village_desert`
-@draft no batch holds this row yet
+@draft compares the census and CANCELLED counts of the two SQ-EFB-19 worlds (two boots, one row cannot hold them); per world: the SQ-EFB-21 squares, /cwglocate census 96 at each, efb_judge.py log --id the desert and badlands ids; the comparison and the oasis LOOK go in the run doc

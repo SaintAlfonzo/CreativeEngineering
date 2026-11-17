@@ -68,7 +68,7 @@ shell grep -iE "missing.*(oven|powdered_sugar_block|placed_)|Registry Object not
 @pass No "no COOKING section" / "no CROP_DROPS section" warning; overridden values name `creativedelight:`
 @fails `cd_core.js` did not register CDConfig, or ran after the first `cfg` call
 @from batches/r1101/cs4_boot3.qb
-shell grep -E "NCH.cfg\] (no .*COOKING|no .*CROP_DROPS|creativedelight:)" logs/kubejs/server.log | head -5 | cut -c1-200; grep "creativedelight config class" logs/kubejs/server.log | head -2 | cut -c1-200; grep -cE "section in any registered config" logs/kubejs/server.log
+shell grep -E "NCH.cfg\] (no .*COOKING|no .*CROP_DROPS|creativedelight:)" logs/kubejs/server.log | head -5 | cut -c1-200; grep "creativedelight config class" logs/kubejs/server.log | head -2 | cut -c1-200; grep -cE "section in any registered config" logs/kubejs/server.log; true
 kjsreject no COOKING section|no CROP_DROPS section
 look no missing-section WARN; overrides name creativedelight:
 
@@ -81,7 +81,7 @@ look no missing-section WARN; overrides name creativedelight:
 > reload
 waitlog (Reloaded|reload) 180
 sleep 15
-shell grep -iE "soil_yield|crop_drops|no switch in CDConfig" logs/kubejs/server.log | head -5 | cut -c1-200; grep -cE "Error occurred while handling event|ReferenceError" logs/kubejs/server.log
+shell grep -iE "soil_yield|crop_drops|no switch in CDConfig" logs/kubejs/server.log | head -5 | cut -c1-200; grep -cE "Error occurred while handling event|ReferenceError" logs/kubejs/server.log; true
 kjsreject no switch in CDConfig
 
 ## SQ-CDJ4-07 | lunchbox serializers
@@ -90,11 +90,13 @@ kjsreject no switch in CDConfig
 @pass Lunchbox serializers present (`LunchboxRecipes` registered from CD when Spice of Life is loaded)
 @fails Lunchbox registration guard or class path wrong
 @from batches/r1101/cs4_boot3.qb
+@reviewed 2026-11-16
 > give qa solapplepie:lunchbag
-> zq recipes creativeengineering:lunchbox
+> cdevtest recipes creativeengineering:lunchbox
 sleep 5
 shell grep -E "lunchbox" logs/latest.log | grep -iE "error|unknown|serializer" | head -3 | cut -c1-200
 look lunchbox recipes present (zq lists them), no unknown serializer
+reject verb=\S+ .*done=0
 
 ## SQ-CDJ4-08 | nested member content
 @group A
@@ -136,6 +138,7 @@ reject No entity was found
 @pass each pick gives 2 to 5 lemons (rerun after the 2026-11-02 mixin; r1102b gave 1 to 2) and resets the tree to age 2; each break 2 to 5 (more with Fortune); no mixin apply error
 @fails `farming/trees #3`, CD `LemonTreePickYieldMixin` (pick), `data/fruitsdelight/loot_tables/blocks/lemon_tree.json` (break)
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 > pbot spawn lem 135 -60 503 minecraft:overworld survival
 > pbot hold lem minecraft:air
 repeat 10
@@ -145,19 +148,20 @@ repeat 10
 > execute if block 135 -60 500 fruitsdelight:lemon_tree[age=2] run say LEM01 reset to age 2
 end
 sleep 2
-> zcount 131 -61 496 139 -56 506
+> cdevtest items 135 -59 500 5
 > clear lem fruitsdelight:lemon 0
 count LEM01 reset to age 2 == 10
-> kill @e[type=minecraft:item,x=135,y=-60,z=500,distance=..8]
 > clear lem
 repeat 10
 > setblock 135 -60 500 fruitsdelight:lemon_tree[age=4,half=lower]
 > setblock 135 -59 500 fruitsdelight:lemon_tree[age=4,half=upper]
-> zact break 135 -60 500 none
+> cdevtest break 135 -60 500
 end
-count \[zact\] break 135 -60 500 fruitsdelight:lemon_tree held none: true, .*fruitsdelight:lemon x[2-5]\b == 10
+count verb=break who=\S+ broken=true before="?fruitsdelight:lemon_tree == 10
+count verb=break drops=\S*fruitsdelight:lemon:[2-5]\b == 10
+reject verb=\S+ .*done=0
 > pbot remove lem
-look pick: zcount item:fruitsdelight:lemon plus the bot's "Found N" = 20 to 50 over 10 picks
+look pick: the verb=items fruitsdelight:lemon count plus the bot's "Found N" = 20 to 50 over 10 picks
 
 ## SQ-LEM-02 | lemon cutting yields 8 slices
 @group A
@@ -165,11 +169,13 @@ look pick: zcount item:fruitsdelight:lemon plus the bot's "Found N" = 20 to 50 o
 @pass both give 8 Lemon Slices (knife also 1 Lemon Seeds); `fruitsdelight:lemon_cutting` and `fruitsdelight:cutting/lemon_slice` absent (remade 2026-11-02, r1102b gave 4)
 @fails `fruitsdelight/recipes.js` Lemon yield
 @from batches/r1102b/s3_A.qb
-> zq rdetail lemon_cutting
-> zq rdetail cutting/lemon_slice
-expect \[zq\] fruitsdelight:lemon_cutting \{.*-> 8 \S*lemon_slice
-expect \[zq\] fruitsdelight:cutting/lemon_slice \{.*-> 8 \S*lemon_slice
+@reviewed 2026-11-16
+> cdevtest rdetail lemon_cutting
+> cdevtest rdetail cutting/lemon_slice
+expect id=fruitsdelight:lemon_cutting serializer=\S+ result=\S*lemon_slice\*8
+expect id=fruitsdelight:cutting/lemon_slice serializer=\S+ result=\S*lemon_slice\*8
 look knife recipe also gives 1 Lemon Seeds (second result, not printed by rdetail: recipe dump or JEI)
+reject verb=\S+ .*done=0
 
 ## SQ-JSL-01 | jams and jellies take slices; the old _from_slices recipes are gone
 @group A
@@ -177,15 +183,17 @@ look knife recipe also gives 1 Lemon Seeds (second result, not printed by rdetai
 @pass each whole-fruit slot is `#forge:fruits/orange` or Orange Slice (lemon: `#forge:fruits/lemon` or Lemon Slice); the lemon recipes keep their separate Lemon Slice slot; pot container `vintagedelight:empty_mason_jar`; `creative_delight:farmersdelightcooking/{orange,lemon}_jam_from_slices`, `creative_delight:createmixing/{orange,lemon}_jam_from_slices` and their `sliceanddice:cooking/creative_delight/...` copies absent
 @fails `baking/sweets #6`, `dishes/jams #6`, CD `fruitsdelight/recipes.js` Jams take slices
 @from batches/r1103/sB_2.qb
-> zq rdetail farmersdelight:cooking/orange_jelly
-> zq rdetail farmersdelight:cooking/lemon_jelly
-> zq rdetail fruitsdelight:mixing/flowing_orange_jam
-> zq rdetail fruitsdelight:mixing/flowing_lemon_jam
-> zq recipes jam_from_slices
-waitlog \[zq\] recipes matching jam_from_slices: 30
-expect \[zq\] recipes matching jam_from_slices: 0
-count \[zq\] rdetail matching \S+: [1-9]\d*$ == 4
+@reviewed 2026-11-16
+> cdevtest rdetail farmersdelight:cooking/orange_jelly
+> cdevtest rdetail farmersdelight:cooking/lemon_jelly
+> cdevtest rdetail fruitsdelight:mixing/flowing_orange_jam
+> cdevtest rdetail fruitsdelight:mixing/flowing_lemon_jam
+> cdevtest recipes jam_from_slices
+waitlog verb=recipes text=jam_from_slices n= 30
+expect verb=recipes text=jam_from_slices n=0
+count verb=rdetail text=\S+ n=[1-9]\d*$ == 4
 look each whole-fruit slot lists the fruit (#forge:fruits/orange / lemon) and the slice; the lemon recipes keep a separate Lemon Slice slot; the pot recipes' container is vintagedelight:empty_mason_jar (rdetail+ fields)
+reject verb=\S+ .*done=0
 
 ## SQ-JSL-02 | Cooking Pot with an Empty Mason Jar: orange jam from slices, then lemon jam (x 130, 134)
 @group A
@@ -193,6 +201,7 @@ look each whole-fruit slot lists the fruit (#forge:fruits/orange / lemon) and th
 @pass Orange Jam, then Lemon Jam, each in the mason jar
 @fails same
 @from batches/r1103/sB_2.qb
+@reviewed 2026-11-16
 > zsb potnbt fruitsdelight:orange_jelly
 > zsb potnbt fruitsdelight:lemon_jelly
 waitlog \[zsb\] potnbt fruitsdelight:lemon_jelly 30
@@ -204,10 +213,14 @@ capture JT2 \[zsb\] potrecipe \S+ cook (\d+) -> \d+ fruitsdelight:lemon_jelly
 > setblock 134 -60 500 minecraft:campfire[lit=true]
 > setblock 134 -59 500 farmersdelight:cooking_pot
 > data merge block 134 -59 500 {Inventory:{Size:9,Items:[{Slot:0b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:1b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:2b,id:"fruitsdelight:lemon_slice",Count:1b},{Slot:3b,id:"minecraft:sugar",Count:1b},{Slot:7b,id:"vintagedelight:empty_mason_jar",Count:1b}]}}
-shell m={JT1}; [ {JT2} -gt $m ] && m={JT2}; sleep $(( m / 20 + 15 )); echo "waited $(( m / 20 + 15 )) s"
+# both pots start together: the two warps add up to at least the longer cook time plus 300 ticks
+> cdevtest tickwarp {JT1+300}
+waitlog verb=tickwarp end=done ticks={JT1+300} 120
+> cdevtest tickwarp {JT2+300}
+waitlog verb=tickwarp end=done ticks={JT2+300} 120
 > data get block 130 -59 500 Inventory
 > data get block 134 -59 500 Inventory
 expect 130, -59, 500 has the following block data: .*Slot: 8b, id: "fruitsdelight:orange_jelly"
 expect 134, -59, 500 has the following block data: .*Slot: 8b, id: "fruitsdelight:lemon_jelly"
-reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zq|zsb|zlbs)\] (error|unknown))
+reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[(zsb|zlbs)\] (error|unknown)|verb=tickwarp .*done=0)
 look slot 8 holds the jam (Orange Jam / Lemon Jam = orange_jelly / lemon_jelly) and the mason jar was used; on a FAIL check whether slot 6 holds the meal (no container taken) or the inputs stayed (no recipe matched)

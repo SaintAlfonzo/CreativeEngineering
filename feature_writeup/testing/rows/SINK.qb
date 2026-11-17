@@ -16,16 +16,36 @@
 @commands BR-53 and BR-55: first person, walk slowly slime -> honey -> slime, wool -> mud -> wool, wool -> dirt path; walk to a wool edge over a 1-block drop
 @pass LOOK: no upward pop at any seam; at the edge the view stays sunk until you fall
 @fails `SinkingRender.depthAt` corner fallback; `support` top check
-@draft no batch holds this row yet
+@owner true
+@draft walking feel across seams and a ledge (BR-53, BR-55): a person judges the view in motion; a `walk` step plus shots could stage it, but the pass is a feel
 ## CQ-SINK-02
 @group client
 @commands BR-54: F5, a pig on wool beside a pig on a honey block
 @pass LOOK: equal depth
 @fails `support` own-sink branch
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# side by side in front of the player (yaw 0 faces +z; at yaw 90 both pigs were out of view, one behind the other)
+> fill ~-3 ~-1 ~4 ~-1 ~-1 ~4 minecraft:white_wool
+> fill ~1 ~-1 ~4 ~3 ~-1 ~4 minecraft:honey_block
+> summon minecraft:pig ~-2 ~ ~4 {NoAI:1b}
+> summon minecraft:pig ~2 ~ ~4 {NoAI:1b}
+do {"look": {"yaw": 0, "pitch": 10}}
+do {"wait": 20}
+shot pigs_side
+look the two pigs sink to equal depth (the F5 third-person view of the row is the same judgement on any pig)
 ## CQ-SINK-03
 @group client
 @commands BR-56: drop items on wool, sand, slime; then add sand to `creativecompat:sinking_hides_items` in `blocktags.js`, `/reload`
 @pass LOOK: items lie on the texture; after the edit the sand item sinks in, wool unchanged; revert the edit
 @fails `HIDES_ITEMS` check in `support`; ItemPhysic renders through `EntityRenderDispatcher#render`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> setblock ~ ~-1 ~3 minecraft:white_wool
+> setblock ~2 ~-1 ~3 minecraft:sand
+> setblock ~-2 ~-1 ~3 minecraft:slime_block
+> summon minecraft:item ~ ~1 ~3 {Item:{id:"minecraft:apple",Count:1b}}
+> summon minecraft:item ~2 ~1 ~3 {Item:{id:"minecraft:apple",Count:1b}}
+> summon minecraft:item ~-2 ~1 ~3 {Item:{id:"minecraft:apple",Count:1b}}
+do {"look": {"yaw": 0, "pitch": 35}}
+do {"wait": 40}
+shot items_on_blocks
+look items lie on the texture of wool, sand and slime. The tag-edit half (add sand to `creativecompat:sinking_hides_items` in blocktags.js, /reload, the sand item sinks in, revert) edits a pack script: do it by hand in the same session

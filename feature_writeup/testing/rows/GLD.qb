@@ -63,25 +63,26 @@ look every other line as in SQ-SALT-05 / -06 (perf/runs/r1102b/r rows SQ-SALT-06
 @pass `salt:salting` recipes and `#salt:can_be_salted` present with the same counts as the pre-move dump in `exported/` (`#salt:can_be_salted` holds 290 entries, salt.md 5); the two Create: The Salt mixing recipes present; the removed ids absent; the rebuilt raw rock salt to 4 salt dust recipe present
 @fails A changed count: diff against the pre-move dump; ids are taken from the upstream jars unchanged, so a difference points at a script or the member not loading
 @from batches/r1103/sA_2.qb
-> zq bytype salt:salting
-waitlog \[zq\] bytype salt:salting: \d+ 60
-> zq itemtag salt:can_be_salted
-> zq recipes create__the_salt:
-waitlog \[zq\] recipes matching create__the_salt:: \d+ 60
-> zq recipes create__the_salt:bread
-> zq recipes create__the_salt:cooked_beef_salted
-> zq recipes create__the_salt:salt_create_
-> zq recipes salt:salt_from_raw_rock_salt
-> zq makes vintagedelight:salt_dust
-waitlog \[zq\] makes vintagedelight:salt_dust: \d+ 60
-expect \[zq\] recipes matching create__the_salt:bread: [1-9]
-expect \[zq\] recipes matching create__the_salt:cooked_beef_salted: [1-9]
-expect \[zq\] recipes matching create__the_salt:salt_create_: 0
-expect \[zq\] recipes matching salt:salt_from_raw_rock_salt: 0
+@reviewed 2026-11-16
+> cdevtest bytype salt:salting
+> cdevtest tag item salt:can_be_salted
+> cdevtest recipes create__the_salt: max=500
+> cdevtest recipes create__the_salt:bread
+> cdevtest recipes create__the_salt:cooked_beef_salted
+> cdevtest recipes create__the_salt:salt_create_
+> cdevtest recipes salt:salt_from_raw_rock_salt
+> cdevtest makes vintagedelight:salt_dust
+waitlog verb=makes item=vintagedelight:salt_dust n=\d+ 60
+expect verb=bytype serializer=salt:salting n=[1-9]
+expect verb=tag kind=item tag=salt:can_be_salted n=[1-9]
+expect verb=recipes text=create__the_salt:bread n=[1-9]
+expect verb=recipes text=create__the_salt:cooked_beef_salted n=[1-9]
+expect verb=recipes text=create__the_salt:salt_create_ n=0\b
+expect verb=recipes text=salt:salt_from_raw_rock_salt n=0\b
 shell B="$INST/tools/scratch_query/batches/r1103/sA_baseline"; echo "baseline salting: $(grep -c ',salt:salting,' $B/salt_recipes_1030.csv)"; echo "baseline create__the_salt / create_salt ids: $(grep -cE '^(create__the_salt|create_salt):' $B/salt_recipes_1030.csv)"; python3 -c "import json;d=json.load(open('$B/salt_item_tags_1030.json'));print('baseline #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
 shell D="${B0:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported"; echo "Boot 0 salting: $(grep -c ',salt:salting,' $D/recipes/all.csv)  create__the_salt ids: $(grep -cE '^create__the_salt:' $D/recipes/all.csv)"; python3 -c "import json;d=json.load(open('$D/tags/item_tags.json'));print('Boot 0 #salt:can_be_salted', len(d.get('salt:can_be_salted',[])))"
 look salting count and Create: The Salt recipe count match the baseline (ids unchanged); #salt:can_be_salted = baseline 148 plus the SQ-SALT2-01 additions (Calamari Roll, Crab Rangoon, kangaroo burger) minus the refused three; the raw rock salt to 4 salt dust recipe present among the salt_dust makers
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-SLT-05 | Salt config read from salt-common.toml: DissolvingChance 1.0 dissolves the Salt Layer in 1 tick
 @group A
@@ -139,6 +140,7 @@ look canned_goods version 1.19.2-3-ce-19.2-01 in the debug.log mod list, found b
 @pass Items exist; `[cans] registered 277` (r1103; or the current count); servings NBT and tags `#creativeengineering:cans/servings/*` on the held can
 @fails `canned_goods:` ids missing: member not nested or disabled in `creativedelight-common.toml` `[members]`
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > pbot spawn sacng {SAH1+8} {SAH2} {SAH3+30} minecraft:overworld survival
 sleep 2
 > clear sacng
@@ -146,18 +148,17 @@ sleep 2
 > give sacng canned_goods:empty_can
 > give sacng canned_goods:crushed_empty_can
 > give sacng creativeengineering:canned_beetroot
-> zp inv sacng
+> pbot inv sacng get
 > data get entity sacng Inventory
-> zq tagsof creativeengineering:canned_beetroot
-> zq tagsof canned_goods:canned_beef
-waitlog \[zq\] item tags of canned_goods:canned_beef 30
-expect inv sacng: .*canned_goods:canned_beef
-expect inv sacng: .*creativeengineering:canned_beetroot
-expect item tags of creativeengineering:canned_beetroot: .*creativeengineering:cans/servings/
+> cdevtest tagsof creativeengineering:canned_beetroot
+> cdevtest tagsof canned_goods:canned_beef
+expect verb=pbot.inv bot=sacng slot=\d+ item=canned_goods:canned_beef\*
+expect verb=pbot.inv bot=sacng slot=\d+ item=creativeengineering:canned_beetroot\*
+expect verb=tagsof id=creativeengineering:canned_beetroot .*item_tags=\S*creativeengineering:cans/servings/
 shell grep -hE "\[cans\] registered" logs/kubejs/startup.log | head -3
 > pbot remove sacng
 look "[cans] registered N" (228 in r1102b, or the current count); servings NBT on the held cans in the Inventory line
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-CNG-03 | old world: the dyed golem keeps 11b, the other 14b
 @group A
@@ -253,6 +254,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @pass Boot succeeds (no missing-dependency screen); both gives work; plants survive on end stone and grow; stew eaten with nothing returned; no NCH or script error from `endersdelight/additions.js` (meal rows skipped); Crushed Void Pepper knife and millstone recipes present in JEI or `/kubejs` recipe dump; startup log has no `[CE potions]` error and no `registerPotionBrewing` exception (the levitation reagent is End's Delight's shulker meat slice, always present)
 @fails Missing dependency stop: `endersdelight` dependency not `mandatory=false`; plant pops off: soil tag rows still behind the `requires: endersdelight` header (`endersdelight/tags.js`); recipe errors: the `global.CD.on('endersdelight')` gate in `additions.js`
 @from batches/r1103/sA_4.qb
+@reviewed 2026-11-16
 shell grep -nE "Error occurred while handling event|additions\.js|endersdelight" logs/latest.log | grep -iE "error|exception|missing" | head -10 || true
 shell ! grep -hE "(additions\.js|endersdelight/).*(rror|xception)" logs/kubejs/server.log logs/kubejs/startup.log
 > pbot spawn saend {SBH1+8} 202 {SBH3+8} minecraft:overworld survival
@@ -260,7 +262,7 @@ sleep 2
 > clear saend
 > give saend endersdelight:voidpepper 4
 > give saend endersdelight:amberveil_stew 1
-> zp inv saend
+> pbot inv saend get
 > fill {SBH1} 199 {SBH3} {SBH1+12} 199 {SBH3+4} minecraft:glass
 > fill {SBH1} 200 {SBH3} {SBH1+8} 200 {SBH3} minecraft:end_stone
 > setblock {SBH1} 201 {SBH3} endersdelight:amberveil_mushroom
@@ -268,32 +270,33 @@ sleep 2
 > setblock {SBH1+4} 201 {SBH3} endersdelight:chorus_flame_block[age=0]
 > setblock {SBH1+6} 201 {SBH3} endersdelight:chorus_flame_block[age=0]
 > setblock {SBH1+8} 201 {SBH3} endersdelight:voidpepper_block[down=true]
-> gamerule randomTickSpeed 100
-sleep 40
-> gamerule randomTickSpeed 3
+> cdevtest randomtick {SBH1} 200 {SBH3} {SBH1+8} 202 {SBH3} 20
+waitlog verb=randomtick rounds=20 60
 > execute if block {SBH1} 201 {SBH3} endersdelight:amberveil_mushroom run say SA4 p1 ok
 > execute if block {SBH1+2} 201 {SBH3} endersdelight:ethereal_saffron_bush run say SA4 p2 ok
 > execute if block {SBH1+4} 201 {SBH3} endersdelight:chorus_flame_block run say SA4 p3 ok
 > execute if block {SBH1+8} 201 {SBH3} endersdelight:voidpepper_block run say SA4 p4 ok
-> zq ages {SBH1+4} 201 {SBH3} {SBH1+6} 201 {SBH3} endersdelight:chorus_flame_block
+> cdevtest ages {SBH1+4} 201 {SBH3} {SBH1+6} 201 {SBH3} endersdelight:chorus_flame_block
 > data get block {SBH1+8} 201 {SBH3}
-> zq count {SBH1-2} 199 {SBH3-2} {SBH1+12} 203 {SBH3+4} endersdelight:voidpepper_block
+> cdevtest count {SBH1-2} 199 {SBH3-2} {SBH1+12} 203 {SBH3+4} endersdelight:voidpepper_block
 > pbot hold saend endersdelight:amberveil_stew
-> zp eat saend
-> zq makes endersdelight:crushed_voidpepper
-> zq rdetail crushed_voidpepper
-waitlog \[zq\] makes endersdelight:crushed_voidpepper: \d+ 30
-sleep 3
-expect inv saend: .*endersdelight:voidpepper
-expect inv saend: .*endersdelight:amberveil_stew
+> pbot hunger saend 10
+> pbot eat saend
+waitlog verb=pbot.useitem bot=saend end=finish item=endersdelight:amberveil_stew 20
+> pbot inv saend get
+> cdevtest makes endersdelight:crushed_voidpepper
+> cdevtest rdetail crushed_voidpepper
+expect verb=pbot.inv bot=saend slot=\d+ item=endersdelight:voidpepper\*
+expect verb=pbot.inv bot=saend slot=\d+ item=endersdelight:amberveil_stew\*
 expect SA4 p1 ok
 expect SA4 p2 ok
 expect SA4 p3 ok
 expect SA4 p4 ok
-expect \[zq\] makes endersdelight:crushed_voidpepper: [2-9]
+expect verb=ages block=endersdelight:chorus_flame_block prop=age n=2 mean=(?!0\.000)
+expect verb=makes item=endersdelight:crushed_voidpepper n=[2-9]
 > pbot remove saend
-look chorusflame ages above 0 (40 s at randomTickSpeed 100, bot in range), void pepper count above 1 or spreading; eat line: hand now empty or the Shulker Bowl per the dish (the row says nothing returned: judge against ends_delight.md 5.9); crushed void pepper: a knife (cutting) and a millstone / milling recipe
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|zp)\] (error|no player))
+look chorusflame ages above 0 (20 random ticks per block, about 40 s at randomTickSpeed 100), void pepper count above 1 or spreading; eat end line result=: empty or the Shulker Bowl per the dish (the row says nothing returned: judge against ends_delight.md 5.9); crushed void pepper: a knife (cutting) and a millstone / milling recipe
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-04 | chorusflameGrowthSlow 0: chorusflame on end stone stays age 0
 @group A
@@ -301,21 +304,21 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Chorusflame stays age 0 on end stone (config still read under the old file name); with the switch off no `creativedelight:` Void Pepper or 1.1.4 meal recipe
 @fails Config not read: `EAConfig` registered under the wrong mod container; recipes still there: `global.CD.on` / `CDConfig.isMember`
 @from batches/r1103/sA_3.qb
+@reviewed 2026-11-16
 > fill {SAH1+30} {SAH2-1} {SAH3+30} {SAH1+38} {SAH2-1} {SAH3+30} minecraft:end_stone
 > setblock {SAH1+30} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
 > setblock {SAH1+32} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
 > setblock {SAH1+34} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
 > setblock {SAH1+36} {SAH2} {SAH3+30} endersdelight:chorus_flame_block[age=0]
 > pbot spawn saenm {SAH1+34} {SAH2+3} {SAH3+34} minecraft:overworld creative
-> gamerule randomTickSpeed 300
-sleep 40
-> gamerule randomTickSpeed 3
-> zq ages {SAH1+30} {SAH2} {SAH3+30} {SAH1+36} {SAH2} {SAH3+30} endersdelight:chorus_flame_block
-waitlog \[zq\] (ages|done) 30
+> cdevtest randomtick {SAH1+30} {SAH2} {SAH3+30} {SAH1+36} {SAH2} {SAH3+30} 60
+waitlog verb=randomtick rounds=60 60
+> cdevtest ages {SAH1+30} {SAH2} {SAH3+30} {SAH1+36} {SAH2} {SAH3+30} endersdelight:chorus_flame_block
 shell grep -nE "chorusflameGrowthSlow" config/enders_additions-common.toml
 > pbot remove saenm
-look ages histogram all 0 (4 plants, 40 s at randomTickSpeed 300 with a bot in range); with the 0.1 default most would grow
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|\[zq\] error)
+expect verb=ages block=endersdelight:chorus_flame_block prop=age n=4 mean=0.000 hist=0:4
+look ages histogram all 0 (4 plants, 60 random ticks each, about 40 s at randomTickSpeed 300); with the 0.1 default most would grow
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-04b | members.enders_additions false, /reload: no Void Pepper or 1.1.4 meal recipe from Creative Delight
 @group A
@@ -323,20 +326,19 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass The members file lists `enders_additions` after `ends_delight`; the toml has `[members] enders_additions = true` and the boot log has no `Incorrect key members.enders_additions` line; with false the `creativedelight:` Void Pepper and 1.1.4 meal recipes are gone, with true they are back
 @fails Key corrected to null: `bundle_extra_mods` not read by `writeMembersList` (CD `build.gradle`) or missing in `members/ends/gradle.properties`
 @from batches/r1103/sA_3.qb
-> zq uses endersdelight:voidpepper
-> zq recipes creativedelight:endersdelight
-waitlog \[zq\] recipes matching creativedelight:endersdelight: \d+ 30
+@reviewed 2026-11-16
+> cdevtest uses endersdelight:voidpepper
+> cdevtest recipes creativedelight:endersdelight
 shell python3 "$INST/tools/scratch_query/qrun.py" toml config/creativedelight-common.toml members enders_additions false && grep -nE "enders_additions" config/creativedelight-common.toml
 > reload
 waitlog (Reloaded|reload) 120
 sleep 10
-> zq uses endersdelight:voidpepper
-> zq makes endersdelight:crushed_voidpepper
-> zq makes endersdelight:amberveil_stew
-> zq recipes creativedelight:endersdelight
-waitlog \[zq\] recipes matching creativedelight:endersdelight: \d+ 30
+> cdevtest uses endersdelight:voidpepper
+> cdevtest makes endersdelight:crushed_voidpepper
+> cdevtest makes endersdelight:amberveil_stew
+> cdevtest recipes creativedelight:endersdelight
 look before / after: the uses and recipes lines lose every creativedelight: Void Pepper recipe and the 1.1.4 meals (pot recipes of amberveil_stew etc.) after the switch; if nothing changes, the switch is read only at startup (note it; the row says /reload)
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-05 | spice and End soil tags, with Ender's Delight 1.2.2 (the without half: SQ-ENM-05b in sA_4.qb)
 @group A
@@ -344,15 +346,15 @@ reject (Unknown or incomplete command|\[zq\] error)
 @pass Spices hold `endersdelight:voidpepper` and `crushed_voidpepper` in both boots; soil_slow holds `minecraft:end_stone`; soil_fast holds the tilled end stone
 @fails Missing without 1.2.2: the tag rows were not moved out of `endersdelight/tags.js`
 @from batches/r1103/sA_2.qb passed
-> zq itemtag creativeengineering:spices
-> zq blocktag creativedelight:end_plant_soil_slow
-> zq blocktag creativedelight:end_plant_soil_fast
-waitlog \[zq\] blocktag creativedelight:end_plant_soil_fast 30
-expect itemtag creativeengineering:spices .*endersdelight:voidpepper( |$)
-expect itemtag creativeengineering:spices .*endersdelight:crushed_voidpepper( |$)
-expect blocktag creativedelight:end_plant_soil_slow .*minecraft:end_stone( |$)
-expect blocktag creativedelight:end_plant_soil_fast .*endercrop:tilled_end_stone( |$)
-reject (Unknown or incomplete command|\[zq\] error)
+@reviewed 2026-11-16
+> cdevtest tag item creativeengineering:spices
+> cdevtest tag block creativedelight:end_plant_soil_slow
+> cdevtest tag block creativedelight:end_plant_soil_fast
+expect verb=tag kind=item tag=creativeengineering:spices .*ids=(\S*,)?endersdelight:voidpepper(,|$)
+expect verb=tag kind=item tag=creativeengineering:spices .*ids=(\S*,)?endersdelight:crushed_voidpepper(,|$)
+expect verb=tag kind=block tag=creativedelight:end_plant_soil_slow .*ids=(\S*,)?minecraft:end_stone(,|$)
+expect verb=tag kind=block tag=creativedelight:end_plant_soil_fast .*ids=(\S*,)?endercrop:tilled_end_stone(,|$)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-ENM-05b | spice and End soil tags without Ender's Delight 1.2.2
 @group A
@@ -360,15 +362,15 @@ reject (Unknown or incomplete command|\[zq\] error)
 @pass Both boots: the slice brews Potion of Levitation (`kubejs:levitation`), lengthen and amplify steps work; the filet is not a reagent (merged into the slice); the shell brews nothing; no `[CE potions] mix skipped ... levitation` line
 @fails `mix skipped ... reagent not registered`: `ends_delight` member missing from the CD jar (then the shell is used instead, also logged)
 @from batches/r1103/sA_4.qb
-> zq itemtag creativeengineering:spices
-> zq blocktag creativedelight:end_plant_soil_slow
-> zq blocktag creativedelight:end_plant_soil_fast
-waitlog \[zq\] blocktag creativedelight:end_plant_soil_fast 30
-expect itemtag creativeengineering:spices .*endersdelight:voidpepper( |$)
-expect itemtag creativeengineering:spices .*endersdelight:crushed_voidpepper( |$)
-expect blocktag creativedelight:end_plant_soil_slow .*minecraft:end_stone( |$)
-expect blocktag creativedelight:end_plant_soil_fast .*endercrop:tilled_end_stone( |$)
-reject (Unknown or incomplete command|\[zq\] error)
+@reviewed 2026-11-16
+> cdevtest tag item creativeengineering:spices
+> cdevtest tag block creativedelight:end_plant_soil_slow
+> cdevtest tag block creativedelight:end_plant_soil_fast
+expect verb=tag kind=item tag=creativeengineering:spices .*ids=(\S*,)?endersdelight:voidpepper(,|$)
+expect verb=tag kind=item tag=creativeengineering:spices .*ids=(\S*,)?endersdelight:crushed_voidpepper(,|$)
+expect verb=tag kind=block tag=creativedelight:end_plant_soil_slow .*ids=(\S*,)?minecraft:end_stone(,|$)
+expect verb=tag kind=block tag=creativedelight:end_plant_soil_fast .*ids=(\S*,)?endercrop:tilled_end_stone(,|$)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 @@text
 @@text Writeup tests: ENM-01 to ENM-05 in ends_delight.md 5.9.
@@ -407,44 +409,50 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @pass Every one is edible at full hunger. Golden: Regeneration amp 1 for 100 t, Absorption amp 0 for 2400 t. Enchanted: Regeneration amp 1 400 t, Resistance amp 0 6000 t, Fire Resistance 6000 t, Absorption amp 3 2400 t. Golden carrot behaves like the golden bread. Golden and enchanted foods, stews and honeys stack to 16 (`/give ... 20` gives 16 + 4), the golden apple, golden carrot and enchanted golden apple too; the golden and enchanted milk buckets and cakes stack to 8; enchanted items show a glint (plan_scratch_bugfix_1103 7.1)
 @fails Wrong values: `GoldenItems.golden()` / `enchanted()`; carrot plain vanilla: the `minecraft` DeferredRegister (`VANILLA_ITEMS`) not registered
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > pbot spawn sagld {SAH1+10} {SAH2} {SAH3+40} minecraft:overworld survival
 sleep 2
 > clear sagld
-> zp hunger sagld 20
-> zq item goldenfood:enchanted_golden_bread
-> zq item minecraft:enchanted_golden_apple
-> zq item goldenfood:golden_bread
+> pbot hunger sagld 20
+> cdevtest item goldenfood:enchanted_golden_bread
+> cdevtest item minecraft:enchanted_golden_apple
+> cdevtest item goldenfood:golden_bread
 > effect clear sagld
 > pbot hold sagld goldenfood:golden_bread
-> zp hunger sagld 20
+> pbot hunger sagld 20
 > sa canuse sagld
-> zp eat sagld
-> zp effects sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_bread 20
+> cdevtest player sagld
 > effect clear sagld
 > pbot hold sagld goldenfood:enchanted_golden_bread
-> zp hunger sagld 20
+> pbot hunger sagld 20
 > sa canuse sagld
-> zp eat sagld
-> zp effects sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_bread 20
+> cdevtest player sagld
 > effect clear sagld
 > pbot hold sagld minecraft:golden_carrot
-> zp hunger sagld 20
+> pbot hunger sagld 20
 > sa canuse sagld
-> zp eat sagld
-> zp effects sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=minecraft:golden_carrot 20
+> cdevtest player sagld
 > effect clear sagld
 > pbot hold sagld minecraft:enchanted_golden_apple
-> zp hunger sagld 20
+> pbot hunger sagld 20
 > sa canuse sagld
-> zp eat sagld
-> zp effects sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=minecraft:enchanted_golden_apple 20
+> cdevtest player sagld
 > effect clear sagld
-waitlog \[zp\] effects sagld 30
-expect item goldenfood:enchanted_golden_bread: .*max stack 1$
-expect item minecraft:enchanted_golden_apple: .*max stack 1$
+expect verb=item item=goldenfood:enchanted_golden_bread .*max_stack=1\b
+expect verb=item item=minecraft:enchanted_golden_apple .*max_stack=1\b
 count \[sa\] canuse sagld .* food 20: (CONSUME|SUCCESS) using=true >= 4
-look golden bread: Regeneration amp 1 100t, Absorption amp 0 2400t; enchanted bread and enchanted apple: Regeneration amp 1 400t, Resistance amp 0 6000t, Fire Resistance 6000t, Absorption amp 3 2400t; golden carrot as golden bread. Glint: client
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+count verb=pbot.useitem bot=sagld end=finish == 4
+expect verb=player name=sagld effects=\S*minecraft:fire_resistance:0:
+look the four effects lines in order (golden bread, enchanted bread, golden carrot, enchanted apple): golden bread: Regeneration amp 1 100t, Absorption amp 0 2400t; enchanted bread and enchanted apple: Regeneration amp 1 400t, Resistance amp 0 6000t, Fire Resistance 6000t, Absorption amp 3 2400t; golden carrot as golden bread. Glint: client
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-03 | golden stews, honey (cures Poison), milk (clears effects, no food effects); containers and stack sizes
 @group A
@@ -452,52 +460,75 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Stews give their effects and return a bowl; honey removes Poison, gives its food effects (golden: Regeneration II 5 s, Absorption 2 min; enchanted: the enchanted set), returns a glass bottle, both honeys stack to 16; each milk clears every effect (Speed gone), gives no food effects (upstream), returns a bucket; no Haste / Speed II / Strength / Luck / Regeneration I 280 t bundle at any step
 @fails Speed stays after golden milk: `ShinyItems.GoldenMilk` not used (cures as a vanilla milk bucket); the 280 t bundle again: note the bot position and nearby blocks, r1103 showed it refreshed at 279 t across three drinks 8 s apart (milk has no food effects), so it is not from the drinks
 @from batches/r1103/sA_2.qb
-> zq item goldenfood:golden_honey_bottle
-> zq item goldenfood:enchanted_golden_honey_bottle
+@reviewed 2026-11-16
+> cdevtest item goldenfood:golden_honey_bottle
+> cdevtest item goldenfood:enchanted_golden_honey_bottle
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:golden_mushroom_stew
-> zp eat sagld
-> zp effects sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_mushroom_stew 20
+> cdevtest player sagld
 > effect clear sagld
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:enchanted_golden_mushroom_stew
-> zp eat sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_mushroom_stew 20
 > effect clear sagld
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:golden_beetroot_soup
-> zp eat sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_beetroot_soup 20
 > effect clear sagld
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:enchanted_golden_beetroot_soup
-> zp eat sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_beetroot_soup 20
 > effect clear sagld
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:golden_rabbit_stew
-> zp eat sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_rabbit_stew 20
 > effect clear sagld
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:enchanted_golden_rabbit_stew
-> zp eat sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_rabbit_stew 20
 > effect clear sagld
 > effect give sagld minecraft:poison 30
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:golden_honey_bottle
-> zp eat sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_honey_bottle 20
+> cdevtest player sagld
 > effect clear sagld
 > effect give sagld minecraft:poison 30
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:enchanted_golden_honey_bottle
-> zp eat sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_honey_bottle 20
+> cdevtest player sagld
 > effect clear sagld
 > effect give sagld minecraft:speed 60
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:golden_milk_bucket
-> zp eat sagld
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:golden_milk_bucket 20
+> cdevtest player sagld
 > effect give sagld minecraft:speed 60
+> pbot hunger sagld 10
 > pbot hold sagld goldenfood:enchanted_golden_milk_bucket
-> zp eat sagld
-> zp effects sagld
-waitlog \[zp\] effects sagld 30
-expect item goldenfood:golden_honey_bottle: .*max stack 8$
-expect item goldenfood:enchanted_golden_honey_bottle: .*max stack 4$
-count \[zp\] eat sagld .*: hand now 1 minecraft:bowl >= 6
-count \[zp\] eat sagld .*honey_bottle: hand now 1 minecraft:glass_bottle == 2
-count \[zp\] eat sagld .*milk_bucket: hand now 1 minecraft:bucket == 2
-reject \[zp\] eat sagld .*honey_bottle: .*effects .*minecraft:poison
-reject \[zp\] eat sagld .*milk_bucket: .*effects .*(minecraft:speed|minecraft:regeneration|minecraft:absorption)
-look stews give their effects; honey gives its effects with Poison gone; milk leaves no effect at all
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+> pbot eat sagld
+waitlog verb=pbot.useitem bot=sagld end=finish item=goldenfood:enchanted_golden_milk_bucket 20
+> cdevtest player sagld
+expect verb=item item=goldenfood:golden_honey_bottle .*max_stack=8\b
+expect verb=item item=goldenfood:enchanted_golden_honey_bottle .*max_stack=4\b
+count verb=pbot.useitem bot=sagld end=finish item=\S+ result=minecraft:bowl >= 6
+count verb=pbot.useitem bot=sagld end=finish item=goldenfood:\S*honey_bottle result=minecraft:glass_bottle == 2
+count verb=pbot.useitem bot=sagld end=finish item=goldenfood:\S*milk_bucket result=minecraft:bucket == 2
+reject verb=player name=sagld effects=\S*minecraft:poison
+count verb=player name=sagld effects=- == 2
+look effects lines: the first (golden mushroom stew) shows its effects; the two honey lines show the honey effects with Poison gone; the two milk lines are empty (effects=-)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-04 | golden cake slices at full hunger, 7 slices, no drop
 @group A
@@ -505,22 +536,23 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Each slice eats at full hunger; golden slice: Regeneration amp 1 100 t, Absorption amp 1 2400 t; enchanted slice: Regeneration amp 1 400 t, Resistance and Fire Resistance 6000 t, Absorption amp 3 2400 t; after the 7th slice the block is gone, no drop
 @fails `GoldenCakeBlock.Slice`; no eating at full hunger is the expected upstream behaviour, so a hunger check means vanilla `CakeBlock.use` ran (override missing)
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > setblock {SAH1+20} {SAH2} {SAH3+44} goldenfood:golden_cake
 > setblock {SAH1+24} {SAH2} {SAH3+44} goldenfood:enchanted_golden_cake
 > pbot spawn sagldc {SAH1+22} {SAH2} {SAH3+42} minecraft:overworld survival
 sleep 2
 > clear sagldc
 > effect clear sagldc
-> zp hunger sagldc 20
+> pbot hunger sagldc 20
 > pbot use sagldc {SAH1+20} {SAH2} {SAH3+44}
-> zp effects sagldc
+> cdevtest player sagldc
 > effect clear sagldc
 repeat 6
 > pbot use sagldc {SAH1+20} {SAH2} {SAH3+44}
 end
-> zp hunger sagldc 20
+> pbot hunger sagldc 20
 > pbot use sagldc {SAH1+24} {SAH2} {SAH3+44}
-> zp effects sagldc
+> cdevtest player sagldc
 > effect clear sagldc
 repeat 6
 > pbot use sagldc {SAH1+24} {SAH2} {SAH3+44}
@@ -528,13 +560,12 @@ end
 sleep 1
 > execute if block {SAH1+20} {SAH2} {SAH3+44} minecraft:air run say SA2 cake gone
 > execute if block {SAH1+24} {SAH2} {SAH3+44} minecraft:air run say SA2 ecake gone
-> zcount {SAH1+18} {SAH2} {SAH3+42} {SAH1+26} {SAH2+2} {SAH3+46}
-waitlog \[zcount\] entities 30
+> cdevtest items {SAH1+22} {SAH2} {SAH3+44} 4
 expect SA2 cake gone
 expect SA2 ecake gone
-reject \[zcount\] entities .*item:goldenfood
-look first golden slice: Regeneration amp 1 100t, Absorption amp 1 2400t; first enchanted slice: Regeneration amp 1 400t, Resistance and Fire Resistance 6000t, Absorption amp 3 2400t (each eaten at food 20)
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+reject verb=items items=\S*goldenfood:
+look the two effects lines: first golden slice: Regeneration amp 1 100t, Absorption amp 1 2400t; first enchanted slice: Regeneration amp 1 400t, Resistance and Fire Resistance 6000t, Absorption amp 3 2400t (each eaten at food 20)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-05 | golden cake + white candle becomes a vanilla candle cake (upstream quirk)
 @group A
@@ -542,6 +573,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|No
 @pass A candle does nothing: the cake stays, the candle is kept, no candle cake; the bite still works
 @fails `minecraft:candle_cake` appears: the old `GoldenCakeBlock.use` candle branch is back (until TODO `baking/baked-goods #38`)
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > setblock {SAH1+28} {SAH2} {SAH3+44} goldenfood:golden_cake
 > clear sagldc
 > pbot hold sagldc minecraft:white_candle
@@ -549,11 +581,11 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|No
 sleep 1
 > execute if block {SAH1+28} {SAH2} {SAH3+44} minecraft:white_candle_cake run say SA2 candle cake
 > execute if block {SAH1+28} {SAH2} {SAH3+44} #minecraft:candle_cakes run say SA2 some candle cake
-> zp inv sagldc
+> pbot inv sagldc get
 expect SA2 (some )?candle cake
 look documents the quirk (owner question Q1): golden cake replaced by a vanilla candle cake, one candle used
 > pbot remove sagldc
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-06 | no Golden Food enchantment: anvil gives nothing, /enchant refuses, not registered
 @group A
@@ -588,12 +620,14 @@ reject \[sa\] (error|no player)
 @pass Both teleport (distance can exceed 16 blocks; enchanted up to 32 sideways from the post-vanilla spot); cooldown about 10 ticks (golden) and 5 ticks (enchanted), shorter than a chorus fruit's 20
 @fails `GoldenChorusFruitItem`; reach or cooldown arguments in `GoldenItems` chorus `pair(...)`
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > pbot spawn sachor {SAH1+60} {SAH2} {SAH3+70} minecraft:overworld survival
 sleep 2
 > clear sachor
 > pbot hold sachor goldenfood:golden_chorus_fruit 4
 > data get entity sachor Pos
-> zp eat sachor
+> pbot eat sachor
+waitlog verb=pbot.useitem bot=sachor end=finish item=goldenfood:golden_chorus_fruit 20
 > sa cd sachor goldenfood:golden_chorus_fruit
 > sa cd sachor goldenfood:golden_chorus_fruit
 > sa cd sachor goldenfood:golden_chorus_fruit
@@ -602,14 +636,15 @@ sleep 2
 > tp sachor {SAH1+60} {SAH2} {SAH3+70}
 > pbot hold sachor goldenfood:enchanted_golden_chorus_fruit 4
 > data get entity sachor Pos
-> zp eat sachor
+> pbot eat sachor
+waitlog verb=pbot.useitem bot=sachor end=finish item=goldenfood:enchanted_golden_chorus_fruit 20
 > sa cd sachor goldenfood:enchanted_golden_chorus_fruit
 > sa cd sachor goldenfood:enchanted_golden_chorus_fruit
 > sa cd sachor goldenfood:enchanted_golden_chorus_fruit
 > data get entity sachor Pos
 > pbot remove sachor
 look both teleport (Pos before/after differ; golden can exceed 16 blocks, enchanted up to 32 sideways); cooldown length from the cd lines = dt / dpct: about 10 ticks golden, 5 enchanted (chorus fruit 20)
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp|sa)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-08 | golden recipes (8 nuggets), no donor carrot recipe, donor data pack, no enchantment book
 @group A
@@ -617,21 +652,22 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass The 23 goldenfood golden recipes exist (the food and 8 gold nuggets since 2026-11-03, SQ-GLD2-01; the golden apple keeps 8 ingots); no `minecraft:golden_carrot` crafting recipe from the donor (the pack's own carrot recipes as before); JEI has no Golden Food Enchantment book
 @fails Missing recipes: `/datapack list` must show `goldenfood_upstream_data`; carrot recipe present: the pack's recipe removal no longer sees the id; book listed: the enchantment is still registered
 @from batches/r1103/sA_2.qb
-> zq makes goldenfood:golden_cake
-> zq makes goldenfood:golden_honey_bottle
-> zq rdetail goldenfood:golden_cake
-> zq makes minecraft:golden_carrot
-> zq recipes goldenfood:
+@reviewed 2026-11-16
+> cdevtest makes goldenfood:golden_cake
+> cdevtest makes goldenfood:golden_honey_bottle
+> cdevtest rdetail goldenfood:golden_cake
+> cdevtest makes minecraft:golden_carrot
+> cdevtest recipes goldenfood: max=500
 > datapack list
 > sa enchreg goldenfood:gf_enchantment
 waitlog \[sa\] enchreg 30
 expect goldenfood_upstream_data
-expect \[zq\] makes goldenfood:golden_cake: [1-9]
-expect \[zq\] makes goldenfood:golden_honey_bottle: [1-9]
-reject \[zq\] goldenfood:[a-z_/]+ -> 1 minecraft:golden_carrot
+expect verb=makes item=goldenfood:golden_cake n=[1-9]
+expect verb=makes item=goldenfood:golden_honey_bottle n=[1-9]
+reject verb=makes id=goldenfood:\S+ result=minecraft:golden_carrot\*
 expect \[sa\] enchreg goldenfood:gf_enchantment: false
-look "recipes matching goldenfood:" = the 23 golden recipes (food + 8 gold nuggets; the golden apple keeps 8 ingots); JEI book: client
-reject (Unknown or incomplete command|\[(zq|sa)\] error)
+look the "verb=recipes text=goldenfood: n=" count = the 23 golden recipes (food + 8 gold nuggets; the golden apple keeps 8 ingots); JEI book: client
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-09 | village chests: no Golden Food book; Chalk / Botania / CC loot injected once; no reverted tables
 @group B
@@ -639,6 +675,7 @@ reject (Unknown or incomplete command|\[(zq|sa)\] error)
 @pass No Golden Food Enchantment book; 0 `botania:` and 0 `computercraft:` stacks in all 200 rolls (owner 2026-11-03: kept out, LootJS `CE/loot/removals/village_botania_cc`); Chalk loot present in the cartographer / plains house rolls; no Chalk doubling
 @fails Botania / CC:Tweaked items present: `10_removals.js` not in the Worldgen jar (rebuild Creative Worldgen) or LootJS `@modid` filter not matching; book drops: the translator still serves `data/minecraft/loot_tables/chests/village/`
 @from batches/r1103/sA_4.qb
+@reviewed 2026-11-16
 > fill {SBH1+36} 199 {SBH3} {SBH1+44} 199 {SBH3+8} minecraft:glass
 > kill @e[type=minecraft:item]
 repeat 20
@@ -646,14 +683,13 @@ repeat 20
 > loot spawn {SBH1+42} 201 {SBH3+6} loot minecraft:chests/village/village_cartographer
 end
 sleep 3
-> zcount {SBH1+36} 200 {SBH3} {SBH1+40} 203 {SBH3+4}
-> zcount {SBH1+40} 200 {SBH3+4} {SBH1+44} 203 {SBH3+8}
+> cdevtest items {SBH1+38} 201 {SBH3+2} 2 keep
+> cdevtest items {SBH1+42} 201 {SBH3+6} 2 keep
 > execute as @e[type=minecraft:item,nbt={Item:{id:"minecraft:enchanted_book"}}] run data get entity @s Item
-waitlog \[zcount\] entities 30
 sleep 2
 reject goldenfood:gf_enchantment
 shell grep -nhiE "reverted|restored|goldenfood" logs/latest.log logs/kubejs/server.log | head -20 || true
-look zcount: chalk / botania / computercraft items appear (one injected pool each); the loot-tuning line counts 0 tables reverted and 0 injections restored for the village tables
+look cdevtest items lines: chalk / botania / computercraft items appear (one injected pool each); the loot-tuning line counts 0 tables reverted and 0 injections restored for the village tables
 > kill @e[type=minecraft:item]
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
 
@@ -681,15 +717,15 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass Each comes out as `goldenfood:enchanted_golden_bread` / `enchanted_golden_milk_bucket` / `enchanted_golden_carrot` after 8 loops (a gold ingot and 125 mB experience each loop); in-between items are `kubejs:incomplete_enchanted_golden_*`
 @fails No recipe: CD `goldenfood/golden.js` not loaded (`requires: goldenfood`) or `F.goldenEnchant` missing; error "incomplete(...) not registered": the `SEQUENCED_ASSEMBLIES` row in `transition_items.js` (startup, needs restart)
 @from batches/r1103/sA_2.qb
-> zq rdetail enchanted_golden_bread
-> zq rdetail enchanted_golden_milk_bucket
-> zq rdetail enchanted_golden_carrot
-waitlog \[zq\] rdetail.*enchanted_golden_carrot|recipes matching enchanted_golden_carrot 60
-sleep 3
-expect sequenced_assembly
+@reviewed 2026-11-16
+> cdevtest rdetail enchanted_golden_bread
+> cdevtest rdetail enchanted_golden_milk_bucket
+> cdevtest rdetail enchanted_golden_carrot
+waitlog verb=rdetail text=enchanted_golden_carrot n= 60
+expect verb=rdetail id=\S*enchanted_golden_\S* serializer=create:sequenced_assembly
 expect kubejs:incomplete_enchanted_golden_
 look bread and milk: 4 loops of gold block + liquid experience (1000 mB total) + press; the carrot follows SQ-GLD2-02 (8 loops, gold ingot + 125 mB); outputs goldenfood:enchanted_golden_*
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-12 | 24 enchanted golden assemblies, no golden.js errors
 @group A
@@ -697,13 +733,13 @@ reject (Unknown or incomplete command|\[zq\] error)
 @pass 24 enchanted golden assemblies (apple + 23); no KubeJS error naming golden.js or an incomplete item
 @fails Fewer: an id missing from `item_dict.js`; KubeJS error: the line it names in golden.js
 @from batches/r1103/sA_2.qb
-> zq recipes enchanted_golden_
-waitlog \[zq\] recipes matching enchanted_golden_: \d+ 60
-count enchanted_golden_[a-z_]+_sequenced_assembly -> == 24
+@reviewed 2026-11-16
+> cdevtest recipes enchanted_golden_ max=500
+waitlog verb=recipes text=enchanted_golden_ n= 60
+count verb=recipes id=\S*enchanted_golden_[a-z_]+_sequenced_assembly result= == 24
 shell ! grep -hiE "(goldenEnchant|incomplete_enchanted_golden|golden\.js).*(rror|xception|not registered)" logs/latest.log logs/kubejs/server.log
 shell D="${B0:-/tmp/claude-1000/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2/51e0db54-43f7-4a69-b393-9d5ee1c5b98d/scratchpad/r1103/b0}/srv/kubejs/exported/recipes/all.csv"; echo "Boot 0 dump (00:54): $(grep -cE 'enchanted_golden_[a-z_]+_sequenced_assembly' "$D")"
-look if the zq list is cut at 80 lines, judge on the Boot 0 dump count (24)
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-13 | no recipe for the enchanted golden cake
 @group A
@@ -711,10 +747,11 @@ reject (Unknown or incomplete command|\[zq\] error)
 @pass No recipe (as upstream); the item places and eats as in SQ-GLD-04
 @fails A recipe shown: a later script added one; decide with the owner
 @from batches/r1103/sA_2.qb
-> zq makes goldenfood:enchanted_golden_cake
-waitlog \[zq\] makes goldenfood:enchanted_golden_cake: 30
-expect \[zq\] makes goldenfood:enchanted_golden_cake: 0
+@reviewed 2026-11-16
+> cdevtest makes goldenfood:enchanted_golden_cake
+expect verb=makes item=goldenfood:enchanted_golden_cake n=0\b
 look places and eats as in SQ-GLD-04 (that row)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-GLD-14 | fresh world: no Golden Food Enchantment from /enchant, the table or librarians
 @group A
@@ -754,6 +791,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @pass the old stacks are gone with no missing-registry warning, the jar fluid is empty or cleared; `/give` fails (unknown item); JEI shows no golden or gilded stew, soup or can and no jar fill row; latest.log has no KubeJS error from `goldenfood` scripts; the other golden foods, cans and vanilla stews still eat and can; a vanilla stack of 3 mushroom stew still leaves one bowl
 @fails `soupItemList` and `removed.json` entries; a stale `i.golden_*_stew` key in a script
 @from batches/r1113/c1_g2.qb
+@reviewed 2026-11-16
 bootexpect Done \(
 bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*goldenfood:(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
 bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*creativedelight:canned_(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
@@ -767,26 +805,26 @@ expect has the following block data: .*minecraft:mushroom_stew
 > data get block 2003 -60 2000
 > pbot spawn c1gj 2002 -60 2002 minecraft:overworld survival
 sleep 3
-> zp inv c1gj
-waitlog \[zp\] done 20
-reject \[zp\] .*golden_(rabbit_stew|beetroot_soup)
+> pbot inv c1gj get
+reject verb=pbot.inv bot=c1gj .*golden_(rabbit_stew|beetroot_soup)
 > give c1gj goldenfood:golden_mushroom_stew
 > give c1gj creativedelight:canned_golden_mushroom_stew
 count Unknown item == 2
-> zq food goldenfood:golden_bread
-> zq food goldenfood:enchanted_golden_cooked_beef
-> zq food minecraft:mushroom_stew
-> zq makes creativedelight:canned_golden_bread
-waitlog \[zq\] makes creativedelight:canned_golden_bread: \d+ 30
-expect \[zq\] food goldenfood:golden_bread: nutrition [1-9]
+> cdevtest food goldenfood:golden_bread
+> cdevtest food goldenfood:enchanted_golden_cooked_beef
+> cdevtest food minecraft:mushroom_stew
+> cdevtest makes creativedelight:canned_golden_bread
+expect verb=food item=goldenfood:golden_bread\*1 food=true nutrition=[1-9]
+expect verb=makes item=creativedelight:canned_golden_bread n=[1-9]
 > clear c1gj
 > pbot hold c1gj minecraft:mushroom_stew 3
-> zp hunger c1gj 0
-> zp eat c1gj
-> zp inv c1gj
-waitlog \[zp\] done 20
+> pbot hunger c1gj 0
+> pbot eat c1gj
+waitlog verb=pbot.useitem bot=c1gj end=finish item=minecraft:mushroom_stew 20
+> pbot inv c1gj get
 shell grep -h -i -E "error|exception" logs/kubejs/startup.log logs/kubejs/server.log | grep -i -E "golden|goldenfood" | head -10 | cut -c1-300; echo "golden script errors listed above (none = pass)"
-look jar data: no golden_mushroom_stew fluid (empty or cleared); the canned_golden_bread makes count > 0 (other golden cans still made); the zp inv after the eat shows 2 mushroom_stew and 1 bowl (or a bowl dropped: check the hotbar); the shell step lists no golden/goldenfood script error. A stack of 3 mushroom stew only exists if the pack stacks stews: if hold gave 1, judge "one bowl back" on that
+look jar data: no golden_mushroom_stew fluid (empty or cleared); the pbot inv after the eat shows 2 mushroom_stew and 1 bowl (or a bowl dropped: check the hotbar); the shell step lists no golden/goldenfood script error. A stack of 3 mushroom stew only exists if the pack stacks stews: if hold gave 1, judge "one bowl back" on that
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## CQ-GLD-03
 @group client
@@ -814,7 +852,7 @@ look jar data: no golden_mushroom_stew fluid (empty or cleared); the canned_gold
 kjsexpect \[loot-drops\] 17 drop pools and 2 shared entries in 11 tables
 kjsreject \[miners_delight\] the loot engine has no drop rules
 bootreject Error occurred while handling event.*miners_delight
-shell grep -hcE "\[loot-drops\] [0-9]+ drop pools" logs/kubejs/server.log
+shell grep -hcE "\[loot-drops\] [0-9]+ drop pools" logs/kubejs/server.log; true
 shell grep -hE "\[loot-drops\]" logs/kubejs/server.log | head -10
 look one "[loot-drops] 17 drop pools ..." line per load (count 1 above); no [loot-drops] warning line
 
@@ -825,6 +863,7 @@ look one "[loot-drops] 17 drop pools ..." line per load (count 1 above); no [loo
 @fails the knife condition (`#forge:tools/knives` killer main hand) or the rule rates in CD `miners_delight/loot.js`
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > summon minecraft:bat {SAH1+30} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["sambat"]}
 > summon minecraft:spider {SAH1+34} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["samspi"]}
 > summon minecraft:cave_spider {SAH1+38} {SAH2} {SAH3+84} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Tags:["samcsp"]}
@@ -861,18 +900,17 @@ repeat 300
 > execute as same run loot spawn {SAH1+42} {SAH2} {SAH3+66} kill @e[tag=samsil,limit=1]
 end
 sleep 3
-> zcount {SAH1+29} {SAH2} {SAH3+61} {SAH1+31} {SAH2+2} {SAH3+63}
-> zcount {SAH1+33} {SAH2} {SAH3+61} {SAH1+35} {SAH2+2} {SAH3+63}
-> zcount {SAH1+37} {SAH2} {SAH3+61} {SAH1+39} {SAH2+2} {SAH3+63}
-> zcount {SAH1+41} {SAH2} {SAH3+61} {SAH1+43} {SAH2+2} {SAH3+63}
-> zcount {SAH1+29} {SAH2} {SAH3+65} {SAH1+31} {SAH2+2} {SAH3+67}
-> zcount {SAH1+33} {SAH2} {SAH3+65} {SAH1+35} {SAH2+2} {SAH3+67}
-> zcount {SAH1+37} {SAH2} {SAH3+65} {SAH1+39} {SAH2+2} {SAH3+67}
-> zcount {SAH1+41} {SAH2} {SAH3+65} {SAH1+43} {SAH2+2} {SAH3+67}
-waitlog \[zcount\] entities 60
+> cdevtest items {SAH1+30} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+34} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+38} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+42} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+30} {SAH2+1} {SAH3+66} 1
+> cdevtest items {SAH1+34} {SAH2+1} {SAH3+66} 1
+> cdevtest items {SAH1+38} {SAH2+1} {SAH3+66} 1
+> cdevtest items {SAH1+42} {SAH2+1} {SAH3+66} 1
 sleep 5
-count \[zcount\] entities >= 8
-look zcount lines in order: knife bat / spider / cave spider / silverfish, then empty hand. Knife: bat bat_wing x600; spider arthropod 300..900, spider_leg about 0.4 x 300 x 2 avg, cobweb about 60; cave spider arthropod 300..900, cobweb about 60, no spider_leg; silverfish arthropod x300, silverfish_eggs about 150. Hand: bat_wing about 150; silverfish_eggs about 15; spiders no Miner's item
+count verb=items items=[a-z] >= 8
+look cdevtest items lines (summed by id) in order: knife bat / spider / cave spider / silverfish, then empty hand. Knife: bat bat_wing x600; spider arthropod 300..900, spider_leg about 0.4 x 300 x 2 avg, cobweb about 60; cave spider arthropod 300..900, cobweb about 60, no spider_leg; silverfish arthropod x300, silverfish_eggs about 150. Hand: bat_wing about 150; silverfish_eggs about 15; spiders no Miner's item
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item)
 
 ## SQ-MDL-03 | the same targets burning: cooked drops only; one real Fire knife kill
@@ -882,6 +920,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails the `alternatives` entry / `is_on_fire` condition in `09_drops.js`
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > summon minecraft:bat {SAH1+30} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfbat"]}
 > summon minecraft:spider {SAH1+34} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfspi"]}
 > summon minecraft:cave_spider {SAH1+38} {SAH2} {SAH3+88} {NoAI:1b,Invulnerable:1b,PersistenceRequired:1b,Fire:30000s,Tags:["samfcsp"]}
@@ -903,28 +942,26 @@ repeat 300
 > execute as same run loot spawn {SAH1+30} {SAH2} {SAH3+74} kill @e[tag=samfbat,limit=1]
 end
 sleep 3
-> zcount {SAH1+29} {SAH2} {SAH3+69} {SAH1+31} {SAH2+2} {SAH3+71}
-> zcount {SAH1+33} {SAH2} {SAH3+69} {SAH1+35} {SAH2+2} {SAH3+71}
-> zcount {SAH1+37} {SAH2} {SAH3+69} {SAH1+39} {SAH2+2} {SAH3+71}
-> zcount {SAH1+41} {SAH2} {SAH3+69} {SAH1+43} {SAH2+2} {SAH3+71}
-> zcount {SAH1+29} {SAH2} {SAH3+73} {SAH1+31} {SAH2+2} {SAH3+75}
-waitlog \[zcount\] entities 60
-sleep 5
-reject \[zcount\] entities .*item:miners_delight:arthropod x
-reject \[zcount\] entities .*item:miners_delight:bat_wing x
-reject \[zcount\] entities .*item:minecraft:cobweb x
-expect \[zcount\] entities .*item:miners_delight:cooked_arthropod x
-expect \[zcount\] entities .*item:miners_delight:smoked_bat_wing x
-expect \[zcount\] entities .*item:miners_delight:baked_spider_leg x
+> cdevtest items {SAH1+30} {SAH2+1} {SAH3+70} 1
+> cdevtest items {SAH1+34} {SAH2+1} {SAH3+70} 1
+> cdevtest items {SAH1+38} {SAH2+1} {SAH3+70} 1
+> cdevtest items {SAH1+42} {SAH2+1} {SAH3+70} 1
+> cdevtest items {SAH1+30} {SAH2+1} {SAH3+74} 1
+reject verb=items items=(\S*,)?miners_delight:arthropod:
+reject verb=items items=(\S*,)?miners_delight:bat_wing:
+reject verb=items items=\S*minecraft:cobweb:
+expect verb=items items=\S*miners_delight:cooked_arthropod:
+expect verb=items items=\S*miners_delight:smoked_bat_wing:
+expect verb=items items=\S*miners_delight:baked_spider_leg:
 > kill @e[type=minecraft:item]
-> zact kill {SAH1+50} {SAH2} {SAH3+88} minecraft:spider 5 farmersdelight:iron_knife fire
-waitlog \[zact\] (kill|done) 60
-expect \[zact\] kill .*miners_delight:cooked_arthropod
-reject \[zact\] kill .*miners_delight:arthropod x
+> cdevtest kill {SAH1+50} {SAH2} {SAH3+88} minecraft:spider n=5 held=farmersdelight:iron_knife fire
+expect verb=kill type=minecraft:spider n=5 killed=5\b
+expect verb=kill drops=\S*miners_delight:cooked_arthropod:
+reject verb=kill drops=(\S*,)?miners_delight:arthropod:
 > pbot remove samk
 > pbot remove same
 look knife: bat smoked_bat_wing x600; spider and cave spider cooked_arthropod 300..900, baked_spider_leg about 40 % of rolls from both, no cobweb; silverfish cooked_arthropod x300. Hand bat: smoked_bat_wing about 150. MND-30: the real burning kill drops cooked items
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[zact\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-MDL-04 | infested blocks: silverfish eggs by pickaxe, none by shovel, block + eggs by silk touch
 @group A
@@ -933,6 +970,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails `forge:can_tool_perform_action` pool condition, or the 6 table ids
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > setblock {SAH1+50} {SAH2} {SAH3+58} minecraft:infested_stone
 > setblock {SAH1+54} {SAH2} {SAH3+58} minecraft:infested_stone_bricks
 > setblock {SAH1+58} {SAH2} {SAH3+58} minecraft:infested_cracked_stone_bricks
@@ -955,19 +993,19 @@ repeat 100
 > loot spawn {SAH1+70} {SAH2} {SAH3+70} mine {SAH1+70} {SAH2} {SAH3+58} minecraft:iron_pickaxe{Enchantments:[{id:"minecraft:silk_touch",lvl:1s}]}
 end
 sleep 3
-> zcount {SAH1+49} {SAH2} {SAH3+61} {SAH1+51} {SAH2+2} {SAH3+63}
-> zcount {SAH1+53} {SAH2} {SAH3+61} {SAH1+55} {SAH2+2} {SAH3+63}
-> zcount {SAH1+57} {SAH2} {SAH3+61} {SAH1+59} {SAH2+2} {SAH3+63}
-> zcount {SAH1+61} {SAH2} {SAH3+61} {SAH1+63} {SAH2+2} {SAH3+63}
-> zcount {SAH1+65} {SAH2} {SAH3+61} {SAH1+67} {SAH2+2} {SAH3+63}
-> zcount {SAH1+69} {SAH2} {SAH3+61} {SAH1+71} {SAH2+2} {SAH3+63}
-> zcount {SAH1+49} {SAH2} {SAH3+65} {SAH1+71} {SAH2+2} {SAH3+67}
-> zcount {SAH1+49} {SAH2} {SAH3+69} {SAH1+51} {SAH2+2} {SAH3+71}
-> zcount {SAH1+69} {SAH2} {SAH3+69} {SAH1+71} {SAH2+2} {SAH3+71}
-waitlog \[zcount\] entities 60
+> cdevtest items {SAH1+50} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+54} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+58} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+62} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+66} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+70} {SAH2+1} {SAH3+62} 1
+> cdevtest items {SAH1+50} {SAH2+1} {SAH3+66} 1
+> cdevtest items {SAH1+70} {SAH2+1} {SAH3+66} 1
+> cdevtest items {SAH1+50} {SAH2+1} {SAH3+70} 1
+> cdevtest items {SAH1+70} {SAH2+1} {SAH3+70} 1
 sleep 5
-count \[zcount\] entities .*item:miners_delight:silverfish_eggs x >= 8
-look pickaxe boxes (6): silverfish_eggs total about 0.75 x 200 x 2 avg = 300 each (1-3 per hit roll); the shovel box (7th line): no eggs; silk touch boxes: the infested block x100 and eggs about 150 each. Shovel line with eggs = FAIL
+count verb=items items=\S*miners_delight:silverfish_eggs: >= 8
+look pickaxe boxes (6): silverfish_eggs total about 0.75 x 200 x 2 avg = 300 each (1-3 per hit roll); the two shovel boxes (7th and 8th lines): no eggs; silk touch boxes: the infested block x100 and eggs about 150 each. Shovel line with eggs = FAIL
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
 
 ## SQ-MDL-05 | fishing: Miner's squid about 5 %, glow squid about 0.5 %; mineshaft carrots
@@ -977,6 +1015,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails `dropShare` on the fishing pool (`09_drops.js`), or `L.addPool` on the mineshaft (05_tuning, `/loottuning` pools added count)
 @jars creativedelight creativeworldgen
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > fill {SAH1+78} {SAH2-3} {SAH3+78} {SAH1+80} {SAH2-1} {SAH3+80} minecraft:water
 > kill @e[type=minecraft:item]
 repeat 4000
@@ -986,13 +1025,12 @@ repeat 1000
 > loot spawn {SAH1+84} {SAH2} {SAH3+70} loot minecraft:chests/abandoned_mineshaft
 end
 sleep 5
-> zcount {SAH1+82} {SAH2} {SAH3+60} {SAH1+86} {SAH2+3} {SAH3+64}
-> zcount {SAH1+82} {SAH2} {SAH3+68} {SAH1+86} {SAH2+3} {SAH3+72}
-waitlog \[zcount\] entities 120
+> cdevtest items {SAH1+84} {SAH2+1} {SAH3+62} 2
+> cdevtest items {SAH1+84} {SAH2+1} {SAH3+70} 2
 sleep 5
-expect \[zcount\] entities .*item:miners_delight:squid x
-expect \[zcount\] entities .*item:miners_delight:copper_carrot x
-expect \[zcount\] entities .*item:miners_delight:cave_carrot x
+expect verb=items items=(\S*,)?miners_delight:squid:
+expect verb=items items=(\S*,)?miners_delight:copper_carrot:
+expect verb=items items=(\S*,)?miners_delight:cave_carrot:
 look fishing box: squid 170..230, glow_squid 10..35 of 4000, the rest fish / junk; mineshaft box: copper_carrot and cave_carrot a few per 100 rolls (MND-33)
 > kill @e[type=minecraft:item]
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
@@ -1026,20 +1064,20 @@ shell ! grep -hE "(food_type_tags|seasoning_tags)\.js.*(rror|xception)" logs/kub
 @fails `food_types.json` / member `food_types.js` (`food_catalog.py --members`); `food_families.json` hand sync (`dessert/pancake` key); tag nesting in `food_type_tags.js`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
-> zq itemtag creativeengineering:food_type/sweet/pancake
-> zq itemtag creativeengineering:food_family/dessert/pancake
-> zq itemtag creativeengineering:food_type/sweet
-> zq itemtag creativeengineering:food_family/dessert/pastry
+@reviewed 2026-11-16
+> cdevtest tag item creativeengineering:food_type/sweet/pancake
+> cdevtest tag item creativeengineering:food_family/dessert/pancake
+> cdevtest tag item creativeengineering:food_type/sweet
+> cdevtest tag item creativeengineering:food_family/dessert/pastry
 > dumptags item
-waitlog \[zq\] itemtag creativeengineering:food_family/dessert/pastry 30
-expect itemtag creativeengineering:food_type/sweet/pancake \(7\):
-expect itemtag creativeengineering:food_family/dessert/pancake \(7\):
-expect itemtag creativeengineering:food_type/sweet/pancake .*veggiesdelight:sweet_potato_pancakes
-expect itemtag creativeengineering:food_type/sweet \(.*rusticdelight:coffee_pancake
-expect itemtag creativeengineering:food_type/sweet \(.*veggiesdelight:sweet_potato_pancakes
-reject itemtag creativeengineering:food_family/dessert/pastry .*veggiesdelight:sweet_potato_pancakes
+expect verb=tag kind=item tag=creativeengineering:food_type/sweet/pancake n=7\b
+expect verb=tag kind=item tag=creativeengineering:food_family/dessert/pancake n=7\b
+expect verb=tag kind=item tag=creativeengineering:food_type/sweet/pancake .*ids=\S*veggiesdelight:sweet_potato_pancakes
+expect verb=tag kind=item tag=creativeengineering:food_type/sweet .*ids=\S*rusticdelight:coffee_pancake
+expect verb=tag kind=item tag=creativeengineering:food_type/sweet .*ids=\S*veggiesdelight:sweet_potato_pancakes
+reject verb=tag kind=item tag=creativeengineering:food_family/dessert/pastry .*ids=\S*veggiesdelight:sweet_potato_pancakes
 look the 7: veggiesdelight:sweet_potato_pancakes and rusticdelight:{honey,chocolate,cherry_blossom,vegetable,pumpkin,coffee}_pancake
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-PCK-03 | Sweet Potato Pancakes displayable; placed block registered, drops exactly one
 @group A
@@ -1048,19 +1086,19 @@ reject (Unknown or incomplete command|\[zq\] error)
 @fails dish not in `displaydelight_dishes.json` of the installed CD jar; loot table `data/creativeengineering/loot_tables/blocks/placed_sweet_potato_pancakes.json`; double drop: `AbstractItemBlock.getDrops` guard (SQ-DDP-03)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
-> zq itemtag displaydelight:displayable
+@reviewed 2026-11-16
+> cdevtest tag item displaydelight:displayable
 > kill @e[type=minecraft:item]
 > setblock {SAH1+18} {SAH2} {SAH3+56} creativeengineering:placed_sweet_potato_pancakes
 > execute if block {SAH1+18} {SAH2} {SAH3+56} creativeengineering:placed_sweet_potato_pancakes run say SA2 pancakes placed
 > setblock {SAH1+18} {SAH2} {SAH3+56} minecraft:air destroy
 sleep 2
-> zcount {SAH1+16} {SAH2} {SAH3+54} {SAH1+20} {SAH2+2} {SAH3+58}
-waitlog \[zcount\] entities 30
-expect itemtag displaydelight:displayable .*veggiesdelight:sweet_potato_pancakes( |$)
+> cdevtest items {SAH1+18} {SAH2} {SAH3+56} 2
+expect verb=tag kind=item tag=displaydelight:displayable .*ids=(\S*,)?veggiesdelight:sweet_potato_pancakes(,|$)
 expect SA2 pancakes placed
-expect \[zcount\] entities .*item:veggiesdelight:sweet_potato_pancakes x1( |,|$)
-reject \[zcount\] entities .*item:minecraft:bowl
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag)|\[zq\] error)
+expect verb=items items=(\S*,)?veggiesdelight:sweet_potato_pancakes:1(,|\s)
+reject verb=items items=\S*minecraft:bowl:
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-PCK-04 | /dumpplaceable links Sweet Potato Pancakes to the placed block
 @group A
@@ -1084,15 +1122,15 @@ look placed-link count one higher than the 10-30 baseline 135 (other links chang
 @fails this change touches no recipe; a difference comes from another change (SQ-RDX-03, Supplementaries `recipes.js`)
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
-> zq makes supplementaries:pancake
-> zq makes rusticdelight:pancakes
-> zq makes rusticdelight:honey_pancakes
-> zq makes rusticdelight:honey_pancake
-> zq makes veggiesdelight:sweet_potato_pancakes
-waitlog \[zq\] makes veggiesdelight:sweet_potato_pancakes: \d+ 30
-expect veggiesdelight:cooking/sweet_potato_pancakes ->
+@reviewed 2026-11-16
+> cdevtest makes supplementaries:pancake
+> cdevtest makes rusticdelight:pancakes
+> cdevtest makes rusticdelight:honey_pancakes
+> cdevtest makes rusticdelight:honey_pancake
+> cdevtest makes veggiesdelight:sweet_potato_pancakes
+expect verb=makes id=veggiesdelight:cooking/sweet_potato_pancakes\b
 look Supplementaries pancake: grid 3 and heated Mixer 5 (milk, egg solution); the plates' Cooking Pot recipes and plate/single conversions; Sweet Potato Pancakes pot recipe and its Mixer copy
-reject (Unknown or incomplete command|\[zq\] error)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## CQ-PCK-01
 @group client
@@ -1139,6 +1177,7 @@ look record the logged merge count (43 pairs in the 11-03 swap lists; the row te
 @fails A pair dropped in the move: compare the lists with `git show HEAD:development/creativeDelight/src/main/resources/kubejs_startup/<mod>/item_merges.js`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 shell echo "jeiRemove lines: $(grep -c '\[jeiRemove\]' logs/kubejs/server.log || true)"
 shell grep -hE "\[jeiRemove\]" logs/kubejs/server.log | grep -E "farmersrespite:(coffee|long_coffee|strong_coffee|coffee_beans|coffee_berries)|alexsmobs:banana|delightful:nut_butter|moredelight:potato_salad|vintagedelight:(vinegar|nut_mash)_bottle" | head || true
 shell ! grep -hE "\[jeiRemove\].*(farmersrespite:(coffee|long_coffee|strong_coffee)|alexsmobs:banana|vintagedelight:vinegar_bottle)( |,|$)" logs/kubejs/server.log
@@ -1147,17 +1186,16 @@ sleep 2
 > clear saswp2
 > give saswp2 farmersrespite:long_coffee 2
 sleep 2
-> zp inv saswp2
+> pbot inv saswp2 get
 > pbot remove saswp2
 sleep 1
 > pbot spawn saswp2 {SAH1+8} {SAH2} {SAH3+34} minecraft:overworld survival
 sleep 2
-> zp inv saswp2
-waitlog \[zp\] inv saswp2 30
-expect inv saswp2: .*2 rusticdelight:coffee
+> pbot inv saswp2 get
+expect verb=pbot.inv bot=saswp2 slot=\d+ item=rusticdelight:coffee\*2
 > pbot remove saswp2
-look first inv line (before the relog) shows whether the give alone converted; the relog line must show 2 rusticdelight:coffee
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item|\[(zq|zp)\] (error|no player))
+look first pbot inv (before the relog) shows whether the give alone converted; the relog read must show rusticdelight:coffee*2
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-SWP-03 | /ceswap items rewrites a chest stack, keeps its name
 @group A
@@ -1184,18 +1222,19 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails `ItemMerges.rewrite` overflow (empty-slot fill, sink), `ItemMergeCore.split`
 @jars creativecommon creativedelight
 @from batches/r1103/sA_2.qb
+@reviewed 2026-11-16
 > setblock {SAH1+22} {SAH2} {SAH3+52} minecraft:chest
 > data merge block {SAH1+22} {SAH2} {SAH3+52} {Items:[{Slot:0b,id:"vintagedelight:vinegar_bottle",Count:64b}]}
-> zq item vintagedelight:vinegar_jar
+> cdevtest item vintagedelight:vinegar_jar
 > ceswap items
 sleep 2
 > data get block {SAH1+22} {SAH2} {SAH3+52} Items
-> zcount {SAH1+20} {SAH2} {SAH3+50} {SAH1+24} {SAH2+2} {SAH3+54}
-waitlog \[zcount\] entities 30
+> cdevtest items {SAH1+22} {SAH2} {SAH3+52} 2
 expect vintagedelight:vinegar_jar
 reject vintagedelight:vinegar_bottle
-look only vinegar_jar stacks, each at most the max stack in the zq item line, counts summing to 64; no item entities in zcount
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)
+expect verb=items items=- stacks=0\b
+look only vinegar_jar stacks, each at most the max_stack in the cdevtest item line, counts summing to 64
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-SWP-05 | nested shulker box contents rewritten
 @group A

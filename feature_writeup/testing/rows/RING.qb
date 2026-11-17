@@ -17,18 +17,39 @@
 @commands Boot a new world; grep latest.log for `[rings]` and `Mixin`; then `/locate structure minecraft:stronghold` and note the result
 @pass One `not stored ... computing` and one `stored in the world's data` line per ring set (vanilla strongholds, Better Strongholds); `world/data/creativeengineering_ring_positions.json` exists with 128 x,z pairs per set
 @fails No `[rings]` line: the mixin did not apply (check `m_223148_`); `no cache key` warning: read the stack trace (codec encode or probe)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[rings\] .*not stored for this world and pack, computing
+bootexpect \[rings\] .*positions stored in the world's data
+bootreject \[rings\] .*(could not store|unreadable)
+bootreject (?i)Mixin apply failed.*[Rr]ing
+shell grep -n "\[rings\]\|Preparing spawn area" logs/latest.log | head -8 | cut -c1-200
+shell python3 -c "import json,sys; d=json.load(open(sys.argv[1])); print({k: (len(v) if isinstance(v,list) else type(v).__name__) for k,v in (d.items() if isinstance(d,dict) else [])})" world/data/creativeengineering_ring_positions.json
+> locate structure minecraft:stronghold
+waitlog (nearest minecraft:stronghold|Could not find) 300
+capture RG is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+look one computing and one stored line per ring set (vanilla, Better Strongholds); the json shape shows 128 pairs per set; note the stronghold position for SQ-RING-02
 ## SQ-RING-02
 @group A
 @commands `/stop`, boot again; grep `[rings]`; repeat the `/locate` from SQ-RING-01; time "Preparing spawn area" against SQ-RING-01's boot
 @pass `positions from the world's data` per set, key time well under 1 s; the same locate result; the level-creation stretch about 12 s shorter
 @fails `computing` again: the key is not stable between boots (an input is non-deterministic; diff the keys in the file)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[rings\] .*positions from the world's data
+bootreject \[rings\] .*computing
+shell grep -n "\[rings\]\|Preparing spawn area" logs/latest.log | head -8 | cut -c1-200
+> locate structure minecraft:stronghold
+waitlog (nearest minecraft:stronghold|Could not find) 300
+waitlog is at \[{RG1}, (~|-?\d+), {RG3}\] 10
+look the key time well under 1 s; the level-creation stretch about 12 s shorter than SQ-RING-01's boot (restart of the same world)
 ## SQ-RING-03
 @group A
 @commands `/stop`; change the seed in `server.properties` and delete `world/`, or add a datapack biome change to the same world; boot
 @pass `computing` again with a new key; the new positions are stored next to the old entry
 @fails Old positions reused: the key misses the changed input
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect \[rings\] .*not stored for this world and pack, computing
+bootexpect \[rings\] .*positions stored in the world's data
+shell grep -c '"' world/data/creativeengineering_ring_positions.json; true
+look own boot after a seed change with world/ deleted, or a datapack biome change on the same world: computing with a new key; on the same world the file holds the old entry beside the new one
 @@text
 @@text Results 2026-10-27 night: SQ-RING-01 first FAIL: ModernFix's `cache_strongholds` RETURN hook returned before ours, nothing stored (perf.md 12.2 #3); with it off, PASS: 10 `computing` lines (one per dimension with the ring set), 10 `192 positions stored`, file with 10 keys (192 per set in this pack). `/locate structure betterstrongholds:stronghold` (the vanilla stronghold is replaced) -1168 -880 both times. SQ-RING-02 PASS: 10 `from the world's data`, key 8-74 ms, `Done` 5.7 s. SQ-RING-03 PASS: an Overworld biome multiplier change computed a new key for the Overworld only (11 keys), the other 9 read from data; restoring it read the old key again.

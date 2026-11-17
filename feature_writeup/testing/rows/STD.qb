@@ -15,13 +15,24 @@
 @commands Boot a server with the jar and the pack's Quark; `/dumpall`
 @pass No `storagedelight` error in `logs/latest.log`; 140 `storagedelight:` blocks, 50 of them new; the 50 recipes load (`storagedelight:` recipe ids for the 36 stone countertops and 14 bamboo blocks)
 @fails repackedStorage jar
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect Done \(
+bootreject (?i)(ERROR|Exception).*storagedelight
+> cdevtest reg block ^storagedelight: max=1
+> cdevtest recipes storagedelight: max=1
+> cdevtest reg block ^storagedelight:.*countertop max=1
+> cdevtest reg block ^storagedelight:bamboo_ max=1
+expect verb=reg kind=block regex=\^storagedelight: n=140$
+expect verb=recipes text=storagedelight: n=([5-9]\d|\d{3,}) 
+reject \[cdevtest\] verb=\S+ done=0
+look recipe count at least the 50 new rows (36 stone countertops and 14 bamboo blocks: the countertop and bamboo reg counts); a different block count than 140: record it against storage_delight.md 5
 ## SQ-STD-02 | Storage Delight drawer and cabinets: 27 slots, dropped with contents (x 100..104; queue group B)
 @group B
 @commands `/give` and place a `storagedelight:bamboo_drawer`, a `storagedelight:oak_cabinet_with_polished_tuff_countertop` and a `storagedelight:warped_cabinet_with_stone_bricks_countertop`; open and close each, break with an axe
 @pass Opens as 27 slots, no block entity error, item kept and dropped
 @fails repackedStorage jar
 @from batches/r1102b/s3_A.qb
+@reviewed 2026-11-16
 > setblock 100 -60 500 storagedelight:bamboo_drawer
 > setblock 102 -60 500 storagedelight:oak_cabinet_with_polished_tuff_countertop
 > setblock 104 -60 500 storagedelight:warped_cabinet_with_stone_bricks_countertop
@@ -38,12 +49,14 @@ count does not have slot == 3
 > pbot use std 100 -60 500 south
 > pbot use std 102 -60 500 south
 > pbot use std 104 -60 500 south
-> zact break 100 -60 500 minecraft:iron_axe
-> zact break 102 -60 500 minecraft:iron_axe
-> zact break 104 -60 500 minecraft:iron_axe
-expect \[zact\] break 100 -60 500 storagedelight:bamboo_drawer held \S+: true, .*drops minecraft:stick x1, storagedelight:bamboo_drawer x1
-expect \[zact\] break 102 -60 500 \S+ held \S+: true, .*storagedelight:oak_cabinet_with_polished_tuff_countertop x1
-expect \[zact\] break 104 -60 500 \S+ held \S+: true, .*storagedelight:warped_cabinet_with_stone_bricks_countertop x1
+> cdevtest break 100 -60 500 held=minecraft:iron_axe
+> cdevtest break 102 -60 500 held=minecraft:iron_axe
+> cdevtest break 104 -60 500 held=minecraft:iron_axe
+count verb=break who=\S+ broken=true before="?storagedelight:\S+ after=minecraft:air == 3
+expect verb=break drops=minecraft:stick:1,storagedelight:bamboo_drawer:1 stacks=2
+expect verb=break drops=minecraft:stick:1,storagedelight:oak_cabinet_with_polished_tuff_countertop:1 stacks=2
+expect verb=break drops=minecraft:stick:1,storagedelight:warped_cabinet_with_stone_bricks_countertop:1 stacks=2
+reject \[cdevtest\] verb=\S+ done=0
 reject (?i)(block ?entity|storagedelight).*(exception|error)
 > pbot remove std
 look the three `pbot use` replies (a menu opened = SUCCESS / CONSUME); the stick in slot 26 dropped with each block

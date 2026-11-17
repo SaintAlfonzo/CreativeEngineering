@@ -19,21 +19,22 @@
 @pass the pickaxe's damage drops; your XP bar rises less than 50
 @fails config not read: check the copied file and Quark's `latest.log` config line
 @from batches/r1115/p8_a0.qb
+@reviewed 2026-11-16
 > pbot spawn qn 105 -60 105 minecraft:overworld survival
 sleep 2
 > xp set qn 0 points
 > xp set qn 0 levels
 > item replace entity qn weapon.mainhand with minecraft:diamond_pickaxe{Damage:500,Enchantments:[{id:"minecraft:mending",lvl:1}]}
-> zqn hand qn
-waitlog \[zqn\] done 20
-expect \[zqn\] hand qn minecraft:diamond_pickaxe damage 500
+> cdevtest player qn
+expect \[cdevtest\] verb=player name=qn .*main="?minecraft:diamond_pickaxe\*1\{Damage:500\b
 > summon minecraft:experience_orb 105 -60 105 {Value:50}
-sleep 3
-> zqn hand qn
-waitlog \[zqn\] done 20
-expect \[zqn\] hand qn minecraft:diamond_pickaxe damage [0-4]\d\d 
+> cdevtest tickwarp 60
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=60 30
+> cdevtest player qn
+expect \[cdevtest\] verb=player name=qn .*xp_total=[0-4]?\d .*main="?minecraft:diamond_pickaxe\*1\{Damage:[0-4]\d\d\b
+reject \[cdevtest\] .*(done=0|error=)
 > kill @e[type=minecraft:experience_orb]
-look damage after the orb below 500 (Mending: 2 durability per point, 50 points = 100 durability); xpTotal under 50
+look Mending repairs 2 durability per point (50 points = 100 durability): the second `main=` Damage near 400
 
 ## SQ-QN-02 | Overworld elytra: the start-fall-flying packet path starts and keeps gliding
 @group any
@@ -41,6 +42,7 @@ look damage after the orb below 500 (Mending: 2 durability per point, 50 points 
 @pass you glide
 @fails the dimension lock still applies
 @from batches/r1115/p8_a0.qb
+@reviewed 2026-11-16
 > item replace entity qn armor.chest with minecraft:elytra
 > item replace entity qn weapon.mainhand with minecraft:air
 > tp qn 105 240 105
@@ -48,10 +50,11 @@ sleep 1
 > zqn fly qn
 waitlog \[zqn\] done 20
 expect \[zqn\] fly qn quarkCanUse true onGround false started true fallFlying true chest minecraft:elytra
-> zqn flying qn
-sleep 2
-> zqn flying qn
-sleep 1
-expect \[zqn\] flying qn fallFlying true dim minecraft:overworld y [0-9]
+> cdevtest player qn
+> cdevtest tickwarp 40
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=40 30
+> cdevtest player qn
+expect \[cdevtest\] verb=player name=qn dim=minecraft:overworld .*fall_flying=true
+reject \[cdevtest\] .*(done=0|error=)
 > pbot remove qn
-look gliding (fallFlying true one second after the start); the client-side hand check (jump in air) is CQ-style and not run here
+look gliding (fall_flying=true in both `verb=player` lines, the second 40 ticks after the start, y lower); the client-side hand check (jump in air) is CQ-style and not run here

@@ -17,15 +17,16 @@
 @pass Old stack: loads with no error or log spam, no seasoning lines (accepted loss). New: tooltip lines, the overlay on the icon, the eat bonus and the JEI page all work; `/data get entity @s SelectedItem` shows `creativedelight:<seasoning>` in `Seasonings`
 @fails No overlay: `assets/creativedelight/models/item/seasoned/` missing from the Delight jar. No tag match: `#creativedelight:seasonable/<path>` not built (`seasoning_tags.js` reads the id)
 @from batches/r1113/c4_a.qb
-> zq bytype creativedelight:seasoning
-> zq itemtag creativedelight:seasonable/pepper
-> zq itemtag creativedelight:seasonable/chili
-> zq itemtag creativedelight:seasonable/cheese
-waitlog \[zq\] itemtag creativedelight:seasonable/cheese 30
-count bytype creativedelight:seasoning >= 1
-expect itemtag creativedelight:seasonable/pepper \([1-9]
-expect itemtag creativedelight:seasonable/chili \([1-9]
-expect itemtag creativedelight:seasonable/cheese \([1-9]
+@reviewed 2026-11-16
+> cdevtest bytype creativedelight:seasoning max=5
+> cdevtest tag item creativedelight:seasonable/pepper
+> cdevtest tag item creativedelight:seasonable/chili
+> cdevtest tag item creativedelight:seasonable/cheese
+expect verb=bytype serializer=creativedelight:seasoning n=[1-9]
+expect verb=tag kind=item tag=creativedelight:seasonable/pepper n=[1-9]
+expect verb=tag kind=item tag=creativedelight:seasonable/chili n=[1-9]
+expect verb=tag kind=item tag=creativedelight:seasonable/cheese n=[1-9]
+reject \[cdevtest\] verb=\S+ done=0
 reject seasonable.*creativeengineering:
 
 ## SQ-NSM-02
@@ -33,27 +34,71 @@ reject seasonable.*creativeengineering:
 @commands Boot; open the chest; check the worn shield and Curios stepstool; walk to the dropped items and Dark Fire; `/save-all flush`; `/data get block <chest>`
 @pass Log: `[swaps]` remap lines for every `creativeengineering:` Equipment and Magic id and `solapplepie:netherite_lunchbox`, nothing unresolved. Chest, offhand, Curios slot and ground items read back under `creativeequipment:` / `creativemagic:` / `creativedelight:netherite_lunchbox` with NBT kept (shield patterns, lunchbox contents); Dark Fire still burns; stepstool still lifts
 @fails Item gone: swap list missing from the jar (`data/<ns>/swaps/owner_namespace.json`). Missing model: assets not moved into `assets/<ns>/`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
+bootreject \[swaps\] .*unresolved
+> forceload add 0 0 16 28
+> pbot spawn nsmA 2 -60 28 minecraft:overworld survival
+sleep 3
+shell grep -E "\[swaps\]" logs/latest.log | cut -c1-240 | head -20
+> cdevtest inv 0 -60 0
+> cdevtest inv 2 -60 0
+> cdevtest inv 4 -60 0
+> cdevtest entities 8 -60 8 10 type=minecraft:item nbt
+> cdevtest state 0 -60 4
+> cdevtest player nsmA
+> data get entity nsmA ForgeCaps
+bootexpect \[swaps\] minecraft:item: \d+ id\(s\) remapped
+expect verb=inv slot=\d+ item="?creativeequipment:\S*shield
+expect verb=inv slot=\d+ item="?creativeequipment:diamond_shield\*1\{.*Patterns
+expect verb=inv slot=2 item="?creativedelight:netherite_lunchbox
+expect verb=entities type=minecraft:item .*creativedelight:netherite_lunchbox
+expect verb=state pos=0,-60,4 state="?\S+:dark_fire
+expect verb=player name=nsmA .*off="?creativeequipment:\S*shield
+reject item="?creativeengineering:|id:\\"creativeengineering:|id:\\"solapplepie:netherite_lunchbox|state="?creativeengineering:
+reject \[cdevtest\] verb=\S+ done=0
+look swaps lines: every creativeengineering Equipment and Magic id and solapplepie:netherite_lunchbox remapped, 0 unresolved; the lunchbox keeps its food (NBT in the inv line); Curios feet slot in the ForgeCaps line holds a creativeequipment stepstool (a crow may carry the red one, scratch_run_2026-11-11); Dark Fire and stepstool behaviour unchanged
 ## SQ-NSM-03
 @group Old save (NSM fixture)
 @commands Same boot: the cardboard box, Botanist Pot, jar and nightstand; set off TNT near a mob (shrapnel); `/data get block` each
 @pass Box, pot, jar fluid and nightstand items present; the jar and nightstand caps read `creativecompat:jar_fluid_pipes` / `creativecompat:nightstand_storage`; shrapnel entities spawn as `creativecompat:shrapnel`; the monster box reward table (config `rewardTable`) still drops
 @fails Contents gone: `capabilities` entry in Compat's swap list, `SwapLists.renameCapabilityKeys`. Reward empty: `config/creativecompat-common.toml` still names `creativeengineering:misc/monster_box_reward`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
+> forceload add 0 0 24 16
+> cdevtest state 2 -60 4
+> cdevtest be 4 -60 4
+> cdevtest be 6 -60 4
+> cdevtest be 8 -60 4
+> summon minecraft:zombie 20 -60 4 {NoAI:1b,PersistenceRequired:1b}
+> summon minecraft:tnt 20 -60 6 {Fuse:1}
+sleep 2
+shell grep -nE "^\s*rewardTable" config/creativecompat-common.toml
+expect verb=state pos=2,-60,4 state="?creativecompat:weathered_cardboard_box
+expect verb=be be=creativecompat:botanist_pot nbt=.*Plant:\\"minecraft:poppy\\"
+expect verb=be be=\S+ nbt=.*creativecompat:jar_fluid_pipes
+expect verb=be be=\S+ nbt=.*minecraft:book
+expect \[nsmprobe\] spawned creativecompat:shrapnel
+reject \[nsmprobe\] spawned creativeengineering:
+reject creativeengineering:misc/monster_box_reward
+reject \[cdevtest\] verb=\S+ done=0
+look jar water kept (FluidHolder in the be line); nightstand items present and its cap key under creativecompat (nightstand_storage, or the CENightstandItems list as in r1111); rewardTable names a creativecompat table
 ## SQ-NSM-04
 @group Old save (NSM fixture), client
 @commands Look at both placed paintings and the banner; Immersive Paintings' Datapacks page; `/data get entity <painting>`; `/save-all flush`
 @pass Both paintings keep their picture; Motive reads `creativecompat:paintings/...` after the save; the Datapacks page lists the modded and vanilla paintings once each; Bedspreads and Customizable Elytra show the modded pattern
 @fails Blank painting: `ImmersivePaintingMotiveAliasMixin` not applied (gated on `immersive_paintings`). Duplicate entries: an old `kubejs/data/creativeengineering/paintings/` copy left somewhere
-@draft no batch holds this row yet
+@draft the NSM fixture has no paintings or banner (nsm_fixture.js has no painting step; scratch_run_2026-11-15.md); a fixture with old-namespace paintings is needed first, and the picture and Datapacks page are client looks
 ## SQ-NSM-05 | (rerun of the skin half) netherite lunchbox from the old save takes a skin in the smithing recipe
 @group Old save (NSM fixture)
 @commands Open the netherite lunchbox, eat from it; dye and skin it in the crafting grid
 @pass Contents intact; dye and skin recipes work on `creativedelight:netherite_lunchbox`; its model and skins render
 @fails Wrong model: `kubejs/assets/creativedelight/models/item/netherite_lunchbox.json`
 @from batches/r1115/p9_o2r.qb
-> zp9 held n5
-waitlog \[zp9\] held n5 20
+@reviewed 2026-11-16
+> cdevtest player n5
+expect verb=player name=n5 .*main=creativedelight:netherite_lunchbox
+reject \[cdevtest\] verb=\S+ done=0
 > zp9 skin n5 solapplepie:golden_lunchbox
 waitlog \[zp9\] skin 20
 > zp9 skin n5 fantasyfurniture:decorations/berry_basket_empty
@@ -81,50 +126,65 @@ look no minecraft:air rows from our namespaces, --left lists nothing moved
 @commands Fixture also has: a player logged out in `creativeengineering:yellowstone` with a bed spawn there; a second player in `hub`; a waystone, a sky island and a meta structure (e.g. a balloon fleet) generated and forceloaded in the Overworld; `dimensions/creativeengineering/{yellowstone,hub,...}` on disk. Boot a copy on the new jars; both players log in; `/execute in creativeworldgen:yellowstone run say ok`; `/locate structure creativeworldgen:sky_island`; walk into the old sky island and meta structure; `/kill` the first player; `/save-all flush`; stop; `ls world/dimensions`
 @pass Log: `[dimension-move] dimensions/creativeengineering/<dim> -> dimensions/creativeworldgen/<dim>` per dimension, `[legacy-ids]` key and chunk structure lines, `[swaps]` lines for `tune_spawns` / `bee_nests`; no `Unknown structure start`, `Found reference to unknown structure`, `Unknown structure piece id` or WorldGenSettings error. Players log in at their old spot (`Dimension` = `creativeworldgen:yellowstone`); respawn at the bed; terrain intact; old structures still count (spawns, `/locate` finds the old one); the waystone teleports into the moved dimension; after stop `world/dimensions/creativeengineering` is gone and level.dat names only `creativeworldgen:` dimensions. Record whether Xaero minimap data for those dimensions starts empty
 @fails Dimension empty or regenerated: `LevelStorageAccessDimensionMoveMixin` not applied, or both folders existed (warning). Player in the Overworld: `ResourceKeyLegacyDimensionMixin`. Structure starts dropped: `ChunkSerializerLegacyStructuresMixin` / `StructureCheckLegacyStructuresMixin` SRG names
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
+# the r1111 fixture has no sky island, meta structure or waystone (superflat): only the dimension half is automated
+bootreject Unknown structure start|Found reference to unknown structure|Unknown structure piece id|WorldGenSettings.*(error|Error)
+> pbot spawn nsmY 0 100 0 creativeworldgen:yellowstone survival
+sleep 5
+> pbot spawn nsmH 0 100 0 creativeworldgen:hub survival
+sleep 5
+> execute in creativeworldgen:yellowstone run say NSM07-yellowstone-ok
+shell echo "dimension-move lines: $(grep -c '\[dimension-move\] dimensions/creativeengineering/' logs/latest.log)"; grep -E "\[legacy-ids\]" logs/latest.log | head -5 | cut -c1-240; ls nsmfix/dimensions
+expect NSM07-yellowstone-ok$
+expect \[nsmprobe\] login nsmY dim creativeworldgen:yellowstone
+expect \[nsmprobe\] login nsmH dim creativeworldgen:hub
+reject \[nsmprobe\] login nsm[YH] dim minecraft:overworld
+look 11 dimension-move lines; ls shows only creativeworldgen; nsmY's respawn (login line) is the bed in yellowstone; structure starts: RECORD not covered (fixture has none)
 ## SQ-NSM-08 | the 11 creativeworldgen dimensions open; structures locate under creativeworldgen
 @group New world
 @commands Create a world on the new jars (live `config/creativeworldgen-common.toml` already rewritten); `/execute in creativeworldgen:<dim> run tp @s ~ 200 ~` for each of the 11 dimensions; `/locate structure creativeworldgen:sky_island`, `#creativeworldgen:meta/<any>`, a `creativeworldgen:group/settlements` member; `/cwglocate census`; `/dumptags` and grep `kubejs/exported` for Worldgen or Calendar tags still under `creativeengineering:`; create a world with the Flower Test preset
 @pass All 11 dimensions open with their biome and noise; `ls world/dimensions` shows only `creativeworldgen/`; sky islands, meta structures and groups locate and generate with terrain adaptation, earth fill and ground match; `[mob-spawns]` and `[bee-nests]` summaries with no rule idle; season and crop season tags (`creativecalendar:`) filled and the season tooltip shows; the Flower Test preset is listed and loads
 @fails Missing dimension: `data/creativeworldgen/dimension` not in the jar. Empty group or meta tag: a script still writing `creativeengineering:` (grep `kubejs/data/creativeworldgen`). No seasons: `kubejs/data/creativecalendar` scripts
 @from batches/r1113/c4_b.qb
+@reviewed 2026-11-16
 > pbot spawn n8 0 160 0 creativeworldgen:hub creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:hub
+> cdevtest chunk 0 0 dim=creativeworldgen:hub
 > pbot spawn n8 0 160 0 creativeworldgen:yellowstone creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:yellowstone
+> cdevtest chunk 0 0 dim=creativeworldgen:yellowstone
 > pbot spawn n8 0 160 0 creativeworldgen:autumnsky creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:autumnsky
+> cdevtest chunk 0 0 dim=creativeworldgen:autumnsky
 > pbot spawn n8 0 160 0 creativeworldgen:springsky creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:springsky
+> cdevtest chunk 0 0 dim=creativeworldgen:springsky
 > pbot spawn n8 0 160 0 creativeworldgen:summersky creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:summersky
+> cdevtest chunk 0 0 dim=creativeworldgen:summersky
 > pbot spawn n8 0 160 0 creativeworldgen:wintersky creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:wintersky
+> cdevtest chunk 0 0 dim=creativeworldgen:wintersky
 > pbot spawn n8 0 160 0 creativeworldgen:desert creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:desert
+> cdevtest chunk 0 0 dim=creativeworldgen:desert
 > pbot spawn n8 0 160 0 creativeworldgen:shield creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:shield
+> cdevtest chunk 0 0 dim=creativeworldgen:shield
 > pbot spawn n8 0 160 0 creativeworldgen:flowergrove creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:flowergrove
+> cdevtest chunk 0 0 dim=creativeworldgen:flowergrove
 > pbot spawn n8 0 160 0 creativeworldgen:flowerhills creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:flowerhills
+> cdevtest chunk 0 0 dim=creativeworldgen:flowerhills
 > pbot spawn n8 0 160 0 creativeworldgen:flowerridge creative
 sleep 8
-> zq chunk 0 0 creativeworldgen:flowerridge
-waitlog \[zq\] chunk 0 0 30
+> cdevtest chunk 0 0 dim=creativeworldgen:flowerridge
 > pbot spawn n8 0 160 0 minecraft:overworld creative
-count \[zq\] chunk 0 0 >= 11
-reject (?i)Unknown dimension|no such dimension|\[zq\] error
+count verb=chunk chunk=0,0 loaded=true == 11
+reject (?i)Unknown dimension|no such dimension
+reject \[cdevtest\] verb=\S+ done=0
 > locate structure creativeworldgen:sky_island
 waitlog (?:The nearest creativeworldgen:sky_island is at|Could not find) 300
 > locate structure creativeworldgen:meta/waystone_ruins
@@ -138,23 +198,64 @@ waitlog \[dumptags\] wrote 600
 waitlog Saved the game 120
 shell ls r1113c4b/dimensions; echo "level.dat is gzip: $(python3 -c "import gzip,sys;d=gzip.open('r1113c4b/level.dat').read();print(d.count(b'creativeengineering:'), 'creativeengineering refs;', d.count(b'creativeworldgen:'), 'creativeworldgen refs')")"
 shell python3 -c "import json,glob,re;s=set();[s.update(re.findall(r'creativeengineering:[a-z_/]+', open(f).read())) for f in glob.glob('kubejs/exported/tags/*_tags.json')];w=[x for x in s if re.search(r'season|crop_season|worldgen|biome|structure|meta/|group/|spawn|bee_nest|wild_flower', x)];print(len(s),'creativeengineering tag ids;', len(w),'worldgen/calendar-like:', sorted(w)[:30])"
-look every zq chunk line shows a loaded full chunk (11 dimensions); ls dimensions shows only creativeworldgen; 0 creativeengineering refs in level.dat; the three locates found a target; census lists the groups; no worldgen or calendar tag left under creativeengineering. The Flower Test world preset needs a client (CQ)
+look every chunk line shows a loaded full chunk (11 dimensions; debug= names the status); ls dimensions shows only creativeworldgen; 0 creativeengineering refs in level.dat; the three locates found a target; census lists the groups; no worldgen or calendar tag left under creativeengineering. The Flower Test world preset needs a client (CQ)
 
 ## SQ-NSM-09
 @group Old save (NSM fixture)
 @commands Fixture built on `creativeLabels-1.0.1.jar` before the rename: a stone wall with 3 written, dyed notes (one special, one with its text erased), a label showing a diamond on a chest face, notes and an eraser in a chest and the player inventory; hand-edited `creative_labels-common.toml` (`noteLength` 20) and `creative_labels-client.toml` (`textDistance` 10). Boot a copy on the new jars; `/save-all flush`; reload the chunks; `/data get block <chest>`; check config/
 @pass Log: `[creativelabels] config creative_labels-common.toml carried over`, `[swaps]` remap lines for `creative_labels:*`, no `[swaps] unresolved`, no block entity load error for `face_paper`. Every note keeps text, colour, special and layer order; the label keeps its picture. Chest reads `creativelabels:sticky_note` with `CreativeLabels.Text` and `creativelabels:eraser`. `config/creativelabels-*.toml` hold 20 and 10, old files gone. `/give @s creativelabels:sticky_note` works
 @fails Notes gone but block present: the `replaces` entry for `face_paper` (block entity alias). Config at defaults: `CreativeLabels.carryOverConfig` ran after the new file existed
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
+bootexpect \[creativelabels\] config creative_labels-common.toml carried over
+bootreject face_paper.*(Exception|[Ee]rror)|\[swaps\] .*unresolved
+> forceload add 0 16 8 17
+> save-all flush
+waitlog Saved the game 120
+> cdevtest be 1 -59 17
+> cdevtest be 2 -59 17
+> cdevtest be 3 -59 17
+> cdevtest be 6 -60 17
+> cdevtest inv 6 -60 16
+shell grep -hE "^\s*(noteLength|textDistance)" config/creativelabels-*.toml; ls config | grep -c "creative_labels-" || true
+count verb=be be=creativelabels:face_paper == 4
+expect verb=be be=creativelabels:face_paper nbt=.*Kind:\\"label\\".*minecraft:diamond
+expect verb=inv slot=\d+ item="?creativelabels:sticky_note\*1\{.*chest note
+expect verb=inv slot=\d+ item="?creativelabels:eraser
+reject \[cdevtest\] verb=\S+ done=0
+look notes keep text, colour, special and layer order (Notes lists in the three wall lines); configs hold noteLength 20 and textDistance 10, old creative_labels files gone (count 0)
 ## SQ-NSM-10
 @group Old save (NSM fixture)
 @commands Same fixture: a leather bag holding a camera and film, a dyed iron bag, a netherite bag in a chest; one bag on an older `creativeengineering:iron_camera_bag` id if the fixture has one; `exposure_extras-common.toml` `leatherSlots` 6. Boot; open each bag; `/data get block <chest>`
 @pass Bags read `exposureextras:*_camera_bag` with the same `CameraBag` contents and dye; the leather bag shows 6 slots; log `[exposureextras] config ... carried over`, `[swaps]` remap lines, nothing unresolved; bags accept `#exposureextras:camera_equipment` items
 @fails Bag missing: `data/exposureextras/swaps/` in the jar. creativeengineering bag missing: `ExposureExtras.remapOldIds`. Accepts nothing: the tag rewrite in kubejs
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
+bootexpect \[exposureextras\] config .*carried over
+> forceload add 0 12 0 12
+> cdevtest inv 0 -60 12
+shell grep -hE "^\s*leatherSlots" config/exposureextras-common.toml
+expect verb=inv slot=\d+ item="?exposureextras:leather_camera_bag\*1\{.*CameraBag:\{Items:\[.*exposure:camera
+expect verb=inv slot=\d+ item="?exposureextras:iron_camera_bag\*1\{.*display:\{color:
+expect verb=inv slot=\d+ item="?exposureextras:netherite_camera_bag
+reject item="?exposure_extras:|creativeengineering:\w*camera_bag
+reject \[cdevtest\] verb=\S+ done=0
+look leatherSlots 6; the leather bag shows 6 slots and accepts #exposureextras:camera_equipment items (client half: CQ)
 ## CQ-NSM-01
 @group Client
 @commands New world: JEI search `@creativeequipment`, `@creativemagic`, `@creativecompat`; hover each moved item; WTHIT on the box, Dark Fire, pot and a sticky note; the shield and canned golem colours
 @pass Every moved item has its name, model and texture (no purple-black, no raw lang key) and lists under its new mod; tier shields render their pattern base; canned golems show their dye colour
 @fails Missing texture: an asset path still under `creativeengineering` (`python3 tools/id_owner_lint.py`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+do {"tooltip_text": "creativeequipment:copper_shield", "reject": "item\\.creativeengineering"}
+do {"tooltip_text": "creativemagic:flint_and_terrasteel", "reject": "item\\.creativeengineering"}
+do {"tooltip_text": "creativecompat:weathered_cardboard_box", "reject": "block\\.creativeengineering"}
+do {"wait": "jei"}
+do {"screen": "creative:creativeequipment"}
+shot equipment_tab
+do {"screen": "close"}
+> fill 0 100 0 6 100 2 minecraft:stone
+> setblock 0 101 1 creativecompat:weathered_cardboard_box
+do {"look": {"from": "1 102.6 -1", "at": "0.5 101.5 1.5"}}
+shot wthit_box
+look every moved item named, modelled and textured (no purple-black, no raw key) under its new mod; JEI @creativeequipment / @creativemagic / @creativecompat by hand; tier shield pattern base and canned golem colours by hand

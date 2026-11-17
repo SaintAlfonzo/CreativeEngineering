@@ -29,7 +29,7 @@
 bootreject Missing or unsupported mandatory dependencies
 bootreject (creativecommon|creativeengineering)\.mixins\.json.*(rror|ailed|could not)
 bootreject in both module|split package
-shell grep -oE "creative[a-z]+-[0-9.]+\.jar" logs/latest.log | sort -u | tr '\n' ' '; echo; grep -cE "from (mixins\.)?creativecommon\.mixins\.json" logs/debug.log; grep -cE "from (mixins\.)?creativeengineering\.mixins\.json" logs/debug.log
+shell grep -oE "creative[a-z]+-[0-9.]+\.jar" logs/latest.log | sort -u | tr '\n' ' '; echo; grep -cE "from (mixins\.)?creativecommon\.mixins\.json" logs/debug.log; grep -cE "from (mixins\.)?creativeengineering\.mixins\.json" logs/debug.log; true
 look jar list has creativecommon-1.1.0 and creativeengineering-2.0.0 (row said 1.0.0: Common is 1.1.0 since 11-06); mixing counts: Common up to 46 common mixins, Engineering up to 17 (row's 74 / 29 predate later moves out); no apply error
 
 ## SQ-CEN-02 | Common's tables and the swaps file carried; interface tables reach Compat; values kept
@@ -52,13 +52,16 @@ look counts: shrapnel count = 12, [surface.wthit] format = "PERCENT", [toasts] t
 @pass Packs: `creativecommon` first, then the pack folder, then the jars (`creativeengineering` among them); no `global.CEN missing`, no NCH.cfg section miss; same item and block ids (components, coils, plates, dust piles, misc parts, wood pellets, amethyst dust and lens, every transition item)
 @fails `HELPERS_MOD_ID` not `creativecommon` (helpers load late, every jar script fails); Engineering startup pack not in the jar
 @from batches/r1113/c2_a1.qb
+@reviewed 2026-11-16
 shell grep -nE "startup script packs in order|global\.CEN missing|in any registered config" logs/kubejs/startup.log logs/kubejs/server.log | head -10 | cut -c1-300
-> zc2 reg item ^creativeengineering:
-> zc2 reg block ^creativeengineering:
-waitlog reg block 20
+> cdevtest reg item ^creativeengineering: max=1
+> cdevtest reg block ^creativeengineering: max=1
+waitlog \[cdevtest\] verb=reg kind=block regex=\S+ n= 20
+expect \[cdevtest\] verb=reg kind=item regex=\S+ n=[1-9]\d*
+reject \[cdevtest\] .*(done=0|error=)
 shell python3 -c "import json;print('exported creativeengineering items', len(json.load(open('$INST/kubejs/exported/items_by_mod/creativeengineering.json'))['items']))"
 kjsreject global\.CEN missing
-look packs order creativecommon, then the pack folder, then the jars with creativeengineering among them; live item count equals the exported (11-10) count (the row's boot-1 diff against 1.1.09 is not possible: no 1.1.09 jar left; this compares with the last dump instead)
+look packs order creativecommon, then the pack folder, then the jars with creativeengineering among them; live item count (the `verb=reg kind=item ... n=` line) equals the exported (11-10) count (the row's boot-1 diff against 1.1.09 is not possible: no 1.1.09 jar left; this compares with the last dump instead)
 
 ## SQ-CEN-04 | sawmill recipe ids unchanged; no purged-wood outputs
 @group A
@@ -66,30 +69,44 @@ look packs order creativecommon, then the pack folder, then the jars with creati
 @pass Same recipe ids and count (moved scripts keep NCH's default namespace); 211 jar sawmill recipes plus the pack's 5; no purged-wood output and no duplicate oak-twin recipes
 @fails an Engineering script failed (server.log); `removed_woods.js` order vs `item_merges.js`
 @from batches/r1113/c2_a1.qb
-> zq recipes creativeengineering:sawmill/
-waitlog recipes matching creativeengineering:sawmill/ 30
-expect recipes matching creativeengineering:sawmill/: 216
-shell grep -cE "^creativeengineering:sawmill/" $INST/kubejs/exported/recipes/all.csv
-look 216 = 211 jar + 5 pack (and = the 11-10 dump count from the shell line); removed-wood output check: no shown line outputs a removed wood item (global.removedWoods; judge only the first 80 shown)
+@reviewed 2026-11-16
+> cdevtest recipes creativeengineering:sawmill/ max=500
+waitlog \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n= 30
+expect \[cdevtest\] verb=recipes text=creativeengineering:sawmill/ n=216 
+reject \[cdevtest\] .*(done=0|error=)
+shell grep -cE "^creativeengineering:sawmill/" $INST/kubejs/exported/recipes/all.csv; true
+look 216 = 211 jar + 5 pack (and = the 11-10 dump count from the shell line); removed-wood output check: no `verb=recipes` line outputs a removed wood item (global.removedWoods; max=500 lists them all)
 
 ## SQ-CEN-05
 @group A
 @commands Same save: `/data get block` the chest; `/summon minecraft:tnt ~ ~ ~ {Fuse:1}` near the bot, then `/execute if entity @e[type=creativeengineering:shrapnel]` count over 5 ticks
 @pass Wooden water bucket, sawblade and sawdust keep their ids and NBT; 12 shrapnel pieces per TNT
 @fails Engineering registries not created (`CreativeEngineering` constructor); config not read
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> forceload add 0 0 15 15
+> fill 0 -60 0 15 -50 15 minecraft:air
+> summon minecraft:tnt 8 -60 8 {Fuse:1}
+> cdevtest tickwarp 3
+waitlog \[cdevtest\] verb=tickwarp end=done ticks=3 30
+> cdevtest entities 8 -60 8 24 type=creativeengineering:shrapnel
+waitlog \[cdevtest\] verb=entities done= 30
+expect \[cdevtest\] verb=entities n=12 
+> kill @e[type=creativeengineering:shrapnel]
+> forceload remove 0 0 15 15
+reject \[cdevtest\] .*(done=0|error=)
+look the carried chest (boot 1 save): `cdevtest inv X Y Z` at its position shows the wooden water bucket, sawblade and sawdust with their ids and NBT kept (position from the save prep)
 ## SQ-CEN-06
 @group A
 @commands Same save: an item on the belt under the dragon-head fan (dragon breathing recipe); the sawmill cutting a log; `grep -iE "FluidBridge\|liquid xp\|dragon_breathing" logs/latest.log`
 @pass Fan output as before; sawmill gives the routed sawdust with the precision blade; the XP bridge startup line names the CEI fluid; dragon breathing type registered once
 @fails fan type not registered (`DragonBreathingFanProcessingType::register` in Engineering setup); sawmill classes not pre-loaded (crash on first sawmill tick)
-@draft no batch holds this row yet
+@draft needs the carried save's machines (sawmill with a precision blade, dragon-head fan over a belt) at positions only the save prep knows; the grep half (`FluidBridge|liquid xp|dragon_breathing`) can go in once the save is built
 ## SQ-CEN-07
 @group A
 @commands Bot vein mines a small ore vein (Ore Excavation), `/undo_excavation`; then vein mine dirt, undo twice quickly
 @pass Ore undo refused (`vein_undo_denied`); dirt undo works, the second inside the 5 s cooldown refused
 @fails Ore Excavation mixins gated off (`oreexcavation` id)
-@draft no batch holds this row yet
+@draft Ore Excavation vein mining needs its keybind held by a real client (a bot break is a single block); run as a client row on the capture driver (key hold + click)
 ## SQ-CEN-08 | Creative Brewing armor effects read Common's config; mount effects tick
 @group A
 @commands Same boot: Creative Brewing armor effects and CD JEI flags read Common's config: `grep -E "ArmorFx\|mountEffectInterval\|CommonConfig" logs/kubejs/server.log`; a horse with a mount-effect armor

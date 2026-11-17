@@ -19,24 +19,82 @@
 @commands Boot; grep latest.log for `[itemMerges]`
 @pass `1 pack merges registered` at startup (woods join after); in the recipe event `pack: 93 merges, N recipes swapped` then `creativedelight: 14 merges, N recipes swapped`, each once; no `already merged`, `already ran`, `chains with` line; no `Error occurred while handling event` from an `item_merges.js`
 @fails A group logged twice: the guard keyed on `e.hashCode()` failed; `replaceItems is not a function`: the old patcherMod jar is in `mods/`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+# item_merges.js logs through the startup console; both KubeJS logs are read so the row does not depend on which
+shell grep -h "\[itemMerges\]" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-200
+shell grep -qE "\[itemMerges\] [0-9]+ pack merges registered" logs/kubejs/startup.log logs/kubejs/server.log
+shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -cE '\[itemMerges\] pack: [0-9]+ merges, [0-9]+ recipes swapped')" = 1
+shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -cE '\[itemMerges\] creativedelight: [0-9]+ merges, [0-9]+ recipes swapped')" = 1
+shell ! cat logs/kubejs/startup.log logs/kubejs/server.log | grep -E "\[itemMerges\] .*(already merged|already ran|chains with)"
+bootreject Error occurred while handling event.*item_merges|replaceItems is not a function
+look the pack and creativedelight merge counts (93 and 14 in the 2026-10-27 build; later merges raise them) and the pack-merges-registered count against item_merges.md
 ## SQ-IMS-02
 @group A
 @commands Time the recipe event: `RecipeManager` / KubeJS `recipes` lines in latest.log, against the 2026-10-27 perf eval (12.2 s KubeJS recipe events)
 @pass Shorter by several seconds
 @fails Not shorter: JFR the recipe event (`perf.md` 3) and look for `replaceItems`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -hiE "recipe.*(took|in) [0-9.]+ ?m?s|Posted .*recipe|recipes? event" logs/kubejs/server.log logs/latest.log | cut -c1-200 | tail -8; true
+look the KubeJS recipe event time against the 2026-10-27 perf eval (12.2 s): shorter by several seconds (a measurement: the runner records the line)
 ## SQ-IMS-03
 @group A
 @commands `/mgcore`; `/fdtest coffee`; `/reload`, then both again
 @pass Same PASS lines as SQ-MG-10 and SQ-CO-01 before the split (banana, milk bottle, chocolate cake, diced potatoes, rocky dirt, coffee recipes and loot); after `/reload` the same, and the two `[itemMerges]` recipe lines once each
 @fails A recipe still names a purged id: `/recipescan` and check which group the pair is in (pack recipes added after priority -100, or CD recipes naming a pack pair)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> mgcore
+waitlog \[mgcore\] done \d+ pass 180
+> fdtest coffee
+waitlog \[fdtest\] done coffee: 180
+> reload
+waitlog Added [0-9]+ recipes 180
+sleep 5
+shell test "$(grep -cE '\[itemMerges\] pack: [0-9]+ merges' logs/kubejs/server.log logs/kubejs/startup.log | awk -F: '{s+=$NF} END{print s}')" -ge 1
+> mgcore
+> fdtest coffee
+sleep 60
+count \[mgcore\] done \d+ pass, 0 fail >= 2
+count \[fdtest\] done coffee: \d+ pass, 0 fail >= 2
+reject \[(mgcore|fdtest)\] FAIL
+look after the /reload the two [itemMerges] recipe lines (pack, creativedelight) show once each in logs/kubejs/server.log
 ## SQ-IMS-04
 @group A
 @commands `/recipescan` (recipe_scan.js), grep `[jeiRemove]` for every purged id (banana, milk bottle, chocolate cake, diced potatoes, rocky dirt, the 7 coffee ids, pickled pickles, The Salt's salt, Vintage's salt block, a river wood id)
 @pass No recipe names a purged id; Gambler's Tea and the chocolate cake cutting recipe now under `creativedelight:`
 @fails A purged id left: the pair's group never ran (CD jar missing or member gate)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> recipescan
+sleep 20
+shell grep -h "\[jeiRemove\]" logs/latest.log logs/kubejs/server.log | cut -c1-200 | tail -30; true
+> cdevtest makes alexsmobs:banana
+> cdevtest makes neapolitan:milk_bottle
+> cdevtest makes neapolitan:chocolate_cake
+> cdevtest makes moredelight:diced_potatoes
+> cdevtest makes decorative_blocks:rocky_dirt
+> cdevtest makes farmersrespite:coffee_berries
+> cdevtest makes farmersrespite:coffee_beans
+> cdevtest makes farmersrespite:coffee_beans_sack
+> cdevtest makes farmersrespite:coffee
+> cdevtest makes farmersrespite:long_coffee
+> cdevtest makes farmersrespite:strong_coffee
+> cdevtest makes salt:salt
+> cdevtest makes vintagedelight:salt_block
+> cdevtest uses alexsmobs:banana
+> cdevtest uses neapolitan:milk_bottle
+> cdevtest uses neapolitan:chocolate_cake
+> cdevtest uses moredelight:diced_potatoes
+> cdevtest uses decorative_blocks:rocky_dirt
+> cdevtest uses farmersrespite:coffee_berries
+> cdevtest uses farmersrespite:coffee_beans
+> cdevtest uses salt:salt
+> cdevtest uses vintagedelight:salt_block
+> cdevtest recipes gamblers_tea
+> cdevtest recipes chocolate_cake
+reject verb=makes item=\S+ n=[1-9]
+reject verb=uses item=\S+ alone=[1-9]
+reject verb=uses item=\S+ alone=\d+ shared=[1-9]
+expect verb=recipes id=creativedelight:\S*gamblers_tea
+expect verb=recipes id=creativedelight:\S*chocolate_cake
+look verb=uses error lines (an id no longer registered) count as clean; the jeiRemove lines and the pickled pickles and river wood ids (not queried by id here) name no recipe left
 @@text
 @@text Results 2026-10-27 night (overall run, Creative Delight 17:20 then 18:43): SQ-IMS-01 PASS (`pack: 93 merges, 2 recipes swapped`, `creativedelight: 14 merges, 29 recipes swapped`, once per load, no guard lines or errors). SQ-IMS-02 PASS: recipe event 2.7 s (`wgp_new` 9.7 s), `/reload` 9-10 s (28 s). SQ-IMS-03 PASS: `/fdtest coffee` 19/0; `/mgcore` 33/0 after its stale rows were updated (merge count, 4-bottle milk recipes, cake id), the same after `/reload`. SQ-IMS-04 FAIL (salt pair only): `vintagedelight:salt_block` input of 3 Vintage froglight fermenting recipes, `vintagedelight:salt_bucket` output of `tactical_fishing:fishing_vintagedelight_salt_bucket`; no other purged id (see SQ-SALT-01).

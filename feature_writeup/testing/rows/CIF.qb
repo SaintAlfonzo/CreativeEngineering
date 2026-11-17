@@ -30,7 +30,7 @@ shell for s in jei gui_title toasts tooltips coaster wthit shrapnel surface vein
 shell for s in jei gui_title toasts tooltips coaster wthit; do grep -q "^\[$s\]" config/creativecompat-common.toml || { echo "missing [$s]"; exit 1; }; done
 shell grep -q "^\[armor_overflow\]" config/creativeequipment-common.toml
 shell python3 $INST/tools/scratch_query/cif_carry_check.py cif_old_common.toml config/creativecompat-common.toml config/creativeequipment-common.toml
-shell grep -cE "^\[(jei|gui_title|toasts|tooltips|coaster|wthit|armor_overflow)\]" config/creativecommon-common.toml
+shell grep -cE "^\[(jei|gui_title|toasts|tooltips|coaster|wthit|armor_overflow)\]" config/creativecommon-common.toml; true
 look the carry log line (`[swaps] config sections ... carried` or similar) in latest.log; DIFF lines: every carried key keeps the old value (a DIFF on a key Forge renamed or re-ranged is judged by hand); the last count is 0 once Forge has corrected Common's file (may need the stop: Forge rewrites on load, so 0 expected). The Engineering sections [shrapnel] [surface] [vein_undo] also land in Compat (SQ-ENGM carry, same mechanism)
 
 ## SQ-CIF-02 | Better Beacons potions under creativebrewing: mixes exist; drinking phantom_bane gives Better Beacons Phantom Bane
@@ -39,19 +39,21 @@ look the carry log line (`[swaps] config sections ... carried` or similar) in la
 @pass chest items read `creativebrewing:` ids; mixes present; drinking gives Better Beacons Phantom Bane
 @fails swap list not read (data/creativebrewing/swaps), PotionByNameRemapMixin
 @from batches/r1113/c3_b1.qb
-> zq potion creativebrewing:long_long_reach
-waitlog \[zq\] potion creativebrewing:long_long_reach registered: 30
-expect potion creativebrewing:long_long_reach registered: true
-> zq potion creativebrewing:long_reach minecraft:redstone
-waitlog \[zq\] done 30
-expect creativebrewing:long_reach \+ minecraft:redstone -> minecraft:potion creativebrewing:long_long_reach
+@reviewed 2026-11-16
+> cdevtest potion creativebrewing:long_long_reach
+> cdevtest potion creativebrewing:long_reach minecraft:redstone
+waitlog \[cdevtest\] verb=potion done= 30
+expect \[cdevtest\] verb=potion potion=creativebrewing:long_long_reach registered=true
+expect \[cdevtest\] verb=potion potion=creativebrewing:long_reach ingredient=minecraft:redstone output="?minecraft:potion creativebrewing:long_long_reach
 > clear cb
+> pbot hunger cb 10
 > item replace entity cb weapon.mainhand with minecraft:potion{Potion:"creativebrewing:phantom_bane"}
-> zp eat cb
-waitlog \[zp\] done 20
-> zp effects cb
-waitlog \[zp\] effects cb: 20
-expect effects cb: .*better_beacons:phantom_bane
+> pbot eat cb
+waitlog \[cdevtest\] verb=pbot\.useitem bot=cb end=finish item=minecraft:potion 30
+> cdevtest player cb
+waitlog \[cdevtest\] verb=player name=cb effects= 20
+expect \[cdevtest\] verb=player name=cb effects=\S*better_beacons:phantom_bane:
+reject \[cdevtest\] .*(done=0|error=)
 look old-world half (a chest with creativecommon:long_reach potions from an 11-06 save) not run: no 11-06 build kept to make the save
 
 ## SQ-CIF-03 | Farmer's Respite coffee: Caffeinated plus a hidden Phantom Bane of the same length; rest stat not -24000; reset to 0 when it ends
@@ -60,24 +62,28 @@ look old-world half (a chest with creativecommon:long_reach potions from an 11-0
 @pass Caffeinated plus a hidden Phantom Bane of the same duration; rest stat not pushed to -24000; reset to 0 when Phantom Bane ends
 @fails CaffeinatedPhantomBane not registered (farmersrespite gate) or the mixin compartment gate
 @from batches/r1113/c3_b1.qb
+@reviewed 2026-11-16
 > effect clear cb
 > zc3 rest cb
 > clear cb
+> pbot hunger cb 10
 > item replace entity cb weapon.mainhand with farmersrespite:coffee
-> zp eat cb
-waitlog \[zp\] done 20
-> zp effects cb
-waitlog \[zp\] effects cb: 20
-expect effects cb: .*farmersrespite:caffeinated
-expect effects cb: .*better_beacons:phantom_bane
-capture PB better_beacons:phantom_bane amp \d+ (\d+)t
+> pbot eat cb
+waitlog \[cdevtest\] verb=pbot\.useitem bot=cb end=finish item=farmersrespite:coffee 30
+> cdevtest player cb
+waitlog \[cdevtest\] verb=player name=cb effects= 20
+expect \[cdevtest\] verb=player name=cb effects=\S*farmersrespite:caffeinated:
+expect \[cdevtest\] verb=player name=cb effects=\S*better_beacons:phantom_bane:
+capture PB verb=player name=cb effects=\S*better_beacons:phantom_bane:\d+:(\d+)
 > zc3 rest cb
-shell sleep $(( {PB} / 20 + 4 ))
-> zp effects cb
+> cdevtest tickwarp {PB+80}
+waitlog \[cdevtest\] verb=tickwarp end=done 600
+> cdevtest player cb
 > zc3 rest cb
 waitlog \[c3\] done 20
 reject rest cb: -2\d{4}
-look Caffeinated and Phantom Bane durations equal; the rest stat after the drink is not near -24000; after Phantom Bane ends the stat reads near 0 (a few seconds of ticks, under about 200). If the coffee item id differs (farmersrespite:coffee is the cup), the eat line says so
+reject \[cdevtest\] .*(done=0|error=)
+look Caffeinated and Phantom Bane durations equal (third field of each in the first `verb=player` effects list); the rest stat after the drink is not near -24000; after Phantom Bane ends the stat reads near 0 (a few seconds of ticks, under about 200). If the coffee item id differs (farmersrespite:coffee is the cup), the `verb=pbot.eat` line says so (`result=` and `using=`)
 
 ## SQ-CIF-04 | Common + Compat boot: no Compat class missing in Common
 @group A (chain, CEPortTesting)
@@ -95,4 +101,5 @@ look mods list: Common, Compat, Calendar, Serene Seasons, the KubeJS stack, perf
 @commands JEI: World tab pages, cycling crafting, craftable-first list, pack ingredient order, potion fluid tooltip, fluid tank scale; WTHIT on a state-line block, campfire, hive, IE sheetmetal tank, coaster, pot; WTHIT plugin toggles screen; tall tooltip keeps its top; advancement toast filtered; long container title plaque; Detail Armor Bar with over 20 armor and a tinted set (echo, dragon); JEED page of Caffeinated; HUD icon of a hidden-icon effect; Create Configs screen string entry; AE2 / FTB Quests / LC tooltips
 @pass all as before the carve; WTHIT toggles kept their old values; tint sheets draw (no purple-black)
 @fails moved client mixin not listed under `client` in creativecompat.mixins.json; tint path
-@draft no batch holds this row yet
+@owner true
+@draft a broad playtest sweep (JEI pages, WTHIT on many blocks, toggles screen, tooltips, toasts, armor bar, JEED, HUD icons, Create config screen, AE2 / FTB / LC tooltips): split into capture rows per item before automating; until then the owner's playtest list

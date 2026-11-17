@@ -33,7 +33,7 @@ shell grep -h '\[itemMerges\] creativedelight' logs/kubejs/startup.log logs/kube
 > give s5fc creativeengineering:kelp_encrusted_cod
 > give s5fc creativeengineering:canned_ratatouille
 count Gave 1 +\[ >= 4
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the creativedelight merge count line (rows/SQ-FCB-00.shell.txt) is 6 pairs above the r1102 count (2 shulker, 1 Caesar, 3 CfB)
 
 ## SQ-FCB-01 | recipe set: new recipes present, removed upstream recipes gone
@@ -42,85 +42,85 @@ look the creativedelight merge count line (rows/SQ-FCB-00.shell.txt) is 6 pairs 
 @pass Present: `fdcutting`/`createmixing` `cabbage_leaves` (4 leaves), `shapeless/cabbage_from_leaves` (4 leaves), `shapeless/taco` (onion or `#creativeengineering:roasted_bell_pepper`), `farmersdelightcooking/cornbread_stuffing` (baked potato or baked sweet potato), `farmersdelightcooking/kelp_encrusted_cod` (0.35 xp), `pickling/vinegar_from_apple_mash` (3 `vinery:apple_mash` + `#forge:mushrooms`, 3 organic mash; since 2026-11-16, R9), `farmersdelightcooking/{salmonberry,raspberry}_jam_jar` and the grape and cherry ones each giving 1 jar, `shaped/{granite,andesite,diorite}_cutting_board`, `combine/kebab_wrap` on `#forge:tortilla`, `shapeless/cesar_salad_manual_only` (cabbage, tomato, cheese, bread, bowl). Absent: `farmersdelightcooking/lemon_jam_from_slices` and `createmixing/lemon_jam_from_slices` (removed 2026-11-02, SQ-JSL-01), `farmersdelight:cutting/cabbage`, `farmersdelight:cabbage_from_leaves`, `corn_delight:taco`, `veggiesdelight:compat/corndelight/taco`, `corn_delight:cooking/cornbread_stuffing`, `veggiesdelight:compat/corndelight/cooking/cornbread_stuffing`, `vintagedelight:fermenting/vinegar_from_jam_bottles`, `creativedelight:pickling/vinegar_from_jam` (removed 2026-11-16), `oceanic_delight:caesar_salad`, `endersdelight:cutting/shulker_filet`, `hostiledelight:ppicklerecp`, `creativedelight:fdcutting/prepared_sea_pickle`, both tempura recipes, CfB's `spice_rack`, `tool_rack`, `fruit_basket` recipes; no recipe outputs a removed item (`/recipescan`)
 @fails removal id differs upstream; Slice & Dice copy of a removed pot recipe left over
 @jars creativecommon creativedelight
-@reviewed 2026-11-16
 @from batches/r1102b/s5_A.qb
-> zq recipes cabbage_leaves
-expect \[zq\] creativedelight:[a-z_]+/cabbage_leaves -> 
-> zq recipes cabbage_from_leaves
-expect \[zq\] creativedelight:[a-z_]+/cabbage_from_leaves -> 
-> zq recipes taco
-expect \[zq\] creativedelight:[a-z_]+/taco -> 
-> zq recipes cornbread_stuffing
-expect \[zq\] creativedelight:[a-z_]+/cornbread_stuffing -> 
-> zq recipes kelp_encrusted_cod
-expect \[zq\] creativedelight:[a-z_]+/kelp_encrusted_cod -> 
-> zq recipes lemon_jam_from_slices
-expect \[zq\] creativedelight:[a-z_]+/lemon_jam_from_slices -> 
-> zq recipes vinegar_from
-expect \[zq\] creativedelight:pickling/vinegar_from_apple_mash -> 
-reject \[zq\] creativedelight:[a-z_]+/vinegar_from_jam -> 
-> zq recipes kebab_wrap
-expect \[zq\] creativedelight:[a-z_]+/kebab_wrap -> 
-> zq recipes cesar_salad_manual_only
-expect \[zq\] creativedelight:[a-z_]+/cesar_salad_manual_only -> 
-count \[zq\] creativedelight:[a-z_]+/cabbage_leaves -> >= 2
-count \[zq\] creativedelight:[a-z_]+/lemon_jam_from_slices -> >= 2
-> zq makes vintagedelight:salmonberry_jam_jar
-> zq makes vintagedelight:raspberry_jam_jar
-> zq makes vintagedelight:green_grape_jam_jar
-> zq makes vintagedelight:red_grape_jam_jar
-> zq makes vintagedelight:cherry_jam_jar
-count \[zq\] \S+ -> 1 vintagedelight:(salmonberry|raspberry|green_grape|red_grape|cherry)_jam_jar >= 5
-reject \[zq\] \S+ -> ([2-9]|\d\d) vintagedelight:(salmonberry|raspberry|green_grape|red_grape|cherry)_jam_jar
-> zq makes farmersdelight:granite_cutting_board
-> zq makes farmersdelight:andesite_cutting_board
-> zq makes farmersdelight:diorite_cutting_board
-count \[zq\] \S+ -> 1 farmersdelight:(granite|andesite|diorite)_cutting_board >= 3
-> zq recipes farmersdelight:cutting/cabbage
-reject \[zq\] farmersdelight:cutting/cabbage -> 
-> zq recipes farmersdelight:cabbage_from_leaves
-reject \[zq\] farmersdelight:cabbage_from_leaves -> 
-> zq recipes corn_delight:taco
-reject \[zq\] corn_delight:taco -> 
-> zq recipes veggiesdelight:compat/corndelight/taco
-reject \[zq\] veggiesdelight:compat/corndelight/taco -> 
-> zq recipes corn_delight:cooking/cornbread_stuffing
-reject \[zq\] corn_delight:cooking/cornbread_stuffing -> 
-> zq recipes veggiesdelight:compat/corndelight/cooking/cornbread_stuffing
-reject \[zq\] veggiesdelight:compat/corndelight/cooking/cornbread_stuffing -> 
-> zq recipes vintagedelight:fermenting/vinegar_from_jam_bottles
-reject \[zq\] vintagedelight:fermenting/vinegar_from_jam_bottles -> 
-> zq recipes oceanic_delight:caesar_salad
-reject \[zq\] oceanic_delight:caesar_salad -> 
-> zq recipes endersdelight:cutting/shulker_filet
-reject \[zq\] endersdelight:cutting/shulker_filet -> 
-> zq recipes hostiledelight:ppicklerecp
-reject \[zq\] hostiledelight:ppicklerecp -> 
-> zq recipes pneumaticcraft:thermo_plant/salmon_tempura
-reject \[zq\] pneumaticcraft:thermo_plant/salmon_tempura -> 
-> zq recipes pneumaticcraft:raw_salmon_tempura
-reject \[zq\] pneumaticcraft:raw_salmon_tempura -> 
-> zq recipes cookingforblockheads:spice_rack
-reject \[zq\] cookingforblockheads:spice_rack -> 
-> zq recipes cookingforblockheads:tool_rack
-reject \[zq\] cookingforblockheads:tool_rack -> 
-> zq recipes cookingforblockheads:fruit_basket
-reject \[zq\] cookingforblockheads:fruit_basket -> 
-> zq recipes prepared_sea_pickle
-reject \[zq\] creativedelight:[a-z_]+/prepared_sea_pickle -> 
-> zq rdetail /taco
+@reviewed 2026-11-16
+> cdevtest recipes cabbage_leaves
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/cabbage_leaves result=
+> cdevtest recipes cabbage_from_leaves
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/cabbage_from_leaves result=
+> cdevtest recipes taco
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/taco result=
+> cdevtest recipes cornbread_stuffing
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/cornbread_stuffing result=
+> cdevtest recipes kelp_encrusted_cod
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/kelp_encrusted_cod result=
+> cdevtest recipes lemon_jam_from_slices
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/lemon_jam_from_slices result=
+> cdevtest recipes vinegar_from
+expect \[cdevtest\] verb=recipes id=creativedelight:pickling/vinegar_from_apple_mash result=
+reject \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/vinegar_from_jam result=
+> cdevtest recipes kebab_wrap
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/kebab_wrap result=
+> cdevtest recipes cesar_salad_manual_only
+expect \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/cesar_salad_manual_only result=
+count \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/cabbage_leaves result= >= 2
+count \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/lemon_jam_from_slices result= >= 2
+> cdevtest makes vintagedelight:salmonberry_jam_jar
+> cdevtest makes vintagedelight:raspberry_jam_jar
+> cdevtest makes vintagedelight:green_grape_jam_jar
+> cdevtest makes vintagedelight:red_grape_jam_jar
+> cdevtest makes vintagedelight:cherry_jam_jar
+count \[cdevtest\] verb=makes id=\S+ result=vintagedelight:(salmonberry|raspberry|green_grape|red_grape|cherry)_jam_jar\*1\b >= 5
+reject \[cdevtest\] verb=makes id=\S+ result=vintagedelight:(salmonberry|raspberry|green_grape|red_grape|cherry)_jam_jar\*([2-9]|\d\d)
+> cdevtest makes farmersdelight:granite_cutting_board
+> cdevtest makes farmersdelight:andesite_cutting_board
+> cdevtest makes farmersdelight:diorite_cutting_board
+count \[cdevtest\] verb=makes id=\S+ result=farmersdelight:(granite|andesite|diorite)_cutting_board\*1\b >= 3
+> cdevtest recipes farmersdelight:cutting/cabbage
+reject \[cdevtest\] verb=recipes id=farmersdelight:cutting/cabbage result=
+> cdevtest recipes farmersdelight:cabbage_from_leaves
+reject \[cdevtest\] verb=recipes id=farmersdelight:cabbage_from_leaves result=
+> cdevtest recipes corn_delight:taco
+reject \[cdevtest\] verb=recipes id=corn_delight:taco result=
+> cdevtest recipes veggiesdelight:compat/corndelight/taco
+reject \[cdevtest\] verb=recipes id=veggiesdelight:compat/corndelight/taco result=
+> cdevtest recipes corn_delight:cooking/cornbread_stuffing
+reject \[cdevtest\] verb=recipes id=corn_delight:cooking/cornbread_stuffing result=
+> cdevtest recipes veggiesdelight:compat/corndelight/cooking/cornbread_stuffing
+reject \[cdevtest\] verb=recipes id=veggiesdelight:compat/corndelight/cooking/cornbread_stuffing result=
+> cdevtest recipes vintagedelight:fermenting/vinegar_from_jam_bottles
+reject \[cdevtest\] verb=recipes id=vintagedelight:fermenting/vinegar_from_jam_bottles result=
+> cdevtest recipes oceanic_delight:caesar_salad
+reject \[cdevtest\] verb=recipes id=oceanic_delight:caesar_salad result=
+> cdevtest recipes endersdelight:cutting/shulker_filet
+reject \[cdevtest\] verb=recipes id=endersdelight:cutting/shulker_filet result=
+> cdevtest recipes hostiledelight:ppicklerecp
+reject \[cdevtest\] verb=recipes id=hostiledelight:ppicklerecp result=
+> cdevtest recipes pneumaticcraft:thermo_plant/salmon_tempura
+reject \[cdevtest\] verb=recipes id=pneumaticcraft:thermo_plant/salmon_tempura result=
+> cdevtest recipes pneumaticcraft:raw_salmon_tempura
+reject \[cdevtest\] verb=recipes id=pneumaticcraft:raw_salmon_tempura result=
+> cdevtest recipes cookingforblockheads:spice_rack
+reject \[cdevtest\] verb=recipes id=cookingforblockheads:spice_rack result=
+> cdevtest recipes cookingforblockheads:tool_rack
+reject \[cdevtest\] verb=recipes id=cookingforblockheads:tool_rack result=
+> cdevtest recipes cookingforblockheads:fruit_basket
+reject \[cdevtest\] verb=recipes id=cookingforblockheads:fruit_basket result=
+> cdevtest recipes prepared_sea_pickle
+reject \[cdevtest\] verb=recipes id=creativedelight:[a-z_]+/prepared_sea_pickle result=
+> cdevtest rdetail /taco
 sleep 1
-> zq rdetail cornbread_stuffing
+> cdevtest rdetail cornbread_stuffing
 sleep 1
-> zq rdetail vinegar_from_apple_mash
+> cdevtest rdetail vinegar_from_apple_mash
 sleep 1
-> zq rdetail cesar_salad_manual_only
+> cdevtest rdetail cesar_salad_manual_only
 sleep 1
-> zq rdetail kebab_wrap
+> cdevtest rdetail kebab_wrap
 sleep 1
 > recipescan
 waitlog \[recipe_scan\] Scan complete 120
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look rdetail inputs (taco onion or roasted bell pepper; stuffing baked potato or sweet potato; vinegar 3 apple mash + a mushroom, 3 organic mash, 2400 t; Caesar cabbage, tomato, cheese, bread, bowl; wrap on a tortilla); recipescan lists no recipe outputting a removed item; kelp cod xp 0.35 is not printed by zq (data only)
 
 ## SQ-FCB-02 | beef patty slots take #creativeengineering:patty
@@ -130,23 +130,24 @@ look rdetail inputs (taco onion or roasted bell pepper; stuffing baked potato or
 @fails `patties.js` priority (ran before a script added the recipe); `_replaceInAdded`
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_A.qb
-> zq uses farmersdelight:beef_patty
-waitlog \[zq\] uses farmersdelight:beef_patty: 60
-> zq itemtag creativeengineering:patty
+@reviewed 2026-11-16
+> cdevtest uses farmersdelight:beef_patty
+waitlog \[cdevtest\] verb=uses item=farmersdelight:beef_patty alone= 60
+> cdevtest tag item creativeengineering:patty
 sleep 1
-> zq itemtag brewinandchewin:cooked_horror_lasagna_meats
+> cdevtest tag item brewinandchewin:cooked_horror_lasagna_meats
 sleep 1
-> zq rdetail hamburger
+> cdevtest rdetail hamburger
 sleep 2
-> zq rdetail pasta_with_meatballs
+> cdevtest rdetail pasta_with_meatballs
 sleep 2
-> zq rdetail stuffed_burrito
+> cdevtest rdetail stuffed_burrito
 sleep 2
-> zq rdetail create__the_salt:beefpatty
+> cdevtest rdetail create__the_salt:beefpatty
 sleep 2
-expect \[zq\] itemtag creativeengineering:patty \(\d+\): .*farmersdelight:beef_patty
-expect \[zq\] itemtag brewinandchewin:cooked_horror_lasagna_meats \(\d+\): .*farmersdelight:beef_patty
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+expect \[cdevtest\] verb=tag kind=item tag=creativeengineering:patty n=\d+ ids=.*farmersdelight:beef_patty
+expect \[cdevtest\] verb=tag kind=item tag=brewinandchewin:cooked_horror_lasagna_meats n=\d+ ids=.*farmersdelight:beef_patty
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the 'alone' recipes of beef_patty are only ones that output a beef patty (Create Salt beefpatty, the cooking trio); hamburger, pasta with meatballs, stuffed burrito inputs show the patty tag items
 
 ## SQ-FCB-03 | sugar, jam and cutting board tags
@@ -156,25 +157,26 @@ look the 'alone' recipes of beef_patty are only ones that output a beef patty (C
 @fails `pneumaticcraft/tags.js` `t.remove`; `stone_cutting_boards.js`
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_A.qb passed
-> zq itemtag forge:sugar
+@reviewed 2026-11-16
+> cdevtest tag item forge:sugar
 sleep 1
-> zq itemtag creativeengineering:sweeteners
+> cdevtest tag item creativeengineering:sweeteners
 sleep 1
-> zq itemtag forge:jams
+> cdevtest tag item forge:jams
 sleep 1
-> zq itemtag forge:jam_jars
+> cdevtest tag item forge:jam_jars
 sleep 1
-> zq blocktag minecraft:mineable/pickaxe
+> cdevtest tag block minecraft:mineable/pickaxe
 sleep 1
-> zq blocktag creativeengineering:counter_toppers
+> cdevtest tag block creativeengineering:counter_toppers
 sleep 1
-> zq blocktag creativeengineering:hammer_no_rotate
+> cdevtest tag block creativeengineering:hammer_no_rotate
 sleep 1
-reject \[zq\] itemtag (forge:sugar|creativeengineering:sweeteners) .*glycerol
-expect \[zq\] itemtag forge:jams \(\d+\): (?=.*vintagedelight:salmonberry_jam_jar)(?=.*vintagedelight:raspberry_jam_jar)
-expect \[zq\] itemtag forge:jam_jars \(\d+\): (?=.*vintagedelight:salmonberry_jam_jar)(?=.*vintagedelight:raspberry_jam_jar)
-count \[zq\] blocktag (minecraft:mineable/pickaxe|creativeengineering:counter_toppers|creativeengineering:hammer_no_rotate) \(\d+\): (?=.*farmersdelight:granite_cutting_board)(?=.*farmersdelight:andesite_cutting_board)(?=.*farmersdelight:diorite_cutting_board) >= 3
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject \[cdevtest\] verb=tag kind=item tag=(forge:sugar|creativeengineering:sweeteners) .*glycerol
+expect \[cdevtest\] verb=tag kind=item tag=forge:jams n=\d+ ids=(?=.*vintagedelight:salmonberry_jam_jar)(?=.*vintagedelight:raspberry_jam_jar)
+expect \[cdevtest\] verb=tag kind=item tag=forge:jam_jars n=\d+ ids=(?=.*vintagedelight:salmonberry_jam_jar)(?=.*vintagedelight:raspberry_jam_jar)
+count \[cdevtest\] verb=tag kind=block tag=(minecraft:mineable/pickaxe|creativeengineering:counter_toppers|creativeengineering:hammer_no_rotate) n=\d+ ids=(?=.*farmersdelight:granite_cutting_board)(?=.*farmersdelight:andesite_cutting_board)(?=.*farmersdelight:diorite_cutting_board) >= 3
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-FCB-04 | squid knife: exactly one Miner's squid
 @group A
@@ -183,6 +185,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails LootJS `removeLoot(Ingredient.all)` on 2.9.1; `kubejs/data/endersdelight/loot_modifiers` override not loaded (pack data below the mod jar)
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-16
 > kill @e[type=minecraft:item]
 > pbot spawn s5bh {S5H1+18} {S5H2} {S5H3+34} minecraft:overworld survival
 > pbot hold s5knf farmersdelight:iron_knife
@@ -192,13 +195,13 @@ repeat 50
 > execute as s5knf run loot spawn {S5H1+24} {S5H2} {S5H3+36} kill @e[type=minecraft:squid,tag=s5f40,limit=1]
 end
 sleep 3
-> zcount {S5H1+23} {S5H2} {S5H3+35} {S5H1+25} {S5H2+3} {S5H3+37}
-waitlog \[zcount\] entities 30
-expect \[zcount\] entities .*item:miners_delight:squid x
-reject \[zcount\] entities .*item:(?!miners_delight:squid x)
-look total miners_delight:squid items = 50 (one per roll; stacks may merge)
+> cdevtest items {S5H1+24} {S5H2+1} {S5H3+36} 1.5 keep
+waitlog \[cdevtest\] verb=items done= 30
+expect \[cdevtest\] verb=items items=\S*\bminers_delight:squid:\d+
+reject \[cdevtest\] verb=items items=(?!-)(?!miners_delight:squid:\d+ stacks=)
+look the verb=items line shows miners_delight:squid:50 (one per roll; fewer only if the knife bot picked some up: its Inventory)
 > kill @e[tag=s5f40]
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-FCB-05 | merged items turn into their survivors in a player's inventory
 @group A
@@ -219,7 +222,7 @@ sleep 2
 > data get entity s5m Inventory
 expect s5m has the following entity data: (?=.*"ends_delight:shulker_meat", Count: 2b)(?=.*"ends_delight:shulker_meat_slice", Count: 2b)(?=.*"veggiesdelight:cesar_salad", Count: 2b)(?=.*oak_spice_rack", Count: 2b)(?=.*oak_tool_rack", Count: 2b)(?=.*oak_fruit_basket", Count: 2b)
 reject s5m has the following entity data: .*"(endersdelight:shulker_mollusk|endersdelight:shulker_filet|oceanic_delight:caesar_salad|cookingforblockheads:(spice_rack|tool_rack|fruit_basket))"
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-FCB-06 | Copper Pot plates a Farmer's Delight beef stew in a bowl, not a cup
 @group A
@@ -228,8 +231,9 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails `kubejs/data/miners_delight/cup_conversion/default_conversions.json` below the donor pack **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_A.qb
-> zq rdetail farmersdelight:cooking/beef_stew
-waitlog \[zq\] rdetail matching 30
+@reviewed 2026-11-16
+> cdevtest rdetail farmersdelight:cooking/beef_stew
+waitlog \[cdevtest\] verb=rdetail text= 30
 > setblock {S5H1+58} {S5H2} {S5H3+20} minecraft:campfire[lit=true]
 > setblock {S5H1+58} {S5H2+1} {S5H3+20} miners_delight:copper_pot
 > data merge block {S5H1+58} {S5H2+1} {S5H3+20} {Inventory:{Size:8,Items:[{Slot:0b,id:"minecraft:beef",Count:1b},{Slot:1b,id:"minecraft:carrot",Count:1b},{Slot:2b,id:"minecraft:potato",Count:1b},{Slot:5b,id:"minecraft:bowl",Count:1b}]}}
@@ -237,7 +241,7 @@ sleep 25
 > data get block {S5H1+58} {S5H2+1} {S5H3+20}
 expect has the following block data: .*farmersdelight:beef_stew
 reject has the following block data: .*beef_stew_cup
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the rdetail inputs match beef + carrot + potato (else BATCH-FAULT: adjust the merge)
 
 ## SQ-FCB-07 | granite cutting board: block entity, cuts, drops itself, keeps its item over /reload and a chunk reload
@@ -247,13 +251,14 @@ look the rdetail inputs match beef + carrot + potato (else BATCH-FAULT: adjust t
 @fails `FDBackportRegistry.allowStoneBoards` not run (common setup)
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_R_A.qb
+@reviewed 2026-11-16
 > setblock {S5H1+400} {S5H2} {S5H3+10} farmersdelight:granite_cutting_board
 sleep 1
 > data get block {S5H1+400} {S5H2} {S5H3+10}
 expect has the following block data: 
 reject (?i)invalid for block
 > kill @e[type=minecraft:item]
-> zq uses minecraft:carrot
+> cdevtest uses minecraft:carrot
 sleep 2
 > pbot spawn s5cb {S5H1+397} {S5H2} {S5H3+10} minecraft:overworld survival
 > pbot hold s5cb minecraft:carrot
@@ -263,22 +268,22 @@ sleep 1
 > pbot hold s5cb farmersdelight:iron_knife
 > pbot use s5cb {S5H1+400} {S5H2} {S5H3+10} up
 sleep 2
-> zcount {S5H1+399} {S5H2} {S5H3+9} {S5H1+401} {S5H2+3} {S5H3+11}
-waitlog \[zcount\] entities 30
+> cdevtest items {S5H1+400} {S5H2+1} {S5H3+10} 1.5 keep
+waitlog \[cdevtest\] verb=items done= 30
 > kill @e[type=minecraft:item]
 > pbot hold s5cb minecraft:iron_pickaxe
-> s5 break s5cb {S5H1+400} {S5H2} {S5H3+10}
+> pbot break s5cb {S5H1+400} {S5H2} {S5H3+10}
 sleep 1
 > setblock {S5H1+400} {S5H2} {S5H3+10} farmersdelight:granite_cutting_board
 > pbot hold s5cb minecraft:air
-> s5 break s5cb {S5H1+400} {S5H2} {S5H3+10}
+> pbot break s5cb {S5H1+400} {S5H2} {S5H3+10}
 sleep 1
-> zcount {S5H1+399} {S5H2} {S5H3+9} {S5H1+401} {S5H2+3} {S5H3+11}
+> cdevtest items {S5H1+400} {S5H2+1} {S5H3+10} 1.5 keep
 sleep 3
 > data get entity s5cb Inventory
-count \[s5\] break s5cb with \S+: true >= 2
-expect \[zcount\] entities .*item:farmersdelight:granite_cutting_board x
-# 2 boards in total: dropped (zcount) plus picked up by the bot (Inventory)
+count \[cdevtest\] verb=pbot\.break bot=s5cb broken=true >= 2
+expect \[cdevtest\] verb=items items=\S*\bfarmersdelight:granite_cutting_board:\d+
+# 2 boards in total: dropped (cdevtest items) plus picked up by the bot (Inventory)
 > setblock {S5H1+400} {S5H2} {S5H3+10} farmersdelight:granite_cutting_board
 > pbot hold s5cb minecraft:beef
 > pbot use s5cb {S5H1+400} {S5H2} {S5H3+10} up
@@ -296,8 +301,8 @@ sleep 20
 sleep 5
 > data get block {S5H1+400} {S5H2} {S5H3+10}
 count has the following block data: .*minecraft:beef >= 2
-reject ^(?!.*Error parsing recipe).*(Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
-look boards: zcount drops plus s5cb Inventory = 2; the zq uses lines show whether a farmersdelight:cutting recipe takes a carrot; the carrot sat on the board after the first use and the knife cut it (zcount after the knife shows the cut result; no FD carrot cutting recipe = the carrot pops back: judge by the rdetail of the pack's carrot board recipe); two boards dropped (pickaxe and empty hand); the beef stays on the board after /reload and the chunk reload. Last row: /reload ran
+reject ^(?!.*Error parsing recipe).*(Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+look boards: cdevtest items drops plus s5cb Inventory = 2; the zq uses lines show whether a farmersdelight:cutting recipe takes a carrot; the carrot sat on the board after the first use and the knife cut it (cdevtest items after the knife shows the cut result; no FD carrot cutting recipe = the carrot pops back: judge by the rdetail of the pack's carrot board recipe); two boards dropped (pickaxe and empty hand); the beef stays on the board after /reload and the chunk reload. Last row: /reload ran
 
 @@text
 @@text Client rows (bulk client session): CQ-FCB-01 seasoning tooltip on a seasoned popcorn shows "Cheese: +2 saturation"-style
@@ -324,7 +329,7 @@ shell grep -E 'GrassSpreadSeasonMixin|IWGrowthSeasonMixin' logs/debug.log | head
 shell grep -qE 'GrassSpreadSeasonMixin' logs/debug.log && grep -qE 'IWGrowthSeasonMixin' logs/debug.log
 bootreject (?i)mixin.*(GrassSpread|IWGrowthSeason).*(error|fail)
 kjsreject \[crop-seasons\].*unknown type grass
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PST-02 | grass block in #crop_seasons/grass; dirt and mycelium not
 @group A
@@ -342,7 +347,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 expect PST02 grass in tag
 expect PST02 dirt not in tag
 expect PST02 mycelium not in tag
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PST-03 | vanilla grass spreads about 75 % as fast in winter; covered grass still dies
 @group A (temperate plains column, sky open)
@@ -351,6 +356,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails GrassSpreadSeasonMixin not applied, still the old winter rule (Creative Calendar jar older than 2026-11-03), or fertility not off (biome typed cold/frozen or tropical: pick a temperate one)
 @jars creativecommon
 @from batches/r1102b/s5_R_A.qb
+@reviewed 2026-11-16
 > pbot spawn s5pd {S5H1+38} {S5H2} {S5H3+58} minecraft:overworld survival
 sleep 2
 > fill {S5H1+37} {S5H2-1} {S5H3+57} {S5H1+74} {S5H2-1} {S5H3+94} minecraft:stone
@@ -375,13 +381,14 @@ sleep 10
 > fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} minecraft:dirt replace minecraft:grass_block
 end
 > setblock {S5H1+39} {S5H2} {S5H3+70} minecraft:stone
-> gamerule randomTickSpeed 100
-sleep 30
+> gamerule randomTickSpeed 3
+> cdevtest randomtick {S5H1+39} {S5H2-1} {S5H3+70} {S5H1+39} {S5H2-1} {S5H3+70} 15 nofluids
+waitlog \[cdevtest\] verb=randomtick done= 60
 > execute if block {S5H1+39} {S5H2-1} {S5H3+70} minecraft:dirt run say PST03 covered grass turned to dirt in winter
 > gamerule randomTickSpeed 3
 shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST03
 expect PST03 covered grass turned to dirt in winter
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the counts (rows/SQ-PST-03.shell.txt): winter mean 60-90 % of spring; a spring mean near the whole pad (1024) means saturation: rerun with 5 s waits
 reject Enum constant must be one of
 
@@ -395,7 +402,7 @@ reject Enum constant must be one of
 shell grep -E 'ModdedGrassSpreadSeasonMixin' logs/debug.log | head -6
 shell grep -qE 'ModdedGrassSpreadSeasonMixin' logs/debug.log
 bootreject (?i)mixin.*ModdedGrassSpread.*(error|fail)
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the debug lines name IW ModGrassBlock, Botania BotaniaGrassBlock, Vinery SpreadableGrassSlabBlock, Vintage LushGrassBlock
 
 ## SQ-PST-07 | modded grasses in the grass season tag
@@ -419,7 +426,7 @@ look the debug lines name IW ModGrassBlock, Botania BotaniaGrassBlock, Vinery Sp
 > execute unless block {S5H1+25} {S5H2-1} {S5H3+92} #creativeengineering:crop_seasons/grass run say PST07 upgrade_aquatic:beachgrass not in tag
 count PST07 \S+ in tag == 4
 count PST07 \S+ not in tag == 2
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PST-08 | Botania vivid grass slower in winter
 @group A (same temperate column)
@@ -451,7 +458,7 @@ sleep 10
 end
 > gamerule randomTickSpeed 3
 shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST08
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 reject Enum constant must be one of
 
 ## SQ-PST-09 | Vinery grass slab slower in winter; covered slab dies
@@ -461,6 +468,7 @@ reject Enum constant must be one of
 @fails `VineryGrassSlabSeasonMixin` missing, or placed before the survive check
 @jars creativecommon
 @from batches/r1102b/s5_R_A.qb passed
+@reviewed 2026-11-16
 > fill {S5H1+37} {S5H2-1} {S5H3+57} {S5H1+74} {S5H2-1} {S5H3+94} minecraft:stone
 > fill {S5H1+37} {S5H2} {S5H3+57} {S5H1+74} {S5H2+3} {S5H3+94} minecraft:air
 > fill {S5H1+39} {S5H2-1} {S5H3+59} {S5H1+72} {S5H2-1} {S5H3+92} vinery:grass_slab
@@ -483,13 +491,14 @@ sleep 10
 > fill {S5H1+40} {S5H2-1} {S5H3+60} {S5H1+71} {S5H2-1} {S5H3+91} vinery:dirt_slab replace vinery:grass_slab
 end
 > setblock {S5H1+39} {S5H2} {S5H3+70} minecraft:stone
-> gamerule randomTickSpeed 100
-sleep 30
+> gamerule randomTickSpeed 3
+> cdevtest randomtick {S5H1+39} {S5H2-1} {S5H3+70} {S5H1+39} {S5H2-1} {S5H3+70} 15 nofluids
+waitlog \[cdevtest\] verb=randomtick done= 60
 > execute if block {S5H1+39} {S5H2-1} {S5H3+70} vinery:dirt_slab run say PST09 covered slab turned to dirt slab in winter
 > gamerule randomTickSpeed 3
 shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST09
 expect PST09 covered slab turned to dirt slab in winter
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 reject Enum constant must be one of
 
 ## SQ-PST-10 | Vintage lush grass slower in winter
@@ -522,7 +531,7 @@ sleep 10
 end
 > gamerule randomTickSpeed 3
 shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST10
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 reject Enum constant must be one of
 
 ## SQ-PST-11 | IW rooted grass (rooted dirt pad) slower in winter
@@ -594,7 +603,7 @@ end
 shell python3 $INST/tools/scratch_query/s5_ratio.py logs/latest.log PST11b
 > season set MID_SPRING
 > pbot remove s5pd
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look season left at mid_spring for the rest of the boot (SQ-PST rows end here)
 reject Enum constant must be one of
 
@@ -701,6 +710,7 @@ look grassOffPenalty = 0.5 in the toml; both pad locates report (0 blocks away) 
 @fails `hemp_harvest.js` not loaded (grep `latest.log` for the file); `block.properties` / `getBlock` Rhino errors
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_R_A.qb
+@reviewed 2026-11-16
 > kill @e[type=minecraft:item]
 > kill @e[type=alexsmobs:crow]
 > kill @e[type=minecraft:slime]
@@ -718,9 +728,9 @@ sleep 1
 > pbot use s5hp {S5H1+20} {S5H2} {S5H3+50} up
 sleep 1
 > execute if block {S5H1+20} {S5H2+1} {S5H3+50} minecraft:air if block {S5H1+20} {S5H2} {S5H3+50} immersiveengineering:hemp[growth=bottom4] run say PSD01 click bottom: top gone, bottom4 kept
-> zcount {S5H1+19} {S5H2} {S5H3+49} {S5H1+21} {S5H2+3} {S5H3+51}
-waitlog \[zcount\] entities 30
-expect \[zcount\] entities .*item:immersiveengineering:hemp_fiber x
+> cdevtest items {S5H1+20} {S5H2+1} {S5H3+50} 1.5 keep
+waitlog \[cdevtest\] verb=items done= 30
+expect \[cdevtest\] verb=items items=\S*\bimmersiveengineering:hemp_fiber:\d+
 > kill @e[type=minecraft:item]
 > kill @e[type=alexsmobs:crow]
 > kill @e[type=minecraft:slime]
@@ -732,8 +742,8 @@ sleep 1
 expect PSD01 click top: top gone, bottom4 kept
 expect PSD01 click bottom: top gone, bottom4 kept
 expect PSD01 bottom2 unchanged
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
-look no hemp fiber from the bottom2 click (the zcount above was before it; any later fiber shows in PSD-02's first zcount)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+look no hemp fiber from the bottom2 click (the cdevtest items above was before it; any later fiber shows in PSD-02's first cdevtest items)
 
 ## SQ-PSD-02 | iron hoe on a 3x3 ripe hemp field harvests all 9 tops, 1 durability; a stick does nothing
 @group A
@@ -742,6 +752,7 @@ look no hemp fiber from the bottom2 click (the zcount above was before it; any l
 @fails `HoeHarvestArea` class name changed (falls back to 1 block); Quark field name for durability
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-16
 > fill {S5H1+24} {S5H2-1} {S5H3+50} {S5H1+26} {S5H2-1} {S5H3+52} minecraft:farmland
 > fill {S5H1+24} {S5H2} {S5H3+50} {S5H1+26} {S5H2} {S5H3+52} immersiveengineering:hemp[growth=bottom4]
 > fill {S5H1+24} {S5H2+1} {S5H3+50} {S5H1+26} {S5H2+1} {S5H3+52} immersiveengineering:hemp[growth=top0]
@@ -750,13 +761,13 @@ look no hemp fiber from the bottom2 click (the zcount above was before it; any l
 > pbot hold s5hh minecraft:iron_hoe
 > pbot use s5hh {S5H1+25} {S5H2+1} {S5H3+51} up
 sleep 1
-> zq count {S5H1+24} {S5H2+1} {S5H3+50} {S5H1+26} {S5H2+1} {S5H3+52} immersiveengineering:hemp
+> cdevtest count {S5H1+24} {S5H2+1} {S5H3+50} {S5H1+26} {S5H2+1} {S5H3+52} immersiveengineering:hemp
 sleep 2
-> zq count {S5H1+24} {S5H2} {S5H3+50} {S5H1+26} {S5H2} {S5H3+52} immersiveengineering:hemp
+> cdevtest count {S5H1+24} {S5H2} {S5H3+50} {S5H1+26} {S5H2} {S5H3+52} immersiveengineering:hemp
 sleep 2
 > data get entity s5hh SelectedItem
-expect \[zq\] count immersiveengineering:hemp: 0\b
-expect \[zq\] count immersiveengineering:hemp: 9\b
+expect \[cdevtest\] verb=count block=immersiveengineering:hemp n=0\b
+expect \[cdevtest\] verb=count block=immersiveengineering:hemp n=9\b
 # r1102b judge: pack config/quark-common.toml "Harvesting Costs Durability" = false, the harvest code follows it: no hoe damage
 expect s5hh has the following entity data: \{.*id: "minecraft:iron_hoe".*Damage: 0\b
 > fill {S5H1+24} {S5H2-1} {S5H3+50} {S5H1+26} {S5H2-1} {S5H3+52} minecraft:farmland
@@ -765,10 +776,10 @@ expect s5hh has the following entity data: \{.*id: "minecraft:iron_hoe".*Damage:
 > pbot hold s5hh minecraft:stick
 > pbot use s5hh {S5H1+25} {S5H2+1} {S5H3+51} up
 sleep 1
-> zq count {S5H1+24} {S5H2+1} {S5H3+50} {S5H1+26} {S5H2+1} {S5H3+52} immersiveengineering:hemp
+> cdevtest count {S5H1+24} {S5H2+1} {S5H3+50} {S5H1+26} {S5H2+1} {S5H3+52} immersiveengineering:hemp
 sleep 2
-count \[zq\] count immersiveengineering:hemp: 9\b >= 2
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+count \[cdevtest\] verb=count block=immersiveengineering:hemp n=9\b >= 2
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the first top count is 0 (all 9 tops gone) and bottoms 9; after the stick the 9 tops stay
 
 ## SQ-PSD-03 | river tree leaves do not decay (Separated Leaves rule)
@@ -778,6 +789,7 @@ look the first top count is 0 (all 9 tops gone) and bottoms 9; after the stick t
 @fails rule file not read: check `kubejs/data/upgrade_aquatic/separated_leaves/river.json` is in the datapack list; Separated Leaves `Reload.LEAVES_RULES`
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-16
 > pbot spawn s5lf {S5H1+60} {S5H2} {S5H3+104} minecraft:overworld survival
 > place feature upgrade_aquatic:river_tree {S5H1+40} {S5H2} {S5H3+110}
 > place feature upgrade_aquatic:river_tree {S5H1+48} {S5H2} {S5H3+110}
@@ -785,18 +797,17 @@ look the first top count is 0 (all 9 tops gone) and bottoms 9; after the stick t
 > place feature upgrade_aquatic:river_tree {S5H1+64} {S5H2} {S5H3+110}
 > place feature upgrade_aquatic:river_tree {S5H1+72} {S5H2} {S5H3+110}
 sleep 2
-> zq count {S5H1+34} {S5H2} {S5H3+104} {S5H1+80} {S5H2+20} {S5H3+116} upgrade_aquatic:river_leaves
-waitlog \[zq\] count 60
-capture S5L0 \[zq\] count upgrade_aquatic:river_leaves: (\d+)
-> gamerule randomTickSpeed 20
-sleep 120
-> gamerule randomTickSpeed 3
-> zq count {S5H1+34} {S5H2} {S5H3+104} {S5H1+80} {S5H2+20} {S5H3+116} upgrade_aquatic:river_leaves
+> cdevtest count {S5H1+34} {S5H2} {S5H3+104} {S5H1+80} {S5H2+20} {S5H3+116} upgrade_aquatic:river_leaves
+waitlog \[cdevtest\] verb=count block= 60
+capture S5L0 \[cdevtest\] verb=count block=upgrade_aquatic:river_leaves n=(\d+)
+> cdevtest randomtick {S5H1+34} {S5H2} {S5H3+104} {S5H1+80} {S5H2+20} {S5H3+116} 12 nofluids
+waitlog \[cdevtest\] verb=randomtick done= 120
+> cdevtest count {S5H1+34} {S5H2} {S5H3+104} {S5H1+80} {S5H2+20} {S5H3+116} upgrade_aquatic:river_leaves
 sleep 5
-capture S5L1 \[zq\] count upgrade_aquatic:river_leaves: (\d+)
+capture S5L1 \[cdevtest\] verb=count block=upgrade_aquatic:river_leaves n=(\d+)
 shell echo before {S5L0} after {S5L1}; test {S5L0} -gt 0 && test {S5L0} -eq {S5L1}
 reject Failed to place
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look 120 s at randomTickSpeed 20 (= 16 x the row's 2400 ticks at 3); counts in rows/SQ-PSD-03.shell.txt
 
 ## SQ-PSD-04 | azalea trees have oak trunks; a given azalea log becomes an oak log
@@ -806,16 +817,17 @@ look 120 s at randomTickSpeed 20 (= 16 x the row's 2400 ticks at 3); counts in r
 @fails Quark config not applied (line 796); a twin key missing (startup error naming `i.<key>`)
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_A.qb passed
+@reviewed 2026-11-16
 > place feature minecraft:azalea_tree {S5H1+100} {S5H2} {S5H3+110}
 > place feature minecraft:azalea_tree {S5H1+108} {S5H2} {S5H3+110}
 > place feature minecraft:azalea_tree {S5H1+116} {S5H2} {S5H3+110}
 sleep 2
-> zq count {S5H1+96} {S5H2} {S5H3+106} {S5H1+120} {S5H2+12} {S5H3+114} minecraft:oak_log
+> cdevtest count {S5H1+96} {S5H2} {S5H3+106} {S5H1+120} {S5H2+12} {S5H3+114} minecraft:oak_log
 sleep 4
-> zq count {S5H1+96} {S5H2} {S5H3+106} {S5H1+120} {S5H2+12} {S5H3+114} quark:azalea_log
+> cdevtest count {S5H1+96} {S5H2} {S5H3+106} {S5H1+120} {S5H2+12} {S5H3+114} quark:azalea_log
 sleep 4
-expect \[zq\] count minecraft:oak_log: [1-9]
-expect \[zq\] count quark:azalea_log: 0\b
+expect \[cdevtest\] verb=count block=minecraft:oak_log n=[1-9]
+expect \[cdevtest\] verb=count block=quark:azalea_log n=0\b
 > pbot spawn s5az {S5H1+98} {S5H2} {S5H3+104} minecraft:overworld survival
 sleep 1
 > give s5az quark:azalea_log 3
@@ -827,7 +839,7 @@ shell grep -h '\[removedWoods\]' logs/kubejs/startup.log logs/kubejs/server.log 
 shell grep -h '\[removedWoods\]' logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | grep -q '5 woods merged into oak'
 shell ! grep -hiE '(already merged|unknown).*azalea' logs/kubejs/startup.log logs/kubejs/server.log
 reject Failed to place
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSD-05 | no recipe outputs a Quark azalea wood item
 @group A
@@ -836,10 +848,11 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails `wood_types.js` or a jar sawmill json survived the purge
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_A.qb
-> zq makes azalea
-waitlog \[zq\] makes azalea: 60
-reject \[zq\] (?!creativedevtools:)\S+ -> \d+ (quark:azalea_(?!hedge)|everycomp:\S*/quark/azalea_|lightmanscurrency:\S*quark_azalea|cookingforblockheads:azalea_)
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+@reviewed 2026-11-16
+> cdevtest makes azalea
+waitlog \[cdevtest\] verb=makes item=azalea n= 60
+reject \[cdevtest\] verb=makes id=(?!creativedevtools:)\S+ result=(quark:azalea_(?!hedge)|everycomp:\S*/quark/azalea_|lightmanscurrency:\S*quark_azalea|cookingforblockheads:azalea_)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSD-06 | village farms (minecraft:village_savanna, dry 1 of 3): cotton possible, never peppers or coffee
 @group B
@@ -848,23 +861,31 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails CD jar not rebuilt/installed (`village_farms.json` in the jar still lists them in both groups)
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_B.qb
+@reviewed 2026-11-16
 > locate structure minecraft:village_savanna
 waitlog (The nearest minecraft:village_savanna is at|Could not find) 600
 capture S5V1 The nearest minecraft:village_savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {S5V11-48} {S5V13-48} {S5V11+48} {S5V13+48}
 sleep 10
-> zq count {S5V11-48} 50 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:cotton
+> cdevtest count {S5V11-48} 50 {S5V13-48} {S5V11+48} 76 {S5V13+48} rusticdelight:cotton
+> cdevtest count {S5V11-48} 77 {S5V13-48} {S5V11+48} 103 {S5V13+48} rusticdelight:cotton
+> cdevtest count {S5V11-48} 104 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:cotton
 > say PSD06 dry0 rusticdelight:cotton counted
 waitlog PSD06 dry0 rusticdelight:cotton counted 240
-> zq count {S5V11-48} 50 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:bell_peppers
+> cdevtest count {S5V11-48} 50 {S5V13-48} {S5V11+48} 76 {S5V13+48} rusticdelight:bell_peppers
+> cdevtest count {S5V11-48} 77 {S5V13-48} {S5V11+48} 103 {S5V13+48} rusticdelight:bell_peppers
+> cdevtest count {S5V11-48} 104 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:bell_peppers
 > say PSD06 dry0 rusticdelight:bell_peppers counted
 waitlog PSD06 dry0 rusticdelight:bell_peppers counted 240
-> zq count {S5V11-48} 50 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:coffee
+> cdevtest count {S5V11-48} 50 {S5V13-48} {S5V11+48} 76 {S5V13+48} rusticdelight:coffee
+> cdevtest count {S5V11-48} 77 {S5V13-48} {S5V11+48} 103 {S5V13+48} rusticdelight:coffee
+> cdevtest count {S5V11-48} 104 {S5V13-48} {S5V11+48} 130 {S5V13+48} rusticdelight:coffee
 > say PSD06 dry0 rusticdelight:coffee counted
 waitlog PSD06 dry0 rusticdelight:coffee counted 240
 > forceload remove {S5V11-48} {S5V13-48} {S5V11+48} {S5V13+48}
-reject \[zq\] count rusticdelight:(bell_peppers|coffee): [1-9]
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+count \[cdevtest\] verb=count block=rusticdelight:(cotton|bell_peppers|coffee) n=\d+ .*skipped_columns=0 == 9
+reject \[cdevtest\] verb=count block=rusticdelight:(bell_peppers|coffee) n=[1-9]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look across SQ-PSD-06, -06b, -06c: cotton above 0 in at least one dry village (35 % of fields replaced, 50/50 split: a village can have none); wild crop patches near a village also count
 
 ## SQ-PSD-07 | raspberry bushes in snowy taiga and grove
@@ -874,29 +895,54 @@ look across SQ-PSD-06, -06b, -06c: cotton above 0 in at least one dry village (3
 @fails `[wild-crops]` log lines for the raspberry rule; `wild_crops.json` folder copy
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_B.qb
-> zq biometag creativedelight:wild_crops/raspberry
-waitlog \[zq\] biometag 30
-expect \[zq\] biometag creativedelight:wild_crops/raspberry \(\d+\): (?=.*minecraft:snowy_taiga)(?=.*minecraft:grove)
+@reviewed 2026-11-16
+> cdevtest tag biome creativedelight:wild_crops/raspberry
+waitlog \[cdevtest\] verb=tag kind=biome 30
+expect \[cdevtest\] verb=tag kind=biome tag=creativedelight:wild_crops/raspberry n=\d+ ids=(?=.*minecraft:snowy_taiga)(?=.*minecraft:grove)
 > locate biome minecraft:snowy_taiga
 waitlog (The nearest minecraft:snowy_taiga is at|Could not find) 600
 capture S5T The nearest minecraft:snowy_taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {S5T1-64} {S5T3-64} {S5T1+63} {S5T3+63}
 sleep 15
-> zq count {S5T1-64} 40 {S5T3-64} {S5T1+63} 200 {S5T3+63} hearthandharvest:raspberry_bush
-> say PSD07 S5T counted
-waitlog PSD07 S5T counted 300
+# a count box is at most 262144 blocks (64x64x64): each biome box runs as slices; its shell line sums them and fails on 0 (the old count >= 2: both biomes)
+> say PSD07S5T begin
+> cdevtest count {S5T1-64} 40 {S5T3-64} {S5T1+63} 200 {S5T3-53} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3-52} {S5T1+63} 200 {S5T3-41} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3-40} {S5T1+63} 200 {S5T3-29} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3-28} {S5T1+63} 200 {S5T3-17} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3-16} {S5T1+63} 200 {S5T3-5} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3-4} {S5T1+63} 200 {S5T3+7} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3+8} {S5T1+63} 200 {S5T3+19} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3+20} {S5T1+63} 200 {S5T3+31} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3+32} {S5T1+63} 200 {S5T3+43} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3+44} {S5T1+63} 200 {S5T3+55} hearthandharvest:raspberry_bush
+> cdevtest count {S5T1-64} 40 {S5T3+56} {S5T1+63} 200 {S5T3+63} hearthandharvest:raspberry_bush
+> say PSD07S5T end
+waitlog PSD07S5T end 300
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" PSD07S5T hearthandharvest:raspberry_bush
 > forceload remove {S5T1-64} {S5T3-64} {S5T1+63} {S5T3+63}
 > locate biome minecraft:grove
 waitlog (The nearest minecraft:grove is at|Could not find) 600
 capture S5G The nearest minecraft:grove is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {S5G1-64} {S5G3-64} {S5G1+63} {S5G3+63}
 sleep 15
-> zq count {S5G1-64} 40 {S5G3-64} {S5G1+63} 200 {S5G3+63} hearthandharvest:raspberry_bush
-> say PSD07 S5G counted
-waitlog PSD07 S5G counted 300
+> say PSD07S5G begin
+> cdevtest count {S5G1-64} 40 {S5G3-64} {S5G1+63} 200 {S5G3-53} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3-52} {S5G1+63} 200 {S5G3-41} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3-40} {S5G1+63} 200 {S5G3-29} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3-28} {S5G1+63} 200 {S5G3-17} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3-16} {S5G1+63} 200 {S5G3-5} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3-4} {S5G1+63} 200 {S5G3+7} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3+8} {S5G1+63} 200 {S5G3+19} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3+20} {S5G1+63} 200 {S5G3+31} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3+32} {S5G1+63} 200 {S5G3+43} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3+44} {S5G1+63} 200 {S5G3+55} hearthandharvest:raspberry_bush
+> cdevtest count {S5G1-64} 40 {S5G3+56} {S5G1+63} 200 {S5G3+63} hearthandharvest:raspberry_bush
+> say PSD07S5G end
+waitlog PSD07S5G end 300
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" PSD07S5G hearthandharvest:raspberry_bush
 > forceload remove {S5G1-64} {S5G3-64} {S5G1+63} {S5G3+63}
-count \[zq\] count hearthandharvest:raspberry_bush: [1-9] >= 2
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look a 0 in one biome is not a fail by itself if the biome tag holds it (the row's fallback: /place feature creativedelight:wild/raspberry_bush there)
 
 ## CQ-PSD-08
@@ -936,7 +982,7 @@ sleep 2
 sleep 2
 expect \[spawn-boxes\] monster at .*: no box \(structures referenced here: none\) -> vanilla \[
 expect \[spawn-boxes\] no mob category nonsense
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSM-02 | meta pillager tower siege: every part gets the meta_tower_siege box
 @group B
@@ -1153,7 +1199,7 @@ capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 sleep 1
 > forceload remove {S5TS1-64} {S5TS3-64} {S5TS1+64} {S5TS3+64}
 expect \[spawn-boxes\] .*box meta_tower_siege \(part box (towers|camps|vehicles)\) of creativeengineering:meta/pillager_tower_siege, part \S+ -> \[minecraft:pillager 7 \(1-1\), minecraft:vindicator 3 \(1-1\), minecraft:evoker 3 \(1-1\), minecraft:illusioner 3 \(1-1\), minecraft:witch 3 \(1-1\)\]
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the [meta-structures] line (rows/SQ-PSM-02.shell.txt) gives the part chunks: the grid points inside a tower, a camp and a weapon each print the meta_tower_siege line with their part box; 'no box' only between parts
 
 ## SQ-PSM-03 | lone birch pillager tower: box probe and illager spawns inside
@@ -1205,7 +1251,7 @@ sleep 2
 shell grep -c 'NaturalSpawnerBoxHeightMixin' logs/debug.log; true
 bootreject (?i)NaturalSpawnerBoxHeightMixin.*(error|fail)
 count PSM03 pillager in the tower >= 3
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look biome monsters (zombie/skeleton/creeper Pos lines) only outside the tower walls; mobcap shows the monster cap 70 at level 0; the tower base y is the ground 30 blocks east of the locate point
 
 ## SQ-PSM-04 | meta pillager camp + ruin: camp part boxed, ruin part never an illager pool
@@ -1296,7 +1342,7 @@ sleep 1
 shell grep -E '\[meta-structures\].*pillager_camp_ruin' logs/latest.log | tail -3
 expect \[spawn-boxes\] .*box meta_camps \(part box camps\)
 reject \[spawn-boxes\] .*part philipsruins:\S+ -> \[minecraft:pillager
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the 3x3 probe grid: the camp part reads box meta_camps with the camp_meta pool; the ruin part spawn_overrides or 'no box -> vanilla' with its own list
 
 ## SQ-PSM-05 | spawn boxes: pillager ship, villager ship, witch wagon, swamp hut, Terralith witch hut
@@ -1371,7 +1417,7 @@ sleep 2
 > forceload remove {S5TH1-16} {S5TH3-16} {S5TH1+16} {S5TH3+16}
 expect \[spawn-boxes\] .*box witch_huts_full .*\[minecraft:witch 1 \(1-1\)\]
 expect \[spawn-boxes\] .*box witch_huts .*\[minecraft:witch 1 \(1-1\)\]
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the ship line: box unwrecked_pillager_ships (boat pool) for a pillager-crew ship, no box for a villager-crew one (the row wants one of each: repeat the ship locate from another origin if this one is a villager ship); wagon and swamp hut witch_huts_full; Terralith hut witch_huts at the y it sits
 
 ## SQ-PSM-06 | struck monument after a restart: 3 elder guardians, rooms, spawn_overrides box
@@ -1381,6 +1427,7 @@ look the ship line: box unwrecked_pillager_ships (boat pool) for a pillager-crew
 @fails 0 elders, hollow monument: `StructureStartMetaMonumentMixin` not applied or `repairMonumentsAfterLoad` skipped (warning line says why)
 @jars creativecommon
 @from batches/r1102b/s5_B2.qb
+@reviewed 2026-11-16
 > forceload add {S5SM1-48} {S5SM3-48} {S5SM1+48} {S5SM3+48}
 > pbot spawn s5mstruck {S5SM1} 60 {S5SM3} minecraft:overworld survival
 sleep 20
@@ -1389,12 +1436,12 @@ sleep 20
 > cespawnbox {S5SM1} 50 {S5SM3}
 > cespawnbox {S5SM1} 45 {S5SM3+8}
 sleep 2
-> zq count {S5SM1-20} 39 {S5SM3-20} {S5SM1+20} 62 {S5SM3+20} minecraft:prismarine_bricks
+> cdevtest count {S5SM1-20} 39 {S5SM3-20} {S5SM1+20} 62 {S5SM3+20} minecraft:prismarine_bricks
 > say PSM06 struck counted
 waitlog PSM06 struck counted 180
 expect #struck_elders has 3 \[s5n\]
 reject could not be rebuilt
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 expect \[spawn-boxes\] .*box spawn_overrides of creativeengineering:meta/struck_monument, part minecraft:monument -> \[minecraft:guardian 1 \(2-4\)\]
 look prismarine brick count well above 0 = interior rooms present (compare with the lone monument's count in SQ-PSM-06b)
 > pbot remove s5mstruck
@@ -1406,18 +1453,20 @@ look prismarine brick count well above 0 = interior rooms present (compare with 
 @fails none with the probe right: monster cap full (record mobcap); probe wrong: vanilla lookup broken
 @jars creativecommon
 @from batches/r1102b/s5_B2.qb
+@reviewed 2026-11-16
 > forceload add {S5LM1-48} {S5LM3-48} {S5LM1+48} {S5LM3+48}
 > execute positioned {S5LM1} 50 {S5LM3} run kill @e[type=minecraft:guardian,distance=..64]
 > setblock {S5LM1} 66 {S5LM3} minecraft:glass
 > pbot spawn s5gd {S5LM1} 67 {S5LM3} minecraft:overworld survival
-sleep 240
+> cdevtest tickwarp 4800
+waitlog \[cdevtest\] verb=tickwarp end=done 600
 > execute store result score #guardians s5n positioned {S5LM1} 50 {S5LM3} if entity @e[type=minecraft:guardian,distance=..30]
 > scoreboard players get #guardians s5n
 > ceperf mobcap
 sleep 2
 > pbot remove s5gd
 expect #guardians has [1-9]\d* \[s5n\]
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look none with the probe right: record the mobcap line (monster cap full?)
 
 ## SQ-PSM-08 | giant squid flees a whale at 12 blocks, not at 30
@@ -1453,7 +1502,7 @@ sleep 15
 > data get entity @e[tag=s5gs,limit=1] Pos
 capture S5Q3 entity data: \[(-?[\d.]+)d, (-?[\d.]+)d, (-?[\d.]+)d\]
 shell python3 -c "import math; q0=({S5Q01},{S5Q02},{S5Q03}); q1=({S5Q11},{S5Q12},{S5Q13}); w=({S5WA1},{S5WA2},{S5WA3}); q2=({S5Q21},{S5Q22},{S5Q23}); w2=({S5WB1},{S5WB2},{S5WB3}); q3=({S5Q31},{S5Q32},{S5Q33}); print('30 m: moved', round(math.dist(q0,q1),1), 'whale dist', round(math.dist(q1,w),1)); print('12 m: dist at tp', round(math.dist(q2,w2),1), 'after 15 s', round(math.dist(q3,w2),1))"
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look rows/SQ-PSM-08.shell.txt: at 30 the squid's movement is ordinary wandering; after the 12-block tp it moves away and stops past about 24
 
 ## SQ-PSM-09 | natural squid, glow squid and dolphin babies, 2-6 %
@@ -1463,6 +1512,7 @@ look rows/SQ-PSM-08.shell.txt: at 30 the squid's movement is ordinary wandering;
 @fails 0 babies among 60+: natural path differs from SQ-OM-13 (check `MobBabyMixin` in the class dump); few squid at all: water_creature cap held by Alex's Mobs (record counts for the owner)
 @jars creativecommon
 @from batches/r1102b/s5_B.qb
+@reviewed 2026-11-16
 > setblock {S5O1} 64 {S5O3} minecraft:glass
 > pbot spawn s5sq {S5O1} 65 {S5O3} minecraft:overworld survival
 sleep 5
@@ -1471,7 +1521,8 @@ sleep 5
 > kill @e[type=minecraft:dolphin]
 > scoreboard objectives add s5age dummy
 > scoreboard objectives add s5n dummy
-sleep 600
+> cdevtest tickwarp 12000
+waitlog \[cdevtest\] verb=tickwarp end=done 900
 > execute as @e[type=minecraft:squid] store result score @s s5age run data get entity @s Age
 > execute store result score #squid s5n if entity @e[type=minecraft:squid]
 > execute store result score #squid_baby s5n if entity @e[type=minecraft:squid,scores={s5age=..-1}]
@@ -1492,7 +1543,7 @@ sleep 2
 > pbot remove s5sq
 > forceload remove {S5O1-48} {S5O3-48} {S5O1+48} {S5O3+48}
 expect #squid has \d+ \[s5n\]
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look counts (#type has N): with 60+ of a type, babies about 2-5 % squid and glow squid, 2-6 % dolphins; few squid: record the mobcap line (water_creature cap held by Alex's Mobs?)
 
 @@text
@@ -1516,7 +1567,7 @@ shell ! (grep -n 'Error occurred while handling event' logs/latest.log | grep -q
 > setblock {S5H1+20} {S5H2-1} {S5H3+56} minecraft:farmland
 > setblock {S5H1+20} {S5H2} {S5H3+56} minecraft:attached_melon_stem[facing=north,east=true]
 expect Changed the block
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSF-02 | iron hoe (r1103 p2_R2: bot 5 blocks off and its inventory counted; 7 tomatoes for 9 vines in p2, bot 2 blocks away) on the middle bottom vine resets 3 tomato columns, climbing, nothing broken
 @group A
@@ -1525,6 +1576,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails vines untouched: own_pick tag missing (`/reload`, check `#creativeengineering:crops/own_pick`); only the lower two levels: climb not running
 @jars creativecalendar creativedelight
 @from batches/r1103/p2_R2.qb
+@reviewed 2026-11-16
 > kill @e[type=minecraft:item]
 > kill @e[type=alexsmobs:crow]
 > kill @e[type=minecraft:slime]
@@ -1557,17 +1609,17 @@ sleep 2
 > execute if block {S5H1+22} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=0] run say PSF02 vine reset
 > execute if block {S5H1+22} {S5H2+1} {S5H3+60} creativedelight:treated_stick_tomatoes[age=0] run say PSF02 vine reset
 > execute if block {S5H1+22} {S5H2+2} {S5H3+60} creativedelight:treated_stick_tomatoes[age=0] run say PSF02 vine reset
-> zcount {S5H1+19} {S5H2} {S5H3+59} {S5H1+23} {S5H2+4} {S5H3+61}
-waitlog \[zcount\] entities 30
+> cdevtest items {S5H1+21} {S5H2+1} {S5H3+60} 2.5 keep
+waitlog \[cdevtest\] verb=items done= 30
 > data get entity s5tm SelectedItem
 > data get entity s5tm Inventory
 count PSF02 vine reset == 9
-look tomatoes = zcount drops plus any in s5tm Inventory (the hoe holder stands 2 blocks off at the click, so a pickup before the tp is possible): 9 to 18 in total
-expect \[zcount\] entities .*item:farmersdelight:tomato x
-reject \[zcount\] entities .*item:(minecraft:stick|supplementaries:rope|farmersdelight:rope|farmersdelight:tomato_seeds|creativedelight:treated_stick)
+look tomatoes = cdevtest items drops plus any in s5tm Inventory (the hoe holder stands 2 blocks off at the click, so a pickup before the tp is possible): 9 to 18 in total
+expect \[cdevtest\] verb=items items=\S*\bfarmersdelight:tomato:\d+
+reject \[cdevtest\] verb=items items=\S*\b(minecraft:stick|supplementaries:rope|farmersdelight:rope|farmersdelight:tomato_seeds|creativedelight:treated_stick):\d+
 # r1102b judge: pack config/quark-common.toml "Harvesting Costs Durability" = false, the harvest code follows it: no hoe damage
 expect s5tm has the following entity data: \{.*id: "minecraft:iron_hoe".*Damage: 0\b
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look tomatoes 9..18 in total (1 to 2 per vine)
 
 ## SQ-PSF-03 | iron hoe climbs 8 levels of a 9-high roped tomato column
@@ -1601,7 +1653,7 @@ sleep 2
 > execute if block {S5H1+26} {S5H2+8} {S5H3+60} farmersdelight:tomatoes[age=3] run say PSF03 level 9 still ripe
 count PSF03 level reset == 8
 expect PSF03 level 9 still ripe
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSF-04 | empty hand and wooden hoe pick one ripe rope tomato vine only
 @group A
@@ -1610,6 +1662,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails nothing happens: Quark returned NONE and the block use did not run
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_R_A.qb passed
+@reviewed 2026-11-16
 > kill @e[type=minecraft:item]
 > kill @e[type=alexsmobs:crow]
 > kill @e[type=minecraft:slime]
@@ -1621,7 +1674,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 > pbot use s5tm {S5H1+30} {S5H2+1} {S5H3+60} up
 sleep 1
 > execute if block {S5H1+30} {S5H2+1} {S5H3+60} supplementaries:rope_tomatoes[age=0] if block {S5H1+30} {S5H2+2} {S5H3+60} supplementaries:rope_tomatoes[age=3] run say PSF04 hand: only the vine reset
-> zcount {S5H1+29} {S5H2} {S5H3+59} {S5H1+31} {S5H2+3} {S5H3+61}
+> cdevtest items {S5H1+30} {S5H2+1} {S5H3+60} 1.5 keep
 sleep 2
 > kill @e[type=minecraft:item]
 > kill @e[type=alexsmobs:crow]
@@ -1634,12 +1687,12 @@ sleep 2
 > pbot use s5tm {S5H1+30} {S5H2+1} {S5H3+60} up
 sleep 1
 > execute if block {S5H1+30} {S5H2+1} {S5H3+60} supplementaries:rope_tomatoes[age=0] if block {S5H1+30} {S5H2+2} {S5H3+60} supplementaries:rope_tomatoes[age=3] run say PSF04 wooden hoe: only the vine reset
-> zcount {S5H1+29} {S5H2} {S5H3+59} {S5H1+31} {S5H2+3} {S5H3+61}
+> cdevtest items {S5H1+30} {S5H2+1} {S5H3+60} 1.5 keep
 sleep 2
 expect PSF04 hand: only the vine reset
 expect PSF04 wooden hoe: only the vine reset
-count \[zcount\] entities .*item:farmersdelight:tomato x >= 2
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+count \[cdevtest\] verb=items items=\S*\bfarmersdelight:tomato:\d+ >= 2
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSF-05 | melon stem grows 3 fruit, side bits set
 @group A
@@ -1648,15 +1701,15 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails all false: bit not set after placement (`StemExtraFruit.randomTick`)
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-16
 > fill {S5H1+29} {S5H2-1} {S5H3+75} {S5H1+31} {S5H2-1} {S5H3+77} minecraft:farmland
 > fill {S5H1+29} {S5H2} {S5H3+75} {S5H1+31} {S5H2+2} {S5H3+77} minecraft:air
 > setblock {S5H1+29} {S5H2-1} {S5H3+76} minecraft:stone
 > setblock {S5H1+31} {S5H2-1} {S5H3+77} minecraft:water
 > setblock {S5H1+30} {S5H2} {S5H3+76} minecraft:melon_stem[age=7]
 # west of the stem has stone below: no fruit there, so north, east and south grow (maxFruits = 3)
-> gamerule randomTickSpeed 300
-sleep 60
-> gamerule randomTickSpeed 3
+> cdevtest randomtick {S5H1+30} {S5H2} {S5H3+76} {S5H1+30} {S5H2} {S5H3+76} 88 nofluids
+waitlog \[cdevtest\] verb=randomtick done= 60
 > execute if block {S5H1+30} {S5H2} {S5H3+75} minecraft:melon run say PSF-05 fruit north
 > execute if block {S5H1+30} {S5H2} {S5H3+76} minecraft:attached_melon_stem[north=true] run say PSF-05 bit north true
 > execute if block {S5H1+30} {S5H2} {S5H3+76} minecraft:attached_melon_stem[facing=north] run say PSF-05 facing north
@@ -1674,7 +1727,7 @@ reject PSF-05 fruit west
 reject PSF-05 bit west true
 count PSF-05 bit (north|east|south) true == 2
 count PSF-05 facing (north|east|south) == 1
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the faced side's bit is false (the facing line names the one fruit side without a 'bit ... true' line)
 
 ## SQ-PSF-06 | hand-placed melon is never re-pointed at; stem resets when the grown fruit are gone
@@ -1709,7 +1762,7 @@ sleep 1
 > execute if block {S5H1+29} {S5H2} {S5H3+76} minecraft:melon run say PSF06 hand melon still there
 expect PSF06 stem reset to melon_stem age 7
 expect PSF06 hand melon still there
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look after the faced melon went, facing points at one of the two grown sides, that side's bit is false and the third grown side keeps its bit (exactly one bit line); the hand-placed west melon never gets a bit or the facing
 
 ## SQ-PSF-07 | pumpkin stem, same as PSF-05
@@ -1719,6 +1772,7 @@ look after the faced melon went, facing points at one of the two grown sides, th
 @fails property missing on the Fruits Delight stem
 @jars creativecalendar creativedelight
 @from batches/r1102b/s5_R_A.qb
+@reviewed 2026-11-16
 > kill @e[type=alexsmobs:crow]
 > kill @e[type=minecraft:slime]
 > fill {S5H1+35} {S5H2-1} {S5H3+75} {S5H1+37} {S5H2-1} {S5H3+77} minecraft:farmland
@@ -1727,9 +1781,8 @@ look after the faced melon went, facing points at one of the two grown sides, th
 > setblock {S5H1+37} {S5H2-1} {S5H3+77} minecraft:water
 > setblock {S5H1+36} {S5H2} {S5H3+76} minecraft:pumpkin_stem[age=7]
 # west of the stem has stone below: no fruit there, so north, east and south grow (maxFruits = 3)
-> gamerule randomTickSpeed 300
-sleep 120
-> gamerule randomTickSpeed 3
+> cdevtest randomtick {S5H1+36} {S5H2} {S5H3+76} {S5H1+36} {S5H2} {S5H3+76} 176 nofluids
+waitlog \[cdevtest\] verb=randomtick done= 60
 > execute if block {S5H1+36} {S5H2} {S5H3+75} minecraft:pumpkin run say PSF-07 fruit north
 > execute if block {S5H1+36} {S5H2} {S5H3+76} minecraft:attached_pumpkin_stem[north=true] run say PSF-07 bit north true
 > execute if block {S5H1+36} {S5H2} {S5H3+76} minecraft:attached_pumpkin_stem[facing=north] run say PSF-07 facing north
@@ -1747,7 +1800,7 @@ reject PSF-07 fruit west
 reject PSF-07 bit west true
 count PSF-07 bit (north|east|south) true == 2
 count PSF-07 facing (north|east|south) == 1
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the faced side's bit is false (the facing line names the one fruit side without a 'bit ... true' line)
 
 ## SQ-PSF-08 | read: mulch stem not far ahead of the farmland stem with fertileSoilBoost = false
@@ -1808,7 +1861,7 @@ capture S5MF S5F8F farmland age (\d)
 shell echo mulch {S5MA} farmland {S5MF}; test $(( {S5MA} - {S5MF} )) -le 2
 reject S5F8F? (mulch|farmland) stem gone
 > pbot remove s5f8
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look per-minute ages (rows/SQ-PSF-08.log, S5F8 lines; elapsed times in the shell file) and the final pair: mulch not more than 2 stages ahead at randomTickSpeed 3
 
 ## SQ-PSF-09 | watering can drains 1000 mB from a Just a Well tank
@@ -1831,7 +1884,7 @@ sleep 2
 > data get block {S5H1+52} {S5H2} {S5H3+40}
 expect s5wc has the following entity data: \{.*iron_watering_can.*WaterLevel: 12
 expect has the following block data: .*Amount: 49\d\d\d\b
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the first data get shows the well's real tank keys; if they are not Tank/FluidName/Amount the merge did nothing (BATCH-FAULT, fix the merge)
 
 ## CQ-PSF-01
@@ -1873,25 +1926,101 @@ shell grep -aiE 'biome fit|nether/(soul|forest|wastes)|philipsruins' logs/latest
 @commands `execute in minecraft:the_nether run locate structure philipsruins:lost_soul_city` (then `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin`); tp a spectator to each, F3 y and biome; same four `locate` in the Overworld
 @pass each found in the Nether: city and dungeon in soul sand valley at y 5 / y 12, rare ruin in crimson or warped forest at y 33, blackstone ruin in Nether wastes or basalt deltas at y 33; none flooded by lava (LOOK); the Overworld locate finds none
 @fails not found: fit not applied (SQ-PSW-01) or the group rate; wrong y: the `kubejs/data/philipsruins/worldgen/structure` override not loaded; city flooded: move it to `absolute -95` on `WORLD_SURFACE_WG` (y 33)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:the_nether run locate structure philipsruins:lost_soul_city
+waitlog (The nearest philipsruins:lost_soul_city is at|Could not find) 600
+capture PWC The nearest philipsruins:lost_soul_city is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {PWC1} {PWC3}
+sleep 5
+> cdevtest state {PWC1} 40 {PWC3} dim=minecraft:the_nether
+waitlog \[cdevtest\] verb=state pos={PWC1},40,{PWC3} .*biome=minecraft:(soul_sand_valley)\b 10
+> execute in minecraft:the_nether run forceload remove {PWC1} {PWC3}
+> execute in minecraft:the_nether run locate structure philipsruins:lost_soul_dungeon
+waitlog (The nearest philipsruins:lost_soul_dungeon is at|Could not find) 600
+capture PWD The nearest philipsruins:lost_soul_dungeon is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {PWD1} {PWD3}
+sleep 5
+> cdevtest state {PWD1} 40 {PWD3} dim=minecraft:the_nether
+waitlog \[cdevtest\] verb=state pos={PWD1},40,{PWD3} .*biome=minecraft:(soul_sand_valley)\b 10
+> execute in minecraft:the_nether run forceload remove {PWD1} {PWD3}
+> execute in minecraft:the_nether run locate structure philipsruins:rare_ruin
+waitlog (The nearest philipsruins:rare_ruin is at|Could not find) 600
+capture PWR The nearest philipsruins:rare_ruin is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {PWR1} {PWR3}
+sleep 5
+> cdevtest state {PWR1} 40 {PWR3} dim=minecraft:the_nether
+waitlog \[cdevtest\] verb=state pos={PWR1},40,{PWR3} .*biome=minecraft:(crimson_forest|warped_forest)\b 10
+> execute in minecraft:the_nether run forceload remove {PWR1} {PWR3}
+> execute in minecraft:the_nether run locate structure philipsruins:start_nether_ruin
+waitlog (The nearest philipsruins:start_nether_ruin is at|Could not find) 600
+capture PWN The nearest philipsruins:start_nether_ruin is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {PWN1} {PWN3}
+sleep 5
+> cdevtest state {PWN1} 40 {PWN3} dim=minecraft:the_nether
+waitlog \[cdevtest\] verb=state pos={PWN1},40,{PWN3} .*biome=minecraft:(nether_wastes|basalt_deltas)\b 10
+> execute in minecraft:the_nether run forceload remove {PWN1} {PWN3}
+> execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:lost_soul_city
+waitlog (The nearest philipsruins:lost_soul_city is at|Could not find a structure of type "?philipsruins:lost_soul_city) 600
+> execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:lost_soul_dungeon
+waitlog (The nearest philipsruins:lost_soul_dungeon is at|Could not find a structure of type "?philipsruins:lost_soul_dungeon) 600
+> execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:rare_ruin
+waitlog (The nearest philipsruins:rare_ruin is at|Could not find a structure of type "?philipsruins:rare_ruin) 600
+> execute in minecraft:overworld positioned 0 70 0 run locate structure philipsruins:start_nether_ruin
+waitlog (The nearest philipsruins:start_nether_ruin is at|Could not find a structure of type "?philipsruins:start_nether_ruin) 600
+count The nearest philipsruins:(lost_soul_city|lost_soul_dungeon|rare_ruin|start_nether_ruin) is at == 4
+count Could not find a structure of type "?philipsruins:(lost_soul_city|lost_soul_dungeon|rare_ruin|start_nether_ruin) >= 4
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[cdevtest\] .*(done=0|error=))
+look spectator at each captured Nether position ({PWC1} {PWC3}, {PWD1} {PWD3}, {PWR1} {PWR3}, {PWN1} {PWN3}): city y 5, dungeon y 12, rare ruin and blackstone ruin y 33 (F3); none flooded by lava. The four counts above: the Nether found all four (captures), the Overworld none
+
 ## SQ-PSW-03 (ST-295)
 @group B
 @commands Overworld `locate structure creativeengineering:meta/ruin_cluster` and `meta/pillager_camp_ruin`
 @pass both found, anchored on a level-three ruin, ancient towers or forgotten church (never a rare ruin)
 @fails `meta/large_ruins` still has the rare ruin, or the meta has no anchor left in that biome
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/ruin_cluster
+waitlog (The nearest creativeengineering:meta/ruin_cluster is at|Could not find) 900
+capture PRC The nearest creativeengineering:meta/ruin_cluster is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/pillager_camp_ruin
+waitlog (The nearest creativeengineering:meta/pillager_camp_ruin is at|Could not find) 900
+capture PPC The nearest creativeengineering:meta/pillager_camp_ruin is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[cdevtest\] .*(done=0|error=))
+look tp a spectator to {PRC1} {PRC3} and {PPC1} {PPC3}: the anchor is a level-three ruin, ancient towers or the forgotten church, never a rare ruin
+
 ## SQ-PSW-04 (NW-21)
 @group B, fresh world
 @commands Chunky r 1000 around spawn plus one deep cave region; stop the server; `python3 tools/block_census.py <save> minecraft:glowstone minecraft:soul_fire minecraft:soul_lantern`
 @pass 0 glowstone in the Overworld; a gothic church in the area shows yellow corundum (NW-11)
 @fails the hit list gives chunk and y; find the source (y 0 and below: D&D layer override missing; inside a structure: a swap or processor)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> chunky world minecraft:overworld
+> chunky center 0 0
+> chunky radius 1000
+> chunky start
+waitlog Task finished 3600
+> save-all flush
+waitlog Saved the game 120
+shell python3 $INST/tools/block_census.py world minecraft:glowstone minecraft:soul_fire minecraft:soul_lantern --dim overworld > ../psw04.txt 2>&1; head -40 ../psw04.txt; grep -qE '^  minecraft:glowstone: 0 in' ../psw04.txt
+> execute in minecraft:overworld positioned 0 70 0 run locate structure gothic_church:church
+waitlog (The nearest|Could not find|Unknown|Invalid) 600
+look rows/SQ-PSW-04.shell.txt: glowstone 0 (a hit line gives chunk and y: y 0 and below = D&D layer override missing, inside a structure = a swap or processor); soul fire and soul lantern hits are for the record. Deep cave region: the radius 1000 square covers y -64 up; a gothic church in the area shows yellow corundum (NW-11; the locate above)
+
 ## SQ-PSW-05 (ST-335)
 @group B, End
 @commands `execute in minecraft:the_end run tp` past 1050 blocks; Chunky the_end r 600 at about 1500 0; `python3 tools/block_census.py <save> quark:dusky_myalite quark:myalite_crystal --dim end`; tp to 3 to 5 of the chunks it lists, look under each spike from the side
 @pass spires still generate (census > 0); every spike base sits on end stone all round, none hangs over the void
 @fails no spires: the mixin cancels every spike (check `makeSpike` target, log for a mixin apply error); bases over air: mixin not applied (latest.log `QuarkSpiralSpireFootprintMixin`)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+> chunky world minecraft:the_end
+> chunky center 1500 0
+> chunky radius 600
+> chunky start
+waitlog Task finished 3600
+> save-all flush
+waitlog Saved the game 120
+shell python3 $INST/tools/block_census.py world quark:dusky_myalite quark:myalite_crystal --dim end > ../psw05.txt 2>&1; head -40 ../psw05.txt; grep -qE '^  quark:dusky_myalite: [1-9]' ../psw05.txt
+bootreject (?i)QuarkSpiralSpireFootprintMixin.*(fail|error|could not)
+look rows/SQ-PSW-05.shell.txt lists the spire chunks; tp a spectator to 3 to 5 of them and look under each spike from the side: every base sits on end stone all round, none hangs over the void
 @@text
 @@text Results: not run yet.
 @@text
@@ -1909,7 +2038,7 @@ shell grep -aiE 'biome fit|nether/(soul|forest|wastes)|philipsruins' logs/latest
 bootreject (?i)(PhantomSpawnerBaneSkipMixin|MulberryJamMasonJarMixin|SimpleHatsFaceSlotMixin).*(error|fail|could not)
 shell grep -cE 'PhantomSpawnerBaneSkipMixin|MulberryJamMasonJarMixin' logs/debug.log; true
 shell ! (grep -n 'Error occurred while handling event' logs/latest.log | grep -qiE 'phantom|mulberry|hats|potion_bucket')
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the debug.log count shows the two server mixins (Simple Hats is client only)
 
 ## SQ-PSU-02 | curios face / mouth and trimmable armor tags
@@ -1918,17 +2047,18 @@ look the debug.log count shows the two server mixins (Simple Hats is client only
 @pass face holds `creativeengineering:cob_pipe` and the 3 Botania masks; mouth has no `cob_pipe`; trimmable_armor holds 49 items incl. `minecraft:iron_chestplate`, `immersiveengineering:armor_steel_chest`, no `immersive_armors:*`
 @fails `corn_delight/tags.js`, `equipmenttags.js` dict keys
 @from batches/r1102b/s5_A.qb
-> zq itemtag curios:face
+@reviewed 2026-11-16
+> cdevtest tag item curios:face
 sleep 1
-> zq itemtag curios:mouth
+> cdevtest tag item curios:mouth
 sleep 1
-> zq itemtag creativeengineering:trimmable_armor
+> cdevtest tag item creativeengineering:trimmable_armor
 sleep 1
-expect \[zq\] itemtag curios:face \(\d+\): (?=.*creativeengineering:cob_pipe)(?=.*botania:cosmetic_ancient_mask)(?=.*botania:cosmetic_eerie_mask)(?=.*botania:cosmetic_tiny_potato_mask)
-reject \[zq\] itemtag curios:mouth .*creativeengineering:cob_pipe
-expect \[zq\] itemtag creativeengineering:trimmable_armor \(50\): (?=.*minecraft:iron_chestplate)(?=.*immersiveengineering:armor_steel_chest)
-reject \[zq\] itemtag creativeengineering:trimmable_armor .*immersive_armors:
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+expect \[cdevtest\] verb=tag kind=item tag=curios:face n=\d+ ids=(?=.*creativeengineering:cob_pipe)(?=.*botania:cosmetic_ancient_mask)(?=.*botania:cosmetic_eerie_mask)(?=.*botania:cosmetic_tiny_potato_mask)
+reject \[cdevtest\] verb=tag kind=item tag=curios:mouth .*creativeengineering:cob_pipe
+expect \[cdevtest\] verb=tag kind=item tag=creativeengineering:trimmable_armor n=50 ids=(?=.*minecraft:iron_chestplate)(?=.*immersiveengineering:armor_steel_chest)
+reject \[cdevtest\] verb=tag kind=item tag=creativeengineering:trimmable_armor .*immersive_armors:
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSU-03 | Armor Trims applies to an iron chestplate, not to an Immersive Armors heavy chestplate
 @group A
@@ -1942,7 +2072,7 @@ sleep 1
 sleep 1
 expect \[s5\] trim minecraft:iron_chestplate: trimmed
 expect \[s5\] trim immersive_armors:heavy_chestplate: empty
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the probe calls TrimmableItem.applyTrim directly (the smithing and JEI paths call the same); giving a bot the items adds nothing
 
 ## SQ-PSU-04 | Phantom Bane on the first player skips only that player (control pass first)
@@ -1993,7 +2123,7 @@ reject PSU04 phantom near bot 1
 > gamerule doMobSpawning false
 > difficulty normal
 > kill @e[type=!minecraft:player,type=!minecraft:marker]
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look control pass: phantoms near both bots (spawning works there at all); bane pass: phantoms near bot 2 only. A control with no phantom near bot 1 leaves the row undecided, not FAILed
 
 ## SQ-PSU-05 | a bot-placed dispenser fires a harming potion bucket; the kill is credited to the bot
@@ -2023,7 +2153,7 @@ sleep 1
 sleep 8
 > scoreboard players get s5dp s5pig
 expect s5dp has [1-9]\d* \[s5pig\]
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the dispenser faces the bot (south) with the pig between; a second pig behind it in case the facing differs
 
 ## SQ-PSU-06 | jams are potted into empty mason jars; mulberry jam; merge count
@@ -2032,20 +2162,21 @@ look the dispenser faces the bot (south) with the pig between; a second pig behi
 @pass no recipe making a jam takes `minecraft:glass_bottle`, and none emptying one gives it back; Handcrafted's Berry Jam Jar takes an empty mason jar (jar audit, plan_scratch_bugfix_1103 1.3); no separate jam-from-slices recipe, the slice is a second accepted input of each pot recipe (rerun after the CD rebuild, plan_scratch_bugfix_1103 0) (pot `container` = `vintagedelight:empty_mason_jar`); merge count up by 8
 @fails `jams.js` filter `{output: tag}` not matching; merge already-merged warning
 @from batches/r1102b/s5_A.qb
-> zq itemtag fruitsdelight:jelly
+@reviewed 2026-11-16
+> cdevtest tag item fruitsdelight:jelly
 sleep 1
 > s5 containers jelly
 sleep 2
 > s5 containers jam
 sleep 2
-> zq makes upgrade_aquatic:mulberry_jam_bottle
+> cdevtest makes upgrade_aquatic:mulberry_jam_bottle
 sleep 2
-> zq rdetail mulberry_jam
+> cdevtest rdetail mulberry_jam
 sleep 2
 reject \[s5\] container \S+ -> \S*(jam|jelly)\S* in minecraft:glass_bottle
 expect \[s5\] container \S+ -> \S*(jam|jelly)\S* in vintagedelight:empty_mason_jar
 shell grep -h '\[itemMerges\] creativedelight' logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log | sort -u
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the creativedelight merge count line is 8 above the r1102 count; no already-merged warning
 
 ## SQ-PSU-07 | Vintage jar and honey recipes
@@ -2054,18 +2185,19 @@ look the creativedelight merge count line is 8 above the r1102 count; no already
 @pass the 6 Vintage ids gone; `honey_jar_from_bottle`, `honey_bottle_from_jar` present; no jar -> jar recipe
 @fails removal ran after the merge (priority)
 @from batches/r1102b/s5_R_A.qb passed
-> zq recipes vintagedelight:jam/vinegar_jar
-> zq recipes vintagedelight:jam/apple_sauce_jar
-> zq recipes vintagedelight:honey_jar
-reject \[zq\] vintagedelight:(jam/vinegar_jar|jam/apple_sauce_jar|honey_jar)\S* -> 
-> zq recipes honey_jar_from_bottle
-> zq recipes honey_bottle_from_jar
-expect \[zq\] \S+honey_jar_from_bottle -> 
-expect \[zq\] \S+honey_bottle_from_jar -> 
+@reviewed 2026-11-16
+> cdevtest recipes vintagedelight:jam/vinegar_jar
+> cdevtest recipes vintagedelight:jam/apple_sauce_jar
+> cdevtest recipes vintagedelight:honey_jar
+reject \[cdevtest\] verb=recipes id=vintagedelight:(jam/vinegar_jar|jam/apple_sauce_jar|honey_jar)\S* result=
+> cdevtest recipes honey_jar_from_bottle
+> cdevtest recipes honey_bottle_from_jar
+expect \[cdevtest\] verb=recipes id=\S+honey_jar_from_bottle result=
+expect \[cdevtest\] verb=recipes id=\S+honey_bottle_from_jar result=
 > s5 selfloop vintagedelight:vinegar_jar
 waitlog \[s5\] selfloop vintagedelight:vinegar_jar: 30
 expect \[s5\] selfloop vintagedelight:vinegar_jar: 0\b
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSU-08 | old Vintage bottles and jars turn into the survivors in a player's inventory
 @group A
@@ -2083,7 +2215,7 @@ sleep 2
 > data get entity s5mg Inventory
 expect s5mg has the following entity data: (?=.*"vintagedelight:vinegar_jar", Count: 2b)(?=.*"vintagedelight:apple_sauce_jar", Count: 2b)(?=.*"vintagedelight:pepper_jam_jar", Count: 2b)(?=.*"fruitsdelight:sweetberry_jelly", Count: 2b)
 reject s5mg has the following entity data: .*"vintagedelight:(vinegar_bottle|apple_sauce_bottle|pepper_jam_bottle|sweet_berry_jam_jar)"
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look stale row text: 'old-world load: chest ... reopen' - merges swap stacks in a player's inventory (PlayerEvents.inventoryChanged), not in chests; a chest in an old world keeps the old ids until a player takes them, so the inventory path is what is checked
 
 ## SQ-PSU-09 | jelly remainder is the empty mason jar; vinegar jar keeps Vintage's food values
@@ -2092,13 +2224,14 @@ look stale row text: 'old-world load: chest ... reopen' - merges swap stacks in 
 @pass `vintagedelight:empty_mason_jar`; drinking the vinegar jar gives Nausea 200 t (10 s) and no Nourishment or Comfort; the vinegar dish and the vinegar can give no Nausea (plan_scratch_bugfix_1103 5.5)
 @fails no Nausea: `vintagedelight/vintage_items.js` (CD jar startup) not in the installed jar; Nourishment back: `comfort_nourishment.json` `vinegar_jar` rule
 @from batches/r1102b/s5_A.qb
+@reviewed 2026-11-16
 > s5 remainder fruitsdelight:blueberry_jelly
 sleep 1
-> zq food vintagedelight:vinegar_jar
+> cdevtest food vintagedelight:vinegar_jar
 sleep 1
 expect \[s5\] remainder fruitsdelight:blueberry_jelly: vintagedelight:empty_mason_jar x1
-expect \[zq\] food vintagedelight:vinegar_jar: nutrition 3, modifier 0\.2\d*, effects \[.*nourishment
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+expect \[cdevtest\] verb=food item=vintagedelight:vinegar_jar\*1 food=true nutrition=3 modifier=0\.2\d* .*effects=\S*nourishment
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## CQ-PSU-01
 @group client
@@ -2143,13 +2276,14 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails `CookwareHandling` not registered; fake player `isShiftKeyDown` false (set the pose); `getInventory` reflection fails (contents then drop from onRemove instead); LeftClickBlock not fired for fake players: punch half is CQ-FCB-04
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_A.qb
-> zq blocktag creativedelight:cookware_pickup
-waitlog \[zq\] blocktag 30
-expect \[zq\] blocktag creativedelight:cookware_pickup \(4\): (?=.*farmersdelight:cooking_pot)(?=.*miners_delight:copper_pot)(?=.*farmersrespite:kettle)(?=.*farmersdelight:skillet)
+@reviewed 2026-11-16
+> cdevtest tag block creativedelight:cookware_pickup
+waitlog \[cdevtest\] verb=tag kind=block 30
+expect \[cdevtest\] verb=tag kind=block tag=creativedelight:cookware_pickup n=4 ids=(?=.*farmersdelight:cooking_pot)(?=.*miners_delight:copper_pot)(?=.*farmersrespite:kettle)(?=.*farmersdelight:skillet)
 > pbot spawn s5ck {S5H1+60} {S5H2} {S5H3+30} minecraft:overworld survival
 > pbot hold s5ck minecraft:air
-> s5 sneak s5ck on
-expect \[s5\] sneak s5ck true
+> pbot sneak s5ck on
+expect \[cdevtest\] verb=pbot\.sneak bot=s5ck shift=true
 > kill @e[type=minecraft:item]
 > setblock {S5H1+62} {S5H2} {S5H3+30} minecraft:campfire[lit=true]
 > setblock {S5H1+62} {S5H2+1} {S5H3+30} farmersdelight:cooking_pot
@@ -2158,7 +2292,7 @@ expect \[s5\] sneak s5ck true
 sleep 1
 > execute if block {S5H1+62} {S5H2+1} {S5H3+30} minecraft:air run say FCB08 cooking_pot picked up
 > data get entity s5ck SelectedItem
-> zcount {S5H1+61} {S5H2} {S5H3+29} {S5H1+63} {S5H2+3} {S5H3+31}
+> cdevtest items {S5H1+62} {S5H2+1} {S5H3+30} 1.5 keep
 sleep 2
 > item replace entity s5ck weapon.mainhand with minecraft:air
 > setblock {S5H1+64} {S5H2} {S5H3+30} minecraft:campfire[lit=true]
@@ -2168,7 +2302,7 @@ sleep 2
 sleep 1
 > execute if block {S5H1+64} {S5H2+1} {S5H3+30} minecraft:air run say FCB08 copper_pot picked up
 > data get entity s5ck SelectedItem
-> zcount {S5H1+63} {S5H2} {S5H3+29} {S5H1+65} {S5H2+3} {S5H3+31}
+> cdevtest items {S5H1+64} {S5H2+1} {S5H3+30} 1.5 keep
 sleep 2
 > item replace entity s5ck weapon.mainhand with minecraft:air
 > setblock {S5H1+66} {S5H2} {S5H3+30} minecraft:campfire[lit=true]
@@ -2179,7 +2313,7 @@ sleep 2
 sleep 1
 > execute if block {S5H1+66} {S5H2+1} {S5H3+30} minecraft:air run say FCB08 kettle picked up
 > data get entity s5ck SelectedItem
-> zcount {S5H1+65} {S5H2} {S5H3+29} {S5H1+67} {S5H2+3} {S5H3+31}
+> cdevtest items {S5H1+66} {S5H2+1} {S5H3+30} 1.5 keep
 sleep 2
 > item replace entity s5ck weapon.mainhand with minecraft:air
 > setblock {S5H1+68} {S5H2} {S5H3+30} minecraft:campfire[lit=true]
@@ -2190,7 +2324,7 @@ sleep 2
 sleep 1
 > execute if block {S5H1+68} {S5H2+1} {S5H3+30} minecraft:air run say FCB08 skillet picked up
 > data get entity s5ck SelectedItem
-> zcount {S5H1+67} {S5H2} {S5H3+29} {S5H1+69} {S5H2+3} {S5H3+31}
+> cdevtest items {S5H1+68} {S5H2+1} {S5H3+30} 1.5 keep
 sleep 2
 > item replace entity s5ck weapon.mainhand with minecraft:air
 count FCB08 (cooking_pot|copper_pot|kettle|skillet) picked up >= 4
@@ -2198,7 +2332,7 @@ expect s5ck has the following entity data: \{.*id: "farmersdelight:cooking_pot".
 expect s5ck has the following entity data: \{.*id: "miners_delight:copper_pot".*cave_soup_cup
 expect s5ck has the following entity data: \{.*id: "farmersrespite:kettle"
 expect s5ck has the following entity data: \{.*id: "farmersdelight:skillet"
-count \[zcount\] entities .*item:minecraft:carrot x >= 2
+count \[cdevtest\] verb=items items=\S*\bminecraft:carrot:\d+ >= 2
 > setblock {S5H1+62} {S5H2} {S5H3+34} minecraft:stone
 > setblock {S5H1+62} {S5H2+1} {S5H3+34} farmersdelight:cooking_pot[support=none]
 > s5 lclick s5ck {S5H1+62} {S5H2+1} {S5H3+34}
@@ -2228,9 +2362,9 @@ sleep 1
 > execute if block {S5H1+2} {S5H2+1} {S5H3+2} farmersdelight:cooking_pot run say FCB08 protected pot kept
 > deop s5op
 > pbot remove s5op
-> s5 sneak s5ck off
+> pbot sneak s5ck off
 expect FCB08 protected pot kept
-reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player))
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look each SelectedItem line after a pickup shows the block's item (pot items carry the meal in BlockEntityTag); the carrot dropped as an item each time; the left-click halves are Forge LeftClickBlock posted by /s5 lclick (no block break path): a real client left-click stays CQ-FCB-04
 
 @@text

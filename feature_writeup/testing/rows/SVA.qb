@@ -26,6 +26,7 @@ bootreject (?i)(error|failed).*skyvillages
 @pass each places; `/data get block` on the keg, wine press, shelf and a cabinet returns a block entity
 @fails swap table entry for that block (`tools/skyvillage_addon_remap.json`), rerun the tool
 @from batches/r1031/a1_world.qb
+@reviewed 2026-11-16
 > forceload add 100 100 400 220
 sleep 8
 > place template skyvillages:farmersdelight/sky_village_farmersdelight_farm_0 100 -40 100
@@ -45,11 +46,18 @@ sleep 8
 > place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_6 280 -40 180
 > place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_7 310 -40 180
 > place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_deco_8 340 -40 180
-> zq count 100 -40 100 420 0 140 brewinandchewin:keg
-> zq count 100 -40 100 420 0 140 vinery:wine_press
+> cdevtest count 100 -40 100 209 0 140 brewinandchewin:keg
+> cdevtest count 210 -40 100 319 0 140 brewinandchewin:keg
+> cdevtest count 320 -40 100 420 0 140 brewinandchewin:keg
+> cdevtest count 100 -40 100 209 0 140 vinery:wine_press
+> cdevtest count 210 -40 100 319 0 140 vinery:wine_press
+> cdevtest count 320 -40 100 420 0 140 vinery:wine_press
+expect verb=count block=brewinandchewin:keg n=[1-9]
+expect verb=count block=vinery:wine_press n=[1-9]
+reject verb=\S+ .*done=0
 count Loaded template "skyvillages == 17
 reject There is no template|Failed to load
-look keg and wine press counts above 0; /data get block on one keg, press, shelf and cabinet returns block entity data (positions from a client fly-by or zq); SVA-04 loot: the farm_0 chest and brewery_1 chests carry LootTable sky_village_weaponsmith / butcher / shepherd
+look keg and wine press counts above 0; /data get block on one keg, press, shelf and cabinet returns block entity data (positions from a client fly-by); SVA-04 loot: the farm_0 chest and brewery_1 chests carry LootTable sky_village_weaponsmith / butcher / shepherd
 > forceload remove all
 
 ## SQ-SVA-03 | sky villages get addon houses
@@ -58,20 +66,32 @@ look keg and wine press counts above 0; /data get block on one keg, press, shelf
 @pass at least one addon house over 5 villages, bridges and villagers attached (SVA-06)
 @fails pool weights in `skyvillage_houses.json`
 @from batches/r1031/w3_terrain.qb
+@reviewed 2026-11-16
 > locate structure skyvillages:skyvillage
 waitlog nearest skyvillages:skyvillage is at|type "?skyvillages:skyvillage 330
 capture SVL is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {SVL1} 200 {SVL3}
 sleep 25
-> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} brewinandchewin:keg
-> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} vinery:wine_press
-> zq count {SVL1-64} 100 {SVL3-64} {SVL1+64} 250 {SVL3+64} farmersdelight:rich_soil_farmland
+# 81 x 81 around the village in four y bands (the box limit is 262144 blocks)
+> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 139 {SVL3+40} brewinandchewin:keg
+> cdevtest count {SVL1-40} 140 {SVL3-40} {SVL1+40} 179 {SVL3+40} brewinandchewin:keg
+> cdevtest count {SVL1-40} 180 {SVL3-40} {SVL1+40} 219 {SVL3+40} brewinandchewin:keg
+> cdevtest count {SVL1-40} 220 {SVL3-40} {SVL1+40} 250 {SVL3+40} brewinandchewin:keg
+> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 139 {SVL3+40} vinery:wine_press
+> cdevtest count {SVL1-40} 140 {SVL3-40} {SVL1+40} 179 {SVL3+40} vinery:wine_press
+> cdevtest count {SVL1-40} 180 {SVL3-40} {SVL1+40} 219 {SVL3+40} vinery:wine_press
+> cdevtest count {SVL1-40} 220 {SVL3-40} {SVL1+40} 250 {SVL3+40} vinery:wine_press
+> cdevtest count {SVL1-40} 100 {SVL3-40} {SVL1+40} 139 {SVL3+40} farmersdelight:rich_soil_farmland
+> cdevtest count {SVL1-40} 140 {SVL3-40} {SVL1+40} 179 {SVL3+40} farmersdelight:rich_soil_farmland
+> cdevtest count {SVL1-40} 180 {SVL3-40} {SVL1+40} 219 {SVL3+40} farmersdelight:rich_soil_farmland
+> cdevtest count {SVL1-40} 220 {SVL3-40} {SVL1+40} 250 {SVL3+40} farmersdelight:rich_soil_farmland
+reject verb=\S+ .*done=0
 > execute positioned 3000 100 3000 run locate structure skyvillages:skyvillage
 > execute positioned -3000 100 3000 run locate structure skyvillages:skyvillage
 > execute positioned 3000 100 -3000 run locate structure skyvillages:skyvillage
 > execute positioned -3000 100 -3000 run locate structure skyvillages:skyvillage
 sleep 120
-look at least one addon house over the 5 villages (keg / press / FD farmland counts above 0 at one of them; tp + zq count for the other four), bridges and villagers attached (SVA-06)
+look at least one addon house over the 5 villages (keg / press / FD farmland verb=count n above 0 at one of them; tp + the same counts for the other four), bridges and villagers attached (SVA-06)
 
 ## SQ-SVA-04 | addon house chests roll Lootr loot tables
 @group A

@@ -18,7 +18,9 @@
 @commands Any small server batch of the run: `qrun.py lint BATCH` then `qrun.py run OUT BATCH RES`
 @pass lint prints `lint: ... E, ... W`; the run prints the same E lines first; `RES/verdicts/<ID>.json` per row with `checks` (one per expect / waitlog / shell ...), `looks`, `verdict`; `qrun.py table RES` matches `results.md`
 @fails `qverdict.write`, `run_row` `chk()`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell python3 $INST/tools/scratch_query/qrun.py lint $INST/feature_writeup/testing/rows/TX.qb | tail -1 | grep -E "^lint: [0-9]+ batch\(es\), [0-9]+ error\(s\), [0-9]+ warning\(s\)"
+look after the run: RES/verdicts/<ID>.json for every row with `checks` (one per expect / waitlog / shell), `looks`, `verdict`; the run printed the batch's E lines first; `qrun.py table RES` matches results.md
 ## SQ-TXQ-02 | say then a long sleep; JVM killed during the sleep
 @group A
 @commands Batch with one row `> say a`, `sleep 60`; during the sleep, from another shell, `kill -9` the scratch server pid (`game_jvms.sh`)
@@ -42,10 +44,10 @@ sleep 60
 @commands `prep_srv.sh OUT txp A`; `qrun.py pair OUT ~/.cache/ce_capture/game BATCH RES` with rows `srv> say s1`, `cli> say c1`, `srv:expect \[Server\] s1`, `expect <PerfEval> c1|\[PerfEval\] c1`, `cli:expect CMD say c1`
 @pass "server: Done", "client: JOINED", rows PASS, "stopped both", `game_jvms.sh` empty after
 @fails `qpair.Pair` boot / `wait_join` / `stop`; join text in `RES/client_launch.out`
-@draft no batch holds this row yet
+@draft drives qrun.py pair itself (a server and a client booted by the harness): run that command from the instance, it is not a step inside a batch
 ## CQ-TXP-02
 @group client
 @commands `qrun.py matrix feature_writeup/testing/matrix_specs/txp.json RES --plan`, then without `--plan` (cases M01 to M04; bump the Power Grid gate jar name in the spec first if a newer one exists)
 @pass `--plan` prints 4 cases and launches nothing; M02 JOINED and both JVMs alive 60 s; M03 and M04 REFUSED with a Forge line in the evidence ("Terminating connection with server/client, mismatched mod list" or "Connection closed - mismatched mod channel list"); M01 JOINED and alive 60 s once TODO #90 is fixed (until then CRASH-CLIENT in `ShootableGadgetRenderHandler.onRenderPlayerHand` is the expected FAIL, the bug reproduced); `RES/matrix.md` written; `game_jvms.sh` empty after
 @fails refusal regexes `CLI_REFUSAL` / `SRV_REFUSAL` in `qpair.py` (if a refusal shows as HANG, copy the real line from `RES/<case>/cli_latest.log` into the row); `Pair.hold`; `run_captures.apply_client_changes` (M03)
-@draft no batch holds this row yet
+@draft drives qrun.py matrix itself (several paired boots per case): run that command from the instance, it is not a step inside a batch

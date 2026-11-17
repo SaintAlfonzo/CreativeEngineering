@@ -14,19 +14,35 @@
 @commands fresh world, `/locate biome` or fly through savanna, Terralith shrubland and brushland, mangrove swamp, orchid swamp; look for firefly bushes
 @pass bushes found in each, plus river and swamp
 @fails none found in a new biome: kubejs/data override not winning over the mod's own modifier
+@reviewed 2026-11-16
 @from batches/r1031/b1_gameplay.qb
 > execute positioned 0 70 0 run locate biome minecraft:savanna
 waitlog nearest minecraft:savanna is at 300
-capture SV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+capture SV minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {SV1} 200 {SV3}
 sleep 30
-> zq count {SV1-48} 40 {SV3-48} {SV1+48} 140 {SV3+48} fireflybushport:firefly_bush
+# a count box is at most 262144 blocks (64x64x64): each biome box runs as slices; its shell line sums them and fails on 0
+> say FF01SV begin
+> cdevtest count {SV1-48} 40 {SV3-48} {SV1+48} 140 {SV3-24} fireflybushport:firefly_bush
+> cdevtest count {SV1-48} 40 {SV3-23} {SV1+48} 140 {SV3+1} fireflybushport:firefly_bush
+> cdevtest count {SV1-48} 40 {SV3+2} {SV1+48} 140 {SV3+26} fireflybushport:firefly_bush
+> cdevtest count {SV1-48} 40 {SV3+27} {SV1+48} 140 {SV3+48} fireflybushport:firefly_bush
+> say FF01SV end
+waitlog FF01SV end 120
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" FF01SV fireflybushport:firefly_bush
 > execute positioned 0 70 0 run locate biome minecraft:mangrove_swamp
 waitlog nearest minecraft:mangrove_swamp is at 300
-capture MS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+capture MS minecraft:mangrove_swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {MS1} 200 {MS3}
 sleep 30
-> zq count {MS1-48} 40 {MS3-48} {MS1+48} 140 {MS3+48} fireflybushport:firefly_bush
+> say FF01MS begin
+> cdevtest count {MS1-48} 40 {MS3-48} {MS1+48} 140 {MS3-24} fireflybushport:firefly_bush
+> cdevtest count {MS1-48} 40 {MS3-23} {MS1+48} 140 {MS3+1} fireflybushport:firefly_bush
+> cdevtest count {MS1-48} 40 {MS3+2} {MS1+48} 140 {MS3+26} fireflybushport:firefly_bush
+> cdevtest count {MS1-48} 40 {MS3+27} {MS1+48} 140 {MS3+48} fireflybushport:firefly_bush
+> say FF01MS end
+waitlog FF01MS end 120
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" FF01MS fireflybushport:firefly_bush
 > execute positioned 0 70 0 run locate biome terralith:shrubland
 > execute positioned 0 70 0 run locate biome terralith:brushland
 > execute positioned 0 70 0 run locate biome terralith:orchid_swamp
@@ -34,21 +50,43 @@ sleep 60
 # Terralith biomes (added 10-31 after the first pass counted only savanna and mangrove)
 > execute positioned 0 70 0 run locate biome terralith:shrubland
 waitlog nearest terralith:shrubland is at 300
-capture SH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+capture SH terralith:shrubland is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {SH1} 200 {SH3}
 sleep 30
-> zq count {SH1-48} 40 {SH3-48} {SH1+48} 140 {SH3+48} fireflybushport:firefly_bush
+> say FF01SH begin
+> cdevtest count {SH1-48} 40 {SH3-48} {SH1+48} 140 {SH3-24} fireflybushport:firefly_bush
+> cdevtest count {SH1-48} 40 {SH3-23} {SH1+48} 140 {SH3+1} fireflybushport:firefly_bush
+> cdevtest count {SH1-48} 40 {SH3+2} {SH1+48} 140 {SH3+26} fireflybushport:firefly_bush
+> cdevtest count {SH1-48} 40 {SH3+27} {SH1+48} 140 {SH3+48} fireflybushport:firefly_bush
+> say FF01SH end
+waitlog FF01SH end 120
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" FF01SH fireflybushport:firefly_bush
 > execute positioned 0 70 0 run locate biome terralith:brushland
 waitlog nearest terralith:brushland is at 300
-capture BR is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+capture BR terralith:brushland is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {BR1} 200 {BR3}
 sleep 30
-> zq count {BR1-48} 40 {BR3-48} {BR1+48} 140 {BR3+48} fireflybushport:firefly_bush
+> say FF01BR begin
+> cdevtest count {BR1-48} 40 {BR3-48} {BR1+48} 140 {BR3-24} fireflybushport:firefly_bush
+> cdevtest count {BR1-48} 40 {BR3-23} {BR1+48} 140 {BR3+1} fireflybushport:firefly_bush
+> cdevtest count {BR1-48} 40 {BR3+2} {BR1+48} 140 {BR3+26} fireflybushport:firefly_bush
+> cdevtest count {BR1-48} 40 {BR3+27} {BR1+48} 140 {BR3+48} fireflybushport:firefly_bush
+> say FF01BR end
+waitlog FF01BR end 120
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" FF01BR fireflybushport:firefly_bush
 > execute positioned 0 70 0 run locate biome terralith:orchid_swamp
 waitlog nearest terralith:orchid_swamp is at 300
-capture OS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+capture OS terralith:orchid_swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {OS1} 200 {OS3}
 sleep 30
-> zq count {OS1-48} 40 {OS3-48} {OS1+48} 140 {OS3+48} fireflybushport:firefly_bush
-look all five counts above 0
+> say FF01OS begin
+> cdevtest count {OS1-48} 40 {OS3-48} {OS1+48} 140 {OS3-24} fireflybushport:firefly_bush
+> cdevtest count {OS1-48} 40 {OS3-23} {OS1+48} 140 {OS3+1} fireflybushport:firefly_bush
+> cdevtest count {OS1-48} 40 {OS3+2} {OS1+48} 140 {OS3+26} fireflybushport:firefly_bush
+> cdevtest count {OS1-48} 40 {OS3+27} {OS1+48} 140 {OS3+48} fireflybushport:firefly_bush
+> say FF01OS end
+waitlog FF01OS end 120
+shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').read().splitlines();a=sys.argv[1];i=max([k for k,l in enumerate(L) if a+' begin' in l]+[0]);t={};[t.__setitem__(m[1],t.get(m[1],0)+int(m[2])) for l in L[i:] for m in [re.search(r'verb=count block=(\S+) n=(\d+)',l)] if m];s=sum(int(m[1]) for l in L[i:] for m in [re.search(r'verb=count .*skipped_columns=(\d+)',l)] if m);print(a,'totals',t,'skipped_columns',s);z=[b for b in sys.argv[2:] if not t.get(b)];print('zero:',z);sys.exit(1 if z else 0)" FF01OS fireflybushport:firefly_bush
+reject \[cdevtest\] .*done=0
+look the five shell totals above 0 (each shell line fails on 0; skipped_columns 0: the bot loaded the box)
 sleep 3

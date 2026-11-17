@@ -27,6 +27,7 @@ look no apply error or skip line; Blockheads Additions is a CD compartment since
 @commands Throwaway boot without `creativebrewing-*.jar` (CD and its deps only; expected to stop if something else needs Brewing, then note what)
 @pass no `CoasterBlockEntityRenderer` / `brewinandchewin` mixin error from Blockheads Additions; Forge does not list `brewinandchewin` as missing for `blockheads_additions`. Expected and not a FAIL: Create Central Kitchen's own optional `KegBlockEntityMixin` WARN, Common's `[item_dict] Missing/invalid item IDs` WARN (Brewing ids absent), the 8 grape bush wild-crops skip WARNs (TODO creativesplit/deps #27)
 @fails gate not applied (client list), optional dep written as mandatory
+@reviewed 2026-11-16
 @from batches/r1115/p7_nb.qb
 bootreject CoasterBlockEntityRenderer|CoasterRendererOffset.*(rror|ail)
 # Create Central Kitchen's own optional KegBlockEntityMixin logs a mixin 'Error loading class: umpaz/brewinandchewin/...'
@@ -38,9 +39,9 @@ shell test "$(ls mods | grep -c '^creativebrewing')" = 0 && echo "brewing jar go
 shell grep -nE "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -iE "brewinandchewin|vinery" | cut -c1-300 | head -8; echo "ERR lines naming brewinandchewin or vinery: $(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "brewinandchewin|vinery")"
 shell test "$(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "brewinandchewin|vinery")" = 0
 > setblock 100 -60 100 creativedelight:placed_vegetable_omelet
-> zq blocks placed_vegetable_omelet
-waitlog \[zq\] done 20
-reject \[zq\] blocks id creativedelight:placed_vegetable_omelet
+> cdevtest reg block placed_vegetable_omelet
+expect verb=reg kind=block regex=placed_vegetable_omelet n=0\b
+reject verb=reg kind=block id=creativedelight:placed_vegetable_omelet
 > zhh2 lootroll hearthandharvest:chests/corn_maze 5
 waitlog \[zhh2\] done 30
 expect \[zhh2\] lootroll hearthandharvest:chests/corn_maze rolls 5, ids [1-9]
@@ -78,20 +79,23 @@ look no hit naming com.SaintAlfonzo, ce.shared or one of our mixin configs (thir
 @commands Same boot: `/setblock` a `minecraft:campfire` under open sky and one on a `minecraft:coal_block` beside it, `/weather thunder`, wait 400 ticks, then `/execute if block <pos> minecraft:campfire[lit=false]` for each; `/dumpall`, `grep -c "creativecommon:campfire/rain_douses" kubejs/exported/tags/block_tags.json`
 @pass open-sky campfire out, the one on coal lit; tag present (1)
 @fails Common's `CampfireRainInfo` namespace vs `block_dict.js` `t_campfire_rain_*` (7.17 item 1)
+@reviewed 2026-11-16
 @from batches/r1113/c2_a1.qb
 > setblock 330 -61 300 minecraft:stone
 > setblock 330 -60 300 minecraft:campfire[lit=true]
 > setblock 332 -61 300 minecraft:coal_block
 > setblock 332 -60 300 minecraft:campfire[lit=true]
 > weather thunder
-sleep 25
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end= 60
+expect verb=tickwarp end=done ticks=400
 > execute if block 330 -60 300 minecraft:campfire[lit=false]
 > execute if block 332 -60 300 minecraft:campfire[lit=true]
-> zq blocktag creativecommon:campfire/rain_douses
+> cdevtest tag block creativecommon:campfire/rain_douses
 > weather clear
-waitlog blocktag creativecommon:campfire/rain_douses 20
 count Test passed == 2
-expect blocktag creativecommon:campfire/rain_douses \([1-9]
+expect verb=tag kind=block tag=creativecommon:campfire/rain_douses n=[1-9]
+reject \[cdevtest\] .*done=0
 look the row's /dumpall grep is replaced by the live tag query (same tag)
 
 ## SQ-DEP-07 | no Common mixin error; every gated mixin applies
@@ -118,7 +122,10 @@ bootreject (?i)storagedelight.*(missing|requires)
 @commands Same boot: `grep -nE "dragon's breath fluid brewing disabled\|Lingerification" logs/latest.log \| head`
 @pass no "disabled" warning; Create and IE are loaded, so both still register after the guard
 @fails `CreativeBrewing.commonSetup` guard ids (7.16 fix 2)
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+shell grep -nE "dragon's breath fluid brewing disabled|Lingerification" logs/latest.log | head -6 | cut -c1-240; true
+bootreject (?i)dragon's breath fluid brewing disabled
+look the grep lines (if any) are not the "disabled" warning; Create and IE are in mods/ (full pack boot)
 @@text
 @@text Results: not run yet.
 
@@ -139,6 +146,7 @@ bootreject (?i)storagedelight.*(missing|requires)
 @commands Full pack boot: `/datapack list enabled`; `/loot spawn ~ ~ ~ loot hearthandharvest:chests/corn_maze` x10 and `hearthandharvest:chests/corn_maze_center` x10; `/loot spawn ~ ~ ~ loot rusticdelight:blocks/pancakes` is block loot, so instead `/setblock ~1 ~ ~ rusticdelight:pancakes[servings=2]` and break it with a bot; `/setblock ~2 ~ ~ vintagedelight:fd_lemon_jam_jar[jars=3]` and break it; `/setblock ~3 ~ ~ hearthandharvest:four_leaf_clover` and break it; `grep -nE "$ERR" logs/latest.log \| grep -iE "creativedelight\|hearthandharvest\|vintagedelight\|rusticdelight\|storagedelight\|creativeengineering:sawmill\|lingerification"`
 @pass the enabled list has `creativedelight:mods/<m>` for brewinandchewin, buzzier_bees, corn_delight, create_factory, fruitsdelight, hostiledelight, moredelight, supplementaries, upgrade_aquatic, vinery; corn maze chests give Corn Delight items, cider or caramel apples among the 20 rolls; the pancake plate (`servings=2`) drops 4 `supplementaries:pancake` and a bowl (servings counts eaten slices in Rustic's numbering; the table gives 6 - servings); the jar drops 3 `fruitsdelight:lemon_jelly`; the clover drops `buzzier_bees:four_leaf_clover`; no grep hit
 @fails a missing pack: `CompartmentPacks.addModData` folder name vs mod id, `pack.mcmeta`; no item from a sub-table: `<ns>:mod_items/<mod>/<item>` path in `packs/mods/<mod>/data/<ns>/loot_tables/mod_items/`
+@reviewed 2026-11-16
 @from batches/r1115/p7_a0.qb
 > datapack list enabled
 waitlog data packs? enabled 20
@@ -153,67 +161,87 @@ expect creativedelight:mods/supplementaries\b
 expect creativedelight:mods/upgrade_aquatic\b
 expect creativedelight:mods/vinery\b
 > zhh2 lootroll hearthandharvest:chests/corn_maze 10
-waitlog \[zhh2\] done 30
+waitlog \[zhh2\] lootroll hearthandharvest:chests/corn_maze rolls 30
 expect \[zhh2\] lootroll hearthandharvest:chests/corn_maze rolls 10, ids [1-9]
 > zhh2 lootroll hearthandharvest:chests/corn_maze_center 10
-waitlog \[zhh2\] done 30
+waitlog \[zhh2\] lootroll hearthandharvest:chests/corn_maze_center rolls 30
 expect \[zhh2\] lootroll hearthandharvest:chests/corn_maze_center rolls 10, ids [1-9]
 > loot spawn 100 -58 100 loot hearthandharvest:chests/corn_maze
 expect Dropped \d+
 > setblock 101 -60 100 rusticdelight:pancakes[servings=2]
-> zc3 loot 101 -60 100 none 1
-waitlog \[c3\] done 20
-expect \[c3\] loot .*rusticdelight:pancakes.*supplementaries:pancake x4
+> cdevtest loot 101 -60 100 rolls=1
+expect verb=loot state="?rusticdelight:pancakes.*drops=\S*supplementaries:pancake:4\b
 > setblock 102 -60 100 vintagedelight:fd_lemon_jam_jar[jars=3]
-> zc3 loot 102 -60 100 none 1
-waitlog \[c3\] done 20
-expect \[c3\] loot .*fd_lemon_jam_jar.*fruitsdelight:lemon_jelly x3
+> cdevtest loot 102 -60 100 rolls=1
+expect verb=loot state="?vintagedelight:fd_lemon_jam_jar.*drops=\S*fruitsdelight:lemon_jelly:3\b
 > setblock 103 -60 100 hearthandharvest:four_leaf_clover
-> zc3 loot 103 -60 100 none 1
-waitlog \[c3\] done 20
-expect \[c3\] loot .*four_leaf_clover.*buzzier_bees:four_leaf_clover x1
-> kill @e[type=minecraft:item]
+> cdevtest loot 103 -60 100 rolls=1
+expect verb=loot state="?hearthandharvest:four_leaf_clover.*drops=\S*buzzier_bees:four_leaf_clover:1\b
+> cdevtest items 102 -60 100 6
 sleep 1
 > setblock 101 -60 100 minecraft:air destroy
 > setblock 102 -60 100 minecraft:air destroy
 > setblock 103 -60 100 minecraft:air destroy
 sleep 1
-> zc3 items 102 -60 100 4
-waitlog \[c3\] done 20
+> cdevtest items 102 -60 100 4
+expect verb=items items=\S*supplementaries:pancake:4\b
+expect verb=items items=\S*fruitsdelight:lemon_jelly:3\b
+expect verb=items items=\S*buzzier_bees:four_leaf_clover:1\b
+reject \[cdevtest\] .*done=0
 shell grep -nE "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -iE "creativedelight|hearthandharvest|vintagedelight|rusticdelight|storagedelight|creativeengineering:sawmill|lingerification" | cut -c1-300 | head -8; echo "ERR lines naming the row list: $(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "creativedelight|hearthandharvest|vintagedelight|rusticdelight|storagedelight|creativeengineering:sawmill|lingerification")"
 shell test "$(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "creativedelight|hearthandharvest|vintagedelight|rusticdelight|storagedelight|creativeengineering:sawmill|lingerification")" = 0
-look the 20 corn maze rolls hold Corn Delight items, cider or caramel apples; the destroy line (zc3 items) shows 4 pancake (servings=2 = two eaten in Rustic's numbering) and a bowl, 3 lemon_jelly, 1 four_leaf_clover
+look the 20 corn maze rolls hold Corn Delight items, cider or caramel apples; the destroy line (cdevtest items) also shows the bowl beside 4 pancake (servings=2 = two eaten in Rustic's numbering), 3 lemon_jelly, 1 four_leaf_clover
 
 ## SQ-DEP-09b
 @group A
 @commands One throwaway boot per mod, each with only that jar removed from `srv/mods/`: buzzier_bees, corn_delight, create_factory, fruitsdelight, hostiledelight, moredelight, supplementaries, upgrade_aquatic, quark, immersiveengineering. If Forge refuses ("Missing or unsupported mandatory dependencies") because another jar requires it, record SKIP (cascade) with the requiring jars and move on. Known cascades (r1115): supplementaries <- suppsquared; upgrade_aquatic <- alexsabnormalities; quark <- quarkengineering (and with it removed too, Botania still needs Quark's API); immersiveengineering <- quarkengineering, more_immersive_wires, compressedengineering, controlengineering, immersiveposts, immersivepetroleum, kubejs_immersive_engineering, tmted. Per boot: `grep -nE "$ERR" logs/latest.log \| grep -i <mod>`; `/datapack list enabled \| grep creativedelight:mods/`; for corn_delight, create_factory, upgrade_aquatic also `/loot spawn ~ ~ ~ loot hearthandharvest:chests/corn_maze` (or `creativedelight:gameplay/fishing_net/junk`) x5
 @pass `Done (`; no ERR line naming the removed mod; its `creativedelight:mods/<mod>` pack is not listed; the loot spawns still give items (at most a `Found validation problem ... Unknown loot table called <ns>:mod_items/<mod>/...` WARN); for moredelight / hostiledelight no `placed_omelette` / `placed_suspicious_bacon_and_eggs` block (`/setblock` fails)
 @fails the ERR file is the next one to guard: run `python3 tools/optional_ref_audit.py --all` and check why it was not flagged (namespace map, closure); recipe errors: missing `forge:mod_loaded` on that recipe
-@draft no batch holds this row yet
+@draft one throwaway boot per removed jar (10 boots, cascades recorded as SKIP by hand): a runner loop outside one batch; per boot the checks are those of SQ-DEP-02 (rerun 5.2) with the removed mod in the greps
 ## SQ-DEP-02 (rerun 5.2)
 @group A
 @commands As SQ-DEP-02 (boot without `creativebrewing-*.jar`), plus `grep -nE "$ERR" logs/latest.log \| grep -iE "brewinandchewin\|vinery"`; `/setblock ~ ~ ~ creativedelight:placed_vegetable_omelet`; `/loot spawn ~ ~ ~ loot hearthandharvest:chests/corn_maze` x5; `grep -nE "vinery:[a-z_]*grape_bush" logs/latest.log`
 @pass `Done (`; no ERR line; the setblock fails (no such block); the chest still gives items (an `Unknown loot table called hearthandharvest:mod_items/vinery/apple_cider` WARN is fine); record any grape bush line for TODO `creativesplit/deps #27` (pack files, not a FAIL)
 @fails `displaydelight_dishes.json` `requires`; `packs/mods/brewinandchewin/`
-@draft no batch holds this row yet
+@reviewed 2026-11-16
+bootexpect Done \(
+bootreject Missing or unsupported mandatory
+shell test "$(ls mods | grep -c '^creativebrewing')" = 0 && echo "brewing jar gone"
+shell grep -nE "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -iE "brewinandchewin|vinery" | cut -c1-300 | head -8; true
+shell test "$(grep -E "Failed to load datapacks|Couldn't parse loot table|Unknown registry key|Parsing error loading recipe|Couldn't load tag|Can't find block|Unknown item" logs/latest.log | grep -ciE "brewinandchewin|vinery")" = 0
+> forceload add 96 96 104 104
+> setblock 100 -60 100 creativedelight:placed_vegetable_omelet
+> cdevtest reg block placed_vegetable_omelet
+expect verb=reg kind=block regex=placed_vegetable_omelet n=0\b
+repeat 5
+> loot spawn 100 -58 100 loot hearthandharvest:chests/corn_maze
+end
+> cdevtest items 100 -58 100 3
+count Dropped [1-9] == 5
+expect verb=items items=\S+:\d
+shell grep -nE "vinery:[a-z_]*grape_bush" logs/latest.log | cut -c1-260 | head -5; echo "grape bush lines: $(grep -cE 'vinery:[a-z_]*grape_bush' logs/latest.log)"
+look the setblock fails (no such block); an Unknown loot table WARN for hearthandharvest:mod_items/vinery/apple_cider is fine; grape bush lines recorded for TODO creativesplit/deps #27 (not a FAIL)
+reject \[cdevtest\] .*done=0
 ## SQ-MIN-03 (rerun 5.2)
 @group B
 @commands As SQ-MIN-03 (reduced set), then `grep -nE "$ERR" logs/latest.log \| grep -iE "vintagedelight:blocks/fd_\|rusticdelight\|hearthandharvest\|creativedelight:blocks/placed_\|storagedelight\|creativeengineering:sawmill"`
 @pass its pass text; no hit
 @fails the file named: its `packs/mods/<mod>/` move or recipe condition
+@reviewed 2026-11-16
 @jars creativecommon creativedelight
-@draft no batch holds this row yet
+@superseded SQ-MIN-03 in MIN.qb (its steps carry this ERR grep)
 ## SQ-CDW-01 (rerun 5.2)
 @group B (new world)
 @commands As SQ-CDW-01 above, adding fruitsdelight and corn_delight to the one-mod-removed boots; grep ERR as well as its own lines
 @pass its pass text; no ERR line naming the removed mod (no `vintagedelight:blocks/fd_*_jam_jar` loot error without fruitsdelight)
 @fails the jam jar loot in CD `packs/mods/fruitsdelight/`; `gen_pack_jams.py` `write_fd_pack`
 @jars creativedelight powergrid
-@draft no batch holds this row yet
+@draft one boot per removed optional mod (fruitsdelight and corn_delight added to the SQ-CDW-01 set in MIN.qb): a runner loop over boots; per boot SQ-CDW-01's steps plus the ERR grep naming the removed mod
 ## SQ-CDW-03b (rerun 5.2)
 @group B (new world)
 @commands As SQ-CDW-03b above, on the SQ-CDW-01 boot without fruitsdelight
 @pass its pass text
 @fails as SQ-CDW-03b
+@reviewed 2026-11-16
 @jars creativedelight powergrid
-@draft no batch holds this row yet
+@superseded SQ-CDW-03b in MIN.qb (the same rerun 5.2, with steps)

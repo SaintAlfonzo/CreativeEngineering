@@ -52,9 +52,11 @@ look #creativeengineering:placeable, /sneak, _on_plate, _on_small_plate, _on_coa
 @commands Recipe lookup: `creativedelight:shapeless/*` mortar crafts (create_wheat, create_sugar_cane, farmersdelight rice x2, cocoa powder, garlic clove); craft one canned food and one Canned Goods can, check the Servings line
 @pass 6 mortar crafts; cans craft, servings bar and tooltip as before
 @fails canning.js / can_tags.js reader
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
-> zq rdetail creativedelight:shapeless/
-> zq recipes mortar
+> cdevtest rdetail creativedelight:shapeless/ max=500
+> cdevtest recipes mortar max=500
+reject \[cdevtest\] .*done=0
 look 6 mortar crafts (create wheat, create sugar cane, farmersdelight rice x2, cocoa powder, garlic clove) among the lines; crafting a can and the Servings line are client checks
 
 ## SQ-CDFW-05 | baked durian, baked pear, dried persimmon: one recipe per cooker
@@ -62,34 +64,38 @@ look 6 mortar crafts (create wheat, create sugar cane, farmersdelight rice x2, c
 @commands Recipe lookup for outputs Baked Durian, Baked Pear, Dried Persimmon
 @pass exactly one furnace, one smoker and one campfire recipe each, all `creativedelight:`, 0.35 xp, 200 / 100 / 600 ticks; no `fruitsdelight:*_smoking` / `*_campfire` left
 @fails the family removal does not match a tag input: add id removals or fix `_cook`'s filter
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb passed
-> zq makes fruitsdelight:baked_durian
-> zq makes fruitsdelight:baked_pear
-> zq makes fruitsdelight:dried_persimmon
-expect makes fruitsdelight:baked_durian: 3$
-expect makes fruitsdelight:baked_pear: 3$
-expect makes fruitsdelight:dried_persimmon: 3$
-reject \[zq\] fruitsdelight:\S*_(smoking|campfire)\S* ->
-count \[zq\] creativedelight:(smelting|smoking|campfirecooking)/\S+ -> 1 fruitsdelight:(baked_durian|baked_pear|dried_persimmon) == 9
+> cdevtest makes fruitsdelight:baked_durian
+> cdevtest makes fruitsdelight:baked_pear
+> cdevtest makes fruitsdelight:dried_persimmon
+expect verb=makes item=fruitsdelight:baked_durian n=3\b
+expect verb=makes item=fruitsdelight:baked_pear n=3\b
+expect verb=makes item=fruitsdelight:dried_persimmon n=3\b
+reject verb=makes id=fruitsdelight:\S*_(smoking|campfire)
+count verb=makes id=creativedelight:(smelting|smoking|campfirecooking)/\S+ result=fruitsdelight:(baked_durian|baked_pear|dried_persimmon)\*1 == 9
+reject \[cdevtest\] .*done=0
 
 ## SQ-CDFW-06 | cooked family: three recipes each, old mod ids gone
 @group A
 @commands Same lookup for Grilled Ghast, Cooked Rotten Ham, Fried Turtle Egg, Cooked Arthropod, Cooked Duck Fillet, Cooked Perch / Pike Slice, Roasted Acorn, Farmer's Delight Fried Egg
 @pass three recipes each, `creativedelight:`, 0.35 xp, 200 / 100 / 600; no `hostiledelight:cghast_*`, `cookrothamrecp*`, `fteggrecp*`, `miners_delight:cooked_arthropod`, `abnormals_delight:upgrade_aquatic/cooked_*_slice*`
 @fails family removal missed a mod recipe
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
-> zq makes grilled_ghast
-> zq makes cooked_rotten_ham
-> zq makes fried_turtle_egg
-> zq makes miners_delight:cooked_arthropod
-> zq makes cooked_duck_fillet
-> zq makes cooked_perch_slice
-> zq makes cooked_pike_slice
-> zq makes roasted_acorn
-> zq makes farmersdelight:fried_egg
-reject \[zq\] hostiledelight:(cghast_|cookrothamrecp|fteggrecp)
-reject \[zq\] miners_delight:cooked_arthropod \S* ->
-reject \[zq\] abnormals_delight:upgrade_aquatic/cooked_\S*_slice
+> cdevtest makes grilled_ghast
+> cdevtest makes cooked_rotten_ham
+> cdevtest makes fried_turtle_egg
+> cdevtest makes miners_delight:cooked_arthropod
+> cdevtest makes cooked_duck_fillet
+> cdevtest makes cooked_perch_slice
+> cdevtest makes cooked_pike_slice
+> cdevtest makes roasted_acorn
+> cdevtest makes farmersdelight:fried_egg
+reject verb=makes id=hostiledelight:(cghast_|cookrothamrecp|fteggrecp)
+reject verb=makes id=miners_delight:cooked_arthropod
+reject verb=makes id=abnormals_delight:upgrade_aquatic/cooked_\S*_slice
+reject \[cdevtest\] .*done=0
 look each item: three creativedelight: smelting / smoking / campfirecooking lines (0.35 xp, 200 / 100 / 600 ticks are in the recipe dump only)
 
 ## SQ-CDFW-07 | knife cuts of catfish, salmon, cod, duck
@@ -97,35 +103,39 @@ look each item: three creativedelight: smelting / smoking / campfirecooking line
 @commands Cutting board with a knife: raw catfish, salmon, cod; `#forge:raw_duck` item
 @pass catfish 6 slices + bone meal; salmon / cod 6 + bone meal; Untitled Duck raw duck 2 fillets; a duck fillet has no cutting recipe (no fillet -> fillet loop, plan_scratch_bugfix_1103 2.1); no `alexsdelight:cutting/raw_catfish_slice`, `farmersdelight:cutting/salmon`, `/cod`
 @fails `_board` removal
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
-> zq uses alexsmobs:raw_catfish
-> zq uses minecraft:salmon
-> zq uses minecraft:cod
-> zq itemtag forge:raw_duck
-reject alexsdelight:cutting/raw_catfish_slice
-reject farmersdelight:cutting/salmon$
-reject farmersdelight:cutting/cod$
-expect (alone|shared) creativedelight:farmersdelightcutting/\S*catfish
-expect (alone|shared) creativedelight:farmersdelightcutting/\S*salmon
-expect (alone|shared) creativedelight:farmersdelightcutting/\S*cod
-look yields (catfish 6 slices + bone meal, salmon / cod 6 + bone meal, duck 2 fillets) via `zq rdetail farmersdelightcutting/` if needed; the board run is not repeated here
+> cdevtest uses alexsmobs:raw_catfish
+> cdevtest uses minecraft:salmon
+> cdevtest uses minecraft:cod
+> cdevtest tag item forge:raw_duck
+reject verb=uses id=alexsdelight:cutting/raw_catfish_slice\b
+reject verb=uses id=farmersdelight:cutting/salmon alone=
+reject verb=uses id=farmersdelight:cutting/cod alone=
+expect verb=uses id=creativedelight:farmersdelightcutting/\S*catfish
+expect verb=uses id=creativedelight:farmersdelightcutting/\S*salmon
+expect verb=uses id=creativedelight:farmersdelightcutting/\S*cod
+reject \[cdevtest\] .*done=0
+look yields (catfish 6 slices + bone meal, salmon / cod 6 + bone meal, duck 2 fillets) via `cdevtest rdetail farmersdelightcutting/` if needed; the board run is not repeated here
 
 ## SQ-CDFW-08 | golden gilding routes
 @group A
 @commands Craft a Golden Apple from 8 rose gold ingots + apple, and a Golden Carrot; recipe lookup `creativedelight:shaped/golden_apple`, `golden_carrot`, `createmixing/golden_*_gilding`, `iearcfurnace/golden_*_arc_gilding`, `createsequencedassembly/enchanted_golden_apple_sequenced_assembly`
 @pass both craft; no `minecraft:golden_apple` / `minecraft:golden_carrot` shaped recipe; mixer 6, arc 5, assembly 4 loops
 @fails goldenGild / goldenEnchant
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
-> zq rdetail golden_apple
-> zq rdetail golden_carrot
-> zq rdetail enchanted_golden_apple_sequenced_assembly
-reject \[zq\] minecraft:golden_apple \{
-reject \[zq\] minecraft:golden_carrot \{
-expect \[zq\] creativedelight:shaped/golden_apple \{
-expect \[zq\] creativedelight:shaped/golden_carrot \{
-expect \[zq\] creativedelight:createmixing/golden_\S*_gilding \{
-expect \[zq\] creativedelight:iearcfurnace/golden_\S*_arc_gilding \{
-expect \[zq\] creativedelight:createsequencedassembly/enchanted_golden_apple_sequenced_assembly \{
+> cdevtest rdetail golden_apple max=200
+> cdevtest rdetail golden_carrot max=200
+> cdevtest rdetail enchanted_golden_apple_sequenced_assembly
+reject verb=rdetail id=minecraft:golden_apple serializer=
+reject verb=rdetail id=minecraft:golden_carrot serializer=
+expect verb=rdetail id=creativedelight:shaped/golden_apple serializer=
+expect verb=rdetail id=creativedelight:shaped/golden_carrot serializer=
+expect verb=rdetail id=creativedelight:createmixing/golden_\S*_gilding serializer=
+expect verb=rdetail id=creativedelight:iearcfurnace/golden_\S*_arc_gilding serializer=
+expect verb=rdetail id=creativedelight:createsequencedassembly/enchanted_golden_apple_sequenced_assembly serializer=
+reject \[cdevtest\] .*done=0
 look the shaped ring accepts rose gold ingots (ring slot /+N); mixer 6, arc 5, assembly 4 loops are in the recipe dump only
 
 ## SQ-CDFW-09 | Farmer's assemblies and heatless rows
@@ -133,23 +143,25 @@ look the shaped ring accepts rose gold ingots (ring slot /+N); mixer 6, arc 5, a
 @commands Recipe lookup: Farmer's assemblies (`barbecue_stick_`, `grilled_salmon_`, `bacon_and_eggs_`, `salmon_roll_`, `cod_roll_`, `kelp_roll_`, `rice_roll_medley_block_`, `roasted_mutton_chops_`, `shepherds_pie_block_`, `stuffed_potato_`, `steak_and_potatoes_`, `mutton_wrap_`, `fruit_salad_sequenced_assembly`); heatless `*_cooked_manual_only` of Farmer's, Fruits, Alex's, Abnormals, Delightful
 @pass all present with the old steps and loops (rolls make 3, fruit salad 2); heatless rows unchanged; `logs/kubejs/server.log` no "incomplete(... not registered"
 @fails incKey picked the wrong transition item key
+@reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
-> zq recipes barbecue_stick_
-> zq recipes grilled_salmon_
-> zq recipes bacon_and_eggs_
-> zq recipes salmon_roll_
-> zq recipes cod_roll_
-> zq recipes kelp_roll_
-> zq recipes rice_roll_medley_block_
-> zq recipes roasted_mutton_chops_
-> zq recipes shepherds_pie_block_
-> zq recipes stuffed_potato_
-> zq recipes steak_and_potatoes_
-> zq recipes mutton_wrap_
-> zq recipes fruit_salad_sequenced_assembly
-> zq recipes _cooked_manual_only
-count \[zq\] creativedelight:createsequencedassembly/(barbecue_stick|grilled_salmon|bacon_and_eggs|salmon_roll|cod_roll|kelp_roll|rice_roll_medley_block|roasted_mutton_chops|shepherds_pie_block|stuffed_potato|steak_and_potatoes|mutton_wrap|fruit_salad)_\S* -> >= 13
-expect createsequencedassembly/salmon_roll_\S* -> 3
-expect createsequencedassembly/fruit_salad_sequenced_assembly -> 2
+> cdevtest recipes barbecue_stick_ max=500
+> cdevtest recipes grilled_salmon_ max=500
+> cdevtest recipes bacon_and_eggs_ max=500
+> cdevtest recipes salmon_roll_ max=500
+> cdevtest recipes cod_roll_ max=500
+> cdevtest recipes kelp_roll_ max=500
+> cdevtest recipes rice_roll_medley_block_ max=500
+> cdevtest recipes roasted_mutton_chops_ max=500
+> cdevtest recipes shepherds_pie_block_ max=500
+> cdevtest recipes stuffed_potato_ max=500
+> cdevtest recipes steak_and_potatoes_ max=500
+> cdevtest recipes mutton_wrap_ max=500
+> cdevtest recipes fruit_salad_sequenced_assembly max=500
+> cdevtest recipes _cooked_manual_only max=500
+count verb=recipes id=creativedelight:createsequencedassembly/(barbecue_stick|grilled_salmon|bacon_and_eggs|salmon_roll|cod_roll|kelp_roll|rice_roll_medley_block|roasted_mutton_chops|shepherds_pie_block|stuffed_potato|steak_and_potatoes|mutton_wrap|fruit_salad)_\S* result= >= 13
+expect verb=recipes id=\S*createsequencedassembly/salmon_roll_\S* result=\S+\*3\b
+expect verb=recipes id=\S*createsequencedassembly/fruit_salad_sequenced_assembly result=\S+\*2\b
+reject \[cdevtest\] .*done=0
 kjsreject incomplete\(.*not registered
 look heatless _cooked_manual_only of Farmer's, Fruits, Alex's, Abnormals, Delightful present (count line)
