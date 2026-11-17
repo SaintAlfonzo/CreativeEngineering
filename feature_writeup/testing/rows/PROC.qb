@@ -16,3 +16,82 @@
 @pass one boot line listing every own jar with its stamp; each stamp equals the `jarstamp.py` stamp of the jar in `srv/mods`, and for jars installed from `mods/`, the last `jar_archive/installed.tsv` row of that jar
 @fails `creativecommon.util.BuildStamps` (ModList mod files, `findResource("META-INF","ce-build.json")`); no line at all: Common jar older than the stamp build
 @draft no batch holds this row yet
+
+@@section 2
+@@title SQ-PROC Tiered scratch queue, live checks, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.1 to P2.4; TODO `tooling/process #5`)
+@@date 2026-11-16
+@@sources tools/scratch_query/qpin.py tools/scratch_query/qdrive.py tools/scratch_query/prep_srv.sh
+@@text
+@@text Offline tests PROC-20 to PROC-28 (`tools/test_queue_rows.sh`) cover the logic with a fake server; these rows check it on a
+@@text real prep_srv.sh server. SQ-PROC-13 is a run-level check, run by the orchestrating agent from the instance root.
+@@text
+@@table
+## SQ-PROC-10 | prep_srv.sh pins the own jars: copies, not links; pinned.json verifies
+@group A
+@commands After `prep_srv.sh OUT LEVEL A`: `python3 tools/scratch_query/qpin.py verify OUT`; `python3 tools/scratch_query/qpin.py show OUT`
+@pass verify prints `qpin: OK`; `pinned.json` lists every own jar of `srv/mods` (Creative jars, exposure, power grid only with PGJAR) with its stamp, or `sha1:` for a jar built before stamping; no own jar in `srv/mods` has a link count above 1
+@fails a link left: the pin step in prep_srv.sh did not run (prep output has no `pin:` line); an unlisted jar: a jar in mods/ with no mod_sides.md row (remove it or add the row)
+shell python3 "$INST/tools/scratch_query/qpin.py" verify ..
+shell python3 "$INST/tools/scratch_query/qpin.py" show ..
+
+## SQ-PROC-11 | the boot builds line names the pinned stamps
+@group A
+@commands Boot; `grep "\[creativecommon\] builds:" logs/latest.log`; compare with `qpin.py show OUT`
+@pass every stamped own jar in the builds line has the stamp pinned.json holds for it
+@fails a different stamp: a jar changed between prep and boot (qrun would refuse the next run: `qpin.py verify`)
+bootexpect \[creativecommon\] builds:
+shell grep -m1 "\[creativecommon\] builds:" logs/latest.log
+shell python3 "$INST/tools/scratch_query/qpin.py" show ..
+look the stamps in the builds line (shell output) equal the pinned ids of the same jars
+
+## SQ-PROC-12 | verdict files carry the pinned stamps
+@group A
+@commands Any row run by `qrun.py run` on this server, then read `RES/verdicts/<ID>.json`
+@pass the verdict file has `stamps` equal to `pinned.json` `jars` ids; `qrun.py states --code PROC` shows the row `current` while mods/ holds the same jars
+@fails `stamps` null: qrun ran without the pin check (target without `srv/`) or an old qrun.py
+> say SQ-PROC-12 marker
+expect SQ-PROC-12 marker
+look after the run: RES/verdicts/SQ-PROC-12.json has stamps equal to OUT/pinned.json jars ids
+
+## SQ-PROC-13 | drive: a killed driver leaves no server; resume continues from the next row
+@group A
+@commands From the instance root: `setsid nohup python3 tools/scratch_query/qrun.py drive start rproc13 --plan-json FILE &` (FILE: `qrun.py plan --json` output cut to two sections of 3 server rows each); after the first row of step 1 ends, `kill -9` the driver; wait 20 s; `bash tools/scratch_query/game_jvms.sh`; then `qrun.py drive resume rproc13`; `qrun.py drive status rproc13`
+@pass within 20 s of the kill no scratch JVM is left (watchdog stopped it); RUNNER.md still shows `State: running` with the run's state path until resume; after resume step 1 runs from its second row (its qrun log has no line for the first row again), both steps end `done`, RUNNER.md back to `State: idle` with a `Run: rproc13 finished` line
+@fails a JVM left after the kill: the watchdog process (`qdrive.py watchdog PID OUT`) was not started or died with the driver's session (start the driver with setsid); a row rerun: `first_unrun` read the wrong RES
+@draft run-level check: the orchestrating agent runs it from the instance root, not inside a batch
+
+@@section 3
+@@title SQ-PROC Release gate (T3), 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P2.2; [deploy.md](../deploy.md))
+@@date 2026-11-16
+@@tier T3
+@@sources tools/build_deploy.py tools/scratch_query/prep_srv.sh
+@@text
+@@text Run before `build_deploy.py` deploys (`qrun.py plan --release` lists these rows, T1 of every own jar and the owner playtest
+@@text list). The server is prepared from the staged payload, not from `mods/`: `NOSWAP=1 prep_srv.sh OUT LEVEL A`, then
+@@text `srv/mods` replaced by an install-mode payload's `deploy/latest/mods/` and `qpin.py pin OUT` again.
+@@text
+@@table
+## SQ-PROC-14 | the staged payload boots as a dedicated server; its own jars are the staged ones
+@group A
+@commands Prepare as above; boot; `grep` latest.log for `Done (`, `builds:`, mixin and class errors naming own mods; `python3 tools/jarstamp.py diff OUT/srv/mods deploy/latest/mods`
+@pass `Done (` within 10 min; no mixin apply failure or class loading error naming an own mod; the builds line lists every own jar of the payload; `jarstamp.py diff` reports no difference
+@fails a missing dependency: the payload mode was update (only changed jars), use an install payload; a stamp difference: the server took jars from mods/ (`NOSWAP=1` missing)
+bootexpect Done \(
+bootexpect \[creativecommon\] builds:
+bootreject (?i)mixin apply .* failed .*(creative|powergrid|tempad|exposure)
+bootreject (?i)error loading class: .*(creative|powergrid|tempad|exposure)
+shell python3 "$INST/tools/jarstamp.py" diff mods "$INST/deploy/latest/mods"
+
+## SQ-PROC-15 | one boot per optional mod the release can run without
+@group A
+@commands For each optional mod named in the release plan (SQ-DEP section 2 pattern: Creative Delight without Brewing, Common + Compat alone, and so on): `DROP="<jars>"` prep, boot, the same boot checks as SQ-PROC-14
+@pass every boot reaches `Done (`; no error naming the dropped mod's ids or classes; `[absent mods]` lists the dropped mods
+@fails an unguarded optional id: `guard_check` (check_all) missed it; add the guard and a row to SQ-DEP
+@draft one boot per drop: the driver has no per-row mod set yet; the runner preps each boot by hand from the release plan's list
+
+## CQ-PROC-01 | a client with the payload's client set joins the staged server
+@group client
+@commands Throwaway client with the payload's `mods/` + `client_mods/`, join the SQ-PROC-14 server, open JEI, place a block of each own jar's main item
+@pass joined without a mismatch screen; JEI opens; no client error naming an own mod in the client latest.log
+@fails `mismatched mod list`: server and client stamps differ (build_deploy refuses that, so the payload was edited by hand)
+@draft client row: converted to the client capture runner when TX-01 to TX-05 are built (D5)
