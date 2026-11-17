@@ -2,13 +2,13 @@
 // requires: vintagedelight
 // requires: lootjs
 // Vintage Delight chest loot (vintageport #5, vintage_delight.md S11). Rules for the pre-roll loot framework
-// (Creative Worldgen loot/05_tuning.js, global.lootTuning); the pack's rules are in Worldgen's loot/07_rules.js.
+// (Creative Loot loot/05_tuning.js, global.lootTuning); the pack's rules are in Creative Loot's loot/07_rules.js.
 //
 // The rules sit in a callback, so nothing leaks into the top-level scope all server scripts share.
 
-// Queued with global.CWG.lootRules (Creative Worldgen's loot engine, loot/05_tuning.js): its script pack can load
-// after this one, so the rules run when the engine of the current reload exists. No Worldgen jar: no rules.
-if (global.CWG) global.CWG.lootRules(function (L) {
+// Queued with global.LOOT.rules (Creative Loot's loot engine, loot/05_tuning.js): its script pack can load
+// after this one, so the rules run when the engine of the current reload exists. Creative Delight requires Creative Loot.
+global.LOOT.rules(function (L) {
     var i = global.item
 
     // ── crates and bags split out of their loose crop's entry, like the Farmer's Delight crates ──

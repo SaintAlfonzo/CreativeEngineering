@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — DEBUG.  Inert by default.
 //
 // Uncomment enableLogging() while tuning: LootJS then prints, for every loot roll, which

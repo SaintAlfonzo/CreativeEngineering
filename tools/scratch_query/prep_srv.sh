@@ -49,6 +49,7 @@ SWAPS=(
   "creativecalendar-*.jar|$INST/development/creativeCalendar/build/libs/creativecalendar-1.0.0.jar"
   "creativedevtools-*.jar|$INST/development/creativeDevtools/build/libs/creativedevtools-1.0.0.jar"
   "repackedStorage-*.jar|$INST/development/repackedStorage/build/libs/repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar"
+  "creativeloot-*.jar|$(newest creativeLoot creativeloot)"
   "creativeworldgen-*.jar|$INST/development/creativeWorldgen/build/libs/creativeworldgen-1.0.0.jar"
   "creativeLabels-*.jar|$(ls -t "$INST"/development/creativeLabels/build/libs/creativeLabels-*.jar | grep -v -- -sources | head -1)"
 )

@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — TARGETED (LootJS).  Per-roll custom logic for ONE table or a small named set.
 //
 // Plain per-table edits are pre-roll, in 07_rules.js: L.add / L.addPool / L.remove / L.frequency with

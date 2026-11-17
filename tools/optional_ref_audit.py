@@ -74,7 +74,7 @@ ALLOW = [
     ("kubejs/data/creativedelight/kubejs/_worldgen/wild_crops.json",
      "script data: _biome_rules.js skips a feature or biome whose namespace is not loaded (Platform.isLoaded) and a rule "
      "whose requires is absent; the build splits the rules' own files by requires"),
-    ("kubejs/data/creativeworldgen/kubejs/loot/loot_index.json",
+    ("kubejs/data/creativeloot/kubejs/loot/loot_index.json",
      "script data: an index of loot table ids from the dump; 05_tuning.js only edits tables that exist"),
     ("development/creativeDelight/src/main/resources/creativedelight/soil_yield.json",
      "soil_yield.js reads it; a crop whose base is missing is skipped with a warning (NaN row)"),

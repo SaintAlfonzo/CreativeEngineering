@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Block loot — LEAF APPLES.  Oak, dark oak and Myrtrees rubberwood leaves no longer drop apples.
 //
 // Apples come from apple trees (Fruits Delight and Vinery, placed by Creative Delight's wild crop rules in oak forests)

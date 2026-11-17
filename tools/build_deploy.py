@@ -155,6 +155,9 @@ IN_TREE_MODS = [
     # Create: Power Grid 0.6.2 port (feature_writeup/plan_power_grid.md): in mods/ for development testing, never staged
     # until energy_advanced.md stage 5 (the basic/advanced energy switch). Not required: collect() skips it.
     ('backportedPowerGrid', 'backportedPowerGrid', False),
+    # Creative Loot: the loot engine (chest tuning, drop rules, the LootJS layer) and the global loot modifier merge
+    # (feature_writeup/creative_loot.md); split out of Creative Worldgen 2026-11-17. Worldgen, Delight and Brewing require it.
+    ('creativeLoot', 'creativeloot', True),
     # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and Baby
     # Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own before 2026-11-02).
     ('creativeWorldgen', 'creativeworldgen', True),
@@ -180,6 +183,7 @@ IN_TREE_EXTRA_SRC = {
                         'kubejs/assets/creativebrewing/kubejs'],
     'creativeCalendar': ['kubejs/data/creativecalendar/kubejs'],
     'creativeCompat': ['kubejs/data/creativecompat/kubejs', 'kubejs/assets/creativecompat/kubejs'],
+    'creativeLoot': ['kubejs/data/creativeloot/kubejs'],
     'creativeWorldgen': ['development/creativeWorldgen/members', 'kubejs/data/creativeworldgen/kubejs',
                          'kubejs/data/more_mooblooms/moobloom_spawns', 'development/shared'],
     'creativeMagic': ['kubejs/data/creativemagic/kubejs', 'kubejs/assets/creativemagic/kubejs', 'development/shared'],
@@ -281,8 +285,11 @@ KUBEJS_CLASSES = [
     # Creative Compat's script trees: the same, shipped only inside the creativecompat jar
     ('data/creativecompat/kubejs/*', 'dev'),
     ('assets/creativecompat/kubejs/*', 'dev'),
-    # Creative Worldgen's server script tree (with the loot framework's loot_config.json / loot_index.json) and the
-    # moobloom spawn rules it ships as a data tree: the same, shipped only inside the creativeworldgen jar
+    # Creative Loot's server script tree (with the loot framework's loot_config.json / loot_index.json): the same,
+    # shipped only inside the creativeloot jar
+    ('data/creativeloot/kubejs/*', 'dev'),
+    # Creative Worldgen's server script tree and the moobloom spawn rules it ships as a data tree: the same, shipped only
+    # inside the creativeworldgen jar
     ('data/creativeworldgen/kubejs/*', 'dev'),
     ('data/more_mooblooms/*', 'dev'),
     # Creative Magic's script trees: the same, shipped only inside the creativemagic jar

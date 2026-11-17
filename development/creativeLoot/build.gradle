@@ -1,0 +1,47 @@
+// creativeLoot: Creative Loot (mod id creativeloot, feature_writeup/creative_loot.md), split out of Creative Worldgen
+// (plan_rules_fixes.md section 5b, D13). Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
+// This file adds what is specific to Loot, the same way creativeMagic/build.gradle does:
+//   - the loot script tree, authored in the pack folder so /reload picks it up without a rebuild, copied into the jar
+//     at the same resource path:
+//       kubejs/data/creativeloot/kubejs/  -> data/creativeloot/kubejs/  (server scripts, with the tuning tables
+//                                            loot/loot_config.json and loot/loot_index.json, read by loot/05_tuning.js
+//                                            from the pack folder in dev, else from the jar through CLResources)
+//     The startup script lives in this project (src/main/resources/kubejs_startup/creativeloot/), loaded from the jar
+//     by Creative Common's startup loader.
+// Build: ./gradlew :creativeLoot:build --offline   Install: ./gradlew :creativeLoot:installToMods
+plugins {
+	id 'ce.forge-mod'
+}
+
+dependencies {
+	// Creative Common (creativecommon): a hard dependency (KubeJS, the shared helpers, the startup loader).
+	compileOnly project(':creativeCommon')
+	// Creative Compat: required by every Creative jar (creative_split.md 7.6).
+	compileOnly project(':creativeCompat')
+}
+
+def scriptTrees = ['data/creativeloot/kubejs']
+
+tasks.named('processResources', ProcessResources).configure {
+	scriptTrees.each { tree ->
+		from(rootProject.file("kubejs/${tree}")) {
+			into tree
+			exclude '**/*.md'
+		}
+	}
+}
+
+// The scripts in the jar run only through KubeJS; a missing tree or table means the pack-folder path moved.
+tasks.named('jar', Jar).configure {
+	doLast {
+		def entries = new java.util.zip.ZipFile(archiveFile.get().asFile).withCloseable { z -> z.entries().collect { it.name } }
+		['kubejs_startup/creativeloot/', 'data/creativeloot/kubejs/loot/'].each { dir ->
+			if (!entries.any { it.startsWith(dir) && it.endsWith('.js') }) {
+				throw new GradleException("creativeloot jar has no scripts under ${dir}")
+			}
+		}
+		['data/creativeloot/kubejs/loot/loot_config.json', 'data/creativeloot/kubejs/loot/loot_index.json'].each { f ->
+			if (!entries.contains(f)) throw new GradleException("creativeloot jar has no ${f}")
+		}
+	}
+}

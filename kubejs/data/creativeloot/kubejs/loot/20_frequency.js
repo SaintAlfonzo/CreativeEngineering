@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — STACK SIZE / CONDITIONAL BONUS (LootJS).
 //
 // How OFTEN an item shows up is pre-roll, in 07_rules.js or loot_config.json:

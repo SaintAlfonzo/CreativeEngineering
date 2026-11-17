@@ -1,0 +1,95 @@
+# Scratch queue rows LOOT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/LOOT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-LOOT Creative Loot split out of Creative Worldgen, 2026-11-17 ([creative_loot.md](../creative_loot.md) 4, LOOT-01 to LOOT-06; [plan_rules_fixes.md](../plan_rules_fixes.md) sections 5 and 5b, TODO `conventions #15`, `#16`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativeloot creativeworldgen
+@@sources development/creativeLoot kubejs/data/creativeloot/kubejs development/creativeWorldgen/src/main/resources/META-INF/mods.toml kubejs/data/creativedelight/kubejs/miners_delight/loot.js kubejs/data/creativedelight/kubejs/rusticdelight/loot.js kubejs/data/creativedelight/kubejs/veggiesdelight/loot.js kubejs/data/creativedelight/kubejs/vintagedelight/loot.js
+@@text
+@@text Same behavior expected: every row compares with the pre-split state. Baseline (instance, before the split): `kubejs/exported/baseline_loot_split_2026-11-17/` holds the 2026-11-15 `loot_tables/` dump, `loot_runtime_additions.json` and the 2026-11-16 KubeJS server log (`[loot-tuning] 5 rules -> rewrote 184 tables (...)`). Run rows 01 and 05 before any `/reload` (it truncates the KubeJS log). Needs `creativeloot-1.0.0.jar` and `creativeworldgen-1.0.0.jar` of 2026-11-17 or later.
+@@table
+## SQ-LOOT-01 | boot: loot engine banner once, tuning line equals the pre-split one
+@group A
+@commands Boot on the installed jars; read startup.log, the KubeJS server log and latest.log
+@pass `[creativeloot] core finished` once in startup.log; `[creativeloot] loaded` in latest.log; `global.LOOT ready`; the `[loot-tuning] N rules -> rewrote M tables (...)` line equals the baseline log's line; no `global.LOOT missing`, no `could not read`, no `queued loot rules failed`, no mixin error on LootModifierManagerMixin
+@fails Line differs: a rule file did not load from the new pack (`// requires: creativeloot`), or the CD `loot.js` queue never ran (`global.LOOT.rules` vs the CD jar copy). `global.LOOT missing`: the startup script is not in the jar. Mixin error: SRG name `m_5787_`
+shell test "$(grep -c '\[creativeloot\] core finished' logs/kubejs/startup.log)" = 1
+bootexpect \[creativeloot\] loaded
+bootreject LootModifierManagerMixin.*(InvalidInjectionException|could not find|failed)
+kjsexpect global\.LOOT ready
+kjsreject global\.LOOT missing|\[loot-tuning\] (could not read|disabled: missing)|queued loot rules failed
+shell a=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' logs/kubejs/server.log | tail -1); b=$(grep -o '\[loot-tuning\] [0-9]* rules -> rewrote .*' "$INST/kubejs/exported/baseline_loot_split_2026-11-17/server_2026-11-16.log" | tail -1); echo "now:  $a"; echo "base: $b"; [ "$a" = "$b" ]
+## SQ-LOOT-02 | GlmMerge: one line per reload, nothing lost
+@group A
+@commands Same boot: grep latest.log for `[GlmMerge]`; `/reload`; grep again
+@pass One `[GlmMerge] N entries (lists: ..., fragments: ...)` line after boot and one more after the reload, same N; N = Forge read + added; no `could not read` line. Until P3 removes the members' list files, `fragments: 0 files` and `added 0` are expected
+@fails No line: mixin not applied (SQ-LOOT-01). `added` above 0: a `replace: true` list dropped entries before the merge, the `[GlmMerge] skipped` and list lines name them (section 5: a "Fixed" changelog bullet if those modifiers now load and did not before)
+bootexpect \[GlmMerge\] \d+ entries \(lists: \d+ files, \d+ entries; fragments: \d+ files
+bootreject \[GlmMerge\] could not read
+shell grep -hE '\[GlmMerge\]' logs/latest.log | tail -5
+> reload
+waitlog \[GlmMerge\] \d+ entries 180
+reject \[GlmMerge\] could not read
+look the N of both lines is the same; `added` and the skipped list (if any) recorded in the run doc
+## SQ-LOOT-03 | /dumpall loot dump diff against the pre-split dump is empty
+@group A
+@commands `/dumpall`; diff `kubejs/exported/loot_tables/` and `loot_runtime_additions.json` against the baseline folder
+@pass Both diffs empty
+@fails A table differs: compare its file; a mod update since 2026-11-15 also shows here (check `mods/` dates before blaming the split)
+> dumpall
+waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
+shell diff -rq "$INST/kubejs/exported/baseline_loot_split_2026-11-17/loot_tables" kubejs/exported/loot_tables && echo LOOT_TABLES_SAME
+shell diff -q "$INST/kubejs/exported/baseline_loot_split_2026-11-17/loot_runtime_additions.json" kubejs/exported/loot_runtime_additions.json && echo ADDITIONS_SAME
+## SQ-LOOT-04 | structure chest tables roll as before: no banned item, tuning active
+@group A
+@commands `/loottuning`; `/loot spawn` a village house and a dungeon table 10 times each at a cleared spot, then `/cdevtest items` there
+@pass `Loot tuning: active`; items rolled; no PneumaticCraft item and no Lightman's Currency coin (both banned); crates (`farmersdelight:*_crate`, `quark:*_sack`) may show where loose food was packed
+@fails No items: the table id; banned item present: `07_rules.js` bans did not apply (rule count in SQ-LOOT-01)
+> loottuning
+sleep 2
+expect Loot tuning: active
+> forceload add 3200 3200 3216 3216
+> fill 3200 -60 3200 3210 -50 3210 minecraft:air
+repeat 10
+> loot spawn 3205 -58 3205 loot minecraft:chests/village/village_plains_house
+> loot spawn 3205 -58 3205 loot minecraft:chests/simple_dungeon
+end
+sleep 2
+> cdevtest items 3205 -58 3205 6
+waitlog verb=items 30
+expect verb=items .*stacks=[1-9]
+reject verb=items .*(pneumaticcraft:|lightmanscurrency:coin)
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
+look the item list looks like village house and dungeon loot; crate or sack entries in place of some loose potatoes, carrots, berries
+## SQ-LOOT-06 | settings and queued rules carried: loot_config.json unchanged, the CD crate rules still run
+@group A
+@commands Same boot as SQ-LOOT-01: `/loottuning`; read the KubeJS log for the CD crate pairs
+@pass `loot_config.json` settings equal the baseline (`enabled`, `slack`, `log_tables`; the file moved unchanged, Worldgen had no `[loot]` toml section to carry); `/loottuning` lists the Veggies, Vintage, Rustic and Miner's rules as before
+@fails CD crate pairs missing: the CD `loot.js` in the pack folder still calls `global.CWG.lootRules` (the jar copy is older until the CD rebuild in P3, the pack folder copy wins in dev)
+shell python3 -c "import json,sys; a=json.load(open('kubejs/data/creativeloot/kubejs/loot/loot_config.json'))['settings']; print(a)"
+> loottuning
+sleep 2
+expect Loot tuning: active
+shell grep -hiE "crate|bag|sack" logs/kubejs/server.log | grep -iE "veggie|vintage|rustic|miner|cave_carrot" | head -15
+look veggie, vintage, rustic and cave carrot crate pairs listed, as SQ-CWG-04 found before the split
+
+@@section 2
+@@title SQ-LOOT Creative Loot tables from the jar, own boot, 2026-11-17 ([creative_loot.md](../creative_loot.md) LOOT-05; replaces SQ-CWG-05)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativeloot
+@@sources development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/CLResources.java kubejs/data/creativeloot/kubejs/loot/05_tuning.js
+@@text
+@@table
+## SQ-LOOT-05 | the tuning tables load from the jar when the pack-folder copies are gone
+@group A
+@commands Scratch copy: move `kubejs/data/creativeloot/kubejs/loot/loot_config.json` and `loot_index.json` away; boot
+@pass Tuning loads from the jar (`CLResources`); the `[loot-tuning]` line equals SQ-LOOT-01's
+@fails `CLResources.text` path, or the json missing from the jar (the jar task checks both)
+shell ! ls kubejs/data/creativeloot/kubejs/loot/loot_config.json kubejs/data/creativeloot/kubejs/loot/loot_index.json 2>/dev/null
+kjsreject \[loot-tuning\] (could not read|disabled: missing)
+kjsexpect \[loot-tuning\] \d+ rules -> rewrote \d+ tables
+@draft a boot of its own: move the two files out of OUT/srv/kubejs/data/creativeloot/kubejs/loot/ before the boot (no setup step for that yet); the steps above are the checks after it

@@ -24,16 +24,16 @@ LootJS.modifiers(event => {
 })
 
 // Cave carrot crate split out of the loose cave carrot's entry, like the Farmer's Delight crates (pre-roll loot
-// framework, Creative Worldgen loot/05_tuning.js). miners_delight.md I5.
-// Queued with global.CWG.lootRules (Creative Worldgen's loot engine, loot/05_tuning.js): its script pack can load
-// after this one, so the rules run when the engine of the current reload exists. No Worldgen jar: no rules.
+// framework, Creative Loot loot/05_tuning.js). miners_delight.md I5.
+// Queued with global.LOOT.rules (Creative Loot's loot engine, loot/05_tuning.js): its script pack can load
+// after this one, so the rules run when the engine of the current reload exists. Creative Delight requires Creative Loot.
 //
 // Miner's Delight drops (creativedelight members #51, miners_delight.md D8): the donor's loot modifiers are not served
 // (MinersTranslator); these rules give the same drops at the same rates, as loot pools in the vanilla tables
 // (L.drop / L.dropShare, loot/09_drops.js), so a rate is one number here and /reload applies it. A mob that dies on
 // fire (Fire Aspect, lava, sun) drops the cooked item instead of the raw one. "Knife" is #forge:tools/knives in the
 // killer's main hand. Squid and glow squid kills are the squid chain's (LootJS rule above); only fishing is here.
-if (global.CWG) global.CWG.lootRules(function (L) {
+global.LOOT.rules(function (L) {
 	var i = global.item
 	var SPIDER = 'minecraft:entities/spider'
 	var CAVE_SPIDER = 'minecraft:entities/cave_spider'
@@ -50,9 +50,9 @@ if (global.CWG) global.CWG.lootRules(function (L) {
 		{ rolls: 1, entries: [{ type: 'minecraft:loot_table', name: 'miners_delight:chests/md_abandoned_mineshaft' }] },
 		{ name: 'miners_delight' })
 
-	// L.drop / L.dropShare come with a Creative Worldgen jar that has loot/09_drops.js: an older one gives no Miner's drops
+	// L.drop / L.dropShare come with a Creative Loot jar that has loot/09_drops.js: an older one gives no Miner's drops
 	if (!L.drop || !L.dropShare) {
-		console.error('[miners_delight] the loot engine has no drop rules (Creative Worldgen older than loot/09_drops.js): ' +
+		console.error('[miners_delight] the loot engine has no drop rules (Creative Loot older than loot/09_drops.js): ' +
 			'no bat wing, arthropod, spider leg, silverfish egg or fished squid drops')
 		return
 	}

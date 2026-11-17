@@ -1,4 +1,4 @@
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — CONTEXT-SCOPED ADDITIONS (LootJS).
 //
 // Putting items in more tables goes pre-roll first, in 07_rules.js (exact odds, part of the pool):

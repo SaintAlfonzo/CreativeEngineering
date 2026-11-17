@@ -1,5 +1,6 @@
-// Offline check for the chest-loot framework: runs the real kubejs/server_scripts/loot/05_tuning.js +
-// 07_rules.js (and tags/loottags.js + 95_tag_capture.js for '#tag' rules) in node with the KubeJS globals
+// Offline check for the loot framework: runs Creative Loot's real loot/05_tuning.js + 07_rules.js + 09_drops.js
+// (kubejs/data/creativeloot/kubejs/, with tags/loottags.js + 95_tag_capture.js for '#tag' rules, and the jar's startup
+// half kubejs_startup/creativeloot/loot_core.js) in node with the KubeJS globals
 // stubbed, against the raw loot tables from the jars (via gen_loot_config.load_sources) and the /dumptags
 // export. Prints the same [loot-tuning] lines the game logs, then checks the result:
 //   - no banned item is left in any rewritten table
@@ -27,6 +28,8 @@ for (const f of fs.readdirSync(ROOT + 'kubejs/exported/items_by_mod')) {
   const text = fs.readFileSync(ROOT + 'kubejs/exported/items_by_mod/' + f, 'utf8')
   if (text.trim()) JSON.parse(text).items.forEach(id => itemIds.add(id))
 }
+// mod ids for global.has (Platform.isLoaded): every namespace with an exported item
+const modIds = new Set([...itemIds].map(id => id.split(':')[0]))
 const tagExport = JSON.parse(fs.readFileSync(ROOT + 'kubejs/exported/tags/item_tags.json', 'utf8'))
 
 // ---- mod config switches, from the files
@@ -44,21 +47,23 @@ const JAVA = {
 // ---- KubeJS stubs
 const logs = []
 const log = level => (...a) => logs.push(level + a.join(' '))
-const handlers = { loot: [], tags: [] }
+const handlers = { loot: [], tags: [], data: [] }
 const javaList = a => ({ size: () => a.length, get: k => a[k] })
 let additions = null
 const sandbox = {
-  global: {},
+  global: { writeExportJson: (p, data) => { additions = data } },
   console: { info: log(''), log: log(''), warn: log('WARN '), error: log('ERROR ') },
   JsonIO: { readString: p => fs.readFileSync(ROOT + p, 'utf8'), parseRaw: s => JSON.parse(s) },
   Java: { loadClass: n => { if (!JAVA[n]) throw new Error('no stub for ' + n); return JAVA[n] } },
   Item: { exists: id => itemIds.has(id) },
+  Platform: { isLoaded: ns => modIds.has(ns) },
   Ingredient: { of: t => ({ itemIds: tagExport[t.replace(/^#/, '')] || [] }) },
   Utils: { getServer: () => null },
   Text: { of: s => ({ red: () => s }) },
   StartupEvents: { postInit: () => {} },
   ServerEvents: {
     genericLootTables: fn => handlers.loot.push(fn),
+    highPriorityData: fn => handlers.data.push(fn),
     tags: (type, fn) => { if (type === 'item') handlers.tags.push(fn) },
     commandRegistry: () => {},
   },
@@ -69,12 +74,18 @@ const sandbox = {
 }
 const run = rel => new Function(...Object.keys(sandbox), fs.readFileSync(ROOT + rel, 'utf8'))(...Object.values(sandbox))
 run('development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js')
+run('development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/has.js')
 run('development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js')
-run('kubejs/server_scripts/loot/05_tuning.js')
-run('kubejs/server_scripts/loot/07_rules.js')
-run('kubejs/server_scripts/tags/loottags.js')
-run('kubejs/server_scripts/loot/95_tag_capture.js')
+const LOOT_TREE = 'kubejs/data/creativeloot/kubejs/'
+run('development/creativeLoot/src/main/resources/kubejs_startup/creativeloot/loot_core.js')
+run(LOOT_TREE + 'loot/05_tuning.js')
+run(LOOT_TREE + 'loot/07_rules.js')
+run(LOOT_TREE + 'loot/09_drops.js')
+run(LOOT_TREE + 'tags/loottags.js')
+run(LOOT_TREE + 'loot/95_tag_capture.js')
 const T = sandbox.global.lootTuning
+// rules other packs queued with global.LOOT.rules run in highPriorityData, before the tag event
+handlers.data.forEach(fn => fn())
 
 // ---- tag event: export members + this pack's adds ('#refs' nested, '/regex/' strings matched)
 const added = {}

@@ -8,7 +8,7 @@ OUT=${1:?OUT}; cd "$OUT/srv/mods" || exit 1
 [ -n "$(bash "$INST/tools/scratch_query/game_jvms.sh" 2>/dev/null)" ] && { echo "a game JVM is up" >&2; exit 1; }
 for p in creativeCommon:creativecommon creativeCompat:creativecompat creativeCalendar:creativecalendar \
          creativeDelight:creativedelight creativeBrewing:creativebrewing creativeEquipment:creativeequipment \
-         creativeEngineering:creativeengineering creativeMagic:creativemagic creativeWorldgen:creativeworldgen; do
+         creativeEngineering:creativeengineering creativeMagic:creativemagic creativeLoot:creativeloot creativeWorldgen:creativeworldgen; do
   d=${p%%:*}; n=${p##*:}
   b=$(ls -t "$INST"/development/$d/build/libs/$n-*.jar 2>/dev/null | grep -vE -- '-(own|sources|overlay)\.jar$' | head -1)
   [ -n "$b" ] || { echo "no build for $n"; continue; }

@@ -1,5 +1,5 @@
 // priority: -1000
-// requires: creativeworldgen
+// requires: creativeloot
 // Chest loot — TAG CAPTURE for '#tag' rules in 05_tuning.js.
 //
 // Loot tables load before tags are bound to the registry, so a '#tag' rule can't ask the registry.

@@ -29,7 +29,7 @@ plugins {
 rootProject.name = 'CreativeEngineering'
 
 // The mod folders live under development/; project names (and :task paths) stay the bare mod names.
-['creativeCommon', 'exposureBackport', 'creativeLabels', 'repackedStorage', 'creativeCalendar', 'creativeCompat', 'creativeMagic', 'creativeEquipment', 'creativeEngineering'].each { name ->
+['creativeCommon', 'exposureBackport', 'creativeLabels', 'repackedStorage', 'creativeCalendar', 'creativeCompat', 'creativeLoot', 'creativeMagic', 'creativeEquipment', 'creativeEngineering'].each { name ->
     include name
     project(":${name}").projectDir = file("development/${name}")
 }

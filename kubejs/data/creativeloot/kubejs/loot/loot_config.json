@@ -15,7 +15,7 @@
       "slack": "\"redistribute\" (default): the share an item loses goes to the other entries of the same pool, so chests stay as full as before (like deleting the entry in a datapack). \"empty\": the lost share becomes an empty roll, every other item keeps its exact odds, chests get a bit emptier.",
       "log_tables": "true = log one line per rewritten table to logs/kubejs/server.log."
     },
-    "how": "Where the item is a normal entry in a loot table JSON (almost always), its weight is rewritten before the roll. Items that mods inject in code (global loot modifiers, tag entries, pools added in code) are thinned or removed after the roll by LootJS instead: removed stacks leave an empty slot there. Full details: kubejs/data/creativeworldgen/kubejs/loot/readme.md.",
+    "how": "Where the item is a normal entry in a loot table JSON (almost always), its weight is rewritten before the roll. Items that mods inject in code (global loot modifiers, tag entries, pools added in code) are thinned or removed after the roll by LootJS instead: removed stacks leave an empty slot there. Full details: kubejs/data/creativeloot/kubejs/loot/readme.md.",
     "regenerate": "python3 tools/gen_loot_config.py (after mod updates / a fresh /dumploot). Keeps your edits."
   },
   "settings": {
