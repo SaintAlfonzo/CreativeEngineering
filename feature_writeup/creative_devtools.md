@@ -12,14 +12,14 @@ Written for: the owner and the split agents, as the execution record of the Devt
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=c97c0e9fb78d -->
+<!-- generated:status_index begin open_work sha1=de8848053419 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creativesplit/devtools #4` | Testing | none | Carve Creative Devtools |
 | `generators-and-tests #18` | Testing | CQ-TXP-01, CQ-TXP-02, CQ-TXC-11, TXQ-OFF-01 to -05 | Paired client + own server runs and mismatch matrix finished; experimental Xvfb display (scratch testing expansion item 5, TX-31, TX-07) |
-| `tooling/generators-and-tests #17` | Testing | SQ-TX-01 to -16, CDV-07 | `/cdevtest` probe verbs, tick warp, random ticks and perfBot test verbs (scratch testing expansion item 3) |
+| `tooling/generators-and-tests #17` | Testing | SQ-TX-19 to -23, CDV-07 | `/cdevtest` probe verbs, tick warp, random ticks and perfBot test verbs (scratch testing expansion item 3) |
 <!-- generated:status_index end open_work -->
 
 | Piece | Gradle project | Folder | Mod id | Ships |
@@ -146,6 +146,10 @@ strings (the splitter strips double quotes), `none`. Unknown options and extra w
 | food, item, attrs | `food ITEM` etc. | food values read stack-sensitive; item class, stack size, use ticks; attribute modifiers per slot |
 | reg, tag, tagsof | `reg KIND REGEX`, `tag KIND TAG`, `tagsof ID` | KIND item, block, fluid, entity, block_entity_type, effect, potion, enchantment, recipe_serializer, menu, sound, attribute, biome |
 | potion, states | `potion ID [ING,ING]`, `states` | registered and brewing outputs; block-state count against 2^20 |
+| season | `season BIOME[,BIOME...]` | one line per biome: `type` (Creative Calendar's cached season type, `SeasonTypes.tagged`, read reflectively; `null` = untagged), `enabled`; error `Creative Calendar not loaded` without the jar |
+| floating | `floating X Z R [dim=]` (R up to 64) | sand, red sand and gravel with air or cave air right below, y 0 to 140: up to 10 `block pos` lines, then `n`, `shown`, `skipped_columns` |
+| under | `under X Z RCHUNKS [IDTEXT\|-] [DIM] [earth=TAG]` (RCHUNKS up to 32) | per structure start in the loaded chunks (first 30, sorted by id in each chunk; the SQ-EFB judge, `efb_judge.py under` reads it): `id chunk box pieces cols unloaded_cols air_below air_max over6 water_below water_max base_water base_earth ring foreign`; then `starts`, `skipped_chunks`. Earth tag default `creativeworldgen:earth_fill/earth` |
+| nbt | `nbt ITEM` | `item has_tag tag share_tag potion`; a bare id gets `/zq nbt`'s fixed tag `{Potion:"minecraft:water",CustomPotionColor:1}`, `id{snbt}` its own |
 | layerdump | `layerdump` | plan_post_scratch_1115b.md D0: every block with an integer `layers` / `layer` / `height` / `snow_layers` / `thickness` property, min, max, collision and outline height per value (pixels), class `in_tag` (`creativecompat:passthrough_layers`), `d1_out` (D1's out rows) or `new` (owner question); `tag_without_property` lines; file `kubejs/exported/passthrough_layers_dump.json` |
 
 Acting player: `as=NAME` is an online player or perfBot bot; without it a Forge fake player of that dimension (profile
@@ -174,8 +178,11 @@ passthrough` now names `Neighbours.SIDES` / `FACES` (Compat keeps `RING` / `CUBE
 
 Moved from the KubeJS probes (D4): the reusable verbs of `zq_probe.js`, `c2`, `c3`, `zact`, `wo`, `zp`, `zsneak`,
 `leaf_pile`, `leaf_decay` and the generic verbs of the `hh_*`, `s5`, `zc4`, `zp9`, `pwg_p6/7/8`, `zpth`, `ztp` probes;
-each file's header names the replacing verb and what stays (a `MIGRATED 2026-11-15` line). Left as KubeJS: `zq season`
-(Creative Calendar), `floating`, `under` (SQ-EFB judges), `nbt` (how KubeJS sees NBT), and every feature reader.
+each file's header names the replacing verb and what stays (a `MIGRATED 2026-11-15` line). `season`, `floating`,
+`under` and `nbt` followed on 2026-11-16 (pure parts in `GroundJudge.java`, harness-tested; the verbs in
+`TestJudges.java`), and `zq_probe.js` is retired: `prep_srv.sh` no longer copies it, its header maps each `/zq` verb to
+its replacement. `nbt` prints the stack's tag as the game holds it; Rhino's view of a stack (`typeof getTag`) has no Java
+equivalent and stays a per-feature probe question. Every feature reader stays KubeJS.
 
 ## 3. Rules
 

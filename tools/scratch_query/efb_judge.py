@@ -10,7 +10,9 @@
 
 LOG is a server log (logs/latest.log); LEVEL the world folder. --box is in block coordinates and filters on the start
 chunk. --id filters structure ids (Python regex, searched).
-under:  every "[zq] under ..." line of /zq under (zq_probe.js), deduplicated by structure and start chunk; a summary
+under:  every "[cdevtest] verb=under id=..." line of /cdevtest under (Creative Devtools, since 2026-11-16) and every
+        "[zq] under ..." line of the retired /zq under (zq_probe.js, older logs), deduplicated by structure and start
+        chunk; a summary
         per structure id and the offenders of each CHECK:
           over6      a column hangs more than 6 over air (beardReach)
           deepwater  water-below max over 2 (waterReach)
@@ -41,6 +43,8 @@ import region_blocks as rb  # noqa: E402  (pure reader helpers: nbt, chunks, bio
 
 UNDER = re.compile(r'\[zq\] under (\S+) chunk (-?\d+) (-?\d+) box (-?\d+) (-?\d+) (-?\d+) to (-?\d+) (-?\d+) (-?\d+) \| pieces (\d+) cols (\d+)'
                    r'.*?\| air-below (\d+) max (\d+) over6 (\d+) \| water-below (\d+) max (\d+) \| base water (\d+) \| base earth: (.*?) \| ring: (.*?) \| foreign: (.*)$')
+CDT_UNDER = re.compile(r'\[cdevtest\] verb=under id=')
+CDT_KV = re.compile(r'(\w+)=("(?:[^"\\]|\\.)*"|\S*)')
 EF = re.compile(r'\[earth-fill\] (\S+) at chunk \[(-?\d+), (-?\d+)\](?P<pred> \(predicted\))?(?P<rest>.*)$')
 NUM = r'(\d+)(\+?)'
 EF_VALUES = re.compile(r': ' + NUM + r' earth, ' + NUM + r' over water \(limit (\d+)\), ' + NUM + r' over air after beard \(limit (\d+)\), '
@@ -75,6 +79,11 @@ def keep_id(sid, o):
 def read_under(log, o):
     seen = {}
     for line in open(log, errors='replace'):
+        s = cdevtest_under(line.rstrip('\n'))
+        if s:
+            if keep_id(s['id'], o) and in_box(s['cx'], s['cz'], o['box']):
+                seen[(s['id'], s['cx'], s['cz'])] = s
+            continue
         m = UNDER.search(line.rstrip('\n'))
         if not m: continue
         sid, cx, cz = m.group(1), int(m.group(2)), int(m.group(3))
@@ -85,6 +94,26 @@ def read_under(log, o):
             'air': int(g[11]), 'gap': int(g[12]), 'over6': int(g[13]), 'wat': int(g[14]), 'watmax': int(g[15]),
             'basewater': int(g[16]), 'earth': g[17], 'ring': g[18], 'foreign': g[19].strip()}
     return seen
+
+
+def cdevtest_under(line):
+    """One /cdevtest under start line as read_under's dict (maps keep the line's id:n,id:n form), else None."""
+    i = line.find('[cdevtest] verb=under id=')
+    if i < 0: return None
+    kv = {}
+    for k, v in CDT_KV.findall(line[i + len('[cdevtest] '):]):
+        if v.startswith('"'): v = re.sub(r'\\(.)', r'\1', v[1:-1])
+        kv[k] = v
+    try:
+        cx, cz = (int(v) for v in kv['chunk'].split(','))
+        box = [int(v) for v in kv['box'].split(',')]
+        return {'id': kv['id'], 'cx': cx, 'cz': cz, 'minY': box[1], 'pieces': int(kv['pieces']), 'cols': int(kv['cols']),
+                'air': int(kv['air_below']), 'gap': int(kv['air_max']), 'over6': int(kv['over6']),
+                'wat': int(kv['water_below']), 'watmax': int(kv['water_max']), 'basewater': int(kv['base_water']),
+                'earth': 'none' if kv['base_earth'] == '-' else kv['base_earth'], 'ring': kv['ring'],
+                'foreign': 'none' if kv['foreign'] == '-' else kv['foreign']}
+    except (KeyError, ValueError):
+        return None
 
 
 def checks(s):

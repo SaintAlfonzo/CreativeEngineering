@@ -1,7 +1,11 @@
+import com.SaintAlfonzo.creativedevtools.test.GroundJudge;
+import com.SaintAlfonzo.creativedevtools.test.GroundJudge.Kind;
 import com.SaintAlfonzo.creativedevtools.test.TestArgs;
 import com.SaintAlfonzo.creativedevtools.test.TestLine;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 
 /**
@@ -77,6 +81,40 @@ public class CdevtestHarness {
         m.put("minecraft:farmland", 12);
         eq("map", new TestLine("x").map("on", m).toString(), "[cdevtest] verb=x on=minecraft:dirt:3,minecraft:farmland:12");
         eq("block state value", new TestLine("x").kv("state", "minecraft:wheat[age=7]").toString(), "[cdevtest] verb=x state=\"minecraft:wheat[age=7]\"");
+        // GroundJudge (the under / floating / season verbs, moved from /zq 2026-11-16)
+        // column: solid 64..70 over air 60..63, solid at 59: bottom 64, air first, gap 4, not deep
+        GroundJudge.Under g = GroundJudge.under(60, 70, y -> y >= 64 || y == 59 ? Kind.SOLID : Kind.AIR);
+        eq("under bottom", g.bottom(), 64);
+        eq("under first", g.first(), Kind.AIR);
+        eq("under gap", g.gap() + "/" + g.water() + "/" + g.deep(), "4/0/false");
+        // bottom sits on solid: gap 0
+        eq("under on ground", GroundJudge.under(60, 70, y -> y >= 50 ? Kind.SOLID : Kind.AIR).gap(), 0);
+        // water 50..63 under a floor at 64: 14 deep, all water, deep
+        GroundJudge.Under w = GroundJudge.under(64, 70, y -> y >= 64 || y < 50 ? Kind.SOLID : Kind.WATER);
+        eq("under water", w.first() + "/" + w.gap() + "/" + w.water() + "/" + w.deep(), "WATER/14/14/true");
+        // no solid in the box: not counted
+        eq("under empty column", GroundJudge.under(60, 70, y -> Kind.AIR), null);
+        // void below: gap stops at REACH
+        eq("under reach", GroundJudge.under(0, 5, y -> y == 5 ? Kind.SOLID : Kind.AIR).gap(), GroundJudge.REACH);
+        // ring: 1x1 box at 0,0 gives the 4x4 lattice -3..3 step 2 minus the inner -1,1 points
+        List<int[]> ring = GroundJudge.ring(0, 0, 0, 0);
+        StringBuilder rs = new StringBuilder(" ");
+        for (int[] pt : ring) rs.append(pt[0]).append(',').append(pt[1]).append(' ');
+        eq("ring size", ring.size(), 12);
+        eq("ring skips inner", rs.toString().contains(" -1,-1 ") || rs.toString().contains(" 1,1 ") || !rs.toString().contains(" 3,3 "), false);
+        Map<String, Integer> te = new TreeMap<>();
+        te.put("b", 5);
+        te.put("a", 5);
+        te.put("c", 9);
+        te.put("d", 1);
+        eq("top order", GroundJudge.top(te, 3), "{c=9, a=5, b=5}");
+        eq("foreign", GroundJudge.foreign(te, Set.of("a", "c")), "b,d");
+        eq("foreign none", GroundJudge.foreign(te, te.keySet()), "-");
+        eq("floats sand", GroundJudge.floats("minecraft:sand", "minecraft:cave_air"), true);
+        eq("floats on stone", GroundJudge.floats("minecraft:gravel", "minecraft:stone"), false);
+        eq("floats first y", GroundJudge.floats("minecraft:sand", null), false);
+        eq("list", GroundJudge.list("minecraft:plains, minecraft:desert,,"), "[minecraft:plains, minecraft:desert]");
+        bad("list empty", () -> GroundJudge.list(" , "), "missing ids");
         System.out.println(fail == 0 ? "PASS " + pass : "FAILED " + fail + " of " + (pass + fail));
         System.exit(fail == 0 ? 0 : 1);
     }

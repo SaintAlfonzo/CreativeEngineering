@@ -7,7 +7,8 @@
 #     and pinned (qpin.py: OUT/pinned.json; qrun.py run refuses a server whose pinned jars changed)
 #   - dev jars newer than mods/ swapped in (SWAPS below: build/libs jar replaces the mods/ jar of the same mod)
 #   - the dev-only perfBot jar added (bots = fake players; never in the instance's mods/), -Dcdevperfbot.out=perf/bot
-#   - /zq probe copied in as a scratch-only server script, plus tools/scratch_query/datapack/zq (tag #zq:villagers)
+#   - tools/scratch_query/datapack/zq (tag #zq:villagers) copied in; the /zq probe (zq_probe.js) is retired since
+#     2026-11-16 and no longer copied: every reusable probe verb is /cdevtest in the Creative Devtools jar
 #   - group B: normal world, structures on, seed 8675309 unless level-seed= is given
 #   - prop=value pairs written into server.properties (difficulty=normal, spawn-monsters=true, ...)
 #   - NOSWAP=1 in the environment: no dev-jar swaps (the installed mods/ jars only)
@@ -100,7 +101,7 @@ PB="$INST/development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.
 # would load beside the jar and fail a boot without the mod it names (framework #16, r1114 SQ-CDW-01), so drop it as
 # the deploy does. A worldgen JSON edit reaches a scratch server through a rebuilt Creative Delight jar.
 rm -rf kubejs/data/creativedelight/worldgen
-cp "$INST/tools/scratch_query/zq_probe.js" kubejs/server_scripts/zz_zq_probe.js
+# zq_probe.js retired 2026-11-16 (its verbs are /cdevtest in Creative Devtools); not copied any more
 # scratch-only data (zq namespace): entity tag #zq:villagers (vanilla + MCA) for selectors
 mkdir -p kubejs/data && cp -r "$INST/tools/scratch_query/datapack/zq" kubejs/data/
 setprop() { local k=$1 v=$2; if grep -q "^$k=" server.properties; then sed -i "s|^$k=.*|$k=$v|" server.properties; else echo "$k=$v" >> server.properties; fi; }
