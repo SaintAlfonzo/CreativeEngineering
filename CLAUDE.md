@@ -7,23 +7,23 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
 - `kubejs/startup_scripts/` (items, rules), `server_scripts/` (recipes, `_lib/` dump
   commands), `client_scripts/`. `generation_scripts/` = generated data, `exported/` = game dumps
   (large; grep, never read whole). `data/` = datapack files.
-- `development/` = in-tree mods: `creativeCommon` (the shared core, mod id `creativecommon`; was `patcherMod` until the
-  2026-11-04 swap), `creativeEngineering` (machines and engineering, mod id `creativeengineering`), `creativeEquipment`, `creativeMagic`,
+- `development/` = in-tree mods: `creativeCommon` (the shared core, mod id `creativecommon`),
+  `creativeEngineering` (machines and engineering, mod id `creativeengineering`), `creativeEquipment`, `creativeMagic`,
   `creativeLabels`, `exposureBackport`, the carved Creative jars (`creativeCompat`, `creativeCalendar`, `creativeDevtools`), and three bundles: `creativeWorldgen` (worldgen and fauna; members More Mooblooms and Baby Mobs),
   `creativeDelight` (food; its ports and repacks, Veggies, Vintage, Fungi, Miner's and Display included, are members in `members/`) and `creativeBrewing` (brewing, alcohol, potions; nests the Vinery and Brewin' ports,
   `members/vinery`, `members/brewin`). Root `settings.gradle` + `build-logic/` build them all.
 - `tools/*.py` = generators, listed in `tools/generators.json` and run in game with `/cdevgen`.
   `/dumpall` refreshes the dumps they read. `build_deploy.py` stages releases into `deploy/`.
-- `feature_writeup/agent_notes/` = subsystem mechanics, gotchas and crash causes (moved out of agent memory
-  2026-11-16). New notes go there with one line in its index, not into memory; memory keeps only rules about working
-  with the owner, user facts and external references. Index: @feature_writeup/agent_notes/README.md
+- `feature_writeup/agent_notes/` = subsystem mechanics, gotchas and crash causes. New notes go there with one line
+  in its index, not into memory; memory keeps only rules about working with the owner, user facts and external
+  references. Index: @feature_writeup/agent_notes/README.md
 - `mod_sides.md` = client/server side of every jar (add a row for each new mod).
   `configs_edited/` = backup of every hand-edited config. `feature_writeup/` = feature docs.
 
 ## Glossary and processes
 
 Shorthand the user and docs use (spell out in player-facing text and changelog bullets):
-CE Creative Engineering (pack, or the Engineering jar) | Common Creative Common (core jar, formerly patcherMod) | CD Creative Delight | FD Farmer's Delight | IE Immersive Engineering |
+CE Creative Engineering (pack, or the Engineering jar) | Common Creative Common (core jar) | CD Creative Delight | FD Farmer's Delight | IE Immersive Engineering |
 IW Immersive Weathering | CR Create | PC PneumaticCraft | AM Alex's Mobs | D&D Create: Dreams & Desires |
 S&D Create Slice & Dice | DH Distant Horizons | LC Lightman's Currency | RD Rustic Delight | SoL Spice of Life (Apple Pie) |
 AE2 Applied Energistics 2 | JEI Just Enough Items | JEED Just Enough Effect Descriptions | WTHIT What The Hell Is That |
