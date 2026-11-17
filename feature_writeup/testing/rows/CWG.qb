@@ -18,7 +18,7 @@
 ## SQ-CWG-01 | Creative Worldgen mixins apply once, More Mooblooms and Baby Mobs nested once
 @group A
 @commands Boot 2: `grep -E "creativeworldgen.mixins.json\|creativeengineering.mixins.json" logs/latest.log`; `grep -c "from creativeworldgen.mixins.json" logs/debug.log`; mod list
-@pass No mixin apply error; the 60 common mixins apply (minus gated ones whose mod is absent: AE2, Quark, MCA, LC, Cloud Storage, Forgiving Void, Bushier Flowers); no worldgen mixin from patcherMod (double apply); one `more_mooblooms` and one `baby_mobs`, nested
+@pass No mixin apply error; the 60 common mixins apply (minus gated ones whose mod is absent: AE2, Quark, MCA, LC, Cloud Storage, Forgiving Void, Bushier Flowers); no worldgen mixin from patcherMod (double apply); one `moremooblooms` and one `babymobs`, nested
 @fails Gate id wrong in `WorldgenMixinPlugin`, a moved mixin still in patcherMod's json, or the old standalone jar left in `mods/`
 @from batches/r1103/sA_2.qb
 bootreject (Mixin apply failed|InvalidMixinException|MixinApplyError).*(creativeworldgen|creativeengineering)
@@ -219,11 +219,11 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 ## SQ-CWG-10 | build_deploy.py dry run with the Creative Worldgen jar in mods/
 @group A
 @commands After installing the boot 2 jars into the scratch copy: `python3 tools/build_deploy.py --dry-run`
-@pass No error on the Farmer's donor pin (now read from Creative Worldgen) or the climate reader check; the Worldgen script tree and `data/more_mooblooms` are dev-only in the payload
+@pass No error on the Farmer's donor pin (now read from Creative Worldgen) or the climate reader check; the Worldgen script tree and `data/moremooblooms` are dev-only in the payload
 @fails `UPSTREAM_DONORS` / `check_climate_reader` paths
 @from batches/r1103/sA_2.qb
 shell cd "$INST" && python3 tools/build_deploy.py --dry-run 2>&1 | tail -40; exit ${PIPESTATUS[0]}
-look no error on the Farmer's donor pin or check_climate_reader; the Worldgen script tree and data/more_mooblooms reported dev-only (not in the payload)
+look no error on the Farmer's donor pin or check_climate_reader; the Worldgen script tree and data/moremooblooms reported dev-only (not in the payload)
 
 ## CQ-CWG-11
 @group client

@@ -467,7 +467,7 @@ look every creative pack listed and enabled; each locate finds a structure withi
 
 ## SQ-SPF-71 | Worldgen fauna: mooblooms and baby mobs near the plains bot, mooshroom breeding
 @group B
-@commands Worldgen, fauna (at the located plains, bot on the ground, not near spawn): RERUN SQ-NM-01 to -03 (named mobs); `forceload` 4 plains chunks, count `more_mooblooms:` and baby mobs over 1200 ticks; mooshroom breeding (two mooshrooms, wheat, bot)
+@commands Worldgen, fauna (at the located plains, bot on the ground, not near spawn): RERUN SQ-NM-01 to -03 (named mobs); `forceload` 4 plains chunks, count `moremooblooms:` and baby mobs over 1200 ticks; mooshroom breeding (two mooshrooms, wheat, bot)
 @pass named cows as SQ-NM; mooblooms and baby mobs spawn; calf type follows the parents' rules
 @fails member mod ids changed; `moobloom_spawns/` not copied at build
 @from batches/r1106spf/b2.qb
@@ -480,7 +480,7 @@ sleep 20
 > execute at qa as @e[type=minecraft:mooshroom,distance=..5] run data merge entity @s {InLove:600}
 sleep 8
 > execute at qa as @e[type=minecraft:mooshroom,distance=..6] run data get entity @s Age
-look entity ids include more_mooblooms: and baby mob types; a calf (Age negative) from the bred pair
+look entity ids include moremooblooms: and baby mob types; a calf (Age negative) from the bred pair
 
 ## SQ-SPF-72 | Worldgen: leaf decay, Forgiving Void, biome-tagged loot
 @group B

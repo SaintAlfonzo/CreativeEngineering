@@ -82,8 +82,9 @@ Rule: own mod ids, packages, config files and script folders carry no underscore
   it against the rule before renaming).
 - **Creative Delight**: `CfbCompartment.MODID = "creativedelight/cookingforblockheads"` has a slash; `VillageFarmCrops`
   keeps `creative_delight:` with a load alias (plan_cd_namespace.md).
-- Ports keep upstream ids on purpose (`roll_delight`, `oceanic_delight`, `miners_delight`, `vinery_backport` and the
-  rest); not violations.
+- Ports keep upstream ids on purpose (`roll_delight`, `oceanic_delight`, `miners_delight` and the
+  rest); not violations. The Vinery port's own lang namespace was `vinery_backport` until 2026-11-17 (now `vinerybackport`,
+  plan_rules_fixes.md section 14).
 
 ### 2.5 Config files
 

@@ -29,7 +29,7 @@ import java.util.TreeMap;
 import java.util.stream.Collectors;
 
 /**
- * The look a medium wine takes lying in the wine box and the 4x rack: {@code vinery_backport:block/wine_box/<id>}.
+ * The look a medium wine takes lying in the wine box and the 4x rack: {@code vinerybackport:block/wine_box/<id>}.
  * Built in memory from the upstream art like the rest of {@link UpstreamTranslator}, so no recoloured upstream texture
  * ships in the jar (D13).
  * <ul>
@@ -43,7 +43,7 @@ import java.util.stream.Collectors;
  * {@link #dump} writes every wine texture the last build saw to disk for hand texturing.
  */
 public final class BottleLooks {
-    private static final String NS = "vinery_backport";
+    private static final String NS = "vinerybackport";
     private static final String KIND = "wine_box";
     /** Mediums that keep their own model everywhere (user, 2026-10-19: Praetorian is fine as is). */
     private static final Set<String> SKIP = Set.of("praetorian_wine");

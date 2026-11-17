@@ -1762,7 +1762,7 @@ before: no gameplay change, so no changelog bullet.
   - Scripts: `cd_core.js` registers CDConfig with `global.NCH.registerConfig`, so `NCH.cfg(..., 'COOKING')` (oven
     ingredient counts) and `'CROP_DROPS'` resolve unchanged; `soil_yield.js` loads `CDConfig` directly.
 - **Since 2026-11-02 (Creative Split wave 5, [creative_worldgen.md](creative_worldgen.md)): Baby Mobs left CD for Creative Worldgen** (`development/creativeWorldgen/members/babymobs`); the row below is the wave 4 record. Incubation Additions stays.
-- **Members**: Baby Mobs (`baby_mobs`) and Incubation Additions (`incubation_additions`) are nested
+- **Members**: Baby Mobs (`babymobs`) and Incubation Additions (`incubation_additions`) are nested
   (`development/creativeDelight/members/babymobs`, `.../incubation`; Gradle projects `:babyMobs`, `:incubationAdditions`
   unchanged, `bundled_in=creativeDelight`). `replaces_jars` moves their standalone jars out of `mods/` at install; their
   `IN_TREE_MODS` rows and `mod_sides.md` rows are gone. Both get a `[members]` switch in CD's config (CD scripts have no

@@ -1,6 +1,6 @@
 # baby-mobs-backport
 
-> Baby Mobs (baby_mobs, now CD member members/babymobs) = 1.21.2 baby squid/dolphin + 26.1 Tiny Takeover remodels of 33 more babies via a generic LivingEntityRenderer kit framework; no golden dandelion
+> Baby Mobs (babymobs, now CD member members/babymobs) = 1.21.2 baby squid/dolphin + 26.1 Tiny Takeover remodels of 33 more babies via a generic LivingEntityRenderer kit framework; no golden dandelion
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 

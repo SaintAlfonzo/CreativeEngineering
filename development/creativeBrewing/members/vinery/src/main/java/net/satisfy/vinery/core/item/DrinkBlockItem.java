@@ -122,7 +122,7 @@ public class DrinkBlockItem extends BlockItem {
             tooltip.add(Component.empty());
             int ageYears = Math.max(0, WineYears.getWineAgeYears(stack, level));
             int ageDays = WineYears.getWineAgeDays(stack, level) - ageYears * clock.daysPerYear();
-            tooltip.add(Component.translatable("tooltip.vinery_backport.age", ageYears, ageDays).withStyle(ChatFormatting.WHITE));
+            tooltip.add(Component.translatable("tooltip.vinerybackport.age", ageYears, ageDays).withStyle(ChatFormatting.WHITE));
 
             long ticksToNext = WineYears.getTicksUntilNextLevel(stack, level);
             if (ticksToNext < 0) {
@@ -130,11 +130,11 @@ public class DrinkBlockItem extends BlockItem {
             } else {
                 int days = WineYears.getDaysUntilNextLevel(stack, level);
                 long cellar = WineYears.isStored(stack) ? ticksToNext : (long) Math.ceil(ticksToNext * 100.0 / Math.max(100, clock.cellarPercent()));
-                tooltip.add(Component.translatable("tooltip.vinery_backport.next_level", days, realTime(clock.realTicks(ticksToNext)), realTime(clock.realTicks(cellar)))
+                tooltip.add(Component.translatable("tooltip.vinerybackport.next_level", days, realTime(clock.realTicks(ticksToNext)), realTime(clock.realTicks(cellar)))
                         .withStyle(style -> style.withColor(TextColor.fromRgb(0x93c47d))));
             }
             if (WineYears.isStored(stack)) {
-                tooltip.add(Component.translatable("tooltip.vinery_backport.storage", WineYears.storageLabel(WineYears.currentStorageKind(stack)),
+                tooltip.add(Component.translatable("tooltip.vinerybackport.storage", WineYears.storageLabel(WineYears.currentStorageKind(stack)),
                         WineYears.formatRate(WineYears.currentStorageRate(stack))).withStyle(ChatFormatting.AQUA));
             }
         }
@@ -264,16 +264,16 @@ public class DrinkBlockItem extends BlockItem {
 
         /** alcohol/vineryport #16: "Small bottle: 3 per placed block" and where it can be stored. */
         public void addSizeLines(List<Component> tooltip) {
-            tooltip.add(Component.translatable("tooltip.vinery_backport.bottle_size", Component.translatable(key("label.vinery_backport.size.")), perBlock)
+            tooltip.add(Component.translatable("tooltip.vinerybackport.bottle_size", Component.translatable(key("label.vinerybackport.size.")), perBlock)
                     .withStyle(ChatFormatting.GRAY));
-            tooltip.add(Component.translatable(key("tooltip.vinery_backport.fits.")).withStyle(ChatFormatting.GRAY));
+            tooltip.add(Component.translatable(key("tooltip.vinerybackport.fits.")).withStyle(ChatFormatting.GRAY));
         }
 
         /** alcohol/vineryport #16: a storage block's capacity, "Holds 4 wines (small or medium)". */
         public static void addHoldsLine(List<Component> tooltip, int slots, BottleSize largest) {
-            Component sizes = Component.translatable(largest.key("label.vinery_backport.sizes_up_to."));
-            tooltip.add((slots == 1 ? Component.translatable("tooltip.vinery_backport.holds_one", sizes)
-                    : Component.translatable("tooltip.vinery_backport.holds", slots, sizes)).withStyle(ChatFormatting.GRAY));
+            Component sizes = Component.translatable(largest.key("label.vinerybackport.sizes_up_to."));
+            tooltip.add((slots == 1 ? Component.translatable("tooltip.vinerybackport.holds_one", sizes)
+                    : Component.translatable("tooltip.vinerybackport.holds", slots, sizes)).withStyle(ChatFormatting.GRAY));
         }
 
         private String key(String prefix) {

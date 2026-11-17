@@ -1,5 +1,6 @@
 package com.SaintAlfonzo.creativecalendar;
 
+import com.SaintAlfonzo.creativecommon.swap.ConfigRename;
 import com.SaintAlfonzo.creativecalendar.time.SeasonClock;
 import com.SaintAlfonzo.creativecalendar.time.TimeCommand;
 import com.SaintAlfonzo.creativecalendar.time.TimePresets;
@@ -12,6 +13,8 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.slf4j.Logger;
+
+import java.util.List;
 
 
 /**
@@ -31,14 +34,21 @@ public class CreativeCalendar {
     public static final String NAMESPACE = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
+    /** patcherMod's file, which held [seasons], [crop_seasons], [time] and the three strays before the carve. */
+    private static final String OLD_FILE = "creativeengineering-common.toml";
+    /** The tables taken from it; [perf] and [wthit] hold the strays, and Forge's correction drops their other keys. */
+    private static final List<String> SECTIONS = List.of("seasons", "crop_seasons", "time", "perf", "wthit");
+
     public CreativeCalendar() {
+        // First boot without this jar's file: the player's values come over (Common's ConfigRename, before Forge reads
+        // the COMMON configs).
+        ConfigRename.carrySections(OLD_FILE, MOD_ID + "-common.toml", SECTIONS);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CalendarConfig.SPEC, MOD_ID + "-common.toml");
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         // [time] master (feature_writeup/time.md): pushes into Serene Seasons / SeasonHUD at server start and on every
         // toml save (the Vinery port reads time/WineTime itself), the sun-driven season counter, and /ccaltime.
         // Calendar tooltip: time/TimeClient (client); season types, crop seasons and their tooltip subscribe themselves.
-        modEventBus.addListener(CalendarConfigMigration::onConfigLoading); // before TimePresets reconciles the preset
         modEventBus.addListener(TimePush::onConfigReload);
         modEventBus.addListener(TimePresets::onConfigLoading);
         MinecraftForge.EVENT_BUS.register(TimePush.class);
@@ -48,6 +58,5 @@ public class CreativeCalendar {
         com.SaintAlfonzo.creativecalendar.seasons.SeasonAnswers.register(modEventBus);
 
         LOGGER.info("[creativecalendar] time, seasons and crop seasons loaded (config/{}-common.toml)", MOD_ID);
-        CalendarConfigMigration.readAndStrip();
     }
 }

@@ -1,0 +1,10 @@
+{
+	"_comment": "plan_rules_fixes.md section 14 (V-11, 2026-11-17): the mod id more_mooblooms became moremooblooms (naming rule: no underscore in own mod ids). Every registered id moved to the same path in the new namespace: the moobloom entity type and its spawn egg. The replaces entries keep the old ids as permanent aliases (entities in saved chunks, eggs in containers and structure NBT). Saved Variant ids are read through MoobloomVariants.legacy. Hand list (DR-C41: tools/owner_namespace_ids.py covers creativeengineering moves only). Read by Creative Common (SwapLists). Never prune.",
+	"namespaces": {
+		"more_mooblooms": "moremooblooms"
+	},
+	"replaces": {
+		"moremooblooms:moobloom": ["more_mooblooms:moobloom"],
+		"moremooblooms:moobloom_spawn_egg": ["more_mooblooms:moobloom_spawn_egg"]
+	}
+}

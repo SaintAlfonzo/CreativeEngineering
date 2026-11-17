@@ -10,7 +10,7 @@
 //     (src/main/resources/kubejs_startup/creativeworldgen/), loaded from the jar by Creative Common's startup loader.
 //   - dataTrees: pack-folder data trees shipped in the jar the same way (creative_worldgen.md 1). Only paths no other
 //     jar ships, so the pack folder copy (dev) and the jar copy share one resource id and load once:
-//       data/more_mooblooms/moobloom_spawns/  the pack's moobloom spawn rules (More Mooblooms, a Worldgen member,
+//       data/moremooblooms/moobloom_spawns/  the pack's moobloom spawn rules (More Mooblooms, a Worldgen member,
 //                                              combines every file of that folder; creativeengineering.json is ours)
 //     The pack's creativeengineering worldgen data is in src/main/resources (data/, and packs/<modid>/ for files naming a
 //     mod this jar does not require, compat/ModDataPacks; moved 2026-11-06). The structure datapacks, Eugene and
@@ -35,7 +35,7 @@ def scriptTrees = ['data/creativeworldgen/kubejs']
 // Every worldgen table except Calendar's two and the scratch-only test overrides (reports are .md, not copied).
 def genData = ['worldgen/**/*.json', 'worldgen/**/*.json.gz']
 def genDataExclude = ['worldgen/season_types.json', 'worldgen/crop_seasons.json', 'worldgen/structure_test_overrides.json']
-def dataTrees = ['data/more_mooblooms/moobloom_spawns']
+def dataTrees = ['data/moremooblooms/moobloom_spawns']
 
 tasks.named('processResources', ProcessResources).configure {
     // Generated data the jar's scripts and Java read (instance kubejs/generation_scripts/ first, this copy second;

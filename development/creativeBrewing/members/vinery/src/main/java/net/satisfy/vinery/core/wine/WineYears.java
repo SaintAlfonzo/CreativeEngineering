@@ -26,7 +26,7 @@ import java.util.Locale;
  */
 public class WineYears {
     public static final String TAG = "WineYear";
-    private static final String LABEL = "label.vinery_backport.storage.";
+    private static final String LABEL = "label.vinerybackport.storage.";
     /**
      * storageKind bits: no sky light (cellar, otherwise sunny) and a cold or warm spot (Brewin' and Chewin's keg
      * temperature, otherwise neither).
@@ -171,7 +171,7 @@ public class WineYears {
 
     /** Tooltip line on the blocks wine ages in. */
     public static void addStorageHint(List<Component> tooltip) {
-        tooltip.add(Component.translatable("tooltip.vinery_backport.storage_hint").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltip.vinerybackport.storage_hint").withStyle(ChatFormatting.GRAY));
     }
 
     public static int getEffectLevel(ItemStack wine, Level level) {

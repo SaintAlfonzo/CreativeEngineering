@@ -313,7 +313,7 @@
 		"Check Hotbar" = false
 		"Unstackables Only" = false
 		#Any items you place in this list will be ignored by the restock feature
-		"Ignored Items" = ["botania:exchange_rod", "botania:dirt_rod", "botania:skydirt_rod", "botania:cobble_rod", "more_mooblooms:moobloom_spawn_egg"]
+		"Ignored Items" = ["botania:exchange_rod", "botania:dirt_rod", "botania:skydirt_rod", "botania:cobble_rod", "moremooblooms:moobloom_spawn_egg"]
 
 	[management.expanded_item_interactions]
 		"Enable Armor Interaction" = true

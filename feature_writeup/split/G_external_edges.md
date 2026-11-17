@@ -150,17 +150,17 @@ to the Calendar package, and adds a `mandatory=false` `creativecalendar` AFTER d
 
 | Project | mod id | version | plugin | mods.toml dependencies | patcherMod reference | mixins | kubejs_startup | config toml |
 |---|---|---|---|---|---|---|---|---|
-| `development/babyMobs` | `baby_mobs` | 1.0.0 | `ce.forge-mod` | forge, minecraft (BOTH) | none | `baby_mobs.mixins.json` (12 Java files) | none | none |
-| `development/moreMooblooms` | `more_mooblooms` | 1.1.0 | `ce.forge-mod`, `compileOnly fileTree('libs')` (jei) | forge, minecraft; optional buzzier_bees (AFTER), jei, blueprint, alexsmobs, supplementaries, abnormals_delight, botania, delightful | none | `more_mooblooms.mixins.json` (24 Java files); `data/`, `assets/`, `packs/` resources | none | none |
+| `development/babyMobs` | `babymobs` | 1.0.0 | `ce.forge-mod` | forge, minecraft (BOTH) | none | `babymobs.mixins.json` (12 Java files) | none | none |
+| `development/moreMooblooms` | `moremooblooms` | 1.1.0 | `ce.forge-mod`, `compileOnly fileTree('libs')` (jei) | forge, minecraft; optional buzzier_bees (AFTER), jei, blueprint, alexsmobs, supplementaries, abnormals_delight, botania, delightful | none | `moremooblooms.mixins.json` (24 Java files); `data/`, `assets/`, `packs/` resources | none | none |
 | `development/incubationAdditions` | `incubation_additions` | 1.1.0 | `ce.forge-mod`, `compileOnly fileTree('libs')` (incubation, alexsmobs, untitledduckmod, blueprint, citadel, geckolib) | forge, minecraft, incubation (mandatory AFTER); optional alexsmobs, untitledduckmod | string only: `OLD_NAMESPACE = "creativeengineering"` in `IncubationAdditions.java` remaps nests saved under the old `creativeengineering:` ids (data fix-up, no class dependency) | `incubation_additions.mixins.json` (14 Java files); `packs/` | none | none |
 
 Reverse edges from patcherMod and the pack to these three: `CEConfig.java` lines 3354, 3419, 3429 list their mod ids
-in a display-name table (`"baby_mobs=Baby Mobs (Alfonzo)"` and so on; changelog or mod-name map, no code
+in a display-name table (`"babymobs=Baby Mobs (Alfonzo)"` and so on; changelog or mod-name map, no code
 dependency); `kubejs/startup_scripts/_lib/item_dict.js`, `block_dict.js`, `func/sample_syringe.js` use their item
 ids; `CDS/incubation_additions/compost_values.js` already exists as a CD per-mod folder. `PM/mooshroom/`
 (`MooshroomFamily`, `MushroomTypeSetter`) does not reference More Mooblooms; its only "moobloom" mention is in
 `CEConfig`. The 2.2 question (mooshroom/ with More Mooblooms or with Worldgen fauna) is sweep A's; this sweep records
-that no code edge ties it to `more_mooblooms`.
+that no code edge ties it to `moremooblooms`.
 
 Nesting each as a CD member (compare `development/creativeDelight/members/rustic/gradle.properties` and
 `settings.gradle`):
@@ -184,7 +184,7 @@ Nesting each as a CD member (compare `development/creativeDelight/members/rustic
    how the existing nested members such as `farmersdelight` are listed; row 436 lists them in the notes column).
 8. `CDConfig`/`creativedelight_members.txt` is generated from `bundle_members`, so the member-gated mixin plugin
    (`compat/CDMixinPlugin`, `development/shared/mixinplugin`) needs no edit; their own mixin jsons stay theirs.
-9. The CD `kubejs_startup` already has `incubation_additions/`; `baby_mobs/` and `more_mooblooms/` folders only if
+9. The CD `kubejs_startup` already has `incubation_additions/`; `babymobs/` and `moremooblooms/` folders only if
    rows exist for them (none today in CD; the pack dicts hold their ids).
 10. The trough code (`PM/mixin/FeedingTroughModuleMixin`, `TemptGoalTroughRetryMixin`, `compat/TroughRetryAccess`,
     3 entries in `creativeengineering.mixins.json`) moves into CD's own Java with a `creativedelight.mixins.json`
@@ -234,8 +234,8 @@ Rows today (matched by mod id; `tools/dump_server_mods.py` refuses to run if a j
 | 117 | both | Creative Labels | `creative_labels` | `creativeLabels-1.0.0.jar` |
 | 147 | both | Exposure (Backport & Extras) | `exposure` | `exposureBackport-1.9.19-ce-19.2-04.jar` |
 | 183 | both | Incubation Additions | `incubation_additions` | `incubationAdditions-1.1.0.jar` |
-| 211 | both | More Mooblooms | `more_mooblooms` | `moreMooblooms-1.1.0.jar` |
-| 212 | both | Baby Mobs | `baby_mobs` | `babyMobs-1.0.0.jar` |
+| 211 | both | More Mooblooms | `moremooblooms` | `moreMooblooms-1.1.0.jar` |
+| 212 | both | Baby Mobs | `babymobs` | `babyMobs-1.0.0.jar` |
 | 436 | both | Creative Delight | `creativedelight` | `creativedelight-1.0.0.jar` |
 | 437 | both | Creative Brewing | `creativebrewing` | `creativebrewing-1.0.0.jar` |
 

@@ -2,7 +2,7 @@
 
 Written 2026-10-21 from [TODO](../todo/TODO.md) `# mobs`, Sub `mooblooms`. Feature writeup:
 [mooblooms.md](../mooblooms.md) (test prefix `MB-`, highest id in use MB-98). Mod source:
-`development/moreMooblooms/` (More Mooblooms 1.0.0, `more_mooblooms`, GPLv3, the pack's own mod).
+`development/moreMooblooms/` (More Mooblooms 1.0.0, `moremooblooms`, GPLv3, the pack's own mod).
 
 ## Scope and order
 
@@ -55,7 +55,7 @@ skylands spring, summer and autumn becomes a moobloom, split evenly over the var
   So spring to autumn already have cows; only winter has none. The pack's `chicken_sky` rule
   ([mob_spawns.json](../../kubejs/generation_scripts/worldgen/mob_spawns.json)) adds chickens to all four; nothing
   touches cows there (`cow_plains` scales `plains` biomes only).
-- Moobloom rules in [creativeengineering.json](../../kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json):
+- Moobloom rules in [creativeengineering.json](../../kubejs/data/moremooblooms/moobloom_spawns/creativeengineering.json):
   line 5 `terralith:skylands_summer` (50 %: sunbloom 37.5, moobloom 8, oxeyebloom 4.5) and line 27
   `terralith:skylands_spring` (75 %: onionbloom 15.75, rosebloom 12, sunbloom 11.25, bluebloom 10.5, lilybloom 10.5,
   moobloom 9.75, peonybloom 5.25). Both are the user's D49 flower-biome rows (mooblooms.md 4.9). No autumn rule:
@@ -77,16 +77,16 @@ skylands spring, summer and autumn becomes a moobloom, split evenly over the var
    they win over any tag rule, D11):
    ```json
    { "biomes": ["terralith:skylands_spring"],
-     "replace": [ {"variant": "more_mooblooms:moobloom", "percent": 14.28}, {"variant": "more_mooblooms:sunbloom", "percent": 14.28},
-                  {"variant": "more_mooblooms:rosebloom", "percent": 14.28}, {"variant": "more_mooblooms:peonybloom", "percent": 14.29},
-                  {"variant": "more_mooblooms:onionbloom", "percent": 14.29}, {"variant": "more_mooblooms:bluebloom", "percent": 14.29},
-                  {"variant": "more_mooblooms:lilybloom", "percent": 14.29} ] },
+     "replace": [ {"variant": "moremooblooms:moobloom", "percent": 14.28}, {"variant": "moremooblooms:sunbloom", "percent": 14.28},
+                  {"variant": "moremooblooms:rosebloom", "percent": 14.28}, {"variant": "moremooblooms:peonybloom", "percent": 14.29},
+                  {"variant": "moremooblooms:onionbloom", "percent": 14.29}, {"variant": "moremooblooms:bluebloom", "percent": 14.29},
+                  {"variant": "moremooblooms:lilybloom", "percent": 14.29} ] },
    { "biomes": ["terralith:skylands_summer"],
-     "replace": [ {"variant": "more_mooblooms:sunbloom", "percent": 33.34}, {"variant": "more_mooblooms:moobloom", "percent": 33.33},
-                  {"variant": "more_mooblooms:oxeyebloom", "percent": 33.33} ] },
+     "replace": [ {"variant": "moremooblooms:sunbloom", "percent": 33.34}, {"variant": "moremooblooms:moobloom", "percent": 33.33},
+                  {"variant": "moremooblooms:oxeyebloom", "percent": 33.33} ] },
    { "biomes": ["terralith:skylands_autumn"],
-     "replace": [ {"variant": "more_mooblooms:moobloom", "percent": 33.34}, {"variant": "more_mooblooms:sunbloom", "percent": 33.33},
-                  {"variant": "more_mooblooms:rosebloom", "percent": 33.33} ] }
+     "replace": [ {"variant": "moremooblooms:moobloom", "percent": 33.34}, {"variant": "moremooblooms:sunbloom", "percent": 33.33},
+                  {"variant": "moremooblooms:rosebloom", "percent": 33.33} ] }
    ```
    Spring and autumn have different mixes, so they stay separate rules; summer and autumn have the same count but
    different variants.
@@ -102,7 +102,7 @@ skylands spring, summer and autumn becomes a moobloom, split evenly over the var
    this biome", not the fixed 9 flower variants of blooming valley / meadow (see Decisions).
 
 ### Ids and data
-Variant ids as above (all in `development/moreMooblooms/src/main/resources/data/more_mooblooms/moobloom_variants/`).
+Variant ids as above (all in `development/moreMooblooms/src/main/resources/data/moremooblooms/moobloom_variants/`).
 Biome ids verified in the Terralith jar; the `#terralith:skylands` tag holds exactly the four seasons (there is a
 fifth biome file `terralith:skylands` that is in no tag and not in `biome_config.json`, so it never generates).
 
@@ -137,7 +137,7 @@ Settle how many cows become mooblooms in each biome, and which variants. First p
 playing.
 
 ### Now
-- One rule file, [creativeengineering.json](../../kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json):
+- One rule file, [creativeengineering.json](../../kubejs/data/moremooblooms/moobloom_spawns/creativeengineering.json):
   35 per-biome rules plus lush caves (100 % azaleabloom); the mod's switch pack adds the witherbloom rule. Offline
   check 2026-10-21: `python3 tools/check_moobloom_data.py` -> `11 variants, 10 breeding rules, 37 spawn rules`, OK.
 - Flower-biome tier (D49): the user's per-biome bloom % and splits (mooblooms.md 4.9, retuned 2026-10-11). The
@@ -171,7 +171,7 @@ Without the generator (fallback): edit the rule file directly and `/reload`; rul
 
 ### Tests
 MB-38, MB-94, MB-95, MB-96 (existing). Counting: stand in the biome after it generates and run
-`/execute if entity @e[type=more_mooblooms:moobloom,distance=..200]` and the same for `minecraft:cow`.
+`/execute if entity @e[type=moremooblooms:moobloom,distance=..200]` and the same for `minecraft:cow`.
 
 ---
 
@@ -182,14 +182,14 @@ Status Planned / Work new jar / TODO `textures/art #2` (scratchpad 2026-10-19)
 "Gray parts to brown; more azalea rings" on the azaleabloom coat.
 
 ### Now
-- Coat: `development/moreMooblooms/src/main/resources/assets/more_mooblooms/textures/entity/moobloom/azaleabloom.png`,
+- Coat: `development/moreMooblooms/src/main/resources/assets/moremooblooms/textures/entity/moobloom/azaleabloom.png`,
   64x32, cow UV layout, olive base `#6C8031` (853 px) with lighter / darker greens, and about nine 3x3 pink-purple
   "rings" (`#D07BE3`, `#BA62CE`, `#9E5088`: the flowering-azalea blossoms).
 - The gray parts (read from the PNG 2026-10-21) are the pixels every coat shares (the cow template):
   horns (u 22-25, v 0-3), muzzle on the head front (u 7-12, v 11-13), hooves (bottom row v 31 of the leg strip, and
   the leg undersides u 8-11, v 16-19), plus an unused muzzle copy at u 53-58, v 11-13 that the cow model never
   draws. Eyes are black `#000000` / `#13110C`; keep them.
-- Hot-swap path (mooblooms.md 4.4): `kubejs/assets/more_mooblooms/textures/entity/moobloom/azaleabloom.png`, F3+T,
+- Hot-swap path (mooblooms.md 4.4): `kubejs/assets/moremooblooms/textures/entity/moobloom/azaleabloom.png`, F3+T,
   client only, no build. The working copies folder `textureswapper/moobloom/` named in mooblooms.md 6 is not in the
   repo (local to the user's machine).
 
@@ -210,7 +210,7 @@ Status Planned / Work new jar / TODO `textures/art #2` (scratchpad 2026-10-19)
   11 lines; if others change, make the mask "identical on all coats but one" or a fixed template mask.
 
 ### Tests
-- **MB-104 Azaleabloom coat:** `/summon more_mooblooms:moobloom ~ ~ ~ {Variant:"more_mooblooms:azaleabloom"}` ->
+- **MB-104 Azaleabloom coat:** `/summon moremooblooms:moobloom ~ ~ ~ {Variant:"moremooblooms:azaleabloom"}` ->
   brown horns, muzzle and hooves, more pink rings; the egg colors still look right for all 11 eggs in JEI.
 
 ---
@@ -223,14 +223,14 @@ mooblooms.md 5: show breeding outputs, show shearing outputs with each flower's 
 its flowers, better (short, human) info text.
 
 ### Now
-- [MoreMoobloomsJeiPlugin.java](../../development/moreMooblooms/src/main/java/com/SaintAlfonzo/more_mooblooms/compat/jei/MoreMoobloomsJeiPlugin.java):
+- [MoreMoobloomsJeiPlugin.java](../../development/moreMooblooms/src/main/java/com/SaintAlfonzo/moremooblooms/compat/jei/MoreMoobloomsJeiPlugin.java):
   subtypes per variant egg (line 64), the breeding category (72), catalyst = the plain egg (77), `registerRecipes`
   (82): breeding recipes + one info page per variant egg; `breedingRecipes()` (116) makes one recipe per
   combination result only; `poolOdds` (135); `onRuntimeAvailable` (164) hides the buttercup, BB's egg and Sunny.
-- [MoobloomBreedingCategory.java](../../development/moreMooblooms/src/main/java/com/SaintAlfonzo/more_mooblooms/compat/jei/MoobloomBreedingCategory.java):
+- [MoobloomBreedingCategory.java](../../development/moreMooblooms/src/main/java/com/SaintAlfonzo/moremooblooms/compat/jei/MoobloomBreedingCategory.java):
   132x26, parent egg + parent egg -> calf egg, chance text. No food, no entity render, no "breeds true" or "random"
   pages.
-- Lang: `src/main/resources/assets/more_mooblooms/lang/en_us.json` lines 16-25 (`jei.more_mooblooms.*`).
+- Lang: `src/main/resources/assets/moremooblooms/lang/en_us.json` lines 16-25 (`jei.moremooblooms.*`).
 - Entity API for a render: `Moobloom.setVariant` (public), `getFlowers()` reads the synced `DATA_FLOWERS`; the
   setter `setFlowers` (Moobloom.java:164) is **private** and `refreshFlowers` returns on the client, so a JEI render
   can't set flowers today. The flower layer (`client/MoobloomFlowerLayer.java:46`) draws whatever `getFlowers()`

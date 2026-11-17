@@ -164,7 +164,7 @@
       "groups": ["worldgen"],
       "dumps": ["dumpspawns"],
       "outputs": [
-        "kubejs/data/more_mooblooms/moobloom_spawns/creativeengineering.json",
+        "kubejs/data/moremooblooms/moobloom_spawns/creativeengineering.json",
         "feature_writeup/mooblooms.md"
       ],
       "apply": "/reload for new spawns (kubejs/data); rebuild and install :creativeWorldgen: so the jar ships the same file"

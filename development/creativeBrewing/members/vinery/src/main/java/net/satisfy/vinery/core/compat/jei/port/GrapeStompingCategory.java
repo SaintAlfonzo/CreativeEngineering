@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class GrapeStompingCategory extends PortCategory<GrapeStompingCategory.Display> {
     public static final RecipeType<Display> TYPE = RecipeType.create(Vinery.MOD_ID, "grape_stomping", Display.class);
-    private static final String LANG = "jei.vinery_backport.grape_stomping";
+    private static final String LANG = "jei.vinerybackport.grape_stomping";
     private static final int WIDTH = 120;
     private static final int X0 = (WIDTH - 101) / 2;
     private static final int GRAPE_X = X0 + 1, BOTTLE_X = X0 + 19, ROW_Y = 5;

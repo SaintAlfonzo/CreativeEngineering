@@ -31,7 +31,7 @@ jumps, is worth a look. Crashes, `Error occurred while handling event` and `Exce
 | # | Message (shortened) | Lines | Cat. key | Biggest sources | Verdict |
 |---|---|---|---|---|---|
 | 1 | `Exception loading blockstate definition: '<mod>:blockstates/<block>.json' missing model for variant: ...` | 2950 | `blockstate` | redeco 1327, colored_water 1024, displaydelight 552, create_dd 48 | Ignore (A) |
-| 2 | `Unable to resolve texture reference: #missing in <model>` | 1302 | `texref` | redeco 941, interiors 306, vintageimprovements 24, alexsabnormalities 12, vinery_backport 10 | Mixed: check in game (B) |
+| 2 | `Unable to resolve texture reference: #missing in <model>` | 1302 | `texref` | redeco 941, interiors 306, vintageimprovements 24, alexsabnormalities 12, vinerybackport 10 | Mixed: check in game (B) |
 | 3 | `Unable to resolve texture due to reference chain X->X in <model>` | 897 | `chain` | flowerpatch 585, create_crystal_clear 144, gates 132, immersive_weathering 36 | Ignore (C) |
 | 4 | `Using missing texture, file <ns>:textures/... not found` (ERROR) | 118 | `missingfile` | supplementaries 37, bedspreads 25, customizableelytra 24, minecraft 9 | Ignore (D) |
 | 5 | `Unable to load model: '<model>' referenced from: <block>#...` | 90 | `modelload` | displaydelight 72, supplementaries 6, alexsabnormalities 4, blocky_siege 3 | Mixed (E) |
@@ -116,7 +116,7 @@ define that variable. The slot renders the checkerboard. `#missingno` is the sam
 | interiors | 306 (306 unique) | `block/chair/<colour>_chair_{none,left,right,both}` and the `_cropped` forms, `block/floor_chair/...` (128), 34 item models. Every color of chair and floor chair. Likely a visual flaw unless the textures come from a block-entity renderer (not verified). |
 | vintageimprovements | 24 | `block/belt_grinder`, 16 of them from the `#missing` slot. Belt grinder block is a block-entity model; check in game. |
 | alexsabnormalities | 12 | whale tooth doors (`cachalot_whale_tooth_door_*`), uses `#missingno`. |
-| vinery_backport | 10 | `block/wine_box/*` - our own port; this one is ours to fix. |
+| vinerybackport | 10 | `block/wine_box/*` - our own port; this one is ours to fix. |
 | veggiesdelight 5, oceanic_delight 5, vinery 4, ae2 3, extendedgears 2, create_things_and_misc 2, create_dd 1, createaddition 1 | | one-off models |
 
 To confirm what is visible, place or hold the block. If it looks right, acknowledge the group.
@@ -205,7 +205,7 @@ named mod's mixin features visibly do nothing, this is the first line to check.
 ### H. defineId (item 8, 40 lines)
 
 ```
-defineId called for: class net.minecraft.world.entity.animal.Squid from class com.SaintAlfonzo.baby_mobs.age.BabyAges
+defineId called for: class net.minecraft.world.entity.animal.Squid from class com.SaintAlfonzo.babymobs.age.BabyAges
 java.lang.RuntimeException: null
 	at net.minecraft.network.syncher.SynchedEntityData.m_135353_(SynchedEntityData.java:46)
 ```
@@ -229,7 +229,7 @@ verdict.
 | 4 | Display Delight plates (E) | Fill an `ad_`/`cd_`/`ctd_`/`ed_`/`df_` plate to 2, 3, 4, 5, 6 servings |
 | 5 | blocky_siege cannon, spewer stand, brazier (E) | Place them (if obtainable) |
 | 6 | redeco shelf, rotating or waterlogged (A) | Place a shelf in water |
-| 7 | vinery_backport wine boxes (B) | Place one (our own port) |
+| 7 | vinerybackport wine boxes (B) | Place one (our own port) |
 | 8 | alexsabnormalities whale tooth door (B) | Place one |
 | 9 | Banner patterns on a Bedspreads bed / Customizable Elytra (D) | Apply a pattern from a non-vanilla mod |
 
@@ -361,7 +361,7 @@ were compared; the WARN/ERROR line counts were 5722, 5722 and 5728 for the three
 | K3 sample syringe `$WorldRows` redeclaration | Load the Java class once in `func/sample_syringe.js` (line 71) |
 | `.DS_Store` in `resourcepacks/Lower Shield.zip` (item 25) | `zip -d "resourcepacks/Lower Shield.zip" .DS_Store` (a user file, not done) |
 | K2 dead `item_dict` keys | Prune the 35 ids |
-| vinery_backport `block/wine_box/*` `#missing` | Our own port; fix the model textures |
+| vinerybackport `block/wine_box/*` `#missing` | Our own port; fix the model textures |
 
 ## 10. Dedicated server startup, 1.2.00 (2026-11-03)
 
@@ -398,7 +398,7 @@ comes from another mod or Forge, but our change or script causes it; **Mod** = a
 | S16 | `[golden values] minecraft:pumpkin_pie is not a food` (KubeJS startup WARN) | 2 | Pack | `creativedelight` `goldenfood/golden_values.js#41`: the golden and enchanted golden pumpkin pie copy vanilla Pumpkin Pie's food values, but in the pack Pumpkin Pie has no food properties at that point, so those two keep their own values | Real, low priority (10.3) |
 | S17 | `[item_dict] Missing/invalid item IDs:` (23 entries) | 1 block | Pack | Dead keys in `item_dict.js`. Same as K2, now 23 [35]: IE `jei_bucket_{bioethanol,ethanol,memory_essence,yeast_culture}`, `tmted:{melon_juice,tomato_sauce}`, `more_immersive_wires:rs_{coil,connector,relay}`, `everycomp:{af,fd,hc}/vinery/cherry_*`, `dramaticdoors:{short,tall}_vinery_cherry_door`, `vinery:king_danis_wine`, `vinery:mead`, `physics_gun_mod:*` (4), `ricksportalgun:*` (3), and `create_questing:blueprint` (client-only mod, so expected on a server) | Real, low priority: prune (10.3) |
 | S18 | `[fluid_dict]` / `[block_dict] Tag entry ... is not validated` | 53 | Pack | Same as K1 | Ignore |
-| S19 | `defineId called for: ... Squid / Dolphin from class com.SaintAlfonzo.baby_mobs.age.BabyAges` | 2 | Pack | Baby Mobs (Creative Worldgen member); same as item 8 | Ignore |
+| S19 | `defineId called for: ... Squid / Dolphin from class com.SaintAlfonzo.babymobs.age.BabyAges` | 2 | Pack | Baby Mobs (Creative Worldgen member); same as item 8 | Ignore |
 | S20 | `defineId called for: ... VillagerEntityMCA / GrimReaperEntity` | 38 | Mod | MCA; same as item 8 | Ignore |
 | S21 | Already in section 0 and unchanged: refmaps (31, item 7), mixin optional-mod probes (`Error loading class` 9 and `@Mixin target ... was not found` 4: multimine, backpacked, aquaculture, botarium, sodium, overweightfarming, plus two client classes), `Shift.BY` / overwrite conflicts (11), `mods.toml` (4, item 15), trust worthiness (3 FATAL, item 14), `Assets URL` (2, item 16), update check (3, item 13), ATM icons (3, item 17), registered twice (2, item 18), Advanced Peripherals integrations (4, item 20), GameStages plugin (item 21), Forgiving Void list types (2, item 30), Philip's Ruins config (item 26) | about 80 | Mod | as listed there | Ignore |
 | S22 | `KubeJS: Plugin ...BuiltinKubeJSForgeClientPlugin does not load on server side`; `oldguns` banner lines and `Random UUID`; `Distant Horizons: G1 Garbage collector detected` | 5 | Mod | Informational at WARN level | Ignore |

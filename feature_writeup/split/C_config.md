@@ -168,7 +168,7 @@ and follow their feature.
 |---|---|---|
 | `shields` | `reduction.physical` in copper 20 [default 40], gold 30 [50], iron 40 [60], diamond 50 [70], netherite 60 [80], echo 70 [90], felsic 80 [95]; dragon 100 = default | defaults are `ShieldTier` enum columns. `durability`, `repairItem`, copper `elemental_breakdown` match; `unblockableEffectTicks` matches `UNBLOCKABLE_EFFECT_TICKS_DEFAULT`. The remaining per-tier keys (`durabilityCost`, effects, `knockbackThreshold`, `blocks*Ticks`, magic/elemental reduction) come from tier maps and were not checked one by one |
 | `damage_tags` | `logSeenSources = true` [false] | debug logging left on in the play config |
-| `mod_names` | `overrides` list: 113 entries vs 117 defaults; the file lacks the "(Alfonzo)" suffixes of `baby_mobs`, `brewinandchewin`, `creative_labels`, `creativeengineering`, `exposure` and adds `exposure_catalog`, `exposure_expanded` | the toml list is older than the Java default; decide which wins before the move |
+| `mod_names` | `overrides` list: 113 entries vs 117 defaults; the file lacks the "(Alfonzo)" suffixes of `babymobs`, `brewinandchewin`, `creative_labels`, `creativeengineering`, `exposure` and adds `exposure_catalog`, `exposure_expanded` | the toml list is older than the Java default; decide which wins before the move |
 
 Every other section matches its defaults: 46 sections checked fully by script; `crafting` (felsic defaults equal the
 toml values 250/500 mB, loops 1, blows 3/5/8), `surface.speed` (26 tiers equal `SurfaceTier`), `crop_drops.soil_yield.crops`

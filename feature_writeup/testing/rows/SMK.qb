@@ -460,15 +460,15 @@ reject Unknown or incomplete command
 ## SQ-SMK-29 | Worldgen boots: loaded line, data packs, Visceral Heap trim, mixins
 @group A
 @commands Boot; grep `logs/latest.log` for `[creativeworldgen]`; count `from creativeworldgen.mixins.json` and the member configs in `logs/debug.log`
-@pass `[creativeworldgen] loaded (config/creativeworldgen-common.toml)`; `N of N files loaded from its jar`; `mod data packs on:`; a `Visceral Heap: kept` line for `minecraft:worldgen/biome`; jar found; mixins applied from `creativeworldgen`; no ERROR line or mixin failure naming `creativeworldgen`, `more_mooblooms` or `baby_mobs`
+@pass `[creativeworldgen] loaded (config/creativeworldgen-common.toml)`; `N of N files loaded from its jar`; `mod data packs on:`; a `Visceral Heap: kept` line for `minecraft:worldgen/biome`; jar found; mixins applied from `creativeworldgen`; no ERROR line or mixin failure naming `creativeworldgen`, `moremooblooms` or `babymobs`
 @fails Jar missing, a member not nested, a worldgen mixin target renamed
 bootexpect Done \(
 bootexpect \[creativeworldgen\] loaded \(config/creativeworldgen-common\.toml\)
 bootexpect \[jar-startup\] creativeworldgen: (\d+) of \1 files loaded from its jar
 bootexpect \[creativeworldgen\] mod data packs on:
 bootexpect \[creativeworldgen\] Visceral Heap: kept \d+ of \d+ Biomes O' Plenty entries in minecraft:worldgen/biome
-bootreject /ERROR\].*\b(creativeworldgen|more_mooblooms|baby_mobs)\b
-bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\b(creativeworldgen|more_mooblooms|baby_mobs)
+bootreject /ERROR\].*\b(creativeworldgen|moremooblooms|babymobs)\b
+bootreject (Mixin apply.*failed|InvalidMixinException|InvalidInjectionException|InjectionError|MixinTransformerError).*\b(creativeworldgen|moremooblooms|babymobs)
 shell grep -q "Found valid mod file creativeworldgen-[^ ]*\.jar with .creativeworldgen." logs/debug.log
 shell echo "mixins $(grep -c 'from creativeworldgen.mixins.json' logs/debug.log)"; test "$(grep -c 'from creativeworldgen.mixins.json' logs/debug.log)" -gt 0
 
@@ -488,16 +488,16 @@ reject Unknown or incomplete command
 
 ## SQ-SMK-31 | a Moobloom summons
 @group A
-@commands `/cdevtest reg entity ^more_mooblooms:moobloom$`; `summon more_mooblooms:moobloom 9048 -60 9030 {NoAI:1b}`; `/cdevtest entities 9048 -60 9030 3 type=more_mooblooms:moobloom`; kill it
+@commands `/cdevtest reg entity ^moremooblooms:moobloom$`; `summon moremooblooms:moobloom 9048 -60 9030 {NoAI:1b}`; `/cdevtest entities 9048 -60 9030 3 type=moremooblooms:moobloom`; kill it
 @pass the entity type is registered (`n=1`); one Moobloom found
 @fails Mooblooms member not nested or its entity not registered
 > forceload add 9000 9000 9100 9100
 sleep 5
-> cdevtest reg entity ^more_mooblooms:moobloom$
-> summon more_mooblooms:moobloom 9048 -60 9030 {NoAI:1b}
+> cdevtest reg entity ^moremooblooms:moobloom$
+> summon moremooblooms:moobloom 9048 -60 9030 {NoAI:1b}
 sleep 2
-> cdevtest entities 9048 -60 9030 3 type=more_mooblooms:moobloom
-> kill @e[type=more_mooblooms:moobloom]
+> cdevtest entities 9048 -60 9030 3 type=moremooblooms:moobloom
+> kill @e[type=moremooblooms:moobloom]
 expect verb=reg kind=entity regex=\S+ n=1\b
 expect verb=entities n=1\b
 

@@ -1,0 +1,30 @@
+{
+  "rules": [
+    {
+      "parents": [
+        "moremooblooms:rosebloom",
+        "moremooblooms:bluebloom"
+      ],
+      "chance": 0.25,
+      "results": [
+        {
+          "variant": "moremooblooms:onionbloom",
+          "weight": 1
+        }
+      ]
+    },
+    {
+      "parents": [
+        "moremooblooms:rosebloom",
+        "moremooblooms:orchidbloom"
+      ],
+      "chance": 0.25,
+      "results": [
+        {
+          "variant": "moremooblooms:onionbloom",
+          "weight": 1
+        }
+      ]
+    }
+  ]
+}

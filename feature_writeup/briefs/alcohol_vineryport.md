@@ -44,7 +44,7 @@ Shearing a planted grapevine stem should give the seed back once and empty the s
   (`StemBlock.java` line 37, `AGE_4`). So a ripe stem sheared four times gives 4 seeds and 2 grape drops, and the seed
   that was planted is still "in" it until age 0: confirmed duplication, no game check needed to know it happens.
 - The JEI Grape Planting page says "Shears give the seed back; breaking the block loses it"
-  (`members/vinery/resources/assets/vinery_backport/lang/en_us.json` line 49), which is the intended rule.
+  (`members/vinery/resources/assets/vinerybackport/lang/en_us.json` line 49), which is the intended rule.
 
 ### Build
 1. In `PaleStemBlock#useItemOn`, the shears branch: drop grapes if `age > 2`, drop one seed, then set the stem to age 0
@@ -158,7 +158,7 @@ Shorten the JEI description texts of the Vinery backport items (see `jei/jei-cov
 ### Now (checked 2026-10-31)
 - The only JEI texts the port has are its three own pages; there are no JEI item-info pages for Vinery items (no
   `addIngredientInfo` in `VineryJEIPlugin`, none in the pack's lang). The texts are lang keys in
-  `members/vinery/resources/assets/vinery_backport/lang/en_us.json` lines 19-49: `jei.vinery_backport.grape_stomping.*`,
+  `members/vinery/resources/assets/vinerybackport/lang/en_us.json` lines 19-49: `jei.vinerybackport.grape_stomping.*`,
   `wine_aging.*` (year, level, cellar, cold, warm) and `grape_planting.*` (where.bush / vine / stem / lattice, slow, fast,
   taiga, vine_shears, leaves, support.*, grapes.*, seeds.*). `support.*`, `grapes.*` and `seeds.*` are slot tooltips, not page
   text (`GrapePlantingCategory.java` lines 114-146).
@@ -200,7 +200,7 @@ Rerun the generators after the port (I25), and stop the `#missing` texture faces
   last four tools are in `tools/generators.json` (`/cdevgen`); `crop_growth_coverage.py` is not.
 - **`#missing` is 14 WARN lines now, not 4.** `logs/latest.log` (boot 2026-10-31 17:16): `Unable to resolve texture
   reference: #missing in` the four upstream models `vinery:block/{aegis, glowing, stal, strad}_wine` and ten port-built
-  models `vinery_backport:block/wine_box/{aegis_wine, apple_cider, chenet_wine, creepers_crush, eiswein, glowing_wine,
+  models `vinerybackport:block/wine_box/{aegis_wine, apple_cider, chenet_wine, creepers_crush, eiswein, glowing_wine,
   magnetic_wine, mellohi_wine, stal_wine, strad_wine}`. The wine box models are copies of Strad's model
   (`members/vinery/java/net/satisfy/vinery/forge/upstream/BottleLooks.java`, `BOX_SHAPE = "strad_wine"`), so they inherit
   its `#missing` faces. In Stal / Strad the faces are the zero-thick label's underside (alcohol_part_b.md 4.9).

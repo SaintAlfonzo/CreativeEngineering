@@ -598,7 +598,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
 
 - **F1. Three things show a raw lang key in game.**
   - `vinery:trippy`: the port kept the effect (D3) but not its name. "Sensory Perception" only existed in the 1.3.10
-    jar, and neither the 1.5.5 donor jar nor the port's `vinery_backport` lang has `effect.vinery.trippy`. Add it to
+    jar, and neither the 1.5.5 donor jar nor the port's `vinerybackport` lang has `effect.vinery.trippy`. Add it to
     the port's lang.
   - `everythingcopper:copper_poisoning`: the mod ships no name. Add `effect.everythingcopper.copper_poisoning` to the
     KubeJS lang.
@@ -648,7 +648,7 @@ Cost: one game-time compare per player per second; the 14-stack scan only at a r
 - **F7.** DECIDED 2026-10-20: keep it hidden (your call: "hide sunny"). The setting is in both `config/` and
   `configs_edited/root_config/`. Correction 2026-10-21: it no longer shows anywhere. More Mooblooms (in the pack since
   1.0.6) removes Buzzier Bees' moobloom and strips the buttercup from every tag (no Sunny stew), and its
-  `disableSunny = true` (`config/more_mooblooms-common.toml` + configs_edited) denies the effect outright, `/effect give`
+  `disableSunny = true` (`config/moremooblooms-common.toml` + configs_edited) denies the effect outright, `/effect give`
   included ([mooblooms.md](mooblooms.md) 4.11, MB-82 passed on a scratch server). That is the "purge sunny" item in
   section 7, done. **Sunny is hidden from JEI. Your call.** `config/jeed-client.toml` `hidden_effects = ["buzzier_bees:sunny"]`. If
   that was deliberate (it's a mob-side effect), fine; otherwise remove it.

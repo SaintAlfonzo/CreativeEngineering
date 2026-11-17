@@ -177,10 +177,10 @@
     "loading_tips:you_are_now_a_minecraft_master_good_luck",
     "loading_tips:the_chestplate_is_the_only_armor_piece_with_no",
     "loading_tips:ocelots_are_passive_in_minecraft_but_cant_spawn",
-    "loading_tips:golden_dandelions_keep_baby_mobs_young_forever",
+    "loading_tips:golden_dandelions_keep_babymobs_young_forever",
     "loading_tips:breed_a_mob_at_least_once_to_unlock_the_golden",
     "loading_tips:feed_a_baby_mob_a_golden_dandelion_again_to_let",
-    "loading_tips:golden_dandelions_dont_work_on_undead_baby_mobs",
+    "loading_tips:golden_dandelions_dont_work_on_undead_babymobs",
     "loading_tips:piglins_will_pick_up_golden_dandelions_off_the",
     "loading_tips:golden_dandelions_can_be_placed_in_flower_pots",
     "loading_tips:wandering_traders_may_randomly_sell_a_golden",
@@ -193,7 +193,7 @@
     "loading_tips:copper_blocks_under_note_blocks_now_produce",
     "loading_tips:the_trumpet_pitch_changes_depending_on_the",
     "loading_tips:wax_your_copper_block_under_a_note_block_to_lock",
-    "loading_tips:baby_mobs_now_have_their_own_dedicated_sounds",
+    "loading_tips:babymobs_now_have_their_own_dedicated_sounds",
     "loading_tips:saddles_and_armor_no_longer_visually_render_on",
     "loading_tips:rabbits_got_a_complete_model_overhaul_in_tiny",
     "loading_tips:baby_polar_bears_no_longer_attack_foxes_a_long",
@@ -1148,7 +1148,7 @@
       "text": "Place lava or water above pointed dripstone to slowly drip it into a cauldron below!"
     },
     {
-      "id": "loading_tips:baby_mobs_now_have_unique_models_instead_of",
+      "id": "loading_tips:babymobs_now_have_unique_models_instead_of",
       "text": "Baby mobs have their own models instead of being shrunken adults"
     },
     {

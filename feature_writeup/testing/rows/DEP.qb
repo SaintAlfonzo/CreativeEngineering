@@ -67,11 +67,11 @@ shell grep -niE "vinery.*creativecalendar|creativecalendar.*vinery" logs/latest.
 @draft no batch holds this row yet
 ## SQ-DEP-04 | no missing dependency or class error naming one of our jars or packages
 @group A
-@commands Part 2 (7.16), same full boot with all ten Creative jars: `grep -nE "Missing or unsupported mandatory\|NoClassDefFoundError\|ClassNotFoundException\|was not found .*(creative\|baby_mobs\|more_mooblooms\|exposure)" logs/latest.log \| head`
+@commands Part 2 (7.16), same full boot with all ten Creative jars: `grep -nE "Missing or unsupported mandatory\|NoClassDefFoundError\|ClassNotFoundException\|was not found .*(creative\|babymobs\|moremooblooms\|exposure)" logs/latest.log \| head`
 @pass no hit naming one of our jars or packages (`com.SaintAlfonzo`, `ce.shared`, our mixin configs)
 @fails the class or mixin named; 7.16 map row for that jar
 @from batches/r1113/c2_a1.qb
-shell grep -nE "Missing or unsupported mandatory|NoClassDefFoundError|ClassNotFoundException|was not found .*(creative|baby_mobs|more_mooblooms|exposure)" logs/latest.log | head -12 | cut -c1-260; true
+shell grep -nE "Missing or unsupported mandatory|NoClassDefFoundError|ClassNotFoundException|was not found .*(creative|babymobs|moremooblooms|exposure)" logs/latest.log | head -12 | cut -c1-260; true
 look no hit naming com.SaintAlfonzo, ce.shared or one of our mixin configs (third-party optional-class lines: note only)
 
 ## SQ-DEP-05 | rain puts out an open-sky campfire on stone, not one on a coal block; the douse tag is present

@@ -600,7 +600,7 @@ with the suffix, existing worlds keep Nether's blocks and stove contents (same i
 
 babyMobs depends only on Forge and Minecraft and nothing in CD imports it, so the move is wiring only: the member map
 entry `'babyMobs': 'babymobs'` goes to the Worldgen bundle with More Mooblooms, `bundled_in=creativeWorldgen`, and the
-`mod_sides.md` note moves from CD's row to Worldgen's. Mod id `baby_mobs` is unchanged, so no swap list. Until Worldgen
+`mod_sides.md` note moves from CD's row to Worldgen's. Mod id `babymobs` is unchanged, so no swap list. Until Worldgen
 exists it stays nested in CD (pulling it out now would mean a standalone jar for one carve).
 
 **Order and gates.** Commit the installed wave 4 first (the CD Java move is uncommitted). Then step 1 and steps 2 + 3

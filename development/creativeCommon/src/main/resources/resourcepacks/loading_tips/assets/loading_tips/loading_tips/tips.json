@@ -2039,11 +2039,11 @@
       "text": "Place lava or water above Pointed Dripstone to slowly drip it into a Cauldron below!"
     },
     {
-      "id": "loading_tips:baby_mobs_now_have_unique_models_instead_of",
+      "id": "loading_tips:babymobs_now_have_unique_models_instead_of",
       "text": "Baby mobs now have unique models instead of being shrunken adults!"
     },
     {
-      "id": "loading_tips:golden_dandelions_keep_baby_mobs_young_forever",
+      "id": "loading_tips:golden_dandelions_keep_babymobs_young_forever",
       "text": "Golden Dandelions keep baby mobs young forever — craft one with a dandelion and 8 gold nuggets!"
     },
     {
@@ -2055,7 +2055,7 @@
       "text": "Feed a baby mob a Golden Dandelion again to let it grow up normally."
     },
     {
-      "id": "loading_tips:golden_dandelions_dont_work_on_undead_baby_mobs",
+      "id": "loading_tips:golden_dandelions_dont_work_on_undead_babymobs",
       "text": "Golden Dandelions don't work on undead baby mobs or baby Villagers."
     },
     {
@@ -2107,7 +2107,7 @@
       "text": "Wax your copper block under a Note Block to lock in your trumpet's pitch forever!"
     },
     {
-      "id": "loading_tips:baby_mobs_now_have_their_own_dedicated_sounds",
+      "id": "loading_tips:babymobs_now_have_their_own_dedicated_sounds",
       "text": "Baby mobs now have their own dedicated sounds — listen for kittens, piglets, and chicks!"
     },
     {

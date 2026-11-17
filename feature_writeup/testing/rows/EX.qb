@@ -1,0 +1,23 @@
+# Scratch queue rows EX (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/EX.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-EX Exposure Extras camera bag ids through Common's swap list, 2026-11-17 ([exposure.md](../exposure.md) 8, design_rules V-06; TODO `conventions #23`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars exposure creativecommon
+@@sources development/exposureBackport/src/extras
+@@text
+@@text The hand `MissingMappingsEvent` in `ExposureExtras` is gone: `creativeengineering:<tier>_camera_bag` (before patcherMod 1.0.3) and `exposure_extras:*` are `replaces` entries in `data/exposureextras/swaps/owner_namespace.json`. Runs in boot 2 of SQ-RFX-25 (rows/RFX.qb section 6); the NBT alias half is SQ-RFX-27.
+@@table
+## SQ-EX-01 | camera bags load under exposureextras ids; no hand remap left
+@group A (old save, boot 2 of SQ-RFX-25)
+@commands `grep -E "\[swaps\]" logs/latest.log`; `> setblock 30 -61 0 chest{Items:[{Slot:0b,id:"creativeengineering:iron_camera_bag",Count:1b,tag:{CameraBag:{}}}]}`; `> data get block 30 -61 0 Items`; `> give @p exposureextras:leather_camera_bag`
+@pass the chest holds `exposureextras:iron_camera_bag` with its `CameraBag` tag; the give works; boot log has the `[swaps] ... list file(s)` line counting the Exposure Extras list and no `[exposureextras]` remap line; no missing-registry warning for any `camera_bag`
+@fails the bag gone: the `creativeengineering:` entries are missing from Exposure's swap list (Creative Common reads `data/exposureextras/swaps/`)
+> setblock 30 -61 0 chest{Items:[{Slot:0b,id:"creativeengineering:iron_camera_bag",Count:1b,tag:{CameraBag:{}}}]}
+> data get block 30 -61 0 Items
+expect exposureextras:iron_camera_bag
+shell ! grep -E "[Mm]issing.*camera_bag|Identifier .*camera_bag.* is missing" logs/latest.log
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command)

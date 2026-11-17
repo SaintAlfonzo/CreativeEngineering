@@ -4,7 +4,7 @@
     python3 tools/check_moobloom_data.py
 
 Reads the variants, breeding rules and spawn rules the game would load: the mod's own
-(development/creativeWorldgen/members/mooblooms/src/main/resources/data and its packs/more_mooblooms/*/data switch packs) with the pack's
+(development/creativeWorldgen/members/mooblooms/src/main/resources/data and its packs/moremooblooms/*/data switch packs) with the pack's
 kubejs/data on top (same path wins), and checks:
 - every variant (mooblooms.md 4.4): only known keys; a non-empty flower pool of block states (or {state,
   weight >= 1, chance 0-1, drop, optional, feed_weight >= 1}); feed and spawns_in_dark_on ids/#tags; any_weight and breed_weight >= 0;
@@ -12,7 +12,7 @@ kubejs/data on top (same path wins), and checks:
 - a flower (item) in several variants' food is listed with each variant's share when a cow is fed it (by
   feed_weight)
 - every variant has a texture (mod resources or kubejs/assets) and an en_us name
-- the default variant (more_mooblooms:moobloom) exists
+- the default variant (moremooblooms:moobloom) exists
 - breeding rules (4.8): parents and results are variants, chance 0-1, result weights >= 1,
   a pair claimed by two rules (the later one never applies: WARNING)
 - spawn rules: biome ids exist in kubejs/exported/biome_data.json (/dumpbiomes), variant ids exist,
@@ -52,7 +52,7 @@ def data_files(kind):
     """{resource id: path} for data/<ns>/<kind>/**.json, kubejs/data overriding the mod."""
     out = {}
     bases = [os.path.join(MOD_RES, 'data')]
-    bases += sorted(glob.glob(os.path.join(MOD_RES, 'packs', 'more_mooblooms', '*', 'data')))  # core switch packs
+    bases += sorted(glob.glob(os.path.join(MOD_RES, 'packs', 'moremooblooms', '*', 'data')))  # core switch packs
     bases.append(os.path.join(KUBEJS, 'data'))
     for base in bases:
         if not os.path.isdir(base):
@@ -70,7 +70,7 @@ def data_files(kind):
 def lang():
     keys = {}
     for base in (MOD_RES, KUBEJS):
-        p = os.path.join(base, 'assets', 'more_mooblooms', 'lang', 'en_us.json')
+        p = os.path.join(base, 'assets', 'moremooblooms', 'lang', 'en_us.json')
         if os.path.exists(p):
             keys.update(json.load(open(p, encoding='utf8')))
     return keys
@@ -142,7 +142,7 @@ def check_variant(vid, path, names):
     tex = os.path.join('assets', ns, 'textures', 'entity', 'moobloom', p + '.png')
     if not any(os.path.exists(os.path.join(b, tex)) for b in (MOD_RES, KUBEJS)):
         problem(vid, f'no texture {tex}')
-    key = 'entity.more_mooblooms.moobloom.' + (p if ns == 'more_mooblooms' else f'{ns}.{p}')
+    key = 'entity.moremooblooms.moobloom.' + (p if ns == 'moremooblooms' else f'{ns}.{p}')
     if key not in names:
         problem(vid, f'no en_us name {key}')
     return v
@@ -254,8 +254,8 @@ def main():
         if v is not None:
             loaded[vid] = v
     shared = check_shared_flowers(loaded)
-    if 'more_mooblooms:moobloom' not in variants:
-        problem('variants', 'no more_mooblooms:moobloom (the default)')
+    if 'moremooblooms:moobloom' not in variants:
+        problem('variants', 'no moremooblooms:moobloom (the default)')
     biomes = json.load(open(BIOMES)) if os.path.exists(BIOMES) else None
     known = set(variants)
     rules = sum(check_rules(p, known, biomes) for p in data_files('moobloom_spawns').values())

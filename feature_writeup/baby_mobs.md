@@ -23,10 +23,10 @@ remodel of every other baby) BUILT 2026-11-01 as babyMobs 1.1.0 (nested in Creat
   (38 mobs), gave five of them their own sounds, added baby armor models for the undead and the golden dandelion.
   Nothing else in 1.20+ is a "baby mob" that 1.19.2 lacks: camels, sniffers and armadillos are whole mobs (not in the
   pack); baby zombie / villager / animal forms already exist here.
-- **Where:** `development/creativeDelight/members/babymobs` (mod id `baby_mobs`, jar `babyMobs-<version>.jar` nested in
+- **Where:** `development/creativeDelight/members/babymobs` (mod id `babymobs`, jar `babyMobs-<version>.jar` nested in
   Creative Delight since the 2026-11-01 split; build with `:creativeDelight:build`). GPLv3 like our other mods; the baby
   textures are Mojang's 26.1 files (D6).
-- **Knobs (`config/baby_mobs-common.toml`):** `[spawns] squidBabyChance 0.05, glowSquidBabyChance 0.05,
+- **Knobs (`config/babymobs-common.toml`):** `[spawns] squidBabyChance 0.05, glowSquidBabyChance 0.05,
   dolphinBabyChance 0.10`; `[growth] growTicks 24000, dolphinFishFeeding true`; `[client] babyModels true`.
 - **How to see it:** `/summon minecraft:squid ~ ~ ~ {Age:-24000}` (also `glow_squid`, `dolphin`): a small squid
   with the 26.1 baby shape and texture; `/data get entity <it> Age` counts up to 0, then it is an adult.
@@ -174,7 +174,7 @@ decompiled with Vineflower (models, renderers, `LayerDefinitions`).
 - [development/creativeDelight/members/babymobs/](../development/creativeDelight/members/babymobs/) (milestone 2 files: section 3a): `BabyMobs` (entry), `BMConfig`, `age/BabyAges`,
   `age/BabyAgeHolder`, `mixin/MobBabyMixin`, `mixin/LivingEntityBabyMixin`, `mixin/DolphinFeedMixin`,
   `client/ClientSetup`, `client/BabyModels`, `client/BabySquidRenderer`, `client/BabyGlowSquidRenderer`,
-  `client/BabyDolphinRenderer`; `baby_mobs.mixins.json`; `assets/baby_mobs/textures/entity/squid/{squid,glow_squid}_baby.png`,
+  `client/BabyDolphinRenderer`; `babymobs.mixins.json`; `assets/babymobs/textures/entity/squid/{squid,glow_squid}_baby.png`,
   `dolphin/dolphin_baby.png`.
 - Reference source: the 26.1 client jar (unobfuscated since 26.1; `piston-meta` version json has no mappings) decompiled
   with `tools/decompile_mod.py` into the session scratchpad: `BabySquidModel`, `BabyDolphinModel`, `SquidRenderer`,
@@ -241,6 +241,9 @@ decompiled with Vineflower (models, renderers, `LayerDefinitions`).
 
 ## 8. History
 
+- 2026-11-17: mod id `baby_mobs` renamed `babymobs` (plan_rules_fixes.md section 14, V-11): package, mixin json and
+  `assets/babymobs/` textures. Nothing registered, so no swap entries; Creative Worldgen carries `baby_mobs-common.toml`
+  over to `babymobs-common.toml`.
 - 2026-11-01: spawn egg on an adult squid / dolphin fixed (`setBaby` hook). Milestone 2 built (babyMobs 1.1.0): the
   generic renderer framework plus five families (33 mobs), ported from the decompiled 26.1 client by family, in
   parallel; compiles, mixin targets checked against the SRG jar, not run in game. Same day (owner): wolf, cow, pig,

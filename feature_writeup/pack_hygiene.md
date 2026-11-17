@@ -71,7 +71,7 @@ advancement is used for a reward or unlock. All Judgement: dead code and data.
 
 12. **Dead advancement code and data.**
     - `backportedBrewin/.../forge/event/BnCCommonEvents.java:202-243` `checkTemperatureAdvancement`: a scan on every block place and right-click near a keg, for an advancement that no longer exists. Remove both listeners if this is our addition (not confirmed against upstream).
-    - `moreMooblooms/src/main/resources/packs/blueprint/data/more_mooblooms/modifiers/advancements/husbandry/bred_all_animals.json` (our own mod).
+    - `moreMooblooms/src/main/resources/packs/blueprint/data/moremooblooms/modifiers/advancements/husbandry/bred_all_animals.json` (our own mod).
     - `kubejs/data/watchtower_building/advancements/watchtower_found.json`.
     - Upstream advancement JSONs in the ports: Brewin' 49 (44 with rewards), Exposure 29 (16), Vintage 11 (2). Optional strip.
 

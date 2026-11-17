@@ -166,8 +166,8 @@ Scan notes:
 | CT-057 | Kegs | Hot and cold blocks change both a keg's temperature and how fast wine ages | T | `brewinandchewin/lang/en_us.json:156-159` |  |  |  |
 | CT-058 | Kegs | Pipes can't drain a keg while it ferments | T | `brewinandchewin/lang/en_us.json:155` |  |  |  |
 | CT-059 | Kegs | Drinks marked Intoxicating can make you tipsy | T | `dev/creativeBrewing/.../creativebrewing/lang/en_us.json:6` |  |  |  |
-| CT-060 | Wine | Wine ages faster in dark, cold storage and slower in warm spots | T W | `vinery_backport/lang/en_us.json:4-13`, `VineryWthitClient.java:196-201` |  |  |  |
-| CT-061 | Wine | Wine bottles come in three sizes, and each size fits only certain racks | T | `vinery_backport/lang/en_us.json:75-87` |  |  |  |
+| CT-060 | Wine | Wine ages faster in dark, cold storage and slower in warm spots | T W | `vinerybackport/lang/en_us.json:4-13`, `VineryWthitClient.java:196-201` |  |  |  |
+| CT-061 | Wine | Wine bottles come in three sizes, and each size fits only certain racks | T | `vinerybackport/lang/en_us.json:75-87` |  |  |  |
 | CT-062 | Vinery | Fill a grapevine pot with one kind of grape and jump on it to press the juice; heavy armor stomps harder | T W | `ka/creativebrewing/kubejs/vinery/tooltips.js:17`, `VineryWthitClient.java:118-130` |  |  |  |
 | CT-063 | Vinery | Mash apples in the apple press, then add a wine bottle to make apple juice | T | `vinery/tooltips.js:18` |  |  |  |
 | CT-064 | Vinery | A fermentation barrel takes one kind of juice at a time; sneak-click empty-handed to pour it out | T | `vinery/tooltips.js:19-20` |  |  |  |
@@ -232,7 +232,7 @@ Scan notes:
 | CT-125 | Kegs | Dread nog raises your Bad Omen level, so expect a bigger raid | T | `brewinandchewin/lang/en_us.json:74` |  |  |  |
 | CT-126 | Brewing | A coaster holds up to four drinks | W | `WthitCoaster.java:61-65` |  |  |  |
 | CT-127 | Vinery | Chorus wine makes you wake up somewhere unexpected | T | `vinery/tooltips.js:34` |  |  |  |
-| CT-128 | Vinery | Stand near a Vinery banner to keep getting its effect | T | `vinery_backport/lang/en_us.json:70` |  |  |  |
+| CT-128 | Vinery | Stand near a Vinery banner to keep getting its effect | T | `vinerybackport/lang/en_us.json:70` |  |  |  |
 | CT-129 | Cooking | Skewers on a grill need flipping and burn if left too long | W | `BBQWthitClient.java:39-41` |  |  |  |
 | CT-130 | Cooking | Barbecue sauce goes on skewers after they are cooked | T | `barbequesdelight/lang/en_us.json:78` | ? fact |  |  |
 | CT-131 | Cooking | An ME kitchen station must be linked to an ME security terminal to work | W | `WthitKitchenStation.java:59-64` |  |  |  |

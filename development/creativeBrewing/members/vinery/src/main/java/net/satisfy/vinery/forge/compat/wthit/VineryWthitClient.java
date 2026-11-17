@@ -39,7 +39,7 @@ import net.satisfy.vinery.platform.PlatformHelper;
  * themselves; everything else comes from {@link VineryWthit}'s server data.
  */
 public final class VineryWthitClient implements IWailaClientPlugin, IBlockComponentProvider {
-    private static final String LANG = "wthit.vinery_backport.";
+    private static final String LANG = "wthit.vinerybackport.";
 
     @Override
     public void register(IClientRegistrar registrar) {

@@ -173,7 +173,7 @@ public class WineBoxBlock extends StorageBlock {
     public void appendHoverText(ItemStack stack, @Nullable BlockGetter level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
         DrinkBlockItem.BottleSize.addHoldsLine(tooltip, size(), LARGEST);
-        tooltip.add(Component.translatable("tooltip.vinery_backport.wine_box.open").withStyle(ChatFormatting.GRAY));
+        tooltip.add(Component.translatable("tooltip.vinerybackport.wine_box.open").withStyle(ChatFormatting.GRAY));
         WineYears.addStorageHint(tooltip);
     }
 }

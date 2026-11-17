@@ -383,3 +383,6 @@ Before deploying 1.0.3:
   1.0.8.
 - 2026-10-19: `-03` and `-04` fixes written up in 3.6; EX-25 added for `-04`.
 - 2026-10-25: leftovers cleared (the 1.6.0 config backup and the Exposure-Create Compatibility pack, section 4).
+- 2026-11-17: the hand `MissingMappingsEvent` in `ExposureExtras` is gone (design_rules V-06): the
+  `creativeengineering:<tier>_camera_bag` ids are `replaces` entries in `data/exposureextras/swaps/owner_namespace.json`,
+  read by Creative Common's swap lists.
