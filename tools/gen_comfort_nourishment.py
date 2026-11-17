@@ -65,12 +65,12 @@ BOTTLE = 'minecraft:glass_bottle'
 # foods that hand back their container in code (no crafting remainder, so the dump shows none): Oceanic Delight's
 # OceanicFood bowls (creativeDelight members/oceanic OceanicItems, `container(BOWL)`), dishes/ocean #8
 CODE_CONTAINERS = {'oceanic_delight:' + n: BOWL for n in (
-    'bowl_of_paella', 'caesar_salad', 'fish_egg_noodle_soup', 'globular_rice', 'glow_squid_stew', 'pasta_with_eyeball',
-    'plate_of_stuffed_pufferfish', 'potato_salad', 'sea_salad', 'shrimp_rice', 'shrimp_stew', 'squid_and_pickles',
-    'squid_salad')}
+	'bowl_of_paella', 'caesar_salad', 'fish_egg_noodle_soup', 'globular_rice', 'glow_squid_stew', 'pasta_with_eyeball',
+	'plate_of_stuffed_pufferfish', 'potato_salad', 'sea_salad', 'shrimp_rice', 'shrimp_stew', 'squid_and_pickles',
+	'squid_salad')}
 # feast servings the food_blocks dump does not link (Oceanic's own plate blocks): serving -> feast block item
 CODE_FEASTS = {'oceanic_delight:bowl_of_paella': 'oceanic_delight:paella_plate',
-               'oceanic_delight:plate_of_stuffed_pufferfish': 'oceanic_delight:stuffed_pufferfish'}
+			   'oceanic_delight:plate_of_stuffed_pufferfish': 'oceanic_delight:stuffed_pufferfish'}
 CAN_NAMESPACES = ('creativedelight', 'canned_goods')
 RECIPE_ORDER = ('farmersdelight:cooking', 'minecraft:crafting_shapeless', 'minecraft:crafting_shaped')
 # recipes a crafted non-food input is valued through
@@ -78,210 +78,210 @@ VALUE_TYPES = set(RECIPE_ORDER)
 
 
 def load(rel):
-    with open(EXPORT / rel, encoding='utf-8') as fh:
-        return json.load(fh)
+	with open(EXPORT / rel, encoding='utf-8') as fh:
+		return json.load(fh)
 
 
 class Values:
-    def __init__(self, foods, recipes, tags):
-        self.hunger = {f['id']: f['nutrition'] for f in foods}
-        self.tags = tags
-        self.makes = {}
-        for r in recipes:
-            if r['type'] in VALUE_TYPES and len(r['out']) == 1:
-                self.makes.setdefault(r['out'][0]['id'], []).append(r)
-        self.memo = {}
+	def __init__(self, foods, recipes, tags):
+		self.hunger = {f['id']: f['nutrition'] for f in foods}
+		self.tags = tags
+		self.makes = {}
+		for r in recipes:
+			if r['type'] in VALUE_TYPES and len(r['out']) == 1:
+				self.makes.setdefault(r['out'][0]['id'], []).append(r)
+		self.memo = {}
 
-    def members(self, raw):
-        """Item ids an ingredient slot accepts."""
-        ing = json.loads(raw) if isinstance(raw, str) else raw
-        if isinstance(ing, list):
-            return [m for part in ing for m in self.members(part)]
-        if 'item' in ing:
-            return [ing['item']]
-        if 'tag' in ing:
-            return list(self.tags.get(ing['tag'], []))
-        for k in ('children', 'ingredients'):
-            if k in ing:
-                return [m for part in ing[k] for m in self.members(part)]
-        if 'base' in ing:
-            return self.members(ing['base'])
-        return []
+	def members(self, raw):
+		"""Item ids an ingredient slot accepts."""
+		ing = json.loads(raw) if isinstance(raw, str) else raw
+		if isinstance(ing, list):
+			return [m for part in ing for m in self.members(part)]
+		if 'item' in ing:
+			return [ing['item']]
+		if 'tag' in ing:
+			return list(self.tags.get(ing['tag'], []))
+		for k in ('children', 'ingredients'):
+			if k in ing:
+				return [m for part in ing[k] for m in self.members(part)]
+		if 'base' in ing:
+			return self.members(ing['base'])
+		return []
 
-    def crafted(self, item, depth):
-        if depth <= 0:
-            return None
-        key = (item, depth)
-        if key not in self.memo:
-            self.memo[key] = None   # cycle guard
-            best = None
-            for r in self.makes.get(item, []):
-                n = r['out'][0].get('n') or 1
-                total = sum(self.slot(s, depth - 1, drop=r.get('container')) for s in r['in'])
-                v = total / n
-                best = v if best is None else min(best, v)
-            self.memo[key] = best
-        return self.memo[key]
+	def crafted(self, item, depth):
+		if depth <= 0:
+			return None
+		key = (item, depth)
+		if key not in self.memo:
+			self.memo[key] = None   # cycle guard
+			best = None
+			for r in self.makes.get(item, []):
+				n = r['out'][0].get('n') or 1
+				total = sum(self.slot(s, depth - 1, drop=r.get('container')) for s in r['in'])
+				v = total / n
+				best = v if best is None else min(best, v)
+			self.memo[key] = best
+		return self.memo[key]
 
-    def slot(self, raw, depth=CRAFT_DEPTH, drop=None):
-        ms = [m for m in self.members(raw) if m != drop]
-        food = [self.hunger[m] for m in ms if m in self.hunger]
-        if food:
-            return min(food)
-        made = [v for v in (self.crafted(m, depth) for m in ms) if v is not None]
-        return min(made) if made else BASE_VALUE
+	def slot(self, raw, depth=CRAFT_DEPTH, drop=None):
+		ms = [m for m in self.members(raw) if m != drop]
+		food = [self.hunger[m] for m in ms if m in self.hunger]
+		if food:
+			return min(food)
+		made = [v for v in (self.crafted(m, depth) for m in ms) if v is not None]
+		return min(made) if made else BASE_VALUE
 
 
 def is_slot(raw, container):
-    ing = json.loads(raw) if isinstance(raw, str) else raw
-    return not (isinstance(ing, dict) and ing.get('item') in (container, BOWL))
+	ing = json.loads(raw) if isinstance(raw, str) else raw
+	return not (isinstance(ing, dict) and ing.get('item') in (container, BOWL))
 
 
 def pick_recipe(item, recipes_by_out):
-    rs = recipes_by_out.get(item, [])
-    for t in RECIPE_ORDER:
-        hits = sorted((r for r in rs if r['type'] == t), key=lambda r: r['id'])
-        if hits:
-            return hits[0]
-    return None
+	rs = recipes_by_out.get(item, [])
+	for t in RECIPE_ORDER:
+		hits = sorted((r for r in rs if r['type'] == t), key=lambda r: r['id'])
+		if hits:
+			return hits[0]
+	return None
 
 
 def decide(inputs, in_hunger, out_hunger):
-    if inputs >= NOURISH_INPUTS and in_hunger >= NOURISH_HUNGER and out_hunger >= NOURISH_OUTPUT:
-        effect = 'nourishment'
-    elif inputs >= COMFORT_INPUTS and in_hunger >= COMFORT_HUNGER:
-        effect = 'comfort'
-    elif out_hunger >= FALLBACK_OUTPUT:
-        effect = 'comfort'
-    else:
-        return None, 0
-    if effect == 'comfort' and out_hunger <= SHORT_COMFORT_UP_TO:
-        return effect, SHORT_COMFORT_SECONDS
-    return effect, LONG_SECONDS if out_hunger >= LONG_FROM else SHORT_SECONDS
+	if inputs >= NOURISH_INPUTS and in_hunger >= NOURISH_HUNGER and out_hunger >= NOURISH_OUTPUT:
+		effect = 'nourishment'
+	elif inputs >= COMFORT_INPUTS and in_hunger >= COMFORT_HUNGER:
+		effect = 'comfort'
+	elif out_hunger >= FALLBACK_OUTPUT:
+		effect = 'comfort'
+	else:
+		return None, 0
+	if effect == 'comfort' and out_hunger <= SHORT_COMFORT_UP_TO:
+		return effect, SHORT_COMFORT_SECONDS
+	return effect, LONG_SECONDS if out_hunger >= LONG_FROM else SHORT_SECONDS
 
 
 def golden_foods():
-    """food id -> Nourishment seconds for the golden food types (item_dict keys in food_types.json)."""
-    _, key_val, _ = pack_paths.parse_item_dict()
-    with open(FOOD_TYPES, encoding='utf-8') as fh:
-        types = json.load(fh)['types']
-    out = {}
-    for t, seconds in GOLDEN_TYPES.items():
-        for k in types.get(t, []):
-            fid = k if ':' in k else key_val.get(k)
-            if fid:
-                out[fid] = seconds
-    out.update(GOLDEN_EXTRA)
-    return out
+	"""food id -> Nourishment seconds for the golden food types (item_dict keys in food_types.json)."""
+	_, key_val, _ = pack_paths.parse_item_dict()
+	with open(FOOD_TYPES, encoding='utf-8') as fh:
+		types = json.load(fh)['types']
+	out = {}
+	for t, seconds in GOLDEN_TYPES.items():
+		for k in types.get(t, []):
+			fid = k if ':' in k else key_val.get(k)
+			if fid:
+				out[fid] = seconds
+	out.update(GOLDEN_EXTRA)
+	return out
 
 
 def current(f):
-    ids = {e['effect'] for e in f.get('effects') or []}
-    c, n = COMFORT in ids, NOURISHMENT in ids
-    return 'both' if c and n else 'comfort' if c else 'nourishment' if n else None
+	ids = {e['effect'] for e in f.get('effects') or []}
+	c, n = COMFORT in ids, NOURISHMENT in ids
+	return 'both' if c and n else 'comfort' if c else 'nourishment' if n else None
 
 
 def build():
-    foods = load('food/foods.json')['foods']
-    recipes = load('food/recipes.json')['recipes']
-    blocks = load('food/food_blocks.json')['blocks']
-    tags = load('tags/item_tags.json')
-    values = Values(foods, recipes, tags)
-    by_out = {}
-    for r in recipes:
-        for o in r['out']:
-            by_out.setdefault(o['id'], []).append(r)
-    feast_of = dict(CODE_FEASTS)
-    feast_of.update({b['serving']: b['id'] for b in blocks if b.get('serving')})
-    by_id = {f['id']: f for f in foods}
+	foods = load('food/foods.json')['foods']
+	recipes = load('food/recipes.json')['recipes']
+	blocks = load('food/food_blocks.json')['blocks']
+	tags = load('tags/item_tags.json')
+	values = Values(foods, recipes, tags)
+	by_out = {}
+	for r in recipes:
+		for o in r['out']:
+			by_out.setdefault(o['id'], []).append(r)
+	feast_of = dict(CODE_FEASTS)
+	feast_of.update({b['serving']: b['id'] for b in blocks if b.get('serving')})
+	by_id = {f['id']: f for f in foods}
 
-    def inputs_of(fid, container):
-        src = feast_of.get(fid, fid)
-        r = pick_recipe(src, by_out)
-        if r is None and src != fid:
-            r = pick_recipe(fid, by_out)
-        if r is None:
-            return None
-        slots = [s for s in r['in'] if is_slot(s, container)]
-        drop = r.get('container')
-        return len(slots), sum(values.slot(s, drop=drop) for s in slots), r, src != fid
+	def inputs_of(fid, container):
+		src = feast_of.get(fid, fid)
+		r = pick_recipe(src, by_out)
+		if r is None and src != fid:
+			r = pick_recipe(fid, by_out)
+		if r is None:
+			return None
+		slots = [s for s in r['in'] if is_slot(s, container)]
+		drop = r.get('container')
+		return len(slots), sum(values.slot(s, drop=drop) for s in slots), r, src != fid
 
-    golden = golden_foods()
-    ruled, keep, bottles = OrderedDict(), [], []
-    for f in sorted(foods, key=lambda f: f['id']):
-        fid, rem = f['id'], f.get('remainder') or CODE_CONTAINERS.get(f['id'])
-        if fid.split(':')[0] in CAN_NAMESPACES:
-            continue
-        if fid in golden:
-            ruled[fid] = dict(effect='nourishment', seconds=golden[fid], inputs=0, input_hunger=0,
-                              output=f['nutrition'], now=current(f), recipe='golden', feast=False, name=f.get('name'))
-            continue
-        if rem == BOTTLE:
-            bottles.append(fid)
-            continue
-        if rem not in RULED_CONTAINERS:
-            # every other food keeps only its Comfort; a light one gets the short Comfort
-            if current(f) in ('comfort', 'both') and f['nutrition'] <= SHORT_COMFORT_UP_TO:
-                ruled[fid] = dict(effect='comfort', seconds=SHORT_COMFORT_SECONDS, inputs=0, input_hunger=0,
-                                  output=f['nutrition'], now=current(f), recipe='kept Comfort', feast=False,
-                                  name=f.get('name'))
-            continue
-        got = inputs_of(fid, rem)
-        if got is None:
-            keep.append(fid)
-            continue
-        n, hunger, r, feast = got
-        effect, seconds = decide(n, hunger, f['nutrition'])
-        ruled[fid] = dict(effect=effect, seconds=seconds, inputs=n, input_hunger=hunger, output=f['nutrition'],
-                          now=current(f), recipe=r['id'], feast=feast, name=f.get('name'))
-    return ruled, keep, bottles, by_id
+	golden = golden_foods()
+	ruled, keep, bottles = OrderedDict(), [], []
+	for f in sorted(foods, key=lambda f: f['id']):
+		fid, rem = f['id'], f.get('remainder') or CODE_CONTAINERS.get(f['id'])
+		if fid.split(':')[0] in CAN_NAMESPACES:
+			continue
+		if fid in golden:
+			ruled[fid] = dict(effect='nourishment', seconds=golden[fid], inputs=0, input_hunger=0,
+							  output=f['nutrition'], now=current(f), recipe='golden', feast=False, name=f.get('name'))
+			continue
+		if rem == BOTTLE:
+			bottles.append(fid)
+			continue
+		if rem not in RULED_CONTAINERS:
+			# every other food keeps only its Comfort; a light one gets the short Comfort
+			if current(f) in ('comfort', 'both') and f['nutrition'] <= SHORT_COMFORT_UP_TO:
+				ruled[fid] = dict(effect='comfort', seconds=SHORT_COMFORT_SECONDS, inputs=0, input_hunger=0,
+								  output=f['nutrition'], now=current(f), recipe='kept Comfort', feast=False,
+								  name=f.get('name'))
+			continue
+		got = inputs_of(fid, rem)
+		if got is None:
+			keep.append(fid)
+			continue
+		n, hunger, r, feast = got
+		effect, seconds = decide(n, hunger, f['nutrition'])
+		ruled[fid] = dict(effect=effect, seconds=seconds, inputs=n, input_hunger=hunger, output=f['nutrition'],
+						  now=current(f), recipe=r['id'], feast=feast, name=f.get('name'))
+	return ruled, keep, bottles, by_id
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument('--list', action='store_true', help='print every ruled food with its inputs')
-    args = ap.parse_args()
+	ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+	ap.add_argument('--list', action='store_true', help='print every ruled food with its inputs')
+	args = ap.parse_args()
 
-    ruled, keep, bottles, by_id = build()
-    first_key = pack_paths.item_dict_first_keys(pack_paths.item_dict_text(), tags=False, skip_keys=('na', 'none'))
-    key = lambda fid: first_key.get(fid, fid)
+	ruled, keep, bottles, by_id = build()
+	first_key = pack_paths.item_dict_first_keys(pack_paths.item_dict_text(), tags=False, skip_keys=('na', 'none'))
+	key = lambda fid: first_key.get(fid, fid)
 
-    out = OrderedDict()
-    out['_readme'] = ('Generated by python3 tools/gen_comfort_nourishment.py; edit the rules there, not this file. '
-                      'set: food -> Comfort / Nourishment and seconds ("none" = neither); keep: ruled foods with no '
-                      'recipe found, left as they are; strip: both effects removed (bottles). Every other food loses '
-                      'Nourishment at runtime. Keys are item_dict keys, raw ids where the item has no key. Read by '
-                      'Creative Delight creativedelight/comfort_nourishment.js and tools/gen_can_types.py; restart '
-                      'to apply.')
-    out['set'] = OrderedDict((key(fid), OrderedDict([('effect', d['effect'] or 'none'), ('seconds', d['seconds'])]))
-                             for fid, d in ruled.items())
-    out['keep'] = [key(fid) for fid in keep]
-    out['strip'] = [key(fid) for fid in bottles]
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    text = json.dumps(out, indent='\t', ensure_ascii=False) + '\n'
-    old = OUT.read_text(encoding='utf-8') if OUT.exists() else None
-    OUT.write_text(text, encoding='utf-8')
+	out = OrderedDict()
+	out['_readme'] = ('Generated by python3 tools/gen_comfort_nourishment.py; edit the rules there, not this file. '
+					  'set: food -> Comfort / Nourishment and seconds ("none" = neither); keep: ruled foods with no '
+					  'recipe found, left as they are; strip: both effects removed (bottles). Every other food loses '
+					  'Nourishment at runtime. Keys are item_dict keys, raw ids where the item has no key. Read by '
+					  'Creative Delight creativedelight/comfort_nourishment.js and tools/gen_can_types.py; restart '
+					  'to apply.')
+	out['set'] = OrderedDict((key(fid), OrderedDict([('effect', d['effect'] or 'none'), ('seconds', d['seconds'])]))
+							 for fid, d in ruled.items())
+	out['keep'] = [key(fid) for fid in keep]
+	out['strip'] = [key(fid) for fid in bottles]
+	OUT.parent.mkdir(parents=True, exist_ok=True)
+	text = json.dumps(out, indent='\t', ensure_ascii=False) + '\n'
+	old = OUT.read_text(encoding='utf-8') if OUT.exists() else None
+	OUT.write_text(text, encoding='utf-8')
 
-    counts = OrderedDict()
-    for d in ruled.values():
-        k = (d['now'] or '-', d['effect'] or '-')
-        counts[k] = counts.get(k, 0) + 1
-    print('%d ruled foods (%d unchanged), %d kept (no recipe found), %d bottles stripped'
-          % (len(ruled), sum(1 for d in ruled.values() if d['now'] == d['effect']), len(keep), len(bottles)))
-    for (now, rule), n in sorted(counts.items()):
-        print('  %-11s -> %-11s %3d' % (now, rule, n))
-    others = [f for f in by_id.values() if f['id'] not in ruled and f['id'] not in keep and f.get('remainder') != BOTTLE
-              and f['id'].split(':')[0] not in CAN_NAMESPACES and current(f) in ('nourishment', 'both')]
-    print('%d other foods lose Nourishment at runtime' % len(others))
-    if keep:
-        print('kept, hand check (no recipe found): ' + ', '.join(keep))
-    if args.list:
-        for fid, d in ruled.items():
-            print('  %-11s %-11s %3d s  in %d / %2d  out %2d  %s  (%s%s)' % (
-                d['now'] or '-', d['effect'] or '-', d['seconds'], d['inputs'], d['input_hunger'], d['output'],
-                fid, d['recipe'], ', feast' if d['feast'] else ''))
-    print('wrote %s%s' % (OUT.relative_to(INSTANCE), '' if old != text else ' (unchanged)'))
+	counts = OrderedDict()
+	for d in ruled.values():
+		k = (d['now'] or '-', d['effect'] or '-')
+		counts[k] = counts.get(k, 0) + 1
+	print('%d ruled foods (%d unchanged), %d kept (no recipe found), %d bottles stripped'
+		  % (len(ruled), sum(1 for d in ruled.values() if d['now'] == d['effect']), len(keep), len(bottles)))
+	for (now, rule), n in sorted(counts.items()):
+		print('  %-11s -> %-11s %3d' % (now, rule, n))
+	others = [f for f in by_id.values() if f['id'] not in ruled and f['id'] not in keep and f.get('remainder') != BOTTLE
+			  and f['id'].split(':')[0] not in CAN_NAMESPACES and current(f) in ('nourishment', 'both')]
+	print('%d other foods lose Nourishment at runtime' % len(others))
+	if keep:
+		print('kept, hand check (no recipe found): ' + ', '.join(keep))
+	if args.list:
+		for fid, d in ruled.items():
+			print('  %-11s %-11s %3d s  in %d / %2d  out %2d  %s  (%s%s)' % (
+				d['now'] or '-', d['effect'] or '-', d['seconds'], d['inputs'], d['input_hunger'], d['output'],
+				fid, d['recipe'], ', feast' if d['feast'] else ''))
+	print('wrote %s%s' % (OUT.relative_to(INSTANCE), '' if old != text else ' (unchanged)'))
 
 
 if __name__ == '__main__':
-    main()
+	main()

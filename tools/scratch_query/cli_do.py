@@ -27,50 +27,50 @@ import qrun  # noqa: E402
 
 
 def main():
-    if len(sys.argv) < 3:
-        sys.exit(__doc__)
-    game = os.path.abspath(sys.argv[1])
-    c = qrun.Client(game)
-    for st in sys.argv[2:]:
-        if st.startswith("/"):
-            c.cmd(st)
-            print("cmd", st)
-            continue
-        what, _, rest = st.partition(":")
-        a = rest.split(":") if rest else []
-        if what == "walk":
-            k = a[1] if len(a) > 1 else "w"
-            subprocess.run(["xdotool", "windowactivate", "--sync", c.w])
-            subprocess.run(["xdotool", "keydown", "--window", c.w, k])
-            time.sleep(float(a[0]))
-            subprocess.run(["xdotool", "keyup", "--window", c.w, k])
-            print("walk", a[0], k)
-        elif what == "key":
-            c.key(rest)
-            print("key", rest)
-        elif what == "shot":
-            c.shot(rest)
-            print("shot", rest)
-        elif what == "sleep":
-            time.sleep(float(rest))
-        elif what == "mouse":
-            subprocess.run(["xdotool", "mousemove", "--window", c.w, a[0], a[1]])
-            print("mouse", a[0], a[1])
-        elif what == "click":
-            subprocess.run(["xdotool", "mousemove", "--window", c.w, a[0], a[1], "click", a[2] if len(a) > 2 else "1"])
-            print("click", rest)
-        elif what == "look":
-            subprocess.run(["xdotool", "mousemove_relative", "--", a[0], a[1]])
-            print("look", rest)
-        elif what == "type":
-            subprocess.run(["xdotool", "type", "--window", c.w, "--delay", "40", "--", rest])
-            print("type", rest)
-        elif what == "grep":
-            n = sum(1 for line in open(os.path.join(game, "logs/latest.log"), errors="replace") if re.search(rest, line))
-            print("grep", rest, n)
-        else:
-            sys.exit("unknown step " + st)
+	if len(sys.argv) < 3:
+		sys.exit(__doc__)
+	game = os.path.abspath(sys.argv[1])
+	c = qrun.Client(game)
+	for st in sys.argv[2:]:
+		if st.startswith("/"):
+			c.cmd(st)
+			print("cmd", st)
+			continue
+		what, _, rest = st.partition(":")
+		a = rest.split(":") if rest else []
+		if what == "walk":
+			k = a[1] if len(a) > 1 else "w"
+			subprocess.run(["xdotool", "windowactivate", "--sync", c.w])
+			subprocess.run(["xdotool", "keydown", "--window", c.w, k])
+			time.sleep(float(a[0]))
+			subprocess.run(["xdotool", "keyup", "--window", c.w, k])
+			print("walk", a[0], k)
+		elif what == "key":
+			c.key(rest)
+			print("key", rest)
+		elif what == "shot":
+			c.shot(rest)
+			print("shot", rest)
+		elif what == "sleep":
+			time.sleep(float(rest))
+		elif what == "mouse":
+			subprocess.run(["xdotool", "mousemove", "--window", c.w, a[0], a[1]])
+			print("mouse", a[0], a[1])
+		elif what == "click":
+			subprocess.run(["xdotool", "mousemove", "--window", c.w, a[0], a[1], "click", a[2] if len(a) > 2 else "1"])
+			print("click", rest)
+		elif what == "look":
+			subprocess.run(["xdotool", "mousemove_relative", "--", a[0], a[1]])
+			print("look", rest)
+		elif what == "type":
+			subprocess.run(["xdotool", "type", "--window", c.w, "--delay", "40", "--", rest])
+			print("type", rest)
+		elif what == "grep":
+			n = sum(1 for line in open(os.path.join(game, "logs/latest.log"), errors="replace") if re.search(rest, line))
+			print("grep", rest, n)
+		else:
+			sys.exit("unknown step " + st)
 
 
 if __name__ == "__main__":
-    main()
+	main()

@@ -17,32 +17,32 @@ NOTE = 'weight x3 by hand (owner, 2026-11-01)'
 
 
 def walk(x):
-    if isinstance(x, dict):
-        for k, v in x.items():
-            yield k, v
-            yield from walk(v)
-    elif isinstance(x, list):
-        for v in x:
-            yield from walk(v)
+	if isinstance(x, dict):
+		for k, v in x.items():
+			yield k, v
+			yield from walk(v)
+	elif isinstance(x, list):
+		for v in x:
+			yield from walk(v)
 
 
 def main():
-    kj = sys.argv[1] if len(sys.argv) > 1 else 'kubejs'
-    wg = os.path.join(kj, 'generation_scripts', 'worldgen')
-    groups = json.load(open(os.path.join(wg, 'structure_groups.json')))
-    md = open(os.path.join(wg, 'structure_group_estimates.md')).read()
-    found = {k: v for k, v in walk(groups) if isinstance(v, dict) and k.startswith('mysticrift_pillagers_towers_aris:') and 'weight' in v}
-    bad = 0
-    for t, w in WEIGHT.items():
-        k = 'mysticrift_pillagers_towers_aris:%s_pillager_tower' % t
-        v = found.get(k, {})
-        m = re.search(r'\| `' + re.escape(k) + r'` \| (\d+) \| ([\d.]+) \| \S+ \| (\d+) \|', md)
-        ok = v.get('weight') == w and str(v.get('tuned', '')).endswith(NOTE) and m is not None and int(m.group(3)) == NEW_PER[t]
-        bad += 0 if ok else 1
-        print('%s %s weight %s frequency %s, note ends "%s", estimate 1 per %s'
-              % ('ok  ' if ok else 'FAIL', k, v.get('weight'), v.get('frequency'), str(v.get('tuned', ''))[-38:], m and m.group(3)))
-    sys.exit(1 if bad else 0)
+	kj = sys.argv[1] if len(sys.argv) > 1 else 'kubejs'
+	wg = os.path.join(kj, 'generation_scripts', 'worldgen')
+	groups = json.load(open(os.path.join(wg, 'structure_groups.json')))
+	md = open(os.path.join(wg, 'structure_group_estimates.md')).read()
+	found = {k: v for k, v in walk(groups) if isinstance(v, dict) and k.startswith('mysticrift_pillagers_towers_aris:') and 'weight' in v}
+	bad = 0
+	for t, w in WEIGHT.items():
+		k = 'mysticrift_pillagers_towers_aris:%s_pillager_tower' % t
+		v = found.get(k, {})
+		m = re.search(r'\| `' + re.escape(k) + r'` \| (\d+) \| ([\d.]+) \| \S+ \| (\d+) \|', md)
+		ok = v.get('weight') == w and str(v.get('tuned', '')).endswith(NOTE) and m is not None and int(m.group(3)) == NEW_PER[t]
+		bad += 0 if ok else 1
+		print('%s %s weight %s frequency %s, note ends "%s", estimate 1 per %s'
+			  % ('ok  ' if ok else 'FAIL', k, v.get('weight'), v.get('frequency'), str(v.get('tuned', ''))[-38:], m and m.group(3)))
+	sys.exit(1 if bad else 0)
 
 
 if __name__ == '__main__':
-    main()
+	main()

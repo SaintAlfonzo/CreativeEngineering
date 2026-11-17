@@ -37,261 +37,261 @@ DOC = os.path.join(ROOT, 'feature_writeup', 'texture_sources')
 SOURCES = os.path.join(DOC, 'sources.csv')
 LEDGER = os.path.join(DOC, 'ledger.csv')
 LEDGER_HEAD = ['path', 'pixel_class', 'pixel_match', 'pixel_detail', 'transcript', 'origin', 'source', 'tool',
-               'used_for', 'status', 'note']
+			   'used_for', 'status', 'note']
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import table_io  # noqa: E402
 OWN_JAR = re.compile(r'^(backported|repacked|creative|exposureBackport|solraspberrypie|babyMobs|moreMooblooms|'
-                     r'incubationAdditions|patcherMod)', re.I)
+					 r'incubationAdditions|patcherMod)', re.I)
 STOP = {'block', 'blocks', 'side', 'top', 'bottom', 'front', 'back', 'item', 'stage', 'base', 'overlay', 'inner',
-        'outer', 'texture', 'interior', 'full', 'level', 'end', 'raw', 'cooked', 'small', 'large', 'medium'}
+		'outer', 'texture', 'interior', 'full', 'level', 'end', 'raw', 'cooked', 'small', 'large', 'medium'}
 
 
 def rgba(data):
-    try:
-        return Image.open(io.BytesIO(data)).convert('RGBA')
-    except Exception:
-        return None
+	try:
+		return Image.open(io.BytesIO(data)).convert('RGBA')
+	except Exception:
+		return None
 
 
 def mask_key(im):
-    a = bytes(1 if p > 0 else 0 for p in im.getchannel('A').tobytes())
-    return hashlib.sha1(f'{im.size}'.encode() + a).hexdigest(), a.count(1)
+	a = bytes(1 if p > 0 else 0 for p in im.getchannel('A').tobytes())
+	return hashlib.sha1(f'{im.size}'.encode() + a).hexdigest(), a.count(1)
 
 
 def words(name):
-    return {w for w in re.split(r'[_\-\d]+', name) if len(w) > 2 and w not in STOP}
+	return {w for w in re.split(r'[_\-\d]+', name) if len(w) > 2 and w not in STOP}
 
 
 class Index:
-    def __init__(self):
-        self.pix, self.mask, self.img, self.by_word = {}, {}, {}, {}
+	def __init__(self):
+		self.pix, self.mask, self.img, self.by_word = {}, {}, {}, {}
 
-    def add(self, label, data):
-        im = rgba(data)
-        if im is None:
-            return
-        self.pix.setdefault(hashlib.sha1(im.tobytes()).hexdigest(), []).append(label)
-        if im.size[0] * im.size[1] > 65536:
-            return
-        self.img[label] = im
-        frames = [im]
-        w, h = im.size
-        if h > w and h % w == 0:
-            frames.append(im.crop((0, 0, w, w)))
-        for f in frames:
-            k, n = mask_key(f)
-            if n > 8:
-                self.mask.setdefault(k, []).append(label)
-        for wd in words(os.path.basename(label)[:-4]):
-            self.by_word.setdefault(wd, []).append(label)
+	def add(self, label, data):
+		im = rgba(data)
+		if im is None:
+			return
+		self.pix.setdefault(hashlib.sha1(im.tobytes()).hexdigest(), []).append(label)
+		if im.size[0] * im.size[1] > 65536:
+			return
+		self.img[label] = im
+		frames = [im]
+		w, h = im.size
+		if h > w and h % w == 0:
+			frames.append(im.crop((0, 0, w, w)))
+		for f in frames:
+			k, n = mask_key(f)
+			if n > 8:
+				self.mask.setdefault(k, []).append(label)
+		for wd in words(os.path.basename(label)[:-4]):
+			self.by_word.setdefault(wd, []).append(label)
 
-    def walk_zip(self, z, label, depth=0):
-        for n in z.namelist():
-            if n.endswith('.png') and '/textures/' in n:
-                self.add(f'{label}!{n}', z.read(n))
-            elif n.endswith('.jar') and depth < 2:
-                try:
-                    self.walk_zip(zipfile.ZipFile(io.BytesIO(z.read(n))), f'{label}!{os.path.basename(n)}', depth + 1)
-                except Exception:
-                    pass
+	def walk_zip(self, z, label, depth=0):
+		for n in z.namelist():
+			if n.endswith('.png') and '/textures/' in n:
+				self.add(f'{label}!{n}', z.read(n))
+			elif n.endswith('.jar') and depth < 2:
+				try:
+					self.walk_zip(zipfile.ZipFile(io.BytesIO(z.read(n))), f'{label}!{os.path.basename(n)}', depth + 1)
+				except Exception:
+					pass
 
 
 def build_index():
-    idx = Index()
-    jars = []
-    for d in ['mods', 'server_mods', 'client_mods', 'disabledmods', 'devmods', 'jar_archive', 'DecompiledMods',
-              'jarmods']:
-        jars += glob.glob(os.path.join(ROOT, d, '**', '*.jar'), recursive=True)
-    jars += glob.glob(os.path.join(ROOT, '*_upstream', '**', '*.jar'), recursive=True)
-    jars += [p for p in glob.glob(os.path.join(ROOT, 'development', '**', '*.jar'), recursive=True)
-             if '/build/' not in p and 'gradle' not in p]
-    jars += [os.path.expanduser('~/.minecraft/versions/1.19.2/1.19.2.jar')]
-    jars += glob.glob(os.path.join(ROOT, 'resourcepacks', '*.zip'))
-    for j in sorted(set(jars)):
-        if OWN_JAR.match(os.path.basename(j)) or not os.path.isfile(j):
-            continue
-        try:
-            idx.walk_zip(zipfile.ZipFile(j), os.path.relpath(j, ROOT))
-        except Exception as e:
-            print('skip', j, e, file=sys.stderr)
-    for d in ['DecompiledMods'] + [os.path.basename(p) for p in glob.glob(os.path.join(ROOT, '*_upstream'))]:
-        for p in glob.glob(os.path.join(ROOT, d, '**', 'textures', '**', '*.png'), recursive=True):
-            idx.add(os.path.relpath(p, ROOT), open(p, 'rb').read())
-    return idx
+	idx = Index()
+	jars = []
+	for d in ['mods', 'server_mods', 'client_mods', 'disabledmods', 'devmods', 'jar_archive', 'DecompiledMods',
+			  'jarmods']:
+		jars += glob.glob(os.path.join(ROOT, d, '**', '*.jar'), recursive=True)
+	jars += glob.glob(os.path.join(ROOT, '*_upstream', '**', '*.jar'), recursive=True)
+	jars += [p for p in glob.glob(os.path.join(ROOT, 'development', '**', '*.jar'), recursive=True)
+			 if '/build/' not in p and 'gradle' not in p]
+	jars += [os.path.expanduser('~/.minecraft/versions/1.19.2/1.19.2.jar')]
+	jars += glob.glob(os.path.join(ROOT, 'resourcepacks', '*.zip'))
+	for j in sorted(set(jars)):
+		if OWN_JAR.match(os.path.basename(j)) or not os.path.isfile(j):
+			continue
+		try:
+			idx.walk_zip(zipfile.ZipFile(j), os.path.relpath(j, ROOT))
+		except Exception as e:
+			print('skip', j, e, file=sys.stderr)
+	for d in ['DecompiledMods'] + [os.path.basename(p) for p in glob.glob(os.path.join(ROOT, '*_upstream'))]:
+		for p in glob.glob(os.path.join(ROOT, d, '**', 'textures', '**', '*.png'), recursive=True):
+			idx.add(os.path.relpath(p, ROOT), open(p, 'rb').read())
+	return idx
 
 
 def colour_map(src, out):
-    """(consistency, off-map pixels, share of pixels unchanged) of out read as a per-color recolour of src."""
-    if out.size != src.size:
-        out = out.crop((0, 0) + src.size)
-    m, same, tot = {}, 0, 0
-    for a, b in zip(src.getdata(), out.getdata()):
-        if a[3] == 0:
-            continue
-        tot += 1
-        same += a == b
-        m.setdefault(a, {}).setdefault(b, 0)
-        m[a][b] += 1
-    if not tot:
-        return 0, 0, 0
-    ok = sum(max(v.values()) for v in m.values())
-    return ok / tot, tot - ok, same / tot
+	"""(consistency, off-map pixels, share of pixels unchanged) of out read as a per-color recolour of src."""
+	if out.size != src.size:
+		out = out.crop((0, 0) + src.size)
+	m, same, tot = {}, 0, 0
+	for a, b in zip(src.getdata(), out.getdata()):
+		if a[3] == 0:
+			continue
+		tot += 1
+		same += a == b
+		m.setdefault(a, {}).setdefault(b, 0)
+		m[a][b] += 1
+	if not tot:
+		return 0, 0, 0
+	ok = sum(max(v.values()) for v in m.values())
+	return ok / tot, tot - ok, same / tot
 
 
 def tiekey(label):
-    return len(label), label
+	return len(label), label
 
 
 def classify(idx, path):
-    im = Image.open(os.path.join(ROOT, path)).convert('RGBA')
-    h = hashlib.sha1(im.tobytes()).hexdigest()
-    if h in idx.pix:
-        return 'copy', min(idx.pix[h], key=tiekey), ''
-    cands = []
-    w, ht = im.size
-    for f in ([im] + ([im.crop((0, 0, w, w))] if ht > w and ht % w == 0 else [])):
-        k, n = mask_key(f)
-        opaque = n == f.size[0] * f.size[1]
-        if not opaque:
-            cands += sorted(idx.mask.get(k, []), key=tiekey)[:60]
-        else:   # an opaque square matches every opaque square: use name words instead
-            for wd in words(os.path.basename(path)[:-4]):
-                cands += [c for c in sorted(idx.by_word.get(wd, []), key=tiekey)[:400] if idx.img[c].size == f.size]
-    best = None
-    for c in sorted(dict.fromkeys(cands), key=tiekey):   # strict > below: the first (shortest) wins a tie
-        r = colour_map(idx.img[c], im)
-        if best is None or (r[0], r[2]) > (best[1][0], best[1][2]):
-            best = (c, r)
-    if best is None or best[1][0] < 0.6:
-        return 'unmatched', '', ''
-    c, (cons, off, same) = best
-    cls = 'recolour' if cons >= 0.999 else 'edited'
-    return cls, c, f'consistency={cons:.3f} offmap_px={off} unchanged={same:.2f}'
+	im = Image.open(os.path.join(ROOT, path)).convert('RGBA')
+	h = hashlib.sha1(im.tobytes()).hexdigest()
+	if h in idx.pix:
+		return 'copy', min(idx.pix[h], key=tiekey), ''
+	cands = []
+	w, ht = im.size
+	for f in ([im] + ([im.crop((0, 0, w, w))] if ht > w and ht % w == 0 else [])):
+		k, n = mask_key(f)
+		opaque = n == f.size[0] * f.size[1]
+		if not opaque:
+			cands += sorted(idx.mask.get(k, []), key=tiekey)[:60]
+		else:   # an opaque square matches every opaque square: use name words instead
+			for wd in words(os.path.basename(path)[:-4]):
+				cands += [c for c in sorted(idx.by_word.get(wd, []), key=tiekey)[:400] if idx.img[c].size == f.size]
+	best = None
+	for c in sorted(dict.fromkeys(cands), key=tiekey):   # strict > below: the first (shortest) wins a tie
+		r = colour_map(idx.img[c], im)
+		if best is None or (r[0], r[2]) > (best[1][0], best[1][2]):
+			best = (c, r)
+	if best is None or best[1][0] < 0.6:
+		return 'unmatched', '', ''
+	c, (cons, off, same) = best
+	cls = 'recolour' if cons >= 0.999 else 'edited'
+	return cls, c, f'consistency={cons:.3f} offmap_px={off} unchanged={same:.2f}'
 
 
 def transcript_evidence(tdir):
-    """png basename -> set of 'owned' / 'paint' / 'script' from Claude Code session logs."""
-    ev = {}
-    draw = re.compile(r'putpixel|ImageDraw|\.rectangle\(|\.ellipse\(|\.polygon\(|px\[[^\]]+\]\s*=(?!=)|load\(\)\[')
-    for f in glob.glob(os.path.join(tdir, '*.jsonl')):
-        for line in open(f, errors='replace'):
-            if '"tool_use"' not in line or '.png' not in line:
-                continue
-            try:
-                o = json.loads(line)
-            except Exception:
-                continue
-            for c in (o.get('message') or {}).get('content') or []:
-                if not isinstance(c, dict) or c.get('type') != 'tool_use':
-                    continue
-                inp = c.get('input') or {}
-                t = inp.get('command') or inp.get('content') or inp.get('new_string') or ''
-                if not isinstance(t, str) or '.jsonl' in t or 'transcript' in t:
-                    continue
-                if re.search(r'palette_swap|combine_tex|scale_tex|upscale_sprites', t):
-                    kind = 'owned'
-                elif draw.search(t) and re.search(r'\.save\(', t):
-                    kind = 'paint'
-                elif re.search(r'(?:make|gen|generate)_[a-z_]+\.py|_texture\.py', t):
-                    kind = 'script'
-                else:
-                    continue
-                for n in set(re.findall(r'([A-Za-z0-9_\-]+)\.png', t)):
-                    ev.setdefault(n, set()).add(kind)
-    return ev
+	"""png basename -> set of 'owned' / 'paint' / 'script' from Claude Code session logs."""
+	ev = {}
+	draw = re.compile(r'putpixel|ImageDraw|\.rectangle\(|\.ellipse\(|\.polygon\(|px\[[^\]]+\]\s*=(?!=)|load\(\)\[')
+	for f in glob.glob(os.path.join(tdir, '*.jsonl')):
+		for line in open(f, errors='replace'):
+			if '"tool_use"' not in line or '.png' not in line:
+				continue
+			try:
+				o = json.loads(line)
+			except Exception:
+				continue
+			for c in (o.get('message') or {}).get('content') or []:
+				if not isinstance(c, dict) or c.get('type') != 'tool_use':
+					continue
+				inp = c.get('input') or {}
+				t = inp.get('command') or inp.get('content') or inp.get('new_string') or ''
+				if not isinstance(t, str) or '.jsonl' in t or 'transcript' in t:
+					continue
+				if re.search(r'palette_swap|combine_tex|scale_tex|upscale_sprites', t):
+					kind = 'owned'
+				elif draw.search(t) and re.search(r'\.save\(', t):
+					kind = 'paint'
+				elif re.search(r'(?:make|gen|generate)_[a-z_]+\.py|_texture\.py', t):
+					kind = 'script'
+				else:
+					continue
+				for n in set(re.findall(r'([A-Za-z0-9_\-]+)\.png', t)):
+					ev.setdefault(n, set()).add(kind)
+	return ev
 
 
 def load_sources():
-    rows = []
-    if os.path.isfile(SOURCES):
-        for r in table_io.read(SOURCES)[2]:
-            rows.append((r + [''] * 7)[:7])
-    return rows
+	rows = []
+	if os.path.isfile(SOURCES):
+		for r in table_io.read(SOURCES)[2]:
+			rows.append((r + [''] * 7)[:7])
+	return rows
 
 
 def auto(cls, match, ev):
-    if cls == 'copy':
-        return ('vanilla' if '1.19.2.jar' in match else 'upstream'), 'ok', ''
-    if ev == {'owned'} or ('owned' in ev and 'paint' not in ev):
-        return 'owned-tool', 'ok', 'transcript: made with the owner\'s tools'
-    if 'paint' in ev and 'owned' not in ev:
-        return 'ai-transform', 'redo', 'transcript: ad-hoc pixel script, not the owner\'s tools'
-    if 'paint' in ev:
-        return 'mixed', 'confirm', 'transcript: owner\'s tools and ad-hoc pixel code both touched it'
-    return 'unknown', 'confirm', ''
+	if cls == 'copy':
+		return ('vanilla' if '1.19.2.jar' in match else 'upstream'), 'ok', ''
+	if ev == {'owned'} or ('owned' in ev and 'paint' not in ev):
+		return 'owned-tool', 'ok', 'transcript: made with the owner\'s tools'
+	if 'paint' in ev and 'owned' not in ev:
+		return 'ai-transform', 'redo', 'transcript: ad-hoc pixel script, not the owner\'s tools'
+	if 'paint' in ev:
+		return 'mixed', 'confirm', 'transcript: owner\'s tools and ad-hoc pixel code both touched it'
+	return 'unknown', 'confirm', ''
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--transcripts', default=os.path.expanduser(
-        '~/.claude/projects/-home-liam--local-share-atlauncher-instances-CreativeEngineering2'))
-    ap.add_argument('--sheet', nargs=2, metavar=('STATUS', 'OUT'))
-    ap.add_argument('--write', action='store_true', help='write the ledger (default: check only)')
-    a = ap.parse_args()
+	ap = argparse.ArgumentParser()
+	ap.add_argument('--transcripts', default=os.path.expanduser(
+		'~/.claude/projects/-home-liam--local-share-atlauncher-instances-CreativeEngineering2'))
+	ap.add_argument('--sheet', nargs=2, metavar=('STATUS', 'OUT'))
+	ap.add_argument('--write', action='store_true', help='write the ledger (default: check only)')
+	a = ap.parse_args()
 
-    if a.sheet and os.path.isfile(LEDGER):
-        return sheet(a.sheet[0], a.sheet[1])
+	if a.sheet and os.path.isfile(LEDGER):
+		return sheet(a.sheet[0], a.sheet[1])
 
-    own = []
-    for base in ['development', 'kubejs/assets']:
-        for p in glob.glob(os.path.join(ROOT, base, '**', 'textures', '**', '*.png'), recursive=True):
-            rp = os.path.relpath(p, ROOT)
-            if not re.search(r'/(build|bin|run|jar_archive)/', rp):
-                own.append(rp)
-    idx = build_index()
-    ev = transcript_evidence(a.transcripts) if os.path.isdir(a.transcripts) else {}
-    src = load_sources()
-    os.makedirs(DOC, exist_ok=True)
-    counts = {}
-    out = []
-    if True:
-        for rp in sorted(own):
-            cls, match, detail = classify(idx, rp)
-            e = ev.get(os.path.basename(rp)[:-4], set())
-            row = next((r for r in src if fnmatch.fnmatch(rp, r[0])), None)
-            if row:
-                origin, source, tool, use, status, note = row[1:]
-            else:
-                origin, status, note = auto(cls, match, e)
-                source, tool, use = (match if cls != 'unmatched' else ''), '', ''
-            counts[status] = counts.get(status, 0) + 1
-            out.append([rp, cls, match, detail, '+'.join(sorted(e)), origin, source, tool, use, status, note])
-    counts_s = ' '.join(f'{k}={v}' for k, v in sorted(counts.items()))
-    if a.write:
-        table_io.write(LEDGER, LEDGER_HEAD, out)
-        print('ledger:', os.path.relpath(LEDGER, ROOT), counts_s)
-        return 0
-    old = {r[0]: r for r in table_io.read(LEDGER)[2]}
-    new = {r[0]: r for r in out}
-    # the transcript column depends on local session logs, so it is left out of the comparison
-    strip = lambda r: r[:4] + r[5:]
-    diff = sorted(k for k in set(old) | set(new) if k not in old or k not in new or strip(old[k]) != strip(new[k]))
-    print('ledger (check only, --write to update):', counts_s)
-    if diff:
-        print('%d ledger row(s) out of date, e.g. %s' % (len(diff), ', '.join(diff[:3])))
-    return 0
+	own = []
+	for base in ['development', 'kubejs/assets']:
+		for p in glob.glob(os.path.join(ROOT, base, '**', 'textures', '**', '*.png'), recursive=True):
+			rp = os.path.relpath(p, ROOT)
+			if not re.search(r'/(build|bin|run|jar_archive)/', rp):
+				own.append(rp)
+	idx = build_index()
+	ev = transcript_evidence(a.transcripts) if os.path.isdir(a.transcripts) else {}
+	src = load_sources()
+	os.makedirs(DOC, exist_ok=True)
+	counts = {}
+	out = []
+	if True:
+		for rp in sorted(own):
+			cls, match, detail = classify(idx, rp)
+			e = ev.get(os.path.basename(rp)[:-4], set())
+			row = next((r for r in src if fnmatch.fnmatch(rp, r[0])), None)
+			if row:
+				origin, source, tool, use, status, note = row[1:]
+			else:
+				origin, status, note = auto(cls, match, e)
+				source, tool, use = (match if cls != 'unmatched' else ''), '', ''
+			counts[status] = counts.get(status, 0) + 1
+			out.append([rp, cls, match, detail, '+'.join(sorted(e)), origin, source, tool, use, status, note])
+	counts_s = ' '.join(f'{k}={v}' for k, v in sorted(counts.items()))
+	if a.write:
+		table_io.write(LEDGER, LEDGER_HEAD, out)
+		print('ledger:', os.path.relpath(LEDGER, ROOT), counts_s)
+		return 0
+	old = {r[0]: r for r in table_io.read(LEDGER)[2]}
+	new = {r[0]: r for r in out}
+	# the transcript column depends on local session logs, so it is left out of the comparison
+	strip = lambda r: r[:4] + r[5:]
+	diff = sorted(k for k in set(old) | set(new) if k not in old or k not in new or strip(old[k]) != strip(new[k]))
+	print('ledger (check only, --write to update):', counts_s)
+	if diff:
+		print('%d ledger row(s) out of date, e.g. %s' % (len(diff), ', '.join(diff[:3])))
+	return 0
 
 
 def sheet(status, out):
-    rows = table_io.read(LEDGER)[2]
-    want, _, classes = status.partition(':')   # e.g. "swap,redo" or "confirm:edited,unmatched"
-    rows = [r for r in rows if r[9] in want.split(',') and (not classes or r[1] in classes.split(','))]
-    cell, cols = 48, 12
-    from PIL import ImageDraw
-    img = Image.new('RGBA', (cols * cell, ((len(rows) + cols - 1) // cols) * (cell + 10)), (60, 60, 60, 255))
-    d = ImageDraw.Draw(img)
-    for i, r in enumerate(rows):
-        t = Image.open(os.path.join(ROOT, r[0])).convert('RGBA')
-        if t.size[1] > t.size[0]:
-            t = t.crop((0, 0, t.size[0], t.size[0]))
-        t.thumbnail((cell - 8, cell - 8), Image.NEAREST)
-        t = t.resize((cell - 8, cell - 8), Image.NEAREST)
-        x, y = (i % cols) * cell + 4, (i // cols) * (cell + 10) + 2
-        img.alpha_composite(t, (x, y))
-        d.text((x - 2, y + cell - 8), os.path.basename(r[0])[:-4][:8], fill=(255, 255, 255, 255))
-    img.save(out)
-    print(out, len(rows), 'textures')
+	rows = table_io.read(LEDGER)[2]
+	want, _, classes = status.partition(':')   # e.g. "swap,redo" or "confirm:edited,unmatched"
+	rows = [r for r in rows if r[9] in want.split(',') and (not classes or r[1] in classes.split(','))]
+	cell, cols = 48, 12
+	from PIL import ImageDraw
+	img = Image.new('RGBA', (cols * cell, ((len(rows) + cols - 1) // cols) * (cell + 10)), (60, 60, 60, 255))
+	d = ImageDraw.Draw(img)
+	for i, r in enumerate(rows):
+		t = Image.open(os.path.join(ROOT, r[0])).convert('RGBA')
+		if t.size[1] > t.size[0]:
+			t = t.crop((0, 0, t.size[0], t.size[0]))
+		t.thumbnail((cell - 8, cell - 8), Image.NEAREST)
+		t = t.resize((cell - 8, cell - 8), Image.NEAREST)
+		x, y = (i % cols) * cell + 4, (i // cols) * (cell + 10) + 2
+		img.alpha_composite(t, (x, y))
+		d.text((x - 2, y + cell - 8), os.path.basename(r[0])[:-4][:8], fill=(255, 255, 255, 255))
+	img.save(out)
+	print(out, len(rows), 'textures')
 
 
 if __name__ == '__main__':
-    main()
+	main()

@@ -31,99 +31,99 @@ SILK = 'minecraft:silk_touch'
 
 
 def is_silk(cond):
-    """True when this condition can only pass with Silk Touch on the tool."""
-    kind = cond.get('condition')
-    if kind == 'minecraft:match_tool':
-        return SILK in json.dumps(cond.get('predicate', {}))
-    if kind == 'minecraft:alternative':
-        terms = cond.get('terms', [])
-        return bool(terms) and all(is_silk(t) for t in terms)
-    return False
+	"""True when this condition can only pass with Silk Touch on the tool."""
+	kind = cond.get('condition')
+	if kind == 'minecraft:match_tool':
+		return SILK in json.dumps(cond.get('predicate', {}))
+	if kind == 'minecraft:alternative':
+		terms = cond.get('terms', [])
+		return bool(terms) and all(is_silk(t) for t in terms)
+	return False
 
 
 def own_item_paths(entry, item, conds, out):
-    """Collects, per entry that gives `item`, whether its condition chain needs Silk Touch."""
-    chain = conds + entry.get('conditions', [])
-    kind = entry.get('type')
-    if kind in ('minecraft:alternatives', 'minecraft:group', 'minecraft:sequence'):
-        for child in entry.get('children', []):
-            own_item_paths(child, item, chain, out)
-    elif kind == 'minecraft:item' and entry.get('name') == item:
-        out.append(any(is_silk(c) for c in chain))
+	"""Collects, per entry that gives `item`, whether its condition chain needs Silk Touch."""
+	chain = conds + entry.get('conditions', [])
+	kind = entry.get('type')
+	if kind in ('minecraft:alternatives', 'minecraft:group', 'minecraft:sequence'):
+		for child in entry.get('children', []):
+			own_item_paths(child, item, chain, out)
+	elif kind == 'minecraft:item' and entry.get('name') == item:
+		out.append(any(is_silk(c) for c in chain))
 
 
 def other_free_drop(entry, item, conds):
-    """True when an entry gives something other than `item` without needing Silk Touch."""
-    chain = conds + entry.get('conditions', [])
-    kind = entry.get('type')
-    if kind in ('minecraft:alternatives', 'minecraft:group', 'minecraft:sequence'):
-        return any(other_free_drop(c, item, chain) for c in entry.get('children', []))
-    if kind in ('minecraft:item', 'minecraft:tag', 'minecraft:loot_table', 'minecraft:dynamic'):
-        return entry.get('name') != item and not any(is_silk(c) for c in chain)
-    return False
+	"""True when an entry gives something other than `item` without needing Silk Touch."""
+	chain = conds + entry.get('conditions', [])
+	kind = entry.get('type')
+	if kind in ('minecraft:alternatives', 'minecraft:group', 'minecraft:sequence'):
+		return any(other_free_drop(c, item, chain) for c in entry.get('children', []))
+	if kind in ('minecraft:item', 'minecraft:tag', 'minecraft:loot_table', 'minecraft:dynamic'):
+		return entry.get('name') != item and not any(is_silk(c) for c in chain)
+	return False
 
 
 def classify(table, item):
-    """'required' (nothing drops without Silk Touch), 'differs' (something else drops) or None."""
-    paths = []
-    for pool in table.get('pools', []):
-        for entry in pool.get('entries', []):
-            own_item_paths(entry, item, pool.get('conditions', []), paths)
-    if not (paths and all(paths)):
-        return None
-    for pool in table.get('pools', []):
-        for entry in pool.get('entries', []):
-            if other_free_drop(entry, item, pool.get('conditions', [])):
-                return 'differs'
-    return 'required'
+	"""'required' (nothing drops without Silk Touch), 'differs' (something else drops) or None."""
+	paths = []
+	for pool in table.get('pools', []):
+		for entry in pool.get('entries', []):
+			own_item_paths(entry, item, pool.get('conditions', []), paths)
+	if not (paths and all(paths)):
+		return None
+	for pool in table.get('pools', []):
+		for entry in pool.get('entries', []):
+			if other_free_drop(entry, item, pool.get('conditions', [])):
+				return 'differs'
+	return 'required'
 
 
 def scan():
-    blocks = {'required': [], 'differs': []}
-    for path in sorted(glob.glob(str(DUMP / '*.json'))):
-        namespace = Path(path).stem
-        with open(path) as f:
-            tables = json.load(f)
-        for key, table in tables.items():
-            if not key.startswith('blocks/') or table.get('type') != 'minecraft:block':
-                continue
-            block = namespace + ':' + key[len('blocks/'):]
-            kind = classify(table, block)
-            if kind:
-                blocks[kind].append(block)
-    return {k: sorted(v) for k, v in blocks.items()}
+	blocks = {'required': [], 'differs': []}
+	for path in sorted(glob.glob(str(DUMP / '*.json'))):
+		namespace = Path(path).stem
+		with open(path) as f:
+			tables = json.load(f)
+		for key, table in tables.items():
+			if not key.startswith('blocks/') or table.get('type') != 'minecraft:block':
+				continue
+			block = namespace + ':' + key[len('blocks/'):]
+			kind = classify(table, block)
+			if kind:
+				blocks[kind].append(block)
+	return {k: sorted(v) for k, v in blocks.items()}
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--dry-run', action='store_true', help='print the count, write nothing')
-    ap.add_argument('--list', action='store_true', help='print every block')
-    args = ap.parse_args()
-    if not DUMP.is_dir():
-        sys.exit(f'no loot dump at {DUMP}: run /dumploot first')
-    blocks = scan()
-    if args.list:
-        for k, v in blocks.items():
-            print(k + ':\n' + '\n'.join(v))
-    print(f"{len(blocks['required'])} blocks drop nothing without Silk Touch, "
-          f"{len(blocks['differs'])} drop something else (Silk Touch gives the block itself)")
-    if args.dry_run:
-        return
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    doc = {
-        '_readme': [
-            'Generated by tools/gen_silk_touch_blocks.py from the loot dump (/dumploot). Do not edit:',
-            'rerun /cdevgen run silk_touch_blocks. Read by kubejs/data/creativecommon/kubejs/tags/wthittags.js into',
-            'creativecommon:wthit/needs_silk_touch and wthit/silk_touch_differs (WTHIT Silk Touch line, wthit_lines.md 2.11).',
-        ],
-        'required': blocks['required'],
-        'differs': blocks['differs'],
-    }
-    with open(OUT, 'w') as f:
-        json.dump(doc, f, indent='\t')
-        f.write('\n')
-    print(f'wrote {OUT.relative_to(INSTANCE)}')
+	ap = argparse.ArgumentParser()
+	ap.add_argument('--dry-run', action='store_true', help='print the count, write nothing')
+	ap.add_argument('--list', action='store_true', help='print every block')
+	args = ap.parse_args()
+	if not DUMP.is_dir():
+		sys.exit(f'no loot dump at {DUMP}: run /dumploot first')
+	blocks = scan()
+	if args.list:
+		for k, v in blocks.items():
+			print(k + ':\n' + '\n'.join(v))
+	print(f"{len(blocks['required'])} blocks drop nothing without Silk Touch, "
+		  f"{len(blocks['differs'])} drop something else (Silk Touch gives the block itself)")
+	if args.dry_run:
+		return
+	OUT.parent.mkdir(parents=True, exist_ok=True)
+	doc = {
+		'_readme': [
+			'Generated by tools/gen_silk_touch_blocks.py from the loot dump (/dumploot). Do not edit:',
+			'rerun /cdevgen run silk_touch_blocks. Read by kubejs/data/creativecommon/kubejs/tags/wthittags.js into',
+			'creativecommon:wthit/needs_silk_touch and wthit/silk_touch_differs (WTHIT Silk Touch line, wthit_lines.md 2.11).',
+		],
+		'required': blocks['required'],
+		'differs': blocks['differs'],
+	}
+	with open(OUT, 'w') as f:
+		json.dump(doc, f, indent='\t')
+		f.write('\n')
+	print(f'wrote {OUT.relative_to(INSTANCE)}')
 
 
 if __name__ == '__main__':
-    main()
+	main()

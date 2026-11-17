@@ -24,77 +24,77 @@ import terrain_adaptation_scan as T  # noqa: E402
 ROOT = T.ROOT
 LAYERS = 3
 EARTH = {'minecraft:dirt', 'minecraft:grass_block', 'minecraft:coarse_dirt', 'minecraft:podzol', 'minecraft:rooted_dirt',
-         'minecraft:mud', 'minecraft:moss_block', 'minecraft:mycelium', 'minecraft:sand', 'minecraft:red_sand',
-         'minecraft:gravel', 'minecraft:clay', 'minecraft:dirt_path', 'minecraft:farmland', 'minecraft:muddy_mangrove_roots'}
+		 'minecraft:mud', 'minecraft:moss_block', 'minecraft:mycelium', 'minecraft:sand', 'minecraft:red_sand',
+		 'minecraft:gravel', 'minecraft:clay', 'minecraft:dirt_path', 'minecraft:farmland', 'minecraft:muddy_mangrove_roots'}
 SKIP = {'minecraft:air', 'minecraft:cave_air', 'minecraft:structure_void', 'minecraft:jigsaw', 'minecraft:structure_block'}
 
 
 def klass(name):
-    if name in EARTH:
-        return 'earth'
-    if 'sandstone' in name:
-        return 'sandstone'
-    if 'terracotta' in name:
-        return 'terracotta'
-    if any(w in name for w in ('stone', 'cobble', 'andesite', 'diorite', 'granite', 'deepslate', 'brick', 'basalt', 'tuff')):
-        return 'stone'
-    if any(w in name for w in ('plank', '_log', '_wood', 'stripped_', 'fence', '_slab', '_stairs')):
-        return 'wood'
-    return 'other'
+	if name in EARTH:
+		return 'earth'
+	if 'sandstone' in name:
+		return 'sandstone'
+	if 'terracotta' in name:
+		return 'terracotta'
+	if any(w in name for w in ('stone', 'cobble', 'andesite', 'diorite', 'granite', 'deepslate', 'brick', 'basalt', 'tuff')):
+		return 'stone'
+	if any(w in name for w in ('plank', '_log', '_wood', 'stripped_', 'fence', '_slab', '_stairs')):
+		return 'wood'
+	return 'other'
 
 
 def base_counts(raw):
-    d = T.S.read_template(raw)
-    if d is None:
-        return None
-    palette = d.get('palette') or (d.get('palettes') or [[]])[0]
-    names = [p.get('Name', 'minecraft:air') for p in palette]
-    c, ids = Counter(), Counter()
-    for b in d.get('blocks', []):
-        s = b.get('state', 0)
-        if s >= len(names) or int(b['pos'][1]) >= LAYERS:
-            continue
-        n = names[s]
-        if n in SKIP:
-            continue
-        c[klass(n)] += 1
-        ids[n] += 1
-    return c, ids
+	d = T.S.read_template(raw)
+	if d is None:
+		return None
+	palette = d.get('palette') or (d.get('palettes') or [[]])[0]
+	names = [p.get('Name', 'minecraft:air') for p in palette]
+	c, ids = Counter(), Counter()
+	for b in d.get('blocks', []):
+		s = b.get('state', 0)
+		if s >= len(names) or int(b['pos'][1]) >= LAYERS:
+			continue
+		n = names[s]
+		if n in SKIP:
+			continue
+		c[klass(n)] += 1
+		ids[n] += 1
+	return c, ids
 
 
 def main():
-    tags = json.loads((T.WORLDGEN / 'structure_tags.json').read_text())['tags']
-    want = sys.argv[1:] or sorted(set(tags['land/desert']['values']) | set(tags['land/badlands']['values']))
-    structs, pools, templates, _ = T.load_worldgen()
-    live = json.loads((T.WORLDGEN / 'pool_config.json').read_text())['pools']
-    pad, plants, _ = T.load_tags()
-    cache = T.TemplateCache(templates, pad, plants, False)
-    for sid in want:
-        d = structs.get(sid)
-        start = T.G.norm_id(d['start_pool']) if d and d.get('start_pool') else None
-        size = int((d or {}).get('size', 1) or 1)
-        if not start and sid in T.VANILLA_JIGSAW:
-            start, size, _ta = T.VANILLA_JIGSAW[sid]
-        if not start:
-            print(f'{sid}: not a jigsaw (legacy or custom pieces), no templates to read')
-            continue
-        reach = T.reach(start, size, pools, live, cache.get)
-        tot, ids, n = Counter(), Counter(), 0
-        for tid, proj in reach.items():
-            if proj == 'terrain_matching' or tid not in templates:
-                continue
-            label, read, name = templates[tid]
-            r = base_counts(read(name))
-            if not r:
-                continue
-            n += 1
-            tot.update(r[0])
-            ids.update(r[1])
-        all_ = sum(tot.values()) or 1
-        share = ', '.join(f'{k} {v} ({100 * v // all_}%)' for k, v in tot.most_common())
-        top = ', '.join(f'{k.split(":")[1]} {v}' for k, v in ids.most_common(5))
-        print(f'{sid}: {n} templates | {share or "nothing"} | top: {top}')
+	tags = json.loads((T.WORLDGEN / 'structure_tags.json').read_text())['tags']
+	want = sys.argv[1:] or sorted(set(tags['land/desert']['values']) | set(tags['land/badlands']['values']))
+	structs, pools, templates, _ = T.load_worldgen()
+	live = json.loads((T.WORLDGEN / 'pool_config.json').read_text())['pools']
+	pad, plants, _ = T.load_tags()
+	cache = T.TemplateCache(templates, pad, plants, False)
+	for sid in want:
+		d = structs.get(sid)
+		start = T.G.norm_id(d['start_pool']) if d and d.get('start_pool') else None
+		size = int((d or {}).get('size', 1) or 1)
+		if not start and sid in T.VANILLA_JIGSAW:
+			start, size, _ta = T.VANILLA_JIGSAW[sid]
+		if not start:
+			print(f'{sid}: not a jigsaw (legacy or custom pieces), no templates to read')
+			continue
+		reach = T.reach(start, size, pools, live, cache.get)
+		tot, ids, n = Counter(), Counter(), 0
+		for tid, proj in reach.items():
+			if proj == 'terrain_matching' or tid not in templates:
+				continue
+			label, read, name = templates[tid]
+			r = base_counts(read(name))
+			if not r:
+				continue
+			n += 1
+			tot.update(r[0])
+			ids.update(r[1])
+		all_ = sum(tot.values()) or 1
+		share = ', '.join(f'{k} {v} ({100 * v // all_}%)' for k, v in tot.most_common())
+		top = ', '.join(f'{k.split(":")[1]} {v}' for k, v in ids.most_common(5))
+		print(f'{sid}: {n} templates | {share or "nothing"} | top: {top}')
 
 
 if __name__ == '__main__':
-    main()
+	main()

@@ -26,29 +26,29 @@ LINE = re.compile(r'^(\s*blacklist\s*=\s*)\[.*\]\s*$', re.M)
 
 
 def main():
-    tags = json.loads(TAGS.read_text())
-    drinks = set(DRINK_ITEMS)
-    for t in DRINK_TAGS:
-        drinks.update(x for x in tags.get(t, []) if not x.startswith('#'))
-    entries = BASE + sorted(drinks - set(BASE))
-    value = '[' + ', '.join(json.dumps(e) for e in entries) + ']'
-    targets = list(TARGETS)
-    if '--worlds' in sys.argv:
-        targets += sorted(ROOT.glob('saves/*/serverconfig/solapplepie-server.toml'))
-    changed = 0
-    for path in targets:
-        text = path.read_text()
-        if not LINE.search(text):
-            print(f'ERROR no blacklist line in {path.relative_to(ROOT)}')
-            return 2
-        new = LINE.sub(lambda m: m.group(1) + value, text, count=1)
-        if new != text:
-            path.write_text(new)
-            changed += 1
-            print(f'wrote {path.relative_to(ROOT)}')
-    print(f'{len(entries)} blacklist entries ({len(entries) - len(BASE)} drinks), {changed} files changed')
-    return 0
+	tags = json.loads(TAGS.read_text())
+	drinks = set(DRINK_ITEMS)
+	for t in DRINK_TAGS:
+		drinks.update(x for x in tags.get(t, []) if not x.startswith('#'))
+	entries = BASE + sorted(drinks - set(BASE))
+	value = '[' + ', '.join(json.dumps(e) for e in entries) + ']'
+	targets = list(TARGETS)
+	if '--worlds' in sys.argv:
+		targets += sorted(ROOT.glob('saves/*/serverconfig/solapplepie-server.toml'))
+	changed = 0
+	for path in targets:
+		text = path.read_text()
+		if not LINE.search(text):
+			print(f'ERROR no blacklist line in {path.relative_to(ROOT)}')
+			return 2
+		new = LINE.sub(lambda m: m.group(1) + value, text, count=1)
+		if new != text:
+			path.write_text(new)
+			changed += 1
+			print(f'wrote {path.relative_to(ROOT)}')
+	print(f'{len(entries)} blacklist entries ({len(entries) - len(BASE)} drinks), {changed} files changed')
+	return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+	sys.exit(main())

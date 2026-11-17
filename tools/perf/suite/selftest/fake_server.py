@@ -18,103 +18,103 @@ lock = threading.Lock()
 
 
 def log(text):
-    LOG.write(time.strftime("[%H:%M:%S] ") + text + "\n")
+	LOG.write(time.strftime("[%H:%M:%S] ") + text + "\n")
 
 
 if os.path.exists("crash_next_boot"):
-    os.remove("crash_next_boot")
-    os.makedirs("crash-reports", exist_ok=True)
-    open("crash-reports/crash-fake-server.txt", "w").write("---- Minecraft Crash Report ----\nfake\n")
-    log("Crash report saved to: ./crash-reports/crash-fake-server.txt")
-    sys.exit(1)
+	os.remove("crash_next_boot")
+	os.makedirs("crash-reports", exist_ok=True)
+	open("crash-reports/crash-fake-server.txt", "w").write("---- Minecraft Crash Report ----\nfake\n")
+	log("Crash report saved to: ./crash-reports/crash-fake-server.txt")
+	sys.exit(1)
 
 ticks = open(f"perf/bot/ticks-{int(time.time() * 1000)}.csv", "w")
 
 
 def write(line):
-    with lock:
-        ticks.write(line)
+	with lock:
+		ticks.write(line)
 
 
 def mark(label):
-    write(f"m,{int(time.time() * 1000)},{state['tick']},{label}\n")
-    with lock:
-        ticks.flush()
+	write(f"m,{int(time.time() * 1000)},{state['tick']},{label}\n")
+	with lock:
+		ticks.flush()
 
 
 def ticker():
-    while True:
-        if state["ticking"]:
-            state["tick"] += 1
-            t = state["tick"]
-            write(f"t,{t},{5000 + (t % 7) * 300}\n")
-            if t % 20 == 0:
-                write(f"s,{int(time.time() * 1000)},{t},1,123,441,2048\n")
-                with lock:
-                    ticks.flush()
-        time.sleep(0.05)
+	while True:
+		if state["ticking"]:
+			state["tick"] += 1
+			t = state["tick"]
+			write(f"t,{t},{5000 + (t % 7) * 300}\n")
+			if t % 20 == 0:
+				write(f"s,{int(time.time() * 1000)},{t},1,123,441,2048\n")
+				with lock:
+					ticks.flush()
+		time.sleep(0.05)
 
 
 def handle(cmd):
-    if cmd == "pbot status":
-        return "cdevperfbot ok tick %d bots 0 out perf/bot" % state["tick"]
-    if cmd.startswith("pbot spawn"):
-        n = cmd.split()[2]
-        return f"bot {n} at 10 64 -20 in minecraft:overworld"
-    if cmd.startswith("pbot mark "):
-        mark(cmd[10:])
-        return "marked"
-    if cmd.startswith("pbot census "):
-        tag = cmd.split()[2]
-        open(f"perf/bot/census-{tag}.json", "w").write('{"tick": %d}' % state["tick"])
-        return f"census {tag} entities 123 block_entities 0"
-    if cmd == "stop":
-        log("Stopping server")
-        log("All dimensions are saved")
-        threading.Timer(0.5, lambda: os._exit(0)).start()
-        return "Stopping the server"
-    if cmd == "fake die9":
-        threading.Timer(0.3, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
-        return "dying"
-    if cmd == "fake hang":
-        state["ticking"] = False
-        return "hanging"
-    if cmd == "fake oom":
-        log("java.lang.OutOfMemoryError: Java heap space")
-        threading.Timer(0.3, lambda: os._exit(1)).start()
-        return "oom"
-    if cmd == "fake crashnext":
-        open("crash_next_boot", "w").write("1")
-        return "armed"
-    return "ok"
+	if cmd == "pbot status":
+		return "cdevperfbot ok tick %d bots 0 out perf/bot" % state["tick"]
+	if cmd.startswith("pbot spawn"):
+		n = cmd.split()[2]
+		return f"bot {n} at 10 64 -20 in minecraft:overworld"
+	if cmd.startswith("pbot mark "):
+		mark(cmd[10:])
+		return "marked"
+	if cmd.startswith("pbot census "):
+		tag = cmd.split()[2]
+		open(f"perf/bot/census-{tag}.json", "w").write('{"tick": %d}' % state["tick"])
+		return f"census {tag} entities 123 block_entities 0"
+	if cmd == "stop":
+		log("Stopping server")
+		log("All dimensions are saved")
+		threading.Timer(0.5, lambda: os._exit(0)).start()
+		return "Stopping the server"
+	if cmd == "fake die9":
+		threading.Timer(0.3, lambda: os.kill(os.getpid(), signal.SIGKILL)).start()
+		return "dying"
+	if cmd == "fake hang":
+		state["ticking"] = False
+		return "hanging"
+	if cmd == "fake oom":
+		log("java.lang.OutOfMemoryError: Java heap space")
+		threading.Timer(0.3, lambda: os._exit(1)).start()
+		return "oom"
+	if cmd == "fake crashnext":
+		open("crash_next_boot", "w").write("1")
+		return "armed"
+	return "ok"
 
 
 def client(conn):
-    def read_exact(n):
-        b = b""
-        while len(b) < n:
-            c = conn.recv(n - len(b))
-            if not c:
-                raise ConnectionError
-            b += c
-        return b
+	def read_exact(n):
+		b = b""
+		while len(b) < n:
+			c = conn.recv(n - len(b))
+			if not c:
+				raise ConnectionError
+			b += c
+		return b
 
-    def send(rid, body):
-        pkt = struct.pack("<ii", rid, 0) + body.encode() + b"\x00\x00"
-        conn.sendall(struct.pack("<i", len(pkt)) + pkt)
+	def send(rid, body):
+		pkt = struct.pack("<ii", rid, 0) + body.encode() + b"\x00\x00"
+		conn.sendall(struct.pack("<i", len(pkt)) + pkt)
 
-    try:
-        while True:
-            (n,) = struct.unpack("<i", read_exact(4))
-            p = read_exact(n)
-            rid, kind = struct.unpack("<ii", p[:8])
-            body = p[8:-2].decode()
-            if kind == 3:
-                send(rid if body == props["rcon.password"] else -1, "")
-            else:
-                send(rid, handle(body))
-    except (ConnectionError, OSError):
-        conn.close()
+	try:
+		while True:
+			(n,) = struct.unpack("<i", read_exact(4))
+			p = read_exact(n)
+			rid, kind = struct.unpack("<ii", p[:8])
+			body = p[8:-2].decode()
+			if kind == 3:
+				send(rid if body == props["rcon.password"] else -1, "")
+			else:
+				send(rid, handle(body))
+	except (ConnectionError, OSError):
+		conn.close()
 
 
 time.sleep(1)
@@ -126,5 +126,5 @@ srv.listen(4)
 log('Done (1.000s)! For help, type "help"')
 mark("server_starting")
 while True:
-    c, _ = srv.accept()
-    threading.Thread(target=client, args=(c,), daemon=True).start()
+	c, _ = srv.accept()
+	threading.Thread(target=client, args=(c,), daemon=True).start()

@@ -43,9 +43,9 @@ ASSET_DIR = os.path.join(INSTANCE, "kubejs", "assets", "creativeengineering", "t
 # Painted from Create: Deep Dark's echo_sword.png frame 0. Use these EXACT
 # colors for anything that should pulse.
 RAMP = [
-    (5, 16, 16), (9, 28, 28), (11, 34, 34), (14, 43, 43),
-    (21, 64, 64), (27, 82, 82), (28, 85, 85), (32, 97, 97),
-    (36, 109, 109), (44, 131, 131), (45, 135, 135), (49, 148, 148),
+	(5, 16, 16), (9, 28, 28), (11, 34, 34), (14, 43, 43),
+	(21, 64, 64), (27, 82, 82), (28, 85, 85), (32, 97, 97),
+	(36, 109, 109), (44, 131, 131), (45, 135, 135), (49, 148, 148),
 ]
 RAMP_IDX = {c: i for i, c in enumerate(RAMP)}
 
@@ -58,84 +58,84 @@ FRAMES = 12
 
 
 def _lum(c):
-    return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]
+	return 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]
 
 
 def _nearest(c, palette):
-    return min(palette, key=lambda p: sum((a - b) ** 2 for a, b in zip(p, c[:3])))
+	return min(palette, key=lambda p: sum((a - b) ** 2 for a, b in zip(p, c[:3])))
 
 
 def animate(paths):
-    for path in paths:
-        src = Image.open(path).convert("RGBA")
-        w, _ = src.size
-        if w != 16:
-            print(f"  ! {path}: width {w} != 16, skipping"); continue
-        frame0 = src.crop((0, 0, 16, 16))
-        px0 = list(frame0.getdata())
+	for path in paths:
+		src = Image.open(path).convert("RGBA")
+		w, _ = src.size
+		if w != 16:
+			print(f"  ! {path}: width {w} != 16, skipping"); continue
+		frame0 = src.crop((0, 0, 16, 16))
+		px0 = list(frame0.getdata())
 
-        strip = Image.new("RGBA", (16, 16 * FRAMES), (0, 0, 0, 0))
-        for f in range(FRAMES):
-            fpx = []
-            for p in px0:
-                if p[3] == 0:
-                    fpx.append(p); continue
-                key = (p[0], p[1], p[2])
-                if key in RAMP_IDX:                       # a glow pixel -> rotate
-                    fpx.append((*RAMP[(RAMP_IDX[key] + f) % FRAMES], p[3]))
-                else:                                    # static
-                    fpx.append(p)
-            fimg = Image.new("RGBA", (16, 16)); fimg.putdata(fpx)
-            strip.paste(fimg, (0, f * 16))
+		strip = Image.new("RGBA", (16, 16 * FRAMES), (0, 0, 0, 0))
+		for f in range(FRAMES):
+			fpx = []
+			for p in px0:
+				if p[3] == 0:
+					fpx.append(p); continue
+				key = (p[0], p[1], p[2])
+				if key in RAMP_IDX:                       # a glow pixel -> rotate
+					fpx.append((*RAMP[(RAMP_IDX[key] + f) % FRAMES], p[3]))
+				else:                                    # static
+					fpx.append(p)
+			fimg = Image.new("RGBA", (16, 16)); fimg.putdata(fpx)
+			strip.paste(fimg, (0, f * 16))
 
-        out = os.path.splitext(path)[0]
-        if out.endswith(".png"):
-            out = out[:-4]
-        out += ".png"
-        strip.save(out)
-        with open(out + ".mcmeta", "w") as fh:
-            json.dump(MCMETA, fh, indent=2)
-        glow = sum(1 for p in px0 if p[3] and (p[0], p[1], p[2]) in RAMP_IDX)
-        print(f"  {os.path.basename(out)}  ({glow} glow px)  + .mcmeta")
+		out = os.path.splitext(path)[0]
+		if out.endswith(".png"):
+			out = out[:-4]
+		out += ".png"
+		strip.save(out)
+		with open(out + ".mcmeta", "w") as fh:
+			json.dump(MCMETA, fh, indent=2)
+		glow = sum(1 for p in px0 if p[3] and (p[0], p[1], p[2]) in RAMP_IDX)
+		print(f"  {os.path.basename(out)}  ({glow} glow px)  + .mcmeta")
 
 
 def _recolor_diamond(tool_img):
-    """Rough diamond-shape -> echo-palette conversion for a frame-0 starter.
+	"""Rough diamond-shape -> echo-palette conversion for a frame-0 starter.
        Diamond's gem head is teal -> head, brown stick -> handle. Clean split."""
-    out = []
-    for c in tool_img.convert("RGBA").getdata():
-        if c[3] == 0:
-            out.append(c); continue
-        r, g, b = c[:3]
-        if b > r + 10:                                          # the teal gem head
-            t = max(0.0, min(1.0, (_lum(c) - 24) / (180 - 24)))
-            out.append((*RAMP[round(t * (FRAMES - 1))], c[3]))
-        elif _lum(c) < 22:
-            out.append((*OUTLINE[1], c[3]))                     # near-black -> edge
-        else:
-            out.append((*_nearest(c, HANDLE), c[3]))            # brown stick
-    img = Image.new("RGBA", tool_img.size); img.putdata(out)
-    return img
+	out = []
+	for c in tool_img.convert("RGBA").getdata():
+		if c[3] == 0:
+			out.append(c); continue
+		r, g, b = c[:3]
+		if b > r + 10:                                          # the teal gem head
+			t = max(0.0, min(1.0, (_lum(c) - 24) / (180 - 24)))
+			out.append((*RAMP[round(t * (FRAMES - 1))], c[3]))
+		elif _lum(c) < 22:
+			out.append((*OUTLINE[1], c[3]))                     # near-black -> edge
+		else:
+			out.append((*_nearest(c, HANDLE), c[3]))            # brown stick
+	img = Image.new("RGBA", tool_img.size); img.putdata(out)
+	return img
 
 
 def starter():
-    ddir = os.environ.get("DIAMOND_DIR", HERE)
-    os.makedirs(ASSET_DIR, exist_ok=True)
-    for tool in ("pickaxe", "axe", "shovel", "hoe"):
-        srcp = os.path.join(ddir, f"diamond_{tool}.png")
-        if not os.path.exists(srcp):
-            print(f"  ! missing {srcp}  (unzip assets/minecraft/textures/item/ from the client jar)")
-            continue
-        dst = os.path.join(ASSET_DIR, f"echo_{tool}.png")
-        _recolor_diamond(Image.open(srcp)).save(dst)
-        print(f"  {dst}  (frame-0 starter — refine, then: echo_texture.py animate {dst})")
+	ddir = os.environ.get("DIAMOND_DIR", HERE)
+	os.makedirs(ASSET_DIR, exist_ok=True)
+	for tool in ("pickaxe", "axe", "shovel", "hoe"):
+		srcp = os.path.join(ddir, f"diamond_{tool}.png")
+		if not os.path.exists(srcp):
+			print(f"  ! missing {srcp}  (unzip assets/minecraft/textures/item/ from the client jar)")
+			continue
+		dst = os.path.join(ASSET_DIR, f"echo_{tool}.png")
+		_recolor_diamond(Image.open(srcp)).save(dst)
+		print(f"  {dst}  (frame-0 starter — refine, then: echo_texture.py animate {dst})")
 
 
 if __name__ == "__main__":
-    if len(sys.argv) >= 2 and sys.argv[1] == "animate" and len(sys.argv) >= 3:
-        animate(sys.argv[2:])
-    elif len(sys.argv) == 2 and sys.argv[1] == "starter":
-        starter()
-    else:
-        print(__doc__)
-        sys.exit(1)
+	if len(sys.argv) >= 2 and sys.argv[1] == "animate" and len(sys.argv) >= 3:
+		animate(sys.argv[2:])
+	elif len(sys.argv) == 2 and sys.argv[1] == "starter":
+		starter()
+	else:
+		print(__doc__)
+		sys.exit(1)

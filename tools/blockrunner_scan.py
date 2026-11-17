@@ -34,111 +34,111 @@ OUT = os.path.join(ROOT, 'tools', 'blockrunner_untagged_blocks.json')
 BS = re.compile(r'^assets/([a-z0-9_.-]+)/blockstates/([a-z0-9_/.-]+)\.json$')
 
 def blockstate_ids(z, out):
-    for n in z.namelist():
-        m = BS.match(n)
-        if m: out.add(m.group(1) + ':' + m.group(2))
-        elif n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
-            try: blockstate_ids(zipfile.ZipFile(io.BytesIO(z.read(n))), out)
-            except zipfile.BadZipFile: pass
+	for n in z.namelist():
+		m = BS.match(n)
+		if m: out.add(m.group(1) + ':' + m.group(2))
+		elif n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
+			try: blockstate_ids(zipfile.ZipFile(io.BytesIO(z.read(n))), out)
+			except zipfile.BadZipFile: pass
 
 colors = r'(?<![a-z])(white|orange|magenta|light_blue|yellow|lime|pink|gray|light_gray|cyan|purple|blue|brown|green|red|black)(?![a-z])'
 woods = (r'(?<![a-z])(oak|spruce|birch|jungle|acacia|dark_oak|mangrove|crimson|warped|bamboo|azalea|blossom|ancient|twisted'
-    r'|dreamwood|livingwood|rose|rubber|smoked|spirit|rubberwood|cherry)(?![a-z])')
+	r'|dreamwood|livingwood|rose|rubber|smoked|spirit|rubberwood|cherry)(?![a-z])')
 
 def collapse(path):
-    return re.sub(woods, '{w}', re.sub(colors, '{c}', path))
+	return re.sub(woods, '{w}', re.sub(colors, '{c}', path))
 
 def print_groups(groups):
-    for ns in sorted(groups, key=lambda n: (-sum(groups[n].values()), n)):
-        print('## %s %d' % (ns, sum(groups[ns].values())))
-        print(' '.join(p + ('x%d' % n if n > 1 else '') for p, n in groups[ns].items()))
+	for ns in sorted(groups, key=lambda n: (-sum(groups[n].values()), n)):
+		print('## %s %d' % (ns, sum(groups[ns].values())))
+		print(' '.join(p + ('x%d' % n if n > 1 else '') for p, n in groups[ns].items()))
 
 PLANT = re.compile(r'(Crop|Bush|Plant|Vine|Stem|Grass|Fern|Flower|Rope|Cane|Reed|Web|Strand|Moss|Sprout|Weed|Leaves|Pile'
-    r'|Tendon|Silk|Root|Berry|Tomato|Rice|Hemp|Sapling|Shrub|Clover|Kelp|Coral|Lichen|Petal|Mushroom|Fungus|Propagule'
-    r'|Wire|Thorn|Pickerel|Lily|Dripleaf|Spore|Shroom|Colony|Succulent)')
+	r'|Tendon|Silk|Root|Berry|Tomato|Rice|Hemp|Sapling|Shrub|Clover|Kelp|Coral|Lichen|Petal|Mushroom|Fungus|Propagule'
+	r'|Wire|Thorn|Pickerel|Lily|Dripleaf|Spore|Shroom|Colony|Succulent)')
 NOT_PLANT = re.compile(r'(Potted|FlowerPot|Wall(Sign|Torch|Banner)|Sign|Button|PressurePlate|Carpet|Rail)')
 
 
 def pass_audit(dump, tiers_path):
-    if tiers_path:
-        members = json.load(open(tiers_path))
-        tiered = {b for k, v in members.items() if (k.startswith('creativecompat:passthrough/') and '/projectile/' not in k) or k == 'creativecompat:passthrough_layers' for b in v}
-        src = tiers_path if os.path.relpath(tiers_path, ROOT).startswith('..') else os.path.relpath(tiers_path, ROOT)
-    else:
-        tiered = set()
-        for mod in json.load(open(os.path.join(ROOT, 'kubejs/exported/tags/block_tags_by_block.json'))).values():
-            for b, tags in mod.items():
-                if any(t.startswith('creativecompat:passthrough/') or t == 'creativecompat:passthrough_layers' for t in tags): tiered.add(b)
-        src = 'kubejs/exported/tags/block_tags_by_block.json'
-    plants, other = collections.defaultdict(collections.Counter), collections.Counter()
-    n_open = 0
-    for row in dump['blocks']:
-        if 'error' in row or row['collisionTop'] >= 0: continue
-        n_open += 1
-        if row['id'] in tiered: continue
-        ns, p = row['id'].split(':', 1)
-        cls = row['class'].rsplit('.', 1)[-1]
-        if PLANT.search(cls) and not NOT_PLANT.search(cls): plants[ns][collapse(p)] += 1
-        else: other[ns] += 1
-    total = sum(sum(c.values()) for c in plants.values())
-    print('# pass-through: %d blocks with no collision, %d tiered (tiers from %s)' % (n_open, len(tiered), src))
-    if not tiered: print('  no creativecompat:passthrough tags found: run /dumptags with the tags loaded, or pass --tiers')
-    print('# no collision, plant-like class, no pass-through tier: %d blocks in %d mods' % (total, len(plants)))
-    print_groups(plants)
-    print('# no collision, other classes (torches, signs, fluids, decor...), no tier: %d in %d mods: %s' % (
-        sum(other.values()), len(other), ' '.join('%s %d' % kv for kv in other.most_common())))
+	if tiers_path:
+		members = json.load(open(tiers_path))
+		tiered = {b for k, v in members.items() if (k.startswith('creativecompat:passthrough/') and '/projectile/' not in k) or k == 'creativecompat:passthrough_layers' for b in v}
+		src = tiers_path if os.path.relpath(tiers_path, ROOT).startswith('..') else os.path.relpath(tiers_path, ROOT)
+	else:
+		tiered = set()
+		for mod in json.load(open(os.path.join(ROOT, 'kubejs/exported/tags/block_tags_by_block.json'))).values():
+			for b, tags in mod.items():
+				if any(t.startswith('creativecompat:passthrough/') or t == 'creativecompat:passthrough_layers' for t in tags): tiered.add(b)
+		src = 'kubejs/exported/tags/block_tags_by_block.json'
+	plants, other = collections.defaultdict(collections.Counter), collections.Counter()
+	n_open = 0
+	for row in dump['blocks']:
+		if 'error' in row or row['collisionTop'] >= 0: continue
+		n_open += 1
+		if row['id'] in tiered: continue
+		ns, p = row['id'].split(':', 1)
+		cls = row['class'].rsplit('.', 1)[-1]
+		if PLANT.search(cls) and not NOT_PLANT.search(cls): plants[ns][collapse(p)] += 1
+		else: other[ns] += 1
+	total = sum(sum(c.values()) for c in plants.values())
+	print('# pass-through: %d blocks with no collision, %d tiered (tiers from %s)' % (n_open, len(tiered), src))
+	if not tiered: print('  no creativecompat:passthrough tags found: run /dumptags with the tags loaded, or pass --tiers')
+	print('# no collision, plant-like class, no pass-through tier: %d blocks in %d mods' % (total, len(plants)))
+	print_groups(plants)
+	print('# no collision, other classes (torches, signs, fluids, decor...), no tier: %d in %d mods: %s' % (
+		sum(other.values()), len(other), ' '.join('%s %d' % kv for kv in other.most_common())))
 
 
 def audit(path, tiers_path=None):
-    dump = json.load(open(path))
-    reg = dump.get('registerHeight', 0.2)
-    untiered = collections.defaultdict(collections.Counter)
-    outliers, errors = [], []
-    for row in dump['blocks']:
-        if 'error' in row:
-            errors.append(row); continue
-        ns, p = row['id'].split(':', 1)
-        tier = row.get('tier')
-        friction, jump, speed = row['friction'], row['jumpFactor'], row['speedFactor']
-        if (row['collisionTop'] >= reg - 1e-6 and row['hasItem'] and not tier and not row['override']
-                and abs(speed - 1) < 1e-6):
-            untiered[ns][collapse(p)] += 1
-        if abs(friction - 0.6) > 1e-6 or abs(jump - 1) > 1e-6 or abs(speed - 1) > 1e-6:
-            outliers.append(row)
-    total = sum(sum(c.values()) for c in untiered.values())
-    print('# walkable, no tier: %d blocks in %d mods (dump %s)' % (total, len(untiered), dump.get('generated', '?')))
-    print_groups(untiered)
-    print('# outliers (friction != 0.6, jump != 1, speed != 1): %d' % len(outliers))
-    for r in sorted(outliers, key=lambda r: r['id']):
-        print('%s  tier=%s friction=%g jump=%g speed=%g top=%g' % (r['id'], r.get('tier') or (
-            'override' if r['override'] else '-'), r['friction'], r['jumpFactor'], r['speedFactor'], r['collisionTop']))
-    if errors:
-        print('# errors: %d' % len(errors))
-        for r in errors: print(r['id'], r['error'])
-    pass_audit(dump, tiers_path)
-    sys.exit(3 if total else 0)
+	dump = json.load(open(path))
+	reg = dump.get('registerHeight', 0.2)
+	untiered = collections.defaultdict(collections.Counter)
+	outliers, errors = [], []
+	for row in dump['blocks']:
+		if 'error' in row:
+			errors.append(row); continue
+		ns, p = row['id'].split(':', 1)
+		tier = row.get('tier')
+		friction, jump, speed = row['friction'], row['jumpFactor'], row['speedFactor']
+		if (row['collisionTop'] >= reg - 1e-6 and row['hasItem'] and not tier and not row['override']
+				and abs(speed - 1) < 1e-6):
+			untiered[ns][collapse(p)] += 1
+		if abs(friction - 0.6) > 1e-6 or abs(jump - 1) > 1e-6 or abs(speed - 1) > 1e-6:
+			outliers.append(row)
+	total = sum(sum(c.values()) for c in untiered.values())
+	print('# walkable, no tier: %d blocks in %d mods (dump %s)' % (total, len(untiered), dump.get('generated', '?')))
+	print_groups(untiered)
+	print('# outliers (friction != 0.6, jump != 1, speed != 1): %d' % len(outliers))
+	for r in sorted(outliers, key=lambda r: r['id']):
+		print('%s  tier=%s friction=%g jump=%g speed=%g top=%g' % (r['id'], r.get('tier') or (
+			'override' if r['override'] else '-'), r['friction'], r['jumpFactor'], r['speedFactor'], r['collisionTop']))
+	if errors:
+		print('# errors: %d' % len(errors))
+		for r in errors: print(r['id'], r['error'])
+	pass_audit(dump, tiers_path)
+	sys.exit(3 if total else 0)
 
 if len(sys.argv) > 2 and sys.argv[1] == '--audit':
-    audit(sys.argv[2], sys.argv[sys.argv.index('--tiers') + 1] if '--tiers' in sys.argv else None)
+	audit(sys.argv[2], sys.argv[sys.argv.index('--tiers') + 1] if '--tiers' in sys.argv else None)
 elif len(sys.argv) > 1 and sys.argv[1] == '--audit':
-    sys.exit('usage: blockrunner_scan.py --audit kubejs/exported/surface_audit.json')
+	sys.exit('usage: blockrunner_scan.py --audit kubejs/exported/surface_audit.json')
 
 tagged = set()
 for mod in json.load(open(os.path.join(ROOT, 'kubejs/exported/tags/block_tags_by_block.json'))).values():
-    tagged.update(mod)
+	tagged.update(mod)
 items = set()
 for f in glob.glob(os.path.join(ROOT, 'kubejs/exported/items_by_mod/*.json')):
-    items.update(json.load(open(f))['items'])
+	items.update(json.load(open(f))['items'])
 
 modded = set()
 for jar in glob.glob(os.path.join(ROOT, 'mods/*.jar')):
-    try: blockstate_ids(zipfile.ZipFile(jar), modded)
-    except zipfile.BadZipFile: print('skipped unreadable jar', jar)
+	try: blockstate_ids(zipfile.ZipFile(jar), modded)
+	except zipfile.BadZipFile: print('skipped unreadable jar', jar)
 for f in glob.glob(os.path.join(ROOT, 'kubejs/assets/*/blockstates/*.json')):
-    modded.add(f.split('/assets/')[1].split('/')[0] + ':' + os.path.basename(f)[:-5])
+	modded.add(f.split('/assets/')[1].split('/')[0] + ':' + os.path.basename(f)[:-5])
 vanilla = set()
 if pack_paths.vanilla_jar():
-    blockstate_ids(zipfile.ZipFile(pack_paths.vanilla_jar()), vanilla)
+	blockstate_ids(zipfile.ZipFile(pack_paths.vanilla_jar()), vanilla)
 if not vanilla: print('vanilla client jar not found: untagged vanilla blocks are missing')
 
 untagged = sorted((vanilla | {b for b in modded if b in items}) - tagged)
@@ -149,13 +149,13 @@ if len(sys.argv) < 2: sys.exit()
 tiered = {b for members in json.load(open(sys.argv[1])).values() for b in members}
 # shapes that never register (BlockRunner reads ~0.2 below your feet) or are never walked on
 thin = re.compile(r'(button|pressure_plate|_plate$|carpet|rail|torch|lantern|candle|sign|banner|flower|sapling|door|pane|bars'
-    r'|ladder|vine|bush|fern|grass$|tall_|crop|seeds|stem$|_head$|skull|pot$|potted_|chain|lever|wire|tripwire|cobweb|fan$'
-    r'|coral$|kelp$|seagrass|pickle|lily|roots$|sprouts|fungus|mushroom$|wart$|layer$|leaf_pile|petals|clover|rope|shelf'
-    r'|frame$|post$|light|lamp|bulb|track|portal|fire$|air$|button|rod$|_nub$|decal|placard|screen|card_display'
-    r'|auction_stand|bookshelf_trader|vending_machine|freezer|coinjar|bogey|wheel|ascii|duck|trophy|chair|stool|table)')
+	r'|ladder|vine|bush|fern|grass$|tall_|crop|seeds|stem$|_head$|skull|pot$|potted_|chain|lever|wire|tripwire|cobweb|fan$'
+	r'|coral$|kelp$|seagrass|pickle|lily|roots$|sprouts|fungus|mushroom$|wart$|layer$|leaf_pile|petals|clover|rope|shelf'
+	r'|frame$|post$|light|lamp|bulb|track|portal|fire$|air$|button|rod$|_nub$|decal|placard|screen|card_display'
+	r'|auction_stand|bookshelf_trader|vending_machine|freezer|coinjar|bogey|wheel|ascii|duck|trophy|chair|stool|table)')
 groups = collections.defaultdict(collections.Counter)
 for b in sorted(tagged | set(untagged)):
-    ns, path = b.split(':', 1)
-    if b in tiered or thin.search(path): continue
-    groups[ns][collapse(path) + ('*' if b in untagged else '')] += 1
+	ns, path = b.split(':', 1)
+	if b in tiered or thin.search(path): continue
+	groups[ns][collapse(path) + ('*' if b in untagged else '')] += 1
 print_groups(groups)

@@ -17,25 +17,25 @@ TAG = b"\x01" + struct.pack(">H", len(b"allowCommands")) + b"allowCommands"
 
 
 def main():
-    if len(sys.argv) != 4:
-        sys.exit(__doc__)
-    src, game, name = sys.argv[1:]
-    if not os.path.isfile(os.path.join(src, "level.dat")):
-        sys.exit(f"no level.dat in {src}")
-    dst = os.path.join(game, "saves", name)
-    if os.path.exists(dst):
-        shutil.rmtree(dst)
-    shutil.copytree(src, dst, ignore=shutil.ignore_patterns("session.lock"))
-    p = os.path.join(dst, "level.dat")
-    data = bytearray(gzip.decompress(open(p, "rb").read()))
-    i = data.find(TAG)
-    if i < 0:
-        sys.exit("allowCommands tag not found in level.dat")
-    data[i + len(TAG)] = 1
-    with open(p, "wb") as f:
-        f.write(gzip.compress(bytes(data)))
-    print(f"{dst}: allowCommands = 1")
+	if len(sys.argv) != 4:
+		sys.exit(__doc__)
+	src, game, name = sys.argv[1:]
+	if not os.path.isfile(os.path.join(src, "level.dat")):
+		sys.exit(f"no level.dat in {src}")
+	dst = os.path.join(game, "saves", name)
+	if os.path.exists(dst):
+		shutil.rmtree(dst)
+	shutil.copytree(src, dst, ignore=shutil.ignore_patterns("session.lock"))
+	p = os.path.join(dst, "level.dat")
+	data = bytearray(gzip.decompress(open(p, "rb").read()))
+	i = data.find(TAG)
+	if i < 0:
+		sys.exit("allowCommands tag not found in level.dat")
+	data[i + len(TAG)] = 1
+	with open(p, "wb") as f:
+		f.write(gzip.compress(bytes(data)))
+	print(f"{dst}: allowCommands = 1")
 
 
 if __name__ == "__main__":
-    main()
+	main()

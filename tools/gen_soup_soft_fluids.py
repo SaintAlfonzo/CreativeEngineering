@@ -47,178 +47,178 @@ CAPACITY = {'minecraft:glass_bottle': 1}   # everything else is a bowl: 2 per it
 EQUIVALENT = {}
 # hand-written soft fluids for bottled drinks in the same folder: never written or deleted by this tool
 HAND_WRITTEN = {'nut_milk.json', 'carrot_juice.json', 'dandelion_juice.json', 'turnip_water.json',
-                'fermented_garlic_honey.json',
-                'bayberry_soup.json'}   # Bayberry Juice (a drink since food/drinks #9; keeps its id and Forge fluid)
+				'fermented_garlic_honey.json',
+				'bayberry_soup.json'}   # Bayberry Juice (a drink since food/drinks #9; keeps its id and Forge fluid)
 # item id -> '#rrggbb', where the patch picks garnish, shadow or a gold bowl (checked against the textures)
 COLOR_OVERRIDE = {
-    'alexsdelight:acacia_blossom_soup': '#d6cba0',
-    'farmersdelight:bone_broth': '#c8b48a',
-    'farmersrespite:blazing_chili': '#9a2c12',
-    'endersdelight:chorus_stew': '#9a6aa0',
-    'endersdelight:endermite_stew': '#4a3a5c',
-    'delightful:sinigang': '#a8763e',
-    'vintagedelight:oatmeal': '#b29a7c',       # the patch is the bowl's shadow side
-    'vintagedelight:pickle_soup': '#e3bf74',   # the broth, not the pickle
+	'alexsdelight:acacia_blossom_soup': '#d6cba0',
+	'farmersdelight:bone_broth': '#c8b48a',
+	'farmersrespite:blazing_chili': '#9a2c12',
+	'endersdelight:chorus_stew': '#9a6aa0',
+	'endersdelight:endermite_stew': '#4a3a5c',
+	'delightful:sinigang': '#a8763e',
+	'vintagedelight:oatmeal': '#b29a7c',       # the patch is the bowl's shadow side
+	'vintagedelight:pickle_soup': '#e3bf74',   # the broth, not the pickle
 }
 
 
 def jar_index():
-    """Every mods/*.jar (and the jars nested in it under META-INF/jarjar, e.g. Creative Delight's members),
+	"""Every mods/*.jar (and the jars nested in it under META-INF/jarjar, e.g. Creative Delight's members),
     the *_upstream donor jars, then the vanilla client jar, highest priority first, as open ZipFiles."""
-    jars = []
-    for p in sorted(glob.glob(str(INSTANCE / 'mods/*.jar'))):
-        z = zipfile.ZipFile(p)
-        jars.append(z)
-        for n in z.namelist():
-            if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
-                jars.append(zipfile.ZipFile(io.BytesIO(z.read(n))))
-    jars += [zipfile.ZipFile(p) for p in sorted(glob.glob(str(INSTANCE / '*_upstream/*.jar')))]
-    if VANILLA:
-        jars.append(zipfile.ZipFile(VANILLA))
-    return jars
+	jars = []
+	for p in sorted(glob.glob(str(INSTANCE / 'mods/*.jar'))):
+		z = zipfile.ZipFile(p)
+		jars.append(z)
+		for n in z.namelist():
+			if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
+				jars.append(zipfile.ZipFile(io.BytesIO(z.read(n))))
+	jars += [zipfile.ZipFile(p) for p in sorted(glob.glob(str(INSTANCE / '*_upstream/*.jar')))]
+	if VANILLA:
+		jars.append(zipfile.ZipFile(VANILLA))
+	return jars
 
 
 def read(jars, path):
-    for z in jars:
-        try:
-            return z.read(path)
-        except KeyError:
-            continue
-    return None
+	for z in jars:
+		try:
+			return z.read(path)
+		except KeyError:
+			continue
+	return None
 
 
 def covered(jars):
-    """Filled items of every soft fluid the mods ship."""
-    out = {}
-    for z in jars:
-        for n in z.namelist():
-            if not SOFT_FLUID_RE.match(n) or n.startswith(OWN_PREFIX):
-                continue
-            try:
-                d = json.loads(z.read(n))
-            except ValueError:
-                continue
-            for c in d.get('containers', []):
-                for f in c.get('filled', []):
-                    out[f] = n
-    return out
+	"""Filled items of every soft fluid the mods ship."""
+	out = {}
+	for z in jars:
+		for n in z.namelist():
+			if not SOFT_FLUID_RE.match(n) or n.startswith(OWN_PREFIX):
+				continue
+			try:
+				d = json.loads(z.read(n))
+			except ValueError:
+				continue
+			for c in d.get('containers', []):
+				for f in c.get('filled', []):
+					out[f] = n
+	return out
 
 
 def texture(jars, item):
-    """The item model's layer0 texture as an RGBA image (follows one parent hop for generated items)."""
-    ns, name = item.split(':', 1)
-    tex = f'{ns}:item/{name}'
-    model = read(jars, f'assets/{ns}/models/item/{name}.json')
-    if model:
-        layers = json.loads(model).get('textures', {})
-        tex = layers.get('layer0', tex)
-    tns, tpath = tex.split(':', 1) if ':' in tex else ('minecraft', tex)
-    png = read(jars, f'assets/{tns}/textures/{tpath}.png')
-    if not png:
-        return None
-    img = Image.open(io.BytesIO(png)).convert('RGBA')
-    w = img.width
-    return img.crop((0, 0, w, w))   # first frame of an animated strip
+	"""The item model's layer0 texture as an RGBA image (follows one parent hop for generated items)."""
+	ns, name = item.split(':', 1)
+	tex = f'{ns}:item/{name}'
+	model = read(jars, f'assets/{ns}/models/item/{name}.json')
+	if model:
+		layers = json.loads(model).get('textures', {})
+		tex = layers.get('layer0', tex)
+	tns, tpath = tex.split(':', 1) if ':' in tex else ('minecraft', tex)
+	png = read(jars, f'assets/{tns}/textures/{tpath}.png')
+	if not png:
+		return None
+	img = Image.open(io.BytesIO(png)).convert('RGBA')
+	w = img.width
+	return img.crop((0, 0, w, w))   # first frame of an animated strip
 
 
 def soup_colour(jars, item, empty):
-    img = texture(jars, item)
-    if img is None:
-        return None
-    base = texture(jars, empty)
-    near = set()
-    if base is not None:
-        near = {p[:3] for p in base.getdata() if p[3] > 0}
+	img = texture(jars, item)
+	if img is None:
+		return None
+	base = texture(jars, empty)
+	near = set()
+	if base is not None:
+		near = {p[:3] for p in base.getdata() if p[3] > 0}
 
-    def is_container(rgb):
-        return any(sum(abs(a - b) for a, b in zip(rgb, c)) <= 24 for c in near)
+	def is_container(rgb):
+		return any(sum(abs(a - b) for a, b in zip(rgb, c)) <= 24 for c in near)
 
-    px = [p[:3] for p in img.getdata() if p[3] > 128]
-    soup = [p for p in px if not is_container(p)] or px
-    if not soup:
-        return None
-    # the broth is the largest patch of one color; garnish is many small ones, so take the pixels near the
-    # commonest color (counting each pixel's neighbors within 48) and average those
-    def close(p, q):
-        return sum(abs(a - b) for a, b in zip(p, q)) <= 48
-    seed = max(soup, key=lambda p: sum(close(p, q) for q in soup))
-    patch = [q for q in soup if close(seed, q)]
-    avg = [round(sum(p[i] for p in patch) / len(patch)) for i in range(3)]
-    return '#%02x%02x%02x' % tuple(avg)
+	px = [p[:3] for p in img.getdata() if p[3] > 128]
+	soup = [p for p in px if not is_container(p)] or px
+	if not soup:
+		return None
+	# the broth is the largest patch of one color; garnish is many small ones, so take the pixels near the
+	# commonest color (counting each pixel's neighbors within 48) and average those
+	def close(p, q):
+		return sum(abs(a - b) for a, b in zip(p, q)) <= 48
+	seed = max(soup, key=lambda p: sum(close(p, q) for q in soup))
+	patch = [q for q in soup if close(seed, q)]
+	avg = [round(sum(p[i] for p in patch) / len(patch)) for i in range(3)]
+	return '#%02x%02x%02x' % tuple(avg)
 
 
 def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument('--dry-run', action='store_true')
-    a = ap.parse_args()
+	ap = argparse.ArgumentParser()
+	ap.add_argument('--dry-run', action='store_true')
+	a = ap.parse_args()
 
-    types = json.loads(TYPES.read_text())['types']
-    keys = list(types.get('soup', []))
-    _, key_val, _ = parse_dict()
-    removed = set(re.findall(r'^\s*i\.(\w+)\s*,', REMOVED_JS.read_text(), re.M))
-    keys = [k for k in keys if k not in removed]
-    remainder = {f['id']: f.get('remainder') for f in json.loads(FOODS.read_text())['foods']}
-    jars = jar_index()
-    have = covered(jars)
+	types = json.loads(TYPES.read_text())['types']
+	keys = list(types.get('soup', []))
+	_, key_val, _ = parse_dict()
+	removed = set(re.findall(r'^\s*i\.(\w+)\s*,', REMOVED_JS.read_text(), re.M))
+	keys = [k for k in keys if k not in removed]
+	remainder = {f['id']: f.get('remainder') for f in json.loads(FOODS.read_text())['foods']}
+	jars = jar_index()
+	have = covered(jars)
 
-    fluids = {}   # base key -> list of item ids, base first
-    for k in keys:
-        base = k[:-5] if k.endswith('_wood') and k[:-5] in keys else k
-        fluids.setdefault(base, [])
-        if k == base:
-            fluids[base].insert(0, key_val[k])
-        else:
-            fluids[base].append(key_val[k])
+	fluids = {}   # base key -> list of item ids, base first
+	for k in keys:
+		base = k[:-5] if k.endswith('_wood') and k[:-5] in keys else k
+		fluids.setdefault(base, [])
+		if k == base:
+			fluids[base].insert(0, key_val[k])
+		else:
+			fluids[base].append(key_val[k])
 
-    OUT.mkdir(parents=True, exist_ok=True)
-    written, skipped, problems = set(), [], []
-    for base, items in fluids.items():
-        done = [i for i in items if i in have]
-        if done:
-            skipped.append(f'{base} ({have[done[0]].split("/")[1]})')
-            if len(done) < len(items):
-                problems.append(f'{base}: {set(items) - set(done)} not in the covering fluid')
-            continue
-        first = items[0]
-        ns, name = first.split(':', 1)
-        containers = []
-        for it in items:
-            empty = remainder.get(it) or 'minecraft:bowl'
-            containers.append({'filled': [it], 'empty': empty, 'capacity': CAPACITY.get(empty, 2)})
-        colour = COLOR_OVERRIDE.get(first) or soup_colour(jars, first, containers[0]['empty'])
-        if not colour:
-            problems.append(f'{base}: no texture for {first}, color left gray')
-            colour = '#a08060'
-        d = {
-            'color': colour,
-            'containers': containers,
-        }
-        if first in EQUIVALENT:
-            d['equivalent_fluids'] = EQUIVALENT[first]
-        d.update({
-            'flowing_texture': 'moonlight:soft_fluids/potion_flow',
-            'food': {'divider': containers[0]['capacity'], 'item': first},
-            'from_mod': ns,
-            'still_texture': 'moonlight:soft_fluids/soup_liquid',
-            'translation_key': f'item.{ns}.{name}',
-        })
-        path = OUT / f'{base}.json'
-        written.add(path.name)
-        text = json.dumps(d, indent=2) + '\n'
-        print(f'  {base:36} {colour}  {" + ".join(c["empty"] for c in containers)}')
-        if not a.dry_run and (not path.exists() or path.read_text() != text):
-            path.write_text(text)
+	OUT.mkdir(parents=True, exist_ok=True)
+	written, skipped, problems = set(), [], []
+	for base, items in fluids.items():
+		done = [i for i in items if i in have]
+		if done:
+			skipped.append(f'{base} ({have[done[0]].split("/")[1]})')
+			if len(done) < len(items):
+				problems.append(f'{base}: {set(items) - set(done)} not in the covering fluid')
+			continue
+		first = items[0]
+		ns, name = first.split(':', 1)
+		containers = []
+		for it in items:
+			empty = remainder.get(it) or 'minecraft:bowl'
+			containers.append({'filled': [it], 'empty': empty, 'capacity': CAPACITY.get(empty, 2)})
+		colour = COLOR_OVERRIDE.get(first) or soup_colour(jars, first, containers[0]['empty'])
+		if not colour:
+			problems.append(f'{base}: no texture for {first}, color left gray')
+			colour = '#a08060'
+		d = {
+			'color': colour,
+			'containers': containers,
+		}
+		if first in EQUIVALENT:
+			d['equivalent_fluids'] = EQUIVALENT[first]
+		d.update({
+			'flowing_texture': 'moonlight:soft_fluids/potion_flow',
+			'food': {'divider': containers[0]['capacity'], 'item': first},
+			'from_mod': ns,
+			'still_texture': 'moonlight:soft_fluids/soup_liquid',
+			'translation_key': f'item.{ns}.{name}',
+		})
+		path = OUT / f'{base}.json'
+		written.add(path.name)
+		text = json.dumps(d, indent=2) + '\n'
+		print(f'  {base:36} {colour}  {" + ".join(c["empty"] for c in containers)}')
+		if not a.dry_run and (not path.exists() or path.read_text() != text):
+			path.write_text(text)
 
-    for p in OUT.glob('*.json'):
-        if p.name not in written and p.name not in HAND_WRITTEN:
-            print(f'  removed {p.name}')
-            if not a.dry_run:
-                p.unlink()
-    print(f'{len(written)} soft fluids; already covered by a mod: {", ".join(skipped)}')
-    for p in problems:
-        print('WARNING', p)
-    return 1 if problems else 0
+	for p in OUT.glob('*.json'):
+		if p.name not in written and p.name not in HAND_WRITTEN:
+			print(f'  removed {p.name}')
+			if not a.dry_run:
+				p.unlink()
+	print(f'{len(written)} soft fluids; already covered by a mod: {", ".join(skipped)}')
+	for p in problems:
+		print('WARNING', p)
+	return 1 if problems else 0
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+	sys.exit(main())

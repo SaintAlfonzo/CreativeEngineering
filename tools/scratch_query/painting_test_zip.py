@@ -15,16 +15,16 @@ from PIL import Image
 
 
 def main(out):
-    img = Image.new('RGBA', (32, 32), (255, 0, 255, 255))
-    buf = io.BytesIO()
-    img.save(buf, 'PNG')
-    with zipfile.ZipFile(out, 'w') as z:
-        z.writestr('pack.mcmeta', '{"pack": {"pack_format": 9, "description": "painting extraSources test"}}')
-        z.writestr('assets/toomanypaintings/textures/painting/afternoon.png', buf.getvalue())
-    print('wrote', out)
+	img = Image.new('RGBA', (32, 32), (255, 0, 255, 255))
+	buf = io.BytesIO()
+	img.save(buf, 'PNG')
+	with zipfile.ZipFile(out, 'w') as z:
+		z.writestr('pack.mcmeta', '{"pack": {"pack_format": 9, "description": "painting extraSources test"}}')
+		z.writestr('assets/toomanypaintings/textures/painting/afternoon.png', buf.getvalue())
+	print('wrote', out)
 
 
 if __name__ == '__main__':
-    if len(sys.argv) != 2:
-        sys.exit(__doc__)
-    main(sys.argv[1])
+	if len(sys.argv) != 2:
+		sys.exit(__doc__)
+	main(sys.argv[1])

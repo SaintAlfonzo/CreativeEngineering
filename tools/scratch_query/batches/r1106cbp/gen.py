@@ -15,10 +15,10 @@ STRICT = "expect effects leaks 0$\nreject \\[cbo\\] leak \nreject \\[cbo\\] leak
 
 
 def strict(text):
-    t = TOL.sub(STRICT, text)
-    t = t.replace("expect effects leaks [04]$", "expect effects leaks 0$")
-    t = t.replace("r1106cbo", "r1106cbp (rerun of r1106cbo)", 1)
-    return t
+	t = TOL.sub(STRICT, text)
+	t = t.replace("expect effects leaks [04]$", "expect effects leaks 0$")
+	t = t.replace("r1106cbo", "r1106cbp (rerun of r1106cbo)", 1)
+	return t
 
 
 # [absent mods] now prints at the end of the recipe event (absent_mods.js) and the loot-table line comes from
@@ -67,7 +67,7 @@ kjsexpect \[compost\] skipped [0-9]+ values for items of absent mods
 """
 # kjsexpect reads server.log; the compost line is a startup print: check both files instead
 B["p4_iw"] = B["p4_iw"].replace(r"kjsexpect \[compost\] skipped [0-9]+ values for items of absent mods",
-                                r'shell grep -h "\[compost\] skipped [0-9]* values for items of absent mods" logs/kubejs/startup.log logs/kubejs/server.log')
+								r'shell grep -h "\[compost\] skipped [0-9]* values for items of absent mods" logs/kubejs/startup.log logs/kubejs/server.log')
 
 B["p5_cd_alone"] = r"""# r1106cbp: Creative Delight alone (cooking set without Creative Brewing), group A (SQ-CDFL-01, -02)
 ## SQ-CDFL-01 | CD alone: creativedelight: fluids, startup folder, swaps, effect swaps
@@ -206,25 +206,25 @@ look diff of the moved sections against configs_edited/root_config/creativebrewi
 
 STRICT_SINGLES = sorted(k for k in cbo.B if re.fullmatch(r"s\d+", k))
 for k in STRICT_SINGLES:
-    B[k] = strict(cbo.B[k])
+	B[k] = strict(cbo.B[k])
 
 INST = "$INST"
 BOOTS = [  # (name, mode, batch, env)
-    ("p1", "chain", "p1_chain", ""),
-    ("p2", "cooking", "p2_cooking", ""),
-    ("p3", "optional", "p3_optional", "KEEP=1"),
-    ("p3", "optional", "p3b_optional_members_off", "REUSE=1 PRE='python3 $INST/tools/scratch_query/qrun.py toml config/creativebrewing-common.toml members vinery false && python3 $INST/tools/scratch_query/qrun.py toml config/creativebrewing-common.toml members brewinandchewin false'"),
-    ("p4", "chain", "p4_iw", 'ADD="immersive_weathering-*.jar,moonlight-*.jar"'),
-    ("p5", "cooking", "p5_cd_alone", 'DROP="creativebrewing-*.jar"'),
-    ("p6", "chain", "p6_equipment", 'DROP="creativecalendar-*.jar creativedelight-*.jar creativebrewing-*.jar kubejsdelight-*.jar" PRE=\'cp $INST/development/creativeEquipment/build/libs/creativeequipment-1.0.0.jar mods/\''),
-    ("p6f", "chain", "p6_equipment", 'ADD="Felsic Gear *.jar" DROP="creativecalendar-*.jar creativedelight-*.jar creativebrewing-*.jar kubejsdelight-*.jar" PRE=\'cp $INST/development/creativeEquipment/build/libs/creativeequipment-1.0.0.jar mods/\''),  # p6 rerun with Felsic Gear: End gear recipes
+	("p1", "chain", "p1_chain", ""),
+	("p2", "cooking", "p2_cooking", ""),
+	("p3", "optional", "p3_optional", "KEEP=1"),
+	("p3", "optional", "p3b_optional_members_off", "REUSE=1 PRE='python3 $INST/tools/scratch_query/qrun.py toml config/creativebrewing-common.toml members vinery false && python3 $INST/tools/scratch_query/qrun.py toml config/creativebrewing-common.toml members brewinandchewin false'"),
+	("p4", "chain", "p4_iw", 'ADD="immersive_weathering-*.jar,moonlight-*.jar"'),
+	("p5", "cooking", "p5_cd_alone", 'DROP="creativebrewing-*.jar"'),
+	("p6", "chain", "p6_equipment", 'DROP="creativecalendar-*.jar creativedelight-*.jar creativebrewing-*.jar kubejsdelight-*.jar" PRE=\'cp $INST/development/creativeEquipment/build/libs/creativeequipment-1.0.0.jar mods/\''),
+	("p6f", "chain", "p6_equipment", 'ADD="Felsic Gear *.jar" DROP="creativecalendar-*.jar creativedelight-*.jar creativebrewing-*.jar kubejsdelight-*.jar" PRE=\'cp $INST/development/creativeEquipment/build/libs/creativeequipment-1.0.0.jar mods/\''),  # p6 rerun with Felsic Gear: End gear recipes
 ] + [(n, "chain", n, f'ADD="{a}"') for n, a in ((f"s{x[0]}", x[1]) for x in cbo.SINGLES if x[0] != "34")]  # s34 = p4
 
 if __name__ == "__main__":
-    for k, v in B.items():
-        with open(os.path.join(HERE, k + ".qb"), "w") as f:
-            f.write(v)
-    print(len(B), "batches written")
-    if len(sys.argv) > 1 and sys.argv[1] == "plan":
-        for b in BOOTS:
-            print(*b, sep="\t")
+	for k, v in B.items():
+		with open(os.path.join(HERE, k + ".qb"), "w") as f:
+			f.write(v)
+	print(len(B), "batches written")
+	if len(sys.argv) > 1 and sys.argv[1] == "plan":
+		for b in BOOTS:
+			print(*b, sep="\t")

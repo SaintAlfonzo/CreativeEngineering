@@ -15,36 +15,36 @@ import sys
 
 
 def main():
-    a = sys.argv[1:]
-    dim = None
-    if '--dim' in a:
-        i = a.index('--dim'); dim = a[i + 1]; del a[i:i + 2]
-    if len(a) < 3:
-        sys.exit(__doc__)
-    var, radius, tag = a[0], int(a[1]), a[2]
-    filt = a[3] if len(a) > 3 else '-'
-    step = 208
-    m = -(-2 * radius // step)                # tiles per side, centered on the square
-    offs = [-(m - 1) * step // 2 + k * step for k in range(m)]
+	a = sys.argv[1:]
+	dim = None
+	if '--dim' in a:
+		i = a.index('--dim'); dim = a[i + 1]; del a[i:i + 2]
+	if len(a) < 3:
+		sys.exit(__doc__)
+	var, radius, tag = a[0], int(a[1]), a[2]
+	filt = a[3] if len(a) > 3 else '-'
+	step = 208
+	m = -(-2 * radius // step)                # tiles per side, centered on the square
+	offs = [-(m - 1) * step // 2 + k * step for k in range(m)]
 
-    def v(g, d):
-        return '{%s%d}' % (var, g) if d == 0 else '{%s%d%+d}' % (var, g, d)
+	def v(g, d):
+		return '{%s%d}' % (var, g) if d == 0 else '{%s%d%+d}' % (var, g, d)
 
-    pre = 'execute in %s run ' % dim if dim else ''
-    k = 0
-    for dx in offs:
-        for dz in offs:
-            k += 1
-            lo = lambda d: max(d - 120, -radius)
-            hi = lambda d: min(d + 120, radius)
-            box = '%s %s %s %s' % (v(1, lo(dx)), v(3, lo(dz)), v(1, hi(dx)), v(3, hi(dz)))
-            print('> %sforceload add %s' % (pre, box))
-            print('sleep 10')
-            print('> zq under %s %s 6 %s%s' % (v(1, dx), v(3, dz), filt, (' ' + dim) if dim else ''))
-            print('> say zqtile %s %d' % (tag, k))
-            print('waitlog zqtile %s %d$ 600' % (tag, k))
-            print('> %sforceload remove %s' % (pre, box))
+	pre = 'execute in %s run ' % dim if dim else ''
+	k = 0
+	for dx in offs:
+		for dz in offs:
+			k += 1
+			lo = lambda d: max(d - 120, -radius)
+			hi = lambda d: min(d + 120, radius)
+			box = '%s %s %s %s' % (v(1, lo(dx)), v(3, lo(dz)), v(1, hi(dx)), v(3, hi(dz)))
+			print('> %sforceload add %s' % (pre, box))
+			print('sleep 10')
+			print('> zq under %s %s 6 %s%s' % (v(1, dx), v(3, dz), filt, (' ' + dim) if dim else ''))
+			print('> say zqtile %s %d' % (tag, k))
+			print('waitlog zqtile %s %d$ 600' % (tag, k))
+			print('> %sforceload remove %s' % (pre, box))
 
 
 if __name__ == '__main__':
-    main()
+	main()

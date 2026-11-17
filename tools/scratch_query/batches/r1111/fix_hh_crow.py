@@ -6,10 +6,10 @@ import re, pathlib
 D = pathlib.Path(__file__).parent
 rows, cur, order = {}, None, []
 for l in (D / 'hh_crow_raw.qb').read_text().split('\n'):
-    if l.strip() in ('sleep', 'waitlog', 'expect', 'reject', 'count', 'capture', 'shell', 'look', 'pace'): continue
-    m = re.match(r'## SQ-HH-(\d+) ', l)
-    if m: cur = int(m.group(1)); order.append(cur); rows[cur] = [l]; continue
-    if cur: rows[cur].append(l)
+	if l.strip() in ('sleep', 'waitlog', 'expect', 'reject', 'count', 'capture', 'shell', 'look', 'pace'): continue
+	m = re.match(r'## SQ-HH-(\d+) ', l)
+	if m: cur = int(m.group(1)); order.append(cur); rows[cur] = [l]; continue
+	if cur: rows[cur].append(l)
 groups = {'hh_crow_d': [i for i in order if i <= 465 and i != 464], 'hh_crow_b': [464], 'hh_crow_f': [i for i in order if i >= 466]}
 for name, ids in groups.items():
-    (D / f'{name}.qb').write_text('pace 1\n\n' + '\n'.join(l for i in ids for l in rows[i]) + '\n'); print(name, len(ids))
+	(D / f'{name}.qb').write_text('pace 1\n\n' + '\n'.join(l for i in ids for l in rows[i]) + '\n'); print(name, len(ids))

@@ -17,25 +17,25 @@ RULINGS_RE = re.compile(r'^#+ .*owner rulings|^\|[^\n]*\bruling\b', re.I | re.M)
 
 
 def created(path):
-    r = subprocess.run(['git', 'log', '--diff-filter=A', '--format=%as', '--', str(path.relative_to(ROOT))],
-                       cwd=ROOT, capture_output=True, text=True)
-    days = [l for l in r.stdout.split() if l]
-    return days[-1] if days else dt.date.today().isoformat()
+	r = subprocess.run(['git', 'log', '--diff-filter=A', '--format=%as', '--', str(path.relative_to(ROOT))],
+					   cwd=ROOT, capture_output=True, text=True)
+	days = [l for l in r.stdout.split() if l]
+	return days[-1] if days else dt.date.today().isoformat()
 
 
 def main():
-    n = 0
-    for p in sorted((ROOT / 'feature_writeup').glob('plan_*.md')):
-        day = created(p)
-        if day <= SINCE:
-            continue
-        n += 1
-        if not RULINGS_RE.search(p.read_text(errors='replace')):
-            print('WARN %s (created %s): no "Owner rulings" table; intake records the rulings (skill intake)'
-                  % (p.relative_to(ROOT), day))
-    print('plan_lint: %d plan(s) created after %s checked' % (n, SINCE))
-    return 0
+	n = 0
+	for p in sorted((ROOT / 'feature_writeup').glob('plan_*.md')):
+		day = created(p)
+		if day <= SINCE:
+			continue
+		n += 1
+		if not RULINGS_RE.search(p.read_text(errors='replace')):
+			print('WARN %s (created %s): no "Owner rulings" table; intake records the rulings (skill intake)'
+				  % (p.relative_to(ROOT), day))
+	print('plan_lint: %d plan(s) created after %s checked' % (n, SINCE))
+	return 0
 
 
 if __name__ == '__main__':
-    sys.exit(main())
+	sys.exit(main())

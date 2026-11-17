@@ -12,31 +12,31 @@ import sys
 
 
 def main():
-    log, tag = sys.argv[1], sys.argv[2]
-    lo, hi = (float(sys.argv[3]), float(sys.argv[4])) if len(sys.argv) > 4 else (0.6, 0.9)
-    mark = re.compile(r"S5R " + re.escape(tag) + r" (spring|winter)\b")
-    filled = re.compile(r"Successfully filled (\d+) block|No blocks were filled")
-    runs = {"spring": [], "winter": []}
-    want = None
-    with open(log, errors="replace") as f:
-        for line in f:
-            m = mark.search(line)
-            if m:
-                want = m.group(1)
-                continue
-            if want:
-                m = filled.search(line)
-                if m:
-                    runs[want].append(int(m.group(1) or 0))
-                    want = None
-    sp, wi = runs["spring"], runs["winter"]
-    msp = sum(sp) / len(sp) if sp else 0.0
-    mwi = sum(wi) / len(wi) if wi else 0.0
-    ratio = mwi / msp if msp else float("nan")
-    print(f"{tag}: spring {sp} mean {msp:.1f}; winter {wi} mean {mwi:.1f}; winter/spring {ratio:.2f} (pass {lo}-{hi})")
-    ok = len(sp) >= 3 and len(wi) >= 3 and msp > 0 and lo <= ratio <= hi
-    sys.exit(0 if ok else 1)
+	log, tag = sys.argv[1], sys.argv[2]
+	lo, hi = (float(sys.argv[3]), float(sys.argv[4])) if len(sys.argv) > 4 else (0.6, 0.9)
+	mark = re.compile(r"S5R " + re.escape(tag) + r" (spring|winter)\b")
+	filled = re.compile(r"Successfully filled (\d+) block|No blocks were filled")
+	runs = {"spring": [], "winter": []}
+	want = None
+	with open(log, errors="replace") as f:
+		for line in f:
+			m = mark.search(line)
+			if m:
+				want = m.group(1)
+				continue
+			if want:
+				m = filled.search(line)
+				if m:
+					runs[want].append(int(m.group(1) or 0))
+					want = None
+	sp, wi = runs["spring"], runs["winter"]
+	msp = sum(sp) / len(sp) if sp else 0.0
+	mwi = sum(wi) / len(wi) if wi else 0.0
+	ratio = mwi / msp if msp else float("nan")
+	print(f"{tag}: spring {sp} mean {msp:.1f}; winter {wi} mean {mwi:.1f}; winter/spring {ratio:.2f} (pass {lo}-{hi})")
+	ok = len(sp) >= 3 and len(wi) >= 3 and msp > 0 and lo <= ratio <= hi
+	sys.exit(0 if ok else 1)
 
 
 if __name__ == "__main__":
-    main()
+	main()

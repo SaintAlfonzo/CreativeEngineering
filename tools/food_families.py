@@ -58,135 +58,135 @@ END = '<!-- FAMILIES:END -->'
 
 # path -> (label, criteria). Order = output order. A parent is the path before the last '/'.
 FAMILIES = OrderedDict([
-    ('fruit', ('Fruit', 'A fruit, berry or nut eaten as harvested or cut, or only dried/baked.')),
-    ('fruit/whole', ('Whole fruit', 'One whole tree or bush fruit (apple, orange, mango, banana).')),
-    ('fruit/berry', ('Berry', 'Small fruit picked by the bunch: berries, grapes, cherries. Nuts are not berries.')),
-    ('fruit/nut', ('Nut', 'A nut or seed eaten as harvested (acorn, walnut, peanut). Canned with salt, not sugar.')),
-    ('fruit/slice', ('Fruit slice', 'A slice or the flesh of a larger fruit (pumpkin, melon, cantaloupe, hamimelon, pineapple, citrus slices, durian flesh).')),
-    ('fruit/cooked', ('Dried or baked fruit', 'A fruit only dried or baked, nothing added.')),
-    ('veggie', ('Vegetable', 'A vegetable, herb or fungus eaten on its own, raw or plainly cooked.')),
-    ('veggie/raw', ('Raw vegetable', 'Whole, as harvested.')),
-    ('veggie/raw_cut', ('Cut vegetable', 'Cut on a board from a raw vegetable (slices, leaves, florets, diced).')),
-    ('veggie/cooked', ('Cooked vegetable', 'A whole vegetable roasted, baked, boiled or grilled, nothing added.')),
-    ('veggie/cooked_cut', ('Cooked cut vegetable', 'A cut vegetable cooked, nothing added.')),
-    ('meat', ('Meat', 'Land animal meat, nothing added.')),
-    ('meat/raw', ('Raw meat', 'A whole raw cut as dropped by the animal.')),
-    ('meat/raw_cut', ('Raw cut meat', 'Cut or minced from raw meat (chops, bacon, mince).')),
-    ('meat/cooked', ('Cooked meat', 'A whole cut cooked, glazed, smoked or dried.')),
-    ('meat/cooked_cut', ('Cooked cut meat', 'A cut, minced or patty piece cooked.')),
-    ('fish', ('Fish and seafood', 'Fish, shellfish and squid, nothing added.')),
-    ('fish/raw', ('Raw fish', 'A whole raw catch.')),
-    ('fish/raw_cut', ('Raw cut fish', 'Cut from a raw catch (slices, fillets).')),
-    ('fish/cooked', ('Cooked fish', 'A whole catch cooked or smoked.')),
-    ('fish/cooked_cut', ('Cooked cut fish', 'A cut piece cooked.')),
-    ('egg', ('Egg', 'Eggs as the main part of the food.')),
-    ('egg/cooked', ('Cooked egg', 'One egg fried, boiled or scrambled, nothing else.')),
-    ('egg/dish', ('Egg dish', 'Eggs with other parts on a plate or bowl (omelet, shakshouka).')),
-    ('dairy', ('Dairy', 'Cheese and yogurt eaten on their own.')),
-    ('bread', ('Bread', 'Baked plain or lightly flavored dough with no filling.')),
-    ('bread/loaf', ('Loaf', 'A whole loaf or round bread.')),
-    ('bread/slice', ('Bread slice', 'A slice of a loaf, toasted or not.')),
-    ('bread/flat', ('Flatbread', 'Tortillas and flatbreads baked as one piece (sweet buns are desserts).')),
-    ('ingredient', ('Kitchen ingredient', 'Edible but made to go into other food, not to be eaten as a dish.')),
-    ('ingredient/dough', ('Dough and batter', 'Unbaked dough, batter and crust, edible or not.')),
-    ('ingredient/sauce', ('Sauce and fat', 'Sauces, oils and fats.')),
-    ('ingredient/other', ('Other ingredient', 'Leaves, beans, pods, mash, mince, raw pasta and noodles for other recipes.')),
-    ('preserve', ('Preserve', 'Fruit or vegetables kept in sugar, salt or brine.')),
-    ('preserve/jam', ('Jam', 'Fruit boiled with sugar, in a jar or bottle.')),
-    ('preserve/spread', ('Spread', 'A non-fruit spread in a jar (nut butter).')),
-    ('preserve/pickle', ('Pickle', 'Vegetables fermented or pickled (kimchi, pickles).')),
-    ('jello', ('Jello', 'A set gelatin dessert of one fruit (Fruits Delight jellos and the like).')),
-    ('pie', ('Pie', 'A crust filled and baked; whole pies are blocks cut into slices.')),
-    ('pie/whole', ('Whole pie', 'The placed block, eaten or cut in slices.')),
-    ('pie/slice', ('Pie slice', 'One slice of a whole pie.')),
-    ('pie/small', ('Tart and hand pie', 'A one-serving pie or tart sold as an item.')),
-    ('cake', ('Cake', 'Sweet sponge with frosting; whole cakes are blocks cut into slices.')),
-    ('cake/whole', ('Whole cake', 'The placed block, eaten or cut in slices.')),
-    ('cake/slice', ('Cake slice', 'One slice of a whole cake.')),
-    ('cake/muffin', ('Muffin and cupcake', 'A one-serving cake baked in a muffin tin: muffins, cupcakes (brownies are desserts).')),
-    ('cookie', ('Cookie', 'A small flat baked biscuit.')),
-    ('dessert', ('Dessert', 'Sweet bakes and set desserts that are not cake, pie, cookie, candy, jello or frozen; also the '
-                            'catchall for any sweet or baked food with no other family.')),
-    ('dessert/brownie', ('Brownie', 'A brownie, or the tray of brownies it is cut from.')),
-    ('dessert/pudding', ('Pudding', 'Soft set desserts in a bowl (custard, pudding, yogurt desserts) and steamed puddings cut in slices.')),
-    ('dessert/pancake', ('Pancake', 'Pancakes from every mod: single pancakes, pancake dishes and the pancake stack blocks. '
-                                    'No base item: each pancake keeps its own recipes (owner, 2026-11-02).')),
-    ('dessert/pastry', ('Pastry', 'Scones, eclairs, beignets and sweet buns.')),
-    ('dessert/waffle', ('Waffle', 'A waffle, plain or topped.')),
-    ('dessert/roll', ('Sweet roll', 'A rolled sweet dough (sweet roll, chocolate roll).')),
-    ('dessert/other', ('Other dessert', 'A sweet or baked food that fits no other family.')),
-    ('candy', ('Candy', 'Sugar or chocolate confections.')),
-    ('candy/bar', ('Chocolate bar', 'A bar of chocolate or caramel.')),
-    ('candy/piece', ('Candy piece', 'A bite of candy, fudge, gummy, coin or leather.')),
-    ('candy/coated', ('Coated fruit', 'A fruit or nut dipped in chocolate, caramel, honey or sugar.')),
-    ('candy/marshmallow', ('Marshmallow', 'Marshmallows, on a stick or in a s\'more.')),
-    ('frozen', ('Frozen dessert', 'Served frozen.')),
-    ('frozen/ice_cream', ('Ice cream', 'Churned ice cream in a bowl.')),
-    ('frozen/popsicle', ('Popsicle', 'Frozen juice, fruit or flavor on a stick (every popsicle, melon and cantaloupe to corn and ender).')),
-    ('frozen/shaved_ice', ('Shaved ice', 'Shaved ice with a fruit flavour.')),
-    ('sandwich', ('Sandwich', 'Fillings held in bread or a wrap, eaten by hand.')),
-    ('sandwich/square', ('Square sandwich', 'Square bread slices around a filling (the sprite shows slices).')),
-    ('sandwich/roll', ('Long roll sandwich', 'A long roll (whole bread) around a filling.')),
-    ('sandwich/burger', ('Burger', 'A bun around a patty.')),
-    ('sandwich/wrap', ('Wrap', 'A tortilla or leaf rolled or folded around a filling (wraps, tacos).')),
-    ('sandwich/toast', ('Open toast', 'One slice of bread or toast with a topping.')),
-    ('skewer', ('Skewer', 'Pieces on a stick, eaten by hand; the stick is kept.')),
-    ('roll', ('Roll and dumpling', 'A filling rolled or folded in a wrapper: sushi rolls, cabbage rolls, dumplings.')),
-    ('stuffed', ('Stuffed vegetable', 'A vegetable hollowed and filled (stuffed potato, peppers).')),
-    ('pizza', ('Pizza', 'Dough topped with sauce, cheese and toppings, baked whole and cut.')),
-    ('pizza/whole', ('Whole pizza', 'The placed block, cut in slices.')),
-    ('pizza/slice', ('Pizza slice', 'One slice of a whole pizza.')),
-    ('quiche', ('Quiche', 'A savory egg and cheese custard baked in a pie crust.')),
-    ('quiche/whole', ('Whole quiche', 'The placed block, cut in slices.')),
-    ('quiche/slice', ('Quiche slice', 'One slice of a whole quiche.')),
-    ('lasagna', ('Lasagna', 'Layered pasta, sauce and cheese baked in a pan.')),
-    ('lasagna/whole', ('Lasagna pan', 'The placed pan, served in portions.')),
-    ('lasagna/serving', ('Lasagna serving', 'One portion of lasagna, from the pan or made on its own.')),
-    ('snack', ('Snack', 'Fried or popped finger food: fries, chips, popcorn, nachos, crab sticks.')),
-    ('salad', ('Salad', 'Raw or cold parts mixed in a bowl.')),
-    ('soup', ('Soup', 'Liquid food in a bowl.')),
-    ('soup/soup', ('Soup', 'Thin or blended soups and broths.')),
-    ('soup/stew', ('Stew', 'Chunky stews, chilis and braises.')),
-    ('meal', ('Bowl meal', 'A cooked dish of several parts in a bowl or on a plate.')),
-    ('meal/rice', ('Rice dish', 'Rice as the base.')),
-    ('meal/pasta', ('Pasta and noodles', 'Pasta or noodles as the base.')),
-    ('meal/fried', ('Fried dish', 'Battered or deep-fried main.')),
-    ('meal/plate', ('Plated meal', 'A main with sides (steak and potatoes, roasted vegetables).')),
-    ('feast', ('Feast', 'A placed block that serves several portions.')),
-    ('feast/whole', ('Feast block', 'The placed block.')),
-    ('feast/serving', ('Feast serving', 'One portion taken from a feast block.')),
-    ('drink', ('Drink', 'Non-alcoholic drinks.')),
-    ('drink/juice', ('Juice', 'Pressed fruit or vegetable juice, smoothies, lemonade.')),
-    ('drink/tea', ('Tea', 'Leaves or flowers steeped in hot water.')),
-    ('drink/coffee', ('Coffee', 'Coffee drinks.')),
-    ('drink/milk', ('Milk drink', 'Milkshakes and hot chocolate.')),
-    ('drink/soda', ('Soda and cider', 'Fizzy or fermented-sweet soft drinks, sweet cider.')),
-    ('drink/other', ('Other drink', 'Honey, water and drinks that fit no other group.')),
-    ('alcohol', ('Alcohol', 'Drinks that make you tipsy.')),
-    ('alcohol/wine', ('Wine', 'Vinery barrel drinks: grape and fruit wines, ciders.')),
-    ('alcohol/brew', ('Brew', 'Keg-fermented beer, ale, stout, mead, cider, rice wine.')),
-    ('alcohol/spirit', ('Spirit', 'Distilled liquor (vodka, rum).')),
-    ('alcohol/mixed', ('Mixed drink', 'Cocktails and nogs made from other drinks.')),
-    ('golden', ('Golden food', 'A food wrapped in gold: same recipe shape (food + gold) for every base.')),
-    ('golden/enchanted', ('Enchanted golden food', 'The enchanted tier of a golden food.')),
-    ('can', ('Can', 'A food sealed in a can (multi-serving).')),
-    ('hazard', ('Hazard', 'Edible but harmful: rotten, poisonous, inedible things.')),
+	('fruit', ('Fruit', 'A fruit, berry or nut eaten as harvested or cut, or only dried/baked.')),
+	('fruit/whole', ('Whole fruit', 'One whole tree or bush fruit (apple, orange, mango, banana).')),
+	('fruit/berry', ('Berry', 'Small fruit picked by the bunch: berries, grapes, cherries. Nuts are not berries.')),
+	('fruit/nut', ('Nut', 'A nut or seed eaten as harvested (acorn, walnut, peanut). Canned with salt, not sugar.')),
+	('fruit/slice', ('Fruit slice', 'A slice or the flesh of a larger fruit (pumpkin, melon, cantaloupe, hamimelon, pineapple, citrus slices, durian flesh).')),
+	('fruit/cooked', ('Dried or baked fruit', 'A fruit only dried or baked, nothing added.')),
+	('veggie', ('Vegetable', 'A vegetable, herb or fungus eaten on its own, raw or plainly cooked.')),
+	('veggie/raw', ('Raw vegetable', 'Whole, as harvested.')),
+	('veggie/raw_cut', ('Cut vegetable', 'Cut on a board from a raw vegetable (slices, leaves, florets, diced).')),
+	('veggie/cooked', ('Cooked vegetable', 'A whole vegetable roasted, baked, boiled or grilled, nothing added.')),
+	('veggie/cooked_cut', ('Cooked cut vegetable', 'A cut vegetable cooked, nothing added.')),
+	('meat', ('Meat', 'Land animal meat, nothing added.')),
+	('meat/raw', ('Raw meat', 'A whole raw cut as dropped by the animal.')),
+	('meat/raw_cut', ('Raw cut meat', 'Cut or minced from raw meat (chops, bacon, mince).')),
+	('meat/cooked', ('Cooked meat', 'A whole cut cooked, glazed, smoked or dried.')),
+	('meat/cooked_cut', ('Cooked cut meat', 'A cut, minced or patty piece cooked.')),
+	('fish', ('Fish and seafood', 'Fish, shellfish and squid, nothing added.')),
+	('fish/raw', ('Raw fish', 'A whole raw catch.')),
+	('fish/raw_cut', ('Raw cut fish', 'Cut from a raw catch (slices, fillets).')),
+	('fish/cooked', ('Cooked fish', 'A whole catch cooked or smoked.')),
+	('fish/cooked_cut', ('Cooked cut fish', 'A cut piece cooked.')),
+	('egg', ('Egg', 'Eggs as the main part of the food.')),
+	('egg/cooked', ('Cooked egg', 'One egg fried, boiled or scrambled, nothing else.')),
+	('egg/dish', ('Egg dish', 'Eggs with other parts on a plate or bowl (omelet, shakshouka).')),
+	('dairy', ('Dairy', 'Cheese and yogurt eaten on their own.')),
+	('bread', ('Bread', 'Baked plain or lightly flavored dough with no filling.')),
+	('bread/loaf', ('Loaf', 'A whole loaf or round bread.')),
+	('bread/slice', ('Bread slice', 'A slice of a loaf, toasted or not.')),
+	('bread/flat', ('Flatbread', 'Tortillas and flatbreads baked as one piece (sweet buns are desserts).')),
+	('ingredient', ('Kitchen ingredient', 'Edible but made to go into other food, not to be eaten as a dish.')),
+	('ingredient/dough', ('Dough and batter', 'Unbaked dough, batter and crust, edible or not.')),
+	('ingredient/sauce', ('Sauce and fat', 'Sauces, oils and fats.')),
+	('ingredient/other', ('Other ingredient', 'Leaves, beans, pods, mash, mince, raw pasta and noodles for other recipes.')),
+	('preserve', ('Preserve', 'Fruit or vegetables kept in sugar, salt or brine.')),
+	('preserve/jam', ('Jam', 'Fruit boiled with sugar, in a jar or bottle.')),
+	('preserve/spread', ('Spread', 'A non-fruit spread in a jar (nut butter).')),
+	('preserve/pickle', ('Pickle', 'Vegetables fermented or pickled (kimchi, pickles).')),
+	('jello', ('Jello', 'A set gelatin dessert of one fruit (Fruits Delight jellos and the like).')),
+	('pie', ('Pie', 'A crust filled and baked; whole pies are blocks cut into slices.')),
+	('pie/whole', ('Whole pie', 'The placed block, eaten or cut in slices.')),
+	('pie/slice', ('Pie slice', 'One slice of a whole pie.')),
+	('pie/small', ('Tart and hand pie', 'A one-serving pie or tart sold as an item.')),
+	('cake', ('Cake', 'Sweet sponge with frosting; whole cakes are blocks cut into slices.')),
+	('cake/whole', ('Whole cake', 'The placed block, eaten or cut in slices.')),
+	('cake/slice', ('Cake slice', 'One slice of a whole cake.')),
+	('cake/muffin', ('Muffin and cupcake', 'A one-serving cake baked in a muffin tin: muffins, cupcakes (brownies are desserts).')),
+	('cookie', ('Cookie', 'A small flat baked biscuit.')),
+	('dessert', ('Dessert', 'Sweet bakes and set desserts that are not cake, pie, cookie, candy, jello or frozen; also the '
+							'catchall for any sweet or baked food with no other family.')),
+	('dessert/brownie', ('Brownie', 'A brownie, or the tray of brownies it is cut from.')),
+	('dessert/pudding', ('Pudding', 'Soft set desserts in a bowl (custard, pudding, yogurt desserts) and steamed puddings cut in slices.')),
+	('dessert/pancake', ('Pancake', 'Pancakes from every mod: single pancakes, pancake dishes and the pancake stack blocks. '
+									'No base item: each pancake keeps its own recipes (owner, 2026-11-02).')),
+	('dessert/pastry', ('Pastry', 'Scones, eclairs, beignets and sweet buns.')),
+	('dessert/waffle', ('Waffle', 'A waffle, plain or topped.')),
+	('dessert/roll', ('Sweet roll', 'A rolled sweet dough (sweet roll, chocolate roll).')),
+	('dessert/other', ('Other dessert', 'A sweet or baked food that fits no other family.')),
+	('candy', ('Candy', 'Sugar or chocolate confections.')),
+	('candy/bar', ('Chocolate bar', 'A bar of chocolate or caramel.')),
+	('candy/piece', ('Candy piece', 'A bite of candy, fudge, gummy, coin or leather.')),
+	('candy/coated', ('Coated fruit', 'A fruit or nut dipped in chocolate, caramel, honey or sugar.')),
+	('candy/marshmallow', ('Marshmallow', 'Marshmallows, on a stick or in a s\'more.')),
+	('frozen', ('Frozen dessert', 'Served frozen.')),
+	('frozen/ice_cream', ('Ice cream', 'Churned ice cream in a bowl.')),
+	('frozen/popsicle', ('Popsicle', 'Frozen juice, fruit or flavor on a stick (every popsicle, melon and cantaloupe to corn and ender).')),
+	('frozen/shaved_ice', ('Shaved ice', 'Shaved ice with a fruit flavour.')),
+	('sandwich', ('Sandwich', 'Fillings held in bread or a wrap, eaten by hand.')),
+	('sandwich/square', ('Square sandwich', 'Square bread slices around a filling (the sprite shows slices).')),
+	('sandwich/roll', ('Long roll sandwich', 'A long roll (whole bread) around a filling.')),
+	('sandwich/burger', ('Burger', 'A bun around a patty.')),
+	('sandwich/wrap', ('Wrap', 'A tortilla or leaf rolled or folded around a filling (wraps, tacos).')),
+	('sandwich/toast', ('Open toast', 'One slice of bread or toast with a topping.')),
+	('skewer', ('Skewer', 'Pieces on a stick, eaten by hand; the stick is kept.')),
+	('roll', ('Roll and dumpling', 'A filling rolled or folded in a wrapper: sushi rolls, cabbage rolls, dumplings.')),
+	('stuffed', ('Stuffed vegetable', 'A vegetable hollowed and filled (stuffed potato, peppers).')),
+	('pizza', ('Pizza', 'Dough topped with sauce, cheese and toppings, baked whole and cut.')),
+	('pizza/whole', ('Whole pizza', 'The placed block, cut in slices.')),
+	('pizza/slice', ('Pizza slice', 'One slice of a whole pizza.')),
+	('quiche', ('Quiche', 'A savory egg and cheese custard baked in a pie crust.')),
+	('quiche/whole', ('Whole quiche', 'The placed block, cut in slices.')),
+	('quiche/slice', ('Quiche slice', 'One slice of a whole quiche.')),
+	('lasagna', ('Lasagna', 'Layered pasta, sauce and cheese baked in a pan.')),
+	('lasagna/whole', ('Lasagna pan', 'The placed pan, served in portions.')),
+	('lasagna/serving', ('Lasagna serving', 'One portion of lasagna, from the pan or made on its own.')),
+	('snack', ('Snack', 'Fried or popped finger food: fries, chips, popcorn, nachos, crab sticks.')),
+	('salad', ('Salad', 'Raw or cold parts mixed in a bowl.')),
+	('soup', ('Soup', 'Liquid food in a bowl.')),
+	('soup/soup', ('Soup', 'Thin or blended soups and broths.')),
+	('soup/stew', ('Stew', 'Chunky stews, chilis and braises.')),
+	('meal', ('Bowl meal', 'A cooked dish of several parts in a bowl or on a plate.')),
+	('meal/rice', ('Rice dish', 'Rice as the base.')),
+	('meal/pasta', ('Pasta and noodles', 'Pasta or noodles as the base.')),
+	('meal/fried', ('Fried dish', 'Battered or deep-fried main.')),
+	('meal/plate', ('Plated meal', 'A main with sides (steak and potatoes, roasted vegetables).')),
+	('feast', ('Feast', 'A placed block that serves several portions.')),
+	('feast/whole', ('Feast block', 'The placed block.')),
+	('feast/serving', ('Feast serving', 'One portion taken from a feast block.')),
+	('drink', ('Drink', 'Non-alcoholic drinks.')),
+	('drink/juice', ('Juice', 'Pressed fruit or vegetable juice, smoothies, lemonade.')),
+	('drink/tea', ('Tea', 'Leaves or flowers steeped in hot water.')),
+	('drink/coffee', ('Coffee', 'Coffee drinks.')),
+	('drink/milk', ('Milk drink', 'Milkshakes and hot chocolate.')),
+	('drink/soda', ('Soda and cider', 'Fizzy or fermented-sweet soft drinks, sweet cider.')),
+	('drink/other', ('Other drink', 'Honey, water and drinks that fit no other group.')),
+	('alcohol', ('Alcohol', 'Drinks that make you tipsy.')),
+	('alcohol/wine', ('Wine', 'Vinery barrel drinks: grape and fruit wines, ciders.')),
+	('alcohol/brew', ('Brew', 'Keg-fermented beer, ale, stout, mead, cider, rice wine.')),
+	('alcohol/spirit', ('Spirit', 'Distilled liquor (vodka, rum).')),
+	('alcohol/mixed', ('Mixed drink', 'Cocktails and nogs made from other drinks.')),
+	('golden', ('Golden food', 'A food wrapped in gold: same recipe shape (food + gold) for every base.')),
+	('golden/enchanted', ('Enchanted golden food', 'The enchanted tier of a golden food.')),
+	('can', ('Can', 'A food sealed in a can (multi-serving).')),
+	('hazard', ('Hazard', 'Edible but harmful: rotten, poisonous, inedible things.')),
 ])
 
 # Sandwich bread shape by sprite: briefs/baking_baked-goods.md (baked-goods #9) audit. Ham and cheese takes
 # slices or bread; chunkwich and zucchini sandwich were not in the audit (default: square).
 SQUARE_SANDWICH = {
-    'farmersdelight:bacon_sandwich', 'moredelight:egg_with_bacon_sandwich', 'moredelight:tomato_sandwich',
-    'delightful:nut_butter_and_jelly_sandwich', 'alexsdelight:bunfungus_sandwich', 'brewinandchewin:ham_and_cheese_sandwich',
-    'delightful:chunkwich', 'veggiesdelight:zucchini_sandwich',
+	'farmersdelight:bacon_sandwich', 'moredelight:egg_with_bacon_sandwich', 'moredelight:tomato_sandwich',
+	'delightful:nut_butter_and_jelly_sandwich', 'alexsdelight:bunfungus_sandwich', 'brewinandchewin:ham_and_cheese_sandwich',
+	'delightful:chunkwich', 'veggiesdelight:zucchini_sandwich',
 }
 # Renamed foods whose dump name still says the old one (renames take effect at the next /dumpall)
 FAMILY_OVERRIDE = {'oceanic_delight:sponge_cake': 'pie/whole', 'oceanic_delight:sponge_cake_slice': 'pie/slice',
-                   # rice bowl with no "rice" in its name (barbeques_delight.md 4 step 10)
-                   'barbequesdelight:bibimbap': 'meal/rice',
-                   # Large Meals (plan_meals_rolls_bbq.md A2, A5): the pot pie is a feast, not a pie; plate meals
-                   'largemeals:mushroom_pot_pie_block': 'feast/whole', 'largemeals:mushroom_pot_pie': 'feast/serving',
-                   'largemeals:cod_deluxe': 'meal/plate', 'largemeals:hearty_lunch': 'meal/plate'}
+				   # rice bowl with no "rice" in its name (barbeques_delight.md 4 step 10)
+				   'barbequesdelight:bibimbap': 'meal/rice',
+				   # Large Meals (plan_meals_rolls_bbq.md A2, A5): the pot pie is a feast, not a pie; plate meals
+				   'largemeals:mushroom_pot_pie_block': 'feast/whole', 'largemeals:mushroom_pot_pie': 'feast/serving',
+				   'largemeals:cod_deluxe': 'meal/plate', 'largemeals:hearty_lunch': 'meal/plate'}
 # Sweet or baked one-offs that fit no other family: the dessert catchall, ahead of the special-type no-family rule
 DESSERT_OTHER = {'botania:mana_cookie', 'create_confectionery:gingerbread'}
 UNSORTED = 'unsorted'
@@ -194,51 +194,51 @@ NOFAM = 'nofamily'   # foods that fit no family: listed on their own, no rules
 SKIP = None
 # One-off foods that fit no family (closest family in the comment). special-type foods are added by type.
 NO_FAMILY = {
-    'endersdelight:twisted_cereal': 'meal/plate', 'endersdelight:twisted_cereal_wood': 'meal/plate',
-    'quarkdelight:crab_bars': 'snack', 'berry_good:sweet_berry_meatballs': 'skewer',
-    # Barbeque's Delight cooked skewers joined the skewer family at the skewer fold (dishes/meals #46: handheld +
-    # "skewer" in the name); the burnt skewer is in hazard by its type
+	'endersdelight:twisted_cereal': 'meal/plate', 'endersdelight:twisted_cereal_wood': 'meal/plate',
+	'quarkdelight:crab_bars': 'snack', 'berry_good:sweet_berry_meatballs': 'skewer',
+	# Barbeque's Delight cooked skewers joined the skewer family at the skewer fold (dishes/meals #46: handheld +
+	# "skewer" in the name); the burnt skewer is in hazard by its type
 }
 
 # Recipe type -> station label. Types not listed are shown by their id.
 STATION = {
-    'minecraft:crafting_shapeless': 'Crafting',
-    'minecraft:crafting_shaped': 'Crafting',
-    'fruitsdelight:jelly_craft_shapeless': 'Crafting',
-    'kubejs:shapeless': 'Crafting',
-    'kubejs:shaped': 'Crafting',
-    'create:mechanical_crafting': 'Mechanical Crafter',
-    'create:mixing': 'Mixer',
-    'create:filling': 'Spout',
-    'create:sequenced_assembly': 'Sequenced assembly',
-    'create:compacting': 'Press + Basin',
-    'create:pressing': 'Press',
-    'create:milling': 'Millstone',
-    'create:crushing': 'Crushing Wheels',
-    'create:cutting': 'Mechanical Saw',
-    'create:haunting': 'Fan (haunting)',
-    'create:splashing': 'Fan (washing)',
-    'create_enchantment_industry:disenchanting': 'Disenchanter',
-    'farmersdelight:cooking': 'Cooking Pot',
-    'farmersdelight:cutting': 'Cutting Board',
-    'sliceanddice:cutting': 'Slice and Dice',
-    'minecraft:smoking': 'Smoker',
-    'minecraft:smelting': 'Furnace',
-    'minecraft:campfire_cooking': 'Campfire / Skillet',
-    'creativedelight:baking': 'Oven',
-    'creativeengineering:dragon_breathing': 'Dragon breath',
-    'vinery:wine_fermentation': 'Fermentation Barrel',
-    'vinery:apple_fermenting': 'Apple Press',
-    'vinery:apple_mashing': 'Apple Press',
-    'farmersrespite:brewing': 'Kettle',
-    'brewinandchewin:fermenting': 'Keg',
-    'brewinandchewin:keg_pouring': 'Keg (pouring)',
-    'immersiveengineering:cloche': 'Garden Cloche',
-    'immersiveengineering:bottling_machine': 'Bottling Machine',
-    'immersiveengineering:metal_press': 'Metal Press',
-    'immersiveengineering:crusher': 'IE Crusher',
-    'immersiveengineering:arc_furnace': 'Arc Furnace',
-    'botania:mana_infusion': 'Mana Pool',
+	'minecraft:crafting_shapeless': 'Crafting',
+	'minecraft:crafting_shaped': 'Crafting',
+	'fruitsdelight:jelly_craft_shapeless': 'Crafting',
+	'kubejs:shapeless': 'Crafting',
+	'kubejs:shaped': 'Crafting',
+	'create:mechanical_crafting': 'Mechanical Crafter',
+	'create:mixing': 'Mixer',
+	'create:filling': 'Spout',
+	'create:sequenced_assembly': 'Sequenced assembly',
+	'create:compacting': 'Press + Basin',
+	'create:pressing': 'Press',
+	'create:milling': 'Millstone',
+	'create:crushing': 'Crushing Wheels',
+	'create:cutting': 'Mechanical Saw',
+	'create:haunting': 'Fan (haunting)',
+	'create:splashing': 'Fan (washing)',
+	'create_enchantment_industry:disenchanting': 'Disenchanter',
+	'farmersdelight:cooking': 'Cooking Pot',
+	'farmersdelight:cutting': 'Cutting Board',
+	'sliceanddice:cutting': 'Slice and Dice',
+	'minecraft:smoking': 'Smoker',
+	'minecraft:smelting': 'Furnace',
+	'minecraft:campfire_cooking': 'Campfire / Skillet',
+	'creativedelight:baking': 'Oven',
+	'creativeengineering:dragon_breathing': 'Dragon breath',
+	'vinery:wine_fermentation': 'Fermentation Barrel',
+	'vinery:apple_fermenting': 'Apple Press',
+	'vinery:apple_mashing': 'Apple Press',
+	'farmersrespite:brewing': 'Kettle',
+	'brewinandchewin:fermenting': 'Keg',
+	'brewinandchewin:keg_pouring': 'Keg (pouring)',
+	'immersiveengineering:cloche': 'Garden Cloche',
+	'immersiveengineering:bottling_machine': 'Bottling Machine',
+	'immersiveengineering:metal_press': 'Metal Press',
+	'immersiveengineering:crusher': 'IE Crusher',
+	'immersiveengineering:arc_furnace': 'Arc Furnace',
+	'botania:mana_infusion': 'Mana Pool',
 }
 # Mirrors of another station: counted, but marked so a rule doesn't double them.
 MIRROR = {'Slice and Dice': 'Cutting Board'}
@@ -249,382 +249,382 @@ UNPACK = re.compile(r'crate|bag|sack|basket|_block|bin\b|box')
 USES_SHOWN = 10
 
 PLACE_COLS = [('block', 'own block'), ('sneak', 'own block, sneak'), ('placed', 'DD placed'),
-              ('plate', 'Food Plate'), ('small_plate', 'Small Food Plate'), ('coaster', 'coaster'),
-              ('jar', 'Supp. jar')]
+			  ('plate', 'Food Plate'), ('small_plate', 'Small Food Plate'), ('coaster', 'coaster'),
+			  ('jar', 'Supp. jar')]
 
 
 def has(n, *words):
-    return any(w in n for w in words)
+	return any(w in n for w in words)
 
 
 def classify(r):
-    """r: dict with id, n (lowercase name), p (id path), t (food type or ''), mod, whole (block form)."""
-    n, p, t, mod = r['n'], r['p'], r['t'], r['mod']
-    if r.get('excluded') or 'incomplete' in p or p in ('lunchbox', 'lunchbag', 'golden_lunchbox'):
-        return SKIP
-    if r['id'] in FAMILY_OVERRIDE:
-        return FAMILY_OVERRIDE[r['id']]
-    if r['whole']:
-        if has(n, 'black powder'):
-            return SKIP
-        for w in ('pizza', 'quiche', 'lasagna'):
-            if has(n, w):
-                return w + '/whole'
-        if has(n, 'popcorn', 'nachos'):
-            return 'snack'
-        if has(n, 'golden cake'):
-            return 'golden/enchanted' if has(n, 'enchanted') else 'golden'
-        if has(n, 'brownie'):
-            return 'dessert/brownie'
-        if has(n, 'pudding'):
-            return 'dessert/pudding'
-        if has(n, 'pancake'):   # Rustic's pancake plates (stack blocks)
-            return 'dessert/pancake'
-        if has(n, 'cake') and not has(n, 'turnip'):
-            return 'cake/whole'
-        if has(n, 'pie') and not has(n, 'shepherd'):
-            return 'pie/whole'
-        return 'feast/whole'
-    if t == 'canned':
-        return 'can'
-    if t == 'golden/enchanted':
-        return 'golden/enchanted'
-    if t == 'golden':
-        return 'golden'
-    if t == 'hazard':
-        return 'hazard'
-    if r['id'] in DESSERT_OTHER:
-        return 'dessert/other'
-    # Fermented garlic honey: a vegetable fermented in the Pickling Jar (creativedelight/members #30 R8)
-    if has(n, 'fermented garlic honey'):
-        return 'preserve/pickle'
-    if t == 'special' or r['id'] in NO_FAMILY:
-        return NOFAM
-    if has(n, 'bellini'):
-        return 'alcohol/mixed'
-    if t == 'meal/feast':
-        return 'snack' if has(n, 'popcorn', 'nachos') else 'feast/serving'
+	"""r: dict with id, n (lowercase name), p (id path), t (food type or ''), mod, whole (block form)."""
+	n, p, t, mod = r['n'], r['p'], r['t'], r['mod']
+	if r.get('excluded') or 'incomplete' in p or p in ('lunchbox', 'lunchbag', 'golden_lunchbox'):
+		return SKIP
+	if r['id'] in FAMILY_OVERRIDE:
+		return FAMILY_OVERRIDE[r['id']]
+	if r['whole']:
+		if has(n, 'black powder'):
+			return SKIP
+		for w in ('pizza', 'quiche', 'lasagna'):
+			if has(n, w):
+				return w + '/whole'
+		if has(n, 'popcorn', 'nachos'):
+			return 'snack'
+		if has(n, 'golden cake'):
+			return 'golden/enchanted' if has(n, 'enchanted') else 'golden'
+		if has(n, 'brownie'):
+			return 'dessert/brownie'
+		if has(n, 'pudding'):
+			return 'dessert/pudding'
+		if has(n, 'pancake'):   # Rustic's pancake plates (stack blocks)
+			return 'dessert/pancake'
+		if has(n, 'cake') and not has(n, 'turnip'):
+			return 'cake/whole'
+		if has(n, 'pie') and not has(n, 'shepherd'):
+			return 'pie/whole'
+		return 'feast/whole'
+	if t == 'canned':
+		return 'can'
+	if t == 'golden/enchanted':
+		return 'golden/enchanted'
+	if t == 'golden':
+		return 'golden'
+	if t == 'hazard':
+		return 'hazard'
+	if r['id'] in DESSERT_OTHER:
+		return 'dessert/other'
+	# Fermented garlic honey: a vegetable fermented in the Pickling Jar (creativedelight/members #30 R8)
+	if has(n, 'fermented garlic honey'):
+		return 'preserve/pickle'
+	if t == 'special' or r['id'] in NO_FAMILY:
+		return NOFAM
+	if has(n, 'bellini'):
+		return 'alcohol/mixed'
+	if t == 'meal/feast':
+		return 'snack' if has(n, 'popcorn', 'nachos') else 'feast/serving'
 
-    if t == 'drink/alcohol':
-        if has(n, 'wodka', 'vodka', 'rum'):
-            return 'alcohol/spirit'
-        if has(n, 'bloody mary', 'grog', 'nog', 'grenadine', 'salty folly', 'withering dross', 'special mixture'):
-            return 'alcohol/mixed'
-        if mod == 'vinery' or (has(n, 'wine') and mod != 'brewinandchewin'):
-            return 'alcohol/wine'
-        return 'alcohol/brew'
-    if t == 'drink':
-        if has(n, 'milkshake', 'hot chocolate', 'chocolate milk'):
-            return 'drink/milk'
-        if has(n, 'coffee', 'cloud latte'):
-            return 'drink/coffee'
-        if has(n, 'tea', 'latte'):
-            return 'drink/tea'
-        if has(n, 'juice', 'smoothie', 'lemonade', 'nectar', 'bellini'):
-            return 'drink/juice'
-        if has(n, 'soda', 'cola', 'cider'):
-            return 'drink/soda'
-        return 'drink/other'
-    if t == 'soup':
-        return 'soup/stew' if has(n, 'stew', 'chili', 'cacciatore', 'sinigang') else 'soup/soup'
-    if t == 'salad':
-        return 'salad'
+	if t == 'drink/alcohol':
+		if has(n, 'wodka', 'vodka', 'rum'):
+			return 'alcohol/spirit'
+		if has(n, 'bloody mary', 'grog', 'nog', 'grenadine', 'salty folly', 'withering dross', 'special mixture'):
+			return 'alcohol/mixed'
+		if mod == 'vinery' or (has(n, 'wine') and mod != 'brewinandchewin'):
+			return 'alcohol/wine'
+		return 'alcohol/brew'
+	if t == 'drink':
+		if has(n, 'milkshake', 'hot chocolate', 'chocolate milk'):
+			return 'drink/milk'
+		if has(n, 'coffee', 'cloud latte'):
+			return 'drink/coffee'
+		if has(n, 'tea', 'latte'):
+			return 'drink/tea'
+		if has(n, 'juice', 'smoothie', 'lemonade', 'nectar', 'bellini'):
+			return 'drink/juice'
+		if has(n, 'soda', 'cola', 'cider'):
+			return 'drink/soda'
+		return 'drink/other'
+	if t == 'soup':
+		return 'soup/stew' if has(n, 'stew', 'chili', 'cacciatore', 'sinigang') else 'soup/soup'
+	if t == 'salad':
+		return 'salad'
 
-    # Pancakes, every mod (food type sweet/pancake; food_families.md 4.7)
-    if t == 'sweet/pancake' or has(n, 'pancake'):
-        return 'dessert/pancake'
-    # Forms that cut across sweet / handheld / meal / baked / ingredient.
-    if has(n, 'jello', 'gelatine', 'magma jelly'):
-        return 'jello'
-    if (re.search(r'\bjam\b', n) or has(n, 'jelly bottle')) and not has(n, 'sandwich'):
-        return 'preserve/jam'
-    if has(n, 'nut butter') and not has(n, 'sandwich'):
-        return 'preserve/spread'
-    if has(n, 'kimchi', 'pickled', 'sauerkraut') or n == 'pickle':
-        return 'preserve/pickle'
-    if has(n, 'rice cake', 'takoyaki', 'cabbage wrapped'):
-        return 'roll'
-    # Oven bases: made to be baked into a cake or cookie, not eaten as one
-    if has(n, 'pie crust') or p in ('cake_base', 'cake_base_baked', 'cake_paste', 'cookie_dough'):
-        return 'ingredient/dough'
-    if has(n, 'pizza'):
-        return 'pizza/slice'
-    if has(n, 'quiche'):
-        return 'quiche/slice'
-    if has(n, 'lasagna'):
-        return 'lasagna/serving'
-    if re.search(r'\bpie\b', n):
-        return 'pie/slice' if has(n, 'slice') else 'pie/small'
-    if has(n, 'tart') and not has(n, 'tartar'):   # Spiked Tartare is a fish dish
-        return 'pie/small'
-    if has(n, 'brownie'):
-        return 'dessert/brownie'
-    if has(n, 'custard', 'pudding', 'glowgurt'):
-        return 'dessert/pudding'
-    if has(n, 'cake', 'gateau') and not has(n, 'turnip cake', 'pancake', 'cupcake'):
-        return 'cake/slice' if has(n, 'slice') else 'cake/whole'
-    if has(n, 'cupcake', 'muffin'):
-        return 'cake/muffin'
-    if has(n, 'cookie', 'gingerbread man'):
-        return 'cookie'
-    if has(n, 'ice cream'):
-        return 'frozen/ice_cream'
-    if has(n, 'shaved ice'):
-        return 'frozen/shaved_ice'
-    if has(n, 'popsicle', 'pearlsicle', 'popsiclime'):
-        return 'frozen/popsicle'
-    if has(n, 'marshmallow', "s'more"):
-        return 'candy/marshmallow'
-    if t == 'sweet':
-        if has(n, 'waffle'):
-            return 'dessert/waffle'
-        if has(n, ' roll') and not has(n, 'hawberry'):
-            return 'dessert/roll'
-        if has(n, 'eclair', 'beignet', 'scone'):
-            return 'dessert/pastry'
-        if has(n, 'toast with'):
-            return 'sandwich/toast'
-        if has(n, 'bar of', 'chocolate bar', 'mint chocolate', 'chocolate fingers'):
-            return 'candy/bar'
-        if has(n, 'apple', 'berries', 'strawberries', 'walnut', 'pear with'):
-            return 'candy/coated'
-        return 'candy/piece'
-    if has(n, 'scone', 'eclair', 'beignet', 'adzuki bun'):
-        return 'dessert/pastry'
-    if has(n, 'toast with', 'bruschetta', 'jelly bread', 'caviar toast'):
-        return 'sandwich/toast'
-    if has(n, 'burger'):
-        return 'sandwich/burger'
-    if has(n, 'sandwich', 'chunkwich'):
-        return 'sandwich/square' if r['id'] in SQUARE_SANDWICH else 'sandwich/roll'
-    if has(n, 'wrap', 'taco', 'fajita'):
-        return 'sandwich/wrap'
-    # 'barbecue stick': End's and Miner's sticks before their Skewer renames reach the dump (plan_meals_rolls_bbq.md C5)
-    if has(n, 'skewer', 'on a stick', 'barbecue stick', 'corn dog', 'meatballs') and t == 'handheld':
-        return 'skewer'
-    if has(n, 'hawberry roll'):
-        return 'candy/piece'
-    if t == 'handheld' and has(n, 'roll', 'dumpling', 'rangoon'):
-        return 'roll'
-    if has(n, 'pierogi'):
-        return 'roll'
-    if has(n, 'stuffed') and t in ('handheld', 'meal') and not has(n, 'stuffing', 'bowl of', 'plate of'):
-        return 'stuffed'
-    if has(n, 'fries', 'chip', 'popcorn', 'nachos', 'crab bars', 'nutritional bar', 'crunchy bar') and not has(n, 'fish and chips', "'n' chips"):
-        return 'snack'
-    if t == 'egg':
-        return 'egg/cooked'
-    if (has(n, 'omelet', 'eggs', 'shakshouka', 'with egg and', 'kuku') and not has(n, 'mixture')
-            and not t.startswith(('raw/', 'cooked/'))):
-        return 'egg/dish'
-    if t in ('meal', 'handheld'):
-        if has(n, 'rice', 'paella'):
-            return 'meal/rice'
-        if has(n, 'pasta', 'noodle'):
-            return 'meal/pasta'
-        if has(n, 'fried', 'chips', 'tempura', 'nugget', 'squid rings'):
-            return 'meal/fried'
-        return 'meal/plate'
+	# Pancakes, every mod (food type sweet/pancake; food_families.md 4.7)
+	if t == 'sweet/pancake' or has(n, 'pancake'):
+		return 'dessert/pancake'
+	# Forms that cut across sweet / handheld / meal / baked / ingredient.
+	if has(n, 'jello', 'gelatine', 'magma jelly'):
+		return 'jello'
+	if (re.search(r'\bjam\b', n) or has(n, 'jelly bottle')) and not has(n, 'sandwich'):
+		return 'preserve/jam'
+	if has(n, 'nut butter') and not has(n, 'sandwich'):
+		return 'preserve/spread'
+	if has(n, 'kimchi', 'pickled', 'sauerkraut') or n == 'pickle':
+		return 'preserve/pickle'
+	if has(n, 'rice cake', 'takoyaki', 'cabbage wrapped'):
+		return 'roll'
+	# Oven bases: made to be baked into a cake or cookie, not eaten as one
+	if has(n, 'pie crust') or p in ('cake_base', 'cake_base_baked', 'cake_paste', 'cookie_dough'):
+		return 'ingredient/dough'
+	if has(n, 'pizza'):
+		return 'pizza/slice'
+	if has(n, 'quiche'):
+		return 'quiche/slice'
+	if has(n, 'lasagna'):
+		return 'lasagna/serving'
+	if re.search(r'\bpie\b', n):
+		return 'pie/slice' if has(n, 'slice') else 'pie/small'
+	if has(n, 'tart') and not has(n, 'tartar'):   # Spiked Tartare is a fish dish
+		return 'pie/small'
+	if has(n, 'brownie'):
+		return 'dessert/brownie'
+	if has(n, 'custard', 'pudding', 'glowgurt'):
+		return 'dessert/pudding'
+	if has(n, 'cake', 'gateau') and not has(n, 'turnip cake', 'pancake', 'cupcake'):
+		return 'cake/slice' if has(n, 'slice') else 'cake/whole'
+	if has(n, 'cupcake', 'muffin'):
+		return 'cake/muffin'
+	if has(n, 'cookie', 'gingerbread man'):
+		return 'cookie'
+	if has(n, 'ice cream'):
+		return 'frozen/ice_cream'
+	if has(n, 'shaved ice'):
+		return 'frozen/shaved_ice'
+	if has(n, 'popsicle', 'pearlsicle', 'popsiclime'):
+		return 'frozen/popsicle'
+	if has(n, 'marshmallow', "s'more"):
+		return 'candy/marshmallow'
+	if t == 'sweet':
+		if has(n, 'waffle'):
+			return 'dessert/waffle'
+		if has(n, ' roll') and not has(n, 'hawberry'):
+			return 'dessert/roll'
+		if has(n, 'eclair', 'beignet', 'scone'):
+			return 'dessert/pastry'
+		if has(n, 'toast with'):
+			return 'sandwich/toast'
+		if has(n, 'bar of', 'chocolate bar', 'mint chocolate', 'chocolate fingers'):
+			return 'candy/bar'
+		if has(n, 'apple', 'berries', 'strawberries', 'walnut', 'pear with'):
+			return 'candy/coated'
+		return 'candy/piece'
+	if has(n, 'scone', 'eclair', 'beignet', 'adzuki bun'):
+		return 'dessert/pastry'
+	if has(n, 'toast with', 'bruschetta', 'jelly bread', 'caviar toast'):
+		return 'sandwich/toast'
+	if has(n, 'burger'):
+		return 'sandwich/burger'
+	if has(n, 'sandwich', 'chunkwich'):
+		return 'sandwich/square' if r['id'] in SQUARE_SANDWICH else 'sandwich/roll'
+	if has(n, 'wrap', 'taco', 'fajita'):
+		return 'sandwich/wrap'
+	# 'barbecue stick': End's and Miner's sticks before their Skewer renames reach the dump (plan_meals_rolls_bbq.md C5)
+	if has(n, 'skewer', 'on a stick', 'barbecue stick', 'corn dog', 'meatballs') and t == 'handheld':
+		return 'skewer'
+	if has(n, 'hawberry roll'):
+		return 'candy/piece'
+	if t == 'handheld' and has(n, 'roll', 'dumpling', 'rangoon'):
+		return 'roll'
+	if has(n, 'pierogi'):
+		return 'roll'
+	if has(n, 'stuffed') and t in ('handheld', 'meal') and not has(n, 'stuffing', 'bowl of', 'plate of'):
+		return 'stuffed'
+	if has(n, 'fries', 'chip', 'popcorn', 'nachos', 'crab bars', 'nutritional bar', 'crunchy bar') and not has(n, 'fish and chips', "'n' chips"):
+		return 'snack'
+	if t == 'egg':
+		return 'egg/cooked'
+	if (has(n, 'omelet', 'eggs', 'shakshouka', 'with egg and', 'kuku') and not has(n, 'mixture')
+			and not t.startswith(('raw/', 'cooked/'))):
+		return 'egg/dish'
+	if t in ('meal', 'handheld'):
+		if has(n, 'rice', 'paella'):
+			return 'meal/rice'
+		if has(n, 'pasta', 'noodle'):
+			return 'meal/pasta'
+		if has(n, 'fried', 'chips', 'tempura', 'nugget', 'squid rings'):
+			return 'meal/fried'
+		return 'meal/plate'
 
-    # Base produce by food type.
-    if t == 'raw/fruit':
-        if has(n, 'slice', 'flesh'):
-            return 'fruit/slice'
-        if has(n, 'acorn', 'peanut', 'walnut', 'almond', 'pecan', 'hazelnut', 'chestnut', 'cashew', 'pistachio'):
-            return 'fruit/nut'
-        if has(n, 'berr', 'grape', 'cherry', 'lychee'):
-            return 'fruit/berry'
-        return 'fruit/whole'
-    if t == 'cooked/fruit':
-        return 'fruit/cooked'
-    if t == 'raw/veggie':
-        return 'veggie/raw'
-    if t == 'raw/veggie/sliced':
-        if has(n, 'pumpkin slice'):
-            return 'fruit/slice'
-        return 'veggie/raw_cut'
-    if t == 'cooked/veggie':
-        if has(n, 'cooked rice'):
-            return 'meal/rice'
-        return 'veggie/cooked'
-    if t == 'cooked/veggie/sliced':
-        return 'veggie/cooked_cut'
-    if t == 'raw/meat':
-        return 'meat/raw'
-    if t == 'raw/meat/sliced':
-        return 'meat/raw_cut'
-    if t == 'cooked/meat':
-        return 'meat/cooked_cut' if has(n, 'patty') else 'meat/cooked'
-    if t == 'cooked/meat/sliced':
-        return 'meat/cooked_cut'
-    if t == 'raw/fish':
-        return 'fish/raw'
-    if t == 'raw/fish/sliced':
-        return 'fish/raw_cut'
-    if t == 'cooked/fish':
-        return 'fish/cooked'
-    if t == 'cooked/fish/sliced':
-        return 'fish/cooked_cut'
-    if t == 'dairy':
-        return 'dairy'
-    if t == 'baked':
-        if has(n, 'honey bread', 'mulberry bread') or p == 'glowbread':   # filled, not bread (baked-goods #33)
-            return 'dessert/other'
-        if has(n, 'slice', 'toast'):
-            return 'bread/slice'
-        if has(n, 'tortilla', 'mhadjeb', 'bun'):
-            return 'bread/flat'
-        return 'bread/loaf'
-    if t == 'ingredient':
-        if has(n, 'pasta', 'noodle'):
-            return 'ingredient/other'
-        if has(n, 'dough', 'batter', 'tortilla', 'uncooked'):
-            return 'ingredient/dough'
-        if has(n, 'sauce', 'oil', 'fat'):
-            return 'ingredient/sauce'
-        return 'ingredient/other'
-    return UNSORTED
+	# Base produce by food type.
+	if t == 'raw/fruit':
+		if has(n, 'slice', 'flesh'):
+			return 'fruit/slice'
+		if has(n, 'acorn', 'peanut', 'walnut', 'almond', 'pecan', 'hazelnut', 'chestnut', 'cashew', 'pistachio'):
+			return 'fruit/nut'
+		if has(n, 'berr', 'grape', 'cherry', 'lychee'):
+			return 'fruit/berry'
+		return 'fruit/whole'
+	if t == 'cooked/fruit':
+		return 'fruit/cooked'
+	if t == 'raw/veggie':
+		return 'veggie/raw'
+	if t == 'raw/veggie/sliced':
+		if has(n, 'pumpkin slice'):
+			return 'fruit/slice'
+		return 'veggie/raw_cut'
+	if t == 'cooked/veggie':
+		if has(n, 'cooked rice'):
+			return 'meal/rice'
+		return 'veggie/cooked'
+	if t == 'cooked/veggie/sliced':
+		return 'veggie/cooked_cut'
+	if t == 'raw/meat':
+		return 'meat/raw'
+	if t == 'raw/meat/sliced':
+		return 'meat/raw_cut'
+	if t == 'cooked/meat':
+		return 'meat/cooked_cut' if has(n, 'patty') else 'meat/cooked'
+	if t == 'cooked/meat/sliced':
+		return 'meat/cooked_cut'
+	if t == 'raw/fish':
+		return 'fish/raw'
+	if t == 'raw/fish/sliced':
+		return 'fish/raw_cut'
+	if t == 'cooked/fish':
+		return 'fish/cooked'
+	if t == 'cooked/fish/sliced':
+		return 'fish/cooked_cut'
+	if t == 'dairy':
+		return 'dairy'
+	if t == 'baked':
+		if has(n, 'honey bread', 'mulberry bread') or p == 'glowbread':   # filled, not bread (baked-goods #33)
+			return 'dessert/other'
+		if has(n, 'slice', 'toast'):
+			return 'bread/slice'
+		if has(n, 'tortilla', 'mhadjeb', 'bun'):
+			return 'bread/flat'
+		return 'bread/loaf'
+	if t == 'ingredient':
+		if has(n, 'pasta', 'noodle'):
+			return 'ingredient/other'
+		if has(n, 'dough', 'batter', 'tortilla', 'uncooked'):
+			return 'ingredient/dough'
+		if has(n, 'sauce', 'oil', 'fat'):
+			return 'ingredient/sauce'
+		return 'ingredient/other'
+	return UNSORTED
 
 
 # ---------------------------------------------------------------- data
 
 def load_json(p, key=None):
-    d = json.loads(Path(p).read_text())
-    return d[key] if key else d
+	d = json.loads(Path(p).read_text())
+	return d[key] if key else d
 
 
 def soft_fluid_items():
-    """Items a Supplementaries jar takes as a soft fluid: every 'filled' container item."""
-    out = set()
+	"""Items a Supplementaries jar takes as a soft fluid: every 'filled' container item."""
+	out = set()
 
-    def take(raw):
-        try:
-            j = json.loads(raw)
-        except ValueError:
-            return
-        for c in j.get('containers', []) if isinstance(j, dict) else []:
-            for f in c.get('filled', []):
-                out.add(f)
-    for jar in (INSTANCE / 'mods').glob('*.jar'):
-        try:
-            with zipfile.ZipFile(jar) as z:
-                for name in z.namelist():
-                    if '/soft_fluids/' in name and name.endswith('.json'):
-                        take(z.read(name).decode('utf-8', 'replace'))
-        except zipfile.BadZipFile:
-            continue
-    for f in (INSTANCE / 'kubejs/data').glob('*/moonlight/soft_fluids/*.json'):
-        take(f.read_text())
-    return out
+	def take(raw):
+		try:
+			j = json.loads(raw)
+		except ValueError:
+			return
+		for c in j.get('containers', []) if isinstance(j, dict) else []:
+			for f in c.get('filled', []):
+				out.add(f)
+	for jar in (INSTANCE / 'mods').glob('*.jar'):
+		try:
+			with zipfile.ZipFile(jar) as z:
+				for name in z.namelist():
+					if '/soft_fluids/' in name and name.endswith('.json'):
+						take(z.read(name).decode('utf-8', 'replace'))
+		except zipfile.BadZipFile:
+			continue
+	for f in (INSTANCE / 'kubejs/data').glob('*/moonlight/soft_fluids/*.json'):
+		take(f.read_text())
+	return out
 
 
 def load():
-    cat = {c['id']: c for c in load_json(EXPORT / 'catalog.json', 'foods')}
-    foods = load_json(EXPORT / 'foods.json', 'foods')
-    blocks = load_json(EXPORT / 'food_blocks.json', 'blocks')
-    recipes = load_json(EXPORT / 'recipes.json', 'recipes')
-    dump_place = load_json(EXPORT / 'placeable.json')
-    tags = load_json(TAGS)
-    tags = tags.get('tags', tags)
-    tags = {k: (v if isinstance(v, list) else v.get('values', [])) for k, v in tags.items()}
-    _, key_val, _ = fc.parse_dict()
-    types = load_json(TYPES)
-    place_keys = load_json(PLACEABLE)
-    return cat, foods, blocks, recipes, dump_place, tags, key_val, types, place_keys
+	cat = {c['id']: c for c in load_json(EXPORT / 'catalog.json', 'foods')}
+	foods = load_json(EXPORT / 'foods.json', 'foods')
+	blocks = load_json(EXPORT / 'food_blocks.json', 'blocks')
+	recipes = load_json(EXPORT / 'recipes.json', 'recipes')
+	dump_place = load_json(EXPORT / 'placeable.json')
+	tags = load_json(TAGS)
+	tags = tags.get('tags', tags)
+	tags = {k: (v if isinstance(v, list) else v.get('values', [])) for k, v in tags.items()}
+	_, key_val, _ = fc.parse_dict()
+	types = load_json(TYPES)
+	place_keys = load_json(PLACEABLE)
+	return cat, foods, blocks, recipes, dump_place, tags, key_val, types, place_keys
 
 
 def clean(name):
-    return re.sub(r'\u00a7.', '', name)
+	return re.sub(r'\u00a7.', '', name)
 
 
 def build_rows(cat, foods, blocks):
-    rows = OrderedDict()
-    for f in foods:
-        c = cat.get(f['id'], {})
-        f = dict(f, name=clean(f['name'] or f['id']))
-        rows[f['id']] = dict(id=f['id'], name=f['name'] or f['id'], n=(f['name'] or f['id']).lower(),
-                             p=f['id'].split(':', 1)[1], mod=f['id'].split(':', 1)[0], t=c.get('type') or '',
-                             whole=False, food=f)
-    for b in blocks:
-        name = b['name'] or b['id']
-        if name.startswith(('Placed ', 'Plated ', 'Small Plated ')) or b['id'] in rows:
-            continue
-        rows[b['id']] = dict(id=b['id'], name=name, n=name.lower(), p=b['id'].split(':', 1)[1],
-                             mod=b['id'].split(':', 1)[0], t='', whole=True, food=None)
-    return rows
+	rows = OrderedDict()
+	for f in foods:
+		c = cat.get(f['id'], {})
+		f = dict(f, name=clean(f['name'] or f['id']))
+		rows[f['id']] = dict(id=f['id'], name=f['name'] or f['id'], n=(f['name'] or f['id']).lower(),
+							 p=f['id'].split(':', 1)[1], mod=f['id'].split(':', 1)[0], t=c.get('type') or '',
+							 whole=False, food=f)
+	for b in blocks:
+		name = b['name'] or b['id']
+		if name.startswith(('Placed ', 'Plated ', 'Small Plated ')) or b['id'] in rows:
+			continue
+		rows[b['id']] = dict(id=b['id'], name=name, n=name.lower(), p=b['id'].split(':', 1)[1],
+							 mod=b['id'].split(':', 1)[0], t='', whole=True, food=None)
+	return rows
 
 
 def add_dough_rows(rows, key_val):
-    """Every f.dough_* in food_dict.js is a dough, edible or not (Create dough, cookie dough, sourdough ...)."""
-    src = (PP.STARTUP_LIB / 'food_dict.js').read_text()
-    names = {}
-    for group in load_json(INSTANCE / 'kubejs/exported/display_names.json', 'entries').values():
-        for e in group:
-            names[e['id']] = e['name']
-    for k in re.findall(r'f\.dough_\w+\s*=\s*i\.(\w+)', src):
-        iid = key_val[k]
-        if iid in rows:
-            continue
-        name = clean(names.get(iid) or iid)
-        rows[iid] = dict(id=iid, name=name, n=name.lower(), p=iid.split(':', 1)[1], mod=iid.split(':', 1)[0],
-                         t='ingredient', whole=False, food=None)
+	"""Every f.dough_* in food_dict.js is a dough, edible or not (Create dough, cookie dough, sourdough ...)."""
+	src = (PP.STARTUP_LIB / 'food_dict.js').read_text()
+	names = {}
+	for group in load_json(INSTANCE / 'kubejs/exported/display_names.json', 'entries').values():
+		for e in group:
+			names[e['id']] = e['name']
+	for k in re.findall(r'f\.dough_\w+\s*=\s*i\.(\w+)', src):
+		iid = key_val[k]
+		if iid in rows:
+			continue
+		name = clean(names.get(iid) or iid)
+		rows[iid] = dict(id=iid, name=name, n=name.lower(), p=iid.split(':', 1)[1], mod=iid.split(':', 1)[0],
+						 t='ingredient', whole=False, food=None)
 
 
 def placement(rows, dump_place, tags, key_val, place_keys, fluids):
-    ids = lambda key: {key_val.get(k) for k in place_keys.get(key, [])} - {None}
-    own, sneak = ids('placeable'), ids('placeable/sneak')
-    dd = dump_place.get('displayDelight', {})
-    placed = set(dd.get('placed', {}))
-    plate, small = ids('placeable_on_plate') | set(dd.get('plate', {})), ids('placeable_on_small_plate') | set(dd.get('small_plate', {}))
-    coaster = ids('placeable_on_coaster')
-    jar = set(tags.get('supplementaries:cookies', [])) | fluids
-    out = {}
-    for i, r in rows.items():
-        s = set()
-        if i in own and i not in placed:
-            s.add('sneak' if i in sneak else 'block')
-        if r['whole']:
-            s.add('block')
-        for col, group in (('placed', placed), ('plate', plate), ('small_plate', small),
-                           ('coaster', coaster), ('jar', jar)):
-            if i in group:
-                s.add(col)
-        out[i] = s
-    return out
+	ids = lambda key: {key_val.get(k) for k in place_keys.get(key, [])} - {None}
+	own, sneak = ids('placeable'), ids('placeable/sneak')
+	dd = dump_place.get('displayDelight', {})
+	placed = set(dd.get('placed', {}))
+	plate, small = ids('placeable_on_plate') | set(dd.get('plate', {})), ids('placeable_on_small_plate') | set(dd.get('small_plate', {}))
+	coaster = ids('placeable_on_coaster')
+	jar = set(tags.get('supplementaries:cookies', [])) | fluids
+	out = {}
+	for i, r in rows.items():
+		s = set()
+		if i in own and i not in placed:
+			s.add('sneak' if i in sneak else 'block')
+		if r['whole']:
+			s.add('block')
+		for col, group in (('placed', placed), ('plate', plate), ('small_plate', small),
+						   ('coaster', coaster), ('jar', jar)):
+			if i in group:
+				s.add(col)
+		out[i] = s
+	return out
 
 
 def tag_members(tags):
-    by_item = defaultdict(set)
-    for t, items in tags.items():
-        for it in items:
-            if not it.startswith('#'):
-                by_item[it].add('#' + t)
-    return by_item
+	by_item = defaultdict(set)
+	for t, items in tags.items():
+		for it in items:
+			if not it.startswith('#'):
+				by_item[it].add('#' + t)
+	return by_item
 
 
 def recipe_index(recipes, tags):
-    """out id -> [recipe dict(st, type, id, ins)]; used_in: item -> {output id}. ins holds raw ids, '#tags' and the
+	"""out id -> [recipe dict(st, type, id, ins)]; used_in: item -> {output id}. ins holds raw ids, '#tags' and the
     items those tags resolve to."""
-    by_out, by_in, used_in = defaultdict(list), defaultdict(list), defaultdict(set)
-    for r in recipes:
-        outs = [o['id'] for o in r.get('out', []) if isinstance(o, dict) and o.get('id')]
-        if (len(r.get('in', [])) == 1 and UNPACK.search(r['in'][0])
-                and r['out'] and r['out'][0].get('n') in (4, 9)):
-            continue
-        ins = set()
-        for raw in r.get('in', []):
-            for x in fc.ingredient_items(raw):
-                ins.add(x)
-                if x.startswith('#'):
-                    ins.update(i for i in tags.get(x[1:], []) if not i.startswith('#'))
-        rec = dict(st=STATION.get(r['type'], r['type']), type=r['type'], id=r['id'], ins=ins, outs=outs)
-        for o in outs:
-            by_out[o].append(rec)
-        for x in ins:
-            if not x.startswith('#'):
-                used_in[x].update(o for o in outs if o != x)
-                by_in[x].append(rec)
-    return by_out, by_in, used_in
+	by_out, by_in, used_in = defaultdict(list), defaultdict(list), defaultdict(set)
+	for r in recipes:
+		outs = [o['id'] for o in r.get('out', []) if isinstance(o, dict) and o.get('id')]
+		if (len(r.get('in', [])) == 1 and UNPACK.search(r['in'][0])
+				and r['out'] and r['out'][0].get('n') in (4, 9)):
+			continue
+		ins = set()
+		for raw in r.get('in', []):
+			for x in fc.ingredient_items(raw):
+				ins.add(x)
+				if x.startswith('#'):
+					ins.update(i for i in tags.get(x[1:], []) if not i.startswith('#'))
+		rec = dict(st=STATION.get(r['type'], r['type']), type=r['type'], id=r['id'], ins=ins, outs=outs)
+		for o in outs:
+			by_out[o].append(rec)
+		for x in ins:
+			if not x.startswith('#'):
+				used_in[x].update(o for o in outs if o != x)
+				by_in[x].append(rec)
+	return by_out, by_in, used_in
 
 
 # ---------------------------------------------------------------- rules
@@ -638,57 +638,57 @@ def recipe_index(recipes, tags):
 # A subfamily inherits each field its parent has and it lacks.
 
 class Rule:
-    def __init__(self, kind, text, src='', check=None):
-        self.kind, self.text, self.src, self.check = kind, text, src, check
+	def __init__(self, kind, text, src='', check=None):
+		self.kind, self.text, self.src, self.check = kind, text, src, check
 
 
 def R(text, src='', check=None):
-    return Rule('rule', text, src, check)
+	return Rule('rule', text, src, check)
 
 
 def P(text, src, check=None):
-    return Rule('planned', text, src, check)
+	return Rule('planned', text, src, check)
 
 
 def D(text, check=None):
-    return Rule('decision', text, '', check)
+	return Rule('decision', text, '', check)
 
 
 class M:
-    """One member, as the checks see it."""
-    def __init__(self, i, row, recs, uses, place, can_want, canned):
-        self.id, self.row, self.recs, self.uses, self.place = i, row, recs, uses, place
-        self.can_want, self.canned = can_want, canned
-        self.food = row['food']
+	"""One member, as the checks see it."""
+	def __init__(self, i, row, recs, uses, place, can_want, canned):
+		self.id, self.row, self.recs, self.uses, self.place = i, row, recs, uses, place
+		self.can_want, self.canned = can_want, canned
+		self.food = row['food']
 
-    def stations(self):
-        return {r['st'] for r in self.recs} - NOT_COOKING
+	def stations(self):
+		return {r['st'] for r in self.recs} - NOT_COOKING
 
-    def at(self, stations, *needs):
-        """A recipe at one of `stations` whose inputs hold, for each need, one of its ids / tags / id fragments."""
-        stations = {stations} if isinstance(stations, str) else set(stations)
-        for r in self.recs:
-            if r['st'] in stations and all(any(any(n in x for x in r['ins']) for n in need) for need in needs):
-                return True
-        return False
+	def at(self, stations, *needs):
+		"""A recipe at one of `stations` whose inputs hold, for each need, one of its ids / tags / id fragments."""
+		stations = {stations} if isinstance(stations, str) else set(stations)
+		for r in self.recs:
+			if r['st'] in stations and all(any(any(n in x for x in r['ins']) for n in need) for need in needs):
+				return True
+		return False
 
-    def only(self, *stations):
-        st = self.stations()
-        return bool(st) and st <= set(stations)
+	def only(self, *stations):
+		st = self.stations()
+		return bool(st) and st <= set(stations)
 
-    def no_shapeless(self):
-        return not any(r['type'] in ('minecraft:crafting_shapeless', 'kubejs:shapeless') for r in self.recs)
+	def no_shapeless(self):
+		return not any(r['type'] in ('minecraft:crafting_shapeless', 'kubejs:shapeless') for r in self.recs)
 
-    def manual_craft(self, *needs):
-        return any(r['st'] == 'Crafting' and r['id'].endswith('_manual_only')
-                   and all(any(any(n in x for x in r['ins']) for n in need) for need in needs) for r in self.recs)
+	def manual_craft(self, *needs):
+		return any(r['st'] == 'Crafting' and r['id'].endswith('_manual_only')
+				   and all(any(any(n in x for x in r['ins']) for n in need) for need in needs) for r in self.recs)
 
-    def name_has(self, *w):
-        return has(self.row['n'], *w)
+	def name_has(self, *w):
+		return has(self.row['n'], *w)
 
 
 def only_if(cond, check):
-    return lambda m: check(m) if cond(m) else None
+	return lambda m: check(m) if cond(m) else None
 
 
 TRIO = ('Smoker', 'Furnace', 'Campfire / Skillet')
@@ -701,7 +701,7 @@ PLACE_ANY = {'block', 'sneak', 'placed', 'plate', 'small_plate', 'coaster', 'jar
 
 
 def placed_on(*cols):
-    return lambda m: bool(m.place & set(cols))
+	return lambda m: bool(m.place & set(cols))
 
 
 placed_any = placed_on(*PLACE_ANY)
@@ -711,7 +711,7 @@ cured = lambda m: m.name_has('jerky', 'kipper', 'smoked', 'glazed', 'dried', 'ce
 own_station = lambda m: cured(m) and bool(m.stations())
 # Cuts that a mob drops (Nether's Delight knife drops, Hostile and Oceanic Delight drops): no board recipe.
 DROPPED = {'nethersdelight:hoglin_ear', 'nethersdelight:strider_slice', 'hostiledelight:guardianfillet',
-           'oceanic_delight:squid_tentacles', 'oceanic_delight:glow_squid_tentacles'}
+		   'oceanic_delight:squid_tentacles', 'oceanic_delight:glow_squid_tentacles'}
 dropped = lambda m: m.id in DROPPED
 
 
@@ -724,8 +724,8 @@ PANCAKE_SRC = 'owner 2026-11-02 ([TODO](todo/TODO.md) merges/baking #2, dishes/m
 
 
 def T(*rows):
-    """Source cell for TODO rows, e.g. T('food/drinks #8', 'food/drinks #2')."""
-    return TD + ' ' + ', '.join(rows)
+	"""Source cell for TODO rows, e.g. T('food/drinks #8', 'food/drinks #2')."""
+	return TD + ' ' + ', '.join(rows)
 
 
 AL = '[alcohol.md](alcohol.md) 11'
@@ -735,833 +735,833 @@ MD = '[more_delight.md](more_delight.md) 2.3'
 BG9 = '[TODO](todo/TODO.md) baking/baked-goods #9, [brief](briefs/baking_baked-goods.md)'
 
 RULES = {
-    # ---- produce and protein
-    'fruit': dict(
-        can=[R('Per item, can parity 2.2 (raw: Fruit Meal 5/3 x 3 servings, + sugar, honey or vinegar; pumpkin, melon, '
-               'cantaloupe, hamimelon and pineapple canned from slices) and 2.6 (dried / baked)', CP, CAN)],
-        place=[R(PLACE_PRODUCE, OWN, placed_any)],
-        recipe=[R('none: gathered', OWN, gathered)]),
-    'fruit/nut': dict(can=[R('Per item, can parity 2.2, but the additive is salt (or bone broth), not sugar, honey or vinegar', CP, CAN)]),
-    'fruit/slice': dict(recipe=[R('Cutting Board: whole fruit -> slices', OWN, board),
-                             P('A banana bunch cuts into bananas', T('dishes/ingredients #18'))]),
-    'fruit/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: whole fruit', OWN, trio)]),
-    'veggie': dict(
-        can=[R('Per item, can parity 2.1 (raw: Baked Potato meal 5/6 x 2, + salt, broth or vinegar) and 2.6 '
-               '(cooked: x2 x 4 servings, 6 or 5 + salt)', CP, CAN)],
-        place=[R(PLACE_PRODUCE, OWN, placed_any)],
-        recipe=[R('none: harvested', OWN, gathered)]),
-    'veggie/raw_cut': dict(recipe=[R('Cutting Board: whole vegetable -> pieces', OWN, board),
-                                  P('Cut sweet potato gives 3 sweet potato slices; cabbage gives 3 leaves with a chance of a 4th',
-                                    T('dishes/ingredients #20', 'dishes/ingredients #8'))]),
-    'veggie/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw vegetable; boiled ones in the Cooking Pot', OWN,
-                                    lambda m: trio(m) or (m.name_has('boiled') and m.at('Cooking Pot')))]),
-    'veggie/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the cut piece, or Cutting Board: the cooked whole', OWN,
-                                        lambda m: trio(m) or board(m))]),
-    'meat': dict(
-        can=[R('Per item, can parity 2.3 (raw: Meat Meal 5/3 x 4) and 2.7 (cooked: x2 x 3, 5 or 4 + broth; patties, '
-               'bacon and exotic meats not canned)', CP, CAN)],
-        place=[R(PLACE_PRODUCE, OWN, placed_any)],
-        recipe=[R('none: dropped', OWN, gathered),
-                P('Patties become their own food type (recipes, which foods open)', T('dishes/meals #14')),
-                R('Unused meats (venison, goat) are removed items; Abnormals Delight\'s duck line takes Untitled Duck Mod\'s '
-                  'raw duck', T('food/types-and-tuning #10'))]),
-    'meat/raw_cut': dict(recipe=[R('Cutting Board: raw cut -> pieces; a seasoned cut is crafted from its raw meat (mint '
-                                   'chops); a mob drop is dropped (hoglin ear, strider slice)', OWN,
-                                   lambda m: board(m) or dropped(m) or m.at('Crafting', ('mutton', 'pork', 'beef', 'chicken')))]),
-    'meat/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw cut; cured, smoked, dried or glazed cuts keep '
-                                  'their own station (Keg, Smoker, Spout, a craft)', OWN, lambda m: trio(m) or own_station(m))]),
-    'meat/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the raw piece', OWN, trio)]),
-    'fish': dict(
-        can=[R('Per item, can parity 2.4 (raw: Fish Meal 4/2 x 4; slices share the whole fish\'s count) and 2.8 '
-               '(cooked: x2 x 3, from the cut)', CP, CAN)],
-        place=[R(PLACE_PRODUCE, OWN, placed_any)],
-        recipe=[R('none: caught', OWN, gathered),
-                P('Fish eggs accepted in the fish egg roll; salmon eggs renamed caviar (caviar in the sea pickle roll); '
-                  'any tentacle cuts to calamari', T('dishes/ocean #2', 'dishes/ocean #5', 'dishes/ocean #4'))]),
-    'fish/raw_cut': dict(recipe=[R('Cutting Board: whole fish -> slices (salmon, cod, catfish 6); a mob drop is dropped '
-                                   '(guardian fillet, squid tentacles)', RCK + ' 2.1; ' + OWN,
-                                   lambda m: board(m) or dropped(m))]),
-    'fish/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw fish; cured or fermented fish keeps its own '
-                                  'station (Keg, Fermenting Jar)', OWN, lambda m: trio(m) or own_station(m))]),
-    'fish/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the raw slice', OWN, trio)]),
-    'egg': dict(
-        can=[R('Never canned (precedent); per item, can parity 2.20', CP, CAN)],
-        place=[R(PLACE_PRODUCE, OWN, placed_any)],
-        recipe=[R('Campfire / Skillet + Smoker + Furnace: one egg; scrambled eggs in the Cooking Pot; a cured egg '
-                  '(century egg) its own station', OWN,
-                  lambda m: trio(m) or (m.name_has('scrambled') and m.at('Cooking Pot')) or own_station(m)),
-                P('Cooking oil + 3 eggs -> 3 fried eggs; Cooking Pot 4 fried eggs -> 4 omelettes', T('dishes/meals #23')),
-                P('Any egg (`#forge:eggs`) in egg recipes via `R.replaceInput`; turtle and parrot eggs open',
-                  T('food/types-and-tuning #6'))]),
-    'egg/dish': dict(
-        place=[R('Display Delight placed (Creative Common adds a placed block for each dish Display Delight has none for)',
-                 OWN, placed_on('placed'))],
-        recipe=[R('Pot meal rule: Cooking Pot, plus a heatless `_manual_only` shapeless craft from cooked forms '
-                  '(one more main ingredient)', RCK + ' heatless meal rule',
-                  lambda m: m.manual_craft() if m.at('Cooking Pot') else None),
-                P('Veggie omelette: the omelette ingredient swapped for tomato, beetroot, any bell pepper or ghost pepper '
-                  '(exact recipe open)', T('dishes/meals #24'))]),
-    'dairy': dict(
-        can=[R('Cheese wedges, 4 per can in the Cooking Pot, x1.25 x 4 servings (can parity 2.20)', CP, CAN)],
-        place=[R(PLACE_PRODUCE, OWN, placed_any)],
-        recipe=[R('none: cut from a cheese wheel', OWN, gathered),
-                P('9 cheese wedges craft back to the cheese block, for each cheese; more cheese types',
-                  T('dishes/ingredients #9'))],
-        values=[P('Stack: cheese wheel 32', T('food/stack-sizes #1'))]),
-    # ---- bread and kitchen
-    'bread': dict(
-        can=[R('x2 x 4 servings, 6 bread; slices, toast, tortilla and scones not canned (can parity 2.9)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[R('Bread only: dough block smoked into a bread block, sawed or knifed into 16 bread', RCK + ' 2.1',
-                  only_if(lambda m: m.id == 'minecraft:bread', lambda m: m.at(('Mechanical Saw', 'Cutting Board')))),
-                D('Smoker + Furnace + Campfire: the dough', only_if(lambda m: m.id != 'minecraft:bread', trio)),
-                P('Bread block cut to a crustless bread block (standard slab recipe)', T('baking/baked-goods #10'))]),
-    'bread/slice': dict(recipe=[D('Cutting Board: the loaf -> slices; toast = slice in the trio',
-                                  lambda m: m.at('Cutting Board') or trio(m)),
-                                P('Honeycomb spreads on toast', T('dishes/ingredients #22'))],
-                        values=[R('Every toast eats fast (16 ticks, like dried kelp); CD moredelight/toast.js', MD, only_if(lambda m: m.name_has('toast'), lambda m: bool(m.food) and bool(m.food.get('fast'))))]),
-    'ingredient': dict(
-        can=[R('Per item, can parity 2.26 (Canned Dough: 8 dough, not edible; tomato sauce in the preserve section)',
-               CP, CAN)],
-        place=[D('none required')],
-        recipe=[R('One flour and one dough (Create\'s) in every recipe that takes them', RCK + ' 2.1'),
-                R('Pie crust: 3 flour + egg + milk, or 3 dough + milk, manual craft -> 3', OV,
-                  only_if(lambda m: m.id == 'farmersdelight:pie_crust', lambda m: m.at('Crafting'))),
-                P('One dough system: Create dough, `#forge:dough`, sweet potato dough, sourdough and cookie dough count as '
-                  'dough; a texture for each dough and a recoloured dough block for each',
-                  T('baking/baked-goods #17', 'baking/baked-goods #27')),
-                P('Sourdough chain (starter -> growing -> fermenting -> sourdough, timed) and a yeast recipe from mushrooms',
-                  T('baking/baked-goods #7', 'baking/baked-goods #8')),
-                P('Batter from wheat flour or cornmeal, used in more fried foods and as a cake base route',
-                  T('dishes/ingredients #7')),
-                P('Fats: animal fat (cows, pigs, nether cows) cooks into cooking oil, which takes animal oil\'s crafts; '
-                  'blubber and whale oil work the same; fish oil counts as cooking oil', T('dishes/ingredients #10')),
-                P('Butter: a new item churned from milk or cream (open)', T('dishes/ingredients #15')),
-                P('Vinegar: 3 apple mash + an enzyme (crushed fungus); foods with vinegar added carry Foul Taste',
-                  T('dishes/pickles-and-ferments #6', 'dishes/pickles-and-ferments #7'))],
-        values=[P('Stack: bowl and bottle ingredients 64', T('food/stack-sizes #1'))]),
-    'preserve': dict(
-        can=[R('Jams and sauces not canned (precedent); preserve section x1 x 4 (tomato sauce); per item, can parity 2.21',
-               CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)', lambda m: m.at('Cooking Pot'))]),
-    'preserve/jam': dict(place=[R('Own block, while sneaking (Fruits Delight jams)', PF,
-                                  only_if(lambda m: m.row['mod'] == 'fruitsdelight', placed_on('sneak')))],
-                         recipe=[D('Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
-                                 R('Every jam cooks 400 ticks in the Cooking Pot (Fruits Delight 200 raised)', 'owner 2026-11-04'),
-                                 P('Pot recipe: 4 fruit + 1 sugar + 1 lemon slice -> 2 jam', T('dishes/jams #2')),
-                                 P('One jam item (Fruits Delight) and one jam block (Vintage Delight), always a mason jar '
-                                   'recoloured to the jam; recipes take jam, never bottled jam or jelly',
-                                   T('dishes/jams #1', 'dishes/jams #3'))]),
-    'preserve/spread': dict(recipe=[D('Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
-                                    P('Nut butter and nut mash merge into one item', T('dishes/jams #5'))]),
-    'preserve/pickle': dict(recipe=[
-        D('Keg: vegetable + salt / brine', lambda m: m.at('Keg')),
-        P('Recipes take real pickles only (not Brewin\'s pickled pickles or raw sea pickles); a Pickled Sea Pickle without honey',
-          T('dishes/pickles-and-ferments #1', 'dishes/pickles-and-ferments #2')),
-        P('Enzymes from crushed or milled mushrooms', T('dishes/pickles-and-ferments #5')),
-        P('Kimchi: Vintage Delight\'s, any pickleable vegetable as the base', T('dishes/pickles-and-ferments #8')),
-        P('Century egg takes a pickled egg', T('dishes/pickles-and-ferments #9'))]),
-    # ---- sweets
-    'jello': dict(
-        can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
-        place=[D('Display Delight placed', placed_on('placed'))],
-        recipe=[D('Crafting: jam + gelatin in a bowl (Spout mirrors it)', lambda m: m.at('Crafting'))],
-        values=[P('Stack: bowl foods including jello 32', T('food/stack-sizes #1'))]),
-    'pie': dict(
-        can=[R('4 slices -> 1 filling can (4 slice-sized servings); crust + full can -> the whole pie; tart cans are pie '
-               'fillings (can parity 2.13)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('see subfamilies')]),
-    'pie/whole': dict(
-        place=[R('Own block', PF, placed_on('block', 'sneak'))],
-        recipe=[R('Oven (pie tin): pie crust + 2 fruit + 2 sugar (honey allowed)', OV,
-                  lambda m: m.at('Oven', ['pie_crust'])),
-                R('Oven or Crafting: pie crust + a full can of its filling (all but durian, pineapple, sponge and End\'s chorus '
-                  'fruit pie: Ender\'s chorus pie owns the chorus filling can)', OV,
-                  only_if(lambda m: m.id not in ('ends_delight:chorus_fruit_pie', 'oceanic_delight:sponge_cake'),
-                          lambda m: m.at(('Oven', 'Crafting'), ['pie_crust'], ['canned_']))),
-                R('No other recipe (every other mod\'s pie recipe removed)', OV,
-                  lambda m: m.only('Oven', 'Crafting', 'Sequenced assembly')),
-                P('Sequenced assembly for every pie', TD + ' baked-goods #4', lambda m: m.at('Sequenced assembly')),
-                P('No shapeless recipe turns a pie into a crust (none found 2026-10-24; check in JEI)',
-                  T('baking/baked-goods #24')),
-                P('Durian and pineapple pies: a 4-slice placed pie, or a non-pie item with its own name, recipe and can',
-                  T('baking/baked-goods #12')),
-                P('Cherry pie: an item placing `create_central_kitchen:cherry_pie`; crust + 2 cherries + 2 sugar, knife to 4 '
-                  'slices, a filling can', T('baking/baked-goods #13'))]),
-    'pie/slice': dict(
-        place=[D('Small Food Plate', placed_on('small_plate'))],
-        recipe=[D('Cutting Board: whole pie -> slices', board),
-                P('Slices whose whole pie is from a mod not in the pack: add the pie or hide the slice, per slice',
-                  T('baking/baked-goods #14'))]),
-    'pie/small': dict(
-        recipe=[R('Tarts: Oven (baking sheet): fruit + pie crust + egg + sugar + milk -> 2', OV,
-                  only_if(lambda m: m.name_has('tart'), lambda m: m.at('Oven', ['pie_crust']))),
-                R('Hand pies: Oven only (baking sheet): pie crust + the filling -> 1 (CD handPieBake)', OV,
-                  only_if(lambda m: not m.name_has('tart') and m.id not in ('fruitsdelight:durian_pie', 'fruitsdelight:pineapple_pie'),
-                          lambda m: m.at('Oven', ['pie_crust']) and m.only('Oven'))),
-                P('Every tart becomes a pie (renamed, retextured)', TD + ' baked-goods #6',
-                  only_if(lambda m: m.name_has('tart'), lambda m: False))]),
-    'cake': dict(
-        can=[R('1 cake, or 4 slices + sugar or honey -> 4 fast servings of 1.75 slices (can parity 2.23)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('see subfamilies')]),
-    'cake/whole': dict(
-        place=[R('Own block', PF, placed_on('block', 'sneak'))],
-        recipe=[R('Cakes: Crafting (manual): baked cake base + frosting + 2 flavor', OV,
-                  only_if(is_cake, lambda m: m.at('Crafting', ['frosting'], ['cake_base']))),
-                R('Cakes: Oven (cake pan): raw cake base + frosting + 2 flavor', OV,
-                  only_if(is_cake, lambda m: m.at('Oven', ['frosting']))),
-                R('Cakes: no other recipe (every other mod\'s cake recipe removed; `_from_slices` reassembly kept; plain and '
-                  'chocolate cake also spout onto a baked base)', OV,
-                  only_if(is_cake, lambda m: m.only('Oven', 'Crafting', 'Spout'))),
-                P('Every cake becomes a sequenced assembly (baked base, frosting, flavor), not only a grid or oven recipe; the existing '
-                  'spouts (plain, chocolate) need more steps', T('baking/baked-goods #28')),
-                R('Honey cake: 1 honey bottle + 1 honeycomb as its 2 flavor', T('baking/baked-goods #26')),
-                P('Mangosteen cake renamed (not a cake); a dragon egg cake', T('baking/baked-goods #5')),
-                P('Cake paste goes into the Cooking Pot', T('baking/baked-goods #6'))]),
-    'cake/slice': dict(
-        place=[P('All slices placeable (method not stated; proposal: Small Food Plate)', TD + ' baked-goods #5',
-                 placed_on('small_plate'))],
-        recipe=[D('Cutting Board: whole cake -> slices', board),
-                P('Unobtainable slices (7 Central Kitchen, its pumpkin pie slice, 6 Delightful) audited and removed',
-                  T('baking/baked-goods #5'))]),
-    'cake/muffin': dict(
-        recipe=[R('Oven (muffin tin, on paper): 2 fruit + wheat flour + milk + egg + sugar -> 4; Cooking Pot: 2 fruit + '
-                  'dough + milk + egg + sugar -> 2 (CD muffinBake)', OV, lambda m: m.at('Oven')),
-                P('Brownie and cupcake baking types: the muffin stays unfrosted, the cupcake is frosted',
-                  T('baking/baked-goods #18')),
-                P('Muffin variants: fruit + milk + egg + sugar + flour or cornmeal, served on paper, sequenced assembly',
-                  T('baking/baked-goods #2'))]),
-    'cookie': dict(
-        can=[R('x2 x 5 fast servings, 8 cookies or 6 + sugar (can parity 2.5)', CP, CAN)],
-        place=[D('Supplementaries jar (`#supplementaries:cookies`)', placed_on('jar'))],
-        recipe=[R('Oven only (baking sheet): cookie dough + 2 flavor -> 12', OV,
-                  lambda m: m.at('Oven', ['cookie_dough'])),
-                R('No other recipe', OV, lambda m: m.only('Oven')),
-                P('Oatmeal cookie takes oat dough; oatmeal raisin cookie: oat dough + 1 raw oat + 1 grape',
-                  T('baking/baked-goods #23')),
-                P('Chorus cookie made from the uncanny cookie; a maple cookie next to the cherry cookie',
-                  T('baking/baked-goods #22', 'baking/baked-goods #15'))]),
-    'dessert': dict(
-        can=[R('Per item, can parity 2.24 (sweets)', CP, CAN)],
-        place=[D('Food Plate', placed_on('plate'))],
-        recipe=[D('Oven for the plain bake; toppings by Spout', lambda m: m.at('Spout') or m.at('Oven')),
-                P('More waffle recipes and uses', T('baking/baked-goods #6')),
-                D('A dessert can get its own cookware or recipe treatment (a mold, a griddle, a press), not the cookie, cake or '
-                  'pie shape; Gingerbread is the first (Create Confectionery\'s gingerdough: furnace, smoker); the Gingerbread Man stays a cookie')]),
-    'candy': dict(
-        can=[R('Per item, can parity 2.24 (sweets)', CP, CAN)],
-        place=[D('Supplementaries jar', placed_on('jar'))],
-        recipe=[D('Spout: coating or filling (chocolate, caramel, honey) over the base', lambda m: m.at('Spout')),
-                P('Gummies for most fruits (slime balls and kelp allowed): a manual craft plus a more efficient pot / Create '
-                  'craft', T('baking/sweets #1')),
-                P('4 or 5 more rock candy variants from corundum; rose quartz kept', T('baking/sweets #2'))]),
-    'candy/bar': dict(recipe=[D('Press + Basin: the fluid into a bar', lambda m: m.at('Press + Basin'))]),
-    'frozen': dict(
-        can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
-        place=[D('Display Delight placed (ice cream), Food Plate (popsicles)', placed_on('placed', 'plate'))],
-        recipe=[R('Every ice food takes `#forge:ice_cubes`', RCK + ' 2.1', lambda m: m.at({r['st'] for r in m.recs}, ['#forge:ice_cubes', 'ice_cubes'])),
-                P('Ice cream: unified recipes, a fluid per flavor with mixing recipes, bowl spouting, an ice cream block per '
-                  'flavor (BlockRunner: sticky, sinks in); Truffle Ice Cream joins as a flavor', T('baking/sweets #4')),
-                P('More custard, shaved ice and popsicle variants', T('baking/sweets #3'))]),
-    'dessert/pancake': dict(
-        place=[R('Every pancake can be put down: Rustic\'s plates and Supplementaries\' Pancake are their own stack blocks '
-                 '(a single Rustic pancake goes back on its plate with sneak-use), Sweet Potato Pancakes a Display Delight '
-                 'placed dish', PANCAKE_SRC,
-                 only_if(lambda m: not m.id.startswith('rusticdelight:'), placed_on('placed', 'block')))],
-        recipe=[R('No base item: every pancake keeps its own recipes (Rustic plates: Cooking Pot, cut into single pancakes; '
-                  'Supplementaries\' Pancake: by hand and the heated Mixer; Sweet Potato Pancakes: Cooking Pot)', PANCAKE_SRC),
-                R('Food type `sweet/pancake` for every pancake eaten as an item (food.md 2.1)', PANCAKE_SRC),
-                P('Cooking Pot for the Supplementaries Pancake (3 batter + 2 sugar + 1 egg -> 4)', T('merges/baking #1')),
-                P('Coverings recoloured to the jam color', T('dishes/meals #37'))]),
-    'dessert/brownie': dict(
-        place=[D('Tray: own block (cut into brownies)', only_if(lambda m: m.row['whole'], placed_on('block', 'sneak')))],
-        recipe=[D('Oven: the tray (cake pan); Cutting Board: tray -> brownies',
-                  lambda m: m.at('Cutting Board') if not m.row['whole'] else m.at('Oven'))]),
-    'dessert/pudding': dict(
-        can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
-        place=[D('Display Delight placed', placed_on('placed'))],
-        recipe=[D('Bowl puddings: Cooking Pot (Mixer mirrors it); fig pudding: Oven, cut on the board',
-                  lambda m: m.at('Cooking Pot') if not m.name_has('fig') else (m.at('Cutting Board') or m.at('Oven')))]),
-    # ---- hand food
-    'sandwich': dict(
-        can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
-        place=[D('Food Plate', placed_on('plate'))],
-        recipe=[D('Shaped crafting (no shapeless) + one sequenced assembly, as the burgers',
-                  lambda m: m.no_shapeless() and m.at('Sequenced assembly'))]),
-    'sandwich/burger': dict(
-        recipe=[R('Shaped only: toppings top, patty middle, bread bottom', RCK + ' 2.1', lambda m: m.no_shapeless()),
-                R('Takes any `#forge:bread`', RCK + ' 2.1', lambda m: m.at('Crafting', ['#forge:bread'])),
-                R('One sequenced assembly each', RCK + ' 2.1', lambda m: m.at('Sequenced assembly')),
-                P('A bun (new item `burger_bun`, oven / smoker / knife on bread) in place of bread; Kangaroo Burger '
-                  'shows a long roll and keeps bread', BG9,
-                  only_if(lambda m: not m.name_has('kangaroo'), lambda m: m.at(('Crafting', 'Sequenced assembly'),
-                                                                              ['burger_bun']))),
-                P('Fermented garlic and onion accepted in place of the raw ones in burgers', T('dishes/meals #29'))]),
-    'sandwich/square': dict(recipe=[
-        P('Nut butter sandwich: more jam options, square bread only', T('dishes/meals #31')),
-        P('2 bread slices (`#forge:bread_slices`, toast counts) in place of bread', BG9,
-          lambda m: m.at(('Crafting', 'Sequenced assembly'), ['bread_slice'])),
-        D('Shaped crafting (no shapeless) + one sequenced assembly, as the burgers',
-          lambda m: m.no_shapeless() and m.at('Sequenced assembly'))]),
-    'sandwich/roll': dict(recipe=[
-        P('Whole bread (`#forge:bread`), kept', BG9, lambda m: m.at(('Crafting', 'Sequenced assembly'), ['#forge:bread',
-                                                                                                         'minecraft:bread'])),
-        D('Shaped crafting (no shapeless) + one sequenced assembly, as the burgers',
-          lambda m: m.no_shapeless() and m.at('Sequenced assembly'))]),
-    'sandwich/wrap': dict(recipe=[
-        P('A tortilla in place of bread (mutton wrap: TODO dishes/meals #2)', BG9, lambda m: m.at(
-            ('Crafting', 'Sequenced assembly'), ['tortilla'])),
-        D('Shaped crafting (no shapeless) + one sequenced assembly, as the burgers',
-          lambda m: m.no_shapeless() and m.at('Sequenced assembly'))]),
-    'sandwich/toast': dict(recipe=[
-        D('Crafting: bread slice or toast + topping', lambda m: m.at('Crafting')),
-        P('Bruschetta: 2 toast in place of bread', BG9,
-          only_if(lambda m: m.name_has('bruschetta'), lambda m: m.at('Crafting', ['toast'])))],
-        values=[R('Every toast eats fast (16 ticks, like dried kelp); CD moredelight/toast.js', MD, only_if(lambda m: m.name_has('toast'), lambda m: bool(m.food) and bool(m.food.get('fast'))))]),
-    'skewer': dict(
-        can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
-        place=[D('Food Plate', placed_on('plate'))],
-        recipe=[R('One line per skewer (CD F.skewer, plan_meals_rolls_bbq.md C2): a raw skewer (not a food; Barbeque\'s '
-                  'Delight basin, or by hand from raw ingredients) cooked on the Grill, furnace, smoker or campfire; a '
-                  'heatless craft from cooked ingredients where they have a cooked form; one sequenced assembly where '
-                  'one existed', 'barbequesdelight/skewers.js', lambda m: m.at(('Smoker', 'Campfire / Skillet'))),
-                D('Shaped only + one sequenced assembly (as Crispy Skewer, ' + RCK + ' 2.1); the End Skewer is shapeless '
-                  '(owner, 2026-11-04)', lambda m: m.no_shapeless() and m.at('Sequenced assembly')),
-                P('Skewers become their own food type (recipes, which foods open)', T('dishes/meals #13'))]),
-    'roll': dict(
-        can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
-        place=[D('Food Plate (whole roll), Small Food Plate (slice)', placed_on('plate', 'small_plate'))],
-        recipe=[D('Crafting: wrapper + filling', lambda m: m.at('Crafting'))]),
-    'stuffed': dict(
-        can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
-        place=[D('Food Plate', placed_on('plate'))],
-        recipe=[D('Crafting + one sequenced assembly on the vegetable (as Stuffed Potato)',
-                  lambda m: m.at('Crafting') and m.at('Sequenced assembly')),
-                P('Stuffed pepper plate: red, yellow and green peppers + rice, meat and onion; sequenced assembly on a bowl '
-                  'plus a less efficient manual craft (or drop the dish)', T('dishes/meals #16'))]),
-    'pizza': dict(
-        can=[R('Per item, can parity 2.25', CP, CAN)],
-        place=[D('see subfamilies')],
-        recipe=[D('see subfamilies')]),
-    'pizza/whole': dict(
-        place=[R('Own block', PF, placed_on('block', 'sneak'))],
-        recipe=[D('One shaped recipe + one sequenced assembly (as Brewin\' pizza, ' + RCK + ' 2.1)',
-                  lambda m: m.at('Crafting') and m.at('Sequenced assembly')),
-                P('8 slices per pizza, dearer dough and cheese; Brewin\' pizzas merge into Deluxe Pizza, plus a Tropical Pizza '
-                  '(pineapple, bacon)', T('dishes/meals #5', 'dishes/meals #26', 'dishes/meals #27', 'baking/baked-goods #20'))]),
-    'pizza/slice': dict(
-        place=[D('Small Food Plate', placed_on('small_plate'))],
-        recipe=[D('Cutting Board: whole pizza -> slices', board)]),
-    'quiche': dict(
-        can=[R('Per item, can parity 2.25', CP, CAN)],
-        place=[D('see subfamilies')],
-        recipe=[D('see subfamilies')]),
-    'quiche/whole': dict(
-        place=[R('Own block', PF, placed_on('block', 'sneak'))],
-        recipe=[D('Shaped recipe on a pie crust + one sequenced assembly on a pie crust (as Brewin\' quiche, ' + RCK + ' 2.1)',
-                  lambda m: m.at('Crafting', ['pie_crust']) and m.at('Sequenced assembly')),
-                P('Quiche: a pie variant for vegetables', T('baking/baked-goods #19'))]),
-    'quiche/slice': dict(
-        place=[D('Small Food Plate', placed_on('small_plate'))],
-        recipe=[D('Cutting Board: whole quiche -> slices', board)]),
-    'lasagna': dict(
-        can=[R('Per item, can parity 2.25', CP, CAN)],
-        place=[D('see subfamilies')],
-        recipe=[D('see subfamilies')]),
-    'lasagna/whole': dict(
-        place=[R('Own block', PF, placed_on('block', 'sneak'))],
-        recipe=[D('Cooking Pot (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
-                P('Lasagna needs a baking dish item', T('baking/baked-goods #21'))]),
-    'lasagna/serving': dict(
-        recipe=[D('Taken from the pan, or Cooking Pot + heatless grid route', lambda m: m.at('Cooking Pot') or m.at('Crafting'))]),
-    'snack': dict(
-        can=[R('Per item, can parity 2.25', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('none shared (fried, popped or boxed)'),
-                P('Nachos take cheese', T('dishes/meals #18'))]),
-    # ---- bowl and plate
-    'salad': dict(
-        can=[R('x1.25 x 8 fast servings, effects x0.75, 6 salads or 5 + vinegar; potato and maggot salads not '
-               'canned (can parity 2.10)', CP, CAN)],
-        place=[D('Display Delight placed', placed_on('placed'))],
-        recipe=[D('Crafting: raw parts + bowl', lambda m: m.at('Crafting')),
-                P('Salad becomes its own food type; field salad accepts more ingredient options (no fermented vegetables); '
-                  'the cucumber salad takes pickled options', T('dishes/meals #15', 'dishes/meals #29',
-                                                                'dishes/pickles-and-ferments #2'))]),
-    'soup': dict(
-        can=[R('x1.25 x 8 servings, effects x0.75, 6 soups or 3 + salt or broth; 4 skipped (can parity 2.11)', CP, CAN)],
-        place=[R('Supplementaries jar: every soup and stew is a jar fluid', TD + ' dishes/ingredients #13',
-                 placed_on('jar')),
-               D('Display Delight placed', placed_on('placed'))],
-        recipe=[R('Cooking Pot (Mixer mirrors it)', RCK + ' heatless meal rule', lambda m: m.at('Cooking Pot')),
-                R('Heatless: shapeless `_manual_only` craft with bone broth, one more main ingredient than the pot',
-                  RCK + ' heatless meal rule',
-                  lambda m: m.manual_craft(['bone_broth']) if m.at('Cooking Pot') else None)],
-        values=[P('Base values adjusted from the inputs; outliers marked first', T('food/types-and-tuning #8'))]),
-    'meal': dict(
-        can=[R('Pastas only: 2 -> 4 servings of 0.75 (placeholder); per item, can parity 2.12', CP, CAN)],
-        place=[D('Display Delight placed', placed_on('placed'))],
-        recipe=[D('Cooking Pot (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
-                R('Heatless: a pot meal is also a shapeless `_manual_only` craft from cooked forms (one more main)',
-                  RCK + ' heatless meal rule', lambda m: m.manual_craft() if m.at('Cooking Pot') else None),
-                P('Meals that take only vanilla or one specific meat, vegetable or fruit open up to any, unless the dish is '
-                  'that food (glazed salmon keeps cooked salmon)', T('dishes/meals #21')),
-                P('Pot recipes that suit the oven gain or move to an Oven recipe (smoking in the oven open)',
-                  T('cooking/oven #7')),
-                P('Fries from any potato slice; potato recipes also take sweet potato and its cooked and sliced forms',
-                  T('dishes/meals #34', 'dishes/ingredients #21')),
-                P('Steak and broccoli takes rice, mashed potatoes, any baked potato + bowl, or other baked vegetables + bowl',
-                  T('dishes/meals #35'))],
-        values=[P('Salt on every valid food (every meat dish too), never on intermediates (bone broth, cooked rice, tomato '
-                  'sauce); sugar or powdered sugar as a seasoning on some foods', T('food/seasoning #1', 'food/seasoning #4',
-                                                                                  'food/seasoning #5'))]),
-    'feast': dict(
-        can=[R('1 placed feast block -> 6 servings (placeholder; can parity 2.14)', CP, CAN),
-             P('Every feast cannable', T('cans/canning #17'))],
-        place=[D('see subfamilies')],
-        recipe=[D('see subfamilies')]),
-    'feast/whole': dict(
-        place=[R('Own block', PF, placed_on('block', 'sneak'))],
-        recipe=[P('Sequenced assembly (roast chicken, shepherd\'s pie, honey glazed ham...)', TD + ' dishes/meals #5',
-                  lambda m: m.at('Sequenced assembly')),
-                P('Cooked in the Oven (hoglin feast first; all feasts in the pot and oven?)', TD + ' dishes/meals #20',
-                  lambda m: m.at('Oven'))]),
-    'feast/serving': dict(
-        place=[D('Display Delight placed', placed_on('placed'))],
-        recipe=[D('none: taken from the feast block with a bowl', gathered)]),
-    # ---- drinks
-    'drink': dict(
-        can=[R('4 drinks -> 4 servings (placeholder); per item, can parity 2.15', CP, CAN)],
-        place=[D('Display Delight placed', placed_on('placed'))],
-        recipe=[D('Crafting + Cooking Pot (Mixer mirrors it) + Spout from the fluid',
-                  lambda m: m.at('Crafting') and m.at('Spout')),
-                P('Kettle with 6 ingredient slots brews the pot drinks via `NCH.frBrewing` (5 Rustic Delight coffees, Apple '
-                  'Cider, Hot Cocoa, Creamy Corn Drink, Ender Nectar, Pickerelweed Juice, Cloud Latte, Mango Milkshake, '
-                  'teas, Chorus Juice); their pot recipes go, Bellini stays in the pot; grid crafts stay',
-                  T('food/drinks #7'))],
-        values=[P('Stack: drinks and bottles (tea, juice, custard, shaved ice) 32', T('food/stack-sizes #1'))]),
-    'drink/juice': dict(recipe=[P('Inputs per bottle by hand, Kettle, Create mixing and IE Mixer; machines cheaper than '
-                                  'hand', TD + ' food/drinks #8',
-                                  lambda m: m.at('Crafting') and m.at('Kettle') and m.at('Mixer')),
-                                P('Every drinkable juice gets a Kettle recipe more efficient than its manual one (Hamimelon, '
-                                  'Kiwi, Lemon, Orange, Pear, Prickly Pear, Chorus); "more efficient" read as output per input',
-                                  T('food/drinks #7', 'food/drinks #8'))]),
-    'drink/tea': dict(
-        place=[P('Placeable with Display Delight', TD + ' food/drinks #2, placeable #3', placed_on('placed'))],
-        recipe=[P('Inputs per bottle by hand, Kettle, Create mixing and IE Mixer; machines cheaper than hand',
-                  TD + ' food/drinks #8', lambda m: m.at('Crafting') and m.at('Kettle') and m.at('Mixer')),
-                P('Teas in both Kettle and pot: the Kettle recipe is 2x as efficient (output per input), the pot tea takes '
-                  '2 fruit per tea, sugar / honey / honeycomb in the pot recipe only; Create mixing dearer than manual',
-                  T('food/drinks #8', 'food/drinks #7', 'food/drinks #2')),
-                P('Farmer\'s Respite long and strong teas get their own names and textures', T('food/drinks #2'))]),
-    'drink/soda': dict(recipe=[R('Ciders: a potion-like chain, base -> long (milk) -> strong (honey), each a fluid',
-                                 '[item_merges.md](item_merges.md) 2.x')]),
-    'alcohol': dict(
-        can=[R('Per item, can parity 2.16 (sheet only, no can section)', CP, CAN)],
-        place=[D('Coaster', placed_on('coaster'))],
-        recipe=[D('see subfamilies')],
-        values=[R('Half a rotten shank (1 hunger), no saturation, always drinkable, Intoxication and Nausea', AL,
-                  lambda m: bool(m.food) and m.food['nutrition'] == 1 and m.food['saturation'] == 0
-                  and m.food['alwaysEat'])]),
-    'alcohol/wine': dict(
-        place=[R('Own block, while sneaking (Vinery bottles)', PF,
-                 only_if(lambda m: m.row['mod'] == 'vinery', placed_on('sneak')))],
-        recipe=[D('Fermentation Barrel (grapes: 12 grapes, 4 stomps -> 4 bottles, decided in ' + TD + ' alcohol)',
-                  lambda m: m.at('Fermentation Barrel'))]),
-    'alcohol/brew': dict(recipe=[D('Keg, poured into a tankard (Spout mirrors the pour)', lambda m: m.at('Keg (pouring)'))]),
-    'alcohol/spirit': dict(recipe=[D('Keg', lambda m: m.at(('Keg', 'Keg (pouring)')))]),
-    'alcohol/mixed': dict(recipe=[D('Keg, from other drinks', lambda m: m.at(('Keg', 'Keg (pouring)')))]),
-    # ---- overlays
-    'golden': dict(
-        can=[R('2 golden + honey -> 10 servings at x0.25 (effects x0.333 decided, not built; can parity 2.17)', CP, CAN)],
-        place=[D('none required')],
-        recipe=[R('Crafting: the food in 8 gold (real gold only, rose gold counts); every golden food but the apple takes '
-                  '8 gold nuggets (owner, 2026-11-02, [food.md](food.md) 3.16; was 8 gold ingots)', RCK + ' 2.4',
-                  lambda m: m.at('Crafting', ['gold'])),
-                D('Heated Mixer: the food + 6 gold, and Arc Furnace: the food + 5 gold, for every golden food (stated '
-                  'only for carrot and apple, ' + RCK + ' 2.4; TODO dishes/meals #9 built it on every gold tag)',
-                  lambda m: m.at('Mixer', ['gold']) and m.at('Arc Furnace'))],
-        values=[R('Hunger and saturation are the input food\'s times 2 (golden) or 4 (gilded), hunger capped at 20; '
-                  'effects kept; the cakes keep their own slices', 'owner 2026-11-02 ([food.md](food.md) 3.16, '
-                  '[golden_food.md](golden_food.md) 3.6)')]),
-    'golden/enchanted': dict(
-        recipe=[R('Gilded (enchanted golden) apple: sequenced assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB '
-                  'liquid XP, pressing (owner, 2026-11-03; was 4 loops of a gold block and 250 mB)', RCK + ' 2.4', only_if(lambda m: m.id == 'minecraft:enchanted_golden_apple',
-                                                       lambda m: m.at('Sequenced assembly'))),
-                R('Every other enchanted golden food but the cake: the same assembly on its golden form; the anvil and '
-                  'the Golden Food Enchantment are removed', 'owner 2026-11-02 ([golden_food.md](golden_food.md) 3.4)', only_if(
-                    lambda m: m.id not in ('minecraft:enchanted_golden_apple', 'goldenfood:enchanted_golden_cake'),
-                    lambda m: m.at('Sequenced assembly'))),
-                R('Enchanted golden cake: no recipe (upstream had none)', '[golden_food.md](golden_food.md) 3.4', only_if(
-                    lambda m: m.id == 'goldenfood:enchanted_golden_cake', lambda m: True))]),
-    'can': dict(
-        can=[R('n/a: these are the cans')],
-        place=[D('none required')],
-        recipe=[R('Recipes that use a can are manual only: `_manual_only` id (NCH `cans` argument; Create and '
-                  'auto-crafters skip them)', CP + ' 8, 2026-10-21',
-                  lambda m: (all(r['id'].endswith('_manual_only') for r in m.uses if r['st'] == 'Crafting')
-                             if any(r['st'] == 'Crafting' for r in m.uses) else None)),
-                P('Canning automation: food effects carry over, bone broth returns its bowl', T('cans/canning #8'))]),
-    'hazard': dict(
-        can=[R('Meat Meal x 4, no additive (placeholder); per item, can parity 2.19', CP, CAN)],
-        place=[D('none required')],
-        recipe=[D('none: dropped or found', gathered)]),
+	# ---- produce and protein
+	'fruit': dict(
+		can=[R('Per item, can parity 2.2 (raw: Fruit Meal 5/3 x 3 servings, + sugar, honey or vinegar; pumpkin, melon, '
+			   'cantaloupe, hamimelon and pineapple canned from slices) and 2.6 (dried / baked)', CP, CAN)],
+		place=[R(PLACE_PRODUCE, OWN, placed_any)],
+		recipe=[R('none: gathered', OWN, gathered)]),
+	'fruit/nut': dict(can=[R('Per item, can parity 2.2, but the additive is salt (or bone broth), not sugar, honey or vinegar', CP, CAN)]),
+	'fruit/slice': dict(recipe=[R('Cutting Board: whole fruit -> slices', OWN, board),
+							 P('A banana bunch cuts into bananas', T('dishes/ingredients #18'))]),
+	'fruit/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: whole fruit', OWN, trio)]),
+	'veggie': dict(
+		can=[R('Per item, can parity 2.1 (raw: Baked Potato meal 5/6 x 2, + salt, broth or vinegar) and 2.6 '
+			   '(cooked: x2 x 4 servings, 6 or 5 + salt)', CP, CAN)],
+		place=[R(PLACE_PRODUCE, OWN, placed_any)],
+		recipe=[R('none: harvested', OWN, gathered)]),
+	'veggie/raw_cut': dict(recipe=[R('Cutting Board: whole vegetable -> pieces', OWN, board),
+								  P('Cut sweet potato gives 3 sweet potato slices; cabbage gives 3 leaves with a chance of a 4th',
+									T('dishes/ingredients #20', 'dishes/ingredients #8'))]),
+	'veggie/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw vegetable; boiled ones in the Cooking Pot', OWN,
+									lambda m: trio(m) or (m.name_has('boiled') and m.at('Cooking Pot')))]),
+	'veggie/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the cut piece, or Cutting Board: the cooked whole', OWN,
+										lambda m: trio(m) or board(m))]),
+	'meat': dict(
+		can=[R('Per item, can parity 2.3 (raw: Meat Meal 5/3 x 4) and 2.7 (cooked: x2 x 3, 5 or 4 + broth; patties, '
+			   'bacon and exotic meats not canned)', CP, CAN)],
+		place=[R(PLACE_PRODUCE, OWN, placed_any)],
+		recipe=[R('none: dropped', OWN, gathered),
+				P('Patties become their own food type (recipes, which foods open)', T('dishes/meals #14')),
+				R('Unused meats (venison, goat) are removed items; Abnormals Delight\'s duck line takes Untitled Duck Mod\'s '
+				  'raw duck', T('food/types-and-tuning #10'))]),
+	'meat/raw_cut': dict(recipe=[R('Cutting Board: raw cut -> pieces; a seasoned cut is crafted from its raw meat (mint '
+								   'chops); a mob drop is dropped (hoglin ear, strider slice)', OWN,
+								   lambda m: board(m) or dropped(m) or m.at('Crafting', ('mutton', 'pork', 'beef', 'chicken')))]),
+	'meat/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw cut; cured, smoked, dried or glazed cuts keep '
+								  'their own station (Keg, Smoker, Spout, a craft)', OWN, lambda m: trio(m) or own_station(m))]),
+	'meat/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the raw piece', OWN, trio)]),
+	'fish': dict(
+		can=[R('Per item, can parity 2.4 (raw: Fish Meal 4/2 x 4; slices share the whole fish\'s count) and 2.8 '
+			   '(cooked: x2 x 3, from the cut)', CP, CAN)],
+		place=[R(PLACE_PRODUCE, OWN, placed_any)],
+		recipe=[R('none: caught', OWN, gathered),
+				P('Fish eggs accepted in the fish egg roll; salmon eggs renamed caviar (caviar in the sea pickle roll); '
+				  'any tentacle cuts to calamari', T('dishes/ocean #2', 'dishes/ocean #5', 'dishes/ocean #4'))]),
+	'fish/raw_cut': dict(recipe=[R('Cutting Board: whole fish -> slices (salmon, cod, catfish 6); a mob drop is dropped '
+								   '(guardian fillet, squid tentacles)', RCK + ' 2.1; ' + OWN,
+								   lambda m: board(m) or dropped(m))]),
+	'fish/cooked': dict(recipe=[R('Smoker + Furnace + Campfire: the raw fish; cured or fermented fish keeps its own '
+								  'station (Keg, Fermenting Jar)', OWN, lambda m: trio(m) or own_station(m))]),
+	'fish/cooked_cut': dict(recipe=[R('Smoker + Furnace + Campfire: the raw slice', OWN, trio)]),
+	'egg': dict(
+		can=[R('Never canned (precedent); per item, can parity 2.20', CP, CAN)],
+		place=[R(PLACE_PRODUCE, OWN, placed_any)],
+		recipe=[R('Campfire / Skillet + Smoker + Furnace: one egg; scrambled eggs in the Cooking Pot; a cured egg '
+				  '(century egg) its own station', OWN,
+				  lambda m: trio(m) or (m.name_has('scrambled') and m.at('Cooking Pot')) or own_station(m)),
+				P('Cooking oil + 3 eggs -> 3 fried eggs; Cooking Pot 4 fried eggs -> 4 omelettes', T('dishes/meals #23')),
+				P('Any egg (`#forge:eggs`) in egg recipes via `R.replaceInput`; turtle and parrot eggs open',
+				  T('food/types-and-tuning #6'))]),
+	'egg/dish': dict(
+		place=[R('Display Delight placed (Creative Common adds a placed block for each dish Display Delight has none for)',
+				 OWN, placed_on('placed'))],
+		recipe=[R('Pot meal rule: Cooking Pot, plus a heatless `_manual_only` shapeless craft from cooked forms '
+				  '(one more main ingredient)', RCK + ' heatless meal rule',
+				  lambda m: m.manual_craft() if m.at('Cooking Pot') else None),
+				P('Veggie omelette: the omelette ingredient swapped for tomato, beetroot, any bell pepper or ghost pepper '
+				  '(exact recipe open)', T('dishes/meals #24'))]),
+	'dairy': dict(
+		can=[R('Cheese wedges, 4 per can in the Cooking Pot, x1.25 x 4 servings (can parity 2.20)', CP, CAN)],
+		place=[R(PLACE_PRODUCE, OWN, placed_any)],
+		recipe=[R('none: cut from a cheese wheel', OWN, gathered),
+				P('9 cheese wedges craft back to the cheese block, for each cheese; more cheese types',
+				  T('dishes/ingredients #9'))],
+		values=[P('Stack: cheese wheel 32', T('food/stack-sizes #1'))]),
+	# ---- bread and kitchen
+	'bread': dict(
+		can=[R('x2 x 4 servings, 6 bread; slices, toast, tortilla and scones not canned (can parity 2.9)', CP, CAN)],
+		place=[D('none required')],
+		recipe=[R('Bread only: dough block smoked into a bread block, sawed or knifed into 16 bread', RCK + ' 2.1',
+				  only_if(lambda m: m.id == 'minecraft:bread', lambda m: m.at(('Mechanical Saw', 'Cutting Board')))),
+				D('Smoker + Furnace + Campfire: the dough', only_if(lambda m: m.id != 'minecraft:bread', trio)),
+				P('Bread block cut to a crustless bread block (standard slab recipe)', T('baking/baked-goods #10'))]),
+	'bread/slice': dict(recipe=[D('Cutting Board: the loaf -> slices; toast = slice in the trio',
+								  lambda m: m.at('Cutting Board') or trio(m)),
+								P('Honeycomb spreads on toast', T('dishes/ingredients #22'))],
+						values=[R('Every toast eats fast (16 ticks, like dried kelp); CD moredelight/toast.js', MD, only_if(lambda m: m.name_has('toast'), lambda m: bool(m.food) and bool(m.food.get('fast'))))]),
+	'ingredient': dict(
+		can=[R('Per item, can parity 2.26 (Canned Dough: 8 dough, not edible; tomato sauce in the preserve section)',
+			   CP, CAN)],
+		place=[D('none required')],
+		recipe=[R('One flour and one dough (Create\'s) in every recipe that takes them', RCK + ' 2.1'),
+				R('Pie crust: 3 flour + egg + milk, or 3 dough + milk, manual craft -> 3', OV,
+				  only_if(lambda m: m.id == 'farmersdelight:pie_crust', lambda m: m.at('Crafting'))),
+				P('One dough system: Create dough, `#forge:dough`, sweet potato dough, sourdough and cookie dough count as '
+				  'dough; a texture for each dough and a recoloured dough block for each',
+				  T('baking/baked-goods #17', 'baking/baked-goods #27')),
+				P('Sourdough chain (starter -> growing -> fermenting -> sourdough, timed) and a yeast recipe from mushrooms',
+				  T('baking/baked-goods #7', 'baking/baked-goods #8')),
+				P('Batter from wheat flour or cornmeal, used in more fried foods and as a cake base route',
+				  T('dishes/ingredients #7')),
+				P('Fats: animal fat (cows, pigs, nether cows) cooks into cooking oil, which takes animal oil\'s crafts; '
+				  'blubber and whale oil work the same; fish oil counts as cooking oil', T('dishes/ingredients #10')),
+				P('Butter: a new item churned from milk or cream (open)', T('dishes/ingredients #15')),
+				P('Vinegar: 3 apple mash + an enzyme (crushed fungus); foods with vinegar added carry Foul Taste',
+				  T('dishes/pickles-and-ferments #6', 'dishes/pickles-and-ferments #7'))],
+		values=[P('Stack: bowl and bottle ingredients 64', T('food/stack-sizes #1'))]),
+	'preserve': dict(
+		can=[R('Jams and sauces not canned (precedent); preserve section x1 x 4 (tomato sauce); per item, can parity 2.21',
+			   CP, CAN)],
+		place=[D('none required')],
+		recipe=[D('Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)', lambda m: m.at('Cooking Pot'))]),
+	'preserve/jam': dict(place=[R('Own block, while sneaking (Fruits Delight jams)', PF,
+								  only_if(lambda m: m.row['mod'] == 'fruitsdelight', placed_on('sneak')))],
+						 recipe=[D('Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
+								 R('Every jam cooks 400 ticks in the Cooking Pot (Fruits Delight 200 raised)', 'owner 2026-11-04'),
+								 P('Pot recipe: 4 fruit + 1 sugar + 1 lemon slice -> 2 jam', T('dishes/jams #2')),
+								 P('One jam item (Fruits Delight) and one jam block (Vintage Delight), always a mason jar '
+								   'recoloured to the jam; recipes take jam, never bottled jam or jelly',
+								   T('dishes/jams #1', 'dishes/jams #3'))]),
+	'preserve/spread': dict(recipe=[D('Cooking Pot: fruit + sugar in a jar (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
+									P('Nut butter and nut mash merge into one item', T('dishes/jams #5'))]),
+	'preserve/pickle': dict(recipe=[
+		D('Keg: vegetable + salt / brine', lambda m: m.at('Keg')),
+		P('Recipes take real pickles only (not Brewin\'s pickled pickles or raw sea pickles); a Pickled Sea Pickle without honey',
+		  T('dishes/pickles-and-ferments #1', 'dishes/pickles-and-ferments #2')),
+		P('Enzymes from crushed or milled mushrooms', T('dishes/pickles-and-ferments #5')),
+		P('Kimchi: Vintage Delight\'s, any pickleable vegetable as the base', T('dishes/pickles-and-ferments #8')),
+		P('Century egg takes a pickled egg', T('dishes/pickles-and-ferments #9'))]),
+	# ---- sweets
+	'jello': dict(
+		can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
+		place=[D('Display Delight placed', placed_on('placed'))],
+		recipe=[D('Crafting: jam + gelatin in a bowl (Spout mirrors it)', lambda m: m.at('Crafting'))],
+		values=[P('Stack: bowl foods including jello 32', T('food/stack-sizes #1'))]),
+	'pie': dict(
+		can=[R('4 slices -> 1 filling can (4 slice-sized servings); crust + full can -> the whole pie; tart cans are pie '
+			   'fillings (can parity 2.13)', CP, CAN)],
+		place=[D('none required')],
+		recipe=[D('see subfamilies')]),
+	'pie/whole': dict(
+		place=[R('Own block', PF, placed_on('block', 'sneak'))],
+		recipe=[R('Oven (pie tin): pie crust + 2 fruit + 2 sugar (honey allowed)', OV,
+				  lambda m: m.at('Oven', ['pie_crust'])),
+				R('Oven or Crafting: pie crust + a full can of its filling (all but durian, pineapple, sponge and End\'s chorus '
+				  'fruit pie: Ender\'s chorus pie owns the chorus filling can)', OV,
+				  only_if(lambda m: m.id not in ('ends_delight:chorus_fruit_pie', 'oceanic_delight:sponge_cake'),
+						  lambda m: m.at(('Oven', 'Crafting'), ['pie_crust'], ['canned_']))),
+				R('No other recipe (every other mod\'s pie recipe removed)', OV,
+				  lambda m: m.only('Oven', 'Crafting', 'Sequenced assembly')),
+				P('Sequenced assembly for every pie', TD + ' baked-goods #4', lambda m: m.at('Sequenced assembly')),
+				P('No shapeless recipe turns a pie into a crust (none found 2026-10-24; check in JEI)',
+				  T('baking/baked-goods #24')),
+				P('Durian and pineapple pies: a 4-slice placed pie, or a non-pie item with its own name, recipe and can',
+				  T('baking/baked-goods #12')),
+				P('Cherry pie: an item placing `create_central_kitchen:cherry_pie`; crust + 2 cherries + 2 sugar, knife to 4 '
+				  'slices, a filling can', T('baking/baked-goods #13'))]),
+	'pie/slice': dict(
+		place=[D('Small Food Plate', placed_on('small_plate'))],
+		recipe=[D('Cutting Board: whole pie -> slices', board),
+				P('Slices whose whole pie is from a mod not in the pack: add the pie or hide the slice, per slice',
+				  T('baking/baked-goods #14'))]),
+	'pie/small': dict(
+		recipe=[R('Tarts: Oven (baking sheet): fruit + pie crust + egg + sugar + milk -> 2', OV,
+				  only_if(lambda m: m.name_has('tart'), lambda m: m.at('Oven', ['pie_crust']))),
+				R('Hand pies: Oven only (baking sheet): pie crust + the filling -> 1 (CD handPieBake)', OV,
+				  only_if(lambda m: not m.name_has('tart') and m.id not in ('fruitsdelight:durian_pie', 'fruitsdelight:pineapple_pie'),
+						  lambda m: m.at('Oven', ['pie_crust']) and m.only('Oven'))),
+				P('Every tart becomes a pie (renamed, retextured)', TD + ' baked-goods #6',
+				  only_if(lambda m: m.name_has('tart'), lambda m: False))]),
+	'cake': dict(
+		can=[R('1 cake, or 4 slices + sugar or honey -> 4 fast servings of 1.75 slices (can parity 2.23)', CP, CAN)],
+		place=[D('none required')],
+		recipe=[D('see subfamilies')]),
+	'cake/whole': dict(
+		place=[R('Own block', PF, placed_on('block', 'sneak'))],
+		recipe=[R('Cakes: Crafting (manual): baked cake base + frosting + 2 flavor', OV,
+				  only_if(is_cake, lambda m: m.at('Crafting', ['frosting'], ['cake_base']))),
+				R('Cakes: Oven (cake pan): raw cake base + frosting + 2 flavor', OV,
+				  only_if(is_cake, lambda m: m.at('Oven', ['frosting']))),
+				R('Cakes: no other recipe (every other mod\'s cake recipe removed; `_from_slices` reassembly kept; plain and '
+				  'chocolate cake also spout onto a baked base)', OV,
+				  only_if(is_cake, lambda m: m.only('Oven', 'Crafting', 'Spout'))),
+				P('Every cake becomes a sequenced assembly (baked base, frosting, flavor), not only a grid or oven recipe; the existing '
+				  'spouts (plain, chocolate) need more steps', T('baking/baked-goods #28')),
+				R('Honey cake: 1 honey bottle + 1 honeycomb as its 2 flavor', T('baking/baked-goods #26')),
+				P('Mangosteen cake renamed (not a cake); a dragon egg cake', T('baking/baked-goods #5')),
+				P('Cake paste goes into the Cooking Pot', T('baking/baked-goods #6'))]),
+	'cake/slice': dict(
+		place=[P('All slices placeable (method not stated; proposal: Small Food Plate)', TD + ' baked-goods #5',
+				 placed_on('small_plate'))],
+		recipe=[D('Cutting Board: whole cake -> slices', board),
+				P('Unobtainable slices (7 Central Kitchen, its pumpkin pie slice, 6 Delightful) audited and removed',
+				  T('baking/baked-goods #5'))]),
+	'cake/muffin': dict(
+		recipe=[R('Oven (muffin tin, on paper): 2 fruit + wheat flour + milk + egg + sugar -> 4; Cooking Pot: 2 fruit + '
+				  'dough + milk + egg + sugar -> 2 (CD muffinBake)', OV, lambda m: m.at('Oven')),
+				P('Brownie and cupcake baking types: the muffin stays unfrosted, the cupcake is frosted',
+				  T('baking/baked-goods #18')),
+				P('Muffin variants: fruit + milk + egg + sugar + flour or cornmeal, served on paper, sequenced assembly',
+				  T('baking/baked-goods #2'))]),
+	'cookie': dict(
+		can=[R('x2 x 5 fast servings, 8 cookies or 6 + sugar (can parity 2.5)', CP, CAN)],
+		place=[D('Supplementaries jar (`#supplementaries:cookies`)', placed_on('jar'))],
+		recipe=[R('Oven only (baking sheet): cookie dough + 2 flavor -> 12', OV,
+				  lambda m: m.at('Oven', ['cookie_dough'])),
+				R('No other recipe', OV, lambda m: m.only('Oven')),
+				P('Oatmeal cookie takes oat dough; oatmeal raisin cookie: oat dough + 1 raw oat + 1 grape',
+				  T('baking/baked-goods #23')),
+				P('Chorus cookie made from the uncanny cookie; a maple cookie next to the cherry cookie',
+				  T('baking/baked-goods #22', 'baking/baked-goods #15'))]),
+	'dessert': dict(
+		can=[R('Per item, can parity 2.24 (sweets)', CP, CAN)],
+		place=[D('Food Plate', placed_on('plate'))],
+		recipe=[D('Oven for the plain bake; toppings by Spout', lambda m: m.at('Spout') or m.at('Oven')),
+				P('More waffle recipes and uses', T('baking/baked-goods #6')),
+				D('A dessert can get its own cookware or recipe treatment (a mold, a griddle, a press), not the cookie, cake or '
+				  'pie shape; Gingerbread is the first (Create Confectionery\'s gingerdough: furnace, smoker); the Gingerbread Man stays a cookie')]),
+	'candy': dict(
+		can=[R('Per item, can parity 2.24 (sweets)', CP, CAN)],
+		place=[D('Supplementaries jar', placed_on('jar'))],
+		recipe=[D('Spout: coating or filling (chocolate, caramel, honey) over the base', lambda m: m.at('Spout')),
+				P('Gummies for most fruits (slime balls and kelp allowed): a manual craft plus a more efficient pot / Create '
+				  'craft', T('baking/sweets #1')),
+				P('4 or 5 more rock candy variants from corundum; rose quartz kept', T('baking/sweets #2'))]),
+	'candy/bar': dict(recipe=[D('Press + Basin: the fluid into a bar', lambda m: m.at('Press + Basin'))]),
+	'frozen': dict(
+		can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
+		place=[D('Display Delight placed (ice cream), Food Plate (popsicles)', placed_on('placed', 'plate'))],
+		recipe=[R('Every ice food takes `#forge:ice_cubes`', RCK + ' 2.1', lambda m: m.at({r['st'] for r in m.recs}, ['#forge:ice_cubes', 'ice_cubes'])),
+				P('Ice cream: unified recipes, a fluid per flavor with mixing recipes, bowl spouting, an ice cream block per '
+				  'flavor (BlockRunner: sticky, sinks in); Truffle Ice Cream joins as a flavor', T('baking/sweets #4')),
+				P('More custard, shaved ice and popsicle variants', T('baking/sweets #3'))]),
+	'dessert/pancake': dict(
+		place=[R('Every pancake can be put down: Rustic\'s plates and Supplementaries\' Pancake are their own stack blocks '
+				 '(a single Rustic pancake goes back on its plate with sneak-use), Sweet Potato Pancakes a Display Delight '
+				 'placed dish', PANCAKE_SRC,
+				 only_if(lambda m: not m.id.startswith('rusticdelight:'), placed_on('placed', 'block')))],
+		recipe=[R('No base item: every pancake keeps its own recipes (Rustic plates: Cooking Pot, cut into single pancakes; '
+				  'Supplementaries\' Pancake: by hand and the heated Mixer; Sweet Potato Pancakes: Cooking Pot)', PANCAKE_SRC),
+				R('Food type `sweet/pancake` for every pancake eaten as an item (food.md 2.1)', PANCAKE_SRC),
+				P('Cooking Pot for the Supplementaries Pancake (3 batter + 2 sugar + 1 egg -> 4)', T('merges/baking #1')),
+				P('Coverings recoloured to the jam color', T('dishes/meals #37'))]),
+	'dessert/brownie': dict(
+		place=[D('Tray: own block (cut into brownies)', only_if(lambda m: m.row['whole'], placed_on('block', 'sneak')))],
+		recipe=[D('Oven: the tray (cake pan); Cutting Board: tray -> brownies',
+				  lambda m: m.at('Cutting Board') if not m.row['whole'] else m.at('Oven'))]),
+	'dessert/pudding': dict(
+		can=[R('Desserts section x1.25 x 8, + sugar; per item, can parity 2.22', CP, CAN)],
+		place=[D('Display Delight placed', placed_on('placed'))],
+		recipe=[D('Bowl puddings: Cooking Pot (Mixer mirrors it); fig pudding: Oven, cut on the board',
+				  lambda m: m.at('Cooking Pot') if not m.name_has('fig') else (m.at('Cutting Board') or m.at('Oven')))]),
+	# ---- hand food
+	'sandwich': dict(
+		can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
+		place=[D('Food Plate', placed_on('plate'))],
+		recipe=[D('Shaped crafting (no shapeless) + one sequenced assembly, as the burgers',
+				  lambda m: m.no_shapeless() and m.at('Sequenced assembly'))]),
+	'sandwich/burger': dict(
+		recipe=[R('Shaped only: toppings top, patty middle, bread bottom', RCK + ' 2.1', lambda m: m.no_shapeless()),
+				R('Takes any `#forge:bread`', RCK + ' 2.1', lambda m: m.at('Crafting', ['#forge:bread'])),
+				R('One sequenced assembly each', RCK + ' 2.1', lambda m: m.at('Sequenced assembly')),
+				P('A bun (new item `burger_bun`, oven / smoker / knife on bread) in place of bread; Kangaroo Burger '
+				  'shows a long roll and keeps bread', BG9,
+				  only_if(lambda m: not m.name_has('kangaroo'), lambda m: m.at(('Crafting', 'Sequenced assembly'),
+																			  ['burger_bun']))),
+				P('Fermented garlic and onion accepted in place of the raw ones in burgers', T('dishes/meals #29'))]),
+	'sandwich/square': dict(recipe=[
+		P('Nut butter sandwich: more jam options, square bread only', T('dishes/meals #31')),
+		P('2 bread slices (`#forge:bread_slices`, toast counts) in place of bread', BG9,
+		  lambda m: m.at(('Crafting', 'Sequenced assembly'), ['bread_slice'])),
+		D('Shaped crafting (no shapeless) + one sequenced assembly, as the burgers',
+		  lambda m: m.no_shapeless() and m.at('Sequenced assembly'))]),
+	'sandwich/roll': dict(recipe=[
+		P('Whole bread (`#forge:bread`), kept', BG9, lambda m: m.at(('Crafting', 'Sequenced assembly'), ['#forge:bread',
+																										 'minecraft:bread'])),
+		D('Shaped crafting (no shapeless) + one sequenced assembly, as the burgers',
+		  lambda m: m.no_shapeless() and m.at('Sequenced assembly'))]),
+	'sandwich/wrap': dict(recipe=[
+		P('A tortilla in place of bread (mutton wrap: TODO dishes/meals #2)', BG9, lambda m: m.at(
+			('Crafting', 'Sequenced assembly'), ['tortilla'])),
+		D('Shaped crafting (no shapeless) + one sequenced assembly, as the burgers',
+		  lambda m: m.no_shapeless() and m.at('Sequenced assembly'))]),
+	'sandwich/toast': dict(recipe=[
+		D('Crafting: bread slice or toast + topping', lambda m: m.at('Crafting')),
+		P('Bruschetta: 2 toast in place of bread', BG9,
+		  only_if(lambda m: m.name_has('bruschetta'), lambda m: m.at('Crafting', ['toast'])))],
+		values=[R('Every toast eats fast (16 ticks, like dried kelp); CD moredelight/toast.js', MD, only_if(lambda m: m.name_has('toast'), lambda m: bool(m.food) and bool(m.food.get('fast'))))]),
+	'skewer': dict(
+		can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
+		place=[D('Food Plate', placed_on('plate'))],
+		recipe=[R('One line per skewer (CD F.skewer, plan_meals_rolls_bbq.md C2): a raw skewer (not a food; Barbeque\'s '
+				  'Delight basin, or by hand from raw ingredients) cooked on the Grill, furnace, smoker or campfire; a '
+				  'heatless craft from cooked ingredients where they have a cooked form; one sequenced assembly where '
+				  'one existed', 'barbequesdelight/skewers.js', lambda m: m.at(('Smoker', 'Campfire / Skillet'))),
+				D('Shaped only + one sequenced assembly (as Crispy Skewer, ' + RCK + ' 2.1); the End Skewer is shapeless '
+				  '(owner, 2026-11-04)', lambda m: m.no_shapeless() and m.at('Sequenced assembly')),
+				P('Skewers become their own food type (recipes, which foods open)', T('dishes/meals #13'))]),
+	'roll': dict(
+		can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
+		place=[D('Food Plate (whole roll), Small Food Plate (slice)', placed_on('plate', 'small_plate'))],
+		recipe=[D('Crafting: wrapper + filling', lambda m: m.at('Crafting'))]),
+	'stuffed': dict(
+		can=[R('Handhelds never canned (precedent); per item, can parity 2.25', CP, CAN)],
+		place=[D('Food Plate', placed_on('plate'))],
+		recipe=[D('Crafting + one sequenced assembly on the vegetable (as Stuffed Potato)',
+				  lambda m: m.at('Crafting') and m.at('Sequenced assembly')),
+				P('Stuffed pepper plate: red, yellow and green peppers + rice, meat and onion; sequenced assembly on a bowl '
+				  'plus a less efficient manual craft (or drop the dish)', T('dishes/meals #16'))]),
+	'pizza': dict(
+		can=[R('Per item, can parity 2.25', CP, CAN)],
+		place=[D('see subfamilies')],
+		recipe=[D('see subfamilies')]),
+	'pizza/whole': dict(
+		place=[R('Own block', PF, placed_on('block', 'sneak'))],
+		recipe=[D('One shaped recipe + one sequenced assembly (as Brewin\' pizza, ' + RCK + ' 2.1)',
+				  lambda m: m.at('Crafting') and m.at('Sequenced assembly')),
+				P('8 slices per pizza, dearer dough and cheese; Brewin\' pizzas merge into Deluxe Pizza, plus a Tropical Pizza '
+				  '(pineapple, bacon)', T('dishes/meals #5', 'dishes/meals #26', 'dishes/meals #27', 'baking/baked-goods #20'))]),
+	'pizza/slice': dict(
+		place=[D('Small Food Plate', placed_on('small_plate'))],
+		recipe=[D('Cutting Board: whole pizza -> slices', board)]),
+	'quiche': dict(
+		can=[R('Per item, can parity 2.25', CP, CAN)],
+		place=[D('see subfamilies')],
+		recipe=[D('see subfamilies')]),
+	'quiche/whole': dict(
+		place=[R('Own block', PF, placed_on('block', 'sneak'))],
+		recipe=[D('Shaped recipe on a pie crust + one sequenced assembly on a pie crust (as Brewin\' quiche, ' + RCK + ' 2.1)',
+				  lambda m: m.at('Crafting', ['pie_crust']) and m.at('Sequenced assembly')),
+				P('Quiche: a pie variant for vegetables', T('baking/baked-goods #19'))]),
+	'quiche/slice': dict(
+		place=[D('Small Food Plate', placed_on('small_plate'))],
+		recipe=[D('Cutting Board: whole quiche -> slices', board)]),
+	'lasagna': dict(
+		can=[R('Per item, can parity 2.25', CP, CAN)],
+		place=[D('see subfamilies')],
+		recipe=[D('see subfamilies')]),
+	'lasagna/whole': dict(
+		place=[R('Own block', PF, placed_on('block', 'sneak'))],
+		recipe=[D('Cooking Pot (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
+				P('Lasagna needs a baking dish item', T('baking/baked-goods #21'))]),
+	'lasagna/serving': dict(
+		recipe=[D('Taken from the pan, or Cooking Pot + heatless grid route', lambda m: m.at('Cooking Pot') or m.at('Crafting'))]),
+	'snack': dict(
+		can=[R('Per item, can parity 2.25', CP, CAN)],
+		place=[D('none required')],
+		recipe=[D('none shared (fried, popped or boxed)'),
+				P('Nachos take cheese', T('dishes/meals #18'))]),
+	# ---- bowl and plate
+	'salad': dict(
+		can=[R('x1.25 x 8 fast servings, effects x0.75, 6 salads or 5 + vinegar; potato and maggot salads not '
+			   'canned (can parity 2.10)', CP, CAN)],
+		place=[D('Display Delight placed', placed_on('placed'))],
+		recipe=[D('Crafting: raw parts + bowl', lambda m: m.at('Crafting')),
+				P('Salad becomes its own food type; field salad accepts more ingredient options (no fermented vegetables); '
+				  'the cucumber salad takes pickled options', T('dishes/meals #15', 'dishes/meals #29',
+																'dishes/pickles-and-ferments #2'))]),
+	'soup': dict(
+		can=[R('x1.25 x 8 servings, effects x0.75, 6 soups or 3 + salt or broth; 4 skipped (can parity 2.11)', CP, CAN)],
+		place=[R('Supplementaries jar: every soup and stew is a jar fluid', TD + ' dishes/ingredients #13',
+				 placed_on('jar')),
+			   D('Display Delight placed', placed_on('placed'))],
+		recipe=[R('Cooking Pot (Mixer mirrors it)', RCK + ' heatless meal rule', lambda m: m.at('Cooking Pot')),
+				R('Heatless: shapeless `_manual_only` craft with bone broth, one more main ingredient than the pot',
+				  RCK + ' heatless meal rule',
+				  lambda m: m.manual_craft(['bone_broth']) if m.at('Cooking Pot') else None)],
+		values=[P('Base values adjusted from the inputs; outliers marked first', T('food/types-and-tuning #8'))]),
+	'meal': dict(
+		can=[R('Pastas only: 2 -> 4 servings of 0.75 (placeholder); per item, can parity 2.12', CP, CAN)],
+		place=[D('Display Delight placed', placed_on('placed'))],
+		recipe=[D('Cooking Pot (Mixer mirrors it)', lambda m: m.at('Cooking Pot')),
+				R('Heatless: a pot meal is also a shapeless `_manual_only` craft from cooked forms (one more main)',
+				  RCK + ' heatless meal rule', lambda m: m.manual_craft() if m.at('Cooking Pot') else None),
+				P('Meals that take only vanilla or one specific meat, vegetable or fruit open up to any, unless the dish is '
+				  'that food (glazed salmon keeps cooked salmon)', T('dishes/meals #21')),
+				P('Pot recipes that suit the oven gain or move to an Oven recipe (smoking in the oven open)',
+				  T('cooking/oven #7')),
+				P('Fries from any potato slice; potato recipes also take sweet potato and its cooked and sliced forms',
+				  T('dishes/meals #34', 'dishes/ingredients #21')),
+				P('Steak and broccoli takes rice, mashed potatoes, any baked potato + bowl, or other baked vegetables + bowl',
+				  T('dishes/meals #35'))],
+		values=[P('Salt on every valid food (every meat dish too), never on intermediates (bone broth, cooked rice, tomato '
+				  'sauce); sugar or powdered sugar as a seasoning on some foods', T('food/seasoning #1', 'food/seasoning #4',
+																				  'food/seasoning #5'))]),
+	'feast': dict(
+		can=[R('1 placed feast block -> 6 servings (placeholder; can parity 2.14)', CP, CAN),
+			 P('Every feast cannable', T('cans/canning #17'))],
+		place=[D('see subfamilies')],
+		recipe=[D('see subfamilies')]),
+	'feast/whole': dict(
+		place=[R('Own block', PF, placed_on('block', 'sneak'))],
+		recipe=[P('Sequenced assembly (roast chicken, shepherd\'s pie, honey glazed ham...)', TD + ' dishes/meals #5',
+				  lambda m: m.at('Sequenced assembly')),
+				P('Cooked in the Oven (hoglin feast first; all feasts in the pot and oven?)', TD + ' dishes/meals #20',
+				  lambda m: m.at('Oven'))]),
+	'feast/serving': dict(
+		place=[D('Display Delight placed', placed_on('placed'))],
+		recipe=[D('none: taken from the feast block with a bowl', gathered)]),
+	# ---- drinks
+	'drink': dict(
+		can=[R('4 drinks -> 4 servings (placeholder); per item, can parity 2.15', CP, CAN)],
+		place=[D('Display Delight placed', placed_on('placed'))],
+		recipe=[D('Crafting + Cooking Pot (Mixer mirrors it) + Spout from the fluid',
+				  lambda m: m.at('Crafting') and m.at('Spout')),
+				P('Kettle with 6 ingredient slots brews the pot drinks via `NCH.frBrewing` (5 Rustic Delight coffees, Apple '
+				  'Cider, Hot Cocoa, Creamy Corn Drink, Ender Nectar, Pickerelweed Juice, Cloud Latte, Mango Milkshake, '
+				  'teas, Chorus Juice); their pot recipes go, Bellini stays in the pot; grid crafts stay',
+				  T('food/drinks #7'))],
+		values=[P('Stack: drinks and bottles (tea, juice, custard, shaved ice) 32', T('food/stack-sizes #1'))]),
+	'drink/juice': dict(recipe=[P('Inputs per bottle by hand, Kettle, Create mixing and IE Mixer; machines cheaper than '
+								  'hand', TD + ' food/drinks #8',
+								  lambda m: m.at('Crafting') and m.at('Kettle') and m.at('Mixer')),
+								P('Every drinkable juice gets a Kettle recipe more efficient than its manual one (Hamimelon, '
+								  'Kiwi, Lemon, Orange, Pear, Prickly Pear, Chorus); "more efficient" read as output per input',
+								  T('food/drinks #7', 'food/drinks #8'))]),
+	'drink/tea': dict(
+		place=[P('Placeable with Display Delight', TD + ' food/drinks #2, placeable #3', placed_on('placed'))],
+		recipe=[P('Inputs per bottle by hand, Kettle, Create mixing and IE Mixer; machines cheaper than hand',
+				  TD + ' food/drinks #8', lambda m: m.at('Crafting') and m.at('Kettle') and m.at('Mixer')),
+				P('Teas in both Kettle and pot: the Kettle recipe is 2x as efficient (output per input), the pot tea takes '
+				  '2 fruit per tea, sugar / honey / honeycomb in the pot recipe only; Create mixing dearer than manual',
+				  T('food/drinks #8', 'food/drinks #7', 'food/drinks #2')),
+				P('Farmer\'s Respite long and strong teas get their own names and textures', T('food/drinks #2'))]),
+	'drink/soda': dict(recipe=[R('Ciders: a potion-like chain, base -> long (milk) -> strong (honey), each a fluid',
+								 '[item_merges.md](item_merges.md) 2.x')]),
+	'alcohol': dict(
+		can=[R('Per item, can parity 2.16 (sheet only, no can section)', CP, CAN)],
+		place=[D('Coaster', placed_on('coaster'))],
+		recipe=[D('see subfamilies')],
+		values=[R('Half a rotten shank (1 hunger), no saturation, always drinkable, Intoxication and Nausea', AL,
+				  lambda m: bool(m.food) and m.food['nutrition'] == 1 and m.food['saturation'] == 0
+				  and m.food['alwaysEat'])]),
+	'alcohol/wine': dict(
+		place=[R('Own block, while sneaking (Vinery bottles)', PF,
+				 only_if(lambda m: m.row['mod'] == 'vinery', placed_on('sneak')))],
+		recipe=[D('Fermentation Barrel (grapes: 12 grapes, 4 stomps -> 4 bottles, decided in ' + TD + ' alcohol)',
+				  lambda m: m.at('Fermentation Barrel'))]),
+	'alcohol/brew': dict(recipe=[D('Keg, poured into a tankard (Spout mirrors the pour)', lambda m: m.at('Keg (pouring)'))]),
+	'alcohol/spirit': dict(recipe=[D('Keg', lambda m: m.at(('Keg', 'Keg (pouring)')))]),
+	'alcohol/mixed': dict(recipe=[D('Keg, from other drinks', lambda m: m.at(('Keg', 'Keg (pouring)')))]),
+	# ---- overlays
+	'golden': dict(
+		can=[R('2 golden + honey -> 10 servings at x0.25 (effects x0.333 decided, not built; can parity 2.17)', CP, CAN)],
+		place=[D('none required')],
+		recipe=[R('Crafting: the food in 8 gold (real gold only, rose gold counts); every golden food but the apple takes '
+				  '8 gold nuggets (owner, 2026-11-02, [food.md](food.md) 3.16; was 8 gold ingots)', RCK + ' 2.4',
+				  lambda m: m.at('Crafting', ['gold'])),
+				D('Heated Mixer: the food + 6 gold, and Arc Furnace: the food + 5 gold, for every golden food (stated '
+				  'only for carrot and apple, ' + RCK + ' 2.4; TODO dishes/meals #9 built it on every gold tag)',
+				  lambda m: m.at('Mixer', ['gold']) and m.at('Arc Furnace'))],
+		values=[R('Hunger and saturation are the input food\'s times 2 (golden) or 4 (gilded), hunger capped at 20; '
+				  'effects kept; the cakes keep their own slices', 'owner 2026-11-02 ([food.md](food.md) 3.16, '
+				  '[golden_food.md](golden_food.md) 3.6)')]),
+	'golden/enchanted': dict(
+		recipe=[R('Gilded (enchanted golden) apple: sequenced assembly on a golden apple, 8 loops of 1 gold ingot, 125 mB '
+				  'liquid XP, pressing (owner, 2026-11-03; was 4 loops of a gold block and 250 mB)', RCK + ' 2.4', only_if(lambda m: m.id == 'minecraft:enchanted_golden_apple',
+													   lambda m: m.at('Sequenced assembly'))),
+				R('Every other enchanted golden food but the cake: the same assembly on its golden form; the anvil and '
+				  'the Golden Food Enchantment are removed', 'owner 2026-11-02 ([golden_food.md](golden_food.md) 3.4)', only_if(
+					lambda m: m.id not in ('minecraft:enchanted_golden_apple', 'goldenfood:enchanted_golden_cake'),
+					lambda m: m.at('Sequenced assembly'))),
+				R('Enchanted golden cake: no recipe (upstream had none)', '[golden_food.md](golden_food.md) 3.4', only_if(
+					lambda m: m.id == 'goldenfood:enchanted_golden_cake', lambda m: True))]),
+	'can': dict(
+		can=[R('n/a: these are the cans')],
+		place=[D('none required')],
+		recipe=[R('Recipes that use a can are manual only: `_manual_only` id (NCH `cans` argument; Create and '
+				  'auto-crafters skip them)', CP + ' 8, 2026-10-21',
+				  lambda m: (all(r['id'].endswith('_manual_only') for r in m.uses if r['st'] == 'Crafting')
+							 if any(r['st'] == 'Crafting' for r in m.uses) else None)),
+				P('Canning automation: food effects carry over, bone broth returns its bowl', T('cans/canning #8'))]),
+	'hazard': dict(
+		can=[R('Meat Meal x 4, no additive (placeholder); per item, can parity 2.19', CP, CAN)],
+		place=[D('none required')],
+		recipe=[D('none: dropped or found', gathered)]),
 }
 FIELDS = [('can', 'Cannable'), ('place', 'Placeable'), ('recipe', 'Recipe shape by station'), ('values', 'Other (values, uses)')]
 
 
 def field_rules(path, field):
-    """(rules, inherited from) for a family field, walking up the parents."""
-    p = path
-    while p:
-        if field in RULES.get(p, {}):
-            return RULES[p][field], (p if p != path else '')
-        p = parent(p)
-    return [], ''
+	"""(rules, inherited from) for a family field, walking up the parents."""
+	p = path
+	while p:
+		if field in RULES.get(p, {}):
+			return RULES[p][field], (p if p != path else '')
+		p = parent(p)
+	return [], ''
 
 
 def parent(path):
-    return path.rsplit('/', 1)[0] if '/' in path else ''
+	return path.rsplit('/', 1)[0] if '/' in path else ''
 
 
 # ---------------------------------------------------------------- can parity worksheet
 
 def can_parity(path=INSTANCE / 'feature_writeup/can_parity.md'):
-    """[(want yes/no, id globs, sheet, alt cell, is an alt-input row)] from every sheet row of section 2."""
-    rows, sheet = [], None
-    for line in path.read_text().split('\n'):
-        m = re.match(r'^### (2\.\d+) (.*?) <a', line)
-        if m:
-            sheet = m.group(1)
-        elif line.startswith('## ') and not line.startswith('## 2'):
-            sheet = None
-        if sheet and re.match(r'^\| (x\*?|/) \|', line):
-            c = [x.strip() for x in line.strip().strip('|').split('|')]
-            note = c[1]
-            want = None if 'shares Canned' in note else c[0].startswith('x')   # a serving of a shared can: n/a
-            rows.append((want, re.findall(r'`([^`]+)`', note), sheet, c[4] if len(c) > 4 else '', 'alt input of' in note))
-    return rows
+	"""[(want yes/no, id globs, sheet, alt cell, is an alt-input row)] from every sheet row of section 2."""
+	rows, sheet = [], None
+	for line in path.read_text().split('\n'):
+		m = re.match(r'^### (2\.\d+) (.*?) <a', line)
+		if m:
+			sheet = m.group(1)
+		elif line.startswith('## ') and not line.startswith('## 2'):
+			sheet = None
+		if sheet and re.match(r'^\| (x\*?|/) \|', line):
+			c = [x.strip() for x in line.strip().strip('|').split('|')]
+			note = c[1]
+			want = None if 'shares Canned' in note else c[0].startswith('x')   # a serving of a shared can: n/a
+			rows.append((want, re.findall(r'`([^`]+)`', note), sheet, c[4] if len(c) > 4 else '', 'alt input of' in note))
+	return rows
 
 
 def can_want(i, name, sheet_rows):
-    """(want True/False/None, sheet) for one item: its own row ("shares Canned X" = n/a), else (and for a row
+	"""(want True/False/None, sheet) for one item: its own row ("shares Canned X" = n/a), else (and for a row
     marked "alt input of") the Alt input cell of its whole item."""
-    import fnmatch
-    for want, globs, sheet, _, alt_of in sheet_rows:
-        if any(fnmatch.fnmatch(i, g) for g in globs) and not alt_of:
-            return want, sheet
-    for want, globs, sheet, alt, _ in sheet_rows:
-        for part in alt.split(';'):
-            if ':' in part and part.split(':')[0].strip().lower() == name.lower():
-                return (want and part.split(':', 1)[1].strip().startswith('x')), sheet
-    return None, None
+	import fnmatch
+	for want, globs, sheet, _, alt_of in sheet_rows:
+		if any(fnmatch.fnmatch(i, g) for g in globs) and not alt_of:
+			return want, sheet
+	for want, globs, sheet, alt, _ in sheet_rows:
+		for part in alt.split(';'):
+			if ':' in part and part.split(':')[0].strip().lower() == name.lower():
+				return (want and part.split(':', 1)[1].strip().startswith('x')), sheet
+	return None, None
 
 
 # ---------------------------------------------------------------- render
 
 def members_of(path, fam_of):
-    return [i for i, f in fam_of.items() if f == path or f.startswith(path + '/')]
+	return [i for i, f in fam_of.items() if f == path or f.startswith(path + '/')]
 
 
 def leaf_label(path):
-    return path.rsplit('/', 1)[-1] if '/' in path else path
+	return path.rsplit('/', 1)[-1] if '/' in path else path
 
 
 def md(s):
-    return str(s).replace('|', '\\|').replace('\n', ' ')
+	return str(s).replace('|', '\\|').replace('\n', ' ')
 
 
 KIND = {'rule': 'Rule', 'planned': 'Planned', 'decision': 'Decision'}
 
 
 def rule_text(r):
-    src = f' ({r.src})' if r.src else ''
-    return f'**{KIND[r.kind]}:** {r.text}{src}'
+	src = f' ({r.src})' if r.src else ''
+	return f'**{KIND[r.kind]}:** {r.text}{src}'
 
 
 def check(r, m):
-    if r.check is None:
-        return None
-    if r.check is CAN:
-        if m.can_want is None:
-            # whole blocks have no row: the can row is on the serving or slice (a feast block fills a feast can)
-            return None if m.row['whole'] or not m.canned else False
-        return m.can_want == m.canned
-    return r.check(m)
+	if r.check is None:
+		return None
+	if r.check is CAN:
+		if m.can_want is None:
+			# whole blocks have no row: the can row is on the serving or slice (a feast block fills a feast can)
+			return None if m.row['whole'] or not m.canned else False
+		return m.can_want == m.canned
+	return r.check(m)
 
 
 def tally(field, ms, fam_of):
-    """'rule a/b; planned c/d; decision e/f': each member against its own family's rows for the field (a member
+	"""'rule a/b; planned c/d; decision e/f': each member against its own family's rows for the field (a member
     passes a kind when it passes every checked row of it)."""
-    out = []
-    for kind in ('rule', 'planned', 'decision'):
-        ok = n = 0
-        for m in ms:
-            rs = [r for r in field_rules(fam_of[m.id], field)[0] if r.kind == kind and r.check is not None]
-            res = [check(r, m) for r in rs]
-            res = [x for x in res if x is not None]
-            if res:
-                n += 1
-                ok += all(res)
-        if n:
-            out.append(f'{KIND[kind].lower()} {ok}/{n}')
-    return '; '.join(out) if out else '-'
+	out = []
+	for kind in ('rule', 'planned', 'decision'):
+		ok = n = 0
+		for m in ms:
+			rs = [r for r in field_rules(fam_of[m.id], field)[0] if r.kind == kind and r.check is not None]
+			res = [check(r, m) for r in rs]
+			res = [x for x in res if x is not None]
+			if res:
+				n += 1
+				ok += all(res)
+		if n:
+			out.append(f'{KIND[kind].lower()} {ok}/{n}')
+	return '; '.join(out) if out else '-'
 
 
 def place_now(ms):
-    c = Counter(col for m in ms for col in m.place)
-    parts = [f'{label} {c[col]}' for col, label in PLACE_COLS if c[col]]
-    none = sum(1 for m in ms if not m.place)
-    if none:
-        parts.append(f'none {none}')
-    return '; '.join(parts)
+	c = Counter(col for m in ms for col in m.place)
+	parts = [f'{label} {c[col]}' for col, label in PLACE_COLS if c[col]]
+	none = sum(1 for m in ms if not m.place)
+	if none:
+		parts.append(f'none {none}')
+	return '; '.join(parts)
 
 
 def stations_now(ms, fam_of, path):
-    by_st = defaultdict(Counter)
-    for m in ms:
-        for st in m.stations():
-            by_st[st][fam_of[m.id]] += 1
-    parts = []
-    for st, c in sorted(by_st.items(), key=lambda kv: (-sum(kv[1].values()), kv[0])):
-        subs = [f'{v} {leaf_label(k)}' for k, v in sorted(c.items(), key=lambda kv: (-kv[1], kv[0])) if k != path]
-        if subs and c[path]:
-            subs.append(f'{c[path]} direct')
-        parts.append(f'{st} {sum(c.values())}' + (f' ({", ".join(subs)})' if subs else ''))
-    none = sum(1 for m in ms if not m.stations())
-    if none:
-        parts.append(f'no recipe {none}')
-    return '; '.join(parts) or '-'
+	by_st = defaultdict(Counter)
+	for m in ms:
+		for st in m.stations():
+			by_st[st][fam_of[m.id]] += 1
+	parts = []
+	for st, c in sorted(by_st.items(), key=lambda kv: (-sum(kv[1].values()), kv[0])):
+		subs = [f'{v} {leaf_label(k)}' for k, v in sorted(c.items(), key=lambda kv: (-kv[1], kv[0])) if k != path]
+		if subs and c[path]:
+			subs.append(f'{c[path]} direct')
+		parts.append(f'{st} {sum(c.values())}' + (f' ({", ".join(subs)})' if subs else ''))
+	none = sum(1 for m in ms if not m.stations())
+	if none:
+		parts.append(f'no recipe {none}')
+	return '; '.join(parts) or '-'
 
 
 def uses_now(ms, fam_of, used_in):
-    c = Counter()
-    for m in ms:
-        for f in {fam_of[o].split('/')[0] for o in used_in.get(m.id, ()) if o in fam_of}:
-            c[f] += 1
-    parts = [f'{f} {v}' for f, v in sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))]
-    if len(parts) > USES_SHOWN:
-        parts = parts[:USES_SHOWN] + [f'{len(parts) - USES_SHOWN} more']
-    return '; '.join(parts) or 'none'
+	c = Counter()
+	for m in ms:
+		for f in {fam_of[o].split('/')[0] for o in used_in.get(m.id, ()) if o in fam_of}:
+			c[f] += 1
+	parts = [f'{f} {v}' for f, v in sorted(c.items(), key=lambda kv: (-kv[1], kv[0]))]
+	if len(parts) > USES_SHOWN:
+		parts = parts[:USES_SHOWN] + [f'{len(parts) - USES_SHOWN} more']
+	return '; '.join(parts) or 'none'
 
 
 def values_now(ms):
-    fs = [m.food for m in ms if m.food]
-    if not fs:
-        return 'block items only'
+	fs = [m.food for m in ms if m.food]
+	if not fs:
+		return 'block items only'
 
-    def rng(xs):
-        lo, md_, hi = min(xs), statistics.median(xs), max(xs)
-        return f'{lo:g}' if lo == hi else f'{lo:g} to {hi:g} (median {md_:g})'
-    parts = [f'hunger {rng([f["nutrition"] for f in fs])}', f'saturation {rng([round(f["saturation"], 1) for f in fs])}']
-    st = Counter(f['stackSize'] for f in fs)
-    parts.append('stack ' + ', '.join(f'{k} x{v}' for k, v in sorted(st.items(), key=lambda kv: (-kv[1], kv[0]))))
-    rem = Counter(f['remainder'].split(':')[-1] for f in fs if f['remainder'])
-    if rem:
-        parts.append('returns ' + ', '.join(f'{k} {v}' for k, v in sorted(rem.items(), key=lambda kv: (-kv[1], kv[0]))))
-    whole = len(ms) - len(fs)
-    if whole:
-        parts.append(f'block items {whole}')
-    return '; '.join(parts)
+	def rng(xs):
+		lo, md_, hi = min(xs), statistics.median(xs), max(xs)
+		return f'{lo:g}' if lo == hi else f'{lo:g} to {hi:g} (median {md_:g})'
+	parts = [f'hunger {rng([f["nutrition"] for f in fs])}', f'saturation {rng([round(f["saturation"], 1) for f in fs])}']
+	st = Counter(f['stackSize'] for f in fs)
+	parts.append('stack ' + ', '.join(f'{k} x{v}' for k, v in sorted(st.items(), key=lambda kv: (-kv[1], kv[0]))))
+	rem = Counter(f['remainder'].split(':')[-1] for f in fs if f['remainder'])
+	if rem:
+		parts.append('returns ' + ', '.join(f'{k} {v}' for k, v in sorted(rem.items(), key=lambda kv: (-kv[1], kv[0]))))
+	whole = len(ms) - len(fs)
+	if whole:
+		parts.append(f'block items {whole}')
+	return '; '.join(parts)
 
 
 def mark(x):
-    return 'ok' if x is True else ('**no**' if x is False else '-')
+	return 'ok' if x is True else ('**no**' if x is False else '-')
 
 
 def render(rows, fam_of, mem, used_in, skipped):
-    out = [BEGIN, '']
-    fams = [p for p in FAMILIES]
-    nofam = [i for i, f in fam_of.items() if f == NOFAM]
-    uns = [i for i, f in fam_of.items() if f == UNSORTED]
-    placed = [i for i, f in fam_of.items() if f not in (NOFAM, UNSORTED)]
-    out.append(f'{len(placed)} items in {sum(1 for p in fams if "/" not in p)} families and '
-               f'{sum(1 for p in fams if "/" in p)} subfamilies; {len(nofam)} without a family (3.3); '
-               f'{len(skipped)} skipped (3.3); unsorted {len(uns)}.')
-    n_dec = sum(1 for p in fams for f, _ in FIELDS for r in RULES.get(p, {}).get(f, []) if r.kind == 'decision')
-    out.append(f'Rule rows: {sum(1 for p in fams for f, _ in FIELDS for r in RULES.get(p, {}).get(f, []) if r.kind == "rule")} '
-               f'stated, {sum(1 for p in fams for f, _ in FIELDS for r in RULES.get(p, {}).get(f, []) if r.kind == "planned")} '
-               f'planned, {n_dec} decisions.')
+	out = [BEGIN, '']
+	fams = [p for p in FAMILIES]
+	nofam = [i for i, f in fam_of.items() if f == NOFAM]
+	uns = [i for i, f in fam_of.items() if f == UNSORTED]
+	placed = [i for i, f in fam_of.items() if f not in (NOFAM, UNSORTED)]
+	out.append(f'{len(placed)} items in {sum(1 for p in fams if "/" not in p)} families and '
+			   f'{sum(1 for p in fams if "/" in p)} subfamilies; {len(nofam)} without a family (3.3); '
+			   f'{len(skipped)} skipped (3.3); unsorted {len(uns)}.')
+	n_dec = sum(1 for p in fams for f, _ in FIELDS for r in RULES.get(p, {}).get(f, []) if r.kind == 'decision')
+	out.append(f'Rule rows: {sum(1 for p in fams for f, _ in FIELDS for r in RULES.get(p, {}).get(f, []) if r.kind == "rule")} '
+			   f'stated, {sum(1 for p in fams for f, _ in FIELDS for r in RULES.get(p, {}).get(f, []) if r.kind == "planned")} '
+			   f'planned, {n_dec} decisions.')
 
-    # 3.1 rules
-    out += ['', '### 3.1 Family rules', '',
-            'One row per family and subfamily. A field a subfamily does not set is its parent\'s ("as parent").',
-            '**Rule** = stated and built, **Planned** = stated in a TODO row, **Decision** = no stated rule yet: the text '
-            'is a proposal, mostly what the members do now, to accept or change.', '',
-            '| Family | Parent | Criteria | ' + ' | '.join(lbl for _, lbl in FIELDS) + ' |',
-            '|---|---|---|' + '---|' * len(FIELDS)]
-    for path in fams:
-        label, crit = FAMILIES[path]
-        cells = []
-        ms = [mem[i] for i in members_of(path, fam_of)]
-        for f, _ in FIELDS:
-            own = RULES.get(path, {}).get(f)
-            if own:
-                cell = '<br>'.join(md(rule_text(r)) for r in own)
-            else:
-                _, src = field_rules(path, f)
-                cell = f'as {src}' if src else ''
-            if f == 'values':
-                cell = '<br>'.join(x for x in (cell, f'Now: {md(values_now(ms))}',
-                                               f'Used in: {md(uses_now(ms, fam_of, used_in))}') if x)
-            cells.append(cell or '-')
-        out.append(f'| **{label}** `{path}` | {parent(path) or "-"} | {md(crit)} | ' + ' | '.join(cells) + ' |')
+	# 3.1 rules
+	out += ['', '### 3.1 Family rules', '',
+			'One row per family and subfamily. A field a subfamily does not set is its parent\'s ("as parent").',
+			'**Rule** = stated and built, **Planned** = stated in a TODO row, **Decision** = no stated rule yet: the text '
+			'is a proposal, mostly what the members do now, to accept or change.', '',
+			'| Family | Parent | Criteria | ' + ' | '.join(lbl for _, lbl in FIELDS) + ' |',
+			'|---|---|---|' + '---|' * len(FIELDS)]
+	for path in fams:
+		label, crit = FAMILIES[path]
+		cells = []
+		ms = [mem[i] for i in members_of(path, fam_of)]
+		for f, _ in FIELDS:
+			own = RULES.get(path, {}).get(f)
+			if own:
+				cell = '<br>'.join(md(rule_text(r)) for r in own)
+			else:
+				_, src = field_rules(path, f)
+				cell = f'as {src}' if src else ''
+			if f == 'values':
+				cell = '<br>'.join(x for x in (cell, f'Now: {md(values_now(ms))}',
+											   f'Used in: {md(uses_now(ms, fam_of, used_in))}') if x)
+			cells.append(cell or '-')
+		out.append(f'| **{label}** `{path}` | {parent(path) or "-"} | {md(crit)} | ' + ' | '.join(cells) + ' |')
 
-    # 3.2 compliance
-    out += ['', '### 3.2 Compliance', '',
-            'Members in line with the family\'s rows (inherited rows included), as passed/checked. A member passes a field '
-            'when it passes every checked row of that kind. Rule and planned rows are the real gaps; decision rows count '
-            'members that already match the proposal. Cannable is checked against the member\'s own Want cell in the can '
-            'parity worksheet (a cut form follows its whole item\'s Alt input cell); a member with no row counts as a '
-            'pass only when it has no can.', '',
-            '| Family | Members | Cannable | Placeable | Recipe shape | Other | Placeable now | Stations now |',
-            '|---|---|---|---|---|---|---|---|']
-    for path in fams:
-        ms = [mem[i] for i in members_of(path, fam_of)]
-        cells = [tally(f, ms, fam_of) for f, _ in FIELDS]
-        out.append(f'| {FAMILIES[path][0]} `{path}` | {len(ms)} | ' + ' | '.join(cells) +
-                   f' | {md(place_now(ms))} | {md(stations_now(ms, fam_of, path))} |')
+	# 3.2 compliance
+	out += ['', '### 3.2 Compliance', '',
+			'Members in line with the family\'s rows (inherited rows included), as passed/checked. A member passes a field '
+			'when it passes every checked row of that kind. Rule and planned rows are the real gaps; decision rows count '
+			'members that already match the proposal. Cannable is checked against the member\'s own Want cell in the can '
+			'parity worksheet (a cut form follows its whole item\'s Alt input cell); a member with no row counts as a '
+			'pass only when it has no can.', '',
+			'| Family | Members | Cannable | Placeable | Recipe shape | Other | Placeable now | Stations now |',
+			'|---|---|---|---|---|---|---|---|']
+	for path in fams:
+		ms = [mem[i] for i in members_of(path, fam_of)]
+		cells = [tally(f, ms, fam_of) for f, _ in FIELDS]
+		out.append(f'| {FAMILIES[path][0]} `{path}` | {len(ms)} | ' + ' | '.join(cells) +
+				   f' | {md(place_now(ms))} | {md(stations_now(ms, fam_of, path))} |')
 
-    # 3.3 no family
-    out += ['', '### 3.3 Foods without a family', '',
-            'Foods no family rule should cover: magic and one-off foods (food type `special`) and single odd fits. They '
-            'keep their own recipes; their can decision is still the can parity row.', '',
-            '| Food | Id | Food type | Closest family | Stations | Placeable | Can (want / has) |', '|---|---|---|---|---|---|---|']
-    for i in sorted(nofam, key=lambda i: rows[i]['name']):
-        m = mem[i]
-        w = {True: 'yes', False: 'no', None: 'no row'}[m.can_want]
-        out.append(f'| {md(rows[i]["name"])} | `{i}` | {rows[i]["t"] or "-"} | {NO_FAMILY.get(i, "-")} | '
-                   f'{md(", ".join(sorted(m.stations())) or "-")} | '
-                   f'{", ".join(l for c, l in PLACE_COLS if c in m.place) or "-"} | {w} / {"yes" if m.canned else "no"} |')
-    out += ['', 'Skipped on purpose (not food for these rules):', '',
-            '| Item | Id | Why |', '|---|---|---|']
-    for i, why in sorted(skipped, key=lambda x: rows[x[0]]['name']):
-        out.append(f'| {md(rows[i]["name"])} | `{i}` | {why} |')
-    if uns:
-        out += ['', '**Unsorted** (no rule took them; fix `classify()`):', '', '| Name | Id | Food type |', '|---|---|---|']
-        out += [f'| {md(rows[i]["name"])} | `{i}` | {rows[i]["t"] or "-"} |' for i in sorted(uns)]
+	# 3.3 no family
+	out += ['', '### 3.3 Foods without a family', '',
+			'Foods no family rule should cover: magic and one-off foods (food type `special`) and single odd fits. They '
+			'keep their own recipes; their can decision is still the can parity row.', '',
+			'| Food | Id | Food type | Closest family | Stations | Placeable | Can (want / has) |', '|---|---|---|---|---|---|---|']
+	for i in sorted(nofam, key=lambda i: rows[i]['name']):
+		m = mem[i]
+		w = {True: 'yes', False: 'no', None: 'no row'}[m.can_want]
+		out.append(f'| {md(rows[i]["name"])} | `{i}` | {rows[i]["t"] or "-"} | {NO_FAMILY.get(i, "-")} | '
+				   f'{md(", ".join(sorted(m.stations())) or "-")} | '
+				   f'{", ".join(l for c, l in PLACE_COLS if c in m.place) or "-"} | {w} / {"yes" if m.canned else "no"} |')
+	out += ['', 'Skipped on purpose (not food for these rules):', '',
+			'| Item | Id | Why |', '|---|---|---|']
+	for i, why in sorted(skipped, key=lambda x: rows[x[0]]['name']):
+		out.append(f'| {md(rows[i]["name"])} | `{i}` | {why} |')
+	if uns:
+		out += ['', '**Unsorted** (no rule took them; fix `classify()`):', '', '| Name | Id | Food type |', '|---|---|---|']
+		out += [f'| {md(rows[i]["name"])} | `{i}` | {rows[i]["t"] or "-"} |' for i in sorted(uns)]
 
-    # 3.4 members
-    out += ['', '### 3.4 Members by family', '',
-            'Every member and how it complies. Columns R1, R2... are the family\'s checked rows listed above each table '
-            '(ok, **no**, or - when the row does not apply). Can = Want cell / has a can.', '']
-    for path in fams:
-        direct = sorted((i for i, f in fam_of.items() if f == path), key=lambda i: rows[i]['name'])
-        label, crit = FAMILIES[path]
-        out += [f'#### {label} (`{path}`)', '']
-        if not direct:
-            out += ['No direct members; see the subfamilies.', '']
-            continue
-        rs = []
-        for f, flabel in FIELDS:
-            for r in field_rules(path, f)[0]:
-                if r.check is not None:
-                    rs.append((flabel, r))
-        for k, (flabel, r) in enumerate(rs, 1):
-            out.append(f'- R{k} ({flabel}): {rule_text(r)}')
-        out += ['', '| Member | Id | ' + ' | '.join(f'R{k}' for k in range(1, len(rs) + 1)) +
-                ' | Can | Placeable | Stations |',
-                '|---|---|' + '---|' * len(rs) + '---|---|---|']
-        for i in direct:
-            m = mem[i]
-            w = {True: 'yes', False: 'no', None: 'no row'}[m.can_want]
-            res = [mark(check(r, m)) for _, r in rs]
-            out.append(f'| {md(rows[i]["name"])} | `{i}` | ' + ' | '.join(res) +
-                       f' | {w} / {"yes" if m.canned else "no"} | '
-                       f'{", ".join(l for c, l in PLACE_COLS if c in m.place) or "-"} | '
-                       f'{md(", ".join(sorted(m.stations())) or "-")} |')
-        out.append('')
-    out.append(END)
-    return '\n'.join(out)
+	# 3.4 members
+	out += ['', '### 3.4 Members by family', '',
+			'Every member and how it complies. Columns R1, R2... are the family\'s checked rows listed above each table '
+			'(ok, **no**, or - when the row does not apply). Can = Want cell / has a can.', '']
+	for path in fams:
+		direct = sorted((i for i, f in fam_of.items() if f == path), key=lambda i: rows[i]['name'])
+		label, crit = FAMILIES[path]
+		out += [f'#### {label} (`{path}`)', '']
+		if not direct:
+			out += ['No direct members; see the subfamilies.', '']
+			continue
+		rs = []
+		for f, flabel in FIELDS:
+			for r in field_rules(path, f)[0]:
+				if r.check is not None:
+					rs.append((flabel, r))
+		for k, (flabel, r) in enumerate(rs, 1):
+			out.append(f'- R{k} ({flabel}): {rule_text(r)}')
+		out += ['', '| Member | Id | ' + ' | '.join(f'R{k}' for k in range(1, len(rs) + 1)) +
+				' | Can | Placeable | Stations |',
+				'|---|---|' + '---|' * len(rs) + '---|---|---|']
+		for i in direct:
+			m = mem[i]
+			w = {True: 'yes', False: 'no', None: 'no row'}[m.can_want]
+			res = [mark(check(r, m)) for _, r in rs]
+			out.append(f'| {md(rows[i]["name"])} | `{i}` | ' + ' | '.join(res) +
+					   f' | {w} / {"yes" if m.canned else "no"} | '
+					   f'{", ".join(l for c, l in PLACE_COLS if c in m.place) or "-"} | '
+					   f'{md(", ".join(sorted(m.stations())) or "-")} |')
+		out.append('')
+	out.append(END)
+	return '\n'.join(out)
 
 
 def main():
-    ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
-    ap.add_argument('--check', action='store_true')
-    ap.add_argument('--print', action='store_true', help='print the block instead of writing it')
-    a = ap.parse_args()
+	ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+	ap.add_argument('--check', action='store_true')
+	ap.add_argument('--print', action='store_true', help='print the block instead of writing it')
+	a = ap.parse_args()
 
-    cat, foods, blocks, recipes, dump_place, tags, key_val, types, place_keys = load()
-    rows = build_rows(cat, foods, blocks)
-    add_dough_rows(rows, key_val)
-    removed = (PP.STARTUP_LIB / 'removed_items.js').read_text()
-    removed = removed[removed.index('global.removedItems'):]
-    removed = re.findall(r'i\.(\w+)', removed[:removed.index(']')])
-    # merged items (the old id of each [old, new] pair): the pack's list (dict keys) and Creative Delight's swap
-    # lists (ids, data/creativedelight/swaps/merges_*.json; item_merges.md 6)
-    f = PP.STARTUP_LIB / 'item_merges.js'
-    if f.exists():
-        removed += re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', f.read_text())
-    swaps = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/swaps'
-    merged_ids = {old for f in sorted(swaps.glob('merges_*.json'))
-                  for olds in json.loads(f.read_text()).get('merges', {}).values() for old in olds}
-    for k in [*types['excluded'], *removed]:
-        if key_val.get(k) in rows:
-            rows[key_val[k]]['excluded'] = True
-    for i in merged_ids:
-        if i in rows:
-            rows[i]['excluded'] = True
-    fam_of, skipped = OrderedDict(), []
-    for i, r in rows.items():
-        f = classify(r)
-        if f is SKIP:
-            why = ('sequenced assembly intermediate' if 'incomplete' in r['p'] else
-                   'removed or merged' if r.get('excluded') else
-                   'food container' if 'lunch' in r['p'] else 'not food (black powder)')
-            skipped.append((i, why))
-            continue
-        if f not in (UNSORTED, NOFAM) and f not in FAMILIES:
-            sys.exit(f'classify() returned unknown family {f} for {i}')
-        fam_of[i] = f
-    place = placement(rows, dump_place, tags, key_val, place_keys, soft_fluid_items())
-    by_out, by_in, used_in = recipe_index(recipes, tags)
-    cannable = {key_val.get(k) for srcs in types['canned'].values() for k in srcs} - {None}
-    # plus the food slot of every can recipe (can_types.json: a recipe's first input group; later groups are additives)
-    for c in load_json(CAN_TYPES)['cans'].values():
-        for rec in c.get('recipes', []):
-            for k in (rec['inputs'][0]['any'] if rec.get('inputs') else []):
-                v = key_val.get(k, k)
-                cannable |= set(tags.get(v[1:], [])) if v.startswith('#') else {v}
-    sheet = can_parity()
-    mem = {}
-    for i in fam_of:
-        want, _ = can_want(i, rows[i]['name'], sheet)
-        mem[i] = M(i, rows[i], by_out.get(i, []), by_in.get(i, []), place[i], want, i in cannable)
-    block = render(rows, fam_of, mem, used_in, skipped)
+	cat, foods, blocks, recipes, dump_place, tags, key_val, types, place_keys = load()
+	rows = build_rows(cat, foods, blocks)
+	add_dough_rows(rows, key_val)
+	removed = (PP.STARTUP_LIB / 'removed_items.js').read_text()
+	removed = removed[removed.index('global.removedItems'):]
+	removed = re.findall(r'i\.(\w+)', removed[:removed.index(']')])
+	# merged items (the old id of each [old, new] pair): the pack's list (dict keys) and Creative Delight's swap
+	# lists (ids, data/creativedelight/swaps/merges_*.json; item_merges.md 6)
+	f = PP.STARTUP_LIB / 'item_merges.js'
+	if f.exists():
+		removed += re.findall(r'\[\s*i\.(\w+)\s*,\s*i\.\w+\s*\]', f.read_text())
+	swaps = INSTANCE / 'development/creativeDelight/src/main/resources/data/creativedelight/swaps'
+	merged_ids = {old for f in sorted(swaps.glob('merges_*.json'))
+				  for olds in json.loads(f.read_text()).get('merges', {}).values() for old in olds}
+	for k in [*types['excluded'], *removed]:
+		if key_val.get(k) in rows:
+			rows[key_val[k]]['excluded'] = True
+	for i in merged_ids:
+		if i in rows:
+			rows[i]['excluded'] = True
+	fam_of, skipped = OrderedDict(), []
+	for i, r in rows.items():
+		f = classify(r)
+		if f is SKIP:
+			why = ('sequenced assembly intermediate' if 'incomplete' in r['p'] else
+				   'removed or merged' if r.get('excluded') else
+				   'food container' if 'lunch' in r['p'] else 'not food (black powder)')
+			skipped.append((i, why))
+			continue
+		if f not in (UNSORTED, NOFAM) and f not in FAMILIES:
+			sys.exit(f'classify() returned unknown family {f} for {i}')
+		fam_of[i] = f
+	place = placement(rows, dump_place, tags, key_val, place_keys, soft_fluid_items())
+	by_out, by_in, used_in = recipe_index(recipes, tags)
+	cannable = {key_val.get(k) for srcs in types['canned'].values() for k in srcs} - {None}
+	# plus the food slot of every can recipe (can_types.json: a recipe's first input group; later groups are additives)
+	for c in load_json(CAN_TYPES)['cans'].values():
+		for rec in c.get('recipes', []):
+			for k in (rec['inputs'][0]['any'] if rec.get('inputs') else []):
+				v = key_val.get(k, k)
+				cannable |= set(tags.get(v[1:], [])) if v.startswith('#') else {v}
+	sheet = can_parity()
+	mem = {}
+	for i in fam_of:
+		want, _ = can_want(i, rows[i]['name'], sheet)
+		mem[i] = M(i, rows[i], by_out.get(i, []), by_in.get(i, []), place[i], want, i in cannable)
+	block = render(rows, fam_of, mem, used_in, skipped)
 
-    members = OrderedDict((f, []) for f in FAMILIES)
-    for i, f in fam_of.items():
-        # edible items and whole food blocks (their block items): the */whole families are blocks only (SQ-LGM-13,
-        # plan_bugfix_1114.md 7.4). Every tag seasoning_tags.js derives from a family is wanted on the block item too
-        # (family tags, and seasonings list no families today).
-        if f in members and (rows[i]['food'] is not None or rows[i]['whole']):
-            members[f].append(i)
-    fam_json = json.dumps({'_comment': 'Generated by tools/food_families.py from the /dumpall exports; do not edit. '
-                           'Each family lists its own members (edible items and whole food blocks); subfamilies are '
-                           'separate keys.',
-                           'families': {f: sorted(v) for f, v in members.items()}}, indent=1) + '\n'
+	members = OrderedDict((f, []) for f in FAMILIES)
+	for i, f in fam_of.items():
+		# edible items and whole food blocks (their block items): the */whole families are blocks only (SQ-LGM-13,
+		# plan_bugfix_1114.md 7.4). Every tag seasoning_tags.js derives from a family is wanted on the block item too
+		# (family tags, and seasonings list no families today).
+		if f in members and (rows[i]['food'] is not None or rows[i]['whole']):
+			members[f].append(i)
+	fam_json = json.dumps({'_comment': 'Generated by tools/food_families.py from the /dumpall exports; do not edit. '
+						   'Each family lists its own members (edible items and whole food blocks); subfamilies are '
+						   'separate keys.',
+						   'families': {f: sorted(v) for f, v in members.items()}}, indent=1) + '\n'
 
-    if a.print:
-        print(block)
-        return
-    text = OUT_MD.read_text() if OUT_MD.exists() else ''
-    if BEGIN in text and END in text:
-        new = text[:text.index(BEGIN)] + block + text[text.index(END) + len(END):]
-    else:
-        new = text.rstrip() + '\n\n' + block + '\n'
-    uns = sum(1 for f in fam_of.values() if f == UNSORTED)
-    json_stale = not OUT_JSON.exists() or OUT_JSON.read_text() != fam_json
-    if a.check:
-        print(f'{OUT_MD.name}: {"out of date" if new != text else "up to date"}, '
-              f'{OUT_JSON.name}: {"out of date" if json_stale else "up to date"}, unsorted {uns}')
-        sys.exit(1 if new != text or json_stale or uns else 0)
-    OUT_MD.write_text(new)
-    OUT_JSON.write_text(fam_json)
-    print(f'wrote {OUT_MD.relative_to(INSTANCE)}: {len(fam_of)} items, unsorted {uns}; {OUT_JSON.relative_to(INSTANCE)}')
+	if a.print:
+		print(block)
+		return
+	text = OUT_MD.read_text() if OUT_MD.exists() else ''
+	if BEGIN in text and END in text:
+		new = text[:text.index(BEGIN)] + block + text[text.index(END) + len(END):]
+	else:
+		new = text.rstrip() + '\n\n' + block + '\n'
+	uns = sum(1 for f in fam_of.values() if f == UNSORTED)
+	json_stale = not OUT_JSON.exists() or OUT_JSON.read_text() != fam_json
+	if a.check:
+		print(f'{OUT_MD.name}: {"out of date" if new != text else "up to date"}, '
+			  f'{OUT_JSON.name}: {"out of date" if json_stale else "up to date"}, unsorted {uns}')
+		sys.exit(1 if new != text or json_stale or uns else 0)
+	OUT_MD.write_text(new)
+	OUT_JSON.write_text(fam_json)
+	print(f'wrote {OUT_MD.relative_to(INSTANCE)}: {len(fam_of)} items, unsorted {uns}; {OUT_JSON.relative_to(INSTANCE)}')
 
 
 if __name__ == '__main__':
-    main()
+	main()

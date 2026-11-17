@@ -25,12 +25,12 @@ FLESH = {'type': 'minecraft:block', 'result_state': {'Name': 'biomesoplenty:fles
 
 
 def surface(kind):
-    return {
-        'type': 'minecraft:condition',
-        'if_true': {'type': 'minecraft:stone_depth', 'offset': 0, 'add_surface_depth': True,
-                    'secondary_depth_range': 0, 'surface_type': kind},
-        'then_run': FLESH,
-    }
+	return {
+		'type': 'minecraft:condition',
+		'if_true': {'type': 'minecraft:stone_depth', 'offset': 0, 'add_surface_depth': True,
+					'secondary_depth_range': 0, 'surface_type': kind},
+		'then_run': FLESH,
+	}
 
 
 # Floor and ceiling first (the top layer, as BOP), then flesh unconditionally: every default-block (netherrack) position in
@@ -39,24 +39,24 @@ def surface(kind):
 # (kubejs/data/creativeworldgen/kubejs/tags/visceral_heap.js); it stays out of #minecraft:base_stone_nether, so Nether ores
 # do not place inside the Heap.
 HEAP_RULE = {
-    'type': 'minecraft:condition',
-    'if_true': {'type': 'minecraft:biome', 'biome_is': ['biomesoplenty:visceral_heap']},
-    'then_run': {'type': 'minecraft:sequence', 'sequence': [surface('ceiling'), surface('floor'), FLESH]},
+	'type': 'minecraft:condition',
+	'if_true': {'type': 'minecraft:biome', 'biome_is': ['biomesoplenty:visceral_heap']},
+	'then_run': {'type': 'minecraft:sequence', 'sequence': [surface('ceiling'), surface('floor'), FLESH]},
 }
 
 
 def main():
-    settings = json.loads(SOURCE.read_text())
-    sequence = settings['surface_rule']['sequence']
-    rule = sequence[INSERT_AT]
-    if (rule['if_true'].get('type') != 'minecraft:y_above'
-            or rule['then_run'].get('result_state', {}).get('Name') != 'minecraft:netherrack'):
-        raise SystemExit('vanilla Nether surface rule has an unexpected shape at index %d' % INSERT_AT)
-    sequence.insert(INSERT_AT, HEAP_RULE)
-    OUT.parent.mkdir(parents=True, exist_ok=True)
-    OUT.write_text(json.dumps(settings, indent=2) + '\n')
-    print('wrote %s (%d surface rules)' % (OUT.relative_to(ROOT), len(sequence)))
+	settings = json.loads(SOURCE.read_text())
+	sequence = settings['surface_rule']['sequence']
+	rule = sequence[INSERT_AT]
+	if (rule['if_true'].get('type') != 'minecraft:y_above'
+			or rule['then_run'].get('result_state', {}).get('Name') != 'minecraft:netherrack'):
+		raise SystemExit('vanilla Nether surface rule has an unexpected shape at index %d' % INSERT_AT)
+	sequence.insert(INSERT_AT, HEAP_RULE)
+	OUT.parent.mkdir(parents=True, exist_ok=True)
+	OUT.write_text(json.dumps(settings, indent=2) + '\n')
+	print('wrote %s (%d surface rules)' % (OUT.relative_to(ROOT), len(sequence)))
 
 
 if __name__ == '__main__':
-    main()
+	main()

@@ -30,293 +30,293 @@ sys.path.insert(0, str(ROOT / 'tools'))
 import status_index as si  # noqa: E402
 
 JAR_ALIASES = [
-    ('creativecommon', r'Creative Common|patcherMod|creativecommon'),
-    ('creativedelight', r'Creative Delight|creativedelight|\bCD\b'),
-    ('creativebrewing', r'Creative Brewing|creativebrewing|Vinery port|Brewin\'? port'),
-    ('creativecalendar', r'Creative Calendar|creativecalendar'),
-    ('creativecompat', r'Creative Compat|creativecompat'),
-    ('creativedevtools', r'Creative Devtools|creativedevtools|Devtools'),
-    ('creativeengineering', r'Creative Engineering(?! 2)|creativeengineering-'),
-    ('creativeequipment', r'Creative Equipment|creativeequipment'),
-    ('creativelabels', r'Creative Labels|Storage Labels'),
-    ('creativeloot', r'Creative Loot|creativeloot'),
-    ('creativemagic', r'Creative Magic|creativemagic'),
-    ('creativeworldgen', r'Creative Worldgen|creativeworldgen'),
-    ('powergrid', r'Power Grid'),
-    ('tempad', r'Tempad'),
-    ('exposure', r'Exposure'),
-    ('storagedelight', r'Storage Delight'),
-    ('solraspberrypie', r'Raspberry Pie'),
+	('creativecommon', r'Creative Common|patcherMod|creativecommon'),
+	('creativedelight', r'Creative Delight|creativedelight|\bCD\b'),
+	('creativebrewing', r'Creative Brewing|creativebrewing|Vinery port|Brewin\'? port'),
+	('creativecalendar', r'Creative Calendar|creativecalendar'),
+	('creativecompat', r'Creative Compat|creativecompat'),
+	('creativedevtools', r'Creative Devtools|creativedevtools|Devtools'),
+	('creativeengineering', r'Creative Engineering(?! 2)|creativeengineering-'),
+	('creativeequipment', r'Creative Equipment|creativeequipment'),
+	('creativelabels', r'Creative Labels|Storage Labels'),
+	('creativeloot', r'Creative Loot|creativeloot'),
+	('creativemagic', r'Creative Magic|creativemagic'),
+	('creativeworldgen', r'Creative Worldgen|creativeworldgen'),
+	('powergrid', r'Power Grid'),
+	('tempad', r'Tempad'),
+	('exposure', r'Exposure'),
+	('storagedelight', r'Storage Delight'),
+	('solraspberrypie', r'Raspberry Pie'),
 ]
 # earliest keyword wins; (regex, word)
 WORD_RULES = [
-    (r'\bVERIFIED\b', 'VERIFIED'),
-    (r'\bDEPLOYED\b', 'DEPLOYED'),
-    (r'\bBROKEN\b|\bFAILED\b', 'BROKEN'),
-    (r'\bBUILT\b|\bbuilt\b|\binstalled\b|\bcarved\b|\bTESTING\b|\bin progress\b|\bin use\b', 'BUILT'),
-    (r'\breference\b|\bREMOVED\b|\barchived\b|\bANALYSIS\b|\banalysis only\b|\bresearch only\b|\baudit\b|'
-     r'\bsurvey\b|\bwritten\b|\breview\b|\bdone\b', 'reference'),
-    (r'\bplanned\b|\bplan 20|\bidea only\b|\bnothing built\b|\bnot started\b|\bdesign only\b', 'planned'),
+	(r'\bVERIFIED\b', 'VERIFIED'),
+	(r'\bDEPLOYED\b', 'DEPLOYED'),
+	(r'\bBROKEN\b|\bFAILED\b', 'BROKEN'),
+	(r'\bBUILT\b|\bbuilt\b|\binstalled\b|\bcarved\b|\bTESTING\b|\bin progress\b|\bin use\b', 'BUILT'),
+	(r'\breference\b|\bREMOVED\b|\barchived\b|\bANALYSIS\b|\banalysis only\b|\bresearch only\b|\baudit\b|'
+	 r'\bsurvey\b|\bwritten\b|\breview\b|\bdone\b', 'reference'),
+	(r'\bplanned\b|\bplan 20|\bidea only\b|\bnothing built\b|\bnot started\b|\bdesign only\b', 'planned'),
 ]
 PLANNED_OVERRIDE = r'\bnothing built\b|\bidea only\b|\bnot started\b|\bdesign only\b|\bnothing added\b'
 RUN_BOLD = re.compile(r'\*\*(?:r\d{4}\w*|Run r\d{4}\w*|\d{4}-\d{2}-\d{2} scratch run)[^*]*\*\*\s*')
 
 
 def cells_of(line):
-    return [c.strip() for c in re.split(r'(?<!\\)\|', line.strip())[1:-1]]
+	return [c.strip() for c in re.split(r'(?<!\\)\|', line.strip())[1:-1]]
 
 
 def status_word(cell):
-    if any('BROKEN' in c for c in RUN_BOLD.findall(cell)):
-        return 'BROKEN', 'BROKEN in a run note'
-    body = RUN_BOLD.sub('', cell)
-    m = re.search(r'\b(VERIFIED|DEPLOYED|BUILT|BROKEN|reference|planned)\b', body)
-    if m:
-        return m.group(1), 'legend word'
-    best = None
-    for rx, word in WORD_RULES:
-        m = re.search(rx, body)
-        if m and (best is None or m.start() < best[0]):
-            best = (m.start(), word, m.group(0))
-    if best and best[1] == 'reference' and re.search(PLANNED_OVERRIDE, body):
-        return 'planned', 'nothing-built override'
-    if best:
-        return best[1], best[2]
-    return 'reference', 'no keyword (fallback)'
+	if any('BROKEN' in c for c in RUN_BOLD.findall(cell)):
+		return 'BROKEN', 'BROKEN in a run note'
+	body = RUN_BOLD.sub('', cell)
+	m = re.search(r'\b(VERIFIED|DEPLOYED|BUILT|BROKEN|reference|planned)\b', body)
+	if m:
+		return m.group(1), 'legend word'
+	best = None
+	for rx, word in WORD_RULES:
+		m = re.search(rx, body)
+		if m and (best is None or m.start() < best[0]):
+			best = (m.start(), word, m.group(0))
+	if best and best[1] == 'reference' and re.search(PLANNED_OVERRIDE, body):
+		return 'planned', 'nothing-built override'
+	if best:
+		return best[1], best[2]
+	return 'reference', 'no keyword (fallback)'
 
 
 def note_of(cell):
-    body = RUN_BOLD.sub('', cell).replace('**', '')
-    for clause in re.split(r';\s+|\.\s+', body):
-        c = clause.strip(' .')
-        if not c or re.search(r'\bPASS|\bFAIL|\br1\d{3}', c):
-            continue
-        c = c.replace('|', '/')
-        if len(c) > 110:
-            c = c[:110].rsplit(' ', 1)[0] + ' ...'
-        return c
-    return ''
+	body = RUN_BOLD.sub('', cell).replace('**', '')
+	for clause in re.split(r';\s+|\.\s+', body):
+		c = clause.strip(' .')
+		if not c or re.search(r'\bPASS|\bFAIL|\br1\d{3}', c):
+			continue
+		c = c.replace('|', '/')
+		if len(c) > 110:
+			c = c[:110].rsplit(' ', 1)[0] + ' ...'
+		return c
+	return ''
 
 
 def is_generated(path, status_cell=''):
-    head = '\n'.join(path.read_text(errors='replace').split('\n')[:10])
-    return bool(re.search(r'generated by|do not edit|regenerate|written by `?tools|auto-generated', head, re.I))
+	head = '\n'.join(path.read_text(errors='replace').split('\n')[:10])
+	return bool(re.search(r'generated by|do not edit|regenerate|written by `?tools|auto-generated', head, re.I))
 
 
 def relink(text, target):
-    """Rewrite relative links written for feature_writeup/ so they resolve from target's folder."""
-    base = target.parent
+	"""Rewrite relative links written for feature_writeup/ so they resolve from target's folder."""
+	base = target.parent
 
-    def fix(m):
-        url = m.group(2)
-        if re.match(r'[a-z]+:|#|/', url):
-            return m.group(0)
-        p, _, frag = url.partition('#')
-        new = os.path.relpath(FW / p, base).replace(os.sep, '/')
-        return '%s(%s%s)' % (m.group(1), new, ('#' + frag) if frag else '')
-    return re.sub(r'(\[[^\]]*\])\(([^)]+)\)', fix, text)
+	def fix(m):
+		url = m.group(2)
+		if re.match(r'[a-z]+:|#|/', url):
+			return m.group(0)
+		p, _, frag = url.partition('#')
+		new = os.path.relpath(FW / p, base).replace(os.sep, '/')
+		return '%s(%s%s)' % (m.group(1), new, ('#' + frag) if frag else '')
+	return re.sub(r'(\[[^\]]*\])\(([^)]+)\)', fix, text)
 
 
 def insert_section0(path, paras):
-    lines = path.read_text().split('\n')
-    block = []
-    for p in paras:
-        block += [p, '']
-    h0 = next((i for i, l in enumerate(lines) if re.match(r'#{2,3} (0[.\s]|At a glance)', l)), None)
-    if h0 is not None:
-        j = h0 + 1
-        if j < len(lines) and lines[j] == '':
-            j += 1
-        lines[j:j] = block
-        path.write_text('\n'.join(lines))
-        return 'existing section 0'
-    first = next((i for i, l in enumerate(lines) if l.startswith('## ')), None)
-    new = ['## 0. At a glance', ''] + block
-    if first is None:
-        lines += [''] + new
-    else:
-        lines[first:first] = new
-    path.write_text('\n'.join(lines))
-    return 'section 0 added'
+	lines = path.read_text().split('\n')
+	block = []
+	for p in paras:
+		block += [p, '']
+	h0 = next((i for i, l in enumerate(lines) if re.match(r'#{2,3} (0[.\s]|At a glance)', l)), None)
+	if h0 is not None:
+		j = h0 + 1
+		if j < len(lines) and lines[j] == '':
+			j += 1
+		lines[j:j] = block
+		path.write_text('\n'.join(lines))
+		return 'existing section 0'
+	first = next((i for i, l in enumerate(lines) if l.startswith('## ')), None)
+	new = ['## 0. At a glance', ''] + block
+	if first is None:
+		lines += [''] + new
+	else:
+		lines[first:first] = new
+	path.write_text('\n'.join(lines))
+	return 'section 0 added'
 
 
 def main(dry):
-    if TSV.exists() and not dry:
-        print('features.csv exists; the seed runs once')
-        return 1
-    rl = README.read_text().split('\n')
-    start = next(i for i, l in enumerate(rl) if l.startswith('| Feature | File | Test prefix |'))
-    end = start
-    while end < len(rl) and rl[end].startswith('|'):
-        end += 1
-    table = rl[start:end]
-    rows = []
-    for l in table[2:]:
-        c = cells_of(l)
-        if len(c) != 4:
-            print('BAD ROW', l[:80])
-            continue
-        rows.append(c)
-    todo_ids = set(si.read_todo()['ids'])
-    by_suffix = defaultdict(list)
-    for t in todo_ids:
-        by_suffix[t.split('/', 1)[-1]].append(t)
-    queue = si.read_queue()
-    codes = sorted(queue['codes'])
-    report = []
-    feats = []
-    keys = Counter()
-    file_texts = {}
-    for feature, filecell, prefix, status in rows:
-        key = re.split(r' \(', feature, 1)[0].strip().replace('**', '')
-        keys[key] += 1
-        if keys[key] > 1:
-            key = '%s %d' % (key, keys[key])
-        links = [u for u in re.findall(r'\]\(([^)#]+)', filecell)]
-        word, why = status_word(status)
-        if why != 'legend word':
-            report.append('status %-10s %-45s (%s): %s' % (word, key[:45], why, status[:90]))
-        text = feature + ' ' + status
-        jars = [j for j, rx in JAR_ALIASES if re.search(rx, text)]
-        tids = []
-        for m in re.finditer(r'`([a-z0-9-]+(?:/[a-z0-9-]+)? #\d+)`', text):
-            t = m.group(1)
-            if t in todo_ids:
-                tids.append(t)
-            elif '/' not in t and len(by_suffix.get(t, [])) == 1:
-                tids.append(by_suffix[t][0])
-        for u in links:
-            p = FW / u
-            if p.exists() and u not in file_texts:
-                file_texts[u] = p.read_text(errors='replace')
-        feats.append({'key': key, 'file': ', '.join(links), 'prefix': ', '.join(re.findall(r'`([^`]+)`', prefix)) or
-                      ('' if prefix in ('', 'none') else prefix), 'status': word, 'jars': ', '.join(jars),
-                      'codes': [], 'todo': ', '.join(dict.fromkeys(tids)), 'note': note_of(status),
-                      'links': links, 'raw': (feature, status)})
-    # queue codes: 1) most mentions in the feature's own files; 2) writeup links in the queue sections holding the
-    # code's rows; 3) TODO rows citing the code -> their Writeup links; 4) code == test prefix; 5) SQ/CQ twin
-    mention = defaultdict(Counter)
-    for fi, f in enumerate(feats):
-        for u in f['links']:
-            for m in re.finditer(r'\b((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-', file_texts.get(u, '')):
-                mention[m.group(1)][fi] += 1
-    file_owner = {}
-    for fi, f in enumerate(feats):
-        for u in f['links']:
-            file_owner.setdefault(os.path.normpath(u), fi)
-    sec_links = defaultdict(Counter)
-    for code, secs in queue['code_sections'].items():
-        for s in secs:
-            for u in re.findall(r'\]\(\.\./([^)#]+)', queue['section_text'][s]):
-                fi = file_owner.get(os.path.normpath(u))
-                if fi is not None:
-                    sec_links[code][fi] += 1
-    todo_links = defaultdict(Counter)
-    for row in si.read_todo()['rows_text']:
-        cs = set(re.findall(r'\b((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-', row))
-        if not cs:
-            continue
-        for u in re.findall(r'\]\(\.\./([^)#]+)', row):
-            fi = file_owner.get(os.path.normpath(u))
-            if fi is not None:
-                for c in cs:
-                    todo_links[c][fi] += 1
-    prefix_owner = {}
-    for fi, f in enumerate(feats):
-        for p in re.split(r',\s*', f['prefix']):
-            p = p.strip().rstrip('-')
-            if p:
-                prefix_owner.setdefault(p, fi)
-    assigned = {}
-    how = Counter()
-    for code in codes:
-        for name, src in (('writeup mentions', mention), ('queue section links', sec_links),
-                          ('TODO row links', todo_links)):
-            if src.get(code):
-                assigned[code] = src[code].most_common(1)[0][0]
-                how[name] += 1
-                break
-        else:
-            bare = code.split('-', 1)[1]
-            if bare in prefix_owner:
-                assigned[code] = prefix_owner[bare]
-                how['test prefix'] += 1
-    for code in codes:
-        if code not in assigned:
-            twin = ('CQ-' if code.startswith('SQ-') else 'SQ-') + code[3:]
-            if twin in assigned:
-                assigned[code] = assigned[twin]
-                how['SQ/CQ twin'] += 1
-    unmapped = [c for c in codes if c not in assigned]
-    for code, fi in assigned.items():
-        feats[fi]['codes'].append(code)
-    print('features %d; queue codes %d mapped (%s), %d unmapped: %s' % (
-        len(feats), len(assigned), ', '.join('%s %d' % kv for kv in how.items()), len(unmapped), ' '.join(unmapped)))
-    print('status words: %s' % dict(Counter(f['status'] for f in feats)))
-    for r in report:
-        print('  ' + r)
-    if dry:
-        return 0
-    STATUS.mkdir(parents=True, exist_ok=True)
-    import table_io
-    table_io.write(TSV, si.TSV_COLS, [[f['key'], f['file'], f['prefix'], f['status'], f['jars'],
-                                       ', '.join(sorted(f['codes'])), f['todo'], f['note']] for f in feats])
-    (STATUS / ('readme_index_%s.md' % DATE)).write_text(
-        '# README index as hand-written until %s\n\nThe feature index table of [../README.md](../README.md) verbatim, '
-        'before `tools/status_seed.py` replaced it with the generated view (plan_process_overhaul.md P1.4). Links '
-        'are relative to `feature_writeup/`.\n\n' % DATE + '\n'.join(table) + '\n')
-    # D6: section 0
-    per_file = defaultdict(list)
-    skipped = []
-    for f in feats:
-        if not f['links']:
-            continue
-        u = f['links'][0]
-        p = FW / u
-        feature, status = f['raw']
-        if is_generated(p, status):
-            skipped.append(u)
-            continue
-        para = ('**README index entry, moved here %s (owner ruling D6).** Feature: %s. Status: %s' %
-                (DATE, feature, status))
-        per_file[p].append(relink(para, p))
-    res = Counter()
-    for p, paras in per_file.items():
-        res[insert_section0(p, paras)] += 1
-    print('section 0: %s; generated, skipped (text in readme_index_%s.md): %s' % (dict(res), DATE, ' '.join(skipped)))
-    # markers
-    rl[start:end] = si.empty_block('readme')
-    README.write_text('\n'.join(rl))
-    hist = ['# Status history', '', 'Hand-written status text replaced by generated blocks (`tools/status_index.py`, '
-            'plan_process_overhaul.md P1.4), moved here once on %s.' % DATE, '']
-    tl = TODO.read_text().split('\n')
-    s0 = next(i for i, l in enumerate(tl) if l.startswith('## Status snapshot'))
-    s1 = next(i for i in range(s0 + 1, len(tl)) if tl[i].startswith('## '))
-    hist += ['## TODO status snapshot (as of 2026-11-03, counts 2026-11-04)', ''] + tl[s0 + 1:s1]
-    tl[s0:s1] = ['## Status snapshot', '', 'Generated from the tables below by `python3 tools/status_index.py`; never '
-                 'hand-edited. The hand-written snapshot of 2026-11-03 is in [status/history.md](../status/history.md).',
-                 ''] + si.empty_block('todo') + ['']
-    TODO.write_text('\n'.join(tl))
-    ql = QUEUE.read_text().split('\n')
-    b0 = next(i for i, l in enumerate(ql) if l.startswith('> **20'))
-    b1 = b0
-    while b1 < len(ql) and (ql[b1].startswith('> **20') or ql[b1].strip() == '>'):
-        b1 += 1
-    hist += ['', '## Scratch queue header banners (until %s)' % DATE, '', 'Run and "added at the end" banners from the '
-             'top of [../testing/scratch_queue.md](../testing/scratch_queue.md), verbatim (links there are relative '
-             'to `feature_writeup/testing/`).', ''] + ql[b0:b1]
-    ql[b0:b1] = [''] + si.empty_block('queue') + ['']
-    QUEUE.write_text('\n'.join(ql))
-    (STATUS / 'history.md').write_text('\n'.join(hist).rstrip('\n') + '\n')
-    print('markers placed; history.md written (%d banner lines)' % (b1 - b0))
-    return 0
+	if TSV.exists() and not dry:
+		print('features.csv exists; the seed runs once')
+		return 1
+	rl = README.read_text().split('\n')
+	start = next(i for i, l in enumerate(rl) if l.startswith('| Feature | File | Test prefix |'))
+	end = start
+	while end < len(rl) and rl[end].startswith('|'):
+		end += 1
+	table = rl[start:end]
+	rows = []
+	for l in table[2:]:
+		c = cells_of(l)
+		if len(c) != 4:
+			print('BAD ROW', l[:80])
+			continue
+		rows.append(c)
+	todo_ids = set(si.read_todo()['ids'])
+	by_suffix = defaultdict(list)
+	for t in todo_ids:
+		by_suffix[t.split('/', 1)[-1]].append(t)
+	queue = si.read_queue()
+	codes = sorted(queue['codes'])
+	report = []
+	feats = []
+	keys = Counter()
+	file_texts = {}
+	for feature, filecell, prefix, status in rows:
+		key = re.split(r' \(', feature, 1)[0].strip().replace('**', '')
+		keys[key] += 1
+		if keys[key] > 1:
+			key = '%s %d' % (key, keys[key])
+		links = [u for u in re.findall(r'\]\(([^)#]+)', filecell)]
+		word, why = status_word(status)
+		if why != 'legend word':
+			report.append('status %-10s %-45s (%s): %s' % (word, key[:45], why, status[:90]))
+		text = feature + ' ' + status
+		jars = [j for j, rx in JAR_ALIASES if re.search(rx, text)]
+		tids = []
+		for m in re.finditer(r'`([a-z0-9-]+(?:/[a-z0-9-]+)? #\d+)`', text):
+			t = m.group(1)
+			if t in todo_ids:
+				tids.append(t)
+			elif '/' not in t and len(by_suffix.get(t, [])) == 1:
+				tids.append(by_suffix[t][0])
+		for u in links:
+			p = FW / u
+			if p.exists() and u not in file_texts:
+				file_texts[u] = p.read_text(errors='replace')
+		feats.append({'key': key, 'file': ', '.join(links), 'prefix': ', '.join(re.findall(r'`([^`]+)`', prefix)) or
+					  ('' if prefix in ('', 'none') else prefix), 'status': word, 'jars': ', '.join(jars),
+					  'codes': [], 'todo': ', '.join(dict.fromkeys(tids)), 'note': note_of(status),
+					  'links': links, 'raw': (feature, status)})
+	# queue codes: 1) most mentions in the feature's own files; 2) writeup links in the queue sections holding the
+	# code's rows; 3) TODO rows citing the code -> their Writeup links; 4) code == test prefix; 5) SQ/CQ twin
+	mention = defaultdict(Counter)
+	for fi, f in enumerate(feats):
+		for u in f['links']:
+			for m in re.finditer(r'\b((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-', file_texts.get(u, '')):
+				mention[m.group(1)][fi] += 1
+	file_owner = {}
+	for fi, f in enumerate(feats):
+		for u in f['links']:
+			file_owner.setdefault(os.path.normpath(u), fi)
+	sec_links = defaultdict(Counter)
+	for code, secs in queue['code_sections'].items():
+		for s in secs:
+			for u in re.findall(r'\]\(\.\./([^)#]+)', queue['section_text'][s]):
+				fi = file_owner.get(os.path.normpath(u))
+				if fi is not None:
+					sec_links[code][fi] += 1
+	todo_links = defaultdict(Counter)
+	for row in si.read_todo()['rows_text']:
+		cs = set(re.findall(r'\b((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-', row))
+		if not cs:
+			continue
+		for u in re.findall(r'\]\(\.\./([^)#]+)', row):
+			fi = file_owner.get(os.path.normpath(u))
+			if fi is not None:
+				for c in cs:
+					todo_links[c][fi] += 1
+	prefix_owner = {}
+	for fi, f in enumerate(feats):
+		for p in re.split(r',\s*', f['prefix']):
+			p = p.strip().rstrip('-')
+			if p:
+				prefix_owner.setdefault(p, fi)
+	assigned = {}
+	how = Counter()
+	for code in codes:
+		for name, src in (('writeup mentions', mention), ('queue section links', sec_links),
+						  ('TODO row links', todo_links)):
+			if src.get(code):
+				assigned[code] = src[code].most_common(1)[0][0]
+				how[name] += 1
+				break
+		else:
+			bare = code.split('-', 1)[1]
+			if bare in prefix_owner:
+				assigned[code] = prefix_owner[bare]
+				how['test prefix'] += 1
+	for code in codes:
+		if code not in assigned:
+			twin = ('CQ-' if code.startswith('SQ-') else 'SQ-') + code[3:]
+			if twin in assigned:
+				assigned[code] = assigned[twin]
+				how['SQ/CQ twin'] += 1
+	unmapped = [c for c in codes if c not in assigned]
+	for code, fi in assigned.items():
+		feats[fi]['codes'].append(code)
+	print('features %d; queue codes %d mapped (%s), %d unmapped: %s' % (
+		len(feats), len(assigned), ', '.join('%s %d' % kv for kv in how.items()), len(unmapped), ' '.join(unmapped)))
+	print('status words: %s' % dict(Counter(f['status'] for f in feats)))
+	for r in report:
+		print('  ' + r)
+	if dry:
+		return 0
+	STATUS.mkdir(parents=True, exist_ok=True)
+	import table_io
+	table_io.write(TSV, si.TSV_COLS, [[f['key'], f['file'], f['prefix'], f['status'], f['jars'],
+									   ', '.join(sorted(f['codes'])), f['todo'], f['note']] for f in feats])
+	(STATUS / ('readme_index_%s.md' % DATE)).write_text(
+		'# README index as hand-written until %s\n\nThe feature index table of [../README.md](../README.md) verbatim, '
+		'before `tools/status_seed.py` replaced it with the generated view (plan_process_overhaul.md P1.4). Links '
+		'are relative to `feature_writeup/`.\n\n' % DATE + '\n'.join(table) + '\n')
+	# D6: section 0
+	per_file = defaultdict(list)
+	skipped = []
+	for f in feats:
+		if not f['links']:
+			continue
+		u = f['links'][0]
+		p = FW / u
+		feature, status = f['raw']
+		if is_generated(p, status):
+			skipped.append(u)
+			continue
+		para = ('**README index entry, moved here %s (owner ruling D6).** Feature: %s. Status: %s' %
+				(DATE, feature, status))
+		per_file[p].append(relink(para, p))
+	res = Counter()
+	for p, paras in per_file.items():
+		res[insert_section0(p, paras)] += 1
+	print('section 0: %s; generated, skipped (text in readme_index_%s.md): %s' % (dict(res), DATE, ' '.join(skipped)))
+	# markers
+	rl[start:end] = si.empty_block('readme')
+	README.write_text('\n'.join(rl))
+	hist = ['# Status history', '', 'Hand-written status text replaced by generated blocks (`tools/status_index.py`, '
+			'plan_process_overhaul.md P1.4), moved here once on %s.' % DATE, '']
+	tl = TODO.read_text().split('\n')
+	s0 = next(i for i, l in enumerate(tl) if l.startswith('## Status snapshot'))
+	s1 = next(i for i in range(s0 + 1, len(tl)) if tl[i].startswith('## '))
+	hist += ['## TODO status snapshot (as of 2026-11-03, counts 2026-11-04)', ''] + tl[s0 + 1:s1]
+	tl[s0:s1] = ['## Status snapshot', '', 'Generated from the tables below by `python3 tools/status_index.py`; never '
+				 'hand-edited. The hand-written snapshot of 2026-11-03 is in [status/history.md](../status/history.md).',
+				 ''] + si.empty_block('todo') + ['']
+	TODO.write_text('\n'.join(tl))
+	ql = QUEUE.read_text().split('\n')
+	b0 = next(i for i, l in enumerate(ql) if l.startswith('> **20'))
+	b1 = b0
+	while b1 < len(ql) and (ql[b1].startswith('> **20') or ql[b1].strip() == '>'):
+		b1 += 1
+	hist += ['', '## Scratch queue header banners (until %s)' % DATE, '', 'Run and "added at the end" banners from the '
+			 'top of [../testing/scratch_queue.md](../testing/scratch_queue.md), verbatim (links there are relative '
+			 'to `feature_writeup/testing/`).', ''] + ql[b0:b1]
+	ql[b0:b1] = [''] + si.empty_block('queue') + ['']
+	QUEUE.write_text('\n'.join(ql))
+	(STATUS / 'history.md').write_text('\n'.join(hist).rstrip('\n') + '\n')
+	print('markers placed; history.md written (%d banner lines)' % (b1 - b0))
+	return 0
 
 
 def status_word_plain(cell):
-    """The first legend word as written (upper case legend words only), for the report."""
-    m = re.search(r'\b(VERIFIED|DEPLOYED|BUILT|BROKEN|reference|planned)\b', RUN_BOLD.sub('', cell))
-    return m.group(1) if m else None
+	"""The first legend word as written (upper case legend words only), for the report."""
+	m = re.search(r'\b(VERIFIED|DEPLOYED|BUILT|BROKEN|reference|planned)\b', RUN_BOLD.sub('', cell))
+	return m.group(1) if m else None
 
 
 if __name__ == '__main__':
-    sys.exit(main('--dry' in sys.argv))
+	sys.exit(main('--dry' in sys.argv))

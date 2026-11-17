@@ -23,36 +23,36 @@ STAGES = {'lightly_licked': (0.15, 0.97), 'well_licked': (0.35, 0.93), 'heavily_
 
 
 def load_base():
-    with zipfile.ZipFile(SALT_JAR) as jar:
-        return Image.open(io.BytesIO(jar.read(BASE))).convert('RGBA')
+	with zipfile.ZipFile(SALT_JAR) as jar:
+		return Image.open(io.BytesIO(jar.read(BASE))).convert('RGBA')
 
 
 def mean_colour(image):
-    pixels = list(image.getdata())
-    return tuple(sum(p[c] for p in pixels) // len(pixels) for c in range(3))
+	pixels = list(image.getdata())
+	return tuple(sum(p[c] for p in pixels) // len(pixels) for c in range(3))
 
 
 def luma(rgb):
-    return 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]
+	return 0.299 * rgb[0] + 0.587 * rgb[1] + 0.114 * rgb[2]
 
 
 def main():
-    base = load_base()
-    mean = mean_colour(base)
-    original = Image.open(os.path.join(UPSTREAM, 'salt_block.png')).convert('RGB')
-    os.makedirs(OUT, exist_ok=True)
-    for stage, (pull, brightness) in STAGES.items():
-        worn = Image.open(os.path.join(UPSTREAM, stage + '_salt_block.png')).convert('RGB')
-        result = base.copy()
-        for y in range(base.height):
-            for x in range(base.width):
-                r, g, b, a = base.getpixel((x, y))
-                ratio = luma(worn.getpixel((x, y))) / max(1.0, luma(original.getpixel((x, y))))
-                channels = [(1.0 - pull) * c + pull * m for c, m in zip((r, g, b), mean)]
-                channels = [max(0, min(255, round(c * ratio * brightness))) for c in channels]
-                result.putpixel((x, y), (channels[0], channels[1], channels[2], a))
-        result.save(os.path.join(OUT, stage + '_salt_block.png'))
+	base = load_base()
+	mean = mean_colour(base)
+	original = Image.open(os.path.join(UPSTREAM, 'salt_block.png')).convert('RGB')
+	os.makedirs(OUT, exist_ok=True)
+	for stage, (pull, brightness) in STAGES.items():
+		worn = Image.open(os.path.join(UPSTREAM, stage + '_salt_block.png')).convert('RGB')
+		result = base.copy()
+		for y in range(base.height):
+			for x in range(base.width):
+				r, g, b, a = base.getpixel((x, y))
+				ratio = luma(worn.getpixel((x, y))) / max(1.0, luma(original.getpixel((x, y))))
+				channels = [(1.0 - pull) * c + pull * m for c, m in zip((r, g, b), mean)]
+				channels = [max(0, min(255, round(c * ratio * brightness))) for c in channels]
+				result.putpixel((x, y), (channels[0], channels[1], channels[2], a))
+		result.save(os.path.join(OUT, stage + '_salt_block.png'))
 
 
 if __name__ == '__main__':
-    main()
+	main()

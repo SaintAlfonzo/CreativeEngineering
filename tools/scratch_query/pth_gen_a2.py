@@ -12,11 +12,11 @@ w("pace 1")
 
 
 def wait_since(name, secs):
-    w(f"shell s=$(( {secs} - $(date +%s) + $(cat zpth_{name}.t) )); [ $s -gt 0 ] && sleep $s; true")
+	w(f"shell s=$(( {secs} - $(date +%s) + $(cat zpth_{name}.t) )); [ $s -gt 0 ] && sleep $s; true")
 
 
 def hold(item_nbt):
-    w(f"> item replace entity P weapon.mainhand with {item_nbt}")
+	w(f"> item replace entity P weapon.mainhand with {item_nbt}")
 
 
 w("\n## P11-a2setup | probe reload, P inventory clear (not a test row)")
@@ -75,8 +75,8 @@ w("look a13: 2 arrows stuck (one pickup 1, one 0); t13: the plain trident in the
 w("\n## SQ-PTH-14 | arrowLongLifeCap 3, test 1: 3 arrows in one chunk now, a 4th after 70 s (row SQ-PTH-14b)")
 w("> zpth watchnew minecraft:arrow a14 5000 200 1143 -59 1000 6")
 for k, x in enumerate((1140.5, 1142.5, 1144.5)):
-    w(f"> summon minecraft:arrow {x} -58 1000.5 {{pickup:1b,Motion:[0d,-1d,0d]}}")
-    w("sleep 1")
+	w(f"> summon minecraft:arrow {x} -58 1000.5 {{pickup:1b,Motion:[0d,-1d,0d]}}")
+	w("sleep 1")
 w("shell date +%s > zpth_14.t")
 w("sleep 2")
 w("> zpth mod a14")
@@ -164,7 +164,7 @@ w("look s11 gone near z 1001.5; P after the pearl inside the cube (about 1091.5 
 # ---- SQ-PTH-12 snag group
 w("\n## SQ-PTH-12 | lone webs: fishing bobber stops and reels in; pickarang held past its timeout, picked up whole; broken web drops it; thorn chakram the same")
 for x in (1100, 1104, 1108, 1112):
-    w(f"> setblock {x} -59 1000 minecraft:cobweb")
+	w(f"> setblock {x} -59 1000 minecraft:cobweb")
 w("> clear P")
 w("> tp P 1100.5 -60 996.5")
 w("> zpth face P 0 0")
@@ -262,7 +262,7 @@ w("> execute as P at P run cdevbench passthrough 200000")
 w("waitlog \\[cdevbench\\] passthrough: 200000 calls per case 300")
 w("shell python3 -c \"import json;d=json.load(open('kubejs/exported/perf/passthrough_bench.json'));print({k:v for k,v in d.items() if k!='cases'});[print(c) for c in (d['cases'] if isinstance(d['cases'],list) else [dict(name=k,**v) for k,v in d['cases'].items()])]\"")
 for blk in ("minecraft:wheat", "minecraft:cobweb", "minecraft:carrots", "minecraft:farmland", "minecraft:stone", "minecraft:dirt"):
-    w(f"> fill 1042 300 1042 1078 319 1078 minecraft:air replace {blk}")
+	w(f"> fill 1042 300 1042 1078 319 1078 minecraft:air replace {blk}")
 w("expect \\[cdevbench\\]")
 w("reject Successfully filled")
 w("look chat (console) 10 cases, tagged=true enabled=true; tick_field and tick_web_cube median < 1000 ns; tick_air lowest tick case; json cases median_ns p99_ns; no watchdog")
@@ -301,9 +301,9 @@ w("\n## SQ-PTH-27 | [debug.passthrough] timing true (set before boot): herd in a
 w("> fill 1039 -61 1199 1049 -61 1209 minecraft:farmland")
 w("> fill 1040 -60 1200 1048 -60 1208 minecraft:wheat[age=7]")
 for k in range(20):
-    x = 1040.5 + (k % 5) * 2
-    z = 1200.5 + (k // 5) * 2
-    w("> summon minecraft:zombie %.1f -60 %.1f {Tags:[\"z27\",\"pth\"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:\"minecraft:generic.movement_speed\",Base:0d}]}" % (x, z))
+	x = 1040.5 + (k % 5) * 2
+	z = 1200.5 + (k // 5) * 2
+	w("> summon minecraft:zombie %.1f -60 %.1f {Tags:[\"z27\",\"pth\"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:\"minecraft:generic.movement_speed\",Base:0d}]}" % (x, z))
 w("> zpth count i06")
 w("sleep 62")
 w("shell python3 $INST/tools/perf/passthrough_timing.py logs/latest.log 2>&1 | tail -25")
@@ -344,8 +344,8 @@ w("look a13 and t13 gone lines between t=3600 and 3720 after landing")
 w("\n## SQ-PTH-14c | test 2: 3 arrows, a 4th after 10 s; the oldest is demoted (vanishes at its first minute, checked after the restart in SQ-PTH-14d)")
 w("> zpth watchnew minecraft:arrow a14c 5000 200 1159 -59 1000 6")
 for x in (1156.5, 1158.5, 1160.5):
-    w(f"> summon minecraft:arrow {x} -58 1000.5 {{pickup:1b,Motion:[0d,-1d,0d]}}")
-    w("sleep 1")
+	w(f"> summon minecraft:arrow {x} -58 1000.5 {{pickup:1b,Motion:[0d,-1d,0d]}}")
+	w("sleep 1")
 w("sleep 8")
 w("> summon minecraft:arrow 1162.5 -58 1000.5 {pickup:1b,Motion:[0d,-1d,0d]}")
 w("sleep 2")

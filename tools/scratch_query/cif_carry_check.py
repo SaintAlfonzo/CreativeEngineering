@@ -10,25 +10,25 @@ SECTIONS = ("jei", "gui_title", "toasts", "tooltips", "coaster", "wthit", "armor
 
 
 def sections(path):
-    out, cur = {}, None
-    for line in open(path):
-        m = re.match(r"^\s*\[([A-Za-z_.]+)\]", line)
-        if m:
-            cur = m.group(1)
-            continue
-        m = re.match(r"^\s*([A-Za-z_]+)\s*=\s*(.+?)\s*$", line)
-        if m and cur:
-            out[(cur, m.group(1))] = m.group(2)
-    return out
+	out, cur = {}, None
+	for line in open(path):
+		m = re.match(r"^\s*\[([A-Za-z_.]+)\]", line)
+		if m:
+			cur = m.group(1)
+			continue
+		m = re.match(r"^\s*([A-Za-z_]+)\s*=\s*(.+?)\s*$", line)
+		if m and cur:
+			out[(cur, m.group(1))] = m.group(2)
+	return out
 
 
 old, compat, equip = (sections(p) for p in sys.argv[1:4])
 diff = 0
 for (sec, key), val in sorted(old.items()):
-    if sec.split(".")[0] not in SECTIONS:
-        continue
-    now = (equip if sec.startswith("armor_overflow") else compat).get((sec, key))
-    if now != val:
-        diff += 1
-        print("DIFF", sec, key, "old", val, "now", now)
+	if sec.split(".")[0] not in SECTIONS:
+		continue
+	now = (equip if sec.startswith("armor_overflow") else compat).get((sec, key))
+	if now != val:
+		diff += 1
+		print("DIFF", sec, key, "old", val, "now", now)
 print("carried keys differing:", diff)
