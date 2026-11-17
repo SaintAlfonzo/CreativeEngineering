@@ -249,10 +249,11 @@ Starts after P1.2 (stamps) and P1.4 (verdict and feature data). Builds on qrun's
 
 ### P2.1 Rows as data (TX-42)
 
-1. Each queue section gets a machine-readable block: a fenced `qb` block under the table, or one `.qb` per section in
-   `feature_writeup/testing/rows/`. Owner decision D4.
-   - Batches are extracted from it, not rewritten each run.
-   - Generalises `hh_queue_to_qb.py`.
+1. Each queue section becomes one `.qb` file in `feature_writeup/testing/rows/<CODE>.qb` (D4). qrun runs it
+   directly; batches are selected from it by metadata, never rewritten per run.
+   - `scratch_queue.md` becomes a generated view: per-section tables (id, group, commands summary, pass, if it fails)
+     plus the P1.4 coverage block, written by `status_index.py` between markers.
+   - Migration generalises `hh_queue_to_qb.py`, newest sections first.
 2. Each row carries metadata:
    - `jars` (own jars it tests), `group`, `tier` (P2.2);
    - `sources` (the files or writeup section it was written from, for TX-46);
@@ -330,15 +331,17 @@ Settled 2026-11-16:
 | D7 | Commits: per plan phase, authored as the owner, with the Co-Authored-By trailer, pushed to `agent_staging` (P1.5) |
 | D8 | Install a rebuild for testing without asking; when the game runs, a dialog with Install now (re-shown while it still runs) / Install on exit / Skip (P1.2 item 7) |
 | D9 | Project memories move into the repo (P1.6, done) |
+| D4 | Queue row data: one `.qb` file per feature section in `feature_writeup/testing/rows/`, queue tables generated from them (option B below) |
 
-Open:
-- **D4. Where queue row data lives (P2.1).** Today a row is a markdown table line (`| ID | Group | Commands | Pass | If it fails |`).
+Background for D4 (settled as option B):
+
+Today a row is a markdown table line (`| ID | Group | Commands | Pass | If it fails |`).
   At run time an agent hand-converts it into a `.qb` batch: qrun's format, a text file of commands, `expect` /
   `waitlog` / `shell` checks and markers (example: `tools/scratch_query/batches/r1113pwg/pwgr1.qb`). Every run
   rewrites the batches, and the two copies drift; that is one source of the stale and wrong rows in review section 2.
   Phase 2 needs the row to exist once, as data qrun can run, with the metadata from P2.1 item 2.
 
-  | | Option A: fenced block under each queue section | Option B: one `.qb` file per section, queue tables generated (recommended) |
+  | | Option A: fenced block under each queue section | Option B: one `.qb` file per section, queue tables generated (chosen) |
   |---|---|---|
   | Where | Inside `scratch_queue.md`, a fenced `qb` block after each section's table | `feature_writeup/testing/rows/<CODE>.qb`, e.g. `rows/MELT.qb`; `scratch_queue.md` becomes a generated view |
   | Human view | Table and data side by side in one file; both hand-kept unless the table is generated from the block | Table generated from the `.qb` (id, group, commands summary, pass, if it fails), so it cannot drift |
@@ -348,7 +351,7 @@ Open:
   | Staleness check (TX-46) | Per block | Per file, using its git history and `sources` |
   | Migration | In place | Newest sections first; unmigrated sections stay readable in the old file until archived |
 
-  B follows the same pattern as P1.4 (data once, view generated) and suits qrun as it is.
+
 
 ## Test list (PO-)
 
@@ -388,7 +391,7 @@ Live (queued when built, per skill `scratch-test`):
 
 - 2026-11-16: planned from [process_review.md](process_review.md); owner asked for items 1 to 3 and 5 as phase 1,
   item 4 as phase 2.
-- 2026-11-16 evening: rulings D1 to D3 and D5 to D9; D4 detailed and left open.
+- 2026-11-16 evening: rulings D1 to D3 and D5 to D9; D4 detailed, then settled as option B (`.qb` per section).
   - CLAUDE.md backed up, then edited: agent notes line and import, install policy, commit rule, "or agent notes" in
     Done means.
   - P1.6 memory move done.
