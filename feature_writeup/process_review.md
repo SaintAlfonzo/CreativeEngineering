@@ -171,7 +171,7 @@ work (screens, books, textures) is where this costs most, because the owner can 
 | Whole-queue scratch runs | Headless tests (effectively never since the split) |
 | Hand fan-out of status into every doc, even for small tweaks | Lints (only the changelog lint runs, at release) |
 | Reruns; per-run gotcha sections | Commits |
-| TODO re-layouts | Installs and releases (built jars of ~8 bundles wait) |
+| ~~TODO re-layouts~~ (withdrawn 2026-11-16, D12: the owner's choice) | Installs and releases (built jars of ~8 bundles wait) |
 | Rebuilds that are never installed | Owner decision checkpoints before building |
 | Hand-written queue header banners | Trimming the queue, gotchas, memory; deploy.md history |
 

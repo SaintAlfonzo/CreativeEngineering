@@ -551,7 +551,7 @@ by hand into feature families (map in todo_migrate.py `REFILE`). TODO.md's first
 edit FAILs `--check`. features.csv `todo ids` dropped: the 39 links moved to the rows' `feature` field (7 rows already
 linked elsewhere kept theirs). Open work blocks: 174 docs (160 writeups replaced their D6 section 0 paragraph; 19
 plans got a block with a generated Status line; `can_parity.md` is generated and skipped). plan_rules_fixes.md sections
-2 to 19b are rows `conventions #1` to `#26` (priority high, 19 low; section 2 Complete). `pack/release #7` closed.
+2 to 19b are rows `conventions #12` to `#37` (numbers continue the old `tooling/conventions` ids, D17) (priority high, 19 low; section 2 Complete). `pack/release #7` closed.
 Checks: `todo_rows` in check_all (schema; `--changed` FAILs new status words in Details, WARNs in briefs).
 Not converted: the `- [ ]` lists left in plans are test lists (SCAT-, PROC-) or closed release plans, not tasks. The
 17 generated writeups have no Open work block; their generators would need to keep the markers (follow-up).
@@ -583,6 +583,12 @@ Not converted: the `- [ ]` lists left in plans are test lists (SCAT-, PROC-) or 
    - the threshold list brought to zero, or each remaining warning listed with a reason.
 
 **Done when:** `check_all` shows the cleanup warnings; one release ran the pass and wrote its doc.
+
+**Done 2026-11-16 (warnings and the release step):** `tools/cleanup_check.py` with
+`tools/cleanup_thresholds.csv` (19 checks), the WARN-only `cleanup` check in check_all (about 15 s, so `--fast` skips
+it unless its inputs changed), release skill step 2b (fixers, then `--report`). First report, without fixers:
+[status/cleanup_2026-11-16.md](status/cleanup_2026-11-16.md) (6 warnings; P3.4 f's 15 unfiled rows are in it).
+Open: the done-when's "one release ran the pass" waits for the next release.
 
 ### P3.7 Documented, not planned
 
