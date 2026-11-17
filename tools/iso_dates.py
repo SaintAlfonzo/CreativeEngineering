@@ -66,7 +66,7 @@ def git(*a):
 
 def doc_scope():
 	files = git('ls-files', 'feature_writeup/*.md', '.claude/*.md', 'CLAUDE.md', 'mod_sides.md', 'README.md',
-				'feature_writeup/todo/rows/*.csv', 'feature_writeup/testing/rows/*.qb',
+				'feature_writeup/todo/rows/*.csv', 'feature_writeup/status/features.csv', 'feature_writeup/testing/rows/*.qb',
 				'kubejs/assets/creativecommon/changelog/unreleased.md').split('\n')
 	out = [ROOT / f for f in files if f and not SKIP.search(f) and f not in GENERATED]
 	if MEMORY.is_dir():

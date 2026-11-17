@@ -117,6 +117,14 @@ if wants('spelling'):
         print(f'   {br:12s} {nb:5d}   {am:12s} {na:5d}')
     print()
 
+# DR-L7: British spellings and arrows left in the doc and own-lang scope of tools/us_spelling.py (which fixes them).
+if wants('spelling'):
+    out = subprocess.run([sys.executable, str(ROOT / 'tools/us_spelling.py'), '--lint'], cwd=ROOT, capture_output=True,
+                         text=True).stdout.rstrip().split('\n')
+    hits = [(l.split(':', 2)[0], int(l.split(':', 2)[1]), l.split(':', 2)[2].strip()) for l in out
+            if l.count(':') >= 2 and l.split(':', 2)[1].isdigit()]
+    report('DR-L7', 'British spellings and arrows in docs, memory, skills, rows and own lang (us_spelling.py fixes them)', hits)
+
 # DR-L5: decision citations.
 if wants('citations'):
     hits_user = [(p, i, l) for p, i, l in lines_of(DOCS) if re.search(r'\(user,? \d{4}-\d\d-\d\d', l)]
