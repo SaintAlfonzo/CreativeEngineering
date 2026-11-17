@@ -1,0 +1,34 @@
+# Scratch queue rows TT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/TT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-TT American spelling in own lang text, 2026-11-17 ([tooltips.md](../tooltips.md); [plan_rules_fixes.md](../plan_rules_fixes.md) section 15b, TODO `conventions #32`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativelabels creativedelight creativecompat
+@@sources development/creativeLabels/src/main/resources/assets/creativelabels/lang/en_us.json development/creativeDelight/src/main/resources/assets/creativedelight/lang/en_us.json development/creativeCompat/src/main/resources/assets/creativecompat/lang/en_us.json
+@@text
+@@text Needs the Labels, Delight and Compat jars rebuilt after 2026-11-17 (the lang values changed in source only; P5 rebuilds every jar).
+@@table
+## CQ-TT-01 | Label and Eraser tooltips use "color" and "labeled"
+@group client
+@commands Served client (`qrun.py client`): read the Label and Eraser tooltips with shift held
+@pass Label: "Right-click with a dye: color the icon"; Eraser: "Right-click a labeled item in your inventory: remove its last label"; no "colour" or "labelled" line
+@fails creativelabels jar older than the lang edit (rebuild `:creativeLabels:`)
+do {"tooltip_text": "creativelabels:label", "shift": true, "reject": "colour"}
+expect READ tooltip_text creativelabels:label \d+: .*color the icon
+do {"tooltip_text": "creativelabels:eraser", "shift": true, "reject": "labelled"}
+expect READ tooltip_text creativelabels:eraser \d+: .*Right-click a labeled item
+## CQ-TT-02 | Oven heat lines say "fueled"
+@group client
+@commands Place an Oven on a stone block (no heat), open it: the status line; JEI on any baking recipe: the heat line
+@pass Oven screen: "Not heated: needs fire, a lit campfire, lava, magma or a fueled blaze burner below (not a stove)"; JEI baking page: "... or a fueled blaze burner (not a stove)"; no "fuelled" (LOOK)
+@fails creativedelight jar older than the lang edit (rebuild `:creativeDelight:`)
+@draft no driver step opens a placed block's screen or a JEI category page by name yet; owner LOOK
+## CQ-TT-03 | MCA gray eyes option
+@group client
+@commands MCA villager editor (or the player editor) with Creative Compat's extra eye colors: the eye color list
+@pass the option reads "Gray Eyes", not "Grey Eyes" (LOOK)
+@fails creativecompat jar older than the lang edit (rebuild `:creativeCompat:`)
+@draft no driver step opens the MCA editor; owner LOOK

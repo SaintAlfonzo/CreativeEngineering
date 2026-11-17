@@ -6,7 +6,7 @@
 - **Changed:** The pack's diet bonuses are 8 hearts, 3 armor toughness tiers, knockback resistance, 10% walk speed, permanent Speed I at diversity 20 and 5 effect slots [fixed Apple Pie bonuses].
 - **New:** Effect slots hold an unlocked effect of your choice: Speed, Haste, Strength, Jump Boost, Night Vision, Water Breathing, Luck, Regeneration, Shrinking, Long Reach, Patrol Nullifier, Phantom Bane, Fleet-Footed or Lava Walker.
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 8 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. A confirm panel shows the cost first.
-- **New:** Effect unlocks are kept for good. Slots below their diversity grey out and keep their choice.
+- **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice.
 - **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.
 - **New:** Diet bonus messages show on the action bar, one at a time.
 - **New:** Diet Bonuses screen (P) and a diet bonus bar on the inventory; Shift+T unlocks the bar to move it.
@@ -58,7 +58,7 @@
 - **Changed:** Ropes slow walking through them to 0.75x [no slowdown]; climbing, sliding and sneaking on them are unchanged.
 - **Changed:** Cobwebs, barbed wire and razor wire slow walking to 0.50x [about 0.1x] and falling to 0.85x, and cut fall damage by 0.85x per web passed. Barbed wire and razor wire still hurt; Spiders and Cave Spiders are not slowed.
 - **Changed:** Cobwebs with webs on 3 or more of their 6 sides slow walking to 0.35x and falling to 0.20x, with no fall damage.
-- **Fixed:** Falling into a single cobweb or a short stack of cobwebs cancelled all fall damage.
+- **Fixed:** Falling into a single cobweb or a short stack of cobwebs canceled all fall damage.
 - **Changed:** In a cobweb with webs on all 6 sides, falling stops; jump climbs slowly, sneak sinks slowly.
 - **Changed:** Taiga grape bushes, salmonberry bushes and cranberry bushes slow walking like sweet berry bushes [no slowdown].
 - **Changed:** Sweet berry bushes and the other berry bushes no longer cancel fall damage [sweet berry bushes did].
@@ -277,7 +277,7 @@
 - **New:** Two Cooking for Blockheads Fridges side by side, facing the same way, join into a double fridge with no gap or seal between them. A Fridge placed next to another opens the other way. Each keeps its own door and inventory.
 - **New:** Food Dictionary, a book (book + carrot) listing every food, tasted or not yet tried. Bites of placed pies and cakes count. No hearts or effects.
 - **Removed:** Golden and gilded mushroom stew, beetroot soup and rabbit stew, their cans and jar fluids. Existing ones in worlds are deleted.
-- **Fixed:** Flavoured Rustic Delight pancakes placed on a coaster showed a missing model.
+- **Fixed:** Flavored Rustic Delight pancakes placed on a coaster showed a missing model.
 - **Fixed:** Bites of a placed cake after the first, and of a cake stacked on a cake, did not count as cake slices for diet bonuses or the Food Dictionary.
 - **Fixed:** A stick used on an Ingredients Basin without enough for a skewer was lost or placed on top of the basin; it stays in the hand.
 - **Fixed:** A pumpkin pie used on a Cutting Board was placed as a pie instead of going on the board.
@@ -311,6 +311,7 @@
 - **Fixed:** Opening chat with / sometimes typed a second / into the box (T sometimes typed t).
 - **Changed:** In JEI, fishing rods and backpacks each have their own group after the equipment materials [with each material]; Simple Hats and Wardrobe backpacks are not sorted.
 - **New:** Title screen splash: Stience!
+- **Changed:** Tooltips and screen text use American spelling: color, gray, labeled, fueled.
 
 ## Gameplay
 

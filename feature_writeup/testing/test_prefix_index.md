@@ -202,7 +202,7 @@ same pass as the renames.
 | `TS-` | [trashslot.md](../trashslot.md) |  | plan_1.0.3.md |  |
 | `TSK-` | [treated_sticks.md](../treated_sticks.md) | CQ-TSK (1), SQ-TSK (2) |  |  |
 | `TSY-` | [trade_sync.md](../trade_sync.md) | SQ-TSY (2) |  | new 2026-11-16, was TS- (collided with trashslot.md); matches SQ-TSY, CQ-TSY |
-| `TT-` | [tooltips.md](../tooltips.md) |  |  |  |
+| `TT-` | [tooltips.md](../tooltips.md) | CQ-TT (3) |  |  |
 | `TX-` | [plan_scratch_testing_expansion.md](../plan_scratch_testing_expansion.md) | CQ-TX (4), SQ-TX (18) |  | not in the README index yet |
 | `UD-` | [unusual_delight.md](../unusual_delight.md) |  |  |  |
 | `VB-` | [alcohol_part_b.md](../alcohol_part_b.md) |  | briefs/alcohol_vineryport.md, alcohol.md |  |
