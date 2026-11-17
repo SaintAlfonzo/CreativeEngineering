@@ -67,7 +67,7 @@ None open.
 - A startup restart applies `stack_sizes.js`; `/reload` does not.
 
 ### Tests
-- **AL-98 (proposed) Brewin' stack sizes:** kimchi, jerky, kippers, cocoa fudge and a cheese wedge stack to the size the
+- [ ] **AL-98 (proposed) Brewin' stack sizes:** kimchi, jerky, kippers, cocoa fudge and a cheese wedge stack to the size the
   generator gives similar foods; a tankard drink stacks to 32; a keg to 64.
 
 ---

@@ -96,7 +96,7 @@ Effects `minecraft:weakness`, `minecraft:slowness`, `minecraft:haste`. Items `i.
 - Startup script: restart, not `/reload`, for the tooltip side; the server handler reads the same data.
 
 ### Tests
-- AE-13 (update): echo axe on a zombie -> Weakness II + Slowness II; no Darkness.
+- [ ] **AE-13:** (update) echo axe on a zombie -> Weakness II + Slowness II; no Darkness.
 - AE-new1 (proposed, numbered when queued; AE-25 to AE-28 are taken by the potions_effects brief): echo pickaxe in
   either hand -> Haste I icon; tooltip "While held: Haste I (infinite)".
 - AE-new2 (after D2): echo sword tooltip shows only the framework lines (no duplicate "On hit" header); hit a zombie ->
@@ -138,7 +138,7 @@ Hand-drawn sprites for the four echo tools, keeping the CDD-style animated glow.
 - Player-visible: changelog bullet under the echo gear family (new echo tool textures).
 
 ### Tests
-- GR-04 (existing): JEI shows the four tools with animated textures.
+- [ ] **GR-04:** (existing) JEI shows the four tools with animated textures.
 
 ---
 

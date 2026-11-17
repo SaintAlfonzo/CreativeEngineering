@@ -32,13 +32,11 @@ Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-FDI-01, -02 PASS (no Carrot hearts; max health 22 is the Raspberry Pie rung; the batch's 20th food, pumpkin pie, is not edible in this pack: swap it); SQ-FDI-03 FAIL: bitten cakes become Supplementaries directional cakes and count in neither book (TODO `food/types-and-tuning #39`).
 
-| ID | Test | Pass |
-|---|---|---|
-| FDI-01 | Boot with the jar; `grep -n "solcarrot\|Failed to parse" logs/latest.log` | mod listed, no errors |
-| FDI-02 | Craft book + potato and book + carrot | Diet Tracker and Food Dictionary; names right in JEI, tooltip and the keybind screen ("Open Diet Tracker") |
-| FDI-03 | Open the Food Dictionary, eat a new food | it moves to Already Tasted; no chat message, particles, sound or tooltip line; max health stays 10 hearts after 20 foods |
-| FDI-04 | Food Dictionary lists modded foods (Creative Delight, Rustic Delight) and not lunchboxes or cans' containers | listed as expected; note foods that should not be there |
-| FDI-05 | Diet Tracker still works and its benefits are unchanged | as before |
+- [ ] **FDI-01:** Boot with the jar; `grep -n "solcarrot|Failed to parse" logs/latest.log` -> mod listed, no errors
+- [ ] **FDI-02:** Craft book + potato and book + carrot -> Diet Tracker and Food Dictionary; names right in JEI, tooltip and the keybind screen ("Open Diet Tracker")
+- [ ] **FDI-03:** Open the Food Dictionary, eat a new food -> it moves to Already Tasted; no chat message, particles, sound or tooltip line; max health stays 10 hearts after 20 foods
+- [ ] **FDI-04:** Food Dictionary lists modded foods (Creative Delight, Rustic Delight) and not lunchboxes or cans' containers -> listed as expected; note foods that should not be there
+- [ ] **FDI-05:** Diet Tracker still works and its benefits are unchanged -> as before
 
 ## Plan 2026-11-10: world slices, lunchboxes (BUILT 2026-11-10, not installed, not run)
 
@@ -105,13 +103,11 @@ and make food eaten out of a lunchbox register as the food.
 
 ### Plan tests
 
-| ID | Test | Pass |
-|---|---|---|
-| FDI-06 | Bite a placed Farmer's Delight pie, a vanilla cake, a Creative Delight cake | each unlocks its slice (cake: D1) in the Food Dictionary; Diet Tracker still records it |
-| FDI-07 | Cut a pie with a knife | nothing unlocks until the slice is eaten |
-| FDI-08 | Open both books | no lunchbox, lunchbag or other lunchbox tier listed |
-| FDI-09 | Eat a food out of a lunchbox | the food, not the lunchbox, is tasted in both books; Diet Tracker queue gets one entry |
-| FDI-10 | Put each food kind into a lunchbox | the blacklist did not change what the lunchbox accepts |
+- [ ] **FDI-06:** Bite a placed Farmer's Delight pie, a vanilla cake, a Creative Delight cake -> each unlocks its slice (cake: D1) in the Food Dictionary; Diet Tracker still records it
+- [ ] **FDI-07:** Cut a pie with a knife -> nothing unlocks until the slice is eaten
+- [ ] **FDI-08:** Open both books -> no lunchbox, lunchbag or other lunchbox tier listed
+- [ ] **FDI-09:** Eat a food out of a lunchbox -> the food, not the lunchbox, is tasted in both books; Diet Tracker queue gets one entry
+- [ ] **FDI-10:** Put each food kind into a lunchbox -> the blacklist did not change what the lunchbox accepts
 
 ## History
 

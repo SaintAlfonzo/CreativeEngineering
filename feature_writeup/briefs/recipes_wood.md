@@ -115,10 +115,10 @@ drop the misleading comment.
   as the default, no-blade route.
 
 ### Tests
-- **RW-11 Twisted stripping, one each:** JEI uses of `architects_palette:twisted_log` -> exactly one cutting-board
+- [ ] **RW-11 Twisted stripping, one each:** JEI uses of `architects_palette:twisted_log` -> exactly one cutting-board
   recipe (axe, stripped log + 50 % twisted bark) and one Create saw recipe; the IE sawmill shows the pack's
   `creativeengineering:sawmill/twisted_log-twisted_planks` only.
-- **RW-12 Stripped-log sawmill, one each:** JEI uses of `minecraft:stripped_oak_log` on the sawmill -> one recipe
+- [ ] **RW-12 Stripped-log sawmill, one each:** JEI uses of `minecraft:stripped_oak_log` on the sawmill -> one recipe
   (`creativeengineering:sawmill/stripped_oak_log-oak_planks`); the same for spruce.
 
 ---
@@ -196,9 +196,9 @@ Clear the F5 comments in `wood_types.js` and `bark.js`, and do the work they poi
 - Keep bark.js's species tables the single source. Don't add a third special case like lines 59-62.
 
 ### Tests
-- **RW-13 Quark stairs on the sawmill:** a blossom planks stairs in the sawmill (plain blade) -> passes through
+- [ ] **RW-13 Quark stairs on the sawmill:** a blossom planks stairs in the sawmill (plain blade) -> passes through
   unchanged or follows a pack recipe; JEI shows no `quarkengineering:sawmill/blossom/blossom_stairs`.
-- **RW-14 Driftwood bark:** a driftwood log on the cutting board with an axe -> stripped driftwood log + driftwood
+- [ ] **RW-14 Driftwood bark:** a driftwood log on the cutting board with an axe -> stripped driftwood log + driftwood
   bark (IW) about half the time, never FD tree bark.
 
 ---
@@ -379,12 +379,12 @@ mulberry vines stay. Every recipe that made or used river wood points at oak.
   River leaves are in `#minecraft:leaves`, so nothing changes.
 
 ### Tests
-- **RW-15 River set gone:** JEI search `@upgrade_aquatic river` -> only leaves, sapling, leaf pile, leaf carpet, hedge;
+- [ ] **RW-15 River set gone:** JEI search `@upgrade_aquatic river` -> only leaves, sapling, leaf pile, leaf carpet, hedge;
   a river hedge recipe takes an oak log.
-- **RW-16 River tree:** `/place feature upgrade_aquatic:river_tree` on grass by a river -> oak trunk, river leaves,
+- [ ] **RW-16 River tree:** `/place feature upgrade_aquatic:river_tree` on grass by a river -> oak trunk, river leaves,
   some mulberry vines; new chunks along a river show the same trees.
-- **RW-17 River sapling:** bone-meal a river sapling -> an oak-trunk river tree (the Creative Common fix).
-- **RW-18 Old logs:** break a river log placed before the change (or `/setblock` one) -> drops an oak log; a river
+- [ ] **RW-17 River sapling:** bone-meal a river sapling -> an oak-trunk river tree (the Creative Common fix).
+- [ ] **RW-18 Old logs:** break a river log placed before the change (or `/setblock` one) -> drops an oak log; a river
   planks item in the grid -> oak planks.
 
 ---

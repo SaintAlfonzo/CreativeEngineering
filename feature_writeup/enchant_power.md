@@ -92,10 +92,10 @@ Open decisions: which families to take, and the pylon and Wise Oak values.
 
 ## 6. In-game test suite (proposed, `EP-`)
 
-- [ ] EP-01: ring of 15 vanilla shelves gives the level 30 offer; 14 gives lower.
-- [ ] EP-02: Wise Oak and each pylon give the agreed value (Display Link readout).
-- [ ] EP-03: each newly tagged family gives its value; fractions add (four quarter blocks = 1).
-- [ ] EP-04: a copycat panel of a tagged block copies its power.
+- [ ] **EP-01:** ring of 15 vanilla shelves gives the level 30 offer; 14 gives lower.
+- [ ] **EP-02:** Wise Oak and each pylon give the agreed value (Display Link readout).
+- [ ] **EP-03:** each newly tagged family gives its value; fractions add (four quarter blocks = 1).
+- [ ] **EP-04:** a copycat panel of a tagged block copies its power.
 
 ## 7. History
 

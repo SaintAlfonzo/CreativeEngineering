@@ -1374,7 +1374,7 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - [ ] **VB-23 Walkers:** kelp cider walks on water, bolvar on lava
 - [ ] **VB-24 Climbing, frosty, armor, health:** jo special climbs walls; eiswein freezes + armor; aegis +2 armor; stal +4 max health
 - [ ] **VB-25 Party:** lilitu wine, hit a zombie -> firework at the target
-- [ ] ~~**VB-26 Banner from the advancement**~~ retired 2026-10-18: advancements are removed (section 10.2); the banner is crafted now (VB-64)
+- [ ] ~~**VB-26 Banner from the advancement:**~~ retired 2026-10-18: advancements are removed (section 10.2); the banner is crafted now (VB-64)
 - [ ] **VB-27 Winemaker set and charm:** full set + bone meal -> bone meal kept, 30% of uses damage all 4 pieces by 1; set + bonemeal charm -> exactly one refund
 - [ ] **VB-28 JEI:** all five Vinery pages (cask, press mashing, press fermenting, grape stomping, wine aging) come from the port, in that order after Brewin's; none of Creative Common's `creativeengineering:vinery_*` pages
 - [ ] **VB-29 Old world: ids kept:** a 1.3.10 world with cherry blocks, crates, wine_press, juice bottles, vinemaker armor, stove, sink, flower box -> all present under the same ids; nothing in the missing-mappings log except effects
@@ -1400,7 +1400,7 @@ Audited 2026-10-19 with bottle sizes and racks: [storage_audit.md](storage_audit
 - [ ] **VB-49 Full-bar hover (7.1):** a quarter-full cask, hover the empty top of the gauge -> the juice tooltip; the same on the JEI page
 - [ ] **VB-50 Apple press slots (7.2):** by hand, slot 1 (left) takes apple mash and honeycomb only, slot 2 wine bottles and glass bottles only; a hopper feeds glass bottles into slot 2; shift-click puts mash in slot 1; honeycomb + glass bottle -> honey bottle, and the JEI page shows the glass bottle
 - [ ] **VB-51 Merged effects (7.3):** Stal Wine gives Health Boost; `/effect give @s vinery:luck_effect` fails (no such effect)
-- [ ] ~~**VB-52 Effect fallbacks**~~ pinned with 7.4 (future plan)
+- [ ] ~~**VB-52 Effect fallbacks:**~~ pinned with 7.4 (future plan)
 - [ ] **VB-53 JEED providers (7.5):** the JEI page of a wine's effect lists that wine as a provider; change the config entry, `/reload` -> the provider moves
 - [ ] **VB-54 Mead gone (7.6):** no `vinery:mead` in JEI, the creative tab or `/give`; no cask recipe for it; the log has no errors about it
 - [ ] **VB-55 Banner Health Boost II (7.7):** stand by a Vinery banner at full health -> Health Boost II for 60 s, 4 extra hearts that stay full while you stand there for 2+ min; the effect timer only jumps back up when it falls under 10 s; walk away -> it runs out within 60 s

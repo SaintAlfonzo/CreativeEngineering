@@ -96,7 +96,7 @@ fixes its water and fire behavior through the existing four physics tags. Nothin
   losing tag's source, not only add it to the winner.
 
 ### Tests
-- IP-21 (exists; SQ-IP-16): dump + audit pass line.
+- [ ] **IP-21:** (exists; SQ-IP-16) dump + audit pass line.
 - **IP-new1 Families applied:** after the generator, drop one item per family (oak log, iron ingot, AE2 drive, brick,
   sand, amethyst, glass, potion, redstone, ice, crimson planks, carrot, bread, bone, oak leaves, wool, flour) into water,
   a campfire and lava; each matches table 9.2.

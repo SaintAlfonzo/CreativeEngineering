@@ -584,84 +584,84 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24; nothing is built. Plans: [dish
 
 Crops and worldgen
 
-- [ ] VD-01 Each of the 6 kept crops plants on farmland, Rich Farmland and Fertile Soil, grows to max age, and drops
+- [ ] **VD-01:** Each of the 6 kept crops plants on farmland, Rich Farmland and Fertile Soil, grows to max age, and drops
   produce (and seeds where it has them).
-- [ ] VD-02 Right-click on a ripe VD crop harvests and replants; a hoe does the same over its area.
-- [ ] VD-03 WTHIT shows a growth percentage on every VD crop.
-- [ ] VD-04 Wild broccoli, cauliflower and garlic appear (rarely) only in temperate grassy biomes; wild sweet potato and
+- [ ] **VD-02:** Right-click on a ripe VD crop harvests and replants; a hoe does the same over its area.
+- [ ] **VD-03:** WTHIT shows a growth percentage on every VD crop.
+- [ ] **VD-04:** Wild broccoli, cauliflower and garlic appear (rarely) only in temperate grassy biomes; wild sweet potato and
   zucchini only in warm dry grassy biomes; wild turnips only where sea beets grow (`/cdevplace` or locate).
-- [ ] VD-05 Wild VD crops also generate on Immersive Weathering soils.
-- [ ] VD-06 Mature dandelions generate in every biome with dandelions and nowhere else, more often than the wild crops.
-- [ ] VD-07 Breaking a mature dandelion drops 1 dandelion and 0 to 3 leaves (any tool but shears); shears give the
+- [ ] **VD-05:** Wild VD crops also generate on Immersive Weathering soils.
+- [ ] **VD-06:** Mature dandelions generate in every biome with dandelions and nowhere else, more often than the wild crops.
+- [ ] **VD-07:** Breaking a mature dandelion drops 1 dandelion and 0 to 3 leaves (any tool but shears); shears give the
   block; bone meal pops another.
-- [ ] VD-08 No VD bell pepper, seeds, crate or wild patch exists; Rustic peppers work in every VD recipe.
-- [ ] VD-09 VD crops follow the copied seasons.
-- [ ] VD-42 *Scratch server PASSED r1031 (2026-10-31, SQ-DM-01, -02).* Plant a vanilla Dandelion on Rich Soil and one on Fertile Soil; `/tick` or wait: each turns into a Mature
+- [ ] **VD-08:** No VD bell pepper, seeds, crate or wild patch exists; Rustic peppers work in every VD recipe.
+- [ ] **VD-09:** VD crops follow the copied seasons.
+- [ ] **VD-42:** *Scratch server PASSED r1031 (2026-10-31, SQ-DM-01, -02).* Plant a vanilla Dandelion on Rich Soil and one on Fertile Soil; `/tick` or wait: each turns into a Mature
   Dandelion (about 10 and 5 minutes since 2026-11-07); `[dandelion_maturing] richSoilTicks = 0` stops it (TODO `ports/veggiesport #4`).
-- [ ] VD-43 *Scratch server PASSED r1031 (2026-10-31, SQ-DM-03, -03b drop rate).* Right-click a Mature Dandelion with shears, then another with a knife: each becomes a plain Dandelion, drops
+- [ ] **VD-43:** *Scratch server PASSED r1031 (2026-10-31, SQ-DM-03, -03b drop rate).* Right-click a Mature Dandelion with shears, then another with a knife: each becomes a plain Dandelion, drops
   2-3 Dandelion Leaves (a Dandelion about half the time) and takes 1 durability; other items do nothing. Scratch: SQ-DM-01 to -03.
 
 Food and recipes
 
-- [ ] VD-10 Every VD food has a food type tag and the type's values.
-- [ ] VD-11 No smoked bell pepper exists; VD recipes that used it take any Rustic roasted bell pepper.
-- [ ] VD-12 Carrot cake and sweet potato pie use the baking families (base / crust, oven); VD's own recipes are gone.
-- [ ] VD-13 Each VD pot meal has a heatless grid route and no Slice and Dice mixer copy where the rule says so.
-- [ ] VD-14 Carrot juice, dandelion juice and turnip water come from the heated mixer, spout, drain and bottler as fluids.
-- [ ] VD-15 Fish and Chips is Veggies Delight's only (PneumaticCraft's merged in, VD-47); Mashed Potatoes (More Delight)
+- [ ] **VD-10:** Every VD food has a food type tag and the type's values.
+- [ ] **VD-11:** No smoked bell pepper exists; VD recipes that used it take any Rustic roasted bell pepper.
+- [ ] **VD-12:** Carrot cake and sweet potato pie use the baking families (base / crust, oven); VD's own recipes are gone.
+- [ ] **VD-13:** Each VD pot meal has a heatless grid route and no Slice and Dice mixer copy where the rule says so.
+- [ ] **VD-14:** Carrot juice, dandelion juice and turnip water come from the heated mixer, spout, drain and bottler as fluids.
+- [ ] **VD-15:** Fish and Chips is Veggies Delight's only (PneumaticCraft's merged in, VD-47); Mashed Potatoes (More Delight)
   and Mashed Sweet Potatoes (Veggies) both exist (VD-48); only Rustic's stuffed bell peppers exist, no VD feast or
   serving in JEI (VD-49).
-- [ ] VD-16 Fermented garlic honey is made in the Pickling Jar (VTD-15); not in the cooking pot; no hand recipe.
-- [ ] VD-17 Placed VD pies, cake, tray, lasagna and stuffed peppers show the placeable tooltip and serve correctly.
-- [ ] VD-18 Stack sizes follow the policy (bowl meals 32, drinks 32, placed cakes and feasts 8).
-- [ ] VD-19 New raw and cooked veggies have cans.
-- [ ] VD-20 Both wraps need a tortilla; no dough route.
-- [ ] VD-21 Every VD soup and stew goes into a Supplementaries jar with its own colour.
-- [ ] VD-22 Sweet potato dough crafts as in VD (the mhadjeb is removed, 5.5).
-- [ ] VD-23 Cauliflower Bread bakes in the Oven from dough and 2 cauliflowers; no grid recipe.
-- [ ] VD-24 VD grid meals and the heatless pot-meal routes are not offered by the Create mixer or mechanical crafter.
-- [ ] VD-25 A ripe zucchini plant gives 1 or 2 zucchinis on right-click and drops back 3 ages.
-- [ ] VD-44 Knife on a sweet potato on a cutting board gives 3 Sliced Sweet Potatoes, a potato 3 Potato Slices; a Slice &
+- [ ] **VD-16:** Fermented garlic honey is made in the Pickling Jar (VTD-15); not in the cooking pot; no hand recipe.
+- [ ] **VD-17:** Placed VD pies, cake, tray, lasagna and stuffed peppers show the placeable tooltip and serve correctly.
+- [ ] **VD-18:** Stack sizes follow the policy (bowl meals 32, drinks 32, placed cakes and feasts 8).
+- [ ] **VD-19:** New raw and cooked veggies have cans.
+- [ ] **VD-20:** Both wraps need a tortilla; no dough route.
+- [ ] **VD-21:** Every VD soup and stew goes into a Supplementaries jar with its own colour.
+- [ ] **VD-22:** Sweet potato dough crafts as in VD (the mhadjeb is removed, 5.5).
+- [ ] **VD-23:** Cauliflower Bread bakes in the Oven from dough and 2 cauliflowers; no grid recipe.
+- [ ] **VD-24:** VD grid meals and the heatless pot-meal routes are not offered by the Create mixer or mechanical crafter.
+- [ ] **VD-25:** A ripe zucchini plant gives 1 or 2 zucchinis on right-click and drops back 3 ages.
+- [ ] **VD-44:** Knife on a sweet potato on a cutting board gives 3 Sliced Sweet Potatoes, a potato 3 Potato Slices; a Slice &
   Dice slicer with a knife does the same; JEI shows both at 3 (5.6, RD-34).
-- [ ] VD-45 Sliced Sweet Potato: shows the potato slices sprite and its name, eats for 1 hunger, composts (50%); JEI lists it
+- [ ] **VD-45 Sliced Sweet Potato:** shows the potato slices sprite and its name, eats for 1 hunger, composts (50%); JEI lists it
   in fries, fish and chips, Mashed Sweet Potatoes, potato salad and diced potato dishes, and the Canned Sweet Potato; not in
   More Delight's Mashed Potatoes (VD-48).
-- [ ] VD-46 `/dumptags`: the Sliced Sweet Potato is in `forge:sliced_potato`, `forge:sliced_potatoes`,
+- [ ] **VD-46:** `/dumptags`: the Sliced Sweet Potato is in `forge:sliced_potato`, `forge:sliced_potatoes`,
   `forge:vegetables/sweet_potato`, `forge:vegetables/potato` and `creativedelight:food_type/raw/veggie/sliced`.
-- [ ] VD-47 Fish and Chips (5.1 M1, item_merges.md 2.13, MG-48): JEI shows one, Veggies Delight's, with the pot frying
+- [ ] **VD-47:** Fish and Chips (5.1 M1, item_merges.md 2.13, MG-48): JEI shows one, Veggies Delight's, with the pot frying
   route (cooking oil, any raw fish, 2 sliced potatoes, bowl) and Fries + cooked fish + bowl; VD's egg pot recipes gone.
-- [ ] VD-48 Mashed family (5.1 M2): Mashed Potatoes from the pot with 2 potatoes or potato slices + milk (bowl) and by
+- [ ] **VD-48:** Mashed family (5.1 M2): Mashed Potatoes from the pot with 2 potatoes or potato slices + milk (bowl) and by
   hand from 3 baked potatoes or baked potato slices + milk + bowl; Mashed Sweet Potatoes (renamed) the same with sweet
   potatoes or sliced sweet potatoes, by hand 3 baked sweet potatoes; neither takes the other type.
-- [ ] VD-49 Stuffed Bell Peppers (5.1 M3): the VD feast and serving are hidden in JEI and have no recipe; Rustic's
+- [ ] **VD-49:** Stuffed Bell Peppers (5.1 M3): the VD feast and serving are hidden in JEI and have no recipe; Rustic's
   stuffed bell peppers are unchanged.
-- [ ] VD-50 Sweet potato dough gives no bread in a furnace, smoker or campfire; it bakes to bread in the Oven on a
+- [ ] **VD-50:** Sweet potato dough gives no bread in a furnace, smoker or campfire; it bakes to bread in the Oven on a
   baking sheet (1, 3, 6).
-- [ ] VD-51 Zucchini Quiche (3.3 R4): one shaped recipe on a pie crust (roasted zucchini x3, milk or any cheese, cooked
+- [ ] **VD-51:** Zucchini Quiche (3.3 R4): one shaped recipe on a pie crust (roasted zucchini x3, milk or any cheese, cooked
   meat), not in the mechanical crafter; the assembly on a pie crust still works. Vegan Pizza (R5): bottom row dough,
   tomato sauce, dough with bell pepper, vegetable, onion above (any dough); an assembly on dough makes it.
-- [ ] VD-52 Stuffed zucchinis (R6): an assembly on a roasted zucchini makes the boat (cooked meat, 250 mB milk) and the
+- [ ] **VD-52:** Stuffed zucchinis (R6): an assembly on a roasted zucchini makes the boat (cooked meat, 250 mB milk) and the
   bowl (2 roasted zucchini, cooked meat, tomato sauce); the grid and pot recipes are unchanged.
-- [ ] VD-53 Turnip Mutton Skewer (R10): shaped diagonal (stick, turnip, cooked mutton), no shapeless; assembly on a
+- [ ] **VD-53:** Turnip Mutton Skewer (R10): shaped diagonal (stick, turnip, cooked mutton), no shapeless; assembly on a
   stick. Vegetarian Burger (R11): shaped cabbage and tomato over the patty over bread; assembly on the cooked
   vegetarian patty. Simple, Egg and Loaded Hamburgers take the vegetarian patty in their shaped recipe; VD's shapeless
   versions gone. Raw vegetarian patty cooks in furnace, smoker, campfire.
-- [ ] VD-54 Fermented Garlic Honey is in `#creativedelight:food_family/preserve/pickle` (R8) after `/reload`.
+- [ ] **VD-54:** Fermented Garlic Honey is in `#creativedelight:food_family/preserve/pickle` (R8) after `/reload`.
 
 World and economy
 
-- [ ] VD-30 Depot houses appear in the 5 vanilla village styles at the pool weight set; their chests are Lootr chests.
-- [ ] VD-31 VD produce appears in the 9 chest types only as the pack's loot config adds it.
-- [ ] VD-32 The farmer buys VD produce; the wandering trader sells VD seeds, clove, sweet potato and leaf.
-- [ ] VD-33 Pigs and chickens breed with VD produce and seeds; parrots tame with VD seeds; villagers pick up VD produce.
-- [ ] VD-34 Every VD crop, seed and food composts.
-- [ ] VD-35 No VD advancement exists.
+- [ ] **VD-30:** Depot houses appear in the 5 vanilla village styles at the pool weight set; their chests are Lootr chests.
+- [ ] **VD-31:** VD produce appears in the 9 chest types only as the pack's loot config adds it.
+- [ ] **VD-32:** The farmer buys VD produce; the wandering trader sells VD seeds, clove, sweet potato and leaf.
+- [ ] **VD-33:** Pigs and chickens breed with VD produce and seeds; parrots tame with VD seeds; villagers pick up VD produce.
+- [ ] **VD-34:** Every VD crop, seed and food composts.
+- [ ] **VD-35:** No VD advancement exists.
 
 UI
 
-- [ ] VD-40 Names follow the pack's rules (Caesar Salad, Zucchini Seeds); every VD item in JEI has a
+- [ ] **VD-40:** Names follow the pack's rules (Caesar Salad, Zucchini Seeds); every VD item in JEI has a
   recipe or a use.
-- [ ] VD-41 Place a carrot cake and eat one slice, then more: the cut face shows the cake's inside texture, not the
+- [ ] **VD-41:** Place a carrot cake and eat one slice, then more: the cut face shows the cake's inside texture, not the
   frosted top.
 
 ## 9. History

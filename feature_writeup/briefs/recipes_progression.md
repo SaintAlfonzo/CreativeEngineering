@@ -87,9 +87,9 @@ recipes/cooking recheck, [recipes_cooking.md](../recipes_cooking.md) F2); the ov
   the gap back.
 
 ### Tests
-- **RP-09 Furnace variants:** JEI `minecraft:blast_furnace` and `minecraft:smoker` -> the two Quark recipes each; craft a
+- [ ] **RP-09 Furnace variants:** JEI `minecraft:blast_furnace` and `minecraft:smoker` -> the two Quark recipes each; craft a
   blast furnace from a deepslate furnace.
-- **RP-10 Cake:** JEI `minecraft:cake` -> FD milk bottle, Neapolitan, Create dough, oven baking.
+- [ ] **RP-10 Cake:** JEI `minecraft:cake` -> FD milk bottle, Neapolitan, Create dough, oven baking.
 - RP-05 stays as the umbrella check; RE-08 (dispenser) and RA-07 (compass) close the last two.
 
 ---
@@ -161,9 +161,9 @@ No recipe ids. Log tags `[jeiRemove]`, `[recipe_scan]` stay, so existing greps k
   this row (see `dump_recipes.js` lines 7-16 for why the event is not a full snapshot). Don't move it.
 
 ### Tests
-- **RP-11 Scan speed:** first world load -> `[recipe_scan] Scan complete. N ... in T ms`; note N and T next to the old
+- [ ] **RP-11 Scan speed:** first world load -> `[recipe_scan] Scan complete. N ... in T ms`; note N and T next to the old
   24 s; second `/reload` -> "Skipping". Supersedes the timing part of RP-01.
-- **RP-12 Scan hits:** `vintageimprovements:aluminum_sheet` is still listed with `vintageimprovements:pressing/aluminum_ingot`
+- [ ] **RP-12 Scan hits:** `vintageimprovements:aluminum_sheet` is still listed with `vintageimprovements:pressing/aluminum_ingot`
   (until `recipes/metal #1` removes that recipe), proving exact matching still finds hits.
 
 ---
@@ -224,7 +224,7 @@ for `tooling/conventions #2`).
   211 Creative Common files and IE's own), so a port would not clash.
 
 ### Tests
-- **RP-13 Dead folder:** `kubejs/recipes/` is gone; `/reload` logs nothing about it; JEI bone broth shows the two
+- [ ] **RP-13 Dead folder:** `kubejs/recipes/` is gone; `/reload` logs nothing about it; JEI bone broth shows the two
   `cooking.js` recipes. (If ported: an oak door in the IE sawmill -> 2 sticks + sawdust.)
 
 ---

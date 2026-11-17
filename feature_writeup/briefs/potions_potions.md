@@ -79,9 +79,9 @@ None.
 - The log count `[CE potions] added N item-agnostic potion mixes` drops by 3; update any note that quotes N.
 
 ### Tests
-- **PO-27 Luck once:** JEI -> Potion of Luck -> R: one brewing recipe per route; Create Automatic Brewing page shows one
+- [ ] **PO-27 Luck once:** JEI -> Potion of Luck -> R: one brewing recipe per route; Create Automatic Brewing page shows one
   awkward + clover -> Luck per bottle type (EF-05 covers the same).
-- **PO-28 Bad Luck from silverfish:** awkward + silverfish bottle -> Potion of Bad Luck; + redstone -> long (BB's step).
+- [ ] **PO-28 Bad Luck from silverfish:** awkward + silverfish bottle -> Potion of Bad Luck; + redstone -> long (BB's step).
 - PO-25 stays valid.
 
 ---
@@ -134,7 +134,7 @@ clover, `TODO` comment at `potions.js` line 86).
 - JEI and Create Automatic Brewing are rebuilt only at startup.
 
 ### Tests
-- **PO-29 Magic Resistance reagent:** thick + new reagent -> Magic Resistance on the stand, Create mixer and IE Mixer;
+- [ ] **PO-29 Magic Resistance reagent:** thick + new reagent -> Magic Resistance on the stand, Create mixer and IE Mixer;
   amethyst shard no longer brews it. Update PO-24 to the new reagent.
 
 ---
@@ -180,9 +180,9 @@ Decide how much a Potion of Saturation should feed, and give it a strong step if
 - AppleSkin shows the restore amount on the potion only if it reads effects; verify with the hunger bar instead.
 
 ### Tests
-- **PO-30 Saturation is instant:** at 10 hunger, drink a base Potion of Saturation with AppleSkin -> hunger +amp+1 at
+- [ ] **PO-30 Saturation is instant:** at 10 hunger, drink a base Potion of Saturation with AppleSkin -> hunger +amp+1 at
   once, no lingering effect icon.
-- **PO-31 Saturation cloud:** lingering Saturation potion and lingering Saturation bucket on yourself at low hunger;
+- [ ] **PO-31 Saturation cloud:** lingering Saturation potion and lingering Saturation bucket on yourself at low hunger;
   record how much they restore.
 
 ---
@@ -235,7 +235,7 @@ Recommended version (see Decisions):
 - `FluidTagInputMixin` matches NBT as a subset, so changing amounts doesn't affect matching.
 
 ### Tests
-- **PO-32 Lingerification rate:** IE Refinery, 1000 mB splash Resistance + 250 mB dragon's breath -> 1000 mB lingering
+- [ ] **PO-32 Lingerification rate:** IE Refinery, 1000 mB splash Resistance + 250 mB dragon's breath -> 1000 mB lingering
   Resistance (update PO-17).
 - PO-11, PO-14 unchanged.
 
@@ -335,9 +335,9 @@ Of the 12 total-overlap groups ([effects.md](../effects.md) 2.3, F5), trim the t
 - Existing worlds: players already caffeinated keep a big negative stat from before the change; harmless.
 
 ### Tests
-- **PO-34 Resilience gone:** JEI shows no Potion of Stability / Resilience recipe; "How Did We Get Here?" criteria no
+- [ ] **PO-34 Resilience gone:** JEI shows no Potion of Stability / Resilience recipe; "How Did We Get Here?" criteria no
   longer list Resilience; Knockback Resistance still brews (bear fur).
-- **PO-35 Caffeinated pauses rest:** scoreboard on `minecraft.time_since_rest`; drink coffee -> value stops rising; when
+- [ ] **PO-35 Caffeinated pauses rest:** scoreboard on `minecraft.time_since_rest`; drink coffee -> value stops rising; when
   the effect ends it resumes from the same value (not negative).
 
 ---
@@ -413,8 +413,8 @@ exists; potion ids stay in `potions.js` / the Java class (recommend not adding o
 - `PotionMixDedup` and the IE `EMPTY` skip need nothing new: these are plain `Mix` entries from real potions.
 
 ### Tests
-- **PO-36 New potions brew:** each base brew on the stand, Create mixer and IE Mixer; long version with redstone.
-- **PO-37 New potions everywhere:** splash, lingering, tipped arrow and potion bucket of each show a name (no raw key)
+- [ ] **PO-36 New potions brew:** each base brew on the stand, Create mixer and IE Mixer; long version with redstone.
+- [ ] **PO-37 New potions everywhere:** splash, lingering, tipped arrow and potion bucket of each show a name (no raw key)
   and give the effect.
 
 ---

@@ -94,7 +94,7 @@ No id changes. Incubation texture ids used by reference: `incubation:block/duck_
 - The emu nest base/item already reference Incubation's twig nest (fine as is).
 
 ### Tests
-- **NE-15 No copied assets:** `python3 tools/check_asset_copies.py` passes; `unzip -l` of the 1.1.0 jar has no
+- [ ] **NE-15 No copied assets:** `python3 tools/check_asset_copies.py` passes; `unzip -l` of the 1.1.0 jar has no
   `duck_eggs.png` / `goose_eggs.png` (or repainted ones).
 - NE-11 (reword after the repaint: duck and goose nests look different from each other and from the hay nest),
   NE-14 (crates), NE-03 to NE-05 (eggs still render on the right geometry).
@@ -195,10 +195,10 @@ New nest textures: see #2.
   `mob_spawns` rules already adding ducks and geese.
 
 ### Tests
-- **NE-16 Wild duck/goose nests:** new world, a swamp and a river bank -> now and then a duck or goose nest with 2-4
+- [ ] **NE-16 Wild duck/goose nests:** new world, a swamp and a river bank -> now and then a duck or goose nest with 2-4
   eggs on grass, ducks / geese nearby; never in a desert.
-- **NE-17 Wild emu nests:** a savanna -> emu nests with 2-4 emu eggs, emus nearby.
-- **NE-18 Gating:** Forge + Incubation + this jar + only the duck mod -> no emu nest feature, no errors (`/place
+- [ ] **NE-17 Wild emu nests:** a savanna -> emu nests with 2-4 emu eggs, emus nearby.
+- [ ] **NE-18 Gating:** Forge + Incubation + this jar + only the duck mod -> no emu nest feature, no errors (`/place
   feature incubation_additions:nest_emu` unknown); the same with only Alex's Mobs for the duck/goose features.
 
 ---

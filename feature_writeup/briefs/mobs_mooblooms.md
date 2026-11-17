@@ -122,8 +122,8 @@ fifth biome file `terralith:skylands` that is in no tag and not in `biome_config
 - `check_moobloom_data.py` can't check biome ids offline here (no `kubejs/exported/biome_data.json` in the repo).
 
 ### Tests
-- **MB-97 (reword):** skylands spring, new chunks -> every cow is a moobloom, the 7 spring variants in roughly equal numbers.
-- **MB-99 Skylands summer and autumn:** `/locate biome terralith:skylands_summer` / `_autumn`, new chunks -> no cows;
+- [ ] **MB-97 (reword):** skylands spring, new chunks -> every cow is a moobloom, the 7 spring variants in roughly equal numbers.
+- [ ] **MB-99 Skylands summer and autumn:** `/locate biome terralith:skylands_summer` / `_autumn`, new chunks -> no cows;
   summer an even mix of sunbloom / moobloom / oxeyebloom, autumn of moobloom / sunbloom / rosebloom.
 - Offline: `check_moobloom_data.py` OK with 38 rules.
 
@@ -210,7 +210,7 @@ Status Planned / Work new jar / TODO `textures/art #2` (scratchpad 2026-10-19)
   11 lines; if others change, make the mask "identical on all coats but one" or a fixed template mask.
 
 ### Tests
-- **MB-104 Azaleabloom coat:** `/summon moremooblooms:moobloom ~ ~ ~ {Variant:"moremooblooms:azaleabloom"}` ->
+- [ ] **MB-104 Azaleabloom coat:** `/summon moremooblooms:moobloom ~ ~ ~ {Variant:"moremooblooms:azaleabloom"}` ->
   brown horns, muzzle and hooves, more pink rings; the egg colors still look right for all 11 eggs in JEI.
 
 ---
@@ -308,13 +308,13 @@ its flowers, better (short, human) info text.
   missing, so `v.pool()` is safe to list.
 
 ### Tests
-- **MB-100 JEI shearing:** JEI uses of shears -> "Moobloom Shearing", 11 pages; rosebloom shows rose bush 1.5,
+- [ ] **MB-100 JEI shearing:** JEI uses of shears -> "Moobloom Shearing", 11 pages; rosebloom shows rose bush 1.5,
   poppy 1.2, red tulip 0.3 per shear; witherbloom wither rose 0.3; the rendered moobloom cycles through every pool
   flower; the cow egg slot appears (and is gone with `shearBareToCow = false` after a restart).
-- **MB-101 JEI breeding outputs:** rosebloom egg -> pages for rosebloom + rosebloom -> rosebloom, rosebloom +
+- [ ] **MB-101 JEI breeding outputs:** rosebloom egg -> pages for rosebloom + rosebloom -> rosebloom, rosebloom +
   lilybloom -> peonybloom 35 % / random 65 %, the random-calf page (no witherbloom); each parent shows its food.
-- **MB-102 Info text:** each egg's info page reads in a few short lines, numbers match the config.
-- **MB-103 No BB moobloom in JEI:** JEI search "moobloom" -> no Just Enough Breeding page for Buzzier Bees' moobloom.
+- [ ] **MB-102 Info text:** each egg's info page reads in a few short lines, numbers match the config.
+- [ ] **MB-103 No BB moobloom in JEI:** JEI search "moobloom" -> no Just Enough Breeding page for Buzzier Bees' moobloom.
 - MB-71, MB-81 (existing) still pass.
 
 ---
@@ -346,7 +346,7 @@ The sunflower on a sunbloom shown in the Moobloom Conversion tab faces the viewe
 None; fix at the layer if the world is wrong too.
 
 ### Tests (MB-)
-- MB-105 (proposed): sunbloom in the world and on all three Moobloom JEI tabs: the sunflower head faces the viewer or
+- [ ] **MB-105:** (proposed) sunbloom in the world and on all three Moobloom JEI tabs: the sunflower head faces the viewer or
   the cow's front, consistently.
 
 ---

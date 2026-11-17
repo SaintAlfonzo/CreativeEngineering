@@ -463,11 +463,11 @@ None.
 - [ ] **RC-11 Golden carrot:** arc furnace, carrot + 3 gold nuggets -> golden carrot.
 - [ ] **RC-12 Enchanted golden apple:** assembly on a golden apple, 4 loops -> enchanted golden apple.
 - [ ] **RC-13 Ruby chocolate:** heated mixer with milk, dragon's breath, cocoa beans, sugar -> 250 mB ruby chocolate.
-- [ ] **RC-15 Cornmeal item** (tag: scratch server PASSED 2026-10-22, SQ-OF-04; name and texture: in game): shows as "Cornmeal" with the yellow flour texture; in `#forge:flour/corn`.
-- [ ] **RC-16 Cornmeal machines** (knife, IE crusher, PNC recipes, Corn Delight ids gone: scratch server PASSED 2026-10-22, SQ-OF-04; crushing wheels, millstone, JEI: in game): crushing wheels on corn give 1-2 cornmeal and sometimes a kernel; the millstone
+- [ ] **RC-15 Cornmeal item:** (tag: scratch server PASSED 2026-10-22, SQ-OF-04; name and texture: in game) shows as "Cornmeal" with the yellow flour texture; in `#forge:flour/corn`.
+- [ ] **RC-16 Cornmeal machines:** (knife, IE crusher, PNC recipes, Corn Delight ids gone: scratch server PASSED 2026-10-22, SQ-OF-04; crushing wheels, millstone, JEI: in game) crushing wheels on corn give 1-2 cornmeal and sometimes a kernel; the millstone
   gives the same (from the 2026-10-20 change; on 1.0.9 it may take no corn); a knife on corn gives 2 kernels and no straw; IE crusher on corn -> 2 cornmeal (+ kernel half the time), on a crate
   -> 18; PNC pressure chamber 4 kernels -> 3. JEI shows no Corn Delight corn -> kernels IE crusher recipe.
-- [ ] **RC-17 Corn recipes** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-04, no raw tortilla or batter recipe takes corn; crafting and washing: in game): raw tortilla and cornbread batter need cornmeal (corn no longer works); splashing corn
+- [ ] **RC-17 Corn recipes:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-04, no raw tortilla or batter recipe takes corn; crafting and washing: in game) raw tortilla and cornbread batter need cornmeal (corn no longer works); splashing corn
   gives nothing, washing cornmeal gives a raw tortilla; pancakes accept cornmeal.
 - [ ] **RC-18 Pie crust:** milk bucket (and a milk bottle) in a bowl of 3 flour -> 2 crusts, bucket returned; works with
   cornmeal; compacting 3 flour + 250 mB milk -> 2; 3 flour + egg still makes 6 dough.
@@ -478,36 +478,36 @@ None.
 - [ ] **RC-54 Cornmeal mortar and washing:** 2 corn or 2 wild corn + mortar -> 3 cornmeal (1 corn: no recipe), mortar
   back with 1 damage; a corn crate or kernel bag + mortar: no recipe; cornmeal through a fan in water -> raw tortillas
   1:1; wild corn on crushing wheels and the Millstone -> 1-2 cornmeal, sometimes a kernel.
-- [ ] **RC-55 Heatless meals** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): JEI shows the shapeless routes for vegetable soup, vegetable noodles, ratatouille and
+- [ ] **RC-55 Heatless meals:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game) JEI shows the shapeless routes for vegetable soup, vegetable noodles, ratatouille and
   corn soup; each crafts by hand; the same items in a basin under an unheated mixer do nothing.
-- [ ] **RC-56 Cooked inputs** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): fried rice, baked cod stew, chicken soup and mushroom rice need the cooked ingredients
+- [ ] **RC-56 Cooked inputs:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game) fried rice, baked cod stew, chicken soup and mushroom rice need the cooked ingredients
   (fried egg, baked potato, tomato sauce, cooked veggie); the raw ones no longer craft them.
-- [ ] **RC-57 Mutton wrap** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): needs a tortilla in the grid and on the deployer belt; bread no longer works.
-- [ ] **RC-58 Omelet and eggs** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): vegetable omelet pot needs fried eggs; omelette + cheese + onion + carrot + bowl crafts
+- [ ] **RC-57 Mutton wrap:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game) needs a tortilla in the grid and on the deployer belt; bread no longer works.
+- [ ] **RC-58 Omelet and eggs:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game) vegetable omelet pot needs fried eggs; omelette + cheese + onion + carrot + bowl crafts
   one from 2 omelettes; scrambled eggs take 3 eggs.
-- [ ] **RC-59 Fruit bowls** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): exotic fruits accept a lemon in place of melon; fruit salad accepts a pineapple slice;
+- [ ] **RC-59 Fruit bowls:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game) exotic fruits accept a lemon in place of melon; fruit salad accepts a pineapple slice;
   fruit salad assembly on a bowl gives 2.
-- [ ] **RC-60 Burgers** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): each burger has only a shaped grid recipe; JEI shows no milk cheeseburger; each assembly on
+- [ ] **RC-60 Burgers:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game) each burger has only a shaped grid recipe; JEI shows no milk cheeseburger; each assembly on
   bread works (the egg burger on a beef patty); a mechanical crafter with a burger pattern does nothing; CCK's bacon,
   chicken and egg sandwich assemblies still work.
-- [ ] **RC-61 Quiche** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game): one shaped recipe in JEI cycling bacon / mushroom; one assembly; mushrooms first works.
-- [ ] **RC-62 Shepherd's pie** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game): 3 cooked mutton chops + a cheese wedge craft it; milk no longer works.
-- [ ] **RC-63 Meal assemblies** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game): shepherd's pie, horror lasagna (2), stuffed potato, crispy skewer, crawling sandwich and
+- [ ] **RC-61 Quiche:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-07; crafting and JEI: in game) one shaped recipe in JEI cycling bacon / mushroom; one assembly; mushrooms first works.
+- [ ] **RC-62 Shepherd's pie:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game) 3 cooked mutton chops + a cheese wedge craft it; milk no longer works.
+- [ ] **RC-63 Meal assemblies:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game) shepherd's pie, horror lasagna (2), stuffed potato, crispy skewer, crawling sandwich and
   steak and potatoes each run on a belt with deployers / spout; a bowl under a spout of tomato sauce still gives tomato
   sauce.
-- [ ] **RC-64 Shaped only** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game): crispy skewer, crawling sandwich and steak and potatoes have only shaped grid recipes.
+- [ ] **RC-64 Shaped only:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-08; crafting and JEI: in game) crispy skewer, crawling sandwich and steak and potatoes have only shaped grid recipes.
 - [ ] **RC-65 Feast Plating tab:** JEI "Feast Plating" tab lists roast chicken, honey glazed ham, shepherd's pie, rice
   roll medley, stuffed pumpkin, nachos, popcorn box, pineapple fried rice, pizza and stuffed hoglin (2 pages), plus any
   KubeJS Delight feast. Roast chicken: 4 bowls -> 4 roast chicken, leftovers bowl + bone meal; popcorn box: empty
   hand, 4 caramel popcorn, paper "given"; pizza: any hand, 4 slices. Uses (U) on a bowl shows the tab; R on a roast
   chicken plate shows it. One plating in game matches the page. `latest.log` has `[jei] Feast Plating: N page(s)`.
-- [ ] **RC-66 Expensive meals** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-09; crafting and JEI: in game): JEI shows a shapeless grid recipe from cooked ingredients for chorus stew, endermite
+- [ ] **RC-66 Expensive meals:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-09; crafting and JEI: in game) JEI shows a shapeless grid recipe from cooked ingredients for chorus stew, endermite
   stew, crab pasta, pumpkin soup, pasta with meatballs, dumplings (1), cavern explorer stew, squid ink pasta; none
   runs in an unheated basin. Craft one (pasta with meatballs: 2 beef patties + pasta + tomato sauce).
-- [ ] **RC-67 Squid ink pasta mixing** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-09; crafting and JEI: in game): heated basin with 250 mB ink + 250 mB tomato sauce, 2 pasta, a raw cod, 2
+- [ ] **RC-67 Squid ink pasta mixing:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-09; crafting and JEI: in game) heated basin with 250 mB ink + 250 mB tomato sauce, 2 pasta, a raw cod, 2
   bowls -> 2 squid ink pasta.
-- [ ] **RC-68 Dog food** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-11; crafting and JEI: in game): rotten flesh + bone meal + 2 cooked meat + cooked rice crafts dog food; not in an unheated basin.
-- [ ] **RC-69 Frying** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-10; crafting and JEI: in game): JEI shows no Thermopneumatic chips or tempura and no plant-oil tempura mixing; names read Fish
+- [ ] **RC-68 Dog food:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-11; crafting and JEI: in game) rotten flesh + bone meal + 2 cooked meat + cooked rice crafts dog food; not in an unheated basin.
+- [ ] **RC-69 Frying:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-10; crafting and JEI: in game) JEI shows no Thermopneumatic chips or tempura and no plant-oil tempura mixing; names read Fish
   Tempura, Raw Fish Tempura, Fries, Fish and Chips. Raw tempura from a pufferfish + batter. Pot: cooking oil + raw
   tempura -> Fish Tempura; cooking oil + 2 potato slices (Rustic) -> 2 Fries, also with diced potatoes; cooking oil +
   a raw cod + 2 slices with paper in the plate slot -> Fish and Chips; fries + cooked fish +
@@ -516,29 +516,29 @@ None.
   arc 4 ingots; both 5 before 2026-11-16) accept rose gold nuggets / MCA rose gold ingots as well as gold; enchanted golden apple assembly accepts
   a rose gold block. (Scratch server 2026-10-22, `tools/golden_food_probe.js`: every gold input of these recipes
   accepts its rose gold twin, 16 of 16; the crafting itself in game.)
-- [ ] **RC-71 Chorus juice fluid** (recipe ids: scratch server PASSED 2026-10-22, SQ-DR-01; client: JEI, the basin and spout runs): JEI shows the Chorus Juice fluid with an Absorption line. Heated basin: chorus
+- [ ] **RC-71 Chorus juice fluid:** (recipe ids: scratch server PASSED 2026-10-22, SQ-DR-01; client: JEI, the basin and spout runs) JEI shows the Chorus Juice fluid with an Absorption line. Heated basin: chorus
   fruit + sugar + 250 mB water -> 250 mB; spout fills a bottle, drain empties one, Bottling Machine fills one.
-- [ ] **RC-72 Chorus juice pot** (id: scratch server PASSED 2026-10-22, SQ-DR-01; client: pot and JEI): Cooking Pot, 2 chorus fruit + sugar with bottles -> 2 Chorus Juice; not in a basin
+- [ ] **RC-72 Chorus juice pot:** (id: scratch server PASSED 2026-10-22, SQ-DR-01; client: pot and JEI) Cooking Pot, 2 chorus fruit + sugar with bottles -> 2 Chorus Juice; not in a basin
   as a Slice & Dice recipe.
-- [ ] **RC-73 Berry matcha latte** (ids, ice tag, bottle remainder: scratch server PASSED 2026-10-22, SQ-DR-02, exactly 2 berry latte recipes; client: JEI, kettle screen, the grid bottle): JEI has no recipe that takes a glass bottle plus a latte. Kettle: matcha latte +
+- [ ] **RC-73 Berry matcha latte:** (ids, ice tag, bottle remainder: scratch server PASSED 2026-10-22, SQ-DR-02, exactly 2 berry latte recipes; client: JEI, kettle screen, the grid bottle) JEI has no recipe that takes a glass bottle plus a latte. Kettle: matcha latte +
   sweet berries (no water) with a glass bottle -> berry matcha latte, the leftover bottle goes to the leftover slot.
   Grid: latte + berries + ice -> berry latte and one glass bottle back.
-- [ ] **RC-74 Milk from jars** (tank and inventory part: scratch server PASSED 2026-10-22, SQ-DR-03, both jars 1000 -> 750 mB and back; client: sound, a real player, creative): glass bottle on a Cow in a Jar with 250 mB or more -> Farmer's Delight milk bottle,
+- [ ] **RC-74 Milk from jars:** (tank and inventory part: scratch server PASSED 2026-10-22, SQ-DR-03, both jars 1000 -> 750 mB and back; client: sound, a real player, creative) glass bottle on a Cow in a Jar with 250 mB or more -> Farmer's Delight milk bottle,
   bottle fill sound; on an empty Milk Jar nothing happens. Milk bottle on a Milk Jar adds 250 mB (refused when
   full). Buckets still fill and empty both jars. Creative keeps the bottle.
-- [ ] **RC-75 Broth soups and pastas** (ids: scratch server PASSED 2026-10-22, SQ-IN-01, 13 ids; client: crafting, the basin): grid: bone broth + 2 cooked kangaroo + carrot + beetroot -> kangaroo stew; bone
+- [ ] **RC-75 Broth soups and pastas:** (ids: scratch server PASSED 2026-10-22, SQ-IN-01, 13 ids; client: crafting, the basin) grid: bone broth + 2 cooked kangaroo + carrot + beetroot -> kangaroo stew; bone
   broth + milk + 3 carrots -> carrot soup; 2 cooked lobster tails + pasta + tomato sauce -> lobster
   pasta; 2 cooked duck + pasta + carrot + baked potato + bowl -> duck noodles. The kangaroo stew items in an unheated
   basin do nothing.
-- [ ] **RC-76 Ice cubes** (ids and ice inputs: scratch server PASSED 2026-10-22, SQ-IN-02; client: JEI, the hammer on the board, the CfB book): JEI shows no pickaxe ice cutting. Hammer on ice on a cutting board -> 4 ice cubes (hammer
+- [ ] **RC-76 Ice cubes:** (ids and ice inputs: scratch server PASSED 2026-10-22, SQ-IN-02; client: JEI, the hammer on the board, the CfB book) JEI shows no pickaxe ice cutting. Hammer on ice on a cutting board -> 4 ice cubes (hammer
   loses 1); hammer + ice in the grid -> 4; IE crusher ice -> 3. Vanilla ice crafts a Neapolitan ice cream and a melon
   popsicle (Abnormals Delight's recipe) takes ice cubes; an ice cream crafts in the CfB crafting book with ice only from a fridge with the ice unit.
   9 cubes still make 1 ice.
-- [ ] **RC-77 Egg solution** (fluid, tag and ids: scratch server PASSED 2026-10-22, SQ-FL-01; client: JEI, the machine runs): after a restart JEI shows the Egg Solution fluid. Unheated basin: egg + 250 mB milk ->
+- [ ] **RC-77 Egg solution:** (fluid, tag and ids: scratch server PASSED 2026-10-22, SQ-FL-01; client: JEI, the machine runs) after a restart JEI shows the Egg Solution fluid. Unheated basin: egg + 250 mB milk ->
   500 mB. Unheated: 3 flour + 250 mB -> 6 dough; 2 cornmeal + 250 mB -> 3 cornbread batter. Heated: sugar + flour +
   250 mB -> 5 pancakes; bowl + 750 mB -> scrambled eggs. Quiche assembly in JEI has a second recipe with one egg
   solution spout step; run it on a pie crust -> quiche. No KubeJS errors for cooking.js in `logs/kubejs/server.log`.
-- [ ] **RC-78 Frosting fluid** (fluid, tag and ids: scratch server PASSED 2026-10-22, SQ-FL-02; client: the machine runs, JEI): heated basin sugar + 250 mB milk -> 500 mB frosting; compactor over a basin with
+- [ ] **RC-78 Frosting fluid:** (fluid, tag and ids: scratch server PASSED 2026-10-22, SQ-FL-02; client: the machine runs, JEI) heated basin sugar + 250 mB milk -> 500 mB frosting; compactor over a basin with
   250 mB -> 1 Frosting item; spout 750 mB on a Baked Cake Base -> Cake. JEI lists the Frosting fluid next to the item.
 - [ ] **RC-14 Cultivated beef:** cow sample syringe + culture base + slime ball -> beef culture; heated mixer with diluted
   bone meal and plant oil -> 3; knife -> 4 raw beef.
@@ -603,11 +603,11 @@ None.
 - [ ] **RC-185 Nut milk jar and one-bottle jars:** (SQ-PJL-05) pot 2 peanuts + sugar in an Empty Mason Jar -> Nut Milk Jar;
   bottle + empty jar <-> jar + glass bottle 1 to 1; drinking it removes one curable effect and leaves the jar.
   Supplementaries jar: one Cherry Jam Jar fills one unit of the jar's contents [3].
-- [ ] **RC-186 Arc gilding 4** (SQ-RC-01): Arc Furnace, a carrot + 4 gold nuggets -> golden carrot, an apple + 4 gold
+- [ ] **RC-186 Arc gilding 4:** (SQ-RC-01) Arc Furnace, a carrot + 4 gold nuggets -> golden carrot, an apple + 4 gold
   ingots -> golden apple; a goldenfood food the same with 4 nuggets; JEI shows 4, not 5.
-- [ ] **RC-187 Jars and bottles 4** (SQ-RC-02): crafting a mason jar gives 4 Empty Mason Jars, 3 glass in a V gives 4
+- [ ] **RC-187 Jars and bottles 4:** (SQ-RC-02) crafting a mason jar gives 4 Empty Mason Jars, 3 glass in a V gives 4
   Glass Bottles; JEI shows one glass bottle recipe (Creative Delight's), not vanilla's 3.
-- [ ] **RC-188 Banana bunch** (SQ-RC-03): a knife on a Cutting Board holding a Banana Bunch gives 6 bananas; right-clicking
+- [ ] **RC-188 Banana bunch:** (SQ-RC-03) a knife on a Cutting Board holding a Banana Bunch gives 6 bananas; right-clicking
   a bunch in hand still opens it as Neapolitan does.
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PJL-04 PASS (one Creative Delight filling and emptying recipe per jam jar and jello).

@@ -306,7 +306,7 @@ Survival, Normal difficulty. Check hidden effects with `/data get entity @s Acti
 - [ ] **AE-19 Dragon bow (F4)** (on-hit tables and a main-hand hit: scratch server PASSED 2026-10-22, SQ-GM-02, slowness 3 + glowing 0, no Invisibility
   on the target; held effects need a real ticking player: in game): holding it -> Invisibility, no Slowness or Glowing on you. Shoot a zombie with the bow
   in the main hand -> it gets Slowness IV 2.5 s and Glowing 25 s; tooltip lists Invisibility under held.
-- [ ] **AE-20 Dragon crossbow (F4)** (same split as AE-19; on-hit: scratch server PASSED 2026-10-22, SQ-GM-02, exsanguination 1 + weakness 2): holding it -> Resistance II, no bleeding or Weakness on you. Shoot a zombie -> it
+- [ ] **AE-20 Dragon crossbow (F4):** (same split as AE-19; on-hit: scratch server PASSED 2026-10-22, SQ-GM-02, exsanguination 1 + weakness 2) holding it -> Resistance II, no bleeding or Weakness on you. Shoot a zombie -> it
   gets Exsanguination II 7.5 s and Weakness III 12.5 s.
 - [ ] **AE-21 Held in either hand:** dragon axe in the off hand -> Jump Boost III still applies.
 - [ ] **AE-22 Magic Resistance cut:** `/effect give @s creativeengineering:magic_resistance 60 0`, then

@@ -754,162 +754,162 @@ Briefs: [dishes_jams](briefs/dishes_jams.md), [dishes_pickles-and-ferments](brie
 
 Crops and worldgen
 
-- [ ] VTD-01 Oats and peanuts plant on farmland, Rich Farmland and Fertile Soil, grow to age 7 and drop produce (and
+- [ ] **VTD-01:** Oats and peanuts plant on farmland, Rich Farmland and Fertile Soil, grow to age 7 and drop produce (and
   seeds where they have them); a knife on ripe oats gives straw; right-click and the hoe area harvest and replant them.
-- [ ] VTD-02 **Cucumber replant mark:** right-click at age 7 gives 1 to 2 and drops to age 5; note whether Quark's
+- [ ] **VTD-02 Cucumber replant mark:** right-click at age 7 gives 1 to 2 and drops to age 5; note whether Quark's
   generic replant fires instead; with a hoe over an area, note what each plant does.
-- [ ] VTD-03 **Ghost pepper replant mark:** same as VTD-02. Seeds plant on Soul Soil, Rich Soul Soil and Fertile Soul Soil; the seed tooltip names those three; they
+- [ ] **VTD-03 Ghost pepper replant mark:** same as VTD-02. Seeds plant on Soul Soil, Rich Soul Soil and Fertile Soul Soil; the seed tooltip names those three; they
   refuse nylium, farmland, dirt and the rest.
-- [ ] VTD-04 Zucchini (Veggies, `VD-25`) with a hoe over an area: picks and drops back 3 ages without double-firing.
-- [ ] VTD-05 WTHIT shows a growth line on every Vintage crop.
-- [ ] VTD-06 Wild oats, peanuts and cucumbers appear only where their `wild_crops.json` rules name, on any dirt soil
+- [ ] **VTD-04:** Zucchini (Veggies, `VD-25`) with a hoe over an area: picks and drops back 3 ages without double-firing.
+- [ ] **VTD-05:** WTHIT shows a growth line on every Vintage crop.
+- [ ] **VTD-06:** Wild oats, peanuts and cucumbers appear only where their `wild_crops.json` rules name, on any dirt soil
   (Grass, Podzol, Rich Soil, Fertile Soil, IW soils); a wild plant can be placed by hand on each of them.
-- [ ] VTD-07 Wild ghost peppers appear in crimson and warped forests on nylium and nowhere else in the Nether.
-- [ ] VTD-08 No gearo bush exists. The Magic Peanut drops from ripe peanuts at about 1 %; planted, it grows a magic vine tree
+- [ ] **VTD-07:** Wild ghost peppers appear in crimson and warped forests on nylium and nowhere else in the Nether.
+- [ ] **VTD-08:** No gearo bush exists. The Magic Peanut drops from ripe peanuts at about 1 %; planted, it grows a magic vine tree
   with Lush Grass under it and an 80 % Golden Egg on top; magic vine logs cut to Vine Tiles; Vine Net and Lush Grass exist.
-- [ ] VTD-08b Vine tiles come only from cutting a stripped magic vine (cutting board and Create); slab and stairs from tiles.
-- [ ] VTD-47 The test set verdict: after play, write keep / purge for the magic vine tree line into S1.
-- [ ] VTD-08a Lush Grass: bone meal places flower forest / meadow / grass features; a hoe turns it into Rich Soil
+- [ ] **VTD-08b:** Vine tiles come only from cutting a stripped magic vine (cutting board and Create); slab and stairs from tiles.
+- [ ] **VTD-47 The test set verdict:** after play, write keep / purge for the magic vine tree line into S1.
+- [ ] **VTD-08a Lush Grass:** bone meal places flower forest / meadow / grass features; a hoe turns it into Rich Soil
   Farmland; a tree grown beside it leaves it as grass.
-- [ ] VTD-09 A Golden Egg block drops the reward table.
+- [ ] **VTD-09:** A Golden Egg block drops the reward table.
 
 Machines
 
-- [ ] VTD-10 Pickling jar: 5 cucumbers + salt -> pickle; hopper in from the top, out from the bottom.
-- [ ] VTD-11 The jar takes salt dust in every salt recipe (since the salt merge, item_merges.md 2.9, The Salt's salt
+- [ ] **VTD-10 Pickling jar:** 5 cucumbers + salt -> pickle; hopper in from the top, out from the bottom.
+- [ ] **VTD-11:** The jar takes salt dust in every salt recipe (since the salt merge, item_merges.md 2.9, The Salt's salt
   is salt dust in any inventory; no recipe names `salt:salt`).
-- [ ] VTD-12 Evaporator next to water grows salt layers; salt dust places and thickens a layer; salt bucket -> 3 dust.
-- [ ] VTD-13 Cheese mold: 4 curds -> wheel after a random tick -> slices; JEI explains it.
-- [ ] VTD-14 Mason jars stack 1 to 4 on a block; jar + 3 bottles <-> 3 bottles.
-- [ ] VTD-15 Fermented garlic honey is made in the pickling jar.
-- [ ] VTD-16 The Brewin' pickling recipes (pickled pickles, kimchi) are made in the jar and no longer in the keg; the
+- [ ] **VTD-12:** Evaporator next to water grows salt layers; salt dust places and thickens a layer; salt bucket -> 3 dust.
+- [ ] **VTD-13 Cheese mold:** 4 curds -> wheel after a random tick -> slices; JEI explains it.
+- [ ] **VTD-14:** Mason jars stack 1 to 4 on a block; jar + 3 bottles <-> 3 bottles.
+- [ ] **VTD-15:** Fermented garlic honey is made in the pickling jar.
+- [ ] **VTD-16:** The Brewin' pickling recipes (pickled pickles, kimchi) are made in the jar and no longer in the keg; the
   keg still makes beer.
 
 Food and recipes
 
-- [ ] VTD-20 Every Vintage food has a food type tag and the type's values.
-- [ ] VTD-20a Oat dough works in the `#forge:dough` recipes (cake base, pie crust, cookie dough, dumplings, cucumber
+- [ ] **VTD-20:** Every Vintage food has a food type tag and the type's values.
+- [ ] **VTD-20a:** Oat dough works in the `#forge:dough` recipes (cake base, pie crust, cookie dough, dumplings, cucumber
   dough); JEI lists it in those recipes. Cucumber dough does not.
-- [ ] VTD-21 Pizzas bake in the oven; oat bread follows the pack's bread chain.
-- [ ] VTD-22 Each Vintage pot meal has a heatless grid route where the rule says so.
-- [ ] VTD-23 The 6 custom-effect brews come out of the jar (Goblin's Piss with a fermented spider eye, not a gearo berry); record how the potion mixers and fluid handle them.
-- [ ] VTD-24 Vinegar cans: salad + vinegar + empty can -> a can; vinegar appears as a cooking ingredient only where a
+- [ ] **VTD-21:** Pizzas bake in the oven; oat bread follows the pack's bread chain.
+- [ ] **VTD-22:** Each Vintage pot meal has a heatless grid route where the rule says so.
+- [ ] **VTD-23:** The 6 custom-effect brews come out of the jar (Goblin's Piss with a fermented spider eye, not a gearo berry); record how the potion mixers and fluid handle them.
+- [ ] **VTD-24 Vinegar cans:** salad + vinegar + empty can -> a can; vinegar appears as a cooking ingredient only where a
   food rule says so.
-- [ ] VTD-25 Placed jars, pizzas and the cheese mold show the placeable tooltip.
-- [ ] VTD-26 Every liquid the port adds (the 8 jar contents, nut milk) can be put in a Supplementaries jar.
-- [ ] VTD-27 No Vintage food or potion gives Dehydrated; no Dehydrated effect, potion, brewing mix or salt dust awkward
+- [ ] **VTD-25:** Placed jars, pizzas and the cheese mold show the placeable tooltip.
+- [ ] **VTD-26:** Every liquid the port adds (the 8 jar contents, nut milk) can be put in a Supplementaries jar.
+- [ ] **VTD-27:** No Vintage food or potion gives Dehydrated; no Dehydrated effect, potion, brewing mix or salt dust awkward
   potion step exists (check JEI, `/effect give`, the brewing stand with salt dust).
 
 Loot, mobs, geese, hats
 
-- [ ] VTD-30 None of the Vintage chest tables is reachable from any vanilla or pack chest; `/loot` can still roll them.
-- [ ] VTD-31 Mob food works (chickens, parrots, pigs, villagers) and the audit note is written.
-- [ ] VTD-32 Geese: with the chance raised for the test (the default is 1 in 1000), a goose sometimes drops a Golden Egg
+- [ ] **VTD-30:** None of the Vintage chest tables is reachable from any vanilla or pack chest; `/loot` can still roll them.
+- [ ] **VTD-31:** Mob food works (chickens, parrots, pigs, villagers) and the audit note is written.
+- [ ] **VTD-32 Geese:** with the chance raised for the test (the default is 1 in 1000), a goose sometimes drops a Golden Egg
   on the ground instead of an egg; it never walks to a nest for that lay; a golden egg is never found in a goose nest.
-- [ ] VTD-32a Golden egg and walls: a goose standing against a wall or in a corner with open ground within 3 blocks drops
+- [ ] **VTD-32a Golden egg and walls:** a goose standing against a wall or in a corner with open ground within 3 blocks drops
   the golden egg on the open ground, not against the wall; in a closed 1x1 pen it drops where it stands.
-- [ ] VTD-35 Century egg: the jar takes any egg (hen, duck, goose, emu) + coal + salt and gives a century egg after 3
+- [ ] **VTD-35 Century egg:** the jar takes any egg (hen, duck, goose, emu) + coal + salt and gives a century egg after 3
   hours.
-- [ ] VTD-33 Vintage chef hats exist in 16 colors; Simple Hats' chef's hat is gone from hat bags and recipes.
-- [ ] VTD-34 Advancement files are present in the jar and the pack still drops all advancements at load.
+- [ ] **VTD-33:** Vintage chef hats exist in 16 colors; Simple Hats' chef's hat is gone from hat bags and recipes.
+- [ ] **VTD-34:** Advancement files are present in the jar and the pack still drops all advancements at load.
 
 Overlap review and UI
 
-- [ ] VTD-40 **Overlap review:** for each `*overlaps w/*` row in §3.1, compare both versions in JEI, in the shared tag
+- [ ] **VTD-40 Overlap review:** for each `*overlaps w/*` row in §3.1, compare both versions in JEI, in the shared tag
   recipes, in cans and in food types; write keep both / keep one / merge back into §3.1.
-- [ ] VTD-45 Names audit fixes; every Vintage item in JEI has a recipe or a use.
-- [ ] VTD-46 Mixed Seeds (§2.3a, port `-10`): use a stack of 20 on tilled farmland; each use plants wheat, beetroot, cabbage, a
+- [ ] **VTD-45:** Names audit fixes; every Vintage item in JEI has a recipe or a use.
+- [ ] **VTD-46:** Mixed Seeds (§2.3a, port `-10`): use a stack of 20 on tilled farmland; each use plants wheat, beetroot, cabbage, a
   melon stem or a pumpkin stem (all five seen over 20), one seed spent per planting, none in creative; used on grass or
   stone it does nothing and is kept. JEI shows its info page; tooltip "Plants a random crop".
-- [ ] VTD-79 Mixed Seeds loot: break about 100 grass with an empty hand and see a few Mixed Seeds (2 %); with shears none.
+- [ ] **VTD-79 Mixed Seeds loot:** break about 100 grass with an empty hand and see a few Mixed Seeds (2 %); with shears none.
   `/loot` the village plains house table 20 times: Mixed Seeds turn up now and then.
-- [ ] VTD-48 **Burgers:** Cheese Burger is shaped (salad, tomato, onion / cheese slice, patty / bread) with a beef or
+- [ ] **VTD-48 Burgers:** Cheese Burger is shaped (salad, tomato, onion / cheese slice, patty / bread) with a beef or
   vegetarian patty; a flaxen wedge in the cheese slot gives Delightful's Cheeseburger instead. The Deluxe Burger is
   shaped (salad, tomato, onion / bacon, patty, fried egg / cheese slice, bread). JEI shows one sequenced assembly
   each (cheese burger on bread, deluxe on a beef patty), none in the Create mixer or mechanical crafter.
-- [ ] VTD-49 **Stuffed burrito:** a tortilla, beef patty, salad, tomato, cheese and a ghost pepper or roasted bell
+- [ ] **VTD-49 Stuffed burrito:** a tortilla, beef patty, salad, tomato, cheese and a ghost pepper or roasted bell
   pepper; no bread recipe; an assembly on a tortilla starting with the pepper.
-- [ ] VTD-50 **Manual only and heatless:** PB & J and Cucumber Salad craft by hand only; Cheese Pasta (pasta, 3
+- [ ] **VTD-50 Manual only and heatless:** PB & J and Cucumber Salad craft by hand only; Cheese Pasta (pasta, 3
   cheese, bowl), Pad Thai (pasta, ghost pepper, 2 cooked chicken cuts, nut mash bottle, roasted peanut, bowl) and
   Pickle Soup (bone broth, 2 pickles, carrot, baked potato, beetroot, salad) craft in the grid and not in the
   unheated mixer.
-- [ ] VTD-51 **Dough and cookies:** Oat Dough does not smelt or smoke into bread; 3 Raw Oats still craft Bread.
+- [ ] **VTD-51 Dough and cookies:** Oat Dough does not smelt or smoke into bread; 3 Raw Oats still craft Bread.
   Cookie dough + 2 Raw Oats bakes 12 Oatmeal Cookies on the baking sheet; no oatmeal cookie grid recipe.
-- [ ] VTD-52 **Veggies compat folded:** Cesar Salad takes garlic or cheese, the Stuffed Zucchini Boat milk or cheese,
+- [ ] **VTD-52 Veggies compat folded:** Cesar Salad takes garlic or cheese, the Stuffed Zucchini Boat milk or cheese,
   both by hand only; the Chicken Fajitas Wrap has no dough recipe.
-- [ ] VTD-53 **Types, fluids, compost:** `/dumpfood` then `python3 tools/food_catalog.py --check` lists no new
+- [ ] **VTD-53 Types, fluids, compost:** `/dumpfood` then `python3 tools/food_catalog.py --check` lists no new
   Vintage food; Pickle Soup, Ghostly Chili and Oatmeal go in a Supplementaries jar in their own color (VD: Carrot
   Juice, Dandelion Juice, Turnip Water, Fermented Garlic Honey too, and a jar of carrot juice fills from a tank);
   Pickled Egg and Century Egg compost (0.6, 0.9), a Cucumber Crate composts at 1.0.
-- [ ] VTD-54 **Block drops (after `vintageport #18`):** in survival, break a placed Magic Peanut, Smooth Salt Block and
+- [ ] **VTD-54 Block drops (after `vintageport #18`):** in survival, break a placed Magic Peanut, Smooth Salt Block and
   Vine Tile by hand: each drops itself. Place a Cheese Wheel, a Cheese Pizza and a Meat Pizza; break one whole (4
   slices), take one slice from another and break it (3 slices); a Creeper or TNT blast may drop some slices (the tables use `survives_explosion`; owner 2026-11-02: fine, scratch r1102 got 4).
-- [ ] VTD-65 **Salted fish out:** JEI has no Salted Cod or Salted Salmon and no recipe for them; Surstromming still
+- [ ] **VTD-65 Salted fish out:** JEI has no Salted Cod or Salted Salmon and no recipe for them; Surstromming still
   pickles; the canned fish and canned cooked salmon still craft from cooked cod / salmon.
-- [ ] VTD-66 **Wild ghost pepper seeds:** millstone and crushing wheels give 2 Ghost Pepper Seeds + 1 cyan dye, the IE
+- [ ] **VTD-66 Wild ghost pepper seeds:** millstone and crushing wheels give 2 Ghost Pepper Seeds + 1 cyan dye, the IE
   Crusher 3 seeds + 1 cyan dye.
-- [ ] VTD-67 **Ghost charcoal:** eat it at full hunger: Wither I 0:05 and Fire Resistance 3:00, no hunger restored; it
+- [ ] **VTD-67 Ghost charcoal:** eat it at full hunger: Wither I 0:05 and Fire Resistance 3:00, no hunger restored; it
   still burns in a furnace.
-- [ ] VTD-68 **No golden egg on the tree:** grow a Magic Peanut tree: nothing on top of the trunk; a goose can still lay
+- [ ] **VTD-68 No golden egg on the tree:** grow a Magic Peanut tree: nothing on top of the trunk; a goose can still lay
   a golden egg. Scratch: SQ-VTD9-01 (server).
-- [ ] VTD-69 **Jar time:** JEI Pickling Jar page: Berserker's Brew (400 ticks) shows 20s, a pickle (2400) 2min, leather
+- [ ] **VTD-69 Jar time:** JEI Pickling Jar page: Berserker's Brew (400 ticks) shows 20s, a pickle (2400) 2min, leather
   (4800) 4min.
-- [ ] VTD-70 **Jar leftover slot:** fermented garlic honey (garlic + honey bottle) leaves the glass bottle in the new slot
+- [ ] **VTD-70 Jar leftover slot:** fermented garlic honey (garlic + honey bottle) leaves the glass bottle in the new slot
   right of the outputs; a hopper under the jar pulls it; breaking the jar drops it; a jar from an older save keeps its
   items; with the slot full of another item the jar waits.
-- [ ] VTD-71 **No slime from the jar:** Slime Block has no Pickling Jar recipe in JEI.
-- [ ] VTD-72 **Any salt:** Berserker's Brew and leather (rotten flesh, tree bark, vinegar) pickle with Create: The Salt's
+- [ ] **VTD-71 No slime from the jar:** Slime Block has no Pickling Jar recipe in JEI.
+- [ ] **VTD-72 Any salt:** Berserker's Brew and leather (rotten flesh, tree bark, vinegar) pickle with Create: The Salt's
   salt as well as Vintage's salt dust.
-- [ ] VTD-73 **Honey jar fluid:** a Honey Jar empties into a Supplementaries jar as honey (honey color, "Honey"), and
+- [ ] **VTD-73 Honey jar fluid:** a Honey Jar empties into a Supplementaries jar as honey (honey color, "Honey"), and
   fills back into an empty mason jar; it no longer counts as apple sauce.
-- [ ] VTD-75 **Ghost pepper soil:** ghost pepper seeds plant on Soul Soil, Rich Soul Soil and Nulch only; farmland, Rich
+- [ ] **VTD-75 Ghost pepper soil:** ghost pepper seeds plant on Soul Soil, Rich Soul Soil and Nulch only; farmland, Rich
   Farmland, Fertile Soil, dirt, grass and nylium refuse them. A wild ghost pepper places on nylium and those three, not on
   grass or dirt. A ghost pepper already on farmland (old save) breaks when a neighbor updates.
-- [ ] VTD-77 **Salt layer icon** (port `-07`): the Salt layer item in JEI, the inventory and the hand is a thin pink-white
+- [ ] **VTD-77 Salt layer icon:** (port `-07`) the Salt layer item in JEI, the inventory and the hand is a thin pink-white
   slab like the snow layer's item, not the salt dust pile. Placing it still places one layer.
-- [ ] VTD-76 **Own pick, not Quark:** ripe cucumber, ghost pepper and zucchini with an empty hand: 1 to 2 cucumbers (1
+- [ ] **VTD-76 Own pick, not Quark:** ripe cucumber, ghost pepper and zucchini with an empty hand: 1 to 2 cucumbers (1
   pepper, 1 to 2 zucchini), no seeds, back to stage 5 (zucchini 4). Same with a wooden hoe. With an iron hoe over a 3x3 of
   ripe and unripe ones: every ripe one picks once, unripe ones stay, no double drops. Wheat in the same area still
   replants to stage 0.
-- [ ] VTD-74 **Crop loot:** `/loottuning` (or the log) lists the Vintage crop packs (oat bale, oat bag, peanut, cucumber,
+- [ ] **VTD-74 Crop loot:** `/loottuning` (or the log) lists the Vintage crop packs (oat bale, oat bag, peanut, cucumber,
   ghost pepper crates) and the Rustic bell pepper crates and seed bag; village house, ruined portal and bastion hoglin
   stable chests can hold the Vintage crops.
 
 Oat look (2026-10-31)
 
-- [ ] VTD-78 Plant oats beside wheat on farmland and grow them with bone meal: every stage has the bushy wheat shape in
+- [ ] **VTD-78:** Plant oats beside wheat on farmland and grow them with bone meal: every stage has the bushy wheat shape in
   oat colors; ripe oats are two blocks tall and vary between three shapes by position, like the ripe wheat next to
   them. Break a ripe oat: same drops as before. F3+T with Fancy Crops off: oats still use these textures.
 
 Pickles (2026-10-25)
 
-- [ ] VTD-55 Pickling Jar: 5 sea pickles + salt -> 5 Pickled Sea Pickles; Pickled Pickles are not in JEI, creative or
+- [ ] **VTD-55 Pickling Jar:** 5 sea pickles + salt -> 5 Pickled Sea Pickles; Pickled Pickles are not in JEI, creative or
   loot, and an old stack turns into Pickled Sea Pickles.
-- [ ] VTD-57 Cooking pot: each pickled veggie in the pickle slot makes pickle soup, with any 2 vegetables.
+- [ ] **VTD-57 Cooking pot:** each pickled veggie in the pickle slot makes pickle soup, with any 2 vegetables.
 
 Vintage work run (2026-11-03)
 
 Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Creative Brewing jar the same time, kimchi removal); not booted. Scratch rows SQ-VTDA-10 to -13 and client row CQ-VTDA-01 (queue section SQ-CDJ7) cover VTD-80 to VTD-86 server-side.
 
-- [ ] VTD-80 **Wild ghost pepper soil** (port `-14`, `vintageport #7`): with Terralith, a wild ghost pepper does not stay on
+- [ ] **VTD-80 Wild ghost pepper soil:** (port `-14`, `vintageport #7`) with Terralith, a wild ghost pepper does not stay on
   grass, mycelium or moss (it breaks on the next neighbor update); it places on crimson and warped nylium, Soul Soil,
   Rich Soul Soil and Nulch.
-- [ ] VTD-81 **Salt layer from inside** (`food/seasoning #7`): stand in a 2-layer salt patch and use Salt Dust on it up to 8
+- [ ] **VTD-81 Salt layer from inside:** (`food/seasoning #7`) stand in a 2-layer salt patch and use Salt Dust on it up to 8
   layers: the layer grows, you are not pushed up. Walk onto a 6-layer salt block from the side: you still step up.
-- [ ] VTD-82 **JEI pages** (`jei/jei-coverage #15`): Organic Mash's page reads "Fermented organic mash, used as an enhanced
+- [ ] **VTD-82 JEI pages:** (`jei/jei-coverage #15`) Organic Mash's page reads "Fermented organic mash, used as an enhanced
   fertilizer or to make compost."; Salt Layer, Cheese Mold and every mason jar (empty and filled) have an information page.
-- [ ] VTD-83 **Kimchi** (`merges/dishes #9`): JEI shows one kimchi (Vintage's); Pickling Jar: 4 cabbage leaves + salt +
+- [ ] **VTD-83 Kimchi:** (`merges/dishes #9`) JEI shows one kimchi (Vintage's); Pickling Jar: 4 cabbage leaves + salt +
   one of cucumber or zucchini, onion, any egg, sea pickle, beetroot, any whole raw fish (cod, salmon, tropical fish,
   lionfish, perch, pike, blobfish, flying fish, catfish) -> 4 kimchi; the ghost pepper recipe stays. No Brewin' kimchi recipe.
-- [ ] VTD-84 **Nut mash** (`merges/dishes #7`): Cooking Pot: 5 acorns, roasted acorns, peanuts or roasted peanuts (mixed is
+- [ ] **VTD-84 Nut mash:** (`merges/dishes #7`) Cooking Pot: 5 acorns, roasted acorns, peanuts or roasted peanuts (mixed is
   fine) + sugar -> 3 Nut Mash, each served into an empty mason jar; no nut mash bottle, nut butter or nut dough in JEI; a
   Nut Butter bottle in an old chest turns into Nut Mash.
-- [ ] VTD-85 **Sandwich** (`merges/dishes #7`): "Nut Mash and Jam Sandwich" (Vintage's art) from any bread + a Nut Mash +
+- [ ] **VTD-85 Sandwich:** (`merges/dishes #7`) "Nut Mash and Jam Sandwich" (Vintage's art) from any bread + a Nut Mash +
   any jam in the grid, both jars come back empty; Delightful's sandwich is gone from JEI. Pad Thai takes a Nut Mash.
-- [ ] VTD-86 **Quiche** (`merges/dishes #8`): the Oven with a pie tin bakes Quiche from pie crust + cheese wedge + milk +
+- [ ] **VTD-86 Quiche:** (`merges/dishes #8`) the Oven with a pie tin bakes Quiche from pie crust + cheese wedge + milk +
   any egg + any cooked meat, or any mushroom, or a salad green (cabbage, cabbage leaf, dandelion leaf); Zucchini Quiche
   from pie crust + cheese wedge + milk + egg + 2 roasted zucchini. No grid or Create assembly recipe for either.
-- [ ] VTD-87 **Vinegar from apple mash** (`dishes/pickles-and-ferments #6`, SQ-FCB-01 rewritten; the jar run is in game): Pickling Jar, 3 apple
+- [ ] **VTD-87 Vinegar from apple mash:** (`dishes/pickles-and-ferments #6`, SQ-FCB-01 rewritten; the jar run is in game) Pickling Jar, 3 apple
   mash + a brown or red mushroom -> 1 Vinegar Jar + 3 Organic Mash after 2 minutes; a jam jar + mushroom makes nothing; JEI
   shows no vinegar recipe from jam.
 
@@ -1010,7 +1010,7 @@ Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Crea
 
 ### Owner decisions 2026-11-02
 
-- VTD-47: keep the magic vine tree set. Magic Peanut: very rare peanut drop (replaces ~1 %) and very rare wandering trader trade, as rare as the pale/dark seeds.
+- [ ] **VTD-47:** keep the magic vine tree set. Magic Peanut: very rare peanut drop (replaces ~1 %) and very rare wandering trader trade, as rare as the pale/dark seeds.
 - Kimchi: Vintage's wins; Brewin's kimchi removed, its recipes NOT carried over (owner later 2026-11-02, replaces "carried over"); new Vintage kimchi recipes per pickleable (see TODO `merges/dishes #9`; built 2026-11-03, History).
 - Pickles craftable with cucumbers or zucchini. Fermented garlic honey: 4 hearts already, no change. Golden egg placement observed OK. Both lasagnas kept.
 

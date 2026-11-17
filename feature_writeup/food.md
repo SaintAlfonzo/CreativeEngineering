@@ -1018,7 +1018,7 @@ Cooking oil and fried eggs (3.7), after a restart:
 - [ ] **FO-28 egg stacks:** `/give @s minecraft:egg 64`, `/give @s quark:egg_parrot_blue 64` and
   `/give @s alexsmobs:emu_egg 64`: each is one full stack. Chickens' eggs picked up merge past 16.
   `logs/kubejs/startup.log` has `[stack_sizes] set N stack sizes` and no `no item_dict key` warning.
-- [ ] **FO-29 glistering melon** (values, no effects, golden type: scratch server PASSED 2026-10-22, SQ-OF-12; eating and brewing: in game): after a restart, hold a Glistering Melon Slice in survival with a full hunger bar and
+- [ ] **FO-29 glistering melon:** (values, no effects, golden type: scratch server PASSED 2026-10-22, SQ-OF-12; eating and brewing: in game) after a restart, hold a Glistering Melon Slice in survival with a full hunger bar and
   eat it: AppleSkin shows 4 hunger / 4.8 saturation (same as a Golden Melon Slice), no effect is applied. It still
   brews Healing in a brewing stand. `logs/kubejs/startup.log` has `[food values] 2 foods copied` and no warning.
 - [ ] **FO-30 Seasoning page:** after installing the Creative Common jar and restarting, `logs/latest.log` has
@@ -1040,11 +1040,11 @@ Cooking oil and fried eggs (3.7), after a restart:
   listed. A knife on a placed pie drops a slice and adds
   nothing until the slice is eaten. A Create deployer biting a cake adds nothing. `logs/latest.log` has no
   `PlacedFoodSol` warning.
-- [x] **FO-44 Placed food map loads** (scratch server PASSED 2026-10-22, SQ-SOL-01: 14 entries, chocolate cake -> Abnormals Delight's slice): after a boot with the Creative Common jar,
+- [x] **FO-44 Placed food map loads:** (scratch server PASSED 2026-10-22, SQ-SOL-01: 14 entries, chocolate cake -> Abnormals Delight's slice) after a boot with the Creative Common jar,
   `logs/latest.log` has no `PlacedFoodSol` warning or error and no mixin failure for
   `ServerPlayerGameModePlacedFoodMixin`; every block in `placed_food_slices.json` exists and maps to an edible item
   (`/fdtest sol`).
-- [ ] **FO-45 Seasoning crafts** (load and recipe ids: scratch SQ-SN-00, 01): Popcorn + any Cheese Wedge, Popcorn +
+- [ ] **FO-45 Seasoning crafts:** (load and recipe ids: scratch SQ-SN-00, 01) Popcorn + any Cheese Wedge, Popcorn +
   Onion, Popcorn + Garlic, Popcorn + Garlic + Onion each craft one seasoned popcorn. The tooltip under the name reads
   "Cheese: +2 saturation", "Onion: +2 nutrition", "Garlic: Speed (0:10)" (both onion and garlic lines on the last).
   Popcorn + Salt still salts it. JEI: U on Garlic shows two Seasoning pages (garlic, garlic + onion).
@@ -1060,7 +1060,7 @@ Cooking oil and fried eggs (3.7), after a restart:
   fills by the amount shown. Plain popcorn unchanged.
 - [ ] **FO-48 Stacking:** 2 Garlic + Onion popcorns made in different orders stack in one slot; seasoned and plain
   popcorn don't. `logs/latest.log` has no `Seasonings` error.
-- [ ] **FO-50 Powdered sugar item** (restart; new Creative Common and Creative Delight jars in `mods/`): JEI shows Powdered
+- [ ] **FO-50 Powdered sugar item:** (restart; new Creative Common and Creative Delight jars in `mods/`) JEI shows Powdered
   Sugar (white pile) and Powdered Sugar Bucket. JEI uses of Sugar: Crushing and Milling give 1 Powdered Sugar plus a
   second at 50%; the mortar craft takes 3 Sugar for 4 Powdered Sugar. Powdered Sugar shows in a `#forge:sugar` recipe
   (e.g. Frosting: Powdered Sugar + 2 Milk in the grid) and the craft works. Rerun 2026-10-29 (`ingredients #23`).
@@ -1073,17 +1073,17 @@ Cooking oil and fried eggs (3.7), after a restart:
   that still shows snow or powder snow for it (2026-10-29 owner report, source not found). Walk in: you sink
   slowly, no frost overlay or freezing damage after 20 s. With leather boots you stand on top. Fall 10 blocks into it: no
   damage. Right-click it with an empty bucket: the block goes, Powdered Sugar Bucket in hand. Break it by hand: no drop.
-- [ ] **FO-58 Batter grains** (restart; Creative Delight jar in `mods/`): JEI recipes for Batter: Cooking Pot (milk,
+- [ ] **FO-58 Batter grains:** (restart; Creative Delight jar in `mods/`) JEI recipes for Batter: Cooking Pot (milk,
   egg, 2 grain) and both heated mixer recipes (Slice & Dice's pot copy, and egg solution + 2 grain + 2 bowls) cycle Wheat
   Flour, Cornmeal and Rice in each grain slot, no Wheat. Cook one with Rice and one with Cornmeal in the pot: 2 Batter
   each.
 - [ ] **FO-53 Sugar seasoning (no foods since 2026-10-26):** Waffle + Sugar gives nothing; the Seasoning JEI tab has no
   Sugar page. Popcorn + Sugar still gives Caramel Popcorn.
-- [ ] **FO-54 AppleSkin with salt** (restart, Creative Common with this change): hover plain popcorn, salted popcorn, onion
+- [ ] **FO-54 AppleSkin with salt:** (restart, Creative Common with this change) hover plain popcorn, salted popcorn, onion
   popcorn and salted onion popcorn. Salted shows Salt's extra hunger and saturation; salted onion shows that plus 2
   hunger, and its saturation is salted popcorn's plus nothing (onion adds hunger only); salted cheese popcorn shows
   salted popcorn's saturation plus 2. Eat each at about 10 hunger: the bars fill by what was shown.
-- [ ] **FO-55 Seasoned icons** (restart; `salt-client.toml` overlay off): popcorn with Cheese, Onion, Garlic each shows
+- [ ] **FO-55 Seasoned icons:** (restart; `salt-client.toml` overlay off) popcorn with Cheese, Onion, Garlic each shows
   the salt-shaped sparkle in yellow, tan, pale pink; salted popcorn shows Salt's white one as before; in the hotbar,
   held in hand, dropped on the ground and on the JEI Seasoning page. Plain popcorn has none. Salted cooked beef still
   shows the salt overlay. F3+T: still shown, no missing-texture squares.
@@ -1097,16 +1097,16 @@ Cooking oil and fried eggs (3.7), after a restart:
   shows one page per seasoning (cheese, onion, garlic) and one for garlic + onion, each with popcorn only.
   Server half PASSED on a scratch server 2026-10-26 (SQ-SNF-01 to -03: tags, recipe ids, `/sntest` grid matches 5/5);
   the JEI tab is the open client half.
-- [ ] **FO-59 Seasoning names at game start** (restart with the new Creative Common jar, no F3+T): Popcorn + Garlic shows
+- [ ] **FO-59 Seasoning names at game start:** (restart with the new Creative Common jar, no F3+T) Popcorn + Garlic shows
   "Garlic: Speed (0:10)", not `seasoning.creativeengineering.garlic`; Cheese, Onion and Void Pepper lines show their
   names too. `logs/kubejs/client.log` lists `Loaded script creativedelight:kubejs/creativeengineering/seasoning_lang.js`
   (and the other `creativedelight:kubejs/...` client scripts) once, before any F3+T. Placeable food lines (PL-01) show
   without F3+T.
-- [ ] **FO-60 Seasoned icons top right** (client, CQ-FO-60; Creative Delight jar of 2026-11-02 13:19 or later, in `mods/` since 14:01, and the pack's `kubejs/assets`):
+- [ ] **FO-60 Seasoned icons top right:** (client, CQ-FO-60; Creative Delight jar of 2026-11-02 13:19 or later, in `mods/` since 14:01, and the pack's `kubejs/assets`)
   Popcorn + Cheese, + Onion, + Garlic, + Crushed Void Pepper, salted popcorn and salted cooked beef show their sparkle in
   the top-right corner of the item (hotbar, hand, dropped, JEI Seasoning page), nothing left in the top-left corner;
   F3+T keeps it there; no missing-texture squares.
-- [ ] **FO-61 Powdered sugar in WTHIT** (client, CQ-FO-61; fix in the `mods/` Creative Delight jar of 2026-11-02 14:01): place powdered sugar from its bucket and look at it: WTHIT reads
+- [ ] **FO-61 Powdered sugar in WTHIT:** (client, CQ-FO-61; fix in the `mods/` Creative Delight jar of 2026-11-02 14:01) place powdered sugar from its bucket and look at it: WTHIT reads
   "Powdered Sugar" with the mod Creative Engineering (or Creative Delight), not "Snow Block" / Minecraft. Real powder
   snow still reads as WTHIT shows it by default (Snow Block unless `override_powder_snow` is off).
 - [ ] **FO-62 Eggs without a furnace (3.7, 2026-11-16):** a heated Cooking Pot with cooking oil + 3 eggs -> 3 fried eggs (the

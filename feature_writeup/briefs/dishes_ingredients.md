@@ -78,7 +78,7 @@ The six More Delight potato dishes show and accept Rustic Delight potato slices 
   ([moredelight/recipes.js:18](../../kubejs/data/creativedelight/kubejs/moredelight/recipes.js)) uses baked potatoes and is unaffected.
 
 ### Tests
-- MG-12 rerun: JEI shows Potato Slices in all six recipes' slot; a pot cooks mashed potatoes from milk + 2 slices.
+- [ ] **MG-12 rerun:** JEI shows Potato Slices in all six recipes' slot; a pot cooks mashed potatoes from milk + 2 slices.
 - MG-new1 (proposed, numbered when queued): tag dump, `#forge:sliced_potatoes` holds `rusticdelight:potato_slices`.
 
 ---

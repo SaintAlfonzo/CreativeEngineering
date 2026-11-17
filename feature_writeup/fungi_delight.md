@@ -541,48 +541,46 @@ filter value against the live cave biomes, and the starting rates above (FGD-28)
 
 ## 8. In-game test suite (drafted)
 
-| ID | Test | Pass |
-|---|---|---|
-| FGD-01 | Game loads with the port; `/dumpall` lists 32 items, 17 blocks, 2 entities | no errors in `latest.log` |
-| ~~FGD-02~~ | moved to FGD-28 (biomes replaced by §5.1.1) | |
-| FGD-03 | Mushroom fields: both colonies, both huge mushrooms, both cows | present |
-| FGD-04 | Bone meal on a placed inky cap and morel in low light | huge form grows; veil hangs under the inky cap |
-| FGD-05 | Inky cap / morel on rich soil | becomes a colony |
-| FGD-06 | Colony on the cutting board; inky cap on the cutting board | 5 mushrooms; cleaned cap + ink sacs |
-| FGD-07 | Truffle dirt in a dark or cold forest under rooted dirt; mine with a shovel, with Fortune, with Silk Touch | 1 to 2 truffles, more with Fortune, the block with Silk Touch |
-| FGD-08 | Wolf truffle hunt: feed a tamed wolf a truffle near truffle dirt | walks to it, barks, scratches; truffle not used up |
-| FGD-09 | Pig digging (raise the chance in a test build or wait) on podzol | loot or truffles pop; block becomes coarse dirt; no "Parameters not allowed" loot error in `latest.log`; griefing case is FGD-33 |
-| FGD-10 | Breed pigs with a truffle 10 times | extra piglets in about half the litters |
-| FGD-11 | Pigs follow brown / red mushrooms, inky caps, morels, truffles | tempted and bred |
-| FGD-12 | Hoglin bred with truffles; piglin picks up a truffle | both work |
-| FGD-13 | Shear an Inky Cap Cow and a Morel Cow | cow left, 5 mushrooms |
-| FGD-14 | Bowl on a Fungi cow | mushroom stew |
-| ~~FGD-15~~ | moved to FGD-30 (breeding is 50 % either parent, §5.1.2) | |
-| FGD-16 | Eat a Cleaned Inky Cap, then drink a pack alcohol | Weak Stomach, then Nausea II, Poison II, Weakness II for 0:10 |
-| FGD-17 | Eat a Cleaned Inky Cap, then drink a water bottle and a potion | water: nothing; potion: the reaction |
-| FGD-18 | Brew Burrowing in a stand and in a Create mixer (awkward + truffle, + redstone, + glowstone) | all three in both |
-| FGD-19 | Burrowing I and II on dirt, gravel, sand vs stone | 1.5x and 2x on shovel blocks only |
-| FGD-20 | Each pot meal cooks; JEI shows every recipe | 7 pot meals, 3 grid meals |
-| FGD-21 | Eat each dish | values and effects as tuned (step 7) |
-| FGD-22 | Crates craft and uncraft; crate breaks drop the crate | 9 each way |
-| ~~FGD-23~~ | moved to FGD-35 (cap 16) | |
-| FGD-24 | Compost each item | chances as in `compost_values.js` |
-| FGD-25 | Mill an inky cap and a colony in Create | black dye as §2.6 |
-| FGD-26 | Dedicated server with the port, client joins | no missing-class or registry mismatch |
-| FGD-27 | Lightning on a red mooshroom; on an Inky Cap Cow; `javap` for BROWN | red becomes brown; Fungi cow unchanged |
-| FGD-28 | Explore dark forest, swamp, mushroom fields, caves (`/cdevplace`) | inky only in dark forest, mushroom fields, caves; morel also in swamps; Fungi forms rarer than brown/red; rare colonies of all four in caves |
-| FGD-29 | Dark forest and mushroom fields herds | brown mooshrooms at the set shares; Fungi cows rare; morel cow in swamps |
-| FGD-30 | Breed red x brown, inky x morel, red x inky 10 times each | calves are either parent's type, about 50 % each |
-| FGD-31 | Mushroom on rich soil; JEI info page | becomes the colony; page lists the four mushrooms |
-| FGD-32 | Truffle dirt in dark and cold forests; taiga that is neither | present only in the first two |
-| FGD-33 | Pig digging with `mobGriefing` true and false (Friendly Griefing loaded) | digs when true; nothing when false |
-| FGD-34 | Craft each of the 3 suspicious stews, eat | the named effect, not an arbitrary one; survives a restart with changed mod list |
-| FGD-35 | Inky Goo Veil under a tall overhang, bone meal repeatedly | stops at 16 segments |
-| FGD-36 | Eat durian, drink a potion, then an alcohol | Weak Stomach, reaction on the potion |
-| FGD-37 | JEI on Burrowing and Weak Stomach | mod description text shown |
-| FGD-38 | Bake a truffle pie | recipe in JEI, pie obtainable |
-| FGD-39 | Farmer level 3 and wandering trader; pig and wolf sounds | trades appear; sounds play |
-| FGD-40 | Seasons: inky cap, morel and colonies in winter | same behavior as brown/red |
+- [ ] **FGD-01:** Game loads with the port; `/dumpall` lists 32 items, 17 blocks, 2 entities -> no errors in `latest.log`
+- [ ] ~~**FGD-02:**~~ moved to FGD-28 (biomes replaced by §5.1.1)
+- [ ] **FGD-03:** Mushroom fields: both colonies, both huge mushrooms, both cows -> present
+- [ ] **FGD-04:** Bone meal on a placed inky cap and morel in low light -> huge form grows; veil hangs under the inky cap
+- [ ] **FGD-05:** Inky cap / morel on rich soil -> becomes a colony
+- [ ] **FGD-06:** Colony on the cutting board; inky cap on the cutting board -> 5 mushrooms; cleaned cap + ink sacs
+- [ ] **FGD-07:** Truffle dirt in a dark or cold forest under rooted dirt; mine with a shovel, with Fortune, with Silk Touch -> 1 to 2 truffles, more with Fortune, the block with Silk Touch
+- [ ] **FGD-08:** Wolf truffle hunt: feed a tamed wolf a truffle near truffle dirt -> walks to it, barks, scratches; truffle not used up
+- [ ] **FGD-09:** Pig digging (raise the chance in a test build or wait) on podzol -> loot or truffles pop; block becomes coarse dirt; no "Parameters not allowed" loot error in `latest.log`; griefing case is FGD-33
+- [ ] **FGD-10:** Breed pigs with a truffle 10 times -> extra piglets in about half the litters
+- [ ] **FGD-11:** Pigs follow brown / red mushrooms, inky caps, morels, truffles -> tempted and bred
+- [ ] **FGD-12:** Hoglin bred with truffles; piglin picks up a truffle -> both work
+- [ ] **FGD-13:** Shear an Inky Cap Cow and a Morel Cow -> cow left, 5 mushrooms
+- [ ] **FGD-14:** Bowl on a Fungi cow -> mushroom stew
+- [ ] ~~**FGD-15:**~~ moved to FGD-30 (breeding is 50 % either parent, §5.1.2)
+- [ ] **FGD-16:** Eat a Cleaned Inky Cap, then drink a pack alcohol -> Weak Stomach, then Nausea II, Poison II, Weakness II for 0:10
+- [ ] **FGD-17:** Eat a Cleaned Inky Cap, then drink a water bottle and a potion -> water: nothing; potion: the reaction
+- [ ] **FGD-18:** Brew Burrowing in a stand and in a Create mixer (awkward + truffle, + redstone, + glowstone) -> all three in both
+- [ ] **FGD-19:** Burrowing I and II on dirt, gravel, sand vs stone -> 1.5x and 2x on shovel blocks only
+- [ ] **FGD-20:** Each pot meal cooks; JEI shows every recipe -> 7 pot meals, 3 grid meals
+- [ ] **FGD-21:** Eat each dish -> values and effects as tuned (step 7)
+- [ ] **FGD-22:** Crates craft and uncraft; crate breaks drop the crate -> 9 each way
+- [ ] ~~**FGD-23:**~~ moved to FGD-35 (cap 16)
+- [ ] **FGD-24:** Compost each item -> chances as in `compost_values.js`
+- [ ] **FGD-25:** Mill an inky cap and a colony in Create -> black dye as §2.6
+- [ ] **FGD-26:** Dedicated server with the port, client joins -> no missing-class or registry mismatch
+- [ ] **FGD-27:** Lightning on a red mooshroom; on an Inky Cap Cow; `javap` for BROWN -> red becomes brown; Fungi cow unchanged
+- [ ] **FGD-28:** Explore dark forest, swamp, mushroom fields, caves (`/cdevplace`) -> inky only in dark forest, mushroom fields, caves; morel also in swamps; Fungi forms rarer than brown/red; rare colonies of all four in caves
+- [ ] **FGD-29:** Dark forest and mushroom fields herds -> brown mooshrooms at the set shares; Fungi cows rare; morel cow in swamps
+- [ ] **FGD-30:** Breed red x brown, inky x morel, red x inky 10 times each -> calves are either parent's type, about 50 % each
+- [ ] **FGD-31:** Mushroom on rich soil; JEI info page -> becomes the colony; page lists the four mushrooms
+- [ ] **FGD-32:** Truffle dirt in dark and cold forests; taiga that is neither -> present only in the first two
+- [ ] **FGD-33:** Pig digging with `mobGriefing` true and false (Friendly Griefing loaded) -> digs when true; nothing when false
+- [ ] **FGD-34:** Craft each of the 3 suspicious stews, eat -> the named effect, not an arbitrary one; survives a restart with changed mod list
+- [ ] **FGD-35:** Inky Goo Veil under a tall overhang, bone meal repeatedly -> stops at 16 segments
+- [ ] **FGD-36:** Eat durian, drink a potion, then an alcohol -> Weak Stomach, reaction on the potion
+- [ ] **FGD-37:** JEI on Burrowing and Weak Stomach -> mod description text shown
+- [ ] **FGD-38:** Bake a truffle pie -> recipe in JEI, pie obtainable
+- [ ] **FGD-39:** Farmer level 3 and wandering trader; pig and wolf sounds -> trades appear; sounds play
+- [ ] **FGD-40:** Seasons: inky cap, morel and colonies in winter -> same behavior as brown/red
 
 ## 9. History
 

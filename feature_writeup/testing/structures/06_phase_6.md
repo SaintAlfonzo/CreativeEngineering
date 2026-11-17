@@ -38,11 +38,11 @@ summary above "8.0.7 Phase 7".
 | ST-72, 91, 98, 101 | SKIPPED | Rates, out of scope |
 
 Notes:
-- **ST-74:** two flotillas sit in a `plains` biome. Generating those chunks showed every log floating on water at
+- [ ] **ST-74:** two flotillas sit in a `plains` biome. Generating those chunks showed every log floating on water at
   least 6 blocks deep: a plains-biome lake or coast, not a beach.
-- **LO-12:** the 91 sections below y 48 that are entirely air are scattered over every Y level, 1 to 3 per chunk in
+- [ ] **LO-12:** the 91 sections below y 48 that are entirely air are scattered over every Y level, 1 to 3 per chunk in
   neighboring chunks. That's big caves, not the distant-terrain clip leaking into real chunks.
-- **ST-20:** its text names 5 chunks for ruins; the ruins grid is 16/8 now, so the real minimum is 9.
+- [ ] **ST-20:** its text names 5 chunks for ruins; the ruins grid is 16/8 now, so the real minimum is 9.
 
 ## 3. Bugs
 

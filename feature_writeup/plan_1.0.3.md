@@ -274,12 +274,12 @@ fails when a new top-level kubejs path isn't classified.
 
 ### 1.5 Tests (proposed)
 
-- **DP-01** install mode reproduces today's payload (file list equal to the 1.0.2 staging).
-- **DP-02** update from 1.0.2 contains only the jars that changed; removals match the diff.
-- **DP-03** verify script on a scratch server at 1.0.2 reports no drift; after deleting one jar it reports it.
-- **DP-04** scratch server at 1.0.2 + update payload boots, and its `mods/` hashes equal the 1.0.3 history.
-- **DP-05** scratch server with no `kubejs/exported/` boots, autodumps climate samples, and biome tuning runs.
-- **DP-06** `--mark-installed` updates INSTALLED.json and the next update defaults `--from` to it.
+- [ ] **DP-01:** install mode reproduces today's payload (file list equal to the 1.0.2 staging).
+- [ ] **DP-02:** update from 1.0.2 contains only the jars that changed; removals match the diff.
+- [ ] **DP-03:** verify script on a scratch server at 1.0.2 reports no drift; after deleting one jar it reports it.
+- [ ] **DP-04:** scratch server at 1.0.2 + update payload boots, and its `mods/` hashes equal the 1.0.3 history.
+- [ ] **DP-05:** scratch server with no `kubejs/exported/` boots, autodumps climate samples, and biome tuning runs.
+- [ ] **DP-06:** `--mark-installed` updates INSTALLED.json and the next update defaults `--from` to it.
 
 ## 2. PR: server performance report
 
@@ -338,12 +338,12 @@ script would then pick up the auto-dumped recordings too.
 
 ### 2.3 Tests (proposed, continuing perf.md)
 
-- **PF-09** report.sh on a scratch server produces a zip with every item in the table; the window excerpt
+- [ ] **PF-09:** report.sh on a scratch server produces a zip with every item in the table; the window excerpt
   starts no earlier than 30 minutes back.
-- **PF-10** no secrets: grep the zip for the discord token and rcon password: no hits.
-- **PF-11** after a `kill -9`, the next report includes the orphaned jfr-repo folder.
-- **PF-12** ingest_report.py produces the HTML report plus the log summary page.
-- **PF-13** Windows: report.ps1 on a Windows server (untested platform today).
+- [ ] **PF-10:** no secrets: grep the zip for the discord token and rcon password: no hits.
+- [ ] **PF-11:** after a `kill -9`, the next report includes the orphaned jfr-repo folder.
+- [ ] **PF-12:** ingest_report.py produces the HTML report plus the log summary page.
+- [ ] **PF-13:** Windows: report.ps1 on a Windows server (untested platform today).
 
 ## 3. RD: large block changes render wrong on clients
 
@@ -428,10 +428,10 @@ section changes (which can look like "broke instantly").
 
 ### 3.6 Tests (proposed)
 
-- **RD-01** paste a large structure with the reported tool on a dedicated server: renders fully without relog.
-- **RD-02** fell a large tree with TreeChop: no phantom leaves after decay finishes.
-- **RD-03** `/cedesync` right after RD-01/RD-02 reports 0 mismatches.
-- **RD-04** `/ceresync` clears a forced desync without relog.
+- [ ] **RD-01:** paste a large structure with the reported tool on a dedicated server: renders fully without relog.
+- [ ] **RD-02:** fell a large tree with TreeChop: no phantom leaves after decay finishes.
+- [ ] **RD-03:** `/cedesync` right after RD-01/RD-02 reports 0 mismatches.
+- [ ] **RD-04:** `/ceresync` clears a forced desync without relog.
 
 ## 4. IM: random item deletion, toggleable item monitor
 
@@ -487,12 +487,12 @@ log line near that time names the path: a vanilla click, a mod packet, a trash a
 
 ### 4.6 Tests (proposed)
 
-- **IM-01** monitor off: no log file writes, no measurable tick cost.
-- **IM-02** throw an item (Q, drag out of the screen): no loss logged.
-- **IM-03** craft, shift-click a crafting result: no loss logged.
-- **IM-04** drop an item on the trash slot: logged as a trash deletion, not an unexplained loss.
-- **IM-05** Quark sort and Sophisticated Backpacks transfer: no loss logged.
-- **IM-06** `/clear` a single item while a menu is open: logged as unexplained (proves Layer B works).
+- [ ] **IM-01:** monitor off: no log file writes, no measurable tick cost.
+- [ ] **IM-02:** throw an item (Q, drag out of the screen): no loss logged.
+- [ ] **IM-03:** craft, shift-click a crafting result: no loss logged.
+- [ ] **IM-04:** drop an item on the trash slot: logged as a trash deletion, not an unexplained loss.
+- [ ] **IM-05:** Quark sort and Sophisticated Backpacks transfer: no loss logged.
+- [ ] **IM-06:** `/clear` a single item while a menu is open: logged as unexplained (proves Layer B works).
 
 ### 4.7 Automated repro results (2026-09-30)
 
@@ -569,10 +569,10 @@ each tick. Logs are in `tools/item_repro/runs/2026-09-30/`.
 
 ### 5.4 Tests (proposed)
 
-- **TS-01** fresh client (no save state): trash slot shows in the player inventory.
-- **TS-02** Sophisticated Backpacks, every tier with and without upgrades: slot visible and on the panel.
-- **TS-03** chest, large chest, furnace: still shows (no regression).
-- **TS-04** hidden slot is not clickable (drop an item where it would be: nothing deleted).
+- [ ] **TS-01:** fresh client (no save state): trash slot shows in the player inventory.
+- [ ] **TS-02:** Sophisticated Backpacks, every tier with and without upgrades: slot visible and on the panel.
+- [ ] **TS-03:** chest, large chest, furnace: still shows (no regression).
+- [ ] **TS-04:** hidden slot is not clickable (drop an item where it would be: nothing deleted).
 
 ### 5.5 Findings (2026-09-30, from the decompiled TrashSlot 12.1.0 + Balm 4.6.0)
 
@@ -641,7 +641,7 @@ other container is one config line away (`allContainers`, off).
 - Check once whether protection ends early when the player moves or attacks (mod behavior). If it does,
   150 s is a ceiling, not a guarantee, and the writeup should say so.
 
-**SP-01** join the server, stand still: the protection message and invulnerability last 150 s.
+- [ ] **SP-01:** join the server, stand still: the protection message and invulnerability last 150 s.
 
 **Status (2026-09-30):** `protectionDuration = 150` set in `config/loadingprotection-common.toml`, copied to
 `configs_edited/root_config/` and to the CreEngServer `configs_edited/root_config/`. Ships with the next deploy.

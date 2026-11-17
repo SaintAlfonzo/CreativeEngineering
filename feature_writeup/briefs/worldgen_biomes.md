@@ -133,9 +133,9 @@ ents = json.load(open('biome_baselines/minecraft__the_end.json'))['generator']['
 
 ### Tests (prefix WG-)
 
-- WG-14 End biomes present: in a world created after the decision, `/locate biome` each of
+- [ ] **WG-14 End biomes present:** in a world created after the decision, `/locate biome` each of
   `nullscape:crystal_peaks`, `void_barrens`, `shadowlands` -> all found.
-- WG-15 Confusion stats: `/reload` -> `biome_config.json` End stats list the mismatch pairs. With End multipliers at 1,
+- [ ] **WG-15 Confusion stats:** `/reload` -> `biome_config.json` End stats list the mismatch pairs. With End multipliers at 1,
   agreement is above 95 %.
 
 ---
@@ -246,7 +246,7 @@ Decide whether the four Terralith skylands stay at 0.15x, given how many feature
 
 ### Tests
 
-- WG-06 already covers it (note the distance). No new test.
+- [ ] **WG-06:** already covers it (note the distance). No new test.
 
 ---
 
@@ -361,12 +361,12 @@ Now): check it before doing anything about it.
 
 ### Tests (new writeup section; suggest prefix `PF-` in a short `permafrost.md`, or add to mob_block_tweaks.md as `MT-`)
 
-- PF-01 Freezing: stand on `immersive_weathering:permafrost` for 30 s in survival -> no freezing (config off). If it
+- [ ] **PF-01 Freezing:** stand on `immersive_weathering:permafrost` for 30 s in survival -> no freezing (config off). If it
   does freeze, the server config differs: compare the server's `config/immersive_weathering-common.toml`.
-- PF-02 Generation: new frozen peaks chunks, caves at y 105-140 -> IW permafrost floors and ceilings, packed ice walls,
+- [ ] **PF-02 Generation:** new frozen peaks chunks, caves at y 105-140 -> IW permafrost floors and ceilings, packed ice walls,
   no `quark:permafrost`.
-- PF-03 Names: JEI shows "Froststone" and its 10 variants (name as built; the plan said "Frost Stone").
-- PF-04 Recipe: 2 packed ice + 2 stone -> 2 Frost Stone.
+- [ ] **PF-03 Names:** JEI shows "Froststone" and its 10 variants (name as built; the plan said "Frost Stone").
+- [ ] **PF-04 Recipe:** 2 packed ice + 2 stone -> 2 Frost Stone.
 
 ---
 

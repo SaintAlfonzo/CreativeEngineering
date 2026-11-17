@@ -537,54 +537,52 @@ recipe-event lines of 1.1 (SQ-IMS-01), `[food values] 5 effect swaps` with no
 from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply error for `JeiFluidHelperTooltipMixin` or
 `QuarkPermafrostStyleMixin`, and no `[jeiRemove]` lines for the purged ids.
 
-| ID | Test | Expected |
-|---|---|---|
-| MG-01 | JEI: search banana, milk bottle, chocolate cake, diced, rocky dirt | None of the five purged items show |
-| MG-02 | `/give @s alexsmobs:banana 5` | Becomes 5 Neapolitan bananas |
-| MG-03 | Eat a Neapolitan banana | Banana peel in the inventory |
-| MG-04 | Feed / tame a capuchin monkey with a Neapolitan banana | Accepted |
-| MG-05 | Break jungle leaves (20+) | No bananas |
-| MG-06 | JEI uses of milk bucket; craft bucket + 4 glass bottles | 4 Farmer's Delight milk bottles; 4 FD bottles + bucket -> milk bucket (3 until 2026-10-25, abnormals_delight.md 3.4) |
-| MG-07 | Milk cauldron (bucket in), take with a glass bottle | FD milk bottle |
-| MG-08 | Spout milk into a glass bottle; matcha latte in the kettle with an FD bottle | FD bottle; latte brews, one recipe only in JEI |
-| MG-09 | JEI chocolate cake | CC&A cake with: baked base + frosting + 2 chocolate bars by hand, 7 slices, oven, spout (baked base + 500 mB chocolate, the pack's recipe only) |
-| MG-10 | Knife on CC&A cake on a cutting board; knife on the placed cake | 7 chocolate slices; one slice per use |
-| MG-11 | Knife on a potato on a cutting board | 3 Rustic Delight potato slices (2 before 2026-11-01), no diced potatoes recipe |
-| MG-12 | Cooking pot: diced potatoes with beef using potato slices | Cooks |
-| MG-13 | Hover Vinery cider and apple juice | "Hard Cider"; tooltip "Apple Wine and Hard Cider" |
-| MG-14 | JEI Pebble Dirt and Rocky Dirt | Pebble Dirt (Dave's, slab "Pebble Dirt Slab"): 2 dirt + 2 Twigs pebbles crossed -> 4, coarse dirt -> 8. Rocky Dirt (Twigs'): 2 dirt + 2 cobblestone -> 4, coarse dirt -> 8. One Rocky Dirt only, no rocky dirt -> dirt recipe |
-| MG-15 | JEI uses of the Apple Cider fluid | Create Mixing page: + milk bottle -> 1000 mB long, + honey bottle -> 1000 mB strong, both heated. IE Mixer page: same at 1500 mB. None on Automatic Brewing or Automated Potion Mixing |
-| MG-16 | Hover the three cider fluids in JEI (ingredient list and a Mixing recipe) | All "Apple Cider"; under the name "Absorption (1:00)", "Absorption (1:30)", "Absorption II (0:30)" in blue |
-| MG-17 | Hover the three cider items | All "Apple Cider" with the same three effect lines |
-| MG-18 | Heated mixer: 1000 mB cider + 1 milk bottle; then + 1 honey bottle on fresh cider | 1000 mB long cider, glass bottle left in the basin; 1000 mB strong cider |
-| MG-19 | IE Mixer: 1500 mB cider + milk bottle; IE Mixer 250 mB water + 2 apples + sugar; Bottling Machine each cider | 1500 mB long cider; 250 mB cider; one bottle per 250 mB, right tier |
-| MG-20 | Hover a green tea fluid in JEI | Its effect line under the name (side effect of MG-16's hook) |
-| MG-21 | JEI search froststone; craft 2 packed ice + 2 stone | 10 Froststone blocks named as in 2.7; 2 Froststone. No "Permafrost" left on Quark's blocks |
-| MG-22 | New frozen peaks chunks: caves at y 105-140 (`/locate biome minecraft:frozen_peaks`, spectator) | IW permafrost floors, ceilings and pillars, packed ice walls, no Froststone |
-| MG-23 | JEI: search coffee (recipe removals: scratch server PASSED 2026-10-22, SQ-CO-01) | No Farmer's Respite coffee items or kettle coffee recipes; Rustic's Coffee, Milk / Honey / Chocolate / Dark Coffee, beans, bag, wild coffee all there |
-| MG-24 | (effect swap: scratch server PASSED 2026-10-22, SQ-CO-02) Hover Rustic's Coffee, Milk Coffee, Honey Coffee, Chocolate Coffee, Dark Coffee; drink each | Caffeinated 1:30, 1:00, 0:45, 0:45, Caffeinated II 0:45; no Speed or Haste. Milk / chocolate coffee still clear one effect |
-| MG-25 | `/give @s farmersrespite:coffee_berries 3`, `coffee_beans 3`, `strong_coffee 1`, `long_coffee 1` | 3 Coffee Beans, 3 Roasted Coffee Beans, 1 Dark Coffee, 1 Coffee (Rustic's) |
-| MG-26 | (inputs: scratch server PASSED 2026-10-22, SQ-CO-01, coffee cake takes roasted beans) JEI recipes for Coffee Cake and Blazing Chili; uses of Coffee Beans | Cake and chili take Roasted Coffee Beans; Gambler's Tea (kettle) and Canned Coffee Berries take Coffee Beans; no beans -> red dye |
-| MG-27 | JEI uses of Rustic's Coffee and Dark Coffee in a Spout / Item Drain | No Central Kitchen coffee fluid recipe |
-| MG-28 | Break a placed FR coffee bush at stage 2 (old world, or `/setblock`) | Rustic's Coffee Beans drop, no FR berries |
-| MG-29 | JEI search salt | One salt item (pink Salt Dust), one Salt Block (The Salt's, pink), no Salt Bucket; Large Salt Lamp plus Vintage's 17 lamps; ores, raw rock salt, buds and cluster pink |
-| MG-30 | Craft 9 salt dust; craft the block back; JEI uses of Salt Block | 1 Salt Block; 9 Salt Dust (one recipe each way); Evaporator, salt bricks / pillar / smooth recipes take it |
-| MG-31 | Craft Large Salt Lamp (7 Salt Block, glowstone center, deepslate tiles bottom middle); place it | Large Salt Lamp, lights up; no raw rock salt block + torch recipe |
-| MG-32 | `/give @s salt:salt 3`, `vintagedelight:salt_block 1`; salt a food with salt dust in the grid | 3 Salt Dust, 1 Salt Block; Salted food |
-| MG-33 | Cauldron of water over a fire until it evaporates; smelt a water bucket | Salt dust drops; no salt bucket recipe |
-| MG-34 | New world, beach: find a salt patch (`/place feature vintagedelight:patch_salt`) | Salt layers on raw rock salt blocks; the rock salt next to the sea stays |
-| MG-35 | Place an Evaporator with water beside it; wait for layers; place a Salt Block with water beside it | Salt Layers grow on the Evaporator, textured like the pink Salt Block; the Salt Block grows nothing and dissolves |
-| MG-36 | `/gamerule randomTickSpeed 300`; put snow / ice against salt bricks, a salt brick stair, a Vintage salt lamp, a Salt Layer and a raw rock salt block | Every touching snow and ice block melts |
-| MG-37 | Same tick speed: Salt Layer beside water, Salt Layer and Salt Block in rain, Salt Layer next to a torch; raw rock salt block beside water and in rain | Layers and Salt Blocks by water dissolve; nothing dissolves in rain; the torch-lit layer stays; raw rock salt stays |
-| MG-38 | JEI: uses of Evaporator, of Salt Layer, of `#salt:meltables` | Evaporator page (layers on top, up to 8); Salt Layer in the dissolve rows; no "use salt on ice" or dispenser rows; Evaporator info reads "Salt Blocks do not grow salt" |
-| MG-39 | JEI: search hamimelon, cantaloupe | Cantaloupe (block), Cantaloupe Seeds, Cantaloupe Slice (Delightful's art), Cantaloupe Popsicle (Delightful's art), Jam, Jello, Juice, Shaved Ice; Mini Cantaloupe, Mini Cantaloupe Seeds; no Hamimelon Slice, no second popsicle, no Canned Hamimelon |
-| MG-40 | `/give @s fruitsdelight:hamimelon_slice 3`, `fruitsdelight:hamimelon_popsicle`, `creativeengineering:canned_hamimelon` | 3 Cantaloupe Slices, a Cantaloupe Popsicle, a Canned Cantaloupe |
-| MG-41 | Craft: 1 slice; 9 slices; 4 slices (2x2); 1 Cantaloupe Seeds; 1 Mini Cantaloupe Seeds; Mini Cantaloupe + 2 ice cubes + stick | Cantaloupe Seeds; Cantaloupe; Mini Cantaloupe; Mini Cantaloupe Seeds; Cantaloupe Seeds; Cantaloupe Popsicle |
-| MG-42 | Knife on a Cantaloupe block on the cutting board; knife on a placed Mini Cantaloupe | 9 Cantaloupe Slices; 4 Cantaloupe Slices |
-| MG-43 | JEI uses of the Cantaloupe Slice: jam, juice, jello, popsicle, exotic fruits bowl, fruit salad, Cantaloupe Bread | All accept it |
-| MG-44 | New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creativedelight:wild/mini_cantaloupe` to see one); WTHIT on the stem | Both on sand, red sand or terracotta; stem named Cantaloupe Stem |
-| MG-45 | Wares package and cardboard box (block and item): look; place an Old and a Weathered Cardboard Box; wash a Dustrial Decor box, then the result, in a Create fan; JEI for other recipes of Old/Weathered | Wares boxes brown; Weathered gray-brown; only the washing recipes exist; boxes walk and sink like Dustrial's (server half: scratch queue SQ-MG-16) |
-| MG-46 | Jungle: gorillas and sugar gliders foraging leaves; new world near banana plants | Neapolitan bananas only; no chimpanzees; JEI shows no chimpanzee spawn egg or head (server half: scratch queue SQ-MG-17 to -20) |
+- [ ] **MG-01:** JEI: search banana, milk bottle, chocolate cake, diced, rocky dirt -> None of the five purged items show
+- [ ] **MG-02:** `/give @s alexsmobs:banana 5` -> Becomes 5 Neapolitan bananas
+- [ ] **MG-03:** Eat a Neapolitan banana -> Banana peel in the inventory
+- [ ] **MG-04:** Feed / tame a capuchin monkey with a Neapolitan banana -> Accepted
+- [ ] **MG-05:** Break jungle leaves (20+) -> No bananas
+- [ ] **MG-06:** JEI uses of milk bucket; craft bucket + 4 glass bottles -> 4 Farmer's Delight milk bottles; 4 FD bottles + bucket -> milk bucket (3 until 2026-10-25, abnormals_delight.md 3.4)
+- [ ] **MG-07:** Milk cauldron (bucket in), take with a glass bottle -> FD milk bottle
+- [ ] **MG-08:** Spout milk into a glass bottle; matcha latte in the kettle with an FD bottle -> FD bottle; latte brews, one recipe only in JEI
+- [ ] **MG-09:** JEI chocolate cake -> CC&A cake with: baked base + frosting + 2 chocolate bars by hand, 7 slices, oven, spout (baked base + 500 mB chocolate, the pack's recipe only)
+- [ ] **MG-10:** Knife on CC&A cake on a cutting board; knife on the placed cake -> 7 chocolate slices; one slice per use
+- [ ] **MG-11:** Knife on a potato on a cutting board -> 3 Rustic Delight potato slices (2 before 2026-11-01), no diced potatoes recipe
+- [ ] **MG-12:** Cooking pot: diced potatoes with beef using potato slices -> Cooks
+- [ ] **MG-13:** Hover Vinery cider and apple juice -> "Hard Cider"; tooltip "Apple Wine and Hard Cider"
+- [ ] **MG-14:** JEI Pebble Dirt and Rocky Dirt -> Pebble Dirt (Dave's, slab "Pebble Dirt Slab"): 2 dirt + 2 Twigs pebbles crossed -> 4, coarse dirt -> 8. Rocky Dirt (Twigs'): 2 dirt + 2 cobblestone -> 4, coarse dirt -> 8. One Rocky Dirt only, no rocky dirt -> dirt recipe
+- [ ] **MG-15:** JEI uses of the Apple Cider fluid -> Create Mixing page: + milk bottle -> 1000 mB long, + honey bottle -> 1000 mB strong, both heated. IE Mixer page: same at 1500 mB. None on Automatic Brewing or Automated Potion Mixing
+- [ ] **MG-16:** Hover the three cider fluids in JEI (ingredient list and a Mixing recipe) -> All "Apple Cider"; under the name "Absorption (1:00)", "Absorption (1:30)", "Absorption II (0:30)" in blue
+- [ ] **MG-17:** Hover the three cider items -> All "Apple Cider" with the same three effect lines
+- [ ] **MG-18:** Heated mixer: 1000 mB cider + 1 milk bottle; then + 1 honey bottle on fresh cider -> 1000 mB long cider, glass bottle left in the basin; 1000 mB strong cider
+- [ ] **MG-19:** IE Mixer: 1500 mB cider + milk bottle; IE Mixer 250 mB water + 2 apples + sugar; Bottling Machine each cider -> 1500 mB long cider; 250 mB cider; one bottle per 250 mB, right tier
+- [ ] **MG-20:** Hover a green tea fluid in JEI -> Its effect line under the name (side effect of MG-16's hook)
+- [ ] **MG-21:** JEI search froststone; craft 2 packed ice + 2 stone -> 10 Froststone blocks named as in 2.7; 2 Froststone. No "Permafrost" left on Quark's blocks
+- [ ] **MG-22:** New frozen peaks chunks: caves at y 105-140 (`/locate biome minecraft:frozen_peaks`, spectator) -> IW permafrost floors, ceilings and pillars, packed ice walls, no Froststone
+- [ ] **MG-23:** JEI: search coffee (recipe removals: scratch server PASSED 2026-10-22, SQ-CO-01) -> No Farmer's Respite coffee items or kettle coffee recipes; Rustic's Coffee, Milk / Honey / Chocolate / Dark Coffee, beans, bag, wild coffee all there
+- [ ] **MG-24:** (effect swap: scratch server PASSED 2026-10-22, SQ-CO-02) Hover Rustic's Coffee, Milk Coffee, Honey Coffee, Chocolate Coffee, Dark Coffee; drink each -> Caffeinated 1:30, 1:00, 0:45, 0:45, Caffeinated II 0:45; no Speed or Haste. Milk / chocolate coffee still clear one effect
+- [ ] **MG-25:** `/give @s farmersrespite:coffee_berries 3`, `coffee_beans 3`, `strong_coffee 1`, `long_coffee 1` -> 3 Coffee Beans, 3 Roasted Coffee Beans, 1 Dark Coffee, 1 Coffee (Rustic's)
+- [ ] **MG-26:** (inputs: scratch server PASSED 2026-10-22, SQ-CO-01, coffee cake takes roasted beans) JEI recipes for Coffee Cake and Blazing Chili; uses of Coffee Beans -> Cake and chili take Roasted Coffee Beans; Gambler's Tea (kettle) and Canned Coffee Berries take Coffee Beans; no beans -> red dye
+- [ ] **MG-27:** JEI uses of Rustic's Coffee and Dark Coffee in a Spout / Item Drain -> No Central Kitchen coffee fluid recipe
+- [ ] **MG-28:** Break a placed FR coffee bush at stage 2 (old world, or `/setblock`) -> Rustic's Coffee Beans drop, no FR berries
+- [ ] **MG-29:** JEI search salt -> One salt item (pink Salt Dust), one Salt Block (The Salt's, pink), no Salt Bucket; Large Salt Lamp plus Vintage's 17 lamps; ores, raw rock salt, buds and cluster pink
+- [ ] **MG-30:** Craft 9 salt dust; craft the block back; JEI uses of Salt Block -> 1 Salt Block; 9 Salt Dust (one recipe each way); Evaporator, salt bricks / pillar / smooth recipes take it
+- [ ] **MG-31:** Craft Large Salt Lamp (7 Salt Block, glowstone center, deepslate tiles bottom middle); place it -> Large Salt Lamp, lights up; no raw rock salt block + torch recipe
+- [ ] **MG-32:** `/give @s salt:salt 3`, `vintagedelight:salt_block 1`; salt a food with salt dust in the grid -> 3 Salt Dust, 1 Salt Block; Salted food
+- [ ] **MG-33:** Cauldron of water over a fire until it evaporates; smelt a water bucket -> Salt dust drops; no salt bucket recipe
+- [ ] **MG-34:** New world, beach: find a salt patch (`/place feature vintagedelight:patch_salt`) -> Salt layers on raw rock salt blocks; the rock salt next to the sea stays
+- [ ] **MG-35:** Place an Evaporator with water beside it; wait for layers; place a Salt Block with water beside it -> Salt Layers grow on the Evaporator, textured like the pink Salt Block; the Salt Block grows nothing and dissolves
+- [ ] **MG-36:** `/gamerule randomTickSpeed 300`; put snow / ice against salt bricks, a salt brick stair, a Vintage salt lamp, a Salt Layer and a raw rock salt block -> Every touching snow and ice block melts
+- [ ] **MG-37:** Same tick speed: Salt Layer beside water, Salt Layer and Salt Block in rain, Salt Layer next to a torch; raw rock salt block beside water and in rain -> Layers and Salt Blocks by water dissolve; nothing dissolves in rain; the torch-lit layer stays; raw rock salt stays
+- [ ] **MG-38:** JEI: uses of Evaporator, of Salt Layer, of `#salt:meltables` -> Evaporator page (layers on top, up to 8); Salt Layer in the dissolve rows; no "use salt on ice" or dispenser rows; Evaporator info reads "Salt Blocks do not grow salt"
+- [ ] **MG-39:** JEI: search hamimelon, cantaloupe -> Cantaloupe (block), Cantaloupe Seeds, Cantaloupe Slice (Delightful's art), Cantaloupe Popsicle (Delightful's art), Jam, Jello, Juice, Shaved Ice; Mini Cantaloupe, Mini Cantaloupe Seeds; no Hamimelon Slice, no second popsicle, no Canned Hamimelon
+- [ ] **MG-40:** `/give @s fruitsdelight:hamimelon_slice 3`, `fruitsdelight:hamimelon_popsicle`, `creativeengineering:canned_hamimelon` -> 3 Cantaloupe Slices, a Cantaloupe Popsicle, a Canned Cantaloupe
+- [ ] **MG-41:** Craft: 1 slice; 9 slices; 4 slices (2x2); 1 Cantaloupe Seeds; 1 Mini Cantaloupe Seeds; Mini Cantaloupe + 2 ice cubes + stick -> Cantaloupe Seeds; Cantaloupe; Mini Cantaloupe; Mini Cantaloupe Seeds; Cantaloupe Seeds; Cantaloupe Popsicle
+- [ ] **MG-42:** Knife on a Cantaloupe block on the cutting board; knife on a placed Mini Cantaloupe -> 9 Cantaloupe Slices; 4 Cantaloupe Slices
+- [ ] **MG-43:** JEI uses of the Cantaloupe Slice: jam, juice, jello, popsicle, exotic fruits bowl, fruit salad, Cantaloupe Bread -> All accept it
+- [ ] **MG-44:** New world, desert and badlands: find wild Cantaloupes and Mini Cantaloupes (`/place feature creativedelight:wild/mini_cantaloupe` to see one); WTHIT on the stem -> Both on sand, red sand or terracotta; stem named Cantaloupe Stem
+- [ ] **MG-45:** Wares package and cardboard box (block and item): look; place an Old and a Weathered Cardboard Box; wash a Dustrial Decor box, then the result, in a Create fan; JEI for other recipes of Old/Weathered -> Wares boxes brown; Weathered gray-brown; only the washing recipes exist; boxes walk and sink like Dustrial's (server half: scratch queue SQ-MG-16)
+- [ ] **MG-46:** Jungle: gorillas and sugar gliders foraging leaves; new world near banana plants -> Neapolitan bananas only; no chimpanzees; JEI shows no chimpanzee spawn egg or head (server half: scratch queue SQ-MG-17 to -20)
 - [ ] **MG-47 Apple tree [game]:** JEI has no Fruits Delight apple sapling or leaves; a Fruits Delight apple sapling
   given by `/give` turns into the Vinery apple tree sapling in the inventory; a new world's forest has no Fruits Delight
   apple trees; an apple's tooltip reads "Fertile: Autumn" / "Offseason: Winter, Dry".
@@ -618,8 +616,8 @@ Probes `tools/item_merges_probe/merge_probe.js` (`/mgtest`, `/mgpf`) and `merge_
   7 slices and 7 slices give the cake back, Rustic potato slices tagged, Pebble Dirt 4 / 8, Rocky Dirt 4 / 8, slab 6.
 - MG-15 and MG-19 (recipe parts): long and strong cider Create mixing, three IE mixer recipes, one bottling recipe per
   cider; tmted's two removed, Central Kitchen's base mixing kept; fluid tags hold one fluid each.
-- MG-21 (recipe part): 2 packed ice + 2 stone gives 2 `quark:permafrost` (Froststone).
-- MG-22: three frozen peaks sites in a new normal world, 3x3 chunks at y 100-145: Quark permafrost 0 at all three,
+- [ ] **MG-21:** (recipe part) 2 packed ice + 2 stone gives 2 `quark:permafrost` (Froststone).
+- [ ] **MG-22:** three frozen peaks sites in a new normal world, 3x3 chunks at y 100-145: Quark permafrost 0 at all three,
   Immersive Weathering permafrost 6335, 1303, 1612. With `permafrostMerge = false` (new world, restart): Quark
   permafrost 1073, Immersive Weathering 0.
 - The Winemaker pool has no apple sapling; the other Fruits Delight saplings are still there.
@@ -782,16 +780,14 @@ untouched, int counts, split sums, fingerprint order-free. JSON: 38 pairs, no du
 SQ-SWP-01 to -08 in the scratch queue (section SQ-CDJ6). 2026-11-03: CD `swaps/merges_*.json` hold 40 pairs after
 2.17 to 2.20; the counts in SWP-01 (43) predate them, so recount at the first boot (plan_creative_delight.md L).
 
-| ID | Test | Expected |
-|---|---|---|
-| SWP-01 | Restart, `logs/latest.log` | `[swaps] ... 43 item merge(s)`, `[creativedelight] 43 item merge(s) from the swap lists` (fewer only when a `requires` mod is absent), `[swaps] n item merge(s) live in the world`; no `merged twice`, no `Error occurred while handling event` |
-| SWP-02 | JEI: search banana, coffee berries, diced potatoes, Caesar salad | The purged items are hidden, as before the move (recipes and loot follow the survivors) |
-| SWP-03 | Put 5 `alexsmobs:banana` with a custom name in a chest (`/data merge`), leave, `/ccswap items` | 5 Neapolitan bananas, name kept |
-| SWP-04 | 64 `vintagedelight:vinegar_bottle` in a chest, open it | Jars in 16-stacks (or the survivor's stack size) in the free slots, total 64; none lost |
-| SWP-05 | Shulker box holding Farmer's Respite coffee in a chest, open the chest | The box's contents read Rustic Delight coffee |
-| SWP-06 | Log out with a purged item in the inventory and ender chest, set `onPlayerDataLoad=false`, rejoin | Rewritten once (`onceWhenUpdated`); a second rejoin logs nothing |
-| SWP-07 | Drop a purged stack from an old save (or `/summon item ... {Item:{id:"alexsmobs:banana",Count:3b}}`) | The item entity holds 3 Neapolitan bananas |
-| SWP-08 | `onCommand=false`, `/ccswap items` | Refused with the config key named |
+- [ ] **SWP-01:** Restart, `logs/latest.log` -> `[swaps] ... 43 item merge(s)`, `[creativedelight] 43 item merge(s) from the swap lists` (fewer only when a `requires` mod is absent), `[swaps] n item merge(s) live in the world`; no `merged twice`, no `Error occurred while handling event`
+- [ ] **SWP-02:** JEI: search banana, coffee berries, diced potatoes, Caesar salad -> The purged items are hidden, as before the move (recipes and loot follow the survivors)
+- [ ] **SWP-03:** Put 5 `alexsmobs:banana` with a custom name in a chest (`/data merge`), leave, `/ccswap items` -> 5 Neapolitan bananas, name kept
+- [ ] **SWP-04:** 64 `vintagedelight:vinegar_bottle` in a chest, open it -> Jars in 16-stacks (or the survivor's stack size) in the free slots, total 64; none lost
+- [ ] **SWP-05:** Shulker box holding Farmer's Respite coffee in a chest, open the chest -> The box's contents read Rustic Delight coffee
+- [ ] **SWP-06:** Log out with a purged item in the inventory and ender chest, set `onPlayerDataLoad=false`, rejoin -> Rewritten once (`onceWhenUpdated`); a second rejoin logs nothing
+- [ ] **SWP-07:** Drop a purged stack from an old save (or `/summon item ... {Item:{id:"alexsmobs:banana",Count:3b}}`) -> The item entity holds 3 Neapolitan bananas
+- [ ] **SWP-08:** `onCommand=false`, `/ccswap items` -> Refused with the config key named
 
 ## Owner notes (scratchpad 2026-11-07)
 

@@ -278,10 +278,10 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - [ ] **POT-15 Vinery box and pot:** a Vinery flower box placed on the floor sits in the middle of the block (model,
   outline, plants), against a wall at the back as before; an old box keeps its place; it takes everything the planter
   box takes. The Vinery flower pot takes an oak sapling, wheat seeds, cactus, a fern, a rose bush (both halves).
-- [ ] **POT-18 whole blocks out of boxes** (3.3, SQ-POT-09): a melon, pumpkin, carved pumpkin, jack o'lantern, moss block
+- [ ] **POT-18 whole blocks out of boxes:** (3.3, SQ-POT-09) a melon, pumpkin, carved pumpkin, jack o'lantern, moss block
   and moss carpet are each refused by the Large Flower Box, an oak planter box and the Vinery flower box (hand keeps
   the item, the box stays empty); a poppy still goes into each.
-- [ ] **POT-19 wall-hung Rich Hanging Pot (owner)** (3.3, CQ-POT-03): in a fresh Flower Test world, the column after the
+- [ ] **POT-19 wall-hung Rich Hanging Pot (owner):** (3.3, CQ-POT-03) in a fresh Flower Test world, the column after the
   Rich Hanging Pot holds a wall lantern on glass with the same plant in every row that took one; the owner rules keep
   (a wall placement for the pot) or remove.
 - [ ] **POT-16 silt pot as soil:** fill a silt pot with rooted dirt; wheat seeds, an oak sapling, sugar cane, cactus and

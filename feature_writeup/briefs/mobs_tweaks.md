@@ -113,9 +113,9 @@ all.
   avoids that.
 
 ### Tests
-- **MT-26 Lunchbox safe in the hotbar:** stand on a beach with a lunchbox in hotbar slot 1 and bread in slot 2, and
+- [ ] **MT-26 Lunchbox safe in the hotbar:** stand on a beach with a lunchbox in hotbar slot 1 and bread in slot 2, and
   wait for a gull -> it takes the bread, never the box. With only the box in the hotbar, no gull dives at you.
-- **MT-27 Dropped box (only with the mixin):** drop a lunchbox near gulls -> none picks it up.
+- [ ] **MT-27 Dropped box (only with the mixin):** drop a lunchbox near gulls -> none picks it up.
 
 ---
 
@@ -192,7 +192,7 @@ to confirm.
 - `global.entity` is a startup global. Client scripts see it too (same `global`), which is fine.
 
 ### Tests
-- **MT-28 Dict check:** restart, then `logs/latest.log` has no `[entity_dict] Missing/invalid` line, and MT-01 still
+- [ ] **MT-28 Dict check:** restart, then `logs/latest.log` has no `[entity_dict] Missing/invalid` line, and MT-01 still
   passes (the tag is unchanged; `/tag` can't list entity tags, so use `/dumptags entity_type` and check
   `kubejs/exported/tags/`).
 
@@ -248,7 +248,7 @@ Depends on the decision:
   `PLANKS_PREDICATE` to vanilla `minecraft:barrel` or require sneaking. Not recommended unless it shows up.
 
 ### Tests
-- **MT-29 Sputter:** place a carved pumpkin on a barrel -> a Sputter appears and the advancement fires; give it 16
+- [ ] **MT-29 Sputter:** place a carved pumpkin on a barrel -> a Sputter appears and the advancement fires; give it 16
   arrows and lure a zombie in -> it shoots, the count goes down; with an empty hand take the rest back. With
   `enableSputter = false` (game stopped) -> nothing happens.
 
@@ -313,7 +313,7 @@ the overlap. The overlap is capuchin vs chimpanzee: same jungles, same bananas.
   the switch. Check that a 0 weight really adds no spawn with `/dumpspawns` after the change (MT-30).
 
 ### Tests
-- **MT-30 One monkey:** after the change, `/dumpspawns` + `python3 tools/gen_spawn_table.py` -> the loser has no biome
+- [ ] **MT-30 One monkey:** after the change, `/dumpspawns` + `python3 tools/gen_spawn_table.py` -> the loser has no biome
   spawn. Fly through a fresh jungle -> only the survivor appears. The hidden items are gone from JEI.
 
 ---
@@ -411,11 +411,11 @@ Killing one costs a little karma later (`largecontent/karma #1`).
   everything else in server scripts.
 
 ### Tests
-- **MT-31 Name rolls:** set `chance = 1` (startup, restart), and new hostile spawns at night carry a name. Reloading
+- [ ] **MT-31 Name rolls:** set `chance = 1` (startup, restart), and new hostile spawns at night carry a name. Reloading
   the chunk doesn't rename them.
-- **MT-32 Announce:** kill a named zombie -> one chat line with its name and type. A named skeleton that kills you ->
+- [ ] **MT-32 Announce:** kill a named zombie -> one chat line with its name and type. A named skeleton that kills you ->
   the vanilla death message names it.
-- **MT-33 Despawn:** walk 128+ blocks away from an untouched named mob -> it despawns like any other.
+- [ ] **MT-33 Despawn:** walk 128+ blocks away from an untouched named mob -> it despawns like any other.
 
 ---
 
@@ -569,16 +569,16 @@ break); when every mob of the wave is dead it spits out a single item rolled fro
 - Named mobs (#6) should skip `SPAWNER` spawns, or every wave can name a zombie.
 
 ### Tests
-- **MT-34 Box stays:** find or `/setblock` a `quark:monster_box`, walk up -> mobs spawn, the box stays.
-- **MT-35 Reward:** kill the wave -> items pop out of the box once; walking up again within the cooldown does nothing.
-- **MT-36 Re-arm:** `cooldownTicks = 200` (game stopped), repeat -> after 10 s it growls again.
-- **MT-37 Off switch:** `vaultMode = false` -> Quark behavior (the box breaks).
-- **MT-47 Single item:** kill the wave -> exactly one stack pops out, from the reward table.
-- **MT-48 Obsidian hardness:** survival, diamond pickaxe -> about 9.4 s to mine, like obsidian next to it; iron
+- [ ] **MT-34 Box stays:** find or `/setblock` a `quark:monster_box`, walk up -> mobs spawn, the box stays.
+- [ ] **MT-35 Reward:** kill the wave -> items pop out of the box once; walking up again within the cooldown does nothing.
+- [ ] **MT-36 Re-arm:** `cooldownTicks = 200` (game stopped), repeat -> after 10 s it growls again.
+- [ ] **MT-37 Off switch:** `vaultMode = false` -> Quark behavior (the box breaks).
+- [ ] **MT-47 Single item:** kill the wave -> exactly one stack pops out, from the reward table.
+- [ ] **MT-48 Obsidian hardness:** survival, diamond pickaxe -> about 9.4 s to mine, like obsidian next to it; iron
   pickaxe -> barely progresses; TNT next to it -> box survives.
-- **MT-49 Sneak to break:** mine it standing -> aqua warning in chat, box stays (and reappears client side); mine it
+- [ ] **MT-49 Sneak to break:** mine it standing -> aqua warning in chat, box stays (and reappears client side); mine it
   sneaking -> breaks, drops nothing. Same in creative.
-- **MT-50 Create drill:** a powered Create drill against a box -> it doesn't break.
+- [ ] **MT-50 Create drill:** a powered Create drill against a box -> it doesn't break.
 
 ---
 
@@ -685,8 +685,8 @@ Sleeping MCA villagers lie still in bed instead of lying with legs and arms bent
 - MCA updates often (this jar is a 2026-03 build). Keep the mixin `require = 0` and the target by name.
 
 ### Tests
-- **MT-38 Diagnose (adults):** the `/data` checks in Build 1, plus `/data get entity <same selector> Pos` a few times (a changing value means (d)). Record the result in the row.
-- **MT-39 Still sleepers:** a village at night -> sleeping villagers lie straight and still, in vanilla beds and
+- [ ] **MT-38 Diagnose (adults):** the `/data` checks in Build 1, plus `/data get entity <same selector> Pos` a few times (a changing value means (d)). Record the result in the row.
+- [ ] **MT-39 Still sleepers:** a village at night -> sleeping villagers lie straight and still, in vanilla beds and
   in every modded bed type that villagers use.
 
 ## tweaks #12: MCA villager eye color
@@ -727,7 +727,7 @@ Recommendation was: 2 if the 5 shipped natural colors are enough (smallest, reve
 Decision needed: which colors are allowed (and whether heterochromia stays, its pairs are fixed in the art).
 
 ### Tests
-- **MT-40 Comb eye colour:** in [mob_block_tweaks.md](../mob_block_tweaks.md) section 7.
+- [ ] **MT-40 Comb eye colour:** in [mob_block_tweaks.md](../mob_block_tweaks.md) section 7.
 
 ---
 

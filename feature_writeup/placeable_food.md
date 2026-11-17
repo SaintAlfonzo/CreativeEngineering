@@ -144,7 +144,7 @@ Data flow: `/dumpplaceable` -> `kubejs/exported/food/placeable.json` -> `tools/p
 
 Restart the game (new item_dict keys, new client script). Hover items in JEI or the inventory.
 
-- [ ] **PL-01 Load** (server half: scratch r1031 SQ-KT-21 PASS, the `[placeable]` counts line with no `not item ids` warning; r1102b SQ-CDFW-03 PASS, tags; deep scan 2026-11-02)**:** `logs/latest.log` has `[placeable] placeable=161, placeable/sneak=103, placeable_on_plate=34, placeable_on_small_plate=13, placeable_on_coaster=392` (2026-10-24 dump; the 9 egg dishes add to `placeable` after the next dump) and no `[placeable]` warning. No `Error occurred while handling event 'item.tooltip'`.
+- [ ] **PL-01 Load:** (server half: scratch r1031 SQ-KT-21 PASS, the `[placeable]` counts line with no `not item ids` warning; r1102b SQ-CDFW-03 PASS, tags; deep scan 2026-11-02)**:** `logs/latest.log` has `[placeable] placeable=161, placeable/sneak=103, placeable_on_plate=34, placeable_on_small_plate=13, placeable_on_coaster=392` (2026-10-24 dump; the 9 egg dishes add to `placeable` after the next dump) and no `[placeable]` warning. No `Error occurred while handling event 'item.tooltip'`.
 - [ ] **PL-02 DD placed:** hover Beef Stew. -> "Placeable (while sneaking)" in gray, and no "Can be placed while sneaking" line. Sneak + right click a block top places it.
 - [ ] **PL-03 DD plate:** hover Hamburger. -> "Placeable on plate" only; no "Can be plated on:" / "Food Plate" lines. Right click an empty Food Plate plates it.
 - [ ] **PL-04 DD small plate:** hover Cake Slice. -> "Placeable on small plate". Right click an empty Small Food Plate plates it.

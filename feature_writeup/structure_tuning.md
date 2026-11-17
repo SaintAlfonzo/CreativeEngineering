@@ -2317,22 +2317,22 @@ attempts a floor level, and with the monster cap full of cave mobs only freed sl
 pillagers (8 in the NBT) despawn at random beyond 32 blocks (qa stood 31-45 off). Fix: box spawn height (above).
 
 **Tests** (scratch queue SQ-SB; r1031 2026-10-31 ran SB-01 to -03, SB-04 to -08 not run):
-- **ST-320 Spawners gone:** *r1031 (SQ-SB-02): the log shows the spawners removed from the catapult, the Mysticrift oak and End towers and the Blocky Siege ship; the row's check was wrong, fixed row not rerun.* new world; `/cdevplace` a catapult, a Mysticrift oak tower, the Blocky Siege ship and the End
+- [ ] **ST-320 Spawners gone:** *r1031 (SQ-SB-02): the log shows the spawners removed from the catapult, the Mysticrift oak and End towers and the Blocky Siege ship; the row's check was wrong, fixed row not rerun.* new world; `/cdevplace` a catapult, a Mysticrift oak tower, the Blocky Siege ship and the End
   tower -> no spawner where the templates had them; `[spawner-filter]` lines for each; `removeSpawners = []` brings
   them back in new chunks.
-- **ST-321 Boxes load:** *PASS r1031 (2026-10-31, SQ-SB-01, -01b).* boot log `[spawn-boxes] 15 box(es)`, then `N structure(s) boxed` on the first spawn check, no
+- [ ] **ST-321 Boxes load:** *PASS r1031 (2026-10-31, SQ-SB-01, -01b).* boot log `[spawn-boxes] 15 box(es)`, then `N structure(s) boxed` on the first spawn check, no
   `is in box ... and in box` warning.
-- **ST-322 Large tower mix:** *FAIL r1031 (2026-10-31, SQ-SB-03): no illager at a lone birch tower by night or day while zombies and a creeper spawned. Cause: attempt heights from the world bottom (see Cause found); box spawn height built 2026-11-02, rerun SQ-PSM-03.* a Mysticrift tower at night on Normal -> pillagers, vindicators, evokers, illusioners,
+- [ ] **ST-322 Large tower mix:** *FAIL r1031 (2026-10-31, SQ-SB-03): no illager at a lone birch tower by night or day while zombies and a creeper spawned. Cause: attempt heights from the world bottom (see Cause found); box spawn height built 2026-11-02, rerun SQ-PSM-03.* a Mysticrift tower at night on Normal -> pillagers, vindicators, evokers, illusioners,
   witches; no ravager, no zombie inside the box. By day only pillagers.
-- **ST-323 Box inside a meta:** `/locate` a `meta/pillager_tower_siege`; by the anchor tower and by a siege weapon ->
+- [ ] **ST-323 Box inside a meta:** `/locate` a `meta/pillager_tower_siege`; by the anchor tower and by a siege weapon ->
   both spawn the large-tower mix (no ravagers); a lone T&T tower spawns the camp mix.
-- **ST-324 Ruin inside a camp meta:** a `meta/pillager_camp_ruin` -> the camp spawns the camp-meta mix, the ruin its
+- [ ] **ST-324 Ruin inside a camp meta:** a `meta/pillager_camp_ruin` -> the camp spawns the camp-meta mix, the ruin its
   own Philip's Ruins mobs.
-- **ST-325 Box evoker totem:** kill an evoker that spawned in a fort box -> no totem; a mansion evoker from generation
+- [ ] **ST-325 Box evoker totem:** kill an evoker that spawned in a fort box -> no totem; a mansion evoker from generation
   -> totem.
-- **ST-326 Unwrecked crew:** an Unwrecked ship with the pillager layout spawns the boat mix on deck; a villager-crew
+- [ ] **ST-326 Unwrecked crew:** an Unwrecked ship with the pillager layout spawns the boat mix on deck; a villager-crew
   ship spawns biome mobs.
-- **ST-327 Witch boxes:** a witch wagon and a Terralith underground witch hut at night -> witches only.
+- [ ] **ST-327 Witch boxes:** a witch wagon and a Terralith underground witch hut at night -> witches only.
 
 ### 3.34 Quark spiral spires: no base over the void (added 2026-11-02, TODO `structures/contents #5`)
 
@@ -3752,15 +3752,15 @@ estimates, the harsh/ordinary ratio in ST-185 skipped). Every correctness part s
 - Revert every temporary edit and rejoin before moving to the next test.
 
 **Structure sets** (tests from before the groups; the retired ones used the old knobs)
-- [ ] ~~**ST-01 Loads clean**~~ retired 2026-09-27, moved to ST-17.
-- [ ] ~~**ST-02 Live values match**~~ retired 2026-09-27, moved to ST-18.
+- [ ] ~~**ST-01 Loads clean:**~~ retired 2026-09-27, moved to ST-17.
+- [ ] ~~**ST-02 Live values match:**~~ retired 2026-09-27, moved to ST-18.
 - [x] **ST-03 Removal works:** `L minecraft:ruined_portal` -> not found, answered within a second or two. In the Nether, `L minecraft:ruined_portal_nether` -> not found. *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads; spawn -80 76 is open ocean): PASSED: both answer "Could not find" in 0.5 s (Overworld and Nether).*
 - [ ] **ST-04 New houses load:** `L villager_tannery:tannery` and `L simply_houses:taiga_inn` -> found. Teleport to the tannery -> it has its villager, and urns stand where the original 1.20 build had decorated pots. *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads; spawn -80 76 is open ocean): locate part PASSED: tannery at 2368 1232 (old-growth pine taiga) and taiga inn at 2768 1168 found, starts there. Villager and urns still to do in a client.*
 - [x] **ST-05 AE2 meteorite in the sky group:** `L ae2:meteorite` -> found, and a crater is there; meteorites are now as rare as Cloud Storage's structures (1 per 215 chunks). *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads; spawn -80 76 is open ocean): PASSED: meteorite at -1504 -688 (river), start box 143 wide at y 59; 1616 blocks from spawn vs a big balloon at 2537.*
-- [ ] ~~**ST-06 Category knob**~~ retired 2026-09-27 (tags have no multipliers), moved to ST-21.
-- [ ] ~~**ST-07 Per-set edit**~~ retired 2026-09-27, moved to ST-23.
-- [ ] ~~**ST-08 One member off**~~ retired 2026-09-27, moved to ST-21.
-- [ ] ~~**ST-09 An error applies nothing**~~ retired 2026-09-27, moved to ST-24.
+- [ ] ~~**ST-06 Category knob:**~~ retired 2026-09-27 (tags have no multipliers), moved to ST-21.
+- [ ] ~~**ST-07 Per-set edit:**~~ retired 2026-09-27, moved to ST-23.
+- [ ] ~~**ST-08 One member off:**~~ retired 2026-09-27, moved to ST-21.
+- [ ] ~~**ST-09 An error applies nothing:**~~ retired 2026-09-27, moved to ST-24.
 - [ ] **ST-10 Blocked means blocked:** `L betterstrongholds:stronghold` -> found; throw an eye of ender -> it heads toward a YUNG's stronghold. The report lists `minecraft:stronghold` as blocked under Coverage. *2026-10-13 scratch phase 2 (world st_a, seed 8675309, 1.0.6 build jar, 4 locator threads; spawn -80 76 is open ocean): locate part PASSED: `betterstrongholds:stronghold` at 1728 -2192 (2900 blocks); `minecraft:stronghold` answers "Use /locate structure betterstrongholds:stronghold instead!"; the report lists it as blocked under Coverage. Eye of ender still to do in a client.*
 
 **Structure groups** (2026-09-27)

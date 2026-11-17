@@ -42,7 +42,7 @@ listings are left out of the sync; a sampled random listing (enchanted items) sh
 
 ## 4. Tests
 
-- TSY-01: on the server, JER's Butcher page lists the six Barbeque's Delight seasonings and 64 salt at level 1 (CQ-TSY-01).
-- TSY-02: Mechanical Engineer, Hydraulic Engineer, Chef and Cleric pages match the pack trades; Wandering Trader page
+- [ ] **TSY-01:** on the server, JER's Butcher page lists the six Barbeque's Delight seasonings and 64 salt at level 1 (CQ-TSY-01).
+- [ ] **TSY-02:** Mechanical Engineer, Hydraulic Engineer, Chef and Cleric pages match the pack trades; Wandering Trader page
   shows the pack list (CQ-TSY-01).
-- TSY-03: after leaving the server, a singleplayer world shows the same pages without duplicates (CQ-TSY-01).
+- [ ] **TSY-03:** after leaving the server, a singleplayer world shows the same pages without duplicates (CQ-TSY-01).

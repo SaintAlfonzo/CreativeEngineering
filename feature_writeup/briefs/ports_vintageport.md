@@ -38,7 +38,7 @@ Remove the salted fish and the salted salmon and salted cod (Surstromming stays;
   the Vintage items only and keeping The Salt's Salted-NBT cooked fish. If the note meant The Salt's, say so.
 
 ### Tests
-- VTD-65 JEI: no salted cod or salted salmon; Surstromming still pickles; canned fish / salmon cans still craft from cooked fish.
+- [ ] **VTD-65 JEI:** no salted cod or salted salmon; Surstromming still pickles; canned fish / salmon cans still craft from cooked fish.
 
 ---
 
@@ -62,7 +62,7 @@ through the helper (unverified name; else extend `neoCraftHelper.js` with `ieCru
 - Multipliers: Create milling and crushing 2 seeds, IE Crusher 3. The note is uncertain; recommend as written.
 
 ### Tests
-- VTD-66 Wild ghost peppers: millstone and crushing wheels give 2 seeds, IE Crusher 3.
+- [ ] **VTD-66 Wild ghost peppers:** millstone and crushing wheels give 2 seeds, IE Crusher 3.
 
 ---
 
@@ -86,7 +86,7 @@ charcoal, or write the entry beside `alcohol_drinks.js`; `food_types.json` row (
   1:30 so it is a trade; hunger 0, alwaysEat.
 
 ### Tests
-- VTD-67 Eat ghost charcoal: Wither and Fire Resistance for the set times; still burns in a furnace.
+- [ ] **VTD-67 Eat ghost charcoal:** Wither and Fire Resistance for the set times; still burns in a furnace.
 
 ---
 
@@ -106,7 +106,7 @@ Delete the `if (topPosition != null ...)` block in `VineTrunkPlacer`; rebuild th
 "Sources", S1, VTD-08 text). No data hook exists for it.
 
 ### Tests
-- VTD-68 Grow a Magic Peanut tree: no golden egg on top; a goose can still lay one.
+- [ ] **VTD-68 Grow a Magic Peanut tree:** no golden egg on top; a goose can still lay one.
 
 ---
 
@@ -126,7 +126,7 @@ In `FermentingCategory`, if ticks < 1200 show `ticks / 20` seconds with a lang k
 1 min 30 s style for non-multiples). Add lang to `vintagedelight` en_us; rebuild the port.
 
 ### Tests
-- VTD-69 JEI: a 600-tick recipe shows 30 s; 2400 ticks shows 2 min.
+- [ ] **VTD-69 JEI:** a 600-tick recipe shows 30 s; 2400 ticks shows 2 min.
 
 ---
 
@@ -150,7 +150,7 @@ extract it on the sides and bottom, keep it in saves and drops; port config `rem
 - Patcher mixin vs native: recommend native, as the keg (`D5`); no dependency on Creative Common.
 
 ### Tests
-- VTD-70 Jar: a recipe using a honey bottle leaves an empty bottle in the buffer; hoppers pull it; breaking drops it.
+- [ ] **VTD-70 Jar:** a recipe using a honey bottle leaves an empty bottle in the buffer; hoppers pull it; breaking drops it.
 
 ---
 
@@ -169,5 +169,5 @@ Remove the slime block pickling recipe.
 changes. The tag `slime_ball_fermenting` becomes unused (leave it).
 
 ### Tests
-- VTD-71 JEI: Slime Block has no Pickling Jar recipe.
+- [ ] **VTD-71 JEI:** Slime Block has no Pickling Jar recipe.
 

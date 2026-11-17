@@ -181,7 +181,7 @@ tick rate; the SRG of `BaseFireBlock#tick` is not needed (own override in the pa
 - The fire tag makes portal detection treat Dark Fire as interior; burning neighbors must not touch obsidian.
 
 ### Tests (NP-)
-- NP-09 / NP-10 are replaced by: **NP-new1**: Flint and Terrasteel on air in front of a fence or a slab top (not
+- [ ] **NP-09:** / NP-10 are replaced by: **NP-new1**: Flint and Terrasteel on air in front of a fence or a slab top (not
   sturdy) -> nothing; on stone -> Dark Fire. **NP-new2**: Dark Fire on netherrack stays; on stone it goes out within
   a minute. **NP-new3**: Dark Fire next to an oak log and planks -> they burn away in seconds, mostly leaving ash;
   no new fire appears. **NP-new4**: the flame animates faster and in the other direction than before.

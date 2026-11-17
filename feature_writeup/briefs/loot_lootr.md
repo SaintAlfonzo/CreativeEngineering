@@ -119,11 +119,11 @@ becomes per-player.
 - The scan sees `Items` in templates only; containers filled by processors or code (YUNG's) are already tables.
 
 ### Tests
-- **LT-32 eugene fixed:** find a `eugene:ruined_drum_tower` in a new world, open the gold chest with two players ->
+- [ ] **LT-32 eugene fixed:** find a `eugene:ruined_drum_tower` in a new world, open the gold chest with two players ->
   each gets the contents; Lootr's chest texture shows.
-- **LT-33 verse chest:** `/locate structure philipsruins:ancient_towers`, find the tower variant with the chest at
+- [ ] **LT-33 verse chest:** `/locate structure philipsruins:ancient_towers`, find the tower variant with the chest at
   (6, 2, 5) -> Lootr chest, the verse book + golden carrot, per player.
-- **LT-34 audit clean:** `python3 tools/audit_loot_containers.py` -> no "NOT converted" rows except those D4 keeps.
+- [ ] **LT-34 audit clean:** `python3 tools/audit_loot_containers.py` -> no "NOT converted" rows except those D4 keeps.
 
 ---
 
@@ -213,12 +213,12 @@ and (separately) item frames that structures place with an item give each player
   must also cover `hurt` from non-player sources (cancel for tagged frames).
 
 ### Tests
-- **LT-35 Quark skin:** in a new world, a taiga or snowy village chest (Quark spruce chest) -> unopened and opened
+- [ ] **LT-35 Quark skin:** in a new world, a taiga or snowy village chest (Quark spruce chest) -> unopened and opened
   look match a plain Lootr chest with the pack's skin; same for a trapped one.
-- **LT-36 trapped skin:** `/setblock ~ ~ ~ lootr:lootr_trapped_chest` (or a YUNG's desert temple trap chest) -> new
+- [ ] **LT-36 trapped skin:** `/setblock ~ ~ ~ lootr:lootr_trapped_chest` (or a YUNG's desert temple trap chest) -> new
   trapped texture, opened variant after opening.
-- **LT-37 barrel lid:** open a Lootr barrel facing up -> opened-lid top uses the pack's art.
-- **LT-38 loot frame:** two players punch the same YUNG's stronghold item frame -> each gets the item once, the frame
+- [ ] **LT-37 barrel lid:** open a Lootr barrel facing up -> opened-lid top uses the pack's art.
+- [ ] **LT-38 loot frame:** two players punch the same YUNG's stronghold item frame -> each gets the item once, the frame
   keeps it; a second punch gives nothing.
 
 ---

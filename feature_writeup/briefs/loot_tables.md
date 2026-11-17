@@ -208,7 +208,7 @@ No Stockpile, Recovery or Cycle book from any container, and know which path sti
   `/give` book first.
 
 ### Tests
-- **LT-28 NEA books never roll:** step 1's probe prints `discoverable=false books=false` for all three; 200 rolls of
+- [ ] **LT-28 NEA books never roll:** step 1's probe prints `discoverable=false books=false` for all three; 200 rolls of
   `minecraft:chests/stronghold_library` and `minecraft:chests/simple_dungeon` give no Stockpile / Recovery / Cycle
   book. (Same check as `pack/release #4`.)
 
@@ -291,7 +291,7 @@ Tables `chalk:chests/{village,dungeon,desert_pyramid}_chalk_loot` (verified, jar
 - Each `addPool` is pre-roll and its tables must exist in the index (regenerate first for Subterrestrial).
 
 ### Tests
-- **LT-29 Chalk skew:** `/dumploot` -> the 4 village tables' Chalk pool has the 0.5 `random_chance`; library and
+- [ ] **LT-29 Chalk skew:** `/dumploot` -> the 4 village tables' Chalk pool has the 0.5 `random_chance`; library and
   underground tables have an extra `dungeon_chalk_loot` pool. 50 rolls of `minecraft:chests/village/village_plains_house`
   give about 4 chalk items; 50 of `minecraft:chests/stronghold_library` about 8.
 
@@ -323,7 +323,7 @@ More crates and sacks in villages and in farming / cooking houses, a little more
 - **Multipliers:** recommend farm/cooking x2, underground x1.5, villages stay x3.
 
 ### Tests
-- **LT-30 Crate boosts:** `/dumploot` -> in `terralith:village/fortified/food` the loose potato / carrot entries split
+- [ ] **LT-30 Crate boosts:** `/dumploot` -> in `terralith:village/fortified/food` the loose potato / carrot entries split
   about 60/40 loose/crates; in `minecraft:chests/abandoned_mineshaft` about 85/15. (Update LT-16 / LT-17 numbers.)
 
 ---
@@ -435,7 +435,7 @@ tier, mod oddities) can't appear.
   `Utils.getRegistry`), skipping missing ids with a warning.
 
 ### Tests
-- **LT-32 Book tiers:** `/dumploot` -> no `enchant_randomly` without a list on a `minecraft:book` anywhere; 30 rolls of
+- [ ] **LT-32 Book tiers:** `/dumploot` -> no `enchant_randomly` without a list on a `minecraft:book` anywhere; 30 rolls of
   `minecraft:chests/simple_dungeon` give only level-1 basic-tier books; `/loot give @s loot creativeengineering:loot/books/basic`
   50x never gives a treasure enchantment or a curse.
 
@@ -476,7 +476,7 @@ named cans.
 - Generated cans exist only after a startup with `can_types.json`; `define` must skip ids `Item.exists` doesn't know.
 
 ### Tests
-- **LT-33 Cans:** 50 rolls of `minecraft:chests/abandoned_mineshaft` give about 4 cans; 50 of
+- [ ] **LT-33 Cans:** 50 rolls of `minecraft:chests/abandoned_mineshaft` give about 4 cans; 50 of
   `minecraft:chests/village/village_plains_house` about 1; a looted can eats as a full can (servings bar starts full).
 
 ---
@@ -505,7 +505,7 @@ No MCA item in loot. Dict keys (item_dict.js lines 1710, 11704-11739): `i.comb` 
   loot gives items that don't do anything yet.
 
 ### Tests
-- **LT-34 MCA loot:** 50 rolls of `minecraft:chests/village/village_plains_house` give about 2 combs / thread; 50 of
+- [ ] **LT-34 MCA loot:** 50 rolls of `minecraft:chests/village/village_plains_house` give about 2 combs / thread; 50 of
   `mes:houses_flower` about 5 bouquets.
 
 ---
@@ -548,7 +548,7 @@ houses.
   [by_structure.md](../loot_catalog/by_structure.md).
 
 ### Tests
-- **LT-35 Azalea:** in a fresh lush cave, a Terralith oak cabin chest has azalea items about half the time; 20 rolls
+- [ ] **LT-35 Azalea:** in a fresh lush cave, a Terralith oak cabin chest has azalea items about half the time; 20 rolls
   of `mes:houses_flower` give about 1.
 
 ---
@@ -602,7 +602,7 @@ minable, emeralds, tools, food, building, rare random; blacksmith / armorer).
 - Tables a structure container names but nobody ships (aliases, finding 5) can be mapped straight to a node.
 
 ### Tests
-- **LT-36 Tree:** `/loottuning` lists N nodes defined and M tables remapped; `/dumploot` shows a remapped village
+- [ ] **LT-36 Tree:** `/loottuning` lists N nodes defined and M tables remapped; `/dumploot` shows a remapped village
   table as one `loot_table` pool; 30 rolls give items from its node's categories.
 
 ---

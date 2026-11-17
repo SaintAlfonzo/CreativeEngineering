@@ -111,7 +111,7 @@ fast-forwarding night.
   lie down and get up.
 
 ### Tests
-- **TI-31 Bed clock turns** (exists, time.md 655; it says about 5 s): single player, sleep at dusk with a clock in the hotbar -> the night passes in about 4-5 s,
+- [ ] **TI-31 Bed clock turns:** (exists, time.md 655; it says about 5 s) single player, sleep at dusk with a clock in the hotbar -> the night passes in about 4-5 s,
   Better Days' bed clock (top right) and the hotbar clock both turn from night to morning, SeasonHUD's time suffix
   races to about 7:42 am (Better Days wakes at vanilla morning, see #5).
 

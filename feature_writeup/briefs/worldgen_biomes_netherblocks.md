@@ -139,7 +139,7 @@ No soul fire or soul lanterns generated in Terralith's frostfire caves (or an ex
 
 ### Tests
 
-- **NW-20 Frostfire census (before and after):** scratch world, `/locate biome terralith:cave/frostfire_caves`, pregen
+- [ ] **NW-20 Frostfire census (before and after):** scratch world, `/locate biome terralith:cave/frostfire_caves`, pregen
   about 25 chunks around it; count soul fire, soul lanterns and lanterns with the region census from #4 (or by eye in
   spectator) -> before: soul lanterns on chains, soul fire 0 (expected); after: lanterns on chains, no soul fire.
 
@@ -207,7 +207,7 @@ Nothing generates glowstone in the Overworld, checked by a scan that covers ever
 
 ### Tests
 
-- **NW-21 Glowstone census:** `block_census.py` on the scratch world -> 0 `minecraft:glowstone` in the Overworld
+- [ ] **NW-21 Glowstone census:** `block_census.py` on the scratch world -> 0 `minecraft:glowstone` in the Overworld
   region files; the gothic church found in it (NW-11) shows yellow corundum.
 
 ---

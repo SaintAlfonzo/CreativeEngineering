@@ -67,15 +67,15 @@ joins IE, Supplementaries and FD, so no member namespace fits.
 
 ## 4. Tests
 
-- [ ] TSK-01 Place treated sticks on the floor, a wall and a ceiling: vertical, and both horizontals. Click a placed
+- [ ] **TSK-01:** Place treated sticks on the floor, a wall and a ceiling: vertical, and both horizontals. Click a placed
   stick's side with another: crossing stick added; a third axis too. Break: one Treated Stick per axis. Pick-block
   gives a Treated Stick. Place one in water: waterlogged.
-- [ ] TSK-02 Right-click a chest, crafting table and a lever with a treated stick: the block opens / toggles, no stick
+- [ ] **TSK-02:** Right-click a chest, crafting table and a lever with a treated stick: the block opens / toggles, no stick
   placed.
-- [ ] TSK-03 Plant tomato seeds on farmland, grow to a vine, right-click it with a treated stick: the vine shows a
+- [ ] **TSK-03:** Plant tomato seeds on farmland, grow to a vine, right-click it with a treated stick: the vine shows a
   treated stick, keeps its age. Put two treated sticks above and bone meal: the vine climbs, three high at most.
   Pick a ripe upper vine: tomatoes, stage resets. Break an upper vine: stick stays, drops as FD's vine.
-- [ ] TSK-04 A vine on a Supplementaries stick with a treated stick above, and a treated-stick vine with a
+- [ ] **TSK-04:** A vine on a Supplementaries stick with a treated stick above, and a treated-stick vine with a
   Supplementaries stick and a rope above: each climbs onto its own kind (Supplementaries stick vine, rope vine,
   treated stick vine).
-- [ ] TSK-05 Break the farmland under a bottom treated-stick vine: the vines above die back to treated sticks.
+- [ ] **TSK-05:** Break the farmland under a bottom treated-stick vine: the vines above die back to treated sticks.

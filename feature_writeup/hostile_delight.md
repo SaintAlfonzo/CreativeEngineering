@@ -551,39 +551,37 @@ Notes, as rows:
 
 ## 8. In-game test suite (drafted)
 
-| ID | Test | Pass |
-|---|---|---|
-| HTD-01 | Boot | No `Failed to parse` naming `hostiledelight`; no unknown item or tag |
-| HTD-02 | JEI: Ghast Roll, Guardian Roll | roll recipes x2 and assembly x3 shown |
-| HTD-03 | JEI: Prepared Sea Pickle | cutting board recipe gives it |
-| HTD-04 | Kill 10 ghasts (no looting) | tears 0-1, gunpowder 0-2, tentacles 0-2 each |
-| HTD-05 | Kill 10 guardians | vanilla drops (shards, cod / crystals) + Ocean's guardian + Upgrade Aquatic spine; no Hostile fillet |
-| HTD-06 | Cut Ocean's guardian on a cutting board | 3 Guardian Fillets |
-| HTD-07 | Kill endermites with and without a knife | per D2: survivor meat only with a knife; mite crust with a knife |
-| HTD-08 | Brew awkward + fillet in a stand | Potion of Dioxiding; splash and lingering by gunpowder / dragon's breath |
-| HTD-09 | Dioxiding in Create mixer and IE mixer | potion fluid of Dioxiding |
-| HTD-10 | Arrow of Dioxiding | craftable with lingering Dioxiding, applies Dioxide |
-| HTD-11 | Drink Dioxiding, stand on land, then swim | land: no damage; water: drowning; with Water Breathing: no damage |
-| HTD-12 | `/effect give @s hostiledelight:collapsing`, take a hit | per D9 (no extra 3 health lost) |
-| HTD-13 | Eat Gazing cookie under water with low air | air bar full |
-| HTD-14 | Craft Silme Syrup | glass bottle count unchanged overall |
-| HTD-15 | Use Glowing Sauce in Glowing Apple | bowl returned |
-| HTD-16 | Eat Magical Butter | per D6 |
-| HTD-17 | Eat Trembling cookie | an endermite appears |
-| HTD-18 | Eat Ender Substance at 20 health | 8 damage, Resistance IV 30 s |
-| HTD-19 | AppleSkin / JEED on Blazing Apple, Glow Wax Shuffle | the effects show (D10) |
-| HTD-20 | Eat Blazing Apple | Fire Resistance and Absorption apply once each (no double from procedure and properties) |
-| HTD-21 | Tooltips on 5 Hostile items | no flavor line (D11); effect lines present |
-| HTD-22 | Cookies in JEI | oven only, on cookie dough; no grid recipe |
-| HTD-23 | Rotten / Green Pie | oven on pie crust |
-| HTD-24 | Pearlsicle, Popsiclime | accept ice cubes and ice |
-| HTD-25 | Guardian Burger | shaped on cooked fillet + assembly |
-| HTD-26 | Mitey Meal, Glowing Ink Pasta | pot + `_manual_only` grid; unheated basin does not make the grid version |
-| HTD-27 | Stack sizes of Carrotmite, Sunset Ade, Dragon Tonic | 32 / 32 / 16 |
-| HTD-28 | Candied Slime Block | hoe fastest, drops itself, 9 <-> 1 |
-| HTD-29 | Names: Silme Syrup, Guardian Ratty, Marine Cocktale, Soda | fixed names |
-| HTD-30 | Guardian Soup | Ocean's item only; Hostile's merged (held copies converted) |
-| HTD-31 | Drink Ghast Brew at 4 health | heals 8 once, not to full (B12) |
+- [ ] **HTD-01:** Boot -> No `Failed to parse` naming `hostiledelight`; no unknown item or tag
+- [ ] **HTD-02:** JEI: Ghast Roll, Guardian Roll -> roll recipes x2 and assembly x3 shown
+- [ ] **HTD-03:** JEI: Prepared Sea Pickle -> cutting board recipe gives it
+- [ ] **HTD-04:** Kill 10 ghasts (no looting) -> tears 0-1, gunpowder 0-2, tentacles 0-2 each
+- [ ] **HTD-05:** Kill 10 guardians -> vanilla drops (shards, cod / crystals) + Ocean's guardian + Upgrade Aquatic spine; no Hostile fillet
+- [ ] **HTD-06:** Cut Ocean's guardian on a cutting board -> 3 Guardian Fillets
+- [ ] **HTD-07:** Kill endermites with and without a knife -> per D2: survivor meat only with a knife; mite crust with a knife
+- [ ] **HTD-08:** Brew awkward + fillet in a stand -> Potion of Dioxiding; splash and lingering by gunpowder / dragon's breath
+- [ ] **HTD-09:** Dioxiding in Create mixer and IE mixer -> potion fluid of Dioxiding
+- [ ] **HTD-10:** Arrow of Dioxiding -> craftable with lingering Dioxiding, applies Dioxide
+- [ ] **HTD-11:** Drink Dioxiding, stand on land, then swim -> land: no damage; water: drowning; with Water Breathing: no damage
+- [ ] **HTD-12:** `/effect give @s hostiledelight:collapsing`, take a hit -> per D9 (no extra 3 health lost)
+- [ ] **HTD-13:** Eat Gazing cookie under water with low air -> air bar full
+- [ ] **HTD-14:** Craft Silme Syrup -> glass bottle count unchanged overall
+- [ ] **HTD-15:** Use Glowing Sauce in Glowing Apple -> bowl returned
+- [ ] **HTD-16:** Eat Magical Butter -> per D6
+- [ ] **HTD-17:** Eat Trembling cookie -> an endermite appears
+- [ ] **HTD-18:** Eat Ender Substance at 20 health -> 8 damage, Resistance IV 30 s
+- [ ] **HTD-19:** AppleSkin / JEED on Blazing Apple, Glow Wax Shuffle -> the effects show (D10)
+- [ ] **HTD-20:** Eat Blazing Apple -> Fire Resistance and Absorption apply once each (no double from procedure and properties)
+- [ ] **HTD-21:** Tooltips on 5 Hostile items -> no flavor line (D11); effect lines present
+- [ ] **HTD-22:** Cookies in JEI -> oven only, on cookie dough; no grid recipe
+- [ ] **HTD-23:** Rotten / Green Pie -> oven on pie crust
+- [ ] **HTD-24:** Pearlsicle, Popsiclime -> accept ice cubes and ice
+- [ ] **HTD-25:** Guardian Burger -> shaped on cooked fillet + assembly
+- [ ] **HTD-26:** Mitey Meal, Glowing Ink Pasta -> pot + `_manual_only` grid; unheated basin does not make the grid version
+- [ ] **HTD-27:** Stack sizes of Carrotmite, Sunset Ade, Dragon Tonic -> 32 / 32 / 16
+- [ ] **HTD-28:** Candied Slime Block -> hoe fastest, drops itself, 9 <-> 1
+- [ ] **HTD-29:** Names: Silme Syrup, Guardian Ratty, Marine Cocktale, Soda -> fixed names
+- [ ] **HTD-30:** Guardian Soup -> Ocean's item only; Hostile's merged (held copies converted)
+- [ ] **HTD-31:** Drink Ghast Brew at 4 health -> heals 8 once, not to full (B12)
 
 ## 9. History
 

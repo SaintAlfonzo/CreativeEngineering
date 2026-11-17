@@ -128,13 +128,13 @@ Close armor_effects.md F3, F5, F7 and F8.
 - Don't strip `duration` from `onHit()` specs: there it is required (tool_effects.js:86-92).
 
 ### Tests (new ids in armor_effects.md 7)
-- **AE-25 Thrown trident:** throw the dragon trident at a zombie -> Mining Fatigue II 3 s (AE-18's "thrown -> nothing" changes).
-- **AE-26 Bow swapped hands:** shoot the dragon bow, switch to a sword before the arrow lands -> the bow's on-hit still applies.
+- [ ] **AE-25 Thrown trident:** throw the dragon trident at a zombie -> Mining Fatigue II 3 s (AE-18's "thrown -> nothing" changes).
+- [ ] **AE-26 Bow swapped hands:** shoot the dragon bow, switch to a sword before the arrow lands -> the bow's on-hit still applies.
   Off-hand bow -> applies.
-- **AE-27 Thorns doesn't count:** wear Thorns armor, hold the dragon sword, let a zombie hit you -> the zombie gets thorns
+- [ ] **AE-27 Thorns doesn't count:** wear Thorns armor, hold the dragon sword, let a zombie hit you -> the zombie gets thorns
   damage but no Weakness / Exsanguination.
-- **AE-28 Held duration warning:** `logs/kubejs/startup.log` has no `duration is ignored` warning (all fields removed).
-- AE-10 changes to expect Amplifier 0.
+- [ ] **AE-28 Held duration warning:** `logs/kubejs/startup.log` has no `duration is ignored` warning (all fields removed).
+- [ ] **AE-10:** changes to expect Amplifier 0.
 
 ---
 
@@ -246,9 +246,9 @@ Tag `creativeengineering:magic` (data, reloadable). Config `[magic_resistance] r
 - `/reload` with a datapack that edits `magic.json` changes Magic Resistance too. Worth a sentence in shields.md 2.9.
 
 ### Tests
-- **AE-29 Tag-driven cut:** with Magic Resistance I, hold another player's Botania relic (`botania-relic`, 2 damage) ->
+- [ ] **AE-29 Tag-driven cut:** with Magic Resistance I, hold another player's Botania relic (`botania-relic`, 2 damage) ->
   1.6 per tick instead of 2. AE-22 (Instant Damage) unchanged.
-- **AE-30 Reload:** a datapack override of `magic.json` without `indirectMagic`, `/reload`, a splash Instant Damage potion
+- [ ] **AE-30 Reload:** a datapack override of `magic.json` without `indirectMagic`, `/reload`, a splash Instant Damage potion
   thrown by a witch -> full damage. Remove the override.
 
 ---
@@ -344,9 +344,9 @@ unless crouching), the bow and crossbow (`effects #2`) and the fishing rod (`gea
 - Every held effect is one client packet per tick (F8). A 5-tick refresh doesn't change that.
 
 ### Tests
-- **AE-31 Dragon pickaxe Haste:** hold it -> Haste II in `ActiveEffects` (hidden); crouch -> gone within 0.5 s; stand ->
+- [ ] **AE-31 Dragon pickaxe Haste:** hold it -> Haste II in `ActiveEffects` (hidden); crouch -> gone within 0.5 s; stand ->
   back. Tooltip: "Haste II (infinite, not while sneaking)".
-- FX-12 already covers the hoe.
+- [ ] **FX-12:** already covers the hoe.
 
 ---
 
@@ -390,9 +390,9 @@ A partial suit gives **nothing** against low-level shocks (all-or-nothing mask).
 Worth a tooltip line if the row is extended.
 
 ### Tests
-- **AE-32 Faraday vs wires:** full suit, walk into a live uninsulated HV (steel) wire span -> no damage. Take one piece
+- [ ] **AE-32 Faraday vs wires:** full suit, walk into a live uninsulated HV (steel) wire span -> no damage. Take one piece
   off -> full damage.
-- **AE-33 Faraday vs tesla:** full suit next to a high-power IE Tesla coil -> hurt (1.2x) and the suit loses durability; low
+- [ ] **AE-33 Faraday vs tesla:** full suit next to a high-power IE Tesla coil -> hurt (1.2x) and the suit loses durability; low
   power -> no damage.
 
 ---

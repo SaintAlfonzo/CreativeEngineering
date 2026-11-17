@@ -196,10 +196,10 @@ SimpleHarvestModule.handle(Player, InteractionHand, BlockPos, boolean, boolean)`
 - Blacklisting weeds also stops the hoe area right-click on weeds; the hoe break still clears them.
 
 ### Tests
-- **CR-16** (change): right-click ripe weeds -> nothing happens; break -> dandelions + weeds.
-- **CR-09 / CR-31** (change): right-click the top half of ripe flax / corn -> same result as the lower half.
-- **CR-33** (change): tea seeds plant on Farmland, Rich Farmland and Fertile Soil.
-- **CR-36** (change): pineapple sapling plants on Farmland, Rich Farmland, Fertile Soil; still refused on grass.
+- [ ] **CR-16:** (change) right-click ripe weeds -> nothing happens; break -> dandelions + weeds.
+- [ ] **CR-09 / CR-31:** (change) right-click the top half of ripe flax / corn -> same result as the lower half.
+- [ ] **CR-33:** (change) tea seeds plant on Farmland, Rich Farmland and Fertile Soil.
+- [ ] **CR-36:** (change) pineapple sapling plants on Farmland, Rich Farmland, Fertile Soil; still refused on grass.
 
 ---
 
@@ -509,7 +509,7 @@ A hoe mines the Oceanic Delight sea grape plant at tool speed, as the newer Ocea
 - Mining speed only: the plant's loot has no tool condition, so drops do not change.
 
 ### Tests
-- **DA-15** (exists, ocean_delight.md): a hoe breaks a sea grape plant and its fruit at hoe speed.
+- [ ] **DA-15:** (exists, ocean_delight.md) a hoe breaks a sea grape plant and its fruit at hoe speed.
 
 ---
 

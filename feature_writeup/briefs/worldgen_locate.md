@@ -163,12 +163,12 @@ against.
 
 ### Tests
 
-- **LO-18 replay census [scratch]:** `foldReplay` true, `/cwglocate census 96` on a fresh world -> `falseNegatives` 0
+- [ ] **LO-18 replay census [scratch]:** `foldReplay` true, `/cwglocate census 96` on a fresh world -> `falseNegatives` 0
   for every structure; `no.replay` non-zero; `missReasons` `slot_taken`, `earth_fill`, `priority`, `surface_check`
   lower than in the same census with it off.
-- **LO-19 replay batch [scratch]:** `/cwglocate batch all` with `foldReplay` off, then on, same seed and origin -> same
+- [ ] **LO-19 replay batch [scratch]:** `/cwglocate batch all` with `foldReplay` off, then on, same seed and origin -> same
   positions for every structure found in both, fewer misses, `savedByStage.replay` > 0, total wall time not higher.
-- **LO-20 rare metas [scratch]:** `foldReplay` on, `/locate structure takesapillage:bastille` and the fortified metas
+- [ ] **LO-20 rare metas [scratch]:** `foldReplay` on, `/locate structure takesapillage:bastille` and the fortified metas
   (`structures/rates-and-groups #6`) -> answered within `searchTimeoutSeconds` 120.
 
 ---
@@ -277,7 +277,7 @@ jar**; `chunky help` in the console lists them. Config files: `config/DistantHor
 
 ### Tests
 
-- **LO-21 DH pregen [server, deploy]:** on the new world, `dh pregen start minecraft:overworld <spawn> 192` ->
+- [ ] **LO-21 DH pregen [server, deploy]:** on the new world, `dh pregen start minecraft:overworld <spawn> 192` ->
   completes ("Pregen is complete"). A client joining afterwards sees LODs out to its render distance at once, with no
   server distant-generation burst in the first minutes (perf capture, `perf/report.sh`).
 ---

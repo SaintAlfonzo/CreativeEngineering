@@ -94,9 +94,9 @@ table and the loot writeups' numbers are true.
 - Three tables can't be serialized by `/dumploot` (keg, kettle, wooden bucket block tables): expected warnings.
 
 ### Tests
-- **LT-28 index current:** after the regeneration, `python3 tools/loot_census.py` reports 0 "chest tables missing
+- [ ] **LT-28 index current:** after the regeneration, `python3 tools/loot_census.py` reports 0 "chest tables missing
   from loot_index.json" and 0 "container tables outside the tuning scope"; `grep -c '"subterrestrial:' loot_index.json` > 0.
-- **LT-29 new tables tuned:** `/loot give @s loot subterrestrial:<a chest table with chalk>` x20 -> chalk at about
+- [ ] **LT-29 new tables tuned:** `/loot give @s loot subterrestrial:<a chest table with chalk>` x20 -> chalk at about
   half its jar rate (compare with `node tools/loot_tuning_sim.js subterrestrial:<id>`).
 
 ---
@@ -169,10 +169,10 @@ Decide what the LootJS layer is for, fill only what has a user, and prove the po
   position, so stand in the biome / depth to test.
 
 ### Tests
-- **LT-30 post-roll ban:** with `99_debug.js` logging on, `/loot give @s loot pneumaticcraft:chests/<table>` (or any
+- [ ] **LT-30 post-roll ban:** with `99_debug.js` logging on, `/loot give @s loot pneumaticcraft:chests/<table>` (or any
   table the census lists with a PNC injection) -> no PneumaticCraft item; `[loot-tuning]` / `[LootJS]` lines show the
   strip.
-- **LT-31 Lootr context:** open a fresh Lootr chest with logging on -> `[LootJS]` line shows `LootType CHEST` and a
+- [ ] **LT-31 Lootr context:** open a fresh Lootr chest with logging on -> `[LootJS]` line shows `LootType CHEST` and a
   position (proves biome / structure conditions will work on Lootr rolls).
 
 ---

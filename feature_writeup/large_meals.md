@@ -321,32 +321,30 @@ crafts; Large Meals Chicken Curry has no recipe at all: `creativedelight:farmers
 `endersdelight/additions.js`, KubeJS keeps the last (`Duplicate recipe for id`). Needs a distinct id (for example
 `lm_chicken_curry`); LGM-12 and LGM-13 wait on it.
 
-| ID | Test | Pass |
-|---|---|---|
-| LGM-01 | Boot with the CD jar | no `Failed to parse` naming `largemeals`; no `Item is not food: largemeals` from Spice of Life |
-| LGM-02 | JEI search "@largemeals" | 18 items, each with a recipe or a loot / info source |
-| LGM-03 | Cook Potato Soup in the pot with a bowl | soup out; without a bowl the pot holds the meal |
-| LGM-04 | Cook Sweet Berry Custard | needs a glass bottle; stacks to the D-rule size |
-| LGM-05 | Kill 20 sheep with a knife | about half drop a raw rack; with a non-knife none |
-| LGM-06 | Kill a burning sheep with a knife | cooked rack |
-| LGM-07 | Cut raw and cooked rack | 4 mutton chops / 4 cooked mutton chops |
-| LGM-08 | Cook raw rack in furnace and on campfire | cooked rack (B2) |
-| LGM-09 | Place Omurice, serve 4 with bowls | 4 Bowl of Omurice, then leftovers bowl |
-| LGM-10 | Break a full and a part-eaten feast | full: the feast item; part-eaten: a bowl |
-| LGM-11 | Feast Plating JEI tab | three Large Meals pages |
-| LGM-12 | Hover both curries | "Chicken Curry" (Large Meals) and "End Chicken Curry" (Ender's); Ender's recipes and old saves unaffected |
-| LGM-13 | Heatless crafts in JEI | one `_manual_only` per pot meal, absent from the mechanical crafter |
-| LGM-14 | Display Delight: place a Rice Pudding | placed block shows, picks back up |
-| LGM-15 | Eat Hearty Lunch | Regeneration 5 s and Nourishment 3 min; Spice of Life counts complexity 6 |
-| LGM-16 | Eat the four complexity foods and the other 14 | no `Item is not food` warning; SoL food list shows each once; the three feast servings count from the placed block and from the hand |
-| LGM-17 | Roasted Rack feast: both pot recipes | raw-rack and cooked-rack recipes each give the feast; the grid craft appears as heatless only |
-| LGM-18 | Egg recipes with a duck, goose, parrot and turtle egg; a dragon egg | the four accepted by Tomato Egg Soup, Omurice, Sweet Berry Custard; the dragon egg rejected |
-| LGM-19 | Sheep kill with a knife | rack drop listed in the Knife and Machete Drops JEI tab |
-| LGM-20 | Display Delight: all 13 `lm_` blocks | each places and picks back up |
-| LGM-21 | Hover all 13 Large Meals foods that have an `lm_` block | each shows the placeable tooltip line |
-| LGM-22 | Eat Pufferfish Broth | Comfort 1 min and Nausea about 5 s; no poison |
-| LGM-23 | Can Omurice, Mushroom Pot Pie and Roasted Rack of Mutton (placed block + cans), then open each can | can crafts; uncanning gives servings |
-| LGM-24 | JEI uses of the raw and cooked mutton rack | no can recipe |
+- [ ] **LGM-01:** Boot with the CD jar -> no `Failed to parse` naming `largemeals`; no `Item is not food: largemeals` from Spice of Life
+- [ ] **LGM-02:** JEI search "@largemeals" -> 18 items, each with a recipe or a loot / info source
+- [ ] **LGM-03:** Cook Potato Soup in the pot with a bowl -> soup out; without a bowl the pot holds the meal
+- [ ] **LGM-04:** Cook Sweet Berry Custard -> needs a glass bottle; stacks to the D-rule size
+- [ ] **LGM-05:** Kill 20 sheep with a knife -> about half drop a raw rack; with a non-knife none
+- [ ] **LGM-06:** Kill a burning sheep with a knife -> cooked rack
+- [ ] **LGM-07:** Cut raw and cooked rack -> 4 mutton chops / 4 cooked mutton chops
+- [ ] **LGM-08:** Cook raw rack in furnace and on campfire -> cooked rack (B2)
+- [ ] **LGM-09:** Place Omurice, serve 4 with bowls -> 4 Bowl of Omurice, then leftovers bowl
+- [ ] **LGM-10:** Break a full and a part-eaten feast -> full: the feast item; part-eaten: a bowl
+- [ ] **LGM-11:** Feast Plating JEI tab -> three Large Meals pages
+- [ ] **LGM-12:** Hover both curries -> "Chicken Curry" (Large Meals) and "End Chicken Curry" (Ender's); Ender's recipes and old saves unaffected
+- [ ] **LGM-13:** Heatless crafts in JEI -> one `_manual_only` per pot meal, absent from the mechanical crafter
+- [ ] **LGM-14:** Display Delight: place a Rice Pudding -> placed block shows, picks back up
+- [ ] **LGM-15:** Eat Hearty Lunch -> Regeneration 5 s and Nourishment 3 min; Spice of Life counts complexity 6
+- [ ] **LGM-16:** Eat the four complexity foods and the other 14 -> no `Item is not food` warning; SoL food list shows each once; the three feast servings count from the placed block and from the hand
+- [ ] **LGM-17:** Roasted Rack feast: both pot recipes -> raw-rack and cooked-rack recipes each give the feast; the grid craft appears as heatless only
+- [ ] **LGM-18:** Egg recipes with a duck, goose, parrot and turtle egg; a dragon egg -> the four accepted by Tomato Egg Soup, Omurice, Sweet Berry Custard; the dragon egg rejected
+- [ ] **LGM-19:** Sheep kill with a knife -> rack drop listed in the Knife and Machete Drops JEI tab
+- [ ] **LGM-20:** Display Delight: all 13 `lm_` blocks -> each places and picks back up
+- [ ] **LGM-21:** Hover all 13 Large Meals foods that have an `lm_` block -> each shows the placeable tooltip line
+- [ ] **LGM-22:** Eat Pufferfish Broth -> Comfort 1 min and Nausea about 5 s; no poison
+- [ ] **LGM-23:** Can Omurice, Mushroom Pot Pie and Roasted Rack of Mutton (placed block + cans), then open each can -> can crafts; uncanning gives servings
+- [ ] **LGM-24:** JEI uses of the raw and cooked mutton rack -> no can recipe
 
 ## 9. History
 

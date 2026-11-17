@@ -51,5 +51,5 @@ Blocks with several loot pools (leaves: shears or Silk Touch; ores: Fortune) nee
 path gives the block itself. Modded blocks with loot modifiers (global loot modifiers) change drops outside the table.
 
 ### Tests (WL-)
-- WL-34 (proposed): look at glass, ice, a grass block and an iron ore: glass, ice and grass show the icon, iron ore does not;
+- [ ] **WL-34:** (proposed) look at glass, ice, a grass block and an iron ore: glass, ice and grass show the icon, iron ore does not;
   holding a Silk Touch pickaxe hides it.

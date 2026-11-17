@@ -162,13 +162,13 @@ look; structure_tuning.md new subsection "3.20 Pillager garrisons" with the fina
   totem from box evokers ([structure_tuning.md](../structure_tuning.md) 3.32).
 
 ### Tests (MS- for the biome rule, ST- for structures; next free numbers)
-- **MS-32 lone pillagers load:** rejoin -> rule `lone_pillagers` matched about 19 biomes; `/dumpspawns` dark_forest
+- [ ] **MS-32 lone pillagers load:** rejoin -> rule `lone_pillagers` matched about 19 biomes; `/dumpspawns` dark_forest
   `monster` lists pillager 3 (1-1).
-- **MS-33 lone pillagers in play:** a night in a dark forest / badlands -> single pillagers appear, never by day (with
+- [ ] **MS-33 lone pillagers in play:** a night in a dark forest / badlands -> single pillagers appear, never by day (with
   `dark_only`); none in plains.
-- **ST-9x siege weapon mix:** `/cdevplace` each siege weapon template twice (both variants) -> variant A has no
+- [ ] **ST-9x siege weapon mix:** `/cdevplace` each siege weapon template twice (both variants) -> variant A has no
   vindicator, B exactly one; pillagers carry crossbows.
-- **ST-9x camp mix:** 5 new T&T beach camps -> vindicators 0-3, mostly 1-2.
+- [ ] **ST-9x camp mix:** 5 new T&T beach camps -> vindicators 0-3, mostly 1-2.
 
 ---
 
@@ -225,7 +225,7 @@ Single-mob spawn sources that only give pillagers (verified):
 - A spawn override replaces the box's whole monster list (no zombies or creepers inside), as now.
 
 ### Tests
-- **ST-9x outpost box mix:** at night inside a T&T tower outpost, kill the garrison and wait -> new pillagers and
+- [ ] **ST-9x outpost box mix:** at night inside a T&T tower outpost, kill the garrison and wait -> new pillagers and
   occasional vindicators; by day only pillagers.
 
 ---
@@ -277,7 +277,7 @@ evokers (vanilla).
   out of the small camps.
 
 ### Tests
-- **ST-9x casters:** `/cdevplace` the captain pool and a Mysticrift caster variant -> one evoker / illusioner present;
+- [ ] **ST-9x casters:** `/cdevplace` the captain pool and a Mysticrift caster variant -> one evoker / illusioner present;
   5 new T&T outposts -> about 2 with a caster.
 
 ---
@@ -345,9 +345,9 @@ Pillagers in the End (the Mysticrift End tower) wear Create diving gear, as if t
   helmet for captains.
 
 ### Tests
-- **MS-34 End divers:** `/execute in minecraft:the_end run summon minecraft:pillager ~ ~ ~` -> it has the copper helmet,
+- [ ] **MS-34 End divers:** `/execute in minecraft:the_end run summon minecraft:pillager ~ ~ ~` -> it has the copper helmet,
   backtank and boots; in the Overworld it doesn't. Kill it -> no gear drops (drop chance 0).
-- **MS-35 End tower garrison:** locate the End tower (ST-80 command), wait at night -> pillagers spawn in the box,
+- [ ] **MS-35 End tower garrison:** locate the End tower (ST-80 command), wait at night -> pillagers spawn in the box,
   all in diving gear.
 
 ---

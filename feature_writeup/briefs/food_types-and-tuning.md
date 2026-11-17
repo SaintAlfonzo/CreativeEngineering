@@ -82,7 +82,7 @@ One pack-level Spice of Life server config that every new world gets, with the b
 - The benefit list must have exactly one entry per threshold or the extra entries are ignored.
 
 ### Tests
-- FO-32 (food.md 7): new single-player world, `serverconfig/solapplepie-server.toml` equals the pack file; after
+- [ ] **FO-32:** (food.md 7) new single-player world, `serverconfig/solapplepie-server.toml` equals the pack file; after
   step 1 no `Item is not food: largemeals` lines in the log.
 
 ---
@@ -147,7 +147,7 @@ to vanilla.
 - The golden cans' effects follow the source; recheck them after this row.
 
 ### Tests
-- FO-34 (proposed): AppleSkin on an Enchanted Golden Apple and an Enchanted Golden Cookie: 4 hunger, saturation 9.6;
+- [ ] **FO-34:** (proposed) AppleSkin on an Enchanted Golden Apple and an Enchanted Golden Cookie: 4 hunger, saturation 9.6;
   Golden Carrot 6 hunger, no Regeneration or Absorption (Nourishment 120 s stays), not edible at full hunger.
 
 ---
@@ -208,7 +208,7 @@ Ids from the 2026-10-30 recipe dump. Recipe types: smelting, smoking, campfire, 
 - The fried egg is the main `#forge:cooked_eggs` source; this widens it to every egg.
 
 ### Tests
-- FO-35 (proposed): JEI uses of Duck Egg and Emu Egg show Fried Egg (furnace, smoker, campfire, cooking-oil pot), the
+- [ ] **FO-35:** (proposed) JEI uses of Duck Egg and Emu Egg show Fried Egg (furnace, smoker, campfire, cooking-oil pot), the
   quiche, cake paste (mixer), echo cake base (compacting), ghast pudding; Egg still shows the chicken egg crate, Duck
   Egg doesn't.
 
@@ -380,7 +380,7 @@ Farmer's Delight ones are not in the dict yet (checked 2026-10-31): add `ef.comf
 - New `item_dict` keys need a restart before the tag and tuning scripts see them.
 
 ### Tests
-- FO-37 log: `[food tuning] ... changed` with no warnings; FO-38 AppleSkin on one food per type matches
+- [ ] **FO-37 log:** `[food tuning] ... changed` with no warnings; FO-38 AppleSkin on one food per type matches
   food_tuning.json; FO-39 `/dumpfood` + `food_catalog.py --report` shows no hard-rule breaks; FO-40 SoL tooltip on a
   meal shows the per-type value (client got the synced map).
 
@@ -443,7 +443,7 @@ stew, kangaroo stew, miso, strider moss stew, suspicious stew) need tag resoluti
 - Soup cans follow on the next `gen_can_types.py` run (section `soup`, mult 1.25).
 
 ### Tests
-- FO-41: `food_catalog.py --report soups` prints no flagged soup after the change; AppleSkin on Carrot Soup shows the
+- [ ] **FO-41:** `food_catalog.py --report soups` prints no flagged soup after the change; AppleSkin on Carrot Soup shows the
   new value.
 
 ---
@@ -498,7 +498,7 @@ three kept by the user 2026-10-22). food.md 3.5's ladder (1 to 26) was sized for
 - Max-health benefits rescale current health (`AttributeBenefit.applyTo`, unless First Aid is loaded) **(jar)**.
 
 ### Tests
-- FO-42 (proposed): fresh player, eat 10 then 16 different FD meals: no tier before the 10th food
+- [ ] **FO-42:** (proposed) fresh player, eat 10 then 16 different FD meals: no tier before the 10th food
   (`minFoodsToActivate`), 2 or 3 tiers after; the food book lists the 12 benefits.
 
 ---

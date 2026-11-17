@@ -114,12 +114,12 @@ above. All in the repo.
   plains), so a pillager caravan never forms in forests.
 
 ### Tests
-- ST-240 Loads: `[meta-structures] N meta structure(s) take slots from M anchor structure(s)` counts 3 more; the
+- [ ] **ST-240 Loads:** `[meta-structures] N meta structure(s) take slots from M anchor structure(s)` counts 3 more; the
   report lists the three; no "share above 100 %" warning.
-- ST-241 `/locate structure creativeengineering:meta/witch_cart_caravan` (and the other two) answer; with
+- [ ] **ST-241:** `/locate structure creativeengineering:meta/witch_cart_caravan` (and the other two) answer; with
   `[worldgen.meta_structures] log = true` the log lists anchor and part positions within the distances.
-- ST-242 Peaceful: no pillager caravan part inside a village's 5-chunk radius over a pregenerated plains square.
-- ST-243 (line layout) the copies of a line part lie within 4 blocks of one line through the anchor.
+- [ ] **ST-242 Peaceful:** no pillager caravan part inside a village's 5-chunk radius over a pregenerated plains square.
+- [ ] **ST-243:** (line layout) the copies of a line part lie within 4 blocks of one line through the anchor.
 
 ---
 
@@ -192,10 +192,10 @@ _bed`, `minecraft:<wood>_log / _slab / _planks` (all exist in 1.19.2; mangrove i
 - Variant elements share their structure's piece-count limit (size 1: a one-piece structure), nothing else changes.
 
 ### Tests
-- ST-244 Pools load: `pool_tag_report.md` lists `villager_rafts:raft_1` with its variants and
+- [ ] **ST-244 Pools load:** `pool_tag_report.md` lists `villager_rafts:raft_1` with its variants and
   `kaisyn:ships/wreckage_ocean/wreckage` with the wood variants; no "missing template" error in the log.
-- ST-245 `/cdevplace templates villager_rafts:*` and `kaisyn:ships/wreckage_ocean/*` show every variant intact.
-- ST-246 A raft convoy found by `/locate` shows rafts of different colors; a shipwreck debris meta shows wreckage of
+- [ ] **ST-245:** `/cdevplace templates villager_rafts:*` and `kaisyn:ships/wreckage_ocean/*` show every variant intact.
+- [ ] **ST-246:** A raft convoy found by `/locate` shows rafts of different colors; a shipwreck debris meta shows wreckage of
   a non-spruce wood in some runs.
 
 ---
@@ -244,7 +244,7 @@ from an earlier jar read.
 - The flotilla is the only `flotsam` member, so its rate is exactly spacing^-2 x frequency.
 
 ### Tests
-- ST-247 `--check` flotilla 1 per 24; a pregenerated ocean square (same seed) has about 1.8x the flotillas and about a
+- [ ] **ST-247:** `--check` flotilla 1 per 24; a pregenerated ocean square (same seed) has about 1.8x the flotillas and about a
   quarter of the lone floating logs of a run with the old values.
 
 ---
@@ -293,7 +293,7 @@ contents: user-built.
 - Unwrecked Ships' `ship` pool once held Nether pieces; only `unwrecked_ships:nether_ship` was crimson/warped (off).
 
 ### Tests
-- ST-248 `/locate structure creativeengineering:meta/merchant_convoy` answers; the log shows 2 to 3 ships spaced 40+
+- [ ] **ST-248:** `/locate structure creativeengineering:meta/merchant_convoy` answers; the log shows 2 to 3 ships spaced 40+
   apart and no piece on land.
 
 ---
@@ -341,7 +341,7 @@ avoid a nearby beach or river fail (three failed at -104 -150, 32 blocks from a 
 
 ### Tests
 - SQ-WG30-E02 (scratch queue): ST-203 / ST-204 with the new default, flotilla still assembles, land-meta count vs diag3.
-- ST-249 (if softened) at -104 -150 (seed 8675309) the three land metas assemble with START and fail with FULL.
+- [ ] **ST-249:** (if softened) at -104 -150 (seed 8675309) the three land metas assemble with START and fail with FULL.
 
 ---
 

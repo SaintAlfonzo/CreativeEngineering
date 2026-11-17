@@ -271,32 +271,30 @@ CIC-10; 16 before any player-side test.
 
 - **r1102b 2026-11-02** (scratch server; verdicts in `perf/runs/r1102b/` HANDOVER.md and the slice judged.md): PASS SQ-CAT-01, -02, -03, -04, -05.
 
-| ID | Test | Pass |
-|---|---|---|
-| CIC-01 | Boot with an existing world | no Cozy parse errors; no B1 exception; world opens |
-| CIC-02 | Walk to a village with cats | each cat is a Cozy cat (Jade / WTHIT shows the Cozy entity) |
-| CIC-03 | Load a tamed vanilla cat from before the install | still owned, same name, collar color and variant; sitting |
-| CIC-04 | Cat with a More Mob Variants texture | same texture after conversion |
-| CIC-05 | Tame a stray with vanilla cod, then Raw Ancient Cod | cod refused; ancient cod tames (about 1 in 2) |
-| CIC-06 | Tamed cat slept in a DI pet bed, then killed | Cat Collar given; no DI respawn at dawn (D1) |
-| CIC-07 | Tamed wolf slept in a DI pet bed, then killed | respawns at the bed at dawn |
-| CIC-08 | Use the Cat Collar | cat revived with its stats |
-| CIC-09 | Destroy a collar (lava) with a linked Cat Bed | cat respawns at the bed (D10) |
-| CIC-10 | Empty-hand right-click a tamed Cozy cat | Cozy behavior only, no DI "following / wandering / staying" message (D2); a wolf still cycles DI modes |
-| CIC-11 | DI collar tag with Extra Health on a Cozy cat | health above the Cozy stat; tag kept on revival |
-| CIC-12 | Carry Cats: pick up and put down a Cozy cat | rides the shoulder with its texture; same cat after |
-| CIC-13 | Cat Loaf with a Cozy cat | loaf pose works |
-| CIC-14 | Feed a Cozy cat a modded raw fish (Aquaculture or pack fish) | accepted (D4) |
-| CIC-15 | Fish 100 times | ancient fish about 5% of cod / salmon catches |
-| CIC-16 | Kill 20 cod | ancient cod about 2 (D6 at 0.1) |
-| CIC-17 | Fisherman level 3 | ancient cod and salmon trades |
-| CIC-18 | Eat Cooked Ancient Cod 5 times | one of Luck, Regeneration, Resistance or XP each time; 5 hunger |
-| CIC-19 | JEI on Raw Ancient Cod | info page: taming, sources |
-| CIC-20 | Cat Bed and Cat Food Bowl | break by the right tool, drop themselves; BlockRunner soft |
-| CIC-21 | Crimson forest and End highlands | Nether / End cats appear (rare) |
-| CIC-22 | End cat following, look at an enderman | enderman stays calm |
-| CIC-23 | Dedicated server with a changed config value on the server only | client matches (configs shipped, step 16) |
-| CIC-24 | DI pet shop and Villagers Sell Animals kitten crate | cats converted, untamed, tamable with ancient fish |
+- [ ] **CIC-01:** Boot with an existing world -> no Cozy parse errors; no B1 exception; world opens
+- [ ] **CIC-02:** Walk to a village with cats -> each cat is a Cozy cat (Jade / WTHIT shows the Cozy entity)
+- [ ] **CIC-03:** Load a tamed vanilla cat from before the install -> still owned, same name, collar color and variant; sitting
+- [ ] **CIC-04:** Cat with a More Mob Variants texture -> same texture after conversion
+- [ ] **CIC-05:** Tame a stray with vanilla cod, then Raw Ancient Cod -> cod refused; ancient cod tames (about 1 in 2)
+- [ ] **CIC-06:** Tamed cat slept in a DI pet bed, then killed -> Cat Collar given; no DI respawn at dawn (D1)
+- [ ] **CIC-07:** Tamed wolf slept in a DI pet bed, then killed -> respawns at the bed at dawn
+- [ ] **CIC-08:** Use the Cat Collar -> cat revived with its stats
+- [ ] **CIC-09:** Destroy a collar (lava) with a linked Cat Bed -> cat respawns at the bed (D10)
+- [ ] **CIC-10:** Empty-hand right-click a tamed Cozy cat -> Cozy behavior only, no DI "following / wandering / staying" message (D2); a wolf still cycles DI modes
+- [ ] **CIC-11:** DI collar tag with Extra Health on a Cozy cat -> health above the Cozy stat; tag kept on revival
+- [ ] **CIC-12:** Carry Cats: pick up and put down a Cozy cat -> rides the shoulder with its texture; same cat after
+- [ ] **CIC-13:** Cat Loaf with a Cozy cat -> loaf pose works
+- [ ] **CIC-14:** Feed a Cozy cat a modded raw fish (Aquaculture or pack fish) -> accepted (D4)
+- [ ] **CIC-15:** Fish 100 times -> ancient fish about 5% of cod / salmon catches
+- [ ] **CIC-16:** Kill 20 cod -> ancient cod about 2 (D6 at 0.1)
+- [ ] **CIC-17:** Fisherman level 3 -> ancient cod and salmon trades
+- [ ] **CIC-18:** Eat Cooked Ancient Cod 5 times -> one of Luck, Regeneration, Resistance or XP each time; 5 hunger
+- [ ] **CIC-19:** JEI on Raw Ancient Cod -> info page: taming, sources
+- [ ] **CIC-20:** Cat Bed and Cat Food Bowl -> break by the right tool, drop themselves; BlockRunner soft
+- [ ] **CIC-21:** Crimson forest and End highlands -> Nether / End cats appear (rare)
+- [ ] **CIC-22:** End cat following, look at an enderman -> enderman stays calm
+- [ ] **CIC-23:** Dedicated server with a changed config value on the server only -> client matches (configs shipped, step 16)
+- [ ] **CIC-24:** DI pet shop and Villagers Sell Animals kitten crate -> cats converted, untamed, tamable with ancient fish
 
 ## 9. History
 
@@ -381,20 +379,18 @@ every tick in Stay, Wander and Guard) stopped it or walked it back to the bed. N
 
 Scratch server: SQ-CAT-01 to -05; client: CQ-CAT-01 to -10 ([scratch_queue.md](testing/scratch_queue.md)).
 
-| ID | Test | Pass |
-|---|---|---|
-| CIC-25 | Raw Cod / Salmon on a wild cat | tames (about 1 in 2), no ancient fish hint |
-| CIC-26 | Stats chat (Training String) and Cat Collar tooltip | no Gender line |
-| CIC-27 | Breed two tamed cats | any pair breeds |
-| CIC-28 | `/give` Ancient Cod; JEI search "ancient" | turns into Cod; nothing in JEI |
-| CIC-29 | Fisherman level 3 | no ancient fish trades |
-| CIC-30 | Empty-hand click a Cozy cat; a wolf | cat sits / stands, no DI message; wolf cycles DI modes |
-| CIC-31 | Guard mode with a zombie in the home radius | warning, glow, patrol |
-| CIC-32 | Feather on the ground: Follow, Wander, Guard, Stay, sitting | follows in the first three only |
-| CIC-33 | Feather cast at a zombie | sticks; cats attack; buffs after the first hit |
-| CIC-34 | Reel in while hooked | no pull; cats stop |
-| CIC-35 | Feather at cow, wolf, villager, player, own pet | passes through by default; sticks with the two settings on; never own pets |
-| CIC-36 | Cat Care Guide pages | no genders, no ancient fish |
+- [ ] **CIC-25:** Raw Cod / Salmon on a wild cat -> tames (about 1 in 2), no ancient fish hint
+- [ ] **CIC-26:** Stats chat (Training String) and Cat Collar tooltip -> no Gender line
+- [ ] **CIC-27:** Breed two tamed cats -> any pair breeds
+- [ ] **CIC-28:** `/give` Ancient Cod; JEI search "ancient" -> turns into Cod; nothing in JEI
+- [ ] **CIC-29:** Fisherman level 3 -> no ancient fish trades
+- [ ] **CIC-30:** Empty-hand click a Cozy cat; a wolf -> cat sits / stands, no DI message; wolf cycles DI modes
+- [ ] **CIC-31:** Guard mode with a zombie in the home radius -> warning, glow, patrol
+- [ ] **CIC-32:** Feather on the ground: Follow, Wander, Guard, Stay, sitting -> follows in the first three only
+- [ ] **CIC-33:** Feather cast at a zombie -> sticks; cats attack; buffs after the first hit
+- [ ] **CIC-34:** Reel in while hooked -> no pull; cats stop
+- [ ] **CIC-35:** Feather at cow, wolf, villager, player, own pet -> passes through by default; sticks with the two settings on; never own pets
+- [ ] **CIC-36:** Cat Care Guide pages -> no genders, no ancient fish
 
 CIC-05, CIC-14 to CIC-18 and CIC-24 (ancient fish taming, fishing, drops, trades, cooked effects) are superseded by
 CIC-25, CIC-28 and CIC-29. CIC-10 is CIC-30.

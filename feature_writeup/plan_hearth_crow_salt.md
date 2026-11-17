@@ -112,29 +112,27 @@ Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2
 | Docs | this file, [hearth_and_harvest.md](hearth_and_harvest.md) 5.2, 8, 9 (D2, D13 rows), [TODO.md](todo/TODO.md), `mod_sides.md` (no new jar: no row), `scratch_queue.md` |
 | Changelog | `unreleased.md`, families `## Salt Lick`, `## Crows` (new content, so bullets are due); run `tools/changelog_lint.py` |
 
-| ID | Test | Pass |
-|---|---|---|
-| HNH-48 | Right-click a Salt Block with empty hands 40 times | the block steps to lightly, well, heavily licked and then pops 1 salt; about 5 % of licks advance |
-| HNH-49 | Honeycomb on a licked block, then an axe | waxed (no lick effect), then unwaxed; the waxed block dropped as an item keeps the wax |
-| HNH-50 | Salt on a worn block, and a dispenser facing one | restores one stage each, uses 1 salt |
-| HNH-51 | Five cows in a pen around an unwaxed salt block (default 1200-tick average interval, 1 in 8 stage chance, 20-block radius) | cows stay within 20 blocks, walk to a spot beside the block and lick about once a minute each; the block is gone in about 6 minutes (32 min for one cow); a waxed block is ignored; breaking the block frees them at once, with no leftover restriction (check `/data get entity` for no restriction) |
-| HNH-52 | A tamed wolf, a leashed cow, a bee and a parrot near a salt block | none is pulled to it (not in `#creativedelight:salt_lickers`, or leashed or tamed) |
-| HNH-53 | 200 licker animals in a loaded area, with one salt block and then none (perf) | tick time with the goal within noise of the baseline (spark / profiler); with no salt block the search finds nothing at once |
-| HNH-54 | Place a scarecrow next to a field with a crow | the crow avoids the scarecrow's radius, the same as a jack o'lantern |
-| HNH-55 | Craft or `/give` the scarecrow | exists, loot returns itself, JEI shows its recipe |
-| HNH-56 | Wild AM crow near wheat, `crow.eatCrops` on and mobGriefing on, then off | crops reset to age 0 on, untouched off; the scarecrow protects the field |
-| HNH-57 | Throw a diamond near a wild crow | it takes 1, carries it to a nest within 16, waits 1 s, deposits it; a nest gets the `CrowStash` mark |
-| HNH-58 | Same with no nest nearby | the crow flies away from the player and drops the item |
-| HNH-59 | A tame crow with a diamond on the ground | it does not steal (the AM fetch behavior is unchanged) |
-| HNH-60 | Break a stash nest | the items drop; open it with an empty hand shows the contents |
-| HNH-61 | Hold crow food near a wild crow, walk, sneak, then sprint | the crow approaches, comfort distance shrinks as trust rises, sprinting loses trust |
-| HNH-62 | Hand-feed a wild crow 20 times; throw food and let it eat; a thrown stolen item | tames about 1 in 5, 1 in 8, and 1 in 3; AM's thrown seed still tames |
-| HNH-63 | Hurt a wild crow in a flock | wild crows within 16 flee the attacker for 6 s |
-| HNH-64 | Kill an AM crow 40 times with Looting I | drops are crow feather only, 0 to 1 plus looting; the vanilla feather is gone from its table |
-| HNH-65 | Brew awkward potion with a crow feather | Bad Omen potion; a vanilla feather does nothing |
-| HNH-66 | New world: fly over a grass biome | ground nests generate in the crow biomes; a crow spawns near one even with the rule's other limits unchanged |
-| HNH-67 | Reload the world with an alarmed crow and a half-trusting crow | state restored from NBT |
-| HNH-68 | A stolen item with an item frame chest of the same item next to it | the crow does not drop the loot into the chest mid-theft (goal clash) |
+- [ ] **HNH-48:** Right-click a Salt Block with empty hands 40 times -> the block steps to lightly, well, heavily licked and then pops 1 salt; about 5 % of licks advance
+- [ ] **HNH-49:** Honeycomb on a licked block, then an axe -> waxed (no lick effect), then unwaxed; the waxed block dropped as an item keeps the wax
+- [ ] **HNH-50:** Salt on a worn block, and a dispenser facing one -> restores one stage each, uses 1 salt
+- [ ] **HNH-51:** Five cows in a pen around an unwaxed salt block (default 1200-tick average interval, 1 in 8 stage chance, 20-block radius) -> cows stay within 20 blocks, walk to a spot beside the block and lick about once a minute each; the block is gone in about 6 minutes (32 min for one cow); a waxed block is ignored; breaking the block frees them at once, with no leftover restriction (check `/data get entity` for no restriction)
+- [ ] **HNH-52:** A tamed wolf, a leashed cow, a bee and a parrot near a salt block -> none is pulled to it (not in `#creativedelight:salt_lickers`, or leashed or tamed)
+- [ ] **HNH-53:** 200 licker animals in a loaded area, with one salt block and then none (perf) -> tick time with the goal within noise of the baseline (spark / profiler); with no salt block the search finds nothing at once
+- [ ] **HNH-54:** Place a scarecrow next to a field with a crow -> the crow avoids the scarecrow's radius, the same as a jack o'lantern
+- [ ] **HNH-55:** Craft or `/give` the scarecrow -> exists, loot returns itself, JEI shows its recipe
+- [ ] **HNH-56:** Wild AM crow near wheat, `crow.eatCrops` on and mobGriefing on, then off -> crops reset to age 0 on, untouched off; the scarecrow protects the field
+- [ ] **HNH-57:** Throw a diamond near a wild crow -> it takes 1, carries it to a nest within 16, waits 1 s, deposits it; a nest gets the `CrowStash` mark
+- [ ] **HNH-58:** Same with no nest nearby -> the crow flies away from the player and drops the item
+- [ ] **HNH-59:** A tame crow with a diamond on the ground -> it does not steal (the AM fetch behavior is unchanged)
+- [ ] **HNH-60:** Break a stash nest -> the items drop; open it with an empty hand shows the contents
+- [ ] **HNH-61:** Hold crow food near a wild crow, walk, sneak, then sprint -> the crow approaches, comfort distance shrinks as trust rises, sprinting loses trust
+- [ ] **HNH-62:** Hand-feed a wild crow 20 times; throw food and let it eat; a thrown stolen item -> tames about 1 in 5, 1 in 8, and 1 in 3; AM's thrown seed still tames
+- [ ] **HNH-63:** Hurt a wild crow in a flock -> wild crows within 16 flee the attacker for 6 s
+- [ ] **HNH-64:** Kill an AM crow 40 times with Looting I -> drops are crow feather only, 0 to 1 plus looting; the vanilla feather is gone from its table
+- [ ] **HNH-65:** Brew awkward potion with a crow feather -> Bad Omen potion; a vanilla feather does nothing
+- [ ] **HNH-66:** New world: fly over a grass biome -> ground nests generate in the crow biomes; a crow spawns near one even with the rule's other limits unchanged
+- [ ] **HNH-67:** Reload the world with an alarmed crow and a half-trusting crow -> state restored from NBT
+- [ ] **HNH-68:** A stolen item with an item frame chest of the same item next to it -> the crow does not drop the loot into the chest mid-theft (goal clash)
 
 ## 7. Open calls for the owner (all answered 2026-11-07, N24: see section 10)
 

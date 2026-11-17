@@ -91,9 +91,9 @@ A player can make a smoker before the Nether, because smoking makes bread blocks
 - `recipes/progression #1` lists the smoker among items with no recipe. Once RC-01 passes, drop it there.
 
 ### Tests
-- **RC-01** (existing, now with an expected answer): JEI `minecraft:smoker` -> two Quark recipes (deepslate furnace,
+- [ ] **RC-01:** (existing, now with an expected answer) JEI `minecraft:smoker` -> two Quark recipes (deepslate furnace,
   blackstone furnace, 4 logs each) and no cobblestone one.
-- **RC-50 Smoker by hand:** craft 8 cobbled deepslate -> deepslate furnace; with 4 oak logs -> smoker; smoke a dough
+- [ ] **RC-50 Smoker by hand:** craft 8 cobbled deepslate -> deepslate furnace; with 4 oak logs -> smoker; smoke a dough
   block -> bread block.
 
 ---
@@ -133,7 +133,7 @@ As above (verified).
   `shaped/cake_cake_base` recipe must both exist before the release, or the cake becomes oven-only.
 
 ### Tests
-- **RC-02** (existing, expected answer): JEI `minecraft:cake` -> FD's, Neapolitan's, Create's crafting recipes and
+- [ ] **RC-02:** (existing, expected answer) JEI `minecraft:cake` -> FD's, Neapolitan's, Create's crafting recipes and
   the oven's; no `minecraft:cake` recipe id.
 
 ---
@@ -193,9 +193,9 @@ salmon_roll,cod_roll}`.
   `kubejs/` for the generated names before deleting (none found on 2026-10-21).
 
 ### Tests
-- **RC-51 Crab bars id:** JEI crab bars -> shapeless x2 with id `creativeengineering:shapeless/crab_bars_manual_only`;
+- [ ] **RC-51 Crab bars id:** JEI crab bars -> shapeless x2 with id `creativeengineering:shapeless/crab_bars_manual_only`;
   the mixer doesn't offer it.
-- **RC-52 FD meals:** JEI grilled salmon, bacon and eggs, salmon roll, cod roll -> one shapeless recipe each under the
+- [ ] **RC-52 FD meals:** JEI grilled salmon, bacon and eggs, salmon roll, cod roll -> one shapeless recipe each under the
   `farmersdelight:` id, plus the pack's sequenced assembly.
 
 ---

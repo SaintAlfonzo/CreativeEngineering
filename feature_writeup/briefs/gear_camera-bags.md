@@ -45,7 +45,7 @@ dyeable. The leather bag keeps its current look.
   `creativeengineering:lunchbox_dyed` and a tint handler that returns -1 when undyed
   ([LunchboxClient.java](../../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/lunchbox/client/LunchboxClient.java) 35-55).
 - Unused source art: `kubejs/assets/dyable.png`, `kubejs/assets/leatheroutline.png` (camera_bags.md "Known limits").
-- LB-13 ([lunchboxes.md](../lunchboxes.md)) expects the camera bags unchanged by the lunchbox work: it goes stale with
+- [ ] **LB-13:** ([lunchboxes.md](../lunchboxes.md)) expects the camera bags unchanged by the lunchbox work: it goes stale with
   this row.
 
 ### Build

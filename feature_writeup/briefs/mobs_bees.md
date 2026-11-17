@@ -239,7 +239,7 @@ Does nothing for the nest items bees leave in structures (hive loot is separate)
 (`jei_world` tab Knife and Machete Drops does not list hive shearing).
 
 ### Tests (BN-)
-- BN-11 (proposed): shear 40 full hives: mean yield 2.4 to 2.6; with a Looting III shear the mean is higher.
+- [ ] **BN-11:** (proposed) shear 40 full hives: mean yield 2.4 to 2.6; with a Looting III shear the mean is higher.
 
 ---
 

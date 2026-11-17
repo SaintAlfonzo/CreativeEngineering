@@ -1095,11 +1095,11 @@ copy (the new boot owns the file), so the earlier boot's Ended column reads "no 
 real end is in the rotated `srv/logs/*.log.gz`.
 
 Tests (live, next bulk run):
-- [x] **PS-01** *(PASSED 2026-10-28, session q1028)* `perf_session.sh start`, run the queue, `stop`, `report --prune` -> one `boots/` folder per boot, each
+- [x] **PS-01:** *(PASSED 2026-10-28, session q1028)* `perf_session.sh start`, run the queue, `stop`, `report --prune` -> one `boots/` folder per boot, each
   with a recording before `report` and a `report.html` after; `summary.md` lists every entry that was marked.
-- [x] **PS-02** *(PASSED 2026-10-28)* a boot stopped with `scratch_server.sh stop` -> "clean stop"; the `hotspot-pid-*.jfr` was moved out
+- [x] **PS-02:** *(PASSED 2026-10-28)* a boot stopped with `scratch_server.sh stop` -> "clean stop"; the `hotspot-pid-*.jfr` was moved out
   of `srv/perf/exit/`.
-- [x] **PS-03** *(PASSED 2026-10-28; the earlier boot's Ended column reads "no clean stop" because its final latest.log copy is skipped, cosmetic)* two boots of one `srv/` back to back -> two boot folders, each with its own `latest.log`.
+- [x] **PS-03:** *(PASSED 2026-10-28; the earlier boot's Ended column reads "no clean stop" because its final latest.log copy is skipped, cosmetic)* two boots of one `srv/` back to back -> two boot folders, each with its own `latest.log`.
 
 ## 15. Immersive Weathering cost in perf suite g1 (studied 2026-10-28)
 

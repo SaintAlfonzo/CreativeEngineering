@@ -469,31 +469,31 @@ Done 2026-11-15 (scratchpad, no game):
 
 Run by the runner itself on a first group (CQ-NEW is small and covers a block color, a tooltip, a HUD mod).
 
-- [ ] CC-01 Preflight refuses to start while any `java` process is up and names its cwd; never prints a command line.
-- [ ] CC-02 A run reaches the world, writes `[cdevcapture] BEGIN` / `END` for every test, and the client exits by itself.
-- [ ] CC-03 `FX-43.png` shows the moss and grass at the crosshair, no chat, no hand, no toast; `FX-43_hotbar.png`
+- [ ] **CC-01:** Preflight refuses to start while any `java` process is up and names its cwd; never prints a command line.
+- [ ] **CC-02:** A run reaches the world, writes `[cdevcapture] BEGIN` / `END` for every test, and the client exits by itself.
+- [ ] **CC-03:** `FX-43.png` shows the moss and grass at the crosshair, no chat, no hand, no toast; `FX-43_hotbar.png`
       is the hotbar only.
-- [ ] CC-04 `tooltip` + `auto`: the whole Legendary Tooltips frame is inside the crop, with no background margin
+- [ ] **CC-04:** `tooltip` + `auto`: the whole Legendary Tooltips frame is inside the crop, with no background margin
       over `pad`.
-- [ ] CC-05 `shift` capture shows the shift-only tooltip lines (glycerol: "Tastes sweet!" once).
-- [ ] CC-06 `jei_recipes` + `gui` crops to the JEI page, and `frames` gives cycled ingredients.
-- [ ] CC-07 `use` on a placed pickling jar opens its GUI; `gui` crop; `hover` on a slot shows that slot's tooltip.
-- [ ] CC-08 A failing `cmd` fails only its own test (`__failed.png`, manifest status, log lines) and the run goes on.
-- [ ] CC-09 Killing the client mid-run: the runner marks that test `crashed`, relaunches, finishes the rest; the
+- [ ] **CC-05:** `shift` capture shows the shift-only tooltip lines (glycerol: "Tastes sweet!" once).
+- [ ] **CC-06:** `jei_recipes` + `gui` crops to the JEI page, and `frames` gives cycled ingredients.
+- [ ] **CC-07:** `use` on a placed pickling jar opens its GUI; `gui` crop; `hover` on a slot shows that slot's tooltip.
+- [ ] **CC-08:** A failing `cmd` fails only its own test (`__failed.png`, manifest status, log lines) and the run goes on.
+- [ ] **CC-09 Killing the client mid-run:** the runner marks that test `crashed`, relaunches, finishes the rest; the
       manifest has every test once.
-- [ ] CC-10 `crop.py` alone after a spec crop edit rewrites the PNGs from `raw/` without the game.
-- [ ] CC-11 Other windows over the game during the run don't show in any capture.
-- [ ] CC-12 Nothing from the run lands in the instance's `mods/`, `logs/`, `saves/` or `config/`.
-- [ ] CC-13 Readback: `player_pos`, `held`, `effects`, `slot_item`, `assert_screen`, `widgets` log `READ` lines; the
+- [ ] **CC-10:** `crop.py` alone after a spec crop edit rewrites the PNGs from `raw/` without the game.
+- [ ] **CC-11:** Other windows over the game during the run don't show in any capture.
+- [ ] **CC-12:** Nothing from the run lands in the instance's `mods/`, `logs/`, `saves/` or `config/`.
+- [ ] **CC-13 Readback:** `player_pos`, `held`, `effects`, `slot_item`, `assert_screen`, `widgets` log `READ` lines; the
       CC group's text test is PASS in the manifest.
-- [ ] CC-14 `walk` 40 ticks logs 41 `READ move` lines and a summary; open-ground survival walk averages about
+- [ ] **CC-14:** `walk` 40 ticks logs 41 `READ move` lines and a summary; open-ground survival walk averages about
       0.2 b/t; two identical walks agree to 0.001 b/t (tick-exact).
-- [ ] CC-15 Anvil: `click_slot` shift-moves paper in, `type_into` the name field, the result slot reads "Capture".
-- [ ] CC-16 `serve` reaches SERVE; `qrun.py client` on it runs `>`, `do`, `key Escape`, `shot` with no xdotool; the
+- [ ] **CC-15 Anvil:** `click_slot` shift-moves paper in, `type_into` the name field, the result slot reads "Capture".
+- [ ] **CC-16:** `serve` reaches SERVE; `qrun.py client` on it runs `>`, `do`, `key Escape`, `shot` with no xdotool; the
       shot lands in `test_captures/judgement/qrun_<RES>/`.
-- [ ] CC-17 Killing the served client mid-batch: qrun ABORTs within 60 s of the last heartbeat (or the crash watch
+- [ ] **CC-17 Killing the served client mid-batch:** qrun ABORTs within 60 s of the last heartbeat (or the crash watch
       flags it first).
-- [ ] CC-18 `click_widget` by label and by index, `scroll`, `press e` (no screen: inventory opens) on vanilla screens.
+- [ ] **CC-18:** `click_widget` by label and by index, `scroll`, `press e` (no screen: inventory opens) on vanilla screens.
 
 ## 8. History
 

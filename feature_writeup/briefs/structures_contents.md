@@ -228,12 +228,12 @@ code). Quark's Spawner Replacer module is off. Botania, PneumaticCraft, Create a
 
 ### Tests
 
-- **ST-290 Pillager spawners gone:** new world; `/cdevplace` (or `/locate`) a catapult, a Mysticrift oak tower and the
+- [ ] **ST-290 Pillager spawners gone:** new world; `/cdevplace` (or `/locate`) a catapult, a Mysticrift oak tower and the
   Blocky Siege ship -> no spawner where the template had one; log line with the removed count (22 if every template
   loads). `removeSpawners = []` brings them back in new chunks.
-- **ST-291 Pillager spawn box:** stand near a boxed Mysticrift tower at night and by day for a few minutes on Normal
+- [ ] **ST-291 Pillager spawn box:** stand near a boxed Mysticrift tower at night and by day for a few minutes on Normal
   -> pillagers spawn inside the box, no zombies inside it.
-- **ST-296 Box inside a meta:** `/locate` a `meta/pillager_tower_siege`; stand by the anchor tower and by one of its
+- [ ] **ST-296 Box inside a meta:** `/locate` a `meta/pillager_tower_siege`; stand by the anchor tower and by one of its
   siege weapons -> pillagers keep spawning at both (fails today: no pillager respawn at a meta anchor).
 
 ---
@@ -362,8 +362,8 @@ checked against a jar here; `check_worldgen_json.py` and a scratch world catch a
 
 ### Tests
 
-- **ST-292 River trees:** new world, a river -> trees with oak trunks, river leaves and mulberry vines.
-- **ST-293 Woods out of play:** JEI shows no river or driftwood planks / slabs / boats; a driftwood log crafts into 4
+- [ ] **ST-292 River trees:** new world, a river -> trees with oak trunks, river leaves and mulberry vines.
+- [ ] **ST-293 Woods out of play:** JEI shows no river or driftwood planks / slabs / boats; a driftwood log crafts into 4
   oak planks; breaking an old river log drops an oak log; the log has no `[jeiRemove]` line for these after `/reload`.
 
 ---
@@ -463,10 +463,10 @@ sense that way); confirm with `/locate` + F3 in game (ST-294).
 
 ### Tests
 
-- **ST-294 Soul builds in the Nether:** new world, in the Nether `/locate structure philipsruins:lost_soul_city`,
+- [ ] **ST-294 Soul builds in the Nether:** new world, in the Nether `/locate structure philipsruins:lost_soul_city`,
   `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin` -> each found, in the planned biomes, at the planned height,
   not flooded by lava; in the Overworld `/locate` finds none of them.
-- **ST-295 Ruin metas without the rare ruin:** in the Overworld, `/locate structure creativeengineering:meta/ruin_cluster`
+- [ ] **ST-295 Ruin metas without the rare ruin:** in the Overworld, `/locate structure creativeengineering:meta/ruin_cluster`
   -> found, anchored on a level-three ruin, ancient towers or forgotten church.
 
 ---

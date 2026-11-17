@@ -114,23 +114,23 @@ In game (client), after installing both jars and a restart. The server halves ar
 (`perf/runs/r1102b/s2/`; -05 now checks Face + Head only, the mouth tag was dropped), -04 open (rerun with a fake player
 breaking the corn with a knife: SQ-CORN-04b). Client half: CQ-CORN-01 (CORN-01, CORN-05, CORN-06). Both added by the deep scan 2026-11-02.
 
-- [ ] CORN-01 Corncob in JEI; cutting board + knife gives 2 kernels; mortar gives 3; Create mill, Millstone and IE crusher give 4 + a 50% cornmeal (2026-11-04).
-- [ ] CORN-02 Mill, Millstone, IE crusher on corn: cornmeal as before, Corncob about 1 in 10 over 50 runs; wild corn in the mill
+- [ ] **CORN-01:** Corncob in JEI; cutting board + knife gives 2 kernels; mortar gives 3; Create mill, Millstone and IE crusher give 4 + a 50% cornmeal (2026-11-04).
+- [ ] **CORN-02:** Mill, Millstone, IE crusher on corn: cornmeal as before, Corncob about 1 in 10 over 50 runs; wild corn in the mill
   and Millstone the same; mortar gives no cob. (Wild corn in the IE crusher gives kernels only, as before: no cob.)
-- [ ] CORN-03 Composter accepts a Corncob at the Straw chance (0.3).
-- [ ] CORN-04 Mature corn broken with a knife drops a Corncob about 1 in 4; with a hand, no cob; immature corn none; a Silk Touch
+- [ ] **CORN-03:** Composter accepts a Corncob at the Straw chance (0.3).
+- [ ] **CORN-04:** Mature corn broken with a knife drops a Corncob about 1 in 4; with a hand, no cob; immature corn none; a Silk Touch
   knife none.
-- [ ] CORN-05 Corn Popsicle: the recipe takes Ice Cubes; eating it gives the stick back (not in Creative); 4 nutrition. Sneak +
+- [ ] **CORN-05 Corn Popsicle:** the recipe takes Ice Cubes; eating it gives the stick back (not in Creative); 4 nutrition. Sneak +
   right click it on a block top places "Placed Corn Popsicle" on Display Delight's tray, an empty hand takes it back.
-- [ ] CORN-06 Cob Pipe crafts (Corncob + stick). Right click with no helmet: it goes in the Face slot (the pack's slot), the
+- [ ] **CORN-06:** Cob Pipe crafts (Corncob + stick). Right click with no helmet: it goes in the Face slot (the pack's slot), the
   Face slot full: on the head; with a helmet and Face full: a Curios Head slot if one exists. It fits the armor head slot by
   hand and shift click. Drawn on the head from the head slot and from Face / Head curios (3D pipe, flat in the GUI).
-- [ ] CORN-07 Corn Dog + Tomato Sauce in the grid gives a Classic Corn Dog (bowl back).
-- [ ] CORN-08 Farmer trades (buy 24 corn; sell 8 cornbread / 8 tortillas for 8 emeralds); wandering trader corn (common) and
+- [ ] **CORN-07:** Corn Dog + Tomato Sauce in the grid gives a Classic Corn Dog (bowl back).
+- [ ] **CORN-08:** Farmer trades (buy 24 corn; sell 8 cornbread / 8 tortillas for 8 emeralds); wandering trader corn (common) and
   Popcorn Box (rare).
-- [ ] CORN-09 A villager picks up corn from the ground, and two villagers with corn in reach breed.
-- [ ] CORN-10 `logs/latest.log` after boot: `[corn-delight] corn is villager food`, no KubeJS error from `corn_delight/`.
-- [ ] CORN-11 After `/dumpall`: `python3 tools/food_catalog.py --check` and `python3 tools/food_families.py` list the Corn
+- [ ] **CORN-09:** A villager picks up corn from the ground, and two villagers with corn in reach breed.
+- [ ] **CORN-10:** `logs/latest.log` after boot: `[corn-delight] corn is villager food`, no KubeJS error from `corn_delight/`.
+- [ ] **CORN-11:** After `/dumpall`: `python3 tools/food_catalog.py --check` and `python3 tools/food_families.py` list the Corn
   Popsicle under `frozen/popsicle` (classify it there if not), then `tools/gen_can_types.py` for the family's can rule
   (section 5 open items).
 
