@@ -365,6 +365,15 @@ derives feature status. P3.4 items are small and independent. P3.6 last, because
 **Done when:** `jarstamp.py pending` prints nothing, including unstamped differences; `jarstamp.py diff mods/
 <build outputs>` is clean; every own jar has a ledger row with a stamp.
 
+**Progress 2026-11-16 (Phase 3 session):** items 3 and 4 built (`jarstamp.py pending` compares unstamped builds by
+sha1; `jarstamp.py prune` moved 40 stale outputs to `jar_archive/displaced/pruned/`). Full build at `afea3f23`, then
+10 stamped installs (Power Grid -19, Tempad, Calendar, Devtools, Engineering, Labels, Magic, Exposure, Storage, SoL
+Raspberry Pie); `mod_sides.md` Power Grid row, E1 and the port note corrected. Common, Delight, Brewing, Equipment,
+Worldgen and Compat are installed by the small-fixes session (plan_small_fixes_1116.md), whose code was mid-edit;
+their stamped installs complete the baseline, then `pending` is empty. Side effect: every own jar has a new stamp, so
+`qrun.py plan` counts 714 rows jar-changed (was 539). Follow-up: qplan could use `jarstamp.content_digest` so a
+rebuild of unchanged sources does not stale rows.
+
 ### P3.2 Lint findings as high-priority TODO rows (D13; done 2026-11-16)
 
 Rows marked **High priority** in their Details cell until P3.5 adds the Priority column (the migration turns the
@@ -407,6 +416,16 @@ marker into `priority=high`):
 
 **Done when:** no `.tsv` file is left among the tables above; the audit list is handed to the owner; every feature row
 has jars or is `reference`; the status words come from the rule (overrides listed).
+
+**Done 2026-11-16:** `tools/table_io.py` (CSV read/write, `#` comment lines kept); `tools/migrate_tsv_csv.py` moved the
+five tables with a round-trip check (`rows/_lint_baseline.csv` was already CSV); readers updated (status_index,
+status_seed, qrows, qplan, install_jar, check_all, texture_provenance); docs and CLAUDE.md point at `.csv` (backup
+`CLAUDE.md.bak-2026-11-16-p3`). Audit: [status/features_audit_2026-11-16.md](status/features_audit_2026-11-16.md),
+applied, with an owner decision list. Derived status: `tools/feature_status.py`, written by `status_index.py`;
+features.csv gains `override`, `override_reason`, `override_date`. `build_deploy.py --snapshot` now records stamp and
+content digest per own jar (`jarstamp.content_digest`); before that, DEPLOYED compares content digests with
+`deploy/latest/mods`. `qrows.py jars` reset 100 section jars from the repaired table. Still TSV and out of scope: the
+perf tools' own outputs and `texture_audit.py`'s unused-texture list (generated, not status tables).
 
 ### P3.4 Phase 1 and 2 fixes
 
@@ -555,8 +574,8 @@ Settled 2026-11-16:
 | D7 | Commits: per plan phase, authored as the owner, with the Co-Authored-By trailer, pushed to `agent_staging` (P1.5) |
 | D8 | Install a rebuild for testing without asking; when the game runs, a dialog with Install now (re-shown while it still runs) / Install on exit / Skip (P1.2 item 7) |
 | D9 | Project memories move into the repo (P1.6, done) |
-| D10 | 2026-11-16: an agent runs rows that need a client and a dedicated server together (its own server plus its own client, `eval_client.py ... ownsrv=PID` / `qrun.py pair`); the playtest list holds `@owner` rows only. Recorded in the scratch-test skill, gotchas.md and memory `one-game-instance-at-a-time` |
-| D11 | 2026-11-16: new data files are CSV, not TSV; only `rows/_lint_baseline.csv` converted (the older TSVs stay) |
+| D18 | 2026-11-16: an agent runs rows that need a client and a dedicated server together (its own server plus its own client, `eval_client.py ... ownsrv=PID` / `qrun.py pair`); the playtest list holds `@owner` rows only. Recorded in the scratch-test skill, gotchas.md and memory `one-game-instance-at-a-time` |
+| D19 | 2026-11-16: new data files are CSV, not TSV; only `rows/_lint_baseline.csv` converted (the older TSVs stay) (widened by D14) |
 | D4 | Queue row data: one `.qb` file per feature section in `feature_writeup/testing/rows/`, queue tables generated from them (option B below) |
 | D10 | Clean-up passes: threshold warnings in `check_all` plus a full pass as a step of each release (AskUserQuestion 2026-11-16; P3.6) |
 | D11 | Install all pending jars: rebuild every own jar once with a stamp and install them all through `installToMods`; Power Grid -19 goes into `mods/`, superseding plan_power_grid.md E1 and the power-grid-port note (AskUserQuestion 2026-11-16; P3.1) |
@@ -729,7 +748,7 @@ Tools (all in `tools/scratch_query/`, entry point `qrun.py`; each file's docstri
 | P2.1 rows as data | `qrows.py` (format, migrate, check, stats); `qrun.py` reads rows files (`@` lines are metadata, `--section`, `--tier`, rows without steps listed as DRAFT); `status_index.py` renders each section as a generated block `rows_<CODE>_<KEY>` | 196 sections moved in one pass (not newest first: the migration is mechanical and the round trip is exact), 175 files, 3177 rows. Lossless: the queue outside the markers is unchanged but for 3 row lines (whitespace, one missing closing pipe). Cells are split backtick-aware (rows quote grep patterns with bare `\|`). Steps imported from the newest past batch holding the row id, preferring one whose text PASSed in a `results.json`: 2031 rows got steps (573 from a passed batch), 1146 are `@draft`. Imported steps keep `@from <batch>`: setup rows of that batch (fixtures, forceload) are not imported, so a runner reads the batch for them. Section jars: features.tsv jars of the section's own code (a heuristic seed: e.g. MELT lists creativedelight and powergrid, not creativecommon; correct features.tsv, then rerun the jar pass). Owner rows: 4, by the pass text ("owner judges", "looks right"). |
 | P2.2 tiers | `qplan.py`: `qrun.py plan` (default, `--jars`, `--never`, `--failed`, `--all`, `--release`, `--client`, `--json`), `states`, `playtest`; T1 smoke rows `rows/SMK.qb` (56 rows, 16 own jars, by a subagent; about 9 min); T3 rows `rows/PROC.qb` section 3 | Row states: current, jar-changed, stale, failed, never, draft, owner, superseded. Jar change = a different pinned identity than the verdict recorded; for results from before pinning, the jar's last install (ledger, else file time) after the PASS day. So today every rebuilt jar counts as changed (539 jar-changed rows): the plan narrows once runs record stamps. Owner playtest list: `@owner` rows only (D10). |
 | P2.3 expiry | `qrowlint.py` (stale rows, dead ids), inside `qrun.py lint` for rows files and in `check_all.py` as `queue_rows` | Stale = a source (git, or file time when uncommitted) changed after `@reviewed` / `@@reviewed` / `@@date`. Deviation: stale is a warning in check_all, not an error, because the P1.4 status pass touched almost every writeup today (3200+ stale warnings); it is an error only with `--changed` when the session changed the source but not the .qb, and `qrun.py plan` lists stale rows to rewrite before they run. Dead ids: by position (setblock / fill / execute if block -> block, give / clear -> item, summon -> entity, effect -> effect, `#tag`, NBT item stacks) against the newest dumps (items_by_mod, loot tables, tag dumps, effects, fluids, recipe types; display_names.json of 10-20 as a fallback), cached in `jar_archive/queue_id_index.json`. 77 dead ids found at migration (e.g. `#creativeengineering:crop_seasons/*` after the namespace move, `#creativecompat:passthrough/leaf_pile`) are in `rows/_lint_baseline.csv`: warnings; a new one fails the check. Rerun ids keep their id (skill text). |
-| P2.4 harness, pins, driver | `qrun.py` HARNESS (bad regex, capture unset by a skipped row, shell exit as the only failure); `qverdict.py` `judge --reclassify` (scratch plan 3.6); `qpin.py` + `prep_srv.sh` pin step + qrun refusal + `stamps` in every verdict file; `qdrive.py` (`qrun.py drive start/resume/status/stop`) | One harness fault makes the row HARNESS (its dependent checks fail with it). Pinning copies only own jars (third-party jars stay hard links: disk), keys them by project mod id (stamp, or `sha1:` for jars built before stamping). Unlisted = no mod_sides.md row; perfBot and the PGJAR Power Grid jar are allowed. The driver runs server rows only (one prep + boot per rows file section and world group); a watchdog process stops the step's server when the driver dies. Client rows are run by the agent (D10) with `qrun.py client` / `pair`; the driver does not launch clients yet. |
+| P2.4 harness, pins, driver | `qrun.py` HARNESS (bad regex, capture unset by a skipped row, shell exit as the only failure); `qverdict.py` `judge --reclassify` (scratch plan 3.6); `qpin.py` + `prep_srv.sh` pin step + qrun refusal + `stamps` in every verdict file; `qdrive.py` (`qrun.py drive start/resume/status/stop`) | One harness fault makes the row HARNESS (its dependent checks fail with it). Pinning copies only own jars (third-party jars stay hard links: disk), keys them by project mod id (stamp, or `sha1:` for jars built before stamping). Unlisted = no mod_sides.md row; perfBot and the PGJAR Power Grid jar are allowed. The driver runs server rows only (one prep + boot per rows file section and world group); a watchdog process stops the step's server when the driver dies. Client rows are run by the agent (D18) with `qrun.py client` / `pair`; the driver does not launch clients yet. |
 | P2.5 archive | `qrun.py archive [--apply]` (`@@archived`, rendered into `testing/scratch_queue_archive.md` with verdict history, created by the first archived section); `@superseded` rows; `qrun.py never` | Archive: 0 sections eligible today (no section has every row current while pre-pinning results cannot prove it); tested by archiving one section and restoring it. Superseded: 13 rows whose own text says superseded / obsolete / dropped (SQ-CBS-01, CQ-CBS-01, SQ-GLD-15, SQ-HSC-87, -88, -90, -91, SQ-MDP-02, -04, -08, -09, SQ-CBJ-05, SQ-RD-02). Never-run rows: [status/never_run_2026-11-16.md](status/never_run_2026-11-16.md), 163 sections; 1103 never-run rows with steps, 877 drafts, 384 of them client rows. Not run: running them is a scratch run (about 24 to 62 h with the jar-changed and stale rows, `qrun.py plan --never`) and waits for the owner. Gotchas consolidated by a subagent (item 5). |
 
 Phase 2 "done when" against the build:

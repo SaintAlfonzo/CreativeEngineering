@@ -114,6 +114,7 @@ import tempfile
 import zipfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import jarstamp  # noqa: E402
 from dump_server_mods import MODS, ROOT, SERVER_SIDES, jar_modid, read_doc  # noqa: E402
 from gen_pack_manifest import enabled_resource_packs, sha1, version_of  # noqa: E402
 from changelog_lint import FOLDER as CHANGELOG_DIR, KUBEJS_PREFIX as CHANGELOG_PREFIX, UNRELEASED, count_bullets, \
@@ -500,6 +501,9 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
         name = entry['name'] if entry and not entry['name'].endswith('.jar') else modid or os.path.splitext(jar)[0]
         version = version_of(entry) if entry else ''
         mods[jar] = {'modId': modid, 'side': side, 'name': name, 'version': '' if version == 'Unknown' else version}
+        own_stamp = jarstamp.stamp_of(path)
+        if own_stamp:   # own jars: identity for the derived feature status (plan_process_overhaul.md P3.3 item 3)
+            mods[jar].update(stamp=own_stamp, digest=jarstamp.content_digest(path))
         files['mods' if side in SERVER_SIDES else 'client_mods'][jar] = path
     if unknown:
         pre.error('jars with no row in mod_sides.md (add a row, see its "Keeping this up to date"):\n'

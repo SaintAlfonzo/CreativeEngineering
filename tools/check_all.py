@@ -17,14 +17,14 @@ Usage: python3 tools/check_all.py [--fast] [--changed] [--full] [--only name,...
 
 Inputs of a test: the paths its script names (tools/..., development/<mod>/..., kubejs/...), with
 development/<mod>/build mapped to development/<mod>, plus the script itself. Any change to check_all.py,
-check_known.tsv or java_test_cp.sh selects every check.
+check_known.csv or java_test_cp.sh selects every check.
 
 Class-based tests read development/<mod>/build/classes. A mod whose sources are newer than its classes is compiled
 first, in one `./gradlew :<mod>:compileJava ... --offline` call; inside Gradle (CE_IN_GRADLE=1, the install gate) a nested
 Gradle run would deadlock on the build lock, so those tests SKIP with "stale classes" instead (the gate compiles the
 installing project before it runs the checks). --no-compile does the same outside Gradle.
 
-KNOWN failures: tools/check_known.tsv (check <TAB> regex <TAB> reason <TAB> yyyy-mm-dd). A FAILed check whose output
+KNOWN failures: tools/check_known.csv (columns check, regex, reason, date yyyy-mm-dd). A FAILed check whose output
 matches the regex counts as KNOWN. Entries older than 30 days print a warning, so accepted failures get revisited.
 
 Gates that call this: installToMods (--fast --changed, build-logic), build_deploy.py stage (--full), the Claude Code
@@ -43,14 +43,14 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 TOOLS = ROOT / 'tools'
-KNOWN_FILE = TOOLS / 'check_known.tsv'
+KNOWN_FILE = TOOLS / 'check_known.csv'
 TIMES_FILE = ROOT / 'jar_archive' / 'check_times.json'   # last run time per check (not tracked)
 FAST_LIMIT = 15.0
 # Checks over FAST_LIMIT on their own (measured alone, 2026-11-16); --fast skips them. Times under parallel load are
 # higher and are only recorded for information (jar_archive/check_times.json).
 SLOW = {'test_worldgen_tools': 75}
 KNOWN_MAX_AGE = 30
-GLOBAL_INPUTS = ['tools/check_all.py', 'tools/check_known.tsv', 'tools/java_test_cp.sh', 'tools/pack_paths.py']
+GLOBAL_INPUTS = ['tools/check_all.py', 'tools/check_known.csv', 'tools/java_test_cp.sh', 'tools/pack_paths.py']
 
 SCRIPT_TREES = ['development/', 'kubejs/data/', 'kubejs/assets/', 'kubejs/startup_scripts/', 'kubejs/server_scripts/',
                 'kubejs/client_scripts/']
@@ -63,7 +63,7 @@ LINTS = {
                                                                'tools/changelog_lint.py'], 1, False),
     'status_index': (['python3', 'tools/status_index.py', '--check'], ['feature_writeup/', 'tools/status_index.py',
                                                                       'tools/scratch_query/qrows.py',
-                                                                      'jar_archive/installed.tsv'], 2, False),
+                                                                      'jar_archive/installed.csv'], 2, False),
     'queue_rows': (['python3', 'tools/scratch_query/qrowlint.py', '--gate', '--quiet'],
                    ['feature_writeup/testing/rows/', 'tools/scratch_query/qrowlint.py', 'tools/scratch_query/qrows.py',
                     'kubejs/exported/'], 2, False),
@@ -151,14 +151,14 @@ def load_known():
     rows = []
     if not KNOWN_FILE.exists():
         return rows
-    for n, line in enumerate(KNOWN_FILE.read_text().splitlines(), 1):
-        if not line.strip() or line.startswith('#'):
+    sys.path.insert(0, str(TOOLS))
+    import table_io
+    for d in table_io.read_dicts(KNOWN_FILE):
+        if not d.get('check') or not d.get('regex') or not d.get('date'):
+            print('WARN check_known.csv line %d: want check, regex, reason, date' % d['_line'])
             continue
-        f = line.split('\t')
-        if len(f) < 4:
-            print('WARN check_known.tsv line %d: want 4 tab-separated fields' % n)
-            continue
-        rows.append(dict(check=f[0], pattern=re.compile(f[1]), reason=f[2], date=f[3].strip()))
+        rows.append(dict(check=d['check'], pattern=re.compile(d['regex']), reason=d.get('reason', ''),
+                         date=d['date'].strip()))
     return rows
 
 
@@ -245,7 +245,7 @@ def main():
         try:
             age = (today - dt.date.fromisoformat(k['date'])).days
         except ValueError:
-            print('WARN check_known.tsv %s: bad date %r' % (k['check'], k['date']))
+            print('WARN check_known.csv %s: bad date %r' % (k['check'], k['date']))
             continue
         if age > KNOWN_MAX_AGE:
             print('WARN KNOWN entry for %s is %d days old (%s): revisit it' % (k['check'], age, k['reason']))

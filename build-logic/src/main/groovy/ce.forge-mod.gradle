@@ -379,7 +379,7 @@ tasks.register('installToMods') {
                     "run ./gradlew :${bundledIn}:installToMods")
         }
     }
-    // tools/install_jar.py does the swap, the install ledger (jar_archive/installed.tsv) and, when the owner's game is
+    // tools/install_jar.py does the swap, the install ledger (jar_archive/installed.csv) and, when the owner's game is
     // running, the Install now / Install on exit / Skip dialog (plan_process_overhaul.md P1.2 item 7).
     doLast {
         def built = shippedJarTask().archiveFile.get().asFile

@@ -13,7 +13,7 @@ Row state (every row of feature_writeup/testing/rows/*.qb, metadata after sectio
 A PASSed row whose text was rewritten later (@reviewed after the PASS day) is stale too: the PASS was for the old text.
 
 Jar change: the jar in mods/ (client_mods/ for client rows) has a different build stamp than the run recorded, or,
-without a recorded stamp, its last jar_archive/installed.tsv row (else its file time) is after the PASS day.
+without a recorded stamp, its last jar_archive/installed.csv row (else its file time) is after the PASS day.
 
     qrun.py plan [--jars a,b] [--all] [--never] [--failed] [--tier T1,T2] [--code MELT,..] [--client] [--json]
         default: T1 rows of every changed own jar plus the T2 rows whose jars or sources changed (jar-changed, stale);
@@ -42,7 +42,7 @@ import qrows  # noqa: E402
 import qrowlint  # noqa: E402
 
 ROOT = qrows.ROOT
-LEDGER = ROOT / 'jar_archive/installed.tsv'
+LEDGER = ROOT / 'jar_archive/installed.csv'
 
 
 def _day_end(day):
@@ -58,8 +58,9 @@ def jar_state():
     import qpin
     ledger = {}
     if LEDGER.exists():
-        for l in LEDGER.read_text().split('\n')[1:]:
-            c = l.split('\t')
+        sys.path.insert(0, str(ROOT / 'tools'))
+        import table_io
+        for c in table_io.read(LEDGER)[2]:
             if len(c) >= 6 and c[5] in ('installed', 'on-exit'):
                 try:
                     ledger[c[1]] = time.mktime(time.strptime(c[0], '%Y-%m-%dT%H:%M:%S'))

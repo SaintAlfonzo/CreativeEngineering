@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """Status as data, docs as generated views (plan_process_overhaul.md P1.4).
 
-Status is written once: feature_writeup/status/features.tsv (one row per feature) and the TODO tables
+Status is written once: feature_writeup/status/features.csv (one row per feature) and the TODO tables
 (feature_writeup/todo/TODO.md). Run results come from the scratch run docs' verdict tables
 (feature_writeup/testing/scratch_run_*.md, scratch_queue_run_*.md: `| ID | Result | ...`) and qrun's verdict files
 (perf/runs/<run>/**/verdicts/*.json, TX-45; a verdict file wins over the run doc for the same run and row). Jar state
-comes from tools/jarstamp.py and jar_archive/installed.tsv.
+comes from tools/jarstamp.py and jar_archive/installed.csv.
 
 Writes three blocks between `<!-- generated:status_index begin NAME sha1=... -->` and
 `<!-- generated:status_index end NAME -->`:
@@ -15,12 +15,12 @@ Writes three blocks between `<!-- generated:status_index begin NAME sha1=... -->
 
 Usage:
   python3 tools/status_index.py            regenerate the three blocks
-  python3 tools/status_index.py --check    fail on: a status word off the legend (TODO or features.tsv), a TODO id in
-                                           features.tsv that does not exist, a queue code with no feature, a hand
+  python3 tools/status_index.py --check    fail on: a status word off the legend (TODO or features.csv), a TODO id in
+                                           features.csv that does not exist, a queue code with no feature, a hand
                                            edit inside a generated block (stored hash), a missing block or writeup;
                                            a block that is only out of date is a WARN (run without --check)
 
-Hand edits go to features.tsv and the TODO rows, never into a generated block.
+Hand edits go to features.csv and the TODO rows, never into a generated block.
 """
 import hashlib
 import json
@@ -38,13 +38,15 @@ FW = ROOT / 'feature_writeup'
 README = FW / 'README.md'
 TODO = FW / 'todo' / 'TODO.md'
 QUEUE = FW / 'testing' / 'scratch_queue.md'
-TSV = FW / 'status' / 'features.tsv'
+TSV = FW / 'status' / 'features.csv'
 RUNDOCS = FW / 'testing'
 VERDICT_ROOT = ROOT / 'perf' / 'runs'
-LEDGER = ROOT / 'jar_archive' / 'installed.tsv'
+LEDGER = ROOT / 'jar_archive' / 'installed.csv'
 sys.path.insert(0, str(ROOT / 'tools'))
+import table_io  # noqa: E402
 
-TSV_COLS = ['key', 'file', 'test prefix', 'status word', 'jars', 'queue codes', 'todo ids', 'note']
+TSV_COLS = ['key', 'file', 'test prefix', 'status word', 'jars', 'queue codes', 'todo ids', 'note', 'override',
+            'override_reason', 'override_date']
 FEATURE_LEGEND = ('VERIFIED', 'DEPLOYED', 'BUILT', 'BROKEN', 'reference', 'planned')
 TODO_LEGEND = ('Bug', 'Planned', 'Pinned', 'In Progress', 'Testing', 'Complete')
 TIERS = 'SCPT'
@@ -97,11 +99,9 @@ def read_features():
     rows = []
     if not TSV.exists():
         return rows
-    lines = TSV.read_text().rstrip('\n').split('\n')
-    for n, l in enumerate(lines[1:], 2):
-        c = l.split('\t')
-        c += [''] * (len(TSV_COLS) - len(c))
-        rows.append(dict(zip(TSV_COLS, c), line=n))
+    for d in table_io.read_dicts(TSV):
+        n = d.pop('_line')
+        rows.append(dict({k: d.get(k, '') for k in TSV_COLS}, line=n))
     return rows
 
 
@@ -136,7 +136,7 @@ def read_todo():
             continue
         ids.add(m.group(1))
         rows_text.append(l)
-        open_rows.append({'id': m.group(1), 'status': c[2], 'tests': c[3], 'line': i + 1})
+        open_rows.append({'id': m.group(1), 'status': c[2], 'tests': c[3], 'line': i + 1, 'text': l})
     return {'open': open_rows, 'archive': arch_rows, 'odd_archive': odd_arch, 'ids': ids, 'rows_text': rows_text}
 
 
@@ -285,8 +285,7 @@ def jar_states():
             names[pr['mod_id']] = (gp.parent.name, pr.get('jar_name', pr['mod_id']))
     ledger = {}
     if LEDGER.exists():
-        for l in LEDGER.read_text().split('\n')[1:]:
-            c = l.split('\t')
+        for c in table_io.read(LEDGER)[2]:
             if len(c) >= 6 and c[5].startswith('installed'):
                 ledger[re.sub(r'-[0-9][^-]*\.jar$', '', c[1])] = c[0][:10]
     for mod, (proj, jar_name) in names.items():
@@ -425,45 +424,70 @@ def rows_spans(path):
 
 # ---------------------------------------------------------------- main
 
+def apply_derived(feats, todo):
+    """Set each feature's status word from tools/feature_status.py (P3.3 item 3); returns the keys that changed."""
+    import feature_status
+    der = feature_status.derive(feats, todo)
+    changed = []
+    for f in feats:
+        w = der[f['key']][0]
+        if f['status word'] != w:
+            changed.append((f['key'], f['status word'], w))
+        f['status word'] = w
+    return changed
+
+
+def write_features(feats):
+    comments = table_io.read(TSV)[0]
+    table_io.write(TSV, TSV_COLS, [[f.get(k, '') for k in TSV_COLS] for f in feats], comments)
+
+
 def build():
     feats = read_features()
     todo = read_todo()
+    feats_changed = apply_derived(feats, todo)
     queue = read_queue()
     runs = read_runs()
     rindex, seen = run_index(runs)
     views = {'readme': view_readme(feats, rindex, jar_states()), 'todo': view_todo(todo),
              'queue': view_queue(queue, rindex, seen)}
     views['rows'], views['rows_where'] = rows_views(runs)
+    views['features_changed'] = feats_changed
     return feats, todo, queue, views
 
 
 def check(feats, todo, queue, views):
     fails, warns = [], []
     if not feats:
-        fails.append('features.tsv missing or empty')
-    hdr = TSV.read_text().split('\n', 1)[0].split('\t') if TSV.exists() else []
+        fails.append('features.csv missing or empty')
+    hdr = table_io.read(TSV)[1]
     if hdr and hdr != TSV_COLS:
-        fails.append('features.tsv header is not %s' % '\t'.join(TSV_COLS))
+        fails.append('features.csv header is not %s' % ','.join(TSV_COLS))
     keys = Counter(f['key'] for f in feats)
     for k, n in keys.items():
         if n > 1:
-            fails.append('features.tsv: key %r on %d rows' % (k, n))
+            fails.append('features.csv: key %r on %d rows' % (k, n))
+    for k, old, new in views.get('features_changed', ()):
+        warns.append('features.csv (%s): status word %s is out of date, the rule gives %s; run python3 '
+                      'tools/status_index.py' % (k, old or '(empty)', new))
     for f in feats:
+        if f.get('override') and not re.match(r'\d{4}-\d{2}-\d{2}$', f.get('override_date', '')):
+            fails.append('features.csv line %d (%s): override without an override_date' % (f['line'], f['key']))
         if f['status word'] not in FEATURE_LEGEND:
-            fails.append('features.tsv line %d (%s): status word %r not in the legend' % (
+            fails.append('features.csv line %d (%s): status word %r not in the legend' % (
                 f['line'], f['key'], f['status word']))
         for t in split_list(f['todo ids']):
             if t not in todo['ids']:
-                fails.append('features.tsv line %d (%s): TODO id %r does not exist' % (f['line'], f['key'], t))
+                fails.append('features.csv line %d (%s): TODO id %r does not exist' % (f['line'], f['key'], t))
         for p in split_list(f['file']):
             if not (FW / p).exists():
-                fails.append('features.tsv line %d (%s): file %s does not exist' % (f['line'], f['key'], p))
+                fails.append('features.csv line %d (%s): file %s does not exist' % (f['line'], f['key'], p))
     for r in todo['open']:
         if r['status'] not in TODO_LEGEND:
             fails.append('TODO.md line %d %s: status %r not in the legend' % (r['line'], r['id'], r['status'][:60]))
     owned = {c for f in feats for c in split_list(f['queue codes'])}
     for code in sorted(set(queue['codes']) - owned):
-        fails.append('scratch_queue.md: queue code %s (%d rows) has no feature in features.tsv' % (
+        fails.append('scratch_queue.md: queue code %s (%d rows) has no feature in features.csv' % (
             code, queue['codes'][code]))
     for name, path in BLOCKS.items():
         lines = path.read_text().split('\n')
@@ -475,7 +499,7 @@ def check(feats, todo, queue, views):
         b, e, stored = span
         content = lines[b + 1:e]
         if sha(content) != stored:
-            fails.append('%s: hand edit inside generated block %s (lines %d-%d); move the change to features.tsv or '
+            fails.append('%s: hand edit inside generated block %s (lines %d-%d); move the change to features.csv or '
                          'TODO.md and rerun tools/status_index.py' % (rel, name, b + 2, e))
         elif content != views[name]:
             warns.append('%s: block %s is out of date; run python3 tools/status_index.py' % (rel, name))
@@ -560,6 +584,9 @@ def main(argv):
             'FAIL %d' % len(fails) if fails else 'OK', len(feats), len(todo['open']), len(queue['codes'])))
         return 1 if fails else 0
     changed = write(views)
+    if views['features_changed']:
+        write_features(feats)
+        changed.append('features.csv status (%d)' % len(views['features_changed']))
     if any(c.startswith('rows') for c in changed):
         # new or moved rows sections change the queue's row counts: rebuild once so the coverage block agrees
         changed += [c for c in write(build()[3]) if c not in changed]

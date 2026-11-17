@@ -13,7 +13,7 @@
 ## SQ-PROC-01
 @group A
 @commands Boot the scratch server; `grep "\[creativecommon\] builds:" logs/latest.log`; `python3 tools/jarstamp.py <srv>/mods`
-@pass one boot line listing every own jar with its stamp; each stamp equals the `jarstamp.py` stamp of the jar in `srv/mods`, and for jars installed from `mods/`, the last `jar_archive/installed.tsv` row of that jar
+@pass one boot line listing every own jar with its stamp; each stamp equals the `jarstamp.py` stamp of the jar in `srv/mods`, and for jars installed from `mods/`, the last `jar_archive/installed.csv` row of that jar
 @fails `creativecommon.util.BuildStamps` (ModList mod files, `findResource("META-INF","ce-build.json")`); no line at all: Common jar older than the stamp build
 @draft no batch holds this row yet
 

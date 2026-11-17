@@ -15,12 +15,14 @@ What it does, for every PNG under development/**/textures and kubejs/assets/**/t
      pixels off that map = edited (painted by someone). Nothing similar = unmatched.
   3. Transcript evidence (optional, --transcripts DIR, Claude Code session logs, which start 2026-10-14):
      calls that named the file and ran the owner's tools (owned), ran ad-hoc pixel code (paint), or a script.
-  4. feature_writeup/texture_sources/sources.tsv (hand-kept, first matching glob wins) sets origin, source,
+  4. feature_writeup/texture_sources/sources.csv (hand-kept, first matching glob wins) sets origin, source,
      tool, use and status; rows it does not cover get an automatic origin from 1-3.
 
-Writes feature_writeup/texture_sources/ledger.tsv and prints counts per status.
+With --write, writes feature_writeup/texture_sources/ledger.csv; without it, a check: prints counts per status and
+how many ledger rows would change, and writes nothing (plan_process_overhaul.md P3.4 d). Ties between equal sources
+break the same way every run: shortest path, then name.
 
-    python3 tools/texture_provenance.py [--transcripts DIR]
+    python3 tools/texture_provenance.py [--write] [--transcripts DIR]
     python3 tools/texture_provenance.py --sheet swap,redo OUT.png              # contact sheet from the ledger
     python3 tools/texture_provenance.py --sheet confirm:edited,unmatched OUT.png
 
@@ -32,8 +34,12 @@ from PIL import Image
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DOC = os.path.join(ROOT, 'feature_writeup', 'texture_sources')
-SOURCES = os.path.join(DOC, 'sources.tsv')
-LEDGER = os.path.join(DOC, 'ledger.tsv')
+SOURCES = os.path.join(DOC, 'sources.csv')
+LEDGER = os.path.join(DOC, 'ledger.csv')
+LEDGER_HEAD = ['path', 'pixel_class', 'pixel_match', 'pixel_detail', 'transcript', 'origin', 'source', 'tool',
+               'used_for', 'status', 'note']
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import table_io  # noqa: E402
 OWN_JAR = re.compile(r'^(backported|repacked|creative|exposureBackport|solraspberrypie|babyMobs|moreMooblooms|'
                      r'incubationAdditions|patcherMod)', re.I)
 STOP = {'block', 'blocks', 'side', 'top', 'bottom', 'front', 'back', 'item', 'stage', 'base', 'overlay', 'inner',
@@ -64,7 +70,7 @@ class Index:
         im = rgba(data)
         if im is None:
             return
-        self.pix.setdefault(hashlib.sha1(im.tobytes()).hexdigest(), label)
+        self.pix.setdefault(hashlib.sha1(im.tobytes()).hexdigest(), []).append(label)
         if im.size[0] * im.size[1] > 65536:
             return
         self.img[label] = im
@@ -132,23 +138,27 @@ def colour_map(src, out):
     return ok / tot, tot - ok, same / tot
 
 
+def tiekey(label):
+    return len(label), label
+
+
 def classify(idx, path):
     im = Image.open(os.path.join(ROOT, path)).convert('RGBA')
     h = hashlib.sha1(im.tobytes()).hexdigest()
     if h in idx.pix:
-        return 'copy', idx.pix[h], ''
+        return 'copy', min(idx.pix[h], key=tiekey), ''
     cands = []
     w, ht = im.size
     for f in ([im] + ([im.crop((0, 0, w, w))] if ht > w and ht % w == 0 else [])):
         k, n = mask_key(f)
         opaque = n == f.size[0] * f.size[1]
         if not opaque:
-            cands += idx.mask.get(k, [])[:60]
+            cands += sorted(idx.mask.get(k, []), key=tiekey)[:60]
         else:   # an opaque square matches every opaque square: use name words instead
             for wd in words(os.path.basename(path)[:-4]):
-                cands += [c for c in idx.by_word.get(wd, [])[:400] if idx.img[c].size == f.size]
+                cands += [c for c in sorted(idx.by_word.get(wd, []), key=tiekey)[:400] if idx.img[c].size == f.size]
     best = None
-    for c in dict.fromkeys(cands):
+    for c in sorted(dict.fromkeys(cands), key=tiekey):   # strict > below: the first (shortest) wins a tie
         r = colour_map(idx.img[c], im)
         if best is None or (r[0], r[2]) > (best[1][0], best[1][2]):
             best = (c, r)
@@ -194,11 +204,8 @@ def transcript_evidence(tdir):
 def load_sources():
     rows = []
     if os.path.isfile(SOURCES):
-        for line in open(SOURCES):
-            if line.startswith('#') or not line.strip() or line.startswith('pattern\t'):
-                continue
-            p = (line.rstrip('\n').split('\t') + [''] * 7)[:7]
-            rows.append(p)
+        for r in table_io.read(SOURCES)[2]:
+            rows.append((r + [''] * 7)[:7])
     return rows
 
 
@@ -219,6 +226,7 @@ def main():
     ap.add_argument('--transcripts', default=os.path.expanduser(
         '~/.claude/projects/-home-[REDACTED]--local-share-atlauncher-instances-CreativeEngineering2'))
     ap.add_argument('--sheet', nargs=2, metavar=('STATUS', 'OUT'))
+    ap.add_argument('--write', action='store_true', help='write the ledger (default: check only)')
     a = ap.parse_args()
 
     if a.sheet and os.path.isfile(LEDGER):
@@ -235,8 +243,8 @@ def main():
     src = load_sources()
     os.makedirs(DOC, exist_ok=True)
     counts = {}
-    with open(LEDGER, 'w') as f:
-        f.write('path\tpixel_class\tpixel_match\tpixel_detail\ttranscript\torigin\tsource\ttool\tused_for\tstatus\tnote\n')
+    out = []
+    if True:
         for rp in sorted(own):
             cls, match, detail = classify(idx, rp)
             e = ev.get(os.path.basename(rp)[:-4], set())
@@ -247,13 +255,25 @@ def main():
                 origin, status, note = auto(cls, match, e)
                 source, tool, use = (match if cls != 'unmatched' else ''), '', ''
             counts[status] = counts.get(status, 0) + 1
-            f.write('\t'.join([rp, cls, match, detail, '+'.join(sorted(e)), origin, source, tool, use, status, note])
-                    + '\n')
-    print('ledger:', os.path.relpath(LEDGER, ROOT), ' '.join(f'{k}={v}' for k, v in sorted(counts.items())))
+            out.append([rp, cls, match, detail, '+'.join(sorted(e)), origin, source, tool, use, status, note])
+    counts_s = ' '.join(f'{k}={v}' for k, v in sorted(counts.items()))
+    if a.write:
+        table_io.write(LEDGER, LEDGER_HEAD, out)
+        print('ledger:', os.path.relpath(LEDGER, ROOT), counts_s)
+        return 0
+    old = {r[0]: r for r in table_io.read(LEDGER)[2]}
+    new = {r[0]: r for r in out}
+    # the transcript column depends on local session logs, so it is left out of the comparison
+    strip = lambda r: r[:4] + r[5:]
+    diff = sorted(k for k in set(old) | set(new) if k not in old or k not in new or strip(old[k]) != strip(new[k]))
+    print('ledger (check only, --write to update):', counts_s)
+    if diff:
+        print('%d ledger row(s) out of date, e.g. %s' % (len(diff), ', '.join(diff[:3])))
+    return 0
 
 
 def sheet(status, out):
-    rows = [l.split('\t') for l in open(LEDGER).read().splitlines()[1:]]
+    rows = table_io.read(LEDGER)[2]
     want, _, classes = status.partition(':')   # e.g. "swap,redo" or "confirm:edited,unmatched"
     rows = [r for r in rows if r[9] in want.split(',') and (not classes or r[1] in classes.split(','))]
     cell, cols = 48, 12

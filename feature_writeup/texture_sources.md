@@ -1,12 +1,12 @@
 # Texture sources
 
 Where every pack-owned texture came from, the texture rule, and the textures that break it. One row per texture in
-[texture_sources/ledger.tsv](texture_sources/ledger.tsv) (generated); the hand-kept part is
-[texture_sources/sources.tsv](texture_sources/sources.tsv). Audit started 2026-11-13.
+[texture_sources/ledger.csv](texture_sources/ledger.csv) (generated); the hand-kept part is
+[texture_sources/sources.csv](texture_sources/sources.csv). Audit started 2026-11-13.
 
 ## 0. At a glance (2026-11-13)
 
-**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Texture sources (texture rule: human art or the owner's tools only; per-texture provenance ledger of every pack-owned texture, sources and uses of swapped / combined textures, AI textures marked swap / redo, unknowns to confirm). Status: audit 2026-11-13: 4 swap, 27 redo, 349 confirm; regenerate with `python3 tools/texture_provenance.py`; TODO `textures/tools #2` to `#4`
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Texture sources (texture rule: human art or the owner's tools only; per-texture provenance ledger of every pack-owned texture, sources and uses of swapped / combined textures, AI textures marked swap / redo, unknowns to confirm). Status: audit 2026-11-13: 4 swap, 27 redo, 349 confirm; regenerate with `python3 tools/texture_provenance.py --write`; TODO `textures/tools #2` to `#4`
 
 2743 PNGs under `development/**/textures` and `kubejs/assets/**/textures` (build output skipped).
 
@@ -35,8 +35,8 @@ were preview and contact sheets only.
   Scripts that only call these tools count (`make_seasoning.py`, `make_salt.py`, `make_psugar.py`, `gen_jam_art.py`).
 - Not allowed: AI-drawn pixels, AI-chosen palettes or ramps, and one-off AI scripts that transform pixels themselves
   (hue shifts, brightness maps, greyscale splits) instead of going through the tools above.
-- Every texture that is not a plain upstream copy gets a row in `sources.tsv` in the same session: source file(s) and
-  jar, tool, and what it is used for. Rerun `python3 tools/texture_provenance.py` after adding or changing textures.
+- Every texture that is not a plain upstream copy gets a row in `sources.csv` in the same session: source file(s) and
+  jar, tool, and what it is used for. Rerun `python3 tools/texture_provenance.py --write` after adding or changing textures.
 
 ## 2. Statuses and what to do
 
@@ -45,7 +45,7 @@ were preview and contact sheets only.
 | ok | upstream, vanilla, mojang-26.1, human, owned-tool | none |
 | swap | ai-drawn, or ai-transform the owner wants replaced | new art by the owner, or a fresh owned-tool derivation from a human sprite |
 | redo | ai-transform | rerun from the recorded source with `palette_swap.py` / `combine_tex.py`; the result usually looks the same |
-| confirm | unknown, mixed | owner says who made it and how; the answer becomes a `sources.tsv` row |
+| confirm | unknown, mixed | owner says who made it and how; the answer becomes a `sources.csv` row |
 
 ## 3. How the ledger is built
 
@@ -62,7 +62,7 @@ were preview and contact sheets only.
 3. **Session logs.** Claude Code transcripts (`~/.claude/projects/...`, from 2026-10-14; earlier work has none) are
    scanned for tool calls that name the file: `owned` (called the owner's tools), `paint` (ad-hoc pixel code that
    saved images), `script` (a generator). The current audit's own calls are skipped.
-4. **sources.tsv** rows override 1 to 3 (first matching glob wins). Rows it does not cover get an automatic origin:
+4. **sources.csv** rows override 1 to 3 (first matching glob wins). Rows it does not cover get an automatic origin:
    copy = upstream/vanilla ok; owned-only evidence = owned-tool ok; paint without owned = ai-transform redo;
    anything else = confirm.
 
@@ -92,7 +92,7 @@ made by an AI script look the same; those stay `confirm`. Mojang 26.1 files are 
 | `kubejs/assets/beautify` `blocks/hanging_pot` | Beautify `hanging_pot` (36 px changed) | colour-map `putpixel` script | `palette_swap.py --drop`, or `combine_tex.py` |
 | Brewin' member `gui/keg` | Brewin' and Chewin' 4.5.0 `gui/keg` (98 % unchanged) | ad-hoc pixel edit of the GUI | owner check: hand edit in an image editor |
 
-The full list with the matched source per file: `ledger.tsv` rows with status `redo`.
+The full list with the matched source per file: `ledger.csv` rows with status `redo`.
 
 ## 6. Confirm: owner to say
 
@@ -119,7 +119,7 @@ pixels no recolour explains, or no source found.
 
 ## 7. Derived textures: sources and use
 
-Every owned-tool texture's source, tool and use is in `sources.tsv` (families) and `ledger.tsv` (per file, columns
+Every owned-tool texture's source, tool and use is in `sources.csv` (families) and `ledger.csv` (per file, columns
 `source`, `tool`, `used_for`). Families recorded so far:
 
 | Family | Source | Tool | Used for |

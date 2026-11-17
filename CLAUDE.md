@@ -48,8 +48,9 @@ findings) become a plan, split and classify them and ask the open items before b
   transform it with an ad-hoc script. Allowed: copy human art (upstream, vanilla, owner's), or run
   `textureswapper/palette_swap.py` / `combine_tex.py` / `scale_tex.py` / `upscale_sprites.py` on a source and palette
   the owner picked (ask when not given). Every derived texture gets a row in
-  `feature_writeup/texture_sources/sources.tsv` (source, tool, use) in the same session; rerun
-  `python3 tools/texture_provenance.py`. Rule and audit: [texture_sources.md](feature_writeup/texture_sources.md).
+  `feature_writeup/texture_sources/sources.csv` (source, tool, use) in the same session; rerun
+  `python3 tools/texture_provenance.py --write`. Rule and audit: [texture_sources.md](feature_writeup/texture_sources.md).
+- **Tables are CSV** (header row, UTF-8, Python `csv` or `tools/table_io.py`); no new TSV files.
 - Hand-edited config: also copy it to `configs_edited/root_config/<same path>` (or `server_config/`).
 - Backports and ports: no old-version or cross-mod conversions. Never use advancements (the pack
   drops them all at load) for rewards or unlocks.
@@ -80,12 +81,12 @@ findings) become a plan, split and classify them and ask the open items before b
 - Build/install a mod: `./gradlew :<mod>:build --offline`, then `:<mod>:installToMods` (moves old
   jars to `jar_archive/displaced/`). A rebuild for testing is installed without asking. When the game is running,
   `installToMods` shows the owner a dialog (Install now, shown again while the game still runs / Install on exit /
-  Skip); never replace a jar under a running game any other way. Every install is a row in `jar_archive/installed.tsv`;
+  Skip); never replace a jar under a running game any other way. Every install is a row in `jar_archive/installed.csv`;
   `python3 tools/jarstamp.py pending` lists built, not installed jars (cite it instead of writing "not installed").
 - **Checks.** `python3 tools/check_all.py` runs every headless test and lint (`--fast` under a minute, `--changed`
   only what the diff touches, `-v` output tails). `installToMods` runs `--fast --changed` first and refuses on a FAIL
   (`-PskipChecks` overrides, logged); `build_deploy.py` runs `--full`; the Stop hook reports. Accepted failures go in
-  `tools/check_known.tsv` with a reason and date.
+  `tools/check_known.csv` with a reason and date.
 - **Session role.** At the start of a session, and whenever the work changes, run
   `python3 tools/session_role.py plan|impl|test`. The Stop hook follows it: `plan` silent; `impl` checks and counts
   only this session's own uncommitted code files (never docs or other sessions' files); `test` counts this session's
@@ -131,8 +132,9 @@ handling event`, the mod/feature name) before reasoning from code. It is the rea
 - Status lives in the repo docs, not memory or agent notes: [feature_writeup/README.md](feature_writeup/README.md)
   (index + status legend), [todo/TODO.md](feature_writeup/todo/TODO.md) (open work),
   `plan_*.md` and [deploy.md](feature_writeup/deploy.md) (releases). A change updates its writeup, its TODO row and its
-  row in `feature_writeup/status/features.tsv` by hand, then runs `python3 tools/status_index.py`. The README index
-  status, the TODO snapshot counts and the queue coverage block are generated: never hand-edit inside
+  row in `feature_writeup/status/features.csv` (jars, queue codes; the status word is derived, `override` only with a
+  dated reason), then runs `python3 tools/status_index.py`. The README index
+  status, the feature status words, the TODO snapshot counts and the queue coverage block are generated: never hand-edit inside
   `generated:status_index` markers, and never paste run results into README cells.
 - New tests and queue rows take their prefix from [test_prefix_index.md](feature_writeup/testing/test_prefix_index.md)
   (a new feature adds its row first).

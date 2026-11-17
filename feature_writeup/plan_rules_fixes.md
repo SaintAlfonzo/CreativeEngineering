@@ -144,7 +144,7 @@ block, the dict line and kept Ender Crop's. State now: `item_dict.js:12603` and 
 - `endersdelight/additions.js:67`, `hearthandharvest/tags.js:74`: confirm they use the block dict and the endercrop guard.
 - Generated data: `kubejs/generation_scripts/physics/item_physics_families.json` carries `endercrop:tilled_end_stone` (fine);
   regenerate with `/cdevgen` if the hearth row exists anywhere else. `tools/blockrunner_untagged_blocks.json:528`,
-  `hearth_and_harvest.md` J75 and `texture_sources/ledger.tsv:977-978` per the 1114 plan.
+  `hearth_and_harvest.md` J75 and `texture_sources/ledger.csv:977-978` per the 1114 plan.
 - Mark V-22 fixed (date, session) once SQ-HH-1546 and 1546b have run; until then "Built, untested".
 
 **Sea pickles**: `item_dict.js:2161` says `#forge:sea_pickles`, `:2210` says `#creativedelight:sea_pickles`. The later

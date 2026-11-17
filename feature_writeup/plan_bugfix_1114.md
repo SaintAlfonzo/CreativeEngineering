@@ -191,7 +191,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
     - The `vinery:grapevine_lattice` blockstate file belongs to Vinery and has no `grape=hops` variants. A client
       `ModelEvent.ModifyBakingResult` hook in the vinery member's client code (MIT, ours) maps each `grape=hops`
       `ModelResourceLocation` to the baked model of the matching `grape=jungle_white` state.
-    - The white grape art is therefore used in place, with no file copied and no `sources.tsv` row (nothing derived).
+    - The white grape art is therefore used in place, with no file copied and no `sources.csv` row (nothing derived).
   - Lang: the lattice tooltip (:172) names hops; our own lang key in the port's lang file.
   - Rebuild `:creativeBrewing:` alongside `:creativeDelight:`. Creative Brewing is one package (memory
     `creative-brewing-package-deal`).
@@ -208,7 +208,7 @@ juice), `/vinery dump grapes` (lists air), no other; foxes eat only from bushes 
   - We write our own blockstate. Its multipart cases point at Vinery's models by id
     (`vinery:block/jungle_grape_vine_stage0`, `_stage1`, `_white_stage2`, `_white_stage3`).
   - Those models and the white grape textures load from the donor jar in place. Nothing is copied, so there is no
-    `sources.tsv` row.
+    `sources.csv` row.
   - Hops only exist when Vinery is loaded (gate above), so the referenced models are always present.
   - The old `hops_vine_stage0-3.png` and the H&H lattice textures retire with their ledger rows. The hops item keeps its
     H&H texture.
@@ -271,7 +271,7 @@ Status: dict part DONE 2026-11-14 (common): `item_dict.js` `i.tilled_end_stone =
 - Swap entry `hearthandharvest:tilled_end_stone -> endercrop:tilled_end_stone` in `swap_merges.js`, plus a fresh old-id save
   test (note [forge-missing-mappings-staging](agent_notes/forge-missing-mappings-staging.md)).
 - Docs:
-  - Retire `texture_sources/ledger.tsv:977-978`.
+  - Retire `texture_sources/ledger.csv:977-978`.
   - Update `hearth_and_harvest.md` J75 and `tools/blockrunner_untagged_blocks.json:528`.
 - Verify: SQ-HH-1546 rewritten (Ender Crop tilled end stone pickaxe-mineable, End crops plant). New SQ-HH-1546b (old save
   with the H&H block loads as Ender Crop).
@@ -346,9 +346,9 @@ Status: DONE 2026-11-14 (cd-a). Rows renamed: SQ-HH-483/-486/-487 were taken, so
   - Models parent vanilla `block/snow_height12`, `/8`, `/4` with texture `salt:block/raw_rock_salt_block` on every face
     of every stage **[default]**. This is an existing upstream texture referenced in place, not a copy. Item models
     follow.
-  - The three `*_licked_salt_block.png` become unused. Leave the files, retire their `ledger.tsv` rows, or delete them
+  - The three `*_licked_salt_block.png` become unused. Leave the files, retire their `ledger.csv` rows, or delete them
     and the rows.
-  - No texture is drawn or edited. If a stage needs a copied file, it gets a `sources.tsv` row.
+  - No texture is drawn or edited. If a stage needs a copied file, it gets a `sources.csv` row.
 - Verify:
   - SQ-HH-482 rerun (cow at 21 blocks makes a trip).
   - New SQ-HH-483: cow at 18.

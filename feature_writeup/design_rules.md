@@ -34,7 +34,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | `python3 tools/changelog_lint.py` | DR-P5, DR-P9 | changelog file format, labels (New, Changed, Fixed, Removed), icons, frozen deployed files |
 | `python3 tools/name_audit.py --check` | DR-P10, DR-P11 | raw lang keys shown as names; Title Case of every displayed name |
 | `python3 tools/id_owner_lint.py` | DR-C11 | ids, channels, JEI and WTHIT uids, `ce` names outside Creative Engineering |
-| `python3 tools/texture_provenance.py` | DR-C18 | every derived texture has a `sources.tsv` row |
+| `python3 tools/texture_provenance.py` | DR-C18 | every derived texture has a `sources.csv` row |
 | `python3 tools/design_rules_audit.py` (`-v` lists every hit; name checks to run only some) | DR-L1, DR-L4, DR-L5, DR-W9, DR-W11, DR-W16, DR-C1, DR-C2, DR-C10, DR-C14, DR-C19, DR-C21 to DR-C25, G1 | report only (exit 0): emoji, relative dates, spelling mix, citation form, path spans, config backups, `mod_sides.md` rows, underscores, licence fields, raw recipe and tag calls, literal ids, formatting counts, doc file names |
 
 ## 2. Language (all text)
@@ -130,7 +130,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | DR-C15 | Ports and backports: no old-version or cross-mod conversions or remaps. Code from an ARR donor is written from behaviour, never translated from a decompile. | Hard | CLAUDE.md; skill `port` |
 | DR-C16 | Structure searches go through Async Locator off the server thread, never a synchronous search. | Memory | memory `async-locator-everywhere` |
 | DR-C17 | No `getChunkAt`, `getBiome` or `getHeight` on ungenerated land from a KubeJS command; no `r.getType()` while looping all recipes. | Hard | skill `scratch-test` gotchas.md |
-| DR-C18 | Textures: human art or the owner's tools only (`palette_swap.py`, `combine_tex.py`, `scale_tex.py`, `upscale_sprites.py`) on a source and palette the owner picked. Never drawn, generated, palette-picked or transformed by an ad-hoc script. Each derived texture gets a `sources.tsv` row the same session. | Checked | CLAUDE.md; texture_sources.md 1 |
+| DR-C18 | Textures: human art or the owner's tools only (`palette_swap.py`, `combine_tex.py`, `scale_tex.py`, `upscale_sprites.py`) on a source and palette the owner picked. Never drawn, generated, palette-picked or transformed by an ad-hoc script. Each derived texture gets a `sources.csv` row the same session. | Checked | CLAUDE.md; texture_sources.md 1 |
 
 ### 5.4 Licence
 

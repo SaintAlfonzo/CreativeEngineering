@@ -1,5 +1,0 @@
-# Accepted failures for tools/check_all.py (plan_process_overhaul.md P1.1).
-# check<TAB>regex matched against the check output<TAB>reason<TAB>yyyy-mm-dd added. Entries older than 30 days warn.
-test_crop_growth	UNKNOWN: hearthandharvest:hops_vine	Hops vine has no crop growth rule; tracked as largecontent/mod-additions #64 (WTHIT growth line)	2026-11-16
-test_wild_crops	places no known crop block	Rustic Delight JSON placed features missing from CROP_BLOCKS: farming/wild-crops #11	2026-11-16
-test_mushroom_spawns	places no known crop block	same generator gap: farming/wild-crops #11	2026-11-16
