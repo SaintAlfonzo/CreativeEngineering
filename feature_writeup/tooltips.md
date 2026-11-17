@@ -4,6 +4,8 @@ Test prefix **TT-** · Last updated **2026-11-02** · Overall status **DEPLOYED 
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Tooltips (pack lines, removals/rewrites of other mods' lines, framework tooltips, tooltip rendering fixes). Status: DEPLOYED (new removals), in-game test pending; placeable lines, Legendary Tooltips underline and AppleSkin bars in JEI / Lightman's Currency DEPLOYED with 1.0.6 (TT-16 to TT-18); AppleSkin bars in the remaining food screens (meal slots, keg tank + JEI keg, Vinery recipe book, TrashSlot, Pretty Pipes, FTB Quests, Wares, Patchouli, AE2) BUILT 2026-10-20, in `mods/`, untested (TT-19 to TT-30); tall tooltips keep their top, Curios slot line on every curio item, PneumaticCraft descriptions without Shift in gray BUILT 2026-11-02 (patcherMod 1.1.07 installed), TT-39 to TT-41
+
 The pack's tooltip layer adds about 455 hand-written lines, removes or rewrites lines other mods ship,
 and draws the lines for the pack's own frameworks (armor effects, tool effects, shields, potion
 buckets, walk speed). Anything that changes a tooltip gets recorded here; the feature it describes

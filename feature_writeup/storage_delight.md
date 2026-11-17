@@ -15,6 +15,10 @@ non-member.
 block type, no behaviour change. 64 of the 94 could exist in the pack (4 new countertops on the 9 current woods, plus
 bamboo and cherry sets); pale oak and poplar have no wood here.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Storage Delight 26.10.05 update (changes against installed 25.12.09: 94 new blocks on new woods and countertop stones, 64 usable here; no behaviour change; MIT). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-STD-03 PASS).** DEPLOYED with 1.1.03 (`repackedStorage`, 50 blocks: blackstone / diorite / stone bricks / tuff countertops on 9 woods + bamboo set), SQ-STD-01 and -02 scratch PASSED (2026-10-26, r1102b 2026-11-02), SQ-STD-03 (fuel) queued, in game open; `mod-additions #33`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py --no-classes` (963 files old, 2022 new; 1334 added, 276 removed, 21 changed; en_us lang

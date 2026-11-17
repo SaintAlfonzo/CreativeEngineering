@@ -29,6 +29,10 @@ Generated 2026-11-05 by `python3 tools/terrain_adaptation_scan.py` (re-run after
 | Built in code (no templates) | 5 |
 | Templates not found | 3 |
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Terrain adaptation scan (generated: which structures could use the soft beard or template trim, pad and air-notch columns per template). Status: reference, regenerate with `python3 tools/terrain_adaptation_scan.py` after adding structure mods
+
 ## 1. Strong candidates
 
 Surface structures whose templates are mostly pad or saved air. These look like the ballista did: a flat rectangle (and with `none`, a notch) the size of the whole template. "Worst template" is in the JSON.

@@ -20,6 +20,8 @@ This file has four parts:
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Veggies Delight backport and implementation description (mod inventory from the 1.20.1 jar: 7 crops, wild plants, 72 items, 215 recipes, worldgen, loot, depot houses, trades; decided 2026-10-22: Rustic's bell peppers replace VD's, smoked pepper dropped, pack wild crop / flower rules, mature dandelion drops, juices as fluids, jarable soups, tortilla wraps, baking families, injections through the pack's tools; marked merges Fish and Chips, Mashed Potatoes, Stuffed Bell Peppers; 10 remaining overlaps). Status: **r1103 2026-11-03: SQ-VDF-04 PASS (all SQ-VDF rows passed).** **2026-11-02 night: R7 pancakes BUILT, CD jar installed 2026-11-02 23:16, not booted (SQ-PCK, SQ-CDJ6).** **Deep scan 2026-11-02:** port `-05` nested in the installed CD jar (11-02 14:01; deployed `-03`); SQ-DM-01 to -03 PASS r1031; r1102b SQ-VP mostly PASS, SQ-VP-06 FAIL (pepper jam / relish soft fluids), SQ-VDF mostly PASS; SQ-VP-14 and CQ-VP open. DEPLOYED with 1.1.01 (port now `-03`, 1.1.03; `-04` built 2026-11-01, not installed); SQ-VP-00 to -12 PASS 2026-10-23 / -25; merges M1 to M3 and the §3.3 folds BUILT 2026-11-01 (CD jar not rebuilt; SQ-VDF, SQ-MG-21), R2, R3, R7 open; dump-driven steps open (§4.0); VD-01 to VD-54 in game
+
 | Part | Where | Status |
 |---|---|---|
 | Mod inventory (7 crops, 8 wild plants, 72 items, 29 blocks, 215 recipe files, worldgen, loot, village houses, trades, mob food, config) | §2 | reference 2026-10-22, from `VeggiesDelight-1.20.1-1.9.2.jar` |

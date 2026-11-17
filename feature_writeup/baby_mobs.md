@@ -6,6 +6,8 @@ remodel of every other baby) BUILT 2026-11-01 as babyMobs 1.1.0 (nested in Creat
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Baby mobs (1.21.2 baby squid, glow squid, dolphin with the 26.1 Tiny Takeover models, in our own `babyMobs` jar, nested in Creative Delight; the 26.1 remodel of 27 more babies). Status: **r1103 2026-11-03: milestone 2 built, scratch server PASSED (SQ-BM-02).** milestone 1 DEPLOYED with 1.1.01 (2026-10-22), BM-01, BM-02 PASSED on the scratch server, server halves of BM-04 to BM-07 scratch server PASSED 2026-10-22 (SQ-OM-13, SQ-OM-14), BM-03 to BM-08 pending in game; spawn egg on an adult fixed and milestone 2 BUILT 2026-11-01 (babyMobs 1.1.0, waits for the Creative Delight install), BM-09 to BM-15 pending in game
+
 - **What the user asked (2026-10-20):** "try to port the 1.20+ baby mobs back to 1.19.2 in a new jar. port every baby
   mob behavior, texture, model, drops, and acquire mechanic if any (breeding). spawning will be wired into the mob
   spawning system like mooblooms. don't port the golden dandelion, poison potato already does this."

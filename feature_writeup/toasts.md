@@ -6,6 +6,8 @@ mixin, driven by two CEConfig switches. Every other toast is left alone. Test pr
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Toasts (tutorial and advancement toasts dropped for every player by `[toasts]` switches + `ToastFilterMixin`, incl. Exposure and Fairy Lights tutorial toasts; catalogue of every toast in the pack). Status: DEPLOYED with 1.1.01 (patcherMod 1.1.01, 2026-10-22); TO-01 to TO-07 pending
+
 | Part | Status |
 |---|---|
 | `[toasts] tutorial / advancement` + `ToastFilterMixin` | DEPLOYED with patcherMod 1.1.01 (2026-10-22); TO-01 to TO-07 not run |

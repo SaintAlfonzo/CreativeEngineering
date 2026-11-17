@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Gear tuning (netherite → echo → felsic → dragon assembly ladder, `tuneTools` / `tuneArmor` stat tables, echo-tier tools, felsic config values, assembly NBT carry, armor enchantability per material, dragon gear autorepair, dragon scale elytra duplication, upgraded dragon chestplate rocket takeoff, air brake). Status: DEPLOYED (since 1.0.3), in-game test pending (GR-01 to GR-30); findings F1-F13 open (F1: felsic shield has no config section; F13: dragon set 36 armor over the 30 cap, cap 50 built, BROKEN: scratch r1031 2026-10-31 SQ-AC-02 FAILED, the set gives 33: DragonLoot's config overrides the tune), F4, F5, F10, F13 need a decision
+
 | Part | Status |
 |---|---|
 | `global.tuneTools` / `global.tuneArmor`: per-item stat overrides on `ItemEvents.modification`, filled for every echo, felsic and dragon tool and armor piece | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); no test ids before this writeup |

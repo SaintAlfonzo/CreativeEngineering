@@ -8,6 +8,8 @@ count), `mobs/tweaks #7` (seagulls), scratchpad 2026-10-29 (reskinning).
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Lunchboxes (Spice of Life: Lunchbag / Copper / Iron / new Netherite, 5 / 9 / 14 / 18 slots; upgrades keep the food; smithing skins from lower tiers and berry baskets; leather-style dye on the base; soap; slot tooltip; seagulls ignore them). Status: DEPLOYED with 1.1.05 (2026-10-31), scratch server PASSED r1031 2026-10-31 (SQ-LB-01, -02), untested in game (CQ-LB-01)
+
 | Part | Status |
 |---|---|
 | Netherite Lunchbox (18 slots, 2 x 9, fire resistant) | BUILT 2026-10-29, scratch server PASSED r1031 (2026-10-31, SQ-LB-01), in game pending |

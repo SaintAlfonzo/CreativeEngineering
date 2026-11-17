@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Potions and brewing (12 `kubejs:*` potions, Long Reach / Phantom Bane / Magic Resistance potions, item-agnostic mixes for every machine, Alex's Mobs and Rustic Delight fixes, Automatic Brewing rebuild, dragon's breath fluid brew, IE Mixer / Refinery / Bottler on `create:potion` with splash/lingering parity, Automated Potion Mixing and Lingerification JEI pages, potion fluid tooltips, Potion Bundles drain). Status: DEPLOYED (built 2026-09-06 to 09-08, shipped since 1.0.3), in-game test pending (PO-01 to PO-26); findings F1-F8 open, F1 (batch sizes) and F2 (Refinery regular → lingering) need a decision
+
 | Part | Status |
 |---|---|
 | 12 `kubejs:*` potions from vanilla effects (resistance, health boost, absorption, glowing, saturation, wither, levitation, mining fatigue, hunger, nausea, blindness, darkness) with base / long / strong brews | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); no test ids before this writeup |

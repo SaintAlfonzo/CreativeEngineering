@@ -7,6 +7,8 @@ classes and Async Locator 1.3.0; decisions in 4)
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Locate (what a locate miss is, folding rules into the start prediction, non-blocking miss loads, StructureCheck thread safety, miss logging, `/cwglocate batch` / `census` on Async Locator's pool, deferring the bottom 64-96 blocks). Status: DEPLOYED with 1.0.6 as part of the INCOMPLETE structure tuning (fold stages A+B, non-blocking loads, thread-safe StructureCheck, miss log, /cwglocate batch/census/stats, DH clip below y 48 with fake seabed); fixes for blocking loads (LO-05), census "known" (LO-03, LO-14) and the `stop` label DEPLOYED with 1.0.7; biome-tie census fix (2026-10-27) DEPLOYED to the client with 1.1.04, SQ-TIE-01 not run; LO-01 to LO-17 pending, rerun LO-03, LO-05, LO-14
+
 | Part | Status | Where it lives |
 |---|---|---|
 | 3.1 Fold rules into the "could it start here?" check: stages A (set frequency, exclusion zone) + B (biomes); C-E on hold | BUILT 2026-10-12 | `worldgen/LocatePrediction` (from `StructureCheckFrequencyMixin` and `MetaSlots.predictGenerationPoint`) |

@@ -5,6 +5,8 @@ checks pass; the owner has used the button in game (CL-13 found 2026-10-27, fixe
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Player changelog (book button on the title screen and pause menu, Quark-style update popup, version list + Markdown notes from `kubejs/assets/creativecommon/changelog/`, working list `unreleased.md`, deploy stamping, deployed files frozen, lint, writing rules for player-facing entries, brief historic changelogs). Status: DEPLOYED with 1.1.01 (2026-10-22), 1.1.02 to 1.1.04 notes shipped; offline checks pass, CL-01 to CL-12 untested; CL-13 fixed 2026-10-27 (1.1.04)
+
 | Part | Status | Where it will live |
 |---|---|---|
 | Changelog source files (one Markdown file per version, plus the working list) | BUILT | `kubejs/assets/creativecommon/changelog/` (`1.1.01.md` to `1.1.04.md` frozen, `unreleased.md` working list) |

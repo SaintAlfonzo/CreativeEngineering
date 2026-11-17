@@ -9,6 +9,8 @@ notices them until WTHIT shows a raw key.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Names (Display Delight placed-food names, Rustic Delight crop/potted names, missing-name catalog, and the display-name audit: client `/cdevdumpnames`, `tools/name_audit.py`, raw keys + Title Case fixes, mod display names via `[mod_names]`). Status: NM-07/08 PASSED 2026-10-02; audit DEPLOYED with 1.1.01 (436 fixes; 116 mod names; patcherMod 1.1.01), NM-09 to NM-11 PASSED (scratch client), NM-01 to NM-06 and NM-12 pending
+
 | Part | Status |
 |---|---|
 | Display Delight: all 205 placed-food blocks named | BUILT, in-game check pending (NM-01 to NM-04) |

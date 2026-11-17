@@ -4,6 +4,10 @@ Immersive Engineering's Treated Stick (`immersiveengineering:stick_treated`) can
 sticks, and Farmer's Delight tomatoes climb it like they climb Supplementaries' sticks. Built 2026-10-31 in Creative
 Delight (CD); test prefix `TSK-`.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Placed treated sticks (IE treated stick placeable like Supplementaries' sticks; FD tomatoes climb it). Status: BUILT 2026-10-31 (Creative Delight), installed, TSK-01 to TSK-05 pending
+
 ## 1. Behaviour
 
 - Right-click a block face with a treated stick (after the clicked block's own use passed, the same order as

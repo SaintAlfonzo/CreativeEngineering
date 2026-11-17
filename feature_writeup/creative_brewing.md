@@ -20,6 +20,8 @@ Ports' own content and tests stay in [alcohol.md](alcohol.md) (Part A Brewin', `
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Brewing (bundle jar nesting the Vinery and Brewin' and Chewin' ports, display names "<Name> (Creative Brewing)"; framework for the potion, alcohol and effect code moving out of patcherMod and the pack scripts: `global.CB`, `creativebrewing-common.toml`, gated mixin plugin, script trees; inventory and phased move plan). Status: **r1114 2026-11-14: SQ-CBP-11 FAIL (owner value: felsic scrap 1-2 vs 2-4, `gear/tuning #23`).** **BUILT 2026-10-31, not installed** (`creativebrewing-1.0.0.jar`: Vinery `-08`, Brewin' `-05`); SQ-CBJ-01 to -05 queued; move plan section 4, nothing moved yet, owner questions 4.4 open
+
 | Member | Gradle project | Folder | Mod ids | Display name | Version |
 |---|---|---|---|---|---|
 | Let's Do Vinery 1.5.5 port | `:backportedVinery` | `development/creativeBrewing/members/vinery` | `vinery`, `foundation` | "Vinery (Creative Brewing)", "Foundation (Creative Brewing)" (the `foundation` id; both renamed 2026-11-04, plan_cb_publish.md M5) | `1.5.5-ce-19.2-08` |

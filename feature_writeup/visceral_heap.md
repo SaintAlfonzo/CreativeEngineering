@@ -5,6 +5,10 @@ Test prefix: `VH-` (scratch rows `SQ-VH-`, `CQ-VH-`). TODO: `worldgen/biomes #10
 
 Status: BUILT and installed 2026-11-09. Never booted; every live check is queued.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Visceral Heap (the one Biomes O' Plenty biome kept: unmodified BOP jar, everything else filtered, TerraBlender stubbed, placed by the biome tuner at 5 % of the Nether). Status: **2026-11-14: all flesh (plan_bugfix_1114.md 6.4) BUILT, Creative Worldgen installed; r1115 2026-11-15: built, scratch server PASSED (SQ-VH-06, -06b, -06c; -06c finding: features spill up to 12 blocks into a neighbouring warped forest, owner TODO).** **r1114 2026-11-14: SQ-FLR-02b, -03, -04, -05 PASS.** BUILT and installed 2026-11-09, never booted; scratch test queued (SQ-VH-01 to -12, CQ-VH-01 to -03); dumps and generator readers wait on a boot. Flesh recipes and Create result pools ([plan_flesh_recipes.md](plan_flesh_recipes.md)) BUILT 2026-11-10, Common and Engineering jars not installed (SQ-FLR-, CQ-FLR-)
+
 ## 1. What it is
 
 The Biomes O' Plenty Visceral Heap generates in the Nether from the unmodified BOP jar. No other BOP block, item, biome,

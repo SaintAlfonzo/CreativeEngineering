@@ -10,6 +10,10 @@ Swap lists (section 6, TODO `creativedelight/swappers #2`, `#3`): CD merges move
 One item is purged and the survivor takes over everything it did: recipes, tags, loot, and any copy that still
 reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges` (plans: section 5), plus `food/drinks #3`.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Item merges (total replacements: one item purged, the survivor takes its recipes, tags, loot and inventory copies; banana, milk bottle, chocolate cake, diced potatoes, rocky dirt, cantaloupe and hamimelon (2.10, built 2026-10-28, scratch test queued SQ-CM), Old and Weathered Cardboard Box by washing, Wares boxes recoloured (5.5, built 2026-10-28, scratch test queued SQ-MG-16, MG-45), Farmer's Respite coffee into Rustic Delight's (Rustic coffees give Caffeinated); Vinery cider renamed Hard Cider, Dave's rocky dirt renamed Pebble Dirt; apple cider potion-like chain and JEI drink-fluid effect lines; Quark permafrost renamed Froststone, its cave worldgen on Immersive Weathering's). Status: **r1103 2026-11-03: swap-list merges built, scratch server PASSED (SQ-SWP-01 to -08, -06o, SQ-VTDA-12, SQ-SALT-06, -08).** **2026-11-02/03: swap-list merges and world half (6) BUILT, patcherMod 1.1.08 and CD jar installed 2026-11-02 23:16, not booted, SQ-SWP-01 to -08 (SQ-CDJ6); potato salad, nut mash, kimchi, quiche (2.17 to 2.20) BUILT, CD jar installed 2026-11-03 00:08, not booted, SQ-CDM2-04, SQ-VTDA-11 to -13 (SQ-CDJ7).** built, scratch server PASSED 2026-10-22 (coffee 2.8 built after it, scratch server PASSED 2026-10-22 too, SQ-CO, after two fixes); DEPLOYED with 1.1.01 to 1.1.04 (cantaloupe and cardboard client only, 1.1.04); cantaloupe scratch server PASSED 2026-10-28 (SQ-CM-01 to -03, -09); food merges 2.13 to 2.15 (fish and chips, shulker meat, Caesar salad) BUILT 2026-11-01 / 11-02, scratch PASSED r1102b, unreleased (deep scan 2026-11-02); in-game MG IDs pending
+
 ## 1. How a merge works
 
 | Piece | File | What it does |

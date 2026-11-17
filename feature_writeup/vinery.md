@@ -4,6 +4,8 @@ Test prefix **VN-** · Last updated **2026-10-01** · Overall status **reference
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Vinery (behaviour reference from the decompiled 1.3.10 jar: pot, press, barrel, stems, lattice, bushes, vines, leaves, wine aging and effects, worldgen, hopper jams; pack changes; tooltip removals + placeholders). Status: reference, in-game checks pending (VN-01 to VN-20); tooltip placeholders TODO
+
 | Part | Where | Status |
 |---|---|---|
 | Block behaviour reference (pot, press, barrel, stems, lattice, bushes, vines, leaves, sink, log, storage) | §2, read from the decompiled `letsdo-vinery-forge-1.3.10.jar` | reference; VN-01 to VN-20 check the surprising parts |

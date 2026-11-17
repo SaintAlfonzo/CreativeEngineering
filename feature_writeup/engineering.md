@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Engineering (IE Sawmill recipe routing by precision-sawblade profile, Dragon Breathing fan processing, 15 components, wire coils and coil blocks for 12 metals + HV, sample syringe, exclusive chance outputs, rose quartz sand blasting). Status: DEPLOYED (since 1.0.3), EN-01 to EN-18 pending; exclusive chance outputs and rose quartz sand blasting built 2026-10-30, EN-21 server half scratch server PASSED r1031 2026-10-31, EN-19 to EN-21 in game; findings F1-F8, F2 (JEI doesn't show the blade) needs a decision, F4 (component centres differ by route) owner asked for more info 2026-10-30, F5 and F7 decided 2026-10-29
+
 | Part | Status |
 |---|---|
 | IE Sawmill picks its recipe by the installed blade: `creativeengineering:precision_sawblade` with a `{Profile}` (stairs, door, fence, ...) | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3); the crash fix (late class load) never explicitly checked in game |

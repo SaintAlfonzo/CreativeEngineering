@@ -19,6 +19,8 @@ code written from the mod's behaviour. Nothing of the upstream jar ships (`check
 
 ## 0. Stews removed (2026-11-10, owner)
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Golden Food as a Creative Delight donor member (`portedGolden`, all rights reserved upstream: own code, art and data read from `goldenfood_upstream/`). Status: **r1114 2026-11-14: SQ-GLD-16 PASS (stews half; cans half not coverable).** **BROKEN: r1103 2026-11-03 SQ-GLD-03 FAILED (golden honey / milk add an unknown 280 t effect bundle from a use-finish handler); the other SQ-GLD and SQ-GLD2 rows PASS; owner decisions in FINAL.md (stack 16, golden cake candle, pumpkin pie values, village loot).** **2026-11-02 night: BUILT, nested in the installed CD jar (23:16), not booted; Q1, Q2 answered (enchantment removed, sequenced assembly); 2026-11-03 nugget recipes, gilded 8 x (ingot + 125 mB), values and names in the CD jar installed 2026-11-03 00:08.** SQ-GLD-01 to -14, CQ-GLD-01 to -03 (SQ-CDJ6); SQ-GLD2-01 to -03, -05, CQ-GLD2-04 (SQ-CDJ7). Server: copy `goldenfood_upstream/`
+
 The 6 golden and gilded stews (mushroom stew, beetroot soup, rabbit stew) are no longer registered, with their 6 cans and 6
 jar soft fluids. Gone from: `GoldenItems` (and `ShinyItems.Bowl`), Common's `item_dict.js` / `food_dict.js`, the `goldenfood`
 can and food-type scripts, `golden.js` (gild and enchant recipes), `golden_values.js`, the soft-fluid JSONs and generator, the

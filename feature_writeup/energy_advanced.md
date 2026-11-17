@@ -5,6 +5,10 @@ Power Grid ([power_grid.md](power_grid.md)) is ported and integrated. Basic mode
 Mode is chosen **per world**: advanced changes apply only when an advanced world is created or loaded; worlds can be
 upgraded or downgraded with a destructive clean-up (section 6).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Energy advanced mode (speculative: everything on Power Grid energy, edge converters, tier mapping, world upgrade/downgrade, integration steps). Status: planned, nothing built (2026-11-12); section 8 P11 evaluation scaffolding (keep / drop / merge, H7 method, D14 inputs) 2026-11-13
+
 ## 1. Principle (owner decisions, 2026-11-12)
 
 - **Order:** port Power Grid fully, in phases, **before** any integration with the pack or other mods starts.

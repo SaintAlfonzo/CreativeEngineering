@@ -13,6 +13,8 @@ asks for it by name. Upstream bugs are fixed.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Carnivore 1.5.0 (Forge 1.20.1, ARR, 36 mob meats dropped by code from 19 vanilla + 8 Alex's Mobs mobs; overlap with Hostile, Ocean, Miner's, Nether's Delight drops and the tentacle removal, 11 upstream bugs). Status: archived 2026-10-30: will not be ported, features will not be added
+
 | Part | Where | Status |
 |---|---|---|
 | Inventory: 36 food items (+1 tab-icon item), 0 blocks used, 0 effects, 40 working recipes (+4 empty files), 27 drop handlers in code, 41 advancements | 1, 3 | surveyed |

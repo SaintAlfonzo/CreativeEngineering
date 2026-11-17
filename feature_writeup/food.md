@@ -10,6 +10,8 @@ wrong today and how tuning will work.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Food (1.0.2: `/dumpfood`, 31 food types as `#creativedelight:food_type/...` tags, canned map, Spice of Life mechanics, Canned Goods parity, tuning design). Status: **r1103 2026-11-03: built, scratch server PASSED for SQ-CF-02, SQ-FO-01 to -05, SQ-PS-06 (FO-02 to FO-28 server halves; client halves open).** BUILT/DEPLOYED parts, see its status block (FO-01 passed; FO-02 to FO-28 pending); generated per-type cans (113) and egg stacks via the stack size policy DEPLOYED with 1.0.6; tuning system designed, not built (D1-D6); egg tag migration TODO; placed pies and cakes count for Spice of Life BUILT 2026-10-22 (built, scratch server PASSED 2026-10-22, FO-44 done; FO-43 in game); Glistering Melon Slice values scratch server PASSED 2026-10-22 (FO-29 in game); SoL pack config in defaultconfigs (scratch PASSED, FO-32 single player); powdered sugar item, block, bucket and sugar seasoning BUILT 2026-10-25 (3.13, scratch server PASSED r1031 2026-10-31 except the 0.5 second results (client pending, SQ-PS-05), FO-50 to FO-53; patcherMod 1.1.03 in `mods/`)
+
 The pack has **1030 edible items** from 40 mods (plus 139 food blocks: placed cakes, pies, feasts and jelly bottles, and 33
 drinks with no food value). Every one of them is sorted into **one of 31 types** (raw vegetable, cooked meat, soup, prepared meal, drink,
 golden food and so on), and each type is an item tag, so recipes can target "every cooked fish" or "every raw food"

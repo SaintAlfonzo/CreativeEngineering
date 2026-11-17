@@ -9,6 +9,10 @@ framework), [barbeques_delight.md](barbeques_delight.md) 3.3 and 4.1 (BBQ and th
 *Seasoning*: everything else (adds a bonus or a flag). Pack seasonings are all seasonings; BBQ's three powders are
 seasonings, its three sauces are sauces.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Seasonings and sauces catalog (every pack and Barbeque's Delight seasoning: type, system, effect, mutex, complementary, source; cap of 2). Status: **2026-11-03: Barbeque's seasonings folded into the pack framework (barbeques_delight.md 4.5) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-BBQF-01 to -07 (SQ-CDJ7).** Catalog written 2026-10-31
+
 ## 1. Catalog (current state)
 
 **Fold built 2026-11-03** (barbeques_delight.md 4.5; in the Creative Delight jar installed 2026-11-03 00:08, not booted; SQ-BBQF-01 to -07): the six BBQ rows below are pack seasonings now (`barbequesdelight:<name>` in `seasonings.js`), put on by a

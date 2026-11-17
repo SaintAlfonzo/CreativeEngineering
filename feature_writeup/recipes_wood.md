@@ -6,6 +6,8 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Wood recipes (species bark from saw and cutting-board stripping, reattach for 6 species; IE sawdust from every wooden shape; ash, creosote sawdust, wood pellets; compost, fertile soil and nulch from mulches; Create saw shapes for 13 species; chimney soot; removed woods: river wood merged into oak, Mulberry tree). Status: DEPLOYED (since 1.0.3), RW-01 to RW-10 pending; F5 (driftwood bark, Quark stairs) built 2026-10-23, scratch test queued (SQ-LE, RW-21, RW-22); removed woods DEPLOYED with 1.1.01, scratch server PASSED 2026-10-22 (SQ-MB; RW-17 done, RW-15, RW-16, RW-18 to RW-20 in game; river trees almost never generate, 2.6); findings F1-F6, F1 is a bug (IE crusher: planks missing, logs probably 2 sawdust); smoked wood and bark leather BUILT 2026-10-30, BROKEN: scratch r1031 2026-10-31 SQ-RW-23 FAILED (smokable shape tags too wide), RW-25 to RW-27 server halves PASSED, RW-24 client pending; D&D woods removed scratch server PASSED (SQ-RW-28)
+
 | Part | Status |
 |---|---|
 | Bark: stripping a log on the Create saw or Farmer's Delight cutting board gives that species' Immersive Weathering bark; bark reattaches for 6 species | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |

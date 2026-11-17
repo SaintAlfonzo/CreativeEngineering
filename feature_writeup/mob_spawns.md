@@ -6,6 +6,8 @@ file that changes spawn weights per biome, adds mobs to biomes and removes them.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Mob spawns by biome (`/dumpspawns`: every biome's spawners after biome modifiers, per-mob placement conditions; generated per-mob / per-biome / per-biome-type tables with category share and area; spawn tuning: `mob_spawns.json` set/scale/remove rules per biome, applied after every mod's modifiers). Status: DEPLOYED with 1.0.6: 12 tuning rules + 3 spawn conditions + spawn ground; MS-01 to MS-12 pending
+
 | Part | Status |
 |---|---|
 | `/dumpspawns` (KubeJS `kubejs/server_scripts/_lib/dump_spawns.js` -> patcherMod `worldgen/SpawnDump`) | BUILT 2026-10-09, in `/dumpall`; first real dump 2026-10-09 21:58 (`kubejs/exported/spawns.json`) |

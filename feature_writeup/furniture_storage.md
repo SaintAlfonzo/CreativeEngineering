@@ -3,6 +3,10 @@
 Storage added to furniture that ships without it. The kitchen corner (Cooking for Blockheads) is in
 [kitchen.md](kitchen.md); this doc has the rest.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Furniture storage (Handcrafted nightstands: 27-slot chest storage, hoppers and pipes). Status: BUILT 2026-10-31 (patcherMod), installed, NS-01 to NS-05 pending
+
 ## 1. Handcrafted nightstands (2026-10-31, patcherMod 1.1.04)
 
 User (TODO scratchpad "nightstands (handcrafted) have storage"): a chest's worth of storage.

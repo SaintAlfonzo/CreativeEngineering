@@ -16,6 +16,8 @@ asks for it by name. Upstream bugs are fixed (3.5).
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Large Meals 1.3.0 (Forge 1.20.1, ARR, 18 items + 3 feasts: FD bowl meals, soups, desserts, mutton rack from sheep; Chicken Curry clash with Ender's, 13 Display Delight blocks waiting, fold-in, D1-D9). Status: BUILT 2026-11-01 (member `backportedLargeMeals`, CD scripts, Display Delight `lm_`); in `mods/` since the CD jar of 11-02 14:01, not played; BROKEN: scratch r1102b SQ-LGM-01 to -09 PASS, SQ-LGM-10 FAILED (Chicken Curry recipe ids clash with Ender's) (deep scan 2026-11-02)
+
 | Part | Where | Status |
 |---|---|---|
 | Inventory: 18 items + 3 feast blocks, no effects of its own (FD Comfort / Nourishment, vanilla Regeneration), 16 recipes, 2 GLMs, 3 block loot tables, 5 Diet tags, 15 advancements | 1, 3 | read from jar and code |

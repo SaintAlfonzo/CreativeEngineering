@@ -7,6 +7,8 @@ sub `#4` ([TODO.md](todo/TODO.md)). Investigated 2026-10-22 against Sophisticate
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Backpack skins (smith a block from a tag onto a Sophisticated Backpack to change its look; skin hitbox, clear by crafting, config-gated equip; first skin the Vinery backport basket). Status: DEPLOYED with 1.1.01, untested in game
+
 | Part | Status | TODO |
 |---|---|---|
 | Smithing recipe (backpack + skin-tag block -> skinned backpack) | Built, untested | `#4` |

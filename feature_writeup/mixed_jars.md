@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Mixed jars (Supplementaries jars hold several kinds of one family: cookies, candied apples/berries, candies, marshmallows, chocolate bars, apples, berries, dried fruit; every cookie jarable; every soup and stew as a jar liquid). Status: **r1103 2026-11-03: jar fluid pipes built, scratch server PASSED (SQ-JFP-01, -02; -03 to -05 r1102b).** DEPLOYED with 1.1.01 (2026-10-22); scratch server `/jartest` 18 pass; MJ-01 to MJ-10 pending; soups (section 9, data only) built, scratch server PASSED 2026-10-22 (SQ-MJ), MJ-13 done, MJ-11, MJ-12, MJ-14 in game
+
 | Part | Status | Where |
 |---|---|---|
 | Jar families (tags), every cookie and the families below jarable | BUILT 2026-10-21 | `kubejs/data/creativedelight/kubejs/creativedelight/jar_tags.js`, dict keys `i.t_jar_cookies`, `i.t_jar_family_*` (item_dict, next to `i.candy`) |

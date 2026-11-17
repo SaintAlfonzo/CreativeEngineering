@@ -4,6 +4,10 @@ Status: BUILT 2026-11-03 (patcherMod `trader/TradeSync`, `trader/client/TradeSyn
 `mods/`, not booted. Scratch rows SQ-TSY-01, -02 and client rows CQ-TSY-01 ([scratch_queue.md](testing/scratch_queue.md)).
 Needs the new patcherMod on **both** the server and the client.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Trade sync (the server's villager and wandering trader lists sent to dedicated-server clients, so JER's villager pages show the pack's trades). Status: **BUILT 2026-11-03** (patcherMod, installed in `mods/`, not booted; server and client both need it); SQ-TSY-01, -02, CQ-TSY-01 queued
+
 ## 1. Problem
 
 Forge builds the modded villager and wandering trader lists (`VillagerTradesEvent`, `WandererTradesEvent`, so every

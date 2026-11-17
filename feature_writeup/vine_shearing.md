@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Vine shearing (shears stop every vine growing: modded vines get a sheared state with a trimmed look like Quark's cut vine, weeping/twisting/cave vine and kelp tips capped as in 1.20; WTHIT lines; trimmed-texture investigation). Status: BUILT 2026-10-31 (patcherMod 1.1.04, installed 2026-10-31); offline checks PASSED; scratch server PASSED r1031 2026-10-31 (SQ-VS-01 to -08); VS-01 to VS-11 pending in game
+
 | Part | Status | Files | Knobs |
 |---|---|---|---|
 | Shears stop modded vines (Floral Enchantment, Botania solid vine, any later `VineBlock`) | BUILT 2026-10-31, patcherMod 1.1.04 installed 2026-10-31 00:44; scratch server PASSED r1031 (2026-10-31, SQ-VS-01 to -08) | `block/VineShearing`, `mixin/VineBlockShearMixin` | `[vine_shearing] enabled`, `cutBelow` |

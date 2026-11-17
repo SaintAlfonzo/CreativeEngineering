@@ -14,6 +14,10 @@ Jar facts below were checked on 2026-11-11 in `solapplepie-1.19.2-2.2.0.jar` (pa
 and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 0, `endDecay` 32,
 `minContribution` 0.0, `shouldForbiddenCount` true.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Raspberry Pie (new mod Spice of Life: Raspberry Pie Addition, `solraspberrypie`: diet bonus ladder, selectable effect slots paid in greyed foods, inventory widget, effect screen, Diet Log changes, Liquid Diet Log). Status: BUILT 2026-11-12, scratch server PASSED (SQ-RP-01 to -06, r1112), client rows queued (CQ-RP-01 to -28); 12.4 owner notes BUILT 2026-11-13 (unique-food gate, reset command, windowed bar with icons, double page, Apple Pie benefits inert; SQ-RP-07, -08, CQ-RP-29 to -40 queued), `solRaspberryPie-1.0.0.jar` of 17:57 and Creative Delight 17:58 in `mods/`; Liquid Diet Log art waits for the owner (#35); Common and Creative Brewing rebuilds pending (section 1 status); ladder values are a draft (#12)
+
 ## 1. What it is
 
 A new in-tree mod that adds selectable diet bonuses on top of Spice of Life: Apple Pie Edition. It is an add-on that

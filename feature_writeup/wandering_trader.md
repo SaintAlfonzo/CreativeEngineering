@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Wandering Trader + Wandering Winemaker (independent tick-based spawn timers, 25 + 5 offers, stock edited through `global.trades`: removals, Wares x20, golden listings, saplings/seeds/plants/blocks/mob buckets, Winemaker additions, no Nether/End items). Status: DEPLOYED with 1.0.4; WT-01 to WT-16 pending (WT-06 retired)
+
 | Part | Status |
 |---|---|
 | Spawn timers in server ticks, Wandering Trader and Winemaker independent (`traderIntervalTicks`, `winemakerIntervalTicks`, both 96000) | DEPLOYED with 1.0.4 (2026-10-04); built 2026-10-03, patcherMod 1.0.4 (md5 37ce1023). Scratch dedicated server: level.dat `WanderingTraderSpawnDelay 96000`; the Winemaker spawner's saved wait counted 96000 to 94800 after one step. A natural spawn with a player present is not tested yet (WT-16) |

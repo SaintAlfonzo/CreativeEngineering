@@ -3,6 +3,10 @@
 Written 2026-10-25. Versions below are read from jar file names, not opened, unless the row says evaluated.
 Evaluated: Veggies 1.9.3, Vintage KOTS 0.3.1, Farmer's Delight 1.3.4, Rustic Delight 1.7.0, Fruits Delight 1.1.3, Farmer's Respite 2.1.2, Display Delight 1.7.0, Delightful 3.8.1, Corn Delight 1.2.11, More Delight 26.05.20, Storage Delight 26.10.05, Farmer's Structures 1.0.6, Ender's Delight 1.1.4, End's Delight 2.6.1 (2026-10-25).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: devmods evaluation (how to diff the newer jars in `devmods/` against the installed versions and ports; which folder each jar belongs in; order). Status: plan 2026-10-25; Veggies 1.9.3, Vintage KOTS 0.3.1, Farmer's Delight 1.3.4, Rustic 1.7.0, Fruits 1.1.3, Farmer's Respite 2.1.2 and eleven more evaluated; only Farmer's Delight 1.3.4 is built (2026-10-25: FD repack `-02` in the Creative Delight jar, installed 2026-10-26, SQ-FDB-01 to 12 queued), the rest are not
+
 ## 1. Method (same for every jar)
 
 1. **Baseline:** the version the pack runs. Installed third-party jar in `mods/`, or for our ports the upstream jar the port was

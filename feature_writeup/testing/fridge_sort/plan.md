@@ -2,6 +2,10 @@
 
 Report: pressing Quark's sort button in a 2-tall Cooking for Blockheads fridge deleted items.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Fridge sort item loss (Quark's sort deleted oversized stacks and everything after them in any sorted inventory, worst in 2-tall fridges; `QuarkSortingHandlerMixin` replaces the sort; cause, fix and test plan). Status: fix DEPLOYED with 1.0.7 (2026-10-18); FS-01 to FS-05 not run
+
 ## Cause
 
 Not the 2-tall fridge itself. CFB joins the two fridges with Balm's `CombinedContainer` (top 0-26,

@@ -10,6 +10,10 @@ heater, "unheated mixing" = Create mixer without heat (shapeless craft where the
 sugar tag family (sugar, honey, honeycomb as the pack already treats them). Every input that has a slice form is accepted
 whole or sliced in every recipe below.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Drink rules: juice, tea, latte and coffee (owner 2026-11-01/02; 14 new teas and juices, 17 fluids, pot / Kettle / heated mixer rules, renames). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-DRK-04, -06, -07 PASS; -01 to -03, -05 r1102b).** TESTING: built 2026-11-02 (section 8), in the `mods/` Creative Delight jar; scratch r1102b SQ-DRK-01, -02, -03, -05 PASS, -04 and -06 batch faults (deep scan 2026-11-02); client CQ-DRK-01 and play open
+
 ## 1. Fruit juice rule
 
 | Where | Inputs | Output |

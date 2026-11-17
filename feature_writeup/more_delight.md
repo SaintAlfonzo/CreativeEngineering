@@ -13,6 +13,10 @@ Owner's decisions: knives retuned, every toast eats fast (a family rule), Carrot
 `forge:sliced_potato`, the pack's own meat / fruit / vegetable tags are singular, and a Cheese Toast is added. Built in
 section 5; tests in section 4.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: More Delight 26.05.20 update (changes against installed 25.07.28: no new item, DelightLib rewrite; knives retuned to Wood / Stone tiers, fast toasts; MIT). Status: **r1103 2026-11-03: SQ-MRD-04 PASS.** DEPLOYED with 1.1.03 (knives, fast toasts, Cheese Toast, singular tags); scratch SQ-MRD-02, -03 PASSED, **SQ-MRD-01 FAILED r1102b (knives mine at 8)**; not run in game; `mod-additions #25`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (214 files each side; 7 added, 7 removed, 104 changed; en_us lang **+0 / -1 / ~0**, the

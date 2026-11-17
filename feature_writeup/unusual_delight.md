@@ -6,6 +6,8 @@ Survey for TODO `largecontent/mod-additions #8`. Written 2026-10-30 from `devmod
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Unusual Delight overlap survey (1.20.1 MCreator, AFL licence, 306 items: blocked by missing mods / 1.20 content, overlaps with Hostile Delight and installed mods, new themes, fold-in list, decisions U1 to U7). Status: survey 2026-10-30, nothing built; `mod-additions #8`
+
 | Bucket | Items | Section |
 |---|---|---|
 | Blocked: needs Ice and Fire (not in the pack) | 35 | 2.1 |

@@ -5,6 +5,8 @@ feature are documented with that feature and only pointed to here.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Fixes and compat (catalogue of 29 patches: forgiving void, banner patterns on beds/elytra, D&D crash, client exit hang, axe tag ghosts, armor bar icons + overflow, Create config text field, bonemeal charm, ghost blocks, Breezy wind vane, thread-safe random, async map trades, tooltip fixes, title plaque, creative menu, XP fluid merge, IE tag order, AppleSkin bars in the remaining food screens, Polymorph in the backpack crafting upgrade, the Engineer's Crafting Table and the Crafting Terminal). Status: DEPLOYED (1.0.3 to 1.0.8, 2.22 with 1.0.8); 2.24 BUILT 2026-10-20, untested; 2.25 (Trinket Case) built, scratch server PASSED 2026-10-22, any item incl. shulker boxes; 2.26 (Ore Excavation undo rules) and 2.27 (JEI `$` search, Breezy wind, chalk symbols, cosmetic armor checked) built, scratch server PASSED 2026-10-22 (SQ-GM-05 to SQ-GM-08: vein undo rules and config, chalk unlocks; FX-34 done); 2.28 (Polymorph in the backpack crafting upgrade) built 2026-10-22, untested; 2.29 (Polymorph in the Engineer's Crafting Table and Crafting Terminal) built 2026-10-22, untested (FX-39 to FX-42); 2.31 (Upgrade Aquatic coral grows through Immersive Weathering) built 2026-10-28, scratch r1031 2026-10-31: files load and prismarine grows (SQ-UC-01, -03), acan client check pending (SQ-UC-02, FX-48); FX-01 to FX-48 pending; findings F1-F6 (ghost-block fix ceiling at 2^20 states; version-pinned fixes)
+
 | # | Fix | Where | Status |
 |---|---|---|---|
 | 2.1 | Forgiving Void: each void fall lands you closer to (or farther from) an anchor | `ForgivingVoidMixin`, `[forgiving_void]` | DEPLOYED (since 1.0.3) |

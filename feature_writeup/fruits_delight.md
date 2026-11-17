@@ -11,6 +11,10 @@ Evaluated 2026-10-25 against `devmods/checkNewerVersionForContent/fruitsdelight-
 **Result in one line:** 1.1.3 is a 1.20 port of the same mod. No item, block, effect or worldgen value is new. What matters
 for the pack is one bug fix (placed Mangosteen Cake), two small recipe changes and two tags.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Fruits Delight 1.1.3 fixes on the installed 0.5.11 (placed Mangosteen Cake effects, Bellini Heal Aura once, `getFoodData` null guard, Fig Pudding any egg, `forge:jams` and crate tags; in Creative Delight, active only beside Fruits Delight 0.5.11). Status: DEPLOYED with 1.1.03 (in the CD jar); scratch PASSED (SQ-FR-01 to -05, r1101 / r1102b 2026-11-02); FR-03 tooltip (client) and play open; `mod-additions #20`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (288 files added, 205 removed, 447 changed; en_us lang **+0 / -0 / ~0**, no new item or

@@ -19,6 +19,8 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Ocean's Delight and Oceanic Delight (overlap survey, tentacle / squid / guardian / shrimp / caviar, fishing net, planned calamari chain). Status: **r1103 2026-11-03: SQ-CDM2-01, -03, -04 PASS; SQ-CDM2-02 open (no loaded-ground check, hand-check).** **2026-11-03: sea grape hoe tag, wild sea grape rule, Oceanic Comfort / Nourishment by rule (8) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-CDM2-01 to -04, CQ-CDM2-01 queued (SQ-CDJ7).** **2026-11-01: Oceanic rebuilt as our own code over the donor jar (`portedOceanic`, 5.6) and net tables moved into CD, in `mods/` since the CD jar of 11-02 14:01, SQ-DNR-O not run; guardian food open.** survey 2026-10-23; fishing net and caviar names DEPLOYED 2026-10-25 (patcherMod 1.1.02 in `mods/`), scratch SQ-FN-01, -04 PASSED, SQ-FN-03 LOOK r1102b, SQ-FN-02 not run, DA-01 to DA-03, DA-08 to DA-11 pending; `mod-additions #5`, `dishes/ocean`; squid chain, glow calamari and braised sea pickle from slices shipped 1.1.03, scratch PASSED (SQ-CDB-03 to -05, -09) (5.3, 5.4); tentacles to calamari (CD `members #24`) shipped 1.1.05 with SQ-CM-32 FAILED r1031, fix PASSED r1101 (SQ-CM-32, -35), unreleased; Kelp Encrusted Cod and one-squid drops BUILT 2026-11-02, scratch PASSED r1102b (7, deep scan 2026-11-02)
+
 | Mod | Jar | Version | Items | Loot / worldgen | Verdict so far |
 |---|---|---|---|---|---|
 | Oceanic Delight | `oceanic_delight-1.0.1-forge-1.19.2.jar` | 1.0.1 | 47 | Squid / elder guardian / salmon drops; wild sea grape worldgen; fishing net | Bigger crop-and-shrimp mod; see section 1 |

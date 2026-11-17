@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Enchantment power (Easy Magic sums `getEnchantPowerBonus` at cap 15; audit of every shelf, pylon, Wise Oak, book pile and crystal source; zero-power shelf families; proposed tag-driven system). Status: audit written 2026-10-31, nothing built; F1 (Wise Oak 15) and F2 (pylons 8 / 15 / 15) need a decision
+
 | Part | Status |
 |---|---|
 | Audit of every jar's `getEnchantPowerBonus` override (section 2) | DONE 2026-10-31, read from bytecode of 417 jars |

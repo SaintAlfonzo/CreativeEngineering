@@ -10,6 +10,10 @@ as is. Plan row: `largecontent/mod-additions #16`, `#17` in [todo/TODO.md](todo/
 
 **Licence:** Nether's Delight is MIT (owner-supplied 2026-10-25; checked 2026-11-01 against the repository's 1.19 branch `LICENSE`, "Copyright (c) 2022 Umpaz", whole repository, no separate asset licence). My Nether's Delight: not stated.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Nether's Delight 4.0 update (changes against installed 3.1: Potted Mimicarnation, tags, moves, renames, code-only) and My Nether's Delight (not ported, not added). Status: **r1103 2026-11-03: SQ-NDM-05 PASS.** **BUILT 2026-11-01 as CD member `repackedNethers` (4.9), installed in `mods/` 2026-11-02, not deployed; scratch SQ-NDM-01 to -04, -06, -07 PASSED r1102b, -05, -08 open; renames display-name only (default).** `mod-additions #16`, `#17`
+
 ## 1. Decisions (user, 2026-10-25)
 
 - **My Nether's Delight is not ported and not added.** Its overlap with Nether's Delight (fungus colonies, trophies,

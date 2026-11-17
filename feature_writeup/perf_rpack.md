@@ -8,6 +8,8 @@ difference between "all packs" and "all packs but this one".
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Resource pack bench (what each resource pack costs: offline scan of atlas pixels, animations, model elements, dead files; one throwaway client swaps pack sets in game, times reloads, builds each pack's blocks in the End void, measures rebuild and frame times; leave-one-out report). Status: BUILT 2026-10-29; client run 1 done 2026-10-29 (perf_rpack.md 9): no enabled pack worth acting on; RP-01, RP-03 PASSED, RP-02 partial
+
 | Part | Status |
 |---|---|
 | Offline scan `tools/perf/rpack/rp_scan.py` | BUILT 2026-10-29, run on the 18 enabled and 11 disabled packs (section 3) |

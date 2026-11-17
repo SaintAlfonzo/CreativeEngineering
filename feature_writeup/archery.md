@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Archery and bullets (Nock Enough Arrows recipes replaced by fletching-table + `archery` blueprint recipes, shaft and fletching tags, torch arrow / quiver / slingshot changes, NEA enchantments removed, dragon scale armor-piercing bullets). Status: DEPLOYED (since 1.0.3), in-game test pending (AR-01 to AR-18); F1 (dragon scale bullets on the `bullet` blueprint), F5, F7 BUILT 2026-10-22 (AR-07, AR-13); F3 kept; F2 needs a decision, F4 open; F1 / F5 recipes scratch server PASSED 2026-10-22 (SQ-GM-04)
+
 | Part | Status |
 |---|---|
 | Nock Enough Arrows' own recipes removed; every arrow re-made at the fletching table (head + shaft + fin) and on an IE `archery` blueprint | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3, live in 1.0.6); no test ids before this writeup |

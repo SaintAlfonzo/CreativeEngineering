@@ -11,6 +11,10 @@ drinks, Create Central Kitchen pumpkin pie slice, Enchanted Golden Carrot with g
 so a Good or Fair match can still show the wrong colour on a borrowed model (golden foods, other teas, cookies).
 Those stay out until they get a recoloured model. Tag 304.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Coaster model candidates (untagged foods whose sprite resembles a food with a coaster model, by texture comparison). Status: ANALYSIS 2026-10-26; partly applied 2026-10-29 (19 borrows, tag 304, kitchen.md 2.3)
+
 ## 1. Tag state
 
 `#creativedelight:placeable_on_coaster` (and through it `#brewinandchewin:placeable_on_coaster`) already holds only foods with a coaster model: 152 entries in `kubejs/generation_scripts/food/placeable.json`, 152 coaster model files (96 from the Brewin' port, 56 pack files from `tools/gen_coaster_models.py`). The cut of unmodelled foods was made 2026-10-25 ([food_families.md](food_families.md) 4.4; `tools/placeable_catalog.py` `add_coaster` only adds modelled items). Nothing was left to cut.

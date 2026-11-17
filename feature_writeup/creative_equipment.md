@@ -8,6 +8,10 @@ Written for: the owner and agents working on the split. Own mod `creativeequipme
 `creativeengineering:`. The Magic rows that were to ride here (2.3) went to their own jar, Creative Magic, one wave
 earlier ([creative_magic.md](creative_magic.md)).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Equipment (own mod `creativeequipment` carved from patcherMod in the Creative Split wave 7: tier shields, stepstools, backpack skins, air brake, Bottled Air, elytra duplication and chestplates, copper tool tier, armor caps and enchantability, bone meal charm, tool and armor tuning, archery, End gear, harvest tiers). Status: built and installed 2026-11-04 19:17 with patcherMod 1.1.09, not booted; scratch SQ-CEQ-01 to -08 queued
+
 ## 1. What it holds
 
 - **Java** (`com.SaintAlfonzo.creativeequipment`, same subpackages as in patcherMod; 35 classes plus 3 new):

@@ -4,6 +4,8 @@ Test prefix **STL-** · Last updated **2026-10-31** · Overall status **BUILT 20
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Stepstools (16 coloured stools worn in the Curios Feet slot; hold Sprint + Jump standing still to stand a block higher; move, crouch or jump to step off). Status: BUILT 2026-10-29 (patcherMod 1.1.04, installed 2026-10-31), scratch server PASSED r1031 2026-10-31 (SQ-STL-01, -02); STL-01 to STL-16 pending in game
+
 | Part | Where | Status |
 |---|---|---|
 | 16 items `creativeengineering:<colour>_stepstool`, Another Furniture tall stool models | [stepstools.js](../kubejs/startup_scripts/items/stepstools.js), `item_dict.js` | BUILT, needs restart |

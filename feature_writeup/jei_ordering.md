@@ -7,6 +7,8 @@ investigation found in JEI 11.8.1.1034 / KubeJS 1902.6.2 / JEED 2.1.4 / JEI Mult
 
 ## 0. Status
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: JEI ordering (pack-defined order for items/blocks, multiblocks, fluids, effects via `creativecompat:jei/...` tags; category/subcategory order, leaf sort modes, visibility report). Status: steps 1 to 3 DEPLOYED with 1.0.7 (patcherMod sorter + mixins, KubeJS definition/tags, first small tree, report tool), not run in game; the client script's hand-off to patcherMod was failing (Rhino const-in-try) until fixed 2026-10-20; JO-01 to JO-12 pending; filling the tree: Equipment family BUILT 2026-10-26 (12.5, JO-13 to JO-16), other categories not started
+
 | Part | Status |
 |---|---|
 | Goals (this file) | written 2026-10-18 |

@@ -8,6 +8,8 @@ art donors with their gameplay off; then they are dropped. Test prefix `SN-`. Tr
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Creative Labels: sticky notes and labels as face paper (investigation of Sticky It! 1.2.1 and Labels 1.10; new in-tree mod `creativelabels` (`creative_labels` until 2026-11-10): `face_paper` block, Sticky It-size curled notes placed by host shape (5 per full face, stairs, slabs, posts), leather-style note colours with 4 specials, item labels by inventory / anvil / off hand, eraser, labels with real-colour or dyed icons drawn up close; donor jars for art until our own, then dropped). Status: **BROKEN: r1103 2026-11-03 SQ-LBS-03 FAILED (note accepted on top of the Supplementaries jar and sack; owner decides), SQ-LBS-04 FAILED (host set to air drops no label or note); SQ-LBS-00 to -02, -05, -05a PASS.** DEPLOYED with 1.1.01; headless suites pass; scratch server: 41 SN- tests PASSED (server half) after 3 fixes; in-game run pending; labels by surface and centred notes (3.3a) BUILT 2026-11-02 in `creativeLabels-1.0.1`, not installed, scratch test queued (SQ-LBS), SN-56 to SN-60 pending 2026-11-03: jar and Pickling Jar tops take a note; 1.0.1 rebuilt, not installed.
+
 | Part | Status |
 |---|---|
 | Investigation of Sticky It 1.2.1 and Labels 1.10 (both decompiled, every class read; licences read) | done 2026-10-20 (section 2) |

@@ -6,6 +6,8 @@ per thing that can be changed, with a **Decision** column (blank = still open).
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Nether blocks in Overworld generation (decision sheet: biome surface rules, biome features, Volcanic Caverns, Upgrade Aquatic canyons, YUNG's obelisk, structures after the swaps; swap / drop / keep per row). Status: scan BUILT 2026-10-19; two rounds of decisions DEPLOYED with 1.0.9 (new chunks only; Scarlet Mountains jasper/crimsite, Moonlight flowers, Mirage Isles acacia, D&D deep layer granite, bunker warts, red roof magma, soul fire -> fire, glowstone -> yellow corundum; scratch-server verified, NW-01 to NW-11 pending); open: B12, K19, K25, K28-K33, K35, K36
+
 | Part | Status |
 |---|---|
 | Scan (surface rules, features, code-added layers and carvers, structures after swaps) | BUILT 2026-10-19: `tools/nether_worldgen_scan.py` -> [nether_worldgen_scan.md](nether_worldgen_scan.md) |

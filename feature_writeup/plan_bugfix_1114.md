@@ -18,6 +18,8 @@ One jar at a time, never while the game runs. Every item gets its changelog bull
 
 ## 0. Decisions taken in this plan (owner can override)
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Bugfix run from the 2026-11-11 to 11-14 scratch runs (seed pouch and bundle dispensing, Debugify config, optional-mod guards, global portal exit lift, rose gold golden items, bitten cakes, hops as a Vinery-gated vine on the Vinery lattice, salt, fire and lava melting system, layered salt lick, crow, horseshoe, corn maze 2x, Power Grid drops, stomping basin, all-flesh Visceral Heap). Status: **r1115 2026-11-15: BUILT and scratch tested: most rows PASS; seed pouch Nether, basin stick and salt lick reach fixed in Creative Delight 03:18, Rare Ice log and melting config reads in Common 03:15. FAIL for the owner: SQ-HOP-04, -05 (pass-through session), -06, SQ-MELT-08, -10, SQ-PWG-82, SQ-PG-01b, SQ-PG-01c (URGENT client crash).** planned 2026-11-14
+
 Defaults chosen from the brief; each is marked **[default]** where it is used.
 1. Seed pouch pattern: fixed 5x5, up to 25 seeds (owner 2026-11-14, was 3x3); matches the pack's Quark `Shift Range = 5`
    player pattern. (1.1)

@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Camera bags (Exposure Extras: leather / iron / netherite bags, 5 / 9 / 14 slots of `#exposureextras:camera_equipment`, contents in NBT, dyeable, smithing upgrades, old-id remap). Status: DEPLOYED (1.0.3, moved 1.0.4), never tested in game; CB-01 to CB-11 + R4-04..06/11 pending; F1 (netherite upgrade needs Armor Trims' template) and F2 (no tier looks) need a decision; F4 (flashes in the bag) built, scratch server PASSED 2026-10-22 (SQ-GM-03; CB-11 click in game)
+
 | Part | Status |
 |---|---|
 | Three bags `exposureextras:{leather,iron,netherite}_camera_bag`, 5 / 9 / 14 slots, only `#exposureextras:camera_equipment` | DEPLOYED (patcherMod in 1.0.3; moved to Exposure Extras in the exposureBackport `-02` jar with 1.0.4); never tested in game |

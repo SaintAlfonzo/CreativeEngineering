@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Client capture (queued visual tests run unattended by a throwaway single-player client: spec files per queue group, dev-only driver mod, framebuffer shots cropped to the GUI / tooltip / HUD region and named by test ID into `test_captures/`). Status: BUILT 2026-11-15 (driver, runner, cropper, channel, qrun driver transport, first specs), scratch test queued (CQ-TXC-01 to -10); visual verdicts only by the owner from `test_captures/judgement/`; decisions D4, D5 open
+
 | Part | Status |
 |---|---|
 | Design (this file) | DESIGNED 2026-10-24; items 2 and 4 of [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md) built 2026-11-15 |

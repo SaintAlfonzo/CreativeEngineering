@@ -3,6 +3,10 @@
 Generated 2026-10-03 from `loot_index.json`, `tools/.cache/template_loot.json` (container templates) and the loot-table graph. An **island** is a container table that only one or two structures use: it is not a sub-table of another table, is not borrowed by another mod, and is not a code-injection pool. "Templates" is the number of distinct structure templates whose chests name the table (a village house is one template, so a table with 1 to 2 templates is a single house or room kind).
 
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Loot table islands (analysis: container tables used by only one or two structures). Status: analysis only, 2026-10-03
+
 ## A1. Placed by 1 to 2 templates
 
 97 tables, 16 mods.

@@ -27,6 +27,8 @@ This file has three parts:
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Fungi Delight backport (inventory from the 1.20.1 1.3 jar: inky cap and morel with colonies, huge forms and mushroom cows; truffles from truffle dirt, pig digging and a wolf hunt; Weak Stomach and Burrowing effects; 32 items, 17 blocks, 34 recipes; no cheese; overlaps, build-order integration list, owner decisions D1 to D12). Status: **2026-11-03: cow names, Weak Stomach JEED provider BUILT, CD jar installed 2026-11-03 00:08, not booted; CQ-CDM2-01 (SQ-CDJ7).** **Deep scan 2026-11-02:** port `-02` nested in the installed CD jar (11-02 14:01; deployed `-01`); r1102 SQ-FGD-00 to -11, -13 PASS, -14 FAIL (truffle dirt, fixed, `creativedelight/members #42`), -12 / -15 partly judged (SQ-FGDC open). DEPLOYED with 1.1.02 (2026-10-23, §4.0): port jar `backportedFungi-1.3-ce-19.2-01` and patcherMod (mooshroom family); `/fgdtest all` 135 / 136; KubeJS integration and the mushroom spawn system in place; FGD-01 to FGD-40 not run
+
 | Part | Where | Status |
 |---|---|---|
 | Mod inventory (2 mushrooms, 2 colonies, truffle and truffle dirt, 2 huge mushrooms, inky goo veil, 32 items, 17 blocks, 2 cow entities, 2 effects, 3 potions, 34 recipe files, pig / wolf / hoglin / sniffer hooks) | §2 | reference, from `FungiDelight-1.20.1-1.3.jar` |

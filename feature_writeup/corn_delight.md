@@ -12,6 +12,10 @@ Config: `config/corn_delight-common.toml`.
 from corn milling and crushing, Classic Corn Dog carried over, corn trades for farmers and the wandering trader, and corn in the
 villager food pool. Village corn farms are handled elsewhere. Nothing else from 1.2.11.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Corn Delight 1.2.11 update (planned subset: Corncob with cutting, milling and compost uses and a knife-harvest chance, Corn Popsicle in the popsicle family, Cob Pipe, Classic Corn Dog grid recipe, corn trades and villager food; village farms elsewhere; MIT). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-CN-04, -04b, -07 PASS; the rest r1102b).** DEPLOYED with 1.1.03; scratch SQ-CN PASSED but SQ-CN-04 (knife cob, probe) open, r1102b 2026-11-02; CN-01 to CN-11 in game pending; chest loot bug `#31`; `mod-additions #24`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (54 files added, 16 removed, 200 changed; en_us lang **+6 / -0 / ~0**). Most changed files

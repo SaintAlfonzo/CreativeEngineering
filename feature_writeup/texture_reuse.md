@@ -5,6 +5,8 @@ nothing here is built. One section per mod; Rustic Delight first (2026-10-22).
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Texture reuse (catalogue of culinary-mod textures usable for new items or retextures, per mod; Rustic Delight done). Status: research only, 2026-10-22
+
 | Mod | Version | Surveyed | Notes |
 |---|---|---|---|
 | Rustic Delight | 1.3.0 | 2026-10-22 | 41 item + 46 block textures; every item is live in the pack; 1 orphan texture |

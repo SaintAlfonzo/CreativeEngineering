@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Biome tuning (per-biome multiplier / replacement for the Overworld, End and Nether, solved against `/dumpclimate` samples by `BiomeLayoutTuner` at world load; biome merges retired for biome fits). Status: DEPLOYED (17 edits, new worlds only), WG-01 to WG-08 pending; Overworld rarity floor (rarest biomes lifted to 0.15 %, never-spawning ones targeted, 12 largest land biomes x0.736) + `target_pct` + 20,000-column and cave samples (`/dumpclimatecaves`) DEPLOYED with 1.0.9 (new worlds only), WG-09 to WG-13 pending; findings F1-F5, F1 (5 targets unreachable) and F3 (skylands at 15 %) need a decision
+
 | Part | Status |
 |---|---|
 | `biome_config.json`: a multiplier or a replacement per biome, for every `multi_noise` dimension (Overworld from Terralith, End from Nullscape, vanilla Nether) | DEPLOYED (in the 2026-09-27 initial commit; the same 17 edits until 2026-10-19), applies to worlds created after it. Overworld rarity floor (53 more edits, `tools/biome_rarity_floor.py`) BUILT 2026-10-19, solved on a scratch server, DEPLOYED with 1.0.9 (2026-10-19 15:54) |

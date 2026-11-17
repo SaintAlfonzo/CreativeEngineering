@@ -20,6 +20,10 @@ coffees give Caffeinated through `food_values.js`), the bell pepper survivor ove
 ([veggies_delight.md](veggies_delight.md)), and its ripe pepper roll is already 1 : 1 : 1 ([crops.md](crops.md),
 `farming/crops #9`). Comfort stays on soups (FD decision, [farmers_delight.md](farmers_delight.md) 2.5).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Rustic Delight 1.7.0 backport in Creative Delight (port of every 1.7.0 item but Fruit Beignet, MIT art and data baked into the member since 2026-11-10: nine pepper colours, slices, rolls, medleys, giant peppers, pancake plates, syrup, coffee and fried foods; Pale and Dark seeds from chests and the trader, village farm crops by the wild crop rules, Supreme Pizza, cotton rename, coaster cut). Status: **r1114 2026-11-14: SQ-RD-10 INCONCLUSIVE (no cotton in two villages, too rare).** **r1103 2026-11-03: SQ-RD-08, -10, -11, -22, SQ-RDX-12b PASS (SQ-RD-22 fixed); SQ-RD-24, -26 open, SQ-RD-10b batch fault (group B world).** **2026-11-03: one potato salad, Comfort rule recheck (5.12) BUILT, CD jar installed 2026-11-03 00:08, not booted; SQ-CDM2-04, SQ-RD-22 and SQ-CDF-08 reruns (SQ-CDJ7).** **built, scratch test queued; r1102b 2026-11-02 write-back: FAIL SQ-RD-22 (no Rustic Nourishment rules; owner regenerated the JSON 19:50, rerun pending in r_B.qb).** **Deep scan 2026-11-02:** the 5.10 rows are in the installed CD jar (11-02 14:01), not deployed; SQ-RDX server rows PASS (r1102, r1102b); SQ-RD mostly PASS r1102b, SQ-RD-22 FAIL (Rustic Nourishment, `creativedelight/members #43`). **2026-11-01: owner list rows built (5.10: coffees, pancake merge, maple, Supreme Pizza, glowing calamari crate, Fried Dough removed, roll assemblies, heatless routes, golden beans), not installed (SQ-RDX).** DEPLOYED with 1.1.03 (ships in the CD jar); SQ-RD-01, SQ-RD-25 PASSED 2026-10-25, coffee tooltip fix with 1.1.04; `mod-additions #19`
+
 ## 1. How it was read
 
 - `python3 tools/jar_diff.py` (1259 files added, 42 removed, 282 changed; lang +173 / -2 / ~2).

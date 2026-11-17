@@ -6,6 +6,8 @@ without errors in single player 2026-10-11)
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Placeable food (tooltip lines "Placeable" / "(while sneaking)" / "Placeable on plate" / "Placeable on small plate" for every food any mod lets you put down: Display Delight, cakes/pies/feasts, Vinery bottles, Fruits Delight jams; `/dumpplaceable`). Status: DEPLOYED with 1.0.6; coaster line and tag DEPLOYED with 1.0.8; 2026-10-25 every produce food on the coaster and the patcherMod egg-dish blocks BUILT and installed 2026-10-26; server half of PL-01 scratch PASSED (SQ-KT-21 r1031, SQ-CDFW-03 r1102b); not run in game (PL-01 to PL-09, FF-06 to FF-08)
+
 Every food that can be put down in the world gets one, two or three tooltip lines, for any mod's placement
 mechanic: "Placeable" (with "(while sneaking)" when sneaking is required), "Placeable on plate", "Placeable on small plate"
 and "Placeable on a coaster". The lines come from five item tags generated from a catalog.

@@ -12,6 +12,10 @@ Plan: [plan_creative_delight.md](plan_creative_delight.md) J2; TODO `creativedel
 Salt behaviour in the pack (one salt, melting, dissolving): [item_merges.md](item_merges.md) 2.9;
 seasonings: [seasonings.md](seasonings.md).
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Salt and Create: The Salt as Creative Delight repack members (access transformer kept, rock salt no-dissolve as direct code, config not moved). Status: **r1103 2026-11-03: built, scratch server PASSED (SQ-SLT-01 to -05, SQ-SALT2-01).** **2026-11-02 night: BUILT, nested in the installed CD jar (23:16; saltable tag in the CD jar installed 2026-11-03 00:08), not booted; `salt` and `create_salt` jars displaced.** SQ-SLT-01 to -05, CQ-SLT-01, -02 queued (SQ-CDJ6); SQ-SALT2-01 (SQ-CDJ7). **2026-11-15: salt dispenser, layer vanish chance, lick refill and top layers, Salt Melt BUILT (CD 1.1.0 with Salt -04, Common 1.2.0; build/libs, not installed), salt.md 7; SQ-PS15-01 to -07; B4 (falling layers) open for the owner**
+
 ## 1. What was built
 
 | Project | Folder | Upstream jar | Mod id | Version | Display name |

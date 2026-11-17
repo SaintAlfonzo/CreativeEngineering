@@ -6,6 +6,8 @@ Where every pack-owned texture came from, the texture rule, and the textures tha
 
 ## 0. At a glance (2026-11-13)
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Texture sources (texture rule: human art or the owner's tools only; per-texture provenance ledger of every pack-owned texture, sources and uses of swapped / combined textures, AI textures marked swap / redo, unknowns to confirm). Status: audit 2026-11-13: 4 swap, 27 redo, 349 confirm; regenerate with `python3 tools/texture_provenance.py`; TODO `textures/tools #2` to `#4`
+
 2743 PNGs under `development/**/textures` and `kubejs/assets/**/textures` (build output skipped).
 
 | Status | Count | Meaning |

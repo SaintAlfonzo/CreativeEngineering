@@ -8,6 +8,8 @@ trades) in [archery.md](archery.md); the Flint and Terrasteel recipe in [nether_
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Magic recipes (Create Enchantment Industry machines on experience blocks; sculk doubled with liquid XP; ender chests behind a Botania third eye, Cloud Storage and Ender Storage on tags; Nature's Compass on terrasteel, Explorer's Compass removed). Status: DEPLOYED (since 1.0.3), RA-01 to RA-08 pending; findings F1-F4, F1 (Explorer's Compass uncraftable) needs a decision
+
 | Part | Status |
 |---|---|
 | Create Enchantment Industry: disenchanter, experience rotor and printer rebuilt around Create's experience block; Compressed Creativity memory essence mixing removed | DEPLOYED (in the 2026-09-27 initial commit; shipped since 1.0.3) |

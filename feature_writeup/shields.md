@@ -2,6 +2,8 @@
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Shields (seven tier shields + vanilla shield as the iron tier: per-group reduction, elemental breakdown, facing, scaled wear, round-down, knockback threshold, on-block effects, disable cooldown, recipes; the damage tag layer they read). Status: DEPLOYED, in-game test pending (SH-06 passed); mob-axe cooldown, banners on every tier, burn/thorn tick gates, unblockable effect ticks, JEI template-only smithing DEPLOYED with 1.0.6 (SH-01 to SH-43); netherite smithing keeps Armor Trims' template (F8); offline `tools/test_shields.sh`; Resistance on block for echo and up built, scratch server PASSED 2026-10-22 (SQ-GM-01; SH-44 tooltip in game)
+
 | Part | Status |
 |---|---|
 | Seven tier shield items (copper, gold, diamond, netherite, echo, felsic, dragon) with their own textures | DEPLOYED (patcherMod, shipped since 1.0.3) |

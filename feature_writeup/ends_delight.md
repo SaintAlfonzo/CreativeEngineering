@@ -16,6 +16,8 @@ Related pages: [ocean_delight.md](ocean_delight.md), [hostile_delight.md](hostil
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: End's Delight and Ender's Delight (overlap survey, chorus / shulker / enderman / endermite, stoves, planned succulent and fungus options). Status: **BROKEN: r1103 2026-11-03 SQ-ENM-03 FAILED (startup crash without the Ender's 1.2.2 jar), SQ-ENM-04b FAILED (the enders_additions member switch is gone); SQ-ENM-05b waits for the -03 fix; SQ-ENM-01, -02, -04, -05, SQ-EN-03 PASS.** **2026-11-02 night: Ender's additions folded into the End's member (`repackedEnds` -03, 5.9) BUILT, CD jar installed 2026-11-02 23:16, not booted; SQ-ENM-01 to -05 queued (SQ-CDJ6).** **2026-11-01: Ender's additions read from the 1.1.4 donor jar (`enders_upstream/`), member -03, in `mods/` since the CD jar of 11-02 14:01, SQ-DNR-E not run; route superseded 2026-11-02 (5.3).** DEPLOYED with 1.1.03 (section 5: End's 2.6.1 changes, Ender's 1.1.4 content in CD member `enders_additions`, End House, integration rows); scratch SQ-EN-01 to -04, -06 PASSED, SQ-EN-03 OPEN r1102b, EN- in game not run; shulker meat merge BUILT 2026-11-02, scratch PASSED r1102b (5.8, deep scan 2026-11-02); `mod-additions #4`, `#15`, `#28`, `#29`, `members #7`
+
 | Mod | Jar | Version | Items | Loot / worldgen | Verdict so far |
 |---|---|---|---|---|---|
 | End's Delight | `ends_delight-1.19.2-2.1.jar` | 2.1 | 64 | Dragon, shulker, enderman, endermite drops (loot modifiers); 1 worldgen file | Overlaps Ender's Delight on chorus and shulker; see section 1 |

@@ -6,6 +6,8 @@ owner decisions Q15 to Q17 and Q24. TODO rows `largecontent/mod-additions #35`, 
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Botany Pots (pot growth x8 for crops, x2 for flowers, soil modifiers stack, no fertilizers; lemon tree lower half; pot tooltip). Status: BUILT 2026-11-07 (script + data; needs the Creative Common jar with `scaleRecipeInt`); BP-01 to BP-08 pending
+
 | Part | Status | Files | Knobs |
 |---|---|---|---|
 | Growth x8 crops, x2 flowers, fertilizers removed | BUILT 2026-11-07, not tested | `kubejs/server_scripts/other/botany_pots.js`, `global.NCH.scaleRecipeInt`, `i.t_wild_crops` (Creative Common) | `global.BOTANY_GROWTH_MULT` (8), `global.BOTANY_FLOWER_MULT` (2), top of the script |

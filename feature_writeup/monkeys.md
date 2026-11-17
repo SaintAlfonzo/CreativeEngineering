@@ -4,6 +4,10 @@ Reference for every monkey and ape mob in the pack, so each can be kept or cut. 
 ([brief](briefs/mobs_tweaks.md)). Spawn numbers are from [mob_spawns.md](mob_spawns.md) and the configs. Behavior marked
 "recalled" comes from memory of the mods, not a readable source.
 
+## 0. At a glance
+
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Monkeys and apes (capuchin, gorilla, gelada, chimpanzee: spawn, behavior, mod links, cut options). Status: reference, decision open (TODO `merges/mobs #1`)
+
 ## Comparison
 
 | | Capuchin Monkey | Gorilla | Gelada Monkey | Chimpanzee |

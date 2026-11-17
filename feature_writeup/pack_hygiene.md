@@ -6,6 +6,8 @@ version handling between in-tree pieces that always ship together.
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Pack hygiene (audit of rule bypasses and reinvented solutions: version gates between in-tree pieces, port conversions, recipes and tags beside the helpers, item and effect dict bypasses, food code outside Creative Delight, copied Java, build and tool infrastructure, config backups, mod_sides rows). Status: AUDIT 2026-10-27: 55 findings; 42 fixed and 24 closed, all BUILT and installed 2026-10-27, scratch test queued (PH-01 to -04, -09 to -11, -16 to -26), in-game PH-05 to -08, -12 to -15, -27 to -37 (section 5); open: 11, 12, 18, 22, 23, 30 to 35, 53
+
 | Part | Status |
 |---|---|
 | Audit (2026-10-27, read-only, whole repo) | DONE: 55 findings in 12 groups |

@@ -23,6 +23,8 @@ This file has three parts, as asked:
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Hostile Delight integration plan (native 1.19.2, AFL licence, no fork: 68 monster foods + candied slime block, Dioxide and Collapsing effects, Dioxiding potion, 3 replaced vanilla mob loot tables; overlaps with End's / Ender's / Ocean's Delight drops and the pack's cooking, baking, food and potion rules; 20-step fold-in list, decisions D1 to D16). Status: planned (2026-10-23); the integration plan is not built, but pack rows touch it: any bread (1.1.04), cooking trio for its meats and egg, Prepared Sea Pickle removed (2026-11-02, scratch PASSED r1102b SQ-FCB-01), food types (deep scan 2026-11-02); HTD-01 to HTD-31 drafted
+
 | Part | Where | Status |
 |---|---|---|
 | Mod inventory (68 items + 1 block, 2 effects, 1 potion with splash / lingering / arrow, 74 recipe files, 3 replaced vanilla mob loot tables, 65 advancements, no tags, no worldgen, no entities) | section 2 | reference, from `Hostile_Delight_0.2.2_1.19.2.jar` |

@@ -8,6 +8,8 @@ the same day: [roll_delight.md](../roll_delight.md), [large_meals.md](../large_m
 
 ## 0. At a glance
 
+**README index entry, moved here 2026-11-16 (owner ruling D6).** Feature: Mineral Delight 2.9 (Forge 1.20.1, AFL 3.0, 54 items: edible gems, ores, stone, sand and glass; 4 effects; overlap survey against Miner's Delight and the pack, upstream defects, integration list). Status: archived 2026-10-30: will not be ported, features will not be added
+
 | | |
 |---|---|
 | Source | `devmods/toBackport/mineraldelight-2.9.jar` (file name 2.9, `mods.toml` version 1.0.0) |
