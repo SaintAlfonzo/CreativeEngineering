@@ -1,11 +1,10 @@
 # Plan: process overhaul (checks, build identity, design intake, status as data, scratch queue tiers, TODO as the source of truth)
 
-<!-- generated:status_index begin open_work sha1=cffa8b23ef94 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 3, In Progress 2, Testing 3), 2 Complete.
+<!-- generated:status_index begin open_work sha1=3e020c558076 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 8 open TODO rows (Planned 2, In Progress 2, Testing 4), 2 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `tooling/process #8` | Planned | none | Phase 3: clean-up passes, install baseline, features audit and CSV, TODO as the source of truth |
 | `tooling/process #9` | Planned | none | 155 agent notes and other docs not named snake_case |
 | `tooling/process #10` | Planned | S | 77 dead ids in scratch queue rows |
 | `tooling/process #6` | In Progress | none | Commit per plan phase, push to agent_staging |
@@ -13,13 +12,14 @@
 | `tooling/process #2` | Testing | S | Build stamps and install ledger |
 | `tooling/process #3` | Testing | none | Design intake before building |
 | `tooling/process #5` | Testing | S | Tiered scratch queue with expiry (phase 2) |
+| `tooling/process #8` | Testing | S | Phase 3: clean-up passes, install baseline, features audit and CSV, TODO as the source of truth |
 <!-- generated:status_index end open_work -->
 
 Status: Planned 2026-11-16. Owner rulings the same evening (section "Owner decisions"). Done the same evening:
 P1.5 commit rule (CLAUDE.md) and P1.6 memory move (136 notes to `agent_notes/`). P1.1 to P1.3 BUILT 2026-11-16 night
 (offline tests PROC-01 to -09 and -15, -18 pass; PROC-16, -17 need the owner at the dialog; SQ-PROC-01 queued). P1.4
 BUILT the same night. Phase 2 (P2.1 to P2.5) BUILT 2026-11-16 late night, offline tests PROC-20 to -28 pass; live rows
-SQ-PROC-10 to -15, CQ-PROC-01 queued; the never-run pass (P2.5 item 3) waits for the owner (Phase 2 build notes). Phase 3 Planned 2026-11-16 (rulings D10 to D17; P3.2 done). Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
+SQ-PROC-10 to -15, CQ-PROC-01 queued; the never-run pass (P2.5 item 3) waits for the owner (Phase 2 build notes). Phase 3 built 2026-11-16 (rulings D10 to D17; P3.1 to P3.6, progress notes under each; open: the scratch rows SQ-PROC-01 and SMK, the first release with the clean-up pass). Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
 `tooling/process #1` to `#5`. Code owner: `tools/` and `build-logic/`. Jar changes are limited to a build stamp
 added by the shared Gradle plugin; no gameplay change, so no changelog bullet. Phase 2 continues
 [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md): TX-40, TX-41 and TX-45 were built 2026-11-15;
