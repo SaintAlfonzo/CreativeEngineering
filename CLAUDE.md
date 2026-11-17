@@ -86,6 +86,10 @@ findings) become a plan, split and classify them and ask the open items before b
   only what the diff touches, `-v` output tails). `installToMods` runs `--fast --changed` first and refuses on a FAIL
   (`-PskipChecks` overrides, logged); `build_deploy.py` runs `--full`; the Stop hook reports. Accepted failures go in
   `tools/check_known.tsv` with a reason and date.
+- **Session role.** At the start of a session, and whenever the work changes, run
+  `python3 tools/session_role.py plan|impl|test`. The Stop hook follows it: `plan` silent; `impl` checks and counts
+  only this session's own uncommitted code files (never docs or other sessions' files); `test` counts this session's
+  own uncommitted run docs and queue rows. Undeclared = `impl` with a hint.
 - **Commits.** Agents commit at the end of each plan phase, and at session end for any finished work left
   uncommitted, as the repo's configured author (the owner) with the Co-Authored-By trailer, then push with
   `git push origin HEAD:agent_staging` (never `main`; the owner merges). Stage only that phase's files by path

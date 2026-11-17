@@ -9,6 +9,7 @@ Exit status 0 only when nothing FAILed (KNOWN and SKIP do not fail the run).
 Usage: python3 tools/check_all.py [--fast] [--changed] [--full] [--only name,...] [-j N] [-v]
   --fast     skip checks that take over 15 s on their own (SLOW below)
   --changed  run only checks whose inputs changed since the last commit (git diff HEAD plus untracked files)
+  --changed-file F  with --changed: the changed paths come from file F, one per line (Stop hook: own files only)
   --full     also run the slow report checks (texture_provenance, design_rules_audit); the release gate uses it
   --only     run just these checks
   -v         print the output tail of every FAILed or KNOWN check
@@ -182,6 +183,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
     ap.add_argument('--fast', action='store_true')
     ap.add_argument('--changed', action='store_true')
+    ap.add_argument('--changed-file', help='with --changed: take the changed paths from this file (one per line) '
+                    'instead of the git diff (the Stop hook passes a session\'s own files)')
     ap.add_argument('--full', action='store_true')
     ap.add_argument('--only')
     ap.add_argument('--list', action='store_true')
@@ -200,7 +203,10 @@ def main():
         times = json.loads(TIMES_FILE.read_text())
     except (OSError, ValueError):
         times = {}
-    changed = changed_paths() if a.changed else None
+    if a.changed and a.changed_file:
+        changed = {l.strip() for l in open(a.changed_file) if l.strip()}
+    else:
+        changed = changed_paths() if a.changed else None
     all_changed = changed is not None and touches(GLOBAL_INPUTS, changed)
     selected, skipped = {}, []
     only = set(a.only.split(',')) if a.only else None

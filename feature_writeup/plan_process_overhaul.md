@@ -404,7 +404,11 @@ P1.1:
   compile stale mods first; inside Gradle they SKIP instead (nested Gradle would deadlock), and the gate runs after
   the installing project's `classes`.
 - Stop hook: `tools/check_stop_hook.py`, cached on the changed-file state (Stop fires every turn), also counts
-  uncommitted tracked files (P1.5 "to build later").
+  uncommitted tracked files (P1.5 "to build later"). Since 2026-11-16 it follows the role declared with
+  `tools/session_role.py` (owner rulings: declared only, undeclared = impl; test = run-doc reminder only; impl counts
+  own code files only). Own files come from the session's and its subagents' transcripts (Edit/Write paths, paths
+  named in writing Bash commands); `check_all.py --changed-file` takes that list. Plan sessions no longer get
+  nagged, and implementers are no longer told to commit plan docs from parallel sessions.
 
 P1.2:
 - Stamp time: the commit time for a clean tree, else the newest mtime of the dirty input files, plus a content hash
