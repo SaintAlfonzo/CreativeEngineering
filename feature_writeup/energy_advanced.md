@@ -2,8 +2,8 @@
 
 Written 2026-11-12. **Speculative; nothing built.** Reference for the **advanced** electricity mode, used only if Create:
 Power Grid ([power_grid.md](power_grid.md)) is ported and integrated. Basic mode is [energy_basic.md](energy_basic.md).
-Mode is chosen **per world**: advanced changes apply only when an advanced world is created or loaded; worlds can be
-upgraded or downgraded with a destructive clean-up (section 6).
+Mode is chosen **per world, at world creation**: advanced changes apply only to a world created as advanced. A world's mode
+cannot be changed in play; an admin can force a switch, which is a destructive clean-up (section 5).
 
 ## 0. At a glance
 
@@ -74,9 +74,11 @@ smaller. Mapping by power would make PG machines absurdly expensive to feed from
 
 ## 5. Mode and world handling
 
-- A per-world flag selects the mode (power_grid.md N1); the global config only sets the default for new worlds.
+- **The mode is a world creation value** (owner 2026-11-16). A per-world flag holds it (power_grid.md N1); the global
+  config only sets the default offered for new worlds. No setting, config change or reload changes an existing world's mode.
 - A client joining a dedicated server checks the mode against the server (N2).
-- **Upgrade** (basic to advanced) and **downgrade** (advanced to basic) are destructive clean-ups that remove inconsistencies:
+- **Forced switch (admins only).** An admin can force an upgrade (basic to advanced) or a downgrade (advanced to basic).
+  Both are destructive clean-ups that remove inconsistencies:
   IE wires and connectors, CC&A Electric Motors and Alternators, PG blocks and items, converters, overheated components.
   A backup copy of the world is made first (N3). Item stacks and block entities that no longer exist are deleted, not
   converted; the exact removal list is built from the registry diff when the mode set is final.
@@ -170,6 +172,8 @@ the port, H5) becomes the default.
 
 ## 9. History
 
+- 2026-11-16: owner ruling: the mode is a world creation value, not changeable in play; admins can force a switch
+  with the destructive clean-up (sections 0 intro and 5). Recorded from plan_process_overhaul.md Phase 3 (D15).
 - 2026-11-13: section 8 (P11 evaluation scaffolding): keep / drop / merge table with our facts, H7 method on the bare
   port, D14 inputs.
 
