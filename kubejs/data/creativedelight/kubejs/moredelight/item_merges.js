@@ -8,13 +8,15 @@
 // potatoes, potato salad, the four diced potatoes with ...) read #forge:sliced_potatoes, whose only member was the
 // diced potatoes; a merged item is stripped from every tag, so the slices fill it (dishes/ingredients #26). The
 // pack's frying recipes read #forge:sliced_potato.
+var R = global.NCH.forPack('creativedelight')
+
 ServerEvents.recipes(e => {
 	if (!global.CD) return
-	global.NCH.remove({ id: 'moredelight:cutting/diced_potatoes' }, e)
+	R.remove({ id: 'moredelight:cutting/diced_potatoes' }, e)
 	// Create's cutting recipe (ingredient minecraft:potatoes, no such item: a barrier in JEI) and Casualness Delight's slice cut
 	// both made the merged item; Rustic Delight's potato -> slices recipe replaces them (dishes/ingredients #28)
-	global.NCH.remove({ id: 'create:cutting/diced_potatoes' }, e)
-	global.NCH.remove({ id: 'casualness_delight:cutting/diced_potatoes' }, e)
+	R.remove({ id: 'create:cutting/diced_potatoes' }, e)
+	R.remove({ id: 'casualness_delight:cutting/diced_potatoes' }, e)
 })
 
 ServerEvents.tags('item', e => {

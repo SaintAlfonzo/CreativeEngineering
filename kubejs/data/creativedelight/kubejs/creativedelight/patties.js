@@ -11,16 +11,16 @@ ServerEvents.tags('item', e => {
 	var i = global.item
 
 	t.add(e, i.t_patty, i.beef_patty)
-	if (Platform.isLoaded('veggiesdelight')) t.add(e, i.t_patty, i.cooked_vegetarian_patty)
-	if (Platform.isLoaded('miners_delight')) t.add(e, i.t_patty, i.vegan_patty)
+	if (global.CD.on('veggiesdelight')) t.add(e, i.t_patty, i.cooked_vegetarian_patty)
+	if (global.CD.on('miners_delight')) t.add(e, i.t_patty, i.vegan_patty)
 	// The Horror Lasagna's meat tag named the beef patty
-	if (Platform.isLoaded('brewinandchewin')) t.add(e, 'brewinandchewin:cooked_horror_lasagna_meats', i.t_patty)
+	if (global.has('brewinandchewin')) t.add(e, 'brewinandchewin:cooked_horror_lasagna_meats', i.t_patty)
 })
 
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	// Data recipes: all but the ones that make a beef patty. Script-added recipes (none makes a beef patty): every one;
 	// _replaceInAdded takes a single-key filter only, so it is called on its own

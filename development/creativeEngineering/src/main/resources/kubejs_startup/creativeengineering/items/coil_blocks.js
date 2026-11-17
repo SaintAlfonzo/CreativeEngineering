@@ -13,12 +13,13 @@ const COIL_BLOCK_METALS = [
     'lead', 'nickel', 'silver', 'zinc', 'steel'
 ];
 
+var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('block', e => {
     COIL_BLOCK_METALS.forEach(metal => {
         const name = metal.charAt(0).toUpperCase() + metal.slice(1);
         const top = 'creativeengineering:block/coil_block/coil_' + metal + '_top';
         const side = 'creativeengineering:block/coil_block/coil_' + metal + '_side';
-        e.create('creativeengineering:coil_' + metal)
+        reg.block(e, 'coil_' + metal)
             .displayName(name + ' Coil Block')
             .material('metal')
             .soundType('metal')

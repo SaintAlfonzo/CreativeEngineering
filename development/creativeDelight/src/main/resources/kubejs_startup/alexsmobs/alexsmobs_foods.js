@@ -10,6 +10,6 @@ ItemEvents.modification(e => {
 	e.modify(i.shrimp_fried_rice, it => it.setFoodProperties(fb => {
 		fb.hunger(20)
 		fb.saturation(0.6)
-		fb.effect('farmersdelight:comfort', 240 * 20, 0, 1.0)
+		fb.effect(global.effect.comfort, 240 * 20, 0, 1.0)
 	}))
 })

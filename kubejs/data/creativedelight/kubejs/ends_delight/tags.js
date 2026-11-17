@@ -15,7 +15,7 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.shulker_loot, [i.shulker_meat, i.shulker_meat_slice])
 	// fungi End's crimson fungus inputs accept (mod-additions #15): crimson, warped, Fungi Delight's edible ones
 	t.add(e, i.t_cookable_fungi, [i.crimson_fungus, i.warped_fungus])
-	if (Platform.isLoaded('fungidelight')) t.add(e, i.t_cookable_fungi, [i.inky_cap_mushroom, i.morel_mushroom, i.truffle])
+	if (global.CD.on('fungidelight')) t.add(e, i.t_cookable_fungi, [i.inky_cap_mushroom, i.morel_mushroom, i.truffle])
 })
 
 ServerEvents.tags('block', e => {

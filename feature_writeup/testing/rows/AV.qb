@@ -6,10 +6,10 @@
 @@title SQ-AV No recipe unlocks, 2026-11-17 ([advancements.md](../advancements.md) 3.3, AV-06 to AV-08; [plan_rules_fixes.md](../plan_rules_fixes.md) section 12e, D23, TODO `conventions #27`)
 @@date 2026-11-17
 @@reviewed 2026-11-17
-@@jars creativecommon
-@@sources development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/NoRecipeUnlockMixin.java development/creativeCommon/src/main/resources/creativecommon.mixins.json
+@@jars creativecommon creativedelight
+@@sources development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/NoRecipeUnlockMixin.java development/creativeCommon/src/main/resources/creativecommon.mixins.json development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/oven development/creativeDelight/members/miners/src/main/java/com/sammy/minersdelight/content/block/copper_pot
 @@text
-@@text `NoRecipeUnlockMixin` makes ServerPlayer.awardRecipes and awardRecipesByKey do nothing. Needs the Creative Common jar of 2026-11-17 or later. The Oven, Keg and Copper Pot rows follow in P3 (their own award calls are deleted there).
+@@text `NoRecipeUnlockMixin` makes ServerPlayer.awardRecipes and awardRecipesByKey do nothing. Needs the Creative Common jar of 2026-11-17 or later. The Oven and Copper Pot rows are SQ-AV-02 and -03 (Creative Delight, P3b 2026-11-17: their award calls are gone, the XP pop stays); the Keg follows in P3c.
 @@table
 ## SQ-AV-01 | /recipe give learns nothing; the book stays empty
 @group A
@@ -29,6 +29,19 @@ reject Unlocked \d+ recipes? for
 bootreject NoRecipeUnlockMixin.*(InvalidInjectionException|could not find|failed)
 > pbot remove rbk1
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+
+## SQ-AV-02 | Oven: taking a bake pops XP, unlocks nothing
+@group A
+@commands Fake player rbk2 with an empty recipe book; a Creative Delight Oven on a heat source bakes one recipe; take the result by hand (or break the Oven with the result inside)
+@pass XP orbs spawn at the player (or at the Oven when broken) as before; `/recipe take rbk2 *` answers "No recipes could be forgotten"; no `awardRecipes` in a stack trace
+@fails no XP: `OvenBlockEntity.popExperience` not called from `OvenResultSlot`; recipes learned: the Common mixin missing and the Oven still awarding (Delight older than 2026-11-17)
+@draft no driver step takes an Oven result slot by hand; owner LOOK, or break the Oven with a finished bake inside and count XP orbs
+## SQ-AV-03 | Copper Pot: taking a meal pops XP, unlocks nothing
+@group A
+@commands As SQ-AV-02 with Miner's Delight's Copper Pot cooking one Farmer's Delight pot recipe
+@pass XP as before; no recipe learned; Create Central Kitchen's blaze stove still drives the pot (its mixin targets `setRecipeUsed`, kept)
+@fails as SQ-AV-02 (`CopperPotBlockEntity.popExperience`, `CopperPotResultSlot`); a mixin error naming `CopperPotBlockEntityMixin` (Central Kitchen): the method shape changed
+@draft no driver step takes a pot result slot by hand; owner LOOK
 
 @@section 2
 @@title CQ-AV No recipe unlocks, client half, 2026-11-17 ([advancements.md](../advancements.md) AV-06, AV-07; same section)

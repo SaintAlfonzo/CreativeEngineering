@@ -27,10 +27,10 @@ ItemEvents.modification(e => {
 	if (data == null) { console.warn('[comfort_nourishment] ' + path + ' not found - Comfort / Nourishment left as upstream'); return }
 	var $CNRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
 	var $CNRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
-	var COMFORT = 'farmersdelight:comfort'
-	var NOURISHMENT = 'farmersdelight:nourishment'
-	var comfort = $CNRegistries.MOB_EFFECTS.getValue(new $CNRL(COMFORT))
-	var nourishment = $CNRegistries.MOB_EFFECTS.getValue(new $CNRL(NOURISHMENT))
+	var COMFORT = global.effect.comfort
+	var NOURISHMENT = global.effect.nourishment
+	var comfort = global.effect.resolve(COMFORT)
+	var nourishment = global.effect.resolve(NOURISHMENT)
 	var idOf = entry => entry.indexOf(':') >= 0 ? entry : i[entry]
 	var unknown = []
 	var handled = {}

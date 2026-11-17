@@ -19,15 +19,16 @@
 // Storage block and hoe tags:
 // kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat_tags.js.
 
+var reg = global.reg.forPack('creativedelight')
 StartupEvents.registry('item', e => {
 	var i = global.item
-	e.create(i.culture_beef).displayName('Beef Culture')
-	e.create(i.culture_pork).displayName('Pork Culture')
-	e.create(i.culture_mutton).displayName('Mutton Culture')
-	e.create(i.culture_poultry).displayName('Poultry Culture')
-	e.create(i.culture_rabbit).displayName('Rabbit Culture')
-	e.create(i.culture_cod).displayName('Cod Culture')
-	e.create(i.culture_salmon).displayName('Salmon Culture')
+	reg.item(e, i.culture_beef).displayName('Beef Culture')
+	reg.item(e, i.culture_pork).displayName('Pork Culture')
+	reg.item(e, i.culture_mutton).displayName('Mutton Culture')
+	reg.item(e, i.culture_poultry).displayName('Poultry Culture')
+	reg.item(e, i.culture_rabbit).displayName('Rabbit Culture')
+	reg.item(e, i.culture_cod).displayName('Cod Culture')
+	reg.item(e, i.culture_salmon).displayName('Salmon Culture')
 })
 
 StartupEvents.registry('block', e => {
@@ -44,7 +45,7 @@ StartupEvents.registry('block', e => {
 		[i.culture_block_salmon, 'Salmon Culture Block'],
 	]
 	cultureBlocks.forEach(c => {
-		e.create(c[0]).displayName(c[1])
+		reg.block(e, c[0]).displayName(c[1])
 			.material('clay').soundType('mud').hardness(0.8).resistance(0.8)
 			.textureAll(c[0].replace(':', ':block/culture_block/'))
 			.model(c[0].replace(':', ':block/'))

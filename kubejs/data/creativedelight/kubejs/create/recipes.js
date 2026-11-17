@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var f = global.fluid
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -41,8 +41,10 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'create_central_kitchen:crafting/dough_4' }, e)
 		R.remove({ id: 'farmersdelight:wheat_dough_from_water' }, e)
 		R.remove({ id: 'tmted:bottling/wheat_dough' }, e)
-		R.replaceOutput({ output: i.out_flour }, i.out_flour, i.in_flour, e)
-		R.replaceInput({ input: i.out_flour }, i.out_flour, i.in_flour, e)
+		// Engineer's Delight's flour is merged into Create's (swaps/merges_tmted.json), recipes included
+		// and its IE crusher flour recipes go (IE crushing below gives the pack's flour)
+		R.remove({ id: 'tmted:crusher/wheat_flour' }, e)
+		R.remove({ id: 'tmted:crusher/wheat_flour_from_bale' }, e)
 		R.shapeless(Item.of(i.dough, 1), [i.flour, i.water_bucket], e)
 		if (Platform.isLoaded('immersiveengineering')) {
 			R.ieBottling(i.dough, f.t_water, i.flour, e, undefined, 250)

@@ -5,7 +5,7 @@
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 
-	const R = global.NCH
+	const R = global.NCH.forPack('creativedelight')
 	var i = global.item
 	var f = global.fluid
 

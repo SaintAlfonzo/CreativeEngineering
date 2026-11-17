@@ -10,7 +10,7 @@ ServerEvents.recipes(e => {
 	var i = global.item
 	// Food items by their food dict key (creative_delight.md 13; Veggies pilot, framework #4): fd is global.food
 	var fd = global.food
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 

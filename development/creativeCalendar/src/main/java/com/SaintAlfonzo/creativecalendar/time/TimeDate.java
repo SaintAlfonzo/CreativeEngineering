@@ -28,6 +28,7 @@ import sereneseasons.season.SeasonSavedData;
 
 import java.util.Arrays;
 import java.util.Locale;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -216,6 +217,11 @@ public final class TimeDate {
         if (delta >= 0) {
             return "wine clock follows";
         }
+        if (DateMoves.any()) {
+            List<String> notes = DateMoves.fire(server, delta);
+            return notes.isEmpty() ? "wine clock moved back" : String.join("; ", notes);
+        }
+        // Until the Vinery port registers with DateMoves (plan_rules_fixes.md 12f step 3, Creative Brewing rebuild)
         try {
             Class.forName(VINTAGE_CLOCK).getMethod("add", MinecraftServer.class, long.class).invoke(null, server, delta);
             return "wine clock moved back";

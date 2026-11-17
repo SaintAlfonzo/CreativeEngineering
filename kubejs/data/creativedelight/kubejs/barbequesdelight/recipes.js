@@ -7,7 +7,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('barbequesdelight')) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		// Stations (1.3.0): grill from an iron trapdoor and 7 iron ingots; basin and tray stonecut from logs, one of each

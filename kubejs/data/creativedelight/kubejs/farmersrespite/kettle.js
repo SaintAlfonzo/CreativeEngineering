@@ -17,7 +17,7 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var f = global.fluid
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 	var kettle = (removeId, input, output, id, base, opts) => {
 		if (removeId) R.remove({ id: removeId }, e)
 		R.frBrewing(input, output, e, id, Object.assign({ base: base }, opts || {}))

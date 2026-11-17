@@ -10,7 +10,7 @@ ServerEvents.recipes(e => {
 	// Food items by their food dict key (creative_delight.md 13; Veggies pilot, framework #4): fd is global.food
 	var fd = global.food
 	var f = global.fluid
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -94,7 +94,7 @@ ServerEvents.recipes(e => {
 		// (VD's own furnace, smoker and campfire recipes are replaced by the family's).
 		F.veggieCook(fd.veggie_vegetarian_patty, fd.veggie_cooked_vegetarian_patty)
 		// Miner's Delight's cave carrot (dishes/ingredients #43): cut for 2 raw patties, the baked one for 2 cooked ones
-		if (Platform.isLoaded('miners_delight')) {
+		if (global.CD.on('miners_delight')) {
 			R.fdCutting(i.cave_carrot, i.any_knife, Item.of(fd.veggie_vegetarian_patty, 2), e, 'raw_veggie_patty_from_cave_carrot')
 			R.fdCutting(i.baked_cave_carrot, i.any_knife, Item.of(fd.veggie_cooked_vegetarian_patty, 2), e, 'cooked_veggie_patty_from_baked_cave_carrot')
 		}

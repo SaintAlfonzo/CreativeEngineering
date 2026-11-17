@@ -134,7 +134,6 @@ global.removedItems = [
 	i.microblock_iron_saw,
 	i.microblock_diamond_saw,
 	i.red_iron_comp,
-	i.out_flour,
 	i.wheat_flour_pc,
 	i.out_dough,
 	i.chorus_stew_wood,

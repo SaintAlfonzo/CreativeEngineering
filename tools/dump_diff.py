@@ -13,6 +13,8 @@ villager trades moved onto global.trades.villager. Prints a summary and the diff
 	    (creativeworldgen:loot/=creativeloot:loot/).
 	python3 tools/dump_diff.py trades BASE NEW PROFESSION ...
 	    BASE, NEW: folders holding villager_trades.json. Pass: the listed professions' offers are equal.
+	python3 tools/dump_diff.py food BASE NEW
+	    BASE, NEW: folders holding food/foods.json (/dumpfood). Pass: the same foods with the same values and effects.
 """
 import csv
 import json
@@ -104,8 +106,28 @@ def trades(base, new, professions):
 	return ok
 
 
+def food(base, new):
+	def load(folder):
+		data = json.loads((Path(folder) / 'food' / 'foods.json').read_text(encoding='utf-8'))
+		return {f['id']: f for f in data['foods']}
+	a, b = load(base), load(new)
+	only_a, only_b = sorted(set(a) - set(b)), sorted(set(b) - set(a))
+	changed = sorted(k for k in set(a) & set(b) if a[k] != b[k])
+	for k in only_a:
+		print(f'ONLY_BASE {k}')
+	for k in only_b:
+		print(f'ONLY_NEW {k}')
+	for k in changed:
+		diff = sorted(f for f in set(a[k]) | set(b[k]) if a[k].get(f) != b[k].get(f))
+		print(f'CHANGED {k}: {", ".join(diff)}')
+	ok = not (only_a or only_b or changed)
+	print(f'foods: base {len(a)}, new {len(b)}')
+	print('FOOD_SAME' if ok else 'FOOD_DIFFERS')
+	return ok
+
+
 def main(argv):
-	if len(argv) < 3 or argv[0] not in ('recipes', 'tags', 'trades'):
+	if len(argv) < 3 or argv[0] not in ('recipes', 'tags', 'trades', 'food'):
 		print(__doc__)
 		return 2
 	kind, rest = argv[0], argv[1:]
@@ -115,6 +137,8 @@ def main(argv):
 	if kind == 'tags':
 		renames, rest = pairs(rest, '--rename')
 		return 0 if tags(rest[0], rest[1], renames) else 1
+	if kind == 'food':
+		return 0 if food(rest[0], rest[1]) else 1
 	return 0 if trades(rest[0], rest[1], rest[2:]) else 1
 
 

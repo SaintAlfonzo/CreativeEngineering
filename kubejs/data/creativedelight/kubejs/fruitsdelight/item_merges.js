@@ -7,7 +7,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !Item.exists(global.item.cantaloupe_seeds)) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		// Seeds: the slice gives Cantaloupe Seeds (Fruits Delight's hamimelon_seeds recipe, input swapped by the merge);

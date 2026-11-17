@@ -16,6 +16,8 @@ dependencies {
     // Optional: the pack jam line's cauldrons extend Fruits Delight's cauldron block and feed its JEI cauldron list
     // (net.ribs.vintagedelight.jam, only loaded when Fruits Delight is). libs/ holds a copy of mods/fruitsdelight-0.5.11.jar.
     compileOnly fg.deobf('local:fruitsdelight:0.5.11')
+    // Crop seasons: the lush grass random tick asks Creative Calendar's GrassSeasonHook (Creative Delight requires Calendar)
+    compileOnly project(':creativeCalendar')
 }
 
 // Access transformer (SRG names; the same ids as upstream's 1.20.1 AT less the PotionBrewing lines, checked against

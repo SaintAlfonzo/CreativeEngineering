@@ -1,0 +1,10 @@
+{
+	"_comment": "Item merge list (swap lists 'merges', SwapLists.java; feature_writeup/item_merges.md 6): both items stay registered; the old one is purged and the survivor takes over its recipes, loot and tags (CD startup script creativedelight/swap_merges.js) and every stack of it in the world (Common swap/ItemMerges). Applied only while every 'requires' mod is loaded. Never prune: an old world whose old item is later unregistered is remapped from this list. One wheat flour: Engineer's Delight's goes, Create's stays (was a hand recipe swap in create/recipes.js; plan_rules_fixes.md V-34).",
+	"requires": [
+		"tmted",
+		"create"
+	],
+	"merges": {
+		"create:wheat_flour": ["tmted:wheat_flour"]
+	}
+}

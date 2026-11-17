@@ -16,4 +16,6 @@ dependencies {
     compileOnly files(rootProject.file('development/creativeCommon/libs/wthit-1.19.2-forge-5.36.1.jar'))
     // The pack rain rule for the grill campfire (campfire.CampfireRainInfo: tags and Creative Compat's config readers).
     compileOnly project(':creativeCommon')
+    // The pack seasoning framework (compat.PackSeasonings): the member ships inside Creative Delight, so it calls it directly.
+    compileOnly project(':creativeDelight')
 }

@@ -8,6 +8,8 @@
 
 // Queued with global.LOOT.rules (Creative Loot's loot engine, loot/05_tuning.js): its script pack can load
 // after this one, so the rules run when the engine of the current reload exists. Creative Delight requires Creative Loot.
+var R = global.NCH.forPack('creativedelight')
+
 global.LOOT.rules(function (L) {
     var i = global.item
 
@@ -52,5 +54,5 @@ LootJS.modifiers(event => {
         .not(n => n.matchMainHand(i.any_shears))
         .randomChance(0.02)
         .addLoot(i.mixed_seeds)
-        .logName('CE/vintage_mixed_seeds_grass')
+        .logName(R.logName('vintage_mixed_seeds_grass'))
 })

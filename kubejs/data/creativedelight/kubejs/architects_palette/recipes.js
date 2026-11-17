@@ -7,7 +7,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -22,9 +22,7 @@ ServerEvents.recipes(e => {
 		if (Platform.isLoaded('create')) {
 			R.createSaw(Item.of(i.bread, 16), i.bread_block, e)
 		}
-		if (Platform.isLoaded('farmersdelight')) {
-			R.fdCutting(i.bread_block, i.any_knife, Item.of(i.bread, 16), e)
-		}
+		R.fdCutting(i.bread_block, i.any_knife, Item.of(i.bread, 16), e)
 		R.stonecutting(i.bread_slab, i.bread_block, e)
 		R.stonecutting(i.crustless_bread_block, i.bread_block, e)
 		R.stonecutting(i.bread_nub, i.bread_slab, e)

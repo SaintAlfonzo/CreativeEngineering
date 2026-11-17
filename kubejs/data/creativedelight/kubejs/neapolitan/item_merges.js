@@ -7,7 +7,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		// Milk bottle. Abnormals Delight turns Farmer's Delight's bucket <-> bottle recipes off while Neapolitan is

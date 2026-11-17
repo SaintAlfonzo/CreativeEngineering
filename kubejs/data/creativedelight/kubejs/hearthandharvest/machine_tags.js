@@ -24,8 +24,8 @@ ServerEvents.tags('block', e => {
 	var t = global.tags
 	var i = global.item
 
-	t.add(e, '#minecraft:mineable/pickaxe', [i.fluid_jug, i.water_trough])
-	t.add(e, '#minecraft:mineable/axe', [i.field_sprinkler, i.bottle_crate, i.stomping_basin])
+	t.add(e, global.blocks.t_mineable_pickaxe, [i.fluid_jug, i.water_trough])
+	t.add(e, global.blocks.t_mineable_axe, [i.field_sprinkler, i.bottle_crate, i.stomping_basin])
 	// Rugs whose fringe reaches outside the block: the crack overlay skips those quads (R4, plan_small_fixes_1116.md)
 	t.add(e, i.t_clip_break_overlay, [i.straw_rug, i.hay_rug, i.canvas_rug])
 })

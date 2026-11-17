@@ -9,5 +9,5 @@ MoreJSEvents.villagerTrades(e => {
 	if (!global.CD) return
 	var i = global.item
 	var SALT = global.CD.on('vintagedelight') ? i.salt_dust : i.salt_item
-	e.addTrade('minecraft:butcher', 1, [Item.of(i.emerald, 12)], Item.of(SALT, 64)).maxUses(4).villagerExperience(4).priceMultiplier(0.05)
+	global.trades.villager(e, 'minecraft:butcher', 1, { buy: [i.emerald, 12], sell: [SALT, 64], uses: 4, xp: 4, priceMultiplier: 0.05 })
 })

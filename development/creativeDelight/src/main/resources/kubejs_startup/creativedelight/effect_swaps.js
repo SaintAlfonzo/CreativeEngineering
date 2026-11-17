@@ -32,7 +32,7 @@ ItemEvents.modification(e => {
 	var $SwapRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
 	var done = 0
 	global.foodEffectSwaps.forEach(swap => {
-		var fromEffects = swap.from.map(id => $SwapRegistries.MOB_EFFECTS.getValue(new $SwapRL(id)))
+		var fromEffects = swap.from.map(id => global.effect.resolve(id))
 		swap.items.forEach(key => {
 			var id = i[key]
 			var item = typeof id === 'string' ? $SwapRegistries.ITEMS.getValue(new $SwapRL(id)) : null
@@ -62,15 +62,13 @@ ItemEvents.modification(e => {
 ItemEvents.modification(e => {
 	if (!global.has('farmersrespite')) return
 	var i = global.item
-	var $SliceRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')
-	var $SliceRL = Java.loadClass('net.minecraft.resources.ResourceLocation')
-	var effect = id => $SliceRegistries.MOB_EFFECTS.getValue(new $SliceRL(id))
+	var effect = global.effect.resolve
 	e.modify(i.coffee_cake_slice, it => it.setFoodProperties(fb => {
-		fb.removeEffect(effect('minecraft:speed'))
-		fb.removeEffect(effect('farmersrespite:caffeinated'))
-		fb.effect('farmersrespite:caffeinated', 600, 0, 1.0)
+		fb.removeEffect(effect(ef.speed))
+		fb.removeEffect(effect(ef.caffeinated))
+		fb.effect(ef.caffeinated, 600, 0, 1.0)
 	}))
-	e.modify(i.rose_hip_pie_slice, it => it.setFoodProperties(fb => fb.removeEffect(effect('minecraft:speed'))))
+	e.modify(i.rose_hip_pie_slice, it => it.setFoodProperties(fb => fb.removeEffect(effect(ef.speed))))
 })
 
 // Street Corn gains Fire Resistance 30 s (TODO dishes/meals #63; its Nourishment and Haste stay as HHFoods sets them).

@@ -860,3 +860,6 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
   grilled result. Built and installed in the CD jar 2026-11-04. Tests BBQ-30 to BBQ-33, scratch SQ-BBQS-01 to -03.
 - 2026-11-14: basin stick fix (plan_bugfix_1114 4.6, TODO `dishes/meals #67`): a skewering tool (the stick) is never stored in a basin slot; without a matching recipe the click passes and the stick stays in the hand. Built and installed; rerun SQ-BBQW-02s.
 - 2026-11-15 (fix-2, r1115): the no-recipe stick click returns CONSUME, not PASS. PASS let the item's own use run, and Supplementaries placed the stick as a block on the basin (SQ-BBQW-02s FAIL); the stick now stays in the hand. CD built 03:19, not installed; rerun SQ-BBQW-02t.
+- 2026-11-17 (plan_rules_fixes.md V-05): `PackSeasonings` compiles against Creative Delight (`compileOnly
+  project(':creativeDelight')`) and calls `food.Seasonings` and `food.SeasoningTooltip` directly; the reflection and
+  the no-Delight fallback are gone. Queue SQ-RFX-15.

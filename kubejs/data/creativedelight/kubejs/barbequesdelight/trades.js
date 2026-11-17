@@ -14,6 +14,6 @@ MoreJSEvents.villagerTrades(e => {
 		[i.honey_mustard_sauce, 16], [i.buffalo_sauce, 16], [i.barbeque_sauce, 16],
 	]
 	sold.forEach(s => {
-		e.addTrade(butcher, 1, [Item.of(i.emerald, 12)], Item.of(s[0], s[1])).maxUses(4).villagerExperience(4).priceMultiplier(0.05)
+		global.trades.villager(e, butcher, 1, { buy: [i.emerald, 12], sell: [s[0], s[1]], uses: 4, xp: 4, priceMultiplier: 0.05 })
 	})
 })

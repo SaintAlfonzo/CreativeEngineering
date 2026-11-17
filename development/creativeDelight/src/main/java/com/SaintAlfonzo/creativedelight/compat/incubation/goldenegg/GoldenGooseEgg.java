@@ -16,7 +16,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
 import javax.annotation.Nullable;
@@ -41,7 +40,7 @@ public final class GoldenGooseEgg {
     /** The golden egg item, or null when Vintage Delight or its golden_egg is not there. */
     @Nullable
     public static Item item() {
-        if (!ModList.get().isLoaded(VINTAGE_ID)) return null;
+        if (!CDConfig.member(VINTAGE_ID)) return null;
         Item item = ForgeRegistries.ITEMS.getValue(GOLDEN_EGG);
         return item == null || item == Items.AIR ? null : item;
     }

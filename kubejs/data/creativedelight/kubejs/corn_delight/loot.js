@@ -3,6 +3,8 @@
 // requires: lootjs
 // Corn Delight loot rows (feature_writeup/corn_delight.md 2.4). Non-member file.
 
+var R = global.NCH.forPack('creativedelight')
+
 LootJS.modifiers(event => {
 	if (!global.CD) return
 	var i = global.item
@@ -17,5 +19,5 @@ LootJS.modifiers(event => {
 		.not(n => n.matchMainHand(ItemFilter.hasEnchantment('minecraft:silk_touch')))
 		.randomChance(0.25)
 		.addLoot(i.corncob)
-		.logName('CE/corn_knife_corncob')
+		.logName(R.logName('corn_knife_corncob'))
 })

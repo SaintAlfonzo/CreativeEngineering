@@ -45,7 +45,6 @@ public class CalendarMixinPlugin extends GatedMixinPlugin {
             Map.entry("IWGrassSpreadSeasonMixin", List.of("immersive_weathering")),
             Map.entry("BotaniaGrassSeasonMixin", List.of("botania")),
             Map.entry("VineryGrassSlabSeasonMixin", List.of("vinery")),
-            Map.entry("VintageLushGrassSeasonMixin", List.of("vintagedelight")),
             Map.entry("SeasonColorUtilMixin", SERENE),
             // vanilla target, but it reads SeasonTypes, which needs Serene Seasons' classes
             Map.entry("SeasonRainColumnMixin", SERENE),

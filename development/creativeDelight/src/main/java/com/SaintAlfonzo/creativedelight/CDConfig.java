@@ -325,6 +325,16 @@ public final class CDConfig {
 		return !SPEC.isLoaded() || v.get();
 	}
 
+	/**
+	 * True if {@code modId} is usable, as {@code global.CD.on} answers it: a compartment asks its switch, a nested
+	 * member asks {@link #member}, any other mod asks the mod list.
+	 */
+	public static boolean on(String modId) {
+		if (isCompartment(modId)) return compartment(modId);
+		if (!net.minecraftforge.fml.ModList.get().isLoaded(modId)) return false;
+		return !isMember(modId) || member(modId);
+	}
+
 	public static List<String> members() {
 		return MEMBERS;
 	}

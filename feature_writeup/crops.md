@@ -1117,8 +1117,9 @@ Findings (2026-10-30):
   `seasons/GrassSeasonHook` (Serene Seasons checked there; the first call per target logs `[creativecalendar] grass
   season hook live: <target>`). `IWGrassSpreadSeasonMixin` and `VineryGrassSlabSeasonMixin` sit on the light check that
   opens the spread (`getMaxLocalRawBrightness`, first call), so what the tick does before it (covered slab turning back
-  to dirt slab, IW path wear recovering) keeps full speed; `BotaniaGrassSeasonMixin` (`tick`) and
-  `VintageLushGrassSeasonMixin` (`randomTick`) hook HEAD, since those methods are only the spread. Targets: IW `ModGrassBlock` (IW registers
+  to dirt slab, IW path wear recovering) keeps full speed; `BotaniaGrassSeasonMixin` (`tick`) hooks HEAD,
+  since that method is only the spread; Vintage `LushGrassBlock.randomTick` (our member source, Creative Delight) calls
+  the hook itself at its top (plan_rules_fixes.md 12f, 2026-11-17; the Calendar mixin is gone). Targets: IW `ModGrassBlock` (IW registers
   it as `minecraft:grass_block`; after the vanilla spread, already rolled once, it spreads over mycelium and rooted
   dirt, which gets its own roll so each kind of spread is slowed by the same share; rooted grass extends it),
   Botania `BotaniaGrassBlock.tick` (its random tick), Vinery `SpreadableGrassSlabBlock` and Vintage `LushGrassBlock`

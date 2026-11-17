@@ -6,7 +6,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('hearthandharvest')) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		// Raspberry Pips, the bush's planting item: 1 Raspberry -> 1 Pips (1.4.1 with Berry Good, shapeless)
@@ -63,13 +63,13 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.grilled_corn, i.blaze_powder, i.any_cheese], i.street_corn, e, 'street_corn', 0.35, 100)
 		R.fdCooking([i.any_dough, i.raw_sausage, i.t_salts, i.milk], i.biscuits_and_gravy, e, 'biscuits_and_gravy', 1.0, 200, i.bowl)
 		R.fdCooking([i.raw_pasta, i.t_salts, i.milk, i.butter, i.any_cheese], i.macaroni_and_cheese, e, 'macaroni_and_cheese', 1.0, 200, i.bowl)
-		var gcCarrot = Platform.isLoaded('miners_delight') ? [i.carrot, i.cave_carrot] : i.carrot   // dishes/meals #64
+		var gcCarrot = global.CD.on('miners_delight') ? [i.carrot, i.cave_carrot] : i.carrot   // dishes/meals #64
 		R.fdCooking([gcCarrot, gcCarrot, i.syrup], i.glazed_carrots, e, 'glazed_carrots', 1.0, 200, i.bowl)
 		R.fdCooking([i.t_food_cooked_meat, i.vegetables, i.any_cheese], i.tamale, e, 'tamale', 1.0, 200, i.corn_husk)
 
 		// By hand
 		// Hops exist only with Vinery (Creative Brewing; plan_bugfix_1114 3.1)
-		var hopsOn = global.has.mod('vinery')
+		var hopsOn = global.has('vinery')
 		if (hopsOn) F.saladCraft([i.hops, i.hops, i.cooking_oil, i.t_salts], i.hops_salad)
 		R.shapeless(i.hot_dog, [i.cooked_sausage, i.bread], e, 'hot_dog')
 		R.shapeless(i.trail_mix, [i.roasted_peanut, i.raisins, i.cocoa_beans, i.t_seeds], e, 'trail_mix')

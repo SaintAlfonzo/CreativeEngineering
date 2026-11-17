@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var f = global.fluid
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -33,7 +33,7 @@ ServerEvents.recipes(e => {
 		// Neapolitan's pickaxe-on-board recipe names neapolitan:ice_cube (no such item) and never loads; the hammer does it
 		// instead: 4 cubes by hand, 3 by machine (Create's own crushing gives 3 + 25% 3), 9 cubes back to 1 ice.
 		R.remove({ id: 'neapolitan:ice_cutting' }, e)
-		if (Platform.isLoaded('immersiveengineering') && Platform.isLoaded('farmersdelight')) {
+		if (Platform.isLoaded('immersiveengineering')) {
 			R.hammering(Item.of(i.ice_cubes, 4), i.ice, e, 'ice_cubes')
 		}
 		if (Platform.isLoaded('immersiveengineering')) {

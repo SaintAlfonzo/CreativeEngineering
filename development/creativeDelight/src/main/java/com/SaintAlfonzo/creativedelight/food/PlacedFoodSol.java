@@ -120,8 +120,7 @@ public final class PlacedFoodSol {
     private static Item sliceFor(Block block) {
         Item mapped = slices.get(block);
         if (mapped != null) return mapped;
-        if (ModList.get().isLoaded("farmersdelight")) return FdPies.slice(block);
-        return null;
+        return FdPies.slice(block);
     }
 
     /** Farmer's Delight classes stay out of the outer class, so it loads without the mod. */

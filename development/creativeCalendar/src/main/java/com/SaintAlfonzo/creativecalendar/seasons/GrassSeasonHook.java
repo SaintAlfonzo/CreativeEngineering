@@ -12,7 +12,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Shared body of the modded grass season mixins (IWGrassSpreadSeasonMixin, BotaniaGrassSeasonMixin,
- * VineryGrassSlabSeasonMixin, VintageLushGrassSeasonMixin; feature_writeup/crops.md 2.12.1). One mixin per target so a
+ * VineryGrassSlabSeasonMixin; feature_writeup/crops.md 2.12.1), also called directly by our own grass blocks (Vintage
+ * Delight's LushGrassBlock in Creative Delight, which requires Calendar). One mixin per target so a
  * missing mod cannot hide the others and each can be {@code require = 1}. The first call per target logs one line, so a
  * scratch run can tell "hook live, season neutral" from "hook never ran".
  * Serene Seasons is checked here, not in the mixin config gate (the gate checks only the grass mod). LoadingModList,

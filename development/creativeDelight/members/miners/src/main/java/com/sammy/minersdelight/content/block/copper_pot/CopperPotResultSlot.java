@@ -48,7 +48,7 @@ public class CopperPotResultSlot extends SlotItemHandler {
     protected void checkTakeAchievements(ItemStack stack) {
         stack.onCraftedBy(player.level, player, removeCount);
         if (!player.level.isClientSide) {
-            pot.awardUsedRecipes(player);
+            pot.popExperience(player);
         }
         removeCount = 0;
     }

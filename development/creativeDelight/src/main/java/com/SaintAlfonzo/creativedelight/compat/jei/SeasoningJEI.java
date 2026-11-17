@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativedelight.compat.jei;
 
+import com.SaintAlfonzo.creativedelight.CDConfig;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -37,7 +39,6 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
@@ -104,7 +105,7 @@ public class SeasoningJEI implements IModPlugin {
             List<Display> displays = new ArrayList<>();
             Set<ResourceLocation> crafting = new HashSet<>();
             Set<ResourceLocation> mixing = new HashSet<>();
-            boolean salt = ModList.get().isLoaded("salt");
+            boolean salt = CDConfig.member("salt");
 
             for (CraftingRecipe recipe : manager.getAllRecipesFor(RecipeType.CRAFTING)) {
                 Display display = recipe instanceof SeasoningRecipe seasoning ? pack(seasoning, table) : null;

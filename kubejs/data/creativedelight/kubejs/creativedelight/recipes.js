@@ -7,7 +7,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -80,7 +80,7 @@ ServerEvents.recipes(e => {
 			var burgerCheese = i.t_cheese_wedge
 			// Patty rule (creativedelight/members #30 R11): Veggies Delight's cooked vegetarian patty fills the patty slot of
 			// the three More Delight burgers it had shapeless versions of (veggiesdelight/recipes.js removes those)
-			var mdPatty = Platform.isLoaded('veggiesdelight') ? [i.beef_patty, i.cooked_vegetarian_patty] : i.beef_patty
+			var mdPatty = global.CD.on('veggiesdelight') ? [i.beef_patty, i.cooked_vegetarian_patty] : i.beef_patty
 			// Vintage Delight's two burgers follow the same rule: Creative Delight members #3 (vintagedelight/recipes.js)
 			;[
 				// [key, pattern, keys, assembly base, deploy steps in order]

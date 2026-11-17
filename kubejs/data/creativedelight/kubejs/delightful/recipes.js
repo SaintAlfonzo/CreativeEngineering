@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('delightful') || !Item.exists(global.item.cantaloupe_seeds)) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 	var n = (id, count) => ({ id: id, count: count })
 	// as cooking/baking.js
 	var PIE = { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin }

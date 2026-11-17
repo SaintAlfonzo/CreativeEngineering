@@ -47,6 +47,14 @@ mandatory=true
 versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
+# Creative Loot: the loot rule engine (global.LOOT.rules) the CD loot scripts call, and GlmMerge for the members' loot
+# modifier fragments (plan_rules_fixes.md D25). AFTER so its script pack runs before CD's.
+[[dependencies.creativedelight]]
+modId="creativeloot"
+mandatory=true
+versionRange="[1.0.0,)"
+ordering="AFTER"
+side="BOTH"
 [[dependencies.creativedelight]]
 modId="farmersdelight"
 mandatory=true

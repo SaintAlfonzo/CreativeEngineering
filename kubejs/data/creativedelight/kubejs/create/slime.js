@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		R.createMixing(i.slime_block, [i.dough_block, i.any_dye_green], e, 'slime_block_from_dough_block', 'heated')

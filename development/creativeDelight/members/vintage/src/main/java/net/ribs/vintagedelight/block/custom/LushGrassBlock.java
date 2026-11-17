@@ -1,5 +1,6 @@
 package net.ribs.vintagedelight.block.custom;
 
+import com.SaintAlfonzo.creativecalendar.seasons.GrassSeasonHook;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.data.worldgen.features.VegetationFeatures;
@@ -95,6 +96,8 @@ public class LushGrassBlock extends GrassBlock {
    }
 
    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
+      // Crop seasons (Creative Calendar, farming/crops #28): out of season the grass does not spread
+      if (GrassSeasonHook.refuse("vintagedelight:LushGrassBlock", state, world, pos)) return;
       if (world.isAreaLoaded(pos, 3)) {
          if (world.getMaxLocalRawBrightness(pos.above()) >= 9) {
             for (int i = 0; i < 4; i++) {

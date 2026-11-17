@@ -47,8 +47,48 @@ global.has._modOf = {
 	'rare-ice': 'rare_ice'
 }
 
-// Whether the mod owning one namespace is loaded (cached: the mod list does not change after startup). A namespace
-// that is itself a mod id needs no row in _modOf.
+// The bundles' member switches (design rule D17, plan_rules_fixes.md section 12): a nested member of Creative Delight
+// or Creative Brewing counts as present only while its [members] switch is on. Each bundle's config class answers
+// (CDConfig, CBConfig: isMember(id), member(id)). Delight's compartments are third-party mods and stay on the mod list
+// here (global.CD.on asks their switch). The classes are
+// looked up on the first call, not when this file loads, and the switch itself is asked on every call (not cached):
+// before the configs load (startup scripts) a member's switch reads as on, so the answer is the mod list's; in event
+// callbacks it is the switch. A bundle that is not installed is skipped.
+global.has._switchClasses = [
+	'com.SaintAlfonzo.creativedelight.CDConfig',
+	'com.SaintAlfonzo.creativebrewing.CBConfig',
+]
+global.has._switches = null
+global.has._switchOf = {}    // mod id -> its bundle's config class, or false (no switch); membership never changes
+global.has.switchOn = function (modId) {
+	if (global.has._switches === null) {
+		var found = []
+		global.has._switchClasses.forEach(function (name) {
+			try { found.push(Java.loadClass(name)) } catch (err) { /* bundle not installed */ }
+		})
+		global.has._switches = found
+	}
+	var sw = global.has._switchOf[modId]
+	if (sw === undefined) {
+		sw = false
+		global.has._switches.forEach(function (cls) {
+			try {
+				if (!sw && cls.isMember(modId)) sw = cls
+			} catch (err) { /* not a member switch class (a headless test stub) */ }
+		})
+		global.has._switchOf[modId] = sw
+	}
+	if (!sw) return true
+	try {
+		return !!sw.member(modId)
+	} catch (err) {
+		return true
+	}
+}
+
+// Whether the mod owning one namespace is present: loaded (cached: the mod list does not change after startup) and,
+// for a bundle member, its switch on (asked every call). A namespace that is itself a mod id needs no
+// row in _modOf.
 global.has.mod = function (ns) {
 	if (global.has._always[ns]) return true
 	var hit = global.has._cache[ns]
@@ -57,5 +97,7 @@ global.has.mod = function (ns) {
 		hit = !!Platform.isLoaded(ns) || (owner !== undefined && !!Platform.isLoaded(owner))
 		global.has._cache[ns] = hit
 	}
-	return hit
+	if (!hit) return false
+	var id = Platform.isLoaded(ns) ? ns : global.has._modOf[ns]
+	return global.has.switchOn(id)
 }

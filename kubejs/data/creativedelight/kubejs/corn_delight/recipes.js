@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var f = global.fluid
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -26,7 +26,7 @@ ServerEvents.recipes(e => {
 		// the one recipe takes either. Time and xp as upstream.
 		R.remove({ id: 'corn_delight:cooking/cornbread_stuffing' }, e)
 		R.remove({ id: 'veggiesdelight:compat/corndelight/cooking/cornbread_stuffing' }, e)
-		var bakedPotato = Platform.isLoaded('veggiesdelight') ? [i.baked_potato, i.baked_sweet_potato] : i.baked_potato
+		var bakedPotato = global.CD.on('veggiesdelight') ? [i.baked_potato, i.baked_sweet_potato] : i.baked_potato
 		R.fdCooking([i.cornbread, i.vegetables, bakedPotato, i.sweet_berries], i.cornbread_stuffing, e, 'cornbread_stuffing', 0.5, 200)
 
 		//######################### Egg solution #########################

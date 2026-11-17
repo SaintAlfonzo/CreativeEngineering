@@ -6,7 +6,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('hearthandharvest')) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 		// 4 Raw Rock Salt in a square give stage 0 of the lick, The Salt's block (N23-9). Lossy against 16 salt by hand, so no loop.

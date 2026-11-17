@@ -8,7 +8,7 @@ ServerEvents.recipes(e => {
 
 	var i = global.item
 	var f = global.fluid
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 

@@ -424,3 +424,7 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
 - 2026-11-17: own lang values in American spelling (plan_rules_fixes.md 15b): Label "color the icon", Eraser "labeled item", the Oven and JEI baking heat lines "fueled", MCA "Gray Eyes"; jars rebuild in P5. Queue CQ-TT-01 to -03. Tooltip strings in scripts and Java follow in the P5 code pass.
 - 2026-11-17: tooltip roles `text`, `data`, `hint`, `value`, `removed`, `uncanny`, `strange` and `global.tooltips.code` in Common's palette (plan_rules_fixes.md section 12, V-43, V-44; lines move in P3); the palette test item behind `[tooltips] paletteDemo` (default false, owner's config true; section 9, V-45). TT-45.
 - **2026-11-17:** P3a of plan_rules_fixes.md (V-43, V-44): Material Information lines use `col.data`, the Precision Sawblade lines `col.text`, `col.value`, `col.data`, the removed-item flag `col.removed` (bold), the armor and tool effect lines Common's `tooltips.code('text')` in place of raw section signs; colors unchanged (CQ-RFX-02).
+- **2026-11-17:** P3b of plan_rules_fixes.md (V-39, V-43, V-44): Creative Delight's client lines use the col roles through
+  a per-file `tipLine(text, role)`; Fertile Soil's villager line is `hint` (green) like Rich Farmland's (was dark blue);
+  `global.tooltips.stripTooltipKeys(text, keys)` strips lines by translation key inside a callback (the placeable food
+  lines use it; `removeTooltipKey` calls it). Queue CQ-RFX-03.

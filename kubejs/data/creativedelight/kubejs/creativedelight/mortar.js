@@ -6,6 +6,8 @@
 // its mortar craft from R.foodGrinding (cooking.js), so it isn't in the catalog. Regenerate the catalog after adding
 // mods or changing grinding recipes, then /reload.
 // Moved from the pack's kubejs/server_scripts/cooking/mortar.js 2026-10-25, rows unchanged.
+var R = global.NCH.forPack('creativedelight')
+
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 
@@ -20,7 +22,7 @@ ServerEvents.recipes(e => {
 			var input = entry.inputKey ? mortarItems[entry.inputKey] : entry.input
 			var output = entry.outputKey ? mortarItems[entry.outputKey] : entry.output
 			if (mortarPurged.indexOf(String(input)) >= 0 || mortarPurged.indexOf(String(output)) >= 0) return
-			global.NCH.mortar(Item.of(output, Math.round(entry.count)), input, e, entry.id, Math.round(entry.inputs))
+			R.mortar(Item.of(output, Math.round(entry.count)), input, e, entry.id, Math.round(entry.inputs))
 			mortarCount++
 		})
 		console.log('[mortar] ' + mortarCount + ' of ' + mortarCatalog.recipes.length + ' catalog crafts')

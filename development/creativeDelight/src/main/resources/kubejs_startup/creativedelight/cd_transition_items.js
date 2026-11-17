@@ -7,7 +7,7 @@
 //   R.createSequencedAssembly(out, in, [...], ['cod_roll'], e, 'any_recipe_id_you_want')
 
 StartupEvents.registry('item', e => {
-	const R = global.NCH
+	const R = global.NCH.forPack('creativedelight')
 	// G5 begin: texture paths only, handed to R.registerIncomplete (an absent mod leaves a missing texture, no error)
 	const SEQUENCED_ASSEMBLIES = [
 		// cooking

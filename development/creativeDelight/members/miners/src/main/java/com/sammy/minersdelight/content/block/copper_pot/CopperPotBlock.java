@@ -149,7 +149,7 @@ public class CopperPotBlock extends BaseEntityBlock implements SimpleWaterlogged
         if (state.getBlock() != newState.getBlock()) {
             if (level.getBlockEntity(pos) instanceof CopperPotBlockEntity pot) {
                 Containers.dropContents(level, pos, pot.getDroppableInventory());
-                pot.getUsedRecipesAndPopExperience(level, Vec3.atCenterOf(pos));
+                pot.popUsedExperience(level, Vec3.atCenterOf(pos));
                 level.updateNeighbourForOutputSignal(pos, this);
             }
             super.onRemove(state, level, pos, newState, isMoving);

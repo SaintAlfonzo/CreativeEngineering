@@ -8,5 +8,5 @@ ServerEvents.tags('block', e => {
 	var t = global.tags
 	var b = global.blocks
 
-	t.add(e, '#minecraft:small_flowers', [b.hh_four_leaf_clover])
+	t.add(e, global.item.t_small_flowers, [b.hh_four_leaf_clover])
 })

@@ -22,36 +22,18 @@ global.delightfulFoodValues = {
 	chopped_clover: [1, 0.35],
 }
 
-ItemEvents.modification(e => {
-	var $DelightfulFoodBuilder = Java.loadClass('net.minecraft.world.food.FoodProperties$Builder')
-
-	Object.keys(global.delightfulFoodValues).forEach(key => {
-		var id = global.item[key]
-		if (typeof id !== 'string') { console.warn('[delightful foods] ' + key + ': not in item_dict'); return }
-		var values = global.delightfulFoodValues[key]
-		try {
-			e.modify(id, item => {
-				var old = item.getFoodProperties()
-				if (!old) { console.warn('[delightful foods] ' + id + ' is not a food'); return }
-				var food = new $DelightfulFoodBuilder().nutrition(values[0]).saturationMod(values[1])
-				if (old.isMeat()) food.meat()
-				if (old.canAlwaysEat()) food.alwaysEat()
-				if (old.isFastFood()) food.fast()
-				var effects = old.getEffects()
-				for (var n = 0; n < effects.size(); n++) food.effect(effects.get(n).getFirst(), effects.get(n).getSecond())
-				item.setFoodProperties(food.build())
-			})
-		} catch (err) {
-			console.warn('[delightful foods] ' + id + ': ' + err)
-		}
-	})
+// Each pair becomes an absolute row of global.foodValueCopies (applied by creativedelight/food_value_copies.js): hunger
+// and modifier set, the meat, always-edible and fast flags and the effects kept.
+global.foodValueCopies = global.foodValueCopies || {}
+Object.keys(global.delightfulFoodValues).forEach(key => {
+	var v = global.delightfulFoodValues[key]
+	global.foodValueCopies[key] = { absolute: { nutrition: v[0], saturationMod: v[1] } }
 })
 
 // Food value copies (rows of global.foodValueCopies, applied by creativedelight/food_value_copies.js). Moved from
 // the pack's startup_scripts/cooking/food_values.js 2026-10-25, rows unchanged.
 //   cantaloupe_slice <- pumpkin_slice              Delightful's 4 / 0.8 + Resistance was far above the other melon
 //                                                  slices (feature_writeup/can_parity.md 4.1)
-global.foodValueCopies = global.foodValueCopies || {}
 Object.assign(global.foodValueCopies, {
 	cantaloupe_slice: 'pumpkin_slice',
 })

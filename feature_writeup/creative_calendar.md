@@ -214,3 +214,7 @@ the same four jars at the next deploy. Calendar's `creativeengineering` range `[
 Xaero, SeasonHUD, Pretty Rain, Cool Rain), 4 scripts, lang, `waila_plugins.json`. No textures, no `@Overwrite`, no shaded
 library, no copied-code markers. mods.toml `GPL-3.0-only`, `creativecalendar-LICENSE.txt` present. Verdict OK: Q3 "all
 own code" holds against the built jar. Summary row in [creative_brewing.md](creative_brewing.md) 9.2.
+- 2026-11-17 (plan_rules_fixes.md P3b, 12f): `VintageLushGrassSeasonMixin` deleted (Vintage Delight's lush grass in
+  Creative Delight calls `GrassSeasonHook.refuse` itself); `time.DateMoves`: jars register a listener that
+  `/ccaltime date` calls on a backward move; the Vinery class-name fallback stays until the Vinery port registers
+  (Creative Brewing, P3c). Queue SQ-PST-10c.

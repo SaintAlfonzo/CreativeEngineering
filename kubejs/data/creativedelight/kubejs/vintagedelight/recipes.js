@@ -7,7 +7,7 @@ ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('vintagedelight')) return
 
 	var i = global.item
-	var R = global.NCH
+	var R = global.NCH.forPack('creativedelight')
 
 	global.CD.recipes(() => {
 
@@ -38,7 +38,7 @@ ServerEvents.recipes(e => {
 		// Pickle: upstream's 5 cucumbers + salt -> 5 pickles, each cucumber slot also takes a zucchini (the zucchini pickles into
 		// the standard pickle; Veggies Delight only).
 		R.remove({ id: 'vintagedelight:fermenting/pickle_from_fermenting' }, e)
-		var PICKLE_VEG = Platform.isLoaded('veggiesdelight') ? [i.cucumber, i.zucchini] : i.cucumber
+		var PICKLE_VEG = global.CD.on('veggiesdelight') ? [i.cucumber, i.zucchini] : i.cucumber
 		R.vdPickling(Item.of(i.pickle, 5), [PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, PICKLE_VEG, i.salt], e,
 			'pickle_from_fermenting', { time: 2400 })
 
@@ -47,7 +47,7 @@ ServerEvents.recipes(e => {
 		// upstream's ghost pepper recipe (kept), one recipe per pickleable in the pepper's slot: 4 cabbage leaves + salt + it
 		// -> 4 kimchi, upstream's time; no pickled pepper on the side (no pepper goes in).
 		var kimchiBases = [
-			['cucumber', Platform.isLoaded('veggiesdelight') ? [i.cucumber, i.zucchini] : i.cucumber],
+			['cucumber', global.CD.on('veggiesdelight') ? [i.cucumber, i.zucchini] : i.cucumber],
 			['onion', i.onion],
 			['egg', i.eggs],
 			['sea_pickle', i.sea_pickle],

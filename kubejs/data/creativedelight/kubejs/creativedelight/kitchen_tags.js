@@ -37,7 +37,7 @@
 		// Cookware picked up by sneak right-click, handle toggled by sneak left-click (TODO cooking/kitchen #27, CD Java
 		// cooking/CookwareHandling, QoL-7). Each mod's block only while it is loaded.
 		t.add(e, b.t_cookware_pickup, [b.cooking_pot, b.skillet])
-		if (Platform.isLoaded('miners_delight')) t.add(e, b.t_cookware_pickup, b.copper_pot)
+		if (global.CD.on('miners_delight')) t.add(e, b.t_cookware_pickup, b.copper_pot)
 		if (Platform.isLoaded('farmersrespite')) t.add(e, b.t_cookware_pickup, b.kettle)
 
 		for (var mat in doughStorage) t.storageBlock(e, mat, doughStorage[mat], { tool: 'shovel' })

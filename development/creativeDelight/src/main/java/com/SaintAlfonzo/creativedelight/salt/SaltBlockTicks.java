@@ -1,5 +1,7 @@
 package com.SaintAlfonzo.creativedelight.salt;
 
+import com.SaintAlfonzo.creativedelight.CDConfig;
+
 import com.mojang.logging.LogUtils;
 import io.github.mortuusars.salt.Dissolving;
 import io.github.mortuusars.salt.Melting;
@@ -12,7 +14,6 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
@@ -61,7 +62,7 @@ public final class SaltBlockTicks {
 
     /** Common setup, before any chunk loads (a section counts its random tickers when it loads). */
     public static void init() {
-        if (!ModList.get().isLoaded("salt")) return;
+        if (!CDConfig.member("salt")) return;
         melters = resolve(MELTERS);
         dissolvers = resolve(DISSOLVERS);
         Block leftover = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(LEFTOVER_SALT_BLOCK));

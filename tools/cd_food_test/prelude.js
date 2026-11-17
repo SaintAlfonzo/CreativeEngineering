@@ -33,6 +33,9 @@ global.NCH = {
 ['remove', 'fdCutting', 'smelting', 'smoking', 'campfireCooking', 'shapeless', 'shaped', 'ceBaking', 'fdCooking', 'createMixing',
 	'createFilling', 'createCompacting', 'hammering', 'ieArcFurnace', 'createSequencedAssembly', 'replaceInput', 'replaceOutput',
 	'ieSqueezing', 'ieBottling', 'ieMixer', 'ieMetalPress', 'createEmptying', 'createBottle', 'smithing', 'mortar'].forEach(function (m) { global.NCH[m] = __rec(m) });
+// forPack(ns) as Common's: the same recording helpers (the namespace is fixed to creativedelight in this stub)
+global.NCH.forPack = function () { return global.NCH };
+global.NCH.logName = function (name) { return 'CD/' + name };
 var __run = function (name) {
 	__log = [];
 	__cbs.forEach(function (cb) { cb(__E) });

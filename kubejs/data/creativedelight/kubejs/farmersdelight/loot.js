@@ -4,6 +4,8 @@
 // Farmer's Delight 1.3.4 loot modifiers on the repacked 1.2.4 (feature_writeup/farmers_delight.md 3), as LootJS
 // rows: 1.3.4's own JSON uses 1.20's any_of condition and its replace_item modifier, neither in 1.2.4.
 
+var R = global.NCH.forPack('creativedelight')
+
 LootJS.modifiers(event => {
 	var i = global.item
 
@@ -14,7 +16,7 @@ LootJS.modifiers(event => {
 		.killedByPlayer()
 		.randomChanceWithLooting(0.02, 0.01)
 		.addLoot(i.onion_farmersdelight)
-		.logName('CE/fd_onion_drops')
+		.logName(R.logName('fd_onion_drops'))
 
 	// A pumpkin broken with a knife (no Silk Touch) gives 4 Pumpkin Slices instead (scavenging_pumpkin)
 	event.addBlockLootModifier(i.pumpkin)
@@ -22,5 +24,5 @@ LootJS.modifiers(event => {
 		.not(n => n.matchMainHand(ItemFilter.hasEnchantment('minecraft:silk_touch')))
 		.removeLoot(i.pumpkin)
 		.addLoot(Item.of(i.pumpkin_slice, 4))
-		.logName('CE/fd_pumpkin_knife')
+		.logName(R.logName('fd_pumpkin_knife'))
 })
