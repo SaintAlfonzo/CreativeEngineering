@@ -6,9 +6,11 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
 
-	// Flower boxes (feature_writeup/flower_pots.md 3.2). Azalea bushes go in no box; Another Furniture's planter box
+	// Flower boxes (feature_writeup/flower_pots.md 3.2). Azalea bushes, melons, pumpkins and moss go in no box; Another Furniture's planter box
 	// also takes these plants, drawn with Supplementaries' flower box models (PlantBoxModels).
-	t.add(e, 'creativecompat:not_in_flower_boxes', [i.azalea, i.flowering_azalea])
+	// Whole blocks a box took as a plant (R12, plan_small_fixes_1116.md; the Flower Test world already left them out)
+	t.add(e, 'creativecompat:not_in_flower_boxes', [i.azalea, i.flowering_azalea, i.melon_block, i.pumpkin, i.carved_pumpkin,
+		i.jack_o_lantern, i.moss, i.moss_carpet])
 	t.add(e, 'another_furniture:planter_box_banned', '#creativecompat:not_in_flower_boxes')
 	t.add(e, 'another_furniture:planter_box_placeables', [
 		i.beetroot_seeds, i.cactus, i.minecraft_carrot, i.chorus_flower, i.cocoa_beans, i.crimson_roots, i.warped_roots,

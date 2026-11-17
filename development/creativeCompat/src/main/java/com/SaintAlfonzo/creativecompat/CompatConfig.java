@@ -27,6 +27,8 @@ public final class CompatConfig {
     public static final TrashSlot TRASH_SLOT;
     public static final Cats CATS;
     public static final GiantSquid GIANT_SQUID;
+    public static final Golems GOLEMS;
+    public static final BoatFriction BOAT_FRICTION;
     public static final Paintings PAINTINGS;
     public static final Shrapnel SHRAPNEL;
     public static final Surface SURFACE;
@@ -68,6 +70,9 @@ public final class CompatConfig {
         TRASH_SLOT = new TrashSlot(builder);
         CATS = new Cats(builder);
         GIANT_SQUID = new GiantSquid(builder);
+        // golem farm cooldown and boat ice friction (plan_small_fixes_1116.md R2, R3; 2026-11-16)
+        GOLEMS = new Golems(builder);
+        BOAT_FRICTION = new BoatFriction(builder);
         PAINTINGS = new Paintings(builder);
         SHRAPNEL = new Shrapnel(builder);
         SURFACE = new Surface(builder);
@@ -328,6 +333,54 @@ public final class CompatConfig {
         /** The stop radius (never below the start), or Alex's Mobs' 60 before the config loads. */
         public static float stop() {
             return SPEC.isLoaded() ? Math.max(GIANT_SQUID.whaleFleeStop.get(), GIANT_SQUID.whaleFleeStart.get()) : 60.0F;
+        }
+    }
+
+    /**
+     * Golem farm cooldown ({@code mobs.GolemCooldown}, mixin {@code VillagerGolemCooldownMixin}; R2, plan_small_fixes_1116.md).
+     * Server side; read on each golem death and each villager summon check.
+     */
+    public static final class Golems {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.IntValue deaths;
+        public final ForgeConfigSpec.IntValue window;
+        public final ForgeConfigSpec.IntValue cooldown;
+
+        private Golems(ForgeConfigSpec.Builder b) {
+            b.comment("Iron golem farm cooldown (server side). A village is its meeting point (bell) within 64 blocks.").push("golems");
+
+            enabled = b.comment("When a village loses villager-summoned iron golems this fast, its villagers stop summoning for a while.",
+                    "Player-built golems neither count nor are affected.").define("enabled", true);
+            deaths = b.comment("Golem deaths in one village that start the cooldown.").defineInRange("deaths", 5, 1, 1000);
+            window = b.comment("Those deaths must fall within this many ticks (12000 = 10 minutes).").defineInRange("window", 12000, 1, 10_000_000);
+            cooldown = b.comment("Ticks the village summons no golems (24000 = 1 in-game day).").defineInRange("cooldown", 24000, 1, 10_000_000);
+
+            b.pop(); // golems
+        }
+
+        public static boolean on() {
+            return SPEC.isLoaded() && GOLEMS.enabled.get();
+        }
+    }
+
+    /**
+     * Boat-only block friction ({@code surface.BoatFriction}, mixin {@code BoatIceFrictionMixin}; R3, plan_small_fixes_1116.md).
+     * Vanilla: ice and packed ice 0.98, blue ice 0.989. Other slippery blocks can join the list (gameplay/blockrunner #4).
+     */
+    public static final class BoatFriction {
+        public final ForgeConfigSpec.BooleanValue enabled;
+        public final ForgeConfigSpec.ConfigValue<List<? extends String>> blocks;
+
+        private BoatFriction(ForgeConfigSpec.Builder b) {
+            b.comment("Block friction for boats only (both sides: the rider's client moves the boat). Players, mobs and items keep",
+                    "the block's own slipperiness.").push("boat_friction");
+
+            enabled = b.comment("Use the list below for boats.").define("enabled", true);
+            blocks = b.comment("\"block id=friction\" rows. Higher is slipperier; vanilla ice and packed ice 0.98, blue ice 0.989,",
+                    "other blocks 0.6.").defineList("blocks",
+                    List.of("minecraft:blue_ice=0.98", "minecraft:packed_ice=0.96", "minecraft:ice=0.94"), o -> o instanceof String);
+
+            b.pop(); // boat_friction
         }
     }
 

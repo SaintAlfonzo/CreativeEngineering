@@ -1,0 +1,40 @@
+# Scratch queue rows AR (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/AR.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-AR repeated blueprint inputs, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P1; [archery.md](../archery.md) AR-19; TODO `tooling/conventions #7`)
+@@date 2026-11-16
+@@jars creativecommon creativeequipment creativeengineering
+@@sources feature_writeup/archery.md development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js
+@@text
+@@text Targets the Creative Common jar installed 2026-11-16 (`NCH.ieBlueprint` merges repeated inputs; headless
+@@text `tools/test_nch_blueprint.sh` passes). Group A, recipe manager only. The 9 recipes keep their ids.
+@@text
+@@table
+## SQ-AR-01 | the 9 blueprint recipes with a repeated input list it once, counted (spectral and split arrows, dropper, observer, piston, thunder detector, note block, jukebox)
+@group A
+@commands `/cdevtest bytype immersiveengineering:blueprint max=400`; `/cdevtest rdetail spectral_arrow`; `/cdevtest rdetail split_arrow`; `/cdevtest rdetail dropper_by_redstonecomponents`; `/cdevtest rdetail observer_by_redstonecomponents`; `/cdevtest rdetail piston_by_redstonecomponents`; `/cdevtest rdetail noteblock`; `/cdevtest rdetail jukebox`; `/cdevtest rdetail thunder`
+@pass each of the 9 recipes exists under its old id; in its `ingredients=` list no ingredient appears twice (spectral: glowstone dust once beside the arrow; split: the arrow once beside the wire; dropper and observer: the stone tag once; piston: planks once and stone once; note block and jukebox: planks once; thunder detector: the mundane potion once); no NCH warning in `logs/kubejs/server.log`
+@fails `NCH._mergeBlueprintInputs` not called or keyed wrongly (compare `tools/test_nch_blueprint.sh`); an id changed: the id is computed before the merge
+> cdevtest bytype immersiveengineering:blueprint max=400
+> cdevtest rdetail spectral_arrow
+> cdevtest rdetail split_arrow
+> cdevtest rdetail dropper_by_redstonecomponents
+> cdevtest rdetail observer_by_redstonecomponents
+> cdevtest rdetail piston_by_redstonecomponents
+> cdevtest rdetail noteblock
+> cdevtest rdetail jukebox
+> cdevtest rdetail thunder
+expect verb=rdetail id=\S*dropper_by_redstonecomponents serializer=immersiveengineering:blueprint
+expect verb=rdetail id=\S*observer_by_redstonecomponents serializer=immersiveengineering:blueprint
+expect verb=rdetail id=\S*piston_by_redstonecomponents serializer=immersiveengineering:blueprint
+kjsreject \[NCH\].*(ieBlueprint|blueprint)
+look in every listed blueprint recipe's ingredients= no item list repeats (counts are not printed; a repeated entry is the old form)
+
+## CQ-AR-01 | Engineer's Workbench crafts the arrows with repeated inputs
+@group client
+@commands survival; Engineer's Workbench with the archery blueprint: 2 glowstone dust + 1 arrow; then 4 arrows + electrum wire; with the redstone components blueprint: 4 stone + quartz + redstone; 3 oak planks + amethyst shard + redstone
+@pass 2 spectral arrows; 2 split arrows; an observer; a note block (AR-19); the output slot shows each before taking
+@fails the workbench still shows nothing: the merged ingredient lost its count (IE `IngredientWithSize`); a tag ingredient that needs two kinds: the merge did not run for tags
+@draft needs a client in a world with an Engineer's Workbench and the blueprints

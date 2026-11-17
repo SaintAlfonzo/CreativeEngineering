@@ -2,110 +2,13 @@
 
 ## Prompt scratchpad, dont touch
 
-add a saltable tooltip/tag that handles salting (result is handled by lookup and returns air if not listed) and remove saltable from permafrost. id like the melt speed to appear faster, id like to increase the number of random ticks meltable items experience on melting, id like an investigation into the efficiency and performance of possible methods. another method could be increasing random ticks for blocks identified by placed heat source. magma should stop snow forming, increase snow instance melt below distance to 2 blocks (snow layers are melted instantly or not melted, on edge of heat range correct?). can performance of permafrost and cryosol melting be optimized if they mirror blue and packed ice and dont experience most melting? can the heat source originating melt behavior work here? i want snow layers to melt by layer, with a higher chance per layer (configurable). rename rock salt ores to 'Rock Salt Vein' and 'Deepslate ...', rock salt is then the name of the item. can undamaged salt melt be stackable? salt evaporation doesnt match its new boosted rate in jei. bamboo has leafy blocks at the top few blocks of grown bamboo, and these bamboo drops twigs bamboo leafs when cut. id like the 4 blocks adjacent to the leafy blocks to have periodic leaf drops and a leaf drop chance like other trees, but with 'pseudo' leaf blocks that dont trigger if another block occupies the space. stack the 4 layer model on top of itself to make a full block version that can be filled like any other leaf stack. are the full layer version of snow and the normal snow block not different? drop the powdered snow conversion if not. mark the saltmelt as a recolored 'the salt' texture in the texture sources. all layers should experience gravity like immersive weatherings and stack by gravity, including salt. i am ok with the messy salt lick path, the regression is expected. change the current acid recips back to heated, and keep the salt w/ rock salt block catalyst heated. implement the slowdowns for any walkthrough with its own block tier for walking on top and through: on is the same as the material, through is slower for leaves and snow, increasing walk through slowness (not on top walk speed) as height increases to 1 less than full block cap, snow layers turn to snow block (presumably) which cant be walked through, and leaf layers stay as layer block that can be walked through with new tweaks. 
-
-## Write up scratchpad, add to the desigated plan: (plan_post_scratch_1115.md )
-
-- misc
-    - magma blocks keep snow off of blocks above them, melt quickly
-        - placed below a stone pathway for a 'heated pathway' that doesnt let snow layers form from snowing. also prevents snowy form on adjacent blocks
-    - snow and snow layers dont melt on blue ice/permafrost
-    - boost global melt speed to configurable rate, 5x by default
-    - add 'requires a spark or flame to light' tooltip to lightable campfires
-    - allow torches to light campfires
-    - boost dragon armor defense by 2 armor bars (4 armor points?) to fill out 2 layers of visual armor bars
-    - immersive weathering cryosol melts like packed ice (to dirt) and perrmafrost melts like blue ice (to dirt)
-    - rare ice cant be made by placing items in ice, only found in world due to worldgen
-
-- salt
-    - tie salt jei displayed yield to configured yield
-        - update other jei tabs that are out of date, including salts
-    - salt/acid issue
-        - remove water-> salt mixing recipe
-        - add heated water + rock salt block -> rock salt block + 2 salt recipe
-    - keep salt block as salt dust block (rename)
-    - where did salt melt texture come from?
-    - rename raw rock salt to rock salt
-    - rock salt block (new name) is the root block of the salt lick
-        - rock salt (new name) item can be used or dispensed to fill salt lick, remove salt layer refilling
-    - rock salt block is 4 rock salt
-    - salt lamp takes rock salt item
-        - swap deepslate for wooden slab
-    - rename vintage salt decor to smooth salt, keep mixed salt names as is. 
-    - salt lick renamed to '{waxed} {heavily} licked rock salt block', keep rock salt block as full block name
-    - salt melt item and mechanics apply to immersive weathering snowy conditional blocks 
-    - salt melt stacks to 16 when durability matches
-
-- layers
-    - ensure blockrunner materials
-    - walkthrough only applies to leaves and snow
-    - ensure no walkthrough for salt, sands, ash, fodder
-    - salt, sands, ash are dust material
-    - snow is snow material
-    - full snow layer blocks turn to powder snow
-    - immersive weathering drops twigs bamboo leaves rarely, allow to stack to a full block
-    - layered snow melts by layer
-    - leaf layers never become solid block, remove the tweaks related to this
-    - leaf layer blocks provide powdered snow-like overlay (experimental) and a mild 'thorny' damage when moving
-        - ensure transparancy of leaf layer blocks can be seed from the inside 
-    - leaf and snow layers cut jump height above half layer height, slow fall speed inside by number of layers 
-    - leather boots allow standing on any snow layer or powdered snow (walkthrough otherwise)
-        - crouch to fall through like scaffold
-
-- raspberry pie
-    - switch back to single page
-    - scale book page size to configurable size, default 125% (icons and text extend off book)
-    - diet buffs screen
-        - move diets slots horizontally
-        - add spacing between permanant buffs and buff label
-        - drop 'needs diversity' line, replace with simplified progress line
-            - stretches length of all slots, tick marks at slots with diversity label
-            - green bar extends from 0 to current diversity, and maxes out at the highest slot diversity on this screen
-    - use monobank replacement lock if loaded for permanant unlockable icon, otherwise awkward potion (configurable)
-    - use create crush everything diamond shard if loaded for permanant buff icon, otherwise diamond
-    - use shield for kb resistance and show in key
-    - use netherite armor for toughness
-    - use supps 2 metal frame if loaded for unlockable slot icon, otherwise an item frame 
-
-- add language 2
-    - saltable tooltip
-    - remove saltable from permafrost
-
-## Loading Tooltip language
-
-- 'Spyglasses, made from amethyst and copper, can be used zoom in on distant things';  
-- 'Ring a bell, by hand or with a projectile, to send villagers indoors and make nearby raiders glow'; 
+## Loading Tooltip language, need to read all tooltips for manual overrides
 
 ## Idea, Notes, Changes (Human scratchpad, don't write up or add to plans unless directed)
 
-- only netherite lunchbox is added currently, remove apple pie versions
-    - add diamond?
-
-- ensure all nether crops grow on nether soil
-- new adzuki rich soil, peanut soil?
-
-- ensure quark endermen block pickup nerf is enabled
-
-- spiders can pathfind and navigate through any web?'
-- investigate philips frozen ocean monument
-    - place palette swapped monument in cold oceans?
-- rare ice investigation, loot table, part of loot tune
-
-- grilled food 
-    - add other meats?
-    - bonus: 
-        - allows extra seasoning slots?
-        - 
-
-- dense effect
-    - given by diving boots
-        - could just be a visual indicator 'false effect' that shows when diving boots behavior is active, determine how hard a new effect would be
-        - 'Increases sinking speed in water. Defying conventional physics, also increases fall speed in the end' description on jei effect
-
-## Power grid notes, dont move
-
-- wire block doenst drop when block under breaks and cant be broken by hand
-    'Block wire' in wthit
+- unbuilt
+    - double fridges
+    - tooltips chat announce
 
 ## Tempad/portals WIP dont move
 
@@ -138,10 +41,6 @@ add a saltable tooltip/tag that handles salting (result is handled by lookup and
     - need to test location boradcaster in multiplayer
     - ensure all apps are added to tempad
     - timeline missing languange in tempad
-
-- portal changes
-    - dont restrict portal placement by location of the color being moved
-        - a blue portal cant be shot so as to make a blue portal move up or down in the same spot
 
 - tempad in server
     - chronomarker used for mining/resource dimension navigation, more valuable resource dimensions availible w/ own tempad (unlock location cards? wandering trader rarely, or found in end chests?)

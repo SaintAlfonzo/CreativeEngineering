@@ -1,0 +1,44 @@
+# Scratch queue rows RE (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RE.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-RE engineering findings F4, F5, F9, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7; [recipes_engineering.md](../recipes_engineering.md) RE-31 to RE-33; TODO `recipes/engineering #3`)
+@@date 2026-11-16
+@@jars creativecommon creativeengineering
+@@sources feature_writeup/recipes_engineering.md kubejs/data/creativeengineering/kubejs/engineering/crystal.js kubejs/data/creativeengineering/kubejs/engineering/dust.js kubejs/data/creativeengineering/kubejs/engineering/redstone.js
+@@text
+@@text Targets the instance's `kubejs/data/creativeengineering/kubejs/engineering/` scripts as of 2026-11-16 (`/reload` is enough). Group A, recipe manager only.
+@@text
+@@table
+## SQ-RE-31 | pressure chamber: 8 coal blocks per diamond (was 9), 4 per diamond shard
+@group A
+@commands `/cdevtest makes minecraft:diamond`; `/cdevtest bytype pneumaticcraft:pressure_chamber max=400`
+@pass a `pneumaticcraft:pressure_chamber` recipe makes `minecraft:diamond*1` from 8 coal blocks (the ingredient shows `minecraft:coal_block`; the count is in `part=fields` or the JSON); the shard recipe from 4 is unchanged
+@fails `crystal.js` `Item.of(i.coal_block, 8)`
+> cdevtest makes minecraft:diamond
+> cdevtest bytype pneumaticcraft:pressure_chamber max=400
+expect verb=makes id=\S+ result=minecraft:diamond\*1 serializer=pneumaticcraft:pressure_chamber
+look the coal block count of the diamond recipe is 8 (rdetail the id from the makes line; part=fields or the dumped JSON)
+
+## SQ-RE-32 | single cinder flour Create filling: redstone, glowstone dust, gunpowder at 25 mB
+@group A
+@commands `/cdevtest rdetail cinder_redstone_filling`; `/cdevtest rdetail cinder_glowstone_filling`; `/cdevtest rdetail cinder_gunpowder_filling`
+@pass three `create:filling` recipes, each one cinder flour -> 1 `minecraft:redstone` / `minecraft:glowstone_dust` / `minecraft:gunpowder`; the fluid (the potion) 25 mB as the other seven singles
+@fails `dust.js` createFilling calls
+> cdevtest rdetail cinder_redstone_filling
+> cdevtest rdetail cinder_glowstone_filling
+> cdevtest rdetail cinder_gunpowder_filling
+expect verb=rdetail id=\S*cinder_redstone_filling serializer=create:filling result=minecraft:redstone\*1
+expect verb=rdetail id=\S*cinder_glowstone_filling serializer=create:filling result=minecraft:glowstone_dust\*1
+expect verb=rdetail id=\S*cinder_gunpowder_filling serializer=create:filling result=minecraft:gunpowder\*1
+look each ingredients= starts with the cinder flour; part=fields (if printed) shows 25 mB
+
+## SQ-RE-33 | thunder detector assembly: the filling step takes the regular mundane potion only
+@group A
+@commands `/cdevtest rdetail thunder_detector`
+@pass the sequenced assembly's filling step fluid NBT has `Bottle:"REGULAR"` and `Potion:"minecraft:mundane"`; in game a splash mundane potion fluid does not advance it (RE-33)
+@fails `redstone.js` filling NBT
+> cdevtest rdetail thunder_detector
+expect verb=rdetail id=\S*thunder_detector\S* .*part=step\d+ serializer=create:filling
+look the filling step line names the mundane potion fluid; if the NBT is not printed, read the recipe JSON (/dumprecipes) for Bottle:"REGULAR"

@@ -9,6 +9,10 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Emu egg #########################
+		// No furnace egg dishes (R13, plan_small_fixes_1116.md): the smoker and campfire forms stay
+		R.remove({ id: 'alexsmobs:boiled_emu_egg' }, e)
+
 		//######################### Shrimp fried rice #########################
 		// Alex's Mobs makes it only in world (a tamed mantis shrimp fries the rice it holds on a furnace). Cooking pot
 		// (TODO dishes/meals #10): Fried Rice + 2 shrimp (Oceanic Delight's #forge:shrimps). The Fried Rice's bowl comes

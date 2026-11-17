@@ -227,8 +227,9 @@ look makers: stonecutting 4 from an iron ingot, shaped 12 from 2 #forge:plates/i
 ## SQ-FO-04 | fried egg, cooking oil, fried chicken recipes
 @group A
 @commands `/zq makes farmersdelight:fried_egg`; `/zq recipes incubation:fried_egg`; `/zq tagsof minecraft:pumpkin_seeds`; `/zq rdetail cooking_oil`; `/zq recipes fried_chicken`; `grep -n "\[NCH\].*cooking_oil" logs/kubejs/server.log`
-@pass fried egg from `minecraft:egg` by smelting 200 t, smoking 100 t, campfire 600 t; no `incubation:fried_egg*` recipe; pumpkin seeds in `rusticdelight:cooking_oil_ingredients`; one FD cooking `..._manual_only` (3 + 3 seeds -> 2 `rusticdelight:cooking_oil`), one heated mixing (3 seeds + glass bottle -> 1), no `sliceanddice:` cooking oil recipe; the Slice & Dice fried chicken mixing still present; no NCH warning
+@pass fried egg from `minecraft:egg` by smoking 100 t and campfire 600 t, no smelting (removed 2026-11-16, SQ-FO-06); no `incubation:fried_egg*` recipe; pumpkin seeds in `rusticdelight:cooking_oil_ingredients`; one FD cooking `..._manual_only` (3 + 3 seeds -> 2 `rusticdelight:cooking_oil`), one heated mixing (3 seeds + glass bottle -> 1), no `sliceanddice:` cooking oil recipe; the Slice & Dice fried chicken mixing still present; no NCH warning
 @fails `F.eggCook` in CD `farmersdelight/recipes.js`; incubation removals
+@reviewed 2026-11-16
 @from batches/r1103/sB_2.qb
 > zq makes farmersdelight:fried_egg
 > zq rdetail fried_egg
@@ -241,7 +242,7 @@ expect \[zq\] recipes matching incubation:fried_egg: 0
 expect \[zq\] item tags of minecraft:pumpkin_seeds: .*\brusticdelight:cooking_oil_ingredients\b
 reject \[zq\] sliceanddice:\S*cooking_oil\S* \{
 kjsreject \[NCH\].*cooking_oil
-look fried egg from minecraft:egg: smelting 200 t, smoking 100 t, campfire 600 t; one FD cooking _manual_only (3 + 3 seeds -> 2 rusticdelight:cooking_oil) and one heated mixing (3 seeds + glass bottle -> 1); the Slice & Dice fried chicken mixing still listed
+look fried egg from minecraft:egg: smoking 100 t, campfire 600 t, no smelting (2026-11-16); one FD cooking _manual_only (3 + 3 seeds -> 2 rusticdelight:cooking_oil) and one heated mixing (3 seeds + glass bottle -> 1); the Slice & Dice fried chicken mixing still listed
 
 ## SQ-FO-05 | egg stacks 64, stack sizes applied
 @group A
@@ -767,3 +768,44 @@ reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argu
 @pass LOOK: at least one addon house over 5 villages, bridges and villagers attached; furniture faces right, lattices and grapes stand, hanging herbs at the old barley / corn spots; chests roll the sky village tables (SVA-03 to SVA-08)
 @fails pool weights; swap table `tools/skyvillage_addon_remap.json`; loot table names in the templates
 @draft no batch holds this row yet
+
+@@section 2
+@@title SQ-FO eggs without a furnace, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P2 R13; [food.md](../food.md) 3.7, FO-62; TODO `dishes/meals #23`)
+@@date 2026-11-16
+@@jars creativecommon creativedelight
+@@sources feature_writeup/food.md kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js kubejs/data/creativedelight/kubejs/moredelight/recipes.js kubejs/data/creativedelight/kubejs/ends_delight/recipes.js kubejs/data/creativedelight/kubejs/alexsmobs/recipes.js
+@@text
+@@text Targets the Creative Delight jar installed 2026-11-16. Group A; recipe manager only (`/cdevtest`).
+@@text
+@@table
+## SQ-FO-06 | cooking pot: oil + 3 eggs -> 3 fried eggs, 4 fried eggs -> 4 omelettes; Rustic's oil fried egg and its Slice & Dice copy gone
+@group A
+@commands `/cdevtest rdetail fried_eggs_from_cooking_oil`; `/cdevtest rdetail omelettes_from_fried_eggs`; `/cdevtest recipes fried_egg_from_cooking_oil`
+@pass `creativedelight:farmersdelightcooking/fried_eggs_from_cooking_oil` result `farmersdelight:fried_egg*3`, ingredients cooking oil + 3 eggs; `creativedelight:farmersdelightcooking/omelettes_from_fried_eggs` result `moredelight:omelette*4`, 4 cooked egg ingredients; no recipe id containing `fried_egg_from_cooking_oil` (Rustic's and `sliceanddice:`)
+@fails `R.fdCooking` calls in CD `rusticdelight/recipes.js`, `moredelight/recipes.js`; the removal runs after Slice & Dice copied the pot recipe
+> cdevtest rdetail fried_eggs_from_cooking_oil
+> cdevtest rdetail omelettes_from_fried_eggs
+> cdevtest recipes fried_egg_from_cooking_oil
+expect verb=rdetail id=creativedelight:farmersdelightcooking/fried_eggs_from_cooking_oil serializer=\S+ result=farmersdelight:fried_egg\*3
+expect verb=rdetail id=creativedelight:farmersdelightcooking/omelettes_from_fried_eggs serializer=\S+ result=moredelight:omelette\*4
+expect verb=recipes text=fried_egg_from_cooking_oil n=0\b
+look oil fried eggs give 3 with rusticdelight:cooking_oil and three minecraft:egg inputs; omelettes 4 from four cooked-egg ingredients
+
+## SQ-FO-07 | no furnace recipe for an egg dish; smoker and campfire forms stay
+@group A
+@commands `/cdevtest bytype minecraft:smelting max=4000`, then grep the lines for fried egg, fried turtle egg, omelette, shulker omelette, fried dragon egg, boiled emu egg; `/cdevtest makes farmersdelight:fried_egg`; `/cdevtest makes moredelight:omelette`
+@pass no `minecraft:smelting` recipe makes `farmersdelight:fried_egg`, `moredelight:omelette`, `ends_delight:shulker_omelette`, `ends_delight:fried_dragon_egg`, `alexsmobs:boiled_emu_egg` or a fried turtle egg; `makes` lists smoking and campfire recipes for the fried egg and the omelette; ids `creativedelight:smelting/fried_egg_from_egg`, `moredelight:omelette_smelting`, `ends_delight:food_smelting/fried_dragon_egg`, `ends_delight:food_smelting/shulker_omelette`, `alexsmobs:boiled_emu_egg` absent
+@fails the CD egg cook family's furnace value (0), the removals in `moredelight/recipes.js`, `ends_delight/recipes.js`, `alexsmobs/recipes.js`
+> cdevtest bytype minecraft:smelting max=4000
+> cdevtest makes farmersdelight:fried_egg
+> cdevtest makes moredelight:omelette
+> cdevtest recipes creativedelight:smelting/fried_egg_from_egg
+> cdevtest recipes moredelight:omelette_smelting
+> cdevtest recipes ends_delight:food_smelting/
+> cdevtest recipes alexsmobs:boiled_emu_egg
+reject verb=bytype id=\S+ result=(farmersdelight:fried_egg|moredelight:omelette|ends_delight:shulker_omelette|ends_delight:fried_dragon_egg|alexsmobs:boiled_emu_egg|\S*fried_?turtle_?egg)\*
+expect verb=recipes text=creativedelight:smelting/fried_egg_from_egg n=0\b
+expect verb=recipes text=moredelight:omelette_smelting n=0\b
+expect verb=recipes text=alexsmobs:boiled_emu_egg n=0\b
+reject verb=recipes id=ends_delight:food_smelting/(fried_dragon_egg|shulker_omelette) 
+look makes lines: the fried egg and the omelette still have a smoking and a campfire recipe

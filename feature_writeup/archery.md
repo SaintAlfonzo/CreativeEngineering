@@ -199,7 +199,7 @@ IE's own cartridge recipes are untouched.
 - [startup_scripts/items/misc_items.js](../development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/misc_items.js) (`creativeequipment:arrow_fletching`), [startup_scripts/_lib/removed_items.js](../kubejs/startup_scripts/_lib/removed_items.js) (NEA quiver and torch arrow).
 - [client_scripts/tooltips.js](../kubejs/client_scripts/tooltips.js) lines 592-618 and 673: one line per arrow.
 - patcherMod: [CycleEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/CycleEnchantmentMixin.java), [StockpileEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/StockpileEnchantmentMixin.java), [RecoveryEnchantmentMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/RecoveryEnchantmentMixin.java), [compat/NockRecipeBookSync.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/compat/NockRecipeBookSync.java) (`CreativeEngineering.java` line 291).
-- `NCH.fletching` (~line 888) and `NCH.ieBlueprint` (~line 1787) in [neoCraftHelper.js](../kubejs/startup_scripts/func/neoCraftHelper.js).
+- `NCH.fletching` (~line 1323) and `NCH.ieBlueprint` (~line 2898) in [neoCraftHelper.js](../development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js) (Creative Common jar). Since 2026-11-16 `ieBlueprint` merges identical inputs (same item or tag and NBT, compared on the emitted JSON) into one counted ingredient through `_mergeBlueprintInputs` (~line 2885); the recipe id is computed before the merge. IE's workbench gives each ingredient the whole pool of its item, so repeated single inputs (2 glowstone, 4 arrows) made the recipe uncraftable. Two different tags that overlap can still starve each other. Headless test: `tools/test_nch_blueprint.sh`.
 - Not here: tipped arrows ([potion_buckets.md](potion_buckets.md) 2.5); the dragon bow and crossbow ([gear_tuning.md](gear_tuning.md), [armor_effects.md](armor_effects.md)).
 
 ## 6. Offline checks
@@ -246,6 +246,10 @@ replacement or a hidden item.
 - [ ] **AR-17 Dedicated server join:** join the dedicated server with NEA installed → no
   `DecoderException ... readerIndex` kick; the log has `[nock-recipe-book] added server-side RecipeBookType`.
 - [ ] **AR-18 Arrow tooltips:** hover a seeker, split and drill arrow → one line each ("Homes in on entities", ...).
+- [ ] **AR-19 Repeated blueprint inputs (`tooling/conventions #7`):** Engineer's Workbench with the archery blueprint:
+  2 glowstone dust + 1 arrow -> 2 spectral arrows; 4 arrows + electrum wire -> 2 split arrows (both uncraftable before
+  2026-11-16). Redstone components blueprint: 4 of one stone kind + quartz + redstone -> observer; 3 oak planks +
+  amethyst shard + redstone -> note block. Queue: SQ-AR-01 (recipe JSON), CQ-AR-01 (workbench).
 
 ## 8. History
 
@@ -261,3 +265,6 @@ replacement or a hidden item.
   `isTradeable` (`m_6594_`), so no librarian (vanilla or DVT) or LC cashier offers them. AR-14 updated. patcherMod built,
   not installed; needs install + restart. Not run in game.
 - 2026-11-04: archery recipes and shaft / fletching tags moved to Creative Equipment (`kubejs/data/creativeequipment/kubejs/equipment/archery.js`, `tags/equipmenttags.js`); `NockRecipeBookSync` too. The NEA enchantment mixins and filters moved to Creative Magic ([creative_magic.md](creative_magic.md)). Same behaviour.
+- 2026-11-16: `NCH.ieBlueprint` merges repeated inputs into one counted ingredient (`tooling/conventions #7`); 9 recipes
+  become craftable (spectral and split arrows, dropper, observer, piston, thunder detector, note block, jukebox). Headless
+  test `tools/test_nch_blueprint.sh`; AR-19 added; queue SQ-AR-01, CQ-AR-01 (plan_small_fixes_1116.md).

@@ -35,7 +35,8 @@ import java.util.WeakHashMap;
  * (red glazed terracotta in butcher stalls) that become Architect's Palette fish blocks standing upright.
  *
  * Config: kubejs/generation_scripts/worldgen/meat_block_swaps.json (tools/meat_block_scan.py) and
- * nether_block_swaps.json (tools/gen_nether_swaps.py from nether_swap_rules.json), both in the same format:
+ * nether_block_swaps.json (tools/gen_nether_swaps.py from nether_swap_rules.json) and misc_block_swaps.json (hand-written,
+ * e.g. the village waystone's glowstone), all in the same format:
  * {"templates": {"template id": [{"pos": [x, y, z], "from": "block id", "to": {"Name": ..., "Properties": {...}}}]}}.
  * A swap applies only where the template still has "from" at "pos" (a mod update that moved things is skipped and
  * logged). Read at every world load; templates load lazily, so a template loaded before (none: they are per server)
@@ -48,7 +49,7 @@ public final class TemplateBlockSwaps {
 	private static final Logger LOG = LogManager.getLogger("creativeworldgen/template-swaps");
 	/** Read in order; a later file's entry for the same template position replaces an earlier one's. */
 	static final List<String> CONFIGS = List.of(BiomeLayoutTuner.WORLDGEN_DIR + "meat_block_swaps.json",
-			BiomeLayoutTuner.WORLDGEN_DIR + "nether_block_swaps.json");
+			BiomeLayoutTuner.WORLDGEN_DIR + "nether_block_swaps.json", BiomeLayoutTuner.WORLDGEN_DIR + "misc_block_swaps.json");
 
 	static final Field PALETTES = ObfuscationReflectionHelper.findField(StructureTemplate.class, "f_74482_");
 	static final Field PALETTE_BLOCKS = ObfuscationReflectionHelper.findField(StructureTemplate.Palette.class, "f_74645_");

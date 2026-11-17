@@ -50,6 +50,10 @@
         { id: 'framedblocks:framed_flower_pot', face: 'up', pts: TOP },
         { id: 'supplementaries:hanging_flower_pot', face: 'north', pts: SIDE, ceiling: true, heldPot: true },
         { id: 'beautify:hanging_pot', face: 'up', pts: TOP, ceiling: true },
+        // R11 (blocks/flower-pots #10, plan_small_fixes_1116.md): the Beautify pot is a lantern, so Supplementaries hangs it
+        // on walls. This column shows that: a wall lantern holding a copy of the Beautify cell to its left (the plant it
+        // took, if any). For the owner to look at; no placement change.
+        { id: 'supplementaries:wall_lantern[facing=south]', ceiling: true, wallOf: 'beautify:hanging_pot', pts: [] },
         { id: 'beautify:botanist_workbench[facing=south]', face: 'up', pts: TOP },
         { id: 'supplementaries:flower_box[facing=north,floor=true]', face: 'up', pts: [[0.17, 0.5], [0.5, 0.5], [0.83, 0.5], [0.5, 0.2]] },
         { id: 'another_furniture:oak_planter_box[facing=north]', face: 'up', pts: TOP },
@@ -63,7 +67,7 @@
     const PRESET_LAYERS = 'minecraft:bedrock*1,minecraft:stone*1,minecraft:dirt*1,minecraft:grass_block*1'
     const KEEP = ['minecraft:grass', 'minecraft:fern', 'minecraft:tall_grass', 'minecraft:large_fern', 'minecraft:vine']
     const EXTRA = ['minecraft:cactus', 'minecraft:bamboo', 'minecraft:hanging_roots']
-    // whole blocks some box takes as a plant; not plants, left out of the table
+    // whole blocks, not plants: every box refuses them (#creativecompat:not_in_flower_boxes, R12), left out of the table
     const EXCLUDE = ['minecraft:melon', 'minecraft:pumpkin', 'minecraft:carved_pumpkin', 'minecraft:jack_o_lantern',
         'minecraft:moss_block', 'minecraft:moss_carpet']
 
@@ -176,8 +180,23 @@
         return 'frame'
     }
 
+    // wallOf column: copy the (planted) holder of the column to the left into a wall lantern on glass; true when it holds a plant
+    function wallCell(level, H, x, z) {
+        let src = level.getBlockState(pos(x - STEP, Y + 1, z))
+        if (key($FWReg.BLOCKS, src.getBlock()) != H.wallOf || String(src) == String(src.getBlock().defaultBlockState())) return false
+        let at = pos(x, Y + 1, z)
+        setState(level, at.north(), $FWBlocks.GLASS.defaultBlockState())
+        setSpec(level, at, H.id)
+        let be = level.getBlockEntity(at)
+        if (be == null) { log('wall lantern did not place'); return false }
+        try { be.setHeldBlock(src); be.setChanged() } catch (err) { log('wall lantern refused ' + src + ': ' + err); return false }
+        level.sendBlockUpdated(at, level.getBlockState(at), level.getBlockState(at), 3)
+        return true
+    }
+
     // one holder x one plant; returns true when the holder took it
     function cell(level, fp, H, x, z, id) {
+        if (H.wallOf) return wallCell(level, H, x, z)
         let at = pos(x, H.ceiling ? Y + 1 : Y, z)   // hanging holders one up, glass above them
         let guard = []   // spots a refused click may place into: above (non-soil) and the clicked side
         if (H.ceiling) setState(level, at.above(), $FWBlocks.GLASS.defaultBlockState())

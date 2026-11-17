@@ -283,6 +283,39 @@ and keeps running while that whale is within 60, so squid scatter from whales fa
 at least the start). Read live each time the goal checks. Vanilla squid have no whale goal (they only flee what hurt
 them); orcas and other whales are untouched.
 
+### 2.11 Iron golem farm cooldown (added 2026-11-16, R2, [plan_small_fixes_1116.md](plan_small_fixes_1116.md) P6)
+
+A village that loses iron golems fast stops summoning new ones for a while; it replaces Quark's "Disable Iron Farms"
+nerf, which stays off (2.13). Creative Compat `mobs/GolemCooldown` (SavedData `creativecompat_golem_cooldown`, one per
+level, saved with the world) counts the deaths of iron golems that are not player-created. Each death is filed under
+the meeting point (bell) POI nearest to the golem within 64 blocks; a death with no meeting point in range is not
+counted. When one village reaches `deaths` (5) within `window` ticks (12000, 10 minutes), mixin
+`VillagerGolemCooldownMixin` (`Villager#spawnGolemIfNeeded`, SRG `m_35397_`, HEAD cancel) stops every villager whose
+nearest meeting point is that village from summoning a golem for `cooldown` ticks (24000, one in-game day).
+Player-built golems are never counted and never blocked (players build them, not villagers). Config
+`config/creativecompat-common.toml` `[golems]`: `enabled` (true), `deaths`, `window`, `cooldown`.
+
+### 2.12 Boat friction on ice (added 2026-11-16, R3)
+
+Boats only: Creative Compat mixin `BoatIceFrictionMixin` (`@Redirect` of `BlockState.getFriction` in
+`Boat#getGroundFriction`, SRG `m_38377_`) asks `surface/BoatFriction` for the block's boat friction. Config
+`[boat_friction]` in `creativecompat-common.toml`: `enabled` (true), `blocks` = `"minecraft:blue_ice=0.98"`,
+`"minecraft:packed_ice=0.96"`, `"minecraft:ice=0.94"` (vanilla 0.989, 0.98, 0.98; higher is slipperier, other blocks
+0.6). Unknown blocks or bad rows are skipped with a `[boat_friction] skipped` warning. Players, mobs and items keep each
+block's own slipperiness. The rider's client moves the boat, so the client needs the same config (both sides).
+Other slippery blocks can join the list (`gameplay/blockrunner #4`).
+
+### 2.13 Quark game nerfs (changed 2026-11-16, R1, `mobs/tweaks #25`)
+
+`config/quark-common.toml` (copy in `configs_edited/root_config/`): the "Game Nerfs" module is on (was off), section
+`[experimental.game_nerfs]`. On: villager discounts reset when a villager is zombified, sheep drop no wool when
+killed, selective mob griefing with
+`Non Griefing Entities` = `["minecraft:enderman"]` (endermen pick up no blocks; creepers explode blocks again, the
+list held both before), and the fixes for the falling block dupe, piston physics exploits, mushroom growth replacing
+blocks and the tripwire hook dupe. Off: Nerf Mending, No Nerf for Mending II, dimension-locked Elytra, Disable Iron
+Farms (iron golems would drop no iron; 2.11 limits farms instead), Disable Ice Roads (boats would not glide on ice;
+2.12 slows them instead).
+
 ## 3. What the pack changes
 
 - **Bubble columns:** `BubbleColumnImmunityMixin` cancels `BubbleColumnBlock#entityInside` (SRG `m_7892_`) at the head
@@ -389,6 +422,7 @@ them); orcas and other whales are untouched.
 - Villager ladders: [McaVillagerPathLaddersMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/McaVillagerPathLaddersMixin.java), [GroundPathNavigationClimbMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/GroundPathNavigationClimbMixin.java), [MoveControlVillagerLadderMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MoveControlVillagerLadderMixin.java); tag in [blocktags.js](../kubejs/server_scripts/tags/blocktags.js), key `t_villager_ladders` in `block_dict.js`.
 - Monster box vaults: [mobs/MonsterBoxVault.java](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mobs/MonsterBoxVault.java) (registered in `CreativeEngineering`), [MonsterBoxBlockEntityMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/MonsterBoxBlockEntityMixin.java), [CreateBreakerMonsterBoxMixin](../development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/CreateBreakerMonsterBoxMixin.java), `CEConfig.MonsterBox`, lang `chat.creativeengineering.monster_box.sneak`, [monster_box_reward.json](../kubejs/data/creativeengineering/loot_tables/misc/monster_box_reward.json), `quark-common.toml` (`Enable Extra Loot Table`, both copies).
 - Giant squid flee distance: Creative Compat [AmGiantSquidAvoidWhalesMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/AmGiantSquidAvoidWhalesMixin.java), `CompatConfig.GiantSquid` (`[giant_squid]`), gate in `CompatMixinPlugin`.
+- Golem cooldown and boat friction: Creative Compat [mobs/GolemCooldown.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mobs/GolemCooldown.java), [VillagerGolemCooldownMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/VillagerGolemCooldownMixin.java), [surface/BoatFriction.java](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/BoatFriction.java), [BoatIceFrictionMixin](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/BoatIceFrictionMixin.java), `CompatConfig` `[golems]`, `[boat_friction]`; Quark: `config/quark-common.toml` `[experimental.game_nerfs]`.
 - KubeJS: [entitytags.js](../kubejs/server_scripts/tags/entitytags.js), [flowers.js](../kubejs/server_scripts/other/flowers.js), [block_properties.js](../kubejs/startup_scripts/changes/block_properties.js), `kubejs/data/bushierflowers/forge/biome_modifier/` (5 files).
 
 ## 6. Offline checks
@@ -507,6 +541,18 @@ them); orcas and other whales are untouched.
   open water → the squid does not flee; whale moved to 12 blocks → it swims away and stops once more than 24 off. With
   `whaleFleeStart = 50`, `whaleFleeStop = 60` it flees at 30 again (Alex's Mobs' own).
 
+- [ ] **MT-52 Golem cooldown [scratch]:** a village with a bell: summon and kill 5 iron golems by the bell within 10 minutes
+  → the villagers summon no golem for one in-game day, even when panicking or gossiping; after it they summon again. A
+  village 200 blocks away is not affected. 4 deaths, or 5 spread over more than 10 minutes, start nothing.
+- [ ] **MT-53 Player golems:** build an iron golem from blocks by the same bell and kill it, 5 times → no cooldown;
+  during a cooldown a player can still build one.
+- [ ] **MT-54 Boats on ice [client]:** row a boat on a long road of ice, then packed ice, then blue ice → each faster than
+  the last and all slower than before (blue ice clearly below the old top speed); walking and a dropped item still
+  slide as before. With `[boat_friction] enabled = false` the old speeds are back.
+- [ ] **MT-55 Quark nerfs:** an enderman by a grass field never picks up a block; a creeper blows up blocks; killing a
+  sheep drops no wool; a villager with a cure discount loses it when zombified again; an iron golem still drops iron;
+  Mending repairs as before; an Elytra works in the Overworld.
+
 ## 8. History
 
 - By 2026-09-27: D&D asphalt friction reset ([blockrunner.md](blockrunner.md)).
@@ -545,6 +591,7 @@ them); orcas and other whales are untouched.
   `MonsterBoxBlockEntityMixin`, `CreateBreakerMonsterBoxMixin`, `[monster_box]`, reward table, obsidian hardness and
   tags, Quark `Enable Extra Loot Table` off. patcherMod 1.1.04 rebuilt into `mods/`. MT-34 to MT-37, MT-47 to
   MT-50 untested, SQ-MB queued.
+- 2026-11-16: iron golem farm cooldown (2.11), boat-only ice friction (2.12), Quark game nerfs on (2.13); Creative Compat built and installed, Quark config edited (plan_small_fixes_1116.md R1 to R3). MT-52 to MT-55; queue SQ-MT-01 to -03, CQ-MT-01. Not run.
 
 ## Owner ideas (scratchpad 2026-10-26)
 

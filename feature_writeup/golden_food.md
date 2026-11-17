@@ -152,7 +152,7 @@ liquid experience, press** (`global.CD.food` `goldenEnchant`; loops and mB in `g
 Every goldenfood golden food, the golden cake included, is its input food in a ring of 8 gold nuggets
 (`#forge:nuggets/gold`, rose gold counts), through `goldenGild` in CD `goldenfood/golden.js` (23 calls). The helper
 removes upstream's shaped recipe (8 gold ingots around the food, served from the donor data) and adds the family's
-heated mixer (food + 6 nuggets) and Arc Furnace (food + 5) routes. Golden carrot: already 8 nuggets
+heated mixer (food + 6 nuggets) and Arc Furnace (food + 4 since 2026-11-16, was 5; `cd_food.js` `gold.arc`, `food/types-and-tuning #27`) routes. Golden carrot: already 8 nuggets
 (`minecraft/golden.js`). **Not changed: the golden apple** (vanilla's 8 gold ingots, `minecraft/golden.js`): the rule
 names golden food in general but "replaces whatever the goldenfood recipes use today"; the apple's recipe is vanilla's,
 so it waits for the owner. The golden milk bucket and honey bottle leave their bucket / bottle in the grid, as upstream.
@@ -237,6 +237,7 @@ Scratch queue section "SQ-GLD Golden Food donor rebuild": SQ-GLD-01 to -05, -07,
 and SQ-GLD-08 rewritten for the removal; SQ-GLD-11 to -14 the assemblies and the removed id.
 Scratch queue section SQ-CDJ7 (2026-11-03): SQ-GLD2-01 (nugget recipes), -02 (gilded assembly), -03 (values), -05
 (gilded cans, after `/dumpfood` and `gen_can_types.py`); CQ-GLD2-04 (gilded names, client).
+Scratch queue 2026-11-16: SQ-RC-01 ([recipes_cooking.md](recipes_cooking.md) RC-186; Arc Furnace gilding takes 4 gold, golden carrot, apple and a goldenfood food).
 
 ## 9. Buff family plan (owner draft, scratchpad 2026-11-13, NOT built)
 
@@ -267,3 +268,7 @@ and not rechecked after the 2026-11-03 value rework (3.6): re-dump before using 
 - Unsorted: golden coffee beans (Rustic Delight, no effects); golden and gilded milk bucket list the standard effects but never apply (milk clears effects).
 - Removed: golden and gilded beetroot soup, mushroom stew, rabbit stew (section 0).
 - Canned versions carry scaled-down effects: Regeneration II 1.25 s, Absorption I 30 s, Nourishment I 30 s (moss can: Regeneration II 2.5 s, Nourishment I 30 s; nutritional bar can: Nourishment I 30 s); canned golden apples has none.
+
+## 11. History
+
+- 2026-11-16: Arc Furnace gilding takes food + 4 gold (was 5) for every `goldenGild` food, golden carrot and apple included (`cd_food.js` `gold.arc`, `food/types-and-tuning #27`); queue SQ-RC-01 (plan_small_fixes_1116.md). Not run.

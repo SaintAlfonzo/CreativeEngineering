@@ -157,6 +157,21 @@ adds `EntityBlock`, `use` and `onRemove`; the block entity `creativecompat:botan
    texture that takes small flowers inside like the flower box (box logic, Supplementaries models) and grows tall
    flowers on top like a planter. Estimate in TODO `potions/enchanting #7`.
 
+### 3.3 Small fixes 2026-11-16 ([plan_small_fixes_1116.md](plan_small_fixes_1116.md) P6, P7)
+
+1. **Whole blocks out of every box** (`blocks/flower-pots #9`, R12): melon, pumpkin, carved pumpkin, jack o'lantern,
+   moss block and moss carpet join `#creativecompat:not_in_flower_boxes` (beside azalea and flowering azalea;
+   `kubejs/data/creativecompat/kubejs/tags/misctags.js`, Creative Compat jar). So the Large Flower Box refuses them
+   (`SuppFlowerBoxPlantsMixin`), Another Furniture's planter box refuses them (`planter_box_banned`), and the Vinery box
+   refuses them (`flower_box_plants` excludes the tag). No tag lists them as box plants: the box that took them did so
+   in its own code. The Flower Test world leaves them out of its table (`EXCLUDE` in `flower_world.js`). `#14` (box
+   accepted whole blocks) was the same request and was already built (`not_in_flower_boxes`, POT-12): closed.
+2. **Rich Hanging Pot on a wall, for review** (`blocks/flower-pots #10`, R11): the Flower Test world has a 13th column
+   right after `beautify:hanging_pot`: a `supplementaries:wall_lantern[facing=south]` on glass holding a copy of the
+   Beautify cell's state (the plant it took). The Beautify pot counts as a lantern, so Supplementaries already hangs it
+   on walls; the column only shows what that looks like with each plant. No placement change. The owner looks and rules
+   keep or remove (POT-19).
+
 ## 4. Decisions (open, owner)
 
 - **D1 "pots hold every flower":** which plants get a vanilla `potted_*` block (map entry + model)? Options: (a) all
@@ -240,6 +255,12 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
 - [ ] **POT-15 Vinery box and pot:** a Vinery flower box placed on the floor sits in the middle of the block (model,
   outline, plants), against a wall at the back as before; an old box keeps its place; it takes everything the planter
   box takes. The Vinery flower pot takes an oak sapling, wheat seeds, cactus, a fern, a rose bush (both halves).
+- [ ] **POT-18 whole blocks out of boxes** (3.3, SQ-POT-09): a melon, pumpkin, carved pumpkin, jack o'lantern, moss block
+  and moss carpet are each refused by the Large Flower Box, an oak planter box and the Vinery flower box (hand keeps
+  the item, the box stays empty); a poppy still goes into each.
+- [ ] **POT-19 wall-hung Rich Hanging Pot (owner)** (3.3, CQ-POT-03): in a fresh Flower Test world, the column after the
+  Rich Hanging Pot holds a wall lantern on glass with the same plant in every row that took one; the owner rules keep
+  (a wall placement for the pot) or remove.
 - [ ] **POT-16 silt pot as soil:** fill a silt pot with rooted dirt; wheat seeds, an oak sapling, sugar cane, cactus and
   a poppy each plant on top and stay after a block update; an unfilled silt pot takes none.
 - [ ] **POT-01 vanilla pot map:** with the matrix open, put 10 plants marked Y in a flower pot and 5 marked blank → Y ones
@@ -294,3 +315,4 @@ Scratch server entries: SQ-POT-01 to SQ-POT-05 in [testing/scratch_queue.md](tes
   "Rooted Dirt" line. patcherMod 1.1.04 rebuilt, not installed. POT-17 added.
 - 2026-11-01: the Flower Test world builder, its preset and lang key moved to Creative Devtools (dev only,
   creative_devtools.md 2); players no longer get the world type.
+- 2026-11-16: melon, pumpkin, carved pumpkin, jack o'lantern, moss block and moss carpet refused by every box (`#creativecompat:not_in_flower_boxes`); Flower Test world column of wall-hung Rich Hanging Pots for the owner (3.3; `blocks/flower-pots #9`, `#10`, `#14` closed as built). POT-18, POT-19; queue SQ-POT-09, CQ-POT-03 (plan_small_fixes_1116.md). Not run.

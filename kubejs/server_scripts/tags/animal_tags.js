@@ -25,9 +25,29 @@
 		})
 	}
 
+	// mobs/bees #4 (plan_small_fixes_1116.md P7): tags that nest a flower tag for another reason (plants, floating items,
+	// planter boxes) keep the removed entries, added to them straight. Computed here, before the removal, because the
+	// jar scripts that own those tags cannot see what this script removed.
+	function members(e, tag, ids) {
+		var all = t._tagMembers(e, tag)
+		return ids.filter(function (id) { return all.indexOf(id) >= 0 })
+	}
+	function keep(e, pairs) {
+		pairs.forEach(function (p) { if (global.has(p[0]) && p[1].length) t.add(e, p[0], p[1]) })
+	}
+
 	ServerEvents.tags('item', e => {
-		t.remove(e, FLOWER_TAGS, wildIn(e, 'minecraft:flowers', []))
-		t.remove(e, FLOWER_TAGS, [i.t_botania_special_flowers, i.flower_crown, i.azalea_flower_pile, i.flowering_azalea_leaf_pile])
+		var notBees = [i.t_botania_special_flowers, i.flower_crown, i.azalea_flower_pile, i.flowering_azalea_leaf_pile]
+		var wild = wildIn(e, 'minecraft:flowers', [])
+		// planter boxes: only the wild plants that were small flowers (no Botania functional flowers, crowns or piles)
+		var smallOut = members(e, 'minecraft:small_flowers', wild)
+		keep(e, [
+			['creativecompat:physics/floats', wild.concat(notBees)],
+			['another_furniture:planter_box_placeables', smallOut],
+			['creativecompat:flower_box_plants', smallOut],
+		])
+		t.remove(e, FLOWER_TAGS, wild)
+		t.remove(e, FLOWER_TAGS, notBees)
 
 		t.add(e, 'blueprint:pig_food', [i.minecraft_carrot, i.minecraft_potato, i.minecraft_beetroot])
 		t.add(e, 'blueprint:cat_food', [i.cod, i.salmon])
@@ -35,6 +55,9 @@
 	})
 
 	ServerEvents.tags('block', e => {
-		t.remove(e, FLOWER_TAGS, wildIn(e, 'minecraft:flowers', WILD_KEEP))
+		var wild = wildIn(e, 'minecraft:flowers', WILD_KEEP)
+		// template_trim/plants nests ground_match/plants
+		keep(e, [['creativeworldgen:ground_match/plants', wild], ['chalk:chalk_cannot_draw_on', wild]])
+		t.remove(e, FLOWER_TAGS, wild)
 	})
 })()

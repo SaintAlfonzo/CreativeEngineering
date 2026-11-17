@@ -1,0 +1,15 @@
+{
+ "_readme": {
+  "what": "Hand-picked template block swaps that are not part of a scan (TemplateBlockSwaps, same format as meat_block_swaps.json). Hand-written; positions read from the template nbt in the named jar.",
+  "entries": "template id -> [{pos: [x, y, z] in the template, from: block id there now, to: block state}]",
+  "waystones": "The glowstone under the village waystone (Waystones 11.4.2 village/common and village/desert waystone pieces, 1 block each at [2, 0, 3]) becomes Quark yellow corundum (structures/contents #9, plan_small_fixes_1116.md R16). Worldgen's waystone ruin reuses the common piece."
+ },
+ "templates": {
+  "waystones:village/common/waystone": [
+   {"pos": [2, 0, 3], "from": "minecraft:glowstone", "to": {"Name": "quark:yellow_corundum"}}
+  ],
+  "waystones:village/desert/waystone": [
+   {"pos": [2, 0, 3], "from": "minecraft:glowstone", "to": {"Name": "quark:yellow_corundum"}}
+  ]
+ }
+}

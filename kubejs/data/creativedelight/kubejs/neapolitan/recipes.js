@@ -12,6 +12,11 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Banana bunch #########################
+		// Knife cutting, 1 bunch -> 6 bananas (dishes/ingredients #18, plan_small_fixes_1116.md R15); Neapolitan's own
+		// right-click opening of the bunch is unchanged
+		R.fdCutting(i.banana_bunch, i.any_knife, Item.of(i.neapolitan_banana, 6), e, 'banana_bunch')
+
 		//######################### Smoothie #########################
 		// The Strawberry Banana Smoothie is removed (global.removedItems; TODO dishes/sweets #5)
 		R.remove({ output: i.strawberry_banana_smoothie }, e)

@@ -10,6 +10,11 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.BoneMealItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -29,8 +34,8 @@ import net.minecraftforge.common.ForgeHooks;
  * Hops vine (plan_bugfix_1114 3.1): the behaviour of Vinery's jungle grape vine (GrapeVineBlock), written here so Creative
  * Delight needs no Creative Brewing class at load. A vine on a wall face (any full face, as vanilla vines), age 0 to 3; it
  * grows 1 in 5 random ticks at light 9 or more (through Forge's crop events, so crop seasons apply) and spreads like a vine.
- * Right-click at age 2 or more picks 0 to 1 hops (+1 at age 3) and goes back to age 1. Shears toggle {@code sterilized}:
- * no growth and no spreading. Bone meal adds one age. Planted with the hops item. Exists only with Vinery loaded, whose
+ * Right-click at age 3 picks 1 to 2 hops and goes back to age 1; younger vines are not picked (R5, plan_small_fixes_1116.md).
+ * Shears toggle {@code sterilized}: no growth and no spreading. Bone meal and every bone-meal-like item adds one age. Planted with the hops item. Exists only with Vinery loaded, whose
  * jungle grape models it draws (blockstate in this member, models by id from the donor jar).
  */
 public class HopsVineBlock extends VineBlock implements BonemealableBlock {
@@ -64,22 +69,39 @@ public class HopsVineBlock extends VineBlock implements BonemealableBlock {
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
         int age = state.getValue(AGE);
-        boolean ripe = age == MAX_AGE;
-        if (!ripe && held.is(Items.BONE_MEAL)) {
-            return InteractionResult.PASS;
-        }
-        if (age > 1) {
+        if (age < MAX_AGE) {
+            // R5 (plan_small_fixes_1116.md): no harvest before age 3. A real BoneMealItem passes to its own useOn (vanilla
+            // bone meal, BonemealEvent); every other bone-meal-like item grows the vine one age here; anything else passes.
+            if (held.getItem() instanceof BoneMealItem || !isFertilizer(held)) {
+                return InteractionResult.PASS;
+            }
             if (!level.isClientSide) {
-                int count = level.random.nextInt(2) + (ripe ? 1 : 0);
-                if (count > 0) {
-                    popResource(level, pos, new ItemStack(HHItems.HOPS.get(), count));
+                performBonemeal((ServerLevel) level, level.random, pos, state);
+                level.levelEvent(1505, pos, 0); // bone meal particles and sound for every client
+                if (!player.getAbilities().instabuild) {
+                    if (held.isDamageableItem()) {
+                        held.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+                    } else {
+                        held.shrink(1);
+                    }
                 }
-                level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
-                level.setBlock(pos, state.setValue(AGE, 1), 2);
             }
             return InteractionResult.sidedSuccess(level.isClientSide);
         }
-        return InteractionResult.PASS;
+        if (!level.isClientSide) {
+            popResource(level, pos, new ItemStack(HHItems.HOPS.get(), level.random.nextInt(2) + 1));
+            level.playSound(null, pos, SoundEvents.SWEET_BERRY_BUSH_PICK_BERRIES, SoundSource.BLOCKS, 1.0F, 0.8F + level.random.nextFloat() * 0.4F);
+            level.setBlock(pos, state.setValue(AGE, 1), 2);
+        }
+        return InteractionResult.sidedSuccess(level.isClientSide);
+    }
+
+    /** H&H's watering-can fertilisers and {@code #creativedelight:bonemeal_like} (tree fertilizer, IE and Botania fertilizer, fertilizer bag, organic mash). */
+    public static final TagKey<Item> BONEMEAL_SUBSTITUTES = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("hearthandharvest", "bonemeal_substitutes"));
+    public static final TagKey<Item> BONEMEAL_LIKE = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("creativedelight", "bonemeal_like"));
+
+    private static boolean isFertilizer(ItemStack stack) {
+        return stack.is(BONEMEAL_SUBSTITUTES) || stack.is(BONEMEAL_LIKE);
     }
 
     @Override

@@ -207,8 +207,15 @@ Findings (2026-10-23, from both jars and the web):
   - JEI information page (CD client `vintagedelight/jei_info.js`).
   - Tests VTD-46, VTD-79; scratch SQ-MXS-01 to -03.
 
-Organic Mash, checked at the same time: it is **not** a dead item. It is the secondary output of both vinegar pickling
-recipes (`fermenting/vinegar_from_jam`, `vinegar_from_jam_bottles`) and an input to Vintage's organic compost crafting
+**Vinegar from apple mash (2026-11-16, `dishes/pickles-and-ferments #6`, R9, [plan_small_fixes_1116.md](plan_small_fixes_1116.md)).**
+Vinegar is made in the Pickling Jar from 3 Vinery apple mash + any mushroom (`#forge:mushrooms`) -> 1 vinegar jar + 3
+organic mash, 2400 ticks (`creativedelight:pickling/vinegar_from_apple_mash`, CD `vintagedelight/jams.js`). The mushroom
+stands in for a crushed fungus enzyme until `pickles-and-ferments #5` adds one. The jam route
+(`creativedelight:pickling/vinegar_from_jam`, any jam + mushroom) and Vintage's `fermenting/vinegar_from_jam` and
+`vinegar_from_jam_bottles` are removed. VTD-87.
+
+Organic Mash, checked at the same time: it is **not** a dead item. It is the secondary output of the vinegar pickling
+recipe (since 2026-11-16 only `creativedelight:pickling/vinegar_from_apple_mash`; were Vintage's `fermenting/vinegar_from_jam`, `vinegar_from_jam_bottles`) and an input to Vintage's organic compost crafting
 recipes (`organic_compost_from_tree_bark_mash`, `_from_rotten_flesh_mash`, `organic_compost_tree_fertilizer`); used on a
 block it works as bone meal x3. All ported as shipped.
 
@@ -868,6 +875,9 @@ Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Crea
 - [ ] VTD-86 **Quiche** (`merges/dishes #8`): the Oven with a pie tin bakes Quiche from pie crust + cheese wedge + milk +
   any egg + any cooked meat, or any mushroom, or a salad green (cabbage, cabbage leaf, dandelion leaf); Zucchini Quiche
   from pie crust + cheese wedge + milk + egg + 2 roasted zucchini. No grid or Create assembly recipe for either.
+- [ ] VTD-87 **Vinegar from apple mash** (`dishes/pickles-and-ferments #6`, SQ-FCB-01 rewritten; the jar run is in game): Pickling Jar, 3 apple
+  mash + a brown or red mushroom -> 1 Vinegar Jar + 3 Organic Mash after 2 minutes; a jam jar + mushroom makes nothing; JEI
+  shows no vinegar recipe from jam.
 
 ## 9. History
 
@@ -962,6 +972,7 @@ Port `-14` and the CD scripts are in the CD jar installed 2026-11-03 00:08 (Crea
   `vintagedelight/recipes.js` (`kimchi_from_*`), new tag `#creativedelight:whole_raw_fish`; Vintage kimchi takes
   Brewin's place in `#creativedelight:soup_veggie_cooked` and alone fills Canned Kimchi (`gen_can_types.py`; the can
   now takes Vintage's values). Kimchi, nut mash (`merges/dishes #7`) and quiche (`merges/dishes #8`): item_merges.md 2.18 to 2.20.
+- 2026-11-16: vinegar from 3 apple mash + any mushroom in the Pickling Jar (+ 3 organic mash); the jam vinegar routes removed (`dishes/pickles-and-ferments #6`). VTD-87; queue SQ-FCB-01 rewritten (plan_small_fixes_1116.md). Not run.
 
 ### Owner decisions 2026-11-02
 

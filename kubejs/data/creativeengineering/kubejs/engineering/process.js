@@ -15,7 +15,7 @@ R.remove({id:'minecraft:blast_furnace'}, e)
 // ############################## Create Press ##############################
 
 //Mechanical Press
-//Replace brass w/ gold, more complex recipe
+//Stiff springs and an iron block instead of Create's recipe
 R.remove({id:'create:crafting/kinetics/mechanical_press'}, e)
 R.shaped(Item.of(i.mechanical_press, 1), [' A ','BCB', ' D '], {A: i.shaft, B: i.springs_stiff, C: i.andesite_casing, D: i.block_iron}, e)
 
@@ -52,7 +52,7 @@ R.shaped(Item.of(i.vibrating_table, 1), ['ABA','ACA', 'DED'], {A: i.springs_stif
 // ############################## Mechanical Crafter ##############################
 
 //Mechanical crafter
-//Replace brass w/ gold, more complex recipe
+//Gold instead of brass, with a redstone mechanism and a crafting table; makes 2
 R.remove({id:'create:crafting/kinetics/mechanical_crafter'}, e)
 R.shaped(Item.of(i.mechanical_crafter, 2), ['GRG','CTC', 'GAG'], {G: i.any_ingot_gold, R: i.redstone_mechanism, C: i.cog, T: i.crafting_table, A: i.andesite_casing}, e)
 

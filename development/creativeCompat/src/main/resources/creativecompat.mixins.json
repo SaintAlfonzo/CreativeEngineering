@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "plugin": "com.SaintAlfonzo.creativecompat.compat.CompatMixinPlugin",
   "mixins": [
+    "VillagerGolemCooldownMixin",
+    "BoatIceFrictionMixin",
     "HandcraftedItemHoldingSaveMixin",
     "HandcraftedNightstandStorageMixin",
     "HandcraftedNightstandUseMixin",

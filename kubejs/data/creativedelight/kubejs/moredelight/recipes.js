@@ -9,6 +9,12 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Omelette #########################
+		// R13 (dishes/meals #23, plan_small_fixes_1116.md): 4 fried eggs -> 4 omelettes in the cooking pot; no furnace
+		// omelette (the smoker and campfire forms stay, so the skillet cooks it)
+		R.remove({ id: 'moredelight:omelette_smelting' }, e)
+		R.fdCooking([i.cooked_eggs, i.cooked_eggs, i.cooked_eggs, i.cooked_eggs], Item.of(i.omelette, 4), e, 'omelettes_from_fried_eggs', 0.35, 200)
+
 		//######################### Toast #########################
 		// Cheese Toast (more_delight.md 2.5): toast + a Flaxen Cheese Wedge, as the other toppings.
 		R.shapeless(i.cheese_toast, [i.toast, i.flaxen_cheese_wedge], e, 'cheese_toast')

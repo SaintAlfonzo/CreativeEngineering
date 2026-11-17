@@ -9,6 +9,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BoneMealItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.context.UseOnContext;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -57,7 +58,9 @@ public abstract class BonemealCharmMixin {
 
             RandomSource random = context.getLevel().getRandom();
 
-            if (random.nextFloat() < CEQConfig.BONEMEAL_CHARM.chance.get()) {
+            // Only bone meal itself is refunded (R7, plan_small_fixes_1116.md): a BoneMealItem subclass from another mod
+            // (fertilisers) is always consumed, even if a future one reaches this injection
+            if (context.getItemInHand().is(Items.BONE_MEAL) && random.nextFloat() < CEQConfig.BONEMEAL_CHARM.chance.get()) {
                 context.getItemInHand().grow(1);
             }
             if (random.nextFloat() < CEQConfig.BONEMEAL_CHARM.damageChance.get()) {

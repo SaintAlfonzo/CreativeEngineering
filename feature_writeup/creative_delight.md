@@ -1589,7 +1589,7 @@ are in `global.CD.FOOD` at the top of the file.
   `_cooked_manual_only` / `_manual_only` keep Create's basin and crafter off them); hand food (`burgerAssemble`,
   `skewerAssemble`, `sandwichAssemble`, `wrapAssemble`: shaped by hand plus one sequenced assembly on the base; `assemble`
   alone takes deploy, `{ fill }` and `{ press }` steps); golden food (`goldenGild`: ring of 8 gold, heated mixer + 6, Arc
-  Furnace + 5; `goldenEnchant`: gold block, 250 mB liquid XP, press, 4 loops). Oven parts for one-off recipes: `F.slot`,
+  Furnace + 4 (5 before 2026-11-16); `goldenEnchant`: gold block, 250 mB liquid XP, press, 4 loops). Oven parts for one-off recipes: `F.slot`,
   `F.ware`, `F.SWEET`.
 - **Culture family** (owner 2026-10-27: meat cultures are their own family): `cultureCut(culture, meat, count)`, knife on
   the board, 4 unless given, no bone meal from the fish cultures (`creativedelight/cultivated_meat.js`).
@@ -1854,7 +1854,7 @@ Keep-or-convert list (files under `kubejs/data/creativedelight/kubejs/`; `rustic
 | `delightful/recipes.js` | Roasted Acorn: `fruitCook` (nuts are in the raw/fruit type); Sinigang grid: `mealCraft` | Baklava (owner: not a family row), milkshakes, nut dough, knives |
 | `alexsdelight/recipes.js` | catfish: `fishSlice`; acacia blossom soup, kangaroo stew: `soupCraft`; kangaroo and lobster pasta: `mealCraft` | none |
 | `farmersdelight/recipes.js` | fried egg: `eggCook`; salmon, cod: `fishSlice`; 6 broth soups and stews: `soupCraft`; 10 meals (fried rice, mushroom rice, fish stew, pasta with mutton, vegetable noodles, ratatouille, pasta with meatballs, dumplings, squid ink pasta, dog food): `mealCraft`; fruit salad: `saladCraft` + `assemble`; mutton wrap: `wrapAssemble`; 11 assemblies (barbecue stick, grilled salmon, bacon and eggs, salmon, cod and kelp rolls, rice medley, roasted mutton chops, shepherd's pie, stuffed potato, steak and potatoes): `assemble` | bread from dough (bread is not a family), salvaging cuts (owner), bone broth and cooked rice from broth (ingredients), cabbage rolls (raw, no bowl), barbecue stick shapeless (the skewer family is shaped: a recipe change), shepherd's pie shapeless and steak and potatoes shaped (no hand call for a bowl meal), gleaming salad feast, pumpkin pie from FD slices, machine and fluid rows |
-| `minecraft/golden.js` | golden carrot, golden apple: `goldenGild` (grid ring, heated mixer 6, Arc Furnace 5); enchanted golden apple: `goldenEnchant` | none; `create/golden.js` and `immersiveengineering/golden.js` folded in and deleted (copies in `development/creativeDelight/moved_code_backup/2026-11-01-framework12/`) |
+| `minecraft/golden.js` | golden carrot, golden apple: `goldenGild` (grid ring, heated mixer 6, Arc Furnace 4 since 2026-11-16); enchanted golden apple: `goldenEnchant` | none; `create/golden.js` and `immersiveengineering/golden.js` folded in and deleted (copies in `development/creativeDelight/moved_code_backup/2026-11-01-framework12/`) |
 
 Not converted, not named in the row: heatless and wrap rows of `veggiesdelight/cooking.js` and `fungidelight/cooking.js`
 (QoL-5 files), `corn_delight/recipes.js` corn soup, `endersdelight/` (being reworked by the Ender's stream the same day),

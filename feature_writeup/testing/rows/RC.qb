@@ -1,0 +1,49 @@
+# Scratch queue rows RC (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/RC.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-RC arc gilding, jars and bottles, banana bunch, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P2; [recipes_cooking.md](../recipes_cooking.md) 2.6, RC-186 to RC-188; TODO `food/types-and-tuning #27`, `items/jars #12`, `dishes/ingredients #18`)
+@@date 2026-11-16
+@@jars creativecommon creativedelight
+@@sources feature_writeup/recipes_cooking.md development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js kubejs/data/creativedelight/kubejs/minecraft/recipes.js kubejs/data/creativedelight/kubejs/neapolitan/recipes.js development/creativeDelight/members/vintage/src/main/resources/data/vintagedelight/recipes/mason_jar.json
+@@text
+@@text Targets the Creative Delight jar installed 2026-11-16. Group A, recipe manager only (`/cdevtest`).
+@@text
+@@table
+## SQ-RC-01 | Arc Furnace gilding takes the food + 4 gold (golden carrot, golden apple, a Golden Food food)
+@group A
+@commands `/cdevtest rdetail golden_carrot_arc_gilding`; `/cdevtest rdetail golden_apple_arc_gilding`; `/cdevtest rdetail golden_melon_slice_arc_gilding`; `/cdevtest bytype immersiveengineering:arc_furnace max=400`
+@pass each recipe present (`serializer=immersiveengineering:arc_furnace`); its ingredients are the food and 4 gold entries (nuggets for the carrot and melon slice, ingots for the apple), not 5; about 25 `_arc_gilding` ids in the bytype list
+@fails `cd_food.js` `gold.arc` (should be 4); `goldenGild` loop; IE arc recipe ingredient order
+> cdevtest rdetail golden_carrot_arc_gilding
+> cdevtest rdetail golden_apple_arc_gilding
+> cdevtest rdetail golden_melon_slice_arc_gilding
+> cdevtest bytype immersiveengineering:arc_furnace max=400
+expect verb=rdetail id=\S*golden_carrot_arc_gilding serializer=immersiveengineering:arc_furnace result=minecraft:golden_carrot\*1
+expect verb=rdetail id=\S*golden_apple_arc_gilding serializer=immersiveengineering:arc_furnace result=minecraft:golden_apple\*1
+look the ingredients= list of each: the food then four gold entries (count them; five = old value); if the arc furnace recipe prints no additives, read the recipe JSON with /cdevtest rdetail ... part=fields
+
+## SQ-RC-02 | mason jar and glass bottle crafts give 4; vanilla glass bottle recipe gone
+@group A
+@commands `/cdevtest makes vintagedelight:empty_mason_jar`; `/cdevtest makes minecraft:glass_bottle`; `/cdevtest recipes minecraft:glass_bottle`
+@pass a crafting recipe makes `vintagedelight:empty_mason_jar*4`; `creativedelight:shaped/glass_bottle` makes `minecraft:glass_bottle*4`; `minecraft:glass_bottle` (vanilla id) is absent
+@fails vintage member `mason_jar.json` not rebuilt; `minecraft/recipes.js` removal or shaped call
+> cdevtest makes vintagedelight:empty_mason_jar
+> cdevtest makes minecraft:glass_bottle
+> cdevtest recipes minecraft:glass_bottle
+expect verb=makes id=\S+ result=vintagedelight:empty_mason_jar\*4 serializer=minecraft:crafting_shaped
+expect verb=makes id=creativedelight:shaped/glass_bottle result=minecraft:glass_bottle\*4
+reject verb=(makes|recipes) id=minecraft:glass_bottle 
+reject verb=makes id=\S+ result=(minecraft:glass_bottle|vintagedelight:empty_mason_jar)\*3 serializer=minecraft:crafting
+look one shaped mason jar recipe giving 4; one shaped glass bottle recipe giving 4 under the creativedelight id
+
+## SQ-RC-03 | banana bunch on the cutting board gives 6 bananas
+@group A
+@commands `/cdevtest rdetail fdcutting/banana_bunch`
+@pass `creativedelight:fdcutting/banana_bunch`, Farmer's Delight cutting, ingredient `neapolitan:banana_bunch`, a knife tool, result 6 `neapolitan:banana`
+@fails `R.fdCutting` in CD `neapolitan/recipes.js`; `i.banana_bunch` key
+> cdevtest rdetail fdcutting/banana_bunch
+expect verb=rdetail id=creativedelight:fdcutting/banana_bunch serializer=farmersdelight:cutting
+expect verb=rdetail id=creativedelight:fdcutting/banana_bunch .*ingredients=neapolitan:banana_bunch
+look result 6 neapolitan:banana (cutting results show as rolled part=results lines)

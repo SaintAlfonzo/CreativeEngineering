@@ -103,3 +103,4 @@ creative_split.md 7.8): CQ-CEQ-01 shields, stepstool, backpack skin and air brak
 - 2026-11-04: carved (wave 7). patcherMod 1.1.09 loses 35 classes, 20 mixins, 9 config sections, the shield models and
   8 lang keys; Equipment takes `harvest.js` back from Creative Delight's tree. Installed 19:17 with Creative Magic and
   a clean-built Creative Delight jar (without `harvest.js`).
+- 2026-11-16: `BonemealCharmMixin` refunds only vanilla `minecraft:bone_meal` (the dragon hoe charm; `gear/tuning #15`, R7, [plan_small_fixes_1116.md](plan_small_fixes_1116.md) P4; brief [gear_tuning.md](briefs/gear_tuning.md)). Built and installed; no test by ruling.

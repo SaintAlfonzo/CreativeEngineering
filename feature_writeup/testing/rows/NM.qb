@@ -1,0 +1,18 @@
+# Scratch queue rows NM (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/NM.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title CQ-NM splash text, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7; [names.md](../names.md) 3.4, NM-14; TODO `ui/misc #7`)
+@@date 2026-11-16
+@@sources feature_writeup/names.md kubejs/assets/minecraft/texts/splashes.txt
+@@text
+@@text Targets the instance's `kubejs/assets/minecraft/texts/splashes.txt` (client resources).
+@@text
+@@table
+## CQ-NM-01 | the title screen can show "Stience!"
+@group client
+@commands open the client; F3+T or restart to the title screen until `Stience!` shows (about 1 in 200), or check the loaded resource: `grep -c "^Stience!$" kubejs/assets/minecraft/texts/splashes.txt` and no resource reload error for `texts/splashes.txt` in latest.log
+@pass `Stience!` is the file's last line and appears as a splash; other splashes still show
+@fails the KubeJS resource pack not loaded on the client, or the file saved with a byte order mark
+@draft random splash; a runner checks the file and the log, the owner sees it on the title screen

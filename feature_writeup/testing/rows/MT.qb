@@ -1,0 +1,58 @@
+# Scratch queue rows MT (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/MT.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-MT golem cooldown, boat ice friction, Quark game nerfs, 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P6, P7 R1 to R3; [mob_block_tweaks.md](../mob_block_tweaks.md) 2.11 to 2.13, MT-52 to MT-55; TODO `mobs/tweaks #25`)
+@@date 2026-11-16
+@@jars creativecompat
+@@sources feature_writeup/mob_block_tweaks.md development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mobs/GolemCooldown.java development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/BoatFriction.java configs_edited/root_config/quark-common.toml
+@@text
+@@text Targets the Creative Compat jar installed 2026-11-16 and the instance's `config/quark-common.toml` (copy into the
+@@text scratch server's `config/`). Group A superflat.
+@@text
+@@table
+## SQ-MT-01 | config: [golems] and [boat_friction] written with their defaults; Quark Game Nerfs on with the ruled values; both mixins applied
+@group A
+@commands boot; read `config/creativecompat-common.toml` `[golems]`, `[boat_friction]`; `config/quark-common.toml` `[experimental.game_nerfs]`; grep debug.log for the two mixins
+@pass `[golems]` enabled true, deaths 5, window 12000, cooldown 24000; `[boat_friction]` blocks blue ice 0.98, packed ice 0.96, ice 0.94; no `[boat_friction] skipped`; Quark `"Game Nerfs" = true`, `Disable Iron Farms` false, `Disable Ice Roads` false, `Non Griefing Entities` only the enderman; `VillagerGolemCooldownMixin` and `BoatIceFrictionMixin` applied, no mixin error
+@fails `CompatConfig` spec; Quark config not copied; mixin target names (`m_35397_`, `m_38377_`)
+bootreject \[boat_friction\] skipped
+bootreject (Mixin apply.*failed|InvalidInjectionException).*(VillagerGolemCooldownMixin|BoatIceFrictionMixin)
+shell grep -A12 '^\[golems\]' config/creativecompat-common.toml | grep -E 'enabled|deaths|window|cooldown'
+shell grep -A12 '^\[boat_friction\]' config/creativecompat-common.toml | grep -E 'enabled|blocks'
+shell grep -nE '"Game Nerfs"|"Disable Iron Farms"|"Disable Ice Roads"|"Non Griefing Entities"|"Disable Wool Drops"' config/quark-common.toml
+shell grep -cE 'VillagerGolemCooldownMixin|BoatIceFrictionMixin' logs/debug.log; true
+look the values as in the pass cell; the debug.log count is at least 2
+
+## SQ-MT-02 | Quark nerfs in play: a killed sheep drops no wool; an iron golem still drops iron; a creeper breaks blocks
+@group A
+@commands `forceload add 760 700 800 740`; `/cdevtest kill 760 -60 700 minecraft:sheep n=10`; `/cdevtest kill 770 -60 700 minecraft:iron_golem n=3`; a 5 x 5 stone pad at 780 -61 700, `summon minecraft:creeper 780 -60 700 {Fuse:0s,ignited:1b}`, wait 2 s, `/cdevtest count 778 -61 698 782 -61 702 minecraft:stone`
+@pass sheep drops have mutton and no wool; golem drops have iron ingots; the stone pad has fewer than 25 stone left (the creeper is no longer in `Non Griefing Entities`)
+@fails `quark-common.toml` not the edited one; Quark GameNerfsModule not loaded
+> forceload add 760 700 800 740
+> cdevtest kill 760 -60 700 minecraft:sheep n=10
+> cdevtest kill 770 -60 700 minecraft:iron_golem n=3
+> fill 778 -61 698 782 -61 702 minecraft:stone
+> summon minecraft:creeper 780 -60 700 {Fuse:0s,ignited:1b}
+sleep 2
+> cdevtest count 778 -61 698 782 -61 702 minecraft:stone
+expect verb=kill drops=.*minecraft:mutton
+reject verb=kill drops=.*minecraft:\w+_wool
+expect verb=kill drops=.*minecraft:iron_ingot
+reject verb=count .*n=25\b
+look sheep: mutton, no wool; golems: iron ingots; stone count below 25
+
+## SQ-MT-03 | golem cooldown: 5 villager-golem deaths by a bell block that village's summoning for a day; player golems unaffected
+@group A
+@commands a bell (meeting point) at 820 -60 700 with villagers; summon 5 iron golems (`PlayerCreated:0b`) and kill them within 10 minutes; make the villagers want a golem (3 villagers panicking near a zombie, or gossip at the bell); repeat with `PlayerCreated:1b` golems by a second bell 200 blocks away
+@pass after the 5 deaths no iron golem appears near the first bell for 24000 ticks while the villagers panic; after the cooldown one does; the second bell's village summons normally; `data/creativecompat_golem_cooldown.dat` holds the first village after `/save-all`
+@fails `GolemCooldown` death listener (`isPlayerCreated`), meeting point POI lookup (64 blocks), `VillagerGolemCooldownMixin` not cancelling
+@draft villager golem summoning needs panicking or sleeping villagers over game time; write the steps with /cdevtest tickwarp and a POI-ready bell when a runner picks it up
+
+## CQ-MT-01 | boats on ice: blue ice, packed ice, ice each slower than vanilla, in that order; walking unchanged
+@group client
+@commands a straight 200-block road of each of ice, packed ice, blue ice; row a boat along each and note top speed (F3 or timing 100 blocks); walk and sprint on each; then `[boat_friction] enabled = false` (restart) and repeat once on blue ice
+@pass with the config on: ice slowest, packed ice faster, blue ice fastest, blue ice clearly below its off-config speed; walking and sprinting feel the same with the config on and off; dropped items slide as before
+@fails `BoatIceFrictionMixin` (`Boat#getGroundFriction`) not applied on the client (the rider's client moves the boat; both sides need the config)
+@draft needs a client and a rider

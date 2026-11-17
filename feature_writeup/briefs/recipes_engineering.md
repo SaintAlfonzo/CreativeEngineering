@@ -154,7 +154,7 @@ Ids above (derived from `NCH.toId`; check with `/kubejs` recipe search after the
 
 ## engineering #3: Smaller findings
 
-Status Planned · Work KubeJS · TODO `recipes/engineering #3` (F4, F5, F8, F9)
+Status Built 2026-11-16 · Work KubeJS · TODO `recipes/engineering #3` (F4, F5, F8, F9)
 
 ### Goal
 Fix four small inconsistencies in one pass.
@@ -216,6 +216,8 @@ Fix four small inconsistencies in one pass.
   the same problem; keep inputs value-consistent.
 
 ### Tests
+Built 2026-11-16 ([plan_small_fixes_1116.md](../plan_small_fixes_1116.md) P7): numbered RE-31, RE-32, RE-33 in
+[recipes_engineering.md](../recipes_engineering.md) (RE-24 to RE-30 were taken); queue SQ-RE-31 to -33.
 - **RE-24 Coal:** 9 coal blocks in a pressure chamber at 8 bar → a diamond (1 block left) or 2 shards (1 left); either
   is one diamond's worth.
 - **RE-25 Cinder singles:** spout 25 mB strength / night vision / harming potion onto one cinder flour → 1 redstone /

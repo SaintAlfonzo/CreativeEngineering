@@ -101,6 +101,7 @@ i.diamond_watering_can = 'hearthandharvest:diamond_watering_can';
 i.netherite_watering_can = 'hearthandharvest:netherite_watering_can';
 i.dragon_watering_can = 'hearthandharvest:dragon_watering_can';
 i.t_bonemeal_substitutes = '#hearthandharvest:bonemeal_substitutes';
+i.t_bonemeal_like = '#creativedelight:bonemeal_like'; // hops vine fertilisers besides bone meal and the substitutes (plan_small_fixes_1116.md R5)
 // Hearth and Harvest block machines (hearth_and_harvest.md 3.1, 3.2)
 i.fluid_jug = 'hearthandharvest:jug';
 i.water_trough = 'hearthandharvest:trough';
@@ -193,6 +194,7 @@ i.goat_milk_bucket = 'hearthandharvest:goat_milk_bucket';
 i.sap_bucket = 'hearthandharvest:sap_bucket';
 i.hay_rug = 'hearthandharvest:hay_rug';
 i.straw_rug = 'hearthandharvest:straw_rug';
+i.t_clip_break_overlay = '#creativedelight:clip_break_overlay'; // block tag: crack overlay drawn without quads outside the block (rugs, plan_small_fixes_1116.md R4)
 i.hops_bag = 'hearthandharvest:hops_bag';
 i.manure_bag = 'hearthandharvest:manure_bag';
 i.manure_block = 'hearthandharvest:manure_block';
