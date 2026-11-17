@@ -6,6 +6,11 @@ the row's LOOKs; run-doc verdict tables are generated from the files. Called thr
     qrun.py judge RES ID N VERDICT EVIDENCE [--by WHO] [--text]
                                                         fill look N (1-based) of row ID
     qrun.py judge RES --file TSV [--by WHO]             same from a file: ID<TAB>N<TAB>VERDICT<TAB>EVIDENCE[<TAB>text]
+    qrun.py judge RES ID --reclassify BATCH-FAULT|HARNESS|INCONCLUSIVE --cause "who, when, why" [--by WHO]
+                                                        a FAILed row becomes a batch fault (scratch plan 3.6); the
+                                                        failed checks stay as they are, `reclassified` records it
+HARNESS (P2.4): qrun itself gives a row HARNESS instead of FAIL when only harness faults failed (a regex that does not
+compile, a capture left unset by a skipped row) or when a shell exit code is the only failure and the log checks passed.
     qrun.py table RES [RES ...] [--ids ID,..] [--open]  markdown | ID | Result | Evidence | for the run doc, then counts
                                                         (--open: rows not PASS; a later RES wins for a rerun row)
 
@@ -36,9 +41,14 @@ def path(res, rid):
 
 
 def verdict_of(d):
+    if d.get("reclassified"):
+        return d["reclassified"]["to"]
     if d.get("crash"):
         return "CRASH"
-    if any(not c["ok"] for c in d["checks"]):
+    bad = [c for c in d["checks"] if not c["ok"]]
+    if any(c.get("harness") for c in bad):
+        return "HARNESS"
+    if bad:
         return "FAIL"
     if any(l["verdict"] is None for l in d["looks"]):
         return "LOOK"
@@ -47,7 +57,7 @@ def verdict_of(d):
     return max((l["verdict"] for l in d["looks"]), key=RANK.get)
 
 
-def write(res, row, r, checks, batch, mode, crash=None):
+def write(res, row, r, checks, batch, mode, crash=None, stamps=None):
     """Called by qrun after each row. r: qrun's result dict (result, looks, shots, lines, started, ended)."""
     os.makedirs(os.path.join(res, "verdicts"), exist_ok=True)
     p = path(res, row["id"])
@@ -67,7 +77,9 @@ def write(res, row, r, checks, batch, mode, crash=None):
          "checks": checks, "looks": looks, "shots": r.get("shots", []),
          "log": f"rows/{rid}.log" if os.path.exists(os.path.join(res, "rows", rid + ".log")) else None,
          "shell": f"rows/{rid}.shell.txt" if os.path.exists(os.path.join(res, "rows", rid + ".shell.txt")) else None,
-         "lines": r.get("lines"), "crash": crash, "previous": prev}
+         "lines": r.get("lines"), "crash": crash, "previous": prev,
+         # identities of the own jars the run pinned (qpin.py); qplan.py judges the row current against mods/
+         "stamps": stamps}
     d["verdict"] = verdict_of(d)
     json.dump(d, open(p, "w"), indent=1)
     return d
@@ -121,10 +133,45 @@ def evidence_of(d):
     return "; ".join(parts).replace("|", "/").replace("\n", " ")
 
 
+RECLASS = ("BATCH-FAULT", "HARNESS", "INCONCLUSIVE")
+
+
+def reclassify(res, rid, to, cause, by="agent"):
+    """Scratch plan 3.6 (owner ruling 2026-11-16): a FAILed row may become BATCH-FAULT (or HARNESS / INCONCLUSIVE) with
+    a recorded cause; checks are never edited, the failed check stays ok: false. Returns an error text or None."""
+    to = to.upper()
+    if to not in RECLASS:
+        return f"{rid}: --reclassify takes one of {', '.join(RECLASS)}"
+    if not cause or not cause.strip():
+        return f"{rid}: --cause is required (who, when, why)"
+    p = path(res, rid)
+    if not os.path.exists(p):
+        return f"{rid}: no verdict file {p}"
+    d = json.load(open(p))
+    if d.get("reclassified"):
+        frm = d["reclassified"]["from"]
+    else:
+        frm = d.get("verdict") or verdict_of(d)
+    if frm not in ("FAIL", "HARNESS", "CRASH", "LOOK") and not d.get("reclassified"):
+        return f"{rid}: verdict {frm}; only a FAIL, HARNESS, CRASH or LOOK row is reclassified"
+    d["reclassified"] = {"from": frm, "to": to, "cause": cause.strip(), "by": by,
+                         "at": time.strftime("%Y-%m-%d %H:%M:%S")}
+    d["verdict"] = verdict_of(d)
+    json.dump(d, open(p, "w"), indent=1)
+    return None
+
+
 def main_judge(a):
     if not a:
         sys.exit(__doc__)
     res = a[0]
+    if "--reclassify" in a:
+        to = a[a.index("--reclassify") + 1]
+        cause = a[a.index("--cause") + 1] if "--cause" in a else ""
+        by = a[a.index("--by") + 1] if "--by" in a else "agent"
+        e = reclassify(res, a[1], to, cause, by)
+        print(e or f"{a[1]}: reclassified as {to.upper()} ({cause})")
+        return 1 if e else 0
     by = a[a.index("--by") + 1] if "--by" in a else "agent"
     text = "--text" in a
     rest = [x for i, x in enumerate(a[1:], 1) if x not in ("--by", "--text", "--file") and a[i - 1] not in ("--by", "--file")]

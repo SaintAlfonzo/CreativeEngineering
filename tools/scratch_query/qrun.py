@@ -15,6 +15,10 @@
     qrun.py judge RES [...]                                     open LOOKs; fill one (qverdict.py docstring)
     qrun.py table RES [RES ...] [--ids ..] [--open]             run-doc verdict table from RES/verdicts/
     qrun.py toml FILE SECTION KEY VALUE                         set KEY under [SECTION] (added if absent)
+    qrun.py plan [--jars a,b] [--never] [--failed] [--all] [--release] ...   rows a run needs from changed jar stamps
+                                                                and sources (qplan.py docstring)
+    qrun.py playtest [--out FILE] / qrun.py states              owner playtest checklist / row states per code
+    qrun.py drive start|resume|status|stop RUN [plan options]   resumable run driver (qdrive.py docstring)
 
 run / client: lint runs first (errors printed, the batch runs anyway; --no-lint skips it). Crash watch (qwatch.py,
 --no-watch skips it): the JVM with cwd OUT/srv or GAME (or --pid P), new hs_err_pid*.log and crash-reports/ files are
@@ -71,7 +75,7 @@ import sys
 import time
 
 INST = os.path.abspath(os.path.join(os.path.dirname(__file__), "../.."))
-SCRATCH = os.path.join(INST, "tools/creative_labels_test/scratch_server.sh")
+SCRATCH = os.environ.get("QRUN_SCRATCH", os.path.join(INST, "tools/creative_labels_test/scratch_server.sh"))
 PERF = os.path.join(INST, "tools/perf/session/perf_session.sh")
 OPS = ("==", ">=", "<=", ">", "<")
 
@@ -327,6 +331,7 @@ def compare(n, op, m):
 
 
 VARS = {}
+CAPTURES = set()   # capture names defined anywhere in the batch (run_batch fills it)
 
 
 def sub(s):
@@ -352,10 +357,26 @@ def run_row(t, row, res, checks=None):
     fails, looks, shots = [], [], []
     checks = [] if checks is None else checks
 
-    def chk(step, arg, ok, detail=""):
-        checks.append({"step": step, "arg": arg, "ok": ok, "detail": detail})
+    def chk(step, arg, ok, detail="", harness=False):
+        checks.append({"step": step, "arg": arg, "ok": ok, "detail": detail} | ({"harness": True} if harness else {}))
         if not ok:
-            fails.append(detail)
+            fails.append(("HARNESS: " if harness else "") + detail)
+
+    def rx_ok(step, pat):
+        """HARNESS (P2.4): a regex that does not compile is a batch fault, not a game FAIL."""
+        try:
+            re.compile(pat)
+            return True
+        except re.error as e:
+            chk(step, pat, False, f"regex does not compile: {e}", harness=True)
+            return False
+
+    def unset(step, arg):
+        """HARNESS (P2.4): a {NAME} still unresolved after substitution names a capture whose row was skipped or failed."""
+        left = [n for n in re.findall(r"\{([A-Za-z_][A-Za-z_0-9]*)(?:[+-]\d+)?\}", arg) if n in CAPTURES]
+        if left:
+            chk(step, arg, False, f"capture {', '.join(left)} unset (its row was skipped or failed)", harness=True)
+        return bool(left)
 
     def since(o, side):
         """Log lines since o; side 'srv' / 'cli' (pair mode, TX-30) reads one game's log, '' every log of the target."""
@@ -371,6 +392,12 @@ def run_row(t, row, res, checks=None):
         side, _, word = word.rpartition(":")
         if word in ("cmd", "shell", "waitlog"):
             arg = sub(arg)
+            if unset(word, arg):
+                continue
+        if word in ("capture", "waitlog") and not rx_ok(word, arg.partition(" ")[2] if word == "capture"
+                                                          else arg.rsplit(" ", 1)[0] if re.search(r" \d+$", arg)
+                                                          else arg):
+            continue
         if word == "capture":
             name, _, pat = arg.partition(" ")
             hit = [m for m in (re.search(pat, l) for l in since(off, side)) if m]
@@ -443,7 +470,7 @@ def run_row(t, row, res, checks=None):
                 t.row = row["id"]
                 err = t.do(sub(arg))
                 chk("do", arg, not err, err or "ok")
-    time.sleep(2)
+    time.sleep(float(os.environ.get("QRUN_SETTLE", "2")))   # log flush before the checks; the offline tests use less
     watch_check(t)
     segs, wholes = {"": t.log.since(off)}, {}
     for word, arg, _ in row["steps"]:
@@ -451,6 +478,11 @@ def run_row(t, row, res, checks=None):
         if side not in segs:
             segs[side] = since(off, side)
         seg = segs[side]
+        if word in ("expect", "reject", "bootexpect", "bootreject", "kjsexpect", "kjsreject") and not rx_ok(word, arg):
+            continue
+        if word == "count" and re.match(r"(.+)\s+(==|>=|<=|>|<)\s+(\d+)$", arg) and not rx_ok(
+                word, re.match(r"(.+)\s+(==|>=|<=|>|<)\s+(\d+)$", arg).group(1)):
+            continue
         if word in ("expect", "reject"):
             hit = [l for l in seg if re.search(arg, l)]
             if word == "expect":
@@ -484,7 +516,19 @@ def run_row(t, row, res, checks=None):
         f.write("\n".join(segs[""]) + "\n")
     with open(os.path.join(res, "timeline.tsv"), "a") as f:
         f.write(f"{t0:.1f}\t{time.time():.1f}\t{t.kind}\t{row['id']}\n")
-    result = "FAIL" if fails else ("LOOK" if looks or shots else "PASS")
+    # HARNESS (P2.4): only harness faults failed, or the only failure is a shell exit code while every log check passed
+    # (e.g. grep -c printing 0 exits 1); the row is then a batch fault for the runner to fix, not a game FAIL
+    bad = [c for c in checks if not c["ok"]]
+    if any(c.get("harness") for c in bad):
+        # a harness fault (bad regex, unset capture) leaves the row unjudged: its other failed checks follow from it
+        result = "HARNESS"
+    elif bad and all(c["step"] == "shell" for c in bad) and any(
+            c["ok"] and c["step"] in ("expect", "count", "waitlog", "bootexpect", "kjsexpect") for c in checks):
+        for c in bad:
+            c["harness"] = True
+        result = "HARNESS"
+    else:
+        result = "FAIL" if fails else ("LOOK" if looks or shots else "PASS")
     return {"result": result, "fails": fails, "looks": looks, "shots": shots, "title": row["title"],
             "at": time.strftime("%Y-%m-%d %H:%M:%S"), "lines": len(segs[""]), "started": t0, "ended": time.time()}
 
@@ -555,6 +599,12 @@ def main():
             kinds = sorted({w for w, _, _ in r["steps"]})
             print(f"{r['id']:<16} {r['title'][:70]:<70} {','.join(kinds)}")
         return
+    if a[0] == "drive":
+        import qdrive
+        sys.exit(qdrive.main(a[1:]))
+    if a[0] in ("plan", "playtest", "states"):
+        import qplan
+        sys.exit(qplan.main(a))
     if a[0] in ("pair", "matrix"):
         import qpair
         sys.exit((qpair.main_pair if a[0] == "pair" else qpair.main_matrix)(a[1:]))
@@ -588,6 +638,18 @@ def run_batch(a, mode, t=None):
         if fs:
             print(f"lint: {sum(1 for x in fs if x[0] == 'E')} E, {sum(1 for x in fs if x[0] == 'W')} W "
                   f"(qrun.py lint {batch} for the warnings); running anyway")
+    stamps = None
+    if mode == "server" and os.path.isdir(os.path.join(target, "srv")):
+        # pinned jars (qpin.py, P2.4): refuse a server whose own jars are links, changed since prep, or unlisted
+        import qpin
+        probs = qpin.verify(target)
+        if probs and "--no-pin" not in a:
+            for p in probs:
+                print("REFUSE", p)
+            sys.exit("qrun: not starting (pinned-jar check); --no-pin overrides and is recorded in the verdicts")
+        stamps = qpin.stamps(target)
+        if probs:
+            stamps = dict(stamps or {}, _no_pin="; ".join(probs)[:500])
     if t is None:
         t = make_target(mode, target)
         t.watch = None
@@ -606,7 +668,9 @@ def run_batch(a, mode, t=None):
     started = start is None
     crashdir = os.path.join(target, "srv", "crash-reports") if a[0] == "run" and t.watch is None else None
     crashes0 = set(os.listdir(crashdir)) if crashdir and os.path.isdir(crashdir) else set()
-    for row in parse(batch):
+    allrows = parse(batch)
+    CAPTURES.update(arg.split(" ", 1)[0] for r in allrows for w, arg, _ in r["steps"] if w.endswith("capture"))
+    for row in allrows:
         if crashdir and os.path.isdir(crashdir) and set(os.listdir(crashdir)) - crashes0:
             # the server died: later rows would only time out (r1102b 19:03, a probe crashed the tick loop)
             print(f"ABORT: server crash report {sorted(set(os.listdir(crashdir)) - crashes0)} before {row['id']}")
@@ -645,7 +709,7 @@ def run_batch(a, mode, t=None):
         results[row["id"]] = r
         write_results(res, results)
         import qverdict
-        qverdict.write(res, row, r, checks, batch, mode, crash)
+        qverdict.write(res, row, r, checks, batch, mode, crash, stamps)
         with open(vp, "w") as f:
             json.dump(VARS, f, indent=1)
         print(r["result"], "; ".join(r["fails"])[:200])

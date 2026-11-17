@@ -3,7 +3,8 @@
 #   prep_srv.sh OUT LEVEL A|B [prop=value ...]
 # scratch_server.sh setup, then:
 #   - every jar HARD-LINKED (cp -l) instead of symlinked, so a parallel session's installToMods or rebuild cannot
-#     break a booting server (installToMods moves the old file; the link keeps it)
+#     break a booting server (installToMods moves the old file; the link keeps it); at the end own jars are COPIED
+#     and pinned (qpin.py: OUT/pinned.json; qrun.py run refuses a server whose pinned jars changed)
 #   - dev jars newer than mods/ swapped in (SWAPS below: build/libs jar replaces the mods/ jar of the same mod)
 #   - the dev-only perfBot jar added (bots = fake players; never in the instance's mods/), -Dcdevperfbot.out=perf/bot
 #   - /zq probe copied in as a scratch-only server script, plus tools/scratch_query/datapack/zq (tag #zq:villagers)
@@ -107,5 +108,9 @@ if [ "$GROUP" = B ]; then
   setprop level-type 'minecraft\:normal'; setprop generate-structures true; setprop level-seed 8675309
 fi
 for kv in "$@"; do setprop "${kv%%=*}" "${kv#*=}"; done
+# pin (plan_process_overhaul.md P2.4): own jars become real copies, OUT/pinned.json records their stamps; qrun.py run
+# refuses to start when they change, turn into links again, or an unlisted jar is in mods/
+python3 "$INST/tools/scratch_query/qpin.py" pin "$OUT"
+python3 "$INST/tools/scratch_query/qpin.py" verify "$OUT" | grep -v '^qpin: OK' || true
 echo "prep done: $(ls mods | wc -l) jars, level $LEVEL, group $GROUP"
 grep -E '^(level-type|level-seed|difficulty|spawn-monsters|spawn-animals|gamemode)=' server.properties | tr '\n' ' '; echo
