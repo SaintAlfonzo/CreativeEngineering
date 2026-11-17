@@ -9,6 +9,12 @@ Files: queue [scratch_queue.md](../../../feature_writeup/testing/scratch_queue.m
 `feature_writeup/testing/scratch_run_<date>.md`, runner claim [RUNNER.md](../../../feature_writeup/testing/RUNNER.md),
 gotchas [gotchas.md](gotchas.md) (read its "Before the first boot" section before booting, and the rest when anything
 odd happens). Tools: `tools/scratch_query/` (prep_srv.sh, qrun.py, game_jvms.sh, zq_probe.js, sp_world.py),
+**`/cdevtest` and the `/pbot` test verbs** (Creative Devtools, in every prep_srv server: block, inventory, tank, box
+count and ages, use / break / kill / loot as a player or fake player, entity and player reads, recipe and tag data,
+`tickwarp`, `randomtick`, `watch`, `layerdump`; `/cdevreload compat` re-reads Compat's toml; bots attack, interact, eat with a real ticked use, sneak, look, walk with physics,
+inventory, vulnerable, pickup; verb table in [creative_devtools.md](../../../feature_writeup/creative_devtools.md)
+"/cdevtest and the perfBot test verbs"). New rows use them before writing a KubeJS probe; a probe is for a one-off
+feature reader only. Output `[cdevtest] verb=<verb> key=value ...`, every call ends `done=1` or `error=... done=0`.
 `tools/creative_labels_test/scratch_server.sh setup|boot|cmd|stop OUT`, `tools/perf/session/perf_session.sh`,
 `tools/perf/eval/eval_client.py`. Tool usage is in each script's header or docstring; do not retype it.
 
@@ -37,8 +43,9 @@ date", "collect queued tests".
    jar that must be installed first). Rows the owner wants first go into the "Priority run" section. Add one line to
    the queue's header block ("<date>: added SQ-XX at the end, ...").
 3. **Row format** (table, as the existing sections): `| ID | Group | Commands | Pass | If it fails |`.
-   - ID: `SQ-<CODE>-NN` server, `CQ-<CODE>-NN` client (needs a window or a real player). Reuse the feature's code if
-     it has rows already; continue its numbering.
+   - ID: `SQ-<CODE>-NN` server, `CQ-<CODE>-NN` client (needs a window or a real player). `<CODE>` is the feature's prefix from
+     [test_prefix_index.md](../../../feature_writeup/testing/test_prefix_index.md) (a new feature adds its row there first);
+     continue its numbering.
    - Group: a world group from the queue's "World groups" table (A superflat, B normal world, B-nether, ...) or
      `client`. Worldgen-registry changes need a fresh world: say so.
    - Commands: exact console commands, probe commands, config edits (`qrun.py toml ...`). A new probe script goes in
@@ -76,8 +83,9 @@ everything below is the default unless the prompt says otherwise.
    then client rows, then long operations (pregen, perf suite, resource pack bench). Pinned owner notes at the top of
    the queue override this (for example "client rows wait for wave 8").
 7. **Cheap extras**: a queued row that fits the world and jars already up may run alongside; log it.
-8. **Skip waits**: `/time add`, `gamerule randomTickSpeed`, shorter config intervals in the srv toml (`qrun.py toml`)
-   instead of sleeping. 1.19.2 has no `/tick` command.
+8. **Skip waits**: `/cdevtest tickwarp N` (full ticks back to back), `/cdevtest randomtick BOX N` (no player needed),
+   `/time add`, `gamerule randomTickSpeed`, shorter config intervals in the srv toml (`qrun.py toml`)
+   instead of sleeping. 1.19.2 has no `/tick` command (tickwarp replaces it).
 9. **Notes as you go**: append to the run doc's "Run notes" at every boot, batch end, FAIL and decision, with clock
    times. Enough for a fresh session to resume if this one stops.
 10. **Stop and report** on a boot failure caused by our jars that you cannot fix inside the run defaults.
@@ -101,14 +109,20 @@ everything below is the default unless the prompt says otherwise.
 - **Targeted run** (one feature, phase or carve): a new section in today's run doc (or a new doc): owner request,
   batches, results dir, jars, boots, then the verdict table. Model: scratch_run_2026-11-01.md sections 6 and 7.
 - Batches: `tools/scratch_query/batches/r<MMDD>/*.qb` (format in `qrun.py`'s docstring), one file per boot. Results:
-  `perf/runs/<run id>/`.
+  `perf/runs/<run id>/`. Before any boot, `qrun.py lint BATCH` (codes in `qlint.py`; fix every E, read the W) and,
+  for a review by a second agent, `qrun.py dry BATCH` (commands with vars substituted, lint inline, time estimate).
+  A rerun with `--rows` / `--from`: lint with the same selection (it reports captures and markers in skipped rows);
+  `--res RES` of an earlier run tests each waitlog against the replies earlier rows really got.
 - Tell the user the scope and the time estimate in 3 to 6 lines, then start (no need to wait unless scope is unclear).
 
 ### B3. Execute
 
 - Per world: `prep_srv.sh OUT LEVEL A|B [prop=value ...]` (OUT under the scratchpad, `cd "$OUT" || exit 1` in
   multi-step commands), srv toml edits, `scratch_server.sh boot OUT`, wait for `Done (` in `OUT/srv/logs/latest.log`
-  (or a crash report) with a Monitor or background wait, not sleep loops. Then `qrun.py run OUT BATCH RES`.
+  (or a crash report) with a Monitor or background wait, not sleep loops. Then `qrun.py run OUT BATCH RES`. Its crash
+  watch (dead pid, `hs_err_pid*.log`, new `crash-reports/`) ends the row CRASH within seconds and copies the
+  evidence to `RES/crash/ID/`; with `--relaunch CMD` (and `--ready`) the game is restarted and the batch goes on
+  (qrun.py docstring). A qrun started from a shell that cannot see the game's pids watches files only (it says so).
 - `scratch_server.sh stop OUT`, then wait until `game_jvms.sh` is empty before the next boot.
 - **Stall watch.** Every foreground wait is capped at `timeout 590`; when one returns without its target line, do a
   check instead of waiting blind, at 10-minute intervals (chain waits; no shorter: each poll re-reads the whole
@@ -122,8 +136,11 @@ everything below is the default unless the prompt says otherwise.
   Do not run `jstack` as a routine check (it pauses the JVM). **Cap: stop polling after 12 hours** counted from the
   first check of the run: stop waiting, leave the server as is, write the state to RUNNER.md and the run notes, and
   report to the user.
-- Client block: `eval_client.py setup/launch`, `sp_world.py` to copy scratch worlds in, `qrun.py client`, xdotool for
-  hand steps, screenshots to `RES/shots/`.
+- Client block: start the client with `tools/client_capture/run_captures.py serve [--game DIR] [--world NAME]`
+  (capture driver serving `GAME/cdev_channel/`, protocol in client_capture.md 2.11), then `qrun.py client GAME BATCH
+  RES`: when `GAME/cdev_channel/` exists qrun drives the driver (commands, `key`, `click`, `shot`, `do JSON` run
+  in-process, tick-exact, no focus or typing loss; shots go to `test_captures/judgement/` for the owner); `--xdotool`
+  forces the old window mode (`eval_client.py setup/launch`, `sp_world.py`, xdotool hand steps, `RES/shots/`).
 - Redirects from the user or another session (defer a block, stop): stop at a row boundary, discard a half-run row,
   mark unrun rows "deferred" in the run notes, update RUNNER.md.
 
@@ -131,7 +148,10 @@ everything below is the default unless the prompt says otherwise.
 
 Turn every LOOK into PASS or FAIL from `RES/rows/<ID>.log`, `rows/<ID>.shell.txt` and `shots/`. A failure caused by
 the batch (wrong regex, wrong coordinates) is `BATCH-FAULT`: fix the batch and rerun when cheap. Verdict table in the
-run doc: `| ID | Result | Evidence |`.
+run doc: `| ID | Result | Evidence |`. qrun writes `RES/verdicts/ID.json` per row (every check with its outcome,
+the LOOKs, shots, crash): `qrun.py judge RES` lists the open LOOKs, `qrun.py judge RES ID N VERDICT "evidence"` (or
+`--file TSV`) fills one, and `qrun.py table RES [RES ...]` prints the run-doc table and counts. The judge step only
+fills LOOKs; a row with shots gets PASS / FAIL only from the owner (`--by owner`) or from text evidence (`--text`).
 
 ### B5. Write back
 

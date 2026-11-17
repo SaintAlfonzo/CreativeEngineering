@@ -112,7 +112,7 @@ Status Planned / KubeJS / data / `creativedelight/members #6`
 1. New CD `kubejs/data/creativedelight/kubejs/oceanic_delight/tags.js` with the fill (via `global.tags`, ids from the dicts);
    the coral line keeps `// requires: upgrade_aquatic` or a `Platform.isLoaded` guard. Tag ids stay `creativeengineering:fishing_net/*`.
 2. The two tables move into the Oceanic repack overlay `development/creativeDelight/members/oceanic/src/main/resources/data/oceanic_delight/loot_tables/gameplay/`
-   (MIT, overlay at the upstream path is allowed); delete the pack copies; clean-build (memory `repack-stale-resources`).
+   (MIT, overlay at the upstream path is allowed); delete the pack copies; clean-build (note [repack-stale-resources](../agent_notes/repack-stale-resources.md)).
 3. Integration pass (merge choices per `largecontent/mod-additions #5`): guardian food (Ocean's `guardian`, `guardian_tail`, elder guardian
    slices against Hostile Delight `guardianfillet` and family), takoyaki (`i.takoyaki` Miner's, `i.oceanic_takoyaki` Oceanic). Each merge
    uses the swappers (`creativedelight/swappers`) and `removed_items.js`.

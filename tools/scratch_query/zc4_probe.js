@@ -17,6 +17,8 @@
 //   sol NAME [ITEM]           "[zc4] sol NAME carrot=N applepie=N maxhealth=H" (+ "carrotHas=b applepieHas=b" for ITEM)
 //   isfood TYPE ITEM          Animal.isFood of a fresh (not added) entity of TYPE: "[zc4] isfood TYPE ITEM true|false"
 //   bees X Y Z R              per bee: FlowerPos, HivePos, HasNectar ("[zc4] bee ... flower=x,y,z|none ...")
+// MIGRATED 2026-11-15 in part (creative_devtools.md): inv -> /cdevtest inv + tank, eat -> /pbot eat, hunger -> /pbot
+// hunger. The rest stays here.
 (() => {
     const $C4Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $C4Reg = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')

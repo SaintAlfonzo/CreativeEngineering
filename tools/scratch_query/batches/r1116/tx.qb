@@ -1,0 +1,254 @@
+# r1116 phase 1, boot 1 (prep_srv.sh OUT tx A): SQ-TX-01 to -18 (first boot part of -18). SQ-TXQ-01 is judged from
+# this run's lint output, verdict files and qrun table. Site x 900 to 1000, z 890 to 910, superflat (grass -61).
+pace 2
+
+## SQ-TX-00 | setup: forceload site, noon, clear weather
+> forceload add 896 880 1007 927
+> time set noon
+> gamerule doDaylightCycle false
+> weather clear
+sleep 3
+
+## SQ-TX-01 | help, unknown verb, unloaded pos, missing arg
+> cdevtest help
+> cdevtest bogus
+> cdevtest state 0 -60 4000
+> cdevtest count 1 2 3
+expect \[cdevtest\] verb=help verbs=\S*state\S*tickwarp\S*states
+expect \[cdevtest\] verb=bogus error="unknown verb
+expect \[cdevtest\] verb=bogus done=0
+expect \[cdevtest\] verb=state error="unloaded 0,-60,4000
+expect \[cdevtest\] verb=state done=0
+expect \[cdevtest\] verb=count error="missing to x"
+expect \[cdevtest\] verb=count done=0
+reject Exception|\tat 
+
+## SQ-TX-02 | place, state, be
+> cdevtest place 900 -60 900 minecraft:chest[facing=north]
+> cdevtest state 900 -60 900
+> cdevtest be 900 -60 900
+> cdevtest place 901 -60 900 minecraft:oak_leaves[persistent=true] flags=18
+expect verb=place placed=true state="minecraft:chest\[facing=north,type=single,waterlogged=false\]"
+expect verb=state pos=900,-60,900 .*be=minecraft:chest shape_top=0.875 .*biome=minecraft:plains
+expect verb=be be=minecraft:chest nbt=".*id:\\"minecraft:chest\\"
+expect verb=place placed=true state="?minecraft:oak_leaves\[
+count verb=place done=1 == 2
+
+## SQ-TX-03 | inv (two faces), tank, energy on the chest
+> item replace block 900 -60 900 container.0 with minecraft:apple 5
+> cdevtest inv 900 -60 900
+> cdevtest inv 900 -60 900 face=up
+> cdevtest tank 900 -60 900
+> cdevtest energy 900 -60 900
+expect verb=inv slot=0 item=minecraft:apple\*5
+count verb=inv via=item_handler slots=27 filled=1 == 2
+expect verb=tank tanks=0
+expect verb=energy energy=none
+
+## SQ-TX-04 | ages, randomtick, count on a wheat field
+> fill 900 -61 902 915 -61 917 minecraft:farmland
+> fill 900 -60 902 915 -60 917 minecraft:wheat
+> cdevtest ages 900 -60 902 915 -60 917 minecraft:wheat
+> cdevtest randomtick 900 -60 902 915 -60 917 20
+waitlog verb=randomtick done= 60
+> cdevtest ages 900 -60 902 915 -60 917 minecraft:wheat
+> cdevtest count 900 -61 902 915 -60 917 #minecraft:crops
+expect verb=ages .*n=256 mean=0.000 hist=0:256
+expect verb=randomtick rounds=20 block_ticks=5120 .*changed=[1-9]\d{2,} .*equiv_game_ticks=27306
+expect verb=ages .*n=256 mean=([1-9]\d*|[1-9]\d*\.\d+)\b
+expect verb=count .*n=256 on=minecraft:farmland:256
+
+## SQ-TX-05 | blocktick on sand
+> setblock 905 -55 900 minecraft:sand
+> cdevtest blocktick 905 -55 900
+sleep 3
+> cdevtest items 905 -60 900 2
+> cdevtest state 905 -60 900
+expect verb=blocktick before=minecraft:sand after=minecraft:air
+expect verb=state pos=905,-60,900 state=minecraft:sand
+
+## SQ-TX-06 | tickwarp 2400
+> time query gametime
+capture G0 The time is (\d+)
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done 120
+> time query gametime
+> cdevtest tickwarp status
+expect verb=tickwarp started=2400
+expect verb=tickwarp end=done ticks=2400 asked=2400 .*tps=([4-9]\d|\d{3,})
+expect verb=tickwarp running=false
+look game time after the warp is at least {G0+2400} (second "The time is" line)
+
+## SQ-TX-07 | tickwarp 6000 with a bot near a second wheat field
+> fill 920 -61 902 935 -61 917 minecraft:farmland
+> fill 920 -60 902 935 -60 917 minecraft:wheat
+> pbot spawn T 927 -60 920 minecraft:overworld creative
+> cdevtest tickwarp 6000
+waitlog verb=tickwarp end=done 400
+> cdevtest ages 920 -60 902 935 -60 917 minecraft:wheat
+expect verb=tickwarp end=done ticks=6000 asked=6000 .*tps=([2-9]\d|\d{3,})
+expect verb=ages .*n=256 mean=(0\.[1-9]|0\.0[1-9]|[1-9])
+look wheat mean clearly above 0 and in line with -04's mean per random-tick round (6000 ticks = about 4.4 random ticks per block)
+
+## SQ-TX-08 | watch the chest inventory
+> cdevtest watch 900 -60 900 40 10 what=inv
+sleep 1
+> item replace block 900 -60 900 container.1 with minecraft:bread 2
+waitlog verb=watch end=done t=40 30
+expect verb=watch t=0 .*items=0:minecraft:apple\*5
+expect verb=watch t=40 .*1:minecraft:bread\*2
+count verb=watch t=(0|10|20|30|40) == 5
+
+## SQ-TX-09 | data verbs against /zq
+> cdevtest recipes minecraft:bread
+> zq recipes minecraft:bread
+> cdevtest food minecraft:bread
+> zq food minecraft:bread
+> cdevtest tag item minecraft:logs
+> zq itemtag minecraft:logs
+> cdevtest states
+> zq states all
+sleep 5
+> cdevtest rdetail create:crushing/
+> cdevtest bytype minecraft:smelting
+> cdevtest uses minecraft:wheat
+> cdevtest makes minecraft:bread
+> cdevtest tagsof minecraft:oak_log
+> cdevtest attrs minecraft:diamond_sword
+> cdevtest reg item ^minecraft:wheat
+> cdevtest potion minecraft:awkward minecraft:sugar,minecraft:spider_eye
+> cdevtest item minecraft:bread
+sleep 3
+expect verb=rdetail .*part=results
+expect verb=bytype .*n=[1-9]\d{2,}
+expect output="minecraft:potion minecraft:swiftness"
+reject verb=(recipes|food|tag|states|rdetail|bytype|uses|makes|tagsof|attrs|reg|potion|item) done=0
+count verb=(recipes|food|tag|states|rdetail|bytype|uses|makes|tagsof|attrs|reg|potion|item) done=1 == 13
+look counts and values equal the /zq lines (recipe count, nutrition and modifier, tag size, state count); attrs n= 2+ on mainhand; spider eye gives awkward or nothing
+
+## SQ-TX-10 | break, use, loot, useair as the fake player
+> setblock 940 -60 900 minecraft:oak_log
+> cdevtest break 940 -60 900 held=minecraft:iron_axe
+> cdevtest use 941 -61 900 held=minecraft:iron_hoe
+> setblock 942 -60 900 minecraft:oak_leaves[persistent=true]
+> cdevtest loot 942 -60 900 tool=minecraft:shears rolls=10
+> cdevtest useair held=minecraft:ender_pearl
+expect verb=break who=fake\S* broken=true before="?minecraft:oak_log\[axis=y\]"? after=minecraft:air
+expect verb=break .*drops=minecraft:oak_log:1
+expect verb=use .*result=(CONSUME|SUCCESS)
+expect verb=use .*state="?minecraft:farmland\[moisture=0\]
+expect verb=loot .*drops=minecraft:oak_leaves:10
+expect verb=useair .*result=(CONSUME|SUCCESS)
+
+## SQ-TX-11 | kill cows (sword, then fire)
+> cdevtest kill 950 -60 900 minecraft:cow n=5 held=minecraft:diamond_sword
+> cdevtest kill 950 -60 905 minecraft:cow n=5 fire
+count verb=kill type=minecraft:cow n=5 killed=5 == 2
+expect verb=kill drops=.*minecraft:leather.*xp=0|verb=kill drops=.*minecraft:beef.*minecraft:leather.*xp=0|verb=kill drops=.*minecraft:leather
+expect verb=kill drops=.*minecraft:beef
+expect verb=kill drops=.*minecraft:cooked_beef
+reject verb=kill .*xp=[1-9]
+
+## SQ-TX-12 | Loading Protection exemption and attack
+> summon minecraft:iron_golem 961 -60 900 {NoAI:1b}
+> pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 1
+> pbot inv A set 0 minecraft:iron_sword
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest] weak
+> pbot remove A
+> pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 1
+> pbot attack A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
+expect Player A logged in, protection active for 150 seconds
+count verb=pbot.attack bot=A target=minecraft:iron_golem strength=1 == 2
+expect verb=pbot.attack bot=A target=minecraft:iron_golem strength=0\.[0-2]\d*\b
+look each attack line health_after below health_before (respawned bot included)
+
+## SQ-TX-13 | vulnerable toggle, interact
+> effect give A minecraft:instant_damage 1 0
+> cdevtest player A
+> pbot vulnerable A on
+> effect give A minecraft:instant_damage 1 0
+> cdevtest player A
+> pbot vulnerable A off
+> pbot inv A set 0 minecraft:iron_ingot
+> pbot interact A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
+expect verb=player name=A .*health=20 .*invulnerable=true
+expect verb=player name=A .*health=(1?\d|1\d\.\d+) .*invulnerable=false
+expect verb=pbot.vulnerable bot=A invulnerable=false
+expect verb=pbot.interact bot=A .*result=(SUCCESS|CONSUME) held_after=(minecraft:air|-|empty|minecraft:iron_ingot\*0)\b
+
+## SQ-TX-14 | eat bread, shoot a bow
+> pbot hunger A 10
+> pbot inv A set 0 minecraft:bread 2
+> pbot inv A select 0
+> pbot eat A
+sleep 3
+> cdevtest food minecraft:bread
+> pbot inv A set 0 minecraft:bow
+> pbot inv A set 9 minecraft:arrow 16
+> pbot look A 0 0
+> pbot useitem A main 20
+sleep 2
+> cdevtest entities 960 -60 900 40 type=minecraft:arrow
+expect verb=pbot.eat bot=A .*result=CONSUME using=true use_ticks=32 .*food=10
+expect verb=pbot.useitem bot=A end=finish item=minecraft:bread
+expect verb=pbot.useitem bot=A .*using=true use_ticks=\d+ release_after=20
+expect verb=pbot.useitem bot=A end=released
+expect verb=entities n=1
+look finish line food = 10 + bread nutrition and sat = cdevtest food saturation; finish tick 32 after the eat line's tick
+
+## SQ-TX-15 | sneak, look, break, punch
+> pbot sneak A on
+sleep 1
+> cdevtest player A
+> pbot sneak A off
+> pbot look A 90 30
+> cdevtest player A
+> pbot break A 961 -61 901
+> pbot punch A 962 -61 901
+expect verb=player name=A .*shift=true pose=CROUCHING
+expect verb=player name=A .*yaw=90 pitch=30
+expect verb=pbot.break bot=A broken=true
+expect verb=pbot.punch bot=A before=(\S+) after=\1
+look punch after= is the same grass block as before=
+
+## SQ-TX-16 | walk, sprint, wall, pickup off
+> fill 960 -60 905 1000 -60 905 minecraft:air
+> pbot spawn W 960 -60 905 minecraft:overworld survival
+sleep 1
+> pbot moveto W 990 905
+sleep 10
+> pbot moveto W 960 905 sprint
+sleep 10
+> setblock 975 -60 905 minecraft:stone
+> setblock 975 -59 905 minecraft:stone
+> pbot moveto W 990 905
+sleep 10
+> pbot pickup W off
+> summon minecraft:item 960 -60 905 {Item:{id:"minecraft:apple",Count:1b}}
+> pbot moveto W 960 905
+sleep 10
+> pbot inv W get
+> cdevtest items 960 -60 905 3
+expect verb=pbot.moveto bot=W end=reached ticks=1[2-5]\d .*speed_bps=4\.[1-4]
+expect verb=pbot.moveto bot=W end=reached .*speed_bps=5\.[3-8]
+expect verb=pbot.moveto bot=W end=stuck
+reject verb=pbot.inv bot=W slot=\d+ item=minecraft:apple
+expect verb=items .*minecraft:apple:1
+look walk ticks about 139, speeds in range (pack walk-speed changes are expected)
+
+## SQ-TX-17 | D0 layer dump
+> cdevtest layerdump
+waitlog verb=layerdump .*done= 120
+shell cp kubejs/exported/passthrough_layers_dump.json "$INST/kubejs/exported/" && echo copied
+expect verb=layerdump .*done=1
+expect tag_without_property=0
+look dump json: class=in_tag for snow 1-8, 9 IW leaf piles + azalea_flower_pile 0-8, IW ash/sand/red sand layers, supplementaries ash and fodder, twigs bamboo_leaves max=4, IE sawdust max=9; class=d1_out for 7 createdeco coin stacks and logic_cabinet; snow collision_px; class=new lines go to the owner
+
+## SQ-TX-18 | cdevreload compat with Compat loaded (boot 1 part)
+> cdevreload compat
+sleep 2
+expect \[cdevreload\] compat: 
+reject not loaded yet

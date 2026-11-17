@@ -47,7 +47,6 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("SiltPotSoilMixin", List.of("twigs")),
             Map.entry("QuarkSortingHandlerMixin", QUARK),
             Map.entry("MonsterBoxBlockEntityMixin", QUARK),
-            Map.entry("LeafPileSlowMixin", List.of("immersive_weathering")),
             // old placed paintings move to the creativecompat painting ids (namespace_move.md D-PAINT)
             Map.entry("ImmersivePaintingMotiveAliasMixin", List.of("immersive_paintings")),
             Map.entry("AnotherFurniturePlanterRenderMixin", List.of("another_furniture")),
@@ -81,6 +80,10 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("BlockRunnerSpeedConfigMixin", BLOCKRUNNER),
             // pass-through field of view: BlockRunner's own FOV recompute steps aside for surface.PassFov
             Map.entry("BlockRunnerFovMixin", BLOCKRUNNER),
+            // pass-through phase 2 (plan_passthrough.md 5.1, 5.3): pickarang and chakram snag, torch arrow web pickup
+            Map.entry("QuarkPickarangPassMixin", QUARK),
+            Map.entry("QuarkTorchArrowPickupMixin", QUARK),
+            Map.entry("BotaniaChakramPassMixin", List.of("botania")),
             // Camouflage order on Framed Blocks and Copycats+ (surface/LastInserted*)
             Map.entry("FramedDoubleCamoOrderMixin", List.of("framedblocks")),
             Map.entry("CopycatMaterialOrderMixin", List.of("copycats")),

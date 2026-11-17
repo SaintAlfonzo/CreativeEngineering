@@ -1,0 +1,27 @@
+# r1115 phase 5 (runner-5), boot A1 follow-ups 3 (same server, after p5_a1p.qb): Rare Ice's own block with an item in its
+# block entity (a bare setblock reverts to minecraft:ice), roofed beside a sea lantern, vanillaLightMelting false; part 2 (true,
+# after a restart) is p5_a1r.qb; plus a vanilla ice control in the same box.
+pace 1
+
+## SQ-MELT-09b-rareice3 | rare-ice:rare_ice holding a diamond, roofed, sea lantern beside: kept at false
+> forceload add 2400 2400 2431 2431
+> fill 2420 -61 2420 2428 -58 2424 minecraft:stone
+> setblock 2422 -60 2422 rare-ice:rare_ice{Items:[{id:"minecraft:diamond",Count:1b}],ItemLocations:[{x:0.5d,y:0.5d,z:0.5d,yaw:0.0d,pitch:0.0d}]}
+> setblock 2423 -60 2422 minecraft:sea_lantern
+> setblock 2426 -60 2422 minecraft:ice
+> setblock 2425 -60 2422 minecraft:sea_lantern
+> data get block 2422 -60 2422
+> zmelt w rareice overworld 2422 -60 2422
+> zmelt w vice overworld 2426 -60 2422
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block 2422 -60 2422 rare-ice:rare_ice run say MELT09b-rareice-kept-off
+> execute if block 2426 -60 2422 minecraft:ice run say MELT09b-vice-kept-off
+> zmelt show
+> zmelt clear
+> save-all flush
+waitlog Saved the game 60
+expect MELT09b-rareice-kept-off$
+expect MELT09b-vice-kept-off$
+look rare ice (block entity with a diamond) and vanilla ice kept 60 s at false; part 2 (true) after a restart in p5_a1r.qb (the Forge config watcher does not pick up live toml edits here: SQ-MELT-P1b-cfg)

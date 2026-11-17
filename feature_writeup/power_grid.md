@@ -386,7 +386,7 @@ ids in Creative Common's dicts.
 2. **Electrical base, wires, sync.** `electricity/base`, `wire`, `wireconnector`, `WorldNetworks`, packets, client mirror.
    `wire_types` as a reload listener.
 3. **Phase 1 devices** (section 3.2) with BER renderers, no ponder. Unported blocks are not registered.
-4. **Dumps and generators:** `/dumpall` after install (memory `dumpall-refresh-workflow`); generators read the new ids.
+4. **Dumps and generators:** `/dumpall` after install (note [dumpall-refresh-workflow](agent_notes/dumpall-refresh-workflow.md)); generators read the new ids.
 5. **Ids in `item_dict.js` / block dict** for every registered PG item, under the `powergrid` namespace (memory
    `ids-follow-owning-mod`).
 6. **Item merges and removals** ([item_merges.md](item_merges.md)): PG `wire`, `iron_wire`, `golden_wire`, `zinc_sheet`
@@ -400,7 +400,7 @@ ids in Creative Common's dicts.
    (`component_items` `via` and the item tag `powergrid:circuit_component`) names `create:copper_nugget`, which
    Creative Common's `removed_items.js` removes, so the tag loads 27 of 28 in the pack (SQ-PWG-67, 2026-11-13): needs a
    pack-side answer (alias the removed nugget, or add the pack's copper nugget to the tag and the via entry).
-9. **Recipes by pack rules:** CE components and coils where PG uses its own parts (memory `ce-components-coils`);
+9. **Recipes by pack rules:** CE components and coils where PG uses its own parts (note [ce-components-coils](agent_notes/ce-components-coils.md));
    check every PG Create recipe still runs on 0.5.1 (sequenced assembly transitional items).
 10. **FE bridge balance** (D3): set `forgeEnergyPerWatt` / `forgeEnergyPerVolt` against IE wire tiers and CC&A rates;
     copy the edited server config to `configs_edited/`.

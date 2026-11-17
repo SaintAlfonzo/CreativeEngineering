@@ -1,0 +1,10 @@
+# r1116 phase 1: SQ-TXQ-02 crash watch. The runner kill -9s the scratch server pid from another shell about 20 s in.
+pace 1
+
+## SQ-TXQ-02 | say then a long sleep; JVM killed during the sleep
+> say a
+sleep 60
+
+## SQ-TXQ-02z | must not run (no --relaunch given)
+> say z
+expect \[Server\] z

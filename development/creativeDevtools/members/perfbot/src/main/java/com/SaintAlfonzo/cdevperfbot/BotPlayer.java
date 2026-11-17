@@ -30,6 +30,11 @@ final class BotPlayer extends ServerPlayer {
         doTick();
     }
 
+    /** A fully charged swing, as after a player waits out the attack cooldown (the ticker is LivingEntity's). */
+    void chargeAttack() {
+        attackStrengthTicker = 1000;
+    }
+
     @Override
     public void die(DamageSource source) {
         super.die(source);

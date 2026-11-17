@@ -1,0 +1,21 @@
+# terrain-adaptation-soft-beard
+
+> Structure tags terrain_adaptation/{none,bury,beard_thin,beard_box,soft} + template_trim (patcherMod TerrainAdaptation/TemplateTrim); soft beard = footprint + 4-block skirt + skirtBump; status in feature_writeup/structure_tuning.md
+
+Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
+
+Built 2026-10-09 on request: user saw square flat pads around small structures (Illager Siege Weapons ballista). Writeup: feature_writeup/structure_tuning.md 3.15, tests ST-61..68.
+
+- Cause: vanilla beard_thin flattens the whole template bounding box + ~8 blocks (round skirt, but the box is the whole MCreator template); templates also save pads and air.
+- Mode tags via `StructureTerrainAdaptationMixin` (Structure#terrainAdaptation m_226620_ HEAD). Table built on ServerAboutToStart + TagsUpdated(SERVER_DATA_LOAD). SOFT answers BEARD_THIN to vanilla. YUNG's YungJigsawStructure overrides the method, so its mode tags are ignored (logged).
+- Soft beard: `BeardifierSoftMixin` redirects `new Rigid` in the lambda m_223930_ (ThreadLocal start set at HEAD) -> Rigid(SoftBox extends BoundingBox, NONE); @ModifyVariable index 5 before the first ObjectListIterator.back in compute m_207386_ adds SoftBox densities. **YUNG's API rebuilds the Beardifier from its iterators at RETURN of forStructuresInChunk and cancels compute at RETURN**, so never keep state on the Beardifier or use cancellable RETURN injects there. The Forge-patched pieceIterator f_158065_ is `protected` (vanilla private).
+- Math: vanilla getBeardContribution with horizontal distance = Euclidean to footprint columns x (8 / skirt); skirt = 4 + skirtBump (0..8, default 0). Bump 4 on a box footprint == vanilla (test).
+- Trim: column with a BUILT block kept whole; other columns drop air/pad/plants (block tags template_trim/pad, /plants; dirt_path and farmland count as built). Templates with no built column (foundation plates) untouched. Runs before GroundMatch in StructureTemplateGroundMatchMixin. EarthFill counts only placed earth for trimmed structures.
+- Tagged (kubejs/server_scripts/worldgen/terrain_adaptation.js, named groups so a group can be soft without trim): 6 siege weapons -> none, 53 other ported MCreator structures -> soft, those 59 trimmed; plus scan batches below.
+- Not done: game was running (no RAM for a scratch server), so the mixins were never applied; targets checked against the Forge-patched SRG jar. Jar only in patcherMod/build/libs (1.0.5).
+- Scan (2026-10-09): `tools/terrain_adaptation_scan.py` (/cdevgen terrain_adaptation_scan) -> feature_writeup/terrain_adaptation_scan.md: 383 structures, 29 strong / 17 mild / 31 settlements; batches 1-3 TAGGED same day (12 pad houses + 24 pillager outposts soft+trim; bastille + pillager camp soft only); batch 4 (spire, ponds, Philip's padded ruins, villages) open. 97 tagged: none 6, soft 91, trim 95. Gotchas: gen_loot_config.iter_data_sources lists only kubejs/data JSON (add .nbt yourself); village farm water must not mark villages as water structures; all-air templates (vanilla outpost base/feature plate) are never trimmed.
+
+Related: [structure-ground-match](structure-ground-match.md), [earth-fill-system](earth-fill-system.md), [mcreator-house-mods-datapack](mcreator-house-mods-datapack.md), memory `scratch-server-verify`.
+
+2026-10-11 scratch server: BeardifierSoftMixin's @ModifyVariable logs an ASM AnalyzerException ("inexistant local variable 19") when Beardifier first loads; not fatal, world generated fine. Meta parts beard per part via MetaStructure.structureOf ([meta-structures](meta-structures.md)).
+- 2026-10-19 sunk starts: Beardifier levels to minY + groundLevelDelta; a negative start_height (projected jigsaw) sinks the template, so the beard digs the surface down around it (Campsite camps: 4-block dirt-dome plinth). Tag `terrain_adaptation/sunk_start` -> TerrainAdaptation.rigid adds the sink (from JigsawStructure f_227608_/f_227610_ by reflection) to groundLevelDelta for vanilla and soft beards. Only the 6 campsites tagged (start height -5 -> -4 = flush); Philip's crypts/ocean fortress/-1 ruins and T&T nilotic are untagged candidates. Structure_tuning.md 3.15/7.5.

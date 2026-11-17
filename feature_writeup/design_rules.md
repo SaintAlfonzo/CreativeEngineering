@@ -14,7 +14,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | Collection of existing rules (sections 2 to 6) | Collected 2026-11-13: 63 rules and 7 formatting observations (section 11 lists the sources) |
 | Compliance audit (sections 8 and 9) | Audited 2026-11-14 (whole repo, read-only): 62 violations recorded as V-01 to V-62, all Open; 5 high |
 | Unwritten conventions (section 10) | Found 2026-11-14: 52 proposed rules, marked Proposed until the owner confirms them |
-| Hardening (owner confirms, edits or drops each rule; decides the gaps) | Not started; section 7 is the agenda (G1 to G20) |
+| Hardening (owner confirms, edits or drops each rule; decides the gaps) | In progress: G1, G2, G3, G5, G11, G12, G13, G19, G20 decided 2026-11-16 (plan_rules_fixes.md D1 to D22); the rest of section 7 open |
 | Enforcement | 6 rules are checked by a tool (section 1); `tools/design_rules_audit.py` reports 13 more; the rest rely on review |
 
 **Hardness of each rule** (column H in the tables):
@@ -40,7 +40,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | Id | Rule | H | Source |
 |---|---|---|---|
 | DR-L1 | No emoji anywhere: code, comments, docs, configs, lang files, commit messages, chat. Arrows, en and em dashes and × are fine. | Hard | CLAUDE.md; memory `no-emojis-in-files` |
-| DR-L2 | Status markers are plain words, never symbols: VERIFIED, DEPLOYED, BUILT, BROKEN, PASSED (writeups); Bug, Planned, Pinned, In Progress, Testing, Complete (TODO). | Hard | README.md "Status legend"; memory `todo-layout` |
+| DR-L2 | Status markers are plain words, never symbols: VERIFIED, DEPLOYED, BUILT, BROKEN, PASSED (writeups); Bug, Planned, Pinned, In Progress, Testing, Complete (TODO). | Hard | README.md "Status legend"; note [todo-layout](agent_notes/todo-layout.md) |
 | DR-L3 | Abbreviations from the CLAUDE.md glossary (CE, CD, FD, IE ...) are fine in docs and chat; spell them out in player-facing text and changelog bullets. | Hard | CLAUDE.md "Glossary" |
 | DR-L4 | Dates are absolute, `YYYY-MM-DD`. Never "yesterday" or "last week" in a file. | Convention | every writeup |
 | DR-L5 | Owner decisions are cited inline with their date: "(owner, 2026-11-02)". | Convention | 279 uses of "owner", 43 older uses of "user" (section 7, G5) |
@@ -80,12 +80,12 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 |---|---|---|---|
 | DR-W1 | One writeup per feature in `feature_writeup/`, the single up-to-date reference; code and config stay the source of truth for values. Readers: the owner coming back later, and Claude at the start of a session. | Hard | README.md intro |
 | DR-W2 | Layout: 0 At a glance, 1 Overview, 2 Reference, 3 What the pack changes, 4 Limits and decisions (with rejected options and why), 5 File map, 6 Offline checks, 7 In-game test suite, 8 History. | Hard | README.md "Layout every writeup follows" |
-| DR-W3 | Test ids are `PREFIX-NN`; each test is a checkbox line `**PREFIX-NN name:** setup and action → expected`. Retire an id (strike through, "moved to ...") rather than renumbering. | Hard | README.md; memory `feature-writeup-pattern` |
+| DR-W3 | Test ids are `PREFIX-NN`; each test is a checkbox line `**PREFIX-NN name:** setup and action → expected`. Retire an id (strike through, "moved to ...") rather than renumbering. Prefixes and owners: [testing/test_prefix_index.md](testing/test_prefix_index.md) (a new prefix gets its row first). | Hard | README.md; memory `feature-writeup-pattern` |
 | DR-W4 | Scratch queue rows are a table `ID / Group / Commands / Pass / If it fails`, ids `SQ-<feature>-NN` (server) and `CQ-<feature>-NN` (client), in a dated section at the end of the queue. | Hard | skill `scratch-test` part A |
 | DR-W5 | Any change to a feature updates its writeup in the same session: values, file map, tests and a dated History line. | Hard | CLAUDE.md "Done means"; README.md |
 | DR-W6 | Feature state (built, deployed, tested, versions) lives in the repo docs: README.md index, TODO.md, `plan_*.md`, deploy.md. Memory holds only rules, gotchas and mechanics. | Hard | CLAUDE.md; memory `memory-vs-docs-policy` |
-| DR-W7 | TODO.md: categories with `##` feature families; row id `family/sub #n` never changes; columns Id / Change / Status / Tests / Work / Details / Decisions / Writeup (Tests added after the memory note was written); order by status (Bug, Planned, Pinned, In Progress, Testing, Complete), then Id; Complete rows move to the archive table. Cite rows as "[TODO](todo/TODO.md) `family/sub #n`". | Memory | memory `todo-layout` (TODO.md header gives part of it) |
-| DR-W8 | New ideas go in `todo/scratchpad.md` first; "translate the scratchpad" turns each note into a TODO row. | Hard | README.md intro; memory `todo-layout` |
+| DR-W7 | TODO.md: categories with `##` feature families; row id `family/sub #n` never changes; columns Id / Change / Status / Tests / Work / Details / Decisions / Writeup (Tests added after the memory note was written); order by status (Bug, Planned, Pinned, In Progress, Testing, Complete), then Id; Complete rows move to the archive table. Cite rows as "[TODO](todo/TODO.md) `family/sub #n`". | Memory | note [todo-layout](agent_notes/todo-layout.md) (TODO.md header gives part of it) |
+| DR-W8 | New ideas go in `todo/scratchpad.md` first; "translate the scratchpad" turns each note into a TODO row. | Hard | README.md intro; note [todo-layout](agent_notes/todo-layout.md) |
 | DR-W9 | Links inside docs are relative markdown links (`../kubejs/...`). In chat, files and images are clickable workspace links, never bare paths; images are copied into the repo as one small combined sheet. | Memory | memory `links-not-filepaths` |
 | DR-W10 | "Visualize" means markdown tables in the writeup. Never publish claude.ai artifacts. | Hard | CLAUDE.md; memory `no-published-artifacts` |
 | DR-W11 | File names: `snake_case.md`; integration reports `<mod_snake>.md`; release and work plans `plan_<name>.md`; briefs `briefs/<family>_<sub>.md`; run docs `testing/scratch_run_<date>.md`. | Convention | skills `integration-report`, `scratch-test`; README.md |
@@ -165,14 +165,18 @@ The agenda for making these rules hard. Each item names the rule ids it would se
 
 - **G1 Spelling.** The docs mix British and American spelling: "colour" 608 times, "color" 84 (mostly in code
   names); "capitalisation" 2, "capitalization" 5. Pick one for prose (code identifiers follow the language or API).
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D20: American; code identifiers follow their API).
 - **G2 Code formatting** (DR-C21 to DR-C25). Indent per language, tabs or spaces, line length, brace style, and
   whether to add an `.editorconfig` (editors apply it with no build change) or a formatter (Spotless rewrites files
   and would need a one-time reformat commit).
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D7: tabs as indent in every own source file, Python included; no trailing whitespace; `.editorconfig`; line length and braces free).
 - **G3 Comments** (DR-C26). When a comment or doc comment is required, what it may say (no history or status in
   code comments?), and file headers (licence line or none).
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D8: comments say what the code does now (DR-C26); history goes to the writeup; no file header rule).
 - **G4 Commit messages** (DR-C27). Format and length, or leave free.
 - **G5 Decision citations** (DR-L5). "owner" (279 uses) or "user" (43, older): settle on one word and the form
   "(owner, YYYY-MM-DD)".
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D9: "owner", form "(owner, YYYY-MM-DD)").
 - **G6 Writeup prose.** Only the changelog has written prose rules (DR-P4). Should writeups follow the same
   terse, facts-only style, and who is "you" (README.md and tooltips.md address the owner as "you")?
 - **G7 Writeup size.** Some writeups have grown very large (creative_delight.md is 2,124 lines). Set a size at which
@@ -190,11 +194,14 @@ Conflicts the 2026-11-14 audit found between a written rule and what the files d
 - **G11 Licence string** (DR-C19). The rule says `license="GNU GPL3"`; all 44 jars use `GPL-3.0-only` (SPDX), with
   an "upstream; overlay" form for repacks. Likely fix: change the rule text. Also settle NOTICE file names
   (`NOTICE-upstream-<licence>.txt` for donors, `NOTICE-thirdparty.txt` for libraries).
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D1: `GPL-3.0-only`; NOTICE form `NOTICE-<scope>-<licence>.txt` (plan section 8)).
 - **G12 Old value in changelog bullets** (DR-P4). The rule says "(was 2)"; every file since 1.1.03 uses `[2]` (335
   uses), and unreleased.md mixes both.
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D10: brackets `[2]`; DR-P4 text to change).
 - **G13 Test form** (DR-W3). The README wants ticked checkbox lines; the integration-report skill asks for
   `| ID | Test | Pass |` tables (27 files). Tables cannot be ticked. Also: one form for a retired id, and whether a
   result note may sit between the bold name and the colon (117 lines do this).
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D12: checkbox lines, colon inside the bold, notes after the colon; the integration-report table converts).
 - **G14 Status words for docs that are not builds** (DR-L2). 52 index rows say reference, audit, plan, research,
   archived and so on; scratch runs write PASS / FAIL / INCONCLUSIVE; findings tables write FIXED / OPEN / DONE.
   Extend the legend or replace them. This file used DONE until 2026-11-14.
@@ -208,9 +215,11 @@ Conflicts the 2026-11-14 audit found between a written rule and what the files d
   upgrades, plans and audits use their own layouts. Name the allowed layouts, say whether appendix sections may
   follow History, and fix the History order (oldest first, appended: 87 files; 11 newest first; 21 mixed).
 - **G19 Arrows** in test lines: `->` (441) and `→` (895) are mixed, often in one file. Pick one.
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D21: `->`).
 - **G20 Upstream-id exceptions** (DR-C10, DR-C9). `baby_mobs` and `more_mooblooms` (mod id, package, mixin json,
   config name), the `vinery_backport` lang namespace, Golden Food's `minecraft:` overrides and CE's
   `jrftl:prepared_flesh` are deliberate. List them as named exceptions, or rename what is not saved data.
+  **Decided 2026-11-16** ([plan_rules_fixes.md](plan_rules_fixes.md) D11: Baby Mobs and More Mooblooms are ours and are renamed; exceptions are `jrftl:prepared_flesh` and Golden Food's `minecraft:` overrides).
 
 ## 8. Compliance by rule (audit 2026-11-14)
 
@@ -454,3 +463,6 @@ each area's numbering. Counts are from 2026-11-14.
 - 2026-11-14: compliance audit of the whole repo. Sections 8 (result per rule), 9 (violations V-01 to V-62, all
   Open) and 10 (proposed rules from unwritten conventions) added; gaps G11 to G20 added; DR-W7 columns and DR-C19
   corrected to match the files; `tools/design_rules_audit.py` added (report only).
+- 2026-11-16: G2, G3, G5, G11, G12, G13 and G20 decided in [plan_rules_fixes.md](plan_rules_fixes.md) section 0; DR-W3
+  points to the new [testing/test_prefix_index.md](testing/test_prefix_index.md).
+- 2026-11-16: G1 (American spelling) and G19 (`->`) decided, plan D20, D21.

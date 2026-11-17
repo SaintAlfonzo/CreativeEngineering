@@ -86,7 +86,11 @@ public final class SeedContainerDispense {
         player.setItemInHand(InteractionHand.MAIN_HAND, held);
         try {
             BlockHitResult hit = new BlockHitResult(Vec3.atCenterOf(soil).add(0, 0.5, 0), Direction.UP, soil, false);
-            boolean placed = held.getItem().useOn(new UseOnContext(player, InteractionHand.MAIN_HAND, hit)).consumesAction();
+            // Explicit level: the fake player is cached by profile (the overworld one in every dimension), and the public
+            // UseOnContext constructor takes player.level, so Nether seeds were tried in the overworld (SQ-SPD-08).
+            UseOnContext context = new UseOnContext(level, player, InteractionHand.MAIN_HAND, held, hit) {
+            };
+            boolean placed = held.getItem().useOn(context).consumesAction();
             // A placed seed shrinks the held copy; count either sign so a planted seed is never handed back.
             return placed || held.isEmpty();
         } finally {

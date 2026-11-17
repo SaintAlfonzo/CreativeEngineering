@@ -4,14 +4,15 @@
 // ultra-warm dimensions and air everywhere else (the dimension check was inverted). Now melted ice leaves water
 // outside ultra-warm dimensions (SaltMeltingPlaceWater still switches it off); snow, and anything melted in an
 // ultra-warm dimension (the Nether), leaves air. Since 2026-11-14 tryMeltFromBlock is off: Creative Common's melting
-// system owns block melting (plan_bugfix_1114 3.8).
+// system owns block melting (plan_bugfix_1114 3.8). Since 2026-11-15 (plan_post_scratch_1115 B2, B6) the dispenser
+// behaviour melts a frozen block one stage (1 salt) or places a salt layer on air, for any salt item it is registered
+// on (Creative Delight registers it on Vintage Delight's salt dust too); isMeltTarget / meltOnce serve the Salt Melt.
 package io.github.mortuusars.salt;
 
 import io.github.mortuusars.salt.configuration.Configuration;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
 import net.minecraft.core.Direction;
-import net.minecraft.core.Position;
 import net.minecraft.core.dispenser.DefaultDispenseItemBehavior;
 import net.minecraft.core.dispenser.DispenseItemBehavior;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -21,13 +22,67 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowLayerBlock;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 public class Melting {
     public static final DispenseItemBehavior SALT_DISPENSER_BEHAVIOR = new SaltItemDispenseBehavior();
+
+    /** Creative Delight: a melting target, Creative Common's (Melting.isTarget) or, without Common, upstream's tag. */
+    public static boolean isMeltTarget(BlockState state) {
+        CommonMelting common = CommonMelting.get();
+        return common != null ? common.isTarget(state) : state.is(Salt.BlockTags.MELTABLES);
+    }
+
+    /**
+     * Creative Delight: one melt action on a target, no roll: Common's meltStep (packed and blue ice step down a tier,
+     * the rest melts) or, without Common, upstream's meltBlock. False when the block is not a target. Not gated by
+     * SaltItemMeltingEnabled (the Salt Melt is its own item).
+     */
+    public static boolean meltOnce(BlockState state, BlockPos pos, ServerLevel level) {
+        if (!isMeltTarget(state)) return false;
+        CommonMelting common = CommonMelting.get();
+        if (common != null) return common.meltStep(level, pos);
+        meltBlock(pos, level);
+        return true;
+    }
+
+    /** Creative Delight: Vintage Delight's salt layer block, or null without Vintage Delight. */
+    @javax.annotation.Nullable
+    public static Block saltLayer() {
+        Block b = ForgeRegistries.BLOCKS.getValue(SALT_LAYER_ID);
+        return b instanceof SnowLayerBlock ? b : null;
+    }
+
+    /**
+     * Creative Delight (B2): one salt layer at pos: a new layer on air where a layer can stand, or one more on a salt
+     * layer below 8. False (nothing placed) otherwise.
+     */
+    public static boolean placeSaltLayer(ServerLevel level, BlockPos pos) {
+        Block layer = saltLayer();
+        if (layer == null) return false;
+        BlockState here = level.getBlockState(pos);
+        if (here.is(layer)) {
+            int n = here.getValue(SnowLayerBlock.LAYERS);
+            if (n >= 8) return false;
+            level.setBlockAndUpdate(pos, here.setValue(SnowLayerBlock.LAYERS, n + 1));
+            level.playSound(null, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+            return true;
+        }
+        BlockState placed = layer.defaultBlockState();
+        if (!here.isAir() || !placed.canSurvive(level, pos)) return false;
+        level.setBlockAndUpdate(pos, placed);
+        return true;
+    }
+
+    private static final ResourceLocation SALT_LAYER_ID = new ResourceLocation("vintagedelight", "salt");
 
     /**
      * Creative Delight: with Creative Common the click is Common's melting system (plan_bugfix_1114 3.8): its targets
@@ -36,12 +91,10 @@ public class Melting {
      */
     public static boolean tryMeltFromItem(BlockState targetState, BlockPos targetPos, Level level) {
         if (!Configuration.MELTING_ITEM_ENABLED.get()) return false;
-        CommonMelting common = CommonMelting.get();
-        if (common != null ? !common.isTarget(targetState) : !targetState.is(Salt.BlockTags.MELTABLES)) return false;
+        if (!isMeltTarget(targetState)) return false;
 
         if (level instanceof ServerLevel serverLevel) {
-            if (common != null) return common.meltStep(serverLevel, targetPos);
-            meltBlock(targetPos, serverLevel);
+            return meltOnce(targetState, targetPos, serverLevel);
         } else {
             Vec3 center = Vec3.atCenterOf(targetPos);
             RandomSource random = level.getRandom();
@@ -145,20 +198,24 @@ public class Melting {
         }
     }
 
+    /**
+     * Creative Delight (plan_post_scratch_1115 B2): a frozen block in front melts one stage, else a salt layer is placed
+     * in front (air or a salt layer below 8); either way 1 salt is spent. Anything else: the salt is dropped as usual.
+     * Upstream returned at once unless the stack was #forge:salts, which in this pack holds only salt dust, so the
+     * behaviour registered for salt:salt did nothing.
+     */
     private static class SaltItemDispenseBehavior extends DefaultDispenseItemBehavior {
         @Override
         protected ItemStack execute(BlockSource source, ItemStack stack) {
-            if (!stack.is(Salt.ItemTags.FORGE_SALTS)) return stack;
-
             Direction direction = source.getBlockState().getValue(DispenserBlock.FACING);
-            ItemStack itemstack = stack.split(1);
             BlockPos targetPos = source.getPos().relative(direction);
-            BlockState targetState = source.getLevel().getBlockState(targetPos);
-            if (!Melting.tryMeltFromItem(targetState, targetPos, source.getLevel())) {
-                Position position = DispenserBlock.getDispensePosition(source);
-                spawnItem(source.getLevel(), itemstack, 6, direction, position);
+            ServerLevel level = source.getLevel();
+            BlockState targetState = level.getBlockState(targetPos);
+            if (Melting.tryMeltFromItem(targetState, targetPos, level) || placeSaltLayer(level, targetPos)) {
+                stack.shrink(1);
+                return stack;
             }
-            return stack;
+            return super.execute(source, stack);
         }
     }
 }

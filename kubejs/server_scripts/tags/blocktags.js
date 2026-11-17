@@ -94,7 +94,7 @@ ServerEvents.tags('block', e => {
 		confectionery:      'blockrunner:surface/confectionery',      // 0.85
 		tilled:             'blockrunner:surface/tilled',             // 0.80
 		leaves:             'blockrunner:surface/leaves',             // 0.78
-		snow:               'blockrunner:surface/snow',               // 0.75
+		snow:               'blockrunner:surface/snow',               // 0.75 (snow block, powder snow; layers: pass-through)
 		sticky:             'blockrunner:surface/sticky',             // 0.65
 		spongy:             'blockrunner:surface/spongy',             // 0.60
 		very_sticky:        'blockrunner:surface/very_sticky',        // 0.45
@@ -373,9 +373,10 @@ ServerEvents.tags('block', e => {
 
 	t.addMatching(e, runner.tilled, ['minecraft:farmland', 'farmersdelight:rich_soil_farmland', item.tilled_end_stone])
 
-	t.addMatching(e, runner.leaves, ['#minecraft:leaves', '#quark:hedges', item.bamboo_leaves])
+	t.addMatching(e, runner.leaves, ['#minecraft:leaves', '#quark:hedges'])  // bamboo leaves: layered pass-through tier only
 
-	t.addMatching(e, runner.snow, ['#minecraft:snow', 'architects_palette:coarse_snow'])
+	// snow layers left out (plan_post_scratch_1115b.md D2): they slow by height in creativecompat:passthrough_layers
+	t.addMatching(e, runner.snow, [b.snow_block, b.powder_snow, 'architects_palette:coarse_snow'])
 
 	t.addMatching(e, runner.spongy, [
 		'minecraft:mud', 'minecraft:muddy_mangrove_roots', 'minecraft:wet_sponge', 'minecraft:clay',

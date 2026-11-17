@@ -877,7 +877,7 @@ worlds moved; registered ids, NBT keys, capability ids and the stepstool keybind
 
 Build: the nine jars `:build` OK, MassPlacerTest 30/30. Tests: scratch section SQ-IDS (-01 to -03, CQ-IDS-01 to -06).
 
-### 7.21 Optional-mod references in data (2026-11-14; built and installed 23:30, not booted, not tested)
+### 7.21 Optional-mod references in data (2026-11-14; built and installed 23:30, scratch server PASSED r1115)
 
 [plan_bugfix_1114.md](plan_bugfix_1114.md) 5.2. Lint `tools/optional_ref_audit.py` (plain lint, reads the sources and
 `mods/`, not the dumps, so not in generators.json; usage in its docstring). Per jar: every data and asset JSON of
@@ -941,6 +941,8 @@ Built and installed 2026-11-14 23:28 to 23:30: `creativedelight-1.1.0.jar`, `cre
 `creativebrewing-1.0.0.jar`, `repackedStorage-...-ce-19.2-02.jar`. No player-visible change in the full pack (every
 guarded mod is installed), so no changelog bullet. Tests: SQ-DEP-09, reruns SQ-DEP-02, SQ-MIN-03, SQ-CDW-01,
 SQ-CDW-03b (scratch queue section "SQ-DEP optional-mod guards").
+
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-DEP-09a PASS; SQ-DEP-09b PASS for buzzier_bees, create_factory, hostiledelight, moredelight, fruitsdelight, corn_delight and the supplementaries + suppsquared pair; SKIP (Forge cascade) for supplementaries, upgrade_aquatic, quark, immersiveengineering alone and the quark + quarkengineering pair (Botania needs Quark); the upgrade_aquatic + alexsabnormalities pair FAILs on the instance's `kubejs/data/upgrade_aquatic/worldgen` river tree files (not a Creative Delight guard; unreachable today, owner note). Reruns SQ-DEP-02, SQ-MIN-03, SQ-CDW-01, -03b PASS (the 8 grape bush lines stay TODO `creativesplit/deps #27`).
 
 ## 8. History
 

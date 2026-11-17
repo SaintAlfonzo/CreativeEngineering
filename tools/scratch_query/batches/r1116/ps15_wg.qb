@@ -1,0 +1,167 @@
+# r1116 phase 4 (runner-4): SQ-PS15 group B (seed 8675309, normal world), one boot. Census probe zz_zcen.js
+# (tools/scratch_query/zcen_probe.js): /zcen scan = chunk-centre surface biome, crop rule tag membership
+# (creativedelight:wild_crops/KEY) and block counts / patches per chunk; /zcen grid = configured feature placed at
+# 25 points (ground under canopy, one above the leaves, or a fixed y), placed blocks counted per point.
+# Sites from r1115 p5_b1*.qb (locate centres): 1b -318 195, 2 1472 -3264, 3 -2072 2232; jungles -1380 -2724,
+# 1892 -2372 (r1115 SQ-RD-26). Boxes 240 blocks (forceload cap 256 chunks). Census before any /zcen grid in a box.
+# Extra forest boxes around site 2 for the adzuki 700 tag-chunk bar (SQ-PS15-12c).
+pace 1
+
+## SQ-PS15-4S | setup: boot, census probe live, rule tag sizes
+bootexpect Done \(
+> gamerule doMobSpawning false
+> zcen scan 0 0 31 31 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 300
+reject \[zcen\] (error|warn)
+look tag sizes (carrot 25, adzuki 18, wild_hops 18, bell_pepper 11), probe lines well formed
+
+## SQ-PS15-11-s2 | census forest site 2 (1472 -3264)
+> forceload remove all
+> forceload add 1352 -3384 1591 -3145
+sleep 60
+> zcen scan 1352 -3384 1591 -3145 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-12b-forest | canopy A/B, site 2: FD patch_wild_carrots at 25 canopy columns, origin one above the leaves, then on the ground
+> zcen grid farmersdelight:patch_wild_carrots farmersdelight:wild_carrots 1472 -3264 5 16 canopy
+waitlog \[zcen\] grid done 300
+> zcen grid farmersdelight:patch_wild_carrots farmersdelight:wild_carrots 1472 -3264 5 16 ground
+waitlog \[zcen\] grid done 300
+count \[zcen\] grid done >= 2
+reject \[zcen\] (error|grid no configured)
+look ground: most points place carrots; canopy: none
+
+## SQ-PS15-11b-place | /place feature creativedelight:wild/wild_hops equivalent at the 25 r1115 points of site 2 (16 apart, origin y 70)
+> zcen grid creativedelight:wild/wild_hops hearthandharvest:hops_vine 1472 -3264 5 16 y70
+waitlog \[zcen\] grid done 300
+reject \[zcen\] (error|grid no configured)
+look placed_points 22 or more of 25 (r1115: 1)
+
+## SQ-PS15-11-s1b | census forest site 1b (-318 195)
+> forceload remove all
+> forceload add -438 75 -199 314
+sleep 60
+> zcen scan -438 75 -199 314 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-11-s3 | census forest site 3 (-2072 2232)
+> forceload remove all
+> forceload add -2192 2112 -1953 2351
+sleep 60
+> zcen scan -2192 2112 -1953 2351 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-12c-fe | extra forest box beside site 2 (1712 -3264), adzuki tag chunks
+> forceload remove all
+> forceload add 1592 -3384 1831 -3145
+sleep 60
+> zcen scan 1592 -3384 1831 -3145 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-12c-fw | extra forest box beside site 2 (1232 -3264), adzuki tag chunks
+> forceload remove all
+> forceload add 1112 -3384 1351 -3145
+sleep 60
+> zcen scan 1112 -3384 1351 -3145 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-12c-fn | extra forest box beside site 2 (1472 -3504), adzuki tag chunks
+> forceload remove all
+> forceload add 1352 -3624 1591 -3385
+sleep 60
+> zcen scan 1352 -3624 1591 -3385 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-12c-fs | extra forest box beside site 2 (1472 -3024), adzuki tag chunks
+> forceload remove all
+> forceload add 1352 -3144 1591 -2905
+sleep 60
+> zcen scan 1352 -3144 1591 -2905 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-12c-j1 | census jungle 1 (-1380 -2724)
+> forceload remove all
+> forceload add -1500 -2844 -1261 -2605
+sleep 60
+> zcen scan -1500 -2844 -1261 -2605 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-12b-jungle | canopy A/B, jungle 1: Rustic wild_bell_peppers at 25 canopy columns, above the leaves, then on the ground
+> zcen grid rusticdelight:wild_bell_peppers rusticdelight:wild_bell_peppers,rusticdelight:wild_pale_bell_peppers,rusticdelight:wild_dark_bell_peppers -1380 -2724 5 16 canopy
+waitlog \[zcen\] grid done 300
+> zcen grid rusticdelight:wild_bell_peppers rusticdelight:wild_bell_peppers,rusticdelight:wild_pale_bell_peppers,rusticdelight:wild_dark_bell_peppers -1380 -2724 5 16 ground
+waitlog \[zcen\] grid done 300
+count \[zcen\] grid done >= 2
+reject \[zcen\] (error|grid no configured)
+look ground: most points place peppers; canopy: none
+
+## SQ-PS15-12c-j2 | census jungle 2 (1892 -2372)
+> forceload remove all
+> forceload add 1772 -2492 2011 -2253
+sleep 60
+> zcen scan 1772 -2492 2011 -2253 hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look per id: blocks, patches, intag_patches against the box's tag chunks
+
+## SQ-PS15-12c-pl | plains control: locate plains from 2144 -2592, census
+> forceload remove all
+> execute positioned 2144 70 -2592 run locate biome minecraft:plains
+waitlog (minecraft:plains is at \[|Could not find a biome of type "?minecraft:plains) 300
+capture L is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {L1-120} {L3-120} {L1+119} {L3+119}
+sleep 60
+> zcen scan {L1-120} {L3-120} {L1+119} {L3+119} hearthandharvest:hops_vine@wild_hops,farmersdelight:wild_carrots@carrot,farmersdelight:wild_onions@onion,neapolitan:adzuki_sprouts@adzuki,veggiesdelight:wild_broccoli@broccoli,veggiesdelight:wild_cauliflowers@cauliflower,veggiesdelight:wild_garlic@garlic,vintagedelight:wild_oats@oats,vintagedelight:wild_cucumbers@cucumbers,rusticdelight:wild_bell_peppers@bell_pepper,rusticdelight:wild_pale_bell_peppers@bell_pepper,rusticdelight:wild_dark_bell_peppers@bell_pepper,rusticdelight:wild_coffee@coffee,delightful:mini_melon@mini_melon,farmersdelight:wild_rice@rice,farmersrespite:wild_tea_bush@tea,minecraft:melon@melon,minecraft:cocoa@cocoa,minecraft:oak_log@,minecraft:birch_log@,minecraft:jungle_log@
+waitlog \[zcen\] scan done 900
+reject Too many chunks
+reject skipped=[1-9]
+reject \[zcen\] error
+look carrots near 1 patch per 120 carrot tag chunks
+
+## SQ-PS15-16-river | river walk half: locate a river near site 2, census river trees, mulberry vines, driftwood
+> forceload remove all
+> execute positioned 1472 70 -3264 run locate biome minecraft:river
+waitlog (minecraft:river is at \[|Could not find a biome of type "?minecraft:river) 300
+capture V is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {V1-120} {V3-120} {V1+119} {V3+119}
+sleep 60
+> zcen scan {V1-120} {V3-120} {V1+119} {V3+119} upgrade_aquatic:river_log@,upgrade_aquatic:river_leaves@,upgrade_aquatic:mulberry_vine@,upgrade_aquatic:driftwood_log@,upgrade_aquatic:driftwood@,minecraft:oak_log@
+waitlog \[zcen\] scan done 900
+reject skipped=[1-9]
+reject \[zcen\] error
+look river_leaves present with oak trunks (river_log 0 from river trees), mulberry vines, driftwood present
+> forceload remove all

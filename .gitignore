@@ -93,3 +93,8 @@ __pycache__/
 /tools/creative_delight_test/move_diff_snapshot.json
 /tools/creative_delight_test/move_diff_dump_snapshot.json
 /tools/.nested_jars/
+# Client capture output (tools/client_capture, feature_writeup/client_capture.md): runs go to
+# test_captures/judgement/<run>/ for the owner to judge, then are wiped. Already outside the allow-list; explicit so
+# no later "!/test_captures/" un-ignores the pixels.
+/test_captures/
+/test_captures/judgement/

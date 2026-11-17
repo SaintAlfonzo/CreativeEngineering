@@ -1,0 +1,157 @@
+# r1115 phase 6, boot A1: CD fix-2 reruns (SQ-SPD-08b, SQ-BBQW-02t, SQ-SLK-01c; rows at the end of "SQ-SPD / SQ-SLK and
+# Creative Delight fixes") and SQ-SY-14 + id lookups for the SY wave 2 rows (p6_a2.qb, same boot).
+# Server: NOSWAP=1 prep_srv.sh OUT p6a1 A spawn-animals=true difficulty=normal (superflat, ground top y -61).
+# Before boot, copy into OUT/srv/kubejs/server_scripts/: hh_crow_probe.js (zhh3), c2_probe.js (zc2), zp_probe.js (zp),
+#   zc4_probe.js (zc4), tools/soil_yield_probe/sy_probe.js (syt), each as zz_<name>; zq comes from prep_srv.sh.
+# srv toml: hearthandharvest-common.toml [salt] saltLickInterval 200, saltSearchInterval 20, saltAnimalStageChance 1.0;
+#   loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1.
+# Rows copied from p4_a1.qb (SQ-SPD-08, -08x, -06, SQ-BBQW-02s, -02) and p4_a1b.qb (SQ-SLK-01b).
+# Basin: 2 slots; facing north -> slot = (1 - hit x) * 2: hit x 0.75 = slot 0 (beef), 0.25 = slot 1 (empty).
+pace 1
+
+## P6-setup | gamerules, forceloads, probe check (not a test row)
+bootexpect Done \(
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule randomTickSpeed 0
+> time set noon
+> weather clear
+> forceload add 700 490 720 590
+> forceload add 296 356 316 376
+> execute in minecraft:the_nether run forceload add 700 490 720 510
+sleep 5
+> kill @e[type=minecraft:item]
+> zc4 cmd zhh3,zc2,zp,zq,syt
+waitlog \[zc4\] done 20
+reject \[zc4\] cmd \w+ missing
+
+## SQ-SY-14 | boot lines: Fortune strip on 70+ tables, 36 crops, nether soils, no "no base", PickSoilYieldMixin applied
+bootexpect \[soil-yield\] Fortune stripped: \d+ terms on ([7-9]\d|\d{3,}) crop tables
+bootexpect \[soil-yield\] 36 crops \(.*sweet_berry.*\)
+bootexpect \[soil-yield\] 36 crops \(.*lemon.*\)
+bootexpect \[soil-yield\] 36 crops \(.*nether_wart.*\)
+bootexpect \[soil-yield\] 36 crops \(.*crimson_fungus_colony.*\)
+bootexpect rich soul soil \+33%, fertile soul soil \+66%
+bootreject no base in soil_yield\.json
+bootreject PickSoilYieldMixin.*(fail|error|Error|could not)
+bootreject Mixin apply.*SoilYield
+shell grep -h "\[soil-yield\]\|\[botany_pots\]" logs/latest.log logs/kubejs/server.log | cut -c1-1500 | sort -u
+shell grep -ic "PickSoilYield" logs/latest.log; grep -i "mixin" logs/latest.log | grep -i "creativedelight" | grep -iE "error|fail|warn" | head -5
+look shell lines: soils list and crop list as the pass text
+
+## SQ-SY-ids | id lookups for p6_a2.qb (not a queue row)
+> zq blocks sweet_potato
+> zq blocks lemon_tree
+> zq blocks propelplant
+> zq blocks salmonberry
+> zq blocks strawberry_bush
+> zq blocks fungus_colony
+> zq blocks zucchini
+> zq blocks cucumber
+> zq blocks ghost_pepper
+> zq blocks rich_soul_soil
+> zq blocks nulch
+> zq blocks mulch
+> zq blocks terracotta_botany_pot
+> zq blocks melon
+waitlog \[zq\] done 20
+look ids for p6_a2.qb
+
+## SQ-SPD-08b | Nether pouch of wart x10 at roof y 129 and at y 61: 10 wart each, pouch emptied and kept; Nether bundle plants 1 on the centre; overworld control 10
+> execute in minecraft:the_nether run fill 705 128 495 715 131 505 minecraft:air
+> execute in minecraft:the_nether run fill 709 128 498 713 128 502 minecraft:soul_sand
+> execute in minecraft:the_nether run setblock 710 129 500 minecraft:dispenser[facing=east]
+> execute in minecraft:the_nether run data merge block 710 129 500 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:nether_wart",Count:1b},itemCount:10}}]}
+> execute in minecraft:the_nether run setblock 710 130 500 minecraft:redstone_block
+sleep 2
+> zq count 709 129 498 713 129 502 minecraft:nether_wart minecraft:the_nether
+> execute in minecraft:the_nether run data get block 710 129 500 Items
+> execute in minecraft:the_nether run fill 705 60 495 715 64 511 minecraft:air
+> execute in minecraft:the_nether run fill 705 59 495 715 59 511 minecraft:netherrack
+> execute in minecraft:the_nether run fill 709 60 498 713 60 502 minecraft:soul_sand
+> execute in minecraft:the_nether run setblock 710 61 500 minecraft:dispenser[facing=east]
+> execute in minecraft:the_nether run data merge block 710 61 500 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:nether_wart",Count:1b},itemCount:10}}]}
+> execute in minecraft:the_nether run setblock 710 62 500 minecraft:redstone_block
+sleep 2
+> zq count 709 61 498 713 61 502 minecraft:nether_wart minecraft:the_nether
+> execute in minecraft:the_nether run data get block 710 61 500 Items
+> execute in minecraft:the_nether run fill 709 60 506 713 60 510 minecraft:soul_sand
+> execute in minecraft:the_nether run setblock 710 61 508 minecraft:dispenser[facing=east]
+> execute in minecraft:the_nether run data merge block 710 61 508 {Items:[{Slot:0b,id:"minecraft:bundle",Count:1b,tag:{Items:[{id:"minecraft:nether_wart",Count:3b}]}}]}
+> execute in minecraft:the_nether run setblock 710 62 508 minecraft:redstone_block
+sleep 2
+> zq count 709 61 506 713 61 510 minecraft:nether_wart minecraft:the_nether
+> execute in minecraft:the_nether if block 711 61 508 minecraft:nether_wart run say SPD08b bundle centre wart
+> execute in minecraft:the_nether run data get block 710 61 508 Items
+> fill 705 -60 575 715 -58 585 minecraft:air
+> fill 709 -61 578 713 -61 582 minecraft:soul_sand
+> setblock 710 -60 580 minecraft:dispenser[facing=east]
+> data merge block 710 -60 580 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:nether_wart",Count:1b},itemCount:10}}]}
+> setblock 710 -59 580 minecraft:redstone_block
+sleep 2
+> zq count 709 -60 578 713 -60 582 minecraft:nether_wart
+> data get block 710 -60 580 Items
+count count minecraft:nether_wart: 10\b == 3
+expect count minecraft:nether_wart: 1\b
+expect SPD08b bundle centre wart
+reject Exception
+look the three pouch Items lines: quark:seed_pouch in Slot 0 with no storedItem / itemCount; bundle Items Count 2b
+
+## SQ-BBQW-02t | stick on each slot of a warped basin holding one beef: CONSUME, stick kept, no stick block, basin 1 beef
+> fill 296 -60 356 316 -56 376 minecraft:air
+> pbot spawn c6b 303.5 -60 366.5 minecraft:overworld survival
+sleep 3
+> clear c6b
+> setblock 304 -60 372 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:1b}]}}
+> pbot hold c6b minecraft:stick 1
+> zc2 useat c6b 304 -60 372 0.75 0.2 0.5 up
+> zc2 useat c6b 304 -60 372 0.25 0.2 0.5 up
+sleep 1
+> zc2 inv 304 -60 372
+> zc2 state 304 -59 372
+> zq count 302 -60 370 306 -58 374 supplementaries:stick
+> zp inv c6b
+waitlog \[zp\] done 20
+count \[zc2\] useat c6b main CONSUME; main now 1 minecraft:stick == 2
+expect \[zp\] inv c6b: .*minecraft:stick
+expect count supplementaries:stick: 0\b
+reject \[zc2\] useat c6b main PASS
+look basin inv 0:1 minecraft:beef only; state above the basin air
+
+## SQ-BBQW-02 | skewering on a warped basin still works (2 beef, stick, cabbage in the off hand)
+> clear c6b
+> setblock 302 -60 370 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:2b}]}}
+> zc2 inv 302 -60 370
+> pbot hold c6b minecraft:stick 1
+> item replace entity c6b weapon.offhand with farmersdelight:cabbage 2
+> zc2 useat c6b 302 -60 370 0.75 0.2 0.5 up
+sleep 1
+> zc2 inv 302 -60 370
+> zp inv c6b
+waitlog \[zp\] done 20
+expect \[zp\] inv c6b: .*barbequesdelight:raw_beef_skewer
+> clear c6b
+> pbot remove c6b
+
+## SQ-SLK-01c | cow at 18 blocks: reaches the salt and licks it within 1600 ticks (interval 200, stage chance 1.0)
+> forceload add 21890 3994 21950 4006
+sleep 3
+> kill @e[type=!player,x=21890,y=-62,z=3994,dx=60,dy=8,dz=12]
+> fill 21890 -61 3994 21950 -56 4006 minecraft:glass hollow
+> pbot spawn c603 21891 -60 3995 minecraft:overworld creative
+sleep 2
+> zhh3 cfgdump
+> setblock 21920 -60 4000 salt:salt_block
+> summon minecraft:cow 21938 -60 4000 {NoAI:1b,Tags:["s603"]}
+> zhh3 watch minecraft:cow 21920 -60 4000 3 80 20 s3 21920.5,-59.5,4000.5
+> zhh3 watch minecraft:cow 21920 -60 4000 22 80 20 w3 21920.5,-59.5,4000.5
+> execute as @e[tag=s603] run data merge entity @s {NoAI:0b}
+waitlog \[zhh3\] watch w3 done 120
+> zhh3 seen w3 StayNearSaltGoal
+> zhh3 block 21920 -60 4000
+> pbot remove c603
+> kill @e[type=minecraft:cow,x=21890,y=-62,z=3994,dx=60,dy=8,dz=12]
+> forceload remove 21890 3994 21950 4006
+expect \[zhh3\] watch s3 done samples=\d+ count=[1-9]
+expect \[zhh3\] block 21920 -60 4000 hearthandharvest:\w*licked_salt_block
+look w3 minD; the block a licked stage (lightly_licked); air would be the cow licking it fully away (also a lick)

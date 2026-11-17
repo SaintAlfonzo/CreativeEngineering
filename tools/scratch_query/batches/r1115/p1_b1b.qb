@@ -1,0 +1,27 @@
+# r1115 phase 1, boot B1 follow-up (same running server, after p1_b1.qb): SQ-VH-06 / -06c reread with the zqh
+# "interior" tally (blocks whose 27 surrounding quart cells are all the biome). p1_b1 found 945 netherrack inside Heap
+# cells and 2212 flesh inside warped_forest cells of a box 32 blocks from the Heap: both can be the surface rule's
+# fuzzed biome lookup at biome borders (BiomeManager zoom), which the per-cell tally cannot tell from a real leak.
+# Needs /reload to load the edited zz_zq_heapcol.js (no kjsexpect rows here or later in this boot).
+pace 1
+
+## SQ-VH-06r | Heap and the adjacent warped forest: interior tallies (no border cells)
+shell cp $INST/tools/scratch_query/zq_heapcol.js kubejs/server_scripts/zz_zq_heapcol.js
+> reload
+sleep 30
+sleep 10
+> execute in minecraft:the_nether run forceload add -34 -18 37 29
+sleep 30
+> zqh biomesoplenty:visceral_heap -34 -18 13 29 minecraft:the_nether
+waitlog \[zqh\] done 300
+> zqh minecraft:warped_forest 6 -10 37 21 minecraft:the_nether 1 126 minecraft:warped_nylium
+waitlog \[zqh\] done 300
+> execute in minecraft:the_nether run forceload remove all
+reject \[zqh\] error
+look Heap interior netherrack 0 (border cells only = surface rule zoom, not a rule fault); warped interior flesh 0
+
+## SQ-HH-328c | candidates of the seed 8675309 corn maze search (no [locate] line: 7 or fewer misses under logMissesAtLeast 8)
+> cwglocate stats
+sleep 3
+shell f=kubejs/exported/worldgen/locate_stats.json; ls -l "$f"; python3 -c "import json,sys; d=json.load(open(sys.argv[1])); [print(r) for r in d['searches'] if 'corn_maze' in str(r.get('structure'))]" "$f"
+look corn maze row: misses, loads, candidates, ms

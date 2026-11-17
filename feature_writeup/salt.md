@@ -1,6 +1,7 @@
 # Salt and Create: The Salt (Creative Delight members)
 
-> **2026-11-14: block melting moved to Creative Common's melting system ([melting.md](melting.md)).** Salt blocks (The Salt's, Vintage Delight's, the Hearth and Harvest salt lick stages) are sources in `#creativecommon:melting/salt`; the salt member's own block melt (`[salt] SaltBlockMeltingEnabled`) is off. The item click stays here.
+> **2026-11-14: block melting moved to Creative Common's melting system ([melting.md](melting.md)).** Salt blocks (The Salt's, Vintage Delight's, the Hearth and Harvest salt lick stages) are sources in `#creativecommon:melting/salt`; the salt member's own block melt (`[salt] SaltBlockMeltingEnabled`) is off.
+> **2026-11-15 (section 7):** a salt click never melts (it places a salt layer); the salt dispenser melts one stage or places a layer; salt layers may vanish as they melt; salt licks take salt in one way and give up top layers first; new item Salt Melt.
 
 Status: BUILT 2026-11-02, installed, not booted. `repackedSalt-1.2.4.1-ce-19.2-01` and `repackedCreateSalt-1.19.2-1.1.0-ce-19.2-01`
 are nested in `mods/creativedelight-1.0.0.jar` (installed 2026-11-02 23:16; the saltable tag of section 5 in the CD jar of
@@ -146,4 +147,31 @@ on crushing wheels and the millstone (S6). A Salt Block unpacks to 9.
 
 Not planned until a mod lands: Unusual Delight's salt from quartz and from smelting Soggy Flesh ([unusual_delight.md](unusual_delight.md)).
 
-2026-11-14 (plan_bugfix_1114 3.8): the member's block melt is off (`Melting.tryMeltFromBlock` returns false, also when CD's `SaltBlockTicks` calls it; `[salt.Melting] SaltBlockMeltingEnabled` defaults off and points at Creative Common's `[melting]`). The salt item click goes through Common's `Melting.isTarget` and `meltStep`, one stage per click. Rules: [melting.md](melting.md).
+2026-11-14 (plan_bugfix_1114 3.8): the member's block melt is off (`Melting.tryMeltFromBlock` returns false, also when CD's `SaltBlockTicks` calls it; `[salt.Melting] SaltBlockMeltingEnabled` defaults off and points at Creative Common's `[melting]`). Rules: [melting.md](melting.md). Superseded 2026-11-15: the "salt item click, one stage per click" never existed in play (the pack's salt is Vintage Delight's salt dust, whose click places a layer; SQ-MELT-08) and is not wanted (owner): section 7.
+
+## 7. Salt, ice and salt licks (plan_post_scratch_1115 B1 to B7, B9; built 2026-11-15)
+
+Status: BUILT 2026-11-15, not installed: Creative Common 1.2.0 (`Melting` listener, tags), Creative Delight 1.1.0 nesting
+`repackedSalt-1.2.4.1-ce-19.2-04` and the hearth member. Queue: SQ-PS15-01 to -07, -09. TODO `tooling/scratch-1115-follow-ups #3` to `#8`.
+
+### 7.1 Rules
+
+| Step | Rule | Where |
+|---|---|---|
+| B1 | Salt dust clicked on ice or snow places a salt layer on top (as on any block); the click never melts. The layer is a salt source, so the ice under it melts at the melting system's block rate. | Vintage `SaltDustItem` (unchanged). The Salt's own `salt:salt` item would still melt by click, but it is merged into salt dust and never in play |
+| B2 | Salt dust (and `salt:salt`) in a dispenser: a melting target in front melts one stage (packed and blue ice step down a tier) for 1 salt; air in front (with support below) gets a salt layer, a salt layer below 8 gets one more, for 1 salt; anything else: the salt is dropped. `[salt.Melting] SaltItemMeltingEnabled = false` turns the melt off (the layer place stays). | Salt member `Melting.SaltItemDispenseBehavior`; CD `salt/SaltLayerMelt` registers it on `vintagedelight:salt_dust` at common setup |
+| B3 | Each time a salt layer melts ice or snow by the melting system's random tick, it loses one layer with chance `[salt.Melting] SaltLayerVanishChance` (default 0.05); the last layer leaves air. Only `SnowLayerBlock` salt sources (Vintage Delight's salt layer); the Salt Block, Raw Rock Salt Block, salt lick stages and other full blocks never vanish. | Common `Melting.setSaltMeltListener` (after a salt-source melt in `targetTick`); CD `salt/SaltLayerMelt` |
+| B4 | Open, waiting for owner: salt layers have no gravity in the pack (plan B4). | none |
+| B5 | A lick with salt layers on top gives up one layer per lick (player or animal), from the topmost layer block down; the lick keeps its stage until no layer is left. | hearth `SaltLick.wear`, `topLayer` |
+| B6 | Salt Melt (`salt:salt_melt`, Tools tab): 64 uses; right click on any melting target melts it one stage for 1 durability (packed and blue ice step down a tier); in a dispenser the same on the block in front (nothing in front to melt: the dispenser fails and keeps it). Recipe: shapeless, 2 salt + 2 raw rock salt. | Salt member overlay `ce/SaltMeltItem`, `ce/SaltMeltRegistry` (Forge annotation scan, `RegisterEvent`); CD `creativedelight/salt.js`; JEI `kubejs/assets/creativedelight/kubejs/salt/jei_info.js` |
+| B7 | One refill, `SaltLick.refill`: each salt (hand or dispenser) or salt layer (placed on top) restores one stage of a worn lick, waxed or not; leftover layers stay on the full lick. Salt on a full lick puts a layer on top: by hand salt dust's own click, by dispenser `SaltLick.addLayerOnTop`. The dispenser now also refills waxed stages (was unwaxed only). | hearth `SaltLick`, `SaltEvents`, `LickableSaltBlock` |
+| B9 | Glowstone cage lantern is no longer a fire source (light 3, no random tick). | Common `tags/melting_tags.js` |
+
+### 7.2 Notes
+
+- Salt Melt texture: the item model is `salt:item/salt` from the same jar (upstream human art, used as is; no file
+  copied, so no `sources.tsv` row). If the owner meant `block/salt_cluster`, change the model's `layer0`.
+- Creative Delight compiles against the upstream Salt jar, so `SaltLayerMelt` reads `SaltLayerVanishChance` by
+  reflection; a Creative Delight jar without the `-04` Salt member reads chance 0 (no layer vanishes).
+- Salt member `-04`: `replaced_resources` now lists `assets/salt/lang/en_us.json` (upstream copy plus `item.salt.salt_melt`).
+- SQ-HH-474 (salt dust on an unworn salt block places a layer): by design under B1 and B7 unless the owner says otherwise.

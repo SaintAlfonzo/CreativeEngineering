@@ -26,6 +26,8 @@ public final class PassResult {
     public boolean surrounded;
     /** Packed position (BlockPos#asLong) of the first surrounded cell, valid when {@link #surrounded}. */
     public long surroundedCell;
+    /** Tier of {@link #surroundedCell}, valid when {@link #surrounded}. */
+    public PassTier surroundedTier;
     /** Some counted block is dense with denseResetsFall. */
     public boolean resetFall;
     /** Some counted block's tier has projectiles = true (phase 2 reads it). */
@@ -44,6 +46,7 @@ public final class PassResult {
         walkNeighbours = fallNeighbours = 0;
         surrounded = false;
         surroundedCell = 0L;
+        surroundedTier = null;
         resetFall = false;
         projectiles = false;
         Arrays.fill(cellRule, 0, cells, null);
@@ -80,6 +83,7 @@ public final class PassResult {
         if (c.surrounded() && !surrounded) {
             surrounded = true;
             surroundedCell = pos;
+            surroundedTier = c.tier();
         }
         resetFall |= c.resetFall();
         projectiles |= tierProjectiles;

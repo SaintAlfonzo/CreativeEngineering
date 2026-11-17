@@ -1,0 +1,618 @@
+# r1115 phase 4, boot A1: "SQ-SPD / SQ-SLK and Creative Delight fixes, 2026-11-14" (scratch_queue.md), server rows and
+# reruns except SQ-DEP-02, SQ-MIN-03 (phase 7) and SQ-CDW-02 (p4_b1.qb, fresh group B world, last).
+# Server: NOSWAP=1 prep_srv.sh OUT p4a1 A difficulty=normal (superflat, ground top y -61, stand at -60).
+# Before boot, copy into OUT/srv/kubejs/server_scripts/: hh_crow_probe.js (zhh3), hh_gear_probe.js (zhh5), zc4_probe.js
+#   (zc4), c2_probe.js (zc2), zp_probe.js (zp), zact_probe.js (zact), each as zz_<name>; zq comes from prep_srv.sh.
+# srv toml (qrun.py toml): hearthandharvest-common.toml [salt] saltLickInterval 200, saltSearchInterval 20,
+#   saltAnimalStageChance 1.0 (Boot F style: SQ-HH-482, SQ-SLK-01 see a lick within the watch);
+#   loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1.
+# Fixtures copied from r1111/hh_gear_*.qb, hh_boot4.qb, hh_crow_d.qb, r1112/hh_gear.qb, hh_crow_rerun.qb,
+# r1113/c2_a1.qb, fix_c2a1.qb, c4_ar2.qb. Seed container code: SeedContainerDispense (CD hearth member): the 5x5 is
+# centred on the block in front (front air: the layer below it), so a horizontal dispenser stands inside its own 5x5.
+pace 1
+
+## P4-setup | gamerules, forceloads, bots (not a test row)
+bootexpect Done \(
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> gamerule randomTickSpeed 0
+> time set noon
+> weather clear
+> forceload add 470 460 620 620
+> forceload add 700 490 720 570
+> forceload add 796 496 820 526
+> forceload add 296 356 316 376
+> execute in minecraft:the_nether run forceload add 700 490 720 510
+sleep 5
+> kill @e[type=minecraft:item]
+> pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
+> clear G
+> zhh5 hand G
+> zc4 cmd zhh3,zhh5,zc2,zc4,zp,zact,zq
+waitlog \[zc4\] done 20
+reject \[zc4\] cmd \w+ missing
+look `[zhh5] hand id=minecraft:air`; no probe load error in the boot log
+
+## SQ-SPD-01 | pouch x30 wheat facing air (east) over a 5x5 farmland layer: 24 or 25 wheat, itemCount 5 or 6
+> fill 705 -60 495 715 -58 505 minecraft:air
+> fill 709 -61 498 713 -61 502 minecraft:farmland
+> setblock 710 -60 500 minecraft:dispenser[facing=east]
+> data merge block 710 -60 500 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:wheat_seeds",Count:1b},itemCount:30}}]}
+> setblock 710 -59 500 minecraft:redstone_block
+sleep 2
+> zq count 709 -60 498 713 -60 502 minecraft:wheat
+> data get block 710 -60 500 Items
+reject Exception
+look row text: 25 wheat and itemCount 5. The dispenser itself stands in the 5x5 (centre 711, x 709..713), so the code can plant 24 at most here: 24 + itemCount 6 = code matches plan_bugfix_1114 1 (row text fault); pouch in slot 0
+
+## SQ-SPD-02 | front block is farmland: wheat on top of the 5x5 at -60 (dispenser takes one cell)
+> fill 705 -60 505 715 -58 515 minecraft:air
+> fill 709 -60 508 713 -60 512 minecraft:farmland
+> setblock 710 -60 510 minecraft:dispenser[facing=east]
+> data merge block 710 -60 510 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:wheat_seeds",Count:1b},itemCount:30}}]}
+> setblock 710 -59 510 minecraft:redstone_block
+sleep 2
+> zq count 709 -59 508 713 -59 512 minecraft:wheat
+> zq count 709 -60 508 713 -60 512 minecraft:wheat
+> data get block 710 -60 510 Items
+reject Exception
+look wheat at -59 (24: the dispenser cell is not soil), none at -60; itemCount 6
+
+## SQ-SPD-03 | pouch x4: 4 wheat; the emptied pouch loses storedItem/itemCount and stays in slot 0
+> fill 705 -60 515 715 -58 525 minecraft:air
+> fill 709 -61 518 713 -61 522 minecraft:farmland
+> setblock 710 -60 520 minecraft:dispenser[facing=east]
+> data merge block 710 -60 520 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:wheat_seeds",Count:1b},itemCount:4}}]}
+> setblock 710 -59 520 minecraft:redstone_block
+sleep 2
+> zq count 709 -60 518 713 -60 522 minecraft:wheat
+> data get block 710 -60 520 Items
+expect count minecraft:wheat: 4\b
+reject Exception
+look Items holds quark:seed_pouch in Slot 0 with no storedItem / itemCount
+
+## SQ-SPD-04 | over stone: nothing planted, itemCount 30, pouch kept
+> fill 705 -60 525 715 -58 535 minecraft:air
+> fill 709 -61 528 713 -61 532 minecraft:stone
+> setblock 710 -60 530 minecraft:dispenser[facing=east]
+> data merge block 710 -60 530 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:wheat_seeds",Count:1b},itemCount:30}}]}
+> setblock 710 -59 530 minecraft:redstone_block
+sleep 2
+> zq count 709 -60 528 713 -60 532 minecraft:wheat
+> data get block 710 -60 530 Items
+expect count minecraft:wheat: 0\b
+expect has the following block data: .*itemCount: 30
+reject Exception
+look pouch in slot 0 (fail click level event not readable on a server)
+
+## SQ-SPD-05 | empty pouch: nothing, pouch kept
+> fill 705 -60 535 715 -58 545 minecraft:air
+> fill 709 -61 538 713 -61 542 minecraft:farmland
+> setblock 710 -60 540 minecraft:dispenser[facing=east]
+> data merge block 710 -60 540 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b}]}
+> setblock 710 -59 540 minecraft:redstone_block
+sleep 2
+> zq count 709 -60 538 713 -60 542 minecraft:wheat
+> data get block 710 -60 540 Items
+expect count minecraft:wheat: 0\b
+expect has the following block data: \[\{Slot: 0b, id: "quark:seed_pouch"
+reject Exception
+
+## SQ-SPD-06 | bundle seeds x3 then dirt: 1 wheat on the centre, Items[0].Count 2, dirt kept, bundle in slot 0
+> fill 705 -60 545 715 -58 555 minecraft:air
+> fill 709 -61 548 713 -61 552 minecraft:farmland
+> setblock 710 -60 550 minecraft:dispenser[facing=east]
+> data merge block 710 -60 550 {Items:[{Slot:0b,id:"minecraft:bundle",Count:1b,tag:{Items:[{id:"minecraft:wheat_seeds",Count:3b},{id:"minecraft:dirt",Count:1b}]}}]}
+> setblock 710 -59 550 minecraft:redstone_block
+sleep 2
+> zq count 709 -60 548 713 -60 552 minecraft:wheat
+> execute if block 711 -60 550 minecraft:wheat run say SPD06 centre wheat
+> data get block 710 -60 550 Items
+expect count minecraft:wheat: 1\b
+expect SPD06 centre wheat
+expect has the following block data: \[\{Slot: 0b, id: "minecraft:bundle", Count: 1b, tag: \{Items: \[\{id: "minecraft:wheat_seeds", Count: 2b\}, \{id: "minecraft:dirt", Count: 1b\}\]
+reject Exception
+
+## SQ-SPD-07 | bundle dirt first: nothing planted, NBT unchanged
+> fill 705 -60 555 715 -58 565 minecraft:air
+> fill 709 -61 558 713 -61 562 minecraft:farmland
+> setblock 710 -60 560 minecraft:dispenser[facing=east]
+> data merge block 710 -60 560 {Items:[{Slot:0b,id:"minecraft:bundle",Count:1b,tag:{Items:[{id:"minecraft:dirt",Count:1b},{id:"minecraft:wheat_seeds",Count:3b}]}}]}
+> setblock 710 -59 560 minecraft:redstone_block
+sleep 2
+> zq count 709 -60 558 713 -60 562 minecraft:wheat
+> data get block 710 -60 560 Items
+expect count minecraft:wheat: 0\b
+expect has the following block data: \[\{Slot: 0b, id: "minecraft:bundle", Count: 1b, tag: \{Items: \[\{id: "minecraft:dirt", Count: 1b\}, \{id: "minecraft:wheat_seeds", Count: 3b\}\]
+reject Exception
+
+## SQ-SPD-08 | Nether roof: pouch of nether wart x10 over 5x5 soul sand: 10 wart, pouch emptied and kept
+> zq itemtag quark:seed_pouch_holdable
+> execute in minecraft:the_nether run fill 705 128 495 715 131 505 minecraft:air
+> execute in minecraft:the_nether run fill 709 128 498 713 128 502 minecraft:soul_sand
+> execute in minecraft:the_nether run setblock 710 129 500 minecraft:dispenser[facing=east]
+> execute in minecraft:the_nether run data merge block 710 129 500 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:nether_wart",Count:1b},itemCount:10}}]}
+> execute in minecraft:the_nether run setblock 710 130 500 minecraft:redstone_block
+sleep 2
+> zq count 709 129 498 713 129 502 minecraft:nether_wart minecraft:the_nether
+> execute in minecraft:the_nether run data get block 710 129 500 Items
+expect count minecraft:nether_wart: 10\b
+reject Exception
+look pouch in slot 0 with no storedItem / itemCount; nether_wart in quark:seed_pouch_holdable
+
+## SQ-HH-1574 | rerun: pouch x20 facing down: 20 wheat in the 5x5 under it, emptied pouch kept, no crash
+> fill 530 -61 549 534 -61 553 minecraft:farmland
+> fill 530 -60 549 534 -57 553 minecraft:air
+> setblock 532 -58 551 minecraft:dispenser[facing=down]
+> data merge block 532 -58 551 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:wheat_seeds",Count:1b},itemCount:20}}]}
+> setblock 533 -58 551 minecraft:redstone_block
+sleep 2
+> zq count 530 -60 549 534 -60 553 minecraft:wheat
+> data get block 532 -58 551 Items
+expect count minecraft:wheat: 20\b
+reject Exception
+look pouch in slot 0, itemCount 0 or no count tag (SPD-03 rule)
+
+## SQ-HH-1575 | rerun: pouch holding cobblestone, then an empty one: no plants, itemCount unchanged, pouch kept
+> fill 538 -61 549 542 -61 553 minecraft:farmland
+> fill 538 -60 549 542 -57 553 minecraft:air
+> setblock 540 -58 551 minecraft:dispenser[facing=down]
+> data merge block 540 -58 551 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:cobblestone",Count:1b},itemCount:20}}]}
+> setblock 541 -58 551 minecraft:redstone_block
+sleep 2
+> zq count 538 -60 549 542 -60 553 minecraft:wheat
+> data get block 540 -58 551 Items
+> fill 546 -61 549 550 -61 553 minecraft:farmland
+> fill 546 -60 549 550 -57 553 minecraft:air
+> setblock 548 -58 551 minecraft:dispenser[facing=down]
+> data merge block 548 -58 551 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b}]}
+> setblock 549 -58 551 minecraft:redstone_block
+sleep 2
+> zq count 546 -60 549 550 -60 553 minecraft:wheat
+> data get block 548 -58 551 Items
+count count minecraft:wheat: 0\b == 2
+expect has the following block data: .*cobblestone.*itemCount: 20
+reject Exception
+
+## SQ-HH-309 | rerun: all 8 mums in each listed tag and in minecraft:small_flowers (item and block)
+> zq blocktag minecraft:small_flowers
+> zq itemtag minecraft:small_flowers
+> zq blocktag flowerpatch:bonemeal_able_flowers
+> zq blocktag terralith:plants
+> zq blocktag c:ignoredblocks
+> zq itemtag vinery:small_flower
+> zq itemtag another_furniture:planter_box_placeables
+> zq itemtag creativecompat:flower_box_plants
+expect blocktag minecraft:small_flowers \(\d+\): (?=.* hearthandharvest:white_mum\b)(?=.* hearthandharvest:red_mum\b)(?=.* hearthandharvest:orange_mum\b)(?=.* hearthandharvest:yellow_mum\b)(?=.* hearthandharvest:light_blue_mum\b)(?=.* hearthandharvest:blue_mum\b)(?=.* hearthandharvest:purple_mum\b)(?=.* hearthandharvest:pink_mum\b)
+expect itemtag minecraft:small_flowers \(\d+\): (?=.* hearthandharvest:white_mum\b)(?=.* hearthandharvest:red_mum\b)(?=.* hearthandharvest:orange_mum\b)(?=.* hearthandharvest:yellow_mum\b)(?=.* hearthandharvest:light_blue_mum\b)(?=.* hearthandharvest:blue_mum\b)(?=.* hearthandharvest:purple_mum\b)(?=.* hearthandharvest:pink_mum\b)
+expect blocktag flowerpatch:bonemeal_able_flowers \(\d+\): (?=.* hearthandharvest:white_mum\b)(?=.* hearthandharvest:red_mum\b)(?=.* hearthandharvest:orange_mum\b)(?=.* hearthandharvest:yellow_mum\b)(?=.* hearthandharvest:light_blue_mum\b)(?=.* hearthandharvest:blue_mum\b)(?=.* hearthandharvest:purple_mum\b)(?=.* hearthandharvest:pink_mum\b)
+expect blocktag terralith:plants \(\d+\): (?=.* hearthandharvest:white_mum\b)(?=.* hearthandharvest:red_mum\b)(?=.* hearthandharvest:orange_mum\b)(?=.* hearthandharvest:yellow_mum\b)(?=.* hearthandharvest:light_blue_mum\b)(?=.* hearthandharvest:blue_mum\b)(?=.* hearthandharvest:purple_mum\b)(?=.* hearthandharvest:pink_mum\b)
+expect blocktag c:ignoredblocks \(\d+\): (?=.* hearthandharvest:white_mum\b)(?=.* hearthandharvest:red_mum\b)(?=.* hearthandharvest:orange_mum\b)(?=.* hearthandharvest:yellow_mum\b)(?=.* hearthandharvest:light_blue_mum\b)(?=.* hearthandharvest:blue_mum\b)(?=.* hearthandharvest:purple_mum\b)(?=.* hearthandharvest:pink_mum\b)
+expect itemtag vinery:small_flower \(\d+\): (?=.* hearthandharvest:white_mum\b)(?=.* hearthandharvest:red_mum\b)(?=.* hearthandharvest:orange_mum\b)(?=.* hearthandharvest:yellow_mum\b)(?=.* hearthandharvest:light_blue_mum\b)(?=.* hearthandharvest:blue_mum\b)(?=.* hearthandharvest:purple_mum\b)(?=.* hearthandharvest:pink_mum\b)
+expect itemtag another_furniture:planter_box_placeables \(\d+\): (?=.* hearthandharvest:white_mum\b)(?=.* hearthandharvest:red_mum\b)(?=.* hearthandharvest:orange_mum\b)(?=.* hearthandharvest:yellow_mum\b)(?=.* hearthandharvest:light_blue_mum\b)(?=.* hearthandharvest:blue_mum\b)(?=.* hearthandharvest:purple_mum\b)(?=.* hearthandharvest:pink_mum\b)
+expect itemtag creativecompat:flower_box_plants \(\d+\): (?=.* hearthandharvest:white_mum\b)(?=.* hearthandharvest:red_mum\b)(?=.* hearthandharvest:orange_mum\b)(?=.* hearthandharvest:yellow_mum\b)(?=.* hearthandharvest:light_blue_mum\b)(?=.* hearthandharvest:blue_mum\b)(?=.* hearthandharvest:purple_mum\b)(?=.* hearthandharvest:pink_mum\b)
+
+## SQ-HH-1593 | rerun: only creativedelight:shapeless/sugar_from_syrup (4 sugar); no rusticdelight:sugar_from_syrup
+> zq rdetail sugar_from_syrup
+expect creativedelight:shapeless/sugar_from_syrup
+reject rusticdelight:sugar_from_syrup
+look the recipe gives 4 sugar
+
+## SQ-HH-1505 | rerun: shod horse takes no cactus or berry damage; unshod control does; ForgeData shod key read
+> summon minecraft:horse 480 -60 476 {Tame:1b,NoAI:1b,Tags:["r4h1"]}
+> summon minecraft:horse 484 -60 476 {Tame:1b,NoAI:1b,Tags:["r4h2"]}
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G r4h1
+> zhh5 horse r4h1
+> zhh5 horse r4h2
+> zhh5 hurt r4h1 cactus
+sleep 1
+> zhh5 hurt r4h1 berry
+sleep 1
+> zhh5 hurt r4h2 cactus
+> data get entity @e[tag=r4h1,limit=1] ForgeData
+reject error TypeError
+expect has the following entity data: \{.*hearthandharvest:horseshoe
+look r4h1 shod=true, accepted=false both times, health unchanged; r4h2 accepted=true, health down 1; ForgeData holds hearthandharvest:horseshoe
+
+## SQ-HH-1507 | rerun: sneak take-off with empty hand, then shears, then a horseshoe on a reshod horse: shoe to the bot each time, ForgeData loses the key
+> summon minecraft:horse 488 -60 476 {Tame:1b,NoAI:1b,Tags:["r4h3"]}
+> clear G
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G r4h3
+> zhh5 horse r4h3
+> pbot hold G minecraft:air
+> zhh5 sneak G on
+> zhh5 interact G r4h3
+> zhh5 sneak G off
+> zhh5 horse r4h3
+> zhh5 offer G hearthandharvest:horseshoe
+> data get entity @e[tag=r4h3,limit=1] ForgeData
+> zhh5 interact G r4h3
+> zhh5 horse r4h3
+> clear G hearthandharvest:horseshoe
+> pbot hold G minecraft:shears 1
+> zhh5 sneak G on
+> zhh5 interact G r4h3
+> zhh5 sneak G off
+> zhh5 horse r4h3
+> zhh5 offer G hearthandharvest:horseshoe
+> data get entity @e[tag=r4h3,limit=1] ForgeData
+> clear G
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 interact G r4h3
+> pbot hold G hearthandharvest:horseshoe 1
+> zhh5 sneak G on
+> zhh5 interact G r4h3
+> zhh5 sneak G off
+> zhh5 horse r4h3
+> zhh5 offer G hearthandharvest:horseshoe
+> data get entity @e[tag=r4h3,limit=1] ForgeData
+> zp inv G
+waitlog \[zp\] done 20
+reject error TypeError
+look per step: shod=true after each shoeing; after each sneak use (empty hand, shears, horseshoe) shod=false, offer +1 (1, 1, 2), ForgeData without hearthandharvest:horseshoe; screen not checkable on a server
+
+## SQ-HH-1534 | rerun alone: sneak-use with a Tilling III hoe tills 25, damage 25 (sneak state printed)
+> gamerule randomTickSpeed 0
+> fill 560 -61 536 568 -61 544 minecraft:grass_block
+> fill 560 -60 536 568 -60 544 minecraft:air
+> clear G
+> item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:3s}]}
+> tp G 564 -60 532 -45 0
+sleep 1
+> zhh5 sneak G on
+> zp sneak G on
+> pbot use G 564 -61 540 up
+> zhh5 sneak G off
+> zq count 560 -61 536 568 -61 544 minecraft:farmland
+> zhh5 hand G
+look farmland count 25; damage=25. Note: the Tilling enchantment was dropped for HoeHarvestArea (hearth_and_harvest.md D21); an "Unknown enchantment" or count 1 means the row predates that
+
+## SQ-SLK-02 | rest heights on the licked and waxed stages
+> fill 798 -60 498 816 -55 502 minecraft:air
+> setblock 800 -60 500 hearthandharvest:lightly_licked_salt_block
+> setblock 802 -60 500 hearthandharvest:well_licked_salt_block
+> setblock 804 -60 500 hearthandharvest:heavily_licked_salt_block
+> setblock 806 -60 500 hearthandharvest:waxed_lightly_licked_salt_block
+> setblock 808 -60 500 hearthandharvest:waxed_well_licked_salt_block
+> setblock 810 -60 500 hearthandharvest:waxed_heavily_licked_salt_block
+> setblock 812 -60 500 hearthandharvest:waxed_salt_block
+> summon minecraft:armor_stand 800.5 -58 500.5 {Tags:["sl0"]}
+> summon minecraft:armor_stand 802.5 -58 500.5 {Tags:["sl1"]}
+> summon minecraft:armor_stand 804.5 -58 500.5 {Tags:["sl2"]}
+> summon minecraft:armor_stand 806.5 -58 500.5 {Tags:["sl3"]}
+> summon minecraft:armor_stand 808.5 -58 500.5 {Tags:["sl4"]}
+> summon minecraft:armor_stand 810.5 -58 500.5 {Tags:["sl5"]}
+> summon minecraft:armor_stand 812.5 -58 500.5 {Tags:["sl6"]}
+sleep 3
+> data get entity @e[tag=sl0,limit=1] Pos[1]
+> data get entity @e[tag=sl1,limit=1] Pos[1]
+> data get entity @e[tag=sl2,limit=1] Pos[1]
+> data get entity @e[tag=sl3,limit=1] Pos[1]
+> data get entity @e[tag=sl4,limit=1] Pos[1]
+> data get entity @e[tag=sl5,limit=1] Pos[1]
+> data get entity @e[tag=sl6,limit=1] Pos[1]
+> kill @e[type=minecraft:armor_stand]
+count has the following entity data: -59\.25d == 2
+count has the following entity data: -59\.5d == 2
+count has the following entity data: -59\.75d == 2
+count has the following entity data: -59\.0d == 1
+look order: lightly -59.25, well -59.5, heavily -59.75, waxed the same, waxed_salt_block -59.0
+
+## SQ-SLK-03 | salt layers refill licked stages
+> fill 798 -60 508 816 -55 512 minecraft:air
+> setblock 800 -60 510 hearthandharvest:heavily_licked_salt_block
+> setblock 802 -60 510 hearthandharvest:heavily_licked_salt_block
+> setblock 804 -60 510 hearthandharvest:well_licked_salt_block
+> setblock 806 -60 510 salt:salt_block
+> setblock 808 -60 510 hearthandharvest:waxed_heavily_licked_salt_block
+> setblock 800 -59 510 vintagedelight:salt[layers=1]
+> setblock 802 -59 510 vintagedelight:salt[layers=3]
+> setblock 804 -59 510 vintagedelight:salt[layers=5]
+> setblock 806 -59 510 vintagedelight:salt[layers=1]
+> setblock 808 -59 510 vintagedelight:salt[layers=1]
+sleep 1
+> zhh3 block 800 -60 510
+> zhh3 block 800 -59 510
+> zhh3 block 802 -60 510
+> zhh3 block 802 -59 510
+> zhh3 block 804 -60 510
+> zhh3 block 804 -59 510
+> zhh3 block 806 -60 510
+> zhh3 block 806 -59 510
+> zhh3 block 808 -60 510
+> zhh3 block 808 -59 510
+> zhh3 items 804 -60 510 10
+look 800: well_licked, air above; 802: salt:salt_block, air; 804: salt:salt_block with layers=3 on top; 806: layer stays; 808: waxed_well_licked, air; items total=0
+
+## SQ-SLK-04 | salt dust and salt layer item restore one stage per click; dispenser restores one stage and keeps the rest
+> fill 798 -60 518 816 -55 524 minecraft:air
+> setblock 800 -60 520 hearthandharvest:well_licked_salt_block
+> pbot spawn slk 800.5 -60 522.5 minecraft:overworld survival
+sleep 3
+> clear slk
+> pbot hold slk vintagedelight:salt_dust 4
+> pbot use slk 800 -60 520 up
+sleep 1
+> zhh3 block 800 -60 520
+> zhh3 block 800 -59 520
+> zhh3 inv slk vintagedelight:salt_dust
+> pbot hold slk vintagedelight:salt 4
+> pbot use slk 800 -60 520 up
+sleep 1
+> zhh3 block 800 -60 520
+> zhh3 block 800 -59 520
+> zhh3 inv slk vintagedelight:salt
+> setblock 806 -60 520 hearthandharvest:heavily_licked_salt_block
+> setblock 806 -60 521 minecraft:dispenser[facing=north]
+> data merge block 806 -60 521 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
+> setblock 806 -59 521 minecraft:redstone_block
+sleep 2
+> zhh3 block 806 -60 520
+> zhh3 block 806 -59 520
+> data get block 806 -60 521 Items
+> zhh3 items 806 -60 520 4
+> pbot remove slk
+look click 1 (dust): well -> lightly, dust 4 -> 3; click 2 (layer item): lightly -> salt:salt_block; dispenser: heavily -> well, Items dust Count 3b, no item entity
+
+## SQ-HH-434 | rerun: handFeeding off: 5 wild crows, corn x16 kept, no crow InLove > 0
+> forceload add 13980 0 13996 16
+sleep 3
+> pbot spawn b434 13988 -60 15 minecraft:overworld survival
+sleep 2
+> zhh3 cfg handFeeding false
+> clear b434
+> pbot hold b434 corn_delight:corn 16
+> zhh3 spawn crow 5 13988 -60 8 3 noai
+sleep 2
+> zhh3 feed b434 13988 -60 8 7
+> zhh3 cfg handFeeding true
+> execute as @e[type=hearthandharvest:crow,x=13980,y=-62,z=0,dx=16,dy=8,dz=16] run data get entity @s InLove
+> pbot remove b434
+> kill @e[type=hearthandharvest:crow,x=13980,y=-62,z=0,dx=16,dy=8,dz=16]
+> forceload remove 13980 0 13996 16
+expect \[zhh3\] feed attempts=5 tamed=0 held=corn_delight:corn x16
+count has the following entity data: 0$ == 5
+reject has the following entity data: [1-9]
+
+## SQ-HH-440 | rerun: two tame crows fed corn go in love and breed (a baby within 40 s)
+> forceload add 14327 -13 14353 13
+sleep 3
+> fill 14327 -61 -13 14353 -47 13 minecraft:glass hollow
+> pbot spawn b440 14340 -60 3 minecraft:overworld survival
+sleep 2
+> clear b440
+> pbot hold b440 corn_delight:corn 2
+> zhh3 spawn crow 2 14342 -59 0 1
+sleep 1
+> zhh3 tame b440 14342 -59 0 4
+> zhh3 interact b440 14342 -59 0 4
+> execute as @e[type=hearthandharvest:crow,x=14327,y=-61,z=-13,dx=26,dy=14,dz=26] run data get entity @s InLove
+sleep 40
+> zhh3 tally 14340 -55 0 14
+> pbot remove b440
+> kill @e[type=hearthandharvest:crow,x=14327,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 14327 -13 14353 13
+expect \[zhh3\] interact 2 held=empty
+count has the following entity data: [1-9]\d*$ == 2
+expect \[zhh3\] tally crows=3
+look tally crows=3 = a baby (AI breeding)
+
+## SQ-HH-440b | cornBreeding off: wheat seeds breed tame crows; a hurt tame crow fed a seed heals 2 and does not go in love
+> forceload add 14427 -13 14453 13
+sleep 3
+> fill 14427 -61 -13 14453 -47 13 minecraft:glass hollow
+> pbot spawn b44b 14440 -60 3 minecraft:overworld survival
+sleep 2
+> zhh3 cfg cornBreeding false
+> clear b44b
+> pbot hold b44b minecraft:wheat_seeds 2
+> zhh3 spawn crow 2 14442 -59 0 1
+sleep 1
+> zhh3 tame b44b 14442 -59 0 4
+> zhh3 interact b44b 14442 -59 0 4
+> execute as @e[type=hearthandharvest:crow,x=14427,y=-61,z=-13,dx=26,dy=14,dz=26] run data get entity @s InLove
+sleep 40
+> zhh3 tally 14440 -55 0 14
+> summon hearthandharvest:crow 14450.5 -60 10.5 {NoAI:1b,Tags:["hc44b"]}
+sleep 1
+> data merge entity @e[tag=hc44b,limit=1] {Health:2.0f}
+> zhh3 tame b44b 14450.5 -60 10.5 0.9
+> pbot hold b44b minecraft:wheat_seeds 1
+> data get entity @e[tag=hc44b,limit=1] Health
+> zhh3 interact b44b 14450.5 -60 10.5 0.9
+> data get entity @e[tag=hc44b,limit=1] Health
+> data get entity @e[tag=hc44b,limit=1] InLove
+> zhh3 cfg cornBreeding true
+> pbot remove b44b
+> kill @e[type=hearthandharvest:crow,x=14427,y=-61,z=-13,dx=26,dy=14,dz=26]
+> forceload remove 14427 -13 14453 13
+expect \[zhh3\] interact 2 held=empty
+expect \[zhh3\] tally crows=3
+expect \[zhh3\] cfg crow\.cornBreeding = true
+look first InLove pair both > 0; hurt crow Health 2.0 -> 4.0 and InLove 0
+
+## SQ-HH-482 | rerun: cow at 21 is pulled back inside 20 and licks; cow at 24 is not seen
+> forceload add 21290 3994 21350 4006
+sleep 3
+> kill @e[type=!player,x=21290,y=-62,z=3994,dx=60,dy=8,dz=12]
+> fill 21290 -61 3994 21350 -56 4006 minecraft:glass hollow
+> pbot spawn c482 21291 -60 3995 minecraft:overworld creative
+sleep 2
+> setblock 21320 -60 4000 salt:salt_block
+> summon minecraft:cow 21341 -60 4000 {NoAI:1b,Tags:["r482"]}
+> summon minecraft:cow 21296 -60 4000 {NoAI:1b,Tags:["r482"]}
+> zhh3 watch minecraft:cow 21341 -60 4000 3 80 20 a 21320.5,-59.5,4000.5
+> zhh3 watch minecraft:cow 21296 -60 4000 3 80 20 b 21320.5,-59.5,4000.5
+> zhh3 watch minecraft:cow 21320 -60 4000 3 80 20 s 21320.5,-59.5,4000.5
+> execute as @e[tag=r482] run data merge entity @s {NoAI:0b}
+waitlog \[zhh3\] watch s done 120
+> zhh3 seen a StayNearSaltGoal
+> zhh3 seen b StayNearSaltGoal
+> zhh3 assert a lastD <= 20.5
+> zhh3 block 21320 -60 4000
+> pbot remove c482
+> kill @e[type=minecraft:cow,x=21290,y=-62,z=3994,dx=60,dy=8,dz=12]
+> forceload remove 21290 3994 21350 4006
+expect \[zhh3\] seen a StayNearSaltGoal yes
+expect \[zhh3\] seen b StayNearSaltGoal no
+expect \[zhh3\] assert a lastD=.* <= 20.5\.?0* PASS
+expect \[zhh3\] watch s done samples=\d+ count=[1-9]
+look the salt block is a licked stage (stage chance 1.0 in this boot) = a lick; watch s count>0 = a cow came within 3 of the salt
+
+## SQ-SLK-01 | cow at 18 blocks reaches the salt within about 300 ticks of a lick time (lick interval 200 here)
+> forceload add 21490 3994 21550 4006
+sleep 3
+> kill @e[type=!player,x=21490,y=-62,z=3994,dx=60,dy=8,dz=12]
+> fill 21490 -61 3994 21550 -56 4006 minecraft:glass hollow
+> pbot spawn c501 21491 -60 3995 minecraft:overworld creative
+sleep 2
+> setblock 21520 -60 4000 salt:salt_block
+> summon minecraft:cow 21538 -60 4000 {NoAI:1b,Tags:["s501"]}
+> zhh3 watch minecraft:cow 21520 -60 4000 3 25 20 s1 21520.5,-59.5,4000.5
+> zhh3 watch minecraft:cow 21520 -60 4000 22 25 20 w1 21520.5,-59.5,4000.5
+> execute as @e[tag=s501] run data merge entity @s {NoAI:0b}
+waitlog \[zhh3\] watch w1 done 60
+> zhh3 seen w1 StayNearSaltGoal
+> zhh3 block 21520 -60 4000
+> pbot remove c501
+> kill @e[type=minecraft:cow,x=21490,y=-62,z=3994,dx=60,dy=8,dz=12]
+> forceload remove 21490 3994 21550 4006
+expect \[zhh3\] watch s1 done samples=\d+ count=[1-9]
+expect \[zhh3\] seen w1 StayNearSaltGoal yes
+look w1 minD near 1 (reached the salt within 500 ticks = within 300 of a lick time at interval 200); salt block a licked stage
+
+## SQ-FDI-03 | rerun: vanilla cake bitten 3 times (Supplementaries directional cakes on): every bite counts cake_slice in both books
+> forceload add 40590 39990 40620 40020
+sleep 3
+> fill 40595 -60 39995 40615 -55 40015 minecraft:air
+> setblock 40612 -60 40000 minecraft:cake
+> pbot spawn fd4 40613.5 -60 40002.5 minecraft:overworld survival
+sleep 3
+> clear fd4
+> pbot hold fd4 minecraft:air
+> zc4 sol fd4 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fd4 4
+> pbot use fd4 40612 -60 40000 up
+sleep 1
+> zc2 state 40612 -60 40000
+> zc4 sol fd4 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fd4 4
+> pbot use fd4 40612 -60 40000 up
+sleep 1
+> zc2 state 40612 -60 40000
+> zc4 sol fd4 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fd4 4
+> pbot use fd4 40612 -60 40000 up
+sleep 1
+> zc2 state 40612 -60 40000
+> zc4 sol fd4 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 sol fd4 minecraft:cake
+waitlog \[zc4\] done 20
+> pbot remove fd4
+look before: carrotHas=false; after bite 1 carrotHas=true applepieHas=true; applepieEntries +1 per bite (3 total); state supplementaries:directional_cake after bite 1 (bites 1, 2, 3); minecraft:cake applepieHas=false
+
+## SQ-FDI-03b | double cake (a cake used on a cake): each bite counts cake_slice
+> setblock 40606 -60 40000 minecraft:cake
+> pbot spawn fd5 40606.5 -60 40002.5 minecraft:overworld survival
+sleep 3
+> clear fd5
+> pbot hold fd5 minecraft:cake 1
+> pbot use fd5 40606 -60 40000 up
+sleep 1
+> zc2 state 40606 -60 40000
+> pbot hold fd5 minecraft:air
+> zc4 sol fd5 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fd5 4
+> pbot use fd5 40606 -60 40000 up
+sleep 1
+> zc2 state 40606 -60 40000
+> zc4 sol fd5 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 hunger fd5 4
+> pbot use fd5 40606 -60 40000 up
+sleep 1
+> zc2 state 40606 -60 40000
+> zc4 sol fd5 farmersdelight:cake_slice
+waitlog \[zc4\] done 20
+> zc4 sol fd5 minecraft:cake
+waitlog \[zc4\] done 20
+> pbot remove fd5
+look state supplementaries:double_cake after the cake use; each bite: applepieEntries +1, cake_slice carrotHas/applepieHas true after bite 1; minecraft:cake false
+
+## SQ-BBQW-02s | rerun: stick on a warped basin holding one beef: stick stays in the main hand, basin unchanged
+> fill 296 -60 356 316 -56 376 minecraft:air
+> pbot spawn c2b 303.5 -60 366.5 minecraft:overworld survival
+sleep 3
+> clear c2b
+> setblock 304 -60 372 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:1b}]}}
+> pbot hold c2b minecraft:stick 1
+> zc2 useat c2b 304 -60 372 0.75 0.2 0.5 up
+sleep 1
+> zc2 inv 304 -60 372
+> zp inv c2b
+waitlog \[zp\] done 20
+expect \[zp\] inv c2b: .*minecraft:stick
+look useat line: main hand still minecraft:stick x1; basin inv 0:1 minecraft:beef
+
+## SQ-BBQW-02 | skewering on a warped basin still works (2 beef, stick, cabbage in the off hand)
+> clear c2b
+> setblock 302 -60 370 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:2b}]}}
+> zc2 inv 302 -60 370
+> pbot hold c2b minecraft:stick 1
+> item replace entity c2b weapon.offhand with farmersdelight:cabbage 2
+> zc2 useat c2b 302 -60 370 0.75 0.2 0.5 up
+sleep 1
+> zc2 inv 302 -60 370
+> zp inv c2b
+waitlog \[zp\] done 20
+expect \[zp\] inv c2b: .*barbequesdelight:raw_beef_skewer
+> clear c2b
+
+## SQ-CBW-03 | rerun: a pumpkin pie goes on a birch board sitting on a CfB counter; no pie block placed
+> setblock 304 -60 360 cookingforblockheads:counter[facing=north]
+> setblock 306 -60 360 cookingforblockheads:counter[facing=north]
+> setblock 304 -59 360 farmersdelight:birch_cutting_board[facing=north]
+> setblock 306 -59 360 farmersdelight:granite_cutting_board[facing=north]
+> pbot hold c2b minecraft:pumpkin_pie 1
+> pbot use c2b 304 -59 360 up
+sleep 1
+> zc2 state 304 -59 360
+> zc2 inv 304 -59 360
+> zc2 state 304 -58 360
+> zp inv c2b
+waitlog \[zp\] done 20
+reject Exception|\[zc2\] error
+look board inv holds minecraft:pumpkin_pie; state at 304 -58 360 air; the bot no longer holds the pie
+> clear c2b
+> pbot remove c2b
+> pbot remove G
+
+## SQ-SPD-08x | follow-up: nether wart pouch over soul sand in the overworld (control) and inside the Nether below the roof
+> fill 705 -60 565 715 -58 575 minecraft:air
+> fill 709 -61 568 713 -61 572 minecraft:soul_sand
+> setblock 710 -60 570 minecraft:dispenser[facing=east]
+> data merge block 710 -60 570 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:nether_wart",Count:1b},itemCount:10}}]}
+> setblock 710 -59 570 minecraft:redstone_block
+sleep 2
+> zq count 709 -60 568 713 -60 572 minecraft:nether_wart
+> data get block 710 -60 570 Items
+> execute in minecraft:the_nether run fill 705 60 495 715 64 505 minecraft:air
+> execute in minecraft:the_nether run fill 705 59 495 715 59 505 minecraft:netherrack
+> execute in minecraft:the_nether run fill 709 60 498 713 60 502 minecraft:soul_sand
+> execute in minecraft:the_nether run setblock 710 61 500 minecraft:dispenser[facing=east]
+> execute in minecraft:the_nether run data merge block 710 61 500 {Items:[{Slot:0b,id:"quark:seed_pouch",Count:1b,tag:{storedItem:{id:"minecraft:nether_wart",Count:1b},itemCount:10}}]}
+> execute in minecraft:the_nether run setblock 710 62 500 minecraft:redstone_block
+sleep 2
+> zq count 709 61 498 713 61 502 minecraft:nether_wart minecraft:the_nether
+> execute in minecraft:the_nether run data get block 710 61 500 Items
+> execute in minecraft:the_nether run fill 709 129 498 713 129 502 minecraft:nether_wart
+> zq count 709 129 498 713 129 502 minecraft:nether_wart minecraft:the_nether
+look overworld 10 wart = pouch logic fine; Nether y 61 10 wart = only the roof refuses; the roof fill shows whether wart can stand at y 129 at all

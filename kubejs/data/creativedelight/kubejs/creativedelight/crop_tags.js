@@ -27,6 +27,18 @@ ServerEvents.tags('block', e => {
 		t.add(e, 'fruitsdelight:pineapple_grows_on', '#creativedelight:crops/farmland_soils')
 })
 
+// Vine crops (plan_post_scratch_1115 C2, SQ-HOP-04): placing any block other than the vine's own into one of these
+// never replaces it (CD crops/VineCropReplace). Vines are replaceable plants in vanilla, so a stick, torch or block
+// clicked onto an unripe hops vine used to take its place.
+ServerEvents.tags('block', e => {
+	if (!global.CD) return
+	var t = global.tags
+	var b = global.blocks
+	var vines = [b.hops_vine, b.jungle_grape_bush_red, b.jungle_grape_bush_white, b.vanilla_vine, b.vanilla_vine_plant,
+		b.mulberry_vine].filter(id => global.has(id))
+	if (vines.length) t.add(e, b.t_vine_crops, vines)
+})
+
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
 	var i = global.item

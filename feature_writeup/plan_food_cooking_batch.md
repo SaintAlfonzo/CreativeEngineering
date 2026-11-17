@@ -13,7 +13,7 @@ Row corrections: `dishes/ingredients #26` is already Testing (fixed 2026-11-01, 
 |---|---|---|
 | A1 | `dishes/ingredients #25` | Cabbage cutting yields 4 leaves. |
 | A2 | `dishes/ingredients #29` | Glycerol removed as a sugar source in every recipe; remove its sugar tooltip (`ui/tooltips #6`). |
-| A3 | `dishes/ingredients #32` | One shulker meat: End's Delight's. Every recipe and tag that used another shulker meat is merged to it. End's Delight textures updated to the merged item. Follows the ARR route in memory `arr-mod-overrides-route` if new ids are needed. |
+| A3 | `dishes/ingredients #32` | One shulker meat: End's Delight's. Every recipe and tag that used another shulker meat is merged to it. End's Delight textures updated to the merged item. Follows the ARR route in note [arr-mod-overrides-route](agent_notes/arr-mod-overrides-route.md) if new ids are needed. |
 | A4 | `dishes/meals #51` | One taco recipe taking any roasted pepper and any roasted onion (tags). |
 | A5 | `dishes/meals #55` | Vegan patty added to the meat patty tag/ingredient in every recipe. |
 | A6 | `dishes/meals #47` | Kebab Wrap combine recipe on `forge:tortilla`, keep skewer-effect NBT (matches `dishes/meals #15`). |

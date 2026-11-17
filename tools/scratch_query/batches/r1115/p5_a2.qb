@@ -1,0 +1,33 @@
+# r1115 phase 5 (runner-5), boot A2: the p5_o2.qb world (old CD jar fixture) rebooted on the installed mods/ jars.
+# Rerun of SQ-HOP-11 / SQ-HH-1546b: the saved world has randomTickSpeed 0, and the checks run before any random tick
+# (p5_a1 read them after randomTickSpeed 3: the age-2 lattice grew, bare tilled end stone reverted to end stone).
+pace 1
+
+## SQ-HOP-11 | old save: lattices keep age and facing (grape none until a random tick), then grape=hops; swap log line
+bootexpect \[swaps\] minecraft:block: 2 id\(s\) remapped
+> gamerule randomTickSpeed
+> zmelt w hop11_620 overworld 620 -60 521
+> zmelt w hop11_622 overworld 622 -60 521
+> zmelt w hh1546b overworld 624 -61 520
+> execute if block 620 -60 521 vinery:grapevine_lattice[age=4,facing=south] run say HOP11-620-lattice-age4
+> execute if block 622 -60 521 vinery:grapevine_lattice[age=2,facing=south] run say HOP11-622-lattice-age2
+> execute if block 624 -61 520 endercrop:tilled_end_stone run say HH1546b-ender-tes
+> pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 2
+> gamerule randomTickSpeed 3000
+sleep 5
+> gamerule randomTickSpeed 0
+> execute if block 620 -60 521 vinery:grapevine_lattice[grape=hops] run say HOP11-620-grape-hops
+> execute if block 622 -60 521 vinery:grapevine_lattice[grape=hops] run say HOP11-622-grape-hops
+> zmelt show
+> zmelt clear
+expect Gamerule randomTickSpeed is currently set to: 0
+expect HOP11-620-lattice-age4$
+expect HOP11-622-lattice-age2$
+expect HH1546b-ender-tes$
+expect HOP11-620-grape-hops$
+expect HOP11-622-grape-hops$
+look watch lines: loaded states (grape none), then grape=hops; 624 loads as endercrop:tilled_end_stone (may revert to end stone during the 5 s of random ticks: Ender Crop behaviour)
+
+## SQ-HH-1546b | old save: H&H tilled end stone loads as Ender Crop's (checked in SQ-HOP-11 before any random tick)
+look HH1546b-ender-tes line in SQ-HOP-11

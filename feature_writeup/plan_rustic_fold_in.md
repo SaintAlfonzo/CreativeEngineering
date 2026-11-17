@@ -98,7 +98,7 @@ Our own overlay files stay where they are (`blockstates/glowing_calamari_crate.j
 | `development/creativeDelight/members/rustic/tools/check_donor.py` | Replaced by `bake_upstream.py --check` |
 | Creative Common upstream-jar detection | Check for a Rustic entry; remove it so Common stops moving or warning about the jar |
 | `mod_sides.md`, `pack/MODLIST.md` (via `gen_pack_manifest.py`) | Rustic row: bundled, MIT, no donor |
-| [rustic_delight.md](rustic_delight.md) 5.1, 5.7, 5.13; [creative_delight.md](creative_delight.md); [pack_tooling.md](pack_tooling.md); README row 87; memory `rustic-delight-port` | Rewrite "donor jar / read at runtime" to "baked, MIT" |
+| [rustic_delight.md](rustic_delight.md) 5.1, 5.7, 5.13; [creative_delight.md](creative_delight.md); [pack_tooling.md](pack_tooling.md); README row 87; note [rustic-delight-port](agent_notes/rustic-delight-port.md) | Rewrite "donor jar / read at runtime" to "baked, MIT" |
 
 ## 7. Verification
 

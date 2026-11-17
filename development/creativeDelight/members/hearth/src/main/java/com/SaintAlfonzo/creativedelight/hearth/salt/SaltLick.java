@@ -10,7 +10,11 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -95,9 +99,98 @@ public final class SaltLick {
         return stack.is(SALT_TAG) || SALT_LAYER_ID.equals(ForgeRegistries.ITEMS.getKey(stack.getItem()));
     }
 
-    /** Wears the block one stage; the last stage pops 1 salt and is gone. */
+    /** Vintage Delight's salt layer block, or null without it. */
+    @Nullable
+    public static Block saltLayer() {
+        Block b = ForgeRegistries.BLOCKS.getValue(SALT_LAYER_ID);
+        return b instanceof SnowLayerBlock ? b : null;
+    }
+
+    /**
+     * The one refill (plan_post_scratch_1115 B7): restores the lick at pos by up to {@code layers} stages, one per layer of
+     * salt (heavily, well, lightly, full); a waxed stage stays waxed. Returns the layers not used (all of them when the
+     * block is not a worn stage). Entry points: salt by hand ({@link SaltEvents#onRightClickBlock}), by dispenser
+     * ({@link SaltEvents#registerDispenser}) and a salt layer arriving on top ({@link LickableSaltBlock#neighborChanged}).
+     */
+    public static int refill(Level level, BlockPos pos, BlockState state, int layers) {
+        build();
+        Block stage = state.getBlock();
+        while (layers > 0 && PREV.get(stage) != null) {
+            stage = PREV.get(stage);
+            layers--;
+        }
+        if (stage != state.getBlock()) {
+            level.setBlockAndUpdate(pos, stage.defaultBlockState());
+            level.playSound(null, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.4F);
+        }
+        return layers;
+    }
+
+    /**
+     * Salt on a full lick (B7, owner 2026-11-15): one salt layer on top of it, or one more on a layer already there
+     * (below 8). False when nothing could be placed (no Vintage Delight, the spot is taken, the layer is full).
+     */
+    public static boolean addLayerOnTop(Level level, BlockPos lick) {
+        Block layer = saltLayer();
+        if (layer == null) {
+            return false;
+        }
+        BlockPos above = lick.above();
+        BlockState here = level.getBlockState(above);
+        if (here.is(layer)) {
+            int n = here.getValue(SnowLayerBlock.LAYERS);
+            if (n >= SnowLayerBlock.MAX_HEIGHT) {
+                return false;
+            }
+            level.setBlockAndUpdate(above, here.setValue(SnowLayerBlock.LAYERS, n + 1));
+        } else if (here.isAir() && layer.defaultBlockState().canSurvive(level, above)) {
+            level.setBlockAndUpdate(above, layer.defaultBlockState());
+        } else {
+            return false;
+        }
+        level.playSound(null, above, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+        return true;
+    }
+
+    /**
+     * B5: the topmost salt layer resting on the lick (a column of full 8-layer salt blocks counts as one stack, the top
+     * block is the one worn), or null when no salt layer sits on it.
+     */
+    @Nullable
+    static BlockPos topLayer(Level level, BlockPos lick) {
+        Block layer = saltLayer();
+        if (layer == null) {
+            return null;
+        }
+        BlockPos.MutableBlockPos m = lick.above().mutable();
+        BlockState s = level.getBlockState(m);
+        if (!s.is(layer)) {
+            return null;
+        }
+        while (s.getValue(SnowLayerBlock.LAYERS) >= SnowLayerBlock.MAX_HEIGHT && !level.isOutsideBuildHeight(m.above())) {
+            BlockState up = level.getBlockState(m.above());
+            if (!up.is(layer)) {
+                break;
+            }
+            m.move(0, 1, 0);
+            s = up;
+        }
+        return m.immutable();
+    }
+
+    /**
+     * Wears the lick one step. B5 (plan_post_scratch_1115): salt layers on top go first, one layer per lick from the top
+     * down, and the lick keeps its size; with none, the block wears one stage and the last stage pops 1 salt and is gone.
+     */
     public static void wear(Level level, BlockPos pos, BlockState state) {
         build();
+        BlockPos top = topLayer(level, pos);
+        if (top != null) {
+            BlockState layer = level.getBlockState(top);
+            int n = layer.getValue(SnowLayerBlock.LAYERS);
+            level.setBlockAndUpdate(top, n > 1 ? layer.setValue(SnowLayerBlock.LAYERS, n - 1) : Blocks.AIR.defaultBlockState());
+            return;
+        }
         Block next = NEXT.get(state.getBlock());
         if (next != null) {
             level.setBlockAndUpdate(pos, next.defaultBlockState());

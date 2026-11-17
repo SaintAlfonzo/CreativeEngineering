@@ -1,0 +1,31 @@
+# r1115 phase 4, boot B1: SQ-CDW-02 rerun last (fresh group B world, seed 8675309 as r1113 c3b1, full pack).
+# Server: NOSWAP=1 prep_srv.sh OUT p4b1 B difficulty=normal. Probe: zq only (prep_srv.sh). Fixture from r1113/c3_b1.qb.
+# Fix under test: kubejs/data/creativedelight/worldgen/placed_feature/wild/rubber_tree.json (MOTION_BLOCKING_NO_LEAVES,
+# no would_survive). r1113: rubber logs 0 in the same box.
+pace 1
+
+## P4B-setup | gamerules (not a test row)
+bootexpect Done \(
+> gamerule doDaylightCycle false
+> gamerule doMobSpawning false
+> time set noon
+> weather clear
+
+## SQ-CDW-02 | all mods present: wild crop packs line off none, no skip line; rubber trees near a jungle
+bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): none
+kjsreject \[wild-crops\].*mod not loaded, skipped
+shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
+shell grep -h "\[wild-crops\]" logs/kubejs/server.log | cut -c1-200 | head -6
+> locate biome minecraft:jungle
+waitlog nearest minecraft:jungle is at|Could not find 300
+capture JG minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+
+> forceload add {JG1-80} {JG3-80} {JG1+79} {JG3+79}
+sleep 90
+> zq count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} myrtrees:rubberwood_log
+waitlog \[zq\] count myrtrees:rubberwood_log: \d+ 600
+> zq count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} minecraft:jungle_log
+waitlog \[zq\] count minecraft:jungle_log: \d+ 600
+expect \[zq\] count myrtrees:rubberwood_log: [1-9]
+> forceload remove {JG1-80} {JG3-80} {JG1+79} {JG3+79}
+look packs line lists delightful, enders_additions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight (a newer jar may add packs); rubberwood logs in about 1 chunk in 4 of the 10x10 box (log count / about 5 logs a tree).

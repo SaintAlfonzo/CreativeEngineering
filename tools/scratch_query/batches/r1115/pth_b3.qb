@@ -1,0 +1,46 @@
+# r1115 phase 11 (runner-11), boot 3 of the p11a world: SQ-PTH-16 second boot (no move line), SQ-PTH-07r (items of
+# SQ-PTH-06r held across the restart), SQ-PTH-15c (SQ-PTH-15b again: its lane z 1180..1192 was outside the forceload
+# after the restart, so the summons never joined the loaded world). The client rows join this server afterwards.
+pace 1
+
+## SQ-PTH-16b | boot 3: no second move line, minLayers stays 6
+bootexpect Done \(
+bootreject slowFromLayers \(.*\) moved to
+shell grep -c '^\[leaf_piles\]' config/creativecompat-common.toml || true; awk '/\[surface\.passthrough\.leaf_pile\]/{f=1} f&&/minLayers/{print; exit}' config/creativecompat-common.toml
+
+## SQ-PTH-07r | items of SQ-PTH-06r after the restart: held, CreativeCompatPass in their data; web removed: they fall
+> pbot spawn P 1010.5 -60 1110.5 minecraft:overworld survival
+sleep 8
+> zpth mod i07
+> data get entity @e[tag=i07fast,limit=1]
+> setblock 1010 -57 1120 minecraft:air
+sleep 3
+> zpth mod i07
+look before: same positions as SQ-PTH-06r, ng=true, a CreativeCompatPass key; after: y -60, ng=false
+
+## SQ-PTH-15c | scratch kubejs data tag exempt + snowball, /reload: snowball flies through the cube; carts from 2.5 blocks before the web (empty carts lose 4 % a tick on rails), control lane without web
+> forceload add 992 1168 1039 1199
+sleep 5
+> fill 1010 -60 1179 1012 -58 1181 minecraft:cobweb
+shell mkdir -p kubejs/data/creativecompat/tags/entity_types/passthrough/projectile && printf '{"replace":false,"values":["minecraft:snowball"]}' > kubejs/data/creativecompat/tags/entity_types/passthrough/projectile/exempt.json
+> reload
+sleep 25
+> summon minecraft:snowball 1004.5 -58.5 1180.5 {NoGravity:1b,Tags:["m15c"]}
+> execute as @e[tag=m15c] if entity @s[type=#creativecompat:passthrough_exempt/all] run say PTH15c-snowball-exempt
+> zpth watch m15c 45 1
+> zpth launch m15c none 1.5 0 0
+sleep 3
+> fill 1000 -60 1192 1024 -60 1192 minecraft:rail[shape=east_west]
+> summon minecraft:minecart 1009.5 -60 1190.5 {Tags:["c15d"]}
+> summon minecraft:minecart 1009.5 -60 1192.5 {Tags:["c15e"]}
+> zpth watch c15d 100 2
+> zpth watch c15e 100 2
+> zpth motion c15d 0.4 0 0
+> zpth motion c15e 0.4 0 0
+sleep 6
+shell rm -f kubejs/data/creativecompat/tags/entity_types/passthrough/projectile/exempt.json
+> reload
+sleep 25
+expect PTH15c-snowball-exempt$
+look m15c passes x 1013 at mot x about 1.4; c15d slowed under the web (x 1011.5..1013) but not stopped dead, compared with c15e
+

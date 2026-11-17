@@ -7,6 +7,8 @@
 //   /zwo stacks X Y Z R        item entities within R of X Y Z, one per line (id, count), left in place
 //   /zwo skip N                advance the overworld game time by N ticks (timers and the talk cooldown come due)
 // Output: "[zwo] ..." lines, then "[zwo] done". Written 2026-11-09, not run yet: one live call each before a batch relies on it.
+// MIGRATED 2026-11-15 (creative_devtools.md): state -> /cdevtest state, punch -> /pbot punch, drops -> /cdevtest items,
+// stacks -> /cdevtest items keep (summed, not per stack: use /cdevtest entities type=minecraft:item nbt). skip stays here.
 (() => {
     const $Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $Pos = Java.loadClass('net.minecraft.core.BlockPos')

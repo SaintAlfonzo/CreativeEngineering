@@ -1,5 +1,10 @@
 package com.SaintAlfonzo.creativecompat.mixin;
 
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.player.LocalPlayer;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.VoxelShape;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,6 +44,38 @@ public abstract class IPExitLiftMixin {
     private boolean creativecompat$liftOnFloorExitOnly(PortalExtension extension) {
         Portal portal = creativecompat$liftPortal;
         creativecompat$liftPortal = null;
-        return portal != null && portal.getContentDirection().y > 0.5;
+        if (portal == null) {
+            return false;
+        }
+        Vec3 out = portal.getContentDirection();
+        if (out.y > 0.5) {
+            return true;
+        }
+        return creativecompat$blockedInFront(portal, out);
+    }
+
+    /**
+     * Wall exit rule (SQ-PG-01b): a player who fell through a floor portal into a wall portal is placed with their feet
+     * below the exit's bottom edge, inside the floor in front of the wall, and could neither walk nor jump out. The lift
+     * also runs when a block collision overlapping the player's box lies in front of the exit plane (the floor);
+     * collisions behind the plane (the wall the portal is cut into) still do not lift, which is what a walk-out needs.
+     */
+    @Unique
+    private static boolean creativecompat$blockedInFront(Portal portal, Vec3 out) {
+        LocalPlayer player = Minecraft.getInstance().player;
+        if (player == null) {
+            return false;
+        }
+        Vec3 plane = portal.getDestPos();
+        for (VoxelShape shape : player.level.getBlockCollisions(player, player.getBoundingBox())) {
+            if (shape.isEmpty()) {
+                continue;
+            }
+            AABB box = shape.bounds();
+            if (box.getCenter().subtract(plane).dot(out) > 0.01) {
+                return true;
+            }
+        }
+        return false;
     }
 }

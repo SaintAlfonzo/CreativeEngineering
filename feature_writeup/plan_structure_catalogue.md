@@ -22,6 +22,8 @@ Owner decisions (2026-11-09):
 | Height | Everything at ground level |
 | Ocean structures | Dried out |
 
+Owner decisions (2026-11-15): structures were too spaced out and most columns held one item. Gaps shrink to 20, 12, 6, 3 and 3. Biome columns fold into biome families whatever the mod or style (all savanna weaponsmiths in one column: vanilla Savanna, T&T Iberian and Mediterranean, acacia-named structures, savanna zombie). Ruined villages (T&T Forest Ruins) move from Village to Ruins. On the 11-09 dump: 622 mapped columns to 407, single-item columns 423 to 196.
+
 Assumptions to overturn at review: unmapped columns are one per mod, each mod running +Z (section 3). Assembled copies of whole villages are not placed, since the decision was pieces only.
 
 ## 2. Layout
@@ -30,11 +32,13 @@ Tree levels and the gap on either side of each boundary. A boundary uses the gap
 
 | Level | Example | Axis | Gap |
 |---|---|---|---|
-| 1. Category | Village, Pillager, Ruins | +X | 50 |
-| 2. Subfamily | Villager Houses, Villager Structures, Decor and Infrastructure | +X | 25 |
-| 3. Function | Blacksmith, Shepherd, Leatherworker | +X | 10 |
-| 4. Biome type | Plains, Spruce, Desert | +X | 5 |
-| 5. Variation | `_1`, `_2`, `_3` | +Z | 5 |
+| 1. Category | Village, Pillager, Ruins | +X | 20 (was 50) |
+| 2. Subfamily | Villager Houses, Villager Structures, Decor and Infrastructure | +X | 12 (was 25) |
+| 3. Function | Blacksmith, Shepherd, Leatherworker | +X | 6 (was 10) |
+| 4. Biome family | Plains, Savanna, Desert | +X | 3 (was 5) |
+| 5. Variation | `_1`, `_2`, `_3` | +Z | 3 (was 5) |
+
+3 is the floor for the variation gap: each item's sign stands 2 blocks in front of it.
 
 ```
  -X <--- unmapped                 spawn (0,0)              mapped ---> +X
@@ -55,7 +59,7 @@ Tree levels and the gap on either side of each boundary. A boundary uses the gap
 - A column is as wide as its widest item, items are left-aligned, and gaps are measured between real bounding boxes.
 - Levels with no value are skipped. Most whole structures have no function level.
 - Order: categories, subfamilies and functions as listed in the rule file; biome columns and variations in natural sort order (`_2` before `_10`).
-- **Streets:** no function split, so one column per biome type. Zombie streets share the column of their base biome. That is 25 columns, the longest with 41 pieces.
+- **Streets:** no function split, so one column per biome family. That is 13 columns, the longest (Plains) with 71 pieces (was 25 columns, longest 41).
 - Signs: `z < 0` is free, so signs naming levels 1 to 4 sit there, staggered by level. Each item gets the existing `/cdevplace` sign in the 5-block aisle in front of it.
 
 Size estimate from template files: the Village category is about 7,500 blocks along +X, deepest column about 680 along +Z. Whole structures are not measurable without generating them.
@@ -121,7 +125,30 @@ Village pieces, first match on the path:
 | Villager Houses | Small, Medium, Large, Other homes | `small_`, `hut`, `cottage`; `medium`; `big`, `large`, `manor`; any other `house` |
 | Villager Structures | Other | anything left (1 in the snapshot) |
 
-Biome type of a piece: the style folder in its path, such as `plains`, `desert`, `flower_forest_japanese` or T&T's `exclusives/iberian`. Zombie variants are their own column (`Plains zombie`), except streets. Pieces with no folder take a biome word in their name, otherwise Any.
+Biome type of a piece: the style folder in its path, such as `plains`, `desert`, `flower_forest_japanese` or T&T's `exclusives/iberian`. Pieces with no folder take a biome word in their name, otherwise Any.
+
+**Biome families** (2026-11-15, `biomeFamilies` in the rule file). The biome type of a piece or whole structure then folds into its family, so one column holds every mod's take on it. Overrides still win. Families follow where each style spawns (T&T's biome tags; Terralith's fortified village spawns in plains and meadows):
+
+| Family | Folds in |
+|---|---|
+| Plains | Plains zombie, Classic, Tudor, Oak, Sunflower Plains Farm, Terralith Fortified |
+| Desert | Desert zombie, Terralith Desert, Nilotic, Oriental, Wandering Trader Camp, Sand |
+| Savanna | Savanna zombie, Acacia, Iberian, Mediterranean |
+| Taiga | Taiga zombie, Spruce, Old Growth Taiga Polish, Swedish |
+| Snowy | Snowy zombie, Snowy Taiga Viking, Snowy Slopes Inn, Icy, Ice |
+| Forest | Forest Ruins, Dark Forest, Rustic |
+| Birch | Birch Forest Romanian |
+| Flower Forest | Flower Forest Japanese, Cherry, Flower |
+| Jungle | Jungle Tribal, Sparse Jungle Polynesian |
+| Swamp | Swamp Boat, Mangrove |
+| Badlands | Badlands Pueblo, Wooded Badlands Tipi |
+| Mountain | Meadow, Meadow Swiss, Grove, Grove Villager Outpost, Highlands |
+| Mushroom | Mushroom Fields Fantasy |
+| Coast | Beach, Beach Lighthouse, Ocean, Warm |
+
+Any, Sky, Nether and End names, and the per-mod unmapped columns, are not folded.
+
+**Ruined villages** (2026-11-15, `pieces.reroute`). Pieces of T&T's Forest Ruins village (52) go to Ruins > Village ruins; the subfamily their piece rule gives (Villager Houses, Villager Structures, Decor and Infrastructure) becomes the function, so they stand in 3 columns.
 
 **Drying.** Applies to Underwater, Buildings > Ships, and any whole structure whose id holds `ocean`, `underwater`, `sunken`, `wreck` or `monument`, unmapped ones included (33 in the snapshot). After placement, inside the bounding box: water, bubble columns, kelp and seagrass become air; `waterlogged` becomes false. Wells, fountains and ponds in other families keep their water.
 
@@ -153,8 +180,12 @@ Logic, in the plain Java harness:
 
 - [x] **SCAT-01** (2026-11-09, `tools/test_worldgen_tools.sh` 2b): resolver gives the section 4 home for one id per rule, and multi-type ids land by priority.
 - [x] **SCAT-02** (2026-11-09): an id with no `type/*` tag is unmapped; a `zpointer` id is skipped.
-- [x] **SCAT-03** (2026-11-09): layout gaps of 50, 25, 10, 5 and 5 at the right boundaries, with no overlapping boxes on a random tree.
-- [x] **SCAT-04** (2026-11-09): skipped levels and the street rule (no function split, zombie merged).
+- [x] **SCAT-03** (2026-11-15): layout gaps of 20, 12, 6, 3 and 3 at the right boundaries, with no overlapping boxes on a random tree.
+- [x] **SCAT-04** (2026-11-15): skipped levels and the street rule (no function split, zombie pieces in their base biome).
+- [x] **SCAT-12** (2026-11-15): biome families: vanilla, Iberian, and an acacia-named whole structure all land in Savanna; Terralith desert in Desert, pueblo in Badlands, Swiss meadow in Mountain; 13 street columns, longest 71.
+- [x] **SCAT-13** (2026-11-15): Forest Ruins pieces are in Ruins > Village ruins, function from their piece subfamily; 52 on the dump.
+
+The harness's snapshot checks for whole (279), unmapped (44) and dried (35) counts fail on the 11-09 dump (244, 79, 33): it predates the 11-10 namespace move, so its `creativeengineering:meta/*` ids no longer match the tag file. Rerun `/dumpall` before reading those three.
 
 Live, queued in [scratch_queue.md](testing/scratch_queue.md) as `SQ-SCAT` / `CQ-SCAT`:
 
@@ -162,7 +193,8 @@ Live, queued in [scratch_queue.md](testing/scratch_queue.md) as `SQ-SCAT` / `CQ-
 - [ ] **SCAT-06:** a new world builds once. A restart does not build it again.
 - [ ] **SCAT-07:** preview counts match the live registry and the report.
 - [ ] **SCAT-08:** full build finishes without a watchdog kill or out-of-memory error. Record time and refusal count.
-- [ ] **SCAT-09:** in game, walk the mapped +X strip and confirm gaps and order. Confirm every family has signs.
+- [ ] **SCAT-09:** in game, walk the mapped +X strip and confirm gaps (20, 12, 6, 3, 3) and order. Confirm every family has signs.
+- [ ] **SCAT-14:** in game, Village > Villager Houses > Weaponsmith has one Savanna column holding the vanilla and Iberian smiths; Ruins has Village ruins with the Forest Ruins pieces.
 - [ ] **SCAT-10:** in game, the unmapped area runs -X then +Z, and each item is listed as needing a tag.
 - [ ] **SCAT-11:** in game, a monument, a shipwreck and an ocean ruin have no water after 5 minutes. A village well still has water.
 

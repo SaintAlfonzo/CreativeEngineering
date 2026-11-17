@@ -4,21 +4,29 @@
 
 | Part | Status |
 |---|---|
-| Design (this file) | DESIGNED 2026-10-24, nothing built |
-| Driver mod `development/creativeDevtools/members/capture` (mod id `cdevcapture`, dev-only, nested in Creative Devtools since 2026-11-01) | not started |
-| Runner `tools/client_capture/run_captures.py` | not started |
-| Cropper `tools/client_capture/crop.py` | not started |
-| Spec files `feature_writeup/testing/capture_specs/*.json` | not started |
-| Output `test_captures/` (project root, git-ignored by the allow-list) | not started |
+| Design (this file) | DESIGNED 2026-10-24; items 2 and 4 of [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md) built 2026-11-15 |
+| Driver mod `development/creativeDevtools/members/capture` (mod id `cdevcapture`, dev-only, nested in Creative Devtools since 2026-11-01; inert without `-Dcdevcapture.plan`) | BUILT: capture steps (2.2) since 11-01; readback (TX-03), tick-exact movement (TX-04), widget actions (TX-05) and the file channel (TX-02, 2.11) 2026-11-15 in `development/creativeDevtools/build/libs/creativedevtools-1.0.0.jar`; not run in game |
+| Runner `tools/client_capture/run_captures.py` (plan, launch through `eval_client.py`, relaunch on crash, `serve` / `stop`) | BUILT 2026-11-15, offline-tested (plan, `--list --check`); never launched |
+| Cropper `tools/client_capture/crop.py` + `crop_regions.json` | BUILT 2026-11-15, `--selftest` and a fake run pass |
+| Channel client `tools/client_capture/chan.py`; `qrun.py client` driver transport | BUILT 2026-11-15, tested against a fake driver |
+| Spec files `feature_writeup/testing/capture_specs/*.json` | first set 2026-11-15: `CC` (CC-05, CC-13, CC-15), `CQ-NEW` (FX-43, N-02, CQ-NEW-04a), `CQ-PTH` (CQ-PTH-03b), `_macros.json` |
+| Output `test_captures/judgement/<run>/` (git-ignored, explicit `.gitignore` line) | none yet |
 
-Open decisions are in section 4.1. TODO: `tooling/generators-and-tests #6`. Test prefix `CC-`.
+In-game checks are queue rows CQ-TXC-01 to -10 ([testing/scratch_queue.md](testing/scratch_queue.md), end). Open
+decisions are in section 4.1. TODO: `tooling/generators-and-tests #6`. Test prefix `CC-`.
 
 The point: Round 2 of [testing/scratch_queue.md](testing/scratch_queue.md) (the `CQ-` rows) is mostly "open this,
 look at that": a JEI page, a tooltip, a WTHIT line, a block's colour, a GUI. Today each needs the user at the keyboard.
 With this system a session (or the user) picks the capturable rows, one throwaway client runs them all unattended in a
-single-player world, and each check leaves one cropped PNG named after its test ID in `test_captures/<run>/`, next
-to a manifest that says what the picture should show. A later session (or the user) reads the PNGs and writes the
-PASS / FAIL into the writeups the usual way.
+single-player world, and each check leaves one cropped PNG named after its test ID, next to a manifest that says what
+the picture should show.
+
+**Judgement rule (owner, 2026-11-15).** The pipeline captures and crops everything, but neither the tool nor any agent
+gives a visual verdict. Every run is written to `test_captures/judgement/<run>/` (git-ignored, wiped by the owner
+after judging): crops, raw frames, manifest entries (test ID, `expect`, crop, step log, reads) and `index.md` with an
+empty Verdict column for the owner. Text readback (TX-03 read steps with `expect` / `reject`) may still give PASS /
+FAIL by regex, in the manifest (`judge: text`) and in qrun. The owner's verdicts go back into the queue and writeups
+as usual. This replaces the earlier "a session reads the PNGs" evaluation.
 
 ## 1. Overview
 
@@ -29,9 +37,9 @@ spec JSON (per queue group) ──> run_captures.py ──> scratch game dir ─
                                     │                                      ▼
                                     │                     raw/<ID>.png + rects + progress.json + log markers
                                     ▼
-                               crop.py ──> test_captures/<run>/<ID>.png + manifest.json + index.md
+                               crop.py ──> test_captures/judgement/<run>/<ID>.png + manifest.json + index.md
                                     ▼
-                         evaluation (session reads PNG + "expect" text) ──> writeup ticks, queue run log
+                         owner judges the PNGs (verdict column); text reads judged by regex ──> queue, writeups
 ```
 
 Three pieces, split by what each one knows:
@@ -56,7 +64,8 @@ to the queue that names them. Specs are test data, so they live with the tests. 
 ```json
 {
   "group": "CQ-NEW",
-  "world": "flat_creative",
+  "world": "flat_swamp",
+  "biome": "minecraft:swamp",
   "client_config": {},
   "tests": [
     {
@@ -65,7 +74,6 @@ to the queue that names them. Specs are test data, so they live with the tests. 
       "title": "Moss follows biome grass colour",
       "expect": "Moss block and moss carpet on the left match the grass block beside them (swamp: dark olive). The item in the hotbar slot stays vanilla bright green.",
       "steps": [
-        {"cmd": "fillbiome $X $Y $Z ~16 ~4 ~16 minecraft:swamp"},
         {"cmd": "setblock $X+2 $Y $Z+4 minecraft:moss_block"},
         {"cmd": "setblock $X+3 $Y $Z+4 minecraft:grass_block"},
         {"cmd": "setblock $X+4 $Y $Z+4 minecraft:moss_carpet"},
@@ -81,8 +89,8 @@ to the queue that names them. Specs are test data, so they live with the tests. 
     {
       "id": "FO-49",
       "covers": ["CQ-NEW-03"],
-      "expect": "Onion popcorn tooltip: AppleSkin hunger bar 2 drumsticks longer than plain popcorn's; cheese and garlic lines present.",
-      "steps": [{"tooltip": "item_dict:popcorn_onion"}],
+      "expect": "Popcorn tooltip: the AppleSkin hunger bar is drawn under the text lines.",
+      "steps": [{"tooltip": "item_dict:popcorn"}],
       "capture": [{"crop": "auto"}]
     }
   ]
@@ -96,8 +104,14 @@ to the queue that names them. Specs are test data, so they live with the tests. 
 - `$X $Y $Z` are the test's plot origin (2.4). `item_dict:<key>` resolves through the exported item dict (the
   define-once rule), so specs don't carry literal ids where a key exists; a literal id is allowed for vanilla and
   for items the dict lacks.
-- `world` names a template (2.5). `client_config` is a per-group overlay of client toml values written before launch
-  (2.6). Tests that need a different client config go in a different group.
+- `world` names the world (2.5); `biome` (default `minecraft:plains`), `seed` and `origin_y` (default -60, the
+  superflat standing height) set how the driver creates it. 1.19.2 has no `/fillbiome`, so a biome is per group: a
+  test that needs another biome goes in another group (the world name must differ too, or the old world is reused
+  within a game dir; the runner deletes `saves/<world>` before each launch). `client_config` is a per-group overlay,
+  `{"config/<file>.toml": {"<section>": {"<key>": value}}}`, written before launch (2.6). Groups with different
+  worlds or client configs are run separately.
+- Read steps (2.2) may carry `"expect"` / `"reject"` (Java regex): a capture-free test whose reads all carry them is
+  judged PASS / FAIL by text; any test with a `capture` entry goes to the owner.
 
 ### 2.2 Steps
 
@@ -118,6 +132,53 @@ through `cmd`.
 | `key` | Holds a modifier (`shift`, `ctrl`, `alt`) for the next capture |
 | `reload` | F3+T resource reload, then waits `resources` |
 | `macro` | Inlines a step list from `_macros.json` |
+| `look` without `from` | `{"yaw": a, "pitch": b}` turns the player where it stands (no teleport, no flight) |
+
+`cmd` logs `[cdevcapture] CMD /<command> -> <result>`. When the client joined a server instead of a single-player
+world (plan `world.join = server`, 2.11), `cmd` is sent as a chat command and its result is not known.
+
+**Readback (TX-03, `Reads.java`).** Each logs `[cdevcapture] READ <kind> <text>` (one line per value) and adds the
+lines to the test's `reads`. Optional `"expect"` / `"reject"` (Java regex, `find`) fail the step on no match / a match.
+
+| Step | READ line |
+|---|---|
+| `{"assert_screen": "<class or simple name>" \| "none"}` | `assert_screen <open screen class>`; fails on mismatch |
+| `{"screen_info": true}` | `screen_info <class> title "<title>"` |
+| `{"slot_item": N}` | `slot_item N <id> x<count> [nbt <snbt>]` or `empty`; slot of the open container, else player inventory index |
+| `{"tooltip_text": "<id>" \| {"slot": N} \| "held", "shift", "ctrl", "alt", "advanced", "nbt", "count"}` | `tooltip_text <id> <i>: <line>` per line, from `getTooltipLines` (Forge tooltip event included, virtual modifiers held) |
+| `{"player_pos": true}` | `player_pos x y z yaw a pitch b ground <bool> dim <dim>` |
+| `{"player_motion": true}` | `player_motion v dx dy dz moved dx dy dz hspeed h bps b` (velocity, last tick's real move) |
+| `{"held": true}` | `held main <id> x<n> off <id> x<n>` |
+| `{"effects": true}` | `effects <id> amp a dur d` per effect, or `none` |
+| `{"target": true}` | `target block <id> at x y z`, `target entity <type>`, `target miss` |
+| `{"widgets": true}` | `widgets <i> <class> "<message>" x y w h [value "<text>"] [inactive]` (the index TX-05 uses) |
+
+**Movement (TX-04, `Moves.java`).** Keys are held through the game's key mappings (normal input path), counted in
+client ticks. Pressed at the end of the tick the step starts in, so logged tick 1 is the first tick of input. Every
+tick logs `READ move <n> pos x y z moved dx dy dz hspeed h bps b ground <bool>`; the end logs
+`READ <kind> ticks N dist D bpt S dy Y from x y z to x y z` (`expect` works on all of these lines).
+
+| Step | Does |
+|---|---|
+| `{"walk": N, "keys": "forward sprint", "after": M}` | holds `forward back left right jump sneak sprint use attack` for N ticks, logs M more released |
+| `{"sneak": N}` | `walk` N with `sneak` |
+| `{"jump": N}` | jump held 1 tick, N ticks logged |
+| `{"fly": true \| false}` | creative flight on / off (`look` with `from` turns flight on; use `fly: false` or survival before walking) |
+
+Toggle-mode sprint / sneak mappings are pressed on the edges only. A walk step's timeout is its own length + 20 ticks.
+
+**Widget actions (TX-05, `Widgets.java`).** Resolved from the open screen's widget list (`children()`, nested
+containers flattened), never from window pixels; clicks go through the screen's own `mouseClicked` /
+`mouseReleased` at the centre, and the virtual mouse is parked there.
+
+| Step | Does |
+|---|---|
+| `{"click_slot": N, "button": 0, "shift": false}` | clicks slot N of the open container (shift-click through the virtual Shift) |
+| `{"click_widget": REF, "button": 0}` | REF: `"label"` (message, exact then substring, case-insensitive), `N` (index in `READ widgets`), `{"class": "EditBox", "n": 0}` |
+| `{"type_into": REF \| null, "text": "...", "clear": true, "enter": false}` | clicks REF (null: keep the focused widget), clears an EditBox, types each character through the screen's `charTyped`; the note has the EditBox value |
+| `{"scroll": d, "at": REF}` or `{"scroll": d, "x": gx, "y": gy}` | `mouseScrolled` there (default screen centre) |
+| `{"click": {"x": gx, "y": gy} \| {"px": wx, "py": wy}, "button": 0}` | raw click in GUI coordinates or window pixels |
+| `{"press": "escape" \| "e" \| "enter" \| "key.inventory", "shift": false}` | a key: to the open screen (`keyPressed` / `keyReleased`); with no screen through its key mapping, `escape` opens the pause menu. F3 combinations are not keys here (`reload` covers F3+T) |
 
 ### 2.3 Capture and crop
 
@@ -153,37 +214,42 @@ ingredients or a block animates.
 
 ### 2.5 World templates
 
-`tools/client_capture/worlds/<name>/` holds a small saved world, copied fresh into the game dir's `saves/` on each
-run. First template: `flat_creative`, superflat, creative, cheats on, gamerules `doDaylightCycle`, `doWeatherCycle`,
-`doMobSpawning`, `doFireTick`, `randomTickSpeed 0` (raise it per test with `cmd`), `sendCommandFeedback false`,
-`announceAdvancements false`. Fixed seed. A `normal` template (fixed seed, spawn on a chosen biome) comes later for
-world-feel shots.
+The driver makes the world itself when `saves/<world>` is absent (`TestWorld.createFlat`): default superflat layers,
+the group's `biome`, no structures, the group's `seed` (default 1), creative with cheats, gamerules `doDaylightCycle`,
+`doWeatherCycle`, `doMobSpawning`, `doFireTick`, patrol and trader spawning off, `randomTickSpeed 0` (raise it per
+test with `cmd`), `sendCommandFeedback false`, `announceAdvancements false`. The runner deletes `saves/<world>` before
+every launch, so each launch starts from a fresh world. A hand-made template in `tools/client_capture/worlds/<name>/`
+is copied in instead when it exists (none yet; a `normal` template with a chosen biome comes later for world-feel
+shots).
 
 In 1.19.2 there's no quick-play launch argument, so the driver loads the world itself from the title screen
-(`createWorldOpenFlows().loadLevel(...)`), then waits for the player, `chunks` and `jei`.
+(`createWorldOpenFlows()`), then waits for the player, `chunks` and `jei`.
 
 ### 2.6 Game dir and client settings
 
-Built by the runner in `~/.cache/ce_capture/game/`, outside the scratchpad (it gets wiped) and outside the instance
-root (no stray `logs/` beside the real ones). On each run:
+Default `~/.cache/ce_capture/game/` (`--game DIR` for another), outside the scratchpad and the instance root. On
+each launch the runner:
 
-- `mods/`: hard links to the instance's jars (same filesystem; the client may add files, which must not land in the
-  real `mods/`) plus `cdevcapture-*.jar` from the driver's `build/libs`. Optional `--jar <path>` swaps in a fresh build
-  of one of our mods without touching `mods/`.
-- `kubejs/`, `vinery_upstream/` copied (the Vinery port refuses to load without the latter; memory
-  `client-launch-for-defaults`).
-- `config/`: copy of the instance's `config/` (what players run), then the group's `client_config` overlay.
-  Option `--fresh-config` starts empty instead, for checks of the pack defaults.
-- `options.txt` written whole: `guiScale:2`, `pauseOnLostFocus:false` (the window will not have focus),
-  `renderDistance:6`, `fov:0.0`, `narrator:0`, `tutorialStep:none`, `joinedFirstServer:true`,
-  `skipMultiplayerWarnings:true`, sound master 0, `fullscreen:false`, `gamma:0.5`, `entityShadows:true`, english.
-- Launch: `launch_client.py`'s argument rebuild (made importable), plus `--width 1280 --height 720` and
-  `-Dcdevcapture.plan=<game dir>/capture_plan.json`. No `--server`: the integrated server is the server, so the run is
-  one JVM.
+- runs `tools/perf/eval/eval_client.py setup GAME`: `mods/` hard links to the instance's jars, `kubejs/`,
+  `config/`, `defaultconfigs/`, `resourcepacks/` copied, `*_upstream` folders symlinked, the user's `options.txt`;
+- deletes the two perf-eval scripts that setup adds (`zz_perfeval_drive.js` switches to spectator and teleports);
+- swaps in the driver: unlinks the hard-linked `creativedevtools-*.jar` and copies
+  `development/creativeDevtools/build/libs/creativedevtools-1.0.0.jar` (the capture driver is nested in it); every
+  `--jar PATH` replaces the same mod's jar the same way (unlink first, so the instance's `mods/` is never written
+  through a link);
+- `--fresh-config`: empty `config/` (pack-default checks); then the group's `client_config` overlay;
+- sets in `options.txt`: `guiScale:2`, `renderDistance:6`, `simulationDistance:6`, `pauseOnLostFocus:false`,
+  `fullscreen:false`, `overrideWidth:1280`, `overrideHeight:720`, `narrator:0`, `tutorialStep:none`,
+  `joinedFirstServer:true`, `skipMultiplayerWarnings:true`, `soundCategory_master:0.0`, `gamma:0.5`, `fov:0.0`,
+  `lang:en_us`, `maxFps:120`;
+- launches with `eval_client.py launch` (the user's `-Xmx`, a JFR recording, `DISPLAY` default `:1`, the one-JVM
+  check) and passes `-Dcdevcapture.plan=<plan>` through `JAVA_TOOL_OPTIONS` (eval_client has no JVM-argument hook).
+  No `--server` for runs: the integrated server is the server, so a run is one JVM.
 
 ### 2.7 Driver internals
 
-- Inert unless `cdevcapture.plan` is set; it's a separate dev-only jar anyway (4.1, D1).
+- Inert unless `cdevcapture.plan` is set. Nested in Creative Devtools (`META-INF/jarjar/cdevcapture-0.1.0.jar`), so
+  it is in the instance's `mods/` too, doing nothing there; the runner swaps in the fresh `build/libs` jar.
 - Runs on the client tick as a state machine (one step at a time, never blocking the render thread). `cmd` is sent to
   the integrated server with `server.execute(...)` and the step waits for its result.
 - Capture: after the settle frames, at the end of a frame (`TickEvent.RenderTickEvent` phase END),
@@ -198,54 +264,101 @@ root (no stray `logs/` beside the real ones). On each run:
   The runner slices `logs/latest.log` between markers and keeps any `ERROR`, `Exception` or
   `Error occurred while handling event` lines per test in the manifest.
 - `progress.json` is rewritten after each test (done IDs, current ID). At the end: `[cdevcapture] DONE`, then the
-  driver calls `Minecraft.stop()` itself so the runner doesn't have to kill anything.
+  driver calls `Minecraft.stop()` itself so the runner doesn't have to kill anything. With a `channel` in the plan it
+  enters phase SERVE instead and stays up (2.11) until a `stop` request.
+- Files: `CaptureDriver` (phases BOOT, CREATING, JOINING, SETUP, TESTS, SERVE, DONE), `CapturePlan`, `Steps` (2.2
+  capture steps, dispatch), `Reads` (TX-03), `Moves` (TX-04), `Widgets` (TX-05), `Channel` (TX-02), `Capture`,
+  `StageScreen`, `TestWorld`, `VirtualInput`, mixins `ScreenModifierMixin`, `MouseHandlerMixin`.
 
 ### 2.8 Runner
 
 ```
-python3 tools/client_capture/run_captures.py CQ-NEW CQ-VP            # groups
-python3 tools/client_capture/run_captures.py CQ-NEW --only FX-43 FO-49
-python3 tools/client_capture/run_captures.py --list                  # tests per group, capturable or manual
-python3 tools/client_capture/run_captures.py --resume <run>          # continue after a crash
-python3 tools/client_capture/crop.py test_captures/<run>             # re-crop only
+python3 tools/client_capture/run_captures.py --list [GROUP ...] [--check]   # tests per group; --check validates
+python3 tools/client_capture/run_captures.py CQ-NEW                         # a run
+python3 tools/client_capture/run_captures.py CQ-NEW --only FX-43,N-02 [--jar PATH]... [--fresh-config]
+python3 tools/client_capture/run_captures.py CQ-NEW --plan-only             # run folder + plan, no launch
+python3 tools/client_capture/run_captures.py --resume <run dir>             # continue after the runner stopped
+python3 tools/client_capture/run_captures.py --recrop <run dir>             # specs re-read, crop.py, no game
+python3 tools/client_capture/run_captures.py serve [--join HOST:PORT --ownsrv PID]   # driver serves the channel
+python3 tools/client_capture/run_captures.py stop                           # serving client quits
 ```
 
-1. Preflight: `pgrep -x java` must be empty (memory `one-game-instance-at-a-time`; never the full command line).
-   If not, stop and say whose JVM it is (`readlink /proc/PID/cwd`). Check the driver jar exists and the spec files
-   parse; resolve `item_dict:` keys from the exported dict and fail early on a missing key.
-2. Build the game dir (2.6), write `capture_plan.json` (resolved steps, plots, output path).
-3. Launch with `DISPLAY` (default `:1`, see D2). Poll `progress.json` and the log. Main menu ~90 s, world load
-   ~60 s more.
-4. Crash or hang (no progress for the per-test timeout + 60 s): kill its own recorded pid only, mark the current test
-   `crashed` with the log tail, relaunch with the remaining tests. Two crashes on the same test: skip it.
-5. Call `crop.py`, print the summary: captured / failed / crashed, and the run folder.
+1. Specs resolved: macros inlined, `$X $Y $Z` (with `+N` / `-N`) replaced by the plot origin, `item_dict:<key>`
+   resolved from `item_dict.js` (`pack_paths.parse_item_dict`); unknown step kinds, duplicate IDs, missing `expect`
+   and unknown keys stop the run. `--check` also requires every `covers` to be a queue row and warns when a test ID
+   is in no writeup.
+2. Preflight: `tools/scratch_query/game_jvms.sh` must print nothing (it prints `pid cwd` only, never a command line);
+   the driver jar must exist.
+3. Game dir (2.6), `capture_plan.json` with the remaining tests, launch. Polls `progress.json`, `results.jsonl` and
+   the pid. Boot (no progress or `loading`) may take 900 s; after that no change for 180 s (test timeout + 60 s) is a
+   hang.
+4. Crash (pid gone before `done`) or hang (own pid killed, TERM then KILL): `latest.log` copied as
+   `client_<n>.log`, `hs_err_pid<pid>.log` and new `crash-reports/` copied to `crash/`, the running test marked
+   `crashed` with the log tail, relaunch with the tests not yet done. Two crashes on one test: `skipped`. Two crashes
+   before any test: the run stops. At most tests + 3 launches.
+5. `crop.py <run>` writes the crops, `manifest.json` and `index.md`, and prints the counts.
+
+`serve` (TX-02): the same game dir with a plan that has no tests and `"channel": GAME/cdev_channel`; returns once the
+driver's heartbeat says SERVE and leaves the client up for `qrun.py client GAME ...`. `--join HOST:PORT` (with
+`--ownsrv PID` for the caller's own scratch server) launches with `--server` and sets `world.join = server`, so the
+driver skips the world load and sends `cmd` as chat commands (item 5 paired runs build on this; one-JVM carve-out D2
+of the plan applies only when one driver starts and stops both).
 
 ### 2.9 Output
 
 ```
-test_captures/
-  2026-10-24_1530_CQ-NEW/
-    FX-43.png  FX-43_hotbar.png  FO-49.png ...
-    manifest.json      one entry per test: id, covers, title, expect, files, status, step log,
-                       log errors, jar md5s (creativeengineering, the backports), kubejs git hash, spec file
-    index.md           table: ID, expect, image link, status, verdict (blank) ; opens in VS Code preview
-    raw/               full frames + sidecars (delete with --no-raw; kept by default for re-crops)
-  latest -> 2026-10-24_1530_CQ-NEW
+test_captures/judgement/          git-ignored (allow-list plus an explicit line); wiped by the owner after judging
+  2026-11-15_1530_CQ-NEW/
+    FX-43.png  FX-43_hotbar.png ...   crops (frames: <ID>_f1.png ...)
+    manifest.json      per test: id, covers, title, expect, group, spec, status (ok / fail / crashed / skipped /
+                       missing), error, files, raw, reads, steps, log_errors, crash, crop_errors,
+                       judge (owner / text), verdict (empty for owner rows; PASS / FAIL for text rows), verdict_by;
+                       plus jar md5s (creative*.jar in the game dir) and the git hash with the kubejs change count
+    index.md           ID, covers, expect, images, driver status, judge, Verdict (blank) + a Readback list
+    run.json  capture_plan.json  results.jsonl  progress.json  runner.json  client_<n>.log  crash/
+    raw/               full frames + sidecars, <ID>__failed.png for failed tests (kept for --recrop)
+  latest -> 2026-11-15_1530_CQ-NEW
+  qrun_<RES name>/     shots from qrun.py client on the driver (2.11): <ROW>_<NAME>.png + sidecar + manifest.json
 ```
 
-`test_captures/` is not tracked (the `.gitignore` allow-list ignores it) and not shipped (`build_deploy.py` follows
-the same ignore rules). Old runs are deleted by hand.
+`build_deploy.py` follows the same ignore rules, so nothing here ships.
 
 ### 2.10 Evaluation
 
-A session evaluating a run reads `manifest.json`, then each PNG with the Read tool against its `expect`, and writes a
-`verdict` (`pass`, `fail`, `unclear`) plus a one-line note into `manifest.json` and `index.md`. Then the normal
-reporting path: tick the writeup tests, add a run log entry under the queue's Run log, `fail` goes to the writeup
-first (section 7 / status block). `unclear` means the shot can't decide it: fix the spec (crop, wait, angle) and
-re-run that ID; it doesn't count as a pass. The cropping is what keeps this cheap: a cropped tooltip is a few hundred
-pixels a side, so a 40-test run is a short read.
+Owner rule (section 0): the owner opens `index.md` (Markdown preview) and fills the Verdict column (`pass`, `fail`,
+`unclear` + a note) for every `owner` row; no agent or tool writes a visual verdict. `text` rows already carry PASS /
+FAIL from their read steps. A session then carries the verdicts into the queue's Run log and the writeup tests
+(`fail` goes to the writeup first), and the owner wipes the run folder. `unclear` means the shot can't decide it: fix
+the spec (crop, wait, angle) and re-run that ID (`--only`); it doesn't count as a pass.
 
-The user can do the same by opening `index.md` in a Markdown preview.
+### 2.11 Channel and qrun client mode (TX-02)
+
+File channel between a host tool and the driver, polled once per client tick (`Channel.java`, `tools/client_capture/chan.py`).
+Item 5 (paired client + server batches) builds on it.
+
+| Path (under `GAME/cdev_channel/`) | Writer | Content |
+|---|---|---|
+| `in/<seq>.json` | host, written as `<seq>.json.tmp` then renamed | `{"seq", "op": "run" \| "ping" \| "stop", "id": "<row>", "reset": false, "timeout_ticks": 2400, "steps": [<step objects of 2.2>]}` |
+| `out/<seq>.json` | driver, `.tmp` then atomic rename | `{"seq", "id", "status": "ok" \| "fail", "error", "files": [raw png names], "reads": [READ texts], "steps": [step log], "ticks"}`; `ping` / `stop` reply `{"seq", "op", "status": "ok"}` |
+| `state.json` | driver, every 20 client ticks | `{"phase": "BOOT" \| ... \| "SERVE", "current", "seq" (-1 idle), "tick", "time" (ms)}` |
+| `raw/` | driver | frames of `capture` steps |
+| `pid` | `run_captures.py serve` | the client pid |
+
+- `seq` is a number (chan.py uses epoch milliseconds); requests run one at a time, lowest `seq` first; the driver
+  deletes a request file when it takes it. A step failure ends that request (`status: fail`, `<id>__failed.png` in
+  `raw/`), never the client.
+- `reset: true` runs the per-test reset (close screen, release keys, creative, clear, effects, noon, clear weather)
+  first. After every request the driver releases virtual modifiers, the virtual mouse and the movement keys.
+- The host treats a heartbeat older than 60 s as a dead or hung client (`ChannelError`). Log markers per request:
+  `[cdevcapture] BEGIN <id> seq <n>`, `STEP ...`, `READ ...`, `CMD ...`, `END <id> ok|fail`.
+
+`qrun.py client GAME BATCH RES` uses the channel whenever `GAME/cdev_channel/` exists (`--xdotool` forces the window
+transport; a stale heartbeat exits with a message instead of typing into a window): `>` runs `cmd` (with
+`allow_fail`; judged by the row's log checks), `key` becomes `press` steps (`F3+t` = `reload`), `click X Y` a
+window-pixel `click`, `shot NAME` a `capture` copied to `test_captures/judgement/qrun_<RES name>/` (row ends LOOK,
+owner judges), and the new directive `do JSON` sends any step object or list (a failed step FAILs the row). Each
+directive waits for the driver's reply, so pace sleeps are skipped. READ lines are in `latest.log`, so `expect`,
+`count` and `waitlog` judge them as usual.
 
 ## 3. What the pack changes
 
@@ -264,23 +377,23 @@ golden egg odds), sound, anything that needs a real player's survival play over 
 
 ### 4.1 Open decisions (user)
 
-- **D1. Where the driver lives.** Recommended: its own dev-only mod `development/clientCapture` (mod id `cdevcapture`),
-  built by the root Gradle build, never copied into `mods/`, never deployed; `mod_sides.md` row "client, dev-only, not
-  in mods/". The other option, a `devtools/capture` package in patcherMod gated on the system property, ships capture
-  code and the shift/mouse mixins to every player and ties driver fixes to patcherMod releases.
-- **D2. Display.** No Xvfb is installed, so the client opens a real 1280 x 720 window on `:1` for the run (as
-  `client-launch-for-defaults` does today, a few minutes per group). Capture reads the framebuffer, so other windows
-  on top don't matter, but the window must not be minimised (Minecraft stops rendering). Option: `sudo apt install
-  xvfb` and run on a virtual display; that uses Mesa's software renderer (llvmpipe), so it's much slower with this
-  modlist and colours may not match the user's GPU exactly. Recommended: the real window, try Xvfb only if the window
-  becomes a nuisance.
-- **D3. Config source.** Recommended default: copy of the instance's `config/` (what players run); `--fresh-config` for
-  pack-default checks.
+- D1 (closed 2026-11-01): the driver is a member of Creative Devtools (`members/capture`, mod id `cdevcapture`),
+  inert without the system property.
+- D2 (closed 2026-11-15): real 1280 x 720 window on `:1` by default (capture reads the framebuffer, so windows on top
+  don't matter, but the window must not be minimised). Xvfb is installed; an experimental `--display xvfb` is TX-07 of
+  the plan (low priority, not built), never for colour rows.
+- D3 (default taken): copy of the instance's `config/`; `--fresh-config` for pack-default checks.
+- D4 (open, owner): test IDs for queue rows that have no writeup test ID. The first spec set uses the queue ID with a
+  letter (`CQ-NEW-04a`); alternative: give each such row a writeup test ID first.
+- D5 (open, owner): `tooltip_text` reads `getTooltipLines` (Forge tooltip event included) but not
+  `RenderTooltipEvent.GatherComponents` additions or image components (AppleSkin bars); those stay captures. Is that
+  the right split for the names / tooltip rows, or should a later TX-09 dump hook the render path too?
 
 ### 4.2 Decisions taken in this design
 
 - Crop on the host, not in game: rects come from the driver, pixels from PIL, so crops can be redone without the game.
-- Single-player (integrated server), never client + scratch server: that would be two JVMs.
+- Single-player (integrated server) for capture runs. Client + own scratch server only through `serve --join` under
+  the plan's D2 carve-out (one driver starts and stops both, item 5).
 - File names are writeup test IDs, not queue IDs: the queue rows are temporary, the writeup IDs are permanent.
 - A flat stage screen for item tooltips instead of hovering in the creative inventory: deterministic place, `auto`
   crop works, and it still runs the real tooltip events.
@@ -298,27 +411,45 @@ golden egg odds), sound, anything that needs a real player's survival play over 
 - `RenderTooltipEvent` bounds before Legendary Tooltips' frame: covered by `pad`; verify on the first run (CC-04).
 - Recipe-unlock and advancement toasts: the pack drops advancements, but recipe toasts still fire; cleared before
   each shot.
-- A client crash takes the run's world with it; the runner relaunches with a fresh copy of the template and the
-  remaining tests (plots are allocated per test, so continuing in a new world is fine).
+- A client crash takes the run's world with it; the runner relaunches with a fresh world and the remaining tests
+  (plots are allocated per test, so continuing in a new world is fine).
+- `tooltip_text` and the `key` step cover tooltip code that asks `Screen.hasShiftDown()`; code polling GLFW directly
+  sees no Shift.
+- Movement keys set through `KeyMapping.setDown` assume no real keyboard events reach the window during a hold (the
+  window has no focus in a run); a toggle-mode sprint / sneak already on at the start is flipped off.
+- `press` with no screen open goes through `KeyMapping.click` (handled on the next tick); F3 debug combinations are not
+  reachable.
 
-## 5. File map (planned)
+## 5. File map
 
 | Path | What |
 |---|---|
-| `development/creativeDevtools/members/capture/` | Driver mod: `CaptureDriver` (state machine), `Steps`, `Capture` (framebuffer + sidecar), `StageScreen`, mixins `ScreenModifierMixin`, `MouseHandlerMixin` |
-| `tools/client_capture/run_captures.py` | Runner |
-| `tools/client_capture/crop.py` | Cropper, manifest, `index.md` |
-| `tools/client_capture/crop_regions.json` | Named HUD regions in GUI coords |
-| `tools/client_capture/worlds/flat_creative/` | World template |
-| `tools/item_repro/launch_client.py` | Argument rebuild, made importable (`build_args(game_dir, extra)`) |
+| `development/creativeDevtools/members/capture/` | Driver (2.7 files) |
+| `tools/client_capture/run_captures.py` | Runner, `serve`, `stop` |
+| `tools/client_capture/crop.py` | Cropper, manifest, `index.md`, `--selftest` |
+| `tools/client_capture/crop_regions.json` | Named HUD regions in GUI coords (expressions of W, H) |
+| `tools/client_capture/chan.py` | Channel host side (library + CLI: `state`, `ping`, `stop`, `run`) |
+| `tools/client_capture/worlds/<name>/` | Optional world templates (none yet; the driver creates flat worlds) |
+| `tools/perf/eval/eval_client.py`, `tools/item_repro/launch_client.py` | Game dir setup and launch (reused as is) |
+| `tools/scratch_query/qrun.py` | `DriverClient` transport, `do` directive (2.11) |
 | `feature_writeup/testing/capture_specs/*.json` | Spec files per queue group, `_macros.json` |
-| `test_captures/` | Output, not tracked |
+| `test_captures/judgement/` | Output for the owner, not tracked |
 
 ## 6. Offline checks
 
-- `run_captures.py --list --check`: every spec parses, every `item_dict:` key resolves, every ID is unique and
-  exists in some writeup's test suite (grep), every `covers` names a queue row.
-- `crop.py` on a stored raw frame + sidecar set under `tools/client_capture/fixtures/` gives the expected crop sizes.
+Done 2026-11-15 (scratchpad, no game):
+
+- `run_captures.py --list --check`: the first spec set parses, item_dict keys resolve, IDs unique, `covers` are queue
+  rows; one warning (CQ-NEW-04a is in no writeup, D4). `--plan-only` gives plots 48 apart at y -60 and `$X+2` /
+  `$X.5` substituted.
+- `crop.py --selftest`: `auto`, `tooltip`, `gui`, `center:`, `slot:`, `rect:`, `hotbar`, `full` + `max_edge` give the
+  expected sizes on a synthetic 1280 x 720 frame. A fake run (results, runner crash entry, log with an ERROR line)
+  gives judge `owner` / verdict empty for the capture test, `text` / PASS for the read test, `skipped` with the crash
+  reason, the ERROR line under the right test; `--recrop` rebuilds it.
+- Channel: a Python fake driver speaking 2.11; `qrun.py client` on it: `>` + `do` read with expect PASS, a failing
+  walk expect FAIL with the driver's error, `key` / `click` / `shot` (copied to the judgement folder, LOOK), a forced
+  step failure FAIL; `chan.py ping` / `stop`; a stale heartbeat raises `ChannelError`. `qrun.py lint` accepts `do`.
+- Driver Java compiles in `:creativeDevtools:build`; its behaviour in game is CQ-TXC-01 to -10.
 
 ## 7. In-game test suite
 
@@ -339,7 +470,20 @@ Run by the runner itself on a first group (CQ-NEW is small and covers a block co
 - [ ] CC-10 `crop.py` alone after a spec crop edit rewrites the PNGs from `raw/` without the game.
 - [ ] CC-11 Other windows over the game during the run don't show in any capture.
 - [ ] CC-12 Nothing from the run lands in the instance's `mods/`, `logs/`, `saves/` or `config/`.
+- [ ] CC-13 Readback: `player_pos`, `held`, `effects`, `slot_item`, `assert_screen`, `widgets` log `READ` lines; the
+      CC group's text test is PASS in the manifest.
+- [ ] CC-14 `walk` 40 ticks logs 41 `READ move` lines and a summary; open-ground survival walk averages about
+      0.2 b/t; two identical walks agree to 0.001 b/t (tick-exact).
+- [ ] CC-15 Anvil: `click_slot` shift-moves paper in, `type_into` the name field, the result slot reads "Capture".
+- [ ] CC-16 `serve` reaches SERVE; `qrun.py client` on it runs `>`, `do`, `key Escape`, `shot` with no xdotool; the
+      shot lands in `test_captures/judgement/qrun_<RES>/`.
+- [ ] CC-17 Killing the served client mid-batch: qrun ABORTs within 60 s of the last heartbeat (or the crash watch
+      flags it first).
+- [ ] CC-18 `click_widget` by label and by index, `scroll`, `press e` (no screen: inventory opens) on vanilla screens.
 
 ## 8. History
 
 - 2026-10-24: designed (this file). Nothing built.
+- 2026-11-15: runner, cropper, channel client and first spec set built (plan_scratch_testing_expansion items 2 and 4:
+  TX-01, TX-03, TX-02, TX-04, TX-05); driver gained read, movement and widget steps and the channel; judgement rule
+  (owner judges all pixels in `test_captures/judgement/`). Not run in game: CQ-TXC-01 to -10.

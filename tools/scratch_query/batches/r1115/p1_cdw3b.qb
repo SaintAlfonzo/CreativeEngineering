@@ -1,0 +1,12 @@
+# r1115 phase 1, boot CDW3 follow-up (same server): SQ-HH-328 census box. The locate point is the maze centre (the
+# corn_maze_center chest sits on it), so p1's box M-2..M+36 held one quadrant; count over M-40..M+40.
+pace 1
+
+## SQ-HH-328b | corn maze census centred on the locate point (seed 424242, maze at -3408 -639)
+> forceload add -3456 -688 -3360 -592
+sleep 20
+> zhh2 countset -3448 50 -679 -3368 110 -599 corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest,lootr:lootr_chest
+> zhh2 chests -3448 50 -679 -3368 110 -599
+sleep 5
+> forceload remove -3456 -688 -3360 -592
+look corn_crop > 100, oak_fence 16, centre chest corn_maze_center

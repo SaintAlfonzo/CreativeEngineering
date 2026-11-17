@@ -16,7 +16,8 @@ count), `mobs/tweaks #7` (seagulls), scratchpad 2026-10-29 (reskinning).
 | Skins (smithing a lower-tier empty box or a berry basket on) | BUILT 2026-10-29, untested |
 | Dye (grid, leather-style mixing, base only) | BUILT 2026-10-29, untested |
 | Soap (grid: dye off, then skin off) | BUILT 2026-10-29, untested |
-| "Slots: N" tooltip | BUILT 2026-10-29, untested |
+| "Slots: N" tooltip | BUILT 2026-10-29, untested; text `Food slots: N` since 2026-11-15 |
+| Food only through the item handler too (`LunchboxFoodOnlyMixin`) | BUILT 2026-11-15 (plan_post_scratch_1115.md D1), not installed; SQ-PS15-13 |
 | Seagulls ignore all lunchboxes (inventory and dropped) | BUILT 2026-10-29, untested (MT-26 in [mob_block_tweaks.md](mob_block_tweaks.md)) |
 
 - **Pending:** the in-game suite (section 7); the client checks are CQ-LB-01 (LB-01, -02, -07 to -11). Scratch rows SQ-LB-01, -02 PASSED r1031 (2026-10-31) with patcherMod
@@ -81,10 +82,16 @@ The ids keep Spice of Life's names so existing boxes and their contents carry ov
 6. **Soap.** Grid (`creativeengineering:lunchbox_soap`): one lunchbox + one Supplementaries Soap. Dyed: the dye comes
    off. Not dyed but skinned: the skin comes off. Neither: no recipe. Supplementaries' own soap recipe never matches
    a lunchbox.
-7. **Tooltip.** `Slots: N` under the name (`LunchboxTooltip`, the capability's slot count).
+7. **Tooltip.** `Food slots: N` under the name (`LunchboxTooltip`, the capability's slot count; `Slots: N` until
+   2026-11-15).
 8. **Seagulls.** `AlexsMobsSeagullStealMixin` makes every `FoodContainerItem` count as blacklisted (inventory steals),
    `AlexsMobsSeagullItemMixin` makes `canTargetItem` false for them (dropped boxes). The config blacklist from
    2026-10-22 stays; it is no longer needed for lunchboxes.
+9. **Food only.** Spice of Life's screen slot (`FoodSlot.canHold`) takes only `ItemStack.isEdible()` items, but the
+   box's item handler (`FoodContainerCapabilityProvider$1.isItemValid`) only refused another lunchbox, so anything that
+   inserted through the capability (a command, another mod's inventory tool) could store a non-food, such as the
+   pack's placeable pumpkin pie (r1115 SQ-FDI-04). `LunchboxFoodOnlyMixin` (Creative Delight, `mixin/solapplepie/`)
+   applies the same food check there: a food check, not a tag, so an item that is not food in this pack stays out.
 
 Rendering: two item properties, `creativeengineering:lunchbox_skin` (position in `Lunchboxes.SKINS` + 1) and
 `creativeengineering:lunchbox_dyed`, drive the model overrides. Each look has a plain model (the drawn texture) and a
@@ -143,7 +150,7 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 
 - [ ] **LB-01 Names and looks:** JEI search "lunchbox" → Lunchbag (paper), Copper Lunchbox (copper), Iron Lunchbox
   (iron), Netherite Lunchbox (netherite); open each: screen titles match, 5 / 9 / 14 / 18 slots, 18 = two rows of 9.
-- [ ] **LB-02 Tooltip:** hover each → `Slots: 5` / `9` / `14` / `18` under the name.
+- [ ] **LB-02 Tooltip:** hover each → `Food slots: 5` / `9` / `14` / `18` under the name.
 - [ ] **LB-03 Copper recipe:** 6 copper ingots + an empty Bundle → Copper Lunchbox. A Bundle holding items → no result.
 - [ ] **LB-04 Iron upgrade keeps food:** Copper Lunchbox with 3 foods + 6 iron ingots → Iron Lunchbox with the same 3
   foods in the same slots; rename the copper box first, the name stays.
@@ -164,6 +171,8 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
 - [ ] **LB-14 Eaten food counts, not the box:** fill a Netherite Lunchbox with 3 foods never eaten, eat from it
   3 times → the Spice of Life food book lists those 3 foods and never a lunchbox; diversity rises each time; a
   seasoned food eaten from the box gives its seasoning bonus; a bowl food returns the bowl to the inventory.
+- [ ] **LB-15 Food only:** a pumpkin pie, an apple pie and a stick are refused by the screen and by a script insert
+  through the item handler; cooked beef goes in both ways (SQ-PS15-13).
 - [ ] **LB-13 Camera bags unchanged:** iron and netherite camera bags still show the old Spice of Life textures.
 
 ## 8. History
@@ -174,3 +183,5 @@ with no step for the skin, and Supplementaries' recipe would compete with the pa
   installed. Changelog bullets in `unreleased.md` (Food & Cooking, Mobs & Animals).
 - 2026-10-29: checked that eating from a lunchbox records the food in Spice of Life, not the box (section 2): already
   so in Spice of Life 2.2.0, covers the Netherite tier; no code change. LB-14 added.
+- 2026-11-15: lunchbox item handler limited to food (`LunchboxFoodOnlyMixin`), tooltip `Food slots: N`
+  (plan_post_scratch_1115.md D1, SQ-FDI-04 side finding). Creative Delight build only, not installed. LB-15, SQ-PS15-13.

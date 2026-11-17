@@ -1,0 +1,54 @@
+# r1115 phase 6, A1 fifth follow-up: as p6_a5.qb after the toolStack enchant fix (copy returned by KubeJS enchant).
+# reference (coal ore 1 to 4, melon 3 to 9 with Fortune III).
+pace 0.5
+
+## SQ-SY-15e | Fortune reference after the enchant fix: sy roll on coal ore and melon with Fortune III against /loot mine
+shell cp "$INST/tools/soil_yield_probe/sy_probe.js" kubejs/server_scripts/zz_sy_probe.js && echo copied
+> reload
+sleep 40
+> syt roll 1020 -60 1000 600 minecraft:diamond_pickaxe@fortune=3
+> syt roll 1018 -60 1000 600 minecraft:diamond_hoe@fortune=3
+repeat 5
+> loot spawn 1020 -50 1000 mine 1020 -60 1000 minecraft:diamond_pickaxe{Enchantments:[{id:"minecraft:fortune",lvl:3s}]}
+> loot spawn 1018 -50 1000 mine 1018 -60 1000 minecraft:diamond_pickaxe{Enchantments:[{id:"minecraft:fortune",lvl:3s}]}
+end
+> kill @e[type=minecraft:item]
+reject \[syt\] error
+look nbt shows fortune lvl 3; coal mean about 2.2, melon F3 mean above 5.0 (max 9)
+
+## SQ-SY-15 | (rerun 2, Fortune half) Fortune III rolls equal the no-tool means
+> setblock 1000 -60 1000 minecraft:wheat[age=7]
+> setblock 1002 -60 1000 minecraft:wheat[age=7]
+> setblock 1004 -60 1000 minecraft:wheat[age=7]
+> setblock 1006 -60 1000 minecraft:carrots[age=7]
+> setblock 1008 -60 1000 minecraft:carrots[age=7]
+> setblock 1010 -60 1000 minecraft:carrots[age=7]
+> setblock 1012 -60 1000 veggiesdelight:sweet_potato_crop[age=5]
+> setblock 1014 -60 1000 veggiesdelight:sweet_potato_crop[age=5]
+> setblock 1016 -60 1000 veggiesdelight:sweet_potato_crop[age=5]
+> syt roll 1000 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1002 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1004 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1006 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1008 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1010 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1012 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1014 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1016 -60 1000 600 minecraft:diamond_hoe@fortune=3
+count \[syt\] roll .* nbt .*fortune.* n 600: == 9
+reject \[syt\] error
+look wheat 1.00 / 1.33 / 1.66 (seeds about 2.71), carrots 3.71 / 4.87 / 6.02, sweet potato 2.71 / 3.54 / 4.36 with F3
+
+## SQ-SY-16 | (rerun 2, Fortune half) Fortune III picks equal the no-tool picks
+> setblock 1002 -60 1004 vintagedelight:cucumber_crop[age=7]
+> setblock 1006 -60 1004 veggiesdelight:zucchini_crop[age=7]
+> setblock 1010 -60 1004 vintagedelight:ghost_pepper_crop[age=7]
+> setblock 1012 -59 1004 farmersdelight:tomatoes[age=3,ropelogged=true]
+> syt pick 1002 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1006 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1010 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1012 -59 1004 400 minecraft:diamond_hoe@fortune=3
+> kill @e[type=minecraft:item]
+count \[syt\] pick .* n 400: == 4
+reject \[syt\] error
+look cucumber 2.49, zucchini 2.49, ghost pepper 1.66, rope tomato 2.49 with F3

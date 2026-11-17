@@ -833,3 +833,4 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
   input and the sandwich / bibimbap skewer to one item; basin sneak grab with items in hand; JEI off-hand icon and
   grilled result. Built and installed in the CD jar 2026-11-04. Tests BBQ-30 to BBQ-33, scratch SQ-BBQS-01 to -03.
 - 2026-11-14: basin stick fix (plan_bugfix_1114 4.6, TODO `dishes/meals #67`): a skewering tool (the stick) is never stored in a basin slot; without a matching recipe the click passes and the stick stays in the hand. Built and installed; rerun SQ-BBQW-02s.
+- 2026-11-15 (fix-2, r1115): the no-recipe stick click returns CONSUME, not PASS. PASS let the item's own use run, and Supplementaries placed the stick as a block on the basin (SQ-BBQW-02s FAIL); the stick now stays in the hand. CD built 03:19, not installed; rerun SQ-BBQW-02t.

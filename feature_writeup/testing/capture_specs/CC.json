@@ -1,0 +1,123 @@
+{
+  "group": "CC",
+  "world": "flat_creative",
+  "client_config": {},
+  "tests": [
+    {
+      "id": "CC-05",
+      "title": "Shift tooltip stage (virtual Shift)",
+      "expect": "Glycerol tooltip with Shift held: the shift-only lines show; \"Tastes sweet!\" appears once.",
+      "steps": [
+        {
+          "tooltip": "item_dict:glycerol",
+          "shift": true
+        },
+        {
+          "tooltip_text": "item_dict:glycerol",
+          "shift": true
+        }
+      ],
+      "capture": [
+        {
+          "crop": "auto"
+        }
+      ]
+    },
+    {
+      "id": "CC-13",
+      "title": "Readback steps log READ lines",
+      "expect": "READ lines for player_pos, held, effects, slot_item and screen; the inventory screen assert passes.",
+      "steps": [
+        {
+          "cmd": "give @s minecraft:bread 3"
+        },
+        {
+          "cmd": "effect give @s minecraft:speed 30 1"
+        },
+        {
+          "player_pos": true,
+          "expect": "ground (true|false) dim minecraft:overworld"
+        },
+        {
+          "held": true,
+          "expect": "main minecraft:bread x3"
+        },
+        {
+          "effects": true,
+          "expect": "minecraft:speed amp 1"
+        },
+        {
+          "screen": "inventory"
+        },
+        {
+          "assert_screen": "CreativeModeInventoryScreen"
+        },
+        {
+          "widgets": true
+        },
+        {
+          "screen": "close"
+        },
+        {
+          "assert_screen": "none"
+        }
+      ]
+    },
+    {
+      "id": "CC-15",
+      "title": "Widget actions: anvil rename by slot click and typed text",
+      "expect": "Paper shift-clicked into the anvil, the name field typed through charTyped, the result slot holds paper named Capture.",
+      "steps": [
+        {
+          "cmd": "give @s minecraft:paper"
+        },
+        {
+          "cmd": "setblock $X+2 $Y $Z+3 minecraft:anvil"
+        },
+        {
+          "look": {
+            "from": "$X+2 $Y+1 $Z+1",
+            "at": "$X+2 $Y $Z+3"
+          }
+        },
+        {
+          "use": "block"
+        },
+        {
+          "wait": "screen:AnvilScreen"
+        },
+        {
+          "widgets": true,
+          "expect": "EditBox"
+        },
+        {
+          "click_slot": 30,
+          "shift": true
+        },
+        {
+          "slot_item": 0,
+          "expect": "minecraft:paper"
+        },
+        {
+          "type_into": {
+            "class": "EditBox"
+          },
+          "text": "Capture"
+        },
+        {
+          "wait": "5"
+        },
+        {
+          "slot_item": 2,
+          "expect": "minecraft:paper x1 nbt .*Capture"
+        },
+        {
+          "press": "escape"
+        },
+        {
+          "assert_screen": "none"
+        }
+      ]
+    }
+  ]
+}

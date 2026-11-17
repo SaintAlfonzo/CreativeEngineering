@@ -31,7 +31,7 @@ Earlier reasons reused from r1102b `s1_skip.md`, `s2_skip.md`, `s3_skip.md` and 
 | SQ-CDQ-08 | not batchable | client: JEI info pages |
 | SQ-WCD-05 | not batchable | stale: "before the CD install with the old jar"; that state no longer exists |
 | SQ-RSP-08 | not batchable | needs a Create pump rig at two speeds watched over time (no probe reads the tank per tick): hand step or client |
-| SQ-INV-09 | not batchable | instance generator chain after the client dumps (writes pack files; memory `dumpall-refresh-workflow`) |
+| SQ-INV-09 | not batchable | instance generator chain after the client dumps (writes pack files; note [dumpall-refresh-workflow](../../../../feature_writeup/agent_notes/dumpall-refresh-workflow.md)) |
 | SQ-INV-13 | not batchable | offline count from the client-only food dump |
 | SQ-INV-15 | not batchable | instance generator run (`/cdevgen run jei_world` writes `generated.json`), not a scratch check |
 | SQ-INV-16 | not batchable | instance generator run (`/cdevgen run loot dumps` writes `loot_index.json`, `loot_config.json`) |

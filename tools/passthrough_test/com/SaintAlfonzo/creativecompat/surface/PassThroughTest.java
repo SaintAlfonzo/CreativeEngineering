@@ -56,7 +56,7 @@ public final class PassThroughTest {
     }
 
     /** A block world from a map; everything else is air. */
-    static final class World implements BlockGetter {
+    static class World implements BlockGetter {
         final Map<BlockPos, BlockState> blocks = new HashMap<>();
 
         World put(int x, int y, int z, BlockState s) {
@@ -115,8 +115,15 @@ public final class PassThroughTest {
         fallDistance();
         modifierMath();
         stickPoint();
+        stickAlong();
+        surrounded();
+        arrowDespawn();
+        projectileGroups();
         exemptTags();
         config();
+        PassPhase35Test.run(java.nio.file.Path.of("").toAbsolutePath());
+        PassFixesTest.run();
+        PassRework1115bTest.run();
 
         System.out.println(failed == 0 ? "ALL " + passed + " OK" : failed + " FAILED of " + (passed + failed));
         System.exit(failed == 0 ? 0 : 1);
@@ -125,19 +132,23 @@ public final class PassThroughTest {
     static void tierDefaults() {
         check("eleven tiers", PassTier.values().length == 11);
         PassTier.Values dc = PassTier.DENSE_CROP.defaults();
-        check("dense_crop 0.75 / dense 0.50 at 6, ring, tall_half", near(dc.walk(), 0.75) && near(dc.denseWalk(), 0.50)
-                && dc.denseFrom() == 6 && dc.neighbours() == PassTier.Neighbours.RING && dc.growth() == PassTier.Growth.TALL_HALF);
+        check("dense_crop 0.75 / dense 0.50 at 3, sides, tall_half", near(dc.walk(), 0.75) && near(dc.denseWalk(), 0.50)
+                && dc.denseFrom() == 3 && dc.neighbours() == PassTier.Neighbours.SIDES && dc.growth() == PassTier.Growth.TALL_HALF);
         PassTier.Values w = PassTier.COBWEB.defaults();
-        check("cobweb 0.50/0.85, dense 0.35/0.20 from 6, cube, reset, web, stick 0.35, projectiles",
+        check("cobweb 0.50/0.85, dense 0.35/0.20 from 3, faces, surrounded at 6, reset, web, stick 0.35, projectiles",
                 near(w.walk(), 0.50) && near(w.fall(), 0.85) && near(w.denseWalk(), 0.35) && near(w.denseFall(), 0.20)
-                        && w.denseFrom() == 6 && w.neighbours() == PassTier.Neighbours.CUBE && w.denseResetsFall()
+                        && w.denseFrom() == 3 && w.neighbours() == PassTier.Neighbours.FACES && w.surroundedAt() == 6
+                        && w.surroundedCount() == 6 && w.denseResetsFall()
                         && w.surrounded() == PassTier.Surround.WEB && w.items() == PassTier.ItemRule.STICK
                         && near(w.itemStickChance(), 0.35) && w.projectiles());
         check("crop half", PassTier.CROP.defaults().growth() == PassTier.Growth.HALF && near(PassTier.CROP.defaults().walk(), 0.75));
         check("cane 0.50", near(PassTier.CANE.defaults().walk(), 0.50));
         check("bush 0.36", near(PassTier.BUSH.defaults().walk(), 0.36));
-        check("leaf_pile 0.45, minLayers 4, depth strider", near(PassTier.LEAF_PILE.defaults().walk(), 0.45)
-                && PassTier.LEAF_PILE.defaults().minLayers() == 4 && PassTier.LEAF_PILE.defaults().depthStriderPasses());
+        PassTier.Values lv = PassTier.LAYERS.defaults();
+        check("layers: minLayers 2, layerMaxSlow 0.5, solidBelowFull 2, depth strider, tag passthrough_layers, not inert",
+                lv.minLayers() == 2 && near(lv.layerMaxSlow(), 0.5) && lv.solidBelowFull() == 2 && lv.depthStriderPasses()
+                        && PassTier.LAYERS.tagPath().equals("passthrough_layers") && PassTier.LAYERS.layered()
+                        && !lv.inert() && PassTier.COBWEB.tagPath().equals("passthrough/cobweb"));
         check("vine walkOnlyMoving", PassTier.VINE.defaults().walkOnlyMoving() && near(PassTier.VINE.defaults().walk(), 0.75));
         check("rope 0.75, no walk while climbing", near(PassTier.ROPE.defaults().walk(), 0.75) && PassTier.ROPE.noWalkWhileClimbing()
                 && !PassTier.VINE.noWalkWhileClimbing());
@@ -148,35 +159,35 @@ public final class PassThroughTest {
 
     static void rules() {
         PassTier.Values dc = PassTier.DENSE_CROP.defaults();
-        for (int n : new int[]{0, 5, 6, 8}) {
+        for (int n : new int[]{0, 2, 3, 4}) {
             PassRule.Cell c = PassRule.cell(PassTier.DENSE_CROP, dc, n);
-            boolean dense = n >= 6;
-            check("dense_crop ring " + n + ": walk " + c.walk() + (c.walkDense() ? " dense" : ""),
+            boolean dense = n >= 3;
+            check("dense_crop sides " + n + " of 4: walk " + c.walk() + (c.walkDense() ? " dense" : ""),
                     near(c.walk(), dense ? 0.50 : 0.75) && c.walkDense() == dense && near(c.fall(), 1.0)
                             && !c.fallDense() && !c.surrounded() && !c.resetFall() && c.neighbours() == n);
         }
-        check("dense_crop 8 of 8 is not surrounded (tier surrounded = none)", !PassRule.cell(PassTier.DENSE_CROP, dc, 8).surrounded());
+        check("dense_crop 4 of 4 is not surrounded (tier surrounded = none)", !PassRule.cell(PassTier.DENSE_CROP, dc, 4).surrounded());
         PassTier.Values w = PassTier.COBWEB.defaults();
-        for (int n : new int[]{0, 5, 6, 25, 26}) {
+        for (int n : new int[]{0, 2, 3, 5, 6}) {
             PassRule.Cell c = PassRule.cell(PassTier.COBWEB, w, n);
-            boolean dense = n >= 6;
-            check("cobweb cube " + n + ": walk " + c.walk() + " fall " + c.fall() + (c.surrounded() ? " surrounded" : ""),
+            boolean dense = n >= 3;
+            check("cobweb faces " + n + " of 6: walk " + c.walk() + " fall " + c.fall() + (c.surrounded() ? " surrounded" : ""),
                     near(c.walk(), dense ? 0.35 : 0.50) && near(c.fall(), dense ? 0.20 : 0.85) && c.dense() == dense
                             && c.walkDense() == dense && c.fallDense() == dense && c.resetFall() == dense
-                            && c.surrounded() == (n == 26));
+                            && c.surrounded() == (n == 6));
         }
-        PassRule.Cell crop = PassRule.cell(PassTier.CROP, PassTier.CROP.defaults(), 8);
+        PassRule.Cell crop = PassRule.cell(PassTier.CROP, PassTier.CROP.defaults(), 4);
         check("crop ignores neighbours", near(crop.walk(), 0.75) && crop.neighbours() == 0 && !crop.dense());
         check("needsCount", PassRule.needsCount(dc) && !PassRule.needsCount(PassTier.CROP.defaults()));
 
         // the lowest walk and the lowest fall win, each with its own density
         PassResult r = new PassResult();
-        r.add(1L, PassRule.cell(PassTier.DENSE_CROP, dc, 7), true, false);
-        r.add(2L, PassRule.cell(PassTier.COBWEB, w, 3), true, true);
+        r.add(1L, PassRule.cell(PassTier.DENSE_CROP, dc, 4), true, false);
+        r.add(2L, PassRule.cell(PassTier.COBWEB, w, 2), true, true);
         check("feet in a dense field, head in a lone web: walk 0.50 (dense crop), fall 0.85 (web)",
-                near(r.walk, 0.50) && r.walkTier == PassTier.DENSE_CROP && r.walkDense && r.walkNeighbours == 7
+                near(r.walk, 0.50) && r.walkTier == PassTier.DENSE_CROP && r.walkDense && r.walkNeighbours == 4
                         && near(r.fall, 0.85) && r.fallTier == PassTier.COBWEB && !r.fallDense && r.projectiles && r.cells() == 2);
-        r.add(3L, PassRule.cell(PassTier.COBWEB, w, 26), true, true);
+        r.add(3L, PassRule.cell(PassTier.COBWEB, w, 6), true, true);
         check("a surrounded web cell marks the result", r.surrounded && r.surroundedCell == 3L && r.resetFall
                 && near(r.walk, 0.35) && near(r.fall, 0.20));
         r.reset();
@@ -191,23 +202,31 @@ public final class PassThroughTest {
         BlockState wheat = Blocks.WHEAT.defaultBlockState();
         World field = new World();
         for (int x = 0; x < 5; x++) for (int z = 0; z < 5; z++) field.put(x, 0, z, wheat);
-        check("ring: inside 8", PassThrough.neighbours(field, new BlockPos(2, 0, 2), PassTier.DENSE_CROP, PassTier.Neighbours.RING) == 8);
-        check("ring: edge 5", PassThrough.neighbours(field, new BlockPos(0, 0, 2), PassTier.DENSE_CROP, PassTier.Neighbours.RING) == 5);
-        check("ring: corner 3", PassThrough.neighbours(field, new BlockPos(0, 0, 0), PassTier.DENSE_CROP, PassTier.Neighbours.RING) == 3);
+        PassTier.Neighbours SIDES = PassTier.Neighbours.SIDES, FACES = PassTier.Neighbours.FACES;
+        check("sides: inside 4", PassThrough.neighbours(field, new BlockPos(2, 0, 2), PassTier.DENSE_CROP, SIDES) == 4);
+        check("sides: edge 3", PassThrough.neighbours(field, new BlockPos(0, 0, 2), PassTier.DENSE_CROP, SIDES) == 3);
+        check("sides: corner 2", PassThrough.neighbours(field, new BlockPos(0, 0, 0), PassTier.DENSE_CROP, SIDES) == 2);
         field.put(1, 1, 1, wheat).put(1, -1, 1, wheat);
-        check("ring ignores other layers", PassThrough.neighbours(field, new BlockPos(1, 0, 1), PassTier.DENSE_CROP, PassTier.Neighbours.RING) == 8);
-        field.put(3, 0, 3, Blocks.STONE.defaultBlockState());
-        check("ring: a solid block does not count", PassThrough.neighbours(field, new BlockPos(2, 0, 2), PassTier.DENSE_CROP, PassTier.Neighbours.RING) == 7);
-        field.put(3, 0, 3, Blocks.COBWEB.defaultBlockState());
-        check("ring: another tier does not count", PassThrough.neighbours(field, new BlockPos(2, 0, 2), PassTier.DENSE_CROP, PassTier.Neighbours.RING) == 7);
+        check("sides ignore other layers", PassThrough.neighbours(field, new BlockPos(1, 0, 1), PassTier.DENSE_CROP, SIDES) == 4);
+        check("sides ignore diagonals: a 3x3 field's middle has 4, not 8",
+                PassThrough.neighbours(field, new BlockPos(1, 0, 1), PassTier.DENSE_CROP, SIDES) == 4);
+        field.put(3, 0, 2, Blocks.STONE.defaultBlockState());
+        check("sides: a solid block does not count", PassThrough.neighbours(field, new BlockPos(2, 0, 2), PassTier.DENSE_CROP, SIDES) == 3);
+        field.put(3, 0, 2, Blocks.COBWEB.defaultBlockState());
+        check("sides: another tier does not count", PassThrough.neighbours(field, new BlockPos(2, 0, 2), PassTier.DENSE_CROP, SIDES) == 3);
+        check("old name RING counts as SIDES", PassThrough.neighbours(field, new BlockPos(2, 0, 2), PassTier.DENSE_CROP, PassTier.Neighbours.RING) == 3
+                && PassTier.Neighbours.RING.canonical() == SIDES && PassTier.Neighbours.CUBE.canonical() == FACES
+                && !PassTier.Neighbours.CONFIG.contains(PassTier.Neighbours.RING));
 
         World cube = new World();
         BlockState web = Blocks.COBWEB.defaultBlockState();
         for (int x = 0; x < 3; x++) for (int y = 0; y < 3; y++) for (int z = 0; z < 3; z++) cube.put(x, y, z, web);
-        check("cube: centre of 3x3x3 = 26", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, PassTier.Neighbours.CUBE) == 26);
-        check("cube: corner = 7", PassThrough.neighbours(cube, new BlockPos(0, 0, 0), PassTier.COBWEB, PassTier.Neighbours.CUBE) == 7);
+        check("faces: centre of 3x3x3 = 6", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, FACES) == 6);
+        check("faces: corner = 3", PassThrough.neighbours(cube, new BlockPos(0, 0, 0), PassTier.COBWEB, FACES) == 3);
         cube.blocks.remove(new BlockPos(0, 0, 0));
-        check("cube: one missing = 25", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, PassTier.Neighbours.CUBE) == 25);
+        check("faces: a missing corner does not count (still 6)", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, FACES) == 6);
+        cube.blocks.remove(new BlockPos(1, 2, 1));
+        check("faces: open above = 5", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, FACES) == 5);
         check("none = 0", PassThrough.neighbours(cube, new BlockPos(1, 1, 1), PassTier.COBWEB, PassTier.Neighbours.NONE) == 0);
         World lone = new World().put(0, 0, 0, web);
         PassRule.Cell c = PassThrough.cellAt(lone, BlockPos.ZERO, web, PassValues.defaults());
@@ -287,16 +306,18 @@ public final class PassThroughTest {
     }
 
     static void layers() {
-        PassThrough.seedTier(Blocks.SNOW, PassTier.LEAF_PILE);
-        PassTier.Values v = PassTier.LEAF_PILE.defaults();
+        PassThrough.seedTier(Blocks.SNOW, PassTier.LAYERS);
+        PassTier.Values v = PassTier.LAYERS.defaults();
         World w = new World();
         for (int n = 1; n <= 8; n++) {
             BlockState s = Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, n);
-            check("layers " + n + " vs minLayers 4: " + (n >= 4), PassThrough.grown(w, BlockPos.ZERO, s, PassTier.LEAF_PILE, v) == (n >= 4));
+            check("layers " + n + " vs minLayers 2: " + (n >= 2), PassThrough.grown(w, BlockPos.ZERO, s, PassTier.LAYERS, v) == (n >= 2));
         }
         check("minLayers ignored for blocks without layers", PassThrough.grown(w, BlockPos.ZERO, Blocks.COBWEB.defaultBlockState(),
                 PassTier.COBWEB, PassTier.COBWEB.defaults()));
         check("layers() = -1 without the property", PassGrowth.layers(Blocks.COBWEB.defaultBlockState()) == -1);
+        check("layersMax: snow 8, none -1", PassGrowth.layersMax(Blocks.SNOW.defaultBlockState()) == 8
+                && PassGrowth.layersMax(Blocks.COBWEB.defaultBlockState()) == -1);
     }
 
     static void fallDistance() {
@@ -379,6 +400,152 @@ public final class PassThroughTest {
         check("no motion inside: sticks where it is", p != null && near(p[0], 0.3) && near(p[1], 0.3));
     }
 
+    // ---- phase 2 ----
+
+    static boolean insideAny(double[] p, double[][] cells, int n, double inset) {
+        for (int i = 0; i < n; i++) {
+            boolean in = true;
+            for (int a = 0; a < 3; a++) {
+                if (p[a] < cells[i][a] + inset - 1e-12 || p[a] > cells[i][a] + 1 - inset + 1e-12) in = false;
+            }
+            if (in) return true;
+        }
+        return false;
+    }
+
+    static void stickAlong() {
+        Random rnd = new Random(7);
+        double[][] wall = {{0, 0, 0}, {1, 0, 0}, {3, 0, 0}, {0, 1, 0}};
+        boolean allInside = true;
+        for (int i = 0; i < 5000; i++) {
+            double[] from = {rnd.nextDouble() * 6 - 1, rnd.nextDouble() * 4 - 1, rnd.nextDouble() * 3 - 1};
+            double[] to = {rnd.nextDouble() * 6 - 1, rnd.nextDouble() * 4 - 1, rnd.nextDouble() * 3 - 1};
+            double roll = rnd.nextBoolean() ? rnd.nextDouble() : -1;
+            double[] p = PassMath.stickAlong(from, to, wall, wall.length, roll, 0.01);
+            if (p != null && !insideAny(p, wall, wall.length, 0.01)) allInside = false;
+        }
+        check("stickAlong: point always inside a web cell (5000 random paths, 4 cells)", allInside);
+
+        double[][] two = {{1, 0, 0}, {0, 0, 0}}; // listed out of order on purpose
+        double[] p = PassMath.stickAlong(new double[]{-0.5, 0.5, 0.5}, new double[]{2.5, 0.5, 0.5}, two, 2, -1, 0.01);
+        check("two touching webs crossed with no hit: stops inside the far exit, not between them",
+                p != null && near(p[0], 1.99));
+        double[][] gap = {{0, 0, 0}, {2, 0, 0}};
+        p = PassMath.stickAlong(new double[]{-0.5, 0.5, 0.5}, new double[]{3.5, 0.5, 0.5}, gap, 2, -1, 0.01);
+        check("webs with a gap: the first web's exit", p != null && near(p[0], 0.99));
+        p = PassMath.stickAlong(new double[]{-0.5, 0.5, 0.5}, new double[]{2.5, 0.5, 0.5}, two, 2, 0.75, 0.01);
+        check("roll 0.75 over two touching webs: three quarters along the run (x 1.5)", p != null && near(p[0], 1.5));
+        check("path ending inside the webs with no hit: keeps moving",
+                PassMath.stickAlong(new double[]{-0.5, 0.5, 0.5}, new double[]{1.5, 0.5, 0.5}, two, 2, -1, 0.01) == null);
+        p = PassMath.stickAlong(new double[]{0.5, 0.5, 0.5}, new double[]{0.5, 0.5, 0.5}, two, 2, -1, 0.01);
+        check("no motion inside a web: sticks where it is", p != null && near(p[1], 0.5));
+        check("no motion outside every web: null",
+                PassMath.stickAlong(new double[]{5, 5, 5}, new double[]{5, 5, 5}, two, 2, 0.3, 0.01) == null);
+        p = PassMath.stickAlong(new double[]{0.5, 3.0, 0.5}, new double[]{0.5, -2.0, 0.5}, new double[][]{{0, 0, 0}}, 1, -1, 0.01);
+        check("fast item crossing a whole web in one tick still sticks (near the bottom)", p != null && near(p[1], 0.01));
+        check("touching a cell only at its corner does not count",
+                PassMath.stickAlong(new double[]{-1, -1, 0.5}, new double[]{2, 2, 0.5}, new double[][]{{1, -1, 0}}, 1, 0.5, 0.01) == null);
+
+        // every item that enters a lone web ends up stuck in it: simulated falls at different speeds, chance 0.35
+        Random r2 = new Random(11);
+        boolean always = true;
+        double[] depthSum = new double[1];
+        int runs = 0;
+        double[][] lone = {{0, 0, 0}};
+        for (int i = 0; i < 2000; i++) {
+            double y = 1.5 + r2.nextDouble(), vy = -(0.05 + r2.nextDouble() * 1.5);
+            double x = 0.2 + r2.nextDouble() * 0.6;
+            double[] stuck = null;
+            for (int tick = 0; tick < 200 && stuck == null && y > -3; tick++) {
+                double ny = y + vy;
+                double roll = r2.nextDouble() < 0.35 ? r2.nextDouble() : -1;
+                stuck = PassMath.stickAlong(new double[]{x, y, 0.5}, new double[]{x, ny, 0.5}, lone, 1, roll, 0.01);
+                y = ny;
+                vy = (vy - 0.04) * 0.98;
+            }
+            if (stuck == null || !insideAny(stuck, lone, 1, 0.01)) always = false;
+            else { depthSum[0] += stuck[1]; runs++; }
+        }
+        check("2000 falls through a lone web: every item sticks inside it", always);
+        check("stick heights spread over the cell (mean " + String.format("%.2f", depthSum[0] / Math.max(1, runs)) + ")",
+                runs > 0 && depthSum[0] / runs > 0.05 && depthSum[0] / runs < 0.95);
+    }
+
+    static void surrounded() {
+        double dw = PassTier.COBWEB.defaults().denseWalk();
+        check("surrounded: jump climbs 0.2 x 0.35 = 0.07", near(PassMath.surroundedVertical(true, false, dw), 0.07));
+        check("surrounded: sneak descends 0.15 x 0.35 = 0.0525", near(PassMath.surroundedVertical(false, true, dw), -0.0525));
+        check("surrounded: no input hangs", near(PassMath.surroundedVertical(false, false, dw), 0.0));
+        check("surrounded: jump wins over sneak", PassMath.surroundedVertical(true, true, dw) > 0);
+        PassResult r = new PassResult();
+        PassTier.Values web = PassTier.COBWEB.defaults();
+        r.add(5L, PassRule.cell(PassTier.COBWEB, web, 5), true, true);
+        check("not surrounded at 5 neighbours", !r.surrounded && r.surroundedTier == null);
+        r.add(9L, PassRule.cell(PassTier.COBWEB, web, 26), true, true);
+        check("surrounded cell carries its tier", r.surrounded && r.surroundedCell == 9L && r.surroundedTier == PassTier.COBWEB);
+        r.reset();
+        check("reset clears the surrounded tier", r.surroundedTier == null && !r.surrounded);
+    }
+
+    static void arrowDespawn() {
+        check("despawn: pickable arrow 12000", PassMath.despawnLimit(true, true, false, 12000) == 12000);
+        check("despawn: demoted arrow vanilla 1200", PassMath.despawnLimit(true, true, true, 12000) == 1200);
+        check("despawn: unpickable arrow keeps vanilla's code", PassMath.despawnLimit(true, false, false, 12000) == -1);
+        check("despawn: system off keeps vanilla's code", PassMath.despawnLimit(false, true, false, 12000) == -1);
+        check("oldest: highest life", PassMath.oldestIndex(new int[]{30, 2000, 5, 1999}, 4) == 1);
+        check("oldest: tie goes to the earliest joined", PassMath.oldestIndex(new int[]{7, 9, 9}, 3) == 1);
+        check("oldest: none", PassMath.oldestIndex(new int[0], 0) == -1);
+        // cap 3: four arrows join in order; the oldest (highest life) is demoted, and despawns at once past 1200
+        int[] lives = {1500, 400, 900, 1};
+        int demoted = PassMath.oldestIndex(lives, 4);
+        check("cap 3, 4th joins: arrow with life 1500 demoted and gone at once (>= 1200)",
+                demoted == 0 && lives[demoted] >= PassMath.despawnLimit(true, true, true, 12000));
+        int[] young = {300, 400, 900, 1};
+        int d2 = PassMath.oldestIndex(young, 4);
+        check("cap 3, all under a minute: oldest (900) demoted, despawns at 1200",
+                d2 == 2 && young[d2] < PassMath.despawnLimit(true, true, true, 12000));
+    }
+
+    static void projectileGroups() {
+        Object[][] cases = {
+                {net.minecraft.world.entity.projectile.Arrow.class, PassGroup.HANG},
+                {net.minecraft.world.entity.projectile.SpectralArrow.class, PassGroup.HANG},
+                {net.minecraft.world.entity.projectile.ThrownTrident.class, PassGroup.HANG},
+                {net.minecraft.world.entity.projectile.Snowball.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.ThrownEnderpearl.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.ThrownEgg.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.LargeFireball.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.SmallFireball.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.DragonFireball.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.WitherSkull.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.LlamaSpit.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.ShulkerBullet.class, PassGroup.BREAK},
+                {net.minecraft.world.entity.projectile.ThrownPotion.class, PassGroup.SETTLE},
+                {net.minecraft.world.entity.projectile.ThrownExperienceBottle.class, PassGroup.SETTLE},
+                {net.minecraft.world.entity.projectile.FishingHook.class, PassGroup.SNAG},
+                {net.minecraft.world.entity.projectile.FireworkRocketEntity.class, PassGroup.LINGER},
+                {net.minecraft.world.entity.projectile.EvokerFangs.class, PassGroup.SLOW},
+        };
+        for (Object[] c : cases) {
+            Class<?> k = (Class<?>) c[0];
+            check("default group " + k.getSimpleName() + " = " + c[1], PassGroup.byClassChain(PassGroup.chainOf(k)) == c[1]);
+        }
+        check("default group: Quark pickarang chain = SNAG", PassGroup.byClassChain(List.of(
+                "vazkii.quark.content.tools.entity.rang.Pickarang", "vazkii.quark.content.tools.entity.rang.AbstractPickarang",
+                "net.minecraft.world.entity.projectile.Projectile")) == PassGroup.SNAG);
+        check("default group: Botania chakram chain = SNAG (before throwable BREAK)", PassGroup.byClassChain(List.of(
+                "vazkii.botania.common.entity.ThornChakramEntity", "net.minecraft.world.entity.projectile.ThrowableProjectile",
+                "net.minecraft.world.entity.projectile.Projectile")) == PassGroup.SNAG);
+        check("default group: a modded arrow subclass = HANG", PassGroup.byClassChain(List.of(
+                "com.example.FancyArrow", "net.minecraft.world.entity.projectile.AbstractArrow")) == PassGroup.HANG);
+        check("default group: unknown projectile = SLOW", PassGroup.byClassChain(List.of(
+                "com.example.Thing", "net.minecraft.world.entity.projectile.Projectile")) == PassGroup.SLOW);
+        check("group tag id creativecompat:passthrough/projectile/break",
+                PassProjectiles.groupTag(PassGroup.BREAK).location().toString().equals("creativecompat:passthrough/projectile/break"));
+        check("seven groups", PassGroup.values().length == 7
+                && PassProjectiles.groupTag(PassGroup.EXEMPT).location().getPath().equals("passthrough/projectile/exempt"));
+    }
+
     static void exemptTags() {
         check("tier tag creativecompat:passthrough/cobweb",
                 PassThrough.blockTag(PassTier.COBWEB).location().toString().equals("creativecompat:passthrough/cobweb"));
@@ -394,15 +561,25 @@ public final class PassThroughTest {
         CompatConfig.SPEC.correct(cfg);
         CompatConfig.SPEC.setConfig(cfg);
         for (PassTier t : PassTier.values()) {
-            for (String k : List.of("walk", "fall", "growth", "neighbours", "denseFrom", "denseWalk", "denseFall",
-                    "denseResetsFall", "surrounded", "minLayers", "walkOnlyMoving", "items", "itemStickChance",
-                    "projectiles", "depthStriderPasses")) {
+            List<String> keys = t.layered()
+                    ? List.of("layerMaxSlow", "solidBelowFull", "minLayers", "solidBelowFullOverrides", "fall", "depthStriderPasses")
+                    : List.of("walk", "fall", "growth", "neighbours", "denseFrom", "denseWalk", "denseFall",
+                    "denseResetsFall", "surrounded", "surroundedAt", "walkOnlyMoving", "items", "itemStickChance",
+                    "projectiles", "depthStriderPasses");
+            for (String k : keys) {
                 if (!cfg.contains(List.of("surface", "passthrough", t.key(), k))) {
                     check("toml has surface.passthrough." + t.key() + "." + k, false);
                 }
             }
         }
         check("toml has every tier key", true);
+        check("layers table has no walk / neighbours keys (its walk comes from the height)",
+                !cfg.contains(List.of("surface", "passthrough", "layers", "walk"))
+                        && !cfg.contains(List.of("surface", "passthrough", "layers", "neighbours"))
+                        && !cfg.contains(List.of("surface", "passthrough", "cobweb", "minLayers")));
+        check("toml breakStallTicks 3, overrides empty",
+                Integer.valueOf(3).equals(cfg.get(List.of("surface", "passthrough", "breakStallTicks")))
+                        && List.of().equals(cfg.get(List.of("surface", "passthrough", "layers", "solidBelowFullOverrides"))));
         check("toml enabled / arrowLifeTicks / arrowLongLifeCap",
                 Boolean.TRUE.equals(cfg.get(List.of("surface", "passthrough", "enabled")))
                         && Integer.valueOf(12000).equals(cfg.get(List.of("surface", "passthrough", "arrowLifeTicks")))

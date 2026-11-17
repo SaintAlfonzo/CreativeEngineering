@@ -1,0 +1,29 @@
+# r1115 phase 9, boot B1 (same boot): SQ-RD-26 jungle half again, two more jungles, 10 x 10 chunk boxes (the first box
+# forceloaded 6 x 6 chunks but counted 7 x 7).
+pace 2
+
+## SQ-RD-26x | jungle half: wild bell peppers and wild coffee in two other jungles
+> execute positioned -2500 70 -2500 run locate biome minecraft:jungle
+waitlog The nearest minecraft:jungle 600
+capture JH The nearest minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {JH1-80} {JH3-80} {JH1+79} {JH3+79}
+sleep 60
+> zq count {JH1-80} 40 {JH3-80} {JH1+79} 200 {JH3+79} rusticdelight:wild_bell_peppers
+waitlog \[zq\] count rusticdelight:wild_bell_peppers 300
+> zq count {JH1-80} 40 {JH3-80} {JH1+79} 200 {JH3+79} rusticdelight:wild_coffee
+waitlog \[zq\] count rusticdelight:wild_coffee 300
+> zq count {JH1-80} 40 {JH3-80} {JH1+79} 200 {JH3+79} minecraft:cocoa
+waitlog \[zq\] count minecraft:cocoa 300
+> forceload remove all
+> execute positioned 2500 70 2500 run locate biome minecraft:jungle
+waitlog The nearest minecraft:jungle 600
+capture JK The nearest minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {JK1-80} {JK3-80} {JK1+79} {JK3+79}
+sleep 60
+> zq count {JK1-80} 40 {JK3-80} {JK1+79} 200 {JK3+79} rusticdelight:wild_bell_peppers
+waitlog \[zq\] count rusticdelight:wild_bell_peppers 300
+> zq count {JK1-80} 40 {JK3-80} {JK1+79} 200 {JK3+79} rusticdelight:wild_coffee
+waitlog \[zq\] count rusticdelight:wild_coffee 300
+> zq count {JK1-80} 40 {JK3-80} {JK1+79} 200 {JK3+79} minecraft:cocoa
+waitlog \[zq\] count minecraft:cocoa 300
+look wild bell peppers and wild coffee above 0 in at least one jungle box (cocoa shows the box is jungle)

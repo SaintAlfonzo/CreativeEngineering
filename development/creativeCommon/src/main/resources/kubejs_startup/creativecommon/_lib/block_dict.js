@@ -111,6 +111,15 @@ b.tall_purple_pickerelweed = 'upgrade_aquatic:tall_purple_pickerelweed';
 b.cucumber_crop = 'vintagedelight:cucumber_crop';
 b.ghost_pepper_crop = 'vintagedelight:ghost_pepper_crop';
 b.zucchini_crop = 'veggiesdelight:zucchini_crop';
+// Vine crops no block placement can replace (CD crops/VineCropReplace, tag creativedelight:crops/vine_crops in CD
+// crop_tags.js; plan_post_scratch_1115 C2, SQ-HOP-04). No items of their own; unresolved when their mod is absent
+b.t_vine_crops = '#creativedelight:crops/vine_crops';
+b.hops_vine = 'hearthandharvest:hops_vine';
+b.jungle_grape_bush_red = 'vinery:jungle_grape_bush_red';
+b.jungle_grape_bush_white = 'vinery:jungle_grape_bush_white';
+b.vanilla_vine = 'neapolitan:vanilla_vine';
+b.vanilla_vine_plant = 'neapolitan:vanilla_vine_plant';
+b.mulberry_vine = 'upgrade_aquatic:mulberry_vine';
 // Crop blocks with a soil yield row (CD creativeengineering/soil_yield.js, feature_writeup/crop_yields.md)
 b.wheat_crop = 'minecraft:wheat';
 b.carrots = 'minecraft:carrots';
@@ -279,7 +288,6 @@ b.melt_fire_fairylights_jack_o_lantern = 'fairylights:jack_o_lantern';
 b.melt_fire_ap_nether_brass_torch = 'architects_palette:nether_brass_torch';
 b.melt_fire_ap_nether_brass_wall_torch = 'architects_palette:nether_brass_wall_torch';
 b.melt_fire_ap_nether_brass_lantern = 'architects_palette:nether_brass_lantern';
-b.melt_fire_ap_glowstone_cage_lantern = 'architects_palette:glowstone_cage_lantern';
 b.melt_fire_twigs_paper_lanterns = 'twigs:*paper_lantern';       // all 5
 b.melt_fire_quark_paper_lantern = 'quark:paper_lantern';
 b.melt_fire_quark_paper_lantern_sakura = 'quark:paper_lantern_sakura';

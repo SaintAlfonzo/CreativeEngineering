@@ -1,0 +1,47 @@
+# r1115 phase 2, same boot: SQ-PWG-82 again at Z +20 (1926; forceload 1135 1916 1200 1935) with the double lineck of
+# the r1114 block (the first lineck flips the belt motor), to confirm the p2_r1 FAIL (circuit stuck at 1/3, the arm moved
+# the whole wire_connector x8 stack onto the belt) is not the batch.
+pace 1
+
+## SQ-PWG-82r | Z 1926 rerun: 11-14 row: arm on a belt, depots filled first (B25 depot output first, lock), circuit finishes on the belt; loose parts PASS-as-upstream
+> forceload add 1135 1916 1200 1935
+sleep 4
+> zpwg9c line 1142 -60 1926 plain
+waitlog \[zpwg9c\] done 20
+sleep 0.5
+> zpwg9c lineck 1142 -60 1926
+sleep 1
+> zpwg9c lineck 1142 -60 1926
+> zpwg9c depot 1145 -60 1930 powergrid:wire_connector 8
+> zpwg9c depot 1147 -60 1930 powergrid:resistor 8
+> zpwg9c depot 1148 -60 1929 minecraft:stone 64
+> zpwg9c arm2 1146 -60 1928 1148 -60 1929 1146 -60 1926 1145 -60 1930 1147 -60 1930
+sleep 1
+> zpwg9c feed 1142 -60 1926 inc 1140 -60 1858
+sleep 3.5
+> zpwg9c show 1146 -60 1926
+sleep 20
+> zpwg9c show 1146 -60 1926
+> zpwg9c show 1152 -60 1926
+> zpwg9c same 1152 -60 1926 1140 -60 1858
+> zpwg9c show 1148 -60 1929
+> zpwg9c show 1146 -60 1928
+> zpwg9c show 1145 -60 1930
+> zpwg9c show 1147 -60 1930
+sleep 1
+expect \[zpwg9c\] line plain belt Block\{create:belt\}
+count \[zpwg9c\] lineck belt facing=east speed=-?[1-9] >= 1
+expect \[zpwg9c\] arm at 1146 -60 1928 points=4$
+count \[zpwg9c\] arm point .*Mode:"TAKE" == 2
+count \[zpwg9c\] arm point .*Mode:"DEPOSIT" == 2
+expect \[zpwg9c\] feed powergrid:incomplete_circuit x1 Schematic components=3 inserted on the belt at 1142 -60 1926
+expect \[zpwg9c\] belt facing=\S+ speed=\S+ items .*powergrid:incomplete_circuit x1 Schematic components=3 .*@4\.\d+ lockedExternally
+expect \[zpwg9c\] items 0:powergrid:circuit_board x1 Schematic components=3$
+expect \[zpwg9c\] same powergrid:circuit_board x1 Schematic components=3 design=true$
+expect \[zpwg9c\] items 0:minecraft:stone x64$
+reject \[zpwg9c\] arm: no interaction point
+reject An unexpected error occurred trying to execute that command
+reject \[zpwg\w*\] (error|unknown subcommand)
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look first belt show: circuit about @4.5 lockedExternally, Assembly inserted 1 to 3; loose part stacks on the belt recorded (upstream); end depot circuit_board, design same; stone depot x64
+

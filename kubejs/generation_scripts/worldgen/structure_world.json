@@ -5,16 +5,18 @@
     "when": "A 'when' holds any of type (a type/* tag, without the prefix), typePrefix, path; it passes when ANY of its keys matches. A rule or choice with no 'when' always passes.",
     "whole": "First matching rule gives a whole structure its category. Multi-type structures land by this order. No type/* tag at all = unmapped, decided before these rules run.",
     "order": "Categories, subfamilies and functions are built in the order listed here; a name not listed goes after the listed ones. Biome columns and variations are in natural order.",
+    "biomeFamilies": "Family name: the biome columns folded into it, whatever mod or style they come from. Applies to village pieces and whole structures, before overrides. A column not listed keeps its own name.",
+    "reroute": "pieces.reroute: pieces whose id matches go to that category and subfamily; the subfamily their piece rule gave becomes the function.",
     "overrides": "Per id: any of category, subfamily, function, biome, dry (true/false), template (place this template instead of generating the structure, for structures refused on flat ground). An unmapped structure takes only dry and template."
   },
-  "gaps": { "category": 50, "subfamily": 25, "function": 10, "biome": 5, "variation": 5 },
+  "gaps": { "category": 20, "subfamily": 12, "function": 6, "biome": 3, "variation": 3 },
   "origin": { "x": 16, "z": 8 },
   "order": {
     "categories": ["Village", "Pillager", "Ruins", "Underground", "Underwater", "Sky", "Buildings", "Nature and Decor", "Nether", "End", "Composite"],
     "subfamilies": [
       "Villager Houses", "Villager Structures", "Decor and Infrastructure", "Whole villages",
       "Outposts", "Towers", "Camps", "Ships", "Siege and wagons", "Witches and mansions",
-      "Portals", "Surface ruins",
+      "Portals", "Surface ruins", "Village ruins",
       "Mineshafts", "Cabins", "Other",
       "Ruins", "Shipwrecks", "Fossils",
       "Balloons and temples", "Sky village: Villager Houses", "Sky village: Villager Structures", "Sky village: Decor and Infrastructure",
@@ -29,8 +31,25 @@
       "Town centres", "Temples", "Farms", "Animal pens", "Gates and towers", "Workplaces", "Other",
       "Streets", "Animals", "Lamps", "Trees", "Decor",
       "Farms and stables", "Churches and temples", "Watchtowers", "Food", "Homes",
-      "Towers", "Camps", "Houses", "Portals", "Decoration"
+      "Towers", "Camps", "Houses", "Portals", "Decoration",
+      "Villager Houses", "Villager Structures", "Decor and Infrastructure"
     ]
+  },
+  "biomeFamilies": {
+    "Plains": ["Plains zombie", "Classic", "Tudor", "Oak", "Sunflower Plains Farm", "Terralith Fortified"],
+    "Desert": ["Desert zombie", "Terralith Desert", "Nilotic", "Oriental", "Wandering Trader Camp", "Sand"],
+    "Savanna": ["Savanna zombie", "Acacia", "Iberian", "Mediterranean"],
+    "Taiga": ["Taiga zombie", "Spruce", "Old Growth Taiga Polish", "Swedish"],
+    "Snowy": ["Snowy zombie", "Snowy Taiga Viking", "Snowy Slopes Inn", "Icy", "Ice"],
+    "Forest": ["Forest Ruins", "Dark Forest", "Rustic"],
+    "Birch": ["Birch Forest Romanian"],
+    "Flower Forest": ["Flower Forest Japanese", "Cherry", "Flower"],
+    "Jungle": ["Jungle Tribal", "Sparse Jungle Polynesian"],
+    "Swamp": ["Swamp Boat", "Mangrove"],
+    "Badlands": ["Badlands Pueblo", "Wooded Badlands Tipi"],
+    "Mountain": ["Meadow", "Meadow Swiss", "Grove", "Grove Villager Outpost", "Highlands"],
+    "Mushroom": ["Mushroom Fields Fantasy"],
+    "Coast": ["Beach", "Beach Lighthouse", "Ocean", "Warm"]
   },
   "skipStructures": "^terralith:zpointer/",
   "replacedByPieces": {
@@ -130,6 +149,9 @@
     "idMatch": ":villages?/|^skyvillages:",
     "sky": { "id": "^skyvillages:", "category": "Sky", "subfamilyPrefix": "Sky village: ", "biome": "Sky" },
     "category": "Village",
+    "reroute": [
+      { "id": "^kaisyn:village/forest_ruins/", "category": "Ruins", "subfamily": "Village ruins" }
+    ],
     "rules": [
       { "path": "/streets?/|/terminators?/|street|road|/bridge|^bridge|bridge_|term\\d|terminator|crossroad|turn_|corner_|straight_|/paths?/", "subfamily": "Decor and Infrastructure", "function": "Streets" },
       { "path": "/villagers?/|^villager$|iron_golem", "skip": "entity" },

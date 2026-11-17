@@ -314,7 +314,8 @@
 		SaltDissolvingInRainChance = 0.15
 
 	[salt.Melting]
-		#Salt (item) will melt clicked blocks defined in tag 'salt/tags/blocks/meltables'.
+		#Salt in a dispenser facing ice or snow melts it one stage and uses 1 salt (Creative Common's
+		#melting targets). A salt click by hand places a salt layer instead. Off: the dispenser drops the salt.
 		SaltItemMeltingEnabled = true
 		#Unused in this pack: salt blocks melting ice and snow is Creative Common's melting system,
 		#[melting] in creativecommon-common.toml. This switch and the chance below have no effect.
@@ -325,6 +326,10 @@
 		#Melted ice is replaced with a water source block outside ultra-warm dimensions (the Nether).
 		#Off: always air. Snow always leaves air.
 		SaltMeltingPlaceWater = true
+		#Chance that a salt layer loses one layer each time it melts ice or snow (the last layer goes).
+		#Only salt layers: full salt blocks never vanish.
+		#Range: 0.0 ~ 1.0
+		SaltLayerVanishChance = 0.05
 
 	[salt.Evaporation]
 		#Water in a cauldron with a heat source beneath (defined in tag 'salt/tags/blocks/heaters') will evaporate and salt will be formed in the cauldron

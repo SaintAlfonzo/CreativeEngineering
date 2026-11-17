@@ -10,6 +10,8 @@
 #   - group B: normal world, structures on, seed 8675309 unless level-seed= is given
 #   - prop=value pairs written into server.properties (difficulty=normal, spawn-monsters=true, ...)
 #   - NOSWAP=1 in the environment: no dev-jar swaps (the installed mods/ jars only)
+#   - SKIPSWAP="creativecompat creativedelight": no swap for those mods (glob prefix), e.g. a build another session is
+#     still rewriting
 #   - COPYDEV=1: swapped dev jars are COPIED, not hard-linked (use while other sessions run Gradle builds)
 #   - PGJAR=<path>: also copy that Power Grid jar (never in mods/; the orchestrator names it in jar_archive/pwg_gate/);
 #     PGJAR=1 takes the newest development/backportedPowerGrid build jar instead
@@ -53,6 +55,8 @@ rm -f mods/creative_delight-*.jar mods/creative_brewing-*.jar
 [ "${NOSWAP:-0}" = 1 ] && { SWAPS=(); echo "swap: off (NOSWAP=1)"; }
 for s in "${SWAPS[@]+"${SWAPS[@]}"}"; do
   g=${s%%|*}; b=${s#*|}
+  skip=0; for k in ${SKIPSWAP:-}; do case "$g" in "$k"-*) skip=1;; esac; done
+  [ "$skip" = 1 ] && { echo "swap: skipped $g (SKIPSWAP)"; continue; }
   [ -f "$b" ] || { echo "swap: no build jar $b"; continue; }
   old=$(ls mods/$g 2>/dev/null | head -1 || true)
   if [ -n "$old" ] && ! [ "$b" -nt "$INST/mods/$(basename "$old")" ]; then
@@ -79,6 +83,9 @@ done
 # Power Grid: only by PGJAR. The -17 jar sat in the instance mods/ on 2026-11-13 with no mod_sides.md row (r1113
 # section 11): drop any copy prep linked in, so queue servers never carry an unlisted port jar.
 rm -f mods/backportedPowerGrid-*.jar
+# PGJAR is resolved against the instance root (the script runs in OUT/srv by now; r1115 a relative path was skipped silently)
+case "${PGJAR:-}" in ""|1|/*) ;; *) PGJAR="$INST/$PGJAR" ;; esac
+if [ -n "${PGJAR:-}" ] && [ "$PGJAR" != 1 ] && [ ! -f "$PGJAR" ]; then echo "power grid: PGJAR NOT FOUND: $PGJAR"; fi
 if [ -f "${PGJAR:-}" ]; then
   cp -p "$PGJAR" mods/; echo "power grid: $(basename "$PGJAR") ($(date -r "$PGJAR" +%m-%d_%H:%M:%S), sha1 $(sha1sum "$PGJAR" | cut -c1-12))"
 elif [ "${PGJAR:-0}" = 1 ]; then

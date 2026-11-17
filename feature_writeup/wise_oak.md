@@ -318,6 +318,8 @@ Nothing else is open.
 
 ## 8. In-game test suite (all open)
 
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-WO-15 to -25 PASS (11 of 11), SQ-WO-31, -33 PASS (no gift with chance 0 / empty lists, no exception). Earlier runs: r1109wo, r1110wo.
+
 - [ ] **WO-01 awake by day:** place a Wise Oak in the day, wait 2 minutes -> it blinks and never sleeps.
 - [ ] **WO-02 asleep by night:** `/time set night`, wait about a minute -> SLEEPING; `/time set day` -> wakes within about a minute.
 - [ ] **WO-02b storm:** `/weather thunder` in the day -> it sleeps; `/weather clear` -> it wakes.

@@ -28,6 +28,8 @@
 //   /zhh1 litter X Y Z TYPE N [truffle]  N parent pairs bred through spawnChildFromBreeding; babies counted, all discarded
 // Output: "[zhh1] ..." lines in logs/latest.log, then "[zhh1] done". Written 2026-11-08, not run yet: one live call each
 // before a batch relies on it (scratch-test gotchas). No Rhino-only tricks: Java collections are copied first.
+// MIGRATED 2026-11-15 in part (creative_devtools.md): interact -> /pbot interact (sneak via /pbot sneak), drops ->
+// /cdevtest items, finish -> /pbot eat or useitem (a ticked use). The rest stays here.
 (() => {
     const KEPT = [
         'acacia_half_cabinet', 'baked_apple', 'birch_half_cabinet', 'biscuits_and_gravy', 'blue_mum',

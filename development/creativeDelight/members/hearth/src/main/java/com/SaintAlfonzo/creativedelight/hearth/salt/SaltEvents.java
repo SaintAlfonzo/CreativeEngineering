@@ -79,9 +79,9 @@ public final class SaltEvents {
             }
             succeed(event, level);
         } else if (SaltLick.isSalt(stack) && SaltLick.restored(block) != null) {
+            // On a full lick this does not fire: salt dust's own click puts a layer on top (B7).
             if (!level.isClientSide()) {
-                level.setBlockAndUpdate(pos, SaltLick.restored(block).defaultBlockState());
-                level.playSound(null, pos, SoundEvents.GRAVEL_PLACE, SoundSource.BLOCKS, 1.0F, 1.4F);
+                SaltLick.refill(level, pos, state, 1);
                 consume(player, stack);
             }
             succeed(event, level);
@@ -108,8 +108,10 @@ public final class SaltEvents {
     }
 
     /**
-     * Salt (and, since plan_bugfix_1114 3.7, Vintage Delight salt dust) in a dispenser facing a worn, unwaxed stage
-     * restores it; any other target falls through to a normal dispense.
+     * Salt (and, since plan_bugfix_1114 3.7, Vintage Delight salt dust) in a dispenser facing a salt lick: a worn stage is
+     * restored one stage (waxed or not, the same refill as by hand), a full one gets a salt layer on top (B7,
+     * plan_post_scratch_1115). Any other target falls through to the behaviour already registered (The Salt's: melt a
+     * frozen block, a layer on air, else drop).
      */
     public static void registerDispenser() {
         registerDispenser(ForgeRegistries.ITEMS.getValue(SALT_ITEM_ID));
@@ -130,13 +132,16 @@ public final class SaltEvents {
                 Direction facing = source.getBlockState().getValue(DispenserBlock.FACING);
                 BlockPos target = source.getPos().relative(facing);
                 Level level = source.getLevel();
-                Block block = level.getBlockState(target).getBlock();
-                Block restored = SaltLick.restored(block);
-                if (restored != null && SaltLick.isLickable(block)) {
-                    level.setBlockAndUpdate(target, restored.defaultBlockState());
-                    level.playSound(null, target, SoundEvents.GRAVEL_PLACE, SoundSource.BLOCKS, 1.0F, 1.4F);
-                    stack.shrink(1);
-                    return stack;
+                BlockState state = level.getBlockState(target);
+                Block block = state.getBlock();
+                if (SaltLick.isLickable(block) || SaltLick.isWaxed(block)) {
+                    boolean done = SaltLick.restored(block) != null
+                            ? SaltLick.refill(level, target, state, 1) == 0
+                            : SaltLick.addLayerOnTop(level, target);
+                    if (done) {
+                        stack.shrink(1);
+                        return stack;
+                    }
                 }
                 return previous != null ? previous.dispense(source, stack) : super.execute(source, stack);
             }

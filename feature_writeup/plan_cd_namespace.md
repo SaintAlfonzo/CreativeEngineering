@@ -181,7 +181,7 @@ Additions, so that the id move loses nothing:
 6. **Resources.** Move `assets/creativeengineering/{blockstates,models,textures}` and
    `data/creativeengineering/{loot_tables,moonlight}` in the CD jar to `creativedelight`, rewriting model and
    blockstate texture paths and soft fluid item ids; rename the lang keys; move `displaydelight_dishes.json` with its
-   loader path. Clean-build CD (memory `repack-stale-resources`).
+   loader path. Clean-build CD (note [repack-stale-resources](agent_notes/repack-stale-resources.md)).
 7. **Build and lint.** `:creativeDelight:`, `:creativeCommon:`, `:creativeCompat:` builds; `tools/id_owner_lint.py`
    gains a check that no CD register call, tag or data id uses `creativeengineering`; grep the scratch world's
    `datapacks/` and the pack for old D4 ids; `python3 tools/changelog_lint.py`.
@@ -195,7 +195,7 @@ Additions, so that the id move loses nothing:
 Two kinds: the swapper itself (run first on the wooden bucket swap, then on the full move), and the move. The swapper
 tests need a **fixture save made on the old jars**: a scratch server running the currently installed jars builds it
 from a `.qb` batch, the save is copied before any new jar touches it (a save opened once without the swap list loses
-the old ids from its snapshot for good: memory `forge-missing-mappings-staging`), and every test boots its own copy.
+the old ids from its snapshot for good: note [forge-missing-mappings-staging](agent_notes/forge-missing-mappings-staging.md)), and every test boots its own copy.
 
 ### 5.1 Fixture (old jars)
 

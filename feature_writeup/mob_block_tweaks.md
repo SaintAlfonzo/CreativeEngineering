@@ -133,10 +133,10 @@ Weathering leaf piles: FLD ran `randomTick`, and IW's `LeavesMixin` calls `Leave
 its `removeBlock`. The port removes leaves in `tick`, so that hook never fired. `block/LeafDecayPiles` now calls the
 same IW method after the port's `removeBlock` (IW's chance `spawn_entity_from_decay` 0.3, its blacklist, a 1-5 layer
 pile in the leaf's place that then falls, the falling-leaves particles). Switch: `[leaf_decay] leafPiles` (default
-true). How tall a pile must be to slow you: `[leaf_piles] slowFromLayers` (default 4 = IW's own "more than 3"; 9 =
-never). `mixin/LeafPileSlowMixin` swaps the 3 in IW's `LeafPileBlock#entityInside`, and the WTHIT Run Speed line
-(`surface/StuckInBlock`) uses the same value, so a pile shows a line exactly when it slows. Keep it equal on server and
-clients (movement is predicted client-side).
+true). How tall a pile must be to slow you: since 2026-11-15 `[surface.passthrough.leaf_pile] minLayers` (default 4, shared
+with Twigs bamboo leaves; the pass-through `leaf_pile` tier, [plan_passthrough.md](plan_passthrough.md) 3.1). Until
+then `[leaf_piles] slowFromLayers` and `mixin/LeafPileSlowMixin` (both removed; an old value is carried on boot by
+`surface/LeafPileMigration`). The WTHIT Walk Through line uses the same value. The server sends its values to clients.
 
 The scratchpad's "restore Immersive Weathering leaf drop on decay" (scratchpad 2026-10-21, listed twice) is this
 fix; MT-24 checks it (TODO `farming/trees #1`).
@@ -447,7 +447,7 @@ them); orcas and other whales are untouched.
   Ground piles: stand under an untouched oak for a few in-game days (or `/gamerule randomTickSpeed 300` for a minute,
   then back to 3) → thin leaf piles appear on the grass under its canopy, as before the decay port. Decay piles and
   the switch: scratch server PASSED 2026-10-22; the fall in a real forest, ground piles and particles: in game.
-- [ ] **MT-25 Pile slow height:** *Logic half: scratch server PASSED 2026-10-22 (SQ-OM-09: 3 layers no slow, 4 and 5 slow; SQ-OM-14 with 6: 5 no slow, 6 and 7 slow); walking and WTHIT: in game.* default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles → only the
+- [ ] **MT-25 Pile slow height:** *Superseded 2026-11-15: leaf piles are the pass-through `leaf_pile` tier, `[surface.passthrough.leaf_pile] minLayers` replaces `slowFromLayers` (same default 4); run BR-83 and BR-87 in [blockrunner.md](blockrunner.md) 3.10 instead (queue SQ-PTH-16 to -18, CQ-PTH-04). Kept for the record.* *Logic half: scratch server PASSED 2026-10-22 (SQ-OM-09: 3 layers no slow, 4 and 5 slow; SQ-OM-14 with 6: 5 no slow, 6 and 7 slow); walking and WTHIT: in game.* default `slowFromLayers = 4`: walk through 3-layer and 4-layer piles → only the
   4-layer one slows you, and WTHIT shows a Run Speed line on the 4-layer one only. Set 6 (game closed), repeat → 4 and
   5 no longer slow or show; 6 and up do. Depth Strider boots still walk through.
 - [ ] **MT-26 Seagulls skip lunchboxes** (needs a real player: gulls only target players in the world): all four

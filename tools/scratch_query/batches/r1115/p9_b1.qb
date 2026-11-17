@@ -1,0 +1,40 @@
+# r1115 phase 9, boot B1: SQ-RD-26 (part of SQ-RDB-03, the only server sub-row not rerun after the Rustic bake).
+# Fresh group B world (NOSWAP=1 prep_srv.sh OUT p9b B: seed 8675309). Rows from r1102b r_B.qb (jungle away from spawn,
+# then a savanna), unchanged except this header.
+pace 2
+
+## SQ-RD-26-SETUP | jungle away from spawn
+> execute positioned 2500 70 -2500 run locate biome minecraft:jungle
+waitlog The nearest minecraft:jungle 600
+capture JG The nearest minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {JG1-48} {JG3-48} {JG1+48} {JG3+48}
+sleep 40
+
+## SQ-RD-26 | Rustic wilds by climate; giant peppers rare, warm dry grassy only; none in the jungle
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:wild_bell_peppers
+waitlog \[zq\] count rusticdelight:wild_bell_peppers 300
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:wild_coffee
+waitlog \[zq\] count rusticdelight:wild_coffee 300
+> zq count {JG1-56} 40 {JG3-56} {JG1+56} 200 {JG3+56} rusticdelight:bell_pepper_red_block
+waitlog \[zq\] count rusticdelight:bell_pepper_red_block 300
+expect \[zq\] count rusticdelight:bell_pepper_red_block: 0
+> execute positioned -2500 70 2500 run locate biome minecraft:savanna
+waitlog The nearest minecraft:savanna 600
+capture SV The nearest minecraft:savanna is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {SV1-64} {SV3-64} {SV1+64} {SV3+64}
+sleep 60
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_cotton
+waitlog \[zq\] count rusticdelight:wild_cotton 300
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:bell_pepper_red_block
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_coffee
+> zq count {SV1-72} 40 {SV3-72} {SV1+72} 160 {SV3+72} rusticdelight:wild_bell_peppers
+sleep 60
+> zq biometag creativedelight:wild_crops/bell_pepper
+> zq biometag creativedelight:wild_crops/coffee
+> zq biometag creativedelight:wild_crops/giant_bell_pepper
+expect \[zq\] count rusticdelight:wild_coffee: [1-9]
+expect \[zq\] count rusticdelight:wild_cotton: [1-9]
+expect biometag creativedelight:wild_crops/bell_pepper \([1-9]\d*\): .*jungle
+reject biometag creativedelight:wild_crops/giant_bell_pepper \(\d+\): .*jungle
+look jungle box (near 2500 -2500): wild bell peppers and wild coffee, no giant pepper; savanna box (9 x 9 chunks): wild cotton, giant peppers rare (0 or 1 patch is normal); r1102b s2's spawn jungle had wild_bell_peppers 0: a second 0 here with the bell_pepper tag naming jungle biomes is a finding
+

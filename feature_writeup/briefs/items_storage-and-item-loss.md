@@ -39,7 +39,7 @@ not by hand.
   Ender Storage chest; Framed storage; Cloud Storage chest; Botania bauble box (2.25 added the Trinket Case path).
 - **Other sorts**: Sophisticated Core's own sort buttons (`common/gui/SortBy`, `settings/nosort`, and an
   `compat/inventorysorter` package) in backpacks; Quark's player-inventory sort.
-- **The 2026-09-30 repro** (`tools/item_repro/`, plan_1.0.3.md 4.7, memory `item-loss-repro`): ~380 random-click rounds
+- **The 2026-09-30 repro** (`tools/item_repro/`, plan_1.0.3.md 4.7, note [item-loss-repro](../agent_notes/item-loss-repro.md)): ~380 random-click rounds
   under lag found no vanilla click loss; the one permanent loss was Sophisticated Backpacks' anti-dupe
   (`UUIDDeduplicator.checkForDuplicateBackpacksAndRemoveTheirUUID`) stripping `contentsUuid` from a re-opened backpack.
   **No fix and no TODO row** for that loss (grep `contentsUuid` / `UUIDDeduplicator` in patcherMod and TODO: none).
@@ -70,7 +70,7 @@ not by hand.
 
 ### Gotchas
 - Scratch scripts must not ship: keep the harness in `feature_writeup/testing/`, copy into the scratch server only.
-- KubeJS hides `getTag`/`setTag`, `getUUID`; use `getNbt`, `getUuid` (memory `item-loss-repro`).
+- KubeJS hides `getTag`/`setTag`, `getUUID`; use `getNbt`, `getUuid` (note [item-loss-repro](../agent_notes/item-loss-repro.md)).
 - `tools/item_repro/README.md` says to match the client by `ps -eo pid=,args=`; per CLAUDE.md, redact the access token
   in the same command or use `pgrep -x java` + `readlink /proc/PID/cwd`.
 
@@ -219,7 +219,7 @@ deleting at once.
 | Row | Change | Status | Note |
 |---|---|---|---|
 | #2 | Items in a sack deleted when dyed | Testing | `SupplementariesDyeBlocksMixin` (patcherMod 1.1.01) skips block-entity blocks and `#creativeengineering:no_world_dye`; [dyeing.md](../dyeing.md) D1. Test in the TODO row (filled sack in world: nothing; grid dye keeps contents; wool still dyes) |
-| #3 | Item deleted after middle-click pick | Testing | `CreativePickBlockSyncMixin` (client, 1.1.01), memory `creative-pick-block-desync`. Test on the server in creative with a full hotbar |
+| #3 | Item deleted after middle-click pick | Testing | `CreativePickBlockSyncMixin` (client, 1.1.01), note [creative-pick-block-desync](../agent_notes/creative-pick-block-desync.md). Test on the server in creative with a full hotbar |
 | #4 | Backpack reskin by smithing | Testing | [backpack_skins.md](../backpack_skins.md); BP-01 to BP-05 open; equip block off by default |
 | #7 | Sacks as bundles | Testing | [storage_audit.md](../storage_audit.md) 6; scratch SQ-GM-10 PASSED 2026-10-22; SB-01 to SB-09 in game |
 | #9 | Lunchbox tiers, skins and dye | Testing | [lunchboxes.md](../lunchboxes.md); SQ-LB-01, -02 PASSED r1031 (2026-10-31); DEPLOYED with 1.1.05 (1.1.05 changelog `## Lunchboxes`; server 1.1.05, client 1.1.06). LB-01 to LB-14 in game |

@@ -1,0 +1,78 @@
+# sawblade-recipe-routing
+
+> IE Sawmill recipe selection driven by the installed sawblade's {Profile} NBT — how it works, the 3 mixins, the data
+
+Moved from agent memory 2026-11-16 (last edited there 2026-09-07). Repo status docs win over any status line here.
+
+The IE Sawmill can run **different recipes for the same input** depending on which sawblade
+is installed. `minecraft:oak_planks` → stairs / door / fence / … is chosen by the blade.
+
+**Why it was needed:** `kubejs/generation_scripts/sawmill.js` emits many `immersiveengineering:sawmill`
+recipes that share one input; IE's `SawmillRecipe.findRecipe` returns only the first input
+match (non-deterministic map order), so all but one were dead. Routing fixes that and makes
+selection deterministic.
+
+## Mechanism
+
+- Recipe JSON gains an optional `"blade": "<profile>"` field. Absent/`""` = the profile-less
+  default for that input (what a plain `immersiveengineering:sawblade` produces).
+- Precision sawblade (`creativeengineering:precision_sawblade`) carries NBT `{Profile:"<shape>"}`.
+- `patcherMod` [patchermod-coremod](patchermod-coremod.md) routes: among input-matching recipes, prefer the one
+  whose `blade` == the installed blade's `Profile`; else the `blade==""` default; else null
+  (IE passes the item through unchanged — safe, `getCurrentStack` null-guards).
+
+## patcherMod pieces (`com.SaintAlfonzo.creativeengineering.sawmill.*` + `.mixin.*`)
+
+- `SawbladeRouting` — `profileOf(ItemStack)`, `route(Level, input, profile)`. Pure logic + the
+  `((Recipe<?>)r).getId()` cast (IE's SRG jar hides the Mojmap `Recipe` methods; cast to the
+  Mojmap `Recipe` interface so reobf maps `getId`→`m_6423_`).
+- `SawmillRecipeMixin` — `@Unique String` blade field + `SawmillRecipeExt` duck iface.
+- `SawmillRecipeSerializerMixin` — `@Inject` RETURN of `readFromJson`, `GsonHelper.getAsString(json,"blade","")`.
+- `SawmillProcessMixin` (targets `SawmillBlockEntity$SawmillProcess`) — captures `be.sawblade`
+  profile at `processStep` HEAD (server), `@Redirect`s the `SawmillRecipe.findRecipe` call in
+  `getRecipeDependentData`, and persists profile + resolved-recipe-id through
+  `writeToNBT`/`readFromNBT` (the client-sync path — client never runs `processStep`, so it
+  re-loads the exact recipe by id via `SawmillRecipe.RECIPES.getById`).
+- Not synced over the IE network — the persisted recipe id on the process handles client parity.
+
+## Data
+
+- `kubejs/generation_scripts/sawmill.js` — `profileFor(outputId)` regex classifies the output
+  shape; `createSawmillSimpleRecipeFile` auto-derives `blade` from the output. Regenerate with
+  `node sawmill.js`, then copy `recipes/sawmill/*.json` → `patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/`.
+- Default per planks input: IE's own `immersiveengineering:sawmill/<species>_slab` (9 vanilla/nether,
+  still live) or the generated `*_slab` (4 modded woods). `wood_types.js` unchanged.
+- Blueprint recipes: `kubejs/data/creativeengineering/recipes/blueprint/precision_sawblade_*.json`
+  (12, raw datapack JSON — kjs-ie's `BlueprintRecipeSchema` mangles `e.custom` blueprint recipes,
+  same class of bug as memory `create-automatic-brewing`-adjacent kjs-ie schema issues). Recipe:
+  `immersiveengineering:sawblade + #<shape tag> + 2 steel plates → precision_sawblade{Profile}`.
+  Crafted fresh from a consumed plain sawblade — **no recipe consumes a precision_sawblade**, so
+  there is no re-program / durability-reset path.
+  - Shape tag is a broad vanilla tag (`minecraft:wooden_stairs` etc.) where one exists. No
+    upstream tag exists for **vertical planks** or **railings**, so those two use pack tags
+    `creativeengineering:vertical_planks` / `creativeengineering:railings` defined in
+    `server_scripts/tags/engineeringtags.js` (13 quark vertical-plank + 13 AP/everycomp railing
+    items — keep in sync with `generation_scripts/sawmill.js` outputs). Fixed 2026-09-07: both
+    recipes previously hard-coded the *oak* item only (`quark:vertical_oak_planks` /
+    `architects_palette:oak_railing`), so no other wood could craft that blade.
+- Blueprint item + category name: `blueprints.js` (`{blueprint:"precision_sawblades"}` + added to
+  `blueprintTypes`) and `namechanges.js`. Blade profile tooltip in `tooltips.js` (`addAdvanced`).
+
+## Crash on first sawmill use (fixed 2026-09-06)
+
+Inserting any precision sawblade crashed: `ClassMetadataNotFoundException:
+com.SaintAlfonzo.creativeengineering.sawmill.SawbladeRouting` (also `duck.SawmillProcessExt`)
+while `SawmillProcessMixin` applied. `SawmillProcess` is transformed lazily on the first
+sawmill tick, minutes after mod load; ModLauncher's Mixin bytecode provider can't locate a
+class from patcherMod's own jar that has never been loaded during a *late* transform ("Error
+loading class ... ClassNotFoundException"). Other patcherMod helper classes (`DragonBreathBrewing`,
+`fan.*`) dodge this only because `commonSetup` already referenced them.
+Fix: `CreativeEngineering.commonSetup` now `Class.forName`s `SawbladeRouting` +
+both `duck` interfaces up front (`forceLoad(...)`), so they're defined before the lazy apply.
+Any future mixin that's applied lazily and references a patcherMod class needs the same treatment.
+
+Status: see feature_writeup/ (sawmill/sawblade rows in todo/TODO.md).
+
+## TODO (earmarked 2026-09-26): make the sawmill recipes dynamic
+
+The user wants these off the manual pipeline (node `kubejs/generation_scripts/sawmill.js` → `recipes/sawmill/*.json` → hand-copied into `patcherMod/src/main/resources/data/creativeengineering/recipes/sawmill/` (211 files, identical to the node output as of 2026-09-26) → jar rebuild). Plan (also written at the top of sawmill.js): an NCH helper that adds the raw recipe JSON from `ServerEvents.highPriorityData` (`event.add`, which skips kjs-ie's broken secondaries schema like datapack JSON does), driven by the species table in `server_scripts/wood/wood_types.js` (item_dict keys). Then delete sawmill.js, recipes/sawmill/ and the jar copies. Must verify in game that `blade` + secondaries survive kjs-ie's interception of all `immersiveengineering:*` recipes. Same pattern as [structure-gen-framework](structure-gen-framework.md)'s runtime migration.

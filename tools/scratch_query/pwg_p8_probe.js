@@ -38,6 +38,8 @@
 //                                 placed 12 blocks apart east of X; each block compared with the file (EXPECTED, generated
 //                                 from the jar's files as in zpwg5): name, stored properties, block entity; then a summary
 // Output: "[zpwg8] ..." lines in logs/latest.log, then "[zpwg8] done".
+// MIGRATED 2026-11-15 in part (creative_devtools.md): fp + hold + sneak + use -> /cdevtest use X Y Z held=ITEM sneak,
+// drops -> /cdevtest entities type=minecraft:item nbt. Power Grid readers stay here.
 (() => {
     const $Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $FR = Java.loadClass('net.minecraftforge.registries.ForgeRegistries')

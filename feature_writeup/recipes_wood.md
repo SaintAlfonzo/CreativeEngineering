@@ -113,10 +113,10 @@ oak ones; the item shelf -> Supplementaries' (oak). Every Compat keeps registeri
 
 The tree stays and is the **Mulberry tree**: river leaves, sapling, leaf pile, carpet, hedge and Immersive Weathering's
 leaf pile are renamed Mulberry (`namechanges.js`; the potted sapling in `name_rules.json`). Its trunk is oak:
-`kubejs/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json` overrides UA's configured feature (UA's
+`development/creativeWorldgen/src/main/resources/packs/upgrade_aquatic/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json` overrides UA's configured feature (UA's
 `RIVER_TREE_CONFIG` with an oak log trunk: straight trunk 3+1+1, blob leaves radius 0). UA's placement
 (`trees_river`, every `#minecraft:is_river` biome) is overridden by
-`kubejs/data/upgrade_aquatic/worldgen/placed_feature/trees_river.json`: 8 tries per chunk (UA: 1, plus 2 in half the
+`development/creativeWorldgen/src/main/resources/packs/upgrade_aquatic/data/upgrade_aquatic/worldgen/placed_feature/trees_river.json`: 8 tries per chunk (UA: 1, plus 2 in half the
 chunks, about 2), same filters (dry column, OCEAN_FLOOR heightmap, biome), and its feature still hangs mulberry vines under 1 leaf in 6
 (they need leaves or logs above, so oak is fine). The sapling: UA's `RiverTreeGrower` returns the built-in holder, which
 the datapack doesn't reach in 1.19.2, so patcherMod `MulberrySapling` swaps it on Forge's `SaplingGrowTreeEvent` for
@@ -213,7 +213,7 @@ are NCH's generated ones, so they ignore counts (F1).
 - [server_scripts/wood/](../kubejs/data/creativeengineering/kubejs/wood/): `bark.js`, `sawdust.js`, `wood_types.js`, `ash.js`,
   `removed_woods.js`.
 - Removed woods: [startup_scripts/_lib/removed_woods.js](../kubejs/startup_scripts/_lib/removed_woods.js) (lists; keys in
-  `item_dict.js` section "removed woods"), `kubejs/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json`,
+  `item_dict.js` section "removed woods"), `development/creativeWorldgen/src/main/resources/packs/upgrade_aquatic/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json`,
   patcherMod `worldgen/MulberrySapling.java` (+ `CEConfig` / `WorldgenConfig` `mulberrySapling`), names in
   `client_scripts/namechanges.js`.
 - Related: [engineering.md](engineering.md) (sawmill), [composting.md](composting.md) (composter, mulch in the table).

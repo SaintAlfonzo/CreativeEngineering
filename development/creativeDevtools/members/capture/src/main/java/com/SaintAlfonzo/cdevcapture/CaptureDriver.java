@@ -34,7 +34,9 @@ import java.util.Set;
  *
  * <p>Log markers for the runner: {@code [cdevcapture] BEGIN <ID>}, {@code STEP <n> <kind> ok|fail <why>},
  * {@code END <ID> ok|fail}, {@code DONE}. One JSON line per finished test goes to the plan's results file;
- * the progress file says where the run is. At the end the driver stops the client itself.
+ * the progress file says where the run is. At the end the driver stops the client itself, unless the plan names a
+ * {@link Channel}: then it stays up in phase SERVE and runs the step requests a host tool drops there.
+ * Readback steps log {@code [cdevcapture] READ <kind> <text>} and collect the lines into the test's "reads".
  */
 public final class CaptureDriver {
 
@@ -44,7 +46,7 @@ public final class CaptureDriver {
     private static final int TITLE_SETTLE_TICKS = 40;
     private static final int JOIN_TIMEOUT_TICKS = 20 * 60 * 10;
 
-    private enum Phase { BOOT, CREATING, JOINING, SETUP, TESTS, DONE }
+    private enum Phase { BOOT, CREATING, JOINING, SETUP, TESTS, SERVE, DONE }
 
     final Minecraft mc = Minecraft.getInstance();
     final CapturePlan plan;
@@ -62,11 +64,18 @@ public final class CaptureDriver {
     private int testTicks;
     private final List<String> files = new ArrayList<>();
     private final JsonArray stepLog = new JsonArray();
+    private final JsonArray reads = new JsonArray();
+    private final Channel channel;
+    /** Seq of the channel request being run, -1 while idle in SERVE. */
+    private long serveSeq = -1;
+    private int serveTimeoutTicks;
+    private long totalTicks;
     private String failure;
     private boolean failShotPending;
 
     CaptureDriver(CapturePlan plan) {
         this.plan = plan;
+        this.channel = plan.channel() == null ? null : new Channel(plan.channel());
         MinecraftForge.EVENT_BUS.register(capture);
         LOG.info("[cdevcapture] plan loaded: {} tests, world {}", plan.tests().size(), plan.worldName());
     }
@@ -77,6 +86,13 @@ public final class CaptureDriver {
 
     void addFile(String f) {
         files.add(f);
+    }
+
+    /** Readback line: logged as {@code [cdevcapture] READ <kind> <text>} and kept in the test's "reads". */
+    void read(String kind, String text) {
+        String line = kind + " " + text;
+        LOG.info("[cdevcapture] READ {}", line);
+        reads.add(line);
     }
 
     // --- events -------------------------------------------------------------------------------------------------
@@ -110,7 +126,7 @@ public final class CaptureDriver {
             finishTest();
             return;
         }
-        if ((phase == Phase.TESTS || phase == Phase.SETUP) && failure == null && stepIndex < steps.size()) {
+        if (running() && failure == null && stepIndex < steps.size()) {
             try {
                 steps.get(stepIndex).onFrameEnd(this);
             } catch (Exception ex) {
@@ -127,10 +143,21 @@ public final class CaptureDriver {
         LOG.info("[cdevcapture] phase {}", p);
     }
 
+    private boolean running() {
+        return phase == Phase.TESTS || phase == Phase.SETUP || (phase == Phase.SERVE && serveSeq >= 0);
+    }
+
     private void tick() throws Exception {
         phaseTicks++;
+        totalTicks++;
+        if (channel != null && totalTicks % 20 == 0) channel.heartbeat(phase.name(), currentId, serveSeq, totalTicks);
         switch (phase) {
             case BOOT -> {
+                if (plan.joinServer()) {
+                    LOG.info("[cdevcapture] waiting to join the server from the launch arguments");
+                    setPhase(Phase.JOINING);
+                    return;
+                }
                 boolean idle = mc.getOverlay() == null && mc.level == null && mc.screen != null;
                 if (!idle) phaseTicks = 0;
                 if (phaseTicks < TITLE_SETTLE_TICKS) return;
@@ -164,6 +191,10 @@ public final class CaptureDriver {
                 }
             }
             case SETUP, TESTS -> runSteps();
+            case SERVE -> {
+                if (serveSeq < 0) serveNext();
+                else runSteps();
+            }
             case DONE -> {
                 if (phaseTicks == 20) mc.stop();
             }
@@ -201,11 +232,20 @@ public final class CaptureDriver {
         testTicks = 0;
         files.clear();
         while (stepLog.size() > 0) stepLog.remove(0);
+        while (reads.size() > 0) reads.remove(0);
         failure = null;
     }
 
     private void nextTest() {
         testIndex++;
+        if (testIndex >= plan.tests().size() && channel != null) {
+            currentId = "idle";
+            writeProgress("serving");
+            LOG.info("[cdevcapture] SERVE {}", channel.dir);
+            setPhase(Phase.SERVE);
+            channel.heartbeat(phase.name(), currentId, serveSeq, totalTicks);
+            return;
+        }
         if (testIndex >= plan.tests().size()) {
             currentId = "done";
             writeProgress("done");
@@ -225,6 +265,40 @@ public final class CaptureDriver {
                 wrap.add("capture", o);
                 list.add(Steps.parse(wrap, this));
             }
+        } catch (RuntimeException ex) {
+            beginSteps(List.of());
+            fail("bad step: " + ex.getMessage());
+            return;
+        }
+        beginSteps(list);
+    }
+
+    /** SERVE: take the next channel request, if any, and start its steps. */
+    private void serveNext() {
+        JsonObject req = channel.poll();
+        if (req == null) return;
+        long seq = req.get("seq").getAsLong();
+        String op = req.has("op") ? req.get("op").getAsString() : "run";
+        if (!op.equals("run")) {
+            JsonObject r = new JsonObject();
+            r.addProperty("status", op.equals("bad") ? "fail" : "ok");
+            r.addProperty("op", op);
+            if (req.has("error")) r.addProperty("error", req.get("error").getAsString());
+            channel.reply(seq, r);
+            if (op.equals("stop")) {
+                LOG.info("[cdevcapture] DONE (stop request)");
+                setPhase(Phase.DONE);
+            }
+            return;
+        }
+        serveSeq = seq;
+        currentId = req.has("id") ? req.get("id").getAsString() : "req" + seq;
+        serveTimeoutTicks = req.has("timeout_ticks") ? req.get("timeout_ticks").getAsInt() : plan.testTimeoutTicks();
+        LOG.info("[cdevcapture] BEGIN {} seq {}", currentId, seq);
+        List<Steps.Step> list = new ArrayList<>();
+        if (req.has("reset") && req.get("reset").getAsBoolean()) list.addAll(resetSteps());
+        try {
+            if (req.has("steps")) for (var e : req.getAsJsonArray("steps")) list.add(Steps.parse(e.getAsJsonObject(), this));
         } catch (RuntimeException ex) {
             beginSteps(List.of());
             fail("bad step: " + ex.getMessage());
@@ -266,8 +340,10 @@ public final class CaptureDriver {
             if (done) {
                 logStep(step, true, step.note);
                 stepIndex++;
-            } else if (step.ticks > plan.stepTimeoutTicks()) {
+            } else if (step.ticks > step.maxTicks(this)) {
                 fail(step.kind + ": timeout after " + step.ticks + " ticks" + (step.note.isEmpty() ? "" : " (" + step.note + ")"));
+            } else if (phase == Phase.SERVE && testTicks > serveTimeoutTicks) {
+                fail("request timeout after " + testTicks + " ticks");
             } else if (phase == Phase.TESTS && testTicks > plan.testTimeoutTicks()) {
                 fail("test timeout after " + testTicks + " ticks");
             }
@@ -314,7 +390,16 @@ public final class CaptureDriver {
         files.forEach(f::add);
         r.add("files", f);
         r.add("steps", stepLog.deepCopy());
+        r.add("reads", reads.deepCopy());
         r.addProperty("ticks", testTicks);
+        if (phase == Phase.SERVE) {
+            channel.reply(serveSeq, r);
+            serveSeq = -1;
+            currentId = "idle";
+            VirtualInput.releaseAll();
+            Moves.releaseKeys(mc);
+            return;
+        }
         try {
             Files.createDirectories(plan.results().getParent());
             Files.writeString(plan.results(), GSON.toJson(r) + "\n", StandardCharsets.UTF_8,

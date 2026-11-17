@@ -1,0 +1,31 @@
+# r1115 phase 5 (runner-5), boot B1: SQ-HH-304 (rewritten) and SQ-HOP-06 on a fresh group B world (seed 8675309),
+# installed mods/ jars (NOSWAP=1). Layout from r1111/hh_wgb.qb SQ-HH-304, counting hearthandharvest:hops_vine and
+# farmersdelight:wild_carrots; countset prints "(in K chunks)" since r1115 (patch / cluster count).
+# Server: NOSWAP=1 prep_srv.sh OUT p5b1 B difficulty=normal; probe zz_hh2.js (hh_mw_probe.js).
+pace 1
+
+## SQ-HH-304-site1 | rewritten: hops vines in two located forests (256 chunks each), sum at least 1, columns skipped 0
+bootexpect Done \(
+> gamerule doMobSpawning false
+> locate biome minecraft:forest
+waitlog (is at \[|Could not find) 300
+capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {P1-128} {P3-128} {P1+127} {P3+127}
+sleep 90
+> zhh2 countset {P1-128} 40 {P3-128} {P1+127} 120 {P3+127} hearthandharvest:hops_vine,farmersdelight:wild_carrots,minecraft:oak_log,minecraft:birch_log
+waitlog \[zhh2\] countset columns skipped 900
+look site 1 counts
+
+## SQ-HH-304-site2 | second forest near 2144 -2592
+> forceload remove all
+> execute positioned 2144 70 -2592 run locate biome minecraft:forest
+waitlog (is at \[|Could not find) 300
+capture Q is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {Q1-128} {Q3-128} {Q1+127} {Q3+127}
+sleep 90
+> zhh2 countset {Q1-128} 40 {Q3-128} {Q1+127} 120 {Q3+127} hearthandharvest:hops_vine,farmersdelight:wild_carrots,minecraft:oak_log,minecraft:birch_log
+waitlog \[zhh2\] countset columns skipped 900
+look sum of the two hops_vine counts at least 1; columns skipped 0 on each
+
+## SQ-HOP-06 | judged from SQ-HH-304's countsets: hops vine chunks at least 1 and at most a quarter of the wild carrot chunks
+look hops_vine "in K chunks" over the two sites at least 1 and at most a quarter of wild_carrots' chunk count

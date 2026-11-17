@@ -1,0 +1,21 @@
+# r1115 phase 9, boot O2 (same boot, /reload for the zp9 skin fix): SQ-NSM-05 skin half.
+pace 1
+
+## RELOAD | /reload for the zp9 skin fix
+> reload
+sleep 45
+> zp9 nothing
+waitlog \[zp9\] unknown subcommand nothing 120
+
+## SQ-NSM-05 | (rerun of the skin half) netherite lunchbox from the old save takes a skin in the smithing recipe
+> zp9 held n5
+waitlog \[zp9\] held n5 20
+> zp9 skin n5 solapplepie:golden_lunchbox
+waitlog \[zp9\] skin 20
+> zp9 skin n5 fantasyfurniture:decorations/berry_basket_empty
+waitlog \[zp9\] skin .*berry 20
+> zp9 dye n5 minecraft:red_dye
+waitlog \[zp9\] dye 20
+expect \[zp9\] skin creativedelight:netherite_lunchbox \+ solapplepie:golden_lunchbox recipe=
+expect \[zp9\] dye creativedelight:netherite_lunchbox \+ minecraft:red_dye recipe=
+look skin results carry the skin id (creativedelight skin tag) and keep the box; model and render are CQ (client)

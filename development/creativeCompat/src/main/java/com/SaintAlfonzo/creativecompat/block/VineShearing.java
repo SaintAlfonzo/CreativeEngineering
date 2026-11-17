@@ -47,7 +47,9 @@ public final class VineShearing {
     /** Vine classes (and their subclasses) that keep their own handling and get no {@link #FERTILE} state. */
     private static final Set<String> OWN_HANDLING = Set.of(
             "vazkii.quark.base.block.QuarkVineBlock",
-            "net.satisfy.vinery.core.block.GrapeVineBlock");
+            "net.satisfy.vinery.core.block.GrapeVineBlock",
+            // Hearth and Harvest hops: shears toggle its own sterilized state, and it overrides randomTick
+            "com.SaintAlfonzo.creativedelight.hearth.block.HopsVineBlock");
 
     private VineShearing() {}
 

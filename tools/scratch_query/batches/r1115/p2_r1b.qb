@@ -1,0 +1,104 @@
+# r1115 phase 2, same boot as p2_r1: p2_r1.qb's qrun hit the runner's 590 s wait cap inside SQ-PWG-54 (panel A and one
+# wire placed at X 1340), so -54 reruns here at X 1380 (shift +40; forceload 1370 1490 1405 1525). p2_r2.qb uses BX 1380.
+# Also SQ-PWG-80bx: which recipes take water or rotten flesh (the -80b basin ended with no water and no salt).
+pace 1
+
+## SQ-PWG-80bx | -80b follow-up: recipe outputs of create__the_salt and creativedelight water_salt; basin read again
+> zpwg3 recipes create__the_salt
+waitlog \[zpwg3\] recipes \d+ 30
+> zpwg3 recipes creativedelight
+waitlog \[zpwg3\] recipes \d+ 30
+> zpwg9c show 1142 -60 1894
+sleep 1
+look recipe ids with rotten_flesh output or water_salt: what took the water
+
+## SQ-PWG-54 | r1115 at X 1380: rerun at X 1380 (pwgr1: p6 entityLine getUUID not found, fixed): rerun at X 1300 (pwg12 built it at X 1100): PWG-23 solar panel at noon, 4-panel series multiblock at 30 ohm, biome overrides (fix B10), night, solar panel bearing (lastException, contraptions all after assemble and 100 ticks later)
+> forceload add 1370 1490 1405 1525
+sleep 4
+> time set 6000
+> weather clear
+> zpwg3 place 1380 -60 1500 powergrid:solar_panel facing=down
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1380 -60 1503 powergrid:creative_resistor
+> zpwg3 res 1380 -60 1503 33
+> zpwg3 w 1380 -60 1500 0 1380 -60 1503 0
+> zpwg3 w 1380 -60 1503 1 1380 -60 1500 1
+sleep 5
+> zpwg6 solar 1380 -60 1500
+sleep 1
+> zpwg6 solar 1380 -60 1500
+sleep 1
+> zpwg6 solar 1380 -60 1500
+> zpwg3 place 1381 -60 1500 powergrid:solar_panel facing=down
+> zpwg3 place 1382 -60 1500 powergrid:solar_panel facing=down
+> zpwg3 place 1383 -60 1500 powergrid:solar_panel facing=down
+> zpwg6 solarjoin 1380 -60 1500 1381 -60 1500
+> zpwg6 solarjoin 1380 -60 1500 1382 -60 1500
+> zpwg6 solarjoin 1380 -60 1500 1383 -60 1500
+# 4 panels in series (IVCurve(..., panelCount, 1)): MPP about 4 x 7 = 28 ohm; index 38 = 3 x 10^1 = 30 ohm
+> zpwg3 res 1380 -60 1503 38
+sleep 5
+> zpwg6 solar 1380 -60 1500
+shell d=p2pwg/datapacks/pwgsolar; o=$d/data/pwgsolar/powergrid/solar_biome_override; mkdir -p $o && printf '{"pack":{"pack_format":10,"description":"PWG solar overrides, scratch only"}}' > $d/pack.mcmeta && printf '{"biome":"minecraft:plains","overrideTemp":true,"biomeTemp":34.4,"overrideSolarConstant":false,"solarConstant":1361,"enableFullRotation":false,"disableWeather":false,"disableAtmosphere":false}' > $o/plains_hot.json && printf '{"biome":"minecraft:swamp","overrideTemp":true,"biomeTemp":34.4,"overrideSolarConstant":false,"solarConstant":1361,"enableFullRotation":false,"disableWeather":false,"disableAtmosphere":false}' > $o/zz_swamp.json && find $d -type f
+> reload
+waitlog Loaded 2 solar biome overrides 180
+sleep 5
+> datapack list enabled
+> zpwg6 check
+waitlog \[zpwg6\] solar biome overrides 30
+> zpwg3 place 1390 -60 1500 powergrid:solar_panel facing=down
+> zpwg3 place 1390 -60 1503 powergrid:creative_resistor
+> zpwg3 res 1390 -60 1503 33
+> zpwg3 w 1390 -60 1500 0 1390 -60 1503 0
+> zpwg3 w 1390 -60 1503 1 1390 -60 1500 1
+sleep 5
+> zpwg6 solar 1390 -60 1500
+sleep 1
+> zpwg6 solar 1390 -60 1500
+sleep 1
+> zpwg6 solar 1390 -60 1500
+> zpwg6 solar 1380 -60 1500
+> time set 18000
+sleep 2
+> zpwg6 solar 1390 -60 1500
+> time set 6000
+> zpwg3 place 1380 -60 1510 powergrid:solar_panel_bearing facing=up
+> zpwg3 place 1380 -59 1510 powergrid:solar_panel facing=down
+> zpwg3 place 1381 -59 1510 powergrid:solar_panel facing=down
+> zpwg6 solarjoin 1380 -59 1510 1381 -59 1510
+> zpwg3 place 1380 -60 1513 powergrid:creative_resistor
+> zpwg3 res 1380 -60 1513 33
+> zpwg3 w 1380 -60 1510 0 1380 -60 1513 0
+> zpwg3 w 1380 -60 1513 1 1380 -60 1510 1
+pace 0
+> zpwg6 assemble 1380 -60 1510
+> zpwg6 contraptions all 1380 -60 1510
+pace 1
+sleep 5
+> zpwg6 contraptions all 1380 -60 1510
+> zpwg6 contraption 1380 -59 1510 16
+> zpwg6 solar 1380 -60 1510
+sleep 10
+> zpwg6 solar 1380 -60 1510
+count \[zpwg6\] solarjoin ok == 4
+expect \[zpwg3\] res idx=38 ohms=30\b
+expect \[zpwg6\] solar biome overrides 2$
+expect pwgsolar
+expect \[zpwg6\] solar powergrid:solar_panel biome=minecraft:plains override=constant=1361(\.0)?/false temp=34\.4\d*/true
+expect \[zpwg6\] assemble called
+expect \[zpwg6\] assemble lastException=none running=true
+count \[zpwg6\] contraptions all t= == 2
+count \[zpwg6\] bearing at 1380 -60 1510 movedContraption= == 2
+expect \[zpwg6\] controlled id=\d+ .*type=powergrid:solar_panel blocks=2
+expect \[zpwg6\] contraption \S+ type=powergrid:solar_panel blocks=2
+expect \[zpwg6\] contraption box types
+expect \[zpwg6\] solar powergrid:solar_panel_bearing
+reject \[zpwg\w*\] error
+reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
+look panel A noon terminals about 18 to 21 V across 7 ohm (pwg10 60 W), sky 15; 4-panel series string at 30 ohm: P = V^2 / 30 about 3.5 to 4 x panel A (current near one panel's 3.5 A, V about 4 x; record); panel B lower power than A, panel A already reads the pwgsolar override here (datapack loaded since pwg12's SQ-PWG-54, so A and B match; the override=none part is pwg12's); night: B terminals 0; bearing: the two `contraptions all` reads (right after assemble, 100 ticks later): controlled count, the entity's removed / alive / controller, the bearing's movedContraption (null, set to a listed entity, or set to an entity not in the level) and how it was read (field or isAttachedTo); output non-zero at noon; record the box types line
+
+# ---- P7 (X 1095 to 1115, Z 1525 to 1590; -60 at X 1300 Z 1575)
+# from r1113/pwg10b.qb
+
+# r1114 phase 5: the P9c chain again, moved to X +200 (1335 to 1400, Z 1855 to 1915): pwgr1 had no SQ-PWG-76 (the plan
+# dropped it as a boot row), so the chain source board at 1140 -60 1858 was never built and -78 to -82 cascaded.

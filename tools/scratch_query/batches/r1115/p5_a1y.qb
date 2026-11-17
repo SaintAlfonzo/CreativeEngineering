@@ -1,0 +1,52 @@
+# r1115 phase 5 (runner-5), boot A1 follow-ups 2 (same server): Rare Ice's own block and the netherite area till per cell.
+pace 1
+
+## SQ-MELT-09b-rareice2 | rare-ice:rare_ice roofed beside a sea lantern: kept at vanillaLightMelting false (redirect applies); melts after the srv toml says true (config refresh)
+> forceload add 2400 2400 2431 2431
+> fill 2420 -61 2410 2424 -58 2414 minecraft:stone
+> setblock 2422 -60 2412 rare-ice:rare_ice
+> setblock 2423 -60 2412 minecraft:sea_lantern
+> zmelt w rareice overworld 2422 -60 2412
+> data get block 2422 -60 2412
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> execute if block 2422 -60 2412 rare-ice:rare_ice run say MELT09b-rareice-kept-off
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecommon-common.toml melting vanillaLightMelting true; sed -n "/^\[melting\]/,/^\[/p" config/creativecommon-common.toml | grep -E "^\s*vanillaLightMelting ="
+sleep 8
+> gamerule randomTickSpeed 1000
+sleep 60
+> gamerule randomTickSpeed 3
+> execute unless block 2422 -60 2412 rare-ice:rare_ice run say MELT09b-rareice-melted-on
+> zmelt show
+> zmelt clear
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativecommon-common.toml melting vanillaLightMelting false; sed -n "/^\[melting\]/,/^\[/p" config/creativecommon-common.toml | grep -E "^\s*vanillaLightMelting ="
+sleep 8
+expect MELT09b-rareice-kept-off$
+expect MELT09b-rareice-melted-on$
+look kept 60 s at false; melted (watch tick) after the edit to true; toml back to false at the end
+
+## SQ-HH-1546c2 | netherite + tilling area till, each cell watched from before the use (randomTickSpeed 0: bare tilled end stone reverts on a random tick)
+> gamerule randomTickSpeed 0
+> fill 645 -61 530 647 -61 532 minecraft:end_stone
+> fill 645 -60 530 647 -59 532 minecraft:air
+> zmelt w a645_530 overworld 645 -61 530
+> zmelt w a646_530 overworld 646 -61 530
+> zmelt w a647_530 overworld 647 -61 530
+> zmelt w a645_531 overworld 645 -61 531
+> zmelt w a646_531 overworld 646 -61 531
+> zmelt w a647_531 overworld 647 -61 531
+> zmelt w a645_532 overworld 645 -61 532
+> zmelt w a646_532 overworld 646 -61 532
+> zmelt w a647_532 overworld 647 -61 532
+> clear G
+> item replace entity G weapon.mainhand with minecraft:netherite_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:1s}]}
+> zhh5 sneak G on
+> pbot use G 646 -61 531 up
+> zhh5 sneak G off
+sleep 1
+> zmelt show
+> zmelt clear
+> zhh2 countset 645 -61 530 647 -61 532 minecraft:end_stone,endercrop:tilled_end_stone
+> gamerule randomTickSpeed 3
+look 9 tilled (or which cell stays end stone)

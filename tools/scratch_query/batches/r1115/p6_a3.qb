@@ -1,0 +1,97 @@
+# r1115 phase 6, A1 second follow-up (same boot): reruns after p6_a2.qb batch faults. sy_probe.js: tool strings
+# with NBT threw out of the command ("An unexpected error occurred"), now <id>@fortune=N; /syt props; /syt pot reads
+# the pot container; /syt potset (a Botany Pot right-click opens its GUI, so soil and seed go in directly).
+# Sweet potato age 7 is not a valid state: max age read with /syt props.
+pace 1
+
+## P6-reload | new probe copy, /reload (not a test row)
+shell cp "$INST/tools/soil_yield_probe/sy_probe.js" kubejs/server_scripts/zz_sy_probe.js && echo copied
+> reload
+sleep 40
+> zc4 cmd syt,zc2,zq
+waitlog \[zc4\] done 30
+reject \[zc4\] cmd \w+ missing
+> syt props veggiesdelight:sweet_potato_crop
+> syt props veggiesdelight:zucchini_crop
+sleep 1
+capture SPA \[syt\] props veggiesdelight:sweet_potato_crop: .*age=\[(?:\d+, )*(\d+)\]
+> forceload add 990 990 1070 1060
+sleep 3
+> pbot spawn c6t 1000.5 -60 1050.5 minecraft:overworld survival
+sleep 2
+
+## SQ-SY-15 | (rerun) sweet potato at its max age; Fortune III rolls equal the no-tool means; melon control shows Fortune applied
+> setblock 1012 -60 1000 veggiesdelight:sweet_potato_crop[age={SPA}]
+> setblock 1014 -60 1000 veggiesdelight:sweet_potato_crop[age={SPA}]
+> setblock 1016 -60 1000 veggiesdelight:sweet_potato_crop[age={SPA}]
+> setblock 1000 -60 1000 minecraft:wheat[age=7]
+> setblock 1002 -60 1000 minecraft:wheat[age=7]
+> setblock 1004 -60 1000 minecraft:wheat[age=7]
+> setblock 1006 -60 1000 minecraft:carrots[age=7]
+> setblock 1008 -60 1000 minecraft:carrots[age=7]
+> setblock 1010 -60 1000 minecraft:carrots[age=7]
+> setblock 1018 -60 1000 minecraft:melon
+> syt roll 1012 -60 1000 600 none
+> syt roll 1014 -60 1000 600 none
+> syt roll 1016 -60 1000 600 none
+> syt roll 1000 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1002 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1004 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1006 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1008 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1010 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1012 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1014 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1016 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1018 -60 1000 600 none
+> syt roll 1018 -60 1000 600 minecraft:diamond_hoe@fortune=3
+count \[syt\] roll .* n 600: == 14
+reject \[syt\] error|does not accept|unexpected error
+look sweet potato 2.71 / 3.54 / 4.36; F3 lines equal the p6_a2 no-tool means; melon F3 above 4.97
+
+## SQ-SY-16 | (rerun, Fortune half) Fortune III picks equal the no-tool picks
+> setblock 1002 -60 1004 vintagedelight:cucumber_crop[age=7]
+> setblock 1006 -60 1004 veggiesdelight:zucchini_crop[age=7]
+> setblock 1010 -60 1004 vintagedelight:ghost_pepper_crop[age=7]
+> setblock 1012 -59 1004 farmersdelight:tomatoes[age=3,ropelogged=true]
+> syt pick 1002 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1006 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1010 -60 1004 400 minecraft:diamond_hoe@fortune=3
+> syt pick 1012 -59 1004 400 minecraft:diamond_hoe@fortune=3
+> kill @e[type=minecraft:item]
+count \[syt\] pick .* n 400: == 4
+reject \[syt\] error|does not accept|unexpected error
+look cucumber 2.49, zucchini 2.49, ghost pepper 1.66, rope tomato 2.49 on the Fertile soils with F3
+
+## SQ-SY-17x | lemon break on Fertile Soil came 5.67 at n 400 (row 5.81): 3000 rolls each soil
+> setblock 1030 -60 1008 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 1032 -60 1008 fruitsdelight:lemon_tree[age=4,half=lower]
+> setblock 1034 -60 1008 fruitsdelight:lemon_tree[age=4,half=lower]
+> syt roll 1030 -60 1008 3000 none
+> syt roll 1032 -60 1008 3000 none
+> syt roll 1034 -60 1008 3000 none
+count \[syt\] roll .* n 3000: == 3
+look lemon 3.50 / 4.66 / 5.81
+
+## SQ-SY-21 | (rerun) pots filled with /syt potset: required 8000 Fertile, 8727 Rich Farmland, 9600 dirt; growth counts up
+> setblock 1000 -60 1024 botanypots:terracotta_botany_pot
+> setblock 1002 -60 1024 botanypots:terracotta_botany_pot
+> setblock 1004 -60 1024 botanypots:terracotta_botany_pot
+> setblock 1006 -60 1024 botanypots:terracotta_botany_pot
+> syt potset 1000 -60 1024 immersive_weathering:mulch_block minecraft:wheat_seeds
+> syt potset 1002 -60 1024 farmersdelight:rich_soil_farmland minecraft:wheat_seeds
+> syt potset 1004 -60 1024 minecraft:dirt minecraft:wheat_seeds
+> syt potset 1006 -60 1024 farmersdelight:rich_soil minecraft:wheat_seeds
+sleep 2
+> syt pot 1000 -60 1024
+> syt pot 1002 -60 1024
+> syt pot 1004 -60 1024
+> syt pot 1006 -60 1024
+sleep 20
+> syt pot 1000 -60 1024
+> syt pot 1002 -60 1024
+> syt pot 1004 -60 1024
+> syt pot 1006 -60 1024
+> pbot remove c6t
+reject \[syt\] error|pot: no block entity|required err
+look required 8000 (Fertile) / 8727 (Rich Farmland) / 9600 (dirt); rich soil as the Rich line; growth up about 400 in 20 s

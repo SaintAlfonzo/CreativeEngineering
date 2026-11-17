@@ -1,0 +1,97 @@
+# r1115 phase 9, boot O2: a copy of the O1 world (1.2.02 save, level nsmfix) on the installed mods/ jars (NOSWAP=1 prep_srv).
+# Rows: SQ-OB-11, SQ-RDB-05, SQ-RDX-13 (part of SQ-RDB-03), SQ-NSM-05 (server half), SQ-VH-11. Probes zz_zc4, zz_zp9.
+pace 1
+
+## SQ-OB-11 | old creativeengineering wooden buckets load as Creative Delight wooden buckets
+bootexpect \[swaps\].*wooden_bucket
+bootexpect \[swaps\].*wooden_water_bucket
+bootreject \[swaps\] unresolved .*wooden
+shell grep -nE "\[swaps\]" logs/latest.log | grep -iE "wooden|permanent|load report|unresolved" | cut -c1-260 | head -12
+> forceload add 192 192 223 223
+> forceload add -16 -16 63 63
+sleep 4
+> data get block 200 -60 205 Items
+> pbot spawn ob11 205 -60 207 minecraft:overworld survival
+sleep 4
+> data get entity ob11 Inventory
+sleep 1
+expect has the following block data: .*creativedelight:wooden_bucket.*creativedelight:wooden_water_bucket
+expect ob11 has the following entity data: .*creativedelight:wooden_bucket.*creativedelight:wooden_water_bucket|ob11 has the following entity data: .*creativedelight:wooden_water_bucket.*creativedelight:wooden_bucket
+
+## SQ-RDB-05 | Rustic blocks from the 1.2.02 save keep their states
+> zp9 bstate 200 -60 200
+> zp9 bstate 202 -60 200
+> zp9 bstate 204 -60 200
+> zp9 bstate 206 -60 200
+> zp9 bstate 208 -60 200
+> zp9 bstate 210 -60 200
+> zp9 bstate 212 -60 200
+> zp9 bstate 214 -60 200
+> zp9 bstate 216 -60 200
+> zp9 bstate 218 -60 200
+> zp9 bstate 220 -60 200
+sleep 1
+expect \[zp9\] bstate 200 -60 200 Block\{rusticdelight:pancakes\}\[facing=east,servings=4\]
+expect \[zp9\] bstate 202 -60 200 Block\{rusticdelight:honey_pancakes\}\[facing=east,servings=7\]
+expect \[zp9\] bstate 204 -60 200 Block\{rusticdelight:cotton\}\[age=3\]
+expect \[zp9\] bstate 206 -60 200 Block\{rusticdelight:coffee\}\[age=4\]
+expect \[zp9\] bstate 208 -60 200 Block\{rusticdelight:bell_peppers\}\[age=6\]
+expect \[zp9\] bstate 210 -60 200 Block\{rusticdelight:bell_pepper_red_crate\}
+expect \[zp9\] bstate 212 -60 200 Block\{rusticdelight:cotton_boll_crate\}
+expect \[zp9\] bstate 214 -60 200 Block\{rusticdelight:potted_wild_coffee\}
+expect \[zp9\] bstate 216 -60 200 Block\{rusticdelight:cherry_blossom_cheesecake\}\[bites=1,facing=north\]
+expect \[zp9\] bstate 218 -60 200 Block\{rusticdelight:wild_coffee\}
+expect \[zp9\] bstate 220 -60 200 Block\{rusticdelight:glowing_calamari_crate\}
+shell echo "missing-registry lines naming rusticdelight: $(grep -ciE '(missing|unidentified|unknown).*rusticdelight' logs/latest.log)"; grep -iE "(missing|unidentified|unknown).*rusticdelight" logs/latest.log | cut -c1-240 | head -8
+
+## SQ-RDX-13 | removed Rustic pancake and fried dough leave the chest without a crash; the old plate serves Supplementaries pancakes
+> data get block 200 -60 205 Items
+> pbot spawn rx13 200 -60 202 minecraft:overworld survival
+sleep 4
+> clear rx13
+> pbot hold rx13 minecraft:air
+> pbot use rx13 200 -60 200 up
+sleep 1
+> data get entity rx13 Inventory
+> zp9 bstate 200 -60 200
+sleep 1
+reject has the following block data: .*rusticdelight:(pancake|fried_dough)"
+expect rx13 has the following entity data: .*supplementaries:pancake
+look chest has no rusticdelight:pancake / fried_dough (if 1.2.02 held them); the plate gave one supplementaries:pancake and its servings went 4 -> 3
+
+## SQ-NSM-05 | netherite lunchbox from the old save: contents intact, eat from it, dye and skin recipes match
+> data get block 4 -60 0 Items
+> pbot spawn n5 6 -60 2 minecraft:overworld survival
+sleep 4
+> clear n5
+> item replace entity n5 weapon.mainhand from block 4 -60 0 container.2
+> zp9 held n5
+waitlog \[zp9\] held n5 20
+expect \[zp9\] held n5 creativedelight:netherite_lunchbox .*minecraft:bread
+> zc4 hunger n5 2
+> zp9 heldeat n5
+waitlog \[zp9\] heldeat n5 20
+> zp9 held n5
+> zp9 dye n5 minecraft:red_dye
+waitlog \[zp9\] dye 20
+> zp9 skin n5 solapplepie:golden_lunchbox
+waitlog \[zp9\] skin 20
+> zp9 skin n5 fantasyfurniture:decorations/berry_basket_empty
+waitlog \[zp9\] skin .*berry 20
+expect \[zp9\] dye creativedelight:netherite_lunchbox \+ minecraft:red_dye recipe=
+expect \[zp9\] skin creativedelight:netherite_lunchbox \+ solapplepie:golden_lunchbox recipe=
+look heldeat removed one food (contents count down by one, food level up); dye result has display.color; skin results carry the skin id. Model and render are CQ (client)
+
+## SQ-VH-11 | old save: does the Heap appear in new Nether chunks
+shell ls DIM-1/region 2>/dev/null | head -3; ls nsmfix/DIM-1/region 2>/dev/null | wc -l
+> execute in minecraft:the_nether positioned 3000 64 3000 run locate biome biomesoplenty:visceral_heap
+waitlog (The nearest biomesoplenty:visceral_heap is at|Could not find a biome of type) 120
+capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {P1} {P3}
+sleep 15
+> execute in minecraft:the_nether positioned {P1} 64 {P3} if biome ~ ~ ~ biomesoplenty:visceral_heap run say VH11 heap biome in a new chunk
+> zq count {P1-8} 5 {P3-8} {P1+8} 120 {P3+8} biomesoplenty:flesh minecraft:the_nether
+waitlog \[zq\] done 60
+> zq count {P1-8} 5 {P3-8} {P1+8} 120 {P3+8} minecraft:netherrack minecraft:the_nether
+waitlog \[zq\] done 60
+look RECORD: locate answer and distance from 3000 3000; flesh present in the newly generated chunk

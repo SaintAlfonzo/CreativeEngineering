@@ -1,0 +1,369 @@
+# r1115 phase 3 (runner-3), boot A1 (same server, after p3_a1.qb): roofed rerun (see tools/scratch_query/melt_gen_p3r.py).
+# Bot m3r at 2210 -60 2060 keeps x 2140..2260 random-ticking.
+pace 0.5
+
+## P3-R0 | setup: forceload the shifted area, bot m3r, build roofed cases, controls; randomTickSpeed 1000 120 s
+> forceload add 2144 1984 2271 2143
+> gamerule randomTickSpeed 3
+sleep 3
+> pbot spawn m3r 2210 -60 2060 minecraft:overworld survival
+> setblock 2151 -61 2000 minecraft:ice
+> setblock 2151 -60 2000 minecraft:glass
+> zmelt w r01_ice overworld 2151 -61 2000
+> setblock 2149 -61 2000 minecraft:snow_block
+> setblock 2149 -60 2000 minecraft:glass
+> zmelt w r01_snowblock overworld 2149 -61 2000
+> setblock 2150 -61 2001 minecraft:powder_snow
+> setblock 2150 -60 2001 minecraft:glass
+> zmelt w r01_powder overworld 2150 -61 2001
+> setblock 2150 -61 1999 minecraft:snow[layers=3]
+> setblock 2150 -60 1999 minecraft:glass
+> zmelt w r01_layer overworld 2150 -61 1999
+> setblock 2150 -61 2000 salt:salt_block
+> setblock 2151 -61 2024 minecraft:ice
+> setblock 2151 -60 2024 minecraft:glass
+> zmelt w r06_ow_ice overworld 2151 -61 2024
+> setblock 2150 -61 2025 minecraft:snow
+> setblock 2150 -60 2025 minecraft:glass
+> zmelt w r06_ow_snow overworld 2150 -61 2025
+> setblock 2150 -61 2024 salt:salt_block
+> setblock 2183 -61 2000 minecraft:ice
+> setblock 2183 -60 2000 minecraft:glass
+> zmelt w r02_fire_ice3 overworld 2183 -61 2000
+> setblock 2176 -61 2000 minecraft:ice
+> setblock 2176 -60 2000 minecraft:glass
+> zmelt w r02_fire_ice4 overworld 2176 -61 2000
+> setblock 2180 -61 2003 minecraft:snow
+> setblock 2180 -60 2003 minecraft:glass
+> zmelt w r02_fire_snow3 overworld 2180 -61 2003
+> setblock 2180 -61 1996 minecraft:snow
+> setblock 2180 -60 1996 minecraft:glass
+> zmelt w r02_fire_snow4 overworld 2180 -61 1996
+> setblock 2180 -62 2000 minecraft:netherrack
+> setblock 2180 -61 2000 minecraft:fire
+> setblock 2183 -61 2012 minecraft:ice
+> setblock 2183 -60 2012 minecraft:glass
+> zmelt w r02_soulfire_ice3 overworld 2183 -61 2012
+> setblock 2176 -61 2012 minecraft:ice
+> setblock 2176 -60 2012 minecraft:glass
+> zmelt w r02_soulfire_ice4 overworld 2176 -61 2012
+> setblock 2180 -61 2015 minecraft:snow
+> setblock 2180 -60 2015 minecraft:glass
+> zmelt w r02_soulfire_snow3 overworld 2180 -61 2015
+> setblock 2180 -61 2008 minecraft:snow
+> setblock 2180 -60 2008 minecraft:glass
+> zmelt w r02_soulfire_snow4 overworld 2180 -61 2008
+> setblock 2180 -62 2012 minecraft:soul_soil
+> setblock 2180 -61 2012 minecraft:soul_fire
+> setblock 2183 -61 2024 minecraft:ice
+> setblock 2183 -60 2024 minecraft:glass
+> zmelt w r02_campfire_ice3 overworld 2183 -61 2024
+> setblock 2176 -61 2024 minecraft:ice
+> setblock 2176 -60 2024 minecraft:glass
+> zmelt w r02_campfire_ice4 overworld 2176 -61 2024
+> setblock 2180 -61 2027 minecraft:snow
+> setblock 2180 -60 2027 minecraft:glass
+> zmelt w r02_campfire_snow3 overworld 2180 -61 2027
+> setblock 2180 -61 2020 minecraft:snow
+> setblock 2180 -60 2020 minecraft:glass
+> zmelt w r02_campfire_snow4 overworld 2180 -61 2020
+> setblock 2180 -61 2024 minecraft:campfire[lit=true]
+> setblock 2183 -61 2036 minecraft:ice
+> setblock 2183 -60 2036 minecraft:glass
+> zmelt w r02_soulcampfire_ice3 overworld 2183 -61 2036
+> setblock 2176 -61 2036 minecraft:ice
+> setblock 2176 -60 2036 minecraft:glass
+> zmelt w r02_soulcampfire_ice4 overworld 2176 -61 2036
+> setblock 2180 -61 2039 minecraft:snow
+> setblock 2180 -60 2039 minecraft:glass
+> zmelt w r02_soulcampfire_snow3 overworld 2180 -61 2039
+> setblock 2180 -61 2032 minecraft:snow
+> setblock 2180 -60 2032 minecraft:glass
+> zmelt w r02_soulcampfire_snow4 overworld 2180 -61 2032
+> setblock 2180 -61 2036 minecraft:soul_campfire[lit=true]
+> setblock 2183 -61 2048 minecraft:ice
+> setblock 2183 -60 2048 minecraft:glass
+> zmelt w r02_magma_ice3 overworld 2183 -61 2048
+> setblock 2176 -61 2048 minecraft:ice
+> setblock 2176 -60 2048 minecraft:glass
+> zmelt w r02_magma_ice4 overworld 2176 -61 2048
+> setblock 2180 -61 2051 minecraft:snow
+> setblock 2180 -60 2051 minecraft:glass
+> zmelt w r02_magma_snow3 overworld 2180 -61 2051
+> setblock 2180 -61 2044 minecraft:snow
+> setblock 2180 -60 2044 minecraft:glass
+> zmelt w r02_magma_snow4 overworld 2180 -61 2044
+> setblock 2180 -61 2048 minecraft:magma_block
+> setblock 2181 -61 2060 minecraft:ice
+> setblock 2181 -60 2060 minecraft:glass
+> zmelt w r02_unlit_ice1 overworld 2181 -61 2060
+> setblock 2180 -61 2060 minecraft:campfire[lit=false]
+> setblock 2214 -61 2000 minecraft:ice
+> setblock 2214 -60 2000 minecraft:glass
+> zmelt w r03_src_ice4 overworld 2214 -61 2000
+> setblock 2205 -61 2000 minecraft:ice
+> setblock 2205 -60 2000 minecraft:glass
+> zmelt w r03_src_ice5 overworld 2205 -61 2000
+> setblock 2210 -61 2000 minecraft:lava
+> setblock 2216 -61 2012 minecraft:ice
+> setblock 2216 -60 2012 minecraft:glass
+> zmelt w r03_flow_ice4 overworld 2216 -61 2012
+> setblock 2213 -61 2012 minecraft:glass
+> setblock 2211 -61 2012 minecraft:air
+> setblock 2212 -61 2012 minecraft:air
+> setblock 2210 -61 2012 minecraft:lava
+> setblock 2214 -61 2024 minecraft:ice
+> setblock 2214 -60 2024 minecraft:glass
+> zmelt w r03_cauldron_ice4 overworld 2214 -61 2024
+> setblock 2210 -61 2024 minecraft:lava_cauldron
+> setblock 2243 -61 2000 minecraft:ice
+> setblock 2243 -60 2000 minecraft:glass
+> zmelt w r06_torch_ice3 overworld 2243 -61 2000
+> setblock 2236 -61 2000 minecraft:ice
+> setblock 2236 -60 2000 minecraft:glass
+> zmelt w r06_torch_ice4 overworld 2236 -61 2000
+> setblock 2240 -61 2003 minecraft:snow
+> setblock 2240 -60 2003 minecraft:glass
+> zmelt w r06_torch_snow3 overworld 2240 -61 2003
+> setblock 2240 -61 1996 minecraft:snow
+> setblock 2240 -60 1996 minecraft:glass
+> zmelt w r06_torch_snow4 overworld 2240 -61 1996
+> setblock 2240 -61 2000 minecraft:torch
+> setblock 2243 -61 2012 minecraft:ice
+> setblock 2243 -60 2012 minecraft:glass
+> zmelt w r06_soultorch_ice3 overworld 2243 -61 2012
+> setblock 2236 -61 2012 minecraft:ice
+> setblock 2236 -60 2012 minecraft:glass
+> zmelt w r06_soultorch_ice4 overworld 2236 -61 2012
+> setblock 2240 -61 2015 minecraft:snow
+> setblock 2240 -60 2015 minecraft:glass
+> zmelt w r06_soultorch_snow3 overworld 2240 -61 2015
+> setblock 2240 -61 2008 minecraft:snow
+> setblock 2240 -60 2008 minecraft:glass
+> zmelt w r06_soultorch_snow4 overworld 2240 -61 2008
+> setblock 2240 -61 2012 minecraft:soul_torch
+> setblock 2243 -61 2024 minecraft:ice
+> setblock 2243 -60 2024 minecraft:glass
+> zmelt w r06_lantern_ice3 overworld 2243 -61 2024
+> setblock 2236 -61 2024 minecraft:ice
+> setblock 2236 -60 2024 minecraft:glass
+> zmelt w r06_lantern_ice4 overworld 2236 -61 2024
+> setblock 2240 -61 2027 minecraft:snow
+> setblock 2240 -60 2027 minecraft:glass
+> zmelt w r06_lantern_snow3 overworld 2240 -61 2027
+> setblock 2240 -61 2020 minecraft:snow
+> setblock 2240 -60 2020 minecraft:glass
+> zmelt w r06_lantern_snow4 overworld 2240 -61 2020
+> setblock 2240 -61 2024 minecraft:lantern
+> setblock 2243 -61 2036 minecraft:ice
+> setblock 2243 -60 2036 minecraft:glass
+> zmelt w r06_sconce_ice3 overworld 2243 -61 2036
+> setblock 2236 -61 2036 minecraft:ice
+> setblock 2236 -60 2036 minecraft:glass
+> zmelt w r06_sconce_ice4 overworld 2236 -61 2036
+> setblock 2240 -61 2039 minecraft:snow
+> setblock 2240 -60 2039 minecraft:glass
+> zmelt w r06_sconce_snow3 overworld 2240 -61 2039
+> setblock 2240 -61 2032 minecraft:snow
+> setblock 2240 -60 2032 minecraft:glass
+> zmelt w r06_sconce_snow4 overworld 2240 -61 2032
+> setblock 2240 -61 2036 supplementaries:sconce
+> setblock 2243 -61 2048 minecraft:ice
+> setblock 2243 -60 2048 minecraft:glass
+> zmelt w r06_copperlantern_ice3 overworld 2243 -61 2048
+> setblock 2236 -61 2048 minecraft:ice
+> setblock 2236 -60 2048 minecraft:glass
+> zmelt w r06_copperlantern_ice4 overworld 2236 -61 2048
+> setblock 2240 -61 2051 minecraft:snow
+> setblock 2240 -60 2051 minecraft:glass
+> zmelt w r06_copperlantern_snow3 overworld 2240 -61 2051
+> setblock 2240 -61 2044 minecraft:snow
+> setblock 2240 -60 2044 minecraft:glass
+> zmelt w r06_copperlantern_snow4 overworld 2240 -61 2044
+> setblock 2240 -61 2048 everythingcopper:copper_lantern
+> setblock 2243 -61 2060 minecraft:ice
+> setblock 2243 -60 2060 minecraft:glass
+> zmelt w r06_glowstone_ice3 overworld 2243 -61 2060
+> setblock 2236 -61 2060 minecraft:ice
+> setblock 2236 -60 2060 minecraft:glass
+> zmelt w r06_glowstone_ice4 overworld 2236 -61 2060
+> setblock 2240 -61 2063 minecraft:snow
+> setblock 2240 -60 2063 minecraft:glass
+> zmelt w r06_glowstone_snow3 overworld 2240 -61 2063
+> setblock 2240 -61 2056 minecraft:snow
+> setblock 2240 -60 2056 minecraft:glass
+> zmelt w r06_glowstone_snow4 overworld 2240 -61 2056
+> setblock 2240 -61 2060 minecraft:glowstone
+> setblock 2241 -61 2072 minecraft:ice
+> setblock 2241 -60 2072 minecraft:glass
+> zmelt w r06_sealantern_ice1 overworld 2241 -61 2072
+> setblock 2240 -61 2072 minecraft:sea_lantern
+> setblock 2241 -61 2084 minecraft:ice
+> setblock 2241 -60 2084 minecraft:glass
+> zmelt w r06_redstonetorch_ice1 overworld 2241 -61 2084
+> setblock 2240 -61 2084 minecraft:redstone_torch
+> setblock 2241 -61 2096 minecraft:ice
+> setblock 2241 -60 2096 minecraft:glass
+> zmelt w r06_jellytorch_ice1 overworld 2241 -61 2096
+> setblock 2240 -61 2096 upgrade_aquatic:blue_jelly_torch
+> setblock 2241 -61 2108 minecraft:ice
+> setblock 2241 -60 2108 minecraft:glass
+> zmelt w r06_brazierunlit_ice1 overworld 2241 -61 2108
+> setblock 2240 -61 2108 decorative_blocks:brazier[lit=false]
+> setblock 2210 -61 2090 minecraft:ice
+> setblock 2210 -60 2090 minecraft:glass
+> zmelt w rc_ice_roof overworld 2210 -61 2090
+> setblock 2214 -61 2090 minecraft:snow
+> setblock 2214 -60 2090 minecraft:glass
+> zmelt w rc_snow_roof overworld 2214 -61 2090
+> setblock 2210 -61 2100 minecraft:ice
+> zmelt w rc_ice_open overworld 2210 -61 2100
+> setblock 2214 -61 2100 minecraft:snow
+> zmelt w rc_snow_open overworld 2214 -61 2100
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|zmelt\] error)
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
+> zmelt show
+waitlog \[zmelt\] show done 30
+look start states; controls: open ones may melt (Serene Seasons), roofed ones must not
+
+## SQ-MELT-01r | roofed rerun
+> execute if block 2151 -61 2000 minecraft:water[level=0] run say SQ-MELT-01r-ice_water
+> execute if block 2149 -61 2000 minecraft:air run say SQ-MELT-01r-snowblock_air
+> execute if block 2150 -61 2001 minecraft:air run say SQ-MELT-01r-powder_air
+> execute if block 2150 -61 1999 minecraft:air run say SQ-MELT-01r-layer_air
+> execute if block 2150 -61 2000 salt:salt_block run say SQ-MELT-01r-salt_kept
+expect SQ-MELT-01r-ice_water$
+expect SQ-MELT-01r-snowblock_air$
+expect SQ-MELT-01r-powder_air$
+expect SQ-MELT-01r-layer_air$
+expect SQ-MELT-01r-salt_kept$
+
+## SQ-SALT2-06r | roofed rerun
+> execute if block 2151 -61 2024 minecraft:water[level=0] run say SQ-SALT2-06r-ow_ice_water
+> execute if block 2150 -61 2025 minecraft:air run say SQ-SALT2-06r-ow_snow_air
+expect SQ-SALT2-06r-ow_ice_water$
+expect SQ-SALT2-06r-ow_snow_air$
+
+## SQ-MELT-02r | roofed rerun
+> execute if block 2183 -61 2000 minecraft:water run say SQ-MELT-02r-fire_ice3_water
+> execute if block 2176 -61 2000 minecraft:ice run say SQ-MELT-02r-fire_ice4_ice
+> execute if block 2180 -61 2003 minecraft:air run say SQ-MELT-02r-fire_snow3_air
+> execute if block 2180 -61 1996 minecraft:snow run say SQ-MELT-02r-fire_snow4_snow
+> execute if block 2183 -61 2012 minecraft:water run say SQ-MELT-02r-soulfire_ice3_water
+> execute if block 2176 -61 2012 minecraft:ice run say SQ-MELT-02r-soulfire_ice4_ice
+> execute if block 2180 -61 2015 minecraft:air run say SQ-MELT-02r-soulfire_snow3_air
+> execute if block 2180 -61 2008 minecraft:snow run say SQ-MELT-02r-soulfire_snow4_snow
+> execute if block 2183 -61 2024 minecraft:water run say SQ-MELT-02r-campfire_ice3_water
+> execute if block 2176 -61 2024 minecraft:ice run say SQ-MELT-02r-campfire_ice4_ice
+> execute if block 2180 -61 2027 minecraft:air run say SQ-MELT-02r-campfire_snow3_air
+> execute if block 2180 -61 2020 minecraft:snow run say SQ-MELT-02r-campfire_snow4_snow
+> execute if block 2183 -61 2036 minecraft:water run say SQ-MELT-02r-soulcampfire_ice3_water
+> execute if block 2176 -61 2036 minecraft:ice run say SQ-MELT-02r-soulcampfire_ice4_ice
+> execute if block 2180 -61 2039 minecraft:air run say SQ-MELT-02r-soulcampfire_snow3_air
+> execute if block 2180 -61 2032 minecraft:snow run say SQ-MELT-02r-soulcampfire_snow4_snow
+> execute if block 2183 -61 2048 minecraft:water run say SQ-MELT-02r-magma_ice3_water
+> execute if block 2176 -61 2048 minecraft:ice run say SQ-MELT-02r-magma_ice4_ice
+> execute if block 2180 -61 2051 minecraft:air run say SQ-MELT-02r-magma_snow3_air
+> execute if block 2180 -61 2044 minecraft:snow run say SQ-MELT-02r-magma_snow4_snow
+> execute if block 2181 -61 2060 minecraft:ice run say SQ-MELT-02r-unlit_ice1_ice
+expect SQ-MELT-02r-fire_ice3_water$
+expect SQ-MELT-02r-fire_ice4_ice$
+expect SQ-MELT-02r-fire_snow3_air$
+expect SQ-MELT-02r-fire_snow4_snow$
+expect SQ-MELT-02r-soulfire_ice3_water$
+expect SQ-MELT-02r-soulfire_ice4_ice$
+expect SQ-MELT-02r-soulfire_snow3_air$
+expect SQ-MELT-02r-soulfire_snow4_snow$
+expect SQ-MELT-02r-campfire_ice3_water$
+expect SQ-MELT-02r-campfire_ice4_ice$
+expect SQ-MELT-02r-campfire_snow3_air$
+expect SQ-MELT-02r-campfire_snow4_snow$
+expect SQ-MELT-02r-soulcampfire_ice3_water$
+expect SQ-MELT-02r-soulcampfire_ice4_ice$
+expect SQ-MELT-02r-soulcampfire_snow3_air$
+expect SQ-MELT-02r-soulcampfire_snow4_snow$
+expect SQ-MELT-02r-magma_ice3_water$
+expect SQ-MELT-02r-magma_ice4_ice$
+expect SQ-MELT-02r-magma_snow3_air$
+expect SQ-MELT-02r-magma_snow4_snow$
+expect SQ-MELT-02r-unlit_ice1_ice$
+
+## SQ-MELT-03r | roofed rerun
+> execute if block 2214 -61 2000 minecraft:water run say SQ-MELT-03r-src_ice4_water
+> execute if block 2205 -61 2000 minecraft:ice run say SQ-MELT-03r-src_ice5_ice
+> execute if block 2216 -61 2012 minecraft:water run say SQ-MELT-03r-flow_ice4_water
+> execute if block 2214 -61 2024 minecraft:water run say SQ-MELT-03r-cauldron_ice4_water
+expect SQ-MELT-03r-src_ice4_water$
+expect SQ-MELT-03r-src_ice5_ice$
+expect SQ-MELT-03r-flow_ice4_water$
+expect SQ-MELT-03r-cauldron_ice4_water$
+
+## SQ-MELT-06r | roofed rerun
+> execute if block 2243 -61 2000 minecraft:water run say SQ-MELT-06r-torch_ice3_water
+> execute if block 2236 -61 2000 minecraft:ice run say SQ-MELT-06r-torch_ice4_ice
+> execute if block 2240 -61 2003 minecraft:air run say SQ-MELT-06r-torch_snow3_air
+> execute if block 2240 -61 1996 minecraft:snow run say SQ-MELT-06r-torch_snow4_snow
+> execute if block 2243 -61 2012 minecraft:water run say SQ-MELT-06r-soultorch_ice3_water
+> execute if block 2236 -61 2012 minecraft:ice run say SQ-MELT-06r-soultorch_ice4_ice
+> execute if block 2240 -61 2015 minecraft:air run say SQ-MELT-06r-soultorch_snow3_air
+> execute if block 2240 -61 2008 minecraft:snow run say SQ-MELT-06r-soultorch_snow4_snow
+> execute if block 2243 -61 2024 minecraft:water run say SQ-MELT-06r-lantern_ice3_water
+> execute if block 2236 -61 2024 minecraft:ice run say SQ-MELT-06r-lantern_ice4_ice
+> execute if block 2240 -61 2027 minecraft:air run say SQ-MELT-06r-lantern_snow3_air
+> execute if block 2240 -61 2020 minecraft:snow run say SQ-MELT-06r-lantern_snow4_snow
+> execute if block 2243 -61 2036 minecraft:water run say SQ-MELT-06r-sconce_ice3_water
+> execute if block 2236 -61 2036 minecraft:ice run say SQ-MELT-06r-sconce_ice4_ice
+> execute if block 2240 -61 2039 minecraft:air run say SQ-MELT-06r-sconce_snow3_air
+> execute if block 2240 -61 2032 minecraft:snow run say SQ-MELT-06r-sconce_snow4_snow
+> execute if block 2243 -61 2048 minecraft:water run say SQ-MELT-06r-copperlantern_ice3_water
+> execute if block 2236 -61 2048 minecraft:ice run say SQ-MELT-06r-copperlantern_ice4_ice
+> execute if block 2240 -61 2051 minecraft:air run say SQ-MELT-06r-copperlantern_snow3_air
+> execute if block 2240 -61 2044 minecraft:snow run say SQ-MELT-06r-copperlantern_snow4_snow
+> execute if block 2243 -61 2060 minecraft:water run say SQ-MELT-06r-glowstone_ice3_water
+> execute if block 2236 -61 2060 minecraft:ice run say SQ-MELT-06r-glowstone_ice4_ice
+> execute if block 2240 -61 2063 minecraft:air run say SQ-MELT-06r-glowstone_snow3_air
+> execute if block 2240 -61 2056 minecraft:snow run say SQ-MELT-06r-glowstone_snow4_snow
+> execute if block 2241 -61 2072 minecraft:ice run say SQ-MELT-06r-sealantern_ice1_ice
+> execute if block 2241 -61 2084 minecraft:ice run say SQ-MELT-06r-redstonetorch_ice1_ice
+> execute if block 2241 -61 2096 minecraft:ice run say SQ-MELT-06r-jellytorch_ice1_ice
+> execute if block 2241 -61 2108 minecraft:ice run say SQ-MELT-06r-brazierunlit_ice1_ice
+expect SQ-MELT-06r-torch_ice3_water$
+expect SQ-MELT-06r-torch_ice4_ice$
+expect SQ-MELT-06r-torch_snow3_air$
+expect SQ-MELT-06r-torch_snow4_snow$
+expect SQ-MELT-06r-soultorch_ice3_water$
+expect SQ-MELT-06r-soultorch_ice4_ice$
+expect SQ-MELT-06r-soultorch_snow3_air$
+expect SQ-MELT-06r-soultorch_snow4_snow$
+expect SQ-MELT-06r-lantern_ice3_water$
+expect SQ-MELT-06r-lantern_ice4_ice$
+expect SQ-MELT-06r-lantern_snow3_air$
+expect SQ-MELT-06r-lantern_snow4_snow$
+expect SQ-MELT-06r-sconce_ice3_water$
+expect SQ-MELT-06r-sconce_ice4_ice$
+expect SQ-MELT-06r-sconce_snow3_air$
+expect SQ-MELT-06r-sconce_snow4_snow$
+expect SQ-MELT-06r-copperlantern_ice3_water$
+expect SQ-MELT-06r-copperlantern_ice4_ice$
+expect SQ-MELT-06r-copperlantern_snow3_air$
+expect SQ-MELT-06r-copperlantern_snow4_snow$
+expect SQ-MELT-06r-glowstone_ice3_water$
+expect SQ-MELT-06r-glowstone_ice4_ice$
+expect SQ-MELT-06r-glowstone_snow3_air$
+expect SQ-MELT-06r-glowstone_snow4_snow$
+expect SQ-MELT-06r-sealantern_ice1_ice$
+expect SQ-MELT-06r-redstonetorch_ice1_ice$
+expect SQ-MELT-06r-jellytorch_ice1_ice$
+expect SQ-MELT-06r-brazierunlit_ice1_ice$
+
+## P3-RC | controls: roofed kept; open recorded
+> execute if block 2210 -61 2090 minecraft:ice run say P3-RC-ice_roof_kept
+> execute if block 2214 -61 2090 minecraft:snow run say P3-RC-snow_roof_kept
+> execute if block 2210 -61 2100 minecraft:ice run say P3-RC-ice_open_kept
+> execute if block 2214 -61 2100 minecraft:snow run say P3-RC-snow_open_kept
+expect P3-RC-ice_roof_kept$
+expect P3-RC-snow_roof_kept$
+shell grep -hE "\[zmelt\] change r" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
+look open controls melted = the non-salt, non-fire path (Serene Seasons)

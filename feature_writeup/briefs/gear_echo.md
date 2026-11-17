@@ -8,7 +8,7 @@ Written 2026-10-21 from [TODO.md](../todo/TODO.md) `# gear`, Sub `echo`; updated
 [tools/echo_texture.py](../../tools/echo_texture.py), textures
 `kubejs/assets/creativeengineering/textures/item/echo_{pickaxe,axe,shovel,hoe}.png(.mcmeta)`.
 
-Both rows cite "scratchpad 2026-10-19" and memory `echo-tier-gear`; the source line (git `2e8687f`,
+Both rows cite "scratchpad 2026-10-19" and note [echo-tier-gear](../agent_notes/echo-tier-gear.md); the source line (git `2e8687f`,
 `change_scratchpad.md`) is the whole spec: "change echo tool potion buffs to be better, but simpler than dragon. give
 echo tools human generated textures (only non human textures in pack)". The memory note isn't in the repo.
 

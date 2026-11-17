@@ -1,0 +1,16 @@
+# r1115 phase 6, A1 fourth follow-up: probe tool NBT printed; vanilla /loot ... mine with a Fortune III pickaxe as the
+# reference (coal ore 1 to 4, melon 3 to 9 with Fortune III).
+pace 0.5
+
+## SQ-SY-15d | Fortune reference: sy roll prints the tool NBT; /loot mine coal ore and melon with Fortune III x10 each
+shell cp "$INST/tools/soil_yield_probe/sy_probe.js" kubejs/server_scripts/zz_sy_probe.js && echo copied
+> reload
+sleep 40
+> syt roll 1020 -60 1000 300 minecraft:diamond_pickaxe@fortune=3
+repeat 10
+> loot spawn 1020 -50 1000 mine 1020 -60 1000 minecraft:diamond_pickaxe{Enchantments:[{id:"minecraft:fortune",lvl:3s}]}
+> loot spawn 1018 -50 1000 mine 1018 -60 1000 minecraft:diamond_pickaxe{Enchantments:[{id:"minecraft:fortune",lvl:3s}]}
+end
+> kill @e[type=minecraft:item]
+reject \[syt\] error
+look tool nbt carries Enchantments fortune lvl 3; /loot coal counts above 1 sometimes, melon above 7 sometimes

@@ -388,6 +388,13 @@ owner hand steps in `perf/runs/r1114/verdicts/cq_pwg17.md`); plan C1 client not 
 Delight's heated water-to-salt mixing takes the acid recipe's water when water goes in first (`#82`). Steps 2 to 5
 (owner session, keep / drop / merge) still open.
 
+**P11 rerun 2026-11-15 (scratch run r1115 phase 2, jar `-18`, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8):** SQ-PWG-91, -97, -06, -80, -54, -54r PASS, -43 PASS (servo part), -80b recorded (water first: Creative Delight's water-to-salt takes the water, then Create: The Salt salts the rotten flesh; `#82`). SQ-PWG-82 FAIL twice: the arm takes the whole wire connector / resistor stacks from the depots and the circuit stalls at Assembly 1/3 (`#83`, port choice). Client (phase 10): CQ-PWG-66 INCONCLUSIVE (creative motor stand-in reads Speed 0.0; row needs a rewrite, `#86`); found: a client with Power Grid joining a server without it crashes on `powergrid:electrozapper` instead of being refused (TODO).
+
+**Post-scratch fixes 2026-11-15 (jar `-19`, [plan_post_scratch_1115.md](plan_post_scratch_1115.md) D3, D4):** gate jar
+`jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-19.jar` (sha1 22d3affb7747, not installed): the mechanical arm takes one
+circuit component per grab (`ArmBlockEntityMixin`, `#83`). Script-only: acid also from rotten flesh + spider eye in
+250 mB water without heat (`power_grid.js`, `#82`). Queue SQ-PS15-14 (reruns SQ-PWG-82), SQ-PS15-15 (reruns -80b).
+
 **P11 fixes 2026-11-14 (jar `-18`, [plan_bugfix_1114.md](plan_bugfix_1114.md) 8, PORT_NOTES.md 25):** gate jar
 `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-18.jar` (sha1 e2163c7f573f): B36 ceiling tile drops tile and
 attachment (`#79`), B37 wire / heavy connector breaks when its support goes (`#78`, was B35), B38 servo commits only after

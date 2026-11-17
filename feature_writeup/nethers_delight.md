@@ -88,7 +88,7 @@ The steps below assume (A) and display-name-only renames.
 3. Tag through `global.tags`: `minecraft:flower_pots` + `nethersdelight:potted_mimicarnation`.
 4. Lang: 3.1's `en_us.json` has no key for it; add `block.nethersdelight.potted_mimicarnation` = "Potted Mimicarnation"
    in `namechanges.js`.
-5. `/dumpall` and the generators afterwards (new block; memory `dumpall-refresh-workflow`). No `mod_sides.md` change.
+5. `/dumpall` and the generators afterwards (new block; note [dumpall-refresh-workflow](agent_notes/dumpall-refresh-workflow.md)). No `mod_sides.md` change.
 
 ### 4.2 Tags (through `global.tags`)
 

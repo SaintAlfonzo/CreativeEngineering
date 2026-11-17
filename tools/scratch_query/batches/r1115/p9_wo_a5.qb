@@ -1,0 +1,17 @@
+# r1115 phase 9, boot A1c: SQ-WO-33 (r1109wo b5_empty.qb row 33; srv toml: all four gift lists [], chancePercent 100, trustThreshold 0)
+pace 1
+## SQ-WO-33 | all lists empty: nothing, no exception
+> forceload add 270 290 900 320
+sleep 8
+> pbot spawn G 280 -60 280 minecraft:overworld survival
+sleep 3
+> gamerule randomTickSpeed 0
+> time set noon
+> setblock 630 -60 300 mysticaloaktree:wise_oak
+> wiseoak trust 630 -60 300 G 100
+> pbot use G 630 -60 300 up
+> zwo drops 630 -60 300 3
+sleep 1
+expect \[zwo\] drops none
+reject Exception
+

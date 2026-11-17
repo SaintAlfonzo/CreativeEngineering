@@ -1,0 +1,38 @@
+# r1115 phase 3 (runner-3), boot A1 extras after p3_a1r.qb: SQ-MELT-08 follow-up (salt in the pack is
+# vintagedelight:salt_dust: salt:salt turned into it in the bot's hand), dispenser path; glowstone cage lantern light.
+pace 2
+
+## SQ-MELT-08x | salt_dust click and salt dispensers against blue ice
+> setblock 2048 -61 2076 minecraft:blue_ice
+> zmelt w x08_click overworld 2048 -61 2076
+> clear m3
+> pbot hold m3 vintagedelight:salt_dust 3
+> pbot use m3 2048 -61 2076 up
+> pbot use m3 2048 -61 2076 up
+> zp inv m3
+waitlog \[zp\] done 20
+> setblock 2052 -61 2076 minecraft:blue_ice
+> zmelt w x08_disp_salt overworld 2052 -61 2076
+> setblock 2052 -60 2076 minecraft:dispenser[facing=down]{Items:[{Slot:0b,id:"salt:salt",Count:3b}]}
+> setblock 2052 -59 2076 minecraft:redstone_block
+> setblock 2052 -59 2076 minecraft:air
+> setblock 2052 -59 2076 minecraft:redstone_block
+> data get block 2052 -60 2076 Items
+> setblock 2056 -61 2076 minecraft:blue_ice
+> zmelt w x08_disp_dust overworld 2056 -61 2076
+> setblock 2056 -60 2076 minecraft:dispenser[facing=down]{Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:3b}]}
+> setblock 2056 -59 2076 minecraft:redstone_block
+> setblock 2056 -59 2076 minecraft:air
+> setblock 2056 -59 2076 minecraft:redstone_block
+> data get block 2056 -60 2076 Items
+> zmelt show
+waitlog \[zmelt\] show done 20
+look which path steps blue ice: salt_dust click, salt:salt dispenser, salt_dust dispenser (one tier per fire)
+
+## P3-X1 | glowstone cage lantern: light per state (melting warning names it at light 3)
+> setblock 2100 -60 2141 architects_palette:glowstone_cage_lantern[lit=true,facing=down]
+> zmelt light overworld 2100 -60 2141
+> zmelt light overworld 2101 -60 2141
+> setblock 2100 -60 2141 architects_palette:glowstone_cage_lantern[lit=false,facing=down]
+> zmelt light overworld 2101 -60 2141
+look block light beside the lantern lit and unlit

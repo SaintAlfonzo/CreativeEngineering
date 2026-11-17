@@ -1,0 +1,10 @@
+## SQ-VH-06cw2 | warped forest interior flesh: positions, zoomed biome, distance to the nearest Heap cell
+shell cp $INST/tools/scratch_query/zq_heapcol.js kubejs/server_scripts/zz_zq_heapcol.js
+> reload
+sleep 30
+> execute in minecraft:the_nether run forceload add 6 -10 37 21
+sleep 20
+> zqh minecraft:warped_forest 6 -10 37 21 minecraft:the_nether 1 126 minecraft:warped_nylium biomesoplenty:flesh
+waitlog \[zqh\] done 300
+> execute in minecraft:the_nether run forceload remove all
+look where lines: flesh in warped interior cells next to the Heap (feature spill) or far from it (rule leak)

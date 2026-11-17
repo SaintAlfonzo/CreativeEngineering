@@ -25,7 +25,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * Honey's wall slide for blocks that aren't honey. Vanilla only slides an entity down a
  * {@link HoneyBlock} because honey's collision box is inset 1/16, so an entity pressed against its
  * side is "inside" the block and gets {@code entityInside}. A full block never calls that from the
- * side, so {@code mixin/WallSlideMixin} calls {@link #afterInsideBlocks} at the end of
+ * side, so {@code mixin/InsideBlocksMixin} calls {@link #afterInsideBlocks} at the end of
  * {@code Entity#checkInsideBlocks}, the exact point honey's slide runs, and this checks the blocks
  * touching the entity's sides itself.
  *

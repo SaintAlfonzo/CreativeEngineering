@@ -49,6 +49,8 @@ glfwInit was also tried, and still crashed.
 
 World join, a long session and an F3+T resource reload are queued (CQ-FDR-02, -03).
 
+Scratch run r1115 phase 10 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): gate PASSED. CQ-FDR-01 (3 launches at 421 jars, 419 stale filesystems closed, 1091 -> 672, title in 69 s), -02 (0 ClosedFileSystemException / ClosedChannelException over 3 sessions with sounds, chat, JEI, world reloads and F3+T), -03 (mixin removed: stack smashing again, so the fix is what holds it), -04 (no `[jar handles]` line on a dedicated server) PASS.
+
 ## 4. Headroom
 
 Every new jar adds about one descriptor after the fix (the game copy). The crash comes back near 900 jars.

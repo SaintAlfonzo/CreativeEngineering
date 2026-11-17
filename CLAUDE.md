@@ -14,6 +14,9 @@ Forge 1.19.2 modpack (KubeJS + in-tree Java mods). Repo root is the ATLauncher i
   `members/vinery`, `members/brewin`). Root `settings.gradle` + `build-logic/` build them all.
 - `tools/*.py` = generators, listed in `tools/generators.json` and run in game with `/cdevgen`.
   `/dumpall` refreshes the dumps they read. `build_deploy.py` stages releases into `deploy/`.
+- `feature_writeup/agent_notes/` = subsystem mechanics, gotchas and crash causes (moved out of agent memory
+  2026-11-16). New notes go there with one line in its index, not into memory; memory keeps only rules about working
+  with the owner, user facts and external references. Index: @feature_writeup/agent_notes/README.md
 - `mod_sides.md` = client/server side of every jar (add a row for each new mod).
   `configs_edited/` = backup of every hand-edited config. `feature_writeup/` = feature docs.
 
@@ -74,7 +77,15 @@ user asks for one, follow its skill.
 ## Build and verify
 
 - Build/install a mod: `./gradlew :<mod>:build --offline`, then `:<mod>:installToMods` (moves old
-  jars to `jar_archive/displaced/`). Never replace a jar while the game is running; if unsure, ask.
+  jars to `jar_archive/displaced/`). A rebuild for testing is installed without asking when the game is not
+  running. Never replace a jar while the game is running: until the install dialog is built
+  ([plan_process_overhaul.md](feature_writeup/plan_process_overhaul.md) P1.2), ask; after, `installToMods` shows it
+  (Install now, shown again while the game still runs / Install on exit / Skip).
+- **Commits.** Agents commit at the end of each plan phase, and at session end for any finished work left
+  uncommitted, as the repo's configured author (the owner) with the Co-Authored-By trailer, then push with
+  `git push origin HEAD:agent_staging` (never `main`; the owner merges). Stage only that phase's files by path
+  (`.gitignore` is an allow-list; never `git add -A` / `.`), never the owner's unrelated uncommitted work; generated
+  output in its own commit. If the push is not a fast-forward, stop and ask.
 - Logic tests without the game: plain `javac`/`java` harness (creativeCommon `build/classes`, Mojmap, an
   `FMLEnvironment` stub first on the classpath). Live checks: throwaway dedicated server in the
   scratchpad. Details: memory `patchermod-headless-smoke-test`, skill `scratch-test`.
@@ -107,7 +118,9 @@ handling event`, the mod/feature name) before reasoning from code. It is the rea
   existing bullets when later work changes them. Never edit a deployed version's file. Same-behaviour ports and
   dev-only changes get no bullet. Run `python3 tools/changelog_lint.py` after editing. State in the hand-over
   whether a bullet was added (or why not).
-- Status lives in the repo docs, not memory: [feature_writeup/README.md](feature_writeup/README.md)
+- Status lives in the repo docs, not memory or agent notes: [feature_writeup/README.md](feature_writeup/README.md)
   (index + status legend), [todo/TODO.md](feature_writeup/todo/TODO.md) (open work),
   `plan_*.md` and [deploy.md](feature_writeup/deploy.md) (releases).
+- New tests and queue rows take their prefix from [test_prefix_index.md](feature_writeup/testing/test_prefix_index.md)
+  (a new feature adds its row first).
 - Hand over with the exact test IDs to run in game, and any jar still waiting to be copied to `mods/`.

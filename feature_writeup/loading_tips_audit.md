@@ -324,6 +324,9 @@ The tip is applied as written; check it in game or in code, and fix the tip if t
 |---|---|---|---|
 | LT-15 | client | F3+T or start the game, load a world | `latest.log` loading tips line: 213 tips, no unmatched id; tips read as section 2 |
 
+
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-QN-01 PASS (Mending repairs in full, Quark Nerf Mending off), SQ-QN-02 PASS (elytra glide in the Overworld, Dimension Locked Elytra off; hand feel left to the owner): tips 54 and 98 match the game.
+
 ## 5. History
 
 - 2026-11-14: audit 2 written and applied to Creative Tips; style rules extended (concise and informative, full

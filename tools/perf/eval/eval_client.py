@@ -4,11 +4,13 @@
     python3 eval_client.py setup GAME_DIR [WORLD_DIR]   mods hard-linked, kubejs/config/resourcepacks copied, the user's
                                                          options.txt windowed / uncapped / no pause on lost focus,
                                                          the two scratch scripts, WORLD_DIR copied to saves/PerfEval
-    python3 eval_client.py launch GAME_DIR [nodebuglog] [server=HOST:PORT]
+    python3 eval_client.py launch GAME_DIR [nodebuglog] [server=HOST:PORT] [ownsrv=PID]
                                                          starts it with the user's -Xmx and a JFR recording from JVM start
                                                          (ce-server.jfc copied to GAME_DIR/perf/); refuses if a game JVM is up.
                                                          nodebuglog: drop ATLauncher's client-1.19-debug.xml log config
                                                          server=HOST:PORT: join that server at start (--server/--port)
+                                                         ownsrv=PID: ignore that game JVM (your own scratch server,
+                                                         for rows that need a server plus a client)
 
 The command line is never printed (it is built from ATLauncher's logged args, see tools/item_repro/launch_client.py).
 """
@@ -58,9 +60,11 @@ def setup(game, world=None):
     print("client dir ready:", len(os.listdir(mods)), "jars")
 
 
-def launch(game, nodebuglog=False, maxage="60m", maxsize="1g", server=None):
+def launch(game, nodebuglog=False, maxage="60m", maxsize="1g", server=None, ownsrv=None):
     live = subprocess.run(["bash", os.path.join(INST, "tools/scratch_query/game_jvms.sh")],
                           capture_output=True, text=True).stdout.strip()
+    # ownsrv=PID: the caller's own scratch server for a row that needs a server and a client (server first)
+    live = "\n".join(l for l in live.splitlines() if not (ownsrv and l.split()[0] == ownsrv))
     if live:
         sys.exit("game JVM already up: " + live)
     jfc = os.path.join(game, "perf/ce-server.jfc")
@@ -89,6 +93,7 @@ if __name__ == "__main__":
     elif what == "launch":
         opts = sys.argv[3:]
         srv = next((o.split("=", 1)[1] for o in opts if o.startswith("server=")), None)
-        launch(game, "nodebuglog" in opts, server=srv)
+        own = next((o.split("=", 1)[1] for o in opts if o.startswith("ownsrv=")), None)
+        launch(game, "nodebuglog" in opts, server=srv, ownsrv=own)
     else:
         sys.exit(__doc__)

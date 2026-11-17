@@ -1,0 +1,24 @@
+# r1115 phase 1, boot A1 follow-up (same running server): SQ-GAP-04 / SQ-T1-04 batch faults of p1_a1.qb. The pack's
+# golden apple, powered rail and golden carrot recipes are not under the vanilla ids (golden apple is
+# creativedelight:shaped/golden_apple), so read them by result; the block row reads the ITEM tag (the script header says
+# the block is in the forge gold tags through MCA's own item tags; the Pass text does not ask for the block tag).
+pace 1
+
+## SQ-GAP-04b | follow-up: recipes by result for powered rail, golden apple, golden carrot; nuggets and block recipe inputs; item storage tag
+> zq itemtag forge:storage_blocks/gold
+> zq makes minecraft:powered_rail
+waitlog \[zq\] makes minecraft:powered_rail: \d+ 30
+> zq makes minecraft:golden_apple
+waitlog \[zq\] makes minecraft:golden_apple: \d+ 30
+> zq makes minecraft:golden_carrot
+waitlog \[zq\] makes minecraft:golden_carrot: \d+ 30
+> zq rdetail powered_rail
+> zq rdetail golden_apple
+> zq rdetail golden_carrot
+> zq rdetail minecraft:gold_ingot_from_nuggets
+> zq rdetail minecraft:gold_block
+> zq rdetail component_gold
+waitlog \[zq\] rdetail matching component_gold: \d+ 30
+> zq uses mca:rose_gold_nugget
+waitlog \[zq\] uses mca:rose_gold_nugget: 60
+look powered rail, golden apple, golden carrot: the gold input is a tag holding rose gold; gold_ingot_from_nuggets and minecraft:gold_block take literal gold only

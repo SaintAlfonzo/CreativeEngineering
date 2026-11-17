@@ -1,0 +1,13 @@
+# r1115 phase 9, boot RB: SQ-CDNS-05 rollback. The O2 world (saved by the mods/ jars) on the 1.2.02 jars (the O1 srv).
+pace 1
+
+## SQ-CDNS-05 | rollback: a save written by the new jars, booted on the 1.2.02 jars; record what is lost
+shell grep -ciE "unidentified|missing registry|Registry .* missing|unknown (item|block)" logs/latest.log; grep -iE "unidentified|missing.*mapping|registry.*missing" logs/latest.log | cut -c1-260 | head -8
+> forceload add -16 -16 63 63
+> forceload add 192 192 223 223
+sleep 8
+> data get block 200 -60 205 Items
+> data get block 4 -60 0 Items
+> save-all flush
+sleep 6
+look RECORD the losses (scan compare after the stop)

@@ -1,0 +1,15 @@
+# r1115 phase 6, A1 third follow-up (same boot): the melon control in p6_a3.qb SQ-SY-15 showed no Fortune effect
+# (5.09 none / 5.00 F3, max 7 both). Coal ore is the second control: vanilla ore_drops Fortune III gives about 2.2 coal.
+pace 1
+
+## SQ-SY-15c | Fortune control: coal ore and melon rolled with no tool, a Fortune III diamond pickaxe and a Fortune III hoe
+> setblock 1020 -60 1000 minecraft:coal_ore
+> syt roll 1020 -60 1000 600 none
+> syt roll 1020 -60 1000 600 minecraft:diamond_pickaxe@fortune=3
+> syt roll 1020 -60 1000 600 minecraft:diamond_hoe@fortune=3
+> syt roll 1018 -60 1000 600 minecraft:diamond_pickaxe@fortune=3
+> syt roll 1018 -60 1000 600 minecraft:diamond_axe@fortune=3
+> zq rdetail minecraft:blocks/melon
+count \[syt\] roll .* n 600: == 5
+reject \[syt\] error
+look coal F3 about 2.2 (Fortune reaches the roll); melon F3 vs 5.0

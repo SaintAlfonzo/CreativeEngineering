@@ -1,0 +1,30 @@
+# r1115 phase 1, boot p1cdw1: SQ-CDW-01 rerun with myrtrees removed. Group B fresh normal world, seed 20261115, full pack minus one jar
+# (installed mods/ only, NOSWAP=1).
+# Server: NOSWAP=1 bash tools/scratch_query/prep_srv.sh OUT p1cdw1 B level-seed=20261115
+# Before boot: rm OUT/srv/mods/myrtrees*.jar (a hard link: the pack's mods/ keeps its jar); probes zz_hh_mw_probe.js.
+pace 1
+
+## SQ-CDW-01 | myrtrees removed: no datapack error, level created, wild crop packs line lists it under off
+bootexpect Done \(
+bootreject ^(?!.*json id corn_delight:).*(Failed to validate datapack|Unknown registry key|Errors in currently selected datapacks)
+bootexpect \[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): \[[^]]*myrtrees[^]]*\]
+shell grep -h "wild crop worldgen packs" logs/latest.log | cut -c1-300
+shell test "$(ls mods | grep -c '^myrtrees')" = 0 && echo "jar gone"
+shell ls kubejs/data/creativedelight/
+look the level is created (Done); no worldgen dir in srv kubejs/data/creativedelight; the packs line as expected
+
+## SQ-HH-328s2 | corn maze locate from spawn within the shipped 120 s deadline (seed 20261115), then the maze census
+> locate structure hearthandharvest:corn_maze
+waitlog (?:The nearest hearthandharvest:corn_maze is at|Could not find) 200
+shell grep -E "\[locate\].*corn_maze" logs/latest.log | tail -2 | cut -c1-260
+capture M The nearest hearthandharvest:corn_maze is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {M1-16} {M3-16} {M1+47} {M3+47}
+sleep 90
+> zq under {M1} {M3} 2 corn_maze
+waitlog \[zq\] done 120
+> zhh2 countset {M1-2} 50 {M3-2} {M1+36} 110 {M3+36} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest,lootr:lootr_chest
+> zhh2 chests {M1-2} 50 {M3-2} {M1+36} 110 {M3+36}
+sleep 5
+> forceload remove {M1-16} {M3-16} {M1+47} {M3+47}
+expect The nearest hearthandharvest:corn_maze is at
+look locate time and candidates ([locate] line); corn_crop > 100, oak_fence 16, a chest with corn_maze_center; under: no large air gap

@@ -1,0 +1,2087 @@
+[
+ {
+  "class": "blusunrize.immersiveengineering.common.entities.ChemthrowerShotEntity",
+  "jar": "ImmersiveEngineering-1.19.2-9.2.4-170.jar",
+  "ids": [
+   "immersiveengineering:chemthrower_shot"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "blusunrize.immersiveengineering.common.entities.IEProjectileEntity",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "blusunrize.immersiveengineering.common.entities.RailgunShotEntity",
+  "jar": "ImmersiveEngineering-1.19.2-9.2.4-170.jar",
+  "ids": [
+   "immersiveengineering:railgun_shot"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "blusunrize.immersiveengineering.common.entities.IEProjectileEntity",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "blusunrize.immersiveengineering.common.entities.RevolvershotEntity",
+  "jar": "ImmersiveEngineering-1.19.2-9.2.4-170.jar",
+  "ids": [
+   "immersiveengineering:revolver_shot"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "blusunrize.immersiveengineering.common.entities.IEProjectileEntity",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "blusunrize.immersiveengineering.common.entities.RevolvershotFlareEntity",
+  "jar": "ImmersiveEngineering-1.19.2-9.2.4-170.jar",
+  "ids": [
+   "immersiveengineering:revolver_shot_flare"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "blusunrize.immersiveengineering.common.entities.RevolvershotEntity",
+   "blusunrize.immersiveengineering.common.entities.IEProjectileEntity",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "blusunrize.immersiveengineering.common.entities.RevolvershotHomingEntity",
+  "jar": "ImmersiveEngineering-1.19.2-9.2.4-170.jar",
+  "ids": [
+   "immersiveengineering:revolver_shot_homing"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "blusunrize.immersiveengineering.common.entities.RevolvershotEntity",
+   "blusunrize.immersiveengineering.common.entities.IEProjectileEntity",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "blusunrize.immersiveengineering.common.entities.SawbladeEntity",
+  "jar": "ImmersiveEngineering-1.19.2-9.2.4-170.jar",
+  "ids": [
+   "immersiveengineering:sawblade"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "blusunrize.immersiveengineering.common.entities.IEProjectileEntity",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "blusunrize.immersiveengineering.common.entities.WolfpackShotEntity",
+  "jar": "ImmersiveEngineering-1.19.2-9.2.4-170.jar",
+  "ids": [
+   "immersiveengineering:revolver_shot_wolfpack"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "blusunrize.immersiveengineering.common.entities.RevolvershotHomingEntity",
+   "blusunrize.immersiveengineering.common.entities.RevolvershotEntity",
+   "blusunrize.immersiveengineering.common.entities.IEProjectileEntity",
+   "net.minecraft.world.entity.projectile.AbstractArrow"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.SaintAlfonzo.creativecompat.shrapnel.ShrapnelEntity",
+  "jar": "creativecompat-1.0.0.jar",
+  "ids": [
+   "creativecompat:shrapnel"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": true
+ },
+ {
+  "class": "com.SaintAlfonzo.creativedelight.hearth.entity.ManureProjectile",
+  "jar": "backportedHearth-1.4.1-ce-19.2-04.jar",
+  "ids": [
+   "hearthandharvest:manure_projectile"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": true
+ },
+ {
+  "class": "com.SaintAlfonzo.creativedelight.hearth.entity.ThrownCleaver",
+  "jar": "backportedHearth-1.4.1-ce-19.2-04.jar",
+  "ids": [
+   "hearthandharvest:thrown_cleaver"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "com.SaintAlfonzo.creativedelight.hearth.entity.ThrownTool",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.SaintAlfonzo.creativedelight.hearth.entity.ThrownPitchfork",
+  "jar": "backportedHearth-1.4.1-ce-19.2-04.jar",
+  "ids": [
+   "hearthandharvest:thrown_pitchfork"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "com.SaintAlfonzo.creativedelight.hearth.entity.ThrownTool",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.SaintAlfonzo.creativedelight.hearth.gear.ThrownHorseshoe",
+  "jar": "backportedHearth-1.4.1-ce-19.2-04.jar",
+  "ids": [
+   "hearthandharvest:thrown_horseshoe"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.github.alexthe666.alexsmobs.entity.EntityCockroachEgg",
+  "jar": "alexsmobs-1.21.1.jar",
+  "ids": [
+   "alexsmobs:cockroach_egg"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.github.alexthe666.alexsmobs.entity.EntityEmuEgg",
+  "jar": "alexsmobs-1.21.1.jar",
+  "ids": [
+   "alexsmobs:emu_egg"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.github.alexthe666.alexsmobs.entity.EntityEnderiophageRocket",
+  "jar": "alexsmobs-1.21.1.jar",
+  "ids": [
+   "alexsmobs:enderiophage_rocket"
+  ],
+  "default": "linger",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.FireworkRocketEntity",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.github.alexthe666.alexsmobs.entity.EntitySharkToothArrow",
+  "jar": "alexsmobs-1.21.1.jar",
+  "ids": [
+   "alexsmobs:shark_tooth_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Arrow",
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.github.alexthe666.alexsmobs.entity.EntityTossedItem",
+  "jar": "alexsmobs-1.21.1.jar",
+  "ids": [
+   "alexsmobs:tossed_item"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.github.alexthe668.domesticationinnovation.server.entity.FeatherEntity",
+  "jar": "domesticationinnovation-1.6.1-1.19.2.jar",
+  "ids": [
+   "domesticationinnovation:feather"
+  ],
+  "default": "snag",
+  "tag": [
+   "snag"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.FishingHook",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.blossom.BlossomArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:blossom_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.cupid.CupidArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:cupid_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.dousing.DousingArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:dousing_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.drill.DrillArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:drill_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.echoing.EchoingArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:echoing_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.ethereal.EtherealArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:ethereal_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.explosive.ExplosiveArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:explosive_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.growing.GrowingArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:growing_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.hookshot.HookshotArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:hookshot_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.ink.InkArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:ink_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.luminous.LuminousArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:luminous_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.message.MessageArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:message_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.paint.PaintArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:paint_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.party.PartyArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:party_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.prismarine.PrismarineArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:prismarine_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.pufferfish.PufferfishArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:pufferfish_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.redstone_torch.RedstoneTorchArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:redstone_torch_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.reinforced.ReinforcedArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:reinforced_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.repulsive.RepulsiveArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:repulsive_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.seeker.SeekerArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:seeker_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.slime.SlimeArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:slime_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.soul_torch.SoulTorchArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:soul_torch_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.split.SplitArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:split_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.teleportation.TeleportationArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:teleportation_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.torch.TorchArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:torch_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.itayfeder.nock_enough_arrows.arrows.whistling.WhistlingArrow",
+  "jar": "nock_enough_arrows-1.19.2-1.2.0.jar",
+  "ids": [
+   "nock_enough_arrows:whistling_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.ninni.twigs.entity.Pebble",
+  "jar": "twigs-forge-1.19.2-3.0.1.jar",
+  "ids": [
+   "twigs:pebble"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.simibubi.create.content.equipment.potatoCannon.PotatoProjectileEntity",
+  "jar": "create-1.19.2-0.5.1.i.jar",
+  "ids": [
+   "create:potato_projectile"
+  ],
+  "default": "break",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractHurtingProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.teamabnormals.neapolitan.common.entity.projectile.Bananarrow",
+  "jar": "neapolitan-1.19.2-4.1.0.jar",
+  "ids": [
+   "neapolitan:bananarrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.zach2039.oldguns.world.entity.BulletProjectile",
+  "jar": "oldguns-1.19.2-3.7.3-47.jar",
+  "ids": [
+   "oldguns:bullet_projectile"
+  ],
+  "default": "slow",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider",
+   "java.lang.Object"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "com.zach2039.oldguns.world.entity.RocketProjectile",
+  "jar": "oldguns-1.19.2-3.7.3-47.jar",
+  "ids": [
+   "oldguns:rocket_projectile"
+  ],
+  "default": "slow",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "com.zach2039.oldguns.world.entity.BulletProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "flaxbeard.immersivepetroleum.common.entity.MolotovItemEntity",
+  "jar": "ImmersivePetroleum-1.19.2-4.2.0-29b.jar",
+  "ids": [
+   "immersivepetroleum:molotov"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "love.marblegate.splashmilk.entity.MilkBottleEntity",
+  "jar": "splash_milk-1.19.2-1.4.0.jar",
+  "ids": [
+   "splash_milk:milk_bottle"
+  ],
+  "default": "break",
+  "tag": [
+   "settle"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "me.desht.pneumaticcraft.common.entity.projectile.MicromissileEntity",
+  "jar": "pneumaticcraft-repressurized-1.19.2-4.3.15-52.jar",
+  "ids": [
+   "pneumaticcraft:micromissile"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "me.desht.pneumaticcraft.common.entity.projectile.TumblingBlockEntity",
+  "jar": "pneumaticcraft-repressurized-1.19.2-4.3.15-52.jar",
+  "ids": [
+   "pneumaticcraft:tumbling_block"
+  ],
+  "default": "break",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "me.desht.pneumaticcraft.common.entity.projectile.VortexEntity",
+  "jar": "pneumaticcraft-repressurized-1.19.2-4.3.15-52.jar",
+  "ids": [
+   "pneumaticcraft:vortex"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.dragonloot.entity.DragonTridentEntity",
+  "jar": "dragonloot-1.1.15-1.19.2-forge.jar",
+  "ids": [
+   "dragonloot:dragon_trident"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.geforcemods.securitycraft.entity.IMSBomb",
+  "jar": "[1.19.2] SecurityCraft v1.9.6.1.jar",
+  "ids": [
+   "securitycraft:imsbomb"
+  ],
+  "default": "break",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Fireball",
+   "net.minecraft.world.entity.projectile.AbstractHurtingProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.geforcemods.securitycraft.entity.sentry.Bullet",
+  "jar": "[1.19.2] SecurityCraft v1.9.6.1.jar",
+  "ids": [
+   "securitycraft:bullet"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.BarrelOfGunpowderProjectileEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_barrel_of_gunpowder_projectile"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.CannonBallProjectileProjectileEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_cannon_ball_projectile_projectile"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.FireBombEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_fire_bomb"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.FrostBombEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_frost_bomb"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.GiantCannonBallProjectileEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_giant_cannon_ball_projectile"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.GiantFireBombProjectileEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_giant_fire_bomb_projectile"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.GiantFrostBombProjectileEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_giant_frost_bomb_projectile"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.GiantSculkBombProjectileEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_giant_sculk_bomb_projectile"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.IceDropEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_ice_drop"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.KegOfGunpowderEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_keg_of_gunpowder"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.LavaDropEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_lava_drop"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.SculkBombEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_sculk_bomb"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.blockysiege.entity.WoodenShrapnelEntity",
+  "jar": "blocky_siege-6.1.91-1.19.2.jar",
+  "ids": [
+   "blocky_siege:projectile_wooden_shrapnel"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.cannedgoods.entity.MiniFizzEntity",
+  "jar": "repackedCannedGoods-1.19.2-3-ce-19.2-01.jar",
+  "ids": [
+   "canned_goods:projectile_mini_fizz"
+  ],
+  "default": "hang",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.createatam.entity.BlazeBallonFireEntity",
+  "jar": "create_misc_and_things_ 1.19.2_4.0A.jar",
+  "ids": [
+   "create_things_and_misc:projectile_blaze_balloon_fire"
+  ],
+  "default": "hang",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.createatam.entity.NeonTubeEntity",
+  "jar": "create_misc_and_things_ 1.19.2_4.0A.jar",
+  "ids": [
+   "create_things_and_misc:projectile_neon_tube"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.createatam.entity.SpoutGunChocolateEntity",
+  "jar": "create_misc_and_things_ 1.19.2_4.0A.jar",
+  "ids": [
+   "create_things_and_misc:projectile_spout_gun_chocolate"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.createatam.entity.SpoutGunHoneyEntity",
+  "jar": "create_misc_and_things_ 1.19.2_4.0A.jar",
+  "ids": [
+   "create_things_and_misc:projectile_spout_gun_honey"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.createatam.entity.SpoutGunLavaEntity",
+  "jar": "create_misc_and_things_ 1.19.2_4.0A.jar",
+  "ids": [
+   "create_things_and_misc:projectile_spout_gun_lava"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.createatam.entity.SpoutGunSlimeEntity",
+  "jar": "create_misc_and_things_ 1.19.2_4.0A.jar",
+  "ids": [
+   "create_things_and_misc:projectile_spout_gun_slime"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mcreator.createatam.entity.StoupGunWaterEntity",
+  "jar": "create_misc_and_things_ 1.19.2_4.0A.jar",
+  "ids": [
+   "create_things_and_misc:projectile_spout_gun_water"
+  ],
+  "default": "hang",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mehvahdjukaar.supplementaries.common.entities.BombEntity",
+  "jar": "supplementaries-1.19.2-2.4.20.jar",
+  "ids": [
+   "supplementaries:bomb"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.mehvahdjukaar.moonlight.api.entity.ImprovedProjectileEntity",
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mehvahdjukaar.supplementaries.common.entities.RopeArrowEntity",
+  "jar": "supplementaries-1.19.2-2.4.20.jar",
+  "ids": [
+   "supplementaries:rope_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mehvahdjukaar.supplementaries.common.entities.SlingshotProjectileEntity",
+  "jar": "supplementaries-1.19.2-2.4.20.jar",
+  "ids": [
+   "supplementaries:slingshot_projectile"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.mehvahdjukaar.moonlight.api.entity.ImprovedProjectileEntity",
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.mehvahdjukaar.supplementaries.common.entities.ThrowableBrickEntity",
+  "jar": "supplementaries-1.19.2-2.4.20.jar",
+  "ids": [
+   "supplementaries:brick_projectile"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.mehvahdjukaar.moonlight.api.entity.ImprovedProjectileEntity",
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.Arrow",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.DragonFireball",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:dragon_fireball"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractHurtingProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.FireworkRocketEntity",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:firework_rocket"
+  ],
+  "default": "linger",
+  "tag": [
+   "linger"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider",
+   "java.lang.Object"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.FishingHook",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:fishing_bobber"
+  ],
+  "default": "snag",
+  "tag": [
+   "snag"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider",
+   "java.lang.Object"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.LargeFireball",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:fireball"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Fireball",
+   "net.minecraft.world.entity.projectile.AbstractHurtingProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.LlamaSpit",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:llama_spit"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider",
+   "java.lang.Object"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.ShulkerBullet",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:shulker_bullet"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider",
+   "java.lang.Object"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.SmallFireball",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:small_fireball"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Fireball",
+   "net.minecraft.world.entity.projectile.AbstractHurtingProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.Snowball",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:snowball"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.SpectralArrow",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:spectral_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.ThrownEgg",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:egg"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.ThrownEnderpearl",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:ender_pearl"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.ThrownExperienceBottle",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:experience_bottle"
+  ],
+  "default": "settle",
+  "tag": [
+   "settle"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.ThrownPotion",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:potion"
+  ],
+  "default": "settle",
+  "tag": [
+   "settle"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.ThrownTrident",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:trident"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.minecraft.world.entity.projectile.WitherSkull",
+  "jar": "minecraft",
+  "ids": [
+   "minecraft:wither_skull"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractHurtingProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "net.untitledduckmod.items.DuckEggEntity",
+  "jar": "untitledduckmod-0.6.1-1.19.2-forge.jar",
+  "ids": [
+   "untitledduckmod:duck_egg",
+   "untitledduckmod:goose_egg"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "org.patryk3211.powergrid.equipment.zapper.ZapProjectileEntity",
+  "jar": "backportedPowerGrid-0.6.2-ce-19.2-18.jar",
+  "ids": [
+   "powergrid:zap_projectile"
+  ],
+  "default": "slow",
+  "tag": [],
+  "chain": [
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider",
+   "java.lang.Object"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "plus.dragons.createenchantmentindustry.content.contraptions.fluids.experience.HyperExperienceBottle",
+  "jar": "create_enchantment_industry-1.19.2-for-create-0.5.1.f-1.2.9.e.jar",
+  "ids": [
+   "create_enchantment_industry:hyper_experience_bottle"
+  ],
+  "default": "break",
+  "tag": [
+   "settle"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.botania.common.entity.BabylonWeaponEntity",
+  "jar": "Botania-1.19.2-440.2-FORGE.jar",
+  "ids": [
+   "botania:babylon_weapon"
+  ],
+  "default": "slow",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "vazkii.botania.common.entity.ThrowableCopyEntity",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.botania.common.entity.EnderAirBottleEntity",
+  "jar": "Botania-1.19.2-440.2-FORGE.jar",
+  "ids": [
+   "botania:ender_air_bottle"
+  ],
+  "default": "break",
+  "tag": [
+   "settle"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.botania.common.entity.FallingStarEntity",
+  "jar": "Botania-1.19.2-440.2-FORGE.jar",
+  "ids": [
+   "botania:falling_star"
+  ],
+  "default": "slow",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "vazkii.botania.common.entity.ThrowableCopyEntity",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.botania.common.entity.MagicMissileEntity",
+  "jar": "Botania-1.19.2-440.2-FORGE.jar",
+  "ids": [
+   "botania:magic_missile"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.botania.common.entity.ManaBurstEntity",
+  "jar": "Botania-1.19.2-440.2-FORGE.jar",
+  "ids": [
+   "botania:mana_burst"
+  ],
+  "default": "break",
+  "tag": [
+   "exempt",
+   "exempt(all)"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.botania.common.entity.ThornChakramEntity",
+  "jar": "Botania-1.19.2-440.2-FORGE.jar",
+  "ids": [
+   "botania:thorn_chakram"
+  ],
+  "default": "snag",
+  "tag": [
+   "snag"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.botania.common.entity.VineBallEntity",
+  "jar": "Botania-1.19.2-440.2-FORGE.jar",
+  "ids": [
+   "botania:vine_ball"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.quark.content.tools.entity.ParrotEgg",
+  "jar": "Quark-3.4-418.jar",
+  "ids": [
+   "quark:parrot_egg"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.quark.content.tools.entity.TorchArrow",
+  "jar": "Quark-3.4-418.jar",
+  "ids": [
+   "quark:torch_arrow"
+  ],
+  "default": "hang",
+  "tag": [
+   "hang"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.AbstractArrow",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.quark.content.tools.entity.rang.Echorang",
+  "jar": "Quark-3.4-418.jar",
+  "ids": [
+   "quark:echorang"
+  ],
+  "default": "snag",
+  "tag": [
+   "snag"
+  ],
+  "chain": [
+   "vazkii.quark.content.tools.entity.rang.AbstractPickarang",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.quark.content.tools.entity.rang.Flamerang",
+  "jar": "Quark-3.4-418.jar",
+  "ids": [
+   "quark:flamerang"
+  ],
+  "default": "snag",
+  "tag": [
+   "snag"
+  ],
+  "chain": [
+   "vazkii.quark.content.tools.entity.rang.AbstractPickarang",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vazkii.quark.content.tools.entity.rang.Pickarang",
+  "jar": "Quark-3.4-418.jar",
+  "ids": [
+   "quark:pickarang"
+  ],
+  "default": "snag",
+  "tag": [
+   "snag"
+  ],
+  "chain": [
+   "vazkii.quark.content.tools.entity.rang.AbstractPickarang",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity",
+   "net.minecraftforge.common.capabilities.CapabilityProvider"
+  ],
+  "unverified": false
+ },
+ {
+  "class": "vectorwing.farmersdelight.common.entity.RottenTomatoEntity",
+  "jar": "repackedFarmers-1.19.2-1.2.4-ce-19.2-04.jar",
+  "ids": [
+   "farmersdelight:rotten_tomato"
+  ],
+  "default": "break",
+  "tag": [
+   "break"
+  ],
+  "chain": [
+   "net.minecraft.world.entity.projectile.ThrowableItemProjectile",
+   "net.minecraft.world.entity.projectile.ThrowableProjectile",
+   "net.minecraft.world.entity.projectile.Projectile",
+   "net.minecraft.world.entity.Entity"
+  ],
+  "unverified": false
+ }
+]

@@ -12,7 +12,7 @@ import net.minecraftforge.fml.common.Mod;
 
 /**
  * Upgrade Aquatic's river sapling (Mulberry Sapling in game) grows the datapack copy of {@code upgrade_aquatic:river_tree}
- * (kubejs/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json: oak trunk, mulberry leaves and vines).
+ * (development/creativeWorldgen/src/main/resources/packs/upgrade_aquatic/data/upgrade_aquatic/worldgen/configured_feature/river_tree.json: oak trunk, mulberry leaves and vines).
  * Worldgen already reads that copy; UA's RiverTreeGrower returns the built-in holder, which a datapack override doesn't
  * reach in 1.19.2, so saplings would keep growing river logs. Switch: [worldgen.systems] mulberrySapling.
  * Feature writeup: recipes_wood.md 2.6.

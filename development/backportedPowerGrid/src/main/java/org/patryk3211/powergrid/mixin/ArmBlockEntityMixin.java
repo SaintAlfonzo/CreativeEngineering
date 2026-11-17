@@ -21,16 +21,19 @@ import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackH
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmBlockEntity;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmInteractionPoint;
 import org.apache.commons.lang3.mutable.MutableBoolean;
+import org.patryk3211.powergrid.circuits.components.ComponentRegistry;
 import org.patryk3211.powergrid.collections.ModdedItems;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.List;
 
 // Port: remap off (Create's own methods); fix B25: an output that is not a belt is skipped instead of ending the scan.
+// Pack change (plan_post_scratch_1115.md D3, TODO #83): the arm grabs one circuit component per trip.
 @Mixin(value = ArmBlockEntity.class, remap = false)
 public abstract class ArmBlockEntityMixin {
     @Shadow List<ArmInteractionPoint> outputs;
@@ -58,5 +61,18 @@ public abstract class ArmBlockEntityMixin {
                 return TransportedItemStackHandlerBehaviour.TransportedResult.doNothing();
             });
         }
+    }
+
+    // Pack change (D3, SQ-PWG-82): Create's arm takes from an input what its outputs accept in a simulated insert. With no
+    // incomplete circuit in the belt's centre window the belt branch falls back to Create's belt insert, which accepts
+    // the whole stack, so the arm carried full part stacks onto the belt and later held the rest (resistor x7) forever.
+    // A circuit component (any item ComponentRegistry maps to a component) is now taken one per grab.
+    @Inject(method = "getDistributableAmount", at = @At("RETURN"), cancellable = true)
+    private void powerGrid$onePartPerGrab(ArmInteractionPoint point, int slot, CallbackInfoReturnable<Integer> cir) {
+        if (cir.getReturnValueI() <= 1 || point.getLevel() == null)
+            return;
+        var stack = point.extract(slot, true);
+        if (!stack.isEmpty() && ComponentRegistry.getComponentId(point.getLevel(), stack) != null)
+            cir.setReturnValue(1);
     }
 }

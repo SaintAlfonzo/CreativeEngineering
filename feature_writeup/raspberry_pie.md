@@ -586,6 +586,8 @@ Not decisions; effort notes for planning.
 
 ## 14. Tests
 
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-RP-07 PASS (diet reset clears the Apple Pie food list), SQ-RP-08 PASS (boot WARN about Apple Pie's own benefits; max health 20, only Carrot's modifier).
+
 Live rows are in [scratch_queue.md](testing/scratch_queue.md) section "SQ-RP" (fresh world). Map:
 
 | Test | Queue row | | Test | Queue row |

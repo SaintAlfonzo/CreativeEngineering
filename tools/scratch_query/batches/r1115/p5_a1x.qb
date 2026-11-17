@@ -1,0 +1,65 @@
+# r1115 phase 5 (runner-5), boot A1 follow-ups (same server, after p5_a1.qb): states behind the p5_a1 FAILs and LOOKs.
+pace 1
+
+## SQ-HOP-05x | hops vine and shears: state after each of three shears uses (Compat vine shearing adds fertile to every VineBlock)
+> setblock 608 -60 520 minecraft:oak_log
+> setblock 608 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> zmelt w hop05x overworld 608 -60 521
+> zmelt w hop05_old overworld 606 -60 521
+> clear G
+> pbot hold G minecraft:shears 1
+> pbot use G 608 -60 521 north
+sleep 1
+> zmelt show
+> pbot use G 608 -60 521 north
+sleep 1
+> zmelt show
+> pbot use G 608 -60 521 north
+sleep 1
+> zmelt show
+> zmelt clear
+look state after each use: fertile and sterilized values
+
+## SQ-HOP-04x | hops vine age 1 with a stick: state after the use
+> setblock 604 -60 521 minecraft:air
+> setblock 604 -60 521 hearthandharvest:hops_vine[north=true,age=1]
+> zmelt w hop04x overworld 604 -60 521
+> kill @e[type=minecraft:item]
+> clear G
+> pbot hold G minecraft:stick 1
+> pbot use G 604 -60 521 north
+sleep 1
+> zmelt show
+> zhh5 hand G
+> zhh5 items 604 -60 521 3
+> zmelt clear
+look state unchanged (age 1), no items; what the CONSUME was
+
+## SQ-HH-1546bx | what is at 624 -61 520 now; Ender Crop tilled end stone with nothing on top under random ticks
+> zmelt w hh1546b_now overworld 624 -61 520
+> setblock 626 -61 520 endercrop:tilled_end_stone
+> zmelt w tes_bare overworld 626 -61 520
+> gamerule randomTickSpeed 3000
+sleep 5
+> gamerule randomTickSpeed 3
+> zmelt show
+> zmelt clear
+look 624 state (end stone = reverted, not a load failure); bare tilled end stone reverts on random tick (Ender Crop farmland-like)?
+
+## SQ-HH-1546cx | netherite area till: state of each of the 9 cells
+> zmelt w c645_525 overworld 645 -61 525
+> zmelt w c646_525 overworld 646 -61 525
+> zmelt w c647_525 overworld 647 -61 525
+> zmelt w c645_526 overworld 645 -61 526
+> zmelt w c646_526 overworld 646 -61 526
+> zmelt w c647_526 overworld 647 -61 526
+> zmelt w c645_527 overworld 645 -61 527
+> zmelt w c646_527 overworld 646 -61 527
+> zmelt w c647_527 overworld 647 -61 527
+> zmelt clear
+look which cell is still end stone
+
+## SQ-MELT-09b-rareice | Rare Ice's own block (RareIceBlock) roofed beside a sea lantern: kept with vanillaLightMelting false; melts after a toml edit to true (config refresh)
+> zq blocks rare
+waitlog \[zq\] blocks matching rare: \d+ 30
+look block ids

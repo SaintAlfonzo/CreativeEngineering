@@ -1,8 +1,6 @@
 package com.SaintAlfonzo.creativedelight.hearth.salt;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -63,24 +61,24 @@ public class LickableSaltBlock extends Block {
             return;
         }
         int layers = above.getValue(SnowLayerBlock.LAYERS);
+        // Order matters: an empty layer goes first so nothing pops off a partial stage; leftover layers are set after
+        // the block is full, so they survive and this does not run twice. SaltLick.refill is the one refill (B7).
         Block stage = state.getBlock();
-        while (layers > 0 && SaltLick.restored(stage) != null) {
+        int used = 0;
+        while (used < layers && SaltLick.restored(stage) != null) {
             stage = SaltLick.restored(stage);
-            layers--;
+            used++;
         }
-        if (stage == state.getBlock()) {
+        if (used == 0) {
             return;
         }
-        // Order matters: an empty layer goes first so nothing pops off a partial stage; leftover layers are set after
-        // the block is full, so they survive and this does not run twice.
-        if (layers == 0) {
+        if (used == layers) {
             level.setBlockAndUpdate(fromPos, Blocks.AIR.defaultBlockState());
-            level.setBlockAndUpdate(pos, stage.defaultBlockState());
+            SaltLick.refill(level, pos, state, used);
         } else {
-            level.setBlockAndUpdate(pos, stage.defaultBlockState());
-            level.setBlockAndUpdate(fromPos, above.setValue(SnowLayerBlock.LAYERS, layers));
+            SaltLick.refill(level, pos, state, used);
+            level.setBlockAndUpdate(fromPos, above.setValue(SnowLayerBlock.LAYERS, layers - used));
         }
-        level.playSound(null, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.4F);
     }
 
     @Override

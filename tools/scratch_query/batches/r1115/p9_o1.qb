@@ -1,0 +1,67 @@
+# r1115 phase 9, boot O1: the 1.2.02 jars (tools/scratch_query/nsm_fixture.sh) on a copy of the r1111 NSM fixture world
+# (perf/runs/r1111/nsm/fixture_world, level nsmfix). Adds the old-save content for SQ-RDB-05 (Rustic plates, crops,
+# crates, potted wild coffee), SQ-OB-11 (creativeengineering:wooden_bucket and wooden_water_bucket in a chest and in
+# a bot's inventory) and SQ-RDX-13 (rusticdelight:pancake and fried_dough, if 1.2.02 still registers them), at x 200 z 200,
+# away from the fixture's own content. Probe zz_zp9_probe.js. Then save and stop; O2 boots a copy on the mods/ jars.
+pace 1
+
+## O1-RUSTIC | place the Rustic blocks and record their states
+> forceload add 192 192 223 223
+sleep 3
+> fill 196 -61 196 222 -61 210 minecraft:grass_block
+> fill 196 -60 196 222 -55 210 minecraft:air
+> setblock 200 -60 200 rusticdelight:pancakes[facing=east,servings=4]
+> setblock 202 -60 200 rusticdelight:honey_pancakes[facing=east,servings=7]
+> setblock 204 -61 200 minecraft:farmland
+> setblock 204 -60 200 rusticdelight:cotton[age=3]
+> setblock 206 -61 200 minecraft:farmland
+> setblock 206 -60 200 rusticdelight:coffee[age=4]
+> setblock 208 -61 200 minecraft:farmland
+> setblock 208 -60 200 rusticdelight:bell_peppers[age=6]
+> setblock 210 -60 200 rusticdelight:bell_pepper_red_crate
+> setblock 212 -60 200 rusticdelight:cotton_boll_crate
+> setblock 214 -60 200 rusticdelight:potted_wild_coffee
+> setblock 216 -60 200 rusticdelight:cherry_blossom_cheesecake[bites=1,facing=north]
+> setblock 218 -60 200 rusticdelight:wild_coffee
+> setblock 220 -60 200 rusticdelight:glowing_calamari_crate
+sleep 1
+> zp9 bstate 200 -60 200
+> zp9 bstate 202 -60 200
+> zp9 bstate 204 -60 200
+> zp9 bstate 206 -60 200
+> zp9 bstate 208 -60 200
+> zp9 bstate 210 -60 200
+> zp9 bstate 212 -60 200
+> zp9 bstate 214 -60 200
+> zp9 bstate 216 -60 200
+> zp9 bstate 218 -60 200
+> zp9 bstate 220 -60 200
+sleep 1
+count \[zp9\] bstate .* Block\{rusticdelight: >= 10
+
+## O1-ITEMS | old ids in a chest and a bot's inventory
+> zq items rusticdelight:pancake
+waitlog \[zq\] done 20
+> zq items rusticdelight:fried_dough
+waitlog \[zq\] done 20
+> zq items creativeengineering:wooden
+waitlog \[zq\] done 20
+> setblock 200 -60 205 minecraft:chest
+> item replace block 200 -60 205 container.0 with creativeengineering:wooden_bucket 2
+> item replace block 200 -60 205 container.1 with creativeengineering:wooden_water_bucket 1
+> item replace block 200 -60 205 container.2 with rusticdelight:pancake 5
+> item replace block 200 -60 205 container.3 with rusticdelight:fried_dough 3
+> item replace block 200 -60 205 container.4 with rusticdelight:cotton_boll 16
+> item replace block 200 -60 205 container.5 with rusticdelight:coffee_beans 8
+> item replace block 200 -60 205 container.6 with rusticdelight:syrup 2
+> data get block 200 -60 205 Items
+> pbot spawn ob11 205 -60 207 minecraft:overworld survival
+sleep 3
+> clear ob11
+> give ob11 creativeengineering:wooden_bucket 1
+> give ob11 creativeengineering:wooden_water_bucket 1
+> data get entity ob11 Inventory
+sleep 2
+> save-all flush
+sleep 5
+look chest and bot hold the old wooden bucket ids; note whether rusticdelight:pancake / fried_dough exist in 1.2.02

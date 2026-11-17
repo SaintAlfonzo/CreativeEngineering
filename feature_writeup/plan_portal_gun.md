@@ -91,6 +91,8 @@ directly and never sees the exclusion.
 **Fix (decided, D3): the lift runs only when the exit portal is on the floor** (it faces up). There it is what lifts
 the player clear of the floor block the portal sits on. Wall and ceiling exits get no lift.
 
+**Amendment 2026-11-15 (SQ-PG-01b):** a fall from a floor portal into a wall portal left the player at y -61.0 inside the floor in front of the wall. `IPExitLiftMixin` now also lifts when a block collision overlapping the box lies in front of the exit plane (centre on the content-direction side of the destination position); collisions behind the plane still do not lift. Built, not installed; test CQ-PS15-01 ([plan_post_scratch_1115.md](plan_post_scratch_1115.md) A1).
+
 - **Rewritten 2026-11-14 ([plan_bugfix_1114.md](plan_bugfix_1114.md) 4.1; built, untested).** The first fix (a common
   mixin on Portal Gun's `CustomPortal` that set the saved `adjustPositionAfterTeleport` flag) failed in r1113: it
   rotated the already rotated content direction a second time, and it missed portals linked in `PortalGunItem`.
@@ -182,6 +184,8 @@ its default. The command keeps working and edits the same data.
      rule.
 4. Changelog bullets when built, under a `## Portal Gun` family: names, the two fixes (past tense), dyeing (left of the
    gun sets the blue portal, right the orange; placed portals change when shot again).
+
+Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8): SQ-PG-01a PASS (server half: no exit-lift class on the server, fresh portal pairs keep portalgun's own flag; old-save half not run). Client (phase 10): SQ-PG-01b PASS on the log criterion with a finding: floor-to-wall leaves the player at y -61 inside the ground, unable to move (2 of 2; owner TODO). SQ-PG-01c FAIL: lighting a Flint and Terrasteel Nether portal kills the client natively within 3 s (3 of 3, Immersive Portals stencil renderer; URGENT TODO). CQ-PG-03 LOOK for the owner.
 
 Scratch run r1114 (2026-11-14, [scratch_run_2026-11-14.md](testing/scratch_run_2026-11-14.md) 8): SQ-PG-01a, -01b FAIL: the exit-lift flag follows the portal colour, not the geometry, and recomputes wrong after a restart (Creative Compat `PortalGunExitLift` rotates an already rotated direction; `PortalGunExitLiftMixin` misses portals linked in PortalGunItem). TODO `gameplay/tnt-and-portal #15` back to Bug; fix waits for the owner.
 

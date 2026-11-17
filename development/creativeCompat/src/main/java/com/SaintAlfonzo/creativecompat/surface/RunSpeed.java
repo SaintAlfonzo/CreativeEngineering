@@ -2,7 +2,6 @@ package com.SaintAlfonzo.creativecompat.surface;
 
 import java.util.EnumMap;
 import java.util.EnumSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -35,7 +34,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  * The walk speed a block really gives, for display (the WTHIT line, {@link WthitRunSpeed}). It uses
  * the same rules as movement: BlockRunner's own Block-to-speed map, then {@link StickyFacing} and
  * {@link CamoSpeed}; a block's own vanilla speed factor where BlockRunner has none (soul sand); and
- * {@link StuckInBlock} for blocks that slow you while you're inside them (cobwebs, leaf piles).
+ * {@link StuckInBlock} for untiered blocks that slow you while you're inside them (powder snow, bamboo spikes).
+ * Pass-through blocks (cobwebs, crops, leaf piles) get their own lines from {@link PassThroughFormat} instead.
  *
  * <p>Which block counts follows BlockRunner, which reads the block 0.2 below your feet: a block whose
  * collision top is under 0.2 (carpet, 1-2 snow layers) shows the block beneath it, and a block with no
@@ -131,6 +131,28 @@ public final class RunSpeed {
         return new Info(surface.factor() * StuckInBlock.walkRatio(stuck, friction), Source.IN_BLOCK, null);
     }
 
+    /** The block a pass-through block sits on and its surface speed ({@link #soil}). */
+    public record Soil(BlockState state, Info info) {}
+
+    /**
+     * The soil under a pass-through block at {@code pos} (the WTHIT Walk Through line, plan_passthrough.md 6): the
+     * first standable block below, looking past up to two more pass-through blocks (the lower half of a tall crop),
+     * or null when there is none (a vine hanging over air).
+     */
+    @Nullable
+    public static Soil soil(Level level, BlockPos pos, @Nullable Player player) {
+        BlockPos.MutableBlockPos p = pos.mutable();
+        for (int i = 0; i < 3; i++) {
+            p.move(Direction.DOWN);
+            BlockState below = level.getBlockState(p);
+            if (standTop(level, p, below, player) >= REGISTER_HEIGHT) {
+                return new Soil(below, surface(level, p.immutable(), below, player));
+            }
+            if (PassThrough.tierOf(below) == null) return null;
+        }
+        return null;
+    }
+
     /** What standing on top of this (standable) block gives. */
     private static Info surface(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
         BlockState camo = CamoSpeed.speedCamo(level, pos, state);
@@ -206,13 +228,7 @@ public final class RunSpeed {
 
     /** {@code 1.50×} or {@code +50%}; green when faster than normal, red when slower. */
     public static Component format(double factor, SpeedFormat format) {
-        String text;
-        if (format == SpeedFormat.PERCENT) {
-            long percent = Math.round((factor - 1.0) * 100.0);
-            text = (percent > 0 ? "+" : "") + percent + "%";
-        } else {
-            text = String.format(Locale.ROOT, "%.2f×", factor);
-        }
+        String text = PassThroughFormat.number(factor, format == SpeedFormat.PERCENT);
         ChatFormatting color = isNormal(factor) ? ChatFormatting.WHITE
                 : factor > 1.0 ? ChatFormatting.GREEN : ChatFormatting.RED;
         return Component.literal(text).withStyle(color);

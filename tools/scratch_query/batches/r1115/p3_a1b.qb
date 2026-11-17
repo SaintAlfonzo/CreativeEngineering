@@ -1,0 +1,72 @@
+# r1115 phase 3 (runner-3), boot A1 continued (same server as p3_a1.qb): SQ-AZW-01 rerun, SQ-MELT-P1, SQ-DCM-02 rerun
+# (last: /reload). Bot m3 from p3_a1.qb stays online; m3p is added on top of the perf box.
+pace 2
+
+## SQ-AZW-01 | rerun: azalea trees grow quark:azalea_log; logs stay azalea; 4 woods merged into oak; no item_dict Missing (sunflower_stem)
+shell grep -h "\[removedWoods\]" logs/kubejs/startup.log | cut -c1-200
+shell grep -qE "\[removedWoods\] 4 woods merged into oak" logs/kubejs/startup.log
+shell grep -h "\[item_dict\] Missing" logs/kubejs/startup.log | head -5; test "$(grep -c "\[item_dict\] Missing" logs/kubejs/startup.log)" = 0
+shell test "$(grep -c "sunflower_stem" logs/kubejs/startup.log)" = 0 || grep -h sunflower_stem logs/kubejs/startup.log | head -3
+> place feature minecraft:azalea_tree 2105 -60 2130
+> place feature minecraft:azalea_tree 2115 -60 2130
+> place feature minecraft:azalea_tree 2125 -60 2130
+> setblock 2135 -61 2130 minecraft:moss_block
+> setblock 2135 -60 2130 minecraft:azalea
+> clear m3
+> pbot hold m3 minecraft:bone_meal 32
+repeat 8
+> pbot use m3 2135 -60 2130 up
+end
+> zq count 2100 -61 2125 2140 -40 2135 quark:azalea_log
+waitlog \[zq\] count quark:azalea_log: \d+ 60
+> zq count 2100 -61 2125 2140 -40 2135 minecraft:oak_log
+waitlog \[zq\] count minecraft:oak_log: \d+ 60
+expect \[zq\] count quark:azalea_log: [1-9]\d*
+expect \[zq\] count minecraft:oak_log: 0\b
+> clear m3
+> give m3 quark:azalea_log 4
+sleep 2
+> zp inv m3
+waitlog \[zp\] done 20
+expect quark:azalea_log
+look trunks quark:azalea_log, no oak_log; inventory keeps quark:azalea_log x4
+
+## SQ-MELT-P1-glacier | perf: 64 x 64 x 16 packed ice box (ice, snow layer on top, dark), randomTickSpeed 3, 10 min
+> gamerule randomTickSpeed 3
+> forceload add 2288 1984 2367 2079
+sleep 5
+> fill 2300 -61 2000 2363 -48 2031 minecraft:packed_ice
+> fill 2300 -61 2032 2363 -48 2063 minecraft:packed_ice
+> fill 2300 -47 2000 2363 -47 2063 minecraft:ice
+> fill 2300 -46 2000 2363 -46 2063 minecraft:snow
+> pbot spawn m3p 2332 -45 2032 minecraft:overworld survival
+sleep 60
+repeat 10
+> forge tps
+sleep 58
+end
+> zq count 2300 -61 2000 2363 -46 2063 minecraft:water
+waitlog \[zq\] count minecraft:water: \d+ 60
+look Overworld mean tick time per sample (forge tps), against the control row; water count in the box (melts: should be 0, no source)
+
+## SQ-MELT-P1-control | perf: the same box as stone, 10 min
+> fill 2300 -61 2000 2363 -54 2063 minecraft:stone
+> fill 2300 -53 2000 2363 -46 2063 minecraft:stone
+sleep 60
+repeat 10
+> forge tps
+sleep 58
+end
+look Overworld mean tick time against the glacier row (difference under 0.5 ms); JFR share of Melting.onRandomTick judged from the boot recording (window in timeline.tsv)
+
+## SQ-DCM-02 | rerun after /reload: no new KubeJS errors, recipe count vs the pack dump, [absent mods] names none of the 5 G5 mods
+shell grep -h "\[absent mods\]" logs/kubejs/server.log | sed -E 's/.*absent mods\] //' | sort | uniq | cut -c1-160 | head -40
+> reload
+sleep 40
+shell grep -cE "\[ERROR\]" logs/kubejs/server.log; grep -hE "\[ERROR\]" logs/kubejs/server.log | cut -c1-200 | head -8; true
+shell grep -h "\[absent mods\]" logs/kubejs/server.log | sed -E 's/.*absent mods\] //' | sort | uniq | cut -c1-160 | head -40
+shell ! grep -h "\[absent mods\]" logs/kubejs/server.log | grep -E "towns_and_towers|hopo|unwrecked_ships|yuushya|cozys-improved-cats"
+> dumprecipes
+sleep 60
+shell wc -l < kubejs/exported/recipes/all.csv; wc -l < $INST/kubejs/exported/recipes/all.csv; ls -l --time-style=+%m-%d_%H:%M $INST/kubejs/exported/recipes/all.csv
+look 0 KubeJS errors after /reload; recipe count equal to the pack dump (or a listed small difference); [absent mods] lines name only mods not in srv/mods

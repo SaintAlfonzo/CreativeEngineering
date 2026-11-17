@@ -1,0 +1,14 @@
+# r1115 phase 2, same boot: where the resistors went in SQ-PWG-82 / -82r (arm held item, item entities near both lines)
+pace 1
+
+## SQ-PWG-82w | arm held item and loose part entities of -82 (Z 1906) and -82r (Z 1926)
+> data get block 1146 -60 1908 HeldItem
+> data get block 1146 -60 1928 HeldItem
+> zpwg3 count 1147 -60 1906 12 powergrid:resistor
+> zpwg3 count 1147 -60 1926 12 powergrid:resistor
+> zpwg3 count 1147 -60 1906 12 powergrid:wire_connector
+> zpwg3 count 1147 -60 1926 12 powergrid:wire_connector
+> data get block 1152 -60 1906
+> data get block 1146 -60 1926 Items
+sleep 1
+look record

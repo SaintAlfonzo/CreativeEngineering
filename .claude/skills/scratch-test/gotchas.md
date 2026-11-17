@@ -81,7 +81,7 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 
 ## World, ticking, entities
 
-- Forceloaded chunks with no player get no random ticks. To force a leaf decay check, `fill` stone next to the leaves
+- Forceloaded chunks with no player get no random ticks (`/cdevtest randomtick BOX N` gives them without one). To force a leaf decay check, `fill` stone next to the leaves
   then air. After a restart wait about 30 s after `forceload add` before scheduling block ticks.
 - An entity summoned right after `forceload add` in an unloaded dimension is not found by the next command: wait a few
   seconds.
@@ -99,15 +99,24 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 
 ## Fake players and clients
 
-- perfBot (`/pbot spawn NAME X Y Z`, `hold`, `use`) gives rows that "need a player"; bots are invulnerable, so damage
-  tests go on mobs. Details: memory `perf-suite-bot-players`.
+- perfBot (`/pbot spawn NAME X Y Z`, `hold`, `use`) gives rows that "need a player". Bots are invulnerable unless
+  `pbot vulnerable NAME on` (kept across a respawn). Since 2026-11-15 the jar has test verbs (attack, interact, punch,
+  break, useitem / eat with a real ticked use, hunger, sneak, look / lookat, moveto with physics, inv get / set /
+  select, pickup on / off): prefer them over a KubeJS player probe (creative_devtools.md). Details: memory
+  `perf-suite-bot-players`.
+- `pbot eat` needs food below 20 (`pbot hunger NAME 10`) unless the food is always edible; its result line comes when
+  the use finishes (`verb=pbot.useitem ... end=finish`, 32 ticks for bread), not with the command reply.
+- `/cdevtest` without `as=NAME` acts as a Forge fake player of that dimension: no ticking (no use duration), inventory
+  cleared every call. Use a bot (`as=NAME`) when the row needs a real player's state.
 - Forge FakePlayer from KubeJS: `FakePlayerFactory.get` + `p.gameMode.useItemOn(...)` / `destroyBlock` / `useItem`;
   menus open (check `containerMenu`). FakePlayer does not tick, so `startUsingItem` never completes: eat with
   `finishUsingItem` + `ForgeEventFactory.onItemUseFinish` (`tools/kitchen_probe/serve_items_probe.js`).
 - Loading Protection (`protectionDuration = 150` in the pack) cancels every `LivingAttackEvent` whose attacker is a
   player in the first 150 s after that player logs in, bots included: a row that spawns a bot and hits with it does
   nothing ("hit result false"). Set `qrun.py toml OUT/srv/config/loadingprotection-common.toml <section>
-  protectionDuration 1` before the boot, or hit with a non-player source (r1111 SQ-HH-424, -425, -453).
+  protectionDuration 1` before the boot, or hit with a non-player source (r1111 SQ-HH-424, -425, -453). Since 2026-11-15
+  perfBot bots are exempt one tick after `pbot spawn` (login spot set one block above the target, so the spawn
+  teleport counts as a move; SQ-TX-12 checks it); real players are not.
 - Rhino picks `Entity.distanceToSqr(Vec3)` (`m_20238_`) for a 3-number call and throws: compute the distance from
   `getX/getY/getZ` (r1111 `hh_crow_probe.js`). A goal's `String(goal)` is `Class@hash`; use
   `getClass().getSimpleName()`. A probe that samples running goals misses a flee that ends during a `sleep` before
@@ -123,7 +132,7 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
   `getChunkSource().getGenerator().getBiomeSource().getNoiseBiome(qx, 16, qz, randomState().sampler())`.
 - Shared script scope: unique local names; find a level by iterating `server.getAllLevels()` (getLevel overloads are
   ambiguous); `level.dimension` is a property; a dimension string argument stops at `:`.
-- Ready probes: `/zq` (recipes, tags, foods: `zq_probe.js`, `zq_batch.sh`), `tools/creative_labels_test/server_probe.js`,
+- Ready probes: `/cdevtest` first (Java, cannot crash the server or deadlock; creative_devtools.md), then `/zq` (recipes, tags, foods: `zq_probe.js`, `zq_batch.sh`), `tools/creative_labels_test/server_probe.js`,
   `tools/leaf_path_probe.js` (place a ConfiguredFeature). The /dumpall recipe dump has only id + type: use `/zq`.
 - Tick stalls: a srv-only tick timer script + `jstack <scratch pid>` shows what the server thread waits on.
 - `level.dimension` is a ResourceLocation property in KubeJS: `l.dimension.location()` throws. Outside a JS try in a
@@ -464,3 +473,98 @@ Sorted by topic. Add new ones under their topic with the date (skill step B5.4).
 - Moving a row to new coordinates with a regex shift: also shift the coordinates inside the expect regexes
   (`basin at 114[26] -60 1890` kept the old X and failed a passing row).
 - `zpwg ns` printed only the first 20 ids per registry; `zpwg ns <ns> all` prints every id (pwg_probe.js).
+
+## Found in r1115 (SQ-MELT, 2026-11-15)
+
+- Serene Seasons melts open-sky ice and snow at any randomTickSpeed (seasonal surface melt), which confounds every melt
+  row: no-source controls melt too. Put a glass block right above every ice or snow target (Serene Seasons skips
+  covered blocks) and keep one roofed no-source control per batch. Generators: `tools/scratch_query/melt_gen_p3r.py`.
+- Do not wrap `qrun.py run` in `timeout 590`: it kills the batch mid-row. Run qrun detached and wait on its pid with
+  capped waits.
+- Intermittent boot failure "Failed to load datapacks" with an NPE `frame is null` in Rhino
+  `Interpreter.getSourcePositionFromStack` from KubeJS `TagLoaderKJS.customTags` console.info on a worker thread: a
+  parallel tag-load race, not our jars. The JVM sits idle; stop it and reboot (r1115 phase 4, clean on reboot).
+- scratch_server.sh (fixed r1115): a `stop` sent to a hung boot could stay in the fifo and stop the next boot 2 s after
+  Done; boot now kills the old feeder and makes a fresh fifo, and stop's kill line no longer aborts under `set -e`.
+- Forceload boxes: an unaligned 256-block box spans 17 chunks per axis and is refused ("Too many chunks 289"); use
+  240-block boxes.
+- Live toml edits are not picked up on scratch servers: the Forge config watcher thread is parked in ModernFix's
+  NightConfigWatchThrottler (same family as SQ-WO-34). Restart to apply config values. Creative Compat's toml: since
+  2026-11-15 `/cdevreload compat` (server, op 3) and `/cdevreloadclient compat` (client) re-read it at once (the watcher
+  also misses saves by rename, `sed -i`: plan_post_scratch_1115b.md E1).
+- Bare tilled end stone (Ender Crop's after the swap) turns back into end stone on its first random tick.
+- A bare `setblock rare-ice:rare_ice` becomes plain ice; it needs an item in its block entity.
+- `/syt` with a tool string carrying NBT (`id{...}`) throws "An unexpected error occurred": use `<id>@fortune=N`.
+- Botany Pots 9.0.44: right-clicking a pot opens its GUI (nothing inserted); `getRequiredGrowthTime` is on
+  `be.getInventory()`. Use `/syt potset` and `/syt pot`.
+- A server stuck after "Failed to load datapacks" or "Failed to start the minecraft server" never reads the fifo, so
+  `scratch_server.sh stop` hangs: kill your own pid (check its cwd). `tools/scratch_query/wait_boot.sh` now reports
+  MISSING / DATAPACK / FAILED instead of waiting out its cap.
+- perfBot bots are real ticking ServerPlayers: they pick up XP orbs, Mending repairs on them, and
+  `tryToStartFallFlying` makes them glide (SQ-QN runs on a bot via `zqn_probe.js`).
+- KubeJS's class filter blocks java.nio.file: write files with JsonIO.write.
+- Rhino: `BlockState.is(TagKey)` / `ItemStack.is(TagKey)` are ambiguous and the explicit-signature form is not remapped;
+  use `ForgeRegistries.X.tags().getTag(tag).contains(...)`. `ItemStack.hasTag()` is not remapped either (read `.nbt`).
+  `new SimpleContainer(2)` resolves to the varargs constructor (size 1).
+- Command output pads "Gave 1    [", and attribute lines read "for entity NAME".
+- qrun `waitlog` matches earlier lines in the same row: repeated counts in one row need distinct patterns.
+- Swap remaps log only a summary line `[swaps] minecraft:item: N id(s) remapped`, not per-id lines.
+- Client (r1115 phase 10): xdotool `key space` is too short for the elytra jump, hold 0.3 s; a command typed right
+  after closing a screen or during a join hitch can lose its opening `t` (letters become hotkeys or chat). Gun portals
+  despawn on reload. Plain ignition fails by design: light frames with `creativemagic:flint_and_terrasteel`. A walkable
+  wall portal from `zc3 shoot`: 2.5 blocks from the wall, pitch 20. Rows needing your own server plus a client:
+  `eval_client.py launch ... ownsrv=PID`. One-off client steps: `tools/scratch_query/cli_do.py`.
+- PGJAR before r1115 needed an absolute path; a relative one silently booted without Power Grid (a client with Power
+  Grid then crashes on join). prep_srv.sh now resolves it and prints "PGJAR NOT FOUND".
+
+## Found in r1115 phase 11 (SQ-PTH, 2026-11-15)
+
+- `summon ... {ActiveEffects:[...]}` is ignored in this pack: a slowness NBT does not slow the mob. For standing mobs
+  set base `generic.movement_speed` to 0; push them with a probe motion command when a row needs them moving.
+- Zombies do not chase perfBot bots. perfBot bots are invulnerable: damage rows need a mob (100 hp zombie) instead.
+- Rhino finds no `setYRot` on perfBot's BotPlayer: turn bots with `tp <bot> ~ ~ ~ <yaw> <pitch>`.
+- `/reload` takes about 50 s here; console commands queued meanwhile all run in the same tick after it.
+- `datapack enable "file/x"` answers "Unknown data pack" until a /reload has discovered the pack; a scratch
+  `srv/kubejs/data` file is simpler.
+- Empty minecarts on rails lose 4 % speed a tick: start them close to the target.
+- Dropped items still despawn at 5 minutes while held in a web; after a restart, lanes outside the setup forceload do
+  not tick (forceload again after every boot).
+- The perf suite measures `mods/` jars only; pass `PERF_JARS="a.jar b.jar"` (tools/perf/suite/server.py) for build
+  jars, and copy the jar under test aside first (another session may rebuild build/libs mid-run).
+- Client speeds: read them from client position steps; server-side motion values for a real player are not the client's.
+
+## Found in r1116 phase 1 (SQ-TX, SQ-TXQ, 2026-11-16)
+
+- Group A is peaceful: a bot's food refills (+1 every 10 ticks), so `pbot hunger A 10` is back at 20 before an eat
+  at pace 2 (`result=FAIL`). Set `difficulty easy` for the row and back to `peaceful` after.
+- A falling block placed with `setblock` schedules its own fall 2 ticks later: a `/cdevtest blocktick` sent at pace 2
+  sees air. Send both under `pace 0`. Same for a 40-tick `/cdevtest watch` (2 s): the change must go in under
+  `pace 0` with a short `sleep`.
+- `pbot attack ... weak` reads the bot's real charge: 2 s of pace recharges it to `strength=1`. Under `pace 0` the
+  weak hit lands in the target's hurt cooldown (no damage), which is vanilla.
+- `/cdevtest kill` reports `xp=` from the orbs: 1.19.2 drops them inside `die()`, so xp is above 0 for animals.
+- No server boots without Creative Compat: 8 own jars, Devtools included, declare it mandatory (FML refuses at once).
+
+## Found in r1116 phase 2 (SQ-PS15B, 2026-11-16)
+
+- `zpth watchnew` tags every entity of the type in its box that lacks the new tag, so an earlier projectile still
+  hanging there joins the new watch and its `count`: use a fresh box or kill the old one first.
+- Items and orbs held in webs keep ageing: a restart half must read them within 5 minutes of their summon (r1115 and
+  r1116 both lost a first try). Summon them in the boot before the restart, right before `save-all`.
+- A per-5-tick `zpth watch` hides climb and sink rates in webs; use every 1 tick for rate rows.
+- `pgrep -f PATTERN` inside `timeout ... bash -c` matches its own command line (never ends); wait on qrun's output file
+  instead (`until grep -q "LASTROW \.\.\. [A-Z]" OUT`).
+- Toml switches for live-reload rows: a rename save (`sed -i`, or copy + `qrun.py toml` + `mv` inside `config/` for a
+  key repeated per table) then `/cdevreload compat` applies at once; an in-place write (even one same-length
+  `os.write`) was not picked up in 30 s on these servers.
+
+## Found in r1116 phase 3 (SQ-PS15, 2026-11-16)
+
+- Rare Ice (`config/rare-ice.properties` `allowInsertingItemsToIce=true`) takes a right click on `minecraft:ice` with
+  any item and turns the ice into `rare-ice:rare_ice` holding it. A row that clicks plain ice tests Rare Ice, not the
+  item; set `allowInsertingItemsToIce=false` in the srv copy (read at common setup: restart) to test the item's own code.
+- A salt or snow layer resting ON ice pops as an item the moment the ice melts (support loss in the same `setBlock`),
+  so a melt listener that removes the source layer never sees it. Put the source beside the target to test such rules.
+- Melt targets in 1-deep holes (y -61 on the flat world) keep the melt water from flowing; `randomtick` only the target
+  cell (`nofluids`) so neighbouring salt does not get its own dissolving tick.
+- Removing a mod jar for a boot: use a fresh `level-name` when the world already holds that mod's blocks.

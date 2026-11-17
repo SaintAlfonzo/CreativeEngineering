@@ -741,7 +741,7 @@ tooling are in [extra_delight_textures.md](extra_delight_textures.md); output la
    `loot_table` -> `loot_tables`, `tags/item` -> `tags/items`; result `id` -> `item`; `neoforge:compound` ->
    array ingredients; `c:` -> `forge:`; NeoForge biome modifiers -> Forge; `Material` on blocks; drop advancements.
    Drop every Drop id of 2.1 with its assets, recipes, loot, tags, lang. `mod_sides.md` row (both sides).
-2. **Dumps and generators** (memory `dumpall-refresh-workflow`): install, `/dumpall`, `/cdevgen` (names, food catalog, JEI
+2. **Dumps and generators** (note [dumpall-refresh-workflow](agent_notes/dumpall-refresh-workflow.md)): install, `/dumpall`, `/cdevgen` (names, food catalog, JEI
    coverage, stack sizes, physics, WTHIT icons, crop table, paintings).
 3. **Ids and tags:** `item_dict.js` (and block / fluid dicts) keys for every kept id; tags through `global.tags` in a CD
    `extradelight/tags.js`: crops and seeds (`#forge:crops/chili|ginger|soybean|mallow_root`, `#forge:seeds/*`), fruit
@@ -779,7 +779,7 @@ tooling are in [extra_delight_textures.md](extra_delight_textures.md); output la
     modifiers removed.
 15. **Trees and woods:** lime, grapefruit, hazelnut, cinnamon trees through the pack's tree worldgen (biome fits, the
     Fruits Delight tree rules), fruit and cinnamon wood sets (Every Compat, `#minecraft:planks`, boats none upstream),
-    leaf decay range (memory `leaf-decay-range`).
+    leaf decay range (note [leaf-decay-range](agent_notes/leaf-decay-range.md)).
 16. **Names and lang** ([names.md](names.md)): clashes "Whisk" (Create), "Oven", "Keg", "Jar", "Sink", "Half Cabinet",
     "Muffin Tin", "Salt", "Cheese", "Toast"; spell-outs ("Smore" is dropped; "SOS" keep the upstream name or spell it
     out: names.md rule); en_us only.
@@ -794,7 +794,7 @@ tooling are in [extra_delight_textures.md](extra_delight_textures.md); output la
 22. **Trades and chests:** villager / wanderer code dropped (D14); kept crops into the trader catalog if wanted
     ([wandering_trader.md](wandering_trader.md)).
 23. **Paintings and banner:** 4 paintings into the paintings catalog (`/cdevgen` paintings), citrus banner pattern
-    through the banner compat fix (memory `banner-pattern-compat-fix`).
+    through the banner compat fix (note [banner-pattern-compat-fix](agent_notes/banner-pattern-compat-fix.md)).
 24. **Patchouli cookbook:** dropped (it documents ED's own stations and recipes, which the pack replaces).
 25. **Config:** `configs_edited/` copy of the port's config (mint spread off since mint is dropped; all-year spooky off).
 26. **Release:** `mod_sides.md` row, changelog bullets per family (only when built), TODO row, plan row.

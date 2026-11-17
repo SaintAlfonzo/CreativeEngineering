@@ -4,34 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
 
 import javax.annotation.Nullable;
 
-import com.mojang.logging.LogUtils;
-
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.PowderSnowBlock;
-import net.minecraft.world.level.block.SweetBerryBushBlock;
-import net.minecraft.world.level.block.WebBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
-import net.minecraft.world.level.block.state.properties.Property;
 
 /**
- * Blocks that slow you while you're inside them: their {@code entityInside} calls
- * {@code Entity#makeStuckInBlock} (cobwebs, berry bushes, leaf piles...). That multiplies the move and
- * also zeroes your momentum every tick, so the speed you really get is
- * {@code multiplier * (1 - 0.91 * friction)} of normal ({@link #walkRatio}), about 0.45x the
- * multiplier on a normal floor.
+ * Blocks that slow you while you're inside them and are in no pass-through tier ({@link PassThrough}, which shows its
+ * own lines): their {@code entityInside} calls {@code Entity#makeStuckInBlock}. That multiplies the move and also
+ * zeroes your momentum every tick, so the speed you really get is {@code multiplier * (1 - 0.91 * friction)} of normal
+ * ({@link #walkRatio}), about 0.45x the multiplier on a normal floor.
  *
- * <p>The table is keyed by block class (superclasses count, so a modded {@code WebBlock} subclass is a
- * cobweb too). Multipliers and conditions were read from each class's {@code entityInside} bytecode
- * (2026-09-27, the pack's current jars); only the horizontal part is kept. Display only: nothing here
- * changes movement.
+ * <p>Since pass-through phase 5 (2026-11-15) only untiered blocks are listed: cobwebs, barbed wire, berry bushes,
+ * propelplant, leaf piles and bamboo leaves moved to the tiers. Kept: powder snow and bamboo spikes (out of scope), and
+ * the plants left outside the system (plan_passthrough.md seventh pass; phase 0 brief 1.2): Floral Enchantment vine
+ * bushes, Farmer's Respite wither roots, Neapolitan beanstalk thorns, Upgrade Aquatic pickerelweed. The Vinery taiga
+ * grape bush entry was stale (no {@code entityInside} in the installed port) and is gone. Keyed by block class
+ * (superclasses count). Multipliers were read from each class's {@code entityInside} bytecode; only the horizontal
+ * part is kept and per-entity conditions are not modelled. Display only: nothing here changes movement.
  */
 final class StuckInBlock {
 
@@ -48,24 +41,22 @@ final class StuckInBlock {
     private static final Map<String, Rule> RULES = new HashMap<>();
 
     static {
-        Rule cobweb = (s, p, on) -> 0.25;
-        RULES.put(WebBlock.class.getName(), cobweb);
-        RULES.put("net.geforcemods.securitycraft.blocks.reinforced.ReinforcedCobwebBlock", cobweb); // owner passes freely
-        RULES.put("xyz.apex.forge.fantasyfurniture.common.block.decorations.SpiderWebBlock", cobweb);
-        RULES.put("xyz.apex.forge.fantasyfurniture.common.block.decorations.SpiderWebMultiBlock", cobweb);
-        RULES.put("com.mrh0.createaddition.blocks.barbed_wire.BarbedWireBlock", cobweb);
-
-        Rule bush = (s, p, on) -> 0.8;
-        RULES.put(SweetBerryBushBlock.class.getName(), bush);
-        RULES.put("umpaz.nethersdelight.common.block.util.PropelplantBlock", bush);
-        RULES.put("net.satisfy.vinery.core.block.GrapeBushBlock$TaigaGrapeBush", bush);
-
         // only while you're in it; standing on top (leather boots) is the snow tier instead
         RULES.put(PowderSnowBlock.class.getName(), (s, p, on) -> on ? NONE : 0.9);
         RULES.put("net.mehvahdjukaar.supplementaries.common.block.blocks.BambooSpikesBlock",
                 (s, p, on) -> p != null && p.isCreative() ? NONE : 0.95);
-        RULES.put("com.ninni.twigs.block.BambooLeavesBlock", (s, p, on) -> layers(s) > 2 ? 0.75 : NONE);
-        RULES.put("com.ordana.immersive_weathering.blocks.LeafPileBlock", StuckInBlock::leafPile);
+        // untiered plants with their own makeStuckInBlock (phase 0 brief 1.2)
+        RULES.put("com.cozary.floralench.blocks.base.VineBushBlock", (s, p, on) -> 0.9);
+        RULES.put("umpaz.farmersrespite.common.block.WitherRootsBlock", (s, p, on) -> 0.8);
+        RULES.put("com.teamabnormals.neapolitan.common.block.BeanstalkThornsBlock", (s, p, on) -> 0.95);
+        RULES.put("com.teamabnormals.upgrade_aquatic.common.block.PickerelweedBlock", (s, p, on) -> 0.6);
+        RULES.put("com.teamabnormals.upgrade_aquatic.common.block.PickerelweedPlantBlock", (s, p, on) -> 0.75);
+        RULES.put("com.teamabnormals.upgrade_aquatic.common.block.PickerelweedDoublePlantBlock", (s, p, on) -> 0.75);
+        // other blocks that slow you from inside, display only (owner 2026-11-15)
+        RULES.put("com.sammy.minersdelight.content.block.sticky_basket.StickyBasketBlock", (s, p, on) -> 0.25);
+        RULES.put("com.teamabnormals.upgrade_aquatic.common.block.MulberryJamBlock", (s, p, on) -> 0.2);
+        RULES.put("com.teamabnormals.upgrade_aquatic.common.block.GuardianSpineBlock", (s, p, on) -> 0.25);
+        RULES.put("com.SaintAlfonzo.creativedelight.food.PowderedSugarBlock", (s, p, on) -> 0.9);
     }
 
     /** Block -> its rule (empty = none), resolved once per block. */
@@ -94,56 +85,5 @@ final class StuckInBlock {
             }
         }
         return Optional.empty();
-    }
-
-    private static int layers(BlockState state) {
-        for (Property<?> p : state.getProperties()) {
-            if (p instanceof IntegerProperty ip && "layers".equals(p.getName())) {
-                return state.getValue(ip);
-            }
-        }
-        return 0;
-    }
-
-    // Immersive Weathering LeafPileBlock: from LeafPileSlow (Creative Compat [leaf_piles] slowFromLayers) (IW: over 3, see
-    // Compat mixin LeafPileSlowMixin), COLLISIONS[layers - 1], unless its leaf_piles_slow config is off or you
-    // wear Depth Strider.
-    private static final float[] LEAF_PILE = {1.0f, 0.999f, 0.998f, 0.997f, 0.996f, 0.994f, 0.993f, 0.992f};
-
-    private static double leafPile(BlockState state, @Nullable Player player, boolean standingOnIt) {
-        int layers = layers(state);
-        if (layers < LeafPileSlow.fromLayers() || !LeafPileConfig.slow()) {
-            return NONE;
-        }
-        if (player != null && EnchantmentHelper.getEnchantmentLevel(Enchantments.DEPTH_STRIDER, player) > 0) {
-            return NONE;
-        }
-        return LEAF_PILE[Math.min(layers, LEAF_PILE.length) - 1];
-    }
-
-    /** IW's {@code CommonConfigs.LEAF_PILES_SLOW}, looked up once; true if it can't be read. */
-    private static final class LeafPileConfig {
-        @Nullable
-        static final Supplier<?> SUPPLIER = find();
-
-        static boolean slow() {
-            try {
-                return SUPPLIER == null || !Boolean.FALSE.equals(SUPPLIER.get());
-            } catch (RuntimeException e) {
-                return true;
-            }
-        }
-
-        @Nullable
-        private static Supplier<?> find() {
-            try {
-                Object value = Class.forName("com.ordana.immersive_weathering.configs.CommonConfigs")
-                        .getField("LEAF_PILES_SLOW").get(null);
-                return value instanceof Supplier<?> s ? s : null;
-            } catch (ReflectiveOperationException | LinkageError e) {
-                LogUtils.getLogger().debug("Immersive Weathering leaf_piles_slow not readable, assuming true", e);
-                return null;
-            }
-        }
     }
 }

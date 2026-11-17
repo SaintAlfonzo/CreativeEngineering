@@ -53,6 +53,8 @@ hit the solver's penalty range (offset 0.6) and note as unreachable; SQ-VH-05 re
 **Run r1111 (2026-11-12):** SQ-VH-01 to -05, -07 to -09, -12 PASS; -06 batch fault (bedrock at 0 and 127 confirmed, floor/ceiling needs a per-column probe); -10 RECORD (a real TerraBlender 2.0.1.166 jar wins over the nested stub and boots; Quark then registers its own Overworld region); -11 not run. Heap result 5.0 % (target 5). Verdicts `perf/runs/r1111/verdicts/bw.md`, `vh10.md`, `wc.md`.
 **Run r1112 (2026-11-12):** SQ-VH-06 PASS with an owner look: per-surface probe `zq_heapcol.js` inside the Heap: flesh is the top floor (61.7 %) and ceiling (65 %) block, porous flesh +4 %, netherrack 10 % / 16 %, Better Fortresses bricks the rest; bedrock at 0 and 127 ([scratch_run_2026-11-12.md](testing/scratch_run_2026-11-12.md) 8; TODO `largecontent/mod-additions #73` (8)).
 
+**Run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) 8):** SQ-VH-06 PASS (all-flesh interior: netherrack 0 of 142461 in Heap cells, 945 only in border cells; bedrock at 0 and 127), -06b PASS (cave air in the Heap, flesh in `nether_carver_replaceables`), -06c PASS with a finding: Heap features spill up to 12 blocks into a neighbouring warped forest (2212 flesh blocks; surface rule fine; owner TODO); -11 RECORD (`locate biome` answers on the mods/ jars; the 1.2.02 fixture never generated the Nether).
+
 | ID | Check | Row |
 |---|---|---|
 | VH-01 | Server boot: no mixin errors or bad `biomesoplenty` tags | SQ-VH-01 |
