@@ -7467,3 +7467,11 @@ memory note not written yet) and Creative Devtools with the capture driver in th
 | SQ-TXQ-03 | A | As SQ-TXQ-02 with `--relaunch 'bash tools/creative_labels_test/scratch_server.sh boot OUT'` | "relaunch 1: relaunched (pid N)" after `Done (`; the next row runs and PASSes; `RES/crash/relaunch_1.out` written | `qwatch.Watch.relaunch`, `--ready` |
 | CQ-TXP-01 | client | `prep_srv.sh OUT txp A`; `qrun.py pair OUT ~/.cache/ce_capture/game BATCH RES` with rows `srv> say s1`, `cli> say c1`, `srv:expect \[Server\] s1`, `expect <PerfEval> c1|\[PerfEval\] c1`, `cli:expect CMD say c1` | "server: Done", "client: JOINED", rows PASS, "stopped both", `game_jvms.sh` empty after | `qpair.Pair` boot / `wait_join` / `stop`; join text in `RES/client_launch.out` |
 | CQ-TXP-02 | client | `qrun.py matrix SPEC RES --plan`, then without `--plan`; SPEC: case M01 = Power Grid gate jar on the client only (`cli_jars`), server without it (no PGJAR), `"expect": "refuse"`; case M02 = Power Grid on both (`srv_env` PGJAR, `cli_jars`), `"expect": "join"` | M01 outcome REFUSED with the Forge refusal text in the evidence (not CRASH-CLIENT; the phase 10 crash was the reference bug), M02 JOINED; `RES/matrix.md` written; no JVM left | refusal regexes `CLI_REFUSAL` / `SRV_REFUSAL` in `qpair.py` (owner to confirm the real text); a stale `GAME/cdev_channel/pid` or `state.json` from an earlier launch can misread the outcome (open, see the plan) |
+
+## SQ-PROC Build stamps boot line, 2026-11-16 ([plan_process_overhaul.md](../plan_process_overhaul.md) P1.2; TODO `tooling/process #2`)
+
+Needs a Creative Common jar built after 2026-11-16 21:30 (BuildStamps); any scratch run with it covers the row.
+
+| ID | Group | Commands | Pass | If it fails |
+|---|---|---|---|---|
+| SQ-PROC-01 | A | Boot the scratch server; `grep "\[creativecommon\] builds:" logs/latest.log`; `python3 tools/jarstamp.py <srv>/mods` | one boot line listing every own jar with its stamp; each stamp equals the `jarstamp.py` stamp of the jar in `srv/mods`, and for jars installed from `mods/`, the last `jar_archive/installed.tsv` row of that jar | `creativecommon.util.BuildStamps` (ModList mod files, `findResource("META-INF","ce-build.json")`); no line at all: Common jar older than the stamp build |

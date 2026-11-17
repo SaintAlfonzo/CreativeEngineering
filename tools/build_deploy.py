@@ -526,6 +526,8 @@ def collect(pre, root=ROOT, unknown_side=None, config_mode='full', pack_version=
             pre.error('mods/ holds more than one jar for a mod id (FML loads only one; remove the others):\n'
                       + '\n'.join(f'    {m}: {", ".join(jars)}' for m, jars in sorted(dupes.items())))
 
+        check_stamps(pre, files)
+
     unclassified = []
     for tree in TREES:
         for rel in not_ignored(walk(tree, root)):
@@ -775,6 +777,53 @@ def changelog_path(version):
     return CHANGELOG_PREFIX + version + '.md'
 
 
+def jar_stamps(files):
+    """{jar: stamp} of every own (stamped) jar in mods/ and client_mods/ (plan_process_overhaul.md P1.2)."""
+    import jarstamp
+    out = {}
+    for cat in ('mods', 'client_mods'):
+        for jar, path in files.get(cat, {}).items():
+            st = jarstamp.stamp_of(path)
+            if st:
+                out[jar] = st
+    return out
+
+
+def check_stamps(pre, files):
+    """A mod id that reaches the server (mods/) and the clients (client_mods/) from two jars with different build stamps
+    is refused: both sides must run the same build (the 1.1.04 case). Dirty builds are a warning."""
+    import jarstamp
+    seen = {}
+    for cat in ('mods', 'client_mods'):
+        for jar, path in files.get(cat, {}).items():
+            own, _ = jarstamp.stamp_info(path)
+            if not own:
+                continue
+            if own.get('dirty'):
+                pre.warn(f'{cat}/{jar} is a dirty build ({own.get("stamp")}): commit and rebuild before a release')
+            seen.setdefault(own.get('mod_id') or jar, []).append((cat, jar, own.get('stamp')))
+    for mod_id, rows in sorted(seen.items()):
+        if len({r[2] for r in rows}) > 1:
+            pre.error(f'{mod_id}: server and client jars differ in build stamp: '
+                      + ', '.join(f'{c}/{j} {st}' for c, j, st in rows))
+
+
+def check_all_gate(pre, args):
+    """Release gate (plan_process_overhaul.md P1.1): tools/check_all.py --full; each FAIL is a preflight error."""
+    if args.dry_run and os.environ.get('CE_DEPLOY_SKIP_CHECKS'):
+        return
+    import subprocess
+    r = subprocess.run([sys.executable, os.path.join(ROOT, 'tools', 'check_all.py'), '--full'], cwd=ROOT,
+                       capture_output=True, text=True)
+    for line in r.stdout.splitlines():
+        if line.startswith('FAIL'):
+            pre.error('check_all: ' + line)
+        elif line.startswith(('KNOWN', 'WARN')):
+            pre.warn('check_all: ' + line)
+    if r.returncode != 0 and not any(l.startswith('FAIL') for l in r.stdout.splitlines()):
+        pre.error('check_all exited %d: %s' % (r.returncode, (r.stderr or r.stdout).strip()[-300:]))
+
+
 def check_changelog(pre, files, version, deployed, stage_dir):
     """Lint the changelog folder, keep deployed versions' files frozen, and put the working list into the
     payload as <version>.md (stamped copy written into stage_dir; the tree is not touched)."""
@@ -996,6 +1045,9 @@ def snapshot(version, targets, date, notes):
     date = date or datetime.datetime.now().isoformat(timespec='minutes')
     deployed = load_deployed()
     mark = {'version': version, 'date': date, 'snapshotSha1': sha1(path)}
+    stamps = json.load(open(path, encoding='utf8')).get('stamps')
+    if stamps:
+        mark['stamps'] = stamps   # the exact build of every own jar on that target (P1.2)
     if notes:
         mark['notes'] = notes
     for t in targets:
@@ -1698,6 +1750,7 @@ def main():
     stage_dir = tempfile.mkdtemp(prefix='ce-changelog-')
     atexit.register(shutil.rmtree, stage_dir, True)
     check_changelog(pre, files, version, deployed, stage_dir)
+    check_all_gate(pre, args)
     if version in deployed_versions(deployed):
         pre.error(f'{version} is already deployed (DEPLOYED.json): rebuilding it would change the snapshot the '
                   'machines are checked against. Build a new version (omit --version to bump the patch).')
@@ -1743,6 +1796,7 @@ def main():
                     **({'fromByTarget': {t: b['version'] for t, b in bases.items()}} if bases else {})},
         'resourcePackOrder': enabled,
         'mods': mods,
+        'stamps': jar_stamps(files),
         'files': {cat: {p: sha1(src) for p, src in paths.items()} for cat, paths in files.items()},
     }
     d = diff(prev, cur)                  # changelog: since the previous build
