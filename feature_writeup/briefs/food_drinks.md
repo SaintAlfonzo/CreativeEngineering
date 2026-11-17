@@ -508,7 +508,7 @@ None (row says none). Recommendation for the fix shape: JSON via `_fluidJson` (s
 ### Gotchas
 - The error is a KubeJS recipe-parse warning, not an `Error occurred while handling event`; grep `Error parsing recipe`.
 - Fixing NCH changes every helper that validates fluids; rerun the NCH harness tests (memory
-  `patchermod-headless-smoke-test`) and check the potion sequenced recipes still load.
+  `creative-common-headless-smoke-test`) and check the potion sequenced recipes still load.
 
 ### Tests
 - SQ-RSP-09 (in the scratch queue): Spout and Item Drain for Milk Coffee, Lavender Tea, Matcha Latte, Coffee; cup <-> water;

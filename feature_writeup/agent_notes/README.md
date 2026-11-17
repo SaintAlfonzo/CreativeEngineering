@@ -12,7 +12,7 @@ Rules: status (built, deployed, tested, versions) lives in [README.md](../README
 - Process cmd lines OK only with token redacted (CLAUDE.md), never bare `pgrep -af`/`ps -f`: [CreEngServer](creengserver-dedicated-server.md)
 - [/cdevgen](cdevgen-generator-runner.md); [/dumpall refresh](dumpall-refresh-workflow.md); [/dumptags](dump-tags-script.md); [perf JFR](perf-profiling-jfr.md); [item-loss repro](item-loss-repro.md)
 - [@Overwrite drops @SubscribeEvent](overwrite-drops-subscribeevent.md) — repeat it on the mixin method; "channel already registered" x40 at load means a recovery reload, read the first resource pack error
-- [Deploy pipeline](deploy-pipeline.md); [root Gradle](root-gradle-build.md); [patcherMod = Creative Common since 2026-11-04](patchermod-coremod.md)
+- [Deploy pipeline](deploy-pipeline.md); [root Gradle](root-gradle-build.md); [patcherMod = Creative Common since 2026-11-04](creative-common-coremod.md)
 - [Jar startup scripts](kubejs-jar-startup-scripts.md): Creative Common loads `kubejs_startup/` from jars; each script pack has its own scope, only `global` is shared
 - [Farmer's Structures donor](farmers-structures-donor.md) — ARR 1.0.6 jar read from farmers_upstream/, converted in memory by Creative Common
 - [Repack stale resources](repack-stale-resources.md) — clean-build a CD repack member after deleting overlay files; skip upstream-held paths

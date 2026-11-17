@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there 2026-09-14). Repo status docs win over any status line here.
 
-## Status: bug found on first in-game launch, fixed + rebuilt, needs a clean relaunch to confirm
+## First launch crash (state: fixes_compat.md row 2.2)
 
 First actual launch after implementation hard-crashed at `[23:00:01]` with a Mixin `InvalidInjectionException: 'static' modifier of handler method does not match target` on
 `CustomizableElytraBannerPatternMixin`. Root cause: the `@Redirect` handler
@@ -183,4 +183,4 @@ one of the 6 confirmed modded-pattern mods (easiest to test: `supplementaries` o
 customizable elytra instead of blank. See memory `debugging-with-latest-log` for the general
 log-first-not-static-code-guessing approach this project already follows.
 
-See also [patchermod-coremod](patchermod-coremod.md) for general Creative Common mixin/build conventions this followed.
+See also [creative-common-coremod](creative-common-coremod.md) for general Creative Common mixin/build conventions this followed.

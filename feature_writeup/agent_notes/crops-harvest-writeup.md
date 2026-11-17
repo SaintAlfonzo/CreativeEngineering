@@ -22,6 +22,6 @@ Status and open gaps (G1-G11): feature_writeup/crops.md and feature_writeup/todo
 **Why:** the user wants every crop to behave like wheat on all soils and with both Quark mechanics.
 **How to apply:** read crops.md §2.1 before any crop/soil/harvest question. For another crop, follow the
 §2.6 checklist; extend the tags/config, don't add per-crop special cases beyond a placement mixin.
-See memory `feature-writeup-pattern`, [patchermod-coremod](patchermod-coremod.md).
+See memory `feature-writeup-pattern`, [creative-common-coremod](creative-common-coremod.md).
 
 2026-10-02: this ships as Creative Common **1.0.4** (pack 1.0.4), not 1.0.3; now in mods/. See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).

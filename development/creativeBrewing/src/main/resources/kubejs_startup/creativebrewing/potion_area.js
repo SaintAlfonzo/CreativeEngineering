@@ -15,7 +15,7 @@
 //     effects - so more rings = a rounder, taller-looking cloud, not a flat circle
 //
 // (An earlier attempt used a Creative Common Mixin to make a single cloud spherical - ripped out,
-// see the patchermod-coremod / potion-buckets memory notes for why. This stacked-ring
+// see the creative-common-coremod / potion-buckets memory notes for why. This stacked-ring
 // approach is pure KubeJS, no Java rebuild needed.)
 //
 // Every dial below is per-bucket (BUCKETS is keyed by item id, not shared) - edit freely.

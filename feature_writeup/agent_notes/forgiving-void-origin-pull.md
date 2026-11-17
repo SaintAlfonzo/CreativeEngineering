@@ -12,7 +12,7 @@ void-fall loops and cross-End travel by void falling.
 No config option for horizontal handling (`forgivingvoid-common.toml` only has
 trigger distance / damage / fallingHeight / per-dimension toggles).
 
-Fix: [patchermod-coremod](patchermod-coremod.md) mixin `mixin/ForgivingVoidMixin.java` (added to
+Fix: [creative-common-coremod](creative-common-coremod.md) mixin `mixin/ForgivingVoidMixin.java` (added to
 `creativeengineering.mixins.json` `mixins` list) — `@Redirect` on the
 `Lnet/minecraft/server/level/ServerPlayer;m_6021_(DDD)V` INVOKE in `onPlayerTick`
 (`remap = false`, SRG target string; handler body calls Mojmap `teleportTo` which reobf

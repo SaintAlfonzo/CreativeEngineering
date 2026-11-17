@@ -17,7 +17,7 @@ selection deterministic.
 - Recipe JSON gains an optional `"blade": "<profile>"` field. Absent/`""` = the profile-less
   default for that input (what a plain `immersiveengineering:sawblade` produces).
 - Precision sawblade (`creativeengineering:precision_sawblade`) carries NBT `{Profile:"<shape>"}`.
-- Creative Common [patchermod-coremod](patchermod-coremod.md) routes: among input-matching recipes, prefer the one
+- Creative Common [creative-common-coremod](creative-common-coremod.md) routes: among input-matching recipes, prefer the one
   whose `blade` == the installed blade's `Profile`; else the `blade==""` default; else null
   (IE passes the item through unchanged — safe, `getCurrentStack` null-guards).
 

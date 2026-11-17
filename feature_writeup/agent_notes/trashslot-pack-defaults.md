@@ -12,4 +12,4 @@ Built 2026-09-30 as Creative Common 1.0.3 (mod_version bumped on request). By 22
 - User, 2026-09-30: IM has only been seen on the dedicated server, never single player.
 
 **Why:** the user wants the slot on for vanilla workstations, both inventories (creative too) and backpacks, with an `allContainers` switch kept off for now.
-**How to apply:** add screens through the CEConfig lists, not TrashSlotSaveState.default.json. Related: [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md), [patchermod-coremod](patchermod-coremod.md), memory `feature-writeup-pattern`.
+**How to apply:** add screens through the CEConfig lists, not TrashSlotSaveState.default.json. Related: [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md), [creative-common-coremod](creative-common-coremod.md), memory `feature-writeup-pattern`.

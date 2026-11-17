@@ -264,7 +264,7 @@ CIC-10; 16 before any player-side test.
 - `/dumpall`, then `tools/food_families.py --check` (no unsorted ancient fish) and the crafting audit
   (`kubejs/exported/recipes/crafting_audit.json`) for bowl / yarn clashes.
 - Tag dump: `cozys-improved-cats:cat_food` holds the pack raw fish / meat (D4).
-- Creative Common headless harness for the D1 / D2 mixins (memory `patchermod-headless-smoke-test`).
+- Creative Common headless harness for the D1 / D2 mixins (memory `creative-common-headless-smoke-test`).
 - `python3 tools/changelog_lint.py`.
 
 ## 8. In-game test suite (drafted)

@@ -16,4 +16,4 @@ is extracted (class files only) in DecompiledMods/, javap dumps in its `_PORT_cr
 - Not live: order fixed per list build, same as JEI 19.
 
 **Why:** user remembered this from newer JEI and wanted it on the pinned 1.19.2 JEI.
-**How to apply:** if the pack's JEI is updated past 11.8.1, check whether the native feature exists and drop these mixins. See [patchermod-coremod](patchermod-coremod.md).
+**How to apply:** if the pack's JEI is updated past 11.8.1, check whether the native feature exists and drop these mixins. See [creative-common-coremod](creative-common-coremod.md).

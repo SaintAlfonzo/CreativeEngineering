@@ -21,4 +21,4 @@ instead: swap the base for the natural ground wherever it doesn't match.
 - Config moved to [worldgen.ground_match] (+ .sampling); on/off is [worldgen.systems] groundMatch (see [worldgen-config-cdevplace](worldgen-config-cdevplace.md)).
 - Writeup (status): feature_writeup/structure_tuning.md 3.8, ST-27..32.
 
-Related: [structure-groups](structure-groups.md), [jigsaw-pool-tuning](jigsaw-pool-tuning.md), [patchermod-coremod](patchermod-coremod.md), memory `patchermod-headless-smoke-test`.
+Related: [structure-groups](structure-groups.md), [jigsaw-pool-tuning](jigsaw-pool-tuning.md), [creative-common-coremod](creative-common-coremod.md), memory `creative-common-headless-smoke-test`.

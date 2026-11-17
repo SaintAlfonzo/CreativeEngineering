@@ -18,7 +18,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
  * separately-compiled copy of the three-line tooltip (no shared method), so one
  * {@code @Mixin} lists all four classes and the two {@link ModifyConstant} handlers apply
  * to each. {@code remap = false}: mod classes, no Mixin refmap in this project — see
- * [[patchermod-coremod]] / {@link EchoArmorEffectProcedureMixin}.
+ * [[creative-common-coremod]] / {@link EchoArmorEffectProcedureMixin}.
  */
 @Mixin(value = {
 		EchoArmorItem.Boots.class,

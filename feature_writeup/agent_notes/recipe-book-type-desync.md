@@ -12,4 +12,4 @@ Fix: Creative Common `compat/NockRecipeBookSync.register()` (commonSetup enqueue
 
 **How to apply:** any new mod that calls `RecipeBookType.create` in client-only code will cause the same kick. Scan jars for the descriptor `(Ljava/lang/String;)Lnet/minecraft/world/inventory/RecipeBookType;` and check whether each call site runs on the server.
 
-Related: [creengserver-dedicated-server](creengserver-dedicated-server.md), [patchermod-coremod](patchermod-coremod.md), memory `debugging-with-latest-log`.
+Related: [creengserver-dedicated-server](creengserver-dedicated-server.md), [creative-common-coremod](creative-common-coremod.md), memory `debugging-with-latest-log`.

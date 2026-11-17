@@ -12,6 +12,6 @@ Built 2026-09-27, headless-tested (22 checks) yet (the game was running at build
 - Startup: `[debug.generators] runAtStartup` starts the run in FMLCommonSetupEvent and joins it in FMLLoadCompleteEvent, which comes before any datapack load on both client and server. The first joining op or singleplayer player gets the summary.
 - Every tools/*.py generator or report is an entry or named in the manifest `_readme` with its reason (since 2026-10-27, pack_hygiene 44; 45 entries). Out on purpose: dump_server_mods.py (the only server_mods/ route since /dumpservermods was removed 2026-10-27; run by hand, copies ~300 jars), tools needing args, jar-rebuild resource writers (bedspreads/elytra, dd_dishes, moobloom variants, compost values), --check-first hand workflows (gen_can_types, cfb fridge), print-only checks, libraries.
 - Shared helpers for new tools: tools/pack_paths.py (paths, item_dict parser, loads_lenient, vanilla/Forge jar locator from instance.json); lang via lang_index.build(); template containers via loot_breakdown_scan.scan().
-- Headless test recipe: memory `patchermod-headless-smoke-test`, plus guava 31.0.1, log4j-api 2.17.0, DFU 5.0.28, brigadier, fastutil and commons-lang3 for CEConfig's static init.
+- Headless test recipe: memory `creative-common-headless-smoke-test`, plus guava 31.0.1, log4j-api 2.17.0, DFU 5.0.28, brigadier, fastutil and commons-lang3 for CEConfig's static init.
 
-Related: [patchermod-coremod](patchermod-coremod.md), memory `feature-writeup-pattern` (loot.md / structure_tuning.md §6 mention it; pack tooling writeup TL- is backlog #11).
+Related: [creative-common-coremod](creative-common-coremod.md), memory `feature-writeup-pattern` (loot.md / structure_tuning.md §6 mention it; pack tooling writeup TL- is backlog #11).

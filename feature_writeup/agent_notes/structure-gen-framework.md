@@ -145,7 +145,7 @@ User didn't want to run a script after every edit, so all three worldgen applier
   returned every `worldgen/structure_set/*` added through highPriorityData/lowPriorityData. Fixed by
   Creative Common `KubeJSVirtualDataPackListMixin` (@Redirect of startsWith in the static lambda
   `lambda$getResources$1`, require=1). That also required adding `kubejs-forge-1902.6.2-build.73.jar`
-  to `creativeCommon/libs/`. VERIFIED 2026-09-26 (structure_tuning.md section 0). KubeJS's GeneratedResourcePack
+  to `creativeCommon/libs/` (state: structure_tuning.md section 0). KubeJS's GeneratedResourcePack
   (the kubejs/data folder) already appends "/", so only the virtual pack was affected.
 - **biome_merges "0 added, 237 skipped" was a false report.** `ServerEvents.tags` handlers run first in a
   PreTagEventJS pre-pass (add() only queues an action, totalAdded stays 0, getElementIds() is empty) and are

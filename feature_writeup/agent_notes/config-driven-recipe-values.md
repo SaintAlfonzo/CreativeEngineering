@@ -23,7 +23,7 @@ per-field or separate-file versions.
   ...)` stay the descriptive, human-facing labels shown in the toml file and Create's Configs
   GUI — these are deliberately different from each other by request. Requires a Creative Common
   rebuild + jar redeploy to take effect (never overwrite `mods/` while the game is running —
-  see [patchermod-coremod](patchermod-coremod.md)).
+  see [creative-common-coremod](creative-common-coremod.md)).
 - **JS side**: `global.NCH.cfg(defaults, path)` (neoCraftHelper.js, next to `bulk()`) — takes
   the **whole defaults object** for a craft (keys must match the CEConfig section's *Java
   field* names exactly, e.g. `potion`/`mb`/`loops`/`blows` - not the toml key strings) plus a

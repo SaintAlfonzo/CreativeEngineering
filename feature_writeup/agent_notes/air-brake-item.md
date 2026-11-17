@@ -32,7 +32,7 @@ common code runs deterministically on both, no Mixin needed.
   for negative-Y (falling) speed after an optional terminal-speed clamp. Sets
   `hurtMarked = true` afterward purely so other observing clients get the new velocity
   synced (irrelevant to the owning client, which is authoritative over its own motion).
-- `CEConfig.AirBrake` (new section in `CEConfig.java`, [patchermod-coremod](patchermod-coremod.md)) - EVERY
+- `CEConfig.AirBrake` (new section in `CEConfig.java`, [creative-common-coremod](creative-common-coremod.md)) - EVERY
   deceleration number is a config knob: `enabled`, `useDurationTicks` (baked into the item
   at registration - needs a restart, not just a config save, see its own comment),
   `requireFallFlying`, `horizontalDecelerationPerTick`, `minHorizontalSpeed`,
@@ -78,7 +78,7 @@ in-game (slowdown works); the stall effect was not, at first - see next entry.
 thrown from `AirBrakeHandler`'s static initializer at game load (caught, logged, silently
 disabled the whole stall feature from then on - deceleration kept working since that's a
 separate code path). Root cause, and a genuinely new lesson beyond what
-[patchermod-coremod](patchermod-coremod.md) already documents about Mixin targets needing SRG names: **reobfJar
+[creative-common-coremod](creative-common-coremod.md) already documents about Mixin targets needing SRG names: **reobfJar
 only rewrites actual bytecode symbolic references** (the `invokevirtual`/`getfield` constant-
 pool entries behind ordinary compiled calls like `isFallFlying()`/`getDeltaMovement()` in
 this same class, which line up fine) **- it cannot touch a plain String argument handed to

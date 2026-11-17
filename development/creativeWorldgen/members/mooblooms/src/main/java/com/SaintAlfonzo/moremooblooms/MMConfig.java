@@ -26,8 +26,6 @@ public final class MMConfig {
 		public static ForgeConfigSpec.BooleanValue REMOVE_MOOBLOOMS;
 		public static ForgeConfigSpec.BooleanValue EMPTY_HOSTILES_TAG;
 		public static ForgeConfigSpec.BooleanValue HIDE_SPAWN_EGG;
-		public static ForgeConfigSpec.BooleanValue REPLACE_TWO_BY_TWO;
-		public static ForgeConfigSpec.BooleanValue REMOVE_SUNNY_FROM_ALL_EFFECTS;
 		public static ForgeConfigSpec.BooleanValue REMOVE_BUTTERCUP_WORLDGEN;
 		public static ForgeConfigSpec.BooleanValue REMOVE_BUTTERCUP_TRADE;
 		public static ForgeConfigSpec.BooleanValue REMOVE_BUTTERCUP_RECIPES;
@@ -81,10 +79,6 @@ public final class MMConfig {
 				.define("emptyHostilesTag", true);
 		BuzzierBees.HIDE_SPAWN_EGG = b.comment("Hide Buzzier Bees' moobloom spawn egg from creative tabs and JEI.")
 				.define("hideSpawnEgg", true);
-		BuzzierBees.REPLACE_TWO_BY_TWO = b.comment("Two by Two asks for a bred More Mooblooms moobloom instead of Buzzier Bees' one.")
-				.define("replaceTwoByTwo", true);
-		BuzzierBees.REMOVE_SUNNY_FROM_ALL_EFFECTS = b.comment("How Did We Get Here no longer needs Sunny.")
-				.define("removeSunnyFromAllEffects", true);
 		BuzzierBees.REMOVE_BUTTERCUP_WORLDGEN = b.comment("No buttercup patches in new chunks.")
 				.define("removeButtercupWorldgen", true);
 		BuzzierBees.REMOVE_BUTTERCUP_TRADE = b.comment("The Wandering Trader stops selling buttercups.")

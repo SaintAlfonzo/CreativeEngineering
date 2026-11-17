@@ -31,7 +31,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  * {@code createSequencedAssembly} recipe (ingots, redstone components, food, ...) is unaffected.
  *
  * <p>{@code advance} is Create's own method (unobfuscated at runtime), hence {@code remap = false}
- * — see [[patchermod-coremod]].
+ * — see [[creative-common-coremod]].
  */
 @Mixin(value = SequencedAssemblyRecipe.class, remap = false)
 public class SequencedAssemblyRecipeMixin {

@@ -424,7 +424,7 @@ ids in Creative Common's dicts.
 17. **Names and lang** ([names.md](names.md)): renames from D7 through the pack's lang route (memory
     `resource-pack-lang-priority`).
 18. **Mob and block audit:** mineable tags, BlockRunner tier, Item Physic, WTHIT (PG has its own goggle tooltips; check
-    WTHIT shows voltage/current, memory `wthit-plugin-patchermod`).
+    WTHIT shows voltage/current, memory `wthit-plugin-creative-common`).
 19. **Stack sizes** ([stack_sizes.md](stack_sizes.md)): wires and components.
 20. **Tooltips and JEI** ([tooltips.md](tooltips.md), [jei_coverage.md](jei_coverage.md)): PG's JEI plugin (magnetization,
     boost); hide unported items.

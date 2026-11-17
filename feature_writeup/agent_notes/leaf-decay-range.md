@@ -23,7 +23,7 @@ Built 2026-10-19 into Creative Common 1.0.9 (rebuilt in mods/). Writeup: feature
 - Scratch numbers: 1351-leaf spruce felled -> gone in ~1 s, worst tick 146 ms (incl. /fill); flags 19 removal decays
   via the event, flags 18 doesn't (same as FLD). tools/leaf_decay_probe.js.
 
-Related: [patchermod-coremod](patchermod-coremod.md), memory `scratch-server-verify`.
+Related: [creative-common-coremod](creative-common-coremod.md), memory `scratch-server-verify`.
 
 **2026-10-20 (Creative Common 1.1.01, in mods/, MT-24/25):** IW leaf piles restored. IW's LeavesMixin calls
 `LeavesGrowth.decayLeavesPile` after removeBlock in randomTick (FLD ran randomTick, so it got piles); our tick-path

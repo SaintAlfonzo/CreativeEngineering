@@ -35,5 +35,5 @@ Set up 2026-10-01.
 - `./gradlew :creativeCommon:build` or `cd Creative Common && ./gradlew build` builds only Creative Common.
 - Jars ship the project's LICENSE/LICENSE.txt/NOTICE* files as `<jar_name>-<file>` (memory `license-gplv3`).
 
-tools/build_deploy.py uses an `IN_TREE_MODS` list (project, jar prefix, required) for preflight and jar archiving ([deploy-pipeline](deploy-pipeline.md)). Related: [patchermod-coremod](patchermod-coremod.md), [exposure-backport](exposure-backport.md).
+tools/build_deploy.py uses an `IN_TREE_MODS` list (project, jar prefix, required) for preflight and jar archiving ([deploy-pipeline](deploy-pipeline.md)). Related: [creative-common-coremod](creative-common-coremod.md), [exposure-backport](exposure-backport.md).
 - `shared_sources` / `shared_base` in a mod's gradle.properties (2026-10-27): ce.forge-mod's `sharedSources` Sync task copies `development/shared/<module>/` into `build/generated/sources/shared/`, rewriting the template packages `ce.shared` / `ce.mixin` to `<shared_base>.shared` / `.mixin`. Edit only the templates. Modules: packs, upstream, mixinplugin, itemhidden (feature_writeup/pack_tooling.md 2.8).

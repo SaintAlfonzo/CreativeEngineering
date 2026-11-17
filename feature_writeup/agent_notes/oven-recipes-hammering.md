@@ -28,4 +28,4 @@ Details: feature_writeup/oven.md 2.5-2.6 (memory `feature-writeup-pattern`).
 
 **Why:** costs and the hammer fix aren't visible from the recipe list alone.
 **How to apply:** new baked goods go in baking.js with the matching bakeware at full cost; if one gets trimmed, add it to oven.md 2.6.1.
-Related: [patchermod-coremod](patchermod-coremod.md), memory `centralize-recipes-tags-items`.
+Related: [creative-common-coremod](creative-common-coremod.md), memory `centralize-recipes-tags-items`.

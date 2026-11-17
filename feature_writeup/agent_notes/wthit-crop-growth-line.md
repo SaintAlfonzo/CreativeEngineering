@@ -16,4 +16,4 @@ User asked (2026-10-04) to catalog every crop where WTHIT shows no growth percen
 **Status:** feature_writeup/wthit_lines.md.
 
 **Why:** WTHIT's native line should be uniform across the pack's crops.
-**How to apply:** after adding mods run `/dumpcropgrowth` + the coverage script. Use the scratch server recipe (memory `scratch-server-verify`); a KubeJS `reload` does NOT re-register commandRegistry commands, restart the server after editing a command script. See memory `wthit-plugin-patchermod`, [crops-harvest-writeup](crops-harvest-writeup.md).
+**How to apply:** after adding mods run `/dumpcropgrowth` + the coverage script. Use the scratch server recipe (memory `scratch-server-verify`); a KubeJS `reload` does NOT re-register commandRegistry commands, restart the server after editing a command script. See memory `wthit-plugin-creative-common`, [crops-harvest-writeup](crops-harvest-writeup.md).

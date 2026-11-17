@@ -63,7 +63,7 @@ public final class AirBrakeHandler {
 		// getDeltaMovement(), ...) from their Mojmap ("official") source names to whatever
 		// this runtime actually uses, but it can't touch a String literal handed to
 		// getDeclaredMethod(). This runtime turns out to still be SRG-obfuscated underneath
-		// (same lesson [[patchermod-coremod]] already learned for Mixin targets) - confirmed
+		// (same lesson [[creative-common-coremod]] already learned for Mixin targets) - confirmed
 		// by a NoSuchMethodException on "setSharedFlag" at game load, then looking up its
 		// real name in build/reobfJar/mappings.tsrg. If a future MCP/mapping update changes
 		// this again, the fix is the same: grep mappings.tsrg for the Mojmap name.

@@ -21,4 +21,4 @@ Gotchas:
   names were invisible to offline tools.
 - The ~620 log warnings for missing `_2`/`_3` variants seen with 1.2.0 were unreachable stack states; recheck under the port.
 
-Related: memory `wthit-plugin-patchermod`, [missing-names-catalog](missing-names-catalog.md), memory `creative-delight-routing`.
+Related: memory `wthit-plugin-creative-common`, [missing-names-catalog](missing-names-catalog.md), memory `creative-delight-routing`.

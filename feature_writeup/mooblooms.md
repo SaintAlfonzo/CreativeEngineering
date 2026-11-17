@@ -379,7 +379,7 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 | Name / id | **More Mooblooms**, `moremooblooms`, version 1.1.0 (1.1: the JEI pages, section 5; 1.0.0 was D22, kept for the 2026-10-11 azaleabloom `spawns_in_dark_on` rebuild, by the user's choice). Folder `development/moreMooblooms`, jar `moreMooblooms-<ver>.jar`, package `com.SaintAlfonzo.moremooblooms`, GPLv3 |
 | Build | a project in the root Gradle build (`settings.gradle`, `ce.forge-mod` convention plugin), the same as Incubation Additions: `./gradlew :moreMooblooms:build`, `./gradlew :moreMooblooms:installToMods` (moves other versions to `jar_archive/displaced/`) |
 | Hard dependencies | Forge, Minecraft 1.19.2 |
-| Optional dependencies | `buzzier_bees` (the O14 set), `jei` (plugin), `blueprint` (advancement modifier), the tag-compat mods (4.10), `farmersdelight` (wild onions on onionbloom, 4.4) |
+| Optional dependencies | `buzzier_bees` (the O14 set), `jei` (plugin), the tag-compat mods (4.10), `farmersdelight` (wild onions on onionbloom, 4.4) |
 | Pattern | the Incubation Additions **content sets**: a core set that is always on, plus one set per optional mod. Each set's data is a hidden, required built-in pack `packs/<mod id>/`, added through `AddPackFindersEvent` only when that mod is loaded; its Java only runs then; a mixin plugin gates its mixins. Core data that a config switch controls is a pack too: `packs/moremooblooms/<switch>/` |
 | Network | channel `moremooblooms:main`, one packet (`SyncVariantsPacket`: the variant and breeding files). Client and server need the same jar |
 | Writeup / tests | this file, `MB-` |
@@ -405,7 +405,6 @@ practical reading for planning, not legal advice. If anything is borderline, ask
 | core switch `witherbloom_spawns` (config `witherbloomSpawns`) | spawn placement and the direct-spawn variant (4.9) are core code | `packs/moremooblooms/witherbloom_spawns/`: biome tag, biome modifier, spawn rule (witherbloom's `spawns_in_dark_on` is in its variant file) |
 | `buzzier_bees` | BB moobloom removal, trade removal, compost entry removal, creative hiding, Sunny off (4.11) | `packs/buzzier_bees/<switch>/`, one sub-pack per data switch |
 | `jei` | variant egg subtypes, info pages, the "Moobloom Breeding", "Moobloom Shearing" and "Moobloom Conversion" categories, hiding the buttercup, BB's egg, Sunny and Just Enough Breeding's BB moobloom page when BB is loaded | none |
-| `blueprint` | none | `packs/blueprint/`: Two by Two asks for our moobloom |
 | `alexsmobs`, `supplementaries`, `abnormals_delight`, `botania`, `delightful` | none | entity type tag files adding `moremooblooms:moobloom` to that mod's cow tags (4.10) |
 
 ### 4.3 The entity
@@ -787,8 +786,7 @@ nether's noise settings turn off chunk-generation spawns, so no herds generate w
 Every change below is ours: new files, events, or vanilla-class mixins. None of it touches the BB jar (4.0).
 
 **Config switches (D26):** one per change, all on by default, in `[buzzier_bees]`: `disableMoobloomSpawns`,
-`restoreCowSpawns`, `removeMooblooms`, `emptyHostilesTag`, `hideSpawnEgg`, `replaceTwoByTwo`,
-`removeSunnyFromAllEffects`, `removeButtercupWorldgen`, `removeButtercupTrade`, `removeButtercupRecipes`,
+`restoreCowSpawns`, `removeMooblooms`, `emptyHostilesTag`, `hideSpawnEgg`, `removeButtercupWorldgen`, `removeButtercupTrade`, `removeButtercupRecipes`,
 `removeButtercupTags`, `removeButtercupCompost`, `hideButtercup`, `disableSunny`. Data overrides can't read a config
 at load, so each data switch has its own sub-pack (`packs/buzzier_bees/<folder>/`), added only when it is on. The
 sub-packs sit above BB's mod resources (they replace BB's files by path) and below the pack's `kubejs/data`.
@@ -801,7 +799,6 @@ sub-packs sit above BB's mod resources (they replace BB's files by path) and bel
 | Existing BB mooblooms, its spawn egg, `/summon buzzier_bees:moobloom` | **removed, not converted** (D25): `EntityJoinLevelEvent` (server, HIGHEST) is canceled for `buzzier_bees:moobloom`, so a new one never enters the world and one loaded from disk isn't added to its chunk (gone at the next chunk save). It never ticks, so the Sunny aura and BB shearing never happen. Logged (first 5, then powers of two) |
 | Zombie bait | gone with the removal. Belt and braces: `moobloom_hostiles.json` with `"replace": true, "values": []` (`emptyHostilesTag`) |
 | BB's spawn egg | hidden from the creative tab (mixin on vanilla `Item.allowedIn`, gated on a hidden-items set) and from JEI (our plugin) |
-| Two by Two (`minecraft:husbandry/bred_all_animals`) | BB's Blueprint modifier asks for a bred BB moobloom, which can no longer exist, so the advancement would be impossible. Our own file at that modifier's path asks for `moremooblooms:moobloom` instead (`replaceTwoByTwo`). Without BB, the `blueprint` set adds ours |
 
 **Buttercup (O11):**
 
@@ -827,7 +824,6 @@ sub-packs sit above BB's mod resources (they replace BB's files by path) and bel
 | BB's undead burn check | `mixin/MobSunBurnMixin` on vanilla `Mob.isSunBurnTick` (`m_21527_`), TAIL, cancellable, **priority 900**. BB's `MobEntityMixin` injects at the same TAIL with the default 1000, and Mixin applies the lower priority first, so our callback runs first. For a mob that has Sunny it returns false (what vanilla returns there) and BB's callback never runs. It cancels only for mobs with Sunny, so other mods' callbacks there (Breezy injects at RETURN) are untouched. Order checked in the exported class (4.14) |
 | Moobloom aura, buttercup stew | never run (removal, tags) |
 | JEED effect page | the `jei` set removes any JEI ingredient of class `MobEffectInstance` whose effect is Sunny (no compile dependency on JEED), and the pack sets `hidden_effects = ["buzzier_bees:sunny"]` in [jeed-client.toml](../config/jeed-client.toml) (+ configs_edited) |
-| How Did We Get Here | BB's advancement modifier adds Sunny to it; `removeSunnyFromAllEffects` overrides that file so the advancement stays possible |
 | BB's other Sunny code (phantom drop, bees working at night) | inert when nobody has the effect. Not patched (no mixins into BB, 4.0) |
 
 Unregistering Sunny was considered (D21) and rejected: BB's own mixin calls `hasEffect(SUNNY.get())` from every
@@ -1111,7 +1107,7 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
 - [x] **MB-78 Breeds true:** two roseblooms -> a rosebloom calf (scratch, once); repeat a few times
 - [ ] **MB-79 Random pool:** breed sunbloom x rosebloom (no combination) 20 times -> mixed variants, never witherbloom
 - [ ] **MB-91 Same-variant combination:** breed two mooblooms 20 times -> about 2 sunblooms, the rest mooblooms
-- [ ] **MB-63 Two by Two:** breed every animal including `moremooblooms:moobloom` -> advancement granted (BB installed) / unaffected (BB absent, no Blueprint)
+- [ ] ~~**MB-63 Two by Two:**~~ retired 2026-11-17 (the advancement modifier packs were deleted: the pack drops every advancement at load, design_rules V-02).
 
 **Spawning**
 - [ ] **MB-38 Flower biomes:** new chunks in blooming valley and flower forest -> no cows; lavender valley, sakura grove, orchid swamp, meadow -> about two in three cows are mooblooms (65-75%); the variants match the flowers (lavender mostly onionblooms, sakura onion- and peonyblooms, orchid swamp mostly orchidblooms), meadow an even mix of the 9 flower variants, never witherbloom or azaleabloom
@@ -1218,3 +1214,4 @@ MB-50, MB-57 and MB-75. Tick a test once it has passed in a client; `[x]` with "
   Saves: `data/moremooblooms/swaps/owner_namespace.json` moves the entity type and the spawn egg (namespace move plus
   permanent aliases); saved `Variant` ids and egg NBT are read through `MoobloomVariants.legacy`, as are older data files;
   Creative Worldgen carries `more_mooblooms-common.toml` over to `moremooblooms-common.toml`. Queue SQ-RFX-26, SQ-RFX-27 (old-id rows) and CQ-RFX-05.
+- 2026-11-17: dead advancement modifiers deleted (design_rules V-02, plan_rules_fixes.md 12b): the `blueprint` content set (Two by Two), the Buzzier Bees sub-packs `replace_two_by_two` and `remove_sunny_from_all_effects` with their switches `replaceTwoByTwo` and `removeSunnyFromAllEffects`, and the optional Blueprint dependency. The pack drops every advancement at load, so they did nothing. MB-63 retired; SQ-RFX-29.

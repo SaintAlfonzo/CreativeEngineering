@@ -19,4 +19,4 @@ We disable all ruined portals (structure_overrides.js writes the set at frequenc
 **How to apply:** when disabling another whole structure set, grep jars for `exploration_map` destinations and extend
 DEAD_DESTINATIONS/TABLES. Tests ST-15/ST-16 in feature_writeup/structure_tuning.md.
 Server copy lives in Trash (see [creengserver-dedicated-server](creengserver-dedicated-server.md)) and still has jar 1.0.0.
-Related: [structure-gen-framework](structure-gen-framework.md), [loot-system](loot-system.md), [patchermod-coremod](patchermod-coremod.md).
+Related: [structure-gen-framework](structure-gen-framework.md), [loot-system](loot-system.md), [creative-common-coremod](creative-common-coremod.md).

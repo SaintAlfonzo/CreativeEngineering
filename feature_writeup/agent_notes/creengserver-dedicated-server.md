@@ -12,7 +12,7 @@ Getting real defaults: copy the server into a scratch dir (symlink mods/librarie
 
 `LaunchServer.sh`/`.bat` rewrite `user_jvm_args.txt` from their own MEMORY/maxmemory line on every launch, so change memory there, not in user_jvm_args. Both are set to 6G as of 2026-09-26.
 
-Related: memory `configs-edited-backup`, [patchermod-coremod](patchermod-coremod.md).
+Related: memory `configs-edited-backup`, [creative-common-coremod](creative-common-coremod.md).
 - As of 2026-09-26 (late) the folder is in ~/.local/share/Trash/files/CreEngServer — confirm with the user before mirroring configs there.
 - 2026-09-27: `server_mods/` is stale while mod_sides.md lacks rows (20+ mods added since); The Missing Villages removed from the pack. For a quick live check use memory `scratch-server-verify` instead of the real server.
 - 2026-09-28: `~/.local/share/atlauncher/servers/CreEngServer` now holds only `configs_edited/`; the full server (libraries, run.sh) is still in Trash. mod_sides.md now has 381 rows (326 both / 12 server / 43 client), and deploys go through [deploy-pipeline](deploy-pipeline.md) rather than server_mods/.

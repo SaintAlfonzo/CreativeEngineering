@@ -8,4 +8,4 @@ Crash 2026-10-04 14:24 (debug/crash-2026-10-04_14.24.57-client.txt): Supplementa
 
 Fix: `mixin/SupplementariesBreezyCompatMixin` (@Overwrite, targets by string) in Creative Common; needs breezy + supplementaries jars in `creativeCommon/libs/` (the AP must see the target class). Built into jar 1.0.4 (same version as deployed, so hash differs from mods/), NOT installed or deployed as of 2026-10-04. Vane heading is yaw from Breezy's (cos a, sin a) vector; a possible 180 degree offset vs the old behavior is untested in game.
 
-**How to apply:** if wind vanes point the wrong way, flip the sign in the atan2. Related: [patchermod-coremod](patchermod-coremod.md), [deploy-pipeline](deploy-pipeline.md).
+**How to apply:** if wind vanes point the wrong way, flip the sign in the atan2. Related: [creative-common-coremod](creative-common-coremod.md), [deploy-pipeline](deploy-pipeline.md).

@@ -14,4 +14,4 @@ Full reference and tests BR-22…26 and BR-30…33: `feature_writeup/blockrunner
 - Model: `EntityRenderDispatcher#render` (m_114384_): `@ModifyVariable` STORE ordinal 0 lowers the renderer's `vec3` offset (only Vec3 local). Model and name tag move; shadow, fire and F3+B hitbox don't.
 - Config: CEConfig `[surface.sinking] depthPixels` (default 2, 0 = off; was `[block_sinking]`). Tag: nested `#blockrunner:surface/{soft,dust,spongy,very_sticky}` in blocktags.js. Honey (15/16) and mud (14/16) are skipped as non-full; they already sink for real.
 - Not done: the crosshair pick ray still starts at the true eye, 2px above the camera. This only matters on block edges; lowering it would mean touching getEyePosition/pick.
-- Related: [blockrunner-speed-tiers](blockrunner-speed-tiers.md), [patchermod-coremod](patchermod-coremod.md).
+- Related: [blockrunner-speed-tiers](blockrunner-speed-tiers.md), [creative-common-coremod](creative-common-coremod.md).

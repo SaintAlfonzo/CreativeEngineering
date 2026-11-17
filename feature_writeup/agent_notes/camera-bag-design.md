@@ -32,7 +32,7 @@ Test status (GUI, slot locking, smithing keeping the contents, tooltip, overflow
 - The SoL lunchbox keeps its contents in a ForgeCaps ItemStackHandler, and its upgrades are plain crafts that wipe them.
 - ForgeCaps are not in getTag(). So smithing (which copies only getTag) loses them, and they aren't synced to the client.
 
-Related: [exposure-backport](exposure-backport.md), [patchermod-coremod](patchermod-coremod.md), memory `scratch-server-verify`.
+Related: [exposure-backport](exposure-backport.md), [creative-common-coremod](creative-common-coremod.md), memory `scratch-server-verify`.
 
 **Moved 2026-10-02 (1.0.4):** the bags now live in exposureBackport `src/extras` as mod `exposure_extras` (ids `exposure_extras:*_camera_bag`, MissingMappingsEvent remaps the old creativeengineering ids, config `exposure_extras-common.toml [camera_bag]`, tag `#exposure_extras:camera_equipment` defaults in the jar + kubejs add/remove lists). Creative Common 1.0.4 no longer has camerabag/. Status and tests (CB-, R4-04 remap): [camera_bags.md](../camera_bags.md). See [release-plans-1-0-3-to-1-0-6](release-plans-1-0-3-to-1-0-6.md).
 

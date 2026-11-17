@@ -103,7 +103,7 @@ Our own overlay files stay where they are (`blockstates/glowing_calamari_crate.j
 ## 7. Verification
 
 **Offline equivalence test (main regression guard).** Before step 4, dump the current runtime view: run
-`RusticTranslator.assets()` and `data()` (headless harness, [patchermod-headless-smoke-test]) into a directory.
+`RusticTranslator.assets()` and `data()` (headless harness, [creative-common-headless-smoke-test]) into a directory.
 After baking, diff that dump against the member's resources. Expected differences are only: the runtime drop of
 unregistered recipes (now static or conditioned), our overlay files, and the recolours. Anything else is a bake bug.
 

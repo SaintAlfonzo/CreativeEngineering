@@ -4,7 +4,7 @@
 
 Moved from agent memory 2026-11-16 (last edited there unknown). Repo status docs win over any status line here.
 
-Built 2026-10-04, needs a restart (new items + dict keys). Sections/multipliers live in SECTIONS/EXPLICIT in `tools/gen_can_types.py` (mirror the Goal comments in canning.js); it reads `kubejs/exported/food/catalog.json` and writes can_types.json, a marked block in item_dict.js, can_servings.json, food_types.json (via food_catalog.write_types).
+Built 2026-10-04 (new items and dict keys: a change needs a restart). Sections/multipliers live in SECTIONS/EXPLICIT in `tools/gen_can_types.py` (mirror the Goal comments in canning.js); it reads `kubejs/exported/food/catalog.json` and writes can_types.json, a marked block in item_dict.js, can_servings.json, food_types.json (via food_catalog.write_types).
 
 - One meal = source hunger and sat points x mult, effects copied with duration scaled; "existing" cans are Canned Goods items whose food is overridden in cans.js ItemEvents.modification (setFoodProperties).
 - Recipes: canning.js `canSection('x')` loops the json; multi-alternative ingredients repeat the array n times (no tags). Recipe id = can key + suffix.

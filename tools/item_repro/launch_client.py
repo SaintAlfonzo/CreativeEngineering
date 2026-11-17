@@ -6,7 +6,7 @@
 The logged args have the account details stripped; this swaps in an offline account
 (username Tester) and the scratch game dir, and joins HOST:PORT on start. Without HOST PORT it
 stops at the title screen (the names audit's dump, feature_writeup/names.md section 11). The command line
-is never printed (see memory: patchermod-headless-smoke-test).
+is never printed (see memory: creative-common-headless-smoke-test).
 
 Importable: build_args(game_dir, extra) returns the argument list and launch(game_dir, extra) starts it
 (tools/client_capture/run_captures.py uses both).

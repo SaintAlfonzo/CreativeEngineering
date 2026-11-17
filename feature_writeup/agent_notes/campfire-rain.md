@@ -11,5 +11,5 @@ User's rules (2026-10-19): campfires (and soul campfires) place unlit (Unlit Cam
 - Tinted Campfires' ColorCampfire extends BaseEntityBlock, not CampfireBlock: Unlit Campfire's mixins never touch them.
 - Lives in Creative Delight since 2026-11-04 (creative_compat.md history); status: [barbeques_delight.md](../barbeques_delight.md) weather row and the campfire writeups.
 
-Related: [patchermod-coremod](patchermod-coremod.md), memory `configs-edited-backup`.
+Related: [creative-common-coremod](creative-common-coremod.md), memory `configs-edited-backup`.
 - 2026-10-22: scratch server PASSED (SQ-OM-06): plain campfire on stone out in rain, on a coal block / Quark charcoal block lit, soul campfire lit; Unlit Campfire campfireLitTime 0 from the world serverconfig (SQ-OM-18).

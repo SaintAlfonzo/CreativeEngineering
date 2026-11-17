@@ -98,7 +98,7 @@ constants instead of one-off per-set offsets.
 - Old `dragon_armor_bar.png` (20x16, the original one-off bespoke sheet) deleted along with its
   now-unused `DRAGON_SHEET_WIDTH/HEIGHT`/`DRAGON_ICON_FULL/HALF`/`DRAGON_NO_OUTLINE` constants -
   confirmed zero other references first (`grep -rn` across `creativeCommon/src` and `kubejs`).
-- This session's crash-debugging also reconfirmed [patchermod-coremod](patchermod-coremod.md)'s "never overwrite `mods/`
+- This session's crash-debugging also reconfirmed [creative-common-coremod](creative-common-coremod.md)'s "never overwrite `mods/`
   while the game is running" rule end-to-end: checked `pgrep` for a live Minecraft process (none)
   before `cp build/libs/... ../mods/...`, then verified by `md5sum` - same discipline that would
   have prevented that crash in the first place.
