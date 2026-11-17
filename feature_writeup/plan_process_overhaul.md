@@ -2,7 +2,9 @@
 
 Status: Planned 2026-11-16. Owner rulings the same evening (section "Owner decisions"). Done the same evening:
 P1.5 commit rule (CLAUDE.md) and P1.6 memory move (136 notes to `agent_notes/`). P1.1 to P1.3 BUILT 2026-11-16 night
-(offline tests PROC-01 to -09 and -15, -18 pass; PROC-16, -17 need the owner at the dialog; SQ-PROC-01 queued). Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
+(offline tests PROC-01 to -09 and -15, -18 pass; PROC-16, -17 need the owner at the dialog; SQ-PROC-01 queued). P1.4
+BUILT the same night. Phase 2 (P2.1 to P2.5) BUILT 2026-11-16 late night, offline tests PROC-20 to -28 pass; live rows
+SQ-PROC-10 to -15, CQ-PROC-01 queued; the never-run pass (P2.5 item 3) waits for the owner (Phase 2 build notes). Why: [process_review.md](process_review.md) (findings 1 to 6). TODO
 `tooling/process #1` to `#5`. Code owner: `tools/` and `build-logic/`. Jar changes are limited to a build stamp
 added by the shared Gradle plugin; no gameplay change, so no changelog bullet. Phase 2 continues
 [plan_scratch_testing_expansion.md](plan_scratch_testing_expansion.md): TX-40, TX-41 and TX-45 were built 2026-11-15;
@@ -389,9 +391,31 @@ Offline (checked by the building agent, results in [process_review.md](process_r
 - [x] **PROC-19 notes move:** 136 notes in `agent_notes/`, memory 48 files plus index, no `[[x]]` link left pointing at
   a moved memory, CLAUDE.md imports the index (2026-11-16, script output and diff).
 
+Phase 2 offline (`tools/test_queue_rows.sh`, run by `check_all.py`; fake scratch server, temp rows dir):
+- [x] **PROC-20 rows round trip:** every queue rows block equals its `.qb` section rendered; `qrows.py check` OK.
+- [x] **PROC-21 rows file runs:** `qrun.py run` on a rows file runs its steps; a `@draft` row is listed and not run;
+  `--section` selects.
+- [x] **PROC-22 one-jar plan:** one jar's stamp changed -> `qrun.py plan` = T1 rows of that jar plus its T2 rows, not
+  the other jar's; estimate under 1 h.
+- [x] **PROC-23 stale and dead id:** a row whose source changed after `@@reviewed` -> stale W (E when the source is in
+  the session's changed set and the .qb is not); `setblock ... minecraft:not_a_block_zz` -> dead-id E.
+- [x] **PROC-24 pin:** a hard-linked own jar becomes a copy; `qpin.py verify` refuses an unlisted jar and a jar changed
+  after prep.
+- [x] **PROC-25 unlisted jar:** `qrun.py run` refuses to start (no results written); `--no-pin` runs and records
+  `_no_pin` in the verdict stamps.
+- [x] **PROC-26 HARNESS:** bad regex, unset capture, shell exit as the only failure -> HARNESS; a real failed expect
+  stays FAIL.
+- [x] **PROC-27 reclassify:** `judge --reclassify` refused without a cause; with one the verdict changes, checks stay.
+- [x] **PROC-28 drive:** state file, two steps done, RUNNER.md claimed and released; a step killed after its first row
+  resumes from its second.
+
 Live (queued when built, per skill `scratch-test`):
 - SQ-PROC-01: scratch boot shows the `[creativecommon] builds:` line, and its stamps match `jar_archive/installed.tsv`.
-- Phase 2 rows (SQ-PROC-10 onward) are written when P2.1 is built.
+- SQ-PROC-10 to -13 (rows/PROC.qb section 2): prep pins on a real server, builds line equals the pinned stamps, verdict
+  files carry stamps, a `kill -9`ed driver leaves no server and resumes.
+- SQ-PROC-14, -15, CQ-PROC-01 (section 3, tier T3): the release gate (staged payload boot, one boot per optional-mod
+  drop, client join).
+- SQ-SMK-01 to -56 (rows/SMK.qb, tier T1): smoke rows of the 16 own jars.
 
 ## Build notes (2026-11-16 night)
 
@@ -450,6 +474,24 @@ P1.4 (items 1 to 3; item 4 by the main session, 5 and 6 by another agent):
 P1.4 (notes, deploy history):
 - Items 5 and 6 done: 33 agent notes lost their status lines (pointers to the owning docs instead), 31 checked and left; list and doc disagreements in [agent_notes/status_pass_2026-11-16.md](agent_notes/status_pass_2026-11-16.md). `build_deploy.py --snapshot` appends its own deploy.md section 8 bullet from the DEPLOYED.json mark (`append_history_rows`); `--backfill-history VERSION...` added 1.2.00 to 1.2.02 (tested on scratch copies, DEPLOYED.json and DEPLOY_LOG untouched).
 
+## Phase 2 build notes (2026-11-16 late night)
+
+Tools (all in `tools/scratch_query/`, entry point `qrun.py`; each file's docstring is the reference):
+
+| Item | Built | Notes |
+|---|---|---|
+| P2.1 rows as data | `qrows.py` (format, migrate, check, stats); `qrun.py` reads rows files (`@` lines are metadata, `--section`, `--tier`, rows without steps listed as DRAFT); `status_index.py` renders each section as a generated block `rows_<CODE>_<KEY>` | 196 sections moved in one pass (not newest first: the migration is mechanical and the round trip is exact), 175 files, 3177 rows. Lossless: the queue outside the markers is unchanged but for 3 row lines (whitespace, one missing closing pipe). Cells are split backtick-aware (rows quote grep patterns with bare `\|`). Steps imported from the newest past batch holding the row id, preferring one whose text PASSed in a `results.json`: 2031 rows got steps (573 from a passed batch), 1146 are `@draft`. Imported steps keep `@from <batch>`: setup rows of that batch (fixtures, forceload) are not imported, so a runner reads the batch for them. Section jars: features.tsv jars of the section's own code (a heuristic seed: e.g. MELT lists creativedelight and powergrid, not creativecommon; correct features.tsv, then rerun the jar pass). Owner rows: 4, by the pass text ("owner judges", "looks right"). |
+| P2.2 tiers | `qplan.py`: `qrun.py plan` (default, `--jars`, `--never`, `--failed`, `--all`, `--release`, `--client`, `--json`), `states`, `playtest`; T1 smoke rows `rows/SMK.qb` (56 rows, 16 own jars, by a subagent; about 9 min); T3 rows `rows/PROC.qb` section 3 | Row states: current, jar-changed, stale, failed, never, draft, owner, superseded. Jar change = a different pinned identity than the verdict recorded; for results from before pinning, the jar's last install (ledger, else file time) after the PASS day. So today every rebuilt jar counts as changed (539 jar-changed rows): the plan narrows once runs record stamps. Owner playtest list: `@owner` rows and client drafts (D5). |
+| P2.3 expiry | `qrowlint.py` (stale rows, dead ids), inside `qrun.py lint` for rows files and in `check_all.py` as `queue_rows` | Stale = a source (git, or file time when uncommitted) changed after `@reviewed` / `@@reviewed` / `@@date`. Deviation: stale is a warning in check_all, not an error, because the P1.4 status pass touched almost every writeup today (3200+ stale warnings); it is an error only with `--changed` when the session changed the source but not the .qb, and `qrun.py plan` lists stale rows to rewrite before they run. Dead ids: by position (setblock / fill / execute if block -> block, give / clear -> item, summon -> entity, effect -> effect, `#tag`, NBT item stacks) against the newest dumps (items_by_mod, loot tables, tag dumps, effects, fluids, recipe types; display_names.json of 10-20 as a fallback), cached in `jar_archive/queue_id_index.json`. 77 dead ids found at migration (e.g. `#creativeengineering:crop_seasons/*` after the namespace move, `#creativecompat:passthrough/leaf_pile`) are in `rows/_lint_baseline.tsv`: warnings; a new one fails the check. Rerun ids keep their id (skill text). |
+| P2.4 harness, pins, driver | `qrun.py` HARNESS (bad regex, capture unset by a skipped row, shell exit as the only failure); `qverdict.py` `judge --reclassify` (scratch plan 3.6); `qpin.py` + `prep_srv.sh` pin step + qrun refusal + `stamps` in every verdict file; `qdrive.py` (`qrun.py drive start/resume/status/stop`) | One harness fault makes the row HARNESS (its dependent checks fail with it). Pinning copies only own jars (third-party jars stay hard links: disk), keys them by project mod id (stamp, or `sha1:` for jars built before stamping). Unlisted = no mod_sides.md row; perfBot and the PGJAR Power Grid jar are allowed. The driver runs server rows only (one prep + boot per rows file section and world group); a watchdog process stops the step's server when the driver dies; client rows wait for TX-01 to TX-05. |
+| P2.5 archive | `qrun.py archive [--apply]` (`@@archived`, rendered into `testing/scratch_queue_archive.md` with verdict history, created by the first archived section); `@superseded` rows; `qrun.py never` | Archive: 0 sections eligible today (no section has every row current while pre-pinning results cannot prove it); tested by archiving one section and restoring it. Superseded: 13 rows whose own text says superseded / obsolete / dropped (SQ-CBS-01, CQ-CBS-01, SQ-GLD-15, SQ-HSC-87, -88, -90, -91, SQ-MDP-02, -04, -08, -09, SQ-CBJ-05, SQ-RD-02). Never-run rows: [status/never_run_2026-11-16.md](status/never_run_2026-11-16.md), 163 sections; 1103 never-run rows with steps, 877 drafts, 384 of them client rows. Not run: running them is a scratch run (about 24 to 62 h with the jar-changed and stale rows, `qrun.py plan --never`) and waits for the owner. Gotchas consolidated by a subagent (item 5). |
+
+Phase 2 "done when" against the build:
+- A one-jar change plans T1 plus the affected T2 rows under 1 h: met offline (PROC-22); live, after the first pinned run.
+- Never-run rows below 5 %: not met (about 60 %); needs the never-run pass above and the drafts' steps.
+- Seeded stale row and dead id flagged: met (PROC-23).
+- A run with an unlisted jar refuses to start: met (PROC-25).
+
 ## History
 
 - 2026-11-16: planned from [process_review.md](process_review.md); owner asked for items 1 to 3 and 5 as phase 1,
@@ -462,3 +504,4 @@ P1.4 (notes, deploy history):
 - 2026-11-16 night: P1.1 to P1.3 built (Build notes above). CLAUDE.md backed up to `CLAUDE.md.bak-2026-11-16-p1`, then: `intake` line, install line (dialog built), Checks line. Tests renamed PO- to PROC- (PO- is potions.md's).
 - 2026-11-16 night: P1.4 items 5 and 6 (agent notes status pass, deploy.md history from `--snapshot`) done; P1.6 follow-up 1 closed.
 - 2026-11-16 night: P1.4 items 1 to 3 built (Build notes above); PROC-10 to PROC-14 passed offline.
+- 2026-11-16 late night: Phase 2 (P2.1 to P2.5) built (Phase 2 build notes above); PROC-20 to PROC-28 passed offline. CLAUDE.md backed up to `CLAUDE.md.bak-2026-11-16-p2`, then: the queue line names the rows files and `qrun.py plan`. Subagents wrote rows/SMK.qb (T1 smoke rows) and consolidated the scratch-test gotchas.

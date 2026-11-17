@@ -38,11 +38,18 @@ date", "collect queued tests".
    registry, startup script, worldgen registry; hard to debug without this session's context; others depend on it;
    tiny and isolated) or "queue" (plain behaviour check; covered by a headless harness; fits a world group already
    queued; debuggable from the writeup). The user decides; silence = queue.
-2. **Where.** New section at the end of the queue: `## <Feature>, <date> ([writeup](../x.md) section N, TODO
-   `family #n`)`, with one intro line naming the jar or config state it targets (build time or version, and any
-   jar that must be installed first). Rows the owner wants first go into the "Priority run" section. Add one line to
-   the queue's header block ("<date>: added SQ-XX at the end, ...").
-3. **Row format** (table, as the existing sections): `| ID | Group | Commands | Pass | If it fails |`.
+2. **Where.** Rows are data (plan_process_overhaul.md P2.1): a new `@@section` in
+   `feature_writeup/testing/rows/<CODE>.qb` (a new file for a new code; key = the file's highest + 1). Fields:
+   `@@title <SQ-CODE> <Feature>, <date> ([writeup](../x.md) section N, TODO `family #n`)`, `@@date`, `@@jars` (own
+   mod ids the rows test: they drive `qrun.py plan`), `@@sources` (the writeup and source paths the rows were written
+   from: they drive the stale lint), `@@tier` (T2 default; T1 = a jar's smoke rows, T3 = release gate), one `@@text`
+   intro line naming the jar or config state it targets, then `@@table` and the rows. Format: `qrows.py` docstring.
+   Then `python3 tools/status_index.py` renders the section into scratch_queue.md (never edit inside the queue's
+   generated blocks). Rows the owner wants first: say so in the hand-over (`qrun.py plan --code CODE`).
+3. **Row format**: `## ID | short title`, then the table cells `@group`, `@commands`, `@pass`, `@fails` (one line
+   each, as `| ID | Group | Commands | Pass | If it fails |` shows them), then the row's qrun steps. Write the steps
+   now when you can (they are written once and every later run uses them); otherwise `@draft <why>` and the first
+   runner writes them. `@owner true` for design-feel rows only the owner judges (playtest list).
    - ID: `SQ-<CODE>-NN` server, `CQ-<CODE>-NN` client (needs a window or a real player). `<CODE>` is the feature's prefix from
      [test_prefix_index.md](../../../feature_writeup/testing/test_prefix_index.md) (a new feature adds its row there first);
      continue its numbering.
@@ -54,10 +61,13 @@ date", "collect queued tests".
      written as a look ("LOOK: ...").
    - If it fails: the files and the likely cause, so a later session does not start cold.
 4. **Index it.** Test IDs into the feature writeup's test list; README status "built, scratch test queued"; the TODO
-   row names the IDs. Only write `.qb` batch files when asked to build a run (part B2).
+   row names the IDs. `qrun.py lint feature_writeup/testing/rows/<CODE>.qb` (batch lint plus stale rows and dead ids,
+   `qrowlint.py`); fix every E. The rows file is the batch: no separate copy in `batches/`.
 5. **Refresh** ("is the queue up to date"): compare `kubejs/assets/creativecommon/changelog/unreleased.md`,
-   recently changed writeups and the latest run doc with the queue. Every player-visible bullet has a row; rows whose
-   feature changed get rewritten; superseded rows say "superseded by X"; results stay in the Run log, never the rows.
+   recently changed writeups and the latest run doc with the queue. Every player-visible bullet has a row;
+   `python3 tools/scratch_query/qrowlint.py` lists rows whose sources changed after they were reviewed (rewrite them,
+   then set `@reviewed <date>` on the row or `@@reviewed` on the section) and ids gone from the dumps; superseded rows
+   get `@superseded <replacement>`; results stay in the run docs and verdict files, never the rows.
    Update the "Jars in `mods/` now" line from `ls -l mods/` and the build outputs.
 
 ## Part B: run
@@ -97,7 +107,9 @@ everything below is the default unless the prompt says otherwise.
 - `python3 tools/check_all.py --fast` exits 0 (an offline FAIL is fixed or reported before a scratch boot).
 - `game_jvms.sh` empty; `df -h /` (stop below about 10 GB free); jar check: `python3 tools/jarstamp.py pending` and
   `python3 tools/jarstamp.py diff mods/ <srv>/mods` for the jars the rows need; record the stamps in the run doc. prep_srv.sh swaps in build jars newer than
-  `mods/`; a jar the rows need that is in neither: report it, those rows wait.
+  `mods/`; a jar the rows need that is in neither: report it, those rows wait. prep_srv.sh then pins the own jars
+  (real copies, `OUT/pinned.json`; `qpin.py`); `qrun.py run` refuses a server whose own jars are links, changed after
+  prep, or lack a mod_sides.md row. `--no-pin` only with the owner's OK; it is recorded in every verdict file.
 - Read the queue header (pinned notes, newest additions), its "World groups" and setup notes, and the latest run
   doc's notes.
 
@@ -109,7 +121,16 @@ everything below is the default unless the prompt says otherwise.
   `7. Run notes`, `8. Final verdicts`. Model: [scratch_run_2026-10-31.md](../../../feature_writeup/testing/scratch_run_2026-10-31.md).
 - **Targeted run** (one feature, phase or carve): a new section in today's run doc (or a new doc): owner request,
   batches, results dir, jars, boots, then the verdict table. Model: scratch_run_2026-11-01.md sections 6 and 7.
-- Batches: `tools/scratch_query/batches/r<MMDD>/*.qb` (format in `qrun.py`'s docstring), one file per boot. Results:
+- **What to run: `qrun.py plan`** (qplan.py docstring). Default: T1 smoke rows of every own jar whose stamp changed
+  since its rows last passed, plus the T2 rows whose jars or sources changed. `--never` / `--failed` add those rows;
+  `--all` (whole queue) only when the owner asks; `--release` = T3 rows + T1 of every jar + `qrun.py playtest` (owner
+  checklist). It prints one `qrun.py run OUT rows/<CODE>.qb RES --rows ...` per section, the drafts that need steps
+  first (write them into the .qb once) and the stale rows to rewrite first. `qrun.py states` shows row states.
+- **Rows files are the batches**: `qrun.py run OUT feature_writeup/testing/rows/<CODE>.qb RES --rows ...`
+  (`--section K`, `--tier T1`). Run-only setup (fixtures, world prep rows) still goes in
+  `tools/scratch_query/batches/r<MMDD>/*.qb`. Multi-boot server runs: `qrun.py drive start RUN [plan options]`
+  (qdrive.py: one prep + boot per section and world group, state in `perf/runs/RUN/drive/`, RUNNER.md kept current,
+  `drive resume RUN` after a dead runner, a watchdog stops the server if the driver dies). Results:
   `perf/runs/<run id>/`. Before any boot, `qrun.py lint BATCH` (codes in `qlint.py`; fix every E, read the W) and,
   for a review by a second agent, `qrun.py dry BATCH` (commands with vars substituted, lint inline, time estimate).
   A rerun with `--rows` / `--from`: lint with the same selection (it reports captures and markers in skipped rows);
@@ -148,7 +169,11 @@ everything below is the default unless the prompt says otherwise.
 ### B4. Judge
 
 Turn every LOOK into PASS or FAIL from `RES/rows/<ID>.log`, `rows/<ID>.shell.txt` and `shots/`. A failure caused by
-the batch (wrong regex, wrong coordinates) is `BATCH-FAULT`: fix the batch and rerun when cheap. Verdict table in the
+the batch (wrong regex, wrong coordinates) is `BATCH-FAULT`: fix the row's steps in its .qb and rerun when cheap
+(the row keeps its id: reruns are verdict history, no new `-NNb` ids). qrun itself marks a row `HARNESS` when a regex
+does not compile, a capture was left unset by a skipped row, or a shell exit code is the only failure while the log
+checks passed. A FAILed row found to be a batch fault: `qrun.py judge RES ID --reclassify BATCH-FAULT --cause "who,
+when, why"` (the failed checks stay recorded). Verdict table in the
 run doc: `| ID | Result | Evidence |`. qrun writes `RES/verdicts/ID.json` per row (every check with its outcome,
 the LOOKs, shots, crash): `qrun.py judge RES` lists the open LOOKs, `qrun.py judge RES ID N VERDICT "evidence"` (or
 `--file TSV`) fills one, and `qrun.py table RES [RES ...]` prints the run-doc table and counts. The judge step only
