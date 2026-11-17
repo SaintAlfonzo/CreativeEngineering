@@ -8,7 +8,7 @@ allowlist (`tools/namespace_allowlist.csv`) and rerun. This is the "no jar regis
 
 None.
 
-## Recipe helper not bound to the folder namespace (outside the pack folder) (82)
+## Recipe helper not bound to the folder namespace (outside the pack folder) (7)
 
 | File | Line | Hit |
 |---|---|---|
@@ -19,93 +19,10 @@ None.
 | `kubejs/data/creativebrewing/kubejs/creativebrewing/potion_bottling.js` | 24 | R = global.NCH (use global.NCH.forPack('creativebrewing')) |
 | `kubejs/data/creativebrewing/kubejs/creativebrewing/tipped_arrows.js` | 11 | R = global.NCH (use global.NCH.forPack('creativebrewing')) |
 | `kubejs/data/creativebrewing/kubejs/vinery/alcohol.js` | 10 | R = global.NCH (use global.NCH.forPack('creativebrewing')) |
-| `kubejs/data/creativedelight/kubejs/abnormals_delight/neapolitan.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/abnormals_delight/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/abnormals_delight/upgrade_aquatic.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/alexsdelight/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/alexsmobs/recipes.js` | 8 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/architects_palette/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/barbequesdelight/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/barbequesdelight/skewers.js` | 12 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js` | 13 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/buzzier_bees/recipes.js` | 8 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/cookingforblockheads/kitchen.js` | 55 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/corn_delight/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/cozys_improved_cats/item_merges.js` | 13 | global.NCH.remove( direct call (namespace creativeengineering) |
-| `kubejs/data/creativedelight/kubejs/create/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/create/seed_milling.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/create/slime.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/create_confectionery/chocolate.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/animal_fat_torch.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/baked_goods.js` | 12 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/baking.js` | 39 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/bread_recipes.js` | 14 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/canning.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js` | 13 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/drinks.js` | 23 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/mortar.js` | 23 | global.NCH.mortar( direct call (namespace creativeengineering) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/patties.js` | 23 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/powdered_sugar.js` | 7 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/salt.js` | 8 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/creativedelight/seasoning.js` | 7 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/delightful/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/endersdelight/additions.js` | 12 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/endersdelight/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/ends_delight/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/farmersdelight/cutting_boards.js` | 33 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/farmersdelight/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/farmersrespite/kettle.js` | 20 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/farmersrespite/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/fruitsdelight/item_merges.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/fungidelight/cooking.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/hearthandharvest/crow_salt_recipes.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/hearthandharvest/machine_recipes.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/hearthandharvest/recipes.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/hearthandharvest/vinery_stomping.js` | 14 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/hostiledelight/recipes.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/immersiveengineering/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/incubation/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/largemeals/recipes.js` | 16 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/minecraft/recipes.js` | 8 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/miners_delight/recipes.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/moredelight/item_merges.js` | 13 | global.NCH.remove( direct call (namespace creativeengineering) |
-| `kubejs/data/creativedelight/kubejs/moredelight/item_merges.js` | 16 | global.NCH.remove( direct call (namespace creativeengineering) |
-| `kubejs/data/creativedelight/kubejs/moredelight/item_merges.js` | 17 | global.NCH.remove( direct call (namespace creativeengineering) |
-| `kubejs/data/creativedelight/kubejs/moredelight/recipes.js` | 8 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/neapolitan/item_merges.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/neapolitan/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/oceansdelight/recipes.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/pneumaticcraft/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/quark/recipes.js` | 9 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/quarkdelight/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/roll_delight/recipes.js` | 14 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/rusticdelight/coffee_merge.js` | 17 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/rusticdelight/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/salt/create_salting.js` | 13 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/solapplepie/diet_log.js` | 10 | global.NCH.remove( direct call (namespace creativeengineering) |
-| `kubejs/data/creativedelight/kubejs/solapplepie/lunchboxes.js` | 12 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/supplementaries/recipes.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/veggiesdelight/cooking.js` | 13 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/veggiesdelight/recipes.js` | 13 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/vintagedelight/cooking.js` | 11 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/vintagedelight/jams.js` | 66 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `kubejs/data/creativedelight/kubejs/vintagedelight/recipes.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_food.js` | 64 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
-| `development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/cd_transition_items.js` | 10 | R = global.NCH (use global.NCH.forPack('creativedelight')) |
 
-## LootJS log names with another prefix (7)
+## LootJS log names with another prefix (0)
 
-| File | Line | Hit |
-|---|---|---|
-| `kubejs/data/creativedelight/kubejs/corn_delight/loot.js` | 20 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
-| `kubejs/data/creativedelight/kubejs/delightful/loot.js` | 16 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
-| `kubejs/data/creativedelight/kubejs/delightful/loot.js` | 24 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
-| `kubejs/data/creativedelight/kubejs/farmersdelight/loot.js` | 17 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
-| `kubejs/data/creativedelight/kubejs/farmersdelight/loot.js` | 25 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
-| `kubejs/data/creativedelight/kubejs/miners_delight/loot.js` | 22 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
-| `kubejs/data/creativedelight/kubejs/vintagedelight/loot.js` | 55 | logName('CE/...') in the creativedelight pack (tag CD, use R.logName) |
+None.
 
 ## Java DeferredRegister for a mod id the jar does not declare (0)
 
@@ -119,7 +36,7 @@ None.
 - `goldenfood->minecraft`: Golden Food overrides vanilla golden food items under minecraft (plan D11)
 - `jrftl:prepared_flesh`: Saved id: the item was registered under jrftl before the pack took it over; renaming would break saves (plan D11)
 
-## Not checked (20)
+## Not checked (23)
 
 Arguments the lint cannot resolve (a variable or a computed id), per file:
 
@@ -136,4 +53,7 @@ Arguments the lint cannot resolve (a variable or a computed id), per file:
 - `development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/drinks.js`: 2
 - `development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js`: 1
 - `development/creativeDelight/src/main/resources/kubejs_startup/rusticdelight/glowing_calamari.js`: 1
+- `development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/coil_blocks.js`: 1
+- `development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/dust_piles.js`: 1
+- `development/creativeEngineering/src/main/resources/kubejs_startup/creativeengineering/items/plate_blocks.js`: 1
 - `development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/items/stepstools.js`: 1
