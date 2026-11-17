@@ -10,23 +10,23 @@ ItemEvents.tooltip(e => {
 	var i = global.item
 
 // ############################## Misc Mods ##############################
-  	
-  	// Chimes
-  	addTooltipPattern(e, 'chimes:*_chimes', ['They sound nice', 'gray']);
-  	
-  	//Comforts 
-  	addTooltips(e,[i.rope_nail, ['Use to hang hammocks', col.norm]]);
-  	addTooltipPattern(e, 'comforts:sleeping_bag*', ['Sleep anywhere without setting a spawnpoint', col.norm]);
+
+	// Chimes
+	addTooltipPattern(e, 'chimes:*_chimes', ['They sound nice', 'gray']);
+
+	//Comforts
+	addTooltips(e,[i.rope_nail, ['Use to hang hammocks', col.norm]]);
+	addTooltipPattern(e, 'comforts:sleeping_bag*', ['Sleep anywhere without setting a spawnpoint', col.norm]);
 		addTooltipPattern(e, 'comforts:hammock*', ['Use with rope and nail', col.norm]);
-  	
-  	//Compass
-  	addTooltips(e,
+
+	//Compass
+	addTooltips(e,
 		[i.explorers_compass, ['Points to any structure!', col.leg], ['Not craftable', col.warn]],
 		[i.natures_compass, ['Points to any biome!', col.epic]]
 	);
-  	
-  	//Domestic Innovation
-  	addTooltips(e,
+
+	//Domestic Innovation
+	addTooltips(e,
 		[i.wayward_lantern, ['Allows following pets in unloaded chunks to wander home', col.good]],
 		[i.feather_on_a_stick, ['Play with your pets, herd them effectively', col.norm], ['Sticks to hostile mobs: your cats attack them', col.good]],
 		[i.deed_of_ownership, ['Allows transferring ownership of a pet to another player', col.rare]],
@@ -34,30 +34,30 @@ ItemEvents.tooltip(e => {
 		[i.collar_tag, ['Usable as a nametag, can be enchanted', col.uncm]]
 	);
 	addTooltipPattern(e, 'domesticationinnovation:pet_bed*', ['Allows pets to respawn if killed', col.good]);
-	
+
 	//Everything copper
 	addTooltips(e,
 		[i.copper_anvil, ['Remember to wax your anvils', col.norm]]
 	);
-		
-  	//Minecraft comes alive
-  	addTooltips(e,
+
+	//Minecraft comes alive
+	addTooltips(e,
 		[i.matchmaker_ring, ['Arrange a marriage...', col.norm]],
 		[i.baby_boy, ['Don\'t leave in the furnace unattended!', col.norm]],
 		[i.baby_girl, ['Don\'t leave in the furnace unattended!', col.norm]]
 	);
-  	
-  	//Immersive weathering
-  	addTooltips(e,
+
+	//Immersive weathering
+	addTooltips(e,
 		[i.tallow, ['Can be used to wax copper and iron blocks', col.norm]],
 		[i.steel_wool, ['Removes oxidation and rust from copper and iron blocks respectively', col.norm]]
 	);
 
-  	//Waystone
-  	addTooltips(e,
+	//Waystone
+	addTooltips(e,
 		[i.warpstone, ['On-demand waystone', col.epic]]
 	);
-		
+
 	//Archery
 	addTooltips(e,
 		[i.spectral_arrow, ['Highlights target on hit', col.uncm]],
@@ -142,13 +142,13 @@ ItemEvents.tooltip(e => {
 		[i.spore_blossom, ['Can be duplicated w/ bone meal', col.norm]],
 		[i.dragon_scale, ['Drops from ender dragon when killed, can be crafted w/ elytra to duplicate', col.epic]]
 	);
-  	
+
 // ############################## Supplementaries ##############################
 
 	addTooltipPattern(e, 'supplementaries:present*', ['Pack items for player w/ message, only recipient can open', col.norm]);
 	addTooltipPattern(e, 'supplementaries:trapped_present*', ['Pack items for player w/ message, only recipient can open', col.norm]);
 	addTooltipPattern(e, 'supplementaries:sack*', ['Retains 9-slot inventory when picked up, 3+ sacks will overencumber the player, can be dyed', col.norm]);
-	
+
 	addTooltips(e,
 		[i.faucet, ['Drains blocks containing fluid into inventory below, waterlogged blocks act as infinite source', col.uncm]],
 		[i.bellows, ['Speeds up furnaces, sustains fire blocks, pushes entities, continuously active when powered', col.norm]],
@@ -187,7 +187,7 @@ ItemEvents.tooltip(e => {
 		[i.short_netherite_door, ['Key Lockable', col.norm, {italic: true}]],
 		[i.statue, ['Holds items, waves when powered', col.norm]],
 		[i.goblet, ['Holds most fluids, right-click to drink', col.norm]],
-		[i.quiver, 
+		[i.quiver,
 			['Swap between up to 7 different arrows!', col.uncm],
 			['Hold [R] and scroll to swap', col.norm]],
 		[i.slice_map, ['Map of a specific altitude', col.norm]],
@@ -200,18 +200,18 @@ ItemEvents.tooltip(e => {
 			['Shoots shrapnel projectiles', col.norm]],
 		[i.rope_arrow, ['Deploys a rope coil where it lands', col.uncm]],
 		[i.antique_ink, ['Age your signs, maps, globes, and written books', col.rare]],
-		[i.creeper_head, 
+		[i.creeper_head,
 			['Can be stacked, candles can be placed on top', col.uncm],
 			['Can be used w/ fence to create skull pike, which scares hostile mobs away', col.norm]],
-		[i.zombie_head, 
+		[i.zombie_head,
 			['Can be stacked, candles can be placed on top', col.uncm],
 			['Can be used w/ fence to create skull pike, which scares hostile mobs away', col.norm]],
-		[i.skeleton_head, 
+		[i.skeleton_head,
 			['Can be stacked, candles can be placed on top', col.uncm],
 			['Can be used w/ fence to create skull pike, which scares hostile mobs away', col.norm]],
 		[i.wither_head, ['Can be stacked, candles can be placed on top', col.uncm]]
 	);
-		
+
 // ############################## Framed / Copycat Blocks ##############################
 
 	// Create schematics save a copycat's material, but not a FramedBlocks camo (feature_writeup/tooltips.md)

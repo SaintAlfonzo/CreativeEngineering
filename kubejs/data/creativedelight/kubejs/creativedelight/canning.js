@@ -88,7 +88,7 @@ global.CD.recipes(() => {
 	//   Every recipe that takes a can goes through this argument: NCH makes it manual only (_manual_only id, no result on
 	//   machine crafters), so Create, IE and AE2 never use up a whole can.
 
-	// TODO 
+	// TODO
 	// Canning automation
 
 	// Not canned: mint, acorn, grapes, mite crust, raw ham/chevon/hoglin/kangaroo/moose/bison/bunfungus. Coverage
@@ -146,11 +146,11 @@ global.CD.recipes(() => {
 	// Can be done with ingredient + can
 	// Ingredient + can + additive stretches ingredient, better yield
 	// Veggie
-	    // Raw - Salt, Bone Broth, Vinegar
+		// Raw - Salt, Bone Broth, Vinegar
 	// Fruit
-	    // Raw - Sugar, Honey (return bottle), Vinegar
+		// Raw - Sugar, Honey (return bottle), Vinegar
 	// Meat
-	    // Raw, cooked - Salt, Bone Broth, Vinegar
+		// Raw, cooked - Salt, Bone Broth, Vinegar
 
 	// Vinegar added later
 
@@ -167,8 +167,8 @@ global.CD.recipes(() => {
 	// Advanced Canning Ratio
 
 	// Beetroot- 1, 1.2, 2 Meals/Can
-	// 5x ==  1BP            
-	// 8x --  1BP, 2M 
+	// 5x ==  1BP
+	// 8x --  1BP, 2M
 	// 6x* -> 1BP, 2M
 
 	// Cabbage- 2, 1.6
@@ -417,7 +417,7 @@ global.CD.recipes(() => {
 	// 6 Bread / can
 	// No additives, special honey bread additive recipe, All bread items but scones, bread slice, toast, tortilla
 
-	// Food- Hunger Points, Saturation 
+	// Food- Hunger Points, Saturation
 
 	// Bread- 5, 6
 	// (10, 12) x4 meals
@@ -429,7 +429,7 @@ global.CD.recipes(() => {
 	// ============================================================
 
 	// Goal
-	// (Salad Type x1.25) -> 8 Meals/can 
+	// (Salad Type x1.25) -> 8 Meals/can
 	// 6 Salads / can
 	// Vinegar, apple cider vinegar additive (to be added) for 5 salads
 	// All fast, copy effect with shorter duration (.75x)

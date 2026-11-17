@@ -15,14 +15,14 @@ R.remove({id: 'immersiveengineering:crafting/ingot_steel_to_storage_steel'}, e)
 R.shapeless(Item.of(i.block_steel, 1), [Item.of(i.ingot_steel, 9)], e)
 R.shapeless(Item.of(i.ingot_steel, 9), [Item.of(i.block_steel, 1)], e)
 R.replaceInput(
-  { id: 'immersiveengineering:crafting/storage_steel_to_slab' },
-  i.ie_block_steel,
-  i.block_steel, e
+	{ id: 'immersiveengineering:crafting/storage_steel_to_slab' },
+	i.ie_block_steel,
+	i.block_steel, e
 )
 R.replaceOutput(
-  { id: 'immersiveengineering:crafting/storage_steel_from_slab' },
-  i.ie_block_steel,
-  i.block_steel, e
+	{ id: 'immersiveengineering:crafting/storage_steel_from_slab' },
+	i.ie_block_steel,
+	i.block_steel, e
 )
 
 R.remove({id: 'pneumaticcraft:explosion_crafting/compressed_iron_ingot'}, e)

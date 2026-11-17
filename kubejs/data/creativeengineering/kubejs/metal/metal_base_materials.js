@@ -193,19 +193,19 @@ R.bulk('remove', [
 	[{ id: 'immersiveengineering:crusher/ore_copper' }, e],
 	[{ id: 'immersiveengineering:crafting/hammercrushing_copper' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_copper' }, e],
-	
+
 	[{ id: 'create:crushing/iron_ore' }, e],
 	[{ id: 'create:crushing/deepslate_iron_ore' }, e],
 	[{ id: 'immersiveengineering:crusher/ore_iron' }, e],
 	[{ id: 'immersiveengineering:crafting/hammercrushing_iron' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_iron' }, e],
-	
+
 	[{ id: 'create:crushing/gold_ore' }, e],
 	[{ id: 'create:crushing/deepslate_gold_ore' }, e],
 	[{ id: 'immersiveengineering:crusher/ore_gold' }, e],
 	[{ id: 'immersiveengineering:crafting/hammercrushing_gold' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_gold' }, e],
-	
+
 	[{ id: 'create:crushing/zinc_ore' }, e],
 	[{ id: 'create:crushing/deepslate_zinc_ore' }, e],
 	[{id: 'create_things_and_misc:zinc_knif_craft'}, e],
@@ -213,7 +213,7 @@ R.bulk('remove', [
 	[{id: 'minecraft:pressing/zinc_sheet'}, e],
 	[{ id: 'immersiveengineering:crafting/hammercrushing_zinc' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_zinc' }, e],
-	
+
 	[{ id: 'immersiveengineering:crafting/hammercrushing_aluminum' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_aluminum' }, e],
 	[{ id: 'immersiveengineering:crusher/ore_aluminum' }, e],
@@ -221,15 +221,15 @@ R.bulk('remove', [
 	[{ id: 'immersiveengineering:crusher/raw_block_aluminum' }, e],
 	[{ id: 'create:crushing/aluminum_ore' }, e],
 	[{ id: 'create:crushing/deepslate_aluminum_ore' }, e],
-	
+
 	[{ id: 'immersiveengineering:crafting/hammercrushing_lead' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_lead' }, e],
 	[{ id: 'immersiveengineering:crusher/ore_lead' }, e],
 	[{ id: 'immersiveengineering:crusher/raw_ore_lead' }, e],
 	[{ id: 'immersiveengineering:crusher/raw_block_lead' }, e],
 	[{ id: 'create:crushing/lead_ore' }, e],
-	[{ id: 'create:crushing/deepslate_lead_ore' }, e],	
-	
+	[{ id: 'create:crushing/deepslate_lead_ore' }, e],
+
 	[{ id: 'create:crushing/silver_ore' }, e],
 	[{ id: 'create:crushing/deepslate_silver_ore' }, e],
 	[{ id: 'immersiveengineering:crusher/ore_silver' }, e],
@@ -237,7 +237,7 @@ R.bulk('remove', [
 	[{ id: 'immersiveengineering:crusher/raw_block_silver' }, e],
 	[{ id: 'immersiveengineering:crafting/hammercrushing_silver' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_silver' }, e],
-	
+
 	[{ id: 'create:crushing/nickel_ore' }, e],
 	[{ id: 'create:crushing/deepslate_nickel_ore' }, e],
 	[{ id: 'immersiveengineering:crusher/ore_nickel' }, e],
@@ -245,7 +245,7 @@ R.bulk('remove', [
 	[{ id: 'immersiveengineering:crusher/raw_block_nickel' }, e],
 	[{ id: 'immersiveengineering:crafting/hammercrushing_nickel' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_nickel' }, e],
-	
+
 	[{ id: 'create:crushing/uranium_ore' }, e],
 	[{ id: 'create:crushing/deepslate_uranium_ore' }, e],
 	[{ id: 'immersiveengineering:crusher/ore_uranium' }, e],
@@ -253,7 +253,7 @@ R.bulk('remove', [
 	[{ id: 'immersiveengineering:crusher/raw_block_uranium' }, e],
 	[{ id: 'immersiveengineering:crafting/hammercrushing_uranium' }, e],
 	[{ id: 'immersiveengineering:crafting/raw_hammercrushing_uranium' }, e],
-	
+
 ]);
 
 // ---------- Create crushing: ore/deepslate ore -> crushed ore ----------
@@ -266,7 +266,7 @@ R.bulk('createCrushing', [
 		Item.of(i.crushed_copper, 2),Item.of(i.crushed_copper, 1).withChance(0.25),
 		Item.of(i.xp_nugget, 1).withChance(0.75),Item.of(i.deepslate_cobble, 1).withChance(0.12)
 	], i.ds_ore_copper, e],
-	
+
 	[[
 		Item.of(i.crushed_iron, 1), Item.of(i.crushed_iron, 1).withChance(0.5),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.cobblestone, 1).withChance(0.12)
@@ -284,7 +284,7 @@ R.bulk('createCrushing', [
 		Item.of(i.crushed_gold, 2), Item.of(i.crushed_gold, 1).withChance(0.25),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.deepslate_cobble, 1).withChance(0.12)
 	], i.ds_ore_gold, e],
-	
+
 	[[
 		Item.of(i.crushed_zinc, 1), Item.of(i.crushed_zinc, 1).withChance(0.5),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.cobblestone, 1).withChance(0.12)
@@ -293,7 +293,7 @@ R.bulk('createCrushing', [
 		Item.of(i.crushed_zinc, 2), Item.of(i.crushed_zinc, 1).withChance(0.25),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.deepslate_cobble, 1).withChance(0.12)
 	], i.ds_ore_zinc, e],
-	
+
 	[[
 		Item.of(i.crushed_aluminum, 1), Item.of(i.crushed_aluminum, 1).withChance(0.5),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.cobblestone, 1).withChance(0.12)
@@ -302,7 +302,7 @@ R.bulk('createCrushing', [
 		Item.of(i.crushed_aluminum, 2), Item.of(i.crushed_aluminum, 1).withChance(0.25),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.deepslate_cobble, 1).withChance(0.12)
 	], i.ds_ore_aluminum, e],
-	
+
 	[[
 		Item.of(i.crushed_lead, 1), Item.of(i.crushed_lead, 1).withChance(0.5),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.cobblestone, 1).withChance(0.12)
@@ -311,7 +311,7 @@ R.bulk('createCrushing', [
 		Item.of(i.crushed_lead, 2), Item.of(i.crushed_lead, 1).withChance(0.25),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.deepslate_cobble, 1).withChance(0.12)
 	], i.ds_ore_lead, e],
-	
+
 	[[
 		Item.of(i.crushed_silver, 1), Item.of(i.crushed_silver, 1).withChance(0.5),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.cobblestone, 1).withChance(0.12)
@@ -320,7 +320,7 @@ R.bulk('createCrushing', [
 		Item.of(i.crushed_silver, 2), Item.of(i.crushed_silver, 1).withChance(0.25),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.deepslate_cobble, 1).withChance(0.12)
 	], i.ds_ore_silver, e],
-	
+
 	[[
 		Item.of(i.crushed_nickel, 1), Item.of(i.crushed_nickel, 1).withChance(0.5),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.cobblestone, 1).withChance(0.12)
@@ -329,7 +329,7 @@ R.bulk('createCrushing', [
 		Item.of(i.crushed_nickel, 2), Item.of(i.crushed_nickel, 1).withChance(0.25),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.deepslate_cobble, 1).withChance(0.12)
 	], i.ds_ore_nickel, e],
-	
+
 	[[
 		Item.of(i.crushed_uranium, 1), Item.of(i.crushed_uranium, 1).withChance(0.5),
 		Item.of(i.xp_nugget, 1).withChance(0.75), Item.of(i.cobblestone, 1).withChance(0.12)
@@ -345,7 +345,7 @@ R.bulk('ieCrushing', [
 	[Item.of(i.crushed_copper, 1), i.raw_copper, e, undefined, [{ chance: 0.333, output: Item.of(i.crushed_copper, 1) }], 6000],
 	[Item.of(i.crushed_copper, 12), i.raw_block_copper, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_copper, 2), i.any_ore_copper, e],
-	
+
 	[i.crushed_iron, i.raw_iron, e, undefined, [{ chance: 0.333, output: i.crushed_iron }], 6000],
 	[Item.of(i.crushed_iron, 12), i.raw_block_iron, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_iron, 2), i.any_ore_iron, e],
@@ -353,27 +353,27 @@ R.bulk('ieCrushing', [
 	[i.crushed_gold, i.raw_gold, e, undefined, [{ chance: 0.333, output: i.crushed_gold }], 6000],
 	[Item.of(i.crushed_gold, 12), i.raw_block_gold, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_gold, 2), i.any_ore_gold, e],
-	
+
 	[i.crushed_zinc, i.raw_zinc, e, undefined, [{ chance: 0.333, output: i.crushed_zinc }], 6000],
 	[Item.of(i.crushed_zinc, 12), i.raw_block_zinc, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_zinc, 2), i.any_ore_zinc, e],
-	
+
 	[i.crushed_aluminum, i.raw_aluminum, e, undefined, [{ chance: 0.333, output: i.crushed_aluminum }], 6000],
 	[Item.of(i.crushed_aluminum, 12), i.raw_block_aluminum, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_aluminum, 2), i.any_ore_aluminum, e],
-	
+
 	[i.crushed_lead, i.raw_lead, e, undefined, [{ chance: 0.333, output: i.crushed_lead }], 6000],
 	[Item.of(i.crushed_lead, 12), i.raw_block_lead, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_lead, 2), i.any_ore_lead, e],
-	
+
 	[i.crushed_silver, i.raw_silver, e, undefined, [{ chance: 0.333, output: i.crushed_silver }], 6000],
 	[Item.of(i.crushed_silver, 12), i.raw_block_silver, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_silver, 2), i.any_ore_silver, e],
-	
+
 	[i.crushed_nickel, i.raw_nickel, e, undefined, [{ chance: 0.333, output: i.crushed_nickel }], 6000],
 	[Item.of(i.crushed_nickel, 12), i.raw_block_nickel, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_nickel, 2), i.any_ore_nickel, e],
-	
+
 	[i.crushed_uranium, i.raw_uranium, e, undefined, [{ chance: 0.333, output: i.crushed_uranium }], 6000],
 	[Item.of(i.crushed_uranium, 12), i.raw_block_uranium, e, undefined, undefined, 24000],
 	[Item.of(i.crushed_uranium, 2), i.any_ore_uranium, e],
@@ -383,28 +383,28 @@ R.bulk('ieCrushing', [
 R.bulk('ieCrushing', [
 	[Item.of(i.dust_copper, 1), i.crushed_copper, e, undefined, [{ chance: 0.333, output: Item.of(i.dust_copper, 1) }], 6000],
 	[Item.of(i.dust_copper, 12), i.crushed_block_copper, e, undefined, undefined, 24000],
-	
+
 	[i.dust_iron, i.crushed_iron, e, undefined, [{ chance: 0.333, output: i.dust_iron }], 6000],
 	[Item.of(i.dust_iron, 12), i.crushed_block_iron, e, undefined, undefined, 24000],
 
 	[i.dust_gold, i.crushed_gold, e, undefined, [{ chance: 0.333, output: i.dust_gold }], 6000],
 	[Item.of(i.dust_gold, 12), i.crushed_block_gold, e, undefined, undefined, 24000],
-	
+
 	[i.dust_zinc, i.crushed_zinc, e, undefined, [{ chance: 0.333, output: i.dust_zinc }], 6000],
 	[Item.of(i.dust_zinc, 12), i.crushed_block_zinc, e, undefined, undefined, 24000],
-	
+
 	[i.dust_aluminum, i.crushed_aluminum, e, undefined, [{ chance: 0.333, output: i.dust_aluminum }], 6000],
 	[Item.of(i.dust_aluminum, 12), i.crushed_block_aluminum, e, undefined, undefined, 24000],
-	
+
 	[i.dust_lead, i.crushed_lead, e, undefined, [{ chance: 0.333, output: i.dust_lead }], 6000],
 	[Item.of(i.dust_lead, 12), i.crushed_block_lead, e, undefined, undefined, 24000],
-	
+
 	[i.dust_silver, i.crushed_silver, e, undefined, [{ chance: 0.333, output: i.dust_silver }], 6000],
 	[Item.of(i.dust_silver, 12), i.crushed_block_silver, e, undefined, undefined, 24000],
-	
+
 	[i.dust_nickel, i.crushed_nickel, e, undefined, [{ chance: 0.333, output: i.dust_nickel }], 6000],
 	[Item.of(i.dust_nickel, 12), i.crushed_block_nickel, e, undefined, undefined, 24000],
-	
+
 	[i.dust_uranium, i.crushed_uranium, e, undefined, [{ chance: 0.333, output: i.dust_uranium }], 6000],
 	[Item.of(i.dust_uranium, 12), i.crushed_block_uranium, e, undefined, undefined, 24000],
 ]);
@@ -418,28 +418,28 @@ R.bulk('ieCrushing', [
 R.bulk('ieArcFurnace', [
 	[i.ingot_copper, i.crushed_copper, e, undefined, [{ chance: 0.5, output: i.ingot_copper }]],
 	[Item.of(i.ingot_copper, 13), i.crushed_block_copper, e, undefined, [{ chance: 0.5, output: i.ingot_copper }]],
-	
+
 	[i.ingot_iron, i.crushed_iron, e, undefined, [{ chance: 0.5, output: i.ingot_iron }]],
 	[Item.of(i.ingot_iron, 13), i.crushed_block_iron, e, undefined, [{ chance: 0.5, output: i.ingot_iron }]],
-	
+
 	[i.ingot_gold, i.crushed_gold, e, undefined, [{ chance: 0.5, output: i.ingot_gold }]],
 	[Item.of(i.ingot_gold, 13), i.crushed_block_gold, e, undefined, [{ chance: 0.5, output: i.ingot_gold }]],
-	
+
 	[i.ingot_zinc, i.crushed_zinc, e, undefined, [{ chance: 0.5, output: i.ingot_zinc }]],
 	[Item.of(i.ingot_zinc, 13), i.crushed_block_zinc, e, undefined, [{ chance: 0.5, output: i.ingot_zinc }]],
-	
+
 	[i.ingot_aluminum, i.crushed_aluminum, e, undefined, [{ chance: 0.5, output: i.ingot_aluminum }]],
 	[Item.of(i.ingot_aluminum, 13), i.crushed_block_aluminum, e, undefined, [{ chance: 0.5, output: i.ingot_aluminum }]],
-	
+
 	[i.ingot_lead, i.crushed_lead, e, undefined, [{ chance: 0.5, output: i.ingot_lead }]],
 	[Item.of(i.ingot_lead, 13), i.crushed_block_lead, e, undefined, [{ chance: 0.5, output: i.ingot_lead }]],
-	
+
 	[i.ingot_silver, i.crushed_silver, e, undefined, [{ chance: 0.5, output: i.ingot_silver }]],
 	[Item.of(i.ingot_silver, 13), i.crushed_block_silver, e, undefined, [{ chance: 0.5, output: i.ingot_silver }]],
-	
+
 	[i.ingot_nickel, i.crushed_nickel, e, undefined, [{ chance: 0.5, output: i.ingot_nickel }]],
 	[Item.of(i.ingot_nickel, 13), i.crushed_block_nickel, e, undefined, [{ chance: 0.5, output: i.ingot_nickel }]],
-	
+
 	[i.ingot_uranium, i.crushed_uranium, e, undefined, [{ chance: 0.5, output: i.ingot_uranium }]],
 	[Item.of(i.ingot_uranium, 13), i.crushed_block_uranium, e, undefined, [{ chance: 0.5, output: i.ingot_uranium }]],
 ]);
@@ -529,31 +529,31 @@ R.bulk('ieArcFurnace', [
 R.bulk('shapeless', [
 	[Item.of(i.dust_copper, 9), i.dust_block_copper, e],
 	[i.dust_block_copper, Item.of(i.dust_copper, 9), e],
-	
+
 	[Item.of(i.dust_iron, 9), i.dust_block_iron, e],
 	[i.dust_block_iron, Item.of(i.dust_iron, 9), e],
-	
+
 	[Item.of(i.dust_gold, 9), i.dust_block_gold, e],
 	[i.dust_block_gold, Item.of(i.dust_gold, 9), e],
-	
+
 	[Item.of(i.dust_zinc, 9), i.dust_block_zinc, e],
 	[i.dust_block_zinc, Item.of(i.dust_zinc, 9), e],
-	
+
 	[Item.of(i.dust_aluminum, 9), i.dust_block_aluminum, e],
 	[i.dust_block_aluminum, Item.of(i.dust_aluminum, 9), e],
-	
+
 	[Item.of(i.dust_lead, 9), i.dust_block_lead, e],
 	[i.dust_block_lead, Item.of(i.dust_lead, 9), e],
-	
+
 	[Item.of(i.dust_silver, 9), i.dust_block_silver, e],
 	[i.dust_block_silver, Item.of(i.dust_silver, 9), e],
-	
+
 	[Item.of(i.dust_nickel, 9), i.dust_block_nickel, e],
 	[i.dust_block_nickel, Item.of(i.dust_nickel, 9), e],
-	
+
 	[Item.of(i.dust_uranium, 9), i.dust_block_uranium, e],
 	[i.dust_block_uranium, Item.of(i.dust_uranium, 9), e],
-	
+
 	[Item.of(i.dust_diamond, 9), i.dust_block_diamond, e],
 	[i.dust_block_diamond, Item.of(i.dust_diamond, 9), e],
 
@@ -580,30 +580,30 @@ R.bulk('shapeless', [
 R.bulk('shapeless', [
 	[Item.of(i.plate_copper, 9), i.plate_block_copper, e],
 	[i.plate_block_copper, Item.of(i.plate_copper, 9), e],
-	
+
 	[Item.of(i.plate_iron, 9), i.plate_block_iron, e],
 	[i.plate_block_iron, Item.of(i.plate_iron, 9), e],
-	
+
 	[i.plate_gold, [i.ie_hammer, i.ingot_gold], e],
 	[Item.of(i.plate_gold, 9), i.plate_block_gold, e],
 	[i.plate_block_gold, Item.of(i.plate_gold, 9), e],
-	
+
 	[i.plate_zinc, [i.ie_hammer, i.ingot_zinc], e],
 	[Item.of(i.plate_zinc, 9), i.plate_block_zinc, e],
 	[i.plate_block_zinc, Item.of(i.plate_zinc, 9), e],
-	
+
 	[Item.of(i.plate_aluminum, 9), i.plate_block_aluminum, e],
 	[i.plate_block_aluminum, Item.of(i.plate_aluminum, 9), e],
-	
+
 	[Item.of(i.plate_lead, 9), i.plate_block_lead, e],
 	[i.plate_block_lead, Item.of(i.plate_lead, 9), e],
-	
+
 	[Item.of(i.plate_silver, 9), i.plate_block_silver, e],
 	[i.plate_block_silver, Item.of(i.plate_silver, 9), e],
-	
+
 	[Item.of(i.plate_nickel, 9), i.plate_block_nickel, e],
 	[i.plate_block_nickel, Item.of(i.plate_nickel, 9), e],
-	
+
 	[Item.of(i.plate_uranium, 9), i.plate_block_uranium, e],
 	[i.plate_block_uranium, Item.of(i.plate_uranium, 9), e],
 ]);

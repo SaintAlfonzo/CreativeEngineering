@@ -14,49 +14,49 @@
 
 (function () {
 
-    var TAG = '[leaf-apples] '
-    var SKIP = 'leaf-apples:skip'
+	var TAG = '[leaf-apples] '
+	var SKIP = 'leaf-apples:skip'
 
-    var TABLES = [
-        'minecraft:blocks/oak_leaves',
-        'minecraft:blocks/dark_oak_leaves',
-        'myrtrees:blocks/rubberwood_leaves',
-    ]
+	var TABLES = [
+		'minecraft:blocks/oak_leaves',
+		'minecraft:blocks/dark_oak_leaves',
+		'myrtrees:blocks/rubberwood_leaves',
+	]
 
-    function dropsApple(entry, apple) {
-        if (entry.name === apple) return true
-        var kids = entry.children || []
-        for (var k = 0; k < kids.length; k++) if (dropsApple(kids[k], apple)) return true
-        return false
-    }
+	function dropsApple(entry, apple) {
+		if (entry.name === apple) return true
+		var kids = entry.children || []
+		for (var k = 0; k < kids.length; k++) if (dropsApple(kids[k], apple)) return true
+		return false
+	}
 
-    function rewrite(b, apple, stats) {
-        var pools = JSON.parse(String(b.pools.toString()))
-        if (!pools.length) throw new Error(SKIP)
-        var removed = 0
-        for (var p = 0; p < pools.length; p++) {
-            var entries = pools[p].entries || []
-            var kept = entries.filter(function (e) { return !dropsApple(e, apple) })
-            removed += entries.length - kept.length
-            pools[p].entries = kept.length ? kept : [{ type: 'minecraft:empty', weight: 1 }]
-        }
-        if (!removed) throw new Error(SKIP)
-        b.pools = JsonIO.parseRaw(JSON.stringify(pools))
-        b.type = 'minecraft:block'
-        stats.tables++
-    }
+	function rewrite(b, apple, stats) {
+		var pools = JSON.parse(String(b.pools.toString()))
+		if (!pools.length) throw new Error(SKIP)
+		var removed = 0
+		for (var p = 0; p < pools.length; p++) {
+			var entries = pools[p].entries || []
+			var kept = entries.filter(function (e) { return !dropsApple(e, apple) })
+			removed += entries.length - kept.length
+			pools[p].entries = kept.length ? kept : [{ type: 'minecraft:empty', weight: 1 }]
+		}
+		if (!removed) throw new Error(SKIP)
+		b.pools = JsonIO.parseRaw(JSON.stringify(pools))
+		b.type = 'minecraft:block'
+		stats.tables++
+	}
 
-    ServerEvents.genericLootTables(function (event) {
-        var apple = global.item.apple
-        var stats = { tables: 0 }
-        TABLES.forEach(function (table) {
-            try {
-                event.modify(table, function (b) { rewrite(b, apple, stats) })
-            } catch (err) {
-                if (String(err).indexOf(SKIP) < 0) console.warn(TAG + table + ': ' + err)
-            }
-        })
-        console.info(TAG + 'apples removed from ' + stats.tables + ' of ' + TABLES.length + ' leaf tables')
-    })
+	ServerEvents.genericLootTables(function (event) {
+		var apple = global.item.apple
+		var stats = { tables: 0 }
+		TABLES.forEach(function (table) {
+			try {
+				event.modify(table, function (b) { rewrite(b, apple, stats) })
+			} catch (err) {
+				if (String(err).indexOf(SKIP) < 0) console.warn(TAG + table + ': ' + err)
+			}
+		})
+		console.info(TAG + 'apples removed from ' + stats.tables + ' of ' + TABLES.length + ' leaf tables')
+	})
 
 })()

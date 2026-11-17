@@ -109,7 +109,7 @@ function dumpPotions() {
 	writeExportJson('kubejs/exported/potions.json', sortByMod(potByMod))
 
 	console.log(`[dumppotions] wrote ${effCount} mob effects (${Object.keys(effByMod).length} mods) ` +
-	            `+ ${potCount} potions (${Object.keys(potByMod).length} mods)`)
+				`+ ${potCount} potions (${Object.keys(potByMod).length} mods)`)
 
 	return { effects: effCount, potions: potCount }
 }

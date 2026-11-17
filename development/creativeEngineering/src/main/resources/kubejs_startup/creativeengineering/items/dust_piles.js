@@ -14,22 +14,22 @@
 // and tool-tier tags for every dust pile in one place, so tags don't fight between two files.
 
 const DUST_PILE_METALS = [
-    // Ore metals (previously Java-registered)
-    'aluminum', 'copper', 'gold', 'iron', 'lead', 'nickel', 'silver', 'uranium', 'zinc', 'diamond',
-    // Alloys
-    'rose_gold', 'cast_iron', 'electrum', 'steel', 'constantan', 'brass',
+	// Ore metals (previously Java-registered)
+	'aluminum', 'copper', 'gold', 'iron', 'lead', 'nickel', 'silver', 'uranium', 'zinc', 'diamond',
+	// Alloys
+	'rose_gold', 'cast_iron', 'electrum', 'steel', 'constantan', 'brass',
 ];
 
 var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('block', e => {
-    DUST_PILE_METALS.forEach(metal => {
-        reg.block(e, metal + '_dust_pile', 'falling')
-            .displayName(metal.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Grit Pile')
-            .material('metal')
-            .gravelSoundType()
-            .hardness(5.0)
-            .resistance(5.0)
-            .requiresTool(true)
-            .textureAll('creativeengineering:block/dust_pile/' + metal + '_dust_pile');
-    });
+	DUST_PILE_METALS.forEach(metal => {
+		reg.block(e, metal + '_dust_pile', 'falling')
+			.displayName(metal.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Grit Pile')
+			.material('metal')
+			.gravelSoundType()
+			.hardness(5.0)
+			.resistance(5.0)
+			.requiresTool(true)
+			.textureAll('creativeengineering:block/dust_pile/' + metal + '_dust_pile');
+	});
 });

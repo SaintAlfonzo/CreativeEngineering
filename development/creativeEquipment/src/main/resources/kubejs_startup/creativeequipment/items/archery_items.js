@@ -3,5 +3,5 @@
 // assets/creativeengineering/textures/item/arrow_fletching.png in this jar.
 
 StartupEvents.registry('item', e => {
-    e.create('creativeequipment:arrow_fletching').displayName('Arrow Fletching')
+	e.create('creativeequipment:arrow_fletching').displayName('Arrow Fletching')
 })

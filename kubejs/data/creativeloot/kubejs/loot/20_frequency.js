@@ -14,21 +14,21 @@
 // Reload with /reload.
 
 LootJS.modifiers(event => {
-  const L = global.LOOT
-  const R = global.NCH.forPack('creativeloot')
+	const L = global.LOOT
+	const R = global.NCH.forPack('creativeloot')
 
-  // ── count caps (examples — uncomment & edit) ──────────────────────────────
+	// ── count caps (examples — uncomment & edit) ──────────────────────────────
 
-  // no chest ever gives more than 8 emeralds
-  // L.capCount(L.chestType(event), 'minecraft:emerald', 8)
-  //   .logName(R.logName('frequency/emerald_cap'))
+	// no chest ever gives more than 8 emeralds
+	// L.capCount(L.chestType(event), 'minecraft:emerald', 8)
+	//   .logName(R.logName('frequency/emerald_cap'))
 
-  // ── context-gated bonus ──────────────────────────────────────────────────
+	// ── context-gated bonus ──────────────────────────────────────────────────
 
-  // 30% of chests in deep dark biomes get an extra echo shard
-  // L.chestType(event)
-  //   .anyBiome('minecraft:deep_dark')
-  //   .randomChance(0.3)
-  //   .addLoot(L.entry({ item: 'minecraft:echo_shard' }, 'freq/deep_dark_echo'))
-  //   .logName(R.logName('frequency/deep_dark_echo'))
+	// 30% of chests in deep dark biomes get an extra echo shard
+	// L.chestType(event)
+	//   .anyBiome('minecraft:deep_dark')
+	//   .randomChance(0.3)
+	//   .addLoot(L.entry({ item: 'minecraft:echo_shard' }, 'freq/deep_dark_echo'))
+	//   .logName(R.logName('frequency/deep_dark_echo'))
 })

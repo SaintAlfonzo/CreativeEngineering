@@ -13,13 +13,13 @@ var u = undefined;
 /*
 Ore Stone ratios:
 	Compacting: 250mb Lava, 2 Gravel, 6 Nuggets
-	
+
 	IE Crush: 5 nugs
 	CR Crush: .519 crushed ore
-	CR Crush - Smelt: .519 ingots (4.66 nugs) 
+	CR Crush - Smelt: .519 ingots (4.66 nugs)
 	CR Crush - IE Crush - Smelt: .692 ingots (6.22 nugs)
 	CR Crush - IE Arc: .77777 ingots (7 nugs)
-	
+
 Ore yields:
 	Smelt (Crushed ore, grit): 1x
 	CR Crush (Orestone): 1x
@@ -97,9 +97,9 @@ R.createCrushing([Item.of(i.blaze_powder, 1).withChance(0.25), Item.of(i.blaze_r
 R.ieCrushing(Item.of(i.dust_sulfur, 1), i.scoria, e, u, [{ chance: 0.50, output: Item.of(i.blaze_powder, 1) }])
 
 //Scorchia
-//Replace dye recipe w/ coke mixing 
+//Replace dye recipe w/ coke mixing
 R.remove({ id: 'create:crafting/palettes/scorchia' }, e)
-R.shaped(Item.of(i.scorchia, 8), ['SSS', 'SCS', 'SSS'], {S: i.scoria, C: [i.coal_coke, i.dust_coke, i.petcoke, i.dust_petcoke]}, e) 
+R.shaped(Item.of(i.scorchia, 8), ['SSS', 'SCS', 'SSS'], {S: i.scoria, C: [i.coal_coke, i.dust_coke, i.petcoke, i.dust_petcoke]}, e)
 //Crushing recipe
 R.createCrushing([Item.of(i.dust_coke, 1).withChance(.25), Item.of(i.nugget_lead, 1).withChance(.1),Item.of(i.nugget_uranium, 1).withChance(.1)], i.scorchia, e)
 R.ieCrushing(Item.of(i.dust_coke, 1), i.scorchia, e, u, [{ chance: 0.2, output: Item.of(i.nugget_lead, 1) }, { chance: 0.2, output: Item.of(i.nugget_uranium, 1) }])
@@ -165,7 +165,7 @@ R.createCrushing([Item.of(i.powdered_obsidian, 3), Item.of(i.powdered_obsidian, 
 R.ieCrushing(Item.of(i.powdered_obsidian, 4), i.layered_obsidian, e, u, [{ chance: 0.75, output: Item.of(i.powdered_obsidian, 1) }])
 
 //Magma block
-//Redundant recipe removal    
+//Redundant recipe removal
 R.remove({ id: 'create:crushing/misc/scrap_magma_block' }, e)
 //IE Crushing
 R.ieCrushing(Item.of(i.crushed_magma, 3), i.magma_block, e, u, [{ chance: 0.75, output: Item.of(i.crushed_magma, 1) }, { chance: 0.333, output: Item.of(i.scoria, 1) }])

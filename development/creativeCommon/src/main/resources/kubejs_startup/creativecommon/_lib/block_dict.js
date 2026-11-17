@@ -310,41 +310,41 @@ b.melt_fire_di_wayward_lantern = 'domesticationinnovation:wayward_lantern';
 // ############################## Validation ##############################
 
 StartupEvents.postInit(() => {
-    var $ForgeRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries');
-    var $ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation');
+	var $ForgeRegistries = Java.loadClass('net.minecraftforge.registries.ForgeRegistries');
+	var $ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation');
 
-    function blockExists(id) {
-        try {
-            return $ForgeRegistries.BLOCKS.containsKey($ResourceLocation.of(id, ':'));
-        } catch (err) {
-            return false;
-        }
-    }
+	function blockExists(id) {
+		try {
+			return $ForgeRegistries.BLOCKS.containsKey($ResourceLocation.of(id, ':'));
+		} catch (err) {
+			return false;
+		}
+	}
 
-    let missing = [];
-    let tagEntries = 0;
-    for (let key in b) {
-        let id = b[key];
-        if (typeof id !== 'string') {
-            // Object-shaped block matchers (state predicates, etc.) — skip validation
-            continue;
-        }
-        // A glob ('displaydelight:*plated_*') is a matcher, and ids of a mod that is not loaded are guarded where they
-        // are used: neither is a dict error (scratch r1106spf).
-        if (id.indexOf('*') >= 0 || !global.has(id)) continue;
-        if (id.startsWith('#')) {
-            // Tag-based block entries aren't validated yet — verify these manually.
-            // Forge block tag validation requires a TagKey<Block> lookup that hasn't
-            // been implemented/tested here; flagging rather than guessing at it.
-            tagEntries++;
-            continue;
-        }
-        if (!blockExists(id)) {
-            missing.push(key + ' -> ' + id);
-        }
-    }
-    if (tagEntries > 0) console.info('[block_dict] ' + tagEntries + ' tag entries not checked (tags load after startup)');
-    if (missing.length > 0) {
-        console.warn('[block_dict] Missing/invalid block IDs:\n' + missing.join('\n'));
-    }
+	let missing = [];
+	let tagEntries = 0;
+	for (let key in b) {
+		let id = b[key];
+		if (typeof id !== 'string') {
+			// Object-shaped block matchers (state predicates, etc.) — skip validation
+			continue;
+		}
+		// A glob ('displaydelight:*plated_*') is a matcher, and ids of a mod that is not loaded are guarded where they
+		// are used: neither is a dict error (scratch r1106spf).
+		if (id.indexOf('*') >= 0 || !global.has(id)) continue;
+		if (id.startsWith('#')) {
+			// Tag-based block entries aren't validated yet — verify these manually.
+			// Forge block tag validation requires a TagKey<Block> lookup that hasn't
+			// been implemented/tested here; flagging rather than guessing at it.
+			tagEntries++;
+			continue;
+		}
+		if (!blockExists(id)) {
+			missing.push(key + ' -> ' + id);
+		}
+	}
+	if (tagEntries > 0) console.info('[block_dict] ' + tagEntries + ' tag entries not checked (tags load after startup)');
+	if (missing.length > 0) {
+		console.warn('[block_dict] Missing/invalid block IDs:\n' + missing.join('\n'));
+	}
 });

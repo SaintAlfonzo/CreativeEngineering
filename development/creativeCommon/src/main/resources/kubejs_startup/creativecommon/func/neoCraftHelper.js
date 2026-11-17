@@ -15,16 +15,16 @@ var $NCH_configClasses = [{ id: 'creativecommon', name: 'com.SaintAlfonzo.creati
 
 global.NCH = {
 
-  // The pack's own namespace: recipe TYPES the pack registers (seasoning, dragon_breathing, ...) always use it.
-  modId: 'creativeengineering',
-  // Namespace of the recipe IDS the helpers write; withNamespace() changes it for one block of calls.
-  _ns: 'creativeengineering',
-  AXE: '#forge:tools/axes',
-  strict: true, // true = throw on invalid item/fluid ids, false = warn and continue
+	// The pack's own namespace: recipe TYPES the pack registers (seasoning, dragon_breathing, ...) always use it.
+	modId: 'creativeengineering',
+	// Namespace of the recipe IDS the helpers write; withNamespace() changes it for one block of calls.
+	_ns: 'creativeengineering',
+	AXE: '#forge:tools/axes',
+	strict: true, // true = throw on invalid item/fluid ids, false = warn and continue
 
-  // ========================================================================
-  // Recipe id namespace (Q24): scoped, so no helper signature changes
-  // ========================================================================
+	// ========================================================================
+	// Recipe id namespace (Q24): scoped, so no helper signature changes
+	// ========================================================================
 
 	// Namespace of the next recipe id ('creativeengineering' unless inside withNamespace).
 	ns() {
@@ -105,45 +105,45 @@ global.NCH = {
 		return (global.NCH._packTags[global.NCH._ns] || global.NCH._ns) + '/' + name
 	},
 
-  // ========================================================================
-  // Core id resolution & validation
-  // ========================================================================
+	// ========================================================================
+	// Core id resolution & validation
+	// ========================================================================
 
 	toId(output, input, process) {
 		const resolve = (v) => {
-		  if (!v) return 'unknown'
+			if (!v) return 'unknown'
 
-		  if (Array.isArray(v))
-		    return resolve(v[0])
+			if (Array.isArray(v))
+				return resolve(v[0])
 
-		  if (typeof v === 'string')
-		    return v
+			if (typeof v === 'string')
+				return v
 
-		  var ingId = global.NCH._ingredientId(v)
-      		if (ingId) return ingId
+			var ingId = global.NCH._ingredientId(v)
+					if (ingId) return ingId
 
 
-		  // IMPORTANT: resolve ItemStacks through toJson/_resolveIdCount
-		  // rather than getId(), because getId() may return
-		  // "1 crushed_raw_iron" rather than an actual item ID.
-		  if (typeof v.toJson === 'function') {
-		    try {
-		      var json = v.toJson()
-		      var id = json.item ?? json.id ?? json.tag
-		      if (id) return String(id)
-		    } catch (err) {}
-		  }
+			// IMPORTANT: resolve ItemStacks through toJson/_resolveIdCount
+			// rather than getId(), because getId() may return
+			// "1 crushed_raw_iron" rather than an actual item ID.
+			if (typeof v.toJson === 'function') {
+				try {
+					var json = v.toJson()
+					var id = json.item ?? json.id ?? json.tag
+					if (id) return String(id)
+				} catch (err) {}
+			}
 
-		  if (v.item && typeof v.item === 'string')
-		    return v.item
+			if (v.item && typeof v.item === 'string')
+				return v.item
 
-		  if (v.fluid && typeof v.fluid === 'string')
-		    return v.fluid
+			if (v.fluid && typeof v.fluid === 'string')
+				return v.fluid
 
-		  if (v.id && typeof v.id === 'string')
-		    return v.id
+			if (v.id && typeof v.id === 'string')
+				return v.id
 
-		  return String(v)
+			return String(v)
 		}
 
 		const clean = (v) => {
@@ -175,237 +175,237 @@ global.NCH = {
 		const base = `${clean(input)}_to_${clean(output)}`
 
 		return process
-		  ? `${base}_by_${process.toLowerCase()}`
-		  : base
+			? `${base}_by_${process.toLowerCase()}`
+			: base
 	},
 
-  _isTag(id) {
-    return typeof id === 'string' && id.startsWith('#')
-  },
-  
-  _cleanResolvedId(id) {
-    if (id == null) return undefined
+	_isTag(id) {
+		return typeof id === 'string' && id.startsWith('#')
+	},
 
-    id = String(id).trim()
+	_cleanResolvedId(id) {
+		if (id == null) return undefined
 
-    // Remove accidental wrapping quotes introduced by Rhino/KubeJS
-    if (
-      id.length >= 2 &&
-      (
-        (id.startsWith("'") && id.endsWith("'")) ||
-        (id.startsWith('"') && id.endsWith('"'))
-      )
-    ) {
-      id = id.substring(1, id.length - 1).trim()
-    }
+		id = String(id).trim()
 
-    // KubeJS ItemStack representations can be:
-    //   "minecraft:redstone"
-    //   "2x minecraft:redstone"
-    //
-    // Never allow the stack count to become part of the item ID.
-    var stackMatch = id.match(/^(\d+)x\s+(.+)$/)
+		// Remove accidental wrapping quotes introduced by Rhino/KubeJS
+		if (
+			id.length >= 2 &&
+			(
+				(id.startsWith("'") && id.endsWith("'")) ||
+				(id.startsWith('"') && id.endsWith('"'))
+			)
+		) {
+			id = id.substring(1, id.length - 1).trim()
+		}
 
-    if (stackMatch) {
-      id = stackMatch[2].trim()
-    }
+		// KubeJS ItemStack representations can be:
+		//   "minecraft:redstone"
+		//   "2x minecraft:redstone"
+		//
+		// Never allow the stack count to become part of the item ID.
+		var stackMatch = id.match(/^(\d+)x\s+(.+)$/)
 
-    return id
-  },
+		if (stackMatch) {
+			id = stackMatch[2].trim()
+		}
 
-    // Resolves a Forge/KubeJS Ingredient (Ingredient.of('#tag') / Ingredient.of('item') /
-  // Ingredient.of(stack)) to its canonical id: '#namespace:path' for a tag, 'namespace:path'
-  // for an item. Returns undefined for anything that isn't an Ingredient (incl. ItemStacks,
-  // which also have toJson()) so it's safe to call from any resolver.
-  // NOTE: a multi-entry ingredient (Ingredient.of('a', 'b')) resolves to its FIRST entry only —
-  // fine for validation and id-slug purposes, which is all NCH uses this for.
-  _ingredientId(v) {
-    if (v == null || typeof v !== 'object') return undefined
+		return id
+	},
 
-    // KubeJS Ingredient (compound / tag / .or() chains) or InputItem
-    // (Ingredient.of([...]).withCount(n), Item.of('#tag', n)): resolve to a representative id.
-    var likeId = global.NCH._ingredientLikeId(v)
-    if (likeId) return likeId
+		// Resolves a Forge/KubeJS Ingredient (Ingredient.of('#tag') / Ingredient.of('item') /
+	// Ingredient.of(stack)) to its canonical id: '#namespace:path' for a tag, 'namespace:path'
+	// for an item. Returns undefined for anything that isn't an Ingredient (incl. ItemStacks,
+	// which also have toJson()) so it's safe to call from any resolver.
+	// NOTE: a multi-entry ingredient (Ingredient.of('a', 'b')) resolves to its FIRST entry only —
+	// fine for validation and id-slug purposes, which is all NCH uses this for.
+	_ingredientId(v) {
+		if (v == null || typeof v !== 'object') return undefined
 
-    if (typeof v.toJson !== 'function' || typeof v.getItems !== 'function') return undefined
-    if (typeof v.getCount === 'function') return undefined // ItemStack, not an Ingredient
+		// KubeJS Ingredient (compound / tag / .or() chains) or InputItem
+		// (Ingredient.of([...]).withCount(n), Item.of('#tag', n)): resolve to a representative id.
+		var likeId = global.NCH._ingredientLikeId(v)
+		if (likeId) return likeId
 
-    var parsed
-    try {
-      parsed = JSON.parse(String(v.toJson()))
-    } catch (err) {
-      return undefined
-    }
+		if (typeof v.toJson !== 'function' || typeof v.getItems !== 'function') return undefined
+		if (typeof v.getCount === 'function') return undefined // ItemStack, not an Ingredient
 
-    var first = Array.isArray(parsed) ? parsed[0] : parsed
-    if (!first || typeof first !== 'object') return undefined
+		var parsed
+		try {
+			parsed = JSON.parse(String(v.toJson()))
+		} catch (err) {
+			return undefined
+		}
 
-    if (typeof first.tag === 'string') return '#' + first.tag
-    if (typeof first.item === 'string') return first.item
-    return undefined
-  },
+		var first = Array.isArray(parsed) ? parsed[0] : parsed
+		if (!first || typeof first !== 'object') return undefined
 
-  // Recognizes a KubeJS Ingredient (incl. compound "match any" ingredients from
-  // Ingredient.of(['#a','#b']) / .or() chains) or an InputItem (an Ingredient + a count, from
-  // Ingredient.of(...).withCount(n)). Returns the KubeJS Ingredient, or null if v isn't one.
-  _ingredientLike(v) {
-    if (v == null || typeof v !== 'object' || Array.isArray(v)) return null
-    var isIng = false
-    try { isIng = typeof Ingredient.isIngredient === 'function' && Ingredient.isIngredient(v) } catch (err) {}
-    // Already a real Ingredient (incl. custom subtypes like PartialNBTIngredient from
-    // .weakNBT()/.strongNBT()) - return it as-is. Re-wrapping via Ingredient.of(v) below
-    // doesn't pass a PartialNBTIngredient through cleanly: it silently comes back matching
-    // zero items, which made _validateAny falsely flag every NBT-matched syringe ingredient
-    // as "matches no items" and (with global.NCH.strict on) throw, discarding the whole
-    // recipe before it ever reached the real e.shapeless(...)/e.shaped(...) call - see
-    // kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js history.
-    if (isIng) return v
-    // InputItem: public `ingredient` + `count` fields, plus kjs$asIngredient()
-    var isInputItem = (v.ingredient !== undefined && v.count !== undefined)
-      || (typeof v.asIngredient === 'function' && typeof v.getCount !== 'function')
-    if (!isInputItem) return null
-    try {
-      var ing = Ingredient.of(v)
-      return ing || null
-    } catch (err) {
-      return null
-    }
-  },
+		if (typeof first.tag === 'string') return '#' + first.tag
+		if (typeof first.item === 'string') return first.item
+		return undefined
+	},
 
-  // A representative id ('#tag' or 'namespace:path') for an Ingredient / InputItem, or undefined.
-  _ingredientLikeId(v) {
-    var ing = global.NCH._ingredientLike(v)
-    if (!ing) return undefined
-    try {
-      var parsed = JSON.parse(String(ing.toJson()))
-      var first = Array.isArray(parsed) ? parsed[0] : parsed
-      if (first && typeof first === 'object') {
-        if (typeof first.tag === 'string') return '#' + first.tag
-        if (typeof first.item === 'string') return first.item
-      }
-    } catch (err) {}
-    try {
-      var ids = ing.itemIds
-      if (ids && ids.length) return String(ids[0])
-    } catch (err) {}
-    return undefined
-  },
+	// Recognizes a KubeJS Ingredient (incl. compound "match any" ingredients from
+	// Ingredient.of(['#a','#b']) / .or() chains) or an InputItem (an Ingredient + a count, from
+	// Ingredient.of(...).withCount(n)). Returns the KubeJS Ingredient, or null if v isn't one.
+	_ingredientLike(v) {
+		if (v == null || typeof v !== 'object' || Array.isArray(v)) return null
+		var isIng = false
+		try { isIng = typeof Ingredient.isIngredient === 'function' && Ingredient.isIngredient(v) } catch (err) {}
+		// Already a real Ingredient (incl. custom subtypes like PartialNBTIngredient from
+		// .weakNBT()/.strongNBT()) - return it as-is. Re-wrapping via Ingredient.of(v) below
+		// doesn't pass a PartialNBTIngredient through cleanly: it silently comes back matching
+		// zero items, which made _validateAny falsely flag every NBT-matched syringe ingredient
+		// as "matches no items" and (with global.NCH.strict on) throw, discarding the whole
+		// recipe before it ever reached the real e.shapeless(...)/e.shaped(...) call - see
+		// kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js history.
+		if (isIng) return v
+		// InputItem: public `ingredient` + `count` fields, plus kjs$asIngredient()
+		var isInputItem = (v.ingredient !== undefined && v.count !== undefined)
+			|| (typeof v.asIngredient === 'function' && typeof v.getCount !== 'function')
+		if (!isInputItem) return null
+		try {
+			var ing = Ingredient.of(v)
+			return ing || null
+		} catch (err) {
+			return null
+		}
+	},
+
+	// A representative id ('#tag' or 'namespace:path') for an Ingredient / InputItem, or undefined.
+	_ingredientLikeId(v) {
+		var ing = global.NCH._ingredientLike(v)
+		if (!ing) return undefined
+		try {
+			var parsed = JSON.parse(String(ing.toJson()))
+			var first = Array.isArray(parsed) ? parsed[0] : parsed
+			if (first && typeof first === 'object') {
+				if (typeof first.tag === 'string') return '#' + first.tag
+				if (typeof first.item === 'string') return first.item
+			}
+		} catch (err) {}
+		try {
+			var ids = ing.itemIds
+			if (ids && ids.length) return String(ids[0])
+		} catch (err) {}
+		return undefined
+	},
 
 
-  // Resolves any accepted item-like shape (string, Item.of() stack, {item}/{tag}/{id} object) to {id, count}
-  _resolveIdCount(v) {
-    if (typeof v === 'string') return { id: v, count: 1 }
-    if (v == null) return { id: undefined, count: 1 }
+	// Resolves any accepted item-like shape (string, Item.of() stack, {item}/{tag}/{id} object) to {id, count}
+	_resolveIdCount(v) {
+		if (typeof v === 'string') return { id: v, count: 1 }
+		if (v == null) return { id: undefined, count: 1 }
 
 	// Forge/KubeJS Ingredient (tag or item)
-    var ingId = global.NCH._ingredientId(v)
-    if (ingId) return { id: ingId, count: 1 }
+		var ingId = global.NCH._ingredientId(v)
+		if (ingId) return { id: ingId, count: 1 }
 
-    var id
-    var count
+		var id
+		var count
 
-    // Preferred: ask the Forge registry directly for this stack's Item key.
-    // This is the most reliable way to resolve a KubeJS ItemStack.
-    if (typeof v.getItem === 'function') {
-      try {
-        var itemObj = v.getItem()
-        var itemKey = $NCH_ForgeRegistries.ITEMS.getKey(itemObj)
-        if (itemKey) id = String(itemKey)
-      } catch (err) {}
-    }
+		// Preferred: ask the Forge registry directly for this stack's Item key.
+		// This is the most reliable way to resolve a KubeJS ItemStack.
+		if (typeof v.getItem === 'function') {
+			try {
+				var itemObj = v.getItem()
+				var itemKey = $NCH_ForgeRegistries.ITEMS.getKey(itemObj)
+				if (itemKey) id = String(itemKey)
+			} catch (err) {}
+		}
 
-    // Get the stack count as early as possible.
-    if (typeof v.getCount === 'function') {
-      try {
-        count = v.getCount()
-      } catch (err) {}
-    }
+		// Get the stack count as early as possible.
+		if (typeof v.getCount === 'function') {
+			try {
+				count = v.getCount()
+			} catch (err) {}
+		}
 
-    if (count === undefined && typeof v.count === 'number') {
-      count = v.count
-    }
+		if (count === undefined && typeof v.count === 'number') {
+			count = v.count
+		}
 
-    // Fallback: toJson(), where available and successful.
-    if (!id && typeof v.toJson === 'function') {
-      try {
-        var json = v.toJson()
+		// Fallback: toJson(), where available and successful.
+		if (!id && typeof v.toJson === 'function') {
+			try {
+				var json = v.toJson()
 
-        if (json) {
-          var jsonId = json.item ?? json.id ?? json.tag
+				if (json) {
+					var jsonId = json.item ?? json.id ?? json.tag
 
-          if (typeof jsonId === 'string') {
-            id = jsonId
-          }
-        }
-      } catch (err) {}
-    }
+					if (typeof jsonId === 'string') {
+						id = jsonId
+					}
+				}
+			} catch (err) {}
+		}
 
-    // Last-resort explicit properties.
-    if (!id && typeof v.getId === 'function') {
-      try {
-        var rawId = v.getId()
+		// Last-resort explicit properties.
+		if (!id && typeof v.getId === 'function') {
+			try {
+				var rawId = v.getId()
 
-        if (typeof rawId === 'string') {
-          id = rawId
-        }
-      } catch (err) {}
-    }
+				if (typeof rawId === 'string') {
+					id = rawId
+				}
+			} catch (err) {}
+		}
 
-    if (!id && typeof v.id === 'string') {
-      id = v.id
-    }
+		if (!id && typeof v.id === 'string') {
+			id = v.id
+		}
 
-    if (!id && typeof v.item === 'string') {
-      id = v.item
-    }
+		if (!id && typeof v.item === 'string') {
+			id = v.item
+		}
 
-    if (!id && typeof v.tag === 'string') {
-      id = v.tag
-    }
+		if (!id && typeof v.tag === 'string') {
+			id = v.tag
+		}
 
-    // IMPORTANT:
-    // Only now inspect String(v).
-    //
-    // KubeJS ItemStack commonly stringifies as:
-    //   "minecraft:redstone"
-    //   "2x minecraft:redstone"
-    //
-    // Do NOT assign String(v) directly to id before parsing it.
-    if (!id) {
-      var str = String(v).trim()
-      var match = str.match(/^(\d+)x\s+(.+)$/)
+		// IMPORTANT:
+		// Only now inspect String(v).
+		//
+		// KubeJS ItemStack commonly stringifies as:
+		//   "minecraft:redstone"
+		//   "2x minecraft:redstone"
+		//
+		// Do NOT assign String(v) directly to id before parsing it.
+		if (!id) {
+			var str = String(v).trim()
+			var match = str.match(/^(\d+)x\s+(.+)$/)
 
-      if (match) {
-        if (count === undefined) {
-          count = Number(match[1])
-        }
+			if (match) {
+				if (count === undefined) {
+					count = Number(match[1])
+				}
 
-        id = match[2].trim()
-      } else {
-        id = str
-      }
-    }
+				id = match[2].trim()
+			} else {
+				id = str
+			}
+		}
 
-    if (count === undefined) {
-      count = 1
-    }
+		if (count === undefined) {
+			count = 1
+		}
 
-    id = global.NCH._cleanResolvedId(id)
+		id = global.NCH._cleanResolvedId(id)
 
-    return {
-      id: id,
-      count: count
-    }
-  },
+		return {
+			id: id,
+			count: count
+		}
+	},
 
-  // v unless it is null or undefined, else d. Use this, never 'v ?? <number>': this Rhino build (1902.2.3-284,
-  // interpreter) returns 0 for 'nullish ?? <numeric literal>' (undefined ?? 250 -> 0; a variable or string on the
-  // right works). createBottle's 'opts.mb ?? 250' wrote 0 mB, an empty fluid (TODO food/drinks #12).
-  _or(v, d) {
-    return v != null ? v : d
-  },
+	// v unless it is null or undefined, else d. Use this, never 'v ?? <number>': this Rhino build (1902.2.3-284,
+	// interpreter) returns 0 for 'nullish ?? <numeric literal>' (undefined ?? 250 -> 0; a variable or string on the
+	// right works). createBottle's 'opts.mb ?? 250' wrote 0 mB, an empty fluid (TODO food/drinks #12).
+	_or(v, d) {
+		return v != null ? v : d
+	},
 
-  // Resolves any accepted fluid-like shape (string, Fluid.of() stack, {fluid}/{tag} object) to {id, amount}
+	// Resolves any accepted fluid-like shape (string, Fluid.of() stack, {fluid}/{tag} object) to {id, amount}
 	_resolveFluidAmount(v, defaultAmount) {
 		var amt = global.NCH._or(defaultAmount, 1000)
 
@@ -417,28 +417,28 @@ global.NCH = {
 		// Preferred: direct Forge registry lookup via getFluid(), same reasoning as
 		// _resolveIdCount's getItem() lookup - avoids Rhino bean-mapping garbage.
 		if (typeof v.getFluid === 'function') {
-		  try {
-		    var fluidObj = v.getFluid()
-		    var fluidKey = $NCH_ForgeRegistries.FLUIDS.getKey(fluidObj)
-		    if (fluidKey) id = String(fluidKey)
-		  } catch (err) {}
+			try {
+				var fluidObj = v.getFluid()
+				var fluidKey = $NCH_ForgeRegistries.FLUIDS.getKey(fluidObj)
+				if (fluidKey) id = String(fluidKey)
+			} catch (err) {}
 		}
 
 		if (!id && typeof v.toJson === 'function') {
-		  try {
-		    var json = v.toJson()
-		    if (json) {
-		      var jsonId = json.fluid ?? json.id ?? json.tag
-		      if (typeof jsonId === 'string') id = String(jsonId)
-		    }
-		  } catch (err) {}
+			try {
+				var json = v.toJson()
+				if (json) {
+					var jsonId = json.fluid ?? json.id ?? json.tag
+					if (typeof jsonId === 'string') id = String(jsonId)
+				}
+			} catch (err) {}
 		}
 
 		if (!id && typeof v.getId === 'function') {
-		  try {
-		    var rawId = v.getId()
-		    if (typeof rawId === 'string') id = rawId
-		  } catch (err) {}
+			try {
+				var rawId = v.getId()
+				if (typeof rawId === 'string') id = rawId
+			} catch (err) {}
 		}
 		if (!id && typeof v.fluid === 'string') id = v.fluid
 		if (!id && typeof v.tag === 'string') id = v.tag
@@ -448,79 +448,79 @@ global.NCH = {
 
 		var amount
 		if (typeof v.getAmount === 'function') {
-		  try { amount = v.getAmount() } catch (err) {}
+			try { amount = v.getAmount() } catch (err) {}
 		}
 		if (amount === undefined && typeof v.amount === 'number') amount = v.amount
 
 		return { id: id, amount: Number(amount != null ? amount : amt) }
 	},
 
-  _checkItem(id, context) {
-    if (!id) {
-      global.NCH._warn(context, 'resolved to an undefined/empty item id - check for an unset global.item key')
-      return false
-    }
-    if (id === 'minecraft:air') global.NCH._absent(id, context)
-    var valid = global.NCH._isTag(id)
-      ? (Ingredient.of(id).itemIds.length > 0)
-      : Item.exists(id)
-    if (!valid) global.NCH._absent(id, context)
-    if (!valid) global.NCH._warn(context, 'item/tag "' + id + '" does not exist or is empty')
-    return valid
-  },
+	_checkItem(id, context) {
+		if (!id) {
+			global.NCH._warn(context, 'resolved to an undefined/empty item id - check for an unset global.item key')
+			return false
+		}
+		if (id === 'minecraft:air') global.NCH._absent(id, context)
+		var valid = global.NCH._isTag(id)
+			? (Ingredient.of(id).itemIds.length > 0)
+			: Item.exists(id)
+		if (!valid) global.NCH._absent(id, context)
+		if (!valid) global.NCH._warn(context, 'item/tag "' + id + '" does not exist or is empty')
+		return valid
+	},
 
-  // plan_cb_publish.md M2 rule G5: a missing id whose mod is not loaded skips the whole helper call quietly. The
-  // safety net at the end of this file counts it per mod instead of logging an error; Creative Common's server
-  // script _lib/absent_mods.js prints one line per mod after the recipe event. A missing id of a loaded mod still
-  // warns or throws as before, so pack bugs stay visible.
-  _absentCounts: {},
-  // Item.of / Fluid.of of a missing id give air / the empty fluid before NCH sees the id, so those count as a row for
-  // an absent mod too, under their own label. Nothing in the pack passes air or the empty fluid on purpose (checked);
-  // in the full pack the label showing up in the [absent mods] summary means a real missing id.
-  _missingStackLabel: 'unknown mod (Item.of or Fluid.of of a missing id gave air or the empty fluid)',
-  _absent(id, context) {
-    if (id === 'minecraft:air' || id === 'minecraft:empty') {
-      var e = new Error('[NCH] ' + context + ': ' + id + ' (Item.of / Fluid.of of a missing id)')
-      e.nchAbsent = global.NCH._missingStackLabel
-      throw e
-    }
-    var ns = global.has.namespace(id)
-    if (ns === null || global.has.mod(ns)) return
-    var err = new Error('[NCH] ' + context + ': ' + id + ' belongs to ' + ns + ', which is not loaded')
-    err.nchAbsent = ns
-    throw err
-  },
+	// plan_cb_publish.md M2 rule G5: a missing id whose mod is not loaded skips the whole helper call quietly. The
+	// safety net at the end of this file counts it per mod instead of logging an error; Creative Common's server
+	// script _lib/absent_mods.js prints one line per mod after the recipe event. A missing id of a loaded mod still
+	// warns or throws as before, so pack bugs stay visible.
+	_absentCounts: {},
+	// Item.of / Fluid.of of a missing id give air / the empty fluid before NCH sees the id, so those count as a row for
+	// an absent mod too, under their own label. Nothing in the pack passes air or the empty fluid on purpose (checked);
+	// in the full pack the label showing up in the [absent mods] summary means a real missing id.
+	_missingStackLabel: 'unknown mod (Item.of or Fluid.of of a missing id gave air or the empty fluid)',
+	_absent(id, context) {
+		if (id === 'minecraft:air' || id === 'minecraft:empty') {
+			var e = new Error('[NCH] ' + context + ': ' + id + ' (Item.of / Fluid.of of a missing id)')
+			e.nchAbsent = global.NCH._missingStackLabel
+			throw e
+		}
+		var ns = global.has.namespace(id)
+		if (ns === null || global.has.mod(ns)) return
+		var err = new Error('[NCH] ' + context + ': ' + id + ' belongs to ' + ns + ', which is not loaded')
+		err.nchAbsent = ns
+		throw err
+	},
 
-  // G5 for a helper whose recipe type belongs to a mod: the first line of the helper returns this when the mod is
-  // not loaded, so the call is counted for that mod (same summary as _absent) instead of writing an unknown type.
-  _skip() {
-    for (var k = 0; k < arguments.length; k++) {
-      var ns = arguments[k]
-      if (global.has.mod(ns)) continue
-      var counts = global.NCH._absentCounts
-      counts[ns] = (counts[ns] || 0) + 1
-      break
-    }
-    return undefined
-  },
+	// G5 for a helper whose recipe type belongs to a mod: the first line of the helper returns this when the mod is
+	// not loaded, so the call is counted for that mod (same summary as _absent) instead of writing an unknown type.
+	_skip() {
+		for (var k = 0; k < arguments.length; k++) {
+			var ns = arguments[k]
+			if (global.has.mod(ns)) continue
+			var counts = global.NCH._absentCounts
+			counts[ns] = (counts[ns] || 0) + 1
+			break
+		}
+		return undefined
+	},
 
-  _fluidExists(id) {
-    try {
+	_fluidExists(id) {
+		try {
 		return $NCH_ForgeRegistries.FLUIDS.containsKey($NCH_ResourceLocation.of(id, ':'))
 	} catch (err) {
 		return false
-    }
-  },
+		}
+	},
 
-  _warnedFluidTags: {},
+	_warnedFluidTags: {},
 
-  _checkFluid(id, context) {
-    if (!id) {
+	_checkFluid(id, context) {
+		if (!id) {
 		global.NCH._warn(context, 'resolved to an undefined/empty fluid id')
 		return false
-    }
-    if (id === 'minecraft:empty') global.NCH._absent(id, context)
-    if (global.NCH._isTag(id)) {
+		}
+		if (id === 'minecraft:empty') global.NCH._absent(id, context)
+		if (global.NCH._isTag(id)) {
 		// once per tag: the potion bottling loop alone passes #forge:fluid/potion hundreds of times
 		if (!global.NCH._warnedFluidTags[id]) {
 			global.NCH._warnedFluidTags[id] = true
@@ -528,13 +528,13 @@ global.NCH = {
 		}
 		return true
 	}
-    if (!global.NCH._fluidExists(id)) {
+		if (!global.NCH._fluidExists(id)) {
 		global.NCH._absent(id, context)
 		global.NCH._warn(context, 'fluid "' + id + '" does not exist')
 		return false
-    }
-    return true
-  },
+		}
+		return true
+	},
 
 	_warn(context, message) {
 		var text = '[NCH] ' + context + ': ' + message
@@ -542,542 +542,542 @@ global.NCH = {
 		console.warn(text)
 	},
 
-  // A KubeJS FluidStackJS or a { fluid | amount } object.
-  _isFluidLike(v) {
-    return v != null && typeof v === 'object' &&
-      (v.fluid !== undefined || v.amount !== undefined || typeof v.getAmount === 'function')
-  },
+	// A KubeJS FluidStackJS or a { fluid | amount } object.
+	_isFluidLike(v) {
+		return v != null && typeof v === 'object' &&
+			(v.fluid !== undefined || v.amount !== undefined || typeof v.getAmount === 'function')
+	},
 
-  // Validates a single item-like or fluid-like value, or recurses through arrays of them.
-  _validateAny(v, context) {
-    if (v == null) {
+	// Validates a single item-like or fluid-like value, or recurses through arrays of them.
+	_validateAny(v, context) {
+		if (v == null) {
 		global.NCH._warn(context, 'is undefined/null')
 		return
-    }
-    if (Array.isArray(v)) {
+		}
+		if (Array.isArray(v)) {
 		v.forEach((entry, idx) => {
 			global.NCH._validateAny(entry, context + '[' + idx + ']')
 		})
 		return
-    }
-    // KubeJS Ingredient / InputItem (compound tags, .or() chains, .withCount()): validate against
-    // the ingredient's own match set - it has no single canonical id to resolve.
-    var asIngredient = global.NCH._ingredientLike(v)
-    if (asIngredient) {
-      var matched
-      try { matched = asIngredient.itemIds } catch (err) {}
-      if (!matched || matched.length === 0)
-        global.NCH._warn(context, 'ingredient / InputItem matches no items (empty tag or bad id)')
-      return
-    }
+		}
+		// KubeJS Ingredient / InputItem (compound tags, .or() chains, .withCount()): validate against
+		// the ingredient's own match set - it has no single canonical id to resolve.
+		var asIngredient = global.NCH._ingredientLike(v)
+		if (asIngredient) {
+			var matched
+			try { matched = asIngredient.itemIds } catch (err) {}
+			if (!matched || matched.length === 0)
+				global.NCH._warn(context, 'ingredient / InputItem matches no items (empty tag or bad id)')
+			return
+		}
 
-    if (global.NCH._isFluidLike(v)) {
+		if (global.NCH._isFluidLike(v)) {
 		global.NCH._checkFluid(global.NCH._resolveFluidAmount(v).id, context)
 	} else {
 		global.NCH._checkItem(global.NCH._resolveIdCount(v).id, context)
-    }
-  },
+		}
+	},
 
-  // ========================================================================
-  // Shared JSON shape builders (for e.custom recipes)
-  // ========================================================================
+	// ========================================================================
+	// Shared JSON shape builders (for e.custom recipes)
+	// ========================================================================
 
-  // opts.countMode: 'flat' (default) | 'base_ingredient' | 'stacked_item' | 'none'
-  // opts.allowTag: default true - set false for result slots that must always be a concrete item
-  // opts.includeChance: default false - carries an inline chance field through from a withChance()-style object
-  // opts.context: string used in validation warnings
-  _itemJson(v, opts) {
-    opts = opts || {}
+	// opts.countMode: 'flat' (default) | 'base_ingredient' | 'stacked_item' | 'none'
+	// opts.allowTag: default true - set false for result slots that must always be a concrete item
+	// opts.includeChance: default false - carries an inline chance field through from a withChance()-style object
+	// opts.context: string used in validation warnings
+	_itemJson(v, opts) {
+		opts = opts || {}
 
-    // Array = "match any of these" (mirrors the array-valued shaped()/createX() key
-    // convention). Forge ingredient JSON encodes that as a JSON array of item/tag
-    // objects, so resolve each entry on its own (no per-entry count/chance - an
-    // alternatives list has no single count to attach).
-    if (Array.isArray(v)) {
-      var arrCtx = opts.context || 'unnamed NCH call'
-      return v.map((entry, idx) =>
-        global.NCH._itemJson(entry, { allowTag: opts.allowTag, countMode: 'none', context: arrCtx + '[' + idx + ']' })
-      )
-    }
+		// Array = "match any of these" (mirrors the array-valued shaped()/createX() key
+		// convention). Forge ingredient JSON encodes that as a JSON array of item/tag
+		// objects, so resolve each entry on its own (no per-entry count/chance - an
+		// alternatives list has no single count to attach).
+		if (Array.isArray(v)) {
+			var arrCtx = opts.context || 'unnamed NCH call'
+			return v.map((entry, idx) =>
+				global.NCH._itemJson(entry, { allowTag: opts.allowTag, countMode: 'none', context: arrCtx + '[' + idx + ']' })
+			)
+		}
 
-    var countMode = opts.countMode || 'flat'
-    var allowTag = opts.allowTag !== false
-    var context = opts.context || 'unnamed NCH call'
+		var countMode = opts.countMode || 'flat'
+		var allowTag = opts.allowTag !== false
+		var context = opts.context || 'unnamed NCH call'
 
-    var resolved = global.NCH._resolveIdCount(v)
-    global.NCH._checkItem(resolved.id, context)
+		var resolved = global.NCH._resolveIdCount(v)
+		global.NCH._checkItem(resolved.id, context)
 
-    var isTag = allowTag && global.NCH._isTag(resolved.id)
-    var key = isTag ? 'tag' : 'item'
-    var idValue = isTag ? resolved.id.substring(1) : resolved.id
+		var isTag = allowTag && global.NCH._isTag(resolved.id)
+		var key = isTag ? 'tag' : 'item'
+		var idValue = isTag ? resolved.id.substring(1) : resolved.id
 
-    var json
-    if (resolved.count <= 1 || countMode === 'none') {
-      json = {}
-      json[key] = idValue
-    } else if (countMode === 'base_ingredient') {
-      var base = {}
-      base[key] = idValue
-      json = { base_ingredient: base, count: resolved.count }
-    } else if (countMode === 'stacked_item') {
-      json = { type: 'pneumaticcraft:stacked_item' } // G5: only the pc* helpers pass stacked_item, and they skip without PneumaticCraft
-      json[key] = idValue
-      json.count = resolved.count
-    } else { // 'flat'
-      json = {}
-      json[key] = idValue
-      json.count = resolved.count
-    }
+		var json
+		if (resolved.count <= 1 || countMode === 'none') {
+			json = {}
+			json[key] = idValue
+		} else if (countMode === 'base_ingredient') {
+			var base = {}
+			base[key] = idValue
+			json = { base_ingredient: base, count: resolved.count }
+		} else if (countMode === 'stacked_item') {
+			json = { type: 'pneumaticcraft:stacked_item' } // G5: only the pc* helpers pass stacked_item, and they skip without PneumaticCraft
+			json[key] = idValue
+			json.count = resolved.count
+		} else { // 'flat'
+			json = {}
+			json[key] = idValue
+			json.count = resolved.count
+		}
 
-    // Carry an inline output chance through from a KubeJS OutputItem (Item.of(x).withChance(n))
-    // or a hand-written { chance: n } object. Coerce to a primitive JS number - Rhino hands back
-    // OutputItem.chance as a boxed java.lang.Double, which KubeJS's JSON serializer drops on the
-    // floor, leaving the result at an implicit 100%.
-    if (opts.includeChance && v && typeof v === 'object') {
-      var ch
-      if (typeof v.hasChance === 'function' && typeof v.getChance === 'function') {
-        try { if (v.hasChance()) ch = Number(v.getChance()) } catch (err) {}
-      }
-      if (ch === undefined && v.chance !== undefined) {
-        var parsedChance = Number(v.chance)
-        if (!isNaN(parsedChance)) ch = parsedChance
-      }
-      if (typeof ch === 'number' && ch >= 0 && ch < 1) json.chance = ch
-    }
+		// Carry an inline output chance through from a KubeJS OutputItem (Item.of(x).withChance(n))
+		// or a hand-written { chance: n } object. Coerce to a primitive JS number - Rhino hands back
+		// OutputItem.chance as a boxed java.lang.Double, which KubeJS's JSON serializer drops on the
+		// floor, leaving the result at an implicit 100%.
+		if (opts.includeChance && v && typeof v === 'object') {
+			var ch
+			if (typeof v.hasChance === 'function' && typeof v.getChance === 'function') {
+				try { if (v.hasChance()) ch = Number(v.getChance()) } catch (err) {}
+			}
+			if (ch === undefined && v.chance !== undefined) {
+				var parsedChance = Number(v.chance)
+				if (!isNaN(parsedChance)) ch = parsedChance
+			}
+			if (typeof ch === 'number' && ch >= 0 && ch < 1) json.chance = ch
+		}
 
-    return json
-  },
+		return json
+	},
 
-  // NBT-aware ingredient / result JSON. Used by ieBlueprint (the Engineer's Workbench) and the
-  // vdPickling results — every other ie* / create* helper still goes through plain _itemJson.
-  //
-  // Recognizes, in addition to everything _itemJson handles:
-  //   - a hand-written ingredient object: { type: 'forge:partial_nbt'|'forge:nbt', item, nbt }
-  //     (or a full { base_ingredient: {...}, count } ) -> used verbatim
-  //   - the shorthand { item: 'id', nbt: '{...}' [, count] } -> forge:partial_nbt ingredient
-  //   - a KubeJS ItemStack carrying NBT, e.g. Item.of('minecraft:potion', '{Potion:"..."}')
-  // opts.role: 'input' (default) -> an Ingredient / IngredientWithSize ; 'result' -> { item,count,nbt }
-  _nbtItemJson(v, opts) {
-    opts = opts || {}
-    var role = opts.role || 'input'
-    var wrap = opts.countMode === 'base_ingredient'
+	// NBT-aware ingredient / result JSON. Used by ieBlueprint (the Engineer's Workbench) and the
+	// vdPickling results — every other ie* / create* helper still goes through plain _itemJson.
+	//
+	// Recognizes, in addition to everything _itemJson handles:
+	//   - a hand-written ingredient object: { type: 'forge:partial_nbt'|'forge:nbt', item, nbt }
+	//     (or a full { base_ingredient: {...}, count } ) -> used verbatim
+	//   - the shorthand { item: 'id', nbt: '{...}' [, count] } -> forge:partial_nbt ingredient
+	//   - a KubeJS ItemStack carrying NBT, e.g. Item.of('minecraft:potion', '{Potion:"..."}')
+	// opts.role: 'input' (default) -> an Ingredient / IngredientWithSize ; 'result' -> { item,count,nbt }
+	_nbtItemJson(v, opts) {
+		opts = opts || {}
+		var role = opts.role || 'input'
+		var wrap = opts.countMode === 'base_ingredient'
 
-    // STRING type/nbt only — a KubeJS OutputItem bean-maps `.nbt` to a CompoundTag/null.
-    var isRawJson = v != null && typeof v === 'object' && typeof v.getItem !== 'function'
-      && (typeof v.type === 'string' || typeof v.nbt === 'string' || v.base_ingredient !== undefined)
+		// STRING type/nbt only — a KubeJS OutputItem bean-maps `.nbt` to a CompoundTag/null.
+		var isRawJson = v != null && typeof v === 'object' && typeof v.getItem !== 'function'
+			&& (typeof v.type === 'string' || typeof v.nbt === 'string' || v.base_ingredient !== undefined)
 
-    var stackNbt
-    try {
-      // KubeJS hides ItemStack.getTag() from scripts; its `.nbt` bean property is the readable one
-      var t = null
-      if (v && typeof v.getTag === 'function') t = v.getTag()
-      else if (v && typeof v.getItem === 'function' && v.nbt != null && typeof v.nbt === 'object') t = v.nbt
-      if (t) { var s = String(t); if (s && s !== '{}') stackNbt = s }
-    } catch (err) {}
+		var stackNbt
+		try {
+			// KubeJS hides ItemStack.getTag() from scripts; its `.nbt` bean property is the readable one
+			var t = null
+			if (v && typeof v.getTag === 'function') t = v.getTag()
+			else if (v && typeof v.getItem === 'function' && v.nbt != null && typeof v.nbt === 'object') t = v.nbt
+			if (t) { var s = String(t); if (s && s !== '{}') stackNbt = s }
+		} catch (err) {}
 
-    // No NBT anywhere -> behave exactly like _itemJson.
-    if (!isRawJson && stackNbt === undefined) {
-      return global.NCH._itemJson(v, opts)
-    }
+		// No NBT anywhere -> behave exactly like _itemJson.
+		if (!isRawJson && stackNbt === undefined) {
+			return global.NCH._itemJson(v, opts)
+		}
 
-    if (role === 'result') {
-      if (isRawJson) return v
-      var rr = global.NCH._resolveIdCount(v)
-      var res = { item: rr.id, nbt: stackNbt }
-      if (rr.count && rr.count > 1) res.count = rr.count
-      return res
-    }
+		if (role === 'result') {
+			if (isRawJson) return v
+			var rr = global.NCH._resolveIdCount(v)
+			var res = { item: rr.id, nbt: stackNbt }
+			if (rr.count && rr.count > 1) res.count = rr.count
+			return res
+		}
 
-    // role === 'input'
-    var ing, cnt
-    if (isRawJson) {
-      if (v.base_ingredient !== undefined) return v
-      cnt = (typeof v.count === 'number') ? v.count : 1
-      if (v.type !== undefined) {
-        ing = {}
-        for (var k in v) { if (v.hasOwnProperty(k) && k !== 'count') ing[k] = v[k] }
-      } else {
-        ing = { type: 'forge:partial_nbt', item: v.item, nbt: v.nbt }
-      }
-    } else {
-      var ri = global.NCH._resolveIdCount(v)
-      cnt = ri.count || 1
-      ing = { type: 'forge:partial_nbt', item: ri.id, nbt: stackNbt }
-    }
-    return (wrap && cnt > 1) ? { base_ingredient: ing, count: cnt } : ing
-  },
+		// role === 'input'
+		var ing, cnt
+		if (isRawJson) {
+			if (v.base_ingredient !== undefined) return v
+			cnt = (typeof v.count === 'number') ? v.count : 1
+			if (v.type !== undefined) {
+				ing = {}
+				for (var k in v) { if (v.hasOwnProperty(k) && k !== 'count') ing[k] = v[k] }
+			} else {
+				ing = { type: 'forge:partial_nbt', item: v.item, nbt: v.nbt }
+			}
+		} else {
+			var ri = global.NCH._resolveIdCount(v)
+			cnt = ri.count || 1
+			ing = { type: 'forge:partial_nbt', item: ri.id, nbt: stackNbt }
+		}
+		return (wrap && cnt > 1) ? { base_ingredient: ing, count: cnt } : ing
+	},
 
-  // opts.allowTag: default true
-  // opts.defaultAmount: fallback amount when v doesn't carry its own (default 1000)
-  // opts.context: string used in validation warnings
-  // opts.nbtString: write the fluid's NBT as an SNBT string
-  _fluidJson(v, opts) {
-    opts = opts || {}
-    var context = opts.context || 'unnamed NCH call'
-    var allowTag = opts.allowTag !== false
-    var resolved = global.NCH._resolveFluidAmount(v, opts.defaultAmount)
-    global.NCH._checkFluid(resolved.id, context)
+	// opts.allowTag: default true
+	// opts.defaultAmount: fallback amount when v doesn't carry its own (default 1000)
+	// opts.context: string used in validation warnings
+	// opts.nbtString: write the fluid's NBT as an SNBT string
+	_fluidJson(v, opts) {
+		opts = opts || {}
+		var context = opts.context || 'unnamed NCH call'
+		var allowTag = opts.allowTag !== false
+		var resolved = global.NCH._resolveFluidAmount(v, opts.defaultAmount)
+		global.NCH._checkFluid(resolved.id, context)
 
-    var isTag = allowTag && global.NCH._isTag(resolved.id)
-    var json = {}
-    json[isTag ? 'tag' : 'fluid'] = isTag ? resolved.id.substring(1) : resolved.id
-    json.amount = resolved.amount
+		var isTag = allowTag && global.NCH._isTag(resolved.id)
+		var json = {}
+		json[isTag ? 'tag' : 'fluid'] = isTag ? resolved.id.substring(1) : resolved.id
+		json.amount = resolved.amount
 
-    if (v && typeof v === 'object') {
-      try {
-        var nbt = v.getTag ? v.getTag() : v.nbt
-        // opts.nbtString: SNBT string for e.custom JSON (a FluidStackJS hands back a CompoundTag)
-        if (nbt) json.nbt = opts.nbtString ? String(nbt) : nbt
-      } catch (err) {}
-    }
+		if (v && typeof v === 'object') {
+			try {
+				var nbt = v.getTag ? v.getTag() : v.nbt
+				// opts.nbtString: SNBT string for e.custom JSON (a FluidStackJS hands back a CompoundTag)
+				if (nbt) json.nbt = opts.nbtString ? String(nbt) : nbt
+			} catch (err) {}
+		}
 
-    return json
-  },
+		return json
+	},
 
-  // ========================================================================
-  // Recipe removal / replacement
-  // ========================================================================
+	// ========================================================================
+	// Recipe removal / replacement
+	// ========================================================================
 
-  // KubeJS reads a missing filter value as match-all ({output: undefined} removed about 3500 recipes, scratch
-  // r1106cba), so a filter that is, or holds at any depth, undefined or null is refused (logged, nothing removed).
-  remove(id, e) {
-    var path = global.NCH._undefinedIn(id, 'filter')
-    if (path) throw new Error('remove refused: ' + path + ' is undefined or null (a dict key that does not exist?)')
-    global.NCH._absentInFilter(id, 'remove')
-    global.NCH._pruneEmptyIeOutputs(e)
-    e.remove(id)
-  },
+	// KubeJS reads a missing filter value as match-all ({output: undefined} removed about 3500 recipes, scratch
+	// r1106cba), so a filter that is, or holds at any depth, undefined or null is refused (logged, nothing removed).
+	remove(id, e) {
+		var path = global.NCH._undefinedIn(id, 'filter')
+		if (path) throw new Error('remove refused: ' + path + ' is undefined or null (a dict key that does not exist?)')
+		global.NCH._absentInFilter(id, 'remove')
+		global.NCH._pruneEmptyIeOutputs(e)
+		e.remove(id)
+	},
 
-  // "Empty array?" (plan_cb_polish.md 3, scratch r1106cbo: 77 failures on the cooking set). kubejs-immersive-engineering
-  // reads an IE output that has no "item" key through IngredientWithSize + IEApi.getPreferredStackbyMod, which throws on
-  // a tag with no items. Every output-filtered remove / replaceOutput tests every recipe's outputs, so one such recipe
-  // aborts the whole call. IE's own data guards on the input tag, not the output one: metalpress/plate_zinc needs
-  // forge:ingots/zinc (Create fills it) but makes forge:plates/zinc (nothing fills it without the full pack). These
-  // recipes cannot run anyway (IE would throw on use), so they are removed by id once per recipe event, before the first
-  // filter. Only the types kubejs-ie gives a schema are read through IEApi; the rest never throw.
-  _ieSchemaTypes: ['alloy', 'arc_furnace', 'blast_furnace', 'blueprint', 'bottling_machine', 'cloche', 'coke_oven',
-    'crusher', 'fermenter', 'metal_press', 'mixer', 'refinery', 'sawmill', 'squeezer'],
-  _iePrunedFor: null,
-  _pruneEmptyIeOutputs(e) {
-    if (!e || global.NCH._iePrunedFor === e) return
-    global.NCH._iePrunedFor = e
-    if (!global.has('immersiveengineering')) return
-    var emptyCache = {}
-    var tagEmpty = function (t) {
-      if (emptyCache[t] === undefined) {
-        try { emptyCache[t] = !(Ingredient.of('#' + t).itemIds.length > 0) } catch (err) { emptyCache[t] = true }
-      }
-      return emptyCache[t]
-    }
-    // the tag an IE output object resolves through IEApi, or null ({item} and {base_ingredient: {item}} never throw)
-    var outTag = function (el) {
-      if (!el || !el.isJsonObject()) return null
-      var o = el.getAsJsonObject()
-      if (o.has('item')) return null
-      if (o.has('base_ingredient') && o.get('base_ingredient').isJsonObject()) o = o.getAsJsonObject('base_ingredient')
-      return (o.has('tag') && o.get('tag').isJsonPrimitive()) ? String(o.get('tag').getAsString()) : null
-    }
-    var hasEmpty = function (json) {
-      var keys = ['result', 'results', 'output', 'secondaries']
-      for (var k = 0; k < keys.length; k++) {
-        if (!json.has(keys[k])) continue
-        var v = json.get(keys[k])
-        var list = v.isJsonArray() ? v.getAsJsonArray() : null
-        var n = list ? list.size() : 1
-        for (var x = 0; x < n; x++) {
-          var el = list ? list.get(x) : v
-          // crusher / arc furnace secondaries: {chance, output: {...}}
-          if (el.isJsonObject() && el.getAsJsonObject().has('output')) el = el.getAsJsonObject().get('output')
-          var t = outTag(el)
-          if (t !== null && tagEmpty(t)) return t
-        }
-      }
-      return null
-    }
-    var filter = global.NCH._ieSchemaTypes.map(function (t) { return { type: 'immersiveengineering:' + t } })
-    var removed = []
-    var found = e.findRecipes(filter)
-    var it = found.iterator()
-    while (it.hasNext()) {
-      var r = it.next()
-      var t = r.json ? hasEmpty(r.json) : null
-      if (t !== null) removed.push(String(r.getId()) + ' (#' + t + ')')
-    }
-    removed.forEach(s => e.remove({ id: s.substring(0, s.indexOf(' ')) }))
-    if (removed.length > 0) console.info('[NCH] removed ' + removed.length + ' Immersive Engineering recipes whose output tag is empty: ' + removed.join(', '))
-  },
+	// "Empty array?" (plan_cb_polish.md 3, scratch r1106cbo: 77 failures on the cooking set). kubejs-immersive-engineering
+	// reads an IE output that has no "item" key through IngredientWithSize + IEApi.getPreferredStackbyMod, which throws on
+	// a tag with no items. Every output-filtered remove / replaceOutput tests every recipe's outputs, so one such recipe
+	// aborts the whole call. IE's own data guards on the input tag, not the output one: metalpress/plate_zinc needs
+	// forge:ingots/zinc (Create fills it) but makes forge:plates/zinc (nothing fills it without the full pack). These
+	// recipes cannot run anyway (IE would throw on use), so they are removed by id once per recipe event, before the first
+	// filter. Only the types kubejs-ie gives a schema are read through IEApi; the rest never throw.
+	_ieSchemaTypes: ['alloy', 'arc_furnace', 'blast_furnace', 'blueprint', 'bottling_machine', 'cloche', 'coke_oven',
+		'crusher', 'fermenter', 'metal_press', 'mixer', 'refinery', 'sawmill', 'squeezer'],
+	_iePrunedFor: null,
+	_pruneEmptyIeOutputs(e) {
+		if (!e || global.NCH._iePrunedFor === e) return
+		global.NCH._iePrunedFor = e
+		if (!global.has('immersiveengineering')) return
+		var emptyCache = {}
+		var tagEmpty = function (t) {
+			if (emptyCache[t] === undefined) {
+				try { emptyCache[t] = !(Ingredient.of('#' + t).itemIds.length > 0) } catch (err) { emptyCache[t] = true }
+			}
+			return emptyCache[t]
+		}
+		// the tag an IE output object resolves through IEApi, or null ({item} and {base_ingredient: {item}} never throw)
+		var outTag = function (el) {
+			if (!el || !el.isJsonObject()) return null
+			var o = el.getAsJsonObject()
+			if (o.has('item')) return null
+			if (o.has('base_ingredient') && o.get('base_ingredient').isJsonObject()) o = o.getAsJsonObject('base_ingredient')
+			return (o.has('tag') && o.get('tag').isJsonPrimitive()) ? String(o.get('tag').getAsString()) : null
+		}
+		var hasEmpty = function (json) {
+			var keys = ['result', 'results', 'output', 'secondaries']
+			for (var k = 0; k < keys.length; k++) {
+				if (!json.has(keys[k])) continue
+				var v = json.get(keys[k])
+				var list = v.isJsonArray() ? v.getAsJsonArray() : null
+				var n = list ? list.size() : 1
+				for (var x = 0; x < n; x++) {
+					var el = list ? list.get(x) : v
+					// crusher / arc furnace secondaries: {chance, output: {...}}
+					if (el.isJsonObject() && el.getAsJsonObject().has('output')) el = el.getAsJsonObject().get('output')
+					var t = outTag(el)
+					if (t !== null && tagEmpty(t)) return t
+				}
+			}
+			return null
+		}
+		var filter = global.NCH._ieSchemaTypes.map(function (t) { return { type: 'immersiveengineering:' + t } })
+		var removed = []
+		var found = e.findRecipes(filter)
+		var it = found.iterator()
+		while (it.hasNext()) {
+			var r = it.next()
+			var t = r.json ? hasEmpty(r.json) : null
+			if (t !== null) removed.push(String(r.getId()) + ' (#' + t + ')')
+		}
+		removed.forEach(s => e.remove({ id: s.substring(0, s.indexOf(' ')) }))
+		if (removed.length > 0) console.info('[NCH] removed ' + removed.length + ' Immersive Engineering recipes whose output tag is empty: ' + removed.join(', '))
+	},
 
-  // G5 for filters: an input/output id (or tag) of a mod that is not loaded matches nothing; count the call for that
-  // mod instead of letting KubeJS parse it. Walks plain objects and arrays (or / not / lists); Java objects pass through
-  // as before. (The "Empty array?" errors this was first written for were IE output tags, _pruneEmptyIeOutputs.)
-  _absentInFilter(v, context, key, nested) {
-    if (v === undefined || v === null) return
-    if (typeof v === 'string' || v instanceof String) {
-      if (key === 'input' || key === 'output') global.NCH._absent(String(v).replace(/^#/, ''), context)
-      return
-    }
-    if (typeof v !== 'object') return
-    if (Array.isArray(v)) {
-      // a list under input/output is a choice of items: left to KubeJS (one absent entry must not drop the call)
-      if (key === 'input' || key === 'output') return
-      for (var n = 0; n < v.length; n++) global.NCH._absentInFilter(v[n], context, key, true)
-      return
-    }
-    if (Object.prototype.toString.call(v) !== '[object Object]') return
-    // a top-level { id: 'mod:recipe' } / { mod: 'mod' } filter of an absent mod matches nothing: count the call for
-    // that mod instead of failing on its (undefined) dict entries. Not inside a list (a list of filters is an OR).
-    if (!nested) {
-      if (typeof v.id === 'string' || v.id instanceof String) global.NCH._absent(String(v.id), context)
-      if ((typeof v.mod === 'string' || v.mod instanceof String) && !global.has.mod(String(v.mod))) {
-        var merr = new Error('[NCH] ' + context + ': mod ' + v.mod + ' is not loaded')
-        merr.nchAbsent = String(v.mod)
-        throw merr
-      }
-    }
-    var keys = Object.keys(v)
-    for (var k = 0; k < keys.length; k++) {
-      var kk = keys[k]
-      global.NCH._absentInFilter(v[kk], context, (kk === 'input' || kk === 'output') ? kk : key, true)
-    }
-  },
+	// G5 for filters: an input/output id (or tag) of a mod that is not loaded matches nothing; count the call for that
+	// mod instead of letting KubeJS parse it. Walks plain objects and arrays (or / not / lists); Java objects pass through
+	// as before. (The "Empty array?" errors this was first written for were IE output tags, _pruneEmptyIeOutputs.)
+	_absentInFilter(v, context, key, nested) {
+		if (v === undefined || v === null) return
+		if (typeof v === 'string' || v instanceof String) {
+			if (key === 'input' || key === 'output') global.NCH._absent(String(v).replace(/^#/, ''), context)
+			return
+		}
+		if (typeof v !== 'object') return
+		if (Array.isArray(v)) {
+			// a list under input/output is a choice of items: left to KubeJS (one absent entry must not drop the call)
+			if (key === 'input' || key === 'output') return
+			for (var n = 0; n < v.length; n++) global.NCH._absentInFilter(v[n], context, key, true)
+			return
+		}
+		if (Object.prototype.toString.call(v) !== '[object Object]') return
+		// a top-level { id: 'mod:recipe' } / { mod: 'mod' } filter of an absent mod matches nothing: count the call for
+		// that mod instead of failing on its (undefined) dict entries. Not inside a list (a list of filters is an OR).
+		if (!nested) {
+			if (typeof v.id === 'string' || v.id instanceof String) global.NCH._absent(String(v.id), context)
+			if ((typeof v.mod === 'string' || v.mod instanceof String) && !global.has.mod(String(v.mod))) {
+				var merr = new Error('[NCH] ' + context + ': mod ' + v.mod + ' is not loaded')
+				merr.nchAbsent = String(v.mod)
+				throw merr
+			}
+		}
+		var keys = Object.keys(v)
+		for (var k = 0; k < keys.length; k++) {
+			var kk = keys[k]
+			global.NCH._absentInFilter(v[kk], context, (kk === 'input' || kk === 'output') ? kk : key, true)
+		}
+	},
 
-  _undefinedIn(v, path) {
-    if (v === undefined || v === null) return path
-    if (typeof v !== 'object') return null
-    if (Array.isArray(v)) {
-      for (var n = 0; n < v.length; n++) {
-        var a = global.NCH._undefinedIn(v[n], path + '[' + n + ']')
-        if (a) return a
-      }
-      return null
-    }
-    // plain JS objects only: Java objects (Ingredient, RegExp wrappers) are values, not filters to walk. Not a
-    // prototype check: each script pack has its own Object.prototype, so a filter from a server script never matched
-    // this file's (scratch r1106cbb; tools/rhino_scope_test)
-    if (Object.prototype.toString.call(v) !== '[object Object]') return null
-    var keys = Object.keys(v)
-    for (var k = 0; k < keys.length; k++) {
-      var b = global.NCH._undefinedIn(v[keys[k]], path + '.' + keys[k])
-      if (b) return b
-    }
-    return null
-  },
+	_undefinedIn(v, path) {
+		if (v === undefined || v === null) return path
+		if (typeof v !== 'object') return null
+		if (Array.isArray(v)) {
+			for (var n = 0; n < v.length; n++) {
+				var a = global.NCH._undefinedIn(v[n], path + '[' + n + ']')
+				if (a) return a
+			}
+			return null
+		}
+		// plain JS objects only: Java objects (Ingredient, RegExp wrappers) are values, not filters to walk. Not a
+		// prototype check: each script pack has its own Object.prototype, so a filter from a server script never matched
+		// this file's (scratch r1106cbb; tools/rhino_scope_test)
+		if (Object.prototype.toString.call(v) !== '[object Object]') return null
+		var keys = Object.keys(v)
+		for (var k = 0; k < keys.length; k++) {
+			var b = global.NCH._undefinedIn(v[keys[k]], path + '.' + keys[k])
+			if (b) return b
+		}
+		return null
+	},
 
-  replaceInput(filter, oldInput, newInput, e, includeAdded) {
-    if (!e) throw new Error('replaceInput called without event object!')
-    global.NCH._absentInFilter(filter, 'replaceInput')
-    global.NCH._pruneEmptyIeOutputs(e)
-    global.NCH._validateAny(oldInput, 'replaceInput old input')
-    global.NCH._validateAny(newInput, 'replaceInput new input')
-    e.replaceInput(filter, oldInput, newInput)
-    return includeAdded ? global.NCH._replaceInAdded(filter, 'input', oldInput, newInput, e) : 0
-  },
+	replaceInput(filter, oldInput, newInput, e, includeAdded) {
+		if (!e) throw new Error('replaceInput called without event object!')
+		global.NCH._absentInFilter(filter, 'replaceInput')
+		global.NCH._pruneEmptyIeOutputs(e)
+		global.NCH._validateAny(oldInput, 'replaceInput old input')
+		global.NCH._validateAny(newInput, 'replaceInput new input')
+		e.replaceInput(filter, oldInput, newInput)
+		return includeAdded ? global.NCH._replaceInAdded(filter, 'input', oldInput, newInput, e) : 0
+	},
 
-  replaceOutput(filter, oldOutput, newOutput, e, includeAdded) {
-    if (!e) throw new Error('replaceOutput called without event object!')
-    global.NCH._absentInFilter(filter, 'replaceOutput')
-    global.NCH._pruneEmptyIeOutputs(e)
-    global.NCH._validateAny(oldOutput, 'replaceOutput old output')
-    global.NCH._validateAny(newOutput, 'replaceOutput new output')
-    e.replaceOutput(filter, oldOutput, newOutput)
-    return includeAdded ? global.NCH._replaceInAdded(filter, 'output', oldOutput, newOutput, e) : 0
-  },
+	replaceOutput(filter, oldOutput, newOutput, e, includeAdded) {
+		if (!e) throw new Error('replaceOutput called without event object!')
+		global.NCH._absentInFilter(filter, 'replaceOutput')
+		global.NCH._pruneEmptyIeOutputs(e)
+		global.NCH._validateAny(oldOutput, 'replaceOutput old output')
+		global.NCH._validateAny(newOutput, 'replaceOutput new output')
+		e.replaceOutput(filter, oldOutput, newOutput)
+		return includeAdded ? global.NCH._replaceInAdded(filter, 'output', oldOutput, newOutput, e) : 0
+	},
 
-  // Sets the cooking time (ticks) of every loaded recipe the filter matches (smelting-style and Farmer's Delight pot
-  // recipes both read `cookingtime`). Returns the number of recipes changed. The time goes in as a parsed JSON number:
-  // a JS number (and even Integer.valueOf) makes Rhino pick addProperty(String, String) and write "400.0", which
-  // Farmer's Delight rejects ("Expected cookingtime to be a Int"), dropping the recipe (checked on a scratch server).
-  setCookTime(filter, time, e) {
-    if (!e) throw new Error('setCookTime called without event object!')
-    global.NCH._pruneEmptyIeOutputs(e)
-    var n = 0
-    var ticks = Java.loadClass('com.google.gson.JsonParser').parseString(String(Math.round(time)))
-    e.forEachRecipe(filter, r => { r.json.add('cookingtime', ticks); n++ })
-    return n
-  },
+	// Sets the cooking time (ticks) of every loaded recipe the filter matches (smelting-style and Farmer's Delight pot
+	// recipes both read `cookingtime`). Returns the number of recipes changed. The time goes in as a parsed JSON number:
+	// a JS number (and even Integer.valueOf) makes Rhino pick addProperty(String, String) and write "400.0", which
+	// Farmer's Delight rejects ("Expected cookingtime to be a Int"), dropping the recipe (checked on a scratch server).
+	setCookTime(filter, time, e) {
+		if (!e) throw new Error('setCookTime called without event object!')
+		global.NCH._pruneEmptyIeOutputs(e)
+		var n = 0
+		var ticks = Java.loadClass('com.google.gson.JsonParser').parseString(String(Math.round(time)))
+		e.forEachRecipe(filter, r => { r.json.add('cookingtime', ticks); n++ })
+		return n
+	},
 
-  // Multiplies an integer field of every loaded recipe the filter matches (Botany Pots `growthTicks`). factor is a
-  // number or a function (recipe json) -> number; 1 (or 0 / null) leaves that recipe alone. The result is rounded,
-  // at least 1, and written as a parsed JSON integer for the same reason as setCookTime. Recipes without the field
-  // are skipped. Returns the number of recipes changed.
-  scaleRecipeInt(filter, key, factor, e) {
-    if (!e) throw new Error('scaleRecipeInt called without event object!')
-    global.NCH._pruneEmptyIeOutputs(e)
-    var parser = Java.loadClass('com.google.gson.JsonParser')
-    var n = 0
-    e.forEachRecipe(filter, r => {
-      var json = r.json
-      if (!json || !json.has(key) || !json.get(key).isJsonPrimitive()) return
-      var f = typeof factor === 'function' ? factor(json) : factor
-      if (!f || f === 1) return
-      var v = json.get(key).getAsDouble()
-      json.add(key, parser.parseString(String(Math.max(1, Math.round(v * f)))))
-      n++
-    })
-    return n
-  },
+	// Multiplies an integer field of every loaded recipe the filter matches (Botany Pots `growthTicks`). factor is a
+	// number or a function (recipe json) -> number; 1 (or 0 / null) leaves that recipe alone. The result is rounded,
+	// at least 1, and written as a parsed JSON integer for the same reason as setCookTime. Recipes without the field
+	// are skipped. Returns the number of recipes changed.
+	scaleRecipeInt(filter, key, factor, e) {
+		if (!e) throw new Error('scaleRecipeInt called without event object!')
+		global.NCH._pruneEmptyIeOutputs(e)
+		var parser = Java.loadClass('com.google.gson.JsonParser')
+		var n = 0
+		e.forEachRecipe(filter, r => {
+			var json = r.json
+			if (!json || !json.has(key) || !json.get(key).isJsonPrimitive()) return
+			var f = typeof factor === 'function' ? factor(json) : factor
+			if (!f || f === 1) return
+			var v = json.get(key).getAsDouble()
+			json.add(key, parser.parseString(String(Math.max(1, Math.round(v * f)))))
+			n++
+		})
+		return n
+	},
 
-  // Sets a number field of every loaded recipe the filter matches (Botany Pots soil `growthModifier`), written as a
-  // parsed JSON number like scaleRecipeInt. Returns the number of recipes changed.
-  setRecipeNumber(filter, key, value, e) {
-    if (!e) throw new Error('setRecipeNumber called without event object!')
-    var num = Java.loadClass('com.google.gson.JsonParser').parseString(String(Number(value)))
-    var n = 0
-    e.forEachRecipe(filter, r => {
-      if (!r.json) return
-      r.json.add(key, num)
-      n++
-    })
-    return n
-  },
+	// Sets a number field of every loaded recipe the filter matches (Botany Pots soil `growthModifier`), written as a
+	// parsed JSON number like scaleRecipeInt. Returns the number of recipes changed.
+	setRecipeNumber(filter, key, value, e) {
+		if (!e) throw new Error('setRecipeNumber called without event object!')
+		var num = Java.loadClass('com.google.gson.JsonParser').parseString(String(Number(value)))
+		var n = 0
+		e.forEachRecipe(filter, r => {
+			if (!r.json) return
+			r.json.add(key, num)
+			n++
+		})
+		return n
+	},
 
-  // KubeJS 1902.6's e.replaceInput / e.replaceOutput / e.remove only walk the recipes loaded from data
-  // (originalRecipes), never the ones scripts added (addedRecipes). With includeAdded, replaceInput /
-  // replaceOutput repeat the swap on the added recipes for a plain { input: X } / { output: X } filter (item
-  // merges: a purged id must go everywhere). Opt-in because a swap replaces the whole matching slot: sugar ->
-  // #forge:sugar would turn a [sugar, honey] slot into the tag alone. Returns the number of added recipes changed.
-  _replaceInAdded(filter, key, oldValue, newValue, e) {
-    if (filter == null || typeof filter !== 'object' || Array.isArray(filter)) return 0
-    var keys = Object.keys(filter)
-    if (keys.length !== 1 || keys[0] !== key) return 0
-    var changed = 0
-    var it = e.addedRecipes.iterator()
-    while (it.hasNext()) {
-      var r = it.next()
-      if (key === 'input') {
-        if (r.hasInput(filter.input) && r.replaceInput(oldValue, newValue)) changed++
-      } else if (r.hasOutput(filter.output) && r.replaceOutput(oldValue, newValue)) changed++
-    }
-    return changed
-  },
+	// KubeJS 1902.6's e.replaceInput / e.replaceOutput / e.remove only walk the recipes loaded from data
+	// (originalRecipes), never the ones scripts added (addedRecipes). With includeAdded, replaceInput /
+	// replaceOutput repeat the swap on the added recipes for a plain { input: X } / { output: X } filter (item
+	// merges: a purged id must go everywhere). Opt-in because a swap replaces the whole matching slot: sugar ->
+	// #forge:sugar would turn a [sugar, honey] slot into the tag alone. Returns the number of added recipes changed.
+	_replaceInAdded(filter, key, oldValue, newValue, e) {
+		if (filter == null || typeof filter !== 'object' || Array.isArray(filter)) return 0
+		var keys = Object.keys(filter)
+		if (keys.length !== 1 || keys[0] !== key) return 0
+		var changed = 0
+		var it = e.addedRecipes.iterator()
+		while (it.hasNext()) {
+			var r = it.next()
+			if (key === 'input') {
+				if (r.hasInput(filter.input) && r.replaceInput(oldValue, newValue)) changed++
+			} else if (r.hasOutput(filter.output) && r.replaceOutput(oldValue, newValue)) changed++
+		}
+		return changed
+	},
 
-  // Item merges (perf.md 11.2 #4): swaps every [old, new] item pair in the inputs and outputs of every recipe, data
-  // and script-added alike, in list order, as replaceInput / replaceOutput with includeAdded would per pair. One
-  // filtered pass over the data recipes and one over the added ones (prefiltered by a single match of every old id)
-  // instead of two data scans and two added walks per pair. Returns the number of recipes changed.
-  replaceItems(pairs, e) {
-    if (!e) throw new Error('replaceItems called without event object!')
-    if (!pairs || pairs.length === 0) return 0
-    pairs.forEach((p, idx) => {
-      global.NCH._validateAny(p[0], 'replaceItems[' + idx + '] old')
-      global.NCH._validateAny(p[1], 'replaceItems[' + idx + '] new')
-    })
-    var anyOld = Ingredient.of(pairs.map(p => p[0]))
-    var changed = 0
-    var swap = r => {
-      var hit = false
-      pairs.forEach(p => {
-        if (r.replaceInput(p[0], p[1])) hit = true
-        if (r.replaceOutput(p[0], p[1])) hit = true
-      })
-      if (hit) changed++
-    }
-    global.NCH._pruneEmptyIeOutputs(e)
-    e.forEachRecipe([{ input: anyOld }, { output: anyOld }], swap)
-    var it = e.addedRecipes.iterator()
-    while (it.hasNext()) {
-      var r = it.next()
-      if (r.hasInput(anyOld) || r.hasOutput(anyOld)) swap(r)
-    }
-    return changed
-  },
+	// Item merges (perf.md 11.2 #4): swaps every [old, new] item pair in the inputs and outputs of every recipe, data
+	// and script-added alike, in list order, as replaceInput / replaceOutput with includeAdded would per pair. One
+	// filtered pass over the data recipes and one over the added ones (prefiltered by a single match of every old id)
+	// instead of two data scans and two added walks per pair. Returns the number of recipes changed.
+	replaceItems(pairs, e) {
+		if (!e) throw new Error('replaceItems called without event object!')
+		if (!pairs || pairs.length === 0) return 0
+		pairs.forEach((p, idx) => {
+			global.NCH._validateAny(p[0], 'replaceItems[' + idx + '] old')
+			global.NCH._validateAny(p[1], 'replaceItems[' + idx + '] new')
+		})
+		var anyOld = Ingredient.of(pairs.map(p => p[0]))
+		var changed = 0
+		var swap = r => {
+			var hit = false
+			pairs.forEach(p => {
+				if (r.replaceInput(p[0], p[1])) hit = true
+				if (r.replaceOutput(p[0], p[1])) hit = true
+			})
+			if (hit) changed++
+		}
+		global.NCH._pruneEmptyIeOutputs(e)
+		e.forEachRecipe([{ input: anyOld }, { output: anyOld }], swap)
+		var it = e.addedRecipes.iterator()
+		while (it.hasNext()) {
+			var r = it.next()
+			if (r.hasInput(anyOld) || r.hasOutput(anyOld)) swap(r)
+		}
+		return changed
+	},
 
-  // ========================================================================
-  // Config-driven recipe values
-  // ========================================================================
+	// ========================================================================
+	// Config-driven recipe values
+	// ========================================================================
 
-  // Takes a whole defaults object for a config-driven craft (keys must match the
-  // CommonConfig section's Java field names exactly, e.g. potion/mb/loops/blows, not the toml
-  // keys potionMb/hammerBlows) and a
-  // dotted path to that section (e.g. 'CRAFTING.FELSIC_SWORD'), and returns a new object
-  // with each field replaced by its CommonConfig value where available. Falls back to the
-  // given default field-by-field if no registered config class (see registerConfig) holds the
-  // section/field. Logs whenever a resolved value differs from its
-  // default, so an override in config/creativecommon-common.toml (or a carved jar's file) shows up in the log
-  // instead of silently changing recipe output. Meant to sit right next to the recipe it
-  // feeds:
-  //
-  //   const felsicSword = R.cfg({
-  //     potion: 'creativecommon:magic_resistance',
-  //     mb: 250,
-  //     loops: 1,
-  //     blows: 3
-  //   }, 'CRAFTING.FELSIC_SWORD')
-  //
-  // Recipes are baked at datapack-reload time (ServerEvents.recipes) - a toml edit needs
-  // /reload to reach an already-generated recipe, same as any other config-driven recipe.
-  // A section is looked up in every registered config class in order, so a section that moves to a carved jar keeps
-  // working without a script change. 'modid:SECTION.FIELD' pins the lookup to one jar's class.
-  registerConfig(modId, className) {
-    if ($NCH_configClasses.some(c => c.id === modId)) {
-      console.warn('[NCH.cfg] ' + modId + ' config already registered; ' + className + ' skipped')
-      return
-    }
-    $NCH_configClasses.push({ id: modId, name: className, cls: undefined })
-  },
+	// Takes a whole defaults object for a config-driven craft (keys must match the
+	// CommonConfig section's Java field names exactly, e.g. potion/mb/loops/blows, not the toml
+	// keys potionMb/hammerBlows) and a
+	// dotted path to that section (e.g. 'CRAFTING.FELSIC_SWORD'), and returns a new object
+	// with each field replaced by its CommonConfig value where available. Falls back to the
+	// given default field-by-field if no registered config class (see registerConfig) holds the
+	// section/field. Logs whenever a resolved value differs from its
+	// default, so an override in config/creativecommon-common.toml (or a carved jar's file) shows up in the log
+	// instead of silently changing recipe output. Meant to sit right next to the recipe it
+	// feeds:
+	//
+	//   const felsicSword = R.cfg({
+	//     potion: 'creativecommon:magic_resistance',
+	//     mb: 250,
+	//     loops: 1,
+	//     blows: 3
+	//   }, 'CRAFTING.FELSIC_SWORD')
+	//
+	// Recipes are baked at datapack-reload time (ServerEvents.recipes) - a toml edit needs
+	// /reload to reach an already-generated recipe, same as any other config-driven recipe.
+	// A section is looked up in every registered config class in order, so a section that moves to a carved jar keeps
+	// working without a script change. 'modid:SECTION.FIELD' pins the lookup to one jar's class.
+	registerConfig(modId, className) {
+		if ($NCH_configClasses.some(c => c.id === modId)) {
+			console.warn('[NCH.cfg] ' + modId + ' config already registered; ' + className + ' skipped')
+			return
+		}
+		$NCH_configClasses.push({ id: modId, name: className, cls: undefined })
+	},
 
-  cfg(defaults, path) {
-    var only = null
-    if (path.indexOf(':') > 0) {
-      only = path.substring(0, path.indexOf(':'))
-      path = path.substring(path.indexOf(':') + 1)
-    }
-    var section = null
-    var owner = null
-    $NCH_configClasses.forEach(c => {
-      if (section || (only && c.id !== only)) return
-      if (c.cls === undefined) {
-        try {
-          c.cls = Java.loadClass(c.name)
-        } catch (err) {
-          c.cls = false
-          console.warn('[NCH.cfg] ' + c.id + ' config class ' + c.name + ' not on classpath: ' + err)
-        }
-      }
-      if (!c.cls) return
-      // Rhino THROWS on a missing static field of a Java class (InternalError "has no public instance field or method
-      // named X"), it does not return undefined: a section that moved to a carved jar must read as "not here" in
-      // CommonConfig, or the error escapes and cfg() returns undefined (scratch_run_2026-11-01.md 7).
-      var found = path.split('.').reduce((obj, seg) => {
-        if (obj == null) return null
-        try {
-          return obj[seg]
-        } catch (err) {
-          return null
-        }
-      }, c.cls)
-      if (found) {
-        section = found
-        owner = c.id
-      }
-    })
-    if (!section) {
-      console.warn('[NCH.cfg] no ' + (only ? only + ':' : '') + path + ' section in any registered config - using hardcoded defaults')
-      return defaults
-    }
+	cfg(defaults, path) {
+		var only = null
+		if (path.indexOf(':') > 0) {
+			only = path.substring(0, path.indexOf(':'))
+			path = path.substring(path.indexOf(':') + 1)
+		}
+		var section = null
+		var owner = null
+		$NCH_configClasses.forEach(c => {
+			if (section || (only && c.id !== only)) return
+			if (c.cls === undefined) {
+				try {
+					c.cls = Java.loadClass(c.name)
+				} catch (err) {
+					c.cls = false
+					console.warn('[NCH.cfg] ' + c.id + ' config class ' + c.name + ' not on classpath: ' + err)
+				}
+			}
+			if (!c.cls) return
+			// Rhino THROWS on a missing static field of a Java class (InternalError "has no public instance field or method
+			// named X"), it does not return undefined: a section that moved to a carved jar must read as "not here" in
+			// CommonConfig, or the error escapes and cfg() returns undefined (scratch_run_2026-11-01.md 7).
+			var found = path.split('.').reduce((obj, seg) => {
+				if (obj == null) return null
+				try {
+					return obj[seg]
+				} catch (err) {
+					return null
+				}
+			}, c.cls)
+			if (found) {
+				section = found
+				owner = c.id
+			}
+		})
+		if (!section) {
+			console.warn('[NCH.cfg] no ' + (only ? only + ':' : '') + path + ' section in any registered config - using hardcoded defaults')
+			return defaults
+		}
 
-    var values = {}
-    Object.keys(defaults).forEach(field => {
-      var configField
-      try {
-        configField = section[field]
-      } catch (err) {
-        configField = null // missing Java field: Rhino throws (see the section lookup above)
-      }
-      if (!configField || typeof configField.get !== 'function') {
-        console.warn('[NCH.cfg] no ' + owner + ':' + path + '.' + field + ' field - using default ' + defaults[field])
-        values[field] = defaults[field]
-        return
-      }
+		var values = {}
+		Object.keys(defaults).forEach(field => {
+			var configField
+			try {
+				configField = section[field]
+			} catch (err) {
+				configField = null // missing Java field: Rhino throws (see the section lookup above)
+			}
+			if (!configField || typeof configField.get !== 'function') {
+				console.warn('[NCH.cfg] no ' + owner + ':' + path + '.' + field + ' field - using default ' + defaults[field])
+				values[field] = defaults[field]
+				return
+			}
 
-      var value = configField.get()
-      if (value != defaults[field]) {
-        console.log('[NCH.cfg] ' + owner + ':' + path + '.' + field + ' overridden: default ' + defaults[field] + ' -> ' + value)
-      }
-      values[field] = value
-    })
-    return values
-  },
+			var value = configField.get()
+			if (value != defaults[field]) {
+				console.log('[NCH.cfg] ' + owner + ':' + path + '.' + field + ' overridden: default ' + defaults[field] + ' -> ' + value)
+			}
+			values[field] = value
+		})
+		return values
+	},
 
 	// Config reads for scripts (design rule DR-C4, V-37): use these instead of Java.loadClass('...Config') in a script.
 	// cfgClass(modId) returns the config class a jar registered with registerConfig (Common's CommonConfig for
@@ -1155,156 +1155,156 @@ global.NCH = {
 	})
 	},
 
-  // ========================================================================
-  // Vanilla-style recipes
-  // ========================================================================
+	// ========================================================================
+	// Vanilla-style recipes
+	// ========================================================================
 
-  // cans: a recipe that uses food cans (feature_writeup/can_parity.md, decision D-C: manual crafts only).
-  //   true / filter / array of filters (item, '#tag', slot index): the cans lose one serving instead of
-  //     being used up (Creative Delight food.CanServings; the last serving rolls empty/crushed/nothing);
-  //     true = every can slot (#creativedelight:cans).
-  //   { whole: id or [ids] }: those cans are used up whole and must be full (an opened can gives no result).
-  //   { servings: <as above>, whole: [...] }: both.
-  //   R.shapeless(Item.of(i.beef_cooked), [i.canned_beef], e, 'uncan_beef', null, null, true)
-  // Every can recipe is manual only: its id ends in _manual_only (Create's mixer, mechanical crafter and
-  // their JEI categories skip it, AllRecipeTypes.shouldIgnoreInAutomation), and it has no result unless a
-  // player's menu holds the grid (IE Assembler, AE2 and other auto-crafters craft on a menu without one).
-  // A slot holding a stack of full cans opens a new can per craft (the opened one goes to the
-  // inventory): vanilla's remainder rule. Put the opened can in the grid on its own to drain it.
-  shaped(output, pattern, keys, e, idOverride, damage, cans) {
-    if (!e) throw new Error('shaped called without event object!')
-    var idSuffix = global.NCH._canId(idOverride ?? global.NCH.toId(output, Object.values(keys)[0], "shaped"), cans)
-    var ctx = 'shaped ' + idSuffix
+	// cans: a recipe that uses food cans (feature_writeup/can_parity.md, decision D-C: manual crafts only).
+	//   true / filter / array of filters (item, '#tag', slot index): the cans lose one serving instead of
+	//     being used up (Creative Delight food.CanServings; the last serving rolls empty/crushed/nothing);
+	//     true = every can slot (#creativedelight:cans).
+	//   { whole: id or [ids] }: those cans are used up whole and must be full (an opened can gives no result).
+	//   { servings: <as above>, whole: [...] }: both.
+	//   R.shapeless(Item.of(i.beef_cooked), [i.canned_beef], e, 'uncan_beef', null, null, true)
+	// Every can recipe is manual only: its id ends in _manual_only (Create's mixer, mechanical crafter and
+	// their JEI categories skip it, AllRecipeTypes.shouldIgnoreInAutomation), and it has no result unless a
+	// player's menu holds the grid (IE Assembler, AE2 and other auto-crafters craft on a menu without one).
+	// A slot holding a stack of full cans opens a new can per craft (the opened one goes to the
+	// inventory): vanilla's remainder rule. Put the opened can in the grid on its own to drain it.
+	shaped(output, pattern, keys, e, idOverride, damage, cans) {
+		if (!e) throw new Error('shaped called without event object!')
+		var idSuffix = global.NCH._canId(idOverride ?? global.NCH.toId(output, Object.values(keys)[0], "shaped"), cans)
+		var ctx = 'shaped ' + idSuffix
 
-    global.NCH._validateAny(output, ctx + ' output')
-    Object.keys(keys).forEach((k) => {
-      global.NCH._validateAny(keys[k], ctx + ' key[' + k + ']')
-    })
+		global.NCH._validateAny(output, ctx + ' output')
+		Object.keys(keys).forEach((k) => {
+			global.NCH._validateAny(keys[k], ctx + ' key[' + k + ']')
+		})
 
-    var recipe = e
-        .shaped(output, pattern, keys)
-        .id(`${global.NCH.ns()}:shaped/${idSuffix}`)
+		var recipe = e
+				.shaped(output, pattern, keys)
+				.id(`${global.NCH.ns()}:shaped/${idSuffix}`)
 
-    if (damage) {
-        var pairs = Array.isArray(damage[0]) ? damage : [damage]
-        for (var d = 0; d < pairs.length; d++) {
-            recipe.damageIngredient(pairs[d][0], pairs[d][1])
-        }
-    }
-    global.NCH._canServings(recipe, cans, ctx)
-    return recipe
+		if (damage) {
+				var pairs = Array.isArray(damage[0]) ? damage : [damage]
+				for (var d = 0; d < pairs.length; d++) {
+						recipe.damageIngredient(pairs[d][0], pairs[d][1])
+				}
+		}
+		global.NCH._canServings(recipe, cans, ctx)
+		return recipe
 	},
 
 	shapeless(output, input, e, idOverride, damage, replace, cans) {
-    if (!e) throw new Error('shapeless called without event object!')
-    var idSuffix = global.NCH._canId(idOverride ?? global.NCH.toId(output, input, "shapeless"), cans)
-    var ctx = 'shapeless ' + idSuffix
+		if (!e) throw new Error('shapeless called without event object!')
+		var idSuffix = global.NCH._canId(idOverride ?? global.NCH.toId(output, input, "shapeless"), cans)
+		var ctx = 'shapeless ' + idSuffix
 
-    global.NCH._validateAny(output, ctx + ' output')
-    global.NCH._validateAny(input, ctx + ' input')
+		global.NCH._validateAny(output, ctx + ' output')
+		global.NCH._validateAny(input, ctx + ' input')
 
-    var recipe = e
-      .shapeless(output, input)
-      .id(`${global.NCH.ns()}:shapeless/${idSuffix}`)
+		var recipe = e
+			.shapeless(output, input)
+			.id(`${global.NCH.ns()}:shapeless/${idSuffix}`)
 
-    if (damage) {
-        var pairs = Array.isArray(damage[0]) ? damage : [damage]
-        for (var d = 0; d < pairs.length; d++) {
-            recipe.damageIngredient(pairs[d][0], pairs[d][1])
-        }
-    }
+		if (damage) {
+				var pairs = Array.isArray(damage[0]) ? damage : [damage]
+				for (var d = 0; d < pairs.length; d++) {
+						recipe.damageIngredient(pairs[d][0], pairs[d][1])
+				}
+		}
 
-    // replace: [filter, resultItem] or [[filter, resultItem], ...] — calls this recipe's own
-    // recipe.replaceIngredient(filter, resultItem).
-    // NOTE: this is NOT a crafting-remainder/leftover-item hook, despite reading like one -
-    // RecipeJS#replaceIngredient takes an IngredientActionFilter and is KubeJS's bulk
-    // ingredient-substitution tool (e.g. a script that swaps every recipe's vanilla iron
-    // ingot for a modded one), not a per-recipe "leave this behind after crafting" mechanic.
-    // Passing a plain Ingredient here silently produced a recipe that could never match any
-    // input (see kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js history) - it just corrupts the
-    // ingredient instead of throwing. For an actual crafting remainder (bucket -> empty
-    // bucket, syringe -> empty syringe), set it on the ITEM at registration time instead:
-    // e.create(id).containerItem('namespace:item_id') - see startup_scripts/items/sample_syringe.js.
-    if (replace) {
-        var rpairs = Array.isArray(replace[0]) ? replace : [replace]
-        for (var r = 0; r < rpairs.length; r++) {
-            recipe.replaceIngredient(rpairs[r][0], rpairs[r][1])
-        }
-    }
-    global.NCH._canServings(recipe, cans, ctx)
-    return recipe
+		// replace: [filter, resultItem] or [[filter, resultItem], ...] — calls this recipe's own
+		// recipe.replaceIngredient(filter, resultItem).
+		// NOTE: this is NOT a crafting-remainder/leftover-item hook, despite reading like one -
+		// RecipeJS#replaceIngredient takes an IngredientActionFilter and is KubeJS's bulk
+		// ingredient-substitution tool (e.g. a script that swaps every recipe's vanilla iron
+		// ingot for a modded one), not a per-recipe "leave this behind after crafting" mechanic.
+		// Passing a plain Ingredient here silently produced a recipe that could never match any
+		// input (see kubejs/data/creativedelight/kubejs/creativedelight/cultivated_meat.js history) - it just corrupts the
+		// ingredient instead of throwing. For an actual crafting remainder (bucket -> empty
+		// bucket, syringe -> empty syringe), set it on the ITEM at registration time instead:
+		// e.create(id).containerItem('namespace:item_id') - see startup_scripts/items/sample_syringe.js.
+		if (replace) {
+				var rpairs = Array.isArray(replace[0]) ? replace : [replace]
+				for (var r = 0; r < rpairs.length; r++) {
+						recipe.replaceIngredient(rpairs[r][0], rpairs[r][1])
+				}
+		}
+		global.NCH._canServings(recipe, cans, ctx)
+		return recipe
 	},
 
-  // Can recipes are manual only (see shaped()): the id suffix Create looks for.
-  _canId(idSuffix, cans) {
-    if (!cans || String(idSuffix).endsWith('_manual_only')) return idSuffix
-    return idSuffix + '_manual_only'
-  },
+	// Can recipes are manual only (see shaped()): the id suffix Create looks for.
+	_canId(idSuffix, cans) {
+		if (!cans || String(idSuffix).endsWith('_manual_only')) return idSuffix
+		return idSuffix + '_manual_only'
+	},
 
-  // True when a player crafts: a crafting table / inventory grid, or any menu holding a player's
-  // inventory (storage crafting terminals). Machines build the grid on a menu with no player slots.
-  _playerGrid(grid) {
-    if (grid.getPlayer() != null) return true
-    try {
-      var menu = grid.getMenu()
-      if (menu == null) return false
-      var slots = menu.slots
-      for (var n = 0; n < slots.size(); n++) {
-        var c = slots.get(n).container
-        if (c != null && c.player != null) return true
-      }
-    } catch (err) {
-      if (!global.NCH._playerGridWarned) console.warn('[NCH] can recipe player check failed, crafting-table grids only: ' + err)
-      global.NCH._playerGridWarned = true
-    }
-    return false
-  },
+	// True when a player crafts: a crafting table / inventory grid, or any menu holding a player's
+	// inventory (storage crafting terminals). Machines build the grid on a menu with no player slots.
+	_playerGrid(grid) {
+		if (grid.getPlayer() != null) return true
+		try {
+			var menu = grid.getMenu()
+			if (menu == null) return false
+			var slots = menu.slots
+			for (var n = 0; n < slots.size(); n++) {
+				var c = slots.get(n).container
+				if (c != null && c.player != null) return true
+			}
+		} catch (err) {
+			if (!global.NCH._playerGridWarned) console.warn('[NCH] can recipe player check failed, crafting-table grids only: ' + err)
+			global.NCH._playerGridWarned = true
+		}
+		return false
+	},
 
-  // The can guard of shaped() / shapeless(): manual only, whole cans full only, then the
-  // creativedelight:can_serving ingredient action. KubeJS empties its custom-action map at the
-  // start of every server script load, so Common's IngredientActions puts every registered action
-  // back on each call; the can logic is registered by compat.KubeJSCanAction (CD-bound).
-  _canServings(recipe, cans, ctx) {
-    if (!cans) return
-    var opts = (cans === true || typeof cans === 'string' || typeof cans === 'number' || Array.isArray(cans))
-      ? { servings: cans } : cans
-    var whole = opts.whole ? [].concat(opts.whole) : []
-    var servings = null
-    if (whole.length) {
-      try { servings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.CanServings') } catch (err) {
-        console.warn('[NCH] ' + ctx + ': Creative Delight CanServings not available, opened cans are not refused: ' + err)
-      }
-    }
-    recipe.modifyResult((grid, result) => {
-      if (!global.NCH._playerGrid(grid)) return Item.empty
-      if (servings == null) return result
-      for (var w = 0; w < whole.length; w++) {
-        var found = grid.findAll(Ingredient.of(whole[w]))
-        for (var s = 0; s < found.size(); s++) {
-          if (servings.isPartial(found.get(s))) return Item.empty   // opened: not full
-        }
-      }
-      return result
-    })
-    if (!opts.servings) return
-    cans = opts.servings
-    var actionId = 'creativedelight:can_serving'
-    try {
-      var actions = Java.loadClass('com.SaintAlfonzo.creativecommon.compat.kubejs.IngredientActions')
-      actions.reapply()
-      if (!actions.has(actionId)) {
-        console.warn('[NCH] ' + ctx + ': no ' + actionId + ' ingredient action registered, cans are used up whole')
-        return
-      }
-    } catch (err) {
-      console.warn('[NCH] ' + ctx + ': IngredientActions not available, cans are used up whole: ' + err)
-      return
-    }
-    var filters = cans === true ? [global.item.t_cans] : (Array.isArray(cans) ? cans : [cans])
-    for (var f = 0; f < filters.length; f++) {
-      recipe.customIngredientAction(filters[f], actionId)
-    }
-  },
+	// The can guard of shaped() / shapeless(): manual only, whole cans full only, then the
+	// creativedelight:can_serving ingredient action. KubeJS empties its custom-action map at the
+	// start of every server script load, so Common's IngredientActions puts every registered action
+	// back on each call; the can logic is registered by compat.KubeJSCanAction (CD-bound).
+	_canServings(recipe, cans, ctx) {
+		if (!cans) return
+		var opts = (cans === true || typeof cans === 'string' || typeof cans === 'number' || Array.isArray(cans))
+			? { servings: cans } : cans
+		var whole = opts.whole ? [].concat(opts.whole) : []
+		var servings = null
+		if (whole.length) {
+			try { servings = Java.loadClass('com.SaintAlfonzo.creativedelight.food.CanServings') } catch (err) {
+				console.warn('[NCH] ' + ctx + ': Creative Delight CanServings not available, opened cans are not refused: ' + err)
+			}
+		}
+		recipe.modifyResult((grid, result) => {
+			if (!global.NCH._playerGrid(grid)) return Item.empty
+			if (servings == null) return result
+			for (var w = 0; w < whole.length; w++) {
+				var found = grid.findAll(Ingredient.of(whole[w]))
+				for (var s = 0; s < found.size(); s++) {
+					if (servings.isPartial(found.get(s))) return Item.empty   // opened: not full
+				}
+			}
+			return result
+		})
+		if (!opts.servings) return
+		cans = opts.servings
+		var actionId = 'creativedelight:can_serving'
+		try {
+			var actions = Java.loadClass('com.SaintAlfonzo.creativecommon.compat.kubejs.IngredientActions')
+			actions.reapply()
+			if (!actions.has(actionId)) {
+				console.warn('[NCH] ' + ctx + ': no ' + actionId + ' ingredient action registered, cans are used up whole')
+				return
+			}
+		} catch (err) {
+			console.warn('[NCH] ' + ctx + ': IngredientActions not available, cans are used up whole: ' + err)
+			return
+		}
+		var filters = cans === true ? [global.item.t_cans] : (Array.isArray(cans) ? cans : [cans])
+		for (var f = 0; f < filters.length; f++) {
+			recipe.customIngredientAction(filters[f], actionId)
+		}
+	},
 
 	stonecutting(output, input, e, idOverride) {
 		if (!e) throw new Error('stonecutting called without event object!')
@@ -1470,7 +1470,7 @@ global.NCH = {
 		}).id(`${global.NCH.ns()}:fletching/${idSuffix}`)
 	},
 
-  	fdCooking(input, output, e, idOverride, exp, time, container) {
+		fdCooking(input, output, e, idOverride, exp, time, container) {
 		if (!global.has('farmersdelight')) return global.NCH._skip('farmersdelight')
 		exp = exp ?? 0
 		time = global.NCH._or(time, 200)
@@ -1490,7 +1490,7 @@ global.NCH = {
 		r.id(`${global.NCH.ns()}:farmersdelightcooking/${idSuffix}`)
 	},
 
-  	fdCutting(input, tool, output, e, idOverride) {
+		fdCutting(input, tool, output, e, idOverride) {
 		if (!global.has('farmersdelight')) return global.NCH._skip('farmersdelight')
 		if (!e) throw new Error('fdCutting called without event object!')
 		var idSuffix = idOverride ?? global.NCH.toId(output, input, "fdcutting")
@@ -1819,9 +1819,9 @@ global.NCH = {
 		}).id(`${global.NCH.ns()}:apple_fermenting/${idSuffix}`)
 	},
 
-  // ========================================================================
-  // Create
-  // ========================================================================
+	// ========================================================================
+	// Create
+	// ========================================================================
 
 	createItemApplication(output, target, tool, e, idOverride) {
 		if (!global.has('create')) return global.NCH._skip('create')
@@ -2368,7 +2368,7 @@ global.NCH = {
 		}
 
 		let r = e.recipes.create.sequenced_assembly(output, input, sequence)
-		  .transitionalItem(transitionalItem)
+			.transitionalItem(transitionalItem)
 
 		if (loops) r.loops(loops)
 
@@ -2490,21 +2490,21 @@ global.NCH = {
 	},
 
  createFilling(output, input, e, idOverride) {
-    if (!e) throw new Error('createFilling called without event object!')
-    var inputArr = Array.isArray(input) ? input : [input]
-    const itemInput = inputArr.find((i) => typeof i === 'string')
-    const id = itemInput
-        ? global.NCH.toId(output, itemInput, "createfilling")
-        : global.NCH.toId(output, input, "createfilling")
-    var idSuffix = idOverride ?? id
-    var ctx = 'createFilling ' + idSuffix
+		if (!e) throw new Error('createFilling called without event object!')
+		var inputArr = Array.isArray(input) ? input : [input]
+		const itemInput = inputArr.find((i) => typeof i === 'string')
+		const id = itemInput
+				? global.NCH.toId(output, itemInput, "createfilling")
+				: global.NCH.toId(output, input, "createfilling")
+		var idSuffix = idOverride ?? id
+		var ctx = 'createFilling ' + idSuffix
 
-    global.NCH._validateAny(output, ctx + ' output')
-    global.NCH._validateAny(input, ctx + ' input')
+		global.NCH._validateAny(output, ctx + ' output')
+		global.NCH._validateAny(input, ctx + ' input')
 
-    e.recipes.create
-    .filling(output, input)
-    .id(`${global.NCH.ns()}:createfilling/${idSuffix}`)
+		e.recipes.create
+		.filling(output, input)
+		.id(`${global.NCH.ns()}:createfilling/${idSuffix}`)
 	},
 
 	// Create Item Drain: input -> outputs, an item and/or a fluid.
@@ -2563,9 +2563,9 @@ global.NCH = {
 		var ctx = 'createRolling ' + idSuffix
 
 		const json = {
-		  type: 'createaddition:rolling',
-		  input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
-		  result: global.NCH._itemJson(output, { countMode: 'flat', allowTag: false, context: ctx + ' output' })
+			type: 'createaddition:rolling',
+			input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
+			result: global.NCH._itemJson(output, { countMode: 'flat', allowTag: false, context: ctx + ' output' })
 		}
 		e.custom(json).id(`${global.NCH.ns()}:createrolling/${idSuffix}`)
 	},
@@ -2626,14 +2626,14 @@ global.NCH = {
 		var ctx = 'viVibrating ' + idSuffix
 
 		const json = {
-		  type: 'vintageimprovements:vibrating',
-		  ingredients: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
-		      return global.NCH._itemJson(i, { countMode: 'none', context: ctx + ' ingredient[' + idx + ']' })
-		  }),
-		  results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
-		      return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })
-		  }),
-		  processingTime: global.NCH._or(processingTime, 300)
+			type: 'vintageimprovements:vibrating',
+			ingredients: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
+					return global.NCH._itemJson(i, { countMode: 'none', context: ctx + ' ingredient[' + idx + ']' })
+			}),
+			results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
+					return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })
+			}),
+			processingTime: global.NCH._or(processingTime, 300)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:vivibrating/${idSuffix}`)
@@ -2658,17 +2658,17 @@ global.NCH = {
 		})
 
 		const json = {
-		  type: 'vintageimprovements:vacuumizing',
-		  ingredients: slots,
-		  results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
-		      return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })
-		  }),
-		  processingTime: global.NCH._or(processingTime, 600)
+			type: 'vintageimprovements:vacuumizing',
+			ingredients: slots,
+			results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
+					return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, includeChance: true, context: ctx + ' result[' + idx + ']' })
+			}),
+			processingTime: global.NCH._or(processingTime, 600)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:vivacuumizing/${idSuffix}`)
 	},
-	
+
 	viLaserCutting(outputs, inputs, e, idOverride, energy, maxChargeRate) {
 		if (!global.has('create', 'vintageimprovements')) return global.NCH._skip('create', 'vintageimprovements')
 		if (!e) throw new Error('laserCutting called without event object!')
@@ -2817,16 +2817,16 @@ global.NCH = {
 		// the only IE helper built on KubeJS IE's recipe schema (the others write JSON): without that addon the schema
 		// is missing ("Constructor for immersiveengineering:metal_press with 3 arguments not found", r1107cc chain boot)
 		if (!global.has('kubejs_immersive_engineering')) return global.NCH._skip('kubejs_immersive_engineering')
-  if (!e) throw new Error('ieMetalPress called without event object!')
-  var idSuffix = idOverride ?? global.NCH.toId(output, input, "iepressing")
-  var ctx = 'ieMetalPress ' + idSuffix
+	if (!e) throw new Error('ieMetalPress called without event object!')
+	var idSuffix = idOverride ?? global.NCH.toId(output, input, "iepressing")
+	var ctx = 'ieMetalPress ' + idSuffix
 
-  global.NCH._validateAny(output, ctx + ' output')
-  global.NCH._validateAny(input, ctx + ' input')
-  global.NCH._validateAny(mold, ctx + ' mold')
+	global.NCH._validateAny(output, ctx + ' output')
+	global.NCH._validateAny(input, ctx + ' input')
+	global.NCH._validateAny(mold, ctx + ' mold')
 
-  e.recipes.immersiveengineeringMetalPress(output, input, mold)
-    .id(`${global.NCH.ns()}:iemetalpress/${idSuffix}`)
+	e.recipes.immersiveengineeringMetalPress(output, input, mold)
+		.id(`${global.NCH.ns()}:iemetalpress/${idSuffix}`)
 	},
 
 	ieCrushing(output, input, e, idOverride, secondaries, energy) {
@@ -2841,14 +2841,14 @@ global.NCH = {
 		global.NCH._validateAny(output, ctx + ' output')
 
 		e.custom({
-		  type: 'immersiveengineering:crusher',
-		  input: Ingredient.of(input),
-		  result: Item.of(output),
-		  energy: energy,
-		  secondaries: secondaries.map((s, idx) => {
-		    global.NCH._validateAny(s.output, ctx + ' secondary[' + idx + ']')
-		    return { chance: s.chance, output: Item.of(s.output).toJson() }
-		  })
+			type: 'immersiveengineering:crusher',
+			input: Ingredient.of(input),
+			result: Item.of(output),
+			energy: energy,
+			secondaries: secondaries.map((s, idx) => {
+				global.NCH._validateAny(s.output, ctx + ' secondary[' + idx + ']')
+				return { chance: s.chance, output: Item.of(s.output).toJson() }
+			})
 		}).id(`${global.NCH.ns()}:iecrushing/${idSuffix}`)
 	},
 
@@ -2889,16 +2889,16 @@ global.NCH = {
 		})
 
 		e.custom({
-		  type: 'immersiveengineering:arc_furnace',
-		  input: Ingredient.of(input),
-		  results: outputs.map((o) => Item.of(o)),
-		  additives: additives.map((a) => Ingredient.of(a)),
-		  secondaries: secondaries.map((s, idx) => {
-		    global.NCH._validateAny(s.output, ctx + ' secondary[' + idx + ']')
-		    return { chance: s.chance, output: Item.of(s.output) }
-		  }),
-		  time: global.NCH._or(time, 100),
-		  energy: global.NCH._or(energy, 25600)
+			type: 'immersiveengineering:arc_furnace',
+			input: Ingredient.of(input),
+			results: outputs.map((o) => Item.of(o)),
+			additives: additives.map((a) => Ingredient.of(a)),
+			secondaries: secondaries.map((s, idx) => {
+				global.NCH._validateAny(s.output, ctx + ' secondary[' + idx + ']')
+				return { chance: s.chance, output: Item.of(s.output) }
+			}),
+			time: global.NCH._or(time, 100),
+			energy: global.NCH._or(energy, 25600)
 		}).id(`${global.NCH.ns()}:iearcfurnace/${idSuffix}`)
 	},
 
@@ -2909,10 +2909,10 @@ global.NCH = {
 		var ctx = 'ieSqueezing ' + idSuffix
 
 		const json = {
-		  type: 'immersiveengineering:squeezer',
-		  input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
-		  fluid: global.NCH._fluidJson(fluidOutput, { defaultAmount: 1000, context: ctx + ' fluid output' }),
-		  energy: global.NCH._or(energy, 6000)
+			type: 'immersiveengineering:squeezer',
+			input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
+			fluid: global.NCH._fluidJson(fluidOutput, { defaultAmount: 1000, context: ctx + ' fluid output' }),
+			energy: global.NCH._or(energy, 6000)
 		}
 
 		if (itemOutput) {
@@ -2936,13 +2936,13 @@ global.NCH = {
 		if (!fluid.tag) global.NCH._warn(ctx, 'fluid input is not a tag, IE will not read it: ' + fluid.fluid)
 
 		const json = {
-		  type: 'immersiveengineering:mixer',
-		  fluid: fluid,
-		  inputs: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
-		      return global.NCH._itemJson(i, { countMode: 'base_ingredient', context: ctx + ' input[' + idx + ']' })
-		  }),
-		  result: result,
-		  energy: global.NCH._or(energy, 3200)
+			type: 'immersiveengineering:mixer',
+			fluid: fluid,
+			inputs: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
+					return global.NCH._itemJson(i, { countMode: 'base_ingredient', context: ctx + ' input[' + idx + ']' })
+			}),
+			result: result,
+			energy: global.NCH._or(energy, 3200)
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:iemixer/${idSuffix}`)
@@ -2974,14 +2974,14 @@ global.NCH = {
 		var ctx = 'ieBottling ' + idSuffix
 
 		const json = {
-		  type: 'immersiveengineering:bottling_machine',
-		  fluid: global.NCH._fluidJson(fluid, { defaultAmount: amount, nbtString: true, context: ctx + ' fluid' }),
-		  inputs: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
-		      return global.NCH._nbtItemJson(i, { countMode: 'flat', role: 'input', context: ctx + ' input[' + idx + ']' })
-		  }),
-		  results: (Array.isArray(results) ? results : [results]).map((r, idx) => {
-		      return global.NCH._nbtItemJson(r, { countMode: 'flat', allowTag: false, role: 'result', context: ctx + ' result[' + idx + ']' })
-		  })
+			type: 'immersiveengineering:bottling_machine',
+			fluid: global.NCH._fluidJson(fluid, { defaultAmount: amount, nbtString: true, context: ctx + ' fluid' }),
+			inputs: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
+					return global.NCH._nbtItemJson(i, { countMode: 'flat', role: 'input', context: ctx + ' input[' + idx + ']' })
+			}),
+			results: (Array.isArray(results) ? results : [results]).map((r, idx) => {
+					return global.NCH._nbtItemJson(r, { countMode: 'flat', allowTag: false, role: 'result', context: ctx + ' result[' + idx + ']' })
+			})
 		}
 
 		e.custom(json).id(`${global.NCH.ns()}:iebottling/${idSuffix}`)
@@ -2994,42 +2994,42 @@ global.NCH = {
 	// computed from the call's own inputs before this, so no id changes. Two different tags that overlap (a tag and one
 	// of its items) are not merged and can still starve each other.
 	_mergeBlueprintInputs(jsonInputs) {
-	  var merged = [], byKey = {}
-	  jsonInputs.forEach(j => {
-	    var wrapped = j != null && j.base_ingredient !== undefined
-	    var ing = wrapped ? j.base_ingredient : j
-	    var cnt = wrapped ? (j.count || 1) : 1
-	    var key = JSON.stringify(ing)
-	    if (Object.prototype.hasOwnProperty.call(byKey, key)) merged[byKey[key]].count += cnt
-	    else { byKey[key] = merged.length; merged.push({ base_ingredient: ing, count: cnt }) }
-	  })
-	  return merged.map(m => m.count > 1 ? m : m.base_ingredient)
+		var merged = [], byKey = {}
+		jsonInputs.forEach(j => {
+			var wrapped = j != null && j.base_ingredient !== undefined
+			var ing = wrapped ? j.base_ingredient : j
+			var cnt = wrapped ? (j.count || 1) : 1
+			var key = JSON.stringify(ing)
+			if (Object.prototype.hasOwnProperty.call(byKey, key)) merged[byKey[key]].count += cnt
+			else { byKey[key] = merged.length; merged.push({ base_ingredient: ing, count: cnt }) }
+		})
+		return merged.map(m => m.count > 1 ? m : m.base_ingredient)
 	},
 
 	ieBlueprint(outputs, inputs, category, e, idOverride) {
 		if (!global.has('immersiveengineering')) return global.NCH._skip('immersiveengineering')
-	  if (!e) throw new Error('ieBlueprint called without event object!')
-	  if (!outputs || !inputs) throw new Error('ieBlueprint called without inputs or outputs!')
-	  if (!category) throw new Error('ieBlueprint called without a category!')
-	  if (!Array.isArray(inputs)) throw new Error('ieBlueprint requires inputs to be an array!')
+		if (!e) throw new Error('ieBlueprint called without event object!')
+		if (!outputs || !inputs) throw new Error('ieBlueprint called without inputs or outputs!')
+		if (!category) throw new Error('ieBlueprint called without a category!')
+		if (!Array.isArray(inputs)) throw new Error('ieBlueprint requires inputs to be an array!')
 
-	  var idSuffix = idOverride ?? global.NCH.toId(outputs, inputs, category)
-	  var ctx = 'ieBlueprint/' + category + ' ' + idSuffix
+		var idSuffix = idOverride ?? global.NCH.toId(outputs, inputs, category)
+		var ctx = 'ieBlueprint/' + category + ' ' + idSuffix
 
-	  const json = {
-	      type: 'immersiveengineering:blueprint',
-	      category: category,
-	      // NBT-aware: an input/result may be a KubeJS Item.of('id','{nbt}'), a
-	      // { item, nbt } shorthand, or a raw { type:'forge:partial_nbt'|'forge:nbt', ... }
-	      // ingredient. Plain items/tags are unchanged. IE's IngredientWithSize honors
-	      // forge:partial_nbt/forge:nbt natively and the workbench matches NBT-aware.
-	      inputs: global.NCH._mergeBlueprintInputs(inputs.map((i, idx) => {
-	          return global.NCH._nbtItemJson(i, { countMode: 'base_ingredient', role: 'input', context: ctx + ' input[' + idx + ']' })
-	      })),
-	      result: global.NCH._nbtItemJson(outputs, { countMode: 'flat', allowTag: false, role: 'result', context: ctx + ' output' })
-	  }
+		const json = {
+				type: 'immersiveengineering:blueprint',
+				category: category,
+				// NBT-aware: an input/result may be a KubeJS Item.of('id','{nbt}'), a
+				// { item, nbt } shorthand, or a raw { type:'forge:partial_nbt'|'forge:nbt', ... }
+				// ingredient. Plain items/tags are unchanged. IE's IngredientWithSize honors
+				// forge:partial_nbt/forge:nbt natively and the workbench matches NBT-aware.
+				inputs: global.NCH._mergeBlueprintInputs(inputs.map((i, idx) => {
+						return global.NCH._nbtItemJson(i, { countMode: 'base_ingredient', role: 'input', context: ctx + ' input[' + idx + ']' })
+				})),
+				result: global.NCH._nbtItemJson(outputs, { countMode: 'flat', allowTag: false, role: 'result', context: ctx + ' output' })
+		}
 
-	  e.custom(json).id(`${global.NCH.ns()}:blueprint/${category}/${idSuffix}`)
+		e.custom(json).id(`${global.NCH.ns()}:blueprint/${category}/${idSuffix}`)
 	},
 
 	// Immersive Engineering Sawmill (immersiveengineering:sawmill).
@@ -3074,40 +3074,40 @@ global.NCH = {
 
 	pcPressureChamber(outputs, inputs, pressure, e, idOverride) {
 		if (!global.has('pneumaticcraft')) return global.NCH._skip('pneumaticcraft')
-		  if (!e) throw new Error('pcPressureChamber called without event object!')
-		  if (!outputs || !inputs) throw new Error('pcPressureChamber called without inputs or outputs!')
+			if (!e) throw new Error('pcPressureChamber called without event object!')
+			if (!outputs || !inputs) throw new Error('pcPressureChamber called without inputs or outputs!')
 
-		  var idSuffix = idOverride ?? global.NCH.toId(outputs, inputs, "pressure")
-		  var ctx = 'pcPressureChamber ' + idSuffix
+			var idSuffix = idOverride ?? global.NCH.toId(outputs, inputs, "pressure")
+			var ctx = 'pcPressureChamber ' + idSuffix
 
-		  const json = {
-		      type: 'pneumaticcraft:pressure_chamber',
-		      inputs: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
-		          return global.NCH._itemJson(i, { countMode: 'stacked_item', context: ctx + ' input[' + idx + ']' })
-		      }),
-		      pressure: pressure,
-		      results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
-		          return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, context: ctx + ' result[' + idx + ']' })
-		      })
-		  }
+			const json = {
+					type: 'pneumaticcraft:pressure_chamber',
+					inputs: (Array.isArray(inputs) ? inputs : [inputs]).map((i, idx) => {
+							return global.NCH._itemJson(i, { countMode: 'stacked_item', context: ctx + ' input[' + idx + ']' })
+					}),
+					pressure: pressure,
+					results: (Array.isArray(outputs) ? outputs : [outputs]).map((o, idx) => {
+							return global.NCH._itemJson(o, { countMode: 'flat', allowTag: false, context: ctx + ' result[' + idx + ']' })
+					})
+			}
 
-		  e.custom(json).id(`${global.NCH.ns()}:pcpressurechamber/${idSuffix}`)
+			e.custom(json).id(`${global.NCH.ns()}:pcpressurechamber/${idSuffix}`)
 	},
 
 	pcExplosionCrafting(output, input, lossRate, e, idOverride) {
 		if (!global.has('pneumaticcraft')) return global.NCH._skip('pneumaticcraft')
-		  if (!e) throw new Error('pcExplosionCrafting called without event object!')
-		  var idSuffix = idOverride ?? global.NCH.toId(output, input, "explosion")
-		  var ctx = 'pcExplosionCrafting ' + idSuffix
+			if (!e) throw new Error('pcExplosionCrafting called without event object!')
+			var idSuffix = idOverride ?? global.NCH.toId(output, input, "explosion")
+			var ctx = 'pcExplosionCrafting ' + idSuffix
 
-		  const json = {
-		      type: 'pneumaticcraft:explosion_crafting',
-		      input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
-		      results: [global.NCH._itemJson(output, { countMode: 'flat', allowTag: false, context: ctx + ' output' })],
-		      loss_rate: lossRate
-		  }
+			const json = {
+					type: 'pneumaticcraft:explosion_crafting',
+					input: global.NCH._itemJson(input, { countMode: 'none', context: ctx + ' input' }),
+					results: [global.NCH._itemJson(output, { countMode: 'flat', allowTag: false, context: ctx + ' output' })],
+					loss_rate: lossRate
+			}
 
-		  e.custom(json).id(`${global.NCH.ns()}:pcexplosioncrafting/${idSuffix}`)
+			e.custom(json).id(`${global.NCH.ns()}:pcexplosioncrafting/${idSuffix}`)
 	},
 
 	// NOTE: itemOutput/fluidOutput/itemInput/fluidInput are each individually guarded
@@ -3233,10 +3233,10 @@ console.log('Neo Craft Helper finished')
 // can't abort the rest of this script or, worse, every listener registered
 // after it in the same ServerEvents.recipes pass.
 Object.keys(global.NCH).forEach((key) => {
-  if (key.startsWith('_')) return
-  if (typeof global.NCH[key] !== 'function') return
-  const original = global.NCH[key]
-  global.NCH[key] = function () {
+	if (key.startsWith('_')) return
+	if (typeof global.NCH[key] !== 'function') return
+	const original = global.NCH[key]
+	global.NCH[key] = function () {
 	var args = arguments
 	try {
 		return original.apply(global.NCH, args)

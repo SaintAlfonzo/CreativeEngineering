@@ -28,9 +28,9 @@ ServerEvents.recipes(e => {
 
 	//Removals
 	R.bulk('remove', [
-        [{ id: 'create_ultimate_factory:compacting_coalblock' }, e],
-        [{ id: 'pneumaticcraft:pressure_chamber/coal_to_diamond' }, e]
-    ])
+		[{ id: 'create_ultimate_factory:compacting_coalblock' }, e],
+		[{ id: 'pneumaticcraft:pressure_chamber/coal_to_diamond' }, e]
+	])
 
 	R.createCompacting(i.diamond_shard, [Item.of(i.coal_block, 9), Fluid.of(f.lava, 250)], e, 'coal_compressing', 'superheated')
 	// 8 blocks per diamond, 4 per shard (2 shards = 1 diamond): PNC runs the first recipe whose inputs are present, so both

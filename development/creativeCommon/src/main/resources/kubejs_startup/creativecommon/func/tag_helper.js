@@ -6,7 +6,7 @@ console.log('Tag Helper starting')
 
 global.tags = {
 
-    // plain wrapper over event.add — one or more tags × one or more entries, no chain expansion.
+	// plain wrapper over event.add — one or more tags × one or more entries, no chain expansion.
 	// t.add(e, 'forge:wires/all_metal', 'mod:thing')
 	// t.add(e, ['forge:springs', 'forge:springs/iron'], ['a', 'b'])
 	add(event, tags, entries) {
@@ -182,7 +182,7 @@ global.tags = {
 		})
 	},
 
-    	// Storage block ("Block of X"). Call from BOTH ServerEvents.tags('block', ...)
+		// Storage block ("Block of X"). Call from BOTH ServerEvents.tags('block', ...)
 	// and ServerEvents.tags('item', ...) — it self-detects the registry via event.getType().
 	//
 	//   TAGS.storageBlock(e, 'cobalt', 'mymod:cobalt_block')
@@ -214,7 +214,7 @@ global.tags = {
 		})
 	},
 
-    // forge:<type>, forge:<type>/all_metal, forge:<type>/<metal>   (rods/wires/plates/springs convention)
+	// forge:<type>, forge:<type>/all_metal, forge:<type>/<metal>   (rods/wires/plates/springs convention)
 	// TAGS.metalPart(e, 'wires', 'zinc', 'mod:zinc_wire')            add
 	// TAGS.metalPart(e, 'rods',  'copper', 'mod:copper_rod', 'remove')
 	// metal omitted -> just forge:<type> (+ /all_metal)

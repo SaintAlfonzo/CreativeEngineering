@@ -13,16 +13,16 @@
 // Reload with /reload.
 
 LootJS.modifiers(event => {
-  const L = global.LOOT
-  const R = global.NCH.forPack('creativeloot')
+	const L = global.LOOT
+	const R = global.NCH.forPack('creativeloot')
 
-  // ── per-roll logic (examples — uncomment & edit) ────────────────────────
+	// ── per-roll logic (examples — uncomment & edit) ────────────────────────
 
-  // end city treasure: players with Luck get an extra dragon's breath
-  // L.tables(event, 'minecraft:chests/end_city_treasure')
-  //   .apply(ctx => { if (ctx.getLuck() > 0) ctx.addLoot(LootEntry.of('minecraft:dragon_breath')) })
-  //   .logName(R.logName('targeted/end_city'))
+	// end city treasure: players with Luck get an extra dragon's breath
+	// L.tables(event, 'minecraft:chests/end_city_treasure')
+	//   .apply(ctx => { if (ctx.getLuck() > 0) ctx.addLoot(LootEntry.of('minecraft:dragon_breath')) })
+	//   .logName(R.logName('targeted/end_city'))
 
-  // hand-authored full override elsewhere — keep LootJS off this one
-  // event.disableLootModification('minecraft:chests/buried_treasure')
+	// hand-authored full override elsewhere — keep LootJS off this one
+	// event.disableLootModification('minecraft:chests/buried_treasure')
 })

@@ -35,9 +35,9 @@ R.createDeploying(Item.of(i.mechanical_saw, 1), [i.andesite_casing, i.sawblade],
 //Brass/gold hand
 //Change brass hand to gold hand, unlocking deployers earlier
 R.replaceInput(
-  { id: 'create:crafting/kinetics/brass_hand' },
-  i.plate_brass,
-  i.any_plate_gold, e
+	{ id: 'create:crafting/kinetics/brass_hand' },
+	i.plate_brass,
+	i.any_plate_gold, e
 )
 //IE Workbench recipe
 R.ieBlueprint(Item.of(i.gold_hand, 1), [{ id: i.any_plate_gold, count: 3 }, i.andesite_alloy], 'components', e, '3_plate_gold_to_1_brass_hand_by_components')
@@ -78,9 +78,9 @@ R.shaped(Item.of(i.blastbrick, 3), ['ABA','BCB', 'ABA'], {A: i.nether_bricks, B:
 
 // Engineers workbench steel-locked
 R.replaceInput(
-  { id: 'immersiveengineering:crafting/workbench' },
-  i.ingot_iron,
-  i.ingot_steel, e
+	{ id: 'immersiveengineering:crafting/workbench' },
+	i.ingot_iron,
+	i.ingot_steel, e
 )
 
 // ############################## Buckets ##############################

@@ -7,5 +7,5 @@
 // a player already opened won't reflect a /reload).
 
 LootJS.modifiers(event => {
-  // event.enableLogging()
+	// event.enableLogging()
 })

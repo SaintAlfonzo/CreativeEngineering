@@ -13,22 +13,22 @@
 // Reload with /reload.
 
 LootJS.modifiers(event => {
-  const L = global.LOOT
-  const R = global.NCH.forPack('creativeloot')
+	const L = global.LOOT
+	const R = global.NCH.forPack('creativeloot')
 
-  // ── context-scoped additions (examples — uncomment & edit) ──────────────
+	// ── context-scoped additions (examples — uncomment & edit) ──────────────
 
-  // sprinkle the "common" tier into every chest inside a village structure, whatever its table
-  // if (L.tiers.common.length) {
-  //   L.addPool(
-  //     L.chestType(event).anyStructure(['#minecraft:village'], false),
-  //     L.tiers.common, 'redistribute/village_common'
-  //   ).logName(R.logName('redistribute/village_common'))
-  // }
+	// sprinkle the "common" tier into every chest inside a village structure, whatever its table
+	// if (L.tiers.common.length) {
+	//   L.addPool(
+	//     L.chestType(event).anyStructure(['#minecraft:village'], false),
+	//     L.tiers.common, 'redistribute/village_common'
+	//   ).logName(R.logName('redistribute/village_common'))
+	// }
 
-  // snowballs in every chest in a snowy biome
-  // L.chestType(event)
-  //   .anyBiome('#minecraft:is_snowy')
-  //   .addLoot(L.entry({ item: 'minecraft:snowball', count: 4, chance: 0.5 }, 'redistribute/snowy'))
-  //   .logName(R.logName('redistribute/snowy'))
+	// snowballs in every chest in a snowy biome
+	// L.chestType(event)
+	//   .anyBiome('#minecraft:is_snowy')
+	//   .addLoot(L.entry({ item: 'minecraft:snowball', count: 4, chance: 0.5 }, 'redistribute/snowy'))
+	//   .logName(R.logName('redistribute/snowy'))
 })

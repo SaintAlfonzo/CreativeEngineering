@@ -6,7 +6,7 @@ ServerEvents.recipes(e => {
 	var i = global.item
 	const R = global.NCH.forPack('creativeengineering')
 
-    //Apply soot to sooty chimney scraping
+	//Apply soot to sooty chimney scraping
 	const SCRAPING = [
 		[i.dirty_brick_chimney, 0.75],
 		[i.dirty_cobblestone_chimney, 0.75],
