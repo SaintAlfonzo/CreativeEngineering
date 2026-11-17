@@ -92,7 +92,7 @@ import java.util.stream.Stream;
  */
 public final class MassPlacer {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/cdevplace");
+	private static final Logger LOG = LogManager.getLogger("creativedevtools/cdevplace");
 	static final String TAGS = BiomeLayoutTuner.WORLDGEN_DIR + "structure_tags.json";
 	private static final String TEMPLATE_DIR = "structures";
 

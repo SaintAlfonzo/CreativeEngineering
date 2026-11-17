@@ -25,6 +25,7 @@ const DUST_PILE_METALS = [
 StartupEvents.registry('block', e => {
     DUST_PILE_METALS.forEach(metal => {
         e.create('creativeengineering:' + metal + '_dust_pile', 'falling')
+            .displayName(metal.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Grit Pile')
             .material('metal')
             .gravelSoundType()
             .hardness(5.0)

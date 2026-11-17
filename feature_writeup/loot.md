@@ -471,9 +471,9 @@ is last) copies the members of every tag a rule names. It also reads during Kube
 re-run (see `tag_helper.js`). If the capture didn't run, the runtime falls back to the registry's bound tags (last
 reload's; empty on a fresh start) and warns. Two meta tags in `tags/loottags.js`:
 
-- `#creativeworldgen:loot/chalk` (`i.t_loot_chalk`) = `#chalk:chalks` (nested, so new colors follow) + the chalk
+- `#creativeloot:loot/chalk` (`i.t_loot_chalk`) = `#chalk:chalks` (nested, so new colors follow) + the chalk
   box. `L.frequency(i.t_loot_chalk, 0.5)`: 8 of its 17 members show up in chest loot.
-- `#creativeworldgen:loot/golden_food` (`i.t_loot_golden_food`) = golden apple, golden carrot and Golden Food's
+- `#creativeloot:loot/golden_food` (`i.t_loot_golden_food`) = golden apple, golden carrot and Golden Food's
   23 plain `golden_*` foods (the enchanted ones and the notch apple are left out as the rare tier). Only the golden
   apple and carrot are in chest loot today.
 
@@ -752,7 +752,7 @@ Revert every temporary edit and `/reload` afterwards.
   entries; packed 99 loose entries into 146 crate entries; 0 companions, 0 items + 0 pools added, 8 injections
   restored, 16 reverted to vanilla, 11 aliases)` (2026-10-03 sim: 128 tables, 94 entries into 137 crate entries; what `node tools/loot_tuning_sim.js` prints), no `!!!` banner, no
   "tag rules resolved from the registry" warning, and `kubejs/exported/loot_runtime_additions.json` is fresh.
-- [ ] **LT-15 Chalk tag:** `/kubejs hand` on a chalk box and on red chalk -> both list `creativeworldgen:loot/chalk`.
+- [ ] **LT-15 Chalk tag:** `/kubejs hand` on a chalk box and on red chalk -> both list `creativeloot:loot/chalk`.
   `/dumploot`, then `chalk.json` -> `village_chalk_loot` etc. show the halved chalk weights, same as LT-06.
 - [ ] **LT-16 Packed food split, in the export:** `/dumploot`, then in `minecraft.json` ->
   `chests/village/village_plains_house` has potato 353, potato crate 101, potato crate x2 51, apple 353, apple crate

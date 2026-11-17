@@ -18,6 +18,9 @@ ServerEvents.tags('block', e => {
 
 	t.add(e, 'minecraft:fire', b.dark_fire)
 
+	// Layered Obsidian (startup_scripts/items/decor_blocks.js): mined like obsidian
+	t.mineable(e, 'pickaxe', 'diamond', item.layered_obsidian)
+
 	// The Vintage Delight ghost pepper soil tag moved to Creative Delight 2026-10-27 (vintagedelight/tags.js).
 
 	// Oven heat sources and the oven's stove heat and pickaxe tags: Creative Delight (creativeengineering/kitchen_tags.js).
@@ -57,8 +60,8 @@ ServerEvents.tags('block', e => {
 
 	// minecraft:concrete isn't a vanilla tag in 1.19.2 — the 16 solid concretes (not powder)
 	t.addMatching(e, 'forge:concrete', 'minecraft:*_concrete')
-	t.addMatching(e, 'forge:bricks', ['minecraft:bricks', 'minecraft:brick_*'])
-	t.addMatching(e, 'forge:stone_bricks', ['minecraft:stone_bricks', 'minecraft:stone_brick_*'])
+	t.addMatching(e, 'forge:bricks', [item.bricks, 'minecraft:brick_*'])
+	t.addMatching(e, 'forge:stone_bricks', [item.stone_bricks, 'minecraft:stone_brick_*'])
 
 	// ── BlockRunner walk speed ──────────────────────────────────────────────
 	// Multipliers live in config/creativeengineering-common.toml [surface.speed], one key per tier
@@ -114,27 +117,27 @@ ServerEvents.tags('block', e => {
 	])
 
 	t.addMatching(e, runner.concrete, [
-		'#forge:concrete', 'immersiveengineering:*concrete*', 'engineersdecor:*rebar_concrete*',
+		item.t_concrete, 'immersiveengineering:*concrete*', 'engineersdecor:*rebar_concrete*',
 		'immersiveengineering:*hempcrete*', 'dustrial_decor:*cinder*',
 	])
 
 	t.addMatching(e, runner.slippery, [
-		'#minecraft:ice', 'supplementaries:soap_block', 'architects_palette:*packed_ice*',
+		b.t_ice, item.soap_block, 'architects_palette:*packed_ice*',
 		item.thin_ice,
 	])
 
 	t.addMatching(e, runner.constructed_smooth, [
 		// vanilla: polished / smooth / cut stones, quartz, glazed terracotta, dark prismarine
 		'minecraft:polished_*', 'minecraft:smooth_*', 'minecraft:cut_*sandstone*', 'minecraft:chiseled_*sandstone',
-		'minecraft:chiseled_polished_blackstone', 'minecraft:*_glazed_terracotta', 'minecraft:dark_prismarine*',
+		item.chiseled_polished_blackstone, 'minecraft:*_glazed_terracotta', 'minecraft:dark_prismarine*',
 		'/^minecraft:(chiseled_)?quartz_(block|pillar|slab|stairs)$/',
-		'vintagedelight:smooth_salt_block', 'vintagedelight:salt_pillar',   // Vintage Delight salt decor
-		'#forge:storage_blocks/diamond', '#forge:storage_blocks/emerald', '#forge:storage_blocks/lapis',
+		item.smooth_salt_block, item.salt_pillar,   // Vintage Delight salt decor
+		item.t_storage_blocks_diamond, '#forge:storage_blocks/emerald', '#forge:storage_blocks/lapis',
 		'#forge:storage_blocks/redstone', '#forge:storage_blocks/quartz',
 		// quark
-		'quark:polished_*', 'quark:smooth_*', 'quark:cut_*sandstone*', 'quark:chiseled_soul_sandstone', 'quark:*_pillar',
-		'quark:quartz_vertical_slab', 'quark:dark_prismarine_vertical_slab', 'quark:midori_block*',
-		'quark:duskbound_block*', 'quark:sturdy_stone',
+		'quark:polished_*', 'quark:smooth_*', 'quark:cut_*sandstone*', item.chiseled_soul_sandstone, 'quark:*_pillar',
+		item.quartz_vertical_slab, item.dark_prismarine_vertical_slab, 'quark:midori_block*',
+		'quark:duskbound_block*', item.sturdy_stone,
 		// supplementaries: checkered tiles, wattle-and-daub plaster
 		'supplementaries:checker_*', 'supplementaries:daub*', item.flint_block,
 		'/^suppsquared:daub(_frame)?_[a-z_]+$/',
@@ -164,29 +167,29 @@ ServerEvents.tags('block', e => {
 		'cookingforblockheads:*_kitchen_floor', item.station_platform, item.stone_pillar,
 		item.dark_prismarine_wall, item.frozen_dark_prismarine, item.redstone_block_off,
 		'/^davebuildingmod:(cut_)?laboratory_block$/', item.duroplast,
-	], { except: ['minecraft:polished_*brick*', 'quark:iron_pillar', 'quark:polished_*brick*'] })
+	], { except: ['minecraft:polished_*brick*', item.iron_pillar, 'quark:polished_*brick*'] })
 
 	// grating: see-through walkway floors (catwalks, grates, metal scaffolding tops)
 	t.addMatching(e, runner.grating, [
-		'quark:grate', 'everythingcopper:*copper_grate', 'design_decor:*_catwalk', 'design_decor:ornate_grate',
-		'createdeco:*_catwalk', 'createdeco:*_catwalk_stairs', 'create:*_scaffolding', 'davebuildingmod:steel_mesh_trapdoor',
+		item.grate, 'everythingcopper:*copper_grate', 'design_decor:*_catwalk', item.ornate_grate,
+		'createdeco:*_catwalk', 'createdeco:*_catwalk_stairs', 'create:*_scaffolding', item.steel_mesh_trapdoor,
 		'/^immersiveengineering:(slab_|stairs_)?(alu|steel)_scaffolding_(grate_top|standard)$/',
 		'engineersdecor:steel_catwalk*', item.steel_floor_grating,
 		'/^dustrial_decor:(chain|iron_bar)_trapdoor$/',
 	])
 
 	t.addMatching(e, runner.metal, [
-		'#forge:storage_blocks/iron', '#forge:storage_blocks/gold', '#forge:storage_blocks/copper',
-		'#forge:storage_blocks/netherite', '#forge:storage_blocks/steel', '#forge:storage_blocks/aluminum',
+		'#forge:storage_blocks/iron', item.any_block_gold, '#forge:storage_blocks/copper',
+		item.t_storage_blocks_netherite, '#forge:storage_blocks/steel', '#forge:storage_blocks/aluminum',
 		'#forge:storage_blocks/lead', '#forge:storage_blocks/silver', '#forge:storage_blocks/nickel',
 		'#forge:storage_blocks/constantan', '#forge:storage_blocks/electrum', '#forge:storage_blocks/uranium',
 		'#forge:storage_blocks/brass', '#forge:storage_blocks/zinc', '#forge:storage_blocks/compressed_iron',
-		'#forge:storage_blocks/andesite_alloy', '#forge:sheetmetals', '#forge:sheetmetal_slabs',
+		'#forge:storage_blocks/andesite_alloy', '#forge:sheetmetals', item.sheetmetal_slabs,
 		// every oxidation / waxed stage of copper and cut copper
-		'minecraft:*copper', 'minecraft:*copper_block', 'minecraft:*cut_copper*', 'minecraft:iron_trapdoor',
-		'quark:*cut_copper*', 'quark:*iron_plate*', 'quark:iron_pillar',
+		'minecraft:*copper', 'minecraft:*copper_block', 'minecraft:*cut_copper*', item.iron_trapdoor,
+		'quark:*cut_copper*', 'quark:*iron_plate*', item.iron_pillar,
 		'immersive_weathering:*plate_iron*', 'immersive_weathering:*cut_iron*', 'immersive_weathering:*iron_trapdoor',
-		'create:industrial_iron_block', '/^create:(waxed_)?((exposed|weathered|oxidized)_)?copper_(shingle|tile)(s|_slab|_stairs)$/',
+		item.block_industrial_iron, '/^create:(waxed_)?((exposed|weathered|oxidized)_)?copper_(shingle|tile)(s|_slab|_stairs)$/',
 		'/^everythingcopper:(waxed_)?((exposed|weathered|oxidized)_)?(chiseled_copper|copper_trapdoor)$/',
 		'/^twigs:(waxed_)?((exposed|weathered|oxidized)_)?copper_pillar$/',
 		// modded metal blocks, plates, sheets, bricks and fences
@@ -211,16 +214,16 @@ ServerEvents.tags('block', e => {
 		'engineersdecor:steel_mesh_fence*', item.steel_railing, item.iron_hatch,
 		'railways:*locometal*', '/^bellsandwhistles:((corrugated_)?metro_casing|(metro|ornate_iron)_trapdoor)$/',
 		'/^sootychimneys:(dirty_)?(copper|iron)_chimney$/', '/^securitycraft:(reinforced_fence_gate|electrified_iron_fence)$/',
-	], { except: ['minecraft:raw_copper_block'] })
+	], { except: [item.raw_block_copper] })
 
 	t.addMatching(e, runner.constructed_brick, [
 		'#minecraft:stone_bricks', '#forge:bricks', '#forge:stone_bricks',
 		// vanilla: every *brick* family, deepslate tiles, prismarine, purpur
-		'minecraft:*brick*', 'minecraft:*deepslate_tile*', 'minecraft:chiseled_deepslate',
+		'minecraft:*brick*', 'minecraft:*deepslate_tile*', item.chiseled_deepslate,
 		'/^minecraft:prismarine(_slab|_stairs|_wall)?$/', 'minecraft:purpur_*',
 		// quark: bricks (incl. raw ore/dirt/cobblestone bricks), roof shingles, vertical slabs
-		'quark:*brick*', 'quark:*shingles*', 'quark:*deepslate_tile*', 'quark:prismarine_vertical_slab',
-		'quark:purpur_vertical_slab',
+		'quark:*brick*', 'quark:*shingles*', 'quark:*deepslate_tile*', item.prismarine_vertical_slab,
+		item.purpur_vertical_slab,
 		'supplementaries:*brick*', 'supplementaries:*_tile*', 'immersive_weathering:*brick*',
 		'immersive_weathering:*deepslate_tile*',
 		'/^' + palette + '(cut|small)_[a-z_]+_brick(s|_slab|_stairs|_wall)$/', 'create:*rose_quartz_tiles',
@@ -237,22 +240,22 @@ ServerEvents.tags('block', e => {
 	])
 
 	t.addMatching(e, runner.natural_path, [
-		'minecraft:dirt_path', 'minecraft:coarse_dirt', '#forge:gravel', '#forge:cobblestone',
-		'minecraft:*cobble*', 'quark:*cobble*_vertical_slab', 'supplementaries:raked_gravel',
+		item.dirt_path, item.coarse_dirt, item.t_gravel, item.t_cobblestone,
+		'minecraft:*cobble*', 'quark:*cobble*_vertical_slab', item.raked_gravel,
 		'immersive_weathering:*cobblestone*', 'botania:metamorphic_*_cobblestone*',
 		'/^davebuildingmod:(ballast|gravel|rocky_dirt)(_slab)?$/', item.twigs_rocky_dirt, item.coarse_dirt_slab, item.dirt_path_slab,
 		'/^engineersdecor:dense_grit_(dirt|sand)_block$/', '/^sootychimneys:(dirty_)?cobblestone_chimney$/',
 	], { except: ['quark:*cobblestone_bricks*'] })
 
 	t.addMatching(e, runner.wood, [
-		'#minecraft:planks', '#minecraft:wooden_slabs', '#minecraft:wooden_stairs', '#minecraft:logs',
+		item.planks, item.wood_slab, item.any_wooden_stairs, item.any_log,
 		'#forge:treated_wood', '#forge:treated_wood_slab',
 		// fence and gate tops count; a trapdoor only when it sits in the top half of its block
-		'#minecraft:wooden_fences', '#forge:fence_gates/wooden', '#minecraft:wooden_trapdoors', 'minecraft:scaffolding',
+		item.any_wooden_fences, item.t_fence_gates_wooden, item.any_wooden_trapdoors, item.scaffolding,
 		'/^(architects_palette:twisted|botania:(dream|living)wood|immersive_weathering:charred|vinery:cherry)_fence_gate$/',
-		'#quark:wooden_vertical_slabs', 'quark:vertical_*_planks', '#quark:hollow_logs',
-		'quark:bamboo_block', 'quark:bamboo_mosaic', 'quark:bamboo_mat', 'quark:*crate', item.cactus_block,
-		'quark:stripped_bamboo_block', 'quark:stick_block', 'quark:sugar_cane_block', 'minecraft:petrified_oak_slab',
+		item.any_wooden_vertical_slabs, 'quark:vertical_*_planks', '#quark:hollow_logs',
+		item.log_bamboo, item.bamboo_mosaic, item.bamboo_mat, 'quark:*crate', item.cactus_block,
+		item.log_bamboo_stripped, item.stick_block, item.sugar_cane_block, item.petrified_oak_slab,
 		'supplementaries:timber_*',
 		// modded boards, beams, palisades, trims, floorboards, log piles and wooden crates
 		'architects_palette:*_board*', 'architects_palette:*_railing', item.vslab_twisted,
@@ -274,10 +277,10 @@ ServerEvents.tags('block', e => {
 		// raw stone + its slab/stairs/wall (vanilla, then quark's stones and vertical slabs)
 		'/^minecraft:(stone|granite|diorite|andesite|tuff|calcite|deepslate|blackstone|sandstone|red_sandstone|end_stone|dripstone_block)(_slab|_stairs|_wall)?$/',
 		'/^quark:(stone|granite|diorite|andesite|tuff|calcite|dripstone_block|blackstone|sandstone|red_sandstone|jasper|limestone|shale|myalite|permafrost|soul_sandstone)(_slab|_stairs|_wall|_vertical_slab)?$/',
-		'/^minecraft:infested_(stone|deepslate)$/', 'minecraft:gilded_blackstone', 'minecraft:reinforced_deepslate',
-		'#minecraft:terracotta', 'minecraft:*_ore', '#forge:ores', 'minecraft:obsidian', 'minecraft:crying_obsidian',
-		'minecraft:amethyst_block', 'minecraft:budding_amethyst', 'minecraft:packed_mud', 'minecraft:bone_block',
-		'minecraft:bedrock', 'quark:dusky_myalite', 'quark:*corundum',
+		'/^minecraft:infested_(stone|deepslate)$/', item.gilded_blackstone, item.reinforced_deepslate,
+		item.t_terracotta, 'minecraft:*_ore', b.t_ores, item.obsidian, item.crying_obsidian,
+		item.amethyst_block, item.budding_amethyst, item.packed_mud, item.bone_block,
+		item.bedrock, item.dusky_myalite, 'quark:*corundum',
 		'/^create:(asurine|crimsite|limestone|ochrum|scorchia|scoria|veridium)$/',
 		'/^create_dd:(breccia|dolomite|gabbro|weathered_limestone)$/',
 		// modded raw stones, crystal blocks, terracotta shapes and bone blocks
@@ -290,33 +293,33 @@ ServerEvents.tags('block', e => {
 		'/^clayworks:([a-z_]+_)?terracotta(_slab|_stairs|_wall|_vertical_slab)$/', '/^sootychimneys:(dirty_)?terracotta_chimney$/',
 		'/^geode:([a-z_]+_block|budding_[a-z_]+|galcite)$/',
 		'/^philipsruins:(bone_chunk_block|cracked_bone|sculk_bone_block)$/',
-	], { except: ['minecraft:nether_*_ore', 'minecraft:ancient_debris'] })
+	], { except: ['minecraft:nether_*_ore', item.ore_netherite] })
 
 	// camouflage: blocks that copy another block's look, so a speed of their own would be arbitrary
 	t.addMatching(e, runner.camouflage, [
-		'@framedblocks', '@copycats', 'create:copycat_panel', 'create:copycat_step',
-	], { except: ['framedblocks:framing_saw', '/^framedblocks:framed_(glowing_)?item_frame$/'] })
+		'@framedblocks', '@copycats', item.copycat_panel, item.copycat_step,
+	], { except: [item.framing_saw, '/^framedblocks:framed_(glowing_)?item_frame$/'] })
 
 	t.addMatching(e, runner.glass, [
-		'#forge:glass', 'minecraft:tinted_glass', 'ae2:quartz_glass', 'ae2:quartz_vibrant_glass', 'alexsmobs:rainbow_glass',
-		'create_crystal_clear:*_glass_casing', 'davebuildingmod:reinforced_glass', 'engineersdecor:panzerglass_*',
-		'/^immersiveengineering:(slab_)?insulating_glass$/', 'immersiveengineering:slag_glass',
+		item.any_glass, item.tinted_glass, 'ae2:quartz_glass', 'ae2:quartz_vibrant_glass', item.rainbow_glass,
+		'create_crystal_clear:*_glass_casing', item.reinforced_glass, 'engineersdecor:panzerglass_*',
+		'/^immersiveengineering:(slab_)?insulating_glass$/', item.slag_glass,
 		'securitycraft:reinforced_*glass',
 		// full-block windows, glass trapdoors (top half only), glassy crystal blocks
-		'minecraft:sea_lantern', 'create:*_window', 'everycomp:c/*_window', item.framed_glass_trapdoor,
+		item.sea_lantern, 'create:*_window', 'everycomp:c/*_window', item.framed_glass_trapdoor,
 		'createframed:*_glass_trapdoor', 'create_crystal_clear:*glass_encased*', item.steel_framed_window,
 		item.metro_window, item.window, item.window_block, '/^immersive_weathering:(vitrified_sand|frosty_glass)$/',
 		'/^buzzier_bees:crystallized_(clover_)?honey_block$/', item.crystalized_banana_slug_mucus,
 	])
 
 	t.addMatching(e, runner.natural_rough, [
-		'salt:raw_rock_salt_block',   // raw salt crystals, like raw stone (salt.md 6 S3)
-		'minecraft:podzol', 'minecraft:mycelium', 'minecraft:crimson_nylium', 'minecraft:warped_nylium',
-		'minecraft:netherrack', 'minecraft:basalt', 'minecraft:nether_*_ore', 'supplementaries:ashen_basalt',
-		'minecraft:*coral_block', 'minecraft:mangrove_roots',
+		b.raw_rock_salt_block,   // raw salt crystals, like raw stone (salt.md 6 S3)
+		item.podzol, item.mycelium, item.crimson_nylium, item.warped_nylium,
+		item.netherrack, item.basalt, 'minecraft:nether_*_ore', 'supplementaries:ashen_basalt',
+		'minecraft:*coral_block', item.mangrove_roots,
 		// raw ore chunks, ancient debris, and crumbly fuel / mineral blocks
-		'minecraft:raw_*_block', 'create:raw_zinc_block', 'immersiveengineering:raw_block_*', 'minecraft:ancient_debris',
-		'minecraft:coal_block', 'minecraft:glowstone', item.charcoal_block, item.architects_palette_charcoal_block,
+		'minecraft:raw_*_block', item.raw_block_zinc, 'immersiveengineering:raw_block_*', item.ore_netherite,
+		item.coal_block, item.glowstone_block, item.charcoal_block, item.architects_palette_charcoal_block,
 		'/^immersiveengineering:(slab_)?coke$/', item.petcoke_block, item.sulfur_block, item.biomass_pellet_block,
 		// Immersive Weathering soils
 		'/^immersive_weathering:(silt|humus|fluvisol|vertisol|cryosol|permafrost|mulch_block|nulch_block|cracked_mud)$/',
@@ -326,14 +329,14 @@ ServerEvents.tags('block', e => {
 	])
 
 	t.addMatching(e, runner.soft, [
-		'#minecraft:wool', '#forge:mushroom_caps', '#forge:mushroom_stems', '#minecraft:wart_blocks',
-		'minecraft:sponge', 'minecraft:hay_block', 'minecraft:target', 'minecraft:moss_block',
-		'minecraft:dried_kelp_block', 'minecraft:shroomlight', 'minecraft:*_froglight', 'minecraft:honeycomb_block',
+		item.any_wool, '#forge:mushroom_caps', '#forge:mushroom_stems', '#minecraft:wart_blocks',
+		item.sponge, item.hay_bale, item.target, item.moss,
+		item.dried_kelp_block, item.shroomlight, 'minecraft:*_froglight', item.honeycomb_block,
 		'/^minecraft:sculk(_catalyst|_sensor|_shrieker)?$/', // not sculk_vein: no collision
-		'quark:thatch*', 'quark:bonded_*', 'quark:*_sack', 'quark:glow_shroom_block', 'quark:glow_shroom_stem',
-		'supplementaries:feather_block', 'supplementaries:flax_block', 'supplementaries:fodder', 'supplementaries:sack',
+		'quark:thatch*', 'quark:bonded_*', 'quark:*_sack', item.glow_shroom_block, item.glow_shroom_stem,
+		item.feather_block, item.flax_block, item.fodder, item.sack,
 		// beds (not full blocks, so no visual sink)
-		'#minecraft:beds', 'handcrafted:*_fancy_bed', 'everycomp:hc/*_fancy_bed', 'domesticationinnovation:pet_bed_*',
+		item.t_beds, 'handcrafted:*_fancy_bed', 'everycomp:hc/*_fancy_bed', 'domesticationinnovation:pet_bed_*',
 		// fabric, fur, padding, rubber, petals, thatch, wax, cardboard
 		'/^create_dd:([a-z_]+_)?(velvet_block|padded_[a-z_]+|rubber_block)$/', item.belt_block,
 		'/^dustrial_decor:(mini_)?padded_(?!door$)[a-z_]+$/', '/^dustrial_decor:(smooth_cardboard[a-z_]*|folded_cardboard|cardboard_box|cardboard_trapdoor)$/',
@@ -344,43 +347,43 @@ ServerEvents.tags('block', e => {
 		'/^farmersdelight:(rice_bag|rice_bale|straw_bale|tatami)$/',
 		'/^vintagedelight:oat_(bag|bale)$/',
 		// the one salt block (packed salt dust, food/seasoning #6) and Vintage's own; Raw Rock Salt Block is natural_rough
-		'salt:salt_block', 'vintagedelight:salt_block',
+		item.salt_salt_block, item.salt_block,
 	])
 
 	t.addMatching(e, runner.dust, [
-		'#forge:sand', 'minecraft:*_concrete_powder', 'quark:gravisand',
-		'supplementaries:ash',
+		item.t_sand, 'minecraft:*_concrete_powder', item.gravisand,
+		item.ash,
 		'/^immersive_weathering:(red_)?sand_layer_block$/', 'immersive_weathering:ash*',
-		'creativeengineering:*_dust_pile', 'create_compressed:*_flour_pile', 'immersiveengineering:sawdust',
+		'creativeengineering:*_dust_pile', 'create_compressed:*_flour_pile', item.immersiveengineering_sawdust,
 		'create_compressed:crushed_*_pile', item.powdered_obsidian_block,
 		item.create_things_and_misc_powdered_obsidian_block, 'oldguns:*_powder_block',
 	])
 
 	// confectionery: edible building blocks and placed food
 	t.addMatching(e, runner.confectionery, [
-		'@create_confectionery', 'minecraft:cake', 'supplementaries:sugar_cube',
+		'@create_confectionery', item.cake, item.sugar_cube,
 		'/^architects_palette:(crustless_)?bread_(block|slab)$/', 'delightful:*_ice_cream_block', 'delightful:*_pie',
-		'create_central_kitchen:*_pie', 'farmersdelight:*_pie', 'farmersdelight:sweet_berry_cheesecake',
+		'create_central_kitchen:*_pie', 'farmersdelight:*_pie', item.sweet_berry_cheesecake,
 		'/^farmersdelight:(honey_glazed_ham|rice_roll_medley|roast_chicken|shepherds_pie|stuffed_pumpkin)_block$/',
 		// gourds and fruit blocks (a hard rind: no visual sink), feasts and cakes
-		'minecraft:melon', 'minecraft:pumpkin', 'minecraft:carved_pumpkin', 'minecraft:jack_o_lantern', item.chorus_fruit_block,
+		item.melon_block, item.pumpkin, item.carved_pumpkin, item.jack_o_lantern, item.chorus_fruit_block,
 		'/^delightful:(sliced_)?(cantaloupe|melon|mini_melon|pumpkin)$/', '/^brewinandchewin:(pizza|quiche)$/',
-		'/^vintagedelight:(cheese|meat)_pizza$/', 'vintagedelight:cheese_wheel',
+		'/^vintagedelight:(cheese|meat)_pizza$/', item.cheese_wheel,
 		'/^createaddition:(chocolate|honey)_cake$/', '/^rusticdelight:[a-z_]*(pancakes|cheesecake)$/', item.chorus_pie,
 		'/^goldenfood:(enchanted_)?golden_cake$/', item.hamimelon, item.coffee_cake, item.rose_hip_pie,
 		item.fig_pudding, item.mangosteen_cake, item.pineapple_fried_rice, item.nachos_block, item.popcorn_box,
 	])
 
-	t.addMatching(e, runner.tilled, ['minecraft:farmland', 'farmersdelight:rich_soil_farmland', b.tilled_end_stone])
+	t.addMatching(e, runner.tilled, [item.farmland, item.rich_farmland, b.tilled_end_stone])
 
-	t.addMatching(e, runner.leaves, ['#minecraft:leaves', '#quark:hedges'])  // bamboo leaves: layered pass-through tier only
+	t.addMatching(e, runner.leaves, [item.t_leaves, '#quark:hedges'])  // bamboo leaves: layered pass-through tier only
 
 	// snow layers left out (plan_post_scratch_1115b.md D2): they slow by height in creativecompat:passthrough_layers
-	t.addMatching(e, runner.snow, [b.snow_block, b.powder_snow, 'architects_palette:coarse_snow'])
+	t.addMatching(e, runner.snow, [b.snow_block, b.powder_snow, item.coarse_snow])
 
 	t.addMatching(e, runner.spongy, [
-		'minecraft:mud', 'minecraft:muddy_mangrove_roots', 'minecraft:wet_sponge', 'minecraft:clay',
-		'create_compressed:dough_block', item.prepared_flesh_block,
+		item.mud, item.muddy_mangrove_roots, item.wet_sponge, item.clay,
+		item.dough_block, item.prepared_flesh_block,
 		item.gingerdough_block, item.cookie_dough_block, item.sweet_potato_dough_block, item.oat_dough_block,
 		item.cucumber_dough_block, item.sourdough_block,
 		'creativedelight:*_culture_block',  // meat culture blocks (reserved for Creative Cultivation, creative_delight.md 29.5)
@@ -392,12 +395,12 @@ ServerEvents.tags('block', e => {
 	// patcherMod (StickyFacing) drops the speed unless facing=up and, for heads, type=sticky —
 	// for everything in #creativecompat:blockrunner_face_up below.
 	t.addMatching(e, runner.sticky, [
-		'minecraft:sticky_piston', 'minecraft:piston_head', 'create:sticky_mechanical_piston',
+		item.sticky_piston, 'minecraft:piston_head', item.sticky_mechanical_piston,
 		'create:mechanical_piston_head', 'create_things_and_misc:*sticky_launcher',
 	])
 
 	t.addMatching(e, runner.very_sticky, [
-		'minecraft:honey_block', 'minecraft:slime_block', 'alexsmobs:banana_slug_slime_block',
+		item.honey_block, item.slime_block, item.banana_slug_slime_block,
 		'fruitsdelight:*_jelly_block', 'fruitsdelight:*_jello_block', // extend HoneyBlock / SlimeBlock
 		b.porous_flesh, // Visceral Heap; honey's jump factor (block_properties.js), wall slide (creativecompat:wall_slide below)
 	])
@@ -408,10 +411,10 @@ ServerEvents.tags('block', e => {
 	// with no collision ignore their tag, so whole-mod entries are safe for plants and pipes.
 	// Never tiered (a tier replaces the block's own speed): soul sand and soil, magma, fluids.
 	var auditSkip = [
-		'minecraft:soul_sand', 'minecraft:soul_soil', 'securitycraft:reinforced_soul_soil', 'minecraft:magma_block',
-		'minecraft:water', 'minecraft:lava', 'minecraft:bubble_column', 'minecraft:moving_piston',
-		'minecraft:structure_void', 'minecraft:end_gateway', 'minecraft:end_portal', 'minecraft:nether_portal',
-		'securitycraft:fake_water_block', 'securitycraft:fake_lava_block', 'biomesoplenty:blood',
+		item.soul_sand, item.soul_soil, 'securitycraft:reinforced_soul_soil', item.magma_block,
+		global.fluid.water, global.fluid.lava, 'minecraft:bubble_column', 'minecraft:moving_piston',
+		item.structure_void, 'minecraft:end_gateway', 'minecraft:end_portal', 'minecraft:nether_portal',
+		'securitycraft:fake_water_block', 'securitycraft:fake_lava_block', global.fluid.blood,
 	]
 
 	// Part 1: real materials
@@ -435,38 +438,38 @@ ServerEvents.tags('block', e => {
 	])
 	t.addMatching(e, runner.natural_path, ['/^upgrade_aquatic:([a-z]+_)?kelpy_cobblestone[a-z_]*$/', 'floralench:*_mossy_cobblestone'])
 	t.addMatching(e, runner.wood, [
-		'upgrade_aquatic:*_boards', 'upgrade_aquatic:*_beehive', 'minecraft:beehive', 'minecraft:bee_nest',
+		'upgrade_aquatic:*_boards', 'upgrade_aquatic:*_beehive', item.beehive, item.bee_nest,
 		'/^architects_palette:[a-z_]*_totem(_wing)?$/', '/^neapolitan:(carved_)?banana_stalk$/',
 		// crates of produce and eggs (Fruits Delight crate precedent)
-		'neapolitan:*_crate', 'veggiesdelight:*_crate', 'fungidelight:*_crate', 'ends_delight:chorus_fruit_crate',
-		'miners_delight:cave_carrot_crate', 'hearthandharvest:*crate', 'creativedelight:goose_egg_crate',
+		'neapolitan:*_crate', 'veggiesdelight:*_crate', 'fungidelight:*_crate', item.chorus_fruit_crate,
+		item.cave_carrot_crate, 'hearthandharvest:*crate', item.goose_egg_crate,
 		'alexsabnormalities:*_crate', 'incubation:*_crate', 'villagersellanimals:crate_*',
 	])
 	t.addMatching(e, runner.natural_smooth, [
 		// coralstone is stone with coral in it; bone-like tooth and scute blocks follow the bone block
 		'/^upgrade_aquatic:(?!chiseled_)([a-z_]+_)?coralstone(_slab|_stairs|_vertical_slab|_wall)?$/', 'upgrade_aquatic:embedded_ammonite',
-		'upgrade_aquatic:tooth_block', 'upgrade_aquatic:scute_block', 'architects_palette:scute_block',
+		'upgrade_aquatic:tooth_block', 'upgrade_aquatic:scute_block', item.scute_block,
 		'alexsabnormalities:*_tooth_block', 'alexsabnormalities:*scute_block',
 		// crystal clusters and buds, like amethyst
-		'minecraft:*amethyst_bud', 'minecraft:amethyst_cluster', 'minecraft:pointed_dripstone', '/^geode:[a-z_]*(cluster|bud|crystal)$/',
+		'minecraft:*amethyst_bud', item.amethyst_cluster, item.pointed_dripstone, '/^geode:[a-z_]*(cluster|bud|crystal)$/',
 		'ae2:*quartz_bud', 'ae2:quartz_cluster', 'salt:*salt_bud', 'salt:salt_cluster', 'salt:*rock_salt_ore',
-		'diamethysts:budding_diamethyst_block', 'alexsmobs:straddlite_block',
+		'diamethysts:budding_diamethyst_block', item.straddlite_block,
 	])
 	t.addMatching(e, runner.natural_rough, [
 		'/^upgrade_aquatic:(dead_)?[a-z_]+_coral_block$/', 'fortuneonneterite_i_ig_z:*_block',
-		'hearthandharvest:manure_block', 'blocky_siege:permafrost', 'alexsmobs:leafcutter_ant_chamber',
-		'immersive_weathering:fulgurite',
+		item.manure_block, 'blocky_siege:permafrost', item.leafcutter_ant_chamber,
+		item.fulgurite,
 	])
 	t.addMatching(e, runner.soft, [
 		// beds, bedrolls, sleeping bags, hammocks, pet beds
-		'upgrade_aquatic:*bedroll', 'comforts:*', 'redeco:*_pet_bed', 'cozys-improved-cats:cat_bed',
+		'upgrade_aquatic:*bedroll', 'comforts:*', 'redeco:*_pet_bed', item.cat_bed,
 		// thatch, kelp and reed blocks, pods
 		'upgrade_aquatic:beachgrass_thatch*', 'neapolitan:frond_thatch*', '/^upgrade_aquatic:[a-z_]*kelp_block$/',
 		'/^upgrade_aquatic:(boiled_)?[a-z_]+_pickerelweed_block$/', 'neapolitan:*vanilla_pod_block',
 		// bags, bundles, cloth, cushioning, cardboard
-		'/^hearthandharvest:(corn_husk_bundle|hops_bag|manure_bag)$/', 'immersiveengineering:cushion', 'immersiveengineering:balloon',
-		'botania:cocoon', 'fantasyfurniture:decorations/bolts_of_cloth', '/^wares:(cardboard_box|package)$/',
-		'design_decor:cardboard_box', 'dustrial_decor:cardboard_scrap',
+		'/^hearthandharvest:(corn_husk_bundle|hops_bag|manure_bag)$/', item.cushion, item.immersiveengineering_balloon,
+		item.cocoon, 'fantasyfurniture:decorations/bolts_of_cloth', '/^wares:(cardboard_box|package)$/',
+		item.cardboard_box, item.cardboard_scrap,
 		// the salt blocks in their licked stages (salt:salt_block precedent)
 		'/^hearthandharvest:(waxed_)?([a-z]+_licked_)?salt_block$/',
 		// nests and mushroom caps (#forge:mushroom_caps precedent)
@@ -476,39 +479,39 @@ ServerEvents.tags('block', e => {
 	t.addMatching(e, runner.tilled, [b.tilled_end_stone, 'neapolitan:adzuki_soil'])
 	t.addMatching(e, runner.very_sticky, [
 		// jam blocks extend HoneyBlock, jello blocks SlimeBlock (Fruits Delight precedent)
-		'vintagedelight:*_jam_block', 'vintagedelight:*_jello_block', 'upgrade_aquatic:mulberry_jam_block',
+		'vintagedelight:*_jam_block', 'vintagedelight:*_jello_block', item.mulberry_jam_block,
 	])
 	// confectionery: every placed dish, plate, jar and bottle (decided 2026-11-10), food blocks, chocolate
 	t.addMatching(e, runner.confectionery, [
 		'@displaydelight', '@neapolitan',
 		'/^lightmanscurrency:coin(block|pile)_chocolate_[a-z]+$/',
-		'fruitsdelight:*_jelly', 'fruitsdelight:durian', 'fruitsdelight:pineapple',
-		'/^vintagedelight:[a-z_]+_jar$/', 'vintagedelight:golden_egg',
+		'fruitsdelight:*_jelly', item.durian, item.pineapple,
+		'/^vintagedelight:[a-z_]+_jar$/', item.golden_egg,
 		'/^brewinandchewin:(?!keg$|coaster$)[a-z_]+$/',
 		'/^hearthandharvest:([a-z_]+_pie|waffle|jug|(unripe_)?goat_cheese_wheel)$/',
 		'/^veggiesdelight:(beetroot_brownie_tray|carrot_cake|lasagna_pan|stuffed_bellpeppers_block|sweet_potato_pie|vegan_pizza|zucchini_quiche)$/',
-		'/^vinery:[a-z_]+_wine$/', '/^ends_delight:(chorus_fruit_pie|[a-z_]+_block)$/', 'nethersdelight:stuffed_hoglin',
-		'/^miners_delight:(fake_meatloaf|glazed_arachnid_limbs|stuffed_squid)$/', 'delightful:baklava',
-		'delightful:stuffed_cantaloupe_block', 'oceanic_delight:sponge_cake', 'oceansdelight:guardian_soup',
-		'roll_delight:wrapped_chopsticks', 'farmersdelight:gleaming_salad_block', 'hostiledelight:candiedslimeblock',
-		'/^rusticdelight:bell_pepper_[a-z_]+_block$/', 'upgrade_aquatic:mulberry_punnet',
+		'/^vinery:[a-z_]+_wine$/', '/^ends_delight:(chorus_fruit_pie|[a-z_]+_block)$/', item.stuffed_hoglin,
+		'/^miners_delight:(fake_meatloaf|glazed_arachnid_limbs|stuffed_squid)$/', item.baklava,
+		item.stuffed_cantaloupe_block, item.sponge_cake, item.guardian_soup,
+		item.wrapped_chopsticks, item.gleaming_salad_block, 'hostiledelight:candiedslimeblock',
+		'/^rusticdelight:bell_pepper_[a-z_]+_block$/', item.mulberry_punnet,
 		'fantasyfurniture:decorations/muffins_*', 'fantasyfurniture:decorations/nordic_sweetrolls',
 		'fantasyfurniture:decorations/nordic_boiled_creme_treats',
 	], { except: [
 		'#' + runner.wood, '#' + runner.soft, '#' + runner.tilled,   // Neapolitan crates, pods, thatch, soil
 		'/^neapolitan:(banana_frond|large_banana_frond|small_banana_frond|beanstalk|beanstalk_thorns|mint|[a-z_]*milkshake_cauldron|milk_cauldron|[a-z_]*_basket)$/',
-		'neapolitan:chimpanzee_head',
+		item.chimpanzee_head,
 	] })
 
 	// Part 2: the 1.00 tiers, whole mods last. auditLeft(tier) keeps what no tier holds yet.
 	var auditTiers = Object.keys(runner).map(k => runner[k])
 	var auditLeft = function (tier) { return { except: auditTiers.filter(x => x !== tier).map(x => "#" + x)
-		.concat(["#minecraft:dirt", "#minecraft:flowers", "#minecraft:crops"], auditSkip) } }
+		.concat([item.t_dirt, item.t_flowers, "#minecraft:crops"], auditSkip) } }
 	t.addMatching(e, runner.flora, [
-		'minecraft:cactus', 'minecraft:chorus_plant', 'minecraft:chorus_flower', 'minecraft:big_dripleaf', 'minecraft:cocoa',
+		item.cactus, item.chorus_plant, item.chorus_flower, item.big_dripleaf, 'minecraft:cocoa',
 		'botania:floating_*', '/^botania:[a-z_]+_floating_flower$/', 'neapolitan:*banana_frond', 'neapolitan:beanstalk*',
-		'neapolitan:mint', 'fungidelight:*_colony', 'farmersdelight:*_colony', 'ends_delight:chorus_succulent',
-		'nethersdelight:mimicarnation', 'fruitsdelight:lemon_tree', 'upgrade_aquatic:*_kelp_plant',
+		'neapolitan:mint', 'fungidelight:*_colony', 'farmersdelight:*_colony', item.chorus_succulent,
+		'nethersdelight:mimicarnation', item.lemon_tree, 'upgrade_aquatic:*_kelp_plant',
 		'@flowerpatch', '@bushierflowers', '/^farmersrespite:coffee_stem[a-z_]*$/',
 	], auditLeft(runner.flora))
 	t.addMatching(e, runner.machinery, [
@@ -521,41 +524,41 @@ ServerEvents.tags('block', e => {
 		'@brickhopper', '@projectred_core', '@projectred_fabrication', '@projectred_illumination',
 		'/^securitycraft:(?!reinforced_|fake_)(?![a-z_]+_mine$)[a-z_]+$/',   // reinforced blocks and mines: the mirror below
 		'@engineersdecor', '@enderstorage',
-		'minecraft:piston', 'minecraft:sticky_piston', 'minecraft:observer', 'minecraft:dispenser', 'minecraft:dropper',
-		'minecraft:hopper', 'minecraft:daylight_detector', 'minecraft:redstone_lamp', 'minecraft:target',
-		'/^everythingcopper:[a-z_]*copper_hopper$/', 'quark:magnet', 'quark:pipe', 'quark:encased_pipe', 'quark:chute',
-		'quark:ender_watcher', 'quark:redstone_randomizer', 'quark:magnetized_block', 'sereneseasons:season_sensor',
-		'create_central_kitchen:blaze_stove', 'creativedelight:oven', 'immersive_weathering:*',
+		item.piston, item.sticky_piston, item.observer, item.dispenser, item.dropper,
+		item.hopper, item.daylight_sensor, item.redstone_lamp, item.target,
+		'/^everythingcopper:[a-z_]*copper_hopper$/', item.magnet, item.pipe, item.encased_pipe, item.q_chute,
+		item.ender_watcher, item.redstone_randomizer, item.magnetized_block, 'sereneseasons:season_sensor',
+		'create_central_kitchen:blaze_stove', item.oven, 'immersive_weathering:*',
 	], auditLeft(runner.machinery))
 	t.addMatching(e, runner.functional, [
 		'@botania', '@waystones', '@ftbquests', '@questsadditions', '@lootr', '@tempad', '@well', '@colored_water',
 		'@lightmanscurrency', '@monobank', '@etched', '@clayworks', '@appliedcooking', '@the_dirty_stuff', '@dragonloot',
 		'@myrtrees', '@cloudstorage', '@botanypots',
-		'minecraft:*crafting_table', 'minecraft:*_table', 'minecraft:*furnace', 'minecraft:smoker', 'minecraft:*anvil',
-		'minecraft:grindstone', 'minecraft:stonecutter', 'minecraft:loom', 'minecraft:lectern', 'minecraft:brewing_stand',
-		'minecraft:*cauldron', 'minecraft:composter', 'minecraft:beacon', 'minecraft:conduit', 'minecraft:respawn_anchor',
-		'minecraft:lodestone', 'minecraft:jukebox', 'minecraft:note_block', 'minecraft:bell', 'minecraft:spawner',
-		'minecraft:*command_block', 'minecraft:structure_block', 'minecraft:jigsaw', 'minecraft:barrier',
-		'minecraft:end_portal_frame', 'minecraft:tnt', 'minecraft:frogspawn', 'minecraft:turtle_egg',
-		'/^everythingcopper:[a-z_]*copper_anvil$/', 'everythingcopper:weathering_station',
+		'minecraft:*crafting_table', 'minecraft:*_table', 'minecraft:*furnace', item.smoker, 'minecraft:*anvil',
+		item.grindstone, item.stonecutter, item.loom, item.lectern, item.brewing_stand,
+		'minecraft:*cauldron', item.composter, item.beacon, item.conduit, item.respawn_anchor,
+		item.lodestone, item.jukebox, item.noteblock, item.bell, item.spawner,
+		'minecraft:*command_block', item.structure_block, item.jigsaw, 'minecraft:barrier',
+		item.end_portal_frame, item.tnt, item.frogspawn, item.turtle_egg,
+		'/^everythingcopper:[a-z_]*copper_anvil$/', item.weathering_station,
 		'*:*_cauldron', '*:*stove', '*:*_oven', '/^[a-z_]+:[a-z_]*(cooking_pot|copper_pot|skillet|kettle|keg)$/',
-		'farmersdelight:*cutting_board', 'farmersdelight:safety_net', 'vintagedelight:cheese_mold', 'vintagedelight:evaporator',
-		'vintagedelight:fermenting_jar', '/^hearthandharvest:(sprinkler|stomping_basin|tree_tapper|trough)$/',
+		'farmersdelight:*cutting_board', item.safety_net, item.cheese_mold, item.evaporator,
+		item.fermenting_jar, '/^hearthandharvest:(sprinkler|stomping_basin|tree_tapper|trough)$/',
 		'/^nethersdelight:[a-z_]*(furnace|smoker)$/', '/^vinery:(fermentation_barrel|wine_press)$/',
-		'quark:matrix_enchanter', 'quark:monster_box', 'quark:feeding_trough', 'quark:*_furnace',
-		'alexsmobs:capsid', 'alexsmobs:gustmaker', 'alexsmobs:transmutation_table', 'oldguns:*', 'blocky_siege:*',
-		'supplementaries:*', 'domesticationinnovation:drum', 'mca:jeweler_workbench', 'wares:delivery_table',
-		'exposure:lightroom', 'projectred_fabrication:*_table', 'creativelabels:*', 'cookingforblockheads:cooking_table',
-		'neapolitan:*milk*_cauldron', 'myrtrees:tree_tap', 'framedblocks:framing_saw',
+		item.matrix_enchanter, item.monster_box, item.feeding_trough, 'quark:*_furnace',
+		item.capsid, item.gustmaker, item.transmutation_table, 'oldguns:*', 'blocky_siege:*',
+		'supplementaries:*', item.pet_drum, item.jeweler_workbench, 'wares:delivery_table',
+		item.lightroom, 'projectred_fabrication:*_table', 'creativelabels:*', 'cookingforblockheads:cooking_table',
+		'neapolitan:*milk*_cauldron', 'myrtrees:tree_tap', item.framing_saw,
 	], auditLeft(runner.functional))
 	t.addMatching(e, runner.furniture, [
 		'@handcrafted', '@fantasyfurniture', '@redeco', '@another_furniture', '@storagedelight', '@storagedrawers',
 		'@abnormals_delight', '@cookingforblockheads', '@interiors', '@wardrobe', '@sophisticatedbackpacks', '@berry_good',
 		'@everycomp',
-		'minecraft:*chest', 'minecraft:barrel', 'minecraft:*shulker_box', 'minecraft:bookshelf', 'quark:*chest',
+		'minecraft:*chest', item.barrel, 'minecraft:*shulker_box', item.bookshelf, 'quark:*chest',
 		'quark:*bookshelf', 'upgrade_aquatic:*chest', 'upgrade_aquatic:*_bookshelf', 'twigs:*_table',
-		'farmersdelight:*_cabinet', 'farmersdelight:basket', 'creativedelight:*', 'delightful:*_cabinet', 'vinery:*',
-		'neapolitan:*_basket', 'hearthandharvest:*_cabinet', 'miners_delight:sticky_basket', 'decorative_blocks:*_seat',
+		'farmersdelight:*_cabinet', item.fd_basket, 'creativedelight:*', 'delightful:*_cabinet', 'vinery:*',
+		'neapolitan:*_basket', 'hearthandharvest:*_cabinet', item.sticky_basket, 'decorative_blocks:*_seat',
 		'immersiveengineering:*crate', 'immersiveengineering:*barrel', 'securitycraft:keypad_chest', 'securitycraft:keypad_barrel',
 		'securitycraft:reinforced_bookshelf', 'pneumaticcraft:*chest', 'ae2:*chest',
 	], auditLeft(runner.furniture))
@@ -568,15 +571,15 @@ ServerEvents.tags('block', e => {
 		'@ends_delight', '@endersdelight', '@nethersdelight', '@miners_delight', '@oceanic_delight', '@farmersrespite',
 		'@corn_delight', '@salt', '@tintedcampfires', '@buzzier_bees', '@biomesoplenty', '@geode', '@diamethysts',
 		'@nock_enough_arrows', 'everythingcopper:*copper_lamp',
-		'minecraft:dragon_egg', 'minecraft:*_head', 'minecraft:*_skull', 'minecraft:flower_pot', 'minecraft:end_rod',
-		'minecraft:*_stained_glass_pane', 'minecraft:light', 'minecraft:sculk_vein', 'minecraft:glow_lichen',
+		item.dragon_egg, 'minecraft:*_head', 'minecraft:*_skull', item.flower_pot, item.end_rod,
+		'minecraft:*_stained_glass_pane', item.light, item.sculk_vein, item.glow_lichen,
 	], auditLeft(runner.decorative))
 
 	// Last: whatever's left of #minecraft:dirt (grass, dirt, rooted dirt, modded grasses/soils)
 	// once the tiers above have claimed coarse dirt, podzol, mud, moss etc.
 	var runnerTags = Object.keys(runner).map(k => runner[k])
 	t.addMatching(e, runner.dirt, [
-		'#minecraft:dirt', 'immersive_weathering:rooted_grass_block', item.enchanted_soil,
+		item.t_dirt, item.rooted_grass_block, item.enchanted_soil,
 		'/^vinery:(dirt_slab|grass_slab|loam[a-z_]*)$/', item.dirt_slab,
 	], {
 		except: runnerTags.filter(tag => tag !== runner.dirt).map(tag => '#' + tag),
@@ -594,17 +597,8 @@ ServerEvents.tags('block', e => {
 		return ['securitycraft:reinforced_' + name, 'securitycraft:' + name.replace(/_ore$/, '') + '_mine']
 	})
 
-	// patcherMod hooks: facing-aware sticky tier, camo-aware camouflage tier, visual sinking
-	// (surface/StickyFacing, CamoSpeed, SinkingRender)
-	t.add(e, 'creativecompat:blockrunner_face_up', '#' + runner.sticky)
-	t.add(e, 'creativecompat:camo_speed', '#' + runner.camouflage)
-	t.add(e, 'creativecompat:sinking', [runner.soft, runner.dust, runner.spongy, runner.very_sticky].map(tag => '#' + tag))
-	// Dropped items lie on top of sinking blocks at their real height; blocks listed here swallow them
-	// (the item sinks like any other entity). Empty for now: every sinking block shows its items.
-	t.add(e, 'creativecompat:sinking_hides_items', [])
-	// Honey's wall slide on blocks that aren't honey (Creative Compat surface/WallSlide; honey and Fruits
-	// Delight jelly blocks already slide, they extend HoneyBlock)
-	t.add(e, 'creativecompat:wall_slide', [b.porous_flesh, item.banana_slug_slime_block])
+	// The Creative Compat hooks on these tiers (facing-aware sticky, camo speed, sinking, wall slide): Creative Compat's
+	// tags/blocktags.js
 
 	// wildcards like 'minecraft:polished_*' also catch the family's buttons and pressure plates
 	t.remove(e, runnerTags, '/_(button|pressure_plate)$/')

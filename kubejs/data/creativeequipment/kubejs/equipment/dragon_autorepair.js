@@ -25,11 +25,9 @@
 // stay unique rather than risk a collision.
 
 ;(function () {
-	let CFG = null
-	try {
-		CFG = Java.loadClass('com.SaintAlfonzo.creativeequipment.CEQConfig')
-	} catch (err) {
-		console.warn('[dragon_autorepair] Creative Equipment CEQConfig not on classpath - autorepair disabled: ' + err)
+	const CFG = global.NCH.cfgClass('creativeequipment', 'CEQConfig')
+	if (!CFG) {
+		console.warn('[dragon_autorepair] Creative Equipment CEQConfig not on classpath - autorepair disabled')
 		return
 	}
 

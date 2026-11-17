@@ -48,7 +48,7 @@ public final class LocateLoads {
 
 	private static final Logger LOG = LogManager.getLogger("creativeworldgen/locate");
 
-	private static final TicketType<ChunkPos> TICKET = TicketType.create("creativeengineering_locate", Comparator.comparingLong(ChunkPos::toLong), 6000);
+	private static final TicketType<ChunkPos> TICKET = TicketType.create("creativeworldgen_locate", Comparator.comparingLong(ChunkPos::toLong), 6000);
 	private static final int LEVEL = 33 + ChunkStatus.getDistance(ChunkStatus.STRUCTURE_STARTS);
 
 	private LocateLoads() {}

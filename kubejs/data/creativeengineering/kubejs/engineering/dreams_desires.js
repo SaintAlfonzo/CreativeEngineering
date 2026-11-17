@@ -3,7 +3,7 @@
 ServerEvents.recipes(e => {
 	console.log('Dreams and Desires starting')
 
-	const R = global.NCH
+	const R = global.NCH.forPack('creativeengineering')
 	var i = global.item
 
 	// ── Painted Asphalt (TODO engineering/dreams-and-desires #6) ──

@@ -6,7 +6,7 @@ console.log('Hello! The redstone event has started!')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativeengineering')
 
 // ############################## Vanilla ##############################
 

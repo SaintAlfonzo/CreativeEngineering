@@ -6,6 +6,9 @@ ServerEvents.tags('block', e => {
 	var b = global.blocks
 	var i = global.item
 
+	// Weathered Cardboard Box (startup decor_blocks.js in this jar): an axe block
+	t.mineable(e, 'axe', null, i.weathered_cardboard_box)
+
 	// Monster box (mob_block_tweaks.md 2.9): mined like obsidian; a contraption must not carry the vault off.
 	t.mineable(e, 'pickaxe', 'diamond', b.monster_box, { exclusive: true })
 	t.add(e, b.t_create_non_movable, b.monster_box)
@@ -42,4 +45,17 @@ ServerEvents.tags('block', e => {
 		i.createframed_horizontal_tinted_framed_glass_pane, i.createframed_vertical_tinted_framed_glass_pane,
 		i.createframed_tinted_tiled_glass_pane, i.framed_glass_pane, i.dirty_glass_pane, i.frosty_glass_pane]
 		.concat(colours.map(c => i[c + '_framed_glass_pane'])))
+
+	// BlockRunner hooks: facing-aware sticky tier, camo-aware camouflage tier, visual sinking (surface/StickyFacing,
+	// CamoSpeed, SinkingRender). The tiers are filled in the pack's server_scripts/tags/blocktags.js.
+	var tier = name => '#blockrunner:surface/' + name
+	t.add(e, 'creativecompat:blockrunner_face_up', tier('sticky'))
+	t.add(e, 'creativecompat:camo_speed', tier('camouflage'))
+	t.add(e, 'creativecompat:sinking', ['soft', 'dust', 'spongy', 'very_sticky'].map(tier))
+	// Dropped items lie on top of sinking blocks at their real height; blocks listed here swallow them
+	// (the item sinks like any other entity). Empty for now: every sinking block shows its items.
+	t.add(e, 'creativecompat:sinking_hides_items', [])
+	// Honey's wall slide on blocks that aren't honey (surface/WallSlide; honey and Fruits Delight jelly blocks already
+	// slide, they extend HoneyBlock)
+	t.add(e, 'creativecompat:wall_slide', [b.porous_flesh, i.banana_slug_slime_block])
 })

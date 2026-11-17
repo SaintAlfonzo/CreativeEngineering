@@ -5,6 +5,7 @@
 // Each row needs every mod it names: the gear's own mod (dict keys resolve to it) and the effect's mod.
 ;(function () {
 	var i = global.item
+	var ef = global.effect
 
 	// ═══════════════════════════ set bonuses ═══════════════════════════════════
 
@@ -29,42 +30,42 @@
 		if (global.has('immersive_armors')) {
 			global.armorEffects.set(
 				[i.ia_wooden_helmet, i.ia_wooden_chestplate, i.ia_wooden_leggings, i.ia_wooden_boots],
-				[{ effect: 'immersiveengineering:flammable' }]
+				[{ effect: ef.flammable }]
 			)
 		}
 
 		if (global.has('everythingcopper')) {
 			global.armorEffects.set(
 				[i.copper_helmet, i.copper_chestplate, i.copper_leggings, i.copper_boots],
-				[{ effect: 'immersiveengineering:conductive' }]
+				[{ effect: ef.conductive }]
 			)
 		}
 
 		global.armorEffects.set(
 			[i.iron_helmet, i.iron_chestplate, i.iron_leggings, i.iron_boots],
-			[{ effect: 'immersiveengineering:conductive' }]
+			[{ effect: ef.conductive }]
 		)
 	}
 
-	var goldenEffects = [{ effect: 'minecraft:luck' }]
-	if (global.has('immersiveengineering')) goldenEffects.push({ effect: 'immersiveengineering:conductive' })
+	var goldenEffects = [{ effect: ef.luck }]
+	if (global.has('immersiveengineering')) goldenEffects.push({ effect: ef.conductive })
 	global.armorEffects.set([i.golden_helmet, i.golden_chestplate, i.golden_leggings, i.golden_boots], goldenEffects)
 
 	global.armorEffects.set(
 		[i.diamond_helmet, i.diamond_chestplate, i.diamond_leggings, i.diamond_boots],
-		[{ effect: 'minecraft:speed' }]
+		[{ effect: ef.speed }]
 	)
 
-	var netheriteEffects = [{ effect: 'minecraft:fire_resistance' }]
+	var netheriteEffects = [{ effect: ef.fire_resistance }]
 	if (global.has('alexsmobs')) {
-		netheriteEffects.push({ effect: 'alexsmobs:lava_vision' }, { effect: 'alexsmobs:knockback_resistance' })
+		netheriteEffects.push({ effect: ef.lava_vision }, { effect: ef.knockback_resistance })
 	}
 	global.armorEffects.set([i.netherite_helmet, i.netherite_chestplate, i.netherite_leggings, i.netherite_boots], netheriteEffects)
 
 	if (global.has('felsic_gear')) {
 		var felsicEffects = []
-		if (global.has('better_beacons')) felsicEffects.push({ effect: 'better_beacons:long_reach' })
-		felsicEffects.push({ effect: 'minecraft:jump_boost' }, { effect: 'creativecommon:magic_resistance' })
+		if (global.has('better_beacons')) felsicEffects.push({ effect: ef.long_reach })
+		felsicEffects.push({ effect: ef.jump_boost }, { effect: ef.magic_resistance })
 		global.armorEffects.set([i.felsic_helmet, i.felsic_chestplate, i.felsic_leggings, i.felsic_boots], felsicEffects)
 	}
 
@@ -77,19 +78,18 @@
 	// Regeneration II, Health Boost II, Resistance II (potions/effects #4, decided 2026-10-29).
 	if (global.has('dragonloot')) {
 		var dragonEffects = [
-			{ effect: 'minecraft:resistance' },
-			{ effect: 'creativecommon:magic_resistance' },
-			{ effect: 'minecraft:fire_resistance' },
+			{ effect: ef.resistance },
+			{ effect: ef.magic_resistance },
+			{ effect: ef.fire_resistance },
 		]
 		if (global.has('alexsmobs')) {
-			dragonEffects.push({ effect: 'alexsmobs:poison_resistance' }, { effect: 'alexsmobs:knockback_resistance' })
+			dragonEffects.push({ effect: ef.poison_resistance }, { effect: ef.knockback_resistance })
 		}
-		if (global.has('botania')) dragonEffects.push({ effect: 'botania:feather_feet' })
-		if (global.has('better_beacons')) dragonEffects.push({ effect: 'better_beacons:long_reach' })
+		if (global.has('botania')) dragonEffects.push({ effect: ef.feather_feet })
+		if (global.has('better_beacons')) dragonEffects.push({ effect: ef.long_reach })
 		global.armorEffects.set([i.dragon_helmet, i.dragon_chestplate, i.dragon_leggings, i.dragon_boots], dragonEffects)
 		global.armorEffects.set([i.dragon_helmet, i.upgraded_dragon_chestplate, i.dragon_leggings, i.dragon_boots], dragonEffects)
 
-		var ef = global.effect
 		global.armorEffects.mount(i.dragon_horse_armor, [
 			{ effect: ef.regeneration, amplifier: 1 },
 			{ effect: ef.health_boost, amplifier: 1 },
@@ -108,18 +108,18 @@
 	// bonus, by contrast, stays a mixin - that constraint doesn't apply here since the
 	// on-hit tool effect was always our own KubeJS code, never CDD's).
 	var echoHit = [
-		{ effect: 'minecraft:weakness', amplifier: 1, duration: 100 },
-		{ effect: 'minecraft:darkness', amplifier: 1, duration: 100 },
+		{ effect: ef.weakness, amplifier: 1, duration: 100 },
+		{ effect: ef.darkness, amplifier: 1, duration: 100 },
 	]
 	var discombobulate = [
-		{ effect: 'minecraft:nausea', amplifier: 1, duration: 100 },
-		{ effect: 'minecraft:hunger', amplifier: 1, duration: 100 },
+		{ effect: ef.nausea, amplifier: 1, duration: 100 },
+		{ effect: ef.hunger, amplifier: 1, duration: 100 },
 	]
 	if (global.has('supplementaries')) discombobulate.push({ effect: 'supplementaries:overencumbered', amplifier: 1, duration: 100 })
 	if (global.has('vinery')) discombobulate.push({ effect: 'vinery:trippy', amplifier: 1, duration: 110 })
 	if (global.has('alexsmobs')) {
-		discombobulate.push({ effect: 'alexsmobs:earthquake', amplifier: 1, duration: 10 },
-			{ effect: 'alexsmobs:fear', amplifier: 1, duration: 10 })
+		discombobulate.push({ effect: ef.earthquake, amplifier: 1, duration: 10 },
+			{ effect: ef.fear, amplifier: 1, duration: 10 })
 	}
 
 	global.toolEffects.onHit(i.echo_pickaxe, echoHit)
@@ -130,26 +130,26 @@
 	// ═══════════════════════════ dragon ═══════════════════════════════════
 	// Dragon Loot's tools; rows naming another optional mod's effect sit in its own guard.
 	if (global.has('dragonloot')) {
-		global.toolEffects.onHit(i.dragon_sword, { effect: 'minecraft:weakness', amplifier: 2, duration: 200 })
-		if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_sword, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
-		if (global.has('botania')) global.toolEffects.held(i.dragon_sword, { effect: 'botania:soul_cross', amplifier: 1, duration: 50 })
+		global.toolEffects.onHit(i.dragon_sword, { effect: ef.weakness, amplifier: 2, duration: 200 })
+		if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_sword, { effect: ef.exsanguination, amplifier: 1, duration: 150 })
+		if (global.has('botania')) global.toolEffects.held(i.dragon_sword, { effect: ef.soul_cross, amplifier: 1, duration: 50 })
 
-		global.toolEffects.onHit(i.dragon_axe, { effect: 'minecraft:levitation', amplifier: 1, duration: 60 })
-		if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_axe, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
-		global.toolEffects.held(i.dragon_axe, { effect: 'minecraft:jump_boost', amplifier: 2, duration: 100 })
+		global.toolEffects.onHit(i.dragon_axe, { effect: ef.levitation, amplifier: 1, duration: 60 })
+		if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_axe, { effect: ef.exsanguination, amplifier: 1, duration: 150 })
+		global.toolEffects.held(i.dragon_axe, { effect: ef.jump_boost, amplifier: 2, duration: 100 })
 
 		global.toolEffects.onHit(i.dragon_shovel, discombobulate)
-		if (global.has('alexsmobs')) global.toolEffects.held(i.dragon_shovel, { effect: 'alexsmobs:knockback_resistance', amplifier: 1, duration: 50 })
+		if (global.has('alexsmobs')) global.toolEffects.held(i.dragon_shovel, { effect: ef.knockback_resistance, amplifier: 1, duration: 50 })
 
-		global.toolEffects.onHit(i.dragon_trident, { effect: 'minecraft:mining_fatigue', amplifier: 1, duration: 60 })
-		global.toolEffects.held(i.dragon_trident, { effect: 'minecraft:slow_falling', amplifier: 1, duration: 50 })
+		global.toolEffects.onHit(i.dragon_trident, { effect: ef.mining_fatigue, amplifier: 1, duration: 60 })
+		global.toolEffects.held(i.dragon_trident, { effect: ef.slow_falling, amplifier: 1, duration: 50 })
 
-		global.toolEffects.held(i.dragon_bow, { effect: 'minecraft:invisibility', amplifier: 0, duration: 60 })
-		global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:slowness', amplifier: 3, duration: 50 })
-		global.toolEffects.onHit(i.dragon_bow, { effect: 'minecraft:glowing', amplifier: 0, duration: 500 })
+		global.toolEffects.held(i.dragon_bow, { effect: ef.invisibility, amplifier: 0, duration: 60 })
+		global.toolEffects.onHit(i.dragon_bow, { effect: ef.slowness, amplifier: 3, duration: 50 })
+		global.toolEffects.onHit(i.dragon_bow, { effect: ef.glowing, amplifier: 0, duration: 500 })
 
-		global.toolEffects.held(i.dragon_crossbow, { effect: 'minecraft:resistance', amplifier: 1, duration: 60 })
-		if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_crossbow, { effect: 'alexsmobs:exsanguination', amplifier: 1, duration: 150 })
-		global.toolEffects.onHit(i.dragon_crossbow, { effect: 'minecraft:weakness', amplifier: 2, duration: 250 })
+		global.toolEffects.held(i.dragon_crossbow, { effect: ef.resistance, amplifier: 1, duration: 60 })
+		if (global.has('alexsmobs')) global.toolEffects.onHit(i.dragon_crossbow, { effect: ef.exsanguination, amplifier: 1, duration: 150 })
+		global.toolEffects.onHit(i.dragon_crossbow, { effect: ef.weakness, amplifier: 2, duration: 250 })
 	}
 })()

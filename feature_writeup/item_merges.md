@@ -57,7 +57,7 @@ reaches a player. Open merges are in [todo/TODO.md](todo/TODO.md) family `merges
 | Hide and strip | `removed_items.js` consumers | JEI hides the purged item (`client_scripts/jeichanges.js`); its item tags are stripped and `recipe_scan.js` (`/recipescan`, off at load by default) logs any recipe that still uses or makes it (`[jeiRemove] <id> -> n recipe(s)`) |
 | Recipes | pack: `kubejs/server_scripts/other/item_merges.js` (priority -100); CD: `kubejs/data/creativedelight/kubejs/_core/item_merges.js` (priority -100, last in the CD tree) | `global.itemMergeRun.recipes(e, group)` -> `NCH.replaceItems`: every input and output of every recipe, data and script-added. Per-merge removals of duplicates: the pack file (general), CD `<mod>/item_merges.js` (food) |
 | Tags | same files as the per-merge removals | The survivor joins the tags recipes or mobs read |
-| Loot | the two run files, LootJS | Every table: purged entry -> survivor, same count (`CE/item_merges/<group>`) |
+| Loot | the two run files, LootJS | Every table: purged entry -> survivor, same count (`CCM/item_merges/<group>`, `CE/` before 2026-11-17) |
 | Inventory | the two run files, `PlayerEvents.inventoryChanged` | A purged stack in a player inventory becomes the survivor, same count. Catches mod code (Neapolitan's milk cauldron), old chests and old worlds |
 | World (CD group) | Common `swap/ItemMerges` (patcherMod) | Stacks already in the world: player inventories and ender chests, containers, dropped items; NBT and count kept (section 6) |
 

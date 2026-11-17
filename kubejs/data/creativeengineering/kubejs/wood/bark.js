@@ -4,7 +4,7 @@ ServerEvents.recipes(e => {
 console.log('StartingBarkServerScript')
 
 var i = global.item
-var R = global.NCH
+var R = global.NCH.forPack('creativeengineering')
 
 // Every "normal" (non-nether, non-compat) species: create:cutting recipes to remove,
 // plus the log/wood pair for saw + fd-cutting bulk calls below.

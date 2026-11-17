@@ -333,7 +333,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/flower_features.json', 'runtime'),    # worldgen/wild_flowers.js (snapshot)
     ('generation_scripts/worldgen/meat_block_swaps.json', 'runtime'),   # TemplateBlockSwaps (tools/meat_block_scan.py)
     ('generation_scripts/worldgen/nether_block_swaps.json', 'runtime'),  # TemplateBlockSwaps (tools/gen_nether_swaps.py)
-    ('generation_scripts/wthit/silk_touch_blocks.json', 'runtime'),     # server_scripts/tags/wthittags.js (Needs Silk Touch tag)
+    ('generation_scripts/wthit/silk_touch_blocks.json', 'runtime'),     # data/creativecommon/kubejs/tags/wthittags.js (Needs Silk Touch tag)
     ('generation_scripts/physics/item_physics_families.json', 'dev'),   # tools/item_physics_audit.py output
     ('generation_scripts/worldgen/nether_swap_rules.json', 'dev'),      # tools/gen_nether_swaps.py input
     ('generation_scripts/worldgen/bee_nests_baseline.json', 'dev'),     # tools/gen_bee_nests.py calibration

@@ -12,6 +12,10 @@ var t = global.tags
 // all; EasyElytraTakeoffGroundCheckMixin = allowed even mid-fall / on thin blocks).
 global.tags.add(e, 'creativeequipment:elytra_chestplates', [i.upgraded_dragon_chestplate])
 
+// Bottled Air (item.BottledAir, [bottled_air]): the "fire type" items that evaporate the filled bottle when held in the
+// other hand (the mod's list: campfires, fire charge, lava bucket, magma block).
+t.add(e, 'creativeequipment:bottled_air/fire_sources', [i.campfire, i.soul_campfire, i.fire_charge, i.lava_bucket, i.magma_block])
+
 // Armor Trims allowlist (gear/tuning #14, gear_tuning.md Armor Trims): only standard armor drawn on the vanilla armor
 // model can be trimmed. patcherMod compat/ArmorTrimsItemCache keeps only these in Armor Trims' trimmable list (smithing
 // table, JEI trim pages, the trimmed-item decorator, untrimming); an empty tag means no filter. Out: hats, mob heads,

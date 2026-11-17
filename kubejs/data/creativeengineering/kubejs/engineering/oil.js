@@ -6,7 +6,7 @@ console.log('Hello! The oil event has started!')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativeengineering')
 
 // Unify bio oils to plant oil
 // Add seeds to squeezing

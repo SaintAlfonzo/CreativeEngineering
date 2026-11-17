@@ -22,6 +22,7 @@ const PLATE_BLOCK_METALS = [
 StartupEvents.registry('block', e => {
     PLATE_BLOCK_METALS.forEach(metal => {
         e.create('creativeengineering:' + metal + '_plate_block')
+            .displayName(metal.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Plate Block')
             .material('metal')
             .soundType('metal')
             .hardness(5.0)

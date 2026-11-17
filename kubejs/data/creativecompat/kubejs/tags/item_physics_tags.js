@@ -106,23 +106,23 @@ ServerEvents.tags('item', e => {
 	// (a) whole families via nested tags — resolve transitively, survive tag edits
 	physicsFromTag(e, 'floats', [
 		// wood & wood-constructed
-		'#minecraft:planks', '#minecraft:logs', '#minecraft:non_flammable_wood',
-		'#minecraft:wooden_slabs', '#minecraft:wooden_stairs', '#minecraft:wooden_fences',
-		'#minecraft:wooden_doors', '#minecraft:wooden_trapdoors', '#minecraft:wooden_buttons',
-		'#minecraft:wooden_pressure_plates', '#forge:fence_gates/wooden',
-		'#minecraft:signs', '#minecraft:boats', '#minecraft:banners',
-		'#forge:chests/wooden', '#forge:rods/wooden',
+		i.planks, i.any_log, '#minecraft:non_flammable_wood',
+		i.wood_slab, i.any_wooden_stairs, i.any_wooden_fences,
+		i.any_wooden_doors, i.any_wooden_trapdoors, i.any_wooden_buttons,
+		i.any_wooden_pressure_plates, i.t_fence_gates_wooden,
+		i.any_sign, i.t_boats, i.any_banner,
+		i.wooden_chest, i.any_stick,
 		// plant / organic
-		'#minecraft:saplings', '#minecraft:leaves', '#minecraft:flowers',
+		i.t_saplings, i.t_leaves, i.t_flowers,
 		// textile / fibre / hide
-		'#minecraft:wool', '#forge:wool', '#minecraft:wool_carpets', '#minecraft:beds',
-		'#forge:string', '#forge:leather', '#forge:dyes',
+		i.any_wool, '#forge:wool', '#minecraft:wool_carpets', i.t_beds,
+		'#forge:string', i.t_leather, i.any_dye,
 		// wax / light
 		'#minecraft:candles',
 		// food-ish
 		'#minecraft:fishes',
 	])
-	if (recycle) physicsFromTag(e, 'floats', ['#create:scrap_wood_small', '#create:scrap_wood_medium', '#create:scrap_wood_large'])
+	if (recycle) physicsFromTag(e, 'floats', [i.scrap_wood_small, i.scrap_wood_medium, i.scrap_wood_large])
 	// (b) explicit vanilla items with no clean tag of their own
 	add('floats', mc([
 		'mangrove_roots', 'sponge',                                          // (pack originals)
@@ -184,9 +184,9 @@ ServerEvents.tags('item', e => {
 	// ═════════════════════════════ FIREPROOF ═══════════════════════════════
 	// survives open fire; still burns / melts in lava
 	physicsFromTag(e, 'fireproof', [
-		'#forge:sand', '#forge:gravel', '#forge:sandstone',
-		'#minecraft:dirt', '#forge:concrete', '#minecraft:terracotta',
-		'#forge:raw_materials', '#forge:ingots', '#forge:nuggets',      // netherite excluded (lavaproof wins)
+		i.t_sand, i.t_gravel, i.t_sandstone,
+		i.t_dirt, i.t_concrete, i.t_terracotta,
+		i.t_raw_materials, i.t_ingots, i.t_nuggets,      // netherite excluded (lavaproof wins)
 		'#minecraft:rails', '#minecraft:anvil', '#minecraft:music_discs',
 	])
 	if (recycle) physicsFromTag(e, 'fireproof', ['#create:scrap_copper_blocks', '#create:scrap_copper_blocks_cut'])
@@ -262,16 +262,16 @@ ServerEvents.tags('item', e => {
 	// immune to BOTH open fire and lava — wins over fireproof
 	physicsFromTag(e, 'lavaproof', [
 		// (pack originals)
-		'#forge:stone', '#forge:cobblestone', '#forge:ores', '#create:sleepers',
-		'#create:stone_types/granite', '#create:stone_types/diorite', '#create:stone_types/andesite',
+		i.anystone, i.t_cobblestone, global.blocks.t_ores, '#create:sleepers',
+		i.granite_stone, '#create:stone_types/diorite', '#create:stone_types/andesite',
 		'#create:stone_types/calcite', '#create:stone_types/dripstone', '#create:stone_types/deepslate',
-		'#create:stone_types/tuff', '#create:stone_types/limestone', '#create:stone_types/veridium',
-		'#create:stone_types/asurine', '#create:stone_types/crimsite', '#create:stone_types/ochrum',
+		'#create:stone_types/tuff', i.limestone_stone, i.veridium_stone,
+		i.asurine_stone, i.crimsite_stone, i.ochrum_stone,
 		'#create:stone_types/scoria', '#create:stone_types/scorchia',
 		// anchors
-		'#forge:obsidian', '#forge:end_stones', '#forge:netherrack',
-		'#forge:gems/diamond', '#forge:storage_blocks/diamond',
-		'#forge:ingots/netherite', '#forge:storage_blocks/netherite', '#forge:nuggets/netherite',
+		i.t_obsidian, '#forge:end_stones', '#forge:netherrack',
+		'#forge:gems/diamond', i.t_storage_blocks_diamond,
+		'#forge:ingots/netherite', i.t_storage_blocks_netherite, '#forge:nuggets/netherite',
 		'#minecraft:shulker_boxes', '#minecraft:soul_fire_base_blocks',
 	])
 	add('lavaproof', mc([
@@ -391,15 +391,15 @@ ServerEvents.tags('item', e => {
 	// Glass → quark:dirty_glass is driven straight off #forge:glass / #forge:glass_panes
 	// in the startup script, so it needs no bucket here.
 	t.add(e, 'creativecompat:burn/to_ash', [
-		'#minecraft:planks', '#minecraft:logs',
-		'#minecraft:wooden_slabs', '#minecraft:wooden_stairs', '#minecraft:wooden_fences',
-		'#forge:fence_gates/wooden', '#minecraft:wooden_doors', '#minecraft:wooden_trapdoors',
-		'#minecraft:wooden_buttons','#minecraft:wooden_pressure_plates','#minecraft:signs',
-		'#minecraft:boats','#minecraft:banners','#forge:chests/wooden','#forge:rods/wooden',
-		'#minecraft:beds'
+		i.planks, i.any_log,
+		i.wood_slab, i.any_wooden_stairs, i.any_wooden_fences,
+		i.t_fence_gates_wooden, i.any_wooden_doors, i.any_wooden_trapdoors,
+		i.any_wooden_buttons,i.any_wooden_pressure_plates,i.any_sign,
+		i.t_boats,i.any_banner,i.wooden_chest,i.any_stick,
+		i.t_beds
 	])
 	if (recycle) t.add(e, 'creativecompat:burn/to_ash', [
-		'#create:scrap_wood_small', '#create:scrap_wood_medium', '#create:scrap_wood_large', '#create:scrap_wood_and_book'
+		i.scrap_wood_small, i.scrap_wood_medium, i.scrap_wood_large, '#create:scrap_wood_and_book'
 	])
 	// t.add(e, 'creativecompat:burn/explosive', ['minecraft:fire_charge'])
 })

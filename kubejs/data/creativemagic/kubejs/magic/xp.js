@@ -5,7 +5,7 @@ ServerEvents.recipes(e => {
 global.CMG.recipes(() => {
 console.log('XP starting')
 
-const R = global.NCH
+const R = global.NCH.forPack('creativemagic')
 var i = global.item;
 
 // ============================================================

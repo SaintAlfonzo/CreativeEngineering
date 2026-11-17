@@ -3,7 +3,7 @@
 ServerEvents.recipes(e => {
     console.log('flowers starting')
 
-    const R = global.NCH
+    const R = global.NCH.forPack('creativecompat')
     const i = global.item
 
     // Bushier Flowers no longer grow from bone meal or generate (BushierFlowersDisableMixin, Creative Worldgen

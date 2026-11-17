@@ -53,7 +53,7 @@
 	var $SpawnTuning = Java.loadClass(TUNING_CLASS)
 
 	function enabled() {
-		return Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig').mobSpawnsEnabled() == true
+		return global.NCH.cfgClass('creativeworldgen', 'worldgen.WorldgenConfig').mobSpawnsEnabled() == true
 	}
 
 	function readJson(path) {

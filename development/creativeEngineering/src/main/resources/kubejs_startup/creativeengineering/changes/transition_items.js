@@ -19,7 +19,7 @@
 // Registered item id is always 'kubejs:incomplete_<key>'.
 
 StartupEvents.registry('item', e => {
-	const R = global.NCH
+	const R = global.NCH.forPack('creativeengineering')
 	console.log('transition items starting')
 
 	// TODO

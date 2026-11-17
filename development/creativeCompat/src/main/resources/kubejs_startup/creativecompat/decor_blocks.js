@@ -14,5 +14,5 @@ StartupEvents.registry('block', e => {
 		.hardness(1.0)
 		.resistance(0.3)
 		.model('creativecompat:block/weathered_cardboard_box')
-		.tagBlock('minecraft:mineable/axe')
+	// Mining tag (axe): Creative Compat's tags/blocktags.js
 })

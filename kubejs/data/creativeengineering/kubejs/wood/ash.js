@@ -4,7 +4,7 @@ ServerEvents.recipes(e => {
 	console.log('Ash starting')
 
 	var i = global.item
-	const R = global.NCH
+	const R = global.NCH.forPack('creativeengineering')
 
     //Apply soot to sooty chimney scraping
 	const SCRAPING = [

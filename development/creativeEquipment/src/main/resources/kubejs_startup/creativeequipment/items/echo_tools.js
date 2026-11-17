@@ -20,7 +20,7 @@ ItemEvents.toolTierRegistry(event => {
 		tier.setAttackDamageBonus(6.0)
 		tier.setLevel(4)                                   // 1 = literal echo-sword match
 		tier.setEnchantmentValue(18)
-		tier.setRepairIngredient(Ingredient.of('create_deep_dark:echo_ingot'))
+		tier.setRepairIngredient(Ingredient.of(global.item.echo_ingot))
 	})
 })
 

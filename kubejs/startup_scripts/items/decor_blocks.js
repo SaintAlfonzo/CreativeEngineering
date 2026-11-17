@@ -14,7 +14,6 @@ StartupEvents.registry('block', e => {
         .hardness(50.0)
         .resistance(1200.0)
         .requiresTool(true)
-        .model('creativeengineering:block/layered_obsidian')
-        .tagBlock('minecraft:mineable/pickaxe')
-        .tagBlock('minecraft:needs_diamond_tool');
+        .model('creativeengineering:block/layered_obsidian');
+    // Mining tags (pickaxe, diamond): server_scripts/tags/blocktags.js
 });

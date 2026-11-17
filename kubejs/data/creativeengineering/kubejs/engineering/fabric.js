@@ -5,7 +5,7 @@ console.log('fabric starting')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativeengineering')
 
 // IE tough fabric to wool partial ingredient replacement
 R.replaceInput({ id: 'architects_palette:spool' },

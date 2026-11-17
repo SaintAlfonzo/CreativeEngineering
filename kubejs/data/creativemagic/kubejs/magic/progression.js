@@ -7,7 +7,7 @@ console.log('magic progression starting')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativemagic')
 
 R.shapeless(Item.of(i.flint_and_terrasteel, 1), [i.flint, i.terrasteel_ingot], e)
 

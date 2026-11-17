@@ -22,18 +22,18 @@ ServerEvents.tags('item', e => {
 	// blueprint recipes (server_scripts/engineering/blueprints.js, precision sawblades)
 	// point at these. Keep in sync with the sawmill outputs generated in generation_scripts/sawmill.js.
 	t.add(e, 'creativeengineering:vertical_planks', [
-		'quark:vertical_oak_planks', 'quark:vertical_spruce_planks', 'quark:vertical_birch_planks',
-		'quark:vertical_jungle_planks', 'quark:vertical_acacia_planks', 'quark:vertical_dark_oak_planks',
-		'quark:vertical_mangrove_planks', 'quark:vertical_crimson_planks', 'quark:vertical_warped_planks',
-		'quark:vertical_ancient_planks', 'quark:vertical_azalea_planks', 'quark:vertical_blossom_planks',
-		'everycomp:q/architects_palette/vertical_twisted_planks',
+		i.vplanks_oak, i.vplanks_spruce, i.vplanks_birch,
+		i.vplanks_jungle, i.vplanks_acacia, i.vplanks_dark_oak,
+		i.vplanks_mangrove, i.vplanks_crimson, i.vplanks_warped,
+		i.vplanks_ancient, i.vplanks_azalea, i.vplanks_blossom,
+		i.vplanks_twisted,
 	])
 	t.add(e, 'creativeengineering:railings', [
-		'architects_palette:oak_railing', 'architects_palette:spruce_railing', 'architects_palette:birch_railing',
-		'architects_palette:jungle_railing', 'architects_palette:acacia_railing', 'architects_palette:dark_oak_railing',
-		'architects_palette:mangrove_railing', 'architects_palette:crimson_railing', 'architects_palette:warped_railing',
-		'architects_palette:twisted_railing',
-		'everycomp:ap/quark/ancient_railing', 'everycomp:ap/quark/azalea_railing', 'everycomp:ap/quark/blossom_railing',
+		i.railing_oak, i.railing_spruce, i.railing_birch,
+		i.railing_jungle, i.railing_acacia, i.railing_dark_oak,
+		i.railing_mangrove, i.railing_crimson, i.railing_warped,
+		i.railing_twisted,
+		i.railing_ancient, i.railing_azalea, i.railing_blossom,
 	])
 })
 

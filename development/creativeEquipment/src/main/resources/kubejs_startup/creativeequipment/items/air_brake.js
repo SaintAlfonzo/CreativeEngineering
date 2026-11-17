@@ -18,12 +18,8 @@
 
 const $UseAnim = Java.loadClass('net.minecraft.world.item.UseAnim')
 
-let CFG = null
-try {
-	CFG = Java.loadClass('com.SaintAlfonzo.creativeequipment.CEQConfig')
-} catch (err) {
-	console.warn('[air_brake] Creative Equipment CEQConfig not on classpath - falling back to a 72000-tick (bow-length) use duration: ' + err)
-}
+const CFG = global.NCH.cfgClass('creativeequipment', 'CEQConfig')
+if (!CFG) console.warn('[air_brake] Creative Equipment CEQConfig not on classpath - falling back to a 72000-tick (bow-length) use duration')
 function airBrakeUseDurationTicks() {
 	return CFG ? CFG.AIR_BRAKE.useDurationTicks.get() : 72000
 }

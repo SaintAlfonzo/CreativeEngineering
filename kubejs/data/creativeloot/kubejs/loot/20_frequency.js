@@ -15,12 +15,13 @@
 
 LootJS.modifiers(event => {
   const L = global.LOOT
+  const R = global.NCH.forPack('creativeloot')
 
   // ── count caps (examples — uncomment & edit) ──────────────────────────────
 
   // no chest ever gives more than 8 emeralds
   // L.capCount(L.chestType(event), 'minecraft:emerald', 8)
-  //   .logName('CE/loot/frequency/emerald_cap')
+  //   .logName(R.logName('frequency/emerald_cap'))
 
   // ── context-gated bonus ──────────────────────────────────────────────────
 
@@ -29,5 +30,5 @@ LootJS.modifiers(event => {
   //   .anyBiome('minecraft:deep_dark')
   //   .randomChance(0.3)
   //   .addLoot(L.entry({ item: 'minecraft:echo_shard' }, 'freq/deep_dark_echo'))
-  //   .logName('CE/loot/frequency/deep_dark_echo')
+  //   .logName(R.logName('frequency/deep_dark_echo'))
 })

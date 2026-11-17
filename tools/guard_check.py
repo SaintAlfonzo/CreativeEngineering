@@ -57,7 +57,8 @@ TOOLTIP_FUNCS = ['addTooltips', 'addTooltipPattern', 'removeTooltips', 'removeTo
 
 ID_RE = re.compile(r"""['"`]([a-z0-9_.\-]+):([a-z0-9_/.\-]+)['"`]""")
 REQUIRES_RE = re.compile(r'^//\s*requires:\s*([a-z0-9_\-]+)', re.M)
-ALIAS_RE = re.compile(r'\b(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*global\.(\w+)\s*[;\n,]')
+# global.NCH.forPack('<ns>') (the bound recipe helper, plan_rules_fixes.md section 6) is an alias of NCH too.
+ALIAS_RE = re.compile(r'\b(?:var|let|const)\s+([A-Za-z_$][\w$]*)\s*=\s*global\.(\w+)(?:\.forPack\([^)]*\))?\s*[;\n,]')
 GUARD_CALL_RE = re.compile(r'(?:global\.has\.mod|global\.has|Platform\.isLoaded|has)\(([^()]*)\)')
 BARE_VAR_RE = re.compile(r'^\s*[A-Za-z_$][\w$]*\s*$')
 EARLY_RETURN_RE = re.compile(r'if\s*\(\s*!\s*(?:global\.has|Platform\.isLoaded)\(([^()]*)\)\s*\)\s*return\b')

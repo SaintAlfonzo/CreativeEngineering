@@ -3,7 +3,7 @@
 ServerEvents.recipes(e => {
 	console.log('Sawdust starting')
 
-	const R = global.NCH
+	const R = global.NCH.forPack('creativeengineering')
 	var i = global.item;
 	var f = global.fluid;
 	// Scrap wood tags are Create Recycle's (create_crush_everything); without it they do not exist.

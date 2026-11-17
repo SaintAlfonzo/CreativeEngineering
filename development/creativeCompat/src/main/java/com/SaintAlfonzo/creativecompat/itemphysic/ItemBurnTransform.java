@@ -39,7 +39,7 @@ import java.util.Set;
  */
 public final class ItemBurnTransform {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger("creativeengineering/itemphysic");
+    private static final Logger LOGGER = LoggerFactory.getLogger("creativecompat/itemphysic");
 
     public enum Kind { REPLACE, EXPLODE }
 

@@ -21,12 +21,12 @@ ServerEvents.tags('block', e => {
 	])
 	// Dropped when the block under them is swapped (both halves of tall plants).
 	t.add(e, 'creativeworldgen:ground_match/plants', [
-		'#minecraft:flowers', '#minecraft:saplings', item.grass, item.fern, item.tall_grass, item.large_fern,
+		item.t_flowers, item.t_saplings, item.grass, item.fern, item.tall_grass, item.large_fern,
 		item.dead_bush, item.brown_mushroom, item.red_mushroom, b.sweet_berry_bush,
 	])
 	// Never sampled as ground: tree and crop parts that neighbouring chunks' features spill onto the surface.
 	t.add(e, 'creativeworldgen:ground_match/not_ground', [
-		'#minecraft:leaves', '#minecraft:logs', item.brown_mushroom_block, item.red_mushroom_block,
+		item.t_leaves, item.any_log, item.brown_mushroom_block, item.red_mushroom_block,
 		item.mushroom_stem, item.cactus, item.bamboo, item.pumpkin, item.melon_block,
 	])
 
@@ -35,7 +35,7 @@ ServerEvents.tags('block', e => {
 	// bases hold more of these over water or air than the limits is cancelled. Loose ground only, not
 	// stone or bricks (those are the building). More tags can be listed in [earth_fill] blocks.
 	t.add(e, 'creativeworldgen:earth_fill/earth', [
-		'#minecraft:dirt', '#forge:sand', '#forge:gravel', 'minecraft:clay', 'minecraft:dirt_path',
+		item.t_dirt, item.t_sand, item.t_gravel, item.clay, item.dirt_path,
 	])
 	// Stone and brick bases, counted as earth only for structures in the structure tag of the same name
 	// (worldgen/earth_fill.js): ones that stand on a stone plate instead of a dirt pad, like the drum tower.
@@ -50,7 +50,7 @@ ServerEvents.tags('block', e => {
 	// (worldgen/earth_fill.js): desert and badlands builds that stand on them instead of sand (2026-11-02,
 	// tools/earth_base_scan.py: Towns and Towers badlands villages 0 % earth, Better Desert Temples 0 %).
 	t.add(e, 'creativeworldgen:earth_fill/sand_base', [
-		'#forge:sandstone', '#minecraft:terracotta', item.philips_sand_stone_brick, item.philips_red_sand_stone_brick,
+		item.t_sandstone, item.t_terracotta, item.philips_sand_stone_brick, item.philips_red_sand_stone_brick,
 		item.philips_sandstone_tiles,
 	])
 
@@ -59,7 +59,7 @@ ServerEvents.tags('block', e => {
 	// isn't placed, so the natural ground stays there. Pad = loose ground a template brings along; dirt_path
 	// and farmland are left out on purpose (paths and crop plots are design, so their columns count as built).
 	t.add(e, 'creativeworldgen:template_trim/pad', [
-		'#minecraft:dirt', '#forge:sand', '#forge:gravel', 'minecraft:clay', item.snow_block,
+		item.t_dirt, item.t_sand, item.t_gravel, item.clay, item.snow_block,
 	])
 	// Loose things standing on a pad: dropped with it.
 	t.add(e, 'creativeworldgen:template_trim/plants', [

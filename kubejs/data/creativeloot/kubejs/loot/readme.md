@@ -15,7 +15,7 @@ KubeJS ignores this `.md` and the `.json` files here (it only loads `.js`).
 | `loot/05_tuning.js` | The tuning runtime (pre-roll rewrite + post-roll LootJS backstop), the `global.lootTuning` script API, and `/loottuning`. Priority 100. |
 | `loot/07_rules.js` | **Script rules**: bans (PneumaticCraft, Lightman's coins) with loud warnings, chalk and golden-food tag groups, packed-food splits and their village boost, goldenfood revert + restored injections (the Golden Food book is in no table since 2026-10-03), aliases for always-empty containers. |
 | `loot/95_tag_capture.js` | Copies the members of every `#tag` a rule names from the reload's tag event. Priority -1000 (runs after every tag script). |
-| `tags/loottags.js` | Loot meta tags, e.g. `#creativeworldgen:loot/chalk`. |
+| `tags/loottags.js` | Loot meta tags, e.g. `#creativeloot:loot/chalk`. |
 | `tools/loot_tuning_sim.js` | Offline run of 05 + 07 against the raw jar tables; checks bans, packed splits, reverts, restores, aliases, tag rules. |
 | `loot/00_lib.js` | `global.LOOT` — helpers for the targeted/additive LootJS edits below: `chestType` `tables` `entry` `addPool` `capCount` `remove`, id validation, `groups` / `tiers` lists. |
 | `loot/10_removals.js` | LootJS: removals scoped by structure / biome / dimension / player (table-based removals go in 07_rules.js) |
@@ -133,7 +133,7 @@ LootJS.modifiers(event => {
   .modifyLoot(filter, stack => stack.withCount(1))          // post-roll stack tweak
   .pool(p => { p.addLoot(...); p.addLoot(...) })            // add a whole extra pool
   .apply(ctx => { ctx.removeLoot(...); ctx.addLoot(...) })  // full custom, per roll
-  .logName('CE/loot/...')                                   // shows in enableLogging output
+  .logName(R.logName('...'))  // R = global.NCH.forPack('creativeloot'): 'CL/...', shows in enableLogging output
 
   // BUILDER CONDITIONS (gate the whole modifier)
   .randomChance(0.3)

@@ -69,12 +69,13 @@ console.log('Tool Effects framework loading')
 	// with an actual finite duration instead of "(infinite)" - onHit effects aren't
 	// continuously refreshed, so the real configured duration is what the target sees.
 	function buildOnHitTooltipLines(effects) {
-		var lines = ['§7On hit, inflicts to target:']
+		var text = global.armorEffects._textCode()
+		var lines = [text + 'On hit, inflicts to target:']
 		effects.forEach(spec => {
 			var d = global.armorEffects._describe(spec)
 			var seconds = spec.duration / 20
 			var durationText = (seconds === Math.floor(seconds) ? seconds : seconds.toFixed(1)) + ' sec.'
-			lines.push('§7- §' + d.color + d.name + ' §7(' + durationText + ')')
+			lines.push(text + '- §' + d.color + d.name + ' ' + text + '(' + durationText + ')')
 		})
 		return lines
 	}

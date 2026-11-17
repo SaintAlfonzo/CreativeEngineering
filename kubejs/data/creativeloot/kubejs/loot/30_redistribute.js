@@ -14,6 +14,7 @@
 
 LootJS.modifiers(event => {
   const L = global.LOOT
+  const R = global.NCH.forPack('creativeloot')
 
   // ── context-scoped additions (examples — uncomment & edit) ──────────────
 
@@ -22,12 +23,12 @@ LootJS.modifiers(event => {
   //   L.addPool(
   //     L.chestType(event).anyStructure(['#minecraft:village'], false),
   //     L.tiers.common, 'redistribute/village_common'
-  //   ).logName('CE/loot/redistribute/village_common')
+  //   ).logName(R.logName('redistribute/village_common'))
   // }
 
   // snowballs in every chest in a snowy biome
   // L.chestType(event)
   //   .anyBiome('#minecraft:is_snowy')
   //   .addLoot(L.entry({ item: 'minecraft:snowball', count: 4, chance: 0.5 }, 'redistribute/snowy'))
-  //   .logName('CE/loot/redistribute/snowy')
+  //   .logName(R.logName('redistribute/snowy'))
 })

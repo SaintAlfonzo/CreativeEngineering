@@ -35,8 +35,11 @@ function getRecipeManager() {
 	return server ? server.getRecipeManager() : null
 }
 
+// The serializer id, read from the registry as dump_crafting_audit.js does (Recipe.getType() is shadowed by KubeJS's
+// kjs$getType, which returns the same id).
+var $RecipeSerializers = Java.loadClass('net.minecraftforge.registries.ForgeRegistries').RECIPE_SERIALIZERS
 function getRecipeType(recipe) {
-	try { return recipe.getType().toString() } catch (err) {}
+	try { return String($RecipeSerializers.getKey(recipe.getSerializer())) } catch (err) {}
 	return 'unknown'
 }
 

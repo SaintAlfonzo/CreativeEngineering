@@ -5,7 +5,7 @@ ServerEvents.recipes(e => {
 console.log('Hello! The wood type event has started!')
 
 var i = global.item
-var R = global.NCH
+var R = global.NCH.forPack('creativeengineering')
 
 var species = [
 	{ name: 'oak', planks: i.planks_oak, slab: i.slab_oak, vslab: i.vslab_oak, vplanks: i.vplanks_oak, stairs: i.stairs_oak, fence: i.fence_oak, fencegate: i.fencegate_oak, door: i.door_oak, trapdoor: i.trapdoor_oak, ladder: i.ladder_oak, button: i.button_oak, pressureplate: i.pressureplate_oak, sign: i.sign_oak, railing: i.railing_oak, sawmill: true },

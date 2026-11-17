@@ -70,7 +70,7 @@ import java.util.Set;
  */
 public final class StructureCatalogue {
 
-	private static final Logger LOG = LogManager.getLogger("creativeengineering/cdevplace");
+	private static final Logger LOG = LogManager.getLogger("creativedevtools/cdevplace");
 	static final String RULES = BiomeLayoutTuner.WORLDGEN_DIR + "structure_world.json";
 	static final String REPORT = "kubejs/exported/structure_catalogue_report.json";
 	static final String FEATURE = "structureCatalogue";

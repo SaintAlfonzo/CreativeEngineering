@@ -2,7 +2,7 @@
 // requires: create
 (function () {
 
-var R = global.NCH
+var R = global.NCH.forPack('creativedevtools')
 var i = global.item
 
 
@@ -18,33 +18,8 @@ var seqForms = [
 	'door', 'trapdoor', 'ladder', 'button', 'pressureplate', 'sign', 'railing'
 ];
 
-// Builds a roughly-square grid pattern + keys object from a flat list of {letter, item} pairs.
-function buildGrid(entries) {
-	var n = entries.length;
-	var cols = Math.ceil(Math.sqrt(n));
-	var rows = Math.ceil(n / cols);
-
-	var keys = {};
-	var pattern = [];
-	var idx = 0;
-
-	for (var r = 0; r < rows; r++) {
-		var row = '';
-		for (var c = 0; c < cols; c++) {
-			if (idx < n) {
-				var entry = entries[idx];
-				keys[entry.letter] = entry.item;
-				row += entry.letter;
-				idx++;
-			} else {
-				row += ' ';
-			}
-		}
-		pattern.push(row);
-	}
-
-	return { pattern: pattern, keys: keys };
-}
+// Grid pattern builder: global.CDV.buildGrid (_lib/build_grid.js)
+var buildGrid = global.CDV.buildGrid;
 
 var alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 

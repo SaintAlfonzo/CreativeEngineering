@@ -4,5 +4,7 @@
   "creativeengineering.jei.result_pool.one": "1 pick from this group",
   "creativeengineering.jei.result_pool.whole": "%s picks from this group",
   "creativeengineering.jei.result_pool.chance": "%s%% chance of 1 pick from this group",
-  "creativeengineering.jei.result_pool.whole_and_chance": "%s picks from this group, %s%% chance of 1 more"
+  "creativeengineering.jei.result_pool.whole_and_chance": "%s picks from this group, %s%% chance of 1 more",
+  "item.creativeengineering.precision_sawblade": "Precision Sawblade",
+  "item.creativeengineering.creosote_soaked_sawdust": "Creosote Soaked Sawdust"
 }

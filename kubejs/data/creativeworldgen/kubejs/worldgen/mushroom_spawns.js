@@ -44,7 +44,7 @@
 	}
 
 	function enabled() {
-		return Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig').mushroomSpawnsEnabled() == true
+		return global.NCH.cfgClass('creativeworldgen', 'worldgen.WorldgenConfig').mushroomSpawnsEnabled() == true
 	}
 
 	ServerEvents.tags('worldgen/biome', function (event) { S().tags(event) })

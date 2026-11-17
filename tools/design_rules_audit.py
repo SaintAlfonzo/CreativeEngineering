@@ -291,12 +291,15 @@ if wants('recipes'):
 # DR-P12: tooltip colors outside the col roles (plan_rules_fixes.md section 12, V-43): raw section signs, bare
 # Text.<color>( calls, raw color keys of the palette. Report until the P3 replacements; the palette lib is the source.
 if wants('colors'):
-    palette = re.compile(r'kubejs/assets/creativecommon/kubejs/_lib/tooltips\.js$')
+    # Skipped: the palette lib, Devtools' command output (chat, not tooltips) and the palette demo rows (a swatch
+    # line names its own color: ['Dark Gray', col.dgray]).
+    palette = re.compile(r'kubejs/assets/creativecommon/kubejs/_lib/tooltips\.js$|/creativedevtools/')
+    swatch = re.compile(r"^\['([A-Z][a-z]+(?: [A-Z][a-z]+)?)', col\.\w+\]")
     color = re.compile(r'§[0-9a-fk-or]|\bText\.(black|darkBlue|darkGreen|darkAqua|darkRed|darkPurple|gold|gray|darkGray|'
                        r'blue|green|aqua|red|lightPurple|yellow|white)\(|\bcol\.(black|dark_\w+|d(blue|green|aqua|red|purple|gray)'
                        r'|gold|gray|blue|green|aqua|red|light_purple|lpurple|yellow|white)\b')
     hits = [(p, i, l.strip()) for p, i, l in lines_of([s for s in SCRIPTS if not palette.search(s)])
-            if color.search(l) and not l.strip().startswith('//')]
+            if color.search(l) and not l.strip().startswith('//') and not swatch.match(l.strip())]
     report('DR-P12', 'tooltip colors picked by look (raw section signs, Text.<color>, raw col color keys)', hits)
 
 # DR-C21 to DR-C25: formatting facts.

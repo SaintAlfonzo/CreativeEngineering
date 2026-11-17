@@ -1,5 +1,6 @@
 // WTHIT Silk Touch icon: block tag creativecommon:wthit/needs_silk_touch = every block whose loot table
-// gives the block itself only with Silk Touch. patcherMod compat/WthitSilkTouch reads the tag on the client.
+// gives the block itself only with Silk Touch. Creative Common's compat/WthitSilkTouch reads the tag on the client,
+// so the tag fill ships in Creative Common's server scripts.
 //
 // The list lives in kubejs/generation_scripts/wthit/silk_touch_blocks.json, written by
 // tools/gen_silk_touch_blocks.py from the loot dump (/cdevgen run silk_touch_blocks dumps). Rerun it after a mod

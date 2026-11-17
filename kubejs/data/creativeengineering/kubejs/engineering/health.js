@@ -5,7 +5,7 @@ console.log('health engineering starting')
 
 var i = global.item
 var f = global.fluid
-var R = global.NCH
+var R = global.NCH.forPack('creativeengineering')
 
 // Replace bandage recipe, efficient alt bottling recipe
 R.remove({ id: 'pneumaticcraft:bandage' }, e)

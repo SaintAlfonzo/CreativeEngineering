@@ -49,7 +49,7 @@
 	var $ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')
 
 	function enabled() {
-		return Java.loadClass('com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig').wildFlowersEnabled() == true
+		return global.NCH.cfgClass('creativeworldgen', 'worldgen.WorldgenConfig').wildFlowersEnabled() == true
 	}
 
 	function readJson(path) {

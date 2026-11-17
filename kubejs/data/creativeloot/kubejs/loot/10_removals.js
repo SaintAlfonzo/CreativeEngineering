@@ -17,6 +17,7 @@
 
 LootJS.modifiers(event => {
   const L = global.LOOT
+  const R = global.NCH.forPack('creativeloot')
 
   // Botania and CC:Tweaked stay out of village chests (owner 2026-11-03, plan_scratch_bugfix_1103 7.3, SQ-GLD-09). Both
   // inject a nested table in code (Botania LootHandler: temple, toolsmith, weaponsmith; CC:Tweaked CommonHooks:
@@ -24,7 +25,7 @@ LootJS.modifiers(event => {
   L.tables(event, /^minecraft:chests\/village\//)
     .removeLoot('@botania')
     .removeLoot('@computercraft')
-    .logName('CE/loot/removals/village_botania_cc')
+    .logName(R.logName('removals/village_botania_cc'))
 
   // ── context-scoped removals (examples — uncomment & edit) ─────────────────
 
@@ -32,11 +33,11 @@ LootJS.modifiers(event => {
   // L.chestType(event)
   //   .anyStructure(['#minecraft:village'], false)
   //   .removeLoot('minecraft:rotten_flesh')
-  //   .logName('CE/loot/removals/village_flesh')
+  //   .logName(R.logName('removals/village_flesh'))
 
   // no fire charges in Nether chests
   // L.chestType(event)
   //   .anyDimension('minecraft:the_nether')
   //   .removeLoot('minecraft:fire_charge')
-  //   .logName('CE/loot/removals/nether_fire_charge')
+  //   .logName(R.logName('removals/nether_fire_charge'))
 })
