@@ -353,388 +353,388 @@ public final class CDConfig {
 		return Collections.unmodifiableList(ids);
 	}
 
-    /**
-     * Dials for Creative Delight's {@code compat.wthit.WthitCropGrowth} (client-side, display only): the "Growth" line WTHIT
-     * leaves off bushes, vines, hemp, tobacco and fruit-tree leaves.
-     */
-    public static final class CropGrowth {
-        public final ForgeConfigSpec.BooleanValue fallback;
-        public final ForgeConfigSpec.BooleanValue showHarvestable;
+	/**
+	 * Dials for Creative Delight's {@code compat.wthit.WthitCropGrowth} (client-side, display only): the "Growth" line WTHIT
+	 * leaves off bushes, vines, hemp, tobacco and fruit-tree leaves.
+	 */
+	public static final class CropGrowth {
+		public final ForgeConfigSpec.BooleanValue fallback;
+		public final ForgeConfigSpec.BooleanValue showHarvestable;
 
-        private CropGrowth(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla",
-                    "plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in",
-                    "WTHIT's own config, to every other growing plant. The blocks and their stages are in",
-                    "assets/creativedelight/crop_growth.json (override it from kubejs/assets/creativedelight/).",
-                    "Client-side only; reads the block state the client already has. The line is Creative Delight's:",
-                    "its on/off switch is creativedelight-common.toml [qol] wthitCropLine."
-            ).push("crop_growth");
+		private CropGrowth(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla",
+					"plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in",
+					"WTHIT's own config, to every other growing plant. The blocks and their stages are in",
+					"assets/creativedelight/crop_growth.json (override it from kubejs/assets/creativedelight/).",
+					"Client-side only; reads the block state the client already has. The line is Creative Delight's:",
+					"its on/off switch is creativedelight-common.toml [qol] wthitCropLine."
+			).push("crop_growth");
 
-            fallback = b.comment(
-                    "true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in",
-                    "crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from",
-                    "mods added later. false: only the plants in the file."
-            ).define("fallback", true);
+			fallback = b.comment(
+					"true: a bush-type plant (BushBlock, not a sapling) with an integer 'age' that no rule in",
+					"crop_growth.json lists still gets a line, fully grown at its top age. Catches plants from",
+					"mods added later. false: only the plants in the file."
+			).define("fallback", true);
 
-            showHarvestable = b.comment(
-                    "true: plants that can be picked before they are fully grown (salmonberries from stage 3,",
-                    "grapes from stage 2) read 'Growth: 75% (Harvestable)' until they finish. false: the",
-                    "percentage only."
-            ).define("showHarvestable", true);
+			showHarvestable = b.comment(
+					"true: plants that can be picked before they are fully grown (salmonberries from stage 3,",
+					"grapes from stage 2) read 'Growth: 75% (Harvestable)' until they finish. false: the",
+					"percentage only."
+			).define("showHarvestable", true);
 
-            b.pop(); // crop_growth
-        }
-    }
+			b.pop(); // crop_growth
+		}
+	}
 
-    /**
-     * Crop harvest table values read by Creative Delight's {@code rusticdelight/crop_drops.js} and
-     * {@code creativedelight/soil_yield.js} (server side); feature_writeup/crops.md 3. A change needs /reload.
-     */
-    public static final class CropDrops {
-        public final ForgeConfigSpec.BooleanValue bellPeppers;
-        public final ForgeConfigSpec.IntValue redWeight;
-        public final ForgeConfigSpec.IntValue greenWeight;
-        public final ForgeConfigSpec.IntValue yellowWeight;
-        public final ForgeConfigSpec.DoubleValue redBonusChance;
-        public final ForgeConfigSpec.DoubleValue greenBonusChance;
-        public final ForgeConfigSpec.DoubleValue yellowBonusChance;
-        public final SoilYield SOIL_YIELD;
+	/**
+	 * Crop harvest table values read by Creative Delight's {@code rusticdelight/crop_drops.js} and
+	 * {@code creativedelight/soil_yield.js} (server side); feature_writeup/crops.md 3. A change needs /reload.
+	 */
+	public static final class CropDrops {
+		public final ForgeConfigSpec.BooleanValue bellPeppers;
+		public final ForgeConfigSpec.IntValue redWeight;
+		public final ForgeConfigSpec.IntValue greenWeight;
+		public final ForgeConfigSpec.IntValue yellowWeight;
+		public final ForgeConfigSpec.DoubleValue redBonusChance;
+		public final ForgeConfigSpec.DoubleValue greenBonusChance;
+		public final ForgeConfigSpec.DoubleValue yellowBonusChance;
+		public final SoilYield SOIL_YIELD;
 
-        private CropDrops(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Pack changes to crop harvest drops (server side, applied on /reload)."
-            ).push("crop_drops");
+		private CropDrops(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"Pack changes to crop harvest drops (server side, applied on /reload)."
+			).push("crop_drops");
 
-            b.comment(
-                    "Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each",
-                    "color has its own bonus chance for one extra. Each color's share of the picked pepper is",
-                    "weight / (sum of weights). Per harvest, color X averages",
-                    "  weightX / (sum of weights) + bonusChanceX",
-                    "Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red",
-                    "bonus (red about 58% of peppers). A weight of 0 takes the color out of the main roll."
-            ).push("bell_peppers");
+			b.comment(
+					"Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each",
+					"color has its own bonus chance for one extra. Each color's share of the picked pepper is",
+					"weight / (sum of weights). Per harvest, color X averages",
+					"  weightX / (sum of weights) + bonusChanceX",
+					"Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red",
+					"bonus (red about 58% of peppers). A weight of 0 takes the color out of the main roll."
+			).push("bell_peppers");
 
-            bellPeppers = b.comment("true: use the values below. false: the mod's own table, untouched.")
-                    .define("enabled", true);
+			bellPeppers = b.comment("true: use the values below. false: the mod's own table, untouched.")
+					.define("enabled", true);
 
-            redWeight = b.comment("Weight of red in the main roll.")
-                    .defineInRange("redWeight", 1, 0, 100);
-            greenWeight = b.comment("Weight of green in the main roll.")
-                    .defineInRange("greenWeight", 1, 0, 100);
-            yellowWeight = b.comment("Weight of yellow in the main roll.")
-                    .defineInRange("yellowWeight", 1, 0, 100);
+			redWeight = b.comment("Weight of red in the main roll.")
+					.defineInRange("redWeight", 1, 0, 100);
+			greenWeight = b.comment("Weight of green in the main roll.")
+					.defineInRange("greenWeight", 1, 0, 100);
+			yellowWeight = b.comment("Weight of yellow in the main roll.")
+					.defineInRange("yellowWeight", 1, 0, 100);
 
-            redBonusChance = b.comment("Chance [0-1] of one extra red pepper (0.15 = 15%).")
-                    .defineInRange("redBonusChance", 0.15, 0.0, 1.0);
-            greenBonusChance = b.comment("Chance [0-1] of one extra green pepper.")
-                    .defineInRange("greenBonusChance", 0.15, 0.0, 1.0);
-            yellowBonusChance = b.comment("Chance [0-1] of one extra yellow pepper.")
-                    .defineInRange("yellowBonusChance", 0.15, 0.0, 1.0);
+			redBonusChance = b.comment("Chance [0-1] of one extra red pepper (0.15 = 15%).")
+					.defineInRange("redBonusChance", 0.15, 0.0, 1.0);
+			greenBonusChance = b.comment("Chance [0-1] of one extra green pepper.")
+					.defineInRange("greenBonusChance", 0.15, 0.0, 1.0);
+			yellowBonusChance = b.comment("Chance [0-1] of one extra yellow pepper.")
+					.defineInRange("yellowBonusChance", 0.15, 0.0, 1.0);
 
-            b.pop(); // bell_peppers
-            SOIL_YIELD = new SoilYield(b);
-            b.pop(); // crop_drops
-        }
-    }
+			b.pop(); // bell_peppers
+			SOIL_YIELD = new SoilYield(b);
+			b.pop(); // crop_drops
+		}
+	}
 
-    /**
-     * Extra produce from crops grown on better soil (CD {@code creativedelight/soil_yield.js}, applied on /reload).
-     * Each soil adds a pool of bonus x the crop's average produce to a ripe crop's harvest; each crop has its own switch
-     * (all on by default). Ender Crop is out (it only grows on tilled End Stone).
-     * feature_writeup/crop_yields.md.
-     */
-    public static final class SoilYield {
-        /** Crop keys of soil_yield.js's crops() and soil_yield.json, overworld then nether. */
-        public static final String[] CROPS = {
-                "wheat", "carrots", "potatoes", "beetroots", "cabbages", "onions", "tomatoes", "rice",
-                "bell_peppers", "coffee", "cotton", "tobacco", "flax", "hemp", "corn", "cave_carrots",
-                "broccoli", "cauliflower", "garlic", "sweet_potato", "turnip", "zucchini", "cucumber", "oats",
-                "peanuts", "adzuki",
-                // nether (wave 2): Rich Soul Soil and Fertile Soul Soil (Nulch)
-                "nether_wart", "ghost_pepper", "propelplant", "crimson_fungus_colony", "warped_fungus_colony"
-        };
-        /** Bush keys (wave 2): picked bushes, own pick and break. */
-        public static final String[] BUSHES = {
-                "strawberry", "blueberry", "cranberry", "lemon", "sweet_berry", "salmonberry"
-        };
+	/**
+	 * Extra produce from crops grown on better soil (CD {@code creativedelight/soil_yield.js}, applied on /reload).
+	 * Each soil adds a pool of bonus x the crop's average produce to a ripe crop's harvest; each crop has its own switch
+	 * (all on by default). Ender Crop is out (it only grows on tilled End Stone).
+	 * feature_writeup/crop_yields.md.
+	 */
+	public static final class SoilYield {
+		/** Crop keys of soil_yield.js's crops() and soil_yield.json, overworld then nether. */
+		public static final String[] CROPS = {
+				"wheat", "carrots", "potatoes", "beetroots", "cabbages", "onions", "tomatoes", "rice",
+				"bell_peppers", "coffee", "cotton", "tobacco", "flax", "hemp", "corn", "cave_carrots",
+				"broccoli", "cauliflower", "garlic", "sweet_potato", "turnip", "zucchini", "cucumber", "oats",
+				"peanuts", "adzuki",
+				// nether (wave 2): Rich Soul Soil and Fertile Soul Soil (Nulch)
+				"nether_wart", "ghost_pepper", "propelplant", "crimson_fungus_colony", "warped_fungus_colony"
+		};
+		/** Bush keys (wave 2): picked bushes, own pick and break. */
+		public static final String[] BUSHES = {
+				"strawberry", "blueberry", "cranberry", "lemon", "sweet_berry", "salmonberry"
+		};
 
-        public final ForgeConfigSpec.DoubleValue farmlandBonus;
-        public final ForgeConfigSpec.DoubleValue richFarmlandBonus;
-        public final ForgeConfigSpec.DoubleValue fertileSoilBonus;
-        public final ForgeConfigSpec.DoubleValue richSoilBonus;
-        public final ForgeConfigSpec.DoubleValue richSoulSoilBonus;
-        public final ForgeConfigSpec.DoubleValue fertileSoulSoilBonus;
-        public final Map<String, ForgeConfigSpec.BooleanValue> crop = new java.util.LinkedHashMap<>();
-        public final Map<String, ForgeConfigSpec.BooleanValue> bush = new java.util.LinkedHashMap<>();
+		public final ForgeConfigSpec.DoubleValue farmlandBonus;
+		public final ForgeConfigSpec.DoubleValue richFarmlandBonus;
+		public final ForgeConfigSpec.DoubleValue fertileSoilBonus;
+		public final ForgeConfigSpec.DoubleValue richSoilBonus;
+		public final ForgeConfigSpec.DoubleValue richSoulSoilBonus;
+		public final ForgeConfigSpec.DoubleValue fertileSoulSoilBonus;
+		public final Map<String, ForgeConfigSpec.BooleanValue> crop = new java.util.LinkedHashMap<>();
+		public final Map<String, ForgeConfigSpec.BooleanValue> bush = new java.util.LinkedHashMap<>();
 
-        private SoilYield(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Extra produce on better soil. A ripe crop whose block below is the soil gets one extra pool sized",
-                    "to 'bonus' x the crop's average produce (seeds are not included): 0.33 = about a third more.",
-                    "A crop that drops one item gets a 'bonus' chance of one more; a crop with a variable count gets",
-                    "its average raised by the same share (the average rounded to the nearest 0.5). The crop's own drops",
-                    "are unchanged. 0 = nothing for that soil. Own right-click picks (tomato vines, cucumber, bushes)",
-                    "and fungus colony shearing get the same extra. Fortune never changes a crop's yield.",
-                    "Each crop is switched on in [crop_drops.soil_yield.crops], each bush in [crop_drops.soil_yield.bushes].",
-                    "feature_writeup/crop_yields.md lists every crop's drops."
-            ).push("soil_yield");
+		private SoilYield(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"Extra produce on better soil. A ripe crop whose block below is the soil gets one extra pool sized",
+					"to 'bonus' x the crop's average produce (seeds are not included): 0.33 = about a third more.",
+					"A crop that drops one item gets a 'bonus' chance of one more; a crop with a variable count gets",
+					"its average raised by the same share (the average rounded to the nearest 0.5). The crop's own drops",
+					"are unchanged. 0 = nothing for that soil. Own right-click picks (tomato vines, cucumber, bushes)",
+					"and fungus colony shearing get the same extra. Fortune never changes a crop's yield.",
+					"Each crop is switched on in [crop_drops.soil_yield.crops], each bush in [crop_drops.soil_yield.bushes].",
+					"feature_writeup/crop_yields.md lists every crop's drops."
+			).push("soil_yield");
 
-            farmlandBonus = b.comment("Vanilla farmland: share of extra produce.").defineInRange("farmlandBonus", 0.0, 0.0, 4.0);
-            richFarmlandBonus = b.comment("Rich Soil Farmland: share of extra produce.").defineInRange("richFarmlandBonus", 0.33, 0.0, 4.0);
-            fertileSoilBonus = b.comment("Fertile Soil (Immersive Weathering mulch): share of extra produce.").defineInRange("fertileSoilBonus", 0.66, 0.0, 4.0);
-            richSoilBonus = b.comment("Untilled Rich Soil (rice, adzuki and bushes grow on it): share of extra produce. Equal to Rich Soil Farmland on purpose.").defineInRange("richSoilBonus", 0.33, 0.0, 4.0);
-            richSoulSoilBonus = b.comment("Rich Soul Soil (nether crops): share of extra produce.").defineInRange("richSoulSoilBonus", 0.33, 0.0, 4.0);
-            fertileSoulSoilBonus = b.comment("Fertile Soul Soil (Immersive Weathering nulch, nether crops): share of extra produce.").defineInRange("fertileSoulSoilBonus", 0.66, 0.0, 4.0);
+			farmlandBonus = b.comment("Vanilla farmland: share of extra produce.").defineInRange("farmlandBonus", 0.0, 0.0, 4.0);
+			richFarmlandBonus = b.comment("Rich Soil Farmland: share of extra produce.").defineInRange("richFarmlandBonus", 0.33, 0.0, 4.0);
+			fertileSoilBonus = b.comment("Fertile Soil (Immersive Weathering mulch): share of extra produce.").defineInRange("fertileSoilBonus", 0.66, 0.0, 4.0);
+			richSoilBonus = b.comment("Untilled Rich Soil (rice, adzuki and bushes grow on it): share of extra produce. Equal to Rich Soil Farmland on purpose.").defineInRange("richSoilBonus", 0.33, 0.0, 4.0);
+			richSoulSoilBonus = b.comment("Rich Soul Soil (nether crops): share of extra produce.").defineInRange("richSoulSoilBonus", 0.33, 0.0, 4.0);
+			fertileSoulSoilBonus = b.comment("Fertile Soul Soil (Immersive Weathering nulch, nether crops): share of extra produce.").defineInRange("fertileSoulSoilBonus", 0.66, 0.0, 4.0);
 
-            b.comment("true: the crop gets the soil pools above. false: its drops are the same on every soil.").push("crops");
-            for (String key : CROPS) {
-                crop.put(key, b.define(key, true));
-            }
-            b.pop(); // crops
-            b.comment("true: the bush gets the soil extra on its own pick and on breaking it. false: the same on every soil.").push("bushes");
-            for (String key : BUSHES) {
-                bush.put(key, b.define(key, true));
-            }
-            b.pop(2); // bushes, soil_yield
-        }
+			b.comment("true: the crop gets the soil pools above. false: its drops are the same on every soil.").push("crops");
+			for (String key : CROPS) {
+				crop.put(key, b.define(key, true));
+			}
+			b.pop(); // crops
+			b.comment("true: the bush gets the soil extra on its own pick and on breaking it. false: the same on every soil.").push("bushes");
+			for (String key : BUSHES) {
+				bush.put(key, b.define(key, true));
+			}
+			b.pop(2); // bushes, soil_yield
+		}
 
-        /** The crop's or bush's switch, or null for a key the config does not have. */
-        public Boolean cropOn(String key) {
-            ForgeConfigSpec.BooleanValue v = crop.get(key);
-            if (v == null) v = bush.get(key);
-            return v == null ? null : v.get();
-        }
+		/** The crop's or bush's switch, or null for a key the config does not have. */
+		public Boolean cropOn(String key) {
+			ForgeConfigSpec.BooleanValue v = crop.get(key);
+			if (v == null) v = bush.get(key);
+			return v == null ? null : v.get();
+		}
 
-        /** A soil's bonus by its key name (soil_yield.json 'soils'); 0 for an unknown name. */
-        public double bonus(String name) {
-            return switch (name) {
-                case "farmlandBonus" -> farmlandBonus.get();
-                case "richFarmlandBonus" -> richFarmlandBonus.get();
-                case "fertileSoilBonus" -> fertileSoilBonus.get();
-                case "richSoilBonus" -> richSoilBonus.get();
-                case "richSoulSoilBonus" -> richSoulSoilBonus.get();
-                case "fertileSoulSoilBonus" -> fertileSoulSoilBonus.get();
-                default -> 0.0;
-            };
-        }
-    }
+		/** A soil's bonus by its key name (soil_yield.json 'soils'); 0 for an unknown name. */
+		public double bonus(String name) {
+			return switch (name) {
+				case "farmlandBonus" -> farmlandBonus.get();
+				case "richFarmlandBonus" -> richFarmlandBonus.get();
+				case "fertileSoilBonus" -> fertileSoilBonus.get();
+				case "richSoilBonus" -> richSoilBonus.get();
+				case "richSoulSoilBonus" -> richSoulSoilBonus.get();
+				case "fertileSoulSoilBonus" -> fertileSoulSoilBonus.get();
+				default -> 0.0;
+			};
+		}
+	}
 
-    /**
-     * Extra fruit on melon, pumpkin and other stems ({@code crops.StemExtraFruit},
-     * {@code mixin/AttachedStemExtraFruitMixin}); feature_writeup/crops.md 2.10. Read on every random tick.
-     */
-    public static final class StemFruit {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.IntValue maxFruits;
-        public final ForgeConfigSpec.IntValue secondFruitMinutes;
-        public final ForgeConfigSpec.IntValue thirdFruitMinutes;
-        public final ForgeConfigSpec.IntValue fourthFruitMinutes;
-        public final ForgeConfigSpec.BooleanValue fertileSoilBoost;
+	/**
+	 * Extra fruit on melon, pumpkin and other stems ({@code crops.StemExtraFruit},
+	 * {@code mixin/AttachedStemExtraFruitMixin}); feature_writeup/crops.md 2.10. Read on every random tick.
+	 */
+	public static final class StemFruit {
+		public final ForgeConfigSpec.BooleanValue enabled;
+		public final ForgeConfigSpec.IntValue maxFruits;
+		public final ForgeConfigSpec.IntValue secondFruitMinutes;
+		public final ForgeConfigSpec.IntValue thirdFruitMinutes;
+		public final ForgeConfigSpec.IntValue fourthFruitMinutes;
+		public final ForgeConfigSpec.BooleanValue fertileSoilBoost;
 
-        private StemFruit(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free",
-                    "sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and",
-                    "hydration count the same) and also waits a minimum time since the stem's last fruit. The",
-                    "wait counts from the first random tick after a fruit grows. When the fruit the stem faces is",
-                    "taken, the stem turns to another of its fruits instead of back into a plain stem. Server side."
-            ).push("stem_fruit");
+		private StemFruit(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"A stem that has grown its fruit (melon, pumpkin, hamimelon) can grow more on its other free",
+					"sides, one at a time. Each extra fruit uses vanilla's stem growth roll (light, soil and",
+					"hydration count the same) and also waits a minimum time since the stem's last fruit. The",
+					"wait counts from the first random tick after a fruit grows. When the fruit the stem faces is",
+					"taken, the stem turns to another of its fruits instead of back into a plain stem. Server side."
+			).push("stem_fruit");
 
-            enabled = b.comment("Master on/off switch. Off = vanilla (one fruit per stem).")
-                    .define("enabled", true);
-            maxFruits = b.comment("Most fruits next to one stem (1 = vanilla, 4 = every side).")
-                    .defineInRange("maxFruits", 4, 1, 4);
-            secondFruitMinutes = b.comment("Minimum game minutes (1200 ticks) after the first fruit before a 2nd can grow.")
-                    .defineInRange("secondFruitMinutes", 10, 0, 1440);
-            thirdFruitMinutes = b.comment("Minimum game minutes after the 2nd fruit before a 3rd can grow.")
-                    .defineInRange("thirdFruitMinutes", 20, 0, 1440);
-            fourthFruitMinutes = b.comment("Minimum game minutes after the 3rd fruit before a 4th can grow.")
-                    .defineInRange("fourthFruitMinutes", 40, 0, 1440);
-            fertileSoilBoost = b.comment(
-                    "true: a stem on soaked Fertile Soil gets Immersive Weathering's extra random ticks",
-                    "(mulch_growth_random_ticks, 10 per soil tick). false: no extra ticks; Fertile Soil still counts",
-                    "as moist farmland for the stem's own growth roll. Melon, pumpkin and cantaloupe stems alike."
-            ).define("fertileSoilBoost", false);
+			enabled = b.comment("Master on/off switch. Off = vanilla (one fruit per stem).")
+					.define("enabled", true);
+			maxFruits = b.comment("Most fruits next to one stem (1 = vanilla, 4 = every side).")
+					.defineInRange("maxFruits", 4, 1, 4);
+			secondFruitMinutes = b.comment("Minimum game minutes (1200 ticks) after the first fruit before a 2nd can grow.")
+					.defineInRange("secondFruitMinutes", 10, 0, 1440);
+			thirdFruitMinutes = b.comment("Minimum game minutes after the 2nd fruit before a 3rd can grow.")
+					.defineInRange("thirdFruitMinutes", 20, 0, 1440);
+			fourthFruitMinutes = b.comment("Minimum game minutes after the 3rd fruit before a 4th can grow.")
+					.defineInRange("fourthFruitMinutes", 40, 0, 1440);
+			fertileSoilBoost = b.comment(
+					"true: a stem on soaked Fertile Soil gets Immersive Weathering's extra random ticks",
+					"(mulch_growth_random_ticks, 10 per soil tick). false: no extra ticks; Fertile Soil still counts",
+					"as moist farmland for the stem's own growth roll. Melon, pumpkin and cantaloupe stems alike."
+			).define("fertileSoilBoost", false);
 
-            b.pop(); // stem_fruit
-        }
-    }
+			b.pop(); // stem_fruit
+		}
+	}
 
-    /**
-     * A plain Dandelion planted on Rich Soil, Rich Soil Farmland or Fertile Soil turns into a Mature Dandelion
-     * (Veggies Delight) on the soil's random ticks ({@code crops.DandelionMaturing}). Each value is "on average one
-     * conversion per N random ticks of the soil block"; a block gets roughly one random tick a minute at the default
-     * randomTickSpeed, so 10 is about ten minutes. 0 turns that soil off.
-     */
-    public static final class DandelionMaturing {
-        public final ForgeConfigSpec.IntValue richSoilTicks;
-        public final ForgeConfigSpec.IntValue fertileSoilTicks;
+	/**
+	 * A plain Dandelion planted on Rich Soil, Rich Soil Farmland or Fertile Soil turns into a Mature Dandelion
+	 * (Veggies Delight) on the soil's random ticks ({@code crops.DandelionMaturing}). Each value is "on average one
+	 * conversion per N random ticks of the soil block"; a block gets roughly one random tick a minute at the default
+	 * randomTickSpeed, so 10 is about ten minutes. 0 turns that soil off.
+	 */
+	public static final class DandelionMaturing {
+		public final ForgeConfigSpec.IntValue richSoilTicks;
+		public final ForgeConfigSpec.IntValue fertileSoilTicks;
 
-        private DandelionMaturing(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Plain Dandelions mature into Mature Dandelions when planted on Rich Soil / Rich Soil Farmland",
-                    "or Fertile Soil. Values are the average number of soil random ticks per conversion",
-                    "(about one random tick a minute per block at the default randomTickSpeed). 0 = off for that soil.",
-                    "Takes effect immediately."
-            ).push("dandelion_maturing");
+		private DandelionMaturing(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"Plain Dandelions mature into Mature Dandelions when planted on Rich Soil / Rich Soil Farmland",
+					"or Fertile Soil. Values are the average number of soil random ticks per conversion",
+					"(about one random tick a minute per block at the default randomTickSpeed). 0 = off for that soil.",
+					"Takes effect immediately."
+			).push("dandelion_maturing");
 
-            richSoilTicks = b.comment("Rich Soil and Rich Soil Farmland (Farmer's Delight).")
-                    .defineInRange("richSoilTicks", 10, 0, 100000);
-            fertileSoilTicks = b.comment("Fertile Soil (Immersive Weathering's mulch block).")
-                    .defineInRange("fertileSoilTicks", 5, 0, 100000);
+			richSoilTicks = b.comment("Rich Soil and Rich Soil Farmland (Farmer's Delight).")
+					.defineInRange("richSoilTicks", 10, 0, 100000);
+			fertileSoilTicks = b.comment("Fertile Soil (Immersive Weathering's mulch block).")
+					.defineInRange("fertileSoilTicks", 5, 0, 100000);
 
-            b.pop(); // dandelion_maturing
-        }
-    }
+			b.pop(); // dandelion_maturing
+		}
+	}
 
-    /**
-     * Remainder buffer on FD-style stations (cooking pot, Farmer's Respite kettle, oven): ingredient leftovers stay
-     * in the station. {@code cooking.RemainderBuffer}; feature_writeup/remainder_buffer.md. The pot and kettle hooks
-     * are Creative Delight's (QoL-1, switch {@code [qol] remainderBuffer}); {@code remainderBuffer} here is the oven's,
-     * the other dials are shared.
-     */
-    public static final class Cooking {
-        public final ForgeConfigSpec.BooleanValue remainderBuffer;
-        public final ForgeConfigSpec.BooleanValue stallWhenFull;
-        public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
-        public final ForgeConfigSpec.IntValue recycleShowTicks;
-        public final ForgeConfigSpec.IntValue kettleBrewTicks;
+	/**
+	 * Remainder buffer on FD-style stations (cooking pot, Farmer's Respite kettle, oven): ingredient leftovers stay
+	 * in the station. {@code cooking.RemainderBuffer}; feature_writeup/remainder_buffer.md. The pot and kettle hooks
+	 * are Creative Delight's (QoL-1, switch {@code [qol] remainderBuffer}); {@code remainderBuffer} here is the oven's,
+	 * the other dials are shared.
+	 */
+	public static final class Cooking {
+		public final ForgeConfigSpec.BooleanValue remainderBuffer;
+		public final ForgeConfigSpec.BooleanValue stallWhenFull;
+		public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
+		public final ForgeConfigSpec.IntValue recycleShowTicks;
+		public final ForgeConfigSpec.IntValue kettleBrewTicks;
 
-        private Cooking(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the",
-                    "Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the",
-                    "container slot; the rest goes to two leftover slots right of the output, which hoppers and",
-                    "funnels on the output faces can empty."
-            ).push("cooking");
+		private Cooking(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the",
+					"Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the",
+					"container slot; the rest goes to two leftover slots right of the output, which hoppers and",
+					"funnels on the output faces can empty."
+			).push("cooking");
 
-            remainderBuffer = b.comment("Oven only. Off = its leftovers are thrown out of the front. The pot and kettle",
-                    "switch is creativedelight-common.toml [qol] remainderBuffer.")
-                    .define("remainderBuffer", true);
+			remainderBuffer = b.comment("Oven only. Off = its leftovers are thrown out of the front. The pot and kettle",
+					"switch is creativedelight-common.toml [qol] remainderBuffer.")
+					.define("remainderBuffer", true);
 
-            stallWhenFull = b.comment(
-                    "On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).",
-                    "Off = it crafts anyway and throws what doesn't fit."
-            ).define("stallWhenFull", true);
+			stallWhenFull = b.comment(
+					"On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).",
+					"Off = it crafts anyway and throws what doesn't fit."
+			).define("stallWhenFull", true);
 
-            ovenIngredientCounts = b.comment(
-                    "On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat",
-                    "stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every",
-                    "ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of",
-                    "their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload."
-            ).define("ovenIngredientCounts", false);
+			ovenIngredientCounts = b.comment(
+					"On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat",
+					"stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every",
+					"ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of",
+					"their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload."
+			).define("ovenIngredientCounts", false);
 
-            recycleShowTicks = b.comment(
-                    "Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's",
-                    "bottle) stays visible there before the meal is plated with it, so the step can be seen.",
-                    "0 = plate at once. Containers a player or hopper puts in plate at once either way."
-            ).defineInRange("recycleShowTicks", 10, 0, 100);
+			recycleShowTicks = b.comment(
+					"Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's",
+					"bottle) stays visible there before the meal is plated with it, so the step can be seen.",
+					"0 = plate at once. Containers a player or hopper puts in plate at once either way."
+			).defineInRange("recycleShowTicks", 10, 0, 100);
 
-            kettleBrewTicks = b.comment(
-                    "Ticks one Farmer's Respite Kettle brew takes (20 = 1 s) for every recipe that names no time of its",
-                    "own (all of the pack's Kettle recipes). Read when recipes load: /reload to apply."
-            ).defineInRange("kettleBrewTicks", 600, 1, 72000);
+			kettleBrewTicks = b.comment(
+					"Ticks one Farmer's Respite Kettle brew takes (20 = 1 s) for every recipe that names no time of its",
+					"own (all of the pack's Kettle recipes). Read when recipes load: /reload to apply."
+			).defineInRange("kettleBrewTicks", 600, 1, 72000);
 
-            b.pop(); // cooking
-        }
-    }
+			b.pop(); // cooking
+		}
+	}
 
-    /**
-     * Dials for multi-serving cans ({@code food.CanServings}). How many servings a can holds is
-     * NOT here: it comes from the {@code #creativedelight:cans/servings/<n>} item tags, set in
-     * KubeJS from the {@code kubejs_startup/<mod>/can_servings.js} member scripts (tools/gen_can_types.py).
-     */
-    public static final class Canning {
-        public final ForgeConfigSpec.BooleanValue enabled;
-        public final ForgeConfigSpec.DoubleValue emptyCanChance;
-        public final ForgeConfigSpec.DoubleValue crushedCanChance;
-        public final ForgeConfigSpec.ConfigValue<String> emptyCanItem;
-        public final ForgeConfigSpec.ConfigValue<String> crushedCanItem;
+	/**
+	 * Dials for multi-serving cans ({@code food.CanServings}). How many servings a can holds is
+	 * NOT here: it comes from the {@code #creativedelight:cans/servings/<n>} item tags, set in
+	 * KubeJS from the {@code kubejs_startup/<mod>/can_servings.js} member scripts (tools/gen_can_types.py).
+	 */
+	public static final class Canning {
+		public final ForgeConfigSpec.BooleanValue enabled;
+		public final ForgeConfigSpec.DoubleValue emptyCanChance;
+		public final ForgeConfigSpec.DoubleValue crushedCanChance;
+		public final ForgeConfigSpec.ConfigValue<String> emptyCanItem;
+		public final ForgeConfigSpec.ConfigValue<String> crushedCanItem;
 
-        private Canning(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Cans in #creativedelight:cans/servings/<n> hold n servings. Eating or crafting with",
-                    "one takes a serving; the servings left show as a durability bar and a tooltip line. The",
-                    "last serving leaves an empty can, a crushed can or nothing, rolled with the chances below."
-            ).push("canning");
+		private Canning(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"Cans in #creativedelight:cans/servings/<n> hold n servings. Eating or crafting with",
+					"one takes a serving; the servings left show as a durability bar and a tooltip line. The",
+					"last serving leaves an empty can, a crushed can or nothing, rolled with the chances below."
+			).push("canning");
 
-            enabled = b.comment("Off = every can behaves like the Canned Goods original (one serving, always an empty can).")
-                    .define("enabled", true);
+			enabled = b.comment("Off = every can behaves like the Canned Goods original (one serving, always an empty can).")
+					.define("enabled", true);
 
-            emptyCanChance = b.comment("Chance [0-1] that an emptied can comes back as an empty can.")
-                    .defineInRange("emptyCanChance", 0.7, 0.0, 1.0);
+			emptyCanChance = b.comment("Chance [0-1] that an emptied can comes back as an empty can.")
+					.defineInRange("emptyCanChance", 0.7, 0.0, 1.0);
 
-            crushedCanChance = b.comment(
-                    "Chance [0-1] that it comes back as a crushed can instead. Whatever is left after both",
-                    "chances gives nothing; if the two add up past 1, the crushed chance is cut to fit."
-            ).defineInRange("crushedCanChance", 0.25, 0.0, 1.0);
+			crushedCanChance = b.comment(
+					"Chance [0-1] that it comes back as a crushed can instead. Whatever is left after both",
+					"chances gives nothing; if the two add up past 1, the crushed chance is cut to fit."
+			).defineInRange("crushedCanChance", 0.25, 0.0, 1.0);
 
-            emptyCanItem = b.comment("Item id handed back as the empty can.")
-                    .define("emptyCanItem", "canned_goods:empty_can");
+			emptyCanItem = b.comment("Item id handed back as the empty can.")
+					.define("emptyCanItem", "canned_goods:empty_can");
 
-            crushedCanItem = b.comment("Item id handed back as the crushed can.")
-                    .define("crushedCanItem", "canned_goods:crushed_empty_can");
+			crushedCanItem = b.comment("Item id handed back as the crushed can.")
+					.define("crushedCanItem", "canned_goods:crushed_empty_can");
 
-            b.pop(); // canning
-        }
-    }
+			b.pop(); // canning
+		}
+	}
 
-    /**
-     * The Quark feeding trough throttle, the one {@code [perf]} key that is Creative Delight's (it was in patcherMod's
-     * {@code [perf]}; same name and comment). Read live.
-     */
-    public static final class Perf {
-        public final ForgeConfigSpec.IntValue troughMissCooldownTicks;
+	/**
+	 * The Quark feeding trough throttle, the one {@code [perf]} key that is Creative Delight's (it was in patcherMod's
+	 * {@code [perf]}; same name and comment). Read live.
+	 */
+	public static final class Perf {
+		public final ForgeConfigSpec.IntValue troughMissCooldownTicks;
 
-        private Perf(ForgeConfigSpec.Builder b) {
-            b.comment("Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.")
-                    .push("perf");
+		private Perf(ForgeConfigSpec.Builder b) {
+			b.comment("Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.")
+					.push("perf");
 
-            troughMissCooldownTicks = b.comment(
-                    "Quark feeding trough: after an animal's trough search finds nothing, it does not search again for",
-                    "this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a",
-                    "hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or",
-                    "refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behavior)."
-            ).defineInRange("troughMissCooldownTicks", 600, 0, 72000);
+			troughMissCooldownTicks = b.comment(
+					"Quark feeding trough: after an animal's trough search finds nothing, it does not search again for",
+					"this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a",
+					"hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or",
+					"refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behavior)."
+			).defineInRange("troughMissCooldownTicks", 600, 0, 72000);
 
-            b.pop(); // perf
-        }
-    }
+			b.pop(); // perf
+		}
+	}
 
-    /**
-     * The pack seasoning cap ({@code food.Seasonings}, feature_writeup/seasonings.md 2): how many seasonings one food may
-     * carry, and whether station seasonings ({@code grilled}, put on by the Barbeque's Delight Grill) count. Salt's
-     * {@code Salted} is separate and never counts. Read live.
-     */
-    public static final class Food {
-        private final ForgeConfigSpec.IntValue maxSeasonings;
-        private final ForgeConfigSpec.BooleanValue grilledCountsTowardMax;
+	/**
+	 * The pack seasoning cap ({@code food.Seasonings}, feature_writeup/seasonings.md 2): how many seasonings one food may
+	 * carry, and whether station seasonings ({@code grilled}, put on by the Barbeque's Delight Grill) count. Salt's
+	 * {@code Salted} is separate and never counts. Read live.
+	 */
+	public static final class Food {
+		private final ForgeConfigSpec.IntValue maxSeasonings;
+		private final ForgeConfigSpec.BooleanValue grilledCountsTowardMax;
 
-        private Food(ForgeConfigSpec.Builder b) {
-            b.comment("Pack seasonings (crafted onto food, feature_writeup/seasonings.md).").push("food");
+		private Food(ForgeConfigSpec.Builder b) {
+			b.comment("Pack seasonings (crafted onto food, feature_writeup/seasonings.md).").push("food");
 
-            maxSeasonings = b.comment(
-                    "Most seasonings one food may carry. A seasoning craft that would go past it does not match.",
-                    "Which pairs may share a food is still each seasoning's combines list. Salt does not count."
-            ).defineInRange("maxSeasonings", 2, 1, 16);
+			maxSeasonings = b.comment(
+					"Most seasonings one food may carry. A seasoning craft that would go past it does not match.",
+					"Which pairs may share a food is still each seasoning's combines list. Salt does not count."
+			).defineInRange("maxSeasonings", 2, 1, 16);
 
-            grilledCountsTowardMax = b.comment(
-                    "On = Grilled (put on by the Barbeque's Delight Grill) counts toward maxSeasonings, and the Grill",
-                    "does not add it to a skewer that is already full. Off = it never counts."
-            ).define("grilledCountsTowardMax", false);
+			grilledCountsTowardMax = b.comment(
+					"On = Grilled (put on by the Barbeque's Delight Grill) counts toward maxSeasonings, and the Grill",
+					"does not add it to a skewer that is already full. Off = it never counts."
+			).define("grilledCountsTowardMax", false);
 
-            b.pop(); // food
-        }
+			b.pop(); // food
+		}
 
-        public int maxSeasonings() {
-            return SPEC.isLoaded() ? maxSeasonings.get() : 2;
-        }
+		public int maxSeasonings() {
+			return SPEC.isLoaded() ? maxSeasonings.get() : 2;
+		}
 
-        public boolean grilledCountsTowardMax() {
-            return SPEC.isLoaded() && grilledCountsTowardMax.get();
-        }
-    }
+		public boolean grilledCountsTowardMax() {
+			return SPEC.isLoaded() && grilledCountsTowardMax.get();
+		}
+	}
 
 	/**
 	 * Rain puts out campfires ({@code campfire.CampfireRain}, {@code mixin/minecraft/CampfireRainMixin}) and the

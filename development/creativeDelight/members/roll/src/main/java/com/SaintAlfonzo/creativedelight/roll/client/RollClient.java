@@ -13,19 +13,19 @@ import net.minecraftforge.event.entity.player.ItemTooltipEvent;
  * chopsticks lengthen (read from the food at tooltip time, so it follows later value changes).
  */
 public final class RollClient {
-    private RollClient() {
-    }
+	private RollClient() {
+	}
 
-    public static void register() {
-        MinecraftForge.EVENT_BUS.addListener(RollClient::onTooltip);
-    }
+	public static void register() {
+		MinecraftForge.EVENT_BUS.addListener(RollClient::onTooltip);
+	}
 
-    private static void onTooltip(ItemTooltipEvent event) {
-        ItemStack stack = event.getItemStack();
-        if (!stack.is(Chopsticks.FOODS)) return;
-        FoodProperties food = stack.getFoodProperties(event.getEntity());
-        boolean lengthens = food != null && food.getEffects().stream().anyMatch(e -> e.getFirst() != null && !e.getFirst().getEffect().isInstantenous());
-        event.getToolTip().add(Component.translatable(lengthens ? "tooltip.roll_delight.chopstick_food.effects" : "tooltip.roll_delight.chopstick_food")
-                .withStyle(ChatFormatting.GRAY));
-    }
+	private static void onTooltip(ItemTooltipEvent event) {
+		ItemStack stack = event.getItemStack();
+		if (!stack.is(Chopsticks.FOODS)) return;
+		FoodProperties food = stack.getFoodProperties(event.getEntity());
+		boolean lengthens = food != null && food.getEffects().stream().anyMatch(e -> e.getFirst() != null && !e.getFirst().getEffect().isInstantenous());
+		event.getToolTip().add(Component.translatable(lengthens ? "tooltip.roll_delight.chopstick_food.effects" : "tooltip.roll_delight.chopstick_food")
+				.withStyle(ChatFormatting.GRAY));
+	}
 }

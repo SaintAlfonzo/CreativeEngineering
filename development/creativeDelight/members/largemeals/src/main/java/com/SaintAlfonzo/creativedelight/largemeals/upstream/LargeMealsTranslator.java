@@ -20,53 +20,53 @@ import java.util.Map;
  * {@code servings} properties.
  */
 public final class LargeMealsTranslator {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final String LANG = "assets/largemeals/lang/en_us.json";
-    /** Names fixed or added by the port (D6, large_meals.md 3.5 B1) and the tab name. */
-    private static final Map<String, String> LANG_SET = Map.of(
-            "item.largemeals.mushroom_pot_pie", "Bowl of Mushroom Pot Pie",
-            "item.largemeals.roasted_mutton_rack", "Bowl of Roasted Rack of Mutton",
-            "itemGroup.largemeals", "Large Meals");
-    private static final List<String> LANG_DROP = List.of("largemeals.advancement.get_mutton_rack", "largemeals.advancement.get_mutton_rack.desc");
-    private static final List<String> DATA_KEEP = List.of("data/largemeals/loot_tables/", "data/largemeals/loot_modifiers/",
-            "data/forge/loot_modifiers/");
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+	private static final String LANG = "assets/largemeals/lang/en_us.json";
+	/** Names fixed or added by the port (D6, large_meals.md 3.5 B1) and the tab name. */
+	private static final Map<String, String> LANG_SET = Map.of(
+			"item.largemeals.mushroom_pot_pie", "Bowl of Mushroom Pot Pie",
+			"item.largemeals.roasted_mutton_rack", "Bowl of Roasted Rack of Mutton",
+			"itemGroup.largemeals", "Large Meals");
+	private static final List<String> LANG_DROP = List.of("largemeals.advancement.get_mutton_rack", "largemeals.advancement.get_mutton_rack.desc");
+	private static final List<String> DATA_KEEP = List.of("data/largemeals/loot_tables/", "data/largemeals/loot_modifiers/",
+			"data/forge/loot_modifiers/");
 
-    private static Map<String, byte[]> assets;
-    private static Map<String, byte[]> data;
+	private static Map<String, byte[]> assets;
+	private static Map<String, byte[]> data;
 
-    private LargeMealsTranslator() {
-    }
+	private LargeMealsTranslator() {
+	}
 
-    public static synchronized Map<String, byte[]> assets() {
-        if (assets == null) {
-            assets = new HashMap<>();
-            UpstreamJars.largemeals130().forEach((path, bytes) -> {
-                if (!path.startsWith("assets/")) return;
-                if (path.equals(LANG)) bytes = lang(bytes);
-                else if (path.startsWith("assets/largemeals/lang/") && !path.equals(LANG)) return;
-                assets.put(path, bytes);
-            });
-            LargeMealsMod.LOGGER.info("Large Meals upstream assets: {} files", assets.size());
-        }
-        return assets;
-    }
+	public static synchronized Map<String, byte[]> assets() {
+		if (assets == null) {
+			assets = new HashMap<>();
+			UpstreamJars.largemeals130().forEach((path, bytes) -> {
+				if (!path.startsWith("assets/")) return;
+				if (path.equals(LANG)) bytes = lang(bytes);
+				else if (path.startsWith("assets/largemeals/lang/") && !path.equals(LANG)) return;
+				assets.put(path, bytes);
+			});
+			LargeMealsMod.LOGGER.info("Large Meals upstream assets: {} files", assets.size());
+		}
+		return assets;
+	}
 
-    public static synchronized Map<String, byte[]> data() {
-        if (data == null) {
-            data = new HashMap<>();
-            UpstreamJars.largemeals130().forEach((path, bytes) -> {
-                if (DATA_KEEP.stream().anyMatch(path::startsWith)) data.put(path, bytes);
-            });
-        }
-        return data;
-    }
+	public static synchronized Map<String, byte[]> data() {
+		if (data == null) {
+			data = new HashMap<>();
+			UpstreamJars.largemeals130().forEach((path, bytes) -> {
+				if (DATA_KEEP.stream().anyMatch(path::startsWith)) data.put(path, bytes);
+			});
+		}
+		return data;
+	}
 
-    private static byte[] lang(byte[] bytes) {
-        String text = new String(bytes, StandardCharsets.UTF_8);
-        if (text.startsWith("﻿")) text = text.substring(1);
-        JsonObject lang = JsonParser.parseString(text).getAsJsonObject();
-        LANG_DROP.forEach(lang::remove);
-        LANG_SET.forEach(lang::addProperty);
-        return GSON.toJson(lang).getBytes(StandardCharsets.UTF_8);
-    }
+	private static byte[] lang(byte[] bytes) {
+		String text = new String(bytes, StandardCharsets.UTF_8);
+		if (text.startsWith("﻿")) text = text.substring(1);
+		JsonObject lang = JsonParser.parseString(text).getAsJsonObject();
+		LANG_DROP.forEach(lang::remove);
+		LANG_SET.forEach(lang::addProperty);
+		return GSON.toJson(lang).getBytes(StandardCharsets.UTF_8);
+	}
 }

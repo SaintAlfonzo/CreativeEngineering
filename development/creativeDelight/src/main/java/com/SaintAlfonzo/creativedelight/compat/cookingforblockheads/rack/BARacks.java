@@ -27,52 +27,52 @@ import org.slf4j.Logger;
  * table finds them), whose valid-block sets only name CfB's two blocks; {@link #allowOnBlockEntityTypes} adds ours.
  */
 public final class BARacks {
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, CfbCompartment.NAMESPACE);
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, CfbCompartment.NAMESPACE);
+	public static final DeferredRegister<Block> BLOCKS =
+			DeferredRegister.create(ForgeRegistries.BLOCKS, CfbCompartment.NAMESPACE);
+	public static final DeferredRegister<Item> ITEMS =
+			DeferredRegister.create(ForgeRegistries.ITEMS, CfbCompartment.NAMESPACE);
 
-    public static final List<RegistryObject<Block>> SPICE_RACKS = new ArrayList<>();
-    public static final List<RegistryObject<Block>> TOOL_RACKS = new ArrayList<>();
-    public static final List<RegistryObject<Block>> FRUIT_BASKETS = new ArrayList<>();
+	public static final List<RegistryObject<Block>> SPICE_RACKS = new ArrayList<>();
+	public static final List<RegistryObject<Block>> TOOL_RACKS = new ArrayList<>();
+	public static final List<RegistryObject<Block>> FRUIT_BASKETS = new ArrayList<>();
 
-    static {
-        for (String wood : RackWoods.WOODS) {
-            SPICE_RACKS.add(register(wood + "_spice_rack", WoodSpiceRackBlock::new));
-            TOOL_RACKS.add(register(wood + "_tool_rack", WoodToolRackBlock::new));
-            FRUIT_BASKETS.add(register(wood + "_fruit_basket", WoodFruitBasketBlock::new));
-        }
-    }
+	static {
+		for (String wood : RackWoods.WOODS) {
+			SPICE_RACKS.add(register(wood + "_spice_rack", WoodSpiceRackBlock::new));
+			TOOL_RACKS.add(register(wood + "_tool_rack", WoodToolRackBlock::new));
+			FRUIT_BASKETS.add(register(wood + "_fruit_basket", WoodFruitBasketBlock::new));
+		}
+	}
 
-    private BARacks() {
-    }
+	private BARacks() {
+	}
 
-    private static RegistryObject<Block> register(String name, Supplier<Block> block) {
-        RegistryObject<Block> b = BLOCKS.register(name, block);
-        ITEMS.register(name, () -> new BlockItem(b.get(), new Item.Properties().tab(ModItems.creativeModeTab)));
-        return b;
-    }
+	private static RegistryObject<Block> register(String name, Supplier<Block> block) {
+		RegistryObject<Block> b = BLOCKS.register(name, block);
+		ITEMS.register(name, () -> new BlockItem(b.get(), new Item.Properties().tab(ModItems.creativeModeTab)));
+		return b;
+	}
 
-    /** Common setup (enqueued): adds the racks to CfB's spice rack and tool rack block entity types. */
-    public static void allowOnBlockEntityTypes() {
-        addValidBlocks(ModBlockEntities.spiceRack.get(), SPICE_RACKS);
-        addValidBlocks(ModBlockEntities.toolRack.get(), TOOL_RACKS);
-        addValidBlocks(ModBlockEntities.fruitBasket.get(), FRUIT_BASKETS);
-    }
+	/** Common setup (enqueued): adds the racks to CfB's spice rack and tool rack block entity types. */
+	public static void allowOnBlockEntityTypes() {
+		addValidBlocks(ModBlockEntities.spiceRack.get(), SPICE_RACKS);
+		addValidBlocks(ModBlockEntities.toolRack.get(), TOOL_RACKS);
+		addValidBlocks(ModBlockEntities.fruitBasket.get(), FRUIT_BASKETS);
+	}
 
-    private static void addValidBlocks(BlockEntityType<?> type, List<RegistryObject<Block>> blocks) {
-        try {
-            // BlockEntityType.validBlocks (an ImmutableSet), SRG f_58915_
-            Field field = ObfuscationReflectionHelper.findField(BlockEntityType.class, "f_58915_");
-            @SuppressWarnings("unchecked")
-            Set<Block> valid = new HashSet<>((Set<Block>) field.get(type));
-            blocks.forEach(b -> valid.add(b.get()));
-            field.set(type, valid);
-        } catch (ReflectiveOperationException | RuntimeException e) {
-            LOGGER.error("[creativedelight/cookingforblockheads] could not add the wood racks to {}: they will not keep their contents",
-                    ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(type), e);
-        }
-    }
+	private static void addValidBlocks(BlockEntityType<?> type, List<RegistryObject<Block>> blocks) {
+		try {
+			// BlockEntityType.validBlocks (an ImmutableSet), SRG f_58915_
+			Field field = ObfuscationReflectionHelper.findField(BlockEntityType.class, "f_58915_");
+			@SuppressWarnings("unchecked")
+			Set<Block> valid = new HashSet<>((Set<Block>) field.get(type));
+			blocks.forEach(b -> valid.add(b.get()));
+			field.set(type, valid);
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			LOGGER.error("[creativedelight/cookingforblockheads] could not add the wood racks to {}: they will not keep their contents",
+					ForgeRegistries.BLOCK_ENTITY_TYPES.getKey(type), e);
+		}
+	}
 }

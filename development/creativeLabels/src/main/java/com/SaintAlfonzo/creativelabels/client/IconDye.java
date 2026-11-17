@@ -18,61 +18,61 @@ import net.minecraft.world.item.DyeColor;
  */
 public final class IconDye {
 
-    /** Dark end = light * DARKEN when the dye's text color gives no usable dark tone. */
-    public static final float DARKEN = 0.6f;
-    /** The text color counts as "dark" only when its luminance is under this share of the light tone's. */
-    public static final float DARK_RATIO = 0.85f;
+	/** Dark end = light * DARKEN when the dye's text color gives no usable dark tone. */
+	public static final float DARKEN = 0.6f;
+	/** The text color counts as "dark" only when its luminance is under this share of the light tone's. */
+	public static final float DARK_RATIO = 0.85f;
 
-    private IconDye() {}
+	private IconDye() {}
 
-    /** The light end of the ramp: the dye's firework color (RGB). */
-    public static int light(DyeColor dye) {
-        return dye.getFireworkColor() & 0xFFFFFF;
-    }
+	/** The light end of the ramp: the dye's firework color (RGB). */
+	public static int light(DyeColor dye) {
+		return dye.getFireworkColor() & 0xFFFFFF;
+	}
 
-    /** The dark end of the ramp: the dye's text color when it is darker, else the light end scaled by {@link #DARKEN}. */
-    public static int dark(DyeColor dye) {
-        int light = light(dye);
-        int text = dye.getTextColor() & 0xFFFFFF;
-        if (text != light && NoteColours.luminance(text) < NoteColours.luminance(light) * DARK_RATIO) return text;
-        return scale(light, DARKEN);
-    }
+	/** The dark end of the ramp: the dye's text color when it is darker, else the light end scaled by {@link #DARKEN}. */
+	public static int dark(DyeColor dye) {
+		int light = light(dye);
+		int text = dye.getTextColor() & 0xFFFFFF;
+		if (text != light && NoteColours.luminance(text) < NoteColours.luminance(light) * DARK_RATIO) return text;
+		return scale(light, DARKEN);
+	}
 
-    /** RGB scaled per channel. */
-    public static int scale(int rgb, float f) {
-        int r = Mth.clamp(Math.round((rgb >> 16 & 0xFF) * f), 0, 255);
-        int g = Mth.clamp(Math.round((rgb >> 8 & 0xFF) * f), 0, 255);
-        int b = Mth.clamp(Math.round((rgb & 0xFF) * f), 0, 255);
-        return r << 16 | g << 8 | b;
-    }
+	/** RGB scaled per channel. */
+	public static int scale(int rgb, float f) {
+		int r = Mth.clamp(Math.round((rgb >> 16 & 0xFF) * f), 0, 255);
+		int g = Mth.clamp(Math.round((rgb >> 8 & 0xFF) * f), 0, 255);
+		int b = Mth.clamp(Math.round((rgb & 0xFF) * f), 0, 255);
+		return r << 16 | g << 8 | b;
+	}
 
-    /** The ramp color for an RGB pixel: lerp(dark, light) by the pixel's luminance (0 = dark, 1 = light). */
-    public static int ramp(int rgb, int dark, int light) {
-        float t = Mth.clamp(NoteColours.luminance(rgb), 0f, 1f);
-        int r = Math.round(Mth.lerp(t, dark >> 16 & 0xFF, light >> 16 & 0xFF));
-        int g = Math.round(Mth.lerp(t, dark >> 8 & 0xFF, light >> 8 & 0xFF));
-        int b = Math.round(Mth.lerp(t, dark & 0xFF, light & 0xFF));
-        return r << 16 | g << 8 | b;
-    }
+	/** The ramp color for an RGB pixel: lerp(dark, light) by the pixel's luminance (0 = dark, 1 = light). */
+	public static int ramp(int rgb, int dark, int light) {
+		float t = Mth.clamp(NoteColours.luminance(rgb), 0f, 1f);
+		int r = Math.round(Mth.lerp(t, dark >> 16 & 0xFF, light >> 16 & 0xFF));
+		int g = Math.round(Mth.lerp(t, dark >> 8 & 0xFF, light >> 8 & 0xFF));
+		int b = Math.round(Mth.lerp(t, dark & 0xFF, light & 0xFF));
+		return r << 16 | g << 8 | b;
+	}
 
-    /** One packed ABGR pixel (NativeImage layout: A in the high byte, R in the low byte) through the ramp; alpha kept. */
-    public static int dyePixel(int abgr, int dark, int light) {
-        int a = abgr >>> 24;
-        if (a == 0) return abgr;
-        int r = abgr & 0xFF, g = abgr >> 8 & 0xFF, b = abgr >> 16 & 0xFF;
-        int out = ramp(r << 16 | g << 8 | b, dark, light);
-        return a << 24 | (out & 0xFF) << 16 | (out >> 8 & 0xFF) << 8 | (out >> 16 & 0xFF);
-    }
+	/** One packed ABGR pixel (NativeImage layout: A in the high byte, R in the low byte) through the ramp; alpha kept. */
+	public static int dyePixel(int abgr, int dark, int light) {
+		int a = abgr >>> 24;
+		if (a == 0) return abgr;
+		int r = abgr & 0xFF, g = abgr >> 8 & 0xFF, b = abgr >> 16 & 0xFF;
+		int out = ramp(r << 16 | g << 8 | b, dark, light);
+		return a << 24 | (out & 0xFF) << 16 | (out >> 8 & 0xFF) << 8 | (out >> 16 & 0xFF);
+	}
 
-    /** Dyes every pixel of the image in place (render thread, after {@code download()}, before {@code upload()}). */
-    public static void apply(NativeImage image, DyeColor dye) {
-        int dark = dark(dye), light = light(dye);
-        for (int y = 0; y < image.getHeight(); y++) {
-            for (int x = 0; x < image.getWidth(); x++) {
-                int p = image.getPixelRGBA(x, y);
-                int q = dyePixel(p, dark, light);
-                if (q != p) image.setPixelRGBA(x, y, q);
-            }
-        }
-    }
+	/** Dyes every pixel of the image in place (render thread, after {@code download()}, before {@code upload()}). */
+	public static void apply(NativeImage image, DyeColor dye) {
+		int dark = dark(dye), light = light(dye);
+		for (int y = 0; y < image.getHeight(); y++) {
+			for (int x = 0; x < image.getWidth(); x++) {
+				int p = image.getPixelRGBA(x, y);
+				int q = dyePixel(p, dark, light);
+				if (q != p) image.setPixelRGBA(x, y, q);
+			}
+		}
+	}
 }

@@ -16,9 +16,9 @@ import java.util.List;
 @Mixin(value = GuiHelper.class, remap = false)
 public class FtbGuiHelperMixin {
 
-    @Inject(method = "addStackTooltip(Lnet/minecraft/world/item/ItemStack;Ljava/util/List;Lnet/minecraft/network/chat/Component;)V",
-            remap = false, require = 1, at = @At("HEAD"))
-    private static void creativecommon$rememberStack(ItemStack stack, List<Component> list, @Nullable Component prefix, CallbackInfo ci) {
-        FtbTooltipStacks.remember(stack);
-    }
+	@Inject(method = "addStackTooltip(Lnet/minecraft/world/item/ItemStack;Ljava/util/List;Lnet/minecraft/network/chat/Component;)V",
+			remap = false, require = 1, at = @At("HEAD"))
+	private static void creativecommon$rememberStack(ItemStack stack, List<Component> list, @Nullable Component prefix, CallbackInfo ci) {
+		FtbTooltipStacks.remember(stack);
+	}
 }

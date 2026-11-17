@@ -22,13 +22,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(ItemInHandLayer.class)
 public abstract class UndeadItemInHandMixin {
 
-    @Inject(method = "m_117184_", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;m_109322_(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemTransforms$TransformType;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"),
-            remap = false)
-    private void babyMobs$babyOffset(LivingEntity entity, ItemStack stack, ItemTransforms.TransformType transform, HumanoidArm arm,
-                                     PoseStack pose, MultiBufferSource buffers, int light, CallbackInfo ci) {
-        if (!UndeadBabies.active()) return;
-        float side = arm == HumanoidArm.LEFT ? -1.0F : 1.0F;
-        pose.translate(-side / 16.0F, -1.0F / 16.0F, 5.5F / 16.0F);
-    }
+	@Inject(method = "m_117184_", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/client/renderer/ItemInHandRenderer;m_109322_(Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/client/renderer/block/model/ItemTransforms$TransformType;ZLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V"),
+			remap = false)
+	private void babyMobs$babyOffset(LivingEntity entity, ItemStack stack, ItemTransforms.TransformType transform, HumanoidArm arm,
+									 PoseStack pose, MultiBufferSource buffers, int light, CallbackInfo ci) {
+		if (!UndeadBabies.active()) return;
+		float side = arm == HumanoidArm.LEFT ? -1.0F : 1.0F;
+		pose.translate(-side / 16.0F, -1.0F / 16.0F, 5.5F / 16.0F);
+	}
 }

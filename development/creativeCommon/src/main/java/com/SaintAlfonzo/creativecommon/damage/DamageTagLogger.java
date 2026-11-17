@@ -36,66 +36,66 @@ import org.slf4j.Logger;
  */
 public final class DamageTagLogger {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private record Seen(String msgId, int mask) {}
+	private record Seen(String msgId, int mask) {}
 
-    private static final Set<Seen> SEEN = ConcurrentHashMap.newKeySet();
+	private static final Set<Seen> SEEN = ConcurrentHashMap.newKeySet();
 
-    private DamageTagLogger() {}
+	private DamageTagLogger() {}
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
-    public static void onAttack(LivingAttackEvent event) {
-        if (!enabled()) {
-            return;
-        }
-        LivingEntity victim = event.getEntity();
-        if (victim.level.isClientSide) {
-            return;
-        }
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+	public static void onAttack(LivingAttackEvent event) {
+		if (!enabled()) {
+			return;
+		}
+		LivingEntity victim = event.getEntity();
+		if (victim.level.isClientSide) {
+			return;
+		}
 
-        DamageSource source = event.getSource();
-        int mask = DamageFlag.mask(source);
-        if (!SEEN.add(new Seen(source.getMsgId(), mask))) {
-            return;
-        }
+		DamageSource source = event.getSource();
+		int mask = DamageFlag.mask(source);
+		if (!SEEN.add(new Seen(source.getMsgId(), mask))) {
+			return;
+		}
 
-        Set<ResourceLocation> dataTags = new LinkedHashSet<>();
-        for (ResourceLocation tag : DamageTags.tagsOf(source)) {
-            if (!DamageFlag.isFlagTag(tag)) {
-                dataTags.add(tag);
-            }
-        }
-        LOGGER.info("[damage-tags] seen msgId='{}' flags={} tags={} attacker={} direct={} victim={} amount={}",
-                source.getMsgId(), DamageFlag.describe(mask), describe(dataTags),
-                typeOf(source.getEntity()), typeOf(source.getDirectEntity()), typeOf(victim), event.getAmount());
-    }
+		Set<ResourceLocation> dataTags = new LinkedHashSet<>();
+		for (ResourceLocation tag : DamageTags.tagsOf(source)) {
+			if (!DamageFlag.isFlagTag(tag)) {
+				dataTags.add(tag);
+			}
+		}
+		LOGGER.info("[damage-tags] seen msgId='{}' flags={} tags={} attacker={} direct={} victim={} amount={}",
+				source.getMsgId(), DamageFlag.describe(mask), describe(dataTags),
+				typeOf(source.getEntity()), typeOf(source.getDirectEntity()), typeOf(victim), event.getAmount());
+	}
 
-    private static boolean enabled() {
-        try {
-            return CommonConfig.DAMAGE_TAGS.logSeenSources.get();
-        } catch (RuntimeException notLoaded) {
-            return false;
-        }
-    }
+	private static boolean enabled() {
+		try {
+			return CommonConfig.DAMAGE_TAGS.logSeenSources.get();
+		} catch (RuntimeException notLoaded) {
+			return false;
+		}
+	}
 
-    private static String describe(Set<ResourceLocation> tags) {
-        if (tags.isEmpty()) {
-            return "NONE";
-        }
-        StringBuilder sb = new StringBuilder();
-        for (ResourceLocation tag : tags) {
-            sb.append(sb.length() == 0 ? "" : ",")
-                    .append(DamageTags.NAMESPACE.equals(tag.getNamespace()) ? tag.getPath() : tag.toString());
-        }
-        return sb.toString();
-    }
+	private static String describe(Set<ResourceLocation> tags) {
+		if (tags.isEmpty()) {
+			return "NONE";
+		}
+		StringBuilder sb = new StringBuilder();
+		for (ResourceLocation tag : tags) {
+			sb.append(sb.length() == 0 ? "" : ",")
+					.append(DamageTags.NAMESPACE.equals(tag.getNamespace()) ? tag.getPath() : tag.toString());
+		}
+		return sb.toString();
+	}
 
-    private static String typeOf(@Nullable Entity entity) {
-        if (entity == null) {
-            return "-";
-        }
-        ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
-        return key == null ? entity.getClass().getSimpleName() : key.toString();
-    }
+	private static String typeOf(@Nullable Entity entity) {
+		if (entity == null) {
+			return "-";
+		}
+		ResourceLocation key = ForgeRegistries.ENTITY_TYPES.getKey(entity.getType());
+		return key == null ? entity.getClass().getSimpleName() : key.toString();
+	}
 }

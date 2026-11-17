@@ -9,15 +9,15 @@ package com.SaintAlfonzo.creativeengineering.fan.duck;
  */
 public interface ProcessingRecipeExt {
 
-    boolean creativeengineering$isExclusiveResults();
+	boolean creativeengineering$isExclusiveResults();
 
-    void creativeengineering$setExclusiveResults(boolean exclusive);
+	void creativeengineering$setExclusiveResults(boolean exclusive);
 
-    /**
-     * The optional {@code "result_pools"} (see {@link com.SaintAlfonzo.creativeengineering.fan.ResultPools}): lists of
-     * indices into the recipe's results, or null. Parsed from JSON and synced to the client (JEI shows the pools).
-     */
-    int[][] creativeengineering$getResultPools();
+	/**
+	 * The optional {@code "result_pools"} (see {@link com.SaintAlfonzo.creativeengineering.fan.ResultPools}): lists of
+	 * indices into the recipe's results, or null. Parsed from JSON and synced to the client (JEI shows the pools).
+	 */
+	int[][] creativeengineering$getResultPools();
 
-    void creativeengineering$setResultPools(int[][] pools);
+	void creativeengineering$setResultPools(int[][] pools);
 }

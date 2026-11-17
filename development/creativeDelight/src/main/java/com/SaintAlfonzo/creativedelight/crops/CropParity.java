@@ -35,32 +35,32 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class CropParity {
 
-    private CropParity() {}
+	private CropParity() {}
 
-    public static final TagKey<Block> FARMLAND_SOILS = BlockTags.create(
-            new ResourceLocation(CreativeDelight.MOD_ID, "crops/farmland_soils"));
-    public static final TagKey<Block> FARMLAND_CROPS = BlockTags.create(
-            new ResourceLocation(CreativeDelight.MOD_ID, "crops/farmland_crops"));
-    public static final TagKey<Block> OWN_PICK_CROPS = BlockTags.create(
-            new ResourceLocation(CreativeDelight.MOD_ID, "crops/own_pick"));
+	public static final TagKey<Block> FARMLAND_SOILS = BlockTags.create(
+			new ResourceLocation(CreativeDelight.MOD_ID, "crops/farmland_soils"));
+	public static final TagKey<Block> FARMLAND_CROPS = BlockTags.create(
+			new ResourceLocation(CreativeDelight.MOD_ID, "crops/farmland_crops"));
+	public static final TagKey<Block> OWN_PICK_CROPS = BlockTags.create(
+			new ResourceLocation(CreativeDelight.MOD_ID, "crops/own_pick"));
 
-    public static final TagKey<Block> HARVEST_FROM_BOTTOM = BlockTags.create(
-            new ResourceLocation(CreativeDelight.MOD_ID, "crops/harvest_from_bottom"));
+	public static final TagKey<Block> HARVEST_FROM_BOTTOM = BlockTags.create(
+			new ResourceLocation(CreativeDelight.MOD_ID, "crops/harvest_from_bottom"));
 
-    /** True for the top half of a {@link #HARVEST_FROM_BOTTOM} crop: tagged, with the same block right below. */
-    public static boolean isTopHalf(BlockState plant, BlockState below) {
-        return plant.is(HARVEST_FROM_BOTTOM) && below.is(plant.getBlock());
-    }
+	/** True for the top half of a {@link #HARVEST_FROM_BOTTOM} crop: tagged, with the same block right below. */
+	public static boolean isTopHalf(BlockState plant, BlockState below) {
+		return plant.is(HARVEST_FROM_BOTTOM) && below.is(plant.getBlock());
+	}
 
-    public static boolean isFarmlandSoil(BlockState soil) {
-        return soil.is(Blocks.FARMLAND) || soil.is(FARMLAND_SOILS);
-    }
+	public static boolean isFarmlandSoil(BlockState soil) {
+		return soil.is(Blocks.FARMLAND) || soil.is(FARMLAND_SOILS);
+	}
 
-    public static boolean isFarmlandCrop(BlockState plant) {
-        return plant.is(FARMLAND_CROPS);
-    }
+	public static boolean isFarmlandCrop(BlockState plant) {
+		return plant.is(FARMLAND_CROPS);
+	}
 
-    public static boolean isOwnPickCrop(BlockState plant) {
-        return plant.is(OWN_PICK_CROPS);
-    }
+	public static boolean isOwnPickCrop(BlockState plant) {
+		return plant.is(OWN_PICK_CROPS);
+	}
 }

@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 /** Apple Pie's single entry for eaten foods (items and cake bites): every rung is re-evaluated after it (8). */
 @Mixin(value = FoodTracker.class, remap = false)
 public abstract class FoodTrackerMixin {
-    @Inject(method = "updateFoodList", at = @At("RETURN"))
-    private static void solrp$afterEat(Item item, Player player, CallbackInfo ci) {
-        if (player instanceof ServerPlayer sp) DietEngine.onFoodEaten(sp, item);
-    }
+	@Inject(method = "updateFoodList", at = @At("RETURN"))
+	private static void solrp$afterEat(Item item, Player player, CallbackInfo ci) {
+		if (player instanceof ServerPlayer sp) DietEngine.onFoodEaten(sp, item);
+	}
 }

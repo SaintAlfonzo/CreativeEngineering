@@ -17,10 +17,10 @@ import java.util.List;
 @Mixin(value = KettleScreen.class, remap = false)
 public class KettleMealTooltipMixin {
 
-    @Redirect(method = "renderMealDisplayTooltip", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lumpaz/farmersrespite/client/gui/KettleScreen;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"))
-    private void ce$mealTooltipWithStack(KettleScreen screen, PoseStack poseStack, List<Component> lines, int x, int y) {
-        MealSlotTooltip.render(screen, poseStack, lines, x, y);
-    }
+	@Redirect(method = "renderMealDisplayTooltip", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lumpaz/farmersrespite/client/gui/KettleScreen;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"))
+	private void ce$mealTooltipWithStack(KettleScreen screen, PoseStack poseStack, List<Component> lines, int x, int y) {
+		MealSlotTooltip.render(screen, poseStack, lines, x, y);
+	}
 }

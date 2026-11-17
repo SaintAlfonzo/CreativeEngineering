@@ -28,19 +28,19 @@ import xfacthd.framedblocks.common.blockentity.FramedFlowerPotBlockEntity;
 @Mixin(value = FramedFlowerPotBlock.class, remap = false)
 public abstract class FramedFlowerPotUnframedMixin {
 
-    @Inject(method = "m_6227_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$plantFirst(BlockState state, Level level, BlockPos pos, Player player,
-            InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
-        ItemStack held = player.getItemInHand(hand);
-        if (!(held.getItem() instanceof BlockItem item)) return;
-        if (FramedFlowerPotBlock.getFlowerPotState(item.getBlock()).isAir()) return;
-        if (!(level.getBlockEntity(pos) instanceof FramedFlowerPotBlockEntity pot) || pot.hasFlowerBlock()) return;
-        if (!level.isClientSide) {
-            pot.setFlowerBlock(item.getBlock());
-            player.awardStat(Stats.POT_FLOWER);
-            if (!player.getAbilities().instabuild) held.shrink(1);
-        }
-        level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
-        cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide));
-    }
+	@Inject(method = "m_6227_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$plantFirst(BlockState state, Level level, BlockPos pos, Player player,
+			InteractionHand hand, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
+		ItemStack held = player.getItemInHand(hand);
+		if (!(held.getItem() instanceof BlockItem item)) return;
+		if (FramedFlowerPotBlock.getFlowerPotState(item.getBlock()).isAir()) return;
+		if (!(level.getBlockEntity(pos) instanceof FramedFlowerPotBlockEntity pot) || pot.hasFlowerBlock()) return;
+		if (!level.isClientSide) {
+			pot.setFlowerBlock(item.getBlock());
+			player.awardStat(Stats.POT_FLOWER);
+			if (!player.getAbilities().instabuild) held.shrink(1);
+		}
+		level.gameEvent(player, GameEvent.BLOCK_CHANGE, pos);
+		cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide));
+	}
 }

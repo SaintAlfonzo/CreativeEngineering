@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(CustomHeadLayer.class)
 public abstract class UndeadCustomHeadMixin {
 
-    @Redirect(method = "m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;m_6162_()Z"), remap = false)
-    private boolean babyMobs$fullSizeHead(LivingEntity entity) {
-        return !BabyRender.active() && entity.isBaby();
-    }
+	@Redirect(method = "m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/LivingEntity;FFFFFF)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;m_6162_()Z"), remap = false)
+	private boolean babyMobs$fullSizeHead(LivingEntity entity) {
+		return !BabyRender.active() && entity.isBaby();
+	}
 }

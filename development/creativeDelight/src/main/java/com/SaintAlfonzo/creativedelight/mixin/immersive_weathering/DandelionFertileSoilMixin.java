@@ -17,9 +17,9 @@ import com.ordana.immersive_weathering.blocks.soil.MulchBlock;
 @Mixin(value = MulchBlock.class, remap = false)
 public abstract class DandelionFertileSoilMixin {
 
-    @Inject(method = "m_213898_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$matureDandelion(BlockState state, ServerLevel level, BlockPos pos,
-                                                     RandomSource random, CallbackInfo ci) {
-        DandelionMaturing.soilTick(level, pos, random, false);
-    }
+	@Inject(method = "m_213898_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$matureDandelion(BlockState state, ServerLevel level, BlockPos pos,
+													 RandomSource random, CallbackInfo ci) {
+		DandelionMaturing.soilTick(level, pos, random, false);
+	}
 }

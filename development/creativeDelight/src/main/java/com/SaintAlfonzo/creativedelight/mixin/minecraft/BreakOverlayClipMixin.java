@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
  */
 @Mixin(BlockRenderDispatcher.class)
 public abstract class BreakOverlayClipMixin {
-    @ModifyVariable(method = "renderBreakingTexture(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/BlockAndTintGetter;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraftforge/client/model/data/ModelData;)V",
-            at = @At("STORE"), ordinal = 0, remap = false)
-    private BakedModel creativedelight$clipBreakOverlay(BakedModel model, BlockState state) {
-        return BreakOverlayClip.wrap(state, model);
-    }
+	@ModifyVariable(method = "renderBreakingTexture(Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/BlockAndTintGetter;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;Lnet/minecraftforge/client/model/data/ModelData;)V",
+			at = @At("STORE"), ordinal = 0, remap = false)
+	private BakedModel creativedelight$clipBreakOverlay(BakedModel model, BlockState state) {
+		return BreakOverlayClip.wrap(state, model);
+	}
 }

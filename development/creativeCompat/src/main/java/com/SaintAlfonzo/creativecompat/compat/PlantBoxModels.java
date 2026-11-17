@@ -25,27 +25,27 @@ import net.minecraftforge.fml.ModList;
  */
 public final class PlantBoxModels {
 
-    public static final ResourceLocation GLOW_BERRIES = new ResourceLocation(CreativeCompat.NS, "block/flower_box/glow_berries");
-    public static final ResourceLocation GLOW_LICHEN = new ResourceLocation(CreativeCompat.NS, "block/flower_box/glow_lichen");
-    /** Glow lichen with its base at y4, the vanilla pot's soil height (botanist workbench). */
-    public static final ResourceLocation GLOW_LICHEN_POT = new ResourceLocation(CreativeCompat.NS, "block/flower_box/glow_lichen_pot");
+	public static final ResourceLocation GLOW_BERRIES = new ResourceLocation(CreativeCompat.NS, "block/flower_box/glow_berries");
+	public static final ResourceLocation GLOW_LICHEN = new ResourceLocation(CreativeCompat.NS, "block/flower_box/glow_lichen");
+	/** Glow lichen with its base at y4, the vanilla pot's soil height (botanist workbench). */
+	public static final ResourceLocation GLOW_LICHEN_POT = new ResourceLocation(CreativeCompat.NS, "block/flower_box/glow_lichen_pot");
 
-    public static final TagKey<Item> NOT_IN_BOXES = ItemTags.create(new ResourceLocation(CreativeCompat.NS, "not_in_flower_boxes"));
+	public static final TagKey<Item> NOT_IN_BOXES = ItemTags.create(new ResourceLocation(CreativeCompat.NS, "not_in_flower_boxes"));
 
-    private PlantBoxModels() {}
+	private PlantBoxModels() {}
 
-    static boolean supplementaries() {
-        return ModList.get().isLoaded("supplementaries");
-    }
+	static boolean supplementaries() {
+		return ModList.get().isLoaded("supplementaries");
+	}
 
-    /** Common setup: adds glow berries and glow lichen to Supplementaries' special flower box models. */
-    public static void commonSetup() {
-        if (supplementaries()) SuppFlowerBox.registerExtras();
-    }
+	/** Common setup: adds glow berries and glow lichen to Supplementaries' special flower box models. */
+	public static void commonSetup() {
+		if (supplementaries()) SuppFlowerBox.registerExtras();
+	}
 
-    @Nullable
-    public static ResourceLocation specialModel(Item item) {
-        return supplementaries() ? SuppFlowerBox.specialModel(item) : null;
-    }
+	@Nullable
+	public static ResourceLocation specialModel(Item item) {
+		return supplementaries() ? SuppFlowerBox.specialModel(item) : null;
+	}
 
 }

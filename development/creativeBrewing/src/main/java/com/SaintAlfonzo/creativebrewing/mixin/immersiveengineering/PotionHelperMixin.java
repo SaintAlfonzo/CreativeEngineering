@@ -35,44 +35,44 @@ import java.util.List;
 @Mixin(value = PotionHelper.class, remap = false)
 public class PotionHelperMixin {
 
-    @Redirect(
-            method = "applyToAllPotionRecipes",
-            at = @At(
-                    value = "FIELD",
-                    target = "Lnet/minecraft/world/item/alchemy/Potions;f_43600_:Lnet/minecraft/world/item/alchemy/Potion;",
-                    opcode = org.objectweb.asm.Opcodes.GETSTATIC
-            )
-    )
-    private static Potion creativeengineering$allowMundaneBase() {
-        return null;
-    }
+	@Redirect(
+			method = "applyToAllPotionRecipes",
+			at = @At(
+					value = "FIELD",
+					target = "Lnet/minecraft/world/item/alchemy/Potions;f_43600_:Lnet/minecraft/world/item/alchemy/Potion;",
+					opcode = org.objectweb.asm.Opcodes.GETSTATIC
+			)
+	)
+	private static Potion creativeengineering$allowMundaneBase() {
+		return null;
+	}
 
-    @Redirect(
-            method = "applyToAllPotionRecipes",
-            at = @At(
-                    value = "FIELD",
-                    target = "Lnet/minecraft/world/item/alchemy/Potions;f_43601_:Lnet/minecraft/world/item/alchemy/Potion;",
-                    opcode = org.objectweb.asm.Opcodes.GETSTATIC
-            )
-    )
-    private static Potion creativeengineering$allowThickBase() {
-        return null;
-    }
+	@Redirect(
+			method = "applyToAllPotionRecipes",
+			at = @At(
+					value = "FIELD",
+					target = "Lnet/minecraft/world/item/alchemy/Potions;f_43601_:Lnet/minecraft/world/item/alchemy/Potion;",
+					opcode = org.objectweb.asm.Opcodes.GETSTATIC
+			)
+	)
+	private static Potion creativeengineering$allowThickBase() {
+		return null;
+	}
 
-    /**
-     * IE's loop 2 walks {@code BrewingRecipeRegistry.getRecipes()}. Drop the Alex's Mobs
-     * modifier steps that already exist as {@code PotionBrewing.Mix} entries (re-added in
-     * {@code potions.js}) so the IE Mixer doesn't get a duplicate recipe for each. See
-     * {@link PotionMixDedup}.
-     */
-    @Redirect(
-            method = "applyToAllPotionRecipes",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraftforge/common/brewing/BrewingRecipeRegistry;getRecipes()Ljava/util/List;"
-            )
-    )
-    private static List<IBrewingRecipe> creativeengineering$dedupBrewingRecipes() {
-        return PotionMixDedup.withoutMixDuplicates(BrewingRecipeRegistry.getRecipes());
-    }
+	/**
+	 * IE's loop 2 walks {@code BrewingRecipeRegistry.getRecipes()}. Drop the Alex's Mobs
+	 * modifier steps that already exist as {@code PotionBrewing.Mix} entries (re-added in
+	 * {@code potions.js}) so the IE Mixer doesn't get a duplicate recipe for each. See
+	 * {@link PotionMixDedup}.
+	 */
+	@Redirect(
+			method = "applyToAllPotionRecipes",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraftforge/common/brewing/BrewingRecipeRegistry;getRecipes()Ljava/util/List;"
+			)
+	)
+	private static List<IBrewingRecipe> creativeengineering$dedupBrewingRecipes() {
+		return PotionMixDedup.withoutMixDuplicates(BrewingRecipeRegistry.getRecipes());
+	}
 }

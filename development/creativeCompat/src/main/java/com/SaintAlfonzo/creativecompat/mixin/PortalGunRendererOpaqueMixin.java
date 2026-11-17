@@ -19,11 +19,11 @@ import tk.meowmc.portalgun.entities.CustomPortal;
 @Mixin(value = CustomPortalEntityRenderer.class, remap = false)
 public abstract class PortalGunRendererOpaqueMixin {
 
-    @Shadow(remap = false) @Final private static ResourceLocation OVERLAY_FILLED;
+	@Shadow(remap = false) @Final private static ResourceLocation OVERLAY_FILLED;
 
-    @Inject(method = "getTextureLocation(Ltk/meowmc/portalgun/entities/CustomPortal;)Lnet/minecraft/resources/ResourceLocation;",
-            at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private void creativecompat$opaqueTexture(CustomPortal portal, CallbackInfoReturnable<ResourceLocation> cir) {
-        if (CompatConfig.SPEC.isLoaded() && CompatConfig.PORTAL_GUN.opaquePortals.get()) cir.setReturnValue(OVERLAY_FILLED);
-    }
+	@Inject(method = "getTextureLocation(Ltk/meowmc/portalgun/entities/CustomPortal;)Lnet/minecraft/resources/ResourceLocation;",
+			at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private void creativecompat$opaqueTexture(CustomPortal portal, CallbackInfoReturnable<ResourceLocation> cir) {
+		if (CompatConfig.SPEC.isLoaded() && CompatConfig.PORTAL_GUN.opaquePortals.get()) cir.setReturnValue(OVERLAY_FILLED);
+	}
 }

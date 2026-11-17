@@ -29,42 +29,42 @@ import vectorwing.farmersdelight.common.block.entity.CookingPotBlockEntity;
 @Mixin(value = CookingPotMenu.class, remap = false)
 public abstract class CookingPotMenuRemainderMixin extends AbstractContainerMenu {
 
-    private static final int PLAYER_INV_START = 9;
-    private static final int PLAYER_INV_END = 45;
+	private static final int PLAYER_INV_START = 9;
+	private static final int PLAYER_INV_END = 45;
 
-    @Unique
-    private int ce$firstRemainderSlot = -1;
+	@Unique
+	private int ce$firstRemainderSlot = -1;
 
-    private CookingPotMenuRemainderMixin(MenuType<?> type, int containerId) {
-        super(type, containerId);
-    }
+	private CookingPotMenuRemainderMixin(MenuType<?> type, int containerId) {
+		super(type, containerId);
+	}
 
-    @Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;Lnet/minecraft/world/inventory/ContainerData;)V",
-            at = @At("TAIL"))
-    private void ce$addRemainderSlots(int windowId, Inventory playerInventory, CookingPotBlockEntity station, ContainerData data, CallbackInfo ci) {
-        if (!(station instanceof RemainderBufferHolder holder)) return;
-        RemainderBuffer buffer = holder.ce$getRemainderBuffer();
-        ce$firstRemainderSlot = slots.size();
-        for (int i = 0; i < buffer.getSlots(); ++i) {
-            addSlot(new RemainderSlot(buffer, i));
-        }
-    }
+	@Inject(method = "<init>(ILnet/minecraft/world/entity/player/Inventory;Lvectorwing/farmersdelight/common/block/entity/CookingPotBlockEntity;Lnet/minecraft/world/inventory/ContainerData;)V",
+			at = @At("TAIL"))
+	private void ce$addRemainderSlots(int windowId, Inventory playerInventory, CookingPotBlockEntity station, ContainerData data, CallbackInfo ci) {
+		if (!(station instanceof RemainderBufferHolder holder)) return;
+		RemainderBuffer buffer = holder.ce$getRemainderBuffer();
+		ce$firstRemainderSlot = slots.size();
+		for (int i = 0; i < buffer.getSlots(); ++i) {
+			addSlot(new RemainderSlot(buffer, i));
+		}
+	}
 
-    @Inject(method = {"m_7648_", "quickMoveStack"}, at = @At("HEAD"), cancellable = true, require = 1)
-    private void ce$quickMoveRemainder(Player player, int index, CallbackInfoReturnable<ItemStack> cir) {
-        if (ce$firstRemainderSlot < 0 || index < ce$firstRemainderSlot) return;
-        Slot slot = slots.get(index);
-        if (!slot.hasItem()) {
-            cir.setReturnValue(ItemStack.EMPTY);
-            return;
-        }
-        ItemStack stack = slot.getItem().copy();
-        ItemStack copy = stack.copy();
-        if (!moveItemStackTo(stack, PLAYER_INV_START, PLAYER_INV_END, true) || stack.getCount() == copy.getCount()) {
-            cir.setReturnValue(ItemStack.EMPTY);
-            return;
-        }
-        slot.set(stack);
-        cir.setReturnValue(copy);
-    }
+	@Inject(method = {"m_7648_", "quickMoveStack"}, at = @At("HEAD"), cancellable = true, require = 1)
+	private void ce$quickMoveRemainder(Player player, int index, CallbackInfoReturnable<ItemStack> cir) {
+		if (ce$firstRemainderSlot < 0 || index < ce$firstRemainderSlot) return;
+		Slot slot = slots.get(index);
+		if (!slot.hasItem()) {
+			cir.setReturnValue(ItemStack.EMPTY);
+			return;
+		}
+		ItemStack stack = slot.getItem().copy();
+		ItemStack copy = stack.copy();
+		if (!moveItemStackTo(stack, PLAYER_INV_START, PLAYER_INV_END, true) || stack.getCount() == copy.getCount()) {
+			cir.setReturnValue(ItemStack.EMPTY);
+			return;
+		}
+		slot.set(stack);
+		cir.setReturnValue(copy);
+	}
 }

@@ -12,17 +12,17 @@ import net.minecraftforge.registries.RegistryObject;
 /** Serializers for the two backpack skin recipes. Smithing keeps vanilla's shared smithing type. */
 public final class BackpackSkinSerializers {
 
-    private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeEquipment.NS);
+	private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
+			DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeEquipment.NS);
 
-    public static final RegistryObject<RecipeSerializer<?>> SMITHING =
-            SERIALIZERS.register("backpack_skin", BackpackSkinRecipe.Serializer::new);
-    public static final RegistryObject<RecipeSerializer<?>> CLEAR =
-            SERIALIZERS.register("backpack_skin_clear", () -> new SimpleRecipeSerializer<>(BackpackSkinClearRecipe::new));
+	public static final RegistryObject<RecipeSerializer<?>> SMITHING =
+			SERIALIZERS.register("backpack_skin", BackpackSkinRecipe.Serializer::new);
+	public static final RegistryObject<RecipeSerializer<?>> CLEAR =
+			SERIALIZERS.register("backpack_skin_clear", () -> new SimpleRecipeSerializer<>(BackpackSkinClearRecipe::new));
 
-    private BackpackSkinSerializers() {}
+	private BackpackSkinSerializers() {}
 
-    public static void register(IEventBus modEventBus) {
-        SERIALIZERS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		SERIALIZERS.register(modEventBus);
+	}
 }

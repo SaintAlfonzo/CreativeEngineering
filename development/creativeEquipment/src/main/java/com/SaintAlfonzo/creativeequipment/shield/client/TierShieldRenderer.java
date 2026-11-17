@@ -43,48 +43,48 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 @OnlyIn(Dist.CLIENT)
 public final class TierShieldRenderer extends BlockEntityWithoutLevelRenderer {
 
-    private final EntityModelSet models;
-    private ShieldModel shieldModel;
+	private final EntityModelSet models;
+	private ShieldModel shieldModel;
 
-    public TierShieldRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet models) {
-        super(dispatcher, models);
-        this.models = models;
-    }
+	public TierShieldRenderer(BlockEntityRenderDispatcher dispatcher, EntityModelSet models) {
+		super(dispatcher, models);
+		this.models = models;
+	}
 
-    // No onResourceManagerReload override: this instance is never registered as a reload
-    // listener, and shieldModel only wraps a baked ModelPart (no textures of its own to go stale).
-    @Override
-    public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack poseStack,
-                             MultiBufferSource buffer, int packedLight, int packedOverlay) {
-        ShieldTier tier = ShieldTier.of(stack);
-        TierShieldMaterials.Pair materials = tier == null ? null : TierShieldMaterials.of(tier);
-        if (materials == null) return; // not a tier shield (or IRON, which never reaches this renderer)
+	// No onResourceManagerReload override: this instance is never registered as a reload
+	// listener, and shieldModel only wraps a baked ModelPart (no textures of its own to go stale).
+	@Override
+	public void renderByItem(ItemStack stack, ItemTransforms.TransformType transformType, PoseStack poseStack,
+							 MultiBufferSource buffer, int packedLight, int packedOverlay) {
+		ShieldTier tier = ShieldTier.of(stack);
+		TierShieldMaterials.Pair materials = tier == null ? null : TierShieldMaterials.of(tier);
+		if (materials == null) return; // not a tier shield (or IRON, which never reaches this renderer)
 
-        if (shieldModel == null) {
-            shieldModel = new ShieldModel(models.bakeLayer(ModelLayers.SHIELD));
-        }
+		if (shieldModel == null) {
+			shieldModel = new ShieldModel(models.bakeLayer(ModelLayers.SHIELD));
+		}
 
-        boolean hasPatterns = BlockItem.getBlockEntityData(stack) != null;
-        poseStack.pushPose();
-        poseStack.scale(1.0F, -1.0F, -1.0F);
+		boolean hasPatterns = BlockItem.getBlockEntityData(stack) != null;
+		poseStack.pushPose();
+		poseStack.scale(1.0F, -1.0F, -1.0F);
 
-        Material material = hasPatterns ? materials.base() : materials.noPattern();
-        TextureAtlasSprite sprite = material.sprite();
-        RenderType renderType = shieldModel.renderType(material.atlasLocation());
-        VertexConsumer vertexConsumer = sprite.wrap(
-                ItemRenderer.getFoilBufferDirect(buffer, renderType, true, stack.hasFoil()));
-        shieldModel.handle().render(poseStack, vertexConsumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+		Material material = hasPatterns ? materials.base() : materials.noPattern();
+		TextureAtlasSprite sprite = material.sprite();
+		RenderType renderType = shieldModel.renderType(material.atlasLocation());
+		VertexConsumer vertexConsumer = sprite.wrap(
+				ItemRenderer.getFoilBufferDirect(buffer, renderType, true, stack.hasFoil()));
+		shieldModel.handle().render(poseStack, vertexConsumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
 
-        if (hasPatterns) {
-            DyeColor color = ShieldItem.getColor(stack);
-            ListTag patternsNbt = BannerBlockEntity.getItemPatterns(stack);
-            List<Pair<Holder<BannerPattern>, DyeColor>> patterns = BannerBlockEntity.createPatterns(color, patternsNbt);
-            BannerRenderer.renderPatterns(poseStack, buffer, packedLight, packedOverlay,
-                    shieldModel.plate(), material, false, patterns, stack.hasFoil());
-        } else {
-            shieldModel.plate().render(poseStack, vertexConsumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
-        }
+		if (hasPatterns) {
+			DyeColor color = ShieldItem.getColor(stack);
+			ListTag patternsNbt = BannerBlockEntity.getItemPatterns(stack);
+			List<Pair<Holder<BannerPattern>, DyeColor>> patterns = BannerBlockEntity.createPatterns(color, patternsNbt);
+			BannerRenderer.renderPatterns(poseStack, buffer, packedLight, packedOverlay,
+					shieldModel.plate(), material, false, patterns, stack.hasFoil());
+		} else {
+			shieldModel.plate().render(poseStack, vertexConsumer, packedLight, packedOverlay, 1.0F, 1.0F, 1.0F, 1.0F);
+		}
 
-        poseStack.popPose();
-    }
+		poseStack.popPose();
+	}
 }

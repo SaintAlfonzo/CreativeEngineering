@@ -26,32 +26,32 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemStack.class)
 public abstract class ItemStackCanServingsMixin {
 
-    @Inject(method = "m_41671_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$eatServing(Level level, LivingEntity entity, CallbackInfoReturnable<ItemStack> cir) {
-        ItemStack self = (ItemStack) (Object) this;
-        boolean can;
-        try {
-            can = entity instanceof Player && CanServings.isCan(self);
-        } catch (Throwable t) {
-            return; // plain Canned Goods behavior
-        }
-        if (can) cir.setReturnValue(CanServings.finishServing(self, level, (Player) entity));
-    }
+	@Inject(method = "m_41671_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$eatServing(Level level, LivingEntity entity, CallbackInfoReturnable<ItemStack> cir) {
+		ItemStack self = (ItemStack) (Object) this;
+		boolean can;
+		try {
+			can = entity instanceof Player && CanServings.isCan(self);
+		} catch (Throwable t) {
+			return; // plain Canned Goods behavior
+		}
+		if (can) cir.setReturnValue(CanServings.finishServing(self, level, (Player) entity));
+	}
 
-    @Inject(method = "m_150947_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$servingsBarVisible(CallbackInfoReturnable<Boolean> cir) {
-        if (CanServings.isPartial((ItemStack) (Object) this)) cir.setReturnValue(true);
-    }
+	@Inject(method = "m_150947_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$servingsBarVisible(CallbackInfoReturnable<Boolean> cir) {
+		if (CanServings.isPartial((ItemStack) (Object) this)) cir.setReturnValue(true);
+	}
 
-    @Inject(method = "m_150948_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$servingsBarWidth(CallbackInfoReturnable<Integer> cir) {
-        ItemStack self = (ItemStack) (Object) this;
-        if (CanServings.isPartial(self)) cir.setReturnValue(CanServings.barWidth(self));
-    }
+	@Inject(method = "m_150948_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$servingsBarWidth(CallbackInfoReturnable<Integer> cir) {
+		ItemStack self = (ItemStack) (Object) this;
+		if (CanServings.isPartial(self)) cir.setReturnValue(CanServings.barWidth(self));
+	}
 
-    @Inject(method = "m_150949_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$servingsBarColor(CallbackInfoReturnable<Integer> cir) {
-        ItemStack self = (ItemStack) (Object) this;
-        if (CanServings.isPartial(self)) cir.setReturnValue(CanServings.barColor(self));
-    }
+	@Inject(method = "m_150949_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$servingsBarColor(CallbackInfoReturnable<Integer> cir) {
+		ItemStack self = (ItemStack) (Object) this;
+		if (CanServings.isPartial(self)) cir.setReturnValue(CanServings.barColor(self));
+	}
 }

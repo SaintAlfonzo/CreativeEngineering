@@ -15,16 +15,16 @@ import qouteall.imm_ptl.core.render.PortalGroup;
  * matched by entity type id, so this class never loads Portal Gun code.
  */
 public enum PortalKind {
-    NETHER, GUN, MIRROR, OTHER;
+	NETHER, GUN, MIRROR, OTHER;
 
-    private static final ResourceLocation GUN_ID = new ResourceLocation("portalgun", "custom_portal");
+	private static final ResourceLocation GUN_ID = new ResourceLocation("portalgun", "custom_portal");
 
-    public static PortalKind of(PortalLike like) {
-        Portal portal = like instanceof PortalGroup group ? group.getFirstPortal() : like instanceof Portal p ? p : null;
-        if (portal == null) return OTHER;
-        if (portal instanceof NetherPortalEntity) return NETHER;
-        if (portal instanceof Mirror) return MIRROR;
-        Entity entity = portal; // vanilla-typed, so getType() reobfuscates
-        return GUN_ID.equals(EntityType.getKey(entity.getType())) ? GUN : OTHER;
-    }
+	public static PortalKind of(PortalLike like) {
+		Portal portal = like instanceof PortalGroup group ? group.getFirstPortal() : like instanceof Portal p ? p : null;
+		if (portal == null) return OTHER;
+		if (portal instanceof NetherPortalEntity) return NETHER;
+		if (portal instanceof Mirror) return MIRROR;
+		Entity entity = portal; // vanilla-typed, so getType() reobfuscates
+		return GUN_ID.equals(EntityType.getKey(entity.getType())) ? GUN : OTHER;
+	}
 }

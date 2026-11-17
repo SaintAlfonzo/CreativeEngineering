@@ -19,14 +19,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ClientboundBlockUpdatePacket.class, remap = false)
 public abstract class BlockUpdateNullStateMixin {
 
-    @Redirect(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/network/FriendlyByteBuf;m_236816_(Lnet/minecraft/core/IdMap;)Ljava/lang/Object;"))
-    private Object creativecommon$trackLookup(FriendlyByteBuf buf, IdMap<?> map) {
-        return BlockStateLookupHook.lookup(map, buf.readVarInt());
-    }
+	@Redirect(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/network/FriendlyByteBuf;m_236816_(Lnet/minecraft/core/IdMap;)Ljava/lang/Object;"))
+	private Object creativecommon$trackLookup(FriendlyByteBuf buf, IdMap<?> map) {
+		return BlockStateLookupHook.lookup(map, buf.readVarInt());
+	}
 
-    @Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("RETURN"))
-    private void creativecommon$reportNulls(FriendlyByteBuf buf, CallbackInfo ci) {
-        BlockStateLookupHook.finishSingle((ClientboundBlockUpdatePacket) (Object) this);
-    }
+	@Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("RETURN"))
+	private void creativecommon$reportNulls(FriendlyByteBuf buf, CallbackInfo ci) {
+		BlockStateLookupHook.finishSingle((ClientboundBlockUpdatePacket) (Object) this);
+	}
 }

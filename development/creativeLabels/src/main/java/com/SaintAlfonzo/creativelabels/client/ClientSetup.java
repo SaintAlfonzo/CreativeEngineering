@@ -26,34 +26,34 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
  */
 public final class ClientSetup {
 
-    public static final int WHITE = 0xFFFFFF;
+	public static final int WHITE = 0xFFFFFF;
 
-    public static void register(IEventBus modBus) {
-        modBus.addListener((ModelEvent.RegisterGeometryLoaders e) ->
-                e.register(FacePaperModelLoader.NAME, FacePaperModelLoader.INSTANCE));
-        modBus.addListener((ModelEvent.RegisterAdditional e) -> e.register(FacePaperModelLoader.LABEL_MODEL));
-        modBus.addListener(DonorArt::onStitch);
-        modBus.addListener(DonorArt::onAddPackFinders);
-        modBus.addListener((RegisterClientReloadListenersEvent e) ->
-                e.registerReloadListener((ResourceManagerReloadListener) manager -> NoteShape.invalidate()));
-        modBus.addListener((RegisterColorHandlersEvent.Block e) -> e.register((state, level, pos, tintIndex) -> {
-            // Tint index = face ordinal * 5 + spot for a dyed note (BRIEF 4); plain notes use the untinted sprite.
-            if (tintIndex < 0 || level == null || pos == null) return WHITE;
-            BlockEntity be = level.getBlockEntity(pos);
-            if (!(be instanceof FacePaperBlockEntity paper)) return WHITE;
-            int faceIndex = tintIndex / Spots.COUNT, spot = tintIndex % Spots.COUNT;
-            if (faceIndex >= 6) return WHITE;
-            FaceContent c = paper.face(Direction.values()[faceIndex]);
-            NoteData n = c.note(spot);
-            return n == null || n.color == NoteData.NO_COLOR ? WHITE : n.color;
-        }, CLRegistry.FACE_PAPER.get()));
-        modBus.addListener(NoteItemColours::onItemColours);
-        modBus.addListener((FMLClientSetupEvent e) -> e.enqueueWork(NoteItemColours::registerProperties));
-        // Phase 3: label pictures and names (Moonlight render-to-texture icons); notes stay in the chunk mesh.
-        modBus.addListener((EntityRenderersEvent.RegisterRenderers e) ->
-                e.registerBlockEntityRenderer(CLRegistry.FACE_PAPER_BE.get(), FacePaperRenderer::new));
-        MinecraftForge.EVENT_BUS.addListener(FacePaperHighlight::onHighlight);
-    }
+	public static void register(IEventBus modBus) {
+		modBus.addListener((ModelEvent.RegisterGeometryLoaders e) ->
+				e.register(FacePaperModelLoader.NAME, FacePaperModelLoader.INSTANCE));
+		modBus.addListener((ModelEvent.RegisterAdditional e) -> e.register(FacePaperModelLoader.LABEL_MODEL));
+		modBus.addListener(DonorArt::onStitch);
+		modBus.addListener(DonorArt::onAddPackFinders);
+		modBus.addListener((RegisterClientReloadListenersEvent e) ->
+				e.registerReloadListener((ResourceManagerReloadListener) manager -> NoteShape.invalidate()));
+		modBus.addListener((RegisterColorHandlersEvent.Block e) -> e.register((state, level, pos, tintIndex) -> {
+			// Tint index = face ordinal * 5 + spot for a dyed note (BRIEF 4); plain notes use the untinted sprite.
+			if (tintIndex < 0 || level == null || pos == null) return WHITE;
+			BlockEntity be = level.getBlockEntity(pos);
+			if (!(be instanceof FacePaperBlockEntity paper)) return WHITE;
+			int faceIndex = tintIndex / Spots.COUNT, spot = tintIndex % Spots.COUNT;
+			if (faceIndex >= 6) return WHITE;
+			FaceContent c = paper.face(Direction.values()[faceIndex]);
+			NoteData n = c.note(spot);
+			return n == null || n.color == NoteData.NO_COLOR ? WHITE : n.color;
+		}, CLRegistry.FACE_PAPER.get()));
+		modBus.addListener(NoteItemColours::onItemColours);
+		modBus.addListener((FMLClientSetupEvent e) -> e.enqueueWork(NoteItemColours::registerProperties));
+		// Phase 3: label pictures and names (Moonlight render-to-texture icons); notes stay in the chunk mesh.
+		modBus.addListener((EntityRenderersEvent.RegisterRenderers e) ->
+				e.registerBlockEntityRenderer(CLRegistry.FACE_PAPER_BE.get(), FacePaperRenderer::new));
+		MinecraftForge.EVENT_BUS.addListener(FacePaperHighlight::onHighlight);
+	}
 
-    private ClientSetup() {}
+	private ClientSetup() {}
 }

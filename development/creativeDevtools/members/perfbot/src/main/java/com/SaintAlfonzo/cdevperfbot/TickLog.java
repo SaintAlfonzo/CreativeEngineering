@@ -28,77 +28,77 @@ import java.nio.file.StandardOpenOption;
  */
 final class TickLog {
 
-    private final Path out;
-    private BufferedWriter w;
-    private MinecraftServer server;
-    private long tickStart;
+	private final Path out;
+	private BufferedWriter w;
+	private MinecraftServer server;
+	private long tickStart;
 
-    TickLog(Path out) {
-        this.out = out;
-    }
+	TickLog(Path out) {
+		this.out = out;
+	}
 
-    @SubscribeEvent
-    public void onStarting(ServerStartingEvent event) {
-        server = event.getServer();
-        try {
-            Files.createDirectories(out);
-            w = Files.newBufferedWriter(out.resolve("ticks-" + System.currentTimeMillis() + ".csv"),
-                    StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
-        } catch (IOException e) {
-            throw new UncheckedIOException("cdevperfbot: can't open the tick log in " + out, e);
-        }
-        mark("server_starting");
-    }
+	@SubscribeEvent
+	public void onStarting(ServerStartingEvent event) {
+		server = event.getServer();
+		try {
+			Files.createDirectories(out);
+			w = Files.newBufferedWriter(out.resolve("ticks-" + System.currentTimeMillis() + ".csv"),
+					StandardCharsets.UTF_8, StandardOpenOption.CREATE_NEW, StandardOpenOption.WRITE);
+		} catch (IOException e) {
+			throw new UncheckedIOException("cdevperfbot: can't open the tick log in " + out, e);
+		}
+		mark("server_starting");
+	}
 
-    @SubscribeEvent
-    public void onStopping(ServerStoppingEvent event) {
-        mark("server_stopping");
-    }
+	@SubscribeEvent
+	public void onStopping(ServerStoppingEvent event) {
+		mark("server_stopping");
+	}
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onTickStart(TickEvent.ServerTickEvent event) {
-        if (event.phase == TickEvent.Phase.START) tickStart = System.nanoTime();
-    }
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public void onTickStart(TickEvent.ServerTickEvent event) {
+		if (event.phase == TickEvent.Phase.START) tickStart = System.nanoTime();
+	}
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public void onTickEnd(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END || w == null || tickStart == 0) return;
-        long us = (System.nanoTime() - tickStart) / 1000;
-        int tick = server.getTickCount();
-        try {
-            w.write("t," + tick + "," + us + "\n");
-            if (tick % 20 == 0) {
-                w.write(status(tick));
-                w.flush();
-            }
-        } catch (IOException ignored) {
-            // disk full or closed: the suite sees the stale file and records it
-        }
-    }
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public void onTickEnd(TickEvent.ServerTickEvent event) {
+		if (event.phase != TickEvent.Phase.END || w == null || tickStart == 0) return;
+		long us = (System.nanoTime() - tickStart) / 1000;
+		int tick = server.getTickCount();
+		try {
+			w.write("t," + tick + "," + us + "\n");
+			if (tick % 20 == 0) {
+				w.write(status(tick));
+				w.flush();
+			}
+		} catch (IOException ignored) {
+			// disk full or closed: the suite sees the stale file and records it
+		}
+	}
 
-    private String status(int tick) {
-        int entities = 0, chunks = 0;
-        for (ServerLevel level : server.getAllLevels()) {
-            for (var ignored : level.getAllEntities()) entities++;
-            chunks += level.getChunkSource().getLoadedChunksCount();
-        }
-        Runtime rt = Runtime.getRuntime();
-        long heapMb = (rt.totalMemory() - rt.freeMemory()) >> 20;
-        return "s," + System.currentTimeMillis() + "," + tick + "," + server.getPlayerCount() + "," + entities + ","
-                + chunks + "," + heapMb + "\n";
-    }
+	private String status(int tick) {
+		int entities = 0, chunks = 0;
+		for (ServerLevel level : server.getAllLevels()) {
+			for (var ignored : level.getAllEntities()) entities++;
+			chunks += level.getChunkSource().getLoadedChunksCount();
+		}
+		Runtime rt = Runtime.getRuntime();
+		long heapMb = (rt.totalMemory() - rt.freeMemory()) >> 20;
+		return "s," + System.currentTimeMillis() + "," + tick + "," + server.getPlayerCount() + "," + entities + ","
+				+ chunks + "," + heapMb + "\n";
+	}
 
-    synchronized void mark(String label) {
-        if (w == null) return;
-        int tick = server == null ? -1 : server.getTickCount();
-        try {
-            w.write("m," + System.currentTimeMillis() + "," + tick + "," + label.replace('\n', ' ') + "\n");
-            w.flush();
-        } catch (IOException ignored) {
-        }
-    }
+	synchronized void mark(String label) {
+		if (w == null) return;
+		int tick = server == null ? -1 : server.getTickCount();
+		try {
+			w.write("m," + System.currentTimeMillis() + "," + tick + "," + label.replace('\n', ' ') + "\n");
+			w.flush();
+		} catch (IOException ignored) {
+		}
+	}
 
-    String fileHint() {
-        return out.toString();
-    }
+	String fileHint() {
+		return out.toString();
+	}
 }

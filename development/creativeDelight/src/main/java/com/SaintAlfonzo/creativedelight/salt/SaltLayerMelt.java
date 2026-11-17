@@ -27,45 +27,45 @@ import net.minecraftforge.registries.ForgeRegistries;
  * Runs from {@link SaltBlockTicks#init} (common setup, main thread).
  */
 public final class SaltLayerMelt {
-    private static final ResourceLocation SALT_DUST_ID = new ResourceLocation("vintagedelight", "salt_dust");
+	private static final ResourceLocation SALT_DUST_ID = new ResourceLocation("vintagedelight", "salt_dust");
 
-    private SaltLayerMelt() {
-    }
+	private SaltLayerMelt() {
+	}
 
-    static void init() {
-        Melting.setSaltMeltListener(SaltLayerMelt::onSaltMelt);
-        Item dust = ForgeRegistries.ITEMS.getValue(SALT_DUST_ID);
-        if (dust != null && dust != Items.AIR) {
-            DispenserBlock.registerBehavior(dust, io.github.mortuusars.salt.Melting.SALT_DISPENSER_BEHAVIOR);
-        }
-    }
+	static void init() {
+		Melting.setSaltMeltListener(SaltLayerMelt::onSaltMelt);
+		Item dust = ForgeRegistries.ITEMS.getValue(SALT_DUST_ID);
+		if (dust != null && dust != Items.AIR) {
+			DispenserBlock.registerBehavior(dust, io.github.mortuusars.salt.Melting.SALT_DISPENSER_BEHAVIOR);
+		}
+	}
 
-    private static volatile ForgeConfigSpec.DoubleValue vanishChance;
-    private static volatile boolean looked;
+	private static volatile ForgeConfigSpec.DoubleValue vanishChance;
+	private static volatile boolean looked;
 
-    /**
-     * {@code [salt.Melting] SaltLayerVanishChance}: the salt member's Configuration field, read by reflection because this
-     * jar compiles against the upstream Salt jar, which lacks it. 0 when it cannot be read.
-     */
-    private static double vanishChance() {
-        if (!looked) {
-            try {
-                Object v = Configuration.class.getField("SALT_LAYER_VANISH_CHANCE").get(null);
-                vanishChance = v instanceof ForgeConfigSpec.DoubleValue d ? d : null;
-            } catch (ReflectiveOperationException | RuntimeException e) {
-                vanishChance = null;
-            }
-            looked = true;
-        }
-        ForgeConfigSpec.DoubleValue v = vanishChance;
-        return v == null ? 0.0D : v.get();
-    }
+	/**
+	 * {@code [salt.Melting] SaltLayerVanishChance}: the salt member's Configuration field, read by reflection because this
+	 * jar compiles against the upstream Salt jar, which lacks it. 0 when it cannot be read.
+	 */
+	private static double vanishChance() {
+		if (!looked) {
+			try {
+				Object v = Configuration.class.getField("SALT_LAYER_VANISH_CHANCE").get(null);
+				vanishChance = v instanceof ForgeConfigSpec.DoubleValue d ? d : null;
+			} catch (ReflectiveOperationException | RuntimeException e) {
+				vanishChance = null;
+			}
+			looked = true;
+		}
+		ForgeConfigSpec.DoubleValue v = vanishChance;
+		return v == null ? 0.0D : v.get();
+	}
 
-    private static void onSaltMelt(ServerLevel level, BlockPos source, BlockState state, RandomSource random) {
-        if (!(state.getBlock() instanceof SnowLayerBlock) || !state.hasProperty(SnowLayerBlock.LAYERS)) return;
-        if (random.nextDouble() >= vanishChance()) return;
-        if (level.getBlockState(source) != state) return;
-        int layers = state.getValue(SnowLayerBlock.LAYERS);
-        level.setBlockAndUpdate(source, layers > 1 ? state.setValue(SnowLayerBlock.LAYERS, layers - 1) : Blocks.AIR.defaultBlockState());
-    }
+	private static void onSaltMelt(ServerLevel level, BlockPos source, BlockState state, RandomSource random) {
+		if (!(state.getBlock() instanceof SnowLayerBlock) || !state.hasProperty(SnowLayerBlock.LAYERS)) return;
+		if (random.nextDouble() >= vanishChance()) return;
+		if (level.getBlockState(source) != state) return;
+		int layers = state.getValue(SnowLayerBlock.LAYERS);
+		level.setBlockAndUpdate(source, layers > 1 ? state.setValue(SnowLayerBlock.LAYERS, layers - 1) : Blocks.AIR.defaultBlockState());
+	}
 }

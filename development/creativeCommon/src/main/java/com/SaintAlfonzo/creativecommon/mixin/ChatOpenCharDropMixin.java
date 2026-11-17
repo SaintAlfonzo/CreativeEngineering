@@ -14,17 +14,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(value = KeyboardHandler.class, remap = false)
 public class ChatOpenCharDropMixin {
-    @Inject(method = "m_90893_", at = @At("HEAD"))
-    private void creativecommon$disarmOnKey(long window, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
-        if (window == Minecraft.getInstance().getWindow().getWindow()) {
-            ChatOpenKeyGuard.onKeyPress(action);
-        }
-    }
+	@Inject(method = "m_90893_", at = @At("HEAD"))
+	private void creativecommon$disarmOnKey(long window, int key, int scanCode, int action, int modifiers, CallbackInfo ci) {
+		if (window == Minecraft.getInstance().getWindow().getWindow()) {
+			ChatOpenKeyGuard.onKeyPress(action);
+		}
+	}
 
-    @Inject(method = "m_90889_", at = @At("HEAD"), cancellable = true)
-    private void creativecommon$dropStaleChatChar(long window, int codePoint, int modifiers, CallbackInfo ci) {
-        if (window == Minecraft.getInstance().getWindow().getWindow() && ChatOpenKeyGuard.shouldDrop(codePoint)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_90889_", at = @At("HEAD"), cancellable = true)
+	private void creativecommon$dropStaleChatChar(long window, int codePoint, int modifiers, CallbackInfo ci) {
+		if (window == Minecraft.getInstance().getWindow().getWindow() && ChatOpenKeyGuard.shouldDrop(codePoint)) {
+			ci.cancel();
+		}
+	}
 }

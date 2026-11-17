@@ -23,17 +23,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = SpreadingSnowyDirtBlock.class, remap = false)
 public abstract class GrassSpreadSeasonMixin {
 
-    // m_56823_ = SpreadingSnowyDirtBlock.canBeGrass(BlockState, LevelReader, BlockPos)
-    @Shadow(remap = false)
-    private static boolean m_56823_(BlockState state, LevelReader level, BlockPos pos) {
-        throw new AssertionError();
-    }
+	// m_56823_ = SpreadingSnowyDirtBlock.canBeGrass(BlockState, LevelReader, BlockPos)
+	@Shadow(remap = false)
+	private static boolean m_56823_(BlockState state, LevelReader level, BlockPos pos) {
+		throw new AssertionError();
+	}
 
-    // m_213898_ = randomTick(BlockState, ServerLevel, BlockPos, RandomSource)
-    @Inject(method = "m_213898_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$grassSeason(BlockState state, ServerLevel level, BlockPos pos, RandomSource random,
-                                                 CallbackInfo ci) {
-        CropSeasons.Type type = CropSeasons.typeOf(state);
-        if (type != null && m_56823_(state, level, pos) && CropSeasons.refuseSpread(level, pos, type)) ci.cancel();
-    }
+	// m_213898_ = randomTick(BlockState, ServerLevel, BlockPos, RandomSource)
+	@Inject(method = "m_213898_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$grassSeason(BlockState state, ServerLevel level, BlockPos pos, RandomSource random,
+												 CallbackInfo ci) {
+		CropSeasons.Type type = CropSeasons.typeOf(state);
+		if (type != null && m_56823_(state, level, pos) && CropSeasons.refuseSpread(level, pos, type)) ci.cancel();
+	}
 }

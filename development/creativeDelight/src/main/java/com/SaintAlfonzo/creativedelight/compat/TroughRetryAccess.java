@@ -7,7 +7,7 @@ package com.SaintAlfonzo.creativedelight.compat;
  * cannot be referenced directly.
  */
 public interface TroughRetryAccess {
-    long ce$getTroughRetryAt();
+	long ce$getTroughRetryAt();
 
-    void ce$setTroughRetryAt(long gameTime);
+	void ce$setTroughRetryAt(long gameTime);
 }

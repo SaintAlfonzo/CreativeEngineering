@@ -41,63 +41,63 @@ import java.util.Set;
  */
 public final class DrinkFluidEffects {
 
-    private static final boolean CREATE = ModList.get().isLoaded("create");
+	private static final boolean CREATE = ModList.get().isLoaded("create");
 
-    private DrinkFluidEffects() {}
+	private DrinkFluidEffects() {}
 
-    private static Map<Fluid, List<MobEffectInstance>> byFluid;
+	private static Map<Fluid, List<MobEffectInstance>> byFluid;
 
-    public static void onRecipesUpdated(RecipesUpdatedEvent event) {
-        byFluid = null;
-    }
+	public static void onRecipesUpdated(RecipesUpdatedEvent event) {
+		byFluid = null;
+	}
 
-    public static List<Component> lines(FluidStack fs) {
-        if (!CREATE || fs.isEmpty() || (fs.hasTag() && fs.getTag().contains("Potion"))) return List.of();
-        Map<Fluid, List<MobEffectInstance>> map = byFluid;
-        if (map == null) {
-            map = build();
-            if (map == null) return List.of();
-            byFluid = map;
-        }
-        List<MobEffectInstance> effects = map.get(fs.getFluid());
-        if (effects == null) return List.of();
-        List<Component> out = new ArrayList<>();
-        for (MobEffectInstance inst : effects) {
-            MutableComponent c = Component.translatable(inst.getDescriptionId());
-            if (inst.getAmplifier() > 0) {
-                c = Component.translatable("potion.withAmplifier", c,
-                        Component.translatable("potion.potency." + inst.getAmplifier()));
-            }
-            if (inst.getDuration() > 20) {
-                c = Component.translatable("potion.withDuration", c, MobEffectUtil.formatDuration(inst, 1.0F));
-            }
-            out.add(c.withStyle(inst.getEffect().getCategory().getTooltipFormatting()));
-        }
-        return out;
-    }
+	public static List<Component> lines(FluidStack fs) {
+		if (!CREATE || fs.isEmpty() || (fs.hasTag() && fs.getTag().contains("Potion"))) return List.of();
+		Map<Fluid, List<MobEffectInstance>> map = byFluid;
+		if (map == null) {
+			map = build();
+			if (map == null) return List.of();
+			byFluid = map;
+		}
+		List<MobEffectInstance> effects = map.get(fs.getFluid());
+		if (effects == null) return List.of();
+		List<Component> out = new ArrayList<>();
+		for (MobEffectInstance inst : effects) {
+			MutableComponent c = Component.translatable(inst.getDescriptionId());
+			if (inst.getAmplifier() > 0) {
+				c = Component.translatable("potion.withAmplifier", c,
+						Component.translatable("potion.potency." + inst.getAmplifier()));
+			}
+			if (inst.getDuration() > 20) {
+				c = Component.translatable("potion.withDuration", c, MobEffectUtil.formatDuration(inst, 1.0F));
+			}
+			out.add(c.withStyle(inst.getEffect().getCategory().getTooltipFormatting()));
+		}
+		return out;
+	}
 
-    private static Map<Fluid, List<MobEffectInstance>> build() {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.getConnection() == null) return null;
-        Map<Fluid, List<MobEffectInstance>> map = new HashMap<>();
-        Set<Fluid> ambiguous = new HashSet<>();
-        for (Recipe<?> r : mc.getConnection().getRecipeManager().getRecipes()) {
-            if (r.getType() != AllRecipeTypes.EMPTYING.getType() || !(r instanceof EmptyingRecipe er)) continue;
-            if (er.getIngredients().isEmpty() || er.getFluidResults().isEmpty()) continue;
-            FluidStack out = er.getFluidResults().get(0);
-            if (out.isEmpty() || out.hasTag()) continue;
-            for (ItemStack stack : er.getIngredients().get(0).getItems()) {
-                FoodProperties food = stack.getFoodProperties(null);
-                if (food == null || food.getEffects().isEmpty()) continue;
-                List<MobEffectInstance> effects = new ArrayList<>();
-                for (Pair<MobEffectInstance, Float> p : food.getEffects()) {
-                    if (p.getFirst() != null) effects.add(p.getFirst());
-                }
-                List<MobEffectInstance> prev = map.putIfAbsent(out.getFluid(), effects);
-                if (prev != null && !prev.equals(effects)) ambiguous.add(out.getFluid());
-            }
-        }
-        ambiguous.forEach(map::remove);
-        return map;
-    }
+	private static Map<Fluid, List<MobEffectInstance>> build() {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.getConnection() == null) return null;
+		Map<Fluid, List<MobEffectInstance>> map = new HashMap<>();
+		Set<Fluid> ambiguous = new HashSet<>();
+		for (Recipe<?> r : mc.getConnection().getRecipeManager().getRecipes()) {
+			if (r.getType() != AllRecipeTypes.EMPTYING.getType() || !(r instanceof EmptyingRecipe er)) continue;
+			if (er.getIngredients().isEmpty() || er.getFluidResults().isEmpty()) continue;
+			FluidStack out = er.getFluidResults().get(0);
+			if (out.isEmpty() || out.hasTag()) continue;
+			for (ItemStack stack : er.getIngredients().get(0).getItems()) {
+				FoodProperties food = stack.getFoodProperties(null);
+				if (food == null || food.getEffects().isEmpty()) continue;
+				List<MobEffectInstance> effects = new ArrayList<>();
+				for (Pair<MobEffectInstance, Float> p : food.getEffects()) {
+					if (p.getFirst() != null) effects.add(p.getFirst());
+				}
+				List<MobEffectInstance> prev = map.putIfAbsent(out.getFluid(), effects);
+				if (prev != null && !prev.equals(effects)) ambiguous.add(out.getFluid());
+			}
+		}
+		ambiguous.forEach(map::remove);
+		return map;
+	}
 }

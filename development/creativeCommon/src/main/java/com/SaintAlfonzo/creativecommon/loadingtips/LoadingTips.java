@@ -34,92 +34,92 @@ import java.util.Map;
  * the file. A tip is shown as the translation when it is a lang key, else as written.
  */
 public final class LoadingTips extends SimpleJsonResourceReloadListener {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static volatile List<String> tips = List.of();
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static volatile List<String> tips = List.of();
 
-    private LoadingTips() {
-        super(new Gson(), "loading_tips");
-    }
+	private LoadingTips() {
+		super(new Gson(), "loading_tips");
+	}
 
-    public static List<String> tips() {
-        return tips;
-    }
+	public static List<String> tips() {
+		return tips;
+	}
 
-    private record TipFile(ResourceLocation id, int priority, JsonObject json) {}
+	private record TipFile(ResourceLocation id, int priority, JsonObject json) {}
 
-    @Override
-    protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager manager, ProfilerFiller profiler) {
-        List<TipFile> sorted = new ArrayList<>();
-        for (Map.Entry<ResourceLocation, JsonElement> e : files.entrySet()) {
-            try {
-                JsonObject o = GsonHelper.convertToJsonObject(e.getValue(), "loading tips");
-                sorted.add(new TipFile(e.getKey(), GsonHelper.getAsInt(o, "priority", 0), o));
-            } catch (RuntimeException ex) {
-                LOGGER.warn("Loading tips: skipped {}: {}", e.getKey(), ex.getMessage());
-            }
-        }
-        sorted.sort(Comparator.comparingInt(TipFile::priority).thenComparing(TipFile::id));
+	@Override
+	protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager manager, ProfilerFiller profiler) {
+		List<TipFile> sorted = new ArrayList<>();
+		for (Map.Entry<ResourceLocation, JsonElement> e : files.entrySet()) {
+			try {
+				JsonObject o = GsonHelper.convertToJsonObject(e.getValue(), "loading tips");
+				sorted.add(new TipFile(e.getKey(), GsonHelper.getAsInt(o, "priority", 0), o));
+			} catch (RuntimeException ex) {
+				LOGGER.warn("Loading tips: skipped {}: {}", e.getKey(), ex.getMessage());
+			}
+		}
+		sorted.sort(Comparator.comparingInt(TipFile::priority).thenComparing(TipFile::id));
 
-        Map<String, String> out = new LinkedHashMap<>();
-        int replaced = 0, removed = 0, clashes = 0, unmatched = 0;
-        for (TipFile f : sorted) {
-            try {
-                JsonObject o = f.json();
-                if (GsonHelper.getAsBoolean(o, "replace", false)) out.clear();
-                boolean override = GsonHelper.getAsBoolean(o, "override", false);
-                if (override && o.has("remove")) {
-                    for (JsonElement r : GsonHelper.getAsJsonArray(o, "remove")) {
-                        String id = GsonHelper.convertToString(r, "remove id");
-                        if (out.remove(id) != null) removed++;
-                        else {
-                            unmatched++;
-                            LOGGER.warn("Loading tips: {} removes {}, which no earlier file has", f.id(), id);
-                        }
-                    }
-                }
-                for (JsonElement t : GsonHelper.getAsJsonArray(o, "tips")) {
-                    String id, text;
-                    if (t.isJsonObject()) {
-                        JsonObject to = t.getAsJsonObject();
-                        id = GsonHelper.getAsString(to, "id");
-                        text = GsonHelper.getAsString(to, "text").strip();
-                    } else {
-                        text = GsonHelper.convertToString(t, "tip").strip();
-                        id = f.id() + "/" + text;
-                    }
-                    if (text.isEmpty()) continue;
-                    if (!out.containsKey(id)) {
-                        // An override naming another pack's id that nothing defines is a typo or an upstream change.
-                        if (override && !id.startsWith(f.id().getNamespace() + ":")) {
-                            unmatched++;
-                            LOGGER.warn("Loading tips: {} overrides {}, which no earlier file has", f.id(), id);
-                        }
-                        out.put(id, text);
-                    } else if (override) {
-                        out.put(id, text);
-                        replaced++;
-                    } else {
-                        clashes++;
-                        LOGGER.warn("Loading tips: {} repeats id {} without override; the first tip stays", f.id(), id);
-                    }
-                }
-            } catch (RuntimeException ex) {
-                LOGGER.warn("Loading tips: skipped {}: {}", f.id(), ex.getMessage());
-            }
-        }
-        tips = List.copyOf(out.values());
-        LoadingTipBar.reset();
-        LOGGER.info("Loading tips: {} tips from {} files ({} replaced, {} removed, {} id clashes, {} unmatched ids)",
-                out.size(), files.size(), replaced, removed, clashes, unmatched);
-    }
+		Map<String, String> out = new LinkedHashMap<>();
+		int replaced = 0, removed = 0, clashes = 0, unmatched = 0;
+		for (TipFile f : sorted) {
+			try {
+				JsonObject o = f.json();
+				if (GsonHelper.getAsBoolean(o, "replace", false)) out.clear();
+				boolean override = GsonHelper.getAsBoolean(o, "override", false);
+				if (override && o.has("remove")) {
+					for (JsonElement r : GsonHelper.getAsJsonArray(o, "remove")) {
+						String id = GsonHelper.convertToString(r, "remove id");
+						if (out.remove(id) != null) removed++;
+						else {
+							unmatched++;
+							LOGGER.warn("Loading tips: {} removes {}, which no earlier file has", f.id(), id);
+						}
+					}
+				}
+				for (JsonElement t : GsonHelper.getAsJsonArray(o, "tips")) {
+					String id, text;
+					if (t.isJsonObject()) {
+						JsonObject to = t.getAsJsonObject();
+						id = GsonHelper.getAsString(to, "id");
+						text = GsonHelper.getAsString(to, "text").strip();
+					} else {
+						text = GsonHelper.convertToString(t, "tip").strip();
+						id = f.id() + "/" + text;
+					}
+					if (text.isEmpty()) continue;
+					if (!out.containsKey(id)) {
+						// An override naming another pack's id that nothing defines is a typo or an upstream change.
+						if (override && !id.startsWith(f.id().getNamespace() + ":")) {
+							unmatched++;
+							LOGGER.warn("Loading tips: {} overrides {}, which no earlier file has", f.id(), id);
+						}
+						out.put(id, text);
+					} else if (override) {
+						out.put(id, text);
+						replaced++;
+					} else {
+						clashes++;
+						LOGGER.warn("Loading tips: {} repeats id {} without override; the first tip stays", f.id(), id);
+					}
+				}
+			} catch (RuntimeException ex) {
+				LOGGER.warn("Loading tips: skipped {}: {}", f.id(), ex.getMessage());
+			}
+		}
+		tips = List.copyOf(out.values());
+		LoadingTipBar.reset();
+		LOGGER.info("Loading tips: {} tips from {} files ({} replaced, {} removed, {} id clashes, {} unmatched ids)",
+				out.size(), files.size(), replaced, removed, clashes, unmatched);
+	}
 
-    @Mod.EventBusSubscriber(modid = CreativeCommon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static final class Reload {
-        private Reload() {}
+	@Mod.EventBusSubscriber(modid = CreativeCommon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+	public static final class Reload {
+		private Reload() {}
 
-        @SubscribeEvent
-        public static void onRegisterReloadListeners(RegisterClientReloadListenersEvent event) {
-            event.registerReloadListener(new LoadingTips());
-        }
-    }
+		@SubscribeEvent
+		public static void onRegisterReloadListeners(RegisterClientReloadListenersEvent event) {
+			event.registerReloadListener(new LoadingTips());
+		}
+	}
 }

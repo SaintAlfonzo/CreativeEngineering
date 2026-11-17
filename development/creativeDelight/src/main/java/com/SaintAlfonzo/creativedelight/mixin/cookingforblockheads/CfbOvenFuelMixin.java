@@ -35,56 +35,56 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = OvenBlockEntity.class, remap = false)
 public abstract class CfbOvenFuelMixin {
 
-    private static final TagKey<Item> CE$COOKING_OIL = ItemTags.create(new ResourceLocation("balm", "cooking_oil"));
-    private static final int CE$OIL_BURN_TIME = 800;
+	private static final TagKey<Item> CE$COOKING_OIL = ItemTags.create(new ResourceLocation("balm", "cooking_oil"));
+	private static final int CE$OIL_BURN_TIME = 800;
 
-    @Shadow
-    @Final
-    private SubContainer outputContainer;
+	@Shadow
+	@Final
+	private SubContainer outputContainer;
 
-    @Inject(method = "getBurnTime", at = @At("RETURN"), cancellable = true)
-    private static void ce$oilBurns(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
-        if (cir.getReturnValueI() <= 0 && !stack.isEmpty() && stack.is(CE$COOKING_OIL)) {
-            cir.setReturnValue(CE$OIL_BURN_TIME);
-        }
-    }
+	@Inject(method = "getBurnTime", at = @At("RETURN"), cancellable = true)
+	private static void ce$oilBurns(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
+		if (cir.getReturnValueI() <= 0 && !stack.isEmpty() && stack.is(CE$COOKING_OIL)) {
+			cir.setReturnValue(CE$OIL_BURN_TIME);
+		}
+	}
 
-    @Redirect(method = "serverTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;m_41774_(I)V"))
-    private void ce$shrinkFuel(ItemStack fuel, int amount) {
-        ItemStack container = fuel.getCount() > amount ? Balm.getHooks().getCraftingRemainingItem(fuel) : ItemStack.EMPTY;
-        fuel.shrink(amount);
-        if (!container.isEmpty()) {
-            ce$giveBack(container);
-        }
-    }
+	@Redirect(method = "serverTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;m_41774_(I)V"))
+	private void ce$shrinkFuel(ItemStack fuel, int amount) {
+		ItemStack container = fuel.getCount() > amount ? Balm.getHooks().getCraftingRemainingItem(fuel) : ItemStack.EMPTY;
+		fuel.shrink(amount);
+		if (!container.isEmpty()) {
+			ce$giveBack(container);
+		}
+	}
 
-    private void ce$giveBack(ItemStack stack) {
-        Container out = outputContainer;
-        for (int i = 0; i < out.getContainerSize() && !stack.isEmpty(); ++i) {
-            ItemStack slot = out.getItem(i);
-            if (!slot.isEmpty() && ItemStack.isSameItemSameTags(slot, stack)) {
-                int moved = Math.min(stack.getCount(), Math.min(slot.getMaxStackSize(), out.getMaxStackSize()) - slot.getCount());
-                if (moved > 0) {
-                    slot.grow(moved);
-                    stack.shrink(moved);
-                }
-            }
-        }
-        for (int i = 0; i < out.getContainerSize() && !stack.isEmpty(); ++i) {
-            if (out.getItem(i).isEmpty()) {
-                out.setItem(i, stack.copy());
-                stack = ItemStack.EMPTY;
-            }
-        }
-        out.setChanged();
-        if (!stack.isEmpty()) {
-            BlockEntity self = (BlockEntity) (Object) this;
-            Level level = self.getLevel();
-            BlockPos pos = self.getBlockPos();
-            if (level != null) {
-                Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack);
-            }
-        }
-    }
+	private void ce$giveBack(ItemStack stack) {
+		Container out = outputContainer;
+		for (int i = 0; i < out.getContainerSize() && !stack.isEmpty(); ++i) {
+			ItemStack slot = out.getItem(i);
+			if (!slot.isEmpty() && ItemStack.isSameItemSameTags(slot, stack)) {
+				int moved = Math.min(stack.getCount(), Math.min(slot.getMaxStackSize(), out.getMaxStackSize()) - slot.getCount());
+				if (moved > 0) {
+					slot.grow(moved);
+					stack.shrink(moved);
+				}
+			}
+		}
+		for (int i = 0; i < out.getContainerSize() && !stack.isEmpty(); ++i) {
+			if (out.getItem(i).isEmpty()) {
+				out.setItem(i, stack.copy());
+				stack = ItemStack.EMPTY;
+			}
+		}
+		out.setChanged();
+		if (!stack.isEmpty()) {
+			BlockEntity self = (BlockEntity) (Object) this;
+			Level level = self.getLevel();
+			BlockPos pos = self.getBlockPos();
+			if (level != null) {
+				Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 1.1, pos.getZ() + 0.5, stack);
+			}
+		}
+	}
 }

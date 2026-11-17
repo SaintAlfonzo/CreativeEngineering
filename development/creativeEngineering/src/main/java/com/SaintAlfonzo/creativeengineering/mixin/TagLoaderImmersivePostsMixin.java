@@ -20,12 +20,12 @@ import java.util.Map;
 @Mixin(value = TagLoader.class, remap = false)
 public abstract class TagLoaderImmersivePostsMixin {
 
-    @Inject(method = "m_144495_(Lnet/minecraft/server/packs/resources/ResourceManager;)Ljava/util/Map;", // load
-            at = @At("RETURN"), remap = false)
-    private void creativeengineering$dropUnregisteredPosts(CallbackInfoReturnable<Map<ResourceLocation, List<TagLoader.EntryWithSource>>> cir) {
-        for (List<TagLoader.EntryWithSource> entries : cir.getReturnValue().values()) {
-            // TagEntry.toString() is "#id" for a tag and ends in '?' when optional; its fields are private
-            entries.removeIf(e -> ImmersivePostsMaterials.isDroppedBlock(e.entry().toString()));
-        }
-    }
+	@Inject(method = "m_144495_(Lnet/minecraft/server/packs/resources/ResourceManager;)Ljava/util/Map;", // load
+			at = @At("RETURN"), remap = false)
+	private void creativeengineering$dropUnregisteredPosts(CallbackInfoReturnable<Map<ResourceLocation, List<TagLoader.EntryWithSource>>> cir) {
+		for (List<TagLoader.EntryWithSource> entries : cir.getReturnValue().values()) {
+			// TagEntry.toString() is "#id" for a tag and ends in '?' when optional; its fields are private
+			entries.removeIf(e -> ImmersivePostsMaterials.isDroppedBlock(e.entry().toString()));
+		}
+	}
 }

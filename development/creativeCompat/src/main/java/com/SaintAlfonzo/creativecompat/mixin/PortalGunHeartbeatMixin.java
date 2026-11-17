@@ -11,8 +11,8 @@ import tk.meowmc.portalgun.entities.CustomPortal;
 @Mixin(value = CustomPortal.class, remap = false)
 public abstract class PortalGunHeartbeatMixin {
 
-    @Inject(method = "m_8119_", at = @At("TAIL"), remap = false, require = 1)
-    private void creativecompat$heartbeat(CallbackInfo ci) {
-        PortalGunDissolve.heartbeat((CustomPortal) (Object) this);
-    }
+	@Inject(method = "m_8119_", at = @At("TAIL"), remap = false, require = 1)
+	private void creativecompat$heartbeat(CallbackInfo ci) {
+		PortalGunDissolve.heartbeat((CustomPortal) (Object) this);
+	}
 }

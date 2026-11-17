@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ProtoChunkTicks.class, remap = false)
 public abstract class ProtoChunkTicksFallingMixin {
 
-    @Inject(method = "m_183393_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$dropFallingTick(ScheduledTick<?> tick, CallbackInfo ci) {
-        if (GeneratedFallingBlocks.dropGenerationTick(tick.type())) ci.cancel();
-    }
+	@Inject(method = "m_183393_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$dropFallingTick(ScheduledTick<?> tick, CallbackInfo ci) {
+		if (GeneratedFallingBlocks.dropGenerationTick(tick.type())) ci.cancel();
+	}
 }

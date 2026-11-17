@@ -31,55 +31,55 @@ import net.minecraftforge.server.ServerLifecycleHooks;
  */
 public final class SurfaceSpeeds {
 
-    private SurfaceSpeeds() {}
+	private SurfaceSpeeds() {}
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    /** Tier speeds last written into BlockRunner's json, or {@code null} if it never happened. */
-    private static volatile Map<SurfaceTier, Double> applied;
+	/** Tier speeds last written into BlockRunner's json, or {@code null} if it never happened. */
+	private static volatile Map<SurfaceTier, Double> applied;
 
-    /** Overwrites the surface-tier entries of BlockRunner's freshly read json with the toml's values. */
-    public static JsonObject apply(JsonObject json) {
-        Map<SurfaceTier, Double> speeds = current();
-        speeds.forEach((tier, speed) -> {
-            JsonElement old = json.get(tier.jsonKey());
-            if (old != null && old.isJsonPrimitive() && old.getAsDouble() != speed) {
-                LOGGER.warn("[surface] blockrunner.json sets {} to {}; using [surface.speed] {} = {} instead",
-                        tier.jsonKey(), old.getAsDouble(), tier.key(), speed);
-            }
-            json.addProperty(tier.jsonKey(), speed);
-        });
-        applied = speeds;
-        LOGGER.info("[surface] {} tier speeds applied to BlockRunner from [surface.speed]", speeds.size());
-        return json;
-    }
+	/** Overwrites the surface-tier entries of BlockRunner's freshly read json with the toml's values. */
+	public static JsonObject apply(JsonObject json) {
+		Map<SurfaceTier, Double> speeds = current();
+		speeds.forEach((tier, speed) -> {
+			JsonElement old = json.get(tier.jsonKey());
+			if (old != null && old.isJsonPrimitive() && old.getAsDouble() != speed) {
+				LOGGER.warn("[surface] blockrunner.json sets {} to {}; using [surface.speed] {} = {} instead",
+						tier.jsonKey(), old.getAsDouble(), tier.key(), speed);
+			}
+			json.addProperty(tier.jsonKey(), speed);
+		});
+		applied = speeds;
+		LOGGER.info("[surface] {} tier speeds applied to BlockRunner from [surface.speed]", speeds.size());
+		return json;
+	}
 
-    /** Saving the toml (by hand or in Create's Configs screen): push changed tier speeds to BlockRunner. */
-    public static void onConfigReload(ModConfigEvent.Reloading event) {
-        if (event.getConfig().getSpec() != CompatConfig.SPEC || !ModList.get().isLoaded("blockrunner")) {
-            return;
-        }
-        Map<SurfaceTier, Double> last = applied;
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        if (server == null || last == null || last.equals(current())) {
-            return; // no world running here (a client on a server gets the server's values), or nothing changed
-        }
-        // re-reads blockrunner.json (so apply() runs again) and re-sends the values to every player
-        server.execute(BlockSpeedManager.INSTANCE::load);
-    }
+	/** Saving the toml (by hand or in Create's Configs screen): push changed tier speeds to BlockRunner. */
+	public static void onConfigReload(ModConfigEvent.Reloading event) {
+		if (event.getConfig().getSpec() != CompatConfig.SPEC || !ModList.get().isLoaded("blockrunner")) {
+			return;
+		}
+		Map<SurfaceTier, Double> last = applied;
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		if (server == null || last == null || last.equals(current())) {
+			return; // no world running here (a client on a server gets the server's values), or nothing changed
+		}
+		// re-reads blockrunner.json (so apply() runs again) and re-sends the values to every player
+		server.execute(BlockSpeedManager.INSTANCE::load);
+	}
 
-    /** The hook rides on a private BlockRunner method; say so loudly if it stopped applying. */
-    @SubscribeEvent
-    public static void onServerStarted(ServerStartedEvent event) {
-        if (applied == null && ModList.get().isLoaded("blockrunner")) {
-            LOGGER.error("[surface] BlockRunner loaded blockrunner.json without BlockRunnerSpeedConfigMixin: the "
-                    + "[surface.speed] tier speeds are NOT in use (did a BlockRunner update rename deserialize?)");
-        }
-    }
+	/** The hook rides on a private BlockRunner method; say so loudly if it stopped applying. */
+	@SubscribeEvent
+	public static void onServerStarted(ServerStartedEvent event) {
+		if (applied == null && ModList.get().isLoaded("blockrunner")) {
+			LOGGER.error("[surface] BlockRunner loaded blockrunner.json without BlockRunnerSpeedConfigMixin: the "
+					+ "[surface.speed] tier speeds are NOT in use (did a BlockRunner update rename deserialize?)");
+		}
+	}
 
-    private static Map<SurfaceTier, Double> current() {
-        Map<SurfaceTier, Double> speeds = new EnumMap<>(SurfaceTier.class);
-        CompatConfig.SURFACE.speed.forEach((tier, value) -> speeds.put(tier, value.get()));
-        return speeds;
-    }
+	private static Map<SurfaceTier, Double> current() {
+		Map<SurfaceTier, Double> speeds = new EnumMap<>(SurfaceTier.class);
+		CompatConfig.SURFACE.speed.forEach((tier, value) -> speeds.put(tier, value.get()));
+		return speeds;
+	}
 }

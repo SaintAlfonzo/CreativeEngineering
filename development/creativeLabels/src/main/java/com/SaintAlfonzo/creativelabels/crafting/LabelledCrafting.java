@@ -21,31 +21,31 @@ import javax.annotation.Nullable;
  */
 public final class LabelledCrafting {
 
-    private LabelledCrafting() {}
+	private LabelledCrafting() {}
 
-    /** Server side, switch on, and some stack in the grid has label lines. */
-    public static boolean blocks(Level level, Container grid) {
-        if (level.isClientSide || !CLConfig.on(CLConfig.BLOCK_LABELLED_CRAFTING)) return false;
-        for (int i = 0; i < grid.getContainerSize(); i++) {
-            if (ItemLabels.has(grid.getItem(i))) return true;
-        }
-        return false;
-    }
+	/** Server side, switch on, and some stack in the grid has label lines. */
+	public static boolean blocks(Level level, Container grid) {
+		if (level.isClientSide || !CLConfig.on(CLConfig.BLOCK_LABELLED_CRAFTING)) return false;
+		for (int i = 0; i < grid.getContainerSize(); i++) {
+			if (ItemLabels.has(grid.getItem(i))) return true;
+		}
+		return false;
+	}
 
-    /**
-     * Empties the result and tells the client: through {@code menu} when the caller knows it, else through the
-     * player's open menu when one of its slots shows {@code result} (FastWorkbench's path passes no menu; its own
-     * result packet is the only other way the client learns the result, so without this it would keep the old one).
-     */
-    public static void clear(@Nullable AbstractContainerMenu menu, Player player, ResultContainer result) {
-        result.setItem(0, ItemStack.EMPTY);
-        if (!(player instanceof ServerPlayer server)) return;
-        AbstractContainerMenu m = menu != null ? menu : player.containerMenu;
-        for (int i = 0; i < m.slots.size(); i++) {
-            if (m.slots.get(i).container == result) {
-                server.connection.send(new ClientboundContainerSetSlotPacket(m.containerId, m.incrementStateId(), i, ItemStack.EMPTY));
-                return;
-            }
-        }
-    }
+	/**
+	 * Empties the result and tells the client: through {@code menu} when the caller knows it, else through the
+	 * player's open menu when one of its slots shows {@code result} (FastWorkbench's path passes no menu; its own
+	 * result packet is the only other way the client learns the result, so without this it would keep the old one).
+	 */
+	public static void clear(@Nullable AbstractContainerMenu menu, Player player, ResultContainer result) {
+		result.setItem(0, ItemStack.EMPTY);
+		if (!(player instanceof ServerPlayer server)) return;
+		AbstractContainerMenu m = menu != null ? menu : player.containerMenu;
+		for (int i = 0; i < m.slots.size(); i++) {
+			if (m.slots.get(i).container == result) {
+				server.connection.send(new ClientboundContainerSetSlotPacket(m.containerId, m.incrementStateId(), i, ItemStack.EMPTY));
+				return;
+			}
+		}
+	}
 }

@@ -8,7 +8,7 @@ package com.SaintAlfonzo.creativecompat.surface;
  */
 public interface PassTierSlot {
 
-    int creativecompat$passTier();
+	int creativecompat$passTier();
 
-    void creativecompat$setPassTier(int packed);
+	void creativecompat$setPassTier(int packed);
 }

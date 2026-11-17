@@ -37,66 +37,66 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class WaterOnSoil {
 
-    private WaterOnSoil() {}
+	private WaterOnSoil() {}
 
-    @SubscribeEvent(priority = EventPriority.HIGH)
-    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        Player player = event.getEntity();
-        if (player == null || player.isSpectator() || player.isSecondaryUseActive()) return;
-        ItemStack stack = event.getItemStack();
-        boolean bucket = stack.is(Items.WATER_BUCKET);
-        boolean bottle = !bucket && stack.is(Items.POTION) && PotionUtils.getPotion(stack) == Potions.WATER;
-        if (!bucket && !bottle) return;
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+		Player player = event.getEntity();
+		if (player == null || player.isSpectator() || player.isSecondaryUseActive()) return;
+		ItemStack stack = event.getItemStack();
+		boolean bucket = stack.is(Items.WATER_BUCKET);
+		boolean bottle = !bucket && stack.is(Items.POTION) && PotionUtils.getPotion(stack) == Potions.WATER;
+		if (!bucket && !bottle) return;
 
-        Level level = event.getLevel();
-        BlockPos soil = soilFor(level, event.getPos(), event.getFace());
-        if (soil == null) return;
-        int radius = bucket ? 1 : 0;
-        if (!hasDrySoil(level, soil, radius)) return;
+		Level level = event.getLevel();
+		BlockPos soil = soilFor(level, event.getPos(), event.getFace());
+		if (soil == null) return;
+		int radius = bucket ? 1 : 0;
+		if (!hasDrySoil(level, soil, radius)) return;
 
-        event.setCanceled(true);
-        event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
-        if (!(level instanceof ServerLevel server)) return;
+		event.setCanceled(true);
+		event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
+		if (!(level instanceof ServerLevel server)) return;
 
-        wetSoil(server, soil, radius);
-        server.playSound(null, soil, bucket ? SoundEvents.BUCKET_EMPTY : SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-        player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
-        InteractionHand hand = event.getHand();
-        ItemStack empty = new ItemStack(bucket ? Items.BUCKET : Items.GLASS_BOTTLE);
-        player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, empty));
-    }
+		wetSoil(server, soil, radius);
+		server.playSound(null, soil, bucket ? SoundEvents.BUCKET_EMPTY : SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+		player.awardStat(Stats.ITEM_USED.get(stack.getItem()));
+		InteractionHand hand = event.getHand();
+		ItemStack empty = new ItemStack(bucket ? Items.BUCKET : Items.GLASS_BOTTLE);
+		player.setItemInHand(hand, ItemUtils.createFilledResult(stack, player, empty));
+	}
 
-    /** The soil the click aims at: the clicked soil from above, or the soil under a clicked crop; null otherwise. */
-    static BlockPos soilFor(Level level, BlockPos pos, Direction face) {
-        BlockState clicked = level.getBlockState(pos);
-        if (isSoil(clicked)) return face == Direction.UP ? pos : null;
-        BlockPos below = pos.below();
-        if (isSoil(level.getBlockState(below)) && clicked.getCollisionShape(level, pos).isEmpty()) return below;
-        return null;
-    }
+	/** The soil the click aims at: the clicked soil from above, or the soil under a clicked crop; null otherwise. */
+	static BlockPos soilFor(Level level, BlockPos pos, Direction face) {
+		BlockState clicked = level.getBlockState(pos);
+		if (isSoil(clicked)) return face == Direction.UP ? pos : null;
+		BlockPos below = pos.below();
+		if (isSoil(level.getBlockState(below)) && clicked.getCollisionShape(level, pos).isEmpty()) return below;
+		return null;
+	}
 
-    /** Anything with farmland moisture: Farmland, Rich Farmland, Fertile Soil. */
-    static boolean isSoil(BlockState state) {
-        return state.hasProperty(FarmBlock.MOISTURE);
-    }
+	/** Anything with farmland moisture: Farmland, Rich Farmland, Fertile Soil. */
+	static boolean isSoil(BlockState state) {
+		return state.hasProperty(FarmBlock.MOISTURE);
+	}
 
-    static boolean isDry(BlockState state) {
-        return isSoil(state) && state.getValue(FarmBlock.MOISTURE) < FarmBlock.MAX_MOISTURE;
-    }
+	static boolean isDry(BlockState state) {
+		return isSoil(state) && state.getValue(FarmBlock.MOISTURE) < FarmBlock.MAX_MOISTURE;
+	}
 
-    private static boolean hasDrySoil(Level level, BlockPos center, int r) {
-        for (BlockPos p : BlockPos.betweenClosed(center.offset(-r, 0, -r), center.offset(r, 0, r))) {
-            if (isDry(level.getBlockState(p))) return true;
-        }
-        return false;
-    }
+	private static boolean hasDrySoil(Level level, BlockPos center, int r) {
+		for (BlockPos p : BlockPos.betweenClosed(center.offset(-r, 0, -r), center.offset(r, 0, r))) {
+			if (isDry(level.getBlockState(p))) return true;
+		}
+		return false;
+	}
 
-    private static void wetSoil(ServerLevel level, BlockPos center, int r) {
-        for (BlockPos p : BlockPos.betweenClosed(center.offset(-r, 0, -r), center.offset(r, 0, r))) {
-            BlockState state = level.getBlockState(p);
-            if (!isDry(state)) continue;
-            level.setBlock(p, state.setValue(FarmBlock.MOISTURE, FarmBlock.MAX_MOISTURE), 2);
-            level.sendParticles(ParticleTypes.SPLASH, p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5, 4, 0.3, 0.05, 0.3, 0.0);
-        }
-    }
+	private static void wetSoil(ServerLevel level, BlockPos center, int r) {
+		for (BlockPos p : BlockPos.betweenClosed(center.offset(-r, 0, -r), center.offset(r, 0, r))) {
+			BlockState state = level.getBlockState(p);
+			if (!isDry(state)) continue;
+			level.setBlock(p, state.setValue(FarmBlock.MOISTURE, FarmBlock.MAX_MOISTURE), 2);
+			level.sendParticles(ParticleTypes.SPLASH, p.getX() + 0.5, p.getY() + 1.0, p.getZ() + 0.5, 4, 0.3, 0.05, 0.3, 0.0);
+		}
+	}
 }

@@ -24,16 +24,16 @@ import qouteall.imm_ptl.peripheral.portal_generation.IntrinsicPortalGeneration;
 @Mixin(value = IntrinsicPortalGeneration.class, remap = false)
 public abstract class IPFireGateMixin {
 
-    @Inject(method = "onFireLitOnObsidian", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private static void creativemagic$gateFire(ServerLevel level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (IPNetherPortalBridge.passing()) return;
-        cir.setReturnValue(false);
-        IPNetherPortalBridge.postVanillaSpawnEvent(level, pos);
-    }
+	@Inject(method = "onFireLitOnObsidian", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private static void creativemagic$gateFire(ServerLevel level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+		if (IPNetherPortalBridge.passing()) return;
+		cir.setReturnValue(false);
+		IPNetherPortalBridge.postVanillaSpawnEvent(level, pos);
+	}
 
-    @Inject(method = "onCrouchingPlayerIgnite", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private static void creativemagic$gateCrouch(ServerLevel level, ServerPlayer player, BlockPos pos,
-                                                 CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(false);
-    }
+	@Inject(method = "onCrouchingPlayerIgnite", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private static void creativemagic$gateCrouch(ServerLevel level, ServerPlayer player, BlockPos pos,
+												 CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(false);
+	}
 }

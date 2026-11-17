@@ -19,25 +19,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = TreeLoreManager.class, remap = false)
 public abstract class TreeLoreManagerMixin {
 
-    @Unique private static final Logger creativeworldgen$LOGGER = LogUtils.getLogger();
-    @Unique private static boolean creativeworldgen$logged;
+	@Unique private static final Logger creativeworldgen$LOGGER = LogUtils.getLogger();
+	@Unique private static boolean creativeworldgen$logged;
 
-    @Inject(method = "initIfNeeded", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
-    private static void creativeworldgen$blockLookups(CallbackInfo ci) {
-        if (!creativeworldgen$logged) {
-            creativeworldgen$logged = true;
-            creativeworldgen$LOGGER.info("Wise Oak web lookups disabled");
-        }
-        ci.cancel();
-    }
+	@Inject(method = "initIfNeeded", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
+	private static void creativeworldgen$blockLookups(CallbackInfo ci) {
+		if (!creativeworldgen$logged) {
+			creativeworldgen$logged = true;
+			creativeworldgen$LOGGER.info("Wise Oak web lookups disabled");
+		}
+		ci.cancel();
+	}
 
-    @Inject(method = "readFromURL(Ljava/lang/String;)Ljava/lang/String;", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
-    private static void creativeworldgen$noRead(String url, CallbackInfoReturnable<String> cir) {
-        cir.setReturnValue("");
-    }
+	@Inject(method = "readFromURL(Ljava/lang/String;)Ljava/lang/String;", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
+	private static void creativeworldgen$noRead(String url, CallbackInfoReturnable<String> cir) {
+		cir.setReturnValue("");
+	}
 
-    @Inject(method = "readFromURL(Ljava/lang/String;Z)Ljava/lang/String;", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
-    private static void creativeworldgen$noReadKeyed(String url, boolean useKey, CallbackInfoReturnable<String> cir) {
-        cir.setReturnValue("");
-    }
+	@Inject(method = "readFromURL(Ljava/lang/String;Z)Ljava/lang/String;", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
+	private static void creativeworldgen$noReadKeyed(String url, boolean useKey, CallbackInfoReturnable<String> cir) {
+		cir.setReturnValue("");
+	}
 }

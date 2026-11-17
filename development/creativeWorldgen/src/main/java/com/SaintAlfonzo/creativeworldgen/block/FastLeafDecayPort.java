@@ -21,27 +21,27 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class FastLeafDecayPort {
 
-    private FastLeafDecayPort() {}
+	private FastLeafDecayPort() {}
 
-    @SubscribeEvent
-    public static void onNeighborNotify(BlockEvent.NeighborNotifyEvent event) {
-        if (!(event.getLevel() instanceof ServerLevel level) || !event.getState().isAir()) return;
-        if (!CWGConfig.LEAF_DECAY.enabled.get()) return;
-        BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
-        for (Direction dir : event.getNotifiedSides()) {
-            at.setWithOffset(event.getPos(), dir);
-            if (!level.isLoaded(at)) continue;
-            BlockState state = level.getBlockState(at);
-            if (state.getBlock() instanceof LeavesBlock && !state.getValue(LeavesBlock.PERSISTENT)) {
-                level.scheduleTick(at.immutable(), state.getBlock(), decayDelay(level.random));
-            }
-        }
-    }
+	@SubscribeEvent
+	public static void onNeighborNotify(BlockEvent.NeighborNotifyEvent event) {
+		if (!(event.getLevel() instanceof ServerLevel level) || !event.getState().isAir()) return;
+		if (!CWGConfig.LEAF_DECAY.enabled.get()) return;
+		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+		for (Direction dir : event.getNotifiedSides()) {
+			at.setWithOffset(event.getPos(), dir);
+			if (!level.isLoaded(at)) continue;
+			BlockState state = level.getBlockState(at);
+			if (state.getBlock() instanceof LeavesBlock && !state.getValue(LeavesBlock.PERSISTENT)) {
+				level.scheduleTick(at.immutable(), state.getBlock(), decayDelay(level.random));
+			}
+		}
+	}
 
-    /** Ticks until a leaf's decay check: uniform in [decayMinTicks, decayMaxTicks]. */
-    static int decayDelay(RandomSource random) {
-        int min = CWGConfig.LEAF_DECAY.decayMinTicks.get();
-        int max = Math.max(min, CWGConfig.LEAF_DECAY.decayMaxTicks.get());
-        return min + random.nextInt(max - min + 1);
-    }
+	/** Ticks until a leaf's decay check: uniform in [decayMinTicks, decayMaxTicks]. */
+	static int decayDelay(RandomSource random) {
+		int min = CWGConfig.LEAF_DECAY.decayMinTicks.get();
+		int max = Math.max(min, CWGConfig.LEAF_DECAY.decayMaxTicks.get());
+		return min + random.nextInt(max - min + 1);
+	}
 }

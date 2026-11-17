@@ -36,11 +36,11 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(value = ElytraEvent.class, remap = false)
 public class EasyElytraTakeoffGroundCheckMixin {
 
-    @ModifyVariable(method = "onFirework", at = @At("LOAD"), index = 8, remap = false)
-    private static boolean creativeengineering$allowAirborneTakeoff(boolean inAir, Player player, Level world, InteractionHand hand) {
-        if (inAir && ElytraChestplates.isWorn(player)) {
-            return false;
-        }
-        return inAir;
-    }
+	@ModifyVariable(method = "onFirework", at = @At("LOAD"), index = 8, remap = false)
+	private static boolean creativeengineering$allowAirborneTakeoff(boolean inAir, Player player, Level world, InteractionHand hand) {
+		if (inAir && ElytraChestplates.isWorn(player)) {
+			return false;
+		}
+		return inAir;
+	}
 }

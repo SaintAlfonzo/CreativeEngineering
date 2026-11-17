@@ -16,25 +16,25 @@ import net.minecraft.world.level.block.state.BlockState;
  * grape plant in the still water above it, where one could stand and nothing grows yet; otherwise it is eaten.
  */
 public class SeaGrapeItem extends OceanicFood {
-    public SeaGrapeItem(Builder builder) {
-        super(builder);
-    }
+	public SeaGrapeItem(Builder builder) {
+		super(builder);
+	}
 
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        BlockPos at = context.getClickedPos().above();
-        BlockState there = level.getBlockState(at);
-        BlockState plant = OceanicBlocks.SEA_GRAPE_PLANT.get().defaultBlockState().setValue(WaterloggedPlantBlock.WATERLOGGED, true);
-        boolean taken = there.is(OceanicBlocks.SEA_GRAPE_PLANT.get()) || there.is(Blocks.KELP_PLANT) || there.is(Blocks.KELP)
-                || (there.hasProperty(WaterloggedPlantBlock.WATERLOGGED) && there.getValue(WaterloggedPlantBlock.WATERLOGGED));
-        if (taken || !plant.canSurvive(level, at)) return InteractionResult.FAIL;
-        if (!level.isClientSide) {
-            level.setBlock(at, plant, 3);
-            Player player = context.getPlayer();
-            if (player == null || !player.getAbilities().instabuild) context.getItemInHand().shrink(1);
-            level.playSound(null, at, SoundEvents.WET_GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        }
-        return InteractionResult.sidedSuccess(level.isClientSide);
-    }
+	@Override
+	public InteractionResult useOn(UseOnContext context) {
+		Level level = context.getLevel();
+		BlockPos at = context.getClickedPos().above();
+		BlockState there = level.getBlockState(at);
+		BlockState plant = OceanicBlocks.SEA_GRAPE_PLANT.get().defaultBlockState().setValue(WaterloggedPlantBlock.WATERLOGGED, true);
+		boolean taken = there.is(OceanicBlocks.SEA_GRAPE_PLANT.get()) || there.is(Blocks.KELP_PLANT) || there.is(Blocks.KELP)
+				|| (there.hasProperty(WaterloggedPlantBlock.WATERLOGGED) && there.getValue(WaterloggedPlantBlock.WATERLOGGED));
+		if (taken || !plant.canSurvive(level, at)) return InteractionResult.FAIL;
+		if (!level.isClientSide) {
+			level.setBlock(at, plant, 3);
+			Player player = context.getPlayer();
+			if (player == null || !player.getAbilities().instabuild) context.getItemInHand().shrink(1);
+			level.playSound(null, at, SoundEvents.WET_GRASS_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
+		}
+		return InteractionResult.sidedSuccess(level.isClientSide);
+	}
 }

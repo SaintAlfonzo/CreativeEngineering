@@ -13,12 +13,12 @@ import org.spongepowered.asm.mixin.gen.Invoker;
  */
 @Mixin(value = IngredientFilter.class, remap = false)
 public interface JeiIngredientFilterAccessor {
-    @Accessor("elementSearch")
-    IElementSearch creativecommon$getElementSearch();
+	@Accessor("elementSearch")
+	IElementSearch creativecommon$getElementSearch();
 
-    @Accessor("ingredientManager")
-    IIngredientManager creativecommon$getIngredientManager();
+	@Accessor("ingredientManager")
+	IIngredientManager creativecommon$getIngredientManager();
 
-    @Invoker("notifyListenersOfChange")
-    void creativecommon$notifyListenersOfChange();
+	@Invoker("notifyListenersOfChange")
+	void creativecommon$notifyListenersOfChange();
 }

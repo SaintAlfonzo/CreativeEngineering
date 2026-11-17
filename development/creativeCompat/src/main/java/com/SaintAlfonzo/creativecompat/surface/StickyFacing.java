@@ -30,36 +30,36 @@ import net.minecraft.world.level.block.state.properties.Property;
  */
 public final class StickyFacing {
 
-    private StickyFacing() {}
+	private StickyFacing() {}
 
-    public static final TagKey<Block> FACE_UP = BlockTags.create(
-            new ResourceLocation(CreativeCompat.NS, "blockrunner_face_up"));
+	public static final TagKey<Block> FACE_UP = BlockTags.create(
+			new ResourceLocation(CreativeCompat.NS, "blockrunner_face_up"));
 
-    public static void afterBlockRunner(LivingEntity entity) {
-        if (!cancels(entity.getBlockStateOn())) {
-            return;
-        }
-        AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speed != null) {
-            speed.removeModifier(BlockSpeedManager.SPEED_MODIFIER_BLOCK_SPEED_UUID);
-        }
-    }
+	public static void afterBlockRunner(LivingEntity entity) {
+		if (!cancels(entity.getBlockStateOn())) {
+			return;
+		}
+		AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
+		if (speed != null) {
+			speed.removeModifier(BlockSpeedManager.SPEED_MODIFIER_BLOCK_SPEED_UUID);
+		}
+	}
 
-    /** True when {@code state} is a sticky-tier block whose sticky face isn't up, so it gives no slowdown. */
-    static boolean cancels(BlockState state) {
-        return CompatConfig.SURFACE.sticky.faceUpOnly.get() && state.is(FACE_UP) && !stickyFaceUp(state);
-    }
+	/** True when {@code state} is a sticky-tier block whose sticky face isn't up, so it gives no slowdown. */
+	static boolean cancels(BlockState state) {
+		return CompatConfig.SURFACE.sticky.faceUpOnly.get() && state.is(FACE_UP) && !stickyFaceUp(state);
+	}
 
-    static boolean stickyFaceUp(BlockState state) {
-        for (Property<?> property : state.getProperties()) {
-            Object value = state.getValue(property);
-            if (property.getName().equals("facing") && value instanceof Direction facing && facing != Direction.UP) {
-                return false;
-            }
-            if (property.getName().equals("type") && value instanceof PistonType type && type != PistonType.STICKY) {
-                return false;
-            }
-        }
-        return true;
-    }
+	static boolean stickyFaceUp(BlockState state) {
+		for (Property<?> property : state.getProperties()) {
+			Object value = state.getValue(property);
+			if (property.getName().equals("facing") && value instanceof Direction facing && facing != Direction.UP) {
+				return false;
+			}
+			if (property.getName().equals("type") && value instanceof PistonType type && type != PistonType.STICKY) {
+				return false;
+			}
+		}
+		return true;
+	}
 }

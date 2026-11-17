@@ -51,143 +51,143 @@ import java.util.TreeMap;
  */
 public final class MoobloomSpawns {
 
-    /** "any" = a weighted pick over every variant's any_weight. */
-    private record Entry(Optional<ResourceLocation> variant, double percent) {}
+	/** "any" = a weighted pick over every variant's any_weight. */
+	private record Entry(Optional<ResourceLocation> variant, double percent) {}
 
-    private record Rule(List<Entry> entries) {}
+	private record Rule(List<Entry> entries) {}
 
-    private static volatile Map<ResourceLocation, Rule> byBiome = Map.of();
-    private static volatile List<Map.Entry<TagKey<Biome>, Rule>> byTag = List.of();
+	private static volatile Map<ResourceLocation, Rule> byBiome = Map.of();
+	private static volatile List<Map.Entry<TagKey<Biome>, Rule>> byTag = List.of();
 
-    /**
-     * The spawn swap. Returns {@code entity} unchanged, or a finalized moobloom in its place. {@code level} must be
-     * the level the spawner is adding to (a WorldGenRegion during chunk generation).
-     */
-    public static Entity swap(ServerLevelAccessor level, Entity entity, MobSpawnType reason) {
-        if (entity.getType() != EntityType.COW || !(entity instanceof Cow cow)) return entity;
-        if (!MMConfig.on(MMConfig.SPAWN_SWAP)) return entity;
-        RandomSource random = cow.getRandom();
-        MoobloomVariant variant = roll(level.getBiome(cow.blockPosition()), random);
-        if (variant == null) return entity;
+	/**
+	 * The spawn swap. Returns {@code entity} unchanged, or a finalized moobloom in its place. {@code level} must be
+	 * the level the spawner is adding to (a WorldGenRegion during chunk generation).
+	 */
+	public static Entity swap(ServerLevelAccessor level, Entity entity, MobSpawnType reason) {
+		if (entity.getType() != EntityType.COW || !(entity instanceof Cow cow)) return entity;
+		if (!MMConfig.on(MMConfig.SPAWN_SWAP)) return entity;
+		RandomSource random = cow.getRandom();
+		MoobloomVariant variant = roll(level.getBiome(cow.blockPosition()), random);
+		if (variant == null) return entity;
 
-        Moobloom moobloom = MMEntities.MOOBLOOM.get().create(level.getLevel());
-        if (moobloom == null) return entity;
-        moobloom.moveTo(cow.getX(), cow.getY(), cow.getZ(), cow.getYRot(), cow.getXRot());
-        moobloom.setVariant(variant);
-        moobloom.finalizeSpawn(level, level.getCurrentDifficultyAt(moobloom.blockPosition()), reason, null, null);
-        moobloom.setAge(cow.getAge());
-        return moobloom;
-    }
+		Moobloom moobloom = MMEntities.MOOBLOOM.get().create(level.getLevel());
+		if (moobloom == null) return entity;
+		moobloom.moveTo(cow.getX(), cow.getY(), cow.getZ(), cow.getYRot(), cow.getXRot());
+		moobloom.setVariant(variant);
+		moobloom.finalizeSpawn(level, level.getCurrentDifficultyAt(moobloom.blockPosition()), reason, null, null);
+		moobloom.setAge(cow.getAge());
+		return moobloom;
+	}
 
-    /** The variant this cow becomes, or null to stay a cow. */
-    static MoobloomVariant roll(Holder<Biome> biome, RandomSource random) {
-        Rule rule = ruleFor(biome);
-        if (rule != null) {
-            double r = random.nextDouble() * 100.0;
-            for (Entry e : rule.entries()) {
-                r -= e.percent();
-                if (r < 0) return resolve(e.variant(), random);
-            }
-        }
-        if (random.nextDouble() < MMConfig.num(MMConfig.RARE_CHANCE)) {
-            return MoobloomVariants.pickWeighted(false, random);
-        }
-        return null;
-    }
+	/** The variant this cow becomes, or null to stay a cow. */
+	static MoobloomVariant roll(Holder<Biome> biome, RandomSource random) {
+		Rule rule = ruleFor(biome);
+		if (rule != null) {
+			double r = random.nextDouble() * 100.0;
+			for (Entry e : rule.entries()) {
+				r -= e.percent();
+				if (r < 0) return resolve(e.variant(), random);
+			}
+		}
+		if (random.nextDouble() < MMConfig.num(MMConfig.RARE_CHANCE)) {
+			return MoobloomVariants.pickWeighted(false, random);
+		}
+		return null;
+	}
 
-    /** A directly spawned moobloom's variant: its biome's rule rolled, without rareChance; null = no rule or a miss. */
-    @Nullable
-    public static MoobloomVariant directVariant(Holder<Biome> biome, RandomSource random) {
-        Rule rule = ruleFor(biome);
-        if (rule == null) return null;
-        double r = random.nextDouble() * 100.0;
-        for (Entry e : rule.entries()) {
-            r -= e.percent();
-            if (r < 0) return resolve(e.variant(), random);
-        }
-        return null;
-    }
+	/** A directly spawned moobloom's variant: its biome's rule rolled, without rareChance; null = no rule or a miss. */
+	@Nullable
+	public static MoobloomVariant directVariant(Holder<Biome> biome, RandomSource random) {
+		Rule rule = ruleFor(biome);
+		if (rule == null) return null;
+		double r = random.nextDouble() * 100.0;
+		for (Entry e : rule.entries()) {
+			r -= e.percent();
+			if (r < 0) return resolve(e.variant(), random);
+		}
+		return null;
+	}
 
-    private static MoobloomVariant resolve(Optional<ResourceLocation> variant, RandomSource random) {
-        if (variant.isEmpty()) return MoobloomVariants.pickWeighted(false, random);
-        return MoobloomVariants.get(false, variant.get());
-    }
+	private static MoobloomVariant resolve(Optional<ResourceLocation> variant, RandomSource random) {
+		if (variant.isEmpty()) return MoobloomVariants.pickWeighted(false, random);
+		return MoobloomVariants.get(false, variant.get());
+	}
 
-    private static Rule ruleFor(Holder<Biome> biome) {
-        Optional<ResourceKey<Biome>> key = biome.unwrapKey();
-        if (key.isPresent()) {
-            Rule exact = byBiome.get(key.get().location());
-            if (exact != null) return exact;
-        }
-        for (Map.Entry<TagKey<Biome>, Rule> e : byTag) {
-            if (biome.is(e.getKey())) return e.getValue();
-        }
-        return null;
-    }
+	private static Rule ruleFor(Holder<Biome> biome) {
+		Optional<ResourceKey<Biome>> key = biome.unwrapKey();
+		if (key.isPresent()) {
+			Rule exact = byBiome.get(key.get().location());
+			if (exact != null) return exact;
+		}
+		for (Map.Entry<TagKey<Biome>, Rule> e : byTag) {
+			if (biome.is(e.getKey())) return e.getValue();
+		}
+		return null;
+	}
 
-    /** {@code data/<ns>/moobloom_spawns/*.json}, read in file-name order. */
-    public static final class Loader extends SimpleJsonResourceReloadListener {
-        private static final Gson GSON = new GsonBuilder().create();
+	/** {@code data/<ns>/moobloom_spawns/*.json}, read in file-name order. */
+	public static final class Loader extends SimpleJsonResourceReloadListener {
+		private static final Gson GSON = new GsonBuilder().create();
 
-        public Loader() {
-            super(GSON, "moobloom_spawns");
-        }
+		public Loader() {
+			super(GSON, "moobloom_spawns");
+		}
 
-        @Override
-        protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager manager, ProfilerFiller profiler) {
-            Map<ResourceLocation, Rule> exact = new HashMap<>();
-            List<Map.Entry<TagKey<Biome>, Rule>> tags = new ArrayList<>();
-            int count = 0;
-            for (Map.Entry<ResourceLocation, JsonElement> file : new TreeMap<>(files).entrySet()) {
-                try {
-                    JsonObject root = GsonHelper.convertToJsonObject(file.getValue(), "moobloom_spawns");
-                    for (JsonElement r : GsonHelper.getAsJsonArray(root, "rules")) {
-                        JsonObject ruleJson = GsonHelper.convertToJsonObject(r, "rule");
-                        Rule rule = parseRule(file.getKey(), ruleJson);
-                        for (JsonElement b : GsonHelper.getAsJsonArray(ruleJson, "biomes")) {
-                            String s = GsonHelper.convertToString(b, "biome");
-                            if (s.startsWith("#")) {
-                                tags.add(Map.entry(TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(s.substring(1))), rule));
-                            } else {
-                                // the first rule naming a biome wins, like tags
-                                exact.putIfAbsent(new ResourceLocation(s), rule);
-                            }
-                        }
-                        count++;
-                    }
-                } catch (RuntimeException e) {
-                    MoreMooblooms.LOGGER.warn("[moremooblooms] skipped moobloom spawn file {}: {}", file.getKey(), e.getMessage());
-                }
-            }
-            byBiome = Map.copyOf(exact);
-            byTag = List.copyOf(tags);
-            MoreMooblooms.LOGGER.info("[moremooblooms] loaded {} moobloom spawn rules ({} biome ids, {} biome tags)",
-                    count, exact.size(), tags.size());
-        }
+		@Override
+		protected void apply(Map<ResourceLocation, JsonElement> files, ResourceManager manager, ProfilerFiller profiler) {
+			Map<ResourceLocation, Rule> exact = new HashMap<>();
+			List<Map.Entry<TagKey<Biome>, Rule>> tags = new ArrayList<>();
+			int count = 0;
+			for (Map.Entry<ResourceLocation, JsonElement> file : new TreeMap<>(files).entrySet()) {
+				try {
+					JsonObject root = GsonHelper.convertToJsonObject(file.getValue(), "moobloom_spawns");
+					for (JsonElement r : GsonHelper.getAsJsonArray(root, "rules")) {
+						JsonObject ruleJson = GsonHelper.convertToJsonObject(r, "rule");
+						Rule rule = parseRule(file.getKey(), ruleJson);
+						for (JsonElement b : GsonHelper.getAsJsonArray(ruleJson, "biomes")) {
+							String s = GsonHelper.convertToString(b, "biome");
+							if (s.startsWith("#")) {
+								tags.add(Map.entry(TagKey.create(Registry.BIOME_REGISTRY, new ResourceLocation(s.substring(1))), rule));
+							} else {
+								// the first rule naming a biome wins, like tags
+								exact.putIfAbsent(new ResourceLocation(s), rule);
+							}
+						}
+						count++;
+					}
+				} catch (RuntimeException e) {
+					MoreMooblooms.LOGGER.warn("[moremooblooms] skipped moobloom spawn file {}: {}", file.getKey(), e.getMessage());
+				}
+			}
+			byBiome = Map.copyOf(exact);
+			byTag = List.copyOf(tags);
+			MoreMooblooms.LOGGER.info("[moremooblooms] loaded {} moobloom spawn rules ({} biome ids, {} biome tags)",
+					count, exact.size(), tags.size());
+		}
 
-        private static Rule parseRule(ResourceLocation file, JsonObject ruleJson) {
-            List<Entry> entries = new ArrayList<>();
-            double sum = 0;
-            for (JsonElement e : GsonHelper.getAsJsonArray(ruleJson, "replace")) {
-                JsonObject o = GsonHelper.convertToJsonObject(e, "replace entry");
-                String v = GsonHelper.getAsString(o, "variant");
-                double percent = GsonHelper.getAsDouble(o, "percent");
-                if (percent < 0) throw new IllegalArgumentException("negative percent");
-                Optional<ResourceLocation> id = v.equals("any") ? Optional.empty() : Optional.of(MoobloomVariants.legacy(new ResourceLocation(v)));
-                if (id.isPresent() && !MoobloomVariants.all(false).isEmpty() && !MoobloomVariants.has(false, id.get())) {
-                    MoreMooblooms.LOGGER.warn("[moremooblooms] {}: unknown variant {} (the default variant spawns instead)", file, v);
-                }
-                entries.add(new Entry(id, percent));
-                sum += percent;
-            }
-            if (sum > 100.0) {
-                MoreMooblooms.LOGGER.warn("[moremooblooms] {}: a rule adds up to {}%, scaled down to 100%", file, sum);
-                double scale = 100.0 / sum;
-                entries.replaceAll(en -> new Entry(en.variant(), en.percent() * scale));
-            }
-            return new Rule(List.copyOf(entries));
-        }
-    }
+		private static Rule parseRule(ResourceLocation file, JsonObject ruleJson) {
+			List<Entry> entries = new ArrayList<>();
+			double sum = 0;
+			for (JsonElement e : GsonHelper.getAsJsonArray(ruleJson, "replace")) {
+				JsonObject o = GsonHelper.convertToJsonObject(e, "replace entry");
+				String v = GsonHelper.getAsString(o, "variant");
+				double percent = GsonHelper.getAsDouble(o, "percent");
+				if (percent < 0) throw new IllegalArgumentException("negative percent");
+				Optional<ResourceLocation> id = v.equals("any") ? Optional.empty() : Optional.of(MoobloomVariants.legacy(new ResourceLocation(v)));
+				if (id.isPresent() && !MoobloomVariants.all(false).isEmpty() && !MoobloomVariants.has(false, id.get())) {
+					MoreMooblooms.LOGGER.warn("[moremooblooms] {}: unknown variant {} (the default variant spawns instead)", file, v);
+				}
+				entries.add(new Entry(id, percent));
+				sum += percent;
+			}
+			if (sum > 100.0) {
+				MoreMooblooms.LOGGER.warn("[moremooblooms] {}: a rule adds up to {}%, scaled down to 100%", file, sum);
+				double scale = 100.0 / sum;
+				entries.replaceAll(en -> new Entry(en.variant(), en.percent() * scale));
+			}
+			return new Rule(List.copyOf(entries));
+		}
+	}
 
-    private MoobloomSpawns() {}
+	private MoobloomSpawns() {}
 }

@@ -36,63 +36,63 @@ import java.util.Set;
  */
 @Mixin(value = FoodList.class, remap = false)
 public abstract class FoodListMixin implements GateFoods {
-    @Unique
-    private static final String SOLRP_KEY = "solrp_gateFoods";
+	@Unique
+	private static final String SOLRP_KEY = "solrp_gateFoods";
 
-    @Shadow
-    private int foodsEaten;
+	@Shadow
+	private int foodsEaten;
 
-    @Shadow
-    @Final
-    private Map<FoodInstance, Integer> uniqueFoods;
+	@Shadow
+	@Final
+	private Map<FoodInstance, Integer> uniqueFoods;
 
-    @Unique
-    private final Set<ResourceLocation> solrp$gate = new LinkedHashSet<>();
+	@Unique
+	private final Set<ResourceLocation> solrp$gate = new LinkedHashSet<>();
 
-    @Override
-    public Set<ResourceLocation> solrp$gateFoods() {
-        return solrp$gate;
-    }
+	@Override
+	public Set<ResourceLocation> solrp$gateFoods() {
+		return solrp$gate;
+	}
 
-    @Inject(method = "addFood(Lnet/minecraft/world/item/Item;)V", at = @At("HEAD"), cancellable = true)
-    private void solrp$skipDrinks(Item item, CallbackInfo ci) {
-        if (Drinks.isDrink(item)) ci.cancel();
-    }
+	@Inject(method = "addFood(Lnet/minecraft/world/item/Item;)V", at = @At("HEAD"), cancellable = true)
+	private void solrp$skipDrinks(Item item, CallbackInfo ci) {
+		if (Drinks.isDrink(item)) ci.cancel();
+	}
 
-    @Inject(method = "addFood(Lnet/minecraft/world/item/Item;)V", at = @At("RETURN"))
-    private void solrp$countUnique(Item item, CallbackInfo ci) {
-        if (!SOLSweetPotatoConfig.shouldCount(item)) return;
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
-        if (id != null) solrp$gate.add(id);
-    }
+	@Inject(method = "addFood(Lnet/minecraft/world/item/Item;)V", at = @At("RETURN"))
+	private void solrp$countUnique(Item item, CallbackInfo ci) {
+		if (!SOLSweetPotatoConfig.shouldCount(item)) return;
+		ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
+		if (id != null) solrp$gate.add(id);
+	}
 
-    @Inject(method = "resetFoodsEaten", at = @At("RETURN"))
-    private void solrp$resetUnique(CallbackInfo ci) {
-        solrp$gate.clear();
-    }
+	@Inject(method = "resetFoodsEaten", at = @At("RETURN"))
+	private void solrp$resetUnique(CallbackInfo ci) {
+		solrp$gate.clear();
+	}
 
-    @Inject(method = "serializeNBT()Lnet/minecraft/nbt/CompoundTag;", at = @At("RETURN"))
-    private void solrp$save(CallbackInfoReturnable<CompoundTag> cir) {
-        ListTag list = new ListTag();
-        for (ResourceLocation id : solrp$gate) list.add(StringTag.valueOf(id.toString()));
-        cir.getReturnValue().put(SOLRP_KEY, list);
-    }
+	@Inject(method = "serializeNBT()Lnet/minecraft/nbt/CompoundTag;", at = @At("RETURN"))
+	private void solrp$save(CallbackInfoReturnable<CompoundTag> cir) {
+		ListTag list = new ListTag();
+		for (ResourceLocation id : solrp$gate) list.add(StringTag.valueOf(id.toString()));
+		cir.getReturnValue().put(SOLRP_KEY, list);
+	}
 
-    @Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
-    private void solrp$load(CompoundTag tag, CallbackInfo ci) {
-        solrp$gate.clear();
-        if (tag.contains(SOLRP_KEY, Tag.TAG_LIST)) {
-            for (Tag el : tag.getList(SOLRP_KEY, Tag.TAG_STRING)) {
-                ResourceLocation id = ResourceLocation.tryParse(el.getAsString());
-                if (id != null) solrp$gate.add(id);
-            }
-            return;
-        }
-        // Saved before the counter existed: a food with fewer meals since than foodsEaten was eaten after the reset.
-        for (Map.Entry<FoodInstance, Integer> e : uniqueFoods.entrySet()) {
-            if (e.getValue() >= foodsEaten || e.getKey().getItem() == null) continue;
-            ResourceLocation id = ForgeRegistries.ITEMS.getKey(e.getKey().getItem());
-            if (id != null) solrp$gate.add(id);
-        }
-    }
+	@Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
+	private void solrp$load(CompoundTag tag, CallbackInfo ci) {
+		solrp$gate.clear();
+		if (tag.contains(SOLRP_KEY, Tag.TAG_LIST)) {
+			for (Tag el : tag.getList(SOLRP_KEY, Tag.TAG_STRING)) {
+				ResourceLocation id = ResourceLocation.tryParse(el.getAsString());
+				if (id != null) solrp$gate.add(id);
+			}
+			return;
+		}
+		// Saved before the counter existed: a food with fewer meals since than foodsEaten was eaten after the reset.
+		for (Map.Entry<FoodInstance, Integer> e : uniqueFoods.entrySet()) {
+			if (e.getValue() >= foodsEaten || e.getKey().getItem() == null) continue;
+			ResourceLocation id = ForgeRegistries.ITEMS.getKey(e.getKey().getItem());
+			if (id != null) solrp$gate.add(id);
+		}
+	}
 }

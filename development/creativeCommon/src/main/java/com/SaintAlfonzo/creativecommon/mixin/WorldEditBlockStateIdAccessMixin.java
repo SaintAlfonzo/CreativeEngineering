@@ -30,33 +30,33 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mixin(value = BlockStateIdAccess.class, remap = false)
 public abstract class WorldEditBlockStateIdAccessMixin {
 
-    @Shadow private static BlockStateIdAccess.BlockStateInternalId blockStateInternalId;
+	@Shadow private static BlockStateIdAccess.BlockStateInternalId blockStateInternalId;
 
-    @Unique
-    private static final ConcurrentHashMap<Integer, BlockState> creativecommon$lazyStates = new ConcurrentHashMap<>();
+	@Unique
+	private static final ConcurrentHashMap<Integer, BlockState> creativecommon$lazyStates = new ConcurrentHashMap<>();
 
-    @Inject(method = "getBlockStateId", at = @At("RETURN"), cancellable = true, remap = false)
-    private static void creativecommon$lazyId(BlockState holder, CallbackInfoReturnable<Integer> cir) {
-        if (BlockStateIdAccess.isValidInternalId(cir.getReturnValueI())) return;
-        // ForgeTransmogrifier, not ForgeAdapter.adapt: adapt asks getBlockStateId first and would loop.
-        int id = Block.getId(ForgeTransmogrifier.transmogToMinecraft(holder));
-        if (!BlockStateIdAccess.isValidInternalId(id)) return;
-        creativecommon$lazyStates.putIfAbsent(id, holder);
-        blockStateInternalId.setInternalId(holder, id);
-        cir.setReturnValue(id);
-    }
+	@Inject(method = "getBlockStateId", at = @At("RETURN"), cancellable = true, remap = false)
+	private static void creativecommon$lazyId(BlockState holder, CallbackInfoReturnable<Integer> cir) {
+		if (BlockStateIdAccess.isValidInternalId(cir.getReturnValueI())) return;
+		// ForgeTransmogrifier, not ForgeAdapter.adapt: adapt asks getBlockStateId first and would loop.
+		int id = Block.getId(ForgeTransmogrifier.transmogToMinecraft(holder));
+		if (!BlockStateIdAccess.isValidInternalId(id)) return;
+		creativecommon$lazyStates.putIfAbsent(id, holder);
+		blockStateInternalId.setInternalId(holder, id);
+		cir.setReturnValue(id);
+	}
 
-    @Inject(method = "getBlockStateById", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void creativecommon$lazyState(int id, CallbackInfoReturnable<BlockState> cir) {
-        BlockState state = creativecommon$lazyStates.get(id);
-        if (state != null) cir.setReturnValue(state);
-    }
+	@Inject(method = "getBlockStateById", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void creativecommon$lazyState(int id, CallbackInfoReturnable<BlockState> cir) {
+		BlockState state = creativecommon$lazyStates.get(id);
+		if (state != null) cir.setReturnValue(state);
+	}
 
-    @Inject(method = "clear", at = @At("HEAD"), remap = false)
-    private static void creativecommon$clearLazy(CallbackInfo ci) {
-        for (BlockState state : creativecommon$lazyStates.values()) {
-            blockStateInternalId.setInternalId(state, BlockStateIdAccess.invalidId());
-        }
-        creativecommon$lazyStates.clear();
-    }
+	@Inject(method = "clear", at = @At("HEAD"), remap = false)
+	private static void creativecommon$clearLazy(CallbackInfo ci) {
+		for (BlockState state : creativecommon$lazyStates.values()) {
+			blockStateInternalId.setInternalId(state, BlockStateIdAccess.invalidId());
+		}
+		creativecommon$lazyStates.clear();
+	}
 }

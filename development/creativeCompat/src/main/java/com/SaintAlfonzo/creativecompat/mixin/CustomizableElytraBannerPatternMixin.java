@@ -44,28 +44,28 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = BannerCustomizationHandler.class, remap = false)
 public class CustomizableElytraBannerPatternMixin {
 
-    @Redirect(
-            method = "render",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lcom/hidoni/customizableelytra/items/CustomizableElytraItem;getTextureLocation(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/resources/ResourceLocation;"
-            )
-    )
-    private ResourceLocation creativeengineering$fallbackToGeneratedPatternTexture(ResourceKey bannerKey) {
-        ResourceLocation curated = CustomizableElytraItem.getTextureLocation(bannerKey);
-        if (!isMissing(curated)) {
-            return curated;
-        }
+	@Redirect(
+			method = "render",
+			at = @At(
+					value = "INVOKE",
+					target = "Lcom/hidoni/customizableelytra/items/CustomizableElytraItem;getTextureLocation(Lnet/minecraft/resources/ResourceKey;)Lnet/minecraft/resources/ResourceLocation;"
+			)
+	)
+	private ResourceLocation creativeengineering$fallbackToGeneratedPatternTexture(ResourceKey bannerKey) {
+		ResourceLocation curated = CustomizableElytraItem.getTextureLocation(bannerKey);
+		if (!isMissing(curated)) {
+			return curated;
+		}
 
-        ResourceLocation key = bannerKey.location();
-        String elytraFolder = curated.getPath().contains("elytra_banner_low") ? "elytra_banner_low" : "elytra_banner";
-        ResourceLocation generated = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS,
-                "entity/" + elytraFolder + "/" + key.getNamespace() + "/" + key.getPath());
-        return isMissing(generated) ? curated : generated;
-    }
+		ResourceLocation key = bannerKey.location();
+		String elytraFolder = curated.getPath().contains("elytra_banner_low") ? "elytra_banner_low" : "elytra_banner";
+		ResourceLocation generated = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS,
+				"entity/" + elytraFolder + "/" + key.getNamespace() + "/" + key.getPath());
+		return isMissing(generated) ? curated : generated;
+	}
 
-    private static boolean isMissing(ResourceLocation location) {
-        Material probe = new Material(TextureAtlas.LOCATION_BLOCKS, location);
-        return probe.sprite().getName() == MissingTextureAtlasSprite.getLocation();
-    }
+	private static boolean isMissing(ResourceLocation location) {
+		Material probe = new Material(TextureAtlas.LOCATION_BLOCKS, location);
+		return probe.sprite().getName() == MissingTextureAtlasSprite.getLocation();
+	}
 }

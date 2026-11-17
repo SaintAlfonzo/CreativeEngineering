@@ -44,36 +44,36 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = DecoratedBedBlockEntityRenderer.class, remap = false)
 public class BedspreadsBannerPatternMixin {
 
-    @Redirect(
-            method = "renderPatterns",
-            at = @At(value = "NEW", target = "Lnet/minecraft/resources/ResourceLocation;")
-    )
-    private static ResourceLocation creativeengineering$realPatternTexture(String bedspreadsNamespace, String path) {
-        ResourceLocation bedspreadsLocation = new ResourceLocation(bedspreadsNamespace, path);
+	@Redirect(
+			method = "renderPatterns",
+			at = @At(value = "NEW", target = "Lnet/minecraft/resources/ResourceLocation;")
+	)
+	private static ResourceLocation creativeengineering$realPatternTexture(String bedspreadsNamespace, String path) {
+		ResourceLocation bedspreadsLocation = new ResourceLocation(bedspreadsNamespace, path);
 
-        // bedspreadsLocation is a Material-style location ("bedspreads:entity/ns/id") - the atlas
-        // expands that to "textures/entity/ns/id.png" internally when it actually loads the
-        // sprite. ResourceManager#getResource does no such expansion, so the existence check
-        // needs the real file path spelled out, or it always misses and this mixin ends up
-        // redirecting every pattern - including ones bedspreads already has working art for.
-        ResourceLocation bedspreadsFile = new ResourceLocation(bedspreadsNamespace, "textures/" + path + ".png");
-        if (Minecraft.getInstance().getResourceManager().getResource(bedspreadsFile).isPresent()) {
-            return bedspreadsLocation;
-        }
+		// bedspreadsLocation is a Material-style location ("bedspreads:entity/ns/id") - the atlas
+		// expands that to "textures/entity/ns/id.png" internally when it actually loads the
+		// sprite. ResourceManager#getResource does no such expansion, so the existence check
+		// needs the real file path spelled out, or it always misses and this mixin ends up
+		// redirecting every pattern - including ones bedspreads already has working art for.
+		ResourceLocation bedspreadsFile = new ResourceLocation(bedspreadsNamespace, "textures/" + path + ".png");
+		if (Minecraft.getInstance().getResourceManager().getResource(bedspreadsFile).isPresent()) {
+			return bedspreadsLocation;
+		}
 
-        String rest = path.startsWith("entity/") ? path.substring("entity/".length()) : path;
-        int slash = rest.indexOf('/');
-        if (slash < 0) {
-            return bedspreadsLocation;
-        }
-        String originNamespace = rest.substring(0, slash);
-        String originPath = rest.substring(slash + 1);
+		String rest = path.startsWith("entity/") ? path.substring("entity/".length()) : path;
+		int slash = rest.indexOf('/');
+		if (slash < 0) {
+			return bedspreadsLocation;
+		}
+		String originNamespace = rest.substring(0, slash);
+		String originPath = rest.substring(slash + 1);
 
-        String relativePath = "entity/" + originNamespace + "/" + originPath;
-        ResourceLocation generatedFile = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, "textures/" + relativePath + ".png");
-        if (Minecraft.getInstance().getResourceManager().getResource(generatedFile).isPresent()) {
-            return new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, relativePath);
-        }
-        return bedspreadsLocation;
-    }
+		String relativePath = "entity/" + originNamespace + "/" + originPath;
+		ResourceLocation generatedFile = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, "textures/" + relativePath + ".png");
+		if (Minecraft.getInstance().getResourceManager().getResource(generatedFile).isPresent()) {
+			return new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, relativePath);
+		}
+		return bedspreadsLocation;
+	}
 }

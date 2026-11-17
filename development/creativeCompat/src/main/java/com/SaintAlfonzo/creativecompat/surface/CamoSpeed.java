@@ -36,82 +36,82 @@ import net.minecraftforge.fml.ModList;
  */
 public final class CamoSpeed {
 
-    private CamoSpeed() {}
+	private CamoSpeed() {}
 
-    public static final TagKey<Block> TAG = BlockTags.create(
-            new ResourceLocation(CreativeCompat.NS, "camo_speed"));
+	public static final TagKey<Block> TAG = BlockTags.create(
+			new ResourceLocation(CreativeCompat.NS, "camo_speed"));
 
-    private static final boolean FRAMED = ModList.get().isLoaded("framedblocks");
-    private static final boolean COPYCATS = ModList.get().isLoaded("copycats");
+	private static final boolean FRAMED = ModList.get().isLoaded("framedblocks");
+	private static final boolean COPYCATS = ModList.get().isLoaded("copycats");
 
-    public static void afterBlockRunner(LivingEntity entity) {
-        if (entity instanceof Player player && player.getAbilities().flying) {
-            return; // BlockRunner gives no block speed while flying either
-        }
-        Level level = entity.level;
-        BlockPos pos = entity.getOnPos();
-        BlockState camo = speedCamo(level, pos, level.getBlockState(pos));
-        if (camo == null) {
-            return; // keep the flat tier
-        }
-        AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speed == null) {
-            return;
-        }
-        speed.removeModifier(BlockSpeedManager.SPEED_MODIFIER_BLOCK_SPEED_UUID);
-        double factor = BlockSpeedManager.INSTANCE.getSpeedFactor(camo.getBlock());
-        if (factor != 1.0) {
-            // same modifier BlockRunner itself would add for this factor
-            double base = speed.getBaseValue();
-            speed.addTransientModifier(new AttributeModifier(BlockSpeedManager.SPEED_MODIFIER_BLOCK_SPEED_UUID,
-                    "Block speed boost", factor * base - base, AttributeModifier.Operation.ADDITION));
-        }
-    }
+	public static void afterBlockRunner(LivingEntity entity) {
+		if (entity instanceof Player player && player.getAbilities().flying) {
+			return; // BlockRunner gives no block speed while flying either
+		}
+		Level level = entity.level;
+		BlockPos pos = entity.getOnPos();
+		BlockState camo = speedCamo(level, pos, level.getBlockState(pos));
+		if (camo == null) {
+			return; // keep the flat tier
+		}
+		AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
+		if (speed == null) {
+			return;
+		}
+		speed.removeModifier(BlockSpeedManager.SPEED_MODIFIER_BLOCK_SPEED_UUID);
+		double factor = BlockSpeedManager.INSTANCE.getSpeedFactor(camo.getBlock());
+		if (factor != 1.0) {
+			// same modifier BlockRunner itself would add for this factor
+			double base = speed.getBaseValue();
+			speed.addTransientModifier(new AttributeModifier(BlockSpeedManager.SPEED_MODIFIER_BLOCK_SPEED_UUID,
+					"Block speed boost", factor * base - base, AttributeModifier.Operation.ADDITION));
+		}
+	}
 
-    /**
-     * The block whose speed the frame at {@code pos} walks like, or {@code null} to keep the flat tier:
-     * not a frame, {@code copyCamo} off, no camo, or disguised as another frame. Shared with
-     * {@link RunSpeed} so the WTHIT line always agrees with movement.
-     */
-    static BlockState speedCamo(Level level, BlockPos pos, BlockState state) {
-        if (!CompatConfig.SURFACE.camouflage.copyCamo.get() || !state.is(TAG)) {
-            return null;
-        }
-        BlockState camo = camo(level.getBlockEntity(pos));
-        return camo == null || camo.is(TAG) ? null : camo;
-    }
+	/**
+	 * The block whose speed the frame at {@code pos} walks like, or {@code null} to keep the flat tier:
+	 * not a frame, {@code copyCamo} off, no camo, or disguised as another frame. Shared with
+	 * {@link RunSpeed} so the WTHIT line always agrees with movement.
+	 */
+	static BlockState speedCamo(Level level, BlockPos pos, BlockState state) {
+		if (!CompatConfig.SURFACE.camouflage.copyCamo.get() || !state.is(TAG)) {
+			return null;
+		}
+		BlockState camo = camo(level.getBlockEntity(pos));
+		return camo == null || camo.is(TAG) ? null : camo;
+	}
 
-    static BlockState camo(BlockEntity be) {
-        if (be == null) {
-            return null;
-        }
-        if (FRAMED) {
-            BlockState state = FramedCamo.camo(be);
-            if (state != null) {
-                return state;
-            }
-        }
-        if (COPYCATS) {
-            BlockState state = CopycatsPlusCamo.camo(be);
-            if (state != null) {
-                return state;
-            }
-        }
-        if (be instanceof CopycatBlockEntity copycat) { // Create's own copycat panel / step
-            return copycat.hasCustomMaterial() ? copycat.getMaterial() : null;
-        }
-        return null;
-    }
+	static BlockState camo(BlockEntity be) {
+		if (be == null) {
+			return null;
+		}
+		if (FRAMED) {
+			BlockState state = FramedCamo.camo(be);
+			if (state != null) {
+				return state;
+			}
+		}
+		if (COPYCATS) {
+			BlockState state = CopycatsPlusCamo.camo(be);
+			if (state != null) {
+				return state;
+			}
+		}
+		if (be instanceof CopycatBlockEntity copycat) { // Create's own copycat panel / step
+			return copycat.hasCustomMaterial() ? copycat.getMaterial() : null;
+		}
+		return null;
+	}
 
-    /** Replacement for BlockRunner's "Speed Multiplier" tooltip line on camouflage blocks. */
-    public static MutableComponent tooltipLine(Block block) {
-        if (!CompatConfig.SURFACE.camouflage.copyCamo.get()) {
-            return Component.translatable("creativeengineering.tooltip.walk_speed.fixed",
-                    BlockSpeedManager.INSTANCE.getSpeedFactor(block));
-        }
-        boolean multi = (FRAMED && FramedCamo.isMultiMaterial(block)) || (COPYCATS && CopycatsPlusCamo.isMultiMaterial(block));
-        return Component.translatable(multi
-                ? "creativeengineering.tooltip.walk_speed.newest_camo"
-                : "creativeengineering.tooltip.walk_speed.camo");
-    }
+	/** Replacement for BlockRunner's "Speed Multiplier" tooltip line on camouflage blocks. */
+	public static MutableComponent tooltipLine(Block block) {
+		if (!CompatConfig.SURFACE.camouflage.copyCamo.get()) {
+			return Component.translatable("creativeengineering.tooltip.walk_speed.fixed",
+					BlockSpeedManager.INSTANCE.getSpeedFactor(block));
+		}
+		boolean multi = (FRAMED && FramedCamo.isMultiMaterial(block)) || (COPYCATS && CopycatsPlusCamo.isMultiMaterial(block));
+		return Component.translatable(multi
+				? "creativeengineering.tooltip.walk_speed.newest_camo"
+				: "creativeengineering.tooltip.walk_speed.camo");
+	}
 }

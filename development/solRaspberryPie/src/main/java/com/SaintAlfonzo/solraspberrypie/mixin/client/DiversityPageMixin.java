@@ -14,15 +14,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  */
 @Mixin(value = DiversityPage.class, remap = false)
 public abstract class DiversityPageMixin {
-    // ordinal 2 = the min_warning1 call. Ordinal 0 runs before super() (needs a static handler), 1 and 3 after it, so an
-    // unqualified redirect cannot match all of them and crashes the book on open.
-    @Redirect(method = "<init>", at = @At(value = "INVOKE",
-            target = "Lcom/tarinoita/solsweetpotato/lib/Localization;localized(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;",
-            ordinal = 2))
-    private String solrp$uniqueWording(String domain, String path, Object[] args) {
-        if ("food_book.stats.min_warning1".equals(path) && ClientState.state != null && ClientState.state.uniqueGate && args.length > 0) {
-            return I18n.get("solraspberrypie.dietlog.min_unique", args[0]);
-        }
-        return Localization.localized(domain, path, args);
-    }
+	// ordinal 2 = the min_warning1 call. Ordinal 0 runs before super() (needs a static handler), 1 and 3 after it, so an
+	// unqualified redirect cannot match all of them and crashes the book on open.
+	@Redirect(method = "<init>", at = @At(value = "INVOKE",
+			target = "Lcom/tarinoita/solsweetpotato/lib/Localization;localized(Ljava/lang/String;Ljava/lang/String;[Ljava/lang/Object;)Ljava/lang/String;",
+			ordinal = 2))
+	private String solrp$uniqueWording(String domain, String path, Object[] args) {
+		if ("food_book.stats.min_warning1".equals(path) && ClientState.state != null && ClientState.state.uniqueGate && args.length > 0) {
+			return I18n.get("solraspberrypie.dietlog.min_unique", args[0]);
+		}
+		return Localization.localized(domain, path, args);
+	}
 }

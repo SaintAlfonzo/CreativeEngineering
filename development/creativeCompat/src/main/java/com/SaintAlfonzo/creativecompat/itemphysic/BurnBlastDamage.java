@@ -16,10 +16,10 @@ import net.minecraft.world.damagesource.DamageSource;
  */
 final class BurnBlastDamage extends DamageSource {
 
-    static final DamageSource INSTANCE = new BurnBlastDamage();
+	static final DamageSource INSTANCE = new BurnBlastDamage();
 
-    private BurnBlastDamage() {
-        super("explosion");
-        this.setExplosion();
-    }
+	private BurnBlastDamage() {
+		super("explosion");
+		this.setExplosion();
+	}
 }

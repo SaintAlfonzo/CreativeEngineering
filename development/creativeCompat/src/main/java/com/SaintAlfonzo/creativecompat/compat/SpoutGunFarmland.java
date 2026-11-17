@@ -28,36 +28,36 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid = CreativeCompat.MOD_ID)
 public final class SpoutGunFarmland {
 
-    private static final ResourceLocation WATER_SHOT =
-            new ResourceLocation("create_things_and_misc", "projectile_spout_gun_water");
+	private static final ResourceLocation WATER_SHOT =
+			new ResourceLocation("create_things_and_misc", "projectile_spout_gun_water");
 
-    /** Only with Create: Misc and Things. */
-    private static final boolean LOADED = net.minecraftforge.fml.ModList.get().isLoaded("create_things_and_misc");
+	/** Only with Create: Misc and Things. */
+	private static final boolean LOADED = net.minecraftforge.fml.ModList.get().isLoaded("create_things_and_misc");
 
-    private SpoutGunFarmland() {}
+	private SpoutGunFarmland() {}
 
-    @SubscribeEvent
-    public static void onImpact(ProjectileImpactEvent event) {
-        if (!LOADED) return;
-        HitResult hit = event.getRayTraceResult();
-        if (!(hit instanceof BlockHitResult blockHit) || hit.getType() != HitResult.Type.BLOCK) return;
-        Projectile shot = event.getProjectile();
-        if (!(shot.level instanceof ServerLevel level)) return;
-        if (!WATER_SHOT.equals(ForgeRegistries.ENTITY_TYPES.getKey(shot.getType()))) return;
+	@SubscribeEvent
+	public static void onImpact(ProjectileImpactEvent event) {
+		if (!LOADED) return;
+		HitResult hit = event.getRayTraceResult();
+		if (!(hit instanceof BlockHitResult blockHit) || hit.getType() != HitResult.Type.BLOCK) return;
+		Projectile shot = event.getProjectile();
+		if (!(shot.level instanceof ServerLevel level)) return;
+		if (!WATER_SHOT.equals(ForgeRegistries.ENTITY_TYPES.getKey(shot.getType()))) return;
 
-        BlockPos pos = blockHit.getBlockPos();
-        if (!wet(level, pos)) wet(level, pos.below());
-    }
+		BlockPos pos = blockHit.getBlockPos();
+		if (!wet(level, pos)) wet(level, pos.below());
+	}
 
-    /** Moisture to full if the block has farmland moisture and is not soaked; true if it has the property. */
-    private static boolean wet(ServerLevel level, BlockPos pos) {
-        BlockState state = level.getBlockState(pos);
-        if (!state.hasProperty(FarmBlock.MOISTURE)) return false;
-        if (state.getValue(FarmBlock.MOISTURE) < FarmBlock.MAX_MOISTURE) {
-            level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, FarmBlock.MAX_MOISTURE), 2);
-            level.sendParticles(ParticleTypes.SPLASH, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 4, 0.3, 0.05, 0.3, 0.0);
-            level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 0.3F, 1.6F);
-        }
-        return true;
-    }
+	/** Moisture to full if the block has farmland moisture and is not soaked; true if it has the property. */
+	private static boolean wet(ServerLevel level, BlockPos pos) {
+		BlockState state = level.getBlockState(pos);
+		if (!state.hasProperty(FarmBlock.MOISTURE)) return false;
+		if (state.getValue(FarmBlock.MOISTURE) < FarmBlock.MAX_MOISTURE) {
+			level.setBlock(pos, state.setValue(FarmBlock.MOISTURE, FarmBlock.MAX_MOISTURE), 2);
+			level.sendParticles(ParticleTypes.SPLASH, pos.getX() + 0.5, pos.getY() + 1.0, pos.getZ() + 0.5, 4, 0.3, 0.05, 0.3, 0.0);
+			level.playSound(null, pos, SoundEvents.BUCKET_EMPTY, SoundSource.BLOCKS, 0.3F, 1.6F);
+		}
+		return true;
+	}
 }

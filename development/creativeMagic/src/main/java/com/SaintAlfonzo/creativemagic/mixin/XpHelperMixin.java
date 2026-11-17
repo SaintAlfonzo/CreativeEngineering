@@ -17,11 +17,11 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(value = XpHelper.class, remap = false)
 public class XpHelperMixin {
 
-    @ModifyConstant(
-            method = { "experienceToLiquid", "liquidToExperience" },
-            constant = @Constant(floatValue = 20.0F)
-    )
-    private static float creativeengineering$retuneXpRatio(float original) {
-        return 1.0F;
-    }
+	@ModifyConstant(
+			method = { "experienceToLiquid", "liquidToExperience" },
+			constant = @Constant(floatValue = 20.0F)
+	)
+	private static float creativeengineering$retuneXpRatio(float original) {
+		return 1.0F;
+	}
 }

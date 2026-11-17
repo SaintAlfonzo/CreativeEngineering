@@ -19,9 +19,9 @@ import net.minecraft.world.level.LightLayer;
 @Mixin(targets = "me.shedaniel.rareice.forge.blocks.RareIceBlock", remap = false)
 public abstract class RareIceLightMeltMixin {
 
-    @Redirect(method = "m_213898_", remap = false, require = 0, at = @At(value = "INVOKE", remap = false,
-            target = "Lnet/minecraft/server/level/ServerLevel;m_45517_(Lnet/minecraft/world/level/LightLayer;Lnet/minecraft/core/BlockPos;)I"))
-    private int creativecommon$lightMelt(ServerLevel level, LightLayer layer, BlockPos pos) {
-        return Melting.vanillaLight(level, layer, pos);
-    }
+	@Redirect(method = "m_213898_", remap = false, require = 0, at = @At(value = "INVOKE", remap = false,
+			target = "Lnet/minecraft/server/level/ServerLevel;m_45517_(Lnet/minecraft/world/level/LightLayer;Lnet/minecraft/core/BlockPos;)I"))
+	private int creativecommon$lightMelt(ServerLevel level, LightLayer layer, BlockPos pos) {
+		return Melting.vanillaLight(level, layer, pos);
+	}
 }

@@ -15,18 +15,18 @@ import net.minecraftforge.event.level.BlockEvent;
  * Roll's input. By hand it still drops nothing, as vanilla.
  */
 public final class FrogspawnShears {
-    private FrogspawnShears() {
-    }
+	private FrogspawnShears() {
+	}
 
-    public static void onBreak(BlockEvent.BreakEvent event) {
-        Player player = event.getPlayer();
-        if (!event.getState().is(Blocks.FROGSPAWN) || player.getAbilities().instabuild || !(event.getLevel() instanceof Level level)
-                || level.isClientSide) {
-            return;
-        }
-        ItemStack tool = player.getMainHandItem();
-        if (tool.getItem() instanceof ShearsItem || tool.is(Tags.Items.SHEARS)) {
-            Block.popResource(level, event.getPos(), new ItemStack(Items.FROGSPAWN));
-        }
-    }
+	public static void onBreak(BlockEvent.BreakEvent event) {
+		Player player = event.getPlayer();
+		if (!event.getState().is(Blocks.FROGSPAWN) || player.getAbilities().instabuild || !(event.getLevel() instanceof Level level)
+				|| level.isClientSide) {
+			return;
+		}
+		ItemStack tool = player.getMainHandItem();
+		if (tool.getItem() instanceof ShearsItem || tool.is(Tags.Items.SHEARS)) {
+			Block.popResource(level, event.getPos(), new ItemStack(Items.FROGSPAWN));
+		}
+	}
 }

@@ -17,15 +17,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Pseudo
 @Mixin(targets = {
-        "com.github.nyuppo.client.renderer.entity.layers.PigMudLayer",
-        "com.github.nyuppo.client.renderer.entity.layers.SheepHornsLayer",
-        "com.github.nyuppo.client.renderer.entity.layers.ShearedWoolColorLayer"})
+		"com.github.nyuppo.client.renderer.entity.layers.PigMudLayer",
+		"com.github.nyuppo.client.renderer.entity.layers.SheepHornsLayer",
+		"com.github.nyuppo.client.renderer.entity.layers.ShearedWoolColorLayer"})
 public abstract class PetMoreMobVariantsLayersMixin {
 
-    @Inject(method = "m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/Entity;FFFFFF)V",
-            at = @At("HEAD"), cancellable = true, remap = false, require = 0)
-    private void babyMobs$skipOnBaby(PoseStack pose, MultiBufferSource buffers, int light, Entity entity, float limbSwing,
-                                     float limbAmount, float partialTick, float age, float yaw, float pitch, CallbackInfo ci) {
-        if (BabyRender.active()) ci.cancel();
-    }
+	@Inject(method = "m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/Entity;FFFFFF)V",
+			at = @At("HEAD"), cancellable = true, remap = false, require = 0)
+	private void babyMobs$skipOnBaby(PoseStack pose, MultiBufferSource buffers, int light, Entity entity, float limbSwing,
+									 float limbAmount, float partialTick, float age, float yaw, float pitch, CallbackInfo ci) {
+		if (BabyRender.active()) ci.cancel();
+	}
 }

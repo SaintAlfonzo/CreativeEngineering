@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = MushroomCow.class, remap = false)
 public abstract class MushroomCowWalkTargetMixin {
 
-    @Inject(method = "m_5610_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$spawnableGround(BlockPos pos, LevelReader level, CallbackInfoReturnable<Float> cir) {
-        if (level.getBlockState(pos.below()).is(BlockTags.MOOSHROOMS_SPAWNABLE_ON)) cir.setReturnValue(10.0F);
-    }
+	@Inject(method = "m_5610_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$spawnableGround(BlockPos pos, LevelReader level, CallbackInfoReturnable<Float> cir) {
+		if (level.getBlockState(pos.below()).is(BlockTags.MOOSHROOMS_SPAWNABLE_ON)) cir.setReturnValue(10.0F);
+	}
 }

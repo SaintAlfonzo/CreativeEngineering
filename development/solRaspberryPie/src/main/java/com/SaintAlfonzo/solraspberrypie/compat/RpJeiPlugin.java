@@ -15,19 +15,19 @@ import java.util.List;
 /** JEI moves its overlay out of the inventory widget's way (11.1). */
 @JeiPlugin
 public class RpJeiPlugin implements IModPlugin {
-    @Override
-    public ResourceLocation getPluginUid() {
-        return new ResourceLocation(SolRaspberryPie.MOD_ID, "jei");
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return new ResourceLocation(SolRaspberryPie.MOD_ID, "jei");
+	}
 
-    @Override
-    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addGuiContainerHandler(InventoryScreen.class, new IGuiContainerHandler<InventoryScreen>() {
-            @Override
-            public List<Rect2i> getGuiExtraAreas(InventoryScreen screen) {
-                Rect2i r = InventoryWidget.lastRect();
-                return r == null ? List.of() : List.of(r);
-            }
-        });
-    }
+	@Override
+	public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+		registration.addGuiContainerHandler(InventoryScreen.class, new IGuiContainerHandler<InventoryScreen>() {
+			@Override
+			public List<Rect2i> getGuiExtraAreas(InventoryScreen screen) {
+				Rect2i r = InventoryWidget.lastRect();
+				return r == null ? List.of() : List.of(r);
+			}
+		});
+	}
 }

@@ -35,16 +35,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ArmorItem.class)
 public class ArmorMaterialEnchantabilityMixin {
 
-    @Inject(method = "m_6473_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$overrideArmorEnchantability(CallbackInfoReturnable<Integer> cir) {
-        Integer override;
-        try {
-            override = ArmorEnchantabilityBridge.valueFor(((ArmorItem) (Object) this).getMaterial().getName());
-        } catch (Throwable ignored) {
-            return;
-        }
-        if (override != null) {
-            cir.setReturnValue(override);
-        }
-    }
+	@Inject(method = "m_6473_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$overrideArmorEnchantability(CallbackInfoReturnable<Integer> cir) {
+		Integer override;
+		try {
+			override = ArmorEnchantabilityBridge.valueFor(((ArmorItem) (Object) this).getMaterial().getName());
+		} catch (Throwable ignored) {
+			return;
+		}
+		if (override != null) {
+			cir.setReturnValue(override);
+		}
+	}
 }

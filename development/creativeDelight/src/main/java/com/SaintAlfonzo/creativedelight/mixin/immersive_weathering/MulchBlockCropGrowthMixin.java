@@ -33,34 +33,34 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = MulchBlock.class, remap = false)
 public abstract class MulchBlockCropGrowthMixin {
 
-    @Inject(method = "m_213898_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$growFarmlandCrops(BlockState state, ServerLevel level, BlockPos pos,
-                                                       RandomSource random, CallbackInfo ci) {
-        if (!CommonConfigs.MULCH_GROWS_CROPS.get() || CommonConfigs.MULCH_GROWTH_TYPE_RANDOM_TICK.get()
-                || !CommonConfigs.MULCH_GROWTH_TYPE_BONEMEAL.get()) {
-            return;
-        }
-        if (state.getValue(FarmBlock.MOISTURE) != 7) {
-            return;
-        }
-        BlockPos above = pos.above();
-        BlockState crop = level.getBlockState(above);
-        if (crop.getBlock() instanceof CropBlock || !CropParity.isFarmlandCrop(crop)
-                || level.getRawBrightness(above, 0) < 9) {
-            return;
-        }
-        if (crop.getBlock() instanceof BonemealableBlock growable && growable.isValidBonemealTarget(level, above, crop, false)) {
-            growable.performBonemeal(level, random, above, crop);
-        }
-    }
+	@Inject(method = "m_213898_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$growFarmlandCrops(BlockState state, ServerLevel level, BlockPos pos,
+													   RandomSource random, CallbackInfo ci) {
+		if (!CommonConfigs.MULCH_GROWS_CROPS.get() || CommonConfigs.MULCH_GROWTH_TYPE_RANDOM_TICK.get()
+				|| !CommonConfigs.MULCH_GROWTH_TYPE_BONEMEAL.get()) {
+			return;
+		}
+		if (state.getValue(FarmBlock.MOISTURE) != 7) {
+			return;
+		}
+		BlockPos above = pos.above();
+		BlockState crop = level.getBlockState(above);
+		if (crop.getBlock() instanceof CropBlock || !CropParity.isFarmlandCrop(crop)
+				|| level.getRawBrightness(above, 0) < 9) {
+			return;
+		}
+		if (crop.getBlock() instanceof BonemealableBlock growable && growable.isValidBonemealTarget(level, above, crop, false)) {
+			growable.performBonemeal(level, random, above, crop);
+		}
+	}
 
-    @Redirect(method = "m_213898_", remap = false, require = 1, at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/level/block/state/BlockState;m_222972_(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V"))
-    private void creativedelight$noStemBoost(BlockState plant, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (plant.getBlock() instanceof StemBlock && !CommonConfigs.MULCH_GROWTH_TYPE_RANDOM_TICK.get()
-                && !CDConfig.STEM_FRUIT.fertileSoilBoost.get()) {
-            return;
-        }
-        plant.randomTick(level, pos, random);
-    }
+	@Redirect(method = "m_213898_", remap = false, require = 1, at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/world/level/block/state/BlockState;m_222972_(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/core/BlockPos;Lnet/minecraft/util/RandomSource;)V"))
+	private void creativedelight$noStemBoost(BlockState plant, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (plant.getBlock() instanceof StemBlock && !CommonConfigs.MULCH_GROWTH_TYPE_RANDOM_TICK.get()
+				&& !CDConfig.STEM_FRUIT.fertileSoilBoost.get()) {
+			return;
+		}
+		plant.randomTick(level, pos, random);
+	}
 }

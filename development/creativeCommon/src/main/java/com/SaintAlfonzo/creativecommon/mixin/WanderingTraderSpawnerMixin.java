@@ -23,12 +23,12 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(WanderingTraderSpawner.class)
 public abstract class WanderingTraderSpawnerMixin {
 
-    @ModifyConstant(method = {"m_7995_", "<init>"}, constant = @Constant(intValue = 24000), remap = false)
-    private int creativecommon$spawnDelay(int vanilla) {
-        try {
-            return WanderingTraderTweaks.spawnDelay(vanilla);
-        } catch (Throwable ignored) {
-            return vanilla;
-        }
-    }
+	@ModifyConstant(method = {"m_7995_", "<init>"}, constant = @Constant(intValue = 24000), remap = false)
+	private int creativecommon$spawnDelay(int vanilla) {
+		try {
+			return WanderingTraderTweaks.spawnDelay(vanilla);
+		} catch (Throwable ignored) {
+			return vanilla;
+		}
+	}
 }

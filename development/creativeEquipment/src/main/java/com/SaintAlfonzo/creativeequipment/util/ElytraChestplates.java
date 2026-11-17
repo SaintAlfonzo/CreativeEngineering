@@ -20,19 +20,19 @@ import net.minecraft.world.item.ItemStack;
  */
 public final class ElytraChestplates {
 
-    public static final TagKey<Item> TAG =
-            TagKey.create(Registry.ITEM_REGISTRY,
-                    new ResourceLocation("creativeequipment", "elytra_chestplates"));
+	public static final TagKey<Item> TAG =
+			TagKey.create(Registry.ITEM_REGISTRY,
+					new ResourceLocation("creativeequipment", "elytra_chestplates"));
 
-    private ElytraChestplates() {}
+	private ElytraChestplates() {}
 
-    /** True if the player has a {@link #TAG}ged chestplate in any armor slot. */
-    public static boolean isWorn(Player player) {
-        for (ItemStack stack : player.getArmorSlots()) {
-            if (!stack.isEmpty() && stack.is(TAG)) {
-                return true;
-            }
-        }
-        return false;
-    }
+	/** True if the player has a {@link #TAG}ged chestplate in any armor slot. */
+	public static boolean isWorn(Player player) {
+		for (ItemStack stack : player.getArmorSlots()) {
+			if (!stack.isEmpty() && stack.is(TAG)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

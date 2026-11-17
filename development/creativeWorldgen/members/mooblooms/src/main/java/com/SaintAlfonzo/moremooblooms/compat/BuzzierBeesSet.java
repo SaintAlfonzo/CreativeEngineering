@@ -42,155 +42,155 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public final class BuzzierBeesSet {
 
-    public static final String MOD_ID = "buzzier_bees";
+	public static final String MOD_ID = "buzzier_bees";
 
-    private static final ResourceLocation MOOBLOOM = new ResourceLocation(MOD_ID, "moobloom");
-    private static final ResourceLocation MOOBLOOM_SPAWN_EGG = new ResourceLocation(MOD_ID, "moobloom_spawn_egg");
-    private static final ResourceLocation BUTTERCUP = new ResourceLocation(MOD_ID, "buttercup");
-    private static final ResourceLocation POTTED_BUTTERCUP = new ResourceLocation(MOD_ID, "potted_buttercup");
-    public static final ResourceLocation SUNNY = new ResourceLocation(MOD_ID, "sunny");
+	private static final ResourceLocation MOOBLOOM = new ResourceLocation(MOD_ID, "moobloom");
+	private static final ResourceLocation MOOBLOOM_SPAWN_EGG = new ResourceLocation(MOD_ID, "moobloom_spawn_egg");
+	private static final ResourceLocation BUTTERCUP = new ResourceLocation(MOD_ID, "buttercup");
+	private static final ResourceLocation POTTED_BUTTERCUP = new ResourceLocation(MOD_ID, "potted_buttercup");
+	public static final ResourceLocation SUNNY = new ResourceLocation(MOD_ID, "sunny");
 
-    /** Sub-pack folder under packs/buzzier_bees/ -> the switch that turns it on. */
-    public record DataSwitch(String folder, ForgeConfigSpec.BooleanValue value) {}
+	/** Sub-pack folder under packs/buzzier_bees/ -> the switch that turns it on. */
+	public record DataSwitch(String folder, ForgeConfigSpec.BooleanValue value) {}
 
-    public static List<DataSwitch> dataSwitches() {
-        return List.of(
-                new DataSwitch("disable_moobloom_spawns", MMConfig.BuzzierBees.DISABLE_MOOBLOOM_SPAWNS),
-                new DataSwitch("restore_cow_spawns", MMConfig.BuzzierBees.RESTORE_COW_SPAWNS),
-                new DataSwitch("empty_hostiles_tag", MMConfig.BuzzierBees.EMPTY_HOSTILES_TAG),
-                new DataSwitch("replace_two_by_two", MMConfig.BuzzierBees.REPLACE_TWO_BY_TWO),
-                new DataSwitch("remove_sunny_from_all_effects", MMConfig.BuzzierBees.REMOVE_SUNNY_FROM_ALL_EFFECTS),
-                new DataSwitch("remove_buttercup_worldgen", MMConfig.BuzzierBees.REMOVE_BUTTERCUP_WORLDGEN),
-                new DataSwitch("remove_buttercup_recipes", MMConfig.BuzzierBees.REMOVE_BUTTERCUP_RECIPES));
-    }
+	public static List<DataSwitch> dataSwitches() {
+		return List.of(
+				new DataSwitch("disable_moobloom_spawns", MMConfig.BuzzierBees.DISABLE_MOOBLOOM_SPAWNS),
+				new DataSwitch("restore_cow_spawns", MMConfig.BuzzierBees.RESTORE_COW_SPAWNS),
+				new DataSwitch("empty_hostiles_tag", MMConfig.BuzzierBees.EMPTY_HOSTILES_TAG),
+				new DataSwitch("replace_two_by_two", MMConfig.BuzzierBees.REPLACE_TWO_BY_TWO),
+				new DataSwitch("remove_sunny_from_all_effects", MMConfig.BuzzierBees.REMOVE_SUNNY_FROM_ALL_EFFECTS),
+				new DataSwitch("remove_buttercup_worldgen", MMConfig.BuzzierBees.REMOVE_BUTTERCUP_WORLDGEN),
+				new DataSwitch("remove_buttercup_recipes", MMConfig.BuzzierBees.REMOVE_BUTTERCUP_RECIPES));
+	}
 
-    private static final AtomicInteger removedMooblooms = new AtomicInteger();
+	private static final AtomicInteger removedMooblooms = new AtomicInteger();
 
-    public static void register(IEventBus modBus) {
-        modBus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(BuzzierBeesSet::removeCompost));
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, BuzzierBeesSet::onEntityJoin);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, BuzzierBeesSet::onWandererTrades);
-        MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, BuzzierBeesSet::onEffectApplicable);
-        MinecraftForge.EVENT_BUS.addListener(BuzzierBeesSet::stripSunnyOnJoin);
-        // Again at server start: anything that re-registered the compost value after setup loses it again.
-        MinecraftForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> removeCompost());
-    }
+	public static void register(IEventBus modBus) {
+		modBus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(BuzzierBeesSet::removeCompost));
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, BuzzierBeesSet::onEntityJoin);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.LOWEST, BuzzierBeesSet::onWandererTrades);
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGHEST, BuzzierBeesSet::onEffectApplicable);
+		MinecraftForge.EVENT_BUS.addListener(BuzzierBeesSet::stripSunnyOnJoin);
+		// Again at server start: anything that re-registered the compost value after setup loses it again.
+		MinecraftForge.EVENT_BUS.addListener((ServerAboutToStartEvent e) -> removeCompost());
+	}
 
-    // ---- creative / JEI hiding ----
+	// ---- creative / JEI hiding ----
 
-    public static boolean isHidden(Item item) {
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
-        if (id == null || !id.getNamespace().equals(MOD_ID)) return false;
-        return (id.equals(BUTTERCUP) && MMConfig.on(MMConfig.BuzzierBees.HIDE_BUTTERCUP))
-                || (id.equals(MOOBLOOM_SPAWN_EGG) && MMConfig.on(MMConfig.BuzzierBees.HIDE_SPAWN_EGG));
-    }
+	public static boolean isHidden(Item item) {
+		ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
+		if (id == null || !id.getNamespace().equals(MOD_ID)) return false;
+		return (id.equals(BUTTERCUP) && MMConfig.on(MMConfig.BuzzierBees.HIDE_BUTTERCUP))
+				|| (id.equals(MOOBLOOM_SPAWN_EGG) && MMConfig.on(MMConfig.BuzzierBees.HIDE_SPAWN_EGG));
+	}
 
-    /** Hidden items, for the JEI plugin. */
-    public static List<Item> hiddenItems() {
-        return ForgeRegistries.ITEMS.getValues().stream().filter(BuzzierBeesSet::isHidden).toList();
-    }
+	/** Hidden items, for the JEI plugin. */
+	public static List<Item> hiddenItems() {
+		return ForgeRegistries.ITEMS.getValues().stream().filter(BuzzierBeesSet::isHidden).toList();
+	}
 
-    // ---- tags ----
+	// ---- tags ----
 
-    /** Element ids TagLoaderStripMixin takes out of every tag in this tag directory. */
-    public static Set<ResourceLocation> tagRemovals(String directory) {
-        if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_BUTTERCUP_TAGS)) return Set.of();
-        return switch (directory) {
-            case "tags/items" -> Set.of(BUTTERCUP);
-            case "tags/blocks" -> Set.of(BUTTERCUP, POTTED_BUTTERCUP);
-            default -> Set.of();
-        };
-    }
+	/** Element ids TagLoaderStripMixin takes out of every tag in this tag directory. */
+	public static Set<ResourceLocation> tagRemovals(String directory) {
+		if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_BUTTERCUP_TAGS)) return Set.of();
+		return switch (directory) {
+			case "tags/items" -> Set.of(BUTTERCUP);
+			case "tags/blocks" -> Set.of(BUTTERCUP, POTTED_BUTTERCUP);
+			default -> Set.of();
+		};
+	}
 
-    public static void logStripped(String directory, Set<ResourceLocation> removed, int tags) {
-        MoreMooblooms.LOGGER.info("[moremooblooms] removed {} from {} {} tags", removed, tags, directory);
-    }
+	public static void logStripped(String directory, Set<ResourceLocation> removed, int tags) {
+		MoreMooblooms.LOGGER.info("[moremooblooms] removed {} from {} {} tags", removed, tags, directory);
+	}
 
-    // ---- Buzzier Bees mooblooms (D25: they shouldn't be in the game at all) ----
+	// ---- Buzzier Bees mooblooms (D25: they shouldn't be in the game at all) ----
 
-    private static void onEntityJoin(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide) return;
-        if (!MOOBLOOM.equals(ForgeRegistries.ENTITY_TYPES.getKey(event.getEntity().getType()))) return;
-        if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_MOOBLOOMS)) return;
-        // Canceling keeps it out of the world: a new one is never added, and one loaded from disk isn't added
-        // to its chunk, so it is gone the next time the chunk saves.
-        event.setCanceled(true);
-        int n = removedMooblooms.incrementAndGet();
-        if (n <= 5 || Integer.bitCount(n) == 1) {
-            MoreMooblooms.LOGGER.info("[moremooblooms] removed a Buzzier Bees moobloom at {} ({} so far)",
-                    event.getEntity().blockPosition(), n);
-        }
-    }
+	private static void onEntityJoin(EntityJoinLevelEvent event) {
+		if (event.getLevel().isClientSide) return;
+		if (!MOOBLOOM.equals(ForgeRegistries.ENTITY_TYPES.getKey(event.getEntity().getType()))) return;
+		if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_MOOBLOOMS)) return;
+		// Canceling keeps it out of the world: a new one is never added, and one loaded from disk isn't added
+		// to its chunk, so it is gone the next time the chunk saves.
+		event.setCanceled(true);
+		int n = removedMooblooms.incrementAndGet();
+		if (n <= 5 || Integer.bitCount(n) == 1) {
+			MoreMooblooms.LOGGER.info("[moremooblooms] removed a Buzzier Bees moobloom at {} ({} so far)",
+					event.getEntity().blockPosition(), n);
+		}
+	}
 
-    // ---- Sunny off (R4, 4.11) ----
+	// ---- Sunny off (R4, 4.11) ----
 
-    @Nullable
-    private static MobEffect sunny() {
-        return ForgeRegistries.MOB_EFFECTS.getValue(SUNNY);
-    }
+	@Nullable
+	private static MobEffect sunny() {
+		return ForgeRegistries.MOB_EFFECTS.getValue(SUNNY);
+	}
 
-    private static boolean isSunny(MobEffect effect) {
-        return SUNNY.equals(ForgeRegistries.MOB_EFFECTS.getKey(effect));
-    }
+	private static boolean isSunny(MobEffect effect) {
+		return SUNNY.equals(ForgeRegistries.MOB_EFFECTS.getKey(effect));
+	}
 
-    /** Nothing can apply Sunny: potions, stews, mobs and {@code /effect give} ("Unable to apply"). */
-    private static void onEffectApplicable(MobEffectEvent.Applicable event) {
-        if (MMConfig.on(MMConfig.BuzzierBees.DISABLE_SUNNY) && isSunny(event.getEffectInstance().getEffect())) {
-            event.setResult(Event.Result.DENY);
-        }
-    }
+	/** Nothing can apply Sunny: potions, stews, mobs and {@code /effect give} ("Unable to apply"). */
+	private static void onEffectApplicable(MobEffectEvent.Applicable event) {
+		if (MMConfig.on(MMConfig.BuzzierBees.DISABLE_SUNNY) && isSunny(event.getEffectInstance().getEffect())) {
+			event.setResult(Event.Result.DENY);
+		}
+	}
 
-    /** Sunny given before the switch was on: players at login, mobs loaded from disk. */
-    private static void stripSunnyOnJoin(EntityJoinLevelEvent event) {
-        if (event.getLevel().isClientSide || !(event.getEntity() instanceof LivingEntity living)) return;
-        if (!MMConfig.on(MMConfig.BuzzierBees.DISABLE_SUNNY)) return;
-        MobEffect effect = sunny();
-        if (effect != null && living.hasEffect(effect)) {
-            living.removeEffect(effect);
-            MoreMooblooms.LOGGER.info("[moremooblooms] removed Sunny from {} ({})", living.getName().getString(), living.getUUID());
-        }
-    }
+	/** Sunny given before the switch was on: players at login, mobs loaded from disk. */
+	private static void stripSunnyOnJoin(EntityJoinLevelEvent event) {
+		if (event.getLevel().isClientSide || !(event.getEntity() instanceof LivingEntity living)) return;
+		if (!MMConfig.on(MMConfig.BuzzierBees.DISABLE_SUNNY)) return;
+		MobEffect effect = sunny();
+		if (effect != null && living.hasEffect(effect)) {
+			living.removeEffect(effect);
+			MoreMooblooms.LOGGER.info("[moremooblooms] removed Sunny from {} ({})", living.getName().getString(), living.getUUID());
+		}
+	}
 
-    /** For mixin/MobSunBurnMixin: true when Buzzier Bees' Sunny burn check should be skipped for this mob. */
-    public static boolean blocksSunnyBurn(Mob mob) {
-        if (!MMConfig.on(MMConfig.BuzzierBees.DISABLE_SUNNY)) return false;
-        MobEffect effect = sunny();
-        return effect != null && mob.hasEffect(effect);
-    }
+	/** For mixin/MobSunBurnMixin: true when Buzzier Bees' Sunny burn check should be skipped for this mob. */
+	public static boolean blocksSunnyBurn(Mob mob) {
+		if (!MMConfig.on(MMConfig.BuzzierBees.DISABLE_SUNNY)) return false;
+		MobEffect effect = sunny();
+		return effect != null && mob.hasEffect(effect);
+	}
 
-    // ---- buttercup sources outside data ----
+	// ---- buttercup sources outside data ----
 
-    private static void onWandererTrades(WandererTradesEvent event) {
-        if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_BUTTERCUP_TRADE)) return;
-        int removed = removeButtercupListings(event.getGenericTrades()) + removeButtercupListings(event.getRareTrades());
-        MoreMooblooms.LOGGER.info("[moremooblooms] removed {} buttercup Wandering Trader listing(s)", removed);
-    }
+	private static void onWandererTrades(WandererTradesEvent event) {
+		if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_BUTTERCUP_TRADE)) return;
+		int removed = removeButtercupListings(event.getGenericTrades()) + removeButtercupListings(event.getRareTrades());
+		MoreMooblooms.LOGGER.info("[moremooblooms] removed {} buttercup Wandering Trader listing(s)", removed);
+	}
 
-    private static int removeButtercupListings(List<VillagerTrades.ItemListing> listings) {
-        int removed = 0;
-        RandomSource random = RandomSource.create(0);
-        for (Iterator<VillagerTrades.ItemListing> it = listings.iterator(); it.hasNext(); ) {
-            VillagerTrades.ItemListing listing = it.next();
-            MerchantOffer offer;
-            try {
-                offer = listing.getOffer(null, random);
-            } catch (RuntimeException e) {
-                continue; // a listing that needs a real trader: not a plain buttercup sale
-            }
-            if (offer != null && BUTTERCUP.equals(ForgeRegistries.ITEMS.getKey(offer.getResult().getItem()))) {
-                it.remove();
-                removed++;
-            }
-        }
-        return removed;
-    }
+	private static int removeButtercupListings(List<VillagerTrades.ItemListing> listings) {
+		int removed = 0;
+		RandomSource random = RandomSource.create(0);
+		for (Iterator<VillagerTrades.ItemListing> it = listings.iterator(); it.hasNext(); ) {
+			VillagerTrades.ItemListing listing = it.next();
+			MerchantOffer offer;
+			try {
+				offer = listing.getOffer(null, random);
+			} catch (RuntimeException e) {
+				continue; // a listing that needs a real trader: not a plain buttercup sale
+			}
+			if (offer != null && BUTTERCUP.equals(ForgeRegistries.ITEMS.getKey(offer.getResult().getItem()))) {
+				it.remove();
+				removed++;
+			}
+		}
+		return removed;
+	}
 
-    private static void removeCompost() {
-        if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_BUTTERCUP_COMPOST)) return;
-        Item buttercup = ForgeRegistries.ITEMS.getValue(BUTTERCUP);
-        if (buttercup == null) return;
-        ComposterBlock.COMPOSTABLES.removeFloat((ItemLike) buttercup);
-    }
+	private static void removeCompost() {
+		if (!MMConfig.on(MMConfig.BuzzierBees.REMOVE_BUTTERCUP_COMPOST)) return;
+		Item buttercup = ForgeRegistries.ITEMS.getValue(BUTTERCUP);
+		if (buttercup == null) return;
+		ComposterBlock.COMPOSTABLES.removeFloat((ItemLike) buttercup);
+	}
 
-    private BuzzierBeesSet() {}
+	private BuzzierBeesSet() {}
 }

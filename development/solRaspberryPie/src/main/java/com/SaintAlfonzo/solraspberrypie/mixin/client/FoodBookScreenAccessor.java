@@ -13,13 +13,13 @@ import java.util.Set;
 /** Apple Pie's page list, food data and book background. Pages are plain UIElements, so Raspberry Pie can insert its own. */
 @Mixin(value = FoodBookScreen.class, remap = false)
 public interface FoodBookScreenAccessor {
-    @SuppressWarnings("rawtypes")
-    @Accessor("pages")
-    List solrp$pages();
+	@SuppressWarnings("rawtypes")
+	@Accessor("pages")
+	List solrp$pages();
 
-    @Accessor("foodData")
-    Set<Map.Entry<FoodInstance, Integer>> solrp$foodData();
+	@Accessor("foodData")
+	Set<Map.Entry<FoodInstance, Integer>> solrp$foodData();
 
-    @Accessor("background")
-    UIImage solrp$background();
+	@Accessor("background")
+	UIImage solrp$background();
 }

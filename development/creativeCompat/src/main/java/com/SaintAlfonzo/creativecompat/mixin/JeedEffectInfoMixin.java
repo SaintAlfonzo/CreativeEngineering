@@ -20,11 +20,11 @@ import net.minecraft.world.effect.MobEffect;
 @Mixin(targets = "net.mehvahdjukaar.jeed.common.EffectInfo", remap = false)
 public abstract class JeedEffectInfoMixin {
 
-    @Inject(method = "getDescription(Lnet/minecraft/world/effect/MobEffect;)Lnet/minecraft/network/chat/Component;",
-            at = @At("RETURN"), cancellable = true, require = 0, remap = false)
-    private static void creativeengineering$compoundParts(MobEffect effect, CallbackInfoReturnable<Component> cir) {
-        Component parts = CompoundEffects.describe(effect);
-        if (parts == null || cir.getReturnValue() == null) return;
-        cir.setReturnValue(cir.getReturnValue().copy().append(" ").append(parts));
-    }
+	@Inject(method = "getDescription(Lnet/minecraft/world/effect/MobEffect;)Lnet/minecraft/network/chat/Component;",
+			at = @At("RETURN"), cancellable = true, require = 0, remap = false)
+	private static void creativeengineering$compoundParts(MobEffect effect, CallbackInfoReturnable<Component> cir) {
+		Component parts = CompoundEffects.describe(effect);
+		if (parts == null || cir.getReturnValue() == null) return;
+		cir.setReturnValue(cir.getReturnValue().copy().append(" ").append(parts));
+	}
 }

@@ -7,11 +7,11 @@ import net.minecraftforge.client.event.RegisterClientCommandsEvent;
  * server never links the client event. Registered by CreativeDevtools on a client with Creative Compat only. */
 public final class CompatReloadClient {
 
-    private CompatReloadClient() {
-    }
+	private CompatReloadClient() {
+	}
 
-    public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("cdevreloadclient")
-                .then(Commands.literal("compat").executes(c -> CompatReloadCommand.run(c.getSource()))));
-    }
+	public static void onRegisterClientCommands(RegisterClientCommandsEvent event) {
+		event.getDispatcher().register(Commands.literal("cdevreloadclient")
+				.then(Commands.literal("compat").executes(c -> CompatReloadCommand.run(c.getSource()))));
+	}
 }

@@ -30,28 +30,28 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = ItemDrainCategory.class, remap = false)
 public class ItemDrainCategoryMixin {
 
-    @Redirect(
-            method = "consumeRecipes",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lcom/simibubi/create/content/fluids/potion/PotionFluidHandler;getFluidFromPotionItem(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraftforge/fluids/FluidStack;"
-            )
-    )
-    private static FluidStack creativeengineering$bundleDrainEntry(ItemStack stack) {
-        FluidStack fluid = PotionFluidHandler.getFluidFromPotionItem(stack);
-        Item item = stack.getItem();
-        if (item instanceof AbstractPotionBundle) {
-            int uses = PotionBundleUtils.getUses(stack);
-            fluid.setAmount(fluid.getAmount() * (uses < 1 ? 3 : uses));
+	@Redirect(
+			method = "consumeRecipes",
+			at = @At(
+					value = "INVOKE",
+					target = "Lcom/simibubi/create/content/fluids/potion/PotionFluidHandler;getFluidFromPotionItem(Lnet/minecraft/world/item/ItemStack;)Lnet/minecraftforge/fluids/FluidStack;"
+			)
+	)
+	private static FluidStack creativeengineering$bundleDrainEntry(ItemStack stack) {
+		FluidStack fluid = PotionFluidHandler.getFluidFromPotionItem(stack);
+		Item item = stack.getItem();
+		if (item instanceof AbstractPotionBundle) {
+			int uses = PotionBundleUtils.getUses(stack);
+			fluid.setAmount(fluid.getAmount() * (uses < 1 ? 3 : uses));
 
-            PotionFluid.BottleType type =
-                      item instanceof LingeringPotionBundle ? PotionFluid.BottleType.LINGERING
-                    : item instanceof SplashPotionBundle    ? PotionFluid.BottleType.SPLASH
-                    : null;
-            if (type != null && fluid.hasTag()) {
-                NBTHelper.writeEnum(fluid.getOrCreateTag(), "Bottle", type);
-            }
-        }
-        return fluid;
-    }
+			PotionFluid.BottleType type =
+					  item instanceof LingeringPotionBundle ? PotionFluid.BottleType.LINGERING
+					: item instanceof SplashPotionBundle    ? PotionFluid.BottleType.SPLASH
+					: null;
+			if (type != null && fluid.hasTag()) {
+				NBTHelper.writeEnum(fluid.getOrCreateTag(), "Bottle", type);
+			}
+		}
+		return fluid;
+	}
 }

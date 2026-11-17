@@ -19,48 +19,48 @@ import oreexcavation.undo.ExcavateHistory;
  */
 public final class VeinUndoAccess {
 
-    private static final Field SCHEDULER = field(MiningScheduler.class, "INSTANCE");
-    private static final Field AUTO_PICKUP = field(ExcavationSettings.class, "autoPickup");
+	private static final Field SCHEDULER = field(MiningScheduler.class, "INSTANCE");
+	private static final Field AUTO_PICKUP = field(ExcavationSettings.class, "autoPickup");
 
-    private VeinUndoAccess() {}
+	private VeinUndoAccess() {}
 
-    /** On {@code MiningScheduler}: per-player undo stacks, newest first. */
-    public interface Scheduler {
-        Map<UUID, ArrayDeque<ExcavateHistory>> creativeengineering$undoHistory();
-    }
+	/** On {@code MiningScheduler}: per-player undo stacks, newest first. */
+	public interface Scheduler {
+		Map<UUID, ArrayDeque<ExcavateHistory>> creativeengineering$undoHistory();
+	}
 
-    /** On {@code ExcavateHistory}: the blocks one vein mine broke. */
-    public interface History {
-        Deque<BlockHistory> creativeengineering$history();
-    }
+	/** On {@code ExcavateHistory}: the blocks one vein mine broke. */
+	public interface History {
+		Deque<BlockHistory> creativeengineering$history();
+	}
 
-    /** On {@code BlockHistory}: the block state before it was broken. */
-    public interface Block {
-        BlockState creativeengineering$state();
-    }
+	/** On {@code BlockHistory}: the block state before it was broken. */
+	public interface Block {
+		BlockState creativeengineering$state();
+	}
 
-    public static Scheduler scheduler() {
-        try {
-            return (Scheduler) SCHEDULER.get(null);
-        } catch (IllegalAccessException e) {
-            throw new IllegalStateException(e);
-        }
-    }
+	public static Scheduler scheduler() {
+		try {
+			return (Scheduler) SCHEDULER.get(null);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
+	}
 
-    /** Ore Excavation's "Auto Pickup" setting. */
-    public static boolean autoPickup() {
-        try {
-            return AUTO_PICKUP.getBoolean(null);
-        } catch (IllegalAccessException e) {
-            throw new IllegalStateException(e);
-        }
-    }
+	/** Ore Excavation's "Auto Pickup" setting. */
+	public static boolean autoPickup() {
+		try {
+			return AUTO_PICKUP.getBoolean(null);
+		} catch (IllegalAccessException e) {
+			throw new IllegalStateException(e);
+		}
+	}
 
-    private static Field field(Class<?> owner, String name) {
-        try {
-            return owner.getField(name);
-        } catch (NoSuchFieldException e) {
-            throw new IllegalStateException("Ore Excavation changed: no " + owner.getSimpleName() + "." + name, e);
-        }
-    }
+	private static Field field(Class<?> owner, String name) {
+		try {
+			return owner.getField(name);
+		} catch (NoSuchFieldException e) {
+			throw new IllegalStateException("Ore Excavation changed: no " + owner.getSimpleName() + "." + name, e);
+		}
+	}
 }

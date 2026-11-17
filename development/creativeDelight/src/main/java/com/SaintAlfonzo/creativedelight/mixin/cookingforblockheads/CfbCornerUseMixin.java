@@ -26,15 +26,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = CornerBlock.class, remap = false)
 public abstract class CfbCornerUseMixin {
 
-    @Inject(method = "m_6227_", at = @At("RETURN"), cancellable = true)
-    private void ce$openStorage(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
-        if (cir.getReturnValue() != InteractionResult.FAIL) return;
-        if (hit.getDirection() == Direction.UP && player.getItemInHand(hand).getItem() instanceof BlockItem) return;
-        if (!(level.getBlockEntity(pos) instanceof CornerStorage.Holder holder)) return;
-        if (!level.isClientSide) {
-            player.openMenu(CornerStorage.menu(holder.ce$cornerStorage(), state.getBlock().getName()));
-        }
-        cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide));
-    }
+	@Inject(method = "m_6227_", at = @At("RETURN"), cancellable = true)
+	private void ce$openStorage(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+								BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
+		if (cir.getReturnValue() != InteractionResult.FAIL) return;
+		if (hit.getDirection() == Direction.UP && player.getItemInHand(hand).getItem() instanceof BlockItem) return;
+		if (!(level.getBlockEntity(pos) instanceof CornerStorage.Holder holder)) return;
+		if (!level.isClientSide) {
+			player.openMenu(CornerStorage.menu(holder.ce$cornerStorage(), state.getBlock().getName()));
+		}
+		cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide));
+	}
 }

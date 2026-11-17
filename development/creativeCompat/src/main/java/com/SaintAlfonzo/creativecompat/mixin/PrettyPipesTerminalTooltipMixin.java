@@ -23,14 +23,14 @@ import java.util.Optional;
 @Mixin(value = ItemTerminalWidget.class, remap = false)
 public abstract class PrettyPipesTerminalTooltipMixin {
 
-    @Shadow
-    public ItemStack stack;
+	@Shadow
+	public ItemStack stack;
 
-    @Redirect(method = "m_7428_", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lde/ellpeck/prettypipes/terminal/containers/ItemTerminalGui;m_169388_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;Ljava/util/Optional;II)V"))
-    private void creativecommon$tooltipWithStack(ItemTerminalGui screen, PoseStack poseStack, List<Component> lines,
-                                                      Optional<TooltipComponent> image, int x, int y) {
-        screen.renderTooltip(poseStack, lines, image, x, y, this.stack);
-    }
+	@Redirect(method = "m_7428_", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lde/ellpeck/prettypipes/terminal/containers/ItemTerminalGui;m_169388_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;Ljava/util/Optional;II)V"))
+	private void creativecommon$tooltipWithStack(ItemTerminalGui screen, PoseStack poseStack, List<Component> lines,
+													  Optional<TooltipComponent> image, int x, int y) {
+		screen.renderTooltip(poseStack, lines, image, x, y, this.stack);
+	}
 }

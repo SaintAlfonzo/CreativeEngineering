@@ -56,65 +56,65 @@ import java.util.List;
  */
 @Mod.EventBusSubscriber(modid = com.SaintAlfonzo.creativeequipment.CreativeEquipment.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
 public class ArmorOverflowRenderer {
-    private static final String MODID = "detailab";
-    private static final int ROW_SIZE = 20; // armor points per row (10 icons x 2 points)
-    private static final int FULL_ROW_SPACING = 9; // icon height, px
+	private static final String MODID = "detailab";
+	private static final int ROW_SIZE = 20; // armor points per row (10 icons x 2 points)
+	private static final int FULL_ROW_SPACING = 9; // icon height, px
 
-    @SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
-    public static void onArmorOverflowRender(RenderGuiOverlayEvent.Pre event) {
-        if (!ModList.get().isLoaded(MODID)) return;
-        if (event.getOverlay().id() != VanillaGuiOverlay.ARMOR_LEVEL.id()) return;
-        if (!com.SaintAlfonzo.creativeequipment.CEQConfig.ARMOR_OVERFLOW.enabled.get()) return;
+	@SubscribeEvent(priority = EventPriority.LOWEST, receiveCanceled = true)
+	public static void onArmorOverflowRender(RenderGuiOverlayEvent.Pre event) {
+		if (!ModList.get().isLoaded(MODID)) return;
+		if (event.getOverlay().id() != VanillaGuiOverlay.ARMOR_LEVEL.id()) return;
+		if (!com.SaintAlfonzo.creativeequipment.CEQConfig.ARMOR_OVERFLOW.enabled.get()) return;
 
-        Minecraft mc = Minecraft.getInstance();
-        LocalPlayer player = mc.player;
-        if (player == null) return;
+		Minecraft mc = Minecraft.getInstance();
+		LocalPlayer player = mc.player;
+		if (player == null) return;
 
-        List<Pair<ItemStack, CustomArmorBar>> armorPoints = ArmorBarRendererAccessor.creativecommon$getArmorPoints(player);
-        int stackCount = (armorPoints.size() - 1) / ROW_SIZE;
-        if (stackCount <= 0) return; // fits in row 0, nothing to do
+		List<Pair<ItemStack, CustomArmorBar>> armorPoints = ArmorBarRendererAccessor.creativecommon$getArmorPoints(player);
+		int stackCount = (armorPoints.size() - 1) / ROW_SIZE;
+		if (stackCount <= 0) return; // fits in row 0, nothing to do
 
-        int screenWidth = mc.getWindow().getGuiScaledWidth() / 2 - 91;
-        int yPos = row0Y(mc, player);
-        int spacing = com.SaintAlfonzo.creativeequipment.CEQConfig.ARMOR_OVERFLOW.compact.get() ? com.SaintAlfonzo.creativeequipment.CEQConfig.ARMOR_OVERFLOW.compactRowSpacing.get() : FULL_ROW_SPACING;
-        int stackRow = stackCount * ROW_SIZE;
-        PoseStack matrices = event.getPoseStack();
+		int screenWidth = mc.getWindow().getGuiScaledWidth() / 2 - 91;
+		int yPos = row0Y(mc, player);
+		int spacing = com.SaintAlfonzo.creativeequipment.CEQConfig.ARMOR_OVERFLOW.compact.get() ? com.SaintAlfonzo.creativeequipment.CEQConfig.ARMOR_OVERFLOW.compactRowSpacing.get() : FULL_ROW_SPACING;
+		int stackRow = stackCount * ROW_SIZE;
+		PoseStack matrices = event.getPoseStack();
 
-        RenderSystem.enableBlend();
-        RenderSystem.setShader(GameRenderer::getPositionTexShader);
-        // Topmost row first, so a lower (closer-to-hotbar) row's draw call - later in this loop -
-        // paints over the bottom sliver of the row above it when spacing is tucked tight.
-        for (int row = stackCount; row >= 1; row--) {
-            drawRow(matrices, armorPoints, stackRow - row * ROW_SIZE, screenWidth, yPos - row * spacing);
-        }
-        RenderSystem.disableBlend();
-        RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
-        RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
-    }
+		RenderSystem.enableBlend();
+		RenderSystem.setShader(GameRenderer::getPositionTexShader);
+		// Topmost row first, so a lower (closer-to-hotbar) row's draw call - later in this loop -
+		// paints over the bottom sliver of the row above it when spacing is tucked tight.
+		for (int row = stackCount; row >= 1; row--) {
+			drawRow(matrices, armorPoints, stackRow - row * ROW_SIZE, screenWidth, yPos - row * spacing);
+		}
+		RenderSystem.disableBlend();
+		RenderSystem.setShaderColor(1.0f, 1.0f, 1.0f, 1.0f);
+		RenderSystem.setShaderTexture(0, GuiComponent.GUI_ICONS_LOCATION);
+	}
 
-    /** One full 20-point (10-icon) row, starting at armorPoints[offset] - mirrors ArmorBarRenderer#render's own row loop. */
-    private static void drawRow(PoseStack matrices, List<Pair<ItemStack, CustomArmorBar>> armorPoints, int offset, int xBase, int y) {
-        for (int count = 0; count < 10; count++) {
-            int xPos = xBase + count * 8;
-            Pair<ItemStack, CustomArmorBar> am1 = armorPoints.get(offset + count * 2);
-            Pair<ItemStack, CustomArmorBar> am2 = armorPoints.get(offset + count * 2 + 1);
-            if (am1.getSecond() == am2.getSecond()) {
-                am1.getSecond().draw(am1.getFirst(), matrices, xPos, y, false, false);
-            } else {
-                am2.getSecond().draw(am2.getFirst(), matrices, xPos, y, true, true);
-                am1.getSecond().draw(am1.getFirst(), matrices, xPos, y, true, false);
-            }
-        }
-    }
+	/** One full 20-point (10-icon) row, starting at armorPoints[offset] - mirrors ArmorBarRenderer#render's own row loop. */
+	private static void drawRow(PoseStack matrices, List<Pair<ItemStack, CustomArmorBar>> armorPoints, int offset, int xBase, int y) {
+		for (int count = 0; count < 10; count++) {
+			int xPos = xBase + count * 8;
+			Pair<ItemStack, CustomArmorBar> am1 = armorPoints.get(offset + count * 2);
+			Pair<ItemStack, CustomArmorBar> am2 = armorPoints.get(offset + count * 2 + 1);
+			if (am1.getSecond() == am2.getSecond()) {
+				am1.getSecond().draw(am1.getFirst(), matrices, xPos, y, false, false);
+			} else {
+				am2.getSecond().draw(am2.getFirst(), matrices, xPos, y, true, true);
+				am1.getSecond().draw(am1.getFirst(), matrices, xPos, y, true, false);
+			}
+		}
+	}
 
-    /** Duplicated from ArmorBarRenderer#render (decompiled) - its own yPos/healthRow math is inline, no accessor to invoke. */
-    private static int row0Y(Minecraft mc, LocalPlayer player) {
-        double playerHealth = Math.ceil(player.getHealth());
-        double maxHealth = Math.max(player.getAttributeValue(Attributes.MAX_HEALTH), playerHealth);
-        double absorptionHealth = Math.ceil(player.getAbsorptionAmount());
-        int healthRow = DetailArmorBar.getConfig().getOptions().toggleCompatibleHeartMod
-                ? 1 : (int) Math.ceil((maxHealth + absorptionHealth) / 20.0);
-        int screenHeight = mc.getWindow().getGuiScaledHeight() - 39;
-        return screenHeight - (healthRow - 1) * Math.max(10 - (healthRow - 2), 3) - 10;
-    }
+	/** Duplicated from ArmorBarRenderer#render (decompiled) - its own yPos/healthRow math is inline, no accessor to invoke. */
+	private static int row0Y(Minecraft mc, LocalPlayer player) {
+		double playerHealth = Math.ceil(player.getHealth());
+		double maxHealth = Math.max(player.getAttributeValue(Attributes.MAX_HEALTH), playerHealth);
+		double absorptionHealth = Math.ceil(player.getAbsorptionAmount());
+		int healthRow = DetailArmorBar.getConfig().getOptions().toggleCompatibleHeartMod
+				? 1 : (int) Math.ceil((maxHealth + absorptionHealth) / 20.0);
+		int screenHeight = mc.getWindow().getGuiScaledHeight() - 39;
+		return screenHeight - (healthRow - 1) * Math.max(10 - (healthRow - 2), 3) - 10;
+	}
 }

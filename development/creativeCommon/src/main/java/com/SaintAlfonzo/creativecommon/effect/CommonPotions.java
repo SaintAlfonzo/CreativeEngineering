@@ -39,56 +39,56 @@ import java.util.List;
  */
 public final class CommonPotions {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final int S = 20; // ticks per second
-    private static final int BASE_DURATION = 180 * S;
-    private static final int LONG_DURATION = 480 * S;
-    private static final int STRONG_DURATION = 90 * S;
-    private static final int STRONG_AMPLIFIER = 1;
+	private static final int S = 20; // ticks per second
+	private static final int BASE_DURATION = 180 * S;
+	private static final int LONG_DURATION = 480 * S;
+	private static final int STRONG_DURATION = 90 * S;
+	private static final int STRONG_AMPLIFIER = 1;
 
-    /**
-     * One effect: registers {@code <name>}, {@code long_<name>} and, for an effect with levels, {@code strong_<name>}
-     * in creativecommon (plan_cb_polish.md 2).
-     *
-     * @param needsMod mod that must be loaded for the potions to be registered, or null
-     * @param missing  appended to the error when the effect is not found at potion registration
-     * @param levels   false for a levelless effect (no strong potion, like Night Vision)
-     */
-    private record Row(String name, ResourceLocation effect, String needsMod, String missing, boolean levels) {
-    }
+	/**
+	 * One effect: registers {@code <name>}, {@code long_<name>} and, for an effect with levels, {@code strong_<name>}
+	 * in creativecommon (plan_cb_polish.md 2).
+	 *
+	 * @param needsMod mod that must be loaded for the potions to be registered, or null
+	 * @param missing  appended to the error when the effect is not found at potion registration
+	 * @param levels   false for a levelless effect (no strong potion, like Night Vision)
+	 */
+	private record Row(String name, ResourceLocation effect, String needsMod, String missing, boolean levels) {
+	}
 
-    /** The Better Beacons potions (long_reach, phantom_bane) are Creative Brewing's (potion/BetterBeaconsPotions). */
-    private static final List<Row> ROWS = List.of(
-            new Row("magic_resistance", new ResourceLocation(CreativeCommon.MODID, "magic_resistance"), null,
-                    "did magic_resistance.js fail to register it?", true));
+	/** The Better Beacons potions (long_reach, phantom_bane) are Creative Brewing's (potion/BetterBeaconsPotions). */
+	private static final List<Row> ROWS = List.of(
+			new Row("magic_resistance", new ResourceLocation(CreativeCommon.MODID, "magic_resistance"), null,
+					"did magic_resistance.js fail to register it?", true));
 
-    private static final DeferredRegister<Potion> POTIONS =
-            DeferredRegister.create(ForgeRegistries.POTIONS, CreativeCommon.MODID);
+	private static final DeferredRegister<Potion> POTIONS =
+			DeferredRegister.create(ForgeRegistries.POTIONS, CreativeCommon.MODID);
 
-    private CommonPotions() {}
+	private CommonPotions() {}
 
-    public static void register(IEventBus modEventBus) {
-        for (Row row : ROWS) {
-            if (row.needsMod() != null && !ModList.get().isLoaded(row.needsMod())) {
-                LOGGER.info("[CE potions] {} not present - skipping the {} potions", row.needsMod(), row.name());
-                continue;
-            }
-            add(row, row.name(), BASE_DURATION, 0);
-            add(row, "long_" + row.name(), LONG_DURATION, 0);
-            if (row.levels()) add(row, "strong_" + row.name(), STRONG_DURATION, STRONG_AMPLIFIER);
-        }
-        POTIONS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		for (Row row : ROWS) {
+			if (row.needsMod() != null && !ModList.get().isLoaded(row.needsMod())) {
+				LOGGER.info("[CE potions] {} not present - skipping the {} potions", row.needsMod(), row.name());
+				continue;
+			}
+			add(row, row.name(), BASE_DURATION, 0);
+			add(row, "long_" + row.name(), LONG_DURATION, 0);
+			if (row.levels()) add(row, "strong_" + row.name(), STRONG_DURATION, STRONG_AMPLIFIER);
+		}
+		POTIONS.register(modEventBus);
+	}
 
-    private static void add(Row row, String name, int duration, int amplifier) {
-        POTIONS.register(name, () -> {
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(row.effect());
-            if (effect == null) {
-                LOGGER.error("[CE potions] {} not found while building creativecommon:{} - {}", row.effect(), name, row.missing());
-                return new Potion(new MobEffectInstance[0]);
-            }
-            return new Potion(new MobEffectInstance(effect, duration, amplifier));
-        });
-    }
+	private static void add(Row row, String name, int duration, int amplifier) {
+		POTIONS.register(name, () -> {
+			MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(row.effect());
+			if (effect == null) {
+				LOGGER.error("[CE potions] {} not found while building creativecommon:{} - {}", row.effect(), name, row.missing());
+				return new Potion(new MobEffectInstance[0]);
+			}
+			return new Potion(new MobEffectInstance(effect, duration, amplifier));
+		});
+	}
 }

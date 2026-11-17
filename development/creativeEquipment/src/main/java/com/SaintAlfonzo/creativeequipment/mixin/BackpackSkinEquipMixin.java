@@ -17,8 +17,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = BackpackItem.class, remap = false)
 public abstract class BackpackSkinEquipMixin {
 
-    @Inject(method = "getEquipmentSlot", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private void creativeengineering$noSkinEquip(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> cir) {
-        if (!CEQConfig.BACKPACK_SKINS.allowEquip.get() && BackpackSkins.getSkin(stack) != null) cir.setReturnValue(null);
-    }
+	@Inject(method = "getEquipmentSlot", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private void creativeengineering$noSkinEquip(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> cir) {
+		if (!CEQConfig.BACKPACK_SKINS.allowEquip.get() && BackpackSkins.getSkin(stack) != null) cir.setReturnValue(null);
+	}
 }

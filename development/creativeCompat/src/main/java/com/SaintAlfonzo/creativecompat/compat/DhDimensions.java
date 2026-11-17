@@ -12,10 +12,10 @@ import java.util.Set;
  */
 public final class DhDimensions {
 
-    public static final Set<String> NO_GENERATION = Set.of("minecraft:the_nether");
+	public static final Set<String> NO_GENERATION = Set.of("minecraft:the_nether");
 
-    public static final String NETHER = "minecraft:the_nether";
-    public static final int NETHER_LOD_RADIUS = 32;
+	public static final String NETHER = "minecraft:the_nether";
+	public static final int NETHER_LOD_RADIUS = 32;
 
-    private DhDimensions() {}
+	private DhDimensions() {}
 }

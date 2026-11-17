@@ -41,87 +41,87 @@ import net.minecraftforge.fml.ModList;
  * Off with {@code [wthit] campfireBurn} and {@code campfireRain}. feature_writeup/wthit_lines.md 2.6.
  */
 public final class WthitCampfire implements IWailaCommonPlugin, IWailaClientPlugin, IBlockComponentProvider,
-        IDataProvider<CampfireBlockEntity> {
+		IDataProvider<CampfireBlockEntity> {
 
-    private static final String INFINITE = "creativecommon.campfire.infinite";
-    private static final String BURN_LEFT = "creativecommon.campfire.burn_left";
-    private static final String RAIN = "creativecommon.campfire.rain";
-    private static final String RAIN_LEFT = "creativecommon.campfire.rain_left";
-    private static final int RAIN_DOUSES = 1;
-    private static final int RAIN_PROOF = 2;
-    private static final int RAIN_GOING = 3;
-    private static final ResourceLocation BURN_LINE = new ResourceLocation(CreativeCompat.MOD_ID, "campfire_burn");
-    private static final ResourceLocation RAIN_LINE = new ResourceLocation(CreativeCompat.MOD_ID, "campfire_rain");
+	private static final String INFINITE = "creativecommon.campfire.infinite";
+	private static final String BURN_LEFT = "creativecommon.campfire.burn_left";
+	private static final String RAIN = "creativecommon.campfire.rain";
+	private static final String RAIN_LEFT = "creativecommon.campfire.rain_left";
+	private static final int RAIN_DOUSES = 1;
+	private static final int RAIN_PROOF = 2;
+	private static final int RAIN_GOING = 3;
+	private static final ResourceLocation BURN_LINE = new ResourceLocation(CreativeCompat.MOD_ID, "campfire_burn");
+	private static final ResourceLocation RAIN_LINE = new ResourceLocation(CreativeCompat.MOD_ID, "campfire_rain");
 
-    @Override
-    public void register(ICommonRegistrar registrar) {
-        registrar.blockData(this, CampfireBlockEntity.class);
-    }
+	@Override
+	public void register(ICommonRegistrar registrar) {
+		registrar.blockData(this, CampfireBlockEntity.class);
+	}
 
-    @Override
-    public void register(IClientRegistrar registrar) {
-        registrar.body(this, CampfireBlock.class);
-    }
+	@Override
+	public void register(IClientRegistrar registrar) {
+		registrar.body(this, CampfireBlock.class);
+	}
 
-    @Override
-    public void appendData(IDataWriter data, IServerAccessor<CampfireBlockEntity> accessor, IPluginConfig config) {
-        CampfireBlockEntity campfire = accessor.getTarget();
-        BlockState state = campfire.getBlockState();
-        if (!state.hasProperty(CampfireBlock.LIT) || !state.getValue(CampfireBlock.LIT)) {
-            return;
-        }
-        CompoundTag raw = data.raw();
-        if (ModList.get().isLoaded("unlitcampfire")) {
-            Unlit.write(raw, campfire, state);
-        }
-        if (CampfireRainInfo.rainDouses() && state.is(CampfireRainInfo.RAIN_DOUSES)) {
-            Level level = accessor.getLevel();
-            BlockPos pos = campfire.getBlockPos();
-            if (level.getBlockState(pos.below()).is(CampfireRainInfo.RAIN_PROOF_FUEL)) {
-                raw.putInt(RAIN, RAIN_PROOF);
-            } else if (level.isRainingAt(pos.above())) {
-                int left = CampfireRainInfo.rainOutTicks() - ((CampfireRainTicks) campfire).ce$getRainTicks();
-                raw.putInt(RAIN, RAIN_GOING);
-                raw.putInt(RAIN_LEFT, Math.max(0, (left + 19) / 20));
-            } else {
-                raw.putInt(RAIN, RAIN_DOUSES);
-            }
-        }
-    }
+	@Override
+	public void appendData(IDataWriter data, IServerAccessor<CampfireBlockEntity> accessor, IPluginConfig config) {
+		CampfireBlockEntity campfire = accessor.getTarget();
+		BlockState state = campfire.getBlockState();
+		if (!state.hasProperty(CampfireBlock.LIT) || !state.getValue(CampfireBlock.LIT)) {
+			return;
+		}
+		CompoundTag raw = data.raw();
+		if (ModList.get().isLoaded("unlitcampfire")) {
+			Unlit.write(raw, campfire, state);
+		}
+		if (CampfireRainInfo.rainDouses() && state.is(CampfireRainInfo.RAIN_DOUSES)) {
+			Level level = accessor.getLevel();
+			BlockPos pos = campfire.getBlockPos();
+			if (level.getBlockState(pos.below()).is(CampfireRainInfo.RAIN_PROOF_FUEL)) {
+				raw.putInt(RAIN, RAIN_PROOF);
+			} else if (level.isRainingAt(pos.above())) {
+				int left = CampfireRainInfo.rainOutTicks() - ((CampfireRainTicks) campfire).ce$getRainTicks();
+				raw.putInt(RAIN, RAIN_GOING);
+				raw.putInt(RAIN_LEFT, Math.max(0, (left + 19) / 20));
+			} else {
+				raw.putInt(RAIN, RAIN_DOUSES);
+			}
+		}
+	}
 
-    @Override
-    public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
-        CompoundTag data = accessor.getData().raw();
-        if (com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.campfireBurn.get()) {
-            if (data.getBoolean(INFINITE)) {
-                tooltip.setLine(BURN_LINE, Component.translatable("hud.unlitcampfire.infinite"));
-            } else if (data.contains(BURN_LEFT)) {
-                tooltip.setLine(BURN_LINE, Component.translatable("hud.unlitcampfire.n_seconds", data.getInt(BURN_LEFT)));
-            }
-        }
-        Component rain = !com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.campfireRain.get() ? null : switch (data.getInt(RAIN)) {
-            case RAIN_DOUSES -> Component.translatable("creativecommon.wthit.campfire.rain.douses");
-            case RAIN_PROOF -> Component.translatable("creativecommon.wthit.campfire.rain.proof")
-                    .withStyle(ChatFormatting.GREEN);
-            case RAIN_GOING -> Component.translatable("creativecommon.wthit.campfire.rain.going", data.getInt(RAIN_LEFT))
-                    .withStyle(ChatFormatting.RED);
-            default -> null;
-        };
-        if (rain != null) {
-            tooltip.setLine(RAIN_LINE, new PairComponent(Component.translatable("creativecommon.wthit.campfire.rain"), rain));
-        }
-    }
+	@Override
+	public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+		CompoundTag data = accessor.getData().raw();
+		if (com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.campfireBurn.get()) {
+			if (data.getBoolean(INFINITE)) {
+				tooltip.setLine(BURN_LINE, Component.translatable("hud.unlitcampfire.infinite"));
+			} else if (data.contains(BURN_LEFT)) {
+				tooltip.setLine(BURN_LINE, Component.translatable("hud.unlitcampfire.n_seconds", data.getInt(BURN_LEFT)));
+			}
+		}
+		Component rain = !com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.campfireRain.get() ? null : switch (data.getInt(RAIN)) {
+			case RAIN_DOUSES -> Component.translatable("creativecommon.wthit.campfire.rain.douses");
+			case RAIN_PROOF -> Component.translatable("creativecommon.wthit.campfire.rain.proof")
+					.withStyle(ChatFormatting.GREEN);
+			case RAIN_GOING -> Component.translatable("creativecommon.wthit.campfire.rain.going", data.getInt(RAIN_LEFT))
+					.withStyle(ChatFormatting.RED);
+			default -> null;
+		};
+		if (rain != null) {
+			tooltip.setLine(RAIN_LINE, new PairComponent(Component.translatable("creativecommon.wthit.campfire.rain"), rain));
+		}
+	}
 
-    /** Unlit Campfire's mixin interfaces; only loaded when the mod is. */
-    private static final class Unlit {
-        static void write(CompoundTag raw, CampfireBlockEntity campfire, BlockState state) {
-            if (campfire instanceof ICampfireBlockEntityMixin be && state.getBlock() instanceof ICampfireBlockMixin block) {
-                if (block.burnsInfinite(state)) {
-                    raw.putBoolean(INFINITE, true);
-                } else {
-                    raw.putInt(BURN_LEFT, Math.max(0, (block.getMaxLitTime(state) - be.getLitTime()) / 20));
-                }
-            }
-        }
-    }
+	/** Unlit Campfire's mixin interfaces; only loaded when the mod is. */
+	private static final class Unlit {
+		static void write(CompoundTag raw, CampfireBlockEntity campfire, BlockState state) {
+			if (campfire instanceof ICampfireBlockEntityMixin be && state.getBlock() instanceof ICampfireBlockMixin block) {
+				if (block.burnsInfinite(state)) {
+					raw.putBoolean(INFINITE, true);
+				} else {
+					raw.putInt(BURN_LEFT, Math.max(0, (block.getMaxLitTime(state) - be.getLitTime()) / 20));
+				}
+			}
+		}
+	}
 }

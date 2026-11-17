@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = FishingHook.class, remap = false)
 public abstract class FishingHookFeatherPullMixin {
 
-    @Inject(method = "m_150155_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativecompat$featherNoPull(Entity entity, CallbackInfo ci) {
-        if ((Object) this instanceof FeatherEntity) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_150155_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativecompat$featherNoPull(Entity entity, CallbackInfo ci) {
+		if ((Object) this instanceof FeatherEntity) {
+			ci.cancel();
+		}
+	}
 }

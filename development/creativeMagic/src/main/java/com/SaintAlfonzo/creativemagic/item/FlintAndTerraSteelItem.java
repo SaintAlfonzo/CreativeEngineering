@@ -25,32 +25,32 @@ import net.minecraft.world.level.gameevent.GameEvent;
  * PortalFailureHandler success path) - this version is a stand-in.
  */
 public class FlintAndTerraSteelItem extends FlintAndSteelItem {
-    public FlintAndTerraSteelItem(Properties properties) {
-        super(properties);
-    }
+	public FlintAndTerraSteelItem(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        Level level = context.getLevel();
-        BlockPos targetPos = context.getClickedPos().relative(context.getClickedFace());
-        BlockState targetState = level.getBlockState(targetPos);
+	@Override
+	public InteractionResult useOn(UseOnContext context) {
+		Level level = context.getLevel();
+		BlockPos targetPos = context.getClickedPos().relative(context.getClickedFace());
+		BlockState targetState = level.getBlockState(targetPos);
 
-        if (!targetState.isAir()) {
-            return InteractionResult.FAIL;
-        }
+		if (!targetState.isAir()) {
+			return InteractionResult.FAIL;
+		}
 
-        level.playSound(context.getPlayer(), targetPos, SoundEvents.FLINTANDSTEEL_USE,
-                SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+		level.playSound(context.getPlayer(), targetPos, SoundEvents.FLINTANDSTEEL_USE,
+				SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
 
-        level.setBlock(targetPos, CreativeMagic.DARK_FIRE.get().defaultBlockState(), 11);
-        level.gameEvent(context.getPlayer(), GameEvent.BLOCK_PLACE, targetPos);
+		level.setBlock(targetPos, CreativeMagic.DARK_FIRE.get().defaultBlockState(), 11);
+		level.gameEvent(context.getPlayer(), GameEvent.BLOCK_PLACE, targetPos);
 
-        Player player = context.getPlayer();
-        if (player != null) {
-            ItemStack stack = context.getItemInHand();
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
-        }
+		Player player = context.getPlayer();
+		if (player != null) {
+			ItemStack stack = context.getItemInHand();
+			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(context.getHand()));
+		}
 
-        return InteractionResult.sidedSuccess(level.isClientSide());
-    }
+		return InteractionResult.sidedSuccess(level.isClientSide());
+	}
 }

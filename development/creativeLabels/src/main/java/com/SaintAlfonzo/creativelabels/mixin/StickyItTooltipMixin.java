@@ -27,9 +27,9 @@ import java.util.List;
 @Mixin(targets = "net.mcreator.sticky_it.procedures.TooltipRenderProcedure", remap = false)
 public class StickyItTooltipMixin {
 
-    @Inject(method = "execute(Lnet/minecraftforge/eventbus/api/Event;Lnet/minecraft/world/item/ItemStack;Ljava/util/List;)V",
-            at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private static void creativelabels$cancelTooltip(Event event, ItemStack stack, List<Component> tooltip, CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "execute(Lnet/minecraftforge/eventbus/api/Event;Lnet/minecraft/world/item/ItemStack;Ljava/util/List;)V",
+			at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private static void creativelabels$cancelTooltip(Event event, ItemStack stack, List<Component> tooltip, CallbackInfo ci) {
+		ci.cancel();
+	}
 }

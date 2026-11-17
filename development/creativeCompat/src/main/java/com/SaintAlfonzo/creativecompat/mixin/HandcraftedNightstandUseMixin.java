@@ -30,28 +30,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "earth.terrarium.handcrafted.common.block.table.nightstand.NightstandBlock", remap = false)
 public abstract class HandcraftedNightstandUseMixin extends BaseEntityBlock {
 
-    protected HandcraftedNightstandUseMixin(Properties properties) {
-        super(properties);
-    }
+	protected HandcraftedNightstandUseMixin(Properties properties) {
+		super(properties);
+	}
 
-    @Inject(method = "m_6227_", at = @At("RETURN"), cancellable = true)
-    private void ce$openStorage(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
-        if (cir.getReturnValue() != InteractionResult.PASS) return;
-        if (hit.getDirection() == Direction.UP && player.getItemInHand(hand).getItem() instanceof BlockItem) return;
-        if (!(level.getBlockEntity(pos) instanceof NightstandStorage.Holder holder)) return;
-        if (!level.isClientSide) {
-            player.openMenu(NightstandStorage.menu(holder.ce$nightstandStorage(), state.getBlock().getName()));
-        }
-        cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide));
-    }
+	@Inject(method = "m_6227_", at = @At("RETURN"), cancellable = true)
+	private void ce$openStorage(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+								BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
+		if (cir.getReturnValue() != InteractionResult.PASS) return;
+		if (hit.getDirection() == Direction.UP && player.getItemInHand(hand).getItem() instanceof BlockItem) return;
+		if (!(level.getBlockEntity(pos) instanceof NightstandStorage.Holder holder)) return;
+		if (!level.isClientSide) {
+			player.openMenu(NightstandStorage.menu(holder.ce$nightstandStorage(), state.getBlock().getName()));
+		}
+		cir.setReturnValue(InteractionResult.sidedSuccess(level.isClientSide));
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof NightstandStorage.Holder holder) {
-            Containers.dropContents(level, pos, holder.ce$nightstandStorage());
-        }
-        super.onRemove(state, level, pos, newState, moved);
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
+		if (!state.is(newState.getBlock()) && level.getBlockEntity(pos) instanceof NightstandStorage.Holder holder) {
+			Containers.dropContents(level, pos, holder.ce$nightstandStorage());
+		}
+		super.onRemove(state, level, pos, newState, moved);
+	}
 }

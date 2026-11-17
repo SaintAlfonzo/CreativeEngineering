@@ -16,13 +16,13 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = Projectile.class, remap = false)
 public abstract class ProjectilePassMixin implements PassImpact {
 
-    @Shadow
-    protected void m_6532_(HitResult hit) {
-        throw new AssertionError();
-    }
+	@Shadow
+	protected void m_6532_(HitResult hit) {
+		throw new AssertionError();
+	}
 
-    @Override
-    public void creativecompat$impact(HitResult hit) {
-        m_6532_(hit);
-    }
+	@Override
+	public void creativecompat$impact(HitResult hit) {
+		m_6532_(hit);
+	}
 }

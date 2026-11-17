@@ -16,19 +16,19 @@ import net.minecraftforge.registries.ForgeRegistries;
  * Source: the item tag solraspberrypie:drinks (the pack's drink tags plus potions and milk).
  */
 public final class Drinks {
-    public static final TagKey<Item> TAG = ItemTags.create(new ResourceLocation(SolRaspberryPie.MOD_ID, "drinks"));
+	public static final TagKey<Item> TAG = ItemTags.create(new ResourceLocation(SolRaspberryPie.MOD_ID, "drinks"));
 
-    public static boolean isDrink(Item item) {
-        return item != null && new ItemStack(item).is(TAG);
-    }
+	public static boolean isDrink(Item item) {
+		return item != null && new ItemStack(item).is(TAG);
+	}
 
-    public static void onDrink(ServerPlayer player, ItemStack stack) {
-        if (!stack.is(TAG)) return;
-        ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
-        if (id == null) return;
-        RpData.get(player).addDrink(id);
-        DietEngine.sync(player);
-    }
+	public static void onDrink(ServerPlayer player, ItemStack stack) {
+		if (!stack.is(TAG)) return;
+		ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
+		if (id == null) return;
+		RpData.get(player).addDrink(id);
+		DietEngine.sync(player);
+	}
 
-    private Drinks() {}
+	private Drinks() {}
 }

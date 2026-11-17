@@ -10,8 +10,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ModVanillaCompat.class, remap = false)
 public abstract class HeapModVanillaCompatMixin {
 
-    @Inject(method = "setup", at = @At("HEAD"), cancellable = true)
-    private static void creativeworldgen$skip(CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "setup", at = @At("HEAD"), cancellable = true)
+	private static void creativeworldgen$skip(CallbackInfo ci) {
+		ci.cancel();
+	}
 }

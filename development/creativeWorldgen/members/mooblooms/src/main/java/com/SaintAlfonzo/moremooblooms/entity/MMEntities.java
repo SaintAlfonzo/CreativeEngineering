@@ -27,30 +27,30 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public final class MMEntities {
 
-    private static final DeferredRegister<EntityType<?>> ENTITIES =
-            DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MoreMooblooms.ID);
+	private static final DeferredRegister<EntityType<?>> ENTITIES =
+			DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MoreMooblooms.ID);
 
-    public static final RegistryObject<EntityType<Moobloom>> MOOBLOOM = ENTITIES.register("moobloom",
-            () -> EntityType.Builder.of(Moobloom::new, MobCategory.CREATURE)
-                    .sized(0.9F, 1.4F)
-                    .clientTrackingRange(10)
-                    .build(MoreMooblooms.ID + ":moobloom"));
+	public static final RegistryObject<EntityType<Moobloom>> MOOBLOOM = ENTITIES.register("moobloom",
+			() -> EntityType.Builder.of(Moobloom::new, MobCategory.CREATURE)
+					.sized(0.9F, 1.4F)
+					.clientTrackingRange(10)
+					.build(MoreMooblooms.ID + ":moobloom"));
 
-    public static void register(IEventBus modBus) {
-        ENTITIES.register(modBus);
-        modBus.addListener((EntityAttributeCreationEvent e) -> e.put(MOOBLOOM.get(), Cow.createAttributes().build()));
-        // Only used by direct moobloom spawns (biome modifiers: the witherbloom pack); cow spawns are swapped
-        // after the cow passed the cow's own checks.
-        modBus.addListener((SpawnPlacementRegisterEvent e) -> e.register(MOOBLOOM.get(), SpawnPlacements.Type.ON_GROUND,
-                Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MMEntities::checkMoobloomSpawnRules,
-                SpawnPlacementRegisterEvent.Operation.REPLACE));
-    }
+	public static void register(IEventBus modBus) {
+		ENTITIES.register(modBus);
+		modBus.addListener((EntityAttributeCreationEvent e) -> e.put(MOOBLOOM.get(), Cow.createAttributes().build()));
+		// Only used by direct moobloom spawns (biome modifiers: the witherbloom pack); cow spawns are swapped
+		// after the cow passed the cow's own checks.
+		modBus.addListener((SpawnPlacementRegisterEvent e) -> e.register(MOOBLOOM.get(), SpawnPlacements.Type.ON_GROUND,
+				Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, MMEntities::checkMoobloomSpawnRules,
+				SpawnPlacementRegisterEvent.Operation.REPLACE));
+	}
 
-    public static boolean checkMoobloomSpawnRules(EntityType<? extends Animal> type, LevelAccessor level, MobSpawnType reason,
-                                                  BlockPos pos, RandomSource random) {
-        return MoobloomVariants.anySpawnsInDarkOn(level.getBlockState(pos.below()))
-                || Animal.checkAnimalSpawnRules(type, level, reason, pos, random);
-    }
+	public static boolean checkMoobloomSpawnRules(EntityType<? extends Animal> type, LevelAccessor level, MobSpawnType reason,
+												  BlockPos pos, RandomSource random) {
+		return MoobloomVariants.anySpawnsInDarkOn(level.getBlockState(pos.below()))
+				|| Animal.checkAnimalSpawnRules(type, level, reason, pos, random);
+	}
 
-    private MMEntities() {}
+	private MMEntities() {}
 }

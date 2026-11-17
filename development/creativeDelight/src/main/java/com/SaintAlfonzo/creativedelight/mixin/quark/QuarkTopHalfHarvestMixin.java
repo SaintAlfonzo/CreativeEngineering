@@ -22,19 +22,19 @@ import vazkii.quark.content.tweaks.module.SimpleHarvestModule;
 @Mixin(value = SimpleHarvestModule.class, remap = false)
 public abstract class QuarkTopHalfHarvestMixin {
 
-    @Shadow
-    private static boolean handle(Player player, InteractionHand hand, BlockPos pos, boolean doRightClick, boolean isHoe) {
-        throw new AssertionError();
-    }
+	@Shadow
+	private static boolean handle(Player player, InteractionHand hand, BlockPos pos, boolean doRightClick, boolean isHoe) {
+		throw new AssertionError();
+	}
 
-    @Inject(method = "handle", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
-    private static void creativeengineering$topHalfToLower(Player player, InteractionHand hand, BlockPos pos,
-                                                           boolean doRightClick, boolean isHoe,
-                                                           CallbackInfoReturnable<Boolean> cir) {
-        if (player == null) return;
-        BlockPos below = pos.below();
-        if (CropParity.isTopHalf(player.level.getBlockState(pos), player.level.getBlockState(below))) {
-            cir.setReturnValue(handle(player, hand, below, doRightClick, isHoe));
-        }
-    }
+	@Inject(method = "handle", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
+	private static void creativeengineering$topHalfToLower(Player player, InteractionHand hand, BlockPos pos,
+														   boolean doRightClick, boolean isHoe,
+														   CallbackInfoReturnable<Boolean> cir) {
+		if (player == null) return;
+		BlockPos below = pos.below();
+		if (CropParity.isTopHalf(player.level.getBlockState(pos), player.level.getBlockState(below))) {
+			cir.setReturnValue(handle(player, hand, below, doRightClick, isHoe));
+		}
+	}
 }

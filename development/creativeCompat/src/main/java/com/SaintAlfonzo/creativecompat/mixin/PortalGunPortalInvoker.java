@@ -8,6 +8,6 @@ import tk.meowmc.portalgun.entities.CustomPortal;
 @Mixin(value = CustomPortal.class, remap = false)
 public interface PortalGunPortalInvoker {
 
-    @Invoker(value = "playClosingSound", remap = false)
-    void creativecompat$playClosingSound();
+	@Invoker(value = "playClosingSound", remap = false)
+	void creativecompat$playClosingSound();
 }

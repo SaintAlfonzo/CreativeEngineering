@@ -29,24 +29,24 @@ import java.util.Optional;
 @Mixin(value = CraftingTerminalContainer.class, remap = false)
 public abstract class PrettyPipesCraftingTerminalPolymorphMixin implements CraftingMenuPolymorphCompat.PolymorphCraftingMenu {
 
-    @Shadow(remap = false) @Final private Player player;
+	@Shadow(remap = false) @Final private Player player;
 
-    @Redirect(method = "m_6199_", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraft/world/item/crafting/RecipeManager;m_44015_(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"))
-    private <C extends Container, T extends Recipe<C>> Optional<T> creativeengineering$polymorphRecipe(
-            RecipeManager manager, RecipeType<T> type, C inventory, Level level) {
-        return RecipeSelection.getPlayerRecipe((AbstractContainerMenu) (Object) this, type, inventory, level, player);
-    }
+	@Redirect(method = "m_6199_", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraft/world/item/crafting/RecipeManager;m_44015_(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"))
+	private <C extends Container, T extends Recipe<C>> Optional<T> creativeengineering$polymorphRecipe(
+			RecipeManager manager, RecipeType<T> type, C inventory, Level level) {
+		return RecipeSelection.getPlayerRecipe((AbstractContainerMenu) (Object) this, type, inventory, level, player);
+	}
 
-    @Override
-    public void creativeengineering$refreshCraftingResult() {
-        CraftingTerminalContainer self = (CraftingTerminalContainer) (Object) this;
-        self.slotsChanged(self.craftInventory);
-    }
+	@Override
+	public void creativeengineering$refreshCraftingResult() {
+		CraftingTerminalContainer self = (CraftingTerminalContainer) (Object) this;
+		self.slotsChanged(self.craftInventory);
+	}
 
-    @Override
-    public Slot creativeengineering$resultSlot() {
-        return ((AbstractContainerMenu) (Object) this).slots.get(0);
-    }
+	@Override
+	public Slot creativeengineering$resultSlot() {
+		return ((AbstractContainerMenu) (Object) this).slots.get(0);
+	}
 }

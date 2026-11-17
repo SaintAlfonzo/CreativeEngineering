@@ -23,24 +23,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = MillingCategory.class, remap = false)
 public class JeiMillingPoolsMixin {
 
-    @Inject(method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lcom/simibubi/create/content/kinetics/crusher/AbstractCrushingRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V",
-            at = @At("HEAD"), cancellable = true, require = 1)
-    private void creativeengineering$poolSlots(IRecipeLayoutBuilder builder, AbstractCrushingRecipe recipe,
-                                               IFocusGroup focuses, CallbackInfo ci) {
-        int[][] pools = ((ProcessingRecipeExt) recipe).creativeengineering$getResultPools();
-        if (pools == null) return;
-        ci.cancel();
+	@Inject(method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lcom/simibubi/create/content/kinetics/crusher/AbstractCrushingRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V",
+			at = @At("HEAD"), cancellable = true, require = 1)
+	private void creativeengineering$poolSlots(IRecipeLayoutBuilder builder, AbstractCrushingRecipe recipe,
+											   IFocusGroup focuses, CallbackInfo ci) {
+		int[][] pools = ((ProcessingRecipeExt) recipe).creativeengineering$getResultPools();
+		if (pools == null) return;
+		ci.cancel();
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 15, 9)
-                .setBackground(CreateRecipeCategory.getRenderedSlot(), -1, -1)
-                .addIngredients(recipe.getIngredients().get(0));
+		builder.addSlot(RecipeIngredientRole.INPUT, 15, 9)
+				.setBackground(CreateRecipeCategory.getRenderedSlot(), -1, -1)
+				.addIngredients(recipe.getIngredients().get(0));
 
-        List<ResultPoolsJei.Slot> slots = ResultPoolsJei.slots(recipe.getRollableResults(), pools);
-        boolean single = slots.size() == 1;
-        for (int n = 0; n < slots.size(); n++) {
-            int x = (single ? 139 : 133) + (n % 2 == 0 ? 0 : 19);
-            int y = 27 - (n / 2) * 19;
-            ResultPoolsJei.fill(builder.addSlot(RecipeIngredientRole.OUTPUT, x, y), slots.get(n));
-        }
-    }
+		List<ResultPoolsJei.Slot> slots = ResultPoolsJei.slots(recipe.getRollableResults(), pools);
+		boolean single = slots.size() == 1;
+		for (int n = 0; n < slots.size(); n++) {
+			int x = (single ? 139 : 133) + (n % 2 == 0 ? 0 : 19);
+			int y = 27 - (n / 2) * 19;
+			ResultPoolsJei.fill(builder.addSlot(RecipeIngredientRole.OUTPUT, x, y), slots.get(n));
+		}
+	}
 }

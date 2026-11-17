@@ -22,23 +22,23 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public final class PowderedSugarRegistry {
 
-    private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
-    private static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, CreativeDelight.MOD_ID);
+	private static final DeferredRegister<Block> BLOCKS =
+			DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
+	private static final DeferredRegister<Item> ITEMS =
+			DeferredRegister.create(ForgeRegistries.ITEMS, CreativeDelight.MOD_ID);
 
-    // Powder snow's stats (strength 0.25, powder snow sounds, dynamic shape); no block item, the bucket places it.
-    public static final RegistryObject<Block> POWDERED_SUGAR_BLOCK = BLOCKS.register("powdered_sugar_block",
-            () -> new PowderedSugarBlock(BlockBehaviour.Properties.copy(Blocks.POWDER_SNOW)));
+	// Powder snow's stats (strength 0.25, powder snow sounds, dynamic shape); no block item, the bucket places it.
+	public static final RegistryObject<Block> POWDERED_SUGAR_BLOCK = BLOCKS.register("powdered_sugar_block",
+			() -> new PowderedSugarBlock(BlockBehaviour.Properties.copy(Blocks.POWDER_SNOW)));
 
-    public static final RegistryObject<Item> POWDERED_SUGAR_BUCKET = ITEMS.register("powdered_sugar_bucket",
-            () -> new SolidBucketItem(POWDERED_SUGAR_BLOCK.get(), SoundEvents.BUCKET_EMPTY_POWDER_SNOW,
-                    new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET).tab(CreativeModeTab.TAB_FOOD)));
+	public static final RegistryObject<Item> POWDERED_SUGAR_BUCKET = ITEMS.register("powdered_sugar_bucket",
+			() -> new SolidBucketItem(POWDERED_SUGAR_BLOCK.get(), SoundEvents.BUCKET_EMPTY_POWDER_SNOW,
+					new Item.Properties().stacksTo(1).craftRemainder(Items.BUCKET).tab(CreativeModeTab.TAB_FOOD)));
 
-    private PowderedSugarRegistry() {}
+	private PowderedSugarRegistry() {}
 
-    public static void register(IEventBus modEventBus) {
-        BLOCKS.register(modEventBus);
-        ITEMS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		BLOCKS.register(modEventBus);
+		ITEMS.register(modEventBus);
+	}
 }

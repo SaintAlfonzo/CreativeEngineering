@@ -18,12 +18,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = SnowLayerBlock.class, remap = false)
 public abstract class SaltLayerRandomTickMixin {
 
-    @Inject(method = "m_213898_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$saltLayerTick(BlockState state, ServerLevel level, BlockPos pos,
-                                                   RandomSource random, CallbackInfo ci) {
-        if (SaltBlockTicks.isSalt(state)) {
-            SaltBlockTicks.randomTick(state, level, pos, random);
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_213898_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$saltLayerTick(BlockState state, ServerLevel level, BlockPos pos,
+												   RandomSource random, CallbackInfo ci) {
+		if (SaltBlockTicks.isSalt(state)) {
+			SaltBlockTicks.randomTick(state, level, pos, random);
+			ci.cancel();
+		}
+	}
 }

@@ -15,11 +15,11 @@ import java.nio.file.Path;
 @Mod(DevCapture.ID)
 public class DevCapture {
 
-    public static final String ID = "cdevcapture";
+	public static final String ID = "cdevcapture";
 
-    public DevCapture() {
-        String plan = System.getProperty("cdevcapture.plan");
-        if (FMLEnvironment.dist != Dist.CLIENT || plan == null || plan.isBlank()) return;
-        MinecraftForge.EVENT_BUS.register(new CaptureDriver(CapturePlan.load(Path.of(plan))));
-    }
+	public DevCapture() {
+		String plan = System.getProperty("cdevcapture.plan");
+		if (FMLEnvironment.dist != Dist.CLIENT || plan == null || plan.isBlank()) return;
+		MinecraftForge.EVENT_BUS.register(new CaptureDriver(CapturePlan.load(Path.of(plan))));
+	}
 }

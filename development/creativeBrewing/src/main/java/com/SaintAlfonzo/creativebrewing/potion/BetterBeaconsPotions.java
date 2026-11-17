@@ -26,44 +26,44 @@ import org.slf4j.Logger;
  */
 public final class BetterBeaconsPotions {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final int S = 20;
-    private static final int BASE_DURATION = 180 * S;
-    private static final int LONG_DURATION = 480 * S;
-    private static final int STRONG_DURATION = 90 * S;
-    private static final int STRONG_AMPLIFIER = 1;
+	private static final int S = 20;
+	private static final int BASE_DURATION = 180 * S;
+	private static final int LONG_DURATION = 480 * S;
+	private static final int STRONG_DURATION = 90 * S;
+	private static final int STRONG_AMPLIFIER = 1;
 
-    private static final DeferredRegister<Potion> POTIONS =
-            DeferredRegister.create(ForgeRegistries.POTIONS, CreativeBrewing.MOD_ID);
+	private static final DeferredRegister<Potion> POTIONS =
+			DeferredRegister.create(ForgeRegistries.POTIONS, CreativeBrewing.MOD_ID);
 
-    private BetterBeaconsPotions() {}
+	private BetterBeaconsPotions() {}
 
-    public static void register(IEventBus modEventBus) {
-        if (!ModList.get().isLoaded("better_beacons")) {
-            LOGGER.info("[CB potions] better_beacons not present - skipping the Long Reach and Phantom Bane potions");
-            return;
-        }
-        trio("long_reach", true);
-        trio("phantom_bane", false);
-        POTIONS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		if (!ModList.get().isLoaded("better_beacons")) {
+			LOGGER.info("[CB potions] better_beacons not present - skipping the Long Reach and Phantom Bane potions");
+			return;
+		}
+		trio("long_reach", true);
+		trio("phantom_bane", false);
+		POTIONS.register(modEventBus);
+	}
 
-    private static void trio(String name, boolean levels) {
-        ResourceLocation effect = new ResourceLocation("better_beacons", name);
-        add(effect, name, BASE_DURATION, 0);
-        add(effect, "long_" + name, LONG_DURATION, 0);
-        if (levels) add(effect, "strong_" + name, STRONG_DURATION, STRONG_AMPLIFIER);
-    }
+	private static void trio(String name, boolean levels) {
+		ResourceLocation effect = new ResourceLocation("better_beacons", name);
+		add(effect, name, BASE_DURATION, 0);
+		add(effect, "long_" + name, LONG_DURATION, 0);
+		if (levels) add(effect, "strong_" + name, STRONG_DURATION, STRONG_AMPLIFIER);
+	}
 
-    private static void add(ResourceLocation effectId, String name, int duration, int amplifier) {
-        POTIONS.register(name, () -> {
-            MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
-            if (effect == null) {
-                LOGGER.error("[CB potions] {} not found while building creativebrewing:{} - is Cerbon's Better Beacons installed?", effectId, name);
-                return new Potion(new MobEffectInstance[0]);
-            }
-            return new Potion(new MobEffectInstance(effect, duration, amplifier));
-        });
-    }
+	private static void add(ResourceLocation effectId, String name, int duration, int amplifier) {
+		POTIONS.register(name, () -> {
+			MobEffect effect = ForgeRegistries.MOB_EFFECTS.getValue(effectId);
+			if (effect == null) {
+				LOGGER.error("[CB potions] {} not found while building creativebrewing:{} - is Cerbon's Better Beacons installed?", effectId, name);
+				return new Potion(new MobEffectInstance[0]);
+			}
+			return new Potion(new MobEffectInstance(effect, duration, amplifier));
+		});
+	}
 }

@@ -41,107 +41,107 @@ import net.minecraftforge.items.wrapper.InvWrapper;
 @Mod.EventBusSubscriber(modid = CreativeCompat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class NightstandStorage {
 
-    public static final String KEY = "CENightstandItems";
-    public static final int SIZE = 27;
+	public static final String KEY = "CENightstandItems";
+	public static final int SIZE = 27;
 
-    private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.NS, "nightstand_storage");
+	private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.NS, "nightstand_storage");
 
-    private NightstandStorage() {}
+	private NightstandStorage() {}
 
-    /** The nightstand block entity, given storage by mixin. */
-    public interface Holder {
-        NightstandContainer ce$nightstandStorage();
-    }
+	/** The nightstand block entity, given storage by mixin. */
+	public interface Holder {
+		NightstandContainer ce$nightstandStorage();
+	}
 
-    /** A three-row chest menu on the nightstand's container, titled with the block's name. */
-    public static MenuProvider menu(NightstandContainer container, Component title) {
-        return new SimpleMenuProvider((id, inventory, player) -> ChestMenu.threeRows(id, inventory, container), title);
-    }
+	/** A three-row chest menu on the nightstand's container, titled with the block's name. */
+	public static MenuProvider menu(NightstandContainer container, Component title) {
+		return new SimpleMenuProvider((id, inventory, player) -> ChestMenu.threeRows(id, inventory, container), title);
+	}
 
-    public static void save(Object blockEntity, CompoundTag tag) {
-        if (blockEntity instanceof Holder holder) {
-            tag.put(KEY, holder.ce$nightstandStorage().save());
-        }
-    }
+	public static void save(Object blockEntity, CompoundTag tag) {
+		if (blockEntity instanceof Holder holder) {
+			tag.put(KEY, holder.ce$nightstandStorage().save());
+		}
+	}
 
-    public static void load(Object blockEntity, CompoundTag tag) {
-        if (blockEntity instanceof Holder holder && tag.contains(KEY, Tag.TAG_LIST)) {
-            holder.ce$nightstandStorage().load(tag.getList(KEY, Tag.TAG_COMPOUND));
-        }
-    }
+	public static void load(Object blockEntity, CompoundTag tag) {
+		if (blockEntity instanceof Holder holder && tag.contains(KEY, Tag.TAG_LIST)) {
+			holder.ce$nightstandStorage().load(tag.getList(KEY, Tag.TAG_COMPOUND));
+		}
+	}
 
-    /** Marks the block entity for saving on every change and closes the menu when the nightstand goes or the player walks off. */
-    public static final class NightstandContainer extends SimpleContainer {
-        private final BlockEntity owner;
+	/** Marks the block entity for saving on every change and closes the menu when the nightstand goes or the player walks off. */
+	public static final class NightstandContainer extends SimpleContainer {
+		private final BlockEntity owner;
 
-        public NightstandContainer(BlockEntity owner) {
-            super(SIZE);
-            this.owner = owner;
-        }
+		public NightstandContainer(BlockEntity owner) {
+			super(SIZE);
+			this.owner = owner;
+		}
 
-        @Override
-        public void setChanged() {
-            super.setChanged();
-            owner.setChanged();
-        }
+		@Override
+		public void setChanged() {
+			super.setChanged();
+			owner.setChanged();
+		}
 
-        @Override
-        public boolean stillValid(Player player) {
-            BlockPos pos = owner.getBlockPos();
-            return owner.getLevel() != null && owner.getLevel().getBlockEntity(pos) == owner
-                    && player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
-        }
+		@Override
+		public boolean stillValid(Player player) {
+			BlockPos pos = owner.getBlockPos();
+			return owner.getLevel() != null && owner.getLevel().getBlockEntity(pos) == owner
+					&& player.distanceToSqr(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) <= 64.0;
+		}
 
-        ListTag save() {
-            ListTag items = new ListTag();
-            for (int i = 0; i < getContainerSize(); ++i) {
-                ItemStack stack = getItem(i);
-                if (!stack.isEmpty()) {
-                    CompoundTag item = stack.save(new CompoundTag());
-                    item.putByte("Slot", (byte) i);
-                    items.add(item);
-                }
-            }
-            return items;
-        }
+		ListTag save() {
+			ListTag items = new ListTag();
+			for (int i = 0; i < getContainerSize(); ++i) {
+				ItemStack stack = getItem(i);
+				if (!stack.isEmpty()) {
+					CompoundTag item = stack.save(new CompoundTag());
+					item.putByte("Slot", (byte) i);
+					items.add(item);
+				}
+			}
+			return items;
+		}
 
-        void load(ListTag items) {
-            clearContent();
-            for (int i = 0; i < items.size(); ++i) {
-                CompoundTag item = items.getCompound(i);
-                int slot = item.getByte("Slot") & 255;
-                if (slot < getContainerSize()) {
-                    setItem(slot, ItemStack.of(item));
-                }
-            }
-        }
-    }
+		void load(ListTag items) {
+			clearContent();
+			for (int i = 0; i < items.size(); ++i) {
+				CompoundTag item = items.getCompound(i);
+				int slot = item.getByte("Slot") & 255;
+				if (slot < getContainerSize()) {
+					setItem(slot, ItemStack.of(item));
+				}
+			}
+		}
+	}
 
-    /** Only with Handcrafted (its mixins add the storage; without them nothing is a Holder anyway). */
-    private static final boolean HANDCRAFTED = net.minecraftforge.fml.ModList.get().isLoaded("handcrafted");
+	/** Only with Handcrafted (its mixins add the storage; without them nothing is a Holder anyway). */
+	private static final boolean HANDCRAFTED = net.minecraftforge.fml.ModList.get().isLoaded("handcrafted");
 
-    @SubscribeEvent
-    public static void attach(AttachCapabilitiesEvent<BlockEntity> event) {
-        if (!HANDCRAFTED) return;
-        if (event.getObject() instanceof Holder holder) {
-            Provider provider = new Provider(holder);
-            event.addCapability(ID, provider);
-            event.addListener(provider.items::invalidate);
-        }
-    }
+	@SubscribeEvent
+	public static void attach(AttachCapabilitiesEvent<BlockEntity> event) {
+		if (!HANDCRAFTED) return;
+		if (event.getObject() instanceof Holder holder) {
+			Provider provider = new Provider(holder);
+			event.addCapability(ID, provider);
+			event.addListener(provider.items::invalidate);
+		}
+	}
 
-    private static final class Provider implements ICapabilityProvider {
-        // Built lazily: the event fires inside the BlockEntity constructor, before the mixin's fields are set.
-        private final LazyOptional<IItemHandler> items;
+	private static final class Provider implements ICapabilityProvider {
+		// Built lazily: the event fires inside the BlockEntity constructor, before the mixin's fields are set.
+		private final LazyOptional<IItemHandler> items;
 
-        Provider(Holder holder) {
-            this.items = LazyOptional.of(() -> new InvWrapper(holder.ce$nightstandStorage()));
-        }
+		Provider(Holder holder) {
+			this.items = LazyOptional.of(() -> new InvWrapper(holder.ce$nightstandStorage()));
+		}
 
-        @Override
-        @Nonnull
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-            return ForgeCapabilities.ITEM_HANDLER.orEmpty(cap, items);
-        }
-    }
+		@Override
+		@Nonnull
+		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+			return ForgeCapabilities.ITEM_HANDLER.orEmpty(cap, items);
+		}
+	}
 }

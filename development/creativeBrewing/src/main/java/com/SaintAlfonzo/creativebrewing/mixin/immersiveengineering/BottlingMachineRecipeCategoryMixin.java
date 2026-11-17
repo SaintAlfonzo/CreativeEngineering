@@ -21,20 +21,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = BottlingMachineRecipeCategory.class, remap = false)
 public class BottlingMachineRecipeCategoryMixin {
 
-    @Redirect(
-            method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;"
-                   + "Lblusunrize/immersiveengineering/api/crafting/BottlingMachineRecipe;"
-                   + "Lmezz/jei/api/recipe/IFocusGroup;)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
-                           + "addTooltipCallback(Lmezz/jei/api/gui/ingredient/IRecipeSlotTooltipCallback;)"
-                           + "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
-            )
-    )
-    private IRecipeSlotBuilder creativeengineering$potionEffectTooltip(
-            IRecipeSlotBuilder slot, IRecipeSlotTooltipCallback ieCallback) {
+	@Redirect(
+			method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;"
+				   + "Lblusunrize/immersiveengineering/api/crafting/BottlingMachineRecipe;"
+				   + "Lmezz/jei/api/recipe/IFocusGroup;)V",
+			at = @At(
+					value = "INVOKE",
+					target = "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
+						   + "addTooltipCallback(Lmezz/jei/api/gui/ingredient/IRecipeSlotTooltipCallback;)"
+						   + "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
+			)
+	)
+	private IRecipeSlotBuilder creativeengineering$potionEffectTooltip(
+			IRecipeSlotBuilder slot, IRecipeSlotTooltipCallback ieCallback) {
 
-        return slot.addTooltipCallback(ieCallback).addTooltipCallback(PotionFluidTooltip.POTION_EFFECTS);
-    }
+		return slot.addTooltipCallback(ieCallback).addTooltipCallback(PotionFluidTooltip.POTION_EFFECTS);
+	}
 }

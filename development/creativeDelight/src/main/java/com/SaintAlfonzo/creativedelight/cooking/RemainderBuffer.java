@@ -36,164 +36,164 @@ import net.minecraftforge.items.ItemStackHandler;
  */
 public class RemainderBuffer extends ItemStackHandler implements RemainderView {
 
-    public static final int SLOTS = 2;
+	public static final int SLOTS = 2;
 
-    private final Runnable onChanged;
-    // Game time of the last craft check that failed for want of room here (not saved): WTHIT's "slots full" line.
-    private long stalledAt = -1000L;
-    // Plating calls still to skip after a recycle into the container slot (not saved: a reload plates at once).
-    private int plateHold;
-    private final OverflowPull pull = new OverflowPull();
+	private final Runnable onChanged;
+	// Game time of the last craft check that failed for want of room here (not saved): WTHIT's "slots full" line.
+	private long stalledAt = -1000L;
+	// Plating calls still to skip after a recycle into the container slot (not saved: a reload plates at once).
+	private int plateHold;
+	private final OverflowPull pull = new OverflowPull();
 
-    public RemainderBuffer(Runnable onChanged) {
-        super(SLOTS);
-        this.onChanged = onChanged;
-    }
+	public RemainderBuffer(Runnable onChanged) {
+		super(SLOTS);
+		this.onChanged = onChanged;
+	}
 
-    @Override
-    protected void onContentsChanged(int slot) {
-        onChanged.run();
-    }
+	@Override
+	protected void onContentsChanged(int slot) {
+		onChanged.run();
+	}
 
-    public static boolean enabled() {
-        return CDConfig.COOKING.remainderBuffer.get();
-    }
+	public static boolean enabled() {
+		return CDConfig.COOKING.remainderBuffer.get();
+	}
 
-    public static boolean stalls() {
-        return enabled() && CDConfig.COOKING.stallWhenFull.get();
-    }
+	public static boolean stalls() {
+		return enabled() && CDConfig.COOKING.stallWhenFull.get();
+	}
 
-    /** The station's room check refused a craft this tick (it runs every tick while a recipe waits). */
-    public void markStalled(long gameTime) {
-        stalledAt = gameTime;
-    }
+	/** The station's room check refused a craft this tick (it runs every tick while a recipe waits). */
+	public void markStalled(long gameTime) {
+		stalledAt = gameTime;
+	}
 
-    /** Whether a craft is waiting for room in these slots (refused within the last couple of ticks). */
-    public boolean isStalled(long gameTime) {
-        return gameTime - stalledAt <= 2;
-    }
+	/** Whether a craft is waiting for room in these slots (refused within the last couple of ticks). */
+	public boolean isStalled(long gameTime) {
+		return gameTime - stalledAt <= 2;
+	}
 
-    /**
-     * Called where the station would plate the waiting meal (once a tick while the meal and its container wait):
-     * true = skip plating this tick, because a recycled container is still on show.
-     */
-    public boolean holdPlating() {
-        if (plateHold <= 0) return false;
-        --plateHold;
-        return true;
-    }
+	/**
+	 * Called where the station would plate the waiting meal (once a tick while the meal and its container wait):
+	 * true = skip plating this tick, because a recycled container is still on show.
+	 */
+	public boolean holdPlating() {
+		if (plateHold <= 0) return false;
+		--plateHold;
+		return true;
+	}
 
-    /**
-     * Once a server tick: a leftover in these slots that the waiting meal is plated with ({@code platesMeal}) moves to
-     * the station's container slot after {@code [cooking] recycleShowTicks}, as many as the {@code mealsWaiting}
-     * still need; then plating waits the same ticks ({@link #holdPlating}). Returns true when it moved something.
-     */
-    public boolean pullForPlating(IItemHandlerModifiable inventory, int containerSlot, int mealsWaiting, Predicate<ItemStack> platesMeal) {
-        int delay = CDConfig.COOKING.recycleShowTicks.get();
-        RemainderBuffer self = this;
-        boolean moved = pull.tick(new OverflowPull.Slots() {
-            @Override
-            public ItemStack get(int slot) {
-                return slot == 0 ? inventory.getStackInSlot(containerSlot) : self.getStackInSlot(slot - 1);
-            }
+	/**
+	 * Once a server tick: a leftover in these slots that the waiting meal is plated with ({@code platesMeal}) moves to
+	 * the station's container slot after {@code [cooking] recycleShowTicks}, as many as the {@code mealsWaiting}
+	 * still need; then plating waits the same ticks ({@link #holdPlating}). Returns true when it moved something.
+	 */
+	public boolean pullForPlating(IItemHandlerModifiable inventory, int containerSlot, int mealsWaiting, Predicate<ItemStack> platesMeal) {
+		int delay = CDConfig.COOKING.recycleShowTicks.get();
+		RemainderBuffer self = this;
+		boolean moved = pull.tick(new OverflowPull.Slots() {
+			@Override
+			public ItemStack get(int slot) {
+				return slot == 0 ? inventory.getStackInSlot(containerSlot) : self.getStackInSlot(slot - 1);
+			}
 
-            @Override
-            public void set(int slot, ItemStack stack) {
-                if (slot == 0) inventory.setStackInSlot(containerSlot, stack);
-                else self.setStackInSlot(slot - 1, stack);
-            }
+			@Override
+			public void set(int slot, ItemStack stack) {
+				if (slot == 0) inventory.setStackInSlot(containerSlot, stack);
+				else self.setStackInSlot(slot - 1, stack);
+			}
 
-            @Override
-            public int limit(int slot) {
-                return slot == 0 ? inventory.getSlotLimit(containerSlot) : self.getSlotLimit(slot - 1);
-            }
-        }, 0, OVERFLOW_VIEW, mealsWaiting, platesMeal, delay);
-        if (moved) plateHold = delay;
-        return moved;
-    }
+			@Override
+			public int limit(int slot) {
+				return slot == 0 ? inventory.getSlotLimit(containerSlot) : self.getSlotLimit(slot - 1);
+			}
+		}, 0, OVERFLOW_VIEW, mealsWaiting, platesMeal, delay);
+		if (moved) plateHold = delay;
+		return moved;
+	}
 
-    /** The buffer slots in pullForPlating's view (0 = the container slot). */
-    private static final int[] OVERFLOW_VIEW = {1, 2};
+	/** The buffer slots in pullForPlating's view (0 = the container slot). */
+	private static final int[] OVERFLOW_VIEW = {1, 2};
 
-    /**
-     * Stores one leftover. {@code inventory}/{@code containerSlot} is the station's container (plating) slot and
-     * {@code servedIn} tells whether an item is what the waiting meal is served in. Returns what didn't fit.
-     */
-    public ItemStack store(ItemStack leftover, IItemHandlerModifiable inventory, int containerSlot, Predicate<ItemStack> servedIn) {
-        ItemStack[] slots = plan(inventory, containerSlot);
-        List<ItemStack> rest = LeftoverPlan.place(List.of(leftover), slots, limits(inventory, containerSlot), servedIn);
-        if (slots[0].getCount() > inventory.getStackInSlot(containerSlot).getCount()) {
-            plateHold = CDConfig.COOKING.recycleShowTicks.get();
-        }
-        if (!ItemStack.matches(slots[0], inventory.getStackInSlot(containerSlot))) {
-            inventory.setStackInSlot(containerSlot, slots[0]);
-        }
-        for (int i = 0; i < SLOTS; ++i) {
-            if (!ItemStack.matches(slots[i + 1], getStackInSlot(i))) {
-                setStackInSlot(i, slots[i + 1]);
-            }
-        }
-        return rest.isEmpty() ? ItemStack.EMPTY : rest.get(0);
-    }
+	/**
+	 * Stores one leftover. {@code inventory}/{@code containerSlot} is the station's container (plating) slot and
+	 * {@code servedIn} tells whether an item is what the waiting meal is served in. Returns what didn't fit.
+	 */
+	public ItemStack store(ItemStack leftover, IItemHandlerModifiable inventory, int containerSlot, Predicate<ItemStack> servedIn) {
+		ItemStack[] slots = plan(inventory, containerSlot);
+		List<ItemStack> rest = LeftoverPlan.place(List.of(leftover), slots, limits(inventory, containerSlot), servedIn);
+		if (slots[0].getCount() > inventory.getStackInSlot(containerSlot).getCount()) {
+			plateHold = CDConfig.COOKING.recycleShowTicks.get();
+		}
+		if (!ItemStack.matches(slots[0], inventory.getStackInSlot(containerSlot))) {
+			inventory.setStackInSlot(containerSlot, slots[0]);
+		}
+		for (int i = 0; i < SLOTS; ++i) {
+			if (!ItemStack.matches(slots[i + 1], getStackInSlot(i))) {
+				setStackInSlot(i, slots[i + 1]);
+			}
+		}
+		return rest.isEmpty() ? ItemStack.EMPTY : rest.get(0);
+	}
 
-    /** Whether all of one craft's leftovers would fit (container slot + these slots), checked before the craft. */
-    public boolean fits(List<ItemStack> leftovers, IItemHandler inventory, int containerSlot, Predicate<ItemStack> servedIn) {
-        if (leftovers.isEmpty()) return true;
-        return LeftoverPlan.place(leftovers, plan(inventory, containerSlot), limits(inventory, containerSlot), servedIn).isEmpty();
-    }
+	/** Whether all of one craft's leftovers would fit (container slot + these slots), checked before the craft. */
+	public boolean fits(List<ItemStack> leftovers, IItemHandler inventory, int containerSlot, Predicate<ItemStack> servedIn) {
+		if (leftovers.isEmpty()) return true;
+		return LeftoverPlan.place(leftovers, plan(inventory, containerSlot), limits(inventory, containerSlot), servedIn).isEmpty();
+	}
 
-    /** Copies of [container slot, buffer slots]. */
-    private ItemStack[] plan(IItemHandler inventory, int containerSlot) {
-        ItemStack[] slots = new ItemStack[SLOTS + 1];
-        slots[0] = inventory.getStackInSlot(containerSlot).copy();
-        for (int i = 0; i < SLOTS; ++i) {
-            slots[i + 1] = getStackInSlot(i).copy();
-        }
-        return slots;
-    }
+	/** Copies of [container slot, buffer slots]. */
+	private ItemStack[] plan(IItemHandler inventory, int containerSlot) {
+		ItemStack[] slots = new ItemStack[SLOTS + 1];
+		slots[0] = inventory.getStackInSlot(containerSlot).copy();
+		for (int i = 0; i < SLOTS; ++i) {
+			slots[i + 1] = getStackInSlot(i).copy();
+		}
+		return slots;
+	}
 
-    private int[] limits(IItemHandler inventory, int containerSlot) {
-        int[] limits = new int[SLOTS + 1];
-        limits[0] = inventory.getSlotLimit(containerSlot);
-        for (int i = 0; i < SLOTS; ++i) {
-            limits[i + 1] = getSlotLimit(i);
-        }
-        return limits;
-    }
+	private int[] limits(IItemHandler inventory, int containerSlot) {
+		int[] limits = new int[SLOTS + 1];
+		limits[0] = inventory.getSlotLimit(containerSlot);
+		for (int i = 0; i < SLOTS; ++i) {
+			limits[i + 1] = getSlotLimit(i);
+		}
+		return limits;
+	}
 
-    /**
-     * The leftovers one craft gives back from ingredient slots {@code [from, to)}, by the stations' own rule: the
-     * stack's crafting remainder, else {@code overrides} (FD's INGREDIENT_REMAINDER_OVERRIDES; null for none).
-     */
-    public static List<ItemStack> leftovers(IItemHandler inventory, int from, int to, Map<Item, Item> overrides) {
-        return leftovers(inventory, from, to, overrides, null);
-    }
+	/**
+	 * The leftovers one craft gives back from ingredient slots {@code [from, to)}, by the stations' own rule: the
+	 * stack's crafting remainder, else {@code overrides} (FD's INGREDIENT_REMAINDER_OVERRIDES; null for none).
+	 */
+	public static List<ItemStack> leftovers(IItemHandler inventory, int from, int to, Map<Item, Item> overrides) {
+		return leftovers(inventory, from, to, overrides, null);
+	}
 
-    /** As above, with {@code counts[slot - from]} items used from each slot (one leftover each); null = 1 per slot. */
-    public static List<ItemStack> leftovers(IItemHandler inventory, int from, int to, Map<Item, Item> overrides,
-                                            int[] counts) {
-        List<ItemStack> leftovers = new ArrayList<>();
-        for (int i = from; i < to; ++i) {
-            ItemStack stack = inventory.getStackInSlot(i);
-            if (stack.isEmpty()) continue;
-            int used = counts == null ? 1 : counts[i - from];
-            for (int n = 0; n < used; ++n) {
-                if (stack.hasCraftingRemainingItem()) {
-                    leftovers.add(stack.getCraftingRemainingItem());
-                } else if (overrides != null && overrides.containsKey(stack.getItem())) {
-                    leftovers.add(overrides.get(stack.getItem()).getDefaultInstance());
-                }
-            }
-        }
-        return leftovers;
-    }
+	/** As above, with {@code counts[slot - from]} items used from each slot (one leftover each); null = 1 per slot. */
+	public static List<ItemStack> leftovers(IItemHandler inventory, int from, int to, Map<Item, Item> overrides,
+											int[] counts) {
+		List<ItemStack> leftovers = new ArrayList<>();
+		for (int i = from; i < to; ++i) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if (stack.isEmpty()) continue;
+			int used = counts == null ? 1 : counts[i - from];
+			for (int n = 0; n < used; ++n) {
+				if (stack.hasCraftingRemainingItem()) {
+					leftovers.add(stack.getCraftingRemainingItem());
+				} else if (overrides != null && overrides.containsKey(stack.getItem())) {
+					leftovers.add(overrides.get(stack.getItem()).getDefaultInstance());
+				}
+			}
+		}
+		return leftovers;
+	}
 
-    /**
-     * "Served in" for a recipe that hasn't run yet: its container, or else its result's crafting remainder (the same
-     * rule as the stations' isContainerValid once the meal is waiting).
-     */
-    public static Predicate<ItemStack> servedIn(ItemStack recipeContainer, ItemStack result) {
-        ItemStack container = recipeContainer.isEmpty() ? result.getCraftingRemainingItem() : recipeContainer;
-        return stack -> !container.isEmpty() && container.sameItem(stack);
-    }
+	/**
+	 * "Served in" for a recipe that hasn't run yet: its container, or else its result's crafting remainder (the same
+	 * rule as the stations' isContainerValid once the meal is waiting).
+	 */
+	public static Predicate<ItemStack> servedIn(ItemStack recipeContainer, ItemStack result) {
+		ItemStack container = recipeContainer.isEmpty() ? result.getCraftingRemainingItem() : recipeContainer;
+		return stack -> !container.isEmpty() && container.sameItem(stack);
+	}
 }

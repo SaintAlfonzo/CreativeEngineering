@@ -41,81 +41,81 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class VineShearing {
 
-    /** Same name and sense as the sheared grass: true = grows (the first value, so {@code any()} keeps it on). */
-    public static final BooleanProperty FERTILE = BooleanProperty.create("fertile");
+	/** Same name and sense as the sheared grass: true = grows (the first value, so {@code any()} keeps it on). */
+	public static final BooleanProperty FERTILE = BooleanProperty.create("fertile");
 
-    /** Vine classes (and their subclasses) that keep their own handling and get no {@link #FERTILE} state. */
-    private static final Set<String> OWN_HANDLING = Set.of(
-            "vazkii.quark.base.block.QuarkVineBlock",
-            "net.satisfy.vinery.core.block.GrapeVineBlock",
-            // Hearth and Harvest hops: shears toggle its own sterilized state, and it overrides randomTick
-            "com.SaintAlfonzo.creativedelight.hearth.block.HopsVineBlock");
+	/** Vine classes (and their subclasses) that keep their own handling and get no {@link #FERTILE} state. */
+	private static final Set<String> OWN_HANDLING = Set.of(
+			"vazkii.quark.base.block.QuarkVineBlock",
+			"net.satisfy.vinery.core.block.GrapeVineBlock",
+			// Hearth and Harvest hops: shears toggle its own sterilized state, and it overrides randomTick
+			"com.SaintAlfonzo.creativedelight.hearth.block.HopsVineBlock");
 
-    private VineShearing() {}
+	private VineShearing() {}
 
-    /** Called from the mixin while a block builds its state definition. Vanilla's own vine is Quark's. */
-    public static boolean addsFertile(Class<?> type) {
-        if (type == VineBlock.class) return false;
-        for (Class<?> c = type; c != null && c != VineBlock.class; c = c.getSuperclass()) {
-            if (OWN_HANDLING.contains(c.getName())) return false;
-        }
-        return true;
-    }
+	/** Called from the mixin while a block builds its state definition. Vanilla's own vine is Quark's. */
+	public static boolean addsFertile(Class<?> type) {
+		if (type == VineBlock.class) return false;
+		for (Class<?> c = type; c != null && c != VineBlock.class; c = c.getSuperclass()) {
+			if (OWN_HANDLING.contains(c.getName())) return false;
+		}
+		return true;
+	}
 
-    public static boolean isSheared(BlockState state) {
-        return state.hasProperty(FERTILE) && !state.getValue(FERTILE);
-    }
+	public static boolean isSheared(BlockState state) {
+		return state.hasProperty(FERTILE) && !state.getValue(FERTILE);
+	}
 
-    @SubscribeEvent
-    public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
-        ItemStack stack = event.getItemStack();
-        if (!stack.canPerformAction(ToolActions.SHEARS_CARVE)) return;
-        if (!CompatConfig.VINE_SHEARING.enabled.get()) return;
-        Level level = event.getLevel();
-        BlockPos pos = event.getPos();
-        BlockState state = level.getBlockState(pos);
-        Block block = state.getBlock();
-        Player player = event.getEntity();
+	@SubscribeEvent
+	public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
+		ItemStack stack = event.getItemStack();
+		if (!stack.canPerformAction(ToolActions.SHEARS_CARVE)) return;
+		if (!CompatConfig.VINE_SHEARING.enabled.get()) return;
+		Level level = event.getLevel();
+		BlockPos pos = event.getPos();
+		BlockState state = level.getBlockState(pos);
+		Block block = state.getBlock();
+		Player player = event.getEntity();
 
-        if (block instanceof VineBlock && state.hasProperty(FERTILE)) {
-            if (!state.getValue(FERTILE)) return;
-            // Quark's Shear Vines sound
-            level.playSound(player, pos, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 0.5F, 1.0F);
-            if (!level.isClientSide) {
-                level.setBlock(pos, state.setValue(FERTILE, false), 11);
-                if (CompatConfig.VINE_SHEARING.cutBelow.get()) {
-                    BlockPos below = pos.below();
-                    while (level.getBlockState(below).is(block)) {
-                        level.removeBlock(below, false);
-                        below = below.below();
-                    }
-                }
-                hurt(player, event, stack);
-                level.gameEvent(player, GameEvent.SHEAR, pos);
-            }
-            succeed(event, level);
-        } else if (block instanceof GrowingPlantHeadBlock head && !head.isMaxAge(state)) {
-            if (state.hasProperty(CaveVines.BERRIES) && CaveVines.hasGlowBerries(state)) return;
-            // 1.20 ShearsItem.useOn on a growing plant tip
-            level.playSound(player, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
-            if (!level.isClientSide) {
-                BlockState capped = head.getMaxAgeState(state);
-                level.setBlockAndUpdate(pos, capped);
-                hurt(player, event, stack);
-                level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, capped));
-            }
-            succeed(event, level);
-        }
-    }
+		if (block instanceof VineBlock && state.hasProperty(FERTILE)) {
+			if (!state.getValue(FERTILE)) return;
+			// Quark's Shear Vines sound
+			level.playSound(player, pos, SoundEvents.SHEEP_SHEAR, SoundSource.PLAYERS, 0.5F, 1.0F);
+			if (!level.isClientSide) {
+				level.setBlock(pos, state.setValue(FERTILE, false), 11);
+				if (CompatConfig.VINE_SHEARING.cutBelow.get()) {
+					BlockPos below = pos.below();
+					while (level.getBlockState(below).is(block)) {
+						level.removeBlock(below, false);
+						below = below.below();
+					}
+				}
+				hurt(player, event, stack);
+				level.gameEvent(player, GameEvent.SHEAR, pos);
+			}
+			succeed(event, level);
+		} else if (block instanceof GrowingPlantHeadBlock head && !head.isMaxAge(state)) {
+			if (state.hasProperty(CaveVines.BERRIES) && CaveVines.hasGlowBerries(state)) return;
+			// 1.20 ShearsItem.useOn on a growing plant tip
+			level.playSound(player, pos, SoundEvents.GROWING_PLANT_CROP, SoundSource.BLOCKS, 1.0F, 1.0F);
+			if (!level.isClientSide) {
+				BlockState capped = head.getMaxAgeState(state);
+				level.setBlockAndUpdate(pos, capped);
+				hurt(player, event, stack);
+				level.gameEvent(GameEvent.BLOCK_CHANGE, pos, GameEvent.Context.of(player, capped));
+			}
+			succeed(event, level);
+		}
+	}
 
-    private static void hurt(Player player, PlayerInteractEvent.RightClickBlock event, ItemStack stack) {
-        if (!player.getAbilities().instabuild) {
-            stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(event.getHand()));
-        }
-    }
+	private static void hurt(Player player, PlayerInteractEvent.RightClickBlock event, ItemStack stack) {
+		if (!player.getAbilities().instabuild) {
+			stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(event.getHand()));
+		}
+	}
 
-    private static void succeed(PlayerInteractEvent.RightClickBlock event, Level level) {
-        event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
-        event.setCanceled(true);
-    }
+	private static void succeed(PlayerInteractEvent.RightClickBlock event, Level level) {
+		event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
+		event.setCanceled(true);
+	}
 }

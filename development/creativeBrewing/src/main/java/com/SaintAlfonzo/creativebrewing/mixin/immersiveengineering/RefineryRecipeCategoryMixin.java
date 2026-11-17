@@ -29,39 +29,39 @@ import java.util.List;
 @Mixin(value = RefineryRecipeCategory.class, remap = false)
 public class RefineryRecipeCategoryMixin {
 
-    @Redirect(
-            method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;"
-                   + "Lblusunrize/immersiveengineering/api/crafting/RefineryRecipe;"
-                   + "Lmezz/jei/api/recipe/IFocusGroup;)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
-                           + "addTooltipCallback(Lmezz/jei/api/gui/ingredient/IRecipeSlotTooltipCallback;)"
-                           + "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
-            )
-    )
-    private IRecipeSlotBuilder creativeengineering$outputPotionTooltip(
-            IRecipeSlotBuilder slot, IRecipeSlotTooltipCallback ieCallback) {
+	@Redirect(
+			method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;"
+				   + "Lblusunrize/immersiveengineering/api/crafting/RefineryRecipe;"
+				   + "Lmezz/jei/api/recipe/IFocusGroup;)V",
+			at = @At(
+					value = "INVOKE",
+					target = "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
+						   + "addTooltipCallback(Lmezz/jei/api/gui/ingredient/IRecipeSlotTooltipCallback;)"
+						   + "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
+			)
+	)
+	private IRecipeSlotBuilder creativeengineering$outputPotionTooltip(
+			IRecipeSlotBuilder slot, IRecipeSlotTooltipCallback ieCallback) {
 
-        return slot.addTooltipCallback(ieCallback).addTooltipCallback(PotionFluidTooltip.POTION_EFFECTS);
-    }
+		return slot.addTooltipCallback(ieCallback).addTooltipCallback(PotionFluidTooltip.POTION_EFFECTS);
+	}
 
-    @SuppressWarnings({"rawtypes", "unchecked"})
-    @Redirect(
-            method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;"
-                   + "Lblusunrize/immersiveengineering/api/crafting/RefineryRecipe;"
-                   + "Lmezz/jei/api/recipe/IFocusGroup;)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
-                           + "addIngredients(Lmezz/jei/api/ingredients/IIngredientType;Ljava/util/List;)"
-                           + "Lmezz/jei/api/gui/builder/IIngredientAcceptor;"
-            )
-    )
-    private IIngredientAcceptor creativeengineering$inputPotionTooltip(
-            IRecipeSlotBuilder slot, IIngredientType type, List ingredients) {
+	@SuppressWarnings({"rawtypes", "unchecked"})
+	@Redirect(
+			method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;"
+				   + "Lblusunrize/immersiveengineering/api/crafting/RefineryRecipe;"
+				   + "Lmezz/jei/api/recipe/IFocusGroup;)V",
+			at = @At(
+					value = "INVOKE",
+					target = "Lmezz/jei/api/gui/builder/IRecipeSlotBuilder;"
+						   + "addIngredients(Lmezz/jei/api/ingredients/IIngredientType;Ljava/util/List;)"
+						   + "Lmezz/jei/api/gui/builder/IIngredientAcceptor;"
+			)
+	)
+	private IIngredientAcceptor creativeengineering$inputPotionTooltip(
+			IRecipeSlotBuilder slot, IIngredientType type, List ingredients) {
 
-        return slot.addIngredients(type, ingredients)
-                .addTooltipCallback(PotionFluidTooltip.POTION_EFFECTS);
-    }
+		return slot.addIngredients(type, ingredients)
+				.addTooltipCallback(PotionFluidTooltip.POTION_EFFECTS);
+	}
 }

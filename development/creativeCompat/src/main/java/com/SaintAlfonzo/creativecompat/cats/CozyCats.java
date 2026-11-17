@@ -32,41 +32,41 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class CozyCats {
 
-    private static final String COZY_TRADES = "net.cozy.cozysimprovedcats.util.ModVillagerTrades";
-    private static final String GENDER_KEY = "tooltip.cozys-improved-cats.cat_collar.gender";
+	private static final String COZY_TRADES = "net.cozy.cozysimprovedcats.util.ModVillagerTrades";
+	private static final String GENDER_KEY = "tooltip.cozys-improved-cats.cat_collar.gender";
 
-    private CozyCats() {}
+	private CozyCats() {}
 
-    public static boolean isCozy(Entity entity) {
-        return entity instanceof ImprovedCatEntity;
-    }
+	public static boolean isCozy(Entity entity) {
+		return entity instanceof ImprovedCatEntity;
+	}
 
-    /** Cozy's Stay mode (a home is required for it; without one Cozy falls back to Follow). */
-    public static boolean inStay(Entity entity) {
-        return entity instanceof ImprovedCatEntity cat && cat.hasReadableData()
-                && cat.featureState().mode() == CatMode.STAY;
-    }
+	/** Cozy's Stay mode (a home is required for it; without one Cozy falls back to Follow). */
+	public static boolean inStay(Entity entity) {
+		return entity instanceof ImprovedCatEntity cat && cat.hasReadableData()
+				&& cat.featureState().mode() == CatMode.STAY;
+	}
 
-    /** DI command 0 (follow, DI's default) on a Cozy cat, so DI's follow goal mixin never holds it in DI stay / wander. */
-    static void clearDiCommand(Cat cat) {
-        if (cat instanceof ImprovedCatEntity && cat instanceof IComandableMob commandable && commandable.getCommand() != 0) {
-            commandable.setCommand(0);
-        }
-    }
+	/** DI command 0 (follow, DI's default) on a Cozy cat, so DI's follow goal mixin never holds it in DI stay / wander. */
+	static void clearDiCommand(Cat cat) {
+		if (cat instanceof ImprovedCatEntity && cat instanceof IComandableMob commandable && commandable.getCommand() != 0) {
+			commandable.setCommand(0);
+		}
+	}
 
-    public static boolean isGenderLine(Component line) {
-        return line != null && line.getContents() instanceof TranslatableContents t && GENDER_KEY.equals(t.getKey());
-    }
+	public static boolean isGenderLine(Component line) {
+		return line != null && line.getContents() instanceof TranslatableContents t && GENDER_KEY.equals(t.getKey());
+	}
 
-    /** Client: the collar's "Gender:" line (Cozy adds it on the normal-priority tooltip event). */
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onTooltip(ItemTooltipEvent event) {
-        event.getToolTip().removeIf(CozyCats::isGenderLine);
-    }
+	/** Client: the collar's "Gender:" line (Cozy adds it on the normal-priority tooltip event). */
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onTooltip(ItemTooltipEvent event) {
+		event.getToolTip().removeIf(CozyCats::isGenderLine);
+	}
 
-    /** Both sides' trade setup: Cozy's ancient fish listings are lambdas declared in ModVillagerTrades. */
-    public static void onTrades(VillagerTradesEvent event) {
-        event.getTrades().values().forEach(list ->
-                list.removeIf(listing -> listing.getClass().getName().startsWith(COZY_TRADES)));
-    }
+	/** Both sides' trade setup: Cozy's ancient fish listings are lambdas declared in ModVillagerTrades. */
+	public static void onTrades(VillagerTradesEvent event) {
+		event.getTrades().values().forEach(list ->
+				list.removeIf(listing -> listing.getClass().getName().startsWith(COZY_TRADES)));
+	}
 }

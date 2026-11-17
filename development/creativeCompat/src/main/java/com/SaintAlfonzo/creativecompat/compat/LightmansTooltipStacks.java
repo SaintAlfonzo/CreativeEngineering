@@ -21,23 +21,23 @@ import java.util.Map;
  */
 public final class LightmansTooltipStacks {
 
-    private static final Map<Component, ItemStack> SOURCES = new MapMaker().weakKeys().makeMap();
+	private static final Map<Component, ItemStack> SOURCES = new MapMaker().weakKeys().makeMap();
 
-    private LightmansTooltipStacks() {}
+	private LightmansTooltipStacks() {}
 
-    public static void tag(List<Component> lines, ItemStack stack) {
-        if (stack.isEmpty()) return;
-        for (Component line : lines) {
-            SOURCES.put(line, stack);
-        }
-    }
+	public static void tag(List<Component> lines, ItemStack stack) {
+		if (stack.isEmpty()) return;
+		for (Component line : lines) {
+			SOURCES.put(line, stack);
+		}
+	}
 
-    /** The stack behind the first tagged line, or {@link ItemStack#EMPTY} if the list has none. */
-    public static ItemStack find(List<? extends Component> lines) {
-        for (Component line : lines) {
-            ItemStack stack = SOURCES.get(line);
-            if (stack != null) return stack;
-        }
-        return ItemStack.EMPTY;
-    }
+	/** The stack behind the first tagged line, or {@link ItemStack#EMPTY} if the list has none. */
+	public static ItemStack find(List<? extends Component> lines) {
+		for (Component line : lines) {
+			ItemStack stack = SOURCES.get(line);
+			if (stack != null) return stack;
+		}
+		return ItemStack.EMPTY;
+	}
 }

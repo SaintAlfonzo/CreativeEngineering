@@ -27,26 +27,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(EntityRenderDispatcher.class)
 public abstract class EntitySinkRenderMixin {
 
-    @Unique
-    private Entity creativeengineering$rendering;
+	@Unique
+	private Entity creativeengineering$rendering;
 
-    @Unique
-    private float creativeengineering$partialTick;
+	@Unique
+	private float creativeengineering$partialTick;
 
-    @Inject(method = "m_114384_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$captureEntity(Entity entity, double x, double y, double z, float yRot,
-            float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int light, CallbackInfo ci) {
-        this.creativeengineering$rendering = entity;
-        this.creativeengineering$partialTick = partialTicks;
-    }
+	@Inject(method = "m_114384_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$captureEntity(Entity entity, double x, double y, double z, float yRot,
+			float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int light, CallbackInfo ci) {
+		this.creativeengineering$rendering = entity;
+		this.creativeengineering$partialTick = partialTicks;
+	}
 
-    @ModifyVariable(method = "m_114384_", at = @At("STORE"), ordinal = 0, remap = false)
-    private Vec3 creativeengineering$sinkModel(Vec3 offset) {
-        try {
-            double depth = SinkingRender.depth(this.creativeengineering$rendering, this.creativeengineering$partialTick);
-            return depth == 0 ? offset : offset.subtract(0, depth, 0);
-        } catch (Throwable ignored) {
-            return offset;
-        }
-    }
+	@ModifyVariable(method = "m_114384_", at = @At("STORE"), ordinal = 0, remap = false)
+	private Vec3 creativeengineering$sinkModel(Vec3 offset) {
+		try {
+			double depth = SinkingRender.depth(this.creativeengineering$rendering, this.creativeengineering$partialTick);
+			return depth == 0 ? offset : offset.subtract(0, depth, 0);
+		} catch (Throwable ignored) {
+			return offset;
+		}
+	}
 }

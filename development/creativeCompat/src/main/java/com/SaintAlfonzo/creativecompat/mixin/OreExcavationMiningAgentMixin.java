@@ -23,20 +23,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = MiningAgent.class, remap = false)
 public class OreExcavationMiningAgentMixin {
 
-    @Shadow(remap = false)
-    @Final
-    public ServerPlayer player;
+	@Shadow(remap = false)
+	@Final
+	public ServerPlayer player;
 
-    @Redirect(method = "lambda$dropEverything$1", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraft/world/level/Level;m_7967_(Lnet/minecraft/world/entity/Entity;)Z"))
-    private boolean creativeengineering$dropsIntoInventory(Level level, Entity entity) {
-        if (VeinUndoAccess.autoPickup() && entity instanceof ItemEntity item) {
-            ItemStack stack = item.getItem().copy();
-            player.getInventory().add(stack);
-            if (stack.isEmpty()) return true;
-            item.setItem(stack);
-        }
-        return level.addFreshEntity(entity);
-    }
+	@Redirect(method = "lambda$dropEverything$1", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraft/world/level/Level;m_7967_(Lnet/minecraft/world/entity/Entity;)Z"))
+	private boolean creativeengineering$dropsIntoInventory(Level level, Entity entity) {
+		if (VeinUndoAccess.autoPickup() && entity instanceof ItemEntity item) {
+			ItemStack stack = item.getItem().copy();
+			player.getInventory().add(stack);
+			if (stack.isEmpty()) return true;
+			item.setItem(stack);
+		}
+		return level.addFreshEntity(entity);
+	}
 }

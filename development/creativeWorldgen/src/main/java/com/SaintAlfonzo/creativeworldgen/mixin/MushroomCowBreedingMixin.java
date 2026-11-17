@@ -21,21 +21,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = MushroomCow.class, remap = false)
 public abstract class MushroomCowBreedingMixin implements MushroomTypeSetter {
 
-    @Shadow(remap = false)
-    private void m_28928_(MushroomCow.MushroomType type) {
-        throw new AssertionError();
-    }
+	@Shadow(remap = false)
+	private void m_28928_(MushroomCow.MushroomType type) {
+		throw new AssertionError();
+	}
 
-    @Override
-    public void creativeengineering$setMushroomType(MushroomCow.MushroomType type) {
-        m_28928_(type);
-    }
+	@Override
+	public void creativeengineering$setMushroomType(MushroomCow.MushroomType type) {
+		m_28928_(type);
+	}
 
-    @Inject(method = "m_142606_(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/AgeableMob;)Lnet/minecraft/world/entity/animal/MushroomCow;",
-            at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$familyCalf(ServerLevel level, AgeableMob partner, CallbackInfoReturnable<MushroomCow> cir) {
-        if (!(partner instanceof MushroomCow other)) return;
-        MushroomCow calf = MooshroomFamily.breed((MushroomCow) (Object) this, other, level);
-        if (calf != null) cir.setReturnValue(calf);
-    }
+	@Inject(method = "m_142606_(Lnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/AgeableMob;)Lnet/minecraft/world/entity/animal/MushroomCow;",
+			at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$familyCalf(ServerLevel level, AgeableMob partner, CallbackInfoReturnable<MushroomCow> cir) {
+		if (!(partner instanceof MushroomCow other)) return;
+		MushroomCow calf = MooshroomFamily.breed((MushroomCow) (Object) this, other, level);
+		if (calf != null) cir.setReturnValue(calf);
+	}
 }

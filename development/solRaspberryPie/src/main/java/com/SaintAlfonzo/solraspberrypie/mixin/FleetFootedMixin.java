@@ -26,31 +26,31 @@ import java.util.WeakHashMap;
 @Pseudo
 @Mixin(targets = "com.github.alexthe666.alexsmobs.effect.EffectFleetFooted", remap = false)
 public abstract class FleetFootedMixin {
-    @Unique
-    private static final AttributeModifier SOLRP$BONUS = new AttributeModifier(UUID.fromString("7E0292F2-9434-48D5-A29F-9583AF7DF29A"),
-            "fleetfooted speed bonus", 0.2F, AttributeModifier.Operation.ADDITION);
-    @Unique
-    private static final Map<LivingEntity, Integer> SOLRP$REMOVE_AFTER = new WeakHashMap<>();
+	@Unique
+	private static final AttributeModifier SOLRP$BONUS = new AttributeModifier(UUID.fromString("7E0292F2-9434-48D5-A29F-9583AF7DF29A"),
+			"fleetfooted speed bonus", 0.2F, AttributeModifier.Operation.ADDITION);
+	@Unique
+	private static final Map<LivingEntity, Integer> SOLRP$REMOVE_AFTER = new WeakHashMap<>();
 
-    @Shadow
-    private int lastDuration;
+	@Shadow
+	private int lastDuration;
 
-    @Inject(method = "m_6742_(Lnet/minecraft/world/entity/LivingEntity;I)V", at = @At("HEAD"), cancellable = true, require = 0)
-    private void solrp$perEntity(LivingEntity entity, int amplifier, CallbackInfo ci) {
-        ci.cancel();
-        AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speed == null) return;
-        boolean active = entity.isSprinting() && !entity.isOnGround() && lastDuration > 2;
-        int removeAfter;
-        synchronized (SOLRP$REMOVE_AFTER) {
-            removeAfter = SOLRP$REMOVE_AFTER.getOrDefault(entity, 0);
-            if (removeAfter > 0) removeAfter--;
-            if (active) {
-                if (!speed.hasModifier(SOLRP$BONUS)) speed.addTransientModifier(SOLRP$BONUS);
-                removeAfter = 5;
-            }
-            SOLRP$REMOVE_AFTER.put(entity, removeAfter);
-        }
-        if (removeAfter <= 0 || lastDuration < 2) speed.removeModifier(SOLRP$BONUS);
-    }
+	@Inject(method = "m_6742_(Lnet/minecraft/world/entity/LivingEntity;I)V", at = @At("HEAD"), cancellable = true, require = 0)
+	private void solrp$perEntity(LivingEntity entity, int amplifier, CallbackInfo ci) {
+		ci.cancel();
+		AttributeInstance speed = entity.getAttribute(Attributes.MOVEMENT_SPEED);
+		if (speed == null) return;
+		boolean active = entity.isSprinting() && !entity.isOnGround() && lastDuration > 2;
+		int removeAfter;
+		synchronized (SOLRP$REMOVE_AFTER) {
+			removeAfter = SOLRP$REMOVE_AFTER.getOrDefault(entity, 0);
+			if (removeAfter > 0) removeAfter--;
+			if (active) {
+				if (!speed.hasModifier(SOLRP$BONUS)) speed.addTransientModifier(SOLRP$BONUS);
+				removeAfter = 5;
+			}
+			SOLRP$REMOVE_AFTER.put(entity, removeAfter);
+		}
+		if (removeAfter <= 0 || lastDuration < 2) speed.removeModifier(SOLRP$BONUS);
+	}
 }

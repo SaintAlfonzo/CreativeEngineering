@@ -13,12 +13,12 @@ import umpaz.farmersrespite.common.registry.FRRecipeTypes;
  */
 public final class KettleContainers {
 
-    public static final StationContainers KETTLE = new StationContainers("farmersrespite:kettle",
-            FRRecipeTypes.BREWING.get(),
-            r -> r instanceof KettleRecipe k
-                    ? List.of(k.getOutputContainer().isEmpty() ? k.getResultItem().getCraftingRemainingItem() : k.getOutputContainer())
-                    : List.of(),
-            List.of());
+	public static final StationContainers KETTLE = new StationContainers("farmersrespite:kettle",
+			FRRecipeTypes.BREWING.get(),
+			r -> r instanceof KettleRecipe k
+					? List.of(k.getOutputContainer().isEmpty() ? k.getResultItem().getCraftingRemainingItem() : k.getOutputContainer())
+					: List.of(),
+			List.of());
 
-    private KettleContainers() {}
+	private KettleContainers() {}
 }

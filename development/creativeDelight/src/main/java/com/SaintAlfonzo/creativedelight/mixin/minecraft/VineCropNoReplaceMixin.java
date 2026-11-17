@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = BlockBehaviour.BlockStateBase.class, remap = false)
 public abstract class VineCropNoReplaceMixin {
 
-    @Inject(method = "m_60629_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativedelight$vineCropNoReplace(BlockPlaceContext context, CallbackInfoReturnable<Boolean> cir) {
-        if (VineCropReplace.refuses((BlockBehaviour.BlockStateBase) (Object) this, context)) {
-            cir.setReturnValue(false);
-        }
-    }
+	@Inject(method = "m_60629_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativedelight$vineCropNoReplace(BlockPlaceContext context, CallbackInfoReturnable<Boolean> cir) {
+		if (VineCropReplace.refuses((BlockBehaviour.BlockStateBase) (Object) this, context)) {
+			cir.setReturnValue(false);
+		}
+	}
 }

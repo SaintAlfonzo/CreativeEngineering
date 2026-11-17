@@ -13,13 +13,13 @@ package com.SaintAlfonzo.creativeengineering.sawmill.duck;
  */
 public interface SawmillProcessExt {
 
-    /** Blade profile captured for this process, or {@code ""}. Never null. */
-    String creativeengineering$getBladeProfile();
+	/** Blade profile captured for this process, or {@code ""}. Never null. */
+	String creativeengineering$getBladeProfile();
 
-    void creativeengineering$setBladeProfile(String profile);
+	void creativeengineering$setBladeProfile(String profile);
 
-    /** Full id of the recipe the server routed this process to, or {@code ""}. Never null. */
-    String creativeengineering$getResolvedRecipeId();
+	/** Full id of the recipe the server routed this process to, or {@code ""}. Never null. */
+	String creativeengineering$getResolvedRecipeId();
 
-    void creativeengineering$setResolvedRecipeId(String id);
+	void creativeengineering$setResolvedRecipeId(String id);
 }

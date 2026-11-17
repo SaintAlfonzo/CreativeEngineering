@@ -19,58 +19,58 @@ import net.minecraftforge.items.IItemHandler;
  */
 public class OvenItemHandler implements IItemHandler {
 
-    public static final TagKey<Item> BAKEWARE = ItemTags.create(new ResourceLocation(CreativeDelight.MOD_ID, "bakeware"));
+	public static final TagKey<Item> BAKEWARE = ItemTags.create(new ResourceLocation(CreativeDelight.MOD_ID, "bakeware"));
 
-    private final OvenBlockEntity oven;
+	private final OvenBlockEntity oven;
 
-    public OvenItemHandler(OvenBlockEntity oven) {
-        this.oven = oven;
-    }
+	public OvenItemHandler(OvenBlockEntity oven) {
+		this.oven = oven;
+	}
 
-    private IItemHandler inventory() {
-        return oven.getInventory();
-    }
+	private IItemHandler inventory() {
+		return oven.getInventory();
+	}
 
-    @Override
-    public int getSlots() {
-        return inventory().getSlots();
-    }
+	@Override
+	public int getSlots() {
+		return inventory().getSlots();
+	}
 
-    @Override
-    @Nonnull
-    public ItemStack getStackInSlot(int slot) {
-        return inventory().getStackInSlot(slot);
-    }
+	@Override
+	@Nonnull
+	public ItemStack getStackInSlot(int slot) {
+		return inventory().getStackInSlot(slot);
+	}
 
-    @Override
-    @Nonnull
-    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        return isValidForAutomation(slot, stack) ? inventory().insertItem(slot, stack, simulate) : stack;
-    }
+	@Override
+	@Nonnull
+	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+		return isValidForAutomation(slot, stack) ? inventory().insertItem(slot, stack, simulate) : stack;
+	}
 
-    @Override
-    @Nonnull
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        return slot == OvenBlockEntity.OUTPUT_SLOT ? inventory().extractItem(slot, amount, simulate) : ItemStack.EMPTY;
-    }
+	@Override
+	@Nonnull
+	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		return slot == OvenBlockEntity.OUTPUT_SLOT ? inventory().extractItem(slot, amount, simulate) : ItemStack.EMPTY;
+	}
 
-    @Override
-    public int getSlotLimit(int slot) {
-        return inventory().getSlotLimit(slot);
-    }
+	@Override
+	public int getSlotLimit(int slot) {
+		return inventory().getSlotLimit(slot);
+	}
 
-    @Override
-    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return isValidForAutomation(slot, stack);
-    }
+	@Override
+	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+		return isValidForAutomation(slot, stack);
+	}
 
-    private boolean isValidForAutomation(int slot, ItemStack stack) {
-        if (stack.is(BAKEWARE)) {
-            return slot == OvenBlockEntity.TOOL_SLOT;
-        }
-        if (oven.isPlatingItem(stack)) {
-            return slot == OvenBlockEntity.CONTAINER_SLOT;
-        }
-        return slot < BakingRecipe.INPUT_SLOTS;
-    }
+	private boolean isValidForAutomation(int slot, ItemStack stack) {
+		if (stack.is(BAKEWARE)) {
+			return slot == OvenBlockEntity.TOOL_SLOT;
+		}
+		if (oven.isPlatingItem(stack)) {
+			return slot == OvenBlockEntity.CONTAINER_SLOT;
+		}
+		return slot < BakingRecipe.INPUT_SLOTS;
+	}
 }

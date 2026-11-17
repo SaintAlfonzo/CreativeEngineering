@@ -27,32 +27,32 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class EmuNests {
 
-    private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, IncubationCompartment.ID);
-    private static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, IncubationCompartment.ID);
+	private static final DeferredRegister<Block> BLOCKS =
+			DeferredRegister.create(ForgeRegistries.BLOCKS, IncubationCompartment.ID);
+	private static final DeferredRegister<Item> ITEMS =
+			DeferredRegister.create(ForgeRegistries.ITEMS, IncubationCompartment.ID);
 
-    // Incubation's own twig nest properties (hardness, sound, no occlusion), shared the way it
-    // shares them across its twig nests.
-    public static final RegistryObject<Block> EMU_NEST = BLOCKS.register("emu_nest",
-            () -> new EmptyNestBlock(IncubationBlocks.IncubationProperties.TWIG_NEST));
+	// Incubation's own twig nest properties (hardness, sound, no occlusion), shared the way it
+	// shares them across its twig nests.
+	public static final RegistryObject<Block> EMU_NEST = BLOCKS.register("emu_nest",
+			() -> new EmptyNestBlock(IncubationBlocks.IncubationProperties.TWIG_NEST));
 
-    // Registered after EMU_NEST in the same register, so EMU_NEST.get() is already bound here.
-    public static final RegistryObject<Block> EMU_EGG_NEST = BLOCKS.register("emu_egg_nest",
-            () -> new BirdNestBlock(new ResourceLocation("alexsmobs", "emu_egg"),
-                    (EmptyNestBlock) EMU_NEST.get(), IncubationBlocks.IncubationProperties.TWIG_NEST));
+	// Registered after EMU_NEST in the same register, so EMU_NEST.get() is already bound here.
+	public static final RegistryObject<Block> EMU_EGG_NEST = BLOCKS.register("emu_egg_nest",
+			() -> new BirdNestBlock(new ResourceLocation("alexsmobs", "emu_egg"),
+					(EmptyNestBlock) EMU_NEST.get(), IncubationBlocks.IncubationProperties.TWIG_NEST));
 
-    public static final RegistryObject<Item> EMU_NEST_ITEM = ITEMS.register("emu_nest",
-            () -> new BlockItem(EMU_NEST.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+	public static final RegistryObject<Item> EMU_NEST_ITEM = ITEMS.register("emu_nest",
+			() -> new BlockItem(EMU_NEST.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
 
-    public static void register(IEventBus modEventBus) {
-        BLOCKS.register(modEventBus);
-        ITEMS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		BLOCKS.register(modEventBus);
+		ITEMS.register(modEventBus);
+	}
 
-    /** Same fire values Incubation gives its nests (IncubationCompat.registerFlammables). Run via enqueueWork. */
-    public static void registerFlammables() {
-        DataUtil.registerFlammable(EMU_NEST.get(), 60, 20);
-        DataUtil.registerFlammable(EMU_EGG_NEST.get(), 60, 20);
-    }
+	/** Same fire values Incubation gives its nests (IncubationCompat.registerFlammables). Run via enqueueWork. */
+	public static void registerFlammables() {
+		DataUtil.registerFlammable(EMU_NEST.get(), 60, 20);
+		DataUtil.registerFlammable(EMU_EGG_NEST.get(), 60, 20);
+	}
 }

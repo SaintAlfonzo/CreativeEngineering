@@ -23,37 +23,37 @@ import java.net.SocketAddress;
  */
 final class BotConnection extends Connection {
 
-    BotConnection() {
-        super(PacketFlow.SERVERBOUND);
-        EmbeddedChannel channel = new EmbeddedChannel();
-        // NetworkConstants.FML_NETVERSION is package-private; AttributeKey.valueOf returns the same pooled key
-        channel.attr(AttributeKey.<String>valueOf("fml:netversion")).set(NetworkConstants.NETVERSION);
-        setField(Channel.class, channel);
-        setField(SocketAddress.class, new InetSocketAddress(InetAddress.getLoopbackAddress(), 0));
-    }
+	BotConnection() {
+		super(PacketFlow.SERVERBOUND);
+		EmbeddedChannel channel = new EmbeddedChannel();
+		// NetworkConstants.FML_NETVERSION is package-private; AttributeKey.valueOf returns the same pooled key
+		channel.attr(AttributeKey.<String>valueOf("fml:netversion")).set(NetworkConstants.NETVERSION);
+		setField(Channel.class, channel);
+		setField(SocketAddress.class, new InetSocketAddress(InetAddress.getLoopbackAddress(), 0));
+	}
 
-    // Connection's fields are private and their names differ between dev and SRG, so they are found by type
-    private void setField(Class<?> type, Object value) {
-        for (Field f : Connection.class.getDeclaredFields()) {
-            if (f.getType() == type) {
-                try {
-                    f.setAccessible(true);
-                    f.set(this, value);
-                    return;
-                } catch (IllegalAccessException e) {
-                    throw new IllegalStateException("cdevperfbot: can't set Connection's " + type.getSimpleName(), e);
-                }
-            }
-        }
-        throw new IllegalStateException("cdevperfbot: Connection has no " + type.getSimpleName() + " field");
-    }
+	// Connection's fields are private and their names differ between dev and SRG, so they are found by type
+	private void setField(Class<?> type, Object value) {
+		for (Field f : Connection.class.getDeclaredFields()) {
+			if (f.getType() == type) {
+				try {
+					f.setAccessible(true);
+					f.set(this, value);
+					return;
+				} catch (IllegalAccessException e) {
+					throw new IllegalStateException("cdevperfbot: can't set Connection's " + type.getSimpleName(), e);
+				}
+			}
+		}
+		throw new IllegalStateException("cdevperfbot: Connection has no " + type.getSimpleName() + " field");
+	}
 
-    @Override
-    public void send(Packet<?> packet) {
-    }
+	@Override
+	public void send(Packet<?> packet) {
+	}
 
-    @Override
-    public void send(Packet<?> packet, @Nullable PacketSendListener listener) {
-        if (listener != null) listener.onSuccess();
-    }
+	@Override
+	public void send(Packet<?> packet, @Nullable PacketSendListener listener) {
+		if (listener != null) listener.onSuccess();
+	}
 }

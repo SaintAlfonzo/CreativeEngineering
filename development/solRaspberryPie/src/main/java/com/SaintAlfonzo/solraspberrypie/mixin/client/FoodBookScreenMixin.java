@@ -28,40 +28,40 @@ import java.awt.Rectangle;
  */
 @Mixin(value = FoodBookScreen.class, remap = false)
 public abstract class FoodBookScreenMixin extends Screen {
-    @Unique
-    private UIElement solrp$companion;
+	@Unique
+	private UIElement solrp$companion;
 
-    protected FoodBookScreenMixin(Component title) {
-        super(title);
-    }
+	protected FoodBookScreenMixin(Component title) {
+		super(title);
+	}
 
-    @Redirect(method = "initPages", at = @At(value = "INVOKE", target = "Lcom/tarinoita/solsweetpotato/tracking/FoodList;getFoodsEaten()I"))
-    private int solrp$gateCount(FoodList list) {
-        return GateFoods.count(list);
-    }
+	@Redirect(method = "initPages", at = @At(value = "INVOKE", target = "Lcom/tarinoita/solsweetpotato/tracking/FoodList;getFoodsEaten()I"))
+	private int solrp$gateCount(FoodList list) {
+		return GateFoods.count(list);
+	}
 
-    @Redirect(method = "m_7856_", at = @At(value = "INVOKE", target = "Lcom/tarinoita/solsweetpotato/client/gui/elements/UIImage;setCenterX(I)V"))
-    private void solrp$placeBook(UIImage background, int centerX) {
-        background.setCenterX(DietLogPages.doublePage(this.width) ? centerX - (DietLogPages.BOOK_W + DietLogPages.GAP) / 2 : centerX);
-    }
+	@Redirect(method = "m_7856_", at = @At(value = "INVOKE", target = "Lcom/tarinoita/solsweetpotato/client/gui/elements/UIImage;setCenterX(I)V"))
+	private void solrp$placeBook(UIImage background, int centerX) {
+		background.setCenterX(DietLogPages.doublePage(this.width) ? centerX - (DietLogPages.BOOK_W + DietLogPages.GAP) / 2 : centerX);
+	}
 
-    @Inject(method = "initPages", at = @At("RETURN"))
-    private void solrp$addLadderPages(CallbackInfo ci) {
-        solrp$companion = DietLogPages.insert((FoodBookScreen) (Object) this, this.width);
-    }
+	@Inject(method = "initPages", at = @At("RETURN"))
+	private void solrp$addLadderPages(CallbackInfo ci) {
+		solrp$companion = DietLogPages.insert((FoodBookScreen) (Object) this, this.width);
+	}
 
-    @Inject(method = "m_7856_", at = @At("TAIL"))
-    private void solrp$addButton(CallbackInfo ci) {
-        int w = 110;
-        Rectangle book = ((FoodBookScreenAccessor) (Object) this).solrp$background().frame;
-        int cx = DietLogPages.doublePage(this.width) ? book.x + book.width + DietLogPages.GAP / 2 : book.x + book.width / 2;
-        this.addRenderableWidget(new Button(cx - w / 2, this.height / 2 + 98, w, 20,
-                Component.translatable("solraspberrypie.dietlog.button"), b -> EffectScreen.open()));
-    }
+	@Inject(method = "m_7856_", at = @At("TAIL"))
+	private void solrp$addButton(CallbackInfo ci) {
+		int w = 110;
+		Rectangle book = ((FoodBookScreenAccessor) (Object) this).solrp$background().frame;
+		int cx = DietLogPages.doublePage(this.width) ? book.x + book.width + DietLogPages.GAP / 2 : book.x + book.width / 2;
+		this.addRenderableWidget(new Button(cx - w / 2, this.height / 2 + 98, w, 20,
+				Component.translatable("solraspberrypie.dietlog.button"), b -> EffectScreen.open()));
+	}
 
-    @Inject(method = "m_6305_", at = @At("TAIL"))
-    private void solrp$renderCompanion(PoseStack pose, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
-        if (!DietLogPages.doublePage(this.width)) return;
-        DietLogPages.renderCompanion(pose, solrp$companion, ((FoodBookScreenAccessor) (Object) this).solrp$background().frame, mouseX, mouseY);
-    }
+	@Inject(method = "m_6305_", at = @At("TAIL"))
+	private void solrp$renderCompanion(PoseStack pose, int mouseX, int mouseY, float partialTicks, CallbackInfo ci) {
+		if (!DietLogPages.doublePage(this.width)) return;
+		DietLogPages.renderCompanion(pose, solrp$companion, ((FoodBookScreenAccessor) (Object) this).solrp$background().frame, mouseX, mouseY);
+	}
 }

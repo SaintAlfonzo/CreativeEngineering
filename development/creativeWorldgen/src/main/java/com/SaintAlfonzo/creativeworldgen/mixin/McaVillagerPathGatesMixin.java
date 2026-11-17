@@ -35,42 +35,42 @@ import java.util.function.Predicate;
 @Mixin(value = VillagerLandPathNodeMaker.class, remap = false)
 public abstract class McaVillagerPathGatesMixin {
 
-    @Unique
-    private static final TagKey<Block> CWG_TALL_DOORS = creativeengineering$tag("tall_doors");
-    @Unique
-    private static final TagKey<Block> CWG_SHORT_DOORS = creativeengineering$tag("short_doors");
-    @Unique
-    private static final TagKey<Block> CWG_TALL_WOODEN_DOORS = creativeengineering$tag("tall_wooden_doors");
-    @Unique
-    private static final TagKey<Block> CWG_SHORT_WOODEN_DOORS = creativeengineering$tag("short_wooden_doors");
+	@Unique
+	private static final TagKey<Block> CWG_TALL_DOORS = creativeengineering$tag("tall_doors");
+	@Unique
+	private static final TagKey<Block> CWG_SHORT_DOORS = creativeengineering$tag("short_doors");
+	@Unique
+	private static final TagKey<Block> CWG_TALL_WOODEN_DOORS = creativeengineering$tag("tall_wooden_doors");
+	@Unique
+	private static final TagKey<Block> CWG_SHORT_WOODEN_DOORS = creativeengineering$tag("short_wooden_doors");
 
-    @Unique
-    private static TagKey<Block> creativeengineering$tag(String path) {
-        return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("dramaticdoors", path));
-    }
+	@Unique
+	private static TagKey<Block> creativeengineering$tag(String path) {
+		return TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("dramaticdoors", path));
+	}
 
-    @Inject(method = "getCommonNodeType", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void creativeengineering$gatesAndDramaticDoors(BlockGetter world, BlockPos pos,
-                                                                  CallbackInfoReturnable<ExtendedPathNodeType> cir) {
-        BlockState state = world.getBlockState(pos);
-        if (state.is(BlockTags.FENCE_GATES) || state.getBlock() instanceof FenceGateBlock) {
-            cir.setReturnValue(ExtendedPathNodeType.FENCE);
-            return;
-        }
-        if (!(state.is(CWG_TALL_DOORS) || state.is(CWG_SHORT_DOORS)) || !state.hasProperty(BlockStateProperties.OPEN)) return;
-        if (state.getValue(BlockStateProperties.OPEN)) {
-            cir.setReturnValue(ExtendedPathNodeType.DOOR_OPEN);
-        } else if (state.is(CWG_TALL_WOODEN_DOORS) || state.is(CWG_SHORT_WOODEN_DOORS)) {
-            cir.setReturnValue(ExtendedPathNodeType.DOOR_WOOD_CLOSED);
-        } else {
-            cir.setReturnValue(ExtendedPathNodeType.DOOR_IRON_CLOSED);
-        }
-    }
+	@Inject(method = "getCommonNodeType", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void creativeengineering$gatesAndDramaticDoors(BlockGetter world, BlockPos pos,
+																  CallbackInfoReturnable<ExtendedPathNodeType> cir) {
+		BlockState state = world.getBlockState(pos);
+		if (state.is(BlockTags.FENCE_GATES) || state.getBlock() instanceof FenceGateBlock) {
+			cir.setReturnValue(ExtendedPathNodeType.FENCE);
+			return;
+		}
+		if (!(state.is(CWG_TALL_DOORS) || state.is(CWG_SHORT_DOORS)) || !state.hasProperty(BlockStateProperties.OPEN)) return;
+		if (state.getValue(BlockStateProperties.OPEN)) {
+			cir.setReturnValue(ExtendedPathNodeType.DOOR_OPEN);
+		} else if (state.is(CWG_TALL_WOODEN_DOORS) || state.is(CWG_SHORT_WOODEN_DOORS)) {
+			cir.setReturnValue(ExtendedPathNodeType.DOOR_WOOD_CLOSED);
+		} else {
+			cir.setReturnValue(ExtendedPathNodeType.DOOR_IRON_CLOSED);
+		}
+	}
 
-    @Redirect(method = "findNearbyNodeTypes", remap = false, at = @At(value = "INVOKE", remap = false,
-            target = "Lnet/minecraft/world/level/block/state/BlockState;m_204338_(Lnet/minecraft/tags/TagKey;Ljava/util/function/Predicate;)Z"))
-    private boolean creativeengineering$noWalkableGates(BlockState state, TagKey<Block> tag,
-                                                        Predicate<BlockBehaviour.BlockStateBase> predicate) {
-        return tag != BlockTags.FENCE_GATES && state.is(tag, predicate);
-    }
+	@Redirect(method = "findNearbyNodeTypes", remap = false, at = @At(value = "INVOKE", remap = false,
+			target = "Lnet/minecraft/world/level/block/state/BlockState;m_204338_(Lnet/minecraft/tags/TagKey;Ljava/util/function/Predicate;)Z"))
+	private boolean creativeengineering$noWalkableGates(BlockState state, TagKey<Block> tag,
+														Predicate<BlockBehaviour.BlockStateBase> predicate) {
+		return tag != BlockTags.FENCE_GATES && state.is(tag, predicate);
+	}
 }

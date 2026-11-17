@@ -27,42 +27,42 @@ import vazkii.quark.content.tweaks.module.HoeHarvestingModule;
 @Mixin(value = HoeHarvestingModule.class, remap = false)
 public abstract class QuarkHoeAreaBreakMixin {
 
-    @Shadow
-    private boolean canHarvest(Player player, LevelAccessor world, BlockPos pos, BlockState state) {
-        throw new AssertionError();
-    }
+	@Shadow
+	private boolean canHarvest(Player player, LevelAccessor world, BlockPos pos, BlockState state) {
+		throw new AssertionError();
+	}
 
-    @Inject(method = "onBlockBroken", at = @At(value = "INVOKE",
-            target = "Lvazkii/quark/content/tweaks/module/HoeHarvestingModule;getRange(Lnet/minecraft/world/item/ItemStack;)I"),
-            cancellable = true, require = 1, remap = false)
-    private void creativeengineering$sizedArea(BreakEvent event, CallbackInfo ci) {
-        Level level = (Level) event.getLevel();
-        Player player = event.getPlayer();
-        BlockPos basePos = event.getPos();
-        ItemStack stack = player.getMainHandItem();
-        HoeHarvestArea.Area area = HoeHarvestArea.of(player, stack);
+	@Inject(method = "onBlockBroken", at = @At(value = "INVOKE",
+			target = "Lvazkii/quark/content/tweaks/module/HoeHarvestingModule;getRange(Lnet/minecraft/world/item/ItemStack;)I"),
+			cancellable = true, require = 1, remap = false)
+	private void creativeengineering$sizedArea(BreakEvent event, CallbackInfo ci) {
+		Level level = (Level) event.getLevel();
+		Player player = event.getPlayer();
+		BlockPos basePos = event.getPos();
+		ItemStack stack = player.getMainHandItem();
+		HoeHarvestArea.Area area = HoeHarvestArea.of(player, stack);
 
-        boolean brokeNonInstant = false;
-        for (int x = area.minX(); x <= area.maxX(); x++) {
-            for (int z = area.minZ(); z <= area.maxZ(); z++) {
-                if (x == 0 && z == 0) continue;
-                BlockPos pos = basePos.offset(x, 0, z);
-                BlockState state = level.getBlockState(pos);
-                if (!canHarvest(player, level, pos, state)) continue;
-                Block block = state.getBlock();
-                if (state.getDestroySpeed(level, pos) != 0.0F) {
-                    brokeNonInstant = true;
-                }
-                if (block.canHarvestBlock(state, level, pos, player)) {
-                    block.playerDestroy(level, player, pos, state, level.getBlockEntity(pos), stack);
-                }
-                level.destroyBlock(pos, false);
-                level.levelEvent(2001, pos, Block.getId(state));
-            }
-        }
-        if (brokeNonInstant) {
-            MiscUtil.damageStack(player, InteractionHand.MAIN_HAND, stack, 1);
-        }
-        ci.cancel();
-    }
+		boolean brokeNonInstant = false;
+		for (int x = area.minX(); x <= area.maxX(); x++) {
+			for (int z = area.minZ(); z <= area.maxZ(); z++) {
+				if (x == 0 && z == 0) continue;
+				BlockPos pos = basePos.offset(x, 0, z);
+				BlockState state = level.getBlockState(pos);
+				if (!canHarvest(player, level, pos, state)) continue;
+				Block block = state.getBlock();
+				if (state.getDestroySpeed(level, pos) != 0.0F) {
+					brokeNonInstant = true;
+				}
+				if (block.canHarvestBlock(state, level, pos, player)) {
+					block.playerDestroy(level, player, pos, state, level.getBlockEntity(pos), stack);
+				}
+				level.destroyBlock(pos, false);
+				level.levelEvent(2001, pos, Block.getId(state));
+			}
+		}
+		if (brokeNonInstant) {
+			MiscUtil.damageStack(player, InteractionHand.MAIN_HAND, stack, 1);
+		}
+		ci.cancel();
+	}
 }

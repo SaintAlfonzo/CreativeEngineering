@@ -51,44 +51,44 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = CreativeCompat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class BannerPatternAtlasCompat {
 
-    @SubscribeEvent
-    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) return;
-        // Each half only with its mod: the textures exist only for those mods' renderers.
-        boolean bedspreads = ModList.get().isLoaded("bedspreads");
-        boolean elytra = ModList.get().isLoaded("customizableelytra");
-        if (!bedspreads && !elytra) return;
-        ResourceManager resources = Minecraft.getInstance().getResourceManager();
-        for (ResourceKey<BannerPattern> key : Registry.BANNER_PATTERN.registryKeySet()) {
-            ResourceLocation id = key.location();
-            String relativePath = "entity/" + id.getNamespace() + "/" + id.getPath();
+	@SubscribeEvent
+	public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
+		if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) return;
+		// Each half only with its mod: the textures exist only for those mods' renderers.
+		boolean bedspreads = ModList.get().isLoaded("bedspreads");
+		boolean elytra = ModList.get().isLoaded("customizableelytra");
+		if (!bedspreads && !elytra) return;
+		ResourceManager resources = Minecraft.getInstance().getResourceManager();
+		for (ResourceKey<BannerPattern> key : Registry.BANNER_PATTERN.registryKeySet()) {
+			ResourceLocation id = key.location();
+			String relativePath = "entity/" + id.getNamespace() + "/" + id.getPath();
 
-            // Material/sprite locations (what addSprite/Material take) are bare - the atlas
-            // expands them to "textures/<path>.png" internally. ResourceManager#getResource
-            // does no such expansion, so existence checks need the real file path spelled out.
-            ResourceLocation bedspreadsFile = new ResourceLocation("bedspreads", "textures/" + relativePath + ".png");
-            if (resources.getResource(bedspreadsFile).isPresent()) continue;
+			// Material/sprite locations (what addSprite/Material take) are bare - the atlas
+			// expands them to "textures/<path>.png" internally. ResourceManager#getResource
+			// does no such expansion, so existence checks need the real file path spelled out.
+			ResourceLocation bedspreadsFile = new ResourceLocation("bedspreads", "textures/" + relativePath + ".png");
+			if (resources.getResource(bedspreadsFile).isPresent()) continue;
 
-            ResourceLocation generatedTexture = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, relativePath);
-            ResourceLocation generatedFile = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, "textures/" + relativePath + ".png");
-            if (bedspreads && resources.getResource(generatedFile).isPresent()) {
-                event.addSprite(generatedTexture);
-            }
+			ResourceLocation generatedTexture = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, relativePath);
+			ResourceLocation generatedFile = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, "textures/" + relativePath + ".png");
+			if (bedspreads && resources.getResource(generatedFile).isPresent()) {
+				event.addSprite(generatedTexture);
+			}
 
-            if (elytra) for (String elytraFolder : ELYTRA_BANNER_FOLDERS) {
-                ResourceLocation elytraCurated = new ResourceLocation("customizableelytra",
-                        "textures/entity/" + elytraFolder + "/" + id.getPath() + ".png");
-                if (resources.getResource(elytraCurated).isPresent()) continue;
+			if (elytra) for (String elytraFolder : ELYTRA_BANNER_FOLDERS) {
+				ResourceLocation elytraCurated = new ResourceLocation("customizableelytra",
+						"textures/entity/" + elytraFolder + "/" + id.getPath() + ".png");
+				if (resources.getResource(elytraCurated).isPresent()) continue;
 
-                String elytraRelativePath = "entity/" + elytraFolder + "/" + id.getNamespace() + "/" + id.getPath();
-                ResourceLocation elytraGeneratedFile = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS,
-                        "textures/" + elytraRelativePath + ".png");
-                if (resources.getResource(elytraGeneratedFile).isPresent()) {
-                    event.addSprite(new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, elytraRelativePath));
-                }
-            }
-        }
-    }
+				String elytraRelativePath = "entity/" + elytraFolder + "/" + id.getNamespace() + "/" + id.getPath();
+				ResourceLocation elytraGeneratedFile = new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS,
+						"textures/" + elytraRelativePath + ".png");
+				if (resources.getResource(elytraGeneratedFile).isPresent()) {
+					event.addSprite(new ResourceLocation(com.SaintAlfonzo.creativecompat.banners.BannerPatternArt.OUT_NS, elytraRelativePath));
+				}
+			}
+		}
+	}
 
-    private static final String[] ELYTRA_BANNER_FOLDERS = {"elytra_banner", "elytra_banner_low"};
+	private static final String[] ELYTRA_BANNER_FOLDERS = {"elytra_banner", "elytra_banner_low"};
 }

@@ -8,7 +8,7 @@ import javax.annotation.Nullable;
  */
 public interface PassHolder {
 
-    /** The entity's state; {@code create = false} returns null when it has none yet. */
-    @Nullable
-    PassState creativecompat$passState(boolean create);
+	/** The entity's state; {@code create = false} returns null when it has none yet. */
+	@Nullable
+	PassState creativecompat$passState(boolean create);
 }

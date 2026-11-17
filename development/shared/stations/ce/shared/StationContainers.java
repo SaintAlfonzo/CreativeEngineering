@@ -36,87 +36,87 @@ import org.slf4j.Logger;
  */
 public final class StationContainers {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static volatile int generation;
-    private static final Map<String, Built> CACHE = new HashMap<>();
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static volatile int generation;
+	private static final Map<String, Built> CACHE = new HashMap<>();
 
-    static {
-        MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent e) -> ++generation);
-        // On a /reload the server sends tags before recipes: the client also rebuilds when its recipes arrive.
-        if (FMLEnvironment.dist.isClient()) ClientHook.register();
-    }
+	static {
+		MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent e) -> ++generation);
+		// On a /reload the server sends tags before recipes: the client also rebuilds when its recipes arrive.
+		if (FMLEnvironment.dist.isClient()) ClientHook.register();
+	}
 
-    private static final class ClientHook {
-        static void register() {
-            MinecraftForge.EVENT_BUS.addListener((RecipesUpdatedEvent e) -> ++generation);
-        }
-    }
+	private static final class ClientHook {
+		static void register() {
+			MinecraftForge.EVENT_BUS.addListener((RecipesUpdatedEvent e) -> ++generation);
+		}
+	}
 
-    private final String name;
-    private final RecipeType<?> type;
-    private final Function<Recipe<?>, List<ItemStack>> containersOf;
-    private final List<TagKey<Item>> tags;
+	private final String name;
+	private final RecipeType<?> type;
+	private final Function<Recipe<?>, List<ItemStack>> containersOf;
+	private final List<TagKey<Item>> tags;
 
-    private record Built(int generation, Set<Item> containers) {}
+	private record Built(int generation, Set<Item> containers) {}
 
-    /**
-     * @param name         station name for the log and the cache (one instance per station kind)
-     * @param type         the station's recipe type
-     * @param containersOf the containers one recipe is served in (may be empty)
-     * @param tags         extra container tags (e.g. farmersdelight:serving_containers)
-     */
-    public StationContainers(String name, RecipeType<?> type, Function<Recipe<?>, List<ItemStack>> containersOf, List<TagKey<Item>> tags) {
-        this.name = name;
-        this.type = type;
-        this.containersOf = containersOf;
-        this.tags = tags;
-    }
+	/**
+	 * @param name         station name for the log and the cache (one instance per station kind)
+	 * @param type         the station's recipe type
+	 * @param containersOf the containers one recipe is served in (may be empty)
+	 * @param tags         extra container tags (e.g. farmersdelight:serving_containers)
+	 */
+	public StationContainers(String name, RecipeType<?> type, Function<Recipe<?>, List<ItemStack>> containersOf, List<TagKey<Item>> tags) {
+		this.name = name;
+		this.type = type;
+		this.containersOf = containersOf;
+		this.tags = tags;
+	}
 
-    /** Whether {@code stack} is one of this station's containers in {@code level} (false with no level). */
-    public boolean isContainer(Level level, ItemStack stack) {
-        if (level == null || stack.isEmpty()) return false;
-        return containers(level).contains(stack.getItem());
-    }
+	/** Whether {@code stack} is one of this station's containers in {@code level} (false with no level). */
+	public boolean isContainer(Level level, ItemStack stack) {
+		if (level == null || stack.isEmpty()) return false;
+		return containers(level).contains(stack.getItem());
+	}
 
-    private Set<Item> containers(Level level) {
-        String key = name + (level.isClientSide ? "@client" : "@server");
-        int gen = generation;
-        synchronized (CACHE) {
-            Built built = CACHE.get(key);
-            if (built != null && built.generation() == gen) return built.containers();
-        }
-        Set<Item> set = build(level);
-        synchronized (CACHE) {
-            CACHE.put(key, new Built(gen, set));
-        }
-        return set;
-    }
+	private Set<Item> containers(Level level) {
+		String key = name + (level.isClientSide ? "@client" : "@server");
+		int gen = generation;
+		synchronized (CACHE) {
+			Built built = CACHE.get(key);
+			if (built != null && built.generation() == gen) return built.containers();
+		}
+		Set<Item> set = build(level);
+		synchronized (CACHE) {
+			CACHE.put(key, new Built(gen, set));
+		}
+		return set;
+	}
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private Set<Item> build(Level level) {
-        Set<Item> containers = new HashSet<>();
-        Set<Item> ingredients = new HashSet<>();
-        List<? extends Recipe<?>> recipes = level.getRecipeManager().getAllRecipesFor((RecipeType) type);
-        for (Recipe<?> recipe : recipes) {
-            for (ItemStack c : containersOf.apply(recipe)) {
-                if (!c.isEmpty()) containers.add(c.getItem());
-            }
-            for (Ingredient ingredient : recipe.getIngredients()) {
-                for (ItemStack s : ingredient.getItems()) ingredients.add(s.getItem());
-            }
-        }
-        for (TagKey<Item> tag : tags) {
-            ForgeRegistries.ITEMS.tags().getTag(tag).forEach(containers::add);
-        }
-        Set<Item> both = new HashSet<>(containers);
-        both.retainAll(ingredients);
-        if (!both.isEmpty()) {
-            containers.removeAll(both);
-            if (!level.isClientSide) {
-                LOGGER.info("[stations] {}: also used as an ingredient, allowed in the ingredient slots: {}", name,
-                        both.stream().map(i -> String.valueOf(Registry.ITEM.getKey(i))).sorted().collect(Collectors.joining(", ")));
-            }
-        }
-        return Set.copyOf(containers);
-    }
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private Set<Item> build(Level level) {
+		Set<Item> containers = new HashSet<>();
+		Set<Item> ingredients = new HashSet<>();
+		List<? extends Recipe<?>> recipes = level.getRecipeManager().getAllRecipesFor((RecipeType) type);
+		for (Recipe<?> recipe : recipes) {
+			for (ItemStack c : containersOf.apply(recipe)) {
+				if (!c.isEmpty()) containers.add(c.getItem());
+			}
+			for (Ingredient ingredient : recipe.getIngredients()) {
+				for (ItemStack s : ingredient.getItems()) ingredients.add(s.getItem());
+			}
+		}
+		for (TagKey<Item> tag : tags) {
+			ForgeRegistries.ITEMS.tags().getTag(tag).forEach(containers::add);
+		}
+		Set<Item> both = new HashSet<>(containers);
+		both.retainAll(ingredients);
+		if (!both.isEmpty()) {
+			containers.removeAll(both);
+			if (!level.isClientSide) {
+				LOGGER.info("[stations] {}: also used as an ingredient, allowed in the ingredient slots: {}", name,
+						both.stream().map(i -> String.valueOf(Registry.ITEM.getKey(i))).sorted().collect(Collectors.joining(", ")));
+			}
+		}
+		return Set.copyOf(containers);
+	}
 }

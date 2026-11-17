@@ -21,15 +21,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = OvenBlock.class, remap = false)
 public abstract class CfbOvenLitMixin {
 
-    @Inject(method = "m_7926_", at = @At("TAIL"))
-    private void ce$addLit(StateDefinition.Builder<Block, BlockState> builder, CallbackInfo ci) {
-        builder.add(BlockStateProperties.LIT);
-    }
+	@Inject(method = "m_7926_", at = @At("TAIL"))
+	private void ce$addLit(StateDefinition.Builder<Block, BlockState> builder, CallbackInfo ci) {
+		builder.add(BlockStateProperties.LIT);
+	}
 
-    /** A boolean property's first value is true, so the default state would be lit without this. */
-    @ModifyArg(method = "<init>", at = @At(value = "INVOKE",
-            target = "Lnet/blay09/mods/cookingforblockheads/block/OvenBlock;m_49959_(Lnet/minecraft/world/level/block/state/BlockState;)V"))
-    private BlockState ce$unlitDefault(BlockState state) {
-        return state.hasProperty(BlockStateProperties.LIT) ? state.setValue(BlockStateProperties.LIT, false) : state;
-    }
+	/** A boolean property's first value is true, so the default state would be lit without this. */
+	@ModifyArg(method = "<init>", at = @At(value = "INVOKE",
+			target = "Lnet/blay09/mods/cookingforblockheads/block/OvenBlock;m_49959_(Lnet/minecraft/world/level/block/state/BlockState;)V"))
+	private BlockState ce$unlitDefault(BlockState state) {
+		return state.hasProperty(BlockStateProperties.LIT) ? state.setValue(BlockStateProperties.LIT, false) : state;
+	}
 }

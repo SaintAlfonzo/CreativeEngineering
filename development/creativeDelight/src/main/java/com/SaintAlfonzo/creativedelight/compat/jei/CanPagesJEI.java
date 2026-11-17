@@ -55,118 +55,118 @@ import net.minecraft.world.item.crafting.Ingredient;
 @JeiPlugin
 public class CanPagesJEI implements IModPlugin {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "can_pages");
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "can_pages");
 
-    public static final mezz.jei.api.recipe.RecipeType<CraftingRecipe> CANNING =
-            mezz.jei.api.recipe.RecipeType.create(CreativeDelight.MOD_ID, "canning", CraftingRecipe.class);
-    public static final mezz.jei.api.recipe.RecipeType<CraftingRecipe> CAN_USES =
-            mezz.jei.api.recipe.RecipeType.create(CreativeDelight.MOD_ID, "can_uses", CraftingRecipe.class);
+	public static final mezz.jei.api.recipe.RecipeType<CraftingRecipe> CANNING =
+			mezz.jei.api.recipe.RecipeType.create(CreativeDelight.MOD_ID, "canning", CraftingRecipe.class);
+	public static final mezz.jei.api.recipe.RecipeType<CraftingRecipe> CAN_USES =
+			mezz.jei.api.recipe.RecipeType.create(CreativeDelight.MOD_ID, "can_uses", CraftingRecipe.class);
 
-    private static final ResourceLocation EMPTY_CAN = new ResourceLocation("canned_goods", "empty_can");
-    private static final ResourceLocation CRUSHED_CAN = new ResourceLocation("canned_goods", "crushed_empty_can");
-    private static final TagKey<Item> CANS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(CreativeDelight.MOD_ID, "cans"));
-    /** Seasoning crafts have their own page ({@link SeasoningJEI}). */
-    private static final String SEASON_PREFIX = "shapeless/season/";
+	private static final ResourceLocation EMPTY_CAN = new ResourceLocation("canned_goods", "empty_can");
+	private static final ResourceLocation CRUSHED_CAN = new ResourceLocation("canned_goods", "crushed_empty_can");
+	private static final TagKey<Item> CANS = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(CreativeDelight.MOD_ID, "cans"));
+	/** Seasoning crafts have their own page ({@link SeasoningJEI}). */
+	private static final String SEASON_PREFIX = "shapeless/season/";
 
-    /** Recipe ids now on these pages (set by the last reload). */
-    private Set<ResourceLocation> moved = Set.of();
+	/** Recipe ids now on these pages (set by the last reload). */
+	private Set<ResourceLocation> moved = Set.of();
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return ID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return ID;
+	}
 
-    @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        IGuiHelper gui = registration.getJeiHelpers().getGuiHelper();
-        registration.addRecipeCategories(
-                new CanCraftingCategory(gui, CANNING, "creativeengineering.jei.canning", icon(gui, EMPTY_CAN)),
-                new CanCraftingCategory(gui, CAN_USES, "creativeengineering.jei.can_uses", icon(gui, CRUSHED_CAN)));
-    }
+	@Override
+	public void registerCategories(IRecipeCategoryRegistration registration) {
+		IGuiHelper gui = registration.getJeiHelpers().getGuiHelper();
+		registration.addRecipeCategories(
+				new CanCraftingCategory(gui, CANNING, "creativeengineering.jei.canning", icon(gui, EMPTY_CAN)),
+				new CanCraftingCategory(gui, CAN_USES, "creativeengineering.jei.can_uses", icon(gui, CRUSHED_CAN)));
+	}
 
-    /** The can with a small crafting table on top (Create's DoubleItemIcon), or the can alone without Create. */
-    private static IDrawable icon(IGuiHelper gui, ResourceLocation can) {
-        ItemStack stack = RecipeRows.stack(can);
-        if (stack.isEmpty()) {
-            stack = new ItemStack(Items.CRAFTING_TABLE);
-        }
-        return doubleIcon(gui, stack, new ItemStack(Items.CRAFTING_TABLE));
-    }
+	/** The can with a small crafting table on top (Create's DoubleItemIcon), or the can alone without Create. */
+	private static IDrawable icon(IGuiHelper gui, ResourceLocation can) {
+		ItemStack stack = RecipeRows.stack(can);
+		if (stack.isEmpty()) {
+			stack = new ItemStack(Items.CRAFTING_TABLE);
+		}
+		return doubleIcon(gui, stack, new ItemStack(Items.CRAFTING_TABLE));
+	}
 
-    /** Common's {@link JeiIcons#doubleIcon}, kept for callers inside the can pages. */
-    public static IDrawable doubleIcon(IGuiHelper gui, ItemStack big, ItemStack small) {
-        return JeiIcons.doubleIcon(gui, big, small);
-    }
+	/** Common's {@link JeiIcons#doubleIcon}, kept for callers inside the can pages. */
+	public static IDrawable doubleIcon(IGuiHelper gui, ItemStack big, ItemStack small) {
+		return JeiIcons.doubleIcon(gui, big, small);
+	}
 
-    @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(Items.CRAFTING_TABLE), CANNING, CAN_USES);
-    }
+	@Override
+	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+		registration.addRecipeCatalyst(new ItemStack(Items.CRAFTING_TABLE), CANNING, CAN_USES);
+	}
 
-    @Override
-    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(CraftingMenu.class, MenuType.CRAFTING, CANNING, 1, 9, 10, 36);
-        registration.addRecipeTransferHandler(CraftingMenu.class, MenuType.CRAFTING, CAN_USES, 1, 9, 10, 36);
-    }
+	@Override
+	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+		registration.addRecipeTransferHandler(CraftingMenu.class, MenuType.CRAFTING, CANNING, 1, 9, 10, 36);
+		registration.addRecipeTransferHandler(CraftingMenu.class, MenuType.CRAFTING, CAN_USES, 1, 9, 10, 36);
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        moved = Set.of();
-        if (Minecraft.getInstance().level == null || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.canCategories.get()) {
-            return;
-        }
-        try {
-            List<CraftingRecipe> canning = new ArrayList<>();
-            List<CraftingRecipe> uses = new ArrayList<>();
-            ItemStack emptyCan = RecipeRows.stack(EMPTY_CAN);
-            for (CraftingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING)) {
-                ResourceLocation id = recipe.getId();
-                if (recipe.isSpecial() || recipe.getResultItem().isEmpty()
-                        || (id.getNamespace().equals(CreativeDelight.MOD_ID) && id.getPath().startsWith(SEASON_PREFIX))) {
-                    continue;
-                }
-                if (recipe.getResultItem().is(CANS) && !emptyCan.isEmpty() && takes(recipe, stack -> stack.is(emptyCan.getItem()))) {
-                    canning.add(recipe);
-                } else if (takes(recipe, stack -> stack.is(CANS))) {
-                    uses.add(recipe);
-                }
-            }
-            Comparator<CraftingRecipe> byId = Comparator.comparing(r -> r.getId().toString());
-            canning.sort(byId);
-            uses.sort(byId);
-            registration.addRecipes(CANNING, canning);
-            registration.addRecipes(CAN_USES, uses);
-            Set<ResourceLocation> ids = new HashSet<>();
-            canning.forEach(r -> ids.add(r.getId()));
-            uses.forEach(r -> ids.add(r.getId()));
-            moved = ids;
-            LOGGER.info("[jei] Canning: {} recipe(s); Using Cans: {} recipe(s)", canning.size(), uses.size());
-        } catch (Throwable t) {
-            moved = Set.of();
-            LOGGER.warn("[jei] couldn't build the Canning / Using Cans pages, leaving can crafts on the Crafting page", t);
-        }
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		moved = Set.of();
+		if (Minecraft.getInstance().level == null || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.canCategories.get()) {
+			return;
+		}
+		try {
+			List<CraftingRecipe> canning = new ArrayList<>();
+			List<CraftingRecipe> uses = new ArrayList<>();
+			ItemStack emptyCan = RecipeRows.stack(EMPTY_CAN);
+			for (CraftingRecipe recipe : Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(net.minecraft.world.item.crafting.RecipeType.CRAFTING)) {
+				ResourceLocation id = recipe.getId();
+				if (recipe.isSpecial() || recipe.getResultItem().isEmpty()
+						|| (id.getNamespace().equals(CreativeDelight.MOD_ID) && id.getPath().startsWith(SEASON_PREFIX))) {
+					continue;
+				}
+				if (recipe.getResultItem().is(CANS) && !emptyCan.isEmpty() && takes(recipe, stack -> stack.is(emptyCan.getItem()))) {
+					canning.add(recipe);
+				} else if (takes(recipe, stack -> stack.is(CANS))) {
+					uses.add(recipe);
+				}
+			}
+			Comparator<CraftingRecipe> byId = Comparator.comparing(r -> r.getId().toString());
+			canning.sort(byId);
+			uses.sort(byId);
+			registration.addRecipes(CANNING, canning);
+			registration.addRecipes(CAN_USES, uses);
+			Set<ResourceLocation> ids = new HashSet<>();
+			canning.forEach(r -> ids.add(r.getId()));
+			uses.forEach(r -> ids.add(r.getId()));
+			moved = ids;
+			LOGGER.info("[jei] Canning: {} recipe(s); Using Cans: {} recipe(s)", canning.size(), uses.size());
+		} catch (Throwable t) {
+			moved = Set.of();
+			LOGGER.warn("[jei] couldn't build the Canning / Using Cans pages, leaving can crafts on the Crafting page", t);
+		}
+	}
 
-    /** True if some ingredient of the recipe accepts an item that matches {@code test}. */
-    private static boolean takes(CraftingRecipe recipe, java.util.function.Predicate<ItemStack> test) {
-        for (Ingredient ingredient : recipe.getIngredients()) {
-            for (ItemStack stack : ingredient.getItems()) {
-                if (test.test(stack)) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
+	/** True if some ingredient of the recipe accepts an item that matches {@code test}. */
+	private static boolean takes(CraftingRecipe recipe, java.util.function.Predicate<ItemStack> test) {
+		for (Ingredient ingredient : recipe.getIngredients()) {
+			for (ItemStack stack : ingredient.getItems()) {
+				if (test.test(stack)) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
 
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime runtime) {
-        try {
-            int hidden = RecipeRows.hide(runtime.getRecipeManager(), Map.of(RecipeTypes.CRAFTING.getUid(), moved));
-            LOGGER.info("[jei] hid {} can craft(s) from the Crafting page", hidden);
-        } catch (Throwable t) {
-            LOGGER.warn("[jei] couldn't hide can crafts from the Crafting page", t);
-        }
-    }
+	@Override
+	public void onRuntimeAvailable(IJeiRuntime runtime) {
+		try {
+			int hidden = RecipeRows.hide(runtime.getRecipeManager(), Map.of(RecipeTypes.CRAFTING.getUid(), moved));
+			LOGGER.info("[jei] hid {} can craft(s) from the Crafting page", hidden);
+		} catch (Throwable t) {
+			LOGGER.warn("[jei] couldn't hide can crafts from the Crafting page", t);
+		}
+	}
 }

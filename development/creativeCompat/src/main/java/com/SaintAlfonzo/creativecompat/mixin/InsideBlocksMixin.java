@@ -41,60 +41,60 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = Entity.class, remap = false)
 public abstract class InsideBlocksMixin implements PassHolder {
 
-    @Unique
-    @Nullable
-    private PassState creativecompat$pass;
+	@Unique
+	@Nullable
+	private PassState creativecompat$pass;
 
-    @Override
-    public PassState creativecompat$passState(boolean create) {
-        if (creativecompat$pass == null && create) {
-            creativecompat$pass = new PassState();
-        }
-        return creativecompat$pass;
-    }
+	@Override
+	public PassState creativecompat$passState(boolean create) {
+		if (creativecompat$pass == null && create) {
+			creativecompat$pass = new PassState();
+		}
+		return creativecompat$pass;
+	}
 
-    @Inject(method = "m_6478_", at = @At("HEAD"), cancellable = true)
-    private void creativecompat$heldMove(MoverType type, Vec3 motion, CallbackInfo ci) {
-        PassState st = creativecompat$pass;
-        if (st == null || type != MoverType.SELF || !PassItems.stuckState(st)) return;
-        try {
-            if (PassItems.heldMove((Entity) (Object) this, st)) ci.cancel();
-        } catch (Throwable ignored) {
-            // move as usual
-        }
-    }
+	@Inject(method = "m_6478_", at = @At("HEAD"), cancellable = true)
+	private void creativecompat$heldMove(MoverType type, Vec3 motion, CallbackInfo ci) {
+		PassState st = creativecompat$pass;
+		if (st == null || type != MoverType.SELF || !PassItems.stuckState(st)) return;
+		try {
+			if (PassItems.heldMove((Entity) (Object) this, st)) ci.cancel();
+		} catch (Throwable ignored) {
+			// move as usual
+		}
+	}
 
-    @Redirect(method = "m_6478_", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/level/Level;m_45547_(Lnet/minecraft/world/level/ClipContext;)Lnet/minecraft/world/phys/BlockHitResult;"),
-            require = 0)
-    private BlockHitResult creativecompat$fallResetClip(Level level, ClipContext ctx) {
-        BlockHitResult hit = level.clip(ctx);
-        if (hit.getType() == HitResult.Type.MISS) return hit;
-        try {
-            return PassThrough.fallResetClip((Entity) (Object) this, level, ctx, hit);
-        } catch (Throwable t) {
-            return hit;
-        }
-    }
+	@Redirect(method = "m_6478_", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/world/level/Level;m_45547_(Lnet/minecraft/world/level/ClipContext;)Lnet/minecraft/world/phys/BlockHitResult;"),
+			require = 0)
+	private BlockHitResult creativecompat$fallResetClip(Level level, ClipContext ctx) {
+		BlockHitResult hit = level.clip(ctx);
+		if (hit.getType() == HitResult.Type.MISS) return hit;
+		try {
+			return PassThrough.fallResetClip((Entity) (Object) this, level, ctx, hit);
+		} catch (Throwable t) {
+			return hit;
+		}
+	}
 
-    @Inject(method = "m_20101_", at = @At("TAIL"))
-    private void creativecompat$insideBlocks(CallbackInfo ci) {
-        Entity self = (Entity) (Object) this;
-        try {
-            WallSlide.afterInsideBlocks(self);
-        } catch (Throwable ignored) {
-            // a broken lookup must never stop movement
-        }
-        try {
-            if (PassTiming.on) {
-                long t = System.nanoTime();
-                PassThrough.afterInsideBlocks(self);
-                PassTiming.hook(self, System.nanoTime() - t);
-            } else {
-                PassThrough.afterInsideBlocks(self);
-            }
-        } catch (Throwable ignored) {
-            // a broken lookup must never stop movement
-        }
-    }
+	@Inject(method = "m_20101_", at = @At("TAIL"))
+	private void creativecompat$insideBlocks(CallbackInfo ci) {
+		Entity self = (Entity) (Object) this;
+		try {
+			WallSlide.afterInsideBlocks(self);
+		} catch (Throwable ignored) {
+			// a broken lookup must never stop movement
+		}
+		try {
+			if (PassTiming.on) {
+				long t = System.nanoTime();
+				PassThrough.afterInsideBlocks(self);
+				PassTiming.hook(self, System.nanoTime() - t);
+			} else {
+				PassThrough.afterInsideBlocks(self);
+			}
+		} catch (Throwable ignored) {
+			// a broken lookup must never stop movement
+		}
+	}
 }

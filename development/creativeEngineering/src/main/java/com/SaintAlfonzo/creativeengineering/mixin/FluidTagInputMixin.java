@@ -39,37 +39,37 @@ import java.util.List;
 @Mixin(value = FluidTagInput.class, remap = false)
 public class FluidTagInputMixin {
 
-    @Inject(
-            method = "deserialize(Lcom/google/gson/JsonElement;)Lblusunrize/immersiveengineering/api/crafting/FluidTagInput;",
-            at = @At("HEAD"),
-            cancellable = true
-    )
-    private static void creativeengineering$deserializeFluidById(JsonElement input,
-                                                                CallbackInfoReturnable<FluidTagInput> cir) {
-        if (input == null || !input.isJsonObject()) return;
-        JsonObject obj = input.getAsJsonObject();
-        if (!obj.has("fluid") || obj.has("tag")) return;
+	@Inject(
+			method = "deserialize(Lcom/google/gson/JsonElement;)Lblusunrize/immersiveengineering/api/crafting/FluidTagInput;",
+			at = @At("HEAD"),
+			cancellable = true
+	)
+	private static void creativeengineering$deserializeFluidById(JsonElement input,
+																CallbackInfoReturnable<FluidTagInput> cir) {
+		if (input == null || !input.isJsonObject()) return;
+		JsonObject obj = input.getAsJsonObject();
+		if (!obj.has("fluid") || obj.has("tag")) return;
 
-        ResourceLocation fluidId = new ResourceLocation(GsonHelper.getAsString(obj, "fluid"));
-        int amount = GsonHelper.getAsInt(obj, "amount");
+		ResourceLocation fluidId = new ResourceLocation(GsonHelper.getAsString(obj, "fluid"));
+		int amount = GsonHelper.getAsInt(obj, "amount");
 
-        CompoundTag nbt = null;
-        if (GsonHelper.isValidNode(obj, "nbt")) {
-            try {
-                nbt = ItemUtils.parseNbtFromJson(obj.get("nbt"));
-            } catch (Exception e) {
-                throw new com.google.gson.JsonParseException("Invalid 'nbt' in fluid input " + fluidId, e);
-            }
-        }
+		CompoundTag nbt = null;
+		if (GsonHelper.isValidNode(obj, "nbt")) {
+			try {
+				nbt = ItemUtils.parseNbtFromJson(obj.get("nbt"));
+			} catch (Exception e) {
+				throw new com.google.gson.JsonParseException("Invalid 'nbt' in fluid input " + fluidId, e);
+			}
+		}
 
-        cir.setReturnValue(new FluidTagInput(Either.right(List.of(fluidId)), amount, nbt));
-    }
+		cir.setReturnValue(new FluidTagInput(Either.right(List.of(fluidId)), amount, nbt));
+	}
 
-    @Redirect(
-            method = "testIgnoringAmount(Lnet/minecraftforge/fluids/FluidStack;)Z",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;equals(Ljava/lang/Object;)Z")
-    )
-    private boolean creativeengineering$nbtSubsetMatch(CompoundTag recipeNbt, Object stackTag) {
-        return NbtUtils.compareNbt(recipeNbt, (Tag) stackTag, true);
-    }
+	@Redirect(
+			method = "testIgnoringAmount(Lnet/minecraftforge/fluids/FluidStack;)Z",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/nbt/CompoundTag;equals(Ljava/lang/Object;)Z")
+	)
+	private boolean creativeengineering$nbtSubsetMatch(CompoundTag recipeNbt, Object stackTag) {
+		return NbtUtils.compareNbt(recipeNbt, (Tag) stackTag, true);
+	}
 }

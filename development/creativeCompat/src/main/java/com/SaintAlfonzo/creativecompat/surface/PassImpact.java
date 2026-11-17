@@ -8,6 +8,6 @@ import net.minecraft.world.phys.HitResult;
  */
 public interface PassImpact {
 
-    /** {@code Projectile#onHit}, virtual (each subclass's own impact runs). */
-    void creativecompat$impact(HitResult hit);
+	/** {@code Projectile#onHit}, virtual (each subclass's own impact runs). */
+	void creativecompat$impact(HitResult hit);
 }

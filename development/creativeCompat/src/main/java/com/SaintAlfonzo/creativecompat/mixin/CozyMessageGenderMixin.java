@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = MessageUtil.class, remap = false)
 public abstract class CozyMessageGenderMixin {
 
-    @Inject(method = "send(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;Z)V",
-            at = @At("HEAD"), cancellable = true, remap = false)
-    private static void creativecompat$noGenderLine(Player player, Component message, boolean overlay, CallbackInfo ci) {
-        if (CozyCats.isGenderLine(message)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "send(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/network/chat/Component;Z)V",
+			at = @At("HEAD"), cancellable = true, remap = false)
+	private static void creativecompat$noGenderLine(Player player, Component message, boolean overlay, CallbackInfo ci) {
+		if (CozyCats.isGenderLine(message)) {
+			ci.cancel();
+		}
+	}
 }

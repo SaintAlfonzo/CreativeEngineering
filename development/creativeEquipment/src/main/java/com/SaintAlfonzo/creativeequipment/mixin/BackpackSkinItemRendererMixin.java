@@ -21,14 +21,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = BackpackItemStackRenderer.class, remap = false)
 public abstract class BackpackSkinItemRendererMixin {
 
-    @Inject(method = "m_108829_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private void creativeengineering$drawSkin(ItemStack stack, TransformType type, PoseStack ps, MultiBufferSource buffer,
-            int light, int overlay, CallbackInfo ci) {
-        Block skin = BackpackSkins.getSkin(stack);
-        if (skin == null) return;
-        ps.popPose();
-        ps.pushPose();
-        Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(skin.asItem()), type, light, overlay, ps, buffer, 0);
-        ci.cancel();
-    }
+	@Inject(method = "m_108829_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private void creativeengineering$drawSkin(ItemStack stack, TransformType type, PoseStack ps, MultiBufferSource buffer,
+			int light, int overlay, CallbackInfo ci) {
+		Block skin = BackpackSkins.getSkin(stack);
+		if (skin == null) return;
+		ps.popPose();
+		ps.pushPose();
+		Minecraft.getInstance().getItemRenderer().renderStatic(new ItemStack(skin.asItem()), type, light, overlay, ps, buffer, 0);
+		ci.cancel();
+	}
 }

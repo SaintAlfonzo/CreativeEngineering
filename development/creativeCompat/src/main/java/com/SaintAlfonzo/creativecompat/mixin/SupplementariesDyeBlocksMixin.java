@@ -32,15 +32,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "net.mehvahdjukaar.supplementaries.common.events.overrides.DyeBehavior", remap = false)
 public abstract class SupplementariesDyeBlocksMixin {
 
-    private static final TagKey<Block> NO_WORLD_DYE = TagKey.create(Registry.BLOCK_REGISTRY,
-            new ResourceLocation("creativecompat", "no_world_dye"));
+	private static final TagKey<Block> NO_WORLD_DYE = TagKey.create(Registry.BLOCK_REGISTRY,
+			new ResourceLocation("creativecompat", "no_world_dye"));
 
-    @Inject(method = "tryPerformingAction", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$skipDataBlocks(Level level, Player player, InteractionHand hand, ItemStack stack,
-                                                    BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
-        BlockState state = level.getBlockState(hit.getBlockPos());
-        if (state.hasBlockEntity() || state.is(NO_WORLD_DYE)) {
-            cir.setReturnValue(InteractionResult.PASS);
-        }
-    }
+	@Inject(method = "tryPerformingAction", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$skipDataBlocks(Level level, Player player, InteractionHand hand, ItemStack stack,
+													BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
+		BlockState state = level.getBlockState(hit.getBlockPos());
+		if (state.hasBlockEntity() || state.is(NO_WORLD_DYE)) {
+			cir.setReturnValue(InteractionResult.PASS);
+		}
+	}
 }

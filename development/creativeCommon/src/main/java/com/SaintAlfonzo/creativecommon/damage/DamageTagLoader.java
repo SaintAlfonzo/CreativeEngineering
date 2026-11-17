@@ -43,67 +43,67 @@ import org.slf4j.Logger;
  */
 public final class DamageTagLoader extends SimplePreparableReloadListener<Map<ResourceLocation, List<Raw>>> {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    static final String DIRECTORY = "damage_tags";
-    private static final String SUFFIX = ".json";
+	static final String DIRECTORY = "damage_tags";
+	private static final String SUFFIX = ".json";
 
-    @SubscribeEvent
-    public static void onAddReloadListeners(AddReloadListenerEvent event) {
-        event.addListener(new DamageTagLoader());
-    }
+	@SubscribeEvent
+	public static void onAddReloadListeners(AddReloadListenerEvent event) {
+		event.addListener(new DamageTagLoader());
+	}
 
-    @Override
-    protected Map<ResourceLocation, List<Raw>> prepare(ResourceManager manager, ProfilerFiller profiler) {
-        Map<ResourceLocation, List<Raw>> out = new TreeMap<>();
-        for (Map.Entry<ResourceLocation, List<Resource>> entry
-                : manager.listResourceStacks(DIRECTORY, rl -> rl.getPath().endsWith(SUFFIX)).entrySet()) {
-            ResourceLocation file = entry.getKey();
-            String path = file.getPath();
-            ResourceLocation tag = new ResourceLocation(file.getNamespace(),
-                    path.substring(DIRECTORY.length() + 1, path.length() - SUFFIX.length()));
+	@Override
+	protected Map<ResourceLocation, List<Raw>> prepare(ResourceManager manager, ProfilerFiller profiler) {
+		Map<ResourceLocation, List<Raw>> out = new TreeMap<>();
+		for (Map.Entry<ResourceLocation, List<Resource>> entry
+				: manager.listResourceStacks(DIRECTORY, rl -> rl.getPath().endsWith(SUFFIX)).entrySet()) {
+			ResourceLocation file = entry.getKey();
+			String path = file.getPath();
+			ResourceLocation tag = new ResourceLocation(file.getNamespace(),
+					path.substring(DIRECTORY.length() + 1, path.length() - SUFFIX.length()));
 
-            for (Resource resource : entry.getValue()) {
-                try (Reader reader = resource.openAsReader()) {
-                    // Parse before touching `out`: a bad file must not leave an empty entry behind
-                    // (that would define the tag with no members).
-                    Raw raw = parse(resource.sourcePackId(), tag, JsonParser.parseReader(reader));
-                    out.computeIfAbsent(tag, k -> new ArrayList<>()).add(raw);
-                } catch (Exception e) {
-                    // Includes a malformed-JSON exception: skip just this pack's copy of just this file.
-                    LOGGER.error("[damage-tags] could not read {} from pack '{}': {}", file, resource.sourcePackId(), e.toString());
-                }
-            }
-        }
-        return out;
-    }
+			for (Resource resource : entry.getValue()) {
+				try (Reader reader = resource.openAsReader()) {
+					// Parse before touching `out`: a bad file must not leave an empty entry behind
+					// (that would define the tag with no members).
+					Raw raw = parse(resource.sourcePackId(), tag, JsonParser.parseReader(reader));
+					out.computeIfAbsent(tag, k -> new ArrayList<>()).add(raw);
+				} catch (Exception e) {
+					// Includes a malformed-JSON exception: skip just this pack's copy of just this file.
+					LOGGER.error("[damage-tags] could not read {} from pack '{}': {}", file, resource.sourcePackId(), e.toString());
+				}
+			}
+		}
+		return out;
+	}
 
-    static Raw parse(String pack, ResourceLocation tag, JsonElement json) {
-        JsonObject root = GsonHelper.convertToJsonObject(json, "damage tag " + tag);
-        boolean replace = GsonHelper.getAsBoolean(root, "replace", false);
-        JsonArray array = GsonHelper.getAsJsonArray(root, "values", new JsonArray());
+	static Raw parse(String pack, ResourceLocation tag, JsonElement json) {
+		JsonObject root = GsonHelper.convertToJsonObject(json, "damage tag " + tag);
+		boolean replace = GsonHelper.getAsBoolean(root, "replace", false);
+		JsonArray array = GsonHelper.getAsJsonArray(root, "values", new JsonArray());
 
-        List<String> values = new ArrayList<>(array.size());
-        for (JsonElement element : array) {
-            if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
-                values.add(element.getAsString());
-            } else {
-                LOGGER.warn("[damage-tags] {} (pack '{}'): ignoring non-string entry {} in \"values\"", tag, pack, element);
-            }
-        }
-        return new Raw(pack, replace, values);
-    }
+		List<String> values = new ArrayList<>(array.size());
+		for (JsonElement element : array) {
+			if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
+				values.add(element.getAsString());
+			} else {
+				LOGGER.warn("[damage-tags] {} (pack '{}'): ignoring non-string entry {} in \"values\"", tag, pack, element);
+			}
+		}
+		return new Raw(pack, replace, values);
+	}
 
-    @Override
-    protected void apply(Map<ResourceLocation, List<Raw>> prepared, ResourceManager manager, ProfilerFiller profiler) {
-        DamageTagSnapshot snapshot = DamageTagSnapshot.build(prepared, msg -> LOGGER.warn("[damage-tags] {}", msg));
-        DamageTags.install(snapshot);
+	@Override
+	protected void apply(Map<ResourceLocation, List<Raw>> prepared, ResourceManager manager, ProfilerFiller profiler) {
+		DamageTagSnapshot snapshot = DamageTagSnapshot.build(prepared, msg -> LOGGER.warn("[damage-tags] {}", msg));
+		DamageTags.install(snapshot);
 
-        StringBuilder summary = new StringBuilder();
-        snapshot.defs().forEach((id, def) -> summary
-                .append(summary.length() == 0 ? "" : ", ")
-                .append(DamageTags.NAMESPACE.equals(id.getNamespace()) ? id.getPath() : id.toString())
-                .append('(').append(def.entryCount()).append(')'));
-        LOGGER.info("[damage-tags] loaded {} data-defined tag(s): {}", snapshot.defs().size(), summary);
-    }
+		StringBuilder summary = new StringBuilder();
+		snapshot.defs().forEach((id, def) -> summary
+				.append(summary.length() == 0 ? "" : ", ")
+				.append(DamageTags.NAMESPACE.equals(id.getNamespace()) ? id.getPath() : id.toString())
+				.append('(').append(def.entryCount()).append(')'));
+		LOGGER.info("[damage-tags] loaded {} data-defined tag(s): {}", snapshot.defs().size(), summary);
+	}
 }

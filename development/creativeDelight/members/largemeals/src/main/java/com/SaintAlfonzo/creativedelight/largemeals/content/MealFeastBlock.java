@@ -19,18 +19,18 @@ import java.util.function.Supplier;
  * given extent on top, the bare plate at 0 servings.
  */
 public class MealFeastBlock extends FeastBlock {
-    private static final VoxelShape PLATE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 2.0D, 15.0D);
+	private static final VoxelShape PLATE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 2.0D, 15.0D);
 
-    private final VoxelShape full;
+	private final VoxelShape full;
 
-    /** The body is the box (x0, 2, z0) to (x1, top, z1) on the plate. */
-    public MealFeastBlock(Properties properties, Supplier<Item> serving, double x0, double z0, double x1, double z1, double top) {
-        super(properties, serving, true);
-        this.full = Shapes.join(PLATE, Block.box(x0, 2.0D, z0, x1, top, z1), BooleanOp.OR);
-    }
+	/** The body is the box (x0, 2, z0) to (x1, top, z1) on the plate. */
+	public MealFeastBlock(Properties properties, Supplier<Item> serving, double x0, double z0, double x1, double z1, double top) {
+		super(properties, serving, true);
+		this.full = Shapes.join(PLATE, Block.box(x0, 2.0D, z0, x1, top, z1), BooleanOp.OR);
+	}
 
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return state.getValue(SERVINGS) == 0 ? PLATE : full;
-    }
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return state.getValue(SERVINGS) == 0 ? PLATE : full;
+	}
 }

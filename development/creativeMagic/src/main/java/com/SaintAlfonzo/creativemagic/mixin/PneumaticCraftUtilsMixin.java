@@ -30,18 +30,18 @@ public abstract class PneumaticCraftUtilsMixin {
 
 	private static final Logger LOGGER = LogUtils.getLogger();
 
-    @Redirect(
-            method = "fillTankWithOrb",
-            at = @At(
-                    value = "FIELD",
-                    target = "Lme/desht/pneumaticcraft/common/core/ModFluids;MEMORY_ESSENCE:Lnet/minecraftforge/registries/RegistryObject;",
-                    opcode = org.objectweb.asm.Opcodes.GETSTATIC
-            ),
-      			remap = false
-    )
-    private static RegistryObject<Fluid> xpfluidbridge$swapInOrbAbsorb() {
-        RegistryObject<Fluid> swapped = FluidBridge.resolveOrFallback(ModFluids.MEMORY_ESSENCE);
-        LOGGER.debug("[XPFluidBridge] fillTankWithOrb (auto-absorb) fluid lookup redirected -> {}", swapped.getId());
-        return swapped;
-    }
+	@Redirect(
+			method = "fillTankWithOrb",
+			at = @At(
+					value = "FIELD",
+					target = "Lme/desht/pneumaticcraft/common/core/ModFluids;MEMORY_ESSENCE:Lnet/minecraftforge/registries/RegistryObject;",
+					opcode = org.objectweb.asm.Opcodes.GETSTATIC
+			),
+				remap = false
+	)
+	private static RegistryObject<Fluid> xpfluidbridge$swapInOrbAbsorb() {
+		RegistryObject<Fluid> swapped = FluidBridge.resolveOrFallback(ModFluids.MEMORY_ESSENCE);
+		LOGGER.debug("[XPFluidBridge] fillTankWithOrb (auto-absorb) fluid lookup redirected -> {}", swapped.getId());
+		return swapped;
+	}
 }

@@ -16,14 +16,14 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(targets = "earth.terrarium.handcrafted.common.block.table.nightstand.NightstandBlockEntity", remap = false)
 public abstract class HandcraftedNightstandStorageMixin implements NightstandStorage.Holder {
 
-    @Unique
-    private NightstandContainer ce$storage;
+	@Unique
+	private NightstandContainer ce$storage;
 
-    @Override
-    public NightstandContainer ce$nightstandStorage() {
-        if (ce$storage == null) {
-            ce$storage = new NightstandContainer((BlockEntity) (Object) this);
-        }
-        return ce$storage;
-    }
+	@Override
+	public NightstandContainer ce$nightstandStorage() {
+		if (ce$storage == null) {
+			ce$storage = new NightstandContainer((BlockEntity) (Object) this);
+		}
+		return ce$storage;
+	}
 }

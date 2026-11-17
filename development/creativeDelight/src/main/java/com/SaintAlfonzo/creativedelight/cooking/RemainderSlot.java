@@ -14,19 +14,19 @@ import net.minecraftforge.items.SlotItemHandler;
  */
 public class RemainderSlot extends SlotItemHandler {
 
-    public static final int X = 150;
-    private static final int TOP_Y = 37;
+	public static final int X = 150;
+	private static final int TOP_Y = 37;
 
-    public RemainderSlot(IItemHandler buffer, int index) {
-        super(buffer, index, X, y(index));
-    }
+	public RemainderSlot(IItemHandler buffer, int index) {
+		super(buffer, index, X, y(index));
+	}
 
-    public static int y(int index) {
-        return TOP_Y + index * 18;
-    }
+	public static int y(int index) {
+		return TOP_Y + index * 18;
+	}
 
-    @Override
-    public boolean mayPlace(@Nonnull ItemStack stack) {
-        return false;
-    }
+	@Override
+	public boolean mayPlace(@Nonnull ItemStack stack) {
+		return false;
+	}
 }

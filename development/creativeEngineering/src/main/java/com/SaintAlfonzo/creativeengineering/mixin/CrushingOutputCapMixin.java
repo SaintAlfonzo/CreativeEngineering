@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = {CrushingRecipe.class, MillingRecipe.class}, remap = false)
 public class CrushingOutputCapMixin {
 
-    private static final int creativeengineering$MAX_OUTPUTS = 24;
+	private static final int creativeengineering$MAX_OUTPUTS = 24;
 
-    @Inject(method = "getMaxOutputCount()I", at = @At("HEAD"), cancellable = true)
-    private void creativeengineering$raiseOutputCap(CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(creativeengineering$MAX_OUTPUTS);
-    }
+	@Inject(method = "getMaxOutputCount()I", at = @At("HEAD"), cancellable = true)
+	private void creativeengineering$raiseOutputCap(CallbackInfoReturnable<Integer> cir) {
+		cir.setReturnValue(creativeengineering$MAX_OUTPUTS);
+	}
 }

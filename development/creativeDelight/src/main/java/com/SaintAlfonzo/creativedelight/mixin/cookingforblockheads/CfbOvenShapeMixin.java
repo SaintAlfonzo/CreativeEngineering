@@ -24,21 +24,21 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mixin(value = BlockKitchen.class, remap = false)
 public abstract class CfbOvenShapeMixin {
 
-    private static final Map<VoxelShape, VoxelShape> CE$RAISED = new ConcurrentHashMap<>();
+	private static final Map<VoxelShape, VoxelShape> CE$RAISED = new ConcurrentHashMap<>();
 
-    @Inject(method = "m_5940_", at = @At("RETURN"), cancellable = true)
-    private void ce$raiseOven(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context,
-                              CallbackInfoReturnable<VoxelShape> cir) {
-        if (!((Object) this instanceof OvenBlock)) {
-            return;
-        }
-        VoxelShape shape = cir.getReturnValue();
-        if (shape.isEmpty()) {
-            return;
-        }
-        cir.setReturnValue(CE$RAISED.computeIfAbsent(shape, s -> {
-            AABB box = s.bounds();
-            return box.maxY >= 1.0 ? s : Shapes.create(box.minX, box.minY, box.minZ, box.maxX, 1.0, box.maxZ);
-        }));
-    }
+	@Inject(method = "m_5940_", at = @At("RETURN"), cancellable = true)
+	private void ce$raiseOven(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context,
+							  CallbackInfoReturnable<VoxelShape> cir) {
+		if (!((Object) this instanceof OvenBlock)) {
+			return;
+		}
+		VoxelShape shape = cir.getReturnValue();
+		if (shape.isEmpty()) {
+			return;
+		}
+		cir.setReturnValue(CE$RAISED.computeIfAbsent(shape, s -> {
+			AABB box = s.bounds();
+			return box.maxY >= 1.0 ? s : Shapes.create(box.minX, box.minY, box.minZ, box.maxX, 1.0, box.maxZ);
+		}));
+	}
 }

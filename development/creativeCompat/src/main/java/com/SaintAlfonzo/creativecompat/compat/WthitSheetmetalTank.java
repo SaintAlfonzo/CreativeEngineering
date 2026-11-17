@@ -23,20 +23,20 @@ import net.minecraftforge.fluids.capability.templates.FluidTank;
  */
 public final class WthitSheetmetalTank implements IWailaCommonPlugin, IDataProvider<SheetmetalTankBlockEntity> {
 
-    @Override
-    public void register(ICommonRegistrar registrar) {
-        registrar.blockData(this, SheetmetalTankBlockEntity.class, 1000);
-    }
+	@Override
+	public void register(ICommonRegistrar registrar) {
+		registrar.blockData(this, SheetmetalTankBlockEntity.class, 1000);
+	}
 
-    @Override
-    public void appendData(IDataWriter data, IServerAccessor<SheetmetalTankBlockEntity> accessor, IPluginConfig config) {
-        SheetmetalTankBlockEntity master = accessor.getTarget().master();
-        if (master == null || !com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.sheetmetalTank.get()) {
-            return;
-        }
-        FluidTank tank = master.tank;
-        FluidStack fluid = tank.getFluid();
-        data.add(FluidData.class, res -> res.add(FluidData.of(FluidData.Unit.MILLIBUCKETS, 1)
-                .add(fluid.getFluid(), fluid.getTag(), fluid.getAmount(), tank.getCapacity())));
-    }
+	@Override
+	public void appendData(IDataWriter data, IServerAccessor<SheetmetalTankBlockEntity> accessor, IPluginConfig config) {
+		SheetmetalTankBlockEntity master = accessor.getTarget().master();
+		if (master == null || !com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.sheetmetalTank.get()) {
+			return;
+		}
+		FluidTank tank = master.tank;
+		FluidStack fluid = tank.getFluid();
+		data.add(FluidData.class, res -> res.add(FluidData.of(FluidData.Unit.MILLIBUCKETS, 1)
+				.add(fluid.getFluid(), fluid.getTag(), fluid.getAmount(), tank.getCapacity())));
+	}
 }

@@ -12,17 +12,17 @@ import java.util.function.Supplier;
  */
 public final class LevelRandomHook {
 
-    private static volatile Supplier<RandomSource> factory;
+	private static volatile Supplier<RandomSource> factory;
 
-    private LevelRandomHook() {}
+	private LevelRandomHook() {}
 
-    public static void register(Supplier<RandomSource> f) {
-        factory = f;
-    }
+	public static void register(Supplier<RandomSource> f) {
+		factory = f;
+	}
 
-    public static RandomSource create() {
-        Supplier<RandomSource> f = factory;
-        RandomSource r = f == null ? null : f.get();
-        return r != null ? r : RandomSource.createThreadSafe();
-    }
+	public static RandomSource create() {
+		Supplier<RandomSource> f = factory;
+		RandomSource r = f == null ? null : f.get();
+		return r != null ? r : RandomSource.createThreadSafe();
+	}
 }

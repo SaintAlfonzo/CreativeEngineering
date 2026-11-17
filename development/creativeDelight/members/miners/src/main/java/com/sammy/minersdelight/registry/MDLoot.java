@@ -13,11 +13,11 @@ import net.minecraftforge.registries.RegistryObject;
  * those drops.
  */
 public final class MDLoot {
-    public static final DeferredRegister<LootItemFunctionType> FUNCTIONS = DeferredRegister.create(Registry.LOOT_FUNCTION_REGISTRY, MinersDelightMod.MODID);
+	public static final DeferredRegister<LootItemFunctionType> FUNCTIONS = DeferredRegister.create(Registry.LOOT_FUNCTION_REGISTRY, MinersDelightMod.MODID);
 
-    public static final RegistryObject<LootItemFunctionType> COPY_MEAL = FUNCTIONS.register("copy_meal",
-            () -> new LootItemFunctionType(new CopyMealFunction.Serializer()));
+	public static final RegistryObject<LootItemFunctionType> COPY_MEAL = FUNCTIONS.register("copy_meal",
+			() -> new LootItemFunctionType(new CopyMealFunction.Serializer()));
 
-    private MDLoot() {
-    }
+	private MDLoot() {
+	}
 }

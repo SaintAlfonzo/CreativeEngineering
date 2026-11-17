@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.Mixin;
 @Mixin(value = BackpackBlockEntity.class, remap = false)
 public abstract class BackpackSkinBlockEntityMixin {
 
-    /** Overrides Forge's default {@code IForgeBlockEntity.getModelData()}. */
-    @NotNull
-    public ModelData getModelData() {
-        return BackpackSkinsClient.modelData(BackpackSkins.getSkin(((BackpackBlockEntity) (Object) this).getBackpackWrapper().getBackpack()));
-    }
+	/** Overrides Forge's default {@code IForgeBlockEntity.getModelData()}. */
+	@NotNull
+	public ModelData getModelData() {
+		return BackpackSkinsClient.modelData(BackpackSkins.getSkin(((BackpackBlockEntity) (Object) this).getBackpackWrapper().getBackpack()));
+	}
 }

@@ -11,9 +11,9 @@ import java.util.Map;
  */
 public class CLMixinPlugin extends GatedMixinPlugin {
 
-    public CLMixinPlugin() {
-        super("[creativelabels]", Map.of(
-                "StickyItTooltipMixin", List.of("sticky_it"),
-                "FastBenchResultMixin", List.of("fastbench")));
-    }
+	public CLMixinPlugin() {
+		super("[creativelabels]", Map.of(
+				"StickyItTooltipMixin", List.of("sticky_it"),
+				"FastBenchResultMixin", List.of("fastbench")));
+	}
 }

@@ -24,51 +24,51 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LivingEntityRenderer.class)
 public abstract class LivingEntityRendererBabyMixin {
 
-    private static final String RENDER = "m_7392_(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V";
+	private static final String RENDER = "m_7392_(Lnet/minecraft/world/entity/LivingEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V";
 
-    @Shadow(remap = false)
-    protected EntityModel<?> f_115290_;
+	@Shadow(remap = false)
+	protected EntityModel<?> f_115290_;
 
-    @Unique
-    private EntityModel<?> babyMobs$adult;
+	@Unique
+	private EntityModel<?> babyMobs$adult;
 
-    @Inject(method = RENDER, at = @At("HEAD"), remap = false)
-    private void babyMobs$begin(LivingEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffers,
-                                int light, CallbackInfo ci) {
-        @SuppressWarnings({"rawtypes", "unchecked"})
-        EntityModel<?> baby = BabyRender.begin(entity, f_115290_, () -> ((LivingEntityRenderer) (Object) this).getTextureLocation(entity));
-        if (baby != null) {
-            babyMobs$adult = f_115290_;
-            f_115290_ = baby;
-        }
-    }
+	@Inject(method = RENDER, at = @At("HEAD"), remap = false)
+	private void babyMobs$begin(LivingEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffers,
+								int light, CallbackInfo ci) {
+		@SuppressWarnings({"rawtypes", "unchecked"})
+		EntityModel<?> baby = BabyRender.begin(entity, f_115290_, () -> ((LivingEntityRenderer) (Object) this).getTextureLocation(entity));
+		if (baby != null) {
+			babyMobs$adult = f_115290_;
+			f_115290_ = baby;
+		}
+	}
 
-    @Inject(method = RENDER, at = @At("RETURN"), remap = false)
-    private void babyMobs$end(LivingEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffers,
-                              int light, CallbackInfo ci) {
-        if (babyMobs$adult != null) {
-            f_115290_ = babyMobs$adult;
-            babyMobs$adult = null;
-        }
-        BabyRender.end();
-    }
+	@Inject(method = RENDER, at = @At("RETURN"), remap = false)
+	private void babyMobs$end(LivingEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffers,
+							  int light, CallbackInfo ci) {
+		if (babyMobs$adult != null) {
+			f_115290_ = babyMobs$adult;
+			babyMobs$adult = null;
+		}
+		BabyRender.end();
+	}
 
-    @Inject(method = RENDER, at = @At(value = "FIELD", target = "Lnet/minecraft/client/model/EntityModel;f_102610_:Z",
-            opcode = org.objectweb.asm.Opcodes.PUTFIELD, shift = At.Shift.AFTER), remap = false)
-    private void babyMobs$notYoung(LivingEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffers,
-                                   int light, CallbackInfo ci) {
-        if (BabyRender.active()) f_115290_.young = false;
-    }
+	@Inject(method = RENDER, at = @At(value = "FIELD", target = "Lnet/minecraft/client/model/EntityModel;f_102610_:Z",
+			opcode = org.objectweb.asm.Opcodes.PUTFIELD, shift = At.Shift.AFTER), remap = false)
+	private void babyMobs$notYoung(LivingEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffers,
+								   int light, CallbackInfo ci) {
+		if (BabyRender.active()) f_115290_.young = false;
+	}
 
-    @Inject(method = RENDER, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;m_7546_(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
-            shift = At.Shift.AFTER), remap = false)
-    private void babyMobs$pose(LivingEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffers,
-                               int light, CallbackInfo ci) {
-        BabyRender.pose(pose);
-    }
+	@Inject(method = RENDER, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/renderer/entity/LivingEntityRenderer;m_7546_(Lnet/minecraft/world/entity/LivingEntity;Lcom/mojang/blaze3d/vertex/PoseStack;F)V",
+			shift = At.Shift.AFTER), remap = false)
+	private void babyMobs$pose(LivingEntity entity, float yaw, float partialTicks, PoseStack pose, MultiBufferSource buffers,
+							   int light, CallbackInfo ci) {
+		BabyRender.pose(pose);
+	}
 
-    @ModifyVariable(method = "m_7225_", at = @At("STORE"), ordinal = 0, remap = false)
-    private ResourceLocation babyMobs$texture(ResourceLocation texture) {
-        return BabyRender.texture(texture);
-    }
+	@ModifyVariable(method = "m_7225_", at = @At("STORE"), ordinal = 0, remap = false)
+	private ResourceLocation babyMobs$texture(ResourceLocation texture) {
+		return BabyRender.texture(texture);
+	}
 }

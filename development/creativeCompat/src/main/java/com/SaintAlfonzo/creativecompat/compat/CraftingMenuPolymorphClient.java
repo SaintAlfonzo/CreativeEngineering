@@ -13,30 +13,30 @@ import net.minecraft.world.inventory.Slot;
  */
 public final class CraftingMenuPolymorphClient {
 
-    private static final int BUTTON_X_FROM_SLOT = 23;
+	private static final int BUTTON_X_FROM_SLOT = 23;
 
-    private CraftingMenuPolymorphClient() {}
+	private CraftingMenuPolymorphClient() {}
 
-    public static void register() {
-        PolymorphApi.client().registerWidget(screen ->
-                screen.getMenu() instanceof CraftingMenuPolymorphCompat.PolymorphCraftingMenu menu
-                        ? new SideButtonWidget(screen, menu.creativeengineering$resultSlot()) : null);
-    }
+	public static void register() {
+		PolymorphApi.client().registerWidget(screen ->
+				screen.getMenu() instanceof CraftingMenuPolymorphCompat.PolymorphCraftingMenu menu
+						? new SideButtonWidget(screen, menu.creativeengineering$resultSlot()) : null);
+	}
 
-    private static final class SideButtonWidget extends PlayerRecipesWidget {
+	private static final class SideButtonWidget extends PlayerRecipesWidget {
 
-        SideButtonWidget(AbstractContainerScreen<?> screen, Slot outputSlot) {
-            super(screen, outputSlot);
-        }
+		SideButtonWidget(AbstractContainerScreen<?> screen, Slot outputSlot) {
+			super(screen, outputSlot);
+		}
 
-        @Override
-        public int getXPos() {
-            return getOutputSlot().x + BUTTON_X_FROM_SLOT;
-        }
+		@Override
+		public int getXPos() {
+			return getOutputSlot().x + BUTTON_X_FROM_SLOT;
+		}
 
-        @Override
-        public int getYPos() {
-            return getOutputSlot().y;
-        }
-    }
+		@Override
+		public int getYPos() {
+			return getOutputSlot().y;
+		}
+	}
 }

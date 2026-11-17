@@ -31,68 +31,68 @@ import net.minecraftforge.common.ForgeConfigSpec;
  */
 public class StringEntry extends ValueEntry<String> {
 
-    private final EditBox textField = new ConfigTextField(Minecraft.getInstance().font, 0, 0, 200, 20);
+	private final EditBox textField = new ConfigTextField(Minecraft.getInstance().font, 0, 0, 200, 20);
 
-    public StringEntry(String label, ForgeConfigSpec.ConfigValue<String> value, ForgeConfigSpec.ValueSpec spec) {
-        super(label, value, spec);
+	public StringEntry(String label, ForgeConfigSpec.ConfigValue<String> value, ForgeConfigSpec.ValueSpec spec) {
+		super(label, value, spec);
 
-        // EditBox defaults to a 32-char maxLength, tuned for vanilla's own short text fields.
-        // Potion/effect ids ("creativecommon:magic_resistance" alone is 32 chars) blow past
-        // that. Past maxLength, EditBox#setValue truncates its *stored* value but still fires the
-        // responder with the *untruncated* argument (a real vanilla quirk, not our bug) - so
-        // onValueChange's "does the field already show this?" check below would find a permanent
-        // mismatch and call setValue again forever: setValue -> truncate -> responder(full) ->
-        // setValue(full) -> mismatch -> setValue -> ... (confirmed via a StackOverflowError crash
-        // report). Raising maxLength keeps every realistic config string under the truncation
-        // branch entirely, so the two values never diverge in the first place.
-        this.textField.setMaxLength(256);
-        this.textField.setValue(this.getValue());
-        this.textField.setTextColor(Theme.i(Theme.Key.TEXT));
-        this.textField.setResponder(s -> {
-            if (!spec.test(s)) {
-                this.textField.setTextColor(Theme.i(Theme.Key.BUTTON_FAIL));
-                return;
-            }
-            this.textField.setTextColor(Theme.i(Theme.Key.TEXT));
-            this.setValue(s);
-        });
-        this.textField.moveCursorToEnd();
-        this.listeners.add(this.textField);
-        this.onReset();
-    }
+		// EditBox defaults to a 32-char maxLength, tuned for vanilla's own short text fields.
+		// Potion/effect ids ("creativecommon:magic_resistance" alone is 32 chars) blow past
+		// that. Past maxLength, EditBox#setValue truncates its *stored* value but still fires the
+		// responder with the *untruncated* argument (a real vanilla quirk, not our bug) - so
+		// onValueChange's "does the field already show this?" check below would find a permanent
+		// mismatch and call setValue again forever: setValue -> truncate -> responder(full) ->
+		// setValue(full) -> mismatch -> setValue -> ... (confirmed via a StackOverflowError crash
+		// report). Raising maxLength keeps every realistic config string under the truncation
+		// branch entirely, so the two values never diverge in the first place.
+		this.textField.setMaxLength(256);
+		this.textField.setValue(this.getValue());
+		this.textField.setTextColor(Theme.i(Theme.Key.TEXT));
+		this.textField.setResponder(s -> {
+			if (!spec.test(s)) {
+				this.textField.setTextColor(Theme.i(Theme.Key.BUTTON_FAIL));
+				return;
+			}
+			this.textField.setTextColor(Theme.i(Theme.Key.TEXT));
+			this.setValue(s);
+		});
+		this.textField.moveCursorToEnd();
+		this.listeners.add(this.textField);
+		this.onReset();
+	}
 
-    @Override
-    protected void setEditable(boolean editable) {
-        super.setEditable(editable);
-        this.textField.setEditable(editable);
-    }
+	@Override
+	protected void setEditable(boolean editable) {
+		super.setEditable(editable);
+		this.textField.setEditable(editable);
+	}
 
-    @Override
-    public void onValueChange(String newValue) {
-        super.onValueChange(newValue);
-        if (!this.textField.getValue().equals(newValue)) {
-            this.textField.setValue(newValue);
-        }
-    }
+	@Override
+	public void onValueChange(String newValue) {
+		super.onValueChange(newValue);
+		if (!this.textField.getValue().equals(newValue)) {
+			this.textField.setValue(newValue);
+		}
+	}
 
-    @Override
-    public void tick() {
-        super.tick();
-        this.textField.tick();
-    }
+	@Override
+	public void tick() {
+		super.tick();
+		this.textField.tick();
+	}
 
-    @Override
-    public void render(PoseStack ms, int index, int y, int x, int width, int height,
-                        int mouseX, int mouseY, boolean hovered, float partialTicks) {
-        // ValueEntry/LabeledEntry (Create's own, unmapped jar) implement this vanilla override
-        // under its raw compiled name, not the friendly "render" this method is declared with -
-        // see the class javadoc.
-        super.m_6311_(ms, index, y, x, width, height, mouseX, mouseY, hovered, partialTicks);
-        int labelWidth = this.getLabelWidth(width);
-        this.textField.x = x + labelWidth;
-        this.textField.y = y + 8;
-        this.textField.setWidth(width - labelWidth - resetWidth);
-        this.textField.setHeight(20);
-        this.textField.render(ms, mouseX, mouseY, partialTicks);
-    }
+	@Override
+	public void render(PoseStack ms, int index, int y, int x, int width, int height,
+						int mouseX, int mouseY, boolean hovered, float partialTicks) {
+		// ValueEntry/LabeledEntry (Create's own, unmapped jar) implement this vanilla override
+		// under its raw compiled name, not the friendly "render" this method is declared with -
+		// see the class javadoc.
+		super.m_6311_(ms, index, y, x, width, height, mouseX, mouseY, hovered, partialTicks);
+		int labelWidth = this.getLabelWidth(width);
+		this.textField.x = x + labelWidth;
+		this.textField.y = y + 8;
+		this.textField.setWidth(width - labelWidth - resetWidth);
+		this.textField.setHeight(20);
+		this.textField.render(ms, mouseX, mouseY, partialTicks);
+	}
 }

@@ -40,49 +40,49 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BlockStateBase.class)
 public abstract class BlockStateCounterTopperMixin {
 
-    @Unique
-    private int ce$topperKey;
+	@Unique
+	private int ce$topperKey;
 
-    @Unique
-    private int ce$topperFlags() {
-        int gen = CounterToppers.generation();
-        int key = ce$topperKey;
-        if ((key >>> 2) != gen) {
-            BlockState state = (BlockState) (Object) this;
-            boolean topper = state.is(CounterToppers.TOPPERS);
-            boolean pops = CounterToppers.popsUnsupported(state);
-            key = (gen << 2) | (pops ? 2 : 0) | (topper ? 1 : 0);
-            ce$topperKey = key;
-        }
-        return key;
-    }
+	@Unique
+	private int ce$topperFlags() {
+		int gen = CounterToppers.generation();
+		int key = ce$topperKey;
+		if ((key >>> 2) != gen) {
+			BlockState state = (BlockState) (Object) this;
+			boolean topper = state.is(CounterToppers.TOPPERS);
+			boolean pops = CounterToppers.popsUnsupported(state);
+			key = (gen << 2) | (pops ? 2 : 0) | (topper ? 1 : 0);
+			ce$topperKey = key;
+		}
+		return key;
+	}
 
-    @Unique
-    private boolean ce$isTopper() {
-        return (ce$topperFlags() & 1) != 0;
-    }
+	@Unique
+	private boolean ce$isTopper() {
+		return (ce$topperFlags() & 1) != 0;
+	}
 
-    @Inject(method = "m_60710_", at = @At("RETURN"), cancellable = true, remap = false)
-    private void ce$counterSupport(LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValueZ() && ce$isTopper() && CounterToppers.onSupport(level, pos)) {
-            cir.setReturnValue(true);
-        }
-    }
+	@Inject(method = "m_60710_", at = @At("RETURN"), cancellable = true, remap = false)
+	private void ce$counterSupport(LevelReader level, BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
+		if (!cir.getReturnValueZ() && ce$isTopper() && CounterToppers.onSupport(level, pos)) {
+			cir.setReturnValue(true);
+		}
+	}
 
-    @Inject(method = "m_60728_", at = @At("RETURN"), cancellable = true, remap = false)
-    private void ce$popUnsupported(Direction direction, BlockState neighbour, LevelAccessor level, BlockPos pos,
-                                   BlockPos neighbourPos, CallbackInfoReturnable<BlockState> cir) {
-        if (direction != Direction.DOWN || (ce$topperFlags() & 2) == 0) return;
-        BlockState result = cir.getReturnValue();
-        if (!result.isAir() && !result.canSurvive(level, pos)) {
-            cir.setReturnValue(Blocks.AIR.defaultBlockState());
-        }
-    }
+	@Inject(method = "m_60728_", at = @At("RETURN"), cancellable = true, remap = false)
+	private void ce$popUnsupported(Direction direction, BlockState neighbour, LevelAccessor level, BlockPos pos,
+								   BlockPos neighbourPos, CallbackInfoReturnable<BlockState> cir) {
+		if (direction != Direction.DOWN || (ce$topperFlags() & 2) == 0) return;
+		BlockState result = cir.getReturnValue();
+		if (!result.isAir() && !result.canSurvive(level, pos)) {
+			cir.setReturnValue(Blocks.AIR.defaultBlockState());
+		}
+	}
 
-    @Inject(method = "m_60824_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void ce$counterTopperOffset(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Vec3> cir) {
-        if (ce$isTopper()) {
-            cir.setReturnValue(CounterToppers.offset(((BlockStateBase) (Object) this).getBlock(), level, pos));
-        }
-    }
+	@Inject(method = "m_60824_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void ce$counterTopperOffset(BlockGetter level, BlockPos pos, CallbackInfoReturnable<Vec3> cir) {
+		if (ce$isTopper()) {
+			cir.setReturnValue(CounterToppers.offset(((BlockStateBase) (Object) this).getBlock(), level, pos));
+		}
+	}
 }

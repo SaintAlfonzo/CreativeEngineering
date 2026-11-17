@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = CPacketPlayerRecipeSelection.class, remap = false)
 public abstract class PolymorphRecipeSelectionPacketMixin {
 
-    @Inject(method = "handle", at = @At("TAIL"), remap = false, require = 1)
-    private static void creativeengineering$refreshStorageCrafting(CPacketPlayerRecipeSelection packet, ServerPlayer player, CallbackInfo ci) {
-        SophisticatedPolymorphCompat.refreshOpenCrafting(player.containerMenu);
-    }
+	@Inject(method = "handle", at = @At("TAIL"), remap = false, require = 1)
+	private static void creativeengineering$refreshStorageCrafting(CPacketPlayerRecipeSelection packet, ServerPlayer player, CallbackInfo ci) {
+		SophisticatedPolymorphCompat.refreshOpenCrafting(player.containerMenu);
+	}
 }

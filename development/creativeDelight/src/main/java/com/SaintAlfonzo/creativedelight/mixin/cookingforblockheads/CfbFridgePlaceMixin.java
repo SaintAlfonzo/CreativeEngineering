@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = FridgeBlock.class, remap = false)
 public abstract class CfbFridgePlaceMixin {
 
-    @Inject(method = "m_5573_", at = @At("RETURN"), cancellable = true)
-    private void ce$mirrorDoor(BlockPlaceContext context, CallbackInfoReturnable<BlockState> cir) {
-        BlockState state = cir.getReturnValue();
-        BlockState mirrored = FridgePairs.mirrorOnPlace(state, context.getLevel(), context.getClickedPos());
-        if (mirrored != state) cir.setReturnValue(mirrored);
-    }
+	@Inject(method = "m_5573_", at = @At("RETURN"), cancellable = true)
+	private void ce$mirrorDoor(BlockPlaceContext context, CallbackInfoReturnable<BlockState> cir) {
+		BlockState state = cir.getReturnValue();
+		BlockState mirrored = FridgePairs.mirrorOnPlace(state, context.getLevel(), context.getClickedPos());
+		if (mirrored != state) cir.setReturnValue(mirrored);
+	}
 }

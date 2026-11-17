@@ -19,19 +19,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ItemStackHandler.class, remap = false)
 public abstract class ItemStackHandlerSlotRuleMixin implements StationSlotRule.Holder {
 
-    @Unique
-    private StationSlotRule ce$slotRule;
+	@Unique
+	private StationSlotRule ce$slotRule;
 
-    @Override
-    public void ce$setSlotRule(StationSlotRule rule) {
-        ce$slotRule = rule;
-    }
+	@Override
+	public void ce$setSlotRule(StationSlotRule rule) {
+		ce$slotRule = rule;
+	}
 
-    @Inject(method = "isItemValid", at = @At("HEAD"), cancellable = true)
-    private void ce$slotRule(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        StationSlotRule rule = ce$slotRule;
-        if (rule != null && !rule.allows(slot, stack)) {
-            cir.setReturnValue(false);
-        }
-    }
+	@Inject(method = "isItemValid", at = @At("HEAD"), cancellable = true)
+	private void ce$slotRule(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+		StationSlotRule rule = ce$slotRule;
+		if (rule != null && !rule.allows(slot, stack)) {
+			cir.setReturnValue(false);
+		}
+	}
 }

@@ -28,19 +28,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(WanderingTrader.class)
 public abstract class WanderingTraderTradesMixin {
 
-    @ModifyConstant(method = "m_7604_", constant = @Constant(intValue = 5), remap = false)
-    private int creativecommon$commonTrades(int vanilla) {
-        try {
-            return WanderingTraderTweaks.commonTrades(vanilla);
-        } catch (Throwable ignored) {
-            return vanilla;
-        }
-    }
+	@ModifyConstant(method = "m_7604_", constant = @Constant(intValue = 5), remap = false)
+	private int creativecommon$commonTrades(int vanilla) {
+		try {
+			return WanderingTraderTweaks.commonTrades(vanilla);
+		} catch (Throwable ignored) {
+			return vanilla;
+		}
+	}
 
-    @Inject(method = "m_7604_", at = @At("TAIL"), remap = false)
-    private void creativecommon$extraRareTrades(CallbackInfo ci) {
-        WanderingTrader self = (WanderingTrader) (Object) this;
-        WanderingTraderTweaks.addExtraRareOffers(self, self.getRandom(), self.getOffers(),
-                VillagerTrades.WANDERING_TRADER_TRADES.get(2));
-    }
+	@Inject(method = "m_7604_", at = @At("TAIL"), remap = false)
+	private void creativecommon$extraRareTrades(CallbackInfo ci) {
+		WanderingTrader self = (WanderingTrader) (Object) this;
+		WanderingTraderTweaks.addExtraRareOffers(self, self.getRandom(), self.getOffers(),
+				VillagerTrades.WANDERING_TRADER_TRADES.get(2));
+	}
 }

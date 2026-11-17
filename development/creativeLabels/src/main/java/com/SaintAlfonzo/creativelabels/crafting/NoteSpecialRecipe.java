@@ -16,39 +16,39 @@ import net.minecraft.world.level.Level;
  */
 public class NoteSpecialRecipe extends CustomRecipe {
 
-    public NoteSpecialRecipe(ResourceLocation id) {
-        super(id);
-    }
+	public NoteSpecialRecipe(ResourceLocation id) {
+		super(id);
+	}
 
-    @Override
-    public boolean matches(CraftingContainer grid, Level level) {
-        return matches(NoteGrid.of(grid));
-    }
+	@Override
+	public boolean matches(CraftingContainer grid, Level level) {
+		return matches(NoteGrid.of(grid));
+	}
 
-    static boolean matches(NoteGrid g) {
-        if (g.notes.isEmpty() || g.specials != 1 || g.dyes != 0 || g.erasers != 0 || g.others != 0) return false;
-        for (ItemStack n : g.notes) {
-            if (NoteData.readColor(n) != NoteData.NO_COLOR || NoteData.readSpecial(n) != null) return false;
-        }
-        return g.notesIdentical();
-    }
+	static boolean matches(NoteGrid g) {
+		if (g.notes.isEmpty() || g.specials != 1 || g.dyes != 0 || g.erasers != 0 || g.others != 0) return false;
+		for (ItemStack n : g.notes) {
+			if (NoteData.readColor(n) != NoteData.NO_COLOR || NoteData.readSpecial(n) != null) return false;
+		}
+		return g.notesIdentical();
+	}
 
-    @Override
-    public ItemStack assemble(CraftingContainer grid) {
-        NoteGrid g = NoteGrid.of(grid);
-        if (!matches(g) || g.special == null) return ItemStack.EMPTY;
-        ItemStack out = NoteGrid.copies(g.notes.get(0), g.notes.size());
-        NoteData.writeSpecial(out, g.special.name());
-        return out;
-    }
+	@Override
+	public ItemStack assemble(CraftingContainer grid) {
+		NoteGrid g = NoteGrid.of(grid);
+		if (!matches(g) || g.special == null) return ItemStack.EMPTY;
+		ItemStack out = NoteGrid.copies(g.notes.get(0), g.notes.size());
+		NoteData.writeSpecial(out, g.special.name());
+		return out;
+	}
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
+	@Override
+	public boolean canCraftInDimensions(int width, int height) {
+		return width * height >= 2;
+	}
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return CLRegistry.NOTE_SPECIAL.get();
-    }
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return CLRegistry.NOTE_SPECIAL.get();
+	}
 }

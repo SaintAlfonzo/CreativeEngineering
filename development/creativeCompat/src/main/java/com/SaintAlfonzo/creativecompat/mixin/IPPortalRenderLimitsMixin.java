@@ -20,15 +20,15 @@ import java.util.function.Supplier;
 @Mixin(value = PortalRenderer.class, remap = false)
 public abstract class IPPortalRenderLimitsMixin {
 
-    @Inject(method = "shouldSkipRenderingPortal", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private static void creativecompat$skipPortal(Portal portal, Supplier<Frustum> frustum,
-                                                  CallbackInfoReturnable<Boolean> cir) {
-        if (PortalLimits.skip(portal)) cir.setReturnValue(true);
-    }
+	@Inject(method = "shouldSkipRenderingPortal", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private static void creativecompat$skipPortal(Portal portal, Supplier<Frustum> frustum,
+												  CallbackInfoReturnable<Boolean> cir) {
+		if (PortalLimits.skip(portal)) cir.setReturnValue(true);
+	}
 
-    @Inject(method = "getPortalRenderDistance", at = @At("RETURN"), cancellable = true, remap = false, require = 1)
-    private static void creativecompat$mirrorViewDistance(PortalLike portal, CallbackInfoReturnable<Integer> cir) {
-        int capped = PortalLimits.renderDistance(portal, cir.getReturnValueI());
-        if (capped != cir.getReturnValueI()) cir.setReturnValue(capped);
-    }
+	@Inject(method = "getPortalRenderDistance", at = @At("RETURN"), cancellable = true, remap = false, require = 1)
+	private static void creativecompat$mirrorViewDistance(PortalLike portal, CallbackInfoReturnable<Integer> cir) {
+		int capped = PortalLimits.renderDistance(portal, cir.getReturnValueI());
+		if (capped != cir.getReturnValueI()) cir.setReturnValue(capped);
+	}
 }

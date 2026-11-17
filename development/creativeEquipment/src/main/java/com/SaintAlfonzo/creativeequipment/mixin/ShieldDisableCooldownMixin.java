@@ -26,12 +26,12 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(Player.class)
 public abstract class ShieldDisableCooldownMixin {
 
-    @ModifyConstant(method = "m_36384_", constant = @Constant(intValue = 100), remap = false)
-    private int creativeengineering$disableCooldownTicks(int vanilla) {
-        try {
-            return ShieldConfig.disableCooldownTicks();
-        } catch (Throwable ignored) {
-            return vanilla;
-        }
-    }
+	@ModifyConstant(method = "m_36384_", constant = @Constant(intValue = 100), remap = false)
+	private int creativeengineering$disableCooldownTicks(int vanilla) {
+		try {
+			return ShieldConfig.disableCooldownTicks();
+		} catch (Throwable ignored) {
+			return vanilla;
+		}
+	}
 }

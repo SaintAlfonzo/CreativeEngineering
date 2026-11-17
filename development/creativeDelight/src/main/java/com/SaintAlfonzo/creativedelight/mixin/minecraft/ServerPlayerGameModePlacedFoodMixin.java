@@ -24,23 +24,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ServerPlayerGameMode.class)
 public abstract class ServerPlayerGameModePlacedFoodMixin {
 
-    @Unique private BlockState ce$stateBefore;
-    @Unique private ItemStack ce$heldBefore = ItemStack.EMPTY;
+	@Unique private BlockState ce$stateBefore;
+	@Unique private ItemStack ce$heldBefore = ItemStack.EMPTY;
 
-    @Inject(method = "m_7179_", at = @At("HEAD"), remap = false)
-    private void ce$rememberState(ServerPlayer player, Level level, ItemStack held, InteractionHand hand,
-                                  BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
-        ce$stateBefore = level.getBlockState(hit.getBlockPos());
-        ce$heldBefore = held.copy();
-    }
+	@Inject(method = "m_7179_", at = @At("HEAD"), remap = false)
+	private void ce$rememberState(ServerPlayer player, Level level, ItemStack held, InteractionHand hand,
+								  BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
+		ce$stateBefore = level.getBlockState(hit.getBlockPos());
+		ce$heldBefore = held.copy();
+	}
 
-    @Inject(method = "m_7179_", at = @At("RETURN"), remap = false)
-    private void ce$placedFoodBite(ServerPlayer player, Level level, ItemStack held, InteractionHand hand,
-                                   BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
-        BlockState before = ce$stateBefore;
-        ce$stateBefore = null;
-        if (before == null) return;
-        PlacedFoodSol.afterUse(player, level, hit.getBlockPos(), before, ce$heldBefore, cir.getReturnValue());
-        ce$heldBefore = ItemStack.EMPTY;
-    }
+	@Inject(method = "m_7179_", at = @At("RETURN"), remap = false)
+	private void ce$placedFoodBite(ServerPlayer player, Level level, ItemStack held, InteractionHand hand,
+								   BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
+		BlockState before = ce$stateBefore;
+		ce$stateBefore = null;
+		if (before == null) return;
+		PlacedFoodSol.afterUse(player, level, hit.getBlockPos(), before, ce$heldBefore, cir.getReturnValue());
+		ce$heldBefore = ItemStack.EMPTY;
+	}
 }

@@ -21,12 +21,12 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(value = FridgeRenderer.class, remap = false)
 public abstract class CfbFridgeRendererMixin {
 
-    @ModifyArg(method = "renderDoor", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/renderer/block/ModelBlockRenderer;m_234379_(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JI)V"),
-            index = 1)
-    private BakedModel ce$joinDoor(BlockAndTintGetter level, BakedModel model, BlockState state, BlockPos pos,
-                                   PoseStack pose, VertexConsumer consumer, boolean checkSides, RandomSource random,
-                                   long seed, int overlay) {
-        return FridgeDouble.door(model, level, state, pos);
-    }
+	@ModifyArg(method = "renderDoor", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/client/renderer/block/ModelBlockRenderer;m_234379_(Lnet/minecraft/world/level/BlockAndTintGetter;Lnet/minecraft/client/resources/model/BakedModel;Lnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;Lcom/mojang/blaze3d/vertex/PoseStack;Lcom/mojang/blaze3d/vertex/VertexConsumer;ZLnet/minecraft/util/RandomSource;JI)V"),
+			index = 1)
+	private BakedModel ce$joinDoor(BlockAndTintGetter level, BakedModel model, BlockState state, BlockPos pos,
+								   PoseStack pose, VertexConsumer consumer, boolean checkSides, RandomSource random,
+								   long seed, int overlay) {
+		return FridgeDouble.door(model, level, state, pos);
+	}
 }

@@ -11,8 +11,8 @@ import java.util.Stack;
 @Mixin(value = PortalRendering.class, remap = false)
 public interface IPPortalRenderingAccessor {
 
-    @Accessor(value = "portalLayers", remap = false)
-    static Stack<PortalLike> creativecompat$getPortalLayers() {
-        throw new AssertionError();
-    }
+	@Accessor(value = "portalLayers", remap = false)
+	static Stack<PortalLike> creativecompat$getPortalLayers() {
+		throw new AssertionError();
+	}
 }

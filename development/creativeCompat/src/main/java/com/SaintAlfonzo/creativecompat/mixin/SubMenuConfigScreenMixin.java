@@ -31,29 +31,29 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(value = SubMenuConfigScreen.class, remap = false)
 public class SubMenuConfigScreenMixin {
 
-    @Shadow
-    protected ConfigScreenList list;
+	@Shadow
+	protected ConfigScreenList list;
 
-    @Inject(
-            method = "lambda$init$12",
-            at = @At(
-                    value = "NEW",
-                    target = "Lcom/simibubi/create/foundation/config/ui/ConfigScreenList$LabeledEntry;"
-            ),
-            cancellable = true,
-            locals = LocalCapture.CAPTURE_FAILEXCEPTION
-    )
-    private void creativecommon$stringEntry(
-            String key, Object obj, CallbackInfo ci,
-            String humanKey, ForgeConfigSpec.ConfigValue<?> configValue, ForgeConfigSpec.ValueSpec valueSpec, Object value) {
+	@Inject(
+			method = "lambda$init$12",
+			at = @At(
+					value = "NEW",
+					target = "Lcom/simibubi/create/foundation/config/ui/ConfigScreenList$LabeledEntry;"
+			),
+			cancellable = true,
+			locals = LocalCapture.CAPTURE_FAILEXCEPTION
+	)
+	private void creativecommon$stringEntry(
+			String key, Object obj, CallbackInfo ci,
+			String humanKey, ForgeConfigSpec.ConfigValue<?> configValue, ForgeConfigSpec.ValueSpec valueSpec, Object value) {
 
-        if (!(value instanceof String)) {
-            return;
-        }
+		if (!(value instanceof String)) {
+			return;
+		}
 
-        @SuppressWarnings("unchecked")
-        ForgeConfigSpec.ConfigValue<String> stringValue = (ForgeConfigSpec.ConfigValue<String>) configValue;
-        this.list.children().add(new StringEntry(humanKey, stringValue, valueSpec));
-        ci.cancel();
-    }
+		@SuppressWarnings("unchecked")
+		ForgeConfigSpec.ConfigValue<String> stringValue = (ForgeConfigSpec.ConfigValue<String>) configValue;
+		this.list.children().add(new StringEntry(humanKey, stringValue, valueSpec));
+		ci.cancel();
+	}
 }

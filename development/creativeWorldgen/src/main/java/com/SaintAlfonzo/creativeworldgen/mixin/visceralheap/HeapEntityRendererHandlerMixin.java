@@ -11,8 +11,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = EntityRendererHandler.class, remap = false)
 public abstract class HeapEntityRendererHandlerMixin {
 
-    @Inject(method = "onRegisterRenderers", at = @At("HEAD"), cancellable = true)
-    private static void creativeworldgen$skip(EntityRenderersEvent.RegisterRenderers event, CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "onRegisterRenderers", at = @At("HEAD"), cancellable = true)
+	private static void creativeworldgen$skip(EntityRenderersEvent.RegisterRenderers event, CallbackInfo ci) {
+		ci.cancel();
+	}
 }

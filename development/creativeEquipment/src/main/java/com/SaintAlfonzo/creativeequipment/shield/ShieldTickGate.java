@@ -23,47 +23,47 @@ import net.minecraft.world.damagesource.DamageSource;
  * <p>Projectiles never count: an ownerless fireball reuses the {@code onFire} id.
  */
 public enum ShieldTickGate {
-    /** On fire, in fire, campfires, braziers, magma, stoves. */
-    BURN("burn_tick", "blocksBurnTicks", "Blocks burning"),
-    /** Cactus, berry bushes and other thorny plants, barbed panes. */
-    CONTACT("contact_tick", "blocksContactTicks", "Blocks thorns");
+	/** On fire, in fire, campfires, braziers, magma, stoves. */
+	BURN("burn_tick", "blocksBurnTicks", "Blocks burning"),
+	/** Cactus, berry bushes and other thorny plants, barbed panes. */
+	CONTACT("contact_tick", "blocksContactTicks", "Blocks thorns");
 
-    private final ResourceLocation tag;
-    private final String configKey;
-    private final String label;
+	private final ResourceLocation tag;
+	private final String configKey;
+	private final String label;
 
-    ShieldTickGate(String tagPath, String configKey, String label) {
-        this.tag = DamageTags.id(tagPath);
-        this.configKey = configKey;
-        this.label = label;
-    }
+	ShieldTickGate(String tagPath, String configKey, String label) {
+		this.tag = DamageTags.id(tagPath);
+		this.configKey = configKey;
+		this.label = label;
+	}
 
-    public ResourceLocation tag() {
-        return tag;
-    }
+	public ResourceLocation tag() {
+		return tag;
+	}
 
-    /** Per-tier toml key. */
-    public String configKey() {
-        return configKey;
-    }
+	/** Per-tier toml key. */
+	public String configKey() {
+		return configKey;
+	}
 
-    /** Full-view tooltip label. */
-    public String label() {
-        return label;
-    }
+	/** Full-view tooltip label. */
+	public String label() {
+		return label;
+	}
 
-    /** The gate this hit falls under, or null for an ordinary hit (and for every projectile). */
-    @Nullable
-    public static ShieldTickGate of(DamageSource source) {
-        Set<ResourceLocation> tags = DamageTags.tagsOf(source);
-        if (tags.contains(DamageFlag.PROJECTILE.tag())) {
-            return null;
-        }
-        for (ShieldTickGate g : values()) {
-            if (tags.contains(g.tag)) {
-                return g;
-            }
-        }
-        return null;
-    }
+	/** The gate this hit falls under, or null for an ordinary hit (and for every projectile). */
+	@Nullable
+	public static ShieldTickGate of(DamageSource source) {
+		Set<ResourceLocation> tags = DamageTags.tagsOf(source);
+		if (tags.contains(DamageFlag.PROJECTILE.tag())) {
+			return null;
+		}
+		for (ShieldTickGate g : values()) {
+			if (tags.contains(g.tag)) {
+				return g;
+			}
+		}
+		return null;
+	}
 }

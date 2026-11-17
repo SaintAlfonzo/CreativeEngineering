@@ -18,21 +18,21 @@ package com.SaintAlfonzo.creativecommon.util;
  */
 public final class BlockStateIdOverflow {
 
-    /** Ids at or above this overflow the packet's int shift. */
-    public static final int FIRST_OVERFLOWING_ID = 1 << 19;
+	/** Ids at or above this overflow the packet's int shift. */
+	public static final int FIRST_OVERFLOWING_ID = 1 << 19;
 
-    /** Ids at or above this lose bits in an unpatched server's int and cannot be recovered on the client. */
-    public static final int UNRECOVERABLE_ID = 1 << 20;
+	/** Ids at or above this lose bits in an unpatched server's int and cannot be recovered on the client. */
+	public static final int UNRECOVERABLE_ID = 1 << 20;
 
-    private BlockStateIdOverflow() {}
+	private BlockStateIdOverflow() {}
 
-    /** Server side: one packet entry, shifted in long so no id overflows. */
-    public static long packed(int stateId, short position) {
-        return (long) stateId << 12 | position;
-    }
+	/** Server side: one packet entry, shifted in long so no id overflows. */
+	public static long packed(int stateId, short position) {
+		return (long) stateId << 12 | position;
+	}
 
-    /** Client side: undo the overflow on an id read from a packet written by an unfixed server. */
-    public static int repairId(int decodedId) {
-        return decodedId < 0 ? decodedId + UNRECOVERABLE_ID : decodedId;
-    }
+	/** Client side: undo the overflow on an id read from a packet written by an unfixed server. */
+	public static int repairId(int decodedId) {
+		return decodedId < 0 ? decodedId + UNRECOVERABLE_ID : decodedId;
+	}
 }

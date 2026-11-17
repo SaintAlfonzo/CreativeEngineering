@@ -54,113 +54,113 @@ import java.util.Map;
  */
 @Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, value = Dist.CLIENT)
 public final class WthitIconDump {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static boolean dumpedAtTitle;
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static boolean dumpedAtTitle;
 
-    private WthitIconDump() {}
+	private WthitIconDump() {}
 
-    @SubscribeEvent
-    public static void onClientCommands(RegisterClientCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("cdevdumpicons").executes(ctx -> {
-            String summary = dump();
-            ctx.getSource().sendSuccess(Component.literal("[cdevdumpicons] " + summary
-                    + " -> kubejs/exported/wthit_icons.json").withStyle(ChatFormatting.GREEN), false);
-            return 1;
-        }));
-    }
+	@SubscribeEvent
+	public static void onClientCommands(RegisterClientCommandsEvent event) {
+		event.getDispatcher().register(Commands.literal("cdevdumpicons").executes(ctx -> {
+			String summary = dump();
+			ctx.getSource().sendSuccess(Component.literal("[cdevdumpicons] " + summary
+					+ " -> kubejs/exported/wthit_icons.json").withStyle(ChatFormatting.GREEN), false);
+			return 1;
+		}));
+	}
 
-    @SubscribeEvent
-    public static void onScreenOpening(ScreenEvent.Opening event) {
-        if (dumpedAtTitle || !(event.getNewScreen() instanceof TitleScreen)) return;
-        if (!DevtoolsConfig.DEBUG.dumpIconsAtTitle.get()) return;
-        dumpedAtTitle = true;
-        dump();
-    }
+	@SubscribeEvent
+	public static void onScreenOpening(ScreenEvent.Opening event) {
+		if (dumpedAtTitle || !(event.getNewScreen() instanceof TitleScreen)) return;
+		if (!DevtoolsConfig.DEBUG.dumpIconsAtTitle.get()) return;
+		dumpedAtTitle = true;
+		dump();
+	}
 
-    public static String dump() {
-        long start = System.nanoTime();
-        Minecraft mc = Minecraft.getInstance();
-        BakedModel missing = mc.getModelManager().getMissingModel();
-        Map<BlockModelIcons.Verdict, Integer> counts = new EnumMap<>(BlockModelIcons.Verdict.class);
-        int errors = 0;
+	public static String dump() {
+		long start = System.nanoTime();
+		Minecraft mc = Minecraft.getInstance();
+		BakedModel missing = mc.getModelManager().getMissingModel();
+		Map<BlockModelIcons.Verdict, Integer> counts = new EnumMap<>(BlockModelIcons.Verdict.class);
+		int errors = 0;
 
-        JsonArray blocks = new JsonArray();
-        List<ResourceLocation> keys = new ArrayList<>(ForgeRegistries.BLOCKS.getKeys());
-        keys.sort(ResourceLocation::compareTo);
-        for (ResourceLocation id : keys) {
-            Block block = ForgeRegistries.BLOCKS.getValue(id);
-            if (block == null) continue;
-            BlockState state = block.defaultBlockState();
-            JsonObject row = new JsonObject();
-            row.addProperty("id", id.toString());
-            row.addProperty("class", block.getClass().getName());
-            row.addProperty("shape", state.getRenderShape().name());
-            row.addProperty("blockModelMissing", mc.getBlockRenderer().getBlockModel(state) == missing);
-            row.addProperty("hasBlockEntity", state.hasBlockEntity());
-            ItemStack clone;
-            try {
-                clone = block.getCloneItemStack(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state);
-            } catch (RuntimeException e) {
-                row.addProperty("error", e.toString());
-                blocks.add(row);
-                errors++;
-                continue;
-            }
-            row.addProperty("clone", clone.isEmpty() ? "" : String.valueOf(ForgeRegistries.ITEMS.getKey(clone.getItem())));
-            if (!clone.isEmpty()) {
-                row.addProperty("cloneModelMissing", !BlockModelIcons.hasItemIcon(clone));
-            }
-            BlockModelIcons.Verdict v;
-            try {
-                v = BlockModelIcons.verdict(state, clone);
-            } catch (RuntimeException e) {
-                row.addProperty("error", e.toString());
-                blocks.add(row);
-                errors++;
-                continue;
-            }
-            row.addProperty("verdict", v.name());
-            counts.merge(v, 1, Integer::sum);
-            blocks.add(row);
-        }
+		JsonArray blocks = new JsonArray();
+		List<ResourceLocation> keys = new ArrayList<>(ForgeRegistries.BLOCKS.getKeys());
+		keys.sort(ResourceLocation::compareTo);
+		for (ResourceLocation id : keys) {
+			Block block = ForgeRegistries.BLOCKS.getValue(id);
+			if (block == null) continue;
+			BlockState state = block.defaultBlockState();
+			JsonObject row = new JsonObject();
+			row.addProperty("id", id.toString());
+			row.addProperty("class", block.getClass().getName());
+			row.addProperty("shape", state.getRenderShape().name());
+			row.addProperty("blockModelMissing", mc.getBlockRenderer().getBlockModel(state) == missing);
+			row.addProperty("hasBlockEntity", state.hasBlockEntity());
+			ItemStack clone;
+			try {
+				clone = block.getCloneItemStack(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, state);
+			} catch (RuntimeException e) {
+				row.addProperty("error", e.toString());
+				blocks.add(row);
+				errors++;
+				continue;
+			}
+			row.addProperty("clone", clone.isEmpty() ? "" : String.valueOf(ForgeRegistries.ITEMS.getKey(clone.getItem())));
+			if (!clone.isEmpty()) {
+				row.addProperty("cloneModelMissing", !BlockModelIcons.hasItemIcon(clone));
+			}
+			BlockModelIcons.Verdict v;
+			try {
+				v = BlockModelIcons.verdict(state, clone);
+			} catch (RuntimeException e) {
+				row.addProperty("error", e.toString());
+				blocks.add(row);
+				errors++;
+				continue;
+			}
+			row.addProperty("verdict", v.name());
+			counts.merge(v, 1, Integer::sum);
+			blocks.add(row);
+		}
 
-        JsonArray missingItems = new JsonArray();
-        List<ResourceLocation> itemKeys = new ArrayList<>(ForgeRegistries.ITEMS.getKeys());
-        itemKeys.sort(ResourceLocation::compareTo);
-        for (ResourceLocation id : itemKeys) {
-            Item item = ForgeRegistries.ITEMS.getValue(id);
-            if (item == null || "minecraft:air".equals(id.toString())) continue;
-            try {
-                if (mc.getItemRenderer().getItemModelShaper().getItemModel(item) == missing) {
-                    missingItems.add(id.toString());
-                }
-            } catch (RuntimeException e) {
-                LOGGER.warn("[cdevdumpicons] item {}: {}", id, e.toString());
-            }
-        }
+		JsonArray missingItems = new JsonArray();
+		List<ResourceLocation> itemKeys = new ArrayList<>(ForgeRegistries.ITEMS.getKeys());
+		itemKeys.sort(ResourceLocation::compareTo);
+		for (ResourceLocation id : itemKeys) {
+			Item item = ForgeRegistries.ITEMS.getValue(id);
+			if (item == null || "minecraft:air".equals(id.toString())) continue;
+			try {
+				if (mc.getItemRenderer().getItemModelShaper().getItemModel(item) == missing) {
+					missingItems.add(id.toString());
+				}
+			} catch (RuntimeException e) {
+				LOGGER.warn("[cdevdumpicons] item {}: {}", id, e.toString());
+			}
+		}
 
-        JsonObject totals = new JsonObject();
-        counts.forEach((k, n) -> totals.addProperty(k.name(), n));
-        totals.addProperty("error", errors);
-        totals.addProperty("missingItemModels", missingItems.size());
+		JsonObject totals = new JsonObject();
+		counts.forEach((k, n) -> totals.addProperty(k.name(), n));
+		totals.addProperty("error", errors);
+		totals.addProperty("missingItemModels", missingItems.size());
 
-        JsonObject out = new JsonObject();
-        out.addProperty("generated", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
-        out.add("totals", totals);
-        out.add("blocks", blocks);
-        out.add("missingItemModels", missingItems);
+		JsonObject out = new JsonObject();
+		out.addProperty("generated", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")));
+		out.add("totals", totals);
+		out.add("blocks", blocks);
+		out.add("missingItemModels", missingItems);
 
-        Path dir = FMLPaths.GAMEDIR.get().resolve("kubejs/exported");
-        try {
-            Files.createDirectories(dir);
-            Files.writeString(dir.resolve("wthit_icons.json"),
-                    new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(out), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            LOGGER.error("[cdevdumpicons] could not write {}", dir, e);
-            return "write failed: " + e.getMessage();
-        }
-        String summary = totals.toString();
-        LOGGER.info("[cdevdumpicons] {} ({} ms)", summary, (System.nanoTime() - start) / 1_000_000);
-        return summary;
-    }
+		Path dir = FMLPaths.GAMEDIR.get().resolve("kubejs/exported");
+		try {
+			Files.createDirectories(dir);
+			Files.writeString(dir.resolve("wthit_icons.json"),
+					new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create().toJson(out), StandardCharsets.UTF_8);
+		} catch (IOException e) {
+			LOGGER.error("[cdevdumpicons] could not write {}", dir, e);
+			return "write failed: " + e.getMessage();
+		}
+		String summary = totals.toString();
+		LOGGER.info("[cdevdumpicons] {} ({} ms)", summary, (System.nanoTime() - start) / 1_000_000);
+		return summary;
+	}
 }

@@ -21,10 +21,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = SpawnPlacements.class, remap = false)
 public abstract class SpawnPlacementsConditionsMixin {
 
-    @Inject(method = "m_217074_", at = @At("HEAD"), cancellable = true, remap = false)
-    private static <T extends Entity> void creativeengineering$conditions(EntityType<T> type, ServerLevelAccessor level,
-            MobSpawnType reason, BlockPos pos, RandomSource random, CallbackInfoReturnable<Boolean> cir) {
-        Boolean verdict = SpawnConditions.check(type, level, reason, pos);
-        if (verdict != null) cir.setReturnValue(verdict);
-    }
+	@Inject(method = "m_217074_", at = @At("HEAD"), cancellable = true, remap = false)
+	private static <T extends Entity> void creativeengineering$conditions(EntityType<T> type, ServerLevelAccessor level,
+			MobSpawnType reason, BlockPos pos, RandomSource random, CallbackInfoReturnable<Boolean> cir) {
+		Boolean verdict = SpawnConditions.check(type, level, reason, pos);
+		if (verdict != null) cir.setReturnValue(verdict);
+	}
 }

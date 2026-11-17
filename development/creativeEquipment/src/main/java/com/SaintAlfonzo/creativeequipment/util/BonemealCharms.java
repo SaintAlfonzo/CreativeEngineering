@@ -17,9 +17,9 @@ import net.minecraft.world.item.Item;
  */
 public final class BonemealCharms {
 
-    public static final TagKey<Item> TAG =
-            TagKey.create(Registry.ITEM_REGISTRY,
-                    new ResourceLocation("creativeequipment", "bonemeal_charms"));
+	public static final TagKey<Item> TAG =
+			TagKey.create(Registry.ITEM_REGISTRY,
+					new ResourceLocation("creativeequipment", "bonemeal_charms"));
 
-    private BonemealCharms() {}
+	private BonemealCharms() {}
 }

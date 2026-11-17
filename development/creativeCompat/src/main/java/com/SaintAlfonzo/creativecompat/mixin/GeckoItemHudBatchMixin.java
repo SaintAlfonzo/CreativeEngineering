@@ -17,10 +17,10 @@ import software.bernie.geckolib3.renderers.geo.GeoItemRenderer;
 @Mixin(value = GeoItemRenderer.class, remap = false)
 public abstract class GeckoItemHudBatchMixin {
 
-    @Redirect(method = "m_108829_", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;m_109911_()V"))
-    private void creativecompat$keepHudBatch(MultiBufferSource.BufferSource source) {
-        if (!GeckoHudBatch.isItemBatch(source)) source.endBatch();
-    }
+	@Redirect(method = "m_108829_", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraft/client/renderer/MultiBufferSource$BufferSource;m_109911_()V"))
+	private void creativecompat$keepHudBatch(MultiBufferSource.BufferSource source) {
+		if (!GeckoHudBatch.isItemBatch(source)) source.endBatch();
+	}
 }

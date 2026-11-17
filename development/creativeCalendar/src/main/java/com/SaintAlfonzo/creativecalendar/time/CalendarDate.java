@@ -12,29 +12,29 @@ import sereneseasons.api.season.Season;
  * one off until the next new year; /ccaltime date ({@link TimeDate}) moves both.
  */
 public final class CalendarDate {
-    private CalendarDate() {}
+	private CalendarDate() {}
 
-    public static long worldDay(Level level) {
-        return Math.floorDiv(level.getDayTime() - TimeSettings.firstSunrise(), (long) TimeSettings.DAY_UNITS);
-    }
+	public static long worldDay(Level level) {
+		return Math.floorDiv(level.getDayTime() - TimeSettings.firstSunrise(), (long) TimeSettings.DAY_UNITS);
+	}
 
-    public static int year(Level level, ISeasonState state) {
-        long years = -Math.floorDiv(state.getDay() - worldDay(level), (long) TimeSettings.yearDays()); // ceiling
-        return (int) Math.max(1, years + 1);
-    }
+	public static int year(Level level, ISeasonState state) {
+		long years = -Math.floorDiv(state.getDay() - worldDay(level), (long) TimeSettings.yearDays()); // ceiling
+		return (int) Math.max(1, years + 1);
+	}
 
-    public static Season.SubSeason next(ISeasonState state) {
-        return Season.SubSeason.VALUES[(state.getSubSeason().ordinal() + 1) % Season.SubSeason.VALUES.length];
-    }
+	public static Season.SubSeason next(ISeasonState state) {
+		return Season.SubSeason.VALUES[(state.getSubSeason().ordinal() + 1) % Season.SubSeason.VALUES.length];
+	}
 
-    /** Days to the next sub-season (1 on its last day) and the real minutes until then, at the configured speeds. */
-    public static int daysLeft(ISeasonState state) {
-        int ticksLeft = state.getSubSeasonDuration() - state.getSeasonCycleTicks() % state.getSubSeasonDuration();
-        return (int) Math.ceil(ticksLeft / (double) state.getDayDuration());
-    }
+	/** Days to the next sub-season (1 on its last day) and the real minutes until then, at the configured speeds. */
+	public static int daysLeft(ISeasonState state) {
+		int ticksLeft = state.getSubSeasonDuration() - state.getSeasonCycleTicks() % state.getSubSeasonDuration();
+		return (int) Math.ceil(ticksLeft / (double) state.getDayDuration());
+	}
 
-    public static double minutesLeft(Level level, ISeasonState state) {
-        int ticksLeft = state.getSubSeasonDuration() - state.getSeasonCycleTicks() % state.getSubSeasonDuration();
-        return TimeSettings.sunSeasons() ? TimeSettings.realMinutes(level.getDayTime(), ticksLeft) : ticksLeft / 1200.0;
-    }
+	public static double minutesLeft(Level level, ISeasonState state) {
+		int ticksLeft = state.getSubSeasonDuration() - state.getSeasonCycleTicks() % state.getSubSeasonDuration();
+		return TimeSettings.sunSeasons() ? TimeSettings.realMinutes(level.getDayTime(), ticksLeft) : ticksLeft / 1200.0;
+	}
 }

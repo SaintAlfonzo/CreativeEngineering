@@ -42,78 +42,78 @@ import org.slf4j.Logger;
  */
 public final class CornDelightCompat {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    public static final ResourceLocation COB_PIPE = new ResourceLocation(CreativeDelight.MOD_ID, "cob_pipe");
-    private static final ResourceLocation CORN = new ResourceLocation("corn_delight", "corn");
+	private static final Logger LOGGER = LogUtils.getLogger();
+	public static final ResourceLocation COB_PIPE = new ResourceLocation(CreativeDelight.MOD_ID, "cob_pipe");
+	private static final ResourceLocation CORN = new ResourceLocation("corn_delight", "corn");
 
-    /** The registered pipe, looked up once (Mob.getEquipmentSlotForItem asks for every stack). */
-    private static volatile Item pipe;
+	/** The registered pipe, looked up once (Mob.getEquipmentSlotForItem asks for every stack). */
+	private static volatile Item pipe;
 
-    private CornDelightCompat() {}
+	private CornDelightCompat() {}
 
-    public static boolean isCobPipe(ItemStack stack) {
-        if (stack.isEmpty()) return false;
-        Item p = pipe;
-        if (p == null) {
-            if (!COB_PIPE.equals(ForgeRegistries.ITEMS.getKey(stack.getItem()))) return false;
-            pipe = p = stack.getItem();
-        }
-        return stack.getItem() == p;
-    }
+	public static boolean isCobPipe(ItemStack stack) {
+		if (stack.isEmpty()) return false;
+		Item p = pipe;
+		if (p == null) {
+			if (!COB_PIPE.equals(ForgeRegistries.ITEMS.getKey(stack.getItem()))) return false;
+			pipe = p = stack.getItem();
+		}
+		return stack.getItem() == p;
+	}
 
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        ItemStack stack = event.getItemStack();
-        if (!isCobPipe(stack)) return;
-        Player player = event.getEntity();
-        boolean curios = ModList.get().isLoaded("curios");
-        boolean equipped = (curios && CornDelightCurios.equip(player, "face", stack))
-                || equipHead(player, stack)
-                || (curios && CornDelightCurios.equip(player, "head", stack));
-        if (!equipped) return;
-        player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_GENERIC,
-                SoundSource.PLAYERS, 1.0F, 1.0F);
-        event.setCanceled(true);
-        event.setCancellationResult(InteractionResult.sidedSuccess(player.level.isClientSide));
-    }
+	@SubscribeEvent
+	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+		ItemStack stack = event.getItemStack();
+		if (!isCobPipe(stack)) return;
+		Player player = event.getEntity();
+		boolean curios = ModList.get().isLoaded("curios");
+		boolean equipped = (curios && CornDelightCurios.equip(player, "face", stack))
+				|| equipHead(player, stack)
+				|| (curios && CornDelightCurios.equip(player, "head", stack));
+		if (!equipped) return;
+		player.level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.ARMOR_EQUIP_GENERIC,
+				SoundSource.PLAYERS, 1.0F, 1.0F);
+		event.setCanceled(true);
+		event.setCancellationResult(InteractionResult.sidedSuccess(player.level.isClientSide));
+	}
 
-    private static boolean equipHead(Player player, ItemStack stack) {
-        if (!player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) return false;
-        player.setItemSlot(EquipmentSlot.HEAD, stack.split(1));
-        return true;
-    }
+	private static boolean equipHead(Player player, ItemStack stack) {
+		if (!player.getItemBySlot(EquipmentSlot.HEAD).isEmpty()) return false;
+		player.setItemSlot(EquipmentSlot.HEAD, stack.split(1));
+		return true;
+	}
 
-    /**
-     * Common setup, main thread (enqueueWork). The two fields are static final in vanilla (the Veggies and Vintage ports
-     * make them public non-final by AT); written with {@code sun.misc.Unsafe} either way, as util.ModDisplayNames.
-     */
-    @SuppressWarnings("unchecked")
-    public static void addVillagerFood() {
-        Item corn = ForgeRegistries.ITEMS.getValue(CORN);
-        if (corn == null || !CORN.equals(ForgeRegistries.ITEMS.getKey(corn))) {
-            LOGGER.warn("[corn-delight] {} not registered; villager food unchanged", CORN);
-            return;
-        }
-        try {
-            Field wantedField = ObfuscationReflectionHelper.findField(Villager.class, "f_35372_");   // WANTED_ITEMS
-            Field pointsField = ObfuscationReflectionHelper.findField(Villager.class, "f_35369_");   // FOOD_POINTS
-            Set<Item> wanted = new HashSet<>((Set<Item>) wantedField.get(null));
-            wanted.add(corn);
-            Map<Item, Integer> points = new HashMap<>();
-            points.put(corn, 1);
-            points.putAll((Map<Item, Integer>) pointsField.get(null));   // a value already set elsewhere wins
-            setStatic(wantedField, ImmutableSet.copyOf(wanted));
-            setStatic(pointsField, ImmutableMap.copyOf(points));
-            LOGGER.info("[corn-delight] corn is villager food ({} wanted items, {} food items)", wanted.size(), points.size());
-        } catch (ReflectiveOperationException | RuntimeException e) {
-            LOGGER.error("[corn-delight] could not add corn to the villager food", e);
-        }
-    }
+	/**
+	 * Common setup, main thread (enqueueWork). The two fields are static final in vanilla (the Veggies and Vintage ports
+	 * make them public non-final by AT); written with {@code sun.misc.Unsafe} either way, as util.ModDisplayNames.
+	 */
+	@SuppressWarnings("unchecked")
+	public static void addVillagerFood() {
+		Item corn = ForgeRegistries.ITEMS.getValue(CORN);
+		if (corn == null || !CORN.equals(ForgeRegistries.ITEMS.getKey(corn))) {
+			LOGGER.warn("[corn-delight] {} not registered; villager food unchanged", CORN);
+			return;
+		}
+		try {
+			Field wantedField = ObfuscationReflectionHelper.findField(Villager.class, "f_35372_");   // WANTED_ITEMS
+			Field pointsField = ObfuscationReflectionHelper.findField(Villager.class, "f_35369_");   // FOOD_POINTS
+			Set<Item> wanted = new HashSet<>((Set<Item>) wantedField.get(null));
+			wanted.add(corn);
+			Map<Item, Integer> points = new HashMap<>();
+			points.put(corn, 1);
+			points.putAll((Map<Item, Integer>) pointsField.get(null));   // a value already set elsewhere wins
+			setStatic(wantedField, ImmutableSet.copyOf(wanted));
+			setStatic(pointsField, ImmutableMap.copyOf(points));
+			LOGGER.info("[corn-delight] corn is villager food ({} wanted items, {} food items)", wanted.size(), points.size());
+		} catch (ReflectiveOperationException | RuntimeException e) {
+			LOGGER.error("[corn-delight] could not add corn to the villager food", e);
+		}
+	}
 
-    private static void setStatic(Field field, Object value) throws ReflectiveOperationException {
-        Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
-        f.setAccessible(true);
-        sun.misc.Unsafe unsafe = (sun.misc.Unsafe) f.get(null);
-        unsafe.putObject(unsafe.staticFieldBase(field), unsafe.staticFieldOffset(field), value);
-    }
+	private static void setStatic(Field field, Object value) throws ReflectiveOperationException {
+		Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
+		f.setAccessible(true);
+		sun.misc.Unsafe unsafe = (sun.misc.Unsafe) f.get(null);
+		unsafe.putObject(unsafe.staticFieldBase(field), unsafe.staticFieldOffset(field), value);
+	}
 }

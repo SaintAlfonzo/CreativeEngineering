@@ -26,27 +26,27 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ExcavateHistory.class, remap = false)
 public class OreExcavationHistoryMixin implements VeinUndoAccess.History {
 
-    @Shadow(remap = false)
-    @Final
-    private Deque<BlockHistory> history;
+	@Shadow(remap = false)
+	@Final
+	private Deque<BlockHistory> history;
 
-    @Shadow(remap = false)
-    private long experience;
+	@Shadow(remap = false)
+	private long experience;
 
-    @Override
-    public Deque<BlockHistory> creativeengineering$history() {
-        return history;
-    }
+	@Override
+	public Deque<BlockHistory> creativeengineering$history() {
+		return history;
+	}
 
-    @Inject(method = "tickRestore", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$waitForPlayer(MinecraftServer server, Player player, CallbackInfoReturnable<Boolean> cir) {
-        if (player == null) cir.setReturnValue(false);
-    }
+	@Inject(method = "tickRestore", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$waitForPlayer(MinecraftServer server, Player player, CallbackInfoReturnable<Boolean> cir) {
+		if (player == null) cir.setReturnValue(false);
+	}
 
-    @Inject(method = "tickRestore", remap = false, require = 1,
-            at = @At(value = "INVOKE", shift = At.Shift.AFTER, remap = false,
-                    target = "Loreexcavation/utils/XPHelper;addXP(Lnet/minecraft/world/entity/player/Player;JZ)V"))
-    private void creativeengineering$takeXpOnce(MinecraftServer server, Player player, CallbackInfoReturnable<Boolean> cir) {
-        experience = 0L;
-    }
+	@Inject(method = "tickRestore", remap = false, require = 1,
+			at = @At(value = "INVOKE", shift = At.Shift.AFTER, remap = false,
+					target = "Loreexcavation/utils/XPHelper;addXP(Lnet/minecraft/world/entity/player/Player;JZ)V"))
+	private void creativeengineering$takeXpOnce(MinecraftServer server, Player player, CallbackInfoReturnable<Boolean> cir) {
+		experience = 0L;
+	}
 }

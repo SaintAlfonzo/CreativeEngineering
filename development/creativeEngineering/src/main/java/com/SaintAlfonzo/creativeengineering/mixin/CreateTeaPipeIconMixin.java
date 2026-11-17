@@ -14,11 +14,11 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(targets = "com.simibubi.create.content.fluids.OpenEndedPipe$TeaEffectHandler", remap = false)
 public abstract class CreateTeaPipeIconMixin {
 
-    @ModifyArg(method = "applyEffects", require = 0, remap = false,
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/effect/MobEffectInstance;<init>(Lnet/minecraft/world/effect/MobEffect;IIZZZ)V"),
-            index = 5)
-    private boolean creativeengineering$showIcon(boolean showIcon) {
-        return true;
-    }
+	@ModifyArg(method = "applyEffects", require = 0, remap = false,
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/world/effect/MobEffectInstance;<init>(Lnet/minecraft/world/effect/MobEffect;IIZZZ)V"),
+			index = 5)
+	private boolean creativeengineering$showIcon(boolean showIcon) {
+		return true;
+	}
 }

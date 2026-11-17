@@ -12,37 +12,37 @@ import net.minecraft.world.entity.Entity;
  */
 public final class PassSave {
 
-    private PassSave() {}
+	private PassSave() {}
 
-    public static final String KEY = "CreativeCompatPass";
+	public static final String KEY = "CreativeCompatPass";
 
-    public static void save(Entity e, CompoundTag tag) {
-        PassState st = PassThrough.state(e, false);
-        if (st == null || !st.needsSave()) return;
-        CompoundTag t = new CompoundTag();
-        if (st.itemStuck) {
-            t.putLong("StuckCell", st.stuckCell);
-            t.putDouble("StuckX", st.stuckX);
-            t.putDouble("StuckY", st.stuckY);
-            t.putDouble("StuckZ", st.stuckZ);
-            t.putBoolean("PriorNoGravity", st.priorNoGravity);
-        }
-        if (st.shortLife) t.putBoolean("ShortLife", true);
-        tag.put(KEY, t);
-    }
+	public static void save(Entity e, CompoundTag tag) {
+		PassState st = PassThrough.state(e, false);
+		if (st == null || !st.needsSave()) return;
+		CompoundTag t = new CompoundTag();
+		if (st.itemStuck) {
+			t.putLong("StuckCell", st.stuckCell);
+			t.putDouble("StuckX", st.stuckX);
+			t.putDouble("StuckY", st.stuckY);
+			t.putDouble("StuckZ", st.stuckZ);
+			t.putBoolean("PriorNoGravity", st.priorNoGravity);
+		}
+		if (st.shortLife) t.putBoolean("ShortLife", true);
+		tag.put(KEY, t);
+	}
 
-    public static void load(Entity e, CompoundTag tag) {
-        if (!tag.contains(KEY, Tag.TAG_COMPOUND)) return;
-        CompoundTag t = tag.getCompound(KEY);
-        PassState st = PassThrough.state(e, true);
-        if (t.contains("StuckCell", Tag.TAG_LONG)) {
-            st.itemStuck = true;
-            st.stuckCell = t.getLong("StuckCell");
-            st.stuckX = t.getDouble("StuckX");
-            st.stuckY = t.getDouble("StuckY");
-            st.stuckZ = t.getDouble("StuckZ");
-            st.priorNoGravity = t.getBoolean("PriorNoGravity");
-        }
-        st.shortLife = t.getBoolean("ShortLife");
-    }
+	public static void load(Entity e, CompoundTag tag) {
+		if (!tag.contains(KEY, Tag.TAG_COMPOUND)) return;
+		CompoundTag t = tag.getCompound(KEY);
+		PassState st = PassThrough.state(e, true);
+		if (t.contains("StuckCell", Tag.TAG_LONG)) {
+			st.itemStuck = true;
+			st.stuckCell = t.getLong("StuckCell");
+			st.stuckX = t.getDouble("StuckX");
+			st.stuckY = t.getDouble("StuckY");
+			st.stuckZ = t.getDouble("StuckZ");
+			st.priorNoGravity = t.getBoolean("PriorNoGravity");
+		}
+		st.shortLife = t.getBoolean("ShortLife");
+	}
 }

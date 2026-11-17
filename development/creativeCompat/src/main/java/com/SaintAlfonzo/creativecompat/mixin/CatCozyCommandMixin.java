@@ -25,17 +25,17 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 @Mixin(value = Cat.class, priority = 900, remap = false)
 public abstract class CatCozyCommandMixin {
 
-    @Inject(method = "m_6071_",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Cat;m_21839_(Z)V", ordinal = 0,
-                    remap = false),
-            cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT, remap = false)
-    private void creativecompat$cozyKeepsSit(Player player, InteractionHand hand,
-                                             CallbackInfoReturnable<InteractionResult> cir,
-                                             ItemStack stack, Item item, InteractionResult result) {
-        Cat self = (Cat) (Object) this;
-        if (CozyCats.isCozy(self)) {
-            self.setOrderedToSit(!self.isOrderedToSit());
-            cir.setReturnValue(result);
-        }
-    }
+	@Inject(method = "m_6071_",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Cat;m_21839_(Z)V", ordinal = 0,
+					remap = false),
+			cancellable = true, locals = LocalCapture.CAPTURE_FAILSOFT, remap = false)
+	private void creativecompat$cozyKeepsSit(Player player, InteractionHand hand,
+											 CallbackInfoReturnable<InteractionResult> cir,
+											 ItemStack stack, Item item, InteractionResult result) {
+		Cat self = (Cat) (Object) this;
+		if (CozyCats.isCozy(self)) {
+			self.setOrderedToSit(!self.isOrderedToSit());
+			cir.setReturnValue(result);
+		}
+	}
 }

@@ -13,9 +13,9 @@ import java.util.Collection;
 /** The inventory's effect list (9.5): diet effects hide while the widget is on (it shows them instead). */
 @Mixin(EffectRenderingInventoryScreen.class)
 public abstract class EffectRenderingInventoryScreenMixin {
-    @Redirect(method = "renderEffects", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"))
-    private Collection<MobEffectInstance> solrp$filterInventory(LocalPlayer player) {
-        return EffectFilter.inventory(player.getActiveEffects());
-    }
+	@Redirect(method = "renderEffects", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"))
+	private Collection<MobEffectInstance> solrp$filterInventory(LocalPlayer player) {
+		return EffectFilter.inventory(player.getActiveEffects());
+	}
 }

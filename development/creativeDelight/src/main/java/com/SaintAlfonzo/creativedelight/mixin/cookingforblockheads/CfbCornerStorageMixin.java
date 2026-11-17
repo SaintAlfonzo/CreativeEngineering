@@ -27,31 +27,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = CornerBlockEntity.class, remap = false)
 public abstract class CfbCornerStorageMixin implements BalmContainerProvider, CornerStorage.Holder {
 
-    @Unique
-    private CornerContainer ce$container;
+	@Unique
+	private CornerContainer ce$container;
 
-    @Unique
-    private DefaultKitchenItemProvider ce$itemProvider;
+	@Unique
+	private DefaultKitchenItemProvider ce$itemProvider;
 
-    @Override
-    public CornerContainer ce$cornerStorage() {
-        if (ce$container == null) {
-            ce$container = new CornerContainer((BlockEntity) (Object) this,
-                    CookingForBlockheadsConfig.getActive().largeCounters ? 54 : 27);
-        }
-        return ce$container;
-    }
+	@Override
+	public CornerContainer ce$cornerStorage() {
+		if (ce$container == null) {
+			ce$container = new CornerContainer((BlockEntity) (Object) this,
+					CookingForBlockheadsConfig.getActive().largeCounters ? 54 : 27);
+		}
+		return ce$container;
+	}
 
-    @Override
-    public Container getContainer() {
-        return ce$cornerStorage();
-    }
+	@Override
+	public Container getContainer() {
+		return ce$cornerStorage();
+	}
 
-    @Inject(method = "getProviders", at = @At("RETURN"))
-    private void ce$kitchenItems(CallbackInfoReturnable<List<BalmProvider<?>>> cir) {
-        if (ce$itemProvider == null) {
-            ce$itemProvider = new DefaultKitchenItemProvider(ce$cornerStorage());
-        }
-        cir.getReturnValue().add(new BalmProvider<>(IKitchenItemProvider.class, ce$itemProvider));
-    }
+	@Inject(method = "getProviders", at = @At("RETURN"))
+	private void ce$kitchenItems(CallbackInfoReturnable<List<BalmProvider<?>>> cir) {
+		if (ce$itemProvider == null) {
+			ce$itemProvider = new DefaultKitchenItemProvider(ce$cornerStorage());
+		}
+		cir.getReturnValue().add(new BalmProvider<>(IKitchenItemProvider.class, ce$itemProvider));
+	}
 }

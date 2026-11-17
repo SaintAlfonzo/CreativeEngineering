@@ -16,9 +16,9 @@ import java.util.function.Consumer;
 @Mixin(value = PluginCaller.class, remap = false)
 public abstract class JeiPluginCallerMixin {
 
-    @Redirect(method = "callOnPlugins",
-            at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
-    private static void creativecommon$callAs(Consumer<IModPlugin> func, Object plugin) {
-        JeiIngredientChanges.runAs(((IModPlugin) plugin).getPluginUid().toString(), () -> func.accept((IModPlugin) plugin));
-    }
+	@Redirect(method = "callOnPlugins",
+			at = @At(value = "INVOKE", target = "Ljava/util/function/Consumer;accept(Ljava/lang/Object;)V"))
+	private static void creativecommon$callAs(Consumer<IModPlugin> func, Object plugin) {
+		JeiIngredientChanges.runAs(((IModPlugin) plugin).getPluginUid().toString(), () -> func.accept((IModPlugin) plugin));
+	}
 }

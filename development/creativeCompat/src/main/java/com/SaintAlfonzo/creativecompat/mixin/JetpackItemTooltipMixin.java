@@ -23,10 +23,10 @@ import uwu.lopyluna.create_dd.content.items.equipment.jetpack.JetpackItem;
 @Mixin(value = JetpackItem.class, remap = false)
 public class JetpackItemTooltipMixin {
 
-    @Redirect(method = "m_7373_", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraft/world/level/Level;m_5776_()Z"))
-    private boolean creativecompat$nullSafeIsClientSide(Level level) {
-        return level != null && level.isClientSide();
-    }
+	@Redirect(method = "m_7373_", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraft/world/level/Level;m_5776_()Z"))
+	private boolean creativecompat$nullSafeIsClientSide(Level level) {
+		return level != null && level.isClientSide();
+	}
 }

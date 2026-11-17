@@ -16,32 +16,32 @@ import java.util.function.IntSupplier;
  */
 public final class CampfireRainInfo {
 
-    /**
-     * Campfires rain puts out (filled by KubeJS through block_dict.js {@code t_campfire_rain_*}); CD's CampfireRain uses
-     * these same keys. Common owns the key, so the namespace is {@code creativecommon} (creative_split.md 7.17).
-     */
-    public static final TagKey<Block> RAIN_DOUSES =
-            BlockTags.create(new ResourceLocation("creativecommon", "campfire/rain_douses"));
-    /** Blocks under a campfire that keep it lit in rain. */
-    public static final TagKey<Block> RAIN_PROOF_FUEL =
-            BlockTags.create(new ResourceLocation("creativecommon", "campfire/rain_proof_fuel"));
+	/**
+	 * Campfires rain puts out (filled by KubeJS through block_dict.js {@code t_campfire_rain_*}); CD's CampfireRain uses
+	 * these same keys. Common owns the key, so the namespace is {@code creativecommon} (creative_split.md 7.17).
+	 */
+	public static final TagKey<Block> RAIN_DOUSES =
+			BlockTags.create(new ResourceLocation("creativecommon", "campfire/rain_douses"));
+	/** Blocks under a campfire that keep it lit in rain. */
+	public static final TagKey<Block> RAIN_PROOF_FUEL =
+			BlockTags.create(new ResourceLocation("creativecommon", "campfire/rain_proof_fuel"));
 
-    private static volatile BooleanSupplier douses = () -> false;
-    private static volatile IntSupplier outTicks = () -> 160;
+	private static volatile BooleanSupplier douses = () -> false;
+	private static volatile IntSupplier outTicks = () -> 160;
 
-    private CampfireRainInfo() {}
+	private CampfireRainInfo() {}
 
-    /** Called by Creative Compat with its [campfire] rainDouses / rainOutTicks readers. */
-    public static void set(BooleanSupplier rainDouses, IntSupplier rainOutTicks) {
-        douses = rainDouses;
-        outTicks = rainOutTicks;
-    }
+	/** Called by Creative Compat with its [campfire] rainDouses / rainOutTicks readers. */
+	public static void set(BooleanSupplier rainDouses, IntSupplier rainOutTicks) {
+		douses = rainDouses;
+		outTicks = rainOutTicks;
+	}
 
-    public static boolean rainDouses() {
-        return douses.getAsBoolean();
-    }
+	public static boolean rainDouses() {
+		return douses.getAsBoolean();
+	}
 
-    public static int rainOutTicks() {
-        return outTicks.getAsInt();
-    }
+	public static int rainOutTicks() {
+		return outTicks.getAsInt();
+	}
 }

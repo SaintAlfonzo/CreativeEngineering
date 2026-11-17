@@ -13,8 +13,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(value = Minecraft.class, remap = false)
 public class ChatOpenArmMixin {
-    @Inject(method = "m_91326_", at = @At("HEAD"))
-    private void creativecommon$armChatKeyGuard(String prefix, CallbackInfo ci) {
-        ChatOpenKeyGuard.arm(prefix);
-    }
+	@Inject(method = "m_91326_", at = @At("HEAD"))
+	private void creativecommon$armChatKeyGuard(String prefix, CallbackInfo ci) {
+		ChatOpenKeyGuard.arm(prefix);
+	}
 }

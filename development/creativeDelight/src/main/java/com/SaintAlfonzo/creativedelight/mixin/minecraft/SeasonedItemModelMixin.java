@@ -20,13 +20,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ItemRenderer.class, remap = false)
 public class SeasonedItemModelMixin {
 
-    @Inject(method = "m_174264_", at = @At("RETURN"), cancellable = true)
-    private void creativeengineering$seasonedOverlay(ItemStack stack, Level level, LivingEntity entity, int seed,
-            CallbackInfoReturnable<BakedModel> cir) {
-        BakedModel base = cir.getReturnValue();
-        BakedModel seasoned = SeasonedItemModel.resolve(stack, base);
-        if (seasoned != base) {
-            cir.setReturnValue(seasoned);
-        }
-    }
+	@Inject(method = "m_174264_", at = @At("RETURN"), cancellable = true)
+	private void creativeengineering$seasonedOverlay(ItemStack stack, Level level, LivingEntity entity, int seed,
+			CallbackInfoReturnable<BakedModel> cir) {
+		BakedModel base = cir.getReturnValue();
+		BakedModel seasoned = SeasonedItemModel.resolve(stack, base);
+		if (seasoned != base) {
+			cir.setReturnValue(seasoned);
+		}
+	}
 }

@@ -35,12 +35,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = IcebergClient.class, remap = false)
 public class IcebergTitleBreakMixin {
 
-    @Inject(method = "onGatherComponentsEventEnd", remap = false, require = 1, at = @At("TAIL"))
-    private static void creativecommon$breakAfterModelSpacer(RenderTooltipEvent.GatherComponents event, CallbackInfo ci) {
-        List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
-        if (elements.size() < 4) return;
-        if (!(elements.get(0).right().orElse(null) instanceof ItemModelComponent)) return;
-        if (!(elements.get(2).right().orElse(null) instanceof Tooltips.TitleBreakComponent)) return;
-        elements.add(3, elements.remove(2));
-    }
+	@Inject(method = "onGatherComponentsEventEnd", remap = false, require = 1, at = @At("TAIL"))
+	private static void creativecommon$breakAfterModelSpacer(RenderTooltipEvent.GatherComponents event, CallbackInfo ci) {
+		List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
+		if (elements.size() < 4) return;
+		if (!(elements.get(0).right().orElse(null) instanceof ItemModelComponent)) return;
+		if (!(elements.get(2).right().orElse(null) instanceof Tooltips.TitleBreakComponent)) return;
+		elements.add(3, elements.remove(2));
+	}
 }

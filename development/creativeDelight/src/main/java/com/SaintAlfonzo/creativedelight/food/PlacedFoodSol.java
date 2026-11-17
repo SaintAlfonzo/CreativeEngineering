@@ -45,115 +45,115 @@ import java.util.Map;
  */
 public final class PlacedFoodSol {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    public static final String FILE = "kubejs/generation_scripts/food/placed_food_slices.json";
-    private static final TagKey<Item> KNIVES = ItemTags.create(new ResourceLocation("forge", "tools/knives"));
+	private static final Logger LOGGER = LogUtils.getLogger();
+	public static final String FILE = "kubejs/generation_scripts/food/placed_food_slices.json";
+	private static final TagKey<Item> KNIVES = ItemTags.create(new ResourceLocation("forge", "tools/knives"));
 
-    private static Map<Block, Item> slices = Map.of();
+	private static Map<Block, Item> slices = Map.of();
 
-    private PlacedFoodSol() {}
+	private PlacedFoodSol() {}
 
-    @SubscribeEvent
-    public static void onServerAboutToStart(ServerAboutToStartEvent event) {
-        slices = load();
-    }
+	@SubscribeEvent
+	public static void onServerAboutToStart(ServerAboutToStartEvent event) {
+		slices = load();
+	}
 
-    private static final ResourceLocation SUPP_DIRECTIONAL_CAKE = new ResourceLocation("supplementaries", "directional_cake");
+	private static final ResourceLocation SUPP_DIRECTIONAL_CAKE = new ResourceLocation("supplementaries", "directional_cake");
 
-    private static Map<Block, Item> load() {
-        Map<Block, Item> out = new HashMap<>();
-        try {
-            String text = WorldgenFiles.readText(FILE);
-            if (text == null) {
-                LOGGER.warn("PlacedFoodSol: {} is missing; only pies count", FILE);
-                return out;
-            }
-            JsonObject blocks = JsonParser.parseString(text).getAsJsonObject().getAsJsonObject("blocks");
-            for (var e : blocks.entrySet()) {
-                Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(e.getKey()));
-                Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(e.getValue().getAsString()));
-                if (block == null || block == Blocks.AIR) continue; // mod not installed
-                if (item == null || !item.isEdible()) {
-                    LOGGER.warn("PlacedFoodSol: {} -> {} is not a food item, skipped", e.getKey(), e.getValue().getAsString());
-                    continue;
-                }
-                out.put(block, item);
-            }
-        } catch (Exception ex) {
-            LOGGER.error("PlacedFoodSol: could not read {}", FILE, ex);
-        }
-        return out;
-    }
+	private static Map<Block, Item> load() {
+		Map<Block, Item> out = new HashMap<>();
+		try {
+			String text = WorldgenFiles.readText(FILE);
+			if (text == null) {
+				LOGGER.warn("PlacedFoodSol: {} is missing; only pies count", FILE);
+				return out;
+			}
+			JsonObject blocks = JsonParser.parseString(text).getAsJsonObject().getAsJsonObject("blocks");
+			for (var e : blocks.entrySet()) {
+				Block block = ForgeRegistries.BLOCKS.getValue(new ResourceLocation(e.getKey()));
+				Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(e.getValue().getAsString()));
+				if (block == null || block == Blocks.AIR) continue; // mod not installed
+				if (item == null || !item.isEdible()) {
+					LOGGER.warn("PlacedFoodSol: {} -> {} is not a food item, skipped", e.getKey(), e.getValue().getAsString());
+					continue;
+				}
+				out.put(block, item);
+			}
+		} catch (Exception ex) {
+			LOGGER.error("PlacedFoodSol: could not read {}", FILE, ex);
+		}
+		return out;
+	}
 
-    /** After {@code ServerPlayerGameMode#useItemOn}; {@code before} is the state at {@code pos} before the use. */
-    public static void afterUse(ServerPlayer player, Level level, BlockPos pos, BlockState before, ItemStack held,
-                                InteractionResult result) {
-        if (!result.consumesAction() || player instanceof FakePlayer || held.is(KNIVES)) return;
-        BlockState after = level.getBlockState(pos);
-        if (after == before) return;
+	/** After {@code ServerPlayerGameMode#useItemOn}; {@code before} is the state at {@code pos} before the use. */
+	public static void afterUse(ServerPlayer player, Level level, BlockPos pos, BlockState before, ItemStack held,
+								InteractionResult result) {
+		if (!result.consumesAction() || player instanceof FakePlayer || held.is(KNIVES)) return;
+		BlockState after = level.getBlockState(pos);
+		if (after == before) return;
 
-        Block block = before.getBlock();
-        Item slice;
-        boolean applePie = true;
-        if (after.getBlock() == block || after.isAir()) {
-            // Apple Pie records the plain vanilla cake itself (as the cake slice); the Food Dictionary does not
-            applePie = block != Blocks.CAKE;
-            slice = sliceFor(block);
-        } else if (block instanceof AbstractCandleBlock) {
-            slice = sliceFor(after.getBlock()); // candle cake bitten: it is now its cake with one bite
-        } else if (SUPP_DIRECTIONAL_CAKE.equals(ForgeRegistries.BLOCKS.getKey(after.getBlock()))) {
-            // Supplementaries swaps the cake (or a double cake's top) for its directional cake on the first bite, so the
-            // vanilla bite Spice of Life sees never runs (plan_bugfix_1114 4.3, TODO food/types-and-tuning #39)
-            slice = sliceFor(after.getBlock());
-        } else {
-            return;
-        }
-        if (slice == null) return;
-        if (applePie && ModList.get().isLoaded("solapplepie")) {
-            SolBridge.record(player, slice);
-        }
-        if (ModList.get().isLoaded("solcarrot")) {
-            CarrotBridge.record(player, slice);
-        }
-    }
+		Block block = before.getBlock();
+		Item slice;
+		boolean applePie = true;
+		if (after.getBlock() == block || after.isAir()) {
+			// Apple Pie records the plain vanilla cake itself (as the cake slice); the Food Dictionary does not
+			applePie = block != Blocks.CAKE;
+			slice = sliceFor(block);
+		} else if (block instanceof AbstractCandleBlock) {
+			slice = sliceFor(after.getBlock()); // candle cake bitten: it is now its cake with one bite
+		} else if (SUPP_DIRECTIONAL_CAKE.equals(ForgeRegistries.BLOCKS.getKey(after.getBlock()))) {
+			// Supplementaries swaps the cake (or a double cake's top) for its directional cake on the first bite, so the
+			// vanilla bite Spice of Life sees never runs (plan_bugfix_1114 4.3, TODO food/types-and-tuning #39)
+			slice = sliceFor(after.getBlock());
+		} else {
+			return;
+		}
+		if (slice == null) return;
+		if (applePie && ModList.get().isLoaded("solapplepie")) {
+			SolBridge.record(player, slice);
+		}
+		if (ModList.get().isLoaded("solcarrot")) {
+			CarrotBridge.record(player, slice);
+		}
+	}
 
-    private static Item sliceFor(Block block) {
-        Item mapped = slices.get(block);
-        if (mapped != null) return mapped;
-        return FdPies.slice(block);
-    }
+	private static Item sliceFor(Block block) {
+		Item mapped = slices.get(block);
+		if (mapped != null) return mapped;
+		return FdPies.slice(block);
+	}
 
-    /** Farmer's Delight classes stay out of the outer class, so it loads without the mod. */
-    private static final class FdPies {
-        static Item slice(Block block) {
-            if (block instanceof vectorwing.farmersdelight.common.block.PieBlock pie) {
-                ItemStack stack = pie.getPieSliceItem();
-                return stack.isEmpty() ? null : stack.getItem();
-            }
-            return null;
-        }
-    }
+	/** Farmer's Delight classes stay out of the outer class, so it loads without the mod. */
+	private static final class FdPies {
+		static Item slice(Block block) {
+			if (block instanceof vectorwing.farmersdelight.common.block.PieBlock pie) {
+				ItemStack stack = pie.getPieSliceItem();
+				return stack.isEmpty() ? null : stack.getItem();
+			}
+			return null;
+		}
+	}
 
-    /**
-     * Food Dictionary (Spice of Life: Carrot Edition, food_dictionary.md P1). Its tracker only listens to the item
-     * finish event, so a bite from the world is recorded here the way its {@code FoodTracker.onFoodEaten} does it,
-     * without the milestone sounds, particles and messages (switched off in the pack config). Carrot classes stay out
-     * of the outer class, so it loads without the mod.
-     */
-    private static final class CarrotBridge {
-        static void record(ServerPlayer player, Item slice) {
-            if (com.cazsius.solcarrot.SOLCarrotConfig.limitProgressionToSurvival()
-                    && player.gameMode.getGameModeForPlayer() != net.minecraft.world.level.GameType.SURVIVAL) return;
-            com.cazsius.solcarrot.tracking.FoodList.get(player).addFood(slice);
-            com.cazsius.solcarrot.tracking.MaxHealthHandler.updateFoodHPModifier(player);
-            com.cazsius.solcarrot.tracking.CapabilityHandler.syncFoodList(player);
-        }
-    }
+	/**
+	 * Food Dictionary (Spice of Life: Carrot Edition, food_dictionary.md P1). Its tracker only listens to the item
+	 * finish event, so a bite from the world is recorded here the way its {@code FoodTracker.onFoodEaten} does it,
+	 * without the milestone sounds, particles and messages (switched off in the pack config). Carrot classes stay out
+	 * of the outer class, so it loads without the mod.
+	 */
+	private static final class CarrotBridge {
+		static void record(ServerPlayer player, Item slice) {
+			if (com.cazsius.solcarrot.SOLCarrotConfig.limitProgressionToSurvival()
+					&& player.gameMode.getGameModeForPlayer() != net.minecraft.world.level.GameType.SURVIVAL) return;
+			com.cazsius.solcarrot.tracking.FoodList.get(player).addFood(slice);
+			com.cazsius.solcarrot.tracking.MaxHealthHandler.updateFoodHPModifier(player);
+			com.cazsius.solcarrot.tracking.CapabilityHandler.syncFoodList(player);
+		}
+	}
 
-    /** Spice of Life classes stay out of the outer class, so it loads without the mod. */
-    private static final class SolBridge {
-        static void record(ServerPlayer player, Item slice) {
-            com.tarinoita.solsweetpotato.tracking.FoodTracker.updateFoodList(slice, player);
-        }
-    }
+	/** Spice of Life classes stay out of the outer class, so it loads without the mod. */
+	private static final class SolBridge {
+		static void record(ServerPlayer player, Item slice) {
+			com.tarinoita.solsweetpotato.tracking.FoodTracker.updateFoodList(slice, player);
+		}
+	}
 }

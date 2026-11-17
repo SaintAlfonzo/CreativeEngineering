@@ -10,13 +10,13 @@ import net.minecraft.resources.ResourceLocation;
  * jei/jei-coverage #24).
  */
 public final class JeiArrow {
-    public static final int WIDTH = 24;
-    public static final int HEIGHT = 17;
-    private static final ResourceLocation GUI = new ResourceLocation("jei", "textures/gui/gui_vanilla.png");
+	public static final int WIDTH = 24;
+	public static final int HEIGHT = 17;
+	private static final ResourceLocation GUI = new ResourceLocation("jei", "textures/gui/gui_vanilla.png");
 
-    private JeiArrow() {}
+	private JeiArrow() {}
 
-    public static IDrawableStatic create(IGuiHelper helper) {
-        return helper.createDrawable(GUI, 82, 128, WIDTH, HEIGHT);
-    }
+	public static IDrawableStatic create(IGuiHelper helper) {
+		return helper.createDrawable(GUI, 82, 128, WIDTH, HEIGHT);
+	}
 }

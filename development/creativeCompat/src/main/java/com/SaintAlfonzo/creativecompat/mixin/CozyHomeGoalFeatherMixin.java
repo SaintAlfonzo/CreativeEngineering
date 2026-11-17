@@ -21,12 +21,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = CatHomeGoal.class, remap = false)
 public abstract class CozyHomeGoalFeatherMixin {
 
-    @Shadow(remap = false) @Final private ImprovedCatEntity cat;
+	@Shadow(remap = false) @Final private ImprovedCatEntity cat;
 
-    @Inject(method = "m_8036_", at = @At("RETURN"), cancellable = true, remap = false)
-    private void creativecompat$featherLure(CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValueZ() && CatFeather.chasing(this.cat)) {
-            cir.setReturnValue(false);
-        }
-    }
+	@Inject(method = "m_8036_", at = @At("RETURN"), cancellable = true, remap = false)
+	private void creativecompat$featherLure(CallbackInfoReturnable<Boolean> cir) {
+		if (cir.getReturnValueZ() && CatFeather.chasing(this.cat)) {
+			cir.setReturnValue(false);
+		}
+	}
 }

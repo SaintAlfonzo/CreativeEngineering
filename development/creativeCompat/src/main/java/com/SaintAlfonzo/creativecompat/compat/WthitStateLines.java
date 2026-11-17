@@ -51,109 +51,109 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class WthitStateLines implements IWailaClientPlugin, IBlockComponentProvider {
 
-    private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation RULES = new ResourceLocation(CreativeCompat.MOD_ID, "state_lines.json");
-    private static final Map<Block, List<Bound>> CACHE = new ConcurrentHashMap<>();
-    private static volatile List<StateLines.Rule> rules;
-    private static boolean listening;
-    private static boolean hooked;
+	private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
+	private static final ResourceLocation RULES = new ResourceLocation(CreativeCompat.MOD_ID, "state_lines.json");
+	private static final Map<Block, List<Bound>> CACHE = new ConcurrentHashMap<>();
+	private static volatile List<StateLines.Rule> rules;
+	private static boolean listening;
+	private static boolean hooked;
 
-    /** A rule bound to one block's property. */
-    private record Bound(IntegerProperty property, StateLines.Mode mode, int min, int top, ResourceLocation line,
-                         String label) {}
+	/** A rule bound to one block's property. */
+	private record Bound(IntegerProperty property, StateLines.Mode mode, int min, int top, ResourceLocation line,
+						 String label) {}
 
-    @Override
-    public void register(IClientRegistrar registrar) {
-        registrar.body(this, Block.class);
-        if (!listening) {
-            listening = true;
-            MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, TagsUpdatedEvent.class, event -> reset());
-        }
-    }
+	@Override
+	public void register(IClientRegistrar registrar) {
+		registrar.body(this, Block.class);
+		if (!listening) {
+			listening = true;
+			MinecraftForge.EVENT_BUS.addListener(EventPriority.NORMAL, false, TagsUpdatedEvent.class, event -> reset());
+		}
+	}
 
-    @Override
-    public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
-        if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.stateLines.get()) {
-            return;
-        }
-        BlockState state = accessor.getBlockState();
-        for (Bound b : CACHE.computeIfAbsent(state.getBlock(), WthitStateLines::bind)) {
-            ForgeConfigSpec.BooleanValue on = com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.stateLine.get(b.label());
-            if (on != null && !on.get()) {
-                continue;
-            }
-            StateLines.Shown shown = StateLines.evaluate(b.mode(), state.getValue(b.property()), b.min(), b.top());
-            tooltip.setLine(b.line(), new PairComponent(
-                    Component.translatable("creativecommon.wthit.state." + b.label()),
-                    Component.literal(shown.value() + " / " + shown.max())));
-        }
-    }
+	@Override
+	public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+		if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.stateLines.get()) {
+			return;
+		}
+		BlockState state = accessor.getBlockState();
+		for (Bound b : CACHE.computeIfAbsent(state.getBlock(), WthitStateLines::bind)) {
+			ForgeConfigSpec.BooleanValue on = com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.stateLine.get(b.label());
+			if (on != null && !on.get()) {
+				continue;
+			}
+			StateLines.Shown shown = StateLines.evaluate(b.mode(), state.getValue(b.property()), b.min(), b.top());
+			tooltip.setLine(b.line(), new PairComponent(
+					Component.translatable("creativecommon.wthit.state." + b.label()),
+					Component.literal(shown.value() + " / " + shown.max())));
+		}
+	}
 
-    private static List<Bound> bind(Block block) {
-        ResourceLocation key = ForgeRegistries.BLOCKS.getKey(block);
-        if (key == null) {
-            return List.of();
-        }
-        String id = key.toString();
-        BlockState base = block.defaultBlockState();
-        List<Bound> out = new ArrayList<>();
-        Set<String> taken = new HashSet<>(); // labels and properties already shown: one line each
-        for (StateLines.Rule rule : rules()) {
-            if (taken.contains("label:" + rule.label()) || taken.contains("property:" + rule.property())
-                    || rule.excludes(id) || !(rule.matchesId(id) || matchesTag(base, rule.tags()))) {
-                continue;
-            }
-            Property<?> p = block.getStateDefinition().getProperty(rule.property());
-            if (!(p instanceof IntegerProperty ip)) {
-                continue;
-            }
-            taken.add("label:" + rule.label());
-            taken.add("property:" + rule.property());
-            out.add(new Bound(ip, rule.mode(), Collections.min(ip.getPossibleValues()),
-                    Collections.max(ip.getPossibleValues()),
-                    new ResourceLocation(CreativeCompat.MOD_ID, "state_" + rule.label()), rule.label()));
-        }
-        return out.isEmpty() ? List.of() : List.copyOf(out);
-    }
+	private static List<Bound> bind(Block block) {
+		ResourceLocation key = ForgeRegistries.BLOCKS.getKey(block);
+		if (key == null) {
+			return List.of();
+		}
+		String id = key.toString();
+		BlockState base = block.defaultBlockState();
+		List<Bound> out = new ArrayList<>();
+		Set<String> taken = new HashSet<>(); // labels and properties already shown: one line each
+		for (StateLines.Rule rule : rules()) {
+			if (taken.contains("label:" + rule.label()) || taken.contains("property:" + rule.property())
+					|| rule.excludes(id) || !(rule.matchesId(id) || matchesTag(base, rule.tags()))) {
+				continue;
+			}
+			Property<?> p = block.getStateDefinition().getProperty(rule.property());
+			if (!(p instanceof IntegerProperty ip)) {
+				continue;
+			}
+			taken.add("label:" + rule.label());
+			taken.add("property:" + rule.property());
+			out.add(new Bound(ip, rule.mode(), Collections.min(ip.getPossibleValues()),
+					Collections.max(ip.getPossibleValues()),
+					new ResourceLocation(CreativeCompat.MOD_ID, "state_" + rule.label()), rule.label()));
+		}
+		return out.isEmpty() ? List.of() : List.copyOf(out);
+	}
 
-    private static boolean matchesTag(BlockState base, List<String> tags) {
-        for (String t : tags) {
-            if (base.is(TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(t)))) {
-                return true;
-            }
-        }
-        return false;
-    }
+	private static boolean matchesTag(BlockState base, List<String> tags) {
+		for (String t : tags) {
+			if (base.is(TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation(t)))) {
+				return true;
+			}
+		}
+		return false;
+	}
 
-    private static List<StateLines.Rule> rules() {
-        List<StateLines.Rule> current = rules;
-        if (current != null) {
-            return current;
-        }
-        hook();
-        try {
-            Resource res = Minecraft.getInstance().getResourceManager().getResource(RULES).orElseThrow();
-            try (Reader in = new InputStreamReader(res.open(), StandardCharsets.UTF_8)) {
-                current = StateLines.parse(JsonParser.parseReader(in).getAsJsonObject());
-            }
-        } catch (Exception e) {
-            LOGGER.error("[state-lines] can't read {}: {}", RULES, e.toString());
-            current = List.of();
-        }
-        rules = current;
-        return current;
-    }
+	private static List<StateLines.Rule> rules() {
+		List<StateLines.Rule> current = rules;
+		if (current != null) {
+			return current;
+		}
+		hook();
+		try {
+			Resource res = Minecraft.getInstance().getResourceManager().getResource(RULES).orElseThrow();
+			try (Reader in = new InputStreamReader(res.open(), StandardCharsets.UTF_8)) {
+				current = StateLines.parse(JsonParser.parseReader(in).getAsJsonObject());
+			}
+		} catch (Exception e) {
+			LOGGER.error("[state-lines] can't read {}: {}", RULES, e.toString());
+			current = List.of();
+		}
+		rules = current;
+		return current;
+	}
 
-    /** Re-read the rules after a resource reload (F3+T, a resource pack change). */
-    private static void hook() {
-        if (!hooked && Minecraft.getInstance().getResourceManager() instanceof ReloadableResourceManager rm) {
-            hooked = true;
-            rm.registerReloadListener((ResourceManagerReloadListener) manager -> reset());
-        }
-    }
+	/** Re-read the rules after a resource reload (F3+T, a resource pack change). */
+	private static void hook() {
+		if (!hooked && Minecraft.getInstance().getResourceManager() instanceof ReloadableResourceManager rm) {
+			hooked = true;
+			rm.registerReloadListener((ResourceManagerReloadListener) manager -> reset());
+		}
+	}
 
-    private static void reset() {
-        rules = null;
-        CACHE.clear();
-    }
+	private static void reset() {
+		rules = null;
+		CACHE.clear();
+	}
 }

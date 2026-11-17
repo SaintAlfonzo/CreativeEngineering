@@ -30,53 +30,53 @@ import java.util.Optional;
  */
 final class TestWorld {
 
-    private TestWorld() {}
+	private TestWorld() {}
 
-    static boolean exists(Minecraft mc, String name) {
-        return Files.isDirectory(mc.getLevelSource().getBaseDir().resolve(name));
-    }
+	static boolean exists(Minecraft mc, String name) {
+		return Files.isDirectory(mc.getLevelSource().getBaseDir().resolve(name));
+	}
 
-    static void load(Minecraft mc, String name) {
-        mc.createWorldOpenFlows().loadLevel(mc.screen, name);
-    }
+	static void load(Minecraft mc, String name) {
+		mc.createWorldOpenFlows().loadLevel(mc.screen, name);
+	}
 
-    /**
-     * Step 1 of a fresh world: CreateWorldScreen.openFresh loads the datapacks (mods' biomes included) into a
-     * WorldCreationContext; {@link #createFlat} reads it off the screen on a later tick.
-     */
-    static void openCreateScreen(Minecraft mc) {
-        CreateWorldScreen.openFresh(mc, mc.screen);
-    }
+	/**
+	 * Step 1 of a fresh world: CreateWorldScreen.openFresh loads the datapacks (mods' biomes included) into a
+	 * WorldCreationContext; {@link #createFlat} reads it off the screen on a later tick.
+	 */
+	static void openCreateScreen(Minecraft mc) {
+		CreateWorldScreen.openFresh(mc, mc.screen);
+	}
 
-    static void createFlat(Minecraft mc, CreateWorldScreen screen, CapturePlan plan) {
-        WorldCreationContext ctx = screen.worldGenSettingsComponent.settings();
-        RegistryAccess.Frozen access = ctx.registryAccess();
-        Registry<Biome> biomes = access.registryOrThrow(Registry.BIOME_REGISTRY);
-        Registry<StructureSet> structures = access.registryOrThrow(Registry.STRUCTURE_SET_REGISTRY);
+	static void createFlat(Minecraft mc, CreateWorldScreen screen, CapturePlan plan) {
+		WorldCreationContext ctx = screen.worldGenSettingsComponent.settings();
+		RegistryAccess.Frozen access = ctx.registryAccess();
+		Registry<Biome> biomes = access.registryOrThrow(Registry.BIOME_REGISTRY);
+		Registry<StructureSet> structures = access.registryOrThrow(Registry.STRUCTURE_SET_REGISTRY);
 
-        FlatLevelGeneratorSettings defaults = FlatLevelGeneratorSettings.getDefault(biomes, structures);
-        FlatLevelGeneratorSettings flat = defaults.withLayers(defaults.getLayersInfo(), Optional.of(HolderSet.direct()));
-        flat.setBiome(biomes.getHolderOrThrow(ResourceKey.create(Registry.BIOME_REGISTRY,
-                new ResourceLocation(plan.worldBiome()))));
-        flat.updateLayers();
+		FlatLevelGeneratorSettings defaults = FlatLevelGeneratorSettings.getDefault(biomes, structures);
+		FlatLevelGeneratorSettings flat = defaults.withLayers(defaults.getLayersInfo(), Optional.of(HolderSet.direct()));
+		flat.setBiome(biomes.getHolderOrThrow(ResourceKey.create(Registry.BIOME_REGISTRY,
+				new ResourceLocation(plan.worldBiome()))));
+		flat.updateLayers();
 
-        WorldGenSettings replaced = WorldGenSettings.replaceOverworldGenerator(access, ctx.worldGenSettings(),
-                new FlatLevelSource(structures, flat));
-        WorldGenSettings wgs = new WorldGenSettings(plan.worldSeed(), false, false, replaced.dimensions());
+		WorldGenSettings replaced = WorldGenSettings.replaceOverworldGenerator(access, ctx.worldGenSettings(),
+				new FlatLevelSource(structures, flat));
+		WorldGenSettings wgs = new WorldGenSettings(plan.worldSeed(), false, false, replaced.dimensions());
 
-        GameRules rules = new GameRules();
-        rules.getRule(GameRules.RULE_DAYLIGHT).set(false, null);
-        rules.getRule(GameRules.RULE_WEATHER_CYCLE).set(false, null);
-        rules.getRule(GameRules.RULE_DOMOBSPAWNING).set(false, null);
-        rules.getRule(GameRules.RULE_DOFIRETICK).set(false, null);
-        rules.getRule(GameRules.RULE_RANDOMTICKING).set(0, null);
-        rules.getRule(GameRules.RULE_SENDCOMMANDFEEDBACK).set(false, null);
-        rules.getRule(GameRules.RULE_ANNOUNCE_ADVANCEMENTS).set(false, null);
-        rules.getRule(GameRules.RULE_DO_PATROL_SPAWNING).set(false, null);
-        rules.getRule(GameRules.RULE_DO_TRADER_SPAWNING).set(false, null);
+		GameRules rules = new GameRules();
+		rules.getRule(GameRules.RULE_DAYLIGHT).set(false, null);
+		rules.getRule(GameRules.RULE_WEATHER_CYCLE).set(false, null);
+		rules.getRule(GameRules.RULE_DOMOBSPAWNING).set(false, null);
+		rules.getRule(GameRules.RULE_DOFIRETICK).set(false, null);
+		rules.getRule(GameRules.RULE_RANDOMTICKING).set(0, null);
+		rules.getRule(GameRules.RULE_SENDCOMMANDFEEDBACK).set(false, null);
+		rules.getRule(GameRules.RULE_ANNOUNCE_ADVANCEMENTS).set(false, null);
+		rules.getRule(GameRules.RULE_DO_PATROL_SPAWNING).set(false, null);
+		rules.getRule(GameRules.RULE_DO_TRADER_SPAWNING).set(false, null);
 
-        LevelSettings settings = new LevelSettings(plan.worldName(), GameType.CREATIVE, false, Difficulty.NORMAL,
-                true, rules, DataPackConfig.DEFAULT);
-        mc.createWorldOpenFlows().createFreshLevel(plan.worldName(), settings, access, wgs);
-    }
+		LevelSettings settings = new LevelSettings(plan.worldName(), GameType.CREATIVE, false, Difficulty.NORMAL,
+				true, rules, DataPackConfig.DEFAULT);
+		mc.createWorldOpenFlows().createFreshLevel(plan.worldName(), settings, access, wgs);
+	}
 }

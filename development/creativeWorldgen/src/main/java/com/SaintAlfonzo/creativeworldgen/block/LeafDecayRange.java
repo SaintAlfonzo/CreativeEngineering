@@ -47,126 +47,126 @@ import org.slf4j.Logger;
  */
 public final class LeafDecayRange {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final int VANILLA_MAX = LeavesBlock.DECAY_DISTANCE;
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final int VANILLA_MAX = LeavesBlock.DECAY_DISTANCE;
 
-    private LeafDecayRange() {}
+	private LeafDecayRange() {}
 
-    /** Random-tick hook: true = cancel this decay (natural leaf at distance 7). */
-    public static boolean cancelRandomDecay(ServerLevel level, BlockPos pos, BlockState state) {
-        CWGConfig.LeafDecay cfg = CWGConfig.LEAF_DECAY;
-        if (!cfg.enabled.get()) return false;
-        return cfg.onlyWhenDisturbed.get() || keep(level, pos, state);
-    }
+	/** Random-tick hook: true = cancel this decay (natural leaf at distance 7). */
+	public static boolean cancelRandomDecay(ServerLevel level, BlockPos pos, BlockState state) {
+		CWGConfig.LeafDecay cfg = CWGConfig.LEAF_DECAY;
+		if (!cfg.enabled.get()) return false;
+		return cfg.onlyWhenDisturbed.get() || keep(level, pos, state);
+	}
 
-    /** Scheduled-tick hook, after vanilla stored the recomputed distance. {@code before} is the state the tick started with. */
-    public static void afterTick(ServerLevel level, BlockPos pos, BlockState before, RandomSource random) {
-        if (!CWGConfig.LEAF_DECAY.enabled.get()) return;
-        BlockState now = level.getBlockState(pos);
-        if (now.getBlock() != before.getBlock() || !decaying(now)) return;
-        if (before.getValue(LeavesBlock.DISTANCE) < VANILLA_MAX) {
-            level.scheduleTick(pos, now.getBlock(), FastLeafDecayPort.decayDelay(random));
-        } else if (!keep(level, pos, now)) {
-            Block.dropResources(now, level, pos);
-            level.removeBlock(pos, false);
-            LeafDecayPiles.afterDecay(now, level, pos, random);
-        }
-    }
+	/** Scheduled-tick hook, after vanilla stored the recomputed distance. {@code before} is the state the tick started with. */
+	public static void afterTick(ServerLevel level, BlockPos pos, BlockState before, RandomSource random) {
+		if (!CWGConfig.LEAF_DECAY.enabled.get()) return;
+		BlockState now = level.getBlockState(pos);
+		if (now.getBlock() != before.getBlock() || !decaying(now)) return;
+		if (before.getValue(LeavesBlock.DISTANCE) < VANILLA_MAX) {
+			level.scheduleTick(pos, now.getBlock(), FastLeafDecayPort.decayDelay(random));
+		} else if (!keep(level, pos, now)) {
+			Block.dropResources(now, level, pos);
+			level.removeBlock(pos, false);
+			LeafDecayPiles.afterDecay(now, level, pos, random);
+		}
+	}
 
-    /** Vanilla {@code LeavesBlock#decaying} (m_221385_): natural and out of reach. */
-    public static boolean decaying(BlockState state) {
-        return state.hasProperty(LeavesBlock.PERSISTENT) && !state.getValue(LeavesBlock.PERSISTENT)
-                && state.getValue(LeavesBlock.DISTANCE) == VANILLA_MAX;
-    }
+	/** Vanilla {@code LeavesBlock#decaying} (m_221385_): natural and out of reach. */
+	public static boolean decaying(BlockState state) {
+		return state.hasProperty(LeavesBlock.PERSISTENT) && !state.getValue(LeavesBlock.PERSISTENT)
+				&& state.getValue(LeavesBlock.DISTANCE) == VANILLA_MAX;
+	}
 
-    /**
-     * True when the decaying leaf at {@code pos} is within the configured range of a log and should
-     * not decay. Only called for non-persistent leaves at distance 7.
-     */
-    public static boolean keep(ServerLevel level, BlockPos pos, BlockState state) {
-        CWGConfig.LeafDecay cfg = CWGConfig.LEAF_DECAY;
-        int max = cfg.maxDistance.get();
-        if (max < VANILLA_MAX) return false;
-        int budget = cfg.maxSearchBlocks.get();
+	/**
+	 * True when the decaying leaf at {@code pos} is within the configured range of a log and should
+	 * not decay. Only called for non-persistent leaves at distance 7.
+	 */
+	public static boolean keep(ServerLevel level, BlockPos pos, BlockState state) {
+		CWGConfig.LeafDecay cfg = CWGConfig.LEAF_DECAY;
+		int max = cfg.maxDistance.get();
+		if (max < VANILLA_MAX) return false;
+		int budget = cfg.maxSearchBlocks.get();
 
-        Set<Block> group = SeparatedLeavesRules.groupOf(state.getBlock());
-        LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
-        LongOpenHashSet seen = new LongOpenHashSet();
-        long start = pos.asLong();
-        queue.enqueue(start);
-        seen.add(start);
-        BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
-        BlockPos.MutableBlockPos next = new BlockPos.MutableBlockPos();
+		Set<Block> group = SeparatedLeavesRules.groupOf(state.getBlock());
+		LongArrayFIFOQueue queue = new LongArrayFIFOQueue();
+		LongOpenHashSet seen = new LongOpenHashSet();
+		long start = pos.asLong();
+		queue.enqueue(start);
+		seen.add(start);
+		BlockPos.MutableBlockPos at = new BlockPos.MutableBlockPos();
+		BlockPos.MutableBlockPos next = new BlockPos.MutableBlockPos();
 
-        // Layered BFS: depth of everything in the queue is known per layer.
-        for (int depth = 0; !queue.isEmpty(); depth++) {
-            int layer = queue.size();
-            int step = depth + 1;
-            for (int i = 0; i < layer; i++) {
-                at.set(queue.dequeueLong());
-                for (Direction dir : Direction.values()) {
-                    next.setWithOffset(at, dir);
-                    long key = next.asLong();
-                    if (seen.contains(key) || !level.isLoaded(next)) continue;
-                    BlockState ns = level.getBlockState(next);
-                    if (!connects(ns, group)) continue;
-                    seen.add(key);
-                    int d = ns.getValue(LeavesBlock.DISTANCE);
-                    if (d < VANILLA_MAX) {
-                        if (step + d <= max) return true;
-                    } else if (step + 2 <= max) {
-                        // A distance-7 leaf is worth walking past only if one more step and a d=1
-                        // neighbor could still land inside the range.
-                        queue.enqueue(key);
-                    }
-                    if (seen.size() > budget) return false;
-                }
-            }
-        }
-        return false;
-    }
+		// Layered BFS: depth of everything in the queue is known per layer.
+		for (int depth = 0; !queue.isEmpty(); depth++) {
+			int layer = queue.size();
+			int step = depth + 1;
+			for (int i = 0; i < layer; i++) {
+				at.set(queue.dequeueLong());
+				for (Direction dir : Direction.values()) {
+					next.setWithOffset(at, dir);
+					long key = next.asLong();
+					if (seen.contains(key) || !level.isLoaded(next)) continue;
+					BlockState ns = level.getBlockState(next);
+					if (!connects(ns, group)) continue;
+					seen.add(key);
+					int d = ns.getValue(LeavesBlock.DISTANCE);
+					if (d < VANILLA_MAX) {
+						if (step + d <= max) return true;
+					} else if (step + 2 <= max) {
+						// A distance-7 leaf is worth walking past only if one more step and a d=1
+						// neighbor could still land inside the range.
+						queue.enqueue(key);
+					}
+					if (seen.size() > budget) return false;
+				}
+			}
+		}
+		return false;
+	}
 
-    private static boolean connects(BlockState ns, Set<Block> group) {
-        if (!(ns.getBlock() instanceof LeavesBlock) || !ns.hasProperty(LeavesBlock.DISTANCE)) return false;
-        return group == null || group.contains(ns.getBlock());
-    }
+	private static boolean connects(BlockState ns, Set<Block> group) {
+		if (!(ns.getBlock() instanceof LeavesBlock) || !ns.hasProperty(LeavesBlock.DISTANCE)) return false;
+		return group == null || group.contains(ns.getBlock());
+	}
 
-    /** Reads Separated Leaves' live rule list ({@code Reload.LEAVES_RULES}) by reflection, if the mod is present. */
-    static final class SeparatedLeavesRules {
-        private static boolean resolved;
-        private static List<?> rules;
-        private static Method leaves;
+	/** Reads Separated Leaves' live rule list ({@code Reload.LEAVES_RULES}) by reflection, if the mod is present. */
+	static final class SeparatedLeavesRules {
+		private static boolean resolved;
+		private static List<?> rules;
+		private static Method leaves;
 
-        private SeparatedLeavesRules() {}
+		private SeparatedLeavesRules() {}
 
-        /** The leaves set of the first rule naming {@code block}, or null (no mod, or no rule: any leaves connect). */
-        @SuppressWarnings("unchecked")
-        static Set<Block> groupOf(Block block) {
-            if (!resolved) resolve();
-            if (rules == null) return null;
-            try {
-                for (Object rule : rules) {
-                    Set<Block> set = (Set<Block>) leaves.invoke(rule);
-                    if (set.contains(block)) return set;
-                }
-            } catch (ReflectiveOperationException | RuntimeException e) {
-                LOGGER.warn("[leaf_decay] Separated Leaves rules unreadable, falling back to any-leaves", e);
-                rules = null;
-            }
-            return null;
-        }
+		/** The leaves set of the first rule naming {@code block}, or null (no mod, or no rule: any leaves connect). */
+		@SuppressWarnings("unchecked")
+		static Set<Block> groupOf(Block block) {
+			if (!resolved) resolve();
+			if (rules == null) return null;
+			try {
+				for (Object rule : rules) {
+					Set<Block> set = (Set<Block>) leaves.invoke(rule);
+					if (set.contains(block)) return set;
+				}
+			} catch (ReflectiveOperationException | RuntimeException e) {
+				LOGGER.warn("[leaf_decay] Separated Leaves rules unreadable, falling back to any-leaves", e);
+				rules = null;
+			}
+			return null;
+		}
 
-        private static synchronized void resolve() {
-            if (resolved) return;
-            try {
-                Class<?> reload = Class.forName("nl.teamdiopside.separatedleaves.Reload");
-                Field f = reload.getField("LEAVES_RULES");
-                rules = (List<?>) f.get(null);
-                leaves = Class.forName("nl.teamdiopside.separatedleaves.Reload$LeavesRule").getMethod("leaves");
-            } catch (ReflectiveOperationException | LinkageError e) {
-                rules = null;
-            }
-            resolved = true;
-        }
-    }
+		private static synchronized void resolve() {
+			if (resolved) return;
+			try {
+				Class<?> reload = Class.forName("nl.teamdiopside.separatedleaves.Reload");
+				Field f = reload.getField("LEAVES_RULES");
+				rules = (List<?>) f.get(null);
+				leaves = Class.forName("nl.teamdiopside.separatedleaves.Reload$LeavesRule").getMethod("leaves");
+			} catch (ReflectiveOperationException | LinkageError e) {
+				rules = null;
+			}
+			resolved = true;
+		}
+	}
 }

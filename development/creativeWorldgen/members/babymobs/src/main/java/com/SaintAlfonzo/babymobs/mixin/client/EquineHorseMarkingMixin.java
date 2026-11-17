@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(HorseMarkingLayer.class)
 public abstract class EquineHorseMarkingMixin {
 
-    @ModifyVariable(method = "m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/horse/Horse;FFFFFF)V",
-            at = @At("STORE"), ordinal = 0, remap = false)
-    private ResourceLocation babyMobs$markingTexture(ResourceLocation texture) {
-        return texture == null ? null : BabyRender.layerTexture(texture);
-    }
+	@ModifyVariable(method = "m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/horse/Horse;FFFFFF)V",
+			at = @At("STORE"), ordinal = 0, remap = false)
+	private ResourceLocation babyMobs$markingTexture(ResourceLocation texture) {
+		return texture == null ? null : BabyRender.layerTexture(texture);
+	}
 }

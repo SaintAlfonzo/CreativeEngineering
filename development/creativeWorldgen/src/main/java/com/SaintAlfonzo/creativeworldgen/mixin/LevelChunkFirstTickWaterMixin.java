@@ -16,14 +16,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = LevelChunk.class, remap = false)
 public abstract class LevelChunkFirstTickWaterMixin {
 
-    @Inject(method = "m_62812_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$openSettleWindow(CallbackInfo ci) {
-        FirstTickWater.onFirstTicking((LevelChunk) (Object) this);
-        GeneratedFallingBlocks.beginPostProcess();
-    }
+	@Inject(method = "m_62812_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$openSettleWindow(CallbackInfo ci) {
+		FirstTickWater.onFirstTicking((LevelChunk) (Object) this);
+		GeneratedFallingBlocks.beginPostProcess();
+	}
 
-    @Inject(method = "m_62812_", at = @At("RETURN"), remap = false)
-    private void creativeengineering$endPostProcess(CallbackInfo ci) {
-        GeneratedFallingBlocks.endPostProcess();
-    }
+	@Inject(method = "m_62812_", at = @At("RETURN"), remap = false)
+	private void creativeengineering$endPostProcess(CallbackInfo ci) {
+		GeneratedFallingBlocks.endPostProcess();
+	}
 }

@@ -15,27 +15,27 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class AnvilLabels {
 
-    private AnvilLabels() {}
+	private AnvilLabels() {}
 
-    @SubscribeEvent
-    public static void onAnvilUpdate(AnvilUpdateEvent event) {
-        ItemStack left = event.getLeft();
-        ItemStack note = event.getRight();
-        if (!(note.getItem() instanceof StickyNoteItem) || !ItemLabels.canLabel(note, left)) return;
-        if (ItemLabels.isFull(left)) {
-            event.setOutput(ItemStack.EMPTY);
-            event.setCost(0);
-            event.setMaterialCost(0);
-            return;
-        }
-        ItemStack out = left.copy(); // full count: AnvilMenu.onTake clears the whole left slot, as vanilla's rename does
-        ItemLabels.add(out, NoteData.readText(note));
-        String name = event.getName();
-        if (name != null && !name.isBlank() && !name.equals(left.getHoverName().getString())) {
-            out.setHoverName(Component.literal(name));
-        }
-        event.setOutput(out);
-        event.setCost(Math.max(0, CLConfig.integer(CLConfig.ANVIL_COST)));
-        event.setMaterialCost(1);
-    }
+	@SubscribeEvent
+	public static void onAnvilUpdate(AnvilUpdateEvent event) {
+		ItemStack left = event.getLeft();
+		ItemStack note = event.getRight();
+		if (!(note.getItem() instanceof StickyNoteItem) || !ItemLabels.canLabel(note, left)) return;
+		if (ItemLabels.isFull(left)) {
+			event.setOutput(ItemStack.EMPTY);
+			event.setCost(0);
+			event.setMaterialCost(0);
+			return;
+		}
+		ItemStack out = left.copy(); // full count: AnvilMenu.onTake clears the whole left slot, as vanilla's rename does
+		ItemLabels.add(out, NoteData.readText(note));
+		String name = event.getName();
+		if (name != null && !name.isBlank() && !name.equals(left.getHoverName().getString())) {
+			out.setHoverName(Component.literal(name));
+		}
+		event.setOutput(out);
+		event.setCost(Math.max(0, CLConfig.integer(CLConfig.ANVIL_COST)));
+		event.setMaterialCost(1);
+	}
 }

@@ -24,17 +24,17 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(value = FluidTankRenderer.class, remap = false)
 public abstract class JeiFluidTankScaleMixin<T> {
 
-    @Shadow @Final private IPlatformFluidHelperInternal<T> fluidHelper;
-    @Shadow @Final private long capacity;
+	@Shadow @Final private IPlatformFluidHelperInternal<T> fluidHelper;
+	@Shadow @Final private long capacity;
 
-    @ModifyVariable(method = "lambda$drawFluid$0", remap = false, require = 0,
-            at = @At(value = "STORE", ordinal = 0), ordinal = 1)
-    private long creativecommon$scaleFill(long linear, Object ingredient, int height, PoseStack pose, int width,
-                                              TextureAtlasSprite sprite) {
-        com.SaintAlfonzo.creativecompat.CompatConfig.Jei.FluidScale mode = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.fluidAmountScale.get();
-        if (mode == com.SaintAlfonzo.creativecompat.CompatConfig.Jei.FluidScale.LINEAR) return linear;
-        @SuppressWarnings("unchecked")
-        long amount = fluidHelper.getAmount((T) ingredient);
-        return FluidTankScale.height(mode, amount, capacity, height);
-    }
+	@ModifyVariable(method = "lambda$drawFluid$0", remap = false, require = 0,
+			at = @At(value = "STORE", ordinal = 0), ordinal = 1)
+	private long creativecommon$scaleFill(long linear, Object ingredient, int height, PoseStack pose, int width,
+											  TextureAtlasSprite sprite) {
+		com.SaintAlfonzo.creativecompat.CompatConfig.Jei.FluidScale mode = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.fluidAmountScale.get();
+		if (mode == com.SaintAlfonzo.creativecompat.CompatConfig.Jei.FluidScale.LINEAR) return linear;
+		@SuppressWarnings("unchecked")
+		long amount = fluidHelper.getAmount((T) ingredient);
+		return FluidTankScale.height(mode, amount, capacity, height);
+	}
 }

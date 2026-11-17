@@ -10,6 +10,6 @@ import java.util.Map;
 /** Apple Pie's private food memory: food -> meals since last eaten (6.2). */
 @Mixin(value = FoodList.class, remap = false)
 public interface FoodListAccessor {
-    @Accessor("uniqueFoods")
-    Map<FoodInstance, Integer> solrp$uniqueFoods();
+	@Accessor("uniqueFoods")
+	Map<FoodInstance, Integer> solrp$uniqueFoods();
 }

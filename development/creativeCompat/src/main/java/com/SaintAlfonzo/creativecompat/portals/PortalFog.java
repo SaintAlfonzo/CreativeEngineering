@@ -23,33 +23,33 @@ import java.util.List;
  */
 public final class PortalFog {
 
-    private PortalFog() {}
+	private PortalFog() {}
 
-    public static void apply() {
-        if (!CompatConfig.SPEC.isLoaded() || !PortalRendering.isRendering()) return;
-        List<PortalLike> layers = IPPortalRenderingAccessor.creativecompat$getPortalLayers();
-        if (layers.isEmpty()) return;
-        PortalLike outer = layers.get(0);
+	public static void apply() {
+		if (!CompatConfig.SPEC.isLoaded() || !PortalRendering.isRendering()) return;
+		List<PortalLike> layers = IPPortalRenderingAccessor.creativecompat$getPortalLayers();
+		if (layers.isEmpty()) return;
+		PortalLike outer = layers.get(0);
 
-        CompatConfig.ImmersivePortals c = CompatConfig.IMMERSIVE_PORTALS;
-        CompatConfig.ImmersivePortals.Fog fog = switch (PortalKind.of(outer)) {
-            case NETHER -> c.nether;
-            case GUN -> c.portalGun;
-            case MIRROR -> c.mirror;
-            default -> null;
-        };
-        if (fog == null || !fog.enabled.get()) return;
+		CompatConfig.ImmersivePortals c = CompatConfig.IMMERSIVE_PORTALS;
+		CompatConfig.ImmersivePortals.Fog fog = switch (PortalKind.of(outer)) {
+			case NETHER -> c.nether;
+			case GUN -> c.portalGun;
+			case MIRROR -> c.mirror;
+			default -> null;
+		};
+		if (fog == null || !fog.enabled.get()) return;
 
-        Portal portal = outer instanceof PortalGroup group ? group.getFirstPortal() : outer instanceof Portal p ? p : null;
-        if (portal == null || RenderStates.originalCamera == null) return;
-        Vec3 camera = RenderStates.originalCamera.getPosition();
-        float offset = (float) portal.getDistanceToNearestPointInPortal(camera);
+		Portal portal = outer instanceof PortalGroup group ? group.getFirstPortal() : outer instanceof Portal p ? p : null;
+		if (portal == null || RenderStates.originalCamera == null) return;
+		Vec3 camera = RenderStates.originalCamera.getPosition();
+		float offset = (float) portal.getDistanceToNearestPointInPortal(camera);
 
-        float start = offset + fog.start.get();
-        float end = offset + Math.max(fog.end.get(), fog.start.get() + 1);
-        float vanillaEnd = RenderSystem.getShaderFogEnd();
-        if (end >= vanillaEnd) return;
-        RenderSystem.setShaderFogStart(Math.min(start, RenderSystem.getShaderFogStart()));
-        RenderSystem.setShaderFogEnd(end);
-    }
+		float start = offset + fog.start.get();
+		float end = offset + Math.max(fog.end.get(), fog.start.get() + 1);
+		float vanillaEnd = RenderSystem.getShaderFogEnd();
+		if (end >= vanillaEnd) return;
+		RenderSystem.setShaderFogStart(Math.min(start, RenderSystem.getShaderFogStart()));
+		RenderSystem.setShaderFogEnd(end);
+	}
 }

@@ -20,13 +20,13 @@ import java.util.List;
 @Mixin(value = GuiBook.class, remap = false)
 public abstract class PatchouliBookTooltipMixin {
 
-    @Shadow
-    private ItemStack tooltipStack;
+	@Shadow
+	private ItemStack tooltipStack;
 
-    @Redirect(method = "drawTooltip", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false, ordinal = 0,
-                    target = "Lvazkii/patchouli/client/book/gui/GuiBook;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"))
-    private void creativecommon$itemTooltipWithStack(GuiBook book, PoseStack poseStack, List<Component> lines, int x, int y) {
-        book.renderComponentTooltip(poseStack, lines, x, y, this.tooltipStack);
-    }
+	@Redirect(method = "drawTooltip", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false, ordinal = 0,
+					target = "Lvazkii/patchouli/client/book/gui/GuiBook;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"))
+	private void creativecommon$itemTooltipWithStack(GuiBook book, PoseStack poseStack, List<Component> lines, int x, int y) {
+		book.renderComponentTooltip(poseStack, lines, x, y, this.tooltipStack);
+	}
 }

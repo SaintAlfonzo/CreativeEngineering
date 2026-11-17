@@ -23,21 +23,21 @@ import org.slf4j.LoggerFactory;
  */
 @Mod(GoldenFoodMod.MODID)
 public class GoldenFoodMod {
-    public static final String MODID = "goldenfood";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+	public static final String MODID = "goldenfood";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-    public GoldenFoodMod() {
-        UpstreamJars.verifyOrFail();
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        GoldenBlocks.BLOCKS.register(bus);
-        GoldenItems.ITEMS.register(bus);
-        GoldenItems.VANILLA_ITEMS.register(bus);
-        // Upstream art and data as built-in packs, always on and at the bottom (datapacks and KubeJS still override).
-        bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "goldenfood_upstream",
-                "Golden Food: art and data read from the upstream jar", GoldenTranslator::assets, GoldenTranslator::data));
-    }
+	public GoldenFoodMod() {
+		UpstreamJars.verifyOrFail();
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		GoldenBlocks.BLOCKS.register(bus);
+		GoldenItems.ITEMS.register(bus);
+		GoldenItems.VANILLA_ITEMS.register(bus);
+		// Upstream art and data as built-in packs, always on and at the bottom (datapacks and KubeJS still override).
+		bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "goldenfood_upstream",
+				"Golden Food: art and data read from the upstream jar", GoldenTranslator::assets, GoldenTranslator::data));
+	}
 
-    public static ResourceLocation path(String path) {
-        return new ResourceLocation(MODID, path);
-    }
+	public static ResourceLocation path(String path) {
+		return new ResourceLocation(MODID, path);
+	}
 }

@@ -17,9 +17,9 @@ import vectorwing.farmersdelight.common.block.RichSoilFarmlandBlock;
 @Mixin(value = RichSoilFarmlandBlock.class, remap = false)
 public abstract class DandelionRichFarmlandMixin {
 
-    @Inject(method = "m_213898_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$matureDandelion(BlockState state, ServerLevel level, BlockPos pos,
-                                                     RandomSource random, CallbackInfo ci) {
-        DandelionMaturing.soilTick(level, pos, random, true);
-    }
+	@Inject(method = "m_213898_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$matureDandelion(BlockState state, ServerLevel level, BlockPos pos,
+													 RandomSource random, CallbackInfo ci) {
+		DandelionMaturing.soilTick(level, pos, random, true);
+	}
 }

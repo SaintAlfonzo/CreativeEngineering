@@ -42,80 +42,80 @@ import net.minecraft.world.level.block.Blocks;
 @JeiPlugin
 public class DragonBreathingJEI implements IModPlugin {
 
-    private static final ResourceLocation ID = new ResourceLocation(CreativeEngineering.MODID, "jei_plugin");
-    private static final String LANG_KEY = "create.recipe.fan_dragon_breathing";
+	private static final ResourceLocation ID = new ResourceLocation(CreativeEngineering.MODID, "jei_plugin");
+	private static final String LANG_KEY = "create.recipe.fan_dragon_breathing";
 
-    private Category category;
+	private Category category;
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return ID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return ID;
+	}
 
-    @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        RecipeType<DragonBreathingRecipe> jeiType =
-                new RecipeType<>(DragonBreathingRecipeType.ID, DragonBreathingRecipe.class);
+	@Override
+	public void registerCategories(IRecipeCategoryRegistration registration) {
+		RecipeType<DragonBreathingRecipe> jeiType =
+				new RecipeType<>(DragonBreathingRecipeType.ID, DragonBreathingRecipe.class);
 
-        IDrawable background = new EmptyBackground(178, 72);
-        IDrawable icon = new DoubleItemIcon(
-                () -> new ItemStack(AllItems.PROPELLER.get()),
-                () -> new ItemStack(Items.DRAGON_HEAD));
+		IDrawable background = new EmptyBackground(178, 72);
+		IDrawable icon = new DoubleItemIcon(
+				() -> new ItemStack(AllItems.PROPELLER.get()),
+				() -> new ItemStack(Items.DRAGON_HEAD));
 
-        net.minecraft.world.item.crafting.RecipeType<DragonBreathingRecipe> vanillaType =
-                DragonBreathingRecipeType.INSTANCE.getType();
-        Supplier<List<DragonBreathingRecipe>> recipes = () -> {
-            ClientPacketListener connection = Minecraft.getInstance().getConnection();
-            if (connection == null) {
-                return List.of();
-            }
-            return connection.getRecipeManager().getAllRecipesFor(vanillaType);
-        };
+		net.minecraft.world.item.crafting.RecipeType<DragonBreathingRecipe> vanillaType =
+				DragonBreathingRecipeType.INSTANCE.getType();
+		Supplier<List<DragonBreathingRecipe>> recipes = () -> {
+			ClientPacketListener connection = Minecraft.getInstance().getConnection();
+			if (connection == null) {
+				return List.of();
+			}
+			return connection.getRecipeManager().getAllRecipesFor(vanillaType);
+		};
 
-        List<Supplier<? extends ItemStack>> catalysts = List.of(
-                ProcessingViaFanCategory.getFan("fan_dragon_breathing"),
-                () -> new ItemStack(Items.DRAGON_HEAD));
+		List<Supplier<? extends ItemStack>> catalysts = List.of(
+				ProcessingViaFanCategory.getFan("fan_dragon_breathing"),
+				() -> new ItemStack(Items.DRAGON_HEAD));
 
-        CreateRecipeCategory.Info<DragonBreathingRecipe> info = new CreateRecipeCategory.Info<>(
-                jeiType, Component.translatable(LANG_KEY), background, icon, recipes, catalysts);
+		CreateRecipeCategory.Info<DragonBreathingRecipe> info = new CreateRecipeCategory.Info<>(
+				jeiType, Component.translatable(LANG_KEY), background, icon, recipes, catalysts);
 
-        category = new Category(info);
-        registration.addRecipeCategories(category);
-    }
+		category = new Category(info);
+		registration.addRecipeCategories(category);
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        if (category != null) {
-            category.registerRecipes(registration);
-        }
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		if (category != null) {
+			category.registerRecipes(registration);
+		}
+	}
 
-    @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        if (category != null) {
-            category.registerCatalysts(registration);
-        }
-    }
+	@Override
+	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+		if (category != null) {
+			category.registerCatalysts(registration);
+		}
+	}
 
-    // MultiOutput (not the single-output ProcessingViaFanCategory base) is what renders per-output
-    // chance in JEI: its setRecipe iterates recipe.getRollableResults() and attaches
-    // CreateRecipeCategory.addStochasticTooltip to each slot. Create's own splashing / smoking /
-    // blasting / haunting fan categories all extend this; the plain base just addItemStack()s
-    // getResultItem() with no chance. Our DragonBreathingRecipe extends ProcessingRecipe, so it
-    // satisfies MultiOutput's `T extends ProcessingRecipe<?>` bound.
-    private static class Category extends ProcessingViaFanCategory.MultiOutput<DragonBreathingRecipe> {
+	// MultiOutput (not the single-output ProcessingViaFanCategory base) is what renders per-output
+	// chance in JEI: its setRecipe iterates recipe.getRollableResults() and attaches
+	// CreateRecipeCategory.addStochasticTooltip to each slot. Create's own splashing / smoking /
+	// blasting / haunting fan categories all extend this; the plain base just addItemStack()s
+	// getResultItem() with no chance. Our DragonBreathingRecipe extends ProcessingRecipe, so it
+	// satisfies MultiOutput's `T extends ProcessingRecipe<?>` bound.
+	private static class Category extends ProcessingViaFanCategory.MultiOutput<DragonBreathingRecipe> {
 
-        Category(CreateRecipeCategory.Info<DragonBreathingRecipe> info) {
-            super(info);
-        }
+		Category(CreateRecipeCategory.Info<DragonBreathingRecipe> info) {
+			super(info);
+		}
 
-        @Override
-        protected void renderAttachedBlock(PoseStack matrixStack) {
-            AnimatedKinetics.defaultBlockElement(Blocks.DRAGON_HEAD.defaultBlockState())
-                    .rotateBlock(0.0D, 180.0D, 0.0D)
-                    .atLocal(0.0D, 0.0D, 0.0D)
-                    .scale(SCALE)
-                    .render(matrixStack);
-        }
-    }
+		@Override
+		protected void renderAttachedBlock(PoseStack matrixStack) {
+			AnimatedKinetics.defaultBlockElement(Blocks.DRAGON_HEAD.defaultBlockState())
+					.rotateBlock(0.0D, 180.0D, 0.0D)
+					.atLocal(0.0D, 0.0D, 0.0D)
+					.scale(SCALE)
+					.render(matrixStack);
+		}
+	}
 }

@@ -18,11 +18,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(HorseArmorLayer.class)
 public abstract class EquineHorseArmorMixin {
 
-    @Inject(method = "m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/horse/Horse;FFFFFF)V",
-            at = @At("HEAD"), cancellable = true, remap = false)
-    private void babyMobs$noBabyArmour(PoseStack pose, MultiBufferSource buffers, int light, Horse horse, float limbSwing,
-                                       float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
-                                       float headPitch, CallbackInfo ci) {
-        if (BabyRender.active()) ci.cancel();
-    }
+	@Inject(method = "m_6494_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/horse/Horse;FFFFFF)V",
+			at = @At("HEAD"), cancellable = true, remap = false)
+	private void babyMobs$noBabyArmour(PoseStack pose, MultiBufferSource buffers, int light, Horse horse, float limbSwing,
+									   float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw,
+									   float headPitch, CallbackInfo ci) {
+		if (BabyRender.active()) ci.cancel();
+	}
 }

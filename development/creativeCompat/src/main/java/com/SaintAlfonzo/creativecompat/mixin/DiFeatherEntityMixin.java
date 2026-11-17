@@ -24,31 +24,31 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = FeatherEntity.class, remap = false)
 public abstract class DiFeatherEntityMixin {
 
-    @Inject(method = "m_5603_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativecompat$hitMobs(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (CatFeather.canHook((FeatherEntity) (Object) this, entity)) {
-            cir.setReturnValue(true);
-        }
-    }
+	@Inject(method = "m_5603_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativecompat$hitMobs(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+		if (CatFeather.canHook((FeatherEntity) (Object) this, entity)) {
+			cir.setReturnValue(true);
+		}
+	}
 
-    @Inject(method = "m_5790_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativecompat$stickToMob(EntityHitResult result, CallbackInfo ci) {
-        FishingHook hook = (FishingHook) (Object) this;
-        if (!hook.level.isClientSide && CatFeather.canHook((FeatherEntity) (Object) this, result.getEntity())) {
-            CatFeather.hookInto(hook, result.getEntity());
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_5790_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativecompat$stickToMob(EntityHitResult result, CallbackInfo ci) {
+		FishingHook hook = (FishingHook) (Object) this;
+		if (!hook.level.isClientSide && CatFeather.canHook((FeatherEntity) (Object) this, result.getEntity())) {
+			CatFeather.hookInto(hook, result.getEntity());
+			ci.cancel();
+		}
+	}
 
-    @Inject(method = "m_8119_", at = @At("TAIL"), remap = false)
-    private void creativecompat$featherTick(CallbackInfo ci) {
-        CatFeather.tick((FeatherEntity) (Object) this);
-    }
+	@Inject(method = "m_8119_", at = @At("TAIL"), remap = false)
+	private void creativecompat$featherTick(CallbackInfo ci) {
+		CatFeather.tick((FeatherEntity) (Object) this);
+	}
 
-    @Inject(method = "isPetAmbulatory", at = @At("RETURN"), cancellable = true, remap = false)
-    private void creativecompat$cozyStay(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
-        if (cir.getReturnValueZ() && ModList.get().isLoaded("cozys_improved_cats") && CozyCats.inStay(entity)) {
-            cir.setReturnValue(false);
-        }
-    }
+	@Inject(method = "isPetAmbulatory", at = @At("RETURN"), cancellable = true, remap = false)
+	private void creativecompat$cozyStay(LivingEntity entity, CallbackInfoReturnable<Boolean> cir) {
+		if (cir.getReturnValueZ() && ModList.get().isLoaded("cozys_improved_cats") && CozyCats.inStay(entity)) {
+			cir.setReturnValue(false);
+		}
+	}
 }

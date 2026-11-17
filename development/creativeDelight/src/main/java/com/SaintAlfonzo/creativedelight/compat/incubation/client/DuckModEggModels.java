@@ -22,28 +22,28 @@ import java.util.Map;
  */
 public final class DuckModEggModels {
 
-    private static final List<String> EGGS = List.of("duck_egg", "goose_egg");
+	private static final List<String> EGGS = List.of("duck_egg", "goose_egg");
 
-    private DuckModEggModels() {}
+	private DuckModEggModels() {}
 
-    public static void register(IEventBus modEventBus) {
-        modEventBus.addListener(DuckModEggModels::registerModels);
-        modEventBus.addListener(DuckModEggModels::swapModels);
-    }
+	public static void register(IEventBus modEventBus) {
+		modEventBus.addListener(DuckModEggModels::registerModels);
+		modEventBus.addListener(DuckModEggModels::swapModels);
+	}
 
-    private static ResourceLocation ourModel(String egg) {
-        return new ResourceLocation(IncubationCompartment.ID, "item/" + egg);
-    }
+	private static ResourceLocation ourModel(String egg) {
+		return new ResourceLocation(IncubationCompartment.ID, "item/" + egg);
+	}
 
-    private static void registerModels(ModelEvent.RegisterAdditional event) {
-        EGGS.forEach(egg -> event.register(ourModel(egg)));
-    }
+	private static void registerModels(ModelEvent.RegisterAdditional event) {
+		EGGS.forEach(egg -> event.register(ourModel(egg)));
+	}
 
-    private static void swapModels(ModelEvent.BakingCompleted event) {
-        Map<ResourceLocation, BakedModel> models = event.getModels();
-        for (String egg : EGGS) {
-            BakedModel ours = models.get(ourModel(egg));
-            if (ours != null) models.put(new ModelResourceLocation("untitledduckmod", egg, "inventory"), ours);
-        }
-    }
+	private static void swapModels(ModelEvent.BakingCompleted event) {
+		Map<ResourceLocation, BakedModel> models = event.getModels();
+		for (String egg : EGGS) {
+			BakedModel ours = models.get(ourModel(egg));
+			if (ours != null) models.put(new ModelResourceLocation("untitledduckmod", egg, "inventory"), ours);
+		}
+	}
 }

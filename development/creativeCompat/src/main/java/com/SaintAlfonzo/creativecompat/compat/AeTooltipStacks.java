@@ -17,22 +17,22 @@ import org.jetbrains.annotations.Nullable;
  */
 public final class AeTooltipStacks {
 
-    private static ItemStack pending = ItemStack.EMPTY;
+	private static ItemStack pending = ItemStack.EMPTY;
 
-    private AeTooltipStacks() {}
+	private AeTooltipStacks() {}
 
-    public static void setPending(ItemStack stack) {
-        pending = stack;
-    }
+	public static void setPending(ItemStack stack) {
+		pending = stack;
+	}
 
-    /** The item an AE2 stack stands for; fluids and other keys give EMPTY. */
-    public static ItemStack itemOf(@Nullable GenericStack stack) {
-        return stack != null && stack.what() instanceof AEItemKey itemKey ? itemKey.toStack() : ItemStack.EMPTY;
-    }
+	/** The item an AE2 stack stands for; fluids and other keys give EMPTY. */
+	public static ItemStack itemOf(@Nullable GenericStack stack) {
+		return stack != null && stack.what() instanceof AEItemKey itemKey ? itemKey.toStack() : ItemStack.EMPTY;
+	}
 
-    public static ItemStack take() {
-        ItemStack stack = pending;
-        pending = ItemStack.EMPTY;
-        return stack;
-    }
+	public static ItemStack take() {
+		ItemStack stack = pending;
+		pending = ItemStack.EMPTY;
+		return stack;
+	}
 }

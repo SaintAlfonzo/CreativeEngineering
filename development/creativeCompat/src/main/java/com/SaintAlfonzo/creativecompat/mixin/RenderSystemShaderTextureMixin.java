@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = RenderSystem.class, remap = false)
 public class RenderSystemShaderTextureMixin {
 
-    @Inject(method = "m_157456_", remap = false, require = 1, at = @At("HEAD"))
-    private static void creativecommon$captureGuiTexture(int unit, ResourceLocation location, CallbackInfo ci) {
-        TitlePlaques.onShaderTexture(unit, location);
-    }
+	@Inject(method = "m_157456_", remap = false, require = 1, at = @At("HEAD"))
+	private static void creativecommon$captureGuiTexture(int unit, ResourceLocation location, CallbackInfo ci) {
+		TitlePlaques.onShaderTexture(unit, location);
+	}
 }

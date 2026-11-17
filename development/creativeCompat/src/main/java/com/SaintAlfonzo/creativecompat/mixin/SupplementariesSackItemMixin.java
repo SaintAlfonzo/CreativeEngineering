@@ -20,17 +20,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = SackItem.class, remap = false)
 public abstract class SupplementariesSackItemMixin {
 
-    @Inject(method = "m_142305_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$takeStack(ItemStack stack, ItemStack incoming, Slot slot, ClickAction action,
-                                               Player player, SlotAccess access,
-                                               CallbackInfoReturnable<Boolean> cir) {
-        if (action != ClickAction.SECONDARY || !incoming.isEmpty() || !slot.allowModification(player)) {
-            return;
-        }
-        ItemStack taken = SackBundle.takeSelected(stack, player);
-        if (!taken.isEmpty()) {
-            access.set(taken);
-            cir.setReturnValue(true);
-        }
-    }
+	@Inject(method = "m_142305_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$takeStack(ItemStack stack, ItemStack incoming, Slot slot, ClickAction action,
+											   Player player, SlotAccess access,
+											   CallbackInfoReturnable<Boolean> cir) {
+		if (action != ClickAction.SECONDARY || !incoming.isEmpty() || !slot.allowModification(player)) {
+			return;
+		}
+		ItemStack taken = SackBundle.takeSelected(stack, player);
+		if (!taken.isEmpty()) {
+			access.set(taken);
+			cir.setReturnValue(true);
+		}
+	}
 }

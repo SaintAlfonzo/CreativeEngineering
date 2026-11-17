@@ -18,19 +18,19 @@ import uwu.lopyluna.create_dd.content.items.equipment.deforester_saw.DeforesterS
 @Mixin(value = DeforesterSawItem.class, remap = false)
 public class DeforesterSawItemMixin {
 
-    @Redirect(method = "destroyTree", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraftforge/network/simple/SimpleChannel;sendToServer(Ljava/lang/Object;)V"))
-    private static void creativeengineering$skipSendOnServer(SimpleChannel channel, Object message) {
-        if (FMLEnvironment.dist.isClient()) {
-            channel.sendToServer(message);
-        }
-    }
+	@Redirect(method = "destroyTree", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraftforge/network/simple/SimpleChannel;sendToServer(Ljava/lang/Object;)V"))
+	private static void creativeengineering$skipSendOnServer(SimpleChannel channel, Object message) {
+		if (FMLEnvironment.dist.isClient()) {
+			channel.sendToServer(message);
+		}
+	}
 
-    @Redirect(method = "destroyTree", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lcom/simibubi/create/foundation/config/ConfigBase$ConfigBool;get()Ljava/lang/Object;"))
-    private static Object creativeengineering$defaultInvertOnServer(ConfigBase.ConfigBool config) {
-        return FMLEnvironment.dist.isClient() ? config.get() : Boolean.FALSE;
-    }
+	@Redirect(method = "destroyTree", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lcom/simibubi/create/foundation/config/ConfigBase$ConfigBool;get()Ljava/lang/Object;"))
+	private static Object creativeengineering$defaultInvertOnServer(ConfigBase.ConfigBool config) {
+		return FMLEnvironment.dist.isClient() ? config.get() : Boolean.FALSE;
+	}
 }

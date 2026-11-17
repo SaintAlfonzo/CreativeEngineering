@@ -28,16 +28,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = XPFluidManager.class, remap = false)
 public class XPFluidManagerMixin {
 
-    @Inject(method = "getXPRatio", at = @At("HEAD"), cancellable = true)
-    private void creativeengineering$bridgeXpRatio(Fluid fluid, CallbackInfoReturnable<Integer> cir) {
-        if (fluid == null) return;
-        ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
-        if (id == null) return;
-        if (id.equals(FluidBridge.LIQUID_XP_ID)) {
-            cir.setReturnValue(1);
-        } else if (id.getNamespace().equals("pneumaticcraft")
-                && id.getPath().equals("memory_essence")) {
-            cir.setReturnValue(20);
-        }
-    }
+	@Inject(method = "getXPRatio", at = @At("HEAD"), cancellable = true)
+	private void creativeengineering$bridgeXpRatio(Fluid fluid, CallbackInfoReturnable<Integer> cir) {
+		if (fluid == null) return;
+		ResourceLocation id = ForgeRegistries.FLUIDS.getKey(fluid);
+		if (id == null) return;
+		if (id.equals(FluidBridge.LIQUID_XP_ID)) {
+			cir.setReturnValue(1);
+		} else if (id.getNamespace().equals("pneumaticcraft")
+				&& id.getPath().equals("memory_essence")) {
+			cir.setReturnValue(20);
+		}
+	}
 }

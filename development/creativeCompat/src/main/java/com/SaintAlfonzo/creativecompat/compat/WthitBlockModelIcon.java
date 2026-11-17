@@ -40,97 +40,97 @@ import net.minecraftforge.client.model.data.ModelData;
  */
 public final class WthitBlockModelIcon implements IWailaClientPlugin, IBlockComponentProvider {
 
-    // vanilla block/block gui transform, for models that have none
-    private static final ItemTransform BLOCK_GUI = new ItemTransform(
-            new Vector3f(30, 225, 0), new Vector3f(0, 0, 0), new Vector3f(0.625f, 0.625f, 0.625f));
+	// vanilla block/block gui transform, for models that have none
+	private static final ItemTransform BLOCK_GUI = new ItemTransform(
+			new Vector3f(30, 225, 0), new Vector3f(0, 0, 0), new Vector3f(0.625f, 0.625f, 0.625f));
 
-    @Override
-    public void register(IClientRegistrar registrar) {
-        registrar.icon(this, Block.class, 1000);
-    }
+	@Override
+	public void register(IClientRegistrar registrar) {
+		registrar.icon(this, Block.class, 1000);
+	}
 
-    @Override
-    public ITooltipComponent getIcon(IBlockAccessor accessor, IPluginConfig config) {
-        BlockState state = accessor.getBlockState();
-        ItemStack clone = state.getBlock().getCloneItemStack(accessor.getLevel(), accessor.getPosition(), state);
-        BlockModelIcons.Verdict verdict = BlockModelIcons.verdict(state, clone);
-        if (verdict == BlockModelIcons.Verdict.SUBSTITUTE) {
-            return new ItemComponent(BlockModelIcons.substitute(state));
-        }
-        if (verdict == BlockModelIcons.Verdict.ITEM || verdict == BlockModelIcons.Verdict.EXCLUDED) {
-            return null;
-        }
-        if (com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.iconForgePick.get()) {
-            ItemStack picked = forgePick(state, accessor);
-            if (BlockModelIcons.hasItemIcon(picked)) {
-                return new ItemComponent(picked);
-            }
-        }
-        return verdict == BlockModelIcons.Verdict.MODEL && com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.iconBlockModel.get()
-                ? new BlockModelComponent(BlockModelIcons.iconState(state)) : null;
-    }
+	@Override
+	public ITooltipComponent getIcon(IBlockAccessor accessor, IPluginConfig config) {
+		BlockState state = accessor.getBlockState();
+		ItemStack clone = state.getBlock().getCloneItemStack(accessor.getLevel(), accessor.getPosition(), state);
+		BlockModelIcons.Verdict verdict = BlockModelIcons.verdict(state, clone);
+		if (verdict == BlockModelIcons.Verdict.SUBSTITUTE) {
+			return new ItemComponent(BlockModelIcons.substitute(state));
+		}
+		if (verdict == BlockModelIcons.Verdict.ITEM || verdict == BlockModelIcons.Verdict.EXCLUDED) {
+			return null;
+		}
+		if (com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.iconForgePick.get()) {
+			ItemStack picked = forgePick(state, accessor);
+			if (BlockModelIcons.hasItemIcon(picked)) {
+				return new ItemComponent(picked);
+			}
+		}
+		return verdict == BlockModelIcons.Verdict.MODEL && com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.iconBlockModel.get()
+				? new BlockModelComponent(BlockModelIcons.iconState(state)) : null;
+	}
 
-    /**
-     * Forge's pick block, the one middle-click uses: it gets the hit, so blocks that hold several things answer with
-     * the part looked at (Supplementaries' skull pile: the upper or lower skull). WTHIT only asks the vanilla method.
-     */
-    private static ItemStack forgePick(BlockState state, IBlockAccessor accessor) {
-        try {
-            return state.getCloneItemStack(accessor.getHitResult(), accessor.getLevel(), accessor.getPosition(),
-                    accessor.getPlayer());
-        } catch (RuntimeException e) {
-            return ItemStack.EMPTY;
-        }
-    }
+	/**
+	 * Forge's pick block, the one middle-click uses: it gets the hit, so blocks that hold several things answer with
+	 * the part looked at (Supplementaries' skull pile: the upper or lower skull). WTHIT only asks the vanilla method.
+	 */
+	private static ItemStack forgePick(BlockState state, IBlockAccessor accessor) {
+		try {
+			return state.getCloneItemStack(accessor.getHitResult(), accessor.getLevel(), accessor.getPosition(),
+					accessor.getPlayer());
+		} catch (RuntimeException e) {
+			return ItemStack.EMPTY;
+		}
+	}
 
-    /** An 18x18 icon slot like WTHIT's ItemComponent, drawn the way ItemRenderer#renderGuiItem draws a block item. */
-    private record BlockModelComponent(BlockState state) implements ITooltipComponent {
+	/** An 18x18 icon slot like WTHIT's ItemComponent, drawn the way ItemRenderer#renderGuiItem draws a block item. */
+	private record BlockModelComponent(BlockState state) implements ITooltipComponent {
 
-        @Override
-        public int getWidth() {
-            return 18;
-        }
+		@Override
+		public int getWidth() {
+			return 18;
+		}
 
-        @Override
-        public int getHeight() {
-            return 18;
-        }
+		@Override
+		public int getHeight() {
+			return 18;
+		}
 
-        @Override
-        public void render(PoseStack matrices, int x, int y, float delta) {
-            Minecraft mc = Minecraft.getInstance();
-            BakedModel model = mc.getBlockRenderer().getBlockModel(state);
-            if (model == mc.getModelManager().getMissingModel()) {
-                return;
-            }
-            RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
-            RenderSystem.enableBlend();
-            RenderSystem.defaultBlendFunc();
-            RenderSystem.setShaderColor(1, 1, 1, 1);
+		@Override
+		public void render(PoseStack matrices, int x, int y, float delta) {
+			Minecraft mc = Minecraft.getInstance();
+			BakedModel model = mc.getBlockRenderer().getBlockModel(state);
+			if (model == mc.getModelManager().getMissingModel()) {
+				return;
+			}
+			RenderSystem.setShaderTexture(0, TextureAtlas.LOCATION_BLOCKS);
+			RenderSystem.enableBlend();
+			RenderSystem.defaultBlendFunc();
+			RenderSystem.setShaderColor(1, 1, 1, 1);
 
-            PoseStack view = RenderSystem.getModelViewStack();
-            view.pushPose();
-            view.translate(x + 1, y + 1, 100);
-            view.translate(8, 8, 0);
-            view.scale(1, -1, 1);
-            view.scale(16, 16, 16);
-            RenderSystem.applyModelViewMatrix();
+			PoseStack view = RenderSystem.getModelViewStack();
+			view.pushPose();
+			view.translate(x + 1, y + 1, 100);
+			view.translate(8, 8, 0);
+			view.scale(1, -1, 1);
+			view.scale(16, 16, 16);
+			RenderSystem.applyModelViewMatrix();
 
-            PoseStack pose = new PoseStack();
-            if (model.getTransforms().getTransform(ItemTransforms.TransformType.GUI) == ItemTransform.NO_TRANSFORM) {
-                BLOCK_GUI.apply(false, pose);
-            } else {
-                ForgeHooksClient.handleCameraTransforms(pose, model, ItemTransforms.TransformType.GUI, false);
-            }
-            pose.translate(-0.5, -0.5, -0.5);
-            MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
-            mc.getBlockRenderer().renderSingleBlock(state, pose, buffers, 0xF000F0, OverlayTexture.NO_OVERLAY,
-                    ModelData.EMPTY, null);
-            buffers.endBatch();
+			PoseStack pose = new PoseStack();
+			if (model.getTransforms().getTransform(ItemTransforms.TransformType.GUI) == ItemTransform.NO_TRANSFORM) {
+				BLOCK_GUI.apply(false, pose);
+			} else {
+				ForgeHooksClient.handleCameraTransforms(pose, model, ItemTransforms.TransformType.GUI, false);
+			}
+			pose.translate(-0.5, -0.5, -0.5);
+			MultiBufferSource.BufferSource buffers = mc.renderBuffers().bufferSource();
+			mc.getBlockRenderer().renderSingleBlock(state, pose, buffers, 0xF000F0, OverlayTexture.NO_OVERLAY,
+					ModelData.EMPTY, null);
+			buffers.endBatch();
 
-            RenderSystem.enableDepthTest();
-            view.popPose();
-            RenderSystem.applyModelViewMatrix();
-        }
-    }
+			RenderSystem.enableDepthTest();
+			view.popPose();
+			RenderSystem.applyModelViewMatrix();
+		}
+	}
 }

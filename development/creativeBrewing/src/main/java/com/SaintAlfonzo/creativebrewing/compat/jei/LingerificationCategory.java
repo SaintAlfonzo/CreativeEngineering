@@ -27,40 +27,40 @@ import java.lang.reflect.Field;
  */
 public class LingerificationCategory extends RefineryRecipeCategory {
 
-    public static final RecipeType<RefineryRecipe> TYPE = new RecipeType<>(
-            new ResourceLocation(CreativeBrewing.NS, "lingerification"), RefineryRecipe.class);
+	public static final RecipeType<RefineryRecipe> TYPE = new RecipeType<>(
+			new ResourceLocation(CreativeBrewing.NS, "lingerification"), RefineryRecipe.class);
 
-    /**
-     * True once the category is built + registered. {@code JEIHelperMixin} only strips these
-     * recipes out of IE's Refinery page while this holds — if the category failed to construct,
-     * they stay where they were.
-     */
-    public static volatile boolean ACTIVE = false;
+	/**
+	 * True once the category is built + registered. {@code JEIHelperMixin} only strips these
+	 * recipes out of IE's Refinery page while this holds — if the category failed to construct,
+	 * they stay where they were.
+	 */
+	public static volatile boolean ACTIVE = false;
 
-    public LingerificationCategory(IGuiHelper guiHelper) {
-        super(guiHelper);
-        try {
-            Field typeField = IERecipeCategory.class.getDeclaredField("type");
-            typeField.setAccessible(true);
-            typeField.set(this, TYPE);
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException(
-                    "[CE] could not rebind IE refinery category type for Lingerification", e);
-        }
-        this.title = Component.translatable("creativebrewing.jei.lingerification");
-    }
+	public LingerificationCategory(IGuiHelper guiHelper) {
+		super(guiHelper);
+		try {
+			Field typeField = IERecipeCategory.class.getDeclaredField("type");
+			typeField.setAccessible(true);
+			typeField.set(this, TYPE);
+		} catch (ReflectiveOperationException e) {
+			throw new IllegalStateException(
+					"[CE] could not rebind IE refinery category type for Lingerification", e);
+		}
+		this.title = Component.translatable("creativebrewing.jei.lingerification");
+	}
 
-    /**
-     * A refinery recipe belongs on this page iff it outputs a LINGERING {@code create:potion}
-     * fluid. Within {@code RefineryRecipe.RECIPES} those are only ever ours (IE's lingering
-     * mixer-parity recipes are {@code MixerRecipe}, a separate list).
-     */
-    public static boolean isLingerification(RefineryRecipe recipe) {
-        FluidStack out = recipe.output;
-        if (out == null || out.isEmpty() || !out.getFluid().isSame(AllFluids.POTION.get())) {
-            return false;
-        }
-        return out.hasTag() && out.getTag() != null
-                && "LINGERING".equals(out.getTag().getString("Bottle"));
-    }
+	/**
+	 * A refinery recipe belongs on this page iff it outputs a LINGERING {@code create:potion}
+	 * fluid. Within {@code RefineryRecipe.RECIPES} those are only ever ours (IE's lingering
+	 * mixer-parity recipes are {@code MixerRecipe}, a separate list).
+	 */
+	public static boolean isLingerification(RefineryRecipe recipe) {
+		FluidStack out = recipe.output;
+		if (out == null || out.isEmpty() || !out.getFluid().isSame(AllFluids.POTION.get())) {
+			return false;
+		}
+		return out.hasTag() && out.getTag() != null
+				&& "LINGERING".equals(out.getTag().getString("Bottle"));
+	}
 }

@@ -19,10 +19,10 @@ import net.minecraft.world.effect.MobEffectInstance;
 @Mixin(Gui.class)
 public abstract class GuiEffectIconMixin {
 
-    @Redirect(method = "m_93028_",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffectInstance;m_19575_()Z"),
-            remap = false)
-    private boolean creativeengineering$forceIcon(MobEffectInstance instance) {
-        return instance.showIcon() || EffectRules.forceHudIcon(instance.getEffect());
-    }
+	@Redirect(method = "m_93028_",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/effect/MobEffectInstance;m_19575_()Z"),
+			remap = false)
+	private boolean creativeengineering$forceIcon(MobEffectInstance instance) {
+		return instance.showIcon() || EffectRules.forceHudIcon(instance.getEffect());
+	}
 }

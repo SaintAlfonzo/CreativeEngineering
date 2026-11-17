@@ -6,6 +6,6 @@ package com.SaintAlfonzo.creativedelight.compat.incubation.goldenegg;
  */
 public interface GoldenEggLayer {
 
-    /** True from the winning roll until the golden egg is dropped; the nest goal stays off meanwhile. */
-    boolean creativedelight$isGoldenEggDue();
+	/** True from the winning roll until the golden egg is dropped; the nest goal stays off meanwhile. */
+	boolean creativedelight$isGoldenEggDue();
 }

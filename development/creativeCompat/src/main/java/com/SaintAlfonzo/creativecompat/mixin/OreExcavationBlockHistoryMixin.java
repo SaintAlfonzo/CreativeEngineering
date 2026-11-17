@@ -15,12 +15,12 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = BlockHistory.class, remap = false)
 public class OreExcavationBlockHistoryMixin implements VeinUndoAccess.Block {
 
-    @Shadow(remap = false)
-    @Final
-    public BlockState state;
+	@Shadow(remap = false)
+	@Final
+	public BlockState state;
 
-    @Override
-    public BlockState creativeengineering$state() {
-        return state;
-    }
+	@Override
+	public BlockState creativeengineering$state() {
+		return state;
+	}
 }

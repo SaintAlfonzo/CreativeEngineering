@@ -8,6 +8,6 @@ import vazkii.botania.common.item.ItemBackedInventory;
 /** The item a Botania item-backed inventory (Trinket Case, flower pouch) reads and writes. */
 @Mixin(value = ItemBackedInventory.class, remap = false)
 public interface ItemBackedInventoryAccessor {
-    @Accessor(value = "stack", remap = false)
-    ItemStack creativeengineering$stack();
+	@Accessor(value = "stack", remap = false)
+	ItemStack creativeengineering$stack();
 }

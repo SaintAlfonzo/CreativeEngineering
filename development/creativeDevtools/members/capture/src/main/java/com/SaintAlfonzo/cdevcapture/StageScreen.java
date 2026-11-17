@@ -13,36 +13,36 @@ import net.minecraft.world.item.ItemStack;
  */
 public class StageScreen extends Screen {
 
-    /** 0xAARRGGBB; crop.py's auto crop trims this color (#202020). */
-    public static final int BACKGROUND = 0xFF202020;
+	/** 0xAARRGGBB; crop.py's auto crop trims this color (#202020). */
+	public static final int BACKGROUND = 0xFF202020;
 
-    private final ItemStack stack;
+	private final ItemStack stack;
 
-    public StageScreen(ItemStack stack) {
-        super(Component.literal("cdevcapture stage"));
-        this.stack = stack;
-    }
+	public StageScreen(ItemStack stack) {
+		super(Component.literal("cdevcapture stage"));
+		this.stack = stack;
+	}
 
-    /** Where the virtual mouse sits: the tooltip opens 12 px right of it, with room for wide tooltips. */
-    int anchorX() {
-        return Math.max(24, width / 6);
-    }
+	/** Where the virtual mouse sits: the tooltip opens 12 px right of it, with room for wide tooltips. */
+	int anchorX() {
+		return Math.max(24, width / 6);
+	}
 
-    int anchorY() {
-        return Math.max(24, height / 3);
-    }
+	int anchorY() {
+		return Math.max(24, height / 3);
+	}
 
-    @Override
-    public void render(PoseStack pose, int mouseX, int mouseY, float partialTick) {
-        fill(pose, 0, 0, width, height, BACKGROUND);
-        int x = anchorX(), y = anchorY();
-        itemRenderer.renderAndDecorateItem(stack, x - 8, y - 8);
-        itemRenderer.renderGuiItemDecorations(font, stack, x - 8, y - 8);
-        renderTooltip(pose, stack, x, y);
-    }
+	@Override
+	public void render(PoseStack pose, int mouseX, int mouseY, float partialTick) {
+		fill(pose, 0, 0, width, height, BACKGROUND);
+		int x = anchorX(), y = anchorY();
+		itemRenderer.renderAndDecorateItem(stack, x - 8, y - 8);
+		itemRenderer.renderGuiItemDecorations(font, stack, x - 8, y - 8);
+		renderTooltip(pose, stack, x, y);
+	}
 
-    @Override
-    public boolean isPauseScreen() {
-        return false;
-    }
+	@Override
+	public boolean isPauseScreen() {
+		return false;
+	}
 }

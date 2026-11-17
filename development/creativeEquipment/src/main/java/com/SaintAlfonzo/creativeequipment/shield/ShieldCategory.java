@@ -34,53 +34,53 @@ import net.minecraft.world.damagesource.DamageSource;
  * config keys; pointing it at a new {@link ShieldGroup} gives it keys of its own in every tier.
  */
 public enum ShieldCategory {
-    EXPLOSION("explosion", ShieldGroup.PHYSICAL, DamageTags.id("explosion")),
-    PROJECTILE("projectile", ShieldGroup.PHYSICAL, DamageTags.id("projectile")),
-    MAGIC("magic", ShieldGroup.MAGIC, DamageTags.id("magic")),
-    ELEMENTAL("elemental", ShieldGroup.ELEMENTAL, DamageTags.id("elemental")),
-    MELEE("melee", ShieldGroup.PHYSICAL, DamageTags.id("melee")),
-    /** Everything else. With the default REQUIRED facing this is exactly vanilla's rule. */
-    OTHER("other", ShieldGroup.PHYSICAL, null);
+	EXPLOSION("explosion", ShieldGroup.PHYSICAL, DamageTags.id("explosion")),
+	PROJECTILE("projectile", ShieldGroup.PHYSICAL, DamageTags.id("projectile")),
+	MAGIC("magic", ShieldGroup.MAGIC, DamageTags.id("magic")),
+	ELEMENTAL("elemental", ShieldGroup.ELEMENTAL, DamageTags.id("elemental")),
+	MELEE("melee", ShieldGroup.PHYSICAL, DamageTags.id("melee")),
+	/** Everything else. With the default REQUIRED facing this is exactly vanilla's rule. */
+	OTHER("other", ShieldGroup.PHYSICAL, null);
 
-    private final String key;
-    private final ShieldGroup group;
-    /** The tag a hit must carry to land here; null only for {@link #OTHER}. */
-    @Nullable
-    private final ResourceLocation tag;
+	private final String key;
+	private final ShieldGroup group;
+	/** The tag a hit must carry to land here; null only for {@link #OTHER}. */
+	@Nullable
+	private final ResourceLocation tag;
 
-    ShieldCategory(String key, ShieldGroup group, @Nullable ResourceLocation tag) {
-        this.key = key;
-        this.group = group;
-        this.tag = tag;
-    }
+	ShieldCategory(String key, ShieldGroup group, @Nullable ResourceLocation tag) {
+		this.key = key;
+		this.group = group;
+		this.tag = tag;
+	}
 
-    /** Lower-case effect-filter name. */
-    public String key() {
-        return key;
-    }
+	/** Lower-case effect-filter name. */
+	public String key() {
+		return key;
+	}
 
-    /** The physical / elemental / magic group this category is tuned under. */
-    public ShieldGroup group() {
-        return group;
-    }
+	/** The physical / elemental / magic group this category is tuned under. */
+	public ShieldGroup group() {
+		return group;
+	}
 
-    public static ShieldCategory classify(DamageSource source) {
-        Set<ResourceLocation> tags = DamageTags.tagsOf(source);
-        for (ShieldCategory c : values()) {
-            if (c.tag == null || tags.contains(c.tag)) {
-                return c;
-            }
-        }
-        return OTHER;
-    }
+	public static ShieldCategory classify(DamageSource source) {
+		Set<ResourceLocation> tags = DamageTags.tagsOf(source);
+		for (ShieldCategory c : values()) {
+			if (c.tag == null || tags.contains(c.tag)) {
+				return c;
+			}
+		}
+		return OTHER;
+	}
 
-    @Nullable
-    public static ShieldCategory byKey(String key) {
-        for (ShieldCategory c : values()) {
-            if (c.key.equalsIgnoreCase(key)) {
-                return c;
-            }
-        }
-        return null;
-    }
+	@Nullable
+	public static ShieldCategory byKey(String key) {
+		for (ShieldCategory c : values()) {
+			if (c.key.equalsIgnoreCase(key)) {
+				return c;
+			}
+		}
+		return null;
+	}
 }

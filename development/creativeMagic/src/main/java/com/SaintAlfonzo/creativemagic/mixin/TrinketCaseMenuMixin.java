@@ -19,12 +19,12 @@ import vazkii.quark.api.IQuarkButtonAllowed;
  */
 @Mixin(value = BaubleBoxContainer.class, remap = false)
 public abstract class TrinketCaseMenuMixin implements IQuarkButtonAllowed {
-    @Shadow(remap = false) @Final private ItemStack box;
+	@Shadow(remap = false) @Final private ItemStack box;
 
 
-    @Redirect(method = "m_7648_", remap = false, at = @At(value = "INVOKE",
-            target = "Lvazkii/botania/common/handler/EquipmentHandler;isAccessory(Lnet/minecraft/world/item/ItemStack;)Z"))
-    private boolean creativeengineering$anyItem(EquipmentHandler handler, ItemStack stack) {
-        return stack != box && (TrinketCaseRules.allowed(stack) || handler.isAccessory(stack));
-    }
+	@Redirect(method = "m_7648_", remap = false, at = @At(value = "INVOKE",
+			target = "Lvazkii/botania/common/handler/EquipmentHandler;isAccessory(Lnet/minecraft/world/item/ItemStack;)Z"))
+	private boolean creativeengineering$anyItem(EquipmentHandler handler, ItemStack stack) {
+		return stack != box && (TrinketCaseRules.allowed(stack) || handler.isAccessory(stack));
+	}
 }

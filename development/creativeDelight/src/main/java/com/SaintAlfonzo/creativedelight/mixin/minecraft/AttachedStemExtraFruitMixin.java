@@ -36,36 +36,36 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = AttachedStemBlock.class, remap = false)
 public abstract class AttachedStemExtraFruitMixin {
 
-    @Inject(method = "m_7926_", at = @At("TAIL"), remap = false)
-    private void creativedelight$grownSides(StateDefinition.Builder<Block, BlockState> builder, CallbackInfo ci) {
-        builder.add(BlockStateProperties.NORTH, BlockStateProperties.EAST, BlockStateProperties.SOUTH,
-                BlockStateProperties.WEST);
-    }
+	@Inject(method = "m_7926_", at = @At("TAIL"), remap = false)
+	private void creativedelight$grownSides(StateDefinition.Builder<Block, BlockState> builder, CallbackInfo ci) {
+		builder.add(BlockStateProperties.NORTH, BlockStateProperties.EAST, BlockStateProperties.SOUTH,
+				BlockStateProperties.WEST);
+	}
 
-    @Inject(method = "<init>", at = @At("RETURN"), remap = false)
-    private void creativedelight$unconnectedDefault(CallbackInfo ci) {
-        StemSides.unconnectedDefault((Block) (Object) this);
-    }
+	@Inject(method = "<init>", at = @At("RETURN"), remap = false)
+	private void creativedelight$unconnectedDefault(CallbackInfo ci) {
+		StemSides.unconnectedDefault((Block) (Object) this);
+	}
 
-    public boolean m_6724_(BlockState state) {
-        return true;
-    }
+	public boolean m_6724_(BlockState state) {
+		return true;
+	}
 
-    public void m_213898_(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
-        StemExtraFruit.randomTick(state, level, pos, random);
-    }
+	public void m_213898_(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		StemExtraFruit.randomTick(state, level, pos, random);
+	}
 
-    public void m_6810_(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        // BlockBehaviour.onRemove's body, since super can't be called from here
-        if (state.hasBlockEntity() && !state.is(newState.getBlock())) level.removeBlockEntity(pos);
-        StemExtraFruit.onRemove(state, level, pos, newState);
-    }
+	public void m_6810_(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+		// BlockBehaviour.onRemove's body, since super can't be called from here
+		if (state.hasBlockEntity() && !state.is(newState.getBlock())) level.removeBlockEntity(pos);
+		StemExtraFruit.onRemove(state, level, pos, newState);
+	}
 
-    @Inject(method = "m_7417_", at = @At("RETURN"), cancellable = true, remap = false)
-    private void creativeengineering$reattach(BlockState state, Direction direction, BlockState neighbor,
-                                              LevelAccessor level, BlockPos pos, BlockPos neighborPos,
-                                              CallbackInfoReturnable<BlockState> cir) {
-        BlockState other = StemExtraFruit.reattach(state, cir.getReturnValue(), direction, neighbor, level, pos);
-        if (other != null) cir.setReturnValue(other);
-    }
+	@Inject(method = "m_7417_", at = @At("RETURN"), cancellable = true, remap = false)
+	private void creativeengineering$reattach(BlockState state, Direction direction, BlockState neighbor,
+											  LevelAccessor level, BlockPos pos, BlockPos neighborPos,
+											  CallbackInfoReturnable<BlockState> cir) {
+		BlockState other = StemExtraFruit.reattach(state, cir.getReturnValue(), direction, neighbor, level, pos);
+		if (other != null) cir.setReturnValue(other);
+	}
 }

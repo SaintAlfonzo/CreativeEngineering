@@ -22,38 +22,38 @@ import java.util.List;
  * only ticks a campfire's cook tick while lit.
  */
 public final class CampfireComfort {
-    private static final ResourceLocation COMFORT = new ResourceLocation("farmersdelight", "comfort");
-    private static final int REFRESH_BELOW_TICKS = 60;
-    private static MobEffect comfort;
-    private static boolean looked;
+	private static final ResourceLocation COMFORT = new ResourceLocation("farmersdelight", "comfort");
+	private static final int REFRESH_BELOW_TICKS = 60;
+	private static MobEffect comfort;
+	private static boolean looked;
 
-    private CampfireComfort() {}
+	private CampfireComfort() {}
 
-    public static void tick(Level level, BlockPos pos) {
-        CDConfig.Campfire cfg = CDConfig.CAMPFIRE;
-        if (!cfg.comfort.get()) return;
-        int every = cfg.comfortEveryTicks.get();
-        if (every > 1 && Math.floorMod(level.getGameTime() + pos.asLong(), every) != 0) return;
-        int distance = cfg.comfortDistance.get();
-        AABB box = new AABB(pos).inflate(distance).expandTowards(0.0, distance, 0.0);
-        List<Player> players = level.getEntitiesOfClass(Player.class, box);
-        if (players.isEmpty()) return;
-        MobEffect effect = effect();
-        int duration = cfg.comfortSeconds.get() * 20;
-        for (Player player : players) {
-            MobEffectInstance current = player.getEffect(effect);
-            if (current == null || current.getDuration() < REFRESH_BELOW_TICKS) {
-                player.addEffect(new MobEffectInstance(effect, duration, 0, true, true));
-            }
-        }
-    }
+	public static void tick(Level level, BlockPos pos) {
+		CDConfig.Campfire cfg = CDConfig.CAMPFIRE;
+		if (!cfg.comfort.get()) return;
+		int every = cfg.comfortEveryTicks.get();
+		if (every > 1 && Math.floorMod(level.getGameTime() + pos.asLong(), every) != 0) return;
+		int distance = cfg.comfortDistance.get();
+		AABB box = new AABB(pos).inflate(distance).expandTowards(0.0, distance, 0.0);
+		List<Player> players = level.getEntitiesOfClass(Player.class, box);
+		if (players.isEmpty()) return;
+		MobEffect effect = effect();
+		int duration = cfg.comfortSeconds.get() * 20;
+		for (Player player : players) {
+			MobEffectInstance current = player.getEffect(effect);
+			if (current == null || current.getDuration() < REFRESH_BELOW_TICKS) {
+				player.addEffect(new MobEffectInstance(effect, duration, 0, true, true));
+			}
+		}
+	}
 
-    private static MobEffect effect() {
-        if (!CDConfig.CAMPFIRE.useComfort.get()) return MobEffects.REGENERATION;
-        if (!looked) {
-            comfort = ForgeRegistries.MOB_EFFECTS.getValue(COMFORT);
-            looked = true;
-        }
-        return comfort != null ? comfort : MobEffects.REGENERATION;
-    }
+	private static MobEffect effect() {
+		if (!CDConfig.CAMPFIRE.useComfort.get()) return MobEffects.REGENERATION;
+		if (!looked) {
+			comfort = ForgeRegistries.MOB_EFFECTS.getValue(COMFORT);
+			looked = true;
+		}
+		return comfort != null ? comfort : MobEffects.REGENERATION;
+	}
 }

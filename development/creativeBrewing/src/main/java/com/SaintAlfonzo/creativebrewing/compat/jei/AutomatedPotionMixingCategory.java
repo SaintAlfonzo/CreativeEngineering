@@ -27,32 +27,32 @@ import java.lang.reflect.Field;
  */
 public class AutomatedPotionMixingCategory extends MixerRecipeCategory {
 
-    public static final RecipeType<MixerRecipe> TYPE = new RecipeType<>(
-            new ResourceLocation(CreativeBrewing.NS, "automated_potion_mixing"), MixerRecipe.class);
+	public static final RecipeType<MixerRecipe> TYPE = new RecipeType<>(
+			new ResourceLocation(CreativeBrewing.NS, "automated_potion_mixing"), MixerRecipe.class);
 
-    /**
-     * True once the category is built + registered. {@code JEIHelperMixin} only strips potion
-     * recipes out of IE's Mixer page while this holds — if the category failed to construct
-     * (reflection blocked, IE internals changed), the recipes stay where they were.
-     */
-    public static volatile boolean ACTIVE = false;
+	/**
+	 * True once the category is built + registered. {@code JEIHelperMixin} only strips potion
+	 * recipes out of IE's Mixer page while this holds — if the category failed to construct
+	 * (reflection blocked, IE internals changed), the recipes stay where they were.
+	 */
+	public static volatile boolean ACTIVE = false;
 
-    public AutomatedPotionMixingCategory(IGuiHelper guiHelper) {
-        super(guiHelper);
-        try {
-            Field typeField = IERecipeCategory.class.getDeclaredField("type");
-            typeField.setAccessible(true);
-            typeField.set(this, TYPE);
-        } catch (ReflectiveOperationException e) {
-            throw new IllegalStateException(
-                    "[CE] could not rebind IE mixer category type for Automated Potion Mixing", e);
-        }
-        this.title = Component.translatable("creativebrewing.jei.automated_potion_mixing");
-    }
+	public AutomatedPotionMixingCategory(IGuiHelper guiHelper) {
+		super(guiHelper);
+		try {
+			Field typeField = IERecipeCategory.class.getDeclaredField("type");
+			typeField.setAccessible(true);
+			typeField.set(this, TYPE);
+		} catch (ReflectiveOperationException e) {
+			throw new IllegalStateException(
+					"[CE] could not rebind IE mixer category type for Automated Potion Mixing", e);
+		}
+		this.title = Component.translatable("creativebrewing.jei.automated_potion_mixing");
+	}
 
-    /** A mixer recipe belongs on this page iff it outputs Create's {@code create:potion} fluid. */
-    public static boolean isPotionMixer(MixerRecipe recipe) {
-        FluidStack out = recipe.fluidOutput;
-        return out != null && !out.isEmpty() && out.getFluid().isSame(AllFluids.POTION.get());
-    }
+	/** A mixer recipe belongs on this page iff it outputs Create's {@code create:potion} fluid. */
+	public static boolean isPotionMixer(MixerRecipe recipe) {
+		FluidStack out = recipe.fluidOutput;
+		return out != null && !out.isEmpty() && out.getFluid().isSame(AllFluids.POTION.get());
+	}
 }

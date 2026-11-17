@@ -44,273 +44,273 @@ import javax.annotation.Nullable;
  */
 public final class JarFluidPipes {
 
-    public static final int MB_PER_BOTTLE = 250;
-    private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.NS, "jar_fluid_pipes");
+	public static final int MB_PER_BOTTLE = 250;
+	private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.NS, "jar_fluid_pipes");
 
-    private JarFluidPipes() {}
+	private JarFluidPipes() {}
 
-    /** Only with Supplementaries loaded (this class names Moonlight types). */
-    public static void register() {
-        MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, JarFluidPipes::attach);
-    }
+	/** Only with Supplementaries loaded (this class names Moonlight types). */
+	public static void register() {
+		MinecraftForge.EVENT_BUS.addGenericListener(BlockEntity.class, JarFluidPipes::attach);
+	}
 
-    private static void attach(AttachCapabilitiesEvent<BlockEntity> event) {
-        if (event.getObject() instanceof ISoftFluidTankProvider) {
-            Provider provider = new Provider(event.getObject());
-            event.addCapability(ID, provider);
-            event.addListener(provider.optional::invalidate);
-        }
-    }
+	private static void attach(AttachCapabilitiesEvent<BlockEntity> event) {
+		if (event.getObject() instanceof ISoftFluidTankProvider) {
+			Provider provider = new Provider(event.getObject());
+			event.addCapability(ID, provider);
+			event.addListener(provider.optional::invalidate);
+		}
+	}
 
-    private static final class Provider implements ICapabilitySerializable<CompoundTag> {
-        private final Handler handler;
-        final LazyOptional<IFluidHandler> optional;
+	private static final class Provider implements ICapabilitySerializable<CompoundTag> {
+		private final Handler handler;
+		final LazyOptional<IFluidHandler> optional;
 
-        Provider(BlockEntity be) {
-            this.handler = new Handler(be);
-            this.optional = LazyOptional.of(() -> handler);
-        }
+		Provider(BlockEntity be) {
+			this.handler = new Handler(be);
+			this.optional = LazyOptional.of(() -> handler);
+		}
 
-        @Override
-        @Nonnull
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-            return ForgeCapabilities.FLUID_HANDLER.orEmpty(cap, optional);
-        }
+		@Override
+		@Nonnull
+		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+			return ForgeCapabilities.FLUID_HANDLER.orEmpty(cap, optional);
+		}
 
-        @Override
-        public CompoundTag serializeNBT() {
-            return handler.save();
-        }
+		@Override
+		public CompoundTag serializeNBT() {
+			return handler.save();
+		}
 
-        @Override
-        public void deserializeNBT(CompoundTag tag) {
-            handler.load(tag);
-        }
-    }
+		@Override
+		public void deserializeNBT(CompoundTag tag) {
+			handler.load(tag);
+		}
+	}
 
-    static final class Handler implements IFluidHandler {
-        // The block entity, not its tank: the attach event fires inside the constructor, before the tank field is set.
-        private final BlockEntity be;
-        private int pendingMb;
-        @Nullable private ResourceLocation pendingId;
-        @Nullable private CompoundTag pendingTag;
+	static final class Handler implements IFluidHandler {
+		// The block entity, not its tank: the attach event fires inside the constructor, before the tank field is set.
+		private final BlockEntity be;
+		private int pendingMb;
+		@Nullable private ResourceLocation pendingId;
+		@Nullable private CompoundTag pendingTag;
 
-        Handler(BlockEntity be) {
-            this.be = be;
-        }
+		Handler(BlockEntity be) {
+			this.be = be;
+		}
 
-        private ISoftFluidTankProvider provider() {
-            return (ISoftFluidTankProvider) be;
-        }
+		private ISoftFluidTankProvider provider() {
+			return (ISoftFluidTankProvider) be;
+		}
 
-        @Nullable
-        private SoftFluidTank tank() {
-            return provider().getSoftFluidTank();
-        }
+		@Nullable
+		private SoftFluidTank tank() {
+			return provider().getSoftFluidTank();
+		}
 
-        // ---- IFluidHandler ----
+		// ---- IFluidHandler ----
 
-        @Override
-        public int getTanks() {
-            return 1;
-        }
+		@Override
+		public int getTanks() {
+			return 1;
+		}
 
-        @Override
-        @Nonnull
-        public FluidStack getFluidInTank(int tank) {
-            return tank == 0 ? contents() : FluidStack.EMPTY;
-        }
+		@Override
+		@Nonnull
+		public FluidStack getFluidInTank(int tank) {
+			return tank == 0 ? contents() : FluidStack.EMPTY;
+		}
 
-        @Override
-        public int getTankCapacity(int tank) {
-            SoftFluidTank t = tank();
-            return tank == 0 && t != null ? bottleCapacity(t) * MB_PER_BOTTLE : 0;
-        }
+		@Override
+		public int getTankCapacity(int tank) {
+			SoftFluidTank t = tank();
+			return tank == 0 && t != null ? bottleCapacity(t) * MB_PER_BOTTLE : 0;
+		}
 
-        @Override
-        public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
-            return tank == 0 && !SoftFluidRegistry.fromVanillaFluid(stack.getFluid()).isEmpty();
-        }
+		@Override
+		public boolean isFluidValid(int tank, @Nonnull FluidStack stack) {
+			return tank == 0 && !SoftFluidRegistry.fromVanillaFluid(stack.getFluid()).isEmpty();
+		}
 
-        @Override
-        public int fill(FluidStack resource, FluidAction action) {
-            SoftFluidTank t = tank();
-            if (t == null || resource.isEmpty() || !provider().canInteractWithSoftFluidTank()) return 0;
-            SoftFluid sf = SoftFluidRegistry.fromVanillaFluid(resource.getFluid());
-            if (sf.isEmpty()) return 0;
-            ResourceLocation id = SoftFluidRegistry.getID(sf);
-            CompoundTag tag = preserved(sf, resource.getTag());
-            settle(t);
-            if (!t.isEmpty()) {
-                if (!t.isSameFluidAs(sf, tag)) return 0;
-            } else if (pendingMb > 0 && (!id.equals(pendingId) || !nbtMatches(pendingTag, tag))) {
-                return 0;
-            }
-            int stored = t.getCount() * MB_PER_BOTTLE + pendingMb;
-            int accept = Math.min(resource.getAmount(), bottleCapacity(t) * MB_PER_BOTTLE - stored);
-            if (accept <= 0) return 0;
-            if (action.execute()) {
-                int total = pendingMb + accept;
-                int bottles = total / MB_PER_BOTTLE;
-                pendingMb = total % MB_PER_BOTTLE;
-                if (bottles > 0) t.tryAddingFluid(sf, bottles, tag);
-                if (pendingMb > 0) {
-                    pendingId = id;
-                    pendingTag = tag;
-                } else {
-                    clearPending();
-                }
-                be.setChanged();
-            }
-            return accept;
-        }
+		@Override
+		public int fill(FluidStack resource, FluidAction action) {
+			SoftFluidTank t = tank();
+			if (t == null || resource.isEmpty() || !provider().canInteractWithSoftFluidTank()) return 0;
+			SoftFluid sf = SoftFluidRegistry.fromVanillaFluid(resource.getFluid());
+			if (sf.isEmpty()) return 0;
+			ResourceLocation id = SoftFluidRegistry.getID(sf);
+			CompoundTag tag = preserved(sf, resource.getTag());
+			settle(t);
+			if (!t.isEmpty()) {
+				if (!t.isSameFluidAs(sf, tag)) return 0;
+			} else if (pendingMb > 0 && (!id.equals(pendingId) || !nbtMatches(pendingTag, tag))) {
+				return 0;
+			}
+			int stored = t.getCount() * MB_PER_BOTTLE + pendingMb;
+			int accept = Math.min(resource.getAmount(), bottleCapacity(t) * MB_PER_BOTTLE - stored);
+			if (accept <= 0) return 0;
+			if (action.execute()) {
+				int total = pendingMb + accept;
+				int bottles = total / MB_PER_BOTTLE;
+				pendingMb = total % MB_PER_BOTTLE;
+				if (bottles > 0) t.tryAddingFluid(sf, bottles, tag);
+				if (pendingMb > 0) {
+					pendingId = id;
+					pendingTag = tag;
+				} else {
+					clearPending();
+				}
+				be.setChanged();
+			}
+			return accept;
+		}
 
-        @Override
-        @Nonnull
-        public FluidStack drain(FluidStack resource, FluidAction action) {
-            if (resource.isEmpty()) return FluidStack.EMPTY;
-            FluidStack in = contents();
-            if (!in.isFluidEqual(resource)) return FluidStack.EMPTY;
-            return drain(resource.getAmount(), action);
-        }
+		@Override
+		@Nonnull
+		public FluidStack drain(FluidStack resource, FluidAction action) {
+			if (resource.isEmpty()) return FluidStack.EMPTY;
+			FluidStack in = contents();
+			if (!in.isFluidEqual(resource)) return FluidStack.EMPTY;
+			return drain(resource.getAmount(), action);
+		}
 
-        @Override
-        @Nonnull
-        public FluidStack drain(int maxDrain, FluidAction action) {
-            SoftFluidTank t = tank();
-            if (t == null || maxDrain <= 0) return FluidStack.EMPTY;
-            FluidStack in = contents();
-            if (in.isEmpty()) return FluidStack.EMPTY;
-            int take = Math.min(maxDrain, in.getAmount());
-            if (action.execute()) {
-                if (take <= pendingMb) {
-                    pendingMb -= take;
-                } else {
-                    // open whole bottles into the buffer, then take from it
-                    int bottles = (take - pendingMb + MB_PER_BOTTLE - 1) / MB_PER_BOTTLE;
-                    pendingId = SoftFluidRegistry.getID(t.getFluid());
-                    pendingTag = preserved(t.getFluid(), t.getNbt());
-                    t.shrink(bottles);
-                    pendingMb = pendingMb + bottles * MB_PER_BOTTLE - take;
-                }
-                if (pendingMb == 0) clearPending();
-                be.setChanged();
-            }
-            FluidStack out = in.copy();
-            out.setAmount(take);
-            return out;
-        }
+		@Override
+		@Nonnull
+		public FluidStack drain(int maxDrain, FluidAction action) {
+			SoftFluidTank t = tank();
+			if (t == null || maxDrain <= 0) return FluidStack.EMPTY;
+			FluidStack in = contents();
+			if (in.isEmpty()) return FluidStack.EMPTY;
+			int take = Math.min(maxDrain, in.getAmount());
+			if (action.execute()) {
+				if (take <= pendingMb) {
+					pendingMb -= take;
+				} else {
+					// open whole bottles into the buffer, then take from it
+					int bottles = (take - pendingMb + MB_PER_BOTTLE - 1) / MB_PER_BOTTLE;
+					pendingId = SoftFluidRegistry.getID(t.getFluid());
+					pendingTag = preserved(t.getFluid(), t.getNbt());
+					t.shrink(bottles);
+					pendingMb = pendingMb + bottles * MB_PER_BOTTLE - take;
+				}
+				if (pendingMb == 0) clearPending();
+				be.setChanged();
+			}
+			FluidStack out = in.copy();
+			out.setAmount(take);
+			return out;
+		}
 
-        // ---- contents ----
+		// ---- contents ----
 
-        /** Tank + buffer as one Forge stack; empty when the soft fluid has no Forge fluid. */
-        private FluidStack contents() {
-            SoftFluidTank t = tank();
-            if (t == null) return FluidStack.EMPTY;
-            settle(t);
-            SoftFluid sf;
-            CompoundTag tag;
-            if (!t.isEmpty()) {
-                sf = t.getFluid();
-                tag = preserved(sf, t.getNbt());
-            } else if (pendingMb > 0 && pendingId != null) {
-                sf = SoftFluidRegistry.getOptional(pendingId).orElse(null);
-                if (sf == null) {
-                    clearPending();
-                    return FluidStack.EMPTY;
-                }
-                tag = pendingTag;
-            } else {
-                return FluidStack.EMPTY;
-            }
-            Fluid forge = sf.getForgeFluid();
-            if (forge == null || forge == Fluids.EMPTY) return FluidStack.EMPTY;
-            int amount = t.getCount() * MB_PER_BOTTLE + pendingMb;
-            FluidStack out = new FluidStack(forge, amount);
-            if (tag != null && !tag.isEmpty()) {
-                CompoundTag copy = tag.copy();
-                // as Moonlight's applyNBTtoFluidStack: IE potion fluid has no bottle type
-                if ("immersiveengineering".equals(net.minecraftforge.registries.ForgeRegistries.FLUIDS.getKey(forge).getNamespace())) {
-                    copy.remove(SoftFluidTank.POTION_TYPE_KEY);
-                }
-                if (!copy.isEmpty()) out.setTag(copy);
-            }
-            return out;
-        }
+		/** Tank + buffer as one Forge stack; empty when the soft fluid has no Forge fluid. */
+		private FluidStack contents() {
+			SoftFluidTank t = tank();
+			if (t == null) return FluidStack.EMPTY;
+			settle(t);
+			SoftFluid sf;
+			CompoundTag tag;
+			if (!t.isEmpty()) {
+				sf = t.getFluid();
+				tag = preserved(sf, t.getNbt());
+			} else if (pendingMb > 0 && pendingId != null) {
+				sf = SoftFluidRegistry.getOptional(pendingId).orElse(null);
+				if (sf == null) {
+					clearPending();
+					return FluidStack.EMPTY;
+				}
+				tag = pendingTag;
+			} else {
+				return FluidStack.EMPTY;
+			}
+			Fluid forge = sf.getForgeFluid();
+			if (forge == null || forge == Fluids.EMPTY) return FluidStack.EMPTY;
+			int amount = t.getCount() * MB_PER_BOTTLE + pendingMb;
+			FluidStack out = new FluidStack(forge, amount);
+			if (tag != null && !tag.isEmpty()) {
+				CompoundTag copy = tag.copy();
+				// as Moonlight's applyNBTtoFluidStack: IE potion fluid has no bottle type
+				if ("immersiveengineering".equals(net.minecraftforge.registries.ForgeRegistries.FLUIDS.getKey(forge).getNamespace())) {
+					copy.remove(SoftFluidTank.POTION_TYPE_KEY);
+				}
+				if (!copy.isEmpty()) out.setTag(copy);
+			}
+			return out;
+		}
 
-        /** Drop a buffer the tank no longer agrees with (a player changed the jar's fluid by hand). */
-        private void settle(SoftFluidTank t) {
-            if (pendingMb <= 0) {
-                clearPending();
-                return;
-            }
-            if (t.isEmpty()) return;
-            ResourceLocation tankId = SoftFluidRegistry.getID(t.getFluid());
-            if (!tankId.equals(pendingId) || !nbtMatches(preserved(t.getFluid(), t.getNbt()), pendingTag)) {
-                clearPending();
-            }
-        }
+		/** Drop a buffer the tank no longer agrees with (a player changed the jar's fluid by hand). */
+		private void settle(SoftFluidTank t) {
+			if (pendingMb <= 0) {
+				clearPending();
+				return;
+			}
+			if (t.isEmpty()) return;
+			ResourceLocation tankId = SoftFluidRegistry.getID(t.getFluid());
+			if (!tankId.equals(pendingId) || !nbtMatches(preserved(t.getFluid(), t.getNbt()), pendingTag)) {
+				clearPending();
+			}
+		}
 
-        private void clearPending() {
-            pendingMb = 0;
-            pendingId = null;
-            pendingTag = null;
-        }
+		private void clearPending() {
+			pendingMb = 0;
+			pendingId = null;
+			pendingTag = null;
+		}
 
-        CompoundTag save() {
-            CompoundTag tag = new CompoundTag();
-            if (pendingMb > 0 && pendingId != null) {
-                tag.putInt("PendingMb", pendingMb);
-                tag.putString("Fluid", pendingId.toString());
-                if (pendingTag != null && !pendingTag.isEmpty()) tag.put("Tag", pendingTag.copy());
-            }
-            return tag;
-        }
+		CompoundTag save() {
+			CompoundTag tag = new CompoundTag();
+			if (pendingMb > 0 && pendingId != null) {
+				tag.putInt("PendingMb", pendingMb);
+				tag.putString("Fluid", pendingId.toString());
+				if (pendingTag != null && !pendingTag.isEmpty()) tag.put("Tag", pendingTag.copy());
+			}
+			return tag;
+		}
 
-        void load(CompoundTag tag) {
-            clearPending();
-            int mb = tag.getInt("PendingMb");
-            ResourceLocation id = ResourceLocation.tryParse(tag.getString("Fluid"));
-            if (mb > 0 && mb < MB_PER_BOTTLE && id != null) {
-                pendingMb = mb;
-                pendingId = id;
-                pendingTag = tag.contains("Tag") ? tag.getCompound("Tag") : null;
-            }
-        }
-    }
+		void load(CompoundTag tag) {
+			clearPending();
+			int mb = tag.getInt("PendingMb");
+			ResourceLocation id = ResourceLocation.tryParse(tag.getString("Fluid"));
+			if (mb > 0 && mb < MB_PER_BOTTLE && id != null) {
+				pendingMb = mb;
+				pendingId = id;
+				pendingTag = tag.contains("Tag") ? tag.getCompound("Tag") : null;
+			}
+		}
+	}
 
-    // ---- helpers ----
+	// ---- helpers ----
 
-    /** The tank's capacity in bottles (SoftFluidTank keeps it protected; canAdd tests count + n against it). */
-    private static int bottleCapacity(SoftFluidTank t) {
-        int free = 0;
-        while (free < 4096 && t.canAdd(free + 1)) free++;
-        return t.getCount() + free;
-    }
+	/** The tank's capacity in bottles (SoftFluidTank keeps it protected; canAdd tests count + n against it). */
+	private static int bottleCapacity(SoftFluidTank t) {
+		int free = 0;
+		while (free < 4096 && t.canAdd(free + 1)) free++;
+		return t.getCount() + free;
+	}
 
-    /** The keys of {@code tag} this soft fluid keeps from its items; null when none. */
-    @Nullable
-    private static CompoundTag preserved(SoftFluid sf, @Nullable CompoundTag tag) {
-        if (tag == null || tag.isEmpty() || sf.getNbtKeyFromItem() == null) return null;
-        CompoundTag out = new CompoundTag();
-        for (String key : sf.getNbtKeyFromItem()) {
-            if (tag.contains(key)) out.put(key, tag.get(key).copy());
-        }
-        return out.isEmpty() ? null : out;
-    }
+	/** The keys of {@code tag} this soft fluid keeps from its items; null when none. */
+	@Nullable
+	private static CompoundTag preserved(SoftFluid sf, @Nullable CompoundTag tag) {
+		if (tag == null || tag.isEmpty() || sf.getNbtKeyFromItem() == null) return null;
+		CompoundTag out = new CompoundTag();
+		for (String key : sf.getNbtKeyFromItem()) {
+			if (tag.contains(key)) out.put(key, tag.get(key).copy());
+		}
+		return out.isEmpty() ? null : out;
+	}
 
-    /** Moonlight's rule: null equals empty, and a {@code Bottle} key on only one side is ignored. */
-    private static boolean nbtMatches(@Nullable CompoundTag a, @Nullable CompoundTag b) {
-        boolean ae = a == null || a.isEmpty();
-        boolean be = b == null || b.isEmpty();
-        if (ae || be) return ae == be;
-        String bottle = SoftFluidTank.POTION_TYPE_KEY;
-        if (a.contains(bottle) != b.contains(bottle)) {
-            a = a.copy();
-            b = b.copy();
-            a.remove(bottle);
-            b.remove(bottle);
-        }
-        return a.equals(b);
-    }
+	/** Moonlight's rule: null equals empty, and a {@code Bottle} key on only one side is ignored. */
+	private static boolean nbtMatches(@Nullable CompoundTag a, @Nullable CompoundTag b) {
+		boolean ae = a == null || a.isEmpty();
+		boolean be = b == null || b.isEmpty();
+		if (ae || be) return ae == be;
+		String bottle = SoftFluidTank.POTION_TYPE_KEY;
+		if (a.contains(bottle) != b.contains(bottle)) {
+			a = a.copy();
+			b = b.copy();
+			a.remove(bottle);
+			b.remove(bottle);
+		}
+		return a.equals(b);
+	}
 }

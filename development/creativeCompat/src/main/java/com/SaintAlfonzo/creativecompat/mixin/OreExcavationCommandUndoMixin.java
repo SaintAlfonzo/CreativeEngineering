@@ -20,22 +20,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = CommandUndo.class, remap = false)
 public class OreExcavationCommandUndoMixin {
 
-    @Inject(method = "execute", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void creativeengineering$veinUndoRules(CommandContext<CommandSourceStack> context,
-                                                          CallbackInfoReturnable<Integer> cir) {
-        ServerPlayer player = context.getSource().getPlayer();
-        if (player == null) return;
-        Component refusal = VeinUndo.refusal(player);
-        if (refusal != null) {
-            context.getSource().sendFailure(refusal);
-            cir.setReturnValue(0);
-        }
-    }
+	@Inject(method = "execute", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void creativeengineering$veinUndoRules(CommandContext<CommandSourceStack> context,
+														  CallbackInfoReturnable<Integer> cir) {
+		ServerPlayer player = context.getSource().getPlayer();
+		if (player == null) return;
+		Component refusal = VeinUndo.refusal(player);
+		if (refusal != null) {
+			context.getSource().sendFailure(refusal);
+			cir.setReturnValue(0);
+		}
+	}
 
-    @Inject(method = "execute", at = @At("RETURN"), remap = false)
-    private static void creativeengineering$startCooldown(CommandContext<CommandSourceStack> context,
-                                                          CallbackInfoReturnable<Integer> cir) {
-        ServerPlayer player = context.getSource().getPlayer();
-        if (player != null) VeinUndo.startCooldown(player);
-    }
+	@Inject(method = "execute", at = @At("RETURN"), remap = false)
+	private static void creativeengineering$startCooldown(CommandContext<CommandSourceStack> context,
+														  CallbackInfoReturnable<Integer> cir) {
+		ServerPlayer player = context.getSource().getPlayer();
+		if (player != null) VeinUndo.startCooldown(player);
+	}
 }

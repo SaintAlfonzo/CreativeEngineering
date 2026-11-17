@@ -15,13 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = IngredientFilter.class, remap = false)
 public abstract class JeiIngredientFilterMixin {
 
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void creativecommon$remember(CallbackInfo ci) {
-        PackIngredientOrder.onFilterCreated((IngredientFilter) (Object) this);
-    }
+	@Inject(method = "<init>", at = @At("RETURN"))
+	private void creativecommon$remember(CallbackInfo ci) {
+		PackIngredientOrder.onFilterCreated((IngredientFilter) (Object) this);
+	}
 
-    @Inject(method = "onIngredientsAdded", at = @At("RETURN"))
-    private void creativecommon$resortAdded(CallbackInfo ci) {
-        PackIngredientOrder.onIngredientsAdded((IngredientFilter) (Object) this);
-    }
+	@Inject(method = "onIngredientsAdded", at = @At("RETURN"))
+	private void creativecommon$resortAdded(CallbackInfo ci) {
+		PackIngredientOrder.onIngredientsAdded((IngredientFilter) (Object) this);
+	}
 }

@@ -11,16 +11,16 @@ import net.minecraft.world.item.ItemStack;
 @FunctionalInterface
 public interface StationSlotRule {
 
-    /** false = {@code stack} may not go into {@code slot}. */
-    boolean allows(int slot, ItemStack stack);
+	/** false = {@code stack} may not go into {@code slot}. */
+	boolean allows(int slot, ItemStack stack);
 
-    /** Mixed into {@code net.minecraftforge.items.ItemStackHandler}. */
-    interface Holder {
-        void ce$setSlotRule(StationSlotRule rule);
-    }
+	/** Mixed into {@code net.minecraftforge.items.ItemStackHandler}. */
+	interface Holder {
+		void ce$setSlotRule(StationSlotRule rule);
+	}
 
-    /** Sets {@code rule} on {@code handler} (a no-op if the mixin did not apply). */
-    static void apply(Object handler, StationSlotRule rule) {
-        if (handler instanceof Holder holder) holder.ce$setSlotRule(rule);
-    }
+	/** Sets {@code rule} on {@code handler} (a no-op if the mixin did not apply). */
+	static void apply(Object handler, StationSlotRule rule) {
+		if (handler instanceof Holder holder) holder.ce$setSlotRule(rule);
+	}
 }

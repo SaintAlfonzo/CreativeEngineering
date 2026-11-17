@@ -40,35 +40,35 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(BoneMealItem.class)
 public abstract class BonemealCharmMixin {
 
-    @Inject(method = "m_6225_", at = @At("RETURN"), remap = false)
-    private void creativeengineering$refundBonemeal(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
-        try {
-            if (!CEQConfig.BONEMEAL_CHARM.enabled.get()) return;
-            if (cir.getReturnValue() != InteractionResult.CONSUME) return;
+	@Inject(method = "m_6225_", at = @At("RETURN"), remap = false)
+	private void creativeengineering$refundBonemeal(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
+		try {
+			if (!CEQConfig.BONEMEAL_CHARM.enabled.get()) return;
+			if (cir.getReturnValue() != InteractionResult.CONSUME) return;
 
-            Player player = context.getPlayer();
-            if (player == null) return;
+			Player player = context.getPlayer();
+			if (player == null) return;
 
-            InteractionHand otherHand = context.getHand() == InteractionHand.MAIN_HAND
-                    ? InteractionHand.OFF_HAND
-                    : InteractionHand.MAIN_HAND;
+			InteractionHand otherHand = context.getHand() == InteractionHand.MAIN_HAND
+					? InteractionHand.OFF_HAND
+					: InteractionHand.MAIN_HAND;
 
-            ItemStack charm = player.getItemInHand(otherHand);
-            if (charm.isEmpty() || !charm.is(BonemealCharms.TAG)) return;
+			ItemStack charm = player.getItemInHand(otherHand);
+			if (charm.isEmpty() || !charm.is(BonemealCharms.TAG)) return;
 
-            RandomSource random = context.getLevel().getRandom();
+			RandomSource random = context.getLevel().getRandom();
 
-            // Only bone meal itself is refunded (R7, plan_small_fixes_1116.md): a BoneMealItem subclass from another mod
-            // (fertilizers) is always consumed, even if a future one reaches this injection
-            if (context.getItemInHand().is(Items.BONE_MEAL) && random.nextFloat() < CEQConfig.BONEMEAL_CHARM.chance.get()) {
-                context.getItemInHand().grow(1);
-            }
-            if (random.nextFloat() < CEQConfig.BONEMEAL_CHARM.damageChance.get()) {
-                charm.hurtAndBreak(CEQConfig.BONEMEAL_CHARM.damagePerUse.get(), player,
-                        p -> p.broadcastBreakEvent(otherHand));
-            }
-        } catch (Throwable ignored) {
-            // fall through to vanilla's own result - no refund, no extra damage
-        }
-    }
+			// Only bone meal itself is refunded (R7, plan_small_fixes_1116.md): a BoneMealItem subclass from another mod
+			// (fertilizers) is always consumed, even if a future one reaches this injection
+			if (context.getItemInHand().is(Items.BONE_MEAL) && random.nextFloat() < CEQConfig.BONEMEAL_CHARM.chance.get()) {
+				context.getItemInHand().grow(1);
+			}
+			if (random.nextFloat() < CEQConfig.BONEMEAL_CHARM.damageChance.get()) {
+				charm.hurtAndBreak(CEQConfig.BONEMEAL_CHARM.damagePerUse.get(), player,
+						p -> p.broadcastBreakEvent(otherHand));
+			}
+		} catch (Throwable ignored) {
+			// fall through to vanilla's own result - no refund, no extra damage
+		}
+	}
 }

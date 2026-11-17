@@ -15,11 +15,11 @@ import java.util.List;
 @Mixin(targets = "dev.ftb.mods.ftbquests.gui.quests.ViewQuestPanel$QuestDescriptionField", remap = false)
 public class FtbQuestDescriptionTooltipMixin {
 
-    @Redirect(method = "addMouseOverText", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraft/world/item/ItemStack;m_41651_(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"))
-    private List<Component> creativecommon$rememberStack(ItemStack stack, Player player, TooltipFlag flag) {
-        FtbTooltipStacks.remember(stack);
-        return stack.getTooltipLines(player, flag);
-    }
+	@Redirect(method = "addMouseOverText", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraft/world/item/ItemStack;m_41651_(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"))
+	private List<Component> creativecommon$rememberStack(ItemStack stack, Player player, TooltipFlag flag) {
+		FtbTooltipStacks.remember(stack);
+		return stack.getTooltipLines(player, flag);
+	}
 }

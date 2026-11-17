@@ -35,47 +35,47 @@ import org.slf4j.Logger;
 @Mod(CreativeMagic.MOD_ID)
 public class CreativeMagic {
 
-    public static final String MOD_ID = "creativemagic";
-    /** The namespace of every id this mod registers. */
-    public static final String NS = MOD_ID;
-    public static final Logger LOGGER = LogUtils.getLogger();
+	public static final String MOD_ID = "creativemagic";
+	/** The namespace of every id this mod registers. */
+	public static final String NS = MOD_ID;
+	public static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final String OLD_FILE = "creativeengineering-common.toml";
-    private static final String FILE = MOD_ID + "-common.toml";
+	private static final String OLD_FILE = "creativeengineering-common.toml";
+	private static final String FILE = MOD_ID + "-common.toml";
 
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, NS);
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, NS);
+	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, NS);
+	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, NS);
 
-    /** The one flame that opens a Nether portal (dimension/PortalFailureHandler). */
-    public static final RegistryObject<Block> DARK_FIRE = BLOCKS.register("dark_fire",
-            () -> new DarkFireBlock(BlockBehaviour.Properties.of(Material.FIRE)
-                    .noCollission()
-                    .instabreak()
-                    .lightLevel(state -> 5)
-                    .sound(SoundType.WOOL)
-                    .noOcclusion()));
+	/** The one flame that opens a Nether portal (dimension/PortalFailureHandler). */
+	public static final RegistryObject<Block> DARK_FIRE = BLOCKS.register("dark_fire",
+			() -> new DarkFireBlock(BlockBehaviour.Properties.of(Material.FIRE)
+					.noCollission()
+					.instabreak()
+					.lightLevel(state -> 5)
+					.sound(SoundType.WOOL)
+					.noOcclusion()));
 
-    /** Places Dark Fire (recipe: kubejs/data/creativemagic/kubejs/magic/progression.js). */
-    public static final RegistryObject<Item> FLINT_AND_TERRASTEEL = ITEMS.register("flint_and_terrasteel",
-            () -> new FlintAndTerraSteelItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).durability(65)));
+	/** Places Dark Fire (recipe: kubejs/data/creativemagic/kubejs/magic/progression.js). */
+	public static final RegistryObject<Item> FLINT_AND_TERRASTEEL = ITEMS.register("flint_and_terrasteel",
+			() -> new FlintAndTerraSteelItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC).durability(65)));
 
-    public CreativeMagic() {
-        // [botania] came from Creative Common's file: the first boot copies the player's value over (then Creative Common drops
-        // it from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
-        ConfigRename.carrySections(OLD_FILE, FILE, CMGConfig.SECTIONS);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CMGConfig.SPEC, FILE);
+	public CreativeMagic() {
+		// [botania] came from Creative Common's file: the first boot copies the player's value over (then Creative Common drops
+		// it from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
+		ConfigRename.carrySections(OLD_FILE, FILE, CMGConfig.SECTIONS);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CMGConfig.SPEC, FILE);
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        // Same order as Creative Common's constructor had them: items, then blocks.
-        ITEMS.register(modEventBus);
-        BLOCKS.register(modEventBus);
-        modEventBus.addListener(CreativeMagic::commonSetup);
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		// Same order as Creative Common's constructor had them: items, then blocks.
+		ITEMS.register(modEventBus);
+		BLOCKS.register(modEventBus);
+		modEventBus.addListener(CreativeMagic::commonSetup);
 
-        LOGGER.info("[creativemagic] loaded (config/{})", FILE);
-    }
+		LOGGER.info("[creativemagic] loaded (config/{})", FILE);
+	}
 
-    private static void commonSetup(FMLCommonSetupEvent event) {
-        // Liquid XP bridge: log whether Create Enchantment Industry's experience fluid is there for the mixins.
-        event.enqueueWork(FluidBridge::logStartupDiagnostic);
-    }
+	private static void commonSetup(FMLCommonSetupEvent event) {
+		// Liquid XP bridge: log whether Create Enchantment Industry's experience fluid is there for the mixins.
+		event.enqueueWork(FluidBridge::logStartupDiagnostic);
+	}
 }

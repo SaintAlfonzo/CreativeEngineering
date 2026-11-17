@@ -16,29 +16,29 @@ import net.minecraft.world.damagesource.DamageSource;
  */
 final class BotPlayer extends ServerPlayer {
 
-    private final Bots bots;
+	private final Bots bots;
 
-    BotPlayer(MinecraftServer server, ServerLevel level, GameProfile profile, Bots bots) {
-        super(server, level, profile, null);
-        this.bots = bots;
-    }
+	BotPlayer(MinecraftServer server, ServerLevel level, GameProfile profile, Bots bots) {
+		super(server, level, profile, null);
+		this.bots = bots;
+	}
 
-    @Override
-    public void tick() {
-        connection.resetPosition();
-        super.tick();
-        doTick();
-    }
+	@Override
+	public void tick() {
+		connection.resetPosition();
+		super.tick();
+		doTick();
+	}
 
-    /** A fully charged swing, as after a player waits out the attack cooldown (the ticker is LivingEntity's). */
-    void chargeAttack() {
-        attackStrengthTicker = 1000;
-    }
+	/** A fully charged swing, as after a player waits out the attack cooldown (the ticker is LivingEntity's). */
+	void chargeAttack() {
+		attackStrengthTicker = 1000;
+	}
 
-    @Override
-    public void die(DamageSource source) {
-        super.die(source);
-        MinecraftServer server = getServer();
-        if (server != null) server.tell(new TickTask(server.getTickCount(), () -> bots.respawn(this)));
-    }
+	@Override
+	public void die(DamageSource source) {
+		super.die(source);
+		MinecraftServer server = getServer();
+		if (server != null) server.tell(new TickTask(server.getTickCount(), () -> bots.respawn(this)));
+	}
 }

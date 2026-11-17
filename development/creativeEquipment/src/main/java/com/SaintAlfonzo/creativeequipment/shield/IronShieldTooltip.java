@@ -16,12 +16,12 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class IronShieldTooltip {
 
-    private IronShieldTooltip() {}
+	private IronShieldTooltip() {}
 
-    @SubscribeEvent
-    public static void onTooltip(ItemTooltipEvent event) {
-        if (event.getItemStack().getItem() == Items.SHIELD) {
-            ShieldTooltip.appendLines(ShieldTier.IRON, event.getFlags(), event.getToolTip());
-        }
-    }
+	@SubscribeEvent
+	public static void onTooltip(ItemTooltipEvent event) {
+		if (event.getItemStack().getItem() == Items.SHIELD) {
+			ShieldTooltip.appendLines(ShieldTier.IRON, event.getFlags(), event.getToolTip());
+		}
+	}
 }

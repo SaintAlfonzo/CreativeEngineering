@@ -20,15 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = MobEffect.class, remap = false)
 public class MobEffectCategoryMixin {
 
-    @Inject(method = "m_19483_", at = @At("HEAD"), cancellable = true)
-    private void creativeengineering$categoryOverride(CallbackInfoReturnable<MobEffectCategory> cir) {
-        MobEffectCategory category = EffectCategories.override((MobEffect) (Object) this);
-        if (category != null) cir.setReturnValue(category);
-    }
+	@Inject(method = "m_19483_", at = @At("HEAD"), cancellable = true)
+	private void creativeengineering$categoryOverride(CallbackInfoReturnable<MobEffectCategory> cir) {
+		MobEffectCategory category = EffectCategories.override((MobEffect) (Object) this);
+		if (category != null) cir.setReturnValue(category);
+	}
 
-    @Inject(method = "m_19486_", at = @At("HEAD"), cancellable = true)
-    private void creativeengineering$beneficialOverride(CallbackInfoReturnable<Boolean> cir) {
-        MobEffectCategory category = EffectCategories.override((MobEffect) (Object) this);
-        if (category != null) cir.setReturnValue(category == MobEffectCategory.BENEFICIAL);
-    }
+	@Inject(method = "m_19486_", at = @At("HEAD"), cancellable = true)
+	private void creativeengineering$beneficialOverride(CallbackInfoReturnable<Boolean> cir) {
+		MobEffectCategory category = EffectCategories.override((MobEffect) (Object) this);
+		if (category != null) cir.setReturnValue(category == MobEffectCategory.BENEFICIAL);
+	}
 }

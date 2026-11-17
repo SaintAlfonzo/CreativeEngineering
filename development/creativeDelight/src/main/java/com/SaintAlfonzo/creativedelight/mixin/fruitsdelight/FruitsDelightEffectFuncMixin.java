@@ -21,9 +21,9 @@ import net.minecraft.world.effect.MobEffectInstance;
 @Mixin(targets = "dev.xkmc.fruitsdelight.init.food.EffectFunc", remap = false)
 public abstract class FruitsDelightEffectFuncMixin {
 
-    @Inject(method = "getEffect", at = @At("RETURN"), cancellable = true, require = 0, remap = false)
-    private void creativedelight$remap(int effectLevel, CallbackInfoReturnable<MobEffectInstance> cir) {
-        MobEffectInstance instance = cir.getReturnValue();
-        if (instance != null) cir.setReturnValue(EffectRules.remap(instance));
-    }
+	@Inject(method = "getEffect", at = @At("RETURN"), cancellable = true, require = 0, remap = false)
+	private void creativedelight$remap(int effectLevel, CallbackInfoReturnable<MobEffectInstance> cir) {
+		MobEffectInstance instance = cir.getReturnValue();
+		if (instance != null) cir.setReturnValue(EffectRules.remap(instance));
+	}
 }

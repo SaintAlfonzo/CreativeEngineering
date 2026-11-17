@@ -27,31 +27,31 @@ import java.nio.file.Path;
  */
 @Mod.EventBusSubscriber(modid = CreativeCommon.MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class LoadingTipPacks {
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    /** Folder under resourcepacks/ and the pack's display name. */
-    private static final String[][] PACKS = {
-            {"loading_tips", "Loading Tips"},
-    };
+	/** Folder under resourcepacks/ and the pack's display name. */
+	private static final String[][] PACKS = {
+			{"loading_tips", "Loading Tips"},
+	};
 
-    private LoadingTipPacks() {}
+	private LoadingTipPacks() {}
 
-    @SubscribeEvent
-    public static void onAddPackFinders(AddPackFindersEvent event) {
-        if (event.getPackType() != PackType.CLIENT_RESOURCES) return;
-        IModFile file = ModList.get().getModFileById(CreativeCommon.MODID).getFile();
-        for (String[] p : PACKS) {
-            Path root = file.findResource("resourcepacks", p[0]);
-            if (!Files.isDirectory(root)) {
-                LOGGER.warn("Loading tips: built-in pack resourcepacks/{} is missing from the jar", p[0]);
-                continue;
-            }
-            String id = CreativeCommon.MODID + ":" + p[0];
-            event.addRepositorySource((consumer, constructor) -> {
-                Pack pack = Pack.create(id, true, () -> new PathPackResources(p[1], root),
-                        constructor, Pack.Position.TOP, PackSource.BUILT_IN);
-                if (pack != null) consumer.accept(pack);
-            });
-        }
-    }
+	@SubscribeEvent
+	public static void onAddPackFinders(AddPackFindersEvent event) {
+		if (event.getPackType() != PackType.CLIENT_RESOURCES) return;
+		IModFile file = ModList.get().getModFileById(CreativeCommon.MODID).getFile();
+		for (String[] p : PACKS) {
+			Path root = file.findResource("resourcepacks", p[0]);
+			if (!Files.isDirectory(root)) {
+				LOGGER.warn("Loading tips: built-in pack resourcepacks/{} is missing from the jar", p[0]);
+				continue;
+			}
+			String id = CreativeCommon.MODID + ":" + p[0];
+			event.addRepositorySource((consumer, constructor) -> {
+				Pack pack = Pack.create(id, true, () -> new PathPackResources(p[1], root),
+						constructor, Pack.Position.TOP, PackSource.BUILT_IN);
+				if (pack != null) consumer.accept(pack);
+			});
+		}
+	}
 }

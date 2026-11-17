@@ -13,9 +13,9 @@ import org.spongepowered.asm.mixin.gen.Accessor;
  */
 @Mixin(value = ItemDisplayTile.class, remap = false)
 public interface ItemDisplayTileAccessor {
-    @Accessor("stacks")
-    NonNullList<ItemStack> creativeengineering$getStacks();
+	@Accessor("stacks")
+	NonNullList<ItemStack> creativeengineering$getStacks();
 
-    @Accessor("stacks")
-    void creativeengineering$setStacks(NonNullList<ItemStack> stacks);
+	@Accessor("stacks")
+	void creativeengineering$setStacks(NonNullList<ItemStack> stacks);
 }

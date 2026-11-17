@@ -17,16 +17,16 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(value = SawmillRecipe.class, remap = false)
 public class SawmillRecipeMixin implements SawmillRecipeExt {
 
-    @Unique
-    private String creativeengineering$blade;
+	@Unique
+	private String creativeengineering$blade;
 
-    @Override
-    public String creativeengineering$getBlade() {
-        return creativeengineering$blade == null ? "" : creativeengineering$blade;
-    }
+	@Override
+	public String creativeengineering$getBlade() {
+		return creativeengineering$blade == null ? "" : creativeengineering$blade;
+	}
 
-    @Override
-    public void creativeengineering$setBlade(String blade) {
-        this.creativeengineering$blade = blade == null ? "" : blade;
-    }
+	@Override
+	public void creativeengineering$setBlade(String blade) {
+		this.creativeengineering$blade = blade == null ? "" : blade;
+	}
 }

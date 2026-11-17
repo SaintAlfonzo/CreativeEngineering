@@ -38,77 +38,77 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = GooseEntity.class, remap = false)
 public abstract class GooseEntityEggLayerMixin extends TamableAnimal implements EggLayer, GoldenEggLayer {
 
-    @Shadow
-    private int eggLayTime;
+	@Shadow
+	private int eggLayTime;
 
-    // This egg's roll is done / was won. Cleared whenever the timer is back above the nest window.
-    @Unique
-    private boolean creativedelight$goldenRolled;
-    @Unique
-    private boolean creativedelight$goldenDue;
+	// This egg's roll is done / was won. Cleared whenever the timer is back above the nest window.
+	@Unique
+	private boolean creativedelight$goldenRolled;
+	@Unique
+	private boolean creativedelight$goldenDue;
 
-    protected GooseEntityEggLayerMixin(EntityType<? extends TamableAnimal> type, Level level) {
-        super(type, level);
-    }
+	protected GooseEntityEggLayerMixin(EntityType<? extends TamableAnimal> type, Level level) {
+		super(type, level);
+	}
 
-    @Override
-    public int getEggTimer() {
-        return this.eggLayTime;
-    }
+	@Override
+	public int getEggTimer() {
+		return this.eggLayTime;
+	}
 
-    @Override
-    public void setEggTimer(int time) {
-        this.eggLayTime = time;
-    }
+	@Override
+	public void setEggTimer(int time) {
+		this.eggLayTime = time;
+	}
 
-    // Geese carry no jockeys.
-    @Override
-    public boolean isBirdJockey() {
-        return false;
-    }
+	// Geese carry no jockeys.
+	@Override
+	public boolean isBirdJockey() {
+		return false;
+	}
 
-    @Override
-    public Item getEggItem() {
-        return ModItems.getGooseEgg();
-    }
+	@Override
+	public Item getEggItem() {
+		return ModItems.getGooseEgg();
+	}
 
-    // Same reset GooseEntity.aiStep uses after a lay.
-    @Override
-    public int getNextEggTime(RandomSource random) {
-        return random.nextInt(6000) + 6000;
-    }
+	// Same reset GooseEntity.aiStep uses after a lay.
+	@Override
+	public int getNextEggTime(RandomSource random) {
+		return random.nextInt(6000) + 6000;
+	}
 
-    @Override
-    public SoundEvent getEggLayingSound() {
-        return ModSoundEvents.getGooseEggSound();
-    }
+	@Override
+	public SoundEvent getEggLayingSound() {
+		return ModSoundEvents.getGooseEggSound();
+	}
 
-    @Override
-    public boolean creativedelight$isGoldenEggDue() {
-        return this.creativedelight$goldenDue;
-    }
+	@Override
+	public boolean creativedelight$isGoldenEggDue() {
+		return this.creativedelight$goldenDue;
+	}
 
-    // 400 = LayEggInNestGoal.canEggBeLaid's window (eggTimer < 400).
-    @Inject(method = "m_8107_", at = @At("HEAD"))
-    private void creativedelight$rollGoldenEgg(CallbackInfo ci) {
-        if (this.level.isClientSide) return;
-        if (this.eggLayTime > 400) {
-            this.creativedelight$goldenRolled = false;
-            this.creativedelight$goldenDue = false;
-        } else if (!this.creativedelight$goldenRolled) {
-            this.creativedelight$goldenRolled = true;
-            this.creativedelight$goldenDue = GoldenGooseEgg.roll(this.random);
-        }
-    }
+	// 400 = LayEggInNestGoal.canEggBeLaid's window (eggTimer < 400).
+	@Inject(method = "m_8107_", at = @At("HEAD"))
+	private void creativedelight$rollGoldenEgg(CallbackInfo ci) {
+		if (this.level.isClientSide) return;
+		if (this.eggLayTime > 400) {
+			this.creativedelight$goldenRolled = false;
+			this.creativedelight$goldenDue = false;
+		} else if (!this.creativedelight$goldenRolled) {
+			this.creativedelight$goldenRolled = true;
+			this.creativedelight$goldenDue = GoldenGooseEgg.roll(this.random);
+		}
+	}
 
-    @Redirect(method = "m_8107_", at = @At(value = "INVOKE",
-            target = "Lnet/untitledduckmod/goose/GooseEntity;m_19998_(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/entity/item/ItemEntity;"))
-    private ItemEntity creativedelight$layGoldenEgg(GooseEntity goose, ItemLike egg) {
-        if (this.creativedelight$goldenDue) {
-            this.creativedelight$goldenDue = false;
-            // The goose drops the return value, so null is fine once the golden egg is laid.
-            if (GoldenGooseEgg.lay(this)) return null;
-        }
-        return this.spawnAtLocation(egg);
-    }
+	@Redirect(method = "m_8107_", at = @At(value = "INVOKE",
+			target = "Lnet/untitledduckmod/goose/GooseEntity;m_19998_(Lnet/minecraft/world/level/ItemLike;)Lnet/minecraft/world/entity/item/ItemEntity;"))
+	private ItemEntity creativedelight$layGoldenEgg(GooseEntity goose, ItemLike egg) {
+		if (this.creativedelight$goldenDue) {
+			this.creativedelight$goldenDue = false;
+			// The goose drops the return value, so null is fine once the golden egg is laid.
+			if (GoldenGooseEgg.lay(this)) return null;
+		}
+		return this.spawnAtLocation(egg);
+	}
 }

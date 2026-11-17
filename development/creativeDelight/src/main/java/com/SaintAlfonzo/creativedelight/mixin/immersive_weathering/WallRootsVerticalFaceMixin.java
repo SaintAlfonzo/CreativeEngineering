@@ -18,8 +18,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = WallRootsBlock.class, remap = false)
 public abstract class WallRootsVerticalFaceMixin {
 
-    @Inject(method = "m_5573_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativedelight$noVerticalFacing(BlockPlaceContext ctx, CallbackInfoReturnable<BlockState> cir) {
-        if (ctx.getClickedFace().getAxis().isVertical()) cir.setReturnValue(null);
-    }
+	@Inject(method = "m_5573_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativedelight$noVerticalFacing(BlockPlaceContext ctx, CallbackInfoReturnable<BlockState> cir) {
+		if (ctx.getClickedFace().getAxis().isVertical()) cir.setReturnValue(null);
+	}
 }

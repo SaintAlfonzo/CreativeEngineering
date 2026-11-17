@@ -42,128 +42,128 @@ import java.util.Set;
  * {@link ModDisplayNames}).
  */
 public final class StaleJarHandles {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static boolean done;
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static boolean done;
 
-    private StaleJarHandles() {}
+	private StaleJarHandles() {}
 
-    public static synchronized void release() {
-        if (done) {
-            return;
-        }
-        done = true;
-        try {
-            int before = openCount();
-            Map<FileSystem, Boolean> live = new IdentityHashMap<>();
-            Set<Path> livePaths = new HashSet<>();
-            UnionFileSystemProvider provider = null;
-            for (ModFileInfo info : LoadingModList.get().getModFiles()) {
-                FileSystem fs = info.getFile().getSecureJar().getRootPath().getFileSystem();
-                if (fs instanceof UnionFileSystem ufs) {
-                    live.put(ufs, Boolean.TRUE);
-                    livePaths.add(ufs.getPrimaryPath().toAbsolutePath().normalize());
-                    provider = (UnionFileSystemProvider) ufs.provider();
-                }
-            }
-            if (provider == null) {
-                return;
-            }
-            Path modsDir = FMLPaths.MODSDIR.get().toAbsolutePath().normalize();
-            List<UnionFileSystem> stale = new ArrayList<>();
-            for (UnionFileSystem ufs : snapshot(provider)) {
-                if (live.containsKey(ufs)) {
-                    continue;
-                }
-                Path p = ufs.getPrimaryPath().toAbsolutePath().normalize();
-                if (modsDir.equals(p.getParent()) && livePaths.contains(p) && Files.isRegularFile(p)) {
-                    stale.add(ufs);
-                }
-            }
-            int zips = 0;
-            for (UnionFileSystem ufs : stale) {
-                zips += closeEmbedded(ufs);
-                ufs.close();
-            }
-            if (stale.isEmpty()) {
-                LOGGER.info("[jar handles] no stale mod jar filesystems ({} descriptors open)", before);
-                return;
-            }
-            LOGGER.info("[jar handles] closed {} stale mod jar filesystems ({} zip files): {} -> {} descriptors open",
-                    stale.size(), zips, before, openCount());
-        } catch (Throwable t) {
-            LOGGER.warn("[jar handles] could not close the stale mod jar filesystems", t);
-        }
-    }
+	public static synchronized void release() {
+		if (done) {
+			return;
+		}
+		done = true;
+		try {
+			int before = openCount();
+			Map<FileSystem, Boolean> live = new IdentityHashMap<>();
+			Set<Path> livePaths = new HashSet<>();
+			UnionFileSystemProvider provider = null;
+			for (ModFileInfo info : LoadingModList.get().getModFiles()) {
+				FileSystem fs = info.getFile().getSecureJar().getRootPath().getFileSystem();
+				if (fs instanceof UnionFileSystem ufs) {
+					live.put(ufs, Boolean.TRUE);
+					livePaths.add(ufs.getPrimaryPath().toAbsolutePath().normalize());
+					provider = (UnionFileSystemProvider) ufs.provider();
+				}
+			}
+			if (provider == null) {
+				return;
+			}
+			Path modsDir = FMLPaths.MODSDIR.get().toAbsolutePath().normalize();
+			List<UnionFileSystem> stale = new ArrayList<>();
+			for (UnionFileSystem ufs : snapshot(provider)) {
+				if (live.containsKey(ufs)) {
+					continue;
+				}
+				Path p = ufs.getPrimaryPath().toAbsolutePath().normalize();
+				if (modsDir.equals(p.getParent()) && livePaths.contains(p) && Files.isRegularFile(p)) {
+					stale.add(ufs);
+				}
+			}
+			int zips = 0;
+			for (UnionFileSystem ufs : stale) {
+				zips += closeEmbedded(ufs);
+				ufs.close();
+			}
+			if (stale.isEmpty()) {
+				LOGGER.info("[jar handles] no stale mod jar filesystems ({} descriptors open)", before);
+				return;
+			}
+			LOGGER.info("[jar handles] closed {} stale mod jar filesystems ({} zip files): {} -> {} descriptors open",
+					stale.size(), zips, before, openCount());
+		} catch (Throwable t) {
+			LOGGER.warn("[jar handles] could not close the stale mod jar filesystems", t);
+		}
+	}
 
-    /**
-     * Same field layout as {@code UnionFileSystem.EmbeddedFileSystemMetadata(Path path, FileSystem fs)}. That class is
-     * a private record, and Unsafe refuses record fields, so the offsets come from this twin (two reference fields in
-     * the same order, no superclass fields: HotSpot lays both out the same). Every read is checked: the twin's
-     * {@code path} must be the very object the map is keyed by before {@code fs} is trusted.
-     */
-    @SuppressWarnings("unused")
-    private static final class EmbeddedTwin {
-        Path path;
-        FileSystem fs;
-    }
+	/**
+	 * Same field layout as {@code UnionFileSystem.EmbeddedFileSystemMetadata(Path path, FileSystem fs)}. That class is
+	 * a private record, and Unsafe refuses record fields, so the offsets come from this twin (two reference fields in
+	 * the same order, no superclass fields: HotSpot lays both out the same). Every read is checked: the twin's
+	 * {@code path} must be the very object the map is keyed by before {@code fs} is trusted.
+	 */
+	@SuppressWarnings("unused")
+	private static final class EmbeddedTwin {
+		Path path;
+		FileSystem fs;
+	}
 
-    /** Closes the zip filesystems under one union filesystem; returns how many. */
-    @SuppressWarnings("unchecked")
-    private static int closeEmbedded(UnionFileSystem ufs) throws Exception {
-        sun.misc.Unsafe unsafe = unsafe();
-        Field mapField = UnionFileSystem.class.getDeclaredField("embeddedFileSystems");
-        Map<Path, Object> embedded = (Map<Path, Object>) unsafe.getObject(ufs, unsafe.objectFieldOffset(mapField));
-        if (embedded == null) {
-            return 0;
-        }
-        Field[] recordFields = embedded.isEmpty() ? new Field[0]
-                : embedded.values().iterator().next().getClass().getDeclaredFields();
-        if (recordFields.length != 2 || recordFields[0].getType() != Path.class || recordFields[1].getType() != FileSystem.class) {
-            LOGGER.warn("[jar handles] unexpected securejarhandler layout, skipping");
-            return 0;
-        }
-        long pathOff = unsafe.objectFieldOffset(EmbeddedTwin.class.getDeclaredField("path"));
-        long fsOff = unsafe.objectFieldOffset(EmbeddedTwin.class.getDeclaredField("fs"));
-        int n = 0;
-        for (Map.Entry<Path, Object> e : embedded.entrySet()) {
-            if (unsafe.getObject(e.getValue(), pathOff) != e.getKey()) {
-                LOGGER.warn("[jar handles] field layout check failed, skipping");
-                return n;
-            }
-            if (unsafe.getObject(e.getValue(), fsOff) instanceof FileSystem zip && zip != FileSystems.getDefault()
-                    && zip.isOpen()) {
-                zip.close();
-                n++;
-            }
-        }
-        return n;
-    }
+	/** Closes the zip filesystems under one union filesystem; returns how many. */
+	@SuppressWarnings("unchecked")
+	private static int closeEmbedded(UnionFileSystem ufs) throws Exception {
+		sun.misc.Unsafe unsafe = unsafe();
+		Field mapField = UnionFileSystem.class.getDeclaredField("embeddedFileSystems");
+		Map<Path, Object> embedded = (Map<Path, Object>) unsafe.getObject(ufs, unsafe.objectFieldOffset(mapField));
+		if (embedded == null) {
+			return 0;
+		}
+		Field[] recordFields = embedded.isEmpty() ? new Field[0]
+				: embedded.values().iterator().next().getClass().getDeclaredFields();
+		if (recordFields.length != 2 || recordFields[0].getType() != Path.class || recordFields[1].getType() != FileSystem.class) {
+			LOGGER.warn("[jar handles] unexpected securejarhandler layout, skipping");
+			return 0;
+		}
+		long pathOff = unsafe.objectFieldOffset(EmbeddedTwin.class.getDeclaredField("path"));
+		long fsOff = unsafe.objectFieldOffset(EmbeddedTwin.class.getDeclaredField("fs"));
+		int n = 0;
+		for (Map.Entry<Path, Object> e : embedded.entrySet()) {
+			if (unsafe.getObject(e.getValue(), pathOff) != e.getKey()) {
+				LOGGER.warn("[jar handles] field layout check failed, skipping");
+				return n;
+			}
+			if (unsafe.getObject(e.getValue(), fsOff) instanceof FileSystem zip && zip != FileSystems.getDefault()
+					&& zip.isOpen()) {
+				zip.close();
+				n++;
+			}
+		}
+		return n;
+	}
 
-    @SuppressWarnings("unchecked")
-    private static List<UnionFileSystem> snapshot(UnionFileSystemProvider provider) throws ReflectiveOperationException {
-        Field field = UnionFileSystemProvider.class.getDeclaredField("fileSystems");
-        sun.misc.Unsafe unsafe = unsafe();
-        Map<String, UnionFileSystem> map = (Map<String, UnionFileSystem>) unsafe.getObject(provider, unsafe.objectFieldOffset(field));
-        if (map == null) {
-            return Collections.emptyList();
-        }
-        synchronized (map) {
-            return new ArrayList<>(map.values());
-        }
-    }
+	@SuppressWarnings("unchecked")
+	private static List<UnionFileSystem> snapshot(UnionFileSystemProvider provider) throws ReflectiveOperationException {
+		Field field = UnionFileSystemProvider.class.getDeclaredField("fileSystems");
+		sun.misc.Unsafe unsafe = unsafe();
+		Map<String, UnionFileSystem> map = (Map<String, UnionFileSystem>) unsafe.getObject(provider, unsafe.objectFieldOffset(field));
+		if (map == null) {
+			return Collections.emptyList();
+		}
+		synchronized (map) {
+			return new ArrayList<>(map.values());
+		}
+	}
 
-    /** Open descriptor count from /proc, or -1 where there is no /proc. */
-    private static int openCount() {
-        try (var s = Files.list(Path.of("/proc/self/fd"))) {
-            return (int) s.count();
-        } catch (Exception e) {
-            return -1;
-        }
-    }
+	/** Open descriptor count from /proc, or -1 where there is no /proc. */
+	private static int openCount() {
+		try (var s = Files.list(Path.of("/proc/self/fd"))) {
+			return (int) s.count();
+		} catch (Exception e) {
+			return -1;
+		}
+	}
 
-    private static sun.misc.Unsafe unsafe() throws ReflectiveOperationException {
-        Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
-        f.setAccessible(true);
-        return (sun.misc.Unsafe) f.get(null);
-    }
+	private static sun.misc.Unsafe unsafe() throws ReflectiveOperationException {
+		Field f = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
+		f.setAccessible(true);
+		return (sun.misc.Unsafe) f.get(null);
+	}
 }

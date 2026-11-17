@@ -22,40 +22,40 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class EffectCategories {
 
-    private EffectCategories() {}
+	private EffectCategories() {}
 
-    /** The config list the maps below were built from (ConfigValue hands back the same list until it changes). */
-    private static volatile List<? extends String> source;
-    private static volatile Map<ResourceLocation, MobEffectCategory> byId = Map.of();
-    /** Per effect: its override, or empty for none. Only effects with a registry name are cached. */
-    private static final Map<MobEffect, Optional<MobEffectCategory>> BY_EFFECT = new ConcurrentHashMap<>();
+	/** The config list the maps below were built from (ConfigValue hands back the same list until it changes). */
+	private static volatile List<? extends String> source;
+	private static volatile Map<ResourceLocation, MobEffectCategory> byId = Map.of();
+	/** Per effect: its override, or empty for none. Only effects with a registry name are cached. */
+	private static final Map<MobEffect, Optional<MobEffectCategory>> BY_EFFECT = new ConcurrentHashMap<>();
 
-    /** The override for this effect, or {@code null} to keep its own category. */
-    public static MobEffectCategory override(MobEffect effect) {
-        List<? extends String> raw;
-        try {
-            raw = CommonConfig.EFFECTS.categoryOverrides.get();
-        } catch (IllegalStateException e) {
-            return null; // config not loaded yet (very early startup)
-        }
-        if (raw != source) {
-            Map<ResourceLocation, MobEffectCategory> parsed = new HashMap<>();
-            for (String entry : raw) {
-                int eq = entry.indexOf('=');
-                ResourceLocation id = ResourceLocation.tryParse(entry.substring(0, eq));
-                if (id != null) parsed.put(id, MobEffectCategory.valueOf(entry.substring(eq + 1)));
-            }
-            byId = parsed;
-            BY_EFFECT.clear();
-            source = raw;
-        }
-        Optional<MobEffectCategory> cached = BY_EFFECT.get(effect);
-        if (cached == null) {
-            ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(effect);
-            if (id == null) return null; // not registered yet: don't cache
-            cached = Optional.ofNullable(byId.get(id));
-            BY_EFFECT.put(effect, cached);
-        }
-        return cached.orElse(null);
-    }
+	/** The override for this effect, or {@code null} to keep its own category. */
+	public static MobEffectCategory override(MobEffect effect) {
+		List<? extends String> raw;
+		try {
+			raw = CommonConfig.EFFECTS.categoryOverrides.get();
+		} catch (IllegalStateException e) {
+			return null; // config not loaded yet (very early startup)
+		}
+		if (raw != source) {
+			Map<ResourceLocation, MobEffectCategory> parsed = new HashMap<>();
+			for (String entry : raw) {
+				int eq = entry.indexOf('=');
+				ResourceLocation id = ResourceLocation.tryParse(entry.substring(0, eq));
+				if (id != null) parsed.put(id, MobEffectCategory.valueOf(entry.substring(eq + 1)));
+			}
+			byId = parsed;
+			BY_EFFECT.clear();
+			source = raw;
+		}
+		Optional<MobEffectCategory> cached = BY_EFFECT.get(effect);
+		if (cached == null) {
+			ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(effect);
+			if (id == null) return null; // not registered yet: don't cache
+			cached = Optional.ofNullable(byId.get(id));
+			BY_EFFECT.put(effect, cached);
+		}
+		return cached.orElse(null);
+	}
 }

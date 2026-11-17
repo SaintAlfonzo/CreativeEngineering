@@ -17,25 +17,25 @@ import net.minecraft.world.item.ItemStack;
  */
 public final class ClientHooks {
 
-    private ClientHooks() {}
+	private ClientHooks() {}
 
-    /** Empty-hand right-click on a placed note (3.4): the note screen for the note on {@code spot} of {@code face}. */
-    public static void openNoteScreen(BlockPos pos, Direction face, int spot) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.level == null) return;
-        FacePaperBlockEntity be = FacePaperBlock.entity(mc.level, pos);
-        if (be == null) return;
-        NoteData note = be.face(face).note(spot);
-        if (note == null) return;
-        mc.setScreen(NoteScreen.forPlaced(pos, face, spot, note));
-    }
+	/** Empty-hand right-click on a placed note (3.4): the note screen for the note on {@code spot} of {@code face}. */
+	public static void openNoteScreen(BlockPos pos, Direction face, int spot) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.level == null) return;
+		FacePaperBlockEntity be = FacePaperBlock.entity(mc.level, pos);
+		if (be == null) return;
+		NoteData note = be.face(face).note(spot);
+		if (note == null) return;
+		mc.setScreen(NoteScreen.forPlaced(pos, face, spot, note));
+	}
 
-    /** Right-click in the air with a note (3.7): the note screen for one note out of the stack in {@code hand}. */
-    public static void openHandNoteScreen(InteractionHand hand) {
-        Minecraft mc = Minecraft.getInstance();
-        if (mc.player == null || mc.level == null) return;
-        ItemStack note = mc.player.getItemInHand(hand);
-        if (!(note.getItem() instanceof StickyNoteItem)) return;
-        mc.setScreen(NoteScreen.forHand(hand, note, FacePaperInteractions.day(mc.level), mc.player.getGameProfile().getName()));
-    }
+	/** Right-click in the air with a note (3.7): the note screen for one note out of the stack in {@code hand}. */
+	public static void openHandNoteScreen(InteractionHand hand) {
+		Minecraft mc = Minecraft.getInstance();
+		if (mc.player == null || mc.level == null) return;
+		ItemStack note = mc.player.getItemInHand(hand);
+		if (!(note.getItem() instanceof StickyNoteItem)) return;
+		mc.setScreen(NoteScreen.forHand(hand, note, FacePaperInteractions.day(mc.level), mc.player.getGameProfile().getName()));
+	}
 }

@@ -23,19 +23,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ProcessingInventory.class, remap = false)
 public abstract class ProcessingInventoryMixin extends ItemStackHandler {
 
-    @Unique
-    private static final int creativeengineering$SLOTS = 32;
+	@Unique
+	private static final int creativeengineering$SLOTS = 32;
 
-    @Inject(method = "<init>", at = @At("RETURN"))
-    private void creativeengineering$growOnCreate(CallbackInfo ci) {
-        if (stacks.size() < creativeengineering$SLOTS) setSize(creativeengineering$SLOTS);
-    }
+	@Inject(method = "<init>", at = @At("RETURN"))
+	private void creativeengineering$growOnCreate(CallbackInfo ci) {
+		if (stacks.size() < creativeengineering$SLOTS) setSize(creativeengineering$SLOTS);
+	}
 
-    @Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("TAIL"))
-    private void creativeengineering$growOnLoad(CompoundTag nbt, CallbackInfo ci) {
-        if (stacks.size() >= creativeengineering$SLOTS) return;
-        NonNullList<ItemStack> loaded = stacks;
-        setSize(creativeengineering$SLOTS);
-        for (int slot = 0; slot < loaded.size(); slot++) stacks.set(slot, loaded.get(slot));
-    }
+	@Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("TAIL"))
+	private void creativeengineering$growOnLoad(CompoundTag nbt, CallbackInfo ci) {
+		if (stacks.size() >= creativeengineering$SLOTS) return;
+		NonNullList<ItemStack> loaded = stacks;
+		setSize(creativeengineering$SLOTS);
+		for (int slot = 0; slot < loaded.size(); slot++) stacks.set(slot, loaded.get(slot));
+	}
 }

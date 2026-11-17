@@ -20,9 +20,9 @@ import java.util.function.Supplier;
 @Mixin(value = Block.class, remap = false)
 public abstract class BlockPopResourceSettleMixin {
 
-    @Inject(method = "m_152440_", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void creativeengineering$skipSettleDrop(Level level, Supplier<ItemEntity> entity, ItemStack stack,
-                                                          CallbackInfo ci) {
-        if (FirstTickWater.suppressDrops()) ci.cancel();
-    }
+	@Inject(method = "m_152440_", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void creativeengineering$skipSettleDrop(Level level, Supplier<ItemEntity> entity, ItemStack stack,
+														  CallbackInfo ci) {
+		if (FirstTickWater.suppressDrops()) ci.cancel();
+	}
 }

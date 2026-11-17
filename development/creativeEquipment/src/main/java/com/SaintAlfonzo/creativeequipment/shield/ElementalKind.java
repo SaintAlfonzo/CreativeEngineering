@@ -25,37 +25,37 @@ import net.minecraft.world.damagesource.DamageSource;
  * elemental value, since there is no more specific number configured for it.
  */
 public enum ElementalKind {
-    FIRE("fire", DamageTags.id("fire")),
-    ELECTRIC("electric", DamageTags.id("electric")),
-    COLD("cold", DamageTags.id("cold")),
-    CHEMICAL("chemical", DamageTags.id("chemical"));
+	FIRE("fire", DamageTags.id("fire")),
+	ELECTRIC("electric", DamageTags.id("electric")),
+	COLD("cold", DamageTags.id("cold")),
+	CHEMICAL("chemical", DamageTags.id("chemical"));
 
-    private final String key;
-    private final ResourceLocation tag;
+	private final String key;
+	private final ResourceLocation tag;
 
-    ElementalKind(String key, ResourceLocation tag) {
-        this.key = key;
-        this.tag = tag;
-    }
+	ElementalKind(String key, ResourceLocation tag) {
+		this.key = key;
+		this.tag = tag;
+	}
 
-    /** Lower-case toml key. */
-    public String key() {
-        return key;
-    }
+	/** Lower-case toml key. */
+	public String key() {
+		return key;
+	}
 
-    public String label() {
-        return key.substring(0, 1).toUpperCase(Locale.ROOT) + key.substring(1);
-    }
+	public String label() {
+		return key.substring(0, 1).toUpperCase(Locale.ROOT) + key.substring(1);
+	}
 
-    /** First (in declaration order) whose tag the hit carries; null if none of the four match. */
-    @Nullable
-    public static ElementalKind classify(DamageSource source) {
-        var tags = DamageTags.tagsOf(source);
-        for (ElementalKind k : values()) {
-            if (tags.contains(k.tag)) {
-                return k;
-            }
-        }
-        return null;
-    }
+	/** First (in declaration order) whose tag the hit carries; null if none of the four match. */
+	@Nullable
+	public static ElementalKind classify(DamageSource source) {
+		var tags = DamageTags.tagsOf(source);
+		for (ElementalKind k : values()) {
+			if (tags.contains(k.tag)) {
+				return k;
+			}
+		}
+		return null;
+	}
 }

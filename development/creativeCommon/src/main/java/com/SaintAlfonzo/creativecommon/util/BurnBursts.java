@@ -13,20 +13,20 @@ import javax.annotation.Nullable;
  */
 public final class BurnBursts {
 
-    @FunctionalInterface
-    public interface Handler {
-        void burst(Level level, Vec3 center, @Nullable Entity owner);
-    }
+	@FunctionalInterface
+	public interface Handler {
+		void burst(Level level, Vec3 center, @Nullable Entity owner);
+	}
 
-    private static volatile Handler handler = (level, center, owner) -> {};
+	private static volatile Handler handler = (level, center, owner) -> {};
 
-    private BurnBursts() {}
+	private BurnBursts() {}
 
-    public static void register(Handler h) {
-        handler = h;
-    }
+	public static void register(Handler h) {
+		handler = h;
+	}
 
-    public static void burst(Level level, Vec3 center, @Nullable Entity owner) {
-        handler.burst(level, center, owner);
-    }
+	public static void burst(Level level, Vec3 center, @Nullable Entity owner) {
+		handler.burst(level, center, owner);
+	}
 }

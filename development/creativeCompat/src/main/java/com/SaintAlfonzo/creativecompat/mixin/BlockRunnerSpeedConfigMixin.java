@@ -21,14 +21,14 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(value = BlockSpeedManager.class, remap = false)
 public abstract class BlockRunnerSpeedConfigMixin {
 
-    @ModifyArg(method = "deserialize(Ljava/io/FileReader;)V",
-            at = @At(value = "INVOKE", target = "Lfuzs/blockrunner/data/BlockSpeedManager;deserialize(Lcom/google/gson/JsonObject;)V"),
-            require = 0)
-    private JsonObject creativeengineering$surfaceSpeeds(JsonObject json) {
-        try {
-            return SurfaceSpeeds.apply(json);
-        } catch (Throwable ignored) {
-            return json; // keep BlockRunner's own values
-        }
-    }
+	@ModifyArg(method = "deserialize(Ljava/io/FileReader;)V",
+			at = @At(value = "INVOKE", target = "Lfuzs/blockrunner/data/BlockSpeedManager;deserialize(Lcom/google/gson/JsonObject;)V"),
+			require = 0)
+	private JsonObject creativeengineering$surfaceSpeeds(JsonObject json) {
+		try {
+			return SurfaceSpeeds.apply(json);
+		} catch (Throwable ignored) {
+			return json; // keep BlockRunner's own values
+		}
+	}
 }

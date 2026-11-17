@@ -21,23 +21,23 @@ import net.p3pp3rf1y.sophisticatedbackpacks.init.ModBlocks;
 @Mod.EventBusSubscriber(modid = CreativeEquipment.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class BackpackSkinColors {
 
-    private BackpackSkinColors() {}
+	private BackpackSkinColors() {}
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
-        BlockColors colors = event.getBlockColors();
-        event.register((state, level, pos, tint) -> {
-            if (tint < 0 || pos == null || level == null) return -1;
-            BlockEntity be = level.getBlockEntity(pos);
-            if (!(be instanceof BackpackBlockEntity bpe)) return -1;
-            Block skin = BackpackSkins.getSkin(bpe.getBackpackWrapper().getBackpack());
-            if (skin != null) {
-                BlockState ss = BackpackSkins.skinState(skin, state);
-                return colors.getColor(ss, level, pos, tint);
-            }
-            if (tint > 1) return -1;
-            return tint == 0 ? bpe.getBackpackWrapper().getMainColor() : bpe.getBackpackWrapper().getAccentColor();
-        }, ModBlocks.BACKPACK.get(), ModBlocks.COPPER_BACKPACK.get(), ModBlocks.IRON_BACKPACK.get(),
-                ModBlocks.GOLD_BACKPACK.get(), ModBlocks.DIAMOND_BACKPACK.get(), ModBlocks.NETHERITE_BACKPACK.get());
-    }
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
+		BlockColors colors = event.getBlockColors();
+		event.register((state, level, pos, tint) -> {
+			if (tint < 0 || pos == null || level == null) return -1;
+			BlockEntity be = level.getBlockEntity(pos);
+			if (!(be instanceof BackpackBlockEntity bpe)) return -1;
+			Block skin = BackpackSkins.getSkin(bpe.getBackpackWrapper().getBackpack());
+			if (skin != null) {
+				BlockState ss = BackpackSkins.skinState(skin, state);
+				return colors.getColor(ss, level, pos, tint);
+			}
+			if (tint > 1) return -1;
+			return tint == 0 ? bpe.getBackpackWrapper().getMainColor() : bpe.getBackpackWrapper().getAccentColor();
+		}, ModBlocks.BACKPACK.get(), ModBlocks.COPPER_BACKPACK.get(), ModBlocks.IRON_BACKPACK.get(),
+				ModBlocks.GOLD_BACKPACK.get(), ModBlocks.DIAMOND_BACKPACK.get(), ModBlocks.NETHERITE_BACKPACK.get());
+	}
 }

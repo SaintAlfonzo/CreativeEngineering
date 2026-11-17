@@ -33,37 +33,37 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = NaturalSpawner.class, remap = false)
 public abstract class NaturalSpawnerMixin {
 
-    @Unique
-    private static final ThreadLocal<ServerLevelAccessor> moremooblooms$chunkGenLevel = new ThreadLocal<>();
+	@Unique
+	private static final ThreadLocal<ServerLevelAccessor> moremooblooms$chunkGenLevel = new ThreadLocal<>();
 
-    @ModifyArg(method = "m_47038_",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/server/level/ServerLevel;m_47205_(Lnet/minecraft/world/entity/Entity;)V",
-                    remap = false),
-            remap = false)
-    private static Entity moremooblooms$swapNatural(Entity entity) {
-        return entity.level instanceof ServerLevel level ? MoobloomSpawns.swap(level, entity, MobSpawnType.NATURAL) : entity;
-    }
+	@ModifyArg(method = "m_47038_",
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/server/level/ServerLevel;m_47205_(Lnet/minecraft/world/entity/Entity;)V",
+					remap = false),
+			remap = false)
+	private static Entity moremooblooms$swapNatural(Entity entity) {
+		return entity.level instanceof ServerLevel level ? MoobloomSpawns.swap(level, entity, MobSpawnType.NATURAL) : entity;
+	}
 
-    @Inject(method = "m_220450_", at = @At("HEAD"), remap = false)
-    private static void moremooblooms$enterChunkGen(ServerLevelAccessor level, Holder<Biome> biome, ChunkPos chunkPos,
-                                                     RandomSource random, CallbackInfo ci) {
-        moremooblooms$chunkGenLevel.set(level);
-    }
+	@Inject(method = "m_220450_", at = @At("HEAD"), remap = false)
+	private static void moremooblooms$enterChunkGen(ServerLevelAccessor level, Holder<Biome> biome, ChunkPos chunkPos,
+													 RandomSource random, CallbackInfo ci) {
+		moremooblooms$chunkGenLevel.set(level);
+	}
 
-    @Inject(method = "m_220450_", at = @At("RETURN"), remap = false)
-    private static void moremooblooms$exitChunkGen(ServerLevelAccessor level, Holder<Biome> biome, ChunkPos chunkPos,
-                                                    RandomSource random, CallbackInfo ci) {
-        moremooblooms$chunkGenLevel.remove();
-    }
+	@Inject(method = "m_220450_", at = @At("RETURN"), remap = false)
+	private static void moremooblooms$exitChunkGen(ServerLevelAccessor level, Holder<Biome> biome, ChunkPos chunkPos,
+													RandomSource random, CallbackInfo ci) {
+		moremooblooms$chunkGenLevel.remove();
+	}
 
-    @ModifyArg(method = "m_220450_",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/ServerLevelAccessor;m_47205_(Lnet/minecraft/world/entity/Entity;)V",
-                    remap = false),
-            remap = false)
-    private static Entity moremooblooms$swapChunkGen(Entity entity) {
-        ServerLevelAccessor level = moremooblooms$chunkGenLevel.get();
-        return level == null ? entity : MoobloomSpawns.swap(level, entity, MobSpawnType.CHUNK_GENERATION);
-    }
+	@ModifyArg(method = "m_220450_",
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/world/level/ServerLevelAccessor;m_47205_(Lnet/minecraft/world/entity/Entity;)V",
+					remap = false),
+			remap = false)
+	private static Entity moremooblooms$swapChunkGen(Entity entity) {
+		ServerLevelAccessor level = moremooblooms$chunkGenLevel.get();
+		return level == null ? entity : MoobloomSpawns.swap(level, entity, MobSpawnType.CHUNK_GENERATION);
+	}
 }

@@ -18,8 +18,8 @@ import java.util.List;
 @Mixin(value = EasyScreenHelper.class, remap = false)
 public class LCEasyScreenHelperMixin {
 
-    @Inject(method = "getTooltipFromItem", remap = false, require = 1, at = @At("RETURN"))
-    private static void creativecommon$tagLines(ItemStack item, CallbackInfoReturnable<List<Component>> cir) {
-        LightmansTooltipStacks.tag(cir.getReturnValue(), item);
-    }
+	@Inject(method = "getTooltipFromItem", remap = false, require = 1, at = @At("RETURN"))
+	private static void creativecommon$tagLines(ItemStack item, CallbackInfoReturnable<List<Component>> cir) {
+		LightmansTooltipStacks.tag(cir.getReturnValue(), item);
+	}
 }

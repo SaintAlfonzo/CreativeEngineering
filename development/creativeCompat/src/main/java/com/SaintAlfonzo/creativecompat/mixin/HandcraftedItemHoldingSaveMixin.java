@@ -19,13 +19,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "earth.terrarium.handcrafted.common.block.ItemHoldingBlockEntity", remap = false)
 public abstract class HandcraftedItemHoldingSaveMixin {
 
-    @Inject(method = "m_183515_", at = @At("TAIL"))
-    private void ce$saveNightstand(CompoundTag tag, CallbackInfo ci) {
-        NightstandStorage.save(this, tag);
-    }
+	@Inject(method = "m_183515_", at = @At("TAIL"))
+	private void ce$saveNightstand(CompoundTag tag, CallbackInfo ci) {
+		NightstandStorage.save(this, tag);
+	}
 
-    @Inject(method = "m_142466_", at = @At("TAIL"))
-    private void ce$loadNightstand(CompoundTag tag, CallbackInfo ci) {
-        NightstandStorage.load(this, tag);
-    }
+	@Inject(method = "m_142466_", at = @At("TAIL"))
+	private void ce$loadNightstand(CompoundTag tag, CallbackInfo ci) {
+		NightstandStorage.load(this, tag);
+	}
 }

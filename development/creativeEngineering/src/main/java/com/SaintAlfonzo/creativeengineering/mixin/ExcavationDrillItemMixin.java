@@ -32,19 +32,19 @@ import uwu.lopyluna.create_dd.content.items.equipment.excavation_drill.Excavatio
 @Mixin(value = ExcavationDrillItem.class, remap = false)
 public class ExcavationDrillItemMixin {
 
-    @Redirect(method = {"onBlockDestroyed", "destroyVein"}, remap = false, require = 2,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraftforge/network/simple/SimpleChannel;sendToServer(Ljava/lang/Object;)V"))
-    private static void creativeengineering$skipSendOnServer(SimpleChannel channel, Object message) {
-        if (FMLEnvironment.dist.isClient()) {
-            channel.sendToServer(message);
-        }
-    }
+	@Redirect(method = {"onBlockDestroyed", "destroyVein"}, remap = false, require = 2,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraftforge/network/simple/SimpleChannel;sendToServer(Ljava/lang/Object;)V"))
+	private static void creativeengineering$skipSendOnServer(SimpleChannel channel, Object message) {
+		if (FMLEnvironment.dist.isClient()) {
+			channel.sendToServer(message);
+		}
+	}
 
-    @Redirect(method = {"onBlockDestroyed", "destroyVein"}, remap = false, require = 2,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lcom/simibubi/create/foundation/config/ConfigBase$ConfigBool;get()Ljava/lang/Object;"))
-    private static Object creativeengineering$defaultInvertOnServer(ConfigBase.ConfigBool config) {
-        return FMLEnvironment.dist.isClient() ? config.get() : Boolean.FALSE;
-    }
+	@Redirect(method = {"onBlockDestroyed", "destroyVein"}, remap = false, require = 2,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lcom/simibubi/create/foundation/config/ConfigBase$ConfigBool;get()Ljava/lang/Object;"))
+	private static Object creativeengineering$defaultInvertOnServer(ConfigBase.ConfigBool config) {
+		return FMLEnvironment.dist.isClient() ? config.get() : Boolean.FALSE;
+	}
 }

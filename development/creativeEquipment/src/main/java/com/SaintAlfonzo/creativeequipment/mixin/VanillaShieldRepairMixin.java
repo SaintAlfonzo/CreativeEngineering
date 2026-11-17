@@ -36,22 +36,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ShieldItem.class)
 public abstract class VanillaShieldRepairMixin {
 
-    @Inject(method = "m_6832_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$ironShieldRepair(ItemStack toRepair, ItemStack repair,
-            CallbackInfoReturnable<Boolean> cir) {
-        try {
-            if ((Object) this != Items.SHIELD) {
-                return;
-            }
-            String id = ShieldConfig.repairItem(ShieldTier.IRON);
-            if (repair.isEmpty() || id == null || id.isBlank()) {
-                cir.setReturnValue(false);
-                return;
-            }
-            ResourceLocation rl = ResourceLocation.tryParse(id.trim());
-            cir.setReturnValue(rl != null && ForgeRegistries.ITEMS.getValue(rl) == repair.getItem());
-        } catch (Throwable ignored) {
-            // fall through to vanilla's own plank check
-        }
-    }
+	@Inject(method = "m_6832_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$ironShieldRepair(ItemStack toRepair, ItemStack repair,
+			CallbackInfoReturnable<Boolean> cir) {
+		try {
+			if ((Object) this != Items.SHIELD) {
+				return;
+			}
+			String id = ShieldConfig.repairItem(ShieldTier.IRON);
+			if (repair.isEmpty() || id == null || id.isBlank()) {
+				cir.setReturnValue(false);
+				return;
+			}
+			ResourceLocation rl = ResourceLocation.tryParse(id.trim());
+			cir.setReturnValue(rl != null && ForgeRegistries.ITEMS.getValue(rl) == repair.getItem());
+		} catch (Throwable ignored) {
+			// fall through to vanilla's own plank check
+		}
+	}
 }

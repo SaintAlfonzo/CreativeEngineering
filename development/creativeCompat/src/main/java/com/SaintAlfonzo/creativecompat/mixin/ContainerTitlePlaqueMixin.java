@@ -22,37 +22,37 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = AbstractContainerScreen.class, remap = false)
 public abstract class ContainerTitlePlaqueMixin {
 
-    private static final String RENDER_BG =
-            "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_7286_(Lcom/mojang/blaze3d/vertex/PoseStack;FII)V";
-    private static final String FONT_DRAW =
-            "Lnet/minecraft/client/gui/Font;m_92889_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/network/chat/Component;FFI)I";
+	private static final String RENDER_BG =
+			"Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_7286_(Lcom/mojang/blaze3d/vertex/PoseStack;FII)V";
+	private static final String FONT_DRAW =
+			"Lnet/minecraft/client/gui/Font;m_92889_(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/network/chat/Component;FFI)I";
 
-    @Unique
-    private TitlePlaques.Label creativecommon$titleLabel;
+	@Unique
+	private TitlePlaques.Label creativecommon$titleLabel;
 
-    @Inject(method = "m_6305_", remap = false, require = 1,
-            at = @At(value = "INVOKE", target = RENDER_BG, remap = false))
-    private void creativecommon$beforeBackground(PoseStack pose, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-        TitlePlaques.beginCapture();
-    }
+	@Inject(method = "m_6305_", remap = false, require = 1,
+			at = @At(value = "INVOKE", target = RENDER_BG, remap = false))
+	private void creativecommon$beforeBackground(PoseStack pose, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+		TitlePlaques.beginCapture();
+	}
 
-    @Inject(method = "m_6305_", remap = false, require = 1,
-            at = @At(value = "INVOKE", target = RENDER_BG, shift = At.Shift.AFTER, remap = false))
-    private void creativecommon$afterBackground(PoseStack pose, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
-        creativecommon$titleLabel = TitlePlaques.afterBackground((AbstractContainerScreen<?>) (Object) this, pose);
-    }
+	@Inject(method = "m_6305_", remap = false, require = 1,
+			at = @At(value = "INVOKE", target = RENDER_BG, shift = At.Shift.AFTER, remap = false))
+	private void creativecommon$afterBackground(PoseStack pose, int mouseX, int mouseY, float partialTick, CallbackInfo ci) {
+		creativecommon$titleLabel = TitlePlaques.afterBackground((AbstractContainerScreen<?>) (Object) this, pose);
+	}
 
-    @ModifyArg(method = "m_7027_", remap = false, require = 1, index = 1,
-            at = @At(value = "INVOKE", target = FONT_DRAW, ordinal = 0, remap = false))
-    private Component creativecommon$titleText(Component text) {
-        TitlePlaques.Label label = creativecommon$titleLabel;
-        return label != null ? label.text() : text;
-    }
+	@ModifyArg(method = "m_7027_", remap = false, require = 1, index = 1,
+			at = @At(value = "INVOKE", target = FONT_DRAW, ordinal = 0, remap = false))
+	private Component creativecommon$titleText(Component text) {
+		TitlePlaques.Label label = creativecommon$titleLabel;
+		return label != null ? label.text() : text;
+	}
 
-    @ModifyArg(method = "m_7027_", remap = false, require = 1, index = 2,
-            at = @At(value = "INVOKE", target = FONT_DRAW, ordinal = 0, remap = false))
-    private float creativecommon$titleX(float x) {
-        TitlePlaques.Label label = creativecommon$titleLabel;
-        return label != null ? label.x() : x;
-    }
+	@ModifyArg(method = "m_7027_", remap = false, require = 1, index = 2,
+			at = @At(value = "INVOKE", target = FONT_DRAW, ordinal = 0, remap = false))
+	private float creativecommon$titleX(float x) {
+		TitlePlaques.Label label = creativecommon$titleLabel;
+		return label != null ? label.x() : x;
+	}
 }

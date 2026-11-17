@@ -21,9 +21,9 @@ import umpaz.farmersrespite.common.block.TeaBushBlock;
 @Mixin(value = {SmallTeaBushBlock.class, TeaBushBlock.class}, remap = false)
 public abstract class TeaBushSoilMixin {
 
-    @Inject(method = "m_6266_", at = @At("RETURN"), cancellable = true, require = 1, remap = false)
-    private void creativeengineering$farmlandSoils(BlockState soil, BlockGetter level, BlockPos pos,
-                                                   CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValueZ() && CropParity.isFarmlandSoil(soil)) cir.setReturnValue(true);
-    }
+	@Inject(method = "m_6266_", at = @At("RETURN"), cancellable = true, require = 1, remap = false)
+	private void creativeengineering$farmlandSoils(BlockState soil, BlockGetter level, BlockPos pos,
+												   CallbackInfoReturnable<Boolean> cir) {
+		if (!cir.getReturnValueZ() && CropParity.isFarmlandSoil(soil)) cir.setReturnValue(true);
+	}
 }

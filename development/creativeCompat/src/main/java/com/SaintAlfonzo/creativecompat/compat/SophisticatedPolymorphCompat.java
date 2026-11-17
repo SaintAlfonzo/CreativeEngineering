@@ -22,25 +22,25 @@ import net.p3pp3rf1y.sophisticatedcore.common.gui.StorageContainerMenuBase;
  */
 public final class SophisticatedPolymorphCompat {
 
-    private SophisticatedPolymorphCompat() {}
+	private SophisticatedPolymorphCompat() {}
 
-    /** Implemented on {@code CraftingUpgradeContainer} by the mixin. */
-    public interface RefreshableCrafting {
-        void creativeengineering$refreshCraftingResult();
-    }
+	/** Implemented on {@code CraftingUpgradeContainer} by the mixin. */
+	public interface RefreshableCrafting {
+		void creativeengineering$refreshCraftingResult();
+	}
 
-    public static void refreshOpenCrafting(AbstractContainerMenu menu) {
-        if (menu instanceof StorageContainerMenuBase<?> storageMenu) {
-            storageMenu.getOpenContainer().ifPresent(container -> {
-                if (container instanceof RefreshableCrafting crafting) {
-                    crafting.creativeengineering$refreshCraftingResult();
-                }
-            });
-        }
-    }
+	public static void refreshOpenCrafting(AbstractContainerMenu menu) {
+		if (menu instanceof StorageContainerMenuBase<?> storageMenu) {
+			storageMenu.getOpenContainer().ifPresent(container -> {
+				if (container instanceof RefreshableCrafting crafting) {
+					crafting.creativeengineering$refreshCraftingResult();
+				}
+			});
+		}
+	}
 
-    @SubscribeEvent
-    public static void onContainerOpen(PlayerContainerEvent.Open event) {
-        refreshOpenCrafting(event.getContainer());
-    }
+	@SubscribeEvent
+	public static void onContainerOpen(PlayerContainerEvent.Open event) {
+		refreshOpenCrafting(event.getContainer());
+	}
 }

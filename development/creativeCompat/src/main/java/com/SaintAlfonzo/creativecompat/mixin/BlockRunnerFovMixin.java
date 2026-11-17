@@ -19,10 +19,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = FieldOfViewHelper.class, remap = false)
 public abstract class BlockRunnerFovMixin {
 
-    @Inject(method = "shouldRemoveBlockSpeedModifier", at = @At("HEAD"), cancellable = true, require = 0)
-    private static void creativecompat$onlyForPassFov(Player player, CallbackInfoReturnable<Boolean> cir) {
-        if (!PassFov.querying()) {
-            cir.setReturnValue(false);
-        }
-    }
+	@Inject(method = "shouldRemoveBlockSpeedModifier", at = @At("HEAD"), cancellable = true, require = 0)
+	private static void creativecompat$onlyForPassFov(Player player, CallbackInfoReturnable<Boolean> cir) {
+		if (!PassFov.querying()) {
+			cir.setReturnValue(false);
+		}
+	}
 }

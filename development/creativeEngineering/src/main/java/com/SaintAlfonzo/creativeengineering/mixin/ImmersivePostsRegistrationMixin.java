@@ -16,10 +16,10 @@ import twistedgate.immersiveposts.enums.EnumPostMaterial;
 @Mixin(value = {IPOContent.Blocks.Posts.class, IPOContent.Blocks.HorizontalTruss.class}, remap = false)
 public abstract class ImmersivePostsRegistrationMixin {
 
-    @Redirect(method = "lambda$static$0", remap = false,
-            at = @At(value = "INVOKE",
-                    target = "Ltwistedgate/immersiveposts/enums/EnumPostMaterial;values()[Ltwistedgate/immersiveposts/enums/EnumPostMaterial;"))
-    private static EnumPostMaterial[] creativeengineering$keptMaterials() {
-        return ImmersivePostsMaterials.kept();
-    }
+	@Redirect(method = "lambda$static$0", remap = false,
+			at = @At(value = "INVOKE",
+					target = "Ltwistedgate/immersiveposts/enums/EnumPostMaterial;values()[Ltwistedgate/immersiveposts/enums/EnumPostMaterial;"))
+	private static EnumPostMaterial[] creativeengineering$keptMaterials() {
+		return ImmersivePostsMaterials.kept();
+	}
 }

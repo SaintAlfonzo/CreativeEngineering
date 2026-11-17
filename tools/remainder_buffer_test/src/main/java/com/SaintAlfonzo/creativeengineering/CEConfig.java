@@ -4,49 +4,49 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 /** Test stand-in: only the [cooking] section of the real CEConfig (copied verbatim below). */
 public final class CEConfig {
-    public static final ForgeConfigSpec COMMON_SPEC;
-    public static final Cooking COOKING;
-    static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        COOKING = new Cooking(builder);
-        COMMON_SPEC = builder.build();
-    }
-    public static final class Cooking {
-        public final ForgeConfigSpec.BooleanValue remainderBuffer;
-        public final ForgeConfigSpec.BooleanValue stallWhenFull;
-        public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
-        public final ForgeConfigSpec.IntValue recycleShowTicks;
+	public static final ForgeConfigSpec COMMON_SPEC;
+	public static final Cooking COOKING;
+	static {
+		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		COOKING = new Cooking(builder);
+		COMMON_SPEC = builder.build();
+	}
+	public static final class Cooking {
+		public final ForgeConfigSpec.BooleanValue remainderBuffer;
+		public final ForgeConfigSpec.BooleanValue stallWhenFull;
+		public final ForgeConfigSpec.BooleanValue ovenIngredientCounts;
+		public final ForgeConfigSpec.IntValue recycleShowTicks;
 
-        private Cooking(ForgeConfigSpec.Builder b) {
-            b.comment(
-                    "Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the",
-                    "Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the",
-                    "container slot; the rest goes to two leftover slots right of the output, which hoppers and",
-                    "funnels on the output faces can empty."
-            ).push("cooking");
+		private Cooking(ForgeConfigSpec.Builder b) {
+			b.comment(
+					"Leftover containers from ingredients (glass bottles, bowls, buckets) on the FD cooking pot, the",
+					"Farmer's Respite kettle and the oven. A leftover the waiting meal is served in goes to the",
+					"container slot; the rest goes to two leftover slots right of the output, which hoppers and",
+					"funnels on the output faces can empty."
+			).push("cooking");
 
-            remainderBuffer = b.comment("Off = leftovers are thrown out of the station as in the original mods.")
-                    .define("remainderBuffer", true);
+			remainderBuffer = b.comment("Off = leftovers are thrown out of the station as in the original mods.")
+					.define("remainderBuffer", true);
 
-            stallWhenFull = b.comment(
-                    "On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).",
-                    "Off = it crafts anyway and throws what doesn't fit."
-            ).define("stallWhenFull", true);
+			stallWhenFull = b.comment(
+					"On = a station whose leftover slots can't take a craft's leftovers waits (like a full output).",
+					"Off = it crafts anyway and throws what doesn't fit."
+			).define("stallWhenFull", true);
 
-            ovenIngredientCounts = b.comment(
-                    "On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat",
-                    "stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every",
-                    "ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of",
-                    "their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload."
-            ).define("ovenIngredientCounts", false);
+			ovenIngredientCounts = b.comment(
+					"On = an oven recipe ingredient with a count takes that many from one slot (3 wheat from a wheat",
+					"stack), so oven copies of 9-item crafting recipes cost the same as the craft. Off = every",
+					"ingredient takes one item from its own slot, and recipes that don't fit the 6 slots drop some of",
+					"their repeated items (feature_writeup/oven.md 2.6). Recipes are built at /reload."
+			).define("ovenIngredientCounts", false);
 
-            recycleShowTicks = b.comment(
-                    "Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's",
-                    "bottle) stays visible there before the meal is plated with it, so the step can be seen.",
-                    "0 = plate at once. Containers a player or hopper puts in plate at once either way."
-            ).defineInRange("recycleShowTicks", 10, 0, 100);
+			recycleShowTicks = b.comment(
+					"Ticks a leftover recycled into the container slot (a bowl-food ingredient's bowl, a milk bottle's",
+					"bottle) stays visible there before the meal is plated with it, so the step can be seen.",
+					"0 = plate at once. Containers a player or hopper puts in plate at once either way."
+			).defineInRange("recycleShowTicks", 10, 0, 100);
 
-            b.pop(); // cooking
-        }
-    }
+			b.pop(); // cooking
+		}
+	}
 }

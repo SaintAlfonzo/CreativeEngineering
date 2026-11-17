@@ -16,14 +16,14 @@ import net.minecraft.world.item.ItemStack;
  */
 public final class TrinketCaseRules {
 
-    private TrinketCaseRules() {}
+	private TrinketCaseRules() {}
 
-    public static boolean allowed(ItemStack stack) {
-        return CMGConfig.BOTANIA.trinketCaseAnyItem.get() && !stack.isEmpty();
-    }
+	public static boolean allowed(ItemStack stack) {
+		return CMGConfig.BOTANIA.trinketCaseAnyItem.get() && !stack.isEmpty();
+	}
 
-    /** The stack is the case whose inventory {@code caseInventory} is (Botania's {@code ItemBackedInventory}). */
-    public static boolean isOpenCase(Container caseInventory, ItemStack stack) {
-        return caseInventory instanceof ItemBackedInventoryAccessor acc && acc.creativeengineering$stack() == stack;
-    }
+	/** The stack is the case whose inventory {@code caseInventory} is (Botania's {@code ItemBackedInventory}). */
+	public static boolean isOpenCase(Container caseInventory, ItemStack stack) {
+		return caseInventory instanceof ItemBackedInventoryAccessor acc && acc.creativeengineering$stack() == stack;
+	}
 }

@@ -19,16 +19,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = OvenBlockEntity.class, remap = false)
 public abstract class CfbOvenLitSyncMixin {
 
-    @Inject(method = "serverTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V",
-            at = @At("RETURN"))
-    private void ce$syncLit(Level level, BlockPos pos, BlockState ignored, CallbackInfo ci) {
-        BlockState state = level.getBlockState(pos);
-        if (!state.hasProperty(BlockStateProperties.LIT)) {
-            return;
-        }
-        boolean burning = ((OvenBlockEntity) (Object) this).isBurning();
-        if (state.getValue(BlockStateProperties.LIT) != burning) {
-            level.setBlock(pos, state.setValue(BlockStateProperties.LIT, burning), Block.UPDATE_ALL);
-        }
-    }
+	@Inject(method = "serverTick(Lnet/minecraft/world/level/Level;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)V",
+			at = @At("RETURN"))
+	private void ce$syncLit(Level level, BlockPos pos, BlockState ignored, CallbackInfo ci) {
+		BlockState state = level.getBlockState(pos);
+		if (!state.hasProperty(BlockStateProperties.LIT)) {
+			return;
+		}
+		boolean burning = ((OvenBlockEntity) (Object) this).isBurning();
+		if (state.getValue(BlockStateProperties.LIT) != burning) {
+			level.setBlock(pos, state.setValue(BlockStateProperties.LIT, burning), Block.UPDATE_ALL);
+		}
+	}
 }

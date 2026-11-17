@@ -20,8 +20,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = RenderSystem.class, remap = false)
 public class FdReleaseMixin {
 
-    @Inject(method = "m_240147_", at = @At("HEAD"))
-    private static void creativecommon$releaseStaleJarHandles(CallbackInfoReturnable<TimeSource.NanoTimeSource> cir) {
-        StaleJarHandles.release();
-    }
+	@Inject(method = "m_240147_", at = @At("HEAD"))
+	private static void creativecommon$releaseStaleJarHandles(CallbackInfoReturnable<TimeSource.NanoTimeSource> cir) {
+		StaleJarHandles.release();
+	}
 }

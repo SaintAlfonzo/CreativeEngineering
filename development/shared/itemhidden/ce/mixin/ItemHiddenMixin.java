@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = Item.class, remap = false)
 public abstract class ItemHiddenMixin {
 
-    @Inject(method = "m_220152_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void ce$hidden(CreativeModeTab tab, CallbackInfoReturnable<Boolean> cir) {
-        if (HiddenItems.isHidden((Item) (Object) this)) cir.setReturnValue(false);
-    }
+	@Inject(method = "m_220152_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void ce$hidden(CreativeModeTab tab, CallbackInfoReturnable<Boolean> cir) {
+		if (HiddenItems.isHidden((Item) (Object) this)) cir.setReturnValue(false);
+	}
 }

@@ -32,72 +32,72 @@ import java.util.Set;
  */
 public final class PotionMixDedup {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private PotionMixDedup() {}
+	private PotionMixDedup() {}
 
-    /** {@code BrewingRecipeRegistry.getRecipes()} minus the entries a {@code PotionBrewing.Mix} covers. */
-    public static List<IBrewingRecipe> withoutMixDuplicates(List<IBrewingRecipe> registry) {
-        Set<String> covered = coveredPairs();
-        if (covered.isEmpty()) {
-            return registry;
-        }
+	/** {@code BrewingRecipeRegistry.getRecipes()} minus the entries a {@code PotionBrewing.Mix} covers. */
+	public static List<IBrewingRecipe> withoutMixDuplicates(List<IBrewingRecipe> registry) {
+		Set<String> covered = coveredPairs();
+		if (covered.isEmpty()) {
+			return registry;
+		}
 
-        List<IBrewingRecipe> out = new ArrayList<>(registry.size());
-        int dropped = 0;
-        for (IBrewingRecipe r : registry) {
-            if (r instanceof BrewingRecipe br && isCovered(br, covered)) {
-                dropped++;
-                continue;
-            }
-            out.add(r);
-        }
-        if (dropped > 0) {
-            LOGGER.info("[CE] potion mixer dedup: hid {} BrewingRecipe(s) already covered by a PotionBrewing.Mix",
-                    dropped);
-        }
-        return out;
-    }
+		List<IBrewingRecipe> out = new ArrayList<>(registry.size());
+		int dropped = 0;
+		for (IBrewingRecipe r : registry) {
+			if (r instanceof BrewingRecipe br && isCovered(br, covered)) {
+				dropped++;
+				continue;
+			}
+			out.add(r);
+		}
+		if (dropped > 0) {
+			LOGGER.info("[CE] potion mixer dedup: hid {} BrewingRecipe(s) already covered by a PotionBrewing.Mix",
+					dropped);
+		}
+		return out;
+	}
 
-    private static boolean isCovered(BrewingRecipe br, Set<String> covered) {
-        ItemStack[] inputs = br.getInput().getItems();
-        if (inputs.length == 0) {
-            return false;
-        }
-        Potion from = PotionUtils.getPotion(inputs[0]);
-        Potion to = PotionUtils.getPotion(br.getOutput());
-        if (from == Potions.EMPTY || to == Potions.EMPTY) {
-            return false; // bottle-based base brew (lava/poison bottle) — handled elsewhere
-        }
-        ResourceLocation fromId = ForgeRegistries.POTIONS.getKey(from);
-        ResourceLocation toId = ForgeRegistries.POTIONS.getKey(to);
-        return fromId != null && toId != null && covered.contains(fromId + ">" + toId);
-    }
+	private static boolean isCovered(BrewingRecipe br, Set<String> covered) {
+		ItemStack[] inputs = br.getInput().getItems();
+		if (inputs.length == 0) {
+			return false;
+		}
+		Potion from = PotionUtils.getPotion(inputs[0]);
+		Potion to = PotionUtils.getPotion(br.getOutput());
+		if (from == Potions.EMPTY || to == Potions.EMPTY) {
+			return false; // bottle-based base brew (lava/poison bottle) — handled elsewhere
+		}
+		ResourceLocation fromId = ForgeRegistries.POTIONS.getKey(from);
+		ResourceLocation toId = ForgeRegistries.POTIONS.getKey(to);
+		return fromId != null && toId != null && covered.contains(fromId + ">" + toId);
+	}
 
-    private static Set<String> coveredPairs() {
-        Set<String> out = new HashSet<>();
-        for (PotionBrewing.Mix<Potion> m : potionMixes()) {
-            ResourceLocation from = ForgeRegistries.POTIONS.getKey(m.from.value());
-            ResourceLocation to = ForgeRegistries.POTIONS.getKey(m.to.value());
-            if (from != null && to != null) {
-                out.add(from + ">" + to);
-            }
-        }
-        return out;
-    }
+	private static Set<String> coveredPairs() {
+		Set<String> out = new HashSet<>();
+		for (PotionBrewing.Mix<Potion> m : potionMixes()) {
+			ResourceLocation from = ForgeRegistries.POTIONS.getKey(m.from.value());
+			ResourceLocation to = ForgeRegistries.POTIONS.getKey(m.to.value());
+			if (from != null && to != null) {
+				out.add(from + ">" + to);
+			}
+		}
+		return out;
+	}
 
-    @SuppressWarnings("unchecked")
-    private static List<PotionBrewing.Mix<Potion>> potionMixes() {
-        for (String name : new String[] { "f_43494_", "POTION_MIXES" }) {
-            try {
-                Field f = PotionBrewing.class.getDeclaredField(name);
-                f.setAccessible(true);
-                return (List<PotionBrewing.Mix<Potion>>) f.get(null);
-            } catch (ReflectiveOperationException ignored) {
-                // try the next name
-            }
-        }
-        LOGGER.error("[CE] PotionBrewing.POTION_MIXES not found - potion mixer dedup disabled");
-        return List.of();
-    }
+	@SuppressWarnings("unchecked")
+	private static List<PotionBrewing.Mix<Potion>> potionMixes() {
+		for (String name : new String[] { "f_43494_", "POTION_MIXES" }) {
+			try {
+				Field f = PotionBrewing.class.getDeclaredField(name);
+				f.setAccessible(true);
+				return (List<PotionBrewing.Mix<Potion>>) f.get(null);
+			} catch (ReflectiveOperationException ignored) {
+				// try the next name
+			}
+		}
+		LOGGER.error("[CE] PotionBrewing.POTION_MIXES not found - potion mixer dedup disabled");
+		return List.of();
+	}
 }

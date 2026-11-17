@@ -31,48 +31,48 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ProcessingRecipe.class, remap = false)
 public abstract class ProcessingRecipeMixin implements ProcessingRecipeExt {
 
-    @Shadow
-    private Supplier<ItemStack> forcedResult;
+	@Shadow
+	private Supplier<ItemStack> forcedResult;
 
-    @Shadow
-    protected NonNullList<ProcessingOutput> results;
+	@Shadow
+	protected NonNullList<ProcessingOutput> results;
 
-    @Unique
-    private boolean creativeengineering$exclusiveResults;
+	@Unique
+	private boolean creativeengineering$exclusiveResults;
 
-    @Unique
-    private int[][] creativeengineering$resultPools;
+	@Unique
+	private int[][] creativeengineering$resultPools;
 
-    @Override
-    public int[][] creativeengineering$getResultPools() {
-        return creativeengineering$resultPools;
-    }
+	@Override
+	public int[][] creativeengineering$getResultPools() {
+		return creativeengineering$resultPools;
+	}
 
-    @Override
-    public void creativeengineering$setResultPools(int[][] pools) {
-        this.creativeengineering$resultPools = pools;
-    }
+	@Override
+	public void creativeengineering$setResultPools(int[][] pools) {
+		this.creativeengineering$resultPools = pools;
+	}
 
-    @Override
-    public boolean creativeengineering$isExclusiveResults() {
-        return creativeengineering$exclusiveResults;
-    }
+	@Override
+	public boolean creativeengineering$isExclusiveResults() {
+		return creativeengineering$exclusiveResults;
+	}
 
-    @Override
-    public void creativeengineering$setExclusiveResults(boolean exclusive) {
-        this.creativeengineering$exclusiveResults = exclusive;
-    }
+	@Override
+	public void creativeengineering$setExclusiveResults(boolean exclusive) {
+		this.creativeengineering$exclusiveResults = exclusive;
+	}
 
-    @Inject(method = "rollResults(Ljava/util/List;)Ljava/util/List;", at = @At("HEAD"), cancellable = true)
-    private void creativeengineering$rollExclusive(List<ProcessingOutput> rollableResults,
-                                                   CallbackInfoReturnable<List<ItemStack>> cir) {
-        if (forcedResult != null) return;
-        int[][] pools = creativeengineering$resultPools;
-        if (pools != null && rollableResults == results && ResultPools.fits(pools, rollableResults)) {
-            cir.setReturnValue(ResultPools.roll(rollableResults, pools));
-            return;
-        }
-        if (!creativeengineering$exclusiveResults) return;
-        cir.setReturnValue(ExclusiveResults.roll(rollableResults));
-    }
+	@Inject(method = "rollResults(Ljava/util/List;)Ljava/util/List;", at = @At("HEAD"), cancellable = true)
+	private void creativeengineering$rollExclusive(List<ProcessingOutput> rollableResults,
+												   CallbackInfoReturnable<List<ItemStack>> cir) {
+		if (forcedResult != null) return;
+		int[][] pools = creativeengineering$resultPools;
+		if (pools != null && rollableResults == results && ResultPools.fits(pools, rollableResults)) {
+			cir.setReturnValue(ResultPools.roll(rollableResults, pools));
+			return;
+		}
+		if (!creativeengineering$exclusiveResults) return;
+		cir.setReturnValue(ExclusiveResults.roll(rollableResults));
+	}
 }

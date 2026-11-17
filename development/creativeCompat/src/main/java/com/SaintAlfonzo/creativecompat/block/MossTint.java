@@ -37,64 +37,64 @@ import net.minecraftforge.registries.ForgeRegistries;
 @Mod.EventBusSubscriber(modid = CreativeCompat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class MossTint {
 
-    /** Least-squares fit of vanilla moss_block.png against the grayscale copy. */
-    private static final int MOSS_BASE = 0x738E3A;
+	/** Least-squares fit of vanilla moss_block.png against the grayscale copy. */
+	private static final int MOSS_BASE = 0x738E3A;
 
-    private static final ResourceLocation BLOCK_MODEL = new ResourceLocation(CreativeCompat.NS, "block/moss_block_tinted");
-    private static final ResourceLocation CARPET_MODEL = new ResourceLocation(CreativeCompat.NS, "block/moss_carpet_tinted");
+	private static final ResourceLocation BLOCK_MODEL = new ResourceLocation(CreativeCompat.NS, "block/moss_block_tinted");
+	private static final ResourceLocation CARPET_MODEL = new ResourceLocation(CreativeCompat.NS, "block/moss_carpet_tinted");
 
-    private MossTint() {}
+	private MossTint() {}
 
-    @SubscribeEvent
-    public static void onRegisterModels(ModelEvent.RegisterAdditional event) {
-        event.register(BLOCK_MODEL);
-        event.register(CARPET_MODEL);
-    }
+	@SubscribeEvent
+	public static void onRegisterModels(ModelEvent.RegisterAdditional event) {
+		event.register(BLOCK_MODEL);
+		event.register(CARPET_MODEL);
+	}
 
-    @SubscribeEvent
-    public static void onBakingCompleted(ModelEvent.BakingCompleted event) {
-        if (!CompatConfig.MOSS.biomeTint.get()) return;
-        Map<ResourceLocation, BakedModel> models = event.getModels();
-        BakedModel missing = event.getModelManager().getMissingModel();
-        swap(models, missing, Blocks.MOSS_BLOCK, models.get(BLOCK_MODEL));
-        swap(models, missing, Blocks.MOSS_CARPET, models.get(CARPET_MODEL));
-    }
+	@SubscribeEvent
+	public static void onBakingCompleted(ModelEvent.BakingCompleted event) {
+		if (!CompatConfig.MOSS.biomeTint.get()) return;
+		Map<ResourceLocation, BakedModel> models = event.getModels();
+		BakedModel missing = event.getModelManager().getMissingModel();
+		swap(models, missing, Blocks.MOSS_BLOCK, models.get(BLOCK_MODEL));
+		swap(models, missing, Blocks.MOSS_CARPET, models.get(CARPET_MODEL));
+	}
 
-    private static void swap(Map<ResourceLocation, BakedModel> models, BakedModel missing, Block block, BakedModel tinted) {
-        if (tinted == null || tinted == missing) return;
-        for (BlockState state : block.getStateDefinition().getPossibleStates()) {
-            models.put(BlockModelShaper.stateToModelLocation(state), tinted);
-        }
-        models.put(new ModelResourceLocation(ForgeRegistries.ITEMS.getKey(block.asItem()), "inventory"), tinted);
-    }
+	private static void swap(Map<ResourceLocation, BakedModel> models, BakedModel missing, Block block, BakedModel tinted) {
+		if (tinted == null || tinted == missing) return;
+		for (BlockState state : block.getStateDefinition().getPossibleStates()) {
+			models.put(BlockModelShaper.stateToModelLocation(state), tinted);
+		}
+		models.put(new ModelResourceLocation(ForgeRegistries.ITEMS.getKey(block.asItem()), "inventory"), tinted);
+	}
 
-    @SubscribeEvent
-    public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
-        event.register((state, level, pos, tint) -> {
-            if (tint != 0) return -1;
-            if (level == null || pos == null) return MOSS_BASE;
-            return shift(BiomeColors.getAverageGrassColor(level, pos));
-        }, Blocks.MOSS_BLOCK, Blocks.MOSS_CARPET);
-    }
+	@SubscribeEvent
+	public static void onBlockColors(RegisterColorHandlersEvent.Block event) {
+		event.register((state, level, pos, tint) -> {
+			if (tint != 0) return -1;
+			if (level == null || pos == null) return MOSS_BASE;
+			return shift(BiomeColors.getAverageGrassColor(level, pos));
+		}, Blocks.MOSS_BLOCK, Blocks.MOSS_CARPET);
+	}
 
-    @SubscribeEvent
-    public static void onItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tint) -> tint == 0 ? MOSS_BASE : -1, Blocks.MOSS_BLOCK, Blocks.MOSS_CARPET);
-    }
+	@SubscribeEvent
+	public static void onItemColors(RegisterColorHandlersEvent.Item event) {
+		event.register((stack, tint) -> tint == 0 ? MOSS_BASE : -1, Blocks.MOSS_BLOCK, Blocks.MOSS_CARPET);
+	}
 
-    /** {@link #MOSS_BASE} times (grass / Lush Caves grass) per channel, scaled by tintStrength. */
-    static int shift(int grass) {
-        double strength = CompatConfig.MOSS.tintStrength.get();
-        int ref = GrassColor.get(0.5, 0.5);
-        int out = 0;
-        for (int shiftBits = 16; shiftBits >= 0; shiftBits -= 8) {
-            int base = (MOSS_BASE >> shiftBits) & 0xFF;
-            int g = (grass >> shiftBits) & 0xFF;
-            int r = Math.max(1, (ref >> shiftBits) & 0xFF);
-            double factor = 1.0 + strength * ((double) g / r - 1.0);
-            int c = (int) Math.round(Math.min(255.0, Math.max(0.0, base * factor)));
-            out |= c << shiftBits;
-        }
-        return out;
-    }
+	/** {@link #MOSS_BASE} times (grass / Lush Caves grass) per channel, scaled by tintStrength. */
+	static int shift(int grass) {
+		double strength = CompatConfig.MOSS.tintStrength.get();
+		int ref = GrassColor.get(0.5, 0.5);
+		int out = 0;
+		for (int shiftBits = 16; shiftBits >= 0; shiftBits -= 8) {
+			int base = (MOSS_BASE >> shiftBits) & 0xFF;
+			int g = (grass >> shiftBits) & 0xFF;
+			int r = Math.max(1, (ref >> shiftBits) & 0xFF);
+			double factor = 1.0 + strength * ((double) g / r - 1.0);
+			int c = (int) Math.round(Math.min(255.0, Math.max(0.0, base * factor)));
+			out |= c << shiftBits;
+		}
+		return out;
+	}
 }

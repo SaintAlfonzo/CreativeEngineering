@@ -24,48 +24,48 @@ import net.minecraftforge.fml.event.config.ModConfigEvent;
  */
 public final class CompatConfigReload {
 
-    private CompatConfigReload() {}
+	private CompatConfigReload() {}
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static volatile ModConfig config;
-    private static volatile IEventBus bus;
+	private static volatile ModConfig config;
+	private static volatile IEventBus bus;
 
-    /** Mod construction: the bus the reload event goes to. */
-    static void init(IEventBus modBus) {
-        bus = modBus;
-        modBus.addListener(CompatConfigReload::onLoad);
-    }
+	/** Mod construction: the bus the reload event goes to. */
+	static void init(IEventBus modBus) {
+		bus = modBus;
+		modBus.addListener(CompatConfigReload::onLoad);
+	}
 
-    private static void onLoad(ModConfigEvent event) {
-        if (event.getConfig().getSpec() == CompatConfig.SPEC) config = event.getConfig();
-    }
+	private static void onLoad(ModConfigEvent event) {
+		if (event.getConfig().getSpec() == CompatConfig.SPEC) config = event.getConfig();
+	}
 
-    /**
-     * Reload the file now. Returns a one-line result for the command's feedback. Thread: any (the readers hand their
-     * own work to the server thread); the command calls it on the server thread, or on the client thread for a
-     * client-side reload.
-     */
-    public static synchronized String reload() {
-        ModConfig c = config;
-        IEventBus b = bus;
-        if (c == null || b == null) return "creativecompat-common.toml is not loaded yet";
-        if (!(c.getConfigData() instanceof CommentedFileConfig file)) return "creativecompat-common.toml has no file";
-        try {
-            file.load();
-            int fixed = 0;
-            if (!CompatConfig.SPEC.isCorrect(file)) {
-                fixed = CompatConfig.SPEC.correct(file);
-                file.save();
-            }
-            CompatConfig.SPEC.afterReload();
-            b.post(new ModConfigEvent.Reloading(c));
-            String msg = "creativecompat-common.toml reloaded" + (fixed > 0 ? " (" + fixed + " value(s) corrected)" : "");
-            LOGGER.info("[creativecompat] {}", msg);
-            return msg;
-        } catch (Exception e) {
-            LOGGER.error("[creativecompat] reloading creativecompat-common.toml failed", e);
-            return "reload failed: " + e;
-        }
-    }
+	/**
+	 * Reload the file now. Returns a one-line result for the command's feedback. Thread: any (the readers hand their
+	 * own work to the server thread); the command calls it on the server thread, or on the client thread for a
+	 * client-side reload.
+	 */
+	public static synchronized String reload() {
+		ModConfig c = config;
+		IEventBus b = bus;
+		if (c == null || b == null) return "creativecompat-common.toml is not loaded yet";
+		if (!(c.getConfigData() instanceof CommentedFileConfig file)) return "creativecompat-common.toml has no file";
+		try {
+			file.load();
+			int fixed = 0;
+			if (!CompatConfig.SPEC.isCorrect(file)) {
+				fixed = CompatConfig.SPEC.correct(file);
+				file.save();
+			}
+			CompatConfig.SPEC.afterReload();
+			b.post(new ModConfigEvent.Reloading(c));
+			String msg = "creativecompat-common.toml reloaded" + (fixed > 0 ? " (" + fixed + " value(s) corrected)" : "");
+			LOGGER.info("[creativecompat] {}", msg);
+			return msg;
+		} catch (Exception e) {
+			LOGGER.error("[creativecompat] reloading creativecompat-common.toml failed", e);
+			return "reload failed: " + e;
+		}
+	}
 }

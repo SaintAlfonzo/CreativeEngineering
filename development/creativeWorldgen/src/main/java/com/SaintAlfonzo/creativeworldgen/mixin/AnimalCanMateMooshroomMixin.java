@@ -16,10 +16,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = Animal.class, remap = false)
 public abstract class AnimalCanMateMooshroomMixin {
 
-    @Inject(method = "m_7848_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$mooshroomFamily(Animal other, CallbackInfoReturnable<Boolean> cir) {
-        Animal self = (Animal) (Object) this;
-        if (other == self || !MooshroomFamily.isMember(self) || !MooshroomFamily.isMember(other)) return;
-        cir.setReturnValue(self.isInLove() && other.isInLove());
-    }
+	@Inject(method = "m_7848_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$mooshroomFamily(Animal other, CallbackInfoReturnable<Boolean> cir) {
+		Animal self = (Animal) (Object) this;
+		if (other == self || !MooshroomFamily.isMember(self) || !MooshroomFamily.isMember(other)) return;
+		cir.setReturnValue(self.isInLove() && other.isInLove());
+	}
 }

@@ -18,12 +18,12 @@ import java.util.Optional;
 @Mixin(value = AEBaseScreen.class, remap = false)
 public class AeBaseScreenTooltipMixin {
 
-    @Inject(method = "drawTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;IILjava/util/List;)V", remap = false, require = 1,
-            at = @At("HEAD"), cancellable = true)
-    private void creativecommon$drawWithStack(PoseStack poseStack, int x, int y, List<Component> lines, CallbackInfo ci) {
-        ItemStack stack = AeTooltipStacks.take();
-        if (stack.isEmpty() || lines.isEmpty()) return;
-        ((Screen) (Object) this).renderTooltip(poseStack, lines, Optional.empty(), x, y, stack);
-        ci.cancel();
-    }
+	@Inject(method = "drawTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;IILjava/util/List;)V", remap = false, require = 1,
+			at = @At("HEAD"), cancellable = true)
+	private void creativecommon$drawWithStack(PoseStack poseStack, int x, int y, List<Component> lines, CallbackInfo ci) {
+		ItemStack stack = AeTooltipStacks.take();
+		if (stack.isEmpty() || lines.isEmpty()) return;
+		((Screen) (Object) this).renderTooltip(poseStack, lines, Optional.empty(), x, y, stack);
+		ci.cancel();
+	}
 }

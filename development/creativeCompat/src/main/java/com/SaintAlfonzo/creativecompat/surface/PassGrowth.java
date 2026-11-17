@@ -30,120 +30,120 @@ import net.minecraft.world.level.block.state.properties.Property;
  */
 final class PassGrowth {
 
-    private PassGrowth() {}
+	private PassGrowth() {}
 
-    /** The growth-related properties of one block. */
-    private record Info(IntegerProperty age, int ageMin, int ageMax, Property<?> growth, List<String> lowerStages,
-                        BooleanProperty upper, Property<?> half, IntegerProperty layers, int layersMax) {
+	/** The growth-related properties of one block. */
+	private record Info(IntegerProperty age, int ageMin, int ageMax, Property<?> growth, List<String> lowerStages,
+						BooleanProperty upper, Property<?> half, IntegerProperty layers, int layersMax) {
 
-        boolean isUpper(BlockState state) {
-            if (upper != null && state.getValue(upper)) return true;
-            if (half != null && "upper".equals(valueName(state, half))) return true;
-            return growth != null && valueName(state, growth).startsWith("top");
-        }
+		boolean isUpper(BlockState state) {
+			if (upper != null && state.getValue(upper)) return true;
+			if (half != null && "upper".equals(valueName(state, half))) return true;
+			return growth != null && valueName(state, growth).startsWith("top");
+		}
 
-        boolean halfGrown(BlockState state) {
-            if (age != null) {
-                return PassMath.halfGrown(state.getValue(age), ageMin, ageMax);
-            }
-            if (growth != null) {
-                int i = lowerStages.indexOf(valueName(state, growth));
-                return i < 0 || PassMath.enumHalfGrown(i, lowerStages.size()); // a top stage: grown
-            }
-            return true;
-        }
-    }
+		boolean halfGrown(BlockState state) {
+			if (age != null) {
+				return PassMath.halfGrown(state.getValue(age), ageMin, ageMax);
+			}
+			if (growth != null) {
+				int i = lowerStages.indexOf(valueName(state, growth));
+				return i < 0 || PassMath.enumHalfGrown(i, lowerStages.size()); // a top stage: grown
+			}
+			return true;
+		}
+	}
 
-    private static final Map<Block, Info> INFO = new ConcurrentHashMap<>();
+	private static final Map<Block, Info> INFO = new ConcurrentHashMap<>();
 
-    static void clear() {
-        INFO.clear();
-    }
+	static void clear() {
+		INFO.clear();
+	}
 
-    private static Info info(Block block) {
-        return INFO.computeIfAbsent(block, PassGrowth::read);
-    }
+	private static Info info(Block block) {
+		return INFO.computeIfAbsent(block, PassGrowth::read);
+	}
 
-    private static Info read(Block block) {
-        IntegerProperty age = null, layers = null;
-        Property<?> growth = null, half = null;
-        BooleanProperty upper = null;
-        for (Property<?> p : block.getStateDefinition().getProperties()) {
-            String name = p.getName();
-            if (p instanceof IntegerProperty ip) {
-                if (name.equals("age")) age = ip;
-                else if (name.equals("layers")) layers = ip;
-            } else if (p instanceof BooleanProperty bp && name.equals("upper")) {
-                upper = bp;
-            } else if (name.equals("half") && names(p).contains("upper")) {
-                half = p;
-            } else if (name.equals("growth") && !(p instanceof BooleanProperty)) {
-                growth = p;
-            }
-        }
-        int min = 0, max = 0;
-        if (age != null) {
-            min = Integer.MAX_VALUE;
-            max = Integer.MIN_VALUE;
-            for (int v : age.getPossibleValues()) {
-                min = Math.min(min, v);
-                max = Math.max(max, v);
-            }
-        }
-        List<String> lower = new ArrayList<>();
-        if (growth != null && age == null) {
-            for (String n : names(growth)) {
-                if (!n.startsWith("top")) lower.add(n);
-            }
-        } else {
-            growth = null;
-        }
-        int lmax = -1;
-        if (layers != null) {
-            for (int v : layers.getPossibleValues()) lmax = Math.max(lmax, v);
-        }
-        return new Info(age, min, max, growth, List.copyOf(lower), upper, half, layers, lmax);
-    }
+	private static Info read(Block block) {
+		IntegerProperty age = null, layers = null;
+		Property<?> growth = null, half = null;
+		BooleanProperty upper = null;
+		for (Property<?> p : block.getStateDefinition().getProperties()) {
+			String name = p.getName();
+			if (p instanceof IntegerProperty ip) {
+				if (name.equals("age")) age = ip;
+				else if (name.equals("layers")) layers = ip;
+			} else if (p instanceof BooleanProperty bp && name.equals("upper")) {
+				upper = bp;
+			} else if (name.equals("half") && names(p).contains("upper")) {
+				half = p;
+			} else if (name.equals("growth") && !(p instanceof BooleanProperty)) {
+				growth = p;
+			}
+		}
+		int min = 0, max = 0;
+		if (age != null) {
+			min = Integer.MAX_VALUE;
+			max = Integer.MIN_VALUE;
+			for (int v : age.getPossibleValues()) {
+				min = Math.min(min, v);
+				max = Math.max(max, v);
+			}
+		}
+		List<String> lower = new ArrayList<>();
+		if (growth != null && age == null) {
+			for (String n : names(growth)) {
+				if (!n.startsWith("top")) lower.add(n);
+			}
+		} else {
+			growth = null;
+		}
+		int lmax = -1;
+		if (layers != null) {
+			for (int v : layers.getPossibleValues()) lmax = Math.max(lmax, v);
+		}
+		return new Info(age, min, max, growth, List.copyOf(lower), upper, half, layers, lmax);
+	}
 
-    /** Serialized names of a property's values, in its own order (an enum's declaration order). */
-    private static <T extends Comparable<T>> List<String> names(Property<T> p) {
-        List<String> out = new ArrayList<>();
-        for (T v : p.getPossibleValues()) out.add(p.getName(v));
-        return out;
-    }
+	/** Serialized names of a property's values, in its own order (an enum's declaration order). */
+	private static <T extends Comparable<T>> List<String> names(Property<T> p) {
+		List<String> out = new ArrayList<>();
+		for (T v : p.getPossibleValues()) out.add(p.getName(v));
+		return out;
+	}
 
-    private static <T extends Comparable<T>> String valueName(BlockState state, Property<T> p) {
-        return p.getName(state.getValue(p));
-    }
+	private static <T extends Comparable<T>> String valueName(BlockState state, Property<T> p) {
+		return p.getName(state.getValue(p));
+	}
 
-    /**
-     * The block passes its tier's growth rule. {@code tierOfBelow} is the tier of the block right below (null = none):
-     * with {@code tall_half}, an upper block (or a different same-tier block on top of another) defers to it.
-     */
-    static boolean passes(PassTier.Growth mode, BlockGetter level, BlockPos pos, BlockState state, PassTier tier) {
-        if (mode == PassTier.Growth.ANY) return true;
-        Info info = info(state.getBlock());
-        if (mode == PassTier.Growth.TALL_HALF) {
-            BlockPos belowPos = pos.below();
-            BlockState below = level.getBlockState(belowPos);
-            boolean belowSameTier = PassThrough.tierOf(below) == tier;
-            boolean upper = info.isUpper(state) || (belowSameTier && below.getBlock() != state.getBlock());
-            if (upper) {
-                // an upper block without its lower one (a placed top) counts as grown
-                return !belowSameTier || info(below.getBlock()).halfGrown(below);
-            }
-        }
-        return info.halfGrown(state);
-    }
+	/**
+	 * The block passes its tier's growth rule. {@code tierOfBelow} is the tier of the block right below (null = none):
+	 * with {@code tall_half}, an upper block (or a different same-tier block on top of another) defers to it.
+	 */
+	static boolean passes(PassTier.Growth mode, BlockGetter level, BlockPos pos, BlockState state, PassTier tier) {
+		if (mode == PassTier.Growth.ANY) return true;
+		Info info = info(state.getBlock());
+		if (mode == PassTier.Growth.TALL_HALF) {
+			BlockPos belowPos = pos.below();
+			BlockState below = level.getBlockState(belowPos);
+			boolean belowSameTier = PassThrough.tierOf(below) == tier;
+			boolean upper = info.isUpper(state) || (belowSameTier && below.getBlock() != state.getBlock());
+			if (upper) {
+				// an upper block without its lower one (a placed top) counts as grown
+				return !belowSameTier || info(below.getBlock()).halfGrown(below);
+			}
+		}
+		return info.halfGrown(state);
+	}
 
-    /** The block's {@code layers} value, or -1 when it has none. */
-    static int layers(BlockState state) {
-        IntegerProperty p = info(state.getBlock()).layers();
-        return p == null ? -1 : state.getValue(p);
-    }
+	/** The block's {@code layers} value, or -1 when it has none. */
+	static int layers(BlockState state) {
+		IntegerProperty p = info(state.getBlock()).layers();
+		return p == null ? -1 : state.getValue(p);
+	}
 
-    /** The highest value of the block's {@code layers} property, or -1 when it has none. */
-    static int layersMax(BlockState state) {
-        return info(state.getBlock()).layersMax();
-    }
+	/** The highest value of the block's {@code layers} property, or -1 when it has none. */
+	static int layersMax(BlockState state) {
+		return info(state.getBlock()).layersMax();
+	}
 }

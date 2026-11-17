@@ -35,86 +35,86 @@ import java.util.Optional;
  */
 public class MoobloomSpawnEggItem extends ForgeSpawnEggItem {
 
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MoreMooblooms.ID);
+	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MoreMooblooms.ID);
 
-    public static final RegistryObject<MoobloomSpawnEggItem> MOOBLOOM_SPAWN_EGG = ITEMS.register("moobloom_spawn_egg",
-            () -> new MoobloomSpawnEggItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
+	public static final RegistryObject<MoobloomSpawnEggItem> MOOBLOOM_SPAWN_EGG = ITEMS.register("moobloom_spawn_egg",
+			() -> new MoobloomSpawnEggItem(new Item.Properties().tab(CreativeModeTab.TAB_MISC)));
 
-    public static void register(IEventBus modBus) {
-        ITEMS.register(modBus);
-    }
+	public static void register(IEventBus modBus) {
+		ITEMS.register(modBus);
+	}
 
-    public MoobloomSpawnEggItem(Item.Properties props) {
-        super(MMEntities.MOOBLOOM, 0xFDD500, 0xF7EDC1, props);
-    }
+	public MoobloomSpawnEggItem(Item.Properties props) {
+		super(MMEntities.MOOBLOOM, 0xFDD500, 0xF7EDC1, props);
+	}
 
-    public static ItemStack forVariant(ResourceLocation variant) {
-        ItemStack stack = new ItemStack(MOOBLOOM_SPAWN_EGG.get());
-        CompoundTag entityTag = new CompoundTag();
-        entityTag.putString("Variant", variant.toString());
-        stack.getOrCreateTag().put("EntityTag", entityTag);
-        return stack;
-    }
+	public static ItemStack forVariant(ResourceLocation variant) {
+		ItemStack stack = new ItemStack(MOOBLOOM_SPAWN_EGG.get());
+		CompoundTag entityTag = new CompoundTag();
+		entityTag.putString("Variant", variant.toString());
+		stack.getOrCreateTag().put("EntityTag", entityTag);
+		return stack;
+	}
 
-    @Nullable
-    public static ResourceLocation variantOf(ItemStack stack) {
-        CompoundTag tag = stack.getTag();
-        if (tag == null || !tag.contains("EntityTag", 10)) return null;
-        CompoundTag entityTag = tag.getCompound("EntityTag");
-        return entityTag.contains("Variant", 8) ? MoobloomVariants.legacy(ResourceLocation.tryParse(entityTag.getString("Variant"))) : null;
-    }
+	@Nullable
+	public static ResourceLocation variantOf(ItemStack stack) {
+		CompoundTag tag = stack.getTag();
+		if (tag == null || !tag.contains("EntityTag", 10)) return null;
+		CompoundTag entityTag = tag.getCompound("EntityTag");
+		return entityTag.contains("Variant", 8) ? MoobloomVariants.legacy(ResourceLocation.tryParse(entityTag.getString("Variant"))) : null;
+	}
 
-    /** Client-side lookup of a stack's variant (null = plain egg or unknown variant). */
-    @Nullable
-    public static MoobloomVariant clientVariant(ItemStack stack) {
-        ResourceLocation id = variantOf(stack);
-        return id == null ? null : MoobloomVariants.all(true).get(id);
-    }
+	/** Client-side lookup of a stack's variant (null = plain egg or unknown variant). */
+	@Nullable
+	public static MoobloomVariant clientVariant(ItemStack stack) {
+		ResourceLocation id = variantOf(stack);
+		return id == null ? null : MoobloomVariants.all(true).get(id);
+	}
 
-    /**
-     * Using the egg on a moobloom makes a calf. Vanilla asks the clicked moobloom for {@code getBreedOffspring},
-     * which would roll the breeding rules, and never reads the egg's {@code EntityTag}; here the calf is the
-     * egg's variant (a plain egg: the clicked moobloom's). Otherwise vanilla's steps, with the variant set before
-     * the calf joins the world.
-     */
-    @Override
-    public Optional<Mob> spawnOffspringFromSpawnEgg(Player player, Mob mob, EntityType<? extends Mob> type,
-                                                    ServerLevel level, Vec3 pos, ItemStack stack) {
-        if (!(mob instanceof Moobloom parent)) return super.spawnOffspringFromSpawnEgg(player, mob, type, level, pos, stack);
-        if (!spawnsEntity(stack.getTag(), type)) return Optional.empty();
-        Moobloom child = MMEntities.MOOBLOOM.get().create(level);
-        if (child == null) return Optional.empty();
-        ResourceLocation id = variantOf(stack);
-        child.setVariant(MoobloomVariants.has(false, id) ? MoobloomVariants.get(false, id) : parent.getVariant());
-        child.setBaby(true);
-        child.moveTo(pos.x(), pos.y(), pos.z(), 0.0F, 0.0F);
-        level.addFreshEntityWithPassengers(child);
-        if (stack.hasCustomHoverName()) child.setCustomName(stack.getHoverName());
-        if (!player.getAbilities().instabuild) stack.shrink(1);
-        return Optional.of(child);
-    }
+	/**
+	 * Using the egg on a moobloom makes a calf. Vanilla asks the clicked moobloom for {@code getBreedOffspring},
+	 * which would roll the breeding rules, and never reads the egg's {@code EntityTag}; here the calf is the
+	 * egg's variant (a plain egg: the clicked moobloom's). Otherwise vanilla's steps, with the variant set before
+	 * the calf joins the world.
+	 */
+	@Override
+	public Optional<Mob> spawnOffspringFromSpawnEgg(Player player, Mob mob, EntityType<? extends Mob> type,
+													ServerLevel level, Vec3 pos, ItemStack stack) {
+		if (!(mob instanceof Moobloom parent)) return super.spawnOffspringFromSpawnEgg(player, mob, type, level, pos, stack);
+		if (!spawnsEntity(stack.getTag(), type)) return Optional.empty();
+		Moobloom child = MMEntities.MOOBLOOM.get().create(level);
+		if (child == null) return Optional.empty();
+		ResourceLocation id = variantOf(stack);
+		child.setVariant(MoobloomVariants.has(false, id) ? MoobloomVariants.get(false, id) : parent.getVariant());
+		child.setBaby(true);
+		child.moveTo(pos.x(), pos.y(), pos.z(), 0.0F, 0.0F);
+		level.addFreshEntityWithPassengers(child);
+		if (stack.hasCustomHoverName()) child.setCustomName(stack.getHoverName());
+		if (!player.getAbilities().instabuild) stack.shrink(1);
+		return Optional.of(child);
+	}
 
-    @Override
-    public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
-        if (!allowedIn(tab)) return;
-        // The creative screen and JEI only ever run on the client, which has the synced table. Before the
-        // first sync (or on a dedicated server) the plain egg stands in.
-        boolean listed = false;
-        if (FMLEnvironment.dist.isClient()) {
-            for (MoobloomVariant v : MoobloomVariants.values(true)) {
-                items.add(forVariant(v.id()));
-                listed = true;
-            }
-        }
-        if (!listed) items.add(new ItemStack(this));
-    }
+	@Override
+	public void fillItemCategory(CreativeModeTab tab, NonNullList<ItemStack> items) {
+		if (!allowedIn(tab)) return;
+		// The creative screen and JEI only ever run on the client, which has the synced table. Before the
+		// first sync (or on a dedicated server) the plain egg stands in.
+		boolean listed = false;
+		if (FMLEnvironment.dist.isClient()) {
+			for (MoobloomVariant v : MoobloomVariants.values(true)) {
+				items.add(forVariant(v.id()));
+				listed = true;
+			}
+		}
+		if (!listed) items.add(new ItemStack(this));
+	}
 
-    @Override
-    public Component getName(ItemStack stack) {
-        ResourceLocation id = variantOf(stack);
-        if (id == null) return super.getName(stack);
-        String key = id.getNamespace().equals(MoreMooblooms.ID) ? id.getPath() : id.getNamespace() + "." + id.getPath();
-        return Component.translatable("item.moremooblooms.moobloom_spawn_egg.variant",
-                Component.translatable("entity.moremooblooms.moobloom." + key));
-    }
+	@Override
+	public Component getName(ItemStack stack) {
+		ResourceLocation id = variantOf(stack);
+		if (id == null) return super.getName(stack);
+		String key = id.getNamespace().equals(MoreMooblooms.ID) ? id.getPath() : id.getNamespace() + "." + id.getPath();
+		return Component.translatable("item.moremooblooms.moobloom_spawn_egg.variant",
+				Component.translatable("entity.moremooblooms.moobloom." + key));
+	}
 }

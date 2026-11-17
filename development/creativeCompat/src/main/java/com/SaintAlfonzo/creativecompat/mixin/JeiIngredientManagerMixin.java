@@ -18,13 +18,13 @@ import java.util.Collection;
 @Mixin(value = IngredientManager.class, remap = false)
 public abstract class JeiIngredientManagerMixin {
 
-    @Inject(method = "addIngredientsAtRuntime", at = @At("HEAD"))
-    private <V> void creativecommon$recordAdd(IIngredientType<V> type, Collection<V> ingredients, CallbackInfo ci) {
-        JeiIngredientChanges.record(true, (IIngredientManager) (Object) this, type, ingredients);
-    }
+	@Inject(method = "addIngredientsAtRuntime", at = @At("HEAD"))
+	private <V> void creativecommon$recordAdd(IIngredientType<V> type, Collection<V> ingredients, CallbackInfo ci) {
+		JeiIngredientChanges.record(true, (IIngredientManager) (Object) this, type, ingredients);
+	}
 
-    @Inject(method = "removeIngredientsAtRuntime", at = @At("HEAD"))
-    private <V> void creativecommon$recordRemove(IIngredientType<V> type, Collection<V> ingredients, CallbackInfo ci) {
-        JeiIngredientChanges.record(false, (IIngredientManager) (Object) this, type, ingredients);
-    }
+	@Inject(method = "removeIngredientsAtRuntime", at = @At("HEAD"))
+	private <V> void creativecommon$recordRemove(IIngredientType<V> type, Collection<V> ingredients, CallbackInfo ci) {
+		JeiIngredientChanges.record(false, (IIngredientManager) (Object) this, type, ingredients);
+	}
 }

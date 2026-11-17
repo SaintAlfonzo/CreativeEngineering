@@ -21,18 +21,18 @@ import org.slf4j.Logger;
  * {@code RecipeBookMenu#getRecipeBookType}, so the mod's own create() never also runs there.
  */
 public final class NockRecipeBookSync {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String TYPE = "fletching";
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final String TYPE = "fletching";
 
-    private NockRecipeBookSync() {}
+	private NockRecipeBookSync() {}
 
-    public static void register() {
-        if (FMLEnvironment.dist != Dist.DEDICATED_SERVER || !ModList.get().isLoaded("nock_enough_arrows")) return;
-        for (RecipeBookType t : RecipeBookType.values()) {
-            if (t.name().equals(TYPE)) return;
-        }
-        RecipeBookType.create(TYPE);
-        LOGGER.info("[nock-recipe-book] added server-side RecipeBookType '{}' ({} types)",
-                TYPE, RecipeBookType.values().length);
-    }
+	public static void register() {
+		if (FMLEnvironment.dist != Dist.DEDICATED_SERVER || !ModList.get().isLoaded("nock_enough_arrows")) return;
+		for (RecipeBookType t : RecipeBookType.values()) {
+			if (t.name().equals(TYPE)) return;
+		}
+		RecipeBookType.create(TYPE);
+		LOGGER.info("[nock-recipe-book] added server-side RecipeBookType '{}' ({} types)",
+				TYPE, RecipeBookType.values().length);
+	}
 }

@@ -19,15 +19,15 @@ import vectorwing.farmersdelight.common.block.entity.inventory.CookingPotItemHan
 @Mixin(value = CookingPotItemHandler.class, remap = false)
 public abstract class CookingPotItemHandlerMixin {
 
-    private static final int INGREDIENT_SLOTS = 6;
-    private static final int CONTAINER_SLOT = 7;
+	private static final int INGREDIENT_SLOTS = 6;
+	private static final int CONTAINER_SLOT = 7;
 
-    @Shadow
-    @Final
-    private IItemHandler itemHandler;
+	@Shadow
+	@Final
+	private IItemHandler itemHandler;
 
-    @Inject(method = "insertItem", at = @At("HEAD"), cancellable = true)
-    private void ce$everyFaceRoutes(int slot, ItemStack stack, boolean simulate, CallbackInfoReturnable<ItemStack> cir) {
-        cir.setReturnValue(slot < INGREDIENT_SLOTS || slot == CONTAINER_SLOT ? itemHandler.insertItem(slot, stack, simulate) : stack);
-    }
+	@Inject(method = "insertItem", at = @At("HEAD"), cancellable = true)
+	private void ce$everyFaceRoutes(int slot, ItemStack stack, boolean simulate, CallbackInfoReturnable<ItemStack> cir) {
+		cir.setReturnValue(slot < INGREDIENT_SLOTS || slot == CONTAINER_SLOT ? itemHandler.insertItem(slot, stack, simulate) : stack);
+	}
 }

@@ -48,78 +48,78 @@ import java.util.List;
  */
 @Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class SurfaceAudit {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    private SurfaceAudit() {}
+	private SurfaceAudit() {}
 
-    @SubscribeEvent
-    public static void onRegisterCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("dumpsurface")
-                .requires(src -> src.hasPermission(2))
-                .executes(ctx -> {
-                    try {
-                        String summary = dump();
-                        ctx.getSource().sendSuccess(Component.literal("[dumpsurface] " + summary
-                                + " -> kubejs/exported/surface_audit.json").withStyle(ChatFormatting.GREEN), false);
-                        return 1;
-                    } catch (IOException e) {
-                        LOGGER.error("[dumpsurface] write failed", e);
-                        ctx.getSource().sendFailure(Component.literal("[dumpsurface] write failed: " + e));
-                        return 0;
-                    }
-                }));
-    }
+	@SubscribeEvent
+	public static void onRegisterCommands(RegisterCommandsEvent event) {
+		event.getDispatcher().register(Commands.literal("dumpsurface")
+				.requires(src -> src.hasPermission(2))
+				.executes(ctx -> {
+					try {
+						String summary = dump();
+						ctx.getSource().sendSuccess(Component.literal("[dumpsurface] " + summary
+								+ " -> kubejs/exported/surface_audit.json").withStyle(ChatFormatting.GREEN), false);
+						return 1;
+					} catch (IOException e) {
+						LOGGER.error("[dumpsurface] write failed", e);
+						ctx.getSource().sendFailure(Component.literal("[dumpsurface] write failed: " + e));
+						return 0;
+					}
+				}));
+	}
 
-    public static String dump() throws IOException {
-        RunSpeed.clearTierCache(); // read the tags as they are now
-        JsonArray blocks = new JsonArray();
-        int errors = 0, tiered = 0;
-        List<ResourceLocation> keys = new ArrayList<>(ForgeRegistries.BLOCKS.getKeys());
-        keys.sort(ResourceLocation::compareTo);
-        for (ResourceLocation id : keys) {
-            Block block = ForgeRegistries.BLOCKS.getValue(id);
-            if (block == null) continue;
-            JsonObject row = new JsonObject();
-            row.addProperty("id", id.toString());
-            row.addProperty("class", block.getClass().getName());
-            try {
-                BlockState state = block.defaultBlockState();
-                VoxelShape shape = state.getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, CollisionContext.empty());
-                row.addProperty("collisionTop", shape.isEmpty() ? -1.0 : round(shape.max(Direction.Axis.Y)));
-                SurfaceTier tier = RunSpeed.tierOf(block);
-                double runner = RunSpeed.runnerFactor(block);
-                if (tier != null) {
-                    row.addProperty("tier", tier.key());
-                    tiered++;
-                }
-                if (!Double.isNaN(runner)) row.addProperty("runnerFactor", round(runner));
-                row.addProperty("override", tier == null && !Double.isNaN(runner));
-                row.addProperty("friction", round(block.getFriction()));
-                row.addProperty("speedFactor", round(block.getSpeedFactor()));
-                row.addProperty("jumpFactor", round(block.getJumpFactor()));
-                row.addProperty("hasItem", block.asItem() != Items.AIR);
-            } catch (RuntimeException e) {
-                row.addProperty("error", e.toString());
-                errors++;
-            }
-            blocks.add(row);
-        }
-        JsonObject root = new JsonObject();
-        root.addProperty("generated", Instant.now().toString());
-        root.addProperty("registerHeight", round(RunSpeed.REGISTER_HEIGHT));
-        root.addProperty("count", blocks.size());
-        root.addProperty("errors", errors);
-        root.add("blocks", blocks);
-        Path out = FMLPaths.GAMEDIR.get().resolve("kubejs/exported/surface_audit.json");
-        Files.createDirectories(out.getParent());
-        Files.writeString(out, GSON.toJson(root) + "\n", StandardCharsets.UTF_8);
-        String summary = blocks.size() + " blocks, " + tiered + " tiered, " + errors + " errors";
-        LOGGER.info("[dumpsurface] {}", summary);
-        return summary;
-    }
+	public static String dump() throws IOException {
+		RunSpeed.clearTierCache(); // read the tags as they are now
+		JsonArray blocks = new JsonArray();
+		int errors = 0, tiered = 0;
+		List<ResourceLocation> keys = new ArrayList<>(ForgeRegistries.BLOCKS.getKeys());
+		keys.sort(ResourceLocation::compareTo);
+		for (ResourceLocation id : keys) {
+			Block block = ForgeRegistries.BLOCKS.getValue(id);
+			if (block == null) continue;
+			JsonObject row = new JsonObject();
+			row.addProperty("id", id.toString());
+			row.addProperty("class", block.getClass().getName());
+			try {
+				BlockState state = block.defaultBlockState();
+				VoxelShape shape = state.getCollisionShape(EmptyBlockGetter.INSTANCE, BlockPos.ZERO, CollisionContext.empty());
+				row.addProperty("collisionTop", shape.isEmpty() ? -1.0 : round(shape.max(Direction.Axis.Y)));
+				SurfaceTier tier = RunSpeed.tierOf(block);
+				double runner = RunSpeed.runnerFactor(block);
+				if (tier != null) {
+					row.addProperty("tier", tier.key());
+					tiered++;
+				}
+				if (!Double.isNaN(runner)) row.addProperty("runnerFactor", round(runner));
+				row.addProperty("override", tier == null && !Double.isNaN(runner));
+				row.addProperty("friction", round(block.getFriction()));
+				row.addProperty("speedFactor", round(block.getSpeedFactor()));
+				row.addProperty("jumpFactor", round(block.getJumpFactor()));
+				row.addProperty("hasItem", block.asItem() != Items.AIR);
+			} catch (RuntimeException e) {
+				row.addProperty("error", e.toString());
+				errors++;
+			}
+			blocks.add(row);
+		}
+		JsonObject root = new JsonObject();
+		root.addProperty("generated", Instant.now().toString());
+		root.addProperty("registerHeight", round(RunSpeed.REGISTER_HEIGHT));
+		root.addProperty("count", blocks.size());
+		root.addProperty("errors", errors);
+		root.add("blocks", blocks);
+		Path out = FMLPaths.GAMEDIR.get().resolve("kubejs/exported/surface_audit.json");
+		Files.createDirectories(out.getParent());
+		Files.writeString(out, GSON.toJson(root) + "\n", StandardCharsets.UTF_8);
+		String summary = blocks.size() + " blocks, " + tiered + " tiered, " + errors + " errors";
+		LOGGER.info("[dumpsurface] {}", summary);
+		return summary;
+	}
 
-    private static double round(double v) {
-        return Math.round(v * 10000.0) / 10000.0;
-    }
+	private static double round(double v) {
+		return Math.round(v * 10000.0) / 10000.0;
+	}
 }

@@ -21,18 +21,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "net.cozy.cozysimprovedcats.entity.client.CatYarnLayer")
 public abstract class PetCozyYarnMixin {
 
-    private static final String RENDER = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/Cat;FFFFFF)V";
+	private static final String RENDER = "render(Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;ILnet/minecraft/world/entity/animal/Cat;FFFFFF)V";
 
-    @Redirect(method = RENDER, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Cat;m_6162_()Z"),
-            remap = false, require = 0)
-    private boolean babyMobs$oldBabyOffset(Cat cat) {
-        return cat.isBaby() && !BabyRender.active();
-    }
+	@Redirect(method = RENDER, at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/animal/Cat;m_6162_()Z"),
+			remap = false, require = 0)
+	private boolean babyMobs$oldBabyOffset(Cat cat) {
+		return cat.isBaby() && !BabyRender.active();
+	}
 
-    @Inject(method = RENDER, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;m_104299_(Lcom/mojang/blaze3d/vertex/PoseStack;)V",
-            shift = At.Shift.AFTER), remap = false, require = 0)
-    private void babyMobs$babyScale(PoseStack pose, MultiBufferSource buffers, int light, Cat cat, float limbSwing, float limbAmount,
-                                    float partialTick, float age, float yaw, float pitch, CallbackInfo ci) {
-        if (BabyRender.active()) pose.scale(0.75F, 0.75F, 0.75F);
-    }
+	@Inject(method = RENDER, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/geom/ModelPart;m_104299_(Lcom/mojang/blaze3d/vertex/PoseStack;)V",
+			shift = At.Shift.AFTER), remap = false, require = 0)
+	private void babyMobs$babyScale(PoseStack pose, MultiBufferSource buffers, int light, Cat cat, float limbSwing, float limbAmount,
+									float partialTick, float age, float yaw, float pitch, CallbackInfo ci) {
+		if (BabyRender.active()) pose.scale(0.75F, 0.75F, 0.75F);
+	}
 }

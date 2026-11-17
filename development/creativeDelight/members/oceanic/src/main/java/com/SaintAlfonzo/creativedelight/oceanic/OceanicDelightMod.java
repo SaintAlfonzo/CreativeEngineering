@@ -25,25 +25,25 @@ import org.slf4j.LoggerFactory;
  */
 @Mod(OceanicDelightMod.MODID)
 public class OceanicDelightMod {
-    public static final String MODID = "oceanic_delight";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+	public static final String MODID = "oceanic_delight";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-    public OceanicDelightMod() {
-        UpstreamJars.verifyOrFail();
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        OceanicBlocks.BLOCKS.register(bus);
-        OceanicItems.ITEMS.register(bus);
-        OceanicEffects.EFFECTS.register(bus);
-        OceanicEffects.POTIONS.register(bus);
-        OceanicLootModifiers.SERIALIZERS.register(bus);
-        bus.addListener(OceanicSetup::commonSetup);
-        // Upstream art and data as built-in packs, always on and at the bottom (datapacks and KubeJS still override).
-        bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "oceanic_upstream",
-                "Oceanic Delight: art and data read from the upstream jar", OceanicTranslator::assets, OceanicTranslator::data));
-        MinecraftForge.EVENT_BUS.addListener(OceanicSetup::wanderingTrades);
-    }
+	public OceanicDelightMod() {
+		UpstreamJars.verifyOrFail();
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		OceanicBlocks.BLOCKS.register(bus);
+		OceanicItems.ITEMS.register(bus);
+		OceanicEffects.EFFECTS.register(bus);
+		OceanicEffects.POTIONS.register(bus);
+		OceanicLootModifiers.SERIALIZERS.register(bus);
+		bus.addListener(OceanicSetup::commonSetup);
+		// Upstream art and data as built-in packs, always on and at the bottom (datapacks and KubeJS still override).
+		bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "oceanic_upstream",
+				"Oceanic Delight: art and data read from the upstream jar", OceanicTranslator::assets, OceanicTranslator::data));
+		MinecraftForge.EVENT_BUS.addListener(OceanicSetup::wanderingTrades);
+	}
 
-    public static ResourceLocation path(String path) {
-        return new ResourceLocation(MODID, path);
-    }
+	public static ResourceLocation path(String path) {
+		return new ResourceLocation(MODID, path);
+	}
 }

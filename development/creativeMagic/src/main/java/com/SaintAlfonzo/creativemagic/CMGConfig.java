@@ -13,34 +13,34 @@ import net.minecraftforge.common.ForgeConfigSpec;
  */
 public final class CMGConfig {
 
-    private CMGConfig() {}
+	private CMGConfig() {}
 
-    public static final ForgeConfigSpec SPEC;
-    public static final Botania BOTANIA;
+	public static final ForgeConfigSpec SPEC;
+	public static final Botania BOTANIA;
 
-    /** The toml tables carried over from creativeengineering-common.toml. */
-    public static final List<String> SECTIONS = List.of("botania");
+	/** The toml tables carried over from creativeengineering-common.toml. */
+	public static final List<String> SECTIONS = List.of("botania");
 
-    static {
-        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
-        BOTANIA = new Botania(builder);
-        SPEC = builder.build();
-    }
+	static {
+		ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+		BOTANIA = new Botania(builder);
+		SPEC = builder.build();
+	}
 
-    /** Botania tweaks ({@code compat/TrinketCaseRules} and the {@code TrinketCase*Mixin}s). */
-    public static final class Botania {
-        public final ForgeConfigSpec.BooleanValue trinketCaseAnyItem;
+	/** Botania tweaks ({@code compat/TrinketCaseRules} and the {@code TrinketCase*Mixin}s). */
+	public static final class Botania {
+		public final ForgeConfigSpec.BooleanValue trinketCaseAnyItem;
 
-        private Botania(ForgeConfigSpec.Builder b) {
-            b.comment("Botania tweaks.").push("botania");
+		private Botania(ForgeConfigSpec.Builder b) {
+			b.comment("Botania tweaks.").push("botania");
 
-            trinketCaseAnyItem = b.comment(
-                    "Let the Trinket Case hold any item, not just trinkets, rods and mana items.",
-                    "Other trinket cases and items that can't go inside container items (shulker",
-                    "boxes) are still refused. Only real trinkets equip from the case. Restart to apply."
-            ).define("trinketCaseAnyItem", true);
+			trinketCaseAnyItem = b.comment(
+					"Let the Trinket Case hold any item, not just trinkets, rods and mana items.",
+					"Other trinket cases and items that can't go inside container items (shulker",
+					"boxes) are still refused. Only real trinkets equip from the case. Restart to apply."
+			).define("trinketCaseAnyItem", true);
 
-            b.pop(); // botania
-        }
-    }
+			b.pop(); // botania
+		}
+	}
 }

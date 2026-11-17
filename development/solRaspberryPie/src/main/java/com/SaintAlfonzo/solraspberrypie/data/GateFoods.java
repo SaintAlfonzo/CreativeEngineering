@@ -12,13 +12,13 @@ import java.util.Set;
  * its NBT) so it resets exactly when Apple Pie's own counter resets.
  */
 public interface GateFoods {
-    Set<ResourceLocation> solrp$gateFoods();
+	Set<ResourceLocation> solrp$gateFoods();
 
-    /** The number the gate compares with Apple Pie's minFoodsToActivate. */
-    static int count(FoodList list) {
-        if (RpConfig.SERVER_SPEC.isLoaded() && RpConfig.SERVER.uniqueFoodsToActivate.get()) {
-            return ((GateFoods) (Object) list).solrp$gateFoods().size();
-        }
-        return list.getFoodsEaten();
-    }
+	/** The number the gate compares with Apple Pie's minFoodsToActivate. */
+	static int count(FoodList list) {
+		if (RpConfig.SERVER_SPEC.isLoaded() && RpConfig.SERVER.uniqueFoodsToActivate.get()) {
+			return ((GateFoods) (Object) list).solrp$gateFoods().size();
+		}
+		return list.getFoodsEaten();
+	}
 }

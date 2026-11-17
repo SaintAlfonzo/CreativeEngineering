@@ -18,57 +18,57 @@ import javax.annotation.Nullable;
  * @param label    the label's look, null unless kind is LABEL
  */
 public record FaceSnapshot(FaceContent.Kind kind, @Nullable Direction rotation, Spots.Place place, NoteLook[] notes,
-                           @Nullable LabelLook label) {
+						   @Nullable LabelLook label) {
 
-    /** Six entries, index = Direction ordinal; a face with nothing on it is {@link #EMPTY}. */
-    public static final ModelProperty<FaceSnapshot[]> FACES = new ModelProperty<>();
+	/** Six entries, index = Direction ordinal; a face with nothing on it is {@link #EMPTY}. */
+	public static final ModelProperty<FaceSnapshot[]> FACES = new ModelProperty<>();
 
-    public static final FaceSnapshot EMPTY = new FaceSnapshot(FaceContent.Kind.NONE, null, Spots.Place.ZERO, new NoteLook[Spots.COUNT], null);
+	public static final FaceSnapshot EMPTY = new FaceSnapshot(FaceContent.Kind.NONE, null, Spots.Place.ZERO, new NoteLook[Spots.COUNT], null);
 
-    /** What a note looks like: its color ({@link NoteData#NO_COLOR} = plain yellow), special look, pen strokes. */
-    public record NoteLook(int color, @Nullable String special, boolean written) {}
+	/** What a note looks like: its color ({@link NoteData#NO_COLOR} = plain yellow), special look, pen strokes. */
+	public record NoteLook(int color, @Nullable String special, boolean written) {}
 
-    /** What the label paper looks like in the chunk mesh (the icon is the block entity renderer's job). */
-    public record LabelLook(boolean hasPicture, boolean glow) {}
+	/** What the label paper looks like in the chunk mesh (the icon is the block entity renderer's job). */
+	public record LabelLook(boolean hasPicture, boolean glow) {}
 
-    public static FaceSnapshot of(FaceContent c) {
-        if (c.kind == FaceContent.Kind.NONE) return EMPTY;
-        NoteLook[] looks = new NoteLook[Spots.COUNT];
-        if (c.kind == FaceContent.Kind.NOTES) {
-            for (int i = 0; i < Spots.COUNT; i++) {
-                NoteData n = c.notes[i];
-                if (n != null) looks[i] = new NoteLook(n.color, n.special, n.isWritten());
-            }
-        }
-        LabelLook label = c.kind == FaceContent.Kind.LABEL && c.label != null
-                ? new LabelLook(c.label.hasPicture(), c.label.glow) : null;
-        return new FaceSnapshot(c.kind, c.rotation, c.place(), looks, label);
-    }
+	public static FaceSnapshot of(FaceContent c) {
+		if (c.kind == FaceContent.Kind.NONE) return EMPTY;
+		NoteLook[] looks = new NoteLook[Spots.COUNT];
+		if (c.kind == FaceContent.Kind.NOTES) {
+			for (int i = 0; i < Spots.COUNT; i++) {
+				NoteData n = c.notes[i];
+				if (n != null) looks[i] = new NoteLook(n.color, n.special, n.isWritten());
+			}
+		}
+		LabelLook label = c.kind == FaceContent.Kind.LABEL && c.label != null
+				? new LabelLook(c.label.hasPicture(), c.label.glow) : null;
+		return new FaceSnapshot(c.kind, c.rotation, c.place(), looks, label);
+	}
 
-    public float inset() {
-        return place.inset();
-    }
+	public float inset() {
+		return place.inset();
+	}
 
-    public boolean isEmpty() {
-        return kind == FaceContent.Kind.NONE;
-    }
+	public boolean isEmpty() {
+		return kind == FaceContent.Kind.NONE;
+	}
 
-    @Nullable
-    public NoteLook note(int spot) {
-        return notes[spot];
-    }
+	@Nullable
+	public NoteLook note(int spot) {
+		return notes[spot];
+	}
 
-    public boolean hasNote(int spot) {
-        return kind == FaceContent.Kind.NOTES && notes[spot] != null;
-    }
+	public boolean hasNote(int spot) {
+		return kind == FaceContent.Kind.NOTES && notes[spot] != null;
+	}
 
-    public int noteCount() {
-        int n = 0;
-        for (NoteLook l : notes) if (l != null) n++;
-        return n;
-    }
+	public int noteCount() {
+		int n = 0;
+		for (NoteLook l : notes) if (l != null) n++;
+		return n;
+	}
 
-    public boolean isCovered() {
-        return kind == FaceContent.Kind.NOTES && noteCount() == Spots.COUNT;
-    }
+	public boolean isCovered() {
+		return kind == FaceContent.Kind.NOTES && noteCount() == Spots.COUNT;
+	}
 }

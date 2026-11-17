@@ -14,62 +14,62 @@ import net.minecraftforge.items.ItemHandlerHelper;
  */
 public final class OverflowPull {
 
-    /** The station's slots as this needs them. */
-    public interface Slots {
-        ItemStack get(int slot);
+	/** The station's slots as this needs them. */
+	public interface Slots {
+		ItemStack get(int slot);
 
-        void set(int slot, ItemStack stack);
+		void set(int slot, ItemStack stack);
 
-        int limit(int slot);
-    }
+		int limit(int slot);
+	}
 
-    private int wait = -1;
-    private int waitingSlot = -1;
+	private int wait = -1;
+	private int waitingSlot = -1;
 
-    /**
-     * Call once a server tick. {@code containerSlot} and {@code overflowSlots} are indices into {@code slots};
-     * {@code mealsWaiting} the count of the meal that waits for containers (0 = none); {@code platesMeal} whether an
-     * item is what that meal is served in. Returns true on the tick it moved something.
-     */
-    public boolean tick(Slots slots, int containerSlot, int[] overflowSlots, int mealsWaiting, Predicate<ItemStack> platesMeal, int delay) {
-        int from = -1;
-        int count = 0;
-        if (mealsWaiting > 0) {
-            ItemStack inSlot = slots.get(containerSlot);
-            for (int o : overflowSlots) {
-                ItemStack over = slots.get(o);
-                if (over.isEmpty() || !platesMeal.test(over)) continue;
-                if (!inSlot.isEmpty() && !ItemHandlerHelper.canItemStacksStack(inSlot, over)) continue;
-                int room = Math.min(slots.limit(containerSlot), over.getMaxStackSize()) - inSlot.getCount();
-                int need = mealsWaiting - inSlot.getCount();
-                count = Math.min(over.getCount(), Math.min(room, need));
-                if (count > 0) {
-                    from = o;
-                    break;
-                }
-            }
-        }
-        if (from < 0) {
-            wait = -1;
-            waitingSlot = -1;
-            return false;
-        }
-        if (waitingSlot != from || wait < 0) {
-            waitingSlot = from;
-            wait = Math.max(0, delay);
-        }
-        if (wait > 0) {
-            --wait;
-            return false;
-        }
-        ItemStack over = slots.get(from).copy();
-        ItemStack inSlot = slots.get(containerSlot);
-        ItemStack moved = ItemHandlerHelper.copyStackWithSize(over, inSlot.getCount() + count);
-        over.shrink(count);
-        slots.set(from, over.isEmpty() ? ItemStack.EMPTY : over);
-        slots.set(containerSlot, moved);
-        wait = -1;
-        waitingSlot = -1;
-        return true;
-    }
+	/**
+	 * Call once a server tick. {@code containerSlot} and {@code overflowSlots} are indices into {@code slots};
+	 * {@code mealsWaiting} the count of the meal that waits for containers (0 = none); {@code platesMeal} whether an
+	 * item is what that meal is served in. Returns true on the tick it moved something.
+	 */
+	public boolean tick(Slots slots, int containerSlot, int[] overflowSlots, int mealsWaiting, Predicate<ItemStack> platesMeal, int delay) {
+		int from = -1;
+		int count = 0;
+		if (mealsWaiting > 0) {
+			ItemStack inSlot = slots.get(containerSlot);
+			for (int o : overflowSlots) {
+				ItemStack over = slots.get(o);
+				if (over.isEmpty() || !platesMeal.test(over)) continue;
+				if (!inSlot.isEmpty() && !ItemHandlerHelper.canItemStacksStack(inSlot, over)) continue;
+				int room = Math.min(slots.limit(containerSlot), over.getMaxStackSize()) - inSlot.getCount();
+				int need = mealsWaiting - inSlot.getCount();
+				count = Math.min(over.getCount(), Math.min(room, need));
+				if (count > 0) {
+					from = o;
+					break;
+				}
+			}
+		}
+		if (from < 0) {
+			wait = -1;
+			waitingSlot = -1;
+			return false;
+		}
+		if (waitingSlot != from || wait < 0) {
+			waitingSlot = from;
+			wait = Math.max(0, delay);
+		}
+		if (wait > 0) {
+			--wait;
+			return false;
+		}
+		ItemStack over = slots.get(from).copy();
+		ItemStack inSlot = slots.get(containerSlot);
+		ItemStack moved = ItemHandlerHelper.copyStackWithSize(over, inSlot.getCount() + count);
+		over.shrink(count);
+		slots.set(from, over.isEmpty() ? ItemStack.EMPTY : over);
+		slots.set(containerSlot, moved);
+		wait = -1;
+		waitingSlot = -1;
+		return true;
+	}
 }

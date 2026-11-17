@@ -27,33 +27,33 @@ import java.util.Set;
  */
 public final class CuriosSlotTooltip {
 
-    private static final String SLOT_KEY = "curios.slot";
+	private static final String SLOT_KEY = "curios.slot";
 
-    private CuriosSlotTooltip() {
-    }
+	private CuriosSlotTooltip() {
+	}
 
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onTooltip(ItemTooltipEvent event) {
-        if (!CEQConfig.TOOLTIPS.curiosSlotLine.get()) return;
-        ItemStack stack = event.getItemStack();
-        if (stack.isEmpty()) return;
-        Set<String> slots = CuriosApi.getCuriosHelper().getCurioTags(stack.getItem());
-        if (slots.isEmpty()) return;
-        List<Component> tooltip = event.getToolTip();
-        for (Component line : tooltip) {
-            if (line.getContents() instanceof TranslatableContents t && SLOT_KEY.equals(t.getKey())) return;
-        }
-        tooltip.add(Math.min(1, tooltip.size()), line(new ArrayList<>(slots)));
-    }
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onTooltip(ItemTooltipEvent event) {
+		if (!CEQConfig.TOOLTIPS.curiosSlotLine.get()) return;
+		ItemStack stack = event.getItemStack();
+		if (stack.isEmpty()) return;
+		Set<String> slots = CuriosApi.getCuriosHelper().getCurioTags(stack.getItem());
+		if (slots.isEmpty()) return;
+		List<Component> tooltip = event.getToolTip();
+		for (Component line : tooltip) {
+			if (line.getContents() instanceof TranslatableContents t && SLOT_KEY.equals(t.getKey())) return;
+		}
+		tooltip.add(Math.min(1, tooltip.size()), line(new ArrayList<>(slots)));
+	}
 
-    /** Curios' own line: "Slot:" gold, then the slot names in yellow, comma separated. */
-    private static Component line(List<String> slots) {
-        MutableComponent out = Component.translatable(SLOT_KEY).append(": ").withStyle(ChatFormatting.GOLD);
-        for (int i = 0; i < slots.size(); i++) {
-            MutableComponent name = Component.translatable("curios.identifier." + slots.get(i));
-            if (i < slots.size() - 1) name = name.append(", ");
-            out.append(name.withStyle(ChatFormatting.YELLOW));
-        }
-        return out;
-    }
+	/** Curios' own line: "Slot:" gold, then the slot names in yellow, comma separated. */
+	private static Component line(List<String> slots) {
+		MutableComponent out = Component.translatable(SLOT_KEY).append(": ").withStyle(ChatFormatting.GOLD);
+		for (int i = 0; i < slots.size(); i++) {
+			MutableComponent name = Component.translatable("curios.identifier." + slots.get(i));
+			if (i < slots.size() - 1) name = name.append(", ");
+			out.append(name.withStyle(ChatFormatting.YELLOW));
+		}
+		return out;
+	}
 }

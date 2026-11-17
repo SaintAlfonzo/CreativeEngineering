@@ -20,15 +20,15 @@ import vazkii.quark.content.tools.module.TorchArrowModule;
 @Mixin(value = TorchArrow.class, remap = false)
 public abstract class QuarkTorchArrowPickupMixin {
 
-    @Inject(method = "m_7941_", at = @At("HEAD"), cancellable = true)
-    private void creativecompat$webTorchArrow(CallbackInfoReturnable<ItemStack> cir) {
-        try {
-            if (TorchArrowModule.extinguishOnMiss && TorchArrowModule.torch_arrow != null
-                    && PassProjectiles.webHung((Entity) (Object) this)) {
-                cir.setReturnValue(new ItemStack(TorchArrowModule.torch_arrow));
-            }
-        } catch (Throwable ignored) {
-            // keep Quark's answer
-        }
-    }
+	@Inject(method = "m_7941_", at = @At("HEAD"), cancellable = true)
+	private void creativecompat$webTorchArrow(CallbackInfoReturnable<ItemStack> cir) {
+		try {
+			if (TorchArrowModule.extinguishOnMiss && TorchArrowModule.torch_arrow != null
+					&& PassProjectiles.webHung((Entity) (Object) this)) {
+				cir.setReturnValue(new ItemStack(TorchArrowModule.torch_arrow));
+			}
+		} catch (Throwable ignored) {
+			// keep Quark's answer
+		}
+	}
 }

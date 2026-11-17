@@ -47,212 +47,212 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public final class RunSpeed {
 
-    private RunSpeed() {}
+	private RunSpeed() {}
 
-    /** Where the number comes from. {@link #NONE} is an "untyped" block: nothing changes its speed. */
-    public enum Source { TIER, OVERRIDE, NATIVE, IN_BLOCK, NONE }
+	/** Where the number comes from. {@link #NONE} is an "untyped" block: nothing changes its speed. */
+	public enum Source { TIER, OVERRIDE, NATIVE, IN_BLOCK, NONE }
 
-    /** Extra context shown after the tier name. */
-    public enum Note { FROM_CAMO, STICKY_FACE_NOT_UP, BLOCK_BELOW }
+	/** Extra context shown after the tier name. */
+	public enum Note { FROM_CAMO, STICKY_FACE_NOT_UP, BLOCK_BELOW }
 
-    /**
-     * {@code tier} is the surface tier the speed comes from ({@code null} = none, e.g. a one-off json
-     * override or a frame whose camo has no tier).
-     */
-    public record Info(double factor, Source source, @Nullable SurfaceTier tier, Set<Note> notes) {
+	/**
+	 * {@code tier} is the surface tier the speed comes from ({@code null} = none, e.g. a one-off json
+	 * override or a frame whose camo has no tier).
+	 */
+	public record Info(double factor, Source source, @Nullable SurfaceTier tier, Set<Note> notes) {
 
-        Info(double factor, Source source, @Nullable SurfaceTier tier) {
-            this(factor, source, tier, Set.of());
-        }
+		Info(double factor, Source source, @Nullable SurfaceTier tier) {
+			this(factor, source, tier, Set.of());
+		}
 
-        public boolean typed() {
-            return source != Source.NONE;
-        }
+		public boolean typed() {
+			return source != Source.NONE;
+		}
 
-        Info with(Note note) {
-            EnumSet<Note> all = EnumSet.of(note);
-            all.addAll(notes);
-            return new Info(factor, source, tier, all);
-        }
-    }
+		Info with(Note note) {
+			EnumSet<Note> all = EnumSet.of(note);
+			all.addAll(notes);
+			return new Info(factor, source, tier, all);
+		}
+	}
 
-    private static final Info UNTYPED = new Info(1.0, Source.NONE, null);
+	private static final Info UNTYPED = new Info(1.0, Source.NONE, null);
 
-    /** BlockRunner (via vanilla getOnPos) reads the block 0.2F below your feet. */
-    public static final double REGISTER_HEIGHT = 0.2F;
+	/** BlockRunner (via vanilla getOnPos) reads the block 0.2F below your feet. */
+	public static final double REGISTER_HEIGHT = 0.2F;
 
-    private static final float DEFAULT_FRICTION = 0.6f;
+	private static final float DEFAULT_FRICTION = 0.6f;
 
-    private static final double EPSILON = 1.0E-6;
+	private static final double EPSILON = 1.0E-6;
 
-    /** The tier tags, built on first use (a TagKey needs the block registry). */
-    private static final class Tags {
-        static final Map<SurfaceTier, TagKey<Block>> BY_TIER = new EnumMap<>(SurfaceTier.class);
-        static {
-            for (SurfaceTier t : SurfaceTier.values()) {
-                BY_TIER.put(t, BlockTags.create(new ResourceLocation("blockrunner", "surface/" + t.key())));
-            }
-        }
-    }
+	/** The tier tags, built on first use (a TagKey needs the block registry). */
+	private static final class Tags {
+		static final Map<SurfaceTier, TagKey<Block>> BY_TIER = new EnumMap<>(SurfaceTier.class);
+		static {
+			for (SurfaceTier t : SurfaceTier.values()) {
+				BY_TIER.put(t, BlockTags.create(new ResourceLocation("blockrunner", "surface/" + t.key())));
+			}
+		}
+	}
 
-    /** Block -> its surface tier (empty = none). Filled on first look, cleared on tag reload. */
-    private static final Map<Block, Optional<SurfaceTier>> TIER_OF = new ConcurrentHashMap<>();
+	/** Block -> its surface tier (empty = none). Filled on first look, cleared on tag reload. */
+	private static final Map<Block, Optional<SurfaceTier>> TIER_OF = new ConcurrentHashMap<>();
 
-    /**
-     * The speed for walking on (or through) this block, or {@code null} when it has none to show: you
-     * can't stand on it and it doesn't slow you from inside (grass, flowers, open doors).
-     */
-    @Nullable
-    public static Info at(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
-        double top = standTop(level, pos, state, player);
-        boolean standable = top >= REGISTER_HEIGHT;
-        double stuck = StuckInBlock.horizontal(state, player, standable);
-        boolean inBlock = !Double.isNaN(stuck);
+	/**
+	 * The speed for walking on (or through) this block, or {@code null} when it has none to show: you
+	 * can't stand on it and it doesn't slow you from inside (grass, flowers, open doors).
+	 */
+	@Nullable
+	public static Info at(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
+		double top = standTop(level, pos, state, player);
+		boolean standable = top >= REGISTER_HEIGHT;
+		double stuck = StuckInBlock.horizontal(state, player, standable);
+		boolean inBlock = !Double.isNaN(stuck);
 
-        BlockPos floorPos = pos;
-        BlockState floor = state;
-        boolean onFloor = standable;
-        Info surface;
-        if (standable) {
-            surface = surface(level, pos, state, player);
-        } else if (inBlock || isThinLayer(state, top)) {
-            floorPos = pos.below();
-            floor = level.getBlockState(floorPos);
-            onFloor = standTop(level, floorPos, floor, player) >= REGISTER_HEIGHT;
-            surface = onFloor ? surface(level, floorPos, floor, player).with(Note.BLOCK_BELOW) : UNTYPED;
-        } else {
-            return null;
-        }
+		BlockPos floorPos = pos;
+		BlockState floor = state;
+		boolean onFloor = standable;
+		Info surface;
+		if (standable) {
+			surface = surface(level, pos, state, player);
+		} else if (inBlock || isThinLayer(state, top)) {
+			floorPos = pos.below();
+			floor = level.getBlockState(floorPos);
+			onFloor = standTop(level, floorPos, floor, player) >= REGISTER_HEIGHT;
+			surface = onFloor ? surface(level, floorPos, floor, player).with(Note.BLOCK_BELOW) : UNTYPED;
+		} else {
+			return null;
+		}
 
-        if (!inBlock) {
-            return surface;
-        }
-        float friction = onFloor ? floor.getFriction(level, floorPos, player) : DEFAULT_FRICTION;
-        return new Info(surface.factor() * StuckInBlock.walkRatio(stuck, friction), Source.IN_BLOCK, null);
-    }
+		if (!inBlock) {
+			return surface;
+		}
+		float friction = onFloor ? floor.getFriction(level, floorPos, player) : DEFAULT_FRICTION;
+		return new Info(surface.factor() * StuckInBlock.walkRatio(stuck, friction), Source.IN_BLOCK, null);
+	}
 
-    /** The block a pass-through block sits on and its surface speed ({@link #soil}). */
-    public record Soil(BlockState state, Info info) {}
+	/** The block a pass-through block sits on and its surface speed ({@link #soil}). */
+	public record Soil(BlockState state, Info info) {}
 
-    /**
-     * The soil under a pass-through block at {@code pos} (the WTHIT Walk Through line, plan_passthrough.md 6): the
-     * first standable block below, looking past up to two more pass-through blocks (the lower half of a tall crop),
-     * or null when there is none (a vine hanging over air).
-     */
-    @Nullable
-    public static Soil soil(Level level, BlockPos pos, @Nullable Player player) {
-        BlockPos.MutableBlockPos p = pos.mutable();
-        for (int i = 0; i < 3; i++) {
-            p.move(Direction.DOWN);
-            BlockState below = level.getBlockState(p);
-            if (standTop(level, p, below, player) >= REGISTER_HEIGHT) {
-                return new Soil(below, surface(level, p.immutable(), below, player));
-            }
-            if (PassThrough.tierOf(below) == null) return null;
-        }
-        return null;
-    }
+	/**
+	 * The soil under a pass-through block at {@code pos} (the WTHIT Walk Through line, plan_passthrough.md 6): the
+	 * first standable block below, looking past up to two more pass-through blocks (the lower half of a tall crop),
+	 * or null when there is none (a vine hanging over air).
+	 */
+	@Nullable
+	public static Soil soil(Level level, BlockPos pos, @Nullable Player player) {
+		BlockPos.MutableBlockPos p = pos.mutable();
+		for (int i = 0; i < 3; i++) {
+			p.move(Direction.DOWN);
+			BlockState below = level.getBlockState(p);
+			if (standTop(level, p, below, player) >= REGISTER_HEIGHT) {
+				return new Soil(below, surface(level, p.immutable(), below, player));
+			}
+			if (PassThrough.tierOf(below) == null) return null;
+		}
+		return null;
+	}
 
-    /** What standing on top of this (standable) block gives. */
-    private static Info surface(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
-        BlockState camo = CamoSpeed.speedCamo(level, pos, state);
-        if (camo != null) {
-            // frames are in the camouflage tier, so always typed, even when the camo has no tier
-            return new Info(factor(camo.getBlock()), Source.TIER, tierOf(camo.getBlock()), Set.of(Note.FROM_CAMO));
-        }
-        if (StickyFacing.cancels(state)) {
-            return new Info(1.0, Source.TIER, tierOf(state.getBlock()), Set.of(Note.STICKY_FACE_NOT_UP));
-        }
-        Block block = state.getBlock();
-        if (BlockSpeedManager.INSTANCE.hasBlockSpeed(block)) {
-            SurfaceTier tier = tierOf(block);
-            return new Info(factor(block), tier != null ? Source.TIER : Source.OVERRIDE, tier);
-        }
-        float speedFactor = block.getSpeedFactor();
-        if (!isNormal(speedFactor)) {
-            return new Info(nativeRatio(speedFactor, state.getFriction(level, pos, player)), Source.NATIVE, null);
-        }
-        return UNTYPED;
-    }
+	/** What standing on top of this (standable) block gives. */
+	private static Info surface(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
+		BlockState camo = CamoSpeed.speedCamo(level, pos, state);
+		if (camo != null) {
+			// frames are in the camouflage tier, so always typed, even when the camo has no tier
+			return new Info(factor(camo.getBlock()), Source.TIER, tierOf(camo.getBlock()), Set.of(Note.FROM_CAMO));
+		}
+		if (StickyFacing.cancels(state)) {
+			return new Info(1.0, Source.TIER, tierOf(state.getBlock()), Set.of(Note.STICKY_FACE_NOT_UP));
+		}
+		Block block = state.getBlock();
+		if (BlockSpeedManager.INSTANCE.hasBlockSpeed(block)) {
+			SurfaceTier tier = tierOf(block);
+			return new Info(factor(block), tier != null ? Source.TIER : Source.OVERRIDE, tier);
+		}
+		float speedFactor = block.getSpeedFactor();
+		if (!isNormal(speedFactor)) {
+			return new Info(nativeRatio(speedFactor, state.getFriction(level, pos, player)), Source.NATIVE, null);
+		}
+		return UNTYPED;
+	}
 
-    /**
-     * A vanilla speed factor {@code s} scales your momentum after every move, so steady walking is
-     * {@code a / (1 - 0.91 f s)} against {@code a / (1 - 0.91 f)} normally (soul sand 0.4 -> 0.58x).
-     */
-    static double nativeRatio(double speedFactor, float friction) {
-        double keep = 0.91 * friction;
-        return (1.0 - keep) / (1.0 - keep * speedFactor);
-    }
+	/**
+	 * A vanilla speed factor {@code s} scales your momentum after every move, so steady walking is
+	 * {@code a / (1 - 0.91 f s)} against {@code a / (1 - 0.91 f)} normally (soul sand 0.4 -> 0.58x).
+	 */
+	static double nativeRatio(double speedFactor, float friction) {
+		double keep = 0.91 * friction;
+		return (1.0 - keep) / (1.0 - keep * speedFactor);
+	}
 
-    /**
-     * A solid layer too thin to count (carpet, 2 snow layers; {@code top} is under 0.2), or a single
-     * snow layer, which has no collision at all but still lies on the block beneath.
-     */
-    private static boolean isThinLayer(BlockState state, double top) {
-        return top > 0.0 || state.getBlock() instanceof SnowLayerBlock;
-    }
+	/**
+	 * A solid layer too thin to count (carpet, 2 snow layers; {@code top} is under 0.2), or a single
+	 * snow layer, which has no collision at all but still lies on the block beneath.
+	 */
+	private static boolean isThinLayer(BlockState state, double top) {
+		return top > 0.0 || state.getBlock() instanceof SnowLayerBlock;
+	}
 
-    /** Top of the collision shape for someone standing on it, or -1 when you'd pass through. */
-    private static double standTop(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
-        VoxelShape shape = state.getCollisionShape(level, pos, new Standing(pos, player));
-        return shape.isEmpty() ? -1.0 : shape.max(Direction.Axis.Y);
-    }
+	/** Top of the collision shape for someone standing on it, or -1 when you'd pass through. */
+	private static double standTop(Level level, BlockPos pos, BlockState state, @Nullable Player player) {
+		VoxelShape shape = state.getCollisionShape(level, pos, new Standing(pos, player));
+		return shape.isEmpty() ? -1.0 : shape.max(Direction.Axis.Y);
+	}
 
-    /**
-     * Collision context for the player standing on top of {@code pos}, whatever their real position:
-     * scaffolding then reports its solid top, and powder snow is solid only in leather boots.
-     */
-    private static final class Standing extends EntityCollisionContext {
-        private static final Predicate<FluidState> NO_FLUID = fluid -> false;
+	/**
+	 * Collision context for the player standing on top of {@code pos}, whatever their real position:
+	 * scaffolding then reports its solid top, and powder snow is solid only in leather boots.
+	 */
+	private static final class Standing extends EntityCollisionContext {
+		private static final Predicate<FluidState> NO_FLUID = fluid -> false;
 
-        Standing(BlockPos pos, @Nullable Player player) {
-            super(false, pos.getY() + 1.0,
-                    player != null ? player.getMainHandItem() : ItemStack.EMPTY,
-                    player != null ? player::canStandOnFluid : NO_FLUID,
-                    player);
-        }
-    }
+		Standing(BlockPos pos, @Nullable Player player) {
+			super(false, pos.getY() + 1.0,
+					player != null ? player.getMainHandItem() : ItemStack.EMPTY,
+					player != null ? player::canStandOnFluid : NO_FLUID,
+					player);
+		}
+	}
 
-    @Nullable
-    public static SurfaceTier tierOf(Block block) {
-        return TIER_OF.computeIfAbsent(block, RunSpeed::findTier).orElse(null);
-    }
+	@Nullable
+	public static SurfaceTier tierOf(Block block) {
+		return TIER_OF.computeIfAbsent(block, RunSpeed::findTier).orElse(null);
+	}
 
-    public static void clearTierCache() {
-        TIER_OF.clear();
-    }
+	public static void clearTierCache() {
+		TIER_OF.clear();
+	}
 
-    public static boolean isNormal(double factor) {
-        return Math.abs(factor - 1.0) < EPSILON;
-    }
+	public static boolean isNormal(double factor) {
+		return Math.abs(factor - 1.0) < EPSILON;
+	}
 
-    /** {@code 1.50×} or {@code +50%}; green when faster than normal, red when slower. */
-    public static Component format(double factor, SpeedFormat format) {
-        String text = PassThroughFormat.number(factor, format == SpeedFormat.PERCENT);
-        ChatFormatting color = isNormal(factor) ? ChatFormatting.WHITE
-                : factor > 1.0 ? ChatFormatting.GREEN : ChatFormatting.RED;
-        return Component.literal(text).withStyle(color);
-    }
+	/** {@code 1.50×} or {@code +50%}; green when faster than normal, red when slower. */
+	public static Component format(double factor, SpeedFormat format) {
+		String text = PassThroughFormat.number(factor, format == SpeedFormat.PERCENT);
+		ChatFormatting color = isNormal(factor) ? ChatFormatting.WHITE
+				: factor > 1.0 ? ChatFormatting.GREEN : ChatFormatting.RED;
+		return Component.literal(text).withStyle(color);
+	}
 
-    /**
-     * BlockRunner's own multiplier for this block (from a tier tag or a one-off json key), or NaN when
-     * it has none. For the surface audit dump (Creative Devtools /dumpsurface).
-     */
-    public static double runnerFactor(Block block) {
-        return BlockSpeedManager.INSTANCE.hasBlockSpeed(block) ? factor(block) : Double.NaN;
-    }
+	/**
+	 * BlockRunner's own multiplier for this block (from a tier tag or a one-off json key), or NaN when
+	 * it has none. For the surface audit dump (Creative Devtools /dumpsurface).
+	 */
+	public static double runnerFactor(Block block) {
+		return BlockSpeedManager.INSTANCE.hasBlockSpeed(block) ? factor(block) : Double.NaN;
+	}
 
-    private static double factor(Block block) {
-        return BlockSpeedManager.INSTANCE.getSpeedFactor(block);
-    }
+	private static double factor(Block block) {
+		return BlockSpeedManager.INSTANCE.getSpeedFactor(block);
+	}
 
-    private static Optional<SurfaceTier> findTier(Block block) {
-        BlockState state = block.defaultBlockState();
-        for (Map.Entry<SurfaceTier, TagKey<Block>> e : Tags.BY_TIER.entrySet()) {
-            if (state.is(e.getValue())) {
-                return Optional.of(e.getKey());
-            }
-        }
-        return Optional.empty();
-    }
+	private static Optional<SurfaceTier> findTier(Block block) {
+		BlockState state = block.defaultBlockState();
+		for (Map.Entry<SurfaceTier, TagKey<Block>> e : Tags.BY_TIER.entrySet()) {
+			if (state.is(e.getValue())) {
+				return Optional.of(e.getKey());
+			}
+		}
+		return Optional.empty();
+	}
 }

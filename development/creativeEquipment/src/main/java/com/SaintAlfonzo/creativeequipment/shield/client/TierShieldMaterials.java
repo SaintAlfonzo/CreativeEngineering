@@ -29,34 +29,34 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = CreativeEquipment.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public final class TierShieldMaterials {
 
-    public record Pair(Material base, Material noPattern) {}
+	public record Pair(Material base, Material noPattern) {}
 
-    private static final Map<ShieldTier, Pair> BY_TIER = new EnumMap<>(ShieldTier.class);
+	private static final Map<ShieldTier, Pair> BY_TIER = new EnumMap<>(ShieldTier.class);
 
-    static {
-        for (ShieldTier tier : ShieldTier.values()) {
-            // IRON has no TierShieldItem of its own (it's the player's real Items.SHIELD - see
-            // ShieldTier#of) so it has no renderer to feed and no texture pair here either.
-            if (tier == ShieldTier.IRON) continue;
-            BY_TIER.put(tier, new Pair(sprite(tier, "_shield_base"), sprite(tier, "_shield_base_nopattern")));
-        }
-    }
+	static {
+		for (ShieldTier tier : ShieldTier.values()) {
+			// IRON has no TierShieldItem of its own (it's the player's real Items.SHIELD - see
+			// ShieldTier#of) so it has no renderer to feed and no texture pair here either.
+			if (tier == ShieldTier.IRON) continue;
+			BY_TIER.put(tier, new Pair(sprite(tier, "_shield_base"), sprite(tier, "_shield_base_nopattern")));
+		}
+	}
 
-    private static Material sprite(ShieldTier tier, String suffix) {
-        return new Material(TextureAtlas.LOCATION_BLOCKS,
-                new ResourceLocation(CreativeEquipment.NS, "entity/shield/" + tier.id() + suffix));
-    }
+	private static Material sprite(ShieldTier tier, String suffix) {
+		return new Material(TextureAtlas.LOCATION_BLOCKS,
+				new ResourceLocation(CreativeEquipment.NS, "entity/shield/" + tier.id() + suffix));
+	}
 
-    public static Pair of(ShieldTier tier) {
-        return BY_TIER.get(tier);
-    }
+	public static Pair of(ShieldTier tier) {
+		return BY_TIER.get(tier);
+	}
 
-    @SubscribeEvent
-    public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
-        if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) return;
-        for (Pair pair : BY_TIER.values()) {
-            event.addSprite(pair.base().texture());
-            event.addSprite(pair.noPattern().texture());
-        }
-    }
+	@SubscribeEvent
+	public static void onTextureStitchPre(TextureStitchEvent.Pre event) {
+		if (!event.getAtlas().location().equals(TextureAtlas.LOCATION_BLOCKS)) return;
+		for (Pair pair : BY_TIER.values()) {
+			event.addSprite(pair.base().texture());
+			event.addSprite(pair.noPattern().texture());
+		}
+	}
 }

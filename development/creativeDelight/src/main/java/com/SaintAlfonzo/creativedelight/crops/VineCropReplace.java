@@ -17,17 +17,17 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
  * item places that same block (adding a face to a vine stays as vanilla). Hook: {@code mixin.minecraft.VineCropNoReplaceMixin}.
  */
 public final class VineCropReplace {
-    public static final TagKey<Block> VINE_CROPS = BlockTags.create(new ResourceLocation("creativedelight", "crops/vine_crops"));
+	public static final TagKey<Block> VINE_CROPS = BlockTags.create(new ResourceLocation("creativedelight", "crops/vine_crops"));
 
-    private VineCropReplace() {
-    }
+	private VineCropReplace() {
+	}
 
-    /** True when placement must not replace this state. */
-    public static boolean refuses(BlockBehaviour.BlockStateBase state, BlockPlaceContext context) {
-        if (!state.is(VINE_CROPS)) {
-            return false;
-        }
-        Item item = context.getItemInHand().getItem();
-        return !(item instanceof BlockItem blockItem && blockItem.getBlock() == state.getBlock());
-    }
+	/** True when placement must not replace this state. */
+	public static boolean refuses(BlockBehaviour.BlockStateBase state, BlockPlaceContext context) {
+		if (!state.is(VINE_CROPS)) {
+			return false;
+		}
+		Item item = context.getItemInHand().getItem();
+		return !(item instanceof BlockItem blockItem && blockItem.getBlock() == state.getBlock());
+	}
 }

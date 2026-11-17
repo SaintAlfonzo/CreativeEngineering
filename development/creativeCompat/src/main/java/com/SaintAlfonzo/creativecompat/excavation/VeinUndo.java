@@ -28,40 +28,40 @@ import oreexcavation.undo.ExcavateHistory;
  */
 public final class VeinUndo {
 
-    public static final TagKey<Block> DENIED =
-            BlockTags.create(new ResourceLocation(CreativeCompat.NS, "vein_undo_denied"));
+	public static final TagKey<Block> DENIED =
+			BlockTags.create(new ResourceLocation(CreativeCompat.NS, "vein_undo_denied"));
 
-    /** Player id to {@link System#nanoTime()} of their last successful undo. */
-    private static final Map<UUID, Long> LAST_UNDO = new ConcurrentHashMap<>();
+	/** Player id to {@link System#nanoTime()} of their last successful undo. */
+	private static final Map<UUID, Long> LAST_UNDO = new ConcurrentHashMap<>();
 
-    private VeinUndo() {}
+	private VeinUndo() {}
 
-    /** Why this player can't undo right now, or null when Ore Excavation may go ahead. */
-    public static Component refusal(Player player) {
-        long cooldownNanos = CompatConfig.VEIN_UNDO.cooldownSeconds.get() * 1_000_000_000L;
-        Long last = LAST_UNDO.get(player.getUUID());
-        if (last != null) {
-            long left = cooldownNanos - (System.nanoTime() - last);
-            if (left > 0) {
-                return Component.translatable("creativeengineering.vein_undo.cooldown", (left + 999_999_999L) / 1_000_000_000L);
-            }
-        }
+	/** Why this player can't undo right now, or null when Ore Excavation may go ahead. */
+	public static Component refusal(Player player) {
+		long cooldownNanos = CompatConfig.VEIN_UNDO.cooldownSeconds.get() * 1_000_000_000L;
+		Long last = LAST_UNDO.get(player.getUUID());
+		if (last != null) {
+			long left = cooldownNanos - (System.nanoTime() - last);
+			if (left > 0) {
+				return Component.translatable("creativeengineering.vein_undo.cooldown", (left + 999_999_999L) / 1_000_000_000L);
+			}
+		}
 
-        ArrayDeque<ExcavateHistory> undos = VeinUndoAccess.scheduler().creativeengineering$undoHistory().get(player.getUUID());
-        ExcavateHistory newest = undos == null ? null : undos.peek();
-        if (newest == null) return null; // Ore Excavation says "no history" itself
+		ArrayDeque<ExcavateHistory> undos = VeinUndoAccess.scheduler().creativeengineering$undoHistory().get(player.getUUID());
+		ExcavateHistory newest = undos == null ? null : undos.peek();
+		if (newest == null) return null; // Ore Excavation says "no history" itself
 
-        boolean denyBlockEntities = CompatConfig.VEIN_UNDO.denyBlockEntities.get();
-        for (BlockHistory block : ((VeinUndoAccess.History) newest).creativeengineering$history()) {
-            BlockState state = ((VeinUndoAccess.Block) block).creativeengineering$state();
-            if (state.is(DENIED) || (denyBlockEntities && state.hasBlockEntity())) {
-                return Component.translatable("creativeengineering.vein_undo.denied", state.getBlock().getName());
-            }
-        }
-        return null;
-    }
+		boolean denyBlockEntities = CompatConfig.VEIN_UNDO.denyBlockEntities.get();
+		for (BlockHistory block : ((VeinUndoAccess.History) newest).creativeengineering$history()) {
+			BlockState state = ((VeinUndoAccess.Block) block).creativeengineering$state();
+			if (state.is(DENIED) || (denyBlockEntities && state.hasBlockEntity())) {
+				return Component.translatable("creativeengineering.vein_undo.denied", state.getBlock().getName());
+			}
+		}
+		return null;
+	}
 
-    public static void startCooldown(Player player) {
-        LAST_UNDO.put(player.getUUID(), System.nanoTime());
-    }
+	public static void startCooldown(Player player) {
+		LAST_UNDO.put(player.getUUID(), System.nanoTime());
+	}
 }

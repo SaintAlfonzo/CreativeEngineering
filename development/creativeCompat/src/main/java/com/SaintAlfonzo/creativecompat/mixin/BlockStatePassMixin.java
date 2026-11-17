@@ -13,16 +13,16 @@ import org.spongepowered.asm.mixin.Unique;
 @Mixin(value = BlockBehaviour.BlockStateBase.class, remap = false)
 public abstract class BlockStatePassMixin implements PassTierSlot {
 
-    @Unique
-    private int creativecompat$passTier;
+	@Unique
+	private int creativecompat$passTier;
 
-    @Override
-    public int creativecompat$passTier() {
-        return creativecompat$passTier;
-    }
+	@Override
+	public int creativecompat$passTier() {
+		return creativecompat$passTier;
+	}
 
-    @Override
-    public void creativecompat$setPassTier(int packed) {
-        creativecompat$passTier = packed;
-    }
+	@Override
+	public void creativecompat$setPassTier(int packed) {
+		creativecompat$passTier = packed;
+	}
 }

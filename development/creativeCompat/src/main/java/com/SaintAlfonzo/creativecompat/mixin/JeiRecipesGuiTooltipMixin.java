@@ -24,26 +24,26 @@ import java.util.List;
 @Mixin(value = RecipesGui.class, remap = false)
 public class JeiRecipesGuiTooltipMixin {
 
-    @Unique
-    @Nullable
-    private static ITypedIngredient<?> creativecommon$hoveredCatalyst;
+	@Unique
+	@Nullable
+	private static ITypedIngredient<?> creativecommon$hoveredCatalyst;
 
-    @Redirect(method = "lambda$render$6", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lmezz/jei/api/gui/ingredient/IRecipeSlotDrawable;getTooltip()Ljava/util/List;"))
-    private static List<Component> creativecommon$rememberCatalyst(IRecipeSlotDrawable slot) {
-        creativecommon$hoveredCatalyst = slot.getDisplayedIngredient().orElse(null);
-        return slot.getTooltip();
-    }
+	@Redirect(method = "lambda$render$6", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lmezz/jei/api/gui/ingredient/IRecipeSlotDrawable;getTooltip()Ljava/util/List;"))
+	private static List<Component> creativecommon$rememberCatalyst(IRecipeSlotDrawable slot) {
+		creativecommon$hoveredCatalyst = slot.getDisplayedIngredient().orElse(null);
+		return slot.getTooltip();
+	}
 
-    @Redirect(method = "lambda$render$6", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lmezz/jei/common/gui/JeiTooltip;draw(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"))
-    private static void creativecommon$drawWithCatalyst(JeiTooltip tooltip, PoseStack poseStack, int x, int y) {
-        if (creativecommon$hoveredCatalyst != null) {
-            tooltip.setIngredient(creativecommon$hoveredCatalyst);
-            creativecommon$hoveredCatalyst = null;
-        }
-        tooltip.draw(poseStack, x, y);
-    }
+	@Redirect(method = "lambda$render$6", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lmezz/jei/common/gui/JeiTooltip;draw(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"))
+	private static void creativecommon$drawWithCatalyst(JeiTooltip tooltip, PoseStack poseStack, int x, int y) {
+		if (creativecommon$hoveredCatalyst != null) {
+			tooltip.setIngredient(creativecommon$hoveredCatalyst);
+			creativecommon$hoveredCatalyst = null;
+		}
+		tooltip.draw(poseStack, x, y);
+	}
 }

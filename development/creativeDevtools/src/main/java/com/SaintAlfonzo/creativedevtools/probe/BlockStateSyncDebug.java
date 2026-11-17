@@ -54,159 +54,159 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class BlockStateSyncDebug {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String TAG = "[CE block-state sync] ";
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final String TAG = "[CE block-state sync] ";
 
-    /** Ids that came back null while the packet on this (network) thread was being decoded. */
-    private static final ThreadLocal<IntArrayList> PENDING = ThreadLocal.withInitial(IntArrayList::new);
-    private static final Set<Integer> SEEN_IDS = ConcurrentHashMap.newKeySet();
-    private static final AtomicInteger BAD_PACKETS = new AtomicInteger();
-    private static final AtomicBoolean CLIENT_DUMPED = new AtomicBoolean();
+	/** Ids that came back null while the packet on this (network) thread was being decoded. */
+	private static final ThreadLocal<IntArrayList> PENDING = ThreadLocal.withInitial(IntArrayList::new);
+	private static final Set<Integer> SEEN_IDS = ConcurrentHashMap.newKeySet();
+	private static final AtomicInteger BAD_PACKETS = new AtomicInteger();
+	private static final AtomicBoolean CLIENT_DUMPED = new AtomicBoolean();
 
-    private BlockStateSyncDebug() {}
+	private BlockStateSyncDebug() {}
 
-    public static boolean enabled() {
-        try {
-            return DevtoolsConfig.DEBUG.stateSyncEnabled.get();
-        } catch (Throwable t) {
-            return false; // config not loaded yet
-        }
-    }
+	public static boolean enabled() {
+		try {
+			return DevtoolsConfig.DEBUG.stateSyncEnabled.get();
+		} catch (Throwable t) {
+			return false; // config not loaded yet
+		}
+	}
 
-    // -------------------------------------------------------------------------
-    // Client: called from the packet mixins
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
+	// Client: called from the packet mixins
+	// -------------------------------------------------------------------------
 
-    /** Subscribes to Creative Common's packet hook (util/BlockStateLookupHook); called from the CreativeDevtools constructor. */
-    public static void register() {
-        BlockStateLookupHook.register(new BlockStateLookupHook.Listener() {
-            @Override
-            public void unresolved(int id) {
-                if (enabled()) PENDING.get().add(id);
-            }
+	/** Subscribes to Creative Common's packet hook (util/BlockStateLookupHook); called from the CreativeDevtools constructor. */
+	public static void register() {
+		BlockStateLookupHook.register(new BlockStateLookupHook.Listener() {
+			@Override
+			public void unresolved(int id) {
+				if (enabled()) PENDING.get().add(id);
+			}
 
-            @Override
-            public void finishSection(ClientboundSectionBlocksUpdatePacket packet) {
-                BlockStateSyncDebug.finishSection(packet);
-            }
+			@Override
+			public void finishSection(ClientboundSectionBlocksUpdatePacket packet) {
+				BlockStateSyncDebug.finishSection(packet);
+			}
 
-            @Override
-            public void finishSingle(ClientboundBlockUpdatePacket packet) {
-                BlockStateSyncDebug.finishSingle(packet);
-            }
-        });
-    }
+			@Override
+			public void finishSingle(ClientboundBlockUpdatePacket packet) {
+				BlockStateSyncDebug.finishSingle(packet);
+			}
+		});
+	}
 
-    public static void finishSection(ClientboundSectionBlocksUpdatePacket packet) {
-        IntArrayList ids = PENDING.get();
-        if (ids.isEmpty()) return;
-        List<String> where = new ArrayList<>();
-        int[] entries = {0};
-        try {
-            packet.runUpdates((pos, state) -> {
-                entries[0]++;
-                if (state == null) where.add(pos.getX() + "," + pos.getY() + "," + pos.getZ());
-            });
-        } catch (Throwable t) {
-            where.add("(positions unavailable: " + t + ")");
-        }
-        report("ClientboundSectionBlocksUpdatePacket (" + entries[0] + " entries)", ids, where);
-    }
+	public static void finishSection(ClientboundSectionBlocksUpdatePacket packet) {
+		IntArrayList ids = PENDING.get();
+		if (ids.isEmpty()) return;
+		List<String> where = new ArrayList<>();
+		int[] entries = {0};
+		try {
+			packet.runUpdates((pos, state) -> {
+				entries[0]++;
+				if (state == null) where.add(pos.getX() + "," + pos.getY() + "," + pos.getZ());
+			});
+		} catch (Throwable t) {
+			where.add("(positions unavailable: " + t + ")");
+		}
+		report("ClientboundSectionBlocksUpdatePacket (" + entries[0] + " entries)", ids, where);
+	}
 
-    public static void finishSingle(ClientboundBlockUpdatePacket packet) {
-        IntArrayList ids = PENDING.get();
-        if (ids.isEmpty()) return;
-        var pos = packet.getPos();
-        report("ClientboundBlockUpdatePacket", ids, List.of(pos.getX() + "," + pos.getY() + "," + pos.getZ()));
-    }
+	public static void finishSingle(ClientboundBlockUpdatePacket packet) {
+		IntArrayList ids = PENDING.get();
+		if (ids.isEmpty()) return;
+		var pos = packet.getPos();
+		report("ClientboundBlockUpdatePacket", ids, List.of(pos.getX() + "," + pos.getY() + "," + pos.getZ()));
+	}
 
-    private static void report(String packet, IntArrayList ids, List<String> where) {
-        int stateCount = Block.BLOCK_STATE_REGISTRY.size();
-        int packetNo = BAD_PACKETS.incrementAndGet();
-        int maxDetail = DevtoolsConfig.DEBUG.stateSyncMaxDetailLines.get();
-        for (int i = 0; i < ids.size(); i++) {
-            int id = ids.getInt(i);
-            if (SEEN_IDS.add(id)) {
-                LOGGER.warn(TAG + "new unresolvable block-state id {} (client registry holds {} states, so the id is {}) in {} at {}",
-                        id, stateCount, id >= stateCount ? "beyond the end by " + (id - stateCount + 1) : "inside the range, an id gap",
-                        packet, i < where.size() ? where.get(i) : "?");
-            }
-        }
-        if (packetNo <= maxDetail) {
-            LOGGER.warn(TAG + "bad packet #{}: {} nulls={} ids={} positions={} clientStates={}",
-                    packetNo, packet, ids.size(), ids, where, stateCount);
-        } else if (packetNo % 500 == 0) {
-            LOGGER.warn(TAG + "{} bad packets so far, {} distinct unresolvable ids {}", packetNo, SEEN_IDS.size(), SEEN_IDS);
-        }
-        ids.clear();
-        if (CLIENT_DUMPED.compareAndSet(false, true)) dumpRanges("client");
-    }
+	private static void report(String packet, IntArrayList ids, List<String> where) {
+		int stateCount = Block.BLOCK_STATE_REGISTRY.size();
+		int packetNo = BAD_PACKETS.incrementAndGet();
+		int maxDetail = DevtoolsConfig.DEBUG.stateSyncMaxDetailLines.get();
+		for (int i = 0; i < ids.size(); i++) {
+			int id = ids.getInt(i);
+			if (SEEN_IDS.add(id)) {
+				LOGGER.warn(TAG + "new unresolvable block-state id {} (client registry holds {} states, so the id is {}) in {} at {}",
+						id, stateCount, id >= stateCount ? "beyond the end by " + (id - stateCount + 1) : "inside the range, an id gap",
+						packet, i < where.size() ? where.get(i) : "?");
+			}
+		}
+		if (packetNo <= maxDetail) {
+			LOGGER.warn(TAG + "bad packet #{}: {} nulls={} ids={} positions={} clientStates={}",
+					packetNo, packet, ids.size(), ids, where, stateCount);
+		} else if (packetNo % 500 == 0) {
+			LOGGER.warn(TAG + "{} bad packets so far, {} distinct unresolvable ids {}", packetNo, SEEN_IDS.size(), SEEN_IDS);
+		}
+		ids.clear();
+		if (CLIENT_DUMPED.compareAndSet(false, true)) dumpRanges("client");
+	}
 
-    // -------------------------------------------------------------------------
-    // Both sides: id range dump
-    // -------------------------------------------------------------------------
+	// -------------------------------------------------------------------------
+	// Both sides: id range dump
+	// -------------------------------------------------------------------------
 
-    /** Dedicated server: write its half of the comparison at startup. */
-    @SubscribeEvent
-    public static void onServerStarted(ServerStartedEvent event) {
-        if (!enabled() || !event.getServer().isDedicatedServer()) return;
-        dumpRanges("server");
-    }
+	/** Dedicated server: write its half of the comparison at startup. */
+	@SubscribeEvent
+	public static void onServerStarted(ServerStartedEvent event) {
+		if (!enabled() || !event.getServer().isDedicatedServer()) return;
+		dumpRanges("server");
+	}
 
-    /** Client: write at login too, so a session with no bad packet still has a file to compare. */
-    @Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
-    public static final class ClientLogin {
-        private ClientLogin() {}
+	/** Client: write at login too, so a session with no bad packet still has a file to compare. */
+	@Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE, value = Dist.CLIENT)
+	public static final class ClientLogin {
+		private ClientLogin() {}
 
-        @SubscribeEvent
-        public static void onLogin(ClientPlayerNetworkEvent.LoggingIn event) {
-            if (enabled() && CLIENT_DUMPED.compareAndSet(false, true)) dumpRanges("client");
-        }
-    }
+		@SubscribeEvent
+		public static void onLogin(ClientPlayerNetworkEvent.LoggingIn event) {
+			if (enabled() && CLIENT_DUMPED.compareAndSet(false, true)) dumpRanges("client");
+		}
+	}
 
-    /**
-     * One line per block, in state-id order: first id, number of states, registry name. Because ids are
-     * handed out block by block, two such files disagree exactly where a block's state count differs.
-     */
-    public static void dumpRanges(String side) {
-        // ~760k states: several seconds, so never on the server thread or a network thread
-        Thread t = new Thread(() -> writeRanges(side), "ce-block-state-dump");
-        t.setDaemon(true);
-        t.start();
-    }
+	/**
+	 * One line per block, in state-id order: first id, number of states, registry name. Because ids are
+	 * handed out block by block, two such files disagree exactly where a block's state count differs.
+	 */
+	public static void dumpRanges(String side) {
+		// ~760k states: several seconds, so never on the server thread or a network thread
+		Thread t = new Thread(() -> writeRanges(side), "ce-block-state-dump");
+		t.setDaemon(true);
+		t.start();
+	}
 
-    private static void writeRanges(String side) {
-        Path file = FMLPaths.GAMEDIR.get().resolve("logs").resolve("cdev_block_state_ranges_" + side + ".txt");
-        try {
-            StringBuilder out = new StringBuilder();
-            StringBuilder body = new StringBuilder();
-            Block current = null;
-            int start = 0, count = 0, blocks = 0;
-            for (BlockState state : Block.BLOCK_STATE_REGISTRY) {
-                Block block = state.getBlock();
-                if (block != current) {
-                    if (current != null) appendRange(body, start, count, current);
-                    current = block;
-                    start = Block.BLOCK_STATE_REGISTRY.getId(state);
-                    count = 0;
-                    blocks++;
-                }
-                count++;
-            }
-            if (current != null) appendRange(body, start, count, current);
-            out.append("# side=").append(side)
-                    .append(" states=").append(Block.BLOCK_STATE_REGISTRY.size())
-                    .append(" blocks=").append(blocks).append('\n')
-                    .append("# firstId\tstateCount\tblock\n").append(body);
-            Files.createDirectories(file.getParent());
-            Files.writeString(file, out.toString(), StandardCharsets.UTF_8);
-            LOGGER.info(TAG + "wrote {} ({} states in {} blocks)", file, Block.BLOCK_STATE_REGISTRY.size(), blocks);
-        } catch (IOException | RuntimeException e) {
-            LOGGER.warn(TAG + "could not write " + file, e);
-        }
-    }
+	private static void writeRanges(String side) {
+		Path file = FMLPaths.GAMEDIR.get().resolve("logs").resolve("cdev_block_state_ranges_" + side + ".txt");
+		try {
+			StringBuilder out = new StringBuilder();
+			StringBuilder body = new StringBuilder();
+			Block current = null;
+			int start = 0, count = 0, blocks = 0;
+			for (BlockState state : Block.BLOCK_STATE_REGISTRY) {
+				Block block = state.getBlock();
+				if (block != current) {
+					if (current != null) appendRange(body, start, count, current);
+					current = block;
+					start = Block.BLOCK_STATE_REGISTRY.getId(state);
+					count = 0;
+					blocks++;
+				}
+				count++;
+			}
+			if (current != null) appendRange(body, start, count, current);
+			out.append("# side=").append(side)
+					.append(" states=").append(Block.BLOCK_STATE_REGISTRY.size())
+					.append(" blocks=").append(blocks).append('\n')
+					.append("# firstId\tstateCount\tblock\n").append(body);
+			Files.createDirectories(file.getParent());
+			Files.writeString(file, out.toString(), StandardCharsets.UTF_8);
+			LOGGER.info(TAG + "wrote {} ({} states in {} blocks)", file, Block.BLOCK_STATE_REGISTRY.size(), blocks);
+		} catch (IOException | RuntimeException e) {
+			LOGGER.warn(TAG + "could not write " + file, e);
+		}
+	}
 
-    private static void appendRange(StringBuilder sb, int start, int count, Block block) {
-        sb.append(start).append('\t').append(count).append('\t').append(ForgeRegistries.BLOCKS.getKey(block)).append('\n');
-    }
+	private static void appendRange(StringBuilder sb, int start, int count, Block block) {
+		sb.append(start).append('\t').append(count).append('\t').append(ForgeRegistries.BLOCKS.getKey(block)).append('\n');
+	}
 }

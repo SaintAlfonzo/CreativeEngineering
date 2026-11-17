@@ -26,45 +26,45 @@ import java.util.List;
  * The normal render keeps the fringe.
  */
 public final class BreakOverlayClip {
-    public static final TagKey<Block> TAG = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativedelight", "clip_break_overlay"));
-    private static final float EPS = 1.0E-4F;
+	public static final TagKey<Block> TAG = TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativedelight", "clip_break_overlay"));
+	private static final float EPS = 1.0E-4F;
 
-    private BreakOverlayClip() {
-    }
+	private BreakOverlayClip() {
+	}
 
-    public static BakedModel wrap(BlockState state, BakedModel model) {
-        return state.is(TAG) ? new Clipped(model) : model;
-    }
+	public static BakedModel wrap(BlockState state, BakedModel model) {
+		return state.is(TAG) ? new Clipped(model) : model;
+	}
 
-    static boolean inside(BakedQuad quad) {
-        int[] v = quad.getVertices();
-        for (int vertex = 0; vertex < 4; vertex++) {
-            for (int axis = 0; axis < 3; axis++) {
-                float f = Float.intBitsToFloat(v[vertex * IQuadTransformer.STRIDE + IQuadTransformer.POSITION + axis]);
-                if (f < -EPS || f > 1.0F + EPS) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
+	static boolean inside(BakedQuad quad) {
+		int[] v = quad.getVertices();
+		for (int vertex = 0; vertex < 4; vertex++) {
+			for (int axis = 0; axis < 3; axis++) {
+				float f = Float.intBitsToFloat(v[vertex * IQuadTransformer.STRIDE + IQuadTransformer.POSITION + axis]);
+				if (f < -EPS || f > 1.0F + EPS) {
+					return false;
+				}
+			}
+		}
+		return true;
+	}
 
-    private static final class Clipped extends BakedModelWrapper<BakedModel> {
-        Clipped(BakedModel base) {
-            super(base);
-        }
+	private static final class Clipped extends BakedModelWrapper<BakedModel> {
+		Clipped(BakedModel base) {
+			super(base);
+		}
 
-        @Override
-        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data,
-                @Nullable RenderType renderType) {
-            List<BakedQuad> quads = super.getQuads(state, side, rand, data, renderType);
-            List<BakedQuad> out = new ArrayList<>(quads.size());
-            for (BakedQuad quad : quads) {
-                if (inside(quad)) {
-                    out.add(quad);
-                }
-            }
-            return out;
-        }
-    }
+		@Override
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand, ModelData data,
+				@Nullable RenderType renderType) {
+			List<BakedQuad> quads = super.getQuads(state, side, rand, data, renderType);
+			List<BakedQuad> out = new ArrayList<>(quads.size());
+			for (BakedQuad quad : quads) {
+				if (inside(quad)) {
+					out.add(quad);
+				}
+			}
+			return out;
+		}
+	}
 }

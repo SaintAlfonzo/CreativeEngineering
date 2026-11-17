@@ -32,34 +32,34 @@ import java.util.function.Consumer;
  */
 public final class IncubationCompartment {
 
-    public static final String ID = CreativeDelight.MOD_ID;
+	public static final String ID = CreativeDelight.MOD_ID;
 
-    /** One content set per bird mod. */
-    private record ContentSet(String modId, Consumer<IEventBus> register, List<Runnable> setup) {
-        boolean loaded() {
-            return ModList.get().isLoaded(modId);
-        }
-    }
+	/** One content set per bird mod. */
+	private record ContentSet(String modId, Consumer<IEventBus> register, List<Runnable> setup) {
+		boolean loaded() {
+			return ModList.get().isLoaded(modId);
+		}
+	}
 
-    private static final List<ContentSet> SETS = List.of(
-            new ContentSet("alexsmobs", EmuNests::register, List.of(EmuNests::registerFlammables)),
-            new ContentSet("untitledduckmod",
-                    bus -> {
-                        WaterfowlNests.register(bus);
-                        WaterfowlEggCrates.register(bus);
-                        // Client only; the lambda keeps client classes out of the server's class loading.
-                        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> DuckModEggModels.register(bus));
-                    },
-                    List.of(WaterfowlNests::registerFlammables, WaterfowlEggCrates::registerFlammables)));
+	private static final List<ContentSet> SETS = List.of(
+			new ContentSet("alexsmobs", EmuNests::register, List.of(EmuNests::registerFlammables)),
+			new ContentSet("untitledduckmod",
+					bus -> {
+						WaterfowlNests.register(bus);
+						WaterfowlEggCrates.register(bus);
+						// Client only; the lambda keeps client classes out of the server's class loading.
+						DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> DuckModEggModels.register(bus));
+					},
+					List.of(WaterfowlNests::registerFlammables, WaterfowlEggCrates::registerFlammables)));
 
-    private IncubationCompartment() {
-    }
+	private IncubationCompartment() {
+	}
 
-    public static void init(IEventBus modEventBus) {
-        List<ContentSet> active = SETS.stream().filter(ContentSet::loaded).toList();
-        if (active.isEmpty()) return;
-        active.forEach(set -> set.register().accept(modEventBus));
-        modEventBus.addListener((FMLCommonSetupEvent event) ->
-                active.forEach(set -> set.setup().forEach(event::enqueueWork)));
-    }
+	public static void init(IEventBus modEventBus) {
+		List<ContentSet> active = SETS.stream().filter(ContentSet::loaded).toList();
+		if (active.isEmpty()) return;
+		active.forEach(set -> set.register().accept(modEventBus));
+		modEventBus.addListener((FMLCommonSetupEvent event) ->
+				active.forEach(set -> set.setup().forEach(event::enqueueWork)));
+	}
 }

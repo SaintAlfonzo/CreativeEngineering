@@ -10,23 +10,23 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 /** Client setup: the Copper Pot screen and cutout render layers (upstream sets them in code, not in the models). */
 public final class MDClient {
-    private MDClient() {
-    }
+	private MDClient() {
+	}
 
-    public static void register(IEventBus bus) {
-        bus.addListener(MDClient::onClientSetup);
-    }
+	public static void register(IEventBus bus) {
+		bus.addListener(MDClient::onClientSetup);
+	}
 
-    @SuppressWarnings("removal")
-    private static void onClientSetup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            MenuScreens.register(MDMenuTypes.COPPER_POT.get(), CopperPotScreen::new);
-            ItemBlockRenderTypes.setRenderLayer(MDBlocks.COPPER_POT.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(MDBlocks.STICKY_BASKET.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(MDBlocks.WILD_CAVE_CARROTS.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(MDBlocks.GOSSYPIUM.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(MDBlocks.POTTED_GOSSYPIUM.get(), RenderType.cutout());
-            ItemBlockRenderTypes.setRenderLayer(MDBlocks.CAVE_CARROTS.get(), RenderType.cutout());
-        });
-    }
+	@SuppressWarnings("removal")
+	private static void onClientSetup(FMLClientSetupEvent event) {
+		event.enqueueWork(() -> {
+			MenuScreens.register(MDMenuTypes.COPPER_POT.get(), CopperPotScreen::new);
+			ItemBlockRenderTypes.setRenderLayer(MDBlocks.COPPER_POT.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(MDBlocks.STICKY_BASKET.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(MDBlocks.WILD_CAVE_CARROTS.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(MDBlocks.GOSSYPIUM.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(MDBlocks.POTTED_GOSSYPIUM.get(), RenderType.cutout());
+			ItemBlockRenderTypes.setRenderLayer(MDBlocks.CAVE_CARROTS.get(), RenderType.cutout());
+		});
+	}
 }

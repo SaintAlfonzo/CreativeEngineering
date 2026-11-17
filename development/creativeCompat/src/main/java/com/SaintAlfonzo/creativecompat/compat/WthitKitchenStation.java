@@ -27,41 +27,41 @@ import net.minecraft.resources.ResourceLocation;
  * feature_writeup/wthit_lines.md 2.7.
  */
 public final class WthitKitchenStation implements IWailaCommonPlugin, IWailaClientPlugin, IBlockComponentProvider,
-        IDataProvider<KitchenStationBlockEntity> {
+		IDataProvider<KitchenStationBlockEntity> {
 
-    private static final String POS = "creativecommon.kitchen_station.security";
-    private static final ResourceLocation STATUS = new ResourceLocation(CreativeCompat.MOD_ID, "kitchen_station");
-    private static final ResourceLocation LINK = new ResourceLocation(CreativeCompat.MOD_ID, "kitchen_station_link");
+	private static final String POS = "creativecommon.kitchen_station.security";
+	private static final ResourceLocation STATUS = new ResourceLocation(CreativeCompat.MOD_ID, "kitchen_station");
+	private static final ResourceLocation LINK = new ResourceLocation(CreativeCompat.MOD_ID, "kitchen_station_link");
 
-    @Override
-    public void register(ICommonRegistrar registrar) {
-        registrar.blockData(this, KitchenStationBlockEntity.class);
-    }
+	@Override
+	public void register(ICommonRegistrar registrar) {
+		registrar.blockData(this, KitchenStationBlockEntity.class);
+	}
 
-    @Override
-    public void register(IClientRegistrar registrar) {
-        registrar.body(this, KitchenStationBlockEntity.class);
-    }
+	@Override
+	public void register(IClientRegistrar registrar) {
+		registrar.body(this, KitchenStationBlockEntity.class);
+	}
 
-    @Override
-    public void appendData(IDataWriter data, IServerAccessor<KitchenStationBlockEntity> accessor, IPluginConfig config) {
-        String pos = accessor.getTarget().getSecurityStationPos();
-        data.raw().putString(POS, pos == null ? "" : pos);
-    }
+	@Override
+	public void appendData(IDataWriter data, IServerAccessor<KitchenStationBlockEntity> accessor, IPluginConfig config) {
+		String pos = accessor.getTarget().getSecurityStationPos();
+		data.raw().putString(POS, pos == null ? "" : pos);
+	}
 
-    @Override
-    public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
-        CompoundTag data = accessor.getData().raw();
-        if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.kitchenStation.get() || !data.contains(POS)) {
-            return;
-        }
-        String pos = data.getString(POS);
-        if (pos.isEmpty()) {
-            tooltip.setLine(STATUS, Component.translatable("jade.appliedcooking:offline").withStyle(ChatFormatting.RED));
-            return;
-        }
-        tooltip.setLine(STATUS, Component.translatable("jade.appliedcooking:online").withStyle(ChatFormatting.GREEN));
-        tooltip.setLine(LINK, Component.translatable("jade.appliedcooking:kitchen_station",
-                Component.translatable("block.ae2.security_station"), pos));
-    }
+	@Override
+	public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+		CompoundTag data = accessor.getData().raw();
+		if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.kitchenStation.get() || !data.contains(POS)) {
+			return;
+		}
+		String pos = data.getString(POS);
+		if (pos.isEmpty()) {
+			tooltip.setLine(STATUS, Component.translatable("jade.appliedcooking:offline").withStyle(ChatFormatting.RED));
+			return;
+		}
+		tooltip.setLine(STATUS, Component.translatable("jade.appliedcooking:online").withStyle(ChatFormatting.GREEN));
+		tooltip.setLine(LINK, Component.translatable("jade.appliedcooking:kitchen_station",
+				Component.translatable("block.ae2.security_station"), pos));
+	}
 }

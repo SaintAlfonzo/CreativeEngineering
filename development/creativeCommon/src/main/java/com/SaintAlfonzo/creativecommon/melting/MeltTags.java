@@ -12,22 +12,22 @@ import net.minecraft.world.level.block.Block;
  */
 public final class MeltTags {
 
-    private MeltTags() {}
+	private MeltTags() {}
 
-    /** Salt sources (The Salt's blocks, Vintage Delight's salt family, the Hearth and Harvest salt lick stages). */
-    public static final TagKey<Block> SALT = tag("salt");
-    /** Fire sources: fire, campfires, magma, torches, lanterns, glowstone. A block with a lit property counts while lit. */
-    public static final TagKey<Block> FIRE = tag("fire");
-    /** Lava sources besides any block whose fluid state is lava (lava cauldron). */
-    public static final TagKey<Block> LAVA = tag("lava");
-    /** Melt fully: ice and frosted ice to water (air when ultra-warm), snow to air. */
-    public static final TagKey<Block> MELTABLE = tag("meltable");
-    /** Step down one tier ([melting] slowSteps) at the low chance: packed and blue ice. */
-    public static final TagKey<Block> MELTABLE_SLOW = tag("meltable_slow");
-    /** Air the moment it is placed in an ultra-warm dimension: snow layers, snow blocks, powder snow. */
-    public static final TagKey<Block> ULTRAWARM_INSTANT = tag("ultrawarm_instant");
+	/** Salt sources (The Salt's blocks, Vintage Delight's salt family, the Hearth and Harvest salt lick stages). */
+	public static final TagKey<Block> SALT = tag("salt");
+	/** Fire sources: fire, campfires, magma, torches, lanterns, glowstone. A block with a lit property counts while lit. */
+	public static final TagKey<Block> FIRE = tag("fire");
+	/** Lava sources besides any block whose fluid state is lava (lava cauldron). */
+	public static final TagKey<Block> LAVA = tag("lava");
+	/** Melt fully: ice and frosted ice to water (air when ultra-warm), snow to air. */
+	public static final TagKey<Block> MELTABLE = tag("meltable");
+	/** Step down one tier ([melting] slowSteps) at the low chance: packed and blue ice. */
+	public static final TagKey<Block> MELTABLE_SLOW = tag("meltable_slow");
+	/** Air the moment it is placed in an ultra-warm dimension: snow layers, snow blocks, powder snow. */
+	public static final TagKey<Block> ULTRAWARM_INSTANT = tag("ultrawarm_instant");
 
-    private static TagKey<Block> tag(String path) {
-        return BlockTags.create(new ResourceLocation("creativecommon", "melting/" + path));
-    }
+	private static TagKey<Block> tag(String path) {
+		return BlockTags.create(new ResourceLocation("creativecommon", "melting/" + path));
+	}
 }

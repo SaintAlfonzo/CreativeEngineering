@@ -29,59 +29,59 @@ import java.util.List;
  */
 public class MoobloomFlowerLayer extends RenderLayer<Moobloom, MoobloomModel> {
 
-    /** Base position and turn of each slot; HEAD is in head space (moves with the head). */
-    private record SlotPose(float x, float y, float z, float yaw) {}
+	/** Base position and turn of each slot; HEAD is in head space (moves with the head). */
+	private record SlotPose(float x, float y, float z, float yaw) {}
 
-    private static final SlotPose BACK_FRONT = new SlotPose(-0.12F, 0.15F, -0.22F, -40.0F);
-    private static final SlotPose BACK_REAR = new SlotPose(0.14F, 0.15F, 0.36F, 35.0F);
-    private static final SlotPose HEAD = new SlotPose(0.0F, -0.2F, -0.18F, -70.0F);
+	private static final SlotPose BACK_FRONT = new SlotPose(-0.12F, 0.15F, -0.22F, -40.0F);
+	private static final SlotPose BACK_REAR = new SlotPose(0.14F, 0.15F, 0.36F, 35.0F);
+	private static final SlotPose HEAD = new SlotPose(0.0F, -0.2F, -0.18F, -70.0F);
 
-    private final BlockRenderDispatcher blockRenderer;
+	private final BlockRenderDispatcher blockRenderer;
 
-    public MoobloomFlowerLayer(RenderLayerParent<Moobloom, MoobloomModel> parent, BlockRenderDispatcher blockRenderer) {
-        super(parent);
-        this.blockRenderer = blockRenderer;
-    }
+	public MoobloomFlowerLayer(RenderLayerParent<Moobloom, MoobloomModel> parent, BlockRenderDispatcher blockRenderer) {
+		super(parent);
+		this.blockRenderer = blockRenderer;
+	}
 
-    @Override
-    public void render(PoseStack pose, MultiBufferSource buffers, int light, Moobloom moobloom, float limbSwing,
-                       float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!moobloom.showsFlowers()) return;
-        boolean outlineOnly = Minecraft.getInstance().shouldEntityAppearGlowing(moobloom) && moobloom.isInvisible();
-        if (moobloom.isInvisible() && !outlineOnly) return;
+	@Override
+	public void render(PoseStack pose, MultiBufferSource buffers, int light, Moobloom moobloom, float limbSwing,
+					   float limbSwingAmount, float partialTick, float ageInTicks, float netHeadYaw, float headPitch) {
+		if (!moobloom.showsFlowers()) return;
+		boolean outlineOnly = Minecraft.getInstance().shouldEntityAppearGlowing(moobloom) && moobloom.isInvisible();
+		if (moobloom.isInvisible() && !outlineOnly) return;
 
-        List<BlockState> flowers = moobloom.getFlowers();
-        if (flowers.size() < MoobloomVariant.Slot.COUNT) return;
-        int overlay = LivingEntityRenderer.getOverlayCoords(moobloom, 0.0F);
-        float scale = moobloom.getVariant().scale();
+		List<BlockState> flowers = moobloom.getFlowers();
+		if (flowers.size() < MoobloomVariant.Slot.COUNT) return;
+		int overlay = LivingEntityRenderer.getOverlayCoords(moobloom, 0.0F);
+		float scale = moobloom.getVariant().scale();
 
-        renderSlot(pose, buffers, light, overlay, outlineOnly, BACK_FRONT, flowers.get(MoobloomVariant.Slot.BACK_FRONT.ordinal()), scale);
-        renderSlot(pose, buffers, light, overlay, outlineOnly, BACK_REAR, flowers.get(MoobloomVariant.Slot.BACK_REAR.ordinal()), scale);
+		renderSlot(pose, buffers, light, overlay, outlineOnly, BACK_FRONT, flowers.get(MoobloomVariant.Slot.BACK_FRONT.ordinal()), scale);
+		renderSlot(pose, buffers, light, overlay, outlineOnly, BACK_REAR, flowers.get(MoobloomVariant.Slot.BACK_REAR.ordinal()), scale);
 
-        pose.pushPose();
-        getParentModel().getHead().translateAndRotate(pose);
-        renderSlot(pose, buffers, light, overlay, outlineOnly, HEAD, flowers.get(MoobloomVariant.Slot.HEAD.ordinal()), scale);
-        pose.popPose();
-    }
+		pose.pushPose();
+		getParentModel().getHead().translateAndRotate(pose);
+		renderSlot(pose, buffers, light, overlay, outlineOnly, HEAD, flowers.get(MoobloomVariant.Slot.HEAD.ordinal()), scale);
+		pose.popPose();
+	}
 
-    private void renderSlot(PoseStack pose, MultiBufferSource buffers, int light, int overlay, boolean outlineOnly,
-                            SlotPose slot, BlockState state, float scale) {
-        if (state == null || state.isAir()) return;
-        pose.pushPose();
-        pose.translate(slot.x(), slot.y(), slot.z());
-        pose.mulPose(Vector3f.YP.rotationDegrees(slot.yaw()));
-        // the sunflower head is one-sided and showed its back on the JEI pages: turn it round (mobs/mooblooms #6)
-        if (state.is(Blocks.SUNFLOWER)) pose.mulPose(Vector3f.YP.rotationDegrees(180.0F));
-        // flip to block space (the entity model is upside down), grow up from the base, centered on x/z
-        pose.scale(-scale, -scale, scale);
-        pose.translate(-0.5, 0.0, -0.5);
-        if (outlineOnly) {
-            blockRenderer.getModelRenderer().renderModel(pose.last(),
-                    buffers.getBuffer(RenderType.outline(TextureAtlas.LOCATION_BLOCKS)), state,
-                    blockRenderer.getBlockModel(state), 0.0F, 0.0F, 0.0F, light, overlay);
-        } else {
-            blockRenderer.renderSingleBlock(state, pose, buffers, light, overlay);
-        }
-        pose.popPose();
-    }
+	private void renderSlot(PoseStack pose, MultiBufferSource buffers, int light, int overlay, boolean outlineOnly,
+							SlotPose slot, BlockState state, float scale) {
+		if (state == null || state.isAir()) return;
+		pose.pushPose();
+		pose.translate(slot.x(), slot.y(), slot.z());
+		pose.mulPose(Vector3f.YP.rotationDegrees(slot.yaw()));
+		// the sunflower head is one-sided and showed its back on the JEI pages: turn it round (mobs/mooblooms #6)
+		if (state.is(Blocks.SUNFLOWER)) pose.mulPose(Vector3f.YP.rotationDegrees(180.0F));
+		// flip to block space (the entity model is upside down), grow up from the base, centered on x/z
+		pose.scale(-scale, -scale, scale);
+		pose.translate(-0.5, 0.0, -0.5);
+		if (outlineOnly) {
+			blockRenderer.getModelRenderer().renderModel(pose.last(),
+					buffers.getBuffer(RenderType.outline(TextureAtlas.LOCATION_BLOCKS)), state,
+					blockRenderer.getBlockModel(state), 0.0F, 0.0F, 0.0F, light, overlay);
+		} else {
+			blockRenderer.renderSingleBlock(state, pose, buffers, light, overlay);
+		}
+		pose.popPose();
+	}
 }

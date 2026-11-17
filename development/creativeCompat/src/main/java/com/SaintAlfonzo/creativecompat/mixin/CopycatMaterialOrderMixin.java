@@ -28,47 +28,47 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = MaterialItemStorage.class, remap = false)
 public abstract class CopycatMaterialOrderMixin implements LastInsertedMaterial {
 
-    @Unique
-    private static final String CREATIVEENGINEERING$FLAG = "creativeengineering:newest";
+	@Unique
+	private static final String CREATIVEENGINEERING$FLAG = "creativeengineering:newest";
 
-    @Unique
-    private String creativeengineering$lastProperty;
+	@Unique
+	private String creativeengineering$lastProperty;
 
-    @Override
-    public String creativeengineering$lastProperty() {
-        return this.creativeengineering$lastProperty;
-    }
+	@Override
+	public String creativeengineering$lastProperty() {
+		return this.creativeengineering$lastProperty;
+	}
 
-    @Inject(method = "storeMaterialItem", at = @At("RETURN"))
-    private void creativeengineering$recordInsert(String property, MaterialItemStorage.MaterialItem item, CallbackInfo ci) {
-        if (((MaterialItemStorage) (Object) this).hasCustomMaterial(property)) {
-            this.creativeengineering$lastProperty = property;
-        }
-    }
+	@Inject(method = "storeMaterialItem", at = @At("RETURN"))
+	private void creativeengineering$recordInsert(String property, MaterialItemStorage.MaterialItem item, CallbackInfo ci) {
+		if (((MaterialItemStorage) (Object) this).hasCustomMaterial(property)) {
+			this.creativeengineering$lastProperty = property;
+		}
+	}
 
-    @Inject(method = "remapStorage", at = @At("RETURN"))
-    private void creativeengineering$remap(Function<String, String> remap, CallbackInfo ci) {
-        if (this.creativeengineering$lastProperty != null) {
-            this.creativeengineering$lastProperty = remap.apply(this.creativeengineering$lastProperty);
-        }
-    }
+	@Inject(method = "remapStorage", at = @At("RETURN"))
+	private void creativeengineering$remap(Function<String, String> remap, CallbackInfo ci) {
+		if (this.creativeengineering$lastProperty != null) {
+			this.creativeengineering$lastProperty = remap.apply(this.creativeengineering$lastProperty);
+		}
+	}
 
-    @Inject(method = {"serialize", "serializeSafe"}, at = @At("RETURN"))
-    private void creativeengineering$write(CallbackInfoReturnable<CompoundTag> cir) {
-        String last = this.creativeengineering$lastProperty;
-        CompoundTag tag = cir.getReturnValue();
-        if (last != null && tag.contains(last, Tag.TAG_COMPOUND)) {
-            tag.getCompound(last).putBoolean(CREATIVEENGINEERING$FLAG, true);
-        }
-    }
+	@Inject(method = {"serialize", "serializeSafe"}, at = @At("RETURN"))
+	private void creativeengineering$write(CallbackInfoReturnable<CompoundTag> cir) {
+		String last = this.creativeengineering$lastProperty;
+		CompoundTag tag = cir.getReturnValue();
+		if (last != null && tag.contains(last, Tag.TAG_COMPOUND)) {
+			tag.getCompound(last).putBoolean(CREATIVEENGINEERING$FLAG, true);
+		}
+	}
 
-    @Inject(method = "deserialize", at = @At("HEAD"))
-    private void creativeengineering$read(CompoundTag tag, CallbackInfoReturnable<Boolean> cir) {
-        for (String part : tag.getAllKeys()) {
-            if (tag.getCompound(part).getBoolean(CREATIVEENGINEERING$FLAG)) {
-                this.creativeengineering$lastProperty = part;
-                return;
-            }
-        }
-    }
+	@Inject(method = "deserialize", at = @At("HEAD"))
+	private void creativeengineering$read(CompoundTag tag, CallbackInfoReturnable<Boolean> cir) {
+		for (String part : tag.getAllKeys()) {
+			if (tag.getCompound(part).getBoolean(CREATIVEENGINEERING$FLAG)) {
+				this.creativeengineering$lastProperty = part;
+				return;
+			}
+		}
+	}
 }

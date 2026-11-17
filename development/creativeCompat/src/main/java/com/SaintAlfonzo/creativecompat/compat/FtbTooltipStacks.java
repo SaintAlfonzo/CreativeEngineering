@@ -20,31 +20,31 @@ import net.minecraft.world.item.ItemStack;
  */
 public final class FtbTooltipStacks {
 
-    private static ItemStack stack = ItemStack.EMPTY;
+	private static ItemStack stack = ItemStack.EMPTY;
 
-    private FtbTooltipStacks() {}
+	private FtbTooltipStacks() {}
 
-    public static void remember(ItemStack itemStack) {
-        stack = itemStack;
-    }
+	public static void remember(ItemStack itemStack) {
+		stack = itemStack;
+	}
 
-    public static void forget() {
-        stack = ItemStack.EMPTY;
-    }
+	public static void forget() {
+		stack = ItemStack.EMPTY;
+	}
 
-    /** Stands in for {@code TooltipList.render}: same arguments, same offsets as the item-only branch. */
-    public static void render(Screen screen, TooltipList list, PoseStack poseStack, int mouseX, int mouseY,
-                              int screenWidth, int screenHeight, Font font) {
-        ItemStack itemStack = stack;
-        stack = ItemStack.EMPTY;
-        if (itemStack.isEmpty()) {
-            list.render(poseStack, mouseX, mouseY, screenWidth, screenHeight, font);
-            return;
-        }
-        poseStack.pushPose();
-        poseStack.translate(0.0, 0.0, list.zOffsetItemTooltip);
-        screen.renderComponentTooltip(poseStack, ((FtbTooltipListAccessor) list).creativecommon$getLines(),
-                mouseX + list.xOffset, mouseY + list.yOffset, font, itemStack);
-        poseStack.popPose();
-    }
+	/** Stands in for {@code TooltipList.render}: same arguments, same offsets as the item-only branch. */
+	public static void render(Screen screen, TooltipList list, PoseStack poseStack, int mouseX, int mouseY,
+							  int screenWidth, int screenHeight, Font font) {
+		ItemStack itemStack = stack;
+		stack = ItemStack.EMPTY;
+		if (itemStack.isEmpty()) {
+			list.render(poseStack, mouseX, mouseY, screenWidth, screenHeight, font);
+			return;
+		}
+		poseStack.pushPose();
+		poseStack.translate(0.0, 0.0, list.zOffsetItemTooltip);
+		screen.renderComponentTooltip(poseStack, ((FtbTooltipListAccessor) list).creativecommon$getLines(),
+				mouseX + list.xOffset, mouseY + list.yOffset, font, itemStack);
+		poseStack.popPose();
+	}
 }

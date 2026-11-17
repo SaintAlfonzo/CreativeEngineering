@@ -19,17 +19,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = FireworkRocketEntity.class, remap = false)
 public abstract class FireworkPassMixin {
 
-    @Shadow
-    private boolean m_37088_() {
-        throw new AssertionError();
-    }
+	@Shadow
+	private boolean m_37088_() {
+		throw new AssertionError();
+	}
 
-    @Inject(method = "m_8119_", at = @At("RETURN"))
-    private void creativecompat$fireworkWeb(CallbackInfo ci) {
-        try {
-            PassProjectiles.fireworkTail((FireworkRocketEntity) (Object) this, m_37088_());
-        } catch (Throwable ignored) {
-            // a broken lookup must never stop the rocket
-        }
-    }
+	@Inject(method = "m_8119_", at = @At("RETURN"))
+	private void creativecompat$fireworkWeb(CallbackInfo ci) {
+		try {
+			PassProjectiles.fireworkTail((FireworkRocketEntity) (Object) this, m_37088_());
+		} catch (Throwable ignored) {
+			// a broken lookup must never stop the rocket
+		}
+	}
 }

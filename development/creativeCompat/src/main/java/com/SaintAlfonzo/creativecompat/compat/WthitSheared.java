@@ -33,47 +33,47 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class WthitSheared implements IWailaClientPlugin, IBlockComponentProvider {
 
-    private static final ResourceLocation LINE = new ResourceLocation(CreativeCompat.MOD_ID, "sheared");
-    private static final ResourceLocation IW_IVY = new ResourceLocation("immersive_weathering", "ivy");
-    private static final int IW_IVY_MAX_AGE = 10;
+	private static final ResourceLocation LINE = new ResourceLocation(CreativeCompat.MOD_ID, "sheared");
+	private static final ResourceLocation IW_IVY = new ResourceLocation("immersive_weathering", "ivy");
+	private static final int IW_IVY_MAX_AGE = 10;
 
-    @Override
-    public void register(IClientRegistrar registrar) {
-        registrar.body(this, Block.class);
-    }
+	@Override
+	public void register(IClientRegistrar registrar) {
+		registrar.body(this, Block.class);
+	}
 
-    @Override
-    public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
-        if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.sheared.get()) {
-            return;
-        }
-        BlockState state = accessor.getBlockState();
-        String key = lineKey(state);
-        if (key != null) {
-            tooltip.setLine(LINE, Component.translatable(key));
-        }
-    }
+	@Override
+	public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+		if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.sheared.get()) {
+			return;
+		}
+		BlockState state = accessor.getBlockState();
+		String key = lineKey(state);
+		if (key != null) {
+			tooltip.setLine(LINE, Component.translatable(key));
+		}
+	}
 
-    private static String lineKey(BlockState state) {
-        Block block = state.getBlock();
-        boolean vine = block instanceof VineBlock;
-        if (hasValue(block.getStateDefinition().getProperty("fertile"), state, false)) {
-            return vine ? "creativecommon.wthit.sheared_vine" : "creativecommon.wthit.sheared";
-        }
-        if (vine && hasValue(block.getStateDefinition().getProperty("sterilized"), state, true)) {
-            return "creativecommon.wthit.sheared_vine";
-        }
-        if (block instanceof GrowingPlantHeadBlock head && head.isMaxAge(state)) {
-            return "creativecommon.wthit.not_growing";
-        }
-        if (block.getStateDefinition().getProperty("age") instanceof IntegerProperty age
-                && state.getValue(age) >= IW_IVY_MAX_AGE && IW_IVY.equals(ForgeRegistries.BLOCKS.getKey(block))) {
-            return "creativecommon.wthit.not_growing";
-        }
-        return null;
-    }
+	private static String lineKey(BlockState state) {
+		Block block = state.getBlock();
+		boolean vine = block instanceof VineBlock;
+		if (hasValue(block.getStateDefinition().getProperty("fertile"), state, false)) {
+			return vine ? "creativecommon.wthit.sheared_vine" : "creativecommon.wthit.sheared";
+		}
+		if (vine && hasValue(block.getStateDefinition().getProperty("sterilized"), state, true)) {
+			return "creativecommon.wthit.sheared_vine";
+		}
+		if (block instanceof GrowingPlantHeadBlock head && head.isMaxAge(state)) {
+			return "creativecommon.wthit.not_growing";
+		}
+		if (block.getStateDefinition().getProperty("age") instanceof IntegerProperty age
+				&& state.getValue(age) >= IW_IVY_MAX_AGE && IW_IVY.equals(ForgeRegistries.BLOCKS.getKey(block))) {
+			return "creativecommon.wthit.not_growing";
+		}
+		return null;
+	}
 
-    private static boolean hasValue(Property<?> property, BlockState state, boolean wanted) {
-        return property instanceof BooleanProperty bp && state.getValue(bp) == wanted;
-    }
+	private static boolean hasValue(Property<?> property, BlockState state, boolean wanted) {
+		return property instanceof BooleanProperty bp && state.getValue(bp) == wanted;
+	}
 }

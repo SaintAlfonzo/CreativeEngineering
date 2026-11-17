@@ -26,31 +26,31 @@ import java.util.Set;
 @Mixin(value = TagLoader.class, remap = false)
 public abstract class TagLoaderStripMixin<T> {
 
-    @Shadow(remap = false)
-    @Final
-    private String f_13449_; // directory, e.g. "tags/items"
+	@Shadow(remap = false)
+	@Final
+	private String f_13449_; // directory, e.g. "tags/items"
 
-    @Inject(method = "m_203898_", at = @At("RETURN"), remap = false)
-    private void moremooblooms$strip(Map<ResourceLocation, ?> unused, CallbackInfoReturnable<Map<ResourceLocation, Collection<T>>> cir) {
-        Set<ResourceLocation> removed = BuzzierBeesSet.tagRemovals(f_13449_);
-        if (removed.isEmpty()) return;
-        int stripped = 0;
-        for (Map.Entry<ResourceLocation, Collection<T>> e : cir.getReturnValue().entrySet()) {
-            Collection<T> values = e.getValue();
-            if (values.stream().noneMatch(v -> moremooblooms$isRemoved(v, removed))) continue;
-            ImmutableSet.Builder<T> kept = ImmutableSet.builder();
-            for (T v : values) {
-                if (!moremooblooms$isRemoved(v, removed)) kept.add(v);
-            }
-            e.setValue(kept.build());
-            stripped++;
-        }
-        if (stripped > 0) BuzzierBeesSet.logStripped(f_13449_, removed, stripped);
-    }
+	@Inject(method = "m_203898_", at = @At("RETURN"), remap = false)
+	private void moremooblooms$strip(Map<ResourceLocation, ?> unused, CallbackInfoReturnable<Map<ResourceLocation, Collection<T>>> cir) {
+		Set<ResourceLocation> removed = BuzzierBeesSet.tagRemovals(f_13449_);
+		if (removed.isEmpty()) return;
+		int stripped = 0;
+		for (Map.Entry<ResourceLocation, Collection<T>> e : cir.getReturnValue().entrySet()) {
+			Collection<T> values = e.getValue();
+			if (values.stream().noneMatch(v -> moremooblooms$isRemoved(v, removed))) continue;
+			ImmutableSet.Builder<T> kept = ImmutableSet.builder();
+			for (T v : values) {
+				if (!moremooblooms$isRemoved(v, removed)) kept.add(v);
+			}
+			e.setValue(kept.build());
+			stripped++;
+		}
+		if (stripped > 0) BuzzierBeesSet.logStripped(f_13449_, removed, stripped);
+	}
 
-    @Unique
-    private static boolean moremooblooms$isRemoved(Object value, Set<ResourceLocation> removed) {
-        return value instanceof Holder<?> holder
-                && holder.unwrapKey().map(k -> removed.contains(k.location())).orElse(false);
-    }
+	@Unique
+	private static boolean moremooblooms$isRemoved(Object value, Set<ResourceLocation> removed) {
+		return value instanceof Holder<?> holder
+				&& holder.unwrapKey().map(k -> removed.contains(k.location())).orElse(false);
+	}
 }

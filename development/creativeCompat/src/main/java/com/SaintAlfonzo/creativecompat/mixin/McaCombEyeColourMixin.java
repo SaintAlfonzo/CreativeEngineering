@@ -29,85 +29,85 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = VillagerEditorScreen.class, remap = false)
 public abstract class McaCombEyeColourMixin extends Screen {
 
-    @Unique
-    private static final String[] COMPAT_EYE_COLOURS = {
-            "brown", "pink", "amber", "purple", "green", "blue", "magenta", "cyan", "red", "grey", "yellow"
-    };
-    @Unique
-    private static final int COMPAT_FACES = 2 * COMPAT_EYE_COLOURS.length;
+	@Unique
+	private static final String[] COMPAT_EYE_COLOURS = {
+			"brown", "pink", "amber", "purple", "green", "blue", "magenta", "cyan", "red", "grey", "yellow"
+	};
+	@Unique
+	private static final int COMPAT_FACES = 2 * COMPAT_EYE_COLOURS.length;
 
-    @Shadow
-    @Final
-    protected VillagerEntityMCA villager;
+	@Shadow
+	@Final
+	protected VillagerEntityMCA villager;
 
-    @Unique
-    private boolean ce$eyesChanged;
+	@Unique
+	private boolean ce$eyesChanged;
 
-    private McaCombEyeColourMixin(Component title) {
-        super(title);
-    }
+	private McaCombEyeColourMixin(Component title) {
+		super(title);
+	}
 
-    @Inject(method = "setPage", at = @At("TAIL"), require = 1)
-    private void ce$addEyeButtons(String page, CallbackInfo ci) {
-        if (!((Object) this instanceof CombScreen) || !"hair".equals(page)) {
-            return;
-        }
-        int y = this.height / 2 - 100;
-        int x = this.width / 2 + 92;
-        Button label = this.addRenderableWidget(new Button(x + 20, y, 68, 20, ce$colourLabel(), b -> {
-        }));
-        label.active = false;
-        this.addRenderableWidget(new Button(x, y, 20, 20, Component.literal("<"), b -> {
-            ce$setFace(ce$shape(), (ce$colour() + COMPAT_EYE_COLOURS.length - 1) % COMPAT_EYE_COLOURS.length);
-            label.setMessage(ce$colourLabel());
-        }));
-        this.addRenderableWidget(new Button(x + 88, y, 20, 20, Component.literal(">"), b -> {
-            ce$setFace(ce$shape(), (ce$colour() + 1) % COMPAT_EYE_COLOURS.length);
-            label.setMessage(ce$colourLabel());
-        }));
-        this.addRenderableWidget(new Button(this.width / 2 - 192, y, 100, 20, ce$shapeLabel(), b -> {
-            ce$setFace(1 - ce$shape(), ce$colour());
-            b.setMessage(ce$shapeLabel());
-        }));
-    }
+	@Inject(method = "setPage", at = @At("TAIL"), require = 1)
+	private void ce$addEyeButtons(String page, CallbackInfo ci) {
+		if (!((Object) this instanceof CombScreen) || !"hair".equals(page)) {
+			return;
+		}
+		int y = this.height / 2 - 100;
+		int x = this.width / 2 + 92;
+		Button label = this.addRenderableWidget(new Button(x + 20, y, 68, 20, ce$colourLabel(), b -> {
+		}));
+		label.active = false;
+		this.addRenderableWidget(new Button(x, y, 20, 20, Component.literal("<"), b -> {
+			ce$setFace(ce$shape(), (ce$colour() + COMPAT_EYE_COLOURS.length - 1) % COMPAT_EYE_COLOURS.length);
+			label.setMessage(ce$colourLabel());
+		}));
+		this.addRenderableWidget(new Button(x + 88, y, 20, 20, Component.literal(">"), b -> {
+			ce$setFace(ce$shape(), (ce$colour() + 1) % COMPAT_EYE_COLOURS.length);
+			label.setMessage(ce$colourLabel());
+		}));
+		this.addRenderableWidget(new Button(this.width / 2 - 192, y, 100, 20, ce$shapeLabel(), b -> {
+			ce$setFace(1 - ce$shape(), ce$colour());
+			b.setMessage(ce$shapeLabel());
+		}));
+	}
 
-    @Inject(method = "syncVillagerData", at = @At("HEAD"), require = 1)
-    private void ce$chargeComb(CallbackInfo ci) {
-        if (this.ce$eyesChanged && (Object) this instanceof CombScreen) {
-            this.ce$eyesChanged = false;
-            NetworkHandler.sendToServer(new DamageItemMessage(MCA.locate("comb")));
-        }
-    }
+	@Inject(method = "syncVillagerData", at = @At("HEAD"), require = 1)
+	private void ce$chargeComb(CallbackInfo ci) {
+		if (this.ce$eyesChanged && (Object) this instanceof CombScreen) {
+			this.ce$eyesChanged = false;
+			NetworkHandler.sendToServer(new DamageItemMessage(MCA.locate("comb")));
+		}
+	}
 
-    @Unique
-    private int ce$face() {
-        return (int) Math.min(COMPAT_FACES - 1, Math.max(0, this.villager.getGenetics().getGene(Genetics.FACE) * COMPAT_FACES));
-    }
+	@Unique
+	private int ce$face() {
+		return (int) Math.min(COMPAT_FACES - 1, Math.max(0, this.villager.getGenetics().getGene(Genetics.FACE) * COMPAT_FACES));
+	}
 
-    @Unique
-    private int ce$shape() {
-        return ce$face() / COMPAT_EYE_COLOURS.length;
-    }
+	@Unique
+	private int ce$shape() {
+		return ce$face() / COMPAT_EYE_COLOURS.length;
+	}
 
-    @Unique
-    private int ce$colour() {
-        return ce$face() % COMPAT_EYE_COLOURS.length;
-    }
+	@Unique
+	private int ce$colour() {
+		return ce$face() % COMPAT_EYE_COLOURS.length;
+	}
 
-    @Unique
-    private void ce$setFace(int shape, int colour) {
-        int face = shape * COMPAT_EYE_COLOURS.length + colour;
-        this.villager.getGenetics().setGene(Genetics.FACE, (face + 0.5F) / COMPAT_FACES);
-        this.ce$eyesChanged = true;
-    }
+	@Unique
+	private void ce$setFace(int shape, int colour) {
+		int face = shape * COMPAT_EYE_COLOURS.length + colour;
+		this.villager.getGenetics().setGene(Genetics.FACE, (face + 0.5F) / COMPAT_FACES);
+		this.ce$eyesChanged = true;
+	}
 
-    @Unique
-    private Component ce$colourLabel() {
-        return Component.translatable("creativeengineering.mca_eyes.colour." + COMPAT_EYE_COLOURS[ce$colour()]);
-    }
+	@Unique
+	private Component ce$colourLabel() {
+		return Component.translatable("creativeengineering.mca_eyes.colour." + COMPAT_EYE_COLOURS[ce$colour()]);
+	}
 
-    @Unique
-    private Component ce$shapeLabel() {
-        return Component.translatable("creativeengineering.mca_eyes.shape", ce$shape() + 1);
-    }
+	@Unique
+	private Component ce$shapeLabel() {
+		return Component.translatable("creativeengineering.mca_eyes.shape", ce$shape() + 1);
+	}
 }

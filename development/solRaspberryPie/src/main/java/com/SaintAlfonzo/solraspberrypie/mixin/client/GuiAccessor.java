@@ -7,6 +7,6 @@ import org.spongepowered.asm.mixin.gen.Accessor;
 /** The action-bar line's timer: our queued lines wait while another message is showing (10). */
 @Mixin(Gui.class)
 public interface GuiAccessor {
-    @Accessor("overlayMessageTime")
-    int solrp$overlayMessageTime();
+	@Accessor("overlayMessageTime")
+	int solrp$overlayMessageTime();
 }
