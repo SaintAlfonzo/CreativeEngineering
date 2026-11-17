@@ -98,9 +98,10 @@ findings) become a plan, split and classify them and ask the open items before b
 - Logic tests without the game: plain `javac`/`java` harness (creativeCommon `build/classes`, Mojmap, an
   `FMLEnvironment` stub first on the classpath). Live checks: throwaway dedicated server in the
   scratchpad. Details: memory `patchermod-headless-smoke-test`, skill `scratch-test`.
-- **Scratch server tests default to the queue.** Add every live check a change needs to
-  [scratch_queue.md](feature_writeup/testing/scratch_queue.md) in the same session; only boot a scratch server when the
-  user says to. Writing rows and running them: skill `scratch-test`.
+- **Scratch server tests default to the queue.** Add every live check a change needs to its rows file
+  `feature_writeup/testing/rows/<CODE>.qb` in the same session (rendered into
+  [scratch_queue.md](feature_writeup/testing/scratch_queue.md) by `status_index.py`); only boot a scratch server when the
+  user says to. What a run needs: `qrun.py plan`. Writing rows and running them: skill `scratch-test`.
 - Script-only change: `/reload` is enough for server scripts; startup scripts, items and any
   Java change need a full restart.
 - The shared helpers (`neoCraftHelper.js`, `tag_helper.js`, `compost.js`, `trade_helper.js`) and the dicts

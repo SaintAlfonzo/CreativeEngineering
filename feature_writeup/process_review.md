@@ -196,3 +196,4 @@ Not planned: a recurring weekly consolidation pass. P1.6 and P2.5 do one-time cl
 - 2026-11-16: written (review session; read-only apart from this file, the plan and their index rows).
 - 2026-11-16 evening: owner rulings recorded in the plan; finding 7 now planned (P1.5); memory move done (P1.6).
 - 2026-11-16 night: P1.1 to P1.3 built; offline results in [plan_process_overhaul.md](plan_process_overhaul.md) (tests renamed PO- to PROC-: PO- belongs to potions.md). Section 3 table: 10 of the 12 tests repaired, 3 tests KNOWN on two real gaps (`largecontent/mod-additions #64`, `farming/wild-crops #11`); 27 guard_check hits: 2 real guards added, the rest tool gaps or G5 tables.
+- 2026-11-16 late night: plan Phase 2 built (finding 2: tiered queue, rows as data, expiry, pinned jars, resumable driver); offline results PROC-20 to PROC-28 in [plan_process_overhaul.md](plan_process_overhaul.md) test list.

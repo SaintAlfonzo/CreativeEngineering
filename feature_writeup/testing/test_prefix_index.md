@@ -164,7 +164,7 @@ same pass as the renames.
 | `PL-` | [placeable_food.md](../placeable_food.md) |  |  |  |
 | `PO-` | [potions.md](../potions.md) |  | briefs/potions_potions.md |  |
 | `POT-` | [flower_pots.md](../flower_pots.md) | SQ-POT (8) |  |  |
-| `PROC-` | [plan_process_overhaul.md](../plan_process_overhaul.md) | SQ-PROC (1) |  | new 2026-11-16 (the plan drafted PO-, owned by potions.md); process tooling, no writeup |
+| `PROC-` | [plan_process_overhaul.md](../plan_process_overhaul.md) | SQ-PROC (7), CQ-PROC (1) |  | new 2026-11-16 (the plan drafted PO-, owned by potions.md); process tooling, no writeup; offline tests PROC-20 to -28 (`tools/test_queue_rows.sh`) |
 | `PRT-` | [immersive_portals.md](../immersive_portals.md) | CQ-IP (4) |  | new 2026-11-16, was IP- (README only; item_physics.md owns IP-); queue SQ-IP-01 to -05 and CQ-IP in the Immersive Portals section become SQ-PRT, CQ-PRT |
 | `PS-` | [perf.md](../perf.md) | SQ-PS (7) |  | not in the README index yet |
 | `PT-` | [plantable.md](../plantable.md) | CQ-PT (1), SQ-PT (1) |  |  |
@@ -474,6 +474,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `SQ-SB31-` | 1 | none found | no doc names it: the first lint run assigns an owner |
 | `SQ-SF-` | 1 | [crops.md](../crops.md) |  |
 | `SQ-SG-` | 3 | [wthit_lines.md](../wthit_lines.md) |  |
+| `SQ-SMK-` | 56 | [plan_process_overhaul.md](../plan_process_overhaul.md) | new 2026-11-16: T1 smoke rows, one section per own jar (`testing/rows/SMK.qb`, P2.2); a series of its own because the rows belong to jars, not to one feature |
 | `SQ-SGF-` | 2 | [hearth_and_harvest.md](../hearth_and_harvest.md) |  |
 | `SQ-SK-` | 3 | [perf_suite.md](../perf_suite.md) |  |
 | `SQ-SLK-` | 5 | [plan_bugfix_1114.md](../plan_bugfix_1114.md) |  |

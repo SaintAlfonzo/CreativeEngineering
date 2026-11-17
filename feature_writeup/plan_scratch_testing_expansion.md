@@ -147,11 +147,11 @@ Effort: S (hours), M (a session), L (several sessions). Ranked by rows unblocked
 |---|---|---|---|
 | TX-40 | **Batch lint** (`qrun.py lint BATCH`): `grep -c` without `; true`, uses of captures set in skipped rows, `waitlog` patterns that also match the previous row's reply, unknown markers, coordinates outside forceloaded boxes | most BATCH-FAULTs before boot | S |
 | TX-41 | **`qrun.py dry`**: parse, substitute vars, print every command and check without a server | batch review by a second agent | S |
-| TX-42 | **Machine-readable rows**: a fenced `qb` block under each queue row (or one `.qb` per section next to the queue) so batches are extracted, not rewritten each run; generalise `hh_queue_to_qb.py` | batch writing time, stale batches | M |
+| TX-42 | **BUILT 2026-11-16** (process overhaul P2.1: `testing/rows/<CODE>.qb`, `qrows.py`; queue tables generated). **Machine-readable rows**: a fenced `qb` block under each queue row (or one `.qb` per section next to the queue) so batches are extracted, not rewritten each run; generalise `hh_queue_to_qb.py` | batch writing time, stale batches | M |
 | TX-43 | **Per-row isolation**: a `plot` directive that gives each row its own forceloaded area at a fixed offset and clears it, so rows do not share markers or coordinates | BATCH-FAULTs from shared world state, reruns on a fresh world | S |
-| TX-44 | **Resumable run driver** on the `perf_suite.py` pattern: state file, auto RUNNER.md updates, resume after a dead runner, server stopped when the runner dies | orchestration losses (r1114 phase 3) | M |
+| TX-44 | **BUILT 2026-11-16** (process overhaul P2.4: `qrun.py drive`, `qdrive.py`). **Resumable run driver** on the `perf_suite.py` pattern: state file, auto RUNNER.md updates, resume after a dead runner, server stopped when the runner dies | orchestration losses (r1114 phase 3) | M |
 | TX-45 | **Verdict file** written by qrun (JSON per row with checks, LOOK text, shots), and a judge step that only fills LOOKs; run doc tables generated from it | write-back time | S |
-| TX-46 | **Row staleness check**: flag rows whose writeup section or source files changed after the row was written | "row text out of date" findings | S |
+| TX-46 | **BUILT 2026-11-16** (process overhaul P2.3: `qrowlint.py`, also dead ids). **Row staleness check**: flag rows whose writeup section or source files changed after the row was written | "row text out of date" findings | S |
 
 ### 3.5 Not worth automating
 
@@ -160,7 +160,7 @@ Effort: S (hours), M (a session), L (several sessions). Ranked by rows unblocked
 
 ## 3.6 Follow-up plan steps, owner decisions 2026-11-16 (planned, not built)
 
-- **Judge reclassification (TX-45).** Planned, not built: `qrun.py judge RES ID --reclassify BATCH-FAULT --cause "text"`
+- **Judge reclassification (TX-45).** Built 2026-11-16 (process overhaul P2.4, offline test PROC-27): `qrun.py judge RES ID --reclassify BATCH-FAULT --cause "text"`
   may turn a row whose check FAILed into BATCH-FAULT. A non-empty recorded cause is required (who, when, why); the original
   failed check stays in `checks` with `ok: false`, and the row records `reclassified: {from, to, cause, by, at}` so tables
   show both. The tool refuses without a cause and never edits `checks`.
