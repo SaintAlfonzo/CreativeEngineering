@@ -10,6 +10,6 @@ import java.util.Map;
 /** TrashSlot's per-screen settings map, for {@code compat.TrashSlotCompat}. */
 @Mixin(value = TrashSlotSaveState.class, remap = false)
 public interface TrashSlotSaveStateAccessor {
-    @Accessor("cachedSettings")
-    Map<String, ContainerSettings> creativeengineering$getCachedSettings();
+	@Accessor("cachedSettings")
+	Map<String, ContainerSettings> creativeengineering$getCachedSettings();
 }

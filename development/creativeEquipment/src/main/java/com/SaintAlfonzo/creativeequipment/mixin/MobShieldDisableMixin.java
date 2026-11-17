@@ -34,23 +34,23 @@ import net.minecraftforge.common.ToolActions;
 @Mixin(Mob.class)
 public abstract class MobShieldDisableMixin {
 
-    @Inject(method = "m_21424_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$disableAnyShield(Player player, ItemStack weapon, ItemStack shield, CallbackInfo ci) {
-        try {
-            Mob self = (Mob) (Object) this;
-            if (!weapon.isEmpty() && !shield.isEmpty()
-                    && shield.canPerformAction(ToolActions.SHIELD_BLOCK)
-                    && weapon.canDisableShield(shield, player, self)) {
-                float chance = 0.25F + EnchantmentHelper.getBlockEfficiency(self) * 0.05F;
-                if (self.getRandom().nextFloat() < chance) {
-                    player.getCooldowns().addCooldown(shield.getItem(), ShieldConfig.disableCooldownTicks());
-                    player.stopUsingItem();
-                    self.level.broadcastEntityEvent(player, (byte) 30);
-                }
-            }
-            ci.cancel();
-        } catch (Throwable ignored) {
-            // fall through to vanilla's own method
-        }
-    }
+	@Inject(method = "m_21424_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$disableAnyShield(Player player, ItemStack weapon, ItemStack shield, CallbackInfo ci) {
+		try {
+			Mob self = (Mob) (Object) this;
+			if (!weapon.isEmpty() && !shield.isEmpty()
+					&& shield.canPerformAction(ToolActions.SHIELD_BLOCK)
+					&& weapon.canDisableShield(shield, player, self)) {
+				float chance = 0.25F + EnchantmentHelper.getBlockEfficiency(self) * 0.05F;
+				if (self.getRandom().nextFloat() < chance) {
+					player.getCooldowns().addCooldown(shield.getItem(), ShieldConfig.disableCooldownTicks());
+					player.stopUsingItem();
+					self.level.broadcastEntityEvent(player, (byte) 30);
+				}
+			}
+			ci.cancel();
+		} catch (Throwable ignored) {
+			// fall through to vanilla's own method
+		}
+	}
 }

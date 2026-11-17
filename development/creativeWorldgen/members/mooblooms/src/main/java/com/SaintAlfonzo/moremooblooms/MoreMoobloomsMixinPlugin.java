@@ -11,10 +11,10 @@ import java.util.Map;
  */
 public class MoreMoobloomsMixinPlugin extends GatedMixinPlugin {
 
-    public MoreMoobloomsMixinPlugin() {
-        super("[moremooblooms]", Map.of(
-                "ItemHiddenMixin", List.of("buzzier_bees"),
-                "TagLoaderStripMixin", List.of("buzzier_bees"),
-                "MobSunBurnMixin", List.of("buzzier_bees")));
-    }
+	public MoreMoobloomsMixinPlugin() {
+		super("[moremooblooms]", Map.of(
+				"ItemHiddenMixin", List.of("buzzier_bees"),
+				"TagLoaderStripMixin", List.of("buzzier_bees"),
+				"MobSunBurnMixin", List.of("buzzier_bees")));
+	}
 }

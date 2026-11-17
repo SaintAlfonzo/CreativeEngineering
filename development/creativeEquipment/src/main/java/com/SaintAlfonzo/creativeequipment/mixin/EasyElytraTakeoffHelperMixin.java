@@ -31,14 +31,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ForgeElytraEventHelper.class, remap = false)
 public class EasyElytraTakeoffHelperMixin {
 
-    @Inject(method = "isWearingAnElytra", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$acceptModdedElytra(Player player, CallbackInfoReturnable<Boolean> cir) {
-        for (ItemStack stack : player.getArmorSlots()) {
-            if (stack.isEmpty()) continue;
-            if (stack.is(ElytraChestplates.TAG) || stack.canElytraFly(player)) {
-                cir.setReturnValue(Boolean.TRUE);
-                return;
-            }
-        }
-    }
+	@Inject(method = "isWearingAnElytra", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$acceptModdedElytra(Player player, CallbackInfoReturnable<Boolean> cir) {
+		for (ItemStack stack : player.getArmorSlots()) {
+			if (stack.isEmpty()) continue;
+			if (stack.is(ElytraChestplates.TAG) || stack.canElytraFly(player)) {
+				cir.setReturnValue(Boolean.TRUE);
+				return;
+			}
+		}
+	}
 }

@@ -40,112 +40,112 @@ import java.util.Set;
  */
 @Mod.EventBusSubscriber(modid = CreativeCommon.MODID, value = Dist.CLIENT)
 public final class LoadingTipBar {
-    private static final Component LABEL = Component.translatable("creativecommon.loading_tips.label");
-    private static final int LABEL_COLOR = 0x3AB35A; // Loading Screen Tips' green
-    private static final int TEXT_COLOR = 0xFFFFFF;
-    private static final int BAR_COLOR = 0x90000000;
-    private static final int MAX_WIDTH = 360;
-    private static final int PAD = 4;
+	private static final Component LABEL = Component.translatable("creativecommon.loading_tips.label");
+	private static final int LABEL_COLOR = 0x3AB35A; // Loading Screen Tips' green
+	private static final int TEXT_COLOR = 0xFFFFFF;
+	private static final int BAR_COLOR = 0x90000000;
+	private static final int MAX_WIDTH = 360;
+	private static final int PAD = 4;
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    /** Gap after which the next loading screen counts as a new join (new tip). */
-    private static final long JOIN_GAP_MS = 5000;
-    /** Dirt-screen titles that open a join: reading a world, creating one, validating its datapacks. */
-    private static final Set<String> JOIN_DIRT_TITLES =
-            Set.of("selectWorld.data_read", "createWorld.preparing", "dataPack.validation.working");
-    /** Dirt-screen titles that never get the bar (leaving a world). */
-    private static final Set<String> NO_BAR_DIRT_TITLES = Set.of("menu.savingLevel");
+	private static final Logger LOGGER = LogUtils.getLogger();
+	/** Gap after which the next loading screen counts as a new join (new tip). */
+	private static final long JOIN_GAP_MS = 5000;
+	/** Dirt-screen titles that open a join: reading a world, creating one, validating its datapacks. */
+	private static final Set<String> JOIN_DIRT_TITLES =
+			Set.of("selectWorld.data_read", "createWorld.preparing", "dataPack.validation.working");
+	/** Dirt-screen titles that never get the bar (leaving a world). */
+	private static final Set<String> NO_BAR_DIRT_TITLES = Set.of("menu.savingLevel");
 
-    private static final List<String> deck = new ArrayList<>();
-    private static int next;
-    private static Class<?> lastScreen;
-    private static String current;
-    private static long shownAt;
-    private static long lastLoadingAt;
+	private static final List<String> deck = new ArrayList<>();
+	private static int next;
+	private static Class<?> lastScreen;
+	private static String current;
+	private static long shownAt;
+	private static long lastLoadingAt;
 
-    private LoadingTipBar() {}
+	private LoadingTipBar() {}
 
-    /** The tip list changed (resource reload): start a fresh deck. */
-    static synchronized void reset() {
-        deck.clear();
-        next = 0;
-        current = null;
-    }
+	/** The tip list changed (resource reload): start a fresh deck. */
+	static synchronized void reset() {
+		deck.clear();
+		next = 0;
+		current = null;
+	}
 
-    private static synchronized String nextTip() {
-        List<String> tips = LoadingTips.tips();
-        if (tips.isEmpty()) return null;
-        if (next >= deck.size()) {
-            String last = current;
-            deck.clear();
-            deck.addAll(tips);
-            Collections.shuffle(deck);
-            // Never show the same tip twice in a row across a reshuffle.
-            if (deck.size() > 1 && deck.get(0).equals(last)) Collections.swap(deck, 0, deck.size() - 1);
-            next = 0;
-        }
-        return deck.get(next++);
-    }
+	private static synchronized String nextTip() {
+		List<String> tips = LoadingTips.tips();
+		if (tips.isEmpty()) return null;
+		if (next >= deck.size()) {
+			String last = current;
+			deck.clear();
+			deck.addAll(tips);
+			Collections.shuffle(deck);
+			// Never show the same tip twice in a row across a reshuffle.
+			if (deck.size() > 1 && deck.get(0).equals(last)) Collections.swap(deck, 0, deck.size() - 1);
+			next = 0;
+		}
+		return deck.get(next++);
+	}
 
-    private static String titleKey(Screen s) {
-        return s.getTitle().getContents() instanceof TranslatableContents t ? t.getKey() : "";
-    }
+	private static String titleKey(Screen s) {
+		return s.getTitle().getContents() instanceof TranslatableContents t ? t.getKey() : "";
+	}
 
-    /** The allowlist. A screen that starts a join shows the bar at any time. */
-    private static boolean startsJoin(Screen s) {
-        return s instanceof ConnectScreen || s instanceof LevelLoadingScreen || s instanceof ReceivingLevelScreen
-                || s instanceof GenericDirtMessageScreen && JOIN_DIRT_TITLES.contains(titleKey(s));
-    }
+	/** The allowlist. A screen that starts a join shows the bar at any time. */
+	private static boolean startsJoin(Screen s) {
+		return s instanceof ConnectScreen || s instanceof LevelLoadingScreen || s instanceof ReceivingLevelScreen
+				|| s instanceof GenericDirtMessageScreen && JOIN_DIRT_TITLES.contains(titleKey(s));
+	}
 
-    /** Screens that also show outside a join, so they get the bar only inside one. */
-    private static boolean continuesJoin(Screen s) {
-        return s instanceof ProgressScreen
-                || s instanceof GenericDirtMessageScreen && !NO_BAR_DIRT_TITLES.contains(titleKey(s));
-    }
+	/** Screens that also show outside a join, so they get the bar only inside one. */
+	private static boolean continuesJoin(Screen s) {
+		return s instanceof ProgressScreen
+				|| s instanceof GenericDirtMessageScreen && !NO_BAR_DIRT_TITLES.contains(titleKey(s));
+	}
 
-    @SubscribeEvent
-    public static void onScreenRender(ScreenEvent.Render.Post event) {
-        Screen s = event.getScreen();
-        long now = System.currentTimeMillis();
-        boolean inJoin = now - lastLoadingAt < JOIN_GAP_MS;
-        if (!(startsJoin(s) || inJoin && continuesJoin(s)) || !CommonClientConfig.LOADING_TIPS.enabled.get()) return;
-        long cycle = CommonClientConfig.LOADING_TIPS.cycleSeconds.get() * 1000L;
-        if (!inJoin || current == null || now - shownAt >= cycle) {
-            current = nextTip();
-            shownAt = now;
-        }
-        lastLoadingAt = now;
-        if (s.getClass() != lastScreen) {
-            lastScreen = s.getClass();
-            LOGGER.info("Loading tips: bar on {} ({})", lastScreen.getSimpleName(), titleKey(s));
-        }
-        if (current == null) return;
+	@SubscribeEvent
+	public static void onScreenRender(ScreenEvent.Render.Post event) {
+		Screen s = event.getScreen();
+		long now = System.currentTimeMillis();
+		boolean inJoin = now - lastLoadingAt < JOIN_GAP_MS;
+		if (!(startsJoin(s) || inJoin && continuesJoin(s)) || !CommonClientConfig.LOADING_TIPS.enabled.get()) return;
+		long cycle = CommonClientConfig.LOADING_TIPS.cycleSeconds.get() * 1000L;
+		if (!inJoin || current == null || now - shownAt >= cycle) {
+			current = nextTip();
+			shownAt = now;
+		}
+		lastLoadingAt = now;
+		if (s.getClass() != lastScreen) {
+			lastScreen = s.getClass();
+			LOGGER.info("Loading tips: bar on {} ({})", lastScreen.getSimpleName(), titleKey(s));
+		}
+		if (current == null) return;
 
-        Font font = Minecraft.getInstance().font;
-        Component text = I18n.exists(current) ? Component.translatable(current) : Component.literal(current);
-        int width = Math.min(MAX_WIDTH, s.width - 40);
-        int labelWidth = font.width(LABEL) + 4;
-        List<FormattedCharSequence> lines = font.split(text, width - labelWidth);
-        int barHeight = lines.size() * font.lineHeight + PAD * 2;
-        int left = (s.width - width) / 2 - PAD;
-        int top = s.height - barHeight - 12;
-        // Never cover a button (the connect screen's Cancel): sit below the lowest widget, or skip the frame.
-        int widgetBottom = 0;
-        for (GuiEventListener c : s.children()) {
-            if (c instanceof AbstractWidget w && w.visible) widgetBottom = Math.max(widgetBottom, w.y + w.getHeight());
-        }
-        if (top < widgetBottom + 4) {
-            top = widgetBottom + 4;
-            if (top + barHeight > s.height) return;
-        }
+		Font font = Minecraft.getInstance().font;
+		Component text = I18n.exists(current) ? Component.translatable(current) : Component.literal(current);
+		int width = Math.min(MAX_WIDTH, s.width - 40);
+		int labelWidth = font.width(LABEL) + 4;
+		List<FormattedCharSequence> lines = font.split(text, width - labelWidth);
+		int barHeight = lines.size() * font.lineHeight + PAD * 2;
+		int left = (s.width - width) / 2 - PAD;
+		int top = s.height - barHeight - 12;
+		// Never cover a button (the connect screen's Cancel): sit below the lowest widget, or skip the frame.
+		int widgetBottom = 0;
+		for (GuiEventListener c : s.children()) {
+			if (c instanceof AbstractWidget w && w.visible) widgetBottom = Math.max(widgetBottom, w.y + w.getHeight());
+		}
+		if (top < widgetBottom + 4) {
+			top = widgetBottom + 4;
+			if (top + barHeight > s.height) return;
+		}
 
-        PoseStack pose = event.getPoseStack();
-        GuiComponent.fill(pose, left, top, left + width + PAD * 2, top + barHeight, BAR_COLOR);
-        int y = top + PAD;
-        font.drawShadow(pose, LABEL, left + PAD, y, LABEL_COLOR);
-        for (FormattedCharSequence line : lines) {
-            font.drawShadow(pose, line, left + PAD + labelWidth, y, TEXT_COLOR);
-            y += font.lineHeight;
-        }
-    }
+		PoseStack pose = event.getPoseStack();
+		GuiComponent.fill(pose, left, top, left + width + PAD * 2, top + barHeight, BAR_COLOR);
+		int y = top + PAD;
+		font.drawShadow(pose, LABEL, left + PAD, y, LABEL_COLOR);
+		for (FormattedCharSequence line : lines) {
+			font.drawShadow(pose, line, left + PAD + labelWidth, y, TEXT_COLOR);
+			y += font.lineHeight;
+		}
+	}
 }

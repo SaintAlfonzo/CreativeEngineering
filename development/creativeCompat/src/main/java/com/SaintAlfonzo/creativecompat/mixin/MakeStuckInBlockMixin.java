@@ -23,16 +23,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = Entity.class, remap = false)
 public abstract class MakeStuckInBlockMixin {
 
-    @Inject(method = "m_7601_", at = @At("HEAD"), cancellable = true)
-    private void creativecompat$passThroughStuck(BlockState state, Vec3 multiplier, CallbackInfo ci) {
-        boolean cancel;
-        try {
-            cancel = PassThrough.cancelsStuck((Entity) (Object) this, state);
-        } catch (Throwable t) {
-            cancel = false; // keep vanilla's slowdown if the lookup breaks
-        }
-        if (cancel) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_7601_", at = @At("HEAD"), cancellable = true)
+	private void creativecompat$passThroughStuck(BlockState state, Vec3 multiplier, CallbackInfo ci) {
+		boolean cancel;
+		try {
+			cancel = PassThrough.cancelsStuck((Entity) (Object) this, state);
+		} catch (Throwable t) {
+			cancel = false; // keep vanilla's slowdown if the lookup breaks
+		}
+		if (cancel) {
+			ci.cancel();
+		}
+	}
 }

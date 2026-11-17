@@ -21,10 +21,10 @@ import java.util.List;
  */
 public final class MealSlotTooltip {
 
-    private MealSlotTooltip() {}
+	private MealSlotTooltip() {}
 
-    public static void render(AbstractContainerScreen<?> screen, PoseStack poseStack, List<Component> lines, int x, int y) {
-        Slot slot = screen.getSlotUnderMouse();
-        screen.renderComponentTooltip(poseStack, lines, x, y, slot != null ? slot.getItem() : ItemStack.EMPTY);
-    }
+	public static void render(AbstractContainerScreen<?> screen, PoseStack poseStack, List<Component> lines, int x, int y) {
+		Slot slot = screen.getSlotUnderMouse();
+		screen.renderComponentTooltip(poseStack, lines, x, y, slot != null ? slot.getItem() : ItemStack.EMPTY);
+	}
 }

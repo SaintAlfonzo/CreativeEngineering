@@ -9,11 +9,11 @@ import java.util.List;
  * spice rack and tool rack stay as they are. Keep in step with tools/gen_cfb_racks.py.
  */
 public final class RackWoods {
-    public static final List<String> WOODS = List.of(
-            "oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "crimson", "warped",
-            "twisted", "dreamwood", "livingwood", "smoked", "treated_wood", "vertical_treated_wood", "rubberwood",
-            "ancient", "azalea", "bamboo", "driftwood");
+	public static final List<String> WOODS = List.of(
+			"oak", "spruce", "birch", "jungle", "acacia", "dark_oak", "mangrove", "crimson", "warped",
+			"twisted", "dreamwood", "livingwood", "smoked", "treated_wood", "vertical_treated_wood", "rubberwood",
+			"ancient", "azalea", "bamboo", "driftwood");
 
-    private RackWoods() {
-    }
+	private RackWoods() {
+	}
 }

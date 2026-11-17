@@ -28,41 +28,41 @@ import vazkii.quark.content.world.undergroundstyle.base.UndergroundStyleGenerato
 @Mixin(value = BasicUndergroundStyle.class, remap = false)
 public abstract class QuarkPermafrostStyleMixin {
 
-    @Shadow(remap = false) public BlockState floorState;
-    @Shadow(remap = false) public BlockState ceilingState;
+	@Shadow(remap = false) public BlockState floorState;
+	@Shadow(remap = false) public BlockState ceilingState;
 
-    @Unique private static BlockState creativeengineering$iwPermafrost;
-    @Unique private BlockState creativeengineering$quarkFloor;
-    @Unique private BlockState creativeengineering$quarkCeiling;
+	@Unique private static BlockState creativeengineering$iwPermafrost;
+	@Unique private BlockState creativeengineering$quarkFloor;
+	@Unique private BlockState creativeengineering$quarkCeiling;
 
-    @Inject(method = "fillFloor", at = @At("HEAD"), remap = false)
-    private void creativeengineering$floor(UndergroundStyleGenerator.Context ctx, BlockPos pos, BlockState state, CallbackInfo ci) {
-        creativeengineering$swap();
-    }
+	@Inject(method = "fillFloor", at = @At("HEAD"), remap = false)
+	private void creativeengineering$floor(UndergroundStyleGenerator.Context ctx, BlockPos pos, BlockState state, CallbackInfo ci) {
+		creativeengineering$swap();
+	}
 
-    @Inject(method = "fillCeiling", at = @At("HEAD"), remap = false)
-    private void creativeengineering$ceiling(UndergroundStyleGenerator.Context ctx, BlockPos pos, BlockState state, CallbackInfo ci) {
-        creativeengineering$swap();
-    }
+	@Inject(method = "fillCeiling", at = @At("HEAD"), remap = false)
+	private void creativeengineering$ceiling(UndergroundStyleGenerator.Context ctx, BlockPos pos, BlockState state, CallbackInfo ci) {
+		creativeengineering$swap();
+	}
 
-    @Unique
-    private void creativeengineering$swap() {
-        if (!((Object) this instanceof PermafrostStyle)) return;
-        if (creativeengineering$quarkFloor == null) {
-            creativeengineering$quarkFloor = floorState;
-            creativeengineering$quarkCeiling = ceilingState;
-        }
-        if (!WorldgenConfig.permafrostMergeEnabled()) {
-            floorState = creativeengineering$quarkFloor;
-            ceilingState = creativeengineering$quarkCeiling;
-            return;
-        }
-        if (creativeengineering$iwPermafrost == null) {
-            Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("immersive_weathering", "permafrost"));
-            if (b == null || b == Blocks.AIR) return;
-            creativeengineering$iwPermafrost = b.defaultBlockState();
-        }
-        floorState = creativeengineering$iwPermafrost;
-        ceilingState = creativeengineering$iwPermafrost;
-    }
+	@Unique
+	private void creativeengineering$swap() {
+		if (!((Object) this instanceof PermafrostStyle)) return;
+		if (creativeengineering$quarkFloor == null) {
+			creativeengineering$quarkFloor = floorState;
+			creativeengineering$quarkCeiling = ceilingState;
+		}
+		if (!WorldgenConfig.permafrostMergeEnabled()) {
+			floorState = creativeengineering$quarkFloor;
+			ceilingState = creativeengineering$quarkCeiling;
+			return;
+		}
+		if (creativeengineering$iwPermafrost == null) {
+			Block b = ForgeRegistries.BLOCKS.getValue(new ResourceLocation("immersive_weathering", "permafrost"));
+			if (b == null || b == Blocks.AIR) return;
+			creativeengineering$iwPermafrost = b.defaultBlockState();
+		}
+		floorState = creativeengineering$iwPermafrost;
+		ceilingState = creativeengineering$iwPermafrost;
+	}
 }

@@ -8,8 +8,8 @@ import javax.annotation.Nullable;
  */
 public interface PassChunkHolder {
 
-    @Nullable
-    PassCountData creativecompat$passCounts();
+	@Nullable
+	PassCountData creativecompat$passCounts();
 
-    void creativecompat$setPassCounts(PassCountData data);
+	void creativecompat$setPassCounts(PassCountData data);
 }

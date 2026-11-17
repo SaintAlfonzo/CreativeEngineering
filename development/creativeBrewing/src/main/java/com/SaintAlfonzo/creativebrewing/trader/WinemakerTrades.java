@@ -20,51 +20,51 @@ import org.slf4j.Logger;
  */
 public final class WinemakerTrades {
 
-    private static final Logger LOG = LogUtils.getLogger();
-    /** The Vinery backport's Winemaker. */
-    private static final String WINEMAKER_CLASS = "net.satisfy.vinery.core.entity.WanderingWinemakerEntity";
+	private static final Logger LOG = LogUtils.getLogger();
+	/** The Vinery backport's Winemaker. */
+	private static final String WINEMAKER_CLASS = "net.satisfy.vinery.core.entity.WanderingWinemakerEntity";
 
-    private static VillagerTrades.ItemListing[] original;
-    private static final List<VillagerTrades.ItemListing> extra = new ArrayList<>();
+	private static VillagerTrades.ItemListing[] original;
+	private static final List<VillagerTrades.ItemListing> extra = new ArrayList<>();
 
-    private WinemakerTrades() {}
+	private WinemakerTrades() {}
 
-    public static synchronized void reset() {
-        extra.clear();
-        apply();
-    }
+	public static synchronized void reset() {
+		extra.clear();
+		apply();
+	}
 
-    public static synchronized boolean add(VillagerTrades.ItemListing listing) {
-        if (listing == null) return false;
-        extra.add(listing);
-        return apply();
-    }
+	public static synchronized boolean add(VillagerTrades.ItemListing listing) {
+		if (listing == null) return false;
+		extra.add(listing);
+		return apply();
+	}
 
-    /** Listings in the Winemaker's pool right now (original + extras), 0 without Vinery. */
-    public static synchronized int size() {
-        Map<Integer, VillagerTrades.ItemListing[]> trades = trades();
-        VillagerTrades.ItemListing[] arr = trades == null ? null : trades.get(1);
-        return arr == null ? 0 : arr.length;
-    }
+	/** Listings in the Winemaker's pool right now (original + extras), 0 without Vinery. */
+	public static synchronized int size() {
+		Map<Integer, VillagerTrades.ItemListing[]> trades = trades();
+		VillagerTrades.ItemListing[] arr = trades == null ? null : trades.get(1);
+		return arr == null ? 0 : arr.length;
+	}
 
-    private static boolean apply() {
-        Map<Integer, VillagerTrades.ItemListing[]> trades = trades();
-        if (trades == null) return false;
-        if (original == null) original = trades.get(1);
-        if (original == null) return false;
-        VillagerTrades.ItemListing[] arr = Arrays.copyOf(original, original.length + extra.size());
-        for (int k = 0; k < extra.size(); k++) arr[original.length + k] = extra.get(k);
-        trades.put(1, arr);
-        return true;
-    }
+	private static boolean apply() {
+		Map<Integer, VillagerTrades.ItemListing[]> trades = trades();
+		if (trades == null) return false;
+		if (original == null) original = trades.get(1);
+		if (original == null) return false;
+		VillagerTrades.ItemListing[] arr = Arrays.copyOf(original, original.length + extra.size());
+		for (int k = 0; k < extra.size(); k++) arr[original.length + k] = extra.get(k);
+		trades.put(1, arr);
+		return true;
+	}
 
-    @SuppressWarnings("unchecked")
-    private static Map<Integer, VillagerTrades.ItemListing[]> trades() {
-        try {
-            return (Map<Integer, VillagerTrades.ItemListing[]>) Class.forName(WINEMAKER_CLASS).getField("TRADES").get(null);
-        } catch (ReflectiveOperationException | ClassCastException | LinkageError e) {
-            LOG.warn("[trades] Wandering Winemaker pool not reachable ({}); Vinery missing or changed", e.toString());
-            return null;
-        }
-    }
+	@SuppressWarnings("unchecked")
+	private static Map<Integer, VillagerTrades.ItemListing[]> trades() {
+		try {
+			return (Map<Integer, VillagerTrades.ItemListing[]>) Class.forName(WINEMAKER_CLASS).getField("TRADES").get(null);
+		} catch (ReflectiveOperationException | ClassCastException | LinkageError e) {
+			LOG.warn("[trades] Wandering Winemaker pool not reachable ({}); Vinery missing or changed", e.toString());
+			return null;
+		}
+	}
 }

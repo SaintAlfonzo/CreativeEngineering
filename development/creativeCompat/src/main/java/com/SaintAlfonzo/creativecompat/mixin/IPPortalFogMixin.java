@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = FogRenderer.class, remap = false)
 public abstract class IPPortalFogMixin {
 
-    @Inject(method = "m_234172_", at = @At("TAIL"), remap = false, require = 1)
-    private static void creativecompat$portalFog(Camera camera, FogRenderer.FogMode mode, float renderDistance,
-                                                 boolean thickFog, float partialTick, CallbackInfo ci) {
-        if (mode == FogRenderer.FogMode.FOG_TERRAIN) PortalFog.apply();
-    }
+	@Inject(method = "m_234172_", at = @At("TAIL"), remap = false, require = 1)
+	private static void creativecompat$portalFog(Camera camera, FogRenderer.FogMode mode, float renderDistance,
+												 boolean thickFog, float partialTick, CallbackInfo ci) {
+		if (mode == FogRenderer.FogMode.FOG_TERRAIN) PortalFog.apply();
+	}
 }

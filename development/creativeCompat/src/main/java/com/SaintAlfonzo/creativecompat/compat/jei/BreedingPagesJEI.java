@@ -39,66 +39,66 @@ import net.minecraftforge.registries.ForgeRegistries;
 @JeiPlugin
 public class BreedingPagesJEI implements IModPlugin {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.MOD_ID, "breeding_pages");
-    private static final String JEBR = "justenoughbreeding";
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.MOD_ID, "breeding_pages");
+	private static final String JEBR = "justenoughbreeding";
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return ID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return ID;
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        JeiGate.run("breedingPages", () -> {
-            try {
-                register(registration);
-            } catch (ReflectiveOperationException e) {
-                LOGGER.warn("[jei] Just Enough Breeding extra pages skipped: {}", e.toString());
-            }
-        });
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		JeiGate.run("breedingPages", () -> {
+			try {
+				register(registration);
+			} catch (ReflectiveOperationException e) {
+				LOGGER.warn("[jei] Just Enough Breeding extra pages skipped: {}", e.toString());
+			}
+		});
+	}
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    private void register(IRecipeRegistration registration) throws ReflectiveOperationException {
-        if (!ModList.get().isLoaded(JEBR)) {
-            return;
-        }
-        Class<?> category = Class.forName("com.christofmeg.justenoughbreeding.jei.BreedingCategory");
-        RecipeType type = (RecipeType) category.getField("TYPE").get(null);
-        Class<?> recipe = Class.forName("com.christofmeg.justenoughbreeding.recipe.BreedingRecipe");
-        Constructor<?> ctor = recipe.getConstructor(EntityType.class, Ingredient.class, ItemStack.class, Boolean.class,
-                Ingredient.class, Ingredient.class, Boolean.class);
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	private void register(IRecipeRegistration registration) throws ReflectiveOperationException {
+		if (!ModList.get().isLoaded(JEBR)) {
+			return;
+		}
+		Class<?> category = Class.forName("com.christofmeg.justenoughbreeding.jei.BreedingCategory");
+		RecipeType type = (RecipeType) category.getField("TYPE").get(null);
+		Class<?> recipe = Class.forName("com.christofmeg.justenoughbreeding.recipe.BreedingRecipe");
+		Constructor<?> ctor = recipe.getConstructor(EntityType.class, Ingredient.class, ItemStack.class, Boolean.class,
+				Ingredient.class, Ingredient.class, Boolean.class);
 
-        List<Object> out = new ArrayList<>();
-        add(out, ctor, "untitledduckmod:duck",
-                Ingredient.of(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS));
-        add(out, ctor, "untitledduckmod:goose",
-                Ingredient.of(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS,
-                        Items.KELP, Items.SEAGRASS));
-        add(out, ctor, "buzzier_bees:grizzly_bear",
-                Ingredient.of(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("buzzier_bees", "grizzly_bear_food"))));
-        add(out, ctor, "fungidelight:inky_cap_cow", Ingredient.of(Items.WHEAT));
-        add(out, ctor, "fungidelight:morel_cow", Ingredient.of(Items.WHEAT));
-        add(out, ctor, "cozys-improved-cats:improved_cat", Ingredient.of(Items.COD, Items.SALMON));
+		List<Object> out = new ArrayList<>();
+		add(out, ctor, "untitledduckmod:duck",
+				Ingredient.of(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS));
+		add(out, ctor, "untitledduckmod:goose",
+				Ingredient.of(Items.WHEAT_SEEDS, Items.MELON_SEEDS, Items.PUMPKIN_SEEDS, Items.BEETROOT_SEEDS,
+						Items.KELP, Items.SEAGRASS));
+		add(out, ctor, "buzzier_bees:grizzly_bear",
+				Ingredient.of(TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("buzzier_bees", "grizzly_bear_food"))));
+		add(out, ctor, "fungidelight:inky_cap_cow", Ingredient.of(Items.WHEAT));
+		add(out, ctor, "fungidelight:morel_cow", Ingredient.of(Items.WHEAT));
+		add(out, ctor, "cozys-improved-cats:improved_cat", Ingredient.of(Items.COD, Items.SALMON));
 
-        if (!out.isEmpty()) {
-            registration.addRecipes(type, out);
-        }
-        LOGGER.info("[jei] Just Enough Breeding: {} extra breeding page(s)", out.size());
-    }
+		if (!out.isEmpty()) {
+			registration.addRecipes(type, out);
+		}
+		LOGGER.info("[jei] Just Enough Breeding: {} extra breeding page(s)", out.size());
+	}
 
-    private static void add(List<Object> out, Constructor<?> ctor, String entityId, Ingredient food)
-            throws ReflectiveOperationException {
-        ResourceLocation id = new ResourceLocation(entityId);
-        if (!ModList.get().isLoaded(id.getNamespace()) || !ForgeRegistries.ENTITY_TYPES.containsKey(id)) {
-            return;
-        }
-        EntityType<?> entity = ForgeRegistries.ENTITY_TYPES.getValue(id);
-        ForgeSpawnEggItem egg = entity == null ? null : ForgeSpawnEggItem.fromEntityType(entity) instanceof ForgeSpawnEggItem f ? f : null;
-        if (egg == null || food.isEmpty()) {
-            return;
-        }
-        out.add(ctor.newInstance(entity, food, new ItemStack(egg), false, Ingredient.EMPTY, Ingredient.EMPTY, false));
-    }
+	private static void add(List<Object> out, Constructor<?> ctor, String entityId, Ingredient food)
+			throws ReflectiveOperationException {
+		ResourceLocation id = new ResourceLocation(entityId);
+		if (!ModList.get().isLoaded(id.getNamespace()) || !ForgeRegistries.ENTITY_TYPES.containsKey(id)) {
+			return;
+		}
+		EntityType<?> entity = ForgeRegistries.ENTITY_TYPES.getValue(id);
+		ForgeSpawnEggItem egg = entity == null ? null : ForgeSpawnEggItem.fromEntityType(entity) instanceof ForgeSpawnEggItem f ? f : null;
+		if (egg == null || food.isEmpty()) {
+			return;
+		}
+		out.add(ctor.newInstance(entity, food, new ItemStack(egg), false, Ingredient.EMPTY, Ingredient.EMPTY, false));
+	}
 }

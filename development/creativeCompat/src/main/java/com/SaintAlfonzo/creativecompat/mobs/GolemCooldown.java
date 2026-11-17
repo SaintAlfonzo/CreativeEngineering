@@ -28,85 +28,85 @@ import java.util.Optional;
  * the world. Config: {@code [golems]} in creativecompat-common.toml.
  */
 public final class GolemCooldown extends SavedData {
-    static final int RADIUS = 64;
-    private static final String NAME = "creativecompat_golem_cooldown";
+	static final int RADIUS = 64;
+	private static final String NAME = "creativecompat_golem_cooldown";
 
-    private final Map<Long, Deque<Long>> deaths = new HashMap<>();
-    private final Map<Long, Long> blockedUntil = new HashMap<>();
+	private final Map<Long, Deque<Long>> deaths = new HashMap<>();
+	private final Map<Long, Long> blockedUntil = new HashMap<>();
 
-    private static GolemCooldown get(ServerLevel level) {
-        return level.getDataStorage().computeIfAbsent(GolemCooldown::load, GolemCooldown::new, NAME);
-    }
+	private static GolemCooldown get(ServerLevel level) {
+		return level.getDataStorage().computeIfAbsent(GolemCooldown::load, GolemCooldown::new, NAME);
+	}
 
-    static Optional<BlockPos> village(ServerLevel level, BlockPos at) {
-        return level.getPoiManager().findClosest(h -> h.is(PoiTypes.MEETING), at, RADIUS, PoiManager.Occupancy.ANY);
-    }
+	static Optional<BlockPos> village(ServerLevel level, BlockPos at) {
+		return level.getPoiManager().findClosest(h -> h.is(PoiTypes.MEETING), at, RADIUS, PoiManager.Occupancy.ANY);
+	}
 
-    public static void onDeath(LivingDeathEvent event) {
-        if (!(event.getEntity() instanceof IronGolem golem) || golem.isPlayerCreated()) return;
-        if (!(golem.level instanceof ServerLevel level) || !CompatConfig.Golems.on()) return;
-        village(level, golem.blockPosition()).ifPresent(v -> get(level).record(v.asLong(), level.getGameTime()));
-    }
+	public static void onDeath(LivingDeathEvent event) {
+		if (!(event.getEntity() instanceof IronGolem golem) || golem.isPlayerCreated()) return;
+		if (!(golem.level instanceof ServerLevel level) || !CompatConfig.Golems.on()) return;
+		village(level, golem.blockPosition()).ifPresent(v -> get(level).record(v.asLong(), level.getGameTime()));
+	}
 
-    /** True when the village around {@code at} may not summon golems now. */
-    public static boolean blocked(ServerLevel level, BlockPos at) {
-        if (!CompatConfig.Golems.on()) return false;
-        GolemCooldown data = get(level);
-        if (data.blockedUntil.isEmpty()) return false;
-        Optional<BlockPos> v = village(level, at);
-        if (v.isEmpty()) return false;
-        Long until = data.blockedUntil.get(v.get().asLong());
-        if (until == null) return false;
-        if (level.getGameTime() < until) return true;
-        data.blockedUntil.remove(v.get().asLong());
-        data.setDirty();
-        return false;
-    }
+	/** True when the village around {@code at} may not summon golems now. */
+	public static boolean blocked(ServerLevel level, BlockPos at) {
+		if (!CompatConfig.Golems.on()) return false;
+		GolemCooldown data = get(level);
+		if (data.blockedUntil.isEmpty()) return false;
+		Optional<BlockPos> v = village(level, at);
+		if (v.isEmpty()) return false;
+		Long until = data.blockedUntil.get(v.get().asLong());
+		if (until == null) return false;
+		if (level.getGameTime() < until) return true;
+		data.blockedUntil.remove(v.get().asLong());
+		data.setDirty();
+		return false;
+	}
 
-    private void record(long village, long now) {
-        CompatConfig.Golems c = CompatConfig.GOLEMS;
-        Deque<Long> q = deaths.computeIfAbsent(village, k -> new ArrayDeque<>());
-        q.addLast(now);
-        while (!q.isEmpty() && now - q.peekFirst() > c.window.get()) q.removeFirst();
-        if (q.size() >= c.deaths.get()) {
-            blockedUntil.put(village, now + c.cooldown.get());
-            q.clear();
-        }
-        if (q.isEmpty()) deaths.remove(village);
-        setDirty();
-    }
+	private void record(long village, long now) {
+		CompatConfig.Golems c = CompatConfig.GOLEMS;
+		Deque<Long> q = deaths.computeIfAbsent(village, k -> new ArrayDeque<>());
+		q.addLast(now);
+		while (!q.isEmpty() && now - q.peekFirst() > c.window.get()) q.removeFirst();
+		if (q.size() >= c.deaths.get()) {
+			blockedUntil.put(village, now + c.cooldown.get());
+			q.clear();
+		}
+		if (q.isEmpty()) deaths.remove(village);
+		setDirty();
+	}
 
-    @Override
-    public CompoundTag save(CompoundTag tag) {
-        ListTag list = new ListTag();
-        for (Map.Entry<Long, Deque<Long>> e : deaths.entrySet()) {
-            CompoundTag t = new CompoundTag();
-            t.putLong("village", e.getKey());
-            t.put("deaths", new LongArrayTag(e.getValue().stream().mapToLong(Long::longValue).toArray()));
-            list.add(t);
-        }
-        tag.put("deaths", list);
-        CompoundTag until = new CompoundTag();
-        blockedUntil.forEach((k, v) -> until.putLong(Long.toString(k), v));
-        tag.put("blockedUntil", until);
-        return tag;
-    }
+	@Override
+	public CompoundTag save(CompoundTag tag) {
+		ListTag list = new ListTag();
+		for (Map.Entry<Long, Deque<Long>> e : deaths.entrySet()) {
+			CompoundTag t = new CompoundTag();
+			t.putLong("village", e.getKey());
+			t.put("deaths", new LongArrayTag(e.getValue().stream().mapToLong(Long::longValue).toArray()));
+			list.add(t);
+		}
+		tag.put("deaths", list);
+		CompoundTag until = new CompoundTag();
+		blockedUntil.forEach((k, v) -> until.putLong(Long.toString(k), v));
+		tag.put("blockedUntil", until);
+		return tag;
+	}
 
-    private static GolemCooldown load(CompoundTag tag) {
-        GolemCooldown data = new GolemCooldown();
-        for (Tag t : tag.getList("deaths", Tag.TAG_COMPOUND)) {
-            CompoundTag c = (CompoundTag) t;
-            Deque<Long> q = new ArrayDeque<>();
-            for (long d : c.getLongArray("deaths")) q.addLast(d);
-            if (!q.isEmpty()) data.deaths.put(c.getLong("village"), q);
-        }
-        CompoundTag until = tag.getCompound("blockedUntil");
-        for (String k : until.getAllKeys()) {
-            try {
-                data.blockedUntil.put(Long.parseLong(k), until.getLong(k));
-            } catch (NumberFormatException ignored) {
-            }
-        }
-        return data;
-    }
+	private static GolemCooldown load(CompoundTag tag) {
+		GolemCooldown data = new GolemCooldown();
+		for (Tag t : tag.getList("deaths", Tag.TAG_COMPOUND)) {
+			CompoundTag c = (CompoundTag) t;
+			Deque<Long> q = new ArrayDeque<>();
+			for (long d : c.getLongArray("deaths")) q.addLast(d);
+			if (!q.isEmpty()) data.deaths.put(c.getLong("village"), q);
+		}
+		CompoundTag until = tag.getCompound("blockedUntil");
+		for (String k : until.getAllKeys()) {
+			try {
+				data.blockedUntil.put(Long.parseLong(k), until.getLong(k));
+			} catch (NumberFormatException ignored) {
+			}
+		}
+		return data;
+	}
 }

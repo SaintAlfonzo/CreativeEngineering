@@ -9,12 +9,12 @@ import top.theillusivec4.curios.api.event.CurioEquipEvent;
 /** Keeps a skinned backpack out of Curios slots while the equip switch is off. Registered only when Curios is loaded. */
 public final class BackpackSkinCurios {
 
-    private BackpackSkinCurios() {}
+	private BackpackSkinCurios() {}
 
-    @SubscribeEvent
-    public static void onEquip(CurioEquipEvent event) {
-        if (!CEQConfig.BACKPACK_SKINS.allowEquip.get() && BackpackSkins.getSkin(event.getStack()) != null) {
-            event.setResult(Event.Result.DENY);
-        }
-    }
+	@SubscribeEvent
+	public static void onEquip(CurioEquipEvent event) {
+		if (!CEQConfig.BACKPACK_SKINS.allowEquip.get() && BackpackSkins.getSkin(event.getStack()) != null) {
+			event.setResult(Event.Result.DENY);
+		}
+	}
 }

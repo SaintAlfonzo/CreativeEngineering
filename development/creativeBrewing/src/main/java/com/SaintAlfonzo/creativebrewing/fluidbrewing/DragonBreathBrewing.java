@@ -50,67 +50,67 @@ import java.util.List;
  */
 public final class DragonBreathBrewing {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final ResourceLocation DRAGON_BREATH_FLUID =
-            new ResourceLocation("create_central_kitchen", "dragon_breath");
+	private static final ResourceLocation DRAGON_BREATH_FLUID =
+			new ResourceLocation("create_central_kitchen", "dragon_breath");
 
-    private static final int AMOUNT = 1000;
+	private static final int AMOUNT = 1000;
 
-    /** Dragon's breath is a catalyst-style reagent: a quarter-bucket per brew. */
-    private static final int DRAGON_BREATH_AMOUNT = 250;
+	/** Dragon's breath is a catalyst-style reagent: a quarter-bucket per brew. */
+	private static final int DRAGON_BREATH_AMOUNT = 250;
 
-    /** Recipes the mixer mixin offers when their fluids are present in the basin. */
-    public static final List<MixingRecipe> FLUID_BREWING = new ArrayList<>();
+	/** Recipes the mixer mixin offers when their fluids are present in the basin. */
+	public static final List<MixingRecipe> FLUID_BREWING = new ArrayList<>();
 
-    private static boolean built = false;
+	private static boolean built = false;
 
-    private DragonBreathBrewing() {}
+	private DragonBreathBrewing() {}
 
-    public static void build() {
-        if (built) return;
-        built = true;
+	public static void build() {
+		if (built) return;
+		built = true;
 
-        // getValue answers the registry default (minecraft:empty) for a missing id, never null: test containsKey.
-        var dragonBreath = ForgeRegistries.FLUIDS.containsKey(DRAGON_BREATH_FLUID)
-                ? ForgeRegistries.FLUIDS.getValue(DRAGON_BREATH_FLUID) : null;
-        if (dragonBreath == null || dragonBreath == net.minecraft.world.level.material.Fluids.EMPTY) {
-            LOGGER.warn("[CE] {} not found - dragon's breath fluid brewing disabled "
-                    + "(is Create Central Kitchen installed?)", DRAGON_BREATH_FLUID);
-            return;
-        }
-        FluidIngredient dragonBreathIngredient =
-                FluidIngredient.fromFluidStack(new FluidStack(dragonBreath, DRAGON_BREATH_AMOUNT));
+		// getValue answers the registry default (minecraft:empty) for a missing id, never null: test containsKey.
+		var dragonBreath = ForgeRegistries.FLUIDS.containsKey(DRAGON_BREATH_FLUID)
+				? ForgeRegistries.FLUIDS.getValue(DRAGON_BREATH_FLUID) : null;
+		if (dragonBreath == null || dragonBreath == net.minecraft.world.level.material.Fluids.EMPTY) {
+			LOGGER.warn("[CE] {} not found - dragon's breath fluid brewing disabled "
+					+ "(is Create Central Kitchen installed?)", DRAGON_BREATH_FLUID);
+			return;
+		}
+		FluidIngredient dragonBreathIngredient =
+				FluidIngredient.fromFluidStack(new FluidStack(dragonBreath, DRAGON_BREATH_AMOUNT));
 
-        int added = 0;
-        for (Potion potion : ForgeRegistries.POTIONS) {
-            if (potion == Potions.EMPTY || potion == Potions.WATER) continue;
-            ResourceLocation id = ForgeRegistries.POTIONS.getKey(potion);
-            if (id == null) continue;
-            String slug = id.toString().replaceAll("[^a-z0-9_.-]", "_");
+		int added = 0;
+		for (Potion potion : ForgeRegistries.POTIONS) {
+			if (potion == Potions.EMPTY || potion == Potions.WATER) continue;
+			ResourceLocation id = ForgeRegistries.POTIONS.getKey(potion);
+			if (id == null) continue;
+			String slug = id.toString().replaceAll("[^a-z0-9_.-]", "_");
 
-            FluidStack splash = PotionFluidHandler.getFluidFromPotion(potion, BottleType.SPLASH, AMOUNT);
-            FluidStack lingering = PotionFluidHandler.getFluidFromPotion(potion, BottleType.LINGERING, AMOUNT);
+			FluidStack splash = PotionFluidHandler.getFluidFromPotion(potion, BottleType.SPLASH, AMOUNT);
+			FluidStack lingering = PotionFluidHandler.getFluidFromPotion(potion, BottleType.LINGERING, AMOUNT);
 
-            MixingRecipe recipe = new ProcessingRecipeBuilder<>(MixingRecipe::new,
-                    new ResourceLocation(CreativeBrewing.NS, "potion_mixing_dragonbreath_" + slug))
-                    .require(FluidIngredient.fromFluidStack(splash))
-                    .require(dragonBreathIngredient)
-                    .output(lingering)
-                    .requiresHeat(HeatCondition.HEATED)
-                    .build();
+			MixingRecipe recipe = new ProcessingRecipeBuilder<>(MixingRecipe::new,
+					new ResourceLocation(CreativeBrewing.NS, "potion_mixing_dragonbreath_" + slug))
+					.require(FluidIngredient.fromFluidStack(splash))
+					.require(dragonBreathIngredient)
+					.output(lingering)
+					.requiresHeat(HeatCondition.HEATED)
+					.build();
 
-            FLUID_BREWING.add(recipe);
-            added++;
-        }
+			FLUID_BREWING.add(recipe);
+			added++;
+		}
 
-        try {
-            PotionMixingRecipes.ALL.addAll(FLUID_BREWING);
-        } catch (UnsupportedOperationException e) {
-            LOGGER.warn("[CE] PotionMixingRecipes.ALL is immutable; dragon-breath fluid "
-                    + "brewing will still work in the mixer but won't show in JEI", e);
-        }
+		try {
+			PotionMixingRecipes.ALL.addAll(FLUID_BREWING);
+		} catch (UnsupportedOperationException e) {
+			LOGGER.warn("[CE] PotionMixingRecipes.ALL is immutable; dragon-breath fluid "
+					+ "brewing will still work in the mixer but won't show in JEI", e);
+		}
 
-        LOGGER.info("[CE] registered {} dragon-breath fluid-brewing recipes", added);
-    }
+		LOGGER.info("[CE] registered {} dragon-breath fluid-brewing recipes", added);
+	}
 }

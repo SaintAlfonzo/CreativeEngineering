@@ -14,10 +14,10 @@ import java.util.List;
 @Mixin(value = BrewingGuideScreen.class, remap = false)
 public class CckBrewingGuideMealTooltipMixin {
 
-    @Redirect(method = "m_7025_", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lplus/dragons/createcentralkitchen/content/logistics/item/guide/brewing/BrewingGuideScreen;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"))
-    private void creativedelight$mealTooltipWithStack(BrewingGuideScreen screen, PoseStack poseStack, List<Component> lines, int x, int y) {
-        MealSlotTooltip.render(screen, poseStack, lines, x, y);
-    }
+	@Redirect(method = "m_7025_", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lplus/dragons/createcentralkitchen/content/logistics/item/guide/brewing/BrewingGuideScreen;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"))
+	private void creativedelight$mealTooltipWithStack(BrewingGuideScreen screen, PoseStack poseStack, List<Component> lines, int x, int y) {
+		MealSlotTooltip.render(screen, poseStack, lines, x, y);
+	}
 }

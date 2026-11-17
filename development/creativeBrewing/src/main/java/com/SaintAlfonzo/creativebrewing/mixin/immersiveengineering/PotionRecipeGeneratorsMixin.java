@@ -66,193 +66,193 @@ import java.util.Map;
 @Mixin(value = PotionRecipeGenerators.class, remap = false)
 public class PotionRecipeGeneratorsMixin {
 
-    private static final Logger CREATIVEENGINEERING$LOG = LogUtils.getLogger();
+	private static final Logger CREATIVEENGINEERING$LOG = LogUtils.getLogger();
 
-    private static final ResourceLocation CREATIVEENGINEERING$CREATE_POTION =
-            new ResourceLocation("create", "potion");
+	private static final ResourceLocation CREATIVEENGINEERING$CREATE_POTION =
+			new ResourceLocation("create", "potion");
 
-    /** IE Mixer potion working amount. Pack design: 1500 mB per op (IE stock / Create: 1000). */
-    private static final int CREATIVEENGINEERING$AMOUNT = 1500;
+	/** IE Mixer potion working amount. Pack design: 1500 mB per op (IE stock / Create: 1000). */
+	private static final int CREATIVEENGINEERING$AMOUNT = 1500;
 
-    /**
-     * Lingering brews (any recipe that OUTPUTS a lingering-potion fluid) run at 1000 mB instead —
-     * so one dragon's-breath bottle converts a bucket of splash potion, and Create / IE stay in
-     * step for lingering. Regular + splash keep the bigger 1500 mB batch.
-     */
-    private static final int CREATIVEENGINEERING$LINGERING_AMOUNT = 1000;
+	/**
+	 * Lingering brews (any recipe that OUTPUTS a lingering-potion fluid) run at 1000 mB instead —
+	 * so one dragon's-breath bottle converts a bucket of splash potion, and Create / IE stay in
+	 * step for lingering. Regular + splash keep the bigger 1500 mB batch.
+	 */
+	private static final int CREATIVEENGINEERING$LINGERING_AMOUNT = 1000;
 
-    /** IE's own generated potion recipes use this energy/tick; keep parity. */
-    private static final int CREATIVEENGINEERING$ENERGY = 6400;
+	/** IE's own generated potion recipes use this energy/tick; keep parity. */
+	private static final int CREATIVEENGINEERING$ENERGY = 6400;
 
-    @Redirect(
-            method = "registerPotionRecipe",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lblusunrize/immersiveengineering/common/fluids/PotionFluid;"
-                           + "getFluidStackForType(Lnet/minecraft/world/item/alchemy/Potion;I)"
-                           + "Lnet/minecraftforge/fluids/FluidStack;"
-            )
-    )
-    private static FluidStack creativeengineering$mixerOutputCreatePotion(Potion potion, int amount) {
-        return PotionFluidHandler.getFluidFromPotion(potion, PotionFluid.BottleType.REGULAR,
-                CREATIVEENGINEERING$AMOUNT);
-    }
+	@Redirect(
+			method = "registerPotionRecipe",
+			at = @At(
+					value = "INVOKE",
+					target = "Lblusunrize/immersiveengineering/common/fluids/PotionFluid;"
+						   + "getFluidStackForType(Lnet/minecraft/world/item/alchemy/Potion;I)"
+						   + "Lnet/minecraftforge/fluids/FluidStack;"
+			)
+	)
+	private static FluidStack creativeengineering$mixerOutputCreatePotion(Potion potion, int amount) {
+		return PotionFluidHandler.getFluidFromPotion(potion, PotionFluid.BottleType.REGULAR,
+				CREATIVEENGINEERING$AMOUNT);
+	}
 
-    @Redirect(
-            method = "registerPotionRecipe",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lblusunrize/immersiveengineering/common/crafting/PotionHelper;"
-                           + "getFluidTagForType(Lnet/minecraft/world/item/alchemy/Potion;I)"
-                           + "Lblusunrize/immersiveengineering/api/crafting/FluidTagInput;"
-            )
-    )
-    private static FluidTagInput creativeengineering$mixerInputCreatePotion(Potion from, int amount) {
-        int amt = CREATIVEENGINEERING$AMOUNT;
-        // Awkward base step: water bottle equivalent -> plain water fluid, unchanged.
-        if (from == Potions.WATER) {
-            return new FluidTagInput(FluidTags.WATER, amt);
-        }
-        // Everything else: consume create:potion with the same NBT shape as the output.
-        FluidStack in = PotionFluidHandler.getFluidFromPotion(from, PotionFluid.BottleType.REGULAR, amt);
-        return new FluidTagInput(
-                Either.right(List.of(CREATIVEENGINEERING$CREATE_POTION)), amt, in.getTag());
-    }
+	@Redirect(
+			method = "registerPotionRecipe",
+			at = @At(
+					value = "INVOKE",
+					target = "Lblusunrize/immersiveengineering/common/crafting/PotionHelper;"
+						   + "getFluidTagForType(Lnet/minecraft/world/item/alchemy/Potion;I)"
+						   + "Lblusunrize/immersiveengineering/api/crafting/FluidTagInput;"
+			)
+	)
+	private static FluidTagInput creativeengineering$mixerInputCreatePotion(Potion from, int amount) {
+		int amt = CREATIVEENGINEERING$AMOUNT;
+		// Awkward base step: water bottle equivalent -> plain water fluid, unchanged.
+		if (from == Potions.WATER) {
+			return new FluidTagInput(FluidTags.WATER, amt);
+		}
+		// Everything else: consume create:potion with the same NBT shape as the output.
+		FluidStack in = PotionFluidHandler.getFluidFromPotion(from, PotionFluid.BottleType.REGULAR, amt);
+		return new FluidTagInput(
+				Either.right(List.of(CREATIVEENGINEERING$CREATE_POTION)), amt, in.getTag());
+	}
 
-    /**
-     * IE's brewing-recipe loop feeds Alex's Mobs' bottle-based bases in with {@code from == EMPTY}
-     * (a lava bottle / poison bottle isn't a potion). Drop those — an explicit datapack recipe
-     * (or, for poison resistance, a re-based {@code strong_poison} brewing mix) covers them.
-     */
-    @Inject(method = "registerPotionRecipe", at = @At("HEAD"), cancellable = true)
-    private static void creativeengineering$skipNonPotionBase(Potion to, Potion from,
-            IngredientWithSize reagent, Map<Potion, List<MixerRecipe>> recipes, CallbackInfo ci) {
-        if (from == Potions.EMPTY) {
-            ci.cancel();
-        }
-    }
+	/**
+	 * IE's brewing-recipe loop feeds Alex's Mobs' bottle-based bases in with {@code from == EMPTY}
+	 * (a lava bottle / poison bottle isn't a potion). Drop those — an explicit datapack recipe
+	 * (or, for poison resistance, a re-based {@code strong_poison} brewing mix) covers them.
+	 */
+	@Inject(method = "registerPotionRecipe", at = @At("HEAD"), cancellable = true)
+	private static void creativeengineering$skipNonPotionBase(Potion to, Potion from,
+			IngredientWithSize reagent, Map<Potion, List<MixerRecipe>> recipes, CallbackInfo ci) {
+		if (from == Potions.EMPTY) {
+			ci.cancel();
+		}
+	}
 
-    /**
-     * Mirror Create's Automatic-Brewing recipe set onto the IE Mixer for the SPLASH and
-     * LINGERING bottle types (IE stock only generates the REGULAR ones).
-     */
-    @Inject(method = "initPotionRecipes", at = @At("RETURN"), cancellable = true)
-    private static void creativeengineering$splashLingeringParity(
-            CallbackInfoReturnable<List<MixerRecipe>> cir) {
+	/**
+	 * Mirror Create's Automatic-Brewing recipe set onto the IE Mixer for the SPLASH and
+	 * LINGERING bottle types (IE stock only generates the REGULAR ones).
+	 */
+	@Inject(method = "initPotionRecipes", at = @At("RETURN"), cancellable = true)
+	private static void creativeengineering$splashLingeringParity(
+			CallbackInfoReturnable<List<MixerRecipe>> cir) {
 
-        List<MixerRecipe> out = new ArrayList<>(cir.getReturnValue());
-        int before = out.size();
+		List<MixerRecipe> out = new ArrayList<>(cir.getReturnValue());
+		int before = out.size();
 
-        // Phase B parity: every potion -> potion step, in SPLASH and LINGERING form.
-        for (PotionBrewing.Mix<Potion> m :
-                PotionRecipeGeneratorsMixin.<Potion>creativeengineering$mixes("f_43494_", "POTION_MIXES")) {
-            Potion from = m.from.value();
-            Potion to = m.to.value();
-            if (from == Potions.WATER || to == Potions.WATER
-                    || from == Potions.EMPTY || to == Potions.EMPTY) {
-                continue;
-            }
-            IngredientWithSize[] reagent = { new IngredientWithSize(m.ingredient) };
-            creativeengineering$addMixer(out, from, to,
-                    PotionFluid.BottleType.SPLASH, PotionFluid.BottleType.SPLASH, reagent);
-            creativeengineering$addMixer(out, from, to,
-                    PotionFluid.BottleType.LINGERING, PotionFluid.BottleType.LINGERING, reagent);
-        }
+		// Phase B parity: every potion -> potion step, in SPLASH and LINGERING form.
+		for (PotionBrewing.Mix<Potion> m :
+				PotionRecipeGeneratorsMixin.<Potion>creativeengineering$mixes("f_43494_", "POTION_MIXES")) {
+			Potion from = m.from.value();
+			Potion to = m.to.value();
+			if (from == Potions.WATER || to == Potions.WATER
+					|| from == Potions.EMPTY || to == Potions.EMPTY) {
+				continue;
+			}
+			IngredientWithSize[] reagent = { new IngredientWithSize(m.ingredient) };
+			creativeengineering$addMixer(out, from, to,
+					PotionFluid.BottleType.SPLASH, PotionFluid.BottleType.SPLASH, reagent);
+			creativeengineering$addMixer(out, from, to,
+					PotionFluid.BottleType.LINGERING, PotionFluid.BottleType.LINGERING, reagent);
+		}
 
-        // Phase C parity: container conversions (gunpowder / dragon's breath) per potion.
-        for (PotionBrewing.Mix<Item> c :
-                PotionRecipeGeneratorsMixin.<Item>creativeengineering$mixes("f_43495_", "CONTAINER_MIXES")) {
-            PotionFluid.BottleType fromType = PotionFluidHandler.bottleTypeFromItem(c.from.value());
-            PotionFluid.BottleType toType = PotionFluidHandler.bottleTypeFromItem(c.to.value());
-            if (fromType == null || toType == null || fromType == toType) {
-                continue;
-            }
-            IngredientWithSize[] reagent = { new IngredientWithSize(c.ingredient) };
-            for (Potion p : ForgeRegistries.POTIONS) {
-                if (p == Potions.EMPTY || p == Potions.WATER) {
-                    continue;
-                }
-                creativeengineering$addMixer(out, p, p, fromType, toType, reagent);
-            }
-        }
+		// Phase C parity: container conversions (gunpowder / dragon's breath) per potion.
+		for (PotionBrewing.Mix<Item> c :
+				PotionRecipeGeneratorsMixin.<Item>creativeengineering$mixes("f_43495_", "CONTAINER_MIXES")) {
+			PotionFluid.BottleType fromType = PotionFluidHandler.bottleTypeFromItem(c.from.value());
+			PotionFluid.BottleType toType = PotionFluidHandler.bottleTypeFromItem(c.to.value());
+			if (fromType == null || toType == null || fromType == toType) {
+				continue;
+			}
+			IngredientWithSize[] reagent = { new IngredientWithSize(c.ingredient) };
+			for (Potion p : ForgeRegistries.POTIONS) {
+				if (p == Potions.EMPTY || p == Potions.WATER) {
+					continue;
+				}
+				creativeengineering$addMixer(out, p, p, fromType, toType, reagent);
+			}
+		}
 
-        // Alex's Mobs Lava Vision base — its real brew is a non-potion lava bottle, so neither
-        // mixer can generate it. Add the lava-fluid version here (Create side is a KubeJS recipe).
-        creativeengineering$addLavaVision(out);
+		// Alex's Mobs Lava Vision base — its real brew is a non-potion lava bottle, so neither
+		// mixer can generate it. Add the lava-fluid version here (Create side is a KubeJS recipe).
+		creativeengineering$addLavaVision(out);
 
-        cir.setReturnValue(out);
-        CREATIVEENGINEERING$LOG.info(
-                "[CE] IE Mixer: +{} splash/lingering potion recipes (parity with Create Automatic Brewing)",
-                out.size() - before);
-    }
+		cir.setReturnValue(out);
+		CREATIVEENGINEERING$LOG.info(
+				"[CE] IE Mixer: +{} splash/lingering potion recipes (parity with Create Automatic Brewing)",
+				out.size() - before);
+	}
 
-    private static void creativeengineering$addLavaVision(List<MixerRecipe> out) {
-        Potion lavaVision = ForgeRegistries.POTIONS.getValue(
-                new ResourceLocation("alexsmobs", "lava_vision"));
-        Item tooth = ForgeRegistries.ITEMS.getValue(
-                new ResourceLocation("alexsmobs", "bone_serpent_tooth"));
-        if (lavaVision == null || tooth == null || tooth == Items.AIR) {
-            return;
-        }
-        FluidStack outStack = PotionFluidHandler.getFluidFromPotion(
-                lavaVision, PotionFluid.BottleType.REGULAR, CREATIVEENGINEERING$AMOUNT);
-        FluidTagInput lavaIn = new FluidTagInput(FluidTags.LAVA, CREATIVEENGINEERING$AMOUNT);
-        IngredientWithSize[] reagent = { new IngredientWithSize(Ingredient.of(tooth)) };
-        out.add(new MixerRecipe(
-                new ResourceLocation(CreativeBrewing.NS, "mixer_potion_parity/lava_vision_base"),
-                outStack, lavaIn, reagent, CREATIVEENGINEERING$ENERGY));
-    }
+	private static void creativeengineering$addLavaVision(List<MixerRecipe> out) {
+		Potion lavaVision = ForgeRegistries.POTIONS.getValue(
+				new ResourceLocation("alexsmobs", "lava_vision"));
+		Item tooth = ForgeRegistries.ITEMS.getValue(
+				new ResourceLocation("alexsmobs", "bone_serpent_tooth"));
+		if (lavaVision == null || tooth == null || tooth == Items.AIR) {
+			return;
+		}
+		FluidStack outStack = PotionFluidHandler.getFluidFromPotion(
+				lavaVision, PotionFluid.BottleType.REGULAR, CREATIVEENGINEERING$AMOUNT);
+		FluidTagInput lavaIn = new FluidTagInput(FluidTags.LAVA, CREATIVEENGINEERING$AMOUNT);
+		IngredientWithSize[] reagent = { new IngredientWithSize(Ingredient.of(tooth)) };
+		out.add(new MixerRecipe(
+				new ResourceLocation(CreativeBrewing.NS, "mixer_potion_parity/lava_vision_base"),
+				outStack, lavaIn, reagent, CREATIVEENGINEERING$ENERGY));
+	}
 
-    private static void creativeengineering$addMixer(List<MixerRecipe> out, Potion from, Potion to,
-            PotionFluid.BottleType fromType, PotionFluid.BottleType toType,
-            IngredientWithSize[] reagents) {
+	private static void creativeengineering$addMixer(List<MixerRecipe> out, Potion from, Potion to,
+			PotionFluid.BottleType fromType, PotionFluid.BottleType toType,
+			IngredientWithSize[] reagents) {
 
-        // The smaller batch is only for the conversion INTO lingering (splash + dragon's breath —
-        // one dragon's-breath bottle converts a bucket). Modifying an already-lingering potion
-        // (lengthen / amplify / any POTION_MIXES step) stays at the full pack amount.
-        int amt = (toType == PotionFluid.BottleType.LINGERING
-                && fromType != PotionFluid.BottleType.LINGERING)
-                ? CREATIVEENGINEERING$LINGERING_AMOUNT
-                : CREATIVEENGINEERING$AMOUNT;
-        FluidStack outStack = PotionFluidHandler.getFluidFromPotion(to, toType, amt);
-        FluidStack inStack = PotionFluidHandler.getFluidFromPotion(from, fromType, amt);
-        CompoundTag inTag = inStack.getTag();
+		// The smaller batch is only for the conversion INTO lingering (splash + dragon's breath —
+		// one dragon's-breath bottle converts a bucket). Modifying an already-lingering potion
+		// (lengthen / amplify / any POTION_MIXES step) stays at the full pack amount.
+		int amt = (toType == PotionFluid.BottleType.LINGERING
+				&& fromType != PotionFluid.BottleType.LINGERING)
+				? CREATIVEENGINEERING$LINGERING_AMOUNT
+				: CREATIVEENGINEERING$AMOUNT;
+		FluidStack outStack = PotionFluidHandler.getFluidFromPotion(to, toType, amt);
+		FluidStack inStack = PotionFluidHandler.getFluidFromPotion(from, fromType, amt);
+		CompoundTag inTag = inStack.getTag();
 
-        FluidTagInput in = new FluidTagInput(
-                Either.right(List.of(CREATIVEENGINEERING$CREATE_POTION)), amt, inTag);
+		FluidTagInput in = new FluidTagInput(
+				Either.right(List.of(CREATIVEENGINEERING$CREATE_POTION)), amt, inTag);
 
-        ResourceLocation id = new ResourceLocation(CreativeBrewing.NS,
-                "mixer_potion_parity/" + creativeengineering$slug(from, fromType)
-                        + "_to_" + creativeengineering$slug(to, toType) + "_" + out.size());
+		ResourceLocation id = new ResourceLocation(CreativeBrewing.NS,
+				"mixer_potion_parity/" + creativeengineering$slug(from, fromType)
+						+ "_to_" + creativeengineering$slug(to, toType) + "_" + out.size());
 
-        out.add(new MixerRecipe(id, outStack, in, reagents, CREATIVEENGINEERING$ENERGY));
-    }
+		out.add(new MixerRecipe(id, outStack, in, reagents, CREATIVEENGINEERING$ENERGY));
+	}
 
-    /**
-     * Read one of {@link PotionBrewing}'s private static mix lists reflectively. SRG name first
-     * (this pack only ever runs reobfuscated — same reason the {@code @Redirect} targets in this
-     * file are SRG), Mojmap name as a dev-run fallback.
-     */
-    @SuppressWarnings("unchecked")
-    private static <T> List<PotionBrewing.Mix<T>> creativeengineering$mixes(String srg, String mojmap) {
-        for (String name : new String[] { srg, mojmap }) {
-            try {
-                Field f = PotionBrewing.class.getDeclaredField(name);
-                f.setAccessible(true);
-                return (List<PotionBrewing.Mix<T>>) f.get(null);
-            } catch (ReflectiveOperationException ignored) {
-                // try the next name
-            }
-        }
-        CREATIVEENGINEERING$LOG.error(
-                "[CE] PotionBrewing mix list {}/{} not found - IE Mixer splash/lingering parity disabled",
-                srg, mojmap);
-        return List.of();
-    }
+	/**
+	 * Read one of {@link PotionBrewing}'s private static mix lists reflectively. SRG name first
+	 * (this pack only ever runs reobfuscated — same reason the {@code @Redirect} targets in this
+	 * file are SRG), Mojmap name as a dev-run fallback.
+	 */
+	@SuppressWarnings("unchecked")
+	private static <T> List<PotionBrewing.Mix<T>> creativeengineering$mixes(String srg, String mojmap) {
+		for (String name : new String[] { srg, mojmap }) {
+			try {
+				Field f = PotionBrewing.class.getDeclaredField(name);
+				f.setAccessible(true);
+				return (List<PotionBrewing.Mix<T>>) f.get(null);
+			} catch (ReflectiveOperationException ignored) {
+				// try the next name
+			}
+		}
+		CREATIVEENGINEERING$LOG.error(
+				"[CE] PotionBrewing mix list {}/{} not found - IE Mixer splash/lingering parity disabled",
+				srg, mojmap);
+		return List.of();
+	}
 
-    private static String creativeengineering$slug(Potion p, PotionFluid.BottleType bt) {
-        ResourceLocation rl = ForgeRegistries.POTIONS.getKey(p);
-        String base = rl == null ? "unknown" : rl.getNamespace() + "_" + rl.getPath();
-        return (base + "_" + bt.name().toLowerCase(Locale.ROOT)).replaceAll("[^a-z0-9_./-]", "_");
-    }
+	private static String creativeengineering$slug(Potion p, PotionFluid.BottleType bt) {
+		ResourceLocation rl = ForgeRegistries.POTIONS.getKey(p);
+		String base = rl == null ? "unknown" : rl.getNamespace() + "_" + rl.getPath();
+		return (base + "_" + bt.name().toLowerCase(Locale.ROOT)).replaceAll("[^a-z0-9_./-]", "_");
+	}
 }

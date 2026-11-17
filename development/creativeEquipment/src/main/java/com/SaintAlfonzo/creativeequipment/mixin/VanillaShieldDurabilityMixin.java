@@ -31,14 +31,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Item.class)
 public abstract class VanillaShieldDurabilityMixin {
 
-    @Inject(method = "m_41462_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$ironShieldDurability(CallbackInfoReturnable<Integer> cir) {
-        try {
-            if ((Item) (Object) this == Items.SHIELD) {
-                cir.setReturnValue(ShieldConfig.durability(ShieldTier.IRON));
-            }
-        } catch (Throwable ignored) {
-            // fall through to vanilla's own maxDamage field
-        }
-    }
+	@Inject(method = "m_41462_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$ironShieldDurability(CallbackInfoReturnable<Integer> cir) {
+		try {
+			if ((Item) (Object) this == Items.SHIELD) {
+				cir.setReturnValue(ShieldConfig.durability(ShieldTier.IRON));
+			}
+		} catch (Throwable ignored) {
+			// fall through to vanilla's own maxDamage field
+		}
+	}
 }

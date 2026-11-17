@@ -18,19 +18,19 @@ import java.util.Set;
  */
 public final class DonorItems {
 
-    public static final ResourceLocation STICKY_IT_NOTE = new ResourceLocation("sticky_it", "sticky_note");
-    public static final ResourceLocation STICKY_IT_ERASER = new ResourceLocation("sticky_it", "eraser");
-    public static final ResourceLocation LABELS_LABEL = new ResourceLocation("labels", "label");
+	public static final ResourceLocation STICKY_IT_NOTE = new ResourceLocation("sticky_it", "sticky_note");
+	public static final ResourceLocation STICKY_IT_ERASER = new ResourceLocation("sticky_it", "eraser");
+	public static final ResourceLocation LABELS_LABEL = new ResourceLocation("labels", "label");
 
-    /** Every donor item hidden from the creative tabs. */
-    public static final Set<ResourceLocation> HIDDEN = Set.of(STICKY_IT_NOTE, STICKY_IT_ERASER, LABELS_LABEL);
+	/** Every donor item hidden from the creative tabs. */
+	public static final Set<ResourceLocation> HIDDEN = Set.of(STICKY_IT_NOTE, STICKY_IT_ERASER, LABELS_LABEL);
 
-    private DonorItems() {}
+	private DonorItems() {}
 
-    /** True when {@code item} is one of the donor items in {@link #HIDDEN} (registry lookup at call time). */
-    public static boolean isHidden(Item item) {
-        if (item == null) return false;
-        ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
-        return key != null && HIDDEN.contains(key);
-    }
+	/** True when {@code item} is one of the donor items in {@link #HIDDEN} (registry lookup at call time). */
+	public static boolean isHidden(Item item) {
+		if (item == null) return false;
+		ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
+		return key != null && HIDDEN.contains(key);
+	}
 }

@@ -25,40 +25,40 @@ import org.slf4j.Logger;
 /** The Display Delight half of {@link DisplayDelightDishes}: only loaded when Display Delight is. */
 final class DisplayDelightDishBlocks {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
-    private static final List<Entry> ENTRIES = new ArrayList<>();
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final DeferredRegister<Block> BLOCKS =
+			DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
+	private static final List<Entry> ENTRIES = new ArrayList<>();
 
-    private record Entry(DisplayDelightDishes.Dish dish, RegistryObject<Block> block) {}
+	private record Entry(DisplayDelightDishes.Dish dish, RegistryObject<Block> block) {}
 
-    private DisplayDelightDishBlocks() {}
+	private DisplayDelightDishBlocks() {}
 
-    static void register(IEventBus modEventBus, List<DisplayDelightDishes.Dish> dishes) {
-        for (DisplayDelightDishes.Dish d : dishes) {
-            // Display Delight's own food blocks: wood material and sound, no occlusion, broken instantly
-            ENTRIES.add(new Entry(d, BLOCKS.register(d.block(), () -> new FoodBlock(
-                    BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().instabreak().sound(SoundType.WOOD)))));
-        }
-        BLOCKS.register(modEventBus);
-        MinecraftForge.EVENT_BUS.addListener(DisplayDelightDishBlocks::onLevelLoad);
-    }
+	static void register(IEventBus modEventBus, List<DisplayDelightDishes.Dish> dishes) {
+		for (DisplayDelightDishes.Dish d : dishes) {
+			// Display Delight's own food blocks: wood material and sound, no occlusion, broken instantly
+			ENTRIES.add(new Entry(d, BLOCKS.register(d.block(), () -> new FoodBlock(
+					BlockBehaviour.Properties.of(Material.WOOD).noOcclusion().instabreak().sound(SoundType.WOOD)))));
+		}
+		BLOCKS.register(modEventBus);
+		MinecraftForge.EVENT_BUS.addListener(DisplayDelightDishBlocks::onLevelLoad);
+	}
 
-    /**
-     * Display Delight fills its item <-> block maps on every server level load, from its own blocks' drops; these join
-     * the same maps (put-if-absent, so a later Display Delight block for the same food would not be replaced).
-     */
-    private static void onLevelLoad(LevelEvent.Load event) {
-        if (!(event.getLevel() instanceof ServerLevel)) return;
-        for (Entry e : ENTRIES) {
-            Block block = e.block().get();
-            if (!ForgeRegistries.ITEMS.containsKey(e.dish().item())) {
-                // normal when the food's mod is absent (corn_popsicle needs Corn Delight): debug only
-                LOGGER.debug("[creativedelight] Display Delight dish {}: item {} not installed", e.dish().block(), e.dish().item());
-                continue;
-            }
-            Item item = ForgeRegistries.ITEMS.getValue(e.dish().item());
-            BlockAssociations.addToMap(item, block, false);
-        }
-    }
+	/**
+	 * Display Delight fills its item <-> block maps on every server level load, from its own blocks' drops; these join
+	 * the same maps (put-if-absent, so a later Display Delight block for the same food would not be replaced).
+	 */
+	private static void onLevelLoad(LevelEvent.Load event) {
+		if (!(event.getLevel() instanceof ServerLevel)) return;
+		for (Entry e : ENTRIES) {
+			Block block = e.block().get();
+			if (!ForgeRegistries.ITEMS.containsKey(e.dish().item())) {
+				// normal when the food's mod is absent (corn_popsicle needs Corn Delight): debug only
+				LOGGER.debug("[creativedelight] Display Delight dish {}: item {} not installed", e.dish().block(), e.dish().item());
+				continue;
+			}
+			Item item = ForgeRegistries.ITEMS.getValue(e.dish().item());
+			BlockAssociations.addToMap(item, block, false);
+		}
+	}
 }

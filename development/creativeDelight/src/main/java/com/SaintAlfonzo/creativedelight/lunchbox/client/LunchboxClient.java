@@ -23,30 +23,30 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class LunchboxClient {
 
-    public static final ResourceLocation SKIN = new ResourceLocation(CreativeDelight.MOD_ID, "lunchbox_skin");
-    public static final ResourceLocation DYED = new ResourceLocation(CreativeDelight.MOD_ID, "lunchbox_dyed");
+	public static final ResourceLocation SKIN = new ResourceLocation(CreativeDelight.MOD_ID, "lunchbox_skin");
+	public static final ResourceLocation DYED = new ResourceLocation(CreativeDelight.MOD_ID, "lunchbox_dyed");
 
-    private LunchboxClient() {}
+	private LunchboxClient() {}
 
-    private static List<Item> boxes() {
-        return Lunchboxes.TIERS.stream().filter(ForgeRegistries.ITEMS::containsKey)
-                .map(ForgeRegistries.ITEMS::getValue).filter(Objects::nonNull).toList();
-    }
+	private static List<Item> boxes() {
+		return Lunchboxes.TIERS.stream().filter(ForgeRegistries.ITEMS::containsKey)
+				.map(ForgeRegistries.ITEMS::getValue).filter(Objects::nonNull).toList();
+	}
 
-    public static void setup(FMLClientSetupEvent event) {
-        event.enqueueWork(() -> {
-            for (Item box : boxes()) {
-                ItemProperties.register(box, SKIN, (stack, level, entity, seed) -> Lunchboxes.skinIndex(stack));
-                ItemProperties.register(box, DYED, (stack, level, entity, seed) -> Lunchboxes.isDyed(stack) ? 1.0F : 0.0F);
-            }
-        });
-    }
+	public static void setup(FMLClientSetupEvent event) {
+		event.enqueueWork(() -> {
+			for (Item box : boxes()) {
+				ItemProperties.register(box, SKIN, (stack, level, entity, seed) -> Lunchboxes.skinIndex(stack));
+				ItemProperties.register(box, DYED, (stack, level, entity, seed) -> Lunchboxes.isDyed(stack) ? 1.0F : 0.0F);
+			}
+		});
+	}
 
-    public static void onItemColors(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tint) -> {
-            if (tint != 0 || !Lunchboxes.showsLunchboxLook(stack)) return -1;
-            int color = Lunchboxes.getColor(stack);
-            return color < 0 ? -1 : color;
-        }, boxes().toArray(new Item[0]));
-    }
+	public static void onItemColors(RegisterColorHandlersEvent.Item event) {
+		event.register((stack, tint) -> {
+			if (tint != 0 || !Lunchboxes.showsLunchboxLook(stack)) return -1;
+			int color = Lunchboxes.getColor(stack);
+			return color < 0 ? -1 : color;
+		}, boxes().toArray(new Item[0]));
+	}
 }

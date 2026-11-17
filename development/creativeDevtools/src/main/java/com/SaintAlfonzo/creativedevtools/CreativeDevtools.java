@@ -28,49 +28,49 @@ import java.util.List;
 @Mod(CreativeDevtools.MOD_ID)
 public class CreativeDevtools {
 
-    public static final String MOD_ID = "creativedevtools";
-    public static final Logger LOGGER = LogUtils.getLogger();
-    /** The nested members' mod ids (bundle_members). */
-    public static final List<String> MEMBERS = List.of("cdevperfbot", "cdevcapture");
+	public static final String MOD_ID = "creativedevtools";
+	public static final Logger LOGGER = LogUtils.getLogger();
+	/** The nested members' mod ids (bundle_members). */
+	public static final List<String> MEMBERS = List.of("cdevperfbot", "cdevcapture");
 
-    public CreativeDevtools() {
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DevtoolsConfig.SPEC, "creativedevtools-common.toml");
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+	public CreativeDevtools() {
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, DevtoolsConfig.SPEC, "creativedevtools-common.toml");
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
-        // Python generators (tools/generators.json): /cdevgen registers itself on the FORGE bus; these two run them at
-        // startup when [debug.generators] runAtStartup is on, finishing before any datapack loads.
-        modBus.addListener(GeneratorCommand::onCommonSetup);
-        modBus.addListener(GeneratorCommand::onLoadComplete);
+		// Python generators (tools/generators.json): /cdevgen registers itself on the FORGE bus; these two run them at
+		// startup when [debug.generators] runAtStartup is on, finishing before any datapack loads.
+		modBus.addListener(GeneratorCommand::onCommonSetup);
+		modBus.addListener(GeneratorCommand::onLoadComplete);
 
-        // /cdevplace: every structure or template matching a filter, laid out in rows (flat-world testing);
-        // knobs in [worldgen.mass_place]. Built on Creative Worldgen's placement code (an optional dependency).
-        if (ModList.get().isLoaded("creativeworldgen")) {
-            MinecraftForge.EVENT_BUS.register(MassPlacer.class);
-            MinecraftForge.EVENT_BUS.register(StructureCatalogue.class);
-        }
+		// /cdevplace: every structure or template matching a filter, laid out in rows (flat-world testing);
+		// knobs in [worldgen.mass_place]. Built on Creative Worldgen's placement code (an optional dependency).
+		if (ModList.get().isLoaded("creativeworldgen")) {
+			MinecraftForge.EVENT_BUS.register(MassPlacer.class);
+			MinecraftForge.EVENT_BUS.register(StructureCatalogue.class);
+		}
 
-        // Probes on Creative Common's hooks (util/BlockStateLookupHook, util/LevelRandomHook); inert while their
-        // [debug.*] switch is off.
-        BlockStateSyncDebug.register();
-        LevelRandomProbe.register();
+		// Probes on Creative Common's hooks (util/BlockStateLookupHook, util/LevelRandomHook); inert while their
+		// [debug.*] switch is off.
+		BlockStateSyncDebug.register();
+		LevelRandomProbe.register();
 
-        // /cdevbench passthrough: Creative Compat's pass-through micro benchmark (plan_passthrough.md 7.1)
-        if (ModList.get().isLoaded("creativecompat")) {
-            MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.perf.PassBenchCommand::onRegisterCommands);
-            // /cdevreload compat (server) and /cdevreloadclient compat (client): CompatConfigReload (plan_post_scratch_1115b.md E2)
-            MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.compat.CompatReloadCommand::onRegisterCommands);
-            if (net.minecraftforge.fml.loading.FMLEnvironment.dist == net.minecraftforge.api.distmarker.Dist.CLIENT) {
-                MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.compat.CompatReloadClient::onRegisterClientCommands);
-            }
-        }
+		// /cdevbench passthrough: Creative Compat's pass-through micro benchmark (plan_passthrough.md 7.1)
+		if (ModList.get().isLoaded("creativecompat")) {
+			MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.perf.PassBenchCommand::onRegisterCommands);
+			// /cdevreload compat (server) and /cdevreloadclient compat (client): CompatConfigReload (plan_post_scratch_1115b.md E2)
+			MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.compat.CompatReloadCommand::onRegisterCommands);
+			if (net.minecraftforge.fml.loading.FMLEnvironment.dist == net.minecraftforge.api.distmarker.Dist.CLIENT) {
+				MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.compat.CompatReloadClient::onRegisterClientCommands);
+			}
+		}
 
-        if (ModList.get().isLoaded("immersiveengineering")) MinecraftForge.EVENT_BUS.register(IeRecyclingDiagnostics.class);
+		if (ModList.get().isLoaded("immersiveengineering")) MinecraftForge.EVENT_BUS.register(IeRecyclingDiagnostics.class);
 
-        // /cdevtest: the scratch-test probe verbs in Java, tick warp and random ticks (creative_devtools.md, /cdevtest)
-        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.test.TestCommand::onRegisterCommands);
-        MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.test.TestTicks::onServerTick);
+		// /cdevtest: the scratch-test probe verbs in Java, tick warp and random ticks (creative_devtools.md, /cdevtest)
+		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.test.TestCommand::onRegisterCommands);
+		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativedevtools.test.TestTicks::onServerTick);
 
-        List<String> missing = MEMBERS.stream().filter(id -> !ModList.get().isLoaded(id)).toList();
-        LOGGER.info("[creativedevtools] loaded, members: {}{}", MEMBERS, missing.isEmpty() ? "" : " (NOT loaded: " + missing + ")");
-    }
+		List<String> missing = MEMBERS.stream().filter(id -> !ModList.get().isLoaded(id)).toList();
+		LOGGER.info("[creativedevtools] loaded, members: {}{}", MEMBERS, missing.isEmpty() ? "" : " (NOT loaded: " + missing + ")");
+	}
 }

@@ -18,32 +18,32 @@ import net.minecraft.world.entity.LivingEntity;
  */
 public final class EffectTickContext {
 
-    private static LivingEntity entity;
-    private static MobEffect effect;
+	private static LivingEntity entity;
+	private static MobEffect effect;
 
-    private EffectTickContext() {}
+	private EffectTickContext() {}
 
-    /** The entity whose effect is ticking (for the mixin to save before {@link #set}). */
-    @Nullable
-    public static LivingEntity entity() {
-        return entity;
-    }
+	/** The entity whose effect is ticking (for the mixin to save before {@link #set}). */
+	@Nullable
+	public static LivingEntity entity() {
+		return entity;
+	}
 
-    /** The ticking effect (for the mixin to save before {@link #set}). */
-    @Nullable
-    public static MobEffect effect() {
-        return effect;
-    }
+	/** The ticking effect (for the mixin to save before {@link #set}). */
+	@Nullable
+	public static MobEffect effect() {
+		return effect;
+	}
 
-    /** Marks {@code ticking} as running on {@code target}; pass the saved values back to restore. */
-    public static void set(@Nullable LivingEntity target, @Nullable MobEffect ticking) {
-        entity = target;
-        effect = ticking;
-    }
+	/** Marks {@code ticking} as running on {@code target}; pass the saved values back to restore. */
+	public static void set(@Nullable LivingEntity target, @Nullable MobEffect ticking) {
+		entity = target;
+		effect = ticking;
+	}
 
-    /** The effect whose tick is running on {@code target} right now, or null. */
-    @Nullable
-    public static MobEffect tickingOn(LivingEntity target) {
-        return entity == target ? effect : null;
-    }
+	/** The effect whose tick is running on {@code target} right now, or null. */
+	@Nullable
+	public static MobEffect tickingOn(LivingEntity target) {
+		return entity == target ? effect : null;
+	}
 }

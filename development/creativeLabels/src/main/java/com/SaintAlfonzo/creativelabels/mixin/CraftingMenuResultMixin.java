@@ -23,11 +23,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(CraftingMenu.class)
 public abstract class CraftingMenuResultMixin {
 
-    @Inject(method = "slotChangedCraftingGrid", at = @At("HEAD"), cancellable = true)
-    private static void creativelabels$blockLabelled(AbstractContainerMenu menu, Level level, Player player,
-                                                      CraftingContainer grid, ResultContainer result, CallbackInfo ci) {
-        if (!LabelledCrafting.blocks(level, grid)) return;
-        LabelledCrafting.clear(menu, player, result);
-        ci.cancel();
-    }
+	@Inject(method = "slotChangedCraftingGrid", at = @At("HEAD"), cancellable = true)
+	private static void creativelabels$blockLabelled(AbstractContainerMenu menu, Level level, Player player,
+													  CraftingContainer grid, ResultContainer result, CallbackInfo ci) {
+		if (!LabelledCrafting.blocks(level, grid)) return;
+		LabelledCrafting.clear(menu, player, result);
+		ci.cancel();
+	}
 }

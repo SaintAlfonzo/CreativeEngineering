@@ -10,24 +10,24 @@ import net.minecraft.client.model.geom.ModelPart;
  */
 public class MoobloomModel extends CowModel<Moobloom> {
 
-    private static final float HEAD_Y = 4.0F;
-    private float headXRot;
+	private static final float HEAD_Y = 4.0F;
+	private float headXRot;
 
-    public MoobloomModel(ModelPart root) {
-        super(root);
-    }
+	public MoobloomModel(ModelPart root) {
+		super(root);
+	}
 
-    @Override
-    public void prepareMobModel(Moobloom moobloom, float limbSwing, float limbSwingAmount, float partialTick) {
-        super.prepareMobModel(moobloom, limbSwing, limbSwingAmount, partialTick);
-        head.y = HEAD_Y + moobloom.getHeadEatPositionScale(partialTick) * 9.0F;
-        headXRot = moobloom.getHeadEatAngleScale(partialTick);
-    }
+	@Override
+	public void prepareMobModel(Moobloom moobloom, float limbSwing, float limbSwingAmount, float partialTick) {
+		super.prepareMobModel(moobloom, limbSwing, limbSwingAmount, partialTick);
+		head.y = HEAD_Y + moobloom.getHeadEatPositionScale(partialTick) * 9.0F;
+		headXRot = moobloom.getHeadEatAngleScale(partialTick);
+	}
 
-    @Override
-    public void setupAnim(Moobloom moobloom, float limbSwing, float limbSwingAmount, float ageInTicks,
-                          float netHeadYaw, float headPitch) {
-        super.setupAnim(moobloom, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-        head.xRot = headXRot;
-    }
+	@Override
+	public void setupAnim(Moobloom moobloom, float limbSwing, float limbSwingAmount, float ageInTicks,
+						  float netHeadYaw, float headPitch) {
+		super.setupAnim(moobloom, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+		head.xRot = headXRot;
+	}
 }

@@ -15,8 +15,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ItemStack.class)
 public abstract class ItemStackCookwareGlintMixin {
 
-    @Inject(method = "m_41790_", at = @At("RETURN"), cancellable = true, remap = false)
-    private void ce$cookwareGlint(CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValueZ() && CookwareContents.holdsContents((ItemStack) (Object) this)) cir.setReturnValue(true);
-    }
+	@Inject(method = "m_41790_", at = @At("RETURN"), cancellable = true, remap = false)
+	private void ce$cookwareGlint(CallbackInfoReturnable<Boolean> cir) {
+		if (!cir.getReturnValueZ() && CookwareContents.holdsContents((ItemStack) (Object) this)) cir.setReturnValue(true);
+	}
 }

@@ -24,72 +24,72 @@ import net.minecraftforge.client.model.data.ModelProperty;
  */
 public class BotanistPotBlockEntity extends BlockEntity implements PottedPlantHolder {
 
-    /** The potted block whose plant the client model draws; absent when the pot is empty. */
-    public static final ModelProperty<Block> POTTED = new ModelProperty<>();
+	/** The potted block whose plant the client model draws; absent when the pot is empty. */
+	public static final ModelProperty<Block> POTTED = new ModelProperty<>();
 
-    @Nullable
-    private ResourceLocation plant;
+	@Nullable
+	private ResourceLocation plant;
 
-    public BotanistPotBlockEntity(BlockPos pos, BlockState state) {
-        super(BotanistPot.TYPE.get(), pos, state);
-    }
+	public BotanistPotBlockEntity(BlockPos pos, BlockState state) {
+		super(BotanistPot.TYPE.get(), pos, state);
+	}
 
-    @Nullable
-    public ResourceLocation plant() {
-        return plant;
-    }
+	@Nullable
+	public ResourceLocation plant() {
+		return plant;
+	}
 
-    void setPlant(@Nullable ResourceLocation plant) {
-        this.plant = plant;
-        setChanged();
-        if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-    }
+	void setPlant(@Nullable ResourceLocation plant) {
+		this.plant = plant;
+		setChanged();
+		if (level != null) level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+	}
 
-    @Override
-    public void load(CompoundTag tag) {
-        super.load(tag);
-        plant = tag.contains(BotanistPot.PLANT_TAG) ? ResourceLocation.tryParse(tag.getString(BotanistPot.PLANT_TAG)) : null;
-    }
+	@Override
+	public void load(CompoundTag tag) {
+		super.load(tag);
+		plant = tag.contains(BotanistPot.PLANT_TAG) ? ResourceLocation.tryParse(tag.getString(BotanistPot.PLANT_TAG)) : null;
+	}
 
-    @Override
-    protected void saveAdditional(CompoundTag tag) {
-        super.saveAdditional(tag);
-        if (plant != null) tag.putString(BotanistPot.PLANT_TAG, plant.toString());
-    }
+	@Override
+	protected void saveAdditional(CompoundTag tag) {
+		super.saveAdditional(tag);
+		if (plant != null) tag.putString(BotanistPot.PLANT_TAG, plant.toString());
+	}
 
-    @Override
-    public CompoundTag getUpdateTag() {
-        return saveWithoutMetadata();
-    }
+	@Override
+	public CompoundTag getUpdateTag() {
+		return saveWithoutMetadata();
+	}
 
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
 
-    @Override
-    public void handleUpdateTag(CompoundTag tag) {
-        load(tag);
-        refreshModel();
-    }
+	@Override
+	public void handleUpdateTag(CompoundTag tag) {
+		load(tag);
+		refreshModel();
+	}
 
-    @Override
-    public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
-        CompoundTag tag = pkt.getTag();
-        load(tag == null ? new CompoundTag() : tag);
-        refreshModel();
-    }
+	@Override
+	public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
+		CompoundTag tag = pkt.getTag();
+		load(tag == null ? new CompoundTag() : tag);
+		refreshModel();
+	}
 
-    private void refreshModel() {
-        requestModelDataUpdate();
-        if (level != null && level.isClientSide) {
-            level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
-        }
-    }
+	private void refreshModel() {
+		requestModelDataUpdate();
+		if (level != null && level.isClientSide) {
+			level.sendBlockUpdated(worldPosition, getBlockState(), getBlockState(), Block.UPDATE_ALL);
+		}
+	}
 
-    @Override
-    public ModelData getModelData() {
-        Block potted = BotanistPot.pottedFor(plant);
-        return potted == null ? ModelData.EMPTY : ModelData.builder().with(POTTED, potted).build();
-    }
+	@Override
+	public ModelData getModelData() {
+		Block potted = BotanistPot.pottedFor(plant);
+		return potted == null ? ModelData.EMPTY : ModelData.builder().with(POTTED, potted).build();
+	}
 }

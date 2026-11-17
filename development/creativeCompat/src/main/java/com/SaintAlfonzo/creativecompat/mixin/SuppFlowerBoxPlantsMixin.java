@@ -19,8 +19,8 @@ import net.minecraft.world.item.ItemStack;
 @Mixin(value = FlowerBoxBlockTile.class, remap = false)
 public abstract class SuppFlowerBoxPlantsMixin {
 
-    @Inject(method = "m_7013_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$notInBoxes(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (stack.is(PlantBoxModels.NOT_IN_BOXES)) cir.setReturnValue(false);
-    }
+	@Inject(method = "m_7013_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$notInBoxes(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+		if (stack.is(PlantBoxModels.NOT_IN_BOXES)) cir.setReturnValue(false);
+	}
 }

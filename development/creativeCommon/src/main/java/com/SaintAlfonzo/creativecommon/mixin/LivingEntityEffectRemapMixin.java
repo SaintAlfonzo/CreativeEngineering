@@ -22,15 +22,15 @@ import net.minecraft.world.entity.LivingEntity;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityEffectRemapMixin {
 
-    @Inject(method = "m_147207_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$remapEffect(MobEffectInstance instance, Entity source, CallbackInfoReturnable<Boolean> cir) {
-        LivingEntity self = (LivingEntity) (Object) this;
-        if (self.level.isClientSide) return;
-        if (EffectRules.isRemoved(instance.getEffect())) {
-            cir.setReturnValue(false);
-            return;
-        }
-        MobEffectInstance changed = EffectRules.withItemIcon(EffectRules.remap(instance));
-        if (changed != instance) cir.setReturnValue(self.addEffect(changed, source));
-    }
+	@Inject(method = "m_147207_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$remapEffect(MobEffectInstance instance, Entity source, CallbackInfoReturnable<Boolean> cir) {
+		LivingEntity self = (LivingEntity) (Object) this;
+		if (self.level.isClientSide) return;
+		if (EffectRules.isRemoved(instance.getEffect())) {
+			cir.setReturnValue(false);
+			return;
+		}
+		MobEffectInstance changed = EffectRules.withItemIcon(EffectRules.remap(instance));
+		if (changed != instance) cir.setReturnValue(self.addEffect(changed, source));
+	}
 }

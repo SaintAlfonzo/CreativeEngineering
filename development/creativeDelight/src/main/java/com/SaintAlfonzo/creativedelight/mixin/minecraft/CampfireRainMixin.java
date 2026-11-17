@@ -22,23 +22,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(CampfireBlockEntity.class)
 public abstract class CampfireRainMixin implements CampfireRainTicks {
 
-    @Unique
-    private int ce$rainTicks;
+	@Unique
+	private int ce$rainTicks;
 
-    @Override
-    public int ce$getRainTicks() {
-        return ce$rainTicks;
-    }
+	@Override
+	public int ce$getRainTicks() {
+		return ce$rainTicks;
+	}
 
-    @Override
-    public void ce$setRainTicks(int ticks) {
-        ce$rainTicks = ticks;
-    }
+	@Override
+	public void ce$setRainTicks(int ticks) {
+		ce$rainTicks = ticks;
+	}
 
-    @Inject(method = "m_155306_", at = @At("RETURN"), remap = false)
-    private static void creativeengineering$rainDouses(Level level, BlockPos pos, BlockState state,
-                                                     CampfireBlockEntity campfire, CallbackInfo ci) {
-        CampfireRain.tick(level, pos, state, campfire);
-        CampfireComfort.tick(level, pos);
-    }
+	@Inject(method = "m_155306_", at = @At("RETURN"), remap = false)
+	private static void creativeengineering$rainDouses(Level level, BlockPos pos, BlockState state,
+													 CampfireBlockEntity campfire, CallbackInfo ci) {
+		CampfireRain.tick(level, pos, state, campfire);
+		CampfireComfort.tick(level, pos);
+	}
 }

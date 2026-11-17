@@ -49,98 +49,98 @@ import java.util.List;
  */
 @Mixin(value = TrashSlotGuiHandler.class, remap = false)
 public abstract class TrashSlotGuiHandlerMixin {
-    @Shadow @Final private static TrashSlotSlot trashSlot;
-    @Shadow private static TrashSlotComponent trashSlotComponent;
-    @Shadow private static ContainerSettings currentContainerSettings;
+	@Shadow @Final private static TrashSlotSlot trashSlot;
+	@Shadow private static TrashSlotComponent trashSlotComponent;
+	@Shadow private static ContainerSettings currentContainerSettings;
 
-    @Unique
-    private static void creativecompat$clearState() {
-        currentContainerSettings = ContainerSettings.NONE;
-        trashSlotComponent = null;
-    }
+	@Unique
+	private static void creativecompat$clearState() {
+		currentContainerSettings = ContainerSettings.NONE;
+		trashSlotComponent = null;
+	}
 
-    /** Settings from the pack's defaults per screen and per backpack tier. */
-    @Redirect(method = "onScreenInit", at = @At(value = "INVOKE",
-            target = "Lnet/blay09/mods/trashslot/TrashSlotSaveState;getSettings(Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;Lnet/blay09/mods/trashslot/api/IGuiContainerLayout;)Lnet/blay09/mods/trashslot/client/ContainerSettings;"))
-    private static ContainerSettings creativecompat$settings(AbstractContainerScreen<?> screen, IGuiContainerLayout layout) {
-        return TrashSlotCompat.settingsFor(screen, layout);
-    }
+	/** Settings from the pack's defaults per screen and per backpack tier. */
+	@Redirect(method = "onScreenInit", at = @At(value = "INVOKE",
+			target = "Lnet/blay09/mods/trashslot/TrashSlotSaveState;getSettings(Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;Lnet/blay09/mods/trashslot/api/IGuiContainerLayout;)Lnet/blay09/mods/trashslot/client/ContainerSettings;"))
+	private static ContainerSettings creativecompat$settings(AbstractContainerScreen<?> screen, IGuiContainerLayout layout) {
+		return TrashSlotCompat.settingsFor(screen, layout);
+	}
 
-    /**
-     * The creative inventory screen check: its only use is {@code instanceof CreativeModeInventoryScreen}, so no screen
-     * here lets the creative screen go on like any container screen.
-     */
-    @Redirect(method = "onScreenInit", at = @At(value = "INVOKE", ordinal = 1,
-            target = "Lnet/blay09/mods/balm/api/event/client/screen/ScreenInitEvent$Post;getScreen()Lnet/minecraft/client/gui/screens/Screen;"))
-    private static Screen creativecompat$noCreativeSkip(ScreenInitEvent.Post event) {
-        return null;
-    }
+	/**
+	 * The creative inventory screen check: its only use is {@code instanceof CreativeModeInventoryScreen}, so no screen
+	 * here lets the creative screen go on like any container screen.
+	 */
+	@Redirect(method = "onScreenInit", at = @At(value = "INVOKE", ordinal = 1,
+			target = "Lnet/blay09/mods/balm/api/event/client/screen/ScreenInitEvent$Post;getScreen()Lnet/minecraft/client/gui/screens/Screen;"))
+	private static Screen creativecompat$noCreativeSkip(ScreenInitEvent.Post event) {
+		return null;
+	}
 
-    /** The survival inventory of a creative player: read as not creative, so it gets a slot. */
-    @Redirect(method = "onScreenInit", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD,
-            target = "Lnet/minecraft/world/entity/player/Abilities;f_35937_:Z"))
-    private static boolean creativecompat$noCreativeInventorySkip(Abilities abilities) {
-        return false;
-    }
+	/** The survival inventory of a creative player: read as not creative, so it gets a slot. */
+	@Redirect(method = "onScreenInit", at = @At(value = "FIELD", opcode = Opcodes.GETFIELD,
+			target = "Lnet/minecraft/world/entity/player/Abilities;f_35937_:Z"))
+	private static boolean creativecompat$noCreativeInventorySkip(Abilities abilities) {
+		return false;
+	}
 
-    /** A spectator's screen: also drop the previous screen's slot. */
-    @Redirect(method = "onScreenInit", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/entity/player/Player;m_5833_()Z"))
-    private static boolean creativecompat$spectatorClears(Player player) {
-        boolean spectator = player.isSpectator();
-        if (spectator) creativecompat$clearState();
-        return spectator;
-    }
+	/** A spectator's screen: also drop the previous screen's slot. */
+	@Redirect(method = "onScreenInit", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/world/entity/player/Player;m_5833_()Z"))
+	private static boolean creativecompat$spectatorClears(Player player) {
+		boolean spectator = player.isSpectator();
+		if (spectator) creativecompat$clearState();
+		return spectator;
+	}
 
-    /** TrashSlot missing on the server (first screen, the one with the message): also drop the previous slot. */
-    @Inject(method = "onScreenInit", at = @At(value = "FIELD", opcode = Opcodes.PUTSTATIC,
-            target = "Lnet/blay09/mods/trashslot/client/TrashSlotGuiHandler;sentMissingMessage:Z"))
-    private static void creativecompat$serverMissingClears(ScreenInitEvent.Post event, CallbackInfo ci) {
-        creativecompat$clearState();
-    }
+	/** TrashSlot missing on the server (first screen, the one with the message): also drop the previous slot. */
+	@Inject(method = "onScreenInit", at = @At(value = "FIELD", opcode = Opcodes.PUTSTATIC,
+			target = "Lnet/blay09/mods/trashslot/client/TrashSlotGuiHandler;sentMissingMessage:Z"))
+	private static void creativecompat$serverMissingClears(ScreenInitEvent.Post event, CallbackInfo ci) {
+		creativecompat$clearState();
+	}
 
-    @Redirect(
-            method = "onMouseClick",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/blay09/mods/trashslot/config/TrashSlotConfig;getDeletionProvider()Lnet/blay09/mods/trashslot/client/deletion/DeletionProvider;"
-            )
-    )
-    private static DeletionProvider creativeengineering$creativeDeletion() {
-        DeletionProvider provider = TrashSlotConfig.getDeletionProvider();
-        if (provider != null && Minecraft.getInstance().screen instanceof CreativeModeInventoryScreen) {
-            return TrashSlotCompat.CREATIVE;
-        }
-        return provider;
-    }
+	@Redirect(
+			method = "onMouseClick",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/blay09/mods/trashslot/config/TrashSlotConfig;getDeletionProvider()Lnet/blay09/mods/trashslot/client/deletion/DeletionProvider;"
+			)
+	)
+	private static DeletionProvider creativeengineering$creativeDeletion() {
+		DeletionProvider provider = TrashSlotConfig.getDeletionProvider();
+		if (provider != null && Minecraft.getInstance().screen instanceof CreativeModeInventoryScreen) {
+			return TrashSlotCompat.CREATIVE;
+		}
+		return provider;
+	}
 
-    @Redirect(
-            method = "runKeyBindings",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/blay09/mods/trashslot/client/ContainerSettings;isEnabled()Z",
-                    ordinal = 0
-            )
-    )
-    private static boolean creativeengineering$noSlotDeleteInCreative(ContainerSettings settings) {
-        if (Minecraft.getInstance().screen instanceof CreativeModeInventoryScreen) {
-            return false;
-        }
-        return settings.isEnabled();
-    }
+	@Redirect(
+			method = "runKeyBindings",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/blay09/mods/trashslot/client/ContainerSettings;isEnabled()Z",
+					ordinal = 0
+			)
+	)
+	private static boolean creativeengineering$noSlotDeleteInCreative(ContainerSettings settings) {
+		if (Minecraft.getInstance().screen instanceof CreativeModeInventoryScreen) {
+			return false;
+		}
+		return settings.isEnabled();
+	}
 
-    @Redirect(
-            method = "onScreenDrawn",
-            remap = false,
-            require = 1,
-            at = @At(
-                    value = "INVOKE",
-                    remap = false,
-                    target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"
-            )
-    )
-    private static void creativeengineering$trashTooltipWithStack(AbstractContainerScreen<?> screen, PoseStack poseStack,
-                                                                 List<Component> lines, int x, int y) {
-        screen.renderComponentTooltip(poseStack, lines, x, y, trashSlot.getItem());
-    }
+	@Redirect(
+			method = "onScreenDrawn",
+			remap = false,
+			require = 1,
+			at = @At(
+					value = "INVOKE",
+					remap = false,
+					target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;m_96597_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;II)V"
+			)
+	)
+	private static void creativeengineering$trashTooltipWithStack(AbstractContainerScreen<?> screen, PoseStack poseStack,
+																 List<Component> lines, int x, int y) {
+		screen.renderComponentTooltip(poseStack, lines, x, y, trashSlot.getItem());
+	}
 }

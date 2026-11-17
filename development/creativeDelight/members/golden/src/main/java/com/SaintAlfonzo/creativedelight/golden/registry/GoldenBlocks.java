@@ -15,17 +15,17 @@ import net.minecraftforge.registries.RegistryObject;
  * upstream's block settings: wool material, strength 0.5, wool sound; no loot table (a cake drops nothing).
  */
 public final class GoldenBlocks {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, GoldenFoodMod.MODID);
+	public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, GoldenFoodMod.MODID);
 
-    public static final RegistryObject<Block> GOLDEN_CAKE = BLOCKS.register("golden_cake",
-            () -> new GoldenCakeBlock(cake(), GoldenCakeBlock.Slice.GOLDEN));
-    public static final RegistryObject<Block> ENCHANTED_GOLDEN_CAKE = BLOCKS.register("enchanted_golden_cake",
-            () -> new GoldenCakeBlock(cake(), GoldenCakeBlock.Slice.ENCHANTED));
+	public static final RegistryObject<Block> GOLDEN_CAKE = BLOCKS.register("golden_cake",
+			() -> new GoldenCakeBlock(cake(), GoldenCakeBlock.Slice.GOLDEN));
+	public static final RegistryObject<Block> ENCHANTED_GOLDEN_CAKE = BLOCKS.register("enchanted_golden_cake",
+			() -> new GoldenCakeBlock(cake(), GoldenCakeBlock.Slice.ENCHANTED));
 
-    private GoldenBlocks() {
-    }
+	private GoldenBlocks() {
+	}
 
-    private static BlockBehaviour.Properties cake() {
-        return BlockBehaviour.Properties.of(Material.WOOL).strength(0.5F).sound(SoundType.WOOL);
-    }
+	private static BlockBehaviour.Properties cake() {
+		return BlockBehaviour.Properties.of(Material.WOOL).strength(0.5F).sound(SoundType.WOOL);
+	}
 }

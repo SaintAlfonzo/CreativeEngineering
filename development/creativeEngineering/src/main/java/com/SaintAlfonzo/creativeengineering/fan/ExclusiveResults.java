@@ -20,29 +20,29 @@ import net.minecraft.world.item.ItemStack;
  */
 public final class ExclusiveResults {
 
-    public static final String JSON_KEY = "exclusive_results";
+	public static final String JSON_KEY = "exclusive_results";
 
-    private static final Random RANDOM = new Random();
+	private static final Random RANDOM = new Random();
 
-    private ExclusiveResults() {}
+	private ExclusiveResults() {}
 
-    public static List<ItemStack> roll(List<ProcessingOutput> outputs) {
-        List<ItemStack> results = new ArrayList<>(1);
-        float r = RANDOM.nextFloat();
-        for (ProcessingOutput output : outputs) {
-            r -= output.getChance();
-            if (r < 0) {
-                ItemStack stack = output.getStack().copy();
-                if (!stack.isEmpty()) results.add(stack);
-                break;
-            }
-        }
-        return results;
-    }
+	public static List<ItemStack> roll(List<ProcessingOutput> outputs) {
+		List<ItemStack> results = new ArrayList<>(1);
+		float r = RANDOM.nextFloat();
+		for (ProcessingOutput output : outputs) {
+			r -= output.getChance();
+			if (r < 0) {
+				ItemStack stack = output.getStack().copy();
+				if (!stack.isEmpty()) results.add(stack);
+				break;
+			}
+		}
+		return results;
+	}
 
-    public static float chanceSum(List<ProcessingOutput> outputs) {
-        float sum = 0;
-        for (ProcessingOutput output : outputs) sum += output.getChance();
-        return sum;
-    }
+	public static float chanceSum(List<ProcessingOutput> outputs) {
+		float sum = 0;
+		for (ProcessingOutput output : outputs) sum += output.getChance();
+		return sum;
+	}
 }

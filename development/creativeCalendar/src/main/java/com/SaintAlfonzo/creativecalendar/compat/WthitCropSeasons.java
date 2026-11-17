@@ -33,53 +33,53 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class WthitCropSeasons implements IWailaClientPlugin, IBlockComponentProvider {
 
-    private static final ResourceLocation SEASONS_LINE = new ResourceLocation(CreativeCalendar.MOD_ID, "crop_seasons");
-    private static final ResourceLocation HERE_LINE = new ResourceLocation(CreativeCalendar.MOD_ID, "crop_out_of_season");
-    /** After the Growth line (default priority 1000). */
-    private static final int PRIORITY = 1100;
+	private static final ResourceLocation SEASONS_LINE = new ResourceLocation(CreativeCalendar.MOD_ID, "crop_seasons");
+	private static final ResourceLocation HERE_LINE = new ResourceLocation(CreativeCalendar.MOD_ID, "crop_out_of_season");
+	/** After the Growth line (default priority 1000). */
+	private static final int PRIORITY = 1100;
 
-    @Override
-    public void register(IClientRegistrar registrar) {
-        registrar.body(this, Block.class, PRIORITY);
-    }
+	@Override
+	public void register(IClientRegistrar registrar) {
+		registrar.body(this, Block.class, PRIORITY);
+	}
 
-    @Override
-    public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
-        if (!CropSeasons.enabled()) {
-            return;
-        }
-        BlockState state = accessor.getBlockState();
-        CropSeasons.Type type = CropSeasons.displayTypeOf(state);
-        if (type == null || type == CropSeasons.Type.NONE) {
-            return;
-        }
-        if (CalendarConfig.WTHIT.cropSeasons.get()) {
-            List<Component> lines = CropSeasonTooltip.summary(type);
-            for (int i = 0; i < lines.size(); i++) {
-                tooltip.setLine(i == 0 ? SEASONS_LINE : new ResourceLocation(SEASONS_LINE + "_" + i), lines.get(i));
-            }
-        }
-        if (CalendarConfig.WTHIT.cropOutOfSeason.get()) {
-            Level level = accessor.getLevel();
-            BlockPos pos = accessor.getPosition();
-            CropSeasons.Fertility f = CropSeasons.fertility(level, pos, type);
-            if (f == CropSeasons.Fertility.FERTILE) {
-                tooltip.setLine(HERE_LINE, Component.translatable("creativeengineering.wthit.crop_season_here.fertile")
-                        .withStyle(ChatFormatting.GREEN));
-            } else if (f == CropSeasons.Fertility.OFF) {
-                tooltip.setLine(HERE_LINE, Component.translatable("creativeengineering.wthit.crop_season_here.off")
-                        .withStyle(ChatFormatting.RED));
-            } else {
-                // neutral only because of greenhouse glass above: say which way it cuts
-                CropSeasons.Fertility open = CropSeasons.fertility(level, pos, type, false);
-                if (open == CropSeasons.Fertility.OFF) {
-                    tooltip.setLine(HERE_LINE, Component.translatable("creativeengineering.wthit.crop_season_here.greenhouse_off")
-                            .withStyle(ChatFormatting.GREEN));
-                } else if (open == CropSeasons.Fertility.FERTILE) {
-                    tooltip.setLine(HERE_LINE, Component.translatable("creativeengineering.wthit.crop_season_here.greenhouse_fertile")
-                            .withStyle(ChatFormatting.RED));
-                }
-            }
-        }
-    }
+	@Override
+	public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+		if (!CropSeasons.enabled()) {
+			return;
+		}
+		BlockState state = accessor.getBlockState();
+		CropSeasons.Type type = CropSeasons.displayTypeOf(state);
+		if (type == null || type == CropSeasons.Type.NONE) {
+			return;
+		}
+		if (CalendarConfig.WTHIT.cropSeasons.get()) {
+			List<Component> lines = CropSeasonTooltip.summary(type);
+			for (int i = 0; i < lines.size(); i++) {
+				tooltip.setLine(i == 0 ? SEASONS_LINE : new ResourceLocation(SEASONS_LINE + "_" + i), lines.get(i));
+			}
+		}
+		if (CalendarConfig.WTHIT.cropOutOfSeason.get()) {
+			Level level = accessor.getLevel();
+			BlockPos pos = accessor.getPosition();
+			CropSeasons.Fertility f = CropSeasons.fertility(level, pos, type);
+			if (f == CropSeasons.Fertility.FERTILE) {
+				tooltip.setLine(HERE_LINE, Component.translatable("creativeengineering.wthit.crop_season_here.fertile")
+						.withStyle(ChatFormatting.GREEN));
+			} else if (f == CropSeasons.Fertility.OFF) {
+				tooltip.setLine(HERE_LINE, Component.translatable("creativeengineering.wthit.crop_season_here.off")
+						.withStyle(ChatFormatting.RED));
+			} else {
+				// neutral only because of greenhouse glass above: say which way it cuts
+				CropSeasons.Fertility open = CropSeasons.fertility(level, pos, type, false);
+				if (open == CropSeasons.Fertility.OFF) {
+					tooltip.setLine(HERE_LINE, Component.translatable("creativeengineering.wthit.crop_season_here.greenhouse_off")
+							.withStyle(ChatFormatting.GREEN));
+				} else if (open == CropSeasons.Fertility.FERTILE) {
+					tooltip.setLine(HERE_LINE, Component.translatable("creativeengineering.wthit.crop_season_here.greenhouse_fertile")
+							.withStyle(ChatFormatting.RED));
+				}
+			}
+		}
+	}
 }

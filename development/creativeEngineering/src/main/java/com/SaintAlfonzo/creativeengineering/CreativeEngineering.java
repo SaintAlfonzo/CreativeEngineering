@@ -30,52 +30,52 @@ import org.slf4j.Logger;
 @Mod(CreativeEngineering.MODID)
 public class CreativeEngineering {
 
-    public static final String MODID = "creativeengineering";
-    private static final Logger LOGGER = LogUtils.getLogger();
+	public static final String MODID = "creativeengineering";
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    public CreativeEngineering() {
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(this::commonSetup);
+	public CreativeEngineering() {
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.addListener(this::commonSetup);
 
-        // Precision sawblade and creosote-soaked sawdust (item/), the dragon breathing recipe type and serializer.
-        CreativeEngineeringItems.register(modEventBus);
-        DragonBreathingRecipeType.register(modEventBus);
+		// Precision sawblade and creosote-soaked sawdust (item/), the dragon breathing recipe type and serializer.
+		CreativeEngineeringItems.register(modEventBus);
+		DragonBreathingRecipeType.register(modEventBus);
 
-        // IE: arc recycling of springs, prefixToIngotMap override (onServerAboutToStart).
-        MinecraftForge.EVENT_BUS.register(IECompat.class);
+		// IE: arc recycling of springs, prefixToIngotMap override (onServerAboutToStart).
+		MinecraftForge.EVENT_BUS.register(IECompat.class);
 
-        // Drink fluid effect lines in JEI fluid tooltips (compat/DrinkFluidEffects, from Creative Common): client
-        // only, and only with Create, whose emptying recipes it reads.
-        if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient() && ModList.get().isLoaded("create")) {
-            MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativeengineering.compat.DrinkFluidEffects::onRecipesUpdated);
-        }
+		// Drink fluid effect lines in JEI fluid tooltips (compat/DrinkFluidEffects, from Creative Common): client
+		// only, and only with Create, whose emptying recipes it reads.
+		if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient() && ModList.get().isLoaded("create")) {
+			MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativeengineering.compat.DrinkFluidEffects::onRecipesUpdated);
+		}
 
-        LOGGER.info("[creativeengineering] loaded");
-    }
+		LOGGER.info("[creativeengineering] loaded");
+	}
 
-    private void commonSetup(final FMLCommonSetupEvent event) {
-        IECompat.register();
+	private void commonSetup(final FMLCommonSetupEvent event) {
+		IECompat.register();
 
-        // SawmillProcessMixin applies lazily on the first sawmill tick (minutes into a session). ModLauncher's Mixin
-        // bytecode provider cannot locate classes from this jar that have never been loaded when it does a late
-        // transform, so the helper and duck classes the mixin references are defined up front here, or the apply
-        // throws ClassMetadataNotFoundException and crashes the game.
-        forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.SawbladeRouting");
-        forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.duck.SawmillProcessExt");
-        forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.duck.SawmillRecipeExt");
+		// SawmillProcessMixin applies lazily on the first sawmill tick (minutes into a session). ModLauncher's Mixin
+		// bytecode provider cannot locate classes from this jar that have never been loaded when it does a late
+		// transform, so the helper and duck classes the mixin references are defined up front here, or the apply
+		// throws ClassMetadataNotFoundException and crashes the game.
+		forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.SawbladeRouting");
+		forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.duck.SawmillProcessExt");
+		forceLoad("com.SaintAlfonzo.creativeengineering.sawmill.duck.SawmillRecipeExt");
 
-        event.enqueueWork(DragonBreathingFanProcessingType::register);
-        if (ModList.get().isLoaded("immersiveengineering")) {
-            event.enqueueWork(IECompat::registerHammerNoRotate);
-        }
-    }
+		event.enqueueWork(DragonBreathingFanProcessingType::register);
+		if (ModList.get().isLoaded("immersiveengineering")) {
+			event.enqueueWork(IECompat::registerHammerNoRotate);
+		}
+	}
 
-    /** Define a class now (with linking) so it exists before any late Mixin transform needs it. */
-    private static void forceLoad(String className) {
-        try {
-            Class.forName(className, true, CreativeEngineering.class.getClassLoader());
-        } catch (Throwable t) {
-            LOGGER.error("Failed to pre-load {} - sawmill blade routing may crash on use", className, t);
-        }
-    }
+	/** Define a class now (with linking) so it exists before any late Mixin transform needs it. */
+	private static void forceLoad(String className) {
+		try {
+			Class.forName(className, true, CreativeEngineering.class.getClassLoader());
+		} catch (Throwable t) {
+			LOGGER.error("Failed to pre-load {} - sawmill blade routing may crash on use", className, t);
+		}
+	}
 }

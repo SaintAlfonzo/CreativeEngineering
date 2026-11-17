@@ -20,11 +20,11 @@ import vazkii.quark.content.tweaks.module.HoeHarvestingModule;
 @Mixin(value = HoeHarvestingModule.class, remap = false)
 public abstract class QuarkHoeHarvestMixin {
 
-    @Inject(method = "canHarvest", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$farmlandCrops(Player player, LevelAccessor world, BlockPos pos, BlockState state,
-                                                   CallbackInfoReturnable<Boolean> cir) {
-        if (CropParity.isFarmlandCrop(state)) {
-            cir.setReturnValue(true);
-        }
-    }
+	@Inject(method = "canHarvest", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$farmlandCrops(Player player, LevelAccessor world, BlockPos pos, BlockState state,
+												   CallbackInfoReturnable<Boolean> cir) {
+		if (CropParity.isFarmlandCrop(state)) {
+			cir.setReturnValue(true);
+		}
+	}
 }

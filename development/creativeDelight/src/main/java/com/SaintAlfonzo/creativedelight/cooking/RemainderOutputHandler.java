@@ -12,47 +12,47 @@ import net.minecraftforge.items.IItemHandler;
  */
 public class RemainderOutputHandler implements IItemHandler {
 
-    private final IItemHandler inner;
-    private final IItemHandler buffer;
+	private final IItemHandler inner;
+	private final IItemHandler buffer;
 
-    public RemainderOutputHandler(IItemHandler inner, IItemHandler buffer) {
-        this.inner = inner;
-        this.buffer = buffer;
-    }
+	public RemainderOutputHandler(IItemHandler inner, IItemHandler buffer) {
+		this.inner = inner;
+		this.buffer = buffer;
+	}
 
-    @Override
-    public int getSlots() {
-        return inner.getSlots() + buffer.getSlots();
-    }
+	@Override
+	public int getSlots() {
+		return inner.getSlots() + buffer.getSlots();
+	}
 
-    @Override
-    @Nonnull
-    public ItemStack getStackInSlot(int slot) {
-        int n = inner.getSlots();
-        return slot < n ? inner.getStackInSlot(slot) : buffer.getStackInSlot(slot - n);
-    }
+	@Override
+	@Nonnull
+	public ItemStack getStackInSlot(int slot) {
+		int n = inner.getSlots();
+		return slot < n ? inner.getStackInSlot(slot) : buffer.getStackInSlot(slot - n);
+	}
 
-    @Override
-    @Nonnull
-    public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
-        return slot < inner.getSlots() ? inner.insertItem(slot, stack, simulate) : stack;
-    }
+	@Override
+	@Nonnull
+	public ItemStack insertItem(int slot, @Nonnull ItemStack stack, boolean simulate) {
+		return slot < inner.getSlots() ? inner.insertItem(slot, stack, simulate) : stack;
+	}
 
-    @Override
-    @Nonnull
-    public ItemStack extractItem(int slot, int amount, boolean simulate) {
-        int n = inner.getSlots();
-        return slot < n ? inner.extractItem(slot, amount, simulate) : buffer.extractItem(slot - n, amount, simulate);
-    }
+	@Override
+	@Nonnull
+	public ItemStack extractItem(int slot, int amount, boolean simulate) {
+		int n = inner.getSlots();
+		return slot < n ? inner.extractItem(slot, amount, simulate) : buffer.extractItem(slot - n, amount, simulate);
+	}
 
-    @Override
-    public int getSlotLimit(int slot) {
-        int n = inner.getSlots();
-        return slot < n ? inner.getSlotLimit(slot) : buffer.getSlotLimit(slot - n);
-    }
+	@Override
+	public int getSlotLimit(int slot) {
+		int n = inner.getSlots();
+		return slot < n ? inner.getSlotLimit(slot) : buffer.getSlotLimit(slot - n);
+	}
 
-    @Override
-    public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
-        return slot < inner.getSlots() && inner.isItemValid(slot, stack);
-    }
+	@Override
+	public boolean isItemValid(int slot, @Nonnull ItemStack stack) {
+		return slot < inner.getSlots() && inner.isItemValid(slot, stack);
+	}
 }

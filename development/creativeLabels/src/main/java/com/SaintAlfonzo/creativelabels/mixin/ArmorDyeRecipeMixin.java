@@ -20,15 +20,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ArmorDyeRecipe.class)
 public abstract class ArmorDyeRecipeMixin {
 
-    @Inject(method = "matches(Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/world/level/Level;)Z",
-            at = @At("HEAD"), cancellable = true)
-    private void creativelabels$refuseSpecialNotes(CraftingContainer grid, Level level, CallbackInfoReturnable<Boolean> cir) {
-        for (int i = 0; i < grid.getContainerSize(); i++) {
-            ItemStack s = grid.getItem(i);
-            if (s.getItem() instanceof StickyNoteItem && NoteData.readSpecial(s) != null) {
-                cir.setReturnValue(false);
-                return;
-            }
-        }
-    }
+	@Inject(method = "matches(Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/world/level/Level;)Z",
+			at = @At("HEAD"), cancellable = true)
+	private void creativelabels$refuseSpecialNotes(CraftingContainer grid, Level level, CallbackInfoReturnable<Boolean> cir) {
+		for (int i = 0; i < grid.getContainerSize(); i++) {
+			ItemStack s = grid.getItem(i);
+			if (s.getItem() instanceof StickyNoteItem && NoteData.readSpecial(s) != null) {
+				cir.setReturnValue(false);
+				return;
+			}
+		}
+	}
 }

@@ -22,17 +22,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Dolphin.class)
 public abstract class DolphinFeedMixin {
 
-    @Inject(method = "m_6071_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void babyMobs$feedBaby(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        Dolphin self = (Dolphin) (Object) this;
-        if (!BMConfig.DOLPHIN_FISH_FEEDING.get() || !BabyAges.isBaby(self)) return;
-        ItemStack stack = player.getItemInHand(hand);
-        if (stack.isEmpty() || !stack.is(ItemTags.FISHES)) return;
-        if (!self.level.isClientSide) {
-            self.playSound(SoundEvents.DOLPHIN_EAT, 1.0F, 1.0F);
-            if (!player.getAbilities().instabuild) stack.shrink(1);
-            BabyAges.ageUp(self, AgeableMob.getSpeedUpSecondsWhenFeeding(-BabyAges.getAge(self)));
-        }
-        cir.setReturnValue(InteractionResult.sidedSuccess(self.level.isClientSide));
-    }
+	@Inject(method = "m_6071_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void babyMobs$feedBaby(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
+		Dolphin self = (Dolphin) (Object) this;
+		if (!BMConfig.DOLPHIN_FISH_FEEDING.get() || !BabyAges.isBaby(self)) return;
+		ItemStack stack = player.getItemInHand(hand);
+		if (stack.isEmpty() || !stack.is(ItemTags.FISHES)) return;
+		if (!self.level.isClientSide) {
+			self.playSound(SoundEvents.DOLPHIN_EAT, 1.0F, 1.0F);
+			if (!player.getAbilities().instabuild) stack.shrink(1);
+			BabyAges.ageUp(self, AgeableMob.getSpeedUpSecondsWhenFeeding(-BabyAges.getAge(self)));
+		}
+		cir.setReturnValue(InteractionResult.sidedSuccess(self.level.isClientSide));
+	}
 }

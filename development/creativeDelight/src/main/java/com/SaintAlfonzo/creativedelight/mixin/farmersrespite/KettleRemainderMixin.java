@@ -47,120 +47,120 @@ import vectorwing.farmersdelight.common.utility.ItemUtils;
 @Mixin(value = KettleBlockEntity.class, remap = false)
 public abstract class KettleRemainderMixin implements RemainderBufferHolder {
 
-    private static final int INGREDIENT_SLOTS = 2;
+	private static final int INGREDIENT_SLOTS = 2;
 
-    @Shadow
-    @Final
-    private ItemStackHandler inventory;
+	@Shadow
+	@Final
+	private ItemStackHandler inventory;
 
-    @Shadow
-    @Final
-    private LazyOptional<IItemHandler> outputHandler;
+	@Shadow
+	@Final
+	private LazyOptional<IItemHandler> outputHandler;
 
-    @Shadow
-    public abstract boolean isContainerValid(ItemStack containerItem);
+	@Shadow
+	public abstract boolean isContainerValid(ItemStack containerItem);
 
-    @Shadow
-    public abstract ItemStack getMeal();
+	@Shadow
+	public abstract ItemStack getMeal();
 
-    @Shadow
-    private boolean doesMealHaveContainer(ItemStack meal) {
-        throw new AssertionError();
-    }
+	@Shadow
+	private boolean doesMealHaveContainer(ItemStack meal) {
+		throw new AssertionError();
+	}
 
-    @Unique
-    private RemainderBuffer ce$remainders;
+	@Unique
+	private RemainderBuffer ce$remainders;
 
-    @Unique
-    private LazyOptional<IItemHandler> ce$sideHandler;
+	@Unique
+	private LazyOptional<IItemHandler> ce$sideHandler;
 
-    @Override
-    public RemainderBuffer ce$getRemainderBuffer() {
-        if (ce$remainders == null) {
-            ce$remainders = new RemainderBuffer(() -> ((BlockEntity) (Object) this).setChanged());
-        }
-        return ce$remainders;
-    }
+	@Override
+	public RemainderBuffer ce$getRemainderBuffer() {
+		if (ce$remainders == null) {
+			ce$remainders = new RemainderBuffer(() -> ((BlockEntity) (Object) this).setChanged());
+		}
+		return ce$remainders;
+	}
 
-    /** Containers only in the container slot, never in an ingredient slot (remainder_buffer.md 3.8). */
-    @Inject(method = "<init>", at = @At("TAIL"))
-    private void ce$slotRule(BlockPos pos, BlockState state, CallbackInfo ci) {
-        StationSlotRule.apply(inventory, (slot, stack) -> {
-            if (slot < INGREDIENT_SLOTS) return !ce$isContainer(stack);
-            if (slot == KettleBlockEntity.CONTAINER_SLOT) return ce$isContainer(stack) || isContainerValid(stack);
-            return true;
-        });
-    }
+	/** Containers only in the container slot, never in an ingredient slot (remainder_buffer.md 3.8). */
+	@Inject(method = "<init>", at = @At("TAIL"))
+	private void ce$slotRule(BlockPos pos, BlockState state, CallbackInfo ci) {
+		StationSlotRule.apply(inventory, (slot, stack) -> {
+			if (slot < INGREDIENT_SLOTS) return !ce$isContainer(stack);
+			if (slot == KettleBlockEntity.CONTAINER_SLOT) return ce$isContainer(stack) || isContainerValid(stack);
+			return true;
+		});
+	}
 
-    @Unique
-    private boolean ce$isContainer(ItemStack stack) {
-        return KettleContainers.KETTLE.isContainer(((BlockEntity) (Object) this).getLevel(), stack);
-    }
+	@Unique
+	private boolean ce$isContainer(ItemStack stack) {
+		return KettleContainers.KETTLE.isContainer(((BlockEntity) (Object) this).getLevel(), stack);
+	}
 
-    @Redirect(method = "processBrewing", at = @At(value = "INVOKE",
-            target = "Lvectorwing/farmersdelight/common/utility/ItemUtils;spawnItemEntity(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;DDDDDD)V"))
-    private void ce$keepRemainder(Level level, ItemStack remainder, double x, double y, double z, double xMotion, double yMotion, double zMotion) {
-        ItemStack rest = RemainderBufferQol.enabled()
-                ? ce$getRemainderBuffer().store(remainder, inventory, KettleBlockEntity.CONTAINER_SLOT,
-                stack -> isContainerValid(stack))
-                : remainder;
-        if (!rest.isEmpty()) {
-            ItemUtils.spawnItemEntity(level, rest, x, y, z, xMotion, yMotion, zMotion);
-        }
-    }
+	@Redirect(method = "processBrewing", at = @At(value = "INVOKE",
+			target = "Lvectorwing/farmersdelight/common/utility/ItemUtils;spawnItemEntity(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;DDDDDD)V"))
+	private void ce$keepRemainder(Level level, ItemStack remainder, double x, double y, double z, double xMotion, double yMotion, double zMotion) {
+		ItemStack rest = RemainderBufferQol.enabled()
+				? ce$getRemainderBuffer().store(remainder, inventory, KettleBlockEntity.CONTAINER_SLOT,
+				stack -> isContainerValid(stack))
+				: remainder;
+		if (!rest.isEmpty()) {
+			ItemUtils.spawnItemEntity(level, rest, x, y, z, xMotion, yMotion, zMotion);
+		}
+	}
 
-    /** A leftover in the buffer that plates the waiting meal moves to the container slot (remainder_buffer.md 3.8). */
-    @Inject(method = "brewingTick", at = @At("HEAD"))
-    private static void ce$pullTick(Level level, BlockPos pos, BlockState state, KettleBlockEntity station, CallbackInfo ci) {
-        ((KettleRemainderMixin) (Object) station).ce$pullForPlating();
-    }
+	/** A leftover in the buffer that plates the waiting meal moves to the container slot (remainder_buffer.md 3.8). */
+	@Inject(method = "brewingTick", at = @At("HEAD"))
+	private static void ce$pullTick(Level level, BlockPos pos, BlockState state, KettleBlockEntity station, CallbackInfo ci) {
+		((KettleRemainderMixin) (Object) station).ce$pullForPlating();
+	}
 
-    @Unique
-    private void ce$pullForPlating() {
-        ItemStack meal = getMeal();
-        int mealsWaiting = !meal.isEmpty() && doesMealHaveContainer(meal) ? meal.getCount() : 0;
-        ce$getRemainderBuffer().pullForPlating(inventory, KettleBlockEntity.CONTAINER_SLOT, mealsWaiting, stack -> isContainerValid(stack));
-    }
+	@Unique
+	private void ce$pullForPlating() {
+		ItemStack meal = getMeal();
+		int mealsWaiting = !meal.isEmpty() && doesMealHaveContainer(meal) ? meal.getCount() : 0;
+		ce$getRemainderBuffer().pullForPlating(inventory, KettleBlockEntity.CONTAINER_SLOT, mealsWaiting, stack -> isContainerValid(stack));
+	}
 
-    @Inject(method = "useStoredContainersOnMeal", at = @At("HEAD"), cancellable = true)
-    private void ce$showRecycledContainer(CallbackInfo ci) {
-        if (ce$getRemainderBuffer().holdPlating()) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "useStoredContainersOnMeal", at = @At("HEAD"), cancellable = true)
+	private void ce$showRecycledContainer(CallbackInfo ci) {
+		if (ce$getRemainderBuffer().holdPlating()) {
+			ci.cancel();
+		}
+	}
 
-    @Inject(method = "canBrew", at = @At("RETURN"), cancellable = true)
-    private void ce$roomForRemainders(KettleRecipe recipe, CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValueZ() || !RemainderBufferQol.stalls()) return;
-        boolean fits = ce$getRemainderBuffer().fits(
-                RemainderBuffer.leftovers(inventory, 0, INGREDIENT_SLOTS, null),
-                inventory, KettleBlockEntity.CONTAINER_SLOT,
-                RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()));
-        if (!fits) {
-            cir.setReturnValue(false);
-            BlockEntity self = (BlockEntity) (Object) this;
-            if (self.getLevel() != null) ce$getRemainderBuffer().markStalled(self.getLevel().getGameTime());
-        }
-    }
+	@Inject(method = "canBrew", at = @At("RETURN"), cancellable = true)
+	private void ce$roomForRemainders(KettleRecipe recipe, CallbackInfoReturnable<Boolean> cir) {
+		if (!cir.getReturnValueZ() || !RemainderBufferQol.stalls()) return;
+		boolean fits = ce$getRemainderBuffer().fits(
+				RemainderBuffer.leftovers(inventory, 0, INGREDIENT_SLOTS, null),
+				inventory, KettleBlockEntity.CONTAINER_SLOT,
+				RemainderBuffer.servedIn(recipe.getOutputContainer(), recipe.getResultItem()));
+		if (!fits) {
+			cir.setReturnValue(false);
+			BlockEntity self = (BlockEntity) (Object) this;
+			if (self.getLevel() != null) ce$getRemainderBuffer().markStalled(self.getLevel().getGameTime());
+		}
+	}
 
-    @Inject(method = "getDroppableInventory", at = @At("RETURN"))
-    private void ce$dropRemainders(CallbackInfoReturnable<NonNullList<ItemStack>> cir) {
-        RemainderBuffer buffer = ce$getRemainderBuffer();
-        for (int i = 0; i < buffer.getSlots(); ++i) {
-            cir.getReturnValue().add(buffer.getStackInSlot(i));
-        }
-    }
+	@Inject(method = "getDroppableInventory", at = @At("RETURN"))
+	private void ce$dropRemainders(CallbackInfoReturnable<NonNullList<ItemStack>> cir) {
+		RemainderBuffer buffer = ce$getRemainderBuffer();
+		for (int i = 0; i < buffer.getSlots(); ++i) {
+			cir.getReturnValue().add(buffer.getStackInSlot(i));
+		}
+	}
 
-    @Inject(method = "getCapability", at = @At("HEAD"), cancellable = true)
-    private <T> void ce$sideHandlerWithRemainders(Capability<T> cap, @Nullable Direction side, CallbackInfoReturnable<LazyOptional<T>> cir) {
-        if (cap != ForgeCapabilities.ITEM_HANDLER || side == null || side == Direction.UP || !outputHandler.isPresent()) return;
-        if (ce$sideHandler == null || !ce$sideHandler.isPresent()) {
-            IItemHandler respiteOutput = outputHandler.orElseThrow(IllegalStateException::new);
-            RemainderBuffer buffer = ce$getRemainderBuffer();
-            LazyOptional<IItemHandler> handler = LazyOptional.of(() -> new RemainderOutputHandler(respiteOutput, buffer));
-            outputHandler.addListener(invalidated -> handler.invalidate());
-            ce$sideHandler = handler;
-        }
-        cir.setReturnValue(ce$sideHandler.cast());
-    }
+	@Inject(method = "getCapability", at = @At("HEAD"), cancellable = true)
+	private <T> void ce$sideHandlerWithRemainders(Capability<T> cap, @Nullable Direction side, CallbackInfoReturnable<LazyOptional<T>> cir) {
+		if (cap != ForgeCapabilities.ITEM_HANDLER || side == null || side == Direction.UP || !outputHandler.isPresent()) return;
+		if (ce$sideHandler == null || !ce$sideHandler.isPresent()) {
+			IItemHandler respiteOutput = outputHandler.orElseThrow(IllegalStateException::new);
+			RemainderBuffer buffer = ce$getRemainderBuffer();
+			LazyOptional<IItemHandler> handler = LazyOptional.of(() -> new RemainderOutputHandler(respiteOutput, buffer));
+			outputHandler.addListener(invalidated -> handler.invalidate());
+			ce$sideHandler = handler;
+		}
+		cir.setReturnValue(ce$sideHandler.cast());
+	}
 }

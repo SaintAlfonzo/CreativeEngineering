@@ -9,15 +9,15 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MDBlockEntities {
-    public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MinersDelightMod.MODID);
+	public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, MinersDelightMod.MODID);
 
-    @SuppressWarnings("DataFlowIssue")
-    public static final RegistryObject<BlockEntityType<CopperPotBlockEntity>> COPPER_POT = BLOCK_ENTITIES.register("copper_pot",
-            () -> BlockEntityType.Builder.of(CopperPotBlockEntity::new, MDBlocks.COPPER_POT.get()).build(null));
-    @SuppressWarnings("DataFlowIssue")
-    public static final RegistryObject<BlockEntityType<StickyBasketBlockEntity>> STICKY_BASKET = BLOCK_ENTITIES.register("sticky_basket",
-            () -> BlockEntityType.Builder.of(StickyBasketBlockEntity::new, MDBlocks.STICKY_BASKET.get()).build(null));
+	@SuppressWarnings("DataFlowIssue")
+	public static final RegistryObject<BlockEntityType<CopperPotBlockEntity>> COPPER_POT = BLOCK_ENTITIES.register("copper_pot",
+			() -> BlockEntityType.Builder.of(CopperPotBlockEntity::new, MDBlocks.COPPER_POT.get()).build(null));
+	@SuppressWarnings("DataFlowIssue")
+	public static final RegistryObject<BlockEntityType<StickyBasketBlockEntity>> STICKY_BASKET = BLOCK_ENTITIES.register("sticky_basket",
+			() -> BlockEntityType.Builder.of(StickyBasketBlockEntity::new, MDBlocks.STICKY_BASKET.get()).build(null));
 
-    private MDBlockEntities() {
-    }
+	private MDBlockEntities() {
+	}
 }

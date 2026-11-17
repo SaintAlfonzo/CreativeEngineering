@@ -33,20 +33,20 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(SkullBlockEntity.class)
 public abstract class SkullBlockEntityMixin {
 
-    @Redirect(
-            method = "m_155733_",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/level/Level;m_46753_(Lnet/minecraft/core/BlockPos;)Z"
-            ),
-            remap = false
-    )
-    private static boolean creativeengineering$fanDrivesMouth(Level level, BlockPos pos) {
-        if (level.hasNeighborSignal(pos)) {
-            return true;
-        }
-        BlockState state = level.getBlockState(pos);
-        Optional<Direction> facing = CatalystUtils.getDirection(state);
-        return facing.isPresent() && CatalystUtils.testFan(level, pos, facing.get());
-    }
+	@Redirect(
+			method = "m_155733_",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/world/level/Level;m_46753_(Lnet/minecraft/core/BlockPos;)Z"
+			),
+			remap = false
+	)
+	private static boolean creativeengineering$fanDrivesMouth(Level level, BlockPos pos) {
+		if (level.hasNeighborSignal(pos)) {
+			return true;
+		}
+		BlockState state = level.getBlockState(pos);
+		Optional<Direction> facing = CatalystUtils.getDirection(state);
+		return facing.isPresent() && CatalystUtils.testFan(level, pos, facing.get());
+	}
 }

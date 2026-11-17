@@ -14,18 +14,18 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class RespitePottedTeaBush {
 
-    private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation PLANT = new ResourceLocation("farmersrespite", "wild_tea_bush");
-    private static final ResourceLocation POTTED = new ResourceLocation("farmersrespite", "potted_wild_tea_bush");
+	private static final org.slf4j.Logger LOGGER = LogUtils.getLogger();
+	private static final ResourceLocation PLANT = new ResourceLocation("farmersrespite", "wild_tea_bush");
+	private static final ResourceLocation POTTED = new ResourceLocation("farmersrespite", "potted_wild_tea_bush");
 
-    private RespitePottedTeaBush() {}
+	private RespitePottedTeaBush() {}
 
-    public static void register() {
-        Block potted = ForgeRegistries.BLOCKS.getValue(POTTED);
-        if (potted == null || potted == Blocks.AIR || !(Blocks.FLOWER_POT instanceof FlowerPotBlock pot)) {
-            LOGGER.warn("[respite] {} not found, Wild Tea Bush can't go in a flower pot", POTTED);
-            return;
-        }
-        pot.addPlant(PLANT, () -> potted);
-    }
+	public static void register() {
+		Block potted = ForgeRegistries.BLOCKS.getValue(POTTED);
+		if (potted == null || potted == Blocks.AIR || !(Blocks.FLOWER_POT instanceof FlowerPotBlock pot)) {
+			LOGGER.warn("[respite] {} not found, Wild Tea Bush can't go in a flower pot", POTTED);
+			return;
+		}
+		pot.addPlant(PLANT, () -> potted);
+	}
 }

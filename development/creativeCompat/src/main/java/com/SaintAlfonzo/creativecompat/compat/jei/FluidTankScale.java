@@ -13,16 +13,16 @@ import com.SaintAlfonzo.creativecommon.CommonConfig;
  * Amounts over the tank size fill it.
  */
 public final class FluidTankScale {
-    private FluidTankScale() {}
+	private FluidTankScale() {}
 
-    public static long height(com.SaintAlfonzo.creativecompat.CompatConfig.Jei.FluidScale mode, long amount, long capacity, int height) {
-        if (amount <= 0 || capacity <= 0) return 0;
-        if (amount >= capacity) return height;
-        double share = switch (mode) {
-            case LOG -> Math.log1p(amount) / Math.log1p(capacity);
-            case SQRT -> Math.sqrt((double) amount / capacity);
-            case LINEAR -> (double) amount / capacity;
-        };
-        return Math.round(share * height);
-    }
+	public static long height(com.SaintAlfonzo.creativecompat.CompatConfig.Jei.FluidScale mode, long amount, long capacity, int height) {
+		if (amount <= 0 || capacity <= 0) return 0;
+		if (amount >= capacity) return height;
+		double share = switch (mode) {
+			case LOG -> Math.log1p(amount) / Math.log1p(capacity);
+			case SQRT -> Math.sqrt((double) amount / capacity);
+			case LINEAR -> (double) amount / capacity;
+		};
+		return Math.round(share * height);
+	}
 }

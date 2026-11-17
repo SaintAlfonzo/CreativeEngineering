@@ -10,7 +10,7 @@ import javax.annotation.Nullable;
  */
 public interface PottedPlantHolder {
 
-    /** Id of the plant block in the pot, or null when empty. */
-    @Nullable
-    ResourceLocation plant();
+	/** Id of the plant block in the pot, or null when empty. */
+	@Nullable
+	ResourceLocation plant();
 }

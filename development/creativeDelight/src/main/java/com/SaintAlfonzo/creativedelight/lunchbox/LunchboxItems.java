@@ -16,28 +16,28 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public final class LunchboxItems {
 
-    public static final int NETHERITE_SLOTS = 18;
+	public static final int NETHERITE_SLOTS = 18;
 
-    private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Lunchboxes.NETHERITE_LUNCHBOX.getNamespace());
+	private static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Lunchboxes.NETHERITE_LUNCHBOX.getNamespace());
 
-    public static final RegistryObject<Item> NETHERITE_LUNCHBOX =
-            ITEMS.register(Lunchboxes.NETHERITE_LUNCHBOX.getPath(), NetheriteLunchboxItem::new);
+	public static final RegistryObject<Item> NETHERITE_LUNCHBOX =
+			ITEMS.register(Lunchboxes.NETHERITE_LUNCHBOX.getPath(), NetheriteLunchboxItem::new);
 
-    private LunchboxItems() {}
+	private LunchboxItems() {}
 
-    public static void register(IEventBus modEventBus) {
-        ITEMS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		ITEMS.register(modEventBus);
+	}
 
-    /** Spice of Life builds the item properties itself, so fire resistance is an override. */
-    public static final class NetheriteLunchboxItem extends FoodContainerItem {
-        public NetheriteLunchboxItem() {
-            super(NETHERITE_SLOTS, Lunchboxes.NETHERITE_LUNCHBOX.getPath());
-        }
+	/** Spice of Life builds the item properties itself, so fire resistance is an override. */
+	public static final class NetheriteLunchboxItem extends FoodContainerItem {
+		public NetheriteLunchboxItem() {
+			super(NETHERITE_SLOTS, Lunchboxes.NETHERITE_LUNCHBOX.getPath());
+		}
 
-        @Override
-        public boolean isFireResistant() {
-            return true;
-        }
-    }
+		@Override
+		public boolean isFireResistant() {
+			return true;
+		}
+	}
 }

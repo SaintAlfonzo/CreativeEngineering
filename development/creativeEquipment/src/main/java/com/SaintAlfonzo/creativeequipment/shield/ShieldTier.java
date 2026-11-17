@@ -45,210 +45,210 @@ import net.minecraft.world.item.Rarity;
  *       shield could never block at all before this feature existed - are separate columns.</li>
  * </ul>
  */
-public enum ShieldTier { //TODO: ajdust kbthreshold to be more reasonable, add variable shield cooldown to each shield 
-   
-    //                                                                    fire/electric/cold/chemical
-    //                                                                     new int[]{25, 30, 35, 40}
+public enum ShieldTier { //TODO: ajdust kbthreshold to be more reasonable, add variable shield cooldown to each shield
 
-    //          id            durability  repair item                phys  elem                   magic fireproof     rarity      kbThreshold
-    //  Blocker effect                    Attacker effect
-    COPPER("copper",         242, "minecraft:copper_ingot",           40,  new int[]{0,50,0,0},    0, false, Rarity.COMMON, 1),
-    GOLD("gold",             168, "minecraft:gold_ingot",             50,  30,                    30, false, Rarity.COMMON, 2),
-    IRON("iron",             336, "minecraft:iron_ingot",             60,  new int[]{25,0,0,0},    0, false, Rarity.COMMON, 3),
-    DIAMOND("diamond",      1561, "minecraft:diamond",                70,  new int[]{50,0,0,0},   25, false, Rarity.RARE,   4),
-    NETHERITE("netherite",  2031, "minecraft:netherite_ingot",        80,  new int[]{100,0,0,0},  50, true,  Rarity.RARE,   5),
-    ECHO("echo",            2124, "create_deep_dark:echo_ingot",      90,  50,                    60, true,  Rarity.EPIC,   6,
-        "minecraft:resistance;40;0", ""),
-    FELSIC("felsic",        2501, "felsic_gear:felsic_ingot",         95,  75,                    75, true,  Rarity.EPIC,   7,
-        "minecraft:resistance;40;1", ""),
-    DRAGON("dragon",        3350, "dragonloot:dragon_scale",          100, 100,                  100, true,  Rarity.EPIC,   8,
-        "minecraft:regeneration;100;0, minecraft:resistance;40;1", "minecraft:poison;100;0");
+	//                                                                    fire/electric/cold/chemical
+	//                                                                     new int[]{25, 30, 35, 40}
 
-    private final String id;
-    private final int defaultDurability;
-    private final String defaultRepairItem;
-    private final int defaultPhysical;
-    private final int defaultElemental;
-    private final int defaultMagic;
-    private final boolean fireproof;
-    private final Rarity rarity;
-    private final int defaultKnockbackThreshold;
-    private final String defaultShielderEffects;
-    private final String defaultAttackerEffects;
-    private final int defaultFire;
-    private final int defaultElectric;
-    private final int defaultCold;
-    private final int defaultChemical;
+	//          id            durability  repair item                phys  elem                   magic fireproof     rarity      kbThreshold
+	//  Blocker effect                    Attacker effect
+	COPPER("copper",         242, "minecraft:copper_ingot",           40,  new int[]{0,50,0,0},    0, false, Rarity.COMMON, 1),
+	GOLD("gold",             168, "minecraft:gold_ingot",             50,  30,                    30, false, Rarity.COMMON, 2),
+	IRON("iron",             336, "minecraft:iron_ingot",             60,  new int[]{25,0,0,0},    0, false, Rarity.COMMON, 3),
+	DIAMOND("diamond",      1561, "minecraft:diamond",                70,  new int[]{50,0,0,0},   25, false, Rarity.RARE,   4),
+	NETHERITE("netherite",  2031, "minecraft:netherite_ingot",        80,  new int[]{100,0,0,0},  50, true,  Rarity.RARE,   5),
+	ECHO("echo",            2124, "create_deep_dark:echo_ingot",      90,  50,                    60, true,  Rarity.EPIC,   6,
+		"minecraft:resistance;40;0", ""),
+	FELSIC("felsic",        2501, "felsic_gear:felsic_ingot",         95,  75,                    75, true,  Rarity.EPIC,   7,
+		"minecraft:resistance;40;1", ""),
+	DRAGON("dragon",        3350, "dragonloot:dragon_scale",          100, 100,                  100, true,  Rarity.EPIC,   8,
+		"minecraft:regeneration;100;0, minecraft:resistance;40;1", "minecraft:poison;100;0");
 
-    /** Blanket mode, no on-block effects: the "elem" slot is one 0-100 number, same as physical/magic. */
-    ShieldTier(String id, int defaultDurability, String defaultRepairItem,
-               int defaultPhysical, int defaultElemental, int defaultMagic, boolean fireproof, Rarity rarity,
-               int defaultKnockbackThreshold) {
-        this(id, defaultDurability, defaultRepairItem, defaultPhysical, defaultElemental, defaultMagic,
-                fireproof, rarity, defaultKnockbackThreshold, "", "");
-    }
+	private final String id;
+	private final int defaultDurability;
+	private final String defaultRepairItem;
+	private final int defaultPhysical;
+	private final int defaultElemental;
+	private final int defaultMagic;
+	private final boolean fireproof;
+	private final Rarity rarity;
+	private final int defaultKnockbackThreshold;
+	private final String defaultShielderEffects;
+	private final String defaultAttackerEffects;
+	private final int defaultFire;
+	private final int defaultElectric;
+	private final int defaultCold;
+	private final int defaultChemical;
 
-    /** Blanket mode, with on-block effects ({@link #ECHO}, {@link #FELSIC}, {@link #DRAGON}). */
-    ShieldTier(String id, int defaultDurability, String defaultRepairItem,
-               int defaultPhysical, int defaultElemental, int defaultMagic, boolean fireproof, Rarity rarity,
-               int defaultKnockbackThreshold, String defaultShielderEffects, String defaultAttackerEffects) {
-        // -1,-1,-1,-1: blanket mode - every tier using an int here (everyone except IRON) stays
-        // on the single defaultElemental percentage; see the int[]-taking overloads below and
-        // ShieldConfig#elementalOverrideRaw for the other half of this "-1 = unset" contract.
-        this.id = id;
-        this.defaultDurability = defaultDurability;
-        this.defaultRepairItem = defaultRepairItem;
-        this.defaultPhysical = defaultPhysical;
-        this.defaultElemental = defaultElemental;
-        this.defaultMagic = defaultMagic;
-        this.fireproof = fireproof;
-        this.rarity = rarity;
-        this.defaultKnockbackThreshold = defaultKnockbackThreshold;
-        this.defaultShielderEffects = defaultShielderEffects;
-        this.defaultAttackerEffects = defaultAttackerEffects;
-        this.defaultFire = -1;
-        this.defaultElectric = -1;
-        this.defaultCold = -1;
-        this.defaultChemical = -1;
-    }
+	/** Blanket mode, no on-block effects: the "elem" slot is one 0-100 number, same as physical/magic. */
+	ShieldTier(String id, int defaultDurability, String defaultRepairItem,
+			   int defaultPhysical, int defaultElemental, int defaultMagic, boolean fireproof, Rarity rarity,
+			   int defaultKnockbackThreshold) {
+		this(id, defaultDurability, defaultRepairItem, defaultPhysical, defaultElemental, defaultMagic,
+				fireproof, rarity, defaultKnockbackThreshold, "", "");
+	}
 
-    /**
-     * Breakdown mode, no on-block effects: the SAME "elem" slot instead takes a 4-element
-     * {@code {fire, electric, cold, chemical}} array (that order - {@link ElementalKind}'s
-     * declaration order) in place of one blanket number - what {@link #IRON} uses. A tier that
-     * wants breakdown defaults writes an {@code int[]} literal here instead of a plain {@code int};
-     * nothing about the constructor call otherwise changes shape or grows a trailing tail of ints.
-     */
-    ShieldTier(String id, int defaultDurability, String defaultRepairItem,
-               int defaultPhysical, int[] defaultElementalBreakdown, int defaultMagic, boolean fireproof, Rarity rarity,
-               int defaultKnockbackThreshold) {
-        this(id, defaultDurability, defaultRepairItem, defaultPhysical, defaultElementalBreakdown, defaultMagic,
-                fireproof, rarity, defaultKnockbackThreshold, "", "");
-    }
+	/** Blanket mode, with on-block effects ({@link #ECHO}, {@link #FELSIC}, {@link #DRAGON}). */
+	ShieldTier(String id, int defaultDurability, String defaultRepairItem,
+			   int defaultPhysical, int defaultElemental, int defaultMagic, boolean fireproof, Rarity rarity,
+			   int defaultKnockbackThreshold, String defaultShielderEffects, String defaultAttackerEffects) {
+		// -1,-1,-1,-1: blanket mode - every tier using an int here (everyone except IRON) stays
+		// on the single defaultElemental percentage; see the int[]-taking overloads below and
+		// ShieldConfig#elementalOverrideRaw for the other half of this "-1 = unset" contract.
+		this.id = id;
+		this.defaultDurability = defaultDurability;
+		this.defaultRepairItem = defaultRepairItem;
+		this.defaultPhysical = defaultPhysical;
+		this.defaultElemental = defaultElemental;
+		this.defaultMagic = defaultMagic;
+		this.fireproof = fireproof;
+		this.rarity = rarity;
+		this.defaultKnockbackThreshold = defaultKnockbackThreshold;
+		this.defaultShielderEffects = defaultShielderEffects;
+		this.defaultAttackerEffects = defaultAttackerEffects;
+		this.defaultFire = -1;
+		this.defaultElectric = -1;
+		this.defaultCold = -1;
+		this.defaultChemical = -1;
+	}
 
-    /** Breakdown mode, with on-block effects (no current tier needs both, but nothing stops one). */
-    ShieldTier(String id, int defaultDurability, String defaultRepairItem,
-               int defaultPhysical, int[] defaultElementalBreakdown, int defaultMagic, boolean fireproof, Rarity rarity,
-               int defaultKnockbackThreshold, String defaultShielderEffects, String defaultAttackerEffects) {
-        this.id = id;
-        this.defaultDurability = defaultDurability;
-        this.defaultRepairItem = defaultRepairItem;
-        this.defaultPhysical = defaultPhysical;
-        // The blanket value is irrelevant once a breakdown array is given at all (ShieldConfig's
-        // "any one of the four is set -> array mode, blanket ignored entirely" rule), so there is
-        // nothing meaningful to put here; 0 documents "not used".
-        this.defaultElemental = 0;
-        this.defaultMagic = defaultMagic;
-        this.fireproof = fireproof;
-        this.rarity = rarity;
-        this.defaultKnockbackThreshold = defaultKnockbackThreshold;
-        this.defaultShielderEffects = defaultShielderEffects;
-        this.defaultAttackerEffects = defaultAttackerEffects;
-        if (defaultElementalBreakdown.length != ElementalKind.values().length) {
-            throw new IllegalArgumentException(id + ": elemental breakdown array must have exactly "
-                    + ElementalKind.values().length + " values (fire, electric, cold, chemical), got "
-                    + defaultElementalBreakdown.length);
-        }
-        this.defaultFire = defaultElementalBreakdown[0];
-        this.defaultElectric = defaultElementalBreakdown[1];
-        this.defaultCold = defaultElementalBreakdown[2];
-        this.defaultChemical = defaultElementalBreakdown[3];
-    }
+	/**
+	 * Breakdown mode, no on-block effects: the SAME "elem" slot instead takes a 4-element
+	 * {@code {fire, electric, cold, chemical}} array (that order - {@link ElementalKind}'s
+	 * declaration order) in place of one blanket number - what {@link #IRON} uses. A tier that
+	 * wants breakdown defaults writes an {@code int[]} literal here instead of a plain {@code int};
+	 * nothing about the constructor call otherwise changes shape or grows a trailing tail of ints.
+	 */
+	ShieldTier(String id, int defaultDurability, String defaultRepairItem,
+			   int defaultPhysical, int[] defaultElementalBreakdown, int defaultMagic, boolean fireproof, Rarity rarity,
+			   int defaultKnockbackThreshold) {
+		this(id, defaultDurability, defaultRepairItem, defaultPhysical, defaultElementalBreakdown, defaultMagic,
+				fireproof, rarity, defaultKnockbackThreshold, "", "");
+	}
 
-    /** Registry-name prefix ({@code creativeequipment:<id>_shield}) and toml section name. */
-    public String id() {
-        return id;
-    }
+	/** Breakdown mode, with on-block effects (no current tier needs both, but nothing stops one). */
+	ShieldTier(String id, int defaultDurability, String defaultRepairItem,
+			   int defaultPhysical, int[] defaultElementalBreakdown, int defaultMagic, boolean fireproof, Rarity rarity,
+			   int defaultKnockbackThreshold, String defaultShielderEffects, String defaultAttackerEffects) {
+		this.id = id;
+		this.defaultDurability = defaultDurability;
+		this.defaultRepairItem = defaultRepairItem;
+		this.defaultPhysical = defaultPhysical;
+		// The blanket value is irrelevant once a breakdown array is given at all (ShieldConfig's
+		// "any one of the four is set -> array mode, blanket ignored entirely" rule), so there is
+		// nothing meaningful to put here; 0 documents "not used".
+		this.defaultElemental = 0;
+		this.defaultMagic = defaultMagic;
+		this.fireproof = fireproof;
+		this.rarity = rarity;
+		this.defaultKnockbackThreshold = defaultKnockbackThreshold;
+		this.defaultShielderEffects = defaultShielderEffects;
+		this.defaultAttackerEffects = defaultAttackerEffects;
+		if (defaultElementalBreakdown.length != ElementalKind.values().length) {
+			throw new IllegalArgumentException(id + ": elemental breakdown array must have exactly "
+					+ ElementalKind.values().length + " values (fire, electric, cold, chemical), got "
+					+ defaultElementalBreakdown.length);
+		}
+		this.defaultFire = defaultElementalBreakdown[0];
+		this.defaultElectric = defaultElementalBreakdown[1];
+		this.defaultCold = defaultElementalBreakdown[2];
+		this.defaultChemical = defaultElementalBreakdown[3];
+	}
 
-    public int defaultDurability() {
-        return defaultDurability;
-    }
+	/** Registry-name prefix ({@code creativeequipment:<id>_shield}) and toml section name. */
+	public String id() {
+		return id;
+	}
 
-    public String defaultRepairItem() {
-        return defaultRepairItem;
-    }
+	public int defaultDurability() {
+		return defaultDurability;
+	}
 
-    /** Item-entity survives fire/lava (matches vanilla netherite gear and the pack's echo/felsic/dragon tools). */
-    public boolean fireproof() {
-        return fireproof;
-    }
+	public String defaultRepairItem() {
+		return defaultRepairItem;
+	}
 
-    public Rarity rarity() {
-        return rarity;
-    }
+	/** Item-entity survives fire/lava (matches vanilla netherite gear and the pack's echo/felsic/dragon tools). */
+	public boolean fireproof() {
+		return fireproof;
+	}
 
-    /**
-     * Default damage amount (after this tier's reduction) below which a blocked hit no longer
-     * knocks the HOLDER back ({@link ShieldBlockHandler#onKnockback}); the attacker's own recoil
-     * off the shield is left vanilla. Placeholder ladder: 1 for copper, +1 per tier up to 8 for dragon.
-     */
-    public int defaultKnockbackThreshold() {
-        return defaultKnockbackThreshold;
-    }
+	public Rarity rarity() {
+		return rarity;
+	}
 
-    /**
-     * Default for {@code [shields.<tier>].<gate key>}: whether this tier may block {@code gate}'s ticks at
-     * all ({@link ShieldTickGate}). Ladder rules: burning and hot blocks from NETHERITE up, thorns and
-     * barbed panes from DIAMOND up. Below that the shield doesn't even attempt the block - no shield
-     * sound, full damage - whatever its percentages say.
-     */
-    public boolean defaultBlocksTicks(ShieldTickGate gate) {
-        return switch (gate) {
-            case BURN -> ordinal() >= NETHERITE.ordinal();
-            case CONTACT -> ordinal() >= DIAMOND.ordinal();
-        };
-    }
+	/**
+	 * Default damage amount (after this tier's reduction) below which a blocked hit no longer
+	 * knocks the HOLDER back ({@link ShieldBlockHandler#onKnockback}); the attacker's own recoil
+	 * off the shield is left vanilla. Placeholder ladder: 1 for copper, +1 per tier up to 8 for dragon.
+	 */
+	public int defaultKnockbackThreshold() {
+		return defaultKnockbackThreshold;
+	}
 
-    /** Default on-block effects for the holder, in the {@code ShieldEffects} string format. */
-    public String defaultShielderEffects() {
-        return defaultShielderEffects;
-    }
+	/**
+	 * Default for {@code [shields.<tier>].<gate key>}: whether this tier may block {@code gate}'s ticks at
+	 * all ({@link ShieldTickGate}). Ladder rules: burning and hot blocks from NETHERITE up, thorns and
+	 * barbed panes from DIAMOND up. Below that the shield doesn't even attempt the block - no shield
+	 * sound, full damage - whatever its percentages say.
+	 */
+	public boolean defaultBlocksTicks(ShieldTickGate gate) {
+		return switch (gate) {
+			case BURN -> ordinal() >= NETHERITE.ordinal();
+			case CONTACT -> ordinal() >= DIAMOND.ordinal();
+		};
+	}
 
-    /** Default on-block effects for the attacker, in the {@code ShieldEffects} string format. */
-    public String defaultAttackerEffects() {
-        return defaultAttackerEffects;
-    }
+	/** Default on-block effects for the holder, in the {@code ShieldEffects} string format. */
+	public String defaultShielderEffects() {
+		return defaultShielderEffects;
+	}
 
-    /** Default percent of a hit this tier absorbs for {@code group}; 0 = not blocked at all. */
-    public int defaultReduction(ShieldGroup group) {
-        return switch (group) {
-            case PHYSICAL -> defaultPhysical;
-            case ELEMENTAL -> defaultElemental;
-            case MAGIC -> defaultMagic;
-            // A group added later starts as "not blocked" until someone configures it.
-            default -> 0;
-        };
-    }
+	/** Default on-block effects for the attacker, in the {@code ShieldEffects} string format. */
+	public String defaultAttackerEffects() {
+		return defaultAttackerEffects;
+	}
 
-    /**
-     * Default per-element override for {@code kind} under {@link ShieldGroup#ELEMENTAL}; -1 means
-     * "no default, stay in blanket mode" (true for every tier above right now - none has opted
-     * in). This is what {@code CEQConfig} seeds each tier's {@code elemental_breakdown} toml
-     * entries with, and what {@code ShieldConfig} falls back to before the config file loads -
-     * the same -1 sentinel and the same source of truth as {@link #defaultReduction}, not a
-     * second, independently-hardcoded default living in the config layer.
-     */
-    public int defaultElementalBreakdown(ElementalKind kind) {
-        return switch (kind) {
-            case FIRE -> defaultFire;
-            case ELECTRIC -> defaultElectric;
-            case COLD -> defaultCold;
-            case CHEMICAL -> defaultChemical;
-        };
-    }
+	/** Default percent of a hit this tier absorbs for {@code group}; 0 = not blocked at all. */
+	public int defaultReduction(ShieldGroup group) {
+		return switch (group) {
+			case PHYSICAL -> defaultPhysical;
+			case ELEMENTAL -> defaultElemental;
+			case MAGIC -> defaultMagic;
+			// A group added later starts as "not blocked" until someone configures it.
+			default -> 0;
+		};
+	}
 
-    /**
-     * The tier {@code stack} shields as, or {@code null} if it isn't a shield this feature knows
-     * about at all (a plain item, Immersive Engineering's shield, ...). This is the ONE place that
-     * decides "is this a tier shield" - {@code ShieldBlocking}/{@code ShieldBlockHandler} call this
-     * instead of an {@code instanceof TierShieldItem} check, which is what lets {@link #IRON} (the
-     * player's real {@code Items.SHIELD}, not a {@link TierShieldItem}) participate too.
-     */
-    @Nullable
-    public static ShieldTier of(ItemStack stack) {
-        if (stack.getItem() instanceof TierShieldItem item) {
-            return item.tier();
-        }
-        return stack.getItem() == Items.SHIELD ? IRON : null;
-    }
+	/**
+	 * Default per-element override for {@code kind} under {@link ShieldGroup#ELEMENTAL}; -1 means
+	 * "no default, stay in blanket mode" (true for every tier above right now - none has opted
+	 * in). This is what {@code CEQConfig} seeds each tier's {@code elemental_breakdown} toml
+	 * entries with, and what {@code ShieldConfig} falls back to before the config file loads -
+	 * the same -1 sentinel and the same source of truth as {@link #defaultReduction}, not a
+	 * second, independently-hardcoded default living in the config layer.
+	 */
+	public int defaultElementalBreakdown(ElementalKind kind) {
+		return switch (kind) {
+			case FIRE -> defaultFire;
+			case ELECTRIC -> defaultElectric;
+			case COLD -> defaultCold;
+			case CHEMICAL -> defaultChemical;
+		};
+	}
+
+	/**
+	 * The tier {@code stack} shields as, or {@code null} if it isn't a shield this feature knows
+	 * about at all (a plain item, Immersive Engineering's shield, ...). This is the ONE place that
+	 * decides "is this a tier shield" - {@code ShieldBlocking}/{@code ShieldBlockHandler} call this
+	 * instead of an {@code instanceof TierShieldItem} check, which is what lets {@link #IRON} (the
+	 * player's real {@code Items.SHIELD}, not a {@link TierShieldItem}) participate too.
+	 */
+	@Nullable
+	public static ShieldTier of(ItemStack stack) {
+		if (stack.getItem() instanceof TierShieldItem item) {
+			return item.tier();
+		}
+		return stack.getItem() == Items.SHIELD ? IRON : null;
+	}
 }

@@ -25,44 +25,44 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  * supply. Server and client both run the event; only the server changes anything.
  */
 public final class BottledAir {
-    public static final TagKey<Item> FIRE_SOURCES =
-            ItemTags.create(new ResourceLocation(CreativeEquipment.NS, "bottled_air/fire_sources"));
+	public static final TagKey<Item> FIRE_SOURCES =
+			ItemTags.create(new ResourceLocation(CreativeEquipment.NS, "bottled_air/fire_sources"));
 
-    private BottledAir() {}
+	private BottledAir() {}
 
-    @SubscribeEvent
-    public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
-        CEQConfig.BottledAir cfg = CEQConfig.BOTTLED_AIR;
-        if (!cfg.enabled.get()) return;
-        Player player = event.getEntity();
-        if (!player.isInWater()) return;
-        ItemStack stack = event.getItemStack();
-        if (isWaterBottle(stack)) {
-            if (cfg.noDrinkingUnderwater.get() && player.isUnderWater()) event.setCanceled(true);
-            return;
-        }
-        if (!stack.is(Items.GLASS_BOTTLE) || player.level.isClientSide) return;
-        int max = player.getMaxAirSupply();
-        int air = player.getAirSupply();
-        if (air >= max) return;
-        player.setAirSupply(Math.min(max, air + cfg.airPerBottle.get()));
-        InteractionHand other = event.getHand() == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
-        if (!cfg.fireEvaporates.get() || !player.getItemInHand(other).is(FIRE_SOURCES)) return;
-        Inventory inv = player.getInventory();
-        for (int slot = Inventory.INVENTORY_SIZE - 1; slot > 0; slot--) {
-            ItemStack held = inv.getItem(slot);
-            if (isWaterBottle(held)) {
-                held.shrink(1);
-                if (player.getRandom().nextDouble() > cfg.bottleBreakChance.get()) {
-                    ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
-                    if (!inv.add(bottle)) player.drop(bottle, false);
-                }
-                break;
-            }
-        }
-    }
+	@SubscribeEvent
+	public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
+		CEQConfig.BottledAir cfg = CEQConfig.BOTTLED_AIR;
+		if (!cfg.enabled.get()) return;
+		Player player = event.getEntity();
+		if (!player.isInWater()) return;
+		ItemStack stack = event.getItemStack();
+		if (isWaterBottle(stack)) {
+			if (cfg.noDrinkingUnderwater.get() && player.isUnderWater()) event.setCanceled(true);
+			return;
+		}
+		if (!stack.is(Items.GLASS_BOTTLE) || player.level.isClientSide) return;
+		int max = player.getMaxAirSupply();
+		int air = player.getAirSupply();
+		if (air >= max) return;
+		player.setAirSupply(Math.min(max, air + cfg.airPerBottle.get()));
+		InteractionHand other = event.getHand() == InteractionHand.MAIN_HAND ? InteractionHand.OFF_HAND : InteractionHand.MAIN_HAND;
+		if (!cfg.fireEvaporates.get() || !player.getItemInHand(other).is(FIRE_SOURCES)) return;
+		Inventory inv = player.getInventory();
+		for (int slot = Inventory.INVENTORY_SIZE - 1; slot > 0; slot--) {
+			ItemStack held = inv.getItem(slot);
+			if (isWaterBottle(held)) {
+				held.shrink(1);
+				if (player.getRandom().nextDouble() > cfg.bottleBreakChance.get()) {
+					ItemStack bottle = new ItemStack(Items.GLASS_BOTTLE);
+					if (!inv.add(bottle)) player.drop(bottle, false);
+				}
+				break;
+			}
+		}
+	}
 
-    private static boolean isWaterBottle(ItemStack stack) {
-        return stack.is(Items.POTION) && PotionUtils.getPotion(stack) == Potions.WATER;
-    }
+	private static boolean isWaterBottle(ItemStack stack) {
+		return stack.is(Items.POTION) && PotionUtils.getPotion(stack) == Potions.WATER;
+	}
 }

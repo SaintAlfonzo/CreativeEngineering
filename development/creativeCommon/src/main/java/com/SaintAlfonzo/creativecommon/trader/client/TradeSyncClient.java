@@ -8,11 +8,11 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 /** Client half of {@link TradeSync}: puts the client's own trade tables back when it leaves a server. */
 public final class TradeSyncClient {
 
-    private TradeSyncClient() {
-    }
+	private TradeSyncClient() {
+	}
 
-    @SubscribeEvent
-    public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
-        TradeSync.restoreClient();
-    }
+	@SubscribeEvent
+	public static void onLoggingOut(ClientPlayerNetworkEvent.LoggingOut event) {
+		TradeSync.restoreClient();
+	}
 }

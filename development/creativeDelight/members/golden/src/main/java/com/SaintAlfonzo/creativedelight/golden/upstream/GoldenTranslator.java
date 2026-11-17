@@ -17,39 +17,39 @@ import java.util.Map;
  * served as they are; the pack's recipe scripts handle them as they handled the upstream jar.
  */
 public final class GoldenTranslator {
-    private static Map<String, byte[]> assets;
-    private static Map<String, byte[]> data;
+	private static Map<String, byte[]> assets;
+	private static Map<String, byte[]> data;
 
-    private GoldenTranslator() {
-    }
+	private GoldenTranslator() {
+	}
 
-    public static synchronized Map<String, byte[]> assets() {
-        if (assets == null) {
-            assets = new HashMap<>();
-            UpstreamJars.golden200().forEach((path, bytes) -> {
-                if (path.startsWith("assets/") && !skipAsset(path)) assets.put(path, bytes);
-            });
-            GoldenFoodMod.LOGGER.info("Golden Food upstream assets: {} files", assets.size());
-        }
-        return assets;
-    }
+	public static synchronized Map<String, byte[]> assets() {
+		if (assets == null) {
+			assets = new HashMap<>();
+			UpstreamJars.golden200().forEach((path, bytes) -> {
+				if (path.startsWith("assets/") && !skipAsset(path)) assets.put(path, bytes);
+			});
+			GoldenFoodMod.LOGGER.info("Golden Food upstream assets: {} files", assets.size());
+		}
+		return assets;
+	}
 
-    public static synchronized Map<String, byte[]> data() {
-        if (data == null) {
-            data = new HashMap<>();
-            UpstreamJars.golden200().forEach((path, bytes) -> {
-                if (path.startsWith("data/") && !skipData(path)) data.put(path, bytes);
-            });
-            GoldenFoodMod.LOGGER.info("Golden Food upstream data: {} files", data.size());
-        }
-        return data;
-    }
+	public static synchronized Map<String, byte[]> data() {
+		if (data == null) {
+			data = new HashMap<>();
+			UpstreamJars.golden200().forEach((path, bytes) -> {
+				if (path.startsWith("data/") && !skipData(path)) data.put(path, bytes);
+			});
+			GoldenFoodMod.LOGGER.info("Golden Food upstream data: {} files", data.size());
+		}
+		return data;
+	}
 
-    static boolean skipData(String path) {
-        return path.startsWith("data/minecraft/loot_tables/chests/village/");
-    }
+	static boolean skipData(String path) {
+		return path.startsWith("data/minecraft/loot_tables/chests/village/");
+	}
 
-    static boolean skipAsset(String path) {
-        return path.startsWith("assets/goldenfood/python/");
-    }
+	static boolean skipAsset(String path) {
+		return path.startsWith("assets/goldenfood/python/");
+	}
 }

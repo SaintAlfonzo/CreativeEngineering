@@ -49,43 +49,43 @@ public class IETagUtilsMixin {
 				// legitimate material family for recycling purposes
 		);
 
-    @Overwrite
+	@Overwrite
 		public static String[] getMatchingPrefixAndRemaining(RegistryAccess tags, ItemStack stack, String... componentTypes) {
 				String[] fallback = null;
 
 				for (ResourceLocation name : TagUtils.getMatchingTagNames(tags, stack)) {
-				    for (String componentType : componentTypes) {
-				        if (!name.getPath().startsWith(componentType)) {
-				            continue;
-				        }
+					for (String componentType : componentTypes) {
+						if (!name.getPath().startsWith(componentType)) {
+							continue;
+						}
 
-				        String material = name.getPath().substring(componentType.length());
-				        if (material.startsWith("/")) {
-				            material = material.substring(1);
-				        }
+						String material = name.getPath().substring(componentType.length());
+						if (material.startsWith("/")) {
+							material = material.substring(1);
+						}
 
-				        if (material.isEmpty()) {
-				            continue;
-				        }
+						if (material.isEmpty()) {
+							continue;
+						}
 
-				        // NEW: skip denylisted materials entirely, even if they'd
-				        // otherwise resolve to a real, non-empty ingot tag.
-				        if (BLACKLISTED_MATERIALS.contains(material)) {
-				            continue;
-				        }
+						// NEW: skip denylisted materials entirely, even if they'd
+						// otherwise resolve to a real, non-empty ingot tag.
+						if (BLACKLISTED_MATERIALS.contains(material)) {
+							continue;
+						}
 
-				        if (fallback == null) {
-				            fallback = new String[]{componentType, material};
-				        }
+						if (fallback == null) {
+							fallback = new String[]{componentType, material};
+						}
 
-				        try {
-				            ResourceLocation ingotTag = IETags.getIngot(material);
-				            if (ingotTag != null && TagUtils.isNonemptyItemTag(tags, ingotTag)) {
-				                return new String[]{componentType, material};
-				            }
-				        } catch (Exception ignored) {
-				        }
-				    }
+						try {
+							ResourceLocation ingotTag = IETags.getIngot(material);
+							if (ingotTag != null && TagUtils.isNonemptyItemTag(tags, ingotTag)) {
+								return new String[]{componentType, material};
+							}
+						} catch (Exception ignored) {
+						}
+					}
 				}
 
 				return fallback;

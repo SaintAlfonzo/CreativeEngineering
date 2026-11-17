@@ -54,75 +54,75 @@ import java.util.List;
  */
 public final class Lingerification {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final ResourceLocation LIST_ID =
-            new ResourceLocation(CreativeBrewing.NS, "lingerification_list");
+	private static final ResourceLocation LIST_ID =
+			new ResourceLocation(CreativeBrewing.NS, "lingerification_list");
 
-    private static final ResourceLocation CREATE_POTION =
-            new ResourceLocation("create", "potion");
+	private static final ResourceLocation CREATE_POTION =
+			new ResourceLocation("create", "potion");
 
-    /** Pack design: Lingerification runs in 1500 mB increments (matches the IE-Mixer potion amount). */
-    private static final int POTION_AMOUNT = 1500;
+	/** Pack design: Lingerification runs in 1500 mB increments (matches the IE-Mixer potion amount). */
+	private static final int POTION_AMOUNT = 1500;
 
-    /** Dragon's breath is a catalyst-style reagent: a quarter-bucket per operation. */
-    private static final int DRAGON_BREATH_AMOUNT = 250;
+	/** Dragon's breath is a catalyst-style reagent: a quarter-bucket per operation. */
+	private static final int DRAGON_BREATH_AMOUNT = 250;
 
-    /** Between IE's own biodiesel (80) and phenolic resin (240). Tunable. */
-    private static final int ENERGY = 120;
+	/** Between IE's own biodiesel (80) and phenolic resin (240). Tunable. */
+	private static final int ENERGY = 120;
 
-    private static final TagKey<Fluid> DRAGON_BREATH_TAG = TagKey.create(
-            Registry.FLUID_REGISTRY, new ResourceLocation("forge", "fluid/dragon_breath"));
+	private static final TagKey<Fluid> DRAGON_BREATH_TAG = TagKey.create(
+			Registry.FLUID_REGISTRY, new ResourceLocation("forge", "fluid/dragon_breath"));
 
-    private static boolean registered = false;
+	private static boolean registered = false;
 
-    private Lingerification() {}
+	private Lingerification() {}
 
-    /** Register the generated-list generator. Idempotent; call from common setup. */
-    public static void registerListGenerator() {
-        if (registered) return;
-        registered = true;
-        try {
-            GeneratedListRecipe.LIST_GENERATORS.put(
-                    LIST_ID,
-                    GeneratedListRecipe.RecipeListGenerator.simple(
-                            Lingerification::generate,
-                            RefineryRecipe.SERIALIZER.getId(),
-                            IERecipeTypes.REFINERY));
-            LOGGER.info("[CE] Lingerification: registered refinery list generator {}", LIST_ID);
-        } catch (Throwable t) {
-            LOGGER.error("[CE] Lingerification: failed to register refinery list generator", t);
-        }
-    }
+	/** Register the generated-list generator. Idempotent; call from common setup. */
+	public static void registerListGenerator() {
+		if (registered) return;
+		registered = true;
+		try {
+			GeneratedListRecipe.LIST_GENERATORS.put(
+					LIST_ID,
+					GeneratedListRecipe.RecipeListGenerator.simple(
+							Lingerification::generate,
+							RefineryRecipe.SERIALIZER.getId(),
+							IERecipeTypes.REFINERY));
+			LOGGER.info("[CE] Lingerification: registered refinery list generator {}", LIST_ID);
+		} catch (Throwable t) {
+			LOGGER.error("[CE] Lingerification: failed to register refinery list generator", t);
+		}
+	}
 
-    /** Build one REGULAR->LINGERING and one SPLASH->LINGERING refinery recipe per registered potion. */
-    private static List<RefineryRecipe> generate() {
-        List<RefineryRecipe> out = new ArrayList<>();
-        for (Potion potion : ForgeRegistries.POTIONS) {
-            if (potion == Potions.EMPTY || potion == Potions.WATER) continue;
-            ResourceLocation id = ForgeRegistries.POTIONS.getKey(potion);
-            if (id == null) continue;
-            String slug = id.toString().replaceAll("[^a-z0-9_.-]", "_");
+	/** Build one REGULAR->LINGERING and one SPLASH->LINGERING refinery recipe per registered potion. */
+	private static List<RefineryRecipe> generate() {
+		List<RefineryRecipe> out = new ArrayList<>();
+		for (Potion potion : ForgeRegistries.POTIONS) {
+			if (potion == Potions.EMPTY || potion == Potions.WATER) continue;
+			ResourceLocation id = ForgeRegistries.POTIONS.getKey(potion);
+			if (id == null) continue;
+			String slug = id.toString().replaceAll("[^a-z0-9_.-]", "_");
 
-            out.add(build(potion, BottleType.REGULAR, slug + "_from_regular"));
-            out.add(build(potion, BottleType.SPLASH, slug + "_from_splash"));
-        }
-        LOGGER.info("[CE] Lingerification: generated {} refinery recipes", out.size());
-        return out;
-    }
+			out.add(build(potion, BottleType.REGULAR, slug + "_from_regular"));
+			out.add(build(potion, BottleType.SPLASH, slug + "_from_splash"));
+		}
+		LOGGER.info("[CE] Lingerification: generated {} refinery recipes", out.size());
+		return out;
+	}
 
-    private static RefineryRecipe build(Potion potion, BottleType fromType, String path) {
-        FluidStack in = PotionFluidHandler.getFluidFromPotion(potion, fromType, POTION_AMOUNT);
-        FluidStack lingering =
-                PotionFluidHandler.getFluidFromPotion(potion, BottleType.LINGERING, POTION_AMOUNT);
-        CompoundTag inTag = in.getTag();
+	private static RefineryRecipe build(Potion potion, BottleType fromType, String path) {
+		FluidStack in = PotionFluidHandler.getFluidFromPotion(potion, fromType, POTION_AMOUNT);
+		FluidStack lingering =
+				PotionFluidHandler.getFluidFromPotion(potion, BottleType.LINGERING, POTION_AMOUNT);
+		CompoundTag inTag = in.getTag();
 
-        FluidTagInput input0 = new FluidTagInput(
-                Either.right(List.of(CREATE_POTION)), POTION_AMOUNT, inTag);
-        FluidTagInput input1 = new FluidTagInput(DRAGON_BREATH_TAG, DRAGON_BREATH_AMOUNT);
+		FluidTagInput input0 = new FluidTagInput(
+				Either.right(List.of(CREATE_POTION)), POTION_AMOUNT, inTag);
+		FluidTagInput input1 = new FluidTagInput(DRAGON_BREATH_TAG, DRAGON_BREATH_AMOUNT);
 
-        return new RefineryRecipe(
-                new ResourceLocation(CreativeBrewing.NS, "lingerification/" + path),
-                lingering, input0, input1, Ingredient.EMPTY, ENERGY);
-    }
+		return new RefineryRecipe(
+				new ResourceLocation(CreativeBrewing.NS, "lingerification/" + path),
+				lingering, input0, input1, Ingredient.EMPTY, ENERGY);
+	}
 }

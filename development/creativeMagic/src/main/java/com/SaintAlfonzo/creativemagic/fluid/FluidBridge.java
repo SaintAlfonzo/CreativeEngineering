@@ -9,85 +9,85 @@ import org.slf4j.Logger;
 
 public final class FluidBridge {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    public static final ResourceLocation LIQUID_XP_ID =
-            new ResourceLocation(
-                    "create_enchantment_industry",
-                    "experience"
-            );
+	public static final ResourceLocation LIQUID_XP_ID =
+			new ResourceLocation(
+					"create_enchantment_industry",
+					"experience"
+			);
 
-    private static boolean warnedMissing = false;
-    private static boolean loggedSuccess = false;
+	private static boolean warnedMissing = false;
+	private static boolean loggedSuccess = false;
 
-    private FluidBridge() {
-    }
-
-
-    public static Fluid getTargetFluidNow() {
-
-        Fluid fluid = ForgeRegistries.FLUIDS.getValue(LIQUID_XP_ID);
-
-        if (fluid == null) {
-
-            if (!warnedMissing) {
-                LOGGER.warn(
-                        "[XPFluidBridge] Missing fluid {}",
-                        LIQUID_XP_ID
-                );
-                warnedMissing = true;
-            }
-
-            return null;
-        }
+	private FluidBridge() {
+	}
 
 
-        if (!loggedSuccess) {
-            LOGGER.info(
-                    "[XPFluidBridge] Found target fluid {}",
-                    LIQUID_XP_ID
-            );
-            loggedSuccess = true;
-        }
+	public static Fluid getTargetFluidNow() {
+
+		Fluid fluid = ForgeRegistries.FLUIDS.getValue(LIQUID_XP_ID);
+
+		if (fluid == null) {
+
+			if (!warnedMissing) {
+				LOGGER.warn(
+						"[XPFluidBridge] Missing fluid {}",
+						LIQUID_XP_ID
+				);
+				warnedMissing = true;
+			}
+
+			return null;
+		}
 
 
-        return fluid;
-    }
+		if (!loggedSuccess) {
+			LOGGER.info(
+					"[XPFluidBridge] Found target fluid {}",
+					LIQUID_XP_ID
+			);
+			loggedSuccess = true;
+		}
 
 
-        private static RegistryObject<Fluid> cachedTarget;
-
-    public static RegistryObject<Fluid> resolveOrFallback(
-            RegistryObject<Fluid> fallback
-    ) {
-        if (getTargetFluidNow() == null) {
-            return fallback;
-        }
-
-        if (cachedTarget == null) {
-            cachedTarget = RegistryObject.create(LIQUID_XP_ID, ForgeRegistries.FLUIDS);
-        }
-
-        return cachedTarget;
-    }
+		return fluid;
+	}
 
 
-    
-    public static void logStartupDiagnostic() {
+		private static RegistryObject<Fluid> cachedTarget;
 
-        if (getTargetFluidNow() != null) {
+	public static RegistryObject<Fluid> resolveOrFallback(
+			RegistryObject<Fluid> fallback
+	) {
+		if (getTargetFluidNow() == null) {
+			return fallback;
+		}
 
-            LOGGER.info(
-                    "[XPFluidBridge] Startup OK: {}",
-                    LIQUID_XP_ID
-            );
+		if (cachedTarget == null) {
+			cachedTarget = RegistryObject.create(LIQUID_XP_ID, ForgeRegistries.FLUIDS);
+		}
 
-        } else {
+		return cachedTarget;
+	}
 
-            LOGGER.warn(
-                    "[XPFluidBridge] Startup FAILED: {}",
-                    LIQUID_XP_ID
-            );
-        }
-    }
+
+
+	public static void logStartupDiagnostic() {
+
+		if (getTargetFluidNow() != null) {
+
+			LOGGER.info(
+					"[XPFluidBridge] Startup OK: {}",
+					LIQUID_XP_ID
+			);
+
+		} else {
+
+			LOGGER.warn(
+					"[XPFluidBridge] Startup FAILED: {}",
+					LIQUID_XP_ID
+			);
+		}
+	}
 }

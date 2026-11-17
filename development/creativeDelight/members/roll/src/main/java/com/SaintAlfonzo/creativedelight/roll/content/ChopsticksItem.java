@@ -17,23 +17,23 @@ import java.util.List;
  * planks (D16). What they do lives in {@link com.SaintAlfonzo.creativedelight.roll.logic.Chopsticks}.
  */
 public class ChopsticksItem extends Item {
-    public ChopsticksItem(Properties properties) {
-        super(properties);
-    }
+	public ChopsticksItem(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public int getEnchantmentValue() {
-        return 15;
-    }
+	@Override
+	public int getEnchantmentValue() {
+		return 15;
+	}
 
-    @Override
-    public boolean isValidRepairItem(ItemStack stack, ItemStack repair) {
-        return repair.is(ItemTags.PLANKS);
-    }
+	@Override
+	public boolean isValidRepairItem(ItemStack stack, ItemStack repair) {
+		return repair.is(ItemTags.PLANKS);
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.roll_delight.chopsticks.tooltip.0").withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("item.roll_delight.chopsticks.tooltip.1").withStyle(ChatFormatting.GRAY));
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+		tooltip.add(Component.translatable("item.roll_delight.chopsticks.tooltip.0").withStyle(ChatFormatting.GRAY));
+		tooltip.add(Component.translatable("item.roll_delight.chopsticks.tooltip.1").withStyle(ChatFormatting.GRAY));
+	}
 }

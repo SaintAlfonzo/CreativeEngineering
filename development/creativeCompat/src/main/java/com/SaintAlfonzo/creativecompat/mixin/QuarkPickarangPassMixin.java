@@ -22,30 +22,30 @@ import vazkii.quark.content.tools.entity.rang.AbstractPickarang;
 @Mixin(value = AbstractPickarang.class, remap = false)
 public abstract class QuarkPickarangPassMixin implements PassSnagItem {
 
-    @Shadow
-    protected int liveTime;
+	@Shadow
+	protected int liveTime;
 
-    @Shadow
-    public abstract ItemStack getStack();
+	@Shadow
+	public abstract ItemStack getStack();
 
-    @Inject(method = "m_8119_", at = @At("RETURN"))
-    private void creativecompat$pickarangWeb(CallbackInfo ci) {
-        Entity self = (Entity) (Object) this;
-        if (self.isRemoved()) return;
-        try {
-            PassProjectiles.tick(self);
-        } catch (Throwable ignored) {
-            // a broken lookup must never stop the pickarang
-        }
-    }
+	@Inject(method = "m_8119_", at = @At("RETURN"))
+	private void creativecompat$pickarangWeb(CallbackInfo ci) {
+		Entity self = (Entity) (Object) this;
+		if (self.isRemoved()) return;
+		try {
+			PassProjectiles.tick(self);
+		} catch (Throwable ignored) {
+			// a broken lookup must never stop the pickarang
+		}
+	}
 
-    @Override
-    public ItemStack creativecompat$snagStack() {
-        return getStack();
-    }
+	@Override
+	public ItemStack creativecompat$snagStack() {
+		return getStack();
+	}
 
-    @Override
-    public void creativecompat$holdTimers() {
-        liveTime = 0;
-    }
+	@Override
+	public void creativecompat$holdTimers() {
+		liveTime = 0;
+	}
 }

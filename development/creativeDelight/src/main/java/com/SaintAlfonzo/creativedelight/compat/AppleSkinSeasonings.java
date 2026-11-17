@@ -23,32 +23,32 @@ import squeek.appleskin.api.food.FoodValues;
  */
 public final class AppleSkinSeasonings {
 
-    private AppleSkinSeasonings() {}
+	private AppleSkinSeasonings() {}
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onFoodValues(FoodValuesEvent event) {
-        List<ResourceLocation> ids = Seasonings.of(event.itemStack);
-        if (ids.isEmpty()) {
-            return;
-        }
-        int nutrition = 0;
-        float saturation = 0f;
-        for (ResourceLocation id : ids) {
-            Seasonings.Definition def = Seasonings.get(id);
-            if (def != null) {
-                nutrition += def.nutrition();
-                saturation += def.saturation();
-            }
-        }
-        if (nutrition == 0 && saturation == 0f) {
-            return;
-        }
-        FoodValues base = event.modifiedFoodValues;
-        int hunger = base.hunger + nutrition;
-        if (hunger <= 0) {
-            return;
-        }
-        float increment = base.getSaturationIncrement() + saturation;
-        event.modifiedFoodValues = new FoodValues(hunger, increment / (hunger * 2f));
-    }
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onFoodValues(FoodValuesEvent event) {
+		List<ResourceLocation> ids = Seasonings.of(event.itemStack);
+		if (ids.isEmpty()) {
+			return;
+		}
+		int nutrition = 0;
+		float saturation = 0f;
+		for (ResourceLocation id : ids) {
+			Seasonings.Definition def = Seasonings.get(id);
+			if (def != null) {
+				nutrition += def.nutrition();
+				saturation += def.saturation();
+			}
+		}
+		if (nutrition == 0 && saturation == 0f) {
+			return;
+		}
+		FoodValues base = event.modifiedFoodValues;
+		int hunger = base.hunger + nutrition;
+		if (hunger <= 0) {
+			return;
+		}
+		float increment = base.getSaturationIncrement() + saturation;
+		event.modifiedFoodValues = new FoodValues(hunger, increment / (hunger * 2f));
+	}
 }

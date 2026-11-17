@@ -27,12 +27,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "shadows.fastbench.util.FastBenchUtil", remap = false)
 public class FastBenchResultMixin {
 
-    @Inject(method = "slotChangedCraftingGrid(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lshadows/fastbench/util/CraftingInventoryExt;Lnet/minecraft/world/inventory/ResultContainer;)V",
-            at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private static void creativelabels$blockLabelled(Level level, Player player, @Coerce CraftingContainer grid,
-                                                      ResultContainer result, CallbackInfo ci) {
-        if (!LabelledCrafting.blocks(level, grid)) return;
-        LabelledCrafting.clear(null, player, result);
-        ci.cancel();
-    }
+	@Inject(method = "slotChangedCraftingGrid(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/player/Player;Lshadows/fastbench/util/CraftingInventoryExt;Lnet/minecraft/world/inventory/ResultContainer;)V",
+			at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private static void creativelabels$blockLabelled(Level level, Player player, @Coerce CraftingContainer grid,
+													  ResultContainer result, CallbackInfo ci) {
+		if (!LabelledCrafting.blocks(level, grid)) return;
+		LabelledCrafting.clear(null, player, result);
+		ci.cancel();
+	}
 }

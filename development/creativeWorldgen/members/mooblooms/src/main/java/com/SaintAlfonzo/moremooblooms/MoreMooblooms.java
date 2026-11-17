@@ -54,67 +54,67 @@ import java.util.List;
 @Mod(MoreMooblooms.ID)
 public class MoreMooblooms {
 
-    public static final String ID = "moremooblooms";
-    public static final Logger LOGGER = LogUtils.getLogger();
+	public static final String ID = "moremooblooms";
+	public static final Logger LOGGER = LogUtils.getLogger();
 
-    /** Content sets that are only a data pack (tag and advancement additions for that mod). */
-    private static final List<String> TAG_PACK_MODS =
-            List.of("blueprint", "alexsmobs", "supplementaries", "abnormals_delight", "botania", "delightful");
+	/** Content sets that are only a data pack (tag and advancement additions for that mod). */
+	private static final List<String> TAG_PACK_MODS =
+			List.of("blueprint", "alexsmobs", "supplementaries", "abnormals_delight", "botania", "delightful");
 
-    public MoreMooblooms() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MMConfig.SPEC);
+	public MoreMooblooms() {
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MMConfig.SPEC);
 
-        MMEntities.register(modBus);
-        MoobloomSpawnEggItem.register(modBus);
-        // The buttercup and Buzzier Bees' moobloom egg stay out of the creative tabs (mixin applied only with Buzzier Bees).
-        if (isLoaded(BuzzierBeesSet.MOD_ID)) HiddenItems.set(BuzzierBeesSet::isHidden);
-        modBus.addListener((FMLCommonSetupEvent e) -> SyncVariantsPacket.register());
-        modBus.addListener(MoreMooblooms::addPacks);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientSetup.register(modBus));
+		MMEntities.register(modBus);
+		MoobloomSpawnEggItem.register(modBus);
+		// The buttercup and Buzzier Bees' moobloom egg stay out of the creative tabs (mixin applied only with Buzzier Bees).
+		if (isLoaded(BuzzierBeesSet.MOD_ID)) HiddenItems.set(BuzzierBeesSet::isHidden);
+		modBus.addListener((FMLCommonSetupEvent e) -> SyncVariantsPacket.register());
+		modBus.addListener(MoreMooblooms::addPacks);
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientSetup.register(modBus));
 
-        MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent e) -> {
-            e.addListener(new MoobloomVariants.Loader());
-            e.addListener(new MoobloomSpawns.Loader());
-            e.addListener(new MoobloomBreeding.Loader());
-        });
-        MinecraftForge.EVENT_BUS.addListener(SyncVariantsPacket::onDatapackSync);
-        MinecraftForge.EVENT_BUS.addListener(CowFeeding::onEntityInteract);
+		MinecraftForge.EVENT_BUS.addListener((AddReloadListenerEvent e) -> {
+			e.addListener(new MoobloomVariants.Loader());
+			e.addListener(new MoobloomSpawns.Loader());
+			e.addListener(new MoobloomBreeding.Loader());
+		});
+		MinecraftForge.EVENT_BUS.addListener(SyncVariantsPacket::onDatapackSync);
+		MinecraftForge.EVENT_BUS.addListener(CowFeeding::onEntityInteract);
 
-        if (isLoaded(BuzzierBeesSet.MOD_ID)) BuzzierBeesSet.register(modBus);
-    }
+		if (isLoaded(BuzzierBeesSet.MOD_ID)) BuzzierBeesSet.register(modBus);
+	}
 
-    public static boolean isLoaded(String modId) {
-        return ModList.get().isLoaded(modId);
-    }
+	public static boolean isLoaded(String modId) {
+		return ModList.get().isLoaded(modId);
+	}
 
-    /**
-     * Adds the packs of every active content set. Tag/advancement packs go at the bottom (they only add).
-     * The Buzzier Bees sub-packs replace Buzzier Bees' own files by path, so they go on top of the mod
-     * resources; the pack's kubejs/data still loads above them.
-     */
-    private static void addPacks(AddPackFindersEvent event) {
-        if (event.getPackType() != PackType.SERVER_DATA) return; // every set is data only
-        Path root = ModList.get().getModFileById(ID).getFile().findResource("packs");
-        if (MMConfig.on(MMConfig.WITHERBLOOM_SPAWNS)) {
-            addPack(event, root.resolve(ID).resolve("witherbloom_spawns"), ID + ":witherbloom_spawns",
-                    "More Mooblooms: witherbloom spawns", Pack.Position.BOTTOM);
-        }
-        for (String mod : TAG_PACK_MODS) {
-            if (isLoaded(mod)) addPack(event, root.resolve(mod), ID + ":" + mod, "More Mooblooms: " + mod, Pack.Position.BOTTOM);
-        }
+	/**
+	 * Adds the packs of every active content set. Tag/advancement packs go at the bottom (they only add).
+	 * The Buzzier Bees sub-packs replace Buzzier Bees' own files by path, so they go on top of the mod
+	 * resources; the pack's kubejs/data still loads above them.
+	 */
+	private static void addPacks(AddPackFindersEvent event) {
+		if (event.getPackType() != PackType.SERVER_DATA) return; // every set is data only
+		Path root = ModList.get().getModFileById(ID).getFile().findResource("packs");
+		if (MMConfig.on(MMConfig.WITHERBLOOM_SPAWNS)) {
+			addPack(event, root.resolve(ID).resolve("witherbloom_spawns"), ID + ":witherbloom_spawns",
+					"More Mooblooms: witherbloom spawns", Pack.Position.BOTTOM);
+		}
+		for (String mod : TAG_PACK_MODS) {
+			if (isLoaded(mod)) addPack(event, root.resolve(mod), ID + ":" + mod, "More Mooblooms: " + mod, Pack.Position.BOTTOM);
+		}
 
-        if (isLoaded(BuzzierBeesSet.MOD_ID)) {
-            for (BuzzierBeesSet.DataSwitch s : BuzzierBeesSet.dataSwitches()) {
-                if (!MMConfig.on(s.value())) continue;
-                addPack(event, root.resolve(BuzzierBeesSet.MOD_ID).resolve(s.folder()),
-                        ID + ":" + BuzzierBeesSet.MOD_ID + "/" + s.folder(),
-                        "More Mooblooms: Buzzier Bees " + s.folder(), Pack.Position.TOP);
-            }
-        }
-    }
+		if (isLoaded(BuzzierBeesSet.MOD_ID)) {
+			for (BuzzierBeesSet.DataSwitch s : BuzzierBeesSet.dataSwitches()) {
+				if (!MMConfig.on(s.value())) continue;
+				addPack(event, root.resolve(BuzzierBeesSet.MOD_ID).resolve(s.folder()),
+						ID + ":" + BuzzierBeesSet.MOD_ID + "/" + s.folder(),
+						"More Mooblooms: Buzzier Bees " + s.folder(), Pack.Position.TOP);
+			}
+		}
+	}
 
-    private static void addPack(AddPackFindersEvent event, Path dir, String packId, String title, Pack.Position position) {
-        BuiltInPacks.addFolder(event, dir, packId, title, position, "More Mooblooms");
-    }
+	private static void addPack(AddPackFindersEvent event, Path dir, String packId, String title, Pack.Position position) {
+		BuiltInPacks.addFolder(event, dir, packId, title, position, "More Mooblooms");
+	}
 }

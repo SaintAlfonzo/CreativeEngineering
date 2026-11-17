@@ -10,10 +10,10 @@ import org.jetbrains.annotations.Nullable;
  * touched, so a crash can't leave doDaylightCycle off. Game time keeps running: scheduled ticks depend on it.
  */
 public final class TimePause {
-    private TimePause() {}
+	private TimePause() {}
 
-    public static boolean paused(@Nullable MinecraftServer server) {
-        return server != null && server.isDedicatedServer() && server.getPlayerCount() == 0
-                && TimeSettings.active() && CalendarConfig.TIME.pauseWhenEmpty.get();
-    }
+	public static boolean paused(@Nullable MinecraftServer server) {
+		return server != null && server.isDedicatedServer() && server.getPlayerCount() == 0
+				&& TimeSettings.active() && CalendarConfig.TIME.pauseWhenEmpty.get();
+	}
 }

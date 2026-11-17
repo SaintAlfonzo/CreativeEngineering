@@ -40,395 +40,395 @@ import java.util.Set;
  */
 public final class CaptureDriver {
 
-    static final Logger LOG = LogUtils.getLogger();
-    private static final Gson GSON = new Gson();
-    /** Ticks to wait at the title screen before loading (lets late mod screens settle). */
-    private static final int TITLE_SETTLE_TICKS = 40;
-    private static final int JOIN_TIMEOUT_TICKS = 20 * 60 * 10;
+	static final Logger LOG = LogUtils.getLogger();
+	private static final Gson GSON = new Gson();
+	/** Ticks to wait at the title screen before loading (lets late mod screens settle). */
+	private static final int TITLE_SETTLE_TICKS = 40;
+	private static final int JOIN_TIMEOUT_TICKS = 20 * 60 * 10;
 
-    private enum Phase { BOOT, CREATING, JOINING, SETUP, TESTS, SERVE, DONE }
+	private enum Phase { BOOT, CREATING, JOINING, SETUP, TESTS, SERVE, DONE }
 
-    final Minecraft mc = Minecraft.getInstance();
-    final CapturePlan plan;
-    final Capture capture = new Capture();
-    /** Rendered frames so far; steps count settle frames with it. */
-    int frames;
+	final Minecraft mc = Minecraft.getInstance();
+	final CapturePlan plan;
+	final Capture capture = new Capture();
+	/** Rendered frames so far; steps count settle frames with it. */
+	int frames;
 
-    private Phase phase = Phase.BOOT;
-    private int phaseTicks;
+	private Phase phase = Phase.BOOT;
+	private int phaseTicks;
 
-    private int testIndex = -1;
-    private String currentId = "setup";
-    private List<Steps.Step> steps = new ArrayList<>();
-    private int stepIndex;
-    private int testTicks;
-    private final List<String> files = new ArrayList<>();
-    private final JsonArray stepLog = new JsonArray();
-    private final JsonArray reads = new JsonArray();
-    private final Channel channel;
-    /** Seq of the channel request being run, -1 while idle in SERVE. */
-    private long serveSeq = -1;
-    private int serveTimeoutTicks;
-    private long totalTicks;
-    private String failure;
-    private boolean failShotPending;
+	private int testIndex = -1;
+	private String currentId = "setup";
+	private List<Steps.Step> steps = new ArrayList<>();
+	private int stepIndex;
+	private int testTicks;
+	private final List<String> files = new ArrayList<>();
+	private final JsonArray stepLog = new JsonArray();
+	private final JsonArray reads = new JsonArray();
+	private final Channel channel;
+	/** Seq of the channel request being run, -1 while idle in SERVE. */
+	private long serveSeq = -1;
+	private int serveTimeoutTicks;
+	private long totalTicks;
+	private String failure;
+	private boolean failShotPending;
 
-    CaptureDriver(CapturePlan plan) {
-        this.plan = plan;
-        this.channel = plan.channel() == null ? null : new Channel(plan.channel());
-        MinecraftForge.EVENT_BUS.register(capture);
-        LOG.info("[cdevcapture] plan loaded: {} tests, world {}", plan.tests().size(), plan.worldName());
-    }
+	CaptureDriver(CapturePlan plan) {
+		this.plan = plan;
+		this.channel = plan.channel() == null ? null : new Channel(plan.channel());
+		MinecraftForge.EVENT_BUS.register(capture);
+		LOG.info("[cdevcapture] plan loaded: {} tests, world {}", plan.tests().size(), plan.worldName());
+	}
 
-    String currentId() {
-        return currentId;
-    }
+	String currentId() {
+		return currentId;
+	}
 
-    void addFile(String f) {
-        files.add(f);
-    }
+	void addFile(String f) {
+		files.add(f);
+	}
 
-    /** Readback line: logged as {@code [cdevcapture] READ <kind> <text>} and kept in the test's "reads". */
-    void read(String kind, String text) {
-        String line = kind + " " + text;
-        LOG.info("[cdevcapture] READ {}", line);
-        reads.add(line);
-    }
+	/** Readback line: logged as {@code [cdevcapture] READ <kind> <text>} and kept in the test's "reads". */
+	void read(String kind, String text) {
+		String line = kind + " " + text;
+		LOG.info("[cdevcapture] READ {}", line);
+		reads.add(line);
+	}
 
-    // --- events -------------------------------------------------------------------------------------------------
+	// --- events -------------------------------------------------------------------------------------------------
 
-    @SubscribeEvent
-    public void onClientTick(TickEvent.ClientTickEvent e) {
-        if (e.phase != TickEvent.Phase.END) return;
-        try {
-            tick();
-        } catch (Exception ex) {
-            LOG.error("[cdevcapture] driver error in phase {}", phase, ex);
-            if (phase == Phase.TESTS || phase == Phase.SETUP) fail("driver error: " + ex);
-        }
-    }
+	@SubscribeEvent
+	public void onClientTick(TickEvent.ClientTickEvent e) {
+		if (e.phase != TickEvent.Phase.END) return;
+		try {
+			tick();
+		} catch (Exception ex) {
+			LOG.error("[cdevcapture] driver error in phase {}", phase, ex);
+			if (phase == Phase.TESTS || phase == Phase.SETUP) fail("driver error: " + ex);
+		}
+	}
 
-    @SubscribeEvent
-    public void onRenderTick(TickEvent.RenderTickEvent e) {
-        if (e.phase == TickEvent.Phase.START) {
-            capture.beginFrame();
-            return;
-        }
-        frames++;
-        if (failShotPending) {
-            failShotPending = false;
-            try {
-                capture.shoot(mc, plan.rawDir(), currentId + "__failed", new JsonObject());
-                files.add(currentId + "__failed.png");
-            } catch (Exception ex) {
-                LOG.warn("[cdevcapture] failed-frame shot for {} not saved: {}", currentId, ex.toString());
-            }
-            finishTest();
-            return;
-        }
-        if (running() && failure == null && stepIndex < steps.size()) {
-            try {
-                steps.get(stepIndex).onFrameEnd(this);
-            } catch (Exception ex) {
-                fail(steps.get(stepIndex).kind + ": " + ex);
-            }
-        }
-    }
+	@SubscribeEvent
+	public void onRenderTick(TickEvent.RenderTickEvent e) {
+		if (e.phase == TickEvent.Phase.START) {
+			capture.beginFrame();
+			return;
+		}
+		frames++;
+		if (failShotPending) {
+			failShotPending = false;
+			try {
+				capture.shoot(mc, plan.rawDir(), currentId + "__failed", new JsonObject());
+				files.add(currentId + "__failed.png");
+			} catch (Exception ex) {
+				LOG.warn("[cdevcapture] failed-frame shot for {} not saved: {}", currentId, ex.toString());
+			}
+			finishTest();
+			return;
+		}
+		if (running() && failure == null && stepIndex < steps.size()) {
+			try {
+				steps.get(stepIndex).onFrameEnd(this);
+			} catch (Exception ex) {
+				fail(steps.get(stepIndex).kind + ": " + ex);
+			}
+		}
+	}
 
-    // --- phases -------------------------------------------------------------------------------------------------
+	// --- phases -------------------------------------------------------------------------------------------------
 
-    private void setPhase(Phase p) {
-        phase = p;
-        phaseTicks = 0;
-        LOG.info("[cdevcapture] phase {}", p);
-    }
+	private void setPhase(Phase p) {
+		phase = p;
+		phaseTicks = 0;
+		LOG.info("[cdevcapture] phase {}", p);
+	}
 
-    private boolean running() {
-        return phase == Phase.TESTS || phase == Phase.SETUP || (phase == Phase.SERVE && serveSeq >= 0);
-    }
+	private boolean running() {
+		return phase == Phase.TESTS || phase == Phase.SETUP || (phase == Phase.SERVE && serveSeq >= 0);
+	}
 
-    private void tick() throws Exception {
-        phaseTicks++;
-        totalTicks++;
-        if (channel != null && totalTicks % 20 == 0) channel.heartbeat(phase.name(), currentId, serveSeq, totalTicks);
-        switch (phase) {
-            case BOOT -> {
-                if (plan.joinServer()) {
-                    LOG.info("[cdevcapture] waiting to join the server from the launch arguments");
-                    setPhase(Phase.JOINING);
-                    return;
-                }
-                boolean idle = mc.getOverlay() == null && mc.level == null && mc.screen != null;
-                if (!idle) phaseTicks = 0;
-                if (phaseTicks < TITLE_SETTLE_TICKS) return;
-                writeProgress("loading");
-                if (TestWorld.exists(mc, plan.worldName())) {
-                    LOG.info("[cdevcapture] loading world {}", plan.worldName());
-                    TestWorld.load(mc, plan.worldName());
-                    setPhase(Phase.JOINING);
-                } else {
-                    LOG.info("[cdevcapture] creating flat world {} ({})", plan.worldName(), plan.worldBiome());
-                    TestWorld.openCreateScreen(mc);
-                    setPhase(Phase.CREATING);
-                }
-            }
-            case CREATING -> {
-                if (mc.screen instanceof CreateWorldScreen cws) {
-                    TestWorld.createFlat(mc, cws, plan);
-                    setPhase(Phase.JOINING);
-                } else if (phaseTicks > JOIN_TIMEOUT_TICKS) {
-                    abort("create world screen never opened");
-                }
-            }
-            case JOINING -> {
-                confirmDialogs();
-                if (mc.player != null && mc.level != null && mc.screen == null && phaseTicks > 20) {
-                    setPhase(Phase.SETUP);
-                    currentId = "setup";
-                    beginSteps(setupSteps());
-                } else if (phaseTicks > JOIN_TIMEOUT_TICKS) {
-                    abort("world never joined (screen " + (mc.screen == null ? "none" : mc.screen.getClass().getName()) + ")");
-                }
-            }
-            case SETUP, TESTS -> runSteps();
-            case SERVE -> {
-                if (serveSeq < 0) serveNext();
-                else runSteps();
-            }
-            case DONE -> {
-                if (phaseTicks == 20) mc.stop();
-            }
-        }
-    }
+	private void tick() throws Exception {
+		phaseTicks++;
+		totalTicks++;
+		if (channel != null && totalTicks % 20 == 0) channel.heartbeat(phase.name(), currentId, serveSeq, totalTicks);
+		switch (phase) {
+			case BOOT -> {
+				if (plan.joinServer()) {
+					LOG.info("[cdevcapture] waiting to join the server from the launch arguments");
+					setPhase(Phase.JOINING);
+					return;
+				}
+				boolean idle = mc.getOverlay() == null && mc.level == null && mc.screen != null;
+				if (!idle) phaseTicks = 0;
+				if (phaseTicks < TITLE_SETTLE_TICKS) return;
+				writeProgress("loading");
+				if (TestWorld.exists(mc, plan.worldName())) {
+					LOG.info("[cdevcapture] loading world {}", plan.worldName());
+					TestWorld.load(mc, plan.worldName());
+					setPhase(Phase.JOINING);
+				} else {
+					LOG.info("[cdevcapture] creating flat world {} ({})", plan.worldName(), plan.worldBiome());
+					TestWorld.openCreateScreen(mc);
+					setPhase(Phase.CREATING);
+				}
+			}
+			case CREATING -> {
+				if (mc.screen instanceof CreateWorldScreen cws) {
+					TestWorld.createFlat(mc, cws, plan);
+					setPhase(Phase.JOINING);
+				} else if (phaseTicks > JOIN_TIMEOUT_TICKS) {
+					abort("create world screen never opened");
+				}
+			}
+			case JOINING -> {
+				confirmDialogs();
+				if (mc.player != null && mc.level != null && mc.screen == null && phaseTicks > 20) {
+					setPhase(Phase.SETUP);
+					currentId = "setup";
+					beginSteps(setupSteps());
+				} else if (phaseTicks > JOIN_TIMEOUT_TICKS) {
+					abort("world never joined (screen " + (mc.screen == null ? "none" : mc.screen.getClass().getName()) + ")");
+				}
+			}
+			case SETUP, TESTS -> runSteps();
+			case SERVE -> {
+				if (serveSeq < 0) serveNext();
+				else runSteps();
+			}
+			case DONE -> {
+				if (phaseTicks == 20) mc.stop();
+			}
+		}
+	}
 
-    private List<Steps.Step> setupSteps() {
-        List<Steps.Step> s = new ArrayList<>();
-        for (JsonObject o : plan.setup()) s.add(Steps.parse(o, this));
-        s.add(new Steps.Wait("jei"));
-        s.add(new Steps.Wait("chunks"));
-        return s;
-    }
+	private List<Steps.Step> setupSteps() {
+		List<Steps.Step> s = new ArrayList<>();
+		for (JsonObject o : plan.setup()) s.add(Steps.parse(o, this));
+		s.add(new Steps.Wait("jei"));
+		s.add(new Steps.Wait("chunks"));
+		return s;
+	}
 
-    /** Experimental-settings and backup prompts on world load: press the proceed button. */
-    private void confirmDialogs() {
-        Screen s = mc.screen;
-        if (!(s instanceof ConfirmScreen || s instanceof BackupConfirmScreen) || phaseTicks % 20 != 0) return;
-        Set<String> proceed = Set.of("selectWorld.backupJoinSkipButton", "gui.proceed", "gui.yes", "gui.continue");
-        for (GuiEventListener l : s.children()) {
-            if (l instanceof Button b && b.getMessage().getContents() instanceof TranslatableContents t
-                    && proceed.contains(t.getKey())) {
-                LOG.info("[cdevcapture] confirming {} ({})", s.getClass().getSimpleName(), t.getKey());
-                b.onPress();
-                return;
-            }
-        }
-    }
+	/** Experimental-settings and backup prompts on world load: press the proceed button. */
+	private void confirmDialogs() {
+		Screen s = mc.screen;
+		if (!(s instanceof ConfirmScreen || s instanceof BackupConfirmScreen) || phaseTicks % 20 != 0) return;
+		Set<String> proceed = Set.of("selectWorld.backupJoinSkipButton", "gui.proceed", "gui.yes", "gui.continue");
+		for (GuiEventListener l : s.children()) {
+			if (l instanceof Button b && b.getMessage().getContents() instanceof TranslatableContents t
+					&& proceed.contains(t.getKey())) {
+				LOG.info("[cdevcapture] confirming {} ({})", s.getClass().getSimpleName(), t.getKey());
+				b.onPress();
+				return;
+			}
+		}
+	}
 
-    // --- tests --------------------------------------------------------------------------------------------------
+	// --- tests --------------------------------------------------------------------------------------------------
 
-    private void beginSteps(List<Steps.Step> list) {
-        steps = list;
-        stepIndex = 0;
-        testTicks = 0;
-        files.clear();
-        while (stepLog.size() > 0) stepLog.remove(0);
-        while (reads.size() > 0) reads.remove(0);
-        failure = null;
-    }
+	private void beginSteps(List<Steps.Step> list) {
+		steps = list;
+		stepIndex = 0;
+		testTicks = 0;
+		files.clear();
+		while (stepLog.size() > 0) stepLog.remove(0);
+		while (reads.size() > 0) reads.remove(0);
+		failure = null;
+	}
 
-    private void nextTest() {
-        testIndex++;
-        if (testIndex >= plan.tests().size() && channel != null) {
-            currentId = "idle";
-            writeProgress("serving");
-            LOG.info("[cdevcapture] SERVE {}", channel.dir);
-            setPhase(Phase.SERVE);
-            channel.heartbeat(phase.name(), currentId, serveSeq, totalTicks);
-            return;
-        }
-        if (testIndex >= plan.tests().size()) {
-            currentId = "done";
-            writeProgress("done");
-            LOG.info("[cdevcapture] DONE");
-            setPhase(Phase.DONE);
-            return;
-        }
-        CapturePlan.Test t = plan.tests().get(testIndex);
-        currentId = t.id();
-        writeProgress("running");
-        LOG.info("[cdevcapture] BEGIN {}", t.id());
-        List<Steps.Step> list = new ArrayList<>(resetSteps());
-        try {
-            for (JsonObject o : t.steps()) list.add(Steps.parse(o, this));
-            for (JsonObject o : t.capture()) {
-                JsonObject wrap = new JsonObject();
-                wrap.add("capture", o);
-                list.add(Steps.parse(wrap, this));
-            }
-        } catch (RuntimeException ex) {
-            beginSteps(List.of());
-            fail("bad step: " + ex.getMessage());
-            return;
-        }
-        beginSteps(list);
-    }
+	private void nextTest() {
+		testIndex++;
+		if (testIndex >= plan.tests().size() && channel != null) {
+			currentId = "idle";
+			writeProgress("serving");
+			LOG.info("[cdevcapture] SERVE {}", channel.dir);
+			setPhase(Phase.SERVE);
+			channel.heartbeat(phase.name(), currentId, serveSeq, totalTicks);
+			return;
+		}
+		if (testIndex >= plan.tests().size()) {
+			currentId = "done";
+			writeProgress("done");
+			LOG.info("[cdevcapture] DONE");
+			setPhase(Phase.DONE);
+			return;
+		}
+		CapturePlan.Test t = plan.tests().get(testIndex);
+		currentId = t.id();
+		writeProgress("running");
+		LOG.info("[cdevcapture] BEGIN {}", t.id());
+		List<Steps.Step> list = new ArrayList<>(resetSteps());
+		try {
+			for (JsonObject o : t.steps()) list.add(Steps.parse(o, this));
+			for (JsonObject o : t.capture()) {
+				JsonObject wrap = new JsonObject();
+				wrap.add("capture", o);
+				list.add(Steps.parse(wrap, this));
+			}
+		} catch (RuntimeException ex) {
+			beginSteps(List.of());
+			fail("bad step: " + ex.getMessage());
+			return;
+		}
+		beginSteps(list);
+	}
 
-    /** SERVE: take the next channel request, if any, and start its steps. */
-    private void serveNext() {
-        JsonObject req = channel.poll();
-        if (req == null) return;
-        long seq = req.get("seq").getAsLong();
-        String op = req.has("op") ? req.get("op").getAsString() : "run";
-        if (!op.equals("run")) {
-            JsonObject r = new JsonObject();
-            r.addProperty("status", op.equals("bad") ? "fail" : "ok");
-            r.addProperty("op", op);
-            if (req.has("error")) r.addProperty("error", req.get("error").getAsString());
-            channel.reply(seq, r);
-            if (op.equals("stop")) {
-                LOG.info("[cdevcapture] DONE (stop request)");
-                setPhase(Phase.DONE);
-            }
-            return;
-        }
-        serveSeq = seq;
-        currentId = req.has("id") ? req.get("id").getAsString() : "req" + seq;
-        serveTimeoutTicks = req.has("timeout_ticks") ? req.get("timeout_ticks").getAsInt() : plan.testTimeoutTicks();
-        LOG.info("[cdevcapture] BEGIN {} seq {}", currentId, seq);
-        List<Steps.Step> list = new ArrayList<>();
-        if (req.has("reset") && req.get("reset").getAsBoolean()) list.addAll(resetSteps());
-        try {
-            if (req.has("steps")) for (var e : req.getAsJsonArray("steps")) list.add(Steps.parse(e.getAsJsonObject(), this));
-        } catch (RuntimeException ex) {
-            beginSteps(List.of());
-            fail("bad step: " + ex.getMessage());
-            return;
-        }
-        beginSteps(list);
-    }
+	/** SERVE: take the next channel request, if any, and start its steps. */
+	private void serveNext() {
+		JsonObject req = channel.poll();
+		if (req == null) return;
+		long seq = req.get("seq").getAsLong();
+		String op = req.has("op") ? req.get("op").getAsString() : "run";
+		if (!op.equals("run")) {
+			JsonObject r = new JsonObject();
+			r.addProperty("status", op.equals("bad") ? "fail" : "ok");
+			r.addProperty("op", op);
+			if (req.has("error")) r.addProperty("error", req.get("error").getAsString());
+			channel.reply(seq, r);
+			if (op.equals("stop")) {
+				LOG.info("[cdevcapture] DONE (stop request)");
+				setPhase(Phase.DONE);
+			}
+			return;
+		}
+		serveSeq = seq;
+		currentId = req.has("id") ? req.get("id").getAsString() : "req" + seq;
+		serveTimeoutTicks = req.has("timeout_ticks") ? req.get("timeout_ticks").getAsInt() : plan.testTimeoutTicks();
+		LOG.info("[cdevcapture] BEGIN {} seq {}", currentId, seq);
+		List<Steps.Step> list = new ArrayList<>();
+		if (req.has("reset") && req.get("reset").getAsBoolean()) list.addAll(resetSteps());
+		try {
+			if (req.has("steps")) for (var e : req.getAsJsonArray("steps")) list.add(Steps.parse(e.getAsJsonObject(), this));
+		} catch (RuntimeException ex) {
+			beginSteps(List.of());
+			fail("bad step: " + ex.getMessage());
+			return;
+		}
+		beginSteps(list);
+	}
 
-    /** Before every test: close the screen, release keys, clear inventory and effects, noon, clear weather, creative. */
-    private List<Steps.Step> resetSteps() {
-        List<Steps.Step> s = new ArrayList<>();
-        s.add(new Steps.Instant("reset", m -> {
-            VirtualInput.releaseAll();
-            capture.clearHide(m);
-            m.options.advancedItemTooltips = false;
-            m.options.renderDebug = false;
-            if (m.screen instanceof AbstractContainerScreen<?>) m.player.closeContainer();
-            else if (m.screen != null) m.setScreen(null);
-            m.gui.getChat().clearMessages(false);
-            m.getToasts().clear();
-        }));
-        for (String c : new String[]{"gamemode creative @s", "clear @s", "effect clear @s", "time set 6000", "weather clear"}) {
-            s.add(new Steps.Cmd(c, true));
-        }
-        return s;
-    }
+	/** Before every test: close the screen, release keys, clear inventory and effects, noon, clear weather, creative. */
+	private List<Steps.Step> resetSteps() {
+		List<Steps.Step> s = new ArrayList<>();
+		s.add(new Steps.Instant("reset", m -> {
+			VirtualInput.releaseAll();
+			capture.clearHide(m);
+			m.options.advancedItemTooltips = false;
+			m.options.renderDebug = false;
+			if (m.screen instanceof AbstractContainerScreen<?>) m.player.closeContainer();
+			else if (m.screen != null) m.setScreen(null);
+			m.gui.getChat().clearMessages(false);
+			m.getToasts().clear();
+		}));
+		for (String c : new String[]{"gamemode creative @s", "clear @s", "effect clear @s", "time set 6000", "weather clear"}) {
+			s.add(new Steps.Cmd(c, true));
+		}
+		return s;
+	}
 
-    private void runSteps() {
-        if (failure != null) return; // waiting for the failed-frame shot
-        testTicks++;
-        if (stepIndex >= steps.size()) {
-            finishTest();
-            return;
-        }
-        Steps.Step step = steps.get(stepIndex);
-        try {
-            boolean done = step.tick(this);
-            step.ticks++;
-            if (done) {
-                logStep(step, true, step.note);
-                stepIndex++;
-            } else if (step.ticks > step.maxTicks(this)) {
-                fail(step.kind + ": timeout after " + step.ticks + " ticks" + (step.note.isEmpty() ? "" : " (" + step.note + ")"));
-            } else if (phase == Phase.SERVE && testTicks > serveTimeoutTicks) {
-                fail("request timeout after " + testTicks + " ticks");
-            } else if (phase == Phase.TESTS && testTicks > plan.testTimeoutTicks()) {
-                fail("test timeout after " + testTicks + " ticks");
-            }
-        } catch (Exception ex) {
-            String why = ex instanceof Steps.StepFailed ? ex.getMessage() : ex.toString();
-            fail(step.kind + ": " + why);
-        }
-    }
+	private void runSteps() {
+		if (failure != null) return; // waiting for the failed-frame shot
+		testTicks++;
+		if (stepIndex >= steps.size()) {
+			finishTest();
+			return;
+		}
+		Steps.Step step = steps.get(stepIndex);
+		try {
+			boolean done = step.tick(this);
+			step.ticks++;
+			if (done) {
+				logStep(step, true, step.note);
+				stepIndex++;
+			} else if (step.ticks > step.maxTicks(this)) {
+				fail(step.kind + ": timeout after " + step.ticks + " ticks" + (step.note.isEmpty() ? "" : " (" + step.note + ")"));
+			} else if (phase == Phase.SERVE && testTicks > serveTimeoutTicks) {
+				fail("request timeout after " + testTicks + " ticks");
+			} else if (phase == Phase.TESTS && testTicks > plan.testTimeoutTicks()) {
+				fail("test timeout after " + testTicks + " ticks");
+			}
+		} catch (Exception ex) {
+			String why = ex instanceof Steps.StepFailed ? ex.getMessage() : ex.toString();
+			fail(step.kind + ": " + why);
+		}
+	}
 
-    private void logStep(Steps.Step step, boolean ok, String why) {
-        LOG.info("[cdevcapture] STEP {} {} {} {}", stepIndex, step.kind, ok ? "ok" : "fail", why);
-        JsonObject o = new JsonObject();
-        o.addProperty("n", stepIndex);
-        o.addProperty("kind", step.kind);
-        o.addProperty("ok", ok);
-        o.addProperty("ticks", step.ticks);
-        if (!why.isEmpty()) o.addProperty("note", why);
-        stepLog.add(o);
-    }
+	private void logStep(Steps.Step step, boolean ok, String why) {
+		LOG.info("[cdevcapture] STEP {} {} {} {}", stepIndex, step.kind, ok ? "ok" : "fail", why);
+		JsonObject o = new JsonObject();
+		o.addProperty("n", stepIndex);
+		o.addProperty("kind", step.kind);
+		o.addProperty("ok", ok);
+		o.addProperty("ticks", step.ticks);
+		if (!why.isEmpty()) o.addProperty("note", why);
+		stepLog.add(o);
+	}
 
-    private void fail(String why) {
-        if (failure != null) return;
-        failure = why;
-        if (stepIndex < steps.size()) logStep(steps.get(stepIndex), false, why);
-        else LOG.info("[cdevcapture] STEP {} - fail {}", stepIndex, why);
-        failShotPending = true; // finishTest runs after the next frame is saved
-    }
+	private void fail(String why) {
+		if (failure != null) return;
+		failure = why;
+		if (stepIndex < steps.size()) logStep(steps.get(stepIndex), false, why);
+		else LOG.info("[cdevcapture] STEP {} - fail {}", stepIndex, why);
+		failShotPending = true; // finishTest runs after the next frame is saved
+	}
 
-    private void finishTest() {
-        boolean ok = failure == null;
-        capture.clearHide(mc);
-        if (phase == Phase.SETUP) {
-            if (!ok) LOG.warn("[cdevcapture] setup failed: {} (running the tests anyway)", failure);
-            setPhase(Phase.TESTS);
-            nextTest();
-            return;
-        }
-        LOG.info("[cdevcapture] END {} {}", currentId, ok ? "ok" : "fail");
-        JsonObject r = new JsonObject();
-        r.addProperty("id", currentId);
-        r.addProperty("status", ok ? "ok" : "fail");
-        if (!ok) r.addProperty("error", failure);
-        JsonArray f = new JsonArray();
-        files.forEach(f::add);
-        r.add("files", f);
-        r.add("steps", stepLog.deepCopy());
-        r.add("reads", reads.deepCopy());
-        r.addProperty("ticks", testTicks);
-        if (phase == Phase.SERVE) {
-            channel.reply(serveSeq, r);
-            serveSeq = -1;
-            currentId = "idle";
-            VirtualInput.releaseAll();
-            Moves.releaseKeys(mc);
-            return;
-        }
-        try {
-            Files.createDirectories(plan.results().getParent());
-            Files.writeString(plan.results(), GSON.toJson(r) + "\n", StandardCharsets.UTF_8,
-                    StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-        } catch (IOException ex) {
-            LOG.error("[cdevcapture] can't write results", ex);
-        }
-        nextTest();
-    }
+	private void finishTest() {
+		boolean ok = failure == null;
+		capture.clearHide(mc);
+		if (phase == Phase.SETUP) {
+			if (!ok) LOG.warn("[cdevcapture] setup failed: {} (running the tests anyway)", failure);
+			setPhase(Phase.TESTS);
+			nextTest();
+			return;
+		}
+		LOG.info("[cdevcapture] END {} {}", currentId, ok ? "ok" : "fail");
+		JsonObject r = new JsonObject();
+		r.addProperty("id", currentId);
+		r.addProperty("status", ok ? "ok" : "fail");
+		if (!ok) r.addProperty("error", failure);
+		JsonArray f = new JsonArray();
+		files.forEach(f::add);
+		r.add("files", f);
+		r.add("steps", stepLog.deepCopy());
+		r.add("reads", reads.deepCopy());
+		r.addProperty("ticks", testTicks);
+		if (phase == Phase.SERVE) {
+			channel.reply(serveSeq, r);
+			serveSeq = -1;
+			currentId = "idle";
+			VirtualInput.releaseAll();
+			Moves.releaseKeys(mc);
+			return;
+		}
+		try {
+			Files.createDirectories(plan.results().getParent());
+			Files.writeString(plan.results(), GSON.toJson(r) + "\n", StandardCharsets.UTF_8,
+					StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+		} catch (IOException ex) {
+			LOG.error("[cdevcapture] can't write results", ex);
+		}
+		nextTest();
+	}
 
-    private void abort(String why) {
-        LOG.error("[cdevcapture] ABORT {}", why);
-        writeProgress("aborted: " + why);
-        setPhase(Phase.DONE);
-    }
+	private void abort(String why) {
+		LOG.error("[cdevcapture] ABORT {}", why);
+		writeProgress("aborted: " + why);
+		setPhase(Phase.DONE);
+	}
 
-    private void writeProgress(String state) {
-        JsonObject o = new JsonObject();
-        o.addProperty("state", state);
-        o.addProperty("current", currentId);
-        o.addProperty("index", Math.max(testIndex, 0));
-        o.addProperty("total", plan.tests().size());
-        o.addProperty("time", System.currentTimeMillis());
-        try {
-            Path p = plan.progress();
-            Files.createDirectories(p.getParent());
-            Files.writeString(p, GSON.toJson(o), StandardCharsets.UTF_8);
-        } catch (IOException ex) {
-            LOG.error("[cdevcapture] can't write progress", ex);
-        }
-    }
+	private void writeProgress(String state) {
+		JsonObject o = new JsonObject();
+		o.addProperty("state", state);
+		o.addProperty("current", currentId);
+		o.addProperty("index", Math.max(testIndex, 0));
+		o.addProperty("total", plan.tests().size());
+		o.addProperty("time", System.currentTimeMillis());
+		try {
+			Path p = plan.progress();
+			Files.createDirectories(p.getParent());
+			Files.writeString(p, GSON.toJson(o), StandardCharsets.UTF_8);
+		} catch (IOException ex) {
+			LOG.error("[cdevcapture] can't write progress", ex);
+		}
+	}
 }

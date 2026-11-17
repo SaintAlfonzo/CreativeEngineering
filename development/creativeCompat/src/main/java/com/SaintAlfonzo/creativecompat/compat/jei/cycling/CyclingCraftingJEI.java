@@ -33,55 +33,55 @@ import net.minecraftforge.registries.ForgeRegistries;
 @JeiPlugin
 public class CyclingCraftingJEI implements IModPlugin {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.MOD_ID, "cycling_crafting");
-    private static final ResourceLocation FACADE = new ResourceLocation("ae2", "facade");
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.MOD_ID, "cycling_crafting");
+	private static final ResourceLocation FACADE = new ResourceLocation("ae2", "facade");
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return ID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return ID;
+	}
 
-    @Override
-    public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
-        JeiGate.run("registerVanillaCategoryExtensions", () -> registerVanillaCategoryExtensions0(registration));
-    }
+	@Override
+	public void registerVanillaCategoryExtensions(IVanillaCategoryExtensionRegistration registration) {
+		JeiGate.run("registerVanillaCategoryExtensions", () -> registerVanillaCategoryExtensions0(registration));
+	}
 
-    private void registerVanillaCategoryExtensions0(IVanillaCategoryExtensionRegistration registration) {
-        registration.getCraftingCategory().addCategoryExtension(CyclingCraftingDisplay.class, CyclingCraftingExtension::new);
-    }
+	private void registerVanillaCategoryExtensions0(IVanillaCategoryExtensionRegistration registration) {
+		registration.getCraftingCategory().addCategoryExtension(CyclingCraftingDisplay.class, CyclingCraftingExtension::new);
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        JeiGate.run("registerRecipes", () -> registerRecipes0(registration));
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		JeiGate.run("registerRecipes", () -> registerRecipes0(registration));
+	}
 
-    private void registerRecipes0(IRecipeRegistration registration) {
-        if (Minecraft.getInstance().level == null) {
-            return;
-        }
-        long start = System.nanoTime();
-        List<CyclingCraftingDisplay> pages = CyclingCraftingPages.build(Minecraft.getInstance().level);
-        registration.addRecipes(RecipeTypes.CRAFTING, List.copyOf(pages));
-        LOGGER.info("[jei cycle] built in {} ms", (System.nanoTime() - start) / 1_000_000);
-    }
+	private void registerRecipes0(IRecipeRegistration registration) {
+		if (Minecraft.getInstance().level == null) {
+			return;
+		}
+		long start = System.nanoTime();
+		List<CyclingCraftingDisplay> pages = CyclingCraftingPages.build(Minecraft.getInstance().level);
+		registration.addRecipes(RecipeTypes.CRAFTING, List.copyOf(pages));
+		LOGGER.info("[jei cycle] built in {} ms", (System.nanoTime() - start) / 1_000_000);
+	}
 
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime runtime) {
-        JeiGate.run("onRuntimeAvailable", () -> onRuntimeAvailable0(runtime));
-    }
+	@Override
+	public void onRuntimeAvailable(IJeiRuntime runtime) {
+		JeiGate.run("onRuntimeAvailable", () -> onRuntimeAvailable0(runtime));
+	}
 
-    private void onRuntimeAvailable0(IJeiRuntime runtime) {
-        if (!ForgeRegistries.ITEMS.containsKey(FACADE)) {
-            return;
-        }
-        IIngredientManager ingredients = runtime.getIngredientManager();
-        List<ItemStack> facades = ingredients.getAllIngredients(VanillaTypes.ITEM_STACK).stream()
-                .filter(s -> FACADE.equals(ForgeRegistries.ITEMS.getKey(s.getItem())))
-                .toList();
-        if (!facades.isEmpty()) {
-            ingredients.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, facades);
-            LOGGER.info("[jei cycle] hid {} AE2 facades from the ingredient list", facades.size());
-        }
-    }
+	private void onRuntimeAvailable0(IJeiRuntime runtime) {
+		if (!ForgeRegistries.ITEMS.containsKey(FACADE)) {
+			return;
+		}
+		IIngredientManager ingredients = runtime.getIngredientManager();
+		List<ItemStack> facades = ingredients.getAllIngredients(VanillaTypes.ITEM_STACK).stream()
+				.filter(s -> FACADE.equals(ForgeRegistries.ITEMS.getKey(s.getItem())))
+				.toList();
+		if (!facades.isEmpty()) {
+			ingredients.removeIngredientsAtRuntime(VanillaTypes.ITEM_STACK, facades);
+			LOGGER.info("[jei cycle] hid {} AE2 facades from the ingredient list", facades.size());
+		}
+	}
 }

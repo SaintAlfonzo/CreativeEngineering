@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = BlockBreakingKineticBlockEntity.class, remap = false)
 public abstract class CreateBreakerMonsterBoxMixin {
 
-    @Inject(method = "isBreakable", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
-    private static void creativeengineering$skipMonsterBox(BlockState state, float hardness, CallbackInfoReturnable<Boolean> cir) {
-        if (MonsterBoxVault.isProtected(state)) cir.setReturnValue(false);
-    }
+	@Inject(method = "isBreakable", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
+	private static void creativeengineering$skipMonsterBox(BlockState state, float hardness, CallbackInfoReturnable<Boolean> cir) {
+		if (MonsterBoxVault.isProtected(state)) cir.setReturnValue(false);
+	}
 }

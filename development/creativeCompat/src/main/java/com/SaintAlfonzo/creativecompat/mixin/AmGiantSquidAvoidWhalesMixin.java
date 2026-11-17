@@ -15,13 +15,13 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(targets = "com.github.alexthe666.alexsmobs.entity.EntityGiantSquid$AIAvoidWhales", remap = false)
 public abstract class AmGiantSquidAvoidWhalesMixin {
 
-    @ModifyConstant(method = "m_8036_", constant = @Constant(floatValue = 50.0F), require = 1, remap = false)
-    private float creativecompat$fleeStart(float original) {
-        return CompatConfig.GiantSquid.start();
-    }
+	@ModifyConstant(method = "m_8036_", constant = @Constant(floatValue = 50.0F), require = 1, remap = false)
+	private float creativecompat$fleeStart(float original) {
+		return CompatConfig.GiantSquid.start();
+	}
 
-    @ModifyConstant(method = "m_8045_", constant = @Constant(floatValue = 60.0F), require = 1, remap = false)
-    private float creativecompat$fleeStop(float original) {
-        return CompatConfig.GiantSquid.stop();
-    }
+	@ModifyConstant(method = "m_8045_", constant = @Constant(floatValue = 60.0F), require = 1, remap = false)
+	private float creativecompat$fleeStop(float original) {
+		return CompatConfig.GiantSquid.stop();
+	}
 }

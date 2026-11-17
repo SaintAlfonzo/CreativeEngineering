@@ -22,46 +22,46 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class PhantomBaneRules {
 
-    private static final ResourceLocation PHANTOM_BANE_ID = new ResourceLocation("better_beacons", "phantom_bane");
+	private static final ResourceLocation PHANTOM_BANE_ID = new ResourceLocation("better_beacons", "phantom_bane");
 
-    private static MobEffect phantomBane;
-    private static boolean lookedUp;
+	private static MobEffect phantomBane;
+	private static boolean lookedUp;
 
-    private PhantomBaneRules() {}
+	private PhantomBaneRules() {}
 
-    private static void lookUp() {
-        if (lookedUp) return;
-        phantomBane = ForgeRegistries.MOB_EFFECTS.getValue(PHANTOM_BANE_ID);
-        lookedUp = true;
-    }
+	private static void lookUp() {
+		if (lookedUp) return;
+		phantomBane = ForgeRegistries.MOB_EFFECTS.getValue(PHANTOM_BANE_ID);
+		lookedUp = true;
+	}
 
-    /** True when the player has Better Beacons' Phantom Bane (the phantom spawner skips them, mixin.better_beacons). */
-    public static boolean hasPhantomBane(net.minecraft.world.entity.player.Player player) {
-        lookUp();
-        return phantomBane != null && player.hasEffect(phantomBane);
-    }
+	/** True when the player has Better Beacons' Phantom Bane (the phantom spawner skips them, mixin.better_beacons). */
+	public static boolean hasPhantomBane(net.minecraft.world.entity.player.Player player) {
+		lookUp();
+		return phantomBane != null && player.hasEffect(phantomBane);
+	}
 
-    public static boolean anyHasPhantomBane(java.util.List<? extends net.minecraft.world.entity.player.Player> players) {
-        for (net.minecraft.world.entity.player.Player p : players) {
-            if (hasPhantomBane(p)) return true;
-        }
-        return false;
-    }
+	public static boolean anyHasPhantomBane(java.util.List<? extends net.minecraft.world.entity.player.Player> players) {
+		for (net.minecraft.world.entity.player.Player p : players) {
+			if (hasPhantomBane(p)) return true;
+		}
+		return false;
+	}
 
-    @SubscribeEvent
-    public static void onExpired(MobEffectEvent.Expired event) {
-        MobEffectInstance instance = event.getEffectInstance();
-        if (instance != null) resetRest(event.getEntity(), instance.getEffect());
-    }
+	@SubscribeEvent
+	public static void onExpired(MobEffectEvent.Expired event) {
+		MobEffectInstance instance = event.getEffectInstance();
+		if (instance != null) resetRest(event.getEntity(), instance.getEffect());
+	}
 
-    @SubscribeEvent
-    public static void onRemove(MobEffectEvent.Remove event) {
-        resetRest(event.getEntity(), event.getEffect());
-    }
+	@SubscribeEvent
+	public static void onRemove(MobEffectEvent.Remove event) {
+		resetRest(event.getEntity(), event.getEffect());
+	}
 
-    private static void resetRest(LivingEntity entity, MobEffect effect) {
-        lookUp();
-        if (phantomBane == null || effect != phantomBane || !(entity instanceof ServerPlayer player)) return;
-        player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
-    }
+	private static void resetRest(LivingEntity entity, MobEffect effect) {
+		lookUp();
+		if (phantomBane == null || effect != phantomBane || !(entity instanceof ServerPlayer player)) return;
+		player.resetStat(Stats.CUSTOM.get(Stats.TIME_SINCE_REST));
+	}
 }

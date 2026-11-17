@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "com.tarinoita.solsweetpotato.item.foodcontainer.FoodContainerCapabilityProvider$1", remap = false)
 public abstract class LunchboxFoodOnlyMixin {
 
-    @Inject(method = "isItemValid", at = @At("HEAD"), cancellable = true)
-    private void ce$foodOnly(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (!stack.isEdible()) cir.setReturnValue(false);
-    }
+	@Inject(method = "isItemValid", at = @At("HEAD"), cancellable = true)
+	private void ce$foodOnly(int slot, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+		if (!stack.isEdible()) cir.setReturnValue(false);
+	}
 }

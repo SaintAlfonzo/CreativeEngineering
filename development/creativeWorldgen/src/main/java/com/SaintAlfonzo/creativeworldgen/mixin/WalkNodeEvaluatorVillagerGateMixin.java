@@ -23,13 +23,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = WalkNodeEvaluator.class, remap = false)
 public abstract class WalkNodeEvaluatorVillagerGateMixin extends NodeEvaluator {
 
-    @Inject(method = "m_8086_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$gatesAreFences(BlockGetter level, int x, int y, int z,
-                                                    CallbackInfoReturnable<BlockPathTypes> cir) {
-        if (!(this.mob instanceof Villager)) return;
-        BlockState state = level.getBlockState(new BlockPos(x, y, z));
-        if (state.is(BlockTags.FENCE_GATES) || state.getBlock() instanceof FenceGateBlock) {
-            cir.setReturnValue(BlockPathTypes.FENCE);
-        }
-    }
+	@Inject(method = "m_8086_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$gatesAreFences(BlockGetter level, int x, int y, int z,
+													CallbackInfoReturnable<BlockPathTypes> cir) {
+		if (!(this.mob instanceof Villager)) return;
+		BlockState state = level.getBlockState(new BlockPos(x, y, z));
+		if (state.is(BlockTags.FENCE_GATES) || state.getBlock() instanceof FenceGateBlock) {
+			cir.setReturnValue(BlockPathTypes.FENCE);
+		}
+	}
 }

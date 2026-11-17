@@ -25,61 +25,61 @@ import net.minecraftforge.items.ItemHandlerHelper;
  */
 public final class LeftoverPlan {
 
-    private LeftoverPlan() {}
+	private LeftoverPlan() {}
 
-    /**
-     * Places {@code leftovers} into {@code slots} (index 0 = the container slot, the rest = overflow slots; each a copy
-     * the caller owns, changed in place) with {@code limits[i]} as each slot's limit. Returns what did not fit.
-     * A null {@code slots[0]} means the station has no container slot.
-     */
-    public static List<ItemStack> place(List<ItemStack> leftovers, ItemStack[] slots, int[] limits, Predicate<ItemStack> servedIn) {
-        List<ItemStack> rest = new ArrayList<>();
-        for (ItemStack leftover : leftovers) {
-            if (leftover.isEmpty()) continue;
-            ItemStack left = leftover.copy();
-            if (slots[0] != null && !slots[0].isEmpty()) {
-                left = merge(slots, 0, left, limits[0]);
-            }
-            for (int i = 1; i < slots.length && !left.isEmpty(); ++i) {
-                if (!slots[i].isEmpty()) left = merge(slots, i, left, limits[i]);
-            }
-            for (int i = 1; i < slots.length && !left.isEmpty(); ++i) {
-                if (slots[i].isEmpty()) left = merge(slots, i, left, limits[i]);
-            }
-            if (!left.isEmpty() && slots[0] != null && slots[0].isEmpty() && servedIn.test(left)) {
-                left = merge(slots, 0, left, limits[0]);
-            }
-            if (!left.isEmpty()) rest.add(left);
-        }
-        return rest;
-    }
+	/**
+	 * Places {@code leftovers} into {@code slots} (index 0 = the container slot, the rest = overflow slots; each a copy
+	 * the caller owns, changed in place) with {@code limits[i]} as each slot's limit. Returns what did not fit.
+	 * A null {@code slots[0]} means the station has no container slot.
+	 */
+	public static List<ItemStack> place(List<ItemStack> leftovers, ItemStack[] slots, int[] limits, Predicate<ItemStack> servedIn) {
+		List<ItemStack> rest = new ArrayList<>();
+		for (ItemStack leftover : leftovers) {
+			if (leftover.isEmpty()) continue;
+			ItemStack left = leftover.copy();
+			if (slots[0] != null && !slots[0].isEmpty()) {
+				left = merge(slots, 0, left, limits[0]);
+			}
+			for (int i = 1; i < slots.length && !left.isEmpty(); ++i) {
+				if (!slots[i].isEmpty()) left = merge(slots, i, left, limits[i]);
+			}
+			for (int i = 1; i < slots.length && !left.isEmpty(); ++i) {
+				if (slots[i].isEmpty()) left = merge(slots, i, left, limits[i]);
+			}
+			if (!left.isEmpty() && slots[0] != null && slots[0].isEmpty() && servedIn.test(left)) {
+				left = merge(slots, 0, left, limits[0]);
+			}
+			if (!left.isEmpty()) rest.add(left);
+		}
+		return rest;
+	}
 
-    /** Copies of the stacks, for a {@link #place} dry run (null stays null). */
-    public static ItemStack[] copies(ItemStack... stacks) {
-        ItemStack[] out = new ItemStack[stacks.length];
-        for (int i = 0; i < stacks.length; ++i) {
-            out[i] = stacks[i] == null ? null : stacks[i].copy();
-        }
-        return out;
-    }
+	/** Copies of the stacks, for a {@link #place} dry run (null stays null). */
+	public static ItemStack[] copies(ItemStack... stacks) {
+		ItemStack[] out = new ItemStack[stacks.length];
+		for (int i = 0; i < stacks.length; ++i) {
+			out[i] = stacks[i] == null ? null : stacks[i].copy();
+		}
+		return out;
+	}
 
-    /** Moves as much of {@code stack} as fits into {@code slots[index]}; returns the rest. */
-    private static ItemStack merge(ItemStack[] slots, int index, ItemStack stack, int slotLimit) {
-        ItemStack current = slots[index];
-        int limit = Math.min(slotLimit, stack.getMaxStackSize());
-        if (current.isEmpty()) {
-            int moved = Math.min(limit, stack.getCount());
-            slots[index] = ItemHandlerHelper.copyStackWithSize(stack, moved);
-            return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - moved);
-        }
-        if (!ItemHandlerHelper.canItemStacksStack(current, stack)) {
-            return stack;
-        }
-        int moved = Math.min(limit - current.getCount(), stack.getCount());
-        if (moved <= 0) {
-            return stack;
-        }
-        current.grow(moved);
-        return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - moved);
-    }
+	/** Moves as much of {@code stack} as fits into {@code slots[index]}; returns the rest. */
+	private static ItemStack merge(ItemStack[] slots, int index, ItemStack stack, int slotLimit) {
+		ItemStack current = slots[index];
+		int limit = Math.min(slotLimit, stack.getMaxStackSize());
+		if (current.isEmpty()) {
+			int moved = Math.min(limit, stack.getCount());
+			slots[index] = ItemHandlerHelper.copyStackWithSize(stack, moved);
+			return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - moved);
+		}
+		if (!ItemHandlerHelper.canItemStacksStack(current, stack)) {
+			return stack;
+		}
+		int moved = Math.min(limit - current.getCount(), stack.getCount());
+		if (moved <= 0) {
+			return stack;
+		}
+		current.grow(moved);
+		return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - moved);
+	}
 }

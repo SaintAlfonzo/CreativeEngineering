@@ -26,15 +26,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class LivingEntityShieldMixin {
 
-    @Inject(method = "m_21275_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$tierShieldBlock(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
-        try {
-            Boolean verdict = ShieldBlocking.verdict((LivingEntity) (Object) this, source);
-            if (verdict != null) {
-                cir.setReturnValue(verdict);
-            }
-        } catch (Throwable ignored) {
-            // fall through to vanilla's own check
-        }
-    }
+	@Inject(method = "m_21275_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$tierShieldBlock(DamageSource source, CallbackInfoReturnable<Boolean> cir) {
+		try {
+			Boolean verdict = ShieldBlocking.verdict((LivingEntity) (Object) this, source);
+			if (verdict != null) {
+				cir.setReturnValue(verdict);
+			}
+		} catch (Throwable ignored) {
+			// fall through to vanilla's own check
+		}
+	}
 }

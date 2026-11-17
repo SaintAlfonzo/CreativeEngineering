@@ -11,16 +11,16 @@ import java.util.function.Predicate;
  * (development/shared/itemhidden, compiled into each jar under its own package; feature_writeup/pack_tooling.md).
  */
 public final class HiddenItems {
-    private static volatile Predicate<Item> test = item -> false;
+	private static volatile Predicate<Item> test = item -> false;
 
-    private HiddenItems() {
-    }
+	private HiddenItems() {
+	}
 
-    public static void set(Predicate<Item> hidden) {
-        test = hidden;
-    }
+	public static void set(Predicate<Item> hidden) {
+		test = hidden;
+	}
 
-    public static boolean isHidden(Item item) {
-        return test.test(item);
-    }
+	public static boolean isHidden(Item item) {
+		return test.test(item);
+	}
 }

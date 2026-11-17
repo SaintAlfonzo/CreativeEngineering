@@ -36,51 +36,51 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = SequencedAssemblyRecipe.class, remap = false)
 public class SequencedAssemblyRecipeMixin {
 
-    @Unique
-    private static final String[] GEAR_NBT_KEYS = {
-            "Enchantments", "StoredEnchantments", "display", "RepairCost", "Unbreakable", "AttributeModifiers"
-    };
+	@Unique
+	private static final String[] GEAR_NBT_KEYS = {
+			"Enchantments", "StoredEnchantments", "display", "RepairCost", "Unbreakable", "AttributeModifiers"
+	};
 
-    @Inject(method = "advance", at = @At("RETURN"))
-    private void creativeengineering$preserveGearNbt(ItemStack input, CallbackInfoReturnable<ItemStack> cir) {
-        ItemStack result = cir.getReturnValue();
-        if (result.isEmpty()) return;
+	@Inject(method = "advance", at = @At("RETURN"))
+	private void creativeengineering$preserveGearNbt(ItemStack input, CallbackInfoReturnable<ItemStack> cir) {
+		ItemStack result = cir.getReturnValue();
+		if (result.isEmpty()) return;
 
-        CompoundTag stash = creativeengineering$extractGearStash(input);
-        if (stash == null) return;
+		CompoundTag stash = creativeengineering$extractGearStash(input);
+		if (stash == null) return;
 
-        CompoundTag resultTag = result.getOrCreateTag();
-        if (resultTag.contains("SequencedAssembly")) {
-            // Still mid-sequence: carry the stash forward on the incomplete item.
-            resultTag.put("CEStash", stash);
-        } else {
-            // This is the real, finished item - splice the original piece's identity back on.
-            for (String key : stash.getAllKeys()) {
-                resultTag.put(key, stash.get(key).copy());
-            }
-        }
-    }
+		CompoundTag resultTag = result.getOrCreateTag();
+		if (resultTag.contains("SequencedAssembly")) {
+			// Still mid-sequence: carry the stash forward on the incomplete item.
+			resultTag.put("CEStash", stash);
+		} else {
+			// This is the real, finished item - splice the original piece's identity back on.
+			for (String key : stash.getAllKeys()) {
+				resultTag.put(key, stash.get(key).copy());
+			}
+		}
+	}
 
-    @Unique
-    private static CompoundTag creativeengineering$extractGearStash(ItemStack input) {
-        if (!input.hasTag()) return null;
-        CompoundTag tag = input.getTag();
+	@Unique
+	private static CompoundTag creativeengineering$extractGearStash(ItemStack input) {
+		if (!input.hasTag()) return null;
+		CompoundTag tag = input.getTag();
 
-        // Already mid-sequence: forward whatever was stashed on step 0 (may be absent/empty).
-        if (tag.contains("CEStash")) {
-            return tag.getCompound("CEStash").copy();
-        }
-        if (tag.contains("SequencedAssembly")) {
-            return null;
-        }
+		// Already mid-sequence: forward whatever was stashed on step 0 (may be absent/empty).
+		if (tag.contains("CEStash")) {
+			return tag.getCompound("CEStash").copy();
+		}
+		if (tag.contains("SequencedAssembly")) {
+			return null;
+		}
 
-        // Step 0: input is the real gear piece the player fed in - lift its identity NBT.
-        CompoundTag stash = new CompoundTag();
-        for (String key : GEAR_NBT_KEYS) {
-            if (tag.contains(key)) {
-                stash.put(key, tag.get(key).copy());
-            }
-        }
-        return stash.isEmpty() ? null : stash;
-    }
+		// Step 0: input is the real gear piece the player fed in - lift its identity NBT.
+		CompoundTag stash = new CompoundTag();
+		for (String key : GEAR_NBT_KEYS) {
+			if (tag.contains(key)) {
+				stash.put(key, tag.get(key).copy());
+			}
+		}
+		return stash.isEmpty() ? null : stash;
+	}
 }

@@ -29,22 +29,22 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = Minecraft.class, remap = false)
 public abstract class CreativePickBlockSyncMixin {
 
-    @Redirect(method = "m_91280_",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/player/Inventory;m_36012_(Lnet/minecraft/world/item/ItemStack;)V"))
-    private void creativecommon$syncPickedItem(Inventory inventory, ItemStack picked) {
-        ItemStack[] before = inventory.items.toArray(new ItemStack[0]);
-        inventory.setPickedItem(picked);
+	@Redirect(method = "m_91280_",
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/world/entity/player/Inventory;m_36012_(Lnet/minecraft/world/item/ItemStack;)V"))
+	private void creativecommon$syncPickedItem(Inventory inventory, ItemStack picked) {
+		ItemStack[] before = inventory.items.toArray(new ItemStack[0]);
+		inventory.setPickedItem(picked);
 
-        Minecraft mc = (Minecraft) (Object) this;
-        if (mc.gameMode == null) return;
-        for (int i = 0; i < before.length; i++) {
-            // vanilla sends the selected hotbar slot itself right after this call
-            if (i == inventory.selected) continue;
-            ItemStack now = inventory.items.get(i);
-            if (now != before[i]) {
-                mc.gameMode.handleCreativeModeItemAdd(now, Inventory.isHotbarSlot(i) ? 36 + i : i);
-            }
-        }
-    }
+		Minecraft mc = (Minecraft) (Object) this;
+		if (mc.gameMode == null) return;
+		for (int i = 0; i < before.length; i++) {
+			// vanilla sends the selected hotbar slot itself right after this call
+			if (i == inventory.selected) continue;
+			ItemStack now = inventory.items.get(i);
+			if (now != before[i]) {
+				mc.gameMode.handleCreativeModeItemAdd(now, Inventory.isHotbarSlot(i) ? 36 + i : i);
+			}
+		}
+	}
 }

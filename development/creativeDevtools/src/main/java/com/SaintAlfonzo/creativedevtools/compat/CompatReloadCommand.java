@@ -15,24 +15,24 @@ import net.minecraftforge.event.RegisterCommandsEvent;
  */
 public final class CompatReloadCommand {
 
-    private CompatReloadCommand() {
-    }
+	private CompatReloadCommand() {
+	}
 
-    public static void onRegisterCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("cdevreload").requires(s -> s.hasPermission(3))
-                .then(Commands.literal("compat").executes(c -> run(c.getSource()))));
-    }
+	public static void onRegisterCommands(RegisterCommandsEvent event) {
+		event.getDispatcher().register(Commands.literal("cdevreload").requires(s -> s.hasPermission(3))
+				.then(Commands.literal("compat").executes(c -> run(c.getSource()))));
+	}
 
-    static int run(CommandSourceStack src) {
-        String result;
-        try {
-            result = CompatConfigReload.reload();
-        } catch (VirtualMachineError e) {
-            throw e;
-        } catch (Throwable t) {
-            result = "reload failed: " + t;
-        }
-        src.sendSuccess(Component.literal("[cdevreload] compat: " + result), true);
-        return 1;
-    }
+	static int run(CommandSourceStack src) {
+		String result;
+		try {
+			result = CompatConfigReload.reload();
+		} catch (VirtualMachineError e) {
+			throw e;
+		} catch (Throwable t) {
+			result = "reload failed: " + t;
+		}
+		src.sendSuccess(Component.literal("[cdevreload] compat: " + result), true);
+		return 1;
+	}
 }

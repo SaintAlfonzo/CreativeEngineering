@@ -12,41 +12,41 @@ import net.minecraft.network.protocol.game.ClientboundSectionBlocksUpdatePacket;
  */
 public final class BlockStateLookupHook {
 
-    /** What a probe sees while a block-update packet is decoded on the client. */
-    public interface Listener {
-        /** A state id the client could not resolve (the packet is still being decoded). */
-        void unresolved(int id);
+	/** What a probe sees while a block-update packet is decoded on the client. */
+	public interface Listener {
+		/** A state id the client could not resolve (the packet is still being decoded). */
+		void unresolved(int id);
 
-        /** The section packet is built; report what {@link #unresolved} collected for it. */
-        void finishSection(ClientboundSectionBlocksUpdatePacket packet);
+		/** The section packet is built; report what {@link #unresolved} collected for it. */
+		void finishSection(ClientboundSectionBlocksUpdatePacket packet);
 
-        /** The single-block packet is built; report what {@link #unresolved} collected for it. */
-        void finishSingle(ClientboundBlockUpdatePacket packet);
-    }
+		/** The single-block packet is built; report what {@link #unresolved} collected for it. */
+		void finishSingle(ClientboundBlockUpdatePacket packet);
+	}
 
-    private static volatile Listener listener;
+	private static volatile Listener listener;
 
-    private BlockStateLookupHook() {}
+	private BlockStateLookupHook() {}
 
-    public static void register(Listener l) {
-        listener = l;
-    }
+	public static void register(Listener l) {
+		listener = l;
+	}
 
-    /** Stand-in for {@code IdMap#byId} inside the packet constructors: same result, tells the listener about nulls. */
-    public static Object lookup(IdMap<?> map, int id) {
-        Object state = map.byId(id);
-        Listener l = listener;
-        if (state == null && l != null) l.unresolved(id);
-        return state;
-    }
+	/** Stand-in for {@code IdMap#byId} inside the packet constructors: same result, tells the listener about nulls. */
+	public static Object lookup(IdMap<?> map, int id) {
+		Object state = map.byId(id);
+		Listener l = listener;
+		if (state == null && l != null) l.unresolved(id);
+		return state;
+	}
 
-    public static void finishSection(ClientboundSectionBlocksUpdatePacket packet) {
-        Listener l = listener;
-        if (l != null) l.finishSection(packet);
-    }
+	public static void finishSection(ClientboundSectionBlocksUpdatePacket packet) {
+		Listener l = listener;
+		if (l != null) l.finishSection(packet);
+	}
 
-    public static void finishSingle(ClientboundBlockUpdatePacket packet) {
-        Listener l = listener;
-        if (l != null) l.finishSingle(packet);
-    }
+	public static void finishSingle(ClientboundBlockUpdatePacket packet) {
+		Listener l = listener;
+		if (l != null) l.finishSingle(packet);
+	}
 }

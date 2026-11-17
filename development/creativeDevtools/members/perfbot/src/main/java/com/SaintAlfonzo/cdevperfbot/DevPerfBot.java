@@ -22,15 +22,15 @@ import java.nio.file.Path;
 @Mod(DevPerfBot.ID)
 public class DevPerfBot {
 
-    public static final String ID = "cdevperfbot";
+	public static final String ID = "cdevperfbot";
 
-    public DevPerfBot() {
-        String out = System.getProperty("cdevperfbot.out");
-        if (FMLEnvironment.dist != Dist.DEDICATED_SERVER || out == null || out.isBlank()) return;
-        TickLog log = new TickLog(Path.of(out));
-        Bots bots = new Bots();
-        MinecraftForge.EVENT_BUS.register(log);
-        MinecraftForge.EVENT_BUS.register(bots);
-        MinecraftForge.EVENT_BUS.register(new BotCommands(log, bots, Path.of(out)));
-    }
+	public DevPerfBot() {
+		String out = System.getProperty("cdevperfbot.out");
+		if (FMLEnvironment.dist != Dist.DEDICATED_SERVER || out == null || out.isBlank()) return;
+		TickLog log = new TickLog(Path.of(out));
+		Bots bots = new Bots();
+		MinecraftForge.EVENT_BUS.register(log);
+		MinecraftForge.EVENT_BUS.register(bots);
+		MinecraftForge.EVENT_BUS.register(new BotCommands(log, bots, Path.of(out)));
+	}
 }

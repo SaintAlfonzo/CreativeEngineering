@@ -31,55 +31,55 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ProcessingRecipeSerializer.class, remap = false)
 public class ProcessingRecipeSerializerMixin {
 
-    @Unique
-    private static final Logger creativeengineering$LOGGER = LogUtils.getLogger();
+	@Unique
+	private static final Logger creativeengineering$LOGGER = LogUtils.getLogger();
 
-    @Inject(
-            method = "readFromJson(Lnet/minecraft/resources/ResourceLocation;Lcom/google/gson/JsonObject;)Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;",
-            at = @At("RETURN")
-    )
-    private void creativeengineering$readExclusiveResults(ResourceLocation recipeId, JsonObject json,
-                                                          CallbackInfoReturnable<ProcessingRecipe<?>> cir) {
-        ProcessingRecipe<?> recipe = cir.getReturnValue();
-        if (recipe == null) return;
-        ProcessingRecipeExt ext = (ProcessingRecipeExt) recipe;
+	@Inject(
+			method = "readFromJson(Lnet/minecraft/resources/ResourceLocation;Lcom/google/gson/JsonObject;)Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;",
+			at = @At("RETURN")
+	)
+	private void creativeengineering$readExclusiveResults(ResourceLocation recipeId, JsonObject json,
+														  CallbackInfoReturnable<ProcessingRecipe<?>> cir) {
+		ProcessingRecipe<?> recipe = cir.getReturnValue();
+		if (recipe == null) return;
+		ProcessingRecipeExt ext = (ProcessingRecipeExt) recipe;
 
-        if (json.has(ResultPools.JSON_KEY)) {
-            String[] problem = new String[1];
-            int[][] pools = ResultPools.parse(json.get(ResultPools.JSON_KEY), recipe.getRollableResults().size(), problem);
-            if (problem[0] != null)
-                creativeengineering$LOGGER.error("[result-pools] {}: {}; pools ignored, every result rolls on its own",
-                        recipeId, problem[0]);
-            ext.creativeengineering$setResultPools(pools);
-        }
+		if (json.has(ResultPools.JSON_KEY)) {
+			String[] problem = new String[1];
+			int[][] pools = ResultPools.parse(json.get(ResultPools.JSON_KEY), recipe.getRollableResults().size(), problem);
+			if (problem[0] != null)
+				creativeengineering$LOGGER.error("[result-pools] {}: {}; pools ignored, every result rolls on its own",
+						recipeId, problem[0]);
+			ext.creativeengineering$setResultPools(pools);
+		}
 
-        if (!GsonHelper.getAsBoolean(json, ExclusiveResults.JSON_KEY, false)) return;
-        if (ext.creativeengineering$getResultPools() != null)
-            creativeengineering$LOGGER.warn("[result-pools] {}: also sets {}; the pools are used", recipeId,
-                    ExclusiveResults.JSON_KEY);
-        ext.creativeengineering$setExclusiveResults(true);
-        float sum = ExclusiveResults.chanceSum(recipe.getRollableResults());
-        if (sum > 1.0001f)
-            creativeengineering$LOGGER.warn("[exclusive-results] {}: output chances add up to {} (> 1); later outputs can never roll",
-                    recipeId, sum);
-    }
+		if (!GsonHelper.getAsBoolean(json, ExclusiveResults.JSON_KEY, false)) return;
+		if (ext.creativeengineering$getResultPools() != null)
+			creativeengineering$LOGGER.warn("[result-pools] {}: also sets {}; the pools are used", recipeId,
+					ExclusiveResults.JSON_KEY);
+		ext.creativeengineering$setExclusiveResults(true);
+		float sum = ExclusiveResults.chanceSum(recipe.getRollableResults());
+		if (sum > 1.0001f)
+			creativeengineering$LOGGER.warn("[exclusive-results] {}: output chances add up to {} (> 1); later outputs can never roll",
+					recipeId, sum);
+	}
 
-    @Inject(
-            method = "toNetwork(Lnet/minecraft/network/FriendlyByteBuf;Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;)V",
-            at = @At("TAIL")
-    )
-    private void creativeengineering$writeResultPools(FriendlyByteBuf buf, ProcessingRecipe<?> recipe, CallbackInfo ci) {
-        ResultPools.write(buf, ((ProcessingRecipeExt) recipe).creativeengineering$getResultPools());
-    }
+	@Inject(
+			method = "toNetwork(Lnet/minecraft/network/FriendlyByteBuf;Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;)V",
+			at = @At("TAIL")
+	)
+	private void creativeengineering$writeResultPools(FriendlyByteBuf buf, ProcessingRecipe<?> recipe, CallbackInfo ci) {
+		ResultPools.write(buf, ((ProcessingRecipeExt) recipe).creativeengineering$getResultPools());
+	}
 
-    @Inject(
-            method = "fromNetwork(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/network/FriendlyByteBuf;)Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;",
-            at = @At("RETURN")
-    )
-    private void creativeengineering$readResultPools(ResourceLocation recipeId, FriendlyByteBuf buf,
-                                                     CallbackInfoReturnable<ProcessingRecipe<?>> cir) {
-        int[][] pools = ResultPools.read(buf);
-        ProcessingRecipe<?> recipe = cir.getReturnValue();
-        if (recipe != null) ((ProcessingRecipeExt) recipe).creativeengineering$setResultPools(pools);
-    }
+	@Inject(
+			method = "fromNetwork(Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/network/FriendlyByteBuf;)Lcom/simibubi/create/content/processing/recipe/ProcessingRecipe;",
+			at = @At("RETURN")
+	)
+	private void creativeengineering$readResultPools(ResourceLocation recipeId, FriendlyByteBuf buf,
+													 CallbackInfoReturnable<ProcessingRecipe<?>> cir) {
+		int[][] pools = ResultPools.read(buf);
+		ProcessingRecipe<?> recipe = cir.getReturnValue();
+		if (recipe != null) ((ProcessingRecipeExt) recipe).creativeengineering$setResultPools(pools);
+	}
 }

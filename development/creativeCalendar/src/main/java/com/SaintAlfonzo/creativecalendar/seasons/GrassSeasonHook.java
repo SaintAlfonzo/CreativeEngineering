@@ -21,16 +21,16 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class GrassSeasonHook {
 
-    private static final Logger LOG = LogUtils.getLogger();
-    private static final boolean SEASONS = LoadingModList.get().getModFileById("sereneseasons") != null;
-    private static final Set<String> SEEN = ConcurrentHashMap.newKeySet();
+	private static final Logger LOG = LogUtils.getLogger();
+	private static final boolean SEASONS = LoadingModList.get().getModFileById("sereneseasons") != null;
+	private static final Set<String> SEEN = ConcurrentHashMap.newKeySet();
 
-    private GrassSeasonHook() {}
+	private GrassSeasonHook() {}
 
-    /** True = skip this spread try (the caller cancels). */
-    public static boolean refuse(String target, BlockState state, ServerLevel level, BlockPos pos) {
-        if (SEEN.add(target)) LOG.info("[creativecalendar] grass season hook live: {}", target);
-        if (!SEASONS) return false;
-        return CropSeasons.refuseSpread(level, pos, CropSeasons.typeOf(state));
-    }
+	/** True = skip this spread try (the caller cancels). */
+	public static boolean refuse(String target, BlockState state, ServerLevel level, BlockPos pos) {
+		if (SEEN.add(target)) LOG.info("[creativecalendar] grass season hook live: {}", target);
+		if (!SEASONS) return false;
+		return CropSeasons.refuseSpread(level, pos, CropSeasons.typeOf(state));
+	}
 }

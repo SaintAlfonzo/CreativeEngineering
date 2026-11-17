@@ -24,49 +24,49 @@ import net.minecraft.world.level.Level;
  */
 public final class SawbladeRouting {
 
-    /** NBT key on the sawblade stack holding the profile string. */
-    public static final String PROFILE_KEY = "Profile";
+	/** NBT key on the sawblade stack holding the profile string. */
+	public static final String PROFILE_KEY = "Profile";
 
-    private SawbladeRouting() {}
+	private SawbladeRouting() {}
 
-    /** The profile programmed onto a sawblade stack, or {@code ""} if none / not a programmed blade. */
-    public static String profileOf(ItemStack blade) {
-        if (blade == null || blade.isEmpty()) return "";
-        CompoundTag tag = blade.getTag();
-        if (tag == null) return "";
-        return tag.getString(PROFILE_KEY);
-    }
+	/** The profile programmed onto a sawblade stack, or {@code ""} if none / not a programmed blade. */
+	public static String profileOf(ItemStack blade) {
+		if (blade == null || blade.isEmpty()) return "";
+		CompoundTag tag = blade.getTag();
+		if (tag == null) return "";
+		return tag.getString(PROFILE_KEY);
+	}
 
-    /**
-     * Pick the sawmill recipe for {@code input} given the installed blade's {@code profile}.
-     *
-     * <ol>
-     *   <li>if {@code profile} is set and a matching recipe has {@code blade == profile} -> that one;</li>
-     *   <li>otherwise the first input-matching recipe with no blade profile (the default);</li>
-     *   <li>otherwise {@code null} -> IE passes the item through unchanged (no crash, no loss).</li>
-     * </ol>
-     */
-    public static SawmillRecipe route(Level level, ItemStack input, String profile) {
-        if (level == null || input == null || input.isEmpty()) return null;
-        String wanted = profile == null ? "" : profile;
+	/**
+	 * Pick the sawmill recipe for {@code input} given the installed blade's {@code profile}.
+	 *
+	 * <ol>
+	 *   <li>if {@code profile} is set and a matching recipe has {@code blade == profile} -> that one;</li>
+	 *   <li>otherwise the first input-matching recipe with no blade profile (the default);</li>
+	 *   <li>otherwise {@code null} -> IE passes the item through unchanged (no crash, no loss).</li>
+	 * </ol>
+	 */
+	public static SawmillRecipe route(Level level, ItemStack input, String profile) {
+		if (level == null || input == null || input.isEmpty()) return null;
+		String wanted = profile == null ? "" : profile;
 
-        SawmillRecipe fallback = null;
-        for (SawmillRecipe recipe : SawmillRecipe.RECIPES.getRecipes(level)) {
-            if (recipe == null || !recipe.input.test(input)) continue;
+		SawmillRecipe fallback = null;
+		for (SawmillRecipe recipe : SawmillRecipe.RECIPES.getRecipes(level)) {
+			if (recipe == null || !recipe.input.test(input)) continue;
 
-            String recipeBlade = bladeOf(recipe);
-            if (!wanted.isEmpty() && wanted.equals(recipeBlade)) {
-                return recipe;
-            }
-            if (recipeBlade.isEmpty() && fallback == null) {
-                fallback = recipe;
-            }
-        }
-        return fallback;
-    }
+			String recipeBlade = bladeOf(recipe);
+			if (!wanted.isEmpty() && wanted.equals(recipeBlade)) {
+				return recipe;
+			}
+			if (recipeBlade.isEmpty() && fallback == null) {
+				fallback = recipe;
+			}
+		}
+		return fallback;
+	}
 
-    private static String bladeOf(SawmillRecipe recipe) {
-        String blade = ((SawmillRecipeExt) recipe).creativeengineering$getBlade();
-        return blade == null ? "" : blade;
-    }
+	private static String bladeOf(SawmillRecipe recipe) {
+		String blade = ((SawmillRecipeExt) recipe).creativeengineering$getBlade();
+		return blade == null ? "" : blade;
+	}
 }

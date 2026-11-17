@@ -21,8 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = Mob.class, priority = 900, remap = false)
 public abstract class MobSunBurnMixin {
 
-    @Inject(method = "m_21527_", at = @At("TAIL"), cancellable = true, remap = false)
-    private void moremooblooms$noSunnyBurn(CallbackInfoReturnable<Boolean> cir) {
-        if (BuzzierBeesSet.blocksSunnyBurn((Mob) (Object) this)) cir.setReturnValue(false);
-    }
+	@Inject(method = "m_21527_", at = @At("TAIL"), cancellable = true, remap = false)
+	private void moremooblooms$noSunnyBurn(CallbackInfoReturnable<Boolean> cir) {
+		if (BuzzierBeesSet.blocksSunnyBurn((Mob) (Object) this)) cir.setReturnValue(false);
+	}
 }

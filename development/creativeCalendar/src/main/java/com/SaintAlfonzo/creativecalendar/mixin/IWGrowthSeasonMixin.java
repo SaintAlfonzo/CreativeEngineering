@@ -30,22 +30,22 @@ import java.util.function.Supplier;
 @Mixin(targets = "com.ordana.immersive_weathering.data.block_growths.growths.ConfigurableBlockGrowth", remap = false)
 public abstract class IWGrowthSeasonMixin {
 
-    @Shadow(remap = false) private Set<Block> possibleBlocks;
+	@Shadow(remap = false) private Set<Block> possibleBlocks;
 
-    /** Crop seasons read Serene Seasons; the mixin config gate only checks Immersive Weathering. */
-    @Unique private static final boolean creativeengineering$seasons = LoadingModList.get().getModFileById("sereneseasons") != null;
+	/** Crop seasons read Serene Seasons; the mixin config gate only checks Immersive Weathering. */
+	@Unique private static final boolean creativeengineering$seasons = LoadingModList.get().getModFileById("sereneseasons") != null;
 
-    @Inject(method = "tryGrowing", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
-    private void creativeengineering$growthSeason(BlockPos pos, BlockState state, ServerLevel level,
-                                                  Supplier<Holder<Biome>> biome, CallbackInfo ci) {
-        if (!creativeengineering$seasons || possibleBlocks == null) return;
-        CropSeasons.Type type = CropSeasons.typeOf(state);
-        if (type == null || !type.seasonal()) return;
-        for (Block placed : possibleBlocks) {
-            if (CropSeasons.typeOf(placed.defaultBlockState()) == type) {
-                if (CropSeasons.refuseSpread(level, pos, type)) ci.cancel();
-                return;
-            }
-        }
-    }
+	@Inject(method = "tryGrowing", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
+	private void creativeengineering$growthSeason(BlockPos pos, BlockState state, ServerLevel level,
+												  Supplier<Holder<Biome>> biome, CallbackInfo ci) {
+		if (!creativeengineering$seasons || possibleBlocks == null) return;
+		CropSeasons.Type type = CropSeasons.typeOf(state);
+		if (type == null || !type.seasonal()) return;
+		for (Block placed : possibleBlocks) {
+			if (CropSeasons.typeOf(placed.defaultBlockState()) == type) {
+				if (CropSeasons.refuseSpread(level, pos, type)) ci.cancel();
+				return;
+			}
+		}
+	}
 }

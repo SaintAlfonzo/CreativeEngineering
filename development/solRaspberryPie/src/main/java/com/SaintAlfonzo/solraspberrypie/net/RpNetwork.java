@@ -12,27 +12,27 @@ import java.util.Optional;
 
 /** Raspberry Pie's channel (13.3): ladder, player state, messages and previews to the client; slot actions to the server. */
 public final class RpNetwork {
-    private static final String VERSION = "2";
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(SolRaspberryPie.MOD_ID, "main"), () -> VERSION, VERSION::equals, VERSION::equals);
+	private static final String VERSION = "2";
+	public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
+			new ResourceLocation(SolRaspberryPie.MOD_ID, "main"), () -> VERSION, VERSION::equals, VERSION::equals);
 
-    public static void register() {
-        int id = 0;
-        CHANNEL.registerMessage(id++, S2CLadder.class, S2CLadder::encode, S2CLadder::decode, S2CLadder::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        CHANNEL.registerMessage(id++, S2CState.class, S2CState::encode, S2CState::decode, S2CState::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        CHANNEL.registerMessage(id++, S2CMessage.class, S2CMessage::encode, S2CMessage::decode, S2CMessage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        CHANNEL.registerMessage(id++, S2CPreview.class, S2CPreview::encode, S2CPreview::decode, S2CPreview::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-        CHANNEL.registerMessage(id++, C2SAction.class, C2SAction::encode, C2SAction::decode, C2SAction::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
-    }
+	public static void register() {
+		int id = 0;
+		CHANNEL.registerMessage(id++, S2CLadder.class, S2CLadder::encode, S2CLadder::decode, S2CLadder::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		CHANNEL.registerMessage(id++, S2CState.class, S2CState::encode, S2CState::decode, S2CState::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		CHANNEL.registerMessage(id++, S2CMessage.class, S2CMessage::encode, S2CMessage::decode, S2CMessage::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		CHANNEL.registerMessage(id++, S2CPreview.class, S2CPreview::encode, S2CPreview::decode, S2CPreview::handle, Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+		CHANNEL.registerMessage(id++, C2SAction.class, C2SAction::encode, C2SAction::decode, C2SAction::handle, Optional.of(NetworkDirection.PLAY_TO_SERVER));
+	}
 
-    public static void toPlayer(ServerPlayer player, Object msg) {
-        if (player.connection == null) return;
-        CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), msg);
-    }
+	public static void toPlayer(ServerPlayer player, Object msg) {
+		if (player.connection == null) return;
+		CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), msg);
+	}
 
-    public static void toServer(Object msg) {
-        CHANNEL.sendToServer(msg);
-    }
+	public static void toServer(Object msg) {
+		CHANNEL.sendToServer(msg);
+	}
 
-    private RpNetwork() {}
+	private RpNetwork() {}
 }

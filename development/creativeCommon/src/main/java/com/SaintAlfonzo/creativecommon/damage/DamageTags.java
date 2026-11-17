@@ -28,33 +28,33 @@ import net.minecraft.world.damagesource.DamageSource;
  */
 public final class DamageTags {
 
-    public static final String NAMESPACE = CreativeCommon.NS;
+	public static final String NAMESPACE = CreativeCommon.NS;
 
-    private static volatile DamageTagSnapshot snapshot = DamageTagSnapshot.EMPTY;
+	private static volatile DamageTagSnapshot snapshot = DamageTagSnapshot.EMPTY;
 
-    private DamageTags() {}
+	private DamageTags() {}
 
-    /** {@code creativecommon:<path>}. */
-    public static ResourceLocation id(String path) {
-        return new ResourceLocation(NAMESPACE, path);
-    }
+	/** {@code creativecommon:<path>}. */
+	public static ResourceLocation id(String path) {
+		return new ResourceLocation(NAMESPACE, path);
+	}
 
-    /** Every tag {@code source} belongs to, built-in flags first. Never null; unmodifiable. */
-    public static Set<ResourceLocation> tagsOf(DamageSource source) {
-        return snapshot.tagsFor(source.getMsgId(), DamageFlag.mask(source));
-    }
+	/** Every tag {@code source} belongs to, built-in flags first. Never null; unmodifiable. */
+	public static Set<ResourceLocation> tagsOf(DamageSource source) {
+		return snapshot.tagsFor(source.getMsgId(), DamageFlag.mask(source));
+	}
 
-    public static boolean is(DamageSource source, ResourceLocation tag) {
-        return tagsOf(source).contains(tag);
-    }
+	public static boolean is(DamageSource source, ResourceLocation tag) {
+		return tagsOf(source).contains(tag);
+	}
 
-    /** Data-defined tags currently loaded, sorted by id (the built-in flag tags are not listed unless a file also defines them). */
-    public static Set<ResourceLocation> definedTags() {
-        return Collections.unmodifiableSet(snapshot.defs().keySet());
-    }
+	/** Data-defined tags currently loaded, sorted by id (the built-in flag tags are not listed unless a file also defines them). */
+	public static Set<ResourceLocation> definedTags() {
+		return Collections.unmodifiableSet(snapshot.defs().keySet());
+	}
 
-    /** Called by {@link DamageTagLoader} after a data reload. */
-    static void install(DamageTagSnapshot next) {
-        snapshot = next;
-    }
+	/** Called by {@link DamageTagLoader} after a data reload. */
+	static void install(DamageTagSnapshot next) {
+		snapshot = next;
+	}
 }

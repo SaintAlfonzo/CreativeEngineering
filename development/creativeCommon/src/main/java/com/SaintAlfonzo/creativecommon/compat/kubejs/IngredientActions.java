@@ -14,21 +14,21 @@ import java.util.Map;
  * installed.
  */
 public final class IngredientActions {
-    private static final Map<String, CustomIngredientActionCallback> ACTIONS = new LinkedHashMap<>();
+	private static final Map<String, CustomIngredientActionCallback> ACTIONS = new LinkedHashMap<>();
 
-    private IngredientActions() {}
+	private IngredientActions() {}
 
-    public static synchronized void register(String id, CustomIngredientActionCallback action) {
-        ACTIONS.put(id, action);
-        CustomIngredientAction.MAP.put(id, action);
-    }
+	public static synchronized void register(String id, CustomIngredientActionCallback action) {
+		ACTIONS.put(id, action);
+		CustomIngredientAction.MAP.put(id, action);
+	}
 
-    /** Puts every registered action back into KubeJS's map. */
-    public static synchronized void reapply() {
-        CustomIngredientAction.MAP.putAll(ACTIONS);
-    }
+	/** Puts every registered action back into KubeJS's map. */
+	public static synchronized void reapply() {
+		CustomIngredientAction.MAP.putAll(ACTIONS);
+	}
 
-    public static synchronized boolean has(String id) {
-        return ACTIONS.containsKey(id);
-    }
+	public static synchronized boolean has(String id) {
+		return ACTIONS.containsKey(id);
+	}
 }

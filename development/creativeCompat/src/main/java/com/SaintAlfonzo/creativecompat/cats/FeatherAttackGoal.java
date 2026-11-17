@@ -11,35 +11,35 @@ import net.minecraft.world.entity.animal.Cat;
  */
 final class FeatherAttackGoal extends MeleeAttackGoal {
 
-    private final Cat cat;
+	private final Cat cat;
 
-    FeatherAttackGoal(Cat cat) {
-        super(cat, 1.3, true);
-        this.cat = cat;
-    }
+	FeatherAttackGoal(Cat cat) {
+		super(cat, 1.3, true);
+		this.cat = cat;
+	}
 
-    private boolean feathered() {
-        LivingEntity target = cat.getTarget();
-        return target != null && !cat.isOrderedToSit() && CatFeather.isFeatheredFor(cat, target);
-    }
+	private boolean feathered() {
+		LivingEntity target = cat.getTarget();
+		return target != null && !cat.isOrderedToSit() && CatFeather.isFeatheredFor(cat, target);
+	}
 
-    @Override
-    public boolean canUse() {
-        if (!feathered()) {
-            CatFeather.dropStaleTarget(cat);
-            return false;
-        }
-        return super.canUse();
-    }
+	@Override
+	public boolean canUse() {
+		if (!feathered()) {
+			CatFeather.dropStaleTarget(cat);
+			return false;
+		}
+		return super.canUse();
+	}
 
-    @Override
-    public boolean canContinueToUse() {
-        return feathered() && super.canContinueToUse();
-    }
+	@Override
+	public boolean canContinueToUse() {
+		return feathered() && super.canContinueToUse();
+	}
 
-    @Override
-    public void stop() {
-        super.stop();
-        CatFeather.dropStaleTarget(cat);
-    }
+	@Override
+	public void stop() {
+		super.stop();
+		CatFeather.dropStaleTarget(cat);
+	}
 }

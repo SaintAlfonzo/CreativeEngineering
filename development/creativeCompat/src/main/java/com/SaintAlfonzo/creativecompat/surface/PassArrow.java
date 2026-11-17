@@ -9,17 +9,17 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public interface PassArrow {
 
-    /** Stops the arrow where it is and puts it into vanilla's stuck state with the web as its block (5.3). */
-    void creativecompat$hangInWeb();
+	/** Stops the arrow where it is and puts it into vanilla's stuck state with the web as its block (5.3). */
+	void creativecompat$hangInWeb();
 
-    boolean creativecompat$inGround();
+	boolean creativecompat$inGround();
 
-    /** The block the arrow is stuck in ({@code lastState}), or null. */
-    BlockState creativecompat$lastState();
+	/** The block the arrow is stuck in ({@code lastState}), or null. */
+	BlockState creativecompat$lastState();
 
-    /** The stuck counter ({@code life}). */
-    int creativecompat$life();
+	/** The stuck counter ({@code life}). */
+	int creativecompat$life();
 
-    /** {@code getPickupItem()} (protected in the class). */
-    ItemStack creativecompat$pickupItem();
+	/** {@code getPickupItem()} (protected in the class). */
+	ItemStack creativecompat$pickupItem();
 }

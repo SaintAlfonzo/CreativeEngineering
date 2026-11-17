@@ -23,46 +23,46 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class DhDimensionView {
 
-    private static boolean applied;
+	private static boolean applied;
 
-    private DhDimensionView() {}
+	private DhDimensionView() {}
 
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public static void onLevelLoad(LevelEvent.Load event) {
-        if (!(event.getLevel() instanceof ClientLevel level)) return;
-        apply(DhDimensions.NETHER.equals(level.dimension().location().toString()));
-    }
+	@SubscribeEvent(priority = EventPriority.HIGHEST)
+	public static void onLevelLoad(LevelEvent.Load event) {
+		if (!(event.getLevel() instanceof ClientLevel level)) return;
+		apply(DhDimensions.NETHER.equals(level.dimension().location().toString()));
+	}
 
-    @SubscribeEvent
-    public static void onLogout(ClientPlayerNetworkEvent.LoggingOut event) {
-        apply(false);
-    }
+	@SubscribeEvent
+	public static void onLogout(ClientPlayerNetworkEvent.LoggingOut event) {
+		apply(false);
+	}
 
-    private static void apply(boolean nether) {
-        if (!nether && !applied) return;
-        IDhApiConfig configs = DhApi.Delayed.configs;
-        if (configs == null) return;
-        try {
-            IDhApiGraphicsConfig graphics = configs.graphics();
-            IDhApiFarFogConfig farFog = graphics.fog().farFog();
-            if (nether) {
-                set(graphics.chunkRenderDistance(), DhDimensions.NETHER_LOD_RADIUS);
-                set(graphics.fog().enableDhFog(), true);
-                set(farFog.farFogEndDistance(), 1.0F);
-                set(farFog.farFogMaxThickness(), 1.0F);
-            } else {
-                graphics.chunkRenderDistance().clearValue();
-                graphics.fog().enableDhFog().clearValue();
-                farFog.farFogEndDistance().clearValue();
-                farFog.farFogMaxThickness().clearValue();
-            }
-            applied = nether;
-        } catch (Throwable t) {
-            CreativeCompat.LOGGER.error("[creativecompat] Distant Horizons dimension overrides failed", t);
-        }
-    }
+	private static void apply(boolean nether) {
+		if (!nether && !applied) return;
+		IDhApiConfig configs = DhApi.Delayed.configs;
+		if (configs == null) return;
+		try {
+			IDhApiGraphicsConfig graphics = configs.graphics();
+			IDhApiFarFogConfig farFog = graphics.fog().farFog();
+			if (nether) {
+				set(graphics.chunkRenderDistance(), DhDimensions.NETHER_LOD_RADIUS);
+				set(graphics.fog().enableDhFog(), true);
+				set(farFog.farFogEndDistance(), 1.0F);
+				set(farFog.farFogMaxThickness(), 1.0F);
+			} else {
+				graphics.chunkRenderDistance().clearValue();
+				graphics.fog().enableDhFog().clearValue();
+				farFog.farFogEndDistance().clearValue();
+				farFog.farFogMaxThickness().clearValue();
+			}
+			applied = nether;
+		} catch (Throwable t) {
+			CreativeCompat.LOGGER.error("[creativecompat] Distant Horizons dimension overrides failed", t);
+		}
+	}
 
-    private static <T> void set(IDhApiConfigValue<T> value, T to) {
-        if (!value.setValue(to)) CreativeCompat.LOGGER.warn("[creativecompat] Distant Horizons refused an API override");
-    }
+	private static <T> void set(IDhApiConfigValue<T> value, T to) {
+		if (!value.setValue(to)) CreativeCompat.LOGGER.warn("[creativecompat] Distant Horizons refused an API override");
+	}
 }

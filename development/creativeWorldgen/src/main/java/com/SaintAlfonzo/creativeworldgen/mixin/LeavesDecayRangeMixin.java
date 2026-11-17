@@ -24,18 +24,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = LeavesBlock.class, remap = false)
 public abstract class LeavesDecayRangeMixin {
 
-    @Inject(method = "m_213898_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$gateRandomDecay(BlockState state, ServerLevel level, BlockPos pos,
-                                                     RandomSource random, CallbackInfo ci) {
-        // Vanilla decaying() inlined: @Shadow of MC members has no refmap in this build.
-        if (LeafDecayRange.decaying(state) && LeafDecayRange.cancelRandomDecay(level, pos, state)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_213898_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$gateRandomDecay(BlockState state, ServerLevel level, BlockPos pos,
+													 RandomSource random, CallbackInfo ci) {
+		// Vanilla decaying() inlined: @Shadow of MC members has no refmap in this build.
+		if (LeafDecayRange.decaying(state) && LeafDecayRange.cancelRandomDecay(level, pos, state)) {
+			ci.cancel();
+		}
+	}
 
-    @Inject(method = "m_213897_", at = @At("TAIL"), remap = false)
-    private void creativeengineering$decayOnUpdate(BlockState state, ServerLevel level, BlockPos pos,
-                                                   RandomSource random, CallbackInfo ci) {
-        LeafDecayRange.afterTick(level, pos, state, random);
-    }
+	@Inject(method = "m_213897_", at = @At("TAIL"), remap = false)
+	private void creativeengineering$decayOnUpdate(BlockState state, ServerLevel level, BlockPos pos,
+												   RandomSource random, CallbackInfo ci) {
+		LeafDecayRange.afterTick(level, pos, state, random);
+	}
 }

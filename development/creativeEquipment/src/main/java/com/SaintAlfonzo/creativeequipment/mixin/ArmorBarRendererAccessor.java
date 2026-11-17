@@ -24,8 +24,8 @@ import java.util.List;
  */
 @Mixin(value = ArmorBarRenderer.class, remap = false)
 public interface ArmorBarRendererAccessor {
-    @Invoker("getArmorPoints")
-    static List<Pair<ItemStack, CustomArmorBar>> creativecommon$getArmorPoints(Player player) {
-        throw new AssertionError();
-    }
+	@Invoker("getArmorPoints")
+	static List<Pair<ItemStack, CustomArmorBar>> creativecommon$getArmorPoints(Player player) {
+		throw new AssertionError();
+	}
 }

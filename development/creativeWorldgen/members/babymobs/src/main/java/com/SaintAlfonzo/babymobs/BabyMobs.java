@@ -29,13 +29,13 @@ import org.slf4j.Logger;
 @Mod(BabyMobs.ID)
 public class BabyMobs {
 
-    public static final String ID = "babymobs";
-    public static final Logger LOGGER = LogUtils.getLogger();
+	public static final String ID = "babymobs";
+	public static final Logger LOGGER = LogUtils.getLogger();
 
-    public BabyMobs() {
-        IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BMConfig.SPEC);
-        BabyAges.init();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientSetup.register(modBus));
-    }
+	public BabyMobs() {
+		IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, BMConfig.SPEC);
+		BabyAges.init();
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> ClientSetup.register(modBus));
+	}
 }

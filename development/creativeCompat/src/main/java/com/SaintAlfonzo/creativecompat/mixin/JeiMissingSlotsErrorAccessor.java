@@ -14,6 +14,6 @@ import java.util.Collection;
  */
 @Mixin(value = RecipeTransferErrorMissingSlots.class, remap = false)
 public interface JeiMissingSlotsErrorAccessor {
-    @Accessor("slots")
-    Collection<IRecipeSlotView> creativecommon$getSlots();
+	@Accessor("slots")
+	Collection<IRecipeSlotView> creativecommon$getSlots();
 }

@@ -30,28 +30,28 @@ import org.slf4j.LoggerFactory;
  */
 @Mod(MinersDelightMod.MODID)
 public class MinersDelightMod {
-    public static final String MODID = "miners_delight";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+	public static final String MODID = "miners_delight";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-    public MinersDelightMod() {
-        UpstreamJars.verifyOrFail();
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MDConfig.SPEC);
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        MDBlocks.BLOCKS.register(bus);
-        MDItems.ITEMS.register(bus);
-        MDBlockEntities.BLOCK_ENTITIES.register(bus);
-        MDMenuTypes.MENU_TYPES.register(bus);
-        MDPotions.POTIONS.register(bus);
-        MDLoot.FUNCTIONS.register(bus);
-        // Upstream art and data as built-in packs, always on and at the bottom: resource packs, KubeJS and datapacks
-        // still override them (miners_delight.md D12).
-        bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "miners_upstream",
-                "Miner's Delight: art and data read from the upstream jar", MinersTranslator::assets, MinersTranslator::data));
-        bus.addListener(MDSetup::onCommonSetup);
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> MDClient.register(bus));
-    }
+	public MinersDelightMod() {
+		UpstreamJars.verifyOrFail();
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, MDConfig.SPEC);
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		MDBlocks.BLOCKS.register(bus);
+		MDItems.ITEMS.register(bus);
+		MDBlockEntities.BLOCK_ENTITIES.register(bus);
+		MDMenuTypes.MENU_TYPES.register(bus);
+		MDPotions.POTIONS.register(bus);
+		MDLoot.FUNCTIONS.register(bus);
+		// Upstream art and data as built-in packs, always on and at the bottom: resource packs, KubeJS and datapacks
+		// still override them (miners_delight.md D12).
+		bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "miners_upstream",
+				"Miner's Delight: art and data read from the upstream jar", MinersTranslator::assets, MinersTranslator::data));
+		bus.addListener(MDSetup::onCommonSetup);
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> MDClient.register(bus));
+	}
 
-    public static ResourceLocation path(String path) {
-        return new ResourceLocation(MODID, path);
-    }
+	public static ResourceLocation path(String path) {
+		return new ResourceLocation(MODID, path);
+	}
 }

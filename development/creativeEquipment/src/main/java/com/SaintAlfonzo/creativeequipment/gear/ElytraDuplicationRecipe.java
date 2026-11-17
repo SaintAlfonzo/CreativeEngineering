@@ -31,87 +31,87 @@ import net.minecraft.world.level.Level;
  */
 public class ElytraDuplicationRecipe extends CustomRecipe {
 
-    private final Ingredient catalyst;
-    private final ItemStack result;
+	private final Ingredient catalyst;
+	private final ItemStack result;
 
-    public ElytraDuplicationRecipe(ResourceLocation id, Ingredient catalyst, ItemStack result) {
-        super(id);
-        this.catalyst = catalyst;
-        this.result = result;
-    }
+	public ElytraDuplicationRecipe(ResourceLocation id, Ingredient catalyst, ItemStack result) {
+		super(id);
+		this.catalyst = catalyst;
+		this.result = result;
+	}
 
-    public Ingredient getCatalyst() {
-        return catalyst;
-    }
+	public Ingredient getCatalyst() {
+		return catalyst;
+	}
 
-    @Override
-    public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
-        boolean sawElytra = false;
-        boolean sawCatalyst = false;
-        for (int i = 0; i < inv.getContainerSize(); i++) {
-            ItemStack stack = inv.getItem(i);
-            if (stack.isEmpty()) continue;
-            if (stack.getItem() instanceof ElytraItem) {
-                if (sawElytra) return false;
-                sawElytra = true;
-            } else if (catalyst.test(stack)) {
-                if (sawCatalyst) return false;
-                sawCatalyst = true;
-            } else {
-                // any third item in the grid invalidates the recipe entirely
-                return false;
-            }
-        }
-        return sawElytra && sawCatalyst;
-    }
+	@Override
+	public boolean matches(@Nonnull CraftingContainer inv, @Nonnull Level level) {
+		boolean sawElytra = false;
+		boolean sawCatalyst = false;
+		for (int i = 0; i < inv.getContainerSize(); i++) {
+			ItemStack stack = inv.getItem(i);
+			if (stack.isEmpty()) continue;
+			if (stack.getItem() instanceof ElytraItem) {
+				if (sawElytra) return false;
+				sawElytra = true;
+			} else if (catalyst.test(stack)) {
+				if (sawCatalyst) return false;
+				sawCatalyst = true;
+			} else {
+				// any third item in the grid invalidates the recipe entirely
+				return false;
+			}
+		}
+		return sawElytra && sawCatalyst;
+	}
 
-    @Override
-    @Nonnull
-    public ItemStack assemble(@Nonnull CraftingContainer inv) {
-        return result.copy();
-    }
+	@Override
+	@Nonnull
+	public ItemStack assemble(@Nonnull CraftingContainer inv) {
+		return result.copy();
+	}
 
-    @Override
-    @Nonnull
-    public ItemStack getResultItem() {
-        return result;
-    }
+	@Override
+	@Nonnull
+	public ItemStack getResultItem() {
+		return result;
+	}
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
+	@Override
+	public boolean canCraftInDimensions(int width, int height) {
+		return width * height >= 2;
+	}
 
-    @Override
-    @Nonnull
-    public NonNullList<ItemStack> getRemainingItems(@Nonnull CraftingContainer inv) {
-        // This is what makes it a *duplication*: the Elytra slot gets its own stack
-        // (NBT and all - enchantments, durability) handed straight back instead of being
-        // consumed. Everything else (the catalyst) defaults to ItemStack.EMPTY, i.e. gone.
-        NonNullList<ItemStack> remaining = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
-        for (int i = 0; i < remaining.size(); i++) {
-            ItemStack stack = inv.getItem(i);
-            if (stack.getItem() instanceof ElytraItem) {
-                remaining.set(i, stack.copy());
-            }
-        }
-        return remaining;
-    }
+	@Override
+	@Nonnull
+	public NonNullList<ItemStack> getRemainingItems(@Nonnull CraftingContainer inv) {
+		// This is what makes it a *duplication*: the Elytra slot gets its own stack
+		// (NBT and all - enchantments, durability) handed straight back instead of being
+		// consumed. Everything else (the catalyst) defaults to ItemStack.EMPTY, i.e. gone.
+		NonNullList<ItemStack> remaining = NonNullList.withSize(inv.getContainerSize(), ItemStack.EMPTY);
+		for (int i = 0; i < remaining.size(); i++) {
+			ItemStack stack = inv.getItem(i);
+			if (stack.getItem() instanceof ElytraItem) {
+				remaining.set(i, stack.copy());
+			}
+		}
+		return remaining;
+	}
 
-    @Override
-    @Nonnull
-    public NonNullList<Ingredient> getIngredients() {
-        // Cosmetic only (recipe book / JEI grid preview) - actual matching in matches()
-        // above accepts ANY ElytraItem, not just vanilla's.
-        NonNullList<Ingredient> ingredients = NonNullList.withSize(2, Ingredient.EMPTY);
-        ingredients.set(0, Ingredient.of(Items.ELYTRA));
-        ingredients.set(1, catalyst);
-        return ingredients;
-    }
+	@Override
+	@Nonnull
+	public NonNullList<Ingredient> getIngredients() {
+		// Cosmetic only (recipe book / JEI grid preview) - actual matching in matches()
+		// above accepts ANY ElytraItem, not just vanilla's.
+		NonNullList<Ingredient> ingredients = NonNullList.withSize(2, Ingredient.EMPTY);
+		ingredients.set(0, Ingredient.of(Items.ELYTRA));
+		ingredients.set(1, catalyst);
+		return ingredients;
+	}
 
-    @Override
-    @Nonnull
-    public RecipeSerializer<?> getSerializer() {
-        return ElytraDuplicationSerializers.SERIALIZER.get();
-    }
+	@Override
+	@Nonnull
+	public RecipeSerializer<?> getSerializer() {
+		return ElytraDuplicationSerializers.SERIALIZER.get();
+	}
 }

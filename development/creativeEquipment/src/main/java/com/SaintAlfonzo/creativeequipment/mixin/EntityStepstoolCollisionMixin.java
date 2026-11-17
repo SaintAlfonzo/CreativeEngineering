@@ -20,12 +20,12 @@ import java.util.List;
 @Mixin(Entity.class)
 public abstract class EntityStepstoolCollisionMixin {
 
-    @ModifyVariable(method = "m_20272_", at = @At(value = "STORE", ordinal = 0), ordinal = 0, remap = false)
-    private List<VoxelShape> creativeengineering$stepstool(List<VoxelShape> shapes) {
-        try {
-            return Stepstool.withStool((Entity) (Object) this, shapes);
-        } catch (Throwable ignored) {
-            return shapes;
-        }
-    }
+	@ModifyVariable(method = "m_20272_", at = @At(value = "STORE", ordinal = 0), ordinal = 0, remap = false)
+	private List<VoxelShape> creativeengineering$stepstool(List<VoxelShape> shapes) {
+		try {
+			return Stepstool.withStool((Entity) (Object) this, shapes);
+		} catch (Throwable ignored) {
+			return shapes;
+		}
+	}
 }

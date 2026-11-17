@@ -14,8 +14,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(value = Villager.class, remap = false)
 public abstract class VillagerGolemCooldownMixin {
-    @Inject(method = "m_35397_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativecompat$golemCooldown(ServerLevel level, long gameTime, int minVillagers, CallbackInfo ci) {
-        if (GolemCooldown.blocked(level, ((Villager) (Object) this).blockPosition())) ci.cancel();
-    }
+	@Inject(method = "m_35397_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativecompat$golemCooldown(ServerLevel level, long gameTime, int minVillagers, CallbackInfo ci) {
+		if (GolemCooldown.blocked(level, ((Villager) (Object) this).blockPosition())) ci.cancel();
+	}
 }

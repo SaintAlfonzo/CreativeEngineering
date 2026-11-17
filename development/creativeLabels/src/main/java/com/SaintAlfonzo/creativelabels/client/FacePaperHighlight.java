@@ -22,23 +22,23 @@ import net.minecraftforge.client.event.RenderHighlightEvent;
  */
 public final class FacePaperHighlight {
 
-    private FacePaperHighlight() {}
+	private FacePaperHighlight() {}
 
-    public static void onHighlight(RenderHighlightEvent.Block event) {
-        BlockHitResult hit = event.getTarget();
-        ClientLevel level = Minecraft.getInstance().level;
-        if (level == null || hit == null) return;
-        BlockPos pos = hit.getBlockPos();
-        BlockState state = level.getBlockState(pos);
-        if (!(state.getBlock() instanceof FacePaperBlock)) return;
-        FacePaperBlockEntity be = FacePaperBlock.entity(level, pos);
-        if (be == null) return;
-        PieceHit piece = PieceHit.resolve(state, be, hit.getLocation());
-        if (piece == null) return;
-        Vec3 cam = event.getCamera().getPosition();
-        AABB box = piece.box(be.faces()).move(pos.getX() - cam.x, pos.getY() - cam.y, pos.getZ() - cam.z);
-        VertexConsumer lines = event.getMultiBufferSource().getBuffer(RenderType.lines());
-        LevelRenderer.renderLineBox(event.getPoseStack(), lines, box, 0f, 0f, 0f, 0.4f);
-        event.setCanceled(true);
-    }
+	public static void onHighlight(RenderHighlightEvent.Block event) {
+		BlockHitResult hit = event.getTarget();
+		ClientLevel level = Minecraft.getInstance().level;
+		if (level == null || hit == null) return;
+		BlockPos pos = hit.getBlockPos();
+		BlockState state = level.getBlockState(pos);
+		if (!(state.getBlock() instanceof FacePaperBlock)) return;
+		FacePaperBlockEntity be = FacePaperBlock.entity(level, pos);
+		if (be == null) return;
+		PieceHit piece = PieceHit.resolve(state, be, hit.getLocation());
+		if (piece == null) return;
+		Vec3 cam = event.getCamera().getPosition();
+		AABB box = piece.box(be.faces()).move(pos.getX() - cam.x, pos.getY() - cam.y, pos.getZ() - cam.z);
+		VertexConsumer lines = event.getMultiBufferSource().getBuffer(RenderType.lines());
+		LevelRenderer.renderLineBox(event.getPoseStack(), lines, box, 0f, 0f, 0f, 0.4f);
+		event.setCanceled(true);
+	}
 }

@@ -26,8 +26,8 @@ import java.util.List;
  */
 @Mixin(value = ArmorBarRenderer.class, remap = false)
 public class ArmorBarRendererOverflowTickMixin {
-    @Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I", ordinal = 1))
-    private int creativecommon$hideOverflowTicks(List<?> armorPoints) {
-        return Math.min(armorPoints.size(), 20);
-    }
+	@Redirect(method = "render", at = @At(value = "INVOKE", target = "Ljava/util/List;size()I", ordinal = 1))
+	private int creativecommon$hideOverflowTicks(List<?> armorPoints) {
+		return Math.min(armorPoints.size(), 20);
+	}
 }

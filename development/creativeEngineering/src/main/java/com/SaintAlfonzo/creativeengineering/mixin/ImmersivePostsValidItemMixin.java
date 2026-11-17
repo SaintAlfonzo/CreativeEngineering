@@ -16,11 +16,11 @@ import twistedgate.immersiveposts.common.blocks.PostBlock;
 @Mixin(value = {PostBaseBlock.class, PostBlock.class}, remap = false)
 public abstract class ImmersivePostsValidItemMixin {
 
-    // Both call sites are in use() (m_6227_), an instance method, so the handler is not static.
-    @Redirect(method = "m_6227_", remap = false,
-            at = @At(value = "INVOKE",
-                    target = "Ltwistedgate/immersiveposts/api/posts/IPostMaterial;isValidItem(Lnet/minecraft/world/item/ItemStack;)Z"))
-    private boolean creativeengineering$keptOnly(ItemStack stack) {
-        return ImmersivePostsMaterials.isValidItem(stack);
-    }
+	// Both call sites are in use() (m_6227_), an instance method, so the handler is not static.
+	@Redirect(method = "m_6227_", remap = false,
+			at = @At(value = "INVOKE",
+					target = "Ltwistedgate/immersiveposts/api/posts/IPostMaterial;isValidItem(Lnet/minecraft/world/item/ItemStack;)Z"))
+	private boolean creativeengineering$keptOnly(ItemStack stack) {
+		return ImmersivePostsMaterials.isValidItem(stack);
+	}
 }

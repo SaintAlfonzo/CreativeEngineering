@@ -28,47 +28,47 @@ import net.minecraftforge.registries.ForgeRegistries;
  * {@code failed}.
  */
 final class WorldJeiMobBuckets {
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private WorldJeiMobBuckets() {}
+	private WorldJeiMobBuckets() {}
 
-    static JsonElement dump(ServerLevel level) {
-        JsonArray found = new JsonArray();
-        JsonArray failed = new JsonArray();
-        for (EntityType<?> type : ForgeRegistries.ENTITY_TYPES.getValues()) {
-            String id = String.valueOf(ForgeRegistries.ENTITY_TYPES.getKey(type));
-            Entity entity;
-            try {
-                entity = type.create(level);
-            } catch (Throwable t) {
-                failed.add(id);
-                continue;
-            }
-            if (entity == null) continue;
-            try {
-                if (entity instanceof Bucketable bucketable) {
-                    JsonObject o = new JsonObject();
-                    o.addProperty("entity", id);
-                    ItemStack stack = bucketable.getBucketItemStack();
-                    o.addProperty("bucket_item", String.valueOf(ForgeRegistries.ITEMS.getKey(stack.getItem())));
-                    Fluid fluid = Fluids.EMPTY;
-                    if (stack.getItem() instanceof BucketItem bucket) fluid = bucket.getFluid();
-                    o.addProperty("fluid", String.valueOf(ForgeRegistries.FLUIDS.getKey(fluid)));
-                    var used = fluid == Fluids.EMPTY ? Items.AIR : fluid.getBucket();
-                    o.addProperty("empty_bucket", String.valueOf(ForgeRegistries.ITEMS.getKey(used)));
-                    o.addProperty("class", entity.getClass().getName());
-                    found.add(o);
-                }
-            } catch (Throwable t) {
-                LOGGER.warn("[dumpworldjei] mob_buckets: {} failed: {}", id, t.toString());
-                failed.add(id);
-            } finally {
-                entity.discard();
-            }
-        }
-        JsonObject out = new JsonObject();
-        out.add("bucketable", found);
-        out.add("failed", failed);
-        return out;
-    }
+	static JsonElement dump(ServerLevel level) {
+		JsonArray found = new JsonArray();
+		JsonArray failed = new JsonArray();
+		for (EntityType<?> type : ForgeRegistries.ENTITY_TYPES.getValues()) {
+			String id = String.valueOf(ForgeRegistries.ENTITY_TYPES.getKey(type));
+			Entity entity;
+			try {
+				entity = type.create(level);
+			} catch (Throwable t) {
+				failed.add(id);
+				continue;
+			}
+			if (entity == null) continue;
+			try {
+				if (entity instanceof Bucketable bucketable) {
+					JsonObject o = new JsonObject();
+					o.addProperty("entity", id);
+					ItemStack stack = bucketable.getBucketItemStack();
+					o.addProperty("bucket_item", String.valueOf(ForgeRegistries.ITEMS.getKey(stack.getItem())));
+					Fluid fluid = Fluids.EMPTY;
+					if (stack.getItem() instanceof BucketItem bucket) fluid = bucket.getFluid();
+					o.addProperty("fluid", String.valueOf(ForgeRegistries.FLUIDS.getKey(fluid)));
+					var used = fluid == Fluids.EMPTY ? Items.AIR : fluid.getBucket();
+					o.addProperty("empty_bucket", String.valueOf(ForgeRegistries.ITEMS.getKey(used)));
+					o.addProperty("class", entity.getClass().getName());
+					found.add(o);
+				}
+			} catch (Throwable t) {
+				LOGGER.warn("[dumpworldjei] mob_buckets: {} failed: {}", id, t.toString());
+				failed.add(id);
+			} finally {
+				entity.discard();
+			}
+		}
+		JsonObject out = new JsonObject();
+		out.add("bucketable", found);
+		out.add("failed", failed);
+		return out;
+	}
 }

@@ -16,11 +16,11 @@ import java.util.List;
 @Mixin(value = ItemTask.class, remap = false)
 public class FtbItemTaskTooltipMixin {
 
-    @Redirect(method = "addMouseOverHeader", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraft/world/item/ItemStack;m_41651_(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"))
-    private List<Component> creativecommon$rememberStack(ItemStack stack, Player player, TooltipFlag flag) {
-        FtbTooltipStacks.remember(stack);
-        return stack.getTooltipLines(player, flag);
-    }
+	@Redirect(method = "addMouseOverHeader", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraft/world/item/ItemStack;m_41651_(Lnet/minecraft/world/entity/player/Player;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;"))
+	private List<Component> creativecommon$rememberStack(ItemStack stack, Player player, TooltipFlag flag) {
+		FtbTooltipStacks.remember(stack);
+		return stack.getTooltipLines(player, flag);
+	}
 }

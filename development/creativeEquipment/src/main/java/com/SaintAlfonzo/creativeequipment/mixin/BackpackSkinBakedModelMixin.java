@@ -26,23 +26,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "net.p3pp3rf1y.sophisticatedbackpacks.client.render.BackpackDynamicModel$BackpackBakedModel", remap = false)
 public abstract class BackpackSkinBakedModelMixin {
 
-    @Inject(method = "getQuads", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private void creativeengineering$skinQuads(BlockState state, Direction side, RandomSource rand, ModelData data,
-            RenderType renderType, CallbackInfoReturnable<List<BakedQuad>> cir) {
-        Block skin = data.get(BackpackSkinsClient.SKIN);
-        if (skin != null) cir.setReturnValue(BackpackSkinsClient.quads(skin, state, side, rand, renderType));
-    }
+	@Inject(method = "getQuads", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private void creativeengineering$skinQuads(BlockState state, Direction side, RandomSource rand, ModelData data,
+			RenderType renderType, CallbackInfoReturnable<List<BakedQuad>> cir) {
+		Block skin = data.get(BackpackSkinsClient.SKIN);
+		if (skin != null) cir.setReturnValue(BackpackSkinsClient.quads(skin, state, side, rand, renderType));
+	}
 
-    @Inject(method = "getRenderTypes", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private void creativeengineering$skinRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand,
-            @NotNull ModelData data, CallbackInfoReturnable<ChunkRenderTypeSet> cir) {
-        Block skin = data.get(BackpackSkinsClient.SKIN);
-        if (skin != null) cir.setReturnValue(BackpackSkinsClient.renderTypes(skin, state, rand));
-    }
+	@Inject(method = "getRenderTypes", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private void creativeengineering$skinRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand,
+			@NotNull ModelData data, CallbackInfoReturnable<ChunkRenderTypeSet> cir) {
+		Block skin = data.get(BackpackSkinsClient.SKIN);
+		if (skin != null) cir.setReturnValue(BackpackSkinsClient.renderTypes(skin, state, rand));
+	}
 
-    /** Overrides Forge's default {@code getParticleIcon(ModelData)}. */
-    public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
-        Block skin = data.get(BackpackSkinsClient.SKIN);
-        return skin != null ? BackpackSkinsClient.particle(skin) : ((net.minecraft.client.resources.model.BakedModel) this).getParticleIcon();
-    }
+	/** Overrides Forge's default {@code getParticleIcon(ModelData)}. */
+	public TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
+		Block skin = data.get(BackpackSkinsClient.SKIN);
+		return skin != null ? BackpackSkinsClient.particle(skin) : ((net.minecraft.client.resources.model.BakedModel) this).getParticleIcon();
+	}
 }

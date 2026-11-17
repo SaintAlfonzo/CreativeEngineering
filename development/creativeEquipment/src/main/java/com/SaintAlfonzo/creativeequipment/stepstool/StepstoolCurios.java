@@ -8,13 +8,13 @@ import top.theillusivec4.curios.api.SlotResult;
 /** The Curios half of {@link Stepstool}: only loaded when Curios is. */
 public final class StepstoolCurios {
 
-    private StepstoolCurios() {
-    }
+	private StepstoolCurios() {
+	}
 
-    /** The first stepstool the entity wears in any Curios slot (the tag puts them in feet), or EMPTY. */
-    public static ItemStack find(LivingEntity entity) {
-        return CuriosApi.getCuriosHelper().findFirstCurio(entity, stack -> stack.is(Stepstool.TAG))
-                .map(SlotResult::stack)
-                .orElse(ItemStack.EMPTY);
-    }
+	/** The first stepstool the entity wears in any Curios slot (the tag puts them in feet), or EMPTY. */
+	public static ItemStack find(LivingEntity entity) {
+		return CuriosApi.getCuriosHelper().findFirstCurio(entity, stack -> stack.is(Stepstool.TAG))
+				.map(SlotResult::stack)
+				.orElse(ItemStack.EMPTY);
+	}
 }

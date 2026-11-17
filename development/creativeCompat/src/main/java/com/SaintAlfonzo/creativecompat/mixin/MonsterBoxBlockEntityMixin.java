@@ -31,78 +31,78 @@ import java.util.UUID;
 @Mixin(value = MonsterBoxBlockEntity.class, remap = false)
 public abstract class MonsterBoxBlockEntityMixin extends ARLBlockEntity implements MonsterBoxVault.Box {
 
-    @Shadow private int breakProgress;
+	@Shadow private int breakProgress;
 
-    @Unique private byte creativeengineering$phase = MonsterBoxVault.ARMED;
-    @Unique private long creativeengineering$until;
-    @Unique private final List<UUID> creativeengineering$wave = new ArrayList<>();
+	@Unique private byte creativeengineering$phase = MonsterBoxVault.ARMED;
+	@Unique private long creativeengineering$until;
+	@Unique private final List<UUID> creativeengineering$wave = new ArrayList<>();
 
-    protected MonsterBoxBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
-    }
+	protected MonsterBoxBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
+	}
 
-    @Inject(method = "tick", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
-    private static void creativeengineering$vaultTick(Level level, BlockPos pos, BlockState state, MonsterBoxBlockEntity be, CallbackInfo ci) {
-        if (MonsterBoxVault.tick(level, pos, (MonsterBoxVault.Box) be)) ci.cancel();
-    }
+	@Inject(method = "tick", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
+	private static void creativeengineering$vaultTick(Level level, BlockPos pos, BlockState state, MonsterBoxBlockEntity be, CallbackInfo ci) {
+		if (MonsterBoxVault.tick(level, pos, (MonsterBoxVault.Box) be)) ci.cancel();
+	}
 
-    // Level#removeBlock after spawnMobs; SRG name, no refmap.
-    @Redirect(method = "tick", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/level/Level;m_7471_(Lnet/minecraft/core/BlockPos;Z)Z"), require = 1, remap = false)
-    private static boolean creativeengineering$keepBox(Level level, BlockPos pos, boolean isMoving) {
-        return !MonsterBoxVault.onTriggered(level, pos) && level.removeBlock(pos, isMoving);
-    }
+	// Level#removeBlock after spawnMobs; SRG name, no refmap.
+	@Redirect(method = "tick", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/world/level/Level;m_7471_(Lnet/minecraft/core/BlockPos;Z)Z"), require = 1, remap = false)
+	private static boolean creativeengineering$keepBox(Level level, BlockPos pos, boolean isMoving) {
+		return !MonsterBoxVault.onTriggered(level, pos) && level.removeBlock(pos, isMoving);
+	}
 
-    @Override
-    public void writeSharedNBT(CompoundTag tag) {
-        super.writeSharedNBT(tag);
-        MonsterBoxVault.write(this, tag);
-    }
+	@Override
+	public void writeSharedNBT(CompoundTag tag) {
+		super.writeSharedNBT(tag);
+		MonsterBoxVault.write(this, tag);
+	}
 
-    @Override
-    public void readSharedNBT(CompoundTag tag) {
-        super.readSharedNBT(tag);
-        MonsterBoxVault.read(this, tag);
-    }
+	@Override
+	public void readSharedNBT(CompoundTag tag) {
+		super.readSharedNBT(tag);
+		MonsterBoxVault.read(this, tag);
+	}
 
-    @Override
-    public Packet<ClientGamePacketListener> getUpdatePacket() {
-        return ClientboundBlockEntityDataPacket.create(this);
-    }
+	@Override
+	public Packet<ClientGamePacketListener> getUpdatePacket() {
+		return ClientboundBlockEntityDataPacket.create(this);
+	}
 
-    @Override
-    public byte creativeengineering$phase() {
-        return creativeengineering$phase;
-    }
+	@Override
+	public byte creativeengineering$phase() {
+		return creativeengineering$phase;
+	}
 
-    @Override
-    public void creativeengineering$setPhase(byte phase) {
-        creativeengineering$phase = phase;
-    }
+	@Override
+	public void creativeengineering$setPhase(byte phase) {
+		creativeengineering$phase = phase;
+	}
 
-    @Override
-    public long creativeengineering$until() {
-        return creativeengineering$until;
-    }
+	@Override
+	public long creativeengineering$until() {
+		return creativeengineering$until;
+	}
 
-    @Override
-    public void creativeengineering$setUntil(long until) {
-        creativeengineering$until = until;
-    }
+	@Override
+	public void creativeengineering$setUntil(long until) {
+		creativeengineering$until = until;
+	}
 
-    @Override
-    public List<UUID> creativeengineering$wave() {
-        return creativeengineering$wave;
-    }
+	@Override
+	public List<UUID> creativeengineering$wave() {
+		return creativeengineering$wave;
+	}
 
-    @Override
-    public void creativeengineering$setBreakProgress(int progress) {
-        breakProgress = progress;
-    }
+	@Override
+	public void creativeengineering$setBreakProgress(int progress) {
+		breakProgress = progress;
+	}
 
-    @Override
-    public void creativeengineering$changed() {
-        setChanged();
-        sync();
-    }
+	@Override
+	public void creativeengineering$changed() {
+		setChanged();
+		sync();
+	}
 }

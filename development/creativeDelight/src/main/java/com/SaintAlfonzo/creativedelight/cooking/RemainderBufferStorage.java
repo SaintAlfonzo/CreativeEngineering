@@ -24,35 +24,35 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class RemainderBufferStorage {
 
-    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "remainder_buffer");
+	private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "remainder_buffer");
 
-    private RemainderBufferStorage() {}
+	private RemainderBufferStorage() {}
 
-    @SubscribeEvent
-    public static void attach(AttachCapabilitiesEvent<BlockEntity> event) {
-        if (event.getObject() instanceof RemainderBufferHolder holder) {
-            event.addCapability(ID, new Provider(holder));
-        }
-    }
+	@SubscribeEvent
+	public static void attach(AttachCapabilitiesEvent<BlockEntity> event) {
+		if (event.getObject() instanceof RemainderBufferHolder holder) {
+			event.addCapability(ID, new Provider(holder));
+		}
+	}
 
-    private record Provider(RemainderBufferHolder holder) implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+	private record Provider(RemainderBufferHolder holder) implements ICapabilityProvider, INBTSerializable<CompoundTag> {
 
-        @Override
-        @Nonnull
-        public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
-            return LazyOptional.empty();
-        }
+		@Override
+		@Nonnull
+		public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @Nullable Direction side) {
+			return LazyOptional.empty();
+		}
 
-        // The holder is asked for its buffer only here, not in the constructor: the event fires inside the
-        // BlockEntity constructor, before the mixin's fields are set up.
-        @Override
-        public CompoundTag serializeNBT() {
-            return holder.ce$getRemainderBuffer().serializeNBT();
-        }
+		// The holder is asked for its buffer only here, not in the constructor: the event fires inside the
+		// BlockEntity constructor, before the mixin's fields are set up.
+		@Override
+		public CompoundTag serializeNBT() {
+			return holder.ce$getRemainderBuffer().serializeNBT();
+		}
 
-        @Override
-        public void deserializeNBT(CompoundTag tag) {
-            holder.ce$getRemainderBuffer().deserializeNBT(tag);
-        }
-    }
+		@Override
+		public void deserializeNBT(CompoundTag tag) {
+			holder.ce$getRemainderBuffer().deserializeNBT(tag);
+		}
+	}
 }

@@ -6,7 +6,7 @@ package com.SaintAlfonzo.creativecommon.campfire;
  */
 public interface CampfireRainTicks {
 
-    int ce$getRainTicks();
+	int ce$getRainTicks();
 
-    void ce$setRainTicks(int ticks);
+	void ce$setRainTicks(int ticks);
 }

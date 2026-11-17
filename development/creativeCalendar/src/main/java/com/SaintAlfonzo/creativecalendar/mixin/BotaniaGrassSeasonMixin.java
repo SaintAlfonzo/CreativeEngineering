@@ -20,10 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "vazkii.botania.common.block.BotaniaGrassBlock", remap = false)
 public abstract class BotaniaGrassSeasonMixin {
 
-    // m_213897_ = tick; Botania's grass spreads there (the default randomTick calls it) and does nothing else, so HEAD
-    @Inject(method = "m_213897_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private void creativecalendar$grassSeason(BlockState state, ServerLevel level, BlockPos pos, RandomSource random,
-                                               CallbackInfo ci) {
-        if (GrassSeasonHook.refuse("botania:BotaniaGrassBlock", state, level, pos)) ci.cancel();
-    }
+	// m_213897_ = tick; Botania's grass spreads there (the default randomTick calls it) and does nothing else, so HEAD
+	@Inject(method = "m_213897_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private void creativecalendar$grassSeason(BlockState state, ServerLevel level, BlockPos pos, RandomSource random,
+											   CallbackInfo ci) {
+		if (GrassSeasonHook.refuse("botania:BotaniaGrassBlock", state, level, pos)) ci.cancel();
+	}
 }

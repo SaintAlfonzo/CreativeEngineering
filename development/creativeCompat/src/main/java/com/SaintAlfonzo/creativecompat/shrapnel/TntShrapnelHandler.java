@@ -21,17 +21,17 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class TntShrapnelHandler {
 
-    private TntShrapnelHandler() {}
+	private TntShrapnelHandler() {}
 
-    @SubscribeEvent
-    public static void onDetonate(ExplosionEvent.Detonate event) {
-        Level level = event.getLevel();
-        if (level.isClientSide) return;
+	@SubscribeEvent
+	public static void onDetonate(ExplosionEvent.Detonate event) {
+		Level level = event.getLevel();
+		if (level.isClientSide) return;
 
-        Explosion explosion = event.getExplosion();
-        Entity direct = explosion.getExploder();
-        if (!(direct instanceof PrimedTnt) && !(direct instanceof MinecartTNT)) return;
+		Explosion explosion = event.getExplosion();
+		Entity direct = explosion.getExploder();
+		if (!(direct instanceof PrimedTnt) && !(direct instanceof MinecartTNT)) return;
 
-        ShrapnelSpawner.burst(level, explosion.getPosition(), explosion.getSourceMob());
-    }
+		ShrapnelSpawner.burst(level, explosion.getPosition(), explosion.getSourceMob());
+	}
 }

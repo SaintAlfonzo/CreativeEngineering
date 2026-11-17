@@ -14,12 +14,12 @@ import vectorwing.farmersdelight.common.tag.ModTags;
  */
 public final class FdPotContainers {
 
-    public static final StationContainers POT = new StationContainers("farmersdelight:cooking_pot",
-            ModRecipeTypes.COOKING.get(),
-            r -> r instanceof CookingPotRecipe c
-                    ? List.of(c.getOutputContainer().isEmpty() ? c.getResultItem().getCraftingRemainingItem() : c.getOutputContainer())
-                    : List.of(),
-            List.of(ModTags.SERVING_CONTAINERS));
+	public static final StationContainers POT = new StationContainers("farmersdelight:cooking_pot",
+			ModRecipeTypes.COOKING.get(),
+			r -> r instanceof CookingPotRecipe c
+					? List.of(c.getOutputContainer().isEmpty() ? c.getResultItem().getCraftingRemainingItem() : c.getOutputContainer())
+					: List.of(),
+			List.of(ModTags.SERVING_CONTAINERS));
 
-    private FdPotContainers() {}
+	private FdPotContainers() {}
 }

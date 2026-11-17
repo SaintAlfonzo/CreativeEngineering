@@ -12,9 +12,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(targets = "vazkii.botania.client.gui.box.BaubleBoxContainer$1", remap = false)
 public abstract class TrinketCaseSlotMixin {
 
-    @Inject(method = "m_5857_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$anyItem(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (TrinketCaseRules.isOpenCase(((Slot) (Object) this).container, stack)) cir.setReturnValue(false);
-        else if (TrinketCaseRules.allowed(stack)) cir.setReturnValue(true);
-    }
+	@Inject(method = "m_5857_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$anyItem(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+		if (TrinketCaseRules.isOpenCase(((Slot) (Object) this).container, stack)) cir.setReturnValue(false);
+		else if (TrinketCaseRules.allowed(stack)) cir.setReturnValue(true);
+	}
 }

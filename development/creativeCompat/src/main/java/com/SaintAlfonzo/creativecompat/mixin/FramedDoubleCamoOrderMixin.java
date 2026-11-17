@@ -26,58 +26,58 @@ import xfacthd.framedblocks.common.blockentity.FramedDoubleBlockEntity;
 @Mixin(value = FramedDoubleBlockEntity.class, remap = false)
 public abstract class FramedDoubleCamoOrderMixin implements LastInsertedCamo {
 
-    @Unique
-    private static final String CREATIVEENGINEERING$KEY = "creativeengineering:last_camo_second";
+	@Unique
+	private static final String CREATIVEENGINEERING$KEY = "creativeengineering:last_camo_second";
 
-    @Unique
-    private boolean creativeengineering$lastSecond;
+	@Unique
+	private boolean creativeengineering$lastSecond;
 
-    @Override
-    public boolean creativeengineering$lastCamoIsSecond() {
-        return this.creativeengineering$lastSecond;
-    }
+	@Override
+	public boolean creativeengineering$lastCamoIsSecond() {
+		return this.creativeengineering$lastSecond;
+	}
 
-    @Inject(method = "setCamo", at = @At("HEAD"))
-    private void creativeengineering$recordInsert(CamoContainer camo, boolean secondary, CallbackInfo ci) {
-        if (!camo.isEmpty()) {
-            this.creativeengineering$lastSecond = secondary;
-        }
-    }
+	@Inject(method = "setCamo", at = @At("HEAD"))
+	private void creativeengineering$recordInsert(CamoContainer camo, boolean secondary, CallbackInfo ci) {
+		if (!camo.isEmpty()) {
+			this.creativeengineering$lastSecond = secondary;
+		}
+	}
 
-    @Inject(method = "m_183515_", at = @At("TAIL"))
-    private void creativeengineering$save(CompoundTag tag, CallbackInfo ci) {
-        tag.putBoolean(CREATIVEENGINEERING$KEY, this.creativeengineering$lastSecond);
-    }
+	@Inject(method = "m_183515_", at = @At("TAIL"))
+	private void creativeengineering$save(CompoundTag tag, CallbackInfo ci) {
+		tag.putBoolean(CREATIVEENGINEERING$KEY, this.creativeengineering$lastSecond);
+	}
 
-    @Inject(method = "m_142466_", at = @At("TAIL"))
-    private void creativeengineering$load(CompoundTag tag, CallbackInfo ci) {
-        this.creativeengineering$read(tag);
-    }
+	@Inject(method = "m_142466_", at = @At("TAIL"))
+	private void creativeengineering$load(CompoundTag tag, CallbackInfo ci) {
+		this.creativeengineering$read(tag);
+	}
 
-    @Inject(method = "writeToDataPacket", at = @At("TAIL"))
-    private void creativeengineering$writePacket(CompoundTag tag, CallbackInfo ci) {
-        tag.putBoolean(CREATIVEENGINEERING$KEY, this.creativeengineering$lastSecond);
-    }
+	@Inject(method = "writeToDataPacket", at = @At("TAIL"))
+	private void creativeengineering$writePacket(CompoundTag tag, CallbackInfo ci) {
+		tag.putBoolean(CREATIVEENGINEERING$KEY, this.creativeengineering$lastSecond);
+	}
 
-    @Inject(method = "readFromDataPacket", at = @At("RETURN"))
-    private void creativeengineering$readPacket(CompoundTag tag, CallbackInfoReturnable<Boolean> cir) {
-        this.creativeengineering$read(tag);
-    }
+	@Inject(method = "readFromDataPacket", at = @At("RETURN"))
+	private void creativeengineering$readPacket(CompoundTag tag, CallbackInfoReturnable<Boolean> cir) {
+		this.creativeengineering$read(tag);
+	}
 
-    @Inject(method = "m_5995_", at = @At("RETURN"))
-    private void creativeengineering$writeUpdateTag(CallbackInfoReturnable<CompoundTag> cir) {
-        cir.getReturnValue().putBoolean(CREATIVEENGINEERING$KEY, this.creativeengineering$lastSecond);
-    }
+	@Inject(method = "m_5995_", at = @At("RETURN"))
+	private void creativeengineering$writeUpdateTag(CallbackInfoReturnable<CompoundTag> cir) {
+		cir.getReturnValue().putBoolean(CREATIVEENGINEERING$KEY, this.creativeengineering$lastSecond);
+	}
 
-    @Inject(method = "handleUpdateTag", at = @At("TAIL"))
-    private void creativeengineering$readUpdateTag(CompoundTag tag, CallbackInfo ci) {
-        this.creativeengineering$read(tag);
-    }
+	@Inject(method = "handleUpdateTag", at = @At("TAIL"))
+	private void creativeengineering$readUpdateTag(CompoundTag tag, CallbackInfo ci) {
+		this.creativeengineering$read(tag);
+	}
 
-    @Unique
-    private void creativeengineering$read(CompoundTag tag) {
-        if (tag.contains(CREATIVEENGINEERING$KEY)) {
-            this.creativeengineering$lastSecond = tag.getBoolean(CREATIVEENGINEERING$KEY);
-        }
-    }
+	@Unique
+	private void creativeengineering$read(CompoundTag tag) {
+		if (tag.contains(CREATIVEENGINEERING$KEY)) {
+			this.creativeengineering$lastSecond = tag.getBoolean(CREATIVEENGINEERING$KEY);
+		}
+	}
 }

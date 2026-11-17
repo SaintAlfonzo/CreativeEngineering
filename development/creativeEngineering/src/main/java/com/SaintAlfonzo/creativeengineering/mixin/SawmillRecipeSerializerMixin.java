@@ -23,15 +23,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = SawmillRecipeSerializer.class, remap = false)
 public class SawmillRecipeSerializerMixin {
 
-    @Inject(
-            method = "readFromJson(Lnet/minecraft/resources/ResourceLocation;Lcom/google/gson/JsonObject;Lnet/minecraftforge/common/crafting/conditions/ICondition$IContext;)Lblusunrize/immersiveengineering/api/crafting/SawmillRecipe;",
-            at = @At("RETURN")
-    )
-    private void creativeengineering$readBladeProfile(ResourceLocation recipeId, JsonObject json,
-                                                     ICondition.IContext context,
-                                                     CallbackInfoReturnable<SawmillRecipe> cir) {
-        SawmillRecipe recipe = cir.getReturnValue();
-        if (recipe == null) return;
-        ((SawmillRecipeExt) recipe).creativeengineering$setBlade(GsonHelper.getAsString(json, "blade", ""));
-    }
+	@Inject(
+			method = "readFromJson(Lnet/minecraft/resources/ResourceLocation;Lcom/google/gson/JsonObject;Lnet/minecraftforge/common/crafting/conditions/ICondition$IContext;)Lblusunrize/immersiveengineering/api/crafting/SawmillRecipe;",
+			at = @At("RETURN")
+	)
+	private void creativeengineering$readBladeProfile(ResourceLocation recipeId, JsonObject json,
+													 ICondition.IContext context,
+													 CallbackInfoReturnable<SawmillRecipe> cir) {
+		SawmillRecipe recipe = cir.getReturnValue();
+		if (recipe == null) return;
+		((SawmillRecipeExt) recipe).creativeengineering$setBlade(GsonHelper.getAsString(json, "blade", ""));
+	}
 }

@@ -40,54 +40,54 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = VillagerLandPathNodeMaker.class, remap = false)
 public abstract class McaVillagerPathLaddersMixin extends NodeEvaluator {
 
-    @Unique
-    private static final TagKey<Block> CWG_VILLAGER_LADDERS =
-            TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeworldgen", "villager_ladders"));
+	@Unique
+	private static final TagKey<Block> CWG_VILLAGER_LADDERS =
+			TagKey.create(Registry.BLOCK_REGISTRY, new ResourceLocation("creativeworldgen", "villager_ladders"));
 
-    @Shadow(remap = false)
-    protected abstract ExtendedPathNodeType getNodeType(Mob entity, int x, int y, int z);
+	@Shadow(remap = false)
+	protected abstract ExtendedPathNodeType getNodeType(Mob entity, int x, int y, int z);
 
-    @Shadow(remap = false)
-    abstract float getPenalty(ExtendedPathNodeType type);
+	@Shadow(remap = false)
+	abstract float getPenalty(ExtendedPathNodeType type);
 
-    @Unique
-    private static boolean creativeengineering$isLadder(BlockState state) {
-        return state.is(BlockTags.CLIMBABLE) && state.is(CWG_VILLAGER_LADDERS);
-    }
+	@Unique
+	private static boolean creativeengineering$isLadder(BlockState state) {
+		return state.is(BlockTags.CLIMBABLE) && state.is(CWG_VILLAGER_LADDERS);
+	}
 
-    @Inject(method = "getLandNodeType", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void creativeengineering$standOnLadders(BlockGetter world, BlockPos.MutableBlockPos pos,
-                                                           CallbackInfoReturnable<ExtendedPathNodeType> cir) {
-        if (creativeengineering$isLadder(world.getBlockState(pos))) cir.setReturnValue(ExtendedPathNodeType.WALKABLE);
-    }
+	@Inject(method = "getLandNodeType", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void creativeengineering$standOnLadders(BlockGetter world, BlockPos.MutableBlockPos pos,
+														   CallbackInfoReturnable<ExtendedPathNodeType> cir) {
+		if (creativeengineering$isLadder(world.getBlockState(pos))) cir.setReturnValue(ExtendedPathNodeType.WALKABLE);
+	}
 
-    @Inject(method = "m_6065_", at = @At("RETURN"), cancellable = true, remap = false)
-    private void creativeengineering$climbSuccessors(Node[] successors, Node node, CallbackInfoReturnable<Integer> cir) {
-        int count = cir.getReturnValueI();
-        for (int dy = -1; dy <= 1; dy += 2) {
-            int y = node.y + dy;
-            if (count >= successors.length) break;
-            if (!creativeengineering$isLadder(this.level.getBlockState(new BlockPos(node.x, y, node.z)))) continue;
-            ExtendedPathNodeType type = this.getNodeType(this.mob, node.x, y, node.z);
-            float penalty = this.getPenalty(type);
-            if (penalty < 0.0F) continue;
-            Node next = this.getNode(node.x, y, node.z);
-            if (next.closed) continue;
-            next.type = type.toVanilla();
-            next.costMalus = Math.max(next.costMalus, penalty);
-            successors[count++] = next;
-        }
-        cir.setReturnValue(count);
-    }
+	@Inject(method = "m_6065_", at = @At("RETURN"), cancellable = true, remap = false)
+	private void creativeengineering$climbSuccessors(Node[] successors, Node node, CallbackInfoReturnable<Integer> cir) {
+		int count = cir.getReturnValueI();
+		for (int dy = -1; dy <= 1; dy += 2) {
+			int y = node.y + dy;
+			if (count >= successors.length) break;
+			if (!creativeengineering$isLadder(this.level.getBlockState(new BlockPos(node.x, y, node.z)))) continue;
+			ExtendedPathNodeType type = this.getNodeType(this.mob, node.x, y, node.z);
+			float penalty = this.getPenalty(type);
+			if (penalty < 0.0F) continue;
+			Node next = this.getNode(node.x, y, node.z);
+			if (next.closed) continue;
+			next.type = type.toVanilla();
+			next.costMalus = Math.max(next.costMalus, penalty);
+			successors[count++] = next;
+		}
+		cir.setReturnValue(count);
+	}
 
-    @Inject(method = "m_7171_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$startOnLadder(CallbackInfoReturnable<Node> cir) {
-        BlockPos feet = this.mob.blockPosition();
-        if (this.mob.isOnGround() || !creativeengineering$isLadder(this.level.getBlockState(feet))) return;
-        Node start = this.getNode(feet.getX(), feet.getY(), feet.getZ());
-        ExtendedPathNodeType type = this.getNodeType(this.mob, feet.getX(), feet.getY(), feet.getZ());
-        start.type = type.toVanilla();
-        start.costMalus = this.getPenalty(type);
-        cir.setReturnValue(start);
-    }
+	@Inject(method = "m_7171_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$startOnLadder(CallbackInfoReturnable<Node> cir) {
+		BlockPos feet = this.mob.blockPosition();
+		if (this.mob.isOnGround() || !creativeengineering$isLadder(this.level.getBlockState(feet))) return;
+		Node start = this.getNode(feet.getX(), feet.getY(), feet.getZ());
+		ExtendedPathNodeType type = this.getNodeType(this.mob, feet.getX(), feet.getY(), feet.getZ());
+		start.type = type.toVanilla();
+		start.costMalus = this.getPenalty(type);
+		cir.setReturnValue(start);
+	}
 }

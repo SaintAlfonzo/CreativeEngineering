@@ -10,22 +10,22 @@ import com.SaintAlfonzo.creativeequipment.CEQConfig;
  */
 public final class ArmorEnchantabilityBridge {
 
-    private ArmorEnchantabilityBridge() {}
+	private ArmorEnchantabilityBridge() {}
 
-    /** {@code ArmorMaterial.getName()} -> configured enchantment value, or {@code null} if unmapped. */
-    public static Integer valueFor(String materialName) {
-        if (materialName == null) return null;
-        for (String entry : CEQConfig.ARMOR_ENCHANT.overrides.get()) {
-            if (entry == null) continue;
-            int sep = entry.indexOf(':');
-            if (sep <= 0) continue;
-            if (!entry.substring(0, sep).trim().equals(materialName)) continue;
-            try {
-                return Integer.parseInt(entry.substring(sep + 1).trim());
-            } catch (NumberFormatException e) {
-                return null;
-            }
-        }
-        return null;
-    }
+	/** {@code ArmorMaterial.getName()} -> configured enchantment value, or {@code null} if unmapped. */
+	public static Integer valueFor(String materialName) {
+		if (materialName == null) return null;
+		for (String entry : CEQConfig.ARMOR_ENCHANT.overrides.get()) {
+			if (entry == null) continue;
+			int sep = entry.indexOf(':');
+			if (sep <= 0) continue;
+			if (!entry.substring(0, sep).trim().equals(materialName)) continue;
+			try {
+				return Integer.parseInt(entry.substring(sep + 1).trim());
+			} catch (NumberFormatException e) {
+				return null;
+			}
+		}
+		return null;
+	}
 }

@@ -23,9 +23,9 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(Screen.class)
 public class ScreenTooltipTopMixin {
 
-    @ModifyVariable(method = "m_169383_", remap = false, require = 1, index = 9,
-            at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;m_85836_()V", ordinal = 0, remap = false))
-    private int creativecommon$keepTopOnScreen(int y) {
-        return com.SaintAlfonzo.creativecompat.CompatConfig.TOOLTIPS.keepTopOnScreen.get() ? Math.max(y, 4) : y;
-    }
+	@ModifyVariable(method = "m_169383_", remap = false, require = 1, index = 9,
+			at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;m_85836_()V", ordinal = 0, remap = false))
+	private int creativecommon$keepTopOnScreen(int y) {
+		return com.SaintAlfonzo.creativecompat.CompatConfig.TOOLTIPS.keepTopOnScreen.get() ? Math.max(y, 4) : y;
+	}
 }

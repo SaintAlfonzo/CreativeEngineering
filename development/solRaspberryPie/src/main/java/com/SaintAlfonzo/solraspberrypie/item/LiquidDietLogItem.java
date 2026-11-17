@@ -15,20 +15,20 @@ import java.util.List;
 
 /** The Liquid Diet Log (7): opens the list of unique drinks. History only; it gives nothing. */
 public class LiquidDietLogItem extends Item {
-    public LiquidDietLogItem(Properties props) {
-        super(props);
-    }
+	public LiquidDietLogItem(Properties props) {
+		super(props);
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        if (level.isClientSide) {
-            DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> com.SaintAlfonzo.solraspberrypie.client.LiquidDietLogScreen.open());
-        }
-        return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
-    }
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		if (level.isClientSide) {
+			DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> com.SaintAlfonzo.solraspberrypie.client.LiquidDietLogScreen.open());
+		}
+		return InteractionResultHolder.sidedSuccess(player.getItemInHand(hand), level.isClientSide);
+	}
 
-    @Override
-    public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-        tooltip.add(Component.translatable("item.solraspberrypie.liquid_diet_log.tooltip").withStyle(net.minecraft.ChatFormatting.GRAY));
-    }
+	@Override
+	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
+		tooltip.add(Component.translatable("item.solraspberrypie.liquid_diet_log.tooltip").withStyle(net.minecraft.ChatFormatting.GRAY));
+	}
 }

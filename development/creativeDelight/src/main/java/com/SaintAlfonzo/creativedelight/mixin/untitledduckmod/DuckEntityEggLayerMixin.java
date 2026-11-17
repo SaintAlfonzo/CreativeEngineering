@@ -23,42 +23,42 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = DuckEntity.class, remap = false)
 public abstract class DuckEntityEggLayerMixin extends Animal implements EggLayer {
 
-    @Shadow
-    private int eggLayTime;
+	@Shadow
+	private int eggLayTime;
 
-    protected DuckEntityEggLayerMixin(EntityType<? extends Animal> type, Level level) {
-        super(type, level);
-    }
+	protected DuckEntityEggLayerMixin(EntityType<? extends Animal> type, Level level) {
+		super(type, level);
+	}
 
-    @Override
-    public int getEggTimer() {
-        return this.eggLayTime;
-    }
+	@Override
+	public int getEggTimer() {
+		return this.eggLayTime;
+	}
 
-    @Override
-    public void setEggTimer(int time) {
-        this.eggLayTime = time;
-    }
+	@Override
+	public void setEggTimer(int time) {
+		this.eggLayTime = time;
+	}
 
-    // Ducks carry no jockeys.
-    @Override
-    public boolean isBirdJockey() {
-        return false;
-    }
+	// Ducks carry no jockeys.
+	@Override
+	public boolean isBirdJockey() {
+		return false;
+	}
 
-    @Override
-    public Item getEggItem() {
-        return ModItems.getDuckEgg();
-    }
+	@Override
+	public Item getEggItem() {
+		return ModItems.getDuckEgg();
+	}
 
-    // Same reset DuckEntity.aiStep uses after a lay.
-    @Override
-    public int getNextEggTime(RandomSource random) {
-        return random.nextInt(6000) + 6000;
-    }
+	// Same reset DuckEntity.aiStep uses after a lay.
+	@Override
+	public int getNextEggTime(RandomSource random) {
+		return random.nextInt(6000) + 6000;
+	}
 
-    @Override
-    public SoundEvent getEggLayingSound() {
-        return ModSoundEvents.getDuckEggSound();
-    }
+	@Override
+	public SoundEvent getEggLayingSound() {
+		return ModSoundEvents.getDuckEggSound();
+	}
 }

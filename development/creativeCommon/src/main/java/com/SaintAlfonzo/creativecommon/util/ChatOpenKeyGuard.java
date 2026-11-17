@@ -19,53 +19,53 @@ import org.lwjgl.glfw.GLFW;
  * Rebound chat/command keys are covered, since the bound key is read at open time.
  */
 public final class ChatOpenKeyGuard {
-    private static final long WINDOW_MS = 250L;
+	private static final long WINDOW_MS = 250L;
 
-    private static InputConstants.Key armedKey;
-    private static long armedAt;
+	private static InputConstants.Key armedKey;
+	private static long armedAt;
 
-    private ChatOpenKeyGuard() {}
+	private ChatOpenKeyGuard() {}
 
-    /** Called at the head of {@code Minecraft.openChatScreen(String)}. */
-    public static void arm(String prefix) {
-        Minecraft mc = Minecraft.getInstance();
-        KeyMapping mapping = "/".equals(prefix) ? mc.options.keyCommand : mc.options.keyChat;
-        InputConstants.Key key = mapping.getKey();
-        if (key.getType() != InputConstants.Type.KEYSYM || key.getValue() == InputConstants.UNKNOWN.getValue()) {
-            armedKey = null;
-            return;
-        }
-        armedKey = key;
-        armedAt = Util.getMillis();
-    }
+	/** Called at the head of {@code Minecraft.openChatScreen(String)}. */
+	public static void arm(String prefix) {
+		Minecraft mc = Minecraft.getInstance();
+		KeyMapping mapping = "/".equals(prefix) ? mc.options.keyCommand : mc.options.keyChat;
+		InputConstants.Key key = mapping.getKey();
+		if (key.getType() != InputConstants.Type.KEYSYM || key.getValue() == InputConstants.UNKNOWN.getValue()) {
+			armedKey = null;
+			return;
+		}
+		armedKey = key;
+		armedAt = Util.getMillis();
+	}
 
-    /** Any key press or repeat after the open means later characters are real typing. */
-    public static void onKeyPress(int action) {
-        if (action != GLFW.GLFW_RELEASE) {
-            armedKey = null;
-        }
-    }
+	/** Any key press or repeat after the open means later characters are real typing. */
+	public static void onKeyPress(int action) {
+		if (action != GLFW.GLFW_RELEASE) {
+			armedKey = null;
+		}
+	}
 
-    /** True when this character event is the stale copy of the chat-opening key press and should be dropped. */
-    public static boolean shouldDrop(int codePoint) {
-        InputConstants.Key key = armedKey;
-        if (key == null) {
-            return false;
-        }
-        armedKey = null;
-        Minecraft mc = Minecraft.getInstance();
-        if (!(mc.screen instanceof ChatScreen) || Util.getMillis() - armedAt > WINDOW_MS) {
-            return false;
-        }
-        int keyCode = key.getValue();
-        if (!InputConstants.isKeyDown(mc.getWindow().getWindow(), keyCode)) {
-            return false;
-        }
-        String name = GLFW.glfwGetKeyName(keyCode, 0);
-        if (name == null || name.codePointCount(0, name.length()) != 1) {
-            return false;
-        }
-        int expected = name.codePointAt(0);
-        return Character.toLowerCase(expected) == Character.toLowerCase(codePoint);
-    }
+	/** True when this character event is the stale copy of the chat-opening key press and should be dropped. */
+	public static boolean shouldDrop(int codePoint) {
+		InputConstants.Key key = armedKey;
+		if (key == null) {
+			return false;
+		}
+		armedKey = null;
+		Minecraft mc = Minecraft.getInstance();
+		if (!(mc.screen instanceof ChatScreen) || Util.getMillis() - armedAt > WINDOW_MS) {
+			return false;
+		}
+		int keyCode = key.getValue();
+		if (!InputConstants.isKeyDown(mc.getWindow().getWindow(), keyCode)) {
+			return false;
+		}
+		String name = GLFW.glfwGetKeyName(keyCode, 0);
+		if (name == null || name.codePointCount(0, name.length()) != 1) {
+			return false;
+		}
+		int expected = name.codePointAt(0);
+		return Character.toLowerCase(expected) == Character.toLowerCase(codePoint);
+	}
 }

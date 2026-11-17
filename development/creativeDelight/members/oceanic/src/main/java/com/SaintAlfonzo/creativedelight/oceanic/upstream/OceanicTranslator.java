@@ -21,51 +21,51 @@ import java.util.Map;
  * </ul>
  */
 public final class OceanicTranslator {
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
-    private static final String LANG = "assets/oceanic_delight/lang/en_us.json";
-    /** Keys of our own lines, added to upstream's English lang. */
-    private static final Map<String, String> LANG_ADD = Map.of(
-            "message.oceanic_delight.needs_bowl", "You need a Bowl to eat this.",
-            "tooltip.oceanic_delight.effect", "%s (%s)");
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+	private static final String LANG = "assets/oceanic_delight/lang/en_us.json";
+	/** Keys of our own lines, added to upstream's English lang. */
+	private static final Map<String, String> LANG_ADD = Map.of(
+			"message.oceanic_delight.needs_bowl", "You need a Bowl to eat this.",
+			"tooltip.oceanic_delight.effect", "%s (%s)");
 
-    private static Map<String, byte[]> assets;
-    private static Map<String, byte[]> data;
+	private static Map<String, byte[]> assets;
+	private static Map<String, byte[]> data;
 
-    private OceanicTranslator() {
-    }
+	private OceanicTranslator() {
+	}
 
-    public static synchronized Map<String, byte[]> assets() {
-        if (assets == null) {
-            assets = new HashMap<>();
-            UpstreamJars.oceanic101().forEach((path, bytes) -> {
-                if (!path.startsWith("assets/")) return;
-                assets.put(path, path.equals(LANG) ? lang(bytes) : bytes);
-            });
-            OceanicDelightMod.LOGGER.info("Oceanic Delight upstream assets: {} files", assets.size());
-        }
-        return assets;
-    }
+	public static synchronized Map<String, byte[]> assets() {
+		if (assets == null) {
+			assets = new HashMap<>();
+			UpstreamJars.oceanic101().forEach((path, bytes) -> {
+				if (!path.startsWith("assets/")) return;
+				assets.put(path, path.equals(LANG) ? lang(bytes) : bytes);
+			});
+			OceanicDelightMod.LOGGER.info("Oceanic Delight upstream assets: {} files", assets.size());
+		}
+		return assets;
+	}
 
-    public static synchronized Map<String, byte[]> data() {
-        if (data == null) {
-            data = new HashMap<>();
-            UpstreamJars.oceanic101().forEach((path, bytes) -> {
-                if (!path.startsWith("data/") || skipData(path)) return;
-                data.put(path, bytes);
-            });
-            OceanicDelightMod.LOGGER.info("Oceanic Delight upstream data: {} files", data.size());
-        }
-        return data;
-    }
+	public static synchronized Map<String, byte[]> data() {
+		if (data == null) {
+			data = new HashMap<>();
+			UpstreamJars.oceanic101().forEach((path, bytes) -> {
+				if (!path.startsWith("data/") || skipData(path)) return;
+				data.put(path, bytes);
+			});
+			OceanicDelightMod.LOGGER.info("Oceanic Delight upstream data: {} files", data.size());
+		}
+		return data;
+	}
 
-    static boolean skipData(String path) {
-        return path.startsWith("data/oceanic_delight/advancements/")
-                || path.startsWith("data/oceanic_delight/loot_tables/gameplay/fishing_net_");
-    }
+	static boolean skipData(String path) {
+		return path.startsWith("data/oceanic_delight/advancements/")
+				|| path.startsWith("data/oceanic_delight/loot_tables/gameplay/fishing_net_");
+	}
 
-    private static byte[] lang(byte[] bytes) {
-        JsonObject lang = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
-        LANG_ADD.forEach(lang::addProperty);
-        return GSON.toJson(lang).getBytes(StandardCharsets.UTF_8);
-    }
+	private static byte[] lang(byte[] bytes) {
+		JsonObject lang = JsonParser.parseString(new String(bytes, StandardCharsets.UTF_8)).getAsJsonObject();
+		LANG_ADD.forEach(lang::addProperty);
+		return GSON.toJson(lang).getBytes(StandardCharsets.UTF_8);
+	}
 }

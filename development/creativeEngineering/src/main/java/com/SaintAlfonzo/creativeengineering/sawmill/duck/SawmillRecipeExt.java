@@ -9,8 +9,8 @@ package com.SaintAlfonzo.creativeengineering.sawmill.duck;
  */
 public interface SawmillRecipeExt {
 
-    /** The blade profile this recipe requires, or {@code ""} for the profile-less default. Never null. */
-    String creativeengineering$getBlade();
+	/** The blade profile this recipe requires, or {@code ""} for the profile-less default. Never null. */
+	String creativeengineering$getBlade();
 
-    void creativeengineering$setBlade(String blade);
+	void creativeengineering$setBlade(String blade);
 }

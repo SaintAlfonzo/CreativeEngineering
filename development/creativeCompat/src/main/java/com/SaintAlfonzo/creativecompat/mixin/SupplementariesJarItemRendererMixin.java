@@ -32,56 +32,56 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = JarItemRenderer.class, remap = false)
 public abstract class SupplementariesJarItemRendererMixin {
 
-    @Redirect(method = "renderContent", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/nbt/ListTag;m_128728_(I)Lnet/minecraft/nbt/CompoundTag;"), remap = false)
-    private CompoundTag creativeengineering$skipFirstStack(ListTag list, int index) {
-        return new CompoundTag();
-    }
+	@Redirect(method = "renderContent", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/nbt/ListTag;m_128728_(I)Lnet/minecraft/nbt/CompoundTag;"), remap = false)
+	private CompoundTag creativeengineering$skipFirstStack(ListTag list, int index) {
+		return new CompoundTag();
+	}
 
-    @Inject(method = "renderContent", at = @At("TAIL"), remap = false)
-    private void creativeengineering$renderLayers(CompoundTag tag, ItemTransforms.TransformType transformType,
-                                                  PoseStack pose, MultiBufferSource buffer, int light, int overlay,
-                                                  CallbackInfo ci) {
-        if (!tag.contains("Items", Tag.TAG_LIST)) {
-            return;
-        }
-        ListTag items = tag.getList("Items", Tag.TAG_COMPOUND);
-        if (items.isEmpty()) {
-            return;
-        }
-        Random rand = new Random(420L);
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        pose.pushPose();
-        pose.translate(0.5, 0.5, 0.5);
-        pose.mulPose(RotHlpr.XN90);
-        pose.translate(0.0, 0.0, -0.5);
-        float scale = 0.5714286F;
-        pose.scale(scale, scale, scale);
-        for (ItemStack stack : creativeengineering$bySlot(items)) {
-            for (int n = 0; n < stack.getCount(); n++) {
-                pose.mulPose(Vector3f.ZP.rotationDegrees(rand.nextInt(360)));
-                pose.translate(0.0, 0.0, 1.0F / (16.0F * scale));
-                BakedModel model = itemRenderer.getModel(stack, null, null, 0);
-                itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, pose, buffer, light, overlay, model);
-            }
-        }
-        pose.popPose();
-    }
+	@Inject(method = "renderContent", at = @At("TAIL"), remap = false)
+	private void creativeengineering$renderLayers(CompoundTag tag, ItemTransforms.TransformType transformType,
+												  PoseStack pose, MultiBufferSource buffer, int light, int overlay,
+												  CallbackInfo ci) {
+		if (!tag.contains("Items", Tag.TAG_LIST)) {
+			return;
+		}
+		ListTag items = tag.getList("Items", Tag.TAG_COMPOUND);
+		if (items.isEmpty()) {
+			return;
+		}
+		Random rand = new Random(420L);
+		ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+		pose.pushPose();
+		pose.translate(0.5, 0.5, 0.5);
+		pose.mulPose(RotHlpr.XN90);
+		pose.translate(0.0, 0.0, -0.5);
+		float scale = 0.5714286F;
+		pose.scale(scale, scale, scale);
+		for (ItemStack stack : creativeengineering$bySlot(items)) {
+			for (int n = 0; n < stack.getCount(); n++) {
+				pose.mulPose(Vector3f.ZP.rotationDegrees(rand.nextInt(360)));
+				pose.translate(0.0, 0.0, 1.0F / (16.0F * scale));
+				BakedModel model = itemRenderer.getModel(stack, null, null, 0);
+				itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, pose, buffer, light, overlay, model);
+			}
+		}
+		pose.popPose();
+	}
 
-    /** The saved stacks in slot order (the list is written in slot order, but sort anyway). */
-    private static List<ItemStack> creativeengineering$bySlot(ListTag items) {
-        List<CompoundTag> tags = new ArrayList<>();
-        for (int i = 0; i < items.size(); i++) {
-            tags.add(items.getCompound(i));
-        }
-        tags.sort(Comparator.comparingInt(t -> t.getByte("Slot") & 255));
-        List<ItemStack> out = new ArrayList<>();
-        for (CompoundTag t : tags) {
-            ItemStack s = ItemStack.of(t);
-            if (!s.isEmpty()) {
-                out.add(s);
-            }
-        }
-        return out;
-    }
+	/** The saved stacks in slot order (the list is written in slot order, but sort anyway). */
+	private static List<ItemStack> creativeengineering$bySlot(ListTag items) {
+		List<CompoundTag> tags = new ArrayList<>();
+		for (int i = 0; i < items.size(); i++) {
+			tags.add(items.getCompound(i));
+		}
+		tags.sort(Comparator.comparingInt(t -> t.getByte("Slot") & 255));
+		List<ItemStack> out = new ArrayList<>();
+		for (CompoundTag t : tags) {
+			ItemStack s = ItemStack.of(t);
+			if (!s.isEmpty()) {
+				out.add(s);
+			}
+		}
+		return out;
+	}
 }

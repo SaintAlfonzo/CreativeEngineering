@@ -25,14 +25,14 @@ import java.util.List;
 @Mixin(value = ItemTooltip.class, remap = false)
 public class AeGuideItemTooltipMixin {
 
-    @Shadow
-    @Final
-    private ItemStack stack;
+	@Shadow
+	@Final
+	private ItemStack stack;
 
-    @Inject(method = "getLines", remap = false, require = 1, at = @At("HEAD"), cancellable = true)
-    private void creativecommon$gatherWithStack(Screen screen, CallbackInfoReturnable<List<ClientTooltipComponent>> cir) {
-        Font font = Minecraft.getInstance().font;
-        cir.setReturnValue(ForgeHooksClient.gatherTooltipComponents(
-                this.stack, screen.getTooltipFromItem(this.stack), 0, screen.width, screen.height, font, font));
-    }
+	@Inject(method = "getLines", remap = false, require = 1, at = @At("HEAD"), cancellable = true)
+	private void creativecommon$gatherWithStack(Screen screen, CallbackInfoReturnable<List<ClientTooltipComponent>> cir) {
+		Font font = Minecraft.getInstance().font;
+		cir.setReturnValue(ForgeHooksClient.gatherTooltipComponents(
+				this.stack, screen.getTooltipFromItem(this.stack), 0, screen.width, screen.height, font, font));
+	}
 }

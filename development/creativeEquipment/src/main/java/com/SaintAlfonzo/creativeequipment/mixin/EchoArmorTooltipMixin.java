@@ -21,28 +21,28 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
  * [[patchermod-coremod]] / {@link EchoArmorEffectProcedureMixin}.
  */
 @Mixin(value = {
-        EchoArmorItem.Boots.class,
-        EchoArmorItem.Chestplate.class,
-        EchoArmorItem.Leggings.class,
-        EchoArmorItem.Helmet.class
+		EchoArmorItem.Boots.class,
+		EchoArmorItem.Chestplate.class,
+		EchoArmorItem.Leggings.class,
+		EchoArmorItem.Helmet.class
 }, remap = false)
 public class EchoArmorTooltipMixin {
 
-    @ModifyConstant(
-            method = "m_7373_",
-            constant = @Constant(stringValue = "§7- §aResistance II §7(infinite)"),
-            remap = false
-    )
-    private String creativeengineering$nightVisionLine(String original) {
-        return "§7- §aNight Vision §7(infinite)";
-    }
+	@ModifyConstant(
+			method = "m_7373_",
+			constant = @Constant(stringValue = "§7- §aResistance II §7(infinite)"),
+			remap = false
+	)
+	private String creativeengineering$nightVisionLine(String original) {
+		return "§7- §aNight Vision §7(infinite)";
+	}
 
-    @ModifyConstant(
-            method = "m_7373_",
-            constant = @Constant(stringValue = "§7- §aStrength II §7(infinite)"),
-            remap = false
-    )
-    private String creativeengineering$phantomBaneLine(String original) {
-        return "§7- §aPhantom Bane §7(infinite)";
-    }
+	@ModifyConstant(
+			method = "m_7373_",
+			constant = @Constant(stringValue = "§7- §aStrength II §7(infinite)"),
+			remap = false
+	)
+	private String creativeengineering$phantomBaneLine(String original) {
+		return "§7- §aPhantom Bane §7(infinite)";
+	}
 }

@@ -23,35 +23,35 @@ import java.util.function.Supplier;
  * and glow squid tentacles, elder guardian eye, salmon eggs, the shipwreck and buried treasure eggs) are its data.
  */
 public final class OceanicLootModifiers {
-    public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, OceanicDelightMod.MODID);
+	public static final DeferredRegister<Codec<? extends IGlobalLootModifier>> SERIALIZERS =
+			DeferredRegister.create(ForgeRegistries.Keys.GLOBAL_LOOT_MODIFIER_SERIALIZERS, OceanicDelightMod.MODID);
 
-    public static final RegistryObject<Codec<AddTable>> ADD_TABLE = SERIALIZERS.register("oceanic_delight_loot_modifier", AddTable.CODEC);
+	public static final RegistryObject<Codec<AddTable>> ADD_TABLE = SERIALIZERS.register("oceanic_delight_loot_modifier", AddTable.CODEC);
 
-    private OceanicLootModifiers() {
-    }
+	private OceanicLootModifiers() {
+	}
 
-    public static class AddTable extends LootModifier {
-        public static final Supplier<Codec<AddTable>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance)
-                .and(ResourceLocation.CODEC.fieldOf("lootTable").forGetter(m -> m.table))
-                .apply(instance, AddTable::new)));
+	public static class AddTable extends LootModifier {
+		public static final Supplier<Codec<AddTable>> CODEC = Suppliers.memoize(() -> RecordCodecBuilder.create(instance -> codecStart(instance)
+				.and(ResourceLocation.CODEC.fieldOf("lootTable").forGetter(m -> m.table))
+				.apply(instance, AddTable::new)));
 
-        private final ResourceLocation table;
+		private final ResourceLocation table;
 
-        public AddTable(LootItemCondition[] conditions, ResourceLocation table) {
-            super(conditions);
-            this.table = table;
-        }
+		public AddTable(LootItemCondition[] conditions, ResourceLocation table) {
+			super(conditions);
+			this.table = table;
+		}
 
-        @Override
-        protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> loot, LootContext context) {
-            context.getLootTable(table).getRandomItemsRaw(context, loot::add);
-            return loot;
-        }
+		@Override
+		protected ObjectArrayList<ItemStack> doApply(ObjectArrayList<ItemStack> loot, LootContext context) {
+			context.getLootTable(table).getRandomItemsRaw(context, loot::add);
+			return loot;
+		}
 
-        @Override
-        public Codec<? extends IGlobalLootModifier> codec() {
-            return CODEC.get();
-        }
-    }
+		@Override
+		public Codec<? extends IGlobalLootModifier> codec() {
+			return CODEC.get();
+		}
+	}
 }

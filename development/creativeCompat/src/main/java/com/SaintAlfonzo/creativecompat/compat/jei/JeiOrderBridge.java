@@ -10,18 +10,18 @@ import org.slf4j.Logger;
  */
 public final class JeiOrderBridge {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private JeiOrderBridge() {}
+	private JeiOrderBridge() {}
 
-    public static void define(String json) {
-        if (!JeiGate.supported()) {
-            return;
-        }
-        try {
-            PackIngredientOrder.define(json);
-        } catch (RuntimeException | LinkageError e) {
-            LOGGER.warn("[jei order] could not hand the pack's order to the JEI sorter, JEI keeps its own order", e);
-        }
-    }
+	public static void define(String json) {
+		if (!JeiGate.supported()) {
+			return;
+		}
+		try {
+			PackIngredientOrder.define(json);
+		} catch (RuntimeException | LinkageError e) {
+			LOGGER.warn("[jei order] could not hand the pack's order to the JEI sorter, JEI keeps its own order", e);
+		}
+	}
 }

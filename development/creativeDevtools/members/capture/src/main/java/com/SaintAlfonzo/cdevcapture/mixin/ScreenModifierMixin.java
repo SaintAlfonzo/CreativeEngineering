@@ -15,18 +15,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = Screen.class, remap = false)
 public abstract class ScreenModifierMixin {
 
-    @Inject(method = "m_96637_", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void cdevcapture$ctrl(CallbackInfoReturnable<Boolean> cir) {
-        if (VirtualInput.ctrl) cir.setReturnValue(true);
-    }
+	@Inject(method = "m_96637_", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void cdevcapture$ctrl(CallbackInfoReturnable<Boolean> cir) {
+		if (VirtualInput.ctrl) cir.setReturnValue(true);
+	}
 
-    @Inject(method = "m_96638_", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void cdevcapture$shift(CallbackInfoReturnable<Boolean> cir) {
-        if (VirtualInput.shift) cir.setReturnValue(true);
-    }
+	@Inject(method = "m_96638_", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void cdevcapture$shift(CallbackInfoReturnable<Boolean> cir) {
+		if (VirtualInput.shift) cir.setReturnValue(true);
+	}
 
-    @Inject(method = "m_96639_", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void cdevcapture$alt(CallbackInfoReturnable<Boolean> cir) {
-        if (VirtualInput.alt) cir.setReturnValue(true);
-    }
+	@Inject(method = "m_96639_", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void cdevcapture$alt(CallbackInfoReturnable<Boolean> cir) {
+		if (VirtualInput.alt) cir.setReturnValue(true);
+	}
 }

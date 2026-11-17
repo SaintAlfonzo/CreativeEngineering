@@ -23,13 +23,13 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(value = BlockBehaviour.BlockStateBase.class, remap = false)
 public abstract class MeltingBlockStateMixin {
 
-    @Inject(method = "m_222972_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private void creativecommon$meltRandomTick(ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
-        if (Melting.onRandomTick((BlockState) (Object) this, level, pos, random)) ci.cancel();
-    }
+	@Inject(method = "m_222972_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private void creativecommon$meltRandomTick(ServerLevel level, BlockPos pos, RandomSource random, CallbackInfo ci) {
+		if (Melting.onRandomTick((BlockState) (Object) this, level, pos, random)) ci.cancel();
+	}
 
-    @Inject(method = "m_60696_", at = @At("TAIL"), remap = false, require = 1)
-    private void creativecommon$meltOnPlace(Level level, BlockPos pos, BlockState oldState, boolean moving, CallbackInfo ci) {
-        Melting.onPlaced((BlockState) (Object) this, level, pos);
-    }
+	@Inject(method = "m_60696_", at = @At("TAIL"), remap = false, require = 1)
+	private void creativecommon$meltOnPlace(Level level, BlockPos pos, BlockState oldState, boolean moving, CallbackInfo ci) {
+		Melting.onPlaced((BlockState) (Object) this, level, pos);
+	}
 }

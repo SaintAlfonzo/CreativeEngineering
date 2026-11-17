@@ -21,18 +21,18 @@ import java.util.function.Supplier;
 @Mixin(value = DeferredRegister.class, remap = false)
 public abstract class HeapDeferredRegisterMixin<T> {
 
-    @Shadow @Final private ResourceKey<? extends Registry<T>> registryKey;
-    @Shadow @Final private String modid;
-    @Shadow @Final private Map<RegistryObject<T>, Supplier<? extends T>> entries;
+	@Shadow @Final private ResourceKey<? extends Registry<T>> registryKey;
+	@Shadow @Final private String modid;
+	@Shadow @Final private Map<RegistryObject<T>, Supplier<? extends T>> entries;
 
-    @Inject(method = "addEntries", at = @At("HEAD"))
-    private void creativeworldgen$keepHeapOnly(RegisterEvent event, CallbackInfo ci) {
-        if (!HeapAllowlist.MOD_ID.equals(modid) || !event.getRegistryKey().equals(registryKey)) return;
-        int before = entries.size();
-        entries.keySet().removeIf(object -> !HeapAllowlist.keep(registryKey.location(), object.getId().getPath()));
-        if (entries.size() != before) {
-            CreativeWorldgen.LOGGER.info("[creativeworldgen] Visceral Heap: kept {} of {} Biomes O' Plenty entries in {}",
-                    entries.size(), before, registryKey.location());
-        }
-    }
+	@Inject(method = "addEntries", at = @At("HEAD"))
+	private void creativeworldgen$keepHeapOnly(RegisterEvent event, CallbackInfo ci) {
+		if (!HeapAllowlist.MOD_ID.equals(modid) || !event.getRegistryKey().equals(registryKey)) return;
+		int before = entries.size();
+		entries.keySet().removeIf(object -> !HeapAllowlist.keep(registryKey.location(), object.getId().getPath()));
+		if (entries.size() != before) {
+			CreativeWorldgen.LOGGER.info("[creativeworldgen] Visceral Heap: kept {} of {} Biomes O' Plenty entries in {}",
+					entries.size(), before, registryKey.location());
+		}
+	}
 }

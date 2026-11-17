@@ -25,12 +25,12 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = InventoryScreen.class, remap = false)
 public class CreativeMenuDisableMixin {
 
-    @Redirect(
-            method = {"m_7856_", "m_181908_"},
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;m_105290_()Z")
-    )
-    private boolean creativecommon$neverOpenCreativeTabs(MultiPlayerGameMode gameMode) {
-        // [creative_menu] disabled (default false = vanilla; the pack sets true)
-        return !CommonConfig.CREATIVE_MENU.disabled.get() && gameMode.hasInfiniteItems();
-    }
+	@Redirect(
+			method = {"m_7856_", "m_181908_"},
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/client/multiplayer/MultiPlayerGameMode;m_105290_()Z")
+	)
+	private boolean creativecommon$neverOpenCreativeTabs(MultiPlayerGameMode gameMode) {
+		// [creative_menu] disabled (default false = vanilla; the pack sets true)
+		return !CommonConfig.CREATIVE_MENU.disabled.get() && gameMode.hasInfiniteItems();
+	}
 }

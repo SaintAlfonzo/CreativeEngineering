@@ -26,13 +26,13 @@ import net.minecraft.world.item.crafting.ShieldDecorationRecipe;
 @Mixin(ShieldDecorationRecipe.class)
 public abstract class ShieldDecorationRecipeMixin {
 
-    @Redirect(method = {
-                    "m_5818_(Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/world/level/Level;)Z",
-                    "m_5874_(Lnet/minecraft/world/inventory/CraftingContainer;)Lnet/minecraft/world/item/ItemStack;"},
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/item/ItemStack;m_150930_(Lnet/minecraft/world/item/Item;)Z"),
-            remap = false)
-    private boolean creativeengineering$anyTierShield(ItemStack stack, Item item) {
-        return stack.is(item) || (item == Items.SHIELD && stack.getItem() instanceof TierShieldItem);
-    }
+	@Redirect(method = {
+					"m_5818_(Lnet/minecraft/world/inventory/CraftingContainer;Lnet/minecraft/world/level/Level;)Z",
+					"m_5874_(Lnet/minecraft/world/inventory/CraftingContainer;)Lnet/minecraft/world/item/ItemStack;"},
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/world/item/ItemStack;m_150930_(Lnet/minecraft/world/item/Item;)Z"),
+			remap = false)
+	private boolean creativeengineering$anyTierShield(ItemStack stack, Item item) {
+		return stack.is(item) || (item == Items.SHIELD && stack.getItem() instanceof TierShieldItem);
+	}
 }

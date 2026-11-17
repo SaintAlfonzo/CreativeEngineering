@@ -19,11 +19,11 @@ import com.SaintAlfonzo.creativeequipment.CEQTiers;
 @Mixin(CopperPickaxeItem.class)
 public class CopperPickaxeItemMixin {
 
-    @ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
-    private static Tier creativeengineering$retierCopperPickaxe(Tier tier) {
-        if (tier == Tiers.STONE) {
-            return CEQTiers.COPPER;
-        }
-        return tier;
-    }
+	@ModifyVariable(method = "<init>", at = @At("HEAD"), argsOnly = true)
+	private static Tier creativeengineering$retierCopperPickaxe(Tier tier) {
+		if (tier == Tiers.STONE) {
+			return CEQTiers.COPPER;
+		}
+		return tier;
+	}
 }

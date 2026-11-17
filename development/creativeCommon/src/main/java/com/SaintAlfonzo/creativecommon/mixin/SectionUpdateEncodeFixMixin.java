@@ -38,19 +38,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ClientboundSectionBlocksUpdatePacket.class, remap = false)
 public abstract class SectionUpdateEncodeFixMixin {
 
-    @Shadow @Final private SectionPos f_132980_;          // sectionPos
-    @Shadow @Final private short[] f_132981_;             // positions
-    @Shadow @Final private BlockState[] f_132982_;        // states
-    @Shadow @Final private boolean f_132983_;             // suppressLightUpdates
+	@Shadow @Final private SectionPos f_132980_;          // sectionPos
+	@Shadow @Final private short[] f_132981_;             // positions
+	@Shadow @Final private BlockState[] f_132982_;        // states
+	@Shadow @Final private boolean f_132983_;             // suppressLightUpdates
 
-    @Inject(method = "m_5779_", at = @At("HEAD"), cancellable = true)
-    private void creativecommon$writeLongShift(FriendlyByteBuf buf, CallbackInfo ci) {
-        buf.writeLong(f_132980_.asLong());
-        buf.writeBoolean(f_132983_);
-        buf.writeVarInt(f_132981_.length);
-        for (int i = 0; i < f_132981_.length; i++) {
-            buf.writeVarLong(BlockStateIdOverflow.packed(Block.getId(f_132982_[i]), f_132981_[i]));
-        }
-        ci.cancel();
-    }
+	@Inject(method = "m_5779_", at = @At("HEAD"), cancellable = true)
+	private void creativecommon$writeLongShift(FriendlyByteBuf buf, CallbackInfo ci) {
+		buf.writeLong(f_132980_.asLong());
+		buf.writeBoolean(f_132983_);
+		buf.writeVarInt(f_132981_.length);
+		for (int i = 0; i < f_132981_.length; i++) {
+			buf.writeVarLong(BlockStateIdOverflow.packed(Block.getId(f_132982_[i]), f_132981_[i]));
+		}
+		ci.cancel();
+	}
 }

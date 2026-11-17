@@ -25,26 +25,26 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = CrushingCategory.class, remap = false)
 public class JeiCrushingPoolsMixin {
 
-    @Inject(method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lcom/simibubi/create/content/kinetics/crusher/AbstractCrushingRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V",
-            at = @At("HEAD"), cancellable = true, require = 1)
-    private void creativeengineering$poolSlots(IRecipeLayoutBuilder builder, AbstractCrushingRecipe recipe,
-                                               IFocusGroup focuses, CallbackInfo ci) {
-        int[][] pools = ((ProcessingRecipeExt) recipe).creativeengineering$getResultPools();
-        if (pools == null) return;
-        ci.cancel();
+	@Inject(method = "setRecipe(Lmezz/jei/api/gui/builder/IRecipeLayoutBuilder;Lcom/simibubi/create/content/kinetics/crusher/AbstractCrushingRecipe;Lmezz/jei/api/recipe/IFocusGroup;)V",
+			at = @At("HEAD"), cancellable = true, require = 1)
+	private void creativeengineering$poolSlots(IRecipeLayoutBuilder builder, AbstractCrushingRecipe recipe,
+											   IFocusGroup focuses, CallbackInfo ci) {
+		int[][] pools = ((ProcessingRecipeExt) recipe).creativeengineering$getResultPools();
+		if (pools == null) return;
+		ci.cancel();
 
-        builder.addSlot(RecipeIngredientRole.INPUT, 51, 3)
-                .setBackground(CreateRecipeCategory.getRenderedSlot(), -1, -1)
-                .addIngredients(recipe.getIngredients().get(0));
+		builder.addSlot(RecipeIngredientRole.INPUT, 51, 3)
+				.setBackground(CreateRecipeCategory.getRenderedSlot(), -1, -1)
+				.addIngredients(recipe.getIngredients().get(0));
 
-        List<ResultPoolsJei.Slot> slots = ResultPoolsJei.slots(recipe.getRollableResults(), pools);
-        int perRow = Math.min(slots.size(), 9);
-        int rows = (slots.size() + perRow - 1) / perRow;
-        int xOffset = ((IRecipeCategory<?>) (Object) this).getBackground().getWidth() / 2;
-        LayoutHelper layout = LayoutHelper.centeredHorizontal(perRow, rows, 18, 18, 1);
-        for (ResultPoolsJei.Slot slot : slots) {
-            ResultPoolsJei.fill(builder.addSlot(RecipeIngredientRole.OUTPUT, xOffset + layout.getX(), 86 + layout.getY()), slot);
-            layout.next();
-        }
-    }
+		List<ResultPoolsJei.Slot> slots = ResultPoolsJei.slots(recipe.getRollableResults(), pools);
+		int perRow = Math.min(slots.size(), 9);
+		int rows = (slots.size() + perRow - 1) / perRow;
+		int xOffset = ((IRecipeCategory<?>) (Object) this).getBackground().getWidth() / 2;
+		LayoutHelper layout = LayoutHelper.centeredHorizontal(perRow, rows, 18, 18, 1);
+		for (ResultPoolsJei.Slot slot : slots) {
+			ResultPoolsJei.fill(builder.addSlot(RecipeIngredientRole.OUTPUT, xOffset + layout.getX(), 86 + layout.getY()), slot);
+			layout.next();
+		}
+	}
 }

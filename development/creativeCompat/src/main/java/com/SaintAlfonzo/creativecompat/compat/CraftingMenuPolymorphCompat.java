@@ -19,19 +19,19 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class CraftingMenuPolymorphCompat {
 
-    private CraftingMenuPolymorphCompat() {}
+	private CraftingMenuPolymorphCompat() {}
 
-    /** Implemented on the patched menus by their mixins. */
-    public interface PolymorphCraftingMenu {
-        void creativeengineering$refreshCraftingResult();
+	/** Implemented on the patched menus by their mixins. */
+	public interface PolymorphCraftingMenu {
+		void creativeengineering$refreshCraftingResult();
 
-        Slot creativeengineering$resultSlot();
-    }
+		Slot creativeengineering$resultSlot();
+	}
 
-    @SubscribeEvent
-    public static void onContainerOpen(PlayerContainerEvent.Open event) {
-        if (event.getContainer() instanceof PolymorphCraftingMenu menu) {
-            menu.creativeengineering$refreshCraftingResult();
-        }
-    }
+	@SubscribeEvent
+	public static void onContainerOpen(PlayerContainerEvent.Open event) {
+		if (event.getContainer() instanceof PolymorphCraftingMenu menu) {
+			menu.creativeengineering$refreshCraftingResult();
+		}
+	}
 }

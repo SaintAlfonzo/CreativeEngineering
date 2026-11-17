@@ -12,25 +12,25 @@ import org.jetbrains.annotations.Nullable;
 
 /** Gossypium (cotton flower): the same ground rules and stone look as the wild cave carrots. */
 public class GossypiumBlock extends FlowerBlock {
-    public GossypiumBlock(Properties properties) {
-        super(MobEffects.DIG_SPEED, 10, properties);
-        registerDefaultState(stateDefinition.any().setValue(WildCaveCarrotBlock.STONE, false));
-    }
+	public GossypiumBlock(Properties properties) {
+		super(MobEffects.DIG_SPEED, 10, properties);
+		registerDefaultState(stateDefinition.any().setValue(WildCaveCarrotBlock.STONE, false));
+	}
 
-    @Override
-    protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
-        return WildCaveCarrotBlock.mayGrowOn(state);
-    }
+	@Override
+	protected boolean mayPlaceOn(BlockState state, BlockGetter level, BlockPos pos) {
+		return WildCaveCarrotBlock.mayGrowOn(state);
+	}
 
-    @Override
-    @Nullable
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockState state = super.getStateForPlacement(context);
-        return state == null ? null : WildCaveCarrotBlock.onGround(state, context.getLevel(), context.getClickedPos());
-    }
+	@Override
+	@Nullable
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		BlockState state = super.getStateForPlacement(context);
+		return state == null ? null : WildCaveCarrotBlock.onGround(state, context.getLevel(), context.getClickedPos());
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(WildCaveCarrotBlock.STONE);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(WildCaveCarrotBlock.STONE);
+	}
 }

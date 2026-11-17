@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Raid.class)
 public abstract class RaidGlowingMixin {
 
-    @Inject(method = "m_37718_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$glow(int wave, Raider raider, boolean recruited, CallbackInfoReturnable<Boolean> cir) {
-        if (CWGConfig.RAIDS.glowingRaiders.get()) {
-            raider.addEffect(new MobEffectInstance(MobEffects.GLOWING, Integer.MAX_VALUE, CWGConfig.RAIDS.glowingAmplifier.get(), false, false));
-        }
-    }
+	@Inject(method = "m_37718_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$glow(int wave, Raider raider, boolean recruited, CallbackInfoReturnable<Boolean> cir) {
+		if (CWGConfig.RAIDS.glowingRaiders.get()) {
+			raider.addEffect(new MobEffectInstance(MobEffects.GLOWING, Integer.MAX_VALUE, CWGConfig.RAIDS.glowingAmplifier.get(), false, false));
+		}
+	}
 }

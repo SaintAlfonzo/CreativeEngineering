@@ -23,37 +23,37 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public final class ElytraDuplicationSerializers {
 
-    private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeEquipment.NS);
+	private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
+			DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeEquipment.NS);
 
-    public static final RegistryObject<RecipeSerializer<?>> SERIALIZER =
-            SERIALIZERS.register("elytra_duplication", Serializer::new);
+	public static final RegistryObject<RecipeSerializer<?>> SERIALIZER =
+			SERIALIZERS.register("elytra_duplication", Serializer::new);
 
-    private ElytraDuplicationSerializers() {}
+	private ElytraDuplicationSerializers() {}
 
-    public static void register(IEventBus modEventBus) {
-        SERIALIZERS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		SERIALIZERS.register(modEventBus);
+	}
 
-    private static final class Serializer implements RecipeSerializer<ElytraDuplicationRecipe> {
-        @Override
-        public ElytraDuplicationRecipe fromJson(ResourceLocation id, JsonObject json) {
-            Ingredient catalyst = CraftingHelper.getIngredient(json.get("catalyst"));
-            ItemStack result = CraftingHelper.getItemStack(json.getAsJsonObject("result"), false);
-            return new ElytraDuplicationRecipe(id, catalyst, result);
-        }
+	private static final class Serializer implements RecipeSerializer<ElytraDuplicationRecipe> {
+		@Override
+		public ElytraDuplicationRecipe fromJson(ResourceLocation id, JsonObject json) {
+			Ingredient catalyst = CraftingHelper.getIngredient(json.get("catalyst"));
+			ItemStack result = CraftingHelper.getItemStack(json.getAsJsonObject("result"), false);
+			return new ElytraDuplicationRecipe(id, catalyst, result);
+		}
 
-        @Override
-        public ElytraDuplicationRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            Ingredient catalyst = Ingredient.fromNetwork(buf);
-            ItemStack result = buf.readItem();
-            return new ElytraDuplicationRecipe(id, catalyst, result);
-        }
+		@Override
+		public ElytraDuplicationRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+			Ingredient catalyst = Ingredient.fromNetwork(buf);
+			ItemStack result = buf.readItem();
+			return new ElytraDuplicationRecipe(id, catalyst, result);
+		}
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, ElytraDuplicationRecipe recipe) {
-            recipe.getCatalyst().toNetwork(buf);
-            buf.writeItem(recipe.getResultItem());
-        }
-    }
+		@Override
+		public void toNetwork(FriendlyByteBuf buf, ElytraDuplicationRecipe recipe) {
+			recipe.getCatalyst().toNetwork(buf);
+			buf.writeItem(recipe.getResultItem());
+		}
+	}
 }

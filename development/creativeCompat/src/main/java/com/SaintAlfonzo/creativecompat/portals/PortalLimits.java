@@ -27,40 +27,40 @@ import java.util.List;
  */
 public final class PortalLimits {
 
-    private PortalLimits() {}
+	private PortalLimits() {}
 
-    public static boolean skip(Portal portal) {
-        if (!CompatConfig.SPEC.isLoaded()) return false;
-        PortalKind kind = PortalKind.of(portal);
-        if (kind == PortalKind.GUN) return CompatConfig.PORTAL_GUN.opaquePortals.get();
-        if (kind != PortalKind.MIRROR) return false;
+	public static boolean skip(Portal portal) {
+		if (!CompatConfig.SPEC.isLoaded()) return false;
+		PortalKind kind = PortalKind.of(portal);
+		if (kind == PortalKind.GUN) return CompatConfig.PORTAL_GUN.opaquePortals.get();
+		if (kind != PortalKind.MIRROR) return false;
 
-        CompatConfig.ImmersivePortals c = CompatConfig.IMMERSIVE_PORTALS;
-        int range = c.mirrorRenderDistance.get();
-        if (range > 0) {
-            Vec3 camera = CHelper.getCurrentCameraPos();
-            if (portal.getDistanceToNearestPointInPortal(camera) > range) return true;
-        }
-        List<PortalLike> layers = IPPortalRenderingAccessor.creativecompat$getPortalLayers();
-        if (layers.size() >= c.mirrorMaxBounces.get()) {
-            for (PortalLike layer : layers) {
-                if (PortalKind.of(layer) != PortalKind.MIRROR) return false;
-            }
-            return true;
-        }
-        return false;
-    }
+		CompatConfig.ImmersivePortals c = CompatConfig.IMMERSIVE_PORTALS;
+		int range = c.mirrorRenderDistance.get();
+		if (range > 0) {
+			Vec3 camera = CHelper.getCurrentCameraPos();
+			if (portal.getDistanceToNearestPointInPortal(camera) > range) return true;
+		}
+		List<PortalLike> layers = IPPortalRenderingAccessor.creativecompat$getPortalLayers();
+		if (layers.size() >= c.mirrorMaxBounces.get()) {
+			for (PortalLike layer : layers) {
+				if (PortalKind.of(layer) != PortalKind.MIRROR) return false;
+			}
+			return true;
+		}
+		return false;
+	}
 
-    /** IP's render distance in chunks for the world seen through {@code portal}, capped per portal type. */
-    public static int renderDistance(PortalLike portal, int chunks) {
-        if (!CompatConfig.SPEC.isLoaded()) return chunks;
-        int blocks = switch (PortalKind.of(portal)) {
-            case MIRROR -> CompatConfig.IMMERSIVE_PORTALS.mirrorViewDistance.get();
-            case GUN -> CompatConfig.IMMERSIVE_PORTALS.portalGunViewDistance.get();
-            case NETHER -> CompatConfig.IMMERSIVE_PORTALS.netherViewDistance.get();
-            default -> 0;
-        };
-        if (blocks <= 0) return chunks;
-        return Math.min(chunks, Math.max(1, (blocks + 15) / 16));
-    }
+	/** IP's render distance in chunks for the world seen through {@code portal}, capped per portal type. */
+	public static int renderDistance(PortalLike portal, int chunks) {
+		if (!CompatConfig.SPEC.isLoaded()) return chunks;
+		int blocks = switch (PortalKind.of(portal)) {
+			case MIRROR -> CompatConfig.IMMERSIVE_PORTALS.mirrorViewDistance.get();
+			case GUN -> CompatConfig.IMMERSIVE_PORTALS.portalGunViewDistance.get();
+			case NETHER -> CompatConfig.IMMERSIVE_PORTALS.netherViewDistance.get();
+			default -> 0;
+		};
+		if (blocks <= 0) return chunks;
+		return Math.min(chunks, Math.max(1, (blocks + 15) / 16));
+	}
 }

@@ -35,99 +35,99 @@ import net.minecraftforge.registries.ForgeRegistry;
  */
 public final class ArmorTrimsItemCache {
 
-    private static final TagKey<Item> TRIMMABLE_ARMOR = TagKey.create(net.minecraft.core.Registry.ITEM_REGISTRY,
-            new ResourceLocation("creativecommon", "trimmable_armor"));
+	private static final TagKey<Item> TRIMMABLE_ARMOR = TagKey.create(net.minecraft.core.Registry.ITEM_REGISTRY,
+			new ResourceLocation("creativecommon", "trimmable_armor"));
 
-    private static final Map<Class<?>, List<Item>> BY_TYPE = new ConcurrentHashMap<>();
-    /** Bumped on every tag (re)load; the trimmable list is valid for one generation. */
-    private static volatile int generation = 1;
-    private static volatile Trimmable trimmable;
+	private static final Map<Class<?>, List<Item>> BY_TYPE = new ConcurrentHashMap<>();
+	/** Bumped on every tag (re)load; the trimmable list is valid for one generation. */
+	private static volatile int generation = 1;
+	private static volatile Trimmable trimmable;
 
-    private ArmorTrimsItemCache() {}
+	private ArmorTrimsItemCache() {}
 
-    public static void init() {
-        MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent event) -> {
-            generation++;
-            trimmable = null;
-        });
-    }
+	public static void init() {
+		MinecraftForge.EVENT_BUS.addListener((TagsUpdatedEvent event) -> {
+			generation++;
+			trimmable = null;
+		});
+	}
 
-    public static boolean ready() {
-        return ForgeRegistries.ITEMS instanceof ForgeRegistry<Item> items && items.isLocked();
-    }
+	public static boolean ready() {
+		return ForgeRegistries.ITEMS instanceof ForgeRegistry<Item> items && items.isLocked();
+	}
 
-    public static List<Item> ofType(Class<?> type) {
-        return BY_TYPE.get(type);
-    }
+	public static List<Item> ofType(Class<?> type) {
+		return BY_TYPE.get(type);
+	}
 
-    public static void putOfType(Class<?> type, List<Item> items) {
-        if (ready()) {
-            BY_TYPE.putIfAbsent(type, List.copyOf(items));
-        }
-    }
+	public static void putOfType(Class<?> type, List<Item> items) {
+		if (ready()) {
+			BY_TYPE.putIfAbsent(type, List.copyOf(items));
+		}
+	}
 
-    /** The cached trimmable list, or null when there is none for these list sizes and this tag generation. */
-    public static List<Item> trimmable(int classes, int tags) {
-        Trimmable t = trimmable;
-        return t != null && t.generation == generation && t.classes == classes && t.tags == tags ? t : null;
-    }
+	/** The cached trimmable list, or null when there is none for these list sizes and this tag generation. */
+	public static List<Item> trimmable(int classes, int tags) {
+		Trimmable t = trimmable;
+		return t != null && t.generation == generation && t.classes == classes && t.tags == tags ? t : null;
+	}
 
-    public static List<Item> putTrimmable(int classes, int tags, List<Item> items) {
-        if (!ready()) {
-            return items;
-        }
-        Trimmable t = new Trimmable(generation, classes, tags, allowed(items));
-        trimmable = t;
-        return t;
-    }
+	public static List<Item> putTrimmable(int classes, int tags, List<Item> items) {
+		if (!ready()) {
+			return items;
+		}
+		Trimmable t = new Trimmable(generation, classes, tags, allowed(items));
+		trimmable = t;
+		return t;
+	}
 
-    /** Armor Trims' list cut to the allowlist tag when the tag has members; else unchanged. */
-    private static Item[] allowed(List<Item> items) {
-        boolean anyTagged = false;
-        for (Item item : items) {
-            if (item.builtInRegistryHolder().is(TRIMMABLE_ARMOR)) {
-                anyTagged = true;
-                break;
-            }
-        }
-        if (!anyTagged) {
-            return items.toArray(new Item[0]);
-        }
-        return items.stream().filter(item -> item.builtInRegistryHolder().is(TRIMMABLE_ARMOR)).toArray(Item[]::new);
-    }
+	/** Armor Trims' list cut to the allowlist tag when the tag has members; else unchanged. */
+	private static Item[] allowed(List<Item> items) {
+		boolean anyTagged = false;
+		for (Item item : items) {
+			if (item.builtInRegistryHolder().is(TRIMMABLE_ARMOR)) {
+				anyTagged = true;
+				break;
+			}
+		}
+		if (!anyTagged) {
+			return items.toArray(new Item[0]);
+		}
+		return items.stream().filter(item -> item.builtInRegistryHolder().is(TRIMMABLE_ARMOR)).toArray(Item[]::new);
+	}
 
-    /** Read-only list in Armor Trims' order (duplicates kept), with a set for {@code contains}. */
-    private static final class Trimmable extends AbstractList<Item> {
-        final int generation;
-        final int classes;
-        final int tags;
-        private final Item[] items;
-        private final Set<Item> set;
+	/** Read-only list in Armor Trims' order (duplicates kept), with a set for {@code contains}. */
+	private static final class Trimmable extends AbstractList<Item> {
+		final int generation;
+		final int classes;
+		final int tags;
+		private final Item[] items;
+		private final Set<Item> set;
 
-        Trimmable(int generation, int classes, int tags, Item[] items) {
-            this.generation = generation;
-            this.classes = classes;
-            this.tags = tags;
-            this.items = items;
-            this.set = new HashSet<>(items.length * 2);
-            for (Item item : items) {
-                set.add(item);
-            }
-        }
+		Trimmable(int generation, int classes, int tags, Item[] items) {
+			this.generation = generation;
+			this.classes = classes;
+			this.tags = tags;
+			this.items = items;
+			this.set = new HashSet<>(items.length * 2);
+			for (Item item : items) {
+				set.add(item);
+			}
+		}
 
-        @Override
-        public Item get(int index) {
-            return items[index];
-        }
+		@Override
+		public Item get(int index) {
+			return items[index];
+		}
 
-        @Override
-        public int size() {
-            return items.length;
-        }
+		@Override
+		public int size() {
+			return items.length;
+		}
 
-        @Override
-        public boolean contains(Object o) {
-            return set.contains(o);
-        }
-    }
+		@Override
+		public boolean contains(Object o) {
+			return set.contains(o);
+		}
+	}
 }

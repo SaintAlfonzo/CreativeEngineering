@@ -26,60 +26,60 @@ import net.minecraft.world.level.block.state.BlockState;
  * {@code client/FridgeDouble}.
  */
 public final class FridgePairs {
-    private FridgePairs() {
-    }
+	private FridgePairs() {
+	}
 
-    /** The world side of this fridge's door handle. */
-    public static Direction handleSide(Direction facing, boolean flipped) {
-        return flipped ? facing.getClockWise() : facing.getCounterClockWise();
-    }
+	/** The world side of this fridge's door handle. */
+	public static Direction handleSide(Direction facing, boolean flipped) {
+		return flipped ? facing.getClockWise() : facing.getCounterClockWise();
+	}
 
-    /** The door side of a fridge block: the lower block's for the upper half of a 2-tall fridge. */
-    public static boolean flipped(BlockGetter level, BlockPos pos, BlockState state) {
-        if (state.getValue(FridgeBlock.MODEL_TYPE) == FridgeBlock.FridgeModelType.LARGE_UPPER) {
-            BlockState below = level.getBlockState(pos.below());
-            if (below.is(ModBlocks.fridge)
-                    && below.getValue(FridgeBlock.MODEL_TYPE) == FridgeBlock.FridgeModelType.LARGE_LOWER) {
-                return below.getValue(BlockKitchen.FLIPPED);
-            }
-        }
-        return state.getValue(BlockKitchen.FLIPPED);
-    }
+	/** The door side of a fridge block: the lower block's for the upper half of a 2-tall fridge. */
+	public static boolean flipped(BlockGetter level, BlockPos pos, BlockState state) {
+		if (state.getValue(FridgeBlock.MODEL_TYPE) == FridgeBlock.FridgeModelType.LARGE_UPPER) {
+			BlockState below = level.getBlockState(pos.below());
+			if (below.is(ModBlocks.fridge)
+					&& below.getValue(FridgeBlock.MODEL_TYPE) == FridgeBlock.FridgeModelType.LARGE_LOWER) {
+				return below.getValue(BlockKitchen.FLIPPED);
+			}
+		}
+		return state.getValue(BlockKitchen.FLIPPED);
+	}
 
-    /** The world side this fridge block is joined on, or null when it has no partner. */
-    @Nullable
-    public static Direction joinSide(BlockGetter level, BlockPos pos, BlockState state) {
-        if (!state.is(ModBlocks.fridge)) return null;
-        Direction facing = state.getValue(BlockKitchen.FACING);
-        boolean flipped = flipped(level, pos, state);
-        Direction side = handleSide(facing, flipped);
-        BlockPos other = pos.relative(side);
-        BlockState n = level.getBlockState(other);
-        if (!n.is(ModBlocks.fridge)
-                || n.getValue(BlockKitchen.FACING) != facing
-                || n.getValue(FridgeBlock.MODEL_TYPE) != state.getValue(FridgeBlock.MODEL_TYPE)
-                || flipped(level, other, n) == flipped) {
-            return null;
-        }
-        return side;
-    }
+	/** The world side this fridge block is joined on, or null when it has no partner. */
+	@Nullable
+	public static Direction joinSide(BlockGetter level, BlockPos pos, BlockState state) {
+		if (!state.is(ModBlocks.fridge)) return null;
+		Direction facing = state.getValue(BlockKitchen.FACING);
+		boolean flipped = flipped(level, pos, state);
+		Direction side = handleSide(facing, flipped);
+		BlockPos other = pos.relative(side);
+		BlockState n = level.getBlockState(other);
+		if (!n.is(ModBlocks.fridge)
+				|| n.getValue(BlockKitchen.FACING) != facing
+				|| n.getValue(FridgeBlock.MODEL_TYPE) != state.getValue(FridgeBlock.MODEL_TYPE)
+				|| flipped(level, other, n) == flipped) {
+			return null;
+		}
+		return side;
+	}
 
-    /**
-     * The placement state with its door side mirrored to a neighboring fridge whose handle points at {@code pos}; CfB's
-     * own choice (from where the player stands) wins when both neighbors qualify or neither does.
-     */
-    public static BlockState mirrorOnPlace(BlockState placed, BlockGetter level, BlockPos pos) {
-        if (placed == null || !placed.is(ModBlocks.fridge)) return placed;
-        Direction facing = placed.getValue(BlockKitchen.FACING);
-        boolean own = placed.getValue(BlockKitchen.FLIPPED);
-        for (boolean flipped : new boolean[]{own, !own}) {
-            BlockPos other = pos.relative(handleSide(facing, flipped));
-            BlockState n = level.getBlockState(other);
-            if (n.is(ModBlocks.fridge) && n.getValue(BlockKitchen.FACING) == facing
-                    && flipped(level, other, n) != flipped) {
-                return flipped == own ? placed : placed.setValue(BlockKitchen.FLIPPED, flipped);
-            }
-        }
-        return placed;
-    }
+	/**
+	 * The placement state with its door side mirrored to a neighboring fridge whose handle points at {@code pos}; CfB's
+	 * own choice (from where the player stands) wins when both neighbors qualify or neither does.
+	 */
+	public static BlockState mirrorOnPlace(BlockState placed, BlockGetter level, BlockPos pos) {
+		if (placed == null || !placed.is(ModBlocks.fridge)) return placed;
+		Direction facing = placed.getValue(BlockKitchen.FACING);
+		boolean own = placed.getValue(BlockKitchen.FLIPPED);
+		for (boolean flipped : new boolean[]{own, !own}) {
+			BlockPos other = pos.relative(handleSide(facing, flipped));
+			BlockState n = level.getBlockState(other);
+			if (n.is(ModBlocks.fridge) && n.getValue(BlockKitchen.FACING) == facing
+					&& flipped(level, other, n) != flipped) {
+				return flipped == own ? placed : placed.setValue(BlockKitchen.FLIPPED, flipped);
+			}
+		}
+		return placed;
+	}
 }

@@ -23,18 +23,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = VineBlock.class, remap = false)
 public abstract class VineBlockShearMixin {
 
-    @Inject(method = "m_7926_", at = @At("TAIL"), remap = false)
-    private void creativeengineering$addFertile(StateDefinition.Builder<Block, BlockState> builder, CallbackInfo ci) {
-        if (VineShearing.addsFertile(((Object) this).getClass())) {
-            builder.add(VineShearing.FERTILE);
-        }
-    }
+	@Inject(method = "m_7926_", at = @At("TAIL"), remap = false)
+	private void creativeengineering$addFertile(StateDefinition.Builder<Block, BlockState> builder, CallbackInfo ci) {
+		if (VineShearing.addsFertile(((Object) this).getClass())) {
+			builder.add(VineShearing.FERTILE);
+		}
+	}
 
-    @Inject(method = "m_213898_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$shearedStopsSpreading(BlockState state, ServerLevel level, BlockPos pos,
-                                                           RandomSource random, CallbackInfo ci) {
-        if (VineShearing.isSheared(state)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_213898_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$shearedStopsSpreading(BlockState state, ServerLevel level, BlockPos pos,
+														   RandomSource random, CallbackInfo ci) {
+		if (VineShearing.isSheared(state)) {
+			ci.cancel();
+		}
+	}
 }

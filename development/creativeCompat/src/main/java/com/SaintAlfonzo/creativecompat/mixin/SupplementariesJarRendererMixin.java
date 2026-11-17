@@ -27,37 +27,37 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = JarBlockTileRenderer.class, remap = false)
 public abstract class SupplementariesJarRendererMixin {
 
-    @Inject(method = "render(Lnet/mehvahdjukaar/supplementaries/common/block/tiles/JarBlockTile;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
-            at = @At("HEAD"), remap = false)
-    private void creativeengineering$renderLayers(JarBlockTile tile, float partialTicks, PoseStack pose,
-                                                  MultiBufferSource buffer, int light, int overlay, CallbackInfo ci) {
-        Container jar = (Container) tile;
-        if (jar.isEmpty()) {
-            return;
-        }
-        Random rand = new Random(tile.getBlockPos().asLong());
-        ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        pose.pushPose();
-        pose.translate(0.5, 0.5, 0.5);
-        pose.mulPose(RotHlpr.XN90);
-        pose.translate(0.0, 0.0, -0.5);
-        float scale = 0.5714286F;
-        pose.scale(scale, scale, scale);
-        for (int i = 0; i < jar.getContainerSize(); i++) {
-            ItemStack stack = jar.getItem(i);
-            for (int n = 0; n < stack.getCount(); n++) {
-                pose.mulPose(Vector3f.ZP.rotationDegrees(rand.nextInt(16) * 22.5F));
-                pose.translate(0.0, 0.0, 1.0F / (16.0F * scale));
-                BakedModel model = itemRenderer.getModel(stack, tile.getLevel(), null, 0);
-                itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, pose, buffer, light, overlay, model);
-            }
-        }
-        pose.popPose();
-    }
+	@Inject(method = "render(Lnet/mehvahdjukaar/supplementaries/common/block/tiles/JarBlockTile;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
+			at = @At("HEAD"), remap = false)
+	private void creativeengineering$renderLayers(JarBlockTile tile, float partialTicks, PoseStack pose,
+												  MultiBufferSource buffer, int light, int overlay, CallbackInfo ci) {
+		Container jar = (Container) tile;
+		if (jar.isEmpty()) {
+			return;
+		}
+		Random rand = new Random(tile.getBlockPos().asLong());
+		ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+		pose.pushPose();
+		pose.translate(0.5, 0.5, 0.5);
+		pose.mulPose(RotHlpr.XN90);
+		pose.translate(0.0, 0.0, -0.5);
+		float scale = 0.5714286F;
+		pose.scale(scale, scale, scale);
+		for (int i = 0; i < jar.getContainerSize(); i++) {
+			ItemStack stack = jar.getItem(i);
+			for (int n = 0; n < stack.getCount(); n++) {
+				pose.mulPose(Vector3f.ZP.rotationDegrees(rand.nextInt(16) * 22.5F));
+				pose.translate(0.0, 0.0, 1.0F / (16.0F * scale));
+				BakedModel model = itemRenderer.getModel(stack, tile.getLevel(), null, 0);
+				itemRenderer.render(stack, ItemTransforms.TransformType.FIXED, true, pose, buffer, light, overlay, model);
+			}
+		}
+		pose.popPose();
+	}
 
-    @Redirect(method = "render(Lnet/mehvahdjukaar/supplementaries/common/block/tiles/JarBlockTile;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;m_41613_()I"), remap = false)
-    private int creativeengineering$skipOwnLoop(ItemStack stack) {
-        return 0;
-    }
+	@Redirect(method = "render(Lnet/mehvahdjukaar/supplementaries/common/block/tiles/JarBlockTile;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;m_41613_()I"), remap = false)
+	private int creativeengineering$skipOwnLoop(ItemStack stack) {
+		return 0;
+	}
 }

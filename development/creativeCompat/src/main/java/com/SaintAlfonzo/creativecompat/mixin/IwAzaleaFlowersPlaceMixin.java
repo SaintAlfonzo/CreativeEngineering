@@ -22,12 +22,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = AzaleaFlowersItem.class, remap = false)
 public abstract class IwAzaleaFlowersPlaceMixin {
 
-    private static final ResourceLocation TWIGS_AZALEA_FLOWERS = new ResourceLocation("twigs", "azalea_flowers");
+	private static final ResourceLocation TWIGS_AZALEA_FLOWERS = new ResourceLocation("twigs", "azalea_flowers");
 
-    @Inject(method = {"m_6225_", "useOn"}, at = @At("RETURN"), cancellable = true, require = 1)
-    private void creativeengineering$placeTwigsFlowers(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
-        if (cir.getReturnValue() != InteractionResult.PASS) return;
-        Item twigs = ForgeRegistries.ITEMS.getValue(TWIGS_AZALEA_FLOWERS);
-        if (twigs instanceof BlockItem blockItem) cir.setReturnValue(blockItem.useOn(context));
-    }
+	@Inject(method = {"m_6225_", "useOn"}, at = @At("RETURN"), cancellable = true, require = 1)
+	private void creativeengineering$placeTwigsFlowers(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
+		if (cir.getReturnValue() != InteractionResult.PASS) return;
+		Item twigs = ForgeRegistries.ITEMS.getValue(TWIGS_AZALEA_FLOWERS);
+		if (twigs instanceof BlockItem blockItem) cir.setReturnValue(blockItem.useOn(context));
+	}
 }

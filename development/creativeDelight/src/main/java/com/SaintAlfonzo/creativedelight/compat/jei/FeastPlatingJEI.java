@@ -20,23 +20,23 @@ import net.minecraft.resources.ResourceLocation;
 @JeiPlugin
 public class FeastPlatingJEI implements IModPlugin {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "feast_plating");
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final ResourceLocation ID = new ResourceLocation(CreativeDelight.MOD_ID, "feast_plating");
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return ID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return ID;
+	}
 
-    @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new FeastPlatingCategory(registration.getJeiHelpers().getGuiHelper()));
-    }
+	@Override
+	public void registerCategories(IRecipeCategoryRegistration registration) {
+		registration.addRecipeCategories(new FeastPlatingCategory(registration.getJeiHelpers().getGuiHelper()));
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        List<FeastPlatingCategory.Display> feasts = FeastPlatingCategory.collect();
-        registration.addRecipes(FeastPlatingCategory.TYPE, feasts);
-        LOGGER.info("[jei] Feast Plating: {} page(s)", feasts.size());
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		List<FeastPlatingCategory.Display> feasts = FeastPlatingCategory.collect();
+		registration.addRecipes(FeastPlatingCategory.TYPE, feasts);
+		LOGGER.info("[jei] Feast Plating: {} page(s)", feasts.size());
+	}
 }

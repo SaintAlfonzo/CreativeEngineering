@@ -34,48 +34,48 @@ import net.minecraft.world.item.trading.MerchantOffers;
  */
 public final class WanderingTraderTweaks {
 
-    private WanderingTraderTweaks() {}
+	private WanderingTraderTweaks() {}
 
-    public static int spawnDelay(int vanilla) {
-        CommonConfig.WanderingTrader cfg = CommonConfig.WANDERING_TRADER;
-        return cfg.enabled.get() ? cfg.traderIntervalTicks.get() : vanilla;
-    }
+	public static int spawnDelay(int vanilla) {
+		CommonConfig.WanderingTrader cfg = CommonConfig.WANDERING_TRADER;
+		return cfg.enabled.get() ? cfg.traderIntervalTicks.get() : vanilla;
+	}
 
-    public static int commonTrades(int vanilla) {
-        CommonConfig.WanderingTrader cfg = CommonConfig.WANDERING_TRADER;
-        return cfg.enabled.get() ? cfg.commonTrades.get() : vanilla;
-    }
+	public static int commonTrades(int vanilla) {
+		CommonConfig.WanderingTrader cfg = CommonConfig.WANDERING_TRADER;
+		return cfg.enabled.get() ? cfg.commonTrades.get() : vanilla;
+	}
 
-    /**
-     * Rare offers beyond vanilla's one. Listings are tried in random order without repeats, and an
-     * offer whose result matches one already on the trader (vanilla's rare pick, or a pool that
-     * registers the same listing twice, as Supplementaries does) is skipped.
-     */
-    public static void addExtraRareOffers(Entity trader, RandomSource random, MerchantOffers offers,
-                                          VillagerTrades.ItemListing[] rare) {
-        CommonConfig.WanderingTrader cfg = CommonConfig.WANDERING_TRADER;
-        if (!cfg.enabled.get() || rare == null) return;
-        int wanted = cfg.rareTrades.get() - 1;
-        if (wanted <= 0) return;
+	/**
+	 * Rare offers beyond vanilla's one. Listings are tried in random order without repeats, and an
+	 * offer whose result matches one already on the trader (vanilla's rare pick, or a pool that
+	 * registers the same listing twice, as Supplementaries does) is skipped.
+	 */
+	public static void addExtraRareOffers(Entity trader, RandomSource random, MerchantOffers offers,
+										  VillagerTrades.ItemListing[] rare) {
+		CommonConfig.WanderingTrader cfg = CommonConfig.WANDERING_TRADER;
+		if (!cfg.enabled.get() || rare == null) return;
+		int wanted = cfg.rareTrades.get() - 1;
+		if (wanted <= 0) return;
 
-        List<Integer> order = new ArrayList<>(rare.length);
-        for (int i = 0; i < rare.length; i++) order.add(i);
-        Collections.shuffle(order, new Random(random.nextLong()));
+		List<Integer> order = new ArrayList<>(rare.length);
+		for (int i = 0; i < rare.length; i++) order.add(i);
+		Collections.shuffle(order, new Random(random.nextLong()));
 
-        int added = 0;
-        for (int idx : order) {
-            if (added >= wanted) break;
-            MerchantOffer offer = rare[idx].getOffer(trader, random);
-            if (offer == null || alreadySold(offers, offer.getResult())) continue;
-            offers.add(offer);
-            added++;
-        }
-    }
+		int added = 0;
+		for (int idx : order) {
+			if (added >= wanted) break;
+			MerchantOffer offer = rare[idx].getOffer(trader, random);
+			if (offer == null || alreadySold(offers, offer.getResult())) continue;
+			offers.add(offer);
+			added++;
+		}
+	}
 
-    private static boolean alreadySold(MerchantOffers offers, ItemStack result) {
-        for (MerchantOffer o : offers) {
-            if (ItemStack.isSameItemSameTags(o.getResult(), result)) return true;
-        }
-        return false;
-    }
+	private static boolean alreadySold(MerchantOffers offers, ItemStack result) {
+		for (MerchantOffer o : offers) {
+			if (ItemStack.isSameItemSameTags(o.getResult(), result)) return true;
+		}
+		return false;
+	}
 }

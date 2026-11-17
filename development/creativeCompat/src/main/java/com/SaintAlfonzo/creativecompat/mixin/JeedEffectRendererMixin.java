@@ -24,11 +24,11 @@ import net.minecraft.world.item.TooltipFlag;
 @Mixin(targets = "net.mehvahdjukaar.jeed.common.EffectRenderer", remap = false)
 public abstract class JeedEffectRendererMixin {
 
-    @Inject(method = "getTooltipsWithDescription", at = @At("RETURN"), require = 0, remap = false)
-    private static void creativeengineering$compoundParts(MobEffectInstance instance, TooltipFlag flag, boolean reactsToShift,
-            boolean showDuration, CallbackInfoReturnable<List<Component>> cir) {
-        List<Component> tooltip = cir.getReturnValue();
-        if (instance == null || tooltip == null) return;
-        CompoundEffects.insert(tooltip, List.of(instance), tooltip.size());
-    }
+	@Inject(method = "getTooltipsWithDescription", at = @At("RETURN"), require = 0, remap = false)
+	private static void creativeengineering$compoundParts(MobEffectInstance instance, TooltipFlag flag, boolean reactsToShift,
+			boolean showDuration, CallbackInfoReturnable<List<Component>> cir) {
+		List<Component> tooltip = cir.getReturnValue();
+		if (instance == null || tooltip == null) return;
+		CompoundEffects.insert(tooltip, List.of(instance), tooltip.size());
+	}
 }

@@ -20,21 +20,21 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = MoveControl.class, remap = false)
 public abstract class MoveControlVillagerLadderMixin {
 
-    @Shadow(remap = false)
-    @Final
-    protected Mob f_24974_;
+	@Shadow(remap = false)
+	@Final
+	protected Mob f_24974_;
 
-    @Inject(method = "m_8126_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$slideDownLadder(CallbackInfo ci) {
-        Mob mob = this.f_24974_;
-        if (!(mob instanceof Villager)) return;
-        MoveControl self = (MoveControl) (Object) this;
-        if (!self.hasWanted() || self.getWantedY() > mob.getY() - 0.5 || !mob.onClimbable()) return;
-        double dx = self.getWantedX() - mob.getX();
-        double dz = self.getWantedZ() - mob.getZ();
-        if (dx * dx + dz * dz >= 0.25) return;
-        mob.setZza(0.0F);
-        mob.setSpeed(0.0F);
-        ci.cancel();
-    }
+	@Inject(method = "m_8126_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$slideDownLadder(CallbackInfo ci) {
+		Mob mob = this.f_24974_;
+		if (!(mob instanceof Villager)) return;
+		MoveControl self = (MoveControl) (Object) this;
+		if (!self.hasWanted() || self.getWantedY() > mob.getY() - 0.5 || !mob.onClimbable()) return;
+		double dx = self.getWantedX() - mob.getX();
+		double dz = self.getWantedZ() - mob.getZ();
+		if (dx * dx + dz * dz >= 0.25) return;
+		mob.setZza(0.0F);
+		mob.setSpeed(0.0F);
+		ci.cancel();
+	}
 }

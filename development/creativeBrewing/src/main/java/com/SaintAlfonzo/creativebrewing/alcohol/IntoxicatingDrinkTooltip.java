@@ -32,50 +32,50 @@ import java.util.List;
  */
 @Mod.EventBusSubscriber(modid = CreativeBrewing.MOD_ID, value = Dist.CLIENT)
 public final class IntoxicatingDrinkTooltip {
-    private static final ResourceLocation INTOXICATION = new ResourceLocation("brewinandchewin", "intoxication");
-    private static final String QUARK_KEY = "quark.misc.saturation";
-    private static final String QUARK_BAD_KEY = "quark.misc.bad_saturation";
-    private static MobEffect intoxication;
-    private static boolean looked;
+	private static final ResourceLocation INTOXICATION = new ResourceLocation("brewinandchewin", "intoxication");
+	private static final String QUARK_KEY = "quark.misc.saturation";
+	private static final String QUARK_BAD_KEY = "quark.misc.bad_saturation";
+	private static MobEffect intoxication;
+	private static boolean looked;
 
-    private IntoxicatingDrinkTooltip() {}
+	private IntoxicatingDrinkTooltip() {}
 
-    @SubscribeEvent(priority = EventPriority.LOWEST)
-    public static void onGather(RenderTooltipEvent.GatherComponents event) {
-        if (!CBConfig.ALCOHOL.quarkLine.get()) return;
-        ItemStack stack = event.getItemStack();
-        if (!stack.isEdible()) return;
-        FoodProperties food = stack.getItem().getFoodProperties();
-        if (food == null || !intoxicating(food)) return;
-        List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
-        for (int i = 0; i < elements.size(); i++) {
-            Either<FormattedText, TooltipComponent> element = elements.get(i);
-            if (element.left().isEmpty()) continue;
-            if (!isQuarkSaturation(element.left().get())) continue;
-            elements.set(i, Either.left(Component.translatable("tooltip.creativebrewing.intoxicating_drink")
-                    .withStyle(ChatFormatting.GRAY)));
-            return;
-        }
-    }
+	@SubscribeEvent(priority = EventPriority.LOWEST)
+	public static void onGather(RenderTooltipEvent.GatherComponents event) {
+		if (!CBConfig.ALCOHOL.quarkLine.get()) return;
+		ItemStack stack = event.getItemStack();
+		if (!stack.isEdible()) return;
+		FoodProperties food = stack.getItem().getFoodProperties();
+		if (food == null || !intoxicating(food)) return;
+		List<Either<FormattedText, TooltipComponent>> elements = event.getTooltipElements();
+		for (int i = 0; i < elements.size(); i++) {
+			Either<FormattedText, TooltipComponent> element = elements.get(i);
+			if (element.left().isEmpty()) continue;
+			if (!isQuarkSaturation(element.left().get())) continue;
+			elements.set(i, Either.left(Component.translatable("tooltip.creativebrewing.intoxicating_drink")
+					.withStyle(ChatFormatting.GRAY)));
+			return;
+		}
+	}
 
-    static boolean isQuarkSaturation(FormattedText text) {
-        if (!(text instanceof Component component)) return false;
-        if (!(component.getContents() instanceof TranslatableContents translatable)) return false;
-        String key = translatable.getKey();
-        return key.startsWith(QUARK_KEY) || key.startsWith(QUARK_BAD_KEY);
-    }
+	static boolean isQuarkSaturation(FormattedText text) {
+		if (!(text instanceof Component component)) return false;
+		if (!(component.getContents() instanceof TranslatableContents translatable)) return false;
+		String key = translatable.getKey();
+		return key.startsWith(QUARK_KEY) || key.startsWith(QUARK_BAD_KEY);
+	}
 
-    /** True when one of the food's effects is Intoxication (null-safe: the effect may be missing without Brewin'). */
-    static boolean intoxicating(FoodProperties food) {
-        if (!looked) {
-            intoxication = ForgeRegistries.MOB_EFFECTS.getValue(INTOXICATION);
-            looked = true;
-        }
-        if (intoxication == null) return false;
-        for (Pair<MobEffectInstance, Float> pair : food.getEffects()) {
-            MobEffectInstance instance = pair.getFirst();
-            if (instance != null && instance.getEffect() == intoxication) return true;
-        }
-        return false;
-    }
+	/** True when one of the food's effects is Intoxication (null-safe: the effect may be missing without Brewin'). */
+	static boolean intoxicating(FoodProperties food) {
+		if (!looked) {
+			intoxication = ForgeRegistries.MOB_EFFECTS.getValue(INTOXICATION);
+			looked = true;
+		}
+		if (intoxication == null) return false;
+		for (Pair<MobEffectInstance, Float> pair : food.getEffects()) {
+			MobEffectInstance instance = pair.getFirst();
+			if (instance != null && instance.getEffect() == intoxication) return true;
+		}
+		return false;
+	}
 }

@@ -21,19 +21,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = FlowingFluid.class, remap = false)
 public abstract class FlowingFluidSettleMixin {
 
-    @Inject(method = "m_6292_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$beginSettle(Level level, BlockPos pos, FluidState state, CallbackInfo ci) {
-        FirstTickWater.beginTick(level, pos);
-    }
+	@Inject(method = "m_6292_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$beginSettle(Level level, BlockPos pos, FluidState state, CallbackInfo ci) {
+		FirstTickWater.beginTick(level, pos);
+	}
 
-    @Inject(method = "m_6292_", at = @At("RETURN"), remap = false)
-    private void creativeengineering$endSettle(Level level, BlockPos pos, FluidState state, CallbackInfo ci) {
-        FirstTickWater.endTick();
-    }
+	@Inject(method = "m_6292_", at = @At("RETURN"), remap = false)
+	private void creativeengineering$endSettle(Level level, BlockPos pos, FluidState state, CallbackInfo ci) {
+		FirstTickWater.endTick();
+	}
 
-    @Inject(method = "m_6364_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$carrySettle(LevelAccessor level, BlockPos pos, BlockState state, Direction dir,
-                                                 FluidState fluid, CallbackInfo ci) {
-        FirstTickWater.onSpread(level, pos);
-    }
+	@Inject(method = "m_6364_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$carrySettle(LevelAccessor level, BlockPos pos, BlockState state, Direction dir,
+												 FluidState fluid, CallbackInfo ci) {
+		FirstTickWater.onSpread(level, pos);
+	}
 }

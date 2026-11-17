@@ -22,12 +22,12 @@ import java.util.Optional;
 @Mixin(value = AgreementScreen.class, remap = false)
 public class WaresAgreementTooltipMixin {
 
-    @Redirect(method = "m_7025_", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lio/github/mortuusars/wares/client/gui/agreement/AgreementScreen;m_169388_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;Ljava/util/Optional;II)V"))
-    private void creativecommon$tooltipWithStack(AgreementScreen screen, PoseStack poseStack, List<Component> lines,
-                                                      Optional<TooltipComponent> image, int x, int y) {
-        Slot slot = screen.getSlotUnderMouse();
-        screen.renderTooltip(poseStack, lines, image, x, y, slot != null ? slot.getItem() : ItemStack.EMPTY);
-    }
+	@Redirect(method = "m_7025_", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lio/github/mortuusars/wares/client/gui/agreement/AgreementScreen;m_169388_(Lcom/mojang/blaze3d/vertex/PoseStack;Ljava/util/List;Ljava/util/Optional;II)V"))
+	private void creativecommon$tooltipWithStack(AgreementScreen screen, PoseStack poseStack, List<Component> lines,
+													  Optional<TooltipComponent> image, int x, int y) {
+		Slot slot = screen.getSlotUnderMouse();
+		screen.renderTooltip(poseStack, lines, image, x, y, slot != null ? slot.getItem() : ItemStack.EMPTY);
+	}
 }

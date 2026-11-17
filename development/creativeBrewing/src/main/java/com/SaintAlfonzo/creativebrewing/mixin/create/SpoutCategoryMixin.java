@@ -22,15 +22,15 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = SpoutCategory.class, remap = false)
 public class SpoutCategoryMixin {
 
-    @Redirect(
-            method = "consumeRecipes",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lcom/simibubi/create/content/fluids/potion/PotionFluidHandler;isPotionItem(Lnet/minecraft/world/item/ItemStack;)Z"
-            )
-    )
-    private static boolean creativeengineering$skipBundleFilling(ItemStack stack) {
-        if (stack.getItem() instanceof AbstractPotionBundle) return false;
-        return PotionFluidHandler.isPotionItem(stack);
-    }
+	@Redirect(
+			method = "consumeRecipes",
+			at = @At(
+					value = "INVOKE",
+					target = "Lcom/simibubi/create/content/fluids/potion/PotionFluidHandler;isPotionItem(Lnet/minecraft/world/item/ItemStack;)Z"
+			)
+	)
+	private static boolean creativeengineering$skipBundleFilling(ItemStack stack) {
+		if (stack.getItem() instanceof AbstractPotionBundle) return false;
+		return PotionFluidHandler.isPotionItem(stack);
+	}
 }

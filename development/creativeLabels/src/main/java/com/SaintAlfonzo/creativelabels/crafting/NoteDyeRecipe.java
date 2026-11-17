@@ -17,37 +17,37 @@ import net.minecraft.world.level.Level;
  */
 public class NoteDyeRecipe extends CustomRecipe {
 
-    public NoteDyeRecipe(ResourceLocation id) {
-        super(id);
-    }
+	public NoteDyeRecipe(ResourceLocation id) {
+		super(id);
+	}
 
-    @Override
-    public boolean matches(CraftingContainer grid, Level level) {
-        return matches(NoteGrid.of(grid));
-    }
+	@Override
+	public boolean matches(CraftingContainer grid, Level level) {
+		return matches(NoteGrid.of(grid));
+	}
 
-    static boolean matches(NoteGrid g) {
-        if (g.notes.isEmpty() || g.dyes != 1 || g.specials != 0 || g.erasers != 0 || g.others != 0) return false;
-        if (NoteData.readSpecial(g.notes.get(0)) != null) return false;
-        return g.notesIdentical();
-    }
+	static boolean matches(NoteGrid g) {
+		if (g.notes.isEmpty() || g.dyes != 1 || g.specials != 0 || g.erasers != 0 || g.others != 0) return false;
+		if (NoteData.readSpecial(g.notes.get(0)) != null) return false;
+		return g.notesIdentical();
+	}
 
-    @Override
-    public ItemStack assemble(CraftingContainer grid) {
-        NoteGrid g = NoteGrid.of(grid);
-        if (!matches(g) || g.dye == null) return ItemStack.EMPTY;
-        ItemStack out = NoteGrid.copies(g.notes.get(0), g.notes.size());
-        NoteData.writeColor(out, NoteColours.mix(NoteData.readColor(out), g.dye.getDyeColor()));
-        return out;
-    }
+	@Override
+	public ItemStack assemble(CraftingContainer grid) {
+		NoteGrid g = NoteGrid.of(grid);
+		if (!matches(g) || g.dye == null) return ItemStack.EMPTY;
+		ItemStack out = NoteGrid.copies(g.notes.get(0), g.notes.size());
+		NoteData.writeColor(out, NoteColours.mix(NoteData.readColor(out), g.dye.getDyeColor()));
+		return out;
+	}
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width * height >= 2;
-    }
+	@Override
+	public boolean canCraftInDimensions(int width, int height) {
+		return width * height >= 2;
+	}
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return CLRegistry.NOTE_DYE.get();
-    }
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return CLRegistry.NOTE_DYE.get();
+	}
 }

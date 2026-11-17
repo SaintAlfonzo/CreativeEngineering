@@ -26,16 +26,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = BubbleColumnBlock.class, remap = false)
 public abstract class BubbleColumnImmunityMixin {
 
-    @Unique
-    private static final TagKey<EntityType<?>> creativeengineering$IMMUNE =
-            TagKey.create(Registry.ENTITY_TYPE_REGISTRY,
-                    new ResourceLocation("creativeworldgen", "bubble_column_immune"));
+	@Unique
+	private static final TagKey<EntityType<?>> creativeengineering$IMMUNE =
+			TagKey.create(Registry.ENTITY_TYPE_REGISTRY,
+					new ResourceLocation("creativeworldgen", "bubble_column_immune"));
 
-    @Inject(method = "m_7892_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$skipImmune(BlockState state, Level level, BlockPos pos,
-                                                Entity entity, CallbackInfo ci) {
-        if (entity.getType().is(creativeengineering$IMMUNE)) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_7892_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$skipImmune(BlockState state, Level level, BlockPos pos,
+												Entity entity, CallbackInfo ci) {
+		if (entity.getType().is(creativeengineering$IMMUNE)) {
+			ci.cancel();
+		}
+	}
 }

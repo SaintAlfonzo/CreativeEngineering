@@ -19,22 +19,22 @@ import net.minecraftforge.common.IPlantable;
 @Mixin(targets = "com.ninni.twigs.block.enums.SiltPotBlock", remap = false)
 public abstract class SiltPotSoilMixin extends Block {
 
-    protected SiltPotSoilMixin(Properties properties) {
-        super(properties);
-    }
+	protected SiltPotSoilMixin(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction facing, IPlantable plantable) {
-        if (facing == Direction.UP && filled(state)) return true;
-        return super.canSustainPlant(state, level, pos, facing, plantable);
-    }
+	@Override
+	public boolean canSustainPlant(BlockState state, BlockGetter level, BlockPos pos, Direction facing, IPlantable plantable) {
+		if (facing == Direction.UP && filled(state)) return true;
+		return super.canSustainPlant(state, level, pos, facing, plantable);
+	}
 
-    private static boolean filled(BlockState state) {
-        for (var property : state.getProperties()) {
-            if (property.getName().equals("filled") && property.getValueClass() == Boolean.class) {
-                return (Boolean) state.getValue(property);
-            }
-        }
-        return false;
-    }
+	private static boolean filled(BlockState state) {
+		for (var property : state.getProperties()) {
+			if (property.getName().equals("filled") && property.getValueClass() == Boolean.class) {
+				return (Boolean) state.getValue(property);
+			}
+		}
+		return false;
+	}
 }

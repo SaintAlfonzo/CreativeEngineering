@@ -18,10 +18,10 @@ import vazkii.quark.content.tweaks.module.SimpleHarvestModule;
 @Mixin(value = SimpleHarvestModule.class, remap = false)
 public abstract class QuarkOwnPickMixin {
 
-    @Inject(method = "getAction", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
-    private static void creativeengineering$ownPick(BlockState state, boolean doRightClick, CallbackInfoReturnable<ActionType> cir) {
-        if (CropParity.isOwnPickCrop(state)) {
-            cir.setReturnValue(doRightClick ? ActionType.CLICK : ActionType.NONE);
-        }
-    }
+	@Inject(method = "getAction", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
+	private static void creativeengineering$ownPick(BlockState state, boolean doRightClick, CallbackInfoReturnable<ActionType> cir) {
+		if (CropParity.isOwnPickCrop(state)) {
+			cir.setReturnValue(doRightClick ? ActionType.CLICK : ActionType.NONE);
+		}
+	}
 }

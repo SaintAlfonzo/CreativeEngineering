@@ -30,57 +30,57 @@ import java.util.zip.ZipInputStream;
  * A missing or different jar adds nothing (one warning), so the pack still runs on the 1.0.0 data alone.
  */
 public final class FarmersDonor {
-    private static final Logger LOG = LogManager.getLogger("creativeworldgen/farmers-donor");
+	private static final Logger LOG = LogManager.getLogger("creativeworldgen/farmers-donor");
 
-    public static final String FOLDER = "farmers_upstream";
-    public static final String FILE = UpstreamJars.FARMERS_STRUCTURES.file();
-    public static final String SHA1 = UpstreamJars.FARMERS_STRUCTURES.sha1();
-    public static final String SOURCE = UpstreamJars.FARMERS_STRUCTURES.source();
-    /** Sorts before KubeJS's own pack ids, so KubeJS data still wins over this one. */
-    static final String PACK_ID = "farmers_structures_donor";
+	public static final String FOLDER = "farmers_upstream";
+	public static final String FILE = UpstreamJars.FARMERS_STRUCTURES.file();
+	public static final String SHA1 = UpstreamJars.FARMERS_STRUCTURES.sha1();
+	public static final String SOURCE = UpstreamJars.FARMERS_STRUCTURES.source();
+	/** Sorts before KubeJS's own pack ids, so KubeJS data still wins over this one. */
+	static final String PACK_ID = "farmers_structures_donor";
 
-    private static Map<String, byte[]> translated;
+	private static Map<String, byte[]> translated;
 
-    private FarmersDonor() {
-    }
+	private FarmersDonor() {
+	}
 
-    public static void onAddPackFinders(AddPackFindersEvent event) {
-        BuiltInPacks.addMemory(event, PackType.SERVER_DATA, PACK_ID, "Farmer's Structures 1.0.6 data, translated in memory from the donor jar",
-                Pack.Position.TOP, FarmersDonor::files);
-    }
+	public static void onAddPackFinders(AddPackFindersEvent event) {
+		BuiltInPacks.addMemory(event, PackType.SERVER_DATA, PACK_ID, "Farmer's Structures 1.0.6 data, translated in memory from the donor jar",
+				Pack.Position.TOP, FarmersDonor::files);
+	}
 
-    /** Built once per game start, on the first read (the registries are complete by then). */
-    private static synchronized Map<String, byte[]> files() {
-        if (translated == null) {
-            translated = build();
-        }
-        return translated;
-    }
+	/** Built once per game start, on the first read (the registries are complete by then). */
+	private static synchronized Map<String, byte[]> files() {
+		if (translated == null) {
+			translated = build();
+		}
+		return translated;
+	}
 
-    private static Map<String, byte[]> build() {
-        Path jar = FMLPaths.GAMEDIR.get().resolve(FOLDER).resolve(FILE);
-        if (!Files.isRegularFile(jar)) {
-            LOG.warn("{} is missing: Farmer's Structures runs on its installed 1.0.0 data. Get {} and put it in '{}'.", jar, SOURCE, FOLDER);
-            return Map.of();
-        }
-        try {
-            String sha1 = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jar)));
-            if (!SHA1.equals(sha1)) {
-                LOG.warn("{} has sha1 {}, expected {}: not read. Get the exact file from {}.", jar, sha1, SHA1, SOURCE);
-                return Map.of();
-            }
-            Map<String, byte[]> source = new HashMap<>();
-            try (InputStream in = Files.newInputStream(jar); ZipInputStream zip = new ZipInputStream(in)) {
-                for (ZipEntry entry; (entry = zip.getNextEntry()) != null; ) {
-                    if (!entry.isDirectory() && entry.getName().startsWith("data/")) {
-                        source.put(entry.getName(), zip.readAllBytes());
-                    }
-                }
-            }
-            return FarmersTranslator.translate(source);
-        } catch (IOException | NoSuchAlgorithmException | RuntimeException e) {
-            LOG.error("Could not translate {}: Farmer's Structures runs on its installed 1.0.0 data", jar, e);
-            return Map.of();
-        }
-    }
+	private static Map<String, byte[]> build() {
+		Path jar = FMLPaths.GAMEDIR.get().resolve(FOLDER).resolve(FILE);
+		if (!Files.isRegularFile(jar)) {
+			LOG.warn("{} is missing: Farmer's Structures runs on its installed 1.0.0 data. Get {} and put it in '{}'.", jar, SOURCE, FOLDER);
+			return Map.of();
+		}
+		try {
+			String sha1 = HexFormat.of().formatHex(MessageDigest.getInstance("SHA-1").digest(Files.readAllBytes(jar)));
+			if (!SHA1.equals(sha1)) {
+				LOG.warn("{} has sha1 {}, expected {}: not read. Get the exact file from {}.", jar, sha1, SHA1, SOURCE);
+				return Map.of();
+			}
+			Map<String, byte[]> source = new HashMap<>();
+			try (InputStream in = Files.newInputStream(jar); ZipInputStream zip = new ZipInputStream(in)) {
+				for (ZipEntry entry; (entry = zip.getNextEntry()) != null; ) {
+					if (!entry.isDirectory() && entry.getName().startsWith("data/")) {
+						source.put(entry.getName(), zip.readAllBytes());
+					}
+				}
+			}
+			return FarmersTranslator.translate(source);
+		} catch (IOException | NoSuchAlgorithmException | RuntimeException e) {
+			LOG.error("Could not translate {}: Farmer's Structures runs on its installed 1.0.0 data", jar, e);
+			return Map.of();
+		}
+	}
 }

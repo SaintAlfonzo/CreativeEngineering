@@ -25,25 +25,25 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = Camera.class, remap = false)
 public abstract class CameraSinkMixin {
 
-    @Unique
-    private Entity creativeengineering$viewer;
+	@Unique
+	private Entity creativeengineering$viewer;
 
-    @Unique
-    private float creativeengineering$partialTick;
+	@Unique
+	private float creativeengineering$partialTick;
 
-    @Inject(method = "m_90575_", at = @At("HEAD"))
-    private void creativeengineering$captureViewer(BlockGetter level, Entity entity, boolean detached,
-            boolean thirdPersonReverse, float partialTick, CallbackInfo ci) {
-        this.creativeengineering$viewer = entity;
-        this.creativeengineering$partialTick = partialTick;
-    }
+	@Inject(method = "m_90575_", at = @At("HEAD"))
+	private void creativeengineering$captureViewer(BlockGetter level, Entity entity, boolean detached,
+			boolean thirdPersonReverse, float partialTick, CallbackInfo ci) {
+		this.creativeengineering$viewer = entity;
+		this.creativeengineering$partialTick = partialTick;
+	}
 
-    @ModifyArg(method = "m_90575_", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;m_90584_(DDD)V", ordinal = 0), index = 1)
-    private double creativeengineering$sinkEye(double eyeY) {
-        try {
-            return eyeY - SinkingRender.depth(this.creativeengineering$viewer, this.creativeengineering$partialTick);
-        } catch (Throwable ignored) {
-            return eyeY;
-        }
-    }
+	@ModifyArg(method = "m_90575_", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Camera;m_90584_(DDD)V", ordinal = 0), index = 1)
+	private double creativeengineering$sinkEye(double eyeY) {
+		try {
+			return eyeY - SinkingRender.depth(this.creativeengineering$viewer, this.creativeengineering$partialTick);
+		} catch (Throwable ignored) {
+			return eyeY;
+		}
+	}
 }

@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 @Mixin(value = ConcreteFluid.class, remap = false)
 public class IEConcreteSetTimeMixin {
 
-    @ModifyConstant(method = "m_6292_", remap = false, require = 0, constant = @Constant(intValue = 31, ordinal = 0))
-    private int creativeengineering$setAfter30s(int ready) {
-        return 29;
-    }
+	@ModifyConstant(method = "m_6292_", remap = false, require = 0, constant = @Constant(intValue = 31, ordinal = 0))
+	private int creativeengineering$setAfter30s(int ready) {
+		return 29;
+	}
 }

@@ -17,20 +17,20 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class DandelionMaturing {
 
-    private static final ResourceLocation MATURE_ID = new ResourceLocation("veggiesdelight", "mature_dandelion");
+	private static final ResourceLocation MATURE_ID = new ResourceLocation("veggiesdelight", "mature_dandelion");
 
-    private DandelionMaturing() {}
+	private DandelionMaturing() {}
 
-    /** @param richSoil true for Farmer's Delight soils, false for Fertile Soil */
-    public static void soilTick(ServerLevel level, BlockPos soilPos, RandomSource random, boolean richSoil) {
-        int chance = richSoil ? CDConfig.DANDELION_MATURING.richSoilTicks.get()
-                : CDConfig.DANDELION_MATURING.fertileSoilTicks.get();
-        if (chance <= 0) return;
-        BlockPos above = soilPos.above();
-        if (!level.getBlockState(above).is(Blocks.DANDELION) || random.nextInt(chance) != 0) return;
-        Block mature = ForgeRegistries.BLOCKS.getValue(MATURE_ID);
-        if (mature == null || mature == Blocks.AIR) return;
-        BlockState state = mature.defaultBlockState();
-        level.setBlock(above, state, Block.UPDATE_ALL);
-    }
+	/** @param richSoil true for Farmer's Delight soils, false for Fertile Soil */
+	public static void soilTick(ServerLevel level, BlockPos soilPos, RandomSource random, boolean richSoil) {
+		int chance = richSoil ? CDConfig.DANDELION_MATURING.richSoilTicks.get()
+				: CDConfig.DANDELION_MATURING.fertileSoilTicks.get();
+		if (chance <= 0) return;
+		BlockPos above = soilPos.above();
+		if (!level.getBlockState(above).is(Blocks.DANDELION) || random.nextInt(chance) != 0) return;
+		Block mature = ForgeRegistries.BLOCKS.getValue(MATURE_ID);
+		if (mature == null || mature == Blocks.AIR) return;
+		BlockState state = mature.defaultBlockState();
+		level.setBlock(above, state, Block.UPDATE_ALL);
+	}
 }

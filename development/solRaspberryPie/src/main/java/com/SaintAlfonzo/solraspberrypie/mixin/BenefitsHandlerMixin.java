@@ -15,13 +15,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Mixin(value = BenefitsHandler.class, remap = false)
 public abstract class BenefitsHandlerMixin {
-    @Inject(method = "updateBenefits", at = @At("HEAD"), cancellable = true)
-    private static void solrp$noBenefits(Player player, double diversity, CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "updateBenefits", at = @At("HEAD"), cancellable = true)
+	private static void solrp$noBenefits(Player player, double diversity, CallbackInfo ci) {
+		ci.cancel();
+	}
 
-    @Inject(method = "tickBenefits", at = @At("HEAD"), cancellable = true)
-    private static void solrp$noEffectTicks(LivingEvent.LivingTickEvent event, CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "tickBenefits", at = @At("HEAD"), cancellable = true)
+	private static void solrp$noEffectTicks(LivingEvent.LivingTickEvent event, CallbackInfo ci) {
+		ci.cancel();
+	}
 }

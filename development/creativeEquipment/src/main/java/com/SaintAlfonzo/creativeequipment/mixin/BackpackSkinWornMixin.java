@@ -24,14 +24,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = BackpackLayerRenderer.class, remap = false)
 public abstract class BackpackSkinWornMixin {
 
-    @Inject(method = "renderBackpack", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private static void creativeengineering$wornSkin(EntityModel<?> parentModel, LivingEntity entity, PoseStack ps,
-            MultiBufferSource buffer, int light, ItemStack backpack, boolean wearsArmor, IBackpackModel model, CallbackInfo ci) {
-        Block skin = BackpackSkins.getSkin(backpack);
-        if (skin == null) return;
-        // raw call: SB's generic signature cannot be satisfied from a wildcard model
-        ((IBackpackModel) model).translateRotateAndScale((EntityModel) parentModel, entity, ps, wearsArmor);
-        BackpackSkinsClient.renderWorn(skin, ps, buffer, light);
-        ci.cancel();
-    }
+	@Inject(method = "renderBackpack", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private static void creativeengineering$wornSkin(EntityModel<?> parentModel, LivingEntity entity, PoseStack ps,
+			MultiBufferSource buffer, int light, ItemStack backpack, boolean wearsArmor, IBackpackModel model, CallbackInfo ci) {
+		Block skin = BackpackSkins.getSkin(backpack);
+		if (skin == null) return;
+		// raw call: SB's generic signature cannot be satisfied from a wildcard model
+		((IBackpackModel) model).translateRotateAndScale((EntityModel) parentModel, entity, ps, wearsArmor);
+		BackpackSkinsClient.renderWorn(skin, ps, buffer, light);
+		ci.cancel();
+	}
 }

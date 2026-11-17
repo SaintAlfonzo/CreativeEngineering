@@ -50,76 +50,76 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class MagicResistanceEffect {
 
-    private static final ResourceLocation ID = new ResourceLocation(CreativeCommon.MODID, "magic_resistance");
+	private static final ResourceLocation ID = new ResourceLocation(CreativeCommon.MODID, "magic_resistance");
 
-    private static final ResourceLocation MAGIC_TAG = DamageTags.id("magic");
+	private static final ResourceLocation MAGIC_TAG = DamageTags.id("magic");
 
-    private static MobEffect effect;
-    private static boolean lookedUp;
+	private static MobEffect effect;
+	private static boolean lookedUp;
 
-    // Parsed negatedEffectTicks keyed by the raw config string, so a live edit just re-parses.
-    private static volatile String negatedRaw;
-    private static volatile Set<ResourceLocation> negatedIds = Set.of();
+	// Parsed negatedEffectTicks keyed by the raw config string, so a live edit just re-parses.
+	private static volatile String negatedRaw;
+	private static volatile Set<ResourceLocation> negatedIds = Set.of();
 
-    private MagicResistanceEffect() {}
+	private MagicResistanceEffect() {}
 
-    private static MobEffect effect() {
-        if (!lookedUp) {
-            effect = ForgeRegistries.MOB_EFFECTS.getValue(ID);
-            lookedUp = true;
-        }
-        return effect;
-    }
+	private static MobEffect effect() {
+		if (!lookedUp) {
+			effect = ForgeRegistries.MOB_EFFECTS.getValue(ID);
+			lookedUp = true;
+		}
+		return effect;
+	}
 
-    @SubscribeEvent
-    public static void onAttack(LivingAttackEvent event) {
-        MobEffect me = effect();
-        if (me == null) return;
-        LivingEntity entity = event.getEntity();
-        MobEffect ticking = EffectTickContext.tickingOn(entity);
-        if (ticking == null || !negated(ticking)) return;
-        MobEffectInstance resistance = entity.getEffect(me);
-        MobEffectInstance tick = entity.getEffect(ticking);
-        if (resistance == null || tick == null) return;
-        if (tick.getAmplifier() <= resistance.getAmplifier()) event.setCanceled(true);
-    }
+	@SubscribeEvent
+	public static void onAttack(LivingAttackEvent event) {
+		MobEffect me = effect();
+		if (me == null) return;
+		LivingEntity entity = event.getEntity();
+		MobEffect ticking = EffectTickContext.tickingOn(entity);
+		if (ticking == null || !negated(ticking)) return;
+		MobEffectInstance resistance = entity.getEffect(me);
+		MobEffectInstance tick = entity.getEffect(ticking);
+		if (resistance == null || tick == null) return;
+		if (tick.getAmplifier() <= resistance.getAmplifier()) event.setCanceled(true);
+	}
 
-    @SubscribeEvent
-    public static void onHurt(LivingHurtEvent event) {
-        MobEffect me = effect();
-        if (me == null) return;
+	@SubscribeEvent
+	public static void onHurt(LivingHurtEvent event) {
+		MobEffect me = effect();
+		if (me == null) return;
 
-        LivingEntity entity = event.getEntity();
-        MobEffectInstance instance = entity.getEffect(me);
-        if (instance == null) return;
+		LivingEntity entity = event.getEntity();
+		MobEffectInstance instance = entity.getEffect(me);
+		if (instance == null) return;
 
-        MobEffect ticking = EffectTickContext.tickingOn(entity);
-        boolean tickCovered = ticking != null && negated(ticking);
-        if (!tickCovered && !DamageTags.is(event.getSource(), MAGIC_TAG)) return;
+		MobEffect ticking = EffectTickContext.tickingOn(entity);
+		boolean tickCovered = ticking != null && negated(ticking);
+		if (!tickCovered && !DamageTags.is(event.getSource(), MAGIC_TAG)) return;
 
-        float perLevel = CommonConfig.MAGIC_RESISTANCE.reductionPerLevel.get().floatValue();
-        float reduction = Math.min(1.0f, perLevel * (instance.getAmplifier() + 1));
-        event.setAmount(event.getAmount() * (1.0f - reduction));
-    }
+		float perLevel = CommonConfig.MAGIC_RESISTANCE.reductionPerLevel.get().floatValue();
+		float reduction = Math.min(1.0f, perLevel * (instance.getAmplifier() + 1));
+		event.setAmount(event.getAmount() * (1.0f - reduction));
+	}
 
-    /** True when {@code effect} is listed in {@code [magic_resistance].negatedEffectTicks}. */
-    private static boolean negated(MobEffect effect) {
-        String raw;
-        try {
-            raw = CommonConfig.MAGIC_RESISTANCE.negatedEffectTicks.get();
-        } catch (RuntimeException notLoaded) {
-            return false;
-        }
-        if (!raw.equals(negatedRaw)) {
-            Set<ResourceLocation> ids = new HashSet<>();
-            for (String part : raw.split(",")) {
-                ResourceLocation id = ResourceLocation.tryParse(part.trim());
-                if (id != null && !part.isBlank()) ids.add(id);
-            }
-            negatedIds = Set.copyOf(ids);
-            negatedRaw = raw;
-        }
-        ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(effect);
-        return id != null && negatedIds.contains(id);
-    }
+	/** True when {@code effect} is listed in {@code [magic_resistance].negatedEffectTicks}. */
+	private static boolean negated(MobEffect effect) {
+		String raw;
+		try {
+			raw = CommonConfig.MAGIC_RESISTANCE.negatedEffectTicks.get();
+		} catch (RuntimeException notLoaded) {
+			return false;
+		}
+		if (!raw.equals(negatedRaw)) {
+			Set<ResourceLocation> ids = new HashSet<>();
+			for (String part : raw.split(",")) {
+				ResourceLocation id = ResourceLocation.tryParse(part.trim());
+				if (id != null && !part.isBlank()) ids.add(id);
+			}
+			negatedIds = Set.copyOf(ids);
+			negatedRaw = raw;
+		}
+		ResourceLocation id = ForgeRegistries.MOB_EFFECTS.getKey(effect);
+		return id != null && negatedIds.contains(id);
+	}
 }

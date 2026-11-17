@@ -14,50 +14,50 @@ import org.slf4j.Logger;
  */
 public final class JeiGate {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    /** Tested JEI versions (Maven range): the pack's 11.8.1.1034 up to the next minor release. */
-    public static final String RANGE = "[11.8.1.1034,11.9)";
+	/** Tested JEI versions (Maven range): the pack's 11.8.1.1034 up to the next minor release. */
+	public static final String RANGE = "[11.8.1.1034,11.9)";
 
-    private static Boolean supported;
+	private static Boolean supported;
 
-    private JeiGate() {}
+	private JeiGate() {}
 
-    public static synchronized boolean supported() {
-        if (supported == null) {
-            supported = check();
-        }
-        return supported;
-    }
+	public static synchronized boolean supported() {
+		if (supported == null) {
+			supported = check();
+		}
+		return supported;
+	}
 
-    private static boolean check() {
-        ModList mods = ModList.get();
-        if (mods == null) {
-            return false;
-        }
-        return mods.getModContainerById("jei").map(c -> {
-            var version = c.getModInfo().getVersion();
-            if (GatedMixinPlugin.inRange(RANGE, version)) {
-                return true;
-            }
-            LOGGER.warn("[creativecompat] jei {} is outside the tested range {}: Creative Compat's JEI pages, order and tooltips are off",
-                    version, RANGE);
-            return false;
-        }).orElse(false);
-    }
+	private static boolean check() {
+		ModList mods = ModList.get();
+		if (mods == null) {
+			return false;
+		}
+		return mods.getModContainerById("jei").map(c -> {
+			var version = c.getModInfo().getVersion();
+			if (GatedMixinPlugin.inRange(RANGE, version)) {
+				return true;
+			}
+			LOGGER.warn("[creativecompat] jei {} is outside the tested range {}: Creative Compat's JEI pages, order and tooltips are off",
+					version, RANGE);
+			return false;
+		}).orElse(false);
+	}
 
-    /**
-     * Runs one JEI feature when the gate is on. A feature that fails, including a JEI method or class it expects not
-     * being there (a LinkageError), is logged and skipped, so the other features and JEI itself keep loading.
-     */
-    public static void run(String feature, Runnable body) {
-        if (!supported()) {
-            return;
-        }
-        try {
-            body.run();
-        } catch (RuntimeException | LinkageError e) {
-            LOGGER.warn("[creativecompat] JEI feature '{}' failed and is skipped", feature, e);
-        }
-    }
+	/**
+	 * Runs one JEI feature when the gate is on. A feature that fails, including a JEI method or class it expects not
+	 * being there (a LinkageError), is logged and skipped, so the other features and JEI itself keep loading.
+	 */
+	public static void run(String feature, Runnable body) {
+		if (!supported()) {
+			return;
+		}
+		try {
+			body.run();
+		} catch (RuntimeException | LinkageError e) {
+			LOGGER.warn("[creativecompat] JEI feature '{}' failed and is skipped", feature, e);
+		}
+	}
 }

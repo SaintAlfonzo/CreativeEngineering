@@ -31,19 +31,19 @@ import java.util.List;
 @Mixin(value = EasyGuiGraphics.class, remap = false)
 public abstract class LCEasyGuiGraphicsMixin {
 
-    @Shadow @Final private PoseStack pose;
-    @Shadow @Final private LazyOptional<Screen> screen;
-    @Shadow private ScreenPosition offset;
+	@Shadow @Final private PoseStack pose;
+	@Shadow @Final private LazyOptional<Screen> screen;
+	@Shadow private ScreenPosition offset;
 
-    @Inject(method = "renderComponentTooltip(Ljava/util/List;II)V", remap = false, require = 1,
-            at = @At("HEAD"), cancellable = true)
-    private void creativecommon$renderWithStack(List<Component> tooltip, int x, int y, CallbackInfo ci) {
-        if (tooltip.isEmpty()) return;
-        ItemStack stack = LightmansTooltipStacks.find(tooltip);
-        if (stack.isEmpty()) return;
-        int screenX = this.offset.x + x;
-        int screenY = this.offset.y + y;
-        this.screen.ifPresent(s -> s.renderComponentTooltip(this.pose, tooltip, screenX, screenY, stack));
-        ci.cancel();
-    }
+	@Inject(method = "renderComponentTooltip(Ljava/util/List;II)V", remap = false, require = 1,
+			at = @At("HEAD"), cancellable = true)
+	private void creativecommon$renderWithStack(List<Component> tooltip, int x, int y, CallbackInfo ci) {
+		if (tooltip.isEmpty()) return;
+		ItemStack stack = LightmansTooltipStacks.find(tooltip);
+		if (stack.isEmpty()) return;
+		int screenX = this.offset.x + x;
+		int screenY = this.offset.y + y;
+		this.screen.ifPresent(s -> s.renderComponentTooltip(this.pose, tooltip, screenX, screenY, stack));
+		ci.cancel();
+	}
 }

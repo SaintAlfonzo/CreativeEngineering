@@ -39,74 +39,74 @@ import org.slf4j.Logger;
  * model is registered as an additional model, which also puts its texture on the block atlas.
  */
 public final class FridgeTopFill {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation FILL = new ResourceLocation(CfbCompartment.NAMESPACE, "block/fridge_top_fill");
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final ResourceLocation FILL = new ResourceLocation(CfbCompartment.NAMESPACE, "block/fridge_top_fill");
 
-    private FridgeTopFill() {
-    }
+	private FridgeTopFill() {
+	}
 
-    public static void register(IEventBus modBus) {
-        modBus.addListener((ModelEvent.RegisterAdditional e) -> e.register(FILL));
-        modBus.addListener(EventPriority.LOWEST, FridgeTopFill::wrap);
-        FridgeDouble.register(modBus);
-    }
+	public static void register(IEventBus modBus) {
+		modBus.addListener((ModelEvent.RegisterAdditional e) -> e.register(FILL));
+		modBus.addListener(EventPriority.LOWEST, FridgeTopFill::wrap);
+		FridgeDouble.register(modBus);
+	}
 
-    private static void wrap(ModelEvent.BakingCompleted event) {
-        Map<ResourceLocation, BakedModel> models = event.getModels();
-        BakedModel fill = models.get(FILL);
-        if (fill == null || fill == event.getModelManager().getMissingModel()) {
-            LOGGER.warn("[creativedelight/cookingforblockheads] {} did not load: the 2-tall fridge keeps CfB's height", FILL);
-            FridgeDouble.wrap(event);
-            return;
-        }
-        int wrapped = 0;
-        for (BlockState state : ModBlocks.fridge.getStateDefinition().getPossibleStates()) {
-            if (state.getValue(FridgeBlock.MODEL_TYPE) != FridgeBlock.FridgeModelType.LARGE_UPPER) continue;
-            ResourceLocation key = BlockModelShaper.stateToModelLocation(state);
-            BakedModel model = models.get(key);
-            if (model == null || model instanceof Filled) continue;
-            models.put(key, new Filled(model, fill));
-            wrapped++;
-        }
-        LOGGER.debug("[creativedelight/cookingforblockheads] fridge top fill on {} states", wrapped);
-        // Double fridge joints wrap the filled model (one listener, so the order is fixed).
-        FridgeDouble.wrap(event);
-    }
+	private static void wrap(ModelEvent.BakingCompleted event) {
+		Map<ResourceLocation, BakedModel> models = event.getModels();
+		BakedModel fill = models.get(FILL);
+		if (fill == null || fill == event.getModelManager().getMissingModel()) {
+			LOGGER.warn("[creativedelight/cookingforblockheads] {} did not load: the 2-tall fridge keeps CfB's height", FILL);
+			FridgeDouble.wrap(event);
+			return;
+		}
+		int wrapped = 0;
+		for (BlockState state : ModBlocks.fridge.getStateDefinition().getPossibleStates()) {
+			if (state.getValue(FridgeBlock.MODEL_TYPE) != FridgeBlock.FridgeModelType.LARGE_UPPER) continue;
+			ResourceLocation key = BlockModelShaper.stateToModelLocation(state);
+			BakedModel model = models.get(key);
+			if (model == null || model instanceof Filled) continue;
+			models.put(key, new Filled(model, fill));
+			wrapped++;
+		}
+		LOGGER.debug("[creativedelight/cookingforblockheads] fridge top fill on {} states", wrapped);
+		// Double fridge joints wrap the filled model (one listener, so the order is fixed).
+		FridgeDouble.wrap(event);
+	}
 
-    /** CfB's fridge model plus the fill box, in the first render pass the fridge draws in. */
-    private static final class Filled extends BakedModelWrapper<BakedModel> {
-        private final BakedModel fill;
+	/** CfB's fridge model plus the fill box, in the first render pass the fridge draws in. */
+	private static final class Filled extends BakedModelWrapper<BakedModel> {
+		private final BakedModel fill;
 
-        Filled(BakedModel original, BakedModel fill) {
-            super(original);
-            this.fill = fill;
-        }
+		Filled(BakedModel original, BakedModel fill) {
+			super(original);
+			this.fill = fill;
+		}
 
-        @Override
-        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
-            return with(originalModel.getQuads(state, side, rand), state, side, rand);
-        }
+		@Override
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, RandomSource rand) {
+			return with(originalModel.getQuads(state, side, rand), state, side, rand);
+		}
 
-        @Override
-        @Nonnull
-        public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand,
-                                        @Nonnull ModelData data, @Nullable RenderType renderType) {
-            List<BakedQuad> quads = originalModel.getQuads(state, side, rand, data, renderType);
-            if (renderType != null && state != null) {
-                ChunkRenderTypeSet types = originalModel.getRenderTypes(state, rand, data);
-                if (types.isEmpty() || types.asList().get(0) != renderType) return quads;
-            }
-            return with(quads, state, side, rand);
-        }
+		@Override
+		@Nonnull
+		public List<BakedQuad> getQuads(@Nullable BlockState state, @Nullable Direction side, @Nonnull RandomSource rand,
+										@Nonnull ModelData data, @Nullable RenderType renderType) {
+			List<BakedQuad> quads = originalModel.getQuads(state, side, rand, data, renderType);
+			if (renderType != null && state != null) {
+				ChunkRenderTypeSet types = originalModel.getRenderTypes(state, rand, data);
+				if (types.isEmpty() || types.asList().get(0) != renderType) return quads;
+			}
+			return with(quads, state, side, rand);
+		}
 
-        private List<BakedQuad> with(List<BakedQuad> quads, @Nullable BlockState state, @Nullable Direction side,
-                                     RandomSource rand) {
-            List<BakedQuad> extra = fill.getQuads(state, side, rand);
-            if (extra.isEmpty()) return quads;
-            List<BakedQuad> out = new ArrayList<>(quads.size() + extra.size());
-            out.addAll(quads);
-            out.addAll(extra);
-            return out;
-        }
-    }
+		private List<BakedQuad> with(List<BakedQuad> quads, @Nullable BlockState state, @Nullable Direction side,
+									 RandomSource rand) {
+			List<BakedQuad> extra = fill.getQuads(state, side, rand);
+			if (extra.isEmpty()) return quads;
+			List<BakedQuad> out = new ArrayList<>(quads.size() + extra.size());
+			out.addAll(quads);
+			out.addAll(extra);
+			return out;
+		}
+	}
 }

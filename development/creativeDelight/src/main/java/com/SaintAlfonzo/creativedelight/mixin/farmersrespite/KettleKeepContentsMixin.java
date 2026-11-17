@@ -26,38 +26,38 @@ import umpaz.farmersrespite.common.block.entity.KettleBlockEntity;
 @Mixin(value = KettleBlockEntity.class, remap = false)
 public abstract class KettleKeepContentsMixin {
 
-    @Shadow @Final private ItemStackHandler inventory;
-    @Shadow private int brewTime;
-    @Shadow private int brewTimeTotal;
-    @Shadow private ItemStack drinkContainerStack;
-    @Shadow private Component customName;
+	@Shadow @Final private ItemStackHandler inventory;
+	@Shadow private int brewTime;
+	@Shadow private int brewTimeTotal;
+	@Shadow private ItemStack drinkContainerStack;
+	@Shadow private Component customName;
 
-    @Inject(method = "writeMeal", at = @At("RETURN"))
-    private void ce$writeAll(CompoundTag compound, CallbackInfoReturnable<CompoundTag> cir) {
-        if (!CookwareContents.keeping((BlockEntity) (Object) this) || ce$empty()) return;
-        CompoundTag out = cir.getReturnValue();
-        out.put("Inventory", inventory.serializeNBT());
-        out.put("Container", drinkContainerStack.serializeNBT());
-        out.putInt("BrewTime", brewTime);
-        out.putInt("BrewTimeTotal", brewTimeTotal);
-        if (customName != null) out.putString("CustomName", Component.Serializer.toJson(customName));
-    }
+	@Inject(method = "writeMeal", at = @At("RETURN"))
+	private void ce$writeAll(CompoundTag compound, CallbackInfoReturnable<CompoundTag> cir) {
+		if (!CookwareContents.keeping((BlockEntity) (Object) this) || ce$empty()) return;
+		CompoundTag out = cir.getReturnValue();
+		out.put("Inventory", inventory.serializeNBT());
+		out.put("Container", drinkContainerStack.serializeNBT());
+		out.putInt("BrewTime", brewTime);
+		out.putInt("BrewTimeTotal", brewTimeTotal);
+		if (customName != null) out.putString("CustomName", Component.Serializer.toJson(customName));
+	}
 
-    @Inject(method = "getDroppableInventory", at = @At("RETURN"))
-    private void ce$keepSlots(CallbackInfoReturnable<NonNullList<ItemStack>> cir) {
-        if (!CookwareContents.keeping((BlockEntity) (Object) this)) return;
-        NonNullList<ItemStack> drops = cir.getReturnValue();
-        for (int slot = 0; slot < inventory.getSlots(); slot++) {
-            ItemStack kept = inventory.getStackInSlot(slot);
-            if (!kept.isEmpty()) drops.removeIf(s -> s == kept);
-        }
-    }
+	@Inject(method = "getDroppableInventory", at = @At("RETURN"))
+	private void ce$keepSlots(CallbackInfoReturnable<NonNullList<ItemStack>> cir) {
+		if (!CookwareContents.keeping((BlockEntity) (Object) this)) return;
+		NonNullList<ItemStack> drops = cir.getReturnValue();
+		for (int slot = 0; slot < inventory.getSlots(); slot++) {
+			ItemStack kept = inventory.getStackInSlot(slot);
+			if (!kept.isEmpty()) drops.removeIf(s -> s == kept);
+		}
+	}
 
-    @Unique
-    private boolean ce$empty() {
-        for (int slot = 0; slot < inventory.getSlots(); slot++) {
-            if (!inventory.getStackInSlot(slot).isEmpty()) return false;
-        }
-        return true;
-    }
+	@Unique
+	private boolean ce$empty() {
+		for (int slot = 0; slot < inventory.getSlots(); slot++) {
+			if (!inventory.getStackInSlot(slot).isEmpty()) return false;
+		}
+		return true;
+	}
 }

@@ -34,46 +34,46 @@ import org.slf4j.Logger;
  */
 public final class DisplayDelightDishes {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final String LIST = "/creativedelight/displaydelight_dishes.json";
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final String LIST = "/creativedelight/displaydelight_dishes.json";
 
-    /** (block path, food item id) from the list. */
-    public record Dish(String block, ResourceLocation item) {}
+	/** (block path, food item id) from the list. */
+	public record Dish(String block, ResourceLocation item) {}
 
-    /** The dish block ids; empty without Display Delight. */
-    private static final Set<ResourceLocation> BLOCK_IDS = ConcurrentHashMap.newKeySet();
+	/** The dish block ids; empty without Display Delight. */
+	private static final Set<ResourceLocation> BLOCK_IDS = ConcurrentHashMap.newKeySet();
 
-    private DisplayDelightDishes() {}
+	private DisplayDelightDishes() {}
 
-    public static void register(IEventBus modEventBus) {
-        if (!CDConfig.member("displaydelight")) return;
-        List<Dish> dishes = read();
-        dishes.forEach(d -> BLOCK_IDS.add(new ResourceLocation(CreativeDelight.MOD_ID, d.block())));
-        DisplayDelightDishBlocks.register(modEventBus, dishes);
-    }
+	public static void register(IEventBus modEventBus) {
+		if (!CDConfig.member("displaydelight")) return;
+		List<Dish> dishes = read();
+		dishes.forEach(d -> BLOCK_IDS.add(new ResourceLocation(CreativeDelight.MOD_ID, d.block())));
+		DisplayDelightDishBlocks.register(modEventBus, dishes);
+	}
 
-    public static boolean isDish(ResourceLocation blockId) {
-        return BLOCK_IDS.contains(blockId);
-    }
+	public static boolean isDish(ResourceLocation blockId) {
+		return BLOCK_IDS.contains(blockId);
+	}
 
-    private static List<Dish> read() {
-        List<Dish> out = new ArrayList<>();
-        try (InputStream in = DisplayDelightDishes.class.getResourceAsStream(LIST)) {
-            if (in == null) {
-                LOGGER.error("[creativedelight] {} missing from the jar: no Display Delight dishes", LIST);
-                return out;
-            }
-            JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
-            for (JsonElement e : root.getAsJsonArray("dishes")) {
-                JsonObject o = e.getAsJsonObject();
-                // "requires": the dish's food only exists with that mod (corn popsicle: Corn Delight); no block then,
-                // and its loot table sits in packs/mods/<mod>/ (plan_bugfix_1114 5.1, TODO creativedelight/members #58)
-                if (o.has("requires") && !CDConfig.on(o.get("requires").getAsString())) continue;
-                out.add(new Dish(o.get("block").getAsString(), new ResourceLocation(o.get("item").getAsString())));
-            }
-        } catch (Exception e) {
-            LOGGER.error("[creativedelight] could not read {}: {}", LIST, e.toString());
-        }
-        return Collections.unmodifiableList(out);
-    }
+	private static List<Dish> read() {
+		List<Dish> out = new ArrayList<>();
+		try (InputStream in = DisplayDelightDishes.class.getResourceAsStream(LIST)) {
+			if (in == null) {
+				LOGGER.error("[creativedelight] {} missing from the jar: no Display Delight dishes", LIST);
+				return out;
+			}
+			JsonObject root = JsonParser.parseReader(new InputStreamReader(in, StandardCharsets.UTF_8)).getAsJsonObject();
+			for (JsonElement e : root.getAsJsonArray("dishes")) {
+				JsonObject o = e.getAsJsonObject();
+				// "requires": the dish's food only exists with that mod (corn popsicle: Corn Delight); no block then,
+				// and its loot table sits in packs/mods/<mod>/ (plan_bugfix_1114 5.1, TODO creativedelight/members #58)
+				if (o.has("requires") && !CDConfig.on(o.get("requires").getAsString())) continue;
+				out.add(new Dish(o.get("block").getAsString(), new ResourceLocation(o.get("item").getAsString())));
+			}
+		} catch (Exception e) {
+			LOGGER.error("[creativedelight] could not read {}: {}", LIST, e.toString());
+		}
+		return Collections.unmodifiableList(out);
+	}
 }

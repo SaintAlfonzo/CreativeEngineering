@@ -39,70 +39,70 @@ import java.util.List;
 @Mixin(value = RecipeLayout.class, remap = false)
 public class JeiRecipeLayoutTooltipMixin {
 
-    @Shadow
-    @Final
-    private List<IRecipeSlotDrawable> recipeCategorySlots;
+	@Shadow
+	@Final
+	private List<IRecipeSlotDrawable> recipeCategorySlots;
 
-    @Shadow
-    private ImmutableRect2i area;
+	@Shadow
+	private ImmutableRect2i area;
 
-    @Unique
-    @Nullable
-    private ITypedIngredient<?> creativecommon$hoveredIngredient;
+	@Unique
+	@Nullable
+	private ITypedIngredient<?> creativecommon$hoveredIngredient;
 
-    @Unique
-    private int creativecommon$mouseX;
+	@Unique
+	private int creativecommon$mouseX;
 
-    @Unique
-    private int creativecommon$mouseY;
+	@Unique
+	private int creativecommon$mouseY;
 
-    @Inject(method = "drawOverlays", remap = false, at = @At("HEAD"))
-    private void creativecommon$rememberMouse(PoseStack poseStack, int mouseX, int mouseY, CallbackInfo ci) {
-        this.creativecommon$mouseX = mouseX;
-        this.creativecommon$mouseY = mouseY;
-    }
+	@Inject(method = "drawOverlays", remap = false, at = @At("HEAD"))
+	private void creativecommon$rememberMouse(PoseStack poseStack, int mouseX, int mouseY, CallbackInfo ci) {
+		this.creativecommon$mouseX = mouseX;
+		this.creativecommon$mouseY = mouseY;
+	}
 
-    @Redirect(method = "drawOverlays", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lmezz/jei/api/gui/ingredient/IRecipeSlotDrawable;getTooltip()Ljava/util/List;"))
-    private List<Component> creativecommon$rememberIngredient(IRecipeSlotDrawable slot) {
-        ITypedIngredient<?> ingredient = slot.getDisplayedIngredient().orElse(null);
-        if (ingredient != null && ingredient.getItemStack().isEmpty()) {
-            ITypedIngredient<?> under = creativecommon$renderOnlyItemUnderMouse(slot);
-            if (under != null) {
-                ingredient = under;
-            }
-        }
-        this.creativecommon$hoveredIngredient = ingredient;
-        return slot.getTooltip();
-    }
+	@Redirect(method = "drawOverlays", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lmezz/jei/api/gui/ingredient/IRecipeSlotDrawable;getTooltip()Ljava/util/List;"))
+	private List<Component> creativecommon$rememberIngredient(IRecipeSlotDrawable slot) {
+		ITypedIngredient<?> ingredient = slot.getDisplayedIngredient().orElse(null);
+		if (ingredient != null && ingredient.getItemStack().isEmpty()) {
+			ITypedIngredient<?> under = creativecommon$renderOnlyItemUnderMouse(slot);
+			if (under != null) {
+				ingredient = under;
+			}
+		}
+		this.creativecommon$hoveredIngredient = ingredient;
+		return slot.getTooltip();
+	}
 
-    @Redirect(method = "drawOverlays", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lmezz/jei/common/gui/JeiTooltip;draw(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"))
-    private void creativecommon$drawWithIngredient(JeiTooltip tooltip, PoseStack poseStack, int x, int y) {
-        if (this.creativecommon$hoveredIngredient != null) {
-            tooltip.setIngredient(this.creativecommon$hoveredIngredient);
-            this.creativecommon$hoveredIngredient = null;
-        }
-        tooltip.draw(poseStack, x, y);
-    }
+	@Redirect(method = "drawOverlays", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lmezz/jei/common/gui/JeiTooltip;draw(Lcom/mojang/blaze3d/vertex/PoseStack;II)V"))
+	private void creativecommon$drawWithIngredient(JeiTooltip tooltip, PoseStack poseStack, int x, int y) {
+		if (this.creativecommon$hoveredIngredient != null) {
+			tooltip.setIngredient(this.creativecommon$hoveredIngredient);
+			this.creativecommon$hoveredIngredient = null;
+		}
+		tooltip.draw(poseStack, x, y);
+	}
 
-    /** Slot rects are recipe-relative, as in {@code RecipeLayout.getSlotUnderMouse}. */
-    @Unique
-    @Nullable
-    private ITypedIngredient<?> creativecommon$renderOnlyItemUnderMouse(IRecipeSlotDrawable hovered) {
-        double recipeX = this.creativecommon$mouseX - this.area.getX();
-        double recipeY = this.creativecommon$mouseY - this.area.getY();
-        for (IRecipeSlotDrawable other : this.recipeCategorySlots) {
-            if (other == hovered || other.getRole() != RecipeIngredientRole.RENDER_ONLY || !other.isMouseOver(recipeX, recipeY)) {
-                continue;
-            }
-            ITypedIngredient<?> ingredient = other.getDisplayedIngredient().orElse(null);
-            if (ingredient != null && ingredient.getItemStack().isPresent()) {
-                return ingredient;
-            }
-        }
-        return null;
-    }
+	/** Slot rects are recipe-relative, as in {@code RecipeLayout.getSlotUnderMouse}. */
+	@Unique
+	@Nullable
+	private ITypedIngredient<?> creativecommon$renderOnlyItemUnderMouse(IRecipeSlotDrawable hovered) {
+		double recipeX = this.creativecommon$mouseX - this.area.getX();
+		double recipeY = this.creativecommon$mouseY - this.area.getY();
+		for (IRecipeSlotDrawable other : this.recipeCategorySlots) {
+			if (other == hovered || other.getRole() != RecipeIngredientRole.RENDER_ONLY || !other.isMouseOver(recipeX, recipeY)) {
+				continue;
+			}
+			ITypedIngredient<?> ingredient = other.getDisplayedIngredient().orElse(null);
+			if (ingredient != null && ingredient.getItemStack().isPresent()) {
+				return ingredient;
+			}
+		}
+		return null;
+	}
 }

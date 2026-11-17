@@ -23,42 +23,42 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = EntityEmu.class, remap = false)
 public abstract class EntityEmuEggLayerMixin extends Animal implements EggLayer {
 
-    @Shadow
-    public int timeUntilNextEgg;
+	@Shadow
+	public int timeUntilNextEgg;
 
-    protected EntityEmuEggLayerMixin(EntityType<? extends Animal> type, Level level) {
-        super(type, level);
-    }
+	protected EntityEmuEggLayerMixin(EntityType<? extends Animal> type, Level level) {
+		super(type, level);
+	}
 
-    @Override
-    public int getEggTimer() {
-        return this.timeUntilNextEgg;
-    }
+	@Override
+	public int getEggTimer() {
+		return this.timeUntilNextEgg;
+	}
 
-    @Override
-    public void setEggTimer(int time) {
-        this.timeUntilNextEgg = time;
-    }
+	@Override
+	public void setEggTimer(int time) {
+		this.timeUntilNextEgg = time;
+	}
 
-    // Emus carry no jockeys.
-    @Override
-    public boolean isBirdJockey() {
-        return false;
-    }
+	// Emus carry no jockeys.
+	@Override
+	public boolean isBirdJockey() {
+		return false;
+	}
 
-    @Override
-    public Item getEggItem() {
-        return AMItemRegistry.EMU_EGG.get();
-    }
+	@Override
+	public Item getEggItem() {
+		return AMItemRegistry.EMU_EGG.get();
+	}
 
-    // Same reset EntityEmu.tick uses after a lay.
-    @Override
-    public int getNextEggTime(RandomSource random) {
-        return random.nextInt(6000) + 6000;
-    }
+	// Same reset EntityEmu.tick uses after a lay.
+	@Override
+	public int getNextEggTime(RandomSource random) {
+		return random.nextInt(6000) + 6000;
+	}
 
-    @Override
-    public SoundEvent getEggLayingSound() {
-        return SoundEvents.CHICKEN_EGG;
-    }
+	@Override
+	public SoundEvent getEggLayingSound() {
+		return SoundEvents.CHICKEN_EGG;
+	}
 }

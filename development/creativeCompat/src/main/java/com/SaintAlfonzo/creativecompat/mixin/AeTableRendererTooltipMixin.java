@@ -16,13 +16,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = AbstractTableRenderer.class, remap = false)
 public abstract class AeTableRendererTooltipMixin {
 
-    @Shadow
-    private GenericStack hoveredStack;
+	@Shadow
+	private GenericStack hoveredStack;
 
-    @Inject(method = "render", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lappeng/client/gui/AEBaseScreen;drawTooltipWithHeader(Lcom/mojang/blaze3d/vertex/PoseStack;IILjava/util/List;)V"))
-    private void creativecommon$pendingEntryStack(CallbackInfo ci) {
-        AeTooltipStacks.setPending(AeTooltipStacks.itemOf(this.hoveredStack));
-    }
+	@Inject(method = "render", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lappeng/client/gui/AEBaseScreen;drawTooltipWithHeader(Lcom/mojang/blaze3d/vertex/PoseStack;IILjava/util/List;)V"))
+	private void creativecommon$pendingEntryStack(CallbackInfo ci) {
+		AeTooltipStacks.setPending(AeTooltipStacks.itemOf(this.hoveredStack));
+	}
 }

@@ -21,15 +21,15 @@ import vazkii.quark.content.world.module.SpiralSpiresModule;
 @Mixin(value = SpiralSpiresModule.class, remap = false)
 public abstract class QuarkSpiralSpiresTeleportMixin {
 
-    @Inject(method = "onTeleport", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativecommon$endOnly(EntityTeleportEvent event, CallbackInfo ci) {
-        Entity entity = event.getEntity();
-        if (entity == null || entity.level.dimension() != Level.END) {
-            ci.cancel();
-            return;
-        }
-        // Quark reads the target, the block below and their neighbors
-        BlockPos target = new BlockPos(event.getTargetX(), event.getTargetY(), event.getTargetZ());
-        if (!entity.level.hasChunksAt(target.offset(-1, 0, -1), target.offset(1, 0, 1))) ci.cancel();
-    }
+	@Inject(method = "onTeleport", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativecommon$endOnly(EntityTeleportEvent event, CallbackInfo ci) {
+		Entity entity = event.getEntity();
+		if (entity == null || entity.level.dimension() != Level.END) {
+			ci.cancel();
+			return;
+		}
+		// Quark reads the target, the block below and their neighbors
+		BlockPos target = new BlockPos(event.getTargetX(), event.getTargetY(), event.getTargetZ());
+		if (!entity.level.hasChunksAt(target.offset(-1, 0, -1), target.offset(1, 0, 1))) ci.cancel();
+	}
 }

@@ -17,16 +17,16 @@ import mezz.jei.api.gui.ingredient.IRecipeSlotTooltipCallback;
  */
 public final class PotionFluidTooltip {
 
-    private PotionFluidTooltip() {}
+	private PotionFluidTooltip() {}
 
-    public static final IRecipeSlotTooltipCallback POTION_EFFECTS = (view, tooltip) ->
-            view.getDisplayedIngredient(ForgeTypes.FLUID_STACK).ifPresent(fs -> {
-                if (!fs.hasTag() || fs.getTag() == null || !fs.getTag().contains("Potion")) {
-                    return;
-                }
-                if (!tooltip.isEmpty()) {
-                    tooltip.set(0, fs.getDisplayName());
-                }
-                PotionFluidHandler.addPotionTooltip(fs, tooltip, 1.0F);
-            });
+	public static final IRecipeSlotTooltipCallback POTION_EFFECTS = (view, tooltip) ->
+			view.getDisplayedIngredient(ForgeTypes.FLUID_STACK).ifPresent(fs -> {
+				if (!fs.hasTag() || fs.getTag() == null || !fs.getTag().contains("Potion")) {
+					return;
+				}
+				if (!tooltip.isEmpty()) {
+					tooltip.set(0, fs.getDisplayName());
+				}
+				PotionFluidHandler.addPotionTooltip(fs, tooltip, 1.0F);
+			});
 }

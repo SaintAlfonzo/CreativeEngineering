@@ -16,12 +16,12 @@ import org.spongepowered.asm.mixin.Shadow;
 @Mixin(value = MiningScheduler.class, remap = false)
 public class OreExcavationSchedulerMixin implements VeinUndoAccess.Scheduler {
 
-    @Shadow(remap = false)
-    @Final
-    private Map<UUID, ArrayDeque<ExcavateHistory>> undoHistory;
+	@Shadow(remap = false)
+	@Final
+	private Map<UUID, ArrayDeque<ExcavateHistory>> undoHistory;
 
-    @Override
-    public Map<UUID, ArrayDeque<ExcavateHistory>> creativeengineering$undoHistory() {
-        return undoHistory;
-    }
+	@Override
+	public Map<UUID, ArrayDeque<ExcavateHistory>> creativeengineering$undoHistory() {
+		return undoHistory;
+	}
 }

@@ -15,6 +15,6 @@ import java.util.function.Supplier;
  */
 @Mixin(FoodProperties.class)
 public interface FoodPropertiesAccessor {
-    @Accessor("effects")
-    List<Pair<Supplier<MobEffectInstance>, Float>> minersdelight$effects();
+	@Accessor("effects")
+	List<Pair<Supplier<MobEffectInstance>, Float>> minersdelight$effects();
 }

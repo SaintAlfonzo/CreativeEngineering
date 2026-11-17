@@ -48,126 +48,126 @@ import net.minecraftforge.network.NetworkHooks;
  */
 public class OvenBlock extends BaseEntityBlock {
 
-    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
-    public static final BooleanProperty LIT = BlockStateProperties.LIT;
+	public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+	public static final BooleanProperty LIT = BlockStateProperties.LIT;
 
-    public OvenBlock(Properties properties) {
-        super(properties);
-        registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
-    }
+	public OvenBlock(Properties properties) {
+		super(properties);
+		registerDefaultState(stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, LIT);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(FACING, LIT);
+	}
 
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
-    }
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		return defaultBlockState().setValue(FACING, context.getHorizontalDirection().getOpposite());
+	}
 
-    @Override
-    public RenderShape getRenderShape(BlockState state) {
-        return RenderShape.MODEL;
-    }
+	@Override
+	public RenderShape getRenderShape(BlockState state) {
+		return RenderShape.MODEL;
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public BlockState rotate(BlockState state, Rotation rotation) {
-        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public BlockState rotate(BlockState state, Rotation rotation) {
+		return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public BlockState mirror(BlockState state, Mirror mirror) {
-        return state.rotate(mirror.getRotation(state.getValue(FACING)));
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public BlockState mirror(BlockState state, Mirror mirror) {
+		return state.rotate(mirror.getRotation(state.getValue(FACING)));
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (!level.isClientSide && level.getBlockEntity(pos) instanceof OvenBlockEntity oven) {
-            ItemStack served = oven.useHeldItemOnMeal(player.getItemInHand(hand));
-            if (!served.isEmpty()) {
-                if (!player.getInventory().add(served)) {
-                    player.drop(served, false);
-                }
-                level.playSound(null, pos, SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.BLOCKS, 1.0F, 1.0F);
-            } else {
-                NetworkHooks.openScreen((ServerPlayer) player, oven, pos);
-            }
-        }
-        return InteractionResult.sidedSuccess(level.isClientSide);
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		if (!level.isClientSide && level.getBlockEntity(pos) instanceof OvenBlockEntity oven) {
+			ItemStack served = oven.useHeldItemOnMeal(player.getItemInHand(hand));
+			if (!served.isEmpty()) {
+				if (!player.getInventory().add(served)) {
+					player.drop(served, false);
+				}
+				level.playSound(null, pos, SoundEvents.ARMOR_EQUIP_GENERIC, SoundSource.BLOCKS, 1.0F, 1.0F);
+			} else {
+				NetworkHooks.openScreen((ServerPlayer) player, oven, pos);
+			}
+		}
+		return InteractionResult.sidedSuccess(level.isClientSide);
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-        if (!state.is(newState.getBlock())) {
-            if (level.getBlockEntity(pos) instanceof OvenBlockEntity oven) {
-                Containers.dropContents(level, pos, oven.getDroppableInventory());
-                oven.popUsedExperience(level, Vec3.atCenterOf(pos));
-                level.updateNeighbourForOutputSignal(pos, this);
-            }
-            super.onRemove(state, level, pos, newState, isMoving);
-        }
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
+		if (!state.is(newState.getBlock())) {
+			if (level.getBlockEntity(pos) instanceof OvenBlockEntity oven) {
+				Containers.dropContents(level, pos, oven.getDroppableInventory());
+				oven.popUsedExperience(level, Vec3.atCenterOf(pos));
+				level.updateNeighbourForOutputSignal(pos, this);
+			}
+			super.onRemove(state, level, pos, newState, isMoving);
+		}
+	}
 
-    @Override
-    public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
-        if (state.getValue(LIT) && !entity.isSteppingCarefully() && entity instanceof LivingEntity living
-                && !EnchantmentHelper.hasFrostWalker(living)) {
-            entity.hurt(DamageSource.HOT_FLOOR, 1.0F);
-        }
-        super.stepOn(level, pos, state, entity);
-    }
+	@Override
+	public void stepOn(Level level, BlockPos pos, BlockState state, Entity entity) {
+		if (state.getValue(LIT) && !entity.isSteppingCarefully() && entity instanceof LivingEntity living
+				&& !EnchantmentHelper.hasFrostWalker(living)) {
+			entity.hurt(DamageSource.HOT_FLOOR, 1.0F);
+		}
+		super.stepOn(level, pos, state, entity);
+	}
 
-    @Override
-    public BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
-        return state.getValue(LIT) ? BlockPathTypes.DAMAGE_FIRE : null;
-    }
+	@Override
+	public BlockPathTypes getBlockPathType(BlockState state, BlockGetter level, BlockPos pos, @Nullable Mob mob) {
+		return state.getValue(LIT) ? BlockPathTypes.DAMAGE_FIRE : null;
+	}
 
-    @Override
-    public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
-        if (!state.getValue(LIT)) return;
-        double x = pos.getX() + 0.5D;
-        double y = pos.getY();
-        double z = pos.getZ() + 0.5D;
-        if (random.nextInt(10) == 0) {
-            level.playLocalSound(x, y, z, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 0.6F, 1.0F, false);
-        }
-        Direction facing = state.getValue(FACING);
-        double side = random.nextDouble() * 0.6D - 0.3D;
-        double xOffset = facing.getAxis() == Direction.Axis.X ? facing.getStepX() * 0.52D : side;
-        double yOffset = random.nextDouble() * 6.0D / 16.0D;
-        double zOffset = facing.getAxis() == Direction.Axis.Z ? facing.getStepZ() * 0.52D : side;
-        level.addParticle(ParticleTypes.SMOKE, x + xOffset, y + yOffset, z + zOffset, 0.0D, 0.0D, 0.0D);
-    }
+	@Override
+	public void animateTick(BlockState state, Level level, BlockPos pos, RandomSource random) {
+		if (!state.getValue(LIT)) return;
+		double x = pos.getX() + 0.5D;
+		double y = pos.getY();
+		double z = pos.getZ() + 0.5D;
+		if (random.nextInt(10) == 0) {
+			level.playLocalSound(x, y, z, SoundEvents.CAMPFIRE_CRACKLE, SoundSource.BLOCKS, 0.6F, 1.0F, false);
+		}
+		Direction facing = state.getValue(FACING);
+		double side = random.nextDouble() * 0.6D - 0.3D;
+		double xOffset = facing.getAxis() == Direction.Axis.X ? facing.getStepX() * 0.52D : side;
+		double yOffset = random.nextDouble() * 6.0D / 16.0D;
+		double zOffset = facing.getAxis() == Direction.Axis.Z ? facing.getStepZ() * 0.52D : side;
+		level.addParticle(ParticleTypes.SMOKE, x + xOffset, y + yOffset, z + zOffset, 0.0D, 0.0D, 0.0D);
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public boolean hasAnalogOutputSignal(BlockState state) {
-        return true;
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public boolean hasAnalogOutputSignal(BlockState state) {
+		return true;
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
-        if (level.getBlockEntity(pos) instanceof OvenBlockEntity oven) {
-            return net.minecraftforge.items.ItemHandlerHelper.calcRedstoneFromInventory(oven.getInventory());
-        }
-        return 0;
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public int getAnalogOutputSignal(BlockState state, Level level, BlockPos pos) {
+		if (level.getBlockEntity(pos) instanceof OvenBlockEntity oven) {
+			return net.minecraftforge.items.ItemHandlerHelper.calcRedstoneFromInventory(oven.getInventory());
+		}
+		return 0;
+	}
 
-    @Nullable
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new OvenBlockEntity(pos, state);
-    }
+	@Nullable
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new OvenBlockEntity(pos, state);
+	}
 
-    @Nullable
-    @Override
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
-        return level.isClientSide ? null : createTickerHelper(type, OvenRegistry.OVEN_BLOCK_ENTITY.get(), OvenBlockEntity::serverTick);
-    }
+	@Nullable
+	@Override
+	public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState state, BlockEntityType<T> type) {
+		return level.isClientSide ? null : createTickerHelper(type, OvenRegistry.OVEN_BLOCK_ENTITY.get(), OvenBlockEntity::serverTick);
+	}
 }

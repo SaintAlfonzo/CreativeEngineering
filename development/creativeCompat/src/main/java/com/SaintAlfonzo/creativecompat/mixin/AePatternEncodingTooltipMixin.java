@@ -19,14 +19,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = PatternEncodingTermScreen.class, remap = false)
 public class AePatternEncodingTooltipMixin {
 
-    @Inject(method = "m_7025_", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lappeng/client/gui/me/items/PatternEncodingTermScreen;drawTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;IILjava/util/List;)V"))
-    private void creativecommon$pendingSlotStack(CallbackInfo ci) {
-        Slot slot = ((AbstractContainerScreen<?>) (Object) this).getSlotUnderMouse();
-        if (slot == null) return;
-        ItemStack item = slot.getItem();
-        GenericStack unwrapped = GenericStack.fromItemStack(item);
-        AeTooltipStacks.setPending(unwrapped != null ? AeTooltipStacks.itemOf(unwrapped) : item);
-    }
+	@Inject(method = "m_7025_", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lappeng/client/gui/me/items/PatternEncodingTermScreen;drawTooltip(Lcom/mojang/blaze3d/vertex/PoseStack;IILjava/util/List;)V"))
+	private void creativecommon$pendingSlotStack(CallbackInfo ci) {
+		Slot slot = ((AbstractContainerScreen<?>) (Object) this).getSlotUnderMouse();
+		if (slot == null) return;
+		ItemStack item = slot.getItem();
+		GenericStack unwrapped = GenericStack.fromItemStack(item);
+		AeTooltipStacks.setPending(unwrapped != null ? AeTooltipStacks.itemOf(unwrapped) : item);
+	}
 }

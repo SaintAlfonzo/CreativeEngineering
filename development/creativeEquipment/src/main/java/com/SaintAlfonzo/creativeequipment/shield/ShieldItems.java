@@ -20,23 +20,23 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public final class ShieldItems {
 
-    public static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, CreativeEquipment.NS);
+	public static final DeferredRegister<Item> ITEMS =
+			DeferredRegister.create(ForgeRegistries.ITEMS, CreativeEquipment.NS);
 
-    public static final Map<ShieldTier, RegistryObject<Item>> BY_TIER = new EnumMap<>(ShieldTier.class);
+	public static final Map<ShieldTier, RegistryObject<Item>> BY_TIER = new EnumMap<>(ShieldTier.class);
 
-    static {
-        for (ShieldTier tier : ShieldTier.values()) {
-            if (tier == ShieldTier.IRON) {
-                continue;
-            }
-            BY_TIER.put(tier, ITEMS.register(tier.id() + "_shield", () -> new TierShieldItem(tier)));
-        }
-    }
+	static {
+		for (ShieldTier tier : ShieldTier.values()) {
+			if (tier == ShieldTier.IRON) {
+				continue;
+			}
+			BY_TIER.put(tier, ITEMS.register(tier.id() + "_shield", () -> new TierShieldItem(tier)));
+		}
+	}
 
-    private ShieldItems() {}
+	private ShieldItems() {}
 
-    public static void register(IEventBus modEventBus) {
-        ITEMS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		ITEMS.register(modEventBus);
+	}
 }

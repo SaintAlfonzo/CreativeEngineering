@@ -33,83 +33,83 @@ import java.util.stream.Stream;
  */
 final class Channel {
 
-    private static final Gson GSON = new Gson();
+	private static final Gson GSON = new Gson();
 
-    final Path dir, in, out;
+	final Path dir, in, out;
 
-    Channel(Path dir) {
-        this.dir = dir;
-        this.in = dir.resolve("in");
-        this.out = dir.resolve("out");
-        try {
-            Files.createDirectories(in);
-            Files.createDirectories(out);
-        } catch (IOException e) {
-            CaptureDriver.LOG.error("[cdevcapture] channel {} not usable", dir, e);
-        }
-    }
+	Channel(Path dir) {
+		this.dir = dir;
+		this.in = dir.resolve("in");
+		this.out = dir.resolve("out");
+		try {
+			Files.createDirectories(in);
+			Files.createDirectories(out);
+		} catch (IOException e) {
+			CaptureDriver.LOG.error("[cdevcapture] channel {} not usable", dir, e);
+		}
+	}
 
-    /** The lowest-seq request waiting in {@code in/}, removed from the folder; null when there is none. */
-    JsonObject poll() {
-        List<Path> files = new ArrayList<>();
-        try (Stream<Path> s = Files.list(in)) {
-            s.filter(p -> p.getFileName().toString().endsWith(".json")).forEach(files::add);
-        } catch (IOException e) {
-            return null;
-        }
-        if (files.isEmpty()) return null;
-        files.sort(Comparator.comparingLong(Channel::seqOf));
-        Path p = files.get(0);
-        try {
-            JsonObject o = JsonParser.parseString(Files.readString(p, StandardCharsets.UTF_8)).getAsJsonObject();
-            if (!o.has("seq")) o.addProperty("seq", seqOf(p));
-            return o;
-        } catch (Exception e) {
-            JsonObject bad = new JsonObject();
-            bad.addProperty("seq", seqOf(p));
-            bad.addProperty("op", "bad");
-            bad.addProperty("error", "unreadable request: " + e);
-            return bad;
-        } finally {
-            try {
-                Files.deleteIfExists(p);
-            } catch (IOException ignored) {
-                // a request left behind would run twice; logged by the next poll's failure if it persists
-            }
-        }
-    }
+	/** The lowest-seq request waiting in {@code in/}, removed from the folder; null when there is none. */
+	JsonObject poll() {
+		List<Path> files = new ArrayList<>();
+		try (Stream<Path> s = Files.list(in)) {
+			s.filter(p -> p.getFileName().toString().endsWith(".json")).forEach(files::add);
+		} catch (IOException e) {
+			return null;
+		}
+		if (files.isEmpty()) return null;
+		files.sort(Comparator.comparingLong(Channel::seqOf));
+		Path p = files.get(0);
+		try {
+			JsonObject o = JsonParser.parseString(Files.readString(p, StandardCharsets.UTF_8)).getAsJsonObject();
+			if (!o.has("seq")) o.addProperty("seq", seqOf(p));
+			return o;
+		} catch (Exception e) {
+			JsonObject bad = new JsonObject();
+			bad.addProperty("seq", seqOf(p));
+			bad.addProperty("op", "bad");
+			bad.addProperty("error", "unreadable request: " + e);
+			return bad;
+		} finally {
+			try {
+				Files.deleteIfExists(p);
+			} catch (IOException ignored) {
+				// a request left behind would run twice; logged by the next poll's failure if it persists
+			}
+		}
+	}
 
-    void reply(long seq, JsonObject r) {
-        r.addProperty("seq", seq);
-        write(out.resolve(seq + ".json"), r);
-    }
+	void reply(long seq, JsonObject r) {
+		r.addProperty("seq", seq);
+		write(out.resolve(seq + ".json"), r);
+	}
 
-    void heartbeat(String phase, String current, long seq, long tick) {
-        JsonObject o = new JsonObject();
-        o.addProperty("phase", phase);
-        o.addProperty("current", current);
-        o.addProperty("seq", seq);
-        o.addProperty("tick", tick);
-        o.addProperty("time", System.currentTimeMillis());
-        write(dir.resolve("state.json"), o);
-    }
+	void heartbeat(String phase, String current, long seq, long tick) {
+		JsonObject o = new JsonObject();
+		o.addProperty("phase", phase);
+		o.addProperty("current", current);
+		o.addProperty("seq", seq);
+		o.addProperty("tick", tick);
+		o.addProperty("time", System.currentTimeMillis());
+		write(dir.resolve("state.json"), o);
+	}
 
-    private static void write(Path target, JsonObject o) {
-        Path tmp = target.resolveSibling(target.getFileName() + ".tmp");
-        try {
-            Files.writeString(tmp, GSON.toJson(o), StandardCharsets.UTF_8);
-            Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
-        } catch (IOException e) {
-            CaptureDriver.LOG.error("[cdevcapture] channel write {} failed", target, e);
-        }
-    }
+	private static void write(Path target, JsonObject o) {
+		Path tmp = target.resolveSibling(target.getFileName() + ".tmp");
+		try {
+			Files.writeString(tmp, GSON.toJson(o), StandardCharsets.UTF_8);
+			Files.move(tmp, target, StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
+		} catch (IOException e) {
+			CaptureDriver.LOG.error("[cdevcapture] channel write {} failed", target, e);
+		}
+	}
 
-    private static long seqOf(Path p) {
-        String n = p.getFileName().toString();
-        try {
-            return Long.parseLong(n.substring(0, n.length() - 5));
-        } catch (NumberFormatException e) {
-            return Long.MAX_VALUE;
-        }
-    }
+	private static long seqOf(Path p) {
+		String n = p.getFileName().toString();
+		try {
+			return Long.parseLong(n.substring(0, n.length() - 5));
+		} catch (NumberFormatException e) {
+			return Long.MAX_VALUE;
+		}
+	}
 }

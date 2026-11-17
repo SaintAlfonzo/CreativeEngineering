@@ -43,113 +43,113 @@ import java.util.Optional;
  */
 public final class CraftableFirstRecipeLayoutList implements IRecipeLayoutList {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    /** A sort slower than this is logged, so a large category's cost shows up in latest.log. */
-    private static final long SLOW_SORT_NANOS = 250_000_000L;
-    private static boolean loggedHandlerFailure;
+	private static final Logger LOGGER = LogUtils.getLogger();
+	/** A sort slower than this is logged, so a large category's cost shows up in latest.log. */
+	private static final long SLOW_SORT_NANOS = 250_000_000L;
+	private static boolean loggedHandlerFailure;
 
-    private final List<RecipeLayoutWithButtons<?>> layouts;
+	private final List<RecipeLayoutWithButtons<?>> layouts;
 
-    private CraftableFirstRecipeLayoutList(List<RecipeLayoutWithButtons<?>> layouts) {
-        this.layouts = layouts;
-    }
+	private CraftableFirstRecipeLayoutList(List<RecipeLayoutWithButtons<?>> layouts) {
+		this.layouts = layouts;
+	}
 
-    /**
-     * The craftable-first list for these layouts, or null when the sort doesn't apply (turned off,
-     * no menu, or the menu can't take transfers for this category); the caller then uses JEI's own list.
-     */
-    @Nullable
-    public static IRecipeLayoutList sortIfCraftingMenu(@Nullable AbstractContainerMenu menu, @Nullable Player player,
-                                                       List<? extends RecipeLayoutWithButtons<?>> layouts) {
-        if (menu == null || player == null || layouts.size() < 2 || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.craftableFirst.get()) {
-            return null;
-        }
-        IRecipeTransferManager transferManager = Internal.getJeiRuntime().getRecipeTransferManager();
-        IRecipeCategory<?> category = layouts.get(0).recipeLayout().getRecipeCategory();
-        if (transferManager.getRecipeTransferHandler(menu, category).isEmpty()) {
-            return null;
-        }
+	/**
+	 * The craftable-first list for these layouts, or null when the sort doesn't apply (turned off,
+	 * no menu, or the menu can't take transfers for this category); the caller then uses JEI's own list.
+	 */
+	@Nullable
+	public static IRecipeLayoutList sortIfCraftingMenu(@Nullable AbstractContainerMenu menu, @Nullable Player player,
+													   List<? extends RecipeLayoutWithButtons<?>> layouts) {
+		if (menu == null || player == null || layouts.size() < 2 || !com.SaintAlfonzo.creativecompat.CompatConfig.JEI.craftableFirst.get()) {
+			return null;
+		}
+		IRecipeTransferManager transferManager = Internal.getJeiRuntime().getRecipeTransferManager();
+		IRecipeCategory<?> category = layouts.get(0).recipeLayout().getRecipeCategory();
+		if (transferManager.getRecipeTransferHandler(menu, category).isEmpty()) {
+			return null;
+		}
 
-        long start = System.nanoTime();
-        List<Ranked> ranked = new ArrayList<>(layouts.size());
-        for (RecipeLayoutWithButtons<?> layout : layouts) {
-            ranked.add(rank(transferManager, menu, player, layout));
-        }
-        // List.sort is stable, so ties keep JEI's order.
-        ranked.sort(Comparator.comparingInt(Ranked::group).thenComparingInt(Ranked::key));
+		long start = System.nanoTime();
+		List<Ranked> ranked = new ArrayList<>(layouts.size());
+		for (RecipeLayoutWithButtons<?> layout : layouts) {
+			ranked.add(rank(transferManager, menu, player, layout));
+		}
+		// List.sort is stable, so ties keep JEI's order.
+		ranked.sort(Comparator.comparingInt(Ranked::group).thenComparingInt(Ranked::key));
 
-        List<RecipeLayoutWithButtons<?>> sorted = new ArrayList<>(ranked.size());
-        for (Ranked r : ranked) {
-            sorted.add(r.layout());
-        }
-        long elapsed = System.nanoTime() - start;
-        if (elapsed > SLOW_SORT_NANOS) {
-            LOGGER.info("JEI craftable-first sort of {} '{}' recipes took {} ms",
-                    layouts.size(), category.getRecipeType().getUid(), elapsed / 1_000_000L);
-        }
-        return new CraftableFirstRecipeLayoutList(sorted);
-    }
+		List<RecipeLayoutWithButtons<?>> sorted = new ArrayList<>(ranked.size());
+		for (Ranked r : ranked) {
+			sorted.add(r.layout());
+		}
+		long elapsed = System.nanoTime() - start;
+		if (elapsed > SLOW_SORT_NANOS) {
+			LOGGER.info("JEI craftable-first sort of {} '{}' recipes took {} ms",
+					layouts.size(), category.getRecipeType().getUid(), elapsed / 1_000_000L);
+		}
+		return new CraftableFirstRecipeLayoutList(sorted);
+	}
 
-    /** group 0 = + button enabled, 1 = not; key orders within group 1 (lower first). */
-    private record Ranked(RecipeLayoutWithButtons<?> layout, int group, int key) {}
+	/** group 0 = + button enabled, 1 = not; key orders within group 1 (lower first). */
+	private record Ranked(RecipeLayoutWithButtons<?> layout, int group, int key) {}
 
-    private static Ranked rank(IRecipeTransferManager transferManager, AbstractContainerMenu menu, Player player,
-                               RecipeLayoutWithButtons<?> layout) {
-        IRecipeTransferError error;
-        try {
-            Optional<IRecipeTransferError> result =
-                    RecipeTransferUtil.getTransferRecipeError(transferManager, menu, layout.recipeLayout(), player);
-            error = result.orElse(null);
-        } catch (RuntimeException e) {
-            // The sort asks about recipes JEI would never have checked (off-screen pages), so a broken
-            // handler must not take the recipe screen down with it; such recipes just sort last.
-            if (!loggedHandlerFailure) {
-                loggedHandlerFailure = true;
-                LOGGER.warn("JEI craftable-first: transfer check failed, sorting the recipe last", e);
-            }
-            return new Ranked(layout, 1, 0);
-        }
-        if (error == null || error.getType().allowsTransfer) {
-            return new Ranked(layout, 0, 0);
-        }
-        return new Ranked(layout, 1, missingKey(layout.recipeLayout(), error));
-    }
+	private static Ranked rank(IRecipeTransferManager transferManager, AbstractContainerMenu menu, Player player,
+							   RecipeLayoutWithButtons<?> layout) {
+		IRecipeTransferError error;
+		try {
+			Optional<IRecipeTransferError> result =
+					RecipeTransferUtil.getTransferRecipeError(transferManager, menu, layout.recipeLayout(), player);
+			error = result.orElse(null);
+		} catch (RuntimeException e) {
+			// The sort asks about recipes JEI would never have checked (off-screen pages), so a broken
+			// handler must not take the recipe screen down with it; such recipes just sort last.
+			if (!loggedHandlerFailure) {
+				loggedHandlerFailure = true;
+				LOGGER.warn("JEI craftable-first: transfer check failed, sorting the recipe last", e);
+			}
+			return new Ranked(layout, 1, 0);
+		}
+		if (error == null || error.getType().allowsTransfer) {
+			return new Ranked(layout, 0, 0);
+		}
+		return new Ranked(layout, 1, missingKey(layout.recipeLayout(), error));
+	}
 
-    /** JEI 19 {@code RecipeSortUtil}: minus the percentage of input slots present; 0 when unknown. */
-    private static int missingKey(IRecipeLayoutDrawable<?> recipeLayout, IRecipeTransferError error) {
-        if (!(error instanceof RecipeTransferErrorMissingSlots)) {
-            return 0;
-        }
-        int missing = ((JeiMissingSlotsErrorAccessor) error).creativecommon$getSlots().size();
-        int inputs = 0;
-        for (IRecipeSlotView slot : recipeLayout.getRecipeSlotsView().getSlotViews()) {
-            if (slot.getRole() == RecipeIngredientRole.INPUT && !slot.isEmpty()) {
-                inputs++;
-            }
-        }
-        if (inputs == 0) {
-            return 0;
-        }
-        return -(100 * (inputs - missing) / inputs);
-    }
+	/** JEI 19 {@code RecipeSortUtil}: minus the percentage of input slots present; 0 when unknown. */
+	private static int missingKey(IRecipeLayoutDrawable<?> recipeLayout, IRecipeTransferError error) {
+		if (!(error instanceof RecipeTransferErrorMissingSlots)) {
+			return 0;
+		}
+		int missing = ((JeiMissingSlotsErrorAccessor) error).creativecommon$getSlots().size();
+		int inputs = 0;
+		for (IRecipeSlotView slot : recipeLayout.getRecipeSlotsView().getSlotViews()) {
+			if (slot.getRole() == RecipeIngredientRole.INPUT && !slot.isEmpty()) {
+				inputs++;
+			}
+		}
+		if (inputs == 0) {
+			return 0;
+		}
+		return -(100 * (inputs - missing) / inputs);
+	}
 
-    @Override
-    public int size() {
-        return layouts.size();
-    }
+	@Override
+	public int size() {
+		return layouts.size();
+	}
 
-    @Override
-    public List<RecipeLayoutWithButtons<?>> subList(int from, int to) {
-        return layouts.subList(from, to);
-    }
+	@Override
+	public List<RecipeLayoutWithButtons<?>> subList(int from, int to) {
+		return layouts.subList(from, to);
+	}
 
-    @Override
-    public Optional<RecipeLayoutWithButtons<?>> findFirst() {
-        return layouts.isEmpty() ? Optional.empty() : Optional.of(layouts.get(0));
-    }
+	@Override
+	public Optional<RecipeLayoutWithButtons<?>> findFirst() {
+		return layouts.isEmpty() ? Optional.empty() : Optional.of(layouts.get(0));
+	}
 
-    @Override
-    public void tick() {
-        // Same as UnsortedRecipeLayoutList: visible layouts are ticked by RecipeGuiLayouts.
-    }
+	@Override
+	public void tick() {
+		// Same as UnsortedRecipeLayoutList: visible layouts are ticked by RecipeGuiLayouts.
+	}
 }

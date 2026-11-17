@@ -11,44 +11,44 @@ import java.util.List;
  * the tab's catalysts. No dependency on JEI here, so {@link WorldRows} can name tabs on a dedicated server.
  */
 public enum WorldTab {
-    BLOCK_GROWTH("block_growth", List.of("immersive_weathering:moss_clump", "minecraft:grass_block"), List.of()),
-    LIGHTNING("lightning", List.of("minecraft:lightning_rod"), List.of("minecraft:lightning_rod")),
-    LAVA_GENERATION("lava_generation", List.of("minecraft:lava_bucket"), List.of()),
-    CONCRETE_HARDENING("concrete_hardening", List.of("immersiveengineering:concrete"), List.of()),
-    SALT("salt", List.of("salt:salt_block", "salt:salt"), List.of()),
-    STRIPPING("stripping", List.of("minecraft:iron_axe"), List.of("#forge:tools/axes")),
-    WAXING("waxing", List.of("minecraft:honeycomb"), List.of("minecraft:honeycomb", "#forge:tools/axes")),
-    DYEING("dyeing", List.of("minecraft:red_dye"), List.of()),
-    SOAPING("soaping", List.of("supplementaries:soap"), List.of("supplementaries:soap")),
-    JAR_STORAGE("jar_storage", List.of("supplementaries:jar"), List.of("supplementaries:jar")),
-    JAR_INTERACTION("jar_interaction", List.of("supplementaries:faucet", "minecraft:glass_bottle"), List.of()),
-    KNIFE_DROPS("knife_drops", List.of("farmersdelight:iron_knife"), List.of()),
-    GRASS_DROPS("grass_drops", List.of("minecraft:wheat_seeds"), List.of()),
-    SAMPLE_SYRINGE("sample_syringe", List.of("creativedelight:sample_syringe"), List.of("creativedelight:sample_syringe")),
-    MOB_BOTTLING("mob_bottling", List.of("minecraft:axolotl_bucket"), List.of()),
-    MOB_TRANSFORMATION("mob_transformation", List.of("minecraft:golden_apple"), List.of()),
-    BURNING("burning", List.of("supplementaries:ash", "minecraft:flint_and_steel"), List.of()),
-    CAMPFIRE("campfire", List.of("minecraft:campfire"), List.of()),
-    BUDDING("budding", List.of("minecraft:budding_amethyst", "minecraft:amethyst_cluster"), List.of());
+	BLOCK_GROWTH("block_growth", List.of("immersive_weathering:moss_clump", "minecraft:grass_block"), List.of()),
+	LIGHTNING("lightning", List.of("minecraft:lightning_rod"), List.of("minecraft:lightning_rod")),
+	LAVA_GENERATION("lava_generation", List.of("minecraft:lava_bucket"), List.of()),
+	CONCRETE_HARDENING("concrete_hardening", List.of("immersiveengineering:concrete"), List.of()),
+	SALT("salt", List.of("salt:salt_block", "salt:salt"), List.of()),
+	STRIPPING("stripping", List.of("minecraft:iron_axe"), List.of("#forge:tools/axes")),
+	WAXING("waxing", List.of("minecraft:honeycomb"), List.of("minecraft:honeycomb", "#forge:tools/axes")),
+	DYEING("dyeing", List.of("minecraft:red_dye"), List.of()),
+	SOAPING("soaping", List.of("supplementaries:soap"), List.of("supplementaries:soap")),
+	JAR_STORAGE("jar_storage", List.of("supplementaries:jar"), List.of("supplementaries:jar")),
+	JAR_INTERACTION("jar_interaction", List.of("supplementaries:faucet", "minecraft:glass_bottle"), List.of()),
+	KNIFE_DROPS("knife_drops", List.of("farmersdelight:iron_knife"), List.of()),
+	GRASS_DROPS("grass_drops", List.of("minecraft:wheat_seeds"), List.of()),
+	SAMPLE_SYRINGE("sample_syringe", List.of("creativedelight:sample_syringe"), List.of("creativedelight:sample_syringe")),
+	MOB_BOTTLING("mob_bottling", List.of("minecraft:axolotl_bucket"), List.of()),
+	MOB_TRANSFORMATION("mob_transformation", List.of("minecraft:golden_apple"), List.of()),
+	BURNING("burning", List.of("supplementaries:ash", "minecraft:flint_and_steel"), List.of()),
+	CAMPFIRE("campfire", List.of("minecraft:campfire"), List.of()),
+	BUDDING("budding", List.of("minecraft:budding_amethyst", "minecraft:amethyst_cluster"), List.of());
 
-    public final String id;
-    public final List<String> icons;
-    public final List<String> catalysts;
+	public final String id;
+	public final List<String> icons;
+	public final List<String> catalysts;
 
-    WorldTab(String id, List<String> icons, List<String> catalysts) {
-        this.id = id;
-        this.icons = icons;
-        this.catalysts = catalysts;
-    }
+	WorldTab(String id, List<String> icons, List<String> catalysts) {
+		this.id = id;
+		this.icons = icons;
+		this.catalysts = catalysts;
+	}
 
-    public String titleKey() {
-        return "creativecommon.jei.world." + id;
-    }
+	public String titleKey() {
+		return "creativecommon.jei.world." + id;
+	}
 
-    public static WorldTab byId(String id) {
-        for (WorldTab tab : values()) {
-            if (tab.id.equals(id)) return tab;
-        }
-        return null;
-    }
+	public static WorldTab byId(String id) {
+		for (WorldTab tab : values()) {
+			if (tab.id.equals(id)) return tab;
+		}
+		return null;
+	}
 }

@@ -21,19 +21,19 @@ import org.slf4j.LoggerFactory;
  */
 @Mod(LargeMealsMod.MODID)
 public class LargeMealsMod {
-    public static final String MODID = "largemeals";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
+	public static final String MODID = "largemeals";
+	public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
 
-    public LargeMealsMod() {
-        UpstreamJars.verifyOrFail();
-        IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
-        MealBlocks.BLOCKS.register(bus);
-        MealItems.ITEMS.register(bus);
-        bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "largemeals_upstream",
-                "Large Meals: art and loot read from the upstream jar", LargeMealsTranslator::assets, LargeMealsTranslator::data));
-    }
+	public LargeMealsMod() {
+		UpstreamJars.verifyOrFail();
+		IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
+		MealBlocks.BLOCKS.register(bus);
+		MealItems.ITEMS.register(bus);
+		bus.addListener((AddPackFindersEvent event) -> BuiltInPacks.addUpstream(event, "largemeals_upstream",
+				"Large Meals: art and loot read from the upstream jar", LargeMealsTranslator::assets, LargeMealsTranslator::data));
+	}
 
-    public static ResourceLocation path(String path) {
-        return new ResourceLocation(MODID, path);
-    }
+	public static ResourceLocation path(String path) {
+		return new ResourceLocation(MODID, path);
+	}
 }

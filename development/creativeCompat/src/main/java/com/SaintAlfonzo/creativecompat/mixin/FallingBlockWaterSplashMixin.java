@@ -23,22 +23,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = FallingBlockEntity.class, remap = false)
 public abstract class FallingBlockWaterSplashMixin extends Entity {
 
-    private FallingBlockWaterSplashMixin(EntityType<?> type, Level level) {
-        super(type, level);
-    }
+	private FallingBlockWaterSplashMixin(EntityType<?> type, Level level) {
+		super(type, level);
+	}
 
-    @Unique
-    private boolean creativecompat$wasInWater;
+	@Unique
+	private boolean creativecompat$wasInWater;
 
-    @Inject(method = "m_8119_", at = @At("TAIL"), remap = false)
-    private void creativecompat$splash(CallbackInfo ci) {
-        if (!(this.level instanceof ClientLevel level) || this.isRemoved()) {
-            return;
-        }
-        boolean inWater = level.getFluidState(this.blockPosition()).is(FluidTags.WATER);
-        if (inWater && !creativecompat$wasInWater) {
-            this.doWaterSplashEffect();
-        }
-        creativecompat$wasInWater = inWater;
-    }
+	@Inject(method = "m_8119_", at = @At("TAIL"), remap = false)
+	private void creativecompat$splash(CallbackInfo ci) {
+		if (!(this.level instanceof ClientLevel level) || this.isRemoved()) {
+			return;
+		}
+		boolean inWater = level.getFluidState(this.blockPosition()).is(FluidTags.WATER);
+		if (inWater && !creativecompat$wasInWater) {
+			this.doWaterSplashEffect();
+		}
+		creativecompat$wasInWater = inWater;
+	}
 }

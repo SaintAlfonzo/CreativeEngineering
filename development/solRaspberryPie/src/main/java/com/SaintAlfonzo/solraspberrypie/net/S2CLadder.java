@@ -10,23 +10,23 @@ import java.util.function.Supplier;
 
 /** The server's ladder, sent at login (3). */
 public final class S2CLadder {
-    final Ladder ladder;
+	final Ladder ladder;
 
-    public S2CLadder(Ladder ladder) {
-        this.ladder = ladder;
-    }
+	public S2CLadder(Ladder ladder) {
+		this.ladder = ladder;
+	}
 
-    public static void encode(S2CLadder m, FriendlyByteBuf buf) {
-        m.ladder.write(buf);
-    }
+	public static void encode(S2CLadder m, FriendlyByteBuf buf) {
+		m.ladder.write(buf);
+	}
 
-    public static S2CLadder decode(FriendlyByteBuf buf) {
-        return new S2CLadder(Ladder.read(buf));
-    }
+	public static S2CLadder decode(FriendlyByteBuf buf) {
+		return new S2CLadder(Ladder.read(buf));
+	}
 
-    public static void handle(S2CLadder m, Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
-                () -> () -> com.SaintAlfonzo.solraspberrypie.client.ClientState.setLadder(m.ladder)));
-        ctx.get().setPacketHandled(true);
-    }
+	public static void handle(S2CLadder m, Supplier<NetworkEvent.Context> ctx) {
+		ctx.get().enqueueWork(() -> DistExecutor.unsafeRunWhenOn(Dist.CLIENT,
+				() -> () -> com.SaintAlfonzo.solraspberrypie.client.ClientState.setLadder(m.ladder)));
+		ctx.get().setPacketHandled(true);
+	}
 }

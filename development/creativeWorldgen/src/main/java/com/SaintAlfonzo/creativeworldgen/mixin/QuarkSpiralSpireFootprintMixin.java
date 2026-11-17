@@ -25,22 +25,22 @@ import java.util.Random;
 @Mixin(value = SpiralSpireGenerator.class, remap = false)
 public abstract class QuarkSpiralSpireFootprintMixin {
 
-    private static final int CWG_FOOTPRINT_RADIUS = 7;
+	private static final int CWG_FOOTPRINT_RADIUS = 7;
 
-    @Inject(method = "makeSpike", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$cancelOverAir(WorldGenRegion world, ChunkGenerator generator, Random rand,
-                                                   BlockPos pos, CallbackInfo ci) {
-        int r = CWG_FOOTPRINT_RADIUS;
-        BlockPos.MutableBlockPos test = new BlockPos.MutableBlockPos();
-        for (int i = -r + 1; i < r; i++) {
-            for (int j = -r + 1; j < r; j++) {
-                if (i * i + j * j > r * r) continue;
-                test.set(pos.getX() + i, pos.getY() - 1, pos.getZ() + j);
-                if (world.getBlockState(test).isAir()) {
-                    ci.cancel();
-                    return;
-                }
-            }
-        }
-    }
+	@Inject(method = "makeSpike", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$cancelOverAir(WorldGenRegion world, ChunkGenerator generator, Random rand,
+												   BlockPos pos, CallbackInfo ci) {
+		int r = CWG_FOOTPRINT_RADIUS;
+		BlockPos.MutableBlockPos test = new BlockPos.MutableBlockPos();
+		for (int i = -r + 1; i < r; i++) {
+			for (int j = -r + 1; j < r; j++) {
+				if (i * i + j * j > r * r) continue;
+				test.set(pos.getX() + i, pos.getY() - 1, pos.getZ() + j);
+				if (world.getBlockState(test).isAir()) {
+					ci.cancel();
+					return;
+				}
+			}
+		}
+	}
 }

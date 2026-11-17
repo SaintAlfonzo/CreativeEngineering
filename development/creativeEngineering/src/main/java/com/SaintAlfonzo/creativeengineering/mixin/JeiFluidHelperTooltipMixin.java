@@ -20,11 +20,11 @@ import java.util.List;
 @Mixin(value = FluidHelper.class, remap = false)
 public class JeiFluidHelperTooltipMixin {
 
-    @Inject(method = "getTooltip(Lnet/minecraftforge/fluids/FluidStack;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;",
-            remap = false, require = 1, at = @At("RETURN"))
-    private void creativeengineering$drinkEffects(FluidStack fs, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir) {
-        List<Component> tooltip = cir.getReturnValue();
-        if (tooltip.isEmpty()) return;
-        tooltip.addAll(1, DrinkFluidEffects.lines(fs));
-    }
+	@Inject(method = "getTooltip(Lnet/minecraftforge/fluids/FluidStack;Lnet/minecraft/world/item/TooltipFlag;)Ljava/util/List;",
+			remap = false, require = 1, at = @At("RETURN"))
+	private void creativeengineering$drinkEffects(FluidStack fs, TooltipFlag flag, CallbackInfoReturnable<List<Component>> cir) {
+		List<Component> tooltip = cir.getReturnValue();
+		if (tooltip.isEmpty()) return;
+		tooltip.addAll(1, DrinkFluidEffects.lines(fs));
+	}
 }

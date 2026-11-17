@@ -29,58 +29,58 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = AbstractArrow.class, remap = false)
 public abstract class ArrowPassMixin implements PassArrow {
 
-    @Shadow
-    private int f_36697_; // life
+	@Shadow
+	private int f_36697_; // life
 
-    @Shadow
-    protected boolean f_36703_; // inGround
+	@Shadow
+	protected boolean f_36703_; // inGround
 
-    @Shadow
-    private BlockState f_36696_; // lastState
+	@Shadow
+	private BlockState f_36696_; // lastState
 
-    @Shadow
-    protected abstract ItemStack m_7941_(); // getPickupItem
+	@Shadow
+	protected abstract ItemStack m_7941_(); // getPickupItem
 
-    @Inject(method = "m_6901_", at = @At("HEAD"), cancellable = true)
-    private void creativecompat$despawn(CallbackInfo ci) {
-        int limit;
-        try {
-            limit = PassArrows.despawnLimit((AbstractArrow) (Object) this);
-        } catch (Throwable t) {
-            limit = -1;
-        }
-        if (limit < 0) return;
-        ci.cancel();
-        if (++f_36697_ >= limit) ((Entity) (Object) this).discard();
-    }
+	@Inject(method = "m_6901_", at = @At("HEAD"), cancellable = true)
+	private void creativecompat$despawn(CallbackInfo ci) {
+		int limit;
+		try {
+			limit = PassArrows.despawnLimit((AbstractArrow) (Object) this);
+		} catch (Throwable t) {
+			limit = -1;
+		}
+		if (limit < 0) return;
+		ci.cancel();
+		if (++f_36697_ >= limit) ((Entity) (Object) this).discard();
+	}
 
-    @Override
-    public void creativecompat$hangInWeb() {
-        AbstractArrow self = (AbstractArrow) (Object) this;
-        f_36703_ = true;
-        f_36696_ = self.level.getBlockState(self.blockPosition());
-        self.setDeltaMovement(Vec3.ZERO);
-        self.shakeTime = 7;
-        self.setCritArrow(false);
-    }
+	@Override
+	public void creativecompat$hangInWeb() {
+		AbstractArrow self = (AbstractArrow) (Object) this;
+		f_36703_ = true;
+		f_36696_ = self.level.getBlockState(self.blockPosition());
+		self.setDeltaMovement(Vec3.ZERO);
+		self.shakeTime = 7;
+		self.setCritArrow(false);
+	}
 
-    @Override
-    public boolean creativecompat$inGround() {
-        return f_36703_;
-    }
+	@Override
+	public boolean creativecompat$inGround() {
+		return f_36703_;
+	}
 
-    @Override
-    public BlockState creativecompat$lastState() {
-        return f_36696_;
-    }
+	@Override
+	public BlockState creativecompat$lastState() {
+		return f_36696_;
+	}
 
-    @Override
-    public int creativecompat$life() {
-        return f_36697_;
-    }
+	@Override
+	public int creativecompat$life() {
+		return f_36697_;
+	}
 
-    @Override
-    public ItemStack creativecompat$pickupItem() {
-        return m_7941_();
-    }
+	@Override
+	public ItemStack creativecompat$pickupItem() {
+		return m_7941_();
+	}
 }

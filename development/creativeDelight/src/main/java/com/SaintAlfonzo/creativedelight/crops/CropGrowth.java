@@ -34,100 +34,100 @@ import com.google.gson.JsonObject;
  */
 public final class CropGrowth {
 
-    private CropGrowth() {}
+	private CropGrowth() {}
 
-    public enum Stage { GROWING, HARVESTABLE, MATURE }
+	public enum Stage { GROWING, HARVESTABLE, MATURE }
 
-    /** What the line says: a percentage, plus whether it can be picked / is finished. */
-    public record Display(int percent, Stage stage) {}
+	/** What the line says: a percentage, plus whether it can be picked / is finished. */
+	public record Display(int percent, Stage stage) {}
 
-    /**
-     * @param value   growth value read from the state (summed over the rule's properties)
-     * @param max     value of a fully grown plant, above 0
-     * @param harvest value from which it can be picked, {@code max} when only the full plant can be
-     * @param empty   values at or below this show no line, -1 for none
-     * @return null when the plant shows no line
-     */
-    public static Display evaluate(int value, int max, int harvest, int empty) {
-        if (max <= 0 || value <= empty) {
-            return null;
-        }
-        if (value >= max) {
-            return new Display(100, Stage.MATURE);
-        }
-        // rounded like WTHIT's own "%.0f%%", but never 100 before the plant is actually grown
-        int percent = Math.min(99, Math.round(Math.max(0, value) * 100f / max));
-        return new Display(percent, value >= harvest ? Stage.HARVESTABLE : Stage.GROWING);
-    }
+	/**
+	 * @param value   growth value read from the state (summed over the rule's properties)
+	 * @param max     value of a fully grown plant, above 0
+	 * @param harvest value from which it can be picked, {@code max} when only the full plant can be
+	 * @param empty   values at or below this show no line, -1 for none
+	 * @return null when the plant shows no line
+	 */
+	public static Display evaluate(int value, int max, int harvest, int empty) {
+		if (max <= 0 || value <= empty) {
+			return null;
+		}
+		if (value >= max) {
+			return new Display(100, Stage.MATURE);
+		}
+		// rounded like WTHIT's own "%.0f%%", but never 100 before the plant is actually grown
+		int percent = Math.min(99, Math.round(Math.max(0, value) * 100f / max));
+		return new Display(percent, value >= harvest ? Stage.HARVESTABLE : Stage.GROWING);
+	}
 
-    public record Rule(List<Pattern> ids, List<String> tags, List<String> properties, List<String> stages,
-                       int max, int harvest, int empty, Map<String, String> requires) {
+	public record Rule(List<Pattern> ids, List<String> tags, List<String> properties, List<String> stages,
+					   int max, int harvest, int empty, Map<String, String> requires) {
 
-        public boolean matchesId(String id) {
-            for (Pattern p : ids) {
-                if (p.matcher(id).matches()) {
-                    return true;
-                }
-            }
-            return false;
-        }
-    }
+		public boolean matchesId(String id) {
+			for (Pattern p : ids) {
+				if (p.matcher(id).matches()) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 
-    /** What to do with a bush-like block that has no rule: any {@code BushBlock} with an integer "age". */
-    public static final String FALLBACK_PROPERTY = "age";
+	/** What to do with a bush-like block that has no rule: any {@code BushBlock} with an integer "age". */
+	public static final String FALLBACK_PROPERTY = "age";
 
-    /** Glob over a full block id: {@code *} matches anything, the rest is literal (Common's {@code Globs}). */
-    public static Pattern glob(String text) {
-        return com.SaintAlfonzo.creativecommon.util.Globs.glob(text);
-    }
+	/** Glob over a full block id: {@code *} matches anything, the rest is literal (Common's {@code Globs}). */
+	public static Pattern glob(String text) {
+		return com.SaintAlfonzo.creativecommon.util.Globs.glob(text);
+	}
 
-    public static List<Rule> parse(JsonObject root) {
-        List<Rule> out = new ArrayList<>();
-        JsonArray rules = root.getAsJsonArray("rules");
-        if (rules == null) {
-            return out;
-        }
-        int n = 0;
-        for (JsonElement el : rules) {
-            n++;
-            JsonObject o = el.getAsJsonObject();
-            List<Pattern> ids = new ArrayList<>();
-            List<String> tags = new ArrayList<>();
-            for (JsonElement b : o.getAsJsonArray("blocks")) {
-                String s = b.getAsString();
-                if (s.startsWith("#")) {
-                    tags.add(s.substring(1));
-                } else {
-                    ids.add(glob(s));
-                }
-            }
-            List<String> props = new ArrayList<>();
-            if (o.has("properties")) {
-                o.getAsJsonArray("properties").forEach(p -> props.add(p.getAsString()));
-            } else {
-                props.add(o.has("property") ? o.get("property").getAsString() : FALLBACK_PROPERTY);
-            }
-            List<String> stages = null;
-            if (o.has("stages")) {
-                stages = new ArrayList<>();
-                for (JsonElement s : o.getAsJsonArray("stages")) {
-                    stages.add(s.getAsString());
-                }
-            }
-            Map<String, String> requires = new LinkedHashMap<>();
-            if (o.has("requires")) {
-                o.getAsJsonObject("requires").entrySet().forEach(e -> requires.put(e.getKey(), e.getValue().getAsString()));
-            }
-            if (ids.isEmpty() && tags.isEmpty()) {
-                throw new IllegalArgumentException("rule " + n + " matches no blocks");
-            }
-            out.add(new Rule(List.copyOf(ids), List.copyOf(tags), List.copyOf(props),
-                    stages == null ? null : List.copyOf(stages),
-                    o.has("max") ? o.get("max").getAsInt() : -1,
-                    o.has("harvest") ? o.get("harvest").getAsInt() : -1,
-                    o.has("empty") ? o.get("empty").getAsInt() : -1,
-                    Map.copyOf(requires)));
-        }
-        return out;
-    }
+	public static List<Rule> parse(JsonObject root) {
+		List<Rule> out = new ArrayList<>();
+		JsonArray rules = root.getAsJsonArray("rules");
+		if (rules == null) {
+			return out;
+		}
+		int n = 0;
+		for (JsonElement el : rules) {
+			n++;
+			JsonObject o = el.getAsJsonObject();
+			List<Pattern> ids = new ArrayList<>();
+			List<String> tags = new ArrayList<>();
+			for (JsonElement b : o.getAsJsonArray("blocks")) {
+				String s = b.getAsString();
+				if (s.startsWith("#")) {
+					tags.add(s.substring(1));
+				} else {
+					ids.add(glob(s));
+				}
+			}
+			List<String> props = new ArrayList<>();
+			if (o.has("properties")) {
+				o.getAsJsonArray("properties").forEach(p -> props.add(p.getAsString()));
+			} else {
+				props.add(o.has("property") ? o.get("property").getAsString() : FALLBACK_PROPERTY);
+			}
+			List<String> stages = null;
+			if (o.has("stages")) {
+				stages = new ArrayList<>();
+				for (JsonElement s : o.getAsJsonArray("stages")) {
+					stages.add(s.getAsString());
+				}
+			}
+			Map<String, String> requires = new LinkedHashMap<>();
+			if (o.has("requires")) {
+				o.getAsJsonObject("requires").entrySet().forEach(e -> requires.put(e.getKey(), e.getValue().getAsString()));
+			}
+			if (ids.isEmpty() && tags.isEmpty()) {
+				throw new IllegalArgumentException("rule " + n + " matches no blocks");
+			}
+			out.add(new Rule(List.copyOf(ids), List.copyOf(tags), List.copyOf(props),
+					stages == null ? null : List.copyOf(stages),
+					o.has("max") ? o.get("max").getAsInt() : -1,
+					o.has("harvest") ? o.get("harvest").getAsInt() : -1,
+					o.has("empty") ? o.get("empty").getAsInt() : -1,
+					Map.copyOf(requires)));
+		}
+		return out;
+	}
 }

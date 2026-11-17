@@ -35,73 +35,73 @@ import java.util.UUID;
  */
 public final class PortalGunDissolve {
 
-    private PortalGunDissolve() {}
+	private PortalGunDissolve() {}
 
-    @SubscribeEvent
-    public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
-        dissolveAll(event.getEntity());
-    }
+	@SubscribeEvent
+	public static void onLogout(PlayerEvent.PlayerLoggedOutEvent event) {
+		dissolveAll(event.getEntity());
+	}
 
-    @SubscribeEvent
-    public static void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
-        dissolveAll(event.getEntity());
-    }
+	@SubscribeEvent
+	public static void onChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
+		dissolveAll(event.getEntity());
+	}
 
-    /** Every portal the player owns, loaded or not. */
-    public static void dissolveAll(Player player) {
-        if (!(player instanceof ServerPlayer serverPlayer)) return;
-        MinecraftServer server = serverPlayer.server;
-        UUID owner = player.getUUID();
-        PortalGunRecord record = PortalGunRecord.get();
-        List<PortalGunRecord.PortalInfo> removed = new ArrayList<>();
-        record.data.entrySet().removeIf(entry -> {
-            if (!owner.equals(entry.getKey().playerId())) return false;
-            removed.add(entry.getValue());
-            return true;
-        });
-        if (removed.isEmpty()) return;
-        record.setDirty();
-        for (PortalGunRecord.PortalInfo info : removed) {
-            ServerLevel level = server.getLevel(info.portalDim());
-            Entity entity = level == null ? null : level.getEntity(info.portalId());
-            if (entity instanceof CustomPortal portal) close(portal);
-        }
-    }
+	/** Every portal the player owns, loaded or not. */
+	public static void dissolveAll(Player player) {
+		if (!(player instanceof ServerPlayer serverPlayer)) return;
+		MinecraftServer server = serverPlayer.server;
+		UUID owner = player.getUUID();
+		PortalGunRecord record = PortalGunRecord.get();
+		List<PortalGunRecord.PortalInfo> removed = new ArrayList<>();
+		record.data.entrySet().removeIf(entry -> {
+			if (!owner.equals(entry.getKey().playerId())) return false;
+			removed.add(entry.getValue());
+			return true;
+		});
+		if (removed.isEmpty()) return;
+		record.setDirty();
+		for (PortalGunRecord.PortalInfo info : removed) {
+			ServerLevel level = server.getLevel(info.portalDim());
+			Entity entity = level == null ? null : level.getEntity(info.portalId());
+			if (entity instanceof CustomPortal portal) close(portal);
+		}
+	}
 
-    /** The heartbeat, called every server tick of a gun portal; does nothing off its beat. */
-    public static void heartbeat(CustomPortal portal) {
-        Entity entity = portal; // vanilla-typed, so the Entity calls reobfuscate
-        if (entity.level.isClientSide || entity.isRemoved() || portal.descriptor == null || !CompatConfig.SPEC.isLoaded()) return;
-        int interval = CompatConfig.PORTAL_GUN.heartbeatSeconds.get() * 20;
-        int phase = (entity.getUUID().hashCode() & Integer.MAX_VALUE) % interval;
-        if (entity.tickCount % interval != phase) return;
+	/** The heartbeat, called every server tick of a gun portal; does nothing off its beat. */
+	public static void heartbeat(CustomPortal portal) {
+		Entity entity = portal; // vanilla-typed, so the Entity calls reobfuscate
+		if (entity.level.isClientSide || entity.isRemoved() || portal.descriptor == null || !CompatConfig.SPEC.isLoaded()) return;
+		int interval = CompatConfig.PORTAL_GUN.heartbeatSeconds.get() * 20;
+		int phase = (entity.getUUID().hashCode() & Integer.MAX_VALUE) % interval;
+		if (entity.tickCount % interval != phase) return;
 
-        MinecraftServer server = entity.getServer();
-        if (server == null) return;
-        ServerPlayer owner = server.getPlayerList().getPlayer(portal.descriptor.playerId());
-        boolean gone = owner == null || owner.level != entity.level;
-        if (!gone) {
-            int range = CompatConfig.PORTAL_GUN.despawnDistance.get();
-            gone = range > 0 && owner.distanceToSqr(entity) > (double) range * range;
-        }
-        if (gone) dissolve(portal);
-    }
+		MinecraftServer server = entity.getServer();
+		if (server == null) return;
+		ServerPlayer owner = server.getPlayerList().getPlayer(portal.descriptor.playerId());
+		boolean gone = owner == null || owner.level != entity.level;
+		if (!gone) {
+			int range = CompatConfig.PORTAL_GUN.despawnDistance.get();
+			gone = range > 0 && owner.distanceToSqr(entity) > (double) range * range;
+		}
+		if (gone) dissolve(portal);
+	}
 
-    /** This one portal: its record entry (when it still points here) and the entity. */
-    public static void dissolve(CustomPortal portal) {
-        Entity entity = portal;
-        PortalGunRecord record = PortalGunRecord.get();
-        Map<PortalGunRecord.PortalDescriptor, PortalGunRecord.PortalInfo> data = record.data;
-        PortalGunRecord.PortalInfo info = data.get(portal.descriptor);
-        if (info != null && info.portalId().equals(entity.getUUID())) {
-            data.remove(portal.descriptor);
-            record.setDirty();
-        }
-        close(portal);
-    }
+	/** This one portal: its record entry (when it still points here) and the entity. */
+	public static void dissolve(CustomPortal portal) {
+		Entity entity = portal;
+		PortalGunRecord record = PortalGunRecord.get();
+		Map<PortalGunRecord.PortalDescriptor, PortalGunRecord.PortalInfo> data = record.data;
+		PortalGunRecord.PortalInfo info = data.get(portal.descriptor);
+		if (info != null && info.portalId().equals(entity.getUUID())) {
+			data.remove(portal.descriptor);
+			record.setDirty();
+		}
+		close(portal);
+	}
 
-    private static void close(CustomPortal portal) {
-        ((PortalGunPortalInvoker) portal).creativecompat$playClosingSound();
-        ((Entity) portal).discard();
-    }
+	private static void close(CustomPortal portal) {
+		((PortalGunPortalInvoker) portal).creativecompat$playClosingSound();
+		((Entity) portal).discard();
+	}
 }

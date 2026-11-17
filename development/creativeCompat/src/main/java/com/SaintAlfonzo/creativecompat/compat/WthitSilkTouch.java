@@ -31,40 +31,40 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class WthitSilkTouch implements IWailaClientPlugin, IBlockComponentProvider {
 
-    private static final ResourceLocation LINE = new ResourceLocation(CreativeCompat.MOD_ID, "silk_touch");
-    private static final TagKey<Block> NEEDS_SILK_TOUCH =
-            BlockTags.create(new ResourceLocation(CreativeCommon.NS, "wthit/needs_silk_touch"));
-    private static final TagKey<Block> DIFFERS =
-            BlockTags.create(new ResourceLocation(CreativeCommon.NS, "wthit/silk_touch_differs"));
+	private static final ResourceLocation LINE = new ResourceLocation(CreativeCompat.MOD_ID, "silk_touch");
+	private static final TagKey<Block> NEEDS_SILK_TOUCH =
+			BlockTags.create(new ResourceLocation(CreativeCommon.NS, "wthit/needs_silk_touch"));
+	private static final TagKey<Block> DIFFERS =
+			BlockTags.create(new ResourceLocation(CreativeCommon.NS, "wthit/silk_touch_differs"));
 
-    @Override
-    public void register(IClientRegistrar registrar) {
-        registrar.body(this, Block.class);
-    }
+	@Override
+	public void register(IClientRegistrar registrar) {
+		registrar.body(this, Block.class);
+	}
 
-    @Override
-    public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
-        if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.silkTouch.get()) {
-            return;
-        }
-        if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, accessor.getPlayer().getMainHandItem()) > 0) {
-            return;
-        }
-        BlockState state = accessor.getBlockState();
-        String key;
-        ChatFormatting color;
-        if (state.is(NEEDS_SILK_TOUCH)) {
-            key = "true";
-            color = ChatFormatting.GREEN;
-        } else if (state.is(DIFFERS)) {
-            key = "differs";
-            color = ChatFormatting.YELLOW;
-        } else if (com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.silkTouchShowFalse.get()) {
-            key = "false";
-            color = ChatFormatting.RED;
-        } else {
-            return;
-        }
-        tooltip.setLine(LINE, Component.translatable("creativecommon.wthit.silk_touch." + key).withStyle(color));
-    }
+	@Override
+	public void appendBody(ITooltip tooltip, IBlockAccessor accessor, IPluginConfig config) {
+		if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.silkTouch.get()) {
+			return;
+		}
+		if (EnchantmentHelper.getItemEnchantmentLevel(Enchantments.SILK_TOUCH, accessor.getPlayer().getMainHandItem()) > 0) {
+			return;
+		}
+		BlockState state = accessor.getBlockState();
+		String key;
+		ChatFormatting color;
+		if (state.is(NEEDS_SILK_TOUCH)) {
+			key = "true";
+			color = ChatFormatting.GREEN;
+		} else if (state.is(DIFFERS)) {
+			key = "differs";
+			color = ChatFormatting.YELLOW;
+		} else if (com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.silkTouchShowFalse.get()) {
+			key = "false";
+			color = ChatFormatting.RED;
+		} else {
+			return;
+		}
+		tooltip.setLine(LINE, Component.translatable("creativecommon.wthit.silk_touch." + key).withStyle(color));
+	}
 }

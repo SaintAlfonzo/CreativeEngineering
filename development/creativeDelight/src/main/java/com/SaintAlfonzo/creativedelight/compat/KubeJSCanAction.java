@@ -15,12 +15,12 @@ import com.SaintAlfonzo.creativecommon.compat.kubejs.IngredientActions;
  */
 public final class KubeJSCanAction {
 
-    public static final String ID = "creativedelight:can_serving";
+	public static final String ID = "creativedelight:can_serving";
 
-    private KubeJSCanAction() {}
+	private KubeJSCanAction() {}
 
-    /** Registers the action with Common's {@link IngredientActions} (which re-applies it on every script load). */
-    public static void register() {
-        IngredientActions.register(ID, (stack, index, inventory) -> CanServings.craftRemainder(stack));
-    }
+	/** Registers the action with Common's {@link IngredientActions} (which re-applies it on every script load). */
+	public static void register() {
+		IngredientActions.register(ID, (stack, index, inventory) -> CanServings.craftRemainder(stack));
+	}
 }

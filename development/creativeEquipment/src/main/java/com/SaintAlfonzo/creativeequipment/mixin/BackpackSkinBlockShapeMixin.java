@@ -20,12 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = BackpackBlock.class, remap = false)
 public abstract class BackpackSkinBlockShapeMixin {
 
-    @Inject(method = "m_5940_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
-    private void creativeengineering$skinShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx,
-            CallbackInfoReturnable<VoxelShape> cir) {
-        BlockEntity be = level.getBlockEntity(pos);
-        if (!(be instanceof BackpackBlockEntity bpe)) return;
-        Block skin = BackpackSkins.getSkin(bpe.getBackpackWrapper().getBackpack());
-        if (skin != null) cir.setReturnValue(BackpackSkins.skinState(skin, state).getShape(level, pos, ctx));
-    }
+	@Inject(method = "m_5940_", at = @At("HEAD"), cancellable = true, remap = false, require = 1)
+	private void creativeengineering$skinShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext ctx,
+			CallbackInfoReturnable<VoxelShape> cir) {
+		BlockEntity be = level.getBlockEntity(pos);
+		if (!(be instanceof BackpackBlockEntity bpe)) return;
+		Block skin = BackpackSkins.getSkin(bpe.getBackpackWrapper().getBackpack());
+		if (skin != null) cir.setReturnValue(BackpackSkins.skinState(skin, state).getShape(level, pos, ctx));
+	}
 }

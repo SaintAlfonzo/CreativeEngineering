@@ -16,23 +16,23 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class CamoSpeedTooltip {
 
-    private CamoSpeedTooltip() {}
+	private CamoSpeedTooltip() {}
 
-    private static final String BLOCKRUNNER_KEY = "block.blockrunner.speedMultiplier";
+	private static final String BLOCKRUNNER_KEY = "block.blockrunner.speedMultiplier";
 
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onTooltip(ItemTooltipEvent event) {
-        if (!(event.getItemStack().getItem() instanceof BlockItem item)
-                || !item.getBlock().defaultBlockState().is(CamoSpeed.TAG)) {
-            return;
-        }
-        List<Component> tooltip = event.getToolTip();
-        for (int i = 0; i < tooltip.size(); i++) {
-            Component line = tooltip.get(i);
-            if (line.getContents() instanceof TranslatableContents contents && BLOCKRUNNER_KEY.equals(contents.getKey())) {
-                tooltip.set(i, CamoSpeed.tooltipLine(item.getBlock()).withStyle(line.getStyle()));
-                return;
-            }
-        }
-    }
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onTooltip(ItemTooltipEvent event) {
+		if (!(event.getItemStack().getItem() instanceof BlockItem item)
+				|| !item.getBlock().defaultBlockState().is(CamoSpeed.TAG)) {
+			return;
+		}
+		List<Component> tooltip = event.getToolTip();
+		for (int i = 0; i < tooltip.size(); i++) {
+			Component line = tooltip.get(i);
+			if (line.getContents() instanceof TranslatableContents contents && BLOCKRUNNER_KEY.equals(contents.getKey())) {
+				tooltip.set(i, CamoSpeed.tooltipLine(item.getBlock()).withStyle(line.getStyle()));
+				return;
+			}
+		}
+	}
 }

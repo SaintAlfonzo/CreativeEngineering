@@ -33,43 +33,43 @@ import net.minecraftforge.fml.loading.FMLPaths;
  */
 @Mod.EventBusSubscriber(modid = CreativeDevtools.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class WorldJeiDump {
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Gson GSON = new GsonBuilder().setPrettyPrinting().disableHtmlEscaping().create();
 
-    /** One output file. {@code dump} gets the overworld and returns the file's JSON. */
-    public record Part(String name, Function<ServerLevel, JsonElement> dump) {}
+	/** One output file. {@code dump} gets the overworld and returns the file's JSON. */
+	public record Part(String name, Function<ServerLevel, JsonElement> dump) {}
 
-    private static final List<Part> PARTS = List.of(
-            new Part("tool_pairs", WorldJeiToolPairs::dump),
-            new Part("mob_buckets", WorldJeiMobBuckets::dump));
+	private static final List<Part> PARTS = List.of(
+			new Part("tool_pairs", WorldJeiToolPairs::dump),
+			new Part("mob_buckets", WorldJeiMobBuckets::dump));
 
-    private WorldJeiDump() {}
+	private WorldJeiDump() {}
 
-    @SubscribeEvent
-    public static void onRegisterCommands(RegisterCommandsEvent event) {
-        event.getDispatcher().register(Commands.literal("dumpworldjei")
-                .requires(src -> src.hasPermission(2))
-                .executes(ctx -> {
-                    ServerLevel level = ctx.getSource().getServer().overworld();
-                    int ok = 0;
-                    for (Part part : PARTS) {
-                        try {
-                            write(part.name(), part.dump().apply(level));
-                            ok++;
-                        } catch (Exception e) {
-                            LOGGER.error("[dumpworldjei] {} failed", part.name(), e);
-                            ctx.getSource().sendFailure(Component.literal("[dumpworldjei] " + part.name() + " failed: " + e));
-                        }
-                    }
-                    ctx.getSource().sendSuccess(Component.literal("[dumpworldjei] " + ok + "/" + PARTS.size()
-                            + " parts -> kubejs/exported/world_jei/").withStyle(ChatFormatting.GREEN), false);
-                    return ok;
-                }));
-    }
+	@SubscribeEvent
+	public static void onRegisterCommands(RegisterCommandsEvent event) {
+		event.getDispatcher().register(Commands.literal("dumpworldjei")
+				.requires(src -> src.hasPermission(2))
+				.executes(ctx -> {
+					ServerLevel level = ctx.getSource().getServer().overworld();
+					int ok = 0;
+					for (Part part : PARTS) {
+						try {
+							write(part.name(), part.dump().apply(level));
+							ok++;
+						} catch (Exception e) {
+							LOGGER.error("[dumpworldjei] {} failed", part.name(), e);
+							ctx.getSource().sendFailure(Component.literal("[dumpworldjei] " + part.name() + " failed: " + e));
+						}
+					}
+					ctx.getSource().sendSuccess(Component.literal("[dumpworldjei] " + ok + "/" + PARTS.size()
+							+ " parts -> kubejs/exported/world_jei/").withStyle(ChatFormatting.GREEN), false);
+					return ok;
+				}));
+	}
 
-    private static void write(String name, JsonElement json) throws IOException {
-        Path dir = FMLPaths.GAMEDIR.get().resolve("kubejs/exported/world_jei");
-        Files.createDirectories(dir);
-        Files.writeString(dir.resolve(name + ".json"), GSON.toJson(json) + "\n", StandardCharsets.UTF_8);
-    }
+	private static void write(String name, JsonElement json) throws IOException {
+		Path dir = FMLPaths.GAMEDIR.get().resolve("kubejs/exported/world_jei");
+		Files.createDirectories(dir);
+		Files.writeString(dir.resolve(name + ".json"), GSON.toJson(json) + "\n", StandardCharsets.UTF_8);
+	}
 }

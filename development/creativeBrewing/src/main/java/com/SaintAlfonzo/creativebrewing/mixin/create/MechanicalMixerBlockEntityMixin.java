@@ -37,20 +37,20 @@ import java.util.List;
 @Mixin(value = MechanicalMixerBlockEntity.class, remap = false)
 public abstract class MechanicalMixerBlockEntityMixin extends BasinOperatingBlockEntity {
 
-    private MechanicalMixerBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-        super(type, pos, state);
-    }
+	private MechanicalMixerBlockEntityMixin(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+		super(type, pos, state);
+	}
 
-    @Inject(method = "getMatchingRecipes", at = @At("RETURN"))
-    private void creativeengineering$dragonBreathFluidBrewing(CallbackInfoReturnable<List<Recipe<?>>> cir) {
-        if (DragonBreathBrewing.FLUID_BREWING.isEmpty()) return;
-        if (!AllConfigs.server().recipes.allowBrewingInMixer.get()) return;
+	@Inject(method = "getMatchingRecipes", at = @At("RETURN"))
+	private void creativeengineering$dragonBreathFluidBrewing(CallbackInfoReturnable<List<Recipe<?>>> cir) {
+		if (DragonBreathBrewing.FLUID_BREWING.isEmpty()) return;
+		if (!AllConfigs.server().recipes.allowBrewingInMixer.get()) return;
 
-        List<Recipe<?>> matching = cir.getReturnValue();
-        for (MixingRecipe recipe : DragonBreathBrewing.FLUID_BREWING) {
-            if (matchBasinRecipe(recipe)) {
-                matching.add(recipe);
-            }
-        }
-    }
+		List<Recipe<?>> matching = cir.getReturnValue();
+		for (MixingRecipe recipe : DragonBreathBrewing.FLUID_BREWING) {
+			if (matchBasinRecipe(recipe)) {
+				matching.add(recipe);
+			}
+		}
+	}
 }

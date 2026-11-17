@@ -10,6 +10,6 @@ import java.util.List;
 /** The lines of an FTB {@code TooltipList}, for {@link com.SaintAlfonzo.creativecompat.compat.FtbTooltipStacks}. */
 @Mixin(value = TooltipList.class, remap = false)
 public interface FtbTooltipListAccessor {
-    @Accessor("lines")
-    List<Component> creativecommon$getLines();
+	@Accessor("lines")
+	List<Component> creativecommon$getLines();
 }

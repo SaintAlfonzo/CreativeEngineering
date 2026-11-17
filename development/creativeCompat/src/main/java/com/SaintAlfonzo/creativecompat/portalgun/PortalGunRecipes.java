@@ -15,15 +15,15 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public final class PortalGunRecipes {
 
-    public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeCompat.MOD_ID);
+	public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
+			DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeCompat.MOD_ID);
 
-    public static final RegistryObject<SimpleRecipeSerializer<PortalGunDyeRecipe>> DYE =
-            SERIALIZERS.register("portal_gun_dye", () -> new SimpleRecipeSerializer<>(PortalGunDyeRecipe::new));
+	public static final RegistryObject<SimpleRecipeSerializer<PortalGunDyeRecipe>> DYE =
+			SERIALIZERS.register("portal_gun_dye", () -> new SimpleRecipeSerializer<>(PortalGunDyeRecipe::new));
 
-    private PortalGunRecipes() {}
+	private PortalGunRecipes() {}
 
-    public static void register(IEventBus modEventBus) {
-        SERIALIZERS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		SERIALIZERS.register(modEventBus);
+	}
 }

@@ -8,11 +8,11 @@ import com.SaintAlfonzo.creativecompat.compat.RemainderView;
  */
 public interface RemainderBufferHolder extends RemainderView.Holder {
 
-    RemainderBuffer ce$getRemainderBuffer();
+	RemainderBuffer ce$getRemainderBuffer();
 
-    /** The buffer as Common's WTHIT line reads it. */
-    @Override
-    default RemainderView ce$remainderView() {
-        return ce$getRemainderBuffer();
-    }
+	/** The buffer as Common's WTHIT line reads it. */
+	@Override
+	default RemainderView ce$remainderView() {
+		return ce$getRemainderBuffer();
+	}
 }

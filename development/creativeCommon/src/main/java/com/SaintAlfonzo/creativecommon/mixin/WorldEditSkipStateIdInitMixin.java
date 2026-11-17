@@ -21,8 +21,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "com.sk89q.worldedit.extension.platform.Capability$4", remap = false)
 public abstract class WorldEditSkipStateIdInitMixin {
 
-    @Inject(method = "ready", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativecommon$skipStateIdInit(PlatformManager platformManager, Platform platform, CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "ready", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativecommon$skipStateIdInit(PlatformManager platformManager, Platform platform, CallbackInfo ci) {
+		ci.cancel();
+	}
 }

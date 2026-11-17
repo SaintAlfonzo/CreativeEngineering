@@ -25,28 +25,28 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(RenderLayer.class)
 public abstract class RenderLayerBabyMixin {
 
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    @Inject(method = "m_117359_", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void babyMobs$copyLayer(EntityModel parent, EntityModel model, ResourceLocation texture, PoseStack pose,
-                                           MultiBufferSource buffers, int light, LivingEntity entity, float limbSwing,
-                                           float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
-                                           float partialTicks, float red, float green, float blue, CallbackInfo ci) {
-        BabyKit.LayerSwap swap = BabyRender.layerSwap(texture);
-        if (swap == null) return;
-        ci.cancel();
-        if (entity.isInvisible()) return;
-        EntityModel baby = BabyRender.layerModel(swap);
-        EntityModel m = baby != null ? baby : model;
-        parent.copyPropertiesTo(m);
-        m.young = false;
-        m.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
-        m.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
-        VertexConsumer vc = buffers.getBuffer(RenderType.entityCutoutNoCull(swap.texture()));
-        m.renderToBuffer(pose, vc, light, LivingEntityRenderer.getOverlayCoords(entity, 0.0F), red, green, blue, 1.0F);
-    }
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	@Inject(method = "m_117359_", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void babyMobs$copyLayer(EntityModel parent, EntityModel model, ResourceLocation texture, PoseStack pose,
+										   MultiBufferSource buffers, int light, LivingEntity entity, float limbSwing,
+										   float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch,
+										   float partialTicks, float red, float green, float blue, CallbackInfo ci) {
+		BabyKit.LayerSwap swap = BabyRender.layerSwap(texture);
+		if (swap == null) return;
+		ci.cancel();
+		if (entity.isInvisible()) return;
+		EntityModel baby = BabyRender.layerModel(swap);
+		EntityModel m = baby != null ? baby : model;
+		parent.copyPropertiesTo(m);
+		m.young = false;
+		m.prepareMobModel(entity, limbSwing, limbSwingAmount, partialTicks);
+		m.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
+		VertexConsumer vc = buffers.getBuffer(RenderType.entityCutoutNoCull(swap.texture()));
+		m.renderToBuffer(pose, vc, light, LivingEntityRenderer.getOverlayCoords(entity, 0.0F), red, green, blue, 1.0F);
+	}
 
-    @ModifyVariable(method = "m_117376_", at = @At("HEAD"), ordinal = 0, argsOnly = true, remap = false)
-    private static ResourceLocation babyMobs$layerTexture(ResourceLocation texture) {
-        return BabyRender.layerTexture(texture);
-    }
+	@ModifyVariable(method = "m_117376_", at = @At("HEAD"), ordinal = 0, argsOnly = true, remap = false)
+	private static ResourceLocation babyMobs$layerTexture(ResourceLocation texture) {
+		return BabyRender.layerTexture(texture);
+	}
 }

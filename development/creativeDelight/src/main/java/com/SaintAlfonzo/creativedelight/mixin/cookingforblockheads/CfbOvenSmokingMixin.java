@@ -22,24 +22,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = OvenBlockEntity.class, remap = false)
 public abstract class CfbOvenSmokingMixin {
 
-    @Shadow
-    @Final
-    private Container singleSlotRecipeWrapper;
+	@Shadow
+	@Final
+	private Container singleSlotRecipeWrapper;
 
-    @Inject(method = "getSmeltingResult", at = @At("RETURN"), cancellable = true)
-    private void ce$smokingFallback(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
-        if (!cir.getReturnValue().isEmpty() || stack.isEmpty()) {
-            return;
-        }
-        Level level = ((BlockEntity) (Object) this).getLevel();
-        if (level == null) {
-            return;
-        }
-        singleSlotRecipeWrapper.setItem(0, stack);
-        ItemStack result = level.getRecipeManager().getRecipeFor(RecipeType.SMOKING, singleSlotRecipeWrapper, level)
-                .map(r -> r.getResultItem()).orElse(ItemStack.EMPTY);
-        if (!result.isEmpty() && result.getItem().isEdible()) {
-            cir.setReturnValue(result);
-        }
-    }
+	@Inject(method = "getSmeltingResult", at = @At("RETURN"), cancellable = true)
+	private void ce$smokingFallback(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
+		if (!cir.getReturnValue().isEmpty() || stack.isEmpty()) {
+			return;
+		}
+		Level level = ((BlockEntity) (Object) this).getLevel();
+		if (level == null) {
+			return;
+		}
+		singleSlotRecipeWrapper.setItem(0, stack);
+		ItemStack result = level.getRecipeManager().getRecipeFor(RecipeType.SMOKING, singleSlotRecipeWrapper, level)
+				.map(r -> r.getResultItem()).orElse(ItemStack.EMPTY);
+		if (!result.isEmpty() && result.getItem().isEdible()) {
+			cir.setReturnValue(result);
+		}
+	}
 }

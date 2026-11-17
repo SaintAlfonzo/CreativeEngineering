@@ -36,73 +36,73 @@ import java.util.Set;
 @Mixin(value = SawmillBlockEntity.SawmillProcess.class, remap = false)
 public class SawmillProcessMixin implements SawmillProcessExt {
 
-    @Unique private String creativeengineering$bladeProfile;
-    @Unique private String creativeengineering$resolvedRecipeId;
+	@Unique private String creativeengineering$bladeProfile;
+	@Unique private String creativeengineering$resolvedRecipeId;
 
-    @Override
-    public String creativeengineering$getBladeProfile() {
-        return creativeengineering$bladeProfile == null ? "" : creativeengineering$bladeProfile;
-    }
+	@Override
+	public String creativeengineering$getBladeProfile() {
+		return creativeengineering$bladeProfile == null ? "" : creativeengineering$bladeProfile;
+	}
 
-    @Override
-    public void creativeengineering$setBladeProfile(String profile) {
-        this.creativeengineering$bladeProfile = profile == null ? "" : profile;
-    }
+	@Override
+	public void creativeengineering$setBladeProfile(String profile) {
+		this.creativeengineering$bladeProfile = profile == null ? "" : profile;
+	}
 
-    @Override
-    public String creativeengineering$getResolvedRecipeId() {
-        return creativeengineering$resolvedRecipeId == null ? "" : creativeengineering$resolvedRecipeId;
-    }
+	@Override
+	public String creativeengineering$getResolvedRecipeId() {
+		return creativeengineering$resolvedRecipeId == null ? "" : creativeengineering$resolvedRecipeId;
+	}
 
-    @Override
-    public void creativeengineering$setResolvedRecipeId(String id) {
-        this.creativeengineering$resolvedRecipeId = id == null ? "" : id;
-    }
+	@Override
+	public void creativeengineering$setResolvedRecipeId(String id) {
+		this.creativeengineering$resolvedRecipeId = id == null ? "" : id;
+	}
 
-    @Inject(method = "processStep", at = @At("HEAD"))
-    private void creativeengineering$captureBlade(SawmillBlockEntity be, Set<ItemStack> secondaryOutputs,
-                                                 CallbackInfoReturnable<Boolean> cir) {
-        this.creativeengineering$bladeProfile = SawbladeRouting.profileOf(be.sawblade);
-    }
+	@Inject(method = "processStep", at = @At("HEAD"))
+	private void creativeengineering$captureBlade(SawmillBlockEntity be, Set<ItemStack> secondaryOutputs,
+												 CallbackInfoReturnable<Boolean> cir) {
+		this.creativeengineering$bladeProfile = SawbladeRouting.profileOf(be.sawblade);
+	}
 
-    @Redirect(
-            method = "getRecipeDependentData",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lblusunrize/immersiveengineering/api/crafting/SawmillRecipe;findRecipe(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;)Lblusunrize/immersiveengineering/api/crafting/SawmillRecipe;"
-            )
-    )
-    private SawmillRecipe creativeengineering$routeByBlade(Level level, ItemStack input) {
-        // Client, or server after a reload: reuse the exact recipe the server already routed to.
-        String saved = creativeengineering$getResolvedRecipeId();
-        if (!saved.isEmpty()) {
-            ResourceLocation id = ResourceLocation.tryParse(saved);
-            if (id != null) {
-                SawmillRecipe byId = SawmillRecipe.RECIPES.getById(level, id);
-                if (byId != null) return byId;
-            }
-        }
-        SawmillRecipe routed = SawbladeRouting.route(level, input, creativeengineering$getBladeProfile());
-        this.creativeengineering$resolvedRecipeId =
-                routed == null ? "" : ((Recipe<?>) routed).getId().toString();
-        return routed;
-    }
+	@Redirect(
+			method = "getRecipeDependentData",
+			at = @At(
+					value = "INVOKE",
+					target = "Lblusunrize/immersiveengineering/api/crafting/SawmillRecipe;findRecipe(Lnet/minecraft/world/level/Level;Lnet/minecraft/world/item/ItemStack;)Lblusunrize/immersiveengineering/api/crafting/SawmillRecipe;"
+			)
+	)
+	private SawmillRecipe creativeengineering$routeByBlade(Level level, ItemStack input) {
+		// Client, or server after a reload: reuse the exact recipe the server already routed to.
+		String saved = creativeengineering$getResolvedRecipeId();
+		if (!saved.isEmpty()) {
+			ResourceLocation id = ResourceLocation.tryParse(saved);
+			if (id != null) {
+				SawmillRecipe byId = SawmillRecipe.RECIPES.getById(level, id);
+				if (byId != null) return byId;
+			}
+		}
+		SawmillRecipe routed = SawbladeRouting.route(level, input, creativeengineering$getBladeProfile());
+		this.creativeengineering$resolvedRecipeId =
+				routed == null ? "" : ((Recipe<?>) routed).getId().toString();
+		return routed;
+	}
 
-    @Inject(method = "writeToNBT", at = @At("RETURN"))
-    private void creativeengineering$writeBladeData(CallbackInfoReturnable<CompoundTag> cir) {
-        CompoundTag tag = cir.getReturnValue();
-        if (tag == null) return;
-        tag.putString("ce_BladeProfile", creativeengineering$getBladeProfile());
-        tag.putString("ce_ResolvedRecipe", creativeengineering$getResolvedRecipeId());
-    }
+	@Inject(method = "writeToNBT", at = @At("RETURN"))
+	private void creativeengineering$writeBladeData(CallbackInfoReturnable<CompoundTag> cir) {
+		CompoundTag tag = cir.getReturnValue();
+		if (tag == null) return;
+		tag.putString("ce_BladeProfile", creativeengineering$getBladeProfile());
+		tag.putString("ce_ResolvedRecipe", creativeengineering$getResolvedRecipeId());
+	}
 
-    @Inject(method = "readFromNBT", at = @At("RETURN"))
-    private static void creativeengineering$readBladeData(CompoundTag tag,
-                                                         CallbackInfoReturnable<SawmillBlockEntity.SawmillProcess> cir) {
-        SawmillBlockEntity.SawmillProcess process = cir.getReturnValue();
-        if (process == null) return;
-        SawmillProcessExt ext = (SawmillProcessExt) process;
-        ext.creativeengineering$setBladeProfile(tag.getString("ce_BladeProfile"));
-        ext.creativeengineering$setResolvedRecipeId(tag.getString("ce_ResolvedRecipe"));
-    }
+	@Inject(method = "readFromNBT", at = @At("RETURN"))
+	private static void creativeengineering$readBladeData(CompoundTag tag,
+														 CallbackInfoReturnable<SawmillBlockEntity.SawmillProcess> cir) {
+		SawmillBlockEntity.SawmillProcess process = cir.getReturnValue();
+		if (process == null) return;
+		SawmillProcessExt ext = (SawmillProcessExt) process;
+		ext.creativeengineering$setBladeProfile(tag.getString("ce_BladeProfile"));
+		ext.creativeengineering$setResolvedRecipeId(tag.getString("ce_ResolvedRecipe"));
+	}
 }

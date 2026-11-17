@@ -20,12 +20,12 @@ import org.spongepowered.asm.mixin.Overwrite;
 @Mixin(targets = "net.mehvahdjukaar.supplementaries.integration.forge.BreezyCompatImpl", remap = false)
 public abstract class SupplementariesBreezyCompatMixin {
 
-    /** @author SaintAlfonzo */
-    @Overwrite
-    public static float getWindDirection(BlockPos pos, Level level) {
-        NewWindSavedData wind = BreezyNetworking.CLIENT_CACHE;
-        if (wind == null) return 90.0F;
-        double angle = Math.toRadians(wind.getWindAtHeight(pos.getY(), level));
-        return (float) (Mth.atan2(-Math.cos(angle), Math.sin(angle)) * 180.0D / Math.PI);
-    }
+	/** @author SaintAlfonzo */
+	@Overwrite
+	public static float getWindDirection(BlockPos pos, Level level) {
+		NewWindSavedData wind = BreezyNetworking.CLIENT_CACHE;
+		if (wind == null) return 90.0F;
+		double angle = Math.toRadians(wind.getWindAtHeight(pos.getY(), level));
+		return (float) (Mth.atan2(-Math.cos(angle), Math.sin(angle)) * 180.0D / Math.PI);
+	}
 }

@@ -14,14 +14,14 @@ import net.minecraft.resources.ResourceLocation;
  */
 public final class RemainderSlotFrames {
 
-    private RemainderSlotFrames() {}
+	private RemainderSlotFrames() {}
 
-    public static void draw(PoseStack poseStack, ResourceLocation texture, int leftPos, int topPos, int frameU, int frameV) {
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, texture);
-        for (int i = 0; i < RemainderBuffer.SLOTS; ++i) {
-            GuiComponent.blit(poseStack, leftPos + RemainderSlot.X - 1, topPos + RemainderSlot.y(i) - 1, 0,
-                    frameU, frameV, 18, 18, 256, 256);
-        }
-    }
+	public static void draw(PoseStack poseStack, ResourceLocation texture, int leftPos, int topPos, int frameU, int frameV) {
+		RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
+		RenderSystem.setShaderTexture(0, texture);
+		for (int i = 0; i < RemainderBuffer.SLOTS; ++i) {
+			GuiComponent.blit(poseStack, leftPos + RemainderSlot.X - 1, topPos + RemainderSlot.y(i) - 1, 0,
+					frameU, frameV, 18, 18, 256, 256);
+		}
+	}
 }

@@ -17,10 +17,10 @@ import org.spongepowered.asm.mixin.injection.Redirect;
  */
 @Mixin(value = Boat.class, remap = false)
 public abstract class BoatIceFrictionMixin {
-    @Redirect(method = "m_38377_", remap = false, at = @At(value = "INVOKE", remap = false,
-            target = "Lnet/minecraft/world/level/block/state/BlockState;getFriction(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)F"))
-    private float creativecompat$boatFriction(BlockState state, LevelReader level, BlockPos pos, Entity entity) {
-        Float f = BoatFriction.of(state);
-        return f != null ? f : state.getFriction(level, pos, entity);
-    }
+	@Redirect(method = "m_38377_", remap = false, at = @At(value = "INVOKE", remap = false,
+			target = "Lnet/minecraft/world/level/block/state/BlockState;getFriction(Lnet/minecraft/world/level/LevelReader;Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/entity/Entity;)F"))
+	private float creativecompat$boatFriction(BlockState state, LevelReader level, BlockPos pos, Entity entity) {
+		Float f = BoatFriction.of(state);
+		return f != null ? f : state.getFriction(level, pos, entity);
+	}
 }

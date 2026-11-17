@@ -27,12 +27,12 @@ import java.util.function.Supplier;
 @Mixin(value = ModBlocks.class, remap = false)
 public abstract class BushierFlowersDisableMixin {
 
-    @Shadow @Final @Mutable public static List<Block> validFlowers;
-    @Shadow @Final @Mutable public static Supplier<List<Block>> grownFlowers;
+	@Shadow @Final @Mutable public static List<Block> validFlowers;
+	@Shadow @Final @Mutable public static Supplier<List<Block>> grownFlowers;
 
-    @Inject(method = "<clinit>", at = @At("TAIL"), remap = false)
-    private static void creativeengineering$disableGrowth(CallbackInfo ci) {
-        validFlowers = List.of();
-        grownFlowers = List::of;
-    }
+	@Inject(method = "<clinit>", at = @At("TAIL"), remap = false)
+	private static void creativeengineering$disableGrowth(CallbackInfo ci) {
+		validFlowers = List.of();
+		grownFlowers = List::of;
+	}
 }

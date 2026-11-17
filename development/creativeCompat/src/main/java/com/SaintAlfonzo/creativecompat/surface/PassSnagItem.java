@@ -10,9 +10,9 @@ import net.minecraft.world.item.ItemStack;
  */
 public interface PassSnagItem {
 
-    /** The thrown tool's own stack (damage and enchantments kept). */
-    ItemStack creativecompat$snagStack();
+	/** The thrown tool's own stack (damage and enchantments kept). */
+	ItemStack creativecompat$snagStack();
 
-    /** Called every tick while snagged: stop the timers that would send it home. Server and client. */
-    void creativecompat$holdTimers();
+	/** Called every tick while snagged: stop the timers that would send it home. Server and client. */
+	void creativecompat$holdTimers();
 }

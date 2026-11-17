@@ -38,11 +38,11 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = RenderSystem.class, remap = false)
 public class SyncGlDebugOutputMixin {
 
-    @Inject(method = "m_69580_", at = @At("TAIL"))
-    private static void creativecommon$syncGlDebugOutput(int debugVerbosity, boolean synchronous, CallbackInfo ci) {
-        GLCapabilities caps = GL.getCapabilities();
-        if (caps.OpenGL43 || caps.GL_KHR_debug) {
-            GL11.glEnable(GL43.GL_DEBUG_OUTPUT_SYNCHRONOUS);
-        }
-    }
+	@Inject(method = "m_69580_", at = @At("TAIL"))
+	private static void creativecommon$syncGlDebugOutput(int debugVerbosity, boolean synchronous, CallbackInfo ci) {
+		GLCapabilities caps = GL.getCapabilities();
+		if (caps.OpenGL43 || caps.GL_KHR_debug) {
+			GL11.glEnable(GL43.GL_DEBUG_OUTPUT_SYNCHRONOUS);
+		}
+	}
 }

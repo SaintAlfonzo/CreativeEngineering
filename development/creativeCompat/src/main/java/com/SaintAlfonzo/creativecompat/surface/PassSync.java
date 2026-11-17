@@ -28,48 +28,48 @@ import net.minecraftforge.server.ServerLifecycleHooks;
  */
 public final class PassSync {
 
-    private PassSync() {}
+	private PassSync() {}
 
-    private static final String PROTOCOL = "1";
+	private static final String PROTOCOL = "1";
 
-    public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(CreativeCompat.NS, "surface"),
-            () -> PROTOCOL, NetworkRegistry.acceptMissingOr(PROTOCOL), NetworkRegistry.acceptMissingOr(PROTOCOL));
+	public static final SimpleChannel CHANNEL = NetworkRegistry.newSimpleChannel(
+			new ResourceLocation(CreativeCompat.NS, "surface"),
+			() -> PROTOCOL, NetworkRegistry.acceptMissingOr(PROTOCOL), NetworkRegistry.acceptMissingOr(PROTOCOL));
 
-    /** Mod construction. */
-    public static void register() {
-        CHANNEL.registerMessage(1, Values.class, Values::encode, Values::decode, Values::handle,
-                Optional.of(NetworkDirection.PLAY_TO_CLIENT));
-    }
+	/** Mod construction. */
+	public static void register() {
+		CHANNEL.registerMessage(1, Values.class, Values::encode, Values::decode, Values::handle,
+				Optional.of(NetworkDirection.PLAY_TO_CLIENT));
+	}
 
-    /** The message: one {@link PassValues}. */
-    public record Values(PassValues values) {
-        void encode(FriendlyByteBuf buf) {
-            values.write(buf);
-        }
+	/** The message: one {@link PassValues}. */
+	public record Values(PassValues values) {
+		void encode(FriendlyByteBuf buf) {
+			values.write(buf);
+		}
 
-        static Values decode(FriendlyByteBuf buf) {
-            return new Values(PassValues.read(buf));
-        }
+		static Values decode(FriendlyByteBuf buf) {
+			return new Values(PassValues.read(buf));
+		}
 
-        void handle(Supplier<NetworkEvent.Context> ctx) {
-            NetworkEvent.Context c = ctx.get();
-            c.enqueueWork(() -> PassValues.setRemote(values));
-            c.setPacketHandled(true);
-        }
-    }
+		void handle(Supplier<NetworkEvent.Context> ctx) {
+			NetworkEvent.Context c = ctx.get();
+			c.enqueueWork(() -> PassValues.setRemote(values));
+			c.setPacketHandled(true);
+		}
+	}
 
-    /** Forge bus: a player joined, send the server's values. */
-    public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        if (event.getEntity() instanceof ServerPlayer player) {
-            CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new Values(PassValues.local()));
-        }
-    }
+	/** Forge bus: a player joined, send the server's values. */
+	public static void onLogin(PlayerEvent.PlayerLoggedInEvent event) {
+		if (event.getEntity() instanceof ServerPlayer player) {
+			CHANNEL.send(PacketDistributor.PLAYER.with(() -> player), new Values(PassValues.local()));
+		}
+	}
 
-    /** The toml was saved: re-send to everyone (on the server thread). No-op without a running server. */
-    static void sendToAllAfterSave() {
-        MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
-        if (server == null) return;
-        server.execute(() -> CHANNEL.send(PacketDistributor.ALL.noArg(), new Values(PassValues.local())));
-    }
+	/** The toml was saved: re-send to everyone (on the server thread). No-op without a running server. */
+	static void sendToAllAfterSave() {
+		MinecraftServer server = ServerLifecycleHooks.getCurrentServer();
+		if (server == null) return;
+		server.execute(() -> CHANNEL.send(PacketDistributor.ALL.noArg(), new Values(PassValues.local())));
+	}
 }

@@ -29,23 +29,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = LayEggInNestGoal.class, remap = false)
 public abstract class LayEggInNestGoalMixin {
 
-    @Shadow
-    @Final
-    private EggLayer eggLayer;
+	@Shadow
+	@Final
+	private EggLayer eggLayer;
 
-    @Inject(method = "m_6465_", at = @At("HEAD"), cancellable = true)
-    private void creativedelight$skipForeignEmptyNests(LevelReader level, BlockPos pos,
-                                                          CallbackInfoReturnable<Boolean> cir) {
-        Block block = level.getBlockState(pos.above()).getBlock();
-        if (block instanceof EmptyNestBlock nest && nest.getNest(this.eggLayer.getEggItem()) == null) {
-            cir.setReturnValue(false);
-        }
-    }
+	@Inject(method = "m_6465_", at = @At("HEAD"), cancellable = true)
+	private void creativedelight$skipForeignEmptyNests(LevelReader level, BlockPos pos,
+														  CallbackInfoReturnable<Boolean> cir) {
+		Block block = level.getBlockState(pos.above()).getBlock();
+		if (block instanceof EmptyNestBlock nest && nest.getNest(this.eggLayer.getEggItem()) == null) {
+			cir.setReturnValue(false);
+		}
+	}
 
-    @Inject(method = "canEggBeLaid", at = @At("HEAD"), cancellable = true)
-    private void creativedelight$noNestForGoldenEgg(CallbackInfoReturnable<Boolean> cir) {
-        if (this.eggLayer instanceof GoldenEggLayer bird && bird.creativedelight$isGoldenEggDue()) {
-            cir.setReturnValue(false);
-        }
-    }
+	@Inject(method = "canEggBeLaid", at = @At("HEAD"), cancellable = true)
+	private void creativedelight$noNestForGoldenEgg(CallbackInfoReturnable<Boolean> cir) {
+		if (this.eggLayer instanceof GoldenEggLayer bird && bird.creativedelight$isGoldenEggDue()) {
+			cir.setReturnValue(false);
+		}
+	}
 }

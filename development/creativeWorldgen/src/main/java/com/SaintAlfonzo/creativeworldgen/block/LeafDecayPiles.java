@@ -18,19 +18,19 @@ import net.minecraftforge.fml.ModList;
  */
 final class LeafDecayPiles {
 
-    private static final boolean IW_LOADED = ModList.get().isLoaded("immersive_weathering");
+	private static final boolean IW_LOADED = ModList.get().isLoaded("immersive_weathering");
 
-    private LeafDecayPiles() {}
+	private LeafDecayPiles() {}
 
-    static void afterDecay(BlockState leaf, ServerLevel level, BlockPos pos, RandomSource random) {
-        if (!IW_LOADED || !CWGConfig.LEAF_DECAY.leafPiles.get()) return;
-        Iw.decay(leaf, level, pos, random);
-    }
+	static void afterDecay(BlockState leaf, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (!IW_LOADED || !CWGConfig.LEAF_DECAY.leafPiles.get()) return;
+		Iw.decay(leaf, level, pos, random);
+	}
 
-    /** Holds the IW reference so this class loads without the mod. */
-    private static final class Iw {
-        static void decay(BlockState leaf, ServerLevel level, BlockPos pos, RandomSource random) {
-            LeavesGrowth.decayLeavesPile(leaf, level, pos, random);
-        }
-    }
+	/** Holds the IW reference so this class loads without the mod. */
+	private static final class Iw {
+		static void decay(BlockState leaf, ServerLevel level, BlockPos pos, RandomSource random) {
+			LeavesGrowth.decayLeavesPile(leaf, level, pos, random);
+		}
+	}
 }

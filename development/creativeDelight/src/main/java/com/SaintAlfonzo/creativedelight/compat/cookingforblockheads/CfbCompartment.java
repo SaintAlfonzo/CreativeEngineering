@@ -31,22 +31,22 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
  * The kitchen code lived in Creative Common; its saved data and tag ids keep their creativeengineering names.
  */
 public final class CfbCompartment {
-    /** Log tag of this compartment. */
-    public static final String MODID = "creativedelight/cookingforblockheads";
-    /** Registry namespace of the blocks and items here (Creative Delight's own since M8, plan D6). */
-    public static final String NAMESPACE = CreativeDelight.MOD_ID;
+	/** Log tag of this compartment. */
+	public static final String MODID = "creativedelight/cookingforblockheads";
+	/** Registry namespace of the blocks and items here (Creative Delight's own since M8, plan D6). */
+	public static final String NAMESPACE = CreativeDelight.MOD_ID;
 
-    private CfbCompartment() {
-    }
+	private CfbCompartment() {
+	}
 
-    public static void init(IEventBus bus) {
-        BARacks.BLOCKS.register(bus);
-        BARacks.ITEMS.register(bus);
-        bus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(BARacks::allowOnBlockEntityTypes));
-        MinecraftForge.EVENT_BUS.register(CornerStorage.class);
-        // The per-state topper cache resets on tag reload.
-        CounterToppers.init();
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FridgeTopFill.register(bus));
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> OvenRaise.register(bus));
-    }
+	public static void init(IEventBus bus) {
+		BARacks.BLOCKS.register(bus);
+		BARacks.ITEMS.register(bus);
+		bus.addListener((FMLCommonSetupEvent e) -> e.enqueueWork(BARacks::allowOnBlockEntityTypes));
+		MinecraftForge.EVENT_BUS.register(CornerStorage.class);
+		// The per-state topper cache resets on tag reload.
+		CounterToppers.init();
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> FridgeTopFill.register(bus));
+		DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> () -> OvenRaise.register(bus));
+	}
 }

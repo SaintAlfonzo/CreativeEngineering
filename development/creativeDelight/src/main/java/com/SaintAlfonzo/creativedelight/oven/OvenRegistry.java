@@ -26,51 +26,51 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public final class OvenRegistry {
 
-    public static final String NAME = "oven";
-    public static final String BAKING = "baking";
-    public static final ResourceLocation BAKING_ID = new ResourceLocation(CreativeDelight.MOD_ID, BAKING);
+	public static final String NAME = "oven";
+	public static final String BAKING = "baking";
+	public static final ResourceLocation BAKING_ID = new ResourceLocation(CreativeDelight.MOD_ID, BAKING);
 
-    private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
-    private static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, CreativeDelight.MOD_ID);
-    private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
-            DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, CreativeDelight.MOD_ID);
-    private static final DeferredRegister<MenuType<?>> MENU_TYPES =
-            DeferredRegister.create(ForgeRegistries.MENU_TYPES, CreativeDelight.MOD_ID);
-    private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
-            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.MOD_ID);
-    private static final DeferredRegister<RecipeType<?>> TYPES =
-            DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, CreativeDelight.MOD_ID);
+	private static final DeferredRegister<Block> BLOCKS =
+			DeferredRegister.create(ForgeRegistries.BLOCKS, CreativeDelight.MOD_ID);
+	private static final DeferredRegister<Item> ITEMS =
+			DeferredRegister.create(ForgeRegistries.ITEMS, CreativeDelight.MOD_ID);
+	private static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITY_TYPES =
+			DeferredRegister.create(ForgeRegistries.BLOCK_ENTITY_TYPES, CreativeDelight.MOD_ID);
+	private static final DeferredRegister<MenuType<?>> MENU_TYPES =
+			DeferredRegister.create(ForgeRegistries.MENU_TYPES, CreativeDelight.MOD_ID);
+	private static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
+			DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, CreativeDelight.MOD_ID);
+	private static final DeferredRegister<RecipeType<?>> TYPES =
+			DeferredRegister.create(ForgeRegistries.RECIPE_TYPES, CreativeDelight.MOD_ID);
 
-    // FD stove stats (Properties.copy(Blocks.BRICKS)), light 13 while heated.
-    public static final RegistryObject<Block> OVEN = BLOCKS.register(NAME, () -> new OvenBlock(
-            BlockBehaviour.Properties.copy(Blocks.BRICKS)
-                    .lightLevel(state -> state.getValue(OvenBlock.LIT) ? 13 : 0)));
+	// FD stove stats (Properties.copy(Blocks.BRICKS)), light 13 while heated.
+	public static final RegistryObject<Block> OVEN = BLOCKS.register(NAME, () -> new OvenBlock(
+			BlockBehaviour.Properties.copy(Blocks.BRICKS)
+					.lightLevel(state -> state.getValue(OvenBlock.LIT) ? 13 : 0)));
 
-    public static final RegistryObject<Item> OVEN_ITEM = ITEMS.register(NAME, () -> new BlockItem(OVEN.get(),
-            new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+	public static final RegistryObject<Item> OVEN_ITEM = ITEMS.register(NAME, () -> new BlockItem(OVEN.get(),
+			new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
 
-    @SuppressWarnings("ConstantConditions")
-    public static final RegistryObject<BlockEntityType<OvenBlockEntity>> OVEN_BLOCK_ENTITY =
-            BLOCK_ENTITY_TYPES.register(NAME, () -> BlockEntityType.Builder.of(OvenBlockEntity::new, OVEN.get()).build(null));
+	@SuppressWarnings("ConstantConditions")
+	public static final RegistryObject<BlockEntityType<OvenBlockEntity>> OVEN_BLOCK_ENTITY =
+			BLOCK_ENTITY_TYPES.register(NAME, () -> BlockEntityType.Builder.of(OvenBlockEntity::new, OVEN.get()).build(null));
 
-    public static final RegistryObject<MenuType<OvenMenu>> OVEN_MENU =
-            MENU_TYPES.register(NAME, () -> IForgeMenuType.create(OvenMenu::new));
+	public static final RegistryObject<MenuType<OvenMenu>> OVEN_MENU =
+			MENU_TYPES.register(NAME, () -> IForgeMenuType.create(OvenMenu::new));
 
-    public static final RegistryObject<RecipeSerializer<BakingRecipe>> BAKING_SERIALIZER =
-            SERIALIZERS.register(BAKING, BakingRecipe.Serializer::new);
-    public static final RegistryObject<RecipeType<BakingRecipe>> BAKING_TYPE =
-            TYPES.register(BAKING, () -> RecipeType.simple(BAKING_ID));
+	public static final RegistryObject<RecipeSerializer<BakingRecipe>> BAKING_SERIALIZER =
+			SERIALIZERS.register(BAKING, BakingRecipe.Serializer::new);
+	public static final RegistryObject<RecipeType<BakingRecipe>> BAKING_TYPE =
+			TYPES.register(BAKING, () -> RecipeType.simple(BAKING_ID));
 
-    private OvenRegistry() {}
+	private OvenRegistry() {}
 
-    public static void register(IEventBus modEventBus) {
-        BLOCKS.register(modEventBus);
-        ITEMS.register(modEventBus);
-        BLOCK_ENTITY_TYPES.register(modEventBus);
-        MENU_TYPES.register(modEventBus);
-        SERIALIZERS.register(modEventBus);
-        TYPES.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		BLOCKS.register(modEventBus);
+		ITEMS.register(modEventBus);
+		BLOCK_ENTITY_TYPES.register(modEventBus);
+		MENU_TYPES.register(modEventBus);
+		SERIALIZERS.register(modEventBus);
+		TYPES.register(modEventBus);
+	}
 }

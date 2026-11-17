@@ -22,37 +22,37 @@ import vazkii.botania.common.entity.ThornChakramEntity;
 @Mixin(value = ThornChakramEntity.class, remap = false)
 public abstract class BotaniaChakramPassMixin implements PassSnagItem {
 
-    @Shadow
-    private ItemStack stack;
+	@Shadow
+	private ItemStack stack;
 
-    @Shadow
-    private boolean isReturning() {
-        throw new AssertionError();
-    }
+	@Shadow
+	private boolean isReturning() {
+		throw new AssertionError();
+	}
 
-    @Shadow
-    private void setEntityToReturnTo(int id) {
-        throw new AssertionError();
-    }
+	@Shadow
+	private void setEntityToReturnTo(int id) {
+		throw new AssertionError();
+	}
 
-    @Inject(method = "m_8119_", at = @At("RETURN"))
-    private void creativecompat$chakramWeb(CallbackInfo ci) {
-        try {
-            PassProjectiles.snagTail((Entity) (Object) this);
-        } catch (Throwable ignored) {
-            // a broken lookup must never stop the chakram
-        }
-    }
+	@Inject(method = "m_8119_", at = @At("RETURN"))
+	private void creativecompat$chakramWeb(CallbackInfo ci) {
+		try {
+			PassProjectiles.snagTail((Entity) (Object) this);
+		} catch (Throwable ignored) {
+			// a broken lookup must never stop the chakram
+		}
+	}
 
-    @Override
-    public ItemStack creativecompat$snagStack() {
-        return stack;
-    }
+	@Override
+	public ItemStack creativecompat$snagStack() {
+		return stack;
+	}
 
-    @Override
-    public void creativecompat$holdTimers() {
-        Entity self = (Entity) (Object) this;
-        if (self.tickCount > 50) self.tickCount = 50;
-        if (!self.level.isClientSide && isReturning()) setEntityToReturnTo(-1);
-    }
+	@Override
+	public void creativecompat$holdTimers() {
+		Entity self = (Entity) (Object) this;
+		if (self.tickCount > 50) self.tickCount = 50;
+		if (!self.level.isClientSide && isReturning()) setEntityToReturnTo(-1);
+	}
 }

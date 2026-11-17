@@ -38,78 +38,78 @@ import net.minecraft.world.phys.shapes.VoxelShape;
  */
 public final class WallSlide {
 
-    private WallSlide() {}
+	private WallSlide() {}
 
-    public static final TagKey<Block> TAG = BlockTags.create(new ResourceLocation(CreativeCompat.NS, "wall_slide"));
+	public static final TagKey<Block> TAG = BlockTags.create(new ResourceLocation(CreativeCompat.NS, "wall_slide"));
 
-    private static final double EPS = 1.0E-3;
+	private static final double EPS = 1.0E-3;
 
-    /** Called at TAIL of {@code Entity#checkInsideBlocks} (after the move, like honey's entityInside). */
-    public static void afterInsideBlocks(Entity entity) {
-        Vec3 v = entity.getDeltaMovement();
-        if (v.y >= -0.08 || entity.isOnGround() || entity.noPhysics || entity.isSpectator()) {
-            return;
-        }
-        Level level = entity.level;
-        AABB box = entity.getBoundingBox();
-        AABB reach = box.inflate(EPS, 0, EPS);
-        int x0 = Mth.floor(reach.minX), x1 = Mth.floor(reach.maxX);
-        int y0 = Mth.floor(box.minY), y1 = Mth.floor(box.maxY - EPS);
-        int z0 = Mth.floor(reach.minZ), z1 = Mth.floor(reach.maxZ);
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        for (int x = x0; x <= x1; x++) {
-            for (int y = y0; y <= y1; y++) {
-                for (int z = z0; z <= z1; z++) {
-                    pos.set(x, y, z);
-                    BlockState state = level.getBlockState(pos);
-                    if (!state.is(TAG) || state.getBlock() instanceof HoneyBlock) {
-                        continue;
-                    }
-                    if (touchesSide(level, pos, state, entity, box)) {
-                        slide(entity, v);
-                        effects(level, entity, state);
-                        return;
-                    }
-                }
-            }
-        }
-    }
+	/** Called at TAIL of {@code Entity#checkInsideBlocks} (after the move, like honey's entityInside). */
+	public static void afterInsideBlocks(Entity entity) {
+		Vec3 v = entity.getDeltaMovement();
+		if (v.y >= -0.08 || entity.isOnGround() || entity.noPhysics || entity.isSpectator()) {
+			return;
+		}
+		Level level = entity.level;
+		AABB box = entity.getBoundingBox();
+		AABB reach = box.inflate(EPS, 0, EPS);
+		int x0 = Mth.floor(reach.minX), x1 = Mth.floor(reach.maxX);
+		int y0 = Mth.floor(box.minY), y1 = Mth.floor(box.maxY - EPS);
+		int z0 = Mth.floor(reach.minZ), z1 = Mth.floor(reach.maxZ);
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		for (int x = x0; x <= x1; x++) {
+			for (int y = y0; y <= y1; y++) {
+				for (int z = z0; z <= z1; z++) {
+					pos.set(x, y, z);
+					BlockState state = level.getBlockState(pos);
+					if (!state.is(TAG) || state.getBlock() instanceof HoneyBlock) {
+						continue;
+					}
+					if (touchesSide(level, pos, state, entity, box)) {
+						slide(entity, v);
+						effects(level, entity, state);
+						return;
+					}
+				}
+			}
+		}
+	}
 
-    /** The entity's side touches the block's collision box, and its feet are below the box's top. */
-    private static boolean touchesSide(Level level, BlockPos pos, BlockState state, Entity entity, AABB box) {
-        VoxelShape shape = state.getCollisionShape(level, pos, net.minecraft.world.phys.shapes.CollisionContext.of(entity));
-        if (shape.isEmpty()) {
-            return false;
-        }
-        AABB solid = shape.bounds().move(pos);
-        if (entity.getY() > solid.maxY - 1.0E-7) {
-            return false; // standing on or above it
-        }
-        return solid.inflate(EPS, 0, EPS).intersects(box);
-    }
+	/** The entity's side touches the block's collision box, and its feet are below the box's top. */
+	private static boolean touchesSide(Level level, BlockPos pos, BlockState state, Entity entity, AABB box) {
+		VoxelShape shape = state.getCollisionShape(level, pos, net.minecraft.world.phys.shapes.CollisionContext.of(entity));
+		if (shape.isEmpty()) {
+			return false;
+		}
+		AABB solid = shape.bounds().move(pos);
+		if (entity.getY() > solid.maxY - 1.0E-7) {
+			return false; // standing on or above it
+		}
+		return solid.inflate(EPS, 0, EPS).intersects(box);
+	}
 
-    /** HoneyBlock#doSlideMovement. */
-    private static void slide(Entity entity, Vec3 v) {
-        if (v.y < -0.13) {
-            double f = -0.05 / v.y;
-            entity.setDeltaMovement(new Vec3(v.x * f, -0.05, v.z * f));
-        } else {
-            entity.setDeltaMovement(new Vec3(v.x, -0.05, v.z));
-        }
-        entity.resetFallDistance();
-    }
+	/** HoneyBlock#doSlideMovement. */
+	private static void slide(Entity entity, Vec3 v) {
+		if (v.y < -0.13) {
+			double f = -0.05 / v.y;
+			entity.setDeltaMovement(new Vec3(v.x * f, -0.05, v.z * f));
+		} else {
+			entity.setDeltaMovement(new Vec3(v.x, -0.05, v.z));
+		}
+		entity.resetFallDistance();
+	}
 
-    /** HoneyBlock#maybeDoSlideEffects, with the wall's own block particles. Server only; it broadcasts. */
-    private static void effects(Level level, Entity entity, BlockState state) {
-        if (!(level instanceof ServerLevel server) || !(entity instanceof LivingEntity)) {
-            return;
-        }
-        if (level.random.nextInt(5) == 0) {
-            entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
-        }
-        if (level.random.nextInt(5) == 0) {
-            server.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
-                    entity.getX(), entity.getY(), entity.getZ(), 5, 0.1, 0.1, 0.1, 0.0);
-        }
-    }
+	/** HoneyBlock#maybeDoSlideEffects, with the wall's own block particles. Server only; it broadcasts. */
+	private static void effects(Level level, Entity entity, BlockState state) {
+		if (!(level instanceof ServerLevel server) || !(entity instanceof LivingEntity)) {
+			return;
+		}
+		if (level.random.nextInt(5) == 0) {
+			entity.playSound(SoundEvents.HONEY_BLOCK_SLIDE, 1.0F, 1.0F);
+		}
+		if (level.random.nextInt(5) == 0) {
+			server.sendParticles(new BlockParticleOption(ParticleTypes.BLOCK, state),
+					entity.getX(), entity.getY(), entity.getZ(), 5, 0.1, 0.1, 0.1, 0.0);
+		}
+	}
 }

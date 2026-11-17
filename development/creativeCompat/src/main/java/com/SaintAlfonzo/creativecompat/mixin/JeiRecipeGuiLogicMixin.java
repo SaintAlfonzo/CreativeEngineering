@@ -33,42 +33,42 @@ import java.util.List;
 @Mixin(value = RecipeGuiLogic.class, remap = false)
 public abstract class JeiRecipeGuiLogicMixin {
 
-    @Shadow
-    @Nullable
-    private IRecipeLayoutList cachedRecipeLayoutsWithButtons;
+	@Shadow
+	@Nullable
+	private IRecipeLayoutList cachedRecipeLayoutsWithButtons;
 
-    @Unique
-    @Nullable
-    private AbstractContainerMenu creativecommon$cachedForMenu;
+	@Unique
+	@Nullable
+	private AbstractContainerMenu creativecommon$cachedForMenu;
 
-    @Unique
-    private boolean creativecommon$cachedCraftableFirst;
+	@Unique
+	private boolean creativecommon$cachedCraftableFirst;
 
-    @Inject(method = "getVisibleRecipeLayoutsWithButtons", at = @At("HEAD"))
-    private void creativecommon$dropStaleOrder(int availableHeight, int minRecipePadding,
-                                                    @Nullable AbstractContainerMenu container,
-                                                    CallbackInfoReturnable<List<RecipeLayoutWithButtons<?>>> cir) {
-        boolean craftableFirst = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.craftableFirst.get();
-        if (container != creativecommon$cachedForMenu || craftableFirst != creativecommon$cachedCraftableFirst) {
-            cachedRecipeLayoutsWithButtons = null;
-            creativecommon$cachedForMenu = container;
-            creativecommon$cachedCraftableFirst = craftableFirst;
-        }
-    }
+	@Inject(method = "getVisibleRecipeLayoutsWithButtons", at = @At("HEAD"))
+	private void creativecommon$dropStaleOrder(int availableHeight, int minRecipePadding,
+													@Nullable AbstractContainerMenu container,
+													CallbackInfoReturnable<List<RecipeLayoutWithButtons<?>>> cir) {
+		boolean craftableFirst = com.SaintAlfonzo.creativecompat.CompatConfig.JEI.craftableFirst.get();
+		if (container != creativecommon$cachedForMenu || craftableFirst != creativecommon$cachedCraftableFirst) {
+			cachedRecipeLayoutsWithButtons = null;
+			creativecommon$cachedForMenu = container;
+			creativecommon$cachedCraftableFirst = craftableFirst;
+		}
+	}
 
-    @Redirect(
-            method = "createRecipeLayoutsWithButtons",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lmezz/jei/gui/recipes/layouts/IRecipeLayoutList;create("
-                           + "Lnet/minecraft/world/inventory/AbstractContainerMenu;"
-                           + "Lnet/minecraft/world/entity/player/Player;"
-                           + "Ljava/util/List;)Lmezz/jei/gui/recipes/layouts/IRecipeLayoutList;"
-            )
-    )
-    private IRecipeLayoutList creativecommon$craftableFirst(@Nullable AbstractContainerMenu menu, @Nullable Player player,
-                                                                List<? extends RecipeLayoutWithButtons<?>> layouts) {
-        IRecipeLayoutList sorted = CraftableFirstRecipeLayoutList.sortIfCraftingMenu(menu, player, layouts);
-        return sorted != null ? sorted : IRecipeLayoutList.create(menu, player, layouts);
-    }
+	@Redirect(
+			method = "createRecipeLayoutsWithButtons",
+			at = @At(
+					value = "INVOKE",
+					target = "Lmezz/jei/gui/recipes/layouts/IRecipeLayoutList;create("
+						   + "Lnet/minecraft/world/inventory/AbstractContainerMenu;"
+						   + "Lnet/minecraft/world/entity/player/Player;"
+						   + "Ljava/util/List;)Lmezz/jei/gui/recipes/layouts/IRecipeLayoutList;"
+			)
+	)
+	private IRecipeLayoutList creativecommon$craftableFirst(@Nullable AbstractContainerMenu menu, @Nullable Player player,
+																List<? extends RecipeLayoutWithButtons<?>> layouts) {
+		IRecipeLayoutList sorted = CraftableFirstRecipeLayoutList.sortIfCraftingMenu(menu, player, layouts);
+		return sorted != null ? sorted : IRecipeLayoutList.create(menu, player, layouts);
+	}
 }

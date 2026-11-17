@@ -6,5 +6,5 @@ package com.SaintAlfonzo.creativecompat.surface;
  */
 public interface LastInsertedCamo {
 
-    boolean creativeengineering$lastCamoIsSecond();
+	boolean creativeengineering$lastCamoIsSecond();
 }

@@ -20,38 +20,38 @@ import qouteall.imm_ptl.peripheral.portal_generation.IntrinsicPortalGeneration;
  */
 public final class IPNetherPortalBridge {
 
-    private static final ThreadLocal<Boolean> PASS = ThreadLocal.withInitial(() -> false);
+	private static final ThreadLocal<Boolean> PASS = ThreadLocal.withInitial(() -> false);
 
-    private IPNetherPortalBridge() {}
+	private IPNetherPortalBridge() {}
 
-    /** True while Dark Fire's own call is running; read by IPFireGateMixin. */
-    public static boolean passing() {
-        return PASS.get();
-    }
+	/** True while Dark Fire's own call is running; read by IPFireGateMixin. */
+	public static boolean passing() {
+		return PASS.get();
+	}
 
-    /**
-     * Ordinary fire next to obsidian, with IP's own portal gated off: posts Forge's PortalSpawnEvent for the vanilla
-     * shape, as vanilla's {@code BaseFireBlock#onPlace} does without IP (IP's redirect returns an empty shape in
-     * {@code normal} mode, so vanilla never posts it). PortalFailureHandler cancels it and ruins the frame.
-     */
-    public static void postVanillaSpawnEvent(ServerLevel level, BlockPos firePos) {
-        Optional<PortalShape> shape = PortalShape.findEmptyPortalShape(level, firePos, Direction.Axis.X);
-        ForgeEventFactory.onTrySpawnPortal(level, firePos, shape);
-    }
+	/**
+	 * Ordinary fire next to obsidian, with IP's own portal gated off: posts Forge's PortalSpawnEvent for the vanilla
+	 * shape, as vanilla's {@code BaseFireBlock#onPlace} does without IP (IP's redirect returns an empty shape in
+	 * {@code normal} mode, so vanilla never posts it). PortalFailureHandler cancels it and ruins the frame.
+	 */
+	public static void postVanillaSpawnEvent(ServerLevel level, BlockPos firePos) {
+		Optional<PortalShape> shape = PortalShape.findEmptyPortalShape(level, firePos, Direction.Axis.X);
+		ForgeEventFactory.onTrySpawnPortal(level, firePos, shape);
+	}
 
-    /**
-     * Asks IP to build a Nether portal from the frame around {@code firePos}. False when IP's mode is vanilla or
-     * disabled, the dimension has no Nether link (IP only links the Overworld and the Nether), or IP found no frame;
-     * the caller then places vanilla portal blocks as before.
-     */
-    public static boolean light(ServerLevel level, BlockPos firePos) {
-        IPGlobal.NetherPortalMode mode = IPGlobal.netherPortalMode;
-        if (mode == IPGlobal.NetherPortalMode.vanilla || mode == IPGlobal.NetherPortalMode.disabled) return false;
-        PASS.set(true);
-        try {
-            return IntrinsicPortalGeneration.onFireLitOnObsidian(level, firePos);
-        } finally {
-            PASS.set(false);
-        }
-    }
+	/**
+	 * Asks IP to build a Nether portal from the frame around {@code firePos}. False when IP's mode is vanilla or
+	 * disabled, the dimension has no Nether link (IP only links the Overworld and the Nether), or IP found no frame;
+	 * the caller then places vanilla portal blocks as before.
+	 */
+	public static boolean light(ServerLevel level, BlockPos firePos) {
+		IPGlobal.NetherPortalMode mode = IPGlobal.netherPortalMode;
+		if (mode == IPGlobal.NetherPortalMode.vanilla || mode == IPGlobal.NetherPortalMode.disabled) return false;
+		PASS.set(true);
+		try {
+			return IntrinsicPortalGeneration.onFireLitOnObsidian(level, firePos);
+		} finally {
+			PASS.set(false);
+		}
+	}
 }

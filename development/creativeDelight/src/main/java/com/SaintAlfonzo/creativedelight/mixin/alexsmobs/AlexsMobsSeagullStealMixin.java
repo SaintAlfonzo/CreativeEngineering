@@ -17,10 +17,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = SeagullAIStealFromPlayers.class, remap = false)
 public abstract class AlexsMobsSeagullStealMixin {
 
-    @Inject(method = "isBlacklisted", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$skipLunchboxes(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        if (stack.getItem() instanceof FoodContainerItem) {
-            cir.setReturnValue(true);
-        }
-    }
+	@Inject(method = "isBlacklisted", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$skipLunchboxes(ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+		if (stack.getItem() instanceof FoodContainerItem) {
+			cir.setReturnValue(true);
+		}
+	}
 }

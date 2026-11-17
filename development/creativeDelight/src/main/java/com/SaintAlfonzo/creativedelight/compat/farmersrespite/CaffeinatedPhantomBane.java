@@ -18,25 +18,25 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public final class CaffeinatedPhantomBane {
 
-    private static final ResourceLocation CAFFEINATED_ID = new ResourceLocation("farmersrespite", "caffeinated");
-    private static final ResourceLocation PHANTOM_BANE_ID = new ResourceLocation("better_beacons", "phantom_bane");
+	private static final ResourceLocation CAFFEINATED_ID = new ResourceLocation("farmersrespite", "caffeinated");
+	private static final ResourceLocation PHANTOM_BANE_ID = new ResourceLocation("better_beacons", "phantom_bane");
 
-    private static MobEffect caffeinated;
-    private static MobEffect phantomBane;
-    private static boolean lookedUp;
+	private static MobEffect caffeinated;
+	private static MobEffect phantomBane;
+	private static boolean lookedUp;
 
-    private CaffeinatedPhantomBane() {}
+	private CaffeinatedPhantomBane() {}
 
-    @SubscribeEvent
-    public static void onAdded(MobEffectEvent.Added event) {
-        if (!lookedUp) {
-            caffeinated = ForgeRegistries.MOB_EFFECTS.getValue(CAFFEINATED_ID);
-            phantomBane = ForgeRegistries.MOB_EFFECTS.getValue(PHANTOM_BANE_ID);
-            lookedUp = true;
-        }
-        MobEffectInstance added = event.getEffectInstance();
-        LivingEntity entity = event.getEntity();
-        if (caffeinated == null || phantomBane == null || entity.level.isClientSide || added.getEffect() != caffeinated) return;
-        entity.addEffect(new MobEffectInstance(phantomBane, added.getDuration(), 0, added.isAmbient(), false, false));
-    }
+	@SubscribeEvent
+	public static void onAdded(MobEffectEvent.Added event) {
+		if (!lookedUp) {
+			caffeinated = ForgeRegistries.MOB_EFFECTS.getValue(CAFFEINATED_ID);
+			phantomBane = ForgeRegistries.MOB_EFFECTS.getValue(PHANTOM_BANE_ID);
+			lookedUp = true;
+		}
+		MobEffectInstance added = event.getEffectInstance();
+		LivingEntity entity = event.getEntity();
+		if (caffeinated == null || phantomBane == null || entity.level.isClientSide || added.getEffect() != caffeinated) return;
+		entity.addEffect(new MobEffectInstance(phantomBane, added.getDuration(), 0, added.isAmbient(), false, false));
+	}
 }

@@ -8,23 +8,23 @@ import top.theillusivec4.curios.api.type.inventory.IDynamicStackHandler;
 /** The Curios half of {@link CornDelightCompat}: only loaded when Curios is. */
 final class CornDelightCurios {
 
-    private CornDelightCurios() {}
+	private CornDelightCurios() {}
 
-    /** Puts one of {@code stack} in the first empty slot of the player's {@code slot} curio type, if it has that type. */
-    static boolean equip(Player player, String slot, ItemStack stack) {
-        return CuriosApi.getCuriosHelper().getCuriosHandler(player)
-                .resolve()
-                .flatMap(h -> h.getStacksHandler(slot))
-                .map(sh -> {
-                    IDynamicStackHandler stacks = sh.getStacks();
-                    for (int n = 0; n < stacks.getSlots(); n++) {
-                        if (stacks.getStackInSlot(n).isEmpty()) {
-                            stacks.setStackInSlot(n, stack.split(1));
-                            return true;
-                        }
-                    }
-                    return false;
-                })
-                .orElse(false);
-    }
+	/** Puts one of {@code stack} in the first empty slot of the player's {@code slot} curio type, if it has that type. */
+	static boolean equip(Player player, String slot, ItemStack stack) {
+		return CuriosApi.getCuriosHelper().getCuriosHandler(player)
+				.resolve()
+				.flatMap(h -> h.getStacksHandler(slot))
+				.map(sh -> {
+					IDynamicStackHandler stacks = sh.getStacks();
+					for (int n = 0; n < stacks.getSlots(); n++) {
+						if (stacks.getStackInSlot(n).isEmpty()) {
+							stacks.setStackInSlot(n, stack.split(1));
+							return true;
+						}
+					}
+					return false;
+				})
+				.orElse(false);
+	}
 }

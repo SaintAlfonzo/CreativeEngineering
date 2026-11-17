@@ -21,9 +21,9 @@ import net.minecraft.world.entity.LivingEntity;
 @Mixin(targets = "cy.jdkdigital.everythingcopper.common.effect.CopperPoisoning", remap = false)
 public abstract class CopperPoisoningEffectMixin {
 
-    @Inject(method = "m_6742_", at = @At("HEAD"), cancellable = true, require = 0, remap = false)
-    private void creativeengineering$poisonInstead(LivingEntity entity, int amplifier, CallbackInfo ci) {
-        CopperPoisoningHandler.poisonFromEffect(entity, amplifier);
-        ci.cancel();
-    }
+	@Inject(method = "m_6742_", at = @At("HEAD"), cancellable = true, require = 0, remap = false)
+	private void creativeengineering$poisonInstead(LivingEntity entity, int amplifier, CallbackInfo ci) {
+		CopperPoisoningHandler.poisonFromEffect(entity, amplifier);
+		ci.cancel();
+	}
 }

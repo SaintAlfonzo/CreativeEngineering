@@ -11,13 +11,13 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ColorHandler.class, remap = false)
 public abstract class HeapColorHandlerMixin {
 
-    @Inject(method = "registerItemColors", at = @At("HEAD"), cancellable = true)
-    private static void creativeworldgen$skipItems(RegisterColorHandlersEvent.Item event, CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "registerItemColors", at = @At("HEAD"), cancellable = true)
+	private static void creativeworldgen$skipItems(RegisterColorHandlersEvent.Item event, CallbackInfo ci) {
+		ci.cancel();
+	}
 
-    @Inject(method = "registerBlockColors", at = @At("HEAD"), cancellable = true)
-    private static void creativeworldgen$skipBlocks(RegisterColorHandlersEvent.Block event, CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "registerBlockColors", at = @At("HEAD"), cancellable = true)
+	private static void creativeworldgen$skipBlocks(RegisterColorHandlersEvent.Block event, CallbackInfo ci) {
+		ci.cancel();
+	}
 }

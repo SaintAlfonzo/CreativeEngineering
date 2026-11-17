@@ -19,9 +19,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = FallingBlock.class, remap = false)
 public abstract class FallingBlockHoldMixin {
 
-    @Inject(method = "m_7417_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$holdGenerated(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level,
-                                                   BlockPos pos, BlockPos neighbourPos, CallbackInfoReturnable<BlockState> cir) {
-        if (GeneratedFallingBlocks.hold(level)) cir.setReturnValue(state);
-    }
+	@Inject(method = "m_7417_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$holdGenerated(BlockState state, Direction dir, BlockState neighbour, LevelAccessor level,
+												   BlockPos pos, BlockPos neighbourPos, CallbackInfoReturnable<BlockState> cir) {
+		if (GeneratedFallingBlocks.hold(level)) cir.setReturnValue(state);
+	}
 }

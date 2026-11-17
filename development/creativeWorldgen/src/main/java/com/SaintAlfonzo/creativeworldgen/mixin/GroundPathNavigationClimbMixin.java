@@ -20,12 +20,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = GroundPathNavigation.class, remap = false)
 public abstract class GroundPathNavigationClimbMixin extends PathNavigation {
 
-    private GroundPathNavigationClimbMixin(Mob mob, Level level) {
-        super(mob, level);
-    }
+	private GroundPathNavigationClimbMixin(Mob mob, Level level) {
+		super(mob, level);
+	}
 
-    @Inject(method = "m_7632_", at = @At("RETURN"), cancellable = true, remap = false)
-    private void creativeengineering$updateOnLadder(CallbackInfoReturnable<Boolean> cir) {
-        if (!cir.getReturnValueZ() && this.mob instanceof Villager && this.mob.onClimbable()) cir.setReturnValue(true);
-    }
+	@Inject(method = "m_7632_", at = @At("RETURN"), cancellable = true, remap = false)
+	private void creativeengineering$updateOnLadder(CallbackInfoReturnable<Boolean> cir) {
+		if (!cir.getReturnValueZ() && this.mob instanceof Villager && this.mob.onClimbable()) cir.setReturnValue(true);
+	}
 }

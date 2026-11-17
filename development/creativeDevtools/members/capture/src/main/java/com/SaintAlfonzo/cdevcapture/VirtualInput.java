@@ -7,18 +7,18 @@ package com.SaintAlfonzo.cdevcapture;
  */
 public final class VirtualInput {
 
-    public static volatile boolean shift;
-    public static volatile boolean ctrl;
-    public static volatile boolean alt;
+	public static volatile boolean shift;
+	public static volatile boolean ctrl;
+	public static volatile boolean alt;
 
-    public static volatile boolean mouseActive;
-    public static volatile double mouseX;
-    public static volatile double mouseY;
+	public static volatile boolean mouseActive;
+	public static volatile double mouseX;
+	public static volatile double mouseY;
 
-    private VirtualInput() {}
+	private VirtualInput() {}
 
-    public static void releaseAll() {
-        shift = ctrl = alt = false;
-        mouseActive = false;
-    }
+	public static void releaseAll() {
+		shift = ctrl = alt = false;
+		mouseActive = false;
+	}
 }

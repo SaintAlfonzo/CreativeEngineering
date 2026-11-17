@@ -33,33 +33,33 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = PotionFluidHandler.class, remap = false)
 public class PotionFluidHandlerMixin {
 
-    @Inject(method = "emptyPotion", at = @At("HEAD"), cancellable = true, require = 1)
-    private static void creativeengineering$emptyWholeBundle(
-            ItemStack stack, boolean simulate,
-            CallbackInfoReturnable<Pair<FluidStack, ItemStack>> cir) {
+	@Inject(method = "emptyPotion", at = @At("HEAD"), cancellable = true, require = 1)
+	private static void creativeengineering$emptyWholeBundle(
+			ItemStack stack, boolean simulate,
+			CallbackInfoReturnable<Pair<FluidStack, ItemStack>> cir) {
 
-        Item item = stack.getItem();
-        if (!(item instanceof AbstractPotionBundle)) return;
+		Item item = stack.getItem();
+		if (!(item instanceof AbstractPotionBundle)) return;
 
-        int uses = PotionBundleUtils.getUses(stack);
-        if (uses < 1) uses = 3;   // AbstractPotionBundle.getMaxUses() is hardcoded 3
+		int uses = PotionBundleUtils.getUses(stack);
+		if (uses < 1) uses = 3;   // AbstractPotionBundle.getMaxUses() is hardcoded 3
 
-        // Base fluid: correct potion + custom effects, 250 mB, Bottle = REGULAR
-        // (or plain water for a water potion).
-        FluidStack fluid = PotionFluidHandler.getFluidFromPotionItem(stack);
-        fluid.setAmount(fluid.getAmount() * uses);
+		// Base fluid: correct potion + custom effects, 250 mB, Bottle = REGULAR
+		// (or plain water for a water potion).
+		FluidStack fluid = PotionFluidHandler.getFluidFromPotionItem(stack);
+		fluid.setAmount(fluid.getAmount() * uses);
 
-        // Bundles are never Splash/LingeringPotionItem, so correct the Bottle type.
-        // Only when it's actually potion fluid (hasTag) — the water branch has none.
-        PotionFluid.BottleType type =
-                  item instanceof LingeringPotionBundle ? PotionFluid.BottleType.LINGERING
-                : item instanceof SplashPotionBundle    ? PotionFluid.BottleType.SPLASH
-                : null;
-        if (type != null && fluid.hasTag()) {
-            NBTHelper.writeEnum(fluid.getOrCreateTag(), "Bottle", type);
-        }
+		// Bundles are never Splash/LingeringPotionItem, so correct the Bottle type.
+		// Only when it's actually potion fluid (hasTag) — the water branch has none.
+		PotionFluid.BottleType type =
+				  item instanceof LingeringPotionBundle ? PotionFluid.BottleType.LINGERING
+				: item instanceof SplashPotionBundle    ? PotionFluid.BottleType.SPLASH
+				: null;
+		if (type != null && fluid.hasTag()) {
+			NBTHelper.writeEnum(fluid.getOrCreateTag(), "Bottle", type);
+		}
 
-        if (!simulate) stack.shrink(1);
-        cir.setReturnValue(Pair.of(fluid, new ItemStack(Items.GLASS_BOTTLE, uses)));
-    }
+		if (!simulate) stack.shrink(1);
+		cir.setReturnValue(Pair.of(fluid, new ItemStack(Items.GLASS_BOTTLE, uses)));
+	}
 }

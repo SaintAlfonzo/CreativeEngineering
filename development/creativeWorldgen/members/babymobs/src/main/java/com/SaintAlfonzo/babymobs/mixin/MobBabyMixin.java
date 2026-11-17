@@ -26,53 +26,53 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(Mob.class)
 public abstract class MobBabyMixin implements BabyAgeHolder {
 
-    @Unique
-    private int babyMobs$age;
+	@Unique
+	private int babyMobs$age;
 
-    @Override
-    public int babyMobs$getAge() {
-        return babyMobs$age;
-    }
+	@Override
+	public int babyMobs$getAge() {
+		return babyMobs$age;
+	}
 
-    @Override
-    public void babyMobs$setAgeRaw(int age) {
-        babyMobs$age = age;
-    }
+	@Override
+	public void babyMobs$setAgeRaw(int age) {
+		babyMobs$age = age;
+	}
 
-    @Inject(method = "m_8097_", at = @At("TAIL"), remap = false)
-    private void babyMobs$define(CallbackInfo ci) {
-        Mob self = (Mob) (Object) this;
-        if (BabyAges.handles(self)) BabyAges.define(self);
-    }
+	@Inject(method = "m_8097_", at = @At("TAIL"), remap = false)
+	private void babyMobs$define(CallbackInfo ci) {
+		Mob self = (Mob) (Object) this;
+		if (BabyAges.handles(self)) BabyAges.define(self);
+	}
 
-    @Inject(method = "m_7380_", at = @At("TAIL"), remap = false)
-    private void babyMobs$save(CompoundTag tag, CallbackInfo ci) {
-        Mob self = (Mob) (Object) this;
-        if (BabyAges.handles(self)) tag.putInt("Age", BabyAges.getAge(self));
-    }
+	@Inject(method = "m_7380_", at = @At("TAIL"), remap = false)
+	private void babyMobs$save(CompoundTag tag, CallbackInfo ci) {
+		Mob self = (Mob) (Object) this;
+		if (BabyAges.handles(self)) tag.putInt("Age", BabyAges.getAge(self));
+	}
 
-    @Inject(method = "m_7378_", at = @At("TAIL"), remap = false)
-    private void babyMobs$load(CompoundTag tag, CallbackInfo ci) {
-        Mob self = (Mob) (Object) this;
-        if (BabyAges.handles(self)) BabyAges.setAge(self, tag.getInt("Age"));
-    }
+	@Inject(method = "m_7378_", at = @At("TAIL"), remap = false)
+	private void babyMobs$load(CompoundTag tag, CallbackInfo ci) {
+		Mob self = (Mob) (Object) this;
+		if (BabyAges.handles(self)) BabyAges.setAge(self, tag.getInt("Age"));
+	}
 
-    @Inject(method = "m_6863_", at = @At("HEAD"), remap = false)
-    private void babyMobs$setBaby(boolean baby, CallbackInfo ci) {
-        Mob self = (Mob) (Object) this;
-        if (BabyAges.handles(self)) BabyAges.setBaby(self, baby);
-    }
+	@Inject(method = "m_6863_", at = @At("HEAD"), remap = false)
+	private void babyMobs$setBaby(boolean baby, CallbackInfo ci) {
+		Mob self = (Mob) (Object) this;
+		if (BabyAges.handles(self)) BabyAges.setBaby(self, baby);
+	}
 
-    @ModifyVariable(method = "m_6518_", at = @At("HEAD"), ordinal = 0, argsOnly = true, remap = false)
-    private SpawnGroupData babyMobs$groupData(SpawnGroupData data) {
-        Mob self = (Mob) (Object) this;
-        return BabyAges.handles(self) ? BabyAges.groupData(self, data) : data;
-    }
+	@ModifyVariable(method = "m_6518_", at = @At("HEAD"), ordinal = 0, argsOnly = true, remap = false)
+	private SpawnGroupData babyMobs$groupData(SpawnGroupData data) {
+		Mob self = (Mob) (Object) this;
+		return BabyAges.handles(self) ? BabyAges.groupData(self, data) : data;
+	}
 
-    @Inject(method = "m_6518_", at = @At("RETURN"), remap = false)
-    private void babyMobs$roll(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
-                               SpawnGroupData data, CompoundTag tag, CallbackInfoReturnable<SpawnGroupData> cir) {
-        Mob self = (Mob) (Object) this;
-        if (BabyAges.handles(self)) BabyAges.rollBaby(self, data);
-    }
+	@Inject(method = "m_6518_", at = @At("RETURN"), remap = false)
+	private void babyMobs$roll(ServerLevelAccessor level, DifficultyInstance difficulty, MobSpawnType reason,
+							   SpawnGroupData data, CompoundTag tag, CallbackInfoReturnable<SpawnGroupData> cir) {
+		Mob self = (Mob) (Object) this;
+		if (BabyAges.handles(self)) BabyAges.rollBaby(self, data);
+	}
 }

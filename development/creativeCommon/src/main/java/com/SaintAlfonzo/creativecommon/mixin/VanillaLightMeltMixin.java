@@ -21,9 +21,9 @@ import net.minecraft.world.level.block.SnowLayerBlock;
 @Mixin(value = {IceBlock.class, SnowLayerBlock.class}, remap = false)
 public abstract class VanillaLightMeltMixin {
 
-    @Redirect(method = "m_213898_", remap = false, require = 1, at = @At(value = "INVOKE", remap = false,
-            target = "Lnet/minecraft/server/level/ServerLevel;m_45517_(Lnet/minecraft/world/level/LightLayer;Lnet/minecraft/core/BlockPos;)I"))
-    private int creativecommon$lightMelt(ServerLevel level, LightLayer layer, BlockPos pos) {
-        return Melting.vanillaLight(level, layer, pos);
-    }
+	@Redirect(method = "m_213898_", remap = false, require = 1, at = @At(value = "INVOKE", remap = false,
+			target = "Lnet/minecraft/server/level/ServerLevel;m_45517_(Lnet/minecraft/world/level/LightLayer;Lnet/minecraft/core/BlockPos;)I"))
+	private int creativecommon$lightMelt(ServerLevel level, LightLayer layer, BlockPos pos) {
+		return Melting.vanillaLight(level, layer, pos);
+	}
 }

@@ -26,60 +26,60 @@ import java.util.function.Supplier;
  * a candle on an uneaten cake makes a vanilla candle cake (the golden cake is gone).
  */
 public class GoldenCakeBlock extends CakeBlock {
-    /** What one slice gives. Golden: 4 hunger, 1.2 saturation, Regeneration II 5 s, Absorption II 2 min. */
-    public enum Slice {
-        GOLDEN(4, 1.2F, List.of(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 1),
-                () -> new MobEffectInstance(MobEffects.ABSORPTION, 2400, 1))),
-        /** 8 hunger, 8.0 saturation, Regeneration II 20 s, Resistance and Fire Resistance 5 min, Absorption IV 2 min. */
-        ENCHANTED(8, 8.0F, List.of(() -> new MobEffectInstance(MobEffects.REGENERATION, 400, 1),
-                () -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 6000, 0),
-                () -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 6000, 0),
-                () -> new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3)));
+	/** What one slice gives. Golden: 4 hunger, 1.2 saturation, Regeneration II 5 s, Absorption II 2 min. */
+	public enum Slice {
+		GOLDEN(4, 1.2F, List.of(() -> new MobEffectInstance(MobEffects.REGENERATION, 100, 1),
+				() -> new MobEffectInstance(MobEffects.ABSORPTION, 2400, 1))),
+		/** 8 hunger, 8.0 saturation, Regeneration II 20 s, Resistance and Fire Resistance 5 min, Absorption IV 2 min. */
+		ENCHANTED(8, 8.0F, List.of(() -> new MobEffectInstance(MobEffects.REGENERATION, 400, 1),
+				() -> new MobEffectInstance(MobEffects.DAMAGE_RESISTANCE, 6000, 0),
+				() -> new MobEffectInstance(MobEffects.FIRE_RESISTANCE, 6000, 0),
+				() -> new MobEffectInstance(MobEffects.ABSORPTION, 2400, 3)));
 
-        final int hunger;
-        final float saturation;
-        final List<Supplier<MobEffectInstance>> effects;
+		final int hunger;
+		final float saturation;
+		final List<Supplier<MobEffectInstance>> effects;
 
-        Slice(int hunger, float saturation, List<Supplier<MobEffectInstance>> effects) {
-            this.hunger = hunger;
-            this.saturation = saturation;
-            this.effects = effects;
-        }
-    }
+		Slice(int hunger, float saturation, List<Supplier<MobEffectInstance>> effects) {
+			this.hunger = hunger;
+			this.saturation = saturation;
+			this.effects = effects;
+		}
+	}
 
-    private final Slice slice;
+	private final Slice slice;
 
-    public GoldenCakeBlock(Properties properties, Slice slice) {
-        super(properties);
-        this.slice = slice;
-    }
+	public GoldenCakeBlock(Properties properties, Slice slice) {
+		super(properties);
+		this.slice = slice;
+	}
 
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        ItemStack held = player.getItemInHand(hand);
-        // No candle cake for the golden cakes until the pack's cake candle feature (TODO baking/baked-goods #38): a candle
-        // did turn it into a plain vanilla candle cake (SQ-GLD-05). The candle is kept and the cake is left as it is.
-        if (held.is(ItemTags.CANDLES)) return InteractionResult.PASS;
-        if (level.isClientSide) {
-            if (takeSlice(level, pos, state, player).consumesAction()) return InteractionResult.SUCCESS;
-            if (held.isEmpty()) return InteractionResult.CONSUME;
-        }
-        return takeSlice(level, pos, state, player);
-    }
+	@Override
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		ItemStack held = player.getItemInHand(hand);
+		// No candle cake for the golden cakes until the pack's cake candle feature (TODO baking/baked-goods #38): a candle
+		// did turn it into a plain vanilla candle cake (SQ-GLD-05). The candle is kept and the cake is left as it is.
+		if (held.is(ItemTags.CANDLES)) return InteractionResult.PASS;
+		if (level.isClientSide) {
+			if (takeSlice(level, pos, state, player).consumesAction()) return InteractionResult.SUCCESS;
+			if (held.isEmpty()) return InteractionResult.CONSUME;
+		}
+		return takeSlice(level, pos, state, player);
+	}
 
-    /** One slice: always eaten (no hunger check), then the next bite state or, after the seventh, the block is gone. */
-    protected InteractionResult takeSlice(LevelAccessor level, BlockPos pos, BlockState state, Player player) {
-        player.awardStat(Stats.EAT_CAKE_SLICE);
-        player.getFoodData().eat(slice.hunger, slice.saturation);
-        slice.effects.forEach(effect -> player.addEffect(effect.get()));
-        int bites = state.getValue(BITES);
-        level.gameEvent(player, GameEvent.EAT, pos);
-        if (bites < MAX_BITES) {
-            level.setBlock(pos, state.setValue(BITES, bites + 1), Block.UPDATE_ALL);
-        } else {
-            level.removeBlock(pos, false);
-            level.gameEvent(player, GameEvent.BLOCK_DESTROY, pos);
-        }
-        return InteractionResult.SUCCESS;
-    }
+	/** One slice: always eaten (no hunger check), then the next bite state or, after the seventh, the block is gone. */
+	protected InteractionResult takeSlice(LevelAccessor level, BlockPos pos, BlockState state, Player player) {
+		player.awardStat(Stats.EAT_CAKE_SLICE);
+		player.getFoodData().eat(slice.hunger, slice.saturation);
+		slice.effects.forEach(effect -> player.addEffect(effect.get()));
+		int bites = state.getValue(BITES);
+		level.gameEvent(player, GameEvent.EAT, pos);
+		if (bites < MAX_BITES) {
+			level.setBlock(pos, state.setValue(BITES, bites + 1), Block.UPDATE_ALL);
+		} else {
+			level.removeBlock(pos, false);
+			level.gameEvent(player, GameEvent.BLOCK_DESTROY, pos);
+		}
+		return InteractionResult.SUCCESS;
+	}
 }

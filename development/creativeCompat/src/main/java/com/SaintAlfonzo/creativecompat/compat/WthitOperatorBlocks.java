@@ -27,39 +27,39 @@ import net.minecraft.world.level.block.Block;
  */
 public final class WthitOperatorBlocks implements IWailaClientPlugin, IBlockComponentProvider {
 
-    /** Before WTHIT's core blacklist redirect (500). */
-    private static final int PRIORITY = 400;
+	/** Before WTHIT's core blacklist redirect (500). */
+	private static final int PRIORITY = 400;
 
-    private List<? extends String> cachedList;
-    private Set<Block> blocks = Set.of();
+	private List<? extends String> cachedList;
+	private Set<Block> blocks = Set.of();
 
-    @Override
-    public void register(IClientRegistrar registrar) {
-        registrar.redirect(this, Block.class, PRIORITY);
-    }
+	@Override
+	public void register(IClientRegistrar registrar) {
+		registrar.redirect(this, Block.class, PRIORITY);
+	}
 
-    @Override
-    public ITargetRedirector.Result redirect(ITargetRedirector redirect, IBlockAccessor accessor, IPluginConfig config) {
-        if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.operatorBlocks.get() || !blocks().contains(accessor.getBlock())) {
-            return null;
-        }
-        Player player = accessor.getPlayer();
-        return player.hasPermissions(com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.operatorBlockLevel.get()) ? redirect.toSelf() : null;
-    }
+	@Override
+	public ITargetRedirector.Result redirect(ITargetRedirector redirect, IBlockAccessor accessor, IPluginConfig config) {
+		if (!com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.operatorBlocks.get() || !blocks().contains(accessor.getBlock())) {
+			return null;
+		}
+		Player player = accessor.getPlayer();
+		return player.hasPermissions(com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.operatorBlockLevel.get()) ? redirect.toSelf() : null;
+	}
 
-    private Set<Block> blocks() {
-        List<? extends String> list = com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.operatorBlockList.get();
-        if (list != cachedList) {
-            Set<Block> set = new HashSet<>();
-            for (String id : list) {
-                ResourceLocation rl = ResourceLocation.tryParse(id);
-                if (rl != null && Registry.BLOCK.containsKey(rl)) {
-                    set.add(Registry.BLOCK.get(rl));
-                }
-            }
-            blocks = set;
-            cachedList = list;
-        }
-        return blocks;
-    }
+	private Set<Block> blocks() {
+		List<? extends String> list = com.SaintAlfonzo.creativecompat.CompatConfig.WTHIT.operatorBlockList.get();
+		if (list != cachedList) {
+			Set<Block> set = new HashSet<>();
+			for (String id : list) {
+				ResourceLocation rl = ResourceLocation.tryParse(id);
+				if (rl != null && Registry.BLOCK.containsKey(rl)) {
+					set.add(Registry.BLOCK.get(rl));
+				}
+			}
+			blocks = set;
+			cachedList = list;
+		}
+		return blocks;
+	}
 }

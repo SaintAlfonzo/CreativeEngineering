@@ -19,23 +19,23 @@ import java.util.List;
  */
 public class LabelItem extends Item {
 
-    public static final int TOOLTIP_LINES = 8;
+	public static final int TOOLTIP_LINES = 8;
 
-    public LabelItem(Properties properties) {
-        super(properties.stacksTo(64));
-    }
+	public LabelItem(Properties properties) {
+		super(properties.stacksTo(64));
+	}
 
-    /** Placement (3.10): an empty five-spot face at the boundary or within the inset limit. */
-    @Override
-    public InteractionResult useOn(UseOnContext context) {
-        return FacePaperInteractions.placeFromContext(context);
-    }
+	/** Placement (3.10): an empty five-spot face at the boundary or within the inset limit. */
+	@Override
+	public InteractionResult useOn(UseOnContext context) {
+		return FacePaperInteractions.placeFromContext(context);
+	}
 
-    /** Spec 3.9: eight gray lines, one per lang key. */
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        for (int i = 1; i <= TOOLTIP_LINES; i++) {
-            tooltip.add(Component.translatable("creativelabels.tooltip.label." + i).withStyle(ChatFormatting.GRAY));
-        }
-    }
+	/** Spec 3.9: eight gray lines, one per lang key. */
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+		for (int i = 1; i <= TOOLTIP_LINES; i++) {
+			tooltip.add(Component.translatable("creativelabels.tooltip.label." + i).withStyle(ChatFormatting.GRAY));
+		}
+	}
 }

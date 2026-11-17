@@ -29,14 +29,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = ClientboundSectionBlocksUpdatePacket.class, remap = false)
 public abstract class SectionUpdateNullStateMixin {
 
-    @Redirect(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/core/IdMapper;m_7942_(I)Ljava/lang/Object;"))
-    private Object creativecommon$trackLookup(IdMapper<?> map, int id) {
-        return BlockStateLookupHook.lookup(map, BlockStateIdOverflow.repairId(id));
-    }
+	@Redirect(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V",
+			at = @At(value = "INVOKE", target = "Lnet/minecraft/core/IdMapper;m_7942_(I)Ljava/lang/Object;"))
+	private Object creativecommon$trackLookup(IdMapper<?> map, int id) {
+		return BlockStateLookupHook.lookup(map, BlockStateIdOverflow.repairId(id));
+	}
 
-    @Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("RETURN"))
-    private void creativecommon$reportNulls(FriendlyByteBuf buf, CallbackInfo ci) {
-        BlockStateLookupHook.finishSection((ClientboundSectionBlocksUpdatePacket) (Object) this);
-    }
+	@Inject(method = "<init>(Lnet/minecraft/network/FriendlyByteBuf;)V", at = @At("RETURN"))
+	private void creativecommon$reportNulls(FriendlyByteBuf buf, CallbackInfo ci) {
+		BlockStateLookupHook.finishSection((ClientboundSectionBlocksUpdatePacket) (Object) this);
+	}
 }

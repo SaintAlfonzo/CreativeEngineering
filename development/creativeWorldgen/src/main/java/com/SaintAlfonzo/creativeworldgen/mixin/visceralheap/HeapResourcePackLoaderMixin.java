@@ -14,10 +14,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = ResourcePackLoader.class, remap = false)
 public abstract class HeapResourcePackLoaderMixin {
 
-    @Inject(method = "createPackForMod", at = @At("RETURN"), cancellable = true)
-    private static void creativeworldgen$heapPack(IModFileInfo info, CallbackInfoReturnable<PathPackResources> cir) {
-        if (info.getMods().stream().anyMatch(mod -> HeapAllowlist.MOD_ID.equals(mod.getModId()))) {
-            cir.setReturnValue(new HeapPackResources(info));
-        }
-    }
+	@Inject(method = "createPackForMod", at = @At("RETURN"), cancellable = true)
+	private static void creativeworldgen$heapPack(IModFileInfo info, CallbackInfoReturnable<PathPackResources> cir) {
+		if (info.getMods().stream().anyMatch(mod -> HeapAllowlist.MOD_ID.equals(mod.getModId()))) {
+			cir.setReturnValue(new HeapPackResources(info));
+		}
+	}
 }

@@ -9,10 +9,10 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 public final class MDMenuTypes {
-    public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MinersDelightMod.MODID);
+	public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(ForgeRegistries.MENU_TYPES, MinersDelightMod.MODID);
 
-    public static final RegistryObject<MenuType<CopperPotMenu>> COPPER_POT = MENU_TYPES.register("copper_pot", () -> IForgeMenuType.create(CopperPotMenu::new));
+	public static final RegistryObject<MenuType<CopperPotMenu>> COPPER_POT = MENU_TYPES.register("copper_pot", () -> IForgeMenuType.create(CopperPotMenu::new));
 
-    private MDMenuTypes() {
-    }
+	private MDMenuTypes() {
+	}
 }

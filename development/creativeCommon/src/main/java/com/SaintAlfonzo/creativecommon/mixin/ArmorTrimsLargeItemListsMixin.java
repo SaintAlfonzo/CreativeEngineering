@@ -19,30 +19,30 @@ import net.minecraft.world.item.Item;
 @Mixin(value = LargeItemLists.class, remap = false)
 public abstract class ArmorTrimsLargeItemListsMixin {
 
-    @Inject(method = "getAllItemsOfType", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void creativecommon$cachedOfType(Class<? extends Item> type, CallbackInfoReturnable<List<Item>> cir) {
-        List<Item> cached = ArmorTrimsItemCache.ofType(type);
-        if (cached != null) {
-            cir.setReturnValue(cached);
-        }
-    }
+	@Inject(method = "getAllItemsOfType", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void creativecommon$cachedOfType(Class<? extends Item> type, CallbackInfoReturnable<List<Item>> cir) {
+		List<Item> cached = ArmorTrimsItemCache.ofType(type);
+		if (cached != null) {
+			cir.setReturnValue(cached);
+		}
+	}
 
-    @Inject(method = "getAllItemsOfType", at = @At("RETURN"), remap = false)
-    private static void creativecommon$storeOfType(Class<? extends Item> type, CallbackInfoReturnable<List<Item>> cir) {
-        ArmorTrimsItemCache.putOfType(type, cir.getReturnValue());
-    }
+	@Inject(method = "getAllItemsOfType", at = @At("RETURN"), remap = false)
+	private static void creativecommon$storeOfType(Class<? extends Item> type, CallbackInfoReturnable<List<Item>> cir) {
+		ArmorTrimsItemCache.putOfType(type, cir.getReturnValue());
+	}
 
-    @Inject(method = "getAllTrimmable", at = @At("HEAD"), cancellable = true, remap = false)
-    private static void creativecommon$cachedTrimmable(CallbackInfoReturnable<List<Item>> cir) {
-        List<Item> cached = ArmorTrimsItemCache.trimmable(LargeItemLists.allTrimmableClasses.size(), LargeItemLists.allTrimmableTags.size());
-        if (cached != null) {
-            cir.setReturnValue(cached);
-        }
-    }
+	@Inject(method = "getAllTrimmable", at = @At("HEAD"), cancellable = true, remap = false)
+	private static void creativecommon$cachedTrimmable(CallbackInfoReturnable<List<Item>> cir) {
+		List<Item> cached = ArmorTrimsItemCache.trimmable(LargeItemLists.allTrimmableClasses.size(), LargeItemLists.allTrimmableTags.size());
+		if (cached != null) {
+			cir.setReturnValue(cached);
+		}
+	}
 
-    @Inject(method = "getAllTrimmable", at = @At("RETURN"), cancellable = true, remap = false)
-    private static void creativecommon$storeTrimmable(CallbackInfoReturnable<List<Item>> cir) {
-        cir.setReturnValue(ArmorTrimsItemCache.putTrimmable(LargeItemLists.allTrimmableClasses.size(),
-                LargeItemLists.allTrimmableTags.size(), cir.getReturnValue()));
-    }
+	@Inject(method = "getAllTrimmable", at = @At("RETURN"), cancellable = true, remap = false)
+	private static void creativecommon$storeTrimmable(CallbackInfoReturnable<List<Item>> cir) {
+		cir.setReturnValue(ArmorTrimsItemCache.putTrimmable(LargeItemLists.allTrimmableClasses.size(),
+				LargeItemLists.allTrimmableTags.size(), cir.getReturnValue()));
+	}
 }

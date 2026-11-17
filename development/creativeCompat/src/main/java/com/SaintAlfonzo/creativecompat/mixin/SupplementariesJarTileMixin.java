@@ -40,99 +40,99 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = JarBlockTile.class, remap = false)
 public abstract class SupplementariesJarTileMixin {
 
-    @Shadow(remap = false)
-    @Final
-    private int capacity;
+	@Shadow(remap = false)
+	@Final
+	private int capacity;
 
-    @Inject(method = "<init>", at = @At("RETURN"), remap = false)
-    private void creativeengineering$oneSlotPerItem(BlockPos pos, BlockState state, CallbackInfo ci) {
-        ((ItemDisplayTileAccessor) this).creativeengineering$setStacks(
-                NonNullList.withSize(Math.max(1, capacity), ItemStack.EMPTY));
-    }
+	@Inject(method = "<init>", at = @At("RETURN"), remap = false)
+	private void creativeengineering$oneSlotPerItem(BlockPos pos, BlockState state, CallbackInfo ci) {
+		((ItemDisplayTileAccessor) this).creativeengineering$setStacks(
+				NonNullList.withSize(Math.max(1, capacity), ItemStack.EMPTY));
+	}
 
-    @Inject(method = "m_7013_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$canPlaceMixed(int index, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(creativeengineering$accepts(index, stack));
-    }
+	@Inject(method = "m_7013_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$canPlaceMixed(int index, ItemStack stack, CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(creativeengineering$accepts(index, stack));
+	}
 
-    @Inject(method = "m_7155_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$canPlaceThroughFaceMixed(int index, ItemStack stack, Direction direction,
-                                                              CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(creativeengineering$accepts(index, stack));
-    }
+	@Inject(method = "m_7155_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$canPlaceThroughFaceMixed(int index, ItemStack stack, Direction direction,
+															  CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(creativeengineering$accepts(index, stack));
+	}
 
-    @Inject(method = "addItem", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$addLayer(ItemStack stack, CallbackInfo ci) {
-        Container jar = (Container) this;
-        int slot = JarMixing.firstEmpty(jar);
-        if (slot >= 0 && !stack.isEmpty()) {
-            ItemStack one = stack.copy();
-            one.setCount(1);
-            jar.setItem(slot, one);
-        }
-        ci.cancel();
-    }
+	@Inject(method = "addItem", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$addLayer(ItemStack stack, CallbackInfo ci) {
+		Container jar = (Container) this;
+		int slot = JarMixing.firstEmpty(jar);
+		if (slot >= 0 && !stack.isEmpty()) {
+			ItemStack one = stack.copy();
+			one.setCount(1);
+			jar.setItem(slot, one);
+		}
+		ci.cancel();
+	}
 
-    @Inject(method = "extractItem", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$takeTopLayer(CallbackInfoReturnable<ItemStack> cir) {
-        Container jar = (Container) this;
-        int slot = JarMixing.top(jar);
-        cir.setReturnValue(slot < 0 ? ItemStack.EMPTY : jar.removeItem(slot, 1));
-    }
+	@Inject(method = "extractItem", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$takeTopLayer(CallbackInfoReturnable<ItemStack> cir) {
+		Container jar = (Container) this;
+		int slot = JarMixing.top(jar);
+		cir.setReturnValue(slot < 0 ? ItemStack.EMPTY : jar.removeItem(slot, 1));
+	}
 
-    @Inject(method = "isFull", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$isFull(CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(JarMixing.total((Container) this) >= capacity);
-    }
+	@Inject(method = "isFull", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$isFull(CallbackInfoReturnable<Boolean> cir) {
+		cir.setReturnValue(JarMixing.total((Container) this) >= capacity);
+	}
 
-    @Inject(method = "m_6893_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$oneItemPerSlot(CallbackInfoReturnable<Integer> cir) {
-        cir.setReturnValue(1);
-    }
+	@Inject(method = "m_6893_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$oneItemPerSlot(CallbackInfoReturnable<Integer> cir) {
+		cir.setReturnValue(1);
+	}
 
-    @Inject(method = "resetHolders", at = @At("RETURN"), remap = false)
-    private void creativeengineering$clearAllLayers(CallbackInfo ci) {
-        NonNullList<ItemStack> stacks = ((ItemDisplayTileAccessor) this).creativeengineering$getStacks();
-        for (int i = 0; i < stacks.size(); i++) {
-            stacks.set(i, ItemStack.EMPTY);
-        }
-    }
+	@Inject(method = "resetHolders", at = @At("RETURN"), remap = false)
+	private void creativeengineering$clearAllLayers(CallbackInfo ci) {
+		NonNullList<ItemStack> stacks = ((ItemDisplayTileAccessor) this).creativeengineering$getStacks();
+		for (int i = 0; i < stacks.size(); i++) {
+			stacks.set(i, ItemStack.EMPTY);
+		}
+	}
 
-    @Inject(method = "m_142466_", at = @At("RETURN"), remap = false)
-    private void creativeengineering$normalizeOnLoad(CompoundTag tag, CallbackInfo ci) {
-        creativeengineering$normalize();
-    }
+	@Inject(method = "m_142466_", at = @At("RETURN"), remap = false)
+	private void creativeengineering$normalizeOnLoad(CompoundTag tag, CallbackInfo ci) {
+		creativeengineering$normalize();
+	}
 
-    @Inject(method = "m_183515_", at = @At("HEAD"), remap = false)
-    private void creativeengineering$normalizeOnSave(CompoundTag tag, CallbackInfo ci) {
-        creativeengineering$normalize();
-    }
+	@Inject(method = "m_183515_", at = @At("HEAD"), remap = false)
+	private void creativeengineering$normalizeOnSave(CompoundTag tag, CallbackInfo ci) {
+		creativeengineering$normalize();
+	}
 
-    private void creativeengineering$normalize() {
-        ItemDisplayTileAccessor self = (ItemDisplayTileAccessor) this;
-        NonNullList<ItemStack> stacks = self.creativeengineering$getStacks();
-        if (stacks.size() < capacity) { // a load sized the list from an older, smaller save
-            NonNullList<ItemStack> grown = NonNullList.withSize(capacity, ItemStack.EMPTY);
-            for (int i = 0; i < stacks.size(); i++) {
-                grown.set(i, stacks.get(i));
-            }
-            self.creativeengineering$setStacks(grown);
-            stacks = grown;
-        }
-        JarMixing.normalize(stacks);
-    }
+	private void creativeengineering$normalize() {
+		ItemDisplayTileAccessor self = (ItemDisplayTileAccessor) this;
+		NonNullList<ItemStack> stacks = self.creativeengineering$getStacks();
+		if (stacks.size() < capacity) { // a load sized the list from an older, smaller save
+			NonNullList<ItemStack> grown = NonNullList.withSize(capacity, ItemStack.EMPTY);
+			for (int i = 0; i < stacks.size(); i++) {
+				grown.set(i, stacks.get(i));
+			}
+			self.creativeengineering$setStacks(grown);
+			stacks = grown;
+		}
+		JarMixing.normalize(stacks);
+	}
 
-    private boolean creativeengineering$accepts(int index, ItemStack stack) {
-        JarBlockTile tile = (JarBlockTile) (Object) this;
-        Container jar = (Container) this;
-        if (stack.isEmpty() || !Functional.JAR_COOKIES.get() || !tile.fluidHolder.isEmpty()
-                || !tile.mobContainer.isEmpty() || !stack.is(ModTags.COOKIES)) {
-            return false;
-        }
-        if (JarMixing.total(jar) >= capacity || !JarMixing.canMix(jar, stack)) {
-            return false;
-        }
-        return index < 0 || index >= jar.getContainerSize() || !jar.getItem(index).isEmpty()
-                || index == JarMixing.firstEmpty(jar);
-    }
+	private boolean creativeengineering$accepts(int index, ItemStack stack) {
+		JarBlockTile tile = (JarBlockTile) (Object) this;
+		Container jar = (Container) this;
+		if (stack.isEmpty() || !Functional.JAR_COOKIES.get() || !tile.fluidHolder.isEmpty()
+				|| !tile.mobContainer.isEmpty() || !stack.is(ModTags.COOKIES)) {
+			return false;
+		}
+		if (JarMixing.total(jar) >= capacity || !JarMixing.canMix(jar, stack)) {
+			return false;
+		}
+		return index < 0 || index >= jar.getContainerSize() || !jar.getItem(index).isEmpty()
+				|| index == JarMixing.firstEmpty(jar);
+	}
 }

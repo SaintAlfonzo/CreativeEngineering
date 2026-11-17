@@ -16,12 +16,12 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 @Mixin(value = AbstractClientPlayer.class, remap = false)
 public abstract class PassFovMixin {
 
-    @ModifyVariable(method = "m_108565_", at = @At(value = "STORE", ordinal = 2), ordinal = 0)
-    private float creativecompat$noBlockSpeedFov(float f) {
-        try {
-            return PassFov.adjust((Player) (Object) this, f);
-        } catch (Throwable t) {
-            return f;
-        }
-    }
+	@ModifyVariable(method = "m_108565_", at = @At(value = "STORE", ordinal = 2), ordinal = 0)
+	private float creativecompat$noBlockSpeedFov(float f) {
+		try {
+			return PassFov.adjust((Player) (Object) this, f);
+		} catch (Throwable t) {
+			return f;
+		}
+	}
 }

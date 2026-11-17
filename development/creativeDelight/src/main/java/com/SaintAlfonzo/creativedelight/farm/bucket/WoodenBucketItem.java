@@ -39,120 +39,120 @@ import net.minecraftforge.registries.ForgeRegistries;
  */
 public class WoodenBucketItem extends BucketItem {
 
-    private final ResourceLocation fluidId;
+	private final ResourceLocation fluidId;
 
-    public WoodenBucketItem(ResourceLocation fluidId, Properties properties) {
-        super(() -> fluidId == null ? Fluids.EMPTY : ForgeRegistries.FLUIDS.getValue(fluidId), properties);
-        this.fluidId = fluidId;
-    }
+	public WoodenBucketItem(ResourceLocation fluidId, Properties properties) {
+		super(() -> fluidId == null ? Fluids.EMPTY : ForgeRegistries.FLUIDS.getValue(fluidId), properties);
+		this.fluidId = fluidId;
+	}
 
-    private boolean is(ResourceLocation id) {
-        return id.equals(fluidId);
-    }
+	private boolean is(ResourceLocation id) {
+		return id.equals(fluidId);
+	}
 
-    @Override
-    public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
-        if (fluidId == null) {
-            return scoopWater(level, player, stack);
-        }
-        if (is(WoodenBuckets.WATER_ID)) {
-            InteractionResultHolder<ItemStack> result = super.use(level, player, hand);
-            if (result.getResult().consumesAction() && result.getObject().is(Items.BUCKET)) {
-                return new InteractionResultHolder<>(result.getResult(), new ItemStack(WoodenBuckets.EMPTY.get()));
-            }
-            return result;
-        }
-        if (is(WoodenBuckets.MILK_ID)) {
-            return ItemUtils.startUsingInstantly(level, player, hand);
-        }
-        return InteractionResultHolder.pass(stack);
-    }
+	@Override
+	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+		ItemStack stack = player.getItemInHand(hand);
+		if (fluidId == null) {
+			return scoopWater(level, player, stack);
+		}
+		if (is(WoodenBuckets.WATER_ID)) {
+			InteractionResultHolder<ItemStack> result = super.use(level, player, hand);
+			if (result.getResult().consumesAction() && result.getObject().is(Items.BUCKET)) {
+				return new InteractionResultHolder<>(result.getResult(), new ItemStack(WoodenBuckets.EMPTY.get()));
+			}
+			return result;
+		}
+		if (is(WoodenBuckets.MILK_ID)) {
+			return ItemUtils.startUsingInstantly(level, player, hand);
+		}
+		return InteractionResultHolder.pass(stack);
+	}
 
-    private InteractionResultHolder<ItemStack> scoopWater(Level level, Player player, ItemStack stack) {
-        BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
-        if (hit.getType() != HitResult.Type.BLOCK) {
-            return InteractionResultHolder.pass(stack);
-        }
-        BlockPos pos = hit.getBlockPos();
-        Direction face = hit.getDirection();
-        if (!level.mayInteract(player, pos) || !player.mayUseItemAt(pos.relative(face), face, stack)) {
-            return InteractionResultHolder.fail(stack);
-        }
-        FluidState fluid = level.getFluidState(pos);
-        BlockState state = level.getBlockState(pos);
-        if (!fluid.isSource() || fluid.getType() != Fluids.WATER || !(state.getBlock() instanceof BucketPickup pickup)) {
-            return InteractionResultHolder.fail(stack);
-        }
-        ItemStack picked = pickup.pickupBlock(level, pos, state);
-        if (picked.isEmpty()) {
-            return InteractionResultHolder.fail(stack);
-        }
-        player.awardStat(Stats.ITEM_USED.get(this));
-        pickup.getPickupSound(state).ifPresent(sound -> player.playSound(sound, 1.0F, 1.0F));
-        level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
-        ItemStack result = ItemUtils.createFilledResult(stack, player, new ItemStack(WoodenBuckets.WATER.get()));
-        return InteractionResultHolder.sidedSuccess(result, level.isClientSide());
-    }
+	private InteractionResultHolder<ItemStack> scoopWater(Level level, Player player, ItemStack stack) {
+		BlockHitResult hit = getPlayerPOVHitResult(level, player, ClipContext.Fluid.SOURCE_ONLY);
+		if (hit.getType() != HitResult.Type.BLOCK) {
+			return InteractionResultHolder.pass(stack);
+		}
+		BlockPos pos = hit.getBlockPos();
+		Direction face = hit.getDirection();
+		if (!level.mayInteract(player, pos) || !player.mayUseItemAt(pos.relative(face), face, stack)) {
+			return InteractionResultHolder.fail(stack);
+		}
+		FluidState fluid = level.getFluidState(pos);
+		BlockState state = level.getBlockState(pos);
+		if (!fluid.isSource() || fluid.getType() != Fluids.WATER || !(state.getBlock() instanceof BucketPickup pickup)) {
+			return InteractionResultHolder.fail(stack);
+		}
+		ItemStack picked = pickup.pickupBlock(level, pos, state);
+		if (picked.isEmpty()) {
+			return InteractionResultHolder.fail(stack);
+		}
+		player.awardStat(Stats.ITEM_USED.get(this));
+		pickup.getPickupSound(state).ifPresent(sound -> player.playSound(sound, 1.0F, 1.0F));
+		level.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
+		ItemStack result = ItemUtils.createFilledResult(stack, player, new ItemStack(WoodenBuckets.WATER.get()));
+		return InteractionResultHolder.sidedSuccess(result, level.isClientSide());
+	}
 
-    // Milk: drunk like vanilla's MilkBucketItem.
+	// Milk: drunk like vanilla's MilkBucketItem.
 
-    @Override
-    public int getUseDuration(ItemStack stack) {
-        return is(WoodenBuckets.MILK_ID) ? 32 : 0;
-    }
+	@Override
+	public int getUseDuration(ItemStack stack) {
+		return is(WoodenBuckets.MILK_ID) ? 32 : 0;
+	}
 
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return is(WoodenBuckets.MILK_ID) ? UseAnim.DRINK : UseAnim.NONE;
-    }
+	@Override
+	public UseAnim getUseAnimation(ItemStack stack) {
+		return is(WoodenBuckets.MILK_ID) ? UseAnim.DRINK : UseAnim.NONE;
+	}
 
-    @Override
-    public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
-        if (!is(WoodenBuckets.MILK_ID)) {
-            return stack;
-        }
-        if (!level.isClientSide) {
-            entity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
-        }
-        if (entity instanceof ServerPlayer player) {
-            CriteriaTriggers.CONSUME_ITEM.trigger(player, stack);
-            player.awardStat(Stats.ITEM_USED.get(this));
-        }
-        if (entity instanceof Player player && player.getAbilities().instabuild) {
-            return stack;
-        }
-        stack.shrink(1);
-        return stack.isEmpty() ? new ItemStack(WoodenBuckets.EMPTY.get()) : stack;
-    }
+	@Override
+	public ItemStack finishUsingItem(ItemStack stack, Level level, LivingEntity entity) {
+		if (!is(WoodenBuckets.MILK_ID)) {
+			return stack;
+		}
+		if (!level.isClientSide) {
+			entity.curePotionEffects(new ItemStack(Items.MILK_BUCKET));
+		}
+		if (entity instanceof ServerPlayer player) {
+			CriteriaTriggers.CONSUME_ITEM.trigger(player, stack);
+			player.awardStat(Stats.ITEM_USED.get(this));
+		}
+		if (entity instanceof Player player && player.getAbilities().instabuild) {
+			return stack;
+		}
+		stack.shrink(1);
+		return stack.isEmpty() ? new ItemStack(WoodenBuckets.EMPTY.get()) : stack;
+	}
 
-    @Override
-    public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
-        return new Wrapper(stack);
-    }
+	@Override
+	public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag nbt) {
+		return new Wrapper(stack);
+	}
 
-    /** Forge's wrapper would fill to {@code fluid.getBucket()} (the iron buckets); this one stays wooden. */
-    private static final class Wrapper extends FluidBucketWrapper {
+	/** Forge's wrapper would fill to {@code fluid.getBucket()} (the iron buckets); this one stays wooden. */
+	private static final class Wrapper extends FluidBucketWrapper {
 
-        Wrapper(ItemStack container) {
-            super(container);
-        }
+		Wrapper(ItemStack container) {
+			super(container);
+		}
 
-        @Override
-        public boolean canFillFluidType(FluidStack fluid) {
-            return WoodenBuckets.BY_FLUID.containsKey(ForgeRegistries.FLUIDS.getKey(fluid.getFluid()));
-        }
+		@Override
+		public boolean canFillFluidType(FluidStack fluid) {
+			return WoodenBuckets.BY_FLUID.containsKey(ForgeRegistries.FLUIDS.getKey(fluid.getFluid()));
+		}
 
-        @Override
-        protected void setFluid(FluidStack fluid) {
-            if (fluid.isEmpty()) {
-                container = new ItemStack(WoodenBuckets.EMPTY.get());
-                return;
-            }
-            var bucket = WoodenBuckets.BY_FLUID.get(ForgeRegistries.FLUIDS.getKey(fluid.getFluid()));
-            if (bucket != null) {
-                container = new ItemStack(bucket.get());
-            }
-        }
-    }
+		@Override
+		protected void setFluid(FluidStack fluid) {
+			if (fluid.isEmpty()) {
+				container = new ItemStack(WoodenBuckets.EMPTY.get());
+				return;
+			}
+			var bucket = WoodenBuckets.BY_FLUID.get(ForgeRegistries.FLUIDS.getKey(fluid.getFluid()));
+			if (bucket != null) {
+				container = new ItemStack(bucket.get());
+			}
+		}
+	}
 }

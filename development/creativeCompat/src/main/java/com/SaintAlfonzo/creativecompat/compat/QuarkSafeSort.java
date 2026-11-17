@@ -27,87 +27,87 @@ import vazkii.quark.base.handler.SortingHandler;
  */
 public final class QuarkSafeSort {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Logger LOGGER = LogUtils.getLogger();
 
-    private QuarkSafeSort() {
-    }
+	private QuarkSafeSort() {
+	}
 
-    public static void sort(IItemHandler handler, int iStart, int iEnd, int[] lockedSlots) {
-        List<ItemStack> stacks = new ArrayList<>();
-        List<Integer> freeSlots = new ArrayList<>();
-        for (int i = iStart; i < iEnd; i++) {
-            if (isLocked(i, lockedSlots)) {
-                continue;
-            }
-            freeSlots.add(i);
-            ItemStack stackAt = handler.getStackInSlot(i);
-            if (stackAt.isEmpty()) {
-                continue;
-            }
-            // every unlocked slot is emptied below; one we cannot fully extract means no sort
-            ItemStack extractTest = handler.extractItem(i, stackAt.getCount(), true);
-            if (extractTest.getCount() != stackAt.getCount()) {
-                return;
-            }
-            stacks.add(stackAt.copy());
-        }
+	public static void sort(IItemHandler handler, int iStart, int iEnd, int[] lockedSlots) {
+		List<ItemStack> stacks = new ArrayList<>();
+		List<Integer> freeSlots = new ArrayList<>();
+		for (int i = iStart; i < iEnd; i++) {
+			if (isLocked(i, lockedSlots)) {
+				continue;
+			}
+			freeSlots.add(i);
+			ItemStack stackAt = handler.getStackInSlot(i);
+			if (stackAt.isEmpty()) {
+				continue;
+			}
+			// every unlocked slot is emptied below; one we cannot fully extract means no sort
+			ItemStack extractTest = handler.extractItem(i, stackAt.getCount(), true);
+			if (extractTest.getCount() != stackAt.getCount()) {
+				return;
+			}
+			stacks.add(stackAt.copy());
+		}
 
-        SortingHandler.mergeStacks(stacks);
-        SortingHandler.sortStackList(stacks);
-        stacks = splitOversized(stacks);
+		SortingHandler.mergeStacks(stacks);
+		SortingHandler.sortStackList(stacks);
+		stacks = splitOversized(stacks);
 
-        if (stacks.size() > freeSlots.size()) {
-            return;
-        }
-        for (int j = 0; j < stacks.size(); j++) {
-            int slot = freeSlots.get(j);
-            ItemStack stack = stacks.get(j);
-            if (stack.getCount() > Math.min(stack.getMaxStackSize(), handler.getSlotLimit(slot))
-                    || !handler.isItemValid(slot, stack)) {
-                return;
-            }
-        }
+		if (stacks.size() > freeSlots.size()) {
+			return;
+		}
+		for (int j = 0; j < stacks.size(); j++) {
+			int slot = freeSlots.get(j);
+			ItemStack stack = stacks.get(j);
+			if (stack.getCount() > Math.min(stack.getMaxStackSize(), handler.getSlotLimit(slot))
+					|| !handler.isItemValid(slot, stack)) {
+				return;
+			}
+		}
 
-        List<ItemStack> leftovers = new ArrayList<>();
-        for (int slot : freeSlots) {
-            handler.extractItem(slot, handler.getStackInSlot(slot).getCount(), false);
-        }
-        for (int j = 0; j < stacks.size(); j++) {
-            ItemStack rest = handler.insertItem(freeSlots.get(j), stacks.get(j), false);
-            if (!rest.isEmpty()) {
-                leftovers.add(rest);
-            }
-        }
-        for (ItemStack rest : leftovers) {
-            ItemStack lost = ItemHandlerHelper.insertItemStacked(handler, rest, false);
-            if (!lost.isEmpty()) {
-                LOGGER.error("[quark-sort] {} refused {} after validation; items lost", handler.getClass().getName(), lost);
-            }
-        }
-    }
+		List<ItemStack> leftovers = new ArrayList<>();
+		for (int slot : freeSlots) {
+			handler.extractItem(slot, handler.getStackInSlot(slot).getCount(), false);
+		}
+		for (int j = 0; j < stacks.size(); j++) {
+			ItemStack rest = handler.insertItem(freeSlots.get(j), stacks.get(j), false);
+			if (!rest.isEmpty()) {
+				leftovers.add(rest);
+			}
+		}
+		for (ItemStack rest : leftovers) {
+			ItemStack lost = ItemHandlerHelper.insertItemStacked(handler, rest, false);
+			if (!lost.isEmpty()) {
+				LOGGER.error("[quark-sort] {} refused {} after validation; items lost", handler.getClass().getName(), lost);
+			}
+		}
+	}
 
-    private static List<ItemStack> splitOversized(List<ItemStack> stacks) {
-        List<ItemStack> out = new ArrayList<>(stacks.size());
-        for (ItemStack stack : stacks) {
-            int max = Math.max(1, stack.getMaxStackSize());
-            ItemStack rest = stack.copy();
-            while (rest.getCount() > max) {
-                out.add(rest.split(max));
-            }
-            out.add(rest);
-        }
-        return out;
-    }
+	private static List<ItemStack> splitOversized(List<ItemStack> stacks) {
+		List<ItemStack> out = new ArrayList<>(stacks.size());
+		for (ItemStack stack : stacks) {
+			int max = Math.max(1, stack.getMaxStackSize());
+			ItemStack rest = stack.copy();
+			while (rest.getCount() > max) {
+				out.add(rest.split(max));
+			}
+			out.add(rest);
+		}
+		return out;
+	}
 
-    private static boolean isLocked(int slot, int[] locked) {
-        if (locked == null) {
-            return false;
-        }
-        for (int i : locked) {
-            if (slot == i) {
-                return true;
-            }
-        }
-        return false;
-    }
+	private static boolean isLocked(int slot, int[] locked) {
+		if (locked == null) {
+			return false;
+		}
+		for (int i : locked) {
+			if (slot == i) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

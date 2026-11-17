@@ -24,24 +24,24 @@ import net.minecraft.world.entity.LivingEntity;
 @Mixin(MobEffectInstance.class)
 public abstract class MobEffectTickContextMixin {
 
-    @Redirect(method = "m_19550_",
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/world/effect/MobEffect;m_6742_(Lnet/minecraft/world/entity/LivingEntity;I)V"),
-            remap = false)
-    private void creativecommon$markEffectTick(MobEffect effect, LivingEntity entity, int amplifier) {
-        if (entity.level.isClientSide) {
-            // Only the server thread ever writes the context, so the singleplayer client thread
-            // can't race it.
-            effect.applyEffectTick(entity, amplifier);
-            return;
-        }
-        LivingEntity outerEntity = EffectTickContext.entity();
-        MobEffect outerEffect = EffectTickContext.effect();
-        EffectTickContext.set(entity, effect);
-        try {
-            effect.applyEffectTick(entity, amplifier);
-        } finally {
-            EffectTickContext.set(outerEntity, outerEffect);
-        }
-    }
+	@Redirect(method = "m_19550_",
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/world/effect/MobEffect;m_6742_(Lnet/minecraft/world/entity/LivingEntity;I)V"),
+			remap = false)
+	private void creativecommon$markEffectTick(MobEffect effect, LivingEntity entity, int amplifier) {
+		if (entity.level.isClientSide) {
+			// Only the server thread ever writes the context, so the singleplayer client thread
+			// can't race it.
+			effect.applyEffectTick(entity, amplifier);
+			return;
+		}
+		LivingEntity outerEntity = EffectTickContext.entity();
+		MobEffect outerEffect = EffectTickContext.effect();
+		EffectTickContext.set(entity, effect);
+		try {
+			effect.applyEffectTick(entity, amplifier);
+		} finally {
+			EffectTickContext.set(outerEntity, outerEffect);
+		}
+	}
 }

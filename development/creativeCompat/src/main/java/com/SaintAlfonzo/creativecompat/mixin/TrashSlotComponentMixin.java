@@ -17,14 +17,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  */
 @Mixin(value = TrashSlotComponent.class, remap = false)
 public abstract class TrashSlotComponentMixin {
-    @Shadow @Final private AbstractContainerScreen<?> screen;
-    @Shadow private SlotRenderStyle renderStyle;
+	@Shadow @Final private AbstractContainerScreen<?> screen;
+	@Shadow private SlotRenderStyle renderStyle;
 
-    @Inject(method = "getAnchoredY", at = @At("RETURN"), cancellable = true)
-    private void creativeengineering$clampToHeight(CallbackInfoReturnable<Integer> cir) {
-        int max = Math.max(0, screen.height - renderStyle.getRenderHeight());
-        if (cir.getReturnValueI() > max) {
-            cir.setReturnValue(max);
-        }
-    }
+	@Inject(method = "getAnchoredY", at = @At("RETURN"), cancellable = true)
+	private void creativeengineering$clampToHeight(CallbackInfoReturnable<Integer> cir) {
+		int max = Math.max(0, screen.height - renderStyle.getRenderHeight());
+		if (cir.getReturnValueI() > max) {
+			cir.setReturnValue(max);
+		}
+	}
 }

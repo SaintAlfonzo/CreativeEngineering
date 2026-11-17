@@ -19,43 +19,43 @@ import java.util.Optional;
 @JeiPlugin
 public class CaptureJeiPlugin implements IModPlugin {
 
-    private static volatile IJeiRuntime runtime;
+	private static volatile IJeiRuntime runtime;
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return new ResourceLocation("cdevcapture", "driver");
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return new ResourceLocation("cdevcapture", "driver");
+	}
 
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
-        runtime = jeiRuntime;
-    }
+	@Override
+	public void onRuntimeAvailable(IJeiRuntime jeiRuntime) {
+		runtime = jeiRuntime;
+	}
 
-    @Override
-    public void onRuntimeUnavailable() {
-        runtime = null;
-    }
+	@Override
+	public void onRuntimeUnavailable() {
+		runtime = null;
+	}
 
-    public static boolean ready() {
-        return runtime != null;
-    }
+	public static boolean ready() {
+		return runtime != null;
+	}
 
-    public static void showRecipes(ItemStack stack, boolean uses) {
-        IJeiRuntime r = require();
-        r.getRecipesGui().show(r.getJeiHelpers().getFocusFactory().createFocus(
-                uses ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT, VanillaTypes.ITEM_STACK, stack));
-    }
+	public static void showRecipes(ItemStack stack, boolean uses) {
+		IJeiRuntime r = require();
+		r.getRecipesGui().show(r.getJeiHelpers().getFocusFactory().createFocus(
+				uses ? RecipeIngredientRole.INPUT : RecipeIngredientRole.OUTPUT, VanillaTypes.ITEM_STACK, stack));
+	}
 
-    public static void showCategory(String uid) {
-        IJeiRuntime r = require();
-        Optional<RecipeType<?>> type = r.getRecipeManager().getRecipeType(new ResourceLocation(uid));
-        if (type.isEmpty()) throw new IllegalArgumentException("no JEI category " + uid);
-        r.getRecipesGui().showTypes(List.of(type.get()));
-    }
+	public static void showCategory(String uid) {
+		IJeiRuntime r = require();
+		Optional<RecipeType<?>> type = r.getRecipeManager().getRecipeType(new ResourceLocation(uid));
+		if (type.isEmpty()) throw new IllegalArgumentException("no JEI category " + uid);
+		r.getRecipesGui().showTypes(List.of(type.get()));
+	}
 
-    private static IJeiRuntime require() {
-        IJeiRuntime r = runtime;
-        if (r == null) throw new IllegalStateException("JEI runtime not available");
-        return r;
-    }
+	private static IJeiRuntime require() {
+		IJeiRuntime r = runtime;
+		if (r == null) throw new IllegalStateException("JEI runtime not available");
+		return r;
+	}
 }

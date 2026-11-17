@@ -15,10 +15,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = UpgradeContainerBase.class, remap = false)
 public abstract class SophisticatedUpgradeOpenMixin {
 
-    @Inject(method = "setIsOpen", at = @At("TAIL"), remap = false, require = 1)
-    private void creativeengineering$refreshOnOpen(boolean isOpen, CallbackInfo ci) {
-        if (isOpen && (Object) this instanceof SophisticatedPolymorphCompat.RefreshableCrafting crafting) {
-            crafting.creativeengineering$refreshCraftingResult();
-        }
-    }
+	@Inject(method = "setIsOpen", at = @At("TAIL"), remap = false, require = 1)
+	private void creativeengineering$refreshOnOpen(boolean isOpen, CallbackInfo ci) {
+		if (isOpen && (Object) this instanceof SophisticatedPolymorphCompat.RefreshableCrafting crafting) {
+			crafting.creativeengineering$refreshCraftingResult();
+		}
+	}
 }

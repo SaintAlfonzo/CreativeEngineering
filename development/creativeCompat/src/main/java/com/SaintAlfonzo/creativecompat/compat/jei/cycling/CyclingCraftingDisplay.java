@@ -23,93 +23,93 @@ import net.minecraft.world.level.Level;
 @ParametersAreNonnullByDefault
 public final class CyclingCraftingDisplay implements CraftingRecipe {
 
-    private final ResourceLocation id;
-    private final List<List<ItemStack>> slots;
-    private final List<ItemStack> outputs;
-    private final boolean shapeless;
+	private final ResourceLocation id;
+	private final List<List<ItemStack>> slots;
+	private final List<ItemStack> outputs;
+	private final boolean shapeless;
 
-    CyclingCraftingDisplay(ResourceLocation id, List<List<ItemStack>> slots, List<ItemStack> outputs, boolean shapeless) {
-        this.id = id;
-        this.slots = slots;
-        this.outputs = outputs;
-        this.shapeless = shapeless;
-    }
+	CyclingCraftingDisplay(ResourceLocation id, List<List<ItemStack>> slots, List<ItemStack> outputs, boolean shapeless) {
+		this.id = id;
+		this.slots = slots;
+		this.outputs = outputs;
+		this.shapeless = shapeless;
+	}
 
-    /** One page from aligned variants: {@code grids.get(i)} (9 stacks, EMPTY for a blank cell) crafts {@code results.get(i)}. */
-    static CyclingCraftingDisplay of(ResourceLocation id, List<List<ItemStack>> grids, List<ItemStack> results, boolean shapeless) {
-        List<List<ItemStack>> slots = new ArrayList<>(9);
-        for (int s = 0; s < 9; s++) {
-            List<ItemStack> slot = new ArrayList<>(grids.size());
-            for (List<ItemStack> grid : grids) {
-                slot.add(grid.get(s));
-            }
-            slots.add(slot);
-        }
-        return new CyclingCraftingDisplay(id, slots, List.copyOf(results), shapeless);
-    }
+	/** One page from aligned variants: {@code grids.get(i)} (9 stacks, EMPTY for a blank cell) crafts {@code results.get(i)}. */
+	static CyclingCraftingDisplay of(ResourceLocation id, List<List<ItemStack>> grids, List<ItemStack> results, boolean shapeless) {
+		List<List<ItemStack>> slots = new ArrayList<>(9);
+		for (int s = 0; s < 9; s++) {
+			List<ItemStack> slot = new ArrayList<>(grids.size());
+			for (List<ItemStack> grid : grids) {
+				slot.add(grid.get(s));
+			}
+			slots.add(slot);
+		}
+		return new CyclingCraftingDisplay(id, slots, List.copyOf(results), shapeless);
+	}
 
-    /** Per grid cell, the stack each variant puts there (EMPTY when the cell is blank in that variant). */
-    public List<List<ItemStack>> slots() {
-        return slots;
-    }
+	/** Per grid cell, the stack each variant puts there (EMPTY when the cell is blank in that variant). */
+	public List<List<ItemStack>> slots() {
+		return slots;
+	}
 
-    public List<ItemStack> outputs() {
-        return outputs;
-    }
+	public List<ItemStack> outputs() {
+		return outputs;
+	}
 
-    public boolean shapeless() {
-        return shapeless;
-    }
+	public boolean shapeless() {
+		return shapeless;
+	}
 
-    public int variants() {
-        return outputs.size();
-    }
+	public int variants() {
+		return outputs.size();
+	}
 
-    @Override
-    public boolean matches(CraftingContainer container, Level level) {
-        return false;
-    }
+	@Override
+	public boolean matches(CraftingContainer container, Level level) {
+		return false;
+	}
 
-    @Override
-    public ItemStack assemble(CraftingContainer container) {
-        return ItemStack.EMPTY;
-    }
+	@Override
+	public ItemStack assemble(CraftingContainer container) {
+		return ItemStack.EMPTY;
+	}
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return width >= 3 && height >= 3;
-    }
+	@Override
+	public boolean canCraftInDimensions(int width, int height) {
+		return width >= 3 && height >= 3;
+	}
 
-    @Override
-    public ItemStack getResultItem() {
-        return outputs.isEmpty() ? ItemStack.EMPTY : outputs.get(0);
-    }
+	@Override
+	public ItemStack getResultItem() {
+		return outputs.isEmpty() ? ItemStack.EMPTY : outputs.get(0);
+	}
 
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        NonNullList<Ingredient> list = NonNullList.create();
-        for (List<ItemStack> slot : slots) {
-            List<ItemStack> filled = slot.stream().filter(s -> !s.isEmpty()).toList();
-            if (!filled.isEmpty()) {
-                list.add(Ingredient.of(filled.stream()));
-            }
-        }
-        return list;
-    }
+	@Override
+	public NonNullList<Ingredient> getIngredients() {
+		NonNullList<Ingredient> list = NonNullList.create();
+		for (List<ItemStack> slot : slots) {
+			List<ItemStack> filled = slot.stream().filter(s -> !s.isEmpty()).toList();
+			if (!filled.isEmpty()) {
+				list.add(Ingredient.of(filled.stream()));
+			}
+		}
+		return list;
+	}
 
-    /** Keeps JEI's own crafting extension (registered for non-special recipes only) off this class. */
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
+	/** Keeps JEI's own crafting extension (registered for non-special recipes only) off this class. */
+	@Override
+	public boolean isSpecial() {
+		return true;
+	}
 
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
+	@Override
+	public ResourceLocation getId() {
+		return id;
+	}
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return RecipeSerializer.SHAPELESS_RECIPE;
-    }
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return RecipeSerializer.SHAPELESS_RECIPE;
+	}
 }

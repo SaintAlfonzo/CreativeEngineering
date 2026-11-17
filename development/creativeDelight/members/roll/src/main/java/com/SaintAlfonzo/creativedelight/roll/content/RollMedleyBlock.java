@@ -30,57 +30,57 @@ import java.util.function.Supplier;
  * in place (3.3). Breaking a part-eaten medley drops what is left and the bowl (loot table, RollTranslator).
  */
 public class RollMedleyBlock extends FeastBlock {
-    public static final int MAX = 8;
-    public static final IntegerProperty SERVINGS = IntegerProperty.create("servings", 0, MAX);
+	public static final int MAX = 8;
+	public static final IntegerProperty SERVINGS = IntegerProperty.create("servings", 0, MAX);
 
-    private static final VoxelShape PLATE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 2.0D, 15.0D);
-    private static final VoxelShape FULL = Shapes.join(PLATE, Block.box(2.0D, 2.0D, 2.0D, 14.0D, 5.0D, 14.0D), BooleanOp.OR);
+	private static final VoxelShape PLATE = Block.box(1.0D, 0.0D, 1.0D, 15.0D, 2.0D, 15.0D);
+	private static final VoxelShape FULL = Shapes.join(PLATE, Block.box(2.0D, 2.0D, 2.0D, 14.0D, 5.0D, 14.0D), BooleanOp.OR);
 
-    /** Index = servings left - 1, so the last entry is handed out first. */
-    private final List<Supplier<Item>> servings;
+	/** Index = servings left - 1, so the last entry is handed out first. */
+	private final List<Supplier<Item>> servings;
 
-    public RollMedleyBlock(Properties properties, List<? extends Supplier<Item>> servings) {
-        super(properties, servings.get(MAX - 1)::get, true);
-        if (servings.size() != MAX) throw new IllegalArgumentException("a roll medley needs " + MAX + " servings");
-        this.servings = List.copyOf(servings);
-    }
+	public RollMedleyBlock(Properties properties, List<? extends Supplier<Item>> servings) {
+		super(properties, servings.get(MAX - 1)::get, true);
+		if (servings.size() != MAX) throw new IllegalArgumentException("a roll medley needs " + MAX + " servings");
+		this.servings = List.copyOf(servings);
+	}
 
-    /** What is still on the plate at {@code left} servings, in serving order (for the loot table). */
-    public List<Supplier<Item>> servings() {
-        return servings;
-    }
+	/** What is still on the plate at {@code left} servings, in serving order (for the loot table). */
+	public List<Supplier<Item>> servings() {
+		return servings;
+	}
 
-    @Override
-    public IntegerProperty getServingsProperty() {
-        return SERVINGS;
-    }
+	@Override
+	public IntegerProperty getServingsProperty() {
+		return SERVINGS;
+	}
 
-    @Override
-    public int getMaxServings() {
-        return MAX;
-    }
+	@Override
+	public int getMaxServings() {
+		return MAX;
+	}
 
-    @Override
-    public ItemStack getServingItem(BlockState state) {
-        return new ItemStack(servings.get(Math.max(state.getValue(SERVINGS), 1) - 1).get());
-    }
+	@Override
+	public ItemStack getServingItem(BlockState state) {
+		return new ItemStack(servings.get(Math.max(state.getValue(SERVINGS), 1) - 1).get());
+	}
 
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
-        ItemStack held = player.getItemInHand(hand);
-        if (Chopsticks.isChopsticks(held)) return Chopsticks.eatFromFeast(this, state, level, pos, player, held);
-        if (!held.isEmpty()) return InteractionResult.PASS;
-        return super.use(state, level, pos, player, hand, hit);
-    }
+	@Override
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
+		if (hand != InteractionHand.MAIN_HAND) return InteractionResult.PASS;
+		ItemStack held = player.getItemInHand(hand);
+		if (Chopsticks.isChopsticks(held)) return Chopsticks.eatFromFeast(this, state, level, pos, player, held);
+		if (!held.isEmpty()) return InteractionResult.PASS;
+		return super.use(state, level, pos, player, hand, hit);
+	}
 
-    @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        return state.getValue(SERVINGS) == 0 ? PLATE : FULL;
-    }
+	@Override
+	public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+		return state.getValue(SERVINGS) == 0 ? PLATE : FULL;
+	}
 
-    @Override
-    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, SERVINGS);
-    }
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		builder.add(FACING, SERVINGS);
+	}
 }

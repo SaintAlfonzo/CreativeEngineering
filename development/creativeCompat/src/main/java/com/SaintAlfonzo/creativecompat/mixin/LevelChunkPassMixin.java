@@ -23,29 +23,29 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = LevelChunk.class, remap = false)
 public abstract class LevelChunkPassMixin implements PassChunkHolder {
 
-    @Unique
-    @Nullable
-    private PassCountData creativecompat$passCounts;
+	@Unique
+	@Nullable
+	private PassCountData creativecompat$passCounts;
 
-    @Override
-    public PassCountData creativecompat$passCounts() {
-        return creativecompat$passCounts;
-    }
+	@Override
+	public PassCountData creativecompat$passCounts() {
+		return creativecompat$passCounts;
+	}
 
-    @Override
-    public void creativecompat$setPassCounts(PassCountData data) {
-        creativecompat$passCounts = data;
-    }
+	@Override
+	public void creativecompat$setPassCounts(PassCountData data) {
+		creativecompat$passCounts = data;
+	}
 
-    @Inject(method = "m_6978_", at = @At("RETURN"))
-    private void creativecompat$blockChanged(BlockPos pos, BlockState state, boolean moving,
-                                             CallbackInfoReturnable<BlockState> cir) {
-        BlockState old = cir.getReturnValue();
-        if (old == null) return;
-        try {
-            PassCounts.blockChanged((LevelChunk) (Object) this, pos, old, state);
-        } catch (Throwable ignored) {
-            // a failed invalidation must never stop a block change; the count is fixed by the next load
-        }
-    }
+	@Inject(method = "m_6978_", at = @At("RETURN"))
+	private void creativecompat$blockChanged(BlockPos pos, BlockState state, boolean moving,
+											 CallbackInfoReturnable<BlockState> cir) {
+		BlockState old = cir.getReturnValue();
+		if (old == null) return;
+		try {
+			PassCounts.blockChanged((LevelChunk) (Object) this, pos, old, state);
+		} catch (Throwable ignored) {
+			// a failed invalidation must never stop a block change; the count is fixed by the next load
+		}
+	}
 }

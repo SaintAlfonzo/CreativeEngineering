@@ -24,42 +24,42 @@ import java.util.List;
 /** The Copper Pot's JEI category, catalyst, click area and [+] transfer. */
 @JeiPlugin
 public class MDJeiPlugin implements IModPlugin {
-    private static final ResourceLocation ID = MinersDelightMod.path("jei_plugin");
+	private static final ResourceLocation ID = MinersDelightMod.path("jei_plugin");
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return ID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return ID;
+	}
 
-    @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new CopperPotCategory(registration.getJeiHelpers().getGuiHelper()));
-    }
+	@Override
+	public void registerCategories(IRecipeCategoryRegistration registration) {
+		registration.addRecipeCategories(new CopperPotCategory(registration.getJeiHelpers().getGuiHelper()));
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        if (Minecraft.getInstance().level == null) {
-            return;
-        }
-        List<CookingPotRecipe> fits = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.COOKING.get()).stream()
-                .filter(recipe -> recipe.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).count() <= CopperPotBlockEntity.INPUT_SLOTS)
-                .toList();
-        registration.addRecipes(CopperPotCategory.TYPE, fits);
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		if (Minecraft.getInstance().level == null) {
+			return;
+		}
+		List<CookingPotRecipe> fits = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(ModRecipeTypes.COOKING.get()).stream()
+				.filter(recipe -> recipe.getIngredients().stream().filter(ingredient -> !ingredient.isEmpty()).count() <= CopperPotBlockEntity.INPUT_SLOTS)
+				.toList();
+		registration.addRecipes(CopperPotCategory.TYPE, fits);
+	}
 
-    @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(MDItems.COPPER_POT.get()), CopperPotCategory.TYPE);
-    }
+	@Override
+	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+		registration.addRecipeCatalyst(new ItemStack(MDItems.COPPER_POT.get()), CopperPotCategory.TYPE);
+	}
 
-    @Override
-    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(CopperPotScreen.class, 78, 28, 28, 15, CopperPotCategory.TYPE);
-    }
+	@Override
+	public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+		registration.addRecipeClickArea(CopperPotScreen.class, 78, 28, 28, 15, CopperPotCategory.TYPE);
+	}
 
-    @Override
-    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        registration.addRecipeTransferHandler(CopperPotMenu.class, MDMenuTypes.COPPER_POT.get(), CopperPotCategory.TYPE,
-                0, CopperPotBlockEntity.INPUT_SLOTS, CopperPotMenu.PLAYER_INVENTORY_START, 36);
-    }
+	@Override
+	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+		registration.addRecipeTransferHandler(CopperPotMenu.class, MDMenuTypes.COPPER_POT.get(), CopperPotCategory.TYPE,
+				0, CopperPotBlockEntity.INPUT_SLOTS, CopperPotMenu.PLAYER_INVENTORY_START, 36);
+	}
 }

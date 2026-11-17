@@ -23,31 +23,31 @@ import net.minecraft.world.item.trading.MerchantOffer;
  */
 public class TagItemListing implements VillagerTrades.ItemListing {
 
-    private final TagKey<Item> tag;
-    private final int count;
-    private final int emeralds;
-    private final int maxUses;
+	private final TagKey<Item> tag;
+	private final int count;
+	private final int emeralds;
+	private final int maxUses;
 
-    public TagItemListing(String tag, int count, int emeralds, int maxUses) {
-        String id = tag.startsWith("#") ? tag.substring(1) : tag;
-        this.tag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(id));
-        this.count = count;
-        this.emeralds = emeralds;
-        this.maxUses = maxUses;
-    }
+	public TagItemListing(String tag, int count, int emeralds, int maxUses) {
+		String id = tag.startsWith("#") ? tag.substring(1) : tag;
+		this.tag = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation(id));
+		this.count = count;
+		this.emeralds = emeralds;
+		this.maxUses = maxUses;
+	}
 
-    @Override
-    public MerchantOffer getOffer(Entity trader, RandomSource random) {
-        Optional<HolderSet.Named<Item>> members = Registry.ITEM.getTag(tag);
-        if (members.isEmpty() || members.get().size() == 0) return null;
-        Optional<Holder<Item>> pick = members.get().getRandomElement(random);
-        if (pick.isEmpty()) return null;
-        return new MerchantOffer(new ItemStack(Items.EMERALD, emeralds), new ItemStack(pick.get().value(), count),
-                maxUses, 1, 0.05F);
-    }
+	@Override
+	public MerchantOffer getOffer(Entity trader, RandomSource random) {
+		Optional<HolderSet.Named<Item>> members = Registry.ITEM.getTag(tag);
+		if (members.isEmpty() || members.get().size() == 0) return null;
+		Optional<Holder<Item>> pick = members.get().getRandomElement(random);
+		if (pick.isEmpty()) return null;
+		return new MerchantOffer(new ItemStack(Items.EMERALD, emeralds), new ItemStack(pick.get().value(), count),
+				maxUses, 1, 0.05F);
+	}
 
-    @Override
-    public String toString() {
-        return "TagItemListing[#" + tag.location() + "]";
-    }
+	@Override
+	public String toString() {
+		return "TagItemListing[#" + tag.location() + "]";
+	}
 }

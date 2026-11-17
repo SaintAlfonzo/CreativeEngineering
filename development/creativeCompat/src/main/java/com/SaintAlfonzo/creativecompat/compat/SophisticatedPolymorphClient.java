@@ -23,76 +23,76 @@ import javax.annotation.Nullable;
  */
 public final class SophisticatedPolymorphClient {
 
-    private static final int RESULT_SLOT_INDEX = 9;
-    private static final int BUTTON_X_FROM_SLOT = 22;
+	private static final int RESULT_SLOT_INDEX = 9;
+	private static final int BUTTON_X_FROM_SLOT = 22;
 
-    private SophisticatedPolymorphClient() {}
+	private SophisticatedPolymorphClient() {}
 
-    public static void register() {
-        PolymorphApi.client().registerWidget(screen ->
-                screen.getMenu() instanceof StorageContainerMenuBase<?> menu ? new CraftingTabWidget(screen, menu) : null);
-    }
+	public static void register() {
+		PolymorphApi.client().registerWidget(screen ->
+				screen.getMenu() instanceof StorageContainerMenuBase<?> menu ? new CraftingTabWidget(screen, menu) : null);
+	}
 
-    private static final class CraftingTabWidget extends PlayerRecipesWidget implements ITickingRecipesWidget {
+	private static final class CraftingTabWidget extends PlayerRecipesWidget implements ITickingRecipesWidget {
 
-        private final StorageContainerMenuBase<?> menu;
-        private final Slot hiddenSlot = new Slot(new SimpleContainer(1), 0, -100, -100);
-        private int lastX = Integer.MIN_VALUE;
-        private int lastY = Integer.MIN_VALUE;
+		private final StorageContainerMenuBase<?> menu;
+		private final Slot hiddenSlot = new Slot(new SimpleContainer(1), 0, -100, -100);
+		private int lastX = Integer.MIN_VALUE;
+		private int lastY = Integer.MIN_VALUE;
 
-        CraftingTabWidget(AbstractContainerScreen<?> screen, StorageContainerMenuBase<?> menu) {
-            super(screen, null);
-            this.menu = menu;
-        }
+		CraftingTabWidget(AbstractContainerScreen<?> screen, StorageContainerMenuBase<?> menu) {
+			super(screen, null);
+			this.menu = menu;
+		}
 
-        @Nullable
-        private Slot openResultSlot() {
-            return menu.getOpenContainer()
-                    .filter(container -> container instanceof CraftingUpgradeContainer)
-                    .map(container -> container.getSlots().get(RESULT_SLOT_INDEX))
-                    .orElse(null);
-        }
+		@Nullable
+		private Slot openResultSlot() {
+			return menu.getOpenContainer()
+					.filter(container -> container instanceof CraftingUpgradeContainer)
+					.map(container -> container.getSlots().get(RESULT_SLOT_INDEX))
+					.orElse(null);
+		}
 
-        @Override
-        public Slot getOutputSlot() {
-            Slot slot = openResultSlot();
-            return slot != null ? slot : hiddenSlot;
-        }
+		@Override
+		public Slot getOutputSlot() {
+			Slot slot = openResultSlot();
+			return slot != null ? slot : hiddenSlot;
+		}
 
-        @Override
-        public int getXPos() {
-            return getOutputSlot().x + BUTTON_X_FROM_SLOT;
-        }
+		@Override
+		public int getXPos() {
+			return getOutputSlot().x + BUTTON_X_FROM_SLOT;
+		}
 
-        @Override
-        public int getYPos() {
-            return getOutputSlot().y;
-        }
+		@Override
+		public int getYPos() {
+			return getOutputSlot().y;
+		}
 
-        @Override
-        public void tick() {
-            Slot slot = openResultSlot();
-            if (slot == null) {
-                selectionWidget.setActive(false);
-                return;
-            }
-            if (slot.x != lastX || slot.y != lastY) {
-                lastX = slot.x;
-                lastY = slot.y;
-                resetWidgetOffsets();
-            }
-        }
+		@Override
+		public void tick() {
+			Slot slot = openResultSlot();
+			if (slot == null) {
+				selectionWidget.setActive(false);
+				return;
+			}
+			if (slot.x != lastX || slot.y != lastY) {
+				lastX = slot.x;
+				lastY = slot.y;
+				resetWidgetOffsets();
+			}
+		}
 
-        @Override
-        public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
-            if (openResultSlot() != null) {
-                super.render(poseStack, mouseX, mouseY, partialTicks);
-            }
-        }
+		@Override
+		public void render(PoseStack poseStack, int mouseX, int mouseY, float partialTicks) {
+			if (openResultSlot() != null) {
+				super.render(poseStack, mouseX, mouseY, partialTicks);
+			}
+		}
 
-        @Override
-        public boolean mouseClicked(double mouseX, double mouseY, int button) {
-            return openResultSlot() != null && super.mouseClicked(mouseX, mouseY, button);
-        }
-    }
+		@Override
+		public boolean mouseClicked(double mouseX, double mouseY, int button) {
+			return openResultSlot() != null && super.mouseClicked(mouseX, mouseY, button);
+		}
+	}
 }

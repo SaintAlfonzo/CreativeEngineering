@@ -21,49 +21,49 @@ import java.util.List;
  */
 public class EraserItem extends Item {
 
-    public static final int TOOLTIP_LINES = 4;
+	public static final int TOOLTIP_LINES = 4;
 
-    public EraserItem(Properties properties) {
-        super(properties.stacksTo(1));
-    }
+	public EraserItem(Properties properties) {
+		super(properties.stacksTo(1));
+	}
 
-    @Override
-    public boolean hasCraftingRemainingItem(ItemStack stack) {
-        return true;
-    }
+	@Override
+	public boolean hasCraftingRemainingItem(ItemStack stack) {
+		return true;
+	}
 
-    @Override
-    public ItemStack getCraftingRemainingItem(ItemStack stack) {
-        return stack.copy();
-    }
+	@Override
+	public ItemStack getCraftingRemainingItem(ItemStack stack) {
+		return stack.copy();
+	}
 
-    @Override
-    public boolean isRepairable(ItemStack stack) {
-        return false;
-    }
+	@Override
+	public boolean isRepairable(ItemStack stack) {
+		return false;
+	}
 
-    @Override
-    public boolean isDamageable(ItemStack stack) {
-        return false;
-    }
+	@Override
+	public boolean isDamageable(ItemStack stack) {
+		return false;
+	}
 
-    /** The eraser on the cursor, right-clicked onto a labeled stack: its last line goes (gated like labeling). */
-    @Override
-    public boolean overrideStackedOnOther(ItemStack eraser, Slot slot, ClickAction action, Player player) {
-        if (action != ClickAction.SECONDARY) return false;
-        ItemStack target = slot.getItem();
-        if (target.isEmpty() || !ItemLabels.has(target)) return false;
-        if (!slot.allowModification(player)) return false;
-        if (!LabelGate.allow(player)) return true;
-        if (ItemLabels.eraseLast(player, target)) slot.setChanged();
-        return true;
-    }
+	/** The eraser on the cursor, right-clicked onto a labeled stack: its last line goes (gated like labeling). */
+	@Override
+	public boolean overrideStackedOnOther(ItemStack eraser, Slot slot, ClickAction action, Player player) {
+		if (action != ClickAction.SECONDARY) return false;
+		ItemStack target = slot.getItem();
+		if (target.isEmpty() || !ItemLabels.has(target)) return false;
+		if (!slot.allowModification(player)) return false;
+		if (!LabelGate.allow(player)) return true;
+		if (ItemLabels.eraseLast(player, target)) slot.setChanged();
+		return true;
+	}
 
-    /** Spec 3.9: four gray lines, one per lang key. */
-    @Override
-    public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-        for (int i = 1; i <= TOOLTIP_LINES; i++) {
-            tooltip.add(Component.translatable("creativelabels.tooltip.eraser." + i).withStyle(ChatFormatting.GRAY));
-        }
-    }
+	/** Spec 3.9: four gray lines, one per lang key. */
+	@Override
+	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+		for (int i = 1; i <= TOOLTIP_LINES; i++) {
+			tooltip.add(Component.translatable("creativelabels.tooltip.eraser." + i).withStyle(ChatFormatting.GRAY));
+		}
+	}
 }

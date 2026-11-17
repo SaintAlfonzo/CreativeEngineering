@@ -42,62 +42,62 @@ import net.minecraftforge.fml.ModList;
 @JeiPlugin
 public class SmithingTemplateJEI implements IModPlugin {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.MOD_ID, "smithing_template");
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final ResourceLocation ID = new ResourceLocation(CreativeCompat.MOD_ID, "smithing_template");
 
-    /** Ids of smithing recipes now shown on Armor Trims' Item Upgrading page (set by the last reload). */
-    private Set<ResourceLocation> reshown = Set.of();
+	/** Ids of smithing recipes now shown on Armor Trims' Item Upgrading page (set by the last reload). */
+	private Set<ResourceLocation> reshown = Set.of();
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return ID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return ID;
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        JeiGate.run("registerRecipes", () -> registerRecipes0(registration));
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		JeiGate.run("registerRecipes", () -> registerRecipes0(registration));
+	}
 
-    private void registerRecipes0(IRecipeRegistration registration) {
-        reshown = Set.of();
-        if (!ModList.get().isLoaded("armor_trims") || Minecraft.getInstance().level == null) {
-            return;
-        }
-        try {
-            if (!ArmorTrimsSmithing.active()) {
-                return;
-            }
-            int trims = ArmorTrimsSmithing.registerTrims(registration);
-            List<UpgradeRecipe> smithing = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.SMITHING);
-            reshown = ArmorTrimsSmithing.registerUpgrades(registration, smithing);
-            LOGGER.info("[jei] Armor Trims pages: {} trim recipe(s), {} template upgrade recipe(s)", trims, reshown.size());
-        } catch (Throwable t) {
-            reshown = Set.of();
-            LOGGER.warn("[jei] couldn't fill Armor Trims' JEI pages, leaving the vanilla Smithing page as is", t);
-        }
-    }
+	private void registerRecipes0(IRecipeRegistration registration) {
+		reshown = Set.of();
+		if (!ModList.get().isLoaded("armor_trims") || Minecraft.getInstance().level == null) {
+			return;
+		}
+		try {
+			if (!ArmorTrimsSmithing.active()) {
+				return;
+			}
+			int trims = ArmorTrimsSmithing.registerTrims(registration);
+			List<UpgradeRecipe> smithing = Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(RecipeType.SMITHING);
+			reshown = ArmorTrimsSmithing.registerUpgrades(registration, smithing);
+			LOGGER.info("[jei] Armor Trims pages: {} trim recipe(s), {} template upgrade recipe(s)", trims, reshown.size());
+		} catch (Throwable t) {
+			reshown = Set.of();
+			LOGGER.warn("[jei] couldn't fill Armor Trims' JEI pages, leaving the vanilla Smithing page as is", t);
+		}
+	}
 
-    @Override
-    public void onRuntimeAvailable(IJeiRuntime runtime) {
-        JeiGate.run("onRuntimeAvailable", () -> onRuntimeAvailable0(runtime));
-    }
+	@Override
+	public void onRuntimeAvailable(IJeiRuntime runtime) {
+		JeiGate.run("onRuntimeAvailable", () -> onRuntimeAvailable0(runtime));
+	}
 
-    private void onRuntimeAvailable0(IJeiRuntime runtime) {
-        if (reshown.isEmpty()) {
-            return;
-        }
-        try {
-            IRecipeManager recipes = runtime.getRecipeManager();
-            List<UpgradeRecipe> hide = recipes.createRecipeLookup(RecipeTypes.SMITHING).get()
-                    .filter(r -> reshown.contains(r.getId()))
-                    .toList();
-            if (!hide.isEmpty()) {
-                recipes.hideRecipes(RecipeTypes.SMITHING, hide);
-            }
-            LOGGER.info("[jei] hid {} template-only smithing recipe(s) from the vanilla Smithing page; "
-                    + "they're on Armor Trims' Item Upgrading page with the template", hide.size());
-        } catch (Throwable t) {
-            LOGGER.warn("[jei] couldn't hide template-only smithing recipes", t);
-        }
-    }
+	private void onRuntimeAvailable0(IJeiRuntime runtime) {
+		if (reshown.isEmpty()) {
+			return;
+		}
+		try {
+			IRecipeManager recipes = runtime.getRecipeManager();
+			List<UpgradeRecipe> hide = recipes.createRecipeLookup(RecipeTypes.SMITHING).get()
+					.filter(r -> reshown.contains(r.getId()))
+					.toList();
+			if (!hide.isEmpty()) {
+				recipes.hideRecipes(RecipeTypes.SMITHING, hide);
+			}
+			LOGGER.info("[jei] hid {} template-only smithing recipe(s) from the vanilla Smithing page; "
+					+ "they're on Armor Trims' Item Upgrading page with the template", hide.size());
+		} catch (Throwable t) {
+			LOGGER.warn("[jei] couldn't hide template-only smithing recipes", t);
+		}
+	}
 }

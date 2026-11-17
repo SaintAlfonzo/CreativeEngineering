@@ -48,104 +48,104 @@ import java.util.List;
 @Mod(CreativeEquipment.MOD_ID)
 public class CreativeEquipment {
 
-    public static final String MOD_ID = "creativeequipment";
-    /** The namespace of every id this mod uses. */
-    public static final String NS = MOD_ID;
-    public static final Logger LOGGER = LogUtils.getLogger();
+	public static final String MOD_ID = "creativeequipment";
+	/** The namespace of every id this mod uses. */
+	public static final String NS = MOD_ID;
+	public static final Logger LOGGER = LogUtils.getLogger();
 
-    private static final String OLD_FILE = "creativeengineering-common.toml";
-    private static final String FILE = MOD_ID + "-common.toml";
+	private static final String OLD_FILE = "creativeengineering-common.toml";
+	private static final String FILE = MOD_ID + "-common.toml";
 
-    public CreativeEquipment() {
-        // The sections came from Creative Common's file: the first boot copies the player's values over (then Creative Common
-        // drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
-        ConfigRename.carrySections(OLD_FILE, FILE, CEQConfig.SECTIONS);
-        if (!ConfigRename.carrySections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS))
-            ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS);
-        ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.CB_SECTIONS);
-        // [armor_overflow] came from Creative Common's file with the Detail Armor Bar code, before the swap from
-        // Creative Common's creativeengineering-common.toml.
-        if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS))
-            ConfigRename.mergeSections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS);
-        ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.COMMON_SECTIONS);
-        ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CEQConfig.SPEC, FILE);
-        // Oxidized Everything Copper gear rolls for Poison ([copper_poisoning]; the effect-tick half is
-        // mixin/CopperPoisoningEffectMixin). From Creative Brewing (plan_cb_polish.md 1).
-        if (net.minecraftforge.fml.ModList.get().isLoaded("everythingcopper"))
-            MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeequipment.effect.CopperPoisoningHandler.class);
+	public CreativeEquipment() {
+		// The sections came from Creative Common's file: the first boot copies the player's values over (then Creative Common
+		// drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
+		ConfigRename.carrySections(OLD_FILE, FILE, CEQConfig.SECTIONS);
+		if (!ConfigRename.carrySections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS))
+			ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS);
+		ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.CB_SECTIONS);
+		// [armor_overflow] came from Creative Common's file with the Detail Armor Bar code, before the swap from
+		// Creative Common's creativeengineering-common.toml.
+		if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS))
+			ConfigRename.mergeSections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS);
+		ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.COMMON_SECTIONS);
+		ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CEQConfig.SPEC, FILE);
+		// Oxidized Everything Copper gear rolls for Poison ([copper_poisoning]; the effect-tick half is
+		// mixin/CopperPoisoningEffectMixin). From Creative Brewing (plan_cb_polish.md 1).
+		if (net.minecraftforge.fml.ModList.get().isLoaded("everythingcopper"))
+			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeequipment.effect.CopperPoisoningHandler.class);
 
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        modEventBus.addListener(CreativeEquipment::commonSetup);
-        // Data naming other mods (packs/<modid>/, e.g. the Felsic Gear ore worldgen): added only while that mod is loaded.
-        modEventBus.addListener(com.SaintAlfonzo.creativeequipment.compat.ModDataPacks::add);
+		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+		modEventBus.addListener(CreativeEquipment::commonSetup);
+		// Data naming other mods (packs/<modid>/, e.g. the Felsic Gear ore worldgen): added only while that mod is loaded.
+		modEventBus.addListener(com.SaintAlfonzo.creativeequipment.compat.ModDataPacks::add);
 
-        // Elytra duplication recipe serializer (gear/).
-        ElytraDuplicationSerializers.register(modEventBus);
-        // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check widening in
-        // mixin/LivingEntityShieldMixin, everything tunable in CEQConfig.SHIELDS.
-        ShieldItems.register(modEventBus);
-        // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are
-        // mixin/BackpackSkin*).
-        BackpackSkinSerializers.register(modEventBus);
-        boolean curios = ModList.get().isLoaded("curios");
-        if (curios) MinecraftForge.EVENT_BUS.register(BackpackSkinCurios.class);
-        // Stepstools: stand a block higher on the stool in the Curios feet slot (stepstool/; the client half is
-        // stepstool/client, the collision mixin.EntityStepstoolCollisionMixin; feature_writeup/stepstool.md). The
-        // channel is creativeequipment:stepstool.
-        Stepstool.register();
-        if (curios) MinecraftForge.EVENT_BUS.register(Stepstool.class);
-        // Hands, face, feet Curios slots by IMC (compat/CuriosSlots; feature_writeup/curios_slots.md; from Creative
-        // Common).
-        if (curios) modEventBus.addListener(com.SaintAlfonzo.creativeequipment.compat.CuriosSlots::enqueue);
+		// Elytra duplication recipe serializer (gear/).
+		ElytraDuplicationSerializers.register(modEventBus);
+		// Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check widening in
+		// mixin/LivingEntityShieldMixin, everything tunable in CEQConfig.SHIELDS.
+		ShieldItems.register(modEventBus);
+		// Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are
+		// mixin/BackpackSkin*).
+		BackpackSkinSerializers.register(modEventBus);
+		boolean curios = ModList.get().isLoaded("curios");
+		if (curios) MinecraftForge.EVENT_BUS.register(BackpackSkinCurios.class);
+		// Stepstools: stand a block higher on the stool in the Curios feet slot (stepstool/; the client half is
+		// stepstool/client, the collision mixin.EntityStepstoolCollisionMixin; feature_writeup/stepstool.md). The
+		// channel is creativeequipment:stepstool.
+		Stepstool.register();
+		if (curios) MinecraftForge.EVENT_BUS.register(Stepstool.class);
+		// Hands, face, feet Curios slots by IMC (compat/CuriosSlots; feature_writeup/curios_slots.md; from Creative
+		// Common).
+		if (curios) modEventBus.addListener(com.SaintAlfonzo.creativeequipment.compat.CuriosSlots::enqueue);
 
-        // Elytra air brake velocity effect (the item itself is registered by this jar's startup script
-        // kubejs_startup/creativeequipment/items/air_brake.js) - see CEQConfig.AirBrake for the tuning knobs.
-        MinecraftForge.EVENT_BUS.register(AirBrakeHandler.class);
-        // Bottled Air port (item.BottledAir, [bottled_air]): glass bottle right-clicked in water refills air.
-        MinecraftForge.EVENT_BUS.register(BottledAir.class);
-        // Tier shields: per-category damage absorption, scaled wear and on-block potion effects
-        // (ShieldBlockEvent listener - see CEQConfig.Shields).
-        MinecraftForge.EVENT_BUS.register(ShieldBlockHandler.class);
-        // Iron tier: folds the player's real vanilla shield into the tier system (ShieldTier.IRON, no new item); this
-        // listener gives that item the tier tooltip lines.
-        MinecraftForge.EVENT_BUS.register(IronShieldTooltip.class);
+		// Elytra air brake velocity effect (the item itself is registered by this jar's startup script
+		// kubejs_startup/creativeequipment/items/air_brake.js) - see CEQConfig.AirBrake for the tuning knobs.
+		MinecraftForge.EVENT_BUS.register(AirBrakeHandler.class);
+		// Bottled Air port (item.BottledAir, [bottled_air]): glass bottle right-clicked in water refills air.
+		MinecraftForge.EVENT_BUS.register(BottledAir.class);
+		// Tier shields: per-category damage absorption, scaled wear and on-block potion effects
+		// (ShieldBlockEvent listener - see CEQConfig.Shields).
+		MinecraftForge.EVENT_BUS.register(ShieldBlockHandler.class);
+		// Iron tier: folds the player's real vanilla shield into the tier system (ShieldTier.IRON, no new item); this
+		// listener gives that item the tier tooltip lines.
+		MinecraftForge.EVENT_BUS.register(IronShieldTooltip.class);
 
-        // Copper tool tier, between stone and iron (CEQTiers; Everything Copper's pickaxe uses it, mixin/CopperPickaxeItemMixin).
-        TierSortingRegistry.registerTier(
-                CEQTiers.COPPER,
-                new ResourceLocation(NS, "copper"),
-                List.of(Tiers.STONE),   // this tier is after stone
-                List.of(Tiers.IRON)     // and before iron
-        );
+		// Copper tool tier, between stone and iron (CEQTiers; Everything Copper's pickaxe uses it, mixin/CopperPickaxeItemMixin).
+		TierSortingRegistry.registerTier(
+				CEQTiers.COPPER,
+				new ResourceLocation(NS, "copper"),
+				List.of(Tiers.STONE),   // this tier is after stone
+				List.of(Tiers.IRON)     // and before iron
+		);
 
-        LOGGER.info("[creativeequipment] loaded (config/{})", FILE);
-    }
+		LOGGER.info("[creativeequipment] loaded (config/{})", FILE);
+	}
 
-    private static void commonSetup(FMLCommonSetupEvent event) {
-        // Nock Enough Arrows' fletching RecipeBookType on a dedicated server (compat/NockRecipeBookSync).
-        event.enqueueWork(NockRecipeBookSync::register);
-    }
+	private static void commonSetup(FMLCommonSetupEvent event) {
+		// Nock Enough Arrows' fletching RecipeBookType on a dedicated server (compat/NockRecipeBookSync).
+		event.enqueueWork(NockRecipeBookSync::register);
+	}
 
-    @Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            TierShieldClient.setup(event);
-            // Gate here, not only inside register(): the class's static fields build detailab TextureOffsets, so
-            // merely loading it without Detail Armor Bar throws NoClassDefFoundError.
-            if (ModList.get().isLoaded("detailab")) {
-                com.SaintAlfonzo.creativeequipment.compat.DetailArmorBarCompat.register();
-            }
-            if (ModList.get().isLoaded("curios")) {
-                MinecraftForge.EVENT_BUS.register(StepstoolClient.class);
-                // "Slot:" line on every Curios item, also where the item's mod hides it (ui/tooltips #8).
-                MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeequipment.compat.CuriosSlotTooltip.class);
-            }
-        }
+	@Mod.EventBusSubscriber(modid = MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
+	public static class ClientModEvents {
+		@SubscribeEvent
+		public static void onClientSetup(FMLClientSetupEvent event) {
+			TierShieldClient.setup(event);
+			// Gate here, not only inside register(): the class's static fields build detailab TextureOffsets, so
+			// merely loading it without Detail Armor Bar throws NoClassDefFoundError.
+			if (ModList.get().isLoaded("detailab")) {
+				com.SaintAlfonzo.creativeequipment.compat.DetailArmorBarCompat.register();
+			}
+			if (ModList.get().isLoaded("curios")) {
+				MinecraftForge.EVENT_BUS.register(StepstoolClient.class);
+				// "Slot:" line on every Curios item, also where the item's mod hides it (ui/tooltips #8).
+				MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativeequipment.compat.CuriosSlotTooltip.class);
+			}
+		}
 
-        @SubscribeEvent
-        public static void onRegisterKeys(RegisterKeyMappingsEvent event) {
-            StepstoolClient.onRegisterKeys(event);
-        }
-    }
+		@SubscribeEvent
+		public static void onRegisterKeys(RegisterKeyMappingsEvent event) {
+			StepstoolClient.onRegisterKeys(event);
+		}
+	}
 }

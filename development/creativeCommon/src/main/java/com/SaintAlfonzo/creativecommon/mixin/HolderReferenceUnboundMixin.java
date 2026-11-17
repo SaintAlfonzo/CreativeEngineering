@@ -27,22 +27,22 @@ import java.util.concurrent.ConcurrentHashMap;
 @Mixin(value = Holder.Reference.class, remap = false)
 public abstract class HolderReferenceUnboundMixin<T> {
 
-    private static final Logger creativecommon$LOGGER = LogUtils.getLogger();
-    private static final int LOG_LIMIT = 20;
-    private static final Set<String> creativecommon$logged = ConcurrentHashMap.newKeySet();
+	private static final Logger creativecommon$LOGGER = LogUtils.getLogger();
+	private static final int LOG_LIMIT = 20;
+	private static final Set<String> creativecommon$logged = ConcurrentHashMap.newKeySet();
 
-    @Shadow(remap = false) private ResourceKey<T> f_205751_;
-    @Shadow(remap = false) private T f_205752_;
+	@Shadow(remap = false) private ResourceKey<T> f_205751_;
+	@Shadow(remap = false) private T f_205752_;
 
-    @Inject(method = "m_203373_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativecommon$unboundIsFalse(ResourceLocation location, CallbackInfoReturnable<Boolean> cir) {
-        if (f_205751_ != null) return;
-        cir.setReturnValue(false);
-        if (creativecommon$logged.size() < LOG_LIMIT) {
-            String name = f_205752_ == null ? "null" : f_205752_.getClass().getName();
-            if (creativecommon$logged.add(name)) {
-                creativecommon$LOGGER.info("Holder with no registry key asked is({}): value class {}", location, name);
-            }
-        }
-    }
+	@Inject(method = "m_203373_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativecommon$unboundIsFalse(ResourceLocation location, CallbackInfoReturnable<Boolean> cir) {
+		if (f_205751_ != null) return;
+		cir.setReturnValue(false);
+		if (creativecommon$logged.size() < LOG_LIMIT) {
+			String name = f_205752_ == null ? "null" : f_205752_.getClass().getName();
+			if (creativecommon$logged.add(name)) {
+				creativecommon$LOGGER.info("Holder with no registry key asked is({}): value class {}", location, name);
+			}
+		}
+	}
 }

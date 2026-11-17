@@ -22,64 +22,64 @@ import net.p3pp3rf1y.sophisticatedbackpacks.backpack.BackpackItem;
  */
 public class BackpackSkinRecipe extends UpgradeRecipe {
 
-    private final Ingredient skins;
+	private final Ingredient skins;
 
-    public BackpackSkinRecipe(ResourceLocation id, Ingredient skins) {
-        super(id, backpacks(), skins, exampleResult());
-        this.skins = skins;
-    }
+	public BackpackSkinRecipe(ResourceLocation id, Ingredient skins) {
+		super(id, backpacks(), skins, exampleResult());
+		this.skins = skins;
+	}
 
-    private static Ingredient backpacks() {
-        return Ingredient.of(ForgeRegistries.ITEMS.getValues().stream()
-                .filter(i -> i instanceof BackpackItem).map(ItemStack::new));
-    }
+	private static Ingredient backpacks() {
+		return Ingredient.of(ForgeRegistries.ITEMS.getValues().stream()
+				.filter(i -> i instanceof BackpackItem).map(ItemStack::new));
+	}
 
-    private static ItemStack exampleResult() {
-        return ForgeRegistries.ITEMS.getValues().stream().filter(i -> i instanceof BackpackItem)
-                .findFirst().map(ItemStack::new).orElse(ItemStack.EMPTY);
-    }
+	private static ItemStack exampleResult() {
+		return ForgeRegistries.ITEMS.getValues().stream().filter(i -> i instanceof BackpackItem)
+				.findFirst().map(ItemStack::new).orElse(ItemStack.EMPTY);
+	}
 
-    public Ingredient getSkins() {
-        return skins;
-    }
+	public Ingredient getSkins() {
+		return skins;
+	}
 
-    @Override
-    public boolean matches(Container inv, Level level) {
-        ItemStack base = inv.getItem(0);
-        ItemStack add = inv.getItem(1);
-        return BackpackSkins.isBackpack(base) && skins.test(add) && BackpackSkins.skinBlockOf(add) != null;
-    }
+	@Override
+	public boolean matches(Container inv, Level level) {
+		ItemStack base = inv.getItem(0);
+		ItemStack add = inv.getItem(1);
+		return BackpackSkins.isBackpack(base) && skins.test(add) && BackpackSkins.skinBlockOf(add) != null;
+	}
 
-    @Override
-    public ItemStack assemble(Container inv) {
-        Block skin = BackpackSkins.skinBlockOf(inv.getItem(1));
-        return skin == null ? ItemStack.EMPTY : BackpackSkins.withSkin(inv.getItem(0), skin);
-    }
+	@Override
+	public ItemStack assemble(Container inv) {
+		Block skin = BackpackSkins.skinBlockOf(inv.getItem(1));
+		return skin == null ? ItemStack.EMPTY : BackpackSkins.withSkin(inv.getItem(0), skin);
+	}
 
-    @Override
-    public boolean isSpecial() {
-        return true;
-    }
+	@Override
+	public boolean isSpecial() {
+		return true;
+	}
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return BackpackSkinSerializers.SMITHING.get();
-    }
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return BackpackSkinSerializers.SMITHING.get();
+	}
 
-    public static final class Serializer implements RecipeSerializer<BackpackSkinRecipe> {
-        @Override
-        public BackpackSkinRecipe fromJson(ResourceLocation id, JsonObject json) {
-            return new BackpackSkinRecipe(id, CraftingHelper.getIngredient(json.get("addition")));
-        }
+	public static final class Serializer implements RecipeSerializer<BackpackSkinRecipe> {
+		@Override
+		public BackpackSkinRecipe fromJson(ResourceLocation id, JsonObject json) {
+			return new BackpackSkinRecipe(id, CraftingHelper.getIngredient(json.get("addition")));
+		}
 
-        @Override
-        public BackpackSkinRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            return new BackpackSkinRecipe(id, Ingredient.fromNetwork(buf));
-        }
+		@Override
+		public BackpackSkinRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
+			return new BackpackSkinRecipe(id, Ingredient.fromNetwork(buf));
+		}
 
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, BackpackSkinRecipe recipe) {
-            recipe.skins.toNetwork(buf);
-        }
-    }
+		@Override
+		public void toNetwork(FriendlyByteBuf buf, BackpackSkinRecipe recipe) {
+			recipe.skins.toNetwork(buf);
+		}
+	}
 }

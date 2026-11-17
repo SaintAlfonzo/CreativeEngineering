@@ -25,26 +25,26 @@ import org.spongepowered.asm.mixin.Pseudo;
 @Mixin(targets = "com.github.Pandarix.beautify.common.block.BotanistWorkbench", remap = false)
 public abstract class BotanistWorkbenchPotMixin extends HorizontalDirectionalBlock implements EntityBlock {
 
-    protected BotanistWorkbenchPotMixin(Properties properties) {
-        super(properties);
-    }
+	protected BotanistWorkbenchPotMixin(Properties properties) {
+		super(properties);
+	}
 
-    @Override
-    public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
-        return new BotanistPotBlockEntity(pos, state);
-    }
+	@Override
+	public BlockEntity newBlockEntity(BlockPos pos, BlockState state) {
+		return new BotanistPotBlockEntity(pos, state);
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-            BlockHitResult hit) {
-        return BotanistPot.use(level, pos, player, hand);
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
+			BlockHitResult hit) {
+		return BotanistPot.use(level, pos, player, hand);
+	}
 
-    @Override
-    @SuppressWarnings("deprecation")
-    public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
-        if (!state.is(newState.getBlock())) BotanistPot.dropPlant(level, pos);
-        super.onRemove(state, level, pos, newState, moved);
-    }
+	@Override
+	@SuppressWarnings("deprecation")
+	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean moved) {
+		if (!state.is(newState.getBlock())) BotanistPot.dropPlant(level, pos);
+		super.onRemove(state, level, pos, newState, moved);
+	}
 }

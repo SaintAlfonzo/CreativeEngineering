@@ -16,11 +16,11 @@ import vazkii.quark.base.handler.SortingHandler;
 @Mixin(value = SortingHandler.class, remap = false)
 public abstract class QuarkSortingHandlerMixin {
 
-    @Inject(method = "sortInventory(Lnet/minecraftforge/items/IItemHandler;II[I)V", at = @At("HEAD"),
-            cancellable = true, remap = false)
-    private static void creativeengineering$safeSort(IItemHandler handler, int iStart, int iEnd, int[] lockedSlots,
-                                                     CallbackInfo ci) {
-        QuarkSafeSort.sort(handler, iStart, iEnd, lockedSlots);
-        ci.cancel();
-    }
+	@Inject(method = "sortInventory(Lnet/minecraftforge/items/IItemHandler;II[I)V", at = @At("HEAD"),
+			cancellable = true, remap = false)
+	private static void creativeengineering$safeSort(IItemHandler handler, int iStart, int iEnd, int[] lockedSlots,
+													 CallbackInfo ci) {
+		QuarkSafeSort.sort(handler, iStart, iEnd, lockedSlots);
+		ci.cancel();
+	}
 }

@@ -15,18 +15,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(value = JeiStarter.class, remap = false)
 public abstract class JeiStarterMixin {
 
-    @Inject(method = "start", at = @At("HEAD"))
-    private void creativecommon$starting(CallbackInfo ci) {
-        PackIngredientOrder.onJeiStarting();
-    }
+	@Inject(method = "start", at = @At("HEAD"))
+	private void creativecommon$starting(CallbackInfo ci) {
+		PackIngredientOrder.onJeiStarting();
+	}
 
-    @Inject(method = "start", at = @At("RETURN"))
-    private void creativecommon$started(CallbackInfo ci) {
-        PackIngredientOrder.onJeiStarted();
-    }
+	@Inject(method = "start", at = @At("RETURN"))
+	private void creativecommon$started(CallbackInfo ci) {
+		PackIngredientOrder.onJeiStarted();
+	}
 
-    @Inject(method = "stop", at = @At("HEAD"))
-    private void creativecommon$stopping(CallbackInfo ci) {
-        PackIngredientOrder.onJeiStopped();
-    }
+	@Inject(method = "stop", at = @At("HEAD"))
+	private void creativecommon$stopping(CallbackInfo ci) {
+		PackIngredientOrder.onJeiStopped();
+	}
 }

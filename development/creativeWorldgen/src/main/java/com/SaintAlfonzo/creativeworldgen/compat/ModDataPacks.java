@@ -28,30 +28,30 @@ import java.util.stream.Stream;
  */
 public final class ModDataPacks {
 
-    private ModDataPacks() {}
+	private ModDataPacks() {}
 
-    public static void add(AddPackFindersEvent event) {
-        if (event.getPackType() != PackType.SERVER_DATA) return;
-        Path root = ModList.get().getModFileById(CreativeWorldgen.MOD_ID).getFile().findResource("packs");
-        if (!Files.isDirectory(root)) return;
-        List<String> on = new ArrayList<>();
-        List<String> off = new ArrayList<>();
-        try (Stream<Path> dirs = Files.list(root)) {
-            for (Path dir : dirs.filter(Files::isDirectory).sorted().toList()) {
-                String mod = dir.getFileName().toString().replace("/", "");
-                // "a+b": every listed mod must be loaded (data naming two mods, e.g. felsic_gear+nullscape)
-                if (!java.util.Arrays.stream(mod.split("\\+")).allMatch(ModList.get()::isLoaded)) {
-                    off.add(mod);
-                    continue;
-                }
-                on.add(mod);
-                BuiltInPacks.addFolder(event, dir, CreativeWorldgen.MOD_ID + ":" + mod, "Creative Worldgen: " + mod,
-                        Pack.Position.BOTTOM, "Creative Worldgen");
-            }
-        } catch (IOException e) {
-            throw new IllegalStateException("Creative Worldgen: cannot list packs/", e);
-        }
-        CreativeWorldgen.LOGGER.info("[creativeworldgen] mod data packs on: {}; off (mod not loaded): {}",
-                on.isEmpty() ? "none" : on, off.isEmpty() ? "none" : off);
-    }
+	public static void add(AddPackFindersEvent event) {
+		if (event.getPackType() != PackType.SERVER_DATA) return;
+		Path root = ModList.get().getModFileById(CreativeWorldgen.MOD_ID).getFile().findResource("packs");
+		if (!Files.isDirectory(root)) return;
+		List<String> on = new ArrayList<>();
+		List<String> off = new ArrayList<>();
+		try (Stream<Path> dirs = Files.list(root)) {
+			for (Path dir : dirs.filter(Files::isDirectory).sorted().toList()) {
+				String mod = dir.getFileName().toString().replace("/", "");
+				// "a+b": every listed mod must be loaded (data naming two mods, e.g. felsic_gear+nullscape)
+				if (!java.util.Arrays.stream(mod.split("\\+")).allMatch(ModList.get()::isLoaded)) {
+					off.add(mod);
+					continue;
+				}
+				on.add(mod);
+				BuiltInPacks.addFolder(event, dir, CreativeWorldgen.MOD_ID + ":" + mod, "Creative Worldgen: " + mod,
+						Pack.Position.BOTTOM, "Creative Worldgen");
+			}
+		} catch (IOException e) {
+			throw new IllegalStateException("Creative Worldgen: cannot list packs/", e);
+		}
+		CreativeWorldgen.LOGGER.info("[creativeworldgen] mod data packs on: {}; off (mod not loaded): {}",
+				on.isEmpty() ? "none" : on, off.isEmpty() ? "none" : off);
+	}
 }

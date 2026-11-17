@@ -18,8 +18,8 @@ import net.minecraft.world.entity.LivingEntity;
 @Mixin(targets = "umpaz.farmersrespite.common.effect.CaffeinatedEffect", remap = false)
 public abstract class CaffeinatedEffectMixin {
 
-    @Inject(method = "m_6742_", at = @At("HEAD"), cancellable = true, require = 0, remap = false)
-    private void creativeengineering$noRestReset(LivingEntity entity, int amplifier, CallbackInfo ci) {
-        ci.cancel();
-    }
+	@Inject(method = "m_6742_", at = @At("HEAD"), cancellable = true, require = 0, remap = false)
+	private void creativeengineering$noRestReset(LivingEntity entity, int amplifier, CallbackInfo ci) {
+		ci.cancel();
+	}
 }

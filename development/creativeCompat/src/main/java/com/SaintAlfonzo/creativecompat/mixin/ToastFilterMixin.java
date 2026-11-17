@@ -27,23 +27,23 @@ import java.util.Set;
 @Mixin(value = ToastComponent.class, remap = false)
 public class ToastFilterMixin {
 
-    private static final Set<String> MOD_TUTORIAL_TOASTS = Set.of(
-            "io.github.mortuusars.exposure.client.gui.toast.BetterTutorialToast",
-            "me.paulf.fairylights.client.tutorial.ClippyController$Balloon"
-    );
-    private static final Set<String> MOD_ADVANCEMENT_TOASTS = Set.of(
-            "vazkii.patchouli.client.base.ClientAdvancements$LexiconToast"
-    );
+	private static final Set<String> MOD_TUTORIAL_TOASTS = Set.of(
+			"io.github.mortuusars.exposure.client.gui.toast.BetterTutorialToast",
+			"me.paulf.fairylights.client.tutorial.ClippyController$Balloon"
+	);
+	private static final Set<String> MOD_ADVANCEMENT_TOASTS = Set.of(
+			"vazkii.patchouli.client.base.ClientAdvancements$LexiconToast"
+	);
 
-    @Inject(method = "m_94922_", at = @At("HEAD"), cancellable = true)
-    private void creativecommon$filterToast(Toast toast, CallbackInfo ci) {
-        String name = toast.getClass().getName();
-        if (!com.SaintAlfonzo.creativecompat.CompatConfig.TOASTS.tutorial.get()
-                && (toast instanceof TutorialToast || MOD_TUTORIAL_TOASTS.contains(name))) {
-            ci.cancel();
-        } else if (!com.SaintAlfonzo.creativecompat.CompatConfig.TOASTS.advancement.get()
-                && (toast instanceof AdvancementToast || MOD_ADVANCEMENT_TOASTS.contains(name))) {
-            ci.cancel();
-        }
-    }
+	@Inject(method = "m_94922_", at = @At("HEAD"), cancellable = true)
+	private void creativecommon$filterToast(Toast toast, CallbackInfo ci) {
+		String name = toast.getClass().getName();
+		if (!com.SaintAlfonzo.creativecompat.CompatConfig.TOASTS.tutorial.get()
+				&& (toast instanceof TutorialToast || MOD_TUTORIAL_TOASTS.contains(name))) {
+			ci.cancel();
+		} else if (!com.SaintAlfonzo.creativecompat.CompatConfig.TOASTS.advancement.get()
+				&& (toast instanceof AdvancementToast || MOD_ADVANCEMENT_TOASTS.contains(name))) {
+			ci.cancel();
+		}
+	}
 }

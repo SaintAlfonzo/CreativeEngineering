@@ -20,14 +20,14 @@ import java.util.List;
 @Mixin(value = PotionMixingRecipes.class, remap = false)
 public class PotionMixingRecipesMixin {
 
-    @Redirect(
-            method = "createRecipes",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraftforge/common/brewing/BrewingRecipeRegistry;getRecipes()Ljava/util/List;"
-            )
-    )
-    private static List<IBrewingRecipe> creativeengineering$dedupBrewingRecipes() {
-        return PotionMixDedup.withoutMixDuplicates(BrewingRecipeRegistry.getRecipes());
-    }
+	@Redirect(
+			method = "createRecipes",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraftforge/common/brewing/BrewingRecipeRegistry;getRecipes()Ljava/util/List;"
+			)
+	)
+	private static List<IBrewingRecipe> creativeengineering$dedupBrewingRecipes() {
+		return PotionMixDedup.withoutMixDuplicates(BrewingRecipeRegistry.getRecipes());
+	}
 }

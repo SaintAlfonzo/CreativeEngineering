@@ -14,14 +14,14 @@ import top.theillusivec4.curios.api.SlotTypePreset;
  */
 public final class CuriosSlots {
 
-    private CuriosSlots() {
-    }
+	private CuriosSlots() {
+	}
 
-    public static void enqueue(InterModEnqueueEvent event) {
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HANDS.getMessageBuilder().build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("face")
-                .priority(50).size(1).icon(new ResourceLocation("minecraft", "item/empty_armor_slot_helmet")).build());
-        InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("feet")
-                .priority(190).size(1).icon(new ResourceLocation("minecraft", "item/empty_armor_slot_boots")).build());
-    }
+	public static void enqueue(InterModEnqueueEvent event) {
+		InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> SlotTypePreset.HANDS.getMessageBuilder().build());
+		InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("face")
+				.priority(50).size(1).icon(new ResourceLocation("minecraft", "item/empty_armor_slot_helmet")).build());
+		InterModComms.sendTo("curios", SlotTypeMessage.REGISTER_TYPE, () -> new SlotTypeMessage.Builder("feet")
+				.priority(190).size(1).icon(new ResourceLocation("minecraft", "item/empty_armor_slot_boots")).build());
+	}
 }

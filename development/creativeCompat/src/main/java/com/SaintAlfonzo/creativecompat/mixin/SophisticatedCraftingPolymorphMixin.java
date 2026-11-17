@@ -35,29 +35,29 @@ import java.util.Optional;
 @Mixin(value = CraftingUpgradeContainer.class, remap = false)
 public abstract class SophisticatedCraftingPolymorphMixin implements SophisticatedPolymorphCompat.RefreshableCrafting {
 
-    @Shadow(remap = false) @Final private CraftingItemHandler craftMatrix;
+	@Shadow(remap = false) @Final private CraftingItemHandler craftMatrix;
 
-    @Shadow(remap = false)
-    private void onCraftMatrixChanged(Container container) {}
+	@Shadow(remap = false)
+	private void onCraftMatrixChanged(Container container) {}
 
-    @Redirect(method = "updateCraftingResult", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/minecraft/world/item/crafting/CraftingRecipe;m_5818_(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Z"))
-    private boolean creativeengineering$skipCachedRecipe(CraftingRecipe recipe, Container inventory, Level level) {
-        return false;
-    }
+	@Redirect(method = "updateCraftingResult", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/minecraft/world/item/crafting/CraftingRecipe;m_5818_(Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Z"))
+	private boolean creativeengineering$skipCachedRecipe(CraftingRecipe recipe, Container inventory, Level level) {
+		return false;
+	}
 
-    @Redirect(method = "updateCraftingResult", remap = false, require = 1,
-            at = @At(value = "INVOKE", remap = false,
-                    target = "Lnet/p3pp3rf1y/sophisticatedcore/util/RecipeHelper;safeGetRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"))
-    private <C extends Container, T extends Recipe<C>> Optional<T> creativeengineering$polymorphRecipe(
-            RecipeType<T> type, C inventory, Level level,
-            Level world, Player player, CraftingContainer matrix, ResultContainer result, ResultSlot resultSlot) {
-        return RecipeSelection.getPlayerRecipe(player.containerMenu, type, inventory, level, player);
-    }
+	@Redirect(method = "updateCraftingResult", remap = false, require = 1,
+			at = @At(value = "INVOKE", remap = false,
+					target = "Lnet/p3pp3rf1y/sophisticatedcore/util/RecipeHelper;safeGetRecipeFor(Lnet/minecraft/world/item/crafting/RecipeType;Lnet/minecraft/world/Container;Lnet/minecraft/world/level/Level;)Ljava/util/Optional;"))
+	private <C extends Container, T extends Recipe<C>> Optional<T> creativeengineering$polymorphRecipe(
+			RecipeType<T> type, C inventory, Level level,
+			Level world, Player player, CraftingContainer matrix, ResultContainer result, ResultSlot resultSlot) {
+		return RecipeSelection.getPlayerRecipe(player.containerMenu, type, inventory, level, player);
+	}
 
-    @Override
-    public void creativeengineering$refreshCraftingResult() {
-        onCraftMatrixChanged(craftMatrix);
-    }
+	@Override
+	public void creativeengineering$refreshCraftingResult() {
+		onCraftMatrixChanged(craftMatrix);
+	}
 }

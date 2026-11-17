@@ -20,16 +20,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(value = LivingEntity.class, remap = false)
 public abstract class LivingClimbMixin {
 
-    @Shadow
-    protected boolean f_20899_;
+	@Shadow
+	protected boolean f_20899_;
 
-    @Inject(method = "m_21297_", at = @At("RETURN"), cancellable = true)
-    private void creativecompat$surroundedClimb(Vec3 motion, CallbackInfoReturnable<Vec3> cir) {
-        try {
-            Vec3 out = PassThrough.surroundedMotion((LivingEntity) (Object) this, cir.getReturnValue(), f_20899_);
-            if (out != null) cir.setReturnValue(out);
-        } catch (Throwable ignored) {
-            // keep vanilla's motion if the lookup breaks
-        }
-    }
+	@Inject(method = "m_21297_", at = @At("RETURN"), cancellable = true)
+	private void creativecompat$surroundedClimb(Vec3 motion, CallbackInfoReturnable<Vec3> cir) {
+		try {
+			Vec3 out = PassThrough.surroundedMotion((LivingEntity) (Object) this, cir.getReturnValue(), f_20899_);
+			if (out != null) cir.setReturnValue(out);
+		} catch (Throwable ignored) {
+			// keep vanilla's motion if the lookup breaks
+		}
+	}
 }

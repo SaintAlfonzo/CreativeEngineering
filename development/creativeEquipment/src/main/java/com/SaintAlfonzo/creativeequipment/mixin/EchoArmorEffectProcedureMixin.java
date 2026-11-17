@@ -34,40 +34,40 @@ import org.spongepowered.asm.mixin.injection.ModifyArg;
 @Mixin(value = EchoArmorEffectProcedure.class, remap = false)
 public class EchoArmorEffectProcedureMixin {
 
-    private static final ResourceLocation PHANTOM_BANE =
-            new ResourceLocation("better_beacons", "phantom_bane");
+	private static final ResourceLocation PHANTOM_BANE =
+			new ResourceLocation("better_beacons", "phantom_bane");
 
-    /** Night Vision strobes client-side while its remaining time is under ~200 ticks. */
-    private static final int NIGHT_VISION_TICKS = 300;
+	/** Night Vision strobes client-side while its remaining time is under ~200 ticks. */
+	private static final int NIGHT_VISION_TICKS = 300;
 
-    @ModifyArg(
-            method = "execute(Lnet/minecraftforge/eventbus/api/Event;Lnet/minecraft/world/entity/Entity;)V",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lnet/minecraft/world/entity/LivingEntity;m_7292_(Lnet/minecraft/world/effect/MobEffectInstance;)Z",
-                    remap = false
-            ),
-            remap = false
-    )
-    private static MobEffectInstance creativeengineering$swapEchoSetBonus(MobEffectInstance original) {
-        MobEffect from = original.getEffect();
+	@ModifyArg(
+			method = "execute(Lnet/minecraftforge/eventbus/api/Event;Lnet/minecraft/world/entity/Entity;)V",
+			at = @At(
+					value = "INVOKE",
+					target = "Lnet/minecraft/world/entity/LivingEntity;m_7292_(Lnet/minecraft/world/effect/MobEffectInstance;)Z",
+					remap = false
+			),
+			remap = false
+	)
+	private static MobEffectInstance creativeengineering$swapEchoSetBonus(MobEffectInstance original) {
+		MobEffect from = original.getEffect();
 
-        if (from == MobEffects.DAMAGE_RESISTANCE) {                 // Resistance -> Night Vision
-            return new MobEffectInstance(
-                    MobEffects.NIGHT_VISION,
-                    Math.max(original.getDuration(), NIGHT_VISION_TICKS),
-                    0, original.isAmbient(), original.isVisible());
-        }
+		if (from == MobEffects.DAMAGE_RESISTANCE) {                 // Resistance -> Night Vision
+			return new MobEffectInstance(
+					MobEffects.NIGHT_VISION,
+					Math.max(original.getDuration(), NIGHT_VISION_TICKS),
+					0, original.isAmbient(), original.isVisible());
+		}
 
-        if (from == MobEffects.DAMAGE_BOOST) {                      // Strength -> Phantom Bane
-            MobEffect phantomBane = ForgeRegistries.MOB_EFFECTS.getValue(PHANTOM_BANE);
-            if (phantomBane != null) {
-                return new MobEffectInstance(
-                        phantomBane, original.getDuration(),
-                        0, original.isAmbient(), original.isVisible());
-            }
-        }
+		if (from == MobEffects.DAMAGE_BOOST) {                      // Strength -> Phantom Bane
+			MobEffect phantomBane = ForgeRegistries.MOB_EFFECTS.getValue(PHANTOM_BANE);
+			if (phantomBane != null) {
+				return new MobEffectInstance(
+						phantomBane, original.getDuration(),
+						0, original.isAmbient(), original.isVisible());
+			}
+		}
 
-        return original;
-    }
+		return original;
+	}
 }

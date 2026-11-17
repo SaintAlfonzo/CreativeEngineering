@@ -21,14 +21,14 @@ import net.minecraft.world.level.block.state.BlockState;
 @Mixin(targets = "com.starfish_studios.another_furniture.client.renderer.blockentity.PlanterBoxRenderer", remap = false)
 public abstract class AnotherFurniturePlanterRenderMixin {
 
-    @Redirect(method = "render(Lcom/starfish_studios/another_furniture/block/entity/PlanterBoxBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
-            remap = false,
-            at = @At(value = "INVOKE",
-                    target = "Lnet/minecraft/client/renderer/block/BlockRenderDispatcher;m_110912_(Lnet/minecraft/world/level/block/state/BlockState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V"))
-    private void creativeengineering$plant(BlockRenderDispatcher dispatcher, BlockState state, PoseStack pose,
-            MultiBufferSource buffers, int light, int overlay) {
-        if (!PlantBoxModelsClient.renderSpecial(state, pose, buffers, light, overlay)) {
-            dispatcher.renderSingleBlock(state, pose, buffers, light, overlay);
-        }
-    }
+	@Redirect(method = "render(Lcom/starfish_studios/another_furniture/block/entity/PlanterBoxBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V",
+			remap = false,
+			at = @At(value = "INVOKE",
+					target = "Lnet/minecraft/client/renderer/block/BlockRenderDispatcher;m_110912_(Lnet/minecraft/world/level/block/state/BlockState;Lcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V"))
+	private void creativeengineering$plant(BlockRenderDispatcher dispatcher, BlockState state, PoseStack pose,
+			MultiBufferSource buffers, int light, int overlay) {
+		if (!PlantBoxModelsClient.renderSpecial(state, pose, buffers, light, overlay)) {
+			dispatcher.renderSingleBlock(state, pose, buffers, light, overlay);
+		}
+	}
 }

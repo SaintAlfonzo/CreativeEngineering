@@ -24,46 +24,46 @@ import java.util.Set;
  */
 public final class WiseOakGifts {
 
-    private static final Logger LOGGER = LogUtils.getLogger();
-    private static final Set<String> WARNED = new HashSet<>();
+	private static final Logger LOGGER = LogUtils.getLogger();
+	private static final Set<String> WARNED = new HashSet<>();
 
-    private WiseOakGifts() {}
+	private WiseOakGifts() {}
 
-    private record Category(List<Item> items, int count) {}
+	private record Category(List<Item> items, int count) {}
 
-    /** Called server side, after a conversation with an awake tree; {@code trust} already includes that conversation. */
-    public static void roll(Level level, BlockPos pos, Direction face, int trust) {
-        CWGConfig.WiseOak cfg = CWGConfig.WISE_OAK;
-        if (trust < cfg.giftTrustThreshold.get()) return;
-        if (level.random.nextDouble() * 100.0D >= cfg.giftChancePercent.get()) return;
+	/** Called server side, after a conversation with an awake tree; {@code trust} already includes that conversation. */
+	public static void roll(Level level, BlockPos pos, Direction face, int trust) {
+		CWGConfig.WiseOak cfg = CWGConfig.WISE_OAK;
+		if (trust < cfg.giftTrustThreshold.get()) return;
+		if (level.random.nextDouble() * 100.0D >= cfg.giftChancePercent.get()) return;
 
-        List<Category> categories = new ArrayList<>();
-        add(categories, cfg.giftSaplings.get(), cfg.giftSaplingCount.get());
-        add(categories, cfg.giftFruitSaplings.get(), cfg.giftFruitSaplingCount.get());
-        add(categories, cfg.giftFruit.get(), cfg.giftFruitCount.get());
-        add(categories, cfg.giftLeaves.get(), cfg.giftLeavesCount.get());
-        if (categories.isEmpty()) return;
+		List<Category> categories = new ArrayList<>();
+		add(categories, cfg.giftSaplings.get(), cfg.giftSaplingCount.get());
+		add(categories, cfg.giftFruitSaplings.get(), cfg.giftFruitSaplingCount.get());
+		add(categories, cfg.giftFruit.get(), cfg.giftFruitCount.get());
+		add(categories, cfg.giftLeaves.get(), cfg.giftLeavesCount.get());
+		if (categories.isEmpty()) return;
 
-        Category category = categories.get(level.random.nextInt(categories.size()));
-        Item item = category.items().get(level.random.nextInt(category.items().size()));
-        int left = category.count();
-        while (left > 0) {
-            int stack = Math.min(left, item.getMaxStackSize());
-            Block.popResourceFromFace(level, pos, face, new ItemStack(item, stack));
-            left -= stack;
-        }
-    }
+		Category category = categories.get(level.random.nextInt(categories.size()));
+		Item item = category.items().get(level.random.nextInt(category.items().size()));
+		int left = category.count();
+		while (left > 0) {
+			int stack = Math.min(left, item.getMaxStackSize());
+			Block.popResourceFromFace(level, pos, face, new ItemStack(item, stack));
+			left -= stack;
+		}
+	}
 
-    private static void add(List<Category> categories, List<? extends String> ids, int count) {
-        List<Item> items = new ArrayList<>();
-        for (String id : ids) {
-            ResourceLocation key = ResourceLocation.tryParse(id);
-            if (key != null && ForgeRegistries.ITEMS.containsKey(key)) {
-                items.add(ForgeRegistries.ITEMS.getValue(key));
-            } else if (WARNED.add(id)) {
-                LOGGER.warn("Wise Oak gift list: unknown item {}", id);
-            }
-        }
-        if (!items.isEmpty()) categories.add(new Category(items, count));
-    }
+	private static void add(List<Category> categories, List<? extends String> ids, int count) {
+		List<Item> items = new ArrayList<>();
+		for (String id : ids) {
+			ResourceLocation key = ResourceLocation.tryParse(id);
+			if (key != null && ForgeRegistries.ITEMS.containsKey(key)) {
+				items.add(ForgeRegistries.ITEMS.getValue(key));
+			} else if (WARNED.add(id)) {
+				LOGGER.warn("Wise Oak gift list: unknown item {}", id);
+			}
+		}
+		if (!items.isEmpty()) categories.add(new Category(items, count));
+	}
 }

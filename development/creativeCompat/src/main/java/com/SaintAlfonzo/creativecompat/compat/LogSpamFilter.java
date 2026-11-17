@@ -25,57 +25,57 @@ import java.util.concurrent.atomic.AtomicBoolean;
  */
 public final class LogSpamFilter extends AbstractFilter {
 
-    private record Rule(String needle, AtomicBoolean seen) {}
+	private record Rule(String needle, AtomicBoolean seen) {}
 
-    private static final List<Rule> RULES = List.of(
-            new Rule("Better Fortresses: Detected a mod with a broken basalt columns configuredfeature", new AtomicBoolean()),
-            new Rule("Better Dungeons: Detected a mod with a broken basalt columns configuredfeature", new AtomicBoolean()));
+	private static final List<Rule> RULES = List.of(
+			new Rule("Better Fortresses: Detected a mod with a broken basalt columns configuredfeature", new AtomicBoolean()),
+			new Rule("Better Dungeons: Detected a mod with a broken basalt columns configuredfeature", new AtomicBoolean()));
 
-    private LogSpamFilter() {
-        super(Result.NEUTRAL, Result.NEUTRAL);
-    }
+	private LogSpamFilter() {
+		super(Result.NEUTRAL, Result.NEUTRAL);
+	}
 
-    public static void install() {
-        if (!(LogManager.getContext(false) instanceof LoggerContext context)) return;
-        LogSpamFilter filter = new LogSpamFilter();
-        filter.start();
-        context.getConfiguration().addFilter(filter);
-        context.updateLoggers();
-    }
+	public static void install() {
+		if (!(LogManager.getContext(false) instanceof LoggerContext context)) return;
+		LogSpamFilter filter = new LogSpamFilter();
+		filter.start();
+		context.getConfiguration().addFilter(filter);
+		context.updateLoggers();
+	}
 
-    private static Result check(Level level, String text) {
-        if (text == null) return Result.NEUTRAL;
-        for (Rule rule : RULES) {
-            if (text.startsWith(rule.needle())) {
-                if (rule.seen().compareAndSet(false, true)) {
-                    LogManager.getLogger("creativecompat").info("[creativecompat] repeats of the next line are hidden "
-                            + "this session (harmless with Distant Horizons generation; LogSpamFilter)");
-                    return Result.NEUTRAL;
-                }
-                return Result.DENY;
-            }
-        }
-        return Result.NEUTRAL;
-    }
+	private static Result check(Level level, String text) {
+		if (text == null) return Result.NEUTRAL;
+		for (Rule rule : RULES) {
+			if (text.startsWith(rule.needle())) {
+				if (rule.seen().compareAndSet(false, true)) {
+					LogManager.getLogger("creativecompat").info("[creativecompat] repeats of the next line are hidden "
+							+ "this session (harmless with Distant Horizons generation; LogSpamFilter)");
+					return Result.NEUTRAL;
+				}
+				return Result.DENY;
+			}
+		}
+		return Result.NEUTRAL;
+	}
 
-    @Override
-    public Result filter(LogEvent event) {
-        Message m = event.getMessage();
-        return check(event.getLevel(), m == null ? null : m.getFormat());
-    }
+	@Override
+	public Result filter(LogEvent event) {
+		Message m = event.getMessage();
+		return check(event.getLevel(), m == null ? null : m.getFormat());
+	}
 
-    @Override
-    public Result filter(Logger logger, Level level, Marker marker, String msg, Object... params) {
-        return check(level, msg);
-    }
+	@Override
+	public Result filter(Logger logger, Level level, Marker marker, String msg, Object... params) {
+		return check(level, msg);
+	}
 
-    @Override
-    public Result filter(Logger logger, Level level, Marker marker, Object msg, Throwable t) {
-        return check(level, msg == null ? null : msg.toString());
-    }
+	@Override
+	public Result filter(Logger logger, Level level, Marker marker, Object msg, Throwable t) {
+		return check(level, msg == null ? null : msg.toString());
+	}
 
-    @Override
-    public Result filter(Logger logger, Level level, Marker marker, Message msg, Throwable t) {
-        return check(level, msg == null ? null : msg.getFormat());
-    }
+	@Override
+	public Result filter(Logger logger, Level level, Marker marker, Message msg, Throwable t) {
+		return check(level, msg == null ? null : msg.getFormat());
+	}
 }

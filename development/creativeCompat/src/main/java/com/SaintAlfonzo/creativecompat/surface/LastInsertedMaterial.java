@@ -7,5 +7,5 @@ package com.SaintAlfonzo.creativecompat.surface;
  */
 public interface LastInsertedMaterial {
 
-    String creativeengineering$lastProperty();
+	String creativeengineering$lastProperty();
 }

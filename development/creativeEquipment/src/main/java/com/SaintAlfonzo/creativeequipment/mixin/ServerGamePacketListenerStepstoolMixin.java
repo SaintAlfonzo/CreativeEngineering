@@ -16,14 +16,14 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(ServerGamePacketListenerImpl.class)
 public abstract class ServerGamePacketListenerStepstoolMixin {
 
-    @Inject(method = "m_9793_", at = @At("HEAD"), cancellable = true, remap = false)
-    private void creativeengineering$standingOnStool(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        try {
-            if (Stepstool.anchor(entity) != null) {
-                cir.setReturnValue(false);
-            }
-        } catch (Throwable ignored) {
-            // vanilla's own check
-        }
-    }
+	@Inject(method = "m_9793_", at = @At("HEAD"), cancellable = true, remap = false)
+	private void creativeengineering$standingOnStool(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+		try {
+			if (Stepstool.anchor(entity) != null) {
+				cir.setReturnValue(false);
+			}
+		} catch (Throwable ignored) {
+			// vanilla's own check
+		}
+	}
 }

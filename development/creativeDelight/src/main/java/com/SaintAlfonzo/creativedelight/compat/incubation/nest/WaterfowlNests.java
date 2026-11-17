@@ -33,45 +33,45 @@ import net.minecraftforge.registries.RegistryObject;
  */
 public class WaterfowlNests {
 
-    private static final String EGG_MOD = "untitledduckmod";
+	private static final String EGG_MOD = "untitledduckmod";
 
-    private static final DeferredRegister<Block> BLOCKS =
-            DeferredRegister.create(ForgeRegistries.BLOCKS, IncubationCompartment.ID);
-    private static final DeferredRegister<Item> ITEMS =
-            DeferredRegister.create(ForgeRegistries.ITEMS, IncubationCompartment.ID);
+	private static final DeferredRegister<Block> BLOCKS =
+			DeferredRegister.create(ForgeRegistries.BLOCKS, IncubationCompartment.ID);
+	private static final DeferredRegister<Item> ITEMS =
+			DeferredRegister.create(ForgeRegistries.ITEMS, IncubationCompartment.ID);
 
-    // Incubation's own hay nest properties (hardness, sound, no occlusion).
-    public static final RegistryObject<Block> DUCK_NEST = BLOCKS.register("duck_nest",
-            () -> new EmptyNestBlock(IncubationBlocks.IncubationProperties.HAY_NEST));
+	// Incubation's own hay nest properties (hardness, sound, no occlusion).
+	public static final RegistryObject<Block> DUCK_NEST = BLOCKS.register("duck_nest",
+			() -> new EmptyNestBlock(IncubationBlocks.IncubationProperties.HAY_NEST));
 
-    // Registered after DUCK_NEST in the same register, so DUCK_NEST.get() is already bound here.
-    public static final RegistryObject<Block> DUCK_EGG_NEST = BLOCKS.register("duck_egg_nest",
-            () -> new BirdNestBlock(new ResourceLocation(EGG_MOD, "duck_egg"),
-                    (EmptyNestBlock) DUCK_NEST.get(), IncubationBlocks.IncubationProperties.HAY_NEST));
+	// Registered after DUCK_NEST in the same register, so DUCK_NEST.get() is already bound here.
+	public static final RegistryObject<Block> DUCK_EGG_NEST = BLOCKS.register("duck_egg_nest",
+			() -> new BirdNestBlock(new ResourceLocation(EGG_MOD, "duck_egg"),
+					(EmptyNestBlock) DUCK_NEST.get(), IncubationBlocks.IncubationProperties.HAY_NEST));
 
-    public static final RegistryObject<Block> GOOSE_NEST = BLOCKS.register("goose_nest",
-            () -> new EmptyNestBlock(IncubationBlocks.IncubationProperties.HAY_NEST));
+	public static final RegistryObject<Block> GOOSE_NEST = BLOCKS.register("goose_nest",
+			() -> new EmptyNestBlock(IncubationBlocks.IncubationProperties.HAY_NEST));
 
-    public static final RegistryObject<Block> GOOSE_EGG_NEST = BLOCKS.register("goose_egg_nest",
-            () -> new BirdNestBlock(new ResourceLocation(EGG_MOD, "goose_egg"),
-                    (EmptyNestBlock) GOOSE_NEST.get(), IncubationBlocks.IncubationProperties.HAY_NEST));
+	public static final RegistryObject<Block> GOOSE_EGG_NEST = BLOCKS.register("goose_egg_nest",
+			() -> new BirdNestBlock(new ResourceLocation(EGG_MOD, "goose_egg"),
+					(EmptyNestBlock) GOOSE_NEST.get(), IncubationBlocks.IncubationProperties.HAY_NEST));
 
-    public static final RegistryObject<Item> DUCK_NEST_ITEM = ITEMS.register("duck_nest",
-            () -> new BlockItem(DUCK_NEST.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+	public static final RegistryObject<Item> DUCK_NEST_ITEM = ITEMS.register("duck_nest",
+			() -> new BlockItem(DUCK_NEST.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
 
-    public static final RegistryObject<Item> GOOSE_NEST_ITEM = ITEMS.register("goose_nest",
-            () -> new BlockItem(GOOSE_NEST.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
+	public static final RegistryObject<Item> GOOSE_NEST_ITEM = ITEMS.register("goose_nest",
+			() -> new BlockItem(GOOSE_NEST.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));
 
-    public static void register(IEventBus modEventBus) {
-        BLOCKS.register(modEventBus);
-        ITEMS.register(modEventBus);
-    }
+	public static void register(IEventBus modEventBus) {
+		BLOCKS.register(modEventBus);
+		ITEMS.register(modEventBus);
+	}
 
-    /** Same fire values Incubation gives its nests (IncubationCompat.registerFlammables). Run via enqueueWork. */
-    public static void registerFlammables() {
-        DataUtil.registerFlammable(DUCK_NEST.get(), 60, 20);
-        DataUtil.registerFlammable(DUCK_EGG_NEST.get(), 60, 20);
-        DataUtil.registerFlammable(GOOSE_NEST.get(), 60, 20);
-        DataUtil.registerFlammable(GOOSE_EGG_NEST.get(), 60, 20);
-    }
+	/** Same fire values Incubation gives its nests (IncubationCompat.registerFlammables). Run via enqueueWork. */
+	public static void registerFlammables() {
+		DataUtil.registerFlammable(DUCK_NEST.get(), 60, 20);
+		DataUtil.registerFlammable(DUCK_EGG_NEST.get(), 60, 20);
+		DataUtil.registerFlammable(GOOSE_NEST.get(), 60, 20);
+		DataUtil.registerFlammable(GOOSE_EGG_NEST.get(), 60, 20);
+	}
 }

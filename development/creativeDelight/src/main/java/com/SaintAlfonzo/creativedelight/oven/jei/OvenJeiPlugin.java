@@ -21,40 +21,40 @@ import net.minecraft.world.item.ItemStack;
 @JeiPlugin
 public class OvenJeiPlugin implements IModPlugin {
 
-    private static final ResourceLocation UID = new ResourceLocation(CreativeDelight.MOD_ID, "oven");
+	private static final ResourceLocation UID = new ResourceLocation(CreativeDelight.MOD_ID, "oven");
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return UID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return UID;
+	}
 
-    @Override
-    public void registerCategories(IRecipeCategoryRegistration registration) {
-        registration.addRecipeCategories(new BakingRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
-    }
+	@Override
+	public void registerCategories(IRecipeCategoryRegistration registration) {
+		registration.addRecipeCategories(new BakingRecipeCategory(registration.getJeiHelpers().getGuiHelper()));
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        if (Minecraft.getInstance().level == null) return;
-        registration.addRecipes(BakingRecipeCategory.TYPE,
-                Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(OvenRegistry.BAKING_TYPE.get()));
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		if (Minecraft.getInstance().level == null) return;
+		registration.addRecipes(BakingRecipeCategory.TYPE,
+				Minecraft.getInstance().level.getRecipeManager().getAllRecipesFor(OvenRegistry.BAKING_TYPE.get()));
+	}
 
-    @Override
-    public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
-        registration.addRecipeCatalyst(new ItemStack(OvenRegistry.OVEN_ITEM.get()), BakingRecipeCategory.TYPE);
-    }
+	@Override
+	public void registerRecipeCatalysts(IRecipeCatalystRegistration registration) {
+		registration.addRecipeCatalyst(new ItemStack(OvenRegistry.OVEN_ITEM.get()), BakingRecipeCategory.TYPE);
+	}
 
-    @Override
-    public void registerGuiHandlers(IGuiHandlerRegistration registration) {
-        registration.addRecipeClickArea(OvenScreen.class, OvenScreen.ARROW_X, OvenScreen.ARROW_Y,
-                OvenScreen.ARROW_W, OvenScreen.ARROW_H, BakingRecipeCategory.TYPE);
-    }
+	@Override
+	public void registerGuiHandlers(IGuiHandlerRegistration registration) {
+		registration.addRecipeClickArea(OvenScreen.class, OvenScreen.ARROW_X, OvenScreen.ARROW_Y,
+				OvenScreen.ARROW_W, OvenScreen.ARROW_H, BakingRecipeCategory.TYPE);
+	}
 
-    @Override
-    public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
-        // Ingredient slots 0-5; the player inventory starts after the oven's 10 slots.
-        registration.addRecipeTransferHandler(OvenMenu.class, OvenRegistry.OVEN_MENU.get(), BakingRecipeCategory.TYPE,
-                0, BakingRecipe.INPUT_SLOTS, 10, 36);
-    }
+	@Override
+	public void registerRecipeTransferHandlers(IRecipeTransferRegistration registration) {
+		// Ingredient slots 0-5; the player inventory starts after the oven's 10 slots.
+		registration.addRecipeTransferHandler(OvenMenu.class, OvenRegistry.OVEN_MENU.get(), BakingRecipeCategory.TYPE,
+				0, BakingRecipe.INPUT_SLOTS, 10, 36);
+	}
 }

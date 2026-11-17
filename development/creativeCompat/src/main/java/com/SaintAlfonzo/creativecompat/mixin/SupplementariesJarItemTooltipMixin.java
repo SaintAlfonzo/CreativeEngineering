@@ -20,14 +20,14 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 @Mixin(value = JarItem.class, remap = false)
 public abstract class SupplementariesJarItemTooltipMixin {
 
-    @Redirect(method = "m_7373_", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/world/ContainerHelper;m_18980_(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/NonNullList;)V"),
-            remap = false)
-    private void creativeengineering$loadByKind(CompoundTag tag, NonNullList<ItemStack> list) {
-        ContainerHelper.loadAllItems(tag, list);
-        List<ItemStack> kinds = JarMixing.kinds(list);
-        for (int i = 0; i < list.size(); i++) {
-            list.set(i, i < kinds.size() ? kinds.get(i) : ItemStack.EMPTY);
-        }
-    }
+	@Redirect(method = "m_7373_", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/world/ContainerHelper;m_18980_(Lnet/minecraft/nbt/CompoundTag;Lnet/minecraft/core/NonNullList;)V"),
+			remap = false)
+	private void creativeengineering$loadByKind(CompoundTag tag, NonNullList<ItemStack> list) {
+		ContainerHelper.loadAllItems(tag, list);
+		List<ItemStack> kinds = JarMixing.kinds(list);
+		for (int i = 0; i < list.size(); i++) {
+			list.set(i, i < kinds.size() ? kinds.get(i) : ItemStack.EMPTY);
+		}
+	}
 }

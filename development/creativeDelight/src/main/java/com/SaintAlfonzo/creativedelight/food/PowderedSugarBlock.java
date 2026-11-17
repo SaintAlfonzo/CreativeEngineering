@@ -18,22 +18,22 @@ import net.minecraft.world.phys.Vec3;
  */
 public class PowderedSugarBlock extends PowderSnowBlock {
 
-    public PowderedSugarBlock(Properties properties) {
-        super(properties);
-    }
+	public PowderedSugarBlock(Properties properties) {
+		super(properties);
+	}
 
-    // PowderSnowBlock.entityInside minus setIsInPowderSnow (freezing), the burning-entity melt and the particles.
-    @Override
-    public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
-        if (!(entity instanceof LivingEntity) || entity.getFeetBlockState().is(this)) {
-            entity.makeStuckInBlock(state, new Vec3(0.9F, 1.5D, 0.9F));
-        }
-    }
+	// PowderSnowBlock.entityInside minus setIsInPowderSnow (freezing), the burning-entity melt and the particles.
+	@Override
+	public void entityInside(BlockState state, Level level, BlockPos pos, Entity entity) {
+		if (!(entity instanceof LivingEntity) || entity.getFeetBlockState().is(this)) {
+			entity.makeStuckInBlock(state, new Vec3(0.9F, 1.5D, 0.9F));
+		}
+	}
 
-    @Override
-    public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
-        level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
-        if (!level.isClientSide()) level.levelEvent(2001, pos, Block.getId(state));
-        return new ItemStack(PowderedSugarRegistry.POWDERED_SUGAR_BUCKET.get());
-    }
+	@Override
+	public ItemStack pickupBlock(LevelAccessor level, BlockPos pos, BlockState state) {
+		level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL_IMMEDIATE);
+		if (!level.isClientSide()) level.levelEvent(2001, pos, Block.getId(state));
+		return new ItemStack(PowderedSugarRegistry.POWDERED_SUGAR_BUCKET.get());
+	}
 }

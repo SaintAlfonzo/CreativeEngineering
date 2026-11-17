@@ -17,26 +17,26 @@ import net.minecraftforge.client.event.RegisterColorHandlersEvent;
  */
 public final class NoteItemColours {
 
-    public static final ResourceLocation LOOK = new ResourceLocation(CreativeLabels.ID, "look");
+	public static final ResourceLocation LOOK = new ResourceLocation(CreativeLabels.ID, "look");
 
-    private NoteItemColours() {}
+	private NoteItemColours() {}
 
-    public static void onItemColours(RegisterColorHandlersEvent.Item event) {
-        event.register((stack, tintIndex) -> tint(stack, tintIndex), CLRegistry.STICKY_NOTE.get());
-    }
+	public static void onItemColours(RegisterColorHandlersEvent.Item event) {
+		event.register((stack, tintIndex) -> tint(stack, tintIndex), CLRegistry.STICKY_NOTE.get());
+	}
 
-    /** White unless layer 0 of a dyed, non-special note. */
-    public static int tint(ItemStack stack, int tintIndex) {
-        if (tintIndex != 0) return ClientSetup.WHITE;
-        int color = NoteData.readColor(stack);
-        if (color == NoteData.NO_COLOR || NoteData.readSpecial(stack) != null) return ClientSetup.WHITE;
-        return color;
-    }
+	/** White unless layer 0 of a dyed, non-special note. */
+	public static int tint(ItemStack stack, int tintIndex) {
+		if (tintIndex != 0) return ClientSetup.WHITE;
+		int color = NoteData.readColor(stack);
+		if (color == NoteData.NO_COLOR || NoteData.readSpecial(stack) != null) return ClientSetup.WHITE;
+		return color;
+	}
 
-    /** {@code ItemProperties.register} is not thread-safe: called from client setup's enqueueWork. */
-    @SuppressWarnings("deprecation")
-    public static void registerProperties() {
-        ItemProperties.register(CLRegistry.STICKY_NOTE.get(), LOOK,
-                (stack, level, entity, seed) -> NoteColours.look(NoteData.readColor(stack), NoteData.readSpecial(stack)));
-    }
+	/** {@code ItemProperties.register} is not thread-safe: called from client setup's enqueueWork. */
+	@SuppressWarnings("deprecation")
+	public static void registerProperties() {
+		ItemProperties.register(CLRegistry.STICKY_NOTE.get(), LOOK,
+				(stack, level, entity, seed) -> NoteColours.look(NoteData.readColor(stack), NoteData.readSpecial(stack)));
+	}
 }

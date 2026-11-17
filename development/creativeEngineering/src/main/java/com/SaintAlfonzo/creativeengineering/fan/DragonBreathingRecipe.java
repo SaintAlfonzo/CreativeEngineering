@@ -29,64 +29,64 @@ import net.minecraftforge.items.wrapper.RecipeWrapper;
  */
 public class DragonBreathingRecipe extends ProcessingRecipe<DragonBreathingRecipe.Wrapper> {
 
-    public DragonBreathingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
-        super(DragonBreathingRecipeType.INSTANCE, params);
-    }
+	public DragonBreathingRecipe(ProcessingRecipeBuilder.ProcessingRecipeParams params) {
+		super(DragonBreathingRecipeType.INSTANCE, params);
+	}
 
-    @Override
-    public boolean matches(@Nonnull Wrapper inv, @Nonnull Level level) {
-        return !inv.isEmpty() && ingredients.get(0).test(inv.getItem(0));
-    }
+	@Override
+	public boolean matches(@Nonnull Wrapper inv, @Nonnull Level level) {
+		return !inv.isEmpty() && ingredients.get(0).test(inv.getItem(0));
+	}
 
-    @Override
-    protected int getMaxInputCount() {
-        return 1;
-    }
+	@Override
+	protected int getMaxInputCount() {
+		return 1;
+	}
 
-    @Override
-    protected int getMaxOutputCount() {
-        return 12;
-    }
+	@Override
+	protected int getMaxOutputCount() {
+		return 12;
+	}
 
-    // --- Mojmap Recipe methods (compile-time only; see class javadoc) ---
+	// --- Mojmap Recipe methods (compile-time only; see class javadoc) ---
 
-    @Override
-    public ResourceLocation getId() {
-        return id;
-    }
+	@Override
+	public ResourceLocation getId() {
+		return id;
+	}
 
-    @Override
-    public RecipeType<?> getType() {
-        return DragonBreathingRecipeType.INSTANCE.getType();
-    }
+	@Override
+	public RecipeType<?> getType() {
+		return DragonBreathingRecipeType.INSTANCE.getType();
+	}
 
-    @Override
-    public RecipeSerializer<?> getSerializer() {
-        return DragonBreathingRecipeType.INSTANCE.getSerializer();
-    }
+	@Override
+	public RecipeSerializer<?> getSerializer() {
+		return DragonBreathingRecipeType.INSTANCE.getSerializer();
+	}
 
-    @Override
-    public boolean canCraftInDimensions(int width, int height) {
-        return true;
-    }
+	@Override
+	public boolean canCraftInDimensions(int width, int height) {
+		return true;
+	}
 
-    @Override
-    public ItemStack getResultItem() {
-        // Mirror ProcessingRecipe's own behavior (first rollable result) without
-        // naming its reobfuscated m_8043_(); getRollableResultsAsItemStacks() is
-        // Create's own, un-obfuscated method.
-        List<ItemStack> results = getRollableResultsAsItemStacks();
-        return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
-    }
+	@Override
+	public ItemStack getResultItem() {
+		// Mirror ProcessingRecipe's own behavior (first rollable result) without
+		// naming its reobfuscated m_8043_(); getRollableResultsAsItemStacks() is
+		// Create's own, un-obfuscated method.
+		List<ItemStack> results = getRollableResultsAsItemStacks();
+		return results.isEmpty() ? ItemStack.EMPTY : results.get(0);
+	}
 
-    @Override
-    public ItemStack assemble(@Nonnull Wrapper inv) {
-        return getResultItem();
-    }
+	@Override
+	public ItemStack assemble(@Nonnull Wrapper inv) {
+		return getResultItem();
+	}
 
-    public static class Wrapper extends RecipeWrapper {
-        public Wrapper() {
-            super(new ItemStackHandler(1));
-        }
-    }
+	public static class Wrapper extends RecipeWrapper {
+		public Wrapper() {
+			super(new ItemStackHandler(1));
+		}
+	}
 }

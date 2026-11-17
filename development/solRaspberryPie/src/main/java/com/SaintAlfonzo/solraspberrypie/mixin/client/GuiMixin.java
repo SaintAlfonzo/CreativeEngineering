@@ -13,9 +13,9 @@ import java.util.Collection;
 /** HUD effect icons (9.5): flat diet effects never show; slot effects hide while the inventory widget is on. */
 @Mixin(Gui.class)
 public abstract class GuiMixin {
-    @Redirect(method = "renderEffects", at = @At(value = "INVOKE",
-            target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"))
-    private Collection<MobEffectInstance> solrp$filterHud(LocalPlayer player) {
-        return EffectFilter.hud(player.getActiveEffects());
-    }
+	@Redirect(method = "renderEffects", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/client/player/LocalPlayer;getActiveEffects()Ljava/util/Collection;"))
+	private Collection<MobEffectInstance> solrp$filterHud(LocalPlayer player) {
+		return EffectFilter.hud(player.getActiveEffects());
+	}
 }

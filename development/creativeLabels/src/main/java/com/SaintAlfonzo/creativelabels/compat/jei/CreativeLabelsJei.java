@@ -33,56 +33,56 @@ import java.util.List;
 @JeiPlugin
 public class CreativeLabelsJei implements IModPlugin {
 
-    private static final ResourceLocation UID = new ResourceLocation(CreativeLabels.ID, "jei");
-    public static final String EXAMPLE_TEXT = "Buy milk";
+	private static final ResourceLocation UID = new ResourceLocation(CreativeLabels.ID, "jei");
+	public static final String EXAMPLE_TEXT = "Buy milk";
 
-    @Override
-    public ResourceLocation getPluginUid() {
-        return UID;
-    }
+	@Override
+	public ResourceLocation getPluginUid() {
+		return UID;
+	}
 
-    @Override
-    public void registerItemSubtypes(ISubtypeRegistration registration) {
-        registration.registerSubtypeInterpreter(CLRegistry.STICKY_NOTE.get(), (stack, context) -> {
-            String special = NoteData.readSpecial(stack);
-            return special == null ? IIngredientSubtypeInterpreter.NONE : special;
-        });
-    }
+	@Override
+	public void registerItemSubtypes(ISubtypeRegistration registration) {
+		registration.registerSubtypeInterpreter(CLRegistry.STICKY_NOTE.get(), (stack, context) -> {
+			String special = NoteData.readSpecial(stack);
+			return special == null ? IIngredientSubtypeInterpreter.NONE : special;
+		});
+	}
 
-    @Override
-    public void registerRecipes(IRecipeRegistration registration) {
-        registration.addRecipes(RecipeTypes.CRAFTING, examples());
-    }
+	@Override
+	public void registerRecipes(IRecipeRegistration registration) {
+		registration.addRecipes(RecipeTypes.CRAFTING, examples());
+	}
 
-    /** The example recipes (built fresh each call; items are registered by now). */
-    public static List<CraftingRecipe> examples() {
-        List<CraftingRecipe> out = new ArrayList<>();
-        ItemStack plain = new ItemStack(CLRegistry.STICKY_NOTE.get());
-        for (DyeColor dye : DyeColor.values()) {
-            ItemStack result = plain.copy();
-            NoteData.writeColor(result, NoteColours.of(dye));
-            out.add(shapeless("dye_" + dye.getName(), result, plain, new ItemStack(DyeItem.byColor(dye))));
-        }
-        for (NoteColours.Special s : NoteColours.SPECIALS) {
-            Item ingredient = s.ingredientItem();
-            if (ingredient == null) continue;
-            out.add(shapeless("special_" + s.name(), CLRegistry.STICKY_NOTE.get().special(s), plain, new ItemStack(ingredient)));
-        }
-        ItemStack written = plain.copy();
-        NoteData.writeText(written, EXAMPLE_TEXT);
-        ItemStack nine = written.copy();
-        nine.setCount(9);
-        ItemStack[] copyInputs = new ItemStack[9];
-        copyInputs[0] = written;
-        for (int i = 1; i < 9; i++) copyInputs[i] = plain;
-        out.add(shapeless("copy", nine, copyInputs));
-        out.add(shapeless("erase", plain, written, new ItemStack(CLRegistry.ERASER.get())));
-        return out;
-    }
+	/** The example recipes (built fresh each call; items are registered by now). */
+	public static List<CraftingRecipe> examples() {
+		List<CraftingRecipe> out = new ArrayList<>();
+		ItemStack plain = new ItemStack(CLRegistry.STICKY_NOTE.get());
+		for (DyeColor dye : DyeColor.values()) {
+			ItemStack result = plain.copy();
+			NoteData.writeColor(result, NoteColours.of(dye));
+			out.add(shapeless("dye_" + dye.getName(), result, plain, new ItemStack(DyeItem.byColor(dye))));
+		}
+		for (NoteColours.Special s : NoteColours.SPECIALS) {
+			Item ingredient = s.ingredientItem();
+			if (ingredient == null) continue;
+			out.add(shapeless("special_" + s.name(), CLRegistry.STICKY_NOTE.get().special(s), plain, new ItemStack(ingredient)));
+		}
+		ItemStack written = plain.copy();
+		NoteData.writeText(written, EXAMPLE_TEXT);
+		ItemStack nine = written.copy();
+		nine.setCount(9);
+		ItemStack[] copyInputs = new ItemStack[9];
+		copyInputs[0] = written;
+		for (int i = 1; i < 9; i++) copyInputs[i] = plain;
+		out.add(shapeless("copy", nine, copyInputs));
+		out.add(shapeless("erase", plain, written, new ItemStack(CLRegistry.ERASER.get())));
+		return out;
+	}
 
-    private static ShapelessRecipe shapeless(String name, ItemStack result, ItemStack... inputs) {
-        NonNullList<Ingredient> ingredients = NonNullList.create();
-        for (ItemStack in : inputs) ingredients.add(Ingredient.of(in));
-        return new ShapelessRecipe(new ResourceLocation(CreativeLabels.ID, "jei/" + name), "", result, ingredients);
-    }
+	private static ShapelessRecipe shapeless(String name, ItemStack result, ItemStack... inputs) {
+		NonNullList<Ingredient> ingredients = NonNullList.create();
+		for (ItemStack in : inputs) ingredients.add(Ingredient.of(in));
+		return new ShapelessRecipe(new ResourceLocation(CreativeLabels.ID, "jei/" + name), "", result, ingredients);
+	}
 }

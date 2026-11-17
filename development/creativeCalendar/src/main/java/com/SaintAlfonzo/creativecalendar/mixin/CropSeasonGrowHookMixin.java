@@ -19,16 +19,16 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  */
 @Pseudo
 @Mixin(targets = {
-        "blusunrize.immersiveengineering.common.blocks.plant.HempBlock",
-        "net.mcreator.thedirtystuff.block.TobaccoSeedsBlock",
-        "umpaz.nethersdelight.common.block.FungusColonyBlock"
+		"blusunrize.immersiveengineering.common.blocks.plant.HempBlock",
+		"net.mcreator.thedirtystuff.block.TobaccoSeedsBlock",
+		"umpaz.nethersdelight.common.block.FungusColonyBlock"
 }, remap = false)
 public abstract class CropSeasonGrowHookMixin {
 
-    // m_213897_ = Block.tick(BlockState, ServerLevel, BlockPos, RandomSource)
-    @Inject(method = "m_213897_", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
-    private void creativeengineering$cropGrowEvent(BlockState state, ServerLevel level, BlockPos pos, RandomSource random,
-                                                   CallbackInfo ci) {
-        if (!ForgeHooks.onCropsGrowPre(level, pos, state, true)) ci.cancel();
-    }
+	// m_213897_ = Block.tick(BlockState, ServerLevel, BlockPos, RandomSource)
+	@Inject(method = "m_213897_", at = @At("HEAD"), cancellable = true, remap = false, require = 0)
+	private void creativeengineering$cropGrowEvent(BlockState state, ServerLevel level, BlockPos pos, RandomSource random,
+												   CallbackInfo ci) {
+		if (!ForgeHooks.onCropsGrowPre(level, pos, state, true)) ci.cancel();
+	}
 }

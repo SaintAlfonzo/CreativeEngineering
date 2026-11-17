@@ -20,10 +20,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(targets = "com.ordana.immersive_weathering.blocks.soil.ModGrassBlock", remap = false)
 public abstract class IWGrassSpreadSeasonMixin {
 
-    // m_213898_ = randomTick; m_46803_ = Level.getMaxLocalRawBrightness, the light check before IW's own spread
-    @Inject(method = "m_213898_", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;m_46803_(Lnet/minecraft/core/BlockPos;)I", ordinal = 0), cancellable = true, remap = false, require = 1)
-    private void creativecalendar$grassSeason(BlockState state, ServerLevel level, BlockPos pos, RandomSource random,
-                                               CallbackInfo ci) {
-        if (GrassSeasonHook.refuse("immersive_weathering:ModGrassBlock", state, level, pos)) ci.cancel();
-    }
+	// m_213898_ = randomTick; m_46803_ = Level.getMaxLocalRawBrightness, the light check before IW's own spread
+	@Inject(method = "m_213898_", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/level/ServerLevel;m_46803_(Lnet/minecraft/core/BlockPos;)I", ordinal = 0), cancellable = true, remap = false, require = 1)
+	private void creativecalendar$grassSeason(BlockState state, ServerLevel level, BlockPos pos, RandomSource random,
+											   CallbackInfo ci) {
+		if (GrassSeasonHook.refuse("immersive_weathering:ModGrassBlock", state, level, pos)) ci.cancel();
+	}
 }

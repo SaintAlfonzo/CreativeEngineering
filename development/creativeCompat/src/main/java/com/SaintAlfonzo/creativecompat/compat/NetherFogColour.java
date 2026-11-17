@@ -20,22 +20,22 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
  */
 public final class NetherFogColour {
 
-    /** #3F0905 */
-    public static final int RGB = 0x3F0905;
-    private static final float R = ((RGB >> 16) & 0xFF) / 255F, G = ((RGB >> 8) & 0xFF) / 255F, B = (RGB & 0xFF) / 255F;
+	/** #3F0905 */
+	public static final int RGB = 0x3F0905;
+	private static final float R = ((RGB >> 16) & 0xFF) / 255F, G = ((RGB >> 8) & 0xFF) / 255F, B = (RGB & 0xFF) / 255F;
 
-    private NetherFogColour() {}
+	private NetherFogColour() {}
 
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public static void onFogColour(ViewportEvent.ComputeFogColor event) {
-        ClientLevel level = Minecraft.getInstance().level;
-        if (level == null || level.dimension() != Level.NETHER) return;
-        if (event.getCamera().getFluidInCamera() != FogType.NONE) return;
-        Entity entity = event.getCamera().getEntity();
-        if (entity instanceof LivingEntity living
-                && (living.hasEffect(MobEffects.BLINDNESS) || living.hasEffect(MobEffects.DARKNESS))) return;
-        event.setRed(R);
-        event.setGreen(G);
-        event.setBlue(B);
-    }
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onFogColour(ViewportEvent.ComputeFogColor event) {
+		ClientLevel level = Minecraft.getInstance().level;
+		if (level == null || level.dimension() != Level.NETHER) return;
+		if (event.getCamera().getFluidInCamera() != FogType.NONE) return;
+		Entity entity = event.getCamera().getEntity();
+		if (entity instanceof LivingEntity living
+				&& (living.hasEffect(MobEffects.BLINDNESS) || living.hasEffect(MobEffects.DARKNESS))) return;
+		event.setRed(R);
+		event.setGreen(G);
+		event.setBlue(B);
+	}
 }

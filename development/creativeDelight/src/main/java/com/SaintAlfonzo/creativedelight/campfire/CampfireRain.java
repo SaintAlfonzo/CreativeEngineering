@@ -26,32 +26,32 @@ import net.minecraft.world.level.block.state.BlockState;
  */
 public final class CampfireRain {
 
-    /** The keys live in Creative Common (campfire.CampfireRainInfo), which the WTHIT lines read. */
-    public static final TagKey<Block> RAIN_DOUSES = CampfireRainInfo.RAIN_DOUSES;
-    public static final TagKey<Block> RAIN_PROOF_FUEL = CampfireRainInfo.RAIN_PROOF_FUEL;
+	/** The keys live in Creative Common (campfire.CampfireRainInfo), which the WTHIT lines read. */
+	public static final TagKey<Block> RAIN_DOUSES = CampfireRainInfo.RAIN_DOUSES;
+	public static final TagKey<Block> RAIN_PROOF_FUEL = CampfireRainInfo.RAIN_PROOF_FUEL;
 
-    private CampfireRain() {}
+	private CampfireRain() {}
 
-    public static void tick(Level level, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
-        CampfireRainTicks ticks = (CampfireRainTicks) campfire;
-        if (!CDConfig.CAMPFIRE.rainDouses.get()
-                || !state.is(RAIN_DOUSES)
-                || !state.getValue(CampfireBlock.LIT)
-                || level.getBlockState(pos.below()).is(RAIN_PROOF_FUEL)
-                || !level.isRainingAt(pos.above())) {
-            ticks.ce$setRainTicks(0);
-            return;
-        }
-        int rained = ticks.ce$getRainTicks() + 1;
-        if (rained < CDConfig.CAMPFIRE.rainOutTicks.get()) {
-            ticks.ce$setRainTicks(rained);
-            return;
-        }
-        ticks.ce$setRainTicks(0);
-        // Same as Unlit Campfire's own rain-out: fizz sound, dowse (smoke, game event), then unlit.
-        // Food on the grill stays, as with a shovel.
-        level.levelEvent(null, 1009, pos, 0);
-        CampfireBlock.dowse(null, level, pos, state);
-        level.setBlockAndUpdate(pos, state.setValue(CampfireBlock.LIT, false));
-    }
+	public static void tick(Level level, BlockPos pos, BlockState state, CampfireBlockEntity campfire) {
+		CampfireRainTicks ticks = (CampfireRainTicks) campfire;
+		if (!CDConfig.CAMPFIRE.rainDouses.get()
+				|| !state.is(RAIN_DOUSES)
+				|| !state.getValue(CampfireBlock.LIT)
+				|| level.getBlockState(pos.below()).is(RAIN_PROOF_FUEL)
+				|| !level.isRainingAt(pos.above())) {
+			ticks.ce$setRainTicks(0);
+			return;
+		}
+		int rained = ticks.ce$getRainTicks() + 1;
+		if (rained < CDConfig.CAMPFIRE.rainOutTicks.get()) {
+			ticks.ce$setRainTicks(rained);
+			return;
+		}
+		ticks.ce$setRainTicks(0);
+		// Same as Unlit Campfire's own rain-out: fizz sound, dowse (smoke, game event), then unlit.
+		// Food on the grill stays, as with a shovel.
+		level.levelEvent(null, 1009, pos, 0);
+		CampfireBlock.dowse(null, level, pos, state);
+		level.setBlockAndUpdate(pos, state.setValue(CampfireBlock.LIT, false));
+	}
 }

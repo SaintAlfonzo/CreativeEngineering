@@ -23,63 +23,63 @@ import javax.annotation.Nullable;
  * {@link ShieldCategory} at it. A group a tier has no default for starts at 0% ("not blocked").
  */
 public enum ShieldGroup {
-    /** Melee, blunt/cutting machinery, piercing, firearms, explosions, projectiles, and anything unclassified. */
-    PHYSICAL("physical", Facing.REQUIRED, true),
-    /** Fire, cold, electric and chemical damage - {@code creativecommon:elemental}. */
-    ELEMENTAL("elemental", Facing.IF_POSITIONED, false),
-    /** Vanilla magic plus the pack's psychic/life-drain tags - {@code creativecommon:magic}. */
-    MAGIC("magic", Facing.IF_POSITIONED, false);
+	/** Melee, blunt/cutting machinery, piercing, firearms, explosions, projectiles, and anything unclassified. */
+	PHYSICAL("physical", Facing.REQUIRED, true),
+	/** Fire, cold, electric and chemical damage - {@code creativecommon:elemental}. */
+	ELEMENTAL("elemental", Facing.IF_POSITIONED, false),
+	/** Vanilla magic plus the pack's psychic/life-drain tags - {@code creativecommon:magic}. */
+	MAGIC("magic", Facing.IF_POSITIONED, false);
 
-    /** How a group's direction check works (vanilla shields only ever do REQUIRED). */
-    public enum Facing {
-        /** Vanilla: the source needs a position and must be inside the shield's front 180 degrees. */
-        REQUIRED,
-        /** The arc test applies only when the source has a position; positionless sources (lava, potions) are blocked from any direction. */
-        IF_POSITIONED,
-        /** Never checked - the raised shield blocks this from every direction. */
-        NONE
-    }
+	/** How a group's direction check works (vanilla shields only ever do REQUIRED). */
+	public enum Facing {
+		/** Vanilla: the source needs a position and must be inside the shield's front 180 degrees. */
+		REQUIRED,
+		/** The arc test applies only when the source has a position; positionless sources (lava, potions) are blocked from any direction. */
+		IF_POSITIONED,
+		/** Never checked - the raised shield blocks this from every direction. */
+		NONE
+	}
 
-    private final String key;
-    private final Facing defaultFacing;
-    private final boolean honorsArmorBypass;
+	private final String key;
+	private final Facing defaultFacing;
+	private final boolean honorsArmorBypass;
 
-    ShieldGroup(String key, Facing defaultFacing, boolean honorsArmorBypass) {
-        this.key = key;
-        this.defaultFacing = defaultFacing;
-        this.honorsArmorBypass = honorsArmorBypass;
-    }
+	ShieldGroup(String key, Facing defaultFacing, boolean honorsArmorBypass) {
+		this.key = key;
+		this.defaultFacing = defaultFacing;
+		this.honorsArmorBypass = honorsArmorBypass;
+	}
 
-    /** Lower-case toml key / effect-filter name - also the matching meta tag's path for ELEMENTAL/MAGIC. */
-    public String key() {
-        return key;
-    }
+	/** Lower-case toml key / effect-filter name - also the matching meta tag's path for ELEMENTAL/MAGIC. */
+	public String key() {
+		return key;
+	}
 
-    public String label() {
-        return key.substring(0, 1).toUpperCase(Locale.ROOT) + key.substring(1);
-    }
+	public String label() {
+		return key.substring(0, 1).toUpperCase(Locale.ROOT) + key.substring(1);
+	}
 
-    public Facing defaultFacing() {
-        return defaultFacing;
-    }
+	public Facing defaultFacing() {
+		return defaultFacing;
+	}
 
-    /**
-     * True for PHYSICAL: a source tagged {@code creativecommon:armor_piercing} is never
-     * blockable, same as vanilla's own bypassArmor rule. False for ELEMENTAL/MAGIC, whose sources
-     * (on-fire, poison, ...) carry that tag almost universally - the whole point of blocking them
-     * is to ignore it.
-     */
-    public boolean honorsArmorBypass() {
-        return honorsArmorBypass;
-    }
+	/**
+	 * True for PHYSICAL: a source tagged {@code creativecommon:armor_piercing} is never
+	 * blockable, same as vanilla's own bypassArmor rule. False for ELEMENTAL/MAGIC, whose sources
+	 * (on-fire, poison, ...) carry that tag almost universally - the whole point of blocking them
+	 * is to ignore it.
+	 */
+	public boolean honorsArmorBypass() {
+		return honorsArmorBypass;
+	}
 
-    @Nullable
-    public static ShieldGroup byKey(String key) {
-        for (ShieldGroup g : values()) {
-            if (g.key.equalsIgnoreCase(key)) {
-                return g;
-            }
-        }
-        return null;
-    }
+	@Nullable
+	public static ShieldGroup byKey(String key) {
+		for (ShieldGroup g : values()) {
+			if (g.key.equalsIgnoreCase(key)) {
+				return g;
+			}
+		}
+		return null;
+	}
 }

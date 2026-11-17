@@ -32,88 +32,88 @@ import javax.annotation.Nullable;
  */
 public final class GoldenGooseEgg {
 
-    private static final String VINTAGE_ID = "vintagedelight";
-    private static final ResourceLocation GOLDEN_EGG = new ResourceLocation(VINTAGE_ID, "golden_egg");
+	private static final String VINTAGE_ID = "vintagedelight";
+	private static final ResourceLocation GOLDEN_EGG = new ResourceLocation(VINTAGE_ID, "golden_egg");
 
-    private GoldenGooseEgg() {}
+	private GoldenGooseEgg() {}
 
-    /** The golden egg item, or null when Vintage Delight or its golden_egg is not there. */
-    @Nullable
-    public static Item item() {
-        if (!CDConfig.member(VINTAGE_ID)) return null;
-        Item item = ForgeRegistries.ITEMS.getValue(GOLDEN_EGG);
-        return item == null || item == Items.AIR ? null : item;
-    }
+	/** The golden egg item, or null when Vintage Delight or its golden_egg is not there. */
+	@Nullable
+	public static Item item() {
+		if (!CDConfig.member(VINTAGE_ID)) return null;
+		Item item = ForgeRegistries.ITEMS.getValue(GOLDEN_EGG);
+		return item == null || item == Items.AIR ? null : item;
+	}
 
-    /** One roll for the next egg; false (no roll) without the item. */
-    public static boolean roll(RandomSource random) {
-        if (item() == null) return false;
-        int oneIn = CDConfig.SPEC.isLoaded() ? CDConfig.INCUBATION.goldenEggChance.get() : 1000;
-        return oneIn > 0 && random.nextInt(oneIn) == 0;
-    }
+	/** One roll for the next egg; false (no roll) without the item. */
+	public static boolean roll(RandomSource random) {
+		if (item() == null) return false;
+		int oneIn = CDConfig.SPEC.isLoaded() ? CDConfig.INCUBATION.goldenEggChance.get() : 1000;
+		return oneIn > 0 && random.nextInt(oneIn) == 0;
+	}
 
-    /**
-     * Lays the golden egg. As a block (Vintage's Golden Egg, which falls like sand) on the open spot
-     * {@link DropSpot#pickBlock} picks; when there is none (a closed 1x1 pen) or the item has no block, as the
-     * item where {@link DropSpot#pick} says, through the bird's own spawnAtLocation (the goose marks the egg as
-     * thrown by itself, so it doesn't pick it straight back up), then moved. False when the item is gone, so
-     * the caller can fall back to the normal egg.
-     */
-    public static boolean lay(Mob bird) {
-        Item item = item();
-        if (item == null) return false;
-        Level level = bird.level;
-        BlockPos base = bird.blockPosition();
-        Vec3 from = new Vec3(bird.getX(), bird.getY() + 0.5, bird.getZ());
+	/**
+	 * Lays the golden egg. As a block (Vintage's Golden Egg, which falls like sand) on the open spot
+	 * {@link DropSpot#pickBlock} picks; when there is none (a closed 1x1 pen) or the item has no block, as the
+	 * item where {@link DropSpot#pick} says, through the bird's own spawnAtLocation (the goose marks the egg as
+	 * thrown by itself, so it doesn't pick it straight back up), then moved. False when the item is gone, so
+	 * the caller can fall back to the normal egg.
+	 */
+	public static boolean lay(Mob bird) {
+		Item item = item();
+		if (item == null) return false;
+		Level level = bird.level;
+		BlockPos base = bird.blockPosition();
+		Vec3 from = new Vec3(bird.getX(), bird.getY() + 0.5, bird.getZ());
 
-        DropSpot.Probe probe = new DropSpot.Probe() {
-            @Override
-            public boolean standable(int dx, int dy, int dz) {
-                BlockPos feet = base.offset(dx, dy, dz);
-                BlockPos below = feet.below();
-                return free(feet) && free(feet.above())
-                        && !level.getBlockState(below).getCollisionShape(level, below).isEmpty();
-            }
+		DropSpot.Probe probe = new DropSpot.Probe() {
+			@Override
+			public boolean standable(int dx, int dy, int dz) {
+				BlockPos feet = base.offset(dx, dy, dz);
+				BlockPos below = feet.below();
+				return free(feet) && free(feet.above())
+						&& !level.getBlockState(below).getCollisionShape(level, below).isEmpty();
+			}
 
-            @Override
-            public boolean solid(int dx, int dy, int dz) {
-                return level.getBlockState(base.offset(dx, dy, dz)).getMaterial().blocksMotion();
-            }
+			@Override
+			public boolean solid(int dx, int dy, int dz) {
+				return level.getBlockState(base.offset(dx, dy, dz)).getMaterial().blocksMotion();
+			}
 
-            @Override
-            public boolean reachable(int dx, int dy, int dz) {
-                Vec3 to = Vec3.atCenterOf(base.offset(dx, dy, dz));
-                return level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, bird))
-                        .getType() == HitResult.Type.MISS;
-            }
+			@Override
+			public boolean reachable(int dx, int dy, int dz) {
+				Vec3 to = Vec3.atCenterOf(base.offset(dx, dy, dz));
+				return level.clip(new ClipContext(from, to, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, bird))
+						.getType() == HitResult.Type.MISS;
+			}
 
-            private boolean free(BlockPos pos) {
-                BlockState state = level.getBlockState(pos);
-                return state.getCollisionShape(level, pos).isEmpty() && state.getFluidState().isEmpty();
-            }
-        };
+			private boolean free(BlockPos pos) {
+				BlockState state = level.getBlockState(pos);
+				return state.getCollisionShape(level, pos).isEmpty() && state.getFluidState().isEmpty();
+			}
+		};
 
-        if (item instanceof BlockItem blockItem) {
-            int[] b = DropSpot.pickBlock(probe);
-            if (b != null) {
-                BlockPos spot = base.offset(b[0], b[1], b[2]);
-                // Free is not enough: never overwrite a torch, flower or rail.
-                if (level.getBlockState(spot).getMaterial().isReplaceable()) {
-                    BlockState egg = blockItem.getBlock().defaultBlockState();
-                    if (level.setBlock(spot, egg, Block.UPDATE_ALL)) {
-                        level.gameEvent(bird, GameEvent.BLOCK_PLACE, spot);
-                        return true;
-                    }
-                }
-            }
-        }
+		if (item instanceof BlockItem blockItem) {
+			int[] b = DropSpot.pickBlock(probe);
+			if (b != null) {
+				BlockPos spot = base.offset(b[0], b[1], b[2]);
+				// Free is not enough: never overwrite a torch, flower or rail.
+				if (level.getBlockState(spot).getMaterial().isReplaceable()) {
+					BlockState egg = blockItem.getBlock().defaultBlockState();
+					if (level.setBlock(spot, egg, Block.UPDATE_ALL)) {
+						level.gameEvent(bird, GameEvent.BLOCK_PLACE, spot);
+						return true;
+					}
+				}
+			}
+		}
 
-        int[] o = DropSpot.pick(probe);
-        ItemEntity egg = bird.spawnAtLocation(item);
-        if (egg != null && (o[0] != 0 || o[1] != 0 || o[2] != 0)) {
-            BlockPos spot = base.offset(o[0], o[1], o[2]);
-            egg.setPos(spot.getX() + 0.5, spot.getY() + 0.1, spot.getZ() + 0.5);
-        }
-        return true;
-    }
+		int[] o = DropSpot.pick(probe);
+		ItemEntity egg = bird.spawnAtLocation(item);
+		if (egg != null && (o[0] != 0 || o[1] != 0 || o[2] != 0)) {
+			BlockPos spot = base.offset(o[0], o[1], o[2]);
+			egg.setPos(spot.getX() + 0.5, spot.getY() + 0.1, spot.getZ() + 0.5);
+		}
+		return true;
+	}
 }
