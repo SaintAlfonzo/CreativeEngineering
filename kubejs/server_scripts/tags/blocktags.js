@@ -371,7 +371,7 @@ ServerEvents.tags('block', e => {
 		item.fig_pudding, item.mangosteen_cake, item.pineapple_fried_rice, item.nachos_block, item.popcorn_box,
 	])
 
-	t.addMatching(e, runner.tilled, ['minecraft:farmland', 'farmersdelight:rich_soil_farmland', item.tilled_end_stone])
+	t.addMatching(e, runner.tilled, ['minecraft:farmland', 'farmersdelight:rich_soil_farmland', b.tilled_end_stone])
 
 	t.addMatching(e, runner.leaves, ['#minecraft:leaves', '#quark:hedges'])  // bamboo leaves: layered pass-through tier only
 
@@ -473,7 +473,7 @@ ServerEvents.tags('block', e => {
 		'/^(incubation|hearthandharvest|creativedelight):[a-z_]*nest$/', '/^fungidelight:[a-z_]+_mushroom_block$/',
 		'/^farmersdelight:(full|half)_tatami_mat$/', '/^hearthandharvest:(hay|straw)_rug$/',
 	])
-	t.addMatching(e, runner.tilled, ['*:tilled_end_stone', 'neapolitan:adzuki_soil'])
+	t.addMatching(e, runner.tilled, [b.tilled_end_stone, 'neapolitan:adzuki_soil'])
 	t.addMatching(e, runner.very_sticky, [
 		// jam blocks extend HoneyBlock, jello blocks SlimeBlock (Fruits Delight precedent)
 		'vintagedelight:*_jam_block', 'vintagedelight:*_jello_block', 'upgrade_aquatic:mulberry_jam_block',

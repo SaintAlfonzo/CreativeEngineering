@@ -785,6 +785,23 @@ Vanilla ratios: hunger x1 (apple to golden apple) and x2 (carrot to golden carro
 
 **NOTE (marked 2026-11-02, revisit before building):** **Owner decision 2026-11-02 (replaces the nine fixed effects and the four-random idea):** each serving applies **3 effects chosen at random from the brewable effects, each for 5 seconds at level II**. Defaults until corrected: the three are distinct; "brewable" means an effect that a potion in the pack can carry, as one list (a tag or generated list, so new potions join on their own); the instant effects (instant health and damage) are left out because 5 seconds means nothing to them. Open: whether harmful effects (wither, poison, blindness, levitation and so on) stay in the pool, which they do by default; whether an effect that has no level II in brewing (night vision) still gets level II here.
 
+### 3.19 Food value copies and absolute rows (applier BUILT 2026-11-17, rows move in plan_rules_fixes.md P3)
+
+One applier, Creative Delight's `kubejs_startup/creativedelight/food_value_copies.js`, sets food values that are not
+the item's own. Each owning script adds a row to `global.foodValueCopies` (target item_dict key -> row):
+
+- `'source_key'`: the target takes the source's whole food (values, effects, flags).
+- `{ from: 'source_key', effects: false }`: the same without the effects.
+- `{ absolute: { ... } }` (new, design rule V-36): values set directly. Fields `nutrition`, `saturationMod` (the
+  modifier), `meat`, `alwaysEat`, `fast`, `effects`, `keepEffects`, `dedupeEffects`; a field left out keeps the
+  target's own value (0 or false when the item is not a food). `effects` is a list of
+  `{ effect, ticks, amplifier, chance }` with an effect id or a `global.effect` key, resolved through
+  `global.effect.resolve`; they are added after the target's own effects when `keepEffects` is true (the default when
+  `effects` is left out), else in their place. `dedupeEffects` keeps the longest entry of each effect.
+
+The four hand `FoodProperties$Builder` rebuilds (`alcohol_drinks.js`, `fruits_foods.js`, `vintage_items.js`,
+`delightful_foods.js`) become absolute rows in P3; the `/dumpall` food dump diff must be empty after the move.
+
 ## 4. Limits and decisions
 
 ### 4.1 Limits
@@ -1090,6 +1107,8 @@ Cooking oil and fried eggs (3.7), after a restart:
   there. No `rusticdelight:fried_egg_from_cooking_oil` (or its Slice & Dice copy). Queue SQ-FO-06, SQ-FO-07.
 
 ## 8. History
+
+- **2026-11-17** Absolute rows in the food value applier (3.19, plan_rules_fixes.md section 12, V-36); no rows use them yet.
 
 - **2026-11-02** Owner decisions recorded: D1 review and exempt, D2 golden multiplier rule (golden x2, gilded x4) with gilded tier and new recipes (3.16), D5 cans count as their contents, D6 raw meat follows raw chicken (3.17). D3 pinned until most food effects are set, D4 answered (3.18).
 

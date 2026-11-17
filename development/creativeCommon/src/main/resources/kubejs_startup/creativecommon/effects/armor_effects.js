@@ -99,11 +99,11 @@ console.log('Armor Effects framework loading')
 	// never at registration time. See header comment on why.
 	const RESOLVED = {}
 
+	// One lookup for every script: global.effect.resolve (effect_dict.js). A miss is cached here, so a missing
+	// effect is skipped without a lookup per tick.
 	function resolveEffect(id) {
 		if (id in RESOLVED) return RESOLVED[id]
-		var me = null
-		try { me = $ForgeRegistries.MOB_EFFECTS.getValue(new $ResourceLocation(id)) } catch (err) {}
-		if (!me) console.warn('[armorEffects] effect "' + id + '" is not registered (bad id, or that mod isn\'t installed) - skipped')
+		var me = global.effect.resolve(id)
 		RESOLVED[id] = me
 		return me
 	}

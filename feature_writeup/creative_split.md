@@ -963,6 +963,8 @@ Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2
 
 ## 8. History
 
+- 2026-11-17: namespace binding in Common ([plan_rules_fixes.md](plan_rules_fixes.md) section 6, D22): `global.NCH.forPack(ns)` (recipe ids and `R.logName` in the folder's namespace), `global.reg.forPack(ns)` for registrations, `_lib/profession_dict.js`; `tools/namespace_lint.py` in report mode lists what each jar still writes outside its namespace ([namespace_report.md](namespace_report.md)). Scripts switch over in P3.
+
 - 2026-11-07, owner: interface (JEI, WTHIT, tooltips) moves to Compat, Detail Armor Bar to Equipment, Caffeinated to
   Delight, Better Beacons potions to Brewing; Gravity and the IE fluid input stay in Common; wandering trader marked for a
   future economy mod (7.19).

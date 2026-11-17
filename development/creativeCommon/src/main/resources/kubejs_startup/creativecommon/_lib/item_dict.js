@@ -129,7 +129,6 @@ i.sugar_horse_treat = 'hearthandharvest:sugar_horse_treat';
 i.fertilizer_bag = 'hearthandharvest:fertilizer_bag';
 i.farmers_hat = 'hearthandharvest:farmers_hat';
 i.blueberry_pips = 'hearthandharvest:blueberry_pips';
-i.hops_crop = 'hearthandharvest:hops';
 i.t_farmers_hats = '#hearthandharvest:farmers_hats';
 i.farmerbrim = 'simplehats:farmerbrim';
 i.t_seeds_blueberry = '#forge:seeds/blueberry';
@@ -1187,9 +1186,6 @@ i.component_aluminum = 'creativeengineering:component_aluminum';
 i.any_ore_aluminum = "#forge:ores/aluminum";
 
 //Lead
-//None
-i.spring_lead = i.none;
-i.small_spring_lead = i.none;
 //Component Chain
 i.ore_lead = 'immersiveengineering:ore_lead';
 i.ds_ore_lead = 'immersiveengineering:deepslate_ore_lead';
@@ -2160,7 +2156,6 @@ i.potato = '#forge:crops/potato';
 i.beetroot = '#forge:crops/beetroot';
 i.onion = '#forge:crops/onion';
 i.t_crops_garlic = '#forge:crops/garlic';
-i.t_sea_pickles = '#forge:sea_pickles';            // sea pickle and Oceanic's sea pickle slices
 i.tomato = '#forge:crops/tomato';
 i.rice = '#forge:crops/rice';
 i.mushrooms = '#forge:mushrooms';
@@ -2209,7 +2204,7 @@ i.t_coffee_pumpkin = '#creativedelight:coffee_pumpkin';         // pumpkin coffe
 i.t_drink_fruits_lemon = '#creativedelight:drink_fruits/lemon';         // whole or sliced (drinks 0)
 i.t_drink_fruits_orange = '#creativedelight:drink_fruits/orange';
 i.t_drink_fruits_hamimelon = '#creativedelight:drink_fruits/hamimelon'; // hamimelon and mini cantaloupe slices
-i.t_sea_pickles = '#creativedelight:sea_pickles';               // sea pickle tea: whole or sliced
+i.t_sea_pickles = '#creativedelight:sea_pickles';               // sea pickle tea: whole sea pickle or Oceanic's sea pickle slices
 i.t_straw = '#minecraft:straw';
 i.t_botania_special_flowers = '#botania:special_flowers';
 i.t_botania_special_floating_flowers = '#botania:special_floating_flowers';
@@ -15473,3 +15468,24 @@ i.blue_bottle_broom_item           = 'witchmobility:blue_bottle_broom_item';
 i.firebolt_broom_item              = 'witchmobility:firebolt_broom_item';
 i.wings_broom_item                 = 'witchmobility:wings_broom_item';
 i.silver_arrow_broom_item          = 'witchmobility:silver_arrow_broom_item';
+
+// ############################## Keys added by tools/literal_id_swap.py ##############################
+// Ids used two or more times as literals in scripts (plan_rules_fixes.md section 7).
+i.t_dirt = '#minecraft:dirt';
+i.t_gravel = '#forge:gravel';
+i.t_sand = '#forge:sand';
+i.t_small_flowers = '#minecraft:small_flowers';
+i.t_fence_gates_wooden = '#forge:fence_gates/wooden';
+i.t_terracotta = '#minecraft:terracotta';
+i.t_beds = '#minecraft:beds';
+i.t_concrete = '#forge:concrete';
+i.t_storage_blocks_diamond = '#forge:storage_blocks/diamond';
+i.t_storage_blocks_netherite = '#forge:storage_blocks/netherite';
+i.t_cobblestone = '#forge:cobblestone';
+i.t_boats = '#minecraft:boats';
+i.t_sandstone = '#forge:sandstone';
+i.t_raw_materials = '#forge:raw_materials';
+i.t_ingots = '#forge:ingots';
+i.t_nuggets = '#forge:nuggets';
+i.t_not_in_flower_boxes = '#creativecompat:not_in_flower_boxes';
+i.t_planter_box_placeables = '#another_furniture:planter_box_placeables';

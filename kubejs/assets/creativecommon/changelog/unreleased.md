@@ -312,6 +312,7 @@
 - **Changed:** In JEI, fishing rods and backpacks each have their own group after the equipment materials [with each material]; Simple Hats and Wardrobe backpacks are not sorted.
 - **New:** Title screen splash: Stience!
 - **Changed:** Tooltips and screen text use American spelling: color, gray, labeled, fueled.
+- **Changed:** Recipes are no longer unlocked in the recipe book by crafting or cooking.
 
 ## Gameplay
 

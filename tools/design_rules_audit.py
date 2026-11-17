@@ -263,9 +263,41 @@ if wants('ids'):
     assign = re.compile(r'^\s*(i|global\.item)\.\w+\s*=')
     hits = [(p, i, l.strip()) for p, i, l in lines_of([s for s in SCRIPTS if not DICTS.search(s)]) if assign.search(l)]
     report('DR-C2', 'dict keys assigned outside the dict files', hits)
+    sys.path.insert(0, str(ROOT / 'tools'))
+    import dict_lint
+    hits = []
+    for dp in sorted(dict_lint.DICT_DIR.glob('*_dict.js')):
+        for (alias, key), nums in dict_lint.duplicates(dp)[1].items():
+            hits.append((str(dp.relative_to(ROOT)), nums[0], f'{alias}.{key} also on {nums[1:]}'))
+    report('DR-C2', 'dict keys assigned twice in one dict file (tools/dict_lint.py fails on them)', hits)
     adv = re.compile(r'advancement', re.I)
     hits = [(p, i, l.strip()) for p, i, l in lines_of(SCRIPTS) if adv.search(l) and not l.strip().startswith('//')]
     report('DR-C14', 'scripts mentioning advancements (check each)', hits)
+
+# DR-C9: ids in the owner's namespace (tools/namespace_lint.py, report mode until plan_rules_fixes.md P3 ends).
+if wants('namespace'):
+    out = subprocess.run([sys.executable, str(ROOT / 'tools/namespace_lint.py')], cwd=ROOT, capture_output=True,
+                         text=True).stdout.rstrip()
+    print('## DR-C9 namespace lint (tools/namespace_lint.py; feature_writeup/namespace_report.md with --write)')
+    print('   ' + '\n   '.join(l for l in out.split('\n') if l.startswith('##') or l.startswith('namespace_lint')))
+    print()
+
+# DR-C1: villager trades through global.trades.villager (plan_rules_fixes.md 12c); report until the P3 conversions.
+if wants('recipes'):
+    hits = [(p, i, l.strip()) for p, i, l in lines_of([s for s in SCRIPTS if not HELPERS.search(s)])
+            if re.search(r'\b(e|event)\.addTrade\s*\(', l) and not l.strip().startswith('//')]
+    report('DR-C1', 'raw villager e.addTrade calls outside global.trades.villager', hits)
+
+# DR-P12: tooltip colors outside the col roles (plan_rules_fixes.md section 12, V-43): raw section signs, bare
+# Text.<color>( calls, raw color keys of the palette. Report until the P3 replacements; the palette lib is the source.
+if wants('colors'):
+    palette = re.compile(r'kubejs/assets/creativecommon/kubejs/_lib/tooltips\.js$')
+    color = re.compile(r'§[0-9a-fk-or]|\bText\.(black|darkBlue|darkGreen|darkAqua|darkRed|darkPurple|gold|gray|darkGray|'
+                       r'blue|green|aqua|red|lightPurple|yellow|white)\(|\bcol\.(black|dark_\w+|d(blue|green|aqua|red|purple|gray)'
+                       r'|gold|gray|blue|green|aqua|red|light_purple|lpurple|yellow|white)\b')
+    hits = [(p, i, l.strip()) for p, i, l in lines_of([s for s in SCRIPTS if not palette.search(s)])
+            if color.search(l) and not l.strip().startswith('//')]
+    report('DR-P12', 'tooltip colors picked by look (raw section signs, Text.<color>, raw col color keys)', hits)
 
 # DR-C21 to DR-C25: formatting facts.
 if wants('format'):

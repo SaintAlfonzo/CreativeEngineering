@@ -81,6 +81,22 @@ keeps its own writeup.
 | `uncm` / `rare` / `epic` / `leg` | green / dark blue / dark purple / aqua | how notable the property is |
 | `eng` | gold | engineering / crafting notes |
 | `good` / `warn` | dark green / dark red | upsides / downsides |
+| `text` | gray | plain description or where an item comes from |
+| `data` | dark gray | measured values and data lines (Material Information) |
+| `hint` | green | how to use an item |
+| `value` | gold | a highlighted value inside a line (the Sawmill profile name) |
+| `removed` | red | removed or disabled item warnings (bold) |
+| `uncanny` / `strange` | dark purple / light purple | turns a mob into another; chorus and ender oddities |
+
+The rows from `text` down are the roles added 2026-11-17 (plan_rules_fixes.md section 12, V-43, V-44) for the colors
+the scripts picked by look; P3 moves the literal-color lines (`Text.gray(...)`, `col.dark_gray`, raw section-sign
+codes) onto them. `global.tooltips.code(role)` gives the section-sign code of a role for code that builds raw strings
+(the effect tooltip lines). The raw color keys (`col.dark_gray`, `col.lpurple`, ...) stay for the palette test item.
+
+**Palette test item.** With `[tooltips] paletteDemo = true` in `creativecommon-common.toml`, White Wool shows one line
+per role and White Concrete one per text color. Default `false`; the owner's config sets `true` for now (plan D16),
+and TODO `tooling/design-rules #4` sets it back to `false` before the next release that reaches players. Read when the
+client scripts load, so a change needs a client restart.
 
 **Sections** (entries / wildcard patterns):
 - Material Information (~213)
@@ -334,6 +350,11 @@ Hover items in JEI or the inventory. BlockRunner's Speed Multiplier line is off 
 - [ ] **TT-44 Pot soil speed:** hover Rich Soil and Rich Soil Farmland -> "Growth speed in Botany Pots +10%" and "Does
   not change yield"; Fertile Soil -> "+20%" and the same second line (CQ-SY-22, [botany_pots.md](botany_pots.md) 3).
 
+**Palette switch (2026-11-17)**
+- [ ] **TT-45 Palette switch:** with `[tooltips] paletteDemo = false` in `creativecommon-common.toml`, restart the client
+  and hover White Wool and White Concrete -> no palette lines. Set it to `true`, restart -> White Wool shows Normal to
+  Engineering, White Concrete Black to White, each in its color. (CQ-TT-04)
+
 - [ ] **TT-09 No dead patterns:** search `logs/latest.log` for `[addTooltipPattern]`. -> Every line reports more than 0 matches.
 
 ## 8. Tooltips To Add
@@ -401,3 +422,4 @@ Not a line but the tooltip box: large item tooltips should run off the bottom of
 - 2026-11-14: Rich Soil, Rich Soil Farmland and Fertile Soil get their Botany Pots growth speed and "Does not change
   yield" (crop yields wave 2). TT-44.
 - 2026-11-17: own lang values in American spelling (plan_rules_fixes.md 15b): Label "color the icon", Eraser "labeled item", the Oven and JEI baking heat lines "fueled", MCA "Gray Eyes"; jars rebuild in P5. Queue CQ-TT-01 to -03. Tooltip strings in scripts and Java follow in the P5 code pass.
+- 2026-11-17: tooltip roles `text`, `data`, `hint`, `value`, `removed`, `uncanny`, `strange` and `global.tooltips.code` in Common's palette (plan_rules_fixes.md section 12, V-43, V-44; lines move in P3); the palette test item behind `[tooltips] paletteDemo` (default false, owner's config true; section 9, V-45). TT-45.

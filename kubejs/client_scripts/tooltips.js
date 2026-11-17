@@ -11,8 +11,11 @@ var i = global.item;
 
 	// col: the palette, from global.tooltips (Creative Common)
 
-	//Test item
-	addTooltips(e,
+	// Test item: the palette on White Wool and White Concrete, only with [tooltips] paletteDemo = true in
+	// creativecommon-common.toml (default false; tooltips.md). A missing key reads as false.
+	var paletteCfg = global.NCH ? global.NCH.cfg({ paletteDemo: false }, 'creativecommon:TOOLTIPS') : null
+	var paletteDemo = paletteCfg ? paletteCfg.paletteDemo == true : false
+	if (paletteDemo) addTooltips(e,
 			[i.white_wool,['Normal', col.norm],['Uncommon', col.uncm],['Rare', col.rare],['Epic', col.epic],['Legendary', col.leg],['Good', col.good],['Warning', col.warn],['Engineering', col.eng]],
 			[i.white_concrete,
 	['Black', col.black],

@@ -1,0 +1,52 @@
+# Scratch queue rows AV (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: qrun.py run OUT feature_writeup/testing/rows/AV.qb RES [--section KEY] [--rows ID,...]
+
+@@section 1
+@@title SQ-AV No recipe unlocks, 2026-11-17 ([advancements.md](../advancements.md) 3.3, AV-06 to AV-08; [plan_rules_fixes.md](../plan_rules_fixes.md) section 12e, D23, TODO `conventions #27`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecommon
+@@sources development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/NoRecipeUnlockMixin.java development/creativeCommon/src/main/resources/creativecommon.mixins.json
+@@text
+@@text `NoRecipeUnlockMixin` makes ServerPlayer.awardRecipes and awardRecipesByKey do nothing. Needs the Creative Common jar of 2026-11-17 or later. The Oven, Keg and Copper Pot rows follow in P3 (their own award calls are deleted there).
+@@table
+## SQ-AV-01 | /recipe give learns nothing; the book stays empty
+@group A
+@commands Fake player: `/recipe give rbk1 *`, then `/recipe give rbk1 minecraft:furnace`, then `/recipe take rbk1 *`
+@pass both gives answer "No new recipes were learned"; the take answers "No recipes could be forgotten" (nothing was added); boot log has no mixin error naming NoRecipeUnlockMixin
+@fails mixin not applied (`bootexpect` on creativecommon.mixins.json, the SRG names m_7281_ / m_7902_), or Common older than 2026-11-17
+> pbot spawn rbk1 0 -60 0 minecraft:overworld survival
+sleep 2
+> recipe give rbk1 *
+waitlog No new recipes were learned 20
+> recipe give rbk1 minecraft:furnace
+sleep 2
+count No new recipes were learned >= 2
+> recipe take rbk1 *
+waitlog No recipes could be forgotten 20
+reject Unlocked \d+ recipes? for
+bootreject NoRecipeUnlockMixin.*(InvalidInjectionException|could not find|failed)
+> pbot remove rbk1
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+
+@@section 2
+@@title CQ-AV No recipe unlocks, client half, 2026-11-17 ([advancements.md](../advancements.md) AV-06, AV-07; same section)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecommon
+@@sources development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/mixin/NoRecipeUnlockMixin.java
+@@text
+@@table
+## CQ-AV-01 | furnace smelt: XP drops, recipe book gains nothing, no toast
+@group client
+@commands Fresh player (empty recipe book): smelt raw iron in a furnace, take the iron ingot by hand; open the recipe book
+@pass XP orbs or the XP bar rise as before; no "New Recipes Unlocked" toast; the recipe book's furnace tab shows nothing new (no red "new" marks)
+@fails toast shows: another unlock path (a mod calling ServerRecipeBook.addRecipes directly, grep its mixins); no XP: the mixin hit the XP pop (it must only cancel the award)
+@draft no driver step fills a furnace and takes its output slot by hand yet; owner LOOK
+## CQ-AV-02 | crafting table: crafting unlocks nothing
+@group client
+@commands Fresh player: craft sticks, a crafting table and a furnace by hand; open the recipe book
+@pass no toast; the recipe book shows no newly unlocked recipe after the crafts
+@fails as CQ-AV-01
+@draft no driver step crafts in a grid yet; owner LOOK

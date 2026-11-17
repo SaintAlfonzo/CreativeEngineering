@@ -70,7 +70,7 @@ same pass as the renames.
 | `AE-` | [armor_effects.md](../armor_effects.md) |  | briefs/potions_effects.md |  |
 | `AL-` | [alcohol.md](../alcohol.md) |  | briefs/alcohol_brewinport.md |  |
 | `AR-` | [archery.md](../archery.md) |  |  |  |
-| `AV-` | [advancements.md](../advancements.md) |  |  |  |
+| `AV-` | [advancements.md](../advancements.md) | CQ-AV (2), SQ-AV (1) |  |  |
 | `BBQ-` | [barbeques_delight.md](../barbeques_delight.md) | SQ-BBQ (8) | plan_meals_rolls_bbq.md |  |
 | `BM-` | [baby_mobs.md](../baby_mobs.md) | CQ-BM (7), SQ-BM (2) |  |  |
 | `BN-` | [bee_nests.md](../bee_nests.md) |  |  |  |
@@ -202,7 +202,7 @@ same pass as the renames.
 | `TS-` | [trashslot.md](../trashslot.md) |  | plan_1.0.3.md |  |
 | `TSK-` | [treated_sticks.md](../treated_sticks.md) | CQ-TSK (1), SQ-TSK (2) |  |  |
 | `TSY-` | [trade_sync.md](../trade_sync.md) | SQ-TSY (2) |  | new 2026-11-16, was TS- (collided with trashslot.md); matches SQ-TSY, CQ-TSY |
-| `TT-` | [tooltips.md](../tooltips.md) | CQ-TT (3) |  |  |
+| `TT-` | [tooltips.md](../tooltips.md) | CQ-TT (5) |  |  |
 | `TX-` | [plan_scratch_testing_expansion.md](../plan_scratch_testing_expansion.md) | CQ-TX (4), SQ-TX (18) |  | not in the README index yet |
 | `UD-` | [unusual_delight.md](../unusual_delight.md) |  |  |  |
 | `VB-` | [alcohol_part_b.md](../alcohol_part_b.md) |  | briefs/alcohol_vineryport.md, alcohol.md |  |
@@ -391,7 +391,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `SQ-DM-` | 4 | [veggies_delight.md](../veggies_delight.md) |  |
 | `SQ-DNR-E-` | 4 | [ends_delight.md](../ends_delight.md) |  |
 | `SQ-DNR-O-` | 5 | [ocean_delight.md](../ocean_delight.md) |  |
-| `SQ-DRK-` | 7 | [creative_delight_drinks.md](../creative_delight_drinks.md) |  |
+| `SQ-DRK-` | 8 | [creative_delight_drinks.md](../creative_delight_drinks.md) |  |
 | `SQ-DW-` | 3 | [structure_tuning.md](../structure_tuning.md) |  |
 | `SQ-EFB-` | 23 | [structure_tuning.md](../structure_tuning.md) |  |
 | `SQ-EFX-` | 14 | [effects.md](../effects.md) |  |

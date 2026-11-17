@@ -26,15 +26,8 @@ const REFRESH_TICKS = 40 // 2 sec — reapplied every tick, just a buffer agains
 // uses, so it's stable across mods without needing a mixin.
 const HORSE_ARMOR_SLOT = 401
 
-// patcherMod's CEConfig, for perf.mountEffectIntervalTicks (how often the horse pass below runs).
-// Null if the mod isn't on the classpath; the pass then uses MOUNT_INTERVAL_DEFAULT.
-const $ArmorFxCEConfig = (function () {
-	try {
-		return Java.loadClass('com.SaintAlfonzo.creativecommon.CommonConfig')
-	} catch (err) {
-		return null
-	}
-})()
+// [perf] mountEffectIntervalTicks in creativecommon-common.toml: how often the horse pass below runs. Read through
+// global.NCH.cfgValue; MOUNT_INTERVAL_DEFAULT when the value cannot be read.
 const MOUNT_INTERVAL_DEFAULT = 100
 
 // A refresh that extends an effect re-runs its attribute modifiers (LivingEntity.onEffectUpdated),
@@ -93,7 +86,7 @@ ServerEvents.tick(event => {
 	if (!AE || !Object.keys(AE.MOUNTS).length) return
 
 	var server = event.getServer()
-	var interval = $ArmorFxCEConfig ? $ArmorFxCEConfig.PERF.mountEffectIntervalTicks.get() : MOUNT_INTERVAL_DEFAULT
+	var interval = global.NCH.cfgValue('creativecommon:PERF.mountEffectIntervalTicks', MOUNT_INTERVAL_DEFAULT)
 	if (server.getTickCount() % interval !== 0) return
 
 	server.getAllLevels().forEach(level => {

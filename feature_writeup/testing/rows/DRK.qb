@@ -418,3 +418,28 @@ do {"wait": 40}
 do {"held": true}
 > gamemode creative
 look the inventory shot: 14 sprites (mug teas, bottle juices), none purple-black; tooltip READ lines give the names (Turnip Juice is the renamed `turnip_tea`; Sea Pickle Tea, Chorus Fruit Bubble Tea, Ice Berry Matcha and Chorus Tea are other mods' drinks renamed: hover them in JEI if wanted); the drinking shot shows the drink animation and `held` reads the emptied container afterwards
+
+@@section 3
+@@title SQ-DRK Sea pickle tag key unified, 2026-11-17 ([creative_delight_drinks.md](../creative_delight_drinks.md); [plan_rules_fixes.md](../plan_rules_fixes.md) section 4, V-23, TODO `conventions #14`)
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecommon creativedelight
+@@sources development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js kubejs/data/creativedelight/kubejs/creativedelight/drink_tags.js kubejs/data/creativedelight/kubejs/creativedelight/drinks.js
+@@text
+@@text The dead `i.t_sea_pickles = '#forge:sea_pickles'` line is gone; the key was already `#creativedelight:sea_pickles` (the later line won). Behavior must not change. Needs the Creative Common jar of 2026-11-17 or later.
+@@table
+## SQ-DRK-08 | sea pickle tea and skewers still read #creativedelight:sea_pickles
+@group A
+@commands `/cdevtest tag item creativedelight:sea_pickles`; `/cdevtest uses minecraft:sea_pickle`; `/cdevtest rdetail creativedelight:createmixing/sea_pickle_tea_on_sea_grape`
+@pass the tag holds the sea pickle (and Oceanic's sea pickle slices when that member is on); `uses` lists the sea pickle tea Kettle, mixing and pot recipes; rdetail shows the tag as the pickle ingredient
+@fails a script still reading `#forge:sea_pickles` (grep), or Common older than the dict edit
+> cdevtest tag item creativedelight:sea_pickles
+waitlog \[cdevtest\] verb=tag kind=item tag=creativedelight:sea_pickles n= 30
+expect verb=tag kind=item tag=creativedelight:sea_pickles n=[1-9]\d* ids=.*minecraft:sea_pickle
+> cdevtest uses minecraft:sea_pickle
+sleep 2
+expect verb=uses id=creativedelight:[a-z_]+/sea_pickle_tea_on_
+> cdevtest rdetail creativedelight:createmixing/sea_pickle_tea_on_sea_grape
+waitlog \[cdevtest\] verb=rdetail text= 30
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
+look rdetail: the pickle ingredient is #creativedelight:sea_pickles (three of them), not #forge:sea_pickles

@@ -59,6 +59,7 @@ SCRIPT_TREES = ['development/', 'kubejs/data/', 'kubejs/assets/', 'kubejs/startu
 # name -> (command, inputs, estimate s, full only)
 LINTS = {
     'id_owner_lint': (['python3', 'tools/id_owner_lint.py'], ['development/', 'kubejs/data/', 'kubejs/assets/'], 7, False),
+    'dict_lint': (['python3', 'tools/dict_lint.py'], ['development/creativeCommon/', 'tools/dict_lint.py'], 1, False),
     'guard_check': (['python3', 'tools/guard_check.py'], SCRIPT_TREES + ['mods/'], 7, False),
     'optional_ref_audit': (['python3', 'tools/optional_ref_audit.py'], SCRIPT_TREES, 3, False),
     'changelog_lint': (['python3', 'tools/changelog_lint.py'], ['kubejs/assets/creativecommon/changelog/',
