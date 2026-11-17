@@ -22,6 +22,7 @@ public class RhinoRun {
 
 	public static class Host {
 		public String read(String p) throws Exception { return Files.readString(root.resolve(p)); }
+		public String readOrNull(String p) throws Exception { Path f = root.resolve(p); return Files.exists(f) ? Files.readString(f) : null; }
 		public void writeText(String p, String t) { report = t; }
 		public void stage(String j) { staged = j; }
 		public void stageBiomeFactors(String j) { biomeFactors = j; }
@@ -52,7 +53,8 @@ public class RhinoRun {
 		ScriptableObject.putProperty(scope, "__HOST", Context.javaToJS(cx, new Host(), scope), cx);
 		String prelude = String.join("\n",
 			"var __cb = null, __tagsCb = null, __biomeTagsCb = null;",
-			"var global = { tags: { add: function (e, t, ids) { [].concat(ids).forEach(function (id) { e.add(t, id) }) } } };",
+			"var global = { tags: { add: function (e, t, ids) { [].concat(ids).forEach(function (id) { e.add(t, id) }) } },",
+			"  genText: function (p) { return __HOST.readOrNull(String(p)) } };",
 			"var console = { info: function (m) { __HOST.log('', String(m)) }, log: function (m) { __HOST.log('', String(m)) },",
 			"  warn: function (m) { __HOST.log('WARN ', String(m)) }, error: function (m) { __HOST.log('ERROR ', String(m)) } };",
 			"var JsonIO = { readString: function (p) { return __HOST.read(p) } };",
@@ -63,11 +65,13 @@ public class RhinoRun {
 			"  if (n.indexOf('MetaStructure') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n); return {} }",
 			"  if (n.indexOf('PlacementPriority') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n); return { stage: function (j) { __HOST.stagePriority(j) } } }",
 			"  if (n.indexOf('MetaSlots') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n); return { stageReplacements: function (j) { __HOST.stageReplacements(j) } } }",
+			"  if (n.indexOf('StructurePresence') >= 0) return { capture: function () { return true }, release: function () {},",
+			"    structure: function () { return true }, placementType: function () { return true } };",
 			"  if (n.indexOf('WorldgenConfig') >= 0) { if (__HOST.noPatcher()) throw new Error('Class not found ' + n);",
 			"    return { structureDensity: function () { return __HOST.density() }, structureGroupsEnabled: function () { return __HOST.groups() },",
 			"      metaStructuresEnabled: function () { return true }, structureReplacementsEnabled: function () { return true },",
 			"      testOverrides: function () { return __HOST.testOverrides() } } }",
-			"  return { writeText: function (p, t) { __HOST.writeText(p, t) } } } };",
+			"  return { writeText: function (p, t) { __HOST.writeText(p, t) }, readText: function (p) { return __HOST.readOrNull(String(p)) } } } };",
 			"var ServerEvents = { highPriorityData: function (fn) { __cb = fn }, tags: function (t, fn) { if (t == 'worldgen/structure') __tagsCb = fn; if (t == 'worldgen/biome') __biomeTagsCb = fn } };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js")), "structure_overrides.js", 1, null);

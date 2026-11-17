@@ -1224,6 +1224,7 @@ global.NCH = {
 	// item's id), categories = which pot crops grow on it, growthModifier multiplies pot growth speed (1 = none).
 	botanySoil(input, categories, growthModifier, e, idOverride, display) {
 		if (!e) throw new Error('botanySoil called without event object!')
+		if (!global.has('botanypots')) return  // optional mod (guard_check)
 		var idSuffix = idOverride ?? global.NCH.toId(input, input, 'botany_soil')
 		var ctx = 'botanySoil ' + idSuffix
 		var id = global.NCH._resolveIdCount(input).id

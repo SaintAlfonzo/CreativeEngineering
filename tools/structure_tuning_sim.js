@@ -6,11 +6,11 @@
 //   node tools/structure_tuning_sim.js report.md out/   also write every structure_set json it would add,
 //                                                       plus out/frequencies.json (what patcherMod would roll)
 //                                                       and out/rules.json + out/fits.json (the biome rules and fits it would get)
-//   --no-patchermod                                     pretend the jar lacks StructureFrequencies (and StructureBiomeRules/Fits)
-//   --density=X                                         CEConfig [worldgen.debug] structureDensity
-//   --groups-off                                        CEConfig [worldgen.systems] structureGroups = false
-//   --no-meta                                           pretend the jar lacks MetaStructure (meta structures left out)
-//   --test-overrides[=FILE]                             CEConfig [worldgen.debug] testOverrides = true (FILE instead of
+//   --density=X                                         WorldgenConfig [worldgen.debug] structureDensity
+//   --groups-off                                        WorldgenConfig [worldgen.systems] structureGroups = false
+//   --no-meta                                           WorldgenConfig [worldgen.systems] metaStructures = false (meta
+//                                                       structures left out)
+//   --test-overrides[=FILE]                             WorldgenConfig [worldgen.debug] testOverrides = true (FILE instead of
 //                                                       structure_test_overrides.json, e.g. a bad one for the refusal test)
 // Also runs the script's ServerEvents.tags handlers and prints the structure tags (meta/*, biome fits) and the biome
 // tags (biome fits) it adds.
@@ -21,7 +21,6 @@ const ROOT = path.resolve(__dirname, '..') + '/'
 const SCRIPT = ROOT + 'kubejs/data/creativeworldgen/kubejs/worldgen/structure_overrides.js'
 const REAL_REPORT = 'kubejs/generation_scripts/worldgen/structure_tag_report.md'
 const argv = process.argv.slice(2)
-const noPatcher = argv.includes('--no-patchermod')
 const densityArg = argv.find(a => a.startsWith('--density='))
 const density = densityArg ? Number(densityArg.split('=')[1]) : 1
 const groupsOff = argv.includes('--groups-off')
@@ -44,15 +43,19 @@ let priority = null
 const logs = []
 const log = level => (...a) => logs.push(level + a.join(' '))
 const classes = {
-  'com.SaintAlfonzo.creativecommon.util.WorldgenFiles': { writeText: (p, text) => { if (p === REAL_REPORT) report = text } },
+  'com.SaintAlfonzo.creativecommon.util.WorldgenFiles': { writeText: (p, text) => { if (p === REAL_REPORT) report = text }, readText: p => readText(p) },
   'com.SaintAlfonzo.creativeworldgen.worldgen.StructureFrequencies': { stage: json => { staged = JSON.parse(json) }, stageBiomeFactors: json => { biomeFactors = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeworldgen.worldgen.StructureBiomeRules': { stage: json => { rules = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeworldgen.worldgen.StructureBiomeFits': { stage: json => { fits = JSON.parse(json) } },
-  'com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig': { structureDensity: () => density, structureGroupsEnabled: () => !groupsOff, metaStructuresEnabled: () => true, structureReplacementsEnabled: () => true, testOverrides: () => !!testArg },
+  'com.SaintAlfonzo.creativeworldgen.worldgen.WorldgenConfig': { structureDensity: () => density, structureGroupsEnabled: () => !groupsOff, metaStructuresEnabled: () => !noMeta, structureReplacementsEnabled: () => true, testOverrides: () => !!testArg },
   'com.SaintAlfonzo.creativeworldgen.worldgen.MetaStructure': {},
   'com.SaintAlfonzo.creativeworldgen.worldgen.PlacementPriority': { stage: json => { priority = JSON.parse(json) } },
   'com.SaintAlfonzo.creativeworldgen.worldgen.MetaSlots': { stageReplacements: json => { replacements = JSON.parse(json) } },
+  // the structure gate: the sim models the full pack, so every structure and placement type counts as loaded
+  'com.SaintAlfonzo.creativeworldgen.worldgen.StructurePresence': { capture: () => true, release: () => {}, structure: () => true, placementType: () => true },
 }
+// global.genText (Creative Common gen_data.js): the instance file, or null when missing
+const readText = p => { try { return fs.readFileSync(p === TEST_PATH && testFile ? testFile : ROOT + p, 'utf8') } catch (e) { if (e.code === 'ENOENT') return null; throw e } }
 const addedTags = {}
 const addedBiomeTags = {}
 const sandbox = {
@@ -60,14 +63,12 @@ const sandbox = {
   JsonIO: { readString: p => fs.readFileSync(p === TEST_PATH && testFile ? testFile : ROOT + p, 'utf8') },
   Java: {
     loadClass: name => {
-      if (noPatcher && /StructureFrequencies|StructureBiomeRules|StructureBiomeFits|MetaStructure|MetaSlots|PlacementPriority/.test(name)) throw new Error("Class '" + name + "' is not found")
-      if (noMeta && /MetaStructure|MetaSlots/.test(name)) throw new Error("Class '" + name + "' is not found")
       if (!classes[name]) throw new Error('sim has no stub for ' + name)
       return classes[name]
     },
   },
   ServerEvents: { highPriorityData: fn => { handler = fn }, tags: (type, fn) => { if (type === 'worldgen/structure') tagsHandler = fn; if (type === 'worldgen/biome') biomeTagsHandler = fn } },
-  global: { tags: { add: (e, tag, ids) => [].concat(ids).forEach(id => e.add(tag, id)) } },
+  global: { tags: { add: (e, tag, ids) => [].concat(ids).forEach(id => e.add(tag, id)) }, genText: p => readText(String(p)) },
 }
 new Function(...Object.keys(sandbox), fs.readFileSync(SCRIPT, 'utf8'))(...Object.values(sandbox))
 

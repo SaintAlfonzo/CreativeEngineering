@@ -1,32 +1,15 @@
 #!/usr/bin/env bash
-# GameTests for the remainder buffer (feature_writeup/remainder_buffer.md section 6): pot, kettle and oven in a dev
-# GameTest server with Farmer's Delight 1.2.4 and Farmer's Respite 2.0. Fetches the two jars from the URLs in
-# pack/manifest.json the first time. Needs Java 17 (JAVA_HOME or the root gradle.properties' org.gradle.java.home).
-# The first run sets up ForgeGradle (several minutes); a run takes about 1-3 minutes after that.
+# Headless checks of the remainder buffer routing (feature_writeup/remainder_buffer.md 3.8 and 6): LeftoverPlan and
+# OverflowPull, the shared station logic (development/shared/stations, compiled into Creative Delight as
+# com.SaintAlfonzo.creativedelight.shared). Build first: ./gradlew :creativeCommon:compileJava :creativeDelight:compileJava --offline
+# No game needed. The pot / kettle / oven GameTests (server boot, stale since the carve) are tools/gametest_remainder_buffer.sh.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
-H="$ROOT/tools/remainder_buffer_test"
-mkdir -p "$H/libs"
-python3 - "$ROOT/pack/manifest.json" "$H/libs" <<'PY'
-import json, os, subprocess, sys, urllib.parse
-manifest, libs = sys.argv[1], sys.argv[2]
-want = {'farmersdelight': 'farmersdelight-1.2.4.jar', 'farmersrespite': 'farmersrespite-2.0.jar'}
-for mod in json.load(open(manifest))['mods']:
-    name = want.get(mod.get('modId'))
-    if not name or os.path.exists(os.path.join(libs, name)):
-        continue
-    src = mod['source']
-    if src.get('modrinth', {}).get('download'):
-        url = src['modrinth']['download']
-    else:
-        f = src['curseforge']['fileId']
-        url = f"https://edge.forgecdn.net/files/{f // 1000}/{f % 1000}/{urllib.parse.quote(mod['file'])}"
-    subprocess.run(['curl', '-sSfL', '-o', os.path.join(libs, name), url], check=True)
-PY
-JAVA_ARG=()
-if [ -n "${JAVA_HOME:-}" ]; then JAVA_ARG=("-Dorg.gradle.java.home=$JAVA_HOME"); fi
-LOG="$H/run/gametest.log"
-mkdir -p "$H/run"
-"$ROOT/gradlew" -p "$H" "${JAVA_ARG[@]}" runGameTestServer --console=plain > "$LOG" 2>&1 || true
-grep -E "failed!|tests passed|required tests failed|BUILD FAILED|error:" "$LOG" | sed 's/^\[[^]]*\] \[[^]]*\] \[[^]]*\]: //'
-grep -q "All [0-9]* required tests passed" "$LOG"
+T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
+L="$HOME/.local/share/atlauncher/libraries"
+C="$HOME/.gradle/caches/modules-2/files-2.1"
+cd "$ROOT"
+source "$ROOT/tools/java_test_cp.sh"
+CP="$CP:$ROOT/development/creativeDelight/build/classes/java/main"
+javac -proc:none -nowarn -cp "$CP" -d "$T" tools/remainder_buffer_test/headless/RemainderLogicTest.java
+java -cp "$T:$CP" RemainderLogicTest 2>&1 | grep -E '^(ok|FAIL|ALL|[0-9]+ FAILED)|Exception|Error'

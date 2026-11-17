@@ -66,5 +66,18 @@
     "additionalDirectories": [
       "/home/liam/.claude/plans"
     ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR\"/tools/check_stop_hook.py",
+            "timeout": 180
+          }
+        ]
+      }
+    ]
   }
 }

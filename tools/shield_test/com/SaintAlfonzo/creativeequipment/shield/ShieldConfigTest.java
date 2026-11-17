@@ -1,8 +1,9 @@
-package com.SaintAlfonzo.creativeengineering.shield;
+package com.SaintAlfonzo.creativeequipment.shield;
 
 import java.util.List;
 
-import com.SaintAlfonzo.creativeengineering.CEConfig;
+import com.SaintAlfonzo.creativecommon.shield.EffectTickContext;
+import com.SaintAlfonzo.creativeequipment.CEQConfig;
 import com.electronwill.nightconfig.core.CommentedConfig;
 
 import net.minecraft.SharedConstants;
@@ -27,8 +28,8 @@ public class ShieldConfigTest {
 
     public static void main(String[] args) throws Exception {
         CommentedConfig cfg = CommentedConfig.inMemory();
-        CEConfig.COMMON_SPEC.correct(cfg);
-        CEConfig.COMMON_SPEC.setConfig(cfg);
+        CEQConfig.SPEC.correct(cfg);
+        CEQConfig.SPEC.setConfig(cfg);
 
         for (ShieldTier t : ShieldTier.values()) {
             boolean burn = t.ordinal() >= ShieldTier.NETHERITE.ordinal();
@@ -40,12 +41,12 @@ public class ShieldConfigTest {
                 && ShieldTier.DIAMOND.ordinal() < ShieldTier.NETHERITE.ordinal(), "gold and diamond rank below netherite");
 
         cfg.set(List.of("shields", "copper", "blocksBurnTicks"), true);
-        CEConfig.COMMON_SPEC.afterReload(); // what Forge's file watcher does after an edit
+        CEQConfig.SPEC.afterReload(); // what Forge's file watcher does after an edit
         check(ShieldConfig.blocksTicks(ShieldTier.COPPER, ShieldTickGate.BURN), "blocksBurnTicks is live (copper set to true)");
         cfg.set(List.of("shields", "copper", "blocksBurnTicks"), false);
 
         check(ShieldConfig.disableCooldownTicks() == 20, "disableCooldownTicks default 20");
-        String fx = CEConfig.SHIELDS.unblockableEffectTicks.get();
+        String fx = CEQConfig.SHIELDS.unblockableEffectTicks.get();
         for (String id : new String[] {"minecraft:poison", "minecraft:wither", "everythingcopper:copper_poisoning",
                 "alexsmobs:debilitating_sting", "alexsmobs:exsanguination", "alexsmobs:ender_flu", "endersdelight:phasing"}) {
             check(fx.contains(id), "unblockableEffectTicks default lists " + id);

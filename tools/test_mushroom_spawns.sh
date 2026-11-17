@@ -7,7 +7,7 @@
 #      colonies are no longer wild_crops.json rules
 #   3. placed features: every feature a rule names is a pack JSON with a rarity_filter; surface ones use a heightmap,
 #      cave ones search a floor below sea level, 13+ blocks under the surface, on air
-#   4. Rhino with CEConfig mushroomSpawns off: no tags, no files
+#   4. Rhino with WorldgenConfig mushroomSpawns off: no tags, no files
 #   5. Rhino with Farmer's Delight missing: its modifiers are not switched off, nothing else changes
 # Needs the ATLauncher library folder (Rhino's gson). No game needed.
 set -euo pipefail
@@ -36,7 +36,7 @@ tags = json.load(open(os.path.join(sys.argv[1], 'tags.json')))
 bad = 0
 for key, rule in rules.items():
     want = g.resolve_crop(traits, rule)
-    got = tags.get('creativeengineering:mushroom_spawns/' + key, [])
+    got = tags.get('creativeworldgen:mushroom_spawns/' + key, [])
     if want != got:
         bad += 1; print('MISMATCH', key, sorted(set(want) ^ set(got)))
     if rule.get('mode') == 'cave' and not {b for b in got if traits[b] & {'ocean', 'cave'}}:
@@ -50,7 +50,7 @@ ok = len(adds) == sum(1 for c in rules.values() if c.get('features')) and len(no
 for d in adds:
     rule = rules[d['biomes'].split('/', 1)[1]]
     step = 'underground_decoration' if rule.get('mode') == 'cave' else 'vegetal_decoration'
-    ok &= d['step'] == step and d['biomes'].startswith('#creativeengineering:mushroom_spawns/') and d['features'] == rule['features']
+    ok &= d['step'] == step and d['biomes'].startswith('#creativeworldgen:mushroom_spawns/') and d['features'] == rule['features']
 moved = [k for k, c in cfg['crops'].items() if not c.get('_mushroom') and 'mushroom_colon' in json.dumps(c)]
 print(f'{len(rules)} rule tags match the generator' if not bad else f'{bad} tags differ')
 print(f'{len(adds)} add modifiers, {len(nones)} forge:none, {len(rem)} remove modifier: ' + ('as expected' if ok else 'UNEXPECTED'))
@@ -60,7 +60,7 @@ PY
 
 echo "== 3. placed features"
 python3 - <<'PY'
-import json, sys
+import json, sys, glob
 sys.path.insert(0, 'tools')
 import gen_crop_worldgen_table as g
 cfg, traits = g.load_wild_crops()
@@ -70,10 +70,12 @@ for key, rule in cfg['crops'].items():
         continue
     for fid in rule.get('features', []):
         ns, path = fid.split(':', 1)
-        try:
-            d = json.load(open(f'kubejs/data/{ns}/worldgen/placed_feature/{path}.json'))
-        except FileNotFoundError:
+        # since the split the pack's json lives in Creative Worldgen's gated packs (packs/<modid>/data/...)
+        hits = glob.glob(f'development/creativeWorldgen/src/main/resources/packs/*/data/{ns}/worldgen/placed_feature/{path}.json') \
+            + glob.glob(f'kubejs/data/{ns}/worldgen/placed_feature/{path}.json')
+        if not hits:
             bad += 1; print('no pack JSON for', fid); continue
+        d = json.load(open(hits[0]))
         n += 1
         types = [m['type'] for m in d['placement']]
         ok = 'minecraft:rarity_filter' in types and types[-1] == 'minecraft:biome'

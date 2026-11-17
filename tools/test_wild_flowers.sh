@@ -5,7 +5,7 @@
 #   2. Rhino: kubejs/data/creativeworldgen/kubejs/worldgen/wild_flowers.js in the pack's Rhino fork; every biome tag must equal
 #      the generator's plan, every file must be valid JSON, every modifier must point at a filled tag and a
 #      feature that exists, and each Flower Patch rewrite must equal the generator's conversion
-#   3. Rhino with CEConfig wildFlowers off: no tags, no files
+#   3. Rhino with WorldgenConfig wildFlowers off: no tags, no files
 #   4. Rhino with Botania missing: its palette features and modifier skipped, nothing else changes
 # Needs the ATLauncher library folder (Rhino's gson). No game needed.
 set -euo pipefail
@@ -44,14 +44,14 @@ bad = []
 # tags: the generator's plan
 want = {}
 for i, (pal, key, biomes) in enumerate(f.botania_plan(cfg, traits)):
-    want[f'creativeengineering:wild_flowers/botania/{i}'] = biomes
+    want[f'creativeworldgen:wild_flowers/botania/{i}'] = biomes
 for key in cfg['flowers']:
     for t, biomes in f.entry_plan(cfg, traits, key).items():
-        want[f'creativeengineering:wild_flowers/{key}/{t}'] = biomes
+        want[f'creativeworldgen:wild_flowers/{key}/{t}'] = biomes
 for fid, spec in cfg.get('existing', {}).items():
     bs = f.removal_biomes(spec, traits)
     if bs and float(spec.get('scale', 1)) > 0:
-        want['creativeengineering:wild_flowers/remove/' + fid.replace(':', '/')] = bs
+        want['creativeworldgen:wild_flowers/remove/' + fid.replace(':', '/')] = bs
 for t in sorted(set(want) | set(tags)):
     if sorted(want.get(t, [])) != sorted(tags.get(t, [])):
         bad.append(f'tag {t}: ' + str(sorted(set(want.get(t, [])) ^ set(tags.get(t, [])))))

@@ -125,6 +125,7 @@ ServerEvents.recipes(e => {
 
 		// Juices on the Apple Press (1 fruit + glass bottle) and wines in the Fermentation Barrel (3 fruit + 15 juice + wine
 		// bottle), N22. The other drinks are Brewin' keg recipes, as upstream.
+		// G5 begin: fruit tables handed only to NCH (absent fruits skipped); split() reads Hearth and Harvest's own ids
 		;[[i.blueberry, i.blueberry_juice], [i.t_fruits_raspberries, i.raspberry_juice], [i.cherry, i.cherry_juice],
 			[i.sweet_berries, i.sweet_berry_juice], [i.glow_berries, i.glow_berry_juice]].forEach(p => {
 			R.vineryPressing(p[1], p[0], i.glass_bottle, e, p[1].split(':')[1])
@@ -134,6 +135,7 @@ ServerEvents.recipes(e => {
 			[i.glow_berries, i.glow_berry_wine, WHITE], [i.melon, i.melon_wine, WHITE], [i.lemon, i.lemon_wine, WHITE]].forEach(p => {
 			R.vineryFermenting(p[1], [p[0], p[0], p[0]], p[2], e, p[1].split(':')[1])
 		})
+		// G5 end
 		R.bncFermenting(i.root_beer, [i.hanging_roots, i.hanging_roots, i.sugar], f.water, e, 'root_beer')
 		R.bncFermenting(i.moonshine, [i.cornmeal, i.cornmeal, i.sugar], f.water, e, 'moonshine')
 
@@ -155,6 +157,7 @@ ServerEvents.recipes(e => {
 
 		// Fluid routes (step 9). Bottle both ways on Create (Spout and Item Drain, 250 mB); juices also from Create compacting
 		// (4 fruit to 500 mB, upstream). No Create mixing of wines (3.1: skips the fermentation).
+		// G5 begin: as above
 		;[[i.blueberry_juice, f.blueberry_juice, i.blueberry], [i.raspberry_juice, f.raspberry_juice, i.t_fruits_raspberries],
 			[i.cherry_juice, f.cherry_juice, i.cherry], [i.sweet_berry_juice, f.sweet_berry_juice, i.sweet_berries],
 			[i.glow_berry_juice, f.glow_berry_juice, i.glow_berries]].forEach(p => {
@@ -162,6 +165,7 @@ ServerEvents.recipes(e => {
 			R.createBottle(p[0], p[1], e, id)
 			R.createCompacting(Fluid.of(p[1], 500), [p[2], p[2], p[2], p[2]], e, id + '_compacting')  // not F.slot: only the cooking helpers read it
 		})
+		// G5 end
 		;[[i.blueberry_wine, f.blueberry_wine], [i.raspberry_wine, f.raspberry_wine], [i.sweet_berry_wine, f.sweet_berry_wine],
 			[i.glow_berry_wine, f.glow_berry_wine], [i.melon_wine, f.melon_wine], [i.lemon_wine, f.lemon_wine],
 			[i.root_beer, f.root_beer], [i.moonshine, f.moonshine], [i.goat_milk_bottle, f.goat_milk], [i.brine_bottle, f.brine]].forEach(p => {

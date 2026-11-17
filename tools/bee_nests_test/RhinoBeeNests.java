@@ -22,6 +22,9 @@ public class RhinoBeeNests {
 		public String read(String p) throws Exception {
 			return Files.readString(config != null && p.endsWith("bee_nests.json") ? Paths.get(config) : root.resolve(p));
 		}
+		public String readOrNull(String p) throws Exception {
+			try { return read(p); } catch (java.nio.file.NoSuchFileException e) { return null; }
+		}
 		public void tag(String t, String id) { tags.computeIfAbsent(t, k -> new ArrayList<>()).add(id); }
 		public void add(String p, String t) { files.put(p, t); }
 		public void log(String level, String msg) { logs.add(level + msg); }
@@ -49,15 +52,20 @@ public class RhinoBeeNests {
 			"var JsonIO = { readString: function (p) { return __HOST.read(p) } };",
 			"var Platform = { isLoaded: function (ns) { return __HOST.loaded(ns) } };",
 			"var Java = { loadClass: function (n) {",
+			"  if (n.indexOf('WorldgenFiles') >= 0) return { readText: function (p) { return __HOST.readOrNull(p) } };",
 			"  if (n.indexOf('WorldgenConfig') >= 0) return { beeNestsEnabled: function () { return __HOST.enabled() } };",
 			"  if (n.indexOf('BeeNests') >= 0) { if (!__HOST.java()) throw new Error('no class ' + n); return { summary: function () { return 'stub' } } }",
 			"  return {} } };",
 			"var ServerEvents = { tags: function (type, fn) { if (type === 'worldgen/biome') __tags = fn },",
 			"  highPriorityData: function (fn) { __data = fn }, loaded: function (fn) {} };");
 		cx.evaluateString(scope, prelude, "prelude", 1, null);
+		// Creative Common's startup helpers in load order: has.js (global.has, used by tag_helper's absent-mod filter),
+		// gen_data.js (global.genText; WorldgenFiles stubbed to read the instance file)
+		cx.evaluateString(scope, Files.readString(root.resolve("development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/has.js")), "has.js", 1, null);
+		cx.evaluateString(scope, Files.readString(root.resolve("development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/gen_data.js")), "gen_data.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js")), "tag_helper.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("kubejs/data/creativeworldgen/kubejs/worldgen/bee_nests.js")), "bee_nests.js", 1, null);
-		cx.evaluateString(scope, "__tags({ add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);
+		cx.evaluateString(scope, "__tags({ getElementIds: function () { return { toArray: function () { return [] } } }, add: function (t, id) { __HOST.tag(String(t), String(id)) } });", "fire_tags", 1, null);
 		cx.evaluateString(scope, "__data({ add: function (p, t) { __HOST.add(String(p), String(t)) } });", "fire_data", 1, null);
 		Path out = Paths.get(a[1]);
 		Files.createDirectories(out.resolve("data"));

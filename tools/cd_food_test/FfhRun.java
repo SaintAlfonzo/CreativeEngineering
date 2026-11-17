@@ -7,6 +7,8 @@ public class FfhRun {
 		Context cx = Context.enter();
 		ScriptableObject scope = cx.initStandardObjects();
 		cx.evaluateString(scope, Files.readString(Paths.get(a[1])), "prelude.js", 1, null);
+		// global.has (Common's first startup file, priority 2000); prelude's Platform.isLoaded answers true
+		cx.evaluateString(scope, Files.readString(root.resolve("development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/func/has.js")), "has.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/item_dict.js")), "item_dict.js", 1, null);
 		cx.evaluateString(scope, Files.readString(root.resolve("development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib/fluid_dict.js")), "fluid_dict.js", 1, null);
 		// food dict (global.food), so scripts that read food keys run too (Veggies pilot, framework #4)

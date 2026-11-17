@@ -7,8 +7,7 @@
 #   3. Rhino, fixture (tools/bee_nests_test/rules_fixture.json): the same parity on every rule shape; each bad rule
 #      is rejected with an error, the rule matching no biome is skipped
 #   4. switch off: no tags, no files
-#   5. old jar (no BeeNests class): no bee_nests modifier (its type would be unknown), trees still written, error logged
-#   6. a mod missing (vinery, fixture): its tree rule writes no feature, nothing else changes
+#   5. a mod missing (vinery, fixture): its tree rule writes no feature, nothing else changes
 # Needs the ATLauncher library folder (Rhino's gson). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -42,22 +41,22 @@ files = {os.path.relpath(p, os.path.join(out, 'data')): json.load(open(p))
          for p in glob.glob(os.path.join(out, 'data/**/*.json'), recursive=True)}
 bad = []
 for r, bs in rules:
-    got = tags.get('creativeengineering:bee_nests/' + r['id'], [])
+    got = tags.get('creativeworldgen:bee_nests/' + r['id'], [])
     if bs != got:
         bad.append(f"tag {r['id']}: {sorted(set(bs) ^ set(got))}")
-want_mod = [{k: v for k, v in (('id', r['id']), ('biomes', '#creativeengineering:bee_nests/' + r['id']),
+want_mod = [{k: v for k, v in (('id', r['id']), ('biomes', '#creativeworldgen:bee_nests/' + r['id']),
              ('chance', r.get('chance')), ('scale', r.get('scale'))) if v is not None}
             for r, _ in rules if r.get('chance') is not None or r.get('scale') is not None]
-mod = files.pop('creativeengineering/forge/biome_modifier/bee_nests.json', None)
-if want_mod and (not mod or mod['type'] != 'creativeengineering:bee_nests' or mod['rules'] != want_mod):
+mod = files.pop('creativeworldgen/forge/biome_modifier/bee_nests.json', None)
+if want_mod and (not mod or mod['type'] != 'creativeworldgen:bee_nests' or mod['rules'] != want_mod):
     bad.append(f'bee_nests modifier: want {want_mod}, got {mod}')
 if not want_mod and mod:
     bad.append('bee_nests modifier written with no chance/scale rules')
 missing = set(os.environ.get('MISSING', '').split()) - {''}
 for r, _ in rules:
     t = r.get('trees')
-    pf = files.pop(f"creativeengineering/worldgen/placed_feature/bee_nests/{r['id']}.json", None)
-    am = files.pop(f"creativeengineering/forge/biome_modifier/bee_nests/{r['id']}.json", None)
+    pf = files.pop(f"creativeworldgen/worldgen/placed_feature/bee_nests/{r['id']}.json", None)
+    am = files.pop(f"creativeworldgen/forge/biome_modifier/bee_nests/{r['id']}.json", None)
     if not t or t['feature'].split(':')[0] in missing:
         if pf or am:
             bad.append(f"{r['id']}: tree files written but should not be")
@@ -71,8 +70,8 @@ for r, _ in rules:
     sap = t.get('sapling', b.DEFAULT_SAPLING)
     if pf['placement'][-1]['predicate']['state']['Name'] != sap:
         bad.append(f"{r['id']}: sapling check is not {sap}")
-    if am != {'type': 'forge:add_features', 'biomes': '#creativeengineering:bee_nests/' + r['id'],
-              'features': 'creativeengineering:bee_nests/' + r['id'], 'step': 'vegetal_decoration'}:
+    if am != {'type': 'forge:add_features', 'biomes': '#creativeworldgen:bee_nests/' + r['id'],
+              'features': 'creativeworldgen:bee_nests/' + r['id'], 'step': 'vegetal_decoration'}:
         bad.append(f"{r['id']}: add modifier {am}")
 if files:
     bad.append(f'unexpected files {sorted(files)}')
@@ -101,13 +100,10 @@ parity "$T/fix" "$FIX" > /dev/null
 echo "== 4. switch off"
 run "$T/off" off | tail -1 | grep -q '^0 tags, 0 data files' && echo "off: nothing applied"
 
-echo "== 5. old jar"
-run "$T/nojava" nojava "config=$FIX" > "$T/nojava.log"
-grep -q 'ERROR.*old jar' "$T/nojava.log" && [ ! -e "$T/nojava/data/creativeengineering/forge/biome_modifier/bee_nests.json" ] \
-  && ls "$T/nojava/data/creativeengineering/worldgen/placed_feature/bee_nests/" | grep -q meadow_trees \
-  && echo "old jar: chance/scale modifier left out, trees written, error logged"
+# The old-jar case (no BeeNests class) was removed 2026-11-16: bee_nests.js loads the class at the top since
+# 2026-10-28 (463d2342) and ships in the same Creative Worldgen jar as the class, so the case cannot happen.
 
-echo "== 6. a mod missing"
+echo "== 5. a mod missing"
 run "$T/miss" missing=vinery "config=$FIX" > "$T/miss.log"
 grep -q 'apple_bees: mod not loaded, trees skipped' "$T/miss.log" && MISSING=vinery parity "$T/miss" "$FIX" > /dev/null \
   && echo "missing mod: its tree feature skipped, everything else unchanged"

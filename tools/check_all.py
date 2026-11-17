@@ -1,0 +1,280 @@
+#!/usr/bin/env python3
+"""One offline check of the pack (plan_process_overhaul.md P1.1): every tools/test_*.sh plus the lints, in parallel,
+each with a timeout. One line per check:
+
+    PASS|FAIL|KNOWN|SKIP  name  seconds  first-error
+
+Exit status 0 only when nothing FAILed (KNOWN and SKIP do not fail the run).
+
+Usage: python3 tools/check_all.py [--fast] [--changed] [--full] [--only name,...] [-j N] [-v]
+  --fast     skip checks that take over 15 s on their own (SLOW below)
+  --changed  run only checks whose inputs changed since the last commit (git diff HEAD plus untracked files)
+  --full     also run the slow report checks (texture_provenance, design_rules_audit); the release gate uses it
+  --only     run just these checks
+  -v         print the output tail of every FAILed or KNOWN check
+  --list     print the checks and their inputs, run nothing
+
+Inputs of a test: the paths its script names (tools/..., development/<mod>/..., kubejs/...), with
+development/<mod>/build mapped to development/<mod>, plus the script itself. Any change to check_all.py,
+check_known.tsv or java_test_cp.sh selects every check.
+
+Class-based tests read development/<mod>/build/classes. A mod whose sources are newer than its classes is compiled
+first, in one `./gradlew :<mod>:compileJava ... --offline` call; inside Gradle (CE_IN_GRADLE=1, the install gate) a nested
+Gradle run would deadlock on the build lock, so those tests SKIP with "stale classes" instead (the gate compiles the
+installing project before it runs the checks). --no-compile does the same outside Gradle.
+
+KNOWN failures: tools/check_known.tsv (check <TAB> regex <TAB> reason <TAB> yyyy-mm-dd). A FAILed check whose output
+matches the regex counts as KNOWN. Entries older than 30 days print a warning, so accepted failures get revisited.
+
+Gates that call this: installToMods (--fast --changed, build-logic), build_deploy.py stage (--full), the Claude Code
+Stop hook (--fast --changed, report only).
+"""
+import argparse
+import concurrent.futures as cf
+import datetime as dt
+import json
+import os
+import re
+import subprocess
+import sys
+import time
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+TOOLS = ROOT / 'tools'
+KNOWN_FILE = TOOLS / 'check_known.tsv'
+TIMES_FILE = ROOT / 'jar_archive' / 'check_times.json'   # last run time per check (not tracked)
+FAST_LIMIT = 15.0
+# Checks over FAST_LIMIT on their own (measured alone, 2026-11-16); --fast skips them. Times under parallel load are
+# higher and are only recorded for information (jar_archive/check_times.json).
+SLOW = {'test_worldgen_tools': 75}
+KNOWN_MAX_AGE = 30
+GLOBAL_INPUTS = ['tools/check_all.py', 'tools/check_known.tsv', 'tools/java_test_cp.sh', 'tools/pack_paths.py']
+
+SCRIPT_TREES = ['development/', 'kubejs/data/', 'kubejs/assets/', 'kubejs/startup_scripts/', 'kubejs/server_scripts/',
+                'kubejs/client_scripts/']
+# name -> (command, inputs, estimate s, full only)
+LINTS = {
+    'id_owner_lint': (['python3', 'tools/id_owner_lint.py'], ['development/', 'kubejs/data/', 'kubejs/assets/'], 7, False),
+    'guard_check': (['python3', 'tools/guard_check.py'], SCRIPT_TREES + ['mods/'], 7, False),
+    'optional_ref_audit': (['python3', 'tools/optional_ref_audit.py'], SCRIPT_TREES, 3, False),
+    'changelog_lint': (['python3', 'tools/changelog_lint.py'], ['kubejs/assets/creativecommon/changelog/',
+                                                               'tools/changelog_lint.py'], 1, False),
+    'status_index': (['python3', 'tools/status_index.py', '--check'], ['feature_writeup/', 'tools/status_index.py',
+                                                                      'jar_archive/installed.tsv'], 2, False),
+    'texture_provenance': (['python3', 'tools/texture_provenance.py'], ['feature_writeup/texture_sources/',
+                                                                       'textureswapper/'], 70, True),
+    'design_rules_audit': (['python3', 'tools/design_rules_audit.py'], SCRIPT_TREES + ['feature_writeup/'], 30, True),
+}
+PATH_RE = re.compile(r'\b((?:development|kubejs|tools|data|config|configs_edited|generation_scripts)/[A-Za-z0-9_.\-/]+)')
+
+
+def test_inputs(script):
+    paths = {str(script.relative_to(ROOT))}
+    for m in PATH_RE.finditer(script.read_text(errors='replace')):
+        p = m.group(1).rstrip('/.')
+        parts = p.split('/')
+        if parts[0] == 'development' and len(parts) >= 2:
+            p = 'development/' + parts[1]          # build/ output follows the sources
+        elif parts[0] == 'kubejs' and len(parts) >= 3:
+            p = '/'.join(parts[:3])
+        elif parts[0] == 'tools' and len(parts) >= 2:
+            p = '/'.join(parts[:2])
+        paths.add(p)
+    return sorted(paths)
+
+
+CLASS_RE = re.compile(r'development/([A-Za-z0-9_]+)/build')
+
+
+def class_mods(script):
+    text = script.read_text(errors='replace')
+    if 'java_test_cp.sh' in text:
+        text += (TOOLS / 'java_test_cp.sh').read_text(errors='replace')
+    return sorted(set(CLASS_RE.findall(text)))
+
+
+def newest(path, pattern):
+    best = 0.0
+    for f in path.rglob(pattern):
+        try:
+            best = max(best, f.stat().st_mtime)
+        except OSError:
+            pass
+    return best
+
+
+def stale_mods(mods):
+    out = []
+    for m in mods:
+        d = ROOT / 'development' / m
+        if not (d / 'src').is_dir():
+            continue
+        if newest(d / 'src', '*.java') > newest(d / 'build' / 'classes', '*.class'):
+            out.append(m)
+    return out
+
+
+def checks():
+    out = {}
+    for s in sorted(TOOLS.glob('test_*.sh')):
+        out[s.stem] = dict(cmd=['bash', str(s.relative_to(ROOT))], inputs=test_inputs(s), est=SLOW.get(s.stem, 10), full=False,
+                           classes=class_mods(s))
+    for name, (cmd, inputs, est, full) in LINTS.items():
+        if not (ROOT / cmd[1]).exists():
+            continue
+        out[name] = dict(cmd=cmd, inputs=inputs + [cmd[1]], est=est, full=full, classes=[])
+    return out
+
+
+def changed_paths():
+    def git(*a):
+        r = subprocess.run(['git', *a], cwd=ROOT, capture_output=True, text=True)
+        return [l for l in r.stdout.splitlines() if l]
+    return set(git('diff', '--name-only', 'HEAD')) | set(git('ls-files', '--others', '--exclude-standard'))
+
+
+def touches(inputs, changed):
+    for c in changed:
+        for i in inputs:
+            if c == i or c.startswith(i.rstrip('/') + '/'):
+                return True
+    return False
+
+
+def load_known():
+    rows = []
+    if not KNOWN_FILE.exists():
+        return rows
+    for n, line in enumerate(KNOWN_FILE.read_text().splitlines(), 1):
+        if not line.strip() or line.startswith('#'):
+            continue
+        f = line.split('\t')
+        if len(f) < 4:
+            print('WARN check_known.tsv line %d: want 4 tab-separated fields' % n)
+            continue
+        rows.append(dict(check=f[0], pattern=re.compile(f[1]), reason=f[2], date=f[3].strip()))
+    return rows
+
+
+def first_error(out):
+    for line in out.splitlines():
+        if re.search(r'(?i)\b(FAIL(?:ED)?|ERROR|Exception|Traceback|error:|missing|no rule)\b', line) \
+                and not re.match(r'\s*(==|#)', line):
+            return line.strip()[:160]
+    lines = [l.strip() for l in out.splitlines() if l.strip()]
+    return lines[-1][:160] if lines else ''
+
+
+def run_one(name, c, timeout):
+    t0 = time.time()
+    try:
+        r = subprocess.run(c['cmd'], cwd=ROOT, capture_output=True, text=True, timeout=timeout,
+                           env={**os.environ, 'CHECK_ALL': '1'})
+        rc, out = r.returncode, r.stdout + r.stderr
+    except subprocess.TimeoutExpired as e:
+        rc, out = 124, ((e.stdout or b'').decode(errors='replace') if isinstance(e.stdout, bytes) else (e.stdout or '')) \
+            + '\nERROR timeout after %d s' % timeout
+    return name, rc, out, time.time() - t0
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
+    ap.add_argument('--fast', action='store_true')
+    ap.add_argument('--changed', action='store_true')
+    ap.add_argument('--full', action='store_true')
+    ap.add_argument('--only')
+    ap.add_argument('--list', action='store_true')
+    ap.add_argument('-j', type=int, default=max(2, min(6, (os.cpu_count() or 4) // 2)))
+    ap.add_argument('--timeout', type=int, default=300)
+    ap.add_argument('-v', action='store_true')
+    ap.add_argument('--no-compile', action='store_true')
+    a = ap.parse_args()
+
+    allc = checks()
+    if a.list:
+        for n, c in allc.items():
+            print('%-24s %s%s' % (n, ' '.join(c['inputs']), '  (full only)' if c['full'] else ''))
+        return 0
+    try:
+        times = json.loads(TIMES_FILE.read_text())
+    except (OSError, ValueError):
+        times = {}
+    changed = changed_paths() if a.changed else None
+    all_changed = changed is not None and touches(GLOBAL_INPUTS, changed)
+    selected, skipped = {}, []
+    only = set(a.only.split(',')) if a.only else None
+    for n, c in allc.items():
+        if only is not None and n not in only:
+            continue
+        if c['full'] and not a.full and only is None:
+            continue
+        if a.fast and c['est'] > FAST_LIMIT:
+            skipped.append((n, 'slow (about %d s)' % c['est']))
+            continue
+        if changed is not None and not all_changed and not touches(c['inputs'], changed):
+            continue
+        selected[n] = c
+
+    need = sorted({m for c in selected.values() for m in c['classes']})
+    stale = stale_mods(need)
+    if stale and not (a.no_compile or os.environ.get('CE_IN_GRADLE')):
+        tasks = [':%s:compileJava' % m for m in stale]
+        print('compiling stale classes: ' + ', '.join(stale))
+        r = subprocess.run(['./gradlew', *tasks, '--offline', '-q'], cwd=ROOT, capture_output=True, text=True)
+        if r.returncode != 0:
+            print('WARN compile failed: ' + first_error(r.stdout + r.stderr))
+        stale = stale_mods(stale)
+    for n in [n for n, c in selected.items() if set(c['classes']) & set(stale)]:
+        skipped.append((n, 'stale classes (%s): compile first' % ', '.join(sorted(set(selected[n]['classes']) & set(stale)))))
+        del selected[n]
+
+    known = load_known()
+    today = dt.date.today()
+    for k in known:
+        try:
+            age = (today - dt.date.fromisoformat(k['date'])).days
+        except ValueError:
+            print('WARN check_known.tsv %s: bad date %r' % (k['check'], k['date']))
+            continue
+        if age > KNOWN_MAX_AGE:
+            print('WARN KNOWN entry for %s is %d days old (%s): revisit it' % (k['check'], age, k['reason']))
+
+    t0 = time.time()
+    results = []
+    with cf.ThreadPoolExecutor(max_workers=a.j) as ex:
+        futs = [ex.submit(run_one, n, c, a.timeout) for n, c in selected.items()]
+        for f in cf.as_completed(futs):
+            results.append(f.result())
+    failed = 0
+    for name, rc, out, secs in sorted(results):
+        times[name] = round(secs, 1)
+        if rc == 0:
+            print('PASS  %-24s %5.1f' % (name, secs))
+            continue
+        k = next((k for k in known if k['check'] == name and k['pattern'].search(out)), None)
+        if k:
+            print('KNOWN %-24s %5.1f  %s' % (name, secs, k['reason']))
+        else:
+            failed += 1
+            print('FAIL  %-24s %5.1f  %s' % (name, secs, first_error(out)))
+        if a.v:
+            for line in out.strip().splitlines()[-15:]:
+                print('      | ' + line[:200])
+    for n, why in skipped:
+        print('SKIP  %-24s   -    %s' % (n, why))
+    try:
+        TIMES_FILE.parent.mkdir(exist_ok=True)
+        TIMES_FILE.write_text(json.dumps(times, indent=1, sort_keys=True))
+    except OSError:
+        pass
+    if not selected:
+        print('check_all: nothing to run%s' % (' (no check inputs changed)' if a.changed else ''))
+    else:
+        print('check_all: %d run, %d failed, %.1f s wall%s' % (len(selected), failed, time.time() - t0,
+                                                            ', %d skipped' % len(skipped) if skipped else ''))
+    return 1 if failed else 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
