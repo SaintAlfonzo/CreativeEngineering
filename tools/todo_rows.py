@@ -239,4 +239,13 @@ def validate(rows, layout_text=None):
 			errs.append(where + ('family %r has no <?todo rows ...?> in layout.md' % r['family'],))
 		if r.get('plan') and not all((FW / p.split()[0]).exists() for p in r['plan'].split(',') if p.strip()):
 			errs.append(where + ('plan %r: no such file in feature_writeup/' % r['plan'],))
+	by_file = defaultdict(list)
+	for r in rows:
+		by_file[r.get('_file', '?')].append(r)
+	for f, rs in by_file.items():
+		for a, b in zip(rs, rs[1:]):
+			if row_key(b) < row_key(a):
+				errs.append((f, b.get('_line', 0), b.get('id', ''),
+							 'row out of order (status rank, then id); any todo.py edit writes the file sorted'))
+				break
 	return errs
