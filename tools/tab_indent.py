@@ -40,9 +40,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 LANG = {'.py': 'py', '.js': 'js', '.mjs': 'js', '.java': 'java', '.gradle': 'gradle', '.json': 'json'}
 SKIP = re.compile(r'^(kubejs/exported/|kubejs/generation_scripts/|kubejs/archive/|jar_archive/|deploy/|config/|'
-                  r'defaultconfigs/|configs_edited/|\.claude/|mods/|saves/|server_mods/|client_mods/)'
-                  r'|(^|/)moved_code_backup/|(^|/)build/|_upstream/|(^|/)node_modules/'
-                  r'|^development/[^/]+(/members/[^/]+)?/upstream/')
+				  r'defaultconfigs/|configs_edited/|\.claude/|mods/|saves/|server_mods/|client_mods/)'
+				  r'|(^|/)moved_code_backup/|(^|/)build/|_upstream/|(^|/)node_modules/'
+				  r'|^development/[^/]+(/members/[^/]+)?/upstream/')
 OWN_NS = re.compile(r'^(creative[a-z_]*|moremooblooms|babymobs|vinerybackport)$')
 NS_RE = re.compile(r'/(?:data|assets)/([^/]+)/')
 MARKER = re.compile(r'(?i)\bgenerated\b.{0,80}\b(by|from)\b')
@@ -133,7 +133,7 @@ def classify(paths=None):
 
 JS_REGEX_AFTER = set('(,=:[!&|?{};+-*%<>~^')
 JS_REGEX_WORDS = {'return', 'typeof', 'case', 'do', 'else', 'in', 'of', 'new', 'delete', 'void', 'throw', 'yield',
-                  'await', 'instanceof'}
+				  'await', 'instanceof'}
 
 
 def lex_c(text, lang):
@@ -382,7 +382,7 @@ def fingerprints(mode, files):
 	res = {}
 	for k in range(0, len(files), 400):
 		out = subprocess.run(['java', *cp, str(ROOT / HELPER), mode, *files[k:k + 400]], capture_output=True,
-		                     text=True).stdout
+							 text=True).stdout
 		for line in out.splitlines():
 			if line.startswith('ERR '):
 				p, _, why = line[4:].partition(' ')
@@ -423,7 +423,7 @@ def acorn_prints(files):
 	res = {}
 	for k in range(0, len(files), 400):
 		out = subprocess.run(['node', '--expose-internals', '-e', ACORN, *files[k:k + 400]], capture_output=True,
-		                     text=True).stdout
+							 text=True).stdout
 		for line in out.splitlines():
 			if line.startswith('ERR '):
 				p, _, why = line[4:].partition(' ')

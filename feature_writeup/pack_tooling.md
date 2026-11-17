@@ -364,6 +364,10 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   also exercises the tag helper.
 - Most generators have a `--check` mode that exits non-zero when their output is stale.
 - The dictionary checks only run in game (F1).
+- `python3 tools/tab_indent.py` keeps own source files tab-indented (DR-C21, DR-C22): dry run by default, `--apply`
+  writes a file only when its parse is equal before and after (`ast.dump`, parsed JSON values, the javac parse tree and
+  Rhino's interpreter code through `tools/tab_indent_check/AstFingerprint.java`, acorn under node for node-only JS),
+  `--scope` lists what is in scope and why the rest is not, `--lint` is the check_all check `tab_indent`.
 
 ## 7. In-game test suite
 
@@ -433,6 +437,9 @@ Everything here is the pack's own; nothing replaces a mod. The conventions and t
   `tools/iso_dates.py --scope code` (lints `spelling_docs`, `spelling_code`, `iso_dates_docs`, `iso_dates_code` fail in
   check_all), `tools/rename_patchermod.py` (patcherMod to Creative Common in text; hits left as written in
   [patchermod_left.csv](patchermod_left.csv)).
+- 2026-11-17: tab sweep of plan_rules_fixes.md P5 (section 16): `tools/tab_indent.py` converted 235 Python, 173 JS,
+  1032 Java, 31 Gradle and 58 JSON files, one commit per language; lint `tab_indent` fails in check_all. Upstream donor
+  trees (a `NOTICE-upstream-*` file), generated files and JSON outside the own namespaces keep their style.
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 

@@ -366,6 +366,15 @@ if wants('format'):
 		print(f'   {name:14s} {len(paths):6d}   {tabs:10d}  {mixed:13d}  {crlf:4d}  {nofinal:16d}  {long_:9d}  {trail:20d}')
 	print()
 
+# DR-C21, DR-C22: space indent or trailing whitespace left in scope files (tools/tab_indent.py converts them; the
+# lint fails in check_all as tab_indent).
+if wants('format'):
+	out = subprocess.run([sys.executable, str(ROOT / 'tools/tab_indent.py'), '--lint'], cwd=ROOT, capture_output=True,
+						 text=True).stdout.rstrip().split('\n')
+	hits = [(l.split(':', 1)[0], 0, l.split(':', 1)[1].strip()) for l in out if l and not l.startswith('tab_indent:')]
+	report('DR-C21', 'own source files with space indent or trailing whitespace (tab_indent.py converts them)', hits,
+		   'files', top=20)
+
 # DR-C26: dates in code comments (tools/history_extract.py moves them to the writeup History; it fails in check_all),
 # and source folders with no owning writeup in tools/writeup_owner.json (history_extract.py files lines by it).
 if wants('history'):

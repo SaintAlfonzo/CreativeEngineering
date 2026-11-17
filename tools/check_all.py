@@ -80,6 +80,8 @@ LINTS = {
 																	'kubejs/assets/'], 5, False),
 	'spelling_code': (['python3', 'tools/us_spelling.py', '--lint', '--scope', 'code'], SCRIPT_TREES + ['tools/'], 14, False),
 	'comment_dates': (['python3', 'tools/history_extract.py', '--lint'], SCRIPT_TREES + ['tools/', 'build-logic/'], 6, False),
+	'tab_indent': (['python3', 'tools/tab_indent.py', '--lint'], SCRIPT_TREES + ['tools/', 'build-logic/', 'settings.gradle'],
+				   7, False),
 	'test_prefix_lint': (['python3', 'tools/test_prefix_lint.py', '--quiet'],
 						 ['feature_writeup/', 'tools/test_prefix_lint.py'], 1, False),
 	'plan_lint': (['python3', 'tools/plan_lint.py'], ['feature_writeup/', 'tools/plan_lint.py'], 2, False),
