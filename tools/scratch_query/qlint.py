@@ -337,6 +337,9 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
     return F
 
 
+INST_ROWS = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../feature_writeup/testing/rows"))
+
+
 def load(batch, opts):
     q = _qrun()
     perr = []
@@ -358,7 +361,19 @@ def load(batch, opts):
 
 def lint(batch, opts):
     rows, sel, vars0, logs, perr = load(batch, opts)
-    return lint_rows(sel, rows, opts.get("client"), vars0, logs, perr)
+    out = lint_rows(sel, rows, opts.get("client"), vars0, logs, perr)
+    if os.path.abspath(batch).startswith(os.path.join(INST_ROWS, "")):
+        # queue row file: stale rows and dead ids (qrowlint.py); baseline dead ids stay warnings
+        import qrowlint
+        base = qrowlint.baseline()
+        ids = {r["id"] for r in sel}
+        for sev, ln, rid, msg in qrowlint.lint_file(batch):
+            if rid not in ids:
+                continue
+            if sev == "E" and qrowlint._key(batch, rid, msg) in base:
+                sev, msg = "W", msg + " (baseline)"
+            out.append((sev, "stale" if msg.startswith("stale") else "dead-id", rid, ln, msg))
+    return out
 
 
 def opts_from(argv):

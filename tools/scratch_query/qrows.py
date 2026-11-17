@@ -14,6 +14,8 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @@jars a b ...              own jars (mod ids) the rows test
     @@sources PATH ...          files the rows were written from (repo paths; a directory covers every file in it)
     @@tier T2                   T1 smoke, T2 feature (default), T3 release gate
+    @@reviewed YYYY-MM-DD     the rows were last matched to their sources that day (default: @@date); qrowlint.py
+                              flags a row whose sources changed later (stale)
     @@text LINE               one markdown line of the section, verbatim ('@@text' alone = blank line)
     @@table                   the standard table header: | ID | Group | Commands | Pass | If it fails | and |---|...
     ## ID | title             a row (ID exactly as the queue shows it)
@@ -21,6 +23,7 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @jars / @sources / @tier  override the section defaults
     @owner true               design-feel row the owner judges in a playtest (never automated)
     @client true              needs a client (default: true for CQ- ids)
+    @reviewed YYYY-MM-DD      as @@reviewed, for this row
     @from PATH [passed]       where the steps came from (a past batch; "passed" = a run with that text passed)
     @draft TEXT               no runnable steps yet: the next runner writes them here once (the reason in TEXT)
     > cmd / waitlog / ...     the row's steps (qrun format)
@@ -39,7 +42,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 QUEUE = ROOT / 'feature_writeup/testing/scratch_queue.md'
-ROWS = ROOT / 'feature_writeup/testing/rows'
+ROWS = Path(os.environ.get('QROWS_DIR', ROOT / 'feature_writeup/testing/rows'))
 BATCHES = ROOT / 'tools/scratch_query/batches'
 RUNS = ROOT / 'perf/runs'
 FEATURES = ROOT / 'feature_writeup/status/features.tsv'
@@ -50,8 +53,8 @@ CELL_KEYS = ['id', 'group', 'commands', 'pass', 'fails']
 ROW_RE = re.compile(r'^\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-\S')
 CODE_RE = re.compile(r'\b(?:SQ|CQ)-([A-Za-z][A-Za-z0-9]*)(?=-[A-Za-z0-9])')
 BLOCK_BEGIN = re.compile(r'^<!-- generated:status_index begin (rows_(\w+?)_(\d+)) sha1=([0-9a-f]+) -->$')
-SECTION_META = ('title', 'date', 'jars', 'sources', 'tier')
-ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'owner', 'client', 'from', 'draft')
+SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier')
+ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'owner', 'client', 'reviewed', 'from', 'draft')
 TIERS = ('T1', 'T2', 'T3')
 
 
@@ -423,11 +426,11 @@ def check(argv=()):
         errs = []
         f = load(p, errs)
         for n, m in errs:
-            fails.append('%s:%d: %s' % (p.relative_to(ROOT), n, m))
+            fails.append('%s:%d: %s' % (os.path.relpath(p, ROOT), n, m))
         keys = collections.Counter(s['key'] for s in f['sections'])
         for k, c in keys.items():
             if c > 1:
-                fails.append('%s: section key %d used %d times' % (p.relative_to(ROOT), k, c))
+                fails.append('%s: section key %d used %d times' % (os.path.relpath(p, ROOT), k, c))
         for s in f['sections']:
             secs[block_name(f['code'], s['key'])] = s
             for kind, r in s['items']:
@@ -435,10 +438,10 @@ def check(argv=()):
                     continue
                 m = effective(s, r)
                 if m['tier'] not in TIERS:
-                    fails.append('%s:%d: %s tier %r not in %s' % (p.relative_to(ROOT), r['line'], r['id'], m['tier'],
+                    fails.append('%s:%d: %s tier %r not in %s' % (os.path.relpath(p, ROOT), r['line'], r['id'], m['tier'],
                                                                   '/'.join(TIERS)))
                 if not runnable(r) and 'draft' not in r['meta'] and m.get('owner') != 'true':
-                    fails.append('%s:%d: %s has no steps and no @draft' % (p.relative_to(ROOT), r['line'], r['id']))
+                    fails.append('%s:%d: %s has no steps and no @draft' % (os.path.relpath(p, ROOT), r['line'], r['id']))
     return fails, secs
 
 
