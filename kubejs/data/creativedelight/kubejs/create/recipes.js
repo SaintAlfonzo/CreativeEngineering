@@ -2,7 +2,6 @@
 // requires: create
 // Create's food items and machine-only food routes: the egg solution fluid and the wheat flour / dough merge onto
 // Create's flour and dough. Non-member file: recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes).
-// Moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

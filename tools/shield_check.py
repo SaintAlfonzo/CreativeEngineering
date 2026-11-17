@@ -23,8 +23,6 @@ from pathlib import Path
 import toml
 
 INSTANCE = Path(__file__).resolve().parent.parent
-# [shields] moved to Creative Equipment's file on 2026-11-04; its first boot carries the section over, so read the old
-# file only until then.
 TOML = INSTANCE / 'config/creativeequipment-common.toml'
 if not TOML.exists():
     TOML = INSTANCE / 'config/creativeengineering-common.toml'

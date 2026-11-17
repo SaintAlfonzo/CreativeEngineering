@@ -49,7 +49,7 @@ public final class CommonPotions {
 
     /**
      * One effect: registers {@code <name>}, {@code long_<name>} and, for an effect with levels, {@code strong_<name>}
-     * in creativecommon (plan_cb_polish.md 2; creativebrewing: until 2026-11-06, data/creativecommon/swaps/effects_potions.json).
+     * in creativecommon (plan_cb_polish.md 2).
      *
      * @param needsMod mod that must be loaded for the potions to be registered, or null
      * @param missing  appended to the error when the effect is not found at potion registration
@@ -58,7 +58,7 @@ public final class CommonPotions {
     private record Row(String name, ResourceLocation effect, String needsMod, String missing, boolean levels) {
     }
 
-    /** The Better Beacons potions (long_reach, phantom_bane) are Creative Brewing's since 2026-11-07 (potion/BetterBeaconsPotions). */
+    /** The Better Beacons potions (long_reach, phantom_bane) are Creative Brewing's (potion/BetterBeaconsPotions). */
     private static final List<Row> ROWS = List.of(
             new Row("magic_resistance", new ResourceLocation(CreativeCommon.MODID, "magic_resistance"), null,
                     "did magic_resistance.js fail to register it?", true));

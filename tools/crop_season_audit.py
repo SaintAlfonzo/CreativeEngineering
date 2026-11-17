@@ -62,7 +62,7 @@ EXTRA = {
     'minecraft:attached_pumpkin_stem': (None, None, 'extra fruit (patcherMod StemExtraFruit) fires the event'),
     'fruitsdelight:attached_hamimelon_stem': (None, None, 'extra fruit (patcherMod StemExtraFruit) fires the event'),
 }
-# Planting items for dumps written before /dumpcropgrowth recorded `item` (checked by hand 2026-10-30).
+# Planting items for dumps written before /dumpcropgrowth recorded `item` (checked by hand).
 FALLBACK_ITEMS = {
     'minecraft:wheat': 'minecraft:wheat_seeds', 'minecraft:carrots': 'minecraft:carrot',
     'minecraft:potatoes': 'minecraft:potato', 'minecraft:beetroots': 'minecraft:beetroot_seeds',

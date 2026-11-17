@@ -36,7 +36,7 @@
     function itemId(st) { return String($GReg.ITEMS.getKey(st.getItem())) }
     function block(id) { return $GReg.BLOCKS.getValue(rl(id)) }
     function blockId(state) { return String($GReg.BLOCKS.getKey(state.getBlock())) }
-    // Grid and pot meals moved into Creative Delight's tree (creativedelight: ids) on 2026-10-25; the oven pie is still C
+    // The oven pie is still C
     const FG = 'fungidelight:', C = 'creativeengineering:', CDN = 'creativedelight:'
 
     let byId = null
@@ -118,7 +118,7 @@
         })
         let pie = [CDN + 'baking/truffle_pie', C + 'baking/truffle_pie'].filter(id => has(server, id))
         note('ids with truffle_pie', Object.keys(recipes(server)).filter(id => id.indexOf('truffle_pie') >= 0).join(', ') || 'none')
-        // TODO fungiport #3: the pack registers CCK's truffle_pie item (2026-10-31), so the oven recipe must load
+        // TODO fungiport #3: the pack registers CCK's truffle_pie item, so the oven recipe must load
         check('oven truffle pie', pie.length >= 1 && takes(server, pie[0], FG + 'truffle'), pie.join(', ') || 'none')
         if (pie.length) {
             let ins = ingredientsOf(recipes(server)[pie[0]]).map(g => { let s = g.getStacks(); if (s.toList) s = s.toList(); return s.size() ? itemId(s.get(0)) + 'x' + s.get(0).getCount() : '-' })
@@ -165,7 +165,7 @@
         check('truffle in #minecraft:piglin_food', tagHas(I, 'minecraft:piglin_food', FG + 'truffle'), '')
         check('truffle dirt in #minecraft:dirt', tagHas(B, 'minecraft:dirt', FG + 'truffle_dirt'), '')
         check('truffle dirt shovel mineable', tagHas(B, 'minecraft:mineable/shovel', FG + 'truffle_dirt'), '')
-        // colonies: FD's own colonies are in neither Serene Seasons tag, so the port leaves the Fungi ones out too (2026-10-25 run)
+        // colonies: FD's own colonies are in neither Serene Seasons tag, so the port leaves the Fungi ones out too
         ;['inky_cap_mushroom', 'morel_mushroom'].forEach(n => {
             check('year-round block ' + n, tagHas(B, 'sereneseasons:year_round_crops', FG + n), '')
             check('unbreakable infertile ' + n, tagHas(B, 'sereneseasons:unbreakable_infertile_crops', FG + n), '')

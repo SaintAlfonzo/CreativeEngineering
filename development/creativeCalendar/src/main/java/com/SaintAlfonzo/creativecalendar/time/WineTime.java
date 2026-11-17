@@ -7,8 +7,7 @@ import com.SaintAlfonzo.creativecalendar.CalendarConfig;
  * Brewing requires Creative Calendar, so the port calls this directly and uses it instead of its own [wine]/[aging]
  * lengths and boosts while {@link #active()}. Calendar never writes the port's config. Every getter reads the toml live.
  *
- * Creative Calendar (feature_writeup/creative_calendar.md): moved here from patcherMod's time/ package on 2026-11-01
- * with the rest of [time]; the class name and getters are the contract with the Vinery port's PackTime.
+ * The class name and getters are the contract with the Vinery port's PackTime.
  */
 public final class WineTime {
     private WineTime() {}

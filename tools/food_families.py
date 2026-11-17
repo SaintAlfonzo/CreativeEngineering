@@ -173,8 +173,8 @@ FAMILIES = OrderedDict([
     ('hazard', ('Hazard', 'Edible but harmful: rotten, poisonous, inedible things.')),
 ])
 
-# Sandwich bread shape by sprite: briefs/baking_baked-goods.md (baked-goods #9) audit, 2026-10-21. Ham and cheese
-# takes slices or bread; chunkwich and zucchini sandwich were not in the audit (default: square).
+# Sandwich bread shape by sprite: briefs/baking_baked-goods.md (baked-goods #9) audit. Ham and cheese takes
+# slices or bread; chunkwich and zucchini sandwich were not in the audit (default: square).
 SQUARE_SANDWICH = {
     'farmersdelight:bacon_sandwich', 'moredelight:egg_with_bacon_sandwich', 'moredelight:tomato_sandwich',
     'delightful:nut_butter_and_jelly_sandwich', 'alexsdelight:bunfungus_sandwich', 'brewinandchewin:ham_and_cheese_sandwich',
@@ -196,8 +196,8 @@ SKIP = None
 NO_FAMILY = {
     'endersdelight:twisted_cereal': 'meal/plate', 'endersdelight:twisted_cereal_wood': 'meal/plate',
     'quarkdelight:crab_bars': 'snack', 'berry_good:sweet_berry_meatballs': 'skewer',
-    # Barbeque's Delight cooked skewers joined the skewer family at the skewer fold (2026-11-03, dishes/meals #46:
-    # handheld + "skewer" in the name); the burnt skewer is in hazard by its type
+    # Barbeque's Delight cooked skewers joined the skewer family at the skewer fold (dishes/meals #46: handheld +
+    # "skewer" in the name); the burnt skewer is in hazard by its type
 }
 
 # Recipe type -> station label. Types not listed are shown by their id.

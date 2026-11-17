@@ -1,6 +1,5 @@
 // Scratch-only probe (never in the pack): copy into a scratch server's kubejs/server_scripts as zz_cc_dict_probe.js.
-// Creative Common dict checks of 2026-11-07 (SQ-CC-06): the bark / metal dust tags moved to creativecommon:, the Create
-// Framed and SecurityCraft tinted glass keys, and the mirror glass block tags. Output lines start with "[ccdict]".
+// Output lines start with "[ccdict]".
 ServerEvents.recipes(e => {
 	var I = global.item, B = global.blocks
 	if (!I || !B) return console.error('[ccdict] global.item or global.blocks missing')

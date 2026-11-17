@@ -4,10 +4,8 @@
 // and alcohol are marked for Creative Brewing (creative_delight.md 29.5). Until then it lives in Creative Delight's
 // creativeengineering/ trees.
 //
-// Cultivated meat tags, moved from the pack 2026-10-27, rows unchanged: the culture base (what a sample is grown on,
-// server_scripts/tags/engineeringtags.js) and the 7 culture storage blocks (server_scripts/tags/storageblocktags.js,
-// soft storage: hand-breakable, the hoe is the fast tool, like prepared_flesh_block). The BlockRunner "spongy" row
-// for the culture blocks stays with the other soft blocks in the pack's server_scripts/tags/blocktags.js.
+// Cultivated meat tags. The BlockRunner "spongy" row for the culture blocks stays with the other soft blocks in the
+// pack's server_scripts/tags/blocktags.js.
 
 // material : [culture block]
 var CD_CULTURE_STORAGE = {

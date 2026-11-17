@@ -63,7 +63,7 @@ def item_sprite(item_id):
             tex = layer0(z)
             if tex:
                 return tex
-            # members nested in a bundle jar (Creative Delight's META-INF/jarjar/*.jar since 2026-11-02)
+            # members nested in a bundle jar (Creative Delight's META-INF/jarjar/*.jar)
             for n in z.namelist():
                 if n.startswith('META-INF/jarjar/') and n.endswith('.jar'):
                     with zipfile.ZipFile(io.BytesIO(z.read(n))) as inner:
@@ -71,7 +71,7 @@ def item_sprite(item_id):
                         if tex:
                             return tex
     # A KubeJS item has no model in a jar: its generated model's layer0 is <ns>:item/<path>, the sprite in kubejs/assets
-    # (or in an in-tree jar's assets: Creative Delight holds the cooking sprites since 2026-11-06)
+    # (or in an in-tree jar's assets: Creative Delight holds the cooking sprites)
     for root in [INSTANCE / 'kubejs/assets', *sorted(INSTANCE.glob('development/*/src/main/resources/assets'))]:
         if (root / ns / 'textures/item' / f'{path}.png').exists():
             return f'{ns}:item/{path}'

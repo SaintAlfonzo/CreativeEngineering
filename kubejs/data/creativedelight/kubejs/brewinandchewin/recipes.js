@@ -1,10 +1,9 @@
 // requires: creativedelight
 // requires: brewinandchewin
 // Brewin' and Chewin' dishes (owner, 2026-10-31: the dishes stay in Creative Delight, added only while Brewin' is
-// loaded; Brewin' itself is a Creative Brewing member, feature_writeup/creative_brewing.md 4.4 Q1). Moved from the pack's
-// server_scripts/cooking/cooking.js 2026-10-31, rows unchanged. Non-member file: recipe ids are
-// creativedelight:<type>/<suffix> (global.CD.recipes; were creativeengineering:). The egg solution fluid is CD's
-// (create/recipes.js); the heatless meal rule is farmersdelight/recipes.js "Meals".
+// loaded; Brewin' itself is a Creative Brewing member, feature_writeup/creative_brewing.md 4.4 Q1). Non-member file:
+// recipe ids are creativedelight:<type>/<suffix> (global.CD.recipes; were creativeengineering:). The egg solution fluid
+// is CD's (create/recipes.js); the heatless meal rule is farmersdelight/recipes.js "Meals".
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 
@@ -23,12 +22,12 @@ ServerEvents.recipes(e => {
 		// Scarlet Pierogi: beetroot in place of nether wart
 		R.replaceInput({ id: 'brewinandchewin:cooking/scarlet_pierogi' }, i.nether_wart, i.beetroot, e)
 
-		// Supreme Pizza (owner 2026-10-25, rustic_delight.md 5.5; slots owner 2026-11-01, creativedelight/members #20,
-		// merges/dishes #8). Pizza family rule (food_families.md `pizza/whole`): bottom row any dough, tomato sauce, any
-		// dough; one topping slot each above: cheese, cooked meat (not fish), cooked fish, any mushroom, a bell pepper (raw,
-		// sliced or roasted, any colour), onion. One shaped recipe (manual only) plus one assembly on the dough, as the Vegan
-		// Pizza. Was: bell pepper, cheese wedge, onion, mushroom, tomato sauce, cooked meat (fish counted) on one wheat dough.
-		// Vintage Delight's cheese and meat pizzas already sit on dough, sauce, dough (any dough).
+		// Supreme Pizza (owner, rustic_delight.md 5.5; slots owner, creativedelight/members #20, merges/dishes #8). Pizza
+		// family rule (food_families.md `pizza/whole`): bottom row any dough, tomato sauce, any dough; one topping slot each
+		// above: cheese, cooked meat (not fish), cooked fish, any mushroom, a bell pepper (raw, sliced or roasted, any
+		// colour), onion. One shaped recipe (manual only) plus one assembly on the dough, as the Vegan Pizza. Was: bell
+		// pepper, cheese wedge, onion, mushroom, tomato sauce, cooked meat (fish counted) on one wheat dough. Vintage
+		// Delight's cheese and meat pizzas already sit on dough, sauce, dough (any dough).
 		var PIZZA_PEPPER = [i.t_vegetables_bell_pepper, i.t_roasted_bell_pepper, i.t_roasted_bell_pepper_slice]
 		R.remove({ id: 'brewinandchewin:pizza' }, e)
 		R.shaped(i.pizza, ['cmf', 'upo', 'xtx'], { c: i.any_cheese, m: i.t_food_cooked_meat, f: i.t_food_cooked_fish, u: i.mushrooms,
@@ -54,10 +53,10 @@ ServerEvents.recipes(e => {
 			e.recipes.create.deploying(incSandwich, [incSandwich, i.t_bread])
 		], ['ham_and_cheese_sandwich'], e, 'ham_and_cheese_sandwich_smoked_ham_sequenced_assembly', 1)
 
-		// Quiche (merges/dishes #8, owner 2026-11-02): baking type, oven only with a pie tin, no plating (the grid recipe and
-		// both sequenced assemblies are gone). Pie crust + cheese wedge + milk + any egg + one filling, one recipe each:
-		// any cooked meat, any fungus, or a leafy green (#forge:salad_ingredients: cabbage, cabbage leaf, dandelion leaf).
-		// Was: bacon or brown mushroom + cabbage + 2 milk + 2 eggs + 2 cheese on a crust in the grid, or the assemblies.
+		// Quiche (merges/dishes #8, owner): baking type, oven only with a pie tin, no plating (the grid recipe and both
+		// sequenced assemblies are gone). Pie crust + cheese wedge + milk + any egg + one filling, one recipe each: any
+		// cooked meat, any fungus, or a leafy green (#forge:salad_ingredients: cabbage, cabbage leaf, dandelion leaf). Was:
+		// bacon or brown mushroom + cabbage + 2 milk + 2 eggs + 2 cheese on a crust in the grid, or the assemblies.
 		R.remove({ id: 'brewinandchewin:quiche_from_bacon' }, e)
 		R.remove({ id: 'brewinandchewin:quiche_from_mushroom' }, e)
 		var QUICHE = { exp: 0.1, time: 200, tool: i.t_bakeware_pie_tin }

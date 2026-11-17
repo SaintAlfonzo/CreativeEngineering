@@ -32,10 +32,10 @@ final class ShieldTooltip {
     private static final ElementalKind[] ELEMENT_ORDER = {
             ElementalKind.COLD, ElementalKind.CHEMICAL, ElementalKind.FIRE, ElementalKind.ELECTRIC};
 
-    // Percentage colour ladder, same breakpoints for every damage type, mirroring the tooltip
-    // colour dict in kubejs/assets/creativecommon/kubejs/_lib/tooltips.js (white / col.uncm / col.rare / col.epic).
-    // Picked so the current config's non-zero, sub-100 lines split ~1/3 into each of the lower
-    // three (9/9/9 as of 2026-09-26); epic is reserved for full 100% blocking.
+    // Percentage colour ladder, same breakpoints for every damage type, mirroring the tooltip colour dict in
+    // kubejs/assets/creativecommon/kubejs/_lib/tooltips.js (white / col.uncm / col.rare / col.epic). Picked so the
+    // current config's non-zero, sub-100 lines split ~1/3 into each of the lower three (9/9/9); epic is reserved
+    // for full 100% blocking.
     private static final int UNCOMMON_AT = 40;
     private static final int RARE_AT = 60;
 

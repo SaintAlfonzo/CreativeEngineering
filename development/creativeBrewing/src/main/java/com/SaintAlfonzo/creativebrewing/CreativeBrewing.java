@@ -33,11 +33,11 @@ import java.util.regex.Pattern;
  * namespace (Vinery with its second id {@code foundation}, Brewin' and Chewin'). What CB adds is KubeJS scripts
  * (startup scripts in {@code kubejs_startup/}, server and client scripts under {@code data/} and
  * {@code assets/creativebrewing/kubejs/}) that call the pack's helpers, {@link CBConfig}, and the potion, effect,
- * potion machine and alcohol Java moved here from patcherMod on 2026-11-01 (creative_brewing.md 4.2 phases 2 and 3).
+ * potion machine and alcohol Java moved here from patcherMod (creative_brewing.md 4.2 phases 2 and 3).
  *
  * Ids: everything CB registers or names (the potion buckets, JEI recipe
  * types,  lang keys, the lingerification list) is under {@code creativebrewing} ({@link #NS}, the mod id) since
- * 2026-11-04 (plan_cb_publish.md M4; they were {@code creativeengineering:} and {@code kubejs:}). The old ids are in
+ * (plan_cb_publish.md M4; they were {@code creativeengineering:} and {@code kubejs:}). The old ids are in
  * {@code data/creativebrewing/swaps/creative_split.json}, so saved effects, buckets and the registry table carry over.
  */
 @Mod(CreativeBrewing.MOD_ID)
@@ -52,7 +52,6 @@ public class CreativeBrewing {
 	private static final String FILE = MOD_ID + "-common.toml";
 
 	public CreativeBrewing() {
-		// Mod id was creative_brewing up to 2026-11-01 (creative_split.md 7.6): keep the player's values.
 		ConfigRename.carryOver("creative_brewing-common.toml", FILE);
 		// [alcohol], [effects], [magic_resistance], [copper_poisoning] came from patcherMod's file (phase 3): the first
 		// boot copies the player's values in (this file already exists, so merge, not carrySections); patcherMod then
@@ -63,9 +62,8 @@ public class CreativeBrewing {
 		if (!carried) warnOldKeys();
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-		// The potions, Magic Resistance and Phantom Bane rules moved to Creative Common (plan_cb_polish.md 2, 2026-11-06).
 		modEventBus.addListener(CreativeBrewing::commonSetup);
-		// Better Beacons potions (creativebrewing:long_reach, phantom_bane and variants), from Creative Common 2026-11-07.
+		// Better Beacons potions (creativebrewing:long_reach, phantom_bane and variants), from Creative Common.
 		com.SaintAlfonzo.creativebrewing.potion.BetterBeaconsPotions.register(modEventBus);
 		// Dispensed potion buckets credit the dispenser's placer (PotionBucketDispenser, potions/potion-buckets #3)
 		MinecraftForge.EVENT_BUS.register(PotionBucketDispenser.class);

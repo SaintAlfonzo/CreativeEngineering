@@ -19,9 +19,9 @@ LootJS.modifiers(event => {
   const L = global.LOOT
   const R = global.NCH.forPack('creativeloot')
 
-  // Botania and CC:Tweaked stay out of village chests (owner 2026-11-03, plan_scratch_bugfix_1103 7.3, SQ-GLD-09). Both
-  // inject a nested table in code (Botania LootHandler: temple, toolsmith, weaponsmith; CC:Tweaked CommonHooks:
-  // cartographer), which the pre-roll framework cannot edit, so their items are taken out after the roll.
+  // Botania and CC:Tweaked stay out of village chests (owner, plan_scratch_bugfix_1103 7.3, SQ-GLD-09). Both inject a
+  // nested table in code (Botania LootHandler: temple, toolsmith, weaponsmith; CC:Tweaked CommonHooks: cartographer),
+  // which the pre-roll framework cannot edit, so their items are taken out after the roll.
   L.tables(event, /^minecraft:chests\/village\//)
     .removeLoot('@botania')
     .removeLoot('@computercraft')

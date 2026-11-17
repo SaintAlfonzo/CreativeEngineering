@@ -15,11 +15,10 @@ import java.util.List;
 import java.util.stream.Stream;
 
 /**
- * Equipment data that names another mod's blocks or items: {@code packs/<modid>/} in this jar, each added as a required,
- * hidden data pack only while that mod is loaded ({@code packs/<modA>+<modB>/}: only while all of them are) (Forge 1.19.2 has no conditions for worldgen registries, so a biome
- * modifier naming an absent block would break world loading). Same pattern as Creative Delight's CompartmentPacks.
- * First folder: {@code felsic_gear} (End felsic ore worldgen and the felsic block loot table, moved from the pack's
- * kubejs/data on 2026-11-06, TODO `creativebrewing/publish #22`).
+ * Equipment data that names another mod's blocks or items: {@code packs/<modid>/} in this jar, each added as a
+ * required, hidden data pack only while that mod is loaded ({@code packs/<modA>+<modB>/}: only while all of them are)
+ * (Forge 1.19.2 has no conditions for worldgen registries, so a biome modifier naming an absent block would break world
+ * loading). Same pattern as Creative Delight's CompartmentPacks. First folder: {@code felsic_gear}.
  */
 public final class ModDataPacks {
 

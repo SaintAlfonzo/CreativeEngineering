@@ -24,37 +24,38 @@ ServerEvents.tags('worldgen/structure', function (e) {
 		// buried by design: the cellar kitchen and the squid tank start 55 / 40 blocks under the surface
 		'farmers_structures:ratatouilles', 'farmers_structures:squids',
 	])
-	// Jigsaw structures whose offending pieces are dropped instead of the whole start (creativeworldgen-common.toml [worldgen.earth_fill]
-	// prune): a house over deep water or a cliff goes, with its villagers, and the village stays (structure_tuning.md
-	// 3.13). Every other surface jigsaw structure drops only its too-wet pieces (creativeworldgen-common.toml pruneWetJigsaws, 2026-10-30);
-	// meta structure parts and anchors are pruned the same way, part by part. A jigsaw whose pieces only make sense
-	// together can be judged whole instead by adding it to creativeworldgen:earth_fill/no_prune (empty today).
+	// Jigsaw structures whose offending pieces are dropped instead of the whole start (creativeworldgen-common.toml
+	// [worldgen.earth_fill] prune): a house over deep water or a cliff goes, with its villagers, and the village stays
+	// (structure_tuning.md 3.13). Every other surface jigsaw structure drops only its too-wet pieces
+	// (creativeworldgen-common.toml pruneWetJigsaws); meta structure parts and anchors are pruned the same way, part by
+	// part. A jigsaw whose pieces only make sense together can be judged whole instead by adding it to
+	// creativeworldgen:earth_fill/no_prune (empty today).
 	global.tags.add(e, 'creativeworldgen:earth_fill/prune', [
 		'#creativeworldgen:type/village',
 	])
 	// Structures that stand in water on purpose (stilts in a swamp or mangrove): no footprint water share, their
-	// other earth-fill limits as usual (2026-10-30, TODO structures/earthfill #14: every surface piece now joins the
-	// footprint, not only pieces with earth). The fisherman house is a water-fill structure, skipped already.
+	// other earth-fill limits as usual (TODO structures/earthfill #14: every surface piece now joins the footprint,
+	// not only pieces with earth). The fisherman house is a water-fill structure, skipped already.
 	global.tags.add(e, 'creativeworldgen:earth_fill/wet_ok', [
 		'minecraft:swamp_hut', 'betterwitchhuts:witch_hut', 'mysticrift_pillagers_towers_aris:mangrove_pillager_tower',
 	])
 	// Structures on a stone or brick base instead of a dirt pad: their base blocks (block tag
 	// creativeworldgen:earth_fill/stone_base, blocktags.js) count as earth, for their size and their overhang.
-	// Without this the drum tower's 49x45 andesite plate counted as "small, 10 earth" (02_new_mods_tests.md 4.2).
-	// The End House (Ender's Delight, 2026-10-25) stands on a purpur and end stone floor (layer 0: 101 of its 144
-	// columns). Counted as earth, a start over the void hangs that whole floor in air and is cancelled (the mod's own
-	// structure type skipped chunks whose surface was below y 50, i.e. no island; the pack uses plain jigsaw).
+	// Without this the drum tower's 49x45 andesite plate counted as "small, 10 earth" (02_new_mods_tests.md 4.2). The
+	// End House (Ender's Delight) stands on a purpur and end stone floor (layer 0: 101 of its 144 columns). Counted
+	// as earth, a start over the void hangs that whole floor in air and is cancelled (the mod's own structure type
+	// skipped chunks whose surface was below y 50, i.e. no island; the pack uses plain jigsaw).
 	global.tags.add(e, 'creativeworldgen:earth_fill/stone_base', [
 		'eugene:ruined_drum_tower', 'endersdelight:end_house',
 	])
 	// Desert and badlands structures on sandstone or terracotta floors: those blocks (block tag
 	// creativeworldgen:earth_fill/sand_base) count as earth, so a house floor over a river or a cliff is seen
-	// (2026-11-02, tools/earth_base_scan.py, bottom 3 layers): T&T badlands village 0 % earth (red sandstone 56 %,
-	// terracotta 14 %), wooded badlands village 0 % (terracotta 37 %), badlands outpost 0 %, Philip's badlands dungeon 0 %,
-	// vanilla desert village 24 % (sandstone 54 %), fortified desert village 43 % (37 %), T&T desert outpost 49 %,
-	// desert village temple 22 %, Philip's desert ruins 42 %. Left out: Better Desert Temples and the T&T desert mimic
-	// (buried / underground: their floors sit in caves and aquifers by design); the desert pyramid is a legacy piece
-	// (judged by its footprint, 3.28).
+	// (tools/earth_base_scan.py, bottom 3 layers): T&T badlands village 0 % earth (red sandstone 56 %, terracotta 14 %),
+	// wooded badlands village 0 % (terracotta 37 %), badlands outpost 0 %, Philip's badlands dungeon 0 %, vanilla desert
+	// village 24 % (sandstone 54 %), fortified desert village 43 % (37 %), T&T desert outpost 49 %, desert village temple
+	// 22 %, Philip's desert ruins 42 %. Left out: Better Desert Temples and the T&T desert mimic (buried / underground:
+	// their floors sit in caves and aquifers by design); the desert pyramid is a legacy piece (judged by its footprint,
+	// 3.28).
 	global.tags.add(e, 'creativeworldgen:earth_fill/sand_base', [
 		'minecraft:village_desert', 'terralith:fortified_desert_village', 'desert_village_temple:village_temple',
 		'philipsruins:desert_structures', 'philipsruins:badlands_start_dungeon',

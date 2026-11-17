@@ -16,7 +16,6 @@ dependencies {
     // patcherMod: the hooks the probes subscribe to, WorldgenFiles (/cdevplace), PerfEvents (/cdevperf),
     // BlockModelIcons (/cdevdumpicons). A hard dependency.
     compileOnly project(':creativeCommon')
-    // interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07
     compileOnly project(':creativeCompat')
     // Creative Worldgen: BiomeLayoutTuner and PoolTuner (/cdevplace), SpawnTuning (/dumpspawns), MobCapLevels (/cdevperf).
     // An optional dependency: each reader checks ModList first.

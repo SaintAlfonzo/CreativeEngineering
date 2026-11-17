@@ -1,7 +1,7 @@
 // requires: creativedelight
-// Oven: creativedelight:baking recipes (NCH.ceBaking) and the oven / bakeware recipes. Moved from the pack's
-// server_scripts/cooking/baking.js 2026-10-25, rows unchanged; recipe ids are creativedelight:<type>/<suffix>
-// (global.CD.recipes). The cake / pie / cookie tables stay whole here (they span many mods); each row is one
+// Oven: creativedelight:baking recipes (NCH.ceBaking) and the oven / bakeware recipes. Recipe ids are
+// creativedelight:<type>/<suffix> (global.CD.recipes). The cake / pie / cookie tables stay whole here (they
+// span many mods); each row is one
 // global.CD.food family call, which also sweeps that output's other recipes.
 // Block, GUI and recipe type: patcherMod oven/ package. Design and tests: feature_writeup/oven.md.
 //
@@ -78,7 +78,6 @@ ServerEvents.recipes(e => {
 			['lemon_cookie', i.t_fruits_lemon], ['mulberry_cookie', i.mulberry], ['uncanny_cookies', i.mite_crust],
 			['cherry_cookie', i.cherry],                     // abnormals_delight, Vinery's cherry
 			['oatmeal_cookie', i.raw_oats],                  // Vintage Delight (was 2 raw oats + honey -> 8 in the grid)
-			// Baking audit 2026-10-27 (food_families.md `cookie`): each was a grid or furnace recipe -> 8 (the butter cookie 3)
 			['bat_cookie', i.smoked_bat_wing],               // Miner's Delight
 			['chorus_cookie', i.chorus_fruit_grain],         // End's Delight
 			// Maple Cookie (Abnormals Delight's): rusticdelight/recipes.js, syrup + honey (creativedelight/members #16)
@@ -140,9 +139,9 @@ ServerEvents.recipes(e => {
 		//######################### Cookies (baking sheet) #########################
 		COOKIES.forEach(c => F.cookieBake(c[1], i[c[0]], c[2]))
 
-		//######################### Muffins (muffin tin, paper) #########################
-		// The family call bakes 4 in the oven (flour, one paper each) and removes the mods' Cooking Pot recipes: muffins
-		// are not made in the pot (owner 2026-10-29).
+		//######################### Muffins (muffin tin, paper) ######################### The family call bakes 4 in the
+		// oven (flour, one paper each) and removes the mods' Cooking Pot recipes: muffins are not made in the pot
+		// (owner).
 		F.muffinBake(i.t_fruits_blueberry, i.blueberry_muffin) // G5
 		F.muffinBake(i.t_fruits_cranberry, i.cranberry_muffin) // G5
 		F.muffinBake(i.baked_sweet_potato, i.sweet_potato_cupcake)   // Veggies Delight's, named Sweet Potato Muffin (its sweet potato dough craft stays)

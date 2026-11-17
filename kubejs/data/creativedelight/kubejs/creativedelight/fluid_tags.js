@@ -1,8 +1,7 @@
 // requires: creativedelight
-// Food and drink fluid subtags (forge:fluid + forge:fluid/<subtag>).
-// Moved from the pack's server_scripts/tags/fluidtags.js 2026-11-01 (creative_split.md 7.6, wave 4), rows
-// unchanged. Only adds: running after the pack's tag scripts gives the same contents (nothing removes from these tags).
-// The pack's dead-placeholder clearAll there names none of these fluids.
+// Food and drink fluid subtags (forge:fluid + forge:fluid/<subtag>). Only adds: running after the pack's tag scripts
+// gives the same contents (nothing removes from these tags). The pack's dead-placeholder clearAll there names none of
+// these fluids.
 ServerEvents.tags('fluid', e => {
 	if (!global.CD) return
 	var t = global.tags

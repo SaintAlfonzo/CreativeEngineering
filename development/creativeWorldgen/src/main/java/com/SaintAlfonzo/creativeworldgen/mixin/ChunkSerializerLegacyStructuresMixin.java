@@ -18,10 +18,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import java.util.Map;
 
 /**
- * Structure ids moved to creativeworldgen: on 2026-11-10 (worldgen/LegacyIds). ChunkSerializer reads a chunk's
- * structure starts (unpackStructureStart, m_188254_) and references (unpackStructureReferences, m_208154_) with
- * Registry#get(ResourceLocation) and drops unknown ids, so the old ids in the chunk's {@code structures} compound are
- * renamed in place first: start keys, start ids, piece type ids and reference keys.
+ * ChunkSerializer reads a chunk's structure starts (unpackStructureStart, m_188254_) and references
+ * (unpackStructureReferences, m_208154_) with Registry#get(ResourceLocation) and drops unknown ids, so the old ids in
+ * the chunk's {@code structures} compound are renamed in place first: start keys, start ids, piece type ids and
+ * reference keys.
  */
 @Mixin(value = ChunkSerializer.class, remap = false)
 public class ChunkSerializerLegacyStructuresMixin {

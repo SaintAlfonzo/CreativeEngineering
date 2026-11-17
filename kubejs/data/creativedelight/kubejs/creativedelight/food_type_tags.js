@@ -6,14 +6,13 @@
 // moving its key there, then python3 tools/food_catalog.py --members. python3 tools/food_catalog.py puts new foods
 // into a type (from a /dumpfood export), gives them item_dict keys and checks the file; it never moves a food you
 // placed. The game reads the <mod>/food_types.js member scripts the tool writes from the JSON, one per item namespace
-// (`// requires: <mod>`, framework #7 2026-11-01; this file read the JSON by instance path before).
+// (`// requires: <mod>`, framework #7; this file read the JSON by instance path before).
 //
 // A nested type also lands in its parents: raw/meat/sliced -> raw/meat -> raw -> food_type, so
-// #creativedelight:food_type/raw is every raw food and #creativedelight:food_type every typed one.
-// Recipes reference the tags through the i.t_food_* keys (generated block at the end of item_dict.js).
-// Reference: feature_writeup/food.md
-// Moved from the pack's server_scripts/tags/foodtypetags.js 2026-10-25, rows unchanged. Removed items in
-// food_types.json lose these tags again in _core/removed_item_tags.js, which runs after every CD tag script.
+// #creativedelight:food_type/raw is every raw food and #creativedelight:food_type every typed one. Recipes
+// reference the tags through the i.t_food_* keys (generated block at the end of item_dict.js). Removed items
+// in food_types.json lose these tags again in _core/removed_item_tags.js, which runs after every CD tag
+// script.
 
 ServerEvents.tags('item', e => {
 	if (!global.CD) return

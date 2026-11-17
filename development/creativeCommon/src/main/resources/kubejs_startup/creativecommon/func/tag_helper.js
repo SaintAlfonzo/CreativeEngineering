@@ -1,7 +1,6 @@
 // Tag helper — global.tags. Registry-agnostic: pass the event from
 // ServerEvents.tags('item' | 'block' | 'fluid' | 'entity_type' | ...).
-// patcherMod: src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js (was
-// kubejs/startup_scripts/func/tag_helper.js; moved 2026-10-25, creative_delight.md 10.5 item 3). Loaded by
+// patcherMod: src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js. Loaded by
 // patcherMod's startup loader before the pack's startup_scripts folder. An edit needs a patcherMod rebuild.
 console.log('Tag Helper starting')
 

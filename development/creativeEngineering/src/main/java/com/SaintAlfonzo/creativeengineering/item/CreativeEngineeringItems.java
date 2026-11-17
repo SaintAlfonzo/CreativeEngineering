@@ -27,7 +27,7 @@ public class CreativeEngineeringItems {
     // silver/steel/uranium/zinc) migrated to KubeJS - see
     // kubejs/startup_scripts/items/plate_blocks.js.
 
-    // flint_and_terrasteel: Creative Magic (creativemagic, 2026-11-04).
+    // flint_and_terrasteel: Creative Magic (creativemagic).
 
     // Dust pile blocks (aluminum/copper/gold/iron/lead/nickel/silver/uranium/zinc/diamond,
     // plus rose_gold/cast_iron/electrum/steel/constantan) migrated to KubeJS - see

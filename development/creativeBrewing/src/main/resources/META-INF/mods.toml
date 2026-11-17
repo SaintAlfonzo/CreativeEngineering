@@ -65,7 +65,7 @@ versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
 # MoreJS: potions.js adds every brewing-stand mix (and through them Create's Automatic Brewing and the IE Mixer list)
-# with MoreJSEvents.registerPotionBrewing; without it the CB potions exist but cannot be brewed (owner 2026-11-06).
+# with MoreJSEvents.registerPotionBrewing; without it the CB potions exist but cannot be brewed (owner).
 [[dependencies.creativebrewing]]
 modId="morejs"
 mandatory=true
@@ -73,8 +73,8 @@ versionRange="[0.3.0,)"
 ordering="NONE"
 side="BOTH"
 
-# Optional (owner 2026-11-06): mods CB's scripts, mixin compartments or JEI pages use when present; each is guarded
-# (global.has, CBMixinPlugin compartments). Listed so the project page and the mod list show them, loaded after them.
+# Optional (owner): mods CB's scripts, mixin compartments or JEI pages use when present; each is guarded (global.has,
+# CBMixinPlugin compartments). Listed so the project page and the mod list show them, loaded after them.
 [[dependencies.creativebrewing]]
 modId="alexsmobs"
 mandatory=false

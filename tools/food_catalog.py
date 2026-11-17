@@ -631,8 +631,8 @@ def main():
 CATALOG_MD = INSTANCE / 'feature_writeup/food_catalog.md'
 CATALOG_JSON = EXPORT / 'catalog.json'
 
-# Effects Canned Goods applies in code on top of the food properties (javap of its procedures, 2026-09-28;
-# every one runs in finishUsingItem). The dump only sees food properties, so these are listed by hand.
+# Effects Canned Goods applies in code on top of the food properties (javap of its procedures; every one
+# runs in finishUsingItem). The dump only sees food properties, so these are listed by hand.
 CANNED_CODE_EFFECTS = {
     'canned_goods:canned_golden_apples': 'regeneration III 5s, absorption II 120s',
     'canned_goods:canned_enchanted_apples': 'regeneration III 20s, resistance II 300s, fire_resistance II 300s, absorption V 120s',

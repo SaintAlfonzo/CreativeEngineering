@@ -6,8 +6,8 @@ import java.util.Map;
 
 /**
  * What {@link CompartmentArt} builds and from what. Plain data (texture ids as {@code namespace:path} strings, without
- * {@code textures/} and {@code .png}), no Minecraft classes. Output paths are the ones the compartment packs' models name, so
- * nothing else changed when the copied PNGs left the jar (2026-11-05); kubejs/assets can still override any of them.
+ * {@code textures/} and {@code .png}), no Minecraft classes. Output paths are the ones the compartment packs' models
+ * name, so nothing else changed when the copied PNGs left the jar; kubejs/assets can still override any of them.
  */
 public final class ArtRecipes {
 
@@ -62,7 +62,7 @@ public final class ArtRecipes {
 		return m;
 	}
 
-	/** Colours as ARGB. Duck shades and goose shades are the owner's picks of 2026-10-21 (nests.md 4). */
+	/** Colours as ARGB. Duck shades and goose shades are the owner's picks (nests.md 4). */
 	public static final List<Derived> INCUBATION = List.of(
 			new Derived("creativedelight:block/emu_eggs", "incubation:block/turkey_eggs", "alexsmobs",
 					map(0xFFFFEFF3, 0xFF1DB2B8, 0xFFE8DAD0, 0xFF108E9C, 0xFFCCBBA7, 0xFF077082)),

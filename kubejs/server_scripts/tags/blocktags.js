@@ -21,14 +21,13 @@ ServerEvents.tags('block', e => {
 	// Layered Obsidian (startup_scripts/items/decor_blocks.js): mined like obsidian
 	t.mineable(e, 'pickaxe', 'diamond', item.layered_obsidian)
 
-	// The Vintage Delight ghost pepper soil tag moved to Creative Delight 2026-10-27 (vintagedelight/tags.js).
 
-	// Oven heat sources and the oven's stove heat and pickaxe tags: Creative Delight (creativeengineering/kitchen_tags.js).
-	// Monster box, Rubidium blendable, campfire rain and no_world_dye tags: Creative Compat (creativecompat/kubejs/tags/blocktags.js).
-	// Bakeware hammering (cutting board): Creative Delight (creativeengineering/kitchen_tags.js).
-	// Counter supports / toppers (Cooking for Blockheads): Creative Delight cookingforblockheads/kitchen.js (2026-10-31).
-	// Villager ladders, structure ground match, earth fill, template trim and wild plant soil tags: Creative Worldgen
-	// (creativeworldgen/kubejs/tags/blocktags.js, 2026-11-02).
+	// Oven heat sources and the oven's stove heat and pickaxe tags: Creative Delight
+	// (creativeengineering/kitchen_tags.js). Monster box, Rubidium blendable, campfire rain and no_world_dye tags:
+	// Creative Compat (creativecompat/kubejs/tags/blocktags.js). Bakeware hammering (cutting board): Creative Delight
+	// (creativeengineering/kitchen_tags.js). Counter supports / toppers (Cooking for Blockheads): Creative Delight
+	// cookingforblockheads/kitchen.js. Villager ladders, structure ground match, earth fill, template trim and wild plant
+	// soil tags: Creative Worldgen (creativeworldgen/kubejs/tags/blocktags.js).
 
 	// Keg temperature + Vinery cold storage (Brewin port BnCHeatSources; Vinery WineYears.storageKind). The keg tag
 	// already holds FD heat_sources; these only warm kegs, they don't let FD pots cook. Running gates are in
@@ -405,11 +404,11 @@ ServerEvents.tags('block', e => {
 		b.porous_flesh, // Visceral Heap; honey's jump factor (block_properties.js), wall slide (creativecompat:wall_slide below)
 	])
 
-	// ── Audit 2026-11-10 (plan_blockrunner_audit.md): every walkable block gets a tier ──────────
-	// Part 1, real materials: families that walk like a tier above. Part 2, the 1.00 tiers: what is
-	// left of each mod goes in whole ('@mod'), minus blocks a tier already holds (auditLeft). Blocks
-	// with no collision ignore their tag, so whole-mod entries are safe for plants and pipes.
-	// Never tiered (a tier replaces the block's own speed): soul sand and soil, magma, fluids.
+	// ── Audit (plan_blockrunner_audit.md): every walkable block gets a tier ────────── Part 1, real
+	// materials: families that walk like a tier above. Part 2, the 1.00 tiers: what is left of each
+	// mod goes in whole ('@mod'), minus blocks a tier already holds (auditLeft). Blocks with no
+	// collision ignore their tag, so whole-mod entries are safe for plants and pipes. Never tiered (a
+	// tier replaces the block's own speed): soul sand and soil, magma, fluids.
 	var auditSkip = [
 		item.soul_sand, item.soul_soil, 'securitycraft:reinforced_soul_soil', item.magma_block,
 		global.fluid.water, global.fluid.lava, 'minecraft:bubble_column', 'minecraft:moving_piston',
@@ -481,7 +480,7 @@ ServerEvents.tags('block', e => {
 		// jam blocks extend HoneyBlock, jello blocks SlimeBlock (Fruits Delight precedent)
 		'vintagedelight:*_jam_block', 'vintagedelight:*_jello_block', item.mulberry_jam_block,
 	])
-	// confectionery: every placed dish, plate, jar and bottle (decided 2026-11-10), food blocks, chocolate
+	// confectionery: every placed dish, plate, jar and bottle (decided), food blocks, chocolate
 	t.addMatching(e, runner.confectionery, [
 		'@displaydelight', '@neapolitan',
 		'/^lightmanscurrency:coin(block|pile)_chocolate_[a-z]+$/',

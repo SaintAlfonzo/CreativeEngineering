@@ -1,4 +1,3 @@
-// Moved from the pack's startup_scripts/func/potion_area.js 2026-11-01 (creative_brewing.md 4.5).
 // Startup script in the CB jar: runs after the pack folder and CD; CB rebuild + restart.
 // global.potionArea — spawns the expanding lingering-potion dome for the
 // creativeengineering potion buckets (potion_buckets.js (this folder)).

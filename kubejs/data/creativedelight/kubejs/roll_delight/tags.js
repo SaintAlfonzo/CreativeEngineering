@@ -24,8 +24,8 @@ ServerEvents.tags('item', e => {
 		i.rice_roll, i.rice_roll_slice, i.amazing_salmon_roll, i.amazing_salmon_roll_slice, i.mushroom_roll,
 		i.mushroom_roll_slice, i.ancient_roll, i.ancient_roll_slice, i.golden_roll, i.golden_roll_slice, i.nether_roll,
 		i.tobiko_roll, i.cooked_nether_wart,
-		// 3.3 table rows: FD slices raw and cooked (Fish Tempura removed 2026-11-02), Hostile Guardian Roll and Sashimi, Ocean's rolls, Pufferfish
-		// (typed hazard, so no fish tag holds it; it keeps its poison, chopsticks lengthen that too, 3.3.3)
+		// 3.3 table rows: FD slices raw and cooked, Hostile Guardian Roll and Sashimi, Ocean's rolls, Pufferfish (typed
+		// hazard, so no fish tag holds it; it keeps its poison, chopsticks lengthen that too, 3.3.3)
 		i.salmon_slice, i.cod_slice, i.salmon_slice_cooked, i.cod_slice_cooked, i.guardianroll,
 		i.guardiansashimi, i.fugu_roll, i.elder_guardian_roll, i.pufferfish,
 		// Rustic Delight (3.3.1)

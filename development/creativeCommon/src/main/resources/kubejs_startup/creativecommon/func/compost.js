@@ -1,9 +1,9 @@
 // priority: 900
 // patcherMod: src/main/resources/kubejs_startup/creativeengineering/func/compost.js (was
-// kubejs/startup_scripts/func/compost.js; moved 2026-10-25, creative_delight.md 10.5 item 3). patcherMod's
-// startup loader runs this pack before the pack's startup_scripts folder, so global.compost exists before
-// compost/compost_rules.js + compost/compost_values.js call it at top level. It reads no dict at load time;
-// keep it that way (the dicts load after it). An edit needs a patcherMod rebuild.
+// kubejs/startup_scripts/func/compost.js). patcherMod's startup loader runs this pack before the pack's
+// startup_scripts folder, so global.compost exists before compost/compost_rules.js +
+// compost/compost_values.js call it at top level. It reads no dict at load time; keep it that way (the
+// dicts load after it). An edit needs a patcherMod rebuild.
 // ─────────────────────────────────────────────────────────────────────────────
 //  Compost framework - global.compost. Owns the composter's chance table
 //  (ComposterBlock.COMPOSTABLES, the one map vanilla, hoppers and every mod read).

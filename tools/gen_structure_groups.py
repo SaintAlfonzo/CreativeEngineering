@@ -81,8 +81,7 @@ QUANTILE = 1.0
 MEDIAN_WEIGHT = 100
 EPS_AREA = 1e-4          # a biome that exists but never showed up in the climate sample
 
-# The groups the pack starts with (2026-09-27). --migrate writes these as group/<name> tags; after
-# that the tags in structure_tags.json are the source of truth and this table is only a record.
+# The groups the pack starts with. --migrate writes these as group/<name> tags.
 GROUP_SPECS = OrderedDict([
     ('settlements', {
         'note': 'Friendly settlements: vanilla and Towns & Towers villages, Terralith fortified villages. Meta structures join later.',
@@ -163,7 +162,6 @@ def fmt_sp(d):
 
 
 def group_salt(name):
-    # Seed string, not an id: kept as it was before the 2026-11-10 namespace move so salts never change.
     return zlib.crc32(('creativeengineering:group/' + name).encode()) & 0x7fffffff
 
 

@@ -1,6 +1,6 @@
 // requires: creativedelight
 // Vanilla food and kitchen recipe changes. Non-member file: recipe ids are creativedelight:<type>/<suffix>
-// (global.CD.recipes). Moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
+// (global.CD.recipes).
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 
@@ -25,7 +25,7 @@ ServerEvents.recipes(e => {
 		//   brewing (keg, wine)   sugar, powdered sugar, honey bottle, honeycomb
 		//   plain (not food)      sugar, powdered sugar: Botania, speed modules and upgrades, ethanol, potions, spider eye, blaze cake
 		//   drinks                sugar, powdered sugar, honey bottle (no honeycomb)
-		//   cooking (the rest)    sugar, powdered sugar, honey bottle, honeycomb (glycerol is no sugar since 2026-11-02)
+		//   cooking (the rest)    sugar, powdered sugar, honey bottle, honeycomb (glycerol is no sugar)
 		// The four passes are disjoint (a swapped slot holds a tag with sugar in it, so a later pass would match it again).
 		// Drinks: the drink food type, plus fluid drinks and the two drinks with no food type, by recipe id. Recipes that need
 		// real sugar (powdered sugar, sugar cube, powdered sugar bucket) are script-added on i.sugar, so no pass sees them.

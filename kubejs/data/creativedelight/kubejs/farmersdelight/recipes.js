@@ -107,7 +107,6 @@ ServerEvents.recipes(e => {
 				R.fdCutting(i.driftwood_furnace_boat, i.any_hoe, [i.driftwood_boat, i.furnace], e, 'salvaging/driftwood_furnace_boat')
 		}
 
-		// The rows below moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
 
 		//######################### Soups and bases #########################
 		//Bone broth

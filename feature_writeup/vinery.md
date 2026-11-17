@@ -364,3 +364,15 @@ Tooltip tests are TT-14 and TT-15 in [tooltips.md](tooltips.md). JEI tests are V
 - 2026-11-12: Lava Walker burns on lava without Fire Resistance (section 3), for Raspberry Pie's slot pool.
 - 2026-11-14: hops grape type on the lattice, model alias, pot juice guard (section 3); Creative Brewing built and installed; not run.
 - 2026-11-16: the jungle grape lattice takes bone meal without a lattice below (2.5; `farming/crops #52`); the stem keeps the trunk rule. VN-13 rewritten, VN-21; queue SQ-VN-01 (plan_small_fixes_1116.md). Creative Brewing built and installed; not run.
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-19: Mediums whose own model is the box shape already (user, scratchpad 2026-10-19) (development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/forge/upstream/BottleLooks.java)
+- 2026-10-20: Colours left out of a wine's palette before the swap (user, scratchpad 2026-10-20) (development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/forge/upstream/BottleLooks.java)
+- 2026-10-20: alcohol/vineryport #16 (test updates 2026-10-20): racks by how many they hold, "Single / Small / Big Oak Wine Rack" (1, 4, 9 bottles), so the wines' "Fits in" lines can name them (development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/forge/upstream/UpstreamTranslator.java)
+- 2026-11-01: Moved from the pack's client_scripts/tooltips.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; the helpers and palette are read through global.tooltips at event time (kubejs/assets/creativebrewing/kubejs/vinery/tooltips.js)
+- 2026-11-01: Moved from the pack's client_scripts/namechanges.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; no other script names these keys, so running after the pack's lang pass gives the same names (kubejs/assets/creativebrewing/kubejs/vinery/names.js)
+- 2026-11-01: Moved from the pack's server_scripts/cooking/alcohol.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged (kubejs/data/creativebrewing/kubejs/vinery/alcohol.js)
+- 2026-11-01: Moved from the pack's server_scripts/economy/wandering_trades.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged (kubejs/data/creativebrewing/kubejs/vinery/wandering_trades.js)
+- 2026-11-06: Moved from Creative Engineering's server scripts (tags/wood_tags.js) 2026-11-06, row unchanged (kubejs/data/creativebrewing/kubejs/vinery/tags.js)
+- 2026-11-14: Pack: a lattice planted with Hearth and Harvest hops before 2026-11-14 was its own block ({@code hearthandharvest:hops}); the swap list loads it as this lattice with its age and facing but grape=none (development/creativeBrewing/members/vinery/src/main/java/net/satisfy/vinery/legacy/block/LegacyLatticeStemBlock.java)

@@ -1,7 +1,6 @@
 // requires: creativedelight
-// Pack-native food and cooking item tags: powdered sugar, cornmeal, bakeware (moved from the pack's
-// server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged). Shared tags are split by the mod owning each
-// entry: the other entries are in that mod's tags.js beside this folder.
+// Pack-native food and cooking item tags: powdered sugar, cornmeal, bakeware. Shared tags are split by the mod
+// owning each entry: the other entries are in that mod's tags.js beside this folder.
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
 	var t = global.tags

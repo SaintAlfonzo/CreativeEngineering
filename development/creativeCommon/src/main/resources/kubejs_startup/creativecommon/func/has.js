@@ -37,7 +37,7 @@ global.has._cache = {}
 
 // Data namespaces that differ from the owning mod's id (plan_bugfix_1114.md 5.1, SQ-DCM-02): without these the
 // worldgen datapack mods below read as absent and their tags and recipes were skipped. Namespace -> mod id, read from
-// each jar's mods.toml and data/assets folders (2026-11-14). Add a row when a jar's namespace is not its mod id.
+// each jar's mods.toml and data/assets folders. Add a row when a jar's namespace is not its mod id.
 global.has._modOf = {
 	'towns_and_towers': 't_and_t',
 	'hopo': 'hopour',

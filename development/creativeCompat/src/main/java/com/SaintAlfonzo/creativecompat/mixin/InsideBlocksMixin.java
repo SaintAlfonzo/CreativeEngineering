@@ -27,12 +27,12 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * The end of {@code Entity#checkInsideBlocks} ({@code m_20101_}), right where vanilla has run every block's
  * {@code entityInside}: first {@link WallSlide} (full {@code #creativecompat:wall_slide} blocks slide entities down
  * their sides like honey), then {@link PassThrough} (walking and falling through pass-through blocks,
- * plan_passthrough.md; timed when {@code [debug.passthrough] timing} is on, {@link PassTiming}). Common side: the local player moves itself on the client, mobs on the server. Was
- * WallSlideMixin until the pass-through phase 1 (2026-11-14).
+ * plan_passthrough.md; timed when {@code [debug.passthrough] timing} is on, {@link PassTiming}). Common side: the local
+ * player moves itself on the client, mobs on the server.
  *
  * <p>Also gives every entity its {@link PassState} field ({@link PassHolder}), created on first use. Two more hooks in
- * {@code Entity#move} ({@code m_6478_}, scratch fixes 2026-11-15): at HEAD an item or orb held in a web skips the
- * whole move ({@link PassItems#heldMove}: only its web is checked), and the fast-fall reset clip ({@code Level#clip},
+ * {@code Entity#move} ({@code m_6478_}, scratch fixes): at HEAD an item or orb held in a web skips the whole move
+ * ({@link PassItems#heldMove}: only its web is checked), and the fast-fall reset clip ({@code Level#clip},
  * {@code m_45547_}) leaves out webs whose fall factor applies ({@link PassThrough#fallResetClip}); {@code require = 0}
  * so another mod's redirect of the same call wins quietly.
  *

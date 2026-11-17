@@ -42,10 +42,10 @@ import com.mojang.logging.LogUtils;
  * truth for ring counts / radii / colours / effects. potion_area.js calls setHandler(...) once
  * at startup, passing a JS lambda that just calls back into global.potionArea.spawn.
  *
- * Owner (potion_buckets.md F6, {@code potions/potion-buckets #3}, decided 2026-11-02): a dispenser placed by a player
- * keeps that player's UUID in its block entity's Forge persistent data ({@link #onPlace}); a bucket it fires spawns its
- * clouds owned by that player while they are online in the same level, so kills credit them as for a thrown bucket.
- * Dispensers placed before this, or by no player, and owners who are offline fire owner-less clouds (vanilla).
+ * Owner (potion_buckets.md F6, {@code potions/potion-buckets #3}): a dispenser placed by a player keeps that player's
+ * UUID in its block entity's Forge persistent data ({@link #onPlace}); a bucket it fires spawns its clouds owned by
+ * that player while they are online in the same level, so kills credit them as for a thrown bucket. Dispensers placed
+ * before this, or by no player, and owners who are offline fire owner-less clouds (vanilla).
  */
 public final class PotionBucketDispenser {
 

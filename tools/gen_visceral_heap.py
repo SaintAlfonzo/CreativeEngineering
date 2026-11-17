@@ -17,9 +17,9 @@ ROOT = Path(__file__).resolve().parent.parent
 SOURCE = ROOT / 'kubejs/generation_scripts/worldgen/vanilla_nether_noise_settings.json'
 OUT = ROOT / 'development/creativeWorldgen/src/main/resources/packs/biomesoplenty/data/minecraft/worldgen/noise_settings/nether.json'
 
-# After the two bedrock rules, ahead of vanilla's belowTop(5) netherrack rule (index 2) so the band under the roof is flesh
-# too. BOP inserts its own rules one later (after that netherrack rule); the Heap goes first because it is flesh at every
-# depth (plan_bugfix_1114.md 6.4, owner 2026-11-14).
+# After the two bedrock rules, ahead of vanilla's belowTop(5) netherrack rule (index 2) so the band under the roof is
+# flesh too. BOP inserts its own rules one later (after that netherrack rule); the Heap goes first because it is flesh
+# at every depth (plan_bugfix_1114.md 6.4, owner).
 INSERT_AT = 2
 FLESH = {'type': 'minecraft:block', 'result_state': {'Name': 'biomesoplenty:flesh'}}
 

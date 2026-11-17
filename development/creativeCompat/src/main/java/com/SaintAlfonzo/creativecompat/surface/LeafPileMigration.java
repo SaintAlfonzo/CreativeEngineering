@@ -12,10 +12,9 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 /**
- * One-time config move (plan_passthrough.md 3.1): the old {@code [leaf_piles] slowFromLayers} (the Immersive
- * Weathering leaf pile mixin, removed 2026-11-15) becomes {@code [surface.passthrough.leaf_pile] minLayers}, shared by
- * IW leaf piles and Twigs bamboo leaves. Runs on the toml text before Forge loads the file, so the value is in place
- * when the spec is read, and the old section is dropped.
+ * One-time config move (plan_passthrough.md 3.1): the old {@code [leaf_piles] slowFromLayers} becomes
+ * {@code [surface.passthrough.leaf_pile] minLayers}, shared by IW leaf piles and Twigs bamboo leaves. Runs on the toml
+ * text before Forge loads the file, so the value is in place when the spec is read, and the old section is dropped.
  *
  * <p>Which value wins: the old one, unless it is the old default (4) and the new key already exists (a player who
  * edited {@code minLayers} with the phase 1 jar keeps that edit). An unreadable or out-of-range old value is dropped

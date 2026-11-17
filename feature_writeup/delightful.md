@@ -240,3 +240,10 @@ namespace (3-argument `e.add` in CD `assets/creativedelight/kubejs/creativedelig
 into the minecraft lang, which the mod's own file can beat (the `ui/names #12` cause). Client restart (or F3+T).
 In the CD jar installed 2026-11-03 00:08, not booted; client row CQ-CDM2-01 (queue section SQ-CDJ7).
 
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-25: The rows below moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged (kubejs/data/creativedelight/kubejs/delightful/recipes.js)
+- 2026-10-25: Delightful items in the pack's food and cooking item tags (moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; split by the mod owning each entry) (kubejs/data/creativedelight/kubejs/delightful/tags.js)
+- 2026-11-02: Nut mash (merges/dishes #7, owner 2026-11-02): nut dough is removed (vintage_items.js) and has no recipe; nut butter and the Nut Butter and Jelly Sandwich merge into Vintage's nut mash jar and sandwich (swaps merges_delightful.json) (kubejs/data/creativedelight/kubejs/delightful/recipes.js)

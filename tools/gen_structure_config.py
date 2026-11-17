@@ -60,10 +60,10 @@ META_PATH = INSTANCE / 'kubejs/generation_scripts/worldgen/meta_structures.json'
 # first). Only used for the has_structure/* biome tags -- see load_vanilla_biome_tags().
 VANILLA_JAR = pack_paths.vanilla_jar()
 
-# ---------------------------------------------------------------------------
-# Vanilla 1.19.2 structure_set defaults, javap-verified against StructureSets.bootstrap
-# (forge-1.19.2-43.3.9_mapped_official_1.19.2.jar) on 2026-09-25. Every field matters here:
-# an override replaces the whole set, so a missing exclusion_zone or frequency is a real change.
+# --------------------------------------------------------------------------- Vanilla 1.19.2
+# structure_set defaults, javap-verified against StructureSets.bootstrap
+# (forge-1.19.2-43.3.9_mapped_official_1.19.2.jar). Every field matters here: an override replaces
+# the whole set, so a missing exclusion_zone or frequency is a real change.
 # ---------------------------------------------------------------------------
 VANILLA_STRUCTURE_SETS = {
     'minecraft:villages': {
@@ -338,8 +338,7 @@ def scan_mod_jars():
             structure_sets.pop(sid, None)
     # Ender's additions (End's Delight member, ends_delight.md 5.9): the End House set and structure come from the
     # 1.1.4 donor in enders_upstream/, served in memory by EndersTranslator, which gives biome ids their minecraft:
-    # namespace (the structure type change does not matter here). Added 2026-11-02 after the member stopped shipping
-    # the files (it read them from the donor since 2026-11-01, so the regenerated config had dropped the set).
+    # namespace (the structure type change does not matter here).
     for jar in sorted((MODS_DIR.parent / 'enders_upstream').glob('*.jar')):
         z = zipfile.ZipFile(jar)
         for kind in ('structure_set', 'structure'):

@@ -4,9 +4,8 @@
 // and alcohol are marked for Creative Brewing (creative_delight.md 29.5). Until then it lives in Creative Delight's
 // creativeengineering/ trees.
 //
-// Cultivated meat: the sample syringe, cultures from samples, culture growth, cutting and culture blocks. Moved from
-// the pack's kubejs/server_scripts/cooking/cultivated_meat.js 2026-10-25, rows unchanged. Items and blocks:
-// kubejs_startup/creativedelight/cultures.js (CD jar); tags: cultivated_meat_tags.js beside this file.
+// Cultivated meat: the sample syringe, cultures from samples, culture growth, cutting and culture blocks. Items and
+// blocks: kubejs_startup/creativedelight/cultures.js (CD jar); tags: cultivated_meat_tags.js beside this file.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

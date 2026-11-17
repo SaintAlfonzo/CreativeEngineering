@@ -17,5 +17,4 @@ ServerEvents.tags('item', e => {
 	t.addMatching(e, i.t_loot_golden_food, 'goldenfood:golden_*')
 })
 
-// Oceanic Delight fishing net tags (block, coral item and biome): Creative Delight
-// (kubejs/data/creativedelight/kubejs/oceanic_delight/fishing_net_tags.js, moved 2026-11-01).
+// Oceanic Delight fishing net tags (block, coral item and biome): Creative Delight.

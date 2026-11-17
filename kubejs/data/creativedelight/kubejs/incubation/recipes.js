@@ -1,7 +1,7 @@
 // requires: creativedelight
 // requires: incubation
 // Incubation egg food recipe changes. Non-member file: recipe ids are creativedelight:<type>/<suffix>
-// (global.CD.recipes). Moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged.
+// (global.CD.recipes).
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

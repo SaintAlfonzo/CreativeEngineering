@@ -1,10 +1,10 @@
 // requires: creativeengineering
-// Rose gold counts as gold (TODO recipes/metal #3, owner 2026-11-07; #7 closed as a decision 2026-11-14, plan_bugfix_1114.md
-// 4.2). The ingot, nugget, dust, block and rod are already in the forge gold tags (MCA's own tags, tags/metaltags.js); the
-// plate and wire join them there. Here every recipe that still names a literal gold item takes the gold tag instead, so rose
-// gold fits all of them except the recipes that make the raw gold forms themselves (gold or rose gold ore, raw, crushed,
-// dust, nugget, ingot, block, bars, plate, rod, wire and their storage blocks and coils), which would turn one metal into
-// the other. Everything else takes either: golden tools, armor and food, components, equipment, shields and magic.
+// Rose gold counts as gold (TODO recipes/metal #3, owner; #7 closed as a decision plan_bugfix_1114.md 4.2). The ingot,
+// nugget, dust, block and rod are already in the forge gold tags (MCA's own tags, tags/metaltags.js); the plate and
+// wire join them there. Here every recipe that still names a literal gold item takes the gold tag instead, so rose gold
+// fits all of them except the recipes that make the raw gold forms themselves (gold or rose gold ore, raw, crushed,
+// dust, nugget, ingot, block, bars, plate, rod, wire and their storage blocks and coils), which would turn one metal
+// into the other. Everything else takes either: golden tools, armor and food, components, equipment, shields and magic.
 // Pack scripts that name a literal gold item are edited where they are (components, redstone, process).
 ServerEvents.recipes(e => {
 	var i = global.item

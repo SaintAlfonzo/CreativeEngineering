@@ -12,11 +12,11 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
 /**
- * One fog colour for the whole Nether, a deep red ({@link #RGB}), instead of each biome's own (perf.md 19.3, owner
- * 2026-11-07). Set on Forge's fog colour event, which comes after vanilla's biome sample, so the clear colour, the
- * terrain fog and Distant Horizons' world-coloured far fog all take it. Uses the level being drawn, so a Nether seen
- * through an Immersive Portals portal is red too. Left alone: in lava, water or powder snow, and with Blindness or
- * Darkness (vanilla darkens the colour for those). Runs LOW, after other mods' fog colour handlers.
+ * One fog colour for the whole Nether, a deep red ({@link #RGB}), instead of each biome's own (perf.md 19.3, owner).
+ * Set on Forge's fog colour event, which comes after vanilla's biome sample, so the clear colour, the terrain fog
+ * and Distant Horizons' world-coloured far fog all take it. Uses the level being drawn, so a Nether seen through an
+ * Immersive Portals portal is red too. Left alone: in lava, water or powder snow, and with Blindness or Darkness
+ * (vanilla darkens the colour for those). Runs LOW, after other mods' fog colour handlers.
  */
 public final class NetherFogColour {
 

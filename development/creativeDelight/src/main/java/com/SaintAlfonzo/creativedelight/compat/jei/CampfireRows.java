@@ -20,8 +20,7 @@ import net.minecraftforge.fml.loading.FMLPaths;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Campfire Rules tab: how a campfire is placed, lit and put out in this pack. Sources (read 2026-10-22):
- * <ul>
+ * Campfire Rules tab: how a campfire is placed, lit and put out in this pack. Sources (read): <ul>
  *   <li>Unlit Campfire 1.7.1.0 ({@code CampfireBlockMixin}): every {@code CampfireBlock} is placed unlit; lit time 0
  *       burns forever; its rain check is off. Its config is a SERVER config, not loaded on the client when JEI starts,
  *       so this reads the pack default {@code defaultconfigs/unlitcampfire-server.toml} (what a new world gets).</li>
@@ -34,7 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  *       Unlit Campfire nor the rain rule touches them.</li>
  * </ul>
  * Rows in the {@code WorldRow} JSON format (patcherMod {@code compat.world.WorldRows}, registered from
- * {@code CreativeDelight}). Moved from Creative Compat 2026-11-04 (creative_split.md 7.9 step 1); the JSON helpers
+ * {@code CreativeDelight}). Moved from Creative Compat (creative_split.md 7.9 step 1); the JSON helpers
  * are copies of Compat's {@code BurnRows} ones, so CD has no class edge to Compat.
  */
 public final class CampfireRows {

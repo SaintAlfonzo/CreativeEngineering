@@ -1,13 +1,10 @@
 // requires: creativedelight
-// Can tags: #creativedelight:cans/servings/<n> for every can in the <mod>/can_servings.js startup member
-// scripts of the CD jar (item_dict key -> servings; record kubejs/generation_scripts/food/can_servings.json, written
-// by tools/gen_can_types.py; framework #7 2026-11-01, read by instance path before), chained up to
-// #creativedelight:cans/servings and #creativedelight:cans.
-// patcherMod food.CanServings reads the servings count from the tag path: eating or crafting takes a
-// serving, the bar shows what's left, the last one rolls empty/crushed/nothing (CEConfig [canning]).
-// Recipes use cans through global.NCH shaped/shapeless with the `cans` argument.
-// Reference: feature_writeup/food.md
-// Moved from the pack's server_scripts/tags/cantags.js 2026-10-25, rows unchanged; the JSON stays in the pack folder.
+// Can tags: #creativedelight:cans/servings/<n> for every can in the <mod>/can_servings.js startup member scripts of
+// the CD jar (item_dict key -> servings; record kubejs/generation_scripts/food/can_servings.json, written by
+// tools/gen_can_types.py; framework #7 read by instance path before), chained up to #creativedelight:cans/servings
+// and #creativedelight:cans. patcherMod food.CanServings reads the servings count from the tag path: eating or
+// crafting takes a serving, the bar shows what's left, the last one rolls empty/crushed/nothing (CEConfig [canning]).
+// Recipes use cans through global.NCH shaped/shapeless with the `cans` argument. The JSON stays in the pack folder.
 
 ServerEvents.tags('item', e => {
 	if (!global.CD) return

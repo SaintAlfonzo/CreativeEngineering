@@ -39,8 +39,8 @@ INSTANCE = lang_index.INSTANCE
 EXPORTED = INSTANCE / 'kubejs/exported'
 PLACEHOLDER = 'TODO: write a description'
 
-# The last /dumppotions ran before the Vinery port went into mods/ (2026-10-19): it dropped these three
-# (alcohol.md B7.3). Remove an entry once a fresh dump agrees.
+# The last /dumppotions ran before the Vinery port went into mods/: it dropped these three (alcohol.md
+# B7.3). Remove an entry once a fresh dump agrees.
 EFFECT_OVERRIDES = {
     'vinery:health_effect': None,
     'vinery:luck_effect': None,
@@ -87,7 +87,7 @@ def jei_sources(potions):
     providers = (INSTANCE / 'kubejs/data/creativebrewing/kubejs/creativebrewing/jeed_providers.js').read_text()
     for eid in EFFECT_ID.findall(providers):
         add(eid, 'provider')
-    # gear rows: Creative Equipment since 2026-11-06 (plan_cb_polish.md 1); the frameworks are Creative Common's
+    # gear rows: Creative Equipment (plan_cb_polish.md 1); the frameworks are Creative Common's
     for f in ('development/creativeEquipment/src/main/resources/kubejs_startup/creativeequipment/gear_effects.js',
               'kubejs/data/creativeequipment/kubejs/equipment/gear_jeed.js'):
         text = (INSTANCE / f).read_text()

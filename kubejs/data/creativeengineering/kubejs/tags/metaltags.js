@@ -1,5 +1,5 @@
 // requires: creativeengineering
-// Creative Engineering; moved from kubejs/server_scripts/tags/metaltags.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
+// Creative Engineering.
 ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
@@ -29,8 +29,6 @@ ServerEvents.tags('item', e => {
 		t.add(e, `forge:${type}/all_metal`, id)
 	})
 
-	// any metal dust or grit (Steel Toe Stout, alcohol.md 8.6): moved 2026-11-06 to Creative Common's data
-	// (data/creativeengineering/tags/items/metal_dusts.json, optional entries) so Creative Brewing finds the tag alone
 
 	// spool
 	t.addTag(e, 'forge:spool/iron', i.spool)

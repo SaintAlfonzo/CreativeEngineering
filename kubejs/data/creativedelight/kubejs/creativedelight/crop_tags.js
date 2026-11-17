@@ -1,7 +1,6 @@
 // requires: creativedelight
-// Crop tags: crop parity soils and crops, hoe harvest area.
-// Moved from the pack's server_scripts/tags/blocktags.js and equipmenttags.js 2026-11-01 (wave 4), rows
-// unchanged. Only adds: running after the pack's tag scripts gives the same contents (nothing removes from these tags).
+// Crop tags: crop parity soils and crops, hoe harvest area. Only adds: running after the pack's tag scripts gives the
+// same contents (nothing removes from these tags).
 ServerEvents.tags('block', e => {
 	if (!global.CD) return
 	var t = global.tags
@@ -16,8 +15,8 @@ ServerEvents.tags('block', e => {
 	// replant is a separate line in config/quark-common.toml "Harvestable Blocks".
 	t.add(e, 'creativedelight:crops/farmland_crops', item.tobacco_seeds)
 
-	// Farming batch 2026-11-07 (plan_farming_cooking_batch.md C1, Q1, Q13; briefs/farming_crops.md G8, G15, crops #4).
-	// G8: Quark's right-click never harvests or replants weeds (break them instead); also stops villagers replanting them.
+	// Farming batch (plan_farming_cooking_batch.md C1, Q1, Q13; briefs/farming_crops.md G8, G15, crops #4). G8: Quark's
+	// right-click never harvests or replants weeds (break them instead); also stops villagers replanting them.
 	if (global.has(item.weeds)) t.add(e, 'quark:simple_harvest_blacklisted', item.weeds)
 	// Q1: weeds can be hand-planted on Rich Farmland. Only WeedsBlock.mayPlaceOn reads this tag; natural weed growth
 	// stays on vanilla farmland only (IW block_growths owner block), so rich soils still never grow weeds by themselves.

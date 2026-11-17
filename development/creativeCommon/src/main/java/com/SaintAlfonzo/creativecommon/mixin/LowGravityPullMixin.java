@@ -16,8 +16,7 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
  * falling blocks, primed TNT, minecarts off rails (on rails the track sets the height) and a Shulker bullet that lost
  * its target. Scales that constant by LowGravity.pullScale, on the server and on the client alike (the client predicts
  * items, falling blocks and TNT itself), so no motion packets are needed. An item in water or lava never reaches the
- * constant (vanilla swims it instead). Replaces CreateGravityEntitiesMixin of 2026-11-08 00:01 (a velocity add-back
- * that needed a motion packet per entity per tick).
+ * constant (vanilla swims it instead).
  */
 @Mixin(value = {ItemEntity.class, FallingBlockEntity.class, PrimedTnt.class, AbstractMinecart.class, ShulkerBullet.class}, remap = false)
 public abstract class LowGravityPullMixin {

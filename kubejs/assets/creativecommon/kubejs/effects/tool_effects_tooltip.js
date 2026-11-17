@@ -1,9 +1,7 @@
-// Creative Common since 2026-11-06 (plan_cb_polish.md 2), from Creative Brewing; before that the pack's client_scripts/tool_effects_tooltip.js.
-// Tooltip renderer for the global.toolEffects framework (Common startup effects/
-// tool_effects.js). Effects are actually applied server-side by
-// Common server effects/tool_effects.js — this file only draws the matching tooltip
-// lines, styled after (and for held(), literally sharing code with) armor_effects.js's
-// own tooltip renderer.
+// Creative Common (plan_cb_polish.md 2), from Creative Brewing. Tooltip renderer for the global.toolEffects framework
+// (Common startup effects/tool_effects.js). Effects are actually applied server-side by Common server
+// effects/tool_effects.js — this file only draws the matching tooltip lines, styled after (and for held(), literally
+// sharing code with) armor_effects.js's own tooltip renderer.
 //
 // A separate file from Common client effects/armor_effects_tooltip.js because it reads a
 // different registry (global.toolEffects, not global.armorEffects.PIECES/SETS), even

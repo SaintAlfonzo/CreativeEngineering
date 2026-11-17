@@ -16,7 +16,7 @@
 //                                        count, then each non-empty slot with what a 64 extract would take (simulated)
 //   /zc2 air NAME N                      air supply set to N (max 300); N = -1 only reads it
 //   /zc2 reg item|block|fluid|block_entity_type <regex>   count of registry ids matching the regex, first 40 listed
-// MIGRATED 2026-11-15 to /cdevtest (creative_devtools.md): state -> state + be, inv -> inv (face=null) / be, watch ->
+// MIGRATED to /cdevtest (creative_devtools.md): state -> state + be, inv -> inv (face=null) / be, watch ->
 // watch what=inv, useat -> use as=NAME hit=dx,dy,dz hand=both, attrs -> attrs, cap -> inv face=..., reg -> reg. air stays here.
 (() => {
     const $C2Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

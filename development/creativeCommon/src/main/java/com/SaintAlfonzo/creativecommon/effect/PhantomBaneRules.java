@@ -11,10 +11,9 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Phantom prevention, one rule for the pack ({@code potions/effects #10}, decided 2026-10-31):
- * <ul>
+ * Phantom prevention, one rule for the pack ({@code potions/effects #10}): <ul>
  *   <li>Farmer's Respite's Caffeinated adds a hidden Phantom Bane: Creative Delight's
- *       {@code compat.farmersrespite.CaffeinatedPhantomBane} and its CaffeinatedEffectMixin (moved 2026-11-07).</li>
+ *       {@code compat.farmersrespite.CaffeinatedPhantomBane} and its CaffeinatedEffectMixin (moved).</li>
  *   <li>When Phantom Bane ends (runs out or is removed) on a player, Time Since Rest goes back to 0, as after sleeping.</li>
  *   <li>Only the players with Phantom Bane are skipped by the phantom spawner, not everyone after them in the player list
  *       ({@code mixin/better_beacons/PhantomSpawnerBaneSkipMixin}, {@code potions/effects #13}).</li>

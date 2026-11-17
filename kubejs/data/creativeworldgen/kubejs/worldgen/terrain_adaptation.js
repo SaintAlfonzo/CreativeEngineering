@@ -81,12 +81,12 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	// Batch 3, walled compounds: soft only. Their courtyards are pad (the bastille has 9,423 pad columns) and
 	// should stay flat, so no trim; soft still shortens and rounds the skirt outside the walls.
 	var walledCompounds = ['takesapillage:bastille', 'takesapillage:pillager_camp']
-	// End builds (2026-10-25): Ender's Delight's End House (9x16 purpur and end stone floor, shipped by Creative
-	// Delight's enders member). Soft only: its floor is the building, not a pad, so no trim. Its own json says beard_thin.
+	// End builds: Ender's Delight's End House (9x16 purpur and end stone floor, shipped by Creative Delight's enders
+	// member). Soft only: its floor is the building, not a pad, so no trim. Its own json says beard_thin.
 	var endBuilds = ['endersdelight:end_house']
-	// Batch 4 (2026-10-30, TODO structures/terrain #1). Ponds: water is a built block for the trim, so the pond stays
-	// whole and the pad around it goes. The carp pond is sunk too (start -4, grass rim at its y 4), like the camps.
-	// Philip's level-three ruins: grass pads around the walls; meta/large_ruins parts follow their anchor.
+	// Batch 4 (TODO structures/terrain #1). Ponds: water is a built block for the trim, so the pond stays whole and
+	// the pad around it goes. The carp pond is sunk too (start -4, grass rim at its y 4), like the camps. Philip's
+	// level-three ruins: grass pads around the walls; meta/large_ruins parts follow their anchor.
 	var ponds = [
 		'farmers_structures:aquacultures_common', 'farmers_structures:aquacultures_carp', 'old_swamp_fisherman_house:fisherman_house',
 	]
@@ -113,26 +113,25 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	// layer below), so it gets this one and keeps its own adaptation.
 	global.tags.add(e, 'creativeworldgen:template_trim/air', ['terralith:spire'])
 
-	// Sunk starts (2026-10-19): start_height below 0 sinks these templates into the ground on purpose, and the beard
-	// levels the ground at the surface they were projected to instead of at their sunk bottom layer (patcherMod
-	// TerrainAdaptation#sink). Campsite Structures' camps stand on a 4-layer dirt dome under their grass layer (start
-	// height -4: the grass layer replaces the surface block; their old features used -5, a 1-block dip); with the plain
-	// beard_thin the ground around them was dug down to the dome's bottom and the dome stood 4 blocks out of a flat ring.
+	// Sunk starts: start_height below 0 sinks these templates into the ground on purpose, and the beard levels the ground
+	// at the surface they were projected to instead of at their sunk bottom layer (patcherMod TerrainAdaptation#sink).
+	// Campsite Structures' camps stand on a 4-layer dirt dome under their grass layer (start height -4: the grass layer
+	// replaces the surface block; their old features used -5, a 1-block dip); with the plain beard_thin the ground around
+	// them was dug down to the dome's bottom and the dome stood 4 blocks out of a flat ring.
 	global.tags.add(e, 'creativeworldgen:terrain_adaptation/sunk_start', [
 		'campsite_structures:armorer_campsite', 'campsite_structures:butcher_campsite', 'campsite_structures:cartographer_campsite',
 		'campsite_structures:cleric_campsite', 'campsite_structures:farmer_campsite', 'campsite_structures:fisher_campsite',
 		// Not here: Philip's ancient_crypt and antiquus_crypta, T&T's nilotic village. Their start element is terrain
-		// matching (patcherMod refuses them), so they keep their own placement (owner call 2026-11-01, TODO
-		// structures/earthfill #17).
-		// the carp pond (batch 4): a 4-layer dirt bowl under its grass rim, start height -4
+		// matching (patcherMod refuses them), so they keep their own placement (owner call TODO structures/earthfill
+		// #17). the carp pond (batch 4): a 4-layer dirt bowl under its grass rim, start height -4
 		'farmers_structures:aquacultures_carp',
 	])
 
-	// Seabed clearance (2026-10-30, TODO structures/terrain #7; patcherMod SeabedClearance): underground structures at
-	// a fixed height (Terralith's caves y -40..40, Subterrestrial's land cabins y 6..48) whose box top comes within 8
-	// blocks of a floor with water on it are dropped; their beard carved the seabed open and the sea flooded them.
-	// Not here: the ocean cabin (made for the seabed: y 24..44 in oceans only, it would almost never start), the
-	// deepslate cabin (y -56..-6), Philip's y -40 ruins, and buried treasure (its box sits at y 90 until it is placed).
+	// Seabed clearance (TODO structures/terrain #7; patcherMod SeabedClearance): underground structures at a fixed
+	// height (Terralith's caves y -40..40, Subterrestrial's land cabins y 6..48) whose box top comes within 8 blocks of
+	// a floor with water on it are dropped. Not here: the ocean cabin (made for the seabed: y 24..44 in oceans only, it
+	// would almost never start), the deepslate cabin (y -56..-6), Philip's y -40 ruins, and buried treasure (its box
+	// sits at y 90 until it is placed).
 	global.tags.add(e, 'creativeworldgen:seabed_clearance', [
 		'terralith:underground/oak_cabin', 'terralith:underground/giant_bee_hive', 'terralith:underground/mining_outpost',
 		'terralith:underground/old_refinery', 'terralith:underground/sunken_tower', 'terralith:underground/witch_hut',

@@ -34,7 +34,7 @@ import org.slf4j.Logger;
  * {@code PlayerEvents.tick}, which only ever runs on the logical server) would be silently
  * overwritten by the client's next movement packet before a player ever saw it slow down.
  *
- * <p><b>2026-09-13 bug:</b> the brake did nothing at all on first release. This class was
+ * <p><b>Why the use-tick path:</b> the brake did nothing at all on first release. This class was
  * fine - {@code isUsingItem()} simply never became true, because right-clicking a plain
  * KubeJS item does NOT call {@code startUsingItem()} on its own (that's specific to items
  * like {@code BowItem} that override {@code use()} to do it). KubeJS's own {@code ItemMixin}

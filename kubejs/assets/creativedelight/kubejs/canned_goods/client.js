@@ -1,6 +1,6 @@
 // requires: creativedelight
 // requires: canned_goods
-// Canned Goods names, moved from the pack's client_scripts/namechanges.js 2026-10-27, rows unchanged.
+// Canned Goods names.
 ClientEvents.lang('en_us', e => {
 	if (!global.CD) return
 	var i = global.item

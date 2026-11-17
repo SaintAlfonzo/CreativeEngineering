@@ -17,16 +17,16 @@ import java.nio.file.Path;
  * Exposure Extras: this pack's own additions to Exposure (not upstream code), shipped in the backport jar.
  * So far: camera bags ({@code camerabag/}). Config: {@code exposureextras-common.toml}.
  *
- * <p>Mod id {@code exposure_extras} until 2026-11-10 (namespace_move.md D-EXPO, naming rule). The {@code exposure_extras:}
- * ids, and the older {@code creativeengineering:<tier>_camera_bag} ids (before patcherMod 1.0.3), move by the swap list
- * {@code data/exposureextras/swaps/owner_namespace.json} (read by Creative Common); the config file is carried over here.
+ * The {@code exposure_extras:} ids, and the older {@code creativeengineering:<tier>_camera_bag} ids (before patcherMod
+ * 1.0.3), move by the swap list {@code data/exposureextras/swaps/owner_namespace.json} (read by Creative Common); the
+ * config file is carried over here.
  */
 @Mod(ExposureExtras.ID)
 public class ExposureExtras {
 
     public static final String ID = "exposureextras";
 
-    /** The mod id before the naming-rule rename (2026-11-10). */
+    /** The mod id before the naming-rule rename. */
     private static final String OLD_ID = "exposure_extras";
     private static final Logger LOGGER = LogUtils.getLogger();
 

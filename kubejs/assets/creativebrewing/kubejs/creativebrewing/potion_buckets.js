@@ -1,12 +1,10 @@
 // requires: creativebrewing
-// Moved from the pack's client_scripts/potion_buckets.js 2026-11-01 (creative_brewing.md 4.5), unchanged.
 // Vanilla-style potion tooltip for the potion buckets - same layout/wording/colour as
-// minecraft:potion/splash_potion/lingering_potion bottles (PotionUtils.addPotionTooltip):
-// one line per effect, "Name II (0:30)", coloured blue (beneficial/neutral) or red (harmful),
-// plus a grey "No Effects" line for a blank bucket. Items: CB startup creativebrewing/potion_buckets.js
-// Durations are the applied ones: the potion's own x the bucket's effectMult
-// (global.potionArea.scaled, CB startup creativeengineering/potion_area.js), so a lingering bucket of a
-// 3:00 potion reads 3:36.
+// minecraft:potion/splash_potion/lingering_potion bottles (PotionUtils.addPotionTooltip): one line per
+// effect, "Name II (0:30)", coloured blue (beneficial/neutral) or red (harmful), plus a grey "No Effects"
+// line for a blank bucket. Items: CB startup creativebrewing/potion_buckets.js Durations are the applied
+// ones: the potion's own x the bucket's effectMult (global.potionArea.scaled, CB startup
+// creativeengineering/potion_area.js), so a lingering bucket of a 3:00 potion reads 3:36.
 //
 // Colouring uses KubeJS's own MutableComponent.blue()/red()/gray() extension methods
 // (dev.latvian.mods.kubejs.core.ComponentKJS - unprefixed per the @RemapPrefixForJS('kjs$')

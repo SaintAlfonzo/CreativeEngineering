@@ -36,7 +36,7 @@ import java.util.function.Consumer;
  *   applied, {@link #postApply} swaps that interface call for {@link FruitsDelightHooks#setPlayer}, which skips a
  *   null FoodData. If the call is not found a warning is logged.
  *
- * FRUITS DELIGHT LEAF CHECK (perf.md; moved from patcherMod 2026-10-27):
+ * FRUITS DELIGHT LEAF CHECK (perf.md):
  *   Fruits Delight's BlockStateBaseMixin merges {@code handler$<id>$fruitsdelight$getCollisionShape$passableLeave}
  *   into {@code BlockStateBase}, called at the head of every collision-shape query. It starts with
  *   {@code this.is(BlockTags.LEAVES)}, a tag lookup run for every query in the game, before it looks at who is asking.
@@ -72,8 +72,8 @@ public class CDMixinPlugin extends GatedMixinPlugin {
 			"FruitsDelightLeafCheckMixin", CDMixinPlugin::patchLeafCheckHandler);
 
 	/**
-	 * Table rows with a tested version range (the compartment gate has none): Farmer's Respite's Caffeinated tick fix,
-	 * moved from Creative Common with its range (2026-11-07). Outside the range the mixin is skipped with one warning.
+	 * Table rows with a tested version range (the compartment gate has none): Farmer's Respite's Caffeinated tick fix.
+	 * Outside the range the mixin is skipped with one warning.
 	 */
 	private static final Map<String, java.util.List<String>> NEEDS_MOD = Map.of(
 			"CaffeinatedEffectMixin", java.util.List.of("farmersrespite"));

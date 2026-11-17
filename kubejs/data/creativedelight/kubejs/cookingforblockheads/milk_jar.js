@@ -3,10 +3,9 @@
 // Glass bottles on Cooking for Blockheads' milk jar and cow in a jar (TODO food/drinks #6). CfB's own use() only
 // takes buckets (1000 mB) and fails on anything else. Here an empty bottle takes 250 mB out as Farmer's Delight's
 // milk bottle, and a milk bottle puts 250 mB back, the same as Create's spout and drain. The cow in a jar refills
-// itself at cowJarMilkPerTick (config/cookingforblockheads-common.toml).
-// Tank: MilkJarBlockEntity.getFluidTank(), a Balm FluidTank (drain / fill take (fluid, amount, simulate); its
-// setChanged syncs the client). Milk is CfB's own Compat.getMilkFluid(), the only fluid the tank accepts.
-// Moved from the pack's kubejs/server_scripts/cooking/milk_jar.js 2026-10-25, handler unchanged.
+// itself at cowJarMilkPerTick (config/cookingforblockheads-common.toml). Tank: MilkJarBlockEntity.getFluidTank(),
+// a Balm FluidTank (drain / fill take (fluid, amount, simulate); its setChanged syncs the client). Milk is CfB's
+// own Compat.getMilkFluid(), the only fluid the tank accepts.
 
 ;[global.blocks.cow_jar, global.blocks.milk_jar].forEach(id => {
 	BlockEvents.rightClicked(id, e => {

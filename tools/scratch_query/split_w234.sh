@@ -15,7 +15,7 @@ if [ -n "$(bash "$INST/tools/scratch_query/game_jvms.sh" 2>/dev/null)" ]; then
   echo "a game JVM is up: not changing jars under it" >&2; exit 1
 fi
 QR="python3 $INST/tools/scratch_query/qrun.py toml"
-# plain copies: a hard link shares the file with build/libs, and a parallel build rewrites it in place (seen 2026-11-01)
+# plain copies: a hard link shares the file with build/libs, and a parallel build rewrites it in place (seen)
 link() { rm -f "$SRV/mods/$(basename "$1")"; cp "$1" "$SRV/mods/"; echo "jar: $(basename "$1") ($(date -r "$1" +%m-%d_%H:%M))"; }
 probe() {
   cp "$INST/tools/scratch_query/zq_probe.js" "$SRV/kubejs/server_scripts/zz_zq_probe.js"

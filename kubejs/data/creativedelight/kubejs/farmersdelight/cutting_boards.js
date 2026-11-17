@@ -2,12 +2,12 @@
 // requires: farmersdelight
 // Extra cutting boards, registered by the repackedFarmers member (FDBackportRegistry). They work like FD's board (same
 // block class and block entity). Recipe: FD's board shape (2 sticks, 4 of the material).
-// - Stone (TODO cooking/kitchen #25, 2026-11-02; kitchen.md 2.8): granite, andesite, diorite; the polished stone for the
-//   planks. Pickaxe.
-// - Wood (TODO cooking/kitchen #38, 2026-11-04; kitchen.md 2.11): the 8 vanilla woods other than spruce; that wood's
-//   planks. Axe. FD's own board is the spruce one: its recipe takes #creativedelight:cutting_board_planks, every plank
-//   except the 8 woods with their own board (modded and vertical planks included), instead of #minecraft:planks.
-// Both sets get the wooden board's counter-topper and hammer tags.
+// - Stone (TODO cooking/kitchen #25; kitchen.md 2.8): granite, andesite, diorite; the polished stone for the planks.
+//   Pickaxe.
+// - Wood (TODO cooking/kitchen #38; kitchen.md 2.11): the 8 vanilla woods other than spruce; that wood's planks. Axe.
+//   FD's own board is the spruce one: its recipe takes #creativedelight:cutting_board_planks, every plank except the 8
+//   woods with their own board (modded and vertical planks included), instead of #minecraft:planks. Both sets get the
+//   wooden board's counter-topper and hammer tags.
 ServerEvents.tags('block', e => {
 	if (!global.CD || !global.CD.on('farmersdelight')) return
 	var t = global.tags

@@ -1,6 +1,6 @@
 // requires: vinery
 // Wandering Winemaker (Vinery) pool helpers, added to the pack's global.trades (creativecommon/func/trade_helper.js,
-// which loads first: the pack folder runs before the CB jar). Moved from trade_helper.js 2026-11-01
+// which loads first: the pack folder runs before the CB jar). Moved from trade_helper.js
 // (creative_brewing.md 4.5), unchanged apart from the class lookup: WinemakerTrades is CB Java
 // (com.SaintAlfonzo.creativebrewing.trader), TradeListings stays in patcherMod and goes through global.trades._java.
 // The stock rows: kubejs/data/creativebrewing/kubejs/vinery/wandering_trades.js. CB rebuild + restart.

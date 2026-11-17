@@ -11,11 +11,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Placed Immersive Paintings store their painting as the full png id ({@code Motive}). The pack's generated paintings
- * moved from {@code creativeengineering:paintings/...} to {@code creativecompat:paintings/...} on 2026-11-10
- * (feature_writeup/namespace_move.md, D-PAINT); a painting saved before that is pointed at the new id when it loads, so
- * it keeps its picture and saves under the new id. Painting items carry no motive, so nothing else needs this.
- * Painting variants are not a Forge registry here, which is why the swap lists cannot do it.
+ * Placed Immersive Paintings store their painting as the full png id ({@code Motive}). Painting items carry no motive,
+ * so nothing else needs this. Painting variants are not a Forge registry here, which is why the swap lists cannot do
+ * it.
  */
 @Mixin(value = ImmersivePaintingEntity.class, remap = false)
 public abstract class ImmersivePaintingMotiveAliasMixin {

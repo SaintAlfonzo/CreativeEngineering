@@ -7,7 +7,7 @@
 //   zlp rt     the same 20 leaves, randomTick called on each now: vanilla's path, where IW's own LeavesMixin hook sits.
 //   zlp tree   minecraft:oak on a clear pad at (330, 0, 330), logs set to air (flags 3), result after 300 ticks.
 // Every result is one `[zlp] ...` line in logs/latest.log, with the live config it ran under.
-// MIGRATED 2026-11-15 in part: the rt path (random ticks without a player) is /cdevtest randomtick BOX N
+// MIGRATED in part: the rt path (random ticks without a player) is /cdevtest randomtick BOX N
 // (creative_devtools.md); tick and tree stay here (they build their own fixtures).
 var ZLP_Leaves = Java.loadClass('net.minecraft.world.level.block.LeavesBlock')
 var ZLP_BlockPos = Java.loadClass('net.minecraft.core.BlockPos')

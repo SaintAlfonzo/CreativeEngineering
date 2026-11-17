@@ -19,8 +19,7 @@ ServerEvents.tags('item', e => {
 	fruitsCrateTags(e)
 })
 
-// Fruits Delight items in the pack's food item tags (moved from the pack's server_scripts/tags/cookingtags.js
-// 2026-10-25, rows unchanged; split by the mod owning each entry).
+// Fruits Delight items in the pack's food item tags (split by the mod owning each entry).
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
 	var t = global.tags

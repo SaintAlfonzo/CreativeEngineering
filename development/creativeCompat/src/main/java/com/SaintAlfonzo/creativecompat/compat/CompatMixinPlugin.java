@@ -30,7 +30,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("HandcraftedItemHoldingSaveMixin", HANDCRAFTED),
             Map.entry("HandcraftedNightstandStorageMixin", HANDCRAFTED),
             Map.entry("HandcraftedNightstandUseMixin", HANDCRAFTED),
-            // Create: Dreams & Desires jetpack tooltip null-level guard (moved from Creative Common 2026-11-04)
+            // Create: Dreams & Desires jetpack tooltip null-level guard
             Map.entry("JetpackItemTooltipMixin", List.of("create_dd")),
             Map.entry("SupplementariesDyeBlocksMixin", SUPPLEMENTARIES),
             Map.entry("SupplementariesJarTileMixin", SUPPLEMENTARIES),
@@ -98,7 +98,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
             Map.entry("IPPortalRenderingAccessor", IMM_PTL),
             Map.entry("IPPortalRenderLimitsMixin", IMM_PTL),
             Map.entry("IPPortalFogMixin", IMM_PTL),
-            // interface mixins from Creative Common (JEI, tooltips, GUI titles, toasts, effect icons; 2026-11-07)
+            // interface mixins from Creative Common (JEI, tooltips, GUI titles, toasts, effect icons)
             Map.entry("SubMenuConfigScreenMixin", List.of("create")),
             Map.entry("JeiRecipeGuiLogicMixin", List.of("jei")),
             Map.entry("JeiMissingSlotsErrorAccessor", List.of("jei")),
@@ -132,8 +132,8 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
     private static final List<String> POLYMORPH_SOPHISTICATED = List.of("polymorph", "sophisticatedcore");
 
     /**
-     * Tested version range of the interface mods (moved with their mixins from Creative Common's CommonMixinPlugin,
-     * 2026-11-07): outside it the mod's mixins are skipped with one warning instead of crashing the boot.
+     * Tested version range of the interface mods: outside it the mod's mixins are skipped with one warning instead
+     * of crashing the boot.
      */
     private static final Map<String, String> MOD_RANGE = Map.ofEntries(
             Map.entry("jei", com.SaintAlfonzo.creativecompat.compat.jei.JeiGate.RANGE),

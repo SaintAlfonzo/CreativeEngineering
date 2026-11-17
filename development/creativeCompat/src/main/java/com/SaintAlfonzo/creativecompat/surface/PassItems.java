@@ -150,9 +150,9 @@ public final class PassItems {
     }
 
     /**
-     * HEAD of {@code Entity#move} for a stuck item or orb (scratch fixes 2026-11-15, SQ-PTH-28 PT04: the zero-length
-     * moves of 500 held items cost about 3 ms a tick in entity collision queries). Checks the web and holds the item;
-     * true = skip the move (still stuck), false = it was let go and moves as usual this tick.
+     * HEAD of {@code Entity#move} for a stuck item or orb (scratch fixes SQ-PTH-28 PT04: the zero-length moves of 500
+     * held items cost about 3 ms a tick in entity collision queries). Checks the web and holds the item; true = skip
+     * the move (still stuck), false = it was let go and moves as usual this tick.
      */
     public static boolean heldMove(Entity e, PassState st) {
         hold(e, st, PassValues.of(e.level.isClientSide));

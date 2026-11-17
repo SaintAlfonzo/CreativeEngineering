@@ -1,13 +1,12 @@
 // requires: creativedelight
 // requires: salt
-// The Salt's saltable tag (#salt:can_be_salted, i.t_can_be_salted): the Salting craft takes any food in it
-// (salt.md 5, TODO food/seasoning #4 and #1, 2026-11-03).
-// Added: every cooked meat and fish and every meat or fish dish that upstream's tag misses (151 foods: food_families.json
-// members whose recipes take a meat or fish, or that are cooked meat or fish themselves; Rustic Delight's calamari roll
-// and Delightful's crab rangoon among them). Left out: cookies, puddings and ice cream made from mob parts, Miner's
-// Delight's crunchy and nutritional bars, Ocean's Delight's raw stuffed cod. Each mod's entries only when it is loaded.
-// Removed: the intermediates bone broth, cooked rice and tomato sauce (food/seasoning #1).
-// Other files add single foods next to their mod (moredelight/tags.js, veggiesdelight/tags.js).
+// The Salt's saltable tag (#salt:can_be_salted, i.t_can_be_salted): the Salting craft takes any food in it (salt.md 5,
+// TODO food/seasoning #4 and #1). Added: every cooked meat and fish and every meat or fish dish that upstream's tag
+// misses (151 foods: food_families.json members whose recipes take a meat or fish, or that are cooked meat or fish
+// themselves; Rustic Delight's calamari roll and Delightful's crab rangoon among them). Left out: cookies, puddings and
+// ice cream made from mob parts, Miner's Delight's crunchy and nutritional bars, Ocean's Delight's raw stuffed cod.
+// Each mod's entries only when it is loaded. Removed: the intermediates bone broth, cooked rice and tomato sauce
+// (food/seasoning #1). Other files add single foods next to their mod (moredelight/tags.js, veggiesdelight/tags.js).
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
 	var i = global.item

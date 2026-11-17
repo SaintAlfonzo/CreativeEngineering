@@ -1,6 +1,5 @@
 // requires: creativeworldgen
-// Creative Worldgen: block tags of the worldgen and fauna systems; moved from kubejs/server_scripts/tags/blocktags.js on
-// 2026-11-02 (villager ladders, structure ground match, earth fill, template trim, wild plant soils).
+// Creative Worldgen: block tags of the worldgen and fauna systems.
 
 ServerEvents.tags('block', e => {
 	var t = global.tags
@@ -47,8 +46,8 @@ ServerEvents.tags('block', e => {
 		item.end_stone, item.end_stone_bricks, item.purpur_block,
 	])
 	// Sandstone and terracotta floors, counted as earth only for structures in the structure tag of the same name
-	// (worldgen/earth_fill.js): desert and badlands builds that stand on them instead of sand (2026-11-02,
-	// tools/earth_base_scan.py: Towns and Towers badlands villages 0 % earth, Better Desert Temples 0 %).
+	// (worldgen/earth_fill.js): desert and badlands builds that stand on them instead of sand
+	// (tools/earth_base_scan.py: Towns and Towers badlands villages 0 % earth, Better Desert Temples 0 %).
 	t.add(e, 'creativeworldgen:earth_fill/sand_base', [
 		item.t_sandstone, item.t_terracotta, item.philips_sand_stone_brick, item.philips_red_sand_stone_brick,
 		item.philips_sandstone_tiles,

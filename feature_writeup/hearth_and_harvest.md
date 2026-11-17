@@ -1224,6 +1224,17 @@ Rows are in the "SQ-HH full suite" section of [scratch_queue.md](testing/scratch
 - 2026-11-14 (cd-b): hops as a vine and a Vinery lattice grape type, gated on Creative Brewing; wild hops on tree trunks; H&H tilled end stone removed, end stone tills with a netherite hoe into Ender Crop's; stomping basin takes valid items only and mirrors the Grapevine Pot (4.8); CD and Brewing built and installed; not run.
 - 2026-11-16: hops vine picked at age 3 only, fertilizer items (`#creativedelight:bonemeal_like`) grow it at ages 0 to 2; rug crack overlay clipped to the block box (4.9); HNH-101, HNH-102; queue SQ-HOP-12 to -14, CQ-HOP-02, SQ-HOP-04 rewritten (plan_small_fixes_1116.md). Built and installed; not run.
 
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-14: Stomping Basin mirrors of every Vinery Grapevine Pot pressing (plan_bugfix_1114 3.10, owner 2026-11-14) (kubejs/data/creativedelight/kubejs/hearthandharvest/vinery_stomping.js)
+- 2026-11-14: End stone tills only with a netherite or better hoe (owner 2026-11-14, plan_bugfix_1114 3.2): a TieredItem whose tier sorts at or above netherite in Forge's TierSortingRegistry, so modded tiers above netherite count (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/gear/TillingEvents.java)
+- 2026-11-14: Tilled end stone is Ender Crop's since 2026-11-14 (the H&H block is gone, plan_bugfix_1114 3.2); the hops lattice block is gone too (hops on Vinery's lattice, 3.1), and the hops vine breaks by hand like a vine (kubejs/data/creativedelight/kubejs/hearthandharvest/tags.js)
+- 2026-11-14: The list is Vinery's GrapeTypeRegistry with a fruit and a bottle (read 2026-11-14): red, white, savanna, taiga and jungle, red and white each (kubejs/data/creativedelight/kubejs/hearthandharvest/vinery_stomping.js)
+- 2026-11-14: H&H tilled end stone removed 2026-11-14 (3.2) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/block/HHBlocks.java)
+- 2026-11-14: The Stomping Basin takes only items that are an ingredient of some {@code hearthandharvest:stomping} recipe (owner 2026-11-14, plan_bugfix_1114 3.10) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/machine/StompingInputs.java)
+- 2026-11-15: Salt on a full lick (B7, owner 2026-11-15): one salt layer on top of it, or one more on a layer already there (below 8) (development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/salt/SaltLick.java)
+
+
 ## Owner notes (scratchpad 2026-11-07)
 
 - Manure buildup (owner, 2026-11-07): layers build up in cramped or uncleared pens; manure mobs walk to open space to drop it; crammed mobs (no 3x3 clear space, touching other mobs) drop manure layers instead of items with a chance. Row `blocks/new #22`.

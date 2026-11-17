@@ -34,23 +34,22 @@ import org.slf4j.Logger;
 import java.util.List;
 
 /**
- * Creative Equipment (feature_writeup/creative_equipment.md): the pack's gear, carved out of patcherMod on 2026-11-04
- * (creative_split.md 7.6, wave 7). Tier shields, stepstools, backpack skins, the air brake, Bottled Air, elytra
- * duplication and elytra chestplates, the copper tool tier, armor caps and enchantability, the bone meal charm, the
- * Nock Enough Arrows recipe book fix, and the gear scripts (tool and armor tuning, archery, End gear, dragon autorepair,
- * harvest tiers). Requires patcherMod ({@code creativeengineering}, later Creative Common: the damage tag framework and
- * {@code shield.EffectTickContext} stay there as Common APIs) and Creative Compat.
+ * Creative Equipment (feature_writeup/creative_equipment.md): the pack's gear. Tier shields, stepstools, backpack
+ * skins, the air brake, Bottled Air, elytra duplication and elytra chestplates, the copper tool tier, armor caps and
+ * enchantability, the bone meal charm, the Nock Enough Arrows recipe book fix, and the gear scripts (tool and armor
+ * tuning, archery, End gear, dragon autorepair, harvest tiers). Requires patcherMod ({@code creativeengineering}, later
+ * Creative Common: the damage tag framework and {@code shield.EffectTickContext} stay there as Common APIs) and
+ * Creative Compat.
  *
  * Ids follow the owner (feature_writeup/namespace_move.md): the shields, the recipe serializers, the copper tier, the
- * stepstool channel, tags and lang keys use this mod's namespace ({@link #NS}); until 2026-11-10 they were
- * {@code creativeengineering}, and the swap list data/creativeequipment/swaps/owner_namespace.json carries old saves.
- * The registrations below are the ones patcherMod's constructor made, in the same order.
+ * stepstool channel, tags and lang keys use this mod's namespace ({@link #NS}). The registrations below are the ones
+ * patcherMod's constructor made, in the same order.
  */
 @Mod(CreativeEquipment.MOD_ID)
 public class CreativeEquipment {
 
     public static final String MOD_ID = "creativeequipment";
-    /** The namespace of every id this mod uses (was creativeengineering until the 2026-11-10 namespace move). */
+    /** The namespace of every id this mod uses. */
     public static final String NS = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -61,12 +60,11 @@ public class CreativeEquipment {
         // The sections came from patcherMod's file: the first boot copies the player's values over (then patcherMod
         // drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
         ConfigRename.carrySections(OLD_FILE, FILE, CEQConfig.SECTIONS);
-        // [copper_poisoning] came from Creative Brewing's file (plan_cb_polish.md 1, 2026-11-06), before that patcherMod's.
         if (!ConfigRename.carrySections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS))
             ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS);
         ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.CB_SECTIONS);
-        // [armor_overflow] came from Creative Common's file with the Detail Armor Bar code (2026-11-07), before the
-        // 2026-11-04 swap from patcherMod's creativeengineering-common.toml.
+        // [armor_overflow] came from Creative Common's file with the Detail Armor Bar code, before the swap from
+        // patcherMod's creativeengineering-common.toml.
         if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS))
             ConfigRename.mergeSections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS);
         ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.COMMON_SECTIONS);
@@ -86,8 +84,8 @@ public class CreativeEquipment {
         // Tier shields (copper..dragon, iron = the vanilla shield): the items here, the block-check widening in
         // mixin/LivingEntityShieldMixin, everything tunable in CEQConfig.SHIELDS.
         ShieldItems.register(modEventBus);
-        // The wooden bucket moved to Creative Delight 2026-11-09 (creativedelight:wooden_*; farm/bucket/ there).
-        // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are mixin/BackpackSkin*).
+        // Backpack skins: smithing + clearing recipes, Curios equip block (backpackskin/; the looks are
+        // mixin/BackpackSkin*).
         BackpackSkinSerializers.register(modEventBus);
         boolean curios = ModList.get().isLoaded("curios");
         if (curios) MinecraftForge.EVENT_BUS.register(BackpackSkinCurios.class);
@@ -97,7 +95,7 @@ public class CreativeEquipment {
         Stepstool.register();
         if (curios) MinecraftForge.EVENT_BUS.register(Stepstool.class);
         // Hands, face, feet Curios slots by IMC (compat/CuriosSlots; feature_writeup/curios_slots.md; from Creative
-        // Common 2026-11-04).
+        // Common).
         if (curios) modEventBus.addListener(com.SaintAlfonzo.creativeequipment.compat.CuriosSlots::enqueue);
 
         // Elytra air brake velocity effect (the item itself is registered by this jar's startup script

@@ -1,12 +1,12 @@
 // requires: creativedelight
 // requires: miners_delight
 // Squid drops for the squid chain (TODO dishes/ocean #3): a squid drops one Miner's Delight squid item and a glow squid
-// one glow squid item, every kill, knife or not; the ink and the calamari come from cutting it (miners_delight/recipes.js).
-// The rule is post-roll (Creative Loot's L.onlyDrop, a LootJS modifier), after every mod's loot modifiers, so this also
-// takes out what they add: Rustic's calamari, Miner's knife
-// squid item, and the tentacles of Miner's, Ocean's and Oceanic Delight (those items are removed, dishes/ocean #4).
-// Exactly one (TODO dishes/ocean #9, 2026-11-02): every other drop goes, whatever added it, so looting, a knife or
-// another mod's modifier can't add a second squid or anything else; the rule no longer waits on Rustic Delight.
+// one glow squid item, every kill, knife or not; the ink and the calamari come from cutting it
+// (miners_delight/recipes.js). The rule is post-roll (Creative Loot's L.onlyDrop, a LootJS modifier), after every mod's
+// loot modifiers, so this also takes out what they add: Rustic's calamari, Miner's knife squid item, and the tentacles
+// of Miner's, Ocean's and Oceanic Delight (those items are removed, dishes/ocean #4). Exactly one (TODO dishes/ocean
+// #9): every other drop goes, whatever added it, so looting, a knife or another mod's modifier can't add a second squid
+// or anything else.
 
 var R = global.NCH.forPack('creativedelight')
 

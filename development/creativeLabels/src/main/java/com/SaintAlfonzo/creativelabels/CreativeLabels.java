@@ -37,7 +37,7 @@ import java.nio.file.Path;
 public class CreativeLabels {
 
     public static final String ID = "creativelabels";
-    /** The mod id before the naming-rule rename (namespace_move.md D-LABELS, 2026-11-10); saved ids move by swap list. */
+    /** The mod id before the naming-rule rename (namespace_move.md D-LABELS); saved ids move by swap list. */
     public static final String OLD_ID = "creative_labels";
     public static final Logger LOGGER = LogUtils.getLogger();
 

@@ -10,8 +10,8 @@ import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.level.Level;
 
 /**
- * The Stomping Basin takes only items that are an ingredient of some {@code hearthandharvest:stomping} recipe (owner
- * 2026-11-14, plan_bugfix_1114 3.10). The ingredient list is read from the level's recipe manager and kept until that manager
+ * The Stomping Basin takes only items that are an ingredient of some {@code hearthandharvest:stomping} recipe (owner,
+ * plan_bugfix_1114 3.10). The ingredient list is read from the level's recipe manager and kept until that manager
  * changes (a /reload builds a new one on the server) or the client's recipes are replaced (RecipesUpdatedEvent, see
  * {@link #clear}). Tag ingredients test the live tag, so tag reloads need nothing more.
  */

@@ -6,7 +6,7 @@
 //           (item, fluid, mob_effect) through global.tags;
 //   client  Creative Compat client kubejs/jei_order.js hands it to Compat (compat/jei/PackIngredientOrder), which sorts
 //           JEI's list by type, then category path, then each node's sort chain.
-// In Creative Compat since 2026-11-07 (was Common func/). Loads after the dicts (Common pack) and before the
+// In Creative Compat (was Common func/). Loads after the dicts (Common pack) and before the
 // definition (startup_scripts, default priority).
 //
 // Definition shape:

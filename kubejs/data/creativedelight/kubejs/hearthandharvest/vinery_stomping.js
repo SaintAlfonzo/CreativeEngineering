@@ -1,12 +1,12 @@
 // requires: creativedelight
 // requires: hearthandharvest
 // requires: vinery
-// Stomping Basin mirrors of every Vinery Grapevine Pot pressing (plan_bugfix_1114 3.10, owner 2026-11-14). The pot turns
-// 3 grapes of one type and an empty wine bottle into that type's juice bottle (GrapevinePotBlock GRAPES_PER_BOTTLE, takeJuice).
-// The list is Vinery's GrapeTypeRegistry with a fruit and a bottle (read 2026-11-14): red, white, savanna, taiga and jungle,
-// red and white each. Hops are a lattice type with no juice and are skipped. No other Vinery stomping exists: the donor
-// jars' recipes are fermenting, apple mashing (the Apple Press) and crafting. A new grape type needs a row here.
-// Four ingredients, so only a 2x2 basin group holds them (a single basin has one slot).
+// Stomping Basin mirrors of every Vinery Grapevine Pot pressing (plan_bugfix_1114 3.10, owner). The pot turns 3 grapes
+// of one type and an empty wine bottle into that type's juice bottle (GrapevinePotBlock GRAPES_PER_BOTTLE, takeJuice).
+// The list is Vinery's GrapeTypeRegistry with a fruit and a bottle (read): red, white, savanna, taiga and jungle, red
+// and white each. Hops are a lattice type with no juice and are skipped. No other Vinery stomping exists: the donor
+// jars' recipes are fermenting, apple mashing (the Apple Press) and crafting. A new grape type needs a row here. Four
+// ingredients, so only a 2x2 basin group holds them (a single basin has one slot).
 ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('hearthandharvest')) return
 

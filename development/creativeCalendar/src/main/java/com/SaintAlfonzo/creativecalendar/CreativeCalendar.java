@@ -19,18 +19,18 @@ import java.util.List;
 
 /**
  * Creative Calendar (feature_writeup/creative_calendar.md): the pack's calendar, day and night length, seasons, season
- * types by biome and crop seasons, carved out of patcherMod on 2026-11-01. Creative Delight and Creative Brewing require
- * it; it requires patcherMod ({@code creativeengineering}, later Creative Common).
+ * types by biome and crop seasons. Creative Delight and Creative Brewing require it; it requires patcherMod
+ * ({@code creativeengineering}, later Creative Common).
  *
- * Tags (season types, snow seasons, crop seasons) are under this jar's own namespace ({@link #NAMESPACE}) since
- * 2026-11-10 (namespace_move.md step 6); they were {@code creativeengineering:} until then. Tags are not saved, so no
- * alias. Lang keys keep their {@code creativeengineering.} prefix (text only); the command stays {@code /ccaltime}.
+ * Tags (season types, snow seasons, crop seasons) are under this jar's own namespace ({@link #NAMESPACE})
+ * (namespace_move.md step 6). Tags are not saved, so no alias. Lang keys keep their {@code creativeengineering.}
+ * prefix (text only); the command stays {@code /ccaltime}.
  */
 @Mod(CreativeCalendar.MOD_ID)
 public class CreativeCalendar {
 
     public static final String MOD_ID = "creativecalendar";
-    /** The namespace of every tag this mod keys (its own mod id since 2026-11-10). */
+    /** The namespace of every tag this mod keys (its own mod id). */
     public static final String NAMESPACE = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 

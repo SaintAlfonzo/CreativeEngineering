@@ -31,7 +31,7 @@ import org.slf4j.Logger;
  * need.
  * <ul>
  * <li>Cob Pipe: goes in the vanilla head slot ({@code mixin.MobCobPipeSlotMixin}). A right click puts it in the pack's
- * Curios Face slot (curios_slots.md; the mouth slot of 1.2.11's plan, dropped 2026-11-02, gameplay/misc #19), else the
+ * Curios Face slot (curios_slots.md; the mouth slot of 1.2.11's plan, dropped gameplay/misc #19), else the
  * empty head slot, else a free Curios head slot (1.2.11: the head curio only while a helmet is worn). Curios part:
  * {@link CornDelightCurios}.</li>
  * <li>Villagers: corn joins the items they pick up and share, and counts as breeding food (1 point, the carrot's),

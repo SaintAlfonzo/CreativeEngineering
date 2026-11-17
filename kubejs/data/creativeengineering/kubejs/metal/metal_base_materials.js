@@ -1,5 +1,5 @@
 // requires: creativeengineering
-// Creative Engineering; moved from kubejs/server_scripts/metal/metal_base_materials.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
+// Creative Engineering.
 ServerEvents.recipes(e => {
 
 /*
@@ -19,9 +19,9 @@ R.shaped(rod_zinc …) at line 558 is the only one. immersiveengineering:craftin
 3. Dust → ingot recycle — zinc only
 Lines 458/471/476 do dust_zinc → ingot_zinc (smelt/blast/arc). The other 8 fall back to immersiveengineering:arcfurnace/dust_{copper,iron,gold,aluminum,lead,silver,nickel,uranium} (all 8 exist, unremoved) + IE's smelting/ingot_*_from_dust for aluminum/lead/nickel/silver.
 
-4. hammercrushing_zinc / raw_hammercrushing_zinc — removed with the other metals' (2026-10-19).
+4. hammercrushing_zinc / raw_hammercrushing_zinc — removed with the other metals'.
 
-5. Plate-block ↔ plate: copper's 9 plate_copper → plate_block_copper added (2026-10-19).
+5. Plate-block ↔ plate: copper's 9 plate_copper → plate_block_copper added.
 
 Minor / probably intentional
 Raw block → storage block smelt/blast: zinc only (with the quark flag). aluminum/lead/silver/nickel/uranium raw blocks have no "smelt to block" path.

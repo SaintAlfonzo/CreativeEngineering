@@ -40,7 +40,7 @@ final class TestLayers {
 
     static final Set<String> NAMES = Set.of("layers", "layer", "height", "snow_layers", "thickness");
     static final ResourceLocation TAG = new ResourceLocation("creativecompat", "passthrough_layers");
-    /** D1 rows marked out (owner, 2026-11-15): Create Deco coin stacks, Control Engineering logic cabinet, Copycats. */
+    /** D1 rows marked out (owner): Create Deco coin stacks, Control Engineering logic cabinet, Copycats. */
     static final List<Pattern> D1_OUT = List.of(Pattern.compile("^createdeco:[a-z_]*coinstack[a-z_]*$"),
             Pattern.compile("^controlengineering:logic_cabinet$"), Pattern.compile("^copycats:"));
 

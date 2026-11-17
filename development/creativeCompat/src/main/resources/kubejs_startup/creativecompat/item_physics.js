@@ -1,6 +1,5 @@
-// Creative Compat startup script (loaded from the Compat jar by the startup loader); moved from
-// kubejs/startup_scripts/func/item_physics.js on 2026-11-01. Defines global.itemPhysics.
-// ─────────────────────────────────────────────────────────────────────────────
+// Creative Compat startup script (loaded from the Compat jar by the startup loader). Defines
+// global.itemPhysics. ─────────────────────────────────────────────────────────────────────────────
 //  Item Physics — fire / lava burning split + float control
 // ─────────────────────────────────────────────────────────────────────────────
 //

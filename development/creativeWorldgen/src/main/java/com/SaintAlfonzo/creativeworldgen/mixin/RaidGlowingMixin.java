@@ -11,9 +11,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 /**
- * Glowing Illagers port (feature_writeup/feature_porting.md 2.1, jar retired 2026-10-20): every raider a raid adds to a
- * wave ({@code Raid#addWaveMob}, {@code m_37718_}) glows for good, so a raid can be followed through walls. Glowing II
- * as the mod (the level changes nothing for Glowing). {@code [raids] glowingRaiders}.
+ * Glowing Illagers port: every raider a raid adds to a wave ({@code Raid#addWaveMob}, {@code m_37718_}) glows for good,
+ * so a raid can be followed through walls. Glowing II as the mod (the level changes nothing for Glowing).
+ * {@code [raids] glowingRaiders}.
  */
 @Mixin(Raid.class)
 public abstract class RaidGlowingMixin {

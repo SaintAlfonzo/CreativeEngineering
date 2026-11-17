@@ -1,7 +1,6 @@
 // requires: creativedelight
 // requires: fungidelight
-// Fungi Delight item tags (Creative Delight members #4, moved from the pack's server_scripts/tags/cookingtags.js
-// 2026-10-25, rows unchanged). Nothing in the pack removes from these tags, so running after the pack's tag scripts
+// Fungi Delight item tags. Nothing in the pack removes from these tags, so running after the pack's tag scripts
 // gives the same contents.
 ServerEvents.tags('item', e => {
 	if (!global.CD || !global.CD.on('fungidelight')) return

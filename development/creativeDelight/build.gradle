@@ -25,7 +25,6 @@ dependencies {
     // QoL compartments (creative_delight.md 8): CEConfig, ConfigRename, RemainderView and the JEI helpers are Creative Common's
     // (a hard dependency); the pot (QoL-1), kettle (QoL-1) and WTHIT (QoL-6) jars as in creativeCommon/libs.
     compileOnly project(':creativeCommon')
-    // interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07
     compileOnly project(':creativeCompat')
     // Creative Loot (required, D25): GlmMerge.gate for the members' global loot modifier fragments
     compileOnly project(':creativeLoot')
@@ -38,7 +37,7 @@ dependencies {
     compileOnly 'local:jei:1.19.2-forge-11.8.1.1034'
     // Banana merge (item_merges.md 2.1): the gorilla and sugar glider forage mixins.
     compileOnly 'local:alexsmobs:1.21.1'
-    // The kitchen and food Java moved from patcherMod at the CD carve (2026-11-01, creative_delight.md 34): the mods it
+    // The kitchen and food Java moved from patcherMod at the CD carve (creative_delight.md 34): the mods it
     // touches (Quark, Spice of Life, Corn Delight, Canned Goods, The Salt, Immersive Weathering, AppleSkin, Curios, KubeJS,
     // The Dirty Stuff, ...) from Creative Common's git-ignored libs/, and the Display Delight port for the placed dishes.
     // (Cooking for Blockheads and Balm are excluded here: the compartment compiles against their deobf copies below.)

@@ -126,7 +126,7 @@ public final class ItemPhysicSplit {
         if (stack.is(LAVAPROOF)) return Boolean.FALSE;                      // immune to both
         if (stack.is(FIREPROOF)) return lava ? Boolean.TRUE : Boolean.FALSE; // survives fire, burns in lava
         // if-chain, not a switch: an enum switch compiles to a synthetic ItemPhysicSplit$1 that loads lazily and
-        // was missing at runtime (NoClassDefFoundError, crashes 2026-09-09 and 09-17).
+        // was missing at runtime (NoClassDefFoundError, crashes).
         Burn burn = burnBehavior(stack);
         if (burn == Burn.NEVER)     return Boolean.FALSE;
         if (burn == Burn.FIRE_ONLY) return !lava;

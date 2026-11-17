@@ -1,8 +1,7 @@
 // requires: creativedelight
 // requires: neapolitan
 // Milk bottle and chocolate cake merges (feature_writeup/item_merges.md 2.2, 2.3). Non-member file: recipe ids are
-// creativedelight:<type>/<suffix> (global.CD.recipes). Moved from the pack's server_scripts/other/item_merges.js
-// 2026-10-27, rows unchanged.
+// creativedelight:<type>/<suffix> (global.CD.recipes).
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

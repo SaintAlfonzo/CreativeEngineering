@@ -365,6 +365,26 @@ if wants('format'):
         print(f'   {name:14s} {len(paths):6d}   {tabs:10d}  {mixed:13d}  {crlf:4d}  {nofinal:16d}  {long_:9d}  {trail:20d}')
     print()
 
+# DR-C26: dates in code comments (tools/history_extract.py moves them to the writeup History; it fails in check_all),
+# and source folders with no owning writeup in tools/writeup_owner.json (history_extract.py files lines by it).
+if wants('history'):
+    out = subprocess.run([sys.executable, str(ROOT / 'tools/history_extract.py'), '--lint'], cwd=ROOT,
+                         capture_output=True, text=True).stdout.rstrip().split('\n')
+    hits = [(l.split(':', 2)[0], int(l.split(':', 2)[1]), l.split(':', 2)[2].strip()) for l in out
+            if l.count(':') >= 2 and l.split(':', 2)[1].isdigit()]
+    report('DR-C26', 'dated sentences in code comments (history_extract.py moves them)', hits)
+    import json
+    owner = [k for k in json.loads((ROOT / 'tools/writeup_owner.json').read_text(encoding='utf-8')) if not k.startswith('_')]
+    folders = set()
+    for p in FILES:
+        m = re.match(r'(development/[^/]+/|kubejs/(?:data|assets)/[^/]+/|kubejs/[a-z]+_scripts/|tools/|build-logic/)', p)
+        if m and Path(p).suffix in ('.java', '.js', '.py', '.gradle', '.sh'):
+            folders.add(m.group(1))
+    missing = [(f, 0, 'no entry in tools/writeup_owner.json') for f in sorted(folders)
+               if not any(f.startswith(k) for k in owner)]
+    report('DR-C26', 'source folders with no owning writeup (WARNING: add a tools/writeup_owner.json entry)', missing,
+           'folders', top=20)
+
 # DR-W11: doc file names.
 if wants('docnames'):
     hits = [(p, 0, Path(p).name) for p in FILES if p.startswith('feature_writeup/') and p.endswith('.md')

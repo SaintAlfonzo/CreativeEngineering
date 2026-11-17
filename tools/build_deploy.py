@@ -134,14 +134,14 @@ SERVER_CONFIG_EDITS = os.path.join(ROOT, 'configs_edited', 'server_config')
 # must be in mods/). Each project keeps its released jars in development/<project>/jar_archive/.
 DEVELOPMENT = os.path.join(ROOT, 'development')
 IN_TREE_MODS = [
-    # Creative Common: patcherMod until the Creative Split swap (2026-11-04, creative_split.md 7.13); the shared core
+    # Creative Common: patcherMod until the Creative Split swap (creative_split.md 7.13); the shared core
     # every Creative jar requires. Its jar displaces the old creativeengineering-1.x jars (replaces_jars).
     ('creativeCommon', 'creativecommon', True),
     ('exposureBackport', 'exposureBackport', True),
     ('creativeLabels', 'creativeLabels', True),
     # Creative Delight: the bundle jar; its members (development/creativeDelight/members/, Baby Mobs and Incubation
-    # Additions included since 2026-11-01; the Veggies, Vintage, Fungi, Miner's and Display ports since 2026-11-02,
-    # creativedelight members #1 / #35) never ship on their own.
+    # Additions included; the Veggies, Vintage, Fungi, Miner's and Display ports, creativedelight members #1 / #35)
+    # never ship on their own.
     ('creativeDelight', 'creativedelight', True),
     # Creative Brewing: the same for the Vinery and Brewin' ports (development/creativeBrewing/members/).
     ('creativeBrewing', 'creativebrewing', True),
@@ -149,17 +149,17 @@ IN_TREE_MODS = [
     ('creativeCalendar', 'creativecalendar', True),
     # Creative Compat: tweaks to third-party mods (feature_writeup/creative_compat.md); every other Creative jar requires it.
     ('creativeCompat', 'creativecompat', True),
-    # Tempad 3.0.4 port (feature_writeup/immersive_portals.md 2.1.1): its own jar since 2026-11-07 (nested in Creative Compat
-    # before, so Compat ships without a donor jar); planned to fold into Creative Computing. Reads tempad_upstream/.
+    # Tempad 3.0.4 port (feature_writeup/immersive_portals.md 2.1.1): its own jar (nested in Creative Compat before, so
+    # Compat ships without a donor jar); planned to fold into Creative Computing. Reads tempad_upstream/.
     ('backportedTempad', 'backportedTempad', True),
     # Create: Power Grid 0.6.2 port (feature_writeup/plan_power_grid.md): in mods/ for development testing, never staged
     # until energy_advanced.md stage 5 (the basic/advanced energy switch). Not required: collect() skips it.
     ('backportedPowerGrid', 'backportedPowerGrid', False),
     # Creative Loot: the loot engine (chest tuning, drop rules, the LootJS layer) and the global loot modifier merge
-    # (feature_writeup/creative_loot.md); split out of Creative Worldgen 2026-11-17. Worldgen, Delight and Brewing require it.
+    # (feature_writeup/creative_loot.md). Worldgen, Delight and Brewing require it.
     ('creativeLoot', 'creativeloot', True),
-    # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and Baby
-    # Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own before 2026-11-02).
+    # Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and
+    # Baby Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own).
     ('creativeWorldgen', 'creativeworldgen', True),
     # Creative Magic: Dark Fire and the Nether portal rule, enchantment tweaks, the Botania Trinket Case, magic recipes
     # (feature_writeup/creative_magic.md).
@@ -341,7 +341,7 @@ KUBEJS_CLASSES = [
     ('generation_scripts/worldgen/nether_worldgen_rules.json', 'dev'),  # tools/gen_nether_worldgen.py input
     ('generation_scripts/worldgen/nether_worldgen_manifest.json', 'dev'),  # tools/gen_nether_worldgen.py
     ('generation_scripts/worldgen/terrain_adaptation_scan.json', 'dev'),  # tools/terrain_adaptation_scan.py
-    # The next five are generator records since framework #7 (2026-11-01): the game reads the CD member scripts
+    # The next five are generator records since framework #7: the game reads the CD member scripts
     # (<mod>/food_types.js, placeable.js, mortar_catalog.js in data/creativedelight/kubejs, kubejs_startup/<mod>/
     # can_types.js and can_servings.js in the CD jar), which the generators write from them.
     ('generation_scripts/food/food_types.json', 'dev'),                 # tools/food_catalog.py record (hand edits)
@@ -604,7 +604,7 @@ UPSTREAM_DONORS = {
     # nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
     'miners_upstream': ('creativedelight', "Miner's Delight (Creative Delight)",
                         ('creativeDelight/members/miners', 'com', 'sammy', 'minersdelight', 'upstream')),
-    # in the Creative Worldgen jar since the wave 5 carve (2026-11-02; patcherMod before)
+    # in the Creative Worldgen jar since the wave 5 carve (patcherMod before)
     'farmers_upstream': ('creativeworldgen', "Farmer's Structures donor (Creative Worldgen)",
                          ('creativeWorldgen', 'com', 'SaintAlfonzo', 'creativeworldgen', 'worldgen', 'donor')),
     'roll_upstream': ('creativedelight', 'Roll Delight (Creative Delight)',
@@ -617,7 +617,7 @@ UPSTREAM_DONORS = {
                         ('creativeDelight/members/ends', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
     'goldenfood_upstream': ('creativedelight', 'Golden Food (Creative Delight)',
                             ('creativeDelight/members/golden', 'com', 'SaintAlfonzo', 'creativedelight', 'golden', 'upstream')),
-    # its own jar since 2026-11-07 (nested in Creative Compat before)
+    # its own jar (nested in Creative Compat before)
     'tempad_upstream': ('backportedTempad', 'Tempad',
                         ('backportedTempad', 'earth', 'terrarium', 'tempad', 'forge')),
 }
@@ -748,7 +748,7 @@ def check_climate_reader(pre, files):
     for jar, src in files['mods'].items():
         if re.match(r'creativecommon-.*\.jar$', jar):
             with zipfile.ZipFile(src) as z:
-                cls = z.read('com/SaintAlfonzo/creativecommon/util/WorldgenFiles.class')  # Creative Common since 2026-11-04
+                cls = z.read('com/SaintAlfonzo/creativecommon/util/WorldgenFiles.class')  # Creative Common
             if b'readGzipText' not in cls:
                 pre.error(f'mods/{jar} predates the gzipped climate samples (no WorldgenFiles.readGzipText): '
                           'copy the current development/creativeCommon/build/libs jar into mods/ first')
@@ -760,7 +760,7 @@ def check_display_delight_models(pre):
     /dumpitemsbymod, so an export older than the jar may miss the new items."""
     jars = [j for j in os.listdir(MODS) if re.match(r'(displaydelight|backportedDisplay)-.*\.jar$', j)]
     if not jars:
-        # nested in the Creative Delight jar since 2026-11-02 (plan_creative_delight.md A2)
+        # nested in the Creative Delight jar (plan_creative_delight.md A2)
         jars = [j for j in os.listdir(MODS) if re.match(r'creativedelight-.*\.jar$', j)
                 and any(n.startswith('backportedDisplay-') for n, _ in nested_modids(os.path.join(MODS, j)))]
     if not jars:

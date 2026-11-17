@@ -19,7 +19,7 @@
 //   /zpth release NAME TICKS  releases a held use (bow, trident) as if charged TICKS ticks
 //   /zpth attrs NAME|TAG      every movement-speed modifier of a player/bot (or of each tagged entity): uuid, name,
 //                             amount, operation, then the attribute value (r1116 SQ-PS15B-11)
-// MIGRATED 2026-11-15 in part (creative_devtools.md): input NAME sneak -> /pbot sneak, states -> /cdevtest state.
+// MIGRATED in part (creative_devtools.md): input NAME sneak -> /pbot sneak, states -> /cdevtest state.
 // Entity watches, jump input and the launch verbs stay here.
 (() => {
     const $PStr = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

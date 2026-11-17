@@ -40,7 +40,7 @@ GENERATED = {'feature_writeup/todo/TODO.md', 'feature_writeup/testing/scratch_qu
 MONTHS = {m: i for i, m in enumerate(['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'], 1)}
 MON = r'(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|June?|July?|Aug(?:ust)?|Sept?(?:ember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)'
 
-# MM-DD with no year: not glued to digits, words, dots, slashes or hyphens (so 2026-11-14, 1.19.2, v2-11 never match).
+# MM-DD with no year: not glued to digits, words, dots, slashes or hyphens (so 1.19.2, v2-11 never match).
 MMDD = re.compile(r'(?<![\w./\-:#])(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])(?P<suf>[a-d])?(?![\w/\-]|\.\d)')
 # Context that marks a bare MM-DD as a date.
 CUE_BEFORE = re.compile(r'(\(|\b(owner|user|since|on|until|till|before|after|dated|as of|of|built|fixed|added|deployed|'

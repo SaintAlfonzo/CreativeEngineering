@@ -252,7 +252,7 @@ CROP_BLOCKS = {
     'veggiesdelight:wild_broccoli': 'Broccoli', 'veggiesdelight:wild_cauliflowers': 'Cauliflower',
     'veggiesdelight:wild_garlic': 'Garlic', 'veggiesdelight:wild_sweet_potatoes': 'Sweet Potato',
     'veggiesdelight:wild_turnips': 'Turnip', 'veggiesdelight:wild_zucchinis': 'Zucchini',
-    # Rustic Delight port (CD members/rustic, json baked since 11-10; farming/wild-crops #11): its placed features are json
+    # Rustic Delight port (CD members/rustic, json baked; farming/wild-crops #11): its placed features are json
     'rusticdelight:wild_cotton': 'Cotton', 'rusticdelight:wild_bell_peppers': 'Bell Pepper',
     'rusticdelight:wild_coffee': 'Coffee (Rustic Delight)',
     'rusticdelight:bell_pepper_red_block': 'Giant Bell Peppers', 'rusticdelight:bell_pepper_yellow_block': 'Giant Bell Peppers',

@@ -1,7 +1,7 @@
 // priority: -100
-// Creative Common since 2026-11-06 (plan_cb_polish.md 2: the effect frameworks live in Common, the rows with the jar
-// that owns the gear: Creative Equipment's kubejs_startup/creativeequipment/gear_effects.js). Was Creative Brewing's,
-// before that the pack's startup_scripts/func/tool_effects.js. Common rebuild + restart.
+// Creative Common (plan_cb_polish.md 2: the effect frameworks live in Common, the rows with the jar that owns the
+// gear: Creative Equipment's kubejs_startup/creativeequipment/gear_effects.js). Was Creative Brewing's, before that
+// the pack's startup_scripts/func/tool_effects.js. Common rebuild + restart.
 //   ^ load after _lib/item_dict.js (priority 0) — same load-order gotcha as
 //   armor_effects.js / tune_tools.js / tune_armor.js (see [[tune-tools-func]]).
 // ─────────────────────────────────────────────────────────────────────────────

@@ -2,13 +2,12 @@
 // requires: goldenfood
 // Golden foods (food.md 3.16, golden_food.md 3.4): every goldenfood golden food is its input food in a ring of 8 gold
 // nuggets (global.CD.food goldenGild, which also adds the heated mixer and Arc Furnace routes), replacing upstream's
-// ring of 8 gold ingots (owner 2026-11-02, TODO food/types-and-tuning #22). The golden carrot's call is in
-// minecraft/golden.js (vanilla id).
-// Gilded (enchanted golden) foods (food_families.md `golden/enchanted`): the gilded apple's Create sequenced assembly
-// (goldenEnchant: 1 gold ingot, 125 mB liquid experience, press, 8 loops; owner 2026-11-03) on every other golden
-// food. Replaces upstream's anvil recipe with the Golden Food Enchantment book, which is removed (owner, 2026-11-02;
-// creativedelight members #50). The golden cake has no gilded recipe (upstream had none either).
-// Each output's incomplete item is a row in startup_scripts/changes/transition_items.js.
+// ring of 8 gold ingots (owner, TODO food/types-and-tuning #22). The golden carrot's call is in minecraft/golden.js
+// (vanilla id). Gilded (enchanted golden) foods (food_families.md `golden/enchanted`): the gilded apple's Create
+// sequenced assembly (goldenEnchant: 1 gold ingot, 125 mB liquid experience, press, 8 loops; owner) on every other
+// golden food. Replaces upstream's anvil recipe with the Golden Food Enchantment book, which is removed (owner;
+// creativedelight members #50). The golden cake has no gilded recipe (upstream had none either). Each output's
+// incomplete item is a row in startup_scripts/changes/transition_items.js.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

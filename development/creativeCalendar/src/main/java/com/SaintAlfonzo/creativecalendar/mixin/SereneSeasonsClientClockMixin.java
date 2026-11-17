@@ -20,14 +20,13 @@ import sereneseasons.season.SeasonTime;
  * {@code [time.seasons] clock = SUN} (feature_writeup/time.md 3.3), client half: between the server's syncs (every
  * second) the client counter follows its own dayTime, not +1 per tick, so the day shown doesn't run ahead by day and
  * snap back, and the sub-season change (a full chunk re-render) happens once.
- * <p>
- * Each server sync is an anchor: the client shows the synced value plus how far its dayTime has moved past the dayTime
- * it had when the sync arrived, never less. Adding every forward client step instead (before 2026-11-02) counted a
- * jump twice when it came with its sync ({@code /ccaltime date}, /time add): the server's value already held it, and
- * Better Days then glides the client's time of day up to the new one, adding it again. With {@code doDaylightCycle
- * false} no later sync corrected it (TODO {@code gameplay/time #7}, scratch r1101 CQ-TD-06: SeasonHUD read Summer
- * day 1 for Mid Autumn day 13). Listed under "client" in the mixin
- * config: a common mixin referencing {@code Minecraft} fails to apply on a dedicated server (patcherMod 1.0.8 boot crash).
+ * <p> Each server sync is an anchor: the client shows the synced value plus how far its dayTime has moved past the
+ * dayTime it had when the sync arrived, never less. Adding every forward client step instead counted a jump twice when
+ * it came with its sync ({@code /ccaltime date}, /time add): the server's value already held it, and Better Days then
+ * glides the client's time of day up to the new one, adding it again. With {@code doDaylightCycle false} no later sync
+ * corrected it (TODO {@code gameplay/time #7}, scratch r1101 CQ-TD-06: SeasonHUD read Summer day 1 for Mid Autumn day
+ * 13). Listed under "client" in the mixin config: a common mixin referencing {@code Minecraft} fails to apply on a
+ * dedicated server (patcherMod 1.0.8 boot crash).
  */
 @Mixin(value = SeasonHandler.class, remap = false)
 public class SereneSeasonsClientClockMixin {

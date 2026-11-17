@@ -4,7 +4,7 @@
 //   recipes, rdetail, bytype, uses, makes, food, item, potion, count, ages, chunk, tagsof, states -> same verb name
 //   items / blocks -> reg item|block;  biometag / itemtag / blocktag -> tag biome|item|block
 //   useitem P -> useair as=P hand=both
-//   season, floating, under, nbt -> same verb name (moved 2026-11-16; same arguments, [cdevtest] key=value output;
+//   season, floating, under, nbt -> same verb name (moved same arguments, [cdevtest] key=value output;
 //   nbt prints the stack's tag as the game holds it, not Rhino's typeof view; efb_judge.py reads both under forms)
 // (original header) Scratch-only query command for bulk queue runs (feature_writeup/testing/scratch_queue.md). Copy into a scratch
 // server's kubejs/server_scripts as zz_zq_probe.js, never into the pack.
@@ -34,10 +34,10 @@
 //                            the off-hand item if the main hand did not consume the action
 //   /zq states all           block-state id count (Block.BLOCK_STATE_REGISTRY) against the 2^20 ceiling
 // Output: "[zq] ..." lines in logs/latest.log, then "[zq] done".
-// MIGRATED 2026-11-15 to Creative Devtools' Java /cdevtest (feature_writeup/creative_devtools.md, /cdevtest); new rows use
+// MIGRATED to Creative Devtools' Java /cdevtest (feature_writeup/creative_devtools.md, /cdevtest); new rows use
 // those verbs, old batches keep /zq: recipes, rdetail, bytype, uses, makes, food, item, items/blocks -> reg item|block,
 // potion, count, ages, chunk, biometag/itemtag/blocktag -> tag biome|item|block, tagsof, useitem -> useair as=NAME
-// hand=both, states. season, floating, under and nbt followed on 2026-11-16 (header above).
+// hand=both, states. season, floating, under and nbt followed (header above).
 (() => {
     const $ZQArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
     const $ZQReg = Java.loadClass('net.minecraft.core.Registry')
@@ -212,7 +212,7 @@
                 //   base earth   ids of earth_fill/earth blocks left in the bottom 3 layers (after ground match)
                 //   ring         top blocks (OCEAN_FLOOR) every 2 blocks on a ring 3 out from the start's box: the native ground
                 //   foreign      base earth ids that never occur in the ring (ground match should have swapped them)
-                // Untested before its first scratch run (written 2026-11-02 for SQ-EFB); first 30 starts only.
+                // Untested before its first scratch run (written for SQ-EFB); first 30 starts only.
                 let a = arg.split(' '), cx0 = (+a[0]) >> 4, cz0 = (+a[1]) >> 4, r = +a[2], filt = a[3] && a[3] != '-' ? a[3] : null
                 let dim = a[4] || 'minecraft:overworld', lv = null
                 server.getAllLevels().forEach(l => { if (String(l.dimension) == dim) lv = l })

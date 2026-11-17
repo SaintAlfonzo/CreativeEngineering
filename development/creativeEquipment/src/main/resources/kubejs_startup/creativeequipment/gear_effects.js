@@ -1,8 +1,8 @@
-// Gear effect rows (plan_cb_polish.md 1, 2026-11-06): which armor set or tool grants which effect, with the jar that
-// owns the gear. The frameworks (global.armorEffects, global.toolEffects, the tick appliers and tooltip lines) are
-// Creative Common's (kubejs_startup/creativecommon/effects/). Moved here from Creative Brewing, where the echo tool rows
-// leaked without this jar (scratch r1106cbo SQ-CBO-01). Equipment rebuild + restart.
-// Each row needs every mod it names: the gear's own mod (dict keys resolve to it) and the effect's mod.
+// Gear effect rows (plan_cb_polish.md 1): which armor set or tool grants which effect, with the jar that owns the gear.
+// The frameworks (global.armorEffects, global.toolEffects, the tick appliers and tooltip lines) are Creative Common's
+// (kubejs_startup/creativecommon/effects/). Moved here from Creative Brewing, where the echo tool rows leaked without
+// this jar (scratch r1106cbo SQ-CBO-01). Equipment rebuild + restart. Each row needs every mod it names: the gear's own
+// mod (dict keys resolve to it) and the effect's mod.
 ;(function () {
 	var i = global.item
 	var ef = global.effect
@@ -69,13 +69,12 @@
 		global.armorEffects.set([i.felsic_helmet, i.felsic_chestplate, i.felsic_leggings, i.felsic_boots], felsicEffects)
 	}
 
-	// dragonloot:upgraded_dragon_chestplate (elytra-capable, see
-	// [[dragon-elytra-rocket-takeoff]]) replaces the base chestplate in the chest slot -
-	// a player wears one or the other, never both - so the bonus is registered twice,
-	// once per chestplate variant, sharing the same effects list.
-	// dragon_horse_armor (dragonloot:dragon_horse_armor) is a HorseArmorItem worn by an
-	// AbstractHorse, not player equipment — see mount() above for why it needs its own path.
-	// Regeneration II, Health Boost II, Resistance II (potions/effects #4, decided 2026-10-29).
+	// dragonloot:upgraded_dragon_chestplate (elytra-capable, see [[dragon-elytra-rocket-takeoff]])
+	// replaces the base chestplate in the chest slot - a player wears one or the other, never both -
+	// so the bonus is registered twice, once per chestplate variant, sharing the same effects list.
+	// dragon_horse_armor (dragonloot:dragon_horse_armor) is a HorseArmorItem worn by an AbstractHorse,
+	// not player equipment — see mount() above for why it needs its own path. Regeneration II, Health
+	// Boost II, Resistance II (potions/effects #4).
 	if (global.has('dragonloot')) {
 		var dragonEffects = [
 			{ effect: ef.resistance },

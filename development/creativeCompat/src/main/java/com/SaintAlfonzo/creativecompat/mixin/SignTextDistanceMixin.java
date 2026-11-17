@@ -15,9 +15,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
  * Sign text is not drawn more than {@link #TEXT_DISTANCE} blocks from the camera; the sign itself still is. Vanilla
- * measures and draws every line of every sign in block entity range on every frame: 1.8% of the render thread on
- * 2026-11-07 (perf.md 19.3), mostly line widths and glyphs, for text too small to read. Looking through a spyglass
- * keeps all text, as vanilla does for the glowing-text outline.
+ * measures and draws every line of every sign in block entity range on every frame: 1.8% of the render thread
+ * (perf.md 19.3), mostly line widths and glyphs, for text too small to read. Looking through a spyglass keeps all
+ * text, as vanilla does for the glowing-text outline.
  *
  * SRG names, remap off (render = m_6922_, getRenderMessages = m_155717_). Cancels just before the text part of render(): by then the model's inner pose is popped and only the outer pose
  * (pushed at the start, popped at the end) is open, so it is popped here.

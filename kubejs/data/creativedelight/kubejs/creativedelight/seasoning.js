@@ -1,6 +1,5 @@
 // requires: creativedelight
-// The pack's seasoning crafts on foods. Moved from the pack's kubejs/server_scripts/cooking/seasoning.js 2026-10-25,
-// rows unchanged.
+// The pack's seasoning crafts on foods.
 ServerEvents.recipes(e => {
 	if (!global.CD) return
 

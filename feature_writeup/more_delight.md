@@ -137,3 +137,11 @@ recipes stay on that tag. Since 2026-11-01 the Sliced Sweet Potato (veggies_deli
 ### 5.4 Not touched
 
 Nothing else from the 26.05.20 diff.
+
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-25: Moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged: bone broth routes (TODO dishes/ingredients #4) and pastas (no broth: the pot's bowl), same rule (kubejs/data/creativedelight/kubejs/moredelight/recipes.js)
+- 2026-10-27: Moved from the pack's server_scripts/other/item_merges.js 2026-10-27, rows unchanged (kubejs/data/creativedelight/kubejs/moredelight/item_merges.js)
+- 2026-11-01: Mashed Potatoes take salt (The Salt's Salting craft), as Veggies Delight's Mashed Sweet Potatoes do (merges/dishes #2, owner 2026-11-01; veggiesdelight/tags.js) (kubejs/data/creativedelight/kubejs/moredelight/tags.js)

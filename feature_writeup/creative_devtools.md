@@ -224,3 +224,10 @@ loses the tools, Devtools without the new patcherMod fails on the missing hooks.
   Protection exemption (scratch testing expansion item 3). Built, harness PASS, not installed or booted; SQ-TX queued.
   Same day 15:50: `/cdevtest layerdump` (pass-through D0), `/cdevreload compat` and `/cdevreloadclient compat` (E2),
   `/cdevbench` on `Neighbours.SIDES` / `FACES`.
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-07: interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07 (development/creativeDevtools/build.gradle)
+- 2026-11-09: /zq under's default earth tag, under its owning jar's namespace since 2026-11-09 (development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/test/TestJudges.java)
+- 2026-11-15: D1 rows marked out (owner, 2026-11-15): Create Deco coin stacks, Control Engineering logic cabinet, Copycats (development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/test/TestLayers.java)
+- 2026-11-16: The last verbs moved from {@code /zq} (tools/scratch_query/zq_probe.js, retired 2026-11-16): season (Creative Calendar's cached season type, read reflectively so Devtools loads without Calendar), floating (sand and gravel over air), under (structure starts judged on their placed blocks, the SQ-EFB judge) and nbt (an item stack's NBT as the game holds it) (development/creativeDevtools/src/main/java/com/SaintAlfonzo/creativedevtools/test/TestJudges.java)

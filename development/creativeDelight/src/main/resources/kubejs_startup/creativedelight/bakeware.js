@@ -1,4 +1,3 @@
-// Moved from the pack's startup_scripts/cooking/bakeware.js 2026-10-25, rows unchanged.
 // Creative Delight startup script, loaded from the jar after the pack's startup_scripts, so the dicts exist here.
 // Restart to apply.
 //
@@ -18,10 +17,9 @@ StartupEvents.registry('item', e => {
     reg.item(e, i.pie_tin).displayName('Pie Tin').texture('creativedelight:item/pie_tin')
     reg.item(e, i.muffin_tin).displayName('Muffin Tin').texture('creativedelight:item/baking_sheet')
 
-    // Mortar and pestle: the food grinding tool (NCH.mortar / foodGrinding, TODO cooking/kitchen #10; moved from the
-    // pack's startup_scripts/items/misc_items.js 2026-10-27, id unchanged). Texture copied from Old Guns'
-    // mortar_and_pestle (AGPL-3.0), whose item is renamed Powder Pestle and stays out of food recipes. maxDamage makes
-    // it unstackable; the recipe's damageIngredient takes 1 per craft and hands it back. Recipe:
+    // Mortar and pestle: the food grinding tool (NCH.mortar / foodGrinding, TODO cooking/kitchen #10). Texture copied
+    // from Old Guns' mortar_and_pestle (AGPL-3.0), whose item is renamed Powder Pestle and stays out of food recipes.
+    // maxDamage makes it unstackable; the recipe's damageIngredient takes 1 per craft and hands it back. Recipe:
     // kubejs/data/creativedelight/kubejs/creativedelight/recipes.js.
     reg.item(e, i.mortar_and_pestle).displayName('Mortar and Pestle').maxDamage(512)
 })

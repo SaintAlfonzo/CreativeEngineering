@@ -433,7 +433,7 @@ public class SpotsTest {
 
     /**
      * Label surface test and centred notes (sticky_notes.md 3.3a), on the real shapes of the modded hosts (read from
-     * their jars 2026-11-02) and on vanilla blocks.
+     * their jars) and on vanilla blocks.
      */
     static void surfaceTests(BlockState stone, BlockState chest, BlockState carpet) {
         VoxelShape jar = Shapes.or(Block.box(3, 0, 3, 13, 14, 13), Block.box(5, 14, 5, 11, 16, 11));

@@ -33,7 +33,7 @@ import java.util.function.Function;
  * THE BUG:
  *   Both listings call findNearestMapStructure on the server thread from getOffer. In unexplored terrain that
  *   loads chunks synchronously up to 100 chunks out: a scratch server's /dumptrades froze the tick for 60 s
- *   until the watchdog killed it (2026-10-02, LC), and Cloud Storage's pair alone held a tick for ~20 s. A
+ *   until the watchdog killed it (LC), and Cloud Storage's pair alone held a tick for ~20 s. A
  *   villager reaching that trade level on the live server does the same. Async Locator only patches vanilla's
  *   TreasureMapForEmeralds, so these never reached it.
  *

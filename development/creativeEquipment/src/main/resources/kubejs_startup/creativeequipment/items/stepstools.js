@@ -1,6 +1,6 @@
-// Creative Equipment; moved from kubejs/startup_scripts/ on 2026-11-04 (creative_split.md 7.6, wave 7), rows unchanged.
-// Stepstools — one per Another Furniture tall stool colour. Worn in the Curios feet slot: stand still and hold
-// Sprint + Jump (or the "Step Up" key) to stand on the stool, a block higher; moving, crouching or jumping steps off.
+// Creative Equipment. Stepstools — one per Another Furniture tall stool colour. Worn in the Curios feet slot: stand
+// still and hold Sprint + Jump (or the "Step Up" key) to stand on the stool, a block higher; moving, crouching or
+// jumping steps off.
 //
 // The items are pure data and borrow Another Furniture's tall stool models, so each one looks like its stool.
 // Everything else lives in this jar's stepstool/ package (key handling, collision, the stool drawn under the

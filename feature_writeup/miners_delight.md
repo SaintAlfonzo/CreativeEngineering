@@ -434,6 +434,16 @@ CD jar again 2026-11-03 00:08); not booted. Live rows SQ-MDL-01 to -05 (queue se
   path (`cup_conversion/` at the namespace root).
 - **2026-11-02:** nested in Creative Delight (`creativedelight/members #1`): `bundled_in=creativeDelight`, jar `backportedMiners-1.4.5-ce-19.2-03` inside the CD jar, "Miner's Delight (Creative Delight)" (also in the donor-missing message); folder stays `development/creativeDelight/members/miners`. `miners_upstream/` is unchanged (both jars, next to `mods/` on server and clients); `build_deploy.py` now ties it to the CD jar. `miners_delight-*.jar` moved to CD's `replaces_jars`.
 
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-01: The port ships the furnace only (0.25 xp); the family call (CD.FOOD values, 2026-11-01) replaces it with all three (kubejs/data/creativedelight/kubejs/miners_delight/recipes.js)
+- 2026-11-01: Textures 1.4.5 redrew that keep their 1.1.2 look (owner 2026-11-01, TODO creativedelight/members #31): read from the 1.1.2 jar over the 1.4.5 ones (development/creativeDelight/members/miners/src/main/java/com/sammy/minersdelight/upstream/MinersTranslator.java)
+- 2026-11-02: A Creative Delight member (folder moved here 2026-11-02): build and install through `:creativeDelight:` only (development/creativeDelight/members/miners/build.gradle)
+- 2026-11-02: Exactly one (TODO dishes/ocean #9, 2026-11-02): every other drop goes, whatever added it, so looting, a knife or another mod's modifier can't add a second squid or anything else; the rule no longer waits on Rustic Delight (kubejs/data/creativedelight/kubejs/miners_delight/loot.js)
+- 2026-11-02: Upstream ids the port does not register: the hot cocoa cup (D3) and, since TODO dishes/meals #53 (2026-11-02), the Copper Cup and every cup (water, milk, powder snow, the 15 soup and stew cups) (development/creativeDelight/members/miners/src/main/java/com/sammy/minersdelight/upstream/MinersTranslator.java)
+- 2026-11-02: The items of Miner's Delight 1.4.5, in its creative tab order, without the Copper Cup and every cup (TODO dishes/meals #53, 2026-11-02; 1.1.2's hot cocoa cup was never ported, D3) (development/creativeDelight/members/miners/src/main/java/com/sammy/minersdelight/registry/MDItems.java)
+
+
 ## 10. Original survey (2026-10-23, before the port plan)
 
 Moved here from the former combined add-ons survey; the survey that started the port. Row: `largecontent/mod-additions #7`.

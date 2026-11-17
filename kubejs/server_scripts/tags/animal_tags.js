@@ -1,4 +1,4 @@
-// Breeding and pollination tags (feature_writeup/breeding_audit.md, owner decisions 2026-11-10).
+// Breeding and pollination tags (feature_writeup/breeding_audit.md, owner decisions).
 //
 // Bees breed with items in #minecraft:flowers and pollinate blocks in the block tag #minecraft:flowers; the
 // hummingbird eats the item tag. Rules here:

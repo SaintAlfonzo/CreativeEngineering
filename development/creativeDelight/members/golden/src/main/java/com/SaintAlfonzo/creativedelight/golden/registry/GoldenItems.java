@@ -57,7 +57,6 @@ public final class GoldenItems {
                 "cooked_chicken", "cooked_rabbit", "cooked_cod", "cooked_salmon", "bread", "cookie", "pumpkin_pie"}) {
             plain(food);
         }
-        // the golden and gilded stews (mushroom stew, beetroot soup, rabbit stew) are not registered: removed 2026-11-10
         pair("milk_bucket", p -> new ShinyItems.GoldenMilk(p.craftRemainder(Items.BUCKET)), p -> new ShinyItems.Milk(p.craftRemainder(Items.BUCKET)), 1, 1);
         pair("honey_bottle", p -> new HoneyBottleItem(p.craftRemainder(Items.GLASS_BOTTLE)),
                 p -> new ShinyItems.Honey(p.craftRemainder(Items.GLASS_BOTTLE)), 8, 4);

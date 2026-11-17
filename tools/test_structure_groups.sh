@@ -49,7 +49,7 @@ for v in "density=4 --density=4" "density=0.3 --density=0.3" "groupsoff --groups
 done
 
 # The old-jar cases (no StructureFrequencies, no MetaStructure class) were removed 2026-11-16: structure_overrides.js
-# loads its classes at the top since 2026-10-28 (463d2342) and ships in the same Creative Worldgen jar as them.
+# loads its classes at the top (463d2342) and ships in the same Creative Worldgen jar as them.
 echo "== 3. meta structures off"
 node tools/structure_tuning_sim.js "$T/nometa.md" "$T/nometa" --no-meta > "$T/nometa.log"
 if find "$T/nometa" -path '*worldgen/structure/*' | grep -q . || grep -rq 'creativeworldgen:meta/' "$T/nometa/creativeworldgen/worldgen/structure_set"; then

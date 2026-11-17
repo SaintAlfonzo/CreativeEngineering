@@ -58,7 +58,7 @@ public final class HHBlocks {
      */
     public static final boolean HOPS_ON = ModList.get().isLoaded("vinery");
 
-    // Hops vine (3.1; was hops on a lattice, N21), sunflower stem (N23-16). H&H tilled end stone removed 2026-11-14 (3.2).
+    // Hops vine (3.1; was hops on a lattice, N21), sunflower stem (N23-16).
     public static final RegistryObject<Block> HOPS_VINE = hops("hops_vine",
             () -> new HopsVineBlock(Properties.copy(Blocks.VINE).randomTicks().sound(SoundType.VINE)));
     public static final RegistryObject<Block> SUNFLOWER_STEM = BLOCKS.register("sunflower_stem",

@@ -1,10 +1,10 @@
-// Scratch-server probe: worldgen hot-spot changes of 2026-10-27 (perf.md 10.7 options 1-4, queue entries SQ-WGP in
+// Scratch-server probe: worldgen hot-spot changes (perf.md 10.7 options 1-4, queue entries SQ-WGP in
 // feature_writeup/testing/scratch_queue.md). Copy into a SCRATCH server's kubejs/server_scripts/ as zz_wgp_probe.js
 // (never the pack's). Prefix WGP_ (all server scripts share one scope).
 //   wgp cliffs   the loaded tectonic:overworld/legacy/cliffs density function, encoded back to JSON: how many
 //                flat_cache wraps it has. The encoder inlines referenced functions, so the counts are of the whole
 //                tree: 10 flat_cache / 5 interpolated with the pack override in kubejs/data, 7 / 2 with Tectonic
-//                2.3.5a's own file (measured 2026-10-27, wgp_new vs wgp_old)
+//                2.3.5a's own file (measured wgp_new vs wgp_old)
 //   wgp dims     per dimension: how many structures DimensionFilter skips there, and the first few ids
 //                (all 0 with [worldgen.systems] dimensionFilter = false)
 // Every result is a `[wgp] ...` line in logs/latest.log; checks print PASS / FAIL.

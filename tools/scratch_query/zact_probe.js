@@ -12,7 +12,7 @@
 //                                         slot box sits below the top (perfBot's `pbot use` hits y+1.0); logs the result
 // Output: "[zact] kill|break ...: <item> xN, ..." lines in logs/latest.log, then "[zact] done". Load the chunk first
 // (forceload): no chunk loads here (Rhino deadlock, scratch-test gotchas).
-// MIGRATED 2026-11-15 to /cdevtest (creative_devtools.md): kill -> kill X Y Z TYPE n= held= [fire], break -> break
+// MIGRATED to /cdevtest (creative_devtools.md): kill -> kill X Y Z TYPE n= held= [fire], break -> break
 // X Y Z held= [keep], useon -> use X Y Z as=NAME hit=0.5,HITY,0.5.
 (() => {
     const $ZAFake = Java.loadClass('net.minecraftforge.common.util.FakePlayerFactory')

@@ -15,9 +15,8 @@ import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
 /**
- * One-time config move to the 2026-11-15 pass-through model (plan_post_scratch_1115b.md C1 and D), on the toml text
- * before Forge loads the file (like {@link LeafPileMigration}, which runs first):
- * <ul>
+ * One-time config move to the pass-through model (plan_post_scratch_1115b.md C1 and D), on the toml text before
+ * Forge loads the file (like {@link LeafPileMigration}, which runs first): <ul>
  *   <li>C1: in every {@code [surface.passthrough.<tier>]} table that has no {@code surroundedAt} key yet (a file from
  *       before the change), {@code neighbours = "RING"} becomes {@code "SIDES"}, {@code "CUBE"} becomes {@code "FACES"},
  *       and {@code denseFrom = 6} (the old default) becomes 3 (the new one). Another denseFrom is an edit and stays.</li>

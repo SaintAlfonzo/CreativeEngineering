@@ -271,7 +271,7 @@ b.vintage_salt_blocks = 'vintagedelight:*salt*';                // salt, salt bl
 b.vintage_evaporator = 'vintagedelight:evaporator';
 b.hh_salt_lick_stages = 'hearthandharvest:*licked_salt_block';  // lightly / well / heavily licked, waxed or not (HHSaltRegistry)
 b.hh_waxed_salt_block = 'hearthandharvest:waxed_salt_block';
-// Modded flame lights counted as fire (plan 3.8 table, 2026-11-13 dump); the non-flame ones of the same mods are left out
+// Modded flame lights counted as fire (plan 3.8 table, dump); the non-flame ones of the same mods are left out
 b.melt_fire_supplementaries_sconces = 'supplementaries:sconce*';  // every sconce and wall sconce, the sconce lever
 b.melt_fire_supplementaries_lanterns = 'supplementaries:*lantern'; // brass, copper, crimson, lead, silver, wall lantern
 b.melt_fire_everythingcopper_lanterns = 'everythingcopper:*lantern'; // 16 copper and copper soul lanterns, all stages

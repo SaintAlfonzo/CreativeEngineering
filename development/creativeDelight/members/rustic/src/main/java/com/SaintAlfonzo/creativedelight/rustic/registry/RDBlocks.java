@@ -59,8 +59,8 @@ public final class RDBlocks {
     public static final RegistryObject<Block> COFFEE_CHEESECAKE = cheesecake("coffee_cheesecake", () -> RDItems.COFFEE_CHEESECAKE_SLICE.get());
 
     /**
-     * The plain plate serves Supplementaries' pancake: Rustic's own plain single is not registered (owner 2026-11-01,
-     * TODO creativedelight/members #15). Air when Supplementaries is absent, then the plate gives nothing back.
+     * The plain plate serves Supplementaries' pancake: Rustic's own plain single is not registered (owner, TODO
+     * creativedelight/members #15). Air when Supplementaries is absent, then the plate gives nothing back.
      */
     public static final RegistryObject<Block> PANCAKES = pancakes("pancakes",
             () -> ForgeRegistries.ITEMS.getValue(new ResourceLocation("supplementaries", "pancake")));

@@ -1,5 +1,4 @@
-// Creative Engineering; moved from kubejs/startup_scripts/changes/transition_items.js on 2026-11-04 (creative_split.md 7.13, wave 8), rows unchanged.
-// One incomplete / transition item per sequenced assembly (and per Engineer's-Workbench chain
+// Creative Engineering. One incomplete / transition item per sequenced assembly (and per Engineer's-Workbench chain
 // that reuses the same "in-progress" sprite).
 //
 // Add a row here for each sequenced assembly, then reference it in the recipe by passing its key
@@ -50,8 +49,8 @@ StartupEvents.registry('item', e => {
 		['budding_amethyst',         'minecraft:block/budding_amethyst'],
 		['echo_shard'],
 
-		// end gear (echo, felsic, dragon) and air brake rows: Creative Equipment's items/end_gear.js since 2026-11-06
-		// (TODO `creativebrewing/publish #22`).
+		// end gear (echo, felsic, dragon) and air brake rows: Creative Equipment's items/end_gear.js (TODO
+		// `creativebrewing/publish #22`).
 
 		// transport
 		['rail'],
@@ -76,7 +75,7 @@ StartupEvents.registry('item', e => {
 	// ---- wire coils + coil blocks + pack components ----------------------------------------
 	// Keep COIL_METALS in sync with server_scripts/metal/metal_base_materials.js.
 	//   coil_<m>       : wire-coil-in-progress  — grey-tint of the wire coil's item sprite, taken
-	//                    from i.wire_coil_<m> (the dict has one key per id since 2026-10-27, so
+	//                    from i.wire_coil_<m> (the dict has one key per id, so
 	//                    there is no i.coil_<m> to auto-derive from; the incomplete id stays
 	//                    kubejs:incomplete_coil_<m>). creativeengineering:* for the 9 pack coils,
 	//                    immersiveengineering:* for copper / steel / electrum.

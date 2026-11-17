@@ -12,10 +12,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
- * Load-only aliases for the ids this jar had under {@code creativeengineering:} until 2026-11-10 (namespace_move.md
- * step 6, D-DIM). Forge registries (the biome modifier codecs) are remapped by the swap list in
- * data/creativeworldgen/swaps; this class covers what Forge cannot remap:
- * <ul>
+ * Forge registries (the biome modifier codecs) are remapped by the swap list in data/creativeworldgen/swaps; this
+ * class covers what Forge cannot remap: <ul>
  * <li>Dimension, dimension type and noise settings keys ({@link #keyAlias}, called from
  * mixin.ResourceKeyLegacyDimensionMixin): every saved dimension string (level.dat's dimension list, player
  * Dimension and SpawnDimension, other mods' saved data, portal entities) is read through {@code ResourceKey.create},
@@ -32,7 +30,6 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public final class LegacyIds {
 	private static final Logger LOG = LogManager.getLogger("creativeworldgen/legacy-ids");
 
-	/** The namespace these ids had until 2026-11-10. */
 	public static final String LEGACY_NS = "creativeengineering";
 	/** CreativeWorldgen.NS, repeated so this class (loaded at bootstrap by the ResourceKey mixin) does not load the mod class. */
 	public static final String NS = "creativeworldgen";

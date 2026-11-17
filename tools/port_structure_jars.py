@@ -62,9 +62,9 @@ BLOCK_REMAP = {
     'minecraft:chiseled_bookshelf': ('minecraft:bookshelf', False, True),
     'minecraft:short_grass': ('minecraft:grass', True, False),
     'minecraft:pink_petals': (None, False, True),
-    # Camps. Castles. Carriages. 2.3.4 (2026-10-14): archaeology blocks lose their loot (D6); a hanging sign
-    # under a chain becomes a hanging lantern (a wall sign there would have no wall); Diagonal Fences /
-    # Diagonal Windows are not in the pack.
+    # Camps. Castles. Carriages. 2.3.4: archaeology blocks lose their loot (D6); a hanging sign under a
+    # chain becomes a hanging lantern (a wall sign there would have no wall); Diagonal Fences / Diagonal
+    # Windows are not in the pack.
     'minecraft:suspicious_gravel': ('minecraft:gravel', False, True),
     'minecraft:suspicious_sand': ('minecraft:sand', False, True),
     'minecraft:mangrove_hanging_sign': ('minecraft:lantern', {'hanging': 'true', 'waterlogged': 'false'}, True),

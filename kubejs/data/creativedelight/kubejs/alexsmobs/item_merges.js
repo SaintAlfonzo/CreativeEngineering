@@ -1,8 +1,7 @@
 // requires: creativedelight
 // requires: alexsmobs
 // requires: neapolitan
-// Banana merge (feature_writeup/item_merges.md 2.1): Alex's Mobs' banana into Neapolitan's. Moved from the pack's
-// server_scripts/other/item_merges.js 2026-10-27, rows unchanged.
+// Banana merge (feature_writeup/item_merges.md 2.1): Alex's Mobs' banana into Neapolitan's.
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
 	global.tags.add(e, global.item.t_crops_banana, global.item.neapolitan_banana)   // Alex's Mobs' monkeys read #alexsmobs:bananas

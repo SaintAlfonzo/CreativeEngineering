@@ -1,8 +1,7 @@
 // requires: creativedelight
 // requires: moredelight
 // requires: rusticdelight
-// Diced potatoes merge (feature_writeup/item_merges.md 2.4). Moved from the pack's server_scripts/other/item_merges.js
-// 2026-10-27, rows unchanged.
+// Diced potatoes merge (feature_writeup/item_merges.md 2.4).
 
 // Rustic Delight's potato -> slices stays (3 since dishes/ingredients #26, rusticdelight/recipes.js), More Delight's potato -> 1 diced goes. More Delight's dishes (mashed
 // potatoes, potato salad, the four diced potatoes with ...) read #forge:sliced_potatoes, whose only member was the

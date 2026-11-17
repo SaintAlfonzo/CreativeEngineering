@@ -1,9 +1,8 @@
 // requires: creativebrewing
 // requires: vinery
-// Wandering Winemaker stock (Vinery): draws 8 from its own pool. Moved from the pack's
-// server_scripts/economy/wandering_trades.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged. The pack's handler
-// (Wandering Trader pools) runs first; this one only touches the Winemaker pool. Helpers: global.trades, Winemaker
-// half in the CB jar's kubejs_startup/vinery/winemaker_trades.js. Reference: feature_writeup/wandering_trader.md
+// Wandering Winemaker stock (Vinery): draws 8 from its own pool. The pack's handler (Wandering Trader pools) runs
+// first; this one only touches the Winemaker pool. Helpers: global.trades, Winemaker half in the CB jar's
+// kubejs_startup/vinery/winemaker_trades.js. Reference: feature_writeup/wandering_trader.md
 MoreJSEvents.wandererTrades(e => {
 	if (!global.CB || !global.CB.on('vinery')) return
 	var i = global.item

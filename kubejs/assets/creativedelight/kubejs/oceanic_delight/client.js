@@ -1,8 +1,7 @@
 // requires: creativedelight
 // requires: oceanic_delight
-// Oceanic Delight net tooltip (ocean_delight.md 5.1): blocks are the fishing_net tags, drops the biome tables. Moved
-// from the pack's client_scripts/tooltips.js 2026-10-27, rows unchanged.
-// A tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
+// Oceanic Delight net tooltip (ocean_delight.md 5.1): blocks are the fishing_net tags, drops the biome tables. A
+// tooltip line in a col role (global.tooltips, Creative Common's client _lib; read at event time)
 var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
 
 ItemEvents.tooltip(e => {

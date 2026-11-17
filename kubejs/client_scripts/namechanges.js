@@ -193,9 +193,8 @@ ClientEvents.lang('en_us', e => {
   e.renameItem(global.item.nulch, 'Fertile Soul Soil')
   e.add('item.vintagedelight.ghost_pepper.planting_soil', 'Requires a soul soil and the heat of the nether to grow')
   // Delight dish, crop and fluid names (Oceanic, Fruits, Veggies, Vintage, Ender's, Rustic, Delightful, The Dirty
-  // Stuff, dish renames) and the lunchbox tier names: Creative Delight
-  // (assets/creativedelight/kubejs/creativedelight/names.js, moved 2026-11-01).
-  // Create D&D asphalt is painted Immersive Petroleum asphalt (server_scripts/engineering/dreams_desires.js)
+  // Stuff, dish renames) and the lunchbox tier names: Creative Delight. Create D&D asphalt is painted Immersive
+  // Petroleum asphalt (server_scripts/engineering/dreams_desires.js)
   ;['white', 'orange', 'magenta', 'light_blue', 'yellow', 'lime', 'pink', 'gray', 'light_gray', 'cyan', 'purple',
     'blue', 'brown', 'green', 'red', 'black'].forEach(c => {
     var name = c.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')

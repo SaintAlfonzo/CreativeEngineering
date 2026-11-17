@@ -34,11 +34,9 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.block.Blocks;
 
 /**
- * JEI page for {@code creativeengineering:dragon_breathing} fan recipes: the same
- * "processing via fan" layout Create uses for washing / smoking / blasting / haunting,
- * with the Encased Fan + a Dragon Head as catalysts. Adapted from Create: Halitosis'
- * {@code HalitosisJEI} to Create 0.5.1.i / JEI 11.8. The Automated Potion Mixing and Lingerification pages it used to
- * register moved to Creative Brewing (compat.jei.PotionMachinesJEI, 2026-11-01).
+ * JEI page for {@code creativeengineering:dragon_breathing} fan recipes: the same "processing via fan" layout Create
+ * uses for washing / smoking / blasting / haunting, with the Encased Fan + a Dragon Head as catalysts. Adapted from
+ * Create: Halitosis' {@code HalitosisJEI} to Create 0.5.1.i / JEI 11.8.
  */
 @ParametersAreNonnullByDefault
 @JeiPlugin

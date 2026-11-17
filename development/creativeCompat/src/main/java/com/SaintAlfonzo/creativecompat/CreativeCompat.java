@@ -64,21 +64,19 @@ import java.util.regex.Pattern;
 
 /**
  * Creative Compat (feature_writeup/creative_compat.md): the pack's tweaks to third-party mods that have no wider system
- * of their own, carved out of patcherMod on 2026-11-01 (creative_split.md 7.5, 7.6). Every other Creative jar requires
- * it; it requires patcherMod ({@code creativeengineering}, later Creative Common). Each tweak applies only when its mod
- * is loaded: mixins through compat/CompatMixinPlugin, listeners through the {@link ModList} checks below.
+ * of their own. Every other Creative jar requires it; it requires patcherMod ({@code creativeengineering}, later
+ * Creative Common). Each tweak applies only when its mod is loaded: mixins through compat/CompatMixinPlugin, listeners
+ * through the {@link ModList} checks below.
  *
  * Ids follow the owner (feature_writeup/namespace_move.md): the shrapnel entity, the botanist pot block entity, the
- * cardboard box, models, textures, tags and loot tables use this mod's namespace ({@link #NS}); until 2026-11-10 they
- * were {@code creativeengineering}, and data/creativecompat/swaps/owner_namespace.json carries old saves. Lang keys
- * and NBT keys kept their old text. This mod id is only the jar's identity, its config
- * file and its script packs.
+ * cardboard box, models, textures, tags and loot tables use this mod's namespace ({@link #NS}). Lang keys and NBT
+ * keys kept their old text. This mod id is only the jar's identity, its config file and its script packs.
  */
 @Mod(CreativeCompat.MOD_ID)
 public class CreativeCompat {
 
     public static final String MOD_ID = "creativecompat";
-    /** The namespace of every id this mod uses (was creativeengineering until the 2026-11-10 namespace move). */
+    /** The namespace of every id this mod uses. */
     public static final String NS = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -89,18 +87,18 @@ public class CreativeCompat {
         // The sections came from patcherMod's file: the first boot copies the player's values over (then patcherMod
         // drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
         boolean carried = ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.SECTIONS);
-        // [shrapnel], [surface] and [vein_undo] came from Creative Engineering's file of the same name (2026-11-06),
-        // after this file's first release: carried into a new file, or merged into an existing one.
+        // [shrapnel], [surface] and [vein_undo] came from Creative Engineering's file of the same name, after this
+        // file's first release: carried into a new file, or merged into an existing one.
         if (!ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.ENGINEERING_SECTIONS))
             ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.ENGINEERING_SECTIONS);
-        // [jei], [gui_title], [toasts], [tooltips], [coaster], [wthit] came from Creative Common's file with the interface
-        // code (2026-11-07); before the 2026-11-04 swap they were in patcherMod's creativeengineering-common.toml.
-        // Sections this file already has are kept; Common drops its copies when Forge corrects its file.
+        // [jei], [gui_title], [toasts], [tooltips], [coaster], [wthit] came from Creative Common's file with the
+        // interface code. Sections this file already has are kept; Common drops its copies when Forge corrects its
+        // file.
         if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS))
             ConfigRename.mergeSections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS);
         ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.COMMON_SECTIONS);
-        // [leaf_piles] slowFromLayers -> [surface.passthrough.leaf_pile] minLayers (plan_passthrough.md 3.1, 2026-11-15),
-        // then the neighbour model and the layer tier (plan_post_scratch_1115b.md C1, D: surface/PassConfigMigration)
+        // [leaf_piles] slowFromLayers -> [surface.passthrough.leaf_pile] minLayers (plan_passthrough.md 3.1), then the
+        // neighbour model and the layer tier (plan_post_scratch_1115b.md C1, D: surface/PassConfigMigration)
         migrateLeafPiles();
         migratePassThrough();
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, CompatConfig.SPEC, FILE);
@@ -123,9 +121,9 @@ public class CreativeCompat {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.compat.NetherFogColour.class);
         }
 
-        // The TNT shrapnel entity (shrapnel/, from Creative Engineering 2026-11-06, id creativecompat:shrapnel):
-        // fired on primed-TNT-entity detonation, and for the itemphysic.ItemBurnTransform burn-explosion rule through
-        // Common's util.BurnBursts. Tuning: [shrapnel].
+        // The TNT shrapnel entity (shrapnel/, from Creative Engineering id creativecompat:shrapnel): fired on
+        // primed-TNT-entity detonation, and for the itemphysic.ItemBurnTransform burn-explosion rule through Common's
+        // util.BurnBursts. Tuning: [shrapnel].
         ShrapnelEntities.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(TntShrapnelHandler.class);
         // golem farm cooldown (plan_small_fixes_1116.md R2)
@@ -140,8 +138,8 @@ public class CreativeCompat {
             MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.portalgun.PortalGunDissolve.class);
         }
 
-        // Walking on blocks (surface/, from Creative Engineering 2026-11-06; [surface]). Framed / copycat blocks: say
-        // on BlockRunner's speed tooltip line whether they walk like their camo. BlockRunner tier speeds come from
+        // Walking on blocks (surface/, from Creative Engineering; [surface]). Framed / copycat blocks: say on
+        // BlockRunner's speed tooltip line whether they walk like their camo. BlockRunner tier speeds come from
         // [surface.speed] (mixin/BlockRunnerSpeedConfigMixin): re-apply them when the toml is saved, and log an error
         // if the mixin never ran.
         MinecraftForge.EVENT_BUS.register(CamoSpeedTooltip.class);
@@ -179,7 +177,7 @@ public class CreativeCompat {
             JarContents.set(JarMixing::kinds, JarMixing::total);
         }
         if (ModList.get().isLoaded("jei")) {
-            // JEI World Interactions: Burning rows (Campfire Rules moved to Creative Delight 2026-11-04) (WorldRows is JEI-free; JEI loads its plugin later)
+            // JEI World Interactions: Burning rows (WorldRows is JEI-free; JEI loads its plugin later)
             WorldRows.provider(WorldTab.BURNING, BurnRows::rows);
         }
 

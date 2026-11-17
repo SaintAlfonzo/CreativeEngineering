@@ -1,5 +1,5 @@
 // requires: creativecompat
-// Creative Compat: display names; moved from kubejs/client_scripts/namechanges.js on 2026-11-01.
+// Creative Compat: display names.
 ClientEvents.lang('en_us', e => {
 	// Flower pots (feature_writeup/flower_pots.md 3.4): Supplementaries' 3-plant box; Beautify's hanging pot has rich
 	// soil (recipe in creativecompat/kubejs/other/flowers.js; on the ground WTHIT names it Rich Pot, WthitPotContents)

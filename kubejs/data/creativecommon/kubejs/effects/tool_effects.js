@@ -1,6 +1,6 @@
-// Creative Common since 2026-11-06 (plan_cb_polish.md 2), from Creative Brewing; before that the pack's server_scripts/magic/tool_effects.js.
-// Applies global.toolEffects (Common startup effects/tool_effects.js; rows in Equipment gear_effects.js) onHit()/held()
-// effects. Tooltip text for the same data lives in Common client effects/tool_effects_tooltip.js.
+// Creative Common (plan_cb_polish.md 2), from Creative Brewing. Applies global.toolEffects (Common startup
+// effects/tool_effects.js; rows in Equipment gear_effects.js) onHit()/held() effects. Tooltip text for the same data
+// lives in Common client effects/tool_effects_tooltip.js.
 //
 // onHit fires once per hit (EntityEvents.hurt, keyed to the attacker's main-hand item)
 // and applies each effect for its own configured duration — a one-shot

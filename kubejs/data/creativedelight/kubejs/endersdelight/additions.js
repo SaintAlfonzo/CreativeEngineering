@@ -52,7 +52,7 @@ ServerEvents.tags('item', e => {
 	var t = global.tags
 	var i = global.item
 
-	// Void Pepper is the first spice (briefs/food_seasoning.md); saffron is not (owner, 2026-10-25)
+	// Void Pepper is the first spice (briefs/food_seasoning.md); saffron is not (owner)
 	t.add(e, i.t_spices, [i.voidpepper, i.crushed_voidpepper])
 })
 

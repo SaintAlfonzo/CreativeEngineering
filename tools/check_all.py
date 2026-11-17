@@ -48,8 +48,8 @@ TOOLS = ROOT / 'tools'
 KNOWN_FILE = TOOLS / 'check_known.csv'
 TIMES_FILE = ROOT / 'jar_archive' / 'check_times.json'   # last run time per check (not tracked)
 FAST_LIMIT = 15.0
-# Checks over FAST_LIMIT on their own (measured alone, 2026-11-16); --fast skips them. Times under parallel load are
-# higher and are only recorded for information (jar_archive/check_times.json).
+# Checks over FAST_LIMIT on their own; --fast skips them. Times under parallel load are higher and are only recorded
+# for information (jar_archive/check_times.json).
 SLOW = {'test_worldgen_tools': 75}
 KNOWN_MAX_AGE = 30
 GLOBAL_INPUTS = ['tools/check_all.py', 'tools/check_known.csv', 'tools/java_test_cp.sh', 'tools/pack_paths.py']
@@ -73,6 +73,7 @@ LINTS = {
     'texture_provenance': (['python3', 'tools/texture_provenance.py'], ['feature_writeup/texture_sources/',
                                                                        'textureswapper/'], 70, True),
     'design_rules_audit': (['python3', 'tools/design_rules_audit.py'], SCRIPT_TREES + ['feature_writeup/'], 30, True),
+    'comment_dates': (['python3', 'tools/history_extract.py', '--lint'], SCRIPT_TREES + ['tools/', 'build-logic/'], 6, False),
     'test_prefix_lint': (['python3', 'tools/test_prefix_lint.py', '--quiet'],
                          ['feature_writeup/', 'tools/test_prefix_lint.py'], 1, False),
     'plan_lint': (['python3', 'tools/plan_lint.py'], ['feature_writeup/', 'tools/plan_lint.py'], 2, False),

@@ -20,7 +20,7 @@ from pathlib import Path
 
 INSTANCE = Path(__file__).resolve().parent.parent
 MODS = INSTANCE / 'mods'
-# The dicts (global.item, food, fluid, blocks, ...) ship in Creative Common's jar since plan_cb_publish.md M1 (2026-11-04).
+# The dicts (global.item, food, fluid, blocks,...) ship in Creative Common's jar since plan_cb_publish.md M1.
 STARTUP_LIB = INSTANCE / 'development/creativeCommon/src/main/resources/kubejs_startup/creativecommon/_lib'
 ITEM_DICT = STARTUP_LIB / 'item_dict.js'
 GRADLE_CACHE = Path.home() / '.gradle/caches/forge_gradle'

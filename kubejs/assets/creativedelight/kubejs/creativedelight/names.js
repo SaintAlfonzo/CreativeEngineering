@@ -1,7 +1,6 @@
 // requires: creativedelight
-// Delight dish, crop and fluid names and the lunchbox tier names. Moved from the pack's client_scripts/namechanges.js
-// 2026-11-01 (creative_split.md 7.6, wave 4), rows unchanged; no pack or CD script names these keys, so running after
-// the pack's lang pass gives the same names.
+// Delight dish, crop and fluid names and the lunchbox tier names. No pack or CD script names these keys, so running
+// after the pack's lang pass gives the same names.
 ClientEvents.lang('en_us', e => {
   if (!global.CD) return
   // Oceanic Delight's salmon eggs are Caviar, and its fish egg dishes are named after it (dishes/ocean #5, ocean_delight.md). Ancient
@@ -62,12 +61,12 @@ ClientEvents.lang('en_us', e => {
     e.add('veggiesdelight', 'block.veggiesdelight.' + c + '_crop',
       c.split('_').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Plant'))
 
-  // Dish renames (scratchpad 2026-10-30). Ids unchanged.
+  // Dish renames (scratchpad). Ids unchanged.
   if (global.has('brewinandchewin')) e.renameItem(global.item.cheesy_pasta, 'Cheesy Fish Pasta')  // Brewin's; merges/dishes #5
   e.renameItem(global.item.canned_cheesy_pasta, 'Canned Cheesy Fish Pasta')
   e.add('block.displaydelight.bnc_cheesy_pasta', 'Placed Cheesy Fish Pasta')
   e.renameItem(global.item.deluxe_burger, 'Loaded Burger')  // Vintage's "The Burger"; merges/dishes #10
-  e.add('block.supplementaries.pancake', 'Pancake')  // owner 2026-11-01 (creativedelight/members #15): "Pancake", the tooltip says stackable (supplementaries/client.js); was Stackable Pancake (merges/baking #1)
+  e.add('block.supplementaries.pancake', 'Pancake')  // owner (creativedelight/members #15): "Pancake", the tooltip says stackable (supplementaries/client.js); was Stackable Pancake (merges/baking #1)
   if (global.has('fruitsdelight')) e.renameItem(global.item.jelly_bread, 'Bread with Jam')  // dishes/jams #3
   e.renameItem(global.item.coffee_cheesecake, 'Coffee Pie')  // creativedelight/members #25
   e.add('item.rusticdelight.coffee_cheesecake_slice', 'Slice of Coffee Pie')

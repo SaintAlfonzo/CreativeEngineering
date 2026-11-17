@@ -98,7 +98,7 @@
         entries: [{ type: 'minecraft:loot_table', name: 'chalk:chests/village_chalk_loot' }],
     }, { mod: 'chalk' })
     // Botania (botania:inject/village_chest: temple, toolsmith, weaponsmith) and CC:Tweaked (computercraft:treasure_disk:
-    // cartographer) are not restored: owner 2026-11-03 keeps them out of village chests (plan_scratch_bugfix_1103 7.3).
+    // cartographer) are not restored: owner keeps them out of village chests (plan_scratch_bugfix_1103 7.3).
     // Since the golden copies stopped being served, Forge injects them natively, so they are removed after the roll in
     // 10_removals.js.
 

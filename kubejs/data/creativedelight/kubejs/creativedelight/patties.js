@@ -1,10 +1,10 @@
 // requires: creativedelight
 // priority: -90
 // requires: farmersdelight
-// Patty rule (TODO dishes/meals #55, 2026-11-02): any cooked patty fills a beef patty slot. #creativedelight:patty
-// holds Farmer's Delight's beef patty, Veggies Delight's cooked vegetarian patty and Miner's Delight's vegan patty; every
-// recipe that takes the beef patty takes the tag instead, data and script-added (late by priority so the CD scripts'
-// recipes are already in). Not swapped: recipes that make a beef patty (cooking, salting it back into itself).
+// Patty rule (TODO dishes/meals #55): any cooked patty fills a beef patty slot. #creativedelight:patty holds Farmer's
+// Delight's beef patty, Veggies Delight's cooked vegetarian patty and Miner's Delight's vegan patty; every recipe that
+// takes the beef patty takes the tag instead, data and script-added (late by priority so the CD scripts' recipes are
+// already in). Not swapped: recipes that make a beef patty (cooking, salting it back into itself).
 ServerEvents.tags('item', e => {
 	if (!global.CD) return
 	var t = global.tags

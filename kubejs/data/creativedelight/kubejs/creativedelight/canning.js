@@ -1,8 +1,8 @@
 // requires: creativedelight
 // Cans: the generated food cans (tools/gen_can_types.py -> the CD jar's kubejs_startup/<mod>/can_types.js member
-// scripts, put into global.CD at startup; framework #7 2026-11-01), the empty can recipes and the Canned Goods removals. Moved from the pack's
-// server_scripts/cooking/canning.js 2026-10-25, rows unchanged; recipe ids are creativedelight:<type>/<suffix>
-// (global.CD.recipes). canSection() serves every mod's cans, so the file stays whole. Items: startup cans.js.
+// scripts, put into global.CD at startup; framework #7), the empty can recipes and the Canned Goods removals. Recipe
+// ids are creativedelight:<type>/<suffix> (global.CD.recipes). canSection() serves every mod's cans, so the file stays
+// whole. Items: startup cans.js.
 
 ServerEvents.recipes(e=>{
 if (!global.CD) return
@@ -91,9 +91,9 @@ global.CD.recipes(() => {
 	// TODO 
 	// Canning automation
 
-	// Not canned (removed 2026-10-13): mint, acorn, grapes, mite crust, raw ham/chevon/hoglin/kangaroo/moose/bison/bunfungus.
-	// Coverage worksheet: feature_writeup/can_parity.md
-	// ensure that food effects carry over from the ingredients or can be added manually, this will be more important later. verify the bowl from bone broth is returned. 
+	// Not canned: mint, acorn, grapes, mite crust, raw ham/chevon/hoglin/kangaroo/moose/bison/bunfungus. Coverage
+	// worksheet: feature_writeup/can_parity.md ensure that food effects carry over from the ingredients or can be added
+	// manually, this will be more important later. verify the bowl from bone broth is returned.
 
 	// Design:
 	// Cans hold multiple meals, increasing meals per stack
@@ -346,8 +346,8 @@ global.CD.recipes(() => {
 	// Raw Fish
 	// ============================================================
 
-	// Goal: (Fish Meal- 4, 2) sized meals, 4 Meals/Can, salt or bone broth (since 2026-10-20; was the Meat Meal 5, 3). Every sliced fish takes the whole fish's
-	// slots and count (a full can either way). Tropical Fish reuses Canned Goods' can.
+	// Goal: (Fish Meal- 4, 2) sized meals, 4 Meals/Can, salt or bone broth (was the Meat Meal 5, 3). Every sliced fish
+	// takes the whole fish's slots and count (a full can either way). Tropical Fish reuses Canned Goods' can.
 	canSection('raw_fish')
 
 	// ============================================================

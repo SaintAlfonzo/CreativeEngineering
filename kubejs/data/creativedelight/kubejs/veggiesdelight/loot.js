@@ -1,10 +1,9 @@
 // requires: creativedelight
 // requires: veggiesdelight
 // requires: rusticdelight
-// Veggies Delight loot rows: its crop crates and 9 chest entries (Creative Delight members #2, moved from the pack's
-// loot/07_rules.js 2026-10-25, rows unchanged), and Rustic Delight's bell pepper crates (vintageport #5): its bell pepper
-// is Rustic's, whose crates and seed bag had no pack rule. Rules are collected here and applied by the pack's loot
-// engine in its fixed phase order (loot/05_tuning.js), so file order does not matter.
+// Veggies Delight loot rows: its crop crates and 9 chest entries, and Rustic Delight's bell pepper crates (vintageport
+// #5): its bell pepper is Rustic's, whose crates and seed bag had no pack rule. Rules are collected here and applied by
+// the pack's loot engine in its fixed phase order (loot/05_tuning.js), so file order does not matter.
 //
 // The rules sit in a callback, so nothing leaks into the top-level scope all server scripts share.
 

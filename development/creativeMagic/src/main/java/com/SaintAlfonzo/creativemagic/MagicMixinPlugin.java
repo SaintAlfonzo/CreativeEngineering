@@ -8,8 +8,7 @@ import java.util.Map;
 /**
  * Mixin config plugin for creativemagic.mixins.json: the table form of the shared {@link GatedMixinPlugin}
  * (development/shared/mixinplugin). Every Magic mixin targets a class of one mod and applies only when that mod is
- * loaded. The mixins moved from patcherMod on 2026-11-04 unchanged apart from their package (SRG names,
- * remap = false, creativeengineering$ member prefixes).
+ * loaded.
  */
 public class MagicMixinPlugin extends GatedMixinPlugin {
 
@@ -28,7 +27,7 @@ public class MagicMixinPlugin extends GatedMixinPlugin {
             Map.entry("TrinketCaseSlotMixin", BOTANIA),
             Map.entry("TrinketCaseMenuMixin", BOTANIA),
             Map.entry("ItemBackedInventoryAccessor", BOTANIA),
-            // Liquid XP bridge (fluid/FluidBridge), from Creative Engineering 2026-11-06
+            // Liquid XP bridge (fluid/FluidBridge), from Creative Engineering
             Map.entry("MemoryStickItemMixin", PNC),
             Map.entry("PneumaticCraftUtilsMixin", PNC),
             Map.entry("XPFluidManagerMixin", PNC),

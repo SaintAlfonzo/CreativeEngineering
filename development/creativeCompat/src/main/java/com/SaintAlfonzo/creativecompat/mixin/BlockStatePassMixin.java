@@ -8,7 +8,7 @@ import org.spongepowered.asm.mixin.Unique;
 
 /**
  * Gives every block state the pass-through tier slot ({@link PassTierSlot}, plan_passthrough.md 7.2 fallback, scratch
- * fixes 2026-11-15). Fields only, no injection. Vanilla-class target, {@code remap = false}.
+ * fixes). Fields only, no injection. Vanilla-class target, {@code remap = false}.
  */
 @Mixin(value = BlockBehaviour.BlockStateBase.class, remap = false)
 public abstract class BlockStatePassMixin implements PassTierSlot {

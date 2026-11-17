@@ -1,4 +1,4 @@
-// Older food builds probe (scratch queue SQ-OF: food builds of 2026-10-19 to 2026-10-21 never checked on a server).
+// Older food builds probe (scratch queue SQ-OF: food builds never checked on a server).
 // Scratch-only: copy into a scratch server's kubejs/server_scripts as zz_of_probe.js
 // (tools/creative_labels_test/scratch_server.sh), never into the pack. Run /ofprobe <part> or /ofprobe all; results
 // are "[ofprobe] PASS|FAIL|INFO ..." lines in logs/latest.log, ending "[ofprobe] done: N pass, M fail".

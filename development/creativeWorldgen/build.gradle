@@ -1,11 +1,10 @@
-// creativeWorldgen: Creative Worldgen (mod id creativeworldgen, feature_writeup/creative_worldgen.md), carved out of
-// patcherMod on 2026-11-02 (creative_split.md 7.6, wave 5). A bundle like Creative Delight: its own Java plus the
-// members More Mooblooms and Baby Mobs nested under META-INF/jarjar/ (build-logic/src/main/groovy/ce.forge-bundle.gradle).
-// This file adds what is specific to Worldgen:
+// creativeWorldgen: Creative Worldgen (mod id creativeworldgen, feature_writeup/creative_worldgen.md). A bundle like
+// Creative Delight: its own Java plus the members More Mooblooms and Baby Mobs nested under META-INF/jarjar/
+// (build-logic/src/main/groovy/ce.forge-bundle.gradle). This file adds what is specific to Worldgen:
 //   - the Worldgen server script tree, authored in the pack folder so /reload picks it up without a rebuild, copied
 //     into the jar at the same resource path:
 //       kubejs/data/creativeworldgen/kubejs/    -> data/creativeworldgen/kubejs/    (server scripts; the loot framework
-//                                                  is Creative Loot's since 2026-11-17, development/creativeLoot)
+//                                                  is Creative Loot's, development/creativeLoot)
 //     No client tree: no client script is Worldgen's. Startup scripts live in this project
 //     (src/main/resources/kubejs_startup/creativeworldgen/), loaded from the jar by Creative Common's startup loader.
 //   - dataTrees: pack-folder data trees shipped in the jar the same way (creative_worldgen.md 1). Only paths no other
@@ -13,7 +12,7 @@
 //       data/moremooblooms/moobloom_spawns/  the pack's moobloom spawn rules (More Mooblooms, a Worldgen member,
 //                                              combines every file of that folder; creativeengineering.json is ours)
 //     The pack's creativeengineering worldgen data is in src/main/resources (data/, and packs/<modid>/ for files naming a
-//     mod this jar does not require, compat/ModDataPacks; moved 2026-11-06). The structure datapacks, Eugene and
+//     mod this jar does not require, compat/ModDataPacks; moved). The structure datapacks, Eugene and
 //     watchtower_building stay in the pack folder: the structure generators (tools/gen_structure_config.py and the scanners) tell jar sets from kubejs/data
 //     ones by source, and campsite_structures, ipo and lightmanscurrency are overrides of loaded mods' jars.
 // Build: ./gradlew :creativeWorldgen:build --offline   Install: ./gradlew :creativeWorldgen:installToMods

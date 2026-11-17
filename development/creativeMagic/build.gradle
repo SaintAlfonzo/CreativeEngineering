@@ -1,6 +1,6 @@
-// creativeMagic: Creative Magic (mod id creativemagic, feature_writeup/creative_magic.md), carved out of patcherMod on
-// 2026-11-04 (creative_split.md 7.6, wave 6). Shared Forge setup comes from build-logic/src/main/groovy/ce.forge-mod.gradle.
-// This file adds what is specific to Magic, the same way creativeCompat/build.gradle does:
+// creativeMagic: Creative Magic (mod id creativemagic, feature_writeup/creative_magic.md). Shared Forge setup comes
+// from build-logic/src/main/groovy/ce.forge-mod.gradle. This file adds what is specific to Magic, the same way
+// creativeCompat/build.gradle does:
 //   - the Magic script trees, authored in the pack folder so /reload (server) and F3+T (client) pick them up without a
 //     rebuild, copied into the jar at the same resource path:
 //       kubejs/data/creativemagic/kubejs/    -> data/creativemagic/kubejs/    (server scripts)

@@ -57,8 +57,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  * {@code age}, so a plant from a new mod isn't silently missing.
  * {@code /dumpcropgrowth} lists every growing block and which ones WTHIT leaves out.
  *
- * <p>Creative Delight QoL-6 (moved from patcherMod's {@code crops/} 2026-10-25): registered through CD's
- * {@code waila_plugins.json}, so it loads only with WTHIT; switch {@code [qol] wthitCropLine}.
+ * <p>Creative Delight QoL-6: registered through CD's {@code waila_plugins.json}, so it loads only with
+ * WTHIT; switch {@code [qol] wthitCropLine}.
  *
  * <p>Priority: a block WTHIT already covers is skipped here, so no block gets two lines.
  */

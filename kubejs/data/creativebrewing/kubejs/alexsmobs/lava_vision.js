@@ -1,8 +1,6 @@
 // requires: creativebrewing
 // requires: alexsmobs
-// Moved from the pack's server_scripts/magic/lava_vision.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; recipe ids are
-// creativebrewing:<type>/<suffix> (were creativeengineering:).
-// Alex's Mobs Lava Vision base brew.
+// Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:). Alex's Mobs Lava Vision base brew.
 //
 // AM registers it as  alexsmobs:lava_bottle + alexsmobs:bone_serpent_tooth -> Potion of Lava Vision
 // (a Forge BrewingRecipe). The "from" is a lava-bottle ITEM, not a potion, so neither the Create

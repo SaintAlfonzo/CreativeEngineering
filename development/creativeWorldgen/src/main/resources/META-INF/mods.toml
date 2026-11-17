@@ -40,8 +40,7 @@ mandatory=true
 versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"
-# Creative Loot: the loot engine (global.LOOT, split out of this jar 2026-11-17, plan_rules_fixes.md section 5b). The
-# structure chest loot rules go through it, and the two jars ship together.
+# Creative Loot: the loot engine. The structure chest loot rules go through it, and the two jars ship together.
 [[dependencies.creativeworldgen]]
 modId="creativeloot"
 mandatory=true
@@ -105,8 +104,8 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# World generation mods: required (owner 2026-11-06), so a world is never created without the biomes and structures the
-# layout, structure and spawn config name. ids from each jar's mods.toml.
+# World generation mods: required (owner), so a world is never created without the biomes and structures the layout,
+# structure and spawn config name. ids from each jar's mods.toml.
 [[dependencies.creativeworldgen]]
 modId="terralith"
 mandatory=true

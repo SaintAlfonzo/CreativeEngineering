@@ -45,33 +45,31 @@ public final class CommonConfig {
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
         // [forgiving_void], [leaf_decay], [raids], [worldgen], [named_mobs] and the [perf] mob cap keys:
-        // creativeworldgen-common.toml (Creative Worldgen, 2026-11-02)
-        // [botania]: creativemagic-common.toml (Creative Magic, 2026-11-04)
-        // [shrapnel], [surface], [vein_undo]: creativeengineering-common.toml (Creative Engineering, 2026-11-04)
+        // creativeworldgen-common.toml (Creative Worldgen) [botania]: creativemagic-common.toml (Creative Magic)
+        // [shrapnel], [surface], [vein_undo]: creativeengineering-common.toml (Creative Engineering)
         CHANGELOG = new Changelog(builder);
-        // [loading_tips]: creativecommon-client.toml (CommonClientConfig, per client, 2026-11-08)
+        // [loading_tips]: creativecommon-client.toml (CommonClientConfig, per client)
         DAMAGE_TAGS = new DamageTagConfig(builder);
-        // [armor_overflow]: creativeequipment-common.toml; [jei], [gui_title], [toasts], [tooltips], [coaster], [wthit]:
-        // creativecompat-common.toml (interface carve, 2026-11-07)
-        // [leaf_piles], [moss], [vine_shearing], [campfire], [monster_box], [trash_slot]: creativecompat-common.toml
-        // (Creative Compat, 2026-11-01)
+        // [armor_overflow]: creativeequipment-common.toml; [jei], [gui_title], [toasts], [tooltips], [coaster],
+        // [wthit]: creativecompat-common.toml (interface carve) [leaf_piles], [moss], [vine_shearing], [campfire],
+        // [monster_box], [trash_slot]: creativecompat-common.toml (Creative Compat)
         PERF = new Perf(builder);
-        // [seasons], [crop_seasons], [time]: creativecalendar-common.toml (Creative Calendar, 2026-11-01)
+        // [seasons], [crop_seasons], [time]: creativecalendar-common.toml (Creative Calendar)
         WANDERING_TRADER = new WanderingTrader(builder);
         BEES = new Bees(builder);
         ADVANCEMENTS = new Advancements(builder);
         CREATIVE_MENU = new CreativeMenu(builder);
         MOD_NAMES = new ModNames(builder);
-        // [effects], [magic_resistance]: from creativebrewing-common.toml (plan_cb_polish.md 2, 2026-11-06); the
-        // constructor carries the player's values over (EFFECT_SECTIONS)
+        // [effects], [magic_resistance]: from creativebrewing-common.toml (plan_cb_polish.md 2); the constructor
+        // carries the player's values over (EFFECT_SECTIONS)
         EFFECTS = new Effects(builder);
         MAGIC_RESISTANCE = new MagicResistance(builder);
-        // [melting]: new 2026-11-14 (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8)
+        // [melting]: new (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8)
         MELTING = new MeltingConfig(builder);
         // [tooltips] paletteDemo: the color palette test item (plan_rules_fixes.md section 9, V-45)
         TOOLTIPS = new Tooltips(builder);
         // [dragon_gear], [air_brake], [stepstool], [crafting], [armor_enchantability], [shields], [bonemeal_charm],
-        // [bottled_air], [backpackSkins]: creativeequipment-common.toml (Creative Equipment, 2026-11-04)
+        // [bottled_air], [backpackSkins]: creativeequipment-common.toml (Creative Equipment)
         COMMON_SPEC = builder.build();
     }
 
@@ -89,13 +87,13 @@ public final class CommonConfig {
             b.comment("Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.")
                     .push("perf");
 
-            // troughMissCooldownTicks: creativedelight-common.toml [perf] (Creative Delight, 2026-11-01)
+            // troughMissCooldownTicks: creativedelight-common.toml [perf] (Creative Delight)
 
-            // seasonsMeltIntervalTicks: creativecalendar-common.toml [perf] (Creative Calendar, 2026-11-01)
+            // seasonsMeltIntervalTicks: creativecalendar-common.toml [perf] (Creative Calendar)
 
             // mobCapLevels, mobCapForceLevel, mobCapLevel1/2Chunks, mobCapHysteresisChunks, mobCapLevel1/2Monster,
             // mobCapScaledCategories, spawnChunksLevel1/2, spawnBandLevel1/2, spawnBandCategories:
-            // creativeworldgen-common.toml [perf] (Creative Worldgen, 2026-11-02)
+            // creativeworldgen-common.toml [perf] (Creative Worldgen)
 
             gravityLimitDimensions = b.comment(
                     "Create: Gravity runs its biome lookup and gravity-attribute update for every living entity in",
@@ -119,10 +117,9 @@ public final class CommonConfig {
         }
     }
 
-    // [kitchen] (counter-top offsets) moved to Creative Delight's blockheadsAdditions config (2026-10-31).
 
     // Season types ([seasons]), crop seasons ([crop_seasons]) and the [time] master: Creative Calendar's
-    // CalendarConfig (creativecalendar-common.toml), moved with their keys and comments on 2026-11-01.
+    // CalendarConfig (creativecalendar-common.toml).
 
     /** Player changelog, "What's New" ({@code changelog/} package, feature_writeup/changelog.md). */
     public static final class Changelog {
@@ -236,7 +233,7 @@ public final class CommonConfig {
         }
     }
 
-    /** {@code mixin/ServerAdvancementManagerMixin}: the pack has no advancements at all (user, 2026-10-18). */
+    /** {@code mixin/ServerAdvancementManagerMixin}: the pack has no advancements at all (owner). */
     public static final class Advancements {
         public final ForgeConfigSpec.BooleanValue enabled;
 

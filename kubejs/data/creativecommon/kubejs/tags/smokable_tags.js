@@ -1,14 +1,13 @@
-// Creative Common; moved from Creative Engineering's tags/wood_tags.js 2026-11-10 (plan_cd_namespace.md, owner decision).
+// Creative Common.
 ServerEvents.tags('item', e => {
 var i = global.item;
 var t = global.tags
 
-// ============================================================
-// Smokable wood: vanilla overworld woods, per block shape (smoking recipes in wood/smoked_wood.js)
-// ============================================================
-// Allow-list (decided 2026-11-01, engineering/dreams-and-desires #10): only the seven vanilla overworld woods smoke.
-// Every modded wood (Botania, driftwood, Quark ...) and the nether woods (crimson, warped) are left out. The item_dict
-// keys are <shape>_<wood>, with stripped logs / wood as log_<wood>_stripped / wood_<wood>_stripped.
+// ============================================================ Smokable wood: vanilla overworld woods, per block shape
+// (smoking recipes in wood/smoked_wood.js) ============================================================ Allow-list
+// (decided engineering/dreams-and-desires #10): only the seven vanilla overworld woods smoke. Every modded wood
+// (Botania, driftwood, Quark ...) and the nether woods (crimson, warped) are left out. The item_dict keys are
+// <shape>_<wood>, with stripped logs / wood as log_<wood>_stripped / wood_<wood>_stripped.
 var smokeWoods = ['oak', 'spruce', 'birch', 'jungle', 'acacia', 'dark_oak', 'mangrove']
 var smokeShapes = {
 	log: w => 'log_' + w,

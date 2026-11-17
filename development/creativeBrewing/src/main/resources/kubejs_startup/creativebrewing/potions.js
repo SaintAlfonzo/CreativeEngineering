@@ -1,4 +1,3 @@
-// Moved from the pack's startup_scripts/cooking/potions.js 2026-11-01 (creative_brewing.md 4.5).
 // Startup script in the CB jar: runs after the pack folder and CD; CB rebuild + restart.
 // ============================================================================
 //  ALL custom-potion + potion-brewing logic for the pack lives in this one file.
@@ -161,8 +160,8 @@ if (global.has('alexsmobs')) {
 
 // 1. The potions are registered by Creative Common (kubejs_startup/creativecommon/effects/potions.js).
 
-// ── 2. brewing mixes (brewing stand + every mixer) ──────────────────────────
-// MoreJS supplies the event; it is a hard dependency of Creative Brewing (mods.toml, owner 2026-11-06).
+// ── 2. brewing mixes (brewing stand + every mixer) ────────────────────────── MoreJS supplies the
+// event; it is a hard dependency of Creative Brewing (mods.toml, owner).
 MoreJSEvents.registerPotionBrewing(event => {
 	const Registry = Java.loadClass('net.minecraft.core.Registry')
 	const ResourceLocation = Java.loadClass('net.minecraft.resources.ResourceLocation')

@@ -655,3 +655,7 @@ the scratch queue row by row (the owner's run notes) and the keep / drop / merge
 - 2026-11-12: investigation written (jar 0.6.2 for 1.20.1, decompiled to the session scratchpad; source repo checked:
   no 1.19.2 branch). Nothing built.
 - 2026-11-17: `LICENSE` (Apache 2.0) and `NOTICE` merged into `NOTICE-upstream-Apache.txt` (plan_rules_fixes.md section 8); `tools/build_deploy.py` never stages the jar while `IN_TREE_MODS` marks it not required (in `mods/` for development testing only).
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-14: Port fix B9 (extension, 2026-11-14): a move commits only after one full lazyTick averaging window in which every tick had coil power for 1 RPM or more and the coil sat at the idle resistance (no move running) (development/backportedPowerGrid/src/main/java/org/patryk3211/powergrid/kinetics/servo/ServoBlockEntity.java)

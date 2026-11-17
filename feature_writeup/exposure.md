@@ -386,3 +386,8 @@ Before deploying 1.0.3:
 - 2026-11-17: the hand `MissingMappingsEvent` in `ExposureExtras` is gone (design_rules V-06): the
   `creativeengineering:<tier>_camera_bag` ids are `replaces` entries in `data/exposureextras/swaps/owner_namespace.json`,
   read by Creative Common's swap lists.
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-11-10: The mod id before the naming-rule rename (2026-11-10) (development/exposureBackport/src/extras/java/com/SaintAlfonzo/exposureextras/ExposureExtras.java)
+- 2026-11-10: <p>Mod id {@code exposure_extras} until 2026-11-10 (namespace_move.md D-EXPO, naming rule) (development/exposureBackport/src/extras/java/com/SaintAlfonzo/exposureextras/ExposureExtras.java)

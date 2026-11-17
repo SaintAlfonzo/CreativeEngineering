@@ -122,7 +122,7 @@
         check('salt:salt_block beside water dissolves', n > 0, n + ' ticks, now ' + idAt(level, pos))
         clear(level, pos)
 
-        // rain (SaltDissolvingInRain = false since 2026-10-28, SQ-SALT-06 / -08): nothing dissolves in open-sky rain
+        // rain (SaltDissolvingInRain = false, SQ-SALT-06 / -08): nothing dissolves in open-sky rain
         level.setWeatherParameters(0, 6000, true, false)
         pos = nextPos(level)
         let biome = String(level.getBiome(pos).unwrapKey().get().location())

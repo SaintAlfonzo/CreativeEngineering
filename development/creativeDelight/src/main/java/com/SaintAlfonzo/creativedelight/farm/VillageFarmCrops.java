@@ -45,13 +45,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Village farms grow more crops (owner 2026-10-25, feature_writeup/crops.md 2.11, creative_delight.md 25). The rules are
+ * Village farms grow more crops (owner, feature_writeup/crops.md 2.11, creative_delight.md 25). The rules are
  * {@code creativedelight/village_farms.json} in this jar: climate groups of crop blocks, and the farm templates that
  * belong to each group. At server start the processor is appended to the pool elements of those templates (the vanilla
- * {@code farm_*} lists are shared by nothing else, but most modded farms use {@code minecraft:empty}, so a list cannot be
- * the hook). When a farm piece is placed, every field (all blocks of one vanilla crop in that piece) is rolled with the
- * file's share; a rolled field is split 50/50 between the original crop and one crop of the group, along the field's
- * longer axis (1.19.2 has no whole-piece hook, so the roll is seeded and each block reaches the same answer). Crops are found by block id, so an entry whose mod is not loaded is skipped. Switched by
+ * {@code farm_*} lists are shared by nothing else, but most modded farms use {@code minecraft:empty}, so a list cannot
+ * be the hook). When a farm piece is placed, every field (all blocks of one vanilla crop in that piece) is rolled with
+ * the file's share; a rolled field is split 50/50 between the original crop and one crop of the group, along the
+ * field's longer axis (1.19.2 has no whole-piece hook, so the roll is seeded and each block reaches the same answer).
+ * Crops are found by block id, so an entry whose mod is not loaded is skipped. Switched by
  * {@code [worldgen] wildCrops}. The growth stage keeps its share of full growth.
  */
 public final class VillageFarmCrops extends StructureProcessor {

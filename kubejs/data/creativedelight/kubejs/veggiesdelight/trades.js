@@ -1,9 +1,8 @@
 // requires: creativedelight
 // requires: veggiesdelight
 // requires: morejs
-// Veggies Delight trades (Creative Delight members #2, moved from the pack's economy/trades.js and
-// economy/wandering_trades.js 2026-10-25, rows unchanged): feature_writeup/veggies_delight.md 4.13. Both events run
-// after the pack's handlers, so the pack's trade removals never reach these.
+// Veggies Delight trades: feature_writeup/veggies_delight.md 4.13. Both events run after the pack's handlers, so
+// the pack's trade removals never reach these.
 MoreJSEvents.villagerTrades(e => {
 	if (!global.CD || !global.CD.on('veggiesdelight')) return
 	var i = global.item

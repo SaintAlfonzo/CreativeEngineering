@@ -15,9 +15,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 /**
- * The Incubation compartment of Creative Delight (feature_writeup/mobs/nests.md; plan_cb_publish.md 3b): the pack's
- * additions to Incubation (Team Abnormals), the incubation_additions member until M8 (2026-11-04). One content set per
- * bird mod, each switched on only when its mod is installed:
+ * One content set per bird mod, each switched on only when its mod is installed:
  * - Alex's Mobs: emu nest ({@link EmuNests}, mixin.alexsmobs.EntityEmuEggLayerMixin)
  * - Untitled Duck Mod: duck and goose nests ({@link WaterfowlNests}, mixin.untitledduckmod.Duck/GooseEntityEggLayerMixin),
  *   duck and goose egg crates ({@link WaterfowlEggCrates}), new item sprites for the duck mod's eggs

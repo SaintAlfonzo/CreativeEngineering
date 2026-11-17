@@ -6,7 +6,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
  * Creative Worldgen's COMMON config, {@code config/creativeworldgen-common.toml}. The sections moved out of patcherMod's
- * creativeengineering-common.toml on 2026-11-02 (creative_split.md 7.6, wave 5) with keys, comments and defaults
+ * creativeengineering-common.toml (creative_split.md 7.6, wave 5) with keys, comments and defaults
  * unchanged: {@code [forgiving_void]}, {@code [leaf_decay]}, {@code [raids]}, the mob cap and spawn area keys of
  * {@code [perf]}, {@code [worldgen]} with every subtable, and {@code [named_mobs]}. The first boot with Worldgen copies a
  * player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeWorldgen}). The static field
@@ -1118,9 +1118,8 @@ public final class CWGConfig {
     }
 
     /**
-     * The mob cap levels and spawn areas of {@code perf/MobCapLevels} (perf.md 17; mixin/MobCapMixin, MobCapLevelTickMixin,
-     * MobCapSpawnAreaMixin). Moved from patcherMod's [perf] on 2026-11-02 with keys, comments and defaults unchanged; the
-     * table keeps patcherMod's comment. Read live.
+     * The mob cap levels and spawn areas of {@code perf/MobCapLevels} (perf.md 17; mixin/MobCapMixin,
+     * MobCapLevelTickMixin, MobCapSpawnAreaMixin). The table keeps patcherMod's comment. Read live.
      */
     public static final class Perf {
         public final ForgeConfigSpec.BooleanValue mobCapLevels;

@@ -100,8 +100,6 @@ parity "$T/fix" "$FIX" > /dev/null
 echo "== 4. switch off"
 run "$T/off" off | tail -1 | grep -q '^0 tags, 0 data files' && echo "off: nothing applied"
 
-# The old-jar case (no BeeNests class) was removed 2026-11-16: bee_nests.js loads the class at the top since
-# 2026-10-28 (463d2342) and ships in the same Creative Worldgen jar as the class, so the case cannot happen.
 
 echo "== 5. a mod missing"
 run "$T/miss" missing=vinery "config=$FIX" > "$T/miss.log"

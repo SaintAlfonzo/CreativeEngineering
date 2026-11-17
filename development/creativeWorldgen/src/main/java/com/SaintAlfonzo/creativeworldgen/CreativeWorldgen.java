@@ -47,24 +47,24 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Creative Worldgen (feature_writeup/creative_worldgen.md): the pack's world generation and fauna, carved out of
- * patcherMod on 2026-11-02 (creative_split.md 7.6, wave 5). Structure placement, frequencies, biome rules and fits,
- * locate, earth and water fill, terrain adaptation, meta structures, sky islands, bee nests, mob spawns and caps, named
- * mobs, mooshrooms, leaf decay, raids glowing, Forgiving Void, the Farmer's Structures donor. Nests More Mooblooms and
- * Baby Mobs. Requires patcherMod ({@code creativeengineering}, later Creative Common) and Creative Compat.
+ * Creative Worldgen (feature_writeup/creative_worldgen.md): the pack's world generation and fauna. Structure placement,
+ * frequencies, biome rules and fits, locate, earth and water fill, terrain adaptation, meta structures, sky islands,
+ * bee nests, mob spawns and caps, named mobs, mooshrooms, leaf decay, raids glowing, Forgiving Void, the Farmer's
+ * Structures donor. Nests More Mooblooms and Baby Mobs. Requires patcherMod ({@code creativeengineering}, later
+ * Creative Common) and Creative Compat.
  *
  * Ids: the biome modifier codecs, the meta structure and piece types, the data (structures, dimensions, noise settings,
- * placed features, biome modifiers) and the tags are under this jar's own namespace ({@link #NS}) since 2026-11-10
- * (namespace_move.md step 6); they were {@code creativeengineering:} until then. Old saves keep loading through the swap
- * list (data/creativeworldgen/swaps), {@link com.SaintAlfonzo.creativeworldgen.worldgen.LegacyIds} (structure starts,
- * pieces, dimension keys) and {@link com.SaintAlfonzo.creativeworldgen.worldgen.DimensionMove} (dimension folders).
- * The registrations below are the ones patcherMod's constructor made, in the same order.
+ * placed features, biome modifiers) and the tags are under this jar's own namespace ({@link #NS}) (namespace_move.md
+ * step 6). Old saves keep loading through the swap list (data/creativeworldgen/swaps),
+ * {@link com.SaintAlfonzo.creativeworldgen.worldgen.LegacyIds} (structure starts, pieces, dimension keys) and
+ * {@link com.SaintAlfonzo.creativeworldgen.worldgen.DimensionMove} (dimension folders). The registrations below are the
+ * ones patcherMod's constructor made, in the same order.
  */
 @Mod(CreativeWorldgen.MOD_ID)
 public class CreativeWorldgen {
 
     public static final String MOD_ID = "creativeworldgen";
-    /** The namespace of every id this mod registers or keys (its own mod id since 2026-11-10). */
+    /** The namespace of every id this mod registers or keys (its own mod id). */
     public static final String NS = MOD_ID;
     public static final Logger LOGGER = LogUtils.getLogger();
 
@@ -91,7 +91,6 @@ public class CreativeWorldgen {
         // packs/<modid>/: worldgen data naming a mod this jar does not require, added only while that mod is loaded.
         modEventBus.addListener(com.SaintAlfonzo.creativeworldgen.compat.ModDataPacks::add);
 
-        // The creativedelight:biome_tag loot condition moved to Creative Delight (loot/BiomeTagCondition) 2026-11-06.
         // Meta structures: the creativeworldgen:meta structure type and its piece types (worldgen/MetaStructure; the
         // structures themselves are kubejs meta_structures.json).
         MetaStructure.register(modEventBus);

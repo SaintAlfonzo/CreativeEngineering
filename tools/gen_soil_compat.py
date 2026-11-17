@@ -77,7 +77,7 @@ def simple_patch(tries, xz, y, feature_type, to_place, below_blocks):
     }
 
 
-# Java-registered configured features (decompiled 2026-10-05). Keep in step with the mod versions.
+# Java-registered configured features (decompiled). Keep in step with the mod versions.
 JAVA_BASES = {
     # neapolitan-1.19.2-4.1.0 NeapolitanFeatures.NeapolitanConfiguredFeatures
     'neapolitan:patch_strawberry_bush': simple_patch(512, 5, 3, 'neapolitan:strawberry_bush',

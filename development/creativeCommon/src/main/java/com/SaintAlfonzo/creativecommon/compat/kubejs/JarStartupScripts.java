@@ -39,7 +39,6 @@ import java.util.Map;
  *       and whatever the pack's startup scripts define.</li>
  * </ol>
  * A helper file runs in its own pack's scope, apart from the rest of its jar: it shares nothing but {@code global}.
- * Until 2026-11-08 the second step was a hard-coded list naming Creative Compat (scratch run r1108cge).
  * One {@code global} object is shared by all packs, but each pack has its own scope: a top-level {@code var} in one
  * pack is not visible in another, so shared code goes through {@code global}.
  */
@@ -48,7 +47,7 @@ public final class JarStartupScripts {
 	private static final Logger LOGGER = LogUtils.getLogger();
 	/** Folder at a jar's root that holds its startup scripts. */
 	public static final String DIRECTORY = "kubejs_startup";
-	/** Creative Common's mod id (patcherMod's until the 2026-11-04 swap): its whole pack goes first. */
+	/** Creative Common's mod id: its whole pack goes first. */
 	private static final String HELPERS_MOD_ID = "creativecommon";
 	/** Header that moves a file of another jar ahead of the pack's startup_scripts folder. */
 	private static final String PHASE_PROPERTY = "phase";

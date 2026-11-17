@@ -120,3 +120,11 @@ swaps and R table rewrites`. `_core/item_merges.js` (Common's item-merge runner)
   the LootJS dependency moved from Worldgen, GlmMerge written; `tools/loot_tuning_sim.js` repointed (TODO
   `tooling/generators-and-tests #9`) and passing. `creativeloot-1.0.0.jar` and `creativeworldgen-1.0.0.jar` installed
   together; SQ-LOOT queued, nothing booted.
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-18: The 2026-10-18 loot dump has no other leaf table with apples besides the two apple trees (fruitsdelight / vinery blocks/apple_leaves) (kubejs/data/creativeloot/kubejs/loot/08_leaf_apples.js)
+- 2026-11-01: Oceanic Delight fishing net tags (block, coral item and biome): Creative Delight (kubejs/data/creativedelight/kubejs/oceanic_delight/fishing_net_tags.js, moved 2026-11-01) (kubejs/data/creativeloot/kubejs/tags/loottags.js)
+- 2026-11-03: Botania (botania:inject/village_chest: temple, toolsmith, weaponsmith) and CC:Tweaked (computercraft:treasure_disk: cartographer) are not restored: owner 2026-11-03 keeps them out of village chests (plan_scratch_bugfix_1103 7.3) (kubejs/data/creativeloot/kubejs/loot/07_rules.js)
+- 2026-11-03: Botania and CC:Tweaked stay out of village chests (owner 2026-11-03, plan_scratch_bugfix_1103 7.3, SQ-GLD-09) (kubejs/data/creativeloot/kubejs/loot/10_removals.js)
+- 2026-11-17: Creative Loot (feature_writeup/creative_loot.md): the pack's loot engine, split out of Creative Worldgen on 2026-11-17 (plan_rules_fixes.md section 5b, D13) (development/creativeLoot/src/main/java/com/SaintAlfonzo/creativeloot/CreativeLoot.java)

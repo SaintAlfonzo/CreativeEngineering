@@ -44,7 +44,7 @@
         if (byId) return byId
         byId = {}
         server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
-        // Food recipes moved into Creative Delight's tree on 2026-10-25 (creativedelight: ids, same paths): a
+        // Food recipes moved into Creative Delight's tree (creativedelight: ids, same paths): a
         // creativeengineering: id the checks name also finds its creativedelight: twin
         Object.keys(byId).forEach(id => {
             if (id.indexOf('creativedelight:') != 0) return
@@ -122,7 +122,7 @@
             'batter_egg_solution', 'scrambled_eggs_egg_solution',
             'potato_salad_egg_solution', 'glow_berry_custard_egg_solution', 'blueberry_custard_egg_solution',
             'vanilla_pudding_egg_solution'].map(s => C + 'createmixing/' + s))
-        // Brewin' dishes: Creative Delight brewinandchewin/recipes.js since 2026-10-31
+        // Brewin' dishes: Creative Delight brewinandchewin/recipes.js
         expectIds(server, ['creativedelight:createmixing/vegetable_omelet_egg_solution',
             'creativedelight:createsequencedassembly/quiche_egg_solution_sequenced_assembly'])
         expectIds(server, [C + 'createmixing/frosting', C + 'createcompacting/frosting', C + 'createfilling/cake_frosting_spout',

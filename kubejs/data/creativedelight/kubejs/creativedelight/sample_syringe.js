@@ -1,8 +1,8 @@
 // requires: creativedelight
-// Moved from the pack's server_scripts/engineering/sample_syringe.js 2026-11-01 (creative_split.md 7.6, wave 4), unchanged.
-// Reserved for Creative Cultivation: the sample syringe exists only to start meat cultures, so it is marked with the rest
-// of the cultivated-meat code (cultures, culture blocks, their recipes, tags, lang and textures) for a future own mod,
-// Creative Cultivation, the way potion brewing and alcohol are marked for Creative Brewing (creative_delight.md 29.5).
+// Reserved for Creative Cultivation: the sample syringe exists only to start meat cultures, so it is marked with the
+// rest of the cultivated-meat code (cultures, culture blocks, their recipes, tags, lang and textures) for a future own
+// mod, Creative Cultivation, the way potion brewing and alcohol are marked for Creative Brewing (creative_delight.md
+// 29.5).
 //
 // Sample Syringe — right-click or attack (left-click) a sampleable passive mob to swap an
 // empty syringe in hand for the matching filled one. See:

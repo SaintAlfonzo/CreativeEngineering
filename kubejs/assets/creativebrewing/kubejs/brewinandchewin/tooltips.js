@@ -1,7 +1,6 @@
 // requires: creativebrewing
 // requires: brewinandchewin
-// Brewin' and Chewin' item tooltips. Moved from the pack's client_scripts/tooltips.js 2026-11-01 (creative_brewing.md
-// 4.5), rows unchanged; the helpers and palette are read through global.tooltips at event time.
+// Brewin' and Chewin' item tooltips. The helpers and palette are read through global.tooltips at event time.
 ItemEvents.tooltip(e => {
 	if (!global.CB || !global.CB.on('brewinandchewin')) return
 	var T = global.tooltips

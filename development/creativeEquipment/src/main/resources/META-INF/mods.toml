@@ -81,8 +81,8 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# --- Detail Armor Bar from Creative Common, 2026-11-07 ---
-# armor bar overflow rows and modded armor icons (API plus 2 mixins)
+# --- Detail Armor Bar from Creative Common, --- armor bar overflow rows and modded armor icons (API
+# plus 2 mixins)
 [[dependencies.creativeequipment]]
 modId="detailab"
 mandatory=false

@@ -1,6 +1,6 @@
 // Shared Forge setup (runs, mods.toml expansion, jar manifest, jar_archive, installToMods) comes from
-// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to Creative Common (patcherMod until the 2026-11-04 swap).
-// Build from the instance root (`./gradlew :creativeCommon:build`) or from here (`./gradlew build`).
+// build-logic/src/main/groovy/ce.forge-mod.gradle; this file has only what is specific to Creative Common. Build from
+// the instance root (`./gradlew :creativeCommon:build`) or from here (`./gradlew build`).
 plugins {
     id 'maven-publish'
     id 'ce.forge-mod'

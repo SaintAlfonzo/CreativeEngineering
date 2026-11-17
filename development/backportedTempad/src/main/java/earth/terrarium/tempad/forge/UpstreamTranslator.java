@@ -51,7 +51,7 @@ import java.util.TreeSet;
 public final class UpstreamTranslator {
     private static final Gson GSON = new GsonBuilder().disableHtmlEscaping().setPrettyPrinting().create();
 
-    /** c: tag -> forge: tag of this pack (checked against kubejs/exported/tags, 2026-11-06). */
+    /** c: tag -> forge: tag of this pack (checked against kubejs/exported/tags). */
     static final Map<String, String> C_TAGS = new LinkedHashMap<>();
 
     static {

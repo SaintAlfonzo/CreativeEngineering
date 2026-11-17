@@ -8,7 +8,7 @@
 #   - dev jars newer than mods/ swapped in (SWAPS below: build/libs jar replaces the mods/ jar of the same mod)
 #   - the dev-only perfBot jar added (bots = fake players; never in the instance's mods/), -Dcdevperfbot.out=perf/bot
 #   - tools/scratch_query/datapack/zq (tag #zq:villagers) copied in; the /zq probe (zq_probe.js) is retired since
-#     2026-11-16 and no longer copied: every reusable probe verb is /cdevtest in the Creative Devtools jar
+#     and no longer copied: every reusable probe verb is /cdevtest in the Creative Devtools jar
 #   - group B: normal world, structures on, seed 8675309 unless level-seed= is given
 #   - prop=value pairs written into server.properties (difficulty=normal, spawn-monsters=true, ...)
 #   - NOSWAP=1 in the environment: no dev-jar swaps (the installed mods/ jars only)
@@ -36,14 +36,14 @@ done
 newest() { ls -t "$INST"/development/$1/build/libs/$2-*.jar 2>/dev/null | grep -vE -- '-(own|sources|overlay)\.jar$' | head -1 || echo "$INST/development/$1/build/libs/none"; }
 # dev jars: "glob in srv/mods to drop|build jar to use"; applied only when the build jar is newer than the mods/ one
 SWAPS=(
-  # Common was patcherMod (jar creativeengineering-*) until the 2026-11-04 swap; the Engineering jar now owns that name
+  # The Engineering jar now owns that name
   "creativecommon-*.jar|$(newest creativeCommon creativecommon)"
   "creativeengineering-*.jar|$(newest creativeEngineering creativeengineering)"
   "creativeequipment-*.jar|$(newest creativeEquipment creativeequipment)"
   "creativemagic-*.jar|$(newest creativeMagic creativemagic)"
   "creativedelight-*.jar|$(newest creativeDelight creativedelight)"
-  # Veggies, Vintage, Fungi, Miner's and Display are nested in the CD jar since 2026-11-02 (plan_creative_delight.md H):
-  # no standalone swap rows for them (a rebuilt member reaches the scratch server through a rebuilt CD jar)
+  # Veggies, Vintage, Fungi, Miner's and Display are nested in the CD jar (plan_creative_delight.md H): no standalone
+  # swap rows for them (a rebuilt member reaches the scratch server through a rebuilt CD jar)
   "creativebrewing-*.jar|$INST/development/creativeBrewing/build/libs/creativebrewing-1.0.0.jar"
   "creativecompat-*.jar|$INST/development/creativeCompat/build/libs/creativecompat-1.0.0.jar"
   "creativecalendar-*.jar|$INST/development/creativeCalendar/build/libs/creativecalendar-1.0.0.jar"
@@ -53,7 +53,6 @@ SWAPS=(
   "creativeworldgen-*.jar|$INST/development/creativeWorldgen/build/libs/creativeworldgen-1.0.0.jar"
   "creativeLabels-*.jar|$(ls -t "$INST"/development/creativeLabels/build/libs/creativeLabels-*.jar | grep -v -- -sources | head -1)"
 )
-# Creative Delight and Creative Brewing had underscored ids up to 2026-11-01 (creative_split.md 7.7): drop the old jars
 rm -f mods/creative_delight-*.jar mods/creative_brewing-*.jar
 [ "${NOSWAP:-0}" = 1 ] && { SWAPS=(); echo "swap: off (NOSWAP=1)"; }
 for s in "${SWAPS[@]+"${SWAPS[@]}"}"; do
@@ -83,8 +82,8 @@ for cd in mods/creativedelight-*.jar; do
     if unzip -l "$cd" | grep -q "META-INF/jarjar/$m-"; then rm -f mods/$m-*.jar; echo "nested in CD: dropped standalone $m"; fi
   done
 done
-# Power Grid: only by PGJAR. The -17 jar sat in the instance mods/ on 2026-11-13 with no mod_sides.md row (r1113
-# section 11): drop any copy prep linked in, so queue servers never carry an unlisted port jar.
+# Power Grid: only by PGJAR. The -17 jar sat in the instance mods/ with no mod_sides.md row (r1113 section 11):
+# drop any copy prep linked in, so queue servers never carry an unlisted port jar.
 rm -f mods/backportedPowerGrid-*.jar
 # PGJAR is resolved against the instance root (the script runs in OUT/srv by now; r1115 a relative path was skipped silently)
 case "${PGJAR:-}" in ""|1|/*) ;; *) PGJAR="$INST/$PGJAR" ;; esac
@@ -102,8 +101,8 @@ PB="$INST/development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.
 # would load beside the jar and fail a boot without the mod it names (framework #16, r1114 SQ-CDW-01), so drop it as
 # the deploy does. A worldgen JSON edit reaches a scratch server through a rebuilt Creative Delight jar.
 rm -rf kubejs/data/creativedelight/worldgen
-# zq_probe.js retired 2026-11-16 (its verbs are /cdevtest in Creative Devtools); not copied any more
-# scratch-only data (zq namespace): entity tag #zq:villagers (vanilla + MCA) for selectors
+# Not copied any more scratch-only data (zq namespace): entity tag #zq:villagers (vanilla + MCA) for
+# selectors
 mkdir -p kubejs/data && cp -r "$INST/tools/scratch_query/datapack/zq" kubejs/data/
 setprop() { local k=$1 v=$2; if grep -q "^$k=" server.properties; then sed -i "s|^$k=.*|$k=$v|" server.properties; else echo "$k=$v" >> server.properties; fi; }
 if [ "$GROUP" = B ]; then

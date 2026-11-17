@@ -1,10 +1,8 @@
-// Wandering Trader stock. The Wandering Winemaker's stock moved to Creative Brewing 2026-11-01
-// (kubejs/data/creativebrewing/kubejs/vinery/wandering_trades.js).
-// Pools: COMMON (25 offers drawn per trader) and RARE (5 drawn); counts and the two independent spawn
-// timers are CEConfig [wandering_trader]. The Winemaker draws 8 from its own pool.
-// Rule: nothing that skips a trip to the Nether or the End (nether wart, glowstone, basalt blocks,
-// Nether/End plants and mobs), in any trader's stock.
-// Helper: global.trades (startup_scripts/func/trade_helper.js). Reference: feature_writeup/wandering_trader.md
+// Wandering Trader stock. Pools: COMMON (25 offers drawn per trader) and RARE (5 drawn); counts and the two
+// independent spawn timers are CEConfig [wandering_trader]. The Winemaker draws 8 from its own pool. Rule:
+// nothing that skips a trip to the Nether or the End (nether wart, glowstone, basalt blocks, Nether/End plants
+// and mobs), in any trader's stock. Helper: global.trades (startup_scripts/func/trade_helper.js). Reference:
+// feature_writeup/wandering_trader.md
 
 MoreJSEvents.wandererTrades(e => {
 	// Fires at server start and on /reload: re-read the dict, top-level `i` is shared by every server script

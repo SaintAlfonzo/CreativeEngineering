@@ -1,5 +1,5 @@
 // Scratch-only probe (run r1113tpf, third-party bug fixes: feature_writeup/thirdparty_fixes.md). Copy into a scratch
-// server's kubejs/server_scripts as zz_tpf_probe.js, never into the pack. Written 2026-11-13, NOT yet run: the first
+// server's kubejs/server_scripts as zz_tpf_probe.js, never into the pack. Written NOT yet run: the first
 // runner fixes it as a tooling blocker if a call does not resolve (run default 1).
 //   /ztpf sound                       "[ztpf] raw_copper_block sound=<copper|stone|other>"            (MC-223153)
 //   /ztpf bignbt NAME KB plain|rand   gives NAME one paper whose NBT holds about KB kilobytes of string data

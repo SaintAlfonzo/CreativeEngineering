@@ -64,11 +64,11 @@ EXPECT = {"items": 376, "blocks": 26}
 # Tags in the dicts that do not move to creativedelight. Value = namespace they end up in. Everything else in the dicts
 # is filled by Creative Delight's scripts (plan 1.3); unknown keys fail the run so a new tag gets a decision.
 TAG_OTHER_PREFIX = {
-    "smokable/": COMMON,  # owner 2026-11-10
-    "plantable/": COMMON,  # owner 2026-11-10
+    "smokable/": COMMON,  # owner
+    "plantable/": COMMON,  # owner
 }
 TAG_OTHER_EXACT = {
-    "plantable": COMMON,  # owner 2026-11-10
+    "plantable": COMMON,  # owner
     # Stay: filled by Engineering.
     "bulb_glass": OLD, "carbon_filament": OLD, "railings": OLD, "unsmoked_planks": OLD, "vertical_planks": OLD,
     # Stay until creativesplit/ids #25: filled by other jars or pack scripts.

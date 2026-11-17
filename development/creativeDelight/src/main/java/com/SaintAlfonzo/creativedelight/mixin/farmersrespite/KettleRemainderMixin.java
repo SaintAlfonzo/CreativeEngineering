@@ -35,14 +35,14 @@ import umpaz.farmersrespite.common.crafting.KettleRecipe;
 import vectorwing.farmersdelight.common.utility.ItemUtils;
 
 /**
- * Farmer's Respite kettle (1.19-2.0): the same as CookingPotRemainderMixin for the pot. The kettle has no throw
- * method of its own: {@code processBrewing} calls FD's {@code ItemUtils.spawnItemEntity} inline for each ingredient
- * (slots 0-1) with a crafting remainder, so that call is redirected. A bottle leftover goes to the container slot when
- * the drink is served in bottles (spares wait there for the next drinks), else to the buffer ({@code LeftoverPlan}).
+ * Farmer's Respite kettle (1.19-2.0): the same as CookingPotRemainderMixin for the pot. The kettle has no throw method
+ * of its own: {@code processBrewing} calls FD's {@code ItemUtils.spawnItemEntity} inline for each ingredient (slots
+ * 0-1) with a crafting remainder, so that call is redirected. A bottle leftover goes to the container slot when the
+ * drink is served in bottles (spares wait there for the next drinks), else to the buffer ({@code LeftoverPlan}).
  * Plating waits {@code [cooking] recycleShowTicks} after a recycle ({@code useStoredContainersOnMeal} HEAD), as on the
  * pot. {@code <init>}: containers ({@link KettleContainers}) only in the container slot, never in an ingredient slot.
- * Creative Delight QoL-1 compartment (moved from patcherMod 2026-10-25): applies only with this mod loaded
- * (compat.CDMixinPlugin); new leftovers are stored only while {@code [qol] remainderBuffer} is on (qol.RemainderBufferQol).
+ * Creative Delight QoL-1 compartment: applies only with this mod loaded (compat.CDMixinPlugin); new leftovers are
+ * stored only while {@code [qol] remainderBuffer} is on (qol.RemainderBufferQol).
  */
 @Mixin(value = KettleBlockEntity.class, remap = false)
 public abstract class KettleRemainderMixin implements RemainderBufferHolder {

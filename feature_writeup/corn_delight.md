@@ -169,3 +169,10 @@ Rows in [TODO](todo/TODO.md) `farming/crops #47` to `#51`. Status checked 2026-1
 - Corn, hemp and the other two-tall crops slow the player to 50%: not started.
 - Corn husk block placeable as a log: not started.
 - Corn pipe rendered as a flat item on the head: fixed 2026-11-09 (built, untested). Cause: KubeJS's generated item model outranked the jar's `cob_pipe.json`; the model is now set with `modelJson` in `corn_items.js`. Test CQ-CORN-01.
+
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-25: Moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged (kubejs/data/creativedelight/kubejs/corn_delight/recipes.js)
+- 2026-10-25: Corn Delight items in the pack's food and cooking item tags (moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; split by the mod owning each entry) (kubejs/data/creativedelight/kubejs/corn_delight/tags.js)

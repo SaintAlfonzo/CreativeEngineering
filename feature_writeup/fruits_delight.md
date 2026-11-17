@@ -146,3 +146,14 @@ Bayberry Soup is renamed Bayberry Juice (item, Forge fluid and can; `namechanges
 (`food_types.json`, food dict `fruit_juice_bayberry`); ids and recipes unchanged. Its jar fluid
 (`kubejs/data/creativeengineering/moonlight/soft_fluids/bayberry_soup.json`) is hand-written now, with the potion still
 texture, so the soup fluid generator keeps it. Test RC-D2, MJ-14 (SQ-CDB-11).
+
+## History
+
+Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
+
+- 2026-10-25: The rows below moved from the pack's kubejs/server_scripts/cooking/cooking.js 2026-10-25, rows unchanged (kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js)
+- 2026-10-25: Fruits Delight items in the pack's food item tags (moved from the pack's server_scripts/tags/cookingtags.js 2026-10-25, rows unchanged; split by the mod owning each entry) (kubejs/data/creativedelight/kubejs/fruitsdelight/tags.js)
+- 2026-10-29: Muffins: oven only, the muffin family call in creativedelight/baking.js; it removes Fruits Delight's Cooking Pot muffins (TODO cooking/oven #3, baking/baked-goods 2026-10-29) (kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js)
+- 2026-11-01: ######################### Cooked fruit ######################### Dried or baked fruit is made in all three of smoker, furnace and campfire (food_families.md 3.1 `fruit/cooked`): the family call (CD.FOOD values, 2026-11-01; Fruits Delight ships smoker and campfire only, at 0.1 xp) replaces the mod's two with all three (kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js)
+- 2026-11-02: ######################### Jams take slices ######################### Orange and lemon jam (TODO baking/sweets #6, dishes/jams #6, owner 2026-11-02): every whole-fruit slot of Fruits Delight's pot and heated mixing recipes also takes that fruit's slice, one for one (2 oranges or 2 orange slices, or one of each) (kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js)
+- 2026-11-04: ######################### Jam cook time ######################### Food family rule (food_families.md, preserve/jam, owner 2026-11-04): every jam cooks 400 ticks in the pot (kubejs/data/creativedelight/kubejs/fruitsdelight/recipes.js)

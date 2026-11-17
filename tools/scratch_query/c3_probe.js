@@ -15,9 +15,9 @@
 //   /zc3 items X Y Z R [keep]         item entities within R of X Y Z summed by id, then discarded (keep: left in place)
 //   /zc3 loot X Y Z TOOL ROLLS        the block at X Y Z rolled through Block.getDrops ROLLS times with TOOL (id or none)
 //   /zc3 rest NAME                    the bot's minecraft:time_since_rest stat
-// Output: "[c3] ..." lines in logs/latest.log, then "[c3] done". Written 2026-11-13, not run yet: one live call each
+// Output: "[c3]..." lines in logs/latest.log, then "[c3] done". Written not run yet: one live call each
 // before a batch relies on it (scratch-test gotchas).
-// MIGRATED 2026-11-15 to /cdevtest and /pbot (creative_devtools.md): aim -> pbot look, bstate -> cdevtest state,
+// MIGRATED to /cdevtest and /pbot (creative_devtools.md): aim -> pbot look, bstate -> cdevtest state,
 // items -> cdevtest items [keep], loot -> cdevtest loot tool= rolls=, rest -> cdevtest player (no stat; stays here).
 // shoot, portals, craft, pot stay one-offs.
 (() => {

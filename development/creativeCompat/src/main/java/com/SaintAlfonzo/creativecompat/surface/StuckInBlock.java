@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
  * zeroes your momentum every tick, so the speed you really get is {@code multiplier * (1 - 0.91 * friction)} of normal
  * ({@link #walkRatio}), about 0.45x the multiplier on a normal floor.
  *
- * <p>Since pass-through phase 5 (2026-11-15) only untiered blocks are listed: cobwebs, barbed wire, berry bushes,
+ * <p>Since pass-through phase 5 only untiered blocks are listed: cobwebs, barbed wire, berry bushes,
  * propelplant, leaf piles and bamboo leaves moved to the tiers. Kept: powder snow and bamboo spikes (out of scope), and
  * the plants left outside the system (plan_passthrough.md seventh pass; phase 0 brief 1.2): Floral Enchantment vine
  * bushes, Farmer's Respite wither roots, Neapolitan beanstalk thorns, Upgrade Aquatic pickerelweed. The Vinery taiga
@@ -52,7 +52,7 @@ final class StuckInBlock {
         RULES.put("com.teamabnormals.upgrade_aquatic.common.block.PickerelweedBlock", (s, p, on) -> 0.6);
         RULES.put("com.teamabnormals.upgrade_aquatic.common.block.PickerelweedPlantBlock", (s, p, on) -> 0.75);
         RULES.put("com.teamabnormals.upgrade_aquatic.common.block.PickerelweedDoublePlantBlock", (s, p, on) -> 0.75);
-        // other blocks that slow you from inside, display only (owner 2026-11-15)
+        // other blocks that slow you from inside, display only (owner)
         RULES.put("com.sammy.minersdelight.content.block.sticky_basket.StickyBasketBlock", (s, p, on) -> 0.25);
         RULES.put("com.teamabnormals.upgrade_aquatic.common.block.MulberryJamBlock", (s, p, on) -> 0.2);
         RULES.put("com.teamabnormals.upgrade_aquatic.common.block.GuardianSpineBlock", (s, p, on) -> 0.25);
