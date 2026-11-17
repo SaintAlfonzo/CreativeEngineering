@@ -13,14 +13,13 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=75927b576366 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 20 open TODO rows (Planned 4, In Progress 2, Testing 14), 7 Complete.
+<!-- generated:status_index begin open_work sha1=3fbc6bae19cd -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 19 open TODO rows (Planned 3, In Progress 2, Testing 14), 8 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `conventions #35` | Planned | none | Memory cleanup todo |
 | `conventions #36` | Planned | none | History audit, low priority, marked |
-| `conventions #37` | Planned | none | Docs and writeup form, last |
 | `tooling/conventions #11` | Planned | S | Rules violation fixes (design_rules V-01 to V-62) |
 | `conventions #24` | In Progress | SQ-RFX-01, -03, -07, -08, -12, -15, -19, CQ-RFX-01, CQ-RFX-03 | Small fixes (added 2026-11-16) |
 | `conventions #25` | In Progress | SQ-RFX-04, -10 | Villager trade helper |
