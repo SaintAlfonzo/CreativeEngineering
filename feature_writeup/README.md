@@ -14,7 +14,7 @@ work, decisions and pending tests: [todo/TODO.md](todo/TODO.md). Finished (Compl
 Test prefixes: every prefix, its owner doc and the renamed ones are in
 [testing/test_prefix_index.md](testing/test_prefix_index.md); a new prefix gets its row there before its first test.
 
-<!-- generated:status_index begin readme sha1=86f4ac48264b -->
+<!-- generated:status_index begin readme sha1=f1feaa2e0b9b -->
 | Feature | File | Test prefix | Status | Last run (per queue code) | Jars | Note |
 |---|---|---|---|---|---|---|
 | BlockRunner walk speed by surface | [blockrunner.md](blockrunner.md) | `BR-` | BUILT | SQ-PTH r1116 2026-11-16: 1 PASS, 1 DEFERRED, 5 LOOK; CQ-PTH r1116 2026-11-16: 1 DEFERRED; SQ-BRA r1111 2026-11-11: 3 PASS, 1 FAIL, 3 PARTIAL | creativecompat pending, creativedevtools installed 2026-11-17 | DEPLOYED, in-game test pending |
@@ -157,7 +157,7 @@ Test prefixes: every prefix, its owner doc and the renamed ones are in
 | WTHIT lines | [wthit_lines.md](wthit_lines.md) | `WL-` | BUILT | SQ-WT r1031 2026-10-31: 1 PASS; SQ-SG r1031 2026-10-31: 3 PASS | creativecompat pending | DD icons DEPLOYED 1.0.4, Growth 1.0.6 |
 | Nether portal ignition | [nether_portal.md](nether_portal.md) | `NP-` | BUILT | none | creativemagic installed 2026-11-17 | DEPLOYED, Flint and Terrasteel still marked temporary |
 | Portals | [immersive_portals.md](immersive_portals.md) | `PRT-` | BROKEN | CQ-PG r1115 2026-11-15: 1 LOOK; SQ-TP r1107 2026-11-07: 37 PASS, 2 NOT-RUN; CQ-TP r1107 2026-11-07: 2 NOT-RUN | creativecompat pending, tempad pending | 2026-11-14: exit lift rebuilt for every portal (plan_bugfix_1114.md 4.1), Creative Compat installed, scratch ... |
-| Mob and block tweaks | [mob_block_tweaks.md](mob_block_tweaks.md) | `MT-` | BUILT | SQ-NM r1106 2026-11-06: 1 OTHER; SQ-VL r1031 2026-10-31: 4 PASS; SQ-VG r1031 2026-10-31: 4 PASS; +1 codes | creativeworldgen installed 2026-11-17, creativecompat pending, kubejs | DEPLOYED (trough 1.0.4, bubble columns and Bushier Flowers 1.0.6), MT-01 to MT-12 pending |
+| Mob and block tweaks | [mob_block_tweaks.md](mob_block_tweaks.md) | `MT-` | BUILT | SQ-NM r1106 2026-11-06: 1 OTHER; SQ-VL r1031 2026-10-31: 4 PASS; SQ-VG r1031 2026-10-31: 4 PASS | creativeworldgen installed 2026-11-17, creativecompat pending, kubejs | DEPLOYED (trough 1.0.4, bubble columns and Bushier Flowers 1.0.6), MT-01 to MT-12 pending |
 | Vine shearing | [vine_shearing.md](vine_shearing.md) | `VS-` | BUILT | SQ-VS r1031 2026-10-31: 8 PASS | creativecompat pending | BUILT 2026-10-31 (Creative Common 1.1.04, installed 2026-10-31) |
 | Immersive Paintings | [immersive_paintings.md](immersive_paintings.md) | `PA-` | BUILT | none | creativecompat pending | DEPLOYED with 1.0.6 (475 paintings, scratch-server verified) |
 | JEI ordering | [jei_ordering.md](jei_ordering.md) | `JO-` | BUILT | none | creativecompat pending | steps 1 to 3 DEPLOYED with 1.0.7 (Creative Common sorter + mixins, KubeJS definition/tags, first small tree, ... |
