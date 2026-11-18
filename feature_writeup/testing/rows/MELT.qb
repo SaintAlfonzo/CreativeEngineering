@@ -246,6 +246,13 @@ look light line shows block 0 at the ice; boot source-driven line names magma_bl
 bootexpect \[melting\] source-driven fire \(light below 4, random ticks\): \[minecraft:magma_block \(light 3\)
 shell grep -hE "\[zmelt\] (change m07_|light)" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
 
+## SQ-MELT-08b | salt dust (survival bot) on a non-meltable block places a salt layer; on snow or ice it never places one
+@group A
+@commands Right-click stone with `vintagedelight:salt_dust` (layer placed on top), then right-click `minecraft:snow` and `minecraft:ice` (melts one stage, no layer)
+@pass stone: `vintagedelight:salt` layer above it, 1 dust spent; ice and snow: melt step, no layer
+@fails the hand click listener (`SaltLayerMelt.onUseSalt`) cancels non-targets, or lets the layer place on ice
+@reviewed 2026-11-17
+
 ## SQ-MELT-08 | salt item click (survival bot) steps blue ice one tier per click: blue -> packed -> ice -> water
 @group A
 @commands Right-click `minecraft:blue_ice` with a salt item three times (`salt:salt`, survival)

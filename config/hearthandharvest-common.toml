@@ -42,10 +42,10 @@
 	#One salt cave attempt in this many chunks of a salt cave biome.
 	#Range: 1 ~ 100000
 	saltCaveRarity = 24
-	#Lowest centre height of a salt cave.
+	#Lowest center height of a salt cave.
 	#Range: -64 ~ 300
 	saltCaveMinY = -40
-	#Highest centre height of a salt cave.
+	#Highest center height of a salt cave.
 	#Range: -64 ~ 300
 	saltCaveMaxY = 30
 	#Generate corn mazes (their rate is in the pack's structure tables).
@@ -68,7 +68,7 @@
 	#Ticks between searches for a salt block.
 	#Range: 20 ~ 6000
 	saltSearchInterval = 200
-	#Average ticks between an animal's licks, randomised by a quarter either way. The first lick comes after half to one and a half intervals.
+	#Average ticks between an animal's licks, randomized by a quarter either way. The first lick comes after half to one and a half intervals.
 	#Range: 200 ~ 72000
 	saltLickInterval = 1200
 

@@ -22,7 +22,7 @@
 	#Range: 0.0 ~ 1.0
 	rareChance = 0.002
 	#Witherblooms spawn, very rarely, in soul sand valleys (biome tag
-	##more_mooblooms:spawns_witherbloom). A built-in data pack: takes effect on the next world load.
+	##moremooblooms:spawns_witherbloom). A built-in data pack: takes effect on the next world load.
 	witherbloomSpawns = true
 
 #Only used when Buzzier Bees is installed. Each switch is one cleanup of Buzzier Bees' moobloom,

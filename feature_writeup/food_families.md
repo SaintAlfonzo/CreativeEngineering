@@ -4,8 +4,8 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=4c99991db86d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 15, Pinned 1, In Progress 50, Testing 28), 3 Complete.
+<!-- generated:status_index begin open_work sha1=000a76941252 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 94 open TODO rows (Planned 14, Pinned 1, In Progress 50, Testing 29), 3 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -20,7 +20,6 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/meals #20` | Planned | S C P | Feasts in ovens |
 | `dishes/meals #27` | Planned | S C P | Pineapple pizza |
 | `dishes/meals #37` | Planned | S C P | Pancake coverings review |
-| `dishes/ocean #2` | Planned | S C P | Fish egg roll accepts eggs |
 | `dishes/pickles-and-ferments #5` | Planned | S C P | Enzymes from crushed or milled mushrooms |
 | `dishes/pickles-and-ferments #9` | Planned | S C P | Pickled egg for the century egg |
 | `tooling/generators-and-tests #11` | Planned | S | `food_families.py` reports 94 unsorted foods |
@@ -90,6 +89,7 @@ Test prefix **FF-** · Last updated **2026-11-02** · Overall status **Produce f
 | `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
 | `dishes/meals #12` | Testing | S C P T | Pancake food type |
 | `dishes/meals #23` | Testing | S C P | Fried egg and omelette batches |
+| `dishes/ocean #2` | Testing | S C P | Fish egg roll accepts eggs |
 | `dishes/ocean #4` | Testing | S+ C P | Remove tentacles; all tentacles to calamari |
 | `dishes/ocean #5` | Testing | C P | Salmon eggs become caviar |
 | `dishes/pickles-and-ferments #1` | Testing | S~ C P | Remove pickled pickles; pickled sea pickle |

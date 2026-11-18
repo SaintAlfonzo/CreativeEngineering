@@ -56,8 +56,8 @@
 	enabled = true
 	#true: random ticks never decay a natural leaf. A leaf only decays after a block next to it
 	#changes: when its log is cut it rechecks 4-11 ticks later, and a far-out leaf rechecks when a
-	#neighbour changes (so a cut tree's canopy falls away in a cascade). Trees from worldgen and
-	#saplings are placed without neighbour updates, so an untouched tree keeps every leaf, even ones
+	#neighbor changes (so a cut tree's canopy falls away in a cascade). Trees from worldgen and
+	#saplings are placed without neighbor updates, so an untouched tree keeps every leaf, even ones
 	#past maxDistance or touching only diagonally. Cheaper than false: the range search runs only on
 	#a change. false: vanilla timing (random ticks), with the maxDistance range.
 	onlyWhenDisturbed = true
@@ -154,7 +154,7 @@
 		#structure_groups.json + group/* tags (kubejs worldgen/structure_overrides.js). Off: every structure
 		#set as its mod ships it (debug.structureDensity still applies). Rejoin to apply.
 		structureGroups = true
-		#The per-structure frequency roll (patcherMod StructureFrequencies). Off: every group member spawns
+		#The per-structure frequency roll (Creative Common StructureFrequencies). Off: every group member spawns
 		#whenever it wins its slot, i.e. at its weight share only. Rejoin to apply.
 		structureFrequencies = true
 		#pool_config.json / pool_tags.json village-house weights (PoolTuner). Off: every pool at its first-seen weights. Rejoin.
@@ -167,7 +167,7 @@
 		deadPlacementFilter = true
 		#Swap a structure's grass/dirt base for the local ground where grass isn't native ([worldgen.ground_match]).
 		groundMatch = true
-		#biome_rules in structure_groups.json (patcherMod StructureBiomeRules): only allowed structures start in
+		#biome_rules in structure_groups.json (Creative Common StructureBiomeRules): only allowed structures start in
 		#the rule's biomes (water: ships, wrecks, ocean ruins...). Off: every structure uses its own biome list. Rejoin.
 		structureBiomeRules = true
 		#Cancel a structure whose foundation would need too much earth over water or air ([worldgen.earth_fill]).
@@ -180,7 +180,7 @@
 		#(kubejs worldgen/wild_flowers.js). Off: every flower as its mod ships it. Rejoin to apply; only new chunks change.
 		wildFlowers = true
 		#mob_spawns.json: per-biome mob spawn weights, additions and removals (kubejs worldgen/mob_spawns.js,
-		#patcherMod SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.
+		#Creative Common SpawnTuning). Off: every mob spawns as its mod ships it. Rejoin to apply; existing worlds change too.
 		mobSpawns = true
 		#The creativeworldgen:terrain_adaptation/* structure tags replace a structure's own terrain adaptation
 		#(none, bury, beard_thin, beard_box, or the pack's soft beard; [worldgen.terrain_adaptation]). Rejoin; new chunks only.
@@ -189,65 +189,65 @@
 		#dirt, plants) outside the built columns, so the terrain around them stays ([worldgen.terrain_adaptation]). New chunks only.
 		templateTrim = true
 		#bee_nests.json: per-biome bee nest chance on generated trees, plus extra bee-nest trees (kubejs
-		#worldgen/bee_nests.js, patcherMod BeeNests). Off: nests as the mods ship them. Rejoin to apply; only new chunks change.
+		#worldgen/bee_nests.js, Creative Common BeeNests). Off: nests as the mods ship them. Rejoin to apply; only new chunks change.
 		beeNests = true
-		#biome_fits.json + the land/* structure tags (patcherMod StructureBiomeFits): a structure in a fit tag spawns in
+		#biome_fits.json + the land/* structure tags (Creative Common StructureBiomeFits): a structure in a fit tag spawns in
 		#its fit's biomes (land/oak: land/oak + land biomes) instead of its own list. Off: its own list. Rejoin; new chunks only.
 		structureBiomeFits = true
 		#meta_structures.json: our structures built from other structures and features (a village with peaceful
-		#towers, ruin clusters, pillager camps with siege weapons, a driftwood flotilla...; patcherMod MetaStructure, [worldgen.meta_structures]).
+		#towers, ruin clusters, pillager camps with siege weapons, a driftwood flotilla...; Creative Common MetaStructure, [worldgen.meta_structures]).
 		#Off: none generate (their anchors spawn plain). Rejoin; new chunks only.
 		metaStructures = true
 		#Group members with "replaces" + "share" in structure_groups.json take that share of another member's slots
-		#(the vanilla swamp hut in YUNG's witch hut slots; patcherMod MetaSlots). Off: they never generate and the
+		#(the vanilla swamp hut in YUNG's witch hut slots; Creative Common MetaSlots). Off: they never generate and the
 		#structures they replace keep every slot. Rejoin; new chunks only.
 		structureReplacements = true
 		#Geodes under oceans generate lower so fewer break through the sea floor ([worldgen.ocean_geodes];
-		#patcherMod OceanGeodes: vanilla amethyst and every Geode Plus geode). Off: at their own height. New chunks only.
+		#Creative Common OceanGeodes: vanilla amethyst and every Geode Plus geode). Off: at their own height. New chunks only.
 		oceanGeodes = true
-		#Placement priority (structure_groups.json "priority"; patcherMod PlacementPriority): a structure whose
+		#Placement priority (structure_groups.json "priority"; Creative Common PlacementPriority): a structure whose
 		#pieces would overlap a higher-ranked structure's never starts (settlements > pillagers > dungeons > houses
 		#and camps > ruins), and companion villages around fortified towns. Off: structures may overlap, no
 		#companions. Rejoin; new chunks only.
 		placementPriority = true
-		#meat_block_swaps.json (patcherMod TemplateBlockSwaps): marked blocks in structure templates are swapped
+		#meat_block_swaps.json (Creative Common TemplateBlockSwaps): marked blocks in structure templates are swapped
 		#when the template loads (lone red glazed terracotta "meat" -> Architect's Palette salmon log). Off: templates as
 		#the mods ship them. Rejoin; new chunks only.
 		templateBlockSwaps = true
 		#Quark's frozen peaks cave style lays Immersive Weathering's permafrost on floors, ceilings and pillars
-		#instead of Quark's own block (renamed Froststone; patcherMod QuarkPermafrostStyleMixin). Walls stay packed ice.
+		#instead of Quark's own block (renamed Froststone; Creative Common QuarkPermafrostStyleMixin). Walls stay packed ice.
 		#Off: Quark's block. New chunks only.
 		permafrostMerge = true
 		#Upgrade Aquatic's river sapling (Mulberry Sapling) grows the datapack's upgrade_aquatic:river_tree, the oak
-		#trunk tree that worldgen places by rivers (patcherMod MulberrySapling). Off: UA's built-in tree with river logs,
+		#trunk tree that worldgen places by rivers (Creative Common MulberrySapling). Off: UA's built-in tree with river logs,
 		#which drop oak logs. Applies at once.
 		mulberrySapling = true
 		#mushroom_spawns.json: wild mushrooms, colonies and huge Fungi Delight mushrooms at the surface and in caves
 		#(kubejs worldgen/mushroom_spawns.js). Off: mushrooms as their mods ship them. Rejoin to apply; only new chunks change.
 		mushroomSpawns = true
 		#Generated water that first flows when its chunk starts ticking (aquifer edges, cave springs) breaks the
-		#plants, carpets and torches in its way without dropping items ([worldgen.first_tick_water]; patcherMod FirstTickWater).
+		#plants, carpets and torches in its way without dropping items ([worldgen.first_tick_water]; Creative Common FirstTickWater).
 		#Off: vanilla, they drop as items. Applies at once.
 		firstTickWater = true
 		#Sand, gravel and other falling blocks left floating by generation stay put when their chunk first
-		#ticks, until a later block update next to them (patcherMod GeneratedFallingBlocks). Covers the chunk's
+		#ticks, until a later block update next to them (Creative Common GeneratedFallingBlocks). Covers the chunk's
 		#post-processing, generated water settling in the [worldgen.first_tick_water] window and ticks scheduled during
 		#generation. Off: vanilla, they fall on the first tick (in the outer ring of loaded chunks the falling entity never
 		#lands and stays saved). Applies at once.
 		holdGeneratedFallingBlocks = true
-		#A structure that cannot start in any biome of a dimension is not tried there (patcherMod DimensionFilter):
+		#A structure that cannot start in any biome of a dimension is not tried there (Creative Common DimensionFilter):
 		#no generation point, terrain reads or jigsaw assembly for Nether and End structures in the Overworld.
 		#Same structures either way, only faster. Off: every structure set is tried in every dimension, as vanilla 1.19.2.
 		dimensionFilter = true
 		#Earth and water fill share one bounded cache of predicted terrain columns across starts, placement
-		#priority predictions, meta retries and the real start of a chunk (patcherMod EarthFill). Same results either way,
+		#priority predictions, meta retries and the real start of a chunk (Creative Common EarthFill). Same results either way,
 		#only faster. Off: each start reads its own columns.
 		sharedTerrainCache = true
-		#spawn_boxes.json (patcherMod StructureSpawnBoxes): pillager and witch structures respawn their own mob mix
+		#spawn_boxes.json (Creative Common StructureSpawnBoxes): pillager and witch structures respawn their own mob mix
 		#inside a spawn box, members of a meta structure keep their own boxes (or take the meta's), and box evokers drop no
 		#totem. Off: only the mods' own spawn_overrides (inside metas each part keeps its own either way). Applies at once, old chunks too.
 		spawnBoxes = true
-		#Mob spawners of these entities are removed from structure templates when the template loads (patcherMod
+		#Mob spawners of these entities are removed from structure templates when the template loads (Creative Common
 		#TemplateSpawnerFilter); the spawn boxes take their place. A template that loses one also loses its spawners with
 		#no mob. Empty list: every spawner stays. Rejoin; new chunks only.
 		removeSpawners = ["minecraft:pillager"]
@@ -308,7 +308,7 @@
 		#Range: 0.0 ~ 1.0
 		nativeShare = 0.35
 		#Fewest natural ground columns needed to decide (columns under structures are skipped). With
-		#fewer, even after also sampling the 8 neighbouring chunks, the base is left as it is.
+		#fewer, even after also sampling the 8 neighboring chunks, the base is left as it is.
 		#Range: 1 ~ 1024
 		minSamples = 16
 		#Block tags, one per base family. A family block in a base is swapped where its family isn't
@@ -322,7 +322,7 @@
 			#Every Nth column of the chunk being placed is sampled (2 = 64 columns).
 			#Range: 1 ~ 16
 			centerStride = 2
-			#Every Nth column of each of the 8 neighbouring chunks (4 = 16 each).
+			#Every Nth column of each of the 8 neighboring chunks (4 = 16 each).
 			#Range: 1 ~ 16
 			neighbourStride = 4
 			#Blocks sampled under each column's top block (the under-block palette).
@@ -341,7 +341,7 @@
 	#toward the size's air limit, but only where the structure's beard (its terrain adaptation) won't
 	#fill under it: ground deeper than beardReach (buryReach for bury), or always with no adaptation.
 	#Columns whose ground lies more than maxMoundHeight below a piece count toward the size's mound
-	#limit. Past any limit the whole structure is cancelled and its slot stays empty (a slot shared
+	#limit. Past any limit the whole structure is canceled and its slot stays empty (a slot shared
 	#with other structures tries the next pick). The limits scale with the structure's size (its earth
 	#base block count, [worldgen.earth_fill.sizes]). Village streets that follow the terrain are never
 	#counted. Exempt a structure with the structure tag creativeworldgen:earth_fill/exempt. New
@@ -369,7 +369,7 @@
 		#coarser at cliffs). 1 = every column. [worldgen.water_fill] uses it too.
 		#Range: 1 ~ 8
 		sampleGrid = 4
-		#CANCELLED: log each structure that is cancelled, and each pruned village or meta part dropped (id, chunk,
+		#CANCELLED: log each structure that is canceled, and each pruned village or meta part dropped (id, chunk,
 		#counts, limits). ALL: log every checked structure that has earth in its base or (footprintAllPieces) a
 		#surface piece. For tuning the limits.
 		#Allowed Values: OFF, CANCELLED, ALL
@@ -418,7 +418,7 @@
 		#The footprint's water share, checked after the limits: the bounding box of every piece with earth, in the
 		#layer the structure was set onto the surface with, and (footprintAllPieces) every other piece's box where
 		#the surface lies within its height. Water there (filled by its earth or the beard, or left
-		#standing) against dry ground there (replaced or left alone): the structure is cancelled when the water
+		#standing) against dry ground there (replaced or left alone): the structure is canceled when the water
 		#outnumbers the ground by more than this share. 0.5 = water more than 50% over ground (60:40 passes, 61:39
 		#doesn't), 0 = more water than ground, -1 = off. Catches camps on islands and ruins reaching out over a lake,
 		#whose beard fills the shallow water so maxOverWater never sees it. A spot under more than baseLayers
@@ -471,7 +471,7 @@
 	#waterlogged blocks, kelp, seagrass; all layers) is compared with the terrain the generator predicts
 	#at that spot. Water in water is fine, and so is water replacing a sea, lake or river bed. Water
 	#replacing dry ground counts toward maxIntoGround, water in air (above the sea surface or on land)
-	#toward maxIntoAir; past either limit the whole structure is cancelled and its slot stays empty.
+	#toward maxIntoAir; past either limit the whole structure is canceled and its slot stays empty.
 	#Uses [worldgen.earth_fill] sampleGrid. New chunks only; /place structure is not checked.
 	[worldgen.water_fill]
 		#Most water blocks that may replace dry ground (a ruin reaching onto a beach or into a hillside).
@@ -487,7 +487,7 @@
 		#water into the ground and allows them 16 in air. The first matching entry wins; -1 = no limit.
 		#Only structures in creativeworldgen:water_fill/structures are checked at all.
 		overrides = ["#creativeworldgen:water_fill/ponds=-1,16"]
-		#CANCELLED: log each structure that is cancelled (id, chunk, counts, limits). ALL: log every checked
+		#CANCELLED: log each structure that is canceled (id, chunk, counts, limits). ALL: log every checked
 		#structure that carries any water. For tuning the limits.
 		#Allowed Values: OFF, CANCELLED, ALL
 		log = "CANCELLED"
@@ -518,13 +518,13 @@
 		log = false
 		#Keep meta structures out of coasts and rivers (the biome tag creativeworldgen:coast_river: beaches,
 		#shores, rivers; kubejs biome_fits.json biome_tags). No part may start there or reach there with its box
-		#(centre or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,
+		#(center or a corner): a satellite tries another spot, an anchor there leaves the slot to the plain anchor,
 		#which still spawns as it would alone. Metas in the structure tag creativeworldgen:meta/coast_ok (fleets,
 		#flotillas, wrecks, sunken ruins) are not affected. New chunks only.
 		avoidCoasts = true
 		#A part that fits fewer times than its minimum count (a satellite near a coast, on a cliff) is kept with
 		#what fitted instead of failing the whole meta; earth fill likewise drops an offending satellite and
-		#prunes village parts instead of cancelling the meta. The meta only fails when no structure besides the
+		#prunes village parts instead of canceling the meta. The meta only fails when no structure besides the
 		#anchor is left (the slot is then the plain anchor). Off: a short part fails the meta (before 2026-10-30).
 		keepShortParts = true
 
@@ -586,7 +586,7 @@
 		#Default search radius of /cwglocate batch, in chunks (/locate uses 100).
 		#Range: 1 ~ 1000
 		batchRadius = 100
-		#A /cwglocate batch search still running after this long is reported as timed out and cancelled (Async
+		#A /cwglocate batch search still running after this long is reported as timed out and canceled (Async
 		#Locator never completes a search that threw).
 		#Range: 5 ~ 3600
 		batchTimeoutSeconds = 120
