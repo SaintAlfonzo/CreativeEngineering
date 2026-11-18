@@ -28,7 +28,7 @@ Design and rulings stay in those plans; this file holds only lanes, order and fi
 | M2 | Creative Delight, configs | G2 salt redesign, G7.6 Salt Melt stacks, G7.7 salt JEI, lick layer hooks removed (B5/B7/E4 lick part), 1115b #12, #13, G3 small fixes (tooltip, torches, dragon armor, Rare Ice); 1115 E2 canopy-proof wild crops as a CD mixin on `HeightmapPlacement` with placed-feature tag `creativedelight:canopy_proof` (lane X finding 2026-11-17: the JSON-only E2 misses FD's Java carrot and onion features), config switch default off | PS15.qb, SALT.qb |
 | R | solRaspberryPie | G5 / G7.12 | its own prefix |
 | X | Power Grid gate, read-only elsewhere | 1115b #14 arm; 1115b #15 Upgrade Aquatic guard (find the owning jar, report before editing); 1115 #12, #14 investigations | PWG.qb |
-| F2 | Creative Delight | food rows after the owner's answers | BBQ.qb, MRD.qb |
+| F2 | Creative Delight | food rows after the owner's answers (2026-11-17, in the TODO rows' decisions): `#72b` 8 sugar per syrup in the cooking pot mirrored to heated mixing, plus a syrup fluid; `#58` Cave Skewer on Miner's ingredients; `#59` Cooked Nether Wart in Warped Moldy Meat and Strider Moss Stew; `#40` stays pinned | BBQ.qb, MRD.qb |
 
 ## 2. Order
 
