@@ -610,7 +610,10 @@ look attrs: bare feet only a1386f64 at -0.4 and Pos[1] -60.0; boots: no a1386f64
 @commands Reload test per switch (needs `/cdevreload compat`): save each with `sed -i` (rename, missed by the watcher), then run the command: `[debug.passthrough] timing` true / false, cobweb `denseWalk` 0.2, `breakStallTicks` 0, cobweb `surroundedAt` 3, layers `snowMaxSlow` 0.3, layers `minLayers` 4; also one save written in place (single write) without the command
 @pass each value applies after the command (timing lines start / stop, speeds change, the client gets the re-sent table: no rubber band); the in-place save applies within a few seconds without the command
 @fails `CompatConfigReload.reload`, `PassValues.onConfig` re-send; night-config watcher (ENTRY_MODIFY, count 1 only)
-@reviewed 2026-11-16
+@reviewed 2026-11-17
+# With the Creative Common build of 2026-11-17 (G11 own config watcher) each save here is also reloaded by Common about
+# 1 s later (one `[creativecommon] creativecompat-common.toml reloaded` line per save), so the in-place step at the end
+# passes on Common alone; the save-without-command checks live in SQ-PS15B-26.
 # every switch is saved by a whole-file rewrite (qrun.py toml), which the watcher misses, then /cdevreload compat;
 # the server copy is restored at the end. Cross web at 1000 -60 1200 (3 faces: dense), zombie z12x in it
 shell cp config/creativecompat-common.toml .ps15b12_compat.toml
@@ -885,3 +888,93 @@ look tick_field and tick_web_cube medians under 1000; the two _recount rows pres
 @pass outside: the first path's nodes over the field are one block up (on top of the snow); sunk: the path's nodes run at the ground level through the snow, the mob reaches the target without standing still; a mob that walks in on an over-the-top path gets a new ground-level path within about 1 s of sinking; off: the sunk mob keeps planning over the top (may stall at the field edge)
 @fails `SnowPathMixin` (NodeEvaluator `prepare` / `done`), `SnowLayers.openForPath` in `LeafPilePathMixin` and `McaLeafPilePathMixin`, `SnowLayers.collision` (null-entity context while a sunk search runs), `SnowLayers.dropStalePath` (`recomputePath`)
 @draft path readback to write at the run (no path dump verb yet: watch the mob's Y and position for 20 s)
+
+@@section 4
+@@title SQ-PS15B-26, -27 / CQ-PS15B-04 Own config watcher (Creative Common), 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G11; [plan_post_scratch_1115b.md](../plan_post_scratch_1115b.md) E3; TODO `tooling/scratch-1115-follow-ups-2 #10`)
+@@date 2026-11-17
+@@jars creativecommon creativecompat
+@@sources feature_writeup/plan_post_scratch_1115.md feature_writeup/plan_post_scratch_1115b.md feature_writeup/creative_devtools.md
+@@text
+@@text Creative Common build/libs 2026-11-17, not installed: Common watches our own mods' config files in `config/` (MODIFY
+@@text and CREATE, 1 s debounce) and reloads them the way Forge does; night-config's watch on those files is removed.
+@@text Headless: `tools/test_config_watcher.sh` ALL 23 OK. Every save below is made with no command; the copies are
+@@text restored at the end of each row (a restore is itself a save and logs one reload line).
+@@text
+@@table
+## SQ-PS15B-26 | in-place and rename saves of an own toml apply about 1 s later without a command, one reload each
+@group A
+@commands Boot line `config watcher on`; Compat `[debug.passthrough] timing` true by an in-place save (truncate + write, count 2: Forge missed it), then false by `sed -i` (rename); one appended blank line to Common's toml (a single write: Forge's own watcher would also have fired)
+@pass boot: `[creativecommon] config watcher on: N own config file(s)`; each save gives exactly one `[creativecommon] <file> reloaded` line within 3 s; `[passthrough-timing]` lines start after the first save and stop after the second; one line (not two) for Common's append
+@fails `OwnConfigWatcher.start` (FileWatcher.removeWatch, register MODIFY + CREATE), `OwnConfigLogic.Debounce`, `ConfigReload.reload` dispatch to the owning mod
+@reviewed 2026-11-17
+bootexpect \[creativecommon\] config watcher on: [0-9]+ own config file
+shell cp config/creativecompat-common.toml .ps15b26_compat.toml
+shell cp config/creativecommon-common.toml .ps15b26_common.toml
+shell python3 -c "p='config/creativecompat-common.toml';s=open(p).read().replace('timing = false','timing = true',1);f=open(p,'r+');f.write(s);f.truncate();f.close()"
+waitlog \[creativecommon\] creativecompat-common.toml reloaded 10
+> cdevtest tickwarp 400
+waitlog verb=tickwarp end=done ticks=400 120
+waitlog \[passthrough-timing\] side=server 30
+shell sed -i 's/timing = true/timing = false/' config/creativecompat-common.toml
+sleep 4
+> say ps15b26 after rename save
+> cdevtest tickwarp 401
+waitlog verb=tickwarp end=done ticks=401 120
+shell printf '\n' >> config/creativecommon-common.toml
+sleep 4
+count \[creativecommon\] creativecompat-common.toml reloaded == 2
+count \[creativecommon\] creativecommon-common.toml reloaded == 1
+shell cp .ps15b26_compat.toml config/creativecompat-common.toml
+shell cp .ps15b26_common.toml config/creativecommon-common.toml
+sleep 4
+reject reload failed
+look `[passthrough-timing]` lines appear during the 400-tick warp and none after the `ps15b26 after rename save` line; the two counts above were taken before the restore
+
+## SQ-PS15B-27 | loop guard: a touch reloads nothing, a corrected value reloads once (no loop); third-party tomls not touched by Common
+@group A
+@commands `touch` Compat's toml; then a wrong value `timing = "maybe"` saved in place (Forge-style correction: backup, fix to the default, save); then one appended blank line to a third-party toml (JEI's or Quark's, whichever exists in config/)
+@pass touch: no reload line within 4 s; bad value: exactly one `[creativecommon] creativecompat-common.toml reloaded (1 value(s) corrected)` line and no second line within 5 s (the correction save is not reloaded again), the file reads `timing = false` and a `.bak` copy exists; third-party save: no `[creativecommon]` line for that file
+@fails `OwnConfigLogic.ContentGuard` (`OwnConfigWatcher.noteApplied` after the save), `OwnConfigLogic.isOwn`
+@reviewed 2026-11-17
+shell cp config/creativecompat-common.toml .ps15b27_compat.toml
+shell touch config/creativecompat-common.toml
+sleep 4
+> say ps15b27 touch done
+shell sed -i 's/timing = false/timing = "maybe"/' config/creativecompat-common.toml
+waitlog \[creativecommon\] creativecompat-common.toml reloaded \(1 value\(s\) corrected\) 10
+sleep 5
+shell grep -c 'timing = false' config/creativecompat-common.toml
+shell sh -c 'f=$(ls config/jei-client.toml config/quark-common.toml 2>/dev/null | head -1); cp "$f" .ps15b27_third.toml; printf "\n" >> "$f"; echo "ps15b27 third=$f"'
+sleep 4
+count \[creativecommon\] creativecompat-common.toml reloaded == 1
+reject \[creativecommon\] (jei-client|quark-common)\.toml
+shell sh -c 'f=$(ls config/jei-client.toml config/quark-common.toml 2>/dev/null | head -1); cp .ps15b27_third.toml "$f"'
+shell cp .ps15b27_compat.toml config/creativecompat-common.toml
+sleep 4
+look no reload line between the touch and `ps15b27 touch done`; the grep printed 1; a `creativecompat-common-*.bak` file was written by the correction (delete it after the run)
+
+## CQ-PS15B-04 | client: an own toml saved by rename while the client runs applies without a command
+@group client
+@commands Client running (singleplayer): `sed -i` sets `[changelog] pauseButton = false` in `config/creativecommon-common.toml`; open the pause menu after 3 s; restore and reopen
+@pass the client log has one `[creativecommon] creativecommon-common.toml reloaded`; the pause menu has no changelog book button after the save and has it again after the restore
+@fails `OwnConfigWatcher` on the client (start at load complete), `ChangelogButtons` reading `pauseButton` live
+@reviewed 2026-11-17
+shell cp config/creativecommon-common.toml .cqps15b04_common.toml
+key Escape
+sleep 1
+shot before
+key Escape
+shell sed -i 's/pauseButton = true/pauseButton = false/' config/creativecommon-common.toml
+sleep 3
+key Escape
+sleep 1
+shot off
+key Escape
+shell cp .cqps15b04_common.toml config/creativecommon-common.toml
+sleep 3
+key Escape
+sleep 1
+shot restored
+key Escape
+expect \[creativecommon\] creativecommon-common.toml reloaded
+look shot before and restored: book button right of Back to Game; shot off: no book button

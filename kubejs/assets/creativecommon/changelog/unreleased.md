@@ -379,6 +379,7 @@
 ## Performance & Stability
 
 - **Fixed:** Worlds did not load with Creative Delight but without Creative Brewing or Corn Delight.
+- **Fixed:** Changes saved to the pack's own mod config files while the game ran were often not applied until a restart; they now apply about 1 second after saving.
 - **Fixed:** On Linux the game closed without a crash report while opening its window when 420 or more mods were installed.
 - **Fixed:** Tags, food types and recipes for Cozy's Improved Cats, Towns and Towers, Hopo Better Underwater Ruins, Unwrecked Ships and Yuushya were skipped as if those mods were not installed.
 
