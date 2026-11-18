@@ -705,6 +705,9 @@ SQ-PS15B-13 to -22, CQ-PS15B-03. Not installed.
   The exempt tag is per tier, so rabbits and cats are also exempt from snow layers' slowdown.
 - **assumed:** `bambooLeafMaxLayers` 4 for natural drops (IW's own piles stop at 3); 5 to 8 by hand. The overlay
   shows in first person in a leaf pile of 2 or more layers, opacity 0.7 x layers / max, tiled 64 GUI px.
+- Owner ruling 2026-11-17: Twigs bamboo leaves use the same rising 8-layer scale as the full block (`PassGrowth.layersMax`
+  returns 8 for them), so 1 to 4 Twigs layers walk, overlay and show as 1 to 4 of 8 and the speed falls steadily to 0.60x
+  at 8 (was 0.60x at 4 Twigs layers, 0.77x at 5 of the full block).
 - Not built: seeing out from inside a leaf pile (render without face culling, G4e). Devtools: `/cdevreload compat`
   existed (E2); 1115b #10 (in-place save not seen by Forge's watcher) is unchanged and still the owner's question.
 
