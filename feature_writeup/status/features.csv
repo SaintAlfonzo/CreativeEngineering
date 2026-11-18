@@ -78,7 +78,7 @@ Fruits Delight 1.1.3 fixes on the installed 0.5.11,fruits_delight.md,FR-,BUILT,c
 Farmer's Respite 2.1.2 update,farmers_respite.md,RSP-,BUILT,"creativecommon, creativedelight","CQ-RSP, SQ-RSP",Spout / drain fix in patcherMod 1.1.07 (not deployed),,,
 "Drink rules: juice, tea, latte and coffee",creative_delight_drinks.md,SQ-DRK-,BUILT,creativedelight,"CQ-DRK, SQ-DRK","TESTING: built 2026-11-02 (section 8), in the `mods/` Creative Delight jar",,,
 Food and cooking batch 2026-11-02,plan_food_cooking_batch.md,SQ-FCB-,planned,creativedelight,SQ-FCB,"TESTING: built 2026-11-02 (""Built"")",,,
-"Large Meals, Roll Delight and Barbeque's Delight changes 2026-11-04",plan_meals_rolls_bbq.md,"SQ-LGM-11..14, SQ-ROLL-10..12, SQ-BBQ2-, CQ-BBQ2-01",planned,creativedelight,"CQ-BBQ2, SQ-BBQ2","BUILT 2026-11-04 (CD jar built, not installed), not run",,,
+"Large Meals, Roll Delight and Barbeque's Delight changes 2026-11-04",plan_meals_rolls_bbq.md,"SQ-LGM-11..14, SQ-ROLL-10..12, SQ-BBQ2-, CQ-BBQ2-01",BUILT,creativedelight,"CQ-BBQ2, SQ-BBQ2","BUILT 2026-11-04 (CD jar built, not installed), not run",,,
 Display Delight 1.7.0 port,display_delight.md,DDP-,BUILT,"creativecommon, creativedelight","CQ-CDJ, CQ-DDP, SQ-DDP","patcherMod 1.1.07 (18:41, with the swap-list `removed` key) is installed",,,
 Delightful 3.8.1 update,delightful.md,,BUILT,creativedelight,"CQ-DF, SQ-DF","2026-11-03: cantaloupe names in their own lang namespace (5) BUILT, CD jar installed 2026-11-03 00:08, not ...",,,
 Corn Delight 1.2.11 update,corn_delight.md,CORN-,BUILT,creativedelight,"CQ-CORN, SQ-CORN",DEPLOYED with 1.1.03,,,
