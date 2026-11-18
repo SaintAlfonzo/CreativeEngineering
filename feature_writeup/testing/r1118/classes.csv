@@ -1,0 +1,470 @@
+id,result,bucket,status,note
+SQ-AC-02,BATCH-FAULT,correct-answer,not-fixed,"expects 36 armor; game 40.0 (dragonloot-common.toml 8/13/11/8 = 40), toughness 18 right but expect regex armor_toughness never matches the Armor Toughness line; SALT run-log copy said 33 (superseded); AC.qb still 36"
+SQ-AC-03,BATCH-FAULT,lost-setup,fixed-in-qb,bot qa never spawned (lost r1031 a1_world setup row); spawn added in AC.qb
+SQ-BBQ2-05,BATCH-FAULT,lost-setup,fixed-in-qb,"bot c2b never spawned (the r1113 c2_a1 setup row SQ-C2-00 was not migrated into BBQ2.qb); every pbot verb logged no such bot, useitem never ran; spawn step added to the row"
+SQ-ROLL-11,BATCH-FAULT,lost-setup,fixed-in-qb,"bot c2b never spawned (the r1113 c2_a1 setup row SQ-C2-00 was not migrated into BBQ2.qb); every pbot verb logged no such bot, useitem never ran; spawn step added to the row"
+SQ-SALT2-06,BATCH-FAULT,lost-setup,fixed-in-qb,"row held only the checks: the ice/snow/salt build, bots and randomTickSpeed 1000 wait were in r1115 setup rows P3-00/P3-01 (not migrated); zmelt probe retired; salt nested jar now -04. Row made self-c"
+SQ-BBQW-02,BATCH-FAULT,lost-setup,fixed-in-qb,"bot c6b never spawned (no such bot) and 302,-60,370 unloaded (forceload add first); rowfix-1 already added forceload + spawn; rerun"
+SQ-BBQW-03,BATCH-FAULT,lost-setup,fixed-in-qb,"bot c2b never spawned (no such bot) and 310,-59,370 unloaded; rowfix-1 already added forceload + spawn; rerun"
+SQ-BREED-03,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,"flat-world fixture at y -60 ran in the group B normal world (underground, fill opened caves, 0 bees in all four zc4 readings, hives Bees []); row moved to @group A; rerun"
+SQ-CAL-01,BATCH-FAULT,correct-answer,fixed-in-qb,bootexpect wanted the moved-keys WARN that the 2026-11-03 migration removed (@pass says no WARN; instance has no creativeengineering-common.toml); now bootreject; loaded line present
+SQ-CAL-04,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"row ran /cetime, renamed /ccaltime (plan_owner_ids); Unknown or incomplete command x3; reject 'Unknown command' never matched that text; commands and reject fixed; [time] Better Days push line present"
+SQ-CAL-05,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale /cetime (now /ccaltime) and bare /season (now season get); fixed in CAL.qb, TD.qb, SPF.qb, IDS.qb; FAIL: /cetime date and bare /season: Unknown or incomplete command (renamed /ccaltime; Serene S"
+SQ-CAL-07,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale /cetime (now /ccaltime), month never moved; fixed in CAL.qb; FAIL: /cetime date add 1 month: Unknown or incomplete command (renamed /ccaltime); wine time printed twice unchanged"
+SQ-CBA-03,BATCH-FAULT,reduced-modset,not-fixed,"CBA section needs the port_chain.sh chain boot (CEPortTesting jars); the step booted the full pack, where the optional mods are present (alexsmobs loaded, so lava_vision.js is not skipped)"
+SQ-CBA-04,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale check: [effects] / [magic_resistance] / copper moved to creativecommon / creativeequipment tomls 2026-11-06; CB file has [members] [alcohol]; row fixed
+SQ-CBA-05,BATCH-FAULT,reduced-modset,not-fixed,"CBA section needs the port_chain.sh chain boot (CEPortTesting jars); the step booted the full pack, where the optional mods are present (better_beacons present, so long_reach is registered)"
+SQ-CBA-06,BATCH-FAULT,reduced-modset,not-fixed,"CBA section needs the port_chain.sh chain boot (CEPortTesting jars); the step booted the full pack, where the optional mods are present (Create Central Kitchen present: re-added 138 dragon-breath brew"
+SQ-CBA-10,BATCH-FAULT,reduced-modset,not-fixed,"CBA section needs the port_chain.sh chain boot (CEPortTesting jars); the step booted the full pack, where the optional mods are present (51 of 51 drinks in the full pack, the chain expects 42 of 44)"
+SQ-CBA-11,BATCH-FAULT,multi-boot,not-fixed,"multi-boot row: needs a restart with [members] vinery = false, never made"
+SQ-CBA-12,BATCH-FAULT,multi-boot,not-fixed,"multi-boot row: needs a restart with brewinandchewin = false, never made"
+SQ-CBA-13,BATCH-FAULT,multi-boot,not-fixed,"multi-boot row: needs a new OUT with NOUPSTREAM=vinery_upstream (server must stop), never made"
+SQ-CBA-14,BATCH-FAULT,multi-boot,not-fixed,"multi-boot row: needs a new OUT with kubejsdelight / SereneSeasons / morejs dropped, never made"
+SQ-CBA-17,BATCH-FAULT,reduced-modset,not-fixed,"[raw] winemaker 34 here and 34 in step 8; both steps booted the full pack, so there is no chain count to compare (port_chain.sh boot needed)"
+SQ-CBA-18,FAIL,real-bug,not-fixed,ported structure datapacks counted as absent mods; tag_helper drops their structure tag entries (j3 finding 1)
+SQ-RDX-13,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"@group old save: needs a pre-2026-11-02 save with rusticdelight:pancake / fried_dough; fresh world, chest and plate absent (That position is not loaded, state air)"
+SQ-CP-01,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale ids (2026-11-09 namespace moves): recipe is creativedelight:createmilling/seeds_bone_meal, tag creativedelight:millable_seeds; fixed"
+SQ-RW-23,BATCH-FAULT,stale-id-or-command,fixed-in-qb,run-log copy in SALT.qb plus stale namespace (creativecommon:smokable); copy marked @superseded
+SQ-SB-01,BATCH-FAULT,correct-answer,not-fixed,"SB.qb expects [spawn-boxes] 15 box(es); game printed 17 (s102); SALT copy superseded, SB.qb not updated"
+SQ-SPF-01,BATCH-FAULT,correct-answer,fixed-in-qb,"Creative Common builds no recipes under creativecommon: (0 in the 2026-11-15 dump, by design); probe now creativeequipment: and creativedelight:"
+SQ-SPF-10,BATCH-FAULT,multi-boot,not-fixed,"moss patch is the boot-0 fixture (multi-boot), not built in this single boot"
+SQ-SPF-100,BATCH-FAULT,multi-boot,not-fixed,"[raw] fixture chest not built in this single boot (boot-0 fixture): 'not a block entity', bot use FAIL; multi-boot fixture, not rebuilt (judge-12)"
+SQ-SPF-11,BATCH-FAULT,stale-id-or-command,fixed-in-qb,no creativecompat:physics/burns_to_charcoal tag exists (fireproof / lavaproof / floats / sinks); probe now physics/fireproof; fire moved onto netherrack (the oak log was still Count 4 after 15 s)
+SQ-SPF-12,INCONCLUSIVE,harness/tool,not-fixed,[raw] pbot path 25 ticks to x=25 on asphalt and on grass alike: perfBot path moves at a fixed rate (known r1106spf); walk speed is the client row CQ-SPF-02 (judge-12)
+SQ-SPF-13,BATCH-FAULT,other,fixed-in-qb,[raw] both kills 'No entity was found': at the default 2 s pace the shrapnel is gone (row text wants pace 0.05); entity id now creativecompat:shrapnel; row fixed (judge-12)
+SQ-SPF-21,BATCH-FAULT,lost-setup,fixed-in-qb,crops filled onto superflat grass with no farmland (fixture farmland row lost): ages n=0; row now lays farmland first
+SQ-SPF-31,BATCH-FAULT,multi-boot,not-fixed,"needs the b1n boot without Devtools (multi-boot); this boot has Devtools, so /dumpall ran"
+SQ-SPF-50,BATCH-FAULT,multi-boot,not-fixed,"[in rerun.txt but setup/boot still missing] fixture chest not built (boot-0 fixture) and stale creativeengineering: ids (shield, stepstools, dragon_gear, elytra_chestplates, bonemeal_charms, needs_copper_tool are creativeequipment:); ids fixed"
+SQ-SPF-52,BATCH-FAULT,stale-id-or-command,fixed-in-qb,[raw] 'Unknown item creativeengineering:red_stepstool' (now creativeequipment:); row fixed (judge-12)
+SQ-SPF-61,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"no plate_block_iron item (plate blocks are <metal>_plate_block, no iron); probe now steel_plate_block"
+SQ-SPF-82,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale creativeengineering:millable_seeds (the tag is creativedelight:millable_seeds, 33 items); already fixed in SPF.qb"
+SQ-SPF-83,BATCH-FAULT,harness/tool,fixed-in-qb,"[raw] fluid half PASS (chorus_juice, egg_solution -> creativedelight:); composter level unread: data get on a composter (no block entity); row now tests composter[level=0] (judge-12)"
+SQ-SPFX-02,BATCH-FAULT,correct-answer,fixed-in-qb,expect tomato_sauce cannot match: rdetail prints no filling fluid (known r1106spfx); expect removed
+SQ-SPFX-03,BATCH-FAULT,correct-answer,fixed-in-qb,bootexpect 'zz_probe_empty_fluid: skipped' wrong since r1106spfx (NCH skips quietly) and the probe line is in kubejs/server.log; now checks the recipe list
+SQ-SPFX-06,BATCH-FAULT,harness/tool,fixed-in-qb,bootreject 'is not validated' too wide (r1106spfx: row text too wide); narrowed to dict lines
+SQ-GT-31,BATCH-FAULT,stale-id-or-command,fixed-in-qb,felsic config moved to config/creativeequipment-common.toml (no creativeengineering-common.toml since the split); shell paths fixed
+SQ-NCH-01,INCONCLUSIVE,harness/tool,fixed-in-qb,"[raw] creativeengineering:smelting/dust_wood_to_ash_by_smelting exists (s105 dump); furnace read 14 s after Done: coal gone (lit), dust_wood x1 unsmelted, server 264 ticks behind at 12:13:57; row now "
+SQ-STL-02,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stepstools tag moved to creativeequipment:stepstools (16 in the dump); row fixed
+SQ-STN-03,BATCH-FAULT,lost-setup,fixed-in-qb,"That position is not loaded class: 'unloaded 300,-60,340 (forceload add first)'; forceload added to the row"
+SQ-STN-06,BATCH-FAULT,lost-setup,fixed-in-qb,"'unloaded 304,-59,340 (forceload add first)'; forceload added to the row"
+SQ-CBB-01,BATCH-FAULT,reduced-modset,not-fixed,"CBB section needs the port_chain.sh chain / cooking boot; the step booted the full pack (full pack removes 1255, the chain under 500)"
+SQ-CBB-02,BATCH-FAULT,harness/tool,fixed-in-qb,"nch_guard_probe.js was never copied into server_scripts (a load-time probe, no root command, so install_probes skips it); @@prep A: copy added to CBB.qb (driver restart needed)"
+SQ-CBB-03,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale tag ids: creativeengineering:bark / metal_dusts are creativecommon: since 2026-11-09 and bark no longer holds tree_bark; the Couldn't load tag match is creategoggles' mekanism tag; row fixed
+SQ-CBB-07,BATCH-FAULT,reduced-modset,not-fixed,chain boot missing; also correct-answer: 44 of 44 -> 51 of 51 (expect now N of N; title/@pass still 44)
+SQ-CBB-08,BATCH-FAULT,reduced-modset,not-fixed,CBB section needs the port_chain.sh chain / cooking boot; the step booted the full pack (cooking set removes under 600; the full pack 1255)
+SQ-SY-14,BATCH-FAULT,correct-answer,fixed-in-qb,boot line reads 35 crops (r1115 found the same and fixed the row; the fix was lost in the move to SY.qb); regexes now 35
+SQ-SY-15,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] That position is not loaded: no forceload at x 1000 z 1000 (only SQ-SY-21 had one); syt rolls read air; forceload added (judge-12)
+SQ-SY-16,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] That position is not loaded: no forceload at x 1000 z 1000 (only SQ-SY-21 had one); syt rolls read air; forceload added (judge-12)
+SQ-SY-17,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] That position is not loaded: no forceload at x 1000 z 1000 (only SQ-SY-21 had one); syt rolls read air; forceload added (judge-12)
+SQ-SY-18,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] That position is not loaded: no forceload at x 1000 z 1000 (only SQ-SY-21 had one); syt rolls read air; forceload added (judge-12)
+SQ-SY-19,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] That position is not loaded: no forceload at x 1000 z 1000 (only SQ-SY-21 had one); syt rolls read air; forceload added (judge-12)
+SQ-SY-20,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] That position is not loaded: no forceload at x 1000 z 1000 (only SQ-SY-21 had one); syt rolls read air; forceload added (judge-12)
+SQ-SY-21,FAIL,real-bug,not-fixed,"Botany Pots growth times unscaled (regression since r1115, j12 finding 1)"
+SQ-TD-05,BATCH-FAULT,stale-id-or-command,fixed-in-qb,shell grepped '[time] /cetime date' (command renamed /ccaltime); the log has 9 '[time] /ccaltime date' lines (>= 8); fixed
+SQ-TP-03,BATCH-FAULT,multi-boot,not-fixed,"after-restart row: the locations are saved by SQ-TP-04, which runs after it, and the restart is a second boot (multi-boot); locs before the Tempad was held: ctx null"
+SQ-TP-04,BATCH-FAULT,other,not-fixed,"[in rerun.txt but setup/boot still missing] the 100-tick walk took the bot through the Far East door and 12 blocks back west (end x 17.7; door pair 0.5,3.5 <-> 30.5,-0.5 logged): walk now 20 ticks; cd false after the API open (ztp open = openTi"
+SQ-TP-05,BATCH-FAULT,multi-boot,not-fixed,"after-restart row: the pinned locationId array is the r1107 world's UUID and the pin is set in an earlier boot (multi-boot); macro sent but no pin, 0 doors; the probe's settings print threw (getTag), "
+SQ-TP-06,BATCH-FAULT,multi-boot,not-fixed,"needs require_location_upgrade = true (config fixture boot); the toml here has false, so New Location shows without the upgrade and its recipe is absent"
+SQ-TP-22,BATCH-FAULT,lost-setup,fixed-in-qb,'open no location named Far East / Hell Spot': the SQ-TP-04 saves live in step s112's world; row now saves its own locations
+SQ-TP-27,BATCH-FAULT,harness/tool,fixed-in-qb,count 'Gave 1 \[' misses 'Gave 1    [' (21 Gave lines present); reject 'Unknown item' hit Biomes O' Plenty recipe parse errors; reject 'ingredients=...empty' hits blank shaped cells; three checks fixe
+SQ-TP-28,BATCH-FAULT,lost-setup,fixed-in-qb,'Far East' location from SQ-TP-04 is in another step's world (0 opens); row now saves its own; generator -> cell 0 -> 51 and cell + battery -> Tempad 4000 seen
+SQ-TP-30,BATCH-FAULT,multi-boot,not-fixed,"config fixture boot (r1107tp a3: capacity 2000, cost 10, door life 100 toml) and the SQ-TP-04 locations; not rebuilt"
+SQ-TPF-11,BATCH-FAULT,lost-setup,fixed-in-qb,"false pass: server had spawn-animals=false (ServerLevel discards animals a tick later, gotchas.md); section now has @@prep spawn-animals=true spawn-npcs=true, so the cow was gone either way"
+SQ-TPF-12,BATCH-FAULT,lost-setup,fixed-in-qb,"chicken gone (No entity was found): server had spawn-animals=false (ServerLevel discards animals a tick later, gotchas.md); section now has @@prep spawn-animals=true spawn-npcs=true"
+SQ-TPF-14,BATCH-FAULT,lost-setup,fixed-in-qb,"wolf gone (No entity was found): server had spawn-animals=false (ServerLevel discards animals a tick later, gotchas.md); section now has @@prep spawn-animals=true spawn-npcs=true"
+SQ-TPF-15,BATCH-FAULT,lost-setup,fixed-in-qb,"0 striders 4 s after 150 summons: server had spawn-animals=false (ServerLevel discards animals a tick later, gotchas.md); section now has @@prep spawn-animals=true spawn-npcs=true"
+SQ-NS-01,BATCH-FAULT,other,fixed-in-qb,item replace block answers 'is not a container' (the storage is an item-handler capability); row now feeds the sugar from a hopper above
+SQ-TSK-02,BATCH-FAULT,other,fixed-in-qb,"[raw] FD vine at -10 -59 not climbed (first execute failed), Supplementaries one did; block_ticks=133 over 100 rounds: the age-3 FD vine is not randomly ticking (CropBlock max age), so attemptRopeClim"
+SQ-TSK-03,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] treated stick loot PASS (3 drops of creativedelight:blocks/treated_stick, 1 each); the revert part is untested because SQ-TSK-02's FD vine never climbed (tomato loot came from the base vine) (ju"
+SQ-TX-02,BATCH-FAULT,lost-setup,fixed-in-qb,forceload lived only in the section text (That position is not loaded / unloaded ... forceload add first); row now forceloads 896 880 1007 927
+SQ-TX-03,BATCH-FAULT,lost-setup,fixed-in-qb,chest of SQ-TX-02 never placed: forceload lived only in the section text (That position is not loaded / unloaded ... forceload add first); row now forceloads 896 880 1007 927
+SQ-TX-04,BATCH-FAULT,lost-setup,fixed-in-qb,"wheat field fill not loaded (n=0, skipped_columns=256): forceload lived only in the section text (That position is not loaded / unloaded ... forceload add first); row now forceloads 896 880 1007 927"
+SQ-TX-09,BATCH-FAULT,harness/tool,fixed-in-qb,attrs line is item=minecraft:diamond_sword*1{Damage:0} n=2: regex lacked the NBT; now \*1\S* n=
+SQ-TX-10,BATCH-FAULT,lost-setup,fixed-in-qb,forceload lived only in the section text (That position is not loaded / unloaded ... forceload add first); row now forceloads 896 880 1007 927
+SQ-TX-13,BATCH-FAULT,other,fixed-in-qb,golem at full health refuses the ingot (result=PASS); r1116 had SQ-TX-12's hits; row now sets golem Health 50
+SQ-VS-03,BATCH-FAULT,other,fixed-in-qb,age-0 weeping vine never grew (changed=7 all poppy) with no ceiling though the row's setup names one; SQ-VS-02 now places stone above both vines (rerun decides; a second FAIL is real)
+SQ-WC-05,INCONCLUSIVE,other,fixed-in-qb,"[raw] farmland part PASS (9 replaced at moisture 7, WaterLevel 15); mulch: 0 blocks at moisture=1 and no state recorded; row now reads the mulch state (judge-13)"
+SQ-WCT-03,BATCH-FAULT,other,fixed-in-qb,"[raw] lower half: WaterLevel 12, tank 3000 before and after with one 1000 mB refill between the reads (FillTick 91 -> 66, 10 s): drain likely but not isolated; roof: setblock placed only the lower hal"
+SQ-WCT-05,HARNESS,harness/tool,not-fixed,"rdetail prints ingredients=- for smithing (UpgradeRecipe base/addition not read), so /golden_watering_can/ cannot match; recipes.js line 20 has golden base + diamond; tool fix passed up"
+SQ-WO-05,BATCH-FAULT,other,fixed-in-qb,"tree state=none after 600 night ticks; BE randomTick fires 1 in 21 every 23 ticks (mean 483), 600 misses it 28 percent; tickwarps now 2400"
+SQ-WO-14,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-15,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-16,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-19,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-20,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-21,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-22,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-26,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-27,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-28,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-29,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A2 config (sleep/anger 5 s, chance 100) never applied, shared A1 boot ran defaults (sleepDurationSeconds 300, chancePercent 5)"
+SQ-WO-31,BATCH-FAULT,multi-boot,not-fixed,false pass: A3 (chancePercent 0) never applied; defaults (5 percent) rarely gift anyway
+SQ-WO-32,BATCH-FAULT,multi-boot,not-fixed,"multi-boot: A4 gift lists (bad id, empty lists) never applied, defaults ran"
+SQ-WO-33,BATCH-FAULT,multi-boot,not-fixed,false pass: A5 (all lists empty) never applied; defaults with 5 percent chance
+SQ-WO-37,BATCH-FAULT,multi-boot,not-fixed,"[raw] needs its own boot under strace (boot S); ran in the shared A1 boot, no wo_net.txt (judge-13)"
+SQ-WO-36,BATCH-FAULT,multi-boot,not-fixed,"multi-boot B: {C1},{C3} captured by SQ-WO-35, outside the step selection; tree_rarity setup not applied; placeholder C1, C3, C1, C3 unset (no capture in this batch, not in RES/vars.json); placeholder "
+SQ-EF-01,BATCH-FAULT,harness/tool,fixed-in-qb,"earth fill overrides and log ALL never applied (only in @commands text); 2nd 'waitlog Task finished' matched the 1st Chunky task, row ended 4 s into the savanna square. Now own section 2 with @@prep t"
+SQ-EF-09,BATCH-FAULT,harness/tool,fixed-in-qb,log ALL not set (pruned lines print only at ALL); its Chunky start hit EF-01's still-running savanna task and its waitlog matched that one (729 chunks). @@prep toml added
+SQ-FTW-03,BATCH-FAULT,multi-boot,not-fixed,"pair section: ftw_off boot and eval seed not set up (multi-boot, not rebuilt); ftw_on half saved 0 entities, nothing to compare"
+SQ-GAP-03,BATCH-FAULT,harness/tool,fixed-in-qb,"region scan read the stale world r1113c4b (0 chunks, silent); 5 files with forge:none part is fine. Level now @; region_blocks exits 2 on a missing region folder"
+SQ-MD-01,BATCH-FAULT,correct-answer,fixed-in-qb,expected '3 mod modifiers off' is stale (Miner's port ships no cave_carrots modifier; log says 2); region scan read the stale world cdj5b (0 chunks). Both fixed
+SQ-TER-05,BATCH-FAULT,lost-setup,fixed-in-qb,beardFootprint = true and log ALL never applied (only in @commands text). Own section 2 with @@prep toml
+SQ-CBC-01,BATCH-FAULT,correct-answer,fixed-in-qb,"stale count: CD transition items 104 (row wanted exactly 89, the list grew); 0 incomplete-item errors; row now 89 or more"
+SQ-CBC-03,BATCH-FAULT,reduced-modset,not-fixed,"chain threshold on the full pack: 91 failed recipes are third-party conditional recipes KubeJS parses anyway (create compat for absent BOP / BYG, railways, dramaticdoors, create_confectionery), none o"
+SQ-CBC-05,BATCH-FAULT,multi-boot,not-fixed,"multi-boot row: needs a new OUT with NOUPSTREAM=vinery_upstream, never made"
+SQ-CAL-06,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,stale tag #creativeengineering:seasons/arid (now creativecalendar:) and a locate biome on the one-biome flat world; now /zq biometag; temperate and glass tags passed
+SQ-CBC-06,BATCH-FAULT,reduced-modset,fixed-in-qb,"Geophilic Reforged never dropped (chain set not built) and the driver waits for Done; own section 2 with @@prep B: rm, qdrive runs all-bootreject-Done steps on the failed boot"
+SQ-CM-09,BATCH-FAULT,harness/tool,fixed-in-qb,"@group 'new world' ran on the superflat (driver took the first letter): no desert; locate had no waitlog. Group B, waitlog added; qdrive world_letter fix; capture D: no line matches /is at \[(-?\d+), "
+SQ-CS-09,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,@group 'server' ran on the superflat: no flower_forest. Group B
+SQ-CS2-01,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"boot 1 of an old-jar fixture (creative_delight: ids unknown on current jars, village locate on the flat world); multi-boot legacy fixture, not rebuilt; capture V: no line matches /is at \[(-?\d+), (~/"
+SQ-EF-08,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale meta ids creativeengineering:meta/* ('no structure with type'); now creativeworldgen:meta/*; meta log true via @@prep
+SQ-EF-11,BATCH-FAULT,lost-setup,fixed-in-qb,sent celocate (already renamed cwglocate in the rows) and idled 2400 s; log ALL missing for the 'under 9 water' and predicted lines (@@prep added); waitlog tightened to '[cwglocate] census done'
+SQ-FCK-07,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,"@group A: plains count on the superflat (0 glow lichen, plains at 0 -60 0). Group B (fresh world)"
+SQ-FCK-08,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,"@group A: no desert on the superflat, capture DS unset. Group B (fresh world); capture DS: no line matches /minecraft:desert is at \[(-?\d+), (~/-?\d+), (-?\d+)\]/; placeholder DS1, DS3, DS1, DS3 unse"
+SQ-CBC-04,FAIL,real-bug,not-fixed,same absent-mods datapack bug as CBA-18; also sequenced count 296 stale (314 now)
+SQ-HCS-04,BATCH-FAULT,harness/tool,fixed-in-qb,"row ended 48 s in while six 169-chunk forceloads still held the console (villages generated later), and the scan read the stale world 'world'. waitlog per village, level @"
+SQ-HH-319,FAIL,unjudged,not-fixed,"no judge covered this step; no line matches /Placed ""hearthandharvest:salt_cave""/; open look 1: shell shows saltCaves true, rarity 1, MinY 0, MaxY 0; cave_air above 1000 (a carve below y 17 means the or"
+SQ-HH-320,FAIL,unjudged,not-fixed,"no judge covered this step; no line matches /Failed to place feature/; open look 1: shell shows saltCaves = false, cornMaze = false; `Failed to place structure` (or the generic failure) for the maze; ca"
+SQ-HH-328,FAIL,unjudged,not-fixed,"no judge covered this step; no line matches /\[cdevtest\] verb=under id=hearthandharvest:corn_maze/; open look 1: locate time and candidates ([locate] line); corn_crop > 100, oak_fence 16, a chest with "
+SQ-HR-05,FAIL,unjudged,not-fixed,no judge covered this step; boot log: no line matches /\[wild-crops\].*raspberry/; no line matches /verb=count block=hearthandharvest:raspberry_bush n=[1-9]/; /\[cdevtest\] .*done=0/ matched: [18Nov2026
+SQ-IDS-02,FAIL,stale-id-or-command,not-fixed,"unjudged; diagnosed here: the old-name list now holds the new names ccaltime and cwglocate (rename sweep hit the row), so 7 unknowns, not 8; old names should be cetime / celocate"
+SQ-IWF-03,LOOK,unjudged,not-fixed,"no judge covered this step; open look 1: the counts (two y bands per block; the random ticks go through the level's chunk tick on purpose: that is the IW sky-tick path, so no /cdevtest randomtick here)"
+SQ-META31-01,LOOK,unjudged,not-fixed,no judge covered this step; open look 1: meta count 13 higher than the 2026-10-30 W30 boots (perf/sessions or the WG30 rows' logs)
+SQ-META31-08,FAIL,stale-id-or-command,fixed-in-qb,unjudged FAIL; listed in rerun.txt (meta id / worldgen row fixes)
+SQ-META31-09,HARNESS,unjudged,not-fixed,"no judge covered this step; placeholder SM1, SM3 unset (no capture in this batch, not in RES/vars.json); placeholder SM1, SM3 unset (no capture in this batch, not in RES/vars.json); placeholder SM1, SM3"
+SQ-CDW-01,FAIL,unjudged,not-fixed,no judge covered this step; shell exit 1: ; boot log: no line matches /\[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): \[[^]]*myrtrees[^]]*\]/; open look 1: the level is
+SQ-CDW-02,FAIL,harness/tool,fixed-in-qb,"unjudged FAIL; rerun.txt: count box over the 262144-block cdevtest limit, shrunk"
+SQ-CDW-03,FAIL,unjudged,not-fixed,no judge covered this step; shell exit 1: ; shell exit 1: ; open look 1: exactly the one line `rubber: needs myrtrees`; other [wild-flowers] / mob spawn skip lines naming myrtrees are not this row's (ju
+SQ-CDW-03b,FAIL,unjudged,not-fixed,"no judge covered this step; shell exit 1: ; open look 1: 17 ""<rule>: needs fruitsdelight"" lines, none naming a fruitsdelight: feature; no apple skip line"
+SQ-MIN-01,LOOK,unjudged,not-fixed,"no judge covered this step; open look 1: tag id is creativecalendar:seasons/arid (row: creativeengineering:seasons/arid, before the 2026-11-09 namespace move)"
+SQ-MIN-03,HARNESS,unjudged,not-fixed,no judge covered this step; shell exit 1: ; open look 1: none of the five lines; no ERR hit in the row list
+SQ-MIN-07,LOOK,unjudged,not-fixed,"no judge covered this step; open look 1: the `loot spawn` reply lines (""Dropped N items"" or the item list) differ between river and ocean per the table's biome_tag conditions (read the table creativedel"
+SQ-NSM-06,LOOK,unjudged,not-fixed,"no judge covered this step; open look 1: no minecraft:air rows from our namespaces, --left lists nothing moved"
+SQ-CBJ4-02,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,legacy-config fixture section (CE->CB config merge of 2026-11-01) not staged; qa bot and {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids and jar paths stale since the 2026-11-0
+SQ-CBJ4-03,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,legacy-config fixture section (CE->CB config merge of 2026-11-01) not staged; qa bot and {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids and jar paths stale since the 2026-11-0
+SQ-CBJ4-04,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,[raw] legacy-config fixture (CE->CB merge of 2026-11-01) not staged; qa bot / {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids stale
+SQ-CBJ4-05,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,legacy-config fixture section (CE->CB config merge of 2026-11-01) not staged; qa bot and {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids and jar paths stale since the 2026-11-0
+SQ-CBJ4-06,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,legacy-config fixture section (CE->CB config merge of 2026-11-01) not staged; qa bot and {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids and jar paths stale since the 2026-11-0
+SQ-CBJ4-07,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,legacy-config fixture section (CE->CB config merge of 2026-11-01) not staged; qa bot and {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids and jar paths stale since the 2026-11-0
+SQ-CBM-02,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale ids (creativeengineering:potion_bucket / magic_resistance / long_reach are creativebrewing: / creativecommon: since 2026-11-09) and qa never spawned (lost cs4_boot3 setup); row fixed
+SQ-CBM-04,BATCH-FAULT,correct-answer,fixed-in-qb,expected counts from 2026-11-01: rare 37 now (the owner's own play log says 37 too); winemaker 34 as expected; row now checks the pools fill
+SQ-CBO-01,BATCH-FAULT,reduced-modset,not-fixed,CBO chain row: needs the port_chain.sh chain boot (no optional mod); the step booted the full pack (24 of 24 optional mods)
+SQ-CBO-02,BATCH-FAULT,reduced-modset,not-fixed,CBO chain row: needs the port_chain.sh chain boot (no optional mod); the step booted the full pack (24 of 24 optional mods)
+SQ-CBO-03,BATCH-FAULT,reduced-modset,not-fixed,"[raw] step booted the full pack; the chain reference (port_chain.sh chain boot) was never made, so nothing to record or compare"
+SQ-CBO-04,BATCH-FAULT,reduced-modset,not-fixed,[in rerun.txt but setup/boot still missing] CBO chain row: needs the port_chain.sh chain boot (no optional mod); the step booted the full pack (24 of 24 optional mods); the Exception filter also caught third-party railways loot-table and redeco
+SQ-CBO-05,BATCH-FAULT,reduced-modset,not-fixed,needs a chain boot with [magic_resistance] reductionPerLevel 0.5 staged; not made
+SQ-CBO-10,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale namespace regex: the Armor / Tool Effects items moved to Creative Equipment 2026-11-06 (items now creativeequipment, dragonloot, everythingcopper, felsic_gear, immersive_armors, minecraft); row "
+SQ-CBO-11,BATCH-FAULT,correct-answer,fixed-in-qb,only the '44 of 44' drink check failed: 51 of 51 now; row now N of N; comparison look needs the chain reference
+SQ-CBO-17,BATCH-FAULT,harness/tool,fixed-in-qb,"Exception filter caught third-party railways loot-table and redeco tag errors after reload, none ours; filter widened"
+SQ-CBO-18,BATCH-FAULT,multi-boot,not-fixed,"multi-boot row: needs a restart with both members off, never made"
+SQ-CBO-20,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-21,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-22,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-23,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-24,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-25,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-26,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-27,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-28,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-29,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-30,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-31,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-32,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-33,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-34,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-35,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-36,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-37,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-38,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-39,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-40,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-41,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-42,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-43,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-50,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-51,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-52,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBO-53,BATCH-FAULT,reduced-modset,not-fixed,single / pair optional-mod boot (port_chain.sh chain ADD=...) never made; the full pack loads 24 of 24
+SQ-CBP-01,BATCH-FAULT,reduced-modset,not-fixed,"chain row (port_chain.sh chain set) ran on the full pack: no absent-mod loot tables to leave out; the 135 loot errors are all railways:blocks/track_twilightforest_* (Steam 'n' Rails, third-party, sinc"
+SQ-CBP-04,BATCH-FAULT,reduced-modset,not-fixed,"chain + IW row ran on the full pack: no absent compat folder, so no [compost] skipped line; no immersive_weathering: missing-item line either; mod-set setup not rebuilt"
+SQ-CBP-05,BATCH-FAULT,correct-answer,fixed-in-qb,"hard-coded removed 1328 from 2026-11-06; pack now removes 1255; absent-mods once per load, 0 Empty array; expect now removed 1[0-9]{3}"
+SQ-CBP-06,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"needs a world saved on the pre-2026-11-06 builds (entity mrold, tank at 0 -61 6, dispensers); fresh scratch world has none, so the data gets found nothing; legacy fixture not rebuilt"
+SQ-CC-03,BATCH-FAULT,reduced-modset,not-fixed,ran on the full pack (379 mods) not the Common+Compat+Calendar folder; match is Sodium WorldSlice optional-class WARN from a third-party mixin; mod-set setup not rebuilt
+SQ-CC-04,BATCH-FAULT,reduced-modset,not-fixed,"needs the generated default config of the CC-03 minimal folder; ran on the pack config (pack lists, advancements off); mod-set setup not rebuilt"
+SQ-CC-06,BATCH-FAULT,harness/tool,fixed-in-qb,"cc_dict_probe.js never copied (no command root, so install_probes skips it; srv held only zz_cl_probe.js, 0 [ccdict] lines); CC.qb now @@prep A: copy of the probe"
+SQ-CC-10,BATCH-FAULT,other,fixed-in-qb,"MCA overwriteOriginalVillagers replaced the summoned NoAI villagers (No entity was found, entities n=0) so captures stayed unset; row now uses NoAI cows; capture HMRP: no line matches /verb=entities t"
+SQ-CC-11,BATCH-FAULT,multi-boot,not-fixed,"the removed = [minecraft:slowness] toml edit in @commands needs its own boot (pack list kept: shell grep failed, slowness applied as expected for the pack config); multi-boot, not fixed"
+SQ-CC-14,BATCH-FAULT,correct-answer,fixed-in-qb,row expected 30 offers; Quark adds a Pathfinder's Quill to every trader so 25+5 config gives 31 (seen 31); advancements off held; expect now 31
+SQ-CC12-01,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the checks ran on the w"
+SQ-CC12-02,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the checks ran on the w"
+SQ-CCO-01,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the checks ran on the w"
+SQ-CCO-02,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the checks ran on the w"
+SQ-CCO-03,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the checks ran on the w"
+SQ-CCO-04,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the look would judge th"
+SQ-CCO-05,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the look would judge th"
+SQ-CCO-07,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the look would judge th"
+SQ-CCO-09,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the look would judge th"
+SQ-CCO-10,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the checks ran on the w"
+SQ-CCO-11,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the look would judge th"
+SQ-CCO-12,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the checks ran on the w"
+SQ-CCO-14,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the look would judge th"
+SQ-CCO-15,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the look would judge th"
+SQ-CCO-16,BATCH-FAULT,reduced-modset,not-fixed,"section needs cc_only_srv.sh (Common + KubeJS stack + optional mods only, emptied config/kubejs); the driver booted the full pack (379 mods, all Creative jars, pack config), so the checks ran on the w"
+SQ-CDFL-03,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,needs an old-id save made on the previous CD/Common jars with tanks at 0 -61 0 / 0 -61 3; fresh world has no tank (data get found nothing); legacy fixture not rebuilt
+SQ-CDFW-10,BATCH-FAULT,harness/tool,fixed-in-qb,"row grepped 'Loaded script startup_scripts:_lib/tool_dict.js'; the dicts load from Common's jar (creativecommon:creativecommon/_lib/tool_dict.js, both loaded); path fixed"
+SQ-CDFW-11,BATCH-FAULT,harness/tool,not-fixed,"row has no > dumpall, so cd_move_diff read the instance's copied 2026-11-15 dump against the stale 2026-10-30 snapshot (3863 LOST); spot checks: LOST Veggies ids are later deliberate reroutes (zucchin"
+SQ-CDJ-09,BATCH-FAULT,correct-answer,fixed-in-qb,"members regex wanted 20 ids, CD now has 21 (goldenfood); '! ls mods / grep -i backported' hit backportedTempad (not a CD member); both fixed; five port gives worked"
+SQ-CDJ-10,BATCH-FAULT,multi-boot,not-fixed,"CDJ5 Boot 2 needs [members] displaydelight = false in the srv CD toml; the driver booted with it true (awk check failed); multi-boot, not rebuilt; members regex updated to 21 ids"
+SQ-CDJ-11,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"CDJ5 Boot 0 needs the five displaced pre-nest jars copied into srv/mods; the driver ran one full-pack boot (0 'is loaded from ... backported' lines); multi-boot legacy fixture, not rebuilt"
+SQ-DDP-06,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"needs an un-moved config/displaydelight-common.toml (Boot 1 of CDJ5); the srv config was copied already moved (.moved files present, no carry line, takeAll = true from the current pack config); legacy"
+SQ-MDP-17,BATCH-FAULT,multi-boot,not-fixed,"CDJ5 Boot 3 removes the srv miners_upstream symlink so startup stops; the driver kept it (server reached Done (10.3s)), so the missing-donor lines never print; multi-boot, not rebuilt"
+SQ-CDJ4-02,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"needs the old [canning]/[perf] sections put back in the scratch creativeengineering-common.toml (section text); config copied already merged, so no [swaps] merge line; legacy-config fixture, not rebui"
+SQ-CDJ4-03,BATCH-FAULT,correct-answer,not-fixed,"premise obsolete: Baby Mobs now nests in Creative Worldgen (builds line babymobs 1.1.0) and Incubation Additions was folded into CD compartments (M8), so CD members end with goldenfood; not fixed (row"
+SQ-CDJ4-04,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"{H} home capture never set (setblock parse error) and creativeengineering:oven moved to creativedelight:oven on 2026-11-09 (Unknown item); fixed: fixed coords 8 -60 8, creativedelight ids, qa spawned"
+SQ-CDJ4-07,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"recipes filter creativeengineering:lunchbox found n=0 (now creativedelight:lunchbox/ and creativedelight:shaped/*lunchbox*), qa never spawned (No player was found); fixed: filter lunchbox with expect "
+SQ-CDNS-10,BATCH-FAULT,correct-answer,fixed-in-qb,"row rejected result=empty for all creativedelight ids but the 11 shapeless/season/* are SeasoningRecipe (CustomRecipe, result from the grid) and wanted 13 block drops though powdered_sugar_block exten"
+SQ-CDS-01,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"creativeengineering:cow_sample_syringe moved to creativedelight: on 2026-11-09 (Unknown item) and qa never spawned; fixed: creativedelight ids, qa spawned, count Gave == 2"
+SQ-CDS-02,BATCH-FAULT,harness/tool,not-fixed,tag_diff compares creativeengineering: tag names that moved to their owning mods on 2026-11-09 (after = 0) and reads the srv copy of the instance dump (row runs no /dumptags); under the new names the 
+SQ-CDS-03,BATCH-FAULT,harness/tool,not-fixed,tag_diff compares creativeengineering: tag names that moved to their owning mods on 2026-11-09 (after = 0) and reads the srv copy of the instance dump (row runs no /dumptags); under the new names the 
+SQ-CDS-04,BATCH-FAULT,harness/tool,not-fixed,tag_diff compares creativeengineering: tag names that moved to their owning mods on 2026-11-09 (after = 0) and reads the srv copy of the instance dump (row runs no /dumptags); under the new names the 
+SQ-CDV-01,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"bootexpect named old members ceperfbot/cecapture; log has [creativedevtools] loaded, members: [cdevperfbot, cdevcapture]; row fixed"
+SQ-CDV-02,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"row ran /cegen /ceperf /ceplace (renamed /cdev*); recipescan, dumpworldjei, dumpspawns answered, spawns.json written; row fixed"
+SQ-CDV-03,BATCH-FAULT,correct-answer,fixed-in-qb,"plain /dumpall runs 20 dumps by design (worldgen 6 only with full); log: all 20 dumps done, 20/20 ok; row fixed"
+SQ-CEN-02,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"legacy-config fixture not staged: no creativeengineering-common.toml (old CE/Compat/Common tomls) in srv/config before boot, 0 [swaps] config lines; needs the c2_legacy_cfg fixture (known setup gap, r"
+SQ-CMG-02,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"legacy-config fixture not staged: no creativeengineering-common.toml (old CE/Compat/Common tomls) in srv/config before boot, 0 [swaps] config lines; needs the c2_legacy_cfg fixture (known setup gap, r"
+SQ-CFR-03,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"legacy-config fixture not staged: no creativeengineering-common.toml (old CE/Compat/Common tomls) in srv/config before boot, 0 [swaps] config lines; needs the c2_legacy_cfg fixture (known setup gap, r"
+SQ-CFR-04,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"legacy-config fixture not staged: no creativeengineering-common.toml (old CE/Compat/Common tomls) in srv/config before boot, 0 [swaps] config lines; needs the c2_legacy_cfg fixture (known setup gap, r"
+SQ-CGE-02,BATCH-FAULT,lost-setup,fixed-in-qb,first End summon right after forceload: [zgv] start the_end entities=0 (chunk not loaded); the later End drop in the same boot (SQ-CGE-06) gave 4.914 vs overworld 24.570 at t=40 = 0.20; sleep 5 added 
+SQ-CGE-05,BATCH-FAULT,multi-boot,not-fixed,"needs a stop, biome_configs [#minecraft:is_end;;-1, minecraft:plains;;] and a boot; the drive does not apply it (needs a separate boot with a cge2_run.sh config set (b2 End -1 / Nether listed, b3 Neth"
+SQ-CGE-06,BATCH-FAULT,other,fixed-in-qb,"MCA replaced the summoned villager so @e[type=villager,tag=cge06] found no entity; zombie and bot read 0.015999 (-0.8) in the End; selector fixed"
+SQ-CGE-08,BATCH-FAULT,lost-setup,fixed-in-qb,first End dropall right after forceload: entities=0 (chunk not loaded); later End dropalls in the boot hold 9 entities at 0.20 (SQ-CGE-14/15 cge_judge ratios 0.200); sleep 5 added
+SQ-CGE-09a,BATCH-FAULT,multi-boot,not-fixed,"needs a separate boot with a cge2_run.sh config set (b2 End -1 / Nether listed, b3 Nether allowed, b4 Common without Compat, b5 no Create Gravity); the drive boots b1 defaults once (multi-boot known g"
+SQ-CGE-09b,BATCH-FAULT,multi-boot,not-fixed,"needs a separate boot with a cge2_run.sh config set (b2 End -1 / Nether listed, b3 Nether allowed, b4 Common without Compat, b5 no Create Gravity); the drive boots b1 defaults once (multi-boot known g"
+SQ-CGE-14,BATCH-FAULT,multi-boot,not-fixed,"needs a separate boot with a cge2_run.sh config set (b2 End -1 / Nether listed, b3 Nether allowed, b4 Common without Compat, b5 no Create Gravity); the drive boots b1 defaults once (multi-boot known g"
+SQ-CGE-15,BATCH-FAULT,multi-boot,not-fixed,"needs a separate boot with a cge2_run.sh config set (b2 End -1 / Nether listed, b3 Nether allowed, b4 Common without Compat, b5 no Create Gravity); the drive boots b1 defaults once (multi-boot known g"
+SQ-CGE-16,BATCH-FAULT,multi-boot,not-fixed,"needs a separate boot with a cge2_run.sh config set (b2 End -1 / Nether listed, b3 Nether allowed, b4 Common without Compat, b5 no Create Gravity); the drive boots b1 defaults once (multi-boot known g"
+SQ-CIF-03,BATCH-FAULT,correct-answer,fixed-in-qb,"the item merge hands rusticdelight:coffee for farmersrespite:coffee, so the waitlog on item=farmersrespite:coffee timed out; drink finished; regex fixed"
+SQ-CIF-04,BATCH-FAULT,reduced-modset,not-fixed,"chain set (Common + Compat only, CEPortTesting) not built by the drive: full pack booted; the matched line is Sodium's WorldSlice class WARN (third-party, full pack only)"
+SQ-CM-02,BATCH-FAULT,harness/tool,fixed-in-qb,"reject 'cantaloupe_seeds ' lost its trailing space and matched cantaloupe_seeds_from_mini; the two cantaloupe popsicle recipes are creativedelight:shaped/cantaloupe_popsicle(_from_cantaloupe) now, not"
+SQ-CM-04,FAIL,real-bug,not-fixed,H&H macaroni and cheese takes FD raw pasta only (j5 finding 1)
+SQ-CM-05,BATCH-FAULT,correct-answer,fixed-in-qb,"coleslaw expect still 11 + Comfort; it is 12 + Nourishment since 2026-10-29 (SQ-CM-21 PASS, food_catalog.md); fermented garlic honey values as expected; row fixed"
+SQ-CM-06,BATCH-FAULT,correct-answer,fixed-in-qb,"reject named every sourdough->bread recipe; sourdough cutting to 3 Bread is intended (section text, item_merges.md SQ-CM-10); the matched lines are those cutting recipes; reject narrowed to oven sourd"
+SQ-CM-20,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale tag ids creativeengineering:field_salad/* (n=0); the tags are creativedelight:field_salad/* since the 2026-11-09 namespace move; row fixed
+SQ-CM-22,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale tag id creativeengineering:veggie_noodle_veg (n=0); now creativedelight:veggie_noodle_veg; row fixed
+SQ-CM-30,BATCH-FAULT,correct-answer,fixed-in-qb,fruit_beignet is no longer registered: uses answers no such item with done=0; makes n=0; row accepts that now
+SQ-CM-31,BATCH-FAULT,harness/tool,fixed-in-qb,"count regex in the old ': 0 alone, 0 with other items' wording; all 6 tentacle uses read alone=0 shared=0, makes tentacle n=0; row fixed"
+SQ-CMP-02,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"legacy-config fixture not staged: no creativeengineering-common.toml (old CE/Compat/Common tomls) in srv/config before boot, 0 [swaps] config lines; needs the c2_legacy_cfg fixture (known setup gap, r"
+SQ-CMP-05,BATCH-FAULT,lost-setup,fixed-in-qb,"{H1}/{H2}/{H3} home marker came from a lost setup row: every command ran with literal {H..} (Incorrect argument), so the fireproof item never existed; row now summons its own marker and captures H"
+SQ-CMP-06,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"lost {H} marker and qa bot, and stale ids creativeengineering:weathered_cardboard_box / misc/monster_box_reward (creativecompat: since 2026-11-09); row fixed"
+SQ-CMV-02,BATCH-FAULT,reduced-modset,not-fixed,Common-alone folder (cc_only_srv.sh) not built by the drive: full pack (379 mods) booted; the match is Sodium's WorldSlice class WARN (third-party)
+SQ-CMV-03,BATCH-FAULT,reduced-modset,not-fixed,"needs the Common-alone folder plus a copy of Armor Trims with mods.toml version rewritten to 1.4.0; the drive staged neither (known prep gap, rowfix1)"
+SQ-CMV-04,BATCH-FAULT,reduced-modset,not-fixed,"Common-alone folder needed: in the full pack advancements are dropped at load, so the grant cannot succeed; config/creativecommon-common.toml was not deleted before boot"
+SQ-CPP-01,BATCH-FAULT,harness/tool,fixed-in-qb,"no waitlog after the cdevtest tag commands: the probe /reload was still running, both answers (correct: metal_dusts 15 with IE dusts and zinc grit, bark 20 IW) landed after the checks; row waits now"
+SQ-CPP-04,BATCH-FAULT,reduced-modset,not-fixed,"[raw] group B chain (Common+Compat+Delight+Brewing, no Engineering) not set up: s44 booted the full pack (379 mods, Engineering present), so the no-Engineering claim is untested (judge-6)"
+SQ-CPP-05,BATCH-FAULT,reduced-modset,not-fixed,"group B chain set (Common + Compat without Create Recycle) not set up; full pack booted, TextureSheetParticle CNFE is the full-pack client-class line"
+SQ-CS-04,INCONCLUSIVE,other,not-fixed,"[raw] spring open 2.875 vs summer open 2.675 = 1.07 (want about 1.25); with n=80 and 18 random ticks the mean noise is about 0.18, so 1.07 vs 1.25 is not separable; CS-03 spring also read 1.10. Needs "
+SQ-CS-05,BATCH-FAULT,other,fixed-in-qb,"[raw] hemp, tobacco, red grape bush, crimson fungus colony all grew in MID_WINTER (4 Test failed); the Ender crop stayed age 0 because the row put it on plain end_stone (it grows on endercrop:tilled_e"
+SQ-CS2-04,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"[raw] two-boot section (old underscore jars, boot 1 save): {V1} never captured (SQ-CS2-01 not in the step), region_ids found none; needs the multi-boot setup (judge-6)"
+SQ-CS2-05,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,two-boot section: the old underscore config files from boot 1 were never placed
+SQ-CS2-06,HARNESS,harness/tool,fixed-in-qb,"[raw] shell exit 1: logs/kubejs/startup.log:[03:32:16] [INFO] [jar-startup] startup script packs in order: creativecommon, creativecompat_helpers, startup_scripts, creativecompat, creativecalendar, cr"
+SQ-CDFO-02,BATCH-FAULT,reduced-modset,not-fixed,[raw] group B set without Cooking for Blockheads / Balm / Incubation not set up: the full pack booted (CfB present) (judge-6)
+SQ-CDFO-03,BATCH-FAULT,reduced-modset,not-fixed,[raw] group B set with CfB but without Incubation not set up: the full pack booted (judge-6)
+SQ-DEP-02,BATCH-FAULT,reduced-modset,not-fixed,needs a boot without creativebrewing-*.jar; the full pack (with Brewing) booted
+SQ-EFX-02,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] 24.0f both reads, but the pillager was not ticking: no player online (the qe spawn comes in SQ-EFX-05) and EFX-03's control Poison II and Wither also did 0 damage; row now spawns qe first (judge"
+SQ-EFX-03,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] all six reads 24.0f including the control (Poison II, no Magic Resistance) and Wither: the entity did not tick (no player online); after qe spawned, SQ-EFX-09 Poison did damage the same pillager"
+SQ-EFX-04,BATCH-FAULT,lost-setup,fixed-in-qb,"no player online, the horse chunk did not entity-tick (no armor effects, also 0 Poison damage in EFX-02/03); row spawns qe now"
+SQ-EFX-08,BATCH-FAULT,lost-setup,fixed-in-qb,"the row's copper_poisoning fixture (interval 10 s, chance 1.0) was never applied; srv held 300 / 0.15; section @@prep toml added"
+SQ-ENGM-03,BATCH-FAULT,other,fixed-in-qb,"shrapnel lives about 9 ticks (maxDistance 12 at 1.4 b/t), gone before the paced kill, and no player / forceload at 0 0; section @@prep slows it to 0.05, row forceloads"
+SQ-ENGM-05,BATCH-FAULT,reduced-modset,not-fixed,"chain set (port_chain.sh, eight builds) not set up; full pack booted with its known 91 failed recipes"
+SQ-FCB-09,BATCH-FAULT,harness/tool,fixed-in-qb,count regex verb=break broken=true misses the who=fake field between them (all 3 breaks broken=true); now verb=break .*broken=true
+SQ-FCK-11,INCONCLUSIVE,other,fixed-in-qb,"[raw] WaterLevel 12 set, Amount 3000 -> 3000, but the reads were 200 ticks apart and FillTick 42 -> 28 shows a refill period of about 180 ticks inside the window (3000 -> 10000 in 62 s): drain and ref"
+SQ-T1-04,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale ids: powered rail is now creativeengineering:shaped/rail_to_6_powered_rail_by_shaped from gold rods (no ingot use), golden apple craft is creativedelight:shaped/golden_apple; row updated"
+SQ-FDI-02,BATCH-FAULT,lost-setup,fixed-in-qb,the 20 bites lived in r1113 c4_ar (same world); the row only read the books (carrot=0); eats added
+SQ-FDI-04,BATCH-FAULT,correct-answer,fixed-in-qb,"netherite lunchbox refused pumpkin pie (edible-only slots, notInserted=2) and the count regex expected carrotHas and applepieHas adjacent; food and regex fixed"
+SQ-FFH-03,BATCH-FAULT,correct-answer,fixed-in-qb,stale: the quiche assembly became oven-only baking creativedelight:baking/zucchini_quiche (merges/dishes #8); row rewritten
+SQ-FLR-06,BATCH-FAULT,multi-boot,not-fixed,restart-on-same-world row: the wheel and saw were filled on the r1111 a1 boot (not a block entity); multi-boot setup not rebuilt
+SQ-GAP-04,BATCH-FAULT,correct-answer,fixed-in-qb,"checked the block tag (gold only by design; recipes use the item tag, which holds mca:rose_gold_block) and stale rdetail ids for rail, apple, carrot; fixed"
+SQ-RW-28,BATCH-FAULT,harness/tool,fixed-in-qb,reject matched block tags; removed items lose item tags only (item_tags=-); narrowed to item tags
+SQ-GFB-03,BATCH-FAULT,other,not-fixed,"row design: setBlock runs FallingBlock.onPlace, which schedules the fall whatever the flags; the hold is for generated chunks and this boot is superflat; not fixed"
+SQ-GLD-16,BATCH-FAULT,lost-setup,fixed-in-qb,"old-world fixture (stews, cans, jar at 2000 -60 2000) missing; count and reject also hit KubeJS recipe parse warnings (78 Unknown item) and are fixed; give fails and stew 2+bowl are correct"
+SQ-HCS-01,BATCH-FAULT,harness/tool,fixed-in-qb,all 15 out of bound lines are KubeJS recipe parse warnings; chunk-gen and CrowEvents counts 0; regex narrowed
+SQ-HCS-08,BATCH-FAULT,lost-setup,fixed-in-qb,"FO capture from SQ-HCS-02 (not run here) and census on folder world (level is r1118_s62); self-contained summon at 0 120 0, level-name census"
+SQ-HCS-05,BATCH-FAULT,lost-setup,fixed-in-qb,no forceload: the glass box and nest setblocks hit That position is not loaded before the bot spawned; forceload added
+SQ-HH-1102,HARNESS,harness/tool,fixed-in-qb,"row ran during the probe reload (zhh1 output at 04:33:56, row window 04:33:47-51; the driver's wait stopped at 'Loaded N/M', fixed in qrun install_probes); the output itself: kept 106/106, blocks, flu"
+SQ-HH-1252,BATCH-FAULT,correct-answer,fixed-in-qb,stale value: corn cuts to 6 kernels since farming/crops #48 (was 4) and the survival bot picks the drops up: Inventory corn_seeds 6b + corncob; row reads the Inventory for 6
+SQ-HH-1259,BATCH-FAULT,other,fixed-in-qb,Pinned applied (pinned:0:1) but read 59 ticks after the hit at pace 2; pace 0.2 around the throw
+SQ-HH-1269,FAIL,real-bug,not-fixed,"no glm_entries.json global loot modifier active (j7, high impact)"
+SQ-HH-1314,BATCH-FAULT,harness/tool,fixed-in-qb,"regex expected 'block data: Count: 5b', NBT prints [{Slot: 0b, id: apple, Count: 5b}]; behavior PASS; regex fixed"
+SQ-HH-1327,BATCH-FAULT,other,fixed-in-qb,"the survival bot picked the slice up (Inventory raspberry_pie_slice 1b, pie bites=1 Test passed); row reads the Inventory"
+SQ-HH-1511,BATCH-FAULT,lost-setup,fixed-in-qb,"no forceload in the row (SQ-HH-1500 setup not in the plan): the summoned thrown horseshoe never ticked, lamp never lit; forceload added"
+SQ-HH-1529,BATCH-FAULT,other,fixed-in-qb,"the bot 2 blocks off absorbed the orb: player xp_total=2, items xp=0; farmerbrim no Damage; regex accepts xp_total"
+SQ-HH-1546,BATCH-FAULT,correct-answer,fixed-in-qb,"known (r1115 SQ-HH-1546b): bare tilled end stone reverts to end stone on a random tick, the loot read saw minecraft:end_stone (5 end stone); mineable tag and ender crop plant PASS; randomTickSpeed 0 a"
+SQ-HH-233,INCONCLUSIVE,other,fixed-in-qb,"[raw] extract 7b, sneak extract Items [], refill 8b, trough drop Test passed; no wheat item entity after the break: the survival bot hb1 stood 2 blocks off and likely picked the 8 wheat up (TroughBloc"
+SQ-HH-274,BATCH-FAULT,multi-boot,not-fixed,"multi-boot row (basin group built in boot 1, read after a restart); not set up"
+SQ-HH-425,BATCH-FAULT,other,fixed-in-qb,"pbot attack selector found no crow (crow moved after NoAI 0 during the 2 s pace); flee still seen (maxD 25.98) from the player alarm, so the hit-flee path is untested; selector by tag, pace 0.2"
+SQ-HH-460,INCONCLUSIVE,other,fixed-in-qb,insert 4 / take back 1 PASS; the break dropped diamond:3 but no nest item: survival bot c460 2 blocks off likely picked it up (block loot table blocks/nest is in the jar); bot now removed before the b
+SQ-HH-461,INCONCLUSIVE,other,fixed-in-qb,"nest Slots 0..3 diamonds, no Slot 4; the 5th diamond not within 2 of the nest (items=-); radius 5 and bot removed before the read"
+SQ-HH-466,BATCH-FAULT,multi-boot,not-fixed,"multi-boot (Boot D save, restart, Boot F read): no restart, the crow kept ticking 160 ticks after forceload remove (Trust 160 -> 0, AlarmTicks 1960 -> 1800); cfg lines PASS"
+SQ-HH-479,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale id after plan_post_scratch_1115 G2b: the lick root is salt:raw_rock_salt_block (placed -> hearthandharvest:placed_rock_salt_block), the row placed salt:salt_block, so no StayNearSaltGoal; ids fi"
+SQ-HH-482,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale id after plan_post_scratch_1115 G2b: the lick root is salt:raw_rock_salt_block (placed -> hearthandharvest:placed_rock_salt_block), the row placed salt:salt_block, so no StayNearSaltGoal; ids fi"
+SQ-HH-485,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale id after plan_post_scratch_1115 G2b: the lick root is salt:raw_rock_salt_block (placed -> hearthandharvest:placed_rock_salt_block), the row placed salt:salt_block, so no StayNearSaltGoal; ids fi"
+SQ-HH-496,BATCH-FAULT,other,fixed-in-qb,"crow summoned without NoAI flew off before zhh3 tame (tamed 0), then stole a nugget as an untamed crow; now NoAI until tamed"
+SQ-FDI-03b,BATCH-FAULT,lost-setup,fixed-in-qb,"first setblock hit an unloaded chunk, the bot placed a single cake (no double cake); forceload added"
+SQ-HH-440b,BATCH-FAULT,harness/tool,fixed-in-qb,"regex expected 'cfg crow.cornBreeding', the probe prints 'cfg cornBreeding = true'; behavior PASS; regex fixed"
+SQ-SLK-01,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale id after G2b: row placed salt:salt_block, the lick root is salt:raw_rock_salt_block; ids fixed"
+SQ-SLK-01c,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale id after G2b: row placed salt:salt_block, the lick root is salt:raw_rock_salt_block; ids fixed"
+SQ-SLK-02,BATCH-FAULT,lost-setup,fixed-in-qb,chunk not loaded (That position is not loaded): section 3 rows had no forceload (r1115 P4-setup not carried into rows/HH.qb); SPD-01 Exception = the probe reload's recipe-parse lines (row started befo
+SQ-SLK-03,BATCH-FAULT,correct-answer,not-fixed,"not loaded (forceload added) and stale vs plan_post_scratch_1115 G2b: salt dust / salt layer refill is removed, Rock Salt refills one stage; the row needs a rewrite (pass-up), not fixed beyond the for"
+SQ-SLK-04,BATCH-FAULT,correct-answer,not-fixed,"not loaded (forceload added) and stale vs plan_post_scratch_1115 G2b: salt dust / salt layer refill is removed, Rock Salt refills one stage; the row needs a rewrite (pass-up), not fixed beyond the for"
+SQ-SPD-01,BATCH-FAULT,lost-setup,fixed-in-qb,chunk not loaded (That position is not loaded): section 3 rows had no forceload (r1115 P4-setup not carried into rows/HH.qb); SPD-01 Exception = the probe reload's recipe-parse lines (row started befo
+SQ-SPD-02,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] chunk not loaded: section 3 (x 705..816, z 495..585, outside spawn chunks) had no forceload (the r1115 P4-setup row is not in rows/HH.qb); forceload added to every SPD and SLK-02..04 row (judge-"
+SQ-SPD-03,BATCH-FAULT,lost-setup,fixed-in-qb,chunk not loaded (That position is not loaded): section 3 rows had no forceload (r1115 P4-setup not carried into rows/HH.qb); SPD-01 Exception = the probe reload's recipe-parse lines (row started befo
+SQ-SPD-04,BATCH-FAULT,lost-setup,fixed-in-qb,chunk not loaded (That position is not loaded): section 3 rows had no forceload (r1115 P4-setup not carried into rows/HH.qb); SPD-01 Exception = the probe reload's recipe-parse lines (row started befo
+SQ-SPD-05,BATCH-FAULT,lost-setup,fixed-in-qb,chunk not loaded (That position is not loaded): section 3 rows had no forceload (r1115 P4-setup not carried into rows/HH.qb); SPD-01 Exception = the probe reload's recipe-parse lines (row started befo
+SQ-SPD-06,BATCH-FAULT,lost-setup,fixed-in-qb,chunk not loaded (That position is not loaded): section 3 rows had no forceload (r1115 P4-setup not carried into rows/HH.qb); SPD-01 Exception = the probe reload's recipe-parse lines (row started befo
+SQ-SPD-07,BATCH-FAULT,lost-setup,fixed-in-qb,chunk not loaded (That position is not loaded): section 3 rows had no forceload (r1115 P4-setup not carried into rows/HH.qb); SPD-01 Exception = the probe reload's recipe-parse lines (row started befo
+SQ-SPD-08b,BATCH-FAULT,lost-setup,fixed-in-qb,Nether and overworld test areas not loaded; forceloads added
+SQ-HH-1546b,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"[raw] the HH1546b-ender-tes line belongs to SQ-HOP-11, whose old-save two-boot setup was not run (judge-8)"
+SQ-HH-266c,BATCH-FAULT,lost-setup,fixed-in-qb,the basin at 176 -60 208 came from the r1115 p5_a1 SQ-HH-266 build (zhh2 getCapability of null); basin setblock and bot tp added
+SQ-HOP-01,BATCH-FAULT,reduced-modset,not-fixed,needs a boot without creativebrewing (SQ-DEP-02 set); not rebuilt
+SQ-HOP-11,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"old-save two-boot row (previous jars, swap); not rebuilt"
+SQ-HR-01,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale id hearthandharvest:raspberries (the item is hearthandharvest:raspberry); fixed
+SQ-HR-04,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale id hearthandharvest:raspberries; fox spawned holding leather; fixed (bush emptied to age 1 already)
+SQ-HSC-89,BATCH-FAULT,lost-setup,fixed-in-qb,"DS capture from SQ-FCK-08 (other step) and a superflat boot; locate, forceload and group B added"
+SQ-HT-03,BATCH-FAULT,lost-setup,fixed-in-qb,ran in its own step without SQ-HT-02's bot and horses (No entity was found); setup added when absent
+SQ-IWF-02,BATCH-FAULT,lost-setup,fixed-in-qb,PL capture set by no row (Expected integer on every fill); locate plains added
+SQ-KT-22,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale: blockheads_additions is now Creative Delight's cookingforblockheads compartment (log line, config section, rack error tag); rewritten"
+SQ-KT-24,BATCH-FAULT,stale-id-or-command,fixed-in-qb,stale id cookingforblockheads:oak_spice_rack (Unknown block type); now creativedelight:oak_spice_rack
+SQ-KT-25,BATCH-FAULT,harness/tool,fixed-in-qb,"tools/kitchen_probe/cfb_kitchen_probe.js loads removed class com.SaintAlfonzo.creativedelight.blockheads.BAConfig, so /kttest never registered; probe fix passed up"
+SQ-LB-01,BATCH-FAULT,stale-id-or-command,fixed-in-qb,"stale id solapplepie:netherite_lunchbox (aliased on load to creativedelight, nbt test never matched); fixed"
+SQ-MCL-02,BATCH-FAULT,stale-id-or-command,fixed-in-qb,[raw] `ceperf mobcap` unknown command (root renamed /cdevperf); row fixed (judge-8)
+SQ-MCL-03,BATCH-FAULT,stale-id-or-command,fixed-in-qb,[raw] `ceperf mobcap` unknown command twice; row fixed (judge-8)
+SQ-MCL-05,BATCH-FAULT,multi-boot,not-fixed,"[raw] {PL1} capture never set (Expected double on pbot spawn qm), no bot; needs a normal-terrain boot with mobCapForceLevel 2 (judge-8)"
+SQ-MELT-01,BATCH-FAULT,lost-setup,not-fixed,setup build lost with r1115 P3-00/P3-01 (j1.md); MELT.qb not edited
+SQ-MELT-02,BATCH-FAULT,lost-setup,not-fixed,setup build lost with r1115 P3-00/P3-01 (j1.md); MELT.qb not edited
+SQ-MELT-03,BATCH-FAULT,lost-setup,not-fixed,setup build lost with r1115 P3-00/P3-01 (j1.md); MELT.qb not edited
+SQ-MELT-04,BATCH-FAULT,lost-setup,not-fixed,setup build lost (That position is not loaded at the first setblocks); MELT.qb not edited
+SQ-MELT-06,BATCH-FAULT,multi-boot,not-fixed,setup build lost; part 2 needs the vanillaLightMelting restart; MELT.qb not edited
+SQ-MELT-07,BATCH-FAULT,lost-setup,not-fixed,setup build lost; MELT.qb not edited
+SQ-MELT-09,BATCH-FAULT,multi-boot,not-fixed,needs the salt-off [melting] config boot (tags line read 40 salt); reject also hit a KubeJS recipe parse warning; MELT.qb not edited
+SQ-MELT-09b,BATCH-FAULT,multi-boot,not-fixed,needs the salt-off and Rare Ice config boot (40 salt); reject hit a KubeJS recipe parse warning; MELT.qb not edited
+SQ-MELT-P1,BATCH-FAULT,other,not-fixed,"row build: snow layers filled on ice do not survive (vanilla canSurvive excludes ice), the stone roof update clears them (state air); MELT.qb not edited"
+SQ-MELT-P1b,BATCH-FAULT,other,not-fixed,"[raw] MG2/MS2 never comparable: P1 left the boxes (No blocks were filled), P1 build itself faulty (snow layers on ice do not survive) (judge-8)"
+SQ-MELT-05,BATCH-FAULT,lost-setup,not-fixed,setup build lost with r1115 P3-00/P3-01; MELT.qb not edited
+SQ-SALT2-06b,BATCH-FAULT,lost-setup,not-fixed,Nether bot m3n never spawned (no such bot; rowfix-1 list); MELT.qb not edited
+SQ-MRD-03,BATCH-FAULT,other,fixed-in-qb,[raw] cheese toast shapeless moredelight:toast + flaxen_cheese_wedge PASS; both slice tags hold rusticdelight:potato_slices PASS; rdetail moredelight:mashed_potatoes n=0 (no such recipe id): fixed to 
+SQ-MXS-02,BATCH-FAULT,lost-setup,fixed-in-qb,"{H1..H3} unset (cdj5home marker capture of a CDJ5 boot 0): fill/pbot spawn rejected, no bot mx; fixed home 1400 -60 1400"
+SQ-NSM-02,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"old-save row on a fresh world: NSM fixture missing (known setup gap), nothing to remap"
+SQ-NSM-03,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"old-save row on a fresh world: NSM fixture missing (known setup gap), state air, be none"
+SQ-NSM-05,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"old-save row on a fresh world: NSM fixture missing (known setup gap), no n5 lunchbox to skin"
+SQ-NSM-09,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"old-save row on a fresh world: NSM fixture missing (known setup gap), no labels or old config"
+SQ-NSM-10,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"old-save row on a fresh world: NSM fixture missing (known setup gap), no camera bags or old config"
+SQ-PF16-03,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] {PL1}/{PL3} unset (plains locate of another section): tp/fill/summon rejected, no bee Pos read; row moved to a fixed stone cave at 1500 20 1500 (judge-10)"
+SQ-PG-01b,BATCH-FAULT,multi-boot,not-fixed,"single boot, no restart; look text floor portal false contradicts r1115 01a PASS (all 1b): look needs rewrite"
+SQ-PS15-02,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] every state/inv/items read 'unloaded ... (forceload add first)': P3-SETUP forceload 280 280 380 420 lost in the move to rows; added per row (judge-10)
+SQ-PS15-03,BATCH-FAULT,lost-setup,fixed-in-qb,layouts unloaded (123 'not loaded'/'unloaded (forceload add first)'): P3-SETUP forceload lost; added per row
+SQ-PS15-05,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] cow half: 3 setblocks 'That position is not loaded', zmelt watches read air, changes=0; stack half in a non-ticking chunk: both licks left layers 8 + 1 (r1116 PASS on a forceloaded area). Forcel"
+SQ-PS15-06,BATCH-FAULT,lost-setup,fixed-in-qb,every use/state/inv read 'unloaded ... (forceload add first)'; forceload added
+SQ-PS15-10,BATCH-FAULT,lost-setup,fixed-in-qb,state/use reads 'unloaded ... (forceload add first)'; forceload added
+SQ-PS15-15,BATCH-FAULT,reduced-modset,not-fixed,"Power Grid not in the set ('skipped ... for absent powergrid', recipes n=0): chain mod set (known cause); forceload of 1135 1855 1200 1915 added too"
+SQ-PS15B-07,BATCH-FAULT,lost-setup,fixed-in-qb,"wheat/zombies at 1081 1152 not loaded, z07r/z07s none found; forceload added"
+SQ-PTH-25c,BATCH-FAULT,lost-setup,fixed-in-qb,"no bot P ('No entity was found'), bench never ran, no json; forceload + bot spawn added"
+SQ-PSU-04,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder S5H1, S5H2, S5H3 unset (no capture in this batch, not in RES/vars.json); placeholder S5H1, S5H2, S5H3 unset (no capture in this batch, not in RES/vars.json); count /\[s5\] rest s5pb["
+SQ-PTH-02,BATCH-FAULT,lost-setup,fixed-in-qb,"lane z 1070-1084 not loaded (6 'not loaded', zombies none found); forceload + bot Q added"
+SQ-PTH-06,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] web setblock 'That position is not loaded' (z 1120 outside the old 992 976 1231 1111 forceload, no forceload in the row); items summoned into an unloaded chunk (judge-10)"
+SQ-PTH-07,BATCH-FAULT,lost-setup,not-fixed,[raw] i06 items absent (SQ-PTH-06 never placed them); also the restart half needs a second boot (multi-boot known cause) (judge-10)
+SQ-PTH-08,BATCH-FAULT,other,fixed-in-qb,"[raw] orbs homed to P (4 blocks away while falling) before the first read: mod o08 none found, P had 25 XP before the walk; same as r1115 first try; row body replaced by r1115 SQ-PTH-08r (judge-10)"
+SQ-PTH-09,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] watch bP n=0: tag bP set only in SQ-PTH-04 (another step); z09 hangs at y -58.07 mod=-0.650; P mod=-0.650 at the cube bottom, jump/sneak not watched. tag P add bP added (judge-10)"
+SQ-PTH-13,BATCH-FAULT,other,fixed-in-qb,"[raw] bot arrow (look 60 down) landed 0.8 blocks from P and was gone 9 ticks later (picked up); no-pickup arrow and plain trident stuck, loyalty trident gone (returned). Look changed to 30 down (judge"
+SQ-PTH-15,BATCH-FAULT,other,fixed-in-qb,"[raw] 'Unknown data pack file/pth15' (world/datapacks pack not picked up live), m15 and c15 n=0 (z 1180-1190 not loaded); r1115 -15/-15b same fault; body replaced by r1115 SQ-PTH-15c plus forceload (j"
+SQ-PTH-17,BATCH-FAULT,lost-setup,fixed-in-qb,"piles at z 1140 not loaded, zombies none found; forceload added"
+SQ-PTH-18,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] piles and zombies at z 1150 not loaded (10 'not loaded'/'none found'); forceload added (judge-10)
+SQ-PTH-20,BATCH-FAULT,lost-setup,fixed-in-qb,"all 28 setblocks 'That position is not loaded'; forceload added, sugar cane on sand with water and quark rope under stone (r1115 SQ-PTH-20x)"
+SQ-PTH-21,BATCH-FAULT,lost-setup,fixed-in-qb,"entities summoned into an unloaded chunk (all MISSING); forceload added. Known: pickarang, firework, revolver shot, mana burst discard themselves on the summon tick (r1115), so those expects will stil"
+SQ-PTH-22,BATCH-FAULT,lost-setup,fixed-in-qb,"plants at z 1159-1160 not loaded, zombies none found; forceload added"
+SQ-PTH-23,BATCH-FAULT,lost-setup,fixed-in-qb,"lane z 1170-1176 not loaded, mobs none found; forceload + bot Q added"
+SQ-PTH-24,BATCH-FAULT,lost-setup,fixed-in-qb,"[raw] z 1180 not loaded: m24a/b/c n=0; forceload added, revolver shot now summoned with its motion (r1115 SQ-PTH-24s) (judge-10)"
+SQ-PTH-26,BATCH-FAULT,lost-setup,fixed-in-qb,"no bot P and lane not loaded: bench never ran, z26a none found; forceload + bot P added"
+SQ-PTH-27,BATCH-FAULT,lost-setup,fixed-in-qb,"timing lines present (46) but herd at z 1200 not loaded, inside=0 throughout; forceload (box now to z 1215) added"
+SQ-PWG-06,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-07,BATCH-FAULT,lost-setup,fixed-in-qb,"perf row on the SQ-PWG-38B line, which was never built (no scroll behavior at 1110 -60 1180); -39 now builds it"
+SQ-PWG-14,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-15,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-19,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-20,BATCH-FAULT,multi-boot,not-fixed,"[raw] restart row: the step had no stop and reboot and no SQ-PWG-20a (batch-only row); reads before any restart: I=1.193 and 10.99 A, wires 5. Multi-boot, not rebuilt"
+SQ-PWG-21,BATCH-FAULT,other,fixed-in-qb,chunk 65 stayed loaded (loaded=true: the -19 loop forceload covers chunk z 66); loop moved to Z 2200 as in the r1114 rerun pwgr1r.qb
+SQ-PWG-22,BATCH-FAULT,multi-boot,not-fixed,"[raw] restart row: clientMirror stayed true (no sed + restart in the step). The comment check holds: '(read on the server)'. Multi-boot, not rebuilt"
+SQ-PWG-26,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] unloaded area: terminals paused=true on every be read (P11A forceload lost); area block added
+SQ-PWG-27,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] unloaded area: terminals paused=true on every be read (P11A forceload lost); area block added
+SQ-PWG-28,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-29,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-30,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] unloaded area: terminals paused=true on every be read (P11A forceload lost); area block added
+SQ-PWG-31,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added; the one 
+SQ-PWG-32,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] unloaded area: terminals paused=true on every be read (P11A forceload lost); area block added
+SQ-PWG-33,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] unloaded area: terminals paused=true on every be read (P11A forceload lost); area block added
+SQ-PWG-34,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] unloaded area: terminals paused=true on every be read (P11A forceload lost); area block added
+SQ-PWG-37,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-38,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-39,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added; and the 
+SQ-PWG-43,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-44,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added; runs on 
+SQ-PWG-48,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-49,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-50,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-51,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-52,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-53,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-54,BATCH-FAULT,harness/tool,fixed-in-qb,"the solar override datapack was written to the r1115 level folder p2pwg/ (not the step's level), so no override loaded; level-name path fixed; also unloaded area"
+SQ-PWG-56,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-59,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-60,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-61,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-63,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-64,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-65,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-66,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added; CC start
+SQ-PWG-68,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-69,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-70,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-71,BATCH-FAULT,correct-answer,fixed-in-qb,version regex expected the -17 jar; prep ran -20 ([zpwg] mod powergrid 0.6.2-ce-19.2-20); also unloaded (That position is not loaded); regex now -20
+SQ-PWG-73,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-74,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-75,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-85,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-87,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-88,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added
+SQ-PWG-89,BATCH-FAULT,lost-setup,fixed-in-qb,ran in unloaded chunks: the P11A / SETUP forceload rows of pwgr1.qb were batch-only and lost in the move to rows (read unloaded / That position is not loaded / paused=true); area block added (deployer
+SQ-PWG-90,BATCH-FAULT,correct-answer,fixed-in-qb,"version -17 -> -20, and recipes 116 -> 115: the pack removes powergrid:mixing/acid and adds its own acid recipe outside the powergrid namespace (server_scripts/other/power_grid.js, TODO #82); expects "
+SQ-PWG-54r,BATCH-FAULT,multi-boot,not-fixed,"restart row after SQ-PWG-54's bearing build at X 1380 (r1115 p2_r1 -> p2_r2); in its own step nothing was built (bearing none). Multi-boot, not rebuilt"
+SQ-PWG-80b,BATCH-FAULT,lost-setup,fixed-in-qb,[raw] nothing ran in 10 s (items and water 1000 untouched): basin at Z 1894 not forceloaded in this step (P11A lost); area block added
+SQ-PWG-97,BATCH-FAULT,lost-setup,fixed-in-qb,"Z 2100 never forceloaded (paused=true, That position is not loaded, gauge 0 before the break); area block adds 1095 2095 1110 2110"
+SQ-CBJ-01,HARNESS,harness/tool,fixed-in-qb,[raw] shell exit 1: ; shell exit 1:
+SQ-CBJ-03,BATCH-FAULT,correct-answer,fixed-in-qb,stale row: the toml gained an [alcohol] section and Foundation has no recipes (row text says so); now counts [members] keys and reads the foundation:cake_cutters tag. vinery:red_grape and brewinandche
+SQ-CDF-07,BATCH-FAULT,correct-answer,fixed-in-qb,"stale id: quiche is oven only since merges/dishes #8 (creativedelight:baking/quiche_meat, _fungus, _greens present); horror lasagna cooking, mixing and sequenced assembly present"
+SQ-CDM-00,BATCH-FAULT,correct-answer,fixed-in-qb,only the Cup conversions expect failed: the cup family was removed 2026-11-02 (SQ-CUP); no Veggies/Vintage/Fungi/Miner's script error; expect dropped
+SQ-CDM-03,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no cap"
+SQ-CDM-05,HARNESS,correct-answer,fixed-in-qb,cups removed 2026-11-02; row @superseded
+SQ-DDP-02,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no cap"
+SQ-DDP-03,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no cap"
+SQ-DDP-05,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no cap"
+SQ-FGD-00,INCONCLUSIVE,correct-answer,not-fixed,look says mushroom-spawns names 8 rules; log has 9 modifiers / 9 tags; RD.qb look still 8
+SQ-FGD-11,HARNESS,harness/tool,not-fixed,ztrades command unknown: tools/fungi_probe/ztrades.js was not installed (install_probes only finds *_probe.js); pass up to the tools owner
+SQ-MDP-01,BATCH-FAULT,correct-answer,fixed-in-qb,stale: upstream data 156 files (182 before the cup family removal 2026-11-02) and no Cup conversions line any more; the error/mixin rejects passed; row now expects any count
+SQ-MDP-03,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no cap"
+SQ-MDP-05,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); count /Gave 1 +\[/ = 0, wanted == 12; open look 1: registry count in namespace miners_delight: SQ-CDJ-09b (items_by"
+SQ-MDP-15,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"fixture: needs a srv-local miners_upstream holding only the 1.4.5 donor; the driver links the full folder, so the boot completed (known: legacy fixtures lack setup)"
+SQ-RSP-09,INCONCLUSIVE,correct-answer,not-fixed,"[raw] createfilling + createemptying present for milk_coffee, lavender_tea, matcha_latte, coffee (glass bottle); rdetail prints no fluid amount, so 250 mB unchecked; copper cup part obsolete (removed "
+SQ-VTD4-04,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no cap"
+SQ-VTD4-06,HARNESS,lost-setup,fixed-in-qb,"[raw] placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no capture in this batch, not in RES/vars.json); placeholder H1, H2, H3 unset (no cap"
+SQ-WT-01,BATCH-FAULT,correct-answer,fixed-in-qb,"stale: glass and iron_ore are in silk_touch_differs now (generator splits required/differs, 341 required); row tests glass_pane, blue_ice, and the differs tag"
+SQ-FGD-13,HARNESS,lost-setup,not-fixed,"[raw] placeholder DF1, DF3, SW1, SW3, MF1, MF3, TA1, TA3, BI1, BI3 unset (no capture in this batch, not in RES/vars.json); open look 1: below Y 50 and depth 13+: inky and morel singles rare, on stone "
+SQ-NM-02,BATCH-FAULT,lost-setup,fixed-in-qb,"No entity was found: bot qa and the plains spot come from SQ-NM-01 (phase worldgen, step 153); row moved to @phase worldgen"
+SQ-NM-03,BATCH-FAULT,lost-setup,fixed-in-qb,"needs SQ-NM-01's bot and named cows (phase worldgen, not yet run); row moved to @phase worldgen"
+SQ-VG-01,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,"group B is the normal world: y -60 is underground, the villager suffocated in a wall 10 s after the summon; rows moved to @group A (superflat)"
+SQ-VG-02,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,normal world: the villager summoned at 62 -60 -58 suffocated; door_present only; moved to @group A
+SQ-VG-03,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,"judge-11 (applied by judge-9), 2026-11-18, false pass: the villager suffocated underground in the normal world, so the check passed for the wrong reason (j11.md)"
+SQ-VL-01,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,"[raw] normal world, structures at y -60 underground (VG villagers suffocated there); moved to @group A (judge-11)"
+SQ-VL-02,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,[raw] follows SQ-VL-01 (underground on the normal world); moved to @group A (judge-11)
+SQ-RDB-01,BATCH-FAULT,multi-boot,not-fixed,"judge-11 (applied by judge-9), 2026-11-18, false pass: the boot had the rustic_upstream folder present, so the no-folder case was not tested; needs its own boot (j11.md)"
+SQ-RDB-05,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,"@group old world: needs the 1.2.02 save fixture, booted on a fresh superflat (11 unloaded/air reads); known: legacy fixtures lack setup"
+SQ-RDB-06,HARNESS,harness/tool,fixed-in-qb,[raw] shell exit 1: lrwxrwxrwx 1 [REDACTED] [REDACTED] 81 Nov 18 11:46 rustic_upstream -> /home/[REDACTED]/.local/share/atlauncher/instances/CreativeEngineering2/rustic_upstream rustic error lines: 0 0
