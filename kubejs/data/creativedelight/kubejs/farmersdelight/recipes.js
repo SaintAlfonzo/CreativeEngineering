@@ -253,6 +253,10 @@ ServerEvents.recipes(e => {
 
 		// Dog food: two cooked meats for the pot's one raw; cooked rice brings the bowl (TODO dishes/meals #8)
 		F.mealCraft([i.rotten_flesh, i.bonemeal, i.cooked_meat, i.cooked_meat, i.cooked_rice], i.dog_food)
+		// Cat food (TODO dishes/meals #56): the dog food with a raw and a cooked fish for the rotten flesh
+		// and bone meal. Pot as Farmer's Delight's dog food (100 ticks, bowl), and the grid meal above.
+		R.fdCooking([i.raw_fish, i.cooked_fish, i.t_food_raw_meat, i.rice], i.cat_food, e, 'cat_food', 0.2, 100, i.bowl)
+		F.mealCraft([i.raw_fish, i.cooked_fish, i.cooked_meat, i.cooked_meat, i.cooked_rice], i.cat_food)
 
 		// Mutton wrap: a tortilla, not bread (FD's grid recipe and CCK's assembly both took bread). TODO dishes/meals #2
 		R.remove({ id: 'farmersdelight:mutton_wrap' }, e)

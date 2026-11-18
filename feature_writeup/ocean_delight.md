@@ -19,12 +19,11 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=ecdc9941c69f -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 7, In Progress 4, Testing 11), 0 Complete.
+<!-- generated:status_index begin open_work sha1=bd7e816d0872 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 6, In Progress 4, Testing 12), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `dishes/ocean #2` | Planned | S C P | Fish egg roll accepts eggs |
 | `dishes/ocean #6` | Planned | S C P | Caviar use audit |
 | `dishes/ocean #11` | Planned | S C P | Guardian Shell: guardian drop and cutting |
 | `dishes/ocean #12` | Planned | S P | Guardian Soup recipe |
@@ -36,6 +35,7 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 | `largecontent/mod-additions #7` | In Progress | S~ C P T | Miner's Delight: merged backport (1.1.2 + 1.4.5 in one 1.19.2 jar, Vinery donor-jar method) |
 | `largecontent/mod-additions #9` | In Progress | S C | Add `mod_sides.md` rows and common integration for the five 2026-10-23 jars |
 | `dishes/ocean #1` | Testing | S~ C P T | Fishing net: cooldown, tooltips, loot by biome |
+| `dishes/ocean #2` | Testing | S C P | Fish egg roll accepts eggs |
 | `dishes/ocean #3` | Testing | S+ C P | Squid and glow squid items, calamari chain |
 | `dishes/ocean #4` | Testing | S+ C P | Remove tentacles; all tentacles to calamari |
 | `dishes/ocean #5` | Testing | C P | Salmon eggs become caviar |
@@ -106,7 +106,7 @@ Rows added to [TODO](todo/TODO.md) on 2026-10-24.
 - [TODO](todo/TODO.md) `dishes/ocean #1`: fishing net with a cooldown, tooltips and a loot table, drops by biome (shrimp in the
   ocean, boosted; salmon eggs in rivers and lakes). The net is Oceanic Delight's `fishing_net` (the row says Ocean's), with two
   gameplay loot tables today. Investigate the mechanic first.
-- [TODO](todo/TODO.md) `dishes/ocean #2`: fish egg roll accepts fish eggs. Open: salmon and ancient fish eggs only, or chicken eggs too.
+- [TODO](todo/TODO.md) `dishes/ocean #2`: fish egg roll accepts fish eggs: salmon or ancient fish eggs, no chicken eggs (owner, 2026-11-17); `kubejs/data/creativedelight/kubejs/oceanic_delight/recipes.js`. Ancient fish eggs come only from buried treasure chests (Oceanic's `ancient_fish_eggs_loot_modifier`: 0 to 2 rolls of 1 to 5); no recipe, trade or mob drop.
 - [TODO](todo/TODO.md) `dishes/ocean #3`: keep the squid and glow squid items (Miner's Delight); a cut squid gives calamari and ink
   sacs; add glowing calamari, cooked glow calamari and a glow calamari roll. Open: drop rates.
 - [TODO](todo/TODO.md) `dishes/ocean #4`: remove the tentacle items of the three mods; any tentacle cuts to calamari. This answers

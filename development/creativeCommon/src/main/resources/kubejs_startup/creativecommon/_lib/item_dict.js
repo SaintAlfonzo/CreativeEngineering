@@ -2090,6 +2090,7 @@ i.glowing_calamari_slice = 'creativedelight:glowing_calamari_slice';
 i.glowing_calamari_roll = 'creativedelight:glowing_calamari_roll';
 i.pickled_sea_pickle = 'creativedelight:pickled_sea_pickle';  // CD vintagedelight/vintage_items.js (TODO dishes/pickles-and-ferments #1)
 i.sliced_sweet_potato = 'creativedelight:sliced_sweet_potato';  // CD veggiesdelight/veggies_items.js (TODO dishes/ingredients #26)
+i.cat_food = 'creativedelight:cat_food';  // CD farmersdelight/cat_food.js (TODO dishes/meals #56)
 i.t_raw_calamari = '#forge:raw_fishes/calamari';
 i.t_cooked_calamari = '#forge:cooked_fishes/calamari';
 i.t_foods_tentacles = '#forge:foods/tentacles';      // Miner's takoyaki slot; its tentacles are removed, raw calamari fills it (CD oceansdelight/tags.js)

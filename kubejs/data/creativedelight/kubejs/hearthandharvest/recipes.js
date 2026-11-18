@@ -176,7 +176,10 @@ ServerEvents.recipes(e => {
 		R.bncFermenting(i.brine_bottle, [i.t_salts], f.water, e, 'brine_bottle_keg')
 		R.createMixing(Fluid.of(f.brine, 250), [i.t_salts, Fluid.of(f.water, 250)], e, 'brine_mixing')
 
-		// Sap to Rustic Delight syrup on a Create mixer, heated, and syrup to sugar (3.1, D4).
+		// Sap to Rustic Delight syrup on a Create mixer, heated, and syrup to sugar (3.1, D4). Sap is the only syrup source
+		// (dishes/ingredients #41): Rustic Delight's pot syrup (sugar + apple or beetroot) goes; Slice & Dice's copy with it.
+		// The boiling cauldron has a JEI information page (assets hearthandharvest/jei_info.js).
+		R.remove({ id: 'rusticdelight:syrup' }, e)
 		R.createMixing(i.syrup, [Fluid.of(f.sap, 1000), i.glass_bottle], e, 'syrup_from_sap', 'heated')
 		R.shapeless(n(i.sugar, 4), [i.syrup], e, 'sugar_from_syrup')
 		// Syrup to sugar (largecontent/mod-additions #72b): 8 sugar a bottle in the Cooking Pot; Slice &

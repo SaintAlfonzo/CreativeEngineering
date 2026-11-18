@@ -189,6 +189,7 @@ loops of its own: gilding food with gold in machines, and growing meat from mob 
 | Ice cubes | Engineer's Hammer on ice on a cutting board, or hammer + ice in the grid -> 4; IE crusher 3; Create's own crushing 3 + 25 % 3; 9 -> 1 ice (Neapolitan). Neapolitan's pickaxe cutting recipe (named a missing item) removed. Every ice food (Neapolitan ice creams, melon / chocolate / kiwi / hamimelon popsicles, hamimelon shaved ice, bellini in pot and mixer) takes `#forge:ice_cubes`, which holds ice and cubes, so the CfB fridge's ice unit counts (2026-10-22) |
 | Squid ink pasta ×2 | heated mixing: 250 mB ink + 250 mB tomato sauce, 2 pasta, any raw fish, 2 bowls |
 | Dog food | shapeless: rotten flesh, bone meal, 2 cooked meat, cooked rice (brings the bowl) |
+| Cat food (`creativedelight:cat_food`, dishes/meals #56) | pot: raw fish, cooked fish, raw meat, rice, bowl, 100 ticks; shapeless: raw fish, cooked fish, 2 cooked meat, cooked rice. Dog food sprite and food values; fed to a tamed cat: full health, Speed, Strength, Resistance 5 min, bowl back |
 | Mutton wrap | shapeless or assembly on a tortilla (FD's bread recipe and CCK's bread assembly removed) |
 | Scrambled eggs (Incubation) | 3 eggs + milk + bowl (was 2 eggs) |
 | Vegetable omelet (Brewin') | pot takes 2 fried eggs (`R.replaceInput`); shapeless 2 omelettes + cheese wedge + onion + carrot + bowl |
@@ -506,6 +507,8 @@ None.
   runs in an unheated basin. Craft one (pasta with meatballs: 2 beef patties + pasta + tomato sauce).
 - [ ] **RC-67 Squid ink pasta mixing:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-09; crafting and JEI: in game) heated basin with 250 mB ink + 250 mB tomato sauce, 2 pasta, a raw cod, 2
   bowls -> 2 squid ink pasta.
+- [ ] **RC-191 Garlic cloves:** a garlic crafts into 2 cloves, cuts into 5 on a board (knife) and in Slice and Dice, mixes into 5 in a Create mixer; 6 cloves craft into a garlic; JEI shows no 3-clove recipe.
+- [ ] **RC-190 Cat food:** both recipes craft cat food (dog food sprite, name Cat Food); eating it gives a bowl back; used on a tamed cat it heals fully, gives Speed, Strength and Resistance for 5 minutes and hands back a bowl; an untamed cat is unaffected.
 - [ ] **RC-68 Dog food:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-11; crafting and JEI: in game) rotten flesh + bone meal + 2 cooked meat + cooked rice crafts dog food; not in an unheated basin.
 - [ ] **RC-69 Frying:** (recipe level: scratch server PASSED 2026-10-22, SQ-OF-10; crafting and JEI: in game) JEI shows no Thermopneumatic chips or tempura and no plant-oil tempura mixing; names read Fish
   Tempura, Raw Fish Tempura, Fries, Fish and Chips. Raw tempura from a pufferfish + batter. Pot: cooking oil + raw
