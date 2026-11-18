@@ -25,7 +25,7 @@ Design and rulings stay in those plans; this file holds only lanes, order and fi
 | M1 | Common | G7.1 method (G8), G7.2 magma, G7.3, G7.10 snow by layer, G7.11 saltable tag, G7.15, G6-A freeze; 1115 #9 investigation; perf row queued | PS15.qb, MELT.qb |
 | M1b | Common | farming F2 random-tick fixes rows 1 to 12, Floral Enchantment bushes stop ticking | FCK.qb |
 | F | Creative Delight, instance kubejs | `dishes/meals #46` / `#57` skewer sequenced assembly, Supplementaries Doormat recipe; read-only proposals for `#72b`, `#58`, `#59`, `#40` | BBQ.qb, FCK.qb |
-| M2 | Creative Delight, configs | G2 salt redesign, G7.6 Salt Melt stacks, G7.7 salt JEI, lick layer hooks removed (B5/B7/E4 lick part), 1115b #12, #13, G3 small fixes (tooltip, torches, dragon armor, Rare Ice) | PS15.qb, SALT.qb |
+| M2 | Creative Delight, configs | G2 salt redesign, G7.6 Salt Melt stacks, G7.7 salt JEI, lick layer hooks removed (B5/B7/E4 lick part), 1115b #12, #13, G3 small fixes (tooltip, torches, dragon armor, Rare Ice); 1115 E2 canopy-proof wild crops as a CD mixin on `HeightmapPlacement` with placed-feature tag `creativedelight:canopy_proof` (lane X finding 2026-11-17: the JSON-only E2 misses FD's Java carrot and onion features), config switch default off | PS15.qb, SALT.qb |
 | R | solRaspberryPie | G5 / G7.12 | its own prefix |
 | X | Power Grid gate, read-only elsewhere | 1115b #14 arm; 1115b #15 Upgrade Aquatic guard (find the owning jar, report before editing); 1115 #12, #14 investigations | PWG.qb |
 | F2 | Creative Delight | food rows after the owner's answers | BBQ.qb, MRD.qb |
