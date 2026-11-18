@@ -1,25 +1,20 @@
 # Post-scratch plan, run r1115 (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=9f1cb68d2a53 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 3, In Progress 5, Testing 14), 1 Complete.
+<!-- generated:status_index begin open_work sha1=078d8c3045e2 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 2, Testing 20), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `tooling/scratch-1115-follow-ups #2` | Bug | C | Flint and Terrasteel portal crashes AMD clients |
-| `tooling/scratch-1115-follow-ups #9` | Planned | P | Investigate frozen decor melting |
 | `tooling/scratch-1115-follow-ups #12` | Planned | P | Investigate original wild hops vs current |
 | `tooling/scratch-1115-follow-ups #16` | Planned | C | Heap spill into warped forest: look in game |
-| `tooling/scratch-1115-follow-ups #20` | In Progress | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
-| `tooling/scratch-1115-follow-ups #21` | In Progress | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
-| `tooling/scratch-1115-follow-ups #22` | In Progress | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
-| `tooling/scratch-1115-follow-ups #23` | In Progress | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
-| `tooling/scratch-1115-follow-ups #24` | In Progress | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 | `tooling/scratch-1115-follow-ups #1` | Testing | C | Wall exit lift: floor portal to wall portal stuck in floor |
 | `tooling/scratch-1115-follow-ups #3` | Testing | S | Salt: click on frozen block places a layer, no melt |
 | `tooling/scratch-1115-follow-ups #4` | Testing | S | Salt: dispenser places a layer on air, one melt (1 salt) on a frozen block |
 | `tooling/scratch-1115-follow-ups #5` | Testing | S | Salt layer may vanish when it melts a frozen block |
 | `tooling/scratch-1115-follow-ups #7` | Testing | S | Salt dust refills a lick (dispenser, hand, layer above) |
 | `tooling/scratch-1115-follow-ups #8` | Testing | S C | New item: Salt Melt |
+| `tooling/scratch-1115-follow-ups #9` | Testing | P | Investigate frozen decor melting |
 | `tooling/scratch-1115-follow-ups #10` | Testing | S | Drop glowstone cage lantern from the fire tag |
 | `tooling/scratch-1115-follow-ups #11` | Testing | S | Hops vine and other vine crops cannot be replaced by placing |
 | `tooling/scratch-1115-follow-ups #13` | Testing | S P | Fix wild hops trunk search |
@@ -28,6 +23,11 @@
 | `tooling/scratch-1115-follow-ups #17` | Testing | S | Power Grid arm takes one circuit component per pickup |
 | `tooling/scratch-1115-follow-ups #18` | Testing | S | Acid from rotten flesh and spider eyes in water |
 | `tooling/scratch-1115-follow-ups #19` | Testing | S | Upgrade Aquatic guard for river tree worldgen files |
+| `tooling/scratch-1115-follow-ups #20` | Testing | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
+| `tooling/scratch-1115-follow-ups #21` | Testing | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
+| `tooling/scratch-1115-follow-ups #22` | Testing | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
+| `tooling/scratch-1115-follow-ups #23` | Testing | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
+| `tooling/scratch-1115-follow-ups #24` | Testing | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 <!-- generated:status_index end open_work -->
 
 Source: [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) section 9 (findings routing) and the owner's
