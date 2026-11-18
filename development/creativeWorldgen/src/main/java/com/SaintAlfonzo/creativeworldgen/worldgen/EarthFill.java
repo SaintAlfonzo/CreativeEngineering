@@ -1212,8 +1212,8 @@ public final class EarthFill {
 		if (!WorldgenConfig.earthFillEnabled() || structure.is(EXEMPT)) return null;
 		EarthFillLog log = WorldgenConfig.earthLog();
 		if (log != EarthFillLog.ALL && earthUnlimited(structure)) return null;
-		// a stone base counts too: its size and its overhang (02_new_mods_tests.md 4.2: the drum tower's 49x45
-		// andesite plate was "small, 10 earth" and could hang over a cliff unchecked) and a sandstone or
+		// a stone base counts too: its size and its overhang (e.g. the drum tower's 49x45
+		// andesite plate) and a sandstone or
 		// terracotta floor in the desert and badlands (earth_base_scan.py)
 		List<TagKey<Block>> earth = withBases(earthTags(), structure.is(STONE_BASE), structure.is(SAND_BASE));
 		if (earth.isEmpty()) return null;

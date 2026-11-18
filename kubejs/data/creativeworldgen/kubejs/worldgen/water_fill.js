@@ -6,7 +6,7 @@
 // structures carry water on purpose (jungle temple pools, stronghold fountains, village farms), and those
 // must not be counted. Structure ids as in /dumpstructuregen ('#tag' works too).
 //
-// Which templates carry water ( of mods/*.jar): Hopo's ruins and fossils (30 to 7,700 water blocks each),
+// Which templates carry water (scanned in mods/*.jar): Hopo's ruins and fossils (30 to 7,700 water blocks each),
 // the T&T ocean outpost plate (10,000, y 57-62, flush with the sea), the T&T ocean village escort ships,
 // Farmer's Structures sushi stall and fish ponds, the swamp fisherman house (a pond under it).
 ServerEvents.tags('worldgen/structure', function (e) {

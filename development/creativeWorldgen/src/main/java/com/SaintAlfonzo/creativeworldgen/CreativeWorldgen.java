@@ -50,15 +50,13 @@ import java.util.regex.Pattern;
  * Creative Worldgen (feature_writeup/creative_worldgen.md): the pack's world generation and fauna. Structure placement,
  * frequencies, biome rules and fits, locate, earth and water fill, terrain adaptation, meta structures, sky islands,
  * bee nests, mob spawns and caps, named mobs, mooshrooms, leaf decay, raids glowing, Forgiving Void, the Farmer's
- * Structures donor. Nests More Mooblooms and Baby Mobs. Requires Creative Common ({@code creativeengineering}, later
- * Creative Common) and Creative Compat.
+ * Structures donor. Nests More Mooblooms and Baby Mobs. Requires Creative Common and Creative Compat.
  *
  * Ids: the biome modifier codecs, the meta structure and piece types, the data (structures, dimensions, noise settings,
  * placed features, biome modifiers) and the tags are under this jar's own namespace ({@link #NS}) (namespace_move.md
  * step 6). Old saves keep loading through the swap list (data/creativeworldgen/swaps),
  * {@link com.SaintAlfonzo.creativeworldgen.worldgen.LegacyIds} (structure starts, pieces, dimension keys) and
- * {@link com.SaintAlfonzo.creativeworldgen.worldgen.DimensionMove} (dimension folders). The registrations below are the
- * ones Creative Common's constructor made, in the same order.
+ * {@link com.SaintAlfonzo.creativeworldgen.worldgen.DimensionMove} (dimension folders).
  */
 @Mod(CreativeWorldgen.MOD_ID)
 public class CreativeWorldgen {
@@ -167,13 +165,13 @@ public class CreativeWorldgen {
 		}
 	}
 
-	/** Lines of creativeengineering-common.toml that held the sections and [perf] keys moved here. */
+	/** Lines of creativeengineering-common.toml that hold the sections and [perf] keys carried here. */
 	private static final Pattern OLD_KEY = Pattern.compile(
 			"^\\s*(\\[(?:forgiving_void|leaf_decay|raids|worldgen|named_mobs)(?:\\.[a-z_.]+)?\\]"
 					+ "|(?:mobCap[A-Za-z0-9]*|spawnChunksLevel[12]|spawnBand[A-Za-z0-9]*)(?=\\s*=))", Pattern.MULTILINE);
 
 	/**
-	 * The sections moved out of Creative Common's file. When this file already existed the carry-over did not run, and Forge
+	 * The sections carried from Creative Common's file. When this file already existed the carry-over does not run, and Forge
 	 * drops the old sections from Creative Common's file on its next correction, so an edited value left there is lost: say
 	 * which ones were still there. Runs at construction, before Forge loads and corrects the COMMON configs.
 	 */

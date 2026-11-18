@@ -68,7 +68,7 @@ public final class MetaFeaturePiece extends StructurePiece implements PieceBeard
 		if (!chunkBox.isInside(spot)) return;
 		Registry<PlacedFeature> features = level.registryAccess().registryOrThrow(Registry.PLACED_FEATURE_REGISTRY);
 		PlacedFeature placed = features.get(feature);
-		if (placed == null) {   // a piece saved before the namespace move (LegacyIds)
+		if (placed == null) {   // a piece saved under an old id (LegacyIds)
 			ResourceLocation moved = LegacyIds.moved(feature.toString(), features);
 			if (moved != null) {
 				feature = moved;

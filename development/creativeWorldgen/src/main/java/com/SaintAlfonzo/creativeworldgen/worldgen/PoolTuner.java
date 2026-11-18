@@ -611,8 +611,7 @@ public final class PoolTuner {
 	 * The weight a piece plays with, from its stored entry. Keys of duplicate pieces ({@code #2}, {@code #3}) follow
 	 * list order, so a reordered pool (canonicalOrder, a mod update) can hand a key to a piece with another weight.
 	 * The stored {@code original} tells: when it differs from the live piece's weight, an unedited entry
-	 * ({@code current == original}) follows the live weight; an edited one keeps its value and is reported. Before
-	 * the stored current always won, so 223 duplicates in 27 pools played another piece's weight.
+	 * ({@code current == original}) follows the live weight; an edited one keeps its value and is reported.
 	 */
 	static double mergeCurrent(String poolId, String key, int liveOriginal, double oldOriginal, double oldCurrent, List<String> warnings) {
 		if (Double.isNaN(oldOriginal) || oldOriginal == liveOriginal) return oldCurrent;

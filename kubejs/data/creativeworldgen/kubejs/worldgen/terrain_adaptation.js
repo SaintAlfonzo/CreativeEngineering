@@ -84,7 +84,7 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	// End builds: Ender's Delight's End House (9x16 purpur and end stone floor, shipped by Creative Delight's enders
 	// member). Soft only: its floor is the building, not a pad, so no trim. Its own json says beard_thin.
 	var endBuilds = ['endersdelight:end_house']
-	// Batch 4 (TODO structures/terrain #1). Ponds: water is a built block for the trim, so the pond stays whole and
+	// Ponds (TODO structures/terrain #1): water is a built block for the trim, so the pond stays whole and
 	// the pad around it goes. The carp pond is sunk too (start -4, grass rim at its y 4), like the camps. Philip's
 	// level-three ruins: grass pads around the walls; meta/large_ruins parts follow their anchor.
 	var ponds = [
@@ -116,14 +116,14 @@ ServerEvents.tags('worldgen/structure', function (e) {
 	// Sunk starts: start_height below 0 sinks these templates into the ground on purpose, and the beard levels the ground
 	// at the surface they were projected to instead of at their sunk bottom layer (Creative Common TerrainAdaptation#sink).
 	// Campsite Structures' camps stand on a 4-layer dirt dome under their grass layer (start height -4: the grass layer
-	// replaces the surface block; their old features used -5, a 1-block dip); with the plain beard_thin the ground around
-	// them was dug down to the dome's bottom and the dome stood 4 blocks out of a flat ring.
+	// replaces the surface block); with the plain beard_thin the ground around them would be dug down to the dome's
+	// bottom and the dome would stand 4 blocks out of a flat ring.
 	global.tags.add(e, 'creativeworldgen:terrain_adaptation/sunk_start', [
 		'campsite_structures:armorer_campsite', 'campsite_structures:butcher_campsite', 'campsite_structures:cartographer_campsite',
 		'campsite_structures:cleric_campsite', 'campsite_structures:farmer_campsite', 'campsite_structures:fisher_campsite',
 		// Not here: Philip's ancient_crypt and antiquus_crypta, T&T's nilotic village. Their start element is terrain
 		// matching (Creative Common refuses them), so they keep their own placement (owner call TODO structures/earthfill
-		// #17). the carp pond (batch 4): a 4-layer dirt bowl under its grass rim, start height -4
+		// #17). the carp pond: a 4-layer dirt bowl under its grass rim, start height -4
 		'farmers_structures:aquacultures_carp',
 	])
 

@@ -5,12 +5,11 @@ import java.util.List;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
- * Creative Worldgen's COMMON config, {@code config/creativeworldgen-common.toml}. The sections moved out of Creative Common's
- * creativeengineering-common.toml (creative_split.md 7.6, wave 5) with keys, comments and defaults
- * unchanged: {@code [forgiving_void]}, {@code [leaf_decay]}, {@code [raids]}, the mob cap and spawn area keys of
+ * Creative Worldgen's COMMON config, {@code config/creativeworldgen-common.toml}. The sections carried from Creative Common's
+ * creativeengineering-common.toml (creative_split.md 7.6, wave 5): {@code [forgiving_void]}, {@code [leaf_decay]}, {@code [raids]}, the mob cap and spawn area keys of
  * {@code [perf]}, {@code [worldgen]} with every subtable, and {@code [named_mobs]}. The first boot with Worldgen copies a
  * player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeWorldgen}). The static field
- * names are the pre-carve CEConfig's, so {@code global.NCH.cfg(..., 'WORLDGEN')} finds them once the scripts register this class.
+ * names are the section field names, so {@code global.NCH.cfg(..., 'WORLDGEN')} finds them once the scripts register this class.
  */
 public final class CWGConfig {
 
@@ -1119,7 +1118,7 @@ public final class CWGConfig {
 
 	/**
 	 * The mob cap levels and spawn areas of {@code perf/MobCapLevels} (perf.md 17; mixin/MobCapMixin,
-	 * MobCapLevelTickMixin, MobCapSpawnAreaMixin). The table keeps Creative Common's comment. Read live.
+	 * MobCapLevelTickMixin, MobCapSpawnAreaMixin). Read live.
 	 */
 	public static final class Perf {
 		public final ForgeConfigSpec.BooleanValue mobCapLevels;

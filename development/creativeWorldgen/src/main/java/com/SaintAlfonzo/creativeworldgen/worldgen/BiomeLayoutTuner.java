@@ -59,7 +59,7 @@ import net.minecraftforge.fml.ModList;
  * back into biome_config.json, only when they changed. Results are cached on the input files' contents, so
  * a /reload with nothing edited costs a hash, not a solve. The cache is also kept on disk
  * (biome_layout_cache.json.gz, ships with the pack), so the first datapack load of a new JVM reads it back
- * instead of re-solving (s). Its key adds a hash of this solver's own class files, so a changed solver
+ * instead of re-solving. Its key adds a hash of this solver's own class files, so a changed solver
  * never reads a layout an older one wrote.
  */
 public final class BiomeLayoutTuner {
