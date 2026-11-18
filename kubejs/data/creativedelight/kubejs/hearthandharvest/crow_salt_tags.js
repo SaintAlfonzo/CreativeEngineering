@@ -29,7 +29,12 @@ ServerEvents.tags('block', e => {
 	// Salt lick: the worn stages mine like The Salt's block.
 	var licks = [i.lightly_licked_salt_block, i.well_licked_salt_block, i.heavily_licked_salt_block, i.waxed_salt_block,
 		i.waxed_lightly_licked_salt_block, i.waxed_well_licked_salt_block, i.waxed_heavily_licked_salt_block]
+	// The placed Rock Salt Block (stage 0, no item); skipped until Creative Common's block dict has the key
+	// and, like the Rock Salt Block (Creative Common melting_tags.js), it melts ice as a salt source
+	var placed = global.blocks.placed_rock_salt_block
+	if (placed) licks.push(placed)
 	t.add(e, global.blocks.t_mineable_pickaxe, licks)
+	if (placed) t.add(e, global.blocks.t_melt_salt, placed)
 
 	// Crows
 	t.add(e, 'creativedelight:repels_crows', [i.carved_pumpkin, i.jack_o_lantern, i.scarecrow])

@@ -9,8 +9,9 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 /**
- * A worn or waxed stage of a salt lick. Every interaction lives in {@link SaltEvents}, because stage 0 is The Salt's
- * {@code salt:raw_rock_salt_block} (the Rock Salt Block, plan_post_scratch_1115 G2b) and cannot carry code of ours. Waxed stages are separate blocks for the same reason: the foreign
+ * A stage of a salt lick: the placed Rock Salt Block ({@link PlacedRockSaltBlock}, stage 0) or a worn or waxed stage.
+ * Every interaction lives in {@link SaltEvents}, written when stage 0 was The Salt's {@code salt:raw_rock_salt_block}
+ * itself (plan_post_scratch_1115 G2b). Waxed stages are separate blocks for the same reason: the foreign
  * block cannot take a {@code waxed} property, and a waxed block must stay out of the POI type.
  * <p>
  * Each stage is a layer like snow (plan_bugfix_1114 3.7): 16 / 12 / 8 / 4 px for full / lightly / well / heavily licked;

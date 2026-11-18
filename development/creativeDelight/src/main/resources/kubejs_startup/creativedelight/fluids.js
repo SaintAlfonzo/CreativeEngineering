@@ -19,6 +19,12 @@ StartupEvents.registry('fluid', e => {
 	// Cooking fluids (TODO dishes/ingredients #2): egg solution stands in for egg + milk, frosting for the frosting item
 	reg.fluid(e, f.egg_solution).displayName('Egg Solution').thinTexture(0xF3D97A).bucketColor(0xF3D97A).noBucket().noBlock()
 	reg.fluid(e, f.frosting).displayName('Frosting').thinTexture(0xFFF4F0).bucketColor(0xFFF4F0).noBucket().noBlock()
+	// Syrup (largecontent/mod-additions #72b): Rustic Delight's Syrup bottle as a fluid, 250 mB a bottle. Hearth and Harvest
+	// 1.4.1's own syrup fluid textures, untinted (copied into the hearthandharvest member). Recipes in Creative Delight's
+	// hearthandharvest/recipes.js. Skipped until Creative Common's fluid dict has f.syrup.
+	if (f.syrup)
+		reg.fluid(e, f.syrup).displayName('Syrup').stillTexture('hearthandharvest:block/fluid/syrup_still')
+			.flowingTexture('hearthandharvest:block/fluid/syrup_flow').noBucket().noBlock()
 	// Kettle tank drinks (feature_writeup/farmers_respite.md K9): Rustic Delight's coffees past plain Coffee (that one
 	// is Central Kitchen's coffee fluid) and Delightful's Kettle drinks. Bottle <-> 250 mB in Creative Delight's
 	// farmersrespite/kettle.js; the Kettle reads those pairs to fill and empty bottles.

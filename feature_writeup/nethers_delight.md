@@ -205,3 +205,10 @@ Tests: SQ-NDM in testing/scratch_queue.md (the 4.7 rows plus the load check of c
 2026-11-02 (`perf/runs/r1102b/s3/judged.md`): SQ-NDM-01, -02, -03, -04 (real PASS), -06, -07 PASS; -05 OPEN (the broken
 open-sky colony's drop not proven; hand or probe addition); -08 (3.1 save) not run. The mod-list name is a client check: CQ-NDM-01 (names, potted render, JEI; deep scan 2026-11-02).
 
+### 4.10 Cooked Nether Wart dishes (`dishes/meals #59`, owner 2026-11-17; built 2026-11-17)
+
+CD `nethersdelight/recipes.js`. Strider Moss Stew: the Cooking Pot takes nether wart (`#forge:crops/nether_wart`) in
+place of the second warped fungus (200 ticks, 1.0 xp, bowl); heatless shapeless craft (`_manual_only`): Roll Delight's
+Cooked Nether Wart (brings the bowl), warped fungus, crimson fungus, crimson roots, 2 raw strider. Warped Moldy Meat:
+Cooked Nether Wart in place of the bowl. The Nether Skewer is unchanged. Grid crafts hand back the Cooked Nether Wart's
+bowl (its crafting remainder), as bone broth does in the heatless meals. Queue SQ-BBQ-11, -12 (rows/BBQ.qb section 2).

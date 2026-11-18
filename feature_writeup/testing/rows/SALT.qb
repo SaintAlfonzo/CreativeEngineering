@@ -1327,11 +1327,11 @@ expect \[salttest\] PASS salt:salt_block beside water dissolves
 @@text saltMeltSnowLayers). Client rows: names, JEI page.
 @@text
 @@table
-## SQ-SALT2-10 | Rock Salt Block is the lick: a cow walks to it and wears it; Salt Dust Block is not licked
+## SQ-SALT2-10 | a placed Rock Salt Block is the lick: a cow walks to it and wears it; Salt Dust Block is not licked
 @group A
-@commands Fenced 9x9 pasture, 2 cows; `salt:raw_rock_salt_block` at one end, `salt:salt_block` at the other; `/gamerule randomTickSpeed 3`; watch 10 minutes (or until the rock salt block wears a stage)
-@pass the Rock Salt Block becomes `hearthandharvest:lightly_licked_salt_block` (then well, heavily); the Salt Dust Block never changes; latest.log has no "salt lick POI clash" line
-@fails no wear: POI not built on the Rock Salt Block (`SaltLick.SALT_BLOCK_ID`); Salt Dust Block worn: old root
+@commands Fenced 9x9 pasture, 2 cows; a player (bot) places a Rock Salt Block (`salt:raw_rock_salt_block` item) at one end, `salt:salt_block` at the other; `/gamerule randomTickSpeed 3`; watch 10 minutes (or until the rock salt block wears a stage)
+@pass the placed block reads `hearthandharvest:placed_rock_salt_block` and becomes `hearthandharvest:lightly_licked_salt_block` (then well, heavily); the Salt Dust Block never changes; latest.log has no "salt lick POI clash" line
+@fails no wear: POI not built on the placed block (`HHSaltRegistry.PLACED_ROCK_SALT`); placed block stays `salt:raw_rock_salt_block`: `SaltEvents.onPlace` not registered; Salt Dust Block worn: old root
 @draft runnable steps not written yet; the next runner writes them from @commands
 ## SQ-SALT2-11 | Rock Salt refills one stage by hand and by dispenser; salt dust and salt layers do not
 @group A
@@ -1381,9 +1381,33 @@ expect \[salttest\] PASS salt:salt_block beside water dissolves
 @pass `salt:meltables` holds the saltable tag's blocks; no `minecraft:blue_ice`, no `securitycraft:reinforced_snow_block`
 @fails the warning line: block_dict key missing (Creative Common); blue ice listed: script did not run
 @draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-SALT2-19 | natural Rock Salt Blocks are never licks: a /setblock or generated block is not visited or worn
+@group A
+@commands Fenced 9x9 pasture, 2 cows; `/setblock` `salt:raw_rock_salt_block` at one end (not placed by a player); `/gamerule randomTickSpeed 3`; watch 10 minutes; then empty both hands and right click it 20 times; then honeycomb on it. Group B seed with a salt cave or beach patch: `/locate` or walk to one, 2 cows next to it, watch 10 minutes
+@pass the block stays `salt:raw_rock_salt_block`; cows do not gather at it; player clicks neither lick nor wear it; honeycomb does nothing (stays in hand); the generated blocks never change
+@fails worn or waxed: the natural block is still in the lick chain (`SaltLick.ensure` plain[0]) or the POI type (`HHSaltRegistry.createPoi`)
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-SALT2-20 | the placed lick: drops, pick block, waxed and unwaxed, refilled back to the placed block
+@group A
+@commands Bot places a Rock Salt Block; middle click it in creative; mine it with a pickaxe (survival); place another, wax it with honeycomb, then take the wax off with an axe; place a `hearthandharvest:heavily_licked_salt_block`, right click with `salt:raw_rock_salt` 3 times; a Deployer holding a Rock Salt Block places one
+@pass pick block gives `salt:raw_rock_salt_block`; mining drops 1 `salt:raw_rock_salt_block` (no item named Placed); honeycomb -> `waxed_salt_block`, axe -> `placed_rock_salt_block`; refills step heavily -> well -> lightly -> `placed_rock_salt_block`; the Deployer's block is `placed_rock_salt_block`; the Rock Salt Block tooltip shows "Animals lick this"
+@fails drops nothing: loot table `hearthandharvest:blocks/placed_rock_salt_block` missing; unwax gives `salt:raw_rock_salt_block`: WAX map still on `saltBlock()`
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-SALT2-21 | save safety: a 2026-11-16 save keeps its worn licks working and loads without errors
+@group A
+@commands A save from before this change (instance save or scratch world made with the older Creative Delight jar) holding a lightly licked stage, a waxed heavily licked stage and a Salt Dust Block in a pasture with cows; load it with the new jar; watch 10 minutes; unwax the waxed stage
+@pass no missing-block or POI errors in latest.log; cows still visit and wear the lightly licked stage; unwaxed stage keeps its stage; the Salt Dust Block is not licked; no `salt:raw_rock_salt_block` turns into a lick by itself
+@fails animals walk to an old POI record on a non-lick block: the block check in `StayNearSaltGoal.findSalt` missing
+@draft runnable steps not written yet; the next runner writes them from @commands
 ## CQ-SALT2-01 | names and the Water Evaporation page
 @group client
 @commands Hover Rock Salt, Rock Salt Block, Salt Dust Block, Rock Salt Vein, Deepslate Rock Salt Vein, the licked stages, Smooth Salt Block, Salt Bricks; JEI: open Salt's uses (U), the Water Evaporation page
 @pass names: Rock Salt, Rock Salt Block, Salt Dust Block, Rock Salt Vein, Deepslate Rock Salt Vein, Lightly Licked Rock Salt Block (and the rest), Chiseled Salt Block, Chiseled Salt Bricks; lamps unchanged; one Water Evaporation page (not two) with 8 salt in the output slot and the tooltip "Full cauldron: 8 / Two thirds full: 5 / One third full: 3"
 @fails two evaporation pages: The Salt's page not hidden; output 1: CD plugin not loaded
+@draft runnable steps not written yet; the next runner writes them from @commands
+## CQ-SALT2-02 | placed lick name and info texts
+@group client
+@commands Place a Rock Salt Block, look at it (WTHIT); JEI: the salt lick info page (Rock Salt Block, U or R); JEI: Vintage Delight's Evaporator info page
+@pass WTHIT names the placed block "Rock Salt Block"; the lick page starts "Placed by a player" and says Rock Salt Blocks found in the world are not licked; the Evaporator page ends "Salt Dust Blocks do not grow salt."
+@fails name shows the raw id: hearth lang key `block.hearthandharvest.placed_rock_salt_block` missing
 @draft runnable steps not written yet; the next runner writes them from @commands

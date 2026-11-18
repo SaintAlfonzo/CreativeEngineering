@@ -203,7 +203,9 @@ public class StayNearSaltGoal extends Goal {
 
     @Nullable
     private BlockPos findSalt(ServerLevel level) {
-        Optional<BlockPos> found = level.getPoiManager().findClosest(type -> type.is(HHSaltRegistry.SALT_LICK_POI.getKey()), mob.blockPosition(),
+        // The block check skips records a save kept from before generated Rock Salt Blocks left the POI type
+        Optional<BlockPos> found = level.getPoiManager().findClosest(type -> type.is(HHSaltRegistry.SALT_LICK_POI.getKey()),
+                pos -> SaltLick.isLickable(level.getBlockState(pos).getBlock()), mob.blockPosition(),
                 SaltConfig.ANIMAL_RADIUS.get() + 2, PoiManager.Occupancy.ANY);
         return found.map(BlockPos::immutable).orElse(null);
     }

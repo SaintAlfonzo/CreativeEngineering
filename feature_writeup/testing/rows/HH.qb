@@ -11936,3 +11936,38 @@ expect \[zhh3\] watch s3 done samples=\d+ count=[1-9]
 expect verb=state pos=21920,-60,4000 state="?hearthandharvest:\w*licked_salt_block\b
 look w3 minD; the block a licked stage (lightly_licked); air would be the cow licking it fully away (also a lick)
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
+
+@@section 4
+@@title Syrup to sugar and the syrup fluid, 2026-11-17 ([plan_bugfix_1114.md](../plan_bugfix_1114.md) 3.4, [hearth_and_harvest.md](../hearth_and_harvest.md) J87; TODO `largecontent/mod-additions #72b`)
+@@date 2026-11-17
+@@jars creativecommon creativedelight
+@@sources kubejs/data/creativedelight/kubejs/hearthandharvest/recipes.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js
+@@text
+@@text The pot recipe needs only the Creative Delight jar of 2026-11-17. The fluid rows (SQ-HH-1614 to -1616) also need a
+@@text Creative Common jar whose fluid dict has `f.syrup`; without it the fluid and its recipes are skipped (no error).
+@@text
+@@table
+## SQ-HH-1613 | Cooking Pot: 1 Rustic Delight Syrup -> 8 sugar, the bottle returned; heated mixer copy; hand craft still 4
+@group A
+@commands `cdevtest rdetail creativedelight:farmersdelightcooking/sugar_from_syrup`; `cdevtest rdetail creativedelight:shapeless/sugar_from_syrup`; live: a lit Cooking Pot with 1 syrup, wait 10 s, take out; a heated basin under a mixer with 1 syrup
+@pass pot recipe: ingredients `rusticdelight:syrup`, result `minecraft:sugar*8`, no container; the shapeless stays at 4; live pot: 8 sugar out, 1 glass bottle in the pot's leftover slot; heated mixer: 8 sugar and 1 glass bottle in the basin; unheated basin: only the 4-sugar shapeless runs (or nothing)
+@fails 4 sugar from the pot: fdCooking line missing in `hearthandharvest/recipes.js`; no bottle: syrup remainder lost
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-HH-1614 | syrup fluid registered with Hearth and Harvest's syrup textures and tagged
+@group any
+@commands `cdevtest tag fluid forge:fluid/syrup`; grep startup.log for `creativedelight:syrup`; `/kubejs dump_registry minecraft:fluid` or a probe for `creativedelight:syrup`
+@pass the fluid `creativedelight:syrup` exists (no bucket, no block); `forge:fluid/syrup` holds it; no texture warning for `hearthandharvest:block/fluid/syrup_still` / `_flow`
+@fails fluid absent: Creative Common fluid dict lacks `f.syrup`
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-HH-1615 | heated mixing: 1000 mB sap -> 250 mB syrup fluid; 250 mB syrup fluid -> 8 sugar
+@group A
+@commands `cdevtest rdetail creativedelight:createmixing/syrup_fluid_from_sap`; `cdevtest rdetail creativedelight:createmixing/sugar_from_syrup_fluid`; live: heated basin with 1000 mB sap, mixer running; then 250 mB syrup fluid alone
+@pass both recipes heated; sap -> 250 mB `creativedelight:syrup`; syrup fluid -> 8 sugar; unheated: nothing
+@fails missing recipes: `f.syrup` guard skipped them (Common dict)
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-HH-1616 | Spout fills a glass bottle with 250 mB syrup fluid; Item Drain empties a syrup bottle to 250 mB
+@group A
+@commands `cdevtest rdetail syrup` (createfilling / createemptying ids `creativedelight:.../syrup`); live: Spout over a depot with a glass bottle, 250 mB syrup fluid; Item Drain with 1 `rusticdelight:syrup`
+@pass filling gives 1 `rusticdelight:syrup`; draining gives 250 mB `creativedelight:syrup` and a glass bottle
+@fails no route: `R.createBottle` line skipped (`f.syrup` missing)
+@draft runnable steps not written yet; the next runner writes them from @commands

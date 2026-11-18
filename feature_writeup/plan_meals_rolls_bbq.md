@@ -118,6 +118,14 @@ See section 5 below the table; ids added to [todo/TODO.md](todo/TODO.md) 2026-11
 | `food/placeable #5` (existing) | Placed models for skewers (raw and cooked), added to the note |
 | `dishes/meals #59` | Cooked Nether Wart: integrate with Nether's Delight |
 
+Build 2026-11-17 (lane F2, plan_exec_1117; owner rulings 2026-11-17 in the TODO rows):
+- `#58`: both skewers kept. Cave Skewer raw = Miner's spider leg + glow berries + rotten flesh; heatless `_manual_only`
+  craft with the baked spider leg; without Miner's the upstream spider eye and no heatless craft (CD
+  `barbequesdelight/skewers.js`, `F.skewer`). Nothing purged. SQ-BBQ-10.
+- `#59`: Strider Moss Stew pot: nether wart for the second warped fungus; heatless meal craft with Cooked Nether Wart;
+  Warped Moldy Meat: Cooked Nether Wart for the bowl; Nether Skewer unchanged (CD `nethersdelight/recipes.js`,
+  [nethers_delight.md](nethers_delight.md) 4.10). SQ-BBQ-11, -12.
+
 ## Build record (2026-11-04)
 
 Built in one session; `./gradlew :creativeDelight:build --offline` passed (20:33). **Not installed:** a parallel session

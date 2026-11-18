@@ -16,8 +16,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * The chain of lick stages. Stage 0 is The Salt's Rock Salt Block ({@code salt:raw_rock_salt_block}, plan_post_scratch_1115
- * G2b); the rest are our {@link LickableSaltBlock}s. 4 stages = 4 Rock Salt: one wear is one stage, one Rock Salt (by hand
+ * The chain of lick stages. Stage 0 is a player-placed Rock Salt Block ({@link PlacedRockSaltBlock}, swapped in when a
+ * player places The Salt's {@code salt:raw_rock_salt_block}, plan_post_scratch_1115 G2b); generated Rock Salt Blocks are
+ * no lick. The rest are our {@link LickableSaltBlock}s. 4 stages = 4 Rock Salt: one wear is one stage, one Rock Salt (by hand
  * or dispenser) refills one stage. Salt layers no longer refill a lick and are not eaten first (G6-10).
  */
 public final class SaltLick {
@@ -46,7 +47,7 @@ public final class SaltLick {
             if (built) {
                 return;
             }
-            Block[] plain = {saltBlock(), HHSaltRegistry.LIGHTLY_LICKED.get(), HHSaltRegistry.WELL_LICKED.get(), HHSaltRegistry.HEAVILY_LICKED.get()};
+            Block[] plain = {HHSaltRegistry.PLACED_ROCK_SALT.get(), HHSaltRegistry.LIGHTLY_LICKED.get(), HHSaltRegistry.WELL_LICKED.get(), HHSaltRegistry.HEAVILY_LICKED.get()};
             Block[] waxed = {HHSaltRegistry.WAXED_SALT.get(), HHSaltRegistry.WAXED_LIGHTLY_LICKED.get(), HHSaltRegistry.WAXED_WELL_LICKED.get(), HHSaltRegistry.WAXED_HEAVILY_LICKED.get()};
             for (int i = 0; i < plain.length; i++) {
                 WAX.put(plain[i], waxed[i]);
@@ -62,7 +63,7 @@ public final class SaltLick {
         }
     }
 
-    /** Stage 0, the Rock Salt Block. */
+    /** The Salt's Rock Salt Block: placed by a player it becomes stage 0; generated ones are no lick. */
     public static Block saltBlock() {
         return ForgeRegistries.BLOCKS.getValue(SALT_BLOCK_ID);
     }

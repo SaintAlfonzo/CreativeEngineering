@@ -707,7 +707,7 @@ plan from a basin recipe to a craft by hand.
 | Seafood Skewer (Oceanic) | shrimp, raw calamari, sea pickle | fried shrimp, cooked calamari, sea pickle (upstream) | 240 (cod) |
 | Turnip Mutton Skewer (Veggies) | raw mutton, turnip | cooked mutton, turnip; assembly kept | 320 (lamb) |
 | Crispy Skewer (Ender's) | mite crust, 2 chorus fruit | mite crust, chorus fruit, popped chorus fruit; assembly kept | 280 (chicken) |
-| Cave Skewer (Hostile) | glow berries, spider eye, rotten flesh | none (all raw already) | 280 (chicken) |
+| Cave Skewer (Hostile) | glow berries, Miner's spider leg, rotten flesh (spider eye without Miner's; `dishes/meals #58`, owner 2026-11-17: both skewers kept) | glow berries, baked spider leg, rotten flesh (none without Miner's) | 280 (chicken) |
 
 - **Shulker mollusk merge undone** (owner, End Skewer uses the mollusk only): the 2026-11-02 merge (`dishes/ingredients #32`,
   [item_merges.md](item_merges.md) 2.14) is emptied for the mollusk and filet; Ender's knife drop and mollusk-to-filet cut are

@@ -275,6 +275,7 @@ b.vintage_salt_blocks = 'vintagedelight:*salt*';                // salt, salt bl
 b.vintage_evaporator = 'vintagedelight:evaporator';
 b.hh_salt_lick_stages = 'hearthandharvest:*licked_salt_block';  // lightly / well / heavily licked, waxed or not (HHSaltRegistry)
 b.hh_waxed_salt_block = 'hearthandharvest:waxed_salt_block';
+b.placed_rock_salt_block = 'hearthandharvest:placed_rock_salt_block';  // player-placed Rock Salt Block, lick stage 0 (placed-only licks)
 // Modded flame lights counted as fire (plan 3.8 table, dump); the non-flame ones of the same mods are left out
 b.melt_fire_supplementaries_sconces = 'supplementaries:sconce*';  // every sconce and wall sconce, the sconce lever
 b.melt_fire_supplementaries_lanterns = 'supplementaries:*lantern'; // brass, copper, crimson, lead, silver, wall lantern

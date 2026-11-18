@@ -189,13 +189,13 @@ Status: BUILT 2026-11-15, not installed: Creative Common 1.2.0 (`Melting` listen
 ## 8. Salt redesign (plan_post_scratch_1115 G2, G6, G7.5 to G7.7, G7.13, G7.14; built 2026-11-17)
 
 Status: built in the Creative Delight jar (Salt member `-04`, hearth `-04`, Vintage member, CD main), not installed, not
-booted. Queue: SQ-SALT-R01 to -R09 (rows/SALT.qb section 8). TODO `tooling/scratch-1115-follow-ups #21`, `#6`; 1115b
+booted. Queue: SQ-SALT2-10 to -21, CQ-SALT2-01, -02 (rows/SALT.qb section 3). TODO `tooling/scratch-1115-follow-ups #21`, `#6`; 1115b
 `#12`, `#13`. Supersedes 7.1 B4 (salt lick hook), B5 and the layer part of B7.
 
 | Step | Rule | Where |
 |---|---|---|
 | Names | Raw Rock Salt -> Rock Salt; Block of Raw Rock Salt -> Rock Salt Block; Salt Block -> Salt Dust Block (Vintage's merged `salt_block` too); ores -> Rock Salt Vein, Deepslate Rock Salt Vein; licks -> "{Waxed} {Lightly/Well/Heavily} Licked Rock Salt Block", stage 0 waxed "Waxed Rock Salt Block"; Vintage decor -> Chiseled Salt Block, Pillar, Bricks, Brick Slab/Stairs/Wall. Ids unchanged; salt lamps and Mixed Salt Bricks keep their names; the item stays "Salt" | Salt member `assets/salt/lang/en_us.json`, hearth and Vintage lang files |
-| Lick root | Stage 0 is `salt:raw_rock_salt_block`; the POI, the waxed stage 0 model (Rock Salt Block texture, referenced in place) and the JEI lick page follow. Salt Dust Blocks are no longer licks | hearth `SaltLick.SALT_BLOCK_ID`, `models/block/waxed_salt_block.json` |
+| Lick root | Stage 0 is a player-placed Rock Salt Block (`hearthandharvest:placed_rock_salt_block`, 8.1); the POI, the waxed stage 0 model (Rock Salt Block texture, referenced in place) and the JEI lick page follow. Salt Dust Blocks are no longer licks | hearth `SaltLick.SALT_BLOCK_ID`, `PlacedRockSaltBlock`, `models/block/waxed_salt_block.json` |
 | Refill | Rock Salt (`salt:raw_rock_salt`) restores one stage of a worn lick by hand or dispenser, waxed or not; on a full lick it does nothing. Salt, salt dust and salt layers no longer refill; licks no longer eat layers on top first; the dispenser no longer puts a layer on a full lick | hearth `SaltLick.isSalt`, `refill`, `SaltEvents` (dispenser on Rock Salt only), `LickableSaltBlock` (layer hook removed) |
 | Last wear | The heavily licked stage wears away and drops 1 Salt (salt dust; The Salt's salt without Vintage) | `SaltLick.wear` |
 | Recipes | Rock Salt Block = 4 Rock Salt (2x2), back to 4 (upstream 9 both ways, removed); heated mixing 1000 mB water + Rock Salt Block -> Rock Salt Block + 2 Salt (`rock_salt_water_salt`; `water_salt` removed); Large Salt Lamp = 7 Rock Salt, glowstone, wooden slab | CD `creativedelight/salt.js` |
@@ -206,12 +206,32 @@ booted. Queue: SQ-SALT-R01 to -R09 (rows/SALT.qb section 8). TODO `tooling/scrat
 | Rare Ice | `allowInsertingItemsToIce=false`: Rare Ice no longer takes the right click on plain ice, so salt dust and the Salt Melt act on it (1115b `#12`) | `config/rare-ice.properties` (+ `configs_edited/`) |
 
 Notes:
-- Natural Rock Salt Blocks (salt caves, beach patches) are licks too: animals walk to them and wear them away (G6-10
-  accepted the messy path). Their POI is added as chunks load.
+- Natural Rock Salt Blocks (salt caves, beach patches) are not licks (owner, 2026-11-17, 8.1; the G6-10 "messy path"
+  that let animals wear them is withdrawn).
 - 1115b `#13` (a salt layer on melting ice drops as dust before the vanish roll): the cause is in Creative Common
   `Melting` (the target is melted before the salt listener runs, so the layer above loses support first). Not fixed here.
 - Salt layers falling (E4, G7.5) is Creative Compat's general layer fall; the lick hook of E4 is dropped. Vintage's salt
   layer is `vintagedelight:salt` (a `SnowLayerBlock`, layers 1 to 8, loot 1 salt dust per layer).
+
+### 8.1 Placed-only licks (owner, 2026-11-17)
+
+Only a Rock Salt Block a player placed is a salt lick; Rock Salt Blocks found in the world (salt caves, beach patches,
+`/setblock`, structures) are never lick targets and never wear.
+
+| Part | Rule | Where |
+|---|---|---|
+| Placed twin | When a player (fake players too: Create's Deployer) places `salt:raw_rock_salt_block`, the block is swapped for `hearthandharvest:placed_rock_salt_block`: same models (The Salt's four random variants), named "Rock Salt Block", drops and picks `salt:raw_rock_salt_block`, no item of its own. A dispenser or schematicannon placement stays The Salt's block | hearth `PlacedRockSaltBlock`, `SaltEvents.onPlace` (`BlockEvent.EntityPlaceEvent`), blockstate and loot table under the hearth member |
+| Lick chain | Stage 0 of the chain (wax, unwax, refill back to full) is the placed twin; The Salt's block is out of the chain and out of the `salt_lick` POI type, so animals never look for it and player licks, honeycomb and Rock Salt do nothing on it | hearth `SaltLick` (plain[0]), `HHSaltRegistry.createPoi` |
+| Tooltip | The Rock Salt Block item keeps the "Animals lick this" line (placing it makes a lick); JEI lick page text says so | `SaltEvents.onTooltip`, hearth lang |
+| Tags | Pickaxe tag and salt melting source (`#creativecommon:melting/salt`, as the Rock Salt Block) through `crow_salt_tags.js`, inert until Creative Common's block dict has `b.placed_rock_salt_block`; until then it breaks by hand at the same hardness and does not melt ice. Blockrunner surface tags of the Rock Salt Block are not copied | CD `hearthandharvest/crow_salt_tags.js` |
+
+Save safety: the new block id is additive and no id is removed or renamed. Worn and waxed stages in older saves stay
+licks; unwaxing waxed stage 0 or refilling a heavily licked stage to full gives the placed twin. A POI record a save kept
+on a block that is no lick any more (Salt Dust Blocks from before section 8) is skipped by the block check in
+`StayNearSaltGoal.findSalt`, and vanilla drops records whose state left the type when the section reloads. A Rock Salt
+Block placed before this change counts as natural; break and place it again to make it a lick. Section 8 was never
+installed, so no save holds such a block as a lick. Queue: SQ-SALT2-10 (rewritten for a placed block), SQ-SALT2-19 to
+-21, CQ-SALT2-02 (rows/SALT.qb section 3).
 
 ## History
 

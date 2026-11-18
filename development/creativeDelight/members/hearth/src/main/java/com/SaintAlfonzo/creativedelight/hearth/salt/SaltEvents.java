@@ -24,17 +24,19 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * Player use of a salt lick. Goes through events rather than the block because stage 0 is The Salt's block: lick with
+ * Player use of a salt lick, and the placement that makes a Rock Salt Block a lick (stage 0, {@link PlacedRockSaltBlock}). Lick with
  * both hands empty, honeycomb to wax, an axe to unwax, Rock Salt to restore one stage (by hand and by dispenser;
  * plan_post_scratch_1115 G2b).
  */
@@ -47,6 +49,20 @@ public final class SaltEvents {
     public static void onEntityJoin(EntityJoinLevelEvent event) {
         if (!event.getLevel().isClientSide() && event.getEntity() instanceof PathfinderMob mob && mob.getType().is(SALT_LICKERS)) {
             mob.goalSelector.addGoal(4, new StayNearSaltGoal(mob));
+        }
+    }
+
+    /**
+     * A Rock Salt Block placed by a player (fake players too: Create's Deployer) becomes stage 0 of a salt lick, the
+     * placed twin of The Salt's block. Generated Rock Salt Blocks never pass here, so they are never licks.
+     */
+    public static void onPlace(BlockEvent.EntityPlaceEvent event) {
+        if (!(event.getEntity() instanceof Player) || !(event.getLevel() instanceof Level level) || level.isClientSide()) {
+            return;
+        }
+        Block rock = SaltLick.saltBlock();
+        if (rock != null && rock != Blocks.AIR && event.getPlacedBlock().is(rock)) {
+            level.setBlock(event.getPos(), HHSaltRegistry.PLACED_ROCK_SALT.get().defaultBlockState(), Block.UPDATE_ALL);
         }
     }
 
@@ -138,9 +154,10 @@ public final class SaltEvents {
         });
     }
 
-    /** The hint line (S6): every unwaxed stage, stage 0 included. Fires on the client only. */
+    /** The hint line (S6): every unwaxed stage, and the Rock Salt Block that becomes stage 0. Fires on the client only. */
     public static void onTooltip(ItemTooltipEvent event) {
-        if (event.getItemStack().getItem() instanceof BlockItem item && SaltLick.isLickable(item.getBlock())) {
+        if (event.getItemStack().getItem() instanceof BlockItem item
+                && (SaltLick.isLickable(item.getBlock()) || item.getBlock() == SaltLick.saltBlock())) {
             event.getToolTip().add(Component.translatable(HearthAndHarvestMod.MODID + ".salt_lick.hint").withStyle(ChatFormatting.GRAY));
         }
     }
