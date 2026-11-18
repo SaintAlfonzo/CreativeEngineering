@@ -33,7 +33,7 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
- * Data verbs of {@code /cdevtest}, moved from {@code /zq} (tools/scratch_query/zq_probe.js) per owner decision D4:
+ * Data verbs of {@code /cdevtest} (owner decision D4):
  * recipes, rdetail, bytype, uses, makes, food, item, attrs, reg, potion, tag, tagsof, states. Recipe reads go through
  * the serializer's registry id, never {@code Recipe.getType()} (Mechanical Extruder throws AbstractMethodError, r1113),
  * and each recipe is read inside its own catch.

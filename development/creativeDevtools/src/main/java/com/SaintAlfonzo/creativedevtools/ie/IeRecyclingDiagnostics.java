@@ -14,8 +14,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import org.slf4j.Logger;
 
 /**
- * IE arc-recycling diagnostics, logged once the server has started (moved from Creative Common's
- * {@code CreativeEngineering.onServerStarted}, feature_writeup/creative_devtools.md 2). Used ONLY for diagnostics:
+ * IE arc-recycling diagnostics, logged once the server has started (feature_writeup/creative_devtools.md 2). Used ONLY for diagnostics:
  * the actual prefixToIngotMap override lives in Creative Common's {@code IECompat.onServerAboutToStart}, which runs BEFORE
  * the arc recycling profiler bakes its cache. Registered by {@code CreativeDevtools} only when Immersive Engineering
  * is loaded, so the IE API classes are never touched without it.

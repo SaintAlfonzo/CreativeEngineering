@@ -14,7 +14,7 @@
 // (getResultItem) and the extra outputs of Create (getRollableResults) and IE (getItemOutputs). Outputs other
 // mods keep in their own fields are not seen.
 //
-// Creative Devtools (creative_devtools.md 2); the removed-item tag strip it used to share a file with stays in the
+// Creative Devtools (creative_devtools.md 2); the removed-item tag strip is in the
 // pack (server_scripts/_lib/removed_item_tags.js).
 //
 // Off by default. creativedevtools-common.toml [debug.recipe_scan] runAtLoad = true runs it once per session when the server has
