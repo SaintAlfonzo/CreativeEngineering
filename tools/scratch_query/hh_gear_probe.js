@@ -13,7 +13,7 @@
 //   /zhh5 potion ID             a potion's effects: id, duration, amplifier
 //   /zhh5 loot BLOCK N [TOOL]   rolls the block's default state drops N times with TOOL (loot modifiers apply), per-item totals
 // Output: "[zhh5] ..." lines in logs/latest.log, then "[zhh5] done".
-// MIGRATED in part (creative_devtools.md): sneak -> /pbot sneak, hand -> /cdevtest player, break -> /pbot
+// Also available as Devtools verbs (creative_devtools.md): sneak -> /pbot sneak, hand -> /cdevtest player, break -> /pbot
 // break, items -> /cdevtest items, loot -> /cdevtest loot (needs the block placed). The rest stays here.
 (() => {
 	const $ZStr = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

@@ -16,7 +16,7 @@
 //   /zhh2 chests x1 y1 z1 x2 y2 z2        every chest in the box: position and LootTable
 //   /zhh2 unpack x y z                    rolls a chest's loot table now and lists its items
 //   /zhh2 lootroll table n                rolls a chest loot table n times: item histogram
-// MIGRATED in part (creative_devtools.md): tank -> /cdevtest tank, sneak -> /pbot sneak, useat -> /cdevtest
+// Also available as Devtools verbs (creative_devtools.md): tank -> /cdevtest tank, sneak -> /pbot sneak, useat -> /cdevtest
 // use as=NAME hit=hx,hy,hz face=F. basin, stomping, unpack and the rest stay here.
 (() => {
 	const $HArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

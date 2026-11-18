@@ -44,7 +44,7 @@
 		if (byId) return byId
 		byId = {}
 		server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
-		// Food recipes moved into Creative Delight's tree (creativedelight: ids, same paths): a
+		// Food recipes live in Creative Delight's tree (creativedelight: ids, same paths): a
 		// creativeengineering: id the checks name also finds its creativedelight: twin
 		Object.keys(byId).forEach(id => {
 			if (id.indexOf('creativedelight:') != 0) return

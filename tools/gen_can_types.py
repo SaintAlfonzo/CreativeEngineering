@@ -98,7 +98,7 @@ SECTIONS = OrderedDict([
 	('feast',        dict(mult=1,    servings=6,  n=1, dur=1.0,  fast=False, extra=[])),
 	('drink',        dict(mult=1,    servings=4,  n=4, dur=1.0,  fast=False, extra=[])),
 	('golden',       dict(mult=0.25, servings=10, n=2, dur=0.25, fast=False, extra=[])),   # honey is required, see below
-	# (can_parity 2.20-2.23): cheese is processed in the Cooking Pot; tomato sauce and dough keep their value; desserts
+	# dairy and desserts (can_parity 2.20-2.23): cheese is processed in the Cooking Pot; tomato sauce and dough keep their value; desserts
 	# like soups; cake: 1 cake -> 4 servings of 1.75 slices (7 slices a cake), see the cake recipes below
 	('dairy',        dict(mult=1.25, servings=4,  n=4, dur=1.0,  fast=False, extra=[], pot=True)),
 	('preserve',     dict(mult=1,    servings=4,  n=4, dur=1.0,  fast=False, extra=[])),
@@ -217,7 +217,7 @@ EXPLICIT = [
 	('raw_meat', 'canned_raw_pork', 'Canned Raw Pork', ['porkchop'], False, dict(input=['raw_pork'])),
 	('raw_meat', 'canned_raw_rabbit', 'Canned Raw Rabbit', ['rabbit'], False),
 	# Shulker: a low value meat, so its own small meal (2, 1) x 4 keeps a full can at 8 pieces. End's Delight's meat and
-	# slice (Ender's mollusk and filet merged into them, TODO dishes/ingredients #32)
+	# slice (Ender's mollusk and filet are merged into them, TODO dishes/ingredients #32)
 	('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_meat', 'shulker_meat_slice'], False,
 	 dict(meal=(2, 1))),
 
@@ -272,7 +272,7 @@ EXPLICIT = [
 	('cooked_veggie', 'canned_boiled_corn', 'Canned Boiled Corn', ['boiled_corn'], False),
 	('cooked_veggie', 'canned_dried_banana', 'Canned Dried Banana', ['dried_banana'], False),
 	('cooked_veggie', 'canned_dried_persimmon', 'Canned Dried Persimmon', ['dried_persimmon'], False),
-	# Kimchi merged (merges/dishes #9, owner): Brewin's kimchi is removed, Vintage Delight's fills the can
+	# Kimchi (merges/dishes #9, owner): Brewin's kimchi is removed, Vintage Delight's fills the can
 	('cooked_veggie', 'canned_kimchi', 'Canned Kimchi', ['vintagedelight_kimchi'], False),
 	('cooked_veggie', 'canned_pickled_pickles', 'Canned Pickles', ['pickle', 'pickled_sea_pickle'], False),   # pickled pickles merged (dishes/pickles-and-ferments #1)
 	('cooked_veggie', 'canned_roasted_adzuki_beans', 'Canned Roasted Adzuki Beans', ['roasted_adzuki_beans'], False),
@@ -312,7 +312,7 @@ EXPLICIT = [
 
 	('soup', 'canned_rabbit_stew', None, ['rabbit_stew'], True),
 	('soup', 'canned_mushrooms', None, ['mushroom_stew'], True),
-	# Bayberry Soup is typed drink since 1.1.03, so the soup loop no longer finds it; its can (shipped) stays
+	# Bayberry Soup is typed drink, so the soup loop does not find it; its can (shipped) stays
 	('soup', 'canned_bayberry_soup', 'Canned Bayberry Soup', ['bayberry_soup'], False),
 	# Farmer's Delight's Ratatouille (TODO cans/canning #18): a vegetable stew, canned like the soups
 	('soup', 'canned_ratatouille', 'Canned Ratatouille', ['ratatouille'], False),
@@ -349,7 +349,7 @@ EXPLICIT = [
 	('meal', 'canned_cheese_pasta', 'Canned Cheese Pasta', ['cheese_pasta'], False),
 	('meal', 'canned_pad_thai', 'Canned Pad Thai', ['pad_thai'], False),
 	('meal', 'canned_truffle_pasta', 'Canned Truffle Pasta', ['truffle_pasta'], False),   # Fungi Delight
-	# mashed potatoes, split (merges/dishes #2, owner: both cannable and saltable)
+	# mashed potatoes and mashed sweet potatoes (merges/dishes #2, owner: both cannable and saltable)
 	('meal', 'canned_mashed_potatoes', 'Canned Mashed Potatoes', ['mashed_potatoes'], False),
 	('meal', 'canned_mashed_sweet_potatoes', 'Canned Mashed Sweet Potatoes', ['veggiesdelight_mashed_potatoes'], False),
 
@@ -485,10 +485,10 @@ SKIP = {
 # Mod namespaces installed but not yet in a /dumpfood: their cans are configured above and skipped (listed as waiting)
 # until the catalog has their foods. Empty this once the dump is taken. Vintage Delight: vintage_delight.md 4.0 step 8;
 # Fungi Delight: fungi_delight.md step 8.
-AWAIT_DUMP = {'roll_delight', 'largemeals'}   # emptied (Vintage, Fungi Delight); Large Meals (its 4 soup cans)
+AWAIT_DUMP = {'roll_delight', 'largemeals'}   # Roll Delight; Large Meals (its 4 soup cans)
 # Mods whose foods are typed but whose cans are not decided yet (each mod page's "Cans" row: hostile_delight.md step
 # 12, ends_delight.md, ocean_delight.md, miners_delight.md I3 "cups are not cans"). The type loops skip their foods;
-# explicit cans above still apply. Take a mod out once its cans are decided (Miner's:, four explicit cans only, so it
+# explicit cans above still apply. Take a mod out once its cans are decided (Miner's has four explicit cans only, so it
 # stays listed).
 UNDECIDED_MODS = {'hostiledelight', 'ends_delight', 'miners_delight', 'oceanic_delight', 'oceansdelight'}
 WAITING = []

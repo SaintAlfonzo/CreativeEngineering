@@ -196,7 +196,7 @@ SKIP = None
 NO_FAMILY = {
 	'endersdelight:twisted_cereal': 'meal/plate', 'endersdelight:twisted_cereal_wood': 'meal/plate',
 	'quarkdelight:crab_bars': 'snack', 'berry_good:sweet_berry_meatballs': 'skewer',
-	# Barbeque's Delight cooked skewers joined the skewer family at the skewer fold (dishes/meals #46: handheld +
+	# Barbeque's Delight cooked skewers are in the skewer family (dishes/meals #46: handheld +
 	# "skewer" in the name); the burnt skewer is in hazard by its type
 }
 

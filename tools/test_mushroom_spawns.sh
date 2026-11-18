@@ -4,7 +4,7 @@
 #   2. Rhino: kubejs/data/creativeworldgen/kubejs/worldgen/mushroom_spawns.js (+ _biome_rules.js) in the pack's Rhino fork; every
 #      rule tag must equal the generator's resolved list (cave rules include ocean and cave biomes), one add modifier
 #      per rule at its mode's step, forge:none for every disable_modifiers id, no remove modifier; the brown/red
-#      colonies are no longer wild_crops.json rules
+#      colonies are not wild_crops.json rules
 #   3. placed features: every feature a rule names is a pack JSON with a rarity_filter; surface ones use a heightmap,
 #      cave ones search a floor below sea level, 13+ blocks under the surface, on air
 #   4. Rhino with WorldgenConfig mushroomSpawns off: no tags, no files

@@ -44,7 +44,7 @@ ROOT = str(lang_index.INSTANCE)
 KUBEJS_ASSETS = os.path.join(ROOT, "kubejs", "assets")
 OUT_FILE = os.path.join(KUBEJS_ASSETS, "creativeengineering", "lang", "en_us.json")
 MOB_EFFECTS = os.path.join(ROOT, "kubejs", "exported", "mob_effects.json")
-# Other effect-description mods (not installed; their lang only). tools/.cache is git-ignored: the jars there were
+# Other effect-description mods (not installed; their lang only). tools/.cache is git-ignored: the jars there are
 # fetched (Modrinth: JEED 1.21-2.3.5, MEED 8.1.0, Effect Insights 26.3.1, Potion Descriptions 1.8)
 # or copied from the ATLauncher download cache (JEED 1.16.5-1.6 / 1.19.2-1.18 / 1.20-2.2.5, Effect Descriptions 8.0.2).
 SOURCE_DIRS = [os.path.join(ROOT, "tools", ".cache", "effect_desc_sources")]

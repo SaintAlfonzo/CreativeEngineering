@@ -39,7 +39,7 @@ INSTANCE = lang_index.INSTANCE
 EXPORTED = INSTANCE / 'kubejs/exported'
 PLACEHOLDER = 'TODO: write a description'
 
-# The last /dumppotions ran before the Vinery port went into mods/: it dropped these three (alcohol.md
+# Effects the /dumppotions dump misses: the Vinery port's three (alcohol.md
 # B7.3). Remove an entry once a fresh dump agrees.
 EFFECT_OVERRIDES = {
 	'vinery:health_effect': None,

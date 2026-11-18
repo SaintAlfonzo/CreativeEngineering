@@ -62,7 +62,7 @@ EXTRA = {
 	'minecraft:attached_pumpkin_stem': (None, None, 'extra fruit (Creative Common StemExtraFruit) fires the event'),
 	'fruitsdelight:attached_hamimelon_stem': (None, None, 'extra fruit (Creative Common StemExtraFruit) fires the event'),
 }
-# Planting items for dumps written before /dumpcropgrowth recorded `item` (checked by hand).
+# Planting items for dump entries that carry no `item` field (checked by hand).
 FALLBACK_ITEMS = {
 	'minecraft:wheat': 'minecraft:wheat_seeds', 'minecraft:carrots': 'minecraft:carrot',
 	'minecraft:potatoes': 'minecraft:potato', 'minecraft:beetroots': 'minecraft:beetroot_seeds',

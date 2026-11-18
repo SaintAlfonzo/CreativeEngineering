@@ -7,8 +7,8 @@
 #     and pinned (qpin.py: OUT/pinned.json; qrun.py run refuses a server whose pinned jars changed)
 #   - dev jars newer than mods/ swapped in (SWAPS below: build/libs jar replaces the mods/ jar of the same mod)
 #   - the dev-only perfBot jar added (bots = fake players; never in the instance's mods/), -Dcdevperfbot.out=perf/bot
-#   - tools/scratch_query/datapack/zq (tag #zq:villagers) copied in; the /zq probe (zq_probe.js) is retired since
-#     and no longer copied: every reusable probe verb is /cdevtest in the Creative Devtools jar
+#   - tools/scratch_query/datapack/zq (tag #zq:villagers) copied in; the /zq probe (zq_probe.js) is retired and not
+#     copied: every reusable probe verb is /cdevtest in the Creative Devtools jar
 #   - group B: normal world, structures on, seed 8675309 unless level-seed= is given
 #   - prop=value pairs written into server.properties (difficulty=normal, spawn-monsters=true, ...)
 #   - NOSWAP=1 in the environment: no dev-jar swaps (the installed mods/ jars only)
@@ -36,7 +36,7 @@ done
 newest() { ls -t "$INST"/development/$1/build/libs/$2-*.jar 2>/dev/null | grep -vE -- '-(own|sources|overlay)\.jar$' | head -1 || echo "$INST/development/$1/build/libs/none"; }
 # dev jars: "glob in srv/mods to drop|build jar to use"; applied only when the build jar is newer than the mods/ one
 SWAPS=(
-  # The Engineering jar now owns that name
+  # creativecommon is the shared core; creativeengineering is the Engineering jar
   "creativecommon-*.jar|$(newest creativeCommon creativecommon)"
   "creativeengineering-*.jar|$(newest creativeEngineering creativeengineering)"
   "creativeequipment-*.jar|$(newest creativeEquipment creativeequipment)"
@@ -74,7 +74,7 @@ done
 if ls mods/creativebrewing-*.jar >/dev/null 2>&1; then
   rm -f mods/backportedVinery-*.jar mods/backportedBrewin-*.jar mods/letsdo-vinery-forge-1.3.10.jar mods/doapi-*.jar mods/BrewinAndChewin-1.19-*.jar
 fi
-# Creative Delight nests Baby Mobs and Incubation Additions since wave 4 (creative_split.md 7.8) and the five ports
+# Creative Delight nests Baby Mobs and Incubation Additions (creative_split.md 7.8) and the five ports
 # (Veggies, Vintage, Fungi, Miner's, Display): a standalone jar would win over the nested one
 for cd in mods/creativedelight-*.jar; do
   [ -f "$cd" ] || continue
@@ -82,7 +82,7 @@ for cd in mods/creativedelight-*.jar; do
     if unzip -l "$cd" | grep -q "META-INF/jarjar/$m-"; then rm -f mods/$m-*.jar; echo "nested in CD: dropped standalone $m"; fi
   done
 done
-# Power Grid: only by PGJAR. The -17 jar sat in the instance mods/ with no mod_sides.md row (r1113 section 11):
+# Power Grid: only by PGJAR. A copy in the instance mods/ has no mod_sides.md row (r1113 section 11):
 # drop any copy prep linked in, so queue servers never carry an unlisted port jar.
 rm -f mods/backportedPowerGrid-*.jar
 # PGJAR is resolved against the instance root (the script runs in OUT/srv by now; r1115 a relative path was skipped silently)
@@ -101,7 +101,7 @@ PB="$INST/development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.
 # would load beside the jar and fail a boot without the mod it names (framework #16, r1114 SQ-CDW-01), so drop it as
 # the deploy does. A worldgen JSON edit reaches a scratch server through a rebuilt Creative Delight jar.
 rm -rf kubejs/data/creativedelight/worldgen
-# Not copied any more scratch-only data (zq namespace): entity tag #zq:villagers (vanilla + MCA) for
+# Scratch-only data (zq namespace): entity tag #zq:villagers (vanilla + MCA) for
 # selectors
 mkdir -p kubejs/data && cp -r "$INST/tools/scratch_query/datapack/zq" kubejs/data/
 setprop() { local k=$1 v=$2; if grep -q "^$k=" server.properties; then sed -i "s|^$k=.*|$k=$v|" server.properties; else echo "$k=$v" >> server.properties; fi; }

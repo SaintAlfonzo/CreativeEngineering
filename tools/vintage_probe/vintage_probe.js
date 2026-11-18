@@ -36,7 +36,7 @@
 
 	const Y = -60
 	const VT = 'vintagedelight:', VG = 'veggiesdelight:', C = 'creativeengineering:'
-	// the pack's food recipes are under C or, since the move into Creative Delight, CDN
+	// the pack's food recipes are under C or CDN
 	const CDN = 'creativedelight:'
 	function ours(id, path) { return id.indexOf(C + path) == 0 || id.indexOf(CDN + path) == 0 }
 	let pass = 0, fail = 0, part = ''
@@ -60,7 +60,7 @@
 		if (byId) return byId
 		byId = {}; aliasId = {}
 		server.getRecipeManager().getRecipes().forEach(r => { byId[String(r.getId())] = r })
-		// Food recipes moved into Creative Delight's tree and brewing into Creative Brewing's
+		// Food recipes live in Creative Delight's tree and brewing in Creative Brewing's
 		// (creativedelight: / creativebrewing: ids, same paths): a creativeengineering: id the checks name also finds
 		// its twin under either namespace
 		let aliased = 0

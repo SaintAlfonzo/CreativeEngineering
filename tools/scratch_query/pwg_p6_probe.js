@@ -43,7 +43,7 @@
 //                             its movedContraption (null or set: field read, else isAttachedTo(null) and against
 //                             each entity found; the entity id when known), running
 // Output: "[zpwg6] ..." lines in logs/latest.log, then "[zpwg6] done".
-// MIGRATED in part (creative_devtools.md): items -> /cdevtest entities type=minecraft:item nbt, tank ->
+// Also available as Devtools verbs (creative_devtools.md): items -> /cdevtest entities type=minecraft:item nbt, tank ->
 // /cdevtest tank, inv -> /cdevtest inv, age -> /cdevtest ages. Power Grid readers stay here.
 (() => {
 	const $Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

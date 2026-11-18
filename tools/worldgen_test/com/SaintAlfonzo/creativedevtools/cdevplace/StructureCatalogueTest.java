@@ -219,7 +219,7 @@ public class StructureCatalogueTest {
 		Path dump = root.resolve("kubejs/exported/structures.json");
 		if (!Files.isRegularFile(dump)) { System.out.println("ok   snapshot skipped: no dump"); return; }
 		JsonObject d = CatalogueRules.parseLenient(Files.readString(dump));
-		// A dump from before the namespace move (e09e4795) lists the pack's own structures (meta/*, sky_island) under
+		// An older dump lists the pack's own structures (meta/*, sky_island) under
 		// creativeengineering; structure_tags.json names them creativeworldgen. Read them under the new namespace until a
 		// /dumpall refreshes the dump, or 35 of them fall into unmapped.
 		JsonObject wg = d.getAsJsonObject("worldgen");

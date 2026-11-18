@@ -2,7 +2,7 @@
 # Offline checks for the tier shields (feature_writeup/shields.md section 6):
 #   1. tools/shield_check.py: effective ladder, toml vs code defaults, references, tag overlaps
 #   2. ShieldConfigTest: [shields] spec builds, burn-tick ladder + live edit, cooldown default, effect-tick context
-# The Java part runs against development/creativeCommon + creativeEquipment build/classes (shields moved to Equipment;
+# The Java part runs against development/creativeCommon + creativeEquipment build/classes (the shields are in Equipment;
 # run ./gradlew :creativeCommon:compileJava :creativeEquipment:compileJava --offline first). No game needed.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
