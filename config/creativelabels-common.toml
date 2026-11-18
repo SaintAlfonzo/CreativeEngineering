@@ -14,7 +14,7 @@
 	#Level cost of adding a note's text to an item in the anvil (0 can't be taken by vanilla).
 	#Range: 0 ~ 39
 	anvilCost = 1
-	#A crafting grid holding any labelled item gives no result (erase the labels first).
+	#A crafting grid holding any labeled item gives no result (erase the labels first).
 	blockLabelledCrafting = true
 
 [wthit]

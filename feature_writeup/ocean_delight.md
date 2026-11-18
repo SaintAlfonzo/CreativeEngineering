@@ -19,8 +19,8 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=bd7e816d0872 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 6, In Progress 4, Testing 12), 0 Complete.
+<!-- generated:status_index begin open_work sha1=54f16d4d8598 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 5, Pinned 1, In Progress 4, Testing 12), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -28,8 +28,8 @@ cannot be copied; its item ids and facts are only referenced (the item dictionar
 | `dishes/ocean #11` | Planned | S C P | Guardian Shell: guardian drop and cutting |
 | `dishes/ocean #12` | Planned | S P | Guardian Soup recipe |
 | `dishes/ocean #13` | Planned | S P | Fugu poisoning chance |
-| `dishes/ocean #14` | Planned | S C | Elder guardian chunk source |
 | `largecontent/mod-additions #14` | Planned | S C P | Rolls Delight, when added |
+| `dishes/ocean #14` | Pinned | S C | Elder guardian chunk source |
 | `creativedelight/members #6` | In Progress | S C P | Ocean's and Oceanic: fishing tags and integration pass |
 | `largecontent/mod-additions #5` | In Progress | S C P | Integrate Ocean's Delight and Oceanic Delight |
 | `largecontent/mod-additions #7` | In Progress | S~ C P T | Miner's Delight: merged backport (1.1.2 + 1.4.5 in one 1.19.2 jar, Vinery donor-jar method) |

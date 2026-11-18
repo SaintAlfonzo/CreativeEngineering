@@ -8,12 +8,12 @@ and E1 frozen decor built 2026-11-17 (lane C1, plan G12; TODO `#20`, `#22`, `#9`
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=9c3f2041819c -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Bug 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=d30c79eee39f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `creativedelight/members #60` | Bug | S | Salt item click does not melt ice one stage per click (SQ-MELT-08) |
+| `creativedelight/members #60` | Testing | S | Salt item click does not melt ice one stage per click (SQ-MELT-08) |
 | `creativedelight/members #61` | Testing | S | Glowstone cage lantern is in the melting fire tag but does not random tick (SQ-MELT-10) |
 <!-- generated:status_index end open_work -->
 

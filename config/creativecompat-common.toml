@@ -1,7 +1,7 @@
 
-#Moss block and moss carpet colour (client only; the server ignores this section).
+#Moss block and moss carpet color (client only; the server ignores this section).
 [moss]
-	#On: moss block and moss carpet take the biome's grass colour, like grass blocks.
+	#On: moss block and moss carpet take the biome's grass color, like grass blocks.
 	#Off: vanilla's fixed green moss. Read when models load: press F3+T or restart after changing it.
 	biomeTint = true
 	#How far moss follows the grass colour. 1.0 = shifts as much as grass does from Lush Caves
@@ -12,7 +12,7 @@
 
 #Shears on a modded vine (Floral Enchantment's flower vines, Botania's solid vine) stop it growing,
 #as Quark's Shear Vines does for the vanilla vine. Shears on the tip of a weeping, twisting or cave
-#vine or kelp stop it growing longer (1.20's behaviour).
+#vine or kelp stop it growing longer (1.20's behavior).
 [vine_shearing]
 	#Shears stop vines growing. Off: shears do nothing to vines (vines already sheared stay so).
 	enabled = true
@@ -54,7 +54,7 @@
 	#Never switched on by allContainers.
 	excludedScreens = ["net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackSettingsScreen"]
 	#Starting position for a screen the player hasn't opened yet: 'class|anchorX|anchorY|x|y'.
-	#The anchor is a fraction of the panel (0.5 = centre, 1.0 = right/bottom edge) and x/y are
+	#The anchor is a fraction of the panel (0.5 = center, 1.0 = right/bottom edge) and x/y are
 	#pixels from it to the slot's top-left; the slot is 28x28. Screens not listed start under the
 	#panel's bottom-right corner. Dragging the slot in game overrides this.
 	positions = ["net.minecraft.client.gui.screens.inventory.CreativeModeInventoryScreen|1.0|1.0|0|-28", "net.p3pp3rf1y.sophisticatedbackpacks.client.gui.BackpackScreen|1.0|1.0|-28|0"]
@@ -67,7 +67,7 @@
 	#true: a cast Feather on a Stick sticks to a mob it hits, like a fishing hook (reeling in lets go, no
 	#pull), and the caster's tamed cats nearby attack the hooked mob while it stays hooked. Sitting cats and
 	#Cozy's Improved Cats cats in Stay mode do not join. false: the feather passes through mobs (Domestication
-	#Innovation's own behaviour).
+	#Innovation's own behavior).
 	featherHooksMobs = true
 	#Hostile mobs (monsters that are not neutral) can be hooked.
 	hookHostile = true
@@ -110,7 +110,7 @@
 
 #TNT shrapnel: when a primed TNT entity or a burning TNT item explodes, it also
 #flings out a burst of fast, gravity-immune projectiles mostly along the horizontal
-#plane (with some vertical variation) that despawn once they've travelled far enough.
+#plane (with some vertical variation) that despawn once they've traveled far enough.
 [shrapnel]
 	#Master on/off switch for TNT shrapnel.
 	enabled = true
@@ -149,7 +149,7 @@
 	#block overrides. The server's values are sent to players. Saving the file re-applies
 	#them straight away; you feel a change after stepping onto a new block.
 	[surface.speed]
-		#Asphalt: Immersive Petroleum asphalt, Create D&D coloured asphalt.
+		#Asphalt: Immersive Petroleum asphalt, Create D&D colored asphalt.
 		#Range: 0.05 ~ 4.0
 		asphalt = 1.5
 		#Concrete: vanilla concrete, IE concrete and hempcrete, Engineer's Decor rebar concrete, cinder blocks.
@@ -215,7 +215,7 @@
 		#Leaves and hedges.
 		#Range: 0.05 ~ 4.0
 		leaves = 0.78
-		#Snow block, coarse snow, powder snow. Snow layers slow by height instead ([surface.passthrough.layers]).
+		#Snow block, coarse snow, powder snow, and snow layers stood on in leather boots. Walking through snow layers slows by height instead ([surface.passthrough.layers]).
 		#Range: 0.05 ~ 4.0
 		snow = 0.75
 		#One sticky face: sticky pistons and their heads, sticky launchers (see [surface.sticky]).
@@ -334,7 +334,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "SIDES"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -360,7 +360,7 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -379,7 +379,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "NONE"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -405,7 +405,7 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -424,7 +424,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "NONE"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -450,7 +450,7 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -469,7 +469,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "NONE"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -495,7 +495,7 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -514,7 +514,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "NONE"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -540,7 +540,7 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -559,7 +559,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "NONE"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -585,7 +585,7 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -604,7 +604,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "NONE"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -630,7 +630,7 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -649,7 +649,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "FACES"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -675,7 +675,7 @@
 			projectiles = true
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -694,7 +694,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "NONE"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -720,7 +720,7 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
@@ -739,7 +739,7 @@
 			#face-adjacent blocks). Same-tier blocks count, grown or not.
 			#Allowed Values: NONE, SIDES, FACES
 			neighbours = "NONE"
-			#Neighbour count at which the dense values apply (above the shape's max: never).
+			#Neighbor count at which the dense values apply (above the shape's max: never).
 			#Range: 1 ~ 6
 			denseFrom = 3
 			#Walk multiplier once dense.
@@ -765,34 +765,37 @@
 			projectiles = false
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = false
-			#Neighbour count that makes a block surrounded (clamped to the shape's max: 4 or 6).
+			#Neighbor count that makes a block surrounded (clamped to the shape's max: 4 or 6).
 			#Range: 1 ~ 6
 			surroundedAt = 6
 
-		#Layer height blocks: snow layers, leaf piles, ash and sand layers, bamboo leaves, fodder, sawdust. The walk value falls with the height (layerMaxSlow at the highest walk-through layer); high piles act whole.
+		#Layer height blocks: snow layers, Immersive Weathering leaf piles, Twigs bamboo leaves. The walk value falls with the height: snow to snowMaxSlow at 7 of 8 layers, leaf layers to leafMaxSlow at full height.
 		[surface.passthrough.layers]
-			#Walk multiplier at the highest walk-through layer H (5 of 8 at the defaults). One layer
-			#does not slow; from 2 layers the value falls in equal steps to this one at H.
-			#Range: 0.05 ~ 1.0
-			layerMaxSlow = 0.5
-			#Stages below full at which a pile stops being walk-through and acts whole (normal
-			#collision and speed, no slowdown): 2 = 6, 7 and 8 of 8 act whole, so H = max - 3. 0 = only
-			#the full block acts whole. The max is read from each block's own layers property (IE
-			#sawdust 9, Twigs bamboo leaves 4). A value that leaves H under 2 means the block never slows.
-			#Range: 0 ~ 16
-			solidBelowFull = 2
 			#Piles with fewer layers than this are ignored (one layer never slows).
 			#Range: 1 ~ 16
 			minLayers = 2
-			#Per-block solidBelowFull, entries 'blockid=value'. Twigs bamboo leaves (4 layers) walk
-			#through up to one layer below full: layers 1 to 3, 0.5 at layer 3.
-			solidBelowFullOverrides = ["twigs:bamboo_leaves=0"]
 			#Multiplier on downward speed each tick inside a walk-through pile, and on fall
 			#distance per block passed.
 			#Range: 0.0 ~ 1.0
 			fall = 1.0
 			#Depth Strider boots walk through unslowed.
 			depthStriderPasses = true
+			#Walk multiplier inside snow layers at 7 of 8 layers, the highest walk-through height (a full
+			#layer becomes a snow block). One layer does not slow; from 2 layers the value falls in
+			#equal steps to this one at 7. Also any other layer block outside the leaf layers.
+			#Range: 0.05 ~ 1.0
+			snowMaxSlow = 0.4
+			#Walk multiplier inside leaf layers (Immersive Weathering leaf piles, Twigs bamboo leaves;
+			#tag creativecompat:passthrough_layers_open) at full height. Leaf layers are walk-through
+			#at every height and never act as a solid block.
+			#Range: 0.05 ~ 1.0
+			leafMaxSlow = 0.6
+			#Snow layers 1 to 7 have no collision for mobs and players: they walk through at the
+			#slowdown above. Leather boots (and the mobs vanilla lets walk on powder snow) stand on
+			#top at the snow surface speed; sneaking sinks in. Off: vanilla snow collision.
+			snowWalkThrough = true
+			#A snow layer that reaches 8 layers (placed, or found on a random tick) becomes a snow block.
+			snowFullBecomesBlock = true
 
 #Ore Excavation's /undo_excavation. An undo is refused when the vein mine broke a block in
 ##creativecompat:vein_undo_denied (ores, storage blocks, budding blocks, spawners, ancient
@@ -1055,9 +1058,33 @@
 	[debug.passthrough]
 		#true: time the pass-through hook and log one '[passthrough-timing]' line every 200 ticks, for
 		#the server and the client separately: hook calls, total and longest time, entity-ticks inside a
-		#pass-through block, neighbour counts, and the tick time they share. Read them with
+		#pass-through block, neighbor counts, and the tick time they share. Read them with
 		#python3 tools/perf/passthrough_timing.py logs/latest.log. Read every tick, so it applies as soon
 		#as the file is reloaded (an editor that saves by replacing the file is missed by Forge's watcher:
 		#run /cdevreload compat or restart).
 		timing = false
+
+#Iron golem farm cooldown (server side). A village is its meeting point (bell) within 64 blocks.
+[golems]
+	#When a village loses villager-summoned iron golems this fast, its villagers stop summoning for a while.
+	#Player-built golems neither count nor are affected.
+	enabled = true
+	#Golem deaths in one village that start the cooldown.
+	#Range: 1 ~ 1000
+	deaths = 5
+	#Those deaths must fall within this many ticks (12000 = 10 minutes).
+	#Range: 1 ~ 10000000
+	window = 12000
+	#Ticks the village summons no golems (24000 = 1 in-game day).
+	#Range: 1 ~ 10000000
+	cooldown = 24000
+
+#Block friction for boats only (both sides: the rider's client moves the boat). Players, mobs and items keep
+#the block's own slipperiness.
+[boat_friction]
+	#Use the list below for boats.
+	enabled = true
+	#"block id=friction" rows. Higher is slipperier; vanilla ice and packed ice 0.98, blue ice 0.989,
+	#other blocks 0.6.
+	blocks = ["minecraft:blue_ice=0.98", "minecraft:packed_ice=0.96", "minecraft:ice=0.94"]
 

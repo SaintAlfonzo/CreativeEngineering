@@ -3,11 +3,17 @@ package com.SaintAlfonzo.creativedelight.salt;
 import com.SaintAlfonzo.creativecommon.melting.Melting;
 import io.github.mortuusars.salt.configuration.Configuration;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.DispenserBlock;
 import net.minecraft.world.level.block.SnowLayerBlock;
@@ -38,6 +44,31 @@ public final class SaltLayerMelt {
 		if (dust != null && dust != Items.AIR) {
 			DispenserBlock.registerBehavior(dust, io.github.mortuusars.salt.Melting.SALT_DISPENSER_BEHAVIOR);
 		}
+		MinecraftForge.EVENT_BUS.addListener(EventPriority.HIGH, SaltLayerMelt::onUseSalt);
+	}
+
+	/**
+	 * Hand click: salt dust used on a meltable block (ice, snow) melts it one stage through Common's
+	 * melting system and spends 1 dust; a salt layer is placed (the item's normal placement) only when the block is not
+	 * meltable. The clicked block is checked first, then the block in front of the clicked face, where the layer would go.
+	 */
+	private static void onUseSalt(PlayerInteractEvent.RightClickBlock event) {
+		ItemStack stack = event.getItemStack();
+		Item dust = ForgeRegistries.ITEMS.getValue(SALT_DUST_ID);
+		if (dust == null || dust == Items.AIR || !stack.is(dust)) return;
+		if (!Configuration.MELTING_ITEM_ENABLED.get()) return;
+		var level = event.getLevel();
+		BlockPos pos = event.getPos();
+		Direction face = event.getFace();
+		BlockPos target = Melting.isTarget(level.getBlockState(pos)) ? pos
+				: face != null && Melting.isTarget(level.getBlockState(pos.relative(face))) ? pos.relative(face) : null;
+		if (target == null) return;
+		if (level instanceof ServerLevel server) {
+			if (!Melting.meltStep(server, target)) return;
+			if (!event.getEntity().getAbilities().instabuild) stack.shrink(1);
+		}
+		event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide));
+		event.setCanceled(true);
 	}
 
 	private static volatile ForgeConfigSpec.DoubleValue vanishChance;

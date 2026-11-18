@@ -3,10 +3,9 @@
 //
 //   acid  redstone + blaze powder + rotten flesh + 250 mB water, heated -> 250 mB acid
 //         (upstream: no rotten flesh).
-//   acid  rotten flesh + spider eye + 250 mB water, heated -> 250 mB acid (plan_post_scratch_1115.md D4, SQ-PWG-80b;
-//         heated since G6-11: Creative Delight's heated water -> salt now needs a Rock Salt Block in the
-//         basin, so water poured first no longer turns to salt). Create: The Salt's flesh salting needs salt, so it
-//         does not match.
+//   Water poured first no longer turns to salt: Creative Delight's heated water -> salt needs a Rock Salt Block in
+//   the basin (rock_salt_water_salt, plan_post_scratch_1115 G2c), so one acid recipe is enough. The spider eye
+//   in-water variant (powergrid_acid_in_water) was dropped.
 
 ServerEvents.recipes(e => {
 	if (!global.has('powergrid')) return
@@ -22,8 +21,6 @@ ServerEvents.recipes(e => {
 	R.remove({ id: 'powergrid:mixing/acid' }, e)
 	R.createMixing(Fluid.of(ACID, 250), [i.redstone, i.blaze_powder, i.rotten_flesh, Fluid.of(f.water, 250)], e,
 		'powergrid_acid', 'heated')
-	R.createMixing(Fluid.of(ACID, 250), [i.rotten_flesh, i.spider_eye, Fluid.of(f.water, 250)], e,
-		'powergrid_acid_in_water', 'heated')
 
 	console.log('power grid recipes done')
 })

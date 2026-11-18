@@ -51,7 +51,7 @@
 	#Fraction of downward (falling) speed removed each tick the brake is held - e.g. 0.02
 	#removes 2% of the current fall speed per tick. Deliberately gentle and multiplicative
 	#(not the flat per-tick subtraction used above) so the brake trims a dive instead of
-	#cancelling it outright.
+	#canceling it outright.
 	#Range: 0.0 ~ 1.0
 	downwardSlowFactorPerTick = 0.02
 	#Hard cap on fall speed (blocks/tick, positive number) while the brake is held and
@@ -81,7 +81,7 @@
 	#Client: ticks the step-up keys must be held before stepping up (20 = 1 second).
 	#Range: 0 ~ 100
 	holdTicks = 5
-	#Blocks the player may drift sideways from the stool's centre (knockback, pistons) before stepping off.
+	#Blocks the player may drift sideways from the stool's center (knockback, pistons) before stepping off.
 	#Range: 0.05 ~ 0.5
 	maxDrift = 0.3
 	#Taking damage knocks the player off the stool.
