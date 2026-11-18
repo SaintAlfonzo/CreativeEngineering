@@ -1992,6 +1992,13 @@ item, not redstone) lights an unlit dry campfire and is used up; soul torches on
 light" ("soulflame") on every `CampfireBlock` item while Unlit Campfire is loaded, plus a torch line. Switches
 `[campfire] torchLights`, `torchConsumed`, `torchRainRefuses`, `soulflameRule`, `unlitTooltip`. Tests SQ-PS15-24 to
 -26, CQ-PS15-05.
+Since 2026-11-17 (plan_post_scratch_1115 G11, TODO `#22`) `campfire/CampfireEnd`: campfires cannot burn in the End.
+Flint and steel or a fire charge on an unlit dry campfire there is refused at the click (extinguish sound, no durability
+or charge used, `RightClickBlock` at HIGH); a torch is refused the same way inside `CampfireTorch`; a campfire lit any
+other way (placed lit, dispenser, burning projectile, commands, other mods) is put out on its first lit server tick
+(`CampfireRainMixin` calls `CampfireEnd.tick` before the rain rule: fizz, dowse smoke, unlit; food stays). Soul
+campfires (registry path "soul") are exempt. Switch `[campfire] endUnlightable` (default true). Ordinary fire blocks in
+the End are Creative Common's. Tests SQ-PS15-30, -31.
 
 ### 34.3 Install and tests
 

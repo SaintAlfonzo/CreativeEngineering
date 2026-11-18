@@ -1381,15 +1381,15 @@ expect \[salttest\] PASS salt:salt_block beside water dissolves
 @pass `salt:meltables` holds the saltable tag's blocks; no `minecraft:blue_ice`, no `securitycraft:reinforced_snow_block`
 @fails the warning line: block_dict key missing (Creative Common); blue ice listed: script did not run
 @draft runnable steps not written yet; the next runner writes them from @commands
-## SQ-SALT2-19 | natural Rock Salt Blocks are never licks: a /setblock or generated block is not visited or worn
-@group A
-@commands Fenced 9x9 pasture, 2 cows; `/setblock` `salt:raw_rock_salt_block` at one end (not placed by a player); `/gamerule randomTickSpeed 3`; watch 10 minutes; then empty both hands and right click it 20 times; then honeycomb on it. Group B seed with a salt cave or beach patch: `/locate` or walk to one, 2 cows next to it, watch 10 minutes
-@pass the block stays `salt:raw_rock_salt_block`; cows do not gather at it; player clicks neither lick nor wear it; honeycomb does nothing (stays in hand); the generated blocks never change
-@fails worn or waxed: the natural block is still in the lick chain (`SaltLick.ensure` plain[0]) or the POI type (`HHSaltRegistry.createPoi`)
+## SQ-SALT2-19 | generated Rock Salt Blocks are never licks; any later placement (/setblock included) is one
+@group B
+@commands Group B seed with a salt cave or beach patch: `/locate` or walk to one, fence 2 cows next to it, `/gamerule randomTickSpeed 3`, watch 10 minutes; empty both hands and right click a generated block 20 times; honeycomb on it. Then a piston pushes one generated block one step. Then `/setblock ~ ~ ~ salt:raw_rock_salt_block` next to the cows
+@pass generated blocks stay `salt:raw_rock_salt_block`: cows do not gather, player clicks neither lick nor wear, honeycomb stays in hand; the pushed block stays `salt:raw_rock_salt_block`; the /setblock block becomes `hearthandharvest:placed_rock_salt_block` and cows gather at it
+@fails generated block worn or waxed: The Salt's block still in the lick chain (`SaltLick` plain[0]) or the POI type (`HHSaltRegistry.createPoi`); pushed block turned into a lick: the moving-piston check in `SaltEvents.afterPlace`; /setblock block not a lick: `BlockPlaceLickMixin` not applied (latest.log mixin errors, SRG `m_6807_`)
 @draft runnable steps not written yet; the next runner writes them from @commands
 ## SQ-SALT2-20 | the placed lick: drops, pick block, waxed and unwaxed, refilled back to the placed block
 @group A
-@commands Bot places a Rock Salt Block; middle click it in creative; mine it with a pickaxe (survival); place another, wax it with honeycomb, then take the wax off with an axe; place a `hearthandharvest:heavily_licked_salt_block`, right click with `salt:raw_rock_salt` 3 times; a Deployer holding a Rock Salt Block places one
+@commands Bot places a Rock Salt Block (it becomes the placed lick); middle click it in creative; mine it with a pickaxe (survival); place another, wax it with honeycomb, then take the wax off with an axe; place a `hearthandharvest:heavily_licked_salt_block`, right click with `salt:raw_rock_salt` 3 times; a Deployer holding a Rock Salt Block places one
 @pass pick block gives `salt:raw_rock_salt_block`; mining drops 1 `salt:raw_rock_salt_block` (no item named Placed); honeycomb -> `waxed_salt_block`, axe -> `placed_rock_salt_block`; refills step heavily -> well -> lightly -> `placed_rock_salt_block`; the Deployer's block is `placed_rock_salt_block`; the Rock Salt Block tooltip shows "Animals lick this"
 @fails drops nothing: loot table `hearthandharvest:blocks/placed_rock_salt_block` missing; unwax gives `salt:raw_rock_salt_block`: WAX map still on `saltBlock()`
 @draft runnable steps not written yet; the next runner writes them from @commands
@@ -1398,6 +1398,12 @@ expect \[salttest\] PASS salt:salt_block beside water dissolves
 @commands A save from before this change (instance save or scratch world made with the older Creative Delight jar) holding a lightly licked stage, a waxed heavily licked stage and a Salt Dust Block in a pasture with cows; load it with the new jar; watch 10 minutes; unwax the waxed stage
 @pass no missing-block or POI errors in latest.log; cows still visit and wear the lightly licked stage; unwaxed stage keeps its stage; the Salt Dust Block is not licked; no `salt:raw_rock_salt_block` turns into a lick by itself
 @fails animals walk to an old POI record on a non-lick block: the block check in `StayNearSaltGoal.findSalt` missing
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-SALT2-22 | every placement after world generation makes a lick: dispenser, Deployer, Schematicannon
+@group A
+@commands Dispenser holding Rock Salt Blocks facing air, powered once; Create Deployer holding one, placing on stone; a schematic with 3 Rock Salt Blocks printed by a Schematicannon; a Create contraption (mechanical piston) carrying one placed lick and one `/setblock` block, moved and stopped; `/data get block` or F3 on each result
+@pass the dispenser, Deployer and Schematicannon blocks are `hearthandharvest:placed_rock_salt_block`; the contraption puts back the blocks it carried unchanged; latest.log has no error from `BlockPlaceLickMixin`
+@fails dispenser block stays The Salt's: BlockItem dispense skipped `onPlace` (check the block class overrides `m_6807_` without super); schematicannon stays The Salt's: Create placed it with the moving flag
 @draft runnable steps not written yet; the next runner writes them from @commands
 ## CQ-SALT2-01 | names and the Water Evaporation page
 @group client

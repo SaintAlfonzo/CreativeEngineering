@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/handheld",
   "textures": {
-    "layer0": "salt:item/salt"
+    "layer0": "salt:item/raw_rock_salt"
   }
 }

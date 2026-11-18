@@ -210,5 +210,7 @@ open-sky colony's drop not proven; hand or probe addition); -08 (3.1 save) not r
 CD `nethersdelight/recipes.js`. Strider Moss Stew: the Cooking Pot takes nether wart (`#forge:crops/nether_wart`) in
 place of the second warped fungus (200 ticks, 1.0 xp, bowl); heatless shapeless craft (`_manual_only`): Roll Delight's
 Cooked Nether Wart (brings the bowl), warped fungus, crimson fungus, crimson roots, 2 raw strider. Warped Moldy Meat:
-Cooked Nether Wart in place of the bowl. The Nether Skewer is unchanged. Grid crafts hand back the Cooked Nether Wart's
-bowl (its crafting remainder), as bone broth does in the heatless meals. Queue SQ-BBQ-11, -12 (rows/BBQ.qb section 2).
+Cooked Nether Wart in place of the bowl. The Nether Skewer is unchanged. The Cooked Nether Wart's bowl is carried into
+the dish (owner, 2026-11-17, plan_post_scratch_1115 G11): both grid crafts hand no bowl back (KubeJS `consumeIngredient`
+on the Cooked Nether Wart slot; `F.mealCraft` returns its recipe for this). Other Cooked Nether Wart recipes (Nether Roll)
+still hand the bowl back. Queue SQ-BBQ-11 to -13 (rows/BBQ.qb section 2).

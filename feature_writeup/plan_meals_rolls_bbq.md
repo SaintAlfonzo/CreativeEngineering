@@ -123,8 +123,8 @@ Build 2026-11-17 (lane F2, plan_exec_1117; owner rulings 2026-11-17 in the TODO 
   craft with the baked spider leg; without Miner's the upstream spider eye and no heatless craft (CD
   `barbequesdelight/skewers.js`, `F.skewer`). Nothing purged. SQ-BBQ-10.
 - `#59`: Strider Moss Stew pot: nether wart for the second warped fungus; heatless meal craft with Cooked Nether Wart;
-  Warped Moldy Meat: Cooked Nether Wart for the bowl; Nether Skewer unchanged (CD `nethersdelight/recipes.js`,
-  [nethers_delight.md](nethers_delight.md) 4.10). SQ-BBQ-11, -12.
+  Warped Moldy Meat: Cooked Nether Wart for the bowl; both grid crafts hand no bowl back (consumeIngredient, G11 2026-11-17); Nether Skewer unchanged (CD `nethersdelight/recipes.js`,
+  [nethers_delight.md](nethers_delight.md) 4.10). SQ-BBQ-11 to -13.
 
 ## Build record (2026-11-04)
 

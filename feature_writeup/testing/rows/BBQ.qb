@@ -242,6 +242,12 @@ look beef steps: deploy beef tag, cabbage tag, beef, cabbage; nether base blaze 
 ## SQ-BBQ-12 | heatless Strider Moss Stew from Cooked Nether Wart; Nether Skewer unchanged
 @group any
 @commands `cdevtest rdetail strider_moss_stew_cooked_manual_only`; `cdevtest rdetail raw_nether_skewer`; live: craft the heatless stew in a grid
-@pass shapeless: Cooked Nether Wart, warped fungus, crimson fungus, crimson roots, 2 raw strider -> 1 Strider Moss Stew, id ends `_manual_only` (no basin copy); Nether Skewer recipes as before this change; the grid gives back the Cooked Nether Wart's bowl (its crafting remainder)
-@fails no recipe: `F.mealCraft` line skipped (`CD.on('roll_delight')`)
+@pass shapeless: Cooked Nether Wart, warped fungus, crimson fungus, crimson roots, 2 raw strider -> 1 Strider Moss Stew, id ends `_manual_only` (no basin copy); Nether Skewer recipes as before this change; the grid gives no bowl back (the bowl is carried into the stew, G11)
+@fails no recipe: `F.mealCraft` line skipped (`CD.on('roll_delight')`); bowl handed back: `consumeIngredient` missing (an older Creative Delight jar whose `mealCraft` returns nothing)
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-BBQ-13 | Warped Moldy Meat from Cooked Nether Wart gives no bowl back
+@group any
+@commands Survival player, empty inventory except 2 warped roots, 1 hoglin sirloin, 1 Cooked Nether Wart; craft Warped Moldy Meat in a crafting table grid; then the same with 2 sets and shift-click
+@pass 1 Warped Moldy Meat per craft; no bowl in the grid or the inventory after either craft
+@fails a bowl appears: the recipe lost its `consumeIngredient` action (`nethersdelight/recipes.js`), or another mod hands the item's remainder back
 @draft runnable steps not written yet; the next runner writes them from @commands

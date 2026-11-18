@@ -62,6 +62,10 @@ public final class CampfireTorch {
 		event.setCancellationResult(InteractionResult.sidedSuccess(level.isClientSide()));
 		if (level.isClientSide()) return;
 		Player player = event.getEntity();
+		if (CampfireEnd.refuses(level, state)) {
+			level.levelEvent(null, 1009, pos, 0); // the End refuses, as rain does (CampfireEnd)
+			return;
+		}
 		if (CDConfig.CAMPFIRE.torchRainRefuses.get() && rainWouldDouse(level, pos, state)) {
 			level.levelEvent(null, 1009, pos, 0); // the extinguish sound, as CampfireRain's rain-out
 			return;
@@ -90,7 +94,7 @@ public final class CampfireTorch {
 		return isSoul(block);
 	}
 
-	private static boolean isSoul(Block block) {
+	static boolean isSoul(Block block) {
 		ResourceLocation id = ForgeRegistries.BLOCKS.getKey(block);
 		return id != null && id.getPath().contains("soul");
 	}
