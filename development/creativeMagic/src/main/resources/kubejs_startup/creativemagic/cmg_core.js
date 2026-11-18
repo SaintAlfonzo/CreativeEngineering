@@ -20,7 +20,7 @@ global.CMG = {
 	},
 }
 
-// [botania] moved from CEConfig at the Magic carve and is CMGConfig's: NCH.cfg finds it by section name.
+// [botania] is CMGConfig's: NCH.cfg finds it by section name.
 global.NCH.registerConfig(global.CMG.modId, 'com.SaintAlfonzo.creativemagic.CMGConfig')
 
 console.info('[creativemagic] core finished')

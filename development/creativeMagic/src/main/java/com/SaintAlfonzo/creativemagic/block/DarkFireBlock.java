@@ -66,8 +66,8 @@ public class DarkFireBlock extends BaseFireBlock {
 		// Intentionally NOT calling super.onPlace(...) here. BaseFireBlock's
 		// own onPlace doesn't do portal detection at all (that's FireBlock's
 		// job, which we don't extend), so there's nothing useful in it for
-		// us to inherit - and calling it was previously causing a second,
-		// competing portal-detection pass to run before this method's own.
+		// us to inherit - and calling it would run a second,
+		// competing portal-detection pass before this method's own.
 
 		if (level.isClientSide || oldState.is(this)) {
 			return;

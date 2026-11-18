@@ -170,7 +170,7 @@ public class PortalFailureHandler {
 	}
 
 	private static boolean isInterior(BlockState state) {
-		// Dark Fire no longer overrides isAir() (that was making the block
+		// Dark Fire does not override isAir() (that would make the block
 		// invisible - isAir() is treated by the client as "skip rendering
 		// entirely"). It's added to the minecraft:fire block tag instead,
 		// which is what this check - and PortalShape's own interior logic -
