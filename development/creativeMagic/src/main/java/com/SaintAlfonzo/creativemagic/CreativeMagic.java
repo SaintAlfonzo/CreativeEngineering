@@ -28,7 +28,7 @@ import org.slf4j.Logger;
  * portal), the Nock Enough Arrows enchantments taken off tables and trades, the Botania Trinket Case holding any item
  * ({@code [botania]}), and the liquid XP bridge (PneumaticCraft and Sophisticated Core use Create Enchantment
  * Industry's experience fluid; fluid/FluidBridge, from Creative Engineering). Requires Creative Common
- * ({@code creativeengineering}, later Creative Common) and Creative Compat.
+ * and Creative Compat.
  *
  * Dark Fire and Flint and Terrasteel are registered under this mod's namespace ({@link #NS}).
  */

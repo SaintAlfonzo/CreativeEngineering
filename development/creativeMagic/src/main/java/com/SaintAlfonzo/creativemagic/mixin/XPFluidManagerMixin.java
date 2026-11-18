@@ -23,7 +23,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
  *   create_enchantment_industry:experience -> 1 mB / XP point (ExperienceFluid.xpRatio == 1;
  *       matches XpHelperMixin and MemoryStickItemMixin's 25600 mB tank)
  *   pneumaticcraft:memory_essence          -> 20 (PNC's native value; the pack strips it
- *       from #forge:experience so PNC no longer self-registers it) — safety net.
+ *       from #forge:experience so PNC does not self-register it) — safety net.
  */
 @Mixin(value = XPFluidManager.class, remap = false)
 public class XPFluidManagerMixin {

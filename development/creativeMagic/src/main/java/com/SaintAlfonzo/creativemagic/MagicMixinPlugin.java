@@ -27,13 +27,13 @@ public class MagicMixinPlugin extends GatedMixinPlugin {
 			Map.entry("TrinketCaseSlotMixin", BOTANIA),
 			Map.entry("TrinketCaseMenuMixin", BOTANIA),
 			Map.entry("ItemBackedInventoryAccessor", BOTANIA),
-			// Liquid XP bridge (fluid/FluidBridge), from Creative Engineering
+			// Liquid XP bridge (fluid/FluidBridge)
 			Map.entry("MemoryStickItemMixin", PNC),
 			Map.entry("PneumaticCraftUtilsMixin", PNC),
 			Map.entry("XPFluidManagerMixin", PNC),
 			Map.entry("XpHelperMixin", SOPHISTICATED),
 			Map.entry("XpPumpUpgradeWrapperMixin", SOPHISTICATED),
-			// Immersive Portals: ordinary fire no longer builds portals, Dark Fire does (plan_portal_changes.md 1)
+			// Immersive Portals: ordinary fire builds no portals, Dark Fire does (plan_portal_changes.md 1)
 			Map.entry("IPFireGateMixin", List.of("imm_ptl_core")));
 
 	public MagicMixinPlugin() {
