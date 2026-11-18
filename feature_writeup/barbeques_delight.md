@@ -725,6 +725,21 @@ plan from a basin recipe to a craft by hand.
 - **Family and cans** (C5, C6): every cooked skewer is `skewer` (name rule also matches "barbecue stick" until the renames reach
   the dump); raw skewers are not foods, so no family; no skewer can row or type loop.
 
+### 4.8 Raw skewer sequenced assembly (2026-11-17, `dishes/meals #57`)
+
+Built 2026-11-17 into the CD jar; not run in game. `F.skewer` adds a Create sequenced assembly for every raw skewer, on the
+line's stick (the blaze rod for the Nether Skewer), one loop, result 1 raw skewer, id
+`creativedelight:createsequencedassembly/<raw path>_sequenced_assembly`. 18 recipes, 18 incomplete items in CD
+`cd_transition_items.js` (keyed by the raw item's id path; the ten BBQ lines use their raw sprite, the eight pack raws the
+raw cod skewer sprite as their models do).
+
+- **Barbeque's Delight lines:** the basin's inputs as deploy steps, main and side alternating, same counts (beef: beef,
+  cabbage, beef, cabbage; lamb, mushroom and pork: 4 of the one input). Same cost as the basin.
+- **Pack skewers:** the raw craft's inputs in order; Turnip Mutton deploys turnip then raw mutton and Crispy chorus fruit,
+  chorus fruit, mite crust, mirroring their cooked assemblies.
+- Option `rawSteps` on the helper overrides the steps (`false` for none). The cooked assemblies of the Barbecue, Turnip
+  Mutton and Crispy Skewers are unchanged; the ten BBQ lines still have no cooked assembly (family recipes later).
+
 ### 4.6 Owner fixes (2026-11-03, after the 1.2.00 play)
 
 - Seasoned icons: the seven new seasonings (`cumin`, `pepper`, `chili`, `honey_mustard`, `buffalo`, `barbeque`, `grilled`)
@@ -833,9 +848,11 @@ grill). SQ-BBQ-08 not run (bots cannot craft).
 - [ ] **BBQ-38:** Craft Kebab Wrap, Kebab Sandwich, Bibimbap from seasoned skewers; eat each (AppleSkin) -> normal JEI pages; no skewer names or effects on the result; 10 / 0.6, 16 / 0.6, 16 / 0.8
 - [ ] **BBQ-39:** Recipe dump before and after: the ten BBQ lines -> same ids (`creativedelight:` skewering, grilling, smelting, smoking, campfire, `_from_cooked_manual_only`)
 - [ ] **BBQ-40:** Kill a shulker with a knife; cut a Shulker Mollusk; JEI uses of the mollusk -> mollusk drops (and End's meat); 2 filets; End Skewer and its heatless craft, stuffed shulker on End's meat
+- [ ] **BBQ-41:** JEI uses of a stick and a blaze rod, Create sequenced assembly tab -> one assembly per raw skewer (18), each ending in the raw skewer; beef shows beef, cabbage, beef, cabbage; the incomplete item shows the raw skewer sprite
 
 ## 9. History
 
+- 2026-11-17 (`dishes/meals #57`, 4.8): sequenced assembly for all 18 raw skewers; BBQ-41, SQ-BBQ-09.
 - 2026-11-04 (plan_meals_rolls_bbq.md C, 4.7): `F.skewer` for all 18 skewer lines, eight raw pack skewers, shulker mollusk merge undone, plain combos with static values, seasoning item tooltip, Skewer renames; BBQ-34..40.
 - 2026-10-30: investigation written (jar decompiled to `DecompiledMods/barbequesdelight-1.3.0/`), nothing built.
 - 2026-10-31: owner decisions O1-O9 recorded (0.1): all skewers and the three combos added without the family fold,

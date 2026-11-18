@@ -31,6 +31,8 @@ R.remove({id: 'supplementaries:flax_block_uncrafting'}, e)
 R.remove({id: 'supplementaries:botany_flax'}, e)
 R.remove({id: 'botanypots:supplementaries/crop/flax'}, e)
 R.remove({id: 'create:milling/compat/supplementaries/flax'}, e)
+// Doormat (owner ruling, plan_farming_cooking_batch.md): upstream's flax shape, two Farmer's Delight straw in a row
+R.shaped(i.doormat, ['SS'], { S: i.straw }, e, 'doormat_from_straw')
 
 // Fodder
 //Replace flax bale w/ rice and straw bale

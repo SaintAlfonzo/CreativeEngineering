@@ -197,3 +197,23 @@ look sauce use on the raw skewer: no BBQSeasoning in the first grill read; chili
 @pass result has `Skewers:[{id:"barbequesdelight:grilled_beef_skewer",...,tag:{BBQSeasoning:...}}]`; a stick returned to the grid; eating applies Nourishment chance and the skewer's Strength (BBQ-13)
 @fails combine serializer not registered
 @draft no batch holds this row yet
+
+## SQ-BBQ-09 | raw skewer sequenced assembly: 18 recipes on the stick (blaze rod for the Nether Skewer), 18 incomplete items
+@group A
+@commands `cdevtest bytype create:sequenced_assembly`; rdetail `raw_beef_skewer_sequenced_assembly`, `raw_lamb_skewer_sequenced_assembly`, `raw_nether_skewer_sequenced_assembly`, `raw_crispy_skewer_sequenced_assembly`; grep startup.log for the transition item count
+@pass 18 `creativedelight:createsequencedassembly/raw_*_sequenced_assembly` recipes (10 Barbeque's Delight lines + 8 pack skewers, `raw_barbecue_stick` and `raw_caveskewer` included); beef deploys beef, cabbage, beef, cabbage; lamb 4 mutton; nether on a blaze rod; result the raw skewer x1; no `incomplete('raw_...') not registered` (barbeques_delight.md 4.5, dishes/meals #57)
+@fails `cd_transition_items.js` row missing (KubeJS error `incomplete(...) not registered`, the whole skewers.js block stops); CD jar old
+@jars creativedelight
+@draft no batch holds this row yet
+> cdevtest recipes raw_ max=500
+> cdevtest rdetail raw_beef_skewer_sequenced_assembly
+> cdevtest rdetail raw_lamb_skewer_sequenced_assembly
+> cdevtest rdetail raw_nether_skewer_sequenced_assembly
+> cdevtest rdetail raw_crispy_skewer_sequenced_assembly
+waitlog verb=rdetail text=raw_crispy_skewer_sequenced_assembly 30
+count verb=recipes id=\S*createsequencedassembly/raw_\S*_sequenced_assembly result=\S+ == 18
+expect verb=rdetail id=creativedelight:createsequencedassembly/raw_beef_skewer_sequenced_assembly serializer=create:sequenced_assembly
+expect verb=rdetail id=creativedelight:createsequencedassembly/raw_nether_skewer_sequenced_assembly serializer=create:sequenced_assembly
+kjsreject incomplete\('raw_\S+'\) not registered
+reject \[cdevtest\] verb=\S+ .*error=
+look beef steps: deploy beef tag, cabbage tag, beef, cabbage; nether base blaze rod; crispy: chorus, chorus, mite crust
