@@ -5088,3 +5088,19 @@ look solar output non-zero at noon; one controlled entity; record controller= (p
 @pass LOOK: the board turns (its goggle line shows a speed, not 0) and shows the linked text; the display link's `Speed` source reads the motor's RPM; with the motor unpowered the board stops
 @fails the board shows `Speed:0.0f` or does not turn: the shaft does not reach the board's input (Create 0.5.1 drives the display board through its back face; try a cogwheel or a different side and rewrite this row's hookup); the motor turns but the board does not: Create kinetics, not Power Grid
 @draft no batch holds this row yet
+
+@@section 4
+@@title SQ-PWG Power Grid arm belt fix, 2026-11-17 ([plan_post_scratch_1115b.md](../plan_post_scratch_1115b.md); TODO `tooling/scratch-1115-follow-ups-2 #14`)
+@@date 2026-11-17
+@@jars powergrid
+@@sources development/backportedPowerGrid/PORT_NOTES.md
+@@text
+@@text Targets gate jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-20.jar` (B39, PORT_NOTES.md 26), copied into `OUT/srv/mods/` only (never `mods/`).
+@@text
+@@table
+## SQ-PWG-98 | B39 arm on a belt: no part goes on the belt before the circuit; the board reaches the end depot (SQ-PS15-14 rerun on -20)
+@group A
+@commands Arm belt refusal (B39, `ArmInteractionPointMixin.powerGrid$handleBelt`), jar -20. Rerun SQ-PS15-14 (= SQ-PWG-82 as written, Z 1906, parts x8 in the depots before the circuit arrives); also `zpwg9c show 1146 -60 1908` (the arm) after the 20-tick wait and before `feed`, then `zpwg9c show 1152 -60 1906` (the end depot) at the end
+@pass before `feed`: the arm is empty (`HeldItem` empty) and no loose part is on the belt; after the circuit arrives the arm takes 1 part per grab, Assembly goes 1/3 to 3/3; at the end the end depot holds only `powergrid:circuit_board x1 Schematic components=3` (no `wire_connector` or `resistor`); the two part depots together lose exactly the 3 parts that went into the board; stone x64; no loose part on the belt
+@fails a loose part on the belt or in the end depot: B39 not in the jar (wrong jar) or the item has no `ComponentRegistry` id (record which item); arm holds a part and the circuit rides past unlocked: lock window (SQ-PWG-82 failure column); the arm idles with a part while a circuit sits in the window: the window check (`handleCenteredProcessingOnAllItems(0.05)`) missed it
+@draft no batch holds this row yet; build it from batches/r1116/ps15_pwg.qb (SQ-PS15-14) with the -20 jar

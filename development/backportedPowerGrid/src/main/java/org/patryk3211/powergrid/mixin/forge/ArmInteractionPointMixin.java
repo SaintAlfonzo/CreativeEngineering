@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 // Modified for the Forge 1.19.2 / Create 0.5.1 port (backportedPowerGrid, 2026); changes listed in PORT_NOTES.md.
-// Port: unchanged apart from this line; Create 0.5.1's ArmInteractionPoint.insert has the same ItemHandlerHelper call.
+// Port: Create 0.5.1's ArmInteractionPoint.insert has the same ItemHandlerHelper call. Pack change B39 (PORT_NOTES.md
+// section 26): the belt branch refuses a circuit component when no incomplete circuit is in the centre window.
 package org.patryk3211.powergrid.mixin.forge;
 
 import com.simibubi.create.content.kinetics.belt.BeltHelper;
@@ -29,6 +30,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemHandlerHelper;
 import org.apache.commons.lang3.mutable.MutableBoolean;
 import org.patryk3211.powergrid.circuits.circuitboard.IncompleteCircuitItem;
+import org.patryk3211.powergrid.circuits.components.ComponentRegistry;
 import org.patryk3211.powergrid.collections.ModdedItems;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -107,8 +109,14 @@ public abstract class ArmInteractionPointMixin {
             }
             return TransportedItemStackHandlerBehaviour.TransportedResult.doNothing();
         });
-        if(found.isFalse())
+        if(found.isFalse()) {
+            // Pack change B39 (SQ-PS15-14): upstream falls back to Create's belt insert here, so a part the arm brought
+            // before the circuit reached the window rode to the belt end and blocked the finished board. A circuit
+            // component stays in the arm's hand until a circuit is in the window; other items keep the fallback.
+            if(!stack.isEmpty() && ComponentRegistry.getComponentId(getLevel(), stack) != null)
+                return stack;
             return null;
+        }
         if(inserted.isFalse())
             return stack;
         return ItemHandlerHelper.copyStackWithSize(stack, stack.getCount() - 1);
