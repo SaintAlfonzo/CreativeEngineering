@@ -31,13 +31,13 @@ import java.util.Optional;
 /**
  * Port ({@code [trader] ownSpawner}): the Wandering Winemaker on its own timer, independent of the Wandering Trader.
  * 1.5.5 only swaps a share of Wandering Trader spawns ({@code WanderingTraderSpawnerMixin}, {@code spawnChance}); with
- * that at 0 this is the only source, and the two traders no longer share one roll.
+ * that at 0 this is the only source, and the two traders do not share one roll.
  * <p>
  * A copy of vanilla's {@code WanderingTraderSpawner}: the same gates (overworld, doMobSpawning, doTraderSpawning), the
  * same 1200-tick step and 25/50/75% chance, 1 in 10, a spot within 48 blocks of a random player or a meeting point
  * near them, two leashed mules ({@code spawnWithMules}), {@code spawnDelay} ticks before it leaves. The wait and chance
  * live in the overworld's saved data ({@code data/vinery_winemaker_spawner.dat}) like vanilla's live in level.dat.
- * Moved from patcherMod (it was {@code trader.WinemakerSpawner}, feature_writeup/wandering_trader.md).
+ * See feature_writeup/wandering_trader.md.
  */
 public final class WinemakerSpawner {
     private static final String DATA_NAME = "vinery_winemaker_spawner";

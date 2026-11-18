@@ -1,6 +1,6 @@
 // requires: creativebrewing
 // requires: alexsmobs
-// Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:). Alex's Mobs Lava Vision base brew.
+// Recipe ids are creativebrewing:<type>/<suffix>. Alex's Mobs Lava Vision base brew.
 //
 // AM registers it as  alexsmobs:lava_bottle + alexsmobs:bone_serpent_tooth -> Potion of Lava Vision
 // (a Forge BrewingRecipe). The "from" is a lava-bottle ITEM, not a potion, so neither the Create

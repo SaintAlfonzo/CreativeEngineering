@@ -1,5 +1,5 @@
 // requires: creativebrewing
-// Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:). JEED effect providers: one
+// Recipe ids are creativebrewing:<type>/<suffix>. JEED effect providers: one
 // jeed:effect_provider recipe per effect, listing every item that gives it, so each effect's JEI page shows where it
 // comes from (feature_writeup/effects.md 3, TODO ui/effects #4).
 //

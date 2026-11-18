@@ -18,13 +18,13 @@ import java.util.Map;
  * <ul>
  * <li>{@code [members]}: one switch per nested member, default on; off makes CB's scripts skip that member's rows
  * ({@code global.CB.on(id)}), the member's own data stays.</li>
- * <li>one section per family of moved pack features ({@link #SECTIONS}: {@code brewing}, {@code alcohol},
+ * <li>one section per family of pack features ({@link #SECTIONS}: {@code brewing}, {@code alcohol},
  * {@code effects}), one switch per feature, default on; scripts read it through {@code global.CB.feature(id)}, Java
  * through {@link #feature}. A section is written only once it has a switch.</li>
  * </ul>
- * Dials moved from creativeengineering-common.toml keep their keys, comments and defaults (creative_brewing.md 4.3):
- * {@code [alcohol]}, {@code [effects]}, {@code [magic_resistance]}, {@code [copper_poisoning]} ({@link #MOVED_SECTIONS},
- * phase 3). {@code [alcohol]} and {@code [effects]} also take that family's feature switches.
+ * Dials carried over from creativeengineering-common.toml keep their keys, comments and defaults (creative_brewing.md 4.3):
+ * {@code [alcohol]}, {@code [effects]}, {@code [magic_resistance]}, {@code [copper_poisoning]} ({@link #MOVED_SECTIONS}).
+ * {@code [alcohol]} and {@code [effects]} also take that family's feature switches.
  *
  * Scripts read it through {@code global.CB} (kubejs_startup/creativebrewing/cb_core.js). COMMON configs load after
  * mod construction, so a startup script must read it inside an event callback, not at top level; before the file is
@@ -44,10 +44,10 @@ public final class CBConfig {
 	 */
 	private static final List<String[]> FEATURE_ROWS = List.of();
 
-	/** Feature sections that also hold moved dials (built by their dial class). */
+	/** Feature sections that also hold dials (built by their dial class). */
 	private static final List<String> DIAL_SECTIONS = List.of("alcohol");
 
-	/** Sections moved here from creativeengineering-common.toml (phase 3), for the carry-over and the leftover WARN. */
+	/** Sections carried over from creativeengineering-common.toml, for the carry-over and the leftover WARN. */
 	public static final List<String> MOVED_SECTIONS = List.of("alcohol");
 
 	public static final ForgeConfigSpec SPEC;
@@ -62,7 +62,7 @@ public final class CBConfig {
 		for (String id : MEMBERS) MEMBER_SWITCHES.put(id, b.define(id, true));
 		b.pop();
 
-		// Sections with only feature switches; alcohol and effects also hold dials moved from Creative Common and write
+		// Sections with only feature switches; alcohol and effects also hold dials and write
 		// their switches inside their own section (featureRows).
 		for (String section : SECTIONS) {
 			if (DIAL_SECTIONS.contains(section) || rows(section).isEmpty()) continue;

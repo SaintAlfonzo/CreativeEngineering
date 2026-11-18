@@ -11,8 +11,7 @@
 // pattern, same as jeichanges.js's Text.red(...).bold()) instead of calling
 // Component.withStyle(ChatFormatting) directly: that has 3 same-arity overloads
 // (ChatFormatting / Style / UnaryOperator<Style>) and throws "ambiguous method" on this Rhino
-// build (rhino-forge 1902.2.3-build.284) - see memory rhino-fieldandmethods-gotcha, and the
-// note this exact file used to carry about dropping styling entirely for that reason.
+// build (rhino-forge 1902.2.3-build.284) - see memory rhino-fieldandmethods-gotcha.
 // (armor_effects.js/echo_tools.js sidestep the same wall with raw "section-sign" strings, but
 // that produces a visually different "gray dash + colored name + gray duration" line, not
 // vanilla's single-color whole-line look - not used here since matching bottles is the point.)
