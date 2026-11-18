@@ -1,7 +1,7 @@
 # Post-scratch plan, run r1115 (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=ccdf068d44ba -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 4, Testing 18), 1 Complete.
+<!-- generated:status_index begin open_work sha1=445dc86b2825 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 3, Testing 19), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -9,7 +9,6 @@
 | `tooling/scratch-1115-follow-ups #9` | Planned | P | Investigate frozen decor melting |
 | `tooling/scratch-1115-follow-ups #12` | Planned | P | Investigate original wild hops vs current |
 | `tooling/scratch-1115-follow-ups #16` | Planned | C | Heap spill into warped forest: look in game |
-| `tooling/scratch-1115-follow-ups #23` | Planned | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
 | `tooling/scratch-1115-follow-ups #1` | Testing | C | Wall exit lift: floor portal to wall portal stuck in floor |
 | `tooling/scratch-1115-follow-ups #3` | Testing | S | Salt: click on frozen block places a layer, no melt |
 | `tooling/scratch-1115-follow-ups #4` | Testing | S | Salt: dispenser places a layer on air, one melt (1 salt) on a frozen block |
@@ -27,6 +26,7 @@
 | `tooling/scratch-1115-follow-ups #20` | Testing | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
 | `tooling/scratch-1115-follow-ups #21` | Testing | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
 | `tooling/scratch-1115-follow-ups #22` | Testing | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
+| `tooling/scratch-1115-follow-ups #23` | Testing | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
 | `tooling/scratch-1115-follow-ups #24` | Testing | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 <!-- generated:status_index end open_work -->
 
