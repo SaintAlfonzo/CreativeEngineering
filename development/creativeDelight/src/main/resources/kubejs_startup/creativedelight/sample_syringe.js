@@ -1,4 +1,4 @@
-// CD rebuild + restart. Reserved for Creative Cultivation: the sample syringe exists only to start meat cultures, so it
+// Reserved for Creative Cultivation: the sample syringe exists only to start meat cultures, so it
 // is marked with the rest of the cultivated-meat code (cultures, culture blocks, their recipes, tags, lang and
 // textures) for a future own mod, Creative Cultivation, the way potion brewing and alcohol are marked for Creative
 // Brewing (creative_delight.md 29.5).

@@ -3,7 +3,7 @@ package com.jkvin114.displaydelight.init;
 import com.jkvin114.displaydelight.shared.CdSettings.Flag;
 
 /**
- * Display Delight's settings. Since the port became a Creative Delight member (plan_creative_delight.md A6) they are
+ * Display Delight's settings. They are
  * keys of Creative Delight's config, section {@code [display]} (CD's CDConfig defines them, comments and defaults); the
  * port registers no config file of its own. The old displaydelight-common.toml ([Features], 1.7.0's keys) is read once
  * by Creative Delight and renamed. Field names and {@code get()} are 1.7.0's, so the call sites are unchanged; the CD

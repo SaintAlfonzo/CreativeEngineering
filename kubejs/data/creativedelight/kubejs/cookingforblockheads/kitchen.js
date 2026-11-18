@@ -1,7 +1,7 @@
 // requires: creativedelight
 // requires: cookingforblockheads
 // Wood spice racks, tool racks and fruit baskets (Creative Delight's Cooking for Blockheads compartment, kitchen.md 9;
-// creativedelight:<wood>_* since M8, the blockheads_additions member's cookingforblockheads:<wood>_* before), and the
+// creativedelight:<wood>_*), and the
 // counter-topper block tags. A wood whose slab mod is absent gets no recipe (its rack stays registered, uncraftable).
 // Each takes CfB's own recipe shape in its wood's slabs: spice rack 2 slabs in a row, tool rack 3 slabs over 2 iron
 // nuggets. Rubberwood has no slab, so its racks take planks. CfB's own spice rack, tool rack and fruit basket are

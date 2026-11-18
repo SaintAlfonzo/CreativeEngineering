@@ -30,9 +30,9 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'endersdelight:chorus_fruit_from_crate' }, e)
 		R.shapeless(Item.of(i.chorus_fruit, 9), [i.t_storage_chorus_fruit], e, 'chorus_fruit_from_crate')
 
-		//######################### Shulker meat ######################### Ender's mollusk and filet are back as their own
-		// items (plan_meals_rolls_bbq.md C3, the End Skewer takes the mollusk only; the merge, dishes/ingredients #32, is
-		// undone for these two). Ender's knife drop and its mollusk-to-filet cut are upstream's again. Every other recipe
+		//######################### Shulker meat ######################### Ender's mollusk and filet are their own
+		// items (plan_meals_rolls_bbq.md C3, the End Skewer takes the mollusk only; not merged, dishes/ingredients #32).
+		// Ender's knife drop and its mollusk-to-filet cut are upstream's. Every other recipe
 		// keeps End's Delight meat: the stuffed shulker takes End's shulker meat in place of the mollusk.
 		R.replaceInput({ id: 'endersdelight:cooking/stuffed_shulker' }, i.shulker_mollusk, i.shulker_meat, e)
 

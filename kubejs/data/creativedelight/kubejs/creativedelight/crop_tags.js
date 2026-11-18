@@ -28,7 +28,7 @@ ServerEvents.tags('block', e => {
 
 // Vine crops (plan_post_scratch_1115 C2, SQ-HOP-04): placing any block other than the vine's own into one of these
 // never replaces it (CD crops/VineCropReplace). Vines are replaceable plants in vanilla, so a stick, torch or block
-// clicked onto an unripe hops vine used to take its place.
+// clicked onto an unripe hops vine would take its place.
 ServerEvents.tags('block', e => {
 	if (!global.CD) return
 	var t = global.tags

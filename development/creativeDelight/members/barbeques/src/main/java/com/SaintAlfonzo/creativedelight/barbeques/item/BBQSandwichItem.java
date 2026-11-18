@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Kebab Wrap, Kebab Sandwich, Bibimbap (1.3.0 BBQSandwichItem). Since plan_meals_rolls_bbq.md C8 they are plain foods
+ * Kebab Wrap, Kebab Sandwich, Bibimbap (1.3.0 BBQSandwichItem). Plain foods (plan_meals_rolls_bbq.md C8)
  * made by shaped and meal recipes: their own values and effects, their own seasoning, nothing from the skewers. The
  * combine recipe's {@value #KEY} list (1.3.0's {@code content} component) is no longer read; stacks that still carry
  * it stay valid and simply ignore it (no conversion).

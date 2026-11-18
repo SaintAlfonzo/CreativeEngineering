@@ -66,7 +66,7 @@ ClientEvents.lang('en_us', e => {
 	e.renameItem(global.item.canned_cheesy_pasta, 'Canned Cheesy Fish Pasta')
 	e.add('block.displaydelight.bnc_cheesy_pasta', 'Placed Cheesy Fish Pasta')
 	e.renameItem(global.item.deluxe_burger, 'Loaded Burger')  // Vintage's "The Burger"; merges/dishes #10
-	e.add('block.supplementaries.pancake', 'Pancake')  // owner (creativedelight/members #15): "Pancake", the tooltip says stackable (supplementaries/client.js); was Stackable Pancake (merges/baking #1)
+	e.add('block.supplementaries.pancake', 'Pancake')  // owner (creativedelight/members #15): "Pancake", the tooltip says stackable (supplementaries/client.js)
 	if (global.has('fruitsdelight')) e.renameItem(global.item.jelly_bread, 'Bread with Jam')  // dishes/jams #3
 	e.renameItem(global.item.coffee_cheesecake, 'Coffee Pie')  // creativedelight/members #25
 	e.add('item.rusticdelight.coffee_cheesecake_slice', 'Slice of Coffee Pie')

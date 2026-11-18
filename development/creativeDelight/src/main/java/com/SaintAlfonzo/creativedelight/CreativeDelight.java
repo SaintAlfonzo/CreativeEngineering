@@ -29,10 +29,9 @@ import java.util.List;
  * client scripts under {@code data/} and {@code assets/creativedelight/kubejs/}) that call the pack's helpers, and
  * {@link CDConfig}.
  *
- * Since the Creative Split CD carve (creative_delight.md 34) it also holds the kitchen and food Java that was
- * Creative Common's: the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
+ * It also holds the kitchen and food Java (creative_delight.md 34): the oven, lunchboxes, the remainder buffer, cans, seasonings, placed food, crops (stem fruit, crop
  * parity, dandelions, hoe area), salt ticks, troughs and the food mod compat (Corn Delight, Display Delight dishes,
- * Respite potted tea bush, AppleSkin; the Canned Goods golem dye moved into the repackedCannedGoods member).
+ * Respite potted tea bush, AppleSkin; the Canned Goods golem dye lives in the repackedCannedGoods member).
  */
 @Mod(CreativeDelight.MOD_ID)
 public class CreativeDelight {
@@ -48,7 +47,7 @@ public class CreativeDelight {
 				CDConfig.COMPAT_FILE, CDConfig.FILE, CDConfig.COMPAT_SECTIONS)
 				|| !com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections(
 				CDConfig.COMPAT_FILE, CDConfig.FILE, CDConfig.COMPAT_SECTIONS).isEmpty();
-		// The sections moved from creativeengineering-common.toml at the CD carve (CDConfig.MOVED_SECTIONS): the first boot
+		// The sections carried over from creativeengineering-common.toml (CDConfig.MOVED_SECTIONS): the first boot
 		// copies the player's values in (carry when this file is new, merge when it exists); Creative Common drops them from its own file when
 		// Forge corrects it. Must run before Forge reads the COMMON configs.
 		boolean carried = com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(
@@ -106,12 +105,12 @@ public class CreativeDelight {
 				com.SaintAlfonzo.creativedelight.compat.Compartments.on(com.SaintAlfonzo.creativedelight.compat.Compartments.INCUBATION) ? "on" : "off");
 	}
 
-	/** The kitchen and food Java moved from Creative Common (creative_delight.md 34), registered as Creative Common did. */
+	/** The kitchen and food Java (creative_delight.md 34). */
 	private static void registerKitchen(IEventBus modBus) {
 		ModList mods = ModList.get();
 		// Oven: FD cooking-pot style baking block + the creativedelight:baking recipe type (oven/; oven.md).
 		com.SaintAlfonzo.creativedelight.oven.OvenRegistry.register(modBus);
-		// creativedelight:biome_tag loot condition for the fishing net tables (from Creative Worldgen)
+		// creativedelight:biome_tag loot condition for the fishing net tables
 		com.SaintAlfonzo.creativedelight.loot.BiomeTagCondition.register(modBus);
 		// Powdered sugar block + bucket (food/PowderedSugarRegistry). Item and recipes are KubeJS.
 		com.SaintAlfonzo.creativedelight.food.PowderedSugarRegistry.register(modBus);

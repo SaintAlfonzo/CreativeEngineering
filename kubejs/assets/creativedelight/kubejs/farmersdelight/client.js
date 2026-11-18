@@ -4,7 +4,7 @@
 
 // Bowl, basket and soil lines (the helpers and palette come through global.tooltips), then the farmer villager line:
 // Creative Delight's Farmer's Delight repack, config/farmersdelight-ce-common.toml [villagers] farmlandBlocks
-// (feature_writeup/farmers_delight.md 3), after the soil lines as before. A tooltip line in a col role
+// (feature_writeup/farmers_delight.md 3), after the soil lines. A tooltip line in a col role
 // (global.tooltips, Creative Common's client _lib; read at event time)
 var tipLine = (text, role, mods) => Text.of(global.tooltips.buildTooltipLine([text, global.tooltips.col[role], mods]))
 

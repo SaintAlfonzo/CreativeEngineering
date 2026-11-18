@@ -26,8 +26,8 @@ import net.minecraftforge.registries.RegistryObject;
  * {@code "tag"}. Vanilla 1.19.2 {@code location_check} only takes a single biome id, so biome groups (warm
  * oceans, rivers) would otherwise be long alternative lists that miss modded biomes.
  * <pre>{"condition": "creativedelight:biome_tag", "tag": "creativedelight:fishing_net/river"}</pre>
- * Used by the fishing net tables (kubejs/data/creativedelight/loot_tables/gameplay/fishing_net/). Moved from Creative
- * Worldgen: Creative Delight does not need Worldgen, and the tables failed to parse without it.
+ * Used by the fishing net tables (kubejs/data/creativedelight/loot_tables/gameplay/fishing_net/). It lives here, not
+ * in Worldgen: Creative Delight does not need Worldgen, and the tables fail to parse without it.
  */
 public class BiomeTagCondition implements LootItemCondition {
 

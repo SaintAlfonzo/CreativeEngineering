@@ -1,6 +1,5 @@
-// Creative Delight's sequenced assembly incomplete items (the food rows). Moved from Creative Engineering's
-// changes/transition_items.js (plan_cb_publish.md 15): CD's assemblies looked them up there, so without
-// the Engineering jar every one failed (`incomplete('...') not registered`). Ids unchanged: 'kubejs:incomplete_<key>'
+// Creative Delight's sequenced assembly incomplete items (the food rows). They are registered here (plan_cb_publish.md 15) so CD's
+// assemblies find them without the Engineering jar (`incomplete('...') not registered` otherwise). Ids unchanged: 'kubejs:incomplete_<key>'
 // whichever script registers them. Row format and texture rules: see Engineering's transition_items.js header.
 //
 //   const inc = R.incomplete('cod_roll')
