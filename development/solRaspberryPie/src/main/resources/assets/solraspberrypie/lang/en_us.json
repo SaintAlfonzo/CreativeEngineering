@@ -66,6 +66,7 @@
   "solraspberrypie.dietlog.milestones": "Milestones",
   "solraspberrypie.dietlog.min_unique": "Need %s more different foods",
   "solraspberrypie.dietlog.unlock": "Unlock %s",
+  "solraspberrypie.dietlog.slot_chosen": "%s: %s",
   "solraspberrypie.dietlog.legend.health": "Hearts",
   "solraspberrypie.dietlog.legend.toughness": "Toughness",
   "solraspberrypie.dietlog.legend.knockback": "Knockback resistance",

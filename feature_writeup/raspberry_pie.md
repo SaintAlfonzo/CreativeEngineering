@@ -740,7 +740,7 @@ replaced by hand; Raspberry Pie now makes Apple Pie's benefits inert whatever th
 ### 12.5 Screens after the 2026-11-16 rulings (built 2026-11-17)
 
 Plan: [plan_post_scratch_1115.md](plan_post_scratch_1115.md) G5 as amended by G6-23, G6-24, G7.12; TODO
-`tooling/scratch-1115-follow-ups #24`; tests CQ-RPI-41 to -45 (CQ-RPI-33 and -36 superseded).
+`tooling/scratch-1115-follow-ups #24`; tests CQ-RPI-41 to -46 (CQ-RPI-33 and -36 superseded).
 
 - **Single page (G5a, G6-23):** the double page view and its client option `[dietLog] doublePage` are removed, with the
   "Counting foods" / "Older foods" split it brought: the food history is Apple Pie's one list again. The owner's client
@@ -764,6 +764,11 @@ Plan: [plan_post_scratch_1115.md](plan_post_scratch_1115.md) G5 as amended by G6
   then an item frame). Used on the bar, the Milestones list and the key; when no listed item loads, the old icon
   (effect sprite, slot box). Attributes keep their item icons (netherite chestplate, shield, ...). The key has six
   rows: Hearts, Toughness, Knockback resistance (the shield, missing before), Effect slot, Permanent buff, One-time
-  unlock. Assumed (2026-11-17, not ruled): the item icons replace the effect sprites everywhere in the Diet Log, so
-  flat and unlock rungs are named by hover and the list text, and slot rungs no longer show the chosen effect (the P
-  screen does).
+  unlock.
+- **Icon rulings (G11 `#24`, owner 2026-11-17; built 2026-11-17):** one-time unlocks and permanent buffs keep the item
+  icons on the bar and in the Milestones list (named by hover and the list text). Slot rungs keep the chosen effect's
+  sprite: a slot holding an effect shows that effect's sprite (grayed when the slot is not reached) and its hover and
+  list text read "Effect Slot N: <effect>"; an empty slot shows the `[icons] slot` item. The key's Effect slot entry
+  cycles through the loaded slot-pool effects in pool order, one per second, looping (`legendSlotEffect`); with no
+  loaded pool effect it shows the slot item. Assumed (not ruled): the cycle period of 1 second, fixed in code (no
+  config); the pool order is the ladder file's order; the slot item stays the icon for empty slots. Test CQ-RPI-46.

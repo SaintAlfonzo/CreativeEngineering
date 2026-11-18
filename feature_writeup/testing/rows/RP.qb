@@ -470,7 +470,7 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 ## CQ-RPI-44
 @group client
 @commands Diet Ladder page at diversity 0, about 6 and about 22; then the Milestones pages (G5d, G7.12)
-@pass one-time unlocks show Monobank's replacement lock, permanent buffs Create Recycle's diamond shard, slots Supplementaries Squared's metal frame; toughness the netherite chestplate, knockback resistance the shield; the key has six rows: Hearts, Toughness, Knockback resistance, Effect slot, Permanent buff, One-time unlock; hover still names the effect; reached in color with a frame, unreached grayed
+@pass one-time unlocks show Monobank's replacement lock, permanent buffs Create Recycle's diamond shard, slots with no chosen effect Supplementaries Squared's metal frame (filled slots: CQ-RPI-46); toughness the netherite chestplate, knockback resistance the shield; the key has six rows: Hearts, Toughness, Knockback resistance, Effect slot, Permanent buff, One-time unlock; hover still names the effect; reached in color with a frame, unreached grayed
 @fails `DietLogPages.kindIcon`, `LEGEND`, `Icons.configured`
 @draft no batch holds this row yet
 ## CQ-RPI-45
@@ -478,4 +478,10 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @commands Client config `[icons]`: set `unlock = ["nosuchmod:lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"]`, `permanentBuff = ["minecraft:diamond"]`, `slot = ["minecraft:item_frame"]`; restart the client; open the Diet Ladder page (G5d fallbacks)
 @pass unlock icon is an Awkward Potion bottle, permanent buff a diamond, slot an item frame; no errors in `logs/latest.log`
 @fails `Icons.configured` (registry check, NBT parse)
+@draft no batch holds this row yet
+## CQ-RPI-46
+@group client
+@commands Diet Ladder and Milestones pages with slot 1 filled (e.g. Speed), slot 2 empty but reached, slot 3 not reached; watch the key's Effect slot row for 5 seconds; hover the slot 1 rung (G11 `#24`)
+@pass slot 1's rung shows the chosen effect's sprite (not the metal frame) and its hover/list text reads "Effect Slot 1: Speed ..."; slot 2 shows the metal frame; slot 3 grayed; the key's Effect slot icon steps to the next slot-pool effect about once a second and loops; one-time unlocks and permanent buffs still show the lock and the diamond shard
+@fails `DietLogPages.slotIcon`, `chosen`, `legendSlotEffect` (`LEGEND[3]` identity), lang `solraspberrypie.dietlog.slot_chosen`
 @draft no batch holds this row yet
