@@ -848,6 +848,28 @@ SQ-MELT-11 to -20, CQ-MELT-01 (MELT.qb section 3); SQ-PS15-22 and -08 superseded
 - **assumed:** all frozen decor and the AP packed ice family are saltable (B8 "both"); salt on an AP shaped packed ice
   block leaves air, on a full one ice.
 
+**Lane C2 build, 2026-11-17 (Creative Common, built, not installed; config reload, 1115b `#10`):** new package
+`config/`: `OwnConfigWatcher` (started at load complete on both sides) takes every COMMON and CLIENT file under
+`config/` whose mod id is ours, removes night-config's watch on it and watches its folder for MODIFY and CREATE;
+`OwnConfigLogic` (Forge-free: own ids, 1 s debounce per file, content guard); `ConfigReload` (Forge's watcher path:
+load, back up and correct, save, `afterReload`, dispatch Reloading to the owning mod; `reloadMod(modId)` public).
+Compat's `CompatConfigReload` and `/cdevreload compat` left as they are. Writeup creative_devtools.md "Own config
+watcher", CDV-08; rows SQ-PS15B-26, -27, CQ-PS15B-04 (PS15B.qb section 4; SQ-PS15B-12 note); skill gotcha updated.
+Headless `tools/test_config_watcher.sh` ALL 23 OK. Changelog bullet under Performance & Stability.
+- **assumed:** own mod ids = the Creative jars (common, compat, delight, brewing, equipment, engineering, magic, labels,
+  worldgen, calendar, devtools, loot), solraspberrypie, exposure, powergrid, tempad and the in-tree members with their
+  own toml (farmersdelight, hearthandharvest, miners_delight, rusticdelight, roll_delight, delightful, salt, vinery,
+  brewinandchewin, babymobs, moremooblooms). Third-party mods (exposureextras, exposure_polaroid, Quark, ...) keep
+  Forge's watcher.
+- **assumed:** double reloads are avoided by taking the file away from Forge (`FileWatcher.removeWatch`), not by
+  matching Forge's events; world server configs (`serverconfig/`) are not covered (Forge's watcher as before).
+- **assumed:** loop guard = content fingerprint (CRC32 + length) of what was last applied, recorded at start and after
+  every reload, including the correction save; an unchanged file (touch, own save) does not reload.
+- **assumed:** a file that fails to parse is logged and keeps its old values (Forge would throw on its watcher thread);
+  no retry until the next save.
+- **assumed:** off switch is a JVM argument `-Dcreativecommon.configWatcher=false` (no toml key, so the watcher never
+  depends on a file it reloads).
+
 ## Not decided or not in this pass
 
 Still on the owner list, unchanged: SQ-QN-02 elytra feel (LOOK), CQ-PWG-66 hookup rewrite, SQ-NSM-04 fixture (tooling),

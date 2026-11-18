@@ -176,6 +176,25 @@ command, the client's own config; registered on a client only) call `CompatConfi
 `[cdevreload] compat: <result>`. Forge's watcher misses a save by rename (`sed -i`, atomic-save editors). `/cdevbench
 passthrough` now names `Neighbours.SIDES` / `FACES` (Compat keeps `RING` / `CUBE` only as deprecated aliases).
 
+**Own config watcher** (Creative Common, not Devtools; plan_post_scratch_1115.md G11, cause in
+plan_post_scratch_1115b.md E3; built 2026-11-17). Forge's watcher (night-config 3.6.x) registers only MODIFY and skips
+events with a count over 1, so on Linux a hand save of a toml almost never reloads and a rename save never does.
+Common's `config/OwnConfigWatcher` starts at load complete (client and server), takes over every COMMON and CLIENT
+config file under `config/` whose mod id is in `OwnConfigLogic.OWN_MOD_IDS` (the Creative jars, Sol: Raspberry Pie,
+Exposure, Power Grid, Tempad and the bundle members with their own file: Farmer's Delight, Hearth and Harvest, Miner's,
+Rustic, Roll, Delightful, Salt, Vinery, Brewin', Baby Mobs, More Mooblooms; **assumed** list), removes night-config's
+watch on each of those files and watches their folder for MODIFY and CREATE. After 1 s without events on a file it runs
+`ConfigReload.reload` (Forge's path: load, back up and correct when out of spec then save, `afterReload`, dispatch
+`ModConfigEvent.Reloading` to the owning mod) and logs `[creativecommon] <file> reloaded`. No double reload: Forge no
+longer watches those files. Loop guard: the content applied at start and after each reload (correction save included)
+is remembered; a due file with that content is skipped (own save, touch). A file that fails to parse is logged and kept
+at its old values until the next save. Third-party configs and world server configs keep Forge's watcher. Off switch:
+JVM argument `-Dcreativecommon.configWatcher=false`. `ConfigReload.reloadMod(modId)` is public for a later general
+`/cdevreload <modid>`; `/cdevreload compat` still calls Compat's own `CompatConfigReload` (left as is). Headless test:
+`tools/test_config_watcher.sh` (debounce, guard, own ids, JDK watch sees in-place and rename saves). Queue rows:
+SQ-PS15B-26 (in-place and rename saves without a command), SQ-PS15B-27 (loop guard, touch, other mods), CQ-PS15B-04
+(client toml); SQ-PS15B-12 keeps the `/cdevreload compat` path.
+
 Moved from the KubeJS probes (D4): the reusable verbs of `zq_probe.js`, `c2`, `c3`, `zact`, `wo`, `zp`, `zsneak`,
 `leaf_pile`, `leaf_decay` and the generic verbs of the `hh_*`, `s5`, `zc4`, `zp9`, `pwg_p6/7/8`, `zpth`, `ztp` probes;
 each file's header names the replacing verb and what stays (a `MIGRATED 2026-11-15` line). `season`, `floating`,
@@ -210,6 +229,10 @@ Scratch server (SQ-CDV, [scratch_queue.md](testing/scratch_queue.md)) and in gam
 - [ ] **CDV-06 Flower Test:** the world type "Flower Test" is listed on a dev client and builds its table.
 - [ ] **CDV-07 /cdevtest and bot verbs:** scratch rows SQ-TX-01 to -18, CQ-TXR-01 (layer dump, Compat reload) (queue section "Scratch testing tools, item 3").
   Headless: `bash tools/scratch_query/cdevtest_harness/run.sh` prints `PASS 27` (2026-11-15).
+- [ ] **CDV-08 Own config watcher (Creative Common):** a save of an own toml (in place or by rename) applies about 1 s
+  later with one `[creativecommon] <file> reloaded` line and no command; a touch or the reload's own correction save
+  adds none; third-party tomls unchanged. Rows SQ-PS15B-26, SQ-PS15B-27, CQ-PS15B-04. Headless:
+  `bash tools/test_config_watcher.sh` prints `ALL 23 OK` (2026-11-17).
 
 ## 5. Install (game closed)
 

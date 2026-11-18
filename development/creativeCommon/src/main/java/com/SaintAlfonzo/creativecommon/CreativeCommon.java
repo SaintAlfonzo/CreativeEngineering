@@ -132,6 +132,8 @@ public class CreativeCommon
 		// [time], seasons and crop seasons (/ccaltime): Creative Calendar (development/creativeCalendar).
 
 		modEventBus.addListener(com.SaintAlfonzo.creativecommon.util.ModDisplayNames::onConfigReload);
+		// Own config watcher (plan_post_scratch_1115.md G11): our mods' config files reload on any save, debounced 1 s
+		modEventBus.addListener(com.SaintAlfonzo.creativecommon.config.OwnConfigWatcher::onLoadComplete);
 
 		// Damage tags (Common API): data/<ns>/damage_tags/*.json reload listener (backs Creative Equipment's
 		// shield.ShieldCategory and Creative Brewing's Magic Resistance) + the optional "seen sources" discovery log.

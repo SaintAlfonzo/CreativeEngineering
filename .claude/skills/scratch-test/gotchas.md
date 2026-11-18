@@ -141,6 +141,11 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   same-length `os.write`) is not seen either (no "changed" line in debug.log; r1114 fix_c3a1 FCK-13, PRT-05, superseding
   an r1113 note that it works; not within 30 s in r1116). Set every value with `qrun.py toml` before a boot and split
   value cases across boots (r1108cge, r1114, r1115) (partly checked: qlint W cfgedit).
+  Cause (plan_post_scratch_1115b.md E3): night-config's watcher skips MODIFY events with count > 1 (Linux folds
+  truncate + write into 2) and never sees a rename. Since the Creative Common build of 2026-11-17 (G11), Common watches
+  our own mods' config files itself (MODIFY + CREATE, 1 s debounce, `[creativecommon] <file> reloaded` in the log), so
+  an in-place or rename save of an own toml applies about 1 s later; third-party tomls keep the old behavior. Rows on
+  an older Common jar keep the qrun.py-before-boot rule.
 - `world/serverconfig/*.toml`: edit only while the server is stopped. Forge writes the in-memory config back on
   shutdown, so an edit made while up is overwritten (r1108cge).
 - Creative Compat's toml: since 2026-11-15 `/cdevreload compat` (server, op 3) and `/cdevreloadclient compat` (client)

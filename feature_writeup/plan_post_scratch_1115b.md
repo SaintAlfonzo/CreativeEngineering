@@ -258,6 +258,14 @@ machine a hand save almost never reloads, and a save by rename (`sed -i`, atomic
 Not our code: the readers react correctly when Reloading fires (E1, and `/cdevreload compat` works for every switch).
 Owner decision on the fix route: G11 below (plan_post_scratch_1115.md assumptions round).
 
+**State E4: G11 route built 2026-11-17 (Creative Common build/libs, not installed).** Common's `config/OwnConfigWatcher`
+watches `config/` itself for our own mods' files (MODIFY and CREATE, so in-place saves with count 2 and rename saves are
+both seen), waits 1 s of quiet per file and runs `ConfigReload.reload` (re-read, back up and correct, save,
+`afterReload`, `ModConfigEvent.Reloading` to the owning mod). Night-config's watch on those files is removed at start
+(no double reload); a content fingerprint of what was last applied skips our own correction save and touches (loop
+guard). Third-party and world server configs keep Forge's watcher. `/cdevreload compat` stays as a manual path. Details,
+assumptions and rows: plan_post_scratch_1115.md G11 "Lane C2 build"; rows SQ-PS15B-26, -27, CQ-PS15B-04.
+
 ## Writeups and docs to update
 
 plan_passthrough.md (sections 1, 2, 3.1, 4.3, 5, 7, 10: neighbor model, layer model, break fallback, perf numbers),
