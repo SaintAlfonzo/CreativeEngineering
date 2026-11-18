@@ -801,3 +801,59 @@ bootexpect \[creativeworldgen\] mod data packs on: \[[^]]*upgrade_aquatic
 expect \[cdevtest\] verb=count .*ids=[^ ]*minecraft:oak_log
 reject \[cdevtest\] verb=count .*upgrade_aquatic:river_log
 look tree placed (place feature reply in the log); logs = oak only; leaves = mulberry (upgrade_aquatic:mulberry_leaves or the override id); the river walk (mulberry trees, driftwood) needs a group B world: not run here
+## SQ-PS15-16c | IW coral growth guard: the 11 ua_*_coral growths load only with Upgrade Aquatic; no unknown coral id ERROR without it
+@group A
+@commands Guard for the Immersive Weathering coral growths of Upgrade Aquatic corals (TODO `tooling/scratch-1115-follow-ups-2 #15`): the 11 `ua_*_coral.json` moved from `kubejs/data/immersive_weathering/block_growths/` into Creative Worldgen `packs/immersive_weathering+upgrade_aquatic/` (build 2026-11-17; generator `ua_coral_growths` writes there). Boot 1, full pack: `grep -n "mod data packs on" logs/latest.log`; `grep -c "ua_.*_coral\|upgrade_aquatic:.*_coral" logs/latest.log`; SQ-UC-01 (growth files parse) as written. Boot 2 as SQ-PS15-16b (`upgrade_aquatic` and `alexsabnormalities` out of a scratch `mods/`, fresh world): the same two greps
+@pass boot 1: `immersive_weathering+upgrade_aquatic` in the `on` list, no ERROR line naming a `ua_*_coral` file, SQ-UC-01 PASS; boot 2: `Done (`, `immersive_weathering+upgrade_aquatic` in the `off` list, 0 ERROR lines naming `ua_*_coral` or `upgrade_aquatic:*_coral` (r1116: 11)
+@fails boot 2 still logs the 11 errors: the old files are still in `kubejs/data/immersive_weathering/block_growths/` (stale copy in the scratch instance) or the Worldgen jar is older than 2026-11-17; boot 1 growths missing: the pack folder name split (`+`) or the pack is off because Immersive Weathering's mod id differs; any other ERROR naming upgrade_aquatic: grep its path and guard that file the same way
+@draft no batch holds this row yet; pairs with SQ-PS15-16b (same boots)
+
+@@section 2
+@@title SQ-PS15 / CQ-PS15 Melting G7 and G8: melt ticks, snow by layer, magma, saltable, slow tier frozen, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G7, G8; [melting.md](../melting.md); TODO `tooling/scratch-1115-follow-ups #20`)
+@@date 2026-11-17
+@@jars creativecommon
+@@sources feature_writeup/melting.md feature_writeup/plan_post_scratch_1115.md
+@@text
+@@text Creative Common built 2026-11-17 (lane M1, build/libs). Group A superflat, `gamerule randomTickSpeed 3` (the melt ticks are scheduled ticks, not random ticks; a high random tick speed hides the pace) unless a row says otherwise. Config `[melting]` in `config/creativecommon-common.toml`: `meltTickInterval 200`, `snowLayerMeltChance 0.8`, `magmaInstantRange 2`, `saltMeltSnowLayers 3`, `slowHeatMelting false`. Rows that need Immersive Weathering blocks use `immersive_weathering:cryosol` and `immersive_weathering:permafrost`.
+@@text
+@@table
+## SQ-PS15-17 | snow melts one layer at a time beside a torch, at a steady pace; ice beside a torch still melts to water
+@group A
+@commands `setblock X -60 Z minecraft:snow[layers=8]` on stone, a `minecraft:torch` 2 blocks away (lit room); a second spot: `minecraft:ice` 2 from a torch. Probe the layer count with `cdevtest state` every 20 s for 4 minutes
+@pass the layer count falls one at a time (8, 7, 6, ...; never a jump from several layers to air), first drop within about 70 s (target random tick or melt tick), then about one layer per 10 to 15 s; air within 4 minutes; the ice becomes `minecraft:water[level=0]` within 2 minutes
+@fails whole stack gone at once: `meltedState` layer path; no change after the first drop: melt tick not scheduled (`hasScheduledTick`, mixin `m_222963_` not applied: grep latest.log for `MeltingBlockStateMixin`)
+## SQ-PS15-18 | a scheduled melt tick survives save and restart
+@group A
+@commands Snow `[layers=8]` 2 from a torch; wait for the first layer to go (SQ-PS15-17); `save-all`, `stop`, boot again on the same world, forceload the spot; probe the layer count every 20 s for 2 minutes
+@pass layers keep falling after the restart without any random tick roll first (first drop within about 15 s of the chunk loading); no ERR at load naming block_ticks
+@fails nothing for a minute, then a drop: the tick was not saved (only random ticks restarted it)
+## SQ-PS15-19 | magma: snow within 2 melts at once (placed and existing); snow at 3 melts by layer
+@group A
+@commands `minecraft:magma_block` on stone. (1) `setblock` `minecraft:snow[layers=4]` 1 above it and 2 to the side (distance 2); (2) a `minecraft:snow_block` and `minecraft:powder_snow` at distance 2; (3) `minecraft:snow[layers=8]` at distance 3. Wait 3 minutes
+@pass (1) and (2) are air at once on placement (fizz); (3) loses layers one at a time and is gone within about 4 minutes; no snow ever stays at distance 2
+@fails (1) stays: `onPlaced` magma path (`[melting] tags` line: magma count 1 or more); (3) gone at once: instant range read as fireRange
+## SQ-PS15-20 | magma: no snowfall and no freezing within 3; snow and ice form outside
+@group B
+@commands Snowy plains (or `/fillbiome` snowy_plains on a superflat area): a 16x16 stone floor with one magma block in the middle at floor level, a 5x5 water pool 1 block deep with magma under its center; `weather thunder 6000`; wait 10 minutes (snowfall is per chunk, not random tick speed)
+@pass no snow layer on any block within 3 of the magma (sphere), snow layers elsewhere on the floor; the pool's water within 3 of the magma never turns to ice, the rest freezes
+@fails snow near magma: `BiomeMeltMixin` not applied (`m_47519_`) or `magmaStopsFreezing` off; ice near magma: `m_47480_`
+## SQ-PS15-21 | snow on blue ice or IW permafrost ignores fire, lava and magma; salt still melts it
+@group A
+@commands `minecraft:snow[layers=8]` on `minecraft:blue_ice`, a torch 2 away and lava 3 away; the same on `immersive_weathering:permafrost`; the same on `minecraft:magma_block`-adjacent blue ice (magma 2 below the snow's side); a fourth stack on blue ice with a `salt:salt_block` touching it; wait 4 minutes
+@pass the first three stacks still 8 layers (magma's instant melt skipped too); the salted stack loses layers (one per melt) and is gone within about 4 minutes
+@fails heat melts the kept stacks: `keeps_snow` tag empty (`[melting] tags` line) or the check reads the wrong block; salted stack kept: salt path should ignore the rule
+## SQ-PS15-22 | packed ice, blue ice, cryosol, permafrost: no melting from fire, lava or magma; salt steps packed ice and cryosol only
+@group A
+@commands Boot log `[melting] random ticks on for 2 extra blocks`. Each block on stone with a torch, lava and magma touching it (one spot per block per source); a second set with a `salt:salt_block` touching each; wait 10 minutes
+@pass every heat spot unchanged; salt: packed ice -> `minecraft:ice` (then water as ice does), cryosol -> `minecraft:dirt`; blue ice and permafrost unchanged
+@fails a heat spot changed: `slowHeatMelting` on or the target path ignores it; salted packed ice unchanged: salt block not scanning on its own tick (salt blocks must random tick; Creative Delight SaltBlockTicks)
+## SQ-PS15-23 | salt dispenser removes 3 snow layers; a snow block becomes 5 layers; blue ice refused
+@group A
+@commands Dispenser with salt dust facing `minecraft:snow[layers=8]`; fire once, probe; fire again; then facing `minecraft:snow_block`, fire once; then facing `minecraft:blue_ice`, fire once
+@pass 8 -> 5 -> 2 layers; snow block -> `minecraft:snow[layers=5]`; blue ice unchanged and the dispenser places a salt layer or drops the dust (Creative Delight's choice), no melt
+@fails whole stack gone: `saltMeltSnowLayers` not used (Creative Delight calling an old path); blue ice melted: not saltable check
+## CQ-PS15-04 | "Saltable" tooltip line on saltable blocks only
+@group client
+@commands Join the scratch server with a client; hover Ice, Packed Ice, Snow, Snow Block, Powder Snow Bucket, Immersive Weathering Cryosol, Blue Ice, IW Permafrost
+@pass a gray "Saltable" line on Ice, Packed Ice, Snow, Snow Block and Cryosol; none on Blue Ice, Permafrost, the Powder Snow Bucket (not a block item)
+@fails no line anywhere: `SaltableTooltip` not registered or the client has no copy of the tag

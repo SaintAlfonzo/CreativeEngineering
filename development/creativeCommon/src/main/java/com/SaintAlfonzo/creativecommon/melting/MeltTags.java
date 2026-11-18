@@ -22,8 +22,14 @@ public final class MeltTags {
 	public static final TagKey<Block> LAVA = tag("lava");
 	/** Melt fully: ice and frosted ice to water (air when ultra-warm), snow to air. */
 	public static final TagKey<Block> MELTABLE = tag("meltable");
-	/** Step down one tier ([melting] slowSteps) at the low chance: packed and blue ice. */
+	/** Step down one tier ([melting] slowSteps) at the low chance: packed and blue ice, IW cryosol and permafrost. */
 	public static final TagKey<Block> MELTABLE_SLOW = tag("meltable_slow");
+	/** The only targets salt melts (salt blocks, salt dispenser, Salt Melt); product by [melting] saltProducts. */
+	public static final TagKey<Block> SALTABLE = tag("saltable");
+	/** Snow resting on these ignores heat and light, not salt: blue ice, IW permafrost. */
+	public static final TagKey<Block> KEEPS_SNOW = tag("keeps_snow");
+	/** Fire sources that also melt snow at once within [melting] magmaInstantRange and stop snow and ice forming. */
+	public static final TagKey<Block> MAGMA = tag("magma");
 	/** Air the moment it is placed in an ultra-warm dimension: snow layers, snow blocks, powder snow. */
 	public static final TagKey<Block> ULTRAWARM_INSTANT = tag("ultrawarm_instant");
 

@@ -1,6 +1,6 @@
 // Creative Common melting tags (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8).
 // Sources: salt melts adjacent targets, fire within 3, lava within 4 (ranges in [melting], creativecommon-common.toml).
-// Targets: meltable (ice, snow) and meltable_slow (packed and blue ice, one tier down). Every mod's lines are guarded by
+// Targets: meltable (ice, snow) and meltable_slow (packed and blue ice, IW cryosol and permafrost, one tier down). Every mod's lines are guarded by
 // global.has, so the tags hold only loaded blocks; the Java side works with any of them empty.
 ServerEvents.tags('block', e => {
 	var b = global.blocks
@@ -51,5 +51,18 @@ ServerEvents.tags('block', e => {
 	t.add(e, b.t_meltable, [b.ice, b.frosted_ice, b.snow, b.snow_block, b.powder_snow])
 	if (global.has(b.rare_ice)) t.add(e, b.t_meltable, b.rare_ice)
 	t.add(e, b.t_meltable_slow, [b.packed_ice, b.blue_ice])
+	// IW soils mirror the ice tiers (plan_post_scratch_1115 G6-5): permafrost like blue ice, cryosol like packed ice.
+	// Heat leaves the whole slow tier alone while [melting] slowHeatMelting is off (G7.15); salt melts the saltable ones.
+	if (global.has('immersive_weathering')) t.add(e, b.t_meltable_slow, [b.iw_cryosol, b.iw_permafrost])
 	t.add(e, b.t_melt_ultrawarm_instant, [b.snow, b.snow_block, b.powder_snow])
+
+	// Salt melts only these (G7.11; the "Saltable" tooltip reads it). Not saltable: blue ice, IW permafrost.
+	t.add(e, b.t_melt_saltable, [b.ice, b.frosted_ice, b.snow, b.snow_block, b.powder_snow, b.packed_ice])
+	if (global.has(b.rare_ice)) t.add(e, b.t_melt_saltable, b.rare_ice)
+	if (global.has('immersive_weathering')) t.add(e, b.t_melt_saltable, b.iw_cryosol)
+	// Snow on these resists heat and light, not salt (G6 4b)
+	t.add(e, b.t_melt_keeps_snow, b.blue_ice)
+	if (global.has('immersive_weathering')) t.add(e, b.t_melt_keeps_snow, b.iw_permafrost)
+	// Magma: snow within 2 melts at once; no snowfall or ice forms within [melting] fireRange (G7.2, G7.13)
+	t.add(e, b.t_melt_magma, b.magma_block)
 })

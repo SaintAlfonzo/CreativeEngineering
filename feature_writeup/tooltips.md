@@ -141,6 +141,12 @@ Examples:
   (177 entries), and the two gate doors the pack missed were added. Tools keep their pack names
   ("Copycat Hammer" etc.) because nothing duplicates them.
 
+**Added (Java)**
+- **"Saltable" (2026-11-17):** a gray line (`col.norm` role) on every block item whose block is in
+  `#creativecommon:melting/saltable` (ice, frosted ice, packed ice, snow, snow block, Rare Ice, IW cryosol). Creative
+  Common `melting/SaltableTooltip` (client `ItemTooltipEvent`, reads the synced block tag); lang
+  `creativecommon.tooltip.saltable`. [melting.md](melting.md) 1; test CQ-PS15-04.
+
 **Rewritten**
 - **BlockRunner's line on framed/copycat blocks:** Creative Common `CamoSpeedTooltip` swaps it for
   "matches its camo", "matches its camo (newest camo sets walk behaviors for hybrid blocks)" on hybrid-capable items, or "1.0, no matter its camo", depending on

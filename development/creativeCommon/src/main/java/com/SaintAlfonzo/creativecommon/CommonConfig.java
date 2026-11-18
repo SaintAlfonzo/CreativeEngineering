@@ -409,16 +409,25 @@ public final class CommonConfig {
 		public final ForgeConfigSpec.BooleanValue ultraWarmInstantMelt;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> slowSteps;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> extraRandomTickBlocks;
+		public final ForgeConfigSpec.DoubleValue snowLayerMeltChance;
+		public final ForgeConfigSpec.IntValue meltTickInterval;
+		public final ForgeConfigSpec.BooleanValue slowHeatMelting;
+		public final ForgeConfigSpec.IntValue magmaInstantRange;
+		public final ForgeConfigSpec.BooleanValue magmaStopsFreezing;
+		public final ForgeConfigSpec.IntValue saltMeltSnowLayers;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> saltProducts;
 
 		private MeltingConfig(ForgeConfigSpec.Builder b) {
 			b.comment(
 					"Melting: salt, fire and lava melt ice and snow (server side). Sources are the block tags",
 					"creativecommon:melting/salt, /fire (a block with a lit property counts only while lit) and /lava (plus any",
-					"block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow becomes air) and",
-					"/meltable_slow (packed and blue ice, one tier down). Each target rolls once per random tick. Ranges are",
-					"spheres measured through any blocks: 1 = the 6 touching blocks, 0 = this source never melts that kind.",
-					"A target looks past its 6 neighbors only when block light reaches it, so a fire or lava behind a sealed",
-					"wall melts nothing; magma (light 3) melts from its own random tick instead. feature_writeup/melting.md."
+					"block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow loses a layer, the",
+					"rest becomes air) and /meltable_slow (packed and blue ice, IW cryosol and permafrost, one tier down). Salt",
+					"melts only /saltable blocks. A pair is found by the target's random tick or by a source's own random tick",
+					"(magma, lava, salt blocks); the target then gets a melt tick every meltTickInterval while a source stays in",
+					"reach, rolling its chance each time. Ranges are spheres measured through any blocks: 1 = the 6 touching",
+					"blocks, 0 = this source never melts that kind. A target looks past its 6 neighbors for fire and lava only",
+					"when block light reaches it, so a fire behind a sealed wall melts nothing. feature_writeup/melting.md."
 			).push("melting");
 
 			enabled = b.comment("Master switch for salt, fire and lava melting. The Salt item click is The Salt's own and not covered.")
@@ -430,15 +439,15 @@ public final class CommonConfig {
 					.defineInRange("fireRange", 3, 0, 8);
 			lavaRange = b.comment("Lava: reach for meltable targets.")
 					.defineInRange("lavaRange", 4, 0, 8);
-			slowFireRange = b.comment("Fire: reach for packed and blue ice.")
+			slowFireRange = b.comment("Fire: reach for meltable_slow targets (only while slowHeatMelting is on).")
 					.defineInRange("slowFireRange", 1, 0, 8);
-			slowLavaRange = b.comment("Lava: reach for packed and blue ice.")
+			slowLavaRange = b.comment("Lava: reach for meltable_slow targets (only while slowHeatMelting is on).")
 					.defineInRange("slowLavaRange", 2, 0, 8);
 			meltChance = b.comment(
-					"Chance per random tick that a meltable target with a source in reach melts. A block random ticks about",
-					"every 68 s at randomTickSpeed 3, so 0.4 melts it in about 3 minutes on average."
+					"Chance per tick (its random tick and each melt tick) that a meltable target with a source in reach",
+					"melts. Snow layers use snowLayerMeltChance."
 			).defineInRange("meltChance", 0.4, 0.0, 1.0);
-			slowMeltChance = b.comment("The same for packed and blue ice, one tier per success (about 23 minutes per tier at 0.05).")
+			slowMeltChance = b.comment("The same for meltable_slow targets, one tier per success.")
 					.defineInRange("slowMeltChance", 0.05, 0.0, 1.0);
 			placeWater = b.comment("Melted ice (#minecraft:ice) leaves a water source; false leaves air. Ultra-warm dimensions",
 							"(the Nether) always leave air.")
@@ -458,18 +467,48 @@ public final class CommonConfig {
 					"row here melts fully, like a meltable one."
 			).defineList("slowSteps", List.of(
 					"minecraft:blue_ice=minecraft:packed_ice",
-					"minecraft:packed_ice=minecraft:ice"
+					"minecraft:packed_ice=minecraft:ice",
+					"immersive_weathering:permafrost=immersive_weathering:cryosol",
+					"immersive_weathering:cryosol=minecraft:dirt"
 			), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
 			extraRandomTickBlocks = b.comment(
-					"Blocks that get random ticks so they can melt (vanilla gives none to these). Ice, frosted ice and snow",
-					"layers tick already. A block left out of this list (or a modded target that does not tick) melts only",
-					"from a source-driven tick. Read once at startup: a change needs a restart."
+					"Blocks that get random ticks so they can find a fire or lava by themselves (vanilla gives none to these).",
+					"Ice, frosted ice and snow layers tick already. A target left out (packed and blue ice, cryosol, permafrost)",
+					"is found only by a source's own tick (magma, lava, salt blocks). Read once at startup: a change needs a restart."
 			).defineList("extraRandomTickBlocks", List.of(
 					"minecraft:snow_block",
-					"minecraft:powder_snow",
-					"minecraft:packed_ice",
-					"minecraft:blue_ice"
+					"minecraft:powder_snow"
 			), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
+			snowLayerMeltChance = b.comment("Chance per tick that a snow layer with a source in reach loses one layer.")
+					.defineInRange("snowLayerMeltChance", 0.8, 0.0, 1.0);
+			meltTickInterval = b.comment(
+					"Ticks between melt ticks of a target with a source in reach (75 to 125 percent of this, vanilla scheduled",
+					"ticks saved with the chunk). 200 = 10 s. 0 = off: targets melt only on random ticks, as before 2026-11-17."
+			).defineInRange("meltTickInterval", 200, 0, 12000);
+			slowHeatMelting = b.comment(
+					"Fire and lava melt meltable_slow targets (packed and blue ice, IW cryosol and permafrost). Off until the",
+					"ambient melting audit is approved: only salt melts packed ice and cryosol, blue ice and permafrost never",
+					"melt. Those blocks do not random tick; on, a non-ticking fire (torch) next to them melts nothing."
+			).define("slowHeatMelting", false);
+			magmaInstantRange = b.comment(
+					"Snow (layers, blocks, powder snow) within this reach of a block in creativecommon:melting/magma melts at",
+					"once: when placed, on magma's own tick, or on its melt tick. 0 = off."
+			).defineInRange("magmaInstantRange", 2, 0, 4);
+			magmaStopsFreezing = b.comment(
+					"No snow forms from snowfall and no water freezes into ice within fireRange of a creativecommon:melting/magma",
+					"block (the weather's snow and ice placement, server only; world generation is not checked)."
+			).define("magmaStopsFreezing", true);
+			saltMeltSnowLayers = b.comment(
+					"Snow layers one Salt Melt use or one salt dispense removes; a Snow Block counts as 8 layers. A salt block",
+					"melting by its tick removes one."
+			).defineInRange("saltMeltSnowLayers", 3, 1, 8);
+			saltProducts = b.comment(
+					"\"from=to\" block ids: what a saltable block becomes when salt melts it (shared properties copied). Not",
+					"listed: ice (#minecraft:ice) becomes water as placeWater says, anything else air. Snow loses layers instead."
+			).defineList("saltProducts", List.of(
+					"minecraft:packed_ice=minecraft:ice",
+					"immersive_weathering:cryosol=minecraft:dirt"
+			), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
 
 			b.pop(); // melting
 		}
