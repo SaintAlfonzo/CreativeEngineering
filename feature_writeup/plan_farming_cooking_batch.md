@@ -172,3 +172,9 @@ row status, `configs_edited/` copy for any config. Jars wait for a restart windo
   you to approve before any change. Effort M.
 - **C6: Coffee merge.** FR coffee beans, bush, tea and coffee recipes remapped to Rustic Delight coffee; the Nether basalt
   spawn is already off. Same merge mechanism as the other item merges.
+
+### Owner rulings 2026-11-17
+
+- F2: random-tick audit fixes rows 1 to 12 of [random_tick_audit.md](random_tick_audit.md) approved (owner, 2026-11-17).
+- Supplementaries Doormat gets a recipe; Floral Enchantment flower bushes stop random-ticking (owner, 2026-11-17, pack defaults).
+- Order of execution: [plan_exec_1117.md](plan_exec_1117.md).
