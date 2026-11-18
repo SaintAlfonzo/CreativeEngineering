@@ -2,6 +2,7 @@ package com.SaintAlfonzo.creativecompat.surface;
 
 import com.SaintAlfonzo.creativecompat.CompatConfig;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -12,8 +13,9 @@ import net.minecraftforge.event.TickEvent;
  * Leaf thorns and mob pathing in leaf piles (plan_post_scratch_1115.md G4e, G7.13, G7.14), server side.
  *
  * <p>Thorns: a player (only players) in a leaf layer block ({@code #creativecompat:passthrough_layers_open}) of at
- * least {@code thornLayers} layers, moving at least {@code thornMinSpeed} x walking speed measured against the full
- * pile's slowdown ({@link LayerMotion#thornSpeed}), is checked once every {@code thornCooldownTicks}: with chance
+ * least {@code thornLayers} layers, moving fast enough for the pile ({@link LayerMotion#thornPrick}, G11:
+ * {@code thornMinSpeed} x walking speed in a full pile, {@code thornPartialMinSpeed} x walking speed (sprinting) in a
+ * partial one, measured against that pile's own slowdown), is checked once every {@code thornCooldownTicks}: with chance
  * {@code thornChance x (4 - armor pieces) / 4} ({@link LayerMotion#thornChance}) it takes half a heart of sweet berry
  * bush damage ({@code DamageSource.SWEET_BERRY_BUSH}, so death messages and armor match the bush). Creative and
  * spectator players and the exempt mobs never count (exempt entities have no counted cells). Reads the pass-through
@@ -46,8 +48,14 @@ public final class LeafThorns {
 		if (now < st.thornNext) return;
 		double speed = Math.sqrt(dx * dx + dz * dz);
 		if (speed > 2.0) return; // a teleport, not a step
-		double fullWalk = values.tier(PassTier.LAYERS).leafMaxSlow();
-		if (!LayerMotion.thornSpeed(speed, fullWalk, c.thornMinSpeed.get())) return;
+		int layers = st.result.leafLayers;
+		BlockState pile = p.level.getBlockState(BlockPos.of(st.result.leafCell));
+		int max = PassGrowth.layersMax(pile);
+		if (max <= 0) max = SnowLayers.FULL;
+		double pileWalk = PassThrough.layerWalk(pile, values.tier(PassTier.LAYERS), values);
+		if (Double.isNaN(pileWalk)) pileWalk = values.tier(PassTier.LAYERS).leafMaxSlow();
+		if (!LayerMotion.thornPrick(speed, pileWalk, layers, max, c.thornMinSpeed.get(), c.thornPartialMinSpeed.get(),
+				p.isSprinting())) return;
 		st.thornNext = now + c.thornCooldownTicks.get();
 		double chance = LayerMotion.thornChance(base, armorPieces(p));
 		if (chance > 0.0 && p.getRandom().nextDouble() < chance) p.hurt(DamageSource.SWEET_BERRY_BUSH, 1.0F);

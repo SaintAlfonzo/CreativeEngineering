@@ -52,15 +52,37 @@ public record LayerMotion(int snowJumpLayers, double snowJumpFactor, double snow
 	}
 
 	/**
-	 * The player moves fast enough to be pricked (G7.14): the measured horizontal speed divided by the full-pile walk
-	 * factor ({@code fullWalk}, the 8-layer value) is at least {@code minSpeed} x walking speed. A pile of 6 slows less
-	 * than a full one, so it pricks more easily. A 10 percent margin covers acceleration and rounding.
+	 * The player moves at least {@code minSpeed} x walking speed (G7.14, G11): the measured horizontal speed divided by
+	 * the walk factor of the pile it moves in ({@code pileWalk}; G11 replaced G7.14's full-pile factor so a partial
+	 * pile no longer pricks more easily), with a 10 percent margin for acceleration and rounding.
 	 */
-	public static boolean thornSpeed(double blocksPerTick, double fullWalk, double minSpeed) {
-		double w = fullWalk > 0.0 ? fullWalk : 1.0;
+	public static boolean thornSpeed(double blocksPerTick, double pileWalk, double minSpeed) {
+		double w = pileWalk > 0.0 ? pileWalk : 1.0;
 		return blocksPerTick / w >= minSpeed * WALK_SPEED * 0.9;
+	}
+
+	/**
+	 * The speed a prick needs in a pile of {@code layers} (G11): walking or faster ({@code walkMin}) in a
+	 * full pile ({@code layers >= max}), sprinting or faster ({@code sprintMin}) in a partial one.
+	 */
+	public static double thornNeed(int layers, int max, double walkMin, double sprintMin) {
+		return layers >= max ? walkMin : sprintMin;
+	}
+
+	/**
+	 * Whole prick speed test (G11): {@code blocksPerTick} divided by the pile's own walk factor ({@code pileWalk}, the
+	 * slowdown at its height) against {@link #thornNeed}. In a partial pile a sprinting player ({@code sprinting}, the
+	 * server's flag) also passes at walking speed, so the test does not hang on the exact sprint ratio inside a pile.
+	 */
+	public static boolean thornPrick(double blocksPerTick, double pileWalk, int layers, int max, double walkMin,
+									 double sprintMin, boolean sprinting) {
+		if (thornSpeed(blocksPerTick, pileWalk, thornNeed(layers, max, walkMin, sprintMin))) return true;
+		return layers < max && sprinting && thornSpeed(blocksPerTick, pileWalk, walkMin);
 	}
 
 	/** A player's walking speed on flat ground, blocks per tick (4.317 m/s). */
 	public static final double WALK_SPEED = 0.21585;
+
+	/** Sprinting over walking speed (vanilla's sprint modifier, +30 percent). */
+	public static final double SPRINT_RATIO = 1.3;
 }

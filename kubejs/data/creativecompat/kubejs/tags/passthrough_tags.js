@@ -131,6 +131,11 @@ ServerEvents.tags('entity_type', e => {
 	// foxes and bees: Immersive Weathering's leaf pile rule, kept tier-wide (snow and the other layers too)
 	// rabbits and cats: G7.14 (exempt from the slowdown and the thorns; the deep-pile path block still applies)
 	t.add(e, 'creativecompat:passthrough_exempt/layers', ['minecraft:fox', 'minecraft:bee', 'minecraft:rabbit', 'minecraft:cat'])
+	// Light mobs stand on top of snow layers whatever their size (plan_post_scratch_1115.md G11; surface/SnowLayers).
+	// Mobs with a hitbox under [surface.passthrough.layers] snowLightVolume count without the tag; vanilla's own
+	// powder snow walkers are listed so they still stand on top with the size rule off (snowLightVolume = 0).
+	t.add(e, 'creativecompat:snow_layer_light', ['minecraft:fox', 'minecraft:rabbit', 'minecraft:endermite',
+		'minecraft:silverfish'])
 
 	// Projectile web groups (plan 5.1). Without a tag a projectile runs on its base-class default (surface/PassGroup);
 	// tools/projectile_scan.py lists the ones with no tag. Vanilla rows are listed too, so the tags are the full table.

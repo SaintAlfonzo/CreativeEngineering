@@ -798,12 +798,12 @@ expect ps15b13 water drop 3 snowballs
 @fails `LayerJumpMixin` (getJumpPower), `PassResult.addLayer`, `PassThrough.apply` capFall; exempt mobs and players in leather boots on top have no cell
 @draft needs a pbot jump verb and a per-tick Y readback (zpth watch on the bot)
 
-## SQ-PS15B-17 | leaf thorns: oak pile 8 and 6 pricks a walking player, pile 5 never, full armor never, creative never
+## SQ-PS15B-17 | leaf thorns: full pile 8 pricks a walking player; piles 6 and 7 only a sprinting one; pile 5 never; full armor never; creative never
 @group A
-@commands Bot P walks back and forth (pbot moveto) for 30 s in an 8-layer and a 6-layer oak leaf pile with no armor, 2 armor pieces, 4 pieces; then in a 5-layer pile; then in creative; a fox, a rabbit and a cat in an 8-layer pile
-@pass no armor: about 0.25 pricks per second of walking (half a heart, death message of the berry bush kind); 2 pieces about half that; 4 pieces none; pile 5 none; creative none; the fox, rabbit and cat take no damage and are not slowed (`passthrough_exempt/layers`)
-@fails `LeafThorns.onPlayerTick` (speed from the tick-to-tick position, thornMinSpeed against leafMaxSlow), `LayerMotion.thornChance`, entity tag `creativecompat:passthrough_exempt/layers`
-@draft health readback per second and the armor swaps to write at the run (Immersive Weathering's own spruce thorns also hurt in spruce piles: use oak)
+@commands Bot P walks back and forth (pbot moveto) for 30 s in an 8-layer oak leaf pile with no armor, 2 armor pieces, 4 pieces; then walks, then sprints, 30 s each in a 6-layer and a 7-layer pile (no armor); then sneaks in the 8-layer pile; then a 5-layer pile sprinting; then creative; a fox, a rabbit and a cat in an 8-layer pile
+@pass pile 8, no armor, walking: about 0.25 pricks per second (half a heart, death message of the berry bush kind); 2 pieces about half that; 4 pieces none; piles 6 and 7: walking none, sprinting about 0.25 per second; sneaking in pile 8 none; pile 5 none; creative none; the fox, rabbit and cat take no damage and are not slowed (`passthrough_exempt/layers`)
+@fails `LeafThorns.onPlayerTick` (tick-to-tick speed over the pile's own walk factor), `LayerMotion.thornPrick` / `thornNeed` (`thornMinSpeed` 1.0 full, `thornPartialMinSpeed` 1.3 partial, the sprint flag), `LayerMotion.thornChance`, entity tag `creativecompat:passthrough_exempt/layers`
+@draft health readback per second and the armor swaps to write at the run (Immersive Weathering's own spruce thorns also hurt in spruce piles: use oak); rewritten 2026-11-17 for G11 (was: piles 6 and 8 prick a walking player)
 
 ## SQ-PS15B-18 | mobs do not path through leaf piles of 6 or more
 @group A
@@ -853,3 +853,35 @@ look tick_field and tick_web_cube medians under 1000; the two _recount rows pres
 @pass oak: tiled oak leaves over the screen in the biome's foliage tint, about 0.7 opacity at 8 layers, lighter at fewer; birch: birch leaves; bamboo: Twigs bamboo leaves texture; off: no overlay; third person: no overlay
 @fails `LeafOverlay.render` (IW `LeafPileBlock.getLeafType().leaves`, particle sprite, `BlockColors`), `RegisterGuiOverlaysEvent` registration
 @draft client shots; `/cdevreloadclient compat` is a client command (see CQ-PS15B-02)
+
+@@section 3
+@@title SQ-PS15B-23 to -25 Mobs in snow layers and the thorn speed rule, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G11; [plan_passthrough.md](../plan_passthrough.md) 2.1; TODO `tooling/scratch-1115-follow-ups #23`)
+@@date 2026-11-17
+@@jars creativecompat
+@@sources feature_writeup/plan_post_scratch_1115.md feature_writeup/plan_passthrough.md
+@@text
+@@text Lane P of plan_post_scratch_1115.md G11: Creative Compat build/libs, not installed. Headless: `tools/test_passthrough.sh`
+@@text ALL 306 OK. Group A superflat: ground top -61, stand at -60. Defaults under test: `[surface.passthrough.layers]`
+@@text snowLightVolume 0.3, snowMobClimb true, snowSunkPathing true, thornPartialMinSpeed 1.3; entity tag
+@@text `creativecompat:snow_layer_light` (fox, rabbit, endermite, silverfish). SQ-PS15B-17 was rewritten for the thorn rule.
+@@table
+## SQ-PS15B-23 | light mobs stand on snow layers 5, heavy mobs sink: rabbit, fox, chicken, cat, baby cow on top; cow, zombie, wolf, Alex's Mobs tiger in
+@group A
+@commands A 9 x 3 pen of snow layers 5 (x 1100 to 1108, z 1160 to 1162, fenced), one each of rabbit, fox, chicken, cat, baby cow (`{Age:-24000}`), cow, zombie (`{NoAI:0b}`, daylight-proof helmet), wolf, `alexsmobs:tiger`, all `{PersistenceRequired:1b}`; after 5 s read each mob's Y
+@pass rabbit, fox, chicken, cat, baby cow: Y -59.375 (on top of 5 layers); cow, zombie, wolf, tiger: Y -60 (sunk to the ground); a zombie in leather boots (`armor.feet`) stands on top
+@fails `SnowLayers.standsOn` / `light` (`snowLightVolume`, tag `creativecompat:snow_layer_light`, boots `canWalkOnPowderedSnow`), `SnowLayers.collision`; a tiger on top = `#minecraft:powder_snow_walkable_mobs` still read
+@draft per-mob Y readback (`data get entity @e[type=...,limit=1] Pos[1]`) to write at the run
+
+## SQ-PS15B-24 | a sunk mob climbs out of snow layers 7 onto a 1-block step and a snow block
+@group A
+@commands A cow and a zombie in a 1 x 4 trench of snow layers 7 sunk to the ground, a stone step 1 high at the trench end and a snow block at the other; lure: a player holding wheat for the cow, a survival bot for the zombie; then `snowMobClimb = false` (rename + `/cdevreload compat`) and repeat; restore
+@pass on: both reach the top of the step (Y -59 on the stone) and the snow block within 10 s, rising at about 0.2 blocks per tick while touching the block; off: they stay in the trench (a 0.63 hop does not clear the step)
+@fails `SnowMobMixin` (LivingEntity `handleRelativeFrictionAndCalculateMovement` RETURN), `SnowLayers.mobMove` / `sunkIn` (feet below the layer top), `snowMobClimb`
+@draft per-tick Y watch of the mob to write at the run
+
+## SQ-PS15B-25 | pathing over snow layers: a fresh mob plans over the top, a sunk mob plans through
+@group A
+@commands A villager (plain and MCA) and a zombie 10 blocks from a target across a 5 x 5 field of snow layers 6: path readback (`/cdevtest` path dump or the debug path renderer) before entering; then the same mobs placed sunk inside the field (summoned at ground level in the snow) with a new target across; then `snowSunkPathing = false` and repeat the sunk case
+@pass outside: the first path's nodes over the field are one block up (on top of the snow); sunk: the path's nodes run at the ground level through the snow, the mob reaches the target without standing still; a mob that walks in on an over-the-top path gets a new ground-level path within about 1 s of sinking; off: the sunk mob keeps planning over the top (may stall at the field edge)
+@fails `SnowPathMixin` (NodeEvaluator `prepare` / `done`), `SnowLayers.openForPath` in `LeafPilePathMixin` and `McaLeafPilePathMixin`, `SnowLayers.collision` (null-entity context while a sunk search runs), `SnowLayers.dropStalePath` (`recomputePath`)
+@draft path readback to write at the run (no path dump verb yet: watch the mob's Y and position for 20 s)
