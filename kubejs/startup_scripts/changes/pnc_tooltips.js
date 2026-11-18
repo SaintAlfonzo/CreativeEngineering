@@ -4,7 +4,7 @@
 // line otherwise. KubeJS' ItemEvents.tooltip runs earlier (Architectury, HIGH priority), so it can't see that line;
 // this listener runs after it (LOW) and swaps the hint for the text itself: wrapped by PNC's own splitter (which also
 // turns ${br} into line breaks), color codes stripped, gray. While Shift is held PNC's own lines stay. Pack text
-// overrides (none since the glycerol one went) are lang entries in kubejs/assets/pneumaticcraft/lang/en_us.json.
+// overrides (none at present) are lang entries in kubejs/assets/pneumaticcraft/lang/en_us.json.
 // Registered once from startup (a client script would add another listener on every reload).
 
 if (Platform.isClientEnvironment()) (function () {

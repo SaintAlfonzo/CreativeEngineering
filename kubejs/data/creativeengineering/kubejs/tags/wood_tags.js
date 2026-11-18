@@ -6,7 +6,7 @@ console.log('wood tag started')
 var i = global.item;
 var t = global.tags
 
-// The Vinery barrel tag to Creative Brewing (vinery/tags.js).
+// The Vinery barrel tag is Creative Brewing's (vinery/tags.js).
 
 // ============================================================
 // Treated wood filling: planks that are not smoked

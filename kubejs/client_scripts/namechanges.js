@@ -6,13 +6,13 @@ ClientEvents.lang('en_us', e => {
 	e.renameItem(global.item.elder_guardian_roll, 'Elder Guardian Roll')
 	e.add('block.salt.salt_lamp', 'Large Salt Lamp')  // The Salt's lamp next to Vintage Delight's (salt merge)
 	// Flower pot names: Creative Compat (assets/creativecompat/kubejs/names.js).
-	// JEI info: Salt Blocks no longer grow salt since the salt merge (Creative Common block.SaltBlockTicks)
+	// JEI info: Salt Blocks do not grow salt (Creative Common block.SaltBlockTicks)
 	e.add('vintagedelight.jei.info.evaporator', 'Place next to water to grow Salt Layers on top. Salt Blocks do not grow salt.')
 	// Flint and Terrasteel, Dark Fire: Creative Magic (assets/creativemagic/kubejs/names.js).
 
 
 	// Food and Delight-member names (Rustic Delight, Canned Goods, Neapolitan, Delightful, Farmer's Delight, PneumaticCraft
-	// fried food) moved to Creative Delight: kubejs/assets/creativedelight/kubejs/<mod>/client.js
+	// fried food) are Creative Delight's: kubejs/assets/creativedelight/kubejs/<mod>/client.js
 	// Brewin' and Chewin' pizza: the many-topping recipe in cooking/cooking.js
 	e.add('block.brewinandchewin.pizza', 'Supreme Pizza')
 	e.add('item.brewinandchewin.pizza_slice', 'Supreme Pizza Slice')
