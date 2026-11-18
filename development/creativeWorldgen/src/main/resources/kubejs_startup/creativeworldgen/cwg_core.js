@@ -21,7 +21,7 @@ global.CWG = {
 	},
 }
 
-// The config sections that moved from CEConfig at the Worldgen carve are CWGConfig's: NCH.cfg finds them by section name.
+// The config sections of CWGConfig: NCH.cfg finds them by section name.
 global.NCH.registerConfig(global.CWG.modId, 'com.SaintAlfonzo.creativeworldgen.CWGConfig')
 
 console.info('[creativeworldgen] core finished')

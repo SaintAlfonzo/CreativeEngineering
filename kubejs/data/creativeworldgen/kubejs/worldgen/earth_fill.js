@@ -34,14 +34,14 @@ ServerEvents.tags('worldgen/structure', function (e) {
 		'#creativeworldgen:type/village',
 	])
 	// Structures that stand in water on purpose (stilts in a swamp or mangrove): no footprint water share, their
-	// other earth-fill limits as usual (TODO structures/earthfill #14: every surface piece now joins the footprint,
+	// other earth-fill limits as usual (TODO structures/earthfill #14: every surface piece joins the footprint,
 	// not only pieces with earth). The fisherman house is a water-fill structure, skipped already.
 	global.tags.add(e, 'creativeworldgen:earth_fill/wet_ok', [
 		'minecraft:swamp_hut', 'betterwitchhuts:witch_hut', 'mysticrift_pillagers_towers_aris:mangrove_pillager_tower',
 	])
 	// Structures on a stone or brick base instead of a dirt pad: their base blocks (block tag
 	// creativeworldgen:earth_fill/stone_base, blocktags.js) count as earth, for their size and their overhang.
-	// Without this the drum tower's 49x45 andesite plate counted as "small, 10 earth" (02_new_mods_tests.md 4.2). The
+	// Without this the drum tower's 49x45 andesite plate would count as "small, 10 earth". The
 	// End House (Ender's Delight) stands on a purpur and end stone floor (layer 0: 101 of its 144 columns). Counted
 	// as earth, a start over the void hangs that whole floor in air and is canceled (the mod's own structure type
 	// skipped chunks whose surface was below y 50, i.e. no island; the pack uses plain jigsaw).

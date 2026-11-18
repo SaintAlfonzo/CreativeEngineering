@@ -10,8 +10,8 @@ import java.util.Optional;
 
 /**
  * The protected StructurePlacement fields for /dumpstructuregen (kubejs/server_scripts/_lib/dump_structuregen.js):
- * Rhino can't call protected methods, so the dump used to log locate_offset, frequency_reduction_method, frequency and
- * salt as errors on every set. Read here by SRG field name, with a Mojang-name fallback for dev.
+ * Rhino can't call protected methods, so the dump reads locate_offset, frequency_reduction_method, frequency and
+ * salt here instead. Read here by SRG field name, with a Mojang-name fallback for dev.
  */
 public final class PlacementInfo {
 

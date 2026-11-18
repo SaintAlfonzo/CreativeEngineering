@@ -12,7 +12,7 @@
 //       data/moremooblooms/moobloom_spawns/  the pack's moobloom spawn rules (More Mooblooms, a Worldgen member,
 //                                              combines every file of that folder; creativeengineering.json is ours)
 //     The pack's creativeengineering worldgen data is in src/main/resources (data/, and packs/<modid>/ for files naming a
-//     mod this jar does not require, compat/ModDataPacks; moved). The structure datapacks, Eugene and
+//     mod this jar does not require, compat/ModDataPacks). The structure datapacks, Eugene and
 //     watchtower_building stay in the pack folder: the structure generators (tools/gen_structure_config.py and the scanners) tell jar sets from kubejs/data
 //     ones by source, and campsite_structures, ipo and lightmanscurrency are overrides of loaded mods' jars.
 // Build: ./gradlew :creativeWorldgen:build --offline   Install: ./gradlew :creativeWorldgen:installToMods

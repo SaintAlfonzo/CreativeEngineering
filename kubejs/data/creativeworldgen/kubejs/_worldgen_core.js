@@ -4,7 +4,7 @@
 // folder (loads on /reload); the Worldgen build copies this tree into the jar at the same path
 // (data/creativeworldgen/kubejs/). Folders keep the pack's layout: worldgen/ (structures, biome layout, earth and water
 // fill, terrain adaptation, bee nests, wild flowers, mushroom and mob spawns), mobs/ (End divers), other/ (removed
-// mobs), tags/ (worldgen block tags, entity tags). Priorities unchanged, and they order only within this tree. The
+// mobs), tags/ (worldgen block tags, entity tags). Priorities order only within this tree. The
 // startup half (global.CWG, the config registration) ships in the jar's kubejs_startup/creativeworldgen/. Each script
 // pack has its own scope: these scripts read only global.* (tags, item, blocks, removedItems, guardThrowable,
 // writeExportJson) and publish global.biomeRules. Readers in other packs read it at event time (Creative Delight's wild

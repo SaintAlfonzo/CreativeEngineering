@@ -885,7 +885,7 @@ public final class MetaStructure extends Structure {
 			for (net.minecraft.nbt.Tag t : tag.getList("parts", net.minecraft.nbt.Tag.TAG_COMPOUND)) {
 				net.minecraft.nbt.CompoundTag c = (net.minecraft.nbt.CompoundTag) t;
 				ResourceLocation id = ResourceLocation.tryParse(c.getString("structure"));
-				ResourceLocation moved = LegacyIds.moved(c.getString("structure"), reg);   // saved before the move
+				ResourceLocation moved = LegacyIds.moved(c.getString("structure"), reg);   // an id saved under an old namespace
 				if (moved != null) id = moved;
 				Structure s = id == null ? null : reg.get(id);
 				es.add(new Entry(s, c.getInt("from"), c.getInt("to")));

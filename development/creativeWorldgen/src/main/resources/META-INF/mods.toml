@@ -25,7 +25,7 @@ versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
 # patcherMod: KubeJS, the shared helpers, the startup script loader and the Common APIs this jar calls
-# (swap/ConfigRename, util/WorldgenFiles). Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range
+# (swap/ConfigRename, util/WorldgenFiles). The range
 # must exclude every Creative Common version that still carries the worldgen classes and mixins (1.1.07 and older: they would apply twice).
 [[dependencies.creativeworldgen]]
 modId="creativecommon"
