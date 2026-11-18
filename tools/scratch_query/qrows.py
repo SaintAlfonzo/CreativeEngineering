@@ -23,6 +23,21 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @@archived YYYY-MM-DD     every row PASSed on the jars still installed (qrun.py archive): the section is shown in
                               scratch_queue_archive.md with its verdict history instead of the queue; it stays data
                               (qrun.py plan still plans it when a jar or source changes)
+    @@prep [A:|B:] SPEC       pre-boot setup of the section's driver steps (qdrive.py, before prep_srv.sh and the boot;
+                              by hand: qrun.py prep). Lines add up in order; a leading A: / B: limits the line to the step
+                              of that world group. SPEC is shell-quoted (shlex) and one of:
+                                KEY=VALUE ...           UPPERCASE KEY -> prep_srv.sh environment (NOSWAP, SKIPSWAP,
+                                                        COPYDEV, PGJAR); lowercase key -> server.properties (prep_srv.sh
+                                                        prop=value: difficulty, spawn-animals, spawn-monsters, level-seed)
+                                toml FILE SECTION KEY VALUE   qrun.py toml on OUT/srv/FILE after prep (FILE without '/'
+                                                        is config/FILE; created when absent); VALUE is the rest of the
+                                                        line, verbatim; a SECTION with spaces is quoted with its own
+                                                        quotes inside: '"Loading Protection Configuration"'
+                                copy SRC DEST           repo file or directory SRC -> OUT/srv/DEST (DEST ending in '/' = into)
+                                rm PATH                 delete OUT/srv/PATH (a glob; a jar the section runs without)
+                              Only what every planned row of the section needs before its boot belongs here; a row that
+                              restarts with other values keeps its own `shell` / `qrun.py toml` steps. Rendered into the
+                              queue as a "Driver prep" line.
     @@text LINE               one markdown line of the section, verbatim ('@@text' alone = blank line)
     @@table                   the standard table header: | ID | Group | Commands | Pass | If it fails | and |---|...
     @@table world             the same with World in place of Group (rows that need a particular world; DR-W4)
@@ -142,6 +157,12 @@ def load(path, errors=None):
 				if rest.strip() not in ('', 'world'):
 					bad(n, '@@table takes nothing or "world"')
 				sec['items'] += [('text', WORLD_HEAD if rest.strip() == 'world' else STD_HEAD), ('text', STD_SEP)]
+			elif word == 'prep':
+				try:
+					prep_line(rest)
+				except ValueError as e:
+					bad(n, '@@prep: %s' % e)
+				sec.setdefault('prep', []).append(rest.strip())
 			elif word in SECTION_META:
 				sec['meta'][word] = rest
 			else:
@@ -210,9 +231,85 @@ def tiers_of(path):
 	return out
 
 
+PREP_ENV = ('NOSWAP', 'SKIPSWAP', 'COPYDEV', 'PGJAR')
+PREP_ACTIONS = {'toml': 4, 'copy': 2, 'rm': 1}
+
+
+def prep_line(text):
+	"""One @@prep line -> (group or None, kind, args). kind 'set': args [(KEY, VALUE)]; 'toml' / 'copy' / 'rm': the
+    words (toml VALUE = the rest of the line). ValueError on a bad line."""
+	import shlex
+	text = text.strip()
+	group = None
+	m = re.match(r'([AB]):\s*', text)
+	if m:
+		group, text = m.group(1), text[m.end():]
+	if not text:
+		raise ValueError('empty')
+	word = text.split()[0]
+	if word in PREP_ACTIONS:
+		n = PREP_ACTIONS[word]
+		if word == 'toml':
+			# FILE SECTION KEY shell-quoted (a section with spaces keeps its inner quotes: '"A B"'); VALUE raw
+			lex = shlex.shlex(text, posix=True)
+			lex.whitespace_split = True
+			args = [lex.get_token() for _ in range(4)][1:]
+			args = [a for a in args if a is not None]
+			rest = lex.instream.read().strip()
+			if rest:
+				args.append(rest)
+		else:
+			args = shlex.split(text)[1:]
+		if len(args) != n:
+			raise ValueError('%s takes %d argument(s), got %d' % (word, n, len(args)))
+		dest = args[0] if word == 'toml' else args[-1]
+		if '..' in Path(dest).parts or dest.startswith('/'):
+			raise ValueError('%s: the srv path must be relative, without ..' % word)
+		return group, word, args
+	pairs = []
+	for tok in shlex.split(text):
+		k, eq, v = tok.partition('=')
+		if not eq or not re.fullmatch(r'[A-Za-z][A-Za-z0-9_.-]*', k):
+			raise ValueError('expected KEY=VALUE, toml, copy or rm, got %r' % tok)
+		if k.isupper() and k not in PREP_ENV:
+			raise ValueError('unknown prep_srv.sh variable %s (known: %s)' % (k, ', '.join(PREP_ENV)))
+		pairs.append((k, v))
+	return group, 'set', pairs
+
+
+def prep_of(sec, group):
+	"""The section's @@prep for a step of world group A/B: {'env': {KEY: VALUE}, 'props': ['k=v', ...],
+    'actions': [(kind, args), ...], 'lines': [the @@prep lines that apply]}."""
+	out = {'env': {}, 'props': [], 'actions': [], 'lines': []}
+	for text in sec.get('prep', []):
+		g, kind, args = prep_line(text)
+		if g and g != group:
+			continue
+		out['lines'].append(text)
+		if kind == 'set':
+			for k, v in args:
+				if k.isupper():
+					out['env'][k] = v
+				else:
+					out['props'].append('%s=%s' % (k, v))
+		else:
+			out['actions'].append((kind, args))
+	return out
+
+
+def section_of(path, key):
+	"""Section KEY of a rows file, or None."""
+	for sec in load(path)['sections']:
+		if str(sec['key']) == str(key):
+			return sec
+	return None
+
+
 def render(sec):
 	"""The section as queue markdown: heading, then its lines; row lines rebuilt from the cells."""
 	out = ['## ' + sec['meta'].get('title', '')]
+	if sec.get('prep'):
+		out += ['', 'Driver prep (`@@prep`, applied before each boot): ' + '; '.join('`%s`' % t for t in sec['prep'])]
 	for kind, x in sec['items']:
 		out.append(x if kind == 'text' else row_line(x))
 	return out
@@ -236,6 +333,7 @@ def write_qb(path, code, sections, header=None):
 		for k in SECTION_META:
 			if sec['meta'].get(k):
 				lines.append('@@%s %s' % (k, sec['meta'][k]))
+		lines += ['@@prep ' + t for t in sec.get('prep', [])]
 		items = sec['items']
 		i = 0
 		while i < len(items):

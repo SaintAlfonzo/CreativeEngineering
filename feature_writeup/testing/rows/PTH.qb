@@ -7,6 +7,9 @@
 @@date 2026-11-14
 @@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
+@@prep difficulty=normal spawn-animals=true spawn-npcs=true
+@@prep toml creativecompat-common.toml surface.passthrough arrowLifeTicks 3600
+@@prep toml creativecompat-common.toml surface.passthrough arrowLongLifeCap 3
 @@text
 @@text Creative Compat 1.0.0 built 2026-11-14 (build/libs, not installed). The tier tags come in phase 4: until then a row
 @@text needs a scratch datapack in `srv/` with `data/creativecompat/tags/blocks/passthrough/<tier>.json` (and entity tag
@@ -31,6 +34,10 @@ look shell: 11 tier tables; enabled, arrowLifeTicks, arrowLongLifeCap under [sur
 @pass value -0.5 in the lone web, -0.65 in the cube center; the zombie keeps moving (vanilla stuck canceled); barbed wire still hurts
 @fails `PassThrough.cancelsStuck`, the tag; `PassRule.cell`
 @from batches/r1115/pth_a1.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+> execute unless entity Q run pbot spawn Q 1002.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > setblock 1000 -60 1070 minecraft:cobweb
 > fill 1004 -60 1069 1006 -58 1071 minecraft:cobweb
 > setblock 1010 -60 1070 immersiveengineering:razor_wire
@@ -66,6 +73,9 @@ look z02m crosses x 1010..1011 without stopping (horizontal motion about half, n
 @pass damage about x0.85 and x0.61 of a plain fall; no damage in the cube
 @fails `PassThrough.newCellsFallFactor`, `resetFall`
 @from batches/r1115/pth_a1.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > setblock 1004 -60 1090 minecraft:cobweb
 > fill 1008 -60 1090 1008 -58 1090 minecraft:cobweb
 > fill 1012 -60 1089 1014 -58 1091 minecraft:cobweb
@@ -87,6 +97,11 @@ look damage (100 - hp): web about 0.85x and stack about 0.61x of plain; cube 0 a
 @pass owner unslowed, other player 0.50x
 @fails `PassOwner` reflection on `IOwnable#isOwnedBy`
 @from batches/r1115/pth_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 pth_a0 P11-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+> execute unless entity Q run pbot spawn Q 1002.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > tp P 1000.5 -60 1098.5
 > tp Q 1003.5 -60 1098.5
 > pbot hold P securitycraft:reinforced_cobweb 1
@@ -124,6 +139,9 @@ look bP: mod=none in the web cell (z 1100..1101); bQ: mod=-0.500 there; owner fi
 @@date 2026-11-15
 @@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
+@@prep difficulty=normal spawn-animals=true spawn-npcs=true
+@@prep toml creativecompat-common.toml surface.passthrough arrowLifeTicks 3600
+@@prep toml creativecompat-common.toml surface.passthrough arrowLongLifeCap 3
 @@text
 @@text Creative Compat 1.0.0 built 2026-11-15 (build/libs, not installed). Same scratch datapack as phase 1 until phase 4:
 @@text block tag `passthrough/cobweb` = `minecraft:cobweb`; projectile groups come from the class defaults unless a row adds
@@ -148,6 +166,9 @@ shell grep -nE 'PassMixin|LivingClimbMixin|QuarkTorchArrowPickupMixin' logs/late
 @pass every item inside the web cell, at different heights; the fast one too; `NoGravity:1b`
 @fails `PassItems.afterInsideBlocks` (path cells, `PassMath.stickAlong`), the `items = stick` tier value
 @from batches/r1115/pth_a1.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > setblock 1000 -57 1120 minecraft:cobweb
 > summon minecraft:item 1000.5 -54 1120.5 {Item:{id:"minecraft:stone",Count:1b},PickupDelay:32767,Motion:[-0.003d,0d,-0.01d],Tags:["i06"]}
 > summon minecraft:item 1000.5 -54 1120.5 {Item:{id:"minecraft:stone",Count:1b},PickupDelay:32767,Motion:[0.03d,0d,0.028d],Tags:["i06"]}
@@ -179,6 +200,9 @@ look every stone and the diamond at y -57..-56 within x 1000..1001 z 1120..1121,
 @pass after restart still in place with `CreativeCompatPass` in their data; web gone: they fall and `NoGravity` is back to 0b
 @fails `PassSave` (`EntityPassMixin` save/load), `PassItems.hold` / `release`
 @from batches/r1115/pth_b1.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > zpth mod i06
 > data get entity @e[tag=i06fast,limit=1]
 > setblock 1000 -57 1120 minecraft:air
@@ -192,25 +216,34 @@ look before: same positions as SQ-PTH-06, ng=true, data has a CreativeCompatPass
 @pass orbs stop in the web and do not home while the player stands outside; collected on touch
 @fails `PassItems.hold` (position held every tick)
 @from batches/r1115/pth_a1.qb
-> setblock 1000 -60 1130 minecraft:cobweb
+# self-contained since r1118 (judge-10, 2026-11-18): body from r1115 SQ-PTH-08r (with the bot 4 blocks away while the orbs fell, they homed to it before reaching the web)
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
+> setblock 1000 -60 1134 minecraft:cobweb
+> tp P 1012.5 -60 1134.5
+> xp set P 0 levels
 > xp set P 0 points
-> tp P 1004.5 -60 1130.5
-> summon minecraft:experience_orb 1000.5 -57 1130.5 {Value:5,Tags:["o08"]}
-> summon minecraft:experience_orb 1000.5 -57 1130.5 {Value:5,Tags:["o08"]}
-> summon minecraft:experience_orb 1000.5 -57 1130.5 {Value:5,Tags:["o08"]}
-> summon minecraft:experience_orb 1000.5 -57 1130.5 {Value:5,Tags:["o08"]}
-> summon minecraft:experience_orb 1000.5 -57 1130.5 {Value:5,Tags:["o08"]}
+> summon minecraft:experience_orb 1000.5 -57 1134.5 {Value:5,Tags:["o08"]}
+> summon minecraft:experience_orb 1000.5 -57 1134.5 {Value:5,Tags:["o08"]}
+> summon minecraft:experience_orb 1000.5 -57 1134.5 {Value:5,Tags:["o08"]}
+> summon minecraft:experience_orb 1000.5 -57 1134.5 {Value:5,Tags:["o08"]}
+> summon minecraft:experience_orb 1000.5 -57 1134.5 {Value:5,Tags:["o08"]}
+sleep 3
+> zpth mod o08
+> tp P 1004.5 -60 1134.5
 sleep 4
 > zpth mod o08
 sleep 4
 > zpth mod o08
 > xp query P points
-> pbot path P 1000.5 -60 1130.5 0.1
+> pbot path P 1000.5 -60 1134.5 0.1
 sleep 5
 > zpth count o08
+> xp query P levels
 > xp query P points
 expect count o08 n=0
-look both mod passes: orbs inside x 1000..1001 y -60..-59 z 1130..1131, same positions; P points 0 before, 25 after
+look the three mod passes: orbs inside x 1000..1001 y -60..-59 z 1134..1135, same positions; P points 0 before the walk; after: 2 levels 9 points (25 XP)
 
 ## SQ-PTH-09 | bot falls 3 blocks into a cube: stops; jump climbs about 0.07 b/t, sneak sinks about 0.05; zombie hangs
 @group A
@@ -219,6 +252,11 @@ look both mod passes: orbs inside x 1000..1001 y -60..-59 z 1130..1131, same pos
 @fails `LivingClimbMixin` (`m_21297_` RETURN), `PassThrough.surroundedMotion`, `PassResult.surroundedTier`
 @from batches/r1115/pth_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 pth_a0 P11-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+> tag P add bP
+sleep 3
 > fill 1000 -60 1109 1002 -58 1111 minecraft:cobweb
 > fill 1004 -60 1109 1006 -58 1111 minecraft:cobweb
 > zpth watch bP 80 2
@@ -245,6 +283,10 @@ reject \[cdevtest\] verb=pbot\.\S+ .*error=
 @fails `ArrowPassMixin.creativecompat$hangInWeb`, `PassProjectiles` HANG, `PassGroup` default
 @from batches/r1115/pth_a2.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 pth_a0 P11-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > fill 1080 -60 1000 1082 -58 1002 minecraft:cobweb
 > zpth watchnew minecraft:arrow a10 1200 2 1081.5 -59 1001.5 7
 > zpth watchnew nock_enough_arrows:explosive_arrow e10 1200 2 1081.5 -59 1001.5 7
@@ -292,6 +334,10 @@ reject \[cdevtest\] verb=pbot\.\S+ .*error=
 @fails `PassProjectiles.breakIn` (`ProjectilePassMixin`), `settle`, `FireworkPassMixin` / `fireworkTail`
 @from batches/r1115/pth_a2.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 pth_a0 P11-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > fill 1090 -57 1000 1092 -55 1002 minecraft:cobweb
 > setblock 1091 -58 995 minecraft:stone
 > tag P remove bP
@@ -334,6 +380,10 @@ reject \[cdevtest\] verb=pbot\.\S+ .*error=
 @fails `PassProjectiles` SNAG, `QuarkPickarangPassMixin` (liveTime), `BotaniaChakramPassMixin` (tickCount, return), `EntityPassMixin` touch
 @from batches/r1115/pth_a2.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 pth_a0 P11-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > setblock 1100 -59 1000 minecraft:cobweb
 > setblock 1104 -59 1000 minecraft:cobweb
 > setblock 1108 -59 1000 minecraft:cobweb
@@ -391,11 +441,16 @@ reject \[cdevtest\] verb=pbot\.\S+ .*error=
 @fails `ArrowPassMixin` despawn HEAD, `PassArrows.despawnLimit`, `arrowLifeTicks`
 @from batches/r1115/pth_a2.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 pth_a0 P11-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > fill 1123 -60 999 1127 -57 999 minecraft:stone
 > zpth watchnew minecraft:arrow a13 5000 400 1122 -59 998 5
 > zpth watchnew minecraft:trident t13 5000 400 1125 -59 998 5
 > tp P 1120.5 -60 995.5
-> pbot look P 0 60
+# judge-10, 2026-11-18: look 30 down (was 60): at 60 the arrow landed 0.8 blocks from the bot, which picked it up 9 ticks later
+> pbot look P 0 30
 > item replace entity P weapon.mainhand with minecraft:bow
 > give P minecraft:arrow 1
 > pbot useitem P main 20
@@ -425,6 +480,9 @@ reject \[cdevtest\] verb=pbot\.\S+ .*error=
 @pass first test: the oldest vanishes at once on the 4th; second: the oldest vanishes at its first minute, the others stay; `/save-all` + restart keeps the demotion
 @fails `PassArrows.join` / `prune`, `PassSave` `ShortLife`
 @from batches/r1115/pth_a2.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > zpth watchnew minecraft:arrow a14 5000 200 1143 -59 1000 6
 > summon minecraft:arrow 1140.5 -58 1000.5 {pickup:1b,Motion:[0d,-1d,0d]}
 sleep 1
@@ -443,42 +501,35 @@ look 3 arrows stuck at x 1140, 1142, 1144
 @pass snowball flies straight through unslowed; minecart slowed in the web (no longer vanilla's stuck slowdown, still slowed)
 @fails `PassProjectiles.groupOf` cache cleared on reload (`PassThrough.clearCache`), `otherEntity`
 @from batches/r1115/pth_a2.qb
-shell mkdir -p world/datapacks/pth15/data/creativecompat/tags/entity_types/passthrough/projectile && printf '{"pack":{"pack_format":10,"description":"pth15"}}' > world/datapacks/pth15/pack.mcmeta && printf '{"replace":false,"values":["minecraft:snowball"]}' > world/datapacks/pth15/data/creativecompat/tags/entity_types/passthrough/projectile/exempt.json
-> datapack enable "file/pth15"
-> reload
-sleep 20
-> datapack list enabled
-> execute as @e[limit=1,type=minecraft:player] run say PTH15-reloaded
+# self-contained since r1118 (judge-10, 2026-11-18): forceload; body from r1115 SQ-PTH-15c (a world/datapacks pack is not seen by datapack enable on a live server: "Unknown data pack")
+> forceload add 992 976 1231 1215
+sleep 3
 > fill 1010 -60 1179 1012 -58 1181 minecraft:cobweb
+shell mkdir -p kubejs/data/creativecompat/tags/entity_types/passthrough/projectile && printf '{"replace":false,"values":["minecraft:snowball"]}' > kubejs/data/creativecompat/tags/entity_types/passthrough/projectile/exempt.json
+> reload
+sleep 25
 > summon minecraft:snowball 1004.5 -58.5 1180.5 {NoGravity:1b,Tags:["m15"]}
+> execute as @e[tag=m15] if entity @s[type=#creativecompat:passthrough_exempt/all] run say PTH15-snowball-exempt
 > zpth watch m15 45 1
 > zpth launch m15 none 1.5 0 0
 sleep 3
 > fill 1000 -60 1190 1024 -60 1190 minecraft:rail[shape=east_west]
+> fill 1000 -60 1192 1024 -60 1192 minecraft:rail[shape=east_west]
 > setblock 1012 -59 1190 minecraft:cobweb
-> summon minecraft:minecart 1001.5 -60 1190.5 {Tags:["c15"]}
-> zpth watch c15 160 2
+> summon minecraft:minecart 1009.5 -60 1190.5 {Tags:["c15"]}
+> summon minecraft:minecart 1009.5 -60 1192.5 {Tags:["c15e"]}
+> zpth watch c15 100 2
+> zpth watch c15e 100 2
 > zpth motion c15 0.4 0 0
-sleep 9
+> zpth motion c15e 0.4 0 0
+sleep 6
 > zpth mod c15
-shell rm -rf world/datapacks/pth15
-> datapack disable "file/pth15"
+shell rm -f kubejs/data/creativecompat/tags/entity_types/passthrough/projectile/exempt.json
 > reload
-sleep 20
-look m15 passes x 1013 at mot x about 1.5; c15 slows under the web at x 1012 but keeps going (vanilla stuck would near-stop it)
+sleep 25
+expect PTH15-snowball-exempt$
+look m15 passes x 1013 at mot x about 1.4; c15 slowed under the web (x 1011.5..1013) but not stopped dead, compared with the no-web control c15e
 
-
-@@section 3
-@@title SQ-PTH Pass-through blocks, phases 3 and 5 (leaf piles, ropes, WTHIT), 2026-11-15 ([plan_passthrough.md](../plan_passthrough.md) 3, 6)
-@@date 2026-11-15
-@@jars creativecompat creativedevtools
-@@sources feature_writeup/plan_passthrough.md
-@@text
-@@text Creative Compat 1.0.0 built 2026-11-15 (build/libs, not installed). Same scratch datapack as phase 1 until phase 4, plus
-@@text `passthrough/leaf_pile` = every IW leaf pile and `twigs:bamboo_leaves`, `passthrough/rope` = `farmersdelight:rope`,
-@@text `supplementaries:rope`, `quark:rope`, `passthrough/dense_crop` = `minecraft:wheat`, `passthrough/vine` = `minecraft:vine`.
-@@text
-@@table
 ## SQ-PTH-16 | boot 2: [leaf_piles] slowFromLayers 6 moved to [surface.passthrough.leaf_pile] minLayers 6
 @group A
 @commands Before boot: `qrun.py toml config/creativecompat-common.toml leaf_piles slowFromLayers 6` (the table back in a copy of the live file); boot; read the file
@@ -497,6 +548,9 @@ shell grep -c '^\[leaf_piles\]' config/creativecompat-common.toml || true; awk '
 @pass 3 layers: no modifier (both blocks; bamboo leaves no longer slow at 3); 4 layers: -0.55 (walk 0.45) for both; Depth Strider: no modifier
 @fails `PassThrough.grown` minLayers, `PassGrowth.layers`, leaf_pile `depthStriderPasses`
 @from batches/r1115/pth_a1.qb passed
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > setblock 1000 -60 1140 immersive_weathering:oak_leaf_pile[layers=3]
 > setblock 1004 -60 1140 immersive_weathering:oak_leaf_pile[layers=4]
 > setblock 1008 -60 1140 twigs:bamboo_leaves[layers=3]
@@ -525,6 +579,9 @@ expect \[zpth\] mod z17e .* mod=none
 @pass damage while moving (0.5 per hit at 6, 1.0 at 7), none with leggings; the walk modifier -0.55 in both
 @fails IW thorns sit in its `entityInside` slowdown branch: `MakeStuckInBlockMixin` must cancel only `makeStuckInBlock`, not the rest of `entityInside`
 @from batches/r1115/pth_a1.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 shell grep -n 'leaf_piles_slow' config/immersive_weathering*.toml config/immersive_weathering/*.json* 2>/dev/null | head -3
 > setblock 1000 -60 1150 immersive_weathering:spruce_leaf_pile[layers=6]
 > setblock 1004 -60 1150 immersive_weathering:spruce_leaf_pile[layers=7]
@@ -565,6 +622,7 @@ look z18a hp 20 -> lower (0.5 per hit), z18b (1.0 per hit), z18c/z18d 20; all mo
 @@date 2026-11-15
 @@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
+@@prep difficulty=normal spawn-animals=true spawn-npcs=true
 @@text
 @@text Needs a Creative Compat jar built after 2026-11-15 that carries `data/creativecompat/kubejs/tags/passthrough_tags.js`
 @@text (check with `unzip -l`); drop the phase 1-3 scratch datapack, these rows run on the real tags. Expected sizes from
@@ -585,7 +643,8 @@ bootreject overlap:
 bootreject passthrough_tags\.js.*(rror|xception)
 kjsreject passthrough_tags\.js.*(rror|xception)
 shell grep -nE 'passthrough_tags|overlaps checked|overlap:' logs/latest.log logs/kubejs/server.log | cut -c1-300 | head -20
-> dumptags block,entity_type
+> dumptags block
+> dumptags entity_type
 sleep 20
 > dumpsurface
 sleep 20
@@ -599,6 +658,9 @@ look tier sizes vs the intro (bush 8 + 2 new, cobweb 5 + 1 razor wire, grass 119
 @fails passthrough_tags.js order or `except` lists (the broad tiers take out what is already tiered); a block missing from the registry (rerun the sim on fresh dumps)
 @from batches/r1115/pth_a1.qb
 @reviewed 2026-11-17
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > fill 998 -61 1048 1052 -61 1052 minecraft:farmland
 > setblock 1000 -60 1050 minecraft:wheat[age=7]
 > execute if block 1000 -60 1050 #creativecompat:passthrough/bush run say PTH20-wheat-IN-bush
@@ -660,6 +722,8 @@ look tier sizes vs the intro (bush 8 + 2 new, cobweb 5 + 1 razor wire, grass 119
 > execute if block 1008 -60 1050 #creativecompat:passthrough/tall_plant run say PTH20-tall_grass-IN-tall_plant
 > execute if block 1008 -60 1050 #creativecompat:passthrough/vine run say PTH20-tall_grass-IN-vine
 > execute if block 1008 -60 1050 #creativecompat:passthrough/wild_crop run say PTH20-tall_grass-IN-wild_crop
+> setblock 1010 -61 1050 minecraft:sand
+> setblock 1010 -61 1049 minecraft:water
 > setblock 1010 -60 1050 minecraft:sugar_cane
 > execute if block 1010 -60 1050 #creativecompat:passthrough/bush run say PTH20-sugar_cane-IN-bush
 > execute if block 1010 -60 1050 #creativecompat:passthrough/cane run say PTH20-sugar_cane-IN-cane
@@ -672,6 +736,7 @@ look tier sizes vs the intro (bush 8 + 2 new, cobweb 5 + 1 razor wire, grass 119
 > execute if block 1010 -60 1050 #creativecompat:passthrough/tall_plant run say PTH20-sugar_cane-IN-tall_plant
 > execute if block 1010 -60 1050 #creativecompat:passthrough/vine run say PTH20-sugar_cane-IN-vine
 > execute if block 1010 -60 1050 #creativecompat:passthrough/wild_crop run say PTH20-sugar_cane-IN-wild_crop
+> setblock 1012 -59 1050 minecraft:stone
 > setblock 1012 -60 1050 quark:rope
 > execute if block 1012 -60 1050 #creativecompat:passthrough/bush run say PTH20-quark_rope-IN-bush
 > execute if block 1012 -60 1050 #creativecompat:passthrough/cane run say PTH20-quark_rope-IN-cane
@@ -935,6 +1000,9 @@ reject Unknown block|Incorrect argument|Unknown or incomplete
 @pass snowball break, potion settle, pickarang snag, firework linger, both arrows hang, revolver shot, mana burst and fire bomb exempt and exempt/all; spider in exempt/cobweb; fox in exempt/bush and leaf_pile
 @fails entity ids in passthrough_tags.js (projectile_scan pairs by registration code: an unverified id may be wrong)
 @from batches/r1115/pth_a1.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > summon minecraft:snowball 1000.5 -50 1060.5 {NoGravity:1b,Tags:["e21_snowball"]}
 > summon minecraft:potion 1002.5 -50 1060.5 {NoGravity:1b,Tags:["e21_potion"]}
 > summon quark:pickarang 1004.5 -50 1060.5 {NoGravity:1b,Tags:["e21_pickarang"]}
@@ -1112,6 +1180,9 @@ reject MISSING
 @pass rope tomatoes center -0.5 (dense, age ignored); budding age 1 none, age 2 -0.25; coffee age 0 -0.25; taiga grape bush -0.64
 @fails `passthrough_growth_any` members; `PassThrough.grown` (growth_any check before the age rule)
 @from batches/r1115/pth_a1.qb passed
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > fill 999 -61 1159 1020 -61 1161 minecraft:farmland
 > fill 1000 -60 1159 1002 -60 1161 supplementaries:rope_tomatoes[age=0]
 > setblock 1006 -60 1160 farmersdelight:budding_tomatoes[age=1]
@@ -1145,6 +1216,10 @@ expect \[zpth\] mod z22e .* mod=-0\.640
 @pass spider no modifier in both (barbed wire still damages it); zombie -0.5; fox none; poppy bush: no pass-through modifier, the zombie still crawls (vanilla stuck slowdown kept)
 @fails exempt tags (`passthrough_exempt/cobweb`, `/bush`); floralench bushes must stay out of every tier (grass `except`)
 @from batches/r1115/pth_a1.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+> execute unless entity Q run pbot spawn Q 1002.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > setblock 1000 -60 1170 securitycraft:reinforced_cobweb
 > setblock 1004 -60 1170 createaddition:barbed_wire
 > setblock 1008 -60 1170 securitycraft:reinforced_cobweb
@@ -1186,10 +1261,13 @@ look s23b hp drops (barbed wire still hurts a spider); z23m slows hard in the po
 @pass both munitions leave the far side at the same speed; the snowball breaks in the center
 @fails IE shots extend AbstractArrow: without the exempt tag they hang; `PassProjectiles.groupOf` reads `passthrough_exempt/all` first
 @from batches/r1115/pth_a1.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > fill 1010 -60 1179 1012 -58 1181 minecraft:cobweb
-> summon immersiveengineering:revolver_shot 1004.5 -58.5 1180.5 {NoGravity:1b,Tags:["m24a"]}
-> zpth watch m24a 45 1
-> zpth launch m24a none 1.5 0 0
+# revolver shot: motion in the summon (it discards itself when summoned still, r1115 SQ-PTH-24s)
+> zpth watchnew immersiveengineering:revolver_shot m24a 45 1 1009 -58.5 1180.5 8
+> summon immersiveengineering:revolver_shot 1003.5 -58.5 1180.5 {Motion:[1.5d,0d,0d]}
 sleep 2
 > summon blocky_siege:projectile_cannon_ball_projectile_projectile 1004.5 -58.5 1180.5 {NoGravity:1b,Tags:["m24b"]}
 > zpth watch m24b 45 1
@@ -1207,6 +1285,8 @@ look m24a / m24b: x passes 1013 with mot x about 1.5 (ng off: gravity drop allow
 @@date 2026-11-15
 @@jars creativecompat creativedevtools
 @@sources feature_writeup/plan_passthrough.md
+@@prep difficulty=normal spawn-animals=true spawn-npcs=true
+@@prep toml creativecompat-common.toml debug.passthrough timing true
 @@text
 @@text Creative Compat 1.0.0 and Creative Devtools 1.0.0 built 2026-11-15 00:40 (build/libs, not installed); both jars in
 @@text `srv/mods` (Devtools is dev-only: `/cdevbench`, `pbot`). The Compat jar carries the phase 4 tags, so no datapack. Run
@@ -1220,6 +1300,10 @@ look m24a / m24b: x passes 1013 with mot x about 1.5 (ng off: gravity drop allow
 @pass chat lists 10 cases with ns per call, `tagged=true`, `enabled=true`; `tick_field` and `tick_web_cube` medians under 1000 ns (green); `tick_air` the lowest of the tick cases; json has `cases` with `median_ns`, `p99_ns`; no fixture blocks left at the build limit; the server did not hit the watchdog
 @fails `tagged=false`: Compat jar without the tags; red medians: record them in blockrunner.md 3.10 (caching per plan 7.2 is the next step, owner call); blocks left: the restore loop in `PassBenchCommand.bench`
 @from batches/r1115/pth_a2.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > tp P 1060.5 -60 1060.5
 > execute as P at P run cdevbench passthrough
 waitlog \[cdevbench\] passthrough: .* calls per case 300
@@ -1242,6 +1326,10 @@ look chat (console) 10 cases, tagged=true enabled=true; tick_field and tick_web_
 @pass file says false and back to true; with false: no pass-through modifier, the zombie crawls as in vanilla (stuck slowdown back), the bench json says `enabled: false` and its tick cases are near `tick_air`; with true: modifier -0.5 again
 @fails `PassValues.refresh` not reached (modifier stays); the file watcher reload re-sends twice (harmless)
 @from batches/r1115/pth_a2.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > execute as P at P run cdevbench passthrough enabled false
 sleep 2
 shell grep -nE '^\s*enabled' config/creativecompat-common.toml | sed -n '1,12p'; awk '/\[surface\.passthrough\]/{f=1} f&&/enabled/{print; exit}' config/creativecompat-common.toml
@@ -1272,6 +1360,9 @@ look file false then true; z26a mod=none while false, -0.500 after true; z26m pu
 @pass `[passthrough-timing] side=server ticks=200 ...` every 10 s; the parser prints a server block with share of tick time, `inside` about the herd plus items per tick, `counts` above 0; no new lines 10 s after the key went false; no `side=client` line on a dedicated server
 @fails no lines: `PassTiming.on` never set (tick listener not registered) or the key path differs; inside 0: `PassTiming.hook` reads the state after `leave` reset it
 @from batches/r1115/pth_a2.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > fill 1039 -61 1199 1049 -61 1209 minecraft:farmland
 > fill 1040 -60 1200 1048 -60 1208 minecraft:wheat[age=7]
 > summon minecraft:zombie 1040.5 -60 1200.5 {Tags:["z27","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d}]}
@@ -1342,6 +1433,9 @@ look parser server block; lines after the key went false: none later than 10 s a
 @fails `PassItems.heldMove` (move skipped while held), `hold` revalidation on a changed block state
 @from batches/r1116/ps15b_a.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > setblock 1040 -57 1120 minecraft:cobweb
 > setblock 1044 -57 1120 minecraft:cobweb
 > fill 1047 -59 1119 1049 -57 1121 minecraft:cobweb

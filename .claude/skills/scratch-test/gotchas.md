@@ -105,6 +105,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 - A data pack that only fails on worldgen registries ("Unbound values in registry worldgen/biome") stops the boot after
   the KubeJS server scripts ran, so their log lines (structure gate, tuning) can still be judged from `latest.log`
   (r1106cbb).
+- Never run `scratch_server.sh boot` with captured stdout/stderr: the fifo feeder inherited the pipe and a `subprocess.run(capture_output=True)` never returned (r1118 drive hang; feeder now writes stderr to /dev/null, qdrive logs boot to drive/sNN_boot.txt).
 
 ## Driving the server and processes
 
@@ -233,6 +234,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   Mechanical Extruder recipes with an abstract `getType()` in `dumprecipes`.
 - Dedicated-server dumps: recipes, tags, loot, structures, biomes, spawns, trades are good; names, stacks, effects, gear,
   food, crops, compost, paintings need the client. The /dumpall recipe dump has only id + type: use `/cdevtest rdetail`.
+- A reject on `Unknown command` never matches: 1.19.2 prints "Unknown or incomplete command"; reject `Unknown or incomplete command|Incorrect argument` (r1118 judge-2).
 
 ## World, chunks and ticking
 
@@ -264,6 +266,8 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   a melt listener that removes the source layer never sees it. Put the source beside the target (r1116 phase 3).
 - Melt targets in 1-deep holes (y -61 on the flat world) keep the melt water from flowing; `randomtick` only the target
   cell (`nofluids`) so neighboring salt does not get its own dissolving tick (r1116 phase 3).
+- A row that builds at y -60 assumes the superflat (group A); in a group B normal world it builds underground and finds nothing (SQ-BREED-03, r1118). Keep such rows in group A or build relative to the surface.
+- With no player online and no forced chunk, entities stop ticking: spawn a bot (or forceload) before entity rows (SQ-EFX-02, -04, r1118). Console command pacing is too slow to catch short-lived entities such as TNT shrapnel: slow them with a `@@prep` config value.
 
 ## Difficulty, spawning and mobs
 

@@ -44,6 +44,10 @@ look reg lists no hops item / block (hops_salad and hops_bag are covered by the 
 @fails `HHItems.HOPS` (ItemNameBlockItem of the vine), `HopsVineBlock` VineBlock placement
 @from batches/r1115/p5_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 576 496 671 559
+> execute unless entity G run pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 3
 > setblock 600 -60 520 minecraft:oak_log
 > clear G
 > pbot hold G hearthandharvest:hops 2
@@ -86,6 +90,10 @@ look "Test passed" (150 random ticks, about 3000/4096 x 200 ticks: the old 10 s 
 @fails `HopsVineBlock.use` (age < 3 must pass for a non-fertilizer item)
 @reviewed 2026-11-16
 @from batches/r1115/p5_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 576 496 671 559
+> execute unless entity G run pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 3
 > setblock 604 -60 520 minecraft:oak_log
 > kill @e[type=minecraft:item]
 > clear G
@@ -120,6 +128,10 @@ look per use: "use SUCCESS/CONSUME" lines; age 3 items lines hearthandharvest:ho
 @fails `HopsVineBlock` STERILIZED, `isRandomlyTicking`
 @from batches/r1115/pth_a2.qb passed
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 576 496 671 559
+> execute unless entity G run pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 3
 > setblock 606 -60 520 minecraft:oak_log
 > setblock 606 -60 521 hearthandharvest:hops_vine[north=true,age=1]
 > clear G
@@ -152,6 +164,10 @@ look hops_vine "in K chunks" over the two sites at least 1 and at most a quarter
 @fails `GrapeTypeRegistry.forSeed`, `LegacyLatticeStemBlock.use`
 @from batches/r1115/p5_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 576 496 671 559
+> execute unless entity G run pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 3
 > setblock 610 -60 520 minecraft:stone
 > setblock 610 -60 521 vinery:grapevine_lattice[facing=south,age=0]
 > clear G
@@ -200,6 +216,10 @@ look open "Test passed" age 4; dark stays age 1 (light line block 0 sky 0)
 @fails `StemBlock.dropGrapes`, `dropGrapeSeeds` with the hops type
 @from batches/r1115/p5_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 576 496 671 559
+> execute unless entity G run pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 3
 > setblock 614 -60 520 minecraft:stone
 > setblock 614 -60 521 vinery:grapevine_lattice[facing=south,age=4,grape=hops]
 > kill @e[type=minecraft:item]
@@ -228,6 +248,10 @@ look ripe: 3 or 4 hearthandharvest:hops, age 1; shears on age 3: 3 hops in total
 @fails `GrapevinePotBlock.useItemOn` (`hasJuice`), `GrapeTypeRegistry`
 @from batches/r1115/p5_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 576 496 671 559
+> execute unless entity G run pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 3
 > setblock 616 -60 520 vinery:grapevine_pot
 > clear G
 > pbot hold G hearthandharvest:hops 3
@@ -406,6 +430,10 @@ look first countset (diamond, enchanted): end_stone 9, tilled 0; second (netheri
 @fails `StompingInputs.accepts`, `StompingBasinBlockEntity.insert` and `Items.isItemValid`
 @jars creativedelight powergrid
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 160 192 335 223
+> execute unless entity hb1 run pbot spawn hb1 178 -60 204 minecraft:overworld survival
+sleep 3
 > clear hb1
 > tp hb1 178.5 -59 206.5 0 60
 > setblock 176 -59 208 minecraft:air
@@ -448,6 +476,10 @@ look both basin lines: slots empty (after the hand uses and after 60 ticks of th
 @jars creativedelight powergrid
 @from batches/r1115/p5_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 160 192 335 223
+> execute unless entity hb1 run pbot spawn hb1 178 -60 204 minecraft:overworld survival
+sleep 3
 > clear hb1
 > tp hb1 302.5 -59 206.5 0 60
 > pbot hold hb1 hearthandharvest:stomping_basin 4
@@ -478,7 +510,15 @@ look group formed (controller 304 -60 208); ids exist; lone basin: wine bottle r
 @jars creativedelight powergrid
 @from batches/r1115/p5_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p5_a1 P5-setup
+> forceload add 160 192 335 223
+> execute unless entity hb1 run pbot spawn hb1 178 -60 204 minecraft:overworld survival
+sleep 3
 > setblock 176 -59 208 minecraft:air
+# basin since r1118 (judge-8, 2026-11-18): it came from r1115 p5_a1 (SQ-HH-266 build); bot moved next to it (266b leaves it at 304)
+> setblock 176 -60 208 hearthandharvest:stomping_basin[facing=north]
+> tp hb1 176.5 -60 206.5 0 60
+sleep 1
 > zhh2 insert 176 -60 208 hearthandharvest:hops 3 up
 > zhh2 basin 176 -60 208
 > clear hb1

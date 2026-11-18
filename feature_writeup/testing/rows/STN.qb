@@ -103,6 +103,7 @@ look first four inv lines: the merged items are where they were put (pot buffer 
 @fails `FermentingJarBlockEntity.tick` `progressRecipe` check; if the kimchi still comes early, log `recipe.getId()` and `getProcessingTime()` per tick
 @from batches/r1113/fix_c2a1.qb
 @reviewed 2026-11-16
+> forceload add 296 336 311 351
 > cdevtest rdetail pickle_from_fermenting
 > cdevtest rdetail kimchi_from_onion
 > setblock 300 -60 340 vintagedelight:fermenting_jar{inventory:{Items:[{Slot:0,id:"vintagedelight:cucumber",Count:1b},{Slot:1,id:"vintagedelight:cucumber",Count:1b},{Slot:2,id:"vintagedelight:cucumber",Count:1b},{Slot:3,id:"vintagedelight:cucumber",Count:1b},{Slot:4,id:"vintagedelight:cucumber",Count:1b},{Slot:5,id:"vintagedelight:salt_dust",Count:1b}]}}
@@ -141,6 +142,7 @@ look BrewTimeTotal 600 (kettleBrewTicks default)
 @fails `RemainderBuffer.pullForPlating` (called from `CookingPotRemainderMixin.ce$pullTick` HEAD of `cookingTick`), shared `OverflowPull`
 @from batches/r1113/fix_c2a1.qb
 @reviewed 2026-11-16
+> forceload add 296 336 311 351
 > setblock 304 -60 340 minecraft:campfire[lit=true]
 > setblock 306 -60 340 minecraft:campfire[lit=true]
 > setblock 308 -60 342 minecraft:campfire[lit=true]

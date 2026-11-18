@@ -75,7 +75,8 @@ shell grep -h "absent mods\|\[NCH\] removed\|Empty array" logs/kubejs/*.log logs
 shell n=$(grep -ch "\[absent mods\] \(skipped\|none\)" logs/kubejs/server.log); echo "absent lines=$n"
 shell n=$(cat logs/kubejs/*.log logs/latest.log | grep -c "Empty array"); echo "empty_array=$n"
 shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
-kjsexpect removed 1328 recipes
+# judge-4 r1118 (2026-11-18): 1328 was the 2026-11-06 count; the 2026-11-18 pack removes 1255 (no full-pack recipe pruned: the only [NCH] removed line is crusher/ore_nickel, #forge:dusts/platinum empty in the full pack)
+kjsexpect removed 1[0-9]{3} recipes
 
 ## SQ-CBP-06 | old world: potions, buckets, Create potion fluid, active Magic Resistance
 @group A (old world, full pack)

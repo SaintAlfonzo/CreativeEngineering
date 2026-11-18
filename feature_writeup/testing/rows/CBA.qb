@@ -64,7 +64,8 @@ kjsexpect Loaded script creativebrewing:kubejs/vinery/wandering_trades.js
 @fails `CBConfig` spec (`SECTIONS`, `MOVED_SECTIONS`) or `ConfigRename` running with no Common config file
 @from batches/r1106cba/b1.qb passed
 shell grep -nE "^\[(members|alcohol|effects|magic_resistance|copper_poisoning)\]|^\s*(vinery|brewinandchewin) = " config/creativebrewing-common.toml
-shell test "$(grep -cE '^\[(members|alcohol|effects|magic_resistance|copper_poisoning)\]' config/creativebrewing-common.toml)" = 5
+# judge-3, 2026-11-18: [effects] and [magic_resistance] live in creativecommon-common.toml, copper in Creative Equipment's (2026-11-06)
+shell test "$(grep -cE '^\[(members|alcohol)\]' config/creativebrewing-common.toml)" = 2
 shell grep -qE "^\s*vinery = true" config/creativebrewing-common.toml && grep -qE "^\s*brewinandchewin = true" config/creativebrewing-common.toml
 bootreject still has sections that moved to
 

@@ -7,6 +7,7 @@
 @@date 2026-11-07
 @@jars creativecommon creativedelight creativeworldgen powergrid
 @@sources feature_writeup/plan_farming_cooking_batch.md
+@@prep difficulty=normal spawn-animals=true spawn-npcs=true
 @@text
 @@text Double fridges (`kitchen #36`) not built, no row. Moobloom rules: no row (generator output identical). SQ-FCB-08 (cookware pickup) needs `[qol] cookwareKeepContents = false` now, or expect the stocked item.
 @@text
@@ -18,6 +19,10 @@
 @fails `crop_tags.js` not in the CD jar; `global.has(item.weeds)` false
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > cdevtest tag item quark:simple_harvest_blacklisted
 > cdevtest tag block quark:simple_harvest_blacklisted
 > cdevtest tag block immersive_weathering:fertile_blocks
@@ -276,6 +281,10 @@ look 21 `verb=makes ... n=1` lines; each rdetail line takes the empty can and on
 @fails tag nesting through `global.tags` not expanded
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > cdevtest tag block fruitsdelight:pineapple_grows_on
 expect verb=tag kind=block tag=fruitsdelight:pineapple_grows_on n=\d+ ids=\S*minecraft:farmland
 expect verb=tag kind=block tag=fruitsdelight:pineapple_grows_on n=\d+ ids=\S*farmersdelight:rich_soil_farmland
@@ -299,15 +308,21 @@ reject \[cdevtest\] .*done=0
 @pass Amount drops by what the can took, then rises again (refill)
 @fails the can does not drain the well: `farming/crops #30` back to Bug
 @from batches/r1113/fix_c3a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > setblock 1030 -60 1080 well:well
 > tp G 1030.5 -60 1078.5 0 30
 sleep 30
-> data get block 1030 -60 1080
 > pbot hold G hearthandharvest:iron_watering_can 1
 > data get entity G SelectedItem
-> pbot use G 1030 -60 1080 north
-> data get entity G SelectedItem
+# judge-6, 2026-11-18: the two well reads sit right around the use (r1118 had 200 ticks between them, one refill of
+# about 180 ticks fell inside and hid the drain: Amount 3000 -> 3000, FillTick 42 -> 28)
 > data get block 1030 -60 1080
+> pbot use G 1030 -60 1080 north
+> data get block 1030 -60 1080
+> data get entity G SelectedItem
 sleep 60
 > data get block 1030 -60 1080
 > tp G 1000 -60 1000
@@ -321,6 +336,10 @@ look Amount falls by 1000 after the use (FillTick not wrapped between the two re
 @fails `BeehiveHoneycombMixin` not applied (latest.log, `m_49600_`)
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb passed
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 shell grep -A4 "^\[bees\]" config/creativecommon-common.toml | grep honeycombMultiplier
 shell grep -qE "^\s*honeycombMultiplier = 2" config/creativecommon-common.toml
 > setblock 1040 -60 1080 minecraft:beehive[honey_level=5,facing=north]
@@ -372,6 +391,10 @@ look the debug.log count is >= 1 (the watcher saw the edit); honeycomb:6 again w
 @fails `WaterOnSoil` not registered; event canceled too late
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb passed
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > fill 1018 -61 1018 1022 -61 1022 minecraft:farmland[moisture=0]
 > pbot hold G minecraft:water_bucket 1
 > pbot use G 1020 -61 1020 up
@@ -410,6 +433,10 @@ reject \[cdevtest\] .*done=0
 @fails bottle check wrong; Quark harvest ran first
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > fill 1018 -61 1028 1022 -61 1028 minecraft:farmland[moisture=0]
 > item replace entity G weapon.mainhand with minecraft:potion{Potion:"minecraft:water"}
 > pbot use G 1020 -61 1028 up
@@ -469,6 +496,10 @@ look `pbot use` PASS, farmland moisture 0 both times, water source above after t
 @fails `TeaBushSoilMixin` not applied
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > setblock 1040 -61 1030 minecraft:farmland[moisture=7]
 > setblock 1042 -61 1030 farmersdelight:rich_soil_farmland[moisture=7]
 > setblock 1044 -61 1030 immersive_weathering:mulch_block
@@ -500,6 +531,10 @@ look if tea_bush has no age=2 the setblock fails (log says so): BATCH-FAULT, rer
 @fails tag `creativeengineering:crops/harvest_from_bottom` empty; `QuarkTopHalfHarvestMixin` not applied
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > setblock 1050 -61 1040 minecraft:farmland[moisture=7]
 > setblock 1050 -60 1040 corn_delight:corn_crop[age=7,upper=false]
 > setblock 1050 -59 1040 corn_delight:corn_crop[age=7,upper=true]
@@ -626,6 +661,10 @@ look a climb is 30% per try: 10 tries miss about 3 runs in 100; a rope still the
 @jars creativedelight powergrid
 @reviewed 2026-11-16
 @from batches/r1115/p3_a1b.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p3_a1 P3-00
+> forceload add 1984 1984 2143 2143
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
 shell grep -h "\[removedWoods\]" logs/kubejs/startup.log | cut -c1-200
 shell grep -qE "\[removedWoods\] 4 woods merged into oak" logs/kubejs/startup.log
 shell grep -h "\[item_dict\] Missing" logs/kubejs/startup.log | head -5; test "$(grep -c "\[item_dict\] Missing" logs/kubejs/startup.log)" = 0
@@ -659,6 +698,10 @@ reject \[cdevtest\] .*done=0
 @jars creativedelight powergrid
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > cdevtest makes quark:azalea_planks
 > cdevtest makes quark:vertical_azalea_planks
 > cdevtest makes everycomp:bd/quark/azalea_picture_frame
@@ -728,6 +771,10 @@ look the randomtick box is the bush only (the wheat stays age 3); items: Rustic 
 @jars creativecommon creativedelight
 @reviewed 2026-11-16
 @from batches/r1113/c3_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 shell grep -qE "\[itemMerges\] 2 pack merges registered" logs/kubejs/startup.log
 bootreject IwAzaleaFlowersPlaceMixin.*(fail|error|Exception)
 > cdevtest makes immersive_weathering:azalea_flowers
@@ -811,6 +858,10 @@ expect pot botanypots:farmersdelight/crop/wild_tomatoes: growthTicks 9600\b
 @fails `R.remove({type:'botanypots:fertilizer'})` did not match
 @from batches/r1113/fix_c3a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > cdevtest recipes botanypots:minecraft/fertilizer/bonemeal
 expect verb=recipes text=botanypots:minecraft/fertilizer/bonemeal n=0\b
 > setblock 1060 -60 1060 botanypots:terracotta_botany_pot
@@ -862,7 +913,7 @@ reject verb=break drops=\S*minecraft:(bone|glow_lichen):
 expect has the following entity data: .*BlockEntityTag.*minecraft:carrot
 expect has the following entity data: .*BlockEntityTag.*minecraft:glow_lichen
 expect has the following entity data: .*BlockEntityTag.*farmersrespite:green_tea_leaves
-count verb=break broken=true >= 3
+count verb=break .*broken=true >= 3
 reject \[cdevtest\] .*done=0
 look cooking pot item keeps slots 0, 6, 7 (carrot, soup, bowls); copper pot item keeps bone and lichen, the glass bottle (slot 7) drops loose beside it; kettle item keeps the leaves. Place-back, sneak pickup, creative break and the remainder-buffer bottle stay
 
@@ -874,6 +925,10 @@ look cooking pot item keeps slots 0, 6, 7 (carrot, soup, bowls); copper pot item
 @jars creativecommon creativedelight
 @reviewed 2026-11-16
 @from batches/r1113/fix_c3a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity G run pbot spawn G 1000 -60 1000 minecraft:overworld survival
+sleep 3
 > setblock 1074 -60 1031 minecraft:stone
 > fill 1074 -60 1030 1074 -58 1030 minecraft:air
 > item replace entity G weapon.mainhand with farmersdelight:skillet{display:{Name:'{"text":"PanC3"}'},Enchantments:[{id:"minecraft:sharpness",lvl:2s}]}
@@ -1009,10 +1064,11 @@ look `#forge:sliced_potatoes` = Creative Delight sliced sweet potato and Rustic 
 > cdevtest uses mca:rose_gold_ingot
 waitlog verb=uses item=mca:rose_gold_ingot alone= 60
 expect verb=uses id=minecraft:clock alone=
-expect verb=uses id=minecraft:powered_rail alone=
+# judge-6, 2026-11-18: the pack's powered rail (creativeengineering:shaped/rail_to_6_powered_rail_by_shaped) takes gold rods, not ingots: no ingot-tag use to expect
 expect verb=uses id=\S*mechanical_crafter\S* alone=
 expect verb=uses id=minecraft:golden_pickaxe alone=
-expect verb=uses id=minecraft:golden_apple alone=
+# judge-6, 2026-11-18: the golden apple craft is creativedelight:shaped/golden_apple since the 2026-11-09 namespace move
+expect verb=uses id=creativedelight:shaped/golden_apple alone=
 reject verb=uses id=minecraft:gold_block alone=
 reject verb=uses id=\S*gold_bars\S* alone=
 > cdevtest uses vintageimprovements:rose_gold_sheet

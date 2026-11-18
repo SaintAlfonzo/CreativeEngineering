@@ -7,6 +7,7 @@
 @@date 2026-10-31
 @@jars creativecommon creativedelight
 @@sources feature_writeup/kitchen.md
+@@prep spawn-animals=true
 @@text
 @@text Jars: Creative Common (CfB mixins removed) and Creative Delight (nests the new `blockheadsAdditions`) installed together
 @@text 2026-10-31 16:29. The server half reruns SQ-KT-01 / -02 (`/kttest`) and `/kctest` against the moved code.
@@ -18,12 +19,13 @@
 @pass `Done (`; mod list has `blockheads_additions`; no mixin error naming `BlockStateCounterTopperMixin`, `CfbOven*`, `CfbCorner*`; no `Duplicate capability key` / `creativeengineering:corner_storage` error; `config/blockheads_additions-common.toml` written with `[kitchen]`; no `[blockheads_additions] could not add the wood racks`
 @fails a mixin error: SRG names; duplicate capability: the old Creative Common still in `mods/`; rack error: `BARacks.addValidBlocks` field name
 @from batches/r1101/p1_server.qb passed
-bootexpect blockheads_additions
+# Creative Delight compartment since r1118 (judge-8, 2026-11-18): blockheads_additions is now CD's cookingforblockheads compartment (CfbCompartment)
+bootexpect \[creativedelight\] compartments: cookingforblockheads on
 bootreject (Mixin apply failed|InvalidInjectionException).*(BlockStateCounterTopperMixin|CfbOven|CfbCorner)
 bootreject Duplicate capability key
 bootreject creativeengineering:corner_storage
-bootreject \[blockheads_additions\] could not add the wood racks
-shell grep -q "^\s*\[kitchen\]" config/blockheads_additions-common.toml
+bootreject \[creativedelight/cookingforblockheads\] could not add the wood racks
+shell grep -q "^\s*\[cookingforblockheads\]" config/creativedelight-common.toml
 
 ## SQ-KT-23 | 40 wood racks: recipes, slab tag, mineable
 @group A
@@ -51,7 +53,8 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails no block entity: the BE type's valid blocks (SQ-KT-22 rack error)
 @from batches/r1101/p1_server.qb
 > setblock 40 -60 1 minecraft:oak_planks
-> setblock 40 -60 0 cookingforblockheads:oak_spice_rack[facing=north]
+# creativedelight:oak_spice_rack since r1118 (judge-8, 2026-11-18): the wood racks moved to Creative Delight's namespace
+> setblock 40 -60 0 creativedelight:oak_spice_rack[facing=north]
 > data get block 40 -60 0
 > item replace block 40 -60 0 container.0 with minecraft:sugar
 > data get block 40 -60 0
@@ -87,9 +90,9 @@ look kt 30 of 34 expected with the known KT-15d / KT-17 expectation fails; kc 9 
 sleep 3
 > setblock 260 -60 0 cookingforblockheads:fridge[facing=south]
 > setblock 262 -60 1 minecraft:oak_planks
-> setblock 262 -60 0 cookingforblockheads:oak_spice_rack[facing=north]
+> setblock 262 -60 0 creativedelight:oak_spice_rack[facing=north]
 > setblock 264 -60 1 minecraft:spruce_planks
-> setblock 264 -60 0 cookingforblockheads:spruce_tool_rack[facing=north]
+> setblock 264 -60 0 creativedelight:spruce_tool_rack[facing=north]
 > tp @s 262 -59 3.5 180 20
 shot racks_fridge
 look fridge textured (no checker), racks in their wood. hand: kitchen.md KT-22 to KT-24 (dyed fridge box)

@@ -109,7 +109,7 @@ look creativedelight file has placeableTooltips = false; underscore files gone; 
 @pass Packs `creativecalendar`, `creativedelight`, `creativebrewing` load; CD and CB core lines present; no `creative_delight` anywhere in either log; no recipe names an unknown `creative_delight:` id; wild crop features place (no `Unknown feature creative_delight:wild/...` in latest.log)
 @fails A script tree or a datapack id still on the old namespace
 @from batches/r1101/cs2_boot2.qb
-shell grep -E "startup script packs in order|\[creativedelight\]|\[creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-220 | head -12; echo "old ns in kjs logs: $(grep -c creative_delight logs/kubejs/startup.log logs/kubejs/server.log | tr '\n' ' ')"; grep -c "Unknown feature creative_delight" logs/latest.log
+shell grep -E "startup script packs in order|\[creativedelight\]|\[creativebrewing\]" logs/kubejs/startup.log logs/kubejs/server.log | cut -c1-220 | head -12; echo "old ns in kjs logs: $(grep -c creative_delight logs/kubejs/startup.log logs/kubejs/server.log | tr '\n' ' ')"; grep -c "Unknown feature creative_delight" logs/latest.log; true
 kjsreject creative_delight
 bootreject Unknown feature creative_delight
 > recipescan

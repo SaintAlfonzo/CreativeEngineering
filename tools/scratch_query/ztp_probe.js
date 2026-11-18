@@ -72,6 +72,14 @@
 
 	let tpOut = function (s) { console.info('[ztp] ' + s) }
 	let tpItemId = function (stack) { return String($TPReg.ITEM.getKey(stack.getItem())) }
+	// stack NBT as text: getTag() is missing on the ItemContext stack under KubeJS 1902.6 Rhino ("Cannot find function
+	// getTag", r1118 judge-12); try the bean property and KubeJS's nbt next, so the line still prints
+	let tpNbt = function (stack) {
+		try { return String(stack.getTag()) } catch (err) { }
+		try { return String(stack.tag) } catch (err) { }
+		try { return String(stack.nbt) } catch (err) { }
+		return '(nbt unreadable)'
+	}
 	let tpTempadCtx = function (p) {
 		return $TPCtxReg.locate(p, st => tpItemId(st) == 'tempad:tempad')
 	}
@@ -134,7 +142,7 @@
 				}
 			} else if (sub == 'settings') {
 				new $TPSettings(ctx.getHolder(), new $TPRL(a[2]), new $TPRL(a[3])).handle(p)
-				tpOut('settings sent app ' + a[2] + ' macro ' + a[3] + ' -> stack ' + ctx.getStack().getTag())
+				tpOut('settings sent app ' + a[2] + ' macro ' + a[3] + ' -> stack ' + tpNbt(ctx.getStack()))
 			} else if (sub == 'openapp') {
 				new $TPOpenApp(new $TPRL(a[2])).handle(p)
 				tpOut('openapp sent ' + a[2])

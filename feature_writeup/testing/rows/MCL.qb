@@ -7,6 +7,7 @@
 @@date 2026-10-28
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
+@@prep difficulty=normal spawn-monsters=true
 @@text
 @@text Creative Common 1.1.03 with `MobCapLevelTickMixin`, `MobCapMixin`, `MobCapSpawnAreaMixin`, `perf.MobCapLevels`. Group A.
 @@text Levels can be forced with `[perf] mobCapForceLevel` in `config/creativeengineering-common.toml` (read live).
@@ -26,10 +27,14 @@ bootreject (?i)(MobCapLevelTickMixin|MobCapMixin|MobCapSpawnAreaMixin).*(error|f
 @pass overworld about 289 spawnable chunks, level 0; monster count reaches about 70 as vanilla
 @fails Level above 0 alone: chunk count read wrong
 @from batches/r1031/a2_variants.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > tp qa 0 -60 0
 > time set 18000
 sleep 90
-> ceperf mobcap
+# /ceperf -> /cdevperf since r1118 (judge-8, 2026-11-18): the old root is gone (IDS-02)
+> cdevperf mobcap
 look overworld about 289 spawnable chunks, level 0; monster count climbing toward vanilla 70
 
 ## SQ-MCL-03 | two players 600 apart: level 1, back to 0 together
@@ -40,10 +45,10 @@ look overworld about 289 spawnable chunks, level 0; monster count climbing towar
 @from batches/r1031/a2_variants.qb
 > pbot spawn qb 600 -60 0
 sleep 20
-> ceperf mobcap
+> cdevperf mobcap
 > tp qb 20 -60 0
 sleep 30
-> ceperf mobcap
+> cdevperf mobcap
 look apart about 578 chunks and level 1; together back to level 0 once below 400
 > pbot remove qb
 
@@ -62,7 +67,7 @@ sleep 160
 > time set 18000
 > kill @e[type=!minecraft:player]
 sleep 120
-> ceperf mobcap
+> cdevperf mobcap
 > execute if entity @e[type=minecraft:zombie]
 > execute if entity @e[type=minecraft:skeleton]
 > execute if entity @e[type=minecraft:spider]

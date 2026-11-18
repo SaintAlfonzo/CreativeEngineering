@@ -7,6 +7,7 @@
 @@date 2026-11-07
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/creative_split.md feature_writeup/creative_engineering.md feature_writeup/loading_tips.md feature_writeup/effects.md
+@@prep A: copy tools/scratch_query/cc_dict_probe.js kubejs/server_scripts/zz_cc_dict_probe.js
 @@text
 @@text Not run. Targets `development/creativeCommon/build/libs/creativecommon-1.1.0.jar` built 2026-11-07 18:02 (`mods/` still holds
 @@text the 16:44 build; prep_srv.sh swaps the newer one into a scratch server, copy it into `mods/` only with the game closed).
@@ -148,31 +149,32 @@ reject (Unknown or incomplete command|Incorrect argument for command|No player w
 @draft needs a world saved on the 2026-11-06 builds with a creativecommon:long_reach potion in a chest (an old-build boot first, then the swap); a fresh scratch world cannot hold the old string
 ## SQ-CC-10
 @group A (full pack)
-@commands Magic Resistance (bots are invulnerable FakePlayers: use NoAI villagers): `/effect give <mob> creativeengineering:magic_resistance 60 0` then `minecraft:poison 10 1` and `minecraft:wither 10 1`; compare damage taken with and without; Better Beacons: `batches/r1107cc/b1_phantom.qb` or `/zph N` (`cc_phantom_probe.js`), two bots on platforms at y 70 (above the superflat sea level 63), `spawn-monsters=true`
+@commands Magic Resistance (bots are invulnerable FakePlayers: use NoAI cows; MCA replaces summoned villagers): `/effect give <mob> creativeengineering:magic_resistance 60 0` then `minecraft:poison 10 1` and `minecraft:wither 10 1`; compare damage taken with and without; Better Beacons: `batches/r1107cc/b1_phantom.qb` or `/zph N` (`cc_phantom_probe.js`), two bots on platforms at y 70 (above the superflat sea level 63), `spawn-monsters=true`
 @pass poison and wither ticks shortened under Magic Resistance, damage reduced (old SQ-EFX-02/-03); the second bot still gets phantoms with the first bot holding Phantom Bane
 @fails `effect/EffectRules`, `LivingEntityEffectRemapMixin`, Better Beacons mixin gate
 @reviewed 2026-11-16
+# judge-4 r1118 (2026-11-18): villagers -> cows (MCA overwriteOriginalVillagers replaced them: No entity was found, entities n=0); cow 10 HP survives 160 ticks of Poison II / Wither II
 > forceload add 2384 2384 2416 2416
 > fill 2398 -60 2398 2416 -57 2402 minecraft:glass hollow
-> summon minecraft:villager 2400 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"mrp"'}
-> summon minecraft:villager 2404 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"plp"'}
-> summon minecraft:villager 2408 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"mrw"'}
-> summon minecraft:villager 2412 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"plw"'}
-> effect give @e[type=minecraft:villager,name=mrp] creativecommon:magic_resistance 60 0
-> effect give @e[type=minecraft:villager,name=mrw] creativecommon:magic_resistance 60 0
-> effect give @e[type=minecraft:villager,name=mrp] minecraft:poison 10 1
-> effect give @e[type=minecraft:villager,name=plp] minecraft:poison 10 1
-> effect give @e[type=minecraft:villager,name=mrw] minecraft:wither 10 1
-> effect give @e[type=minecraft:villager,name=plw] minecraft:wither 10 1
+> summon minecraft:cow 2400 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"mrp"'}
+> summon minecraft:cow 2404 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"plp"'}
+> summon minecraft:cow 2408 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"mrw"'}
+> summon minecraft:cow 2412 -59 2400 {NoAI:1b,PersistenceRequired:1b,CustomName:'"plw"'}
+> effect give @e[type=minecraft:cow,name=mrp] creativecommon:magic_resistance 60 0
+> effect give @e[type=minecraft:cow,name=mrw] creativecommon:magic_resistance 60 0
+> effect give @e[type=minecraft:cow,name=mrp] minecraft:poison 10 1
+> effect give @e[type=minecraft:cow,name=plp] minecraft:poison 10 1
+> effect give @e[type=minecraft:cow,name=mrw] minecraft:wither 10 1
+> effect give @e[type=minecraft:cow,name=plw] minecraft:wither 10 1
 > cdevtest tickwarp 160
 waitlog verb=tickwarp end= 60
-> cdevtest entities 2406 -59 2400 8 type=minecraft:villager
-capture HMRP verb=entities type=minecraft:villager .*health=([\d.]+) max=\S+ name=mrp
-capture HPLP verb=entities type=minecraft:villager .*health=([\d.]+) max=\S+ name=plp
-capture HMRW verb=entities type=minecraft:villager .*health=([\d.]+) max=\S+ name=mrw
-capture HPLW verb=entities type=minecraft:villager .*health=([\d.]+) max=\S+ name=plw
+> cdevtest entities 2406 -59 2400 8 type=minecraft:cow
+capture HMRP verb=entities type=minecraft:cow .*health=([\d.]+) max=\S+ name=mrp
+capture HPLP verb=entities type=minecraft:cow .*health=([\d.]+) max=\S+ name=plp
+capture HMRW verb=entities type=minecraft:cow .*health=([\d.]+) max=\S+ name=mrw
+capture HPLW verb=entities type=minecraft:cow .*health=([\d.]+) max=\S+ name=plw
 shell python3 -c "import sys; print('poison', {HMRP}, 'vs', {HPLP}, 'wither', {HMRW}, 'vs', {HPLW}); sys.exit(0 if {HMRP} > {HPLP} and {HMRW} > {HPLW} else 1)"
-> kill @e[type=minecraft:villager,x=2406,y=-59,z=2400,distance=..10]
+> kill @e[type=minecraft:cow,x=2406,y=-59,z=2400,distance=..10]
 look the Better Beacons phantom half (a second bot still gets phantoms beside a Phantom Bane holder) stays in batches/r1107cc/b1_phantom.qb (cc_phantom_probe.js, night, spawn-monsters)
 reject \[cdevtest\] .*done=0
 
@@ -233,7 +235,8 @@ sleep 3
 > pbot remove cc14
 expect (?i)(Unknown advancement|No advancement was found|Couldn't grant|could not grant)
 reject Granted the advancement
-expect Storage cc:t has the following contents: 30$
+# judge-4 r1118 (2026-11-18): 25 common + 5 rare + 1 Quark Pathfinder's Quill (Quark adds it to every trader) = 31
+expect Storage cc:t has the following contents: 31$
 reject (Unknown or incomplete command|Incorrect argument for command|No player was found|\[cdevtest\] .*done=0|verb=pbot\.\S+ .*error=)
 ## SQ-CC-15
 @group A

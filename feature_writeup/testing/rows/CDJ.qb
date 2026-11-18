@@ -102,9 +102,10 @@ look shell: five "is loaded from ... backported" member lines (Display, Fungi, M
 @fails Member missing: `bundle_members` or the jarjar `metadata.json` of the CD build; a not-nested line: a standalone jar slipped into the srv `mods/` (prep_srv.sh drop list); fewer items: compare that member's `-NN` jar in `META-INF/jarjar/` with build/libs
 @from batches/r1102/b1_main.qb
 bootexpect Done \(
-bootexpect \[creativedelight\] members: \[([a-z_]+, ){19}[a-z_]+\]$
+# judge-4 r1118 (2026-11-18): 21 members since goldenfood joined (was 20); backportedTempad is not a CD member, so the jar check names the five ports
+bootexpect \[creativedelight\] members: \[([a-z_]+, ){20}[a-z_]+\]$
 bootreject NOT loaded|not from the Creative Delight jar|not nested
-shell ! ls mods | grep -i backported
+shell ! ls mods | grep -iE "backported(Veggies|Vintage|Fungi|Miners|Display)"
 # error count against the last r1101 boot: judged by hand from rows/SQ-CDJ-09.shell.txt
 shell echo "error/exception lines in latest.log: $(grep -ciE 'error|exception' logs/latest.log)"
 > execute unless entity @e[type=minecraft:marker,tag=cdj5home] run say CDJ5 home marker missing
@@ -132,7 +133,7 @@ look item counts per namespace (displaydelight 212, fungidelight 32, miners_deli
 @from batches/r1102/b2_switches.qb
 @reviewed 2026-11-16
 bootexpect Done \(
-bootexpect \[creativedelight\] members: \[([a-z_]+, ){19}[a-z_]+\]$
+bootexpect \[creativedelight\] members: \[([a-z_]+, ){20}[a-z_]+\]$
 bootreject Error occurred while handling event
 bootreject (?i)\b(error|warn)\b.*displaydelight
 kjsreject (?i)\b(error|warn)\b.*displaydelight
@@ -259,7 +260,8 @@ look the crash report / log blames only Miner's Delight (Creative Delight) (Susp
 @fails A thrown check names the bad key (value not in `global.item`, a duplicate, a key outside the grammar): fix the dict entry, rerun `tools/kitchen_dicts.py`
 @from batches/r1102/b1_main.qb
 shell grep -nE "tool_dict|misc_dict" logs/kubejs/startup.log | head -5
-shell grep -q "Loaded script startup_scripts:_lib/tool_dict.js" logs/kubejs/startup.log && grep -q "Loaded script startup_scripts:_lib/misc_dict.js" logs/kubejs/startup.log
+# judge-4 r1118 (2026-11-18): the dicts load from Creative Common's jar (creativecommon:creativecommon/_lib/), not startup_scripts/_lib/
+shell grep -qE "Loaded script creativecommon:creativecommon/_lib/tool_dict.js" logs/kubejs/startup.log && grep -qE "Loaded script creativecommon:creativecommon/_lib/misc_dict.js" logs/kubejs/startup.log
 shell ! grep -nE "tool_dict|misc_dict" logs/kubejs/startup.log logs/latest.log | grep -iE "error|throw|missing|warn"
 shell ! grep -nE "(tool|misc) dict: [0-9]+ problem" logs/kubejs/startup.log logs/latest.log
 look key counts (108 tool, 227 misc): KubeJS 1.19.2 has no /kubejs eval and the dicts print no count; judge offline (grep the two files) or leave to a client session with a startup print
@@ -294,7 +296,7 @@ look rows/SQ-CDFW-11.shell.txt: no LOST veggiesdelight: recipe, tag or loot id a
 @pass 20 members, none `NOT loaded`; nested `backportedVeggies-1.9.2-ce-19.2-05`, `backportedVintage-0.1.6-ce-19.2-12`, `backportedFungi-1.3-ce-19.2-02`, `backportedMiners-1.4.5-ce-19.2-04`, `backportedDisplay-1.7.0-ce-19.2-03`; error count not above the r1102 Boot 1
 @fails a member missing: root `settings.gradle` CD member map (the four ports were moved there 2026-11-02)
 @reviewed 2026-11-16
-bootexpect \[creativedelight\] members: \[([a-z_]+, ){19}[a-z_]+\]$
+bootexpect \[creativedelight\] members: \[([a-z_]+, ){20}[a-z_]+\]$
 bootreject NOT loaded|not nested
 shell grep -nE "\[creativedelight\] members:|NOT loaded|not nested" logs/latest.log | head -5
 shell unzip -l mods/creativedelight-1.0.0.jar | grep jarjar/backported

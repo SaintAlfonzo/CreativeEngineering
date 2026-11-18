@@ -8,7 +8,9 @@ the row's LOOKs; run-doc verdict tables are generated from the files. Called thr
     qrun.py judge RES --file TSV [--by WHO]             same from a file: ID<TAB>N<TAB>VERDICT<TAB>EVIDENCE[<TAB>text]
     qrun.py judge RES ID --reclassify BATCH-FAULT|HARNESS|INCONCLUSIVE --cause "who, when, why" [--by WHO]
                                                         a FAILed row becomes a batch fault (scratch plan 3.6); the
-                                                        failed checks stay as they are, `reclassified` records it
+                                                        failed checks stay as they are, `reclassified` records it; a
+                                                        PASS row may become BATCH-FAULT only (a false pass: the checks
+                                                        passed for the wrong reason; r1118 judge-11)
 HARNESS (P2.4): qrun itself gives a row HARNESS instead of FAIL when only harness faults failed (a regex that does not
 compile, a capture left unset by a skipped row) or when a shell exit code is the only failure and the log checks passed.
     qrun.py table RES [RES ...] [--ids ID,..] [--open]  markdown | ID | Result | Evidence | for the run doc, then counts
@@ -120,6 +122,9 @@ def evidence_of(d):
 	parts = []
 	if d.get("crash"):
 		parts.append(f"CRASH: {d['crash']['reason']} (evidence {d['crash']['evidence_dir']})")
+	if d.get("reclassified"):
+		rc = d["reclassified"]
+		parts.append(f"reclassified from {rc['from']}: {rc['cause']}")
 	parts += [c["detail"] for c in d["checks"] if not c["ok"]]
 	for i, l in enumerate(d["looks"], 1):
 		if l["verdict"]:
@@ -137,7 +142,8 @@ RECLASS = ("BATCH-FAULT", "HARNESS", "INCONCLUSIVE")
 
 
 def reclassify(res, rid, to, cause, by="agent"):
-	"""Scratch plan 3.6 (owner ruling 2026-11-16): a FAILed row may become BATCH-FAULT (or HARNESS / INCONCLUSIVE) with
+	"""Scratch plan 3.6 (owner ruling 2026-11-16): a FAILed row may become BATCH-FAULT (or HARNESS / INCONCLUSIVE), a PASS
+    row BATCH-FAULT only (false pass, r1118), with
     a recorded cause; checks are never edited, the failed check stays ok: false. Returns an error text or None."""
 	to = to.upper()
 	if to not in RECLASS:
@@ -152,8 +158,11 @@ def reclassify(res, rid, to, cause, by="agent"):
 		frm = d["reclassified"]["from"]
 	else:
 		frm = d.get("verdict") or verdict_of(d)
-	if frm not in ("FAIL", "HARNESS", "CRASH", "LOOK") and not d.get("reclassified"):
-		return f"{rid}: verdict {frm}; only a FAIL, HARNESS, CRASH or LOOK row is reclassified"
+	if frm == "PASS" and to != "BATCH-FAULT" and not d.get("reclassified"):
+		# a false pass (the checks passed for the wrong reason: r1118 judge-11, SQ-VG-03 villager suffocated)
+		return f"{rid}: verdict PASS; a PASS row is reclassified only as BATCH-FAULT (a false pass)"
+	if frm not in ("FAIL", "HARNESS", "CRASH", "LOOK", "PASS") and not d.get("reclassified"):
+		return f"{rid}: verdict {frm}; only a FAIL, HARNESS, CRASH, LOOK or PASS row is reclassified"
 	d["reclassified"] = {"from": frm, "to": to, "cause": cause.strip(), "by": by,
 						 "at": time.strftime("%Y-%m-%d %H:%M:%S")}
 	d["verdict"] = verdict_of(d)

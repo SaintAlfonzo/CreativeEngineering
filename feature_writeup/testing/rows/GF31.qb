@@ -6,6 +6,7 @@
 @@title Gap fill, 2026-10-31: changelog bullets that had no row
 @@date 2026-10-31
 @@jars creativecommon creativedevtools creativeengineering
+@@prep spawn-animals=true
 @@text
 @@text Added with the 2026-10-31 run plan ([scratch_run_2026-10-31.md](scratch_run_2026-10-31.md)); the batch files hold the
 @@text exact commands and checks.
@@ -43,6 +44,9 @@ reject \[cdevtest\] verb=\S+ done=0
 @pass test fails, the pumpkin stays
 @fails `config/nock_enough_arrows-common.toml` `enableSputter` not false on the server copy
 @from batches/r1031/a1_world.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > setblock 45 -60 0 minecraft:barrel
 > tp qa 45 -60 2
 # a bot use on a barrel opens it (no sneak): setblock runs the same CarvedPumpkinBlock.onPlace pattern check
@@ -85,7 +89,8 @@ reject Unknown or incomplete command
 expect verb=makes item=create_dd:rose_planks n=0
 expect verb=makes item=create_dd:rubber_planks n=0
 expect verb=makes item=create_dd:spirit_planks n=0
-reject verb=tagsof id=create_dd:rose_log .*_tags=(?!-)\S
+# item tags only since r1118 (judge-8, 2026-11-18): removed items lose item tags (removed_item_tags.js); block tags stay, the blocks never generate
+reject verb=tagsof id=create_dd:rose_log .*item_tags=(?!-)\S
 reject verb=makes item=create_dd:smoked_planks n=0
 kjsreject (removed_woods\.js).*(Error|error)
 look smoked planks keep their own recipe (RW-23); the JEI half is RW-28 in the client block

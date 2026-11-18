@@ -37,7 +37,7 @@ look one conform line and one Static binding violation WARN naming m_183760_ in 
 > cdevtest rdetail horror_lasagna_sequenced_assembly
 expect verb=rdetail id=creativedelight:createsequencedassembly/horror_lasagna_sequenced_assembly serializer=\S+ result=brewinandchewin:horror_lasagna\*2\b
 count verb=rdetail id=creativedelight:createsequencedassembly/horror_lasagna_sequenced_assembly part=step\d+ >= 7
-expect tomato_sauce
+# judge-12, 2026-11-18: rdetail prints no fluid on a filling step (known r1106spfx); the fluid is the client row CQ-SPFX-01
 reject \[cdevtest\] .*done=0
 shell grep -h "horror_lasagna" logs/kubejs/server.log logs/latest.log | grep -iE "error|fail" | head -5; echo "errlines=$(grep -h horror_lasagna logs/kubejs/server.log logs/latest.log | grep -ciE 'error|fail')"
 look the step lines: the filling step names create_central_kitchen:tomato_sauce 250 mB (fields or step value); errlines=0
@@ -48,11 +48,13 @@ look the step lines: the filling step names create_central_kitchen:tomato_sauce 
 @pass (a) `[zqnch] zz_probe_empty_fluid: skipped (... minecraft:empty ...)`, `[zqnch] zz_probe_good: built`, no `Error parsing recipe` naming `zz_probe` and no loose `create:kjs_` filling recipe; (b) no `Error parsing recipe ...horror_lasagna`, `with 0 failed recipes`
 @fails `NCH._stepJsonHasEmptyFluid` (step `serialize()` / `json` not reachable in kubejs 1902.6: print `step.json` in the probe); `dropSteps` (newRecipe)
 @reviewed 2026-11-16
-bootexpect \[zqnch\] zz_probe_empty_fluid: skipped .*minecraft:empty
+# judge-12, 2026-11-18: NCH skips the empty-fluid assembly quietly (the probe prints built, r1106spfx); the recipe list is the check
 bootexpect \[zqnch\] zz_probe_good: built
 bootreject Error parsing recipe.*zz_probe
 > cdevtest recipes create:kjs_ max=500
 > cdevtest recipes zz_probe max=50
+expect verb=recipes text=zz_probe n=1 shown=1
+expect verb=recipes id=\S+zz_probe_good
 reject \[cdevtest\] .*done=0
 shell echo "zz_probe_empty_fluid lines: $(grep -c zz_probe_empty_fluid logs/kubejs/server.log)"
 look the create:kjs_ and zz_probe recipe lines: no loose create:kjs_ filling recipe from the probe, zz_probe_good present; (b) the port chain p1 half (run_boots.sh '^p1$' in batches/r1106cbp: no Error parsing recipe ...horror_lasagna, "with 0 failed recipes") is a chain boot of its own
@@ -75,7 +77,8 @@ look the create:kjs_ and zz_probe recipe lines: no loose create:kjs_ filling rec
 @fails a dict id whose item is gone (remove it, and its uses); the validators' `global.has` / glob skip
 @from batches/r1106spfx/a1.qb
 bootreject \[(item|block|fluid)_dict\] Missing
-bootreject is not validated
+# judge-12, 2026-11-18: the NCH fluid-tag 'is not validated' warnings are not dict lines (r1106spfx: row text too wide)
+bootreject \[(item|block|fluid)_dict\].*is not validated
 shell grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] Missing" logs/latest.log | head -40; echo "notvalidated=$(grep -c 'is not validated' logs/latest.log)"; grep "tag entries not checked" logs/latest.log | head
 look one [block_dict] and one [fluid_dict] 'tag entries not checked' info line, nothing else
 

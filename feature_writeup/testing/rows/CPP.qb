@@ -26,6 +26,8 @@
 bootreject ClassNotFoundException.*(creativecommon|creativeengineering)
 > cdevtest tag item creativecommon:metal_dusts
 > cdevtest tag item creativecommon:bark
+# judge-6, 2026-11-18: wait for the answers (r1118: the probe /reload was still running, both lines landed in SQ-CPP-02's log)
+waitlog verb=tag kind=item tag=creativecommon:bark n= 60
 expect verb=tag kind=item tag=creativecommon:metal_dusts .*immersiveengineering:dust_
 expect verb=tag kind=item tag=creativecommon:bark n=[1-9]
 reject \[cdevtest\] .*done=0

@@ -64,6 +64,9 @@ look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperat
 @reviewed 2026-11-16
 # measure = mean wheat age per field (`cdevtest ages`), first line open field (x 100), second glass field (x 120);
 # 2 min at randomTickSpeed 30 ripens almost nothing, so ripe counts were noise (2026-10-31 first run)
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > kill @e[type=!minecraft:player]
 > forceload add 96 -4 132 12
 > fill 96 -61 -4 132 -61 12 minecraft:grass_block
@@ -154,13 +157,14 @@ look open field (first verb=ages line of each pair): spring growth about 5/4 of 
 > setblock 104 -60 12 vinery:red_grape_bush
 > setblock 106 -61 12 nethersdelight:rich_soul_soil
 > setblock 106 -60 12 nethersdelight:crimson_fungus_colony
-> setblock 108 -61 12 minecraft:end_stone
+> setblock 108 -61 12 endercrop:tilled_end_stone
 > setblock 108 -60 12 endercrop:ender_crop
 # fungus colony and Ender crop need low light (colony: raw light <= 12): a dark stone box over x 105..109
+# judge-6, 2026-11-18: the Ender crop grows only on tilled end stone (r1118 on plain end stone: still age 0 after 120 s at randomTickSpeed 100)
 > fill 105 -61 11 109 -57 13 minecraft:stone hollow
 > setblock 106 -61 12 nethersdelight:rich_soul_soil
 > setblock 106 -60 12 nethersdelight:crimson_fungus_colony
-> setblock 108 -61 12 minecraft:end_stone
+> setblock 108 -61 12 endercrop:tilled_end_stone
 > setblock 108 -60 12 endercrop:ender_crop
 > gamerule randomTickSpeed 100
 sleep 120
@@ -223,6 +227,9 @@ count Test failed == 1
 @fails biome modifier override not loaded, or merge group skipped by `requires: vinery`
 @from batches/r1031/b1_gameplay.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 b1_gameplay / w2_metas_spawns bot row
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
 > give qa fruitsdelight:apple_sapling
 > data get entity qa Inventory
 > execute positioned 0 70 0 run locate biome minecraft:flower_forest

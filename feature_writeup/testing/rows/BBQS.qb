@@ -43,6 +43,10 @@ look raw_potato_skewer inputs = the potato tag's items (potato/sweet_potato) and
 @pass Raw Potato Skewer given; well empty; one stick and the bacon used
 @fails no recipe match: tag empty or ingredient JSON
 @from batches/r1113/c2_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
+> forceload add 296 290 360 380
+> execute unless entity c2b run pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > setblock 300 -60 350 barbequesdelight:basin[facing=north]{Items:{Items:[{Slot:0,id:"veggiesdelight:sweet_potato",Count:2b}]}}
 > cdevtest inv 300 -60 350
 > pbot hold c2b minecraft:stick 1
@@ -66,6 +70,10 @@ look first basin inv shows slot=0 item=veggiesdelight:sweet_potato*2 (else the I
 @fails `onSneakGrab` not registered (BarbequesDelight ctor)
 @from batches/r1113/c2_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
+> forceload add 296 290 360 380
+> execute unless entity c2b run pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > setblock 302 -60 350 barbequesdelight:basin[facing=north]{Items:{Items:[{Slot:0,id:"farmersdelight:cabbage",Count:4b}]}}
 > pbot hold c2b minecraft:stick 1
 > pbot sneak c2b on

@@ -75,7 +75,7 @@ boot)
   if [ -f feeder.pid ]; then kill "$(cat feeder.pid)" 2>/dev/null || true; fi; rm -f feeder.pid in.fifo
   mkfifo in.fifo
   # own feeder pid: stop kills only this one, not other sessions' feeders
-  (sleep infinity > in.fifo & echo $! > feeder.pid)
+  (sleep infinity > in.fifo 2>/dev/null & echo $! > feeder.pid)
   nohup bash -c 'bash run.sh nogui < in.fifo > console.log 2>&1' >/dev/null 2>&1 &
   tl boot "$(grep -m1 '^level-name=' server.properties | cut -d= -f2) $(grep -m1 '^level-type=' server.properties | cut -d= -f2)"
   echo booting

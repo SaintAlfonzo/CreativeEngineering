@@ -57,6 +57,13 @@ look the armoured horse (first data get) has Regeneration (Id 10) amplifier 0; t
 @fails
 @reviewed 2026-11-16
 # same horses and bot as SQ-HT-02; the horse's chunk stays forceloaded
+# self-contained since r1118 (judge-8, 2026-11-18): the driver can run HT-03 in a step without HT-02; build only what is absent
+> forceload add 320 400 336 416
+> execute unless entity ht run pbot spawn ht 328.5 -60 412.5 minecraft:overworld survival
+sleep 2
+> execute unless entity @e[type=minecraft:horse,tag=ht2a] run summon minecraft:horse 326 -60 404 {Tame:1b,Tags:["ht2a"],NoAI:1b}
+> item replace entity @e[type=minecraft:horse,tag=ht2a,limit=1] horse.armor with dragonloot:dragon_horse_armor
+sleep 1
 > effect clear @e[type=minecraft:horse,tag=ht2a,limit=1]
 > execute in minecraft:the_nether run forceload add 0 0
 > execute in minecraft:the_nether run tp ht 0 120 0

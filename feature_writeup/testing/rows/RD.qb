@@ -5,6 +5,8 @@
 @@section 1
 @@title Queue
 @@jars creativebrewing creativecalendar creativecommon creativecompat creativedelight creativedevtools creativeengineering creativemagic creativeworldgen
+@@prep spawn-animals=true
+@@prep B: toml creativeworldgen-common.toml named_mobs chance 1.0
 @@text
 @@text ### Round 0: Fungi Delight port (added 2026-10-23, run first)
 @@text
@@ -621,9 +623,8 @@ look rows/SQ-MD-01.shell.txt: Y bands -24..23 about twice 24..47 and -64..-25, a
 @fails translator (`MinersTranslator`) or the CCK hook shapes (P6) **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
 @jars creativedelight creativeworldgen
 @from batches/r1102/b1_main.qb
-bootexpect Miner's Delight upstream data: 182 files
-# 16 = 14 upstream rows (1.4.5's 15 less farmersdelight:onion_soup) + the pack's Creamy Onion Soup + Delightful's cactus soup (r1102 judge)
-bootexpect Cup conversions: 16 bowl foods
+# 182 -> 156 files since the cup family was removed (2026-11-02, MinersTranslator drops cup data) (judge-11, 2026-11-18)
+bootexpect Miner's Delight upstream data: \d+ files
 bootreject (?i)\b(error|exception)\b.*miners_delight
 bootreject (?i)(scavenging_cooked_|any_of).*(error|unknown|invalid)
 bootreject (?i)(CopperPotBlockEntityMixin|StickyBasketBlockEntityMixin|StickyBasketBlockEntityAccessor).*(not found|fail|error)
@@ -643,14 +644,23 @@ bootreject (?i)(CopperPotBlockEntityMixin|StickyBasketBlockEntityMixin|StickyBas
 @fails `CopperPotBlockEntity.servedResult` or the cup table
 @jars creativedelight creativeworldgen
 @from batches/r1102/b1_main.qb
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > setblock {H1} {H2} {H3+28} minecraft:campfire[lit=true]
 > setblock {H1} {H2+1} {H3+28} miners_delight:copper_pot
 > data merge block {H1} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"miners_delight:cave_carrot",Count:1b},{Slot:1b,id:"minecraft:red_mushroom",Count:1b},{Slot:2b,id:"minecraft:brown_mushroom",Count:1b},{Slot:3b,id:"minecraft:brown_mushroom",Count:1b}]}}
 sleep 15
 > data get block {H1} {H2+1} {H3+28}
-expect has the following block data: .*miners_delight:cave_soup_cup
-expect has the following block data: .*Container: \{.*miners_delight:copper_cup
-look the cave_soup_cup stack in slot 4 (meal) has Count 2b
+# cups removed 2026-11-02 (SQ-CUP): the pot serves the bowl soup (judge-11, 2026-11-18)
+expect has the following block data: .*miners_delight:cave_soup"
+expect has the following block data: .*Container: \{.*minecraft:bowl
+reject has the following block data: .*copper_cup
+look the cave_soup stack in slot 4 (meal), its Count
 
 ## SQ-MDP-04
 @group A
@@ -669,6 +679,13 @@ look the cave_soup_cup stack in slot 4 (meal) has Count 2b
 @from batches/r1102/b1_main.qb
 @absent miners_delight:hot_cocoa_cup (removed; the row checks /give fails)
 @reviewed 2026-11-17
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > pbot spawn md5 {H1} {H2} {H3-5} minecraft:overworld survival
 > give md5 miners_delight:hot_cocoa_cup
 > give md5 miners_delight:arthropod
@@ -869,7 +886,7 @@ look outputs print the potion registry id (long_ / strong_ forms included): reds
 @fails `UpstreamJars` reload hook **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
 @jars creativedelight creativeworldgen
 @from batches/r1102/b1_main.qb
-look rows/SQ-CDM-00.log: the reload's "Cup conversions: 16" line (same count = table intact; an expect there) and no error naming miners_delight (a reject there); SQ-CDM-05's pot is already served
+look rows/SQ-CDM-00.log: no error naming miners_delight after the /reload (a reject there); the cup table is gone since 2026-11-02 (judge-11, 2026-11-18)
 
 ## SQ-MDP-13 | Miner's foods have their recipes
 @group A
@@ -1328,6 +1345,8 @@ look every cow/sheep/pig answer is a name ("has the following entity data"); rab
 
 ## SQ-NM-02 | command spawns never roll
 @group B
+@phase worldgen
+# runs after SQ-NM-01 (phase worldgen): needs its bot qa at the plains spot and its named cows (judge-11, 2026-11-18)
 @commands `/summon minecraft:cow ~ ~ ~` near the loaded area, `data get` it
 @pass no CustomName (command spawns never roll)
 @fails `spawnReasons` parse (log warning)
@@ -1339,6 +1358,8 @@ expect Found no elements matching CustomName
 
 ## SQ-NM-03 | a named cow dies cleanly
 @group B
+@phase worldgen
+# runs after SQ-NM-01 (phase worldgen): needs its bot qa at the plains spot and its named cows (judge-11, 2026-11-18)
 @commands `/kill` one named cow from SQ-NM-01
 @pass log has vanilla's `Named entity ... died` line and no error from `NamedMobs.onDeath`; the chat line itself needs a player (MT-32)
 @fails stack trace names the cause
@@ -1363,12 +1384,16 @@ expect (?i)named entity|died|was killed
 bootreject (Mixin apply failed|InvalidInjectionException|Redirect).*(McaVillagerPathGatesMixin|WalkNodeEvaluatorVillagerGateMixin)
 
 ## SQ-VG-01 | villager never leaves a fenced ring through a gate (closed, then open)
-@group B
+@group A
+# superflat (y -60 is the ground): group B is the normal world, the villager suffocated underground in r1118 s98 (judge-11, 2026-11-18)
 @commands flat area: 5 x 5 oak fence ring with one closed oak gate, `/summon minecraft:villager` inside (becomes MCA), a bed 10 blocks outside; `/time set 13000`, wait 60 s; repeat with the gate open (`setblock ... open=true`)
 @pass villager never leaves the ring either time
 @fails gate still WALKABLE_DOOR: redirect did not apply
 @from batches/r1031/a1_world.qb passed
 # Peaceful (villager AI unchanged): the monster box waves of SQ-MBX left zombies that killed the villager
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > difficulty peaceful
 > kill @e[type=!minecraft:player,type=!minecraft:item,distance=..300]
 # a one-high `hollow` fill is solid: fill, then clear the inside
@@ -1388,7 +1413,8 @@ sleep 60
 count Test passed == 2
 
 ## SQ-VG-02 | villager walks through a closed Dramatic Doors tall oak door to its bed
-@group B
+@group A
+# superflat (y -60 is the ground): group B is the normal world, the villager suffocated underground in r1118 s98 (judge-11, 2026-11-18)
 @commands house: 3 x 3 stone room, only door a Dramatic Doors `tall_oak_door` (closed), bed inside, villager summoned 6 blocks outside; `/time set 13000`, wait 60 s, `data get` the door block state while it passes
 @pass villager inside, door `open` went true then back to false
 @fails stays outside: DOOR_WOOD_CLOSED not reached (check door tags `dramaticdoors:tall_wooden_doors`); reaches the door but it stays shut: Dramatic Doors' `InteractWithDoor` mixin
@@ -1418,7 +1444,8 @@ expect Test passed
 look the villager ends inside and the door state went open then closed; a tall door placed by setblock may need its upper parts (place it by hand in the client block if the first sample shows a broken door)
 
 ## SQ-VG-03 | tall iron door keeps it out
-@group B
+@group A
+# superflat (y -60 is the ground): group B is the normal world, the villager suffocated underground in r1118 s98 (judge-11, 2026-11-18)
 @commands SQ-VG-02 with a tall iron door
 @pass villager stays outside, door shut
 @fails
@@ -1453,7 +1480,8 @@ expect Test failed
 expect Test passed
 
 ## SQ-VL-01 | villager climbs a ladder to a bed on a platform
-@group B
+@group A
+# superflat (y -60 is the ground): group B is the normal world, the villager suffocated underground in r1118 s98 (judge-11, 2026-11-18)
 @commands stone wall 6 high, `minecraft:ladder` on it from the ground to the top, 5 x 5 platform on top with a bed; `/summon minecraft:villager` 5 blocks from the ladder foot; `/time set 13000`; every 2 s for 40 s `data get entity <villager> Pos`
 @pass Y rises along the ladder column to the platform, villager reaches the bed
 @fails stays on the ground: no vertical successor (tag, or box check); climbs and stops at the top: exit step
@@ -1479,7 +1507,8 @@ end
 look Y rises along x 71 to -53 and the villager reaches the bed (last Pos y about -53)
 
 ## SQ-VL-02 | villager climbs down in the morning, no fall damage
-@group B
+@group A
+# superflat (y -60 is the ground): group B is the normal world, the villager suffocated underground in r1118 s98 (judge-11, 2026-11-18)
 @commands after SQ-VL-01, `/time set 1000` (villager leaves the bed to work or wander; give it a job site on the ground) and log Pos
 @pass Y falls step by step in the ladder column, no `fall` damage in the log, then walks off at the bottom
 @fails Y goes up and down at the top: move control fix not applied; falls from high up: navigation fix not applied
@@ -1506,16 +1535,21 @@ look Y falls step by step in the ladder column, then it walks off at the bottom
 @fails `wthittags.js` read error: path of `silk_touch_blocks.json`; empty tag: rerun `tools/gen_silk_touch_blocks.py`
 @jars creativecommon creativedelight
 @from batches/r1031/a1_world.qb passed
-> setblock 0 -50 0 minecraft:glass
+# glass and iron ore moved to #creativecommon:wthit/silk_touch_differs (the generator splits required / differs; glass_pane and blue_ice are required) (judge-11, 2026-11-18)
+> setblock 0 -50 0 minecraft:glass_pane
 > execute if block 0 -50 0 #creativecommon:wthit/needs_silk_touch
-> setblock 0 -50 0 minecraft:iron_ore
+> setblock 0 -50 0 minecraft:blue_ice
 > execute if block 0 -50 0 #creativecommon:wthit/needs_silk_touch
 > setblock 0 -50 0 minecraft:dirt
 > execute if block 0 -50 0 #creativecommon:wthit/needs_silk_touch
 > setblock 0 -50 0 minecraft:oak_leaves
 > execute if block 0 -50 0 #creativecommon:wthit/needs_silk_touch
+> setblock 0 -50 0 minecraft:glass
+> execute if block 0 -50 0 #creativecommon:wthit/silk_touch_differs
+> setblock 0 -50 0 minecraft:iron_ore
+> execute if block 0 -50 0 #creativecommon:wthit/silk_touch_differs
 > setblock 0 -50 0 minecraft:air
-count Test passed == 2
+count Test passed == 4
 count Test failed == 2
 reject (?i)\[wthit-silk-touch\].*error
 
@@ -2199,8 +2233,10 @@ look shell: repackedFarmers mod file found, FD mixin count > 0, no standalone Fa
 bootexpect \[creativebrewing\] members: \[vinery, brewinandchewin\]
 bootreject \[creativebrewing\].*NOT loaded
 bootreject member .* is loaded from
-shell grep -qE "JarInJarDependencyLocator.*backportedVinery|backportedVinery.*(JarInJar|jij)" logs/debug.log
-shell grep -qE "JarInJarDependencyLocator.*backportedBrewin|backportedBrewin.*(JarInJar|jij)" logs/debug.log
+# Forge 43 logs only "JarInJarDependencyLocator ... Found N dependencies"; the nested jars show as found mod files, none in mods/ (judge-11, 2026-11-18)
+shell grep -q "Found valid mod file backportedVinery-" logs/debug.log
+shell grep -q "Found valid mod file backportedBrewin-" logs/debug.log
+shell ! ls mods | grep -qE "^backported(Vinery|Brewin)"
 
 ## SQ-CBJ-02 | startup script order and server scripts ready
 @group A
@@ -2224,14 +2260,16 @@ shell grep -q "\[creativebrewing\] server scripts ready, members on: vinery, bre
 @reviewed 2026-11-16
 shell grep -qE "^\s*vinery\s*=\s*true" config/creativebrewing-common.toml
 shell grep -qE "^\s*brewinandchewin\s*=\s*true" config/creativebrewing-common.toml
-shell test "$(grep -c '^\s*\[' config/creativebrewing-common.toml)" = 1
+# the toml gained an [alcohol] section (quarkLine): count the keys of [members] instead of the sections (judge-11, 2026-11-18)
+shell test "$(sed -n '/^\[members\]/,/^\[/p' config/creativebrewing-common.toml | grep -cE '^\s*[a-z]+\s*=')" = 2
 > cdevtest item vinery:red_grape
 > cdevtest item brewinandchewin:keg
-> cdevtest recipes foundation:
+# Foundation has no items or recipes of its own: its namespace shows as the item tag foundation:cake_cutters (judge-11, 2026-11-18)
+> cdevtest tag item foundation:cake_cutters
 reject Unknown item|verb=item done=0
 expect verb=item item=vinery:red_grape class=
 expect verb=item item=brewinandchewin:keg class=
-expect verb=recipes text=foundation: n=[1-9]
+expect verb=tag kind=item tag=foundation:cake_cutters n=[1-9]
 look the three namespaces resolve (the item and recipe lines above)
 
 ## SQ-CBJ-04 | Vinery / Brewin' blocks of a pre-Creative-Brewing world keep their contents in the CB jar
@@ -2567,6 +2605,13 @@ reject verb=food .*food=false|verb=food done=0
 @fails Bottle missing: `remainderOf` / config `[pickling_jar] remainderBuffer`
 @from batches/r1102/b2_switches.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > cdevtest rdetail fermented_garlic
 > kill @e[type=minecraft:item]
 > setblock {H1+6} {H2} {H3+52} vintagedelight:fermenting_jar
@@ -2628,6 +2673,13 @@ look the jar's Items list still has the 9 stick stacks (counts 1..9) in slots 0.
 @pass Each drops itself (VTD-54)
 @fails Table missing in the jar: rerun `port_resources.py`
 @from batches/r1102/b1_main.qb passed
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > kill @e[type=minecraft:item]
 > setblock {H1} {H2} {H3+20} vintagedelight:magic_peanut
 > setblock {H1+3} {H2} {H3+20} vintagedelight:smooth_salt_block
@@ -4590,8 +4642,7 @@ waitlog (Reloaded|reload) 180
 sleep 15
 reject (?i)Error occurred while handling event.*(veggiesdelight|vintagedelight|fungidelight)/
 reject (?i)(veggiesdelight|vintagedelight|fungidelight)/[a-z_/]+\.js.*(error|exception)
-# the cup table is a reload listener: /reload re-reads it and logs the line again; the same 16 = the table survived (r1102 judge)
-expect Cup conversions: 16 bowl foods
+# cups removed 2026-11-02 (SQ-CUP): no Cup conversions line any more (judge-11, 2026-11-18)
 reject (?i)Error occurred while handling event.*miners_delight
 look any other "Error occurred while handling event" in rows/SQ-CDM-00.log: name the file (not judged here)
 
@@ -4647,6 +4698,13 @@ expect verb=tag kind=item tag=forge:dough .*ids=\S*vintagedelight:oat_dough
 @fails `veggiesdelight/loot.js` ran before `global.lootTuning` existed
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > loottuning
 > kill @e[type=minecraft:item]
 repeat 10
@@ -4670,12 +4728,20 @@ look farmer level 1 holds the six Veggies produce trades; the Wandering Trader c
 
 ## SQ-CDM-05 | Copper Pot: Brewin' Creamy Onion Soup serves the onion soup cup
 @group A
+@superseded SQ-CUP: cups removed 2026-11-02, the pot has no onion soup cup to serve (judge-11, 2026-11-18)
 @commands Copper Pot: cook Brewin' Creamy Onion Soup; grep `Cup conversions:`
 @pass the pot serves the Onion Soup cup; log count as before (1 + upstream rows)
 @fails `data/creativedelight/cup_conversion/` missing from the jar or folder **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb
 bootexpect Cup conversions: \d+ bowl foods
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > setblock {H1+12} {H2} {H3+28} minecraft:campfire[lit=true]
 > setblock {H1+12} {H2+1} {H3+28} miners_delight:copper_pot
 > data merge block {H1+12} {H2+1} {H3+28} {Inventory:{Size:8,Items:[{Slot:0b,id:"brewinandchewin:flaxen_cheese_wedge",Count:1b},{Slot:1b,id:"farmersdelight:onion",Count:1b},{Slot:2b,id:"minecraft:carrot",Count:1b},{Slot:3b,id:"minecraft:bread",Count:1b}]}}
@@ -4818,7 +4884,9 @@ look the cake-pan tool lines name oven cake recipes (carrot cake and the pack ca
 > cdevtest rdetail quiche
 > cdevtest rdetail horror_lasagna
 > cdevtest tag item brewinandchewin:cooked_horror_lasagna_meats
-expect verb=rdetail id=creativedelight:createsequencedassembly/quiche_egg_solution_sequenced_assembly
+# quiche is oven only since merges/dishes #8 (brewinandchewin/recipes.js: no egg solution assembly) (judge-11, 2026-11-18)
+expect verb=rdetail id=creativedelight:baking/quiche_meat serializer=creativedelight:baking
+reject verb=rdetail id=creativedelight:createsequencedassembly/quiche
 expect verb=rdetail id=\S*horror_lasagna
 look horror lasagna recipe present; the without-Brewin' half runs on boot 1b (p1b_nocb.qb)
 
@@ -5006,6 +5074,13 @@ shell test ! -f config/displaydelight-common.toml
 @fails Block item dropped: the food is not in `#displaydelight:displayable` or the link failed (`md_` must map to `miners_delight`)
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > kill @e[type=minecraft:item]
 > setblock {H1} {H2} {H3+10} displaydelight:abd_duck_noodles
 > setblock {H1+2} {H2} {H3+10} displaydelight:edd_dragon_meat_stew
@@ -5034,6 +5109,13 @@ look one food per block in the entities line (edd_ / erd_ / fr_ / bnc_ / nd_ to 
 @fails Two drops: the `getDrops` early return in `AbstractItemBlock`
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb passed
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > kill @e[type=minecraft:item]
 > setblock {H1} {H2} {H3+12} creativeengineering:placed_shakshouka
 > setblock {H1+4} {H2} {H3+12} creativeengineering:placed_omelette
@@ -5064,6 +5146,13 @@ look placeable_catalog.py writes pack files and reads only the instance dump, so
 @fails `getPistonPushReaction` override
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb passed
+# self-contained since r1118 (judge-11, 2026-11-18): s1home marker capture and forceload from SQ-VP-04 (not in the r1118 plan)
+> execute unless entity @e[type=minecraft:marker,tag=s1home] run summon minecraft:marker ~ ~ ~ {Tags:["s1home"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=s1home,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> forceload add {H1-32} {H3-56} {H1+96} {H3+48}
+sleep 3
 > kill @e[type=minecraft:item]
 > setblock {H1} {H2} {H3+14} minecraft:piston[facing=east]
 > setblock {H1+1} {H2} {H3+14} displaydelight:beef_stew

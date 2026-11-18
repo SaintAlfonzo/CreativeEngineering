@@ -7,6 +7,7 @@
 @@date 2026-11-06
 @@jars creativebrewing creativecommon
 @@sources feature_writeup/creative_brewing.md
+@@prep A: copy tools/scratch_query/nch_guard_probe.js kubejs/server_scripts/zz_nch_guard_probe.js
 @@text
 @@text Not run. Follows r1106cba ([scratch_run_2026-11-06.md](scratch_run_2026-11-06.md) 1). Needs rebuilt Creative Common (NCH
 @@text `remove` guard, `f.dish_stuffed_bellpepper`, the moved tags), Creative Delight (optional cooking dependencies) and
@@ -57,13 +58,16 @@ reject \[cdevtest\] .*done=0
 > cdevtest recipes creativebrewing:fermenting/pale_jane
 > cdevtest recipes creativebrewing:fermenting/steel_toe
 > cdevtest tag item immersive_weathering:bark
-> cdevtest tag item creativeengineering:bark
-> cdevtest tag item creativeengineering:metal_dusts
+# judge-3, 2026-11-18: the tags are creativecommon: since 2026-11-09 (ids follow the owning jar); creativecommon:bark is
+# #immersive_weathering:bark only (no farmersdelight:tree_bark any more), so the row checks that both tags exist
+> cdevtest tag item creativecommon:bark
+> cdevtest tag item creativecommon:metal_dusts
 sleep 3
 expect verb=bytype serializer=brewinandchewin:fermenting n=(1[89]|[2-9]\d)$
 expect pale_jane_from_rice_wine
-expect farmersdelight:tree_bark
-bootreject Couldn't load tag|missing references
+expect verb=tag kind=item tag=creativecommon:bark n=
+expect verb=tag kind=item tag=creativecommon:metal_dusts n=
+bootreject Couldn't load tag .*(creative|brewinandchewin|vinery)|missing references.*(creative|brewinandchewin|vinery)
 reject \[cdevtest\] .*done=0
 
 ## SQ-CBB-04
@@ -108,8 +112,9 @@ kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
 @pass 44 of 44 (Fruits Delight bellini, Engineer's Delight wodka present); winemaker 34 or more
 @fails `alcohol_drinks.js` ids, `vinery/wandering_trades.js`
 @from batches/r1106cbb/c2.qb passed
-shell grep -oE "\[alcohol\] food values set on [0-9]+ of 44[^\"]*" logs/kubejs/startup.log
-shell grep -qE "\[alcohol\] food values set on 44 of 44" logs/kubejs/startup.log
+# judge-3, 2026-11-18: the drink list grew (51 in the full pack 2026-11-18); every drink set = N of N
+shell grep -oE "\[alcohol\] food values set on [0-9]+ of [0-9]+[^\"]*" logs/kubejs/startup.log
+shell grep -qE "\[alcohol\] food values set on ([0-9]+) of \1 drinks" logs/kubejs/startup.log
 shell grep -oE "\[wandering trades\] winemaker [0-9]+" logs/kubejs/server.log | head -1
 shell n=$(grep -oE "\[wandering trades\] winemaker [0-9]+" logs/kubejs/server.log | head -1 | grep -oE "[0-9]+$"); test "$n" -ge 34
 

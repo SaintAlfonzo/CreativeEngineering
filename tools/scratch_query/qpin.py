@@ -46,6 +46,11 @@ def listed():
 		if len(ticks) >= 4:
 			ids.add(ticks[1].strip().lower())
 			names.add(ticks[3].strip())
+		# rows whose id cell is bare (no-mod-id jars such as kotlinforforge, r1118): any backticked jar name counts
+		names.update(t.strip() for t in ticks[1::2] if t.strip().endswith('.jar'))
+		cells = [c.strip() for c in l.split('|')]
+		if len(cells) > 2 and re.fullmatch(r'[a-z0-9_.-]+', cells[2]):
+			ids.add(cells[2])
 	return names, ids
 
 

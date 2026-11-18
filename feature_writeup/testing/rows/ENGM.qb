@@ -7,6 +7,10 @@
 @@date 2026-11-06
 @@jars creativebrewing creativecommon creativedelight
 @@sources feature_writeup/plan_cb_polish.md
+@@prep B: difficulty=normal
+# SQ-ENGM-03 (judge-6, 2026-11-18): shrapnel flies maxDistance 12 at 1.4 blocks/tick (about 9 ticks), gone before the paced kill; slowed to 0.05 (about 12 s)
+@@prep B: toml creativecompat-common.toml shrapnel speed 0.05
+@@prep B: toml creativecompat-common.toml shrapnel speedVariance 0.0
 @@text
 @@text Not run. Builds of 2026-11-06 18:51-18:54 (Common, Compat, Magic, Equipment, Engineering, Worldgen, Delight, Brewing),
 @@text NOT installed. Moved, ids unchanged: XP fluid bridge to Magic; BlockRunner / camo / sinking walk speeds, WTHIT speed line,
@@ -112,6 +116,8 @@ look sky island located (ids are creativeworldgen: since the Worldgen carve; the
 @fails the tag ran before `#forge:seeds` was complete in Delight's script pack order
 @reviewed 2026-11-16
 @from batches/r1113/c3_b1.qb
+# judge-6, 2026-11-18: forceload so the TNT ticks with no player online (r1118: kill found nothing)
+> forceload add 0 0
 > setblock 0 210 0 minecraft:stone
 > summon minecraft:tnt 0 211 0 {Fuse:1}
 sleep 0.4

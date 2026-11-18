@@ -22,7 +22,8 @@
 @fails `cd_transition_items.js` not loaded (jar startup scripts) or a CD assembly keyed on a row still in Engineering's `transition_items.js`
 @from batches/r1106cbp/p1_chain.qb
 shell grep -h "transition items" logs/kubejs/startup.log
-shell grep -qE '\[creativedelight\] transition items \(89\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
+# judge-3, 2026-11-18: CD's list grew (104 on 2026-11-18); 89 or more
+shell grep -qE '\[creativedelight\] transition items \((89|9[0-9]|[1-9][0-9]{2})\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
 shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log; true
 shell test "$(cat logs/kubejs/startup.log logs/kubejs/server.log | grep -c "not registered - add a row\|no incomplete item registered")" = 0
 
@@ -57,13 +58,15 @@ shell n=$(grep -oE "[0-9]+ failed" logs/kubejs/server.log | tail -1 | grep -oE "
 @from batches/r1106cbo/c4_full.qb
 @reviewed 2026-11-16
 shell grep -h "transition items" logs/kubejs/startup.log
-shell grep -qE '\[creativedelight\] transition items \(89\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
+# judge-3, 2026-11-18: CD's list grew (104 on 2026-11-18); 89 or more
+shell grep -qE '\[creativedelight\] transition items \((89|9[0-9]|[1-9][0-9]{2})\)' logs/kubejs/startup.log  # startup.log (r1106spf: kjsexpect reads server.log)
 shell grep -h "Added [0-9]* recipes" logs/kubejs/server.log
 shell n=$(grep -oE "removed [0-9]+ recipes" logs/kubejs/server.log | tail -1 | grep -oE "[0-9]+"); echo "removed=$n"; test "$n" -gt 1100 -a "$n" -lt 1600
 shell grep -h "absent mods" logs/kubejs/server.log
 shell grep -c "not registered - add a row\|no incomplete item registered" logs/kubejs/startup.log logs/kubejs/server.log; true
 > cdevtest bytype create:sequenced_assembly max=1
-expect verb=bytype serializer=create:sequenced_assembly n=296$
+# judge-3, 2026-11-18: 314 on 2026-11-18 (the CD transition list grew by 15); 296 or more
+expect verb=bytype serializer=create:sequenced_assembly n=(29[6-9]|3\d\d)$
 reject \[cdevtest\] verb=\S+ done=0
 look sequenced assembly count against 296 (2026-11-05 dump); [absent mods] never prints (afterRecipes not posted, run notes 14:06)
 

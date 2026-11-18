@@ -122,12 +122,13 @@ reject \[cdevtest\] .*done=0
 @from batches/r1109wo/b1_defaults.qb passed
 > setblock 350 -60 300 mysticaloaktree:wise_oak
 > time set midnight
-> cdevtest tickwarp 600
-waitlog verb=tickwarp end=done ticks=600 30
+# 2400 ticks (judge-13, 2026-11-18): the BE rolls randomTick 1 in 21 every 23 ticks (mean 483); 600 misses it 28 % of the time (r1118)
+> cdevtest tickwarp 2400
+waitlog verb=tickwarp end=done ticks=2400 60
 > cdevtest state 350 -60 300
 > time set noon
-> cdevtest tickwarp 601
-waitlog verb=tickwarp end=done ticks=601 30
+> cdevtest tickwarp 2401
+waitlog verb=tickwarp end=done ticks=2401 60
 > cdevtest state 350 -60 300
 > data get block 350 -60 300 creativeworldgen_sleep_until
 sleep 1

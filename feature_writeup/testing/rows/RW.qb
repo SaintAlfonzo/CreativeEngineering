@@ -41,15 +41,15 @@ reject \[cdevtest\] verb=\S+ done=0
 ## SQ-RW-23 | smoked wood smoking recipes
 @group A
 @commands boot; recipe id dump for `smoking` outputs of `create_dd:smoked_*`
-@pass 13 smoking recipes, cook time 200, one per smoked shape (log, wood, stripped log, stripped wood, planks, slab, stairs, fence, fence gate, door, trapdoor, button, pressure plate); `creativeengineering:smokable/*` tags each hold oak and spruce, none hold `botania:*` or driftwood
+@pass 13 smoking recipes, cook time 200, one per smoked shape (log, wood, stripped log, stripped wood, planks, slab, stairs, fence, fence gate, door, trapdoor, button, pressure plate); `creativecommon:smokable/*` tags each hold oak and spruce, none hold `botania:*` or driftwood
 @fails `server_scripts/wood/smoked_wood.js`, `tags/wood_tags.js` 36-40 (RW-23)
 @from batches/r1031/a1_data.qb
 @reviewed 2026-11-16
 > cdevtest recipes smoked max=200
-> cdevtest tag item creativeengineering:smokable/planks
-expect verb=tag kind=item tag=creativeengineering:smokable/planks .*minecraft:oak_planks
-expect verb=tag kind=item tag=creativeengineering:smokable/planks .*minecraft:spruce_planks
-reject verb=tag kind=item tag=creativeengineering:smokable/planks .*(botania:|driftwood)
+> cdevtest tag item creativecommon:smokable/planks
+expect verb=tag kind=item tag=creativecommon:smokable/planks .*minecraft:oak_planks
+expect verb=tag kind=item tag=creativecommon:smokable/planks .*minecraft:spruce_planks
+reject verb=tag kind=item tag=creativecommon:smokable/planks .*(botania:|driftwood)
 reject \[cdevtest\] verb=\S+ done=0
 look 13 smoking recipes, one per smoked shape, cook time 200 (rdetail if unsure); smokable tags hold oak and spruce, no botania:* and no driftwood
 
@@ -119,15 +119,15 @@ reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-CP-01 | seed milling to bone meal
 @group A
-@commands boot; tag probe `#creativeengineering:millable_seeds`; recipe dump for `create:milling` outputs of `minecraft:bone_meal`
-@pass tag holds the vanilla and modded seeds, not `farmersdelight:rice` nor corn kernels; one milling recipe `creativeengineering:createmilling/seeds_bone_meal`, chance 0.15
+@commands boot; tag probe `#creativedelight:millable_seeds`; recipe dump for `create:milling` outputs of `minecraft:bone_meal`
+@pass tag holds the vanilla and modded seeds, not `farmersdelight:rice` nor corn kernels; one milling recipe `creativedelight:createmilling/seeds_bone_meal`, chance 0.15
 @fails `tags/wood_tags.js`, `wood/compost.js` (CP-01)
 @from batches/r1031/a1_data.qb passed
 @reviewed 2026-11-16
 > cdevtest makes minecraft:bone_meal
-> cdevtest tag item creativeengineering:millable_seeds
-expect verb=makes id=creativeengineering:createmilling/seeds_bone_meal
-reject verb=tag kind=item tag=creativeengineering:millable_seeds .*(farmersdelight:rice(,|$)|corn_kernels)
+> cdevtest tag item creativedelight:millable_seeds
+expect verb=makes id=creativedelight:createmilling/seeds_bone_meal
+reject verb=tag kind=item tag=creativedelight:millable_seeds .*(farmersdelight:rice(,|$)|corn_kernels)
 reject \[cdevtest\] verb=\S+ done=0
 
 ## CQ-SPC-01 | seeds go into a seed pouch

@@ -38,6 +38,10 @@ reject verb=\S+ .*done=0
 @fails block entity type built with the oak block only
 @from batches/r1115/p6_a1.qb passed
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p6_a1 (row before SQ-BBQW-02)
+> forceload add 296 356 316 376
+> execute unless entity c6b run pbot spawn c6b 303.5 -60 366.5 minecraft:overworld survival
+sleep 3
 > clear c6b
 > setblock 302 -60 370 barbequesdelight:warped_basin[facing=north]{Items:{Items:[{Slot:0,id:"minecraft:beef",Count:2b}]}}
 > cdevtest inv 302 -60 370
@@ -59,6 +63,10 @@ reject verb=\S+ .*done=0
 @fails `TrayBlock` still checks `is(this)`
 @from batches/r1113/fix_c2a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
+> forceload add 296 290 360 380
+> execute unless entity c2b run pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > setblock 310 -60 370 minecraft:oak_planks
 > setblock 310 -59 370 barbequesdelight:spruce_tray[facing=north]
 > pbot sneak c2b on

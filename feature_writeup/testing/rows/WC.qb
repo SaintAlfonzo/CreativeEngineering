@@ -39,6 +39,9 @@ reject \[cdevtest\] .*done=0
 @fails off-hand load path broken
 @from batches/r1101/p1_server.qb passed
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > setblock -20 -61 -20 minecraft:farmland
 > setblock -20 -60 -20 minecraft:wheat[age=0]
 > tp qa -20 -60 -22
@@ -78,6 +81,9 @@ look hand: fill the can at the water (-40 -60 -34); one charged use on the 3x3 w
 @pass all 9 farmland at moisture 7, WaterLevel 15; second use leaves 15; mulch soaked likewise
 @fails soil check or client claim; mulch property not `moisture`
 @from batches/r1101/p1_server.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > gamerule randomTickSpeed 0
 > fill -26 -61 -21 -24 -61 -19 minecraft:farmland[moisture=0]
 > fill -26 -60 -21 -24 -60 -19 minecraft:wheat[age=0]
@@ -93,6 +99,9 @@ expect Successfully filled 9 block
 > item replace entity qa weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:16}
 > tp qa -31 -60 -23
 > pbot use qa -31 -60 -20 up
+# state readout (judge-13, 2026-11-18): r1118 replaced 0 mulch at moisture=1 and recorded no state
+> cdevtest state -31 -61 -20
+> cdevtest state -30 -61 -19
 > fill -32 -61 -21 -30 -61 -19 minecraft:stone replace immersive_weathering:mulch_block[moisture=1]
 > gamerule randomTickSpeed 3
 look second "filled 9" = mulch soaked (moisture=1); if 0, the mulch property value differs: record the mulch state

@@ -5,6 +5,7 @@
 @@section 1
 @@title More Delight 26.05.20 (mod-additions #25)
 @@jars creativedelight
+@@prep B: difficulty=normal spawn-monsters=true spawn-animals=true
 @@text
 @@text Needs the Creative Common and Creative Delight jars rebuilt and installed. Details: [../more_delight.md](../more_delight.md) 4.
 @@text
@@ -39,7 +40,8 @@ shell python3 -I $INST/tools/scratch_query/dumpq.py food moredelight:toast fast=
 > cdevtest rdetail cheese_toast
 > cdevtest tag item forge:sliced_potato
 > cdevtest tag item forge:sliced_potatoes
-> cdevtest rdetail moredelight:mashed_potatoes
+# text query since r1118 (judge-8, 2026-11-18): no recipe has the id moredelight:mashed_potatoes; the four diced potato dishes are moredelight:cooking/diced_potatoes_with_*
+> cdevtest rdetail diced_potatoes_with
 expect verb=tag kind=item tag=forge:sliced_potatoes .*.*rusticdelight
 look cheese toast shapeless (toast + flaxen cheese wedge); both slice tags hold Rustic's slices; More Delight potato recipes show a slice item
 reject verb=\S+ .*done=0

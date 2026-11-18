@@ -7,6 +7,10 @@
 @@date 2026-11-15
 @@jars creativedelight
 @@sources feature_writeup/plan_post_scratch_1115.md
+@@prep toml hearthandharvest-common.toml salt saltLickInterval 200
+@@prep toml hearthandharvest-common.toml salt saltAnimalStageChance 1.0
+@@prep toml hearthandharvest-common.toml salt saltPlayerLickChance 1.0
+@@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@text Only CQ-PS15-01 to -03 have code or a question today (Compat built, not installed). The SQ rows are written ahead of the builds; each is run when its step ships. SQ-PS15-01 to -03, -05 to -07, -09 to -11b (salt, vine crops, wild hops) have code since 2026-11-15 (Common 1.2.0, Creative Delight 1.1.0 build/libs; -04 waits on the owner). SQ-PS15-13 to -16 (D1 lunchbox half, D3, D4, D5) have code since 2026-11-15: Creative Delight and Creative Worldgen build/libs, Power Grid `jar_archive/pwg_gate/` -19, acid script-only.
 @@text
@@ -38,6 +42,9 @@
 @pass a salt layer is placed on top; the ice is not melted by the click; the layer then melts it at block rate
 @fails route the click through the layer place only
 @from batches/r1116/ps15_a.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+> forceload add 280 280 380 420
+sleep 2
 > setblock 300 -61 300 minecraft:ice
 > setblock 303 -61 300 minecraft:packed_ice
 > setblock 306 -60 300 minecraft:snow[layers=1]
@@ -71,6 +78,9 @@ look before the ticks: ice and packed ice kept with a 1-layer salt layer above, 
 @pass air over grass: a layer placed, dust -1; air over air: dust dropped as an item; ice: water, packed ice: ice, snow layer: air, dust -1 each; salt layer: 4 layers; stone: dust dropped; switch off: ice kept, dust dropped
 @fails `SaltLayerMelt.init` registration on `vintagedelight:salt_dust` (log), `Melting.SaltItemDispenseBehavior`
 @from batches/r1116/ps15_a.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+> forceload add 280 280 380 420
+sleep 2
 > setblock 300 -60 310 minecraft:dispenser[facing=east]
 > data merge block 300 -60 310 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
 > setblock 305 -57 310 minecraft:dispenser[facing=east]
@@ -142,6 +152,9 @@ look grass: front salt[layers=1], dust 3, no item; air: item dropped (vintagedel
 @pass 1.0: every 1-layer salt layer air after its ice melts, every Salt Block stays; 0.0: no layer lost; default 0.05: about 1 of 20
 @fails key present in `config/creativedelight-common.toml` and `configs_edited/`; `Melting.setSaltMeltListener` set (CD `SaltLayerMelt.init`); CD reads the field by reflection (needs Salt -04)
 @from batches/r1116/ps15_a.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+> forceload add 280 280 380 420
+sleep 2
 > fill 298 -61 328 362 -58 340 minecraft:grass_block replace minecraft:water
 > fill 298 -60 328 362 -58 340 minecraft:air
 > fill 298 -61 328 362 -61 340 minecraft:grass_block
@@ -388,6 +401,9 @@ look chance 1.0: per layout ice 0 / water 20; L1 salt layers left and item drops
 @pass layers 2 -> 1 -> air, the lick stays `salt:salt_block`; the third lick makes it lightly licked; stack: the 1-layer block goes first, then the 8-layer one becomes 7
 @fails `SaltLick.wear` / `topLayer`
 @from batches/r1116/ps15_a.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+> forceload add 280 280 380 420
+sleep 2
 > fill 339 -61 349 342 -58 351 minecraft:glass hollow
 > setblock 340 -60 350 salt:salt_block
 > setblock 340 -59 350 vintagedelight:salt[layers=2]
@@ -420,6 +436,9 @@ look zmelt changes in order: layer 2 -> 1 -> air while the lick stays salt:salt_
 @pass worn: one stage per salt in all three (layer of 2: two stages, layer gone); waxed: waxed well licked; full: a salt layer on top (dispenser: dust -1)
 @fails `SaltLick.refill`, `addLayerOnTop`
 @from batches/r1116/ps15_a.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+> forceload add 280 280 380 420
+sleep 2
 > setblock 300 -60 360 hearthandharvest:heavily_licked_salt_block
 > cdevtest use 300 -60 360 held=vintagedelight:salt_dust*4 face=up
 > setblock 304 -60 360 hearthandharvest:heavily_licked_salt_block
@@ -472,6 +491,9 @@ look all three refills one stage per salt (layer of 2: two stages, layer gone); 
 @fails `SaltMeltRegistry` (annotation scan), recipe `creativedelight:salt_melt`
 @from batches/r1116/ps15_a.qb
 @absent salt:salt_melt (registered by SaltMeltRegistry after the 2026-11-15 dumps; drop this line after /dumpall)
+# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+> forceload add 280 280 380 420
+sleep 2
 > cdevtest rdetail creativedelight:shapeless/salt_melt
 > cdevtest item salt:salt_melt
 > pbot spawn SM 300.5 -60 376.5 minecraft:overworld survival
@@ -558,6 +580,9 @@ bootexpect \[melting\] tags: .* fire
 @pass nothing replaces a vine (the item goes beside it or nowhere); hops still adds a face; `/zq blocktag creativedelight:crops/vine_crops` lists 6 blocks
 @fails `VineCropNoReplaceMixin` applied (mixin log), tag contents
 @from batches/r1116/ps15_a.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_a P3-SETUP ("unloaded ... (forceload add first)")
+> forceload add 280 280 380 420
+sleep 2
 > cdevtest tag block creativedelight:crops/vine_crops
 > setblock 300 -60 379 minecraft:oak_log
 > setblock 300 -60 380 hearthandharvest:hops_vine[age=1,north=true]
@@ -748,6 +773,9 @@ look arm show lines: HeldItem never more than 1 part; circuit locked about @4.5,
 @pass unheated: `tanks minecraft:water 750` and `powergrid:acid 250`, no items left, no salt; heated, water first: record (expected: Creative Delight `water_salt` still takes the 1000 mB first, as SQ-PWG-80b; then the flesh and eye stay, no acid; not a FAIL); no ERROR
 @fails no acid unheated: script error (`power grid recipes done` missing) or another unheated mixing took the flesh (record its id)
 @from batches/r1116/ps15_pwg.qb
+# self-contained since r1118 (judge-10, 2026-11-18): forceload from r1116 ps15_pwg (the Power Grid jar is still needed: chain mod set)
+> forceload add 1135 1855 1200 1915
+sleep 2
 > zpwg3 recipes powergrid
 waitlog \[zpwg3\] recipes \d+ 30
 > cdevtest recipes powergrid_acid

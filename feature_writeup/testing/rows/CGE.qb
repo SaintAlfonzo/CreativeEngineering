@@ -32,6 +32,8 @@ look Done line present; no WARN/ERROR naming either Create Gravity mixin
 @reviewed 2026-11-16
 > execute in minecraft:the_end run forceload add 0 0 6 18
 > forceload add 0 0 6 18
+# judge-5, 2026-11-18: the first End summon right after forceload found 0 entities (chunk not loaded yet, r1118 s34/s35)
+sleep 5
 > zgv cfg the_end 0 70 0
 > zgv drop the_end 0 120 0
 waitlog \[zgv\] drop done dim=minecraft:the_end 20
@@ -99,7 +101,8 @@ waitlog \[zgv\] cfg dim=minecraft:the_end 10
 sleep 6
 # 1.19.2 has no `execute if biome`: the probe's cfg line names the biome at the spot
 > execute in minecraft:the_end run attribute @e[type=zombie,tag=cge06,limit=1] forge:entity_gravity get
-> execute in minecraft:the_end run attribute @e[type=villager,tag=cge06,limit=1] forge:entity_gravity get
+# judge-5, 2026-11-18: MCA replaces the summoned villager (type mca:*), so select by tag, not type=villager
+> execute in minecraft:the_end run attribute @e[tag=cge06,type=!minecraft:zombie,type=!minecraft:player,limit=1] forge:entity_gravity get
 > execute in minecraft:the_end run attribute cge06 forge:entity_gravity get
 > execute in minecraft:the_end run data get entity @e[type=zombie,tag=cge06,limit=1] Attributes
 > zgv drop the_end 0 120 0
@@ -160,6 +163,8 @@ look shell.txt holds the four ok lines (each shell step exits 1 when its check f
 @from batches/r1108cge2/b1_full.qb
 > execute in minecraft:the_end run forceload add 0 0 6 18
 > forceload add 0 0 6 18
+# judge-5, 2026-11-18: the first End summon right after forceload found 0 entities (chunk not loaded yet, r1118 s34/s35)
+sleep 5
 > zgv cfg the_end 0 70 0
 > zgv dropall the_end 0 120 0
 waitlog \[zgv\] drop done dim=minecraft:the_end 20

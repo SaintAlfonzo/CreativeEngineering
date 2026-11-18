@@ -26,21 +26,24 @@ expect Test passed
 
 ## SQ-NS-01 | nightstand storage (first half; restart half in p1b)
 @group A
-@commands `/setblock` an oak and an Every Compat nightstand; `/item replace block ~ ~ ~ container.0 with minecraft:sugar`; restart; `/data get block`; break it with a bot
+@commands `/setblock` an oak and an Every Compat nightstand; a hopper above each holding one sugar feeds it (item handler; `/item replace block` refuses it); restart; `/data get block`; break it with a bot
 @pass `CENightstandItems` holds the sugar after the restart; the sugar drops on break; a hopper below pulls it
 @fails `HandcraftedItemHoldingSaveMixin` (save/load names), `NightstandStorage` item handler
 @from batches/r1101/p1_server.qb
 > setblock 40 -60 10 handcrafted:oak_nightstand
 > setblock 42 -60 10 everycomp:hc/architects_palette/twisted_nightstand
-> item replace block 40 -60 10 container.0 with minecraft:sugar
-> item replace block 42 -60 10 container.0 with minecraft:sugar
+# judge-13, 2026-11-18: the storage is an item handler capability, not a vanilla Container, so `item replace block`
+# answers "is not a container" (r1118); a hopper above feeds it through the capability instead
+> setblock 40 -59 10 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:sugar",Count:1b}]}
+> setblock 42 -59 10 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:sugar",Count:1b}]}
+sleep 3
 > data get block 40 -60 10
 > data get block 42 -60 10
-count CENightstandItems >= 2
+count CENightstandItems: \[\{.*minecraft:sugar >= 2
 > setblock 44 -60 10 handcrafted:oak_nightstand
-> item replace block 44 -60 10 container.0 with minecraft:sugar
 > setblock 44 -61 10 minecraft:hopper
-sleep 3
+> setblock 44 -59 10 minecraft:hopper[facing=down]{Items:[{Slot:0b,id:"minecraft:sugar",Count:1b}]}
+sleep 4
 > data get block 44 -61 10 Items
 expect minecraft:sugar
 look the hopper below pulled the sugar; restart and break halves in p1b
@@ -76,13 +79,15 @@ look the first count is template 0 (4), the second template 1 (2)
 @from batches/r1101/p1_server.qb
 > gamerule randomTickSpeed 0
 > setblock -10 -61 30 minecraft:farmland[moisture=7]
-> setblock -10 -60 30 farmersdelight:tomatoes[age=3]
+# age 1 (judge-13, 2026-11-18): a max-age (3) FD vine is not randomly ticking (CropBlock), so it never reached attemptRopeClimb in r1118
+> setblock -10 -60 30 farmersdelight:tomatoes[age=1]
 > setblock -10 -59 30 creativedelight:treated_stick
 > setblock -10 -58 30 creativedelight:treated_stick
 > setblock -8 -61 30 minecraft:farmland[moisture=7]
 > setblock -8 -60 30 supplementaries:stick_tomatoes
 > setblock -8 -59 30 creativedelight:treated_stick
-> cdevtest randomtick -10 -60 30 -8 -57 30 100
+# 300 rounds (judge-13, 2026-11-18): 100 left the FD vine unclimbed in r1118, rules out chance
+> cdevtest randomtick -10 -60 30 -8 -57 30 300
 expect verb=randomtick .*changed=[1-9]
 > gamerule randomTickSpeed 3
 > execute if block -10 -59 30 creativedelight:treated_stick_tomatoes

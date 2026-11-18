@@ -484,6 +484,26 @@ look the makes list has a mixing id (create__the_salt: or the CD salting namespa
 @pass Overworld: ice -> water source, snow -> air; Nether: both -> air; latest.log `[melting] tags:` with salt > 0
 @fails Common `melting/Melting.java`, `#creativecommon:melting/salt` empty (Common `tags/melting_tags.js`, `has('salt')`); r1113's Nether-only melt was Immersive Weathering's `ice_icicle_and_melt` growth, not salt ([melting.md](../melting.md) 6)
 @from batches/r1115/p3_a1.qb
+# self-contained since r1118 (judge-1, 2026-11-18): the build lived in the r1115 setup rows P3-00 / P3-01, not migrated;
+# bots keep the cases random-ticking (no player near = no random ticks); the retired zmelt probe is not used
+> forceload add 1984 2016 2015 2047
+> execute in minecraft:the_nether run forceload add 0 0 15 15
+> gamerule randomTickSpeed 3
+> execute in minecraft:the_nether run fill 0 128 0 15 128 15 minecraft:stone
+> execute in minecraft:the_nether run fill 0 129 0 15 133 15 minecraft:air
+sleep 3
+> pbot spawn s6b 2010.5 -60 2010.5 minecraft:overworld survival
+> pbot spawn s6n 8.5 129 8.5 minecraft:the_nether survival
+sleep 3
+> setblock 2001 -61 2024 minecraft:ice
+> setblock 2000 -61 2025 minecraft:snow
+> setblock 2000 -61 2024 salt:salt_block
+> execute in minecraft:the_nether run setblock 5 129 12 minecraft:ice
+> execute in minecraft:the_nether run setblock 4 129 12 salt:salt_block
+> execute in minecraft:the_nether run setblock 4 129 13 minecraft:snow
+> gamerule randomTickSpeed 1000
+sleep 90
+> gamerule randomTickSpeed 3
 > execute if block 2001 -61 2024 minecraft:water[level=0] run say SQ-SALT2-06-ow_ice_water
 > execute if block 2000 -61 2025 minecraft:air run say SQ-SALT2-06-ow_snow_air
 > execute if block 2000 -61 2024 salt:salt_block run say SQ-SALT2-06-ow_salt_kept
@@ -494,9 +514,11 @@ expect SQ-SALT2-06-ow_snow_air$
 expect SQ-SALT2-06-ow_salt_kept$
 expect SQ-SALT2-06-n_ice_air$
 expect SQ-SALT2-06-n_snow_air$
-look s06_ changes one step each; [melting] tags salt > 0
-shell grep -hE "\[zmelt\] change s06_" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
-shell unzip -p mods/creativedelight-1.1.0.jar META-INF/jarjar/repackedSalt-1.2.4.1-ce-19.2-03.jar > /tmp/zsalt$$.jar && unzip -p /tmp/zsalt$$.jar io/github/mortuusars/salt/Melting.class | strings | grep -c "switched off" ; grep -nE "SaltBlockMeltingEnabled" config/*.toml | head -3; rm -f /tmp/zsalt$$.jar; true
+bootexpect \[melting\] tags: \d+ meltable, \d+ slow, [1-9]\d* salt
+shell grep -nE "SaltBlockMeltingEnabled" config/*.toml | head -3
+look SaltBlockMeltingEnabled = false (the salt member's own block melt off, so the ice -> water above is Common's single step)
+> pbot remove s6b
+> pbot remove s6n
 
 ## SQ-SALT2-07 | butchers: 12 emeralds -> 64 salt dust, 4 uses; never a salt:salt trade
 @group A

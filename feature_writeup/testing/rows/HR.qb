@@ -7,6 +7,7 @@
 @@date 2026-10-31
 @@jars creativedelight
 @@sources feature_writeup/hearth_and_harvest.md
+@@prep spawn-animals=true
 @@text
 @@text Needs the CD jar built 2026-10-31 (member `backportedHearth 1.4.1-ce-19.2-01`) installed; full restart (new member,
 @@text items, worldgen). Group A (superflat) and a bot player, except SQ-HR-05 (group B, new chunks).
@@ -21,8 +22,9 @@
 @reviewed 2026-11-16
 bootreject (?i)(missing|unknown).*(raspberry)
 bootreject hearthandharvest/.*\.js.*(Error|error)
+# id hearthandharvest:raspberry since r1118 (judge-8, 2026-11-18): 'raspberries' was never registered
 > cdevtest item hearthandharvest:raspberry_pips
-> cdevtest item hearthandharvest:raspberries
+> cdevtest item hearthandharvest:raspberry
 > cdevtest makes hearthandharvest:raspberry_pips
 reject Unknown item
 expect raspberry_pips_from_raspberry
@@ -34,6 +36,9 @@ reject \[cdevtest\] .*done=0
 @pass placed on dirt, refused on sand; reaches age 3
 @fails soil rule
 @from batches/r1101/p1_server.qb passed
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > setblock 20 -61 -10 minecraft:dirt
 > setblock 22 -61 -10 minecraft:sand
 > tp qa 21 -60 -12
@@ -56,6 +61,9 @@ count Test passed >= 3
 @pass age 2: nothing; age 3: 2-3 raspberries, bush age 1
 @fails `use` override
 @from batches/r1101/p1_server.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > kill @e[type=item]
 > clear qa
 > setblock 24 -61 -10 minecraft:grass_block
@@ -79,7 +87,8 @@ look age 2: the first `if entity` fails (no drop); age 3: 2-3 raspberries on the
 @fails tags.js not run (member switch); fox goal not added
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
-> cdevtest tagsof hearthandharvest:raspberries
+# id hearthandharvest:raspberry and an empty-mouthed fox since r1118 (judge-8, 2026-11-18): a spawned fox can hold leather and not pick up
+> cdevtest tagsof hearthandharvest:raspberry
 > cdevtest tagsof hearthandharvest:raspberry_pips
 expect forge:fruits/raspberries
 expect forge:berries
@@ -89,7 +98,7 @@ expect forge:seeds/raspberry
 > setblock 28 -60 -10 hearthandharvest:raspberry_bush[age=3]
 > fill 26 -60 -12 30 -58 -8 minecraft:glass hollow
 > setblock 28 -60 -10 hearthandharvest:raspberry_bush[age=3]
-> summon fox 27 -60 -10
+> summon fox 27 -60 -10 {HandItems:[{},{}]}
 sleep 60
 > execute if block 28 -60 -10 hearthandharvest:raspberry_bush[age=1]
 > execute as @e[type=fox,limit=1,sort=nearest] at @s run data get entity @s HandItems

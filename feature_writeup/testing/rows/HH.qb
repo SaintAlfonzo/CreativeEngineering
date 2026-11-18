@@ -470,6 +470,14 @@
 @@date 2026-11-08
 @@jars creativedelight powergrid
 @@sources feature_writeup/hearth_and_harvest.md
+@@prep spawn-animals=true difficulty=normal spawn-monsters=false
+@@prep toml hearthandharvest-common.toml crow stealChance 1.0
+@@prep toml hearthandharvest-common.toml crow carryTicks 200
+@@prep toml hearthandharvest-common.toml salt saltPlayerLickChance 1.0
+@@prep toml hearthandharvest-common.toml salt saltAnimalStageChance 1.0
+@@prep toml hearthandharvest-common.toml salt saltLickInterval 200
+@@prep toml hearthandharvest-common.toml salt saltSearchInterval 20
+@@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@text Targets `mods/` of 2026-11-08 22:02: Creative Common 22:02, Creative Delight 22:00 (nests `backportedHearth-1.4.1-ce-19.2-04`), Creative Brewing 21:56; all installed. Run `/dumpall` and `/cdevgen` before the worldgen block on a world that has booted these jars. Replaces the SQ-HH-01 to -15, -A, -B, -C and -D rows above, each marked with its replacement. **Nothing here has run, and the four probes have only passed `node --check`:** the first row of each block makes the probe's first live call, so run those first and fix the probe before trusting a batch. Tranche 3 has never booted: SQ-HH-401 (crow registration; the Alex's Mobs mixin is gone since the 2026-11-10 crow swap), SQ-HH-201, SQ-HH-301 and SQ-HH-1101 are the boot checks.
 @@text
@@ -512,12 +520,12 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-1102 | log matches `ids kept 106 of 106 missing: none`; log matches `ids drop
 @group A
 @commands `zhh1 ids`
-@pass log matches `ids kept 106 of 106 missing: none`; log matches `ids dropped checked 203 present: none`; log matches `ids blocks 11 missing: none`; log matches `ids fluids 16 \(and flowing\) missing: none`; log matches `ids effects missing: none; entities missing: none`; log matches `ids sound hearthandharvest:entities\.fart true`
+@pass log matches `ids kept 106 of 106 missing: none`; log matches `ids dropped checked 191 present: none`; log matches `ids blocks 11 missing: none`; log matches `ids fluids 16 \(and flowing\) missing: none`; log matches `ids effects missing: none; entities missing: none`; log matches `ids sound hearthandharvest:entities\.fart true`
 @fails `HHItems`, `HHBlocks`, `HHFluids`, `HHEffects`, `HHEntities`, `HHSounds`; a present dropped id: remove it from the member, or from the DROPPED list in `tools/scratch_query/hh_t12_probe.js` if 3.1 now keeps it
 @from batches/r1108hh/t12_a.qb
 > zhh1 ids
 expect ids kept 106 of 106 missing: none
-expect ids dropped checked 203 present: none
+expect ids dropped checked 191 present: none
 expect ids blocks 11 missing: none
 expect ids fluids 16 \(and flowing\) missing: none
 expect ids effects missing: none; entities missing: none
@@ -2748,11 +2756,11 @@ sleep 8
 expect Test failed
 expect hearthandharvest:iron_cleaver
 
-## SQ-HH-1252 | log matches `drops .*corn_delight:corn_seeds x4`
+## SQ-HH-1252 | log matches `drops .*corn_delight:corn_seeds x6`
 @group A
 @commands `forceload add 3240 3144`; `pbot spawn bot1 3240 -60 3144 minecraft:overworld survival`; `effect clear bot1`; `clear bot1`; (wait 3 s); `pbot hold bot1 hearthandharvest:iron_cleaver`; `setblock 3240 -60 3145 farmersdelight:cutting_board[facing=south]`; `pbot hold bot1 corn_delight:corn`; `pbot use bot1 3240 -60 3145`; `pbot hold bot1 hearthandharvest:iron_cleaver`; `pbot use bot1 3240 -60 3145`; (wait 1 s); `cdevtest items 3240 -60 3145 3`; `data get entity bot1 SelectedItem.tag.Damage`
-@pass log matches `verb=items items=\S*\bcorn_delight:corn_seeds:4\b`
-@fails FD cutting board with `#forge:tools/knives`; drops may also list `corn_husk x1` (75 %)
+@pass log matches `id: "corn_delight:corn_seeds", Count: 6b` (the survival bot picks the cut drops up: read its Inventory)
+@fails 6 kernels since farming/crops #48 (was 4); FD cutting board with `#forge:tools/knives`; drops may also list `corn_husk x1` (75 %)
 @from batches/r1108hh/t12_a.qb
 @reviewed 2026-11-16
 > forceload add 3240 3144
@@ -2770,7 +2778,7 @@ sleep 1
 > cdevtest items 3240 -60 3145 6
 > data get entity bot1 SelectedItem.tag.Damage
 > data get entity bot1 Inventory
-expect verb=items items=\S*\bcorn_delight:corn_seeds:4\b
+expect id: "corn_delight:corn_seeds", Count: 6b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-1253 | log matches `mods hearthandharvest:iron_cleaver: .*minecraft:generic\.
@@ -2902,9 +2910,11 @@ sleep 3
 sleep 1
 > tp bot1 3384 -60 3144 0 0
 > pbot hold bot1 hearthandharvest:pitchfork
+pace 0.2
 > zhh1 throw bot1 20
 sleep 1
 > cdevtest player bot2
+pace 2
 > pbot vulnerable bot2 off
 > data get entity bot2 Health
 expect verb=pbot\.vulnerable bot=bot2 invulnerable=false
@@ -4024,7 +4034,7 @@ sleep 3
 > setblock 3144 -60 3434 air destroy
 sleep 1
 > cdevtest items 3144 -60 3434 3
-expect has the following block data: Count: 5b
+expect has the following block data: \[\{.*Count: 5b.*"minecraft:apple"|has the following block data: \[\{.*"minecraft:apple", Count: 5b
 expect verb=items items=\S*\bhearthandharvest:oak_half_cabinet:1\b
 expect verb=items items=\S*\bminecraft:apple:5\b
 look log matches `has the following block data: \[\{Count: 5b, Slot: 0b, id: "minecraft:apple"\}\]`; log matches `verb=items items=\S*\bhearthandharvest:oak_half_cabinet:1\b`; log matches `verb=items items=\S*\bminecraft:apple:5\b`; log has no `invalid for ticking`; log has no `Block entity .*@ .*state .*invalid`
@@ -4249,7 +4259,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 ## SQ-HH-1327 | log matches `drops .*hearthandharvest:raspberry_pie_slice x1`; log mat
 @group A
 @commands `forceload add 3192 3480`; `pbot spawn bot1 3192 -60 3480 minecraft:overworld survival`; `effect clear bot1`; `clear bot1`; (wait 3 s); `setblock 3192 -60 3482 hearthandharvest:raspberry_pie`; `pbot hold bot1 farmersdelight:iron_knife`; `pbot use bot1 3192 -60 3482`; (wait 1 s); `cdevtest items 3192 -60 3482 3`; `execute if block 3192 -60 3482 hearthandharvest:raspberry_pie[bites=1]`
-@pass log matches `verb=items items=\S*\bhearthandharvest:raspberry_pie_slice:1\b`; log matches `Test passed`
+@pass log matches `id: "hearthandharvest:raspberry_pie_slice", Count: 1b` (the survival bot picks the slice up: Inventory); log matches `Test passed`
 @fails FD `PieBlock` with `HHItems.RASPBERRY_PIE_SLICE`; knife cuts one of 4 bites
 @from batches/r1108hh/t12_c.qb
 @reviewed 2026-11-16
@@ -4265,7 +4275,7 @@ sleep 1
 > cdevtest items 3192 -60 3482 3
 > execute if block 3192 -60 3482 hearthandharvest:raspberry_pie[bites=1]
 > data get entity bot1 Inventory
-expect verb=items items=\S*\bhearthandharvest:raspberry_pie_slice:1\b
+expect id: "hearthandharvest:raspberry_pie_slice", Count: 1b
 expect Test passed
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -5092,6 +5102,7 @@ waitlog verb=tickwarp end=done ticks=400 60
 > pbot hold hb1 minecraft:wheat 8
 > pbot use hb1 80 -60 112 up
 > data get block 80 -60 112 Items
+> tp hb1 80.5 -59 122.5
 > kill @e[type=minecraft:item,x=80,y=-60,z=112,distance=..4]
 > setblock 80 -60 112 air destroy
 sleep 1
@@ -7296,8 +7307,10 @@ sleep 2
 > clear c425
 > summon hearthandharvest:crow 20184 -60 4000 {NoAI:1b,Tags:["r425"]}
 > zhh3 watch crow 20180 -55 4000 26 40 5 a @c425
+pace 0.2
 > data merge entity @e[tag=r425,limit=1] {NoAI:0b}
-> pbot attack c425 @e[type=hearthandharvest:crow,x=20184,y=-58,z=4000,distance=..8,sort=nearest,limit=1]
+> pbot attack c425 @e[tag=r425,limit=1]
+pace 2
 waitlog \[zhh3\] watch a done 20
 > zhh3 seen a CrowFleeGoal
 > zhh3 assert a maxD >= 14
@@ -8268,10 +8281,10 @@ sleep 2
 > pbot use c460 20900 -60 4000 up
 > pbot inv c460 get
 > data get block 20900 -60 4000 Inventory
+> pbot remove c460
 > setblock 20900 -60 4000 air destroy
 sleep 1
 > cdevtest items 20900 -60 4000 3 keep
-> pbot remove c460
 > kill @e[type=hearthandharvest:crow,x=20887,y=-62,z=3987,dx=26,dy=18,dz=26]
 > forceload remove 20887 3987 20913 4013
 count Slot: 3, == 1
@@ -8296,9 +8309,9 @@ sleep 2
 > setblock 20960 -60 4000 hearthandharvest:nest
 > zhh3 throw c461 20960.5 -59.7 4000.5 minecraft:diamond 5 0.1
 sleep 6
-> data get block 20960 -60 4000 Inventory
-> cdevtest items 20960 -60 4000 2 keep
 > pbot remove c461
+> data get block 20960 -60 4000 Inventory
+> cdevtest items 20960 -60 4000 5 keep
 > kill @e[type=hearthandharvest:crow,x=20947,y=-62,z=3987,dx=26,dy=18,dz=26]
 > forceload remove 20947 3987 20973 4013
 expect has the following block data: \{.*Slot: 3,
@@ -8729,7 +8742,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-479 | r1112: one cow licks a salt block away (watch 75 s, then 20 s more before the block read)
 @group A
-@commands Boot F (saltLickInterval 200, stage chance 1). HNH-51: one cow walks to a standing spot and licks; each lick wears one stage; the block is gone within about 1200 ticks.; `forceload add 16674 -6 16686 6`; `sleep 3`; `fill 16674 -61 -6 16686 -56 6 minecraft:glass hollow`; `pbot spawn b479 16675 -60 -5 minecraft:overworld creative`; `sleep 2`; `setblock 16680 -60 0 salt:salt_block`; `summon minecraft:cow 16683 -60 0`; `sleep 1`; `zhh3 watch minecraft:cow 16680 -60 0 8 75 20 a 16680.5,-59.5,0.5`; `waitlog \[zhh3\] watch a done 90`; `zhh3 seen a StayNearSaltGoal`; `zhh3 assert a minD <= 3`; `zhh3 assert a maxD <= 7`; `/cdevtest state 16680 -60 0`; `/cdevtest items 16680 -60 0 4 keep`; `pbot remove b479`; `forceload remove 16674 -6 16686 6`
+@commands Boot F (saltLickInterval 200, stage chance 1). HNH-51: one cow walks to a standing spot and licks; each lick wears one stage; the block is gone within about 1200 ticks.; `forceload add 16674 -6 16686 6`; `sleep 3`; `fill 16674 -61 -6 16686 -56 6 minecraft:glass hollow`; `pbot spawn b479 16675 -60 -5 minecraft:overworld creative`; `sleep 2`; `setblock 16680 -60 0 salt:raw_rock_salt_block`; `summon minecraft:cow 16683 -60 0`; `sleep 1`; `zhh3 watch minecraft:cow 16680 -60 0 8 75 20 a 16680.5,-59.5,0.5`; `waitlog \[zhh3\] watch a done 90`; `zhh3 seen a StayNearSaltGoal`; `zhh3 assert a minD <= 3`; `zhh3 assert a maxD <= 7`; `/cdevtest state 16680 -60 0`; `/cdevtest items 16680 -60 0 4 keep`; `pbot remove b479`; `forceload remove 16674 -6 16686 6`
 @pass `expect \[zhh3\] seen a StayNearSaltGoal yes`; `expect \[zhh3\] assert a minD=.* <= 3\.?0* PASS`; `expect verb=state pos=16680,-60,0 state="?minecraft:air\b`; `expect \[zhh3\] items total=1 `
 @fails `StayNearSaltGoal` (trip to a `walkable` spot, `closeEnough` within 2), `HHSaltRegistry.SALT_LICK_POI`, `SaltLick.wear`. A cow that never starts: POI not registered (`/zhh3 poi` row) or `salt_lickers` tag.
 @from batches/r1112/hh_crow_rerun.qb passed
@@ -8740,7 +8753,7 @@ sleep 3
 > fill 21254 -61 3994 21266 -56 4006 minecraft:glass hollow
 > pbot spawn c479 21255 -60 3995 minecraft:overworld creative
 sleep 2
-> setblock 21260 -60 4000 salt:salt_block
+> setblock 21260 -60 4000 salt:raw_rock_salt_block
 > summon minecraft:cow 21263 -60 4000
 sleep 1
 > zhh3 watch minecraft:cow 21260 -60 4000 8 150 20 a 21260.5,-59.5,4000.5
@@ -8817,7 +8830,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-482 | rerun: cow at 21 is pulled back inside 20 and licks; cow at 24 is not seen
 @group A
-@commands Boot F. HNH-51, J58: a cow beyond the radius (21 blocks, search reaches 22) is pulled back inside 20; a cow at 24 is not seen.; `forceload add 16830 -6 16890 6`; `sleep 3`; `fill 16830 -61 -6 16890 -56 6 minecraft:glass hollow`; `pbot spawn b482 16831 -60 -5 minecraft:overworld creative`; `sleep 2`; `setblock 16860 -60 0 salt:salt_block`; `summon minecraft:cow 16881 -60 0`; `summon minecraft:cow 16836 -60 0`; `sleep 1`; `zhh3 watch minecraft:cow 16881 -60 0 3 40 20 a 16860.5,-59.5,0.5`; `zhh3 watch minecraft:cow 16836 -60 0 3 40 20 b 16860.5,-59.5,0.5`; `waitlog \[zhh3\] watch b done 60`; `zhh3 seen a StayNearSaltGoal`; `zhh3 seen b StayNearSaltGoal`; `zhh3 assert a lastD <= 20.5`; `pbot remove b482`; `forceload remove 16830 -6 16890 6`
+@commands Boot F. HNH-51, J58: a cow beyond the radius (21 blocks, search reaches 22) is pulled back inside 20; a cow at 24 is not seen.; `forceload add 16830 -6 16890 6`; `sleep 3`; `fill 16830 -61 -6 16890 -56 6 minecraft:glass hollow`; `pbot spawn b482 16831 -60 -5 minecraft:overworld creative`; `sleep 2`; `setblock 16860 -60 0 salt:raw_rock_salt_block`; `summon minecraft:cow 16881 -60 0`; `summon minecraft:cow 16836 -60 0`; `sleep 1`; `zhh3 watch minecraft:cow 16881 -60 0 3 40 20 a 16860.5,-59.5,0.5`; `zhh3 watch minecraft:cow 16836 -60 0 3 40 20 b 16860.5,-59.5,0.5`; `waitlog \[zhh3\] watch b done 60`; `zhh3 seen a StayNearSaltGoal`; `zhh3 seen b StayNearSaltGoal`; `zhh3 assert a lastD <= 20.5`; `pbot remove b482`; `forceload remove 16830 -6 16890 6`
 @pass `expect \[zhh3\] seen a StayNearSaltGoal yes`; `expect \[zhh3\] seen b StayNearSaltGoal no` (holds only while cow b stays at 24: a cow that strolls to 22 is inside the search radius and is pulled in, as in r1115); `expect \[zhh3\] assert a lastD=.* <= 20.5\.?0* PASS`
 @fails `StayNearSaltGoal.beyondRadius` and `findSalt` (`saltAnimalRadius` + 2). Note a cow left inside 17 to 20 blocks without being pulled may also never lick: `findTrip` needs a complete path and a cow's follow range is 16 (retries every 125 ticks).
 @from batches/r1115/p4_a1.qb
@@ -8828,7 +8841,7 @@ sleep 3
 > fill 21290 -61 3994 21350 -56 4006 minecraft:glass hollow
 > pbot spawn c482 21291 -60 3995 minecraft:overworld creative
 sleep 2
-> setblock 21320 -60 4000 salt:salt_block
+> setblock 21320 -60 4000 salt:raw_rock_salt_block
 > summon minecraft:cow 21341 -60 4000 {NoAI:1b,Tags:["r482"]}
 > summon minecraft:cow 21296 -60 4000 {NoAI:1b,Tags:["r482"]}
 > zhh3 watch minecraft:cow 21341 -60 4000 3 80 20 a 21320.5,-59.5,4000.5
@@ -8904,8 +8917,8 @@ look UNPARSED CMD: restricted=
 
 ## SQ-HH-485 | r1112: animal licks ignore mobGriefing (3 cows, 60 s)
 @group A
-@commands Boot F. J58: animal licks ignore mobGriefing.; `forceload add 17033 -7 17047 7`; `sleep 3`; `fill 17033 -61 -7 17047 -56 7 minecraft:glass hollow`; `pbot spawn b485 17034 -60 -6 minecraft:overworld creative`; `sleep 2`; `setblock 17040 -60 0 salt:salt_block`; `gamerule mobGriefing false`; `summon minecraft:cow 17043 -60 0`; `sleep 35`; `/cdevtest state 17040 -60 0`; `gamerule mobGriefing true`; `pbot remove b485`; `forceload remove 17033 -7 17047 7`
-@pass `reject verb=state pos=17040,-60,0 state="?salt:salt_block\b`
+@commands Boot F. J58: animal licks ignore mobGriefing.; `forceload add 17033 -7 17047 7`; `sleep 3`; `fill 17033 -61 -7 17047 -56 7 minecraft:glass hollow`; `pbot spawn b485 17034 -60 -6 minecraft:overworld creative`; `sleep 2`; `setblock 17040 -60 0 salt:raw_rock_salt_block`; `gamerule mobGriefing false`; `summon minecraft:cow 17043 -60 0`; `sleep 35`; `/cdevtest state 17040 -60 0`; `gamerule mobGriefing true`; `pbot remove b485`; `forceload remove 17033 -7 17047 7`
+@pass `reject verb=state pos=17040,-60,0 state="?hearthandharvest:placed_rock_salt_block\b`
 @fails `StayNearSaltGoal.lick` (no mobGriefing check, J58).
 @from batches/r1112/hh_crow.qb passed
 @reviewed 2026-11-16
@@ -8915,7 +8928,7 @@ sleep 3
 > fill 21373 -61 3993 21387 -56 4007 minecraft:glass hollow
 > pbot spawn c485 21374 -60 3994 minecraft:overworld creative
 sleep 2
-> setblock 21380 -60 4000 salt:salt_block
+> setblock 21380 -60 4000 salt:raw_rock_salt_block
 > gamerule mobGriefing false
 > summon minecraft:cow 21383 -60 4000
 > summon minecraft:cow 21377 -60 4000
@@ -8927,7 +8940,7 @@ waitlog verb=tickwarp end=done 120
 > pbot remove c485
 > kill @e[type=minecraft:cow,x=21373,y=-62,z=3993,dx=14,dy=8,dz=14]
 > forceload remove 21373 3993 21387 4007
-reject verb=state pos=21380,-60,4000 state="?salt:salt_block\b
+reject verb=state pos=21380,-60,4000 state="?hearthandharvest:placed_rock_salt_block\b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-486 | `expect \[zhh3\] seen a StayNearSaltGoal no`; `expect \[zhh3\] block 1
@@ -9205,9 +9218,10 @@ sleep 3
 sleep 2
 > clear c496
 > item replace entity c496 hotbar.3 with minecraft:iron_nugget 8
-> summon hearthandharvest:crow 21446 -60 4000
+> summon hearthandharvest:crow 21446 -60 4000 {NoAI:1b,Tags:["r496"]}
 sleep 1
 > zhh3 tame c496 21446 -60 4000 3
+> data merge entity @e[tag=r496,limit=1] {NoAI:0b}
 > zhh3 throw c496 21444 -60 4002 minecraft:diamond 1
 > zhh3 watch crow 21440 -55 4000 14 40 10 a @c496
 waitlog \[zhh3\] watch a done 25
@@ -9573,6 +9587,10 @@ look `effects` holds fire resistance both times with duration near 40 (re-applie
 @pass zh1 `accepted=false`, health unchanged both times; zh2 `accepted=true`, health down 1
 @fails `HorseshoeEvents.onAttack`, the DamageSource compare
 @from batches/r1115/p4_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > summon minecraft:horse 480 -60 476 {Tame:1b,NoAI:1b,Tags:["r4h1"]}
 > summon minecraft:horse 484 -60 476 {Tame:1b,NoAI:1b,Tags:["r4h2"]}
 > pbot hold G hearthandharvest:horseshoe 1
@@ -9595,6 +9613,10 @@ look r4h1 shod=true, accepted=false both times, health unchanged; r4h2 accepted=
 @pass on soul sand mods holds `Horseshoe grip`, value about 1.5 (1 / 0.4 - 1); on grass it is gone, `Horseshoe=0.25` stays
 @fails `HorseshoeEvents` factor test and `isOnGround`
 @from batches/r1112/hh_gear.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > summon minecraft:horse 488 -60 476 {Tame:1b,NoAI:1b,OnGround:1b,Tags:["r2h3"]}
 > pbot hold G hearthandharvest:horseshoe 1
 > zhh5 interact G r2h3
@@ -9614,6 +9636,10 @@ look first line `shod=true ground=true`; on soul sand mods holds `Horseshoe grip
 @fails `HorseshoeEvents.takeShoe`
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > summon minecraft:horse 488 -60 476 {Tame:1b,NoAI:1b,Tags:["r4h3"]}
 > clear G
 > pbot hold G hearthandharvest:horseshoe 1
@@ -9669,6 +9695,10 @@ look `shod=true` and `Horseshoe=0.25` after the restart; transient modifiers are
 @fails `HorseshoeEvents.onDeath`
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > summon minecraft:horse 492 -60 476 {Tame:1b,NoAI:1b,Tags:["r2h4"]}
 > pbot hold G hearthandharvest:horseshoe 1
 > zhh5 interact G r2h4
@@ -9703,6 +9733,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass first "Test passed" (ringer lit the touching lamp), second "Test passed" (lamp went out)
 @fails `ThrownHorseshoe.onHitBlock`; `scheduleTick` delay
 @from batches/r1112/hh_gear.qb
+> forceload add 470 470 620 620
+sleep 3
 > setblock 496 -60 476 minecraft:oak_fence
 > setblock 497 -60 476 minecraft:redstone_lamp
 sleep 1
@@ -9785,6 +9817,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `speed` shows all three at once: `Horseshoe=0.25`, the boost modifier, and `effect.minecraft.speed`; `speed` above base x 1.25 x 1.25 (HNH-81)
 @fails separate modifier UUIDs in `HHEffects` and `HorseshoeEvents`; Supplementaries `AbstractHorseMixin` gives Speed only under its own conditions
 @from batches/r1112/hh_gear.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > summon minecraft:horse 480 -60 470 {Tame:1b,NoAI:1b,Tags:["r2h5"]}
 > pbot hold G hearthandharvest:horseshoe 1
 > zhh5 interact G r2h5
@@ -9868,6 +9904,10 @@ look "Test passed": bone-mealed one step, not harvested (J row)
 @fails `validTarget` test
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > setblock 508 -61 500 minecraft:dirt
 > setblock 508 -60 500 minecraft:air
 > pbot hold G hearthandharvest:fertilizer_bag 1
@@ -10003,7 +10043,7 @@ sleep 4
 > cdevtest items 902 -60 900 4
 > cdevtest player rj
 > data get entity rj Inventory[{Slot:103b}]
-expect xp=[12]\b
+expect (xp|xp_total)=[12]\b
 reject Damage: [1-9]
 > pbot remove rj
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
@@ -10113,6 +10153,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `TillingEvents` span and `till`
 @from batches/r1113/rerun_a.qb passed
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > gamerule randomTickSpeed 0
 > fill 31060 -61 30036 31068 -61 30044 minecraft:grass_block
 > fill 31060 -60 30036 31068 -60 30044 minecraft:air
@@ -10139,6 +10183,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `getToolModifiedState`
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > fill 576 -61 536 580 -61 544 farmersdelight:rich_soil
 > fill 576 -60 536 580 -60 544 minecraft:air
 > item replace entity G weapon.mainhand with minecraft:iron_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:1s}]}
@@ -10157,6 +10205,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `TillingEvents.till` end stone branch
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > fill 586 -61 536 590 -61 544 minecraft:end_stone
 > fill 586 -60 536 590 -60 544 minecraft:air
 > item replace entity G weapon.mainhand with minecraft:netherite_hoe{Enchantments:[{id:"hearthandharvest:tilling",lvl:1s}]}
@@ -10175,6 +10227,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails enchantment level gate
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > setblock 590 -61 548 minecraft:end_stone
 > setblock 590 -60 548 minecraft:air
 > item replace entity G weapon.mainhand with minecraft:iron_hoe
@@ -10207,6 +10263,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `canTill`
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > fill 606 -61 536 610 -61 544 minecraft:grass_block
 > fill 606 -60 536 610 -60 544 minecraft:stone
 > setblock 608 -60 540 minecraft:air
@@ -10227,6 +10287,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails the hurt loop `isEmpty` break
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > fill 616 -61 538 620 -61 542 minecraft:grass_block
 > fill 616 -60 538 620 -60 542 minecraft:air
 > item replace entity G weapon.mainhand with minecraft:iron_hoe{Damage:248,Enchantments:[{id:"hearthandharvest:tilling",lvl:3s}]}
@@ -10285,9 +10349,15 @@ look console "Unknown enchantment" (HNH-94, N26-8)
 @fails loot table; `tags.js`
 @from batches/r1115/p5_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > forceload add 624 512 640 528
+> gamerule randomTickSpeed 0
 > setblock 634 -60 524 endercrop:tilled_end_stone
 > cdevtest loot 634 -60 524 tool=minecraft:diamond_pickaxe rolls=5
+> gamerule randomTickSpeed 3
 > setblock 634 -60 524 minecraft:air
 > cdevtest tag block minecraft:mineable/pickaxe
 > setblock 630 -61 520 endercrop:tilled_end_stone
@@ -10389,6 +10459,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `HorseFeedEvents`, `ageUp`, `modifyTemper`
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > summon minecraft:horse 486 -60 470 {NoAI:1b,Age:-24000,Tags:["r2h6"]}
 > pbot hold G hearthandharvest:hops 1
 > zhh5 interact G r2h6
@@ -10405,6 +10479,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `wants` test
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > summon minecraft:horse 492 -60 470 {Tame:1b,NoAI:1b,Health:53f,Attributes:[{Name:"generic.max_health",Base:53d}],Tags:["r2h7"]}
 > pbot hold G hearthandharvest:hops 1
 > zhh5 interact G r2h7
@@ -10507,6 +10585,10 @@ look "Test passed": a blocked top keeps it at age 7, no error
 @fails `performBonemeal`
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > setblock 511 -61 530 minecraft:dirt
 > setblock 511 -60 530 hearthandharvest:sunflower_stem[age=0]
 > pbot hold G minecraft:bone_meal 1
@@ -10588,6 +10670,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `canSurvive` in `ForeignPlantItem`
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > setblock 502 -61 535 minecraft:stone
 > setblock 502 -60 535 minecraft:air
 > pbot hold G hearthandharvest:blueberry_pips 2
@@ -11101,6 +11187,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails spend guards
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > fill 510 -61 563 514 -61 567 minecraft:farmland[moisture=7]
 > fill 510 -60 563 514 -60 567 minecraft:wheat[age=7]
 > item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5,BonemealLevel:5,FertilizerItem:"minecraft:bone_meal"}
@@ -11117,6 +11207,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `setFertilizer` `removeKey`
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > setblock 520 -61 565 minecraft:farmland[moisture=7]
 > setblock 520 -60 565 minecraft:wheat[age=0]
 > item replace entity G weapon.mainhand with hearthandharvest:watering_can{WaterLevel:1,BonemealLevel:1,FertilizerItem:"minecraft:bone_meal"}
@@ -11150,6 +11244,10 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `wetSoil` and grow share one spend
 @from batches/r1112/hh_gear.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-HH-1500 setup (not in every plan)
+> forceload add 470 470 620 620
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > fill 540 -61 563 544 -61 567 minecraft:farmland[moisture=0]
 > fill 540 -60 563 544 -60 567 minecraft:wheat[age=0]
 > item replace entity G weapon.mainhand with hearthandharvest:golden_watering_can{WaterLevel:5,BonemealLevel:5,FertilizerItem:"minecraft:bone_meal"}
@@ -11296,6 +11394,11 @@ look FD tab holds the pips and the cans (HNH-34); can tier names, "Area: NxN" an
 @@date 2026-11-14
 @@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic powergrid
 @@sources feature_writeup/plan_bugfix_1114.md
+@@prep spawn-animals=true difficulty=normal
+@@prep toml hearthandharvest-common.toml salt saltLickInterval 200
+@@prep toml hearthandharvest-common.toml salt saltSearchInterval 20
+@@prep toml hearthandharvest-common.toml salt saltAnimalStageChance 1.0
+@@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@text Targets `mods/creativedelight-1.1.0.jar` built and installed 2026-11-14 (cd-a), with the Creative Common build of the same
 @@text day (3.8 melting) and `kubejs/generation_scripts/food/placed_food_slices.json` of 2026-11-14. Plan ids SQ-HH-483, -486
@@ -11309,6 +11412,8 @@ look FD tab holds the pips and the cans (HNH-34); can tier names, "Area: NxN" an
 @fails `SeedContainerDispense.soilCentre` / `plantPattern`; `QuarkCompat.plantFromPouch`
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+> forceload add 705 495 715 505
+sleep 3
 > fill 705 -60 495 715 -58 505 minecraft:air
 > fill 709 -61 498 713 -61 502 minecraft:farmland
 > setblock 710 -60 500 minecraft:dispenser[facing=east]
@@ -11328,6 +11433,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `soilCentre` air/replaceable test
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+> forceload add 705 505 715 515
+sleep 3
 > fill 705 -60 505 715 -58 515 minecraft:air
 > fill 709 -60 508 713 -60 512 minecraft:farmland
 > setblock 710 -60 510 minecraft:dispenser[facing=east]
@@ -11348,6 +11455,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SeedPouchItem.setCount(pouch, 0)`
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+> forceload add 705 515 715 525
+sleep 3
 > fill 705 -60 515 715 -58 525 minecraft:air
 > fill 709 -61 518 713 -61 522 minecraft:farmland
 > setblock 710 -60 520 minecraft:dispenser[facing=east]
@@ -11368,6 +11477,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `plantOne` placed test
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+> forceload add 705 525 715 535
+sleep 3
 > fill 705 -60 525 715 -58 535 minecraft:air
 > fill 709 -61 528 713 -61 532 minecraft:stone
 > setblock 710 -60 530 minecraft:dispenser[facing=east]
@@ -11389,6 +11500,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `plantFromPouch` null contents
 @from batches/r1115/p4_a1.qb passed
 @reviewed 2026-11-16
+> forceload add 705 535 715 545
+sleep 3
 > fill 705 -60 535 715 -58 545 minecraft:air
 > fill 709 -61 538 713 -61 542 minecraft:farmland
 > setblock 710 -60 540 minecraft:dispenser[facing=east]
@@ -11409,6 +11522,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SeedContainerDispense.plantFromBundle`
 @from batches/r1115/p4_a1.qb passed
 @reviewed 2026-11-16
+> forceload add 705 545 715 555
+sleep 3
 > fill 705 -60 545 715 -58 555 minecraft:air
 > fill 709 -61 548 713 -61 552 minecraft:farmland
 > setblock 710 -60 550 minecraft:dispenser[facing=east]
@@ -11431,6 +11546,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `isSeed`
 @from batches/r1115/p4_a1.qb passed
 @reviewed 2026-11-16
+> forceload add 705 555 715 565
+sleep 3
 > fill 705 -60 555 715 -58 565 minecraft:air
 > fill 709 -61 558 713 -61 562 minecraft:farmland
 > setblock 710 -60 560 minecraft:dispenser[facing=east]
@@ -11552,7 +11669,7 @@ sleep 1
 > forceload remove 14427 -13 14453 13
 expect \[zhh3\] interact 2 held=empty
 expect \[zhh3\] tally crows=3
-expect \[zhh3\] cfg crow\.cornBreeding = true
+expect \[zhh3\] cfg (crow\.)?cornBreeding = true
 look first InLove pair both > 0; hurt crow Health 2.0 -> 4.0 and InLove 0
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
@@ -11588,7 +11705,7 @@ sleep 3
 > fill 21490 -61 3994 21550 -56 4006 minecraft:glass hollow
 > pbot spawn c501 21491 -60 3995 minecraft:overworld creative
 sleep 2
-> setblock 21520 -60 4000 salt:salt_block
+> setblock 21520 -60 4000 salt:raw_rock_salt_block
 > summon minecraft:cow 21538 -60 4000 {NoAI:1b,Tags:["s501"]}
 > zhh3 watch minecraft:cow 21520 -60 4000 3 25 20 s1 21520.5,-59.5,4000.5
 > zhh3 watch minecraft:cow 21520 -60 4000 22 25 20 w1 21520.5,-59.5,4000.5
@@ -11611,6 +11728,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `LickableSaltBlock` shape, `HHSaltRegistry.stage` heights
 @jars creativedelight
 @from batches/r1115/p4_a1.qb
+> forceload add 798 498 816 502
+sleep 3
 > fill 798 -60 498 816 -55 502 minecraft:air
 > setblock 800 -60 500 hearthandharvest:lightly_licked_salt_block
 > setblock 802 -60 500 hearthandharvest:well_licked_salt_block
@@ -11649,6 +11768,8 @@ look order: lightly -59.25, well -59.5, heavily -59.75, waxed the same, waxed_sa
 @jars creativedelight
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+> forceload add 798 508 816 512
+sleep 3
 > fill 798 -60 508 816 -55 512 minecraft:air
 > setblock 800 -60 510 hearthandharvest:heavily_licked_salt_block
 > setblock 802 -60 510 hearthandharvest:heavily_licked_salt_block
@@ -11692,6 +11813,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @jars creativedelight
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+> forceload add 798 518 816 524
+sleep 3
 > fill 798 -60 518 816 -55 524 minecraft:air
 > setblock 800 -60 520 hearthandharvest:well_licked_salt_block
 > pbot spawn slk 800.5 -60 522.5 minecraft:overworld survival
@@ -11769,6 +11892,8 @@ look rock salt layers (Salt's raw rock salt texture), 12 / 8 / 4 px, no tint, no
 @fails `placed_food_slices.json` `supplementaries:double_cake`
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+> forceload add 40600 39994 40612 40006
+sleep 3
 > setblock 40606 -60 40000 minecraft:cake
 > pbot spawn fd5 40606.5 -60 40002.5 minecraft:overworld survival
 sleep 3
@@ -11851,6 +11976,8 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SeedContainerDispense.plantOne`: the `UseOnContext` must carry the dispenser's level (fake player is cached per profile, overworld)
 @from batches/r1115/p6_a1.qb
 @reviewed 2026-11-16
+> execute in minecraft:the_nether run forceload add 705 495 715 511
+sleep 3
 > execute in minecraft:the_nether run fill 705 128 495 715 131 505 minecraft:air
 > execute in minecraft:the_nether run fill 709 128 498 713 128 502 minecraft:soul_sand
 > execute in minecraft:the_nether run setblock 710 129 500 minecraft:dispenser[facing=east]
@@ -11876,6 +12003,8 @@ sleep 2
 > cdevtest count 709 61 506 713 61 510 minecraft:nether_wart dim=minecraft:the_nether
 > execute in minecraft:the_nether if block 711 61 508 minecraft:nether_wart run say SPD08b bundle centre wart
 > execute in minecraft:the_nether run data get block 710 61 508 Items
+> forceload add 705 575 715 585
+sleep 3
 > fill 705 -60 575 715 -58 585 minecraft:air
 > fill 709 -61 578 713 -61 582 minecraft:soul_sand
 > setblock 710 -60 580 minecraft:dispenser[facing=east]
@@ -11924,7 +12053,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-SLK-01c | cow at 18 blocks: reaches the salt and licks it within 1600 ticks (interval 200, stage chance 1.0)
 @group A
-@commands Needs the CD jar built 2026-11-15 03:19 (fix-2, r1115) installed; `spawn-animals=true` in server.properties. Srv toml `[salt] saltLickInterval 200, saltSearchInterval 20, saltAnimalStageChance 1.0`. As SQ-SLK-01b: one cow 18 blocks from a `salt:salt_block`, watch 1600 ticks
+@commands Needs the CD jar built 2026-11-15 03:19 (fix-2, r1115) installed; `spawn-animals=true` in server.properties. Srv toml `[salt] saltLickInterval 200, saltSearchInterval 20, saltAnimalStageChance 1.0`. As SQ-SLK-01b: one cow 18 blocks from a `salt:raw_rock_salt_block`, watch 1600 ticks
 @pass the cow reaches the salt and the block steps to `hearthandharvest:lightly_licked_salt_block` or further, up to `minecraft:air` (licked away; stage chance 1.0) within the watch
 @fails `StayNearSaltGoal.closeEnough` (block positions within 2, or the body within 1 block of the block)
 @jars creativedelight
@@ -11937,7 +12066,7 @@ sleep 3
 > pbot spawn c603 21891 -60 3995 minecraft:overworld creative
 sleep 2
 > zhh3 cfgdump
-> setblock 21920 -60 4000 salt:salt_block
+> setblock 21920 -60 4000 salt:raw_rock_salt_block
 > summon minecraft:cow 21938 -60 4000 {NoAI:1b,Tags:["s603"]}
 > zhh3 watch minecraft:cow 21920 -60 4000 3 80 20 s3 21920.5,-59.5,4000.5
 > zhh3 watch minecraft:cow 21920 -60 4000 22 80 20 w3 21920.5,-59.5,4000.5

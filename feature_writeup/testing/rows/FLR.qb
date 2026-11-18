@@ -7,6 +7,7 @@
 @@date 2026-11-10
 @@jars creativeworldgen
 @@sources feature_writeup/plan_flesh_recipes.md feature_writeup/visceral_heap.md feature_writeup/engineering.md
+@@prep spawn-animals=true
 @@text
 @@text Targets Creative Common and Creative Engineering built 2026-11-10 (both NOT installed when written: game open) and the BOP jar. Startup dicts changed, so a fresh boot. Recipes are in `kubejs/data/creativeworldgen/kubejs/recipes/visceral_heap.js`.
 @@text

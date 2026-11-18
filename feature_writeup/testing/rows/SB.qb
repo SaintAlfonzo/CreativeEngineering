@@ -7,6 +7,7 @@
 @@phase worldgen
 @@date 2026-10-30
 @@jars creativedelight creativeworldgen
+@@prep B: difficulty=normal
 @@text
 @@text Creative Common 1.1.04 of 17:55 in `mods/` (`TemplateSpawnerFilter`, `StructureSpawnBoxes`, `ChunkGeneratorSpawnBoxesMixin`,
 @@text CEConfig `[worldgen.systems] spawnBoxes`, `removeSpawners`); data `kubejs/generation_scripts/worldgen/spawn_boxes.json`.

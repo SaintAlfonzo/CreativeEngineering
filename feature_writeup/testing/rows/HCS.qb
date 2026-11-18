@@ -7,6 +7,10 @@
 @@date 2026-11-10
 @@jars creativedelight
 @@sources feature_writeup/plan_hearth_crow_swap.md
+@@prep spawn-animals=true
+@@prep toml hearthandharvest-common.toml crow stealChance 1.0
+@@prep toml hearthandharvest-common.toml crow carryTicks 200
+@@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@text Jars: Creative Delight and Creative Common built 2026-11-10, NOT installed (the game was running). Install both, then run. SQ-HH-401 to -502 and CQ-HH-401 to -405 were rewritten 2026-11-10 for `hearthandharvest:crow` (note in that section); run them with this set. Fixture for SQ-HCS-09: a 1.2.02 save with a tamed AM crow, an AM crow carrying an item and a generated ground nest.
 @@text
@@ -19,7 +23,8 @@
 @from batches/r1111/b1.qb
 bootexpect Done \(
 shell for p in "out of bound" "Exception generating new chunk" "CrowEvents"; do echo "$p: $(grep -c "$p" logs/latest.log)"; done; ls crash-reports 2>/dev/null | head
-bootreject out of bound
+# KubeJS recipe parse warnings excluded since r1118 (judge-8, 2026-11-18): 15 'Index 0 out of bounds' lines from recipe parsing, none from chunk gen
+bootreject ^(?!.*KubeJS Recipe Event).*out of bound
 bootreject Exception generating new chunk
 bootreject CrowEvents
 
@@ -102,6 +107,9 @@ look nests on roofs (depth 0, above the ground band), never two per house, none 
 @pass 2 to 3 crows at the nest after generation; after the kill, crows come back one at a time, never more than 3 within 24 blocks; with the player 60 blocks away none come back
 @fails No refill: `NestBlock.isRandomlyTicking` false for `generated=true`; too many: cap in `NestCrows.tick`
 @from batches/r1113/rerun_a.qb
+# forceload since r1118 (judge-8, 2026-11-18): the build ran before any player was near (That position is not loaded x4)
+> forceload add 30495 29995 30525 30025
+sleep 3
 > gamerule randomTickSpeed 3
 > fill 30495 -61 29995 30525 -45 30025 minecraft:glass hollow
 > fill 30496 -60 29996 30524 -46 30024 minecraft:air
@@ -129,6 +137,7 @@ sleep 10
 > execute positioned 30510 -54 30010 if entity @e[type=hearthandharvest:crow,distance=..24]
 expect Test failed|Test passed, count: 0
 > pbot remove hcs5
+> forceload remove 30495 29995 30525 30025
 look the five counts rise one at a time (1, 2, 3, 3, 3) and never pass 3; last count 0 with the bot 60 blocks away
 
 ## SQ-HCS-06 | hand-placed nest makes no crows; summon and egg do
@@ -226,12 +235,17 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass No natural `alexsmobs:crow`; the summon works; JEI hides `alexsmobs:spawn_egg_crow`
 @fails AM crows still spawning: rule `no_alexsmobs_crow` in `mob_spawns.json` not applied (log `[mob_spawns]`), `crowSpawnWeight` not 0
 @from batches/r1111/b1.qb
-shell python3 $INST/tools/scratch_query/region_blocks.py entities world 'alexsmobs:crow|hearthandharvest:crow' 2>&1 | tail -15
+# self-contained since r1118 (judge-8, 2026-11-18): FO came from SQ-HCS-02 (not always in the same step); the world folder is the level name
+> save-all flush
+sleep 5
+shell python3 -I $INST/tools/scratch_query/region_blocks.py entities "$(sed -n 's/^level-name=//p' server.properties)" 'alexsmobs:crow|hearthandharvest:crow' 2>&1 | tail -15
 > execute if entity @e[type=alexsmobs:crow]
-> summon alexsmobs:crow {FO1} 120 {FO3}
+> forceload add 0 0
+sleep 2
+> summon alexsmobs:crow 0 120 0
 > execute if entity @e[type=alexsmobs:crow]
 expect Test passed, count: [1-9]
-shell grep -nE "\[mob_spawns\].*(crow|no_alexsmobs_crow)" logs/latest.log | head -5
+shell grep -nE "\[mob[-_]spawns\].*(crow|rules)" logs/latest.log | cut -c1-250 | head -5
 look region census: alexsmobs:crow 0 saved in chunks, hearthandharvest:crow present near nests
 
 ## SQ-HCS-09

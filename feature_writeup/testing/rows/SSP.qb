@@ -6,6 +6,7 @@
 @@title Bug batch, 2026-11-01 (TODO rows in each ID's Depends column)
 @@date 2026-11-01
 @@jars creativedelight creativeengineering creativeworldgen
+@@prep spawn-animals=true
 @@text
 @@text Needs the Creative Common jar (`creativeengineering-1.1.04.jar`, built 2026-11-01 01:35) and the Creative Delight jar (`creativedelight-1.0.0.jar`, 01:23) installed, and a full restart. Already-queued checks to rerun with these jars: SQ-RSP-09 (Spout / Item Drain drinks), SQ-FFH-03 (zucchini quiche), SQ-MRD-03 (tags half, rewritten), SQ-CM-32 and SQ-CM-35 (calamari), SQ-AC-02 (also `/attribute <bot> minecraft:generic.armor_toughness get`: armor 36, toughness 18).
 @@text
@@ -20,8 +21,11 @@
 bootreject Can't modify the empty stack
 kjsreject Can't modify the empty stack
 > cdevtest rdetail sawdust
+> cdevtest rdetail dust_wood_to_ash
+> forceload add 64 0
 > setblock 70 -60 0 minecraft:furnace{Items:[{Slot:0b,id:"immersiveengineering:dust_wood",Count:1b},{Slot:1b,id:"minecraft:coal",Count:1b}]}
-sleep 12
+# judge-12, 2026-11-18: r1118 read it 14 s after Done with the server 264 ticks behind (coal lit, input unsmelted)
+sleep 25
 > data get block 70 -60 0 Items
 look sawdust smelting recipe cookingtime 200; the furnace output slot (Slot 2b) holds ash after 12 s
 reject verb=\S+ .*done=0
@@ -34,13 +38,13 @@ reject verb=\S+ .*done=0
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
 bootreject \[NCH.cfg\] no CEConfig.CRAFTING.FELSIC_
-shell python3 $INST/tools/scratch_query/qrun.py toml config/creativeengineering-common.toml crafting.felsic_helmet reachPotionMb 100
+shell python3 $INST/tools/scratch_query/qrun.py toml config/creativeequipment-common.toml crafting.felsic_helmet reachPotionMb 100
 > reload
 waitlog (Reloaded|reload)
 sleep 5
 expect CRAFTING.FELSIC_HELMET.reachMb overridden: default 500 -> 100
 > cdevtest rdetail felsic_helmet
-shell sed -i '/reachPotionMb = 100/d' config/creativeengineering-common.toml
+shell sed -i '/reachPotionMb = 100/d' config/creativeequipment-common.toml
 look recipe shows a 100 mB Long Reach fill and a 500 mB Magic Resistance fill; if the override line is missing, the toml change is not re-read on /reload (record, check on the p1b restart)
 reject verb=\S+ .*done=0
 
@@ -58,7 +62,7 @@ reject verb=\S+ .*done=0
 ## SQ-RW-23b | smoked planks: all smoking recipes with inputs (decides SQ-RW-23; zq recipes stopped at 80 lines)
 @group A
 @commands recipe dump for `smoking` outputs of `create_dd:smoked_*`; `/dumptags`
-@pass 13 smoking recipes, cook time 200; each `creativeengineering:smokable/*` tag holds exactly the 7 `minecraft:` overworld woods (mangrove included); no `botania:*`, driftwood, `quark:*`, crimson or warped
+@pass 13 smoking recipes, cook time 200; each `creativecommon:smokable/*` tag holds exactly the 7 `minecraft:` overworld woods (mangrove included); no `botania:*`, driftwood, `quark:*`, crimson or warped
 @fails Depends on: `engineering/dreams-and-desires #10`
 @from batches/r1031/a1_followup.qb
 @reviewed 2026-11-16

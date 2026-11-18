@@ -54,11 +54,14 @@ look 11 Creative jars (Common, Compat, Calendar, Devtools, Magic, Equipment, Eng
 @fails `neoCraftHelper.js` / `tag_helper.js` not loaded first (Common's startup pack order, `HELPERS_MOD_ID`)
 @from batches/r1106spf/b1.qb
 @reviewed 2026-11-16
-> cdevtest recipes creativecommon:
+> cdevtest recipes creativeequipment:
+> cdevtest recipes creativedelight:
 > cdevtest makes create:andesite_alloy
 > cdevtest tag item forge:ingots/copper
 look per-jar namespaces present; andesite alloy recipes same as base
-expect verb=recipes text=creativecommon: n=[1-9]
+# judge-12, 2026-11-18: Creative Common builds no recipes under its own namespace (0 in the 2026-11-15 dump); probe two jars instead
+expect verb=recipes text=creativeequipment: n=[1-9]
+expect verb=recipes text=creativedelight: n=[1-9]
 expect verb=makes item=create:andesite_alloy n=[1-9]
 expect verb=tag kind=item tag=forge:ingots/copper n=[1-9]
 reject \[cdevtest\] verb=\S+ .*error=
@@ -142,17 +145,18 @@ look moss tint is client-only (CQ-SPF-01); vine and monster box: SQ-VS / SQ-MBX 
 @from batches/r1106spf/b1.qb
 @reviewed 2026-11-16
 > fill 60 -61 -20 62 -61 -18 minecraft:lava
-> fill 60 -61 -14 62 -61 -12 minecraft:stone
+> fill 60 -61 -14 62 -61 -12 minecraft:netherrack
 > setblock 61 -60 -13 minecraft:fire
 > summon minecraft:item 61 -59 -19 {Item:{id:"minecraft:stick",Count:4b}}
 > summon minecraft:item 61 -59 -13 {Item:{id:"minecraft:oak_log",Count:4b}}
 sleep 15
 > execute positioned 61 -60 -19 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
 > execute positioned 61 -60 -13 run data get entity @e[type=minecraft:item,limit=1,sort=nearest,distance=..3] Item
-> cdevtest tag item creativecompat:physics/burns_to_charcoal
+> cdevtest tag item creativecompat:physics/fireproof
 shell grep -c "itemphysic\|ItemPhysic" logs/latest.log; true
 look burn transform outputs (charcoal / ash) as base; physics tags filled
-expect verb=tag kind=item tag=creativecompat:physics/burns_to_charcoal n=[1-9]
+# judge-12, 2026-11-18: no burns_to_charcoal tag exists (physics/ has floats, sinks, fireproof, lavaproof); fire on netherrack so it stays lit
+expect verb=tag kind=item tag=creativecompat:physics/fireproof n=[1-9]
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-12 | Compat leaf pile slow and surface walk speed
@@ -185,9 +189,12 @@ look x after 2 s on asphalt is greater than on grass by about the [surface] fact
 @from batches/r1106spf/b1.qb
 > tp qa 70 -60 40
 > fill 68 -61 38 92 -61 62 minecraft:obsidian
+pace 0.05
 > summon minecraft:tnt 80 -40 50 {Fuse:1}
-> kill @e[type=creativeengineering:shrapnel]
-> kill @e[type=creativeengineering:shrapnel]
+> kill @e[type=creativecompat:shrapnel]
+> kill @e[type=creativecompat:shrapnel]
+> kill @e[type=creativecompat:shrapnel]
+pace 2
 > tp qa -20 -60 -24
 shell grep -A6 "^\[shrapnel\]" config/creativecompat-common.toml | grep -E "count|enabled"
 look Killed N entities with N = [shrapnel] count (24 default); vein undo (SQ-CEN-07) needs the client's vein mine key: CQ row
@@ -215,9 +222,9 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass date moves one day; day length and the pushed values match `[time.day]` of `creativecalendar-common.toml`; SQ-TD rows pass
 @fails `time/` registrations not in `CreativeCalendar`; push skipped
 @from batches/r1106spf/b1.qb
-> cetime date
+> ccaltime date
 > time add 24000
-> cetime date
+> ccaltime date
 shell grep -A12 "^\[time" config/creativecalendar-common.toml | head -14; grep -iE "dayLength|day_length|ticks" config/betterdays-common.toml | head -5; ls world/serverconfig/ | grep -i season; grep -iE "day|duration" world/serverconfig/sereneseasons-server.toml | head -5
 look date moved one day; Better Days and Serene Seasons values match [time.day] of creativecalendar-common.toml
 
@@ -231,6 +238,7 @@ look date moved one day; Better Days and Serene Seasons values match [time.day] 
 > execute if block -30 -60 -48 #creativecalendar:crop_seasons/warm_wet
 > execute if block -30 -60 -48 #creativecalendar:crop_seasons/warm_dry
 > execute if block -30 -60 -50 #creativecalendar:crop_seasons/temperate
+> fill -35 -61 -50 -26 -61 -48 minecraft:farmland[moisture=7]
 > fill -35 -60 -50 -26 -60 -50 minecraft:wheat[age=0]
 > fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
 > tp qa -30 -60 -45
@@ -300,10 +308,12 @@ sleep 2
 > execute if block 30 -61 70 minecraft:crying_obsidian
 > execute if block 31 -60 70 minecraft:nether_portal
 > tp qa 36 -60 72
-> pbot hold qa creativeengineering:flint_and_terrasteel
+> pbot hold qa creativemagic:flint_and_terrasteel
 > pbot use qa 36 -61 70 up
 sleep 2
 > execute if block 36 -60 70 minecraft:nether_portal
+# judge-12, 2026-11-18: Immersive Portals is in the server set now: a lit frame becomes a portal entity, not nether_portal blocks; its log line is the evidence
+expect Portal Generation Attempted minecraft:overworld 36 -60 70
 > cdevtest recipes creativemagic:
 > tp qa -20 -60 -24
 look first frame: crying obsidian, no portal; second: portal open; creativemagic: recipes listed (Flint and Terrasteel, Ender Storage, CEI machine, sculk)
@@ -328,16 +338,16 @@ look new jars: bridge line logged by creativemagic, one fluid in the tag
 @from batches/r1106spf/b1.qb
 @reviewed 2026-11-16
 > data get block -20 -60 -20 Items
-expect creativeengineering:copper_shield
+expect creativeequipment:copper_shield
 expect clothColor
-> give qa creativeengineering:netherite_shield
-> cdevtest tag item creativeengineering:stepstools
+> give qa creativeequipment:netherite_shield
+> cdevtest tag item creativeequipment:stepstools
 > cdevtest tag item curios:feet
-> cdevtest tag item creativeengineering:dragon_gear
-> cdevtest tag item creativeengineering:elytra_chestplates
-> cdevtest tag item creativeengineering:bonemeal_charms
+> cdevtest tag item creativeequipment:dragon_gear
+> cdevtest tag item creativeequipment:elytra_chestplates
+> cdevtest tag item creativeequipment:bonemeal_charms
 > cdevtest recipes creativeequipment:
-> cdevtest tag block creativeengineering:needs_copper_tool
+> cdevtest tag block creativeequipment:needs_copper_tool
 > execute if block -20 -60 -20 minecraft:chest
 shell grep -c "\[tags\].*harvest" logs/kubejs/server.log; true
 look items keep NBT (backpack colours, sawblade Damage 5); tag counts as base (compare with SQ-SPF-50 lines vs b0 dumps); creativeequipment: recipes (felsic assembly, End gear, shield, stepstool, archery, bullets, camera bag, backpack skin)
@@ -376,7 +386,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass as those rows
 @fails `Stepstool.register` channel
 @from batches/r1106spf/b1.qb
-> item replace entity qa armor.feet with creativeengineering:red_stepstool
+> item replace entity qa armor.feet with creativeequipment:red_stepstool
 > data get entity qa Inventory[{Slot:100b}]
 look stepstool equipped; step-up packet needs the client (CQ-SPF-02)
 
@@ -410,7 +420,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 > cdevtest makes component_copper
 > cdevtest makes component_netherite
 > cdevtest makes coil_electrum
-> cdevtest makes plate_block_iron
+> cdevtest makes steel_plate_block
 > cdevtest makes dust_pile
 > cdevtest makes wood_pellet
 > cdevtest makes prepared_flesh
@@ -580,19 +590,19 @@ reject \[cdevtest\] verb=\S+ .*error=
 @draft no batch holds this row yet
 ## SQ-SPF-82 | Delight moved in: torch and seeds recipes, millable seeds tag
 @group A
-@commands Delight, moved in 2026-11-06: `/zq recipes creativedelight:torch_crafting_animal_fat`, `creativedelight:seeds_bone_meal`; `/zq itemtag creativeengineering:millable_seeds`; `/zq recipes` a seasoned item
+@commands Delight, moved in 2026-11-06: `/zq recipes creativedelight:torch_crafting_animal_fat`, `creativedelight:seeds_bone_meal`; `/zq itemtag creativedelight:millable_seeds`; `/zq recipes` a seasoned item
 @pass present under `creativedelight:`; tags as the baseline
 @fails SQ-ENGM-03 failure text
 @from batches/r1106spf/b1.qb
 @reviewed 2026-11-16
 > cdevtest recipes torch_crafting_animal_fat
 > cdevtest recipes seeds_bone_meal
-> cdevtest tag item creativeengineering:millable_seeds
+> cdevtest tag item creativedelight:millable_seeds
 > cdevtest tag item forge:mulch
 look present under creativedelight: on the new jars; tags same as base
 expect verb=recipes text=torch_crafting_animal_fat n=[1-9]
 expect verb=recipes text=seeds_bone_meal n=[1-9]
-expect verb=tag kind=item tag=creativeengineering:millable_seeds n=[1-9]
+expect verb=tag kind=item tag=creativedelight:millable_seeds n=[1-9]
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-83 | Delight fluids and compost
@@ -609,8 +619,9 @@ reject \[cdevtest\] verb=\S+ .*error=
 repeat 20
 > pbot use qa -36 -60 -60 up
 end
-> data get block -36 -60 -60
 > execute if block -36 -60 -60 minecraft:composter
+> execute unless block -36 -60 -60 minecraft:composter[level=0]
+count Test passed == 2
 > tp qa -20 -60 -24
 look fluid tags list creativedelight: fluids only; composter level against the compost.js value (20 tries: about chance x 20 / 7 levels)
 

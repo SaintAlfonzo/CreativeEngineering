@@ -29,8 +29,14 @@ bootreject (?i)(missing|exception).*(floralench:[a-z_]*vine|botania:solid_vine)
 @fails Sheared one grew: the randomTick cancel is not applied (check the mixin loaded)
 @from batches/r1106spf/b1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1106spf b1 setup
+> execute unless entity qa run pbot spawn qa -20 -60 -24 minecraft:overworld survival
+sleep 3
 > setblock 10 -53 9 floralench:poppy_vine[south=true,fertile=false]
 > setblock 16 -53 9 floralench:poppy_vine[south=true]
+# ceiling above the weeping vines (judge-13, 2026-11-18): SQ-VS-03's setup names one; r1118 without it: the age-0 tip never grew
+> setblock 20 -50 10 minecraft:stone
+> setblock 26 -50 10 minecraft:stone
 > setblock 20 -51 10 minecraft:weeping_vines[age=25]
 > setblock 26 -51 10 minecraft:weeping_vines[age=0]
 > tp qa 15 -60 5

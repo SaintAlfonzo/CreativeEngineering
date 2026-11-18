@@ -7,6 +7,8 @@
 @@date 2026-11-04
 @@jars creativecommon creativedelight
 @@sources feature_writeup/kitchen.md
+@@prep spawn-animals=true
+@@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@table
 ## SQ-CBW-01 | wood cutting board recipes on the plank tags; board tags
@@ -39,6 +41,10 @@ reject verb=\S+ .*done=0
 @fails as SQ-FCB-07
 @from batches/r1113/fix_c2a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
+> forceload add 296 290 360 380
+> execute unless entity c2b run pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > setblock 300 -60 360 farmersdelight:oak_cutting_board[facing=north]
 > setblock 302 -60 360 farmersdelight:crimson_cutting_board[facing=north]
 > pbot hold c2b minecraft:beef 1
@@ -73,6 +79,12 @@ look the beef left both boards after the knife use (filled=0), the kill line rem
 @fails `FDBackportEvents` check
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p4_a1 P4-setup and its c2b row
+> forceload add 296 356 316 376
+> forceload add 470 460 620 620
+> execute unless entity c2b run pbot spawn c2b 303.5 -60 366.5 minecraft:overworld survival
+> execute unless entity G run pbot spawn G 500 -60 490 minecraft:overworld survival
+sleep 3
 > setblock 304 -60 360 cookingforblockheads:counter[facing=north]
 > setblock 306 -60 360 cookingforblockheads:counter[facing=north]
 > setblock 304 -59 360 farmersdelight:birch_cutting_board[facing=north]

@@ -7,6 +7,11 @@
 @@date 2026-10-31
 @@jars creativecommon creativeequipment
 @@sources feature_writeup/effects.md feature_writeup/armor_effects.md
+@@prep spawn-animals=true
+# SQ-EFX-08 (judge-6, 2026-11-18): the row's interval 10 s / chance 1.0 fixture was never applied (r1118 srv held 300 / 0.15)
+@@prep toml creativeequipment-common.toml copper_poisoning intervalSeconds 10
+@@prep toml creativeequipment-common.toml copper_poisoning jitterSeconds 0
+@@prep toml creativeequipment-common.toml copper_poisoning chancePerPiece 1.0
 @@text
 @@text Jars built 2026-10-31 00:28-00:30: Creative Common 1.1.04 (`MagicResistanceEffect`, `CopperPoisoningHandler`, `EffectRules`,
 @@text `PhantomBaneRules`, `CompoundEffects`, mixins `CopperPoisoningEffectMixin`, `LivingEntityEffectRemapMixin`,
@@ -36,6 +41,9 @@ bootexpect \[(CE )?potions\]
 @from batches/r1031/a1_effects.qb
 # perfBot bots are invulnerable (Bots.java setInvulnerable): damage reads use a NoAI pillager "qp" on Normal
 # (zombies are undead: no Poison). Pillager max health 24.
+# self-contained since r1118 (judge-6, 2026-11-18): bot spawn so the chunk entity-ticks (r1118: no player near, 0 Poison II / Wither damage, horse armor gave no effects)
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
 > difficulty normal
 > kill @e[type=minecraft:pillager]
 > summon minecraft:pillager -46 -60 -46 {NoAI:1b,PersistenceRequired:1b,Tags:["qp"]}
@@ -85,6 +93,9 @@ look reads in pairs: control drop D (no Magic Resistance); with it, about 0.8 x 
 @pass Regeneration, Health Boost, Resistance all Amplifier 1; Health does not drop at each 5 s refresh
 @fails `armor_effects.js` mount list; health restore in `applyEffects`
 @from batches/r1031/a1_effects.qb
+# self-contained since r1118 (judge-6, 2026-11-18): bot spawn so the chunk entity-ticks (r1118: no player near, 0 Poison II / Wither damage, horse armor gave no effects)
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
 > summon minecraft:horse -46 -60 -50 {Tame:1b}
 > item replace entity @e[type=minecraft:horse,limit=1,sort=nearest] horse.armor with dragonloot:dragon_horse_armor
 sleep 10
@@ -104,6 +115,9 @@ look Ids 10, 21 and 11 at Amplifier 1b; the second Health read not lower than th
 @pass Climbing and Knockback Resistance present, no Agility / Resilience; Chorus gave Teleport (position changed)
 @fails `LivingEntityEffectRemapMixin`, config `[effects] remap`
 @from batches/r1031/a1_effects.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 a1_followup
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
 > data get entity qe Pos
 > effect give qe neapolitan:agility 30 0
 > effect give qe quark:resilience 30 0
@@ -123,6 +137,9 @@ look the second Pos differs from the first (Teleport); an "Unknown effect" for a
 @pass No effect added; no Flare (`/execute if entity @e[type=upgrade_aquatic:flare]` fails)
 @fails `[effects] removed`; `removed_mobs.js` (server scripts loaded?)
 @from batches/r1031/a1_effects.qb passed
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 a1_followup
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
 > effect give qe upgrade_aquatic:restfulness 1 0
 > effect give qe alexsmobs:power_down 10 0
 > data get entity qe ActiveEffects
@@ -139,6 +156,9 @@ expect Test failed
 @fails `PhantomBaneRules`, `CaffeinatedEffectMixin`
 @reviewed 2026-11-16
 @from batches/r1031/a1_effects.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 a1_followup
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
 > scoreboard objectives add rest minecraft.custom:minecraft.time_since_rest
 sleep 3
 > scoreboard players get qe rest
@@ -160,6 +180,9 @@ look rest score: rises between the first two reads (not -24000), reads 0 (or a f
 @fails `CopperPoisoningHandler` (persistent key `ce_copper_poison_roll`), `isOxidized` NBT check
 @reviewed 2026-11-16
 @from batches/r1031/a1_effects.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 a1_followup
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
 > effect clear qe
 > item replace entity qe armor.head with everythingcopper:copper_helmet{state:"oxidized"}
 > item replace entity qe armor.chest with everythingcopper:copper_chestplate{state:"oxidized"}
@@ -203,6 +226,9 @@ look Poison Duration about 160 ticks, Amplifier 0b; Health right after the give 
 @pass Regeneration, Absorption, Resistance, Fire Resistance, same level; no `Ignoring invalid wine effect entry` in the log
 @fails `config/vinery-common.toml` entry, `WineEffects.parse` `+` split
 @from batches/r1031/a1_effects.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 a1_followup
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
 > vinery effect vinery:jellie_wine qe
 sleep 1
 > data get entity qe ActiveEffects
@@ -238,6 +264,9 @@ reject \[cdevtest\] .*done=0
 @pass Their effects have `ShowIcon:1b`; Fire Resistance from the dragon set still `ShowIcon:0b`
 @fails `LivingEntityUseItemIconMixin` (`m_8095_`), `[effects] forceHudIconItems`
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1031 a1_followup
+> execute unless entity qe run pbot spawn qe -50 -60 -50 minecraft:overworld survival
+sleep 3
 > effect clear qe
 > pbot hunger qe 6
 > pbot hold qe canned_goods:canned_pufferfishs

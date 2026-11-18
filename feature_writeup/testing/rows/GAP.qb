@@ -6,6 +6,7 @@
 @@title SQ-GAP Recent features with no scratch row of their own, 2026-11-08 (gap sweep of the player changelog and TODO rows dated 2026-11-05 to 2026-11-08)
 @@date 2026-11-08
 @@jars creativedelight powergrid
+@@prep difficulty=normal spawn-animals=true spawn-npcs=true
 @@text
 @@text **HOLD: run this section only after the Common suite is finished.** Order: SQ-CGE and its re-run list (Common 2026-11-08 00:01 jar), then every FAIL or PARTIAL from that run debugged and rerun until the Common rows are complete; only then boot for SQ-GAP. Sweep method: every TODO row dated 2026-11-05 to 2026-11-08 in Built / Testing / In Progress with no test ID (13 rows), plus changelog bullets with no table row (Botany Pot tooltip, grape seed tooltip, Pineapple and Tea planting). Features that already have rows (Tempad SQ-TP, Portals SQ-IP / SQ-PG, cans, cookware, skewers, crops, lichen, Rose Gold recipes in SQ-CDFW-08, Nether DH CQ-PNE) are not repeated; swept and found covered: `dishes/meals #8` rotten ham tags (SQ-T1-02), `creativesplit/regression #21` textures (CQ-ENGM-01, extended by CQ-GAP-01), loading tips (SQ-CC-01..03). Jars: whatever Common run left installed in `mods/` plus the 2026-11-07 Engineering, Delight, Compat 23:10 builds; no new build is needed.
 @@text
@@ -66,22 +67,23 @@ look 5 files each with 1 forge:none; region census finds no bushierflowers: bloc
 @reviewed 2026-11-16
 > cdevtest tag item forge:plates/gold
 > cdevtest tag item forge:wires/gold
-> cdevtest tag block forge:storage_blocks/gold
+# since r1118 (judge-8, 2026-11-18): recipes read the item tag (block tag holds gold only); pack recipe ids for rail, apple, carrot
+> cdevtest tag item forge:storage_blocks/gold
 > cdevtest rdetail minecraft:clock
-> cdevtest rdetail minecraft:powered_rail
+> cdevtest rdetail creativeengineering:shaped/rail_to_6_powered_rail_by_shaped
 > cdevtest rdetail mechanical_crafter
-> cdevtest rdetail minecraft:golden_apple
+> cdevtest rdetail creativedelight:shaped/golden_apple
 > cdevtest rdetail minecraft:golden_pickaxe
 > cdevtest rdetail minecraft:golden_chestplate
-> cdevtest rdetail minecraft:golden_carrot
+> cdevtest rdetail creativedelight:shaped/golden_carrot
 > cdevtest makes minecraft:gold_ingot
 waitlog \[cdevtest\] verb=makes item=minecraft:gold_ingot n= 30
 > cdevtest makes minecraft:gold_block
 waitlog \[cdevtest\] verb=makes item=minecraft:gold_block n= 30
 expect \[cdevtest\] verb=tag kind=item tag=forge:plates/gold n=\d+ ids=.*rose_gold
 expect \[cdevtest\] verb=tag kind=item tag=forge:wires/gold n=\d+ ids=.*rose_gold
-expect \[cdevtest\] verb=tag kind=block tag=forge:storage_blocks/gold n=\d+ ids=.*rose_gold
-look rdetail ingredients= of clock, rail, crafter, golden apple/pickaxe/chestplate/carrot: the gold ingredient lists several items (a tag holding rose gold); gold ingot (nuggets) and gold block recipes (makes ids, then rdetail) take literal gold only
+expect \[cdevtest\] verb=tag kind=item tag=forge:storage_blocks/gold n=\d+ ids=.*rose_gold
+look rdetail ingredients= of clock, rail (gold rods since the pack recipe), crafter, golden apple/pickaxe/chestplate/carrot: the gold ingredient lists several items (a tag holding rose gold); gold ingot (nuggets) and gold block recipes (makes ids, then rdetail) take literal gold only
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-GAP-05 | golden egg: falls, sinks in water like an ordinary item, in no floating tag

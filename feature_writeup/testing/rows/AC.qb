@@ -25,6 +25,9 @@ bootreject (Mixin apply failed|InvalidInjectionException).*ArmorCapMixin
 @pass 36 (was 30)
 @fails mixin not applied, or config `[dragon_gear] armorCap` below 36
 @from batches/r1101/p1_server.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > item replace entity qa armor.head with dragonloot:dragon_helmet
 > item replace entity qa armor.chest with dragonloot:dragon_chestplate
 > item replace entity qa armor.legs with dragonloot:dragon_leggings
@@ -42,6 +45,9 @@ expect armor_toughness for entity qa is 18
 @pass 50 (the cap), not 100
 @fails sanitizeValue inject missing
 @from batches/r1031/a1_world.qb passed
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > attribute qa minecraft:generic.armor base set 100
 sleep 1
 > attribute qa minecraft:generic.armor get

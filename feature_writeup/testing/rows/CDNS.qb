@@ -119,7 +119,8 @@ expect verb=bytype serializer=creativedelight:lunchbox_upgrade n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_skin n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_dye n=[1-9]
 expect verb=bytype serializer=creativedelight:lunchbox_soap n=[1-9]
-reject verb=bytype id=creativedelight:\S+ result=(empty|minecraft:air)
+# judge-4 r1118 (2026-11-18): seasoning is a CustomRecipe (result depends on the food in the grid), so its 11 ids list result=empty by design
+reject verb=bytype id=creativedelight:(?!shapeless/season/)\S+ result=(empty|minecraft:air)
 > forceload add 0 0
 sleep 2
 > setblock 0 150 0 creativedelight:oven
@@ -148,8 +149,10 @@ sleep 2
 > cdevtest loot 11 150 0 tool=minecraft:netherite_pickaxe
 > setblock 12 150 0 creativedelight:powdered_sugar_block
 > cdevtest loot 12 150 0 tool=minecraft:netherite_pickaxe
-count verb=loot state=\S+ tool=\S+ rolls=1 drops=[a-z] >= 13
-reject verb=loot .*drops=-
+# judge-4 r1118 (2026-11-18): the powdered sugar block extends PowderSnowBlock and drops nothing when broken (empty loot table, bucket pickup), like powder snow
+count verb=loot state=\S+ tool=\S+ rolls=1 drops=[a-z] >= 12
+expect verb=loot state=creativedelight:powdered_sugar_block .*drops=-
+reject verb=loot state=(?!creativedelight:powdered_sugar_block)\S+ .*drops=-
 reject (?i)unknown (block|item|loot)|Incorrect argument
 > fill 0 150 0 12 150 0 minecraft:air
 > loot spawn 0 151 0 loot creativedelight:gameplay/fishing_net/kelp

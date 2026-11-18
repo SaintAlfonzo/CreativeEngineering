@@ -134,6 +134,7 @@ look the grep lines (if any) are not the "disabled" warning; Create and IE are i
 @@date 2026-11-14
 @@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic powergrid
 @@sources feature_writeup/creative_split.md feature_writeup/plan_bugfix_1114.md
+@@prep difficulty=normal
 @@text
 @@text Targets `creativedelight-1.1.0.jar`, `creativeengineering-2.0.0.jar`, `creativebrewing-1.0.0.jar` and
 @@text `repackedStorage-25.12.09-1.19-forge-ce-19.2-02.jar` installed 2026-11-14 23:28 to 23:30 (audit agent). Lint first:

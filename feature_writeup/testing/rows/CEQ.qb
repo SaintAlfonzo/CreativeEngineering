@@ -120,6 +120,10 @@ look tag members equal boot 1's lists (r1106 dumps); the skinned backpack chest 
 @fails listener not registered in `CreativeEquipment`; config read from the wrong class
 @from batches/r1113/c2_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
+> forceload add 296 290 360 380
+> execute unless entity c2b run pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 shell grep -A5 "^\[bonemeal_charm\]" config/creativeequipment-common.toml | grep -vE "^\s*#"; grep -A6 "^\[bottled_air\]" config/creativeequipment-common.toml | grep -vE "^\s*#"
 > setblock 340 -61 320 minecraft:farmland
 > pbot hold c2b minecraft:bone_meal 64

@@ -7,6 +7,7 @@
 @@date 2026-11-13
 @@jars creativecommon
 @@sources feature_writeup/thirdparty_fixes.md
+@@prep spawn-animals=true spawn-npcs=true
 @@text
 @@text Targets `packetfixer-3.3.2-1.18-1.20.4-merged.jar` and `debugify-1.1.0-forge-1.19.2.jar`. Both are in the
 @@text instance's `mods/` since 2026-11-13 23:20. Packet Fixer has a `both` row since 2026-11-13 (shipped to clients and server with one
