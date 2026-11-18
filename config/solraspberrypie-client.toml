@@ -15,7 +15,17 @@
 	#Diet Log progress bar: how many milestones ahead of the last one reached it shows.
 	#Range: 1 ~ 50
 	progressAhead = 3
-	#The Diet Log opens as two pages, foods still in the window on the left and the first page of
-	#foods out of the window on the right. Needs a screen wide enough for both pages.
-	doublePage = true
+	#Diet Log size: 1.25 draws the book at 125%. Shrinks to fit a small window, never below 100%
+	#(or below this value when it is under 1.0).
+	#Range: 0.5 ~ 3.0
+	bookScale = 1.25
+
+[icons]
+	#Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT
+	#in braces, e.g. minecraft:potion{Potion:"minecraft:awkward"}.
+	unlock = ["monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"]
+	#Diet Log icon for permanent buffs: the first of these items that is loaded.
+	permanentBuff = ["create_crush_everything:diamond_shard", "minecraft:diamond"]
+	#Diet Log icon for effect slots: the first of these items that is loaded.
+	slot = ["suppsquared:metal_frame", "minecraft:item_frame"]
 

@@ -1,20 +1,15 @@
 package com.SaintAlfonzo.solraspberrypie.client;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
-import com.SaintAlfonzo.solraspberrypie.data.SlotChoice;
 import com.SaintAlfonzo.solraspberrypie.ladder.Ladder;
 import com.SaintAlfonzo.solraspberrypie.ladder.Rung;
 import com.SaintAlfonzo.solraspberrypie.logic.DietEngine;
 import com.SaintAlfonzo.solraspberrypie.logic.SlotActions;
 import com.SaintAlfonzo.solraspberrypie.mixin.client.FoodBookScreenAccessor;
-import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
-import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
 import com.tarinoita.solsweetpotato.client.gui.BenefitsPage;
 import com.tarinoita.solsweetpotato.client.gui.FoodBookScreen;
-import com.tarinoita.solsweetpotato.client.gui.FoodListPage;
 import com.tarinoita.solsweetpotato.client.gui.elements.UIElement;
-import com.tarinoita.solsweetpotato.tracking.FoodInstance;
 import net.minecraft.client.gui.GuiComponent;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -22,7 +17,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 
 import java.awt.Rectangle;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,38 +27,36 @@ import java.util.TreeSet;
  * Raspberry Pie's pages in Apple Pie's Diet Log (6.3, 12.4): a progress bar over a window of the ladder (the last
  * milestone reached, a short stretch before it and the next few milestones) with an icon per rung (reached in color,
  * unreached grayed, hover for the value), then the milestone list. Inserted after the diversity page; Apple Pie's own
- * benefit pages are removed. With the experimental double page view the food pages split into foods in the window and
- * foods out of it, and the first page out of the window is drawn on a second book page to the right.
+ * benefit pages are removed. The whole book is drawn at {@link #bookScale} (G5b).
  */
 public final class DietLogPages {
 	static final int HEALTH = 0xFFD03030, ATTRIBUTE = 0xFF4060C0, SLOT = 0xFF20A0A0, FLAT = 0xFFC09020, UNLOCK = 0xFF9040C0, GREY = 0xFFA0A0A0;
 	private static final int ROWS_PER_PAGE = 11;
 	private static final int ICON = 9;
-	/** Apple Pie's book: page size and the gap between the two books of the double page view. */
-	public static final int BOOK_W = 186, BOOK_H = 192, GAP = 4;
-	public static final ResourceLocation BOOK_TEXTURE = new ResourceLocation("solapplepie", "textures/gui/food_book.png");
-
-	/** True when the double page view is on and the screen is wide enough for two books. */
-	public static boolean doublePage(int screenWidth) {
-		return RpConfig.CLIENT_SPEC.isLoaded() && RpConfig.CLIENT.doublePage.get() && screenWidth >= 2 * BOOK_W + GAP + 8;
-	}
+	/** Apple Pie's book page size, and how far the Diet Bonuses button reaches below the screen center. */
+	public static final int BOOK_W = 186, BOOK_H = 192, BUTTON_BOTTOM = 118;
 
 	/**
-	 * Rebuilds the page list after Apple Pie's initPages. Returns the page to draw on the right-hand book in the double
-	 * page view, or null.
+	 * The scale the book is drawn at (G5b): the configured {@code bookScale}, shrunk to fit the window with a 4 px
+	 * margin, but never below 100% (or below the configured value when that is under 1.0).
 	 */
+	public static float bookScale(int screenWidth, int screenHeight) {
+		float want = RpConfig.CLIENT_SPEC.isLoaded() ? RpConfig.CLIENT.bookScale.get().floatValue() : 1.25F;
+		if (want <= 1F) return want;
+		float fit = Math.min((screenWidth / 2F - 4F) / (BOOK_W / 2F), (screenHeight / 2F - 4F) / BUTTON_BOTTOM);
+		return Math.min(want, Math.max(1F, fit));
+	}
+
+	/** Rebuilds the page list after Apple Pie's initPages. */
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public static UIElement insert(FoodBookScreen screen, int screenWidth) {
+	public static void insert(FoodBookScreen screen) {
 		FoodBookScreenAccessor acc = (FoodBookScreenAccessor) (Object) screen;
 		List pages = acc.solrp$pages();
-		if (pages.isEmpty()) return null;
+		if (pages.isEmpty()) return;
 		Rectangle frame = ((UIElement) pages.get(0)).frame;
 		pages.removeIf(p -> p instanceof BenefitsPage);
 
-		UIElement companion = null;
-		if (doublePage(screenWidth)) companion = splitFoodPages(pages, frame, acc.solrp$foodData());
-
-		if (!ClientState.ready()) return companion;
+		if (!ClientState.ready()) return;
 		List<UIElement> ours = new ArrayList<>();
 		ours.add(new ProgressPage(new Rectangle(frame)));
 		List<Rung> rungs = ClientState.ladder.rungs;
@@ -72,70 +64,6 @@ public final class DietLogPages {
 			ours.add(new ListPage(new Rectangle(frame), rungs.subList(i, Math.min(rungs.size(), i + ROWS_PER_PAGE))));
 		}
 		pages.addAll(Math.min(1, pages.size()), ours);
-		return companion;
-	}
-
-	// ---- double page view (#31) ------------------------------------------------------------------------------------
-
-	private static Method foodPages;
-
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static List<UIElement> foodListPages(Rectangle frame, String header, List<ItemStack> stacks, Map<FoodInstance, Integer> map) {
-		try {
-			if (foodPages == null) {
-				foodPages = FoodListPage.class.getDeclaredMethod("pages", Rectangle.class, String.class, List.class, Map.class);
-				foodPages.setAccessible(true);
-			}
-			return (List<UIElement>) foodPages.invoke(null, frame, header, stacks, map);
-		} catch (ReflectiveOperationException e) {
-			return List.of();
-		}
-	}
-
-	/** Replaces Apple Pie's single food queue with in-window pages, then out-of-window pages 2+; returns out-of-window page 1. */
-	@SuppressWarnings({"unchecked", "rawtypes"})
-	private static UIElement splitFoodPages(List pages, Rectangle frame, java.util.Set<Map.Entry<FoodInstance, Integer>> data) {
-		if (data == null) return null;
-		int at = -1;
-		for (int i = 0; i < pages.size(); i++) {
-			if (pages.get(i) instanceof FoodListPage) {
-				at = i;
-				break;
-			}
-		}
-		if (at < 0) return null;
-		pages.removeIf(p -> p instanceof FoodListPage);
-
-		List<Map.Entry<FoodInstance, Integer>> sorted = new ArrayList<>(data);
-		sorted.sort(Map.Entry.comparingByValue());
-		Map<FoodInstance, Integer> map = new HashMap<>();
-		List<ItemStack> in = new ArrayList<>(), out = new ArrayList<>();
-		int end = SOLSweetPotatoConfig.endDecay();
-		for (Map.Entry<FoodInstance, Integer> e : sorted) {
-			map.put(e.getKey(), e.getValue());
-			if (e.getKey().getItem() == null) continue;
-			(e.getValue() < end ? in : out).add(new ItemStack(e.getKey().getItem()));
-		}
-		List<UIElement> inPages = foodListPages(frame,
-				Component.translatable("solraspberrypie.dietlog.window_in", in.size()).getString(), in, map);
-		Rectangle right = new Rectangle(frame);
-		right.translate(BOOK_W + GAP, 0);
-		List<UIElement> outRight = foodListPages(right,
-				Component.translatable("solraspberrypie.dietlog.window_out", out.size()).getString(), out, map);
-		List<UIElement> outPages = foodListPages(frame,
-				Component.translatable("solraspberrypie.dietlog.window_out", out.size()).getString(), out, map);
-		List added = new ArrayList<>(inPages);
-		if (outPages.size() > 1) added.addAll(outPages.subList(1, outPages.size()));
-		pages.addAll(Math.min(at, pages.size()), added);
-		return outRight.isEmpty() ? null : outRight.get(0);
-	}
-
-	/** The right-hand book of the double page view, with its page. */
-	public static void renderCompanion(PoseStack pose, UIElement page, Rectangle left, int mouseX, int mouseY) {
-		RenderSystem.setShaderColor(1, 1, 1, 1);
-		RenderSystem.setShaderTexture(0, BOOK_TEXTURE);
-		GuiComponent.blit(pose, left.x + BOOK_W + GAP, left.y, 0, 0, BOOK_W, BOOK_H, 256, 256);
-		if (page != null) UIElement.render(pose, page, mouseX, mouseY);
 	}
 
 	// ---- rungs -----------------------------------------------------------------------------------------------------
@@ -177,6 +105,17 @@ public final class DietLogPages {
 		return ItemStack.EMPTY;
 	}
 
+	/**
+	 * The kind's item icon from the client config (G5d: lock, diamond shard, metal frame, with vanilla fallbacks). When
+	 * none of the configured items is loaded, the old icon: the effect sprite, or for a slot an empty box.
+	 */
+	private static void kindIcon(PoseStack pose, List<? extends String> ids, Rung r, int x, int y) {
+		ItemStack stack = RpConfig.CLIENT_SPEC.isLoaded() ? Icons.configured(ids) : ItemStack.EMPTY;
+		if (!stack.isEmpty()) Icons.item(stack, x, y, ICON);
+		else if (r.kind == Rung.Kind.SLOT) GuiComponent.fill(pose, x, y, x + ICON, y + ICON, 0x40000000);
+		else Icons.effect(pose, r.id, x, y, ICON);
+	}
+
 	/** The rung's icon at {@code (x, y)}, {@link #ICON} pixels: kind-colored frame, grayed when not reached. */
 	static void drawIcon(PoseStack pose, Rung r, int x, int y, boolean got) {
 		switch (r.kind) {
@@ -186,27 +125,23 @@ public final class DietLogPages {
 				if (stack.isEmpty()) Icons.armor(pose, x, y);
 				else Icons.item(stack, x, y, ICON);
 			}
-			case SLOT -> {
-				SlotChoice c = ClientState.state.slots.size() > r.slotIndex && r.slotIndex >= 0 ? ClientState.state.slots.get(r.slotIndex) : null;
-				GuiComponent.fill(pose, x, y, x + ICON, y + ICON, 0x40000000);
-				if (c != null) Icons.effect(pose, c.effect(), x, y, ICON);
-			}
-			case FLAT, UNLOCK -> Icons.effect(pose, r.id, x, y, ICON);
+			case SLOT -> kindIcon(pose, RpConfig.CLIENT.slotIcon.get(), r, x, y);
+			case FLAT -> kindIcon(pose, RpConfig.CLIENT.flatIcon.get(), r, x, y);
+			case UNLOCK -> kindIcon(pose, RpConfig.CLIENT.unlockIcon.get(), r, x, y);
 		}
 		Icons.frame(pose, x, y, ICON, got ? color(r) : GREY);
 		if (!got) Icons.dim(pose, x, y, ICON);
 	}
 
-	/** A legend sample for a kind (a heart, a toughness chestplate, a slot box, Speed, Haste). */
-	private static Rung sample(Rung.Kind kind) {
-		return switch (kind) {
-			case HEALTH -> new Rung(kind, 0, null, 2, 0);
-			case ATTRIBUTE -> new Rung(kind, 0, new ResourceLocation("minecraft", "generic.armor_toughness"), 1, 0);
-			case SLOT -> new Rung(kind, 0, null, 0, 0);
-			case FLAT -> new Rung(kind, 0, new ResourceLocation("minecraft", "speed"), 0, 1);
-			case UNLOCK -> new Rung(kind, 0, new ResourceLocation("minecraft", "haste"), 0, 1);
-		};
-	}
+	/** The key (legend) rows: a sample rung per row and its name (G5d adds knockback resistance with the shield). */
+	private static final Rung[] LEGEND = {
+			new Rung(Rung.Kind.HEALTH, 0, null, 2, 0),
+			new Rung(Rung.Kind.ATTRIBUTE, 0, new ResourceLocation("minecraft", "generic.armor_toughness"), 1, 0),
+			new Rung(Rung.Kind.ATTRIBUTE, 0, new ResourceLocation("minecraft", "generic.knockback_resistance"), 1, 0),
+			new Rung(Rung.Kind.SLOT, 0, null, 0, 0),
+			new Rung(Rung.Kind.FLAT, 0, new ResourceLocation("minecraft", "speed"), 0, 1),
+			new Rung(Rung.Kind.UNLOCK, 0, new ResourceLocation("minecraft", "haste"), 0, 1)};
+	private static final String[] LEGEND_NAMES = {"health", "toughness", "knockback", "slot", "flat", "unlock"};
 
 	/** A hover target over an icon: Apple Pie's UIElement shows its tooltip string. Draws nothing itself. */
 	private static final class Hover extends UIElement {
@@ -252,8 +187,6 @@ public final class DietLogPages {
 
 	private static final class ProgressPage extends UIElement {
 		private static final int BAR_DY = 66, LEGEND_DY = 86;
-		private static final Rung.Kind[] KINDS = {Rung.Kind.HEALTH, Rung.Kind.ATTRIBUTE, Rung.Kind.SLOT, Rung.Kind.FLAT, Rung.Kind.UNLOCK};
-		private static final String[] NAMES = {"health", "attribute", "slot", "flat", "unlock"};
 		private final Window window;
 		private final List<Rung> shown = new ArrayList<>();
 		private final List<int[]> spots = new ArrayList<>();
@@ -276,9 +209,9 @@ public final class DietLogPages {
 				children.add(new Hover(new Rectangle(ix, iy, ICON, ICON), Icons.num(r.threshold) + ": " + describe(r).getString()));
 			}
 			int ly = frame.y + LEGEND_DY;
-			for (int i = 0; i < NAMES.length; i++) {
+			for (int i = 0; i < LEGEND_NAMES.length; i++) {
 				children.add(new Hover(new Rectangle(frame.x + 8, ly + i * 11, ICON, ICON),
-						Component.translatable("solraspberrypie.dietlog.legend." + NAMES[i]).getString()));
+						Component.translatable("solraspberrypie.dietlog.legend." + LEGEND_NAMES[i]).getString()));
 			}
 		}
 
@@ -310,13 +243,13 @@ public final class DietLogPages {
 			}
 
 			int ly = frame.y + LEGEND_DY;
-			for (int i = 0; i < NAMES.length; i++) {
-				drawIcon(pose, sample(KINDS[i]), frame.x + 8, ly + i * 11, true);
-				fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.legend." + NAMES[i]), frame.x + 22, ly + i * 11 + 1, 0x333333);
+			for (int i = 0; i < LEGEND_NAMES.length; i++) {
+				drawIcon(pose, LEGEND[i], frame.x + 8, ly + i * 11, true);
+				fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.legend." + LEGEND_NAMES[i]), frame.x + 22, ly + i * 11 + 1, 0x333333);
 			}
 			if (s.foodsEaten < s.minFoods) {
 				fontRenderer.draw(pose, Component.translatable(s.uniqueGate ? "solraspberrypie.screen.gate_unique" : "solraspberrypie.screen.gate",
-						s.minFoods - s.foodsEaten), frame.x + 6, ly + 57, 0x8A4A00);
+						s.minFoods - s.foodsEaten), frame.x + 6, ly + LEGEND_NAMES.length * 11 + 2, 0x8A4A00);
 			}
 			super.render(pose);
 		}

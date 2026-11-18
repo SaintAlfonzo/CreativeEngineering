@@ -255,7 +255,9 @@ Q-E: a warning at server start when it is above 0 (decided 2026-11-12).
 - **Progress line** (behavior like Carrot's food book, own code): a bar across diversity with icons at each rung:
   heart (health), knockback resistance, armor toughness, slot, flat bonus (permanent buff), one-time unlock.
   Reached rungs colored, unreached gray, hover for the value. Since 12.4 the bar covers a window (the last milestone
-  reached and the next few), icons as listed in 12.4 #37; Apple Pie's own benefit pages are removed.
+  reached and the next few), icons as listed in 12.4 #37 and since 2026-11-17 in 12.5; Apple Pie's own benefit pages are removed.
+- **Single page, scaled** (12.5): the book is drawn at client config `[dietLog] bookScale` (default 1.25), shrunk to
+  fit small windows. The double page view (12.4 #31) is removed.
 
 ## 7. Liquid Diet Log
 
@@ -500,6 +502,8 @@ Losses from a confirmed paid action were already listed on the confirm panel; th
   evaluate in the boilerplate). Whatever empty active slot is targeted, the effect lands in the lowest empty active
   slot (5.1). Level dropdown per active slot (free).
 - Paid actions open the confirm panel (5.4).
+- Layout since 2026-11-17 (12.5): slots side by side, a progress bar under them in place of each slot's "needs
+  diversity" line.
 
 ### 11.3 Keybinds (client, rebindable)
 
@@ -703,7 +707,7 @@ replaced by hand; Raspberry Pie now makes Apple Pie's benefits inert whatever th
   foods-eaten counter (and so the unique-food count), highest diversity (so every one-time unlock), slot choices and
   the Liquid Diet Log. Keeps pause state and the books-given flag. Applies at once; the player gets "Your diet was
   reset". There was no stored cost history to clear (costs come from `respecFoods`).
-- **#31 double page (built; default on 2026-11-13, owner):** client config `[dietLog] doublePage` (on). When on and the screen is at
+- **#31 double page (removed 2026-11-17, G7.12: option and code gone; see 12.5):** client config `[dietLog] doublePage` (on). When on and the screen is at
   least 380 px wide, the book moves left by half a page and a second book on the right shows the first page of foods
   out of the decay window ("Older foods"); the left food pages become "Counting foods" (in the window) followed by the
   older foods from page 2 on. Narrow screens fall back to one book.
@@ -733,3 +737,34 @@ replaced by hand; Raspberry Pie now makes Apple Pie's benefits inert whatever th
   effect sprite (flat and unlock). Each has a frame in its kind color when reached; unreached icons are greyed. The
   Milestones list uses the same icons (rows 12 px).
 - **#38 Apple Pie pages (fixed):** every Apple Pie benefits page is removed from the Diet Log, whatever the config.
+
+### 12.5 Screens after the 2026-11-16 rulings (built 2026-11-17)
+
+Plan: [plan_post_scratch_1115.md](plan_post_scratch_1115.md) G5 as amended by G6-23, G6-24, G7.12; TODO
+`tooling/scratch-1115-follow-ups #24`; tests CQ-RPI-41 to -45 (CQ-RPI-33 and -36 superseded).
+
+- **Single page (G5a, G6-23):** the double page view and its client option `[dietLog] doublePage` are removed, with the
+  "Counting foods" / "Older foods" split it brought: the food history is Apple Pie's one list again. The owner's client
+  config was edited by hand (mirror in `configs_edited/root_config/`); other clients drop the key when Forge corrects
+  the file.
+- **Book scale (G5b):** client config `[dietLog] bookScale` (0.5 to 3.0, default 1.25). Applied as a model-view scale
+  around the screen center while the Diet Log renders, so Apple Pie's fixed-pixel UI kit, its item models and the
+  Diet Bonuses button grow together; the mouse is mapped back for hovers and clicks (`mouseClicked` override). Fit
+  rule (replaces the 380 px rule of #31): above 1.0 the scale shrinks so the book (186 px wide) and the button (118 px
+  below center) stay 4 px inside the window, but never below 1.0. At 1.25 that needs 241 x 303 GUI pixels; GUI scale 4
+  on 1080p (480 x 270) gives about 1.11. Tooltips are drawn inside the scale and can reach past the window edge.
+- **Effect screen (P key, G5c, G6-24):** slots in a row of cells (up to 92 px each; the panel widens to fit, never
+  past the window less 16 px, never under 276 px). Each cell: "Slot N", effect icon, name (cut to the cell), -/+, then
+  Change/Drop (Choose when empty). Hover a cell for the name and its "Slot N (diversity X)" or "needs diversity X".
+  Permanent buff icons start 14 px after their label. Under the slots a full-width bar: one segment per slot, a tick
+  and the slot's diversity at each segment's right end, "0" at the left; the green fill follows the current diversity
+  piece by piece and is full at the last slot's diversity.
+- **Icons (G5d, G7.12):** client config `[icons]`, each a list tried in order, first loaded item wins, NBT allowed in
+  braces: `unlock` (Monobank `replacement_lock`, then an Awkward Potion), `permanentBuff` (Create Recycle
+  `create_crush_everything:diamond_shard`, then a diamond), `slot` (Supplementaries Squared `suppsquared:metal_frame`,
+  then an item frame). Used on the bar, the Milestones list and the key; when no listed item loads, the old icon
+  (effect sprite, slot box). Attributes keep their item icons (netherite chestplate, shield, ...). The key has six
+  rows: Hearts, Toughness, Knockback resistance (the shield, missing before), Effect slot, Permanent buff, One-time
+  unlock. Assumed (2026-11-17, not ruled): the item icons replace the effect sprites everywhere in the Diet Log, so
+  flat and unlock rungs are named by hover and the list text, and slot rungs no longer show the chosen effect (the P
+  screen does).

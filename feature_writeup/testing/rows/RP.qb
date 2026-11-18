@@ -398,6 +398,7 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @pass the bar spans a window: at 0 it ends at 7 with icons at 2, 5, 7; at 6 it starts a little before 5 and ends at 12; values printed under both ends, "..." when more lie ahead, "<" on the left when earlier milestones exist; icons: heart, effect sprites (Speed, Haste, ...), slot box (holding the chosen effect), chestplate or shield for attributes; reached icons in color with a colored frame, unreached grayed; hover gives the value; legend shows the five icons
 @fails `DietLogPages.ProgressPage`, `Window.of`, `drawIcon`
 @draft no batch holds this row yet
+@superseded CQ-RPI-44 (icons and key changed 2026-11-17, G5d); the window checks stay valid
 ## CQ-RPI-34
 @group client
 @commands Milestones pages (#37)
@@ -416,6 +417,7 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @pass book moves left, a second book on the right shows "Older foods (N)" page 1; the left food pages read "Counting foods (N)" then older foods page 2+; item tooltips work on both; Diet Bonuses button centered under the pair; narrow window falls back to one book
 @fails `FoodBookScreenMixin.solrp$placeBook`, `DietLogPages.splitFoodPages`, `renderCompanion`
 @draft no batch holds this row yet
+@superseded CQ-RPI-41 (double page removed 2026-11-17, G7.12)
 ## CQ-RPI-37
 @group client
 @commands At full health with a heart rung active, drop below its threshold (respec); then at half health with two heart rungs, drop one (#33 rule)
@@ -439,4 +441,41 @@ look rp8 (new) and rp7 (has eaten): max health 20, no Apple Pie modifier in Attr
 @commands Open `New World` (made before this jar) with the replaced Apple Pie config; `/data get entity @s ForgeCaps` (#36 backfill, stale config)
 @pass `solrp_gateFoods` present, holding the remembered foods eaten since the counter last reset; the book says minimum 5 (not 10); no Apple Pie bonus pages
 @fails `FoodListMixin.solrp$load` backfill; world `serverconfig/solapplepie-server.toml`
+@draft no batch holds this row yet
+@@text
+@@text ### CQ-RPI screens after the 2026-11-16 rulings, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G5, G7.12; TODO `tooling/scratch-1115-follow-ups #24`)
+@@text
+@@text Targets the `solRaspberryPie-1.0.0.jar` built 2026-11-17. The owner's client config had `doublePage` removed by hand
+@@text and gained `bookScale` and `[icons]`. Monobank, Create Recycle and Supplementaries Squared are in `mods/`.
+@@text
+@@table
+## CQ-RPI-41
+@group client
+@commands Open the Diet Log at GUI scale 2 on a 1920x1080 window; page through every page; hover a food and a ladder icon; click the page arrows and Diet Bonuses (G5a, G5b)
+@pass one book only, drawn about 25% larger than Apple Pie's (fonts, item icons and the button grow together); no "Counting foods" or "Older foods" headers (one food history list); hovers and clicks hit what is under the cursor; no `doublePage` key in the client config after the game saves it
+@fails `FoodBookScreenMixin` (`solrp$scaleBegin`, `solrp$mouseX/Y`, `mouseClicked`), `DietLogPages.bookScale`
+@draft no batch holds this row yet
+## CQ-RPI-42
+@group client
+@commands Diet Log with a narrow window (GUI scale 4 on 1080p = 270 px tall, or a window under 606 px tall at scale 2; 1.25 needs 303 GUI px of height and 241 of width); then `[dietLog] bookScale = 1.0` and `= 1.5` in the client config, reopen (G5b, 380 px rule)
+@pass narrow: the book shrinks to fit with the Diet Bonuses button on screen, never smaller than unscaled; 1.0 draws Apple Pie's size; 1.5 draws larger where it fits
+@fails `DietLogPages.bookScale` fit math (`BUTTON_BOTTOM` 118)
+@draft no batch holds this row yet
+## CQ-RPI-43
+@group client
+@commands Press P with 4 slots (pack ladder): fill slots 1 and 2, leave 3 empty and active if reached, 4 not reached; then at a diversity between two slot values; then a flat bonus active (G5c)
+@pass slots side by side, each with "Slot N", effect icon, name, and -/+ then Change/Drop (Choose when empty); grayed slots have no buttons; a gap between "Permanent buffs" and the first buff icon; under the slots a full-width bar with a tick and diversity value at the right end of each slot's segment, "0" at the left; green fill to the current diversity, partial in the segment being filled, full at the last slot's value; hovering a slot shows its name and "Slot N (diversity X)" or "needs diversity X"; picker and confirm panel still work
+@fails `EffectScreen.drawSlots`, `drawSlotBar`, `buildSlots`, `cellX`
+@draft no batch holds this row yet
+## CQ-RPI-44
+@group client
+@commands Diet Ladder page at diversity 0, about 6 and about 22; then the Milestones pages (G5d, G7.12)
+@pass one-time unlocks show Monobank's replacement lock, permanent buffs Create Recycle's diamond shard, slots Supplementaries Squared's metal frame; toughness the netherite chestplate, knockback resistance the shield; the key has six rows: Hearts, Toughness, Knockback resistance, Effect slot, Permanent buff, One-time unlock; hover still names the effect; reached in color with a frame, unreached grayed
+@fails `DietLogPages.kindIcon`, `LEGEND`, `Icons.configured`
+@draft no batch holds this row yet
+## CQ-RPI-45
+@group client
+@commands Client config `[icons]`: set `unlock = ["nosuchmod:lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"]`, `permanentBuff = ["minecraft:diamond"]`, `slot = ["minecraft:item_frame"]`; restart the client; open the Diet Ladder page (G5d fallbacks)
+@pass unlock icon is an Awkward Potion bottle, permanent buff a diamond, slot an item frame; no errors in `logs/latest.log`
+@fails `Icons.configured` (registry check, NBT parse)
 @draft no batch holds this row yet

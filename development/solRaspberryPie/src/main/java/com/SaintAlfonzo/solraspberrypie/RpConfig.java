@@ -2,6 +2,8 @@ package com.SaintAlfonzo.solraspberrypie;
 
 import net.minecraftforge.common.ForgeConfigSpec;
 
+import java.util.List;
+
 /** Server settings are per world (serverconfig/solraspberrypie-server.toml); the ladder is its own JSON file (3). */
 public final class RpConfig {
 	public static final Server SERVER;
@@ -52,15 +54,27 @@ public final class RpConfig {
 		public final ForgeConfigSpec.IntValue widgetX;
 		public final ForgeConfigSpec.IntValue widgetY;
 		public final ForgeConfigSpec.IntValue progressAhead;
-		public final ForgeConfigSpec.BooleanValue doublePage;
+		public final ForgeConfigSpec.DoubleValue bookScale;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> unlockIcon;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> flatIcon;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> slotIcon;
 
 		Client(ForgeConfigSpec.Builder b) {
 			b.push("dietLog");
 			progressAhead = b.comment("Diet Log progress bar: how many milestones ahead of the last one reached it shows.")
 					.defineInRange("progressAhead", 3, 1, 50);
-			doublePage = b.comment("The Diet Log opens as two pages, foods still in the window on the left and the first page of",
-							"foods out of the window on the right. Needs a screen wide enough for both pages.")
-					.define("doublePage", true);
+			bookScale = b.comment("Diet Log size: 1.25 draws the book at 125%. Shrinks to fit a small window, never below 100%",
+							"(or below this value when it is under 1.0).")
+					.defineInRange("bookScale", 1.25, 0.5, 3.0);
+			b.pop();
+			b.push("icons");
+			unlockIcon = b.comment("Diet Log icon for one-time unlocks: the first of these items that is loaded. An item may carry NBT",
+							"in braces, e.g. minecraft:potion{Potion:\"minecraft:awkward\"}.")
+					.defineList("unlock", List.of("monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"), o -> o instanceof String);
+			flatIcon = b.comment("Diet Log icon for permanent buffs: the first of these items that is loaded.")
+					.defineList("permanentBuff", List.of("create_crush_everything:diamond_shard", "minecraft:diamond"), o -> o instanceof String);
+			slotIcon = b.comment("Diet Log icon for effect slots: the first of these items that is loaded.")
+					.defineList("slot", List.of("suppsquared:metal_frame", "minecraft:item_frame"), o -> o instanceof String);
 			b.pop();
 			b.push("widget");
 			widgetEnabled = b.comment("Show the diet bonus bar on the survival inventory. When off, diet effects show like any other effect.")
