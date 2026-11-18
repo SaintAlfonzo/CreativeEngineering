@@ -126,6 +126,19 @@ def t21():
 	assert v.get('stamps') == {}, 'verdict stamps %r' % v.get('stamps')
 
 
+@case('PROC-21b qrun: a repeated waitlog pattern waits for a new line, not the one an earlier waitlog matched')
+def t21b():
+	p = write_rows('ZW.qb', SECTION % ('zjar', 'T2') + row('SQ-ZW-01', '> say Task finished\nwaitlog Task finished 5\n'
+															'> say Task finished\nwaitlog Task finished 5')
+				   + row('SQ-ZW-02', '> say Task finished\nwaitlog Task finished 5\nwaitlog Task finished 2'))
+	out = fake_out('o21b')
+	res = TMP / 'r21b'
+	subprocess.run(QRUN + ['run', str(out), str(p), str(res), '--no-watch'], capture_output=True, text=True)
+	d = json.loads((res / 'results.json').read_text())
+	assert d.get('SQ-ZW-01', {}).get('result') == 'PASS', d
+	assert d.get('SQ-ZW-02', {}).get('result') == 'FAIL', d
+
+
 @case('PROC-22 plan: a one-jar stamp change plans T1 of that jar plus its T2 rows, not the others; under 1 h')
 def t22():
 	for f in ROWS.glob('*.qb'):

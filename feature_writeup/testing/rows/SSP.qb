@@ -107,16 +107,16 @@ look cashiers still offer enchanted books; the cashier trader type may not use v
 ## SQ-META31-04b | meteorite desert pyramid never placed short
 @phase worldgen
 @group C
-@commands `[worldgen.meta_structures] log` on, new world, `/locate structure creativeengineering:meta/meteorite_desert_pyramid` a few times, grep `meteorite_desert_pyramid` in latest.log
+@commands `[worldgen.meta_structures] log` on, new world, `/locate structure creativeworldgen:meta/meteorite_desert_pyramid` a few times, grep `meteorite_desert_pyramid` in latest.log
 @pass every placed line `1/1 minecraft:desert_pyramid` plus a meteorite; short ones `not placed, core part ...` or `no satellite fitted`; none placed with `0/1 desert_pyramid`
 @fails Depends on: `structures/metas #11`
 @jars creativecommon
 @from batches/r1101/w2_worldgen.qb
-> locate structure creativeengineering:meta/meteorite_desert_pyramid
-waitlog nearest creativeengineering:meta/meteorite_desert_pyramid is at|type "?creativeengineering:meta/meteorite_desert_pyramid|creativeengineering:meta/meteorite_desert_pyramid.*timed out 330
-> execute positioned 6000 70 -6000 run locate structure creativeengineering:meta/meteorite_desert_pyramid
+> locate structure creativeworldgen:meta/meteorite_desert_pyramid
+waitlog nearest creativeworldgen:meta/meteorite_desert_pyramid is at|type "?creativeworldgen:meta/meteorite_desert_pyramid|creativeworldgen:meta/meteorite_desert_pyramid.*timed out 330
+> execute positioned 6000 70 -6000 run locate structure creativeworldgen:meta/meteorite_desert_pyramid
 sleep 240
-> execute positioned -6000 70 6000 run locate structure creativeengineering:meta/meteorite_desert_pyramid
+> execute positioned -6000 70 6000 run locate structure creativeworldgen:meta/meteorite_desert_pyramid
 sleep 240
 bootreject meteorite_desert_pyramid.*0/1.*desert_pyramid
 look every placed line 1/1 minecraft:desert_pyramid plus a meteorite; short ones "not placed, core part" or "no satellite fitted"
@@ -135,7 +135,7 @@ look every placed line 1/1 minecraft:desert_pyramid plus a meteorite; short ones
 > chunky shape square
 > chunky start
 waitlog (?i)\[Chunky\].*(task finished|finished generating|complete) 3000
-> celocate census 96 2144 -2592
+> cwglocate census 96 2144 -2592
 waitlog (?i)census.*(done|finished|written) 2400
 shell python3 -c "import json,sys; d=json.load(open('kubejs/exported/worldgen/locate_census.json')); s=json.dumps(d); sys.exit(0 if 'falseNegativeAt' in s else 1)"
 look every biome false negative has a diagnosis string (regenerated point, biome, nearest-distance entries, start-piece centre); copy the census json into RES

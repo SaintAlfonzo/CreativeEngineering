@@ -458,12 +458,12 @@ bootexpect Done \(
 bootreject (Mixin apply failed|InvalidInjectionException).*(creativeworldgen|WorldgenMixinPlugin)
 > datapack list
 > pbot spawn qa 0 120 0 minecraft:overworld creative
-> locate structure creativeengineering:meta/ruin_scatter
+> locate structure creativeworldgen:meta/ruin_scatter
 waitlog (nearest|Could not find).* 240
 capture RS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> locate structure creativeengineering:meta/ruin_cluster
+> locate structure creativeworldgen:meta/ruin_cluster
 waitlog (nearest|Could not find).*ruin_cluster 240
-> locate structure creativeengineering:meta/pillager_camp_ruins
+> locate structure creativeworldgen:meta/pillager_camp_ruins
 waitlog (nearest|Could not find).*pillager_camp_ruins 240
 > locate structure creativeworldgen:sky_island
 waitlog (nearest|Could not find).*sky_island 240

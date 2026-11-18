@@ -47,15 +47,15 @@ shell grep -h "\[wild-crops\]" logs/kubejs/server.log | cut -c1-200 | head -6
 waitlog nearest minecraft:jungle is at|Could not find 300
 capture JG minecraft:jungle is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 
-> forceload add {JG1-80} {JG3-80} {JG1+79} {JG3+79}
+> forceload add {JG1-24} {JG3-24} {JG1+23} {JG3+23}
 sleep 90
-> cdevtest count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} myrtrees:rubberwood_log
-waitlog verb=count block=myrtrees:rubberwood_log n= 600
-> cdevtest count {JG1-80} 50 {JG3-80} {JG1+79} 160 {JG3+79} minecraft:jungle_log
-waitlog verb=count block=minecraft:jungle_log n= 600
+> cdevtest count {JG1-24} 50 {JG3-24} {JG1+23} 160 {JG3+23} myrtrees:rubberwood_log
+waitlog verb=count (block=myrtrees:rubberwood_log n=|error=) 600
+> cdevtest count {JG1-24} 50 {JG3-24} {JG1+23} 160 {JG3+23} minecraft:jungle_log
+waitlog verb=count (block=minecraft:jungle_log n=|error=) 600
 expect verb=count block=myrtrees:rubberwood_log n=[1-9]
 reject \[cdevtest\] .*done=0
-> forceload remove {JG1-80} {JG3-80} {JG1+79} {JG3+79}
+> forceload remove {JG1-24} {JG3-24} {JG1+23} {JG3+23}
 look packs line lists delightful, enders_additions, ends_delight, farmersdelight, fruitsdelight, fungidelight, hearthandharvest, myrtrees, oceanic_delight (a newer jar may add packs); rubberwood logs in about 1 chunk in 4 of the 10x10 box (log count / about 5 logs a tree).
 
 ## SQ-CDW-03 | [wild-crops] skip lines name only the removed mod's rules

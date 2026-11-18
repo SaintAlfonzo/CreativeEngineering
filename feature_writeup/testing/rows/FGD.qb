@@ -23,10 +23,10 @@
 @pass at least 300 mushroom_fields chunks in the square; huge inky in about 1 of 3 chunks and huge morel 1 of 4 ("chunks with a match by surface biome"); inky cap and morel singles present at the surface; colonies only over dirt / podzol
 @fails no mushroom_fields interior within 5000 blocks: try `level-seed=` of a mushroom-fields spawn seed in the srv properties; zero huge forms: `[mushroom-spawns]` log line, `mushroomSpawns` in CEConfig
 @from batches/r1103w/w_11_B.qb
-shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5c 'fungidelight:(inky_cap|morel)_mushroom_block$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
-shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5c '(fungidelight:(inky_cap|morel)_mushroom|minecraft:(brown|red)_mushroom)$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
-shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5c 'fungidelight:[a-z_]+_colony$' --near 'minecraft:(dirt|coarse_dirt|podzol|rooted_dirt|grass_block|mycelium|moss_block)$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
-shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks cdj5c 'minecraft:mycelium$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150} | grep -i 'surface biome'
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'fungidelight:(inky_cap|morel)_mushroom_block$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ '(fungidelight:(inky_cap|morel)_mushroom|minecraft:(brown|red)_mushroom)$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'fungidelight:[a-z_]+_colony$' --near 'minecraft:(dirt|coarse_dirt|podzol|rooted_dirt|grass_block|mycelium|moss_block)$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150}
+shell python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'minecraft:mycelium$' --box {MF1-150} {MF2-150} {MF1+150} {MF2+150} | grep -i 'surface biome'
 bootreject (?i)(error|exception).*mushroom-spawns
 look "chunks with a match by surface biome": mushroom_fields at least 300 chunks; huge inky about 1 of 3 chunks, huge morel 1 of 4; inky and morel singles at depth 0..1; colonies next to dirt / podzol
 
@@ -103,6 +103,6 @@ count FGD15c egg red == 20
 reject FGD15c egg brown
 > save-all flush
 waitlog Saved the game 300
-shell for b in "MF {MF1} {MF2}" "DF {DF1} {DF3}" "MG {MG1} {MG3}"; do set -- $b; echo "== $1 square (after summons)"; python3 -I $INST/tools/scratch_query/region_blocks.py entities cdj5c '^(minecraft:mooshroom|fungidelight:[a-z_]+_cow)$' --field Type --box $(($2-150)) $(($3-150)) $(($2+150)) $(($3+150)); done
+shell for b in "MF {MF1} {MF2}" "DF {DF1} {DF3}" "MG {MG1} {MG3}"; do set -- $b; echo "== $1 square (after summons)"; python3 -I $INST/tools/scratch_query/region_blocks.py entities @ '^(minecraft:mooshroom|fungidelight:[a-z_]+_cow)$' --field Type --box $(($2-150)) $(($3-150)) $(($2+150)) $(($3+150)); done
 shell grep -a "\[mob-spawns\]" logs/latest.log | grep -i "brown\|mooshroom" | cut -c1-300 | head -5
 look natural share (SQ-FGD-15c-nat): mushroom fields at least 20 mooshrooms and about 25 % brown, dark forest about 50 % brown, Fungi cows rare in dark forest, morel cows in swamps, both common in mushroom fields; too few natural animals: judge the summoned / egg half and the SpawnTuning.brownChance line

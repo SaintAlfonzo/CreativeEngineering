@@ -1065,14 +1065,14 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 ## SQ-PSM-02 | meta pillager tower siege: every part gets the meta_tower_siege box
 @phase worldgen
 @group B
-@commands `/locate structure creativeengineering:meta/pillager_tower_siege`; read its `[meta-structures] ... at chunk` line for the part positions; tp inside the anchor tower, on a camp, on a weapon; `/cwgspawnbox` at each
-@pass each line: `box meta_tower_siege (part box towers / camps / vehicles) of creativeengineering:meta/pillager_tower_siege, part <id> -> [minecraft:pillager 7 (1-1), minecraft:vindicator 3 (1-1), minecraft:evoker 3 (1-1), minecraft:illusioner 3 (1-1), minecraft:witch 3 (1-1)]`
+@commands `/locate structure creativeworldgen:meta/pillager_tower_siege`; read its `[meta-structures] ... at chunk` line for the part positions; tp inside the anchor tower, on a camp, on a weapon; `/cwgspawnbox` at each
+@pass each line: `box meta_tower_siege (part box towers / camps / vehicles) of creativeworldgen:meta/pillager_tower_siege, part <id> -> [minecraft:pillager 7 (1-1), minecraft:vindicator 3 (1-1), minecraft:evoker 3 (1-1), minecraft:illusioner 3 (1-1), minecraft:witch 3 (1-1)]`
 @fails part's own pool: `inMeta` metaBox lost (pillagers #6 resolution bug); `no box`: part pieces do not cover that spot (step further in) or `MetaStructure.parts` null
 @jars creativecommon
 @from batches/r1102b/s5_B.qb
-> locate structure creativeengineering:meta/pillager_tower_siege
-waitlog (The nearest creativeengineering:meta/pillager_tower_siege is at|Could not find) 1800
-capture S5TS The nearest creativeengineering:meta/pillager_tower_siege is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure creativeworldgen:meta/pillager_tower_siege
+waitlog (The nearest creativeworldgen:meta/pillager_tower_siege is at|Could not find) 1800
+capture S5TS The nearest creativeworldgen:meta/pillager_tower_siege is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {S5TS1-64} {S5TS3-64} {S5TS1+64} {S5TS3+64}
 sleep 20
 shell grep -E '\[meta-structures\].*pillager_tower_siege' logs/latest.log | tail -3
@@ -1277,7 +1277,7 @@ capture S5TG entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > cespawnbox {S5TS1+48} {S5TG2} {S5TS3+48}
 sleep 1
 > forceload remove {S5TS1-64} {S5TS3-64} {S5TS1+64} {S5TS3+64}
-expect \[spawn-boxes\] .*box meta_tower_siege \(part box (towers|camps|vehicles)\) of creativeengineering:meta/pillager_tower_siege, part \S+ -> \[minecraft:pillager 7 \(1-1\), minecraft:vindicator 3 \(1-1\), minecraft:evoker 3 \(1-1\), minecraft:illusioner 3 \(1-1\), minecraft:witch 3 \(1-1\)\]
+expect \[spawn-boxes\] .*box meta_tower_siege \(part box (towers|camps|vehicles)\) of creativeworldgen:meta/pillager_tower_siege, part \S+ -> \[minecraft:pillager 7 \(1-1\), minecraft:vindicator 3 \(1-1\), minecraft:evoker 3 \(1-1\), minecraft:illusioner 3 \(1-1\), minecraft:witch 3 \(1-1\)\]
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 look the [meta-structures] line (rows/SQ-PSM-02.shell.txt) gives the part chunks: the grid points inside a tower, a camp and a weapon each print the meta_tower_siege line with their part box; 'no box' only between parts
 
@@ -1337,14 +1337,14 @@ look biome monsters (zombie/skeleton/creeper Pos lines) only outside the tower w
 ## SQ-PSM-04 | meta pillager camp + ruin: camp part boxed, ruin part never an illager pool
 @phase worldgen
 @group B
-@commands `/locate structure creativeengineering:meta/pillager_camp_ruin`; `/cwgspawnbox` on the camp part and on the ruin part
+@commands `/locate structure creativeworldgen:meta/pillager_camp_ruin`; `/cwgspawnbox` on the camp part and on the ruin part
 @pass camp: `box meta_camps (part box camps) ...` with the camp_meta pool; ruin: `spawn_overrides ... part philipsruins:...` or `no box -> vanilla` with the ruin's own list, never an illager pool
 @fails ruin gets illagers: meta box applied to an unboxed part
 @jars creativecommon
 @from batches/r1102b/s5_B.qb
-> locate structure creativeengineering:meta/pillager_camp_ruin
-waitlog (The nearest creativeengineering:meta/pillager_camp_ruin is at|Could not find) 1500
-capture S5CR The nearest creativeengineering:meta/pillager_camp_ruin is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> locate structure creativeworldgen:meta/pillager_camp_ruin
+waitlog (The nearest creativeworldgen:meta/pillager_camp_ruin is at|Could not find) 1500
+capture S5CR The nearest creativeworldgen:meta/pillager_camp_ruin is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {S5CR1-48} {S5CR3-48} {S5CR1+48} {S5CR3+48}
 sleep 15
 > summon minecraft:armor_stand {S5CR1-32} 300 {S5CR3-32} {Tags:["s5cg"],NoGravity:1b,Invisible:1b}
@@ -1504,8 +1504,8 @@ look the ship line: box unwrecked_pillager_ships (boat pool) for a pillager-crew
 
 ## SQ-PSM-06 | struck monument after a restart: 3 elder guardians, rooms, spawn_overrides box
 @group B
-@commands `/locate structure creativeengineering:meta/struck_monument` (do not tp), `save-all`, `stop`, boot, tp to the monument centre at y 60, wait 20 s; count `@e[type=minecraft:elder_guardian,distance=..48]`; `/cwgspawnbox` inside; grep log for `could not be rebuilt`. Control: same steps with `minecraft:monument`
-@pass struck: elder guardians count 3, interior rooms present, probe `box spawn_overrides of creativeengineering:meta/struck_monument, part minecraft:monument -> [minecraft:guardian 1 (2-4)]`, no `could not be rebuilt` line; lone: 3 elders, probe `no box ... -> vanilla [minecraft:guardian 1 (2-4)]`
+@commands `/locate structure creativeworldgen:meta/struck_monument` (do not tp), `save-all`, `stop`, boot, tp to the monument centre at y 60, wait 20 s; count `@e[type=minecraft:elder_guardian,distance=..48]`; `/cwgspawnbox` inside; grep log for `could not be rebuilt`. Control: same steps with `minecraft:monument`
+@pass struck: elder guardians count 3, interior rooms present, probe `box spawn_overrides of creativeworldgen:meta/struck_monument, part minecraft:monument -> [minecraft:guardian 1 (2-4)]`, no `could not be rebuilt` line; lone: 3 elders, probe `no box ... -> vanilla [minecraft:guardian 1 (2-4)]`
 @fails 0 elders, hollow monument: `StructureStartMetaMonumentMixin` not applied or `repairMonumentsAfterLoad` skipped (warning line says why)
 @jars creativecommon
 @from batches/r1102b/s5_B2.qb
@@ -1524,7 +1524,7 @@ waitlog PSM06 struck counted 180
 expect #struck_elders has 3 \[s5n\]
 reject could not be rebuilt
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
-expect \[spawn-boxes\] .*box spawn_overrides of creativeengineering:meta/struck_monument, part minecraft:monument -> \[minecraft:guardian 1 \(2-4\)\]
+expect \[spawn-boxes\] .*box spawn_overrides of creativeworldgen:meta/struck_monument, part minecraft:monument -> \[minecraft:guardian 1 \(2-4\)\]
 look prismarine brick count well above 0 = interior rooms present (compare with the lone monument's count in SQ-PSM-06b)
 > pbot remove s5mstruck
 
@@ -2060,16 +2060,16 @@ look spectator at each captured Nether position ({PWC1} {PWC3}, {PWD1} {PWD3}, {
 ## SQ-PSW-03 (ST-295)
 @phase worldgen
 @group B
-@commands Overworld `locate structure creativeengineering:meta/ruin_cluster` and `meta/pillager_camp_ruin`
+@commands Overworld `locate structure creativeworldgen:meta/ruin_cluster` and `meta/pillager_camp_ruin`
 @pass both found, anchored on a level-three ruin, ancient towers or forgotten church (never a rare ruin)
 @fails `meta/large_ruins` still has the rare ruin, or the meta has no anchor left in that biome
 @reviewed 2026-11-16
-> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/ruin_cluster
-waitlog (The nearest creativeengineering:meta/ruin_cluster is at|Could not find) 900
-capture PRC The nearest creativeengineering:meta/ruin_cluster is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/pillager_camp_ruin
-waitlog (The nearest creativeengineering:meta/pillager_camp_ruin is at|Could not find) 900
-capture PPC The nearest creativeengineering:meta/pillager_camp_ruin is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeworldgen:meta/ruin_cluster
+waitlog (The nearest creativeworldgen:meta/ruin_cluster is at|Could not find) 900
+capture PRC The nearest creativeworldgen:meta/ruin_cluster is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeworldgen:meta/pillager_camp_ruin
+waitlog (The nearest creativeworldgen:meta/pillager_camp_ruin is at|Could not find) 900
+capture PPC The nearest creativeworldgen:meta/pillager_camp_ruin is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[cdevtest\] .*(done=0|error=))
 look tp a spectator to {PRC1} {PRC3} and {PPC1} {PPC3}: the anchor is a level-three ruin, ancient towers or the forgotten church, never a rare ruin
 

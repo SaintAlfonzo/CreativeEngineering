@@ -24,7 +24,7 @@
 ## SQ-WG30-A01 **PASS 2026-10-30**: 34 village starts in the square, all `-> kept`, no `too wet`; 3 with water over 1.5x ground kept (e.g. T&T snowy slopes 315 / 0)
 @phase long
 @group B
-@commands scratch toml `overrides = ["#creativeengineering:type/village=-1,-1,-1"]`, `log = "ALL"`; Chunky the square; `grep '\[earth-fill\]' latest.log` for village ids
+@commands scratch toml `overrides = ["#creativeworldgen:type/village=-1,-1,-1"]`, `log = "ALL"`; Chunky the square; `grep '\[earth-fill\]' latest.log` for village ids
 @pass every village line ends `-> kept`, none `CANCELLED`, none says `too wet`, also lines whose footprint has water more than 1.5x ground (#9)
 @fails `EarthFill.earthCancelled` / `EarthCheck.cancels`
 @reviewed 2026-11-16
@@ -36,7 +36,7 @@ waitlog Task finished 3600
 shell grep -aE '\[earth-fill\]' logs/latest.log | grep -iE 'village' | cut -c1-260 | head -40
 expect \[earth-fill\].*village.*-> kept
 reject \[earth-fill\].*village.*(CANCELLED|too wet)
-look village lines whose footprint has water more than 1.5x ground are kept too (#9). Preset before the boot: scratch toml `overrides = ["#creativeengineering:type/village=-1,-1,-1"]`, `log = "ALL"`, density 4, seed 8675309
+look village lines whose footprint has water more than 1.5x ground are kept too (#9). Preset before the boot: scratch toml `overrides = ["#creativeworldgen:type/village=-1,-1,-1"]`, `log = "ALL"`, density 4, seed 8675309
 ## SQ-WG30-A02 **PARTIAL 2026-10-30**: 27 Campsite starts, 1 cancel (fisher at [124, -115], 208 over water, too wet), none for air; ST-199 not checkable: the weight strip changed the pick at [-7, -9] (now a circus tent, canceled by mounds); a sampled sunk camp (butcher, 2138 102 -2426) sits flush; no 1.1.04-jar run to compare air counts
 @group B
 @commands same run; the `[earth-fill]` lines of the 6 Campsite camps (sunk 4); then ST-199 (armorer campsite at chunk [-7, -9])
@@ -160,13 +160,13 @@ shell n=$(grep -ac 'TEST OVERRIDES ACTIVE' logs/latest.log); echo "ACTIVE lines 
 look preset `[worldgen.debug] testOverrides = true` and a new world; the ACTIVE line lists 33 changes (towers weight 100, rare ruin 0.25, fortified shares 0.45, town villages 0.1); report has `## Test overrides`
 ## SQ-WG30-C04 **PASS 2026-10-30**: fortified_ruins 2728 blocks (4 s; fortified village + 3 ruins 64 to 71 out), fortified_camps 2608 (8 s; 2 camps 79 and 81 out), mangrove tower 2254 (9 s), rare ruin 2771 (65 s); bad `biomes` key: one `TEST OVERRIDES REFUSED ... "biomes" refused (... 7.4.8 ...)`, report "None applied: the file was refused"
 @group B
-@commands same world (switch on): ST-135 `/locate structure creativeengineering:meta/fortified_ruins` and `.../meta/fortified_camps` from 0 0, with `[worldgen.meta_structures] log = true`; then `/locate structure mysticrift_pillagers_towers_aris:mangrove_pillager_tower` and `philipsruins:rare_ruin`; then add `"biomes": "#minecraft:is_overworld"` to one entry of the scratch copy of `structure_test_overrides.json` and `/reload`
+@commands same world (switch on): ST-135 `/locate structure creativeworldgen:meta/fortified_ruins` and `.../meta/fortified_camps` from 0 0, with `[worldgen.meta_structures] log = true`; then `/locate structure mysticrift_pillagers_towers_aris:mangrove_pillager_tower` and `philipsruins:rare_ruin`; then add `"biomes": "#minecraft:is_overworld"` to one entry of the scratch copy of `structure_test_overrides.json` and `/reload`
 @pass both metas answer inside 300 s; the meta log lists a fortified village (or red roof castle) with 2 to 6 ruins / 2 to 4 camps 44 to 108 blocks out; the tower and the rare ruin answer; after the bad key: one `TEST OVERRIDES REFUSED ... "biomes" refused (... 7.4.8 ...)` warning and the report says the file was refused (ST-222, ST-135)
 @fails metas time out even with the overrides: earth fill or peaceful radius cancels (grep `[earth-fill]` / `[placement-priority] dropped` for the anchor), not a rate problem
 @draft needs a mid-run edit of the scratch structure_test_overrides copy and a reboot for the refused-key half (a row cannot reboot); the locate half is covered by SQ-WGE-02b
 ## SQ-WG30-C05 **PASS 2026-10-30**: toml `searchTimeoutSeconds = 300`; fortified_camps from 0 0: 1823 blocks (4 s), from 2448 -624: same village, 3019 blocks (1 s); fortified_ruins from 0 0: 2608 blocks (5 s); camps 56 / 74 and ruins 73 to 97 blocks out; no timeout
 @group B
-@commands first world (switch off, density 1): `/zcfg` or the toml shows `searchTimeoutSeconds = 300`; `/locate structure creativeengineering:meta/fortified_camps` from 0 0 and from 2448 -624, then `meta/fortified_ruins` from 0 0
+@commands first world (switch off, density 1): `/zcfg` or the toml shows `searchTimeoutSeconds = 300`; `/locate structure creativeworldgen:meta/fortified_camps` from 0 0 and from 2448 -624, then `meta/fortified_ruins` from 0 0
 @pass each answers, or ends with a clean `[locate] ... timed out after 300 s` line (no stall, server keeps ticking; LO-05 style); record the time and load count of each (ST-223)
 @fails timeout still 120: Forge kept the old toml value; a stall: `LocateStats.expired` path
 @draft superseded in practice by SQ-WGE-02b (same locates at the 120 s timeout set 2026-11-02); kept for the 300 s history only
@@ -189,7 +189,7 @@ look preset `[worldgen.debug] testOverrides = true` and a new world; the ACTIVE 
 @draft the share-only cancel judgement (teleport: open water vs a shore pond) is a person or agent look per start; the log half is `grep [earth-fill].*footprint` after the two Chunky squares, write both when the row is next run
 ## SQ-WG30-E02 **PASS 2026-10-30**: toml `avoidCoasts = true`; ST-203 all three `not placed, no anchor fits`; ST-204 all three built; driftwood flotilla found 144 blocks out and assembles (15/15, 10/10); square: 35 land metas, all built (diag3 count not recorded, no comparison)
 @group B
-@commands same world, toml `[worldgen.meta_structures] log = true`; ST-203: `/place structure` `creativeengineering:meta/farmers_camp`, `house_camp`, `ruin_scatter` at the spawn beach (-80 100 -16); ST-204: the same three at 2144 -2592; `/locate structure` a driftwood flotilla; count assembled land metas in the Chunky square vs the 2026-10-19 diag3 log
+@commands same world, toml `[worldgen.meta_structures] log = true`; ST-203: `/place structure` `creativeworldgen:meta/farmers_camp`, `house_camp`, `ruin_scatter` at the spawn beach (-80 100 -16); ST-204: the same three at 2144 -2592; `/locate structure` a driftwood flotilla; count assembled land metas in the Chunky square vs the 2026-10-19 diag3 log
 @pass the switch reads true (log or `/zcfg`); ST-203: all three "not placed, no anchor fits"; ST-204: all three build; the flotilla (in `meta/coast_ok`) still assembles; land metas within about 32 blocks of a beach or river fail (expected side effect, written up), elsewhere their count matches diag3
 @fails switch still false: Forge kept an old toml value, check the instance toml; flotilla gone: `meta/coast_ok` tag in `structure_tags.json`
 @draft ST-203/204 `/place structure` of metas at fixed spots plus a diag3 log compare; needs the meta log format of today (`[meta-structures]`) checked against MetaStructure before regexes can be written
@@ -216,7 +216,7 @@ look no solver `note` for crystal peaks or void barrens; distances against 1,064
 @@text ### D. Floating islands and seabed clearance (TODO `structures/terrain #5`, `#7`; [structure_tuning.md](../structure_tuning.md) 3.26, ST-233, ST-234)
 @@text
 @@text Creative Common `SkyIslands` (Sky Structures' 9 island features: one island per hit, based on the higher of ground and sea)
-@@text and `SeabedClearance` (structure tag `creativeengineering:seabed_clearance`: 7 Terralith `underground/*`, 6
+@@text and `SeabedClearance` (structure tag `creativeworldgen:seabed_clearance`: 7 Terralith `underground/*`, 6
 @@text Subterrestrial land cabins). New chunks only. D01 and D03 can share the A / E world (group B); D02 needs any Overworld.
 @@text
 @@table

@@ -5,7 +5,10 @@
                                         [--fail-depth-below N] [--json FILE]
     region_blocks.py entities LEVEL REGEX [--box X0 Z0 X1 Z1] [--field NAME] [--json FILE]
 
-LEVEL is the world folder (OUT/srv/<level-name>). Only chunks with Status full are read.
+LEVEL is the world folder (OUT/srv/<level-name>); '@' = the level-name of ./server.properties (a row's shell step
+runs in OUT/srv). A LEVEL without its region (or entities) folder exits 2: a wrong world name is not "0 found"
+(judge-14, r1118: SQ-GAP-03 and SQ-MD-01 read a stale r1113 world name and reported 0 blocks). Only chunks with
+Status full are read.
 blocks: every block whose id matches REGEX (Python, searched in the palette name), counted by id and
   - Y band (BAND layers per band, default 8), by biome (the section's 4x4x4 biome cell),
   - depth = blocks below the chunk's WORLD_SURFACE heightmap top (0 = the top block itself; < 13 = "near the surface"),
@@ -238,6 +241,15 @@ def main():
 		return v if n > 1 else v[0]
 	box = opt('--box', 4, int)
 	rx = re.compile(a[2])
+	if a[1] == '@':
+		try:
+			a[1] = next(l.split('=', 1)[1].strip() for l in open('server.properties') if l.startswith('level-name='))
+		except (OSError, StopIteration):
+			sys.exit('region_blocks: LEVEL @ needs ./server.properties with a level-name')
+	need = os.path.join(a[1], 'region' if a[0] == 'blocks' else 'entities')
+	if not os.path.isdir(need):
+		print('region_blocks: no %s folder (cwd %s): wrong LEVEL?' % (need, os.getcwd()), file=sys.stderr)
+		sys.exit(2)
 	if a[0] == 'blocks':
 		res, rc = cmd_blocks(a[1], rx, box, opt('--band', 1, int) or 8, opt('--near'), opt('--fail-above', 1, int),
 							 opt('--fail-depth-below', 1, int))
