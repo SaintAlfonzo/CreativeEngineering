@@ -31,7 +31,7 @@ public enum SurfaceTier {
 	CONFECTIONERY("confectionery", 0.85, "Edible blocks: chocolate, cake, pies, melon, pumpkins."),
 	TILLED("tilled", 0.80, "Crop fields: farmland, rich soil farmland, tilled end stone."),
 	LEAVES("leaves", 0.78, "Leaves and hedges."),
-	SNOW("snow", 0.75, "Snow block, coarse snow, powder snow. Snow layers slow by height instead ([surface.passthrough.layers])."),
+	SNOW("snow", 0.75, "Snow block, coarse snow, powder snow, and snow layers stood on in leather boots. Walking through snow layers slows by height instead ([surface.passthrough.layers])."),
 	STICKY("sticky", 0.65, "One sticky face: sticky pistons and their heads, sticky launchers (see [surface.sticky])."),
 	SPONGY("spongy", 0.60, "Squelching ground: mud, clay, wet sponge, dough, flesh blocks. Full blocks also sink."),
 	VERY_STICKY("very_sticky", 0.45, "Whole slime and honey blocks. Full blocks also sink.");

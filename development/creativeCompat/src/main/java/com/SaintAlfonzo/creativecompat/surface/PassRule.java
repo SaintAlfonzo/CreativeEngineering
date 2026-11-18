@@ -39,7 +39,7 @@ public final class PassRule {
 	}
 
 	/**
-	 * A layer height block's rule (plan_post_scratch_1115b.md D2): {@code walk} from {@link #layerWalk}, the tier's
+	 * A layer height block's rule (plan_post_scratch_1115b.md D2, plan_post_scratch_1115.md G7.4): {@code walk} from {@link #layerWalk}, the tier's
 	 * fall value, no density.
 	 */
 	public static Cell layerCell(PassTier tier, PassTier.Values v, double walk) {
@@ -47,25 +47,25 @@ public final class PassRule {
 	}
 
 	/**
-	 * Highest walk-through layer {@code H = max - solidBelowFull - 1} of a block whose layers run up to {@code max}
-	 * ({@code solidBelowFull} clamped to 0..max).
+	 * Highest walk-through layer H of a block whose layers run up to {@code max} (plan_post_scratch_1115.md G7.4):
+	 * leaf layers ({@code open}) walk through at every height, H = max; snow and any other layer block up to one layer
+	 * below full, H = max - 1 (a full snow layer becomes a snow block, {@link SnowLayers}).
 	 */
-	public static int highestWalkThrough(int max, int solidBelowFull) {
-		int s = Math.max(-1, Math.min(solidBelowFull, max)); // -1: never acts whole (leaf layers)
-		return max - s - 1;
+	public static int highestWalkThrough(int max, boolean open) {
+		return open ? max : max - 1;
 	}
 
 	/**
-	 * Walk value inside a layer block of {@code layers} out of {@code max} (plan_post_scratch_1115b.md D2), or NaN
-	 * when the block acts whole (no pass-through rule: {@code layers >= max - solidBelowFull}, or {@code H < 2} so it
-	 * never slows). One layer: 1.0. From 2 layers the value falls in equal steps to {@code layerMaxSlow} at H:
-	 * {@code walk(l) = 1 - (1 - layerMaxSlow) * (l - 1) / (H - 1)}.
+	 * Walk value inside a layer block of {@code layers} out of {@code max} (plan_post_scratch_1115.md G7.4), or NaN
+	 * when the block acts whole ({@code layers > H}, or {@code H < 2} so it never slows). One layer: 1.0. From 2 layers
+	 * the value falls in equal steps to {@code maxSlow} at H: {@code walk(l) = 1 - (1 - maxSlow) * (l - 1) / (H - 1)}.
+	 * {@code maxSlow} is the tier's {@code snowMaxSlow} or, for leaf layers, {@code leafMaxSlow}.
 	 */
-	public static double layerWalk(int layers, int max, int solidBelowFull, double layerMaxSlow) {
-		int h = highestWalkThrough(max, solidBelowFull);
+	public static double layerWalk(int layers, int max, boolean open, double maxSlow) {
+		int h = highestWalkThrough(max, open);
 		if (h < 2 || layers > h) return Double.NaN;
 		if (layers < 2) return 1.0;
-		return 1.0 - (1.0 - layerMaxSlow) * (layers - 1) / (double) (h - 1);
+		return 1.0 - (1.0 - maxSlow) * (layers - 1) / (double) (h - 1);
 	}
 
 	/** The neighbor count only matters for a tier that counts them; skip the block lookups otherwise. */

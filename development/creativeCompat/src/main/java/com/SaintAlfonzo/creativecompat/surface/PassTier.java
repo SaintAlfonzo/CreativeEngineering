@@ -33,13 +33,15 @@ public enum PassTier {
 	BUSH("bush", "Berry bushes: sweet berry, raspberry, grape bushes.",
 			v(0.36, 1.0, Growth.ANY, Neighbours.NONE, 3, 0.36, 1.0)),
 	/**
-	 * Layer height blocks (plan_post_scratch_1115b.md D, owner): snow layers, leaf piles, bamboo leaves. The walk value comes from the block's height ({@link PassRule#layerWalk}), not from {@code walk};
+	 * Layer height blocks (plan_post_scratch_1115b.md D, plan_post_scratch_1115.md G7.4): snow layers, leaf piles,
+	 * bamboo leaves. The walk value comes from the block's height ({@link PassRule#layerWalk}), not from {@code walk};
 	 * tag {@code creativecompat:passthrough_layers}.
 	 */
-	LAYERS("layers", "Layer height blocks: snow layers, leaf piles, bamboo leaves. "
-			+ "The walk value falls with the height (layerMaxSlow at the highest walk-through layer); high piles act whole.",
+	LAYERS("layers", "Layer height blocks: snow layers, Immersive Weathering leaf piles, Twigs bamboo leaves. "
+			+ "The walk value falls with the height: snow to snowMaxSlow at 7 of 8 layers, leaf layers to leafMaxSlow "
+			+ "at full height.",
 			v(1.0, 1.0, Growth.ANY, Neighbours.NONE, 3, 1.0, 1.0).minLayers(2).depthStriderPasses(true)
-					.layers(0.5, 2)), // LAYER_MAX_SLOW, SOLID_BELOW_FULL
+					.layers(0.4, 0.6)), // SNOW_MAX_SLOW, LEAF_MAX_SLOW
 	GRASS("grass", "Short grass, fern and other short plants. 1.0 = no effect; listed so it can be tuned.",
 			v(1.0, 1.0, Growth.ANY, Neighbours.NONE, 3, 1.0, 1.0));
 
@@ -101,60 +103,61 @@ public enum PassTier {
 	/**
 	 * Every config value of one tier, as one immutable snapshot (also the wire format of {@link PassSync}).
 	 * {@code surroundedAt}: the count that makes a {@code WEB} tier surrounded (clamped to the shape's max);
-	 * {@code minLayers}, {@code layerMaxSlow}, {@code solidBelowFull}: the layer height rule ({@link #LAYERS} only).
+	 * {@code minLayers}, {@code snowMaxSlow}, {@code leafMaxSlow}: the layer height rule ({@link #LAYERS} only; snow
+	 * layers and every other layer block, and the leaf layers of {@code creativecompat:passthrough_layers_open}).
 	 */
 	public record Values(double walk, double fall, Growth growth, Neighbours neighbours, int denseFrom,
 						 double denseWalk, double denseFall, boolean denseResetsFall, Surround surrounded,
 						 int surroundedAt, int minLayers, boolean walkOnlyMoving, ItemRule items,
 						 double itemStickChance, boolean projectiles, boolean depthStriderPasses,
-						 double layerMaxSlow, int solidBelowFull) {
+						 double snowMaxSlow, double leafMaxSlow) {
 
 		Values walkOnlyMoving(boolean b) {
 			return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, denseResetsFall,
 					surrounded, surroundedAt, minLayers, b, items, itemStickChance, projectiles, depthStriderPasses,
-					layerMaxSlow, solidBelowFull);
+					snowMaxSlow, leafMaxSlow);
 		}
 
 		Values denseResetsFall(boolean b) {
 			return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, b,
 					surrounded, surroundedAt, minLayers, walkOnlyMoving, items, itemStickChance, projectiles,
-					depthStriderPasses, layerMaxSlow, solidBelowFull);
+					depthStriderPasses, snowMaxSlow, leafMaxSlow);
 		}
 
 		Values surrounded(Surround s) {
 			return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, denseResetsFall,
 					s, surroundedAt, minLayers, walkOnlyMoving, items, itemStickChance, projectiles, depthStriderPasses,
-					layerMaxSlow, solidBelowFull);
+					snowMaxSlow, leafMaxSlow);
 		}
 
 		Values items(ItemRule i) {
 			return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, denseResetsFall,
 					surrounded, surroundedAt, minLayers, walkOnlyMoving, i, itemStickChance, projectiles,
-					depthStriderPasses, layerMaxSlow, solidBelowFull);
+					depthStriderPasses, snowMaxSlow, leafMaxSlow);
 		}
 
 		Values projectiles(boolean b) {
 			return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, denseResetsFall,
 					surrounded, surroundedAt, minLayers, walkOnlyMoving, items, itemStickChance, b, depthStriderPasses,
-					layerMaxSlow, solidBelowFull);
+					snowMaxSlow, leafMaxSlow);
 		}
 
 		Values minLayers(int n) {
 			return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, denseResetsFall,
 					surrounded, surroundedAt, n, walkOnlyMoving, items, itemStickChance, projectiles,
-					depthStriderPasses, layerMaxSlow, solidBelowFull);
+					depthStriderPasses, snowMaxSlow, leafMaxSlow);
 		}
 
 		Values depthStriderPasses(boolean b) {
 			return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, denseResetsFall,
 					surrounded, surroundedAt, minLayers, walkOnlyMoving, items, itemStickChance, projectiles, b,
-					layerMaxSlow, solidBelowFull);
+					snowMaxSlow, leafMaxSlow);
 		}
 
-		Values layers(double maxSlow, int solidBelow) {
+		Values layers(double snowSlow, double leafSlow) {
 			return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, denseResetsFall,
 					surrounded, surroundedAt, minLayers, walkOnlyMoving, items, itemStickChance, projectiles,
-					depthStriderPasses, maxSlow, solidBelow);
+					depthStriderPasses, snowSlow, leafSlow);
 		}
 
 		/** The count that makes a block surrounded: {@code surroundedAt}, at most the shape's max. */
@@ -164,7 +167,7 @@ public enum PassTier {
 
 		/** Nothing in this tier changes movement (all speeds 1.0, no fall reset, no surround): the scan can skip it. */
 		public boolean inert() {
-			if (walk == 1.0 && layerMaxSlow < 1.0) return false; // layers: the walk comes from the height
+			if (walk == 1.0 && (snowMaxSlow < 1.0 || leafMaxSlow < 1.0)) return false; // layers: walk from the height
 			return walk == 1.0 && fall == 1.0 && (neighbours == Neighbours.NONE
 					|| (denseWalk == 1.0 && denseFall == 1.0 && !denseResetsFall && surrounded == Surround.NONE));
 		}
@@ -172,17 +175,20 @@ public enum PassTier {
 
 	/**
 	 * Defaults that are the same for every tier: no density effect, no reset, surrounded at 6, no layers rule
-	 * (layerMaxSlow 1.0 outside the layer tier), item chance 0.35.
+	 * (snowMaxSlow and leafMaxSlow 1.0 outside the layer tier), item chance 0.35.
 	 */
 	private static Values v(double walk, double fall, Growth growth, Neighbours neighbours, int denseFrom,
 							double denseWalk, double denseFall) {
 		return new Values(walk, fall, growth, neighbours, denseFrom, denseWalk, denseFall, false, Surround.NONE,
-				6, 1, false, ItemRule.NONE, 0.35, false, false, 1.0, 2);
+				6, 1, false, ItemRule.NONE, 0.35, false, false, 1.0, 1.0);
 	}
 
-	/** Layer rule defaults (plan_post_scratch_1115b.md D2): 0.5 at the highest walk-through layer, 2 stages solid. */
-	public static final double LAYER_MAX_SLOW = 0.5;
-	public static final int SOLID_BELOW_FULL = 2;
+	/**
+	 * Layer rule defaults (plan_post_scratch_1115.md G7.4, proposal): snow 0.4 at 7 of 8 layers, leaf layers 0.6 at full
+	 * height. Snow slows harder than leaves.
+	 */
+	public static final double SNOW_MAX_SLOW = 0.4;
+	public static final double LEAF_MAX_SLOW = 0.6;
 
 	private final String key;
 	private final String description;

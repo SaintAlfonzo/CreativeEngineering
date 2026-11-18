@@ -64,9 +64,14 @@ public final class PassState {
 
 	/** Remembers this tick's counted cells as "last tick" for the next one. */
 	void rememberCells() {
-		int n = result.cells();
+		rememberCells(result);
+	}
+
+	/** Remembers the cells of {@code r} (the landing check's result, {@link PassThrough#beforeLanding}). */
+	void rememberCells(PassResult r) {
+		int n = r.cells();
 		if (lastCells.length < n) lastCells = new long[Math.max(n, lastCells.length * 2)];
-		for (int i = 0; i < n; i++) lastCells[i] = result.cellPos(i);
+		for (int i = 0; i < n; i++) lastCells[i] = r.cellPos(i);
 		lastCount = n;
 	}
 

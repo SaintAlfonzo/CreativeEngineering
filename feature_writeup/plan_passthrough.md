@@ -149,8 +149,9 @@ A **pass-through tier** is a block tag `blockrunner:passthrough/<tier>` (filled 
 | `depthStriderPasses` | Depth Strider boots ignore the tier | bool |
 
 Plus `[surface.passthrough] enabled` (master switch, also used by the benchmark) and `breakStallTicks` (section 5.1,
-default 3). The layer tier's table `[surface.passthrough.layers]` has its own keys (section 2.1): `layerMaxSlow`,
-`solidBelowFull`, `minLayers`, `solidBelowFullOverrides`, `fall`, `depthStriderPasses`.
+default 3). The layer tier's table `[surface.passthrough.layers]` has its own keys (section 2.1): `snowMaxSlow`,
+`leafMaxSlow`, `minLayers`, `snowWalkThrough`, `snowFullBecomesBlock`, `fall`, `depthStriderPasses` (since 2026-11-17;
+the 2026-11-15 `layerMaxSlow`, `solidBelowFull`, `solidBelowFullOverrides` are dropped by Forge's correction).
 
 **Neighbors** are blocks in the **same tier tag** (rice and rice panicles count for each other; cobweb, reinforced
 cobweb and barbed wire count for each other). Solid blocks never count. A neighbor counts whatever its growth: a
@@ -232,21 +233,36 @@ by the item's normal position updates.
 
 Out: Biomes O' Plenty barley, cattail and reed.
 
-### 2.1 Layer height blocks (plan_post_scratch_1115b.md D, 2026-11-15)
+### 2.1 Layer height blocks (plan_post_scratch_1115b.md D and F, plan_post_scratch_1115.md G7.4; 2026-11-17)
 
-One rule for every stacked-layer block; replaces the leaf_pile tier (flat 0.45 from 4 layers) and BlockRunner's snow
-layers (the `snow` surface tier keeps the snow block, coarse snow and powder snow). Members: vanilla snow layers; every
-Immersive Weathering leaf pile (azalea flower pile included), IW ash, sand and red sand layers; Twigs bamboo leaves;
-Supplementaries ash and fodder; IE sawdust. Out (owner): Create Deco coin stacks, Control Engineering logic cabinet,
-Copycats layers.
+One rule by height for the walk-through layer blocks; replaces the leaf_pile tier (flat 0.45 from 4 layers). Members
+(tag `creativecompat:passthrough_layers`): vanilla snow layers, every Immersive Weathering leaf pile (azalea flower
+pile included), Twigs bamboo leaves. Leaf layers are also in `creativecompat:passthrough_layers_open`. Out: dust layers
+(IW sand, red sand and ash layers, Supplementaries ash, IE sawdust, salt layers) and Supplementaries fodder are not
+walk-through; they keep their BlockRunner surface speed (dust 0.85, fodder soft 0.88) when stood on. Also out (owner):
+Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
 
-- `max` = the block's own highest `layers` value (snow 8, sawdust 9, bamboo leaves 4); `solidBelowFull` (default 2,
-  per-block `solidBelowFullOverrides`, default `twigs:bamboo_leaves=0`). Layers `>= max - solidBelowFull` act whole:
-  no slowdown, normal collision and the Run Speed line. Highest walk-through layer `H = max - solidBelowFull - 1`.
-- `walk(l) = 1 - (1 - layerMaxSlow) * (l - 1) / (H - 1)` for `2 <= l <= H`; one layer 1.0; `H < 2` never slows.
-  Defaults, 8 layers: 1.0, 0.875, 0.75, 0.625, 0.5 for 1 to 5 layers, 6 to 8 whole. Sawdust: 0.5 at 6. Bamboo leaves:
-  0.75 at 2, 0.5 at 3, 4 whole.
-- WTHIT: `Walk Through: 0.75x (3 of 8 layers)`.
+- Two speeds per block (G7.4): **on top**, its BlockRunner material (snow layers -> `snow` 0.75, leaf piles and bamboo
+  leaves -> `leaves` 0.78; BlockRunner reads the block under the feet, so it applies only when standing on the layer),
+  and **through**, the height slowdown below.
+- `max` = the block's own highest `layers` value (snow 8, leaf piles 8, bamboo leaves 4). Highest walk-through layer
+  `H`: leaf layers `H = max` (walk-through at every height, never solid); snow `H = max - 1` (1 to 7; a full layer
+  becomes a snow block, below).
+- `walk(l) = 1 - (1 - maxSlow) * (l - 1) / (H - 1)` for `2 <= l <= H`; one layer 1.0; `H < 2` never slows. `maxSlow`
+  is `snowMaxSlow` (default 0.4) for snow, `leafMaxSlow` (default 0.6) for leaf layers: snow slows harder. Snow: 1.0,
+  0.9, 0.8, 0.7, 0.6, 0.5, 0.4 for 1 to 7. Leaf piles: 1.0 down to 0.6 at 8 (steps of 0.4 / 7). Bamboo leaves: 0.867,
+  0.733, 0.6 at 2 to 4.
+- Snow collision (`snowWalkThrough`, `surface/SnowLayers`, `mixin/SnowLayerPassMixin`): snow layers 1 to 7 have no
+  collision for living entities, so they walk through at the height slowdown. Leather boots (and the mobs vanilla lets
+  walk on powder snow: rabbits, foxes) stand on top at the full layer height and the `snow` surface speed; sneaking
+  sinks in. Items, falling blocks, projectiles and pathfinding keep vanilla's collision. Leaf piles and bamboo leaves
+  have no collision of their own already.
+- Full layer (`snowFullBecomesBlock`): vanilla snow that reaches 8 layers becomes a snow block, on placement and on a
+  random tick for one already in the world. `SnowLayers.fullToBlock` is the seam for other stacking code (G7.5 falling
+  layers).
+- WTHIT: `Walk Through: 0.60x (5 of 8 layers)`; a player in leather boots sees the Run Speed line of the snow tier.
+- Left for later (plan_post_scratch_1115.md G7.13, G7.14): fall and jump inside snow and leaf layers, the leaf overlay,
+  thorns, mob pathing, rabbits and cats exempt.
 
 ## 3. Leaf piles and ropes
 
@@ -258,7 +274,7 @@ Copycats layers.
 - 2026-11-15 (plan_post_scratch_1115b.md D): the leaf_pile tier is replaced by the layer tier (2.1).
   `surface/PassConfigMigration` (after `LeafPileMigration`) drops `[surface.passthrough.leaf_pile]` and carries its
   edited values into `[surface.passthrough.layers]` (`minLayers` unless the old default 4, `fall`,
-  `depthStriderPasses`, `walk` as `layerMaxSlow`).
+  `depthStriderPasses`, `walk` as `leafMaxSlow` since 2026-11-17).
 - IW's `leaf_piles_slow` no longer matters (its `makeStuckInBlock` is canceled); say so in creative_compat.md.
 - IW spruce thorns (6+ layers) stay IW's.
 

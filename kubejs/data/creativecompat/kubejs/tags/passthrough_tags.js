@@ -15,7 +15,7 @@ var PASS = {
 	rope:       'creativecompat:passthrough/rope',       // 0.75, not while climbing
 	cobweb:     'creativecompat:passthrough/cobweb',     // 0.50 / fall 0.85, 3+ of the 6 face neighbors 0.35 / 0.20, 6 of 6 surrounded
 	bush:       'creativecompat:passthrough/bush',       // 0.36
-	layers:     'creativecompat:passthrough_layers',     // by height: 0.5 at the highest walk-through layer (5 of 8)
+	layers:     'creativecompat:passthrough_layers',     // by height: snow 0.4 at 7 of 8, leaf layers 0.6 at full
 	grass:      'creativecompat:passthrough/grass',      // 1.00 (listed so it can be tuned)
 }
 
@@ -52,11 +52,12 @@ ServerEvents.tags('block', e => {
 		'vinery:taiga_grape_bush_red', 'vinery:taiga_grape_bush_white',
 		'delightful:salmonberry_bush', b.cranberry_bush])  // salmonberry, cranberry: owner
 
-	// Layer height blocks (plan_post_scratch_1115b.md D1): one rule by height for every stacked-layer block. Layer
-	// height blocks (owner): snow layers, every Immersive Weathering leaf pile (azalea flower pile included) and Twigs
-	// bamboo leaves. Sand, ash, fodder, sawdust and salt layers are dust/soft: no walk-through.
+	// Layer height blocks (plan_post_scratch_1115b.md D1, F1; plan_post_scratch_1115.md G7.4): snow layers, every
+	// Immersive Weathering leaf pile (azalea flower pile included) and Twigs bamboo leaves. Sand, ash, fodder, sawdust
+	// and salt layers are dust/soft: no walk-through, their BlockRunner surface speed only.
 	t.addMatching(e, PASS.layers, [b.snow, '/^immersive_weathering:([a-z_]+\\/)?[a-z_]*(leaf|flower)_pile$/', i.bamboo_leaves])
-	// Leaf layers never act whole (owner): no solidBelowFull for them. Snow layers keep it.
+	// Leaf layers: walk-through at every height, leafMaxSlow at full. Snow layers: walk-through 1 to 7 (a full layer
+	// becomes a snow block), snowMaxSlow at 7.
 	t.addMatching(e, 'creativecompat:passthrough_layers_open', ['#' + PASS.layers], { except: [b.snow] })
 
 	// Vines: vanilla, Vinery jungle grape vines, Hearth hops, Floral Enchantment, Quark, Botania, Immersive Weathering

@@ -66,8 +66,8 @@ ServerEvents.tags('block', e => {
 	// Multipliers live in config/creativeengineering-common.toml [surface.speed], one key per tier
 	// (the numbers below are the defaults, fastest -> slowest). Creative Common's SurfaceTier enum lists the
 	// tiers for that config, so a new tier needs an entry there too; blockrunner.json only keeps one-offs.
-	// BlockRunner reads the block ~0.2 below your feet (vanilla getOnPos), so carpets, 1–2 layer
-	// snow, pressure plates and IW leaf piles never register (the block under them does).
+	// BlockRunner reads the block ~0.2 below your feet (vanilla getOnPos), so carpets, pressure plates,
+	// IW leaf piles and snow layers walked through never register (the block under them does).
 	// A tiered block's native speed factor is replaced (IP asphalt's 1.2, honey's 0.4); soul sand/soil
 	// are left out on purpose: tiering them would stop Soul Speed from canceling the slowdown.
 	// One tier per block — BlockRunner picks a random one on each reload otherwise (see overlaps below).
@@ -96,7 +96,7 @@ ServerEvents.tags('block', e => {
 		confectionery:      'blockrunner:surface/confectionery',      // 0.85
 		tilled:             'blockrunner:surface/tilled',             // 0.80
 		leaves:             'blockrunner:surface/leaves',             // 0.78
-		snow:               'blockrunner:surface/snow',               // 0.75 (snow block, powder snow; layers: pass-through)
+		snow:               'blockrunner:surface/snow',               // 0.75 (snow block, powder snow, snow layers stood on)
 		sticky:             'blockrunner:surface/sticky',             // 0.65
 		spongy:             'blockrunner:surface/spongy',             // 0.60
 		very_sticky:        'blockrunner:surface/very_sticky',        // 0.45
@@ -375,10 +375,13 @@ ServerEvents.tags('block', e => {
 
 	t.addMatching(e, runner.tilled, [item.farmland, item.rich_farmland, b.tilled_end_stone])
 
-	t.addMatching(e, runner.leaves, [item.t_leaves, '#quark:hedges'])  // bamboo leaves: layered pass-through tier only
+	// On-top speeds of the walk-through layers (plan_post_scratch_1115.md G7.4): leaf piles and bamboo leaves are
+	// leaves, snow layers snow. Walking through them is creativecompat:passthrough_layers instead; BlockRunner reads
+	// the block under the feet, so the two never stack.
+	t.addMatching(e, runner.leaves, [item.t_leaves, '#quark:hedges',
+		'/^immersive_weathering:([a-z_]+\\/)?[a-z_]*(leaf|flower)_pile$/', item.bamboo_leaves])
 
-	// snow layers left out (plan_post_scratch_1115b.md D2): they slow by height in creativecompat:passthrough_layers
-	t.addMatching(e, runner.snow, [b.snow_block, b.powder_snow, item.coarse_snow])
+	t.addMatching(e, runner.snow, [b.snow, b.snow_block, b.powder_snow, item.coarse_snow])
 
 	t.addMatching(e, runner.spongy, [
 		item.mud, item.muddy_mangrove_roots, item.wet_sponge, item.clay,

@@ -48,6 +48,7 @@
     "BlockRunnerBlockStateMixin",
     "InsideBlocksMixin",
     "BlockStatePassMixin",
+    "SnowLayerPassMixin",
     "LevelChunkPassMixin",
     "MakeStuckInBlockMixin",
     "EntityPassMixin",

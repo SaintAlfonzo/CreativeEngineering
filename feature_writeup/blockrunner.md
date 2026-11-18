@@ -127,8 +127,8 @@ blocks that carry no tags (see 6). Tiers are listed fastest first; `[surface.spe
 | `dust` | 0.85 | 67 | Loose powder | sand, red sand, concrete powder, gravisand, ash, IW sand layers, CE metal dust piles, flour and crushed-ore piles, powdered obsidian, gunpowder blocks, IE sawdust |
 | `confectionery` | 0.85 | 630 | Edible blocks | Create Confectionery chocolate/caramel/gingerbread, cake, pies, feasts (pizza, quiche, pancakes), ice cream blocks, FD ham/roast blocks, AP bread, sugar cube, melon, pumpkins, chorus fruit block, Golden Food's golden and enchanted golden cakes |
 | `tilled` | 0.80 | 5 | Crop fields | farmland, FD rich soil farmland, tilled end stone |
-| `leaves` | 0.78 | 71 | Canopy | all leaves, Quark hedges, Twigs bamboo leaves |
-| `snow` | 0.75 | 3 | Snow | snow block, powder snow (standable in leather boots), coarse snow; snow layers left since 2026-11-15 (they slow by height, 3.10 layer tier) |
+| `leaves` | 0.78 | 71 | Canopy | all leaves, Quark hedges, Twigs bamboo leaves, IW leaf piles (on-top speed of the layer tier, 3.10; they have no collision, so it never registers) |
+| `snow` | 0.75 | 4 | Snow | snow block, powder snow (standable in leather boots), coarse snow, snow layers stood on in leather boots (since 2026-11-17; walking through them is the 3.10 layer tier) |
 | `sticky` | 0.65 | 8 | One sticky face (facing-aware, see 3.2) | sticky piston, vanilla/Create piston heads, Create sticky mechanical piston, CTM sticky launchers, SecurityCraft reinforced sticky piston + head |
 | `spongy` | 0.60 | 27 | Squelching ground | mud, muddy mangrove roots, wet sponge, clay, dough block, rotten flesh and entrails, CE prepared flesh block, Visceral Heap flesh |
 | `very_sticky` | 0.45 | 69 | Whole slime/honey blocks | honey block, slime block, banana slug slime, Visceral Heap porous flesh (honey jump) |
@@ -483,7 +483,9 @@ its growth rule and `minLayers`, for an entity not exempt. Several at once: the 
   which holds cobwebs) leaves out webs with a fall rule, so a lone or stacked web scales the fall instead of zeroing
   it (scratch fix 2026-11-15, SQ-PTH-03). Bush-tier blocks (sweet berry included) never reset it either, fast or
   slow (owner ruling 2026-11-15; vanilla's sweet berry bush canceled fall damage); climbables, water and exempt
-  entities keep vanilla's reset.
+  entities keep vanilla's reset. A drop that enters a tier block and lands in the same move (a lone web at ground
+  level) gets the factor before the landing deals damage (`PassThrough.beforeLanding`, before `Entity#checkFallDamage`;
+  2026-11-17, TODO `tooling/scratch-1115-follow-ups-2 #8`).
 - **Old slowdowns cancelled:** `MakeStuckInBlockMixin` cancels `Entity#makeStuckInBlock` for any tiered block, so
   vanilla's and mods' "stuck" slowdowns (webs, berry bushes, IW leaf piles, Twigs bamboo leaves, barbed wire) stop;
   their other effects (berry, thorn and wire damage) stay. Untiered blocks (powder snow, bamboo spikes, Floral
@@ -515,7 +517,7 @@ its growth rule and `minLayers`, for an entity not exempt. Several at once: the 
 | `rope` (3) | Farmer's Delight, Supplementaries and Quark rope | 0.75 | 1.00 | `any` | none | not while climbing (on the rope and moving up or down, sneaking, or off the ground); ladder rules unchanged |
 | `cobweb` (5) | cobweb, SecurityCraft reinforced cobweb, Fantasy Furniture webs (2), Create Crafts & Additions barbed wire | 0.50 | 0.85 | `any` | faces, 3+ of 6: walk 0.35, fall 0.20, fall damage reset | `surrounded = web` at 6 of 6, `items = stick` (0.35 per tick), `projectiles`; spiders exempt |
 | `bush` (8) | sweet berry bush, Hearth and Harvest raspberry bush, every Vinery grape bush | 0.36 | 1.00 | `any` | none | today's real berry bush speed; foxes and bees exempt |
-| `layers` (44, tag `creativecompat:passthrough_layers`; was `leaf_pile`) | snow layers, every IW leaf pile, IW ash, sand and red sand layers, Twigs bamboo leaves, Supplementaries ash and fodder, IE sawdust | by height: 1 layer 1.0, then equal steps to `layerMaxSlow` 0.5 at the highest walk-through layer H (5 of 8; sawdust 6 of 9; bamboo leaves 3 of 4); higher piles act whole | 1.00 | `any` | none | `minLayers = 2`, `solidBelowFull = 2` (bamboo leaves 0), `depthStriderPasses`; foxes and bees exempt |
+| `layers` (tag `creativecompat:passthrough_layers`; was `leaf_pile`; since 2026-11-17 G7.4) | snow layers, every IW leaf pile (azalea flower pile included), Twigs bamboo leaves; dust layers and fodder are out (not walk-through, their surface tier only) | by height: 1 layer 1.0, then equal steps to `snowMaxSlow` 0.4 at 7 of 8 (snow; 8 becomes a snow block) or `leafMaxSlow` 0.6 at full height (leaf layers, never solid) | 1.00 | `any` | none | `minLayers = 2`, `depthStriderPasses`; snow layers have no collision (`snowWalkThrough`), leather boots stand on top, sneak to sink; foxes and bees exempt |
 | `grass` (119) | short grass, fern, dead bush, roots, small flowers, saplings, flower patches | 1.00 | 1.00 | `any` | none | inert (skipped) until tuned |
 
 Out of the system: Biomes O' Plenty barley, cattail, reed (not registered here); Supplementaries flax and wild flax;
@@ -650,8 +652,8 @@ and powdered sugar got `StuckInBlock` lines.
   dedicated server has run the same Creative Common as the clients since the pack deploys resumed (1.0.9 on 2026-10-19),
   so facing, camo and `[surface.speed]` run server-side too; BR-27 is still untested.
 - **Twigs bamboo leaves are in the `leaves` tier but can never register:** the block has no collision,
-  so you always stand on the block beneath. The tier entry is harmless dead weight. Since 2026-11-15 the block is in
-  the pass-through `leaf_pile` tier (3.10): 0.45x from 4 layers, WTHIT Walk Through line.
+  so you always stand on the block beneath. The tier entry is the block's on-top speed (2026-11-17, G7.4); walking
+  through it is the pass-through `layers` tier (3.10): down to 0.6x at 4 of 4 layers, WTHIT Walk Through line.
 - **Pass-through (3.10) limits:**
   - One tier per block: a block in two tier tags gets a random one per reload (`t.overlaps` warns at load).
   - The stuck cancel is keyed by tag: a tiered block loses all of its own stuck slowdown. Powder snow stays out
@@ -709,11 +711,13 @@ and powdered sugar got `StuckInBlock` lines.
   `PassTier` (tiers, defaults), `PassThrough` (block -> tier cache, rule per entity, movement), `PassRule`,
   `PassResult`, `PassMath`, `PassGrowth`, `PassState` / `PassHolder`, `PassOwner`, `PassValues` / `PassSync` /
   `PassSyncClient`, `PassFov` / `BlockRunnerFov`, `PassItems`, `PassProjectiles`, `PassGroup`, `PassArrows`,
-  `PassSave`, `PassThroughFormat` (WTHIT), `LeafPileMigration`, `PassTiming` (`[debug.passthrough] timing`)
+  `PassSave`, `PassThroughFormat` (WTHIT), `LeafPileMigration`, `PassTiming` (`[debug.passthrough] timing`),
+  `SnowLayers` (snow layer collision and the full layer -> snow block, 2026-11-17)
 - Pass-through mixins (Compat [mixin/](../development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/mixin/)):
   `InsideBlocksMixin` (was WallSlideMixin), `MakeStuckInBlockMixin`, `EntityPassMixin`, `LivingClimbMixin`,
   `ArrowPassMixin`, `FireworkPassMixin`, `ProjectilePassMixin`; gated `QuarkPickarangPassMixin`,
-  `QuarkTorchArrowPickupMixin`, `BotaniaChakramPassMixin`; client `PassFovMixin`, `BlockRunnerFovMixin`
+  `QuarkTorchArrowPickupMixin`, `BotaniaChakramPassMixin`; client `PassFovMixin`, `BlockRunnerFovMixin`;
+  `SnowLayerPassMixin` (2026-11-17)
 - Pass-through config: `config/creativecompat-common.toml` `[surface.passthrough]` (`enabled`, `arrowLifeTicks`,
   `arrowLongLifeCap`, one table per tier), `[surface.wthit] passThrough`, `[debug.passthrough] timing`
 - Pass-through tags: [passthrough_tags.js](../kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js) (copied
