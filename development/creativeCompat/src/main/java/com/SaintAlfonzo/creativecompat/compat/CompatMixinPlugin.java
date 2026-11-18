@@ -44,6 +44,13 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("BotanistWorkbenchPotMixin", List.of("beautify")),
 			Map.entry("FramedFlowerPotUnframedMixin", List.of("framedblocks")),
 			Map.entry("SiltPotSoilMixin", List.of("twigs")),
+			// falling and stacking layers, bamboo leaf drops (surface/FallingLayers, BambooLeafDrops; G7.5, G7.9)
+			Map.entry("TwigsBambooLeavesMixin", List.of("twigs")),
+			Map.entry("BambooLeafDropMixin", List.of("twigs")),
+			Map.entry("IeSawdustFallMixin", List.of("immersiveengineering")),
+			Map.entry("SuppFodderFallMixin", SUPPLEMENTARIES),
+			// MCA villagers avoid deep leaf piles (surface/LeafThorns, G7.14)
+			Map.entry("McaLeafPilePathMixin", List.of("mca")),
 			Map.entry("QuarkSortingHandlerMixin", QUARK),
 			Map.entry("MonsterBoxBlockEntityMixin", QUARK),
 			// old placed paintings move to the creativecompat painting ids (namespace_move.md D-PAINT)

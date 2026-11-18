@@ -171,6 +171,10 @@ public final class PassBenchCommand {
 							() -> cold(inWeb)),
 					new Case("tick_web_cube_shared", "entity tick, web cube, cells already counted this tick (crowd)",
 							() -> tick(inWeb)),
+					new Case("tick_field_recount", "entity tick, wheat field, every chunk count forgotten (after a block change or tag reload)",
+							() -> recount(inField)),
+					new Case("tick_web_cube_recount", "entity tick, web cube, every chunk count forgotten (after a block change or tag reload)",
+							() -> recount(inWeb)),
 					new Case("tick_horse_field", "entity tick, horse over 2x2 field cells (first in its cells this tick)",
 							() -> cold(horse)),
 					new Case("item_roll", "item stick roll with its path clip (top of the web cube)",
@@ -259,8 +263,21 @@ public final class PassBenchCommand {
 		return Double.doubleToRawLongBits(e.getDeltaMovement().x) & 1L;
 	}
 
-	/** The tick of the first entity in its cells this tick: the per-tick neighbor count cache emptied first. */
+	/** Identity key for {@link #cold}: a level the cache has never seen, so its next call starts a new table. */
+	private static final Object NEW_TICK = new Object();
+
+	/**
+	 * The tick of the first entity in its cells this tick, as in play (plan_post_scratch_1115b.md C2): the per-tick
+	 * table starts empty, the counts baked into the chunk stay (TODO tooling/scratch-1115-follow-ups-2 #11: the cold
+	 * case used to clear those too, timing a full recount every call). Budgeted.
+	 */
 	private static long cold(Entity e) {
+		PassCountCache.get().at(NEW_TICK, 0L);
+		return tick(e);
+	}
+
+	/** The tick right after every chunk count was forgotten (a tag reload; a nearby block change): not budgeted. */
+	private static long recount(Entity e) {
 		PassCountCache.get().clear();
 		return tick(e);
 	}

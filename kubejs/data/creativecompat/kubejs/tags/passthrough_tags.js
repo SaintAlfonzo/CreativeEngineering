@@ -55,10 +55,15 @@ ServerEvents.tags('block', e => {
 	// Layer height blocks (plan_post_scratch_1115b.md D1, F1; plan_post_scratch_1115.md G7.4): snow layers, every
 	// Immersive Weathering leaf pile (azalea flower pile included) and Twigs bamboo leaves. Sand, ash, fodder, sawdust
 	// and salt layers are dust/soft: no walk-through, their BlockRunner surface speed only.
-	t.addMatching(e, PASS.layers, [b.snow, '/^immersive_weathering:([a-z_]+\\/)?[a-z_]*(leaf|flower)_pile$/', i.bamboo_leaves])
+	t.addMatching(e, PASS.layers, [b.snow, '/^immersive_weathering:([a-z_]+\\/)?[a-z_]*(leaf|flower)_pile$/', i.bamboo_leaves,
+		'creativecompat:bamboo_leaves_full'])  // full bamboo leaves: Twigs bamboo leaves past 4 layers (G7.9)
 	// Leaf layers: walk-through at every height, leafMaxSlow at full. Snow layers: walk-through 1 to 7 (a full layer
 	// becomes a snow block), snowMaxSlow at 7.
 	t.addMatching(e, 'creativecompat:passthrough_layers_open', ['#' + PASS.layers], { except: [b.snow] })
+	// Layers that fall and stack (plan_post_scratch_1115.md G7.5, surface/FallingLayers): the layer blocks with no gravity
+	// of their own. Immersive Weathering's layers and Supplementaries ash already fall by their own code.
+	t.add(e, 'creativecompat:falling_layers', [b.snow, i.vintagedelight_salt, i.bamboo_leaves,
+		'creativecompat:bamboo_leaves_full', i.immersiveengineering_sawdust, i.fodder])
 
 	// Vines: vanilla, Vinery jungle grape vines, Hearth hops, Floral Enchantment, Quark, Botania, Immersive Weathering
 	// ivy, Upgrade Aquatic mulberry, Neapolitan vanilla, Biomes O' Plenty strands (flesh tendons, and hanging cobweb,
@@ -124,7 +129,8 @@ ServerEvents.tags('entity_type', e => {
 	t.add(e, 'creativecompat:passthrough_exempt/cobweb', ['minecraft:spider', 'minecraft:cave_spider'])
 	t.add(e, 'creativecompat:passthrough_exempt/bush', ['minecraft:fox', 'minecraft:bee'])
 	// foxes and bees: Immersive Weathering's leaf pile rule, kept tier-wide (snow and the other layers too)
-	t.add(e, 'creativecompat:passthrough_exempt/layers', ['minecraft:fox', 'minecraft:bee'])
+	// rabbits and cats: G7.14 (exempt from the slowdown and the thorns; the deep-pile path block still applies)
+	t.add(e, 'creativecompat:passthrough_exempt/layers', ['minecraft:fox', 'minecraft:bee', 'minecraft:rabbit', 'minecraft:cat'])
 
 	// Projectile web groups (plan 5.1). Without a tag a projectile runs on its base-class default (surface/PassGroup);
 	// tools/projectile_scan.py lists the ones with no tag. Vanilla rows are listed too, so the tags are the full table.

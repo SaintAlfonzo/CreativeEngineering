@@ -39,6 +39,7 @@ final class PassRework1115bTest {
 		migrationC();
 		syncC();
 		layersD();
+		motionG713();
 	}
 
 	static final BlockState WEB = Blocks.COBWEB.defaultBlockState();
@@ -286,12 +287,13 @@ final class PassRework1115bTest {
 		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
 		for (PassTier t : PassTier.values()) m.put(t, t.defaults());
 		m.put(PassTier.LAYERS, PassTier.LAYERS.defaults().layers(0.3, 0.7));
-		PassValues v = new PassValues(true, 12000, 128, 5, false, true, m);
+		LayerMotion motion = new LayerMotion(5, 0.6, 0.1, 4, 0.85, 0.3);
+		PassValues v = new PassValues(true, 12000, 128, 5, false, true, motion, m);
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		v.write(buf);
 		PassValues back = PassValues.read(buf);
-		check("G7.4 sync: format 3 round trip (breakStallTicks, snow switches, snow / leaf max slow)",
-				PassValues.FORMAT == 3 && back.equals(v) && back.breakStallTicks == 5 && !back.snowWalkThrough
+		check("G7.13 sync: format 4 round trip (breakStallTicks, snow switches, snow / leaf max slow, layer motion)",
+				PassValues.FORMAT == 4 && back.equals(v) && back.motion.equals(motion) && back.breakStallTicks == 5 && !back.snowWalkThrough
 						&& back.snowFullBecomesBlock && near(back.tier(PassTier.LAYERS).snowMaxSlow(), 0.3)
 						&& near(back.tier(PassTier.LAYERS).leafMaxSlow(), 0.7) && buf.readableBytes() == 0);
 		FriendlyByteBuf old = new FriendlyByteBuf(Unpooled.buffer());
@@ -300,6 +302,49 @@ final class PassRework1115bTest {
 		old.writeVarInt(12000);
 		PassValues mis = PassValues.read(old);
 		check("C1 sync: another format -> system off on the client, buffer consumed", !mis.enabled && old.readableBytes() == 0);
+	}
+
+	/** Jump, fall and thorn numbers inside layers (plan_post_scratch_1115.md G7.13, G7.14; LayerMotion). */
+	static void motionG713() {
+		LayerMotion d = LayerMotion.DEFAULTS;
+		check("G7.13 snow jump: none below snowJumpLayers 6, 0.67 at 6 and 7",
+				d.jumpFactor(false, 5) == 1.0 && near(d.jumpFactor(false, 6), 0.67) && near(d.jumpFactor(false, 7), 0.67));
+		check("G7.13 leaf jump: none below leafJumpLayers 5, 0.9 at 5 to 8",
+				d.jumpFactor(true, 4) == 1.0 && near(d.jumpFactor(true, 5), 0.9) && near(d.jumpFactor(true, 8), 0.9));
+		check("G7.13 jump heights: snow 0.67 hops about 0.63 (powder snow), leaf 0.9 still clears a 1-block step",
+				Math.abs(jumpHeight(0.42 * 0.67) - 0.63) < 0.03 && jumpHeight(0.42 * 0.9) > 1.0 && jumpHeight(0.42 * 0.9) < 1.1);
+		check("G7.13 fall caps: snow 0.12 (powder snow 0.1176), leaf 0.24, 0 = no cap",
+				near(d.fallCap(false), 0.12) && Math.abs(LayerMotion.POWDER_SNOW_FALL - 0.1176) < 1e-4 && near(d.fallCap(true), 0.24)
+						&& new LayerMotion(6, 0.67, 0.0, 5, 0.9, 0.0).fallCap(true) == LayerMotion.NO_CAP);
+		check("G7.13 capFall: faster falls clamp, slower falls and rising unchanged",
+				near(LayerMotion.capFall(-0.5, 0.12), -0.12) && near(LayerMotion.capFall(-0.05, 0.12), -0.05)
+						&& near(LayerMotion.capFall(0.42, 0.12), 0.42));
+		check("G7.13 thorn chance: base x (4 - armor) / 4, full armor none",
+				near(LayerMotion.thornChance(0.25, 0), 0.25) && near(LayerMotion.thornChance(0.25, 2), 0.125)
+						&& LayerMotion.thornChance(0.25, 4) == 0.0 && LayerMotion.thornChance(0.25, 7) == 0.0);
+		double walk8 = 0.6;
+		check("G7.14 thorn speed: walking in a full pile (0.6 x walk) pricks at thornMinSpeed 1.0; half speed does not",
+				LayerMotion.thornSpeed(LayerMotion.WALK_SPEED * walk8, walk8, 1.0)
+						&& !LayerMotion.thornSpeed(LayerMotion.WALK_SPEED * walk8 * 0.5, walk8, 1.0));
+		PassResult r = new PassResult();
+		r.addLayer(1L, false, 7, d);
+		r.addLayer(2L, true, 6, d);
+		r.addLayer(3L, true, 3, d);
+		check("G7.13 result: lowest jump and cap win, deepest leaf pile recorded",
+				near(r.jump, 0.67) && near(r.fallCap, 0.12) && r.leafLayers == 6 && r.leafCell == 2L);
+		r.reset();
+		check("G7.13 result reset: no jump, no cap, no leaf pile",
+				r.jump == 1.0 && r.fallCap == LayerMotion.NO_CAP && r.leafLayers == 0);
+	}
+
+	static double jumpHeight(double v) {
+		double y = 0, m = 0;
+		for (int i = 0; i < 40; i++) {
+			y += v;
+			m = Math.max(m, y);
+			v = (v - 0.08) * 0.98;
+		}
+		return m;
 	}
 
 	static void layersD() {

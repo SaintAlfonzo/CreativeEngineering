@@ -61,6 +61,7 @@ public final class WthitIconDump {
 
 	@SubscribeEvent
 	public static void onClientCommands(RegisterClientCommandsEvent event) {
+		if (!net.minecraftforge.fml.ModList.get().isLoaded("creativecompat")) return; // reads Compat's BlockModelIcons
 		event.getDispatcher().register(Commands.literal("cdevdumpicons").executes(ctx -> {
 			String summary = dump();
 			ctx.getSource().sendSuccess(Component.literal("[cdevdumpicons] " + summary
@@ -72,6 +73,7 @@ public final class WthitIconDump {
 	@SubscribeEvent
 	public static void onScreenOpening(ScreenEvent.Opening event) {
 		if (dumpedAtTitle || !(event.getNewScreen() instanceof TitleScreen)) return;
+		if (!net.minecraftforge.fml.ModList.get().isLoaded("creativecompat")) return;
 		if (!DevtoolsConfig.DEBUG.dumpIconsAtTitle.get()) return;
 		dumpedAtTitle = true;
 		dump();

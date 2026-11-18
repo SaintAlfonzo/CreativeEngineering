@@ -1,0 +1,28 @@
+{
+  "variants": {
+    "layers=5,waterlogged=false": {
+      "model": "creativecompat:block/bamboo_leaves_full_5"
+    },
+    "layers=5,waterlogged=true": {
+      "model": "creativecompat:block/bamboo_leaves_full_5"
+    },
+    "layers=6,waterlogged=false": {
+      "model": "creativecompat:block/bamboo_leaves_full_6"
+    },
+    "layers=6,waterlogged=true": {
+      "model": "creativecompat:block/bamboo_leaves_full_6"
+    },
+    "layers=7,waterlogged=false": {
+      "model": "creativecompat:block/bamboo_leaves_full_7"
+    },
+    "layers=7,waterlogged=true": {
+      "model": "creativecompat:block/bamboo_leaves_full_7"
+    },
+    "layers=8,waterlogged=false": {
+      "model": "creativecompat:block/bamboo_leaves_full_8"
+    },
+    "layers=8,waterlogged=true": {
+      "model": "creativecompat:block/bamboo_leaves_full_8"
+    }
+  }
+}

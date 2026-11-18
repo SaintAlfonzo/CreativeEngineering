@@ -659,7 +659,9 @@ and powdered sugar got `StuckInBlock` lines.
   - The stuck cancel is keyed by tag: a tiered block loses all of its own stuck slowdown. Powder snow stays out
     for that reason.
   - Mobs in a surrounded web with nothing to climb stay there until the web is broken. Mob pathing does not avoid
-    slow blocks (vanilla does not avoid webs either).
+    slow blocks (vanilla does not avoid webs either), except leaf piles of 6 or more layers (2026-11-17, G7.14).
+  - Layers: jump and fall caps, leaf thorns, the leaf overlay, falling and stacking layers and the full bamboo leaves:
+    [plan_passthrough.md](plan_passthrough.md) 2.1.
   - Fast arrows can cross a single web in one tick and skip it (accepted). Items cannot: their path is clipped.
   - Cost scales with the cells an entity overlaps (a horse covers 2x2) and with neighbor counts; measured by
     `/cdevbench passthrough` and the perf suite plan, not yet run.

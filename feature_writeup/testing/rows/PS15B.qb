@@ -723,3 +723,133 @@ look middle `Neighbors: 4 of 4`, corner `2 of 4`; web cube `Neighbors: 6 of 6` w
 @pass the Walk Through lines go at once after the reload
 @fails client command routing to `CompatConfigReload.reload`
 @draft `/cdevreloadclient compat` is a client command: the capture driver's cmd step runs commands on the integrated server, so the batch cannot send it (needs a driver step for client commands, or the owner types it)
+
+@@section 2
+@@title SQ-PS15B-13 to -22 / CQ-PS15B-03 Layers fall and stack, bamboo leaves, jump and fall in layers, leaf thorns and overlay, Devtools without Compat, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G7.5, G7.9, G7.13, G7.14; [plan_post_scratch_1115b.md](../plan_post_scratch_1115b.md) E, F; TODO `tooling/scratch-1115-follow-ups #23`, `-2 #7`, `#11`, `#16`)
+@@date 2026-11-17
+@@jars creativecompat creativedevtools
+@@sources feature_writeup/plan_post_scratch_1115.md feature_writeup/plan_post_scratch_1115b.md feature_writeup/plan_passthrough.md
+@@text
+@@text Lane L2 of plan_exec_1117.md: Creative Compat and Creative Devtools build/libs, not installed. Headless:
+@@text `tools/test_passthrough.sh` ALL 301 OK. Group A superflat: ground top -61, stand at -60. Defaults under test:
+@@text `[surface.passthrough.layers]` layersFall true, snowJumpLayers 6 / snowJumpFactor 0.67 / snowFallSpeed 0.12,
+@@text leafJumpLayers 5 / leafJumpFactor 0.9 / leafFallSpeed 0.24, thornChance 0.25 / thornLayers 6 / thornMinSpeed 1.0 /
+@@text thornCooldownTicks 20, pathBlockLayers 6, bambooLeafChance 0.0005 / bambooLeafMaxLayers 4, leafOverlay true.
+@@table
+## SQ-PS15B-13 | layers fall and stack: snow 3 onto 2 -> 5, snow 3 onto 7 -> snow block + 2 above, salt 2 onto 7 -> 8 + 1, bamboo 3 onto 3 -> full 6, sawdust onto air -> lands, snow into water -> snowballs
+@group A
+@commands Each pile sits on a stone block 4 above the ground (or over a water pool); the stone is removed and the pile falls onto the ground pile below
+@pass the merged states as in the title (one `say` line each); the water case leaves 3 snowballs as an item entity and no snow
+@fails `FallingLayers.holdAndQueue` (updateShape mixins: SnowLayerFallMixin, TwigsBambooLeavesMixin, IeSawdustFallMixin), `FallingLayerEntity.tick` landing, `FallingLayers.land` merge / `withLayers` / `SnowLayers.fullToBlock`, `drop`
+> forceload add 1290 1290 1330 1310
+> setblock 1300 -60 1300 minecraft:snow[layers=2]
+> setblock 1300 -57 1300 minecraft:stone
+> setblock 1300 -56 1300 minecraft:snow[layers=3]
+> setblock 1303 -60 1300 minecraft:snow[layers=7]
+> setblock 1303 -57 1300 minecraft:stone
+> setblock 1303 -56 1300 minecraft:snow[layers=3]
+> setblock 1306 -60 1300 vintagedelight:salt[layers=7]
+> setblock 1306 -57 1300 minecraft:stone
+> setblock 1306 -56 1300 vintagedelight:salt[layers=2]
+> setblock 1309 -60 1300 twigs:bamboo_leaves[layers=3]
+> setblock 1309 -57 1300 minecraft:stone
+> setblock 1309 -56 1300 twigs:bamboo_leaves[layers=3]
+> setblock 1312 -57 1300 minecraft:stone
+> setblock 1312 -56 1300 immersiveengineering:sawdust[layers=4]
+> fill 1314 -61 1299 1316 -61 1301 minecraft:water
+> setblock 1315 -57 1300 minecraft:stone
+> setblock 1315 -56 1300 minecraft:snow[layers=3]
+sleep 1
+> fill 1300 -57 1300 1315 -57 1300 minecraft:air replace minecraft:stone
+sleep 4
+> execute if block 1300 -60 1300 minecraft:snow[layers=5] run say ps15b13 snow 2+3 = 5
+> execute if block 1303 -60 1300 minecraft:snow_block if block 1303 -59 1300 minecraft:snow[layers=2] run say ps15b13 snow 7+3 = block + 2
+> execute if block 1306 -60 1300 vintagedelight:salt[layers=8] if block 1306 -59 1300 vintagedelight:salt[layers=1] run say ps15b13 salt 7+2 = 8 + 1
+> cdevtest state 1309 -60 1300
+> execute if block 1312 -60 1300 immersiveengineering:sawdust[layers=4] run say ps15b13 sawdust landed
+> execute if entity @e[type=minecraft:item,x=1314,y=-62,z=1299,dx=3,dy=3,dz=3,nbt={Item:{id:"minecraft:snowball",Count:3b}}] run say ps15b13 water drop 3 snowballs
+expect ps15b13 snow 2\+3 = 5
+expect ps15b13 snow 7\+3 = block \+ 2
+expect ps15b13 salt 7\+2 = 8 \+ 1
+expect verb=state pos=1309,-60,1300 state="?creativecompat:bamboo_leaves_full\[.*layers=6
+expect ps15b13 sawdust landed
+expect ps15b13 water drop 3 snowballs
+> fill 1299 -61 1299 1316 -55 1301 minecraft:air
+> fill 1299 -61 1299 1316 -61 1301 minecraft:grass_block
+
+## SQ-PS15B-14 | layersFall off, piston, chunk reload, fodder
+@group A
+@commands (a) `layersFall = false` (rename + `/cdevreload compat`): a snow 3 over a removed stone breaks as vanilla (no falling entity), fodder 4 stays floating; back to true. (b) a piston pushes a salt layer 4 off a stone ledge over a 3-deep gap: it falls and lands. (c) a floating snow 4 written into an unloaded chunk (`/setblock` then `/forceload remove` and reload) falls on its first random tick (randomTickSpeed 300)
+@pass (a) no `creativecompat:falling_layer` entity, snow gone, fodder still at its height; (b) the salt layer at the gap bottom; (c) the snow on the ground within 20 s
+@fails `FallingLayers.enabled`, `SuppFodderFallMixin`, piston `Block.updateFromNeighbourShapes` path, `SnowLayerFallMixin` randomTick
+@draft steps to write at the run (needs the piston fixture and a chunk unload/reload sequence)
+
+## SQ-PS15B-15 | full bamboo leaves by hand and drops; grown bamboo drops bamboo leaves
+@group A
+@commands Bot P uses Twigs bamboo leaves on a 4-layer pile 4 times (5, 6, 7, 8; a 5th use does nothing), then breaks it; bamboo: a 6-tall grown stalk (`age=1,stage=1`, top two `leaves=large`) with `bambooLeafChance 1.0` (rename + reload) and randomTickSpeed 300 for 10 s
+@pass `creativecompat:bamboo_leaves_full[layers=8]` after 4 uses, pick block gives Twigs bamboo leaves, breaking drops 8 Twigs bamboo leaves; bamboo leaves appear on the ground beside the stalk, never more than 4 layers each (bambooLeafMaxLayers), none on a side blocked by a block; restore 0.0005
+@fails `TwigsBambooLeavesMixin` canBeReplaced / getStateForPlacement, `FullBambooLeavesBlock.getDrops`, `BambooLeafDropMixin` (isRandomlyTicking needs the chunk loaded after the change: forceload the area after the reload), `BambooLeafDrops.land`
+@draft pbot use sequence and the drop count readback to write at the run
+
+## SQ-PS15B-16 | jump and fall inside layers: snow 5 vs 6, leaf pile 4 vs 5, fall cap
+@group A
+@commands Bot P jumps (pbot jump) from inside snow 5 and snow 6, an oak leaf pile 4 and 5, plain ground; per-tick Y watch. Drop P from 10 blocks into a 7-layer snow pile and an 8-layer leaf pile: per-tick motion Y inside
+@pass jump apex above the start: plain about 1.25, snow 5 about 1.25, snow 6 about 0.63, leaf 4 about 1.25, leaf 5 about 1.05 (still onto a 1-block step beside it); inside the piles the fall speed is at most 0.12 (snow) and 0.24 (leaves) blocks per tick
+@fails `LayerJumpMixin` (getJumpPower), `PassResult.addLayer`, `PassThrough.apply` capFall; exempt mobs and players in leather boots on top have no cell
+@draft needs a pbot jump verb and a per-tick Y readback (zpth watch on the bot)
+
+## SQ-PS15B-17 | leaf thorns: oak pile 8 and 6 pricks a walking player, pile 5 never, full armor never, creative never
+@group A
+@commands Bot P walks back and forth (pbot moveto) for 30 s in an 8-layer and a 6-layer oak leaf pile with no armor, 2 armor pieces, 4 pieces; then in a 5-layer pile; then in creative; a fox, a rabbit and a cat in an 8-layer pile
+@pass no armor: about 0.25 pricks per second of walking (half a heart, death message of the berry bush kind); 2 pieces about half that; 4 pieces none; pile 5 none; creative none; the fox, rabbit and cat take no damage and are not slowed (`passthrough_exempt/layers`)
+@fails `LeafThorns.onPlayerTick` (speed from the tick-to-tick position, thornMinSpeed against leafMaxSlow), `LayerMotion.thornChance`, entity tag `creativecompat:passthrough_exempt/layers`
+@draft health readback per second and the armor swaps to write at the run (Immersive Weathering's own spruce thorns also hurt in spruce piles: use oak)
+
+## SQ-PS15B-18 | mobs do not path through leaf piles of 6 or more
+@group A
+@commands A zombie and an MCA villager behind a 1-wide gap filled with an oak leaf pile, target 10 blocks beyond (a player for the zombie, `/mca` home or a bed for the villager): pile 6, then pile 5
+@pass pile 6: neither paths through the gap (goes around if there is a way, else stays); pile 5: both walk through
+@fails `LeafPilePathMixin` (WalkNodeEvaluator getBlockPathTypeRaw -> DAMAGE_OTHER), `McaLeafPilePathMixin`, `pathBlockLayers`
+@draft path readback to write at the run (watch the mob's position for 20 s)
+
+## SQ-PS15B-19 | 200 snow layers falling at once: TPS
+@group A
+@commands A 20 x 10 stone slab 6 above the ground with snow 3 on top, the stone removed in one /fill
+@pass every pile lands (200 merged or placed piles, no snow left floating); mspt during the fall under 50
+@fails `FallingLayers.onLevelTick` queue (512 per tick), entity count
+@draft perf row (spark or the perf suite); steps at the run
+
+## SQ-PS15B-20 | Devtools boots without Compat (second boot of SQ-TX-18)
+@group A
+@commands A boot with Creative Compat and every jar that requires it (Engineering, Calendar, Equipment, Delight, Brewing, Loot, Magic, Worldgen) removed from `OUT/srv/mods/`, Devtools and Common kept: `cdevreload compat`, `cdevbench passthrough`, `dumpsurface`, `cdevtest help`
+@pass the server starts; no ERROR or NoClassDefFoundError naming `creativecompat`; the three Compat commands are `Unknown or incomplete command`; `cdevtest help` works
+@fails Devtools mods.toml `creativecompat mandatory=false`, the `ModList.isLoaded("creativecompat")` guards in CreativeDevtools, SurfaceAudit, WthitIconDump
+@draft a boot with a cut-down mod set; the qrun boot profile has no jar-removal step yet
+
+## SQ-PS15B-21 | /cdevbench passthrough, 14 cases: first in its cells on saved counts, recount cases unbudgeted
+@group A
+@commands As SQ-PTH-25c with this Devtools build: `/cdevbench passthrough` twice
+@pass `tick_field` and `tick_web_cube` under 1000 ns median (the per-tick table cleared, the chunk counts kept); `tick_field_recount` and `tick_web_cube_recount` recorded (full recount, no budget, white in chat); record all 14 in blockrunner.md 3.10
+@fails `PassBenchCommand.cold` (`PassCountCache.at` with a fresh key), `recount` (`PassCountCache.clear`)
+@jars creativedevtools
+> tp P 1150.5 -60 1150.5
+sleep 2
+> execute as P at P run cdevbench passthrough
+waitlog \[cdevbench\] passthrough: .* calls per case 300
+sleep 2
+shell python3 -c "import json;d=json.load(open('kubejs/exported/perf/passthrough_bench.json'));print({k:v for k,v in d.items() if k!='cases'});[print(c['id'],c['median_ns'],c['p99_ns']) for c in d['cases']]"
+look tick_field and tick_web_cube medians under 1000; the two _recount rows present
+
+## SQ-PS15B-22 | cdevreload compat picks up the new layer keys
+@group A
+@commands Rename-save `[surface.passthrough.layers] snowJumpLayers 8`, `thornChance 0`, `layersFall false`, then `/cdevreload compat`; restore
+@pass each applies after the command (jump in snow 7 normal; no pricks; a snow layer over a removed stone breaks as vanilla); the client gets the re-sent table (sync format 4)
+@fails `CompatConfigReload.reload`, `PassValues.FORMAT` 4, `LayerMotion` read from the config
+@draft steps to write with SQ-PS15B-16 and -17
+
+## CQ-PS15B-03 | leaf overlay inside a leaf pile; switch off
+@group client
+@commands First person inside an 8-layer oak leaf pile in a plains biome, then a birch pile (untinted), a 4-layer Twigs bamboo leaves pile, a full bamboo leaves 8; then `leafOverlay = false` and `/cdevreloadclient compat`
+@pass oak: tiled oak leaves over the screen in the biome's foliage tint, about 0.7 opacity at 8 layers, lighter at fewer; birch: birch leaves; bamboo: Twigs bamboo leaves texture; off: no overlay; third person: no overlay
+@fails `LeafOverlay.render` (IW `LeafPileBlock.getLeafType().leaves`, particle sprite, `BlockColors`), `RegisterGuiOverlaysEvent` registration
+@draft client shots; `/cdevreloadclient compat` is a client command (see CQ-PS15B-02)

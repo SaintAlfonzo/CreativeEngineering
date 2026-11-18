@@ -379,7 +379,7 @@ ServerEvents.tags('block', e => {
 	// leaves, snow layers snow. Walking through them is creativecompat:passthrough_layers instead; BlockRunner reads
 	// the block under the feet, so the two never stack.
 	t.addMatching(e, runner.leaves, [item.t_leaves, '#quark:hedges',
-		'/^immersive_weathering:([a-z_]+\\/)?[a-z_]*(leaf|flower)_pile$/', item.bamboo_leaves])
+		'/^immersive_weathering:([a-z_]+\\/)?[a-z_]*(leaf|flower)_pile$/', item.bamboo_leaves, 'creativecompat:bamboo_leaves_full'])
 
 	t.addMatching(e, runner.snow, [b.snow, b.snow_block, b.powder_snow, item.coarse_snow])
 

@@ -33,6 +33,8 @@ public final class PassValues {
 	public final boolean snowWalkThrough;
 	/** {@code [surface.passthrough.layers] snowFullBecomesBlock}: a snow layer that reaches 8 becomes a snow block. */
 	public final boolean snowFullBecomesBlock;
+	/** Jump and fall inside snow and leaf layers ({@link LayerMotion}, plan_post_scratch_1115.md G7.13). */
+	public final LayerMotion motion;
 	private final PassTier.Values[] tiers;
 
 	public PassValues(boolean enabled, int arrowLifeTicks, int arrowLongLifeCap, Map<PassTier, PassTier.Values> tiers) {
@@ -41,6 +43,14 @@ public final class PassValues {
 
 	public PassValues(boolean enabled, int arrowLifeTicks, int arrowLongLifeCap, int breakStallTicks,
 					  boolean snowWalkThrough, boolean snowFullBecomesBlock, Map<PassTier, PassTier.Values> tiers) {
+		this(enabled, arrowLifeTicks, arrowLongLifeCap, breakStallTicks, snowWalkThrough, snowFullBecomesBlock,
+				LayerMotion.DEFAULTS, tiers);
+	}
+
+	public PassValues(boolean enabled, int arrowLifeTicks, int arrowLongLifeCap, int breakStallTicks,
+					  boolean snowWalkThrough, boolean snowFullBecomesBlock, LayerMotion motion,
+					  Map<PassTier, PassTier.Values> tiers) {
+		this.motion = motion != null ? motion : LayerMotion.DEFAULTS;
 		this.enabled = enabled;
 		this.arrowLifeTicks = arrowLifeTicks;
 		this.arrowLongLifeCap = arrowLongLifeCap;
@@ -98,7 +108,7 @@ public final class PassValues {
 		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
 		c.tiers.forEach((t, cfg) -> m.put(t, cfg.values()));
 		return new PassValues(c.enabled.get(), c.arrowLifeTicks.get(), c.arrowLongLifeCap.get(),
-				c.breakStallTicks.get(), c.snowWalkThrough.get(), c.snowFullBecomesBlock.get(), m);
+				c.breakStallTicks.get(), c.snowWalkThrough.get(), c.snowFullBecomesBlock.get(), c.motion(), m);
 	}
 
 	/** Received from the server (client side), or null on logout. */
@@ -134,10 +144,10 @@ public final class PassValues {
 	/**
 	 * Wire format version, written first (plan_post_scratch_1115b.md C1: the layout changed with the neighbor model
 	 * and the layer rule; 3 with plan_post_scratch_1115.md G7.4: snow and leaf max slow, the snow switches instead of
-	 * solidBelowFull and its overrides). A client that reads another version uses the system switched off ({@link #mismatch()})
+	 * solidBelowFull and its overrides; 4 with G7.13: the {@link LayerMotion} jump and fall values). A client that reads another version uses the system switched off ({@link #mismatch()})
 	 * rather than misreading the table.
 	 */
-	public static final int FORMAT = 3;
+	public static final int FORMAT = 4;
 
 	public void write(FriendlyByteBuf buf) {
 		buf.writeVarInt(FORMAT);
@@ -147,6 +157,12 @@ public final class PassValues {
 		buf.writeVarInt(breakStallTicks);
 		buf.writeBoolean(snowWalkThrough);
 		buf.writeBoolean(snowFullBecomesBlock);
+		buf.writeVarInt(motion.snowJumpLayers());
+		buf.writeDouble(motion.snowJumpFactor());
+		buf.writeDouble(motion.snowFallSpeed());
+		buf.writeVarInt(motion.leafJumpLayers());
+		buf.writeDouble(motion.leafJumpFactor());
+		buf.writeDouble(motion.leafFallSpeed());
 		buf.writeVarInt(tiers.length);
 		for (PassTier t : PassTier.values()) {
 			buf.writeUtf(t.key());
@@ -188,6 +204,8 @@ public final class PassValues {
 		int stall = buf.readVarInt();
 		boolean snowWalk = buf.readBoolean();
 		boolean snowBlock = buf.readBoolean();
+		LayerMotion motion = new LayerMotion(buf.readVarInt(), buf.readDouble(), buf.readDouble(), buf.readVarInt(),
+				buf.readDouble(), buf.readDouble());
 		int n = buf.readVarInt();
 		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
 		for (int i = 0; i < n; i++) {
@@ -201,7 +219,7 @@ public final class PassValues {
 				if (t.key().equals(key)) m.put(t, v);
 			}
 		}
-		return new PassValues(enabled, life, cap, stall, snowWalk, snowBlock, m);
+		return new PassValues(enabled, life, cap, stall, snowWalk, snowBlock, motion, m);
 	}
 
 	/** What a client uses when the server's values came in another format: the system off (vanilla behavior). */
@@ -216,7 +234,7 @@ public final class PassValues {
 		if (!(o instanceof PassValues p)) return false;
 		return enabled == p.enabled && arrowLifeTicks == p.arrowLifeTicks && arrowLongLifeCap == p.arrowLongLifeCap
 				&& breakStallTicks == p.breakStallTicks && snowWalkThrough == p.snowWalkThrough
-				&& snowFullBecomesBlock == p.snowFullBecomesBlock
+				&& snowFullBecomesBlock == p.snowFullBecomesBlock && motion.equals(p.motion)
 				&& java.util.Arrays.equals(tiers, p.tiers);
 	}
 

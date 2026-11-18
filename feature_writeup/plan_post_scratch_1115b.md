@@ -1,14 +1,12 @@
 # Post-scratch plan 2: pass-through rework (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=036c1eaf6b74 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 16 open TODO rows (Planned 5, In Progress 1, Testing 10), 0 Complete.
+<!-- generated:status_index begin open_work sha1=563b25dd4b2b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 16 open TODO rows (Planned 3, In Progress 1, Testing 12), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `tooling/scratch-1115-follow-ups-2 #10` | Planned | S | In-place Compat toml save not reloaded |
 | `tooling/scratch-1115-follow-ups-2 #11` | Planned | S | Pass-through bench web cube over budget |
-| `tooling/scratch-1115-follow-ups-2 #12` | Planned | S | Rare Ice swallows salt dust and Salt Melt clicks on plain ice |
-| `tooling/scratch-1115-follow-ups-2 #13` | Planned | S | Salt layer on melting ice drops as dust before the vanish roll |
 | `tooling/scratch-1115-follow-ups-2 #16` | Planned | S | SQ-TX-18 second boot impossible: Devtools needs Compat |
 | `tooling/scratch-1115-follow-ups-2 #7` | In Progress | S C | Broken config switches (timing, denseWalk, wthit passThrough) |
 | `tooling/scratch-1115-follow-ups-2 #1` | Testing | S | Cobweb fall distance reset |
@@ -19,6 +17,8 @@
 | `tooling/scratch-1115-follow-ups-2 #6` | Testing | S C | Solid threshold for leaf piles (default 2 stages below full) |
 | `tooling/scratch-1115-follow-ups-2 #8` | Testing | S | Ground-level web: same-tick enter and land takes full fall damage |
 | `tooling/scratch-1115-follow-ups-2 #9` | Testing | S | IW sand layer and Supplementaries fodder never slow |
+| `tooling/scratch-1115-follow-ups-2 #12` | Testing | S | Rare Ice swallows salt dust and Salt Melt clicks on plain ice |
+| `tooling/scratch-1115-follow-ups-2 #13` | Testing | S | Salt layer on melting ice drops as dust before the vanish roll |
 | `tooling/scratch-1115-follow-ups-2 #14` | Testing | S | Arm: early loose part blocks the belt end depot |
 | `tooling/scratch-1115-follow-ups-2 #15` | Testing | S | Upgrade Aquatic guard misses IW coral growth files |
 <!-- generated:status_index end open_work -->
@@ -290,10 +290,10 @@ walk-through tiers; snow layers walk-through at 1 to 7, and layer 8 turns into a
 leaf layers walk-through at every height; dust layers not walk-through; every layer falls and stacks.
 
 Open notes, owner TODO, not built (what each would touch):
-- Full snow layer becomes powder snow: snow block placement / `SnowLayerBlock` mixin, Compat.
-- IW drops Twigs bamboo leaves rarely, stacking to a full block: IW leaf-drop code, Compat mixin, new loot.
+- Full snow layer becomes powder snow: dropped (G7.4: a snow block instead, built).
+- IW drops Twigs bamboo leaves rarely, stacking to a full block: built 2026-11-17 as G7.9 (plan_post_scratch_1115.md G10).
 - Layered snow melts by layer: Creative Common `Melting` (snow melt by layer may already exist; check first).
-- Powder-snow-like overlay and mild thorny damage in leaf layers: client overlay and `entityInside` in Compat.
+- Powder-snow-like overlay and mild thorny damage in leaf layers: built 2026-11-17 (G7.13, G7.14; plan_post_scratch_1115.md G10).
 - Seeing out from inside leaf layers: leaf layer model / render, client.
 
 ## Open (waiting for owner)
@@ -307,7 +307,10 @@ Open notes, owner TODO, not built (what each would touch):
   tier as their on-top speed only.
 - Foxes and bees were exempt from leaf piles; the exemption is per tier, so it now covers snow, sand and ash layers
   too. Keep, or narrow it to leaf piles?
-- E2: `/cdevreload compat` built in Creative Devtools 2026-11-15 (install with Compat).
+- E2: `/cdevreload compat` built in Creative Devtools 2026-11-15 (install with Compat). An in-place save is still not
+  seen by Forge's watcher (TODO `-2 #10`, owner question). Devtools no longer requires Compat (`-2 #16`, built
+  2026-11-17, SQ-PS15B-20); the bench's budgeted cold cases keep the chunk counts and two unbudgeted `_recount` cases
+  time a full recount (`-2 #11`, SQ-PS15B-21).
 
 ## Done means
 

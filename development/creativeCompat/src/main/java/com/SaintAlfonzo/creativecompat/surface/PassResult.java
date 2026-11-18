@@ -32,6 +32,14 @@ public final class PassResult {
 	public boolean resetFall;
 	/** Some counted block's tier has projectiles = true (phase 2 reads it). */
 	public boolean projectiles;
+	/** Lowest jump power multiplier of the counted layer blocks ({@link LayerMotion}; 1.0 = none). */
+	public double jump = 1.0;
+	/** Fastest fall in blocks per tick allowed by the counted layer blocks ({@link LayerMotion#NO_CAP} = none). */
+	public double fallCap = LayerMotion.NO_CAP;
+	/** Most layers of a counted leaf layer block (0 = none): leaf thorns and the leaf overlay read it. */
+	public int leafLayers;
+	/** Packed position of the leaf layer block that set {@link #leafLayers}. */
+	public long leafCell;
 
 	/** Counted cells this tick: packed positions and their per-block rule. */
 	private long[] cellPos = new long[8];
@@ -49,6 +57,10 @@ public final class PassResult {
 		surroundedTier = null;
 		resetFall = false;
 		projectiles = false;
+		jump = 1.0;
+		fallCap = LayerMotion.NO_CAP;
+		leafLayers = 0;
+		leafCell = 0L;
 		Arrays.fill(cellRule, 0, cells, null);
 		cells = 0;
 	}
@@ -87,6 +99,21 @@ public final class PassResult {
 		}
 		resetFall |= c.resetFall();
 		projectiles |= tierProjectiles;
+	}
+
+	/**
+	 * A counted layer block's jump and fall (plan_post_scratch_1115.md G7.13): the lowest jump factor and fall cap
+	 * win; a leaf layer block also records its layers for the thorns and the overlay.
+	 */
+	public void addLayer(long pos, boolean open, int layers, LayerMotion m) {
+		double j = m.jumpFactor(open, layers);
+		if (j < jump) jump = j;
+		double c = m.fallCap(open);
+		if (c < fallCap) fallCap = c;
+		if (open && layers > leafLayers) {
+			leafLayers = layers;
+			leafCell = pos;
+		}
 	}
 
 	/** True when the entity is in at least one counted block. */

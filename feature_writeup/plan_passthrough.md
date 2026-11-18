@@ -261,8 +261,29 @@ Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
   random tick for one already in the world. `SnowLayers.fullToBlock` is the seam for other stacking code (G7.5 falling
   layers).
 - WTHIT: `Walk Through: 0.60x (5 of 8 layers)`; a player in leather boots sees the Run Speed line of the snow tier.
-- Left for later (plan_post_scratch_1115.md G7.13, G7.14): fall and jump inside snow and leaf layers, the leaf overlay,
-  thorns, mob pathing, rabbits and cats exempt.
+- Jump and fall inside (G4c, G7.13; `surface/LayerMotion`, `mixin/LayerJumpMixin`, synced, format 4): from
+  `snowJumpLayers` 6 snow layers the jump power is x `snowJumpFactor` 0.67 (powder snow's 0.63-block hop); from
+  `leafJumpLayers` 5 leaf layers x `leafJumpFactor` 0.9 (about 1.05 blocks: still onto a step beside the pile).
+  Falling inside is capped at `snowFallSpeed` 0.12 (powder snow) and `leafFallSpeed` 0.24 blocks per tick. The
+  lowest jump factor and cap of the counted cells win; exempt mobs have no cells.
+- Leaf thorns (G7.13, G7.14; `surface/LeafThorns`, server): players only, in a leaf pile of `thornLayers` 6 or more,
+  moving at `thornMinSpeed` x walking speed measured against the 8-layer walk factor, once per `thornCooldownTicks`
+  20: chance `thornChance` 0.25 x (4 - armor pieces) / 4, half a heart of sweet berry bush damage. Creative and
+  spectators never.
+- Mob pathing (`mixin/LeafPilePathMixin`, `McaLeafPilePathMixin`): a leaf pile of `pathBlockLayers` 6 or more is a
+  berry-bush node (`DAMAGE_OTHER`) for every mob, MCA villagers included; smaller piles path as before.
+- Leaf overlay (`surface/LeafOverlay`, client, `leafOverlay` on): in first person in a leaf pile, the leaf type's own
+  texture tiled over the screen, biome tinted, opacity 0.7 x layers / max.
+- Exempt (`passthrough_exempt/layers`): foxes, bees, rabbits, cats (G7.14); the tag is per tier, so snow layers too.
+- Falling layers (G7.5; `surface/FallingLayers`, `FallingLayerEntity`, tag `creativecompat:falling_layers`): snow,
+  salt layers, Twigs bamboo leaves, the full bamboo leaves, IE sawdust and Supplementaries fodder fall when the block
+  below is free and stack where they land (capped at the most layers, the rest on top, snow at 8 -> snow block, items
+  when they cannot land). Immersive Weathering's layers and Supplementaries ash fall by their own code. `layersFall`.
+- Full bamboo leaves (G7.9; `creativecompat:bamboo_leaves_full`, layers 5 to 8, `surface/FullBambooLeavesBlock`): a 5th
+  Twigs bamboo leaves on a pile of 4 makes it; walk-through, falls and stacks like the rest. Grown bamboo with leaves
+  drops Twigs bamboo leaves on its free sides (`surface/BambooLeafDrops`, `bambooLeafChance` 0.0005 per random tick and
+  side, piles up to `bambooLeafMaxLayers` 4).
+- Values marked assumed: plan_post_scratch_1115.md G10. Rows SQ-PS15B-13 to -22, CQ-PS15B-03.
 
 ## 3. Leaf piles and ropes
 
@@ -423,6 +444,10 @@ The count runs on the client against the looked-at block, once per WTHIT refresh
   field; one item stick roll with its path clip.
 - Reports ns per call (median and 99th percentile of 20 batches) to chat and to
   `kubejs/exported/perf/passthrough_bench.json`.
+- The "first in its cells" cases (`tick_field`, `tick_web_cube`, `tick_horse_field`) start a new per-tick table and keep
+  the counts baked into the chunk, as in play; they carry the 1000 ns budget. `tick_field_recount` and
+  `tick_web_cube_recount` forget every chunk count first (a tag reload or a block change nearby): recorded, no budget
+  (TODO `tooling/scratch-1115-follow-ups-2 #11`; the r1116 1222 ns was the old cold case timing a recount).
 
 ### 7.2 Macro: perf suite scenario ([perf_suite.md](perf_suite.md), `tools/perf/suite`, bot players)
 - Scenes: 200 cows penned in a 32x32 corn field; 50 villagers working a wheat field; 100 zombies in a 9x9x5 web

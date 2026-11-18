@@ -399,6 +399,7 @@ public final class PassThrough {
 						if (Double.isNaN(layerWalk)) continue; // acts whole: normal terrain
 					}
 					if (PassOwner.ownerPasses(level, pos, state, e)) continue;
+					if (tier.layered()) out.addLayer(pos.asLong(), openLayers(state), PassGrowth.layers(state), values.motion);
 					boolean walkCounts = true;
 					if (v.walkOnlyMoving()) {
 						if (moving < 0) moving = e.getDeltaMovement().horizontalDistanceSqr() > MOVING_SQR ? 1 : 0;
@@ -668,6 +669,18 @@ public final class PassThrough {
 		st.rememberCells(r);
 	}
 
+	/**
+	 * RETURN of {@code LivingEntity#getJumpPower} ({@code mixin/LayerJumpMixin}): the jump power inside snow and leaf
+	 * layers (plan_post_scratch_1115.md G4c, G7.13), from last tick's result. Exempt mobs have no counted cells.
+	 */
+	public static float jumpPower(LivingEntity e, float power) {
+		PassState st = state(e, false);
+		if (st == null || st.result.jump >= 1.0) return power;
+		PassValues values = PassValues.of(e.level.isClientSide);
+		if (!values.enabled || skipsEntity(e)) return power;
+		return (float) (power * st.result.jump);
+	}
+
 	/** A shared result for a check that needs no per-entity state yet (same thread only, do not keep). */
 	static PassResult scratch() {
 		return SCRATCH.get();
@@ -707,6 +720,8 @@ public final class PassThrough {
 		if (vy < 0.0 && r.fall < 1.0) {
 			vy *= r.fall;
 		}
+		// inside snow or leaf layers: falling is capped (plan_post_scratch_1115.md G7.13, LayerMotion)
+		vy = LayerMotion.capFall(vy, r.fallCap);
 		if (vx != v.x || vy != v.y || vz != v.z) {
 			e.setDeltaMovement(vx, vy, vz);
 		}
