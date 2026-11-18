@@ -11,8 +11,7 @@ import java.util.Map;
  * {@link #NEEDS_ALL} only when every one of its mods is (a target in one mod that calls code typed on another). Mixins
  * in neither table (vanilla targets whose feature does nothing without its mod: BlockItemOwnStackFillMixin,
  * StructureTemplateBotanistPotMixin, VineBlockShearMixin; the visual sinking pair CameraSinkMixin and
- * EntitySinkRenderMixin) always apply. The mixins moved from
- * Creative Common unchanged apart from their package (SRG names, remap = false, creativeengineering$ member prefixes).
+ * EntitySinkRenderMixin) always apply. The mixins use SRG names, remap = false and creativeengineering$ member prefixes.
  */
 public class CompatMixinPlugin extends GatedMixinPlugin {
 
@@ -69,7 +68,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("CozyMessageGenderMixin", COZY),
 			// Alex's Mobs giant squid flee radius from cachalot whales (CompatConfig.GiantSquid)
 			Map.entry("AmGiantSquidAvoidWhalesMixin", List.of("alexsmobs")),
-			// From Creative Engineering: Ore Excavation undo rules (excavation/)
+			// Ore Excavation undo rules (excavation/)
 			Map.entry("OreExcavationBlockHistoryMixin", ORE_EXCAVATION),
 			Map.entry("OreExcavationCommandUndoMixin", ORE_EXCAVATION),
 			Map.entry("OreExcavationHistoryMixin", ORE_EXCAVATION),
@@ -98,7 +97,7 @@ public class CompatMixinPlugin extends GatedMixinPlugin {
 			Map.entry("IPPortalRenderingAccessor", IMM_PTL),
 			Map.entry("IPPortalRenderLimitsMixin", IMM_PTL),
 			Map.entry("IPPortalFogMixin", IMM_PTL),
-			// interface mixins from Creative Common (JEI, tooltips, GUI titles, toasts, effect icons)
+			// interface mixins (JEI, tooltips, GUI titles, toasts, effect icons)
 			Map.entry("SubMenuConfigScreenMixin", List.of("create")),
 			Map.entry("JeiRecipeGuiLogicMixin", List.of("jei")),
 			Map.entry("JeiMissingSlotsErrorAccessor", List.of("jei")),

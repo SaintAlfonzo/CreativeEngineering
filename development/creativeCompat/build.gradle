@@ -7,8 +7,7 @@
 //       kubejs/assets/creativecompat/kubejs/  -> assets/creativecompat/kubejs/  (client scripts)
 //     Startup scripts live in this project (src/main/resources/kubejs_startup/creativecompat/), loaded from the jar by
 //     Creative Common's startup loader.
-//   - no nested members (Tempad was one; now its own jar, development/backportedTempad), so Compat
-//     needs no donor jar.
+//   - no nested members so Compat needs no donor jar.
 // Build: ./gradlew :creativeCompat:build --offline   Install: ./gradlew :creativeCompat:installToMods
 plugins {
 	id 'ce.forge-mod'

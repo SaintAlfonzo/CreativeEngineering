@@ -13,9 +13,8 @@ import net.minecraftforge.common.ForgeConfigSpec;
 /**
  * Creative Compat's COMMON config, {@code config/creativecompat-common.toml}. The first boot with Compat copies a
  * player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeCompat}).
- * {@code [shrapnel]}, {@code [surface]} and {@code [vein_undo]} came from Creative Engineering's file (same name,
- * creativeengineering-common.toml) with the TNT shrapnel, walk speed and Ore Excavation undo code; keys, comments and
- * defaults unchanged, carried or merged the same way ({@link #ENGINEERING_SECTIONS}).
+ * {@code [shrapnel]}, {@code [surface]} and {@code [vein_undo]} (TNT shrapnel, walk speed, Ore Excavation undo) are
+ * carried or merged the same way from creativeengineering-common.toml ({@link #ENGINEERING_SECTIONS}).
  */
 public final class CompatConfig {
 
@@ -42,7 +41,7 @@ public final class CompatConfig {
 	public static final PortalGun PORTAL_GUN;
 	public static final Debug DEBUG;
 
-	/** Sections taken over from Creative Common's creativecommon-common.toml (interface carve). */
+	/** Sections carried over from Creative Common's creativecommon-common.toml. */
 	public static final List<String> COMMON_SECTIONS = List.of("jei", "gui_title", "toasts", "tooltips", "coaster", "wthit");
 
 	/** How the WTHIT Run Speed line writes a multiplier: 1.50x or +50%. */
@@ -50,15 +49,15 @@ public final class CompatConfig {
 
 	/**
 	 * The toml tables carried over from creativeengineering-common.toml, in order. {@code [cats]}
-	 * and {@code [giant_squid]} are new in this file and are not carried. {@code [campfire]}
-	 * moved on to Creative Delight's file (creative_split.md 7.9 step 1), which carries it from here.
+	 * and {@code [giant_squid]} are not carried. {@code [campfire]} belongs to
+	 * Creative Delight's file (creative_split.md 7.9 step 1), which carries it from here.
 	 * {@code [leaf_piles]} has no spec: carried from an old file, {@code surface.LeafPileMigration}
 	 * then moves its value to {@code [surface.passthrough.leaf_pile] minLayers} and drops it.
 	 */
 	public static final List<String> SECTIONS =
 			List.of("leaf_piles", "moss", "vine_shearing", "monster_box", "trash_slot");
 
-	/** The tables that came from Creative Engineering's creativeengineering-common.toml. */
+	/** The tables carried over from Creative Engineering's creativeengineering-common.toml. */
 	public static final List<String> ENGINEERING_SECTIONS = List.of("shrapnel", "surface", "vein_undo");
 
 	static {
@@ -76,7 +75,7 @@ public final class CompatConfig {
 		SHRAPNEL = new Shrapnel(builder);
 		SURFACE = new Surface(builder);
 		VEIN_UNDO = new VeinUndo(builder);
-		// from creativecommon-common.toml (interface carve)
+		// from creativecommon-common.toml
 		JEI = new Jei(builder);
 		GUI_TITLE = new GuiTitle(builder);
 		TOASTS = new Toasts(builder);

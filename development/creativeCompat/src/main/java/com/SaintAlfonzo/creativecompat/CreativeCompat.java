@@ -64,13 +64,12 @@ import java.util.regex.Pattern;
 
 /**
  * Creative Compat (feature_writeup/creative_compat.md): the pack's tweaks to third-party mods that have no wider system
- * of their own. Every other Creative jar requires it; it requires Creative Common ({@code creativeengineering}, later
- * Creative Common). Each tweak applies only when its mod is loaded: mixins through compat/CompatMixinPlugin, listeners
+ * of their own. Every other Creative jar requires it; it requires Creative Common. Each tweak applies only when its mod is loaded: mixins through compat/CompatMixinPlugin, listeners
  * through the {@link ModList} checks below.
  *
  * Ids follow the owner (feature_writeup/namespace_move.md): the shrapnel entity, the botanist pot block entity, the
  * cardboard box, models, textures, tags and loot tables use this mod's namespace ({@link #NS}). Lang keys and NBT
- * keys kept their old text. This mod id is only the jar's identity, its config file and its script packs.
+ * keys keep their original text. This mod id is only the jar's identity, its config file and its script packs.
  */
 @Mod(CreativeCompat.MOD_ID)
 public class CreativeCompat {
@@ -84,15 +83,14 @@ public class CreativeCompat {
 	private static final String FILE = MOD_ID + "-common.toml";
 
 	public CreativeCompat() {
-		// The sections came from Creative Common's file: the first boot copies the player's values over (then Creative Common
-		// drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
+		// The sections are carried from Creative Common's file: the first boot copies the player's values over (then Creative
+		// Common drops them from its file when Forge corrects it). Must run before Forge reads the COMMON configs.
 		boolean carried = ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.SECTIONS);
-		// [shrapnel], [surface] and [vein_undo] came from Creative Engineering's file of the same name, after this
-		// file's first release: carried into a new file, or merged into an existing one.
+		// [shrapnel], [surface] and [vein_undo] are carried from Creative Engineering's file of the same name into a new
+		// file, or merged into an existing one.
 		if (!ConfigRename.carrySections(OLD_FILE, FILE, CompatConfig.ENGINEERING_SECTIONS))
 			ConfigRename.mergeSections(OLD_FILE, FILE, CompatConfig.ENGINEERING_SECTIONS);
-		// [jei], [gui_title], [toasts], [tooltips], [coaster], [wthit] came from Creative Common's file with the
-		// interface code. Sections this file already has are kept; Common drops its copies when Forge corrects its
+		// [jei], [gui_title], [toasts], [tooltips], [coaster], [wthit] are carried from Creative Common's file. Sections this file already has are kept; Common drops its copies when Forge corrects its
 		// file.
 		if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS))
 			ConfigRename.mergeSections("creativecommon-common.toml", FILE, CompatConfig.COMMON_SECTIONS);
@@ -121,7 +119,7 @@ public class CreativeCompat {
 			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.compat.NetherFogColour.class);
 		}
 
-		// The TNT shrapnel entity (shrapnel/, from Creative Engineering id creativecompat:shrapnel): fired on
+		// The TNT shrapnel entity (shrapnel/, id creativecompat:shrapnel): fired on
 		// primed-TNT-entity detonation, and for the itemphysic.ItemBurnTransform burn-explosion rule through Common's
 		// util.BurnBursts. Tuning: [shrapnel].
 		ShrapnelEntities.register(modEventBus);
@@ -138,7 +136,7 @@ public class CreativeCompat {
 			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativecompat.portalgun.PortalGunDissolve.class);
 		}
 
-		// Walking on blocks (surface/, from Creative Engineering; [surface]). Framed / copycat blocks: say on
+		// Walking on blocks (surface/; [surface]). Framed / copycat blocks: say on
 		// BlockRunner's speed tooltip line whether they walk like their camo. BlockRunner tier speeds come from
 		// [surface.speed] (mixin/BlockRunnerSpeedConfigMixin): re-apply them when the toml is saved, and log an error
 		// if the mixin never ran.
@@ -288,12 +286,12 @@ public class CreativeCompat {
 		}
 	}
 
-	/** Lines of creativeengineering-common.toml that held the sections moved here. */
+	/** Lines of creativeengineering-common.toml that hold the sections carried here. */
 	private static final Pattern OLD_KEY = Pattern.compile(
 			"^\\s*(\\[(?:leaf_piles|moss|vine_shearing|monster_box|trash_slot)\\])", Pattern.MULTILINE);
 
 	/**
-	 * The sections moved out of Creative Common's file. When this file already existed the carry-over did not run, and
+	 * The sections carried from Creative Common's file. When this file already existed the carry-over does not run, and
 	 * Forge drops the old sections from Creative Common's file on its next correction, so an edited value left there is
 	 * lost: say which ones were still there. Runs at construction, before Forge loads and corrects the COMMON configs.
 	 */

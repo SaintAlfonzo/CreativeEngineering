@@ -4,7 +4,7 @@ package com.SaintAlfonzo.creativecompat.surface;
  * Kept for Creative Devtools' bench, whose {@link #clear()} now also makes every chunk recount
  * ({@link PassCountData#forgetAll()}), so its cold cases stay cold.
  *
- * <p>Was: neighbor counts of the current tick, per block position (plan_passthrough.md 7.2 fallback, scratch fixes): a
+ * <p>Neighbor counts of the current tick, per block position (plan_passthrough.md 7.2 fallback, scratch fixes): a
  * herd in a field or a crowd in a web block shares cells, so the second entity in a cell reads the count instead of
  * doing the 8 or 26 block lookups again. One per thread ({@link #get()}: server thread, client thread); a new level or
  * game time starts an empty table (a stamp bump, nothing cleared). A block changed during the tick can leave a count
