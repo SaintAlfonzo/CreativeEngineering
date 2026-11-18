@@ -122,7 +122,7 @@ reject \[cdevtest\] .*done=0
 
 ## SQ-FCK-07 | glow lichen in a 9x9-chunk plains box about 3x the control boot (c3_b2.qb, SQ-FCK-07c); no lichen codec error
 @phase worldgen
-@group A
+@group B (fresh world)
 @commands Fresh world, pregen a 9x9 chunk area around 0,0 in a plains / forest seed; count `minecraft:glow_lichen` blocks (`tools/farm_worldgen_probe.js` block census or WorldEdit `//count`); same on a control boot with the two `kubejs/data/minecraft/worldgen/*/glow_lichen.json` files moved out
 @pass about 3x the control count or more; no `glow_lichen` codec error in latest.log (FL-15)
 @fails JSON codec error (1.19.2 IntProvider shape); a mod's biome lists a different lichen feature
@@ -157,7 +157,7 @@ look the shell's summed glow_lichen total here vs SQ-FCK-07c (same seed and box)
 
 ## SQ-FCK-08 | hamimelon and Mini Cantaloupe in desert and badlands about 2.5x the control (c3_b2.qb, SQ-FCK-08c); rules list the _common features
 @phase worldgen
-@group A
+@group B (fresh world)
 @commands Pregen 25x25 chunks in `minecraft:desert` and `minecraft:badlands` (two seeds); count `fruitsdelight:hamimelon` and the Mini Cantaloupe block; control with the two `_common` placed features removed from wild_crops.json
 @pass about 2.5x the control count of each (CR-111); log lists the two new features in the hamimelon / cantaloupe rules
 @fails rule `requires` gate moved only the old files (`packs/worldgen/<mod>/` in the built CD jar)

@@ -50,7 +50,7 @@ look plugin_toggle.json5 half (client config) is CQ-IDS-01's
 sleep 10
 > ceswap
 > ccaltime
-> celocate
+> cwglocate
 > cespawnbox
 > cegen
 > ceplace

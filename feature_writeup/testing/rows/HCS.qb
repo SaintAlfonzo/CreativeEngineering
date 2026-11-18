@@ -73,7 +73,7 @@ look no Can't keep up during the walk worth attention; no crow / nest exception 
 waitlog Task finished 1800
 > save-all flush
 sleep 10
-shell python3 $INST/tools/scratch_query/region_blocks.py blocks world 'hearthandharvest:nest' --box $(( {FO1} - 240 )) $(( {FO3} - 240 )) $(( {FO1} + 240 )) $(( {FO3} + 240 )) --near 'leaves' 2>&1 | tail -40
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks @ 'hearthandharvest:nest' --box $(( {FO1} - 240 )) $(( {FO3} - 240 )) $(( {FO1} + 240 )) $(( {FO3} + 240 )) --near 'leaves' 2>&1 | tail -40
 look nest count about 100 to 200 over the 900 chunks of the forest square, every nest with a leaves neighbour and depth 0 (top block), none on grass
 
 ## SQ-HCS-04 | villages: a quarter of houses carry one roof nest
@@ -83,22 +83,30 @@ look nest count about 100 to 200 over the 900 chunks of the forest square, every
 @pass About a quarter of houses carry one nest, on a full block on the roof, never two on one house, none in a street or on a lamp post
 @fails None at all: mixin `ChunkGeneratorCrowNestMixin` not applied (log `hearthandharvest.ce.mixins.json`), or `/place` skips `applyBiomeDecoration` (then test with Chunky over a seed with villages); far below a quarter: the middle-third column misses sloped roofs, widen `ROOF_DEPTH` in `nest/RoofNests`
 @from batches/r1111/b1.qb
+# each forceload box generates its 169 chunks inside the console command: wait for each village before the next line,
+# so the region scan runs after them and the console is free when the row ends (judge-14, r1118)
 > forceload add 6000 6000 6200 6200
 > place structure minecraft:village_plains 6100 64 6100
+waitlog Generated structure "minecraft:village_plains" at 6100, 64, 6100 900
 > forceload add 7000 6000 7200 6200
 > place structure minecraft:village_plains 7100 64 6100
+waitlog Generated structure "minecraft:village_plains" at 7100, 64, 6100 900
 > forceload add 8000 6000 8200 6200
 > place structure minecraft:village_desert 8100 64 6100
+waitlog Generated structure "minecraft:village_desert" at 8100, 64, 6100 900
 > forceload add 9000 6000 9200 6200
 > place structure minecraft:village_savanna 9100 64 6100
+waitlog Generated structure "minecraft:village_savanna" at 9100, 64, 6100 900
 > forceload add 10000 6000 10200 6200
 > place structure minecraft:village_taiga 10100 64 6100
+waitlog Generated structure "minecraft:village_taiga" at 10100, 64, 6100 900
 > forceload add 11000 6000 11200 6200
 > place structure minecraft:village_snowy 11100 64 6100
+waitlog Generated structure "minecraft:village_snowy" at 11100, 64, 6100 900
 sleep 10
 > save-all flush
-sleep 10
-shell python3 $INST/tools/scratch_query/region_blocks.py blocks world 'hearthandharvest:nest' --box 5900 5900 11300 6300 2>&1 | tail -25
+waitlog Saved the game 600
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks @ 'hearthandharvest:nest' --box 5900 5900 11300 6300 2>&1 | tail -25
 look nests on roofs (depth 0, above the ground band), never two per house, none in streets; if none: /place skips applyBiomeDecoration, use Chunky over villages (row note)
 
 ## SQ-HCS-05 | generated nest refills one crow per 5 game minutes up to 3, none with the player 60 away

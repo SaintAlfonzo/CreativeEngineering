@@ -60,32 +60,15 @@ look no 94x98 square cut into the hills round the base, snow on the upper ledges
 
 ## SQ-TER-04 | level-three ruins and large-ruins meta on a slope: no grass slab pad
 @group A
-@commands a slope: `/place structure philipsruins:level_three_ruins` x2; `/place structure creativeengineering:meta/large_ruins`
+@commands a slope: `/place structure philipsruins:level_three_ruins` x2; `/place structure creativeworldgen:meta/ruin_cluster` (the meta anchored on the large-ruins tag)
 @pass no grass slab around the walls; a large-ruins cluster with one as anchor looks the same (ST-302)
 @fails pad left: template_trim tag not bound (SQ-TER-01)
 @from batches/r1031/w3_terrain.qb
 > execute positioned {HL1} 120 {HL3+120} run place structure philipsruins:level_three_ruins
 > execute positioned {HL1+80} 120 {HL3+120} run place structure philipsruins:level_three_ruins
-> execute positioned {HL1} 120 {HL3+240} run place structure creativeengineering:meta/large_ruins
+> execute positioned {HL1} 120 {HL3+240} run place structure creativeworldgen:meta/ruin_cluster
 reject (?i)failed to place
 look no grass slab around the walls; the large-ruins cluster looks the same (ST-302)
-
-## SQ-TER-05 | beard footprint calibration (W1c, beardFootprint = true)
-@phase long
-@group B
-@commands toml `[worldgen.earth_fill] log = "ALL"`, `beardFootprint = true`; Chunky r 300 in hills with outposts and villages; `grep 'under built floors' latest.log`
-@pass lines show `(N under built floors)`; cancels rise for outposts on cliff edges; tabulate cancels per family against `tools/earth_fill_sim.sh 4242 60 footprint` (outposts 23%, villages 2 to 18% newly over) and look at 3 canceled and 3 kept starts (ST-304). Calibration only: turn the switch back off unless the user decides
-@fails no `under built floors` line at all: the switch did not load (check the toml); every outpost cancelled: limits too tight for footprint mounds, report numbers
-@from batches/r1031/w1_earthfill.qb
-> execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills
-waitlog nearest minecraft:windswept_hills is at 300
-capture WH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> chunky center {WH1} {WH3}
-> chunky radius 300
-> chunky start
-waitlog Task finished 1800
-expect under built floors
-look tabulate cancels per family (python over RES/rows/SQ-TER-05.log) against tools/earth_fill_sim.sh 4242 60 footprint (outposts 23%, villages 2 to 18% newly over); look at 3 cancelled and 3 kept starts (ST-304). Calibration only: switch back off after
 
 ## SQ-TER-06 | ocean geodes covered in the floor block (floorPatch SWAP)
 @phase long
@@ -120,3 +103,31 @@ sleep 20
 > forceload remove {GO1-64} {GO3-64} {GO1+63} {GO3+63}
 reject verb=\S+ .*done=0
 look the verb=count lines give n and on= (what each stands on); calcite and smooth basalt seen from the water (first block below water) should be about 0: fly 5 geode spots in the client block for the look (ST-305); prismarine geodes untouched. count reads loaded chunks only (skipped_columns 0 means the sample was loaded) Chunky while they are still loaded, else forceload the box first
+
+@@section 2
+@@title Terrain beard footprint calibration (structures/terrain), 2026-10-30
+@@phase worldgen
+@@date 2026-10-30
+@@jars creativeworldgen
+@@prep toml creativeworldgen-common.toml worldgen.earth_fill log "ALL"
+@@prep toml creativeworldgen-common.toml worldgen.earth_fill beardFootprint true
+@@text
+@@text SQ-TER-05 in its own boot (judge-14, r1118): `beardFootprint = true` would change the other SQ-TER rows.
+@@text
+@@table
+## SQ-TER-05 | beard footprint calibration (W1c, beardFootprint = true)
+@phase long
+@group B
+@commands toml `[worldgen.earth_fill] log = "ALL"`, `beardFootprint = true`; Chunky r 300 in hills with outposts and villages; `grep 'under built floors' latest.log`
+@pass lines show `(N under built floors)`; cancels rise for outposts on cliff edges; tabulate cancels per family against `tools/earth_fill_sim.sh 4242 60 footprint` (outposts 23%, villages 2 to 18% newly over) and look at 3 canceled and 3 kept starts (ST-304). Calibration only: turn the switch back off unless the user decides
+@fails no `under built floors` line at all: the switch did not load (check the toml); every outpost cancelled: limits too tight for footprint mounds, report numbers
+@from batches/r1031/w1_earthfill.qb
+> execute positioned 2144 70 -2592 run locate biome minecraft:windswept_hills
+waitlog nearest minecraft:windswept_hills is at 300
+capture WH is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {WH1} {WH3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 1800
+expect under built floors
+look tabulate cancels per family (python over RES/rows/SQ-TER-05.log) against tools/earth_fill_sim.sh 4242 60 footprint (outposts 23%, villages 2 to 18% newly over); look at 3 cancelled and 3 kept starts (ST-304). Calibration only: switch back off after

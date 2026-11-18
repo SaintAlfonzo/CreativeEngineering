@@ -121,6 +121,16 @@ def game_jvms():
 	return r.stdout.strip()
 
 
+def world_letter(group):
+	"""A row's @group text -> world group 'A' (superflat) or 'B' (normal world). B: text starting with B, or naming a
+	new / fresh / normal world or level (judge-14, r1118: "new world", "Fresh world" took the first letter and ran on
+	the superflat, so locate biome found nothing). Everything else is A."""
+	g = (group or 'A').strip()
+	if g[:1].upper() == 'B' or re.search(r'\b(new|fresh|normal)\s+(world|level)\b|\bgroup\s+B\b', g, re.I):
+		return 'B'
+	return 'A'
+
+
 def build_steps(plan_rows):
 	"""plan --json rows -> steps, one per (phase, file, section, group letter), in plan order; client rows skipped."""
 	sys.path.insert(0, str(HERE))
@@ -138,8 +148,7 @@ def build_steps(plan_rows):
 			skipped.append(x['id'])
 			continue
 		m = meta.get((x['file'], x['id']), {})
-		g = (m.get('group') or 'A').strip()[:1].upper()
-		g = 'B' if g == 'B' else 'A'
+		g = world_letter(m.get('group'))
 		ph = x.get('phase', 'server')
 		key = '%s#%s#%s#%s' % (ph, x['file'], x['section'], g)   # plan --json is in run-phase order (qrows.PHASES)
 		steps.setdefault(key, {'key': key, 'file': x['file'], 'section': x['section'], 'group': g, 'phase': ph, 'rows': [],
@@ -229,6 +238,37 @@ def wait_ready(out, secs=600):
 	return False
 
 
+def wait_failed_boot(out, secs=600):
+	"""A step whose rows all expect the boot to fail (`bootreject Done \(`, e.g. SQ-CBC-06 missing dependency): wait until
+	the log shows Done (the rows then FAIL as they should), a crash or dependency error, or the server stopped
+	(judge-14, r1118: wait_ready waited 600 s and raised, so such a row never ran)."""
+	log = Path(out) / 'srv/logs/latest.log'
+	end = time.time() + secs
+	rx = re.compile(r'Done \(|Missing or unsupported mandatory dependencies|Failed to start|Crash report|crash-reports|'
+					r'Stopping server|ModLoadingException')
+	while time.time() < end and not STOP['flag']:
+		try:
+			if rx.search(log.read_text(errors='replace')):
+				time.sleep(10)
+				return True
+		except OSError:
+			pass
+		time.sleep(3)
+	return False
+
+
+def expects_failed_boot(file, rows):
+	"""True when every row of the step has a `bootreject Done \(` step."""
+	try:
+		import qrun
+		parsed = {r['id']: r for r in qrun.parse(str(INST / file))}
+	except Exception:  # noqa: BLE001
+		return False
+	sel = [parsed.get(r) for r in rows]
+	return bool(sel) and all(r and any(w.endswith('bootreject') and arg.startswith('Done') for w, arg, _ in r['steps'])
+							 for r in sel)
+
+
 def watchdog(pid, out):
 	"""Detached: stop the step's server when the driver pid is gone."""
 	return subprocess.Popen([sys.executable, str(Path(__file__)), 'watchdog', str(pid), str(out)],
@@ -284,11 +324,16 @@ def run_step(d, i, s):
 	s['watchdog'] = dog.pid
 	d.save()
 	try:
-		if not wait_ready(out):
+		noboot = expects_failed_boot(s['file'], todo)
+		if noboot:
+			if not wait_failed_boot(out):
+				raise RuntimeError('boot neither failed nor finished in 600 s (%s/srv/logs/latest.log)' % out)
+			d.log('step %d: rows expect a failed boot; running them on the log' % (i + 1))
+		elif not wait_ready(out):
 			raise RuntimeError('server not ready in 600 s (%s/srv/logs/latest.log)' % out)
 		d.log('step %d: %d rows' % (i + 1, len(todo)))
 		cmd = [sys.executable, str(HERE / 'qrun.py'), 'run', str(out), str(INST / s['file']), str(res), '--rows',
-			   ','.join(todo)]
+			   ','.join(todo)] + (['--no-watch', '--no-probes'] if noboot else [])
 		with open(d.dir / ('s%02d_qrun.txt' % i), 'a') as f:
 			p = subprocess.Popen(cmd, stdout=f, stderr=subprocess.STDOUT)
 			while p.poll() is None:

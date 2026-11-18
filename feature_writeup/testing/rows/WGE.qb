@@ -79,24 +79,24 @@ shell grep -n 'searchTimeoutSeconds' $INST/development/creativeWorldgen/src/main
 look the spec default in the source line is 120 (the delete-and-reboot half needs its own boot: optional)
 ## SQ-WGE-02b (A2)
 @group B
-@commands SQ-WG30-C05 at 120: `/locate structure creativeengineering:meta/fortified_camps` from 0 0 and from 2448 -624, `meta/fortified_ruins` from 0 0
+@commands SQ-WG30-C05 at 120: `/locate structure creativeworldgen:meta/fortified_camps` from 0 0 and from 2448 -624, `meta/fortified_ruins` from 0 0
 @pass each answers, or ends with exactly one `[locate] ... timed out after 120 s` line; previous answers were 1 to 5 s (1823 / 3019 / 2608 blocks), so none should time out; server keeps ticking
 @fails a timeout where C05 passed at 300 s: the earlier answers were slow only on a cold world, rerun; message says 300: toml not updated
 @reviewed 2026-11-16
-> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/fortified_camps
-waitlog (The nearest creativeengineering:meta/fortified_camps is at|Could not find|timed out after) 400
-> execute in minecraft:overworld positioned 2448 70 -624 run locate structure creativeengineering:meta/fortified_camps
-waitlog (The nearest creativeengineering:meta/fortified_camps is at|Could not find|timed out after) 400
-> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/fortified_ruins
-waitlog (The nearest creativeengineering:meta/fortified_ruins is at|Could not find|timed out after) 400
-count The nearest creativeengineering:meta/fortified_(camps|ruins) is at == 3
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeworldgen:meta/fortified_camps
+waitlog (The nearest creativeworldgen:meta/fortified_camps is at|Could not find|timed out after) 400
+> execute in minecraft:overworld positioned 2448 70 -624 run locate structure creativeworldgen:meta/fortified_camps
+waitlog (The nearest creativeworldgen:meta/fortified_camps is at|Could not find|timed out after) 400
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeworldgen:meta/fortified_ruins
+waitlog (The nearest creativeworldgen:meta/fortified_ruins is at|Could not find|timed out after) 400
+count The nearest creativeworldgen:meta/fortified_(camps|ruins) is at == 3
 reject timed out after 300 s
 count \[locate\].*timed out after 120 s <= 1
 reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
 look any timeout line names 120 s (300 = toml not updated); previous answers were 1 to 5 s
 ## SQ-WGE-02c (A2)
 @group B
-@commands set `searchTimeoutSeconds = 5` in the scratch toml, reboot, `/locate structure minecraft:mansion` from 0 0 (rare, long), then `/locate structure creativeengineering:meta/fortified_ruins`; restore 120
+@commands set `searchTimeoutSeconds = 5` in the scratch toml, reboot, `/locate structure minecraft:mansion` from 0 0 (rare, long), then `/locate structure creativeworldgen:meta/fortified_ruins`; restore 120
 @pass the mansion search ends as not found with a `[locate] ... timed out after 5 s` line and its counters; the tick time stays under 100 ms during it; fortified ruins either answers or times out the same way; thread free for the next search
 @fails no timeout line: `LocateStats.expired` path or the value is not read per search
 @draft needs its own boot with searchTimeoutSeconds = 5 preset (qrun.py toml before the boot; a row cannot reboot the server), then mansion and fortified_ruins locates expecting `timed out after 5 s`; restore 120 after
@@ -385,7 +385,7 @@ look the Retuned pools list holds only the vinery / beautify / tech pools (the 9
 ## SQ-WGE-00b (step 3 to 5, all)
 @group none, offline
 @commands `python3 tools/gen_nether_swaps.py`; `python3 tools/check_worldgen_json.py`; `python3 tools/gen_structure_groups.py --check`; `python3 tools/check_moobloom_data.py`; `node --check` on `end_divers.js`
-@pass 1514 swaps in 117 templates (1407 before C3); 0 worldgen problems; groups check lists `creativeengineering:meta/waystone_ruins` in `ruins` at weight 1 and no new warning; moobloom check OK with 38 spawn rules; script parses
+@pass 1514 swaps in 117 templates (1407 before C3); 0 worldgen problems; groups check lists `creativeworldgen:meta/waystone_ruins` in `ruins` at weight 1 and no new warning; moobloom check OK with 38 spawn rules; script parses
 @fails swap count off by the 7 rule rows: a rule's `to` id or a KEEP property
 @reviewed 2026-11-16
 shell cd $INST && python3 tools/gen_nether_swaps.py 2>&1 | tail -6
@@ -393,11 +393,11 @@ shell cd $INST && python3 tools/check_worldgen_json.py 2>&1 | tail -6
 shell cd $INST && python3 tools/gen_structure_groups.py --check 2>&1 | grep -nE "waystone_ruins|WARN|warn" | head -12
 shell cd $INST && python3 tools/check_moobloom_data.py 2>&1 | tail -6
 shell cd $INST && node --check kubejs/data/creativeworldgen/kubejs/mobs/end_divers.js && echo END_DIVERS_PARSES
-look rows/<ID>.shell.txt: 1514 swaps in 117 templates (more is fine when later rules were added; fewer = a rule's `to` id or KEEP property); 0 worldgen problems; `creativeengineering:meta/waystone_ruins` in `ruins` at weight 1, no new warning; moobloom check OK with 38 spawn rules; END_DIVERS_PARSES
+look rows/<ID>.shell.txt: 1514 swaps in 117 templates (more is fine when later rules were added; fewer = a rule's `to` id or KEEP property); 0 worldgen problems; `creativeworldgen:meta/waystone_ruins` in `ruins` at weight 1, no new warning; moobloom check OK with 38 spawn rules; END_DIVERS_PARSES
 ## SQ-WGE-09 (A7)
 @phase long
 @group B, plus the Nether
-@commands ST-294 and ST-295 (already queued with the pre-scratch pass): in the Overworld `/locate structure philipsruins:lost_soul_city`, `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin`; in the Nether the same four; `/locate structure creativeengineering:meta/ruin_cluster` in the Overworld
+@commands ST-294 and ST-295 (already queued with the pre-scratch pass): in the Overworld `/locate structure philipsruins:lost_soul_city`, `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin`; in the Nether the same four; `/locate structure creativeworldgen:meta/ruin_cluster` in the Overworld
 @pass none found in the Overworld; each found in the Nether in its biomes (soul sand valley; crimson / warped forest; wastes / deltas) at y 33 (ruins), 12 (dungeon), 5 (city); soul fire inside them kept (no swap: the generator skips Nether-owned templates); ruin cluster still found
 @fails found in the Overworld: the jar json override in `kubejs/data/philipsruins/` not loaded; soul fire swapped: template also owned by an Overworld structure
 @reviewed 2026-11-16
@@ -417,11 +417,11 @@ waitlog (The nearest philipsruins:lost_soul_dungeon is at|Could not find|timed o
 waitlog (The nearest philipsruins:rare_ruin is at|Could not find|timed out after) 600
 > execute in minecraft:the_nether positioned 0 70 0 run locate structure philipsruins:start_nether_ruin
 waitlog (The nearest philipsruins:start_nether_ruin is at|Could not find|timed out after) 600
-> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/ruin_cluster
-waitlog (The nearest creativeengineering:meta/ruin_cluster is at|Could not find|timed out after) 900
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeworldgen:meta/ruin_cluster
+waitlog (The nearest creativeworldgen:meta/ruin_cluster is at|Could not find|timed out after) 900
 count The nearest philipsruins:(lost_soul_city|lost_soul_dungeon|rare_ruin|start_nether_ruin) is at == 4
 count Could not find a structure of type "?philipsruins: >= 4
-expect The nearest creativeengineering:meta/ruin_cluster is at
+expect The nearest creativeworldgen:meta/ruin_cluster is at
 reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
 look the Overworld locates come first: their 4 lines must be the not-found ones (order in rows/<ID>.log); Nether biomes and y and the soul fire inside are SQ-PSW-02's checks (same steps there with biome readback)
 ## SQ-WGE-10 (C3)
@@ -447,7 +447,7 @@ reject census done \(stopped\)
 look against the SQ-META31 census: camp ruin metas about 1.7x (share 0.25 [0.15]); great tower siege about 0.6x; meteor shower about 0.66x; plain camp, great tower and meteorite counts within 15 %
 ## SQ-WGE-12 (B2)
 @group B
-@commands Needs the Creative Worldgen jar of 2026-11-03 or later (`punch` accepted by `structure_overrides.js`; before, the definition was dropped). SQ-META31-04b: `/place structure creativeengineering:meta/meteorite_desert_pyramid` 3 times on desert ground, and 2 found with `/locate`; grep `[meta-structures] ... meteorite_desert_pyramid` (log on); LOOK at each from the ground and from the side
+@commands Needs the Creative Worldgen jar of 2026-11-03 or later (`punch` accepted by `structure_overrides.js`; before, the definition was dropped). SQ-META31-04b: `/place structure creativeworldgen:meta/meteorite_desert_pyramid` 3 times on desert ground, and 2 found with `/locate`; grep `[meta-structures] ... meteorite_desert_pyramid` (log on); LOOK at each from the ground and from the side
 @pass log line has `punch r <n> column <c> y <from>-<top>`; the meteorite center within 4 blocks of the pyramid center; the pyramid above ground stands (walls, towers, roof) except a round shaft over the meteorite; sky stone sphere under or through the floor; no crater, no fallout, no cleared sand around the pyramid; no `could not rebuild an AE2 meteorite piece` error
 @fails crater still there: crater type not rewritten (AE2 tag keys changed: read `MeteoriteStructurePiece` save keys); no shaft: `topOver` found no box (meteorite missed the pyramid)
 @owner true
@@ -461,46 +461,46 @@ look against the SQ-META31 census: camp ruin metas about 1.7x (share 0.25 [0.15]
 ## SQ-WGE-14 (A6)
 @phase long
 @group B
-@commands `/locate structure creativeengineering:meta/waystone_ruins` 4 times (log on); tp to each; right-click the waystone
-@pass a small ruin with one waystone 4 to 12 blocks from its center, standing on the ground (beard), not inside a wall; the waystone is registered (name screen); `/locate structure creativeengineering:waystone_ruin_part` alone finds only the ones inside metas (no structure set); ruin_scatter still found; plain stone waystone in every biome (Waystones' BIOME style only covers its lone waystones)
+@commands `/locate structure creativeworldgen:meta/waystone_ruins` 4 times (log on); tp to each; right-click the waystone
+@pass a small ruin with one waystone 4 to 12 blocks from its center, standing on the ground (beard), not inside a wall; the waystone is registered (name screen); `/locate structure creativeworldgen:waystone_ruin_part` alone finds only the ones inside metas (no structure set); ruin_scatter still found; plain stone waystone in every biome (Waystones' BIOME style only covers its lone waystones)
 @fails `no satellite fitted` for most: margin 1 too tight, raise distance; waystone not registered: template block entity, compare with a village waystone
 @reviewed 2026-11-16
-> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/waystone_ruins
-waitlog (The nearest creativeengineering:meta/waystone_ruins is at|Could not find|timed out after) 900
-capture WRA The nearest creativeengineering:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeworldgen:meta/waystone_ruins
+waitlog (The nearest creativeworldgen:meta/waystone_ruins is at|Could not find|timed out after) 900
+capture WRA The nearest creativeworldgen:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {WRA1-16} {WRA3-16} {WRA1+16} {WRA3+16}
 sleep 10
 > cdevtest count {WRA1-16} -20 {WRA3-16} {WRA1+16} 200 {WRA3+16} #waystones:waystones
 waitlog \[cdevtest\] verb=count done= 120
 > forceload remove {WRA1-16} {WRA3-16} {WRA1+16} {WRA3+16}
-> execute in minecraft:overworld positioned 3000 70 0 run locate structure creativeengineering:meta/waystone_ruins
-waitlog (The nearest creativeengineering:meta/waystone_ruins is at|Could not find|timed out after) 900
-capture WRB The nearest creativeengineering:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:overworld positioned 3000 70 0 run locate structure creativeworldgen:meta/waystone_ruins
+waitlog (The nearest creativeworldgen:meta/waystone_ruins is at|Could not find|timed out after) 900
+capture WRB The nearest creativeworldgen:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {WRB1-16} {WRB3-16} {WRB1+16} {WRB3+16}
 sleep 10
 > cdevtest count {WRB1-16} -20 {WRB3-16} {WRB1+16} 200 {WRB3+16} #waystones:waystones
 waitlog \[cdevtest\] verb=count done= 120
 > forceload remove {WRB1-16} {WRB3-16} {WRB1+16} {WRB3+16}
-> execute in minecraft:overworld positioned 0 70 3000 run locate structure creativeengineering:meta/waystone_ruins
-waitlog (The nearest creativeengineering:meta/waystone_ruins is at|Could not find|timed out after) 900
-capture WRC The nearest creativeengineering:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:overworld positioned 0 70 3000 run locate structure creativeworldgen:meta/waystone_ruins
+waitlog (The nearest creativeworldgen:meta/waystone_ruins is at|Could not find|timed out after) 900
+capture WRC The nearest creativeworldgen:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {WRC1-16} {WRC3-16} {WRC1+16} {WRC3+16}
 sleep 10
 > cdevtest count {WRC1-16} -20 {WRC3-16} {WRC1+16} 200 {WRC3+16} #waystones:waystones
 waitlog \[cdevtest\] verb=count done= 120
 > forceload remove {WRC1-16} {WRC3-16} {WRC1+16} {WRC3+16}
-> execute in minecraft:overworld positioned -3000 70 -3000 run locate structure creativeengineering:meta/waystone_ruins
-waitlog (The nearest creativeengineering:meta/waystone_ruins is at|Could not find|timed out after) 900
-capture WRD The nearest creativeengineering:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:overworld positioned -3000 70 -3000 run locate structure creativeworldgen:meta/waystone_ruins
+waitlog (The nearest creativeworldgen:meta/waystone_ruins is at|Could not find|timed out after) 900
+capture WRD The nearest creativeworldgen:meta/waystone_ruins is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {WRD1-16} {WRD3-16} {WRD1+16} {WRD3+16}
 sleep 10
 > cdevtest count {WRD1-16} -20 {WRD3-16} {WRD1+16} 200 {WRD3+16} #waystones:waystones
 waitlog \[cdevtest\] verb=count done= 120
 > forceload remove {WRD1-16} {WRD3-16} {WRD1+16} {WRD3+16}
 count \[cdevtest\] verb=count block=#waystones:waystones n=1 == 4
-> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeengineering:meta/ruin_scatter
-waitlog (The nearest creativeengineering:meta/ruin_scatter is at|Could not find|timed out after) 900
-expect The nearest creativeengineering:meta/ruin_scatter is at
+> execute in minecraft:overworld positioned 0 70 0 run locate structure creativeworldgen:meta/ruin_scatter
+waitlog (The nearest creativeworldgen:meta/ruin_scatter is at|Could not find|timed out after) 900
+expect The nearest creativeworldgen:meta/ruin_scatter is at
 reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
 look the `on` value of each count line (the waystone stands on ground blocks, not in a wall); 4 to 12 blocks from the ruin centre and the name screen need a client look
 ## SQ-WGE-15 (B3, B4)
@@ -519,7 +519,7 @@ look the `on` value of each count line (the waystone stands on ground blocks, no
 sleep 10
 shell python3 -c "import json; d=json.load(open('kubejs/exported/spawns.json')); b=d['biomes']; [print(k, [s for s in b[k]['spawners'].get('creature', []) if 'villager' in s['type']]) for k in ('minecraft:plains', 'minecraft:meadow')]; t=json.dumps(d.get('tuning', {})); print('lone_villagers' in t, t[t.find('lone_villagers'):t.find('lone_villagers')+160])"
 shell python3 -c "import json,sys; d=json.load(open('kubejs/exported/spawns.json'))['biomes']; ok=any(s['type']=='minecraft:villager' and s['weight']==1 for s in d['minecraft:plains']['spawners'].get('creature', [])); print('plains villager 1:', ok); sys.exit(0 if ok else 1)"
-shell python3 -I $INST/tools/scratch_query/region_blocks.py entities wge 'villager' --box {PL1-400} {PL3-400} {PL1+400} {PL3+400} | head -12
+shell python3 -I $INST/tools/scratch_query/region_blocks.py entities @ 'villager' --box {PL1-400} {PL3-400} {PL1+400} {PL3+400} | head -12
 look villagers in the plains square outside villages (by_biome lines), none in caves; MCA conversion (MS-27, MS-28)
 
 ## SQ-MOB-N6 | allays: moonlight grove creature list, allays in the grove, outposts with a cage, temple box
@@ -565,8 +565,8 @@ sleep 1
 expect allay_temples
 > save-all flush
 waitlog Saved the game 300
-shell python3 -I $INST/tools/scratch_query/region_blocks.py entities wge 'allay' --box {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119} | head -4
-shell for v in "{PO01} {PO03}" "{PO11} {PO13}" "{PO21} {PO23}"; do set -- $v; echo "outpost $1 $2"; python3 -I $INST/tools/scratch_query/region_blocks.py entities wge 'allay' --box $(($1-48)) $(($2-48)) $(($1+48)) $(($2+48)) | head -2; done
+shell python3 -I $INST/tools/scratch_query/region_blocks.py entities @ 'allay' --box {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119} | head -4
+shell for v in "{PO01} {PO03}" "{PO11} {PO13}" "{PO21} {PO23}"; do set -- $v; echo "outpost $1 $2"; python3 -I $INST/tools/scratch_query/region_blocks.py entities @ 'allay' --box $(($1-48)) $(($2-48)) $(($1+48)) $(($2+48)) | head -2; done
 reject first wins
 look grove creature list has minecraft:allay 3 (1-2); allays counted in the grove; an allay in at least 1 of 3 outposts; allays appear in the temple (5 min wait needs a player: client)
 > forceload remove {GROVE1-120} {GROVE3-120} {GROVE1+119} {GROVE3+119}

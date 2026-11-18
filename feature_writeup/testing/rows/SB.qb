@@ -80,13 +80,13 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SB-04 | tower siege meta: both spots spawn the large-tower mix; lone T&T tower its own mix
 @group B
-@commands `/locate structure creativeengineering:meta/pillager_tower_siege`; wait by the anchor tower, then by a siege weapon; then a lone T&T tower (`towns_and_towers:pillager_outpost_forest`)
+@commands `/locate structure creativeworldgen:meta/pillager_tower_siege`; wait by the anchor tower, then by a siege weapon; then a lone T&T tower (`towns_and_towers:pillager_outpost_forest`)
 @pass meta: both spots spawn the large-tower mix; lone T&T tower: pillagers, vindicators, rare witch (ST-323)
 @fails meta spots spawn nothing or biome mobs: `StructureSpawnBoxes.inMeta` / `MetaStructure.parts`
 @from batches/r1101/w2_worldgen.qb
 @reviewed 2026-11-16
-> locate structure creativeengineering:meta/pillager_tower_siege
-waitlog nearest creativeengineering:meta/pillager_tower_siege is at|type "?creativeengineering:meta/pillager_tower_siege|creativeengineering:meta/pillager_tower_siege.*timed out 330
+> locate structure creativeworldgen:meta/pillager_tower_siege
+waitlog nearest creativeworldgen:meta/pillager_tower_siege is at|type "?creativeworldgen:meta/pillager_tower_siege|creativeworldgen:meta/pillager_tower_siege.*timed out 330
 capture TS is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {TS1+30} 100 {TS3}
 sleep 20
@@ -110,13 +110,13 @@ reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SB-05 | pillager camp + ruin meta: camp illagers, ruin its own mobs
 @group B
-@commands `/locate structure creativeengineering:meta/pillager_camp_ruin`
+@commands `/locate structure creativeworldgen:meta/pillager_camp_ruin`
 @pass camp: pillagers, vindicators, witches, evokers; the ruin: its own Philip's Ruins mobs (ST-324)
 @fails ruin spawns illagers: meta box applied to an unboxed part
 @from batches/r1101/w2_worldgen.qb
 @reviewed 2026-11-16
-> locate structure creativeengineering:meta/pillager_camp_ruin
-waitlog nearest creativeengineering:meta/pillager_camp_ruin is at|type "?creativeengineering:meta/pillager_camp_ruin|creativeengineering:meta/pillager_camp_ruin.*timed out 330
+> locate structure creativeworldgen:meta/pillager_camp_ruin
+waitlog nearest creativeworldgen:meta/pillager_camp_ruin is at|type "?creativeworldgen:meta/pillager_camp_ruin|creativeworldgen:meta/pillager_camp_ruin.*timed out 330
 capture PR is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {PR1+30} 100 {PR3}
 sleep 20

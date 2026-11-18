@@ -163,7 +163,7 @@ reject verb=\S+ .*done=0
 
 ## SQ-CM-09
 @phase worldgen
-@group new world
+@group B (new world)
 @commands `/place feature creativedelight:wild/mini_cantaloupe` in a desert 10 times: Mini Cantaloupe blocks on sand / red sand / terracotta; biome tag `creativedelight:wild_crops/cantaloupe` lists deserts and badlands, no savanna
 @pass Existing test: MG-44
 @reviewed 2026-11-16
@@ -171,6 +171,7 @@ reject verb=\S+ .*done=0
 expect verb=tag kind=biome tag=creativedelight:wild_crops/cantaloupe n=[1-9]\d* ids=\S*minecraft:desert\S*badlands
 reject verb=tag kind=biome tag=creativedelight:wild_crops/cantaloupe .*savanna
 > locate biome minecraft:desert
+waitlog (nearest minecraft:desert is at|Could not find) 300
 capture D is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > forceload add {D1-32} {D3-32} {D1+32} {D3+32}
 sleep 10

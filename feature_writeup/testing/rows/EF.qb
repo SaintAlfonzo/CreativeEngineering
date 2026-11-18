@@ -7,6 +7,9 @@
 @@phase worldgen
 @@date 2026-10-30
 @@jars creativeworldgen
+@@prep toml creativeworldgen-common.toml worldgen.earth_fill log "ALL"
+@@prep toml creativeworldgen-common.toml worldgen.debug structureDensity 4.0
+@@prep toml creativeworldgen-common.toml worldgen.meta_structures log true
 @@text
 @@text TODO `structures/earthfill #13`, `#14`, `#16`, `#3`, `#4`; [structure_tuning.md](../structure_tuning.md) 3.28, ST-235 to
 @@text ST-242; plan in [briefs/structures_earthfill.md](../briefs/structures_earthfill.md). Creative Common `creativeengineering-1.1.04.jar`
@@ -15,31 +18,6 @@
 @@text a desert square and a swamp square found with `/locate biome`. Fill lines: `grep -E '\[earth-fill\]' logs/latest.log`.
 @@text
 @@table
-## SQ-EF-01 | -1,-1 keeps the size's mound limit; -1,-1,-1 never prunes (W1a)
-@phase long
-@group B
-@commands scratch toml `overrides = ["minecraft:village_plains=-1,-1", "village_savanna=-1,-1,-1"]`; Chunky the inland square (and a savanna square r 200)
-@pass plains lines show `mound columns (limit N)` with N the size's limit, not -1; savanna lines `limit -1` everywhere, `-> kept`, and no `pruned` line for savanna villages (ST-242)
-@fails plains at -1: `EarthFill.unlimited`; savanna pruned: `prunes()` in `filter`; savanna unmatched: `parseOverrides` namespace default
-@from batches/r1031/w1_earthfill.qb
-> chunky world minecraft:overworld
-> chunky center 2144 -2592
-> chunky radius 400
-> chunky start
-waitlog Task finished 1800
-> execute positioned 0 70 0 run locate biome minecraft:savanna
-waitlog nearest minecraft:savanna is at 300
-capture SV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> chunky center {SV1} {SV3}
-> chunky radius 200
-> chunky start
-waitlog Task finished 1800
-expect \[earth-fill\].*village_plains.*mound columns \(limit \d+\)
-reject \[earth-fill\].*village_plains.*mound columns \(limit -1\)
-reject \[earth-fill\].*village_savanna.*pruned
-reject \[earth-fill\].*village_savanna.*CANCELLED
-look savanna village lines show limit -1 and "-> kept" (ST-242); none in the savanna square = Chunky one more savanna square
-
 ## SQ-EF-02 | villages at a lake lose the wet houses only (W1b)
 @phase long
 @group B
@@ -139,18 +117,18 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 @draft perf row: reruns the SQ-WGP-07 pregen (square and settings in WGP.qb) on a B-perf world and compares wall time; a runner times it, nothing for /cdevtest to read
 ## SQ-EF-08 | metas inland build with short parts; at the beach not placed; survive a restart
 @group B
-@commands toml `[worldgen.meta_structures] log = true`; `/place structure creativeengineering:meta/farmers_camp` (then `house_camp`, `ruin_scatter`) about 40 blocks inland from the spawn beach (-80 100 -16), and at the beach itself; then save, stop, start, rejoin a built one
+@commands toml `[worldgen.meta_structures] log = true`; `/place structure creativeworldgen:meta/farmers_camp` (then `house_camp`, `ruin_scatter`) about 40 blocks inland from the spawn beach (-80 100 -16), and at the beach itself; then save, stop, start, rejoin a built one
 @pass inland: the meta builds, its log line has `short:` for the part that met the coast; at the beach: `not placed, no anchor fits` as before; any `dropped K of N parts` earth-fill line names satellite ids; after the restart the meta loads with no error and `/locate structure` finds it (ST-241)
 @fails meta still `not placed`: `keepShortParts` false in the toml; error on load: `MetaStructure.withParts` index ranges
 @from batches/r1031/w1_earthfill.qb
 # seed 8675309: x -80..-40 z -16..100 is ocean / beach (r1031); inland = plains near 1762 -3249, beach near 1792 -2208
-> execute positioned 1840 100 -3249 run place structure creativeengineering:meta/farmers_camp
-> execute positioned 1762 100 -3150 run place structure creativeengineering:meta/house_camp
-> execute positioned 1680 100 -3249 run place structure creativeengineering:meta/ruin_scatter
-> execute positioned 1792 100 -2208 run place structure creativeengineering:meta/farmers_camp
+> execute positioned 1840 100 -3249 run place structure creativeworldgen:meta/farmers_camp
+> execute positioned 1762 100 -3150 run place structure creativeworldgen:meta/house_camp
+> execute positioned 1680 100 -3249 run place structure creativeworldgen:meta/ruin_scatter
+> execute positioned 1792 100 -2208 run place structure creativeworldgen:meta/farmers_camp
 bootexpect (?i)\[meta.*short:
 expect not placed, no anchor fits
-look after this batch: save-all, stop, boot, then "locate structure creativeengineering:meta/farmers_camp" finds a naturally built one (a /place structure start is never locatable, vanilla) and the boot log has no MetaStructure error (ST-241); any "dropped K of N parts" line names satellite ids
+look after this batch: save-all, stop, boot, then "locate structure creativeworldgen:meta/farmers_camp" finds a naturally built one (a /place structure start is never locatable, vanilla) and the boot log has no MetaStructure error (ST-241); any "dropped K of N parts" line names satellite ids
 
 ## SQ-EF-09 | non-village jigsaws at water lose wet parts only
 @phase long
@@ -172,12 +150,12 @@ look tp to one: its dry part stands, no piece over the water (ST-297); a broken-
 
 ## SQ-EF-10 | a meta anchored on a jigsaw at a lake shore prunes instead of canceling
 @group B
-@commands toml `[worldgen.meta_structures] log = true`; `/place structure` a meta with a jigsaw anchor (`creativeengineering:meta/farmers_camp`, a village meta) at a lake shore
+@commands toml `[worldgen.meta_structures] log = true`; `/place structure` a meta with a jigsaw anchor (`creativeworldgen:meta/farmers_camp`, a village meta) at a lake shore
 @pass `[earth-fill] ... pruned` line names the anchor or satellite id and the meta builds; a `dropped K of N parts` line only for a part still over its limits (ST-298)
 @fails meta `CANCELLED` with no pruned line: `EarthFill.filterParts` / `prunes`
 @from batches/r1031/w1_earthfill.qb
-> execute positioned {RV1} 80 {RV3} run place structure creativeengineering:meta/farmers_camp
-> execute positioned {RV1+40} 80 {RV3} run place structure creativeengineering:meta/farmers_camp
+> execute positioned {RV1} 80 {RV3} run place structure creativeworldgen:meta/farmers_camp
+> execute positioned {RV1+40} 80 {RV3} run place structure creativeworldgen:meta/farmers_camp
 expect \[earth-fill\].*pruned
 reject \[earth-fill\].*farmers_camp.*CANCELLED
 look the meta builds; a "dropped K of N parts" line only for a part still over its limits (ST-298)
@@ -188,10 +166,49 @@ look the meta builds; a "dropped K of N parts" line only for a part still over i
 @pass every `too wet` line has water >= 9; `under 9 water` lines end `-> kept`; `(predicted)` lines exist; census shows EARTH_FILL and PRIORITY rejects; boot log has no mixin error for ChunkGeneratorEarthFillMixin / PlacementPriorityMixin (ST-299)
 @fails mixin error: the merged injector in ChunkGeneratorEarthFillMixin
 @from batches/r1031/w1_earthfill.qb
-> celocate census 96 2144 -2592
-waitlog (?i)census.*(done|finished|written) 2400
+> cwglocate census 96 2144 -2592
+waitlog \[cwglocate\] census done 2400
 bootexpect \[earth-fill\].*too wet
 bootexpect \[earth-fill\].*under 9 water.*-> kept
 bootexpect \[earth-fill\].*\(predicted\)
 bootreject \[earth-fill\].*under 9 water.*CANCELLED
 look every "too wet" line has water >= 9 (python over RES/rows/SQ-EF-02.log + this one); census shows EARTH_FILL and PRIORITY rejects (ST-299)
+
+@@section 2
+@@title SQ-EF earth fill per-structure overrides, 2026-10-30
+@@phase worldgen
+@@date 2026-10-30
+@@jars creativeworldgen
+@@prep toml creativeworldgen-common.toml worldgen.earth_fill log "ALL"
+@@prep toml creativeworldgen-common.toml worldgen.debug structureDensity 4.0
+@@prep toml creativeworldgen-common.toml worldgen.meta_structures log true
+@@prep toml creativeworldgen-common.toml worldgen.earth_fill overrides ["eugene:undead_castle=24,800,400", "minecraft:village_plains=-1,-1", "village_savanna=-1,-1,-1"]
+@@text
+@@text SQ-EF-01 in its own boot (judge-14, r1118): its earth fill overrides would change the other SQ-EF rows' villages. Same seed,
+@@text density and `log = "ALL"` as section 1.
+@@text
+@@table
+## SQ-EF-01 | -1,-1 keeps the size's mound limit; -1,-1,-1 never prunes (W1a)
+@phase long
+@group B
+@commands scratch toml `overrides = ["minecraft:village_plains=-1,-1", "village_savanna=-1,-1,-1"]`; Chunky the inland square (and a savanna square r 200)
+@pass plains lines show `mound columns (limit N)` with N the size's limit, not -1; savanna lines `limit -1` everywhere, `-> kept`, and no `pruned` line for savanna villages (ST-242)
+@fails plains at -1: `EarthFill.unlimited`; savanna pruned: `prunes()` in `filter`; savanna unmatched: `parseOverrides` namespace default
+@from batches/r1031/w1_earthfill.qb
+> chunky world minecraft:overworld
+> chunky center 2144 -2592
+> chunky radius 400
+> chunky start
+waitlog Task finished 1800
+> execute positioned 0 70 0 run locate biome minecraft:savanna
+waitlog nearest minecraft:savanna is at 300
+capture SV is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {SV1} {SV3}
+> chunky radius 200
+> chunky start
+waitlog Task finished 1800
+expect \[earth-fill\].*village_plains.*mound columns \(limit \d+\)
+reject \[earth-fill\].*village_plains.*mound columns \(limit -1\)
+reject \[earth-fill\].*village_savanna.*pruned
+reject \[earth-fill\].*village_savanna.*CANCELLED
+look savanna village lines show limit -1 and "-> kept" (ST-242); none in the savanna square = Chunky one more savanna square

@@ -79,14 +79,15 @@ look day +1 in both ccaltime lines, /season agrees
 ## SQ-CAL-06 | season and crop season tags
 @phase worldgen
 @group A
-@commands `/locate biome #creativeengineering:seasons/arid`; place wheat at x y z, `/execute if block x y z #creativecalendar:crop_seasons/temperate run say temperate`; `/execute if block <glass> #sereneseasons:greenhouse_glass run say glass`
+@commands `/zq biometag creativecalendar:seasons/arid`; place wheat at x y z, `/execute if block x y z #creativecalendar:crop_seasons/temperate run say temperate`; `/execute if block <glass> #sereneseasons:greenhouse_glass run say glass`
 @pass a desert or badlands found; both `say` lines print (tags filled by the moved `sereneseasons/seasontags.js` and `cropseasontags.js`)
 @fails Calendar server script tree missing from the jar, or `// requires: sereneseasons` skipped it
 @from batches/r1101/cs1_split.qb
 @reviewed 2026-11-17
-> locate biome #creativeengineering:seasons/arid
-waitlog (Located|Could not find) 180
-expect (desert|badlands)
+# group A is a one-biome flat world, so the tag is read, not located (judge-14, r1118: the old id was creativeengineering:)
+> zq biometag creativecalendar:seasons/arid
+waitlog biometag creativecalendar:seasons/arid \( 60
+expect biometag creativecalendar:seasons/arid \([1-9]\d*\): .*(desert|badlands)
 > forceload add 30 30
 sleep 3
 > setblock 30 -61 30 minecraft:farmland

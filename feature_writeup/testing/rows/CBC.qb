@@ -82,19 +82,6 @@ bootexpect Vinery \(Creative Brewing\)
 bootreject Backport
 bootreject Done \(
 shell grep -nE "missing: |get it from|Vinery \(Creative Brewing\)" logs/latest.log | head -5 | cut -c1-300
-## SQ-CBC-06
-@phase worldgen
-@group B (instance + Creative Worldgen)
-@commands new OUT with Creative Worldgen and its world generation mods but `DROP="GeophilicReforged-*.jar"`; boot
-@pass `bootexpect Missing or unsupported mandatory dependencies`; `geophilic_reforged` listed for `creativeworldgen`
-@fails Worldgen `mods.toml` entry
-@reviewed 2026-11-16
-# setup: DROP="GeophilicReforged-*.jar" ADD="creativeworldgen-*.jar" port_chain.sh server OUT cbc06 B instance (Creative Worldgen and its world generation mods from the pack, Geophilic left out); boot and wait for Stopping or a crash
-bootexpect Missing or unsupported mandatory dependencies
-bootexpect geophilic_reforged
-bootreject Done \(
-shell grep -nE "Missing or unsupported|Mod ID: 'geophilic_reforged'|Requested by: 'creativeworldgen'" logs/latest.log | head -8 | cut -c1-300
-look geophilic_reforged is listed for creativeworldgen (Requested by line); if other Worldgen dependencies are listed too, ADD their jars and rerun
 ## SQ-CBC-07 | chain: no dependency or ordering error for creativebrewing
 @group A (chain)
 @commands the SQ-CBC-01 boot: `shell grep -c "creativebrewing" logs/latest.log` near `Missing or unsupported`; in the full-pack boot (SQ-CBC-04) the same
@@ -118,3 +105,27 @@ do {"screen": "jei_uses:create:sequenced_assembly"}
 do {"screen": "close"}
 do {"tooltip_text": "creativedelight:incomplete_omurice", "reject": "item\\.creative"}
 look incomplete items keep their names and tinted sprites; cod roll, omurice and the enchanted golden apple assemblies list as before (open the other two pages by hand if the ids differ)
+
+@@section 2
+@@title SQ-CBC-06 Creative Worldgen without Geophilic Reforged, 2026-11-06
+@@phase worldgen
+@@date 2026-11-06
+@@jars creativeworldgen
+@@prep B: rm mods/GeophilicReforged-*.jar
+@@text
+@@text The boot is meant to fail on the missing dependency (judge-14, r1118: own section so the rm reaches no other CBC row).
+@@text
+@@table
+## SQ-CBC-06
+@phase worldgen
+@group B (instance + Creative Worldgen)
+@commands new OUT with Creative Worldgen and its world generation mods but `DROP="GeophilicReforged-*.jar"`; boot
+@pass `bootexpect Missing or unsupported mandatory dependencies`; `geophilic_reforged` listed for `creativeworldgen`
+@fails Worldgen `mods.toml` entry
+@reviewed 2026-11-16
+# setup (now the section @@prep rm, judge-14 r1118; qdrive runs a step whose rows all bootreject Done on the failed boot): DROP="GeophilicReforged-*.jar" ADD="creativeworldgen-*.jar" port_chain.sh server OUT cbc06 B instance (Creative Worldgen and its world generation mods from the pack, Geophilic left out); boot and wait for Stopping or a crash
+bootexpect Missing or unsupported mandatory dependencies
+bootexpect geophilic_reforged
+bootreject Done \(
+shell grep -nE "Missing or unsupported|Mod ID: 'geophilic_reforged'|Requested by: 'creativeworldgen'" logs/latest.log | head -8 | cut -c1-300
+look geophilic_reforged is listed for creativeworldgen (Requested by line); if other Worldgen dependencies are listed too, ADD their jars and rerun

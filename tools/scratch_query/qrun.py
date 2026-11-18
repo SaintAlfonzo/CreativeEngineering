@@ -38,7 +38,8 @@ Batch format (one directive per line, '#' comments, blank lines ignored):
     ## ID | title                 starts a row
     > command                     console command (server) or chat command typed into the window (client)
     sleep N                       wait N seconds
-    waitlog REGEX [SECS]          wait until the row's log segment matches (default 120 s); FAIL on timeout
+    waitlog REGEX [SECS]          wait until the row's log segment matches (default 120 s); FAIL on timeout. A repeat
+                                  of an earlier waitlog pattern in the same row waits for a new matching line
     expect REGEX                  the row's log segment must match
     reject REGEX                  the row's log segment must not match
     count REGEX OP N              lines of the segment matching REGEX, OP one of == >= <= > <
@@ -400,6 +401,9 @@ def run_row(t, row, res, checks=None):
 		drv.row = row["id"]
 		drv.judge = os.path.join(INST, "test_captures/judgement", "qrun_" + os.path.basename(os.path.normpath(res)))
 	perf_mark(row["id"])
+	# a waitlog whose pattern an earlier waitlog of this row already matched waits for one more matching line, not the
+	# old one (judge-14, r1118 SQ-EF-01: the second "waitlog Task finished" hit the first Chunky task's line at once)
+	wl_seen = {}
 	for word, arg, pace in row["steps"]:
 		watch_check(t)
 		side, _, word = word.rpartition(":")
@@ -454,13 +458,17 @@ def run_row(t, row, res, checks=None):
 			parts = arg.rsplit(" ", 1)
 			pat, secs = (parts[0], float(parts[1])) if len(parts) == 2 and parts[1].isdigit() else (arg, 120.0)
 			rx, end, ok = re.compile(pat), time.time() + secs, True
-			while not any(rx.search(l) for l in since(off, side)):
+			need = wl_seen.get((side, pat), 0)
+			while (got := sum(1 for l in since(off, side) if rx.search(l))) <= need:
 				if time.time() > end:
 					ok = False
 					break
 				watch_check(t)
 				time.sleep(1)
-			chk("waitlog", arg, ok, f"timeout {int(secs)} s waiting for /{pat}/" if not ok else "matched")
+			if ok:
+				wl_seen[(side, pat)] = got
+			chk("waitlog", arg, ok, (f"timeout {int(secs)} s waiting for /{pat}/" + (f" (a new line: {need} matched before)"
+										if need else "")) if not ok else "matched")
 		elif word == "look":
 			looks.append(arg)
 		elif word == "shot":

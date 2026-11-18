@@ -55,7 +55,7 @@ bootreject (?i)bushierflowers.*(error|exception)
 waitlog Task finished 1800
 > save-all flush
 waitlog Saved the game 120
-shell python3 $INST/tools/scratch_query/region_blocks.py blocks r1113c4b 'bushierflowers:' --box -300 -300 300 300 2>&1 | tail -15
+shell python3 $INST/tools/scratch_query/region_blocks.py blocks @ 'bushierflowers:' --box -300 -300 300 300 2>&1 | tail -15
 look 5 files each with 1 forge:none; region census finds no bushierflowers: block
 
 ## SQ-GAP-04 | rose gold in gold plate/wire/block tags; gold-input recipes and golden apple/pickaxe/chestplate/carrot take the tag; gold ingot and block literal

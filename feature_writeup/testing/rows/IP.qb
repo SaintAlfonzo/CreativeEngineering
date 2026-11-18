@@ -19,7 +19,7 @@
 @pass `falseNegatives` 0 in total, and 0 for `terralith:underground/old_refinery` and `mining_outpost` (were 4 and 6 at 162,270 / 157,199 / 240,325 and others); their `no.biome` drops by about that many; `built` per structure equal to `wgp_new` (generation unchanged); census time within noise of 424 s; no reflection error
 @fails A false negative still at `biome`: the tie set misses the generated biome (another biome source wraps the multi-noise one, or a mod changes `getNoiseBiome`); at another stage: a new bug, read its row; reflection error: the SRG name of `MultiNoiseBiomeSource.parameters`
 @from batches/r1103w/w_9_B.qb
-> celocate census 96 4000 4000
+> cwglocate census 96 4000 4000
 waitlog \[celocate\] census done 2400
 shell mkdir -p $INST/perf/runs/r1103w/w && cp kubejs/exported/worldgen/locate_census.json $INST/perf/runs/r1103w/w/f1_census_tie.json && echo copied f1_census_tie
 reject (?i)locate reflection

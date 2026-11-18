@@ -268,6 +268,7 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
   cell (`nofluids`) so neighboring salt does not get its own dissolving tick (r1116 phase 3).
 - A row that builds at y -60 assumes the superflat (group A); in a group B normal world it builds underground and finds nothing (SQ-BREED-03, r1118). Keep such rows in group A or build relative to the surface.
 - With no player online and no forced chunk, entities stop ticking: spawn a bot (or forceload) before entity rows (SQ-EFX-02, -04, r1118). Console command pacing is too slow to catch short-lived entities such as TNT shrapnel: slow them with a `@@prep` config value.
+- A big `forceload add` box in a fresh normal world generates every chunk synchronously on the server thread, inside the console command; all later console lines, `stop` included, wait behind it (and SIGTERM's shutdown waits too). Six 169-chunk boxes held a group B server for over 10 minutes after its rows ended (SQ-HCS, r1118). Keep forceload boxes small in group B, or `/cdevtest tickwarp` after each one.
 
 ## Difficulty, spawning and mobs
 

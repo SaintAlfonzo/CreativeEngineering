@@ -92,7 +92,7 @@ look the "N rules" number equals SQ-CWG-04's /loottuning in sA_2.qb (rows/SQ-CWG
 
 ## SQ-CWG-06 | fresh world: locates resolve, /celocate status, a punch meta structure places, earth fill logs, dimensions
 @group A
-@commands Fresh world: `/locate structure` three pack structures, `/cwglocate status`; `/place structure creativeengineering:meta/meteorite_desert_pyramid` (a meta structure with a punch part); grep latest.log for `meteorite_desert_pyramid` and `unknown field`; `/tp` to a village and read the earth fill log lines
+@commands Fresh world: `/locate structure` three pack structures, `/cwglocate status`; `/place structure creativeworldgen:meta/meteorite_desert_pyramid` (a meta structure with a punch part); grep latest.log for `meteorite_desert_pyramid` and `unknown field`; `/tp` to a village and read the earth fill log lines
 @pass Locates resolve; no `[meta-structures] ... unknown field "punch"` or `not a loaded structure` line; the meta structure places its punch shaft; earth fill and ground match log as before; custom dimensions load (`/execute in` each)
 @fails `punch` missing from `META_PART_KEYS` in the Worldgen jar's `structure_overrides.js` (fixed 2026-11-03, rebuild Creative Worldgen), registration not moved to `CreativeWorldgen`, or the `meta_punch` piece type id changed
 @from batches/r1103/sA_4.qb
@@ -101,28 +101,28 @@ waitlog The nearest minecraft:pillager_outpost 600
 > locate structure minecraft:village_plains
 waitlog The nearest minecraft:village_plains 600
 capture SVP The nearest minecraft:village_plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
-> locate structure creativeengineering:meta/pillager_camp_ruin
-waitlog (The nearest creativeengineering:meta/pillager_camp_ruin|Could not find) 900
-> celocate status
+> locate structure creativeworldgen:meta/pillager_camp_ruin
+waitlog (The nearest creativeworldgen:meta/pillager_camp_ruin|Could not find) 900
+> cwglocate status
 > forceload add {SVP1-48} {SVP3-48} {SVP1+48} {SVP3+48}
 sleep 45
 > forceload remove {SVP1-48} {SVP3-48} {SVP1+48} {SVP3+48}
 > forceload add 3008 3008 3135 3135
 sleep 60
-> place structure creativeengineering:meta/meteorite_desert_pyramid 3072 100 3072
+> place structure creativeworldgen:meta/meteorite_desert_pyramid 3072 100 3072
 sleep 10
 > forceload remove 3008 3008 3135 3135
-> execute in creativeengineering:autumnsky run say SA4 dim autumnsky
-> execute in creativeengineering:desert run say SA4 dim desert
-> execute in creativeengineering:flowergrove run say SA4 dim flowergrove
-> execute in creativeengineering:flowerhills run say SA4 dim flowerhills
-> execute in creativeengineering:flowerridge run say SA4 dim flowerridge
-> execute in creativeengineering:hub run say SA4 dim hub
-> execute in creativeengineering:shield run say SA4 dim shield
-> execute in creativeengineering:springsky run say SA4 dim springsky
-> execute in creativeengineering:summersky run say SA4 dim summersky
-> execute in creativeengineering:wintersky run say SA4 dim wintersky
-> execute in creativeengineering:yellowstone run say SA4 dim yellowstone
+> execute in creativeworldgen:autumnsky run say SA4 dim autumnsky
+> execute in creativeworldgen:desert run say SA4 dim desert
+> execute in creativeworldgen:flowergrove run say SA4 dim flowergrove
+> execute in creativeworldgen:flowerhills run say SA4 dim flowerhills
+> execute in creativeworldgen:flowerridge run say SA4 dim flowerridge
+> execute in creativeworldgen:hub run say SA4 dim hub
+> execute in creativeworldgen:shield run say SA4 dim shield
+> execute in creativeworldgen:springsky run say SA4 dim springsky
+> execute in creativeworldgen:summersky run say SA4 dim summersky
+> execute in creativeworldgen:wintersky run say SA4 dim wintersky
+> execute in creativeworldgen:yellowstone run say SA4 dim yellowstone
 count SA4 dim [a-z]+$ == 11
 expect The nearest minecraft:pillager_outpost
 expect The nearest minecraft:village_plains
@@ -132,7 +132,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 
 ## SQ-CWG-07 | no wild-crops-off warning; earth fill, ground match, soils and bubble-column tags filled
 @group A
-@commands Same world: `grep -E "wild crops off\|biomeRules" logs/kubejs/server.log`; `/dumptags` for `#creativeengineering:earth_fill/*`, `ground_match/*`, `worldgen/grass_like_soils`, entity `bubble_column_immune`
+@commands Same world: `grep -E "wild crops off\|biomeRules" logs/kubejs/server.log`; `/dumptags` for `#creativeworldgen:earth_fill/*`, `ground_match/*`, `worldgen/grass_like_soils`, entity `bubble_column_immune`
 @pass No "wild crops off" warning (CD reads `global.biomeRules` at event time); every tag filled
 @fails Tag rows lost in the `blocktags.js` split, or the CD guard tripping
 @from batches/r1103/sA_4.qb
@@ -141,7 +141,7 @@ shell grep -hE "biomeRules" logs/kubejs/server.log | head -5 || true
 > dumptags
 waitlog (Dumped|dumptags|tags/) 300
 sleep 10
-shell python3 -c "import json;b=json.load(open('kubejs/exported/tags/block_tags.json'));e=json.load(open('kubejs/exported/tags/entity_type_tags.json'));i=json.load(open('kubejs/exported/tags/item_tags.json'));want=[(k,len(v)) for d in (b,i) for k,v in d.items() if k.startswith(('creativeengineering:earth_fill/','creativeengineering:ground_match/')) or k=='creativeengineering:worldgen/grass_like_soils'];want+=[(k,len(v)) for k,v in e.items() if k.endswith('bubble_column_immune')];[print(k,n) for k,n in sorted(want)];empty=[k for k,n in want if n==0];print('empty:',empty);import sys;sys.exit(1 if empty or not want else 0)"
+shell python3 -c "import json;b=json.load(open('kubejs/exported/tags/block_tags.json'));e=json.load(open('kubejs/exported/tags/entity_type_tags.json'));i=json.load(open('kubejs/exported/tags/item_tags.json'));want=[(k,len(v)) for d in (b,i) for k,v in d.items() if k.startswith(('creativeworldgen:earth_fill/','creativeworldgen:ground_match/')) or k=='creativeworldgen:worldgen/grass_like_soils'];want+=[(k,len(v)) for k,v in e.items() if k.endswith('bubble_column_immune')];[print(k,n) for k,n in sorted(want)];empty=[k for k,n in want if n==0];print('empty:',empty);import sys;sys.exit(1 if empty or not want else 0)"
 look every listed tag has members; the bubble_column_immune entity tag present
 
 ## SQ-CWG-08 | old world on the new jars: chunks, mobs and blocks intact; mooshroom breeding; leaf decay; Devtools commands

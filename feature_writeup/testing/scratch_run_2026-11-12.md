@@ -117,3 +117,7 @@ and rejudges 6; SQ-OB 4; SQ-VH 1, counted once each), FAIL 3 (SQ-HH-474 owner qu
 
 Not run: every client row; SQ-HH-1534 rerun, SQ-HH-1551 (two-boot row), SQ-HH-1607 to -1611 (real player), SQ-HH-1574,
 -1575 (known crash), SQ-OB-02 (client), SQ-FLR-02 to -05, SQ-BREED-01, SQ-VH-11, SQ-OB-11, SQ-FDI (as r1111).
+
+## Queue banner lines
+
+- r1112 (SQ-RP server rows, r1111 batch-fault reruns; [scratch_run_2026-11-12.md](scratch_run_2026-11-12.md))

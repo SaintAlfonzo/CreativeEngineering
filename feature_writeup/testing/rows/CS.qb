@@ -221,7 +221,7 @@ count Test failed == 1
 
 ## SQ-CS-09 | Fruits Delight apple sapling merges into Vinery's; no Fruits Delight apple trees
 @phase worldgen
-@group server
+@group B (new world)
 @commands `/give @s fruitsdelight:apple_sapling`; new world, `/locate biome minecraft:flower_forest`, fly over 10 chunks; grep latest.log `[itemMerges]`
 @pass the sapling becomes Vinery's apple tree sapling; no Fruits Delight apple trees; merge count line includes the creativedelight pairs
 @fails biome modifier override not loaded, or merge group skipped by `requires: vinery`
