@@ -1,7 +1,8 @@
-// Creative Common melting tags (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8).
-// Sources: salt melts adjacent targets, fire within 3, lava within 4 (ranges in [melting], creativecommon-common.toml).
-// Targets: meltable (ice, snow) and meltable_slow (packed and blue ice, IW cryosol and permafrost, one tier down). Every mod's lines are guarded by
-// global.has, so the tags hold only loaded blocks; the Java side works with any of them empty.
+// Creative Common melting tags (melting/ package, feature_writeup/melting.md, plan_bugfix_1114.md 3.8,
+// plan_post_scratch_1115 E1, G11). Sources: salt melts adjacent targets, fire within 3, lava within 4 (ranges in
+// [melting], creativecommon-common.toml). Targets: meltable (ice, snow, frozen decor) and meltable_slow (packed and
+// blue ice, IW cryosol and permafrost, AP packed ice; one tier down, only lava and magma heat them). Every mod's lines
+// are guarded by global.has, so the tags hold only loaded blocks; the Java side works with any of them empty.
 ServerEvents.tags('block', e => {
 	var b = global.blocks
 	var t = global.tags
@@ -52,9 +53,27 @@ ServerEvents.tags('block', e => {
 	if (global.has(b.rare_ice)) t.add(e, b.t_meltable, b.rare_ice)
 	t.add(e, b.t_meltable_slow, [b.packed_ice, b.blue_ice])
 	// IW soils mirror the ice tiers (plan_post_scratch_1115 G6-5): permafrost like blue ice, cryosol like packed ice.
-	// Heat leaves the whole slow tier alone while [melting] slowHeatMelting is off (G7.15); salt melts the saltable ones.
+	// G11: packed ice and cryosol melt from magma and lava within [melting] slowMagmaRange / slowLavaRange and from
+	// salt; blue ice and permafrost (lava_only) only touching lava, never from salt.
 	if (global.has('immersive_weathering')) t.add(e, b.t_meltable_slow, [b.iw_cryosol, b.iw_permafrost])
+	t.add(e, b.t_melt_lava_only, b.blue_ice)
+	if (global.has('immersive_weathering')) t.add(e, b.t_melt_lava_only, b.iw_permafrost)
 	t.add(e, b.t_melt_ultrawarm_instant, [b.snow, b.snow_block, b.powder_snow])
+
+	// Frozen decor (B8, E1). Products are [melting] meltProducts rows (snowy -> plain stone, same shape and facing;
+	// frosty -> glass, pane, grass, fern; thin ice -> water; coarse snow -> gravel); no row -> air (frost, icicle,
+	// snow bricks). Snow bricks melt at sluggishMeltFactor (0.25x) and vanish in the Nether like snow. Philips Ruins
+	// frozen prismarine never melts (left out).
+	if (global.has('immersive_weathering')) {
+		t.addMatching(e, [b.t_meltable, b.t_melt_saltable], [b.melt_iw_snowy, b.melt_iw_frosty, b.melt_iw_snow_bricks])
+		t.add(e, [b.t_meltable, b.t_melt_saltable], [b.iw_frost, b.thin_ice, b.iw_icicle])
+		t.addMatching(e, [b.t_melt_sluggish, b.t_melt_ultrawarm_instant], b.melt_iw_snow_bricks)
+	}
+	if (global.has('architects_palette')) {
+		t.add(e, [b.t_meltable, b.t_melt_saltable], b.ap_coarse_snow)
+		// AP packed ice is packed ice: slow tier, saltable; full blocks step to ice (slowSteps), shaped ones to air
+		t.addMatching(e, [b.t_meltable_slow, b.t_melt_saltable], b.melt_ap_packed_ice)
+	}
 
 	// Salt melts only these (G7.11; the "Saltable" tooltip reads it). Not saltable: blue ice, IW permafrost.
 	t.add(e, b.t_melt_saltable, [b.ice, b.frosted_ice, b.snow, b.snow_block, b.powder_snow, b.packed_ice])
@@ -65,4 +84,14 @@ ServerEvents.tags('block', e => {
 	if (global.has('immersive_weathering')) t.add(e, b.t_melt_keeps_snow, b.iw_permafrost)
 	// Magma: snow within 2 melts at once; no snowfall or ice forms within [melting] fireRange (G7.2, G7.13)
 	t.add(e, b.t_melt_magma, b.magma_block)
+	// Modded magma-like blocks (G11; in the block dump the only one is AP Molten Nether Bricks, light 3; it random
+	// ticks through [melting] extraRandomTickBlocks, so it scans like magma). Melting treats the magma tag as fire too.
+	if (global.has('architects_palette')) t.add(e, [b.t_melt_fire, b.t_melt_magma], b.ap_molten_nether_bricks)
+})
+
+// Hot biomes (G11): ice and snow there melt on their own melt ticks with no source ([melting] hotMeltTickInterval).
+// The arid and tropical season types of Creative Calendar (kubejs/generation_scripts/worldgen/season_types.json).
+ServerEvents.tags('worldgen/biome', e => {
+	if (!global.has('creativecalendar')) return
+	global.tags.add(e, global.blocks.t_melt_hot_biomes, [global.blocks.t_biome_seasons_arid, global.blocks.t_biome_seasons_tropical])
 })

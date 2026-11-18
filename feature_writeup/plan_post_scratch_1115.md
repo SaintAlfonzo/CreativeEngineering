@@ -745,6 +745,108 @@ Answers to the assumptions of G7.4, G9, G10, raspberry_pie.md 12.5 and lane F2. 
   schematicannon, deployer); only world-generated Rock Salt Blocks are not licks.
 - **Diet Log (`#24`, solRaspberryPie):** item icons for one-time unlocks and permanent buffs; slot rungs keep the chosen
   effect's sprite; the key's effect-slot entry scrolls through the effects.
+  Built 2026-11-17 (solRaspberryPie jar, not installed; [raspberry_pie.md](raspberry_pie.md) 12.5, CQ-RPI-46): unlock and
+  buff rungs keep the configured items; a filled slot rung draws its chosen effect's sprite and names it in hover and
+  list text, an empty slot keeps the `[icons] slot` item; the key's Effect slot icon cycles through the loaded pool
+  effects. **assumed:** cycle period 1 second, fixed (no config). **assumed:** pool order as in the ladder file.
+  **assumed:** "scrolls" = the icon steps in place, not a sliding strip. **assumed:** empty slot rungs keep the slot item.
+
+**Lane D build, 2026-11-17 (Creative Delight, built, not installed; campfire `#22`, licks `#21`, `dishes/meals #59`, E3):**
+campfires in the End: `campfire/CampfireEnd` refuses flint and steel and fire charge clicks, `CampfireTorch` refuses
+torches, and the lit tick (`CampfireRainMixin`) puts out a campfire lit any other way; switch `[campfire] endUnlightable`
+(mirrored). Licks: hearth `mixin/BlockPlaceLickMixin` on `BlockBehaviour.onPlace` swaps every Rock Salt Block set in a
+loaded chunk for the placed twin (player, dispenser, Deployer, Schematicannon, commands); the player-only place event is
+gone. Cooked Nether Wart: Warped Moldy Meat and the heatless Strider Moss Stew `consumeIngredient` the Cooked Nether
+Wart (no bowl back); CD `mealCraft` returns its recipe. E3: Salt Melt `layer0` `salt:item/raw_rock_salt`, salt.md 7.2 per
+G2h. Writeups: salt.md 7.2, 8.1; creative_delight.md 34 (campfire). Rows SQ-PS15-30, -31; SQ-SALT2-19 (rewritten), -22;
+SQ-BBQ-12 (pass changed), -13; SQ-PS15-07 icon text.
+- **assumed:** a campfire lit by a route other than a player click (placed lit, dispenser, burning projectile, command,
+  other mods) is put out on its first lit tick (fizz and dowse smoke) rather than blocked at each source.
+- **assumed:** campfire click refusal covers flint and steel and fire charge items by class (`FlintAndSteelItem`,
+  `FireChargeItem`); modded igniters fall to the tick rule.
+- **assumed:** "soul" campfire = registry path contains "soul" (as `CampfireTorch`).
+- **assumed:** switch `[campfire] endUnlightable`, default true.
+- **assumed:** lick mechanism: `BlockBehaviour.onPlace` (never called by world generation, which writes proto chunks);
+  `/setblock`, `/fill` and structures placed after generation (`/place`, structure blocks, mods writing into loaded
+  chunks) make licks; piston pushes (old state `moving_piston`) and Create contraptions (moving flag) do not.
+- **assumed:** the bowl suppression is per recipe (`consumeIngredient`), not a change to Cooked Nether Wart's remainder;
+  other recipes (Nether Roll) still hand the bowl back.
+
+**Lane P build, 2026-11-17 (Creative Compat, built, not installed; thorns and mobs in snow, `#23`):**
+thorns: `LeafThorns` divides the tick-to-tick speed by the walk factor of the pile the player is in (not the 8-layer
+factor) and asks `LayerMotion.thornPrick`: a full pile (layers at the pile's maximum) needs `thornMinSpeed` 1.0, a pile
+of `thornLayers` 6 to 7 needs new `thornPartialMinSpeed` 1.3; chance, armor rule, cooldown unchanged. Snow:
+`SnowLayers.standsOn` = leather boots (any wearer) or a light mob; `mixin/SnowMobMixin` (LivingEntity
+`handleRelativeFrictionAndCalculateMovement` RETURN) makes a sunk mob climb at 0.2 blocks per tick on a horizontal
+collision and recomputes a path whose next node steps up onto walk-through snow; `mixin/SnowPathMixin` (NodeEvaluator
+`prepare` / `done`, so MCA's node maker too) marks a sunk mob's search, during which `LeafPilePathMixin` /
+`McaLeafPilePathMixin` return `OPEN` for walk-through snow and `SnowLayers.collision` gives null-entity contexts no
+shape (floor heights). New keys in `[surface.passthrough.layers]` (server side, not in the sync packet, format stays 4):
+`thornPartialMinSpeed`, `snowLightVolume`, `snowMobClimb`, `snowSunkPathing`; entity tag `creativecompat:snow_layer_light`.
+Writeups: plan_passthrough.md 2.1, blockrunner.md 3.10 table row and limits. Rows SQ-PS15B-17 (rewritten), -23 to -25.
+Headless `tools/test_passthrough.sh` ALL 306 OK (5 new G11 cases).
+- **assumed:** "light" = entity tag `creativecompat:snow_layer_light` (fox, rabbit, endermite, silverfish) or a hitbox
+  width x width x height of at most `snowLightVolume` 0.3 cubic blocks (rabbit, fox, cat, ocelot, chicken, parrot, frog,
+  most babies light; wolf 0.31, pig, sheep, players and zombies heavy). Players are never light (leather boots only).
+- **assumed:** `#minecraft:powder_snow_walkable_mobs` no longer makes a mob stand on top (in this pack it holds Alex's
+  Mobs tigers, bison and snow leopards); powder snow itself is unchanged.
+- **assumed:** "sprinting speed" = 1.3 x walking (vanilla's +30 percent), 10 percent margin kept; in a partial pile the
+  server's sprint flag also passes from walking speed up, so a slowed sprint still counts. "Full pile" = the pile's own
+  maximum (8 on the shared scale; Twigs bamboo leaves at 4 are partial).
+- **assumed:** sunk = feet in a walk-through snow layer more than 0.05 below its top. Climbing out: mobs only (players
+  keep the weaker jump), ladder speed 0.2, only while the feet are in the snow (at most one block up), switch
+  `snowMobClimb` true.
+- **assumed:** "plans over the top" = vanilla's own snow pathing for mobs that are not sunk (1 to 4 layers open, 5 to 7 a
+  block to step onto); no change for them. A stale over-the-top path of a sunk mob is recomputed through vanilla's
+  `recomputePath` (at most once per second). Switch `snowSunkPathing` true.
+- **assumed:** `snowLightVolume` is read from each side's own toml (not synced): only server mobs use it, the client
+  moves only the player, who is never light.
+
+**Lane C1 build (G12), 2026-11-17 (Creative Common, built, not installed; melting `#20`, End fire `#22`, E1 `#9`):**
+`melting/Melting.java`, `MeltTags` (tags `lava_only`, `sluggish`, biome tag `creativecommon:melting/hot`), new
+`mixin/EndFireMixin`, `CommonConfig` `[melting]`, `melting_tags.js`, block_dict keys; instance toml and
+`configs_edited/` rewritten with the new defaults. Pace: `meltTickInterval` 100. Slow tier: G7.15's salt-only freeze
+and `slowHeatMelting` / `slowFireRange` removed; packed ice and cryosol take magma within new `slowMagmaRange` 2 and
+lava within `slowLavaRange` 2, blue ice and permafrost (tag `lava_only`) only touching lava, one `slowSteps` step;
+fire that is not magma never melts the slow tier; salt unchanged. Hot places: `isHot` / `hotTick`, new
+`hotMeltTickInterval` 20; packed ice and cryosol placed in the Nether start ticking from `onPlaced`. The End: every
+reach clamped to 1 (`endContactOnly`). End fire: `Level.setBlock` refuses `minecraft:fire` in the End (`endNoFire`),
+old fire goes out on its scheduled tick. Magma tag: AP Molten Nether Bricks (the dump's only magma-like block; light 3,
+given random ticks). E1: `meltProducts` (22 rows: 16 IW snowy -> plain, the 4 frosty, thin ice -> water, coarse snow ->
+gravel; frost, icicle, snow bricks -> air), shared properties now copied by name too (Quark vertical slab types), salt
+falls back to the heat product, `sluggish` snow bricks at `sluggishMeltFactor` 0.25 and in `ultrawarm_instant`, AP
+packed ice family (7) in the slow tier with `slowSteps` rows for the 3 full blocks, frozen prismarine left out; all
+decor saltable. The Salt's `salt:meltables` already follows `saltable` (Creative Delight `salt/block_tags.js`, M2), so
+E1's tag edit there is done. Fix found on the way: vanilla stairs pass their random tick to the base block's state, so
+the target path now checks the ticked state is the one in the world. Writeup [melting.md](melting.md) 1 to 7; rows
+SQ-MELT-11 to -20, CQ-MELT-01 (MELT.qb section 3); SQ-PS15-22 and -08 superseded. Headless `tools/test_melting.sh` ALL 34 OK.
+- **assumed:** hot interval `hotMeltTickInterval` 20 ticks (1 s, each 15 to 25), the usual chance rolled on each.
+- **assumed:** "arid and tropical biomes" = Creative Calendar's `arid` and `tropical` season types (tags
+  `creativecalendar:seasons/arid`, `/tropical`); `dry` (savannas, shrublands) is not included; without Creative Calendar
+  no biome is hot. Read at the target's noise biome (no biome blending).
+- **assumed:** in arid and tropical biomes only the meltable tier is hot (ice, snow, frozen decor); packed ice and cryosol
+  there still need lava or magma. In the Nether every target but blue ice and permafrost is hot.
+- **assumed:** snow resting on blue ice or permafrost is not melted by a hot place (G6 4b's ambient rule kept), Nether
+  snow still vanishes on placement.
+- **assumed:** "close range" for packed ice and cryosol = 2 for both lava and magma (the old `slowLavaRange`); magma
+  does not count as "direct contact" for blue ice and permafrost (lava only).
+- **assumed:** in ultra-warm dimensions lava scans only its touching blocks (the old rule skipped the scan entirely; blue
+  ice beside Nether lava needs the touch).
+- **assumed:** the End: magma's instant zone shrinks to touching; magma's snow and ice guard to 1; `endContactOnly`
+  switch, default true. Only `minecraft:the_end` counts (no modded End-like dimension).
+- **assumed:** End fire is refused at `Level.setBlock` on both sides with no sound or message (a fizz there would play
+  every tick under each End crystal); a player's flint and steel still loses durability. `endNoFire` switch, default
+  true; independent of `[melting] enabled`. Other fire blocks (Architect's Palette nether brass fire, Creative Magic
+  dark fire, MCA infernal flame) are not covered; only `minecraft:fire` is named in the ruling.
+- **assumed:** Molten Nether Bricks join both the magma and fire tags and get random ticks (`extraRandomTickBlocks`), so
+  they melt like magma (snow within 2 at once, snow and ice guard); no other block in the dump is magma-like (Create
+  scorchia, Dustrial Decor cinder blocks are plain stone).
+- **assumed:** E1 decor products: snowy walls -> Immersive Weathering's `stone_wall` (IW's own un-snow map), snowy
+  vertical slabs -> Quark's plain vertical slabs (not in IW's map); a missing product mod leaves air. Thin ice, frost,
+  icicle and the frosty blocks melt to their row or air in the Nether as a hot place. IW thin ice gets forced random
+  ticks; frost, icicle, snowy and frosty blocks are left to their own (IW random ticks them).
+- **assumed:** all frozen decor and the AP packed ice family are saltable (B8 "both"); salt on an AP shaped packed ice
+  block leaves air, on a full one ice.
 
 ## Not decided or not in this pass
 

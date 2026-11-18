@@ -35,13 +35,19 @@ public class MeltingTest {
 		CommonConfig.MeltingConfig m = CommonConfig.MELTING;
 
 		check(m.snowLayerMeltChance.get() == 0.8, "snowLayerMeltChance default 0.8");
-		check(m.meltTickInterval.get() == 200, "meltTickInterval default 200");
-		check(!m.slowHeatMelting.get(), "slowHeatMelting default false (G7.15)");
+		check(m.meltTickInterval.get() == 100, "meltTickInterval default 100 (G11)");
+		check(m.slowLavaRange.get() == 2 && m.slowMagmaRange.get() == 2, "slow lava and magma ranges 2 (G11)");
+		check(m.hotMeltTickInterval.get() == 20, "hotMeltTickInterval default 20 (G11)");
+		check(m.endContactOnly.get() && m.endNoFire.get(), "endContactOnly and endNoFire default true (G11)");
+		check(m.sluggishMeltFactor.get() == 0.25, "sluggishMeltFactor default 0.25 (E1)");
+		check(m.meltProducts.get().size() == 22, "meltProducts: 22 frozen decor rows (E1)");
 		check(m.magmaInstantRange.get() == 2, "magmaInstantRange default 2");
 		check(m.magmaStopsFreezing.get(), "magmaStopsFreezing default true");
 		check(m.saltMeltSnowLayers.get() == 3, "saltMeltSnowLayers default 3");
-		check(m.extraRandomTickBlocks.get().equals(List.of("minecraft:snow_block", "minecraft:powder_snow")),
-				"extraRandomTickBlocks: snow block and powder snow only (packed and blue ice left)");
+		check(m.extraRandomTickBlocks.get().containsAll(List.of("minecraft:snow_block", "minecraft:powder_snow",
+						"architects_palette:coarse_snow", "architects_palette:molten_nether_bricks"))
+				&& !m.extraRandomTickBlocks.get().contains("minecraft:packed_ice"),
+				"extraRandomTickBlocks: snow block, powder snow, frozen decor, molten nether bricks; no packed ice");
 		check(m.saltProducts.get().contains("immersive_weathering:cryosol=minecraft:dirt")
 				&& m.saltProducts.get().contains("minecraft:packed_ice=minecraft:ice"), "saltProducts default rows");
 		check(m.slowSteps.get().contains("immersive_weathering:permafrost=immersive_weathering:cryosol"),
@@ -86,6 +92,24 @@ public class MeltingTest {
 		check(spruce.getValue(StairBlock.FACING) == Direction.EAST, "withShared keeps the stairs' facing");
 		check(Melting.withShared(oak, Blocks.DIRT.defaultBlockState()) == Blocks.DIRT.defaultBlockState(),
 				"withShared ignores properties the product lacks");
+		// by name: a top slab carries its type onto another slab block and a wall's sides onto another wall
+		BlockState topSlab = Blocks.OAK_SLAB.defaultBlockState().setValue(net.minecraft.world.level.block.SlabBlock.TYPE,
+				net.minecraft.world.level.block.state.properties.SlabType.TOP);
+		check(Melting.withShared(topSlab, Blocks.STONE_SLAB.defaultBlockState())
+				.getValue(net.minecraft.world.level.block.SlabBlock.TYPE) == net.minecraft.world.level.block.state.properties.SlabType.TOP,
+				"withShared keeps a slab's type");
+		// a property of the same name but another class: copied by value name (two mods' vertical slab types)
+		net.minecraft.world.level.block.state.properties.EnumProperty<Direction.Axis> axisA = net.minecraft.world.level.block.state.properties.BlockStateProperties.AXIS;
+		BlockState log = Blocks.OAK_LOG.defaultBlockState().setValue(axisA, Direction.Axis.X);
+		check(Melting.withShared(log, Blocks.BASALT.defaultBlockState()).getValue(axisA) == Direction.Axis.X,
+				"withShared keeps the axis");
+		BlockState observer = Blocks.OBSERVER.defaultBlockState()
+				.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING, Direction.EAST);
+		check(Melting.withShared(observer, Blocks.OAK_STAIRS.defaultBlockState()).getValue(StairBlock.FACING) == Direction.EAST,
+				"withShared by name: facing (6 ways) -> stairs facing (4 ways)");
+		check(Melting.withShared(observer.setValue(net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING,
+						Direction.UP), Blocks.OAK_STAIRS.defaultBlockState()) == Blocks.OAK_STAIRS.defaultBlockState(),
+				"withShared by name: a value the product lacks stays at its default");
 
 		// Rows read through ForgeRegistries: only when the headless registry answers (else reported, not failed)
 		boolean registry;
@@ -97,6 +121,8 @@ public class MeltingTest {
 		if (registry) {
 			check(Melting.saltedState(Blocks.PACKED_ICE.defaultBlockState(), false, 3).is(Blocks.ICE), "salt: packed ice -> ice (row)");
 			check(Melting.meltedState(Blocks.BLUE_ICE.defaultBlockState(), false, true).is(Blocks.PACKED_ICE), "heat: blue ice -> packed ice (slow step)");
+			// frozen decor rows (E1): products of vanilla blocks only (no mod blocks headless)
+			check(Melting.meltedState(Blocks.SNOW_BLOCK.defaultBlockState(), true, false).isAir(), "heat: snow block in ultra-warm -> air");
 		} else {
 			System.out.println("skip product rows: ForgeRegistries not available headless");
 		}

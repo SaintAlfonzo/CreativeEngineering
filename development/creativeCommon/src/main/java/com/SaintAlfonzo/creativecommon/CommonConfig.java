@@ -418,8 +418,8 @@ public final class CommonConfig {
 		public final ForgeConfigSpec.IntValue saltRange;
 		public final ForgeConfigSpec.IntValue fireRange;
 		public final ForgeConfigSpec.IntValue lavaRange;
-		public final ForgeConfigSpec.IntValue slowFireRange;
 		public final ForgeConfigSpec.IntValue slowLavaRange;
+		public final ForgeConfigSpec.IntValue slowMagmaRange;
 		public final ForgeConfigSpec.DoubleValue meltChance;
 		public final ForgeConfigSpec.DoubleValue slowMeltChance;
 		public final ForgeConfigSpec.BooleanValue placeWater;
@@ -429,19 +429,24 @@ public final class CommonConfig {
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> extraRandomTickBlocks;
 		public final ForgeConfigSpec.DoubleValue snowLayerMeltChance;
 		public final ForgeConfigSpec.IntValue meltTickInterval;
-		public final ForgeConfigSpec.BooleanValue slowHeatMelting;
 		public final ForgeConfigSpec.IntValue magmaInstantRange;
 		public final ForgeConfigSpec.BooleanValue magmaStopsFreezing;
 		public final ForgeConfigSpec.IntValue saltMeltSnowLayers;
 		public final ForgeConfigSpec.ConfigValue<List<? extends String>> saltProducts;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> meltProducts;
+		public final ForgeConfigSpec.DoubleValue sluggishMeltFactor;
+		public final ForgeConfigSpec.IntValue hotMeltTickInterval;
+		public final ForgeConfigSpec.BooleanValue endContactOnly;
+		public final ForgeConfigSpec.BooleanValue endNoFire;
 
 		private MeltingConfig(ForgeConfigSpec.Builder b) {
 			b.comment(
 					"Melting: salt, fire and lava melt ice and snow (server side). Sources are the block tags",
 					"creativecommon:melting/salt, /fire (a block with a lit property counts only while lit) and /lava (plus any",
-					"block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow loses a layer, the",
-					"rest becomes air) and /meltable_slow (packed and blue ice, IW cryosol and permafrost, one tier down). Salt",
-					"melts only /saltable blocks. A pair is found by the target's random tick or by a source's own random tick",
+					"block holding lava fluid); targets are /meltable (ice and frosted ice become water, snow loses a layer, frozen",
+					"decor becomes its meltProducts row, the rest air) and /meltable_slow (packed and blue ice, IW cryosol and",
+					"permafrost, one tier down; only lava and magma heat them, /lava_only ones only by touching lava). Salt melts",
+					"only /saltable blocks. A pair is found by the target's random tick or by a source's own random tick",
 					"(magma, lava, salt blocks); the target then gets a melt tick every meltTickInterval while a source stays in",
 					"reach, rolling its chance each time. Ranges are spheres measured through any blocks: 1 = the 6 touching",
 					"blocks, 0 = this source never melts that kind. A target looks past its 6 neighbors for fire and lava only",
@@ -457,10 +462,11 @@ public final class CommonConfig {
 					.defineInRange("fireRange", 3, 0, 8);
 			lavaRange = b.comment("Lava: reach for meltable targets.")
 					.defineInRange("lavaRange", 4, 0, 8);
-			slowFireRange = b.comment("Fire: reach for meltable_slow targets (only while slowHeatMelting is on).")
-					.defineInRange("slowFireRange", 1, 0, 8);
-			slowLavaRange = b.comment("Lava: reach for meltable_slow targets (only while slowHeatMelting is on).")
+			slowLavaRange = b.comment("Lava: reach for meltable_slow targets (packed ice, cryosol). Blue ice and permafrost",
+							"(creativecommon:melting/lava_only) melt only touching lava, whatever this says. Other fire never melts them.")
 					.defineInRange("slowLavaRange", 2, 0, 8);
+			slowMagmaRange = b.comment("Magma (creativecommon:melting/magma): reach for meltable_slow targets that are not lava_only.")
+					.defineInRange("slowMagmaRange", 2, 0, 8);
 			meltChance = b.comment(
 					"Chance per tick (its random tick and each melt tick) that a meltable target with a source in reach",
 					"melts. Snow layers use snowLayerMeltChance."
@@ -487,27 +493,35 @@ public final class CommonConfig {
 					"minecraft:blue_ice=minecraft:packed_ice",
 					"minecraft:packed_ice=minecraft:ice",
 					"immersive_weathering:permafrost=immersive_weathering:cryosol",
-					"immersive_weathering:cryosol=minecraft:dirt"
+					"immersive_weathering:cryosol=minecraft:dirt",
+					"architects_palette:polished_packed_ice=minecraft:ice",
+					"architects_palette:chiseled_packed_ice=minecraft:ice",
+					"architects_palette:packed_ice_pillar=minecraft:ice"
 			), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
 			extraRandomTickBlocks = b.comment(
 					"Blocks that get random ticks so they can find a fire or lava by themselves (vanilla gives none to these).",
-					"Ice, frosted ice and snow layers tick already. A target left out (packed and blue ice, cryosol, permafrost)",
-					"is found only by a source's own tick (magma, lava, salt blocks). Read once at startup: a change needs a restart."
+					"Ice, frosted ice, snow layers and Immersive Weathering's snowy and frosty blocks tick already. A target left",
+					"out (packed and blue ice, cryosol, permafrost) is found only by a source's own tick (magma, lava, salt",
+					"blocks). Sources listed here (Molten Nether Bricks) scan from their own tick like magma. Read once at",
+					"startup: a change needs a restart."
 			).defineList("extraRandomTickBlocks", List.of(
 					"minecraft:snow_block",
-					"minecraft:powder_snow"
+					"minecraft:powder_snow",
+					"immersive_weathering:thin_ice",
+					"immersive_weathering:snow_bricks",
+					"immersive_weathering:snow_brick_slab",
+					"immersive_weathering:snow_brick_stairs",
+					"immersive_weathering:snow_brick_wall",
+					"immersive_weathering:snow_brick_vertical_slab",
+					"architects_palette:coarse_snow",
+					"architects_palette:molten_nether_bricks"
 			), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+"));
 			snowLayerMeltChance = b.comment("Chance per tick that a snow layer with a source in reach loses one layer.")
 					.defineInRange("snowLayerMeltChance", 0.8, 0.0, 1.0);
 			meltTickInterval = b.comment(
 					"Ticks between melt ticks of a target with a source in reach (75 to 125 percent of this, vanilla scheduled",
-					"ticks saved with the chunk). 200 = 10 s. 0 = off: targets melt only on random ticks, as before 2026-11-17."
-			).defineInRange("meltTickInterval", 200, 0, 12000);
-			slowHeatMelting = b.comment(
-					"Fire and lava melt meltable_slow targets (packed and blue ice, IW cryosol and permafrost). Off until the",
-					"ambient melting audit is approved: only salt melts packed ice and cryosol, blue ice and permafrost never",
-					"melt. Those blocks do not random tick; on, a non-ticking fire (torch) next to them melts nothing."
-			).define("slowHeatMelting", false);
+					"ticks saved with the chunk). 100 = 5 s. 0 = off: targets melt only on random ticks, as before 2026-11-17."
+			).defineInRange("meltTickInterval", 100, 0, 12000);
 			magmaInstantRange = b.comment(
 					"Snow (layers, blocks, powder snow) within this reach of a block in creativecommon:melting/magma melts at",
 					"once: when placed, on magma's own tick, or on its melt tick. 0 = off."
@@ -527,6 +541,50 @@ public final class CommonConfig {
 					"minecraft:packed_ice=minecraft:ice",
 					"immersive_weathering:cryosol=minecraft:dirt"
 			), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
+			meltProducts = b.comment(
+					"\"from=to\" block ids: what a meltable target becomes when heat melts it (and salt, when saltProducts has",
+					"no row), every property the two share copied by name (facing, half, slab type, wall sides, waterlogged).",
+					"minecraft:water becomes air in ultra-warm dimensions or with placeWater off. Not listed: water for",
+					"#minecraft:ice, else air. A row whose product is missing (mod not loaded) is skipped."
+			).defineList("meltProducts", List.of(
+					"immersive_weathering:snowy_stone=minecraft:stone",
+					"immersive_weathering:snowy_stone_slab=minecraft:stone_slab",
+					"immersive_weathering:snowy_stone_stairs=minecraft:stone_stairs",
+					"immersive_weathering:snowy_stone_wall=immersive_weathering:stone_wall",
+					"immersive_weathering:snowy_stone_vertical_slab=quark:stone_vertical_slab",
+					"immersive_weathering:snowy_cobblestone=minecraft:cobblestone",
+					"immersive_weathering:snowy_cobblestone_slab=minecraft:cobblestone_slab",
+					"immersive_weathering:snowy_cobblestone_stairs=minecraft:cobblestone_stairs",
+					"immersive_weathering:snowy_cobblestone_wall=minecraft:cobblestone_wall",
+					"immersive_weathering:snowy_cobblestone_vertical_slab=quark:cobblestone_vertical_slab",
+					"immersive_weathering:snowy_stone_bricks=minecraft:stone_bricks",
+					"immersive_weathering:snowy_stone_brick_slab=minecraft:stone_brick_slab",
+					"immersive_weathering:snowy_stone_brick_stairs=minecraft:stone_brick_stairs",
+					"immersive_weathering:snowy_stone_brick_wall=minecraft:stone_brick_wall",
+					"immersive_weathering:snowy_stone_brick_vertical_slab=quark:stone_brick_vertical_slab",
+					"immersive_weathering:snowy_chiseled_stone_bricks=minecraft:chiseled_stone_bricks",
+					"immersive_weathering:frosty_glass=minecraft:glass",
+					"immersive_weathering:frosty_glass_pane=minecraft:glass_pane",
+					"immersive_weathering:frosty_grass=minecraft:grass",
+					"immersive_weathering:frosty_fern=minecraft:fern",
+					"immersive_weathering:thin_ice=minecraft:water",
+					"architects_palette:coarse_snow=minecraft:gravel"
+			), o -> o instanceof String str && str.matches("[a-z0-9_.-]+:[a-z0-9_/.-]+=[a-z0-9_.-]+:[a-z0-9_/.-]+"));
+			sluggishMeltFactor = b.comment("Chance multiplier for creativecommon:melting/sluggish targets (snow bricks).")
+					.defineInRange("sluggishMeltFactor", 0.25, 0.0, 1.0);
+			hotMeltTickInterval = b.comment(
+					"Hot places: in an ultra-warm dimension (the Nether) every target but the lava_only ones (blue ice,",
+					"permafrost), and in a creativecommon:melting/hot biome (arid and tropical) ice, snow and frozen decor, take a",
+					"melt tick this often with no source needed, rolling their chance each time. 0 = off."
+			).defineInRange("hotMeltTickInterval", 20, 0, 12000);
+			endContactOnly = b.comment(
+					"The End: every source (salt, fire, magma, lava) melts only the blocks touching it; no reach, no magma",
+					"instant zone past the touching blocks.")
+					.define("endContactOnly", true);
+			endNoFire = b.comment(
+					"No minecraft:fire in the End: any placement of it is refused (flint and steel, fire charges, lava, End",
+					"crystals, commands) and fire already there goes out on its next tick. Soul fire is not affected.")
+					.define("endNoFire", true);
 
 			b.pop(); // melting
 		}

@@ -571,3 +571,79 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 @pass G8 within 0.5 ms per tick of the control and below (b); melts per minute of G8 at least 3x the control; JFR `Melting.onScheduledTick` plus `Melting.onRandomTick` under 2 percent of server samples; no `LevelTicks` growth beyond the targets in reach (scheduled tick count steady)
 @fails G8 costs more than (b): raise `meltTickInterval` default or cap scheduling per source tick; report numbers to the owner either way (the G7.1 report)
 @owner true
+
+@@section 3
+@@title SQ-MELT / CQ-MELT G11 and E1: slow tier from lava and magma, hot places, the End, no fire in the End, frozen decor, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G11, G12, E1; [melting.md](../melting.md) 1, 3; TODO `tooling/scratch-1115-follow-ups #20`, `#22`, `#9`)
+@@date 2026-11-17
+@@jars creativecommon
+@@sources feature_writeup/melting.md feature_writeup/plan_post_scratch_1115.md development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/melting/Melting.java kubejs/data/creativecommon/kubejs/tags/melting_tags.js
+@@text
+@@text Creative Common built 2026-11-17 (lane C1, build/libs). Group A superflat, `gamerule randomTickSpeed 3` unless a row says otherwise. `[melting]` in `config/creativecommon-common.toml`: `meltTickInterval 100`, `slowLavaRange 2`, `slowMagmaRange 2`, `hotMeltTickInterval 20`, `endContactOnly true`, `endNoFire true`, `sluggishMeltFactor 0.25`. Nether and End spots: `execute in minecraft:the_nether` / `minecraft:the_end` with `forceload add` first (wait 30 s). Each case at least 12 blocks from the others. Supersedes SQ-PS15-22 (slow tier frozen) and fills SQ-PS15-08 (E1).
+@@text
+@@table
+## SQ-MELT-11 | slow tier (G11): packed ice and cryosol melt within 2 of lava or magma, never from a torch; blue ice and permafrost only touching lava, one step down; salt as before
+@group A
+@commands Boot log: `[melting] tags:` line (lava only 2). On stone, one spot each: `minecraft:packed_ice` and `immersive_weathering:cryosol` with lava 2 away (a gap block of stone between), with magma 2 away, with a torch touching; `minecraft:blue_ice` and `immersive_weathering:permafrost` with lava touching, with lava 2 away, with magma touching; a `salt:salt_block` touching packed ice, cryosol, blue ice, permafrost. Probe each spot with `cdevtest state` every 60 s for 15 minutes
+@pass lava and magma at 2: packed ice -> `minecraft:ice` (then water), cryosol -> `minecraft:dirt`; torch spots unchanged; blue ice touching lava -> `minecraft:packed_ice`, permafrost touching lava -> `immersive_weathering:cryosol`; blue ice and permafrost with lava at 2 or magma touching unchanged; salt: packed ice -> ice, cryosol -> dirt, blue ice and permafrost unchanged
+@fails torch melts packed ice: findSource fire radius for the slow tier not 0; blue ice at 2 melts: lava_only tag empty (boot line) or reach not 1; nothing melts at all: the slow blocks do not random tick, so only the lava's or magma's own tick finds them (lava must random tick: check `sources scan on their own tick` count)
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-12 | Nether (G11): packed ice, cryosol, ice and snow melt on their own with no source; blue ice and permafrost only beside lava
+@group A
+@commands In the Nether on netherrack, far from lava (16+ blocks, no lava above or below): `setblock` `minecraft:packed_ice`, `immersive_weathering:cryosol`, `minecraft:ice`, `minecraft:blue_ice`, `immersive_weathering:permafrost`; a second `minecraft:blue_ice` with a lava source touching it. Probe every 20 s for 5 minutes
+@pass ice -> air within about 1 minute (melt tick every 15 to 25 ticks, chance 0.4); packed ice -> ice -> air, cryosol -> dirt, each within about 5 minutes (chance 0.05 per tick); the lone blue ice and permafrost unchanged; the blue ice touching lava -> packed ice (then melts on as packed ice)
+@fails nothing melts: `onPlaced` hot path (packed ice has no random tick, it needs the placement schedule) or `hotMeltTickInterval 0`; lone blue ice melts: lava_only flag skipped in `isHot`
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-13 | arid and tropical biomes (G11): ice and snow melt with no source; packed ice and snow on blue ice stay
+@group B
+@commands Fresh normal world; find a desert (`locate biome minecraft:desert`) and a jungle; at each, away from any light source: `minecraft:ice`, `minecraft:snow[layers=8]`, `minecraft:snow_block`, `minecraft:packed_ice`, and `minecraft:snow[layers=8]` on `minecraft:blue_ice`. Control: the same set in a plains biome. Probe every 20 s for 4 minutes. Boot: Creative Calendar loaded (the hot tag reads its season tags)
+@pass desert and jungle: ice -> water within about 1 minute, the snow stack loses one layer at a time and is gone within about 1 minute, the snow block gone; packed ice unchanged; the snow on blue ice keeps 8 layers; plains: nothing changes
+@fails nothing melts in the desert: `#creativecommon:melting/hot` empty (Creative Calendar's `creativecalendar:seasons/arid` tag, `melting_tags.js` biome event) or `getNoiseBiome` reads another biome at that height; plains melts: tag too wide
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-14 | the End (G11): every source melts only touching blocks
+@group A
+@commands In the End on end stone (forceload): `minecraft:ice` with a torch 2 away (lit), the same with a torch touching; `minecraft:snow[layers=8]` with magma 2 away and another with magma touching; `minecraft:ice` with a `salt:salt_block` touching; `minecraft:packed_ice` with lava 2 away and another with lava touching. Probe every 20 s for 5 minutes
+@pass the ice with the torch at 2 and the snow with magma at 2 unchanged; the torch-touching ice -> water; the magma-touching snow gone at once on placement; the salted ice -> water; packed ice with lava at 2 unchanged, touching -> ice
+@fails reach in the End: `endContact` not read (`level.dimension() == Level.END`) or `endContactOnly` false
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-15 | no ordinary fire in the End (G11): flint and steel, fire charge, setblock, lava spread refused; soul fire allowed; old fire goes out
+@group A
+@commands In the End (forceload), a survival bot or `execute as` a player: flint and steel on end stone; a fire charge from a dispenser at end stone; `setblock ~ ~1 ~ minecraft:fire` on netherrack placed there; a lava source beside planks for 5 minutes at `randomTickSpeed 100`; `setblock` `minecraft:soul_fire` on soul sand. Then `[melting] endNoFire = false` (restart), `setblock minecraft:fire` on netherrack, `endNoFire = true` again (restart), probe that block for 30 s. Overworld control: flint and steel on netherrack
+@pass End: no `minecraft:fire` block ever appears (`execute if block` false after each), the planks never burn; soul fire stays; the old fire is air within 2 s of the restart's first tick; Overworld fire lights; no ERR naming `EndFireMixin` and no mixin apply failure in latest.log
+@fails fire appears: `EndFireMixin` not applied (SRG `m_6933_`) or `refusesFire` dimension check; soul fire refused: the check reads a tag instead of `Blocks.FIRE`; old fire stays: the scheduled tick check in `Melting.onScheduledTick`
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-16 | magma-like blocks (G11): Molten Nether Bricks melt snow like magma
+@group A
+@commands Boot log: `[melting] random ticks on for N extra blocks` (10 with Immersive Weathering and Architect's Palette) and `[melting] tags:` (magma 2). `architects_palette:molten_nether_bricks` on stone; `minecraft:snow[layers=4]` placed 2 away; `minecraft:snow[layers=8]` 3 away; `minecraft:packed_ice` 2 away. Probe every 20 s for 5 minutes
+@pass the snow at 2 is air at once; the snow at 3 loses layers one at a time; the packed ice -> ice within about 10 minutes (slow chance, slowMagmaRange 2); the source-driven fire line of the boot log names the bricks (light 3)
+@fails snow at 2 kept: the bricks are not in the magma tag (`architects_palette` guard) or not random ticking (`extraRandomTickBlocks` in the instance toml is the old list)
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-17 | frozen decor (E1): snowy stone blocks melt into the plain block, same shape and facing
+@group A
+@commands A torch 2 from each, lit room: `immersive_weathering:snowy_stone_stairs[facing=east,half=top]`, `immersive_weathering:snowy_cobblestone_slab[type=top]`, `immersive_weathering:snowy_stone_brick_wall` between two stone brick walls, `immersive_weathering:snowy_stone_vertical_slab` (any type but the default), `immersive_weathering:snowy_chiseled_stone_bricks`. Probe each with `cdevtest state` every 20 s for 3 minutes
+@pass `minecraft:stone_stairs[facing=east,half=top]`, `minecraft:cobblestone_slab[type=top]`, `minecraft:stone_brick_wall` keeping its side connections, `quark:stone_vertical_slab` with the same type, `minecraft:chiseled_stone_bricks`; none becomes air or a full block
+@fails full stone where the stairs were: the stairs passed their random tick to the base state (`onRandomTick` same-state check); air: `meltProducts` row missing in the instance toml (old list) or the product mod absent; default facing: `withShared`
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-18 | frozen decor (E1): frosty glass, pane, grass, fern, frost, thin ice, icicle
+@group A
+@commands A torch 2 from each: `immersive_weathering:frosty_glass`, `immersive_weathering:frosty_glass_pane` between two glass blocks, `immersive_weathering:frosty_grass` and `frosty_fern` on grass blocks, `immersive_weathering:frost` on a stone wall face, `immersive_weathering:thin_ice` on water, `immersive_weathering:icicle` hanging from stone. In the Nether: `immersive_weathering:thin_ice` on netherrack, no source. Probe every 20 s for 4 minutes
+@pass `minecraft:glass`, `minecraft:glass_pane` (connected east and west), `minecraft:grass`, `minecraft:fern`, frost -> air, thin ice -> `minecraft:water[level=0]`, icicle -> air; Nether thin ice -> air
+@fails a block unchanged: it does not random tick and no source tick found it (frost and icicle: check `isRandomlyTicking`; add to `extraRandomTickBlocks`); thin ice -> air in the Overworld: water rule in `productOf`
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-19 | frozen decor (E1): snow bricks melt at a quarter of snow's pace and vanish in the Nether; coarse snow melts into gravel
+@group A
+@commands 8 `immersive_weathering:snow_bricks` and 8 `minecraft:snow_block` in two rows, each block with its own torch 2 away; 4 `architects_palette:coarse_snow` with torches 2 away. Count the remaining snow bricks and snow blocks every 30 s for 10 minutes. In the Nether: place a snow brick slab and a coarse snow block by `setblock`
+@pass snow blocks gone well before the snow bricks (mean time about 4x: bricks roll 0.1, blocks 0.4 per melt tick); snow bricks -> air; coarse snow -> `minecraft:gravel`; Nether snow brick slab air at once (fizz), Nether coarse snow -> gravel within about 1 minute
+@fails bricks as fast as blocks: `sluggish` tag empty; coarse snow -> air: `meltProducts` row missing
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-MELT-20 | Architect's Palette packed ice (E1): full blocks -> ice, shaped -> air, from lava, magma and salt only; frozen prismarine never melts
+@group A
+@commands Lava 2 away from each (stone gap): `architects_palette:polished_packed_ice`, `chiseled_packed_ice`, `packed_ice_pillar[axis=x]`, `polished_packed_ice_slab`, `polished_packed_ice_stairs`, `polished_packed_ice_wall`, `polished_packed_ice_vertical_slab`; a torch touching a second polished packed ice; a salt dispenser facing a third polished packed ice and one facing a polished packed ice slab; Philips Ruins frozen prismarine (if loaded) with lava touching. Probe every 60 s for 15 minutes
+@pass the three full blocks -> `minecraft:ice`; the four shaped blocks -> air (or water if waterlogged was kept, not expected); torch spot unchanged; dispenser: full block -> ice at once, slab -> air at once; frozen prismarine unchanged
+@fails shaped blocks -> ice: they matched a `slowSteps` row; nothing changes: the `*packed_ice*` glob missed (`[melting] tags` slow count should be 11 with IW and AP)
+@draft runnable steps not written yet; the next runner writes them from @commands
+## CQ-MELT-01 | "Saltable" tooltip on frozen decor
+@group client
+@commands Join the scratch server; hover Snowy Stone Bricks, Frosty Glass, Snow Bricks, Coarse Snow, Polished Packed Ice, Thin Ice, Blue Ice, Permafrost
+@pass a gray "Saltable" line on the first six; none on Blue Ice and Permafrost
+@fails no line on the decor: the client copy of `#creativecommon:melting/saltable` lacks them (the `immersive_weathering` / `architects_palette` guard in `melting_tags.js`)
+@draft runnable steps not written yet; the next runner writes them from @commands
