@@ -50,3 +50,25 @@ Design and rulings stay in those plans; this file holds only lanes, order and fi
 
 - 2026-11-17: written; owner rulings: melting method (1115 G8), farming F2 approved with pack defaults, food rows
   `#72b`, `#58`, `#59`, `#40` come back as proposals for one question round.
+- 2026-11-17: every lane built and committed (X, F, R, M1, L1, M2, M1b, B, L2, F2); jars installed: Common, Compat, Devtools,
+  Creative Delight, Creative Brewing, Creative Worldgen, solRaspberryPie (Power Grid stays a gate jar, -20). Owner rulings
+  this pass: melting method (1115 G8), farming F2, food `#72b`, `#58`, `#59`, `#40` pinned, placed-only licks, bamboo
+  leaves on one 8-layer scale. Nothing run in game.
+
+## Hand-over (2026-11-17)
+
+Test ids (all queue rows; drafts get their steps from the next runner):
+- Melting (Common): SQ-PS15-17 to -23, CQ-PS15-04, SQ-PS15-03 rerun (salt listener order); perf SQ-MELT-P2.
+- Salt (Creative Delight): SQ-SALT2-10 to -21, CQ-SALT2-01, -02.
+- Campfires, dragon armor, Rare Ice, canopy-proof crops: SQ-PS15-24 to -29, CQ-PS15-05.
+- Layers (Compat): SQ-PS15B-01, -10 to -22, CQ-PS15B-03, SQ-PTH-25c.
+- Raspberry Pie: CQ-RPI-41 to -45.
+- Idle random ticks: SQ-FCK-20 to -23 (perf SQ-FCK-22).
+- Skewers, syrup, Nether's Delight, doormat: SQ-BBQ-09 to -12, BBQ-41, SQ-HH-1613 to -1616, SQ-FCK-19, MG-51.
+- Power Grid arm (gate jar -20): SQ-PWG-98. UA coral growths: SQ-PS15-16c. Portal wall exit: SQ-PG-01b, CQ-PG-03.
+
+Open for the owner: 1115 `#2` AMD portal crash (bisect on the owner's client), `#16` heap spill (look in game); 1115b
+`#10` in-place config save not seen by Forge's watcher; SQ-TX-18 must also remove the 8 jars that require Compat (TX.qb
+text); assumed values in 1115 G7.4, G9, G10 and raspberry_pie.md 12.5; Warped Moldy Meat and the heatless stew return
+Cooked Nether Wart's bowl; dispenser-placed Rock Salt Blocks are not licks; `tooling/design-rules #3` and `#4` unchanged.
+
