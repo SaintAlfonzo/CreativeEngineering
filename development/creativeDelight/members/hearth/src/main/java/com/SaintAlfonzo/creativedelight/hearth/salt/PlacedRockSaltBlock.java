@@ -8,8 +8,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 
 /**
- * Stage 0 of a salt lick: a Rock Salt Block a player placed. Placing The Salt's {@code salt:raw_rock_salt_block} swaps it
- * for this block ({@link SaltEvents#onPlace}), so only placed blocks are licks; generated Rock Salt Blocks (salt caves,
+ * Stage 0 of a salt lick: a Rock Salt Block placed after world generation. Setting The Salt's
+ * {@code salt:raw_rock_salt_block} in a loaded level swaps it for this block ({@link SaltEvents#afterPlace}), so only placed
+ * blocks are licks; generated Rock Salt Blocks (salt caves,
  * beach patches) stay The Salt's block, out of the POI type, never licked or worn. Looks like the Rock Salt Block, drops
  * it and picks it; no item of its own.
  */

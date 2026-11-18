@@ -16,8 +16,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
 /**
- * The chain of lick stages. Stage 0 is a player-placed Rock Salt Block ({@link PlacedRockSaltBlock}, swapped in when a
- * player places The Salt's {@code salt:raw_rock_salt_block}, plan_post_scratch_1115 G2b); generated Rock Salt Blocks are
+ * The chain of lick stages. Stage 0 is a placed (not generated) Rock Salt Block ({@link PlacedRockSaltBlock}, swapped in when The
+ * Salt's {@code salt:raw_rock_salt_block} is placed after world generation, plan_post_scratch_1115 G2b, G11); generated Rock Salt Blocks are
  * no lick. The rest are our {@link LickableSaltBlock}s. 4 stages = 4 Rock Salt: one wear is one stage, one Rock Salt (by hand
  * or dispenser) refills one stage. Salt layers no longer refill a lick and are not eaten first (G6-10).
  */
@@ -63,7 +63,7 @@ public final class SaltLick {
         }
     }
 
-    /** The Salt's Rock Salt Block: placed by a player it becomes stage 0; generated ones are no lick. */
+    /** The Salt's Rock Salt Block: placed after world generation it becomes stage 0; generated ones are no lick. */
     public static Block saltBlock() {
         return ForgeRegistries.BLOCKS.getValue(SALT_BLOCK_ID);
     }

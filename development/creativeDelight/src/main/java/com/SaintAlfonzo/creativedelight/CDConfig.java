@@ -760,6 +760,7 @@ public final class CDConfig {
 		public final ForgeConfigSpec.BooleanValue torchRainRefuses;
 		public final ForgeConfigSpec.BooleanValue soulflameRule;
 		public final ForgeConfigSpec.BooleanValue unlitTooltip;
+		public final ForgeConfigSpec.BooleanValue endUnlightable;
 
 		private Campfire(ForgeConfigSpec.Builder b) {
 			b.comment(
@@ -811,6 +812,13 @@ public final class CDConfig {
 					"(\"soulflame\" on soul campfires), plus a torch line while torchLights is on. Shown only while Unlit",
 					"Campfire is loaded. Read on the client from its own copy of this file."
 			).define("unlitTooltip", true);
+			// plan_post_scratch_1115 G11 (campfire.CampfireEnd).
+			endUnlightable = b.comment(
+					"Campfires cannot burn in the End (campfire.CampfireEnd): torch, flint and steel and fire charge",
+					"clicks are refused with the extinguish sound and nothing used, and a campfire lit any other way",
+					"(placed lit, dispenser, burning projectile, commands, other mods) goes out on its next tick.",
+					"Soul campfires are exempt."
+			).define("endUnlightable", true);
 
 			b.pop(); // campfire
 		}

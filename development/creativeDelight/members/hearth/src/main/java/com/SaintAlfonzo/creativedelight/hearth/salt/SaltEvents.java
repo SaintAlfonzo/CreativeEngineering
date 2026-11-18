@@ -31,7 +31,6 @@ import net.minecraftforge.common.ToolActions;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;
 import net.minecraftforge.registries.ForgeRegistries;
 
@@ -53,17 +52,32 @@ public final class SaltEvents {
     }
 
     /**
-     * A Rock Salt Block placed by a player (fake players too: Create's Deployer) becomes stage 0 of a salt lick, the
-     * placed twin of The Salt's block. Generated Rock Salt Blocks never pass here, so they are never licks.
+     * Any Rock Salt Block set in a loaded level becomes stage 0 of a salt lick, the placed twin of The Salt's block
+     * (plan_post_scratch_1115 G11): players, fake players (Create's Deployer), dispensers, Create's Schematicannon,
+     * commands. Called from {@code BlockPlaceLickMixin} on {@code BlockBehaviour.onPlace}, which runs only for blocks set
+     * in a full chunk on the server (after Forge's place event for item placement). World generation writes proto
+     * chunks, which never call it, so generated Rock Salt Blocks stay The Salt's block. A piston or a Create contraption
+     * moving a block is not a placement and keeps the block it carries.
      */
-    public static void onPlace(BlockEvent.EntityPlaceEvent event) {
-        if (!(event.getEntity() instanceof Player) || !(event.getLevel() instanceof Level level) || level.isClientSide()) {
+    public static void afterPlace(Block self, Level level, BlockPos pos, BlockState oldState, boolean isMoving) {
+        if (isMoving || level.isClientSide() || self != rockBlock() || oldState.is(Blocks.MOVING_PISTON)) {
             return;
         }
-        Block rock = SaltLick.saltBlock();
-        if (rock != null && rock != Blocks.AIR && event.getPlacedBlock().is(rock)) {
-            level.setBlock(event.getPos(), HHSaltRegistry.PLACED_ROCK_SALT.get().defaultBlockState(), Block.UPDATE_ALL);
+        level.setBlock(pos, HHSaltRegistry.PLACED_ROCK_SALT.get().defaultBlockState(), Block.UPDATE_ALL);
+    }
+
+    private static Block rockCache;
+
+    private static Block rockBlock() {
+        Block rock = rockCache;
+        if (rock == null) {
+            rock = SaltLick.saltBlock();
+            if (rock == null) {
+                rock = Blocks.AIR;
+            }
+            rockCache = rock;
         }
+        return rock == Blocks.AIR ? null : rock;
     }
 
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {

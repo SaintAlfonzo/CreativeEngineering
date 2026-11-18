@@ -446,6 +446,11 @@
 	#("soulflame" on soul campfires), plus a torch line while torchLights is on. Shown only while Unlit
 	#Campfire is loaded. Read on the client from its own copy of this file.
 	unlitTooltip = true
+	#Campfires cannot burn in the End (campfire.CampfireEnd): torch, flint and steel and fire charge
+	#clicks are refused with the extinguish sound and nothing used, and a campfire lit any other way
+	#(placed lit, dispenser, burning projectile, commands, other mods) goes out on its next tick.
+	#Soul campfires are exempt.
+	endUnlightable = true
 
 #One switch per optional Creative Delight compartment (Java, assets and data folded into this jar).
 #Each works only with its mod installed; off = as if that mod were absent: no blocks, no changes to it,

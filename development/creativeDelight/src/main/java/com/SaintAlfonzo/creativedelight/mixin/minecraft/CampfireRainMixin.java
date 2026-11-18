@@ -15,7 +15,7 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 /**
- * Runs {@link CampfireRain} and {@link CampfireComfort} after every lit campfire's server tick ({@code cookTick}, {@code m_155306_}).
+ * Runs {@code CampfireEnd} (End: put out at once), {@link CampfireRain} and {@link CampfireComfort} after every lit campfire's server tick ({@code cookTick}, {@code m_155306_}).
  * Unlit Campfire injects at the same RETURN; with its lit time at 0 it does nothing there, so order doesn't
  * matter. SRG name with {@code remap = false}, as in {@code AttachedStemExtraFruitMixin}.
  */
@@ -38,6 +38,7 @@ public abstract class CampfireRainMixin implements CampfireRainTicks {
 	@Inject(method = "m_155306_", at = @At("RETURN"), remap = false)
 	private static void creativeengineering$rainDouses(Level level, BlockPos pos, BlockState state,
 													 CampfireBlockEntity campfire, CallbackInfo ci) {
+		if (com.SaintAlfonzo.creativedelight.campfire.CampfireEnd.tick(level, pos, state)) return;
 		CampfireRain.tick(level, pos, state, campfire);
 		CampfireComfort.tick(level, pos);
 	}

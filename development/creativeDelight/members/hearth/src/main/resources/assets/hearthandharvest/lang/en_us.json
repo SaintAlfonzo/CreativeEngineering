@@ -13,7 +13,7 @@
   "hearthandharvest.salt_lick.hint": "Animals lick this",
   "hearthandharvest.subtitles.entity.lick": "Licking",
   "hearthandharvest.crow.stole": "A crow stole your %s",
-  "hearthandharvest.jei.info.salt_block": "Placed by a player, keeps animals near, who lick it. Rock Salt Blocks found in the world are not licked. It wears away over time and is repaired with Rock Salt, one per stage (by hand or dispenser). Honeycomb stops the wear; an axe takes the wax off.",
+  "hearthandharvest.jei.info.salt_block": "Placed (by hand, dispenser, deployer or schematicannon), keeps animals near, who lick it. Rock Salt Blocks that generated with the world are not licked. It wears away over time and is repaired with Rock Salt, one per stage (by hand or dispenser). Honeycomb stops the wear; an axe takes the wax off.",
   "hearthandharvest.jei.info.scarecrow": "Keeps crows away from crops within 6 blocks, as Carved Pumpkins and Jack o'Lanterns do.",
   "hearthandharvest.jei.info.crow": "Crow food is any seed or pip, and corn. A wild crow fed by hand may be tamed. A hurt tame crow eats crow food to heal. Tame crows breed with corn or corn seeds.",
   "hearthandharvest.jei.info.nest": "Holds 4 items. Crows live around nests found on temperate forest tree tops and village roofs, and stash stolen items in nearby nests. Right-click with an empty hand to take from it.",

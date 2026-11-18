@@ -180,7 +180,8 @@ global.CD.food = function (e) {
 		//######################### Heatless grid meals #########################
 		// Heatless meal rule (farmersdelight/recipes.js "Meals"): the grid route from cooked forms, at least one more
 		// main ingredient than the pot. _manual_only keeps Create's basin and mechanical crafter off it.
-		mealCraft(inputs, output) { R.shapeless(output, inputs, e, suffix(output, '_cooked_manual_only')) },
+		// Returns the recipe, so a caller can add an ingredient action (nethersdelight/recipes.js consumes a bowl food whole).
+		mealCraft(inputs, output) { return R.shapeless(output, inputs, e, suffix(output, '_cooked_manual_only')) },
 		soupCraft(inputs, output) { R.shapeless(output, [i.bone_broth].concat(inputs), e, suffix(output, '_cooked_manual_only')) },
 		saladCraft(inputs, output) { R.shapeless(output, inputs.concat([i.bowl]), e, suffix(output, '_manual_only')) },
 

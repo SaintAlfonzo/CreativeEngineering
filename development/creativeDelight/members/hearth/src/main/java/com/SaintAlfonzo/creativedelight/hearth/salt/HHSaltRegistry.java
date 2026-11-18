@@ -35,7 +35,7 @@ public final class HHSaltRegistry {
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, MODID);
 
     // Heights in px (plan_bugfix_1114 3.7): layered like snow, waxed stages as high as their unwaxed twin.
-    /** Stage 0, a player-placed Rock Salt Block (no item: it drops and picks The Salt's Rock Salt Block). */
+    /** Stage 0, a Rock Salt Block placed after world generation (no item: it drops and picks The Salt's Rock Salt Block). */
     public static final RegistryObject<Block> PLACED_ROCK_SALT = BLOCKS.register("placed_rock_salt_block",
             () -> new PlacedRockSaltBlock(Properties.copy(Blocks.GRAVEL).strength(2.0F, 3.0F).sound(SoundType.TUFF)));
     public static final RegistryObject<Block> LIGHTLY_LICKED = stage("lightly_licked_salt_block", 12);
@@ -86,7 +86,6 @@ public final class HHSaltRegistry {
         // Load complete, after every mod's common setup: the lick restore wraps whatever Salt (or another mod) registered
         bus.addListener((net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent event) -> event.enqueueWork(SaltEvents::registerDispenser));
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onRightClickBlock);
-        MinecraftForge.EVENT_BUS.addListener(SaltEvents::onPlace);
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onEntityJoin);
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onTooltip);
     }
