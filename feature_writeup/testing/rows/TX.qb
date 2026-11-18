@@ -412,9 +412,9 @@ look dump json: class=in_tag for snow 1-8, 9 IW leaf piles + azalea_flower_pile 
 
 ## SQ-TX-18 | cdevreload compat with Compat loaded (boot 1 part)
 @group A
-@commands Compat swapped in: `cdevreload compat`; then SQ-PS15B-12 uses it. A second boot with `SKIPSWAP` and the Compat jar removed from `OUT/srv/mods/`: `cdevreload compat`, `cdevtest help`
+@commands Compat swapped in: `cdevreload compat`; then SQ-PS15B-12 uses it. A second boot with `SKIPSWAP` and, from `OUT/srv/mods/`, the Compat jar plus the 8 Creative jars that require it (creativebrewing, creativecalendar, creativedelight, creativeengineering, creativeequipment, creativeloot, creativemagic, creativeworldgen; their mods.toml list `creativecompat` as mandatory, so Forge refuses the boot while any stays): `cdevreload compat`, `cdevtest help`
 @pass first boot: log line `[cdevreload] compat: ` followed by CompatConfigReload's result (not "not loaded yet"); second boot: `Unknown or incomplete command` for cdevreload, no ERROR or NoClassDefFoundError naming `creativecompat` at load, `cdevtest help` works
-@fails `CompatReloadCommand` registered outside the `ModList.isLoaded("creativecompat")` guard in `CreativeDevtools`
+@fails boot refused with "requires creativecompat": one of the 8 dependent jars is still in `mods/`; `CompatReloadCommand` registered outside the `ModList.isLoaded("creativecompat")` guard in `CreativeDevtools`
 @from batches/r1116/tx.qb passed
 > cdevreload compat
 sleep 2

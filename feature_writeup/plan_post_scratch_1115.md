@@ -1,7 +1,7 @@
 # Post-scratch plan, run r1115 (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=445dc86b2825 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 3, Testing 19), 1 Complete.
+<!-- generated:status_index begin open_work sha1=3ee28140e81e -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 3, In Progress 4, Testing 15), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -9,6 +9,10 @@
 | `tooling/scratch-1115-follow-ups #9` | Planned | P | Investigate frozen decor melting |
 | `tooling/scratch-1115-follow-ups #12` | Planned | P | Investigate original wild hops vs current |
 | `tooling/scratch-1115-follow-ups #16` | Planned | C | Heap spill into warped forest: look in game |
+| `tooling/scratch-1115-follow-ups #20` | In Progress | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
+| `tooling/scratch-1115-follow-ups #21` | In Progress | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
+| `tooling/scratch-1115-follow-ups #23` | In Progress | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
+| `tooling/scratch-1115-follow-ups #24` | In Progress | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 | `tooling/scratch-1115-follow-ups #1` | Testing | C | Wall exit lift: floor portal to wall portal stuck in floor |
 | `tooling/scratch-1115-follow-ups #3` | Testing | S | Salt: click on frozen block places a layer, no melt |
 | `tooling/scratch-1115-follow-ups #4` | Testing | S | Salt: dispenser places a layer on air, one melt (1 salt) on a frozen block |
@@ -23,11 +27,7 @@
 | `tooling/scratch-1115-follow-ups #17` | Testing | S | Power Grid arm takes one circuit component per pickup |
 | `tooling/scratch-1115-follow-ups #18` | Testing | S | Acid from rotten flesh and spider eyes in water |
 | `tooling/scratch-1115-follow-ups #19` | Testing | S | Upgrade Aquatic guard for river tree worldgen files |
-| `tooling/scratch-1115-follow-ups #20` | Testing | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
-| `tooling/scratch-1115-follow-ups #21` | Testing | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
 | `tooling/scratch-1115-follow-ups #22` | Testing | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
-| `tooling/scratch-1115-follow-ups #23` | Testing | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
-| `tooling/scratch-1115-follow-ups #24` | Testing | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 <!-- generated:status_index end open_work -->
 
 Source: [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) section 9 (findings routing) and the owner's
@@ -710,6 +710,35 @@ SQ-PS15B-13 to -22, CQ-PS15B-03. Not installed.
   at 8 (was 0.60x at 4 Twigs layers, 0.77x at 5 of the full block).
 - Not built: seeing out from inside a leaf pile (render without face culling, G4e). Devtools: `/cdevreload compat`
   existed (E2); 1115b #10 (in-place save not seen by Forge's watcher) is unchanged and still the owner's question.
+
+### G11. Owner rulings on the assumptions, 2026-11-17 (planned, not built)
+
+Answers to the assumptions of G7.4, G9, G10, raspberry_pie.md 12.5 and lane F2. Each item names its TODO row.
+
+- **Config reload (1115b `#10`, Common):** Creative Common runs its own watcher on `config/` (MODIFY and CREATE, so
+  rename saves are seen), debounced 1 s, and runs each Creative mod's reload path (the `CompatConfigReload` way: re-read,
+  correct, reset caches, post `ModConfigEvent.Reloading`) for our own config files only. Cause: plan_post_scratch_1115b.md E3.
+- **Melt pace (`#20`, Common):** `meltTickInterval` 100 (was 200), chance roll kept.
+- **Slow tier (`#20`, Common; replaces G7.15 and the G9 "salt only" build):** packed ice, blue ice and IW cryosol and
+  permafrost melt only from lava and magma, and from salt for packed ice and cryosol. Packed ice and cryosol melt within a
+  close range of lava or magma; blue ice and permafrost only in direct contact with lava, and step down one tier (blue ->
+  packed, permafrost -> cryosol). Salt keeps stepping packed ice and cryosol down; blue ice and permafrost are not saltable.
+- **Hot places (`#20`, Common):** in the Nether, packed ice and everything below it (ice, snow, cryosol and the IW
+  counterparts) take melt ticks rapidly and skip the other melt checks (no heat source needed); ice and snow in arid and
+  tropical biomes do the same. Blue ice and permafrost still melt only next to lava, Nether included.
+- **Magma (`#20`, Common):** built zone kept; modded magma-like blocks join the magma tag (list from the dump at build).
+- **Thorns (`#23`, Compat):** a prick needs speed: walking or sprinting speed in a full pile, sprinting speed in a
+  partial pile; chance 0.25 and the armor rule kept.
+- **Mobs and snow (`#23`, Compat):** light mobs stand on top, other mobs sink; mobs can climb out of snow layers, and
+  pathfinding plans over the top of snow layers unless the mob has already sunk in.
+- **Kept as built:** snow and leaf slowdown 0.40 / 0.60, snow jump and fall at powder snow's values, leaf jump and fall
+  until eval SQ-PS15B-16, the salt, campfire, layer and melting detail bundles of G9, G10 and the M2 notes.
+- **Cooked Nether Wart (`dishes/meals #59`, Creative Delight):** its bowl is carried into the dish: no crafting
+  remainder in Warped Moldy Meat and the heatless Strider Moss Stew craft.
+- **Licks (`#21`, Creative Delight):** any placement after world generation makes a lick (player, dispenser,
+  schematicannon, deployer); only world-generated Rock Salt Blocks are not licks.
+- **Diet Log (`#24`, solRaspberryPie):** item icons for one-time unlocks and permanent buffs; slot rungs keep the chosen
+  effect's sprite; the key's effect-slot entry scrolls through the effects.
 
 ## Not decided or not in this pass
 
