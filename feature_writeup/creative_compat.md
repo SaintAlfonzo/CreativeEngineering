@@ -115,6 +115,8 @@ and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors an
   tier tags `kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js` ship in the jar from the 2026-11-15 00:40
   build; `[leaf_piles]` and `LeafPileSlowMixin` removed (migration above). Built, not installed.
 
+- 2026-11-17: the flower tags' item side (removal of wild plants, Botania special flowers, the flower crown and the azalea piles from the flower tags, with the floating, planter box and flower box tags that keep them) moved from the pack folder's `animal_tags.js` into Compat's `kubejs/data/creativecompat/kubejs/tags/flower_tags.js`: one handler reads the members, adds them straight and removes them, so the order is inside Compat (plan_rules_fixes_followup.md F7; closes plan_rules_fixes.md owner item 3). Same tag content (SQ-RFX-30, -31). Built, not installed until the next Compat install.
+
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
 - 2026-09-09: if-chain, not a switch: an enum switch compiles to a synthetic ItemPhysicSplit$1 that loads lazily and was missing at runtime (NoClassDefFoundError, crashes 2026-09-09 and 2026-09-17) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/itemphysic/ItemPhysicSplit.java)
@@ -200,6 +202,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-16: Layer blocks that never act whole (leaf piles, bamboo leaves; owner 2026-11-16) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/PassThrough.java)
 - 2026-11-16: Leaf layers never act whole (owner, 2026-11-16): no solidBelowFull for them (kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js)
 - 2026-11-16: Layer height blocks (plan_post_scratch_1115b.md D, owner 2026-11-16): snow layers, leaf piles, bamboo leaves (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/PassTier.java)
+- 2026-11-17: Tempad was a Compat nested member until 2026-11-07, now its own jar (development/backportedTempad); the Vinery taiga grape bush entry of StuckInBlock was dropped (no entityInside in the port) (build.gradle, StuckInBlock)
 
 
 ## 6. License audit (2026-11-04, plan_cb_publish.md Step 2)

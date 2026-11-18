@@ -410,3 +410,42 @@ look the config comments read naturally (no "Creative Common Creative Common" or
 shell ! grep -nE "replaceTwoByTwo|removeSunnyFromAllEffects" config/moremooblooms-common.toml
 shell ! grep -nE "ERROR.*moremooblooms" logs/latest.log
 look `/datapack list` output: the three packs absent, `buzzier_bees/disable_moobloom_spawns` and `alexsmobs` present
+
+@@section 10
+@@title SQ-RFX Follow-up F5 and F7: the flower tags' item side in Creative Compat, the loot tags in Creative Loot, 2026-11-17 ([plan_rules_fixes_followup.md](../plan_rules_fixes_followup.md); [creative_compat.md](../creative_compat.md) 5; [breeding_audit.md](../breeding_audit.md))
+@@date 2026-11-17
+@@reviewed 2026-11-17
+@@jars creativecompat creativecommon creativeloot
+@@sources kubejs/data/creativecompat/kubejs/tags/flower_tags.js kubejs/server_scripts/tags/animal_tags.js kubejs/data/creativeloot/kubejs/tags/loottags.js
+@@text
+@@text The removal of wild plants, Botania special flowers, the flower crown and the azalea piles from the flower item tags moved into Creative Compat's `flower_tags.js` with the floating, planter box and flower box tags that keep them (same content, order now inside one file). The loot group tags are `#creativeloot:loot/*` (checked: no reader of `creativeworldgen:loot/` is left).
+@@table
+## SQ-RFX-30 | tags: floats, planter box, flower box, flower and loot tags equal the baseline after the move
+@group A
+@commands `/dumpall`; `python3 $INST/tools/dump_diff.py tags $INST/kubejs/exported/baseline_rules_p3a_2026-11-17 kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/` (or against the dump of the commit c65c5871 jars)
+@pass `TAGS_SAME` for `creativecompat:physics/floats`, `creativecompat:flower_box_plants`, `another_furniture:planter_box_placeables`, `minecraft:flowers`, `minecraft:small_flowers`, `minecraft:tall_flowers`, `creativeloot:loot/chalk` and `creativeloot:loot/golden_food`; any other tag line is explained in the run doc
+@fails a flower tag still holding a `wild_` item or a Botania special flower: Compat's `flower_tags.js` ran before a script that fills the flower tags (load order between script packs), or the jar is not installed; floats missing the wild plants: the same order problem, or `t.add` ran after the removal
+shell python3 "$INST/tools/dump_diff.py" tags "$INST/kubejs/exported/baseline_rules_p3a_2026-11-17" kubejs/exported --rename creativeworldgen:loot/=creativeloot:loot/ | grep -E "physics/floats|flower_box_plants|planter_box_placeables|minecraft:(small_|tall_)?flowers|loot/(chalk|golden_food)|TAGS_SAME" | tail -20
+look the grep output: no ONLY_ or changed line for the eight tags
+## SQ-RFX-31 | float tag members: the wild plants and Botania special flowers float, bees and hummingbirds lose them
+@group A
+@commands `/cdevtest tag item creativecompat:physics/floats`, `/cdevtest tag item minecraft:flowers`
+@pass the floats tag lists wild plants (for example `wild_onions` ids of the Delight crops), `botania` special flower ids (with Botania), `immersive_weathering:flower_crown` and the azalea leaf and flower piles; `minecraft:flowers` lists none of the `wild_` items, no Botania special flower, no flower crown
+@fails floats without the wild plants: `flower_tags.js` did not run or read the flower tag after the removal; flowers still holding wild plants: the removal did not run (script error in the log, search `flower_tags`)
+> cdevtest tag item creativecompat:physics/floats
+> cdevtest tag item minecraft:flowers
+waitlog verb=tag kind=item tag=creativecompat:physics/floats n= [1-9]\d*
+reject verb=tag kind=item tag=minecraft:flowers n=\d+ ids=.*:wild_
+shell ! grep -nE "(ERROR|Error).*flower_tags" logs/kubejs/server.log
+look the floats tag member list (wild plants, special flowers, crown, piles) and the flowers list without them
+## SQ-RFX-32 | loot tag probe: the chalk tag holds the chalks and the box, under creativeloot
+@group A
+@commands `/cdevtest tag item creativeloot:loot/chalk`, `/cdevtest tag item creativeloot:loot/golden_food`, `/cdevtest tag item creativeworldgen:loot/chalk`
+@pass the chalk tag lists every chalk stick and the chalk box, the golden food tag lists the golden apple, golden carrot and Golden Food's plain golden foods; the `creativeworldgen:loot/chalk` probe shows an empty or missing tag
+@fails `creativeloot:loot/chalk` empty: `tags/loottags.js` did not load (Creative Loot not installed); the worldgen id filled: a script still names it
+> cdevtest tag item creativeloot:loot/chalk
+> cdevtest tag item creativeloot:loot/golden_food
+> cdevtest tag item creativeworldgen:loot/chalk
+waitlog verb=tag kind=item tag=creativeloot:loot/chalk n= [1-9]\d*
+reject verb=tag kind=item tag=creativeworldgen:loot/chalk n= [1-9]\d*
+look the two creativeloot lists are full and the worldgen id has no members

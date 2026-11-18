@@ -442,6 +442,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-02: Exactly one (TODO dishes/ocean #9, 2026-11-02): every other drop goes, whatever added it, so looting, a knife or another mod's modifier can't add a second squid or anything else; the rule no longer waits on Rustic Delight (kubejs/data/creativedelight/kubejs/miners_delight/loot.js)
 - 2026-11-02: Upstream ids the port does not register: the hot cocoa cup (D3) and, since TODO dishes/meals #53 (2026-11-02), the Copper Cup and every cup (water, milk, powder snow, the 15 soup and stew cups) (development/creativeDelight/members/miners/src/main/java/com/sammy/minersdelight/upstream/MinersTranslator.java)
 - 2026-11-02: The items of Miner's Delight 1.4.5, in its creative tab order, without the Copper Cup and every cup (TODO dishes/meals #53, 2026-11-02; 1.1.2's hot cocoa cup was never ported, D3) (development/creativeDelight/members/miners/src/main/java/com/sammy/minersdelight/registry/MDItems.java)
+- 2026-11-17: V-14 (package `com.sammy.minersdelight` kept) closed as not applicable by the owner: the member is an upstream-license (ARR, donor-jar) member like golden, roll, largemeals and oceanic, with no NOTICE file and the same lint scope; Create Central Kitchen targets its class names (D1) (plan_rules_fixes_followup.md F1).
 
 
 ## 10. Original survey (2026-10-23, before the port plan)
