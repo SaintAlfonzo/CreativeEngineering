@@ -22,6 +22,7 @@ bootreject (?i)(FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound).
 bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 
 ## SQ-GFB-02
+@phase long
 @group A
 @commands Done + 2 min: `tools/perf/eval/entity_census.py` on the world as in perf.md 12
 @pass `minecraft:falling_block` near 0 (193 in the overall run); gravel item count lower than 21
@@ -63,6 +64,7 @@ expect verb=state pos=303,-60,303 state=minecraft:sand
 reject verb=\S+ .*done=0
 look the sand held over air without an update (flags 18), fell on the neighbour placement and landed at -60; generated floating sand in a real cave is the same check on a /cdevtest floating hit
 ## SQ-GFB-04
+@phase long
 @group A
 @commands Set `[worldgen.systems] holdGeneratedFallingBlocks = false`, new world, repeat SQ-GFB-02
 @pass Falling blocks back near vanilla counts (about 190)
@@ -83,6 +85,7 @@ shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 $INS
 reject verb=\S+ .*done=0
 look shell: falling blocks back near vanilla counts (about 190); set the switch back to true afterwards
 ## SQ-HRU-01
+@phase long
 @group A
 @commands After a pregen (`chunky radius 200`), `grep "Holder with no registry key" logs/latest.log`
 @pass Up to 20 lines naming the unkeyed value classes; record them in perf.md 13.3

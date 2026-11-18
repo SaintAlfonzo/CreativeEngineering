@@ -858,6 +858,7 @@ shell grep -hE "\[loot-drops\]" logs/kubejs/server.log | head -10
 look one "[loot-drops] 17 drop pools ..." line per load (count 1 above); no [loot-drops] warning line
 
 ## SQ-MDL-02 | Miner's drops by knife and by hand: bat, spider, cave spider, silverfish (300 rolls each)
+@phase long
 @group A
 @commands summon a bat, a spider, a cave spider, a silverfish (`NoAI:1b`); 300 x `/loot spawn ~ ~ ~ kill <each>` with a knife, then 300 x with an empty hand
 @pass knife: bat 2 `bat_wing` every time; spider 1-3 `arthropod` every time, `spider_leg` in about 40 % of rolls (0-4, so about 32 % of rolls show a stack), `cobweb` about 20 %; cave spider 1-3 `arthropod`, `cobweb` about 20 %, no spider leg; silverfish 1 `arthropod` every time, `silverfish_eggs` about 50 %. Empty hand: bat 1 `bat_wing` about 50 %; silverfish `silverfish_eggs` about 5 %; spiders nothing from Miner's (string / spider eye only)
@@ -915,6 +916,7 @@ look cdevtest items lines (summed by id) in order: knife bat / spider / cave spi
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|no such bot|no such item)
 
 ## SQ-MDL-03 | the same targets burning: cooked drops only; one real Fire knife kill
+@phase long
 @group A
 @commands as -02 with every target summoned burning (`{Fire:2000s}`), knife and empty hand
 @pass knife: bat 2 `smoked_bat_wing`, no raw wing; spider and cave spider 1-3 `cooked_arthropod`, no raw `arthropod`, no `cobweb`; `baked_spider_leg` (1) about 40 % from both; silverfish 1 `cooked_arthropod`. Empty hand: bat 1 `smoked_bat_wing` about 50 %. Then one real kill: a burning spider hit with a Fire Aspect knife by a fake player drops cooked items (MND-30)
@@ -965,6 +967,7 @@ look knife: bat smoked_bat_wing x600; spider and cave spider cooked_arthropod 30
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## SQ-MDL-04 | infested blocks: silverfish eggs by pickaxe, none by shovel, block + eggs by silk touch
+@phase long
 @group A
 @commands `/setblock` each of the 6 infested blocks (stone, stone bricks, cracked, mossy, chiseled, deepslate) and break with `/loot spawn ~ ~ ~ mine x y z minecraft:iron_pickaxe`, 200 x per block; then 100 x with `minecraft:iron_shovel` and 100 x with a silk touch pickaxe
 @pass pickaxe: `silverfish_eggs` 1-3 in about 75 % of rolls; shovel: none; silk touch pickaxe: the stone block and eggs about 75 %
@@ -1010,6 +1013,7 @@ look pickaxe boxes (6): silverfish_eggs total about 0.75 x 200 x 2 avg = 300 eac
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Invalid (block state|tag))
 
 ## SQ-MDL-05 | fishing: Miner's squid about 5 %, glow squid about 0.5 %; mineshaft carrots
+@phase long
 @group A
 @commands 4000 x `/loot spawn ~ ~ ~ fish minecraft:gameplay/fishing x y z minecraft:fishing_rod` over open water (3x3x3 water)
 @pass `miners_delight:squid` about 5 % (170 to 230), `miners_delight:glow_squid` about 0.5 % (10 to 35); the rest fish / junk / treasure as before; 1000 x on `minecraft:abandoned_mineshaft` via `/loot spawn ~ ~ ~ loot minecraft:chests/abandoned_mineshaft`: `copper_carrot` and `cave_carrot` in a few rolls per 100 (MND-33, was SQ-MDP-09)

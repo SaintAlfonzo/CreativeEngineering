@@ -4,6 +4,7 @@
 
 @@section 1
 @@title Sky Village addon houses (skyvillages #1), 2026-10-30
+@@phase worldgen
 @@date 2026-10-30
 @@text
 @@text Data only ([sky_village_addons.md](../sky_village_addons.md)): `kubejs/data/skyvillages` templates and pools, nothing to

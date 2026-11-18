@@ -24,7 +24,9 @@ without a recorded stamp, its last jar_archive/installed.csv row (else its file 
         default: T1 rows of every changed own jar plus the T2 rows whose jars or sources changed (jar-changed, stale);
         rewritten rows are left out; --jars: treat these jars as changed (a planned rebuild); --never / --failed /
         --rewritten add those rows; --all: every runnable row, rewritten ones included (only when the owner asks).
-        Prints one qrun command per rows file and section, the drafts that need steps first, the stale rows that need
+        Prints one qrun command per rows file, section and phase in run order (qrows.PHASES, scratch-test skill step 6:
+        priority, server, longwait, worldgen, client, long; longwait = a long row cited in the queue column of a
+        Testing TODO row), the drafts that need steps first, the stale rows that need
         rewriting first, a count of the rewritten rows left out, and a time estimate.
     qrun.py plan --release        T3: T3 rows, T1 of every own jar, the owner playtest list (see playtest)
     qrun.py playtest [--out FILE] the owner playtest checklist: @owner rows and client rows nobody automates
@@ -195,6 +197,29 @@ def estimate(selected):
 	return lo, hi
 
 
+TODO_ROWS = ROOT / 'feature_writeup/todo/rows'
+
+
+def waited_ids():
+	"""Queue row ids cited in the queue column of a TODO row in Testing (a built change waiting on its test)."""
+	import csv
+	import re
+	out = set()
+	for f in sorted(TODO_ROWS.glob('*.csv')):
+		if f.name == 'archive.csv':
+			continue
+		with open(f, newline='', encoding='utf-8') as fh:
+			for r in csv.DictReader(fh):
+				if r.get('status') == 'Testing':
+					out.update(re.findall(r'\b[SC]Q-[A-Za-z0-9]+-[A-Za-z0-9]+\b', r.get('queue') or ''))
+	return out
+
+
+def phase_of(x, waited):
+	ph = x['meta'].get('phase') or 'server'
+	return 'longwait' if ph == 'long' and x['row']['id'] in waited else ph
+
+
 def plan(argv):
 	opt = lambda k: argv[argv.index(k) + 1] if k in argv else None  # noqa: E731
 	forced = (opt('--jars') or '').split(',') if '--jars' in argv else []
@@ -248,9 +273,14 @@ def plan(argv):
 			sel.append(x)
 		else:
 			sel.append(x)
+	waited = waited_ids()
+	order = {ph: i for i, ph in enumerate(qrows.PHASES)}
+	for x in sel + drafts:
+		x['phase'] = phase_of(x, waited)
+	sel.sort(key=lambda x: order.get(x['phase'], len(order)))   # stable: file and section order inside a phase
 	if '--json' in argv:
 		print(json.dumps([{'id': x['row']['id'], 'file': os.path.relpath(x['file'], ROOT), 'section': x['sec']['key'],
-						   'state': x['state'], 'why': x['why'], 'tier': x['meta']['tier'],
+						   'state': x['state'], 'why': x['why'], 'tier': x['meta']['tier'], 'phase': x['phase'],
 						   'client': x['meta'].get('client') == 'true'} for x in sel + drafts], indent=1))
 		return 0
 	print('changed jars: %s' % (', '.join(sorted(changed)) or 'none'))
@@ -260,9 +290,15 @@ def plan(argv):
 		lo // 60, hi // 60, len(drafts), len(owner)))
 	groups = collections.OrderedDict()
 	for x in sel:
-		k = (x['file'], x['sec']['key'], x['meta'].get('client') == 'true')
+		k = (x['phase'], x['file'], x['sec']['key'], x['meta'].get('client') == 'true')
 		groups.setdefault(k, []).append(x)
-	for (p, key, client), xs in groups.items():
+	last = None
+	for (ph, p, key, client), xs in groups.items():
+		if ph != last:
+			n = sum(len(v) for k, v in groups.items() if k[0] == ph)
+			lo_, hi_ = estimate(sum((v for k, v in groups.items() if k[0] == ph), []))
+			print('phase %s: %d rows, about %d to %d min' % (ph, n, lo_ // 60, hi_ // 60))
+			last = ph
 		rel = os.path.relpath(p, ROOT)
 		ids = ','.join(x['row']['id'] for x in xs)
 		grp = sorted({x['meta'].get('group', '').split(',')[0].strip() for x in xs})

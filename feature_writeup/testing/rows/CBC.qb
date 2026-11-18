@@ -80,6 +80,7 @@ bootreject Backport
 bootreject Done \(
 shell grep -nE "missing: |get it from|Vinery \(Creative Brewing\)" logs/latest.log | head -5 | cut -c1-300
 ## SQ-CBC-06
+@phase worldgen
 @group B (instance + Creative Worldgen)
 @commands new OUT with Creative Worldgen and its world generation mods but `DROP="GeophilicReforged-*.jar"`; boot
 @pass `bootexpect Missing or unsupported mandatory dependencies`; `geophilic_reforged` listed for `creativeworldgen`

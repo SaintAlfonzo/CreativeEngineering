@@ -437,6 +437,7 @@ count verb=bytype serializer=immersiveengineering:\S+ n=[1-9] == 4
 reject \[cdevtest\] verb=\S+ .*error=
 
 ## SQ-SPF-70 | Worldgen: packs enabled, structures locate, ground under them
+@phase worldgen
 @group B
 @commands Worldgen: boot 2 (fresh world, 18:5x builds); `> datapack list`; `/locate structure` each `creativeengineering:` structure in `structures_by_biome.md` (Async Locator on), `/cdevtest under` on one found (ruin_scatter, the bot keeps its chunks loaded)
 @pass every pack enabled; each structure found within the baseline radius (SQ-WGE census); under the built bottom no air gap over 6 and no water deeper than 2 (`efb_judge.py under --fail over6 --fail deepwater`, the earth fill limits)
@@ -483,6 +484,7 @@ sleep 8
 look entity ids include moremooblooms: and baby mob types; a calf (Age negative) from the bred pair
 
 ## SQ-SPF-72 | Worldgen: leaf decay, Forgiving Void, biome-tagged loot
+@phase worldgen
 @group B
 @commands Worldgen, blocks and survival: break the trunk of a fresh oak, 400 ticks, count leaves; drop the bot into the void in the End or below y -64 (`/tp bot ~ -100 ~`); `/zq` loot roll of a chest with a `BiomeTagCondition` pool in a desert vs a plains chest
 @pass leaves decay within the `[leaf_decay]` range, leaf piles drop; Forgiving Void returns the bot to the surface; biome-tagged loot only in the matching biome

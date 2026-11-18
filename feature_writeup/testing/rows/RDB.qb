@@ -42,6 +42,7 @@ look every [rdb] line SAME (recipes 270); a DIFF names the entry: check its bake
 @fails Compare with the last run record
 @draft a rerun list, not a row: run `qrun.py run OUT feature_writeup/testing/rows/RD.qb RES --rows SQ-RD-08,SQ-RD-10,SQ-RD-11,SQ-RD-22,SQ-RD-24,SQ-RD-26` and the SQ-RDX rows; this row holds no steps of its own
 ## SQ-RDB-04
+@phase worldgen
 @group B
 @commands New world; `/place feature rusticdelight:wild_bell_peppers_placed`, `wild_cotton_placed`, `wild_coffee_placed`, `bell_pepper_block_patch_placed` on grass; a jungle temple and village chest roll (loot tables `/loot spawn`) and a Wandering Trader
 @pass Patches place (peppers base colors only); chest seeds and trader seeds as in SQ-RD-24, -26

@@ -4,6 +4,7 @@
 
 @@section 1
 @@title Priority run: everything since the 1.1.05 snapshot (updated 2026-10-31, run this BEFORE the rest of the queue)
+@@phase priority
 @@date 2026-10-31
 @@text
 @@text > **PINNED (owner, 2026-11-01):** client rows from the creative split (waves 2 to 7) are not run until wave 8+; they run as one bulk client session. Server rows still run per carve.

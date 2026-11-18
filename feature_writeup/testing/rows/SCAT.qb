@@ -4,6 +4,7 @@
 
 @@section 1
 @@title SQ-SCAT Structure Catalog world type, 2026-11-09 ([plan_structure_catalogue.md](../plan_structure_catalogue.md) 7, TODO `tooling/generators-and-tests #13`)
+@@phase worldgen
 @@date 2026-11-09
 @@jars creativedevtools
 @@sources feature_writeup/plan_structure_catalogue.md
@@ -37,6 +38,7 @@ shell grep -E "^(level-type|level-name)" server.properties
 look gamerules false; build started; spawn checked from level.dat after the stop (0 65 0)
 
 ## SQ-SCAT-08 | build finishes; record time, refusals, heap
+@phase long
 @group Catalog preset, fresh level
 @commands Same boot as SQ-SCAT-06; watch `/cdevplace catalogue status`; on finish read the report
 @pass Build ends with `Structure Catalogue built`; no `Watchdog` or `OutOfMemoryError` in the log; no `[catalogue] build aborted`. RECORD: seconds, refused count, refused ids and reasons, peak heap. Refusals are not a FAIL unless the build stops; every meta structure outcome is recorded

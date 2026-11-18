@@ -80,6 +80,7 @@ shell grep -A30 "\[item_dict\] Missing\|\[block_dict\] Missing\|\[fluid_dict\] M
 look one [block_dict] and one [fluid_dict] 'tag entries not checked' info line, nothing else
 
 ## SQ-SPFX-07 | sky island generates
+@phase worldgen
 @group B (fresh world)
 @commands `> locate structure creativeworldgen:sky_island` (Async Locator: waitlog); tp a creative bot there; `/zq under` is not meaningful (floating): `> execute at qa run zq count ~-40 100 ~-40 ~40 250 ~40 minecraft:grass_block` with literal coordinates from the locate; `shell grep -n "sky_island" kubejs/generation_scripts/worldgen/structure_tag_report.md` after the world load writes it
 @pass locate finds one within about 2000 blocks (group `sky`, 0.22 of its slots); grass blocks at 135-165 above the ground at that spot; the report lists the island in `group/sky`

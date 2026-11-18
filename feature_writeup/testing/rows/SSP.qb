@@ -101,6 +101,7 @@ reject nock_enough_arrows:(stockpile|recovery|cycle)
 look cashiers still offer enchanted books; the cashier trader type may not use villager offers: record what data shows
 
 ## SQ-META31-04b | meteorite desert pyramid never placed short
+@phase worldgen
 @group C
 @commands `[worldgen.meta_structures] log` on, new world, `/locate structure creativeengineering:meta/meteorite_desert_pyramid` a few times, grep `meteorite_desert_pyramid` in latest.log
 @pass every placed line `1/1 minecraft:desert_pyramid` plus a meteorite; short ones `not placed, core part ...` or `no satellite fitted`; none placed with `0/1 desert_pyramid`
@@ -117,6 +118,7 @@ bootreject meteorite_desert_pyramid.*0/1.*desert_pyramid
 look every placed line 1/1 minecraft:desert_pyramid plus a meteorite; short ones "not placed, core part" or "no satellite fitted"
 
 ## SQ-WG30-C02b | census false negatives carry a diagnosis (long: Chunky r 400 + census r 96)
+@phase long
 @group C
 @commands new world, Chunky square, `/cwglocate census 96 <x> <z>`; read `falseNegativeAt` in `kubejs/exported/worldgen/locate_census.json`
 @pass every biome false negative has a diagnosis string (regenerated point, its biome, nearest-distance entries, start-piece center); record which case it shows
@@ -135,6 +137,7 @@ shell python3 -c "import json,sys; d=json.load(open('kubejs/exported/worldgen/lo
 look every biome false negative has a diagnosis string (regenerated point, biome, nearest-distance entries, start-piece centre); copy the census json into RES
 
 ## SQ-TER-01b | ancient crypt sunk without warning; places on its own projection
+@phase worldgen
 @group A
 @commands boot, grep `latest.log` for the terrain adaptation load line; `/locate structure philipsruins:ancient_crypt` in new chunks
 @pass load line counts 7 sunk starts with no `ancient_crypt ... ignored` warning; the crypt places on its own terrain-matching projection

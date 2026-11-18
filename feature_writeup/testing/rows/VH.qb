@@ -4,6 +4,7 @@
 
 @@section 1
 @@title SQ-VH Visceral Heap, 2026-11-09 ([visceral_heap.md](../visceral_heap.md) section 5, TODO `worldgen/biomes #10`)
+@@phase worldgen
 @@date 2026-11-09
 @@jars creativeworldgen
 @@sources feature_writeup/visceral_heap.md

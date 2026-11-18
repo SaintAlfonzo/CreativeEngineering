@@ -31,6 +31,7 @@ bootreject [Dd]uplicate (plugin|uid)|^(?!.*BaseClassRegistrationImpl).*already r
 look plugin_toggle.json5 half (client config) is CQ-IDS-01's
 
 ## SQ-IDS-02 | new commands answer, old names unknown
+@phase worldgen
 @group B (same boot)
 @commands `/ccswap items`, `/ccaltime`, `/cwglocate batch minecraft:village_plains`, `/cwgspawnbox`, `/cdevgen status`, `/cdevgen run food_dict`, `/cdevplace preview structures minecraft:*`, `/cdevperf`, `/cdevdumpnames`; then each old name (`/ceswap`, `/cetime`, `/celocate`, `/cespawnbox`, `/cegen`, `/ceplace`, `/ceperf`, `/cedumpnames`); perf suite smoke (`tools/perf/suite/perf_suite.py`, 1 bot, 1 minute)
 @pass each new command answers (usage or result, no "Unknown command"); each old name is unknown; `/cdevgen run` writes `logs/cdevgen/food_dict.log`; the bot logs in (`pbot status`) and `perf/bot` gains a tick log

@@ -45,7 +45,10 @@ date", "collect queued tests".
    `feature_writeup/testing/rows/<CODE>.qb` (a new file for a new code; key = the file's highest + 1). Fields:
    `@@title <SQ-CODE> <Feature>, <date> ([writeup](../x.md) section N, TODO `family #n`)`, `@@date`, `@@jars` (own
    mod ids the rows test: they drive `qrun.py plan`), `@@sources` (the writeup and source paths the rows were written
-   from: they drive the stale lint), `@@tier` (T2 default; T1 = a jar's smoke rows, T3 = release gate), one `@@text`
+   from: they drive the stale lint), `@@tier` (T2 default; T1 = a jar's smoke rows, T3 = release gate), `@@phase`
+   (run order, step 6: `worldgen` for a section that tests world generation; a single row overrides with `@phase
+   worldgen` when it uses `locate` / `cdevplace` / `place` or needs a fresh world, `@phase long` for pregen, perf suite,
+   resource pack bench or a row over 30 min; client rows need no tag), one `@@text`
    intro line naming the jar or config state it targets, then `@@table` (or `@@table world` when the second column
    names the world a row needs) and the rows. Format: `qrows.py` docstring.
    Then `python3 tools/status_index.py` renders the section into scratch_queue.md (never edit inside the queue's
@@ -95,8 +98,12 @@ everything below is the default unless the prompt says otherwise.
    (one feature or one carve) may skip the perf session; say so in its run notes.
 5. **Dumps and generators first** when any row or TODO needs them: `/dumpall` early, copy back only the server-safe
    dumps (queue setup notes), run the generators the user named.
-6. **Order**: queue "Priority run" first, then server rows cheapest first, then worldgen (fresh world per group),
-   then client rows, then long operations (pregen, perf suite, resource pack bench). Pinned owner notes at the top of
+6. **Order** (owner, 2026-11-18): queue "Priority run" first, then server rows cheapest first, then any long
+   operation (pregen, perf suite, resource pack bench) that a pending change is waiting on (a TODO row in Testing or a
+   queued row that needs its result), then worldgen rows (fresh world per group), then client rows, then the remaining
+   long operations. `qrun.py plan` and `drive` print and run in this order from each row's phase (`@@phase` /
+   `@phase` in the .qb; a `long` row becomes `longwait` when a Testing TODO row's queue column cites it).
+   Pinned owner notes at the top of
    the queue override this (for example "client rows wait for wave 8").
 7. **Cheap extras**: a queued row that fits the world and jars already up may run alongside; log it.
 8. **Skip waits**: `/cdevtest tickwarp N` (full ticks back to back), `/cdevtest randomtick BOX N` (no player needed),

@@ -231,6 +231,7 @@ reject \[cdevtest\] .*done=0
 @jars creativecommon creativedelight
 @superseded SQ-MIN-03 in MIN.qb (its steps carry this ERR grep)
 ## SQ-CDW-01 (rerun 5.2)
+@phase worldgen
 @group B (new world)
 @commands As SQ-CDW-01 above, adding fruitsdelight and corn_delight to the one-mod-removed boots; grep ERR as well as its own lines
 @pass its pass text; no ERR line naming the removed mod (no `vintagedelight:blocks/fd_*_jam_jar` loot error without fruitsdelight)

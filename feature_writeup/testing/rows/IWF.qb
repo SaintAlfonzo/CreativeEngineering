@@ -48,6 +48,7 @@ look grass/tall grass above 0 on the floor and leaf piles above 0 (about 10 expe
 reject verb=\S+ .*done=0
 
 ## SQ-IWF-03 | snowy stone or icicles in a snowy biome in thunder
+@phase worldgen
 @group B
 @commands Snowy biome (`/locate biome minecraft:snowy_plains`): `/weather thunder`, `/gamerule randomTickSpeed 300` 60 s; look for snowy stone and icicles near exposed stone; then `/weather clear`
 @pass Snow-covered stone or icicles appear (universal snow growths through the sky tick)

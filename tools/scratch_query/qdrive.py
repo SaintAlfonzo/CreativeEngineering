@@ -117,7 +117,7 @@ def game_jvms():
 
 
 def build_steps(plan_rows):
-	"""plan --json rows -> steps, one per (file, section, group letter); client rows skipped."""
+	"""plan --json rows -> steps, one per (phase, file, section, group letter), in plan order; client rows skipped."""
 	sys.path.insert(0, str(HERE))
 	import qrows
 	meta = {}
@@ -135,8 +135,9 @@ def build_steps(plan_rows):
 		m = meta.get((x['file'], x['id']), {})
 		g = (m.get('group') or 'A').strip()[:1].upper()
 		g = 'B' if g == 'B' else 'A'
-		key = '%s#%s#%s' % (x['file'], x['section'], g)
-		steps.setdefault(key, {'key': key, 'file': x['file'], 'section': x['section'], 'group': g, 'rows': [],
+		ph = x.get('phase', 'server')
+		key = '%s#%s#%s#%s' % (ph, x['file'], x['section'], g)   # plan --json is in run-phase order (qrows.PHASES)
+		steps.setdefault(key, {'key': key, 'file': x['file'], 'section': x['section'], 'group': g, 'phase': ph, 'rows': [],
 							   'status': 'pending', 'est': 0})['rows'].append(x['id'])
 	out = list(steps.values())
 	import qlint

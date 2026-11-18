@@ -4,6 +4,7 @@
 
 @@section 1
 @@title Terrain batch 4, beard footprint, geode floor (structures/terrain #1, #2, #6), 2026-10-30
+@@phase worldgen
 @@date 2026-10-30
 @@jars creativeworldgen
 @@text
@@ -70,6 +71,7 @@ reject (?i)failed to place
 look no grass slab around the walls; the large-ruins cluster looks the same (ST-302)
 
 ## SQ-TER-05 | beard footprint calibration (W1c, beardFootprint = true)
+@phase long
 @group B
 @commands toml `[worldgen.earth_fill] log = "ALL"`, `beardFootprint = true`; Chunky r 300 in hills with outposts and villages; `grep 'under built floors' latest.log`
 @pass lines show `(N under built floors)`; cancels rise for outposts on cliff edges; tabulate cancels per family against `tools/earth_fill_sim.sh 4242 60 footprint` (outposts 23%, villages 2 to 18% newly over) and look at 3 canceled and 3 kept starts (ST-304). Calibration only: turn the switch back off unless the user decides
@@ -86,6 +88,7 @@ expect under built floors
 look tabulate cancels per family (python over RES/rows/SQ-TER-05.log) against tools/earth_fill_sim.sh 4242 60 footprint (outposts 23%, villages 2 to 18% newly over); look at 3 cancelled and 3 kept starts (ST-304). Calibration only: switch back off after
 
 ## SQ-TER-06 | ocean geodes covered in the floor block (floorPatch SWAP)
+@phase long
 @group B
 @commands Chunky r 300 over deep ocean; `/locate feature` is not available, so fly the floor (spectator) over 5 geode spots (`/locate biome minecraft:deep_ocean`, look for calcite / basalt)
 @pass `SWAP` (default): no basalt or calcite showing; geodes that reach the floor are mounds of the floor's own sand / gravel, amethyst only in the opening; then set `floorPatch = "CUT"`, restart, a fresh square: geodes cut flush, rim in the floor block; prismarine geodes (Geode Plus) untouched in both (ST-305)

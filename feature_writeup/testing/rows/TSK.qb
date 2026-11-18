@@ -46,6 +46,7 @@ expect minecraft:sugar
 look the hopper below pulled the sugar; restart and break halves in p1b
 
 ## SQ-SVA-05 | brewery sky houses carry hanging herbs
+@phase worldgen
 @group A
 @commands `/place template skyvillages:letsdo_brewery/sky_village_letsdo_brewery_0` and `_1`
 @pass `fantasyfurniture:decorations/hanging_herbs` at 4 and 2 spots (SVA-08)

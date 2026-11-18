@@ -77,6 +77,7 @@ reject Unknown command
 look day +1 in both cetime lines, /season agrees
 
 ## SQ-CAL-06 | season and crop season tags
+@phase worldgen
 @group A
 @commands `/locate biome #creativeengineering:seasons/arid`; place wheat at x y z, `/execute if block x y z #creativecalendar:crop_seasons/temperate run say temperate`; `/execute if block <glass> #sereneseasons:greenhouse_glass run say glass`
 @pass a desert or badlands found; both `say` lines print (tags filled by the moved `sereneseasons/seasontags.js` and `cropseasontags.js`)

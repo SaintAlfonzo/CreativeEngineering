@@ -104,6 +104,7 @@ look rows/SQ-FGD-01.log, part brewing: all PASS
 look rows/SQ-FGD-01.log, part blocks: all PASS
 
 ## SQ-FGD-07
+@phase long
 @group A
 @commands `/gamerule mobGriefing true`; 40 adult pigs in a pen floored with podzol and truffle dirt (shipped chance 1 in 4000 ticks per pig); wait 10 min; then `false` and repeat on fresh blocks
 @pass true: some podzol becomes coarse dirt, items on the ground, no `Parameters not allowed` / loot error in the log; false: no block changes (FGD-09, FGD-33). If too slow, record and leave for the client round
@@ -204,6 +205,7 @@ expect \[ztrades\] wandering L0 .*-> \d+ fungidelight:inky_goo_veil
 look farmer L3 also buys the brown and red mushroom colonies (4 colonies in all) for 1 emerald
 
 ## SQ-FGD-12 | surface Fungi mushrooms by biome (offline)
+@phase worldgen
 @group B (new world)
 @commands Chunky radius 600 around a dark forest, a swamp, mushroom fields, a taiga and a birch forest; count offline
 @pass inky cap only in dark forest and mushroom fields (plus underground); morel also in all 4 swamps; none at the surface in taiga or birch; dark-forest Fungi singles clearly rarer than brown / red; mushroom fields near upstream (huge inky about 1 in 3 chunks, huge morel 1 in 4); colonies of inky / morel on dirt or podzol (FGD-03, FGD-28 surface)
@@ -504,6 +506,7 @@ look VTD-27 from the effects lines: the 6 brews' effects are vanilla ids, no sal
 @fails `wild_crops.json`, `crops_by_biome.md`, `gen_soil_compat.py`; Vinery grape bush `tries` changed 36 -> 33 (also check the four grape feature JSONs load: no `Failed to load configured feature` line)
 @draft no batch holds this row yet
 ## SQ-VP-15 | wild ghost peppers in crimson and warped forests on nylium, nowhere else in the Nether
+@phase worldgen
 @group B-nether (new world, worldgen registry change)
 @commands `forceload add` over a crimson and a warped forest; count blocks
 @pass VTD-07: wild ghost peppers generate in crimson and warped forests on nylium and nowhere else in the Nether (`nether_worldgen_rules.json` `literal` modifier); `no feature order cycle` crash is the known risk of adding a placed feature
@@ -540,6 +543,7 @@ reject verb=count done=0
 look line 1 (crimson) and 2 (warped): count > 0, standing on crimson_nylium / warped_nylium only; lines 3 (wastes) and 4 (soul sand valley): 0. A box edge may cross into another biome: a few peppers in line 3 / 4 next to a forest are judged by their "on" list
 
 ## SQ-VP-16 | Veggies depot houses: pool weights live, chests Lootr
+@phase worldgen
 @group B
 @commands `/locate` or `/cdevplace` a village, plain / desert / savanna / snowy / taiga
 @pass VD-30: Veggies depot houses appear in the 5 vanilla village styles at weight 4 x `mod/veggiesdelight` multiplier 0.5, in `pool_config.json` after the first world load; their chests are Lootr chests
@@ -574,6 +578,7 @@ look rdetail: the crafting recipe (3 netherrack, 2 scales, ash, magma cream, net
 @@text
 @@table
 ## SQ-MD-01 | wild cave carrots: below Y 48, banded, never near the surface
+@phase long
 @group B (new world)
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) boot; Chunky pregen radius 400; count `miners_delight:wild_cave_carrots` offline by Y (region files, one histogram per 8 layers) and by biome
 @pass `[mushroom-spawns] ... 3 mod modifiers off` (FD brown, red, `miners_delight:cave_carrots`) in the log; no error naming `cave_carrots`; **zero blocks above Y 48**; counts per Y layer: core (-24..24) about twice the layers 25..44 and -64..-25, all clearly non-zero; none within 13 blocks of the surface; found in noise and carver caves alike
@@ -1061,6 +1066,7 @@ bootexpect Done \(
 bootreject (?i)OceanicDelightFishingNetMixin.*(error|fail|exception)
 bootreject (?i)(Couldn't parse|Failed to (load|parse)|Invalid|Unknown).*(biome_tag|fishing_net)
 ## SQ-FN-02
+@phase worldgen
 @group A (needs the biomes: B or `/execute in` a worldgen world)
 @commands tp to a warm ocean, a lukewarm ocean, a plain ocean, a frozen/cold ocean and a river; 500 x `/loot spawn ~ ~ ~ loot oceanic_delight:gameplay/fishing_net_on_kelp` in each, then 500 x `..._on_sea_grass`
 @pass Kelp table: shrimp about 14 % in warm oceans (4 of 28), shrimp in the plain ocean, none in the cold ocean or river; caviar (`salmon_eggs`) only in rivers, about 13 % (3 of 24); coral or coral fan only in warm and lukewarm oceans; nautilus shell about 2 % and heart of the sea about 0.2 % in every ocean, never in the river. Sea grass table: caviar about 27-30 % in rivers, shrimp only in non-cold oceans; scute rare. Changelog numbers (shrimp 14 %, caviar 30 % / 13 %) must match
@@ -1068,6 +1074,7 @@ bootreject (?i)(Couldn't parse|Failed to (load|parse)|Invalid|Unknown).*(biome_t
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## SQ-FN-03 | fishing net junk about 5 % in both tables, river and ocean
+@phase long
 @group A
 @commands 400 x `/loot spawn ~ ~ ~ loot oceanic_delight:gameplay/fishing_net_on_sea_grass` and the same on kelp, in a river and an ocean
 @pass Junk about 5 % of rolls (about 20 of 400) in both tables and both biomes, every junk item one of Leather Boots, Leather, Bone, Bowl, Tripwire Hook, Rotten Flesh, String, Stick, Driftwood Log; no lily pad / water bottle / rod / ink sac
@@ -1297,6 +1304,7 @@ look skbot gets no kit on either rejoin (tag kept in its playerdata); the new bo
 @@text
 @@table
 ## SQ-NM-01 | naturally spawned cows, sheep, pigs get names (chance 1.0)
+@phase worldgen
 @group B
 @commands `forceload add` a 64 x 64 area of fresh plains/meadow chunks far from spawn, wait 30 s, `/execute as @e[type=minecraft:cow] run data get entity @s CustomName`, same for `minecraft:sheep`, `minecraft:pig`, `minecraft:rabbit`
 @pass every cow, sheep and pig has a CustomName and `ForgeData."creativeengineering:named_mob"` = 2b; rabbits none; no `[named_mobs]` warning, no `Accessing LegacyRandomSource from multiple threads` in the log
@@ -1609,6 +1617,7 @@ reject (?i)\[ztrades\].*bedroll
 expect \[ztrades\] leatherworker L1
 
 ## SQ-LE-06 | desert temples group live at 32 / 20; temple starts at least 21 chunks apart; priority over the desert mimic
+@phase worldgen
 @group B (new normal world)
 @commands boot; `structure_tag_report.md`; `forceload` / census a desert square (the SQ-ST census probe)
 @pass ST-225: `desert_temples` 32 / 20 with the pyramid replacement, no config error; ST-226: no two desert temple / pyramid starts closer than 21 chunks; ST-227: `[placement-priority] dropped towns_and_towers:mimic_desert ... overlaps betterdeserttemples:desert_temple` if any overlap, never the reverse
@@ -3461,6 +3470,7 @@ look 1-2 Calamari per kill (10 kills): about 10 to 20 in the merged zcount stack
 @fails Other colours: `RusticTranslator.basePatch`; wrong biomes: the `giant_bell_pepper` row (`requires: creativedelight`)
 @draft no batch holds this row yet
 ## SQ-RD-10 | savanna village farms carry Rustic crops (log line and a census of one village)
+@phase long
 @group B
 @commands `/locate structure minecraft:village_savanna`, `/tp`; look at the farms; also a plains village
 @pass Log `[creativedelight] village farm crops added to 5 farm processor lists`; some savanna farm crops are cotton; plains farms unchanged (no rule matches)
@@ -3977,6 +3987,7 @@ expect (syrup|coffee|cherry_blossom)_cheesecake_slice
 look the three plates are gone (zcount blocks: no cheesecake left) and the slices are in the inventory or on the ground; a slices -> whole recipe for each; cherry blossom coffee, pancakes, cookie and cheesecake list vinery:cherry_leaves / quark:pink_blossom_leaves (via the tag)
 
 ## SQ-RD-24 | /place feature: giant pepper patch on grass only; wild patches (configured feature ids)
+@phase worldgen
 @group A
 @commands `/place feature` each on grass in a cleared flat area: `rusticdelight:bell_pepper_block_patch_placed`, the wild bell pepper, coffee and cotton patches (placed ids from `wild_crops.json`) x5
 @pass Giant patch puts red, yellow, green blocks on grass only (never on dirt or sand, never a rare color); wild patches place their plant; no Pale or Dark wilds in the bell pepper patch
@@ -4033,6 +4044,7 @@ shell ! grep -niE "rusticdelight/[a-z_]+\.js.*(error|exception)|item_dict.*rusti
 sleep 20
 kjsreject (?i)rusticdelight/[a-z_]+\.js.*(error|exception)
 ## SQ-RD-26 | Rustic wilds by climate; giant peppers rare, warm dry grassy only; none in the jungle
+@phase worldgen
 @group B
 @commands New world: `/locate biome` jungle, savanna, a warm wet and a warm dry grassy biome; fly 2000 blocks in each
 @pass Wild bell peppers and coffee in warm wet, cotton in warm dry grassy, giant peppers about 1 patch per 64 chunks (rare) in warm dry grassy only; nothing from upstream's own biome modifiers (no jungle giant patches)
@@ -4073,6 +4085,7 @@ reject verb=(count|tag) done=0
 look jungle box (near 2500 -2500): wild bell peppers and wild coffee, no giant pepper; savanna box (9 x 9 chunks): wild cotton, giant peppers rare (0 or 1 patch is normal); r1102b s2's spawn jungle had wild_bell_peppers 0: a second 0 here with the bell_pepper tag naming jungle biomes is a finding
 
 ## SQ-RD-27 | crops in desert, snowy and taiga village farms (savanna and plains: SQ-RD-10)
+@phase worldgen
 @group B
 @commands Every village type: `/locate structure` plains, desert, savanna, snowy, taiga village; look at 3 farms each, list the crops seen
 @pass Savanna farms about 25% cotton among vanilla crops; other types vanilla only (today's rules). Record the list per type for the farm audit (`farming/crops #16`)
@@ -5086,6 +5099,7 @@ shell grep -E "\[wild-crops\]" logs/latest.log | cut -c1-400
 look the counts (62 / 49 / 12 on 2026-10-25; each missing mod named in a "mod not loaded, skipped" line); no "problems" error lines; the Terralith cave biomes warning names biome_traits.json
 
 ## SQ-WCD-02 | jungle: cocoa and melons; beach: wild cabbages on sand
+@phase worldgen
 @group B
 @commands Fresh world (new chunks: the melon placement changed 2026-11-03, plan_scratch_bugfix_1103 4.2): `/locate biome minecraft:jungle`, tp, forceload a 10x10 chunk box and count blocks in it (`zq_probe.js` block census or `/fill ... replace` counts): `minecraft:melon`, `delightful:mini_melon` (any wild mini melon block), `minecraft:cocoa`; `/locate biome minecraft:beach`, same for wild cabbages
 @pass jungle box: melons above 0 (rarity 1 in 6 chunks of a patch, so roughly 10 or more patches in 100 chunks), on the ground under the canopy, not on leaves; mini melons above 0 (they generate by their own rarity, not beside the melons; report both counts); cocoa on jungle trees; wild cabbages on the beach sand
@@ -5124,6 +5138,7 @@ look 7 x 7 chunks per biome; a 0 on a small beach strip is not a fail by itself:
 bootreject \[wild-crops\] .*(no such biome|is not in #creativedelight:wild_crops/|could not read)
 
 ## SQ-WCD-04 | wildCrops = false: nothing applied, Farmer's wild cabbages back on beaches
+@phase worldgen
 @group B
 @commands `[worldgen] wildCrops = false` in `config/creativedelight-common.toml`, new level, boot
 @pass `[wild-crops] off in creativedelight-common.toml`; Farmer's wild cabbages back at their mod spawn (beaches)
@@ -5152,6 +5167,7 @@ look a 0 on a small beach strip: retry another beach before calling it a fail (F
 @jars creativecommon creativedelight
 @draft needs its own boot with the old creativedelight-1.0.0 jar and the pack folder trees (a jar swap): a separate boot batch
 ## SQ-WCD-06 | wild crop rules and features from the CD jar (pack folder copy deleted)
+@phase worldgen
 @group B
 @commands after the install: delete `kubejs/data/creativedelight/` on the scratch server only, new level, boot
 @pass same as WCD-01: rules from the jar copy (`CDResources`), features from the jar
@@ -5205,6 +5221,7 @@ shell grep -iE "deadwood|\[meta-structures\]" logs/latest.log | head -10
 look report: Grid spacing 16, separation 5, 6 members (acacia, birch, cherry, jungle, oak, spruce)
 
 ## SQ-DW-02 | acacia deadwood near a savanna: own wood only
+@phase worldgen
 @group B
 @commands `/locate biome minecraft:savanna`, tp, `/locate structure creativeengineering:meta/deadwood_acacia`, tp, forceload the 3 x 3 chunks, count `acacia_log` with `/fill ~-20 ~-5 ~-20 ~20 ~10 ~20 minecraft:acacia_log replace minecraft:acacia_log`
 @pass found within ~30 chunks; 5+ acacia logs near the spot, no other wood
@@ -5225,6 +5242,7 @@ expect verb=count block=minecraft:acacia_log n=([5-9]|\d\d+)\b
 look found within about 30 chunks of the savanna hit (blocks away in the locate line); oak count near 0 (savanna trees are acacia; an oak count from nearby trees is not a fail on its own)
 
 ## SQ-DW-03 | spruce deadwood from a taiga, oak from a forest
+@phase long
 @group B
 @commands same as 02 for `_spruce` (from a taiga) and `_oak` (from a forest)
 @pass found, own wood only
@@ -5623,6 +5641,7 @@ look the lines are the two "Hello! The metal base event has started!" console.lo
 expect verb=states states=\d+ ceiling=1048576
 
 ## SQ-INV-06 | End: nullscape biomes found or tuned out
+@phase worldgen
 @group B (End forceloaded)
 @commands `execute in minecraft:the_end run locate biome nullscape:crystal_peaks`, then `nullscape:void_barrens`; allow the 120 s timeout
 @pass TODO `worldgen/biomes #8` and `#4`: a biome is found (the tuning keeps it) or not found (tuning flips whole biomes out; record the seed and result)

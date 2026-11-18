@@ -583,6 +583,7 @@ look valid only if SQ-SGF-01 wet its farmland (same summon path)
 @@text
 @@table
 ## SQ-VTD9-01 | Magic Peanut trees grow without the golden egg (lane x 0..200 z 1000..1060)
+@phase worldgen
 @group A
 @commands `/forceload add 0 0 200 60`; `/place feature vintagedelight:magic_vine_tree X -60 0` for X = 0, 20, ..., 180 (10 trees); `/setblock X -60 40 vintagedelight:magic_peanut` for X = 0, 40, 80, 120, 160 (5 saplings), `/gamerule randomTickSpeed 1000`, wait 60 s, `/gamerule randomTickSpeed 3`; per tree `/fill X-3 -60 Z-3 X+3 -30 Z+3 minecraft:air replace vintagedelight:golden_egg`, then the same with `replace vintagedelight:magic_vine`
 @pass every egg fill: "No blocks were filled" (0 golden eggs over the 15 trees; before 1.1.03 about 80 % of trees had one); every vine fill removes more than 0 blocks (the trees grew)

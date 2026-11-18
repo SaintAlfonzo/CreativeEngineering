@@ -681,6 +681,7 @@ look season left at mid_spring for the rest of the boot (SQ-PST rows end here)
 reject Enum constant must be one of
 
 ## SQ-PST-12 | grass in a tropical (jungle) column spreads at about half the temperate spring rate, wet and dry season
+@phase worldgen
 @group A (tropical column: `/locate biome minecraft:jungle`, sky open)
 @commands **Owner: row text stale, see run r1114** (the current CropSeasons GRASS type is neutral in wet/dry biomes, farming/crops #28; the 0.35 to 0.70 expect below predates it). Owner rule 2026-11-03 (plan_scratch_bugfix_1103 4.3): grass spreads normally in spring, autumn and winter and at half speed (`[crop_seasons] grassOffPenalty` 0.5) in summer and in tropical (wet/dry) biomes. SQ-PST-03 setup in a jungle; 3 runs in the wet season and 3 in the dry season (`/season set` a tropical season, or the matching sub-season), plus 3 runs of the same pad in a temperate plains column in spring as the reference
 @pass jungle wet and dry both about 50 % of the temperate spring mean (35 to 70 %); `config/creativecalendar-common.toml` has `grassOffPenalty = 0.5`
@@ -856,6 +857,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look the first top count is 0 (all 9 tops gone) and bottoms 9; after the stick the 9 tops stay
 
 ## SQ-PSD-03 | river tree leaves do not decay (Separated Leaves rule)
+@phase worldgen
 @group A
 @commands `/place feature upgrade_aquatic:river_tree` x5 nearby, wait 2400 ticks, count `upgrade_aquatic:river_leaves` before/after (`/fill ... replace` count)
 @pass count unchanged
@@ -884,6 +886,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look 120 s at randomTickSpeed 20 (= 16 x the row's 2400 ticks at 3); counts in rows/SQ-PSD-03.shell.txt
 
 ## SQ-PSD-04 | azalea trees have oak trunks; a given azalea log becomes an oak log
+@phase worldgen
 @group A
 @commands `/place feature minecraft:azalea_tree` x3; `/give @p quark:azalea_log`; grep `latest.log` for `[removedWoods]` and `[itemMerges]`
 @pass trunks are `minecraft:oak_log`; the given azalea log becomes an oak log in the inventory; log says `5 woods merged into oak`, no `already merged` / `unknown` errors for azalea ids
@@ -928,6 +931,7 @@ reject \[cdevtest\] verb=makes id=(?!creativedevtools:)\S+ result=(quark:azalea_
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSD-06 | village farms (minecraft:village_savanna, dry 1 of 3): cotton possible, never peppers or coffee
+@phase worldgen
 @group B
 @commands new level; `/locate structure` 3 savanna or desert villages and 3 Towns & Towers jungle villages; look at farm fields
 @pass Cotton only in savanna/desert farms; Bell Peppers and Coffee only in jungle farms
@@ -962,6 +966,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look across SQ-PSD-06, -06b, -06c: cotton above 0 in at least one dry village (35 % of fields replaced, 50/50 split: a village can have none); wild crop patches near a village also count
 
 ## SQ-PSD-07 | raspberry bushes in snowy taiga and grove
+@phase worldgen
 @group B
 @commands new level; `/locate biome minecraft:snowy_taiga` and `minecraft:grove`, forceload 8x8 chunks, count `hearthandharvest:raspberry_bush`
 @pass at least one patch in each biome set (or `/place feature creativedelight:wild/raspberry_bush` there and check the biome tag `creativedelight:wild_crops/raspberry` contains them)
@@ -1058,6 +1063,7 @@ expect \[spawn-boxes\] no mob category nonsense
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
 
 ## SQ-PSM-02 | meta pillager tower siege: every part gets the meta_tower_siege box
+@phase worldgen
 @group B
 @commands `/locate structure creativeengineering:meta/pillager_tower_siege`; read its `[meta-structures] ... at chunk` line for the part positions; tp inside the anchor tower, on a camp, on a weapon; `/cwgspawnbox` at each
 @pass each line: `box meta_tower_siege (part box towers / camps / vehicles) of creativeengineering:meta/pillager_tower_siege, part <id> -> [minecraft:pillager 7 (1-1), minecraft:vindicator 3 (1-1), minecraft:evoker 3 (1-1), minecraft:illusioner 3 (1-1), minecraft:witch 3 (1-1)]`
@@ -1276,6 +1282,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look the [meta-structures] line (rows/SQ-PSM-02.shell.txt) gives the part chunks: the grid points inside a tower, a camp and a weapon each print the meta_tower_siege line with their part box; 'no box' only between parts
 
 ## SQ-PSM-03 | lone birch pillager tower: box probe and illager spawns inside
+@phase worldgen
 @group B
 @commands `/locate structure mysticrift_pillagers_towers_aris:birch_pillager_tower` (a lone one, not in a meta) -> {BT1} {BT3}; tower base y {BY} from `zq` at the locate column; tp into the tower's ground floor, `/cwgspawnbox`; then `gamerule doPatrolSpawning false`, `difficulty peaceful`, `difficulty normal`, `time set 18000`; qa at {BT1} {BY+50} {BT3} (29+ blocks from every floor, so the 24-block rule never blocks the tower), `kill @e[type=!player,distance=..128]`; every 30 s for 300 s: `execute if entity @e[type=X,x={BT1-15},y={BY},z={BT3-15},dx=30,dy=22,dz=30]` for X = pillager, vindicator, evoker, illusioner, witch; at the end `data get entity` Pos of any zombie/skeleton/creeper in that volume; `/cdevperf mobcap`; grep `latest.log` for `NaturalSpawnerBoxHeightMixin`
 @pass probe: `box large_towers of mysticrift_pillagers_towers_aris:birch_pillager_tower -> [minecraft:pillager 7 (1-1), minecraft:vindicator 3 (1-1), minecraft:evoker 3 (1-1), minecraft:illusioner 3 (1-1), minecraft:witch 3 (1-1)]`; an illager (pillager at least) in at least 3 of the 10 counts; biome monsters only outside the tower walls; mobcap shows the unchanged monster cap (70 at level 0); no mixin apply error
@@ -1328,6 +1335,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look biome monsters (zombie/skeleton/creeper Pos lines) only outside the tower walls; mobcap shows the monster cap 70 at level 0; the tower base y is the ground 30 blocks east of the locate point
 
 ## SQ-PSM-04 | meta pillager camp + ruin: camp part boxed, ruin part never an illager pool
+@phase worldgen
 @group B
 @commands `/locate structure creativeengineering:meta/pillager_camp_ruin`; `/cwgspawnbox` on the camp part and on the ruin part
 @pass camp: `box meta_camps (part box camps) ...` with the camp_meta pool; ruin: `spawn_overrides ... part philipsruins:...` or `no box -> vanilla` with the ruin's own list, never an illager pool
@@ -1419,6 +1427,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look the 3x3 probe grid: the camp part reads box meta_camps with the camp_meta pool; the ruin part spawn_overrides or 'no box -> vanilla' with its own list
 
 ## SQ-PSM-05 | spawn boxes: pillager ship, villager ship, witch wagon, swamp hut, Terralith witch hut
+@phase long
 @group B
 @commands `/locate structure unwrecked_ships:ship` until one with pillager sailors, `/cwgspawnbox` on deck, same on a villager-crew ship; `/locate structure eugene:witch_wagon`, `minecraft:swamp_hut`, `terralith:underground/witch_hut`, `/cwgspawnbox` inside each
 @pass pillager ship `box unwrecked_pillager_ships` (boat pool); villager ship `no box`; wagon and swamp hut `box witch_huts_full`, Terralith hut `box witch_huts`, pool `[minecraft:witch 1 (1-1)]`
@@ -1543,6 +1552,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look none with the probe right: record the mobcap line (monster cap full?)
 
 ## SQ-PSM-08 | giant squid flees a whale at 12 blocks, not at 30
+@phase worldgen
 @group B
 @commands deep ocean: `/summon alexsmobs:giant_squid` and `/summon alexsmobs:cachalot_whale ~30 ~ ~ {NoAI:1b}`; squid Pos at 0 s and 10 s; tp the whale 12 blocks from the squid, Pos again at 5 s and 20 s
 @pass at 30 blocks the squid does not flee; at 12 it swims away and stops once more than 24 off
@@ -1579,6 +1589,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look rows/SQ-PSM-08.shell.txt: at 30 the squid's movement is ordinary wandering; after the 12-block tp it moves away and stops past about 24
 
 ## SQ-PSM-09 | natural squid, glow squid and dolphin babies, 2-6 %
+@phase long
 @group B
 @commands forceload an ocean area plus a cave-water area, qa there, `kill` squid / glow squid / dolphins, wait 600 s; `scoreboard objectives add age dummy`; `execute as @e[type=minecraft:squid] store result score @s age run data get entity @s Age` (same for glow_squid, dolphin); count all and `scores={age=..-1}`
 @pass natural babies seen, share about 2-5 % squid and glow squid, 2-6 % dolphins when 60+ of a type are counted; first of a pack never a baby
@@ -1995,6 +2006,7 @@ bootreject standalone.*still lists.*lost_soul
 shell grep -aiE 'biome fit|nether/(soul|forest|wastes)|philipsruins' logs/latest.log | cut -c1-300 | head -20
 
 ## SQ-PSW-02 (ST-294)
+@phase long
 @group B, fresh world
 @commands `execute in minecraft:the_nether run locate structure philipsruins:lost_soul_city` (then `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin`); tp a spectator to each, F3 y and biome; same four `locate` in the Overworld
 @pass each found in the Nether: city and dungeon in soul sand valley at y 5 / y 12, rare ruin in crimson or warped forest at y 33, blackstone ruin in Nether wastes or basalt deltas at y 33; none flooded by lava (LOOK); the Overworld locate finds none
@@ -2046,6 +2058,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look spectator at each captured Nether position ({PWC1} {PWC3}, {PWD1} {PWD3}, {PWR1} {PWR3}, {PWN1} {PWN3}): city y 5, dungeon y 12, rare ruin and blackstone ruin y 33 (F3); none flooded by lava. The four counts above: the Nether found all four (captures), the Overworld none
 
 ## SQ-PSW-03 (ST-295)
+@phase worldgen
 @group B
 @commands Overworld `locate structure creativeengineering:meta/ruin_cluster` and `meta/pillager_camp_ruin`
 @pass both found, anchored on a level-three ruin, ancient towers or forgotten church (never a rare ruin)
@@ -2061,6 +2074,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 look tp a spectator to {PRC1} {PRC3} and {PPC1} {PPC3}: the anchor is a level-three ruin, ancient towers or the forgotten church, never a rare ruin
 
 ## SQ-PSW-04 (NW-21)
+@phase long
 @group B, fresh world
 @commands Chunky r 1000 around spawn plus one deep cave region; stop the server; `python3 tools/block_census.py <save> minecraft:glowstone minecraft:soul_fire minecraft:soul_lantern`
 @pass 0 glowstone in the Overworld; a gothic church in the area shows yellow corundum (NW-11)
@@ -2079,6 +2093,7 @@ waitlog (The nearest|Could not find|Unknown|Invalid) 600
 look rows/SQ-PSW-04.shell.txt: glowstone 0 (a hit line gives chunk and y: y 0 and below = D&D layer override missing, inside a structure = a swap or processor); soul fire and soul lantern hits are for the record. Deep cave region: the radius 1000 square covers y -64 up; a gothic church in the area shows yellow corundum (NW-11; the locate above)
 
 ## SQ-PSW-05 (ST-335)
+@phase long
 @group B, End
 @commands `execute in minecraft:the_end run tp` past 1050 blocks; Chunky the_end r 600 at about 1500 0; `python3 tools/block_census.py <save> quark:dusky_myalite quark:myalite_crystal --dim end`; tp to 3 to 5 of the chunks it lists, look under each spike from the side
 @pass spires still generate (census > 0); every spike base sits on end stone all round, none hangs over the void

@@ -4,6 +4,7 @@
 
 @@section 1
 @@title First-tick water drops no items, 2026-10-27 ([perf.md](../perf.md) 10.6, TODO `perf #14`)
+@@phase worldgen
 @@date 2026-10-27
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
@@ -44,6 +45,7 @@ shell mkdir -p $INST/perf/runs/r1103w/w; rm -rf ../ftw_on_snap; mkdir ../ftw_on_
 look item entities near 0 (moss carpet, seeds, azalea, glow berries, torches, cocoa, Miner's plants each under 10; sugar cane / cactus / bamboo expected leftovers); the ftw_off half is w_10_B.qb; baseline 672 items (perf.md 10.2 #5)
 
 ## SQ-FTW-03
+@phase long
 @group same pair
 @commands Pregen without ticking: `/chunky center 4000 4000`, `/chunky radius 120`, `/chunky start`, wait for done; then `/forceload add 3888 3888 4112 4112`, wait 90 s, `/forceload remove all`, wait 10 s, `stop`, census
 @pass `ftw_on` well under `ftw_off` for the cave plant items

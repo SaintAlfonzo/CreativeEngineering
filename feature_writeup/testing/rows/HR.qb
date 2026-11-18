@@ -97,6 +97,7 @@ look fox emptied the bush (age 1 Test passed) and holds a raspberry; a fox aslee
 reject \[cdevtest\] .*done=0
 
 ## SQ-HR-05 | wild raspberry patches in forest
+@phase worldgen
 @group B
 @commands New world, seed 8675309; `/locate biome minecraft:forest`, fly there (r1101: the `[wild-crops]` log names no rules; use `/cdevtest tag biome creativedelight:wild_crops/raspberry` and a fully loaded 256-chunk `/cdevtest count`)
 @pass tag lists 26 biomes; ripe raspberry bush patches in forest / plains

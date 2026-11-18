@@ -196,6 +196,7 @@ expect verb=bytype id=\S*felsic\S* result=\S*felsic_ingot
 reject verb=\S+ .*done=0
 look shell: transition items (37); pack line on: [felsic_gear] (p6f) or off (mod not loaded): [felsic_gear] (p6); [absent mods] counts sophisticatedbackpacks (2 rows)
 ## SQ-CBP-11 | transitions in Equipment (37); felsic_gear pack on; no incomplete or duplicate error; felsic ore in End highlands; block drops 1-2 scrap
+@phase worldgen
 @group B (full pack, fresh world, seed 8675309)
 @commands full pack with Engineering + Equipment + Common of 18:35: `grep -h "transition items\|end gear transition\|mod data packs" logs/kubejs/startup.log logs/latest.log`; `> datapack list`; `> zq bytype create:sequenced_assembly`; `> execute in minecraft:the_end run locate biome minecraft:end_highlands`, tp there, `> zq census felsic_gear:felsic_block` (or `fill`-scan probe) over a few chunks; break a felsic block with a netherite pickaxe (fake player)
 @pass Engineering transition count 37 lower than before; Equipment 37; data pack `creativeequipment:felsic_gear` listed and enabled; no `incomplete('...') not registered`, no duplicate-registration error for `kubejs:incomplete_*`; felsic ore present in the End highlands; the block drops 1-2 Felsic Scrap before Fortune (loot table moved; owner value 2026-11-14, plan_bugfix_1114.md 4.5; r1114: 68 from 50 breaks)

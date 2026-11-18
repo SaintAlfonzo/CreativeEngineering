@@ -4,6 +4,7 @@
 
 @@section 1
 @@title SQ-CDW Creative Delight worldgen gated on its mods, 2026-11-06 ([creative_delight.md](../creative_delight.md) 24.4, TODO `creativedelight/framework #13`)
+@@phase worldgen
 @@date 2026-11-06
 @@jars creativecommon creativedelight powergrid
 @@sources feature_writeup/creative_delight.md

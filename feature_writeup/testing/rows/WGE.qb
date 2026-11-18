@@ -4,6 +4,7 @@
 
 @@section 1
 @@title SQ-WGE Worldgen edit plan, built part, 2026-11-02 ([plan_worldgen_edit.md](../plan_worldgen_edit.md) A1 to A5, B1, B5; TODO `worldgen/biomes #9`, `locate #5`, `earthfill #4`, `rates-and-groups #6 #9 #11 #12`, `seasons #2`)
+@@phase worldgen
 @@date 2026-11-02
 @@jars creativeworldgen
 @@sources feature_writeup/plan_worldgen_edit.md
@@ -41,6 +42,7 @@ bootexpect (?i)(BiomeLayoutTuner|biome solver).*nullscape:shadowlands
 bootreject (?i)(BiomeLayoutTuner|biome solver).*ERROR
 look rows/<ID>.shell.txt: multiplier 0.75; the solver summary gives nullscape:shadowlands a modelled End share near 14 % (aim about 16 %), crystal_peaks still 3 and void_barrens 2; a cached layout (no solver lines) = delete biome_layout_cache.json.gz and reboot
 ## SQ-WGE-01b (A1)
+@phase long
 @group B
 @commands `execute in minecraft:the_end run locate biome nullscape:shadowlands` from 0 0 and after `tp` to 3000 0, 0 3000 and -3000 -3000 (outer islands start near 1000); then the 20,000-point End sample used in SQ-WG30-E03 (`tools/scratch_query/zq_probe.js` End climate dump)
 @pass shadowlands found from all four spots, nearest find under 1500 blocks from each; sample share of shadowlands between 12 and 20 % (old 10.7 %); crystal peaks and void barrens still found (SQ-WG30-E03 numbers within a factor of 1.3)
@@ -125,6 +127,7 @@ shell cd $INST && python3 -c "import json; g=json.dumps(json.load(open('kubejs/g
 shell cd $INST && grep -nE '(acacia|birch|cherry|desert|end|jungle|mangrove|oak)_pillager_tower' feature_writeup/structure_group_estimates.md | head -10
 look rows/<ID>.shell.txt: 8 `weight x3 by hand` strings; weights acacia 30, birch 24, cherry 51, desert 3, end 3, jungle 30, mangrove 15, oak 15; estimates acacia 115, birch 169, cherry 137, desert 355, jungle 91, mangrove 765, oak 190, end 232 chunks per start
 ## SQ-WGE-04b (A4)
+@phase long
 @group B, seed 8675309
 @commands `/cwglocate census 128 0 0` and `... 4000 4000` with `mysticrift_pillagers_towers_aris:*_pillager_tower` rows; compare with the pre-change census in `structure_group_estimates.md` (192 / 288 / 230 / 599 / 151 / 1304 / 242 chunks per start)
 @pass each tower type is 1.3 to 2.2 times as common as before where it is not biome-limited (acacia, birch, cherry, jungle, oak, desert); end (232) and mangrove (limited by its own 0.038 frequency) within 15 % of before; total pillager_settlements group not displacing camps, vehicles or statues by more than 15 % (they share the grid)
@@ -230,6 +233,7 @@ shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').re
 reject (Unknown or incomplete command|Incorrect argument for command|That position is not loaded|\[cdevtest\] .*(done=0|error=))
 look toml frequency 60 and forceSpawnInVillages true; the shell's summed count over 256 chunks (village ones included: the `on` list shows what each stands on) is about 4 or fewer lone waystones (1 per 60 chunks; was 1 per 25); deserts no longer densest
 ## SQ-WGE-05b (A5)
+@phase long
 @group B
 @commands find 10 villages (`/locate structure minecraft:village_plains` and the other four kinds), `tp` to each, look for a waystone within 20 blocks of the village centre (probe: nearest `waystones:` block entity)
 @pass at least 8 of 10 villages have one, near the center (accepted 2026-11-03: r1103w found 8 of 10, none at -240 1120 and 2496 -1488); each waystone is registered (right-click shows a name)
@@ -391,6 +395,7 @@ shell cd $INST && python3 tools/check_moobloom_data.py 2>&1 | tail -6
 shell cd $INST && node --check kubejs/data/creativeworldgen/kubejs/mobs/end_divers.js && echo END_DIVERS_PARSES
 look rows/<ID>.shell.txt: 1514 swaps in 117 templates (more is fine when later rules were added; fewer = a rule's `to` id or KEEP property); 0 worldgen problems; `creativeengineering:meta/waystone_ruins` in `ruins` at weight 1, no new warning; moobloom check OK with 38 spawn rules; END_DIVERS_PARSES
 ## SQ-WGE-09 (A7)
+@phase long
 @group B, plus the Nether
 @commands ST-294 and ST-295 (already queued with the pre-scratch pass): in the Overworld `/locate structure philipsruins:lost_soul_city`, `lost_soul_dungeon`, `rare_ruin`, `start_nether_ruin`; in the Nether the same four; `/locate structure creativeengineering:meta/ruin_cluster` in the Overworld
 @pass none found in the Overworld; each found in the Nether in its biomes (soul sand valley; crimson / warped forest; wastes / deltas) at y 33 (ruins), 12 (dungeon), 5 (city); soul fire inside them kept (no swap: the generator skips Nether-owned templates); ruin cluster still found
@@ -426,6 +431,7 @@ look the Overworld locates come first: their 4 lines must be the not-found ones 
 @fails old block still there: template id renamed (rerun the generator); state lost: KEEP table
 @draft per-piece block reads at /place structure sites need the piece positions from nether_swaps.md rules 26 to 32 per template; a person or agent picks them at the placed structure (cdevtest state per block) and judges facing, half and the temple puzzle
 ## SQ-WGE-11 (C4, C5)
+@phase long
 @group B, seed 8675309
 @commands `[worldgen.meta_structures] log = true`; `/cwglocate census 128 0 0` and `... 4000 4000` counting `meta/pillager_camp_ruin`, `pillager_camp_ruins`, `pillager_great_tower_siege`, `meteor_shower`; compare with the SQ-META31 census
 @pass camp ruin metas about 1.7 times as common as before (share 0.25 [0.15]); great tower siege about 0.6 times (0.30 [0.50]); meteor shower about 0.66 times (0.33 [0.50]); plain camp, great tower and meteorite counts unchanged within 15 % (shares never change an anchor's slots)
@@ -453,6 +459,7 @@ look against the SQ-META31 census: camp ruin metas about 1.7x (share 0.25 [0.15]
 @fails all at the surface: mixin not applied (`AeMeteoriteHeightMixin` in the Creative Worldgen mixin config); metas moved: `MeteoriteHeights.enterMeta` not around `generate`
 @draft needs the sky stone height of 20 meteorite starts against WORLD_SURFACE: `cdevtest under` lists starts (deferred verb) but no verb reads a start box against the surface height; write when a heights reader exists (tools/scratch_query/meteor_heights.py may cover it)
 ## SQ-WGE-14 (A6)
+@phase long
 @group B
 @commands `/locate structure creativeengineering:meta/waystone_ruins` 4 times (log on); tp to each; right-click the waystone
 @pass a small ruin with one waystone 4 to 12 blocks from its center, standing on the ground (beard), not inside a wall; the waystone is registered (name screen); `/locate structure creativeengineering:waystone_ruin_part` alone finds only the ones inside metas (no structure set); ruin_scatter still found; plain stone waystone in every biome (Waystones' BIOME style only covers its lone waystones)

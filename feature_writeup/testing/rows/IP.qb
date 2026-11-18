@@ -4,6 +4,7 @@
 
 @@section 1
 @@title Census biome ties, 2026-10-27 ([locate.md](../locate.md) 3.6, TODO `structures/testing #4`)
+@@phase worldgen
 @@date 2026-10-27
 @@jars creativecompat creativeworldgen tempad
 @@sources feature_writeup/locate.md
