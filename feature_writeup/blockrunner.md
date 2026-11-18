@@ -517,7 +517,7 @@ its growth rule and `minLayers`, for an entity not exempt. Several at once: the 
 | `rope` (3) | Farmer's Delight, Supplementaries and Quark rope | 0.75 | 1.00 | `any` | none | not while climbing (on the rope and moving up or down, sneaking, or off the ground); ladder rules unchanged |
 | `cobweb` (5) | cobweb, SecurityCraft reinforced cobweb, Fantasy Furniture webs (2), Create Crafts & Additions barbed wire | 0.50 | 0.85 | `any` | faces, 3+ of 6: walk 0.35, fall 0.20, fall damage reset | `surrounded = web` at 6 of 6, `items = stick` (0.35 per tick), `projectiles`; spiders exempt |
 | `bush` (8) | sweet berry bush, Hearth and Harvest raspberry bush, every Vinery grape bush | 0.36 | 1.00 | `any` | none | today's real berry bush speed; foxes and bees exempt |
-| `layers` (tag `creativecompat:passthrough_layers`; was `leaf_pile`; since 2026-11-17 G7.4) | snow layers, every IW leaf pile (azalea flower pile included), Twigs bamboo leaves; dust layers and fodder are out (not walk-through, their surface tier only) | by height: 1 layer 1.0, then equal steps to `snowMaxSlow` 0.4 at 7 of 8 (snow; 8 becomes a snow block) or `leafMaxSlow` 0.6 at full height (leaf layers, never solid) | 1.00 | `any` | none | `minLayers = 2`, `depthStriderPasses`; snow layers have no collision (`snowWalkThrough`), leather boots stand on top, sneak to sink; foxes and bees exempt |
+| `layers` (tag `creativecompat:passthrough_layers`; was `leaf_pile`; since 2026-11-17 G7.4) | snow layers, every IW leaf pile (azalea flower pile included), Twigs bamboo leaves; dust layers and fodder are out (not walk-through, their surface tier only) | by height: 1 layer 1.0, then equal steps to `snowMaxSlow` 0.4 at 7 of 8 (snow; 8 becomes a snow block) or `leafMaxSlow` 0.6 at full height (leaf layers, never solid) | 1.00 | `any` | none | `minLayers = 2`, `depthStriderPasses`; snow layers have no collision (`snowWalkThrough`), leather boots and light mobs stand on top (hitbox up to `snowLightVolume` 0.3 cubic blocks or tag `creativecompat:snow_layer_light`; since 2026-11-17 G11), sneak to sink; heavier mobs sink, climb out on walking into a block (`snowMobClimb`) and path over the top unless already sunk (`snowSunkPathing`); leaf thorns need walking speed in a full pile, sprinting speed in a pile of 6 or 7 (`thornMinSpeed` 1.0, `thornPartialMinSpeed` 1.3); foxes and bees exempt |
 | `grass` (119) | short grass, fern, dead bush, roots, small flowers, saplings, flower patches | 1.00 | 1.00 | `any` | none | inert (skipped) until tuned |
 
 Out of the system: Biomes O' Plenty barley, cattail, reed (not registered here); Supplementaries flax and wild flax;
@@ -660,6 +660,11 @@ and powdered sugar got `StuckInBlock` lines.
     for that reason.
   - Mobs in a surrounded web with nothing to climb stay there until the web is broken. Mob pathing does not avoid
     slow blocks (vanilla does not avoid webs either), except leaf piles of 6 or more layers (2026-11-17, G7.14).
+  - Snow layers and mobs (2026-11-17, G11): a mob plans its path over the top of snow (vanilla's view: 1 to 4 layers
+    open, 5 to 7 a step up); once sunk in, its path search sees walk-through snow as air and a path still stepping up
+    onto snow is recomputed (at most once a second, vanilla's throttle). A sunk mob that walks into a block climbs at
+    ladder speed (0.2 blocks per tick) until its feet leave the snow. Players do not climb (they keep the weak jump).
+    `snowLightVolume` is read from each side's own toml, not synced (the client only moves the player, never light).
   - Layers: jump and fall caps, leaf thorns, the leaf overlay, falling and stacking layers and the full bamboo leaves:
     [plan_passthrough.md](plan_passthrough.md) 2.1.
   - Fast arrows can cross a single web in one tick and skip it (accepted). Items cannot: their path is clipped.

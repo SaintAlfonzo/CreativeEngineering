@@ -57,6 +57,8 @@
     "LeafPilePathMixin",
     "McaLeafPilePathMixin",
     "LayerJumpMixin",
+    "SnowMobMixin",
+    "SnowPathMixin",
     "LevelChunkPassMixin",
     "MakeStuckInBlockMixin",
     "EntityPassMixin",

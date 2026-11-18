@@ -611,8 +611,13 @@ public final class CompatConfig {
 			public ForgeConfigSpec.DoubleValue thornChance;
 			public ForgeConfigSpec.IntValue thornLayers;
 			public ForgeConfigSpec.DoubleValue thornMinSpeed;
+			public ForgeConfigSpec.DoubleValue thornPartialMinSpeed;
 			public ForgeConfigSpec.IntValue thornCooldownTicks;
 			public ForgeConfigSpec.IntValue pathBlockLayers;
+			// [surface.passthrough.layers] mobs in snow layers (surface.SnowLayers, G11): who stands on top, climbing out
+			public ForgeConfigSpec.DoubleValue snowLightVolume;
+			public ForgeConfigSpec.BooleanValue snowMobClimb;
+			public ForgeConfigSpec.BooleanValue snowSunkPathing;
 			public ForgeConfigSpec.DoubleValue bambooLeafChance;
 			public ForgeConfigSpec.IntValue bambooLeafMaxLayers;
 			// [surface.passthrough.layers] client side: the leaf overlay (surface.LeafOverlay, G7.14)
@@ -718,8 +723,9 @@ public final class CompatConfig {
 								.defineInRange("minLayers", d.minLayers(), 1, 16);
 						parent.snowWalkThrough = b.comment(
 								"Snow layers 1 to 7 have no collision for mobs and players: they walk through at the",
-								"slowdown above. Leather boots (and the mobs vanilla lets walk on powder snow) stand on",
-								"top at the snow surface speed; sneaking sinks in. Off: vanilla snow collision.")
+								"slowdown above. Leather boots and light mobs (snowLightVolume, entity tag",
+								"creativecompat:snow_layer_light) stand on top at the snow surface speed; sneaking sinks in.",
+								"Off: vanilla snow collision.")
 								.define("snowWalkThrough", true);
 						parent.snowFullBecomesBlock = b.comment(
 								"A snow layer that reaches 8 layers (placed, or found on a random tick) becomes a snow block.")
@@ -760,14 +766,33 @@ public final class CompatConfig {
 						parent.thornLayers = b.comment("Leaf piles of at least this many layers prick.")
 								.defineInRange("thornLayers", 6, 1, 8);
 						parent.thornMinSpeed = b.comment(
-								"Pricks only while moving at least this fast (1.0 = walking), measured against the full",
-								"pile's slowdown, so a pile of 6 pricks more easily than a pile of 8.")
+								"In a full leaf pile, pricks only while moving at least this fast (1.0 = walking),",
+								"measured against the pile's own slowdown.")
 								.defineInRange("thornMinSpeed", 1.0, 0.0, 4.0);
+						parent.thornPartialMinSpeed = b.comment(
+								"In a partial leaf pile (thornLayers up to one below full), pricks only while moving at",
+								"least this fast (1.3 = sprinting), measured against the pile's own slowdown. A sprinting",
+								"player also counts from thornMinSpeed up.")
+								.defineInRange("thornPartialMinSpeed", 1.3, 0.0, 4.0);
 						parent.thornCooldownTicks = b.comment("Ticks between prick checks.")
 								.defineInRange("thornCooldownTicks", 20, 1, 1200);
 						parent.pathBlockLayers = b.comment(
 								"Mobs do not path through leaf piles of at least this many layers (9 = off; server side).")
 								.defineInRange("pathBlockLayers", 6, 1, 9);
+						parent.snowLightVolume = b.comment(
+								"Mobs whose hitbox (width x width x height, in blocks) is at most this stand on top of",
+								"snow layers; bigger mobs sink in. Entity tag creativecompat:snow_layer_light adds mobs",
+								"of any size. Players stand on top only in leather boots. 0 = by tag only (server side).")
+								.defineInRange("snowLightVolume", 0.3, 0.0, 8.0);
+						parent.snowMobClimb = b.comment(
+								"A mob sunk into snow layers climbs out when it walks into a block, like a ladder (server",
+								"side).")
+								.define("snowMobClimb", true);
+						parent.snowSunkPathing = b.comment(
+								"Mobs path over the top of snow layers; a mob already sunk in paths through them at the",
+								"ground below, and drops a path that still runs over the top. Off: vanilla snow pathing",
+								"for every mob (server side).")
+								.define("snowSunkPathing", true);
 						parent.bambooLeafChance = b.comment(
 								"Grown bamboo with leaves drops Twigs bamboo leaves beside it: chance per random tick for",
 								"each free side (Immersive Weathering's leaf pile chance is 0.0005). 0 = off (server side).")

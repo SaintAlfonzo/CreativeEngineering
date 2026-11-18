@@ -253,10 +253,17 @@ Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
   0.9, 0.8, 0.7, 0.6, 0.5, 0.4 for 1 to 7. Leaf piles: 1.0 down to 0.6 at 8 (steps of 0.4 / 7). Bamboo leaves: 0.867,
   0.733, 0.6 at 2 to 4.
 - Snow collision (`snowWalkThrough`, `surface/SnowLayers`, `mixin/SnowLayerPassMixin`): snow layers 1 to 7 have no
-  collision for living entities, so they walk through at the height slowdown. Leather boots (and the mobs vanilla lets
-  walk on powder snow: rabbits, foxes) stand on top at the full layer height and the `snow` surface speed; sneaking
-  sinks in. Items, falling blocks, projectiles and pathfinding keep vanilla's collision. Leaf piles and bamboo leaves
-  have no collision of their own already.
+  collision for living entities, so they walk through at the height slowdown. Leather boots and light mobs stand on
+  top at the full layer height and the `snow` surface speed; sneaking sinks in. Items, falling blocks, projectiles and
+  pathfinding keep vanilla's collision. Leaf piles and bamboo leaves have no collision of their own already.
+- Mobs in snow (G11, 2026-11-17; `SnowLayers`, `mixin/SnowMobMixin`, `SnowPathMixin`): a mob is light when its type is
+  in `#creativecompat:snow_layer_light` (fox, rabbit, endermite, silverfish) or its hitbox width x width x height is at
+  most `snowLightVolume` 0.3 (rabbit, fox, cat, chicken, parrot, frog, most babies; a wolf at 0.31 is not). Players are
+  never light (leather boots only). `#minecraft:powder_snow_walkable_mobs` no longer counts alone (it holds Alex's Mobs
+  tigers and bison). Other mobs sink. A sunk mob that walks into a block climbs at 0.2 blocks per tick while its feet
+  are in the snow (`snowMobClimb`). Paths: vanilla plans over the top (1 to 4 layers open, 5 to 7 a step up); a mob
+  already sunk plans through (walk-through snow is air to its search, MCA villagers too), and a path that still steps
+  up onto walk-through snow is recomputed once the mob sinks (`snowSunkPathing`).
 - Full layer (`snowFullBecomesBlock`): vanilla snow that reaches 8 layers becomes a snow block, on placement and on a
   random tick for one already in the world. `SnowLayers.fullToBlock` is the seam for other stacking code (G7.5 falling
   layers).
@@ -267,8 +274,9 @@ Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
   Falling inside is capped at `snowFallSpeed` 0.12 (powder snow) and `leafFallSpeed` 0.24 blocks per tick. The
   lowest jump factor and cap of the counted cells win; exempt mobs have no cells.
 - Leaf thorns (G7.13, G7.14; `surface/LeafThorns`, server): players only, in a leaf pile of `thornLayers` 6 or more,
-  moving at `thornMinSpeed` x walking speed measured against the 8-layer walk factor, once per `thornCooldownTicks`
-  20: chance `thornChance` 0.25 x (4 - armor pieces) / 4, half a heart of sweet berry bush damage. Creative and
+  moving fast enough, once per `thornCooldownTicks` 20. Speed (G11, 2026-11-17): the tick-to-tick distance divided by
+  that pile's own walk factor, 10 percent margin; a full pile needs `thornMinSpeed` 1.0 (walking), a pile of 6 or 7
+  `thornPartialMinSpeed` 1.3 (sprinting; the server's sprint flag also passes from walking speed up). Then chance `thornChance` 0.25 x (4 - armor pieces) / 4, half a heart of sweet berry bush damage. Creative and
   spectators never.
 - Mob pathing (`mixin/LeafPilePathMixin`, `McaLeafPilePathMixin`): a leaf pile of `pathBlockLayers` 6 or more is a
   berry-bush node (`DAMAGE_OTHER`) for every mob, MCA villagers included; smaller piles path as before.

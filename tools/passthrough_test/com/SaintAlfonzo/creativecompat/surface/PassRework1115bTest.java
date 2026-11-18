@@ -326,6 +326,26 @@ final class PassRework1115bTest {
 		check("G7.14 thorn speed: walking in a full pile (0.6 x walk) pricks at thornMinSpeed 1.0; half speed does not",
 				LayerMotion.thornSpeed(LayerMotion.WALK_SPEED * walk8, walk8, 1.0)
 						&& !LayerMotion.thornSpeed(LayerMotion.WALK_SPEED * walk8 * 0.5, walk8, 1.0));
+		double walk6 = PassRule.layerWalk(6, 8, true, 0.6), w = LayerMotion.WALK_SPEED, run = w * LayerMotion.SPRINT_RATIO;
+		check("G11 thorn need: full pile walking (1.0), partial pile sprinting (1.3)",
+				LayerMotion.thornNeed(8, 8, 1.0, 1.3) == 1.0 && LayerMotion.thornNeed(7, 8, 1.0, 1.3) == 1.3
+						&& LayerMotion.thornNeed(6, 8, 1.0, 1.3) == 1.3);
+		check("G11 thorn prick, full pile: walking pricks, sneaking does not",
+				LayerMotion.thornPrick(w * walk8, walk8, 8, 8, 1.0, 1.3, false)
+						&& !LayerMotion.thornPrick(w * 0.3 * walk8, walk8, 8, 8, 1.0, 1.3, false));
+		check("G11 thorn prick, pile of 6: walking does not, sprinting does (by speed or by the sprint flag)",
+				!LayerMotion.thornPrick(w * walk6, walk6, 6, 8, 1.0, 1.3, false)
+						&& LayerMotion.thornPrick(run * walk6, walk6, 6, 8, 1.0, 1.3, false)
+						&& LayerMotion.thornPrick(w * walk6, walk6, 6, 8, 1.0, 1.3, true)
+						&& !LayerMotion.thornPrick(w * 0.5 * walk6, walk6, 6, 8, 1.0, 1.3, true));
+		check("G11 light by box at 0.3: rabbit, fox, chicken, baby cow light; wolf, pig, player-sized heavy; 0 = none",
+				SnowLayers.lightByBox(0.4, 0.5, 0.3) && SnowLayers.lightByBox(0.6, 0.7, 0.3)
+						&& SnowLayers.lightByBox(0.4, 0.7, 0.3) && SnowLayers.lightByBox(0.45, 0.7, 0.3)
+						&& !SnowLayers.lightByBox(0.6, 0.85, 0.3) && !SnowLayers.lightByBox(0.9, 0.9, 0.3)
+						&& !SnowLayers.lightByBox(0.6, 1.8, 0.3) && !SnowLayers.lightByBox(0.4, 0.5, 0.0));
+		check("G11 sunk: feet below the layer top by more than 0.05; on top (or above) is not sunk",
+				SnowLayers.below(64.0, 64, 7) && SnowLayers.below(64.5, 64, 7) && !SnowLayers.below(64.875, 64, 7)
+						&& !SnowLayers.below(64.84, 64, 7) && SnowLayers.below(64.0, 64, 1) && !SnowLayers.below(64.125, 64, 1));
 		PassResult r = new PassResult();
 		r.addLayer(1L, false, 7, d);
 		r.addLayer(2L, true, 6, d);
