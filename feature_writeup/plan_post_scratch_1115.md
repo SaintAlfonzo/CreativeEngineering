@@ -1,7 +1,7 @@
 # Post-scratch plan, run r1115 (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=3ee28140e81e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 3, In Progress 4, Testing 15), 1 Complete.
+<!-- generated:status_index begin open_work sha1=9f1cb68d2a53 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 3, In Progress 5, Testing 14), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -11,6 +11,7 @@
 | `tooling/scratch-1115-follow-ups #16` | Planned | C | Heap spill into warped forest: look in game |
 | `tooling/scratch-1115-follow-ups #20` | In Progress | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
 | `tooling/scratch-1115-follow-ups #21` | In Progress | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
+| `tooling/scratch-1115-follow-ups #22` | In Progress | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
 | `tooling/scratch-1115-follow-ups #23` | In Progress | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
 | `tooling/scratch-1115-follow-ups #24` | In Progress | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 | `tooling/scratch-1115-follow-ups #1` | Testing | C | Wall exit lift: floor portal to wall portal stuck in floor |
@@ -27,7 +28,6 @@
 | `tooling/scratch-1115-follow-ups #17` | Testing | S | Power Grid arm takes one circuit component per pickup |
 | `tooling/scratch-1115-follow-ups #18` | Testing | S | Acid from rotten flesh and spider eyes in water |
 | `tooling/scratch-1115-follow-ups #19` | Testing | S | Upgrade Aquatic guard for river tree worldgen files |
-| `tooling/scratch-1115-follow-ups #22` | Testing | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
 <!-- generated:status_index end open_work -->
 
 Source: [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) section 9 (findings routing) and the owner's
@@ -726,6 +726,12 @@ Answers to the assumptions of G7.4, G9, G10, raspberry_pie.md 12.5 and lane F2. 
 - **Hot places (`#20`, Common):** in the Nether, packed ice and everything below it (ice, snow, cryosol and the IW
   counterparts) take melt ticks rapidly and skip the other melt checks (no heat source needed); ice and snow in arid and
   tropical biomes do the same. Blue ice and permafrost still melt only next to lava, Nether included.
+- **The End (`#20`, Common):** melting there happens only through direct block contact: a source melts only the
+  blocks touching it (no reach, no scan range), salt and lava included.
+- **Fire in the End (`#22`; Common for the fire block, Creative Delight for campfires):** ordinary fire
+  (`minecraft:fire`) cannot exist in the End: flint and steel, fire charges, lava spread and lightning place none, and
+  any that appears goes out at once. Campfires cannot be lit in the End (torch, flint and steel, fire charge, placed lit,
+  dispensers). Soul fire and soul campfires are exempt.
 - **Magma (`#20`, Common):** built zone kept; modded magma-like blocks join the magma tag (list from the dump at build).
 - **Thorns (`#23`, Compat):** a prick needs speed: walking or sprinting speed in a full pile, sprinting speed in a
   partial pile; chance 0.25 and the armor rule kept.
