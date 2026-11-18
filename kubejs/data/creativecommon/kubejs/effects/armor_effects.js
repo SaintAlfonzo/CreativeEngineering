@@ -1,4 +1,4 @@
-// Creative Common (plan_cb_polish.md 2), from Creative Brewing. Applies global.armorEffects (Common startup
+// Creative Common (plan_cb_polish.md 2). Applies global.armorEffects (Common startup
 // effects/armor_effects.js; rows in Equipment gear_effects.js) piece()/set() effects every tick to whichever players
 // have the matching armor equipped, and its mount() effects to whichever horses have the matching horse armor equipped.
 // Tooltip text for the same data lives in Common client effects/armor_effects_tooltip.js.

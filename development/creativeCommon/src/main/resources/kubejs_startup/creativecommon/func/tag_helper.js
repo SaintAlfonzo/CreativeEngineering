@@ -1,6 +1,6 @@
 // Tag helper — global.tags. Registry-agnostic: pass the event from
 // ServerEvents.tags('item' | 'block' | 'fluid' | 'entity_type' | ...).
-// Creative Common: src/main/resources/kubejs_startup/creativeengineering/func/tag_helper.js. Loaded by
+// Creative Common: src/main/resources/kubejs_startup/creativecommon/func/tag_helper.js. Loaded by
 // Creative Common's startup loader before the pack's startup_scripts folder. An edit needs a Creative Common rebuild.
 console.log('Tag Helper starting')
 

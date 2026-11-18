@@ -1,5 +1,5 @@
 // The creativecommon: potions of vanilla effects (plan_cb_polish.md 2, every potion and effect the Creative mods own is
-// registered from Creative Common; these were creativebrewing:*, before that kubejs:*, all remapped by
+// registered from Creative Common; old creativebrewing:* and kubejs:* ids are remapped by
 // data/creativecommon/swaps/effects_potions.json and, for ids saved in item NBT, PotionByNameRemapMixin). Brewing mixes
 // stay with Creative Brewing (its potions.js reads global.creativePotions for which steps exist). Potions of modded
 // effects (Better Beacons, Magic Resistance) are Java: effect/CommonPotions.java.

@@ -1,4 +1,4 @@
-// Creative Common (plan_cb_polish.md 2), from Creative Brewing. Tooltip renderer for the global.toolEffects framework
+// Creative Common (plan_cb_polish.md 2). Tooltip renderer for the global.toolEffects framework
 // (Common startup effects/tool_effects.js). Effects are actually applied server-side by Common server
 // effects/tool_effects.js — this file only draws the matching tooltip lines, styled after (and for held(), literally
 // sharing code with) armor_effects.js's own tooltip renderer.

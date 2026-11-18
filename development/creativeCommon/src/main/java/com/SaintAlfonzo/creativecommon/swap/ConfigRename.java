@@ -16,7 +16,7 @@ import java.util.List;
  * Config half of the swap lists: a jar whose config file was renamed (a mod id change) calls {@link #carryOver} before
  * registering its config, so the player's values move to the new file instead of being replaced by defaults. Runs only
  * when the old file exists and the new one does not; the old file is renamed, not copied, so it cannot be read twice.
- * A jar carved out of another (its sections moved to a new file) calls {@link #carrySections} the same way.
+ * A jar that owns sections of another jar's config file (they live in a new file) calls {@link #carrySections} the same way.
  */
 public final class ConfigRename {
 	private static final Logger LOGGER = LogUtils.getLogger();

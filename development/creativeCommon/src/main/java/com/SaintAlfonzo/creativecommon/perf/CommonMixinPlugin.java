@@ -77,8 +77,8 @@ public class CommonMixinPlugin extends GatedMixinPlugin {
 			// no MOD_RANGE row: the jar's mods.toml version is ${file.jarVersion} with no Implementation-Version, and the
 			// redirect is require = 0, so any loaded Rare Ice keeps it (SQ-MELT-09)
 			Map.entry("RareIceLightMeltMixin", List.of("rare_ice")),
-			// effect mixin from Creative Brewing (plan_cb_polish.md 2); the Create tea pipe icon went to Engineering
-			// and the Fruits Delight remap to Delight (creative_engineering.md 7.1)
+			// effect mixin (plan_cb_polish.md 2); the Create tea pipe icon is Engineering's and the Fruits Delight
+			// remap is Delight's (creative_engineering.md 7.1)
 			Map.entry("PhantomSpawnerBaneSkipMixin", List.of("better_beacons")));
 
 	/**
@@ -169,7 +169,7 @@ public class CommonMixinPlugin extends GatedMixinPlugin {
 	 * Heartstone 1.1.2's {@code LevelRendererMixin} @ModifyArg's the {@code renderEntity} call in
 	 * {@code LevelRenderer.renderLevel}; Immersive Portals 2.3.7's {@code MixinLevelRenderer} @Redirect's the same call.
 	 * Both sit at priority 1000 and IP's config registers first, so the redirect lands first, Heartstone's injector
-	 * (require 1) no longer finds its call and the client crashes at launch. Applied the other way round both work: the
+	 * (require 1) finds no call and the client crashes at launch. Applied the other way round both work: the
 	 * ModifyArg rewrites the argument in front of the call and the redirect then takes that call over. Lowering the
 	 * Heartstone mixin's priority before LevelRenderer loads (its target context sorts mixins by priority) gives that
 	 * order. Mixin does not export or open its transformer package to mods, so the fields are reached with Unsafe and

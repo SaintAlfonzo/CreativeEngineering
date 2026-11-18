@@ -388,7 +388,7 @@ global.removedItems = [
 	i.flax_seeds,
 	i.flax_block,
 	i.wild_flax,
-	// Alex's Mobs' crow no longer spawns: Hearth and Harvest's crow replaces it (plan_hearth_crow_swap.md 6.3; spawn rule
+	// Alex's Mobs' crow does not spawn: Hearth and Harvest's crow replaces it (plan_hearth_crow_swap.md 6.3; spawn rule
 	// no_alexsmobs_crow in mob_spawns.json, crowSpawnWeight 0). Crows already in saves stay.
 	i.spawn_egg_crow,
 ];

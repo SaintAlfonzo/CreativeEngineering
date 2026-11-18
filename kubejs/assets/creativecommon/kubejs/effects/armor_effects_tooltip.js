@@ -1,4 +1,4 @@
-// Creative Common (plan_cb_polish.md 2), from Creative Brewing. Tooltip renderer for the global.armorEffects framework
+// Creative Common (plan_cb_polish.md 2). Tooltip renderer for the global.armorEffects framework
 // (Common startup effects/armor_effects.js). Effects are actually applied server-side by Common server
 // effects/armor_effects.js's PlayerEvents.tick — this file only draws the matching tooltip lines, styled after Create:
 // Deep Dark's echo-armor set-bonus tooltip (Creative Common's EchoArmorTooltipMixin).

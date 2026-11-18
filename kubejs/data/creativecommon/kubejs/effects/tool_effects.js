@@ -1,4 +1,4 @@
-// Creative Common (plan_cb_polish.md 2), from Creative Brewing. Applies global.toolEffects (Common startup
+// Creative Common (plan_cb_polish.md 2). Applies global.toolEffects (Common startup
 // effects/tool_effects.js; rows in Equipment gear_effects.js) onHit()/held() effects. Tooltip text for the same data
 // lives in Common client effects/tool_effects_tooltip.js.
 //
@@ -18,7 +18,7 @@
 // Named $ToolMobEffectInstance, not $MobEffectInstance - ALL server_scripts share one
 // top-level JS scope in this KubeJS/Rhino build, and server_scripts/magic/
 // armor_effects.js already declares its own top-level `const $MobEffectInstance`.
-// Redeclaring the same const name here previously threw "redeclaration of const
+// Redeclaring the same const name here throws "redeclaration of const
 // $MobEffectInstance" and knocked whichever of the two files loaded second out
 // entirely (see [[rhino-fieldandmethods-gotcha]]).
 const $ToolMobEffectInstance = Java.loadClass('net.minecraft.world.effect.MobEffectInstance')
