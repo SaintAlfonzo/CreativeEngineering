@@ -23,9 +23,7 @@ import org.slf4j.Logger;
  * Compat's (with [shrapnel], [surface] and [vein_undo]), the liquid XP bridge is Creative Magic's, the wooden bucket
  * Creative Delight's.
  *
- * <p>This jar took over the mod id {@code creativeengineering} at the swap (creative_split.md 6 Q1); what was left of
- * patcherMod became Creative Common ({@code creativecommon}). Every id keeps the {@code creativeengineering}
- * namespace, which is now this jar's own.
+ * <p>Every id of this jar is in the {@code creativeengineering} namespace.
  */
 @Mod(CreativeEngineering.MODID)
 public class CreativeEngineering {
@@ -44,7 +42,7 @@ public class CreativeEngineering {
 		// IE: arc recycling of springs, prefixToIngotMap override (onServerAboutToStart).
 		MinecraftForge.EVENT_BUS.register(IECompat.class);
 
-		// Drink fluid effect lines in JEI fluid tooltips (compat/DrinkFluidEffects, from Creative Common): client
+		// Drink fluid effect lines in JEI fluid tooltips (compat/DrinkFluidEffects): client
 		// only, and only with Create, whose emptying recipes it reads.
 		if (net.minecraftforge.fml.loading.FMLEnvironment.dist.isClient() && ModList.get().isLoaded("create")) {
 			MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativeengineering.compat.DrinkFluidEffects::onRecipesUpdated);

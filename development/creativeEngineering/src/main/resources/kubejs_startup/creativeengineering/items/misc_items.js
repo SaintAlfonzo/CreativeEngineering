@@ -1,5 +1,4 @@
-// Creative Engineering. Plain items and the prepared flesh block, migrated from Java (Creative Common
-// CreativeEngineeringItems used to register these as bare Item/Block with no custom behavior) into KubeJS.
+// Creative Engineering. Plain items and the prepared flesh block: bare Item/Block with no custom behavior.
 //
 // Item models are KubeJS's own auto-generated item/generated + layer0 (same as
 // component_*/wirecoil_* in components.js) - no hand-authored model needed, just the
@@ -9,8 +8,7 @@
 // under assets/creativeengineering/{blockstates,models/block,models/item}/prepared_flesh_block.json
 // (cube_all, texture at creativeengineering:block/prepared_flesh_block - the .model() call
 // just points at that same model; the on-disk files win), matching decor_blocks.js's
-// convention. No requiresTool() - the original Java block didn't call
-// requiresCorrectToolForDrops() either, so it stays hand-breakable.
+// convention. No requiresTool(), so it stays hand-breakable.
 
 var reg = global.reg.forPack('creativeengineering')
 StartupEvents.registry('item', e => {

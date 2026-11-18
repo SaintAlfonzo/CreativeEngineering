@@ -35,7 +35,7 @@ import java.util.Set;
  * (ingredient list, Create, IE and the other categories) shows them under the fluid's name. Create potion
  * fluids are skipped: Create's own categories already list their effects.
  *
- * <p>From Creative Common (creative_engineering.md 7.1). Guards: {@link CreativeEngineering} registers
+ * <p>See creative_engineering.md 7.1. Guards: {@link CreativeEngineering} registers
  * {@link #onRecipesUpdated} only on the client with Create loaded; {@link #lines} returns nothing without Create, so
  * the JEI mixin (gated on JEI) never reaches Create's classes.
  */
