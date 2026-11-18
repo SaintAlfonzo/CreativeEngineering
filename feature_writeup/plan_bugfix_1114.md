@@ -18,16 +18,16 @@ One jar at a time, never while the game runs. Every item gets its changelog bull
 
 ## 0. Decisions taken in this plan (owner can override)
 
-<!-- generated:status_index begin open_work sha1=68b2520db82f -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Bug 1, Planned 1, Testing 5), 1 Complete.
+<!-- generated:status_index begin open_work sha1=ee2fc03860a5 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Bug 1, Testing 6), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `gameplay/tnt-and-portal #15` | Bug | S C P | Portal Gun: player lifted one block after walking out of a wall portal |
-| `largecontent/mod-additions #72b` | Planned | S | Syrup to sugar: heated Create mixing recipe with a better yield |
 | `creativecommon/publish #4` | Testing | S | SQ-AZW-01: `[item_dict] Missing` for the block-only Sunflower Stem |
 | `creativecommon/publish #5` | Testing | S | SQ-DCM-02: `global.has` read five data namespaces as absent mods |
 | `dishes/ingredients #43` | Testing | S+ C | Vegetarian patty renamed Veggie patty; cave carrot makes patties |
+| `largecontent/mod-additions #72b` | Testing | S | Syrup to sugar: heated Create mixing recipe with a better yield |
 | `largecontent/mod-additions #81` | Testing | S+ C P | Debugify has no config in the instance: every fix runs and MC-121706 crashes a server boot |
 | `locate #6` | Testing | S+ P T | Corn maze cannot be located within the 120 s search deadline |
 <!-- generated:status_index end open_work -->

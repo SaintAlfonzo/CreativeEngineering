@@ -180,7 +180,7 @@ Wood recipes,recipes_wood.md,RW-,BUILT,creativeengineering,"CQ-RW, SQ-RW","DEPLO
 Cooking recipes,recipes_cooking.md,RC-,BUILT,creativedelight,"SQ-BJ, SQ-PJL, SQ-RC, SQ-RCO",DEPLOYED (since 1.0.3),,,
 Magic recipes,recipes_magic.md,RA-,planned,creativemagic,,"DEPLOYED (since 1.0.3), RA-01 to RA-08 pending",,,
 Recipe progression hub,recipe_progression.md,RP-,BUILT,"creativecompat, creativecommon",SQ-RS,"DEPLOYED (since 1.0.3), RP-01 to RP-08 pending",,,
-Bugfix run from the 2026-11-11 to 2026-11-14 scratch runs,plan_bugfix_1114.md,rows named in the plan,planned,"creativedelight, powergrid","CQ-SPD, SQ-AZW, SQ-CDW, SQ-GAP, SQ-HH, SQ-MELT, SQ-PG, SQ-SPD, SQ-T1",planned 2026-11-14,,,
+Bugfix run from the 2026-11-11 to 2026-11-14 scratch runs,plan_bugfix_1114.md,rows named in the plan,BUILT,"creativedelight, powergrid","CQ-SPD, SQ-AZW, SQ-CDW, SQ-GAP, SQ-HH, SQ-MELT, SQ-PG, SQ-SPD, SQ-T1",planned 2026-11-14,,,
 Rules violation fix plan,"plan_rules_fixes.md, testing/test_prefix_index.md","SQ-RFX, CQ-RFX, RFX-",BUILT,"creativecommon, creativecompat, creativemagic, creativelabels, creativeequipment, creativedevtools, creativeworldgen, creativeloot, creativeengineering, creativecalendar, creativedelight, creativebrewing, exposure","SQ-RFX, CQ-RFX",P0 to P7 built 2026-11-17 (plan Hand-over); SQ-RFX and CQ-RFX queued,,,
 Process review and overhaul plan,"process_review.md, plan_process_overhaul.md",PROC-,BUILT,tools,"CQ-PROC, SQ-PROC, SQ-SMK",Phases 1 and 2 built 2026-11-16; Phase 3 planned 2026-11-16,,,
 Random-tick audit,random_tick_audit.md,,reference,,,"audit 2026-11-07 (plan_farming_cooking_batch.md F2, TODO `farming/crops #15`); moved out of briefs/ 2026-11-17",,,
