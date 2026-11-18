@@ -54,6 +54,8 @@ Design and rulings stay in those plans; this file holds only lanes, order and fi
   Creative Delight, Creative Brewing, Creative Worldgen, solRaspberryPie (Power Grid stays a gate jar, -20). Owner rulings
   this pass: melting method (1115 G8), farming F2, food `#72b`, `#58`, `#59`, `#40` pinned, placed-only licks, bamboo
   leaves on one 8-layer scale. Nothing run in game.
+- 2026-11-17: wave 3 close-out: `tooling/design-rules #3` closed (no patcherMod identifier left). Calendar, Compat and
+  Loot rebuilt at ccc8bfd5 with no source change from the installed jars; not reinstalled.
 
 ## Hand-over (2026-11-17)
 
@@ -70,5 +72,5 @@ Test ids (all queue rows; drafts get their steps from the next runner):
 Open for the owner: 1115 `#2` AMD portal crash (bisect on the owner's client), `#16` heap spill (look in game); 1115b
 `#10` in-place config save not seen by Forge's watcher; SQ-TX-18 must also remove the 8 jars that require Compat (TX.qb
 text); assumed values in 1115 G7.4, G9, G10 and raspberry_pie.md 12.5; Warped Moldy Meat and the heatless stew return
-Cooked Nether Wart's bowl; dispenser-placed Rock Salt Blocks are not licks; `tooling/design-rules #3` and `#4` unchanged.
+Cooked Nether Wart's bowl; dispenser-placed Rock Salt Blocks are not licks; `tooling/design-rules #4` unchanged (#3 closed).
 
