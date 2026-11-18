@@ -128,6 +128,7 @@ f.mangosteen_juice = 'creativedelight:mangosteen_juice';
 f.peach_juice = 'creativedelight:peach_juice';
 f.sea_grape_juice = 'creativedelight:sea_grape_juice';
 f.pickerelweed_juice = 'creativedelight:pickerelweed_juice';
+f.syrup = 'creativedelight:syrup';
 // Fruits Delight's own juice and tea fluids (bottle pairs ship with the mod); bayberry_soup is Bayberry Juice
 f.bayberry_juice = 'fruitsdelight:bayberry_soup';
 f.hamimelon_juice = 'fruitsdelight:hamimelon_juice';

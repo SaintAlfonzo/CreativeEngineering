@@ -213,6 +213,10 @@ def main():
 	for f in FLUIDS:
 		for suf in ('still', 'flow'):
 			texture(f'hearthandharvest:block/fluid/{f}_{suf}')
+	# Syrup: textures only, for Creative Delight's creativedelight:syrup fluid (largecontent/mod-additions #72b); no
+	# H&H syrup fluid or lang is ported
+	for suf in ('still', 'flow'):
+		texture(f'hearthandharvest:block/fluid/syrup_{suf}')
 	for e in EFFECTS:
 		texture(f'hearthandharvest:mob_effect/{e}')
 	up = json.load(open(f'{UA}/lang/en_us.json'))

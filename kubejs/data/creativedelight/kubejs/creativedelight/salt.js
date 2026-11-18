@@ -9,7 +9,6 @@ ServerEvents.recipes(e => {
 	const R = global.NCH.forPack('creativedelight')
 	var i = global.item
 	var f = global.fluid
-	var b = global.blocks
 
 	global.CD.recipes(() => {
 
@@ -37,8 +36,8 @@ ServerEvents.recipes(e => {
 		R.createMilling(MACHINE_SALT, i.raw_rock_salt, e, 'raw_rock_salt_salt')
 
 		// Rock Salt Block <-> 4 rock salt (upstream 9; plan_post_scratch_1115 G2b): one block is one salt lick, worn in 4
-		// stages, each stage refilled by 1 rock salt. The block id is block_dict's (no item_dict key yet).
-		var ROCK_SALT_BLOCK = b.raw_rock_salt_block
+		// stages, each stage refilled by 1 rock salt.
+		var ROCK_SALT_BLOCK = i.raw_rock_salt_block
 		R.remove({ id: 'salt:raw_rock_salt' }, e)
 		R.remove({ id: 'salt:raw_rock_salt_block' }, e)
 		R.shaped(ROCK_SALT_BLOCK, ['RR', 'RR'], { R: i.raw_rock_salt }, e, 'rock_salt_block')

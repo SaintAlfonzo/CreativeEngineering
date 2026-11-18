@@ -179,6 +179,17 @@ ServerEvents.recipes(e => {
 		// Sap to Rustic Delight syrup on a Create mixer, heated, and syrup to sugar (3.1, D4).
 		R.createMixing(i.syrup, [Fluid.of(f.sap, 1000), i.glass_bottle], e, 'syrup_from_sap', 'heated')
 		R.shapeless(n(i.sugar, 4), [i.syrup], e, 'sugar_from_syrup')
+		// Syrup to sugar (largecontent/mod-additions #72b): 8 sugar a bottle in the Cooking Pot; Slice &
+		// Dice copies it to a heated mixer. Both hand the bottle back (the syrup's crafting remainder). The hand craft above
+		// stays at 4.
+		R.fdCooking([i.syrup], n(i.sugar, 8), e, 'sugar_from_syrup', 0.35, 200)
+		// Syrup fluid (creativedelight:syrup, CD startup fluids.js): 1000 mB sap to 250 mB syrup heated (one bottle, as
+		// syrup_from_sap), bottle <-> 250 mB on Spout and Item Drain, 250 mB to 8 sugar heated
+		if (f.syrup) {
+			R.createMixing(Fluid.of(f.syrup, 250), [Fluid.of(f.sap, 1000)], e, 'syrup_fluid_from_sap', 'heated')
+			R.createBottle(i.syrup, f.syrup, e, 'syrup')
+			R.createMixing(n(i.sugar, 8), [Fluid.of(f.syrup, 250)], e, 'sugar_from_syrup_fluid', 'heated')
+		}
 
 		// Manure building blocks
 		R.shaped(i.manure_block, ['##', '##'], { '#': i.manure }, e, 'manure_block')

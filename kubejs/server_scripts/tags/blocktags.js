@@ -313,6 +313,7 @@ ServerEvents.tags('block', e => {
 
 	t.addMatching(e, runner.natural_rough, [
 		b.raw_rock_salt_block,   // raw salt crystals, like raw stone (salt.md 6 S3)
+		b.placed_rock_salt_block,   // the placed lick form of the same block (salt.md 8.1)
 		item.podzol, item.mycelium, item.crimson_nylium, item.warped_nylium,
 		item.netherrack, item.basalt, 'minecraft:nether_*_ore', 'supplementaries:ashen_basalt',
 		'minecraft:*coral_block', item.mangrove_roots,

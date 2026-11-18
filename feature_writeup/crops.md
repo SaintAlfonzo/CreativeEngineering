@@ -4,8 +4,8 @@ Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=584eb18d6278 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 4, In Progress 4, Testing 17), 1 Complete.
+<!-- generated:status_index begin open_work sha1=71a50e17844f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 25 open TODO rows (Planned 4, In Progress 3, Testing 18), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -13,7 +13,6 @@ Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference
 | `farming/crops #14` | Planned | S P | Bone meal in planters |
 | `farming/wild-crops #1` | Planned | S P T | Densities moved by the placement system |
 | `farming/wild-crops #2` | Planned | S P T | Ground limits |
-| `farming/crops #15` | In Progress | S P | Other plants in random growth? |
 | `farming/wild-crops #3` | In Progress | S P T | Biome gaps and choices |
 | `farming/wild-crops #4` | In Progress | S P T | Sources and duplicates |
 | `food/drinks #3` | In Progress | S+ C P~ | Merges |
@@ -25,6 +24,7 @@ Test prefix **CR-** · Last updated **2026-11-02** · Overall status **reference
 | `farming/crops #9` | Testing | S+ P T | Bell pepper colors |
 | `farming/crops #11` | Testing | S+ P T | Extra stem fruit |
 | `farming/crops #12` | Testing | S+ P | Extra stem fruit ignores seasons |
+| `farming/crops #15` | Testing | S P | Other plants in random growth? |
 | `farming/crops #17` | Testing | S P | Wet farmland from buckets and water bottles |
 | `farming/crops #19` | Testing | S P T | Village farms grow Rustic crops by the wild-crop rules |
 | `farming/crops #20` | Testing | S~ C P | Melon and pumpkin stems connect to their own fruit |

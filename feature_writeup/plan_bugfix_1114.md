@@ -305,6 +305,12 @@ Status: DONE 2026-11-14 (cd-a). Dropped through the Rustic bake (`DROPPED_FILES`
 - Later, a separate step, not in this run: add a heated Create mixing recipe with a better yield (`R.createMixing(..., 'heated')`,
   the pattern at `recipes.js:173`). The owner picks the value. TODO row to add: `#72b`.
 - Verify: SQ-HH-1593 rerun (only the 4-sugar recipe).
+- `#72b` built 2026-11-17 (lane F2, plan_exec_1117): owner ruling 8 sugar per syrup bottle, bottle returned; Cooking Pot
+  recipe `creativedelight:farmersdelightcooking/sugar_from_syrup` (Slice & Dice mirrors it to heated mixing); the
+  4-sugar hand craft kept. Syrup fluid `creativedelight:syrup` (CD startup `fluids.js`, tag `forge:fluid/syrup`) with
+  heated sap -> syrup fluid (1000 -> 250 mB), syrup fluid -> 8 sugar, bottle <-> 250 mB; inert until Creative Common's
+  fluid dict has `f.syrup`. Textures: Hearth and Harvest 1.4.1 `block/fluid/syrup_still` / `_flow`, exact copies
+  (`tools/port_hearth_assets.py`). Queue SQ-HH-1613 to -1616 (rows/HH.qb section 4).
 
 ### 3.5 Crow feeding and breeding (TODO `#66`, `#67`)
 Status: DONE 2026-11-14 (cd-a). A hurt tame crow heals 2 health per food; JEI page on the crow spawn egg.

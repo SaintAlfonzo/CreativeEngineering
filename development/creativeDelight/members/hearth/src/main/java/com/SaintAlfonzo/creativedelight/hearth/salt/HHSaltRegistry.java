@@ -35,6 +35,9 @@ public final class HHSaltRegistry {
     public static final DeferredRegister<PoiType> POI_TYPES = DeferredRegister.create(ForgeRegistries.POI_TYPES, MODID);
 
     // Heights in px (plan_bugfix_1114 3.7): layered like snow, waxed stages as high as their unwaxed twin.
+    /** Stage 0, a player-placed Rock Salt Block (no item: it drops and picks The Salt's Rock Salt Block). */
+    public static final RegistryObject<Block> PLACED_ROCK_SALT = BLOCKS.register("placed_rock_salt_block",
+            () -> new PlacedRockSaltBlock(Properties.copy(Blocks.GRAVEL).strength(2.0F, 3.0F).sound(SoundType.TUFF)));
     public static final RegistryObject<Block> LIGHTLY_LICKED = stage("lightly_licked_salt_block", 12);
     public static final RegistryObject<Block> WELL_LICKED = stage("well_licked_salt_block", 8);
     public static final RegistryObject<Block> HEAVILY_LICKED = stage("heavily_licked_salt_block", 4);
@@ -46,7 +49,7 @@ public final class HHSaltRegistry {
     public static final RegistryObject<SoundEvent> LICK = SOUNDS.register("entities.lick",
             () -> new SoundEvent(new ResourceLocation(MODID, "entities.lick")));
 
-    /** Unwaxed lick blocks only: waxing takes a block out of the index, unwaxing puts it back. */
+    /** Unwaxed lick blocks only: waxing takes a block out of the index, unwaxing puts it back. Generated Rock Salt Blocks are not in it. */
     public static final RegistryObject<PoiType> SALT_LICK_POI = POI_TYPES.register("salt_lick", HHSaltRegistry::createPoi);
 
     private HHSaltRegistry() {
@@ -60,12 +63,7 @@ public final class HHSaltRegistry {
 
     private static PoiType createPoi() {
         Set<BlockState> states = new HashSet<>();
-        Block salt = SaltLick.saltBlock();
-        if (salt != null && salt != Blocks.AIR) {
-            states.addAll(salt.getStateDefinition().getPossibleStates());
-        } else {
-            LOGGER.warn("salt:raw_rock_salt_block is not registered; the salt lick POI covers the worn stages only");
-        }
+        states.addAll(PLACED_ROCK_SALT.get().getStateDefinition().getPossibleStates());
         states.addAll(LIGHTLY_LICKED.get().getStateDefinition().getPossibleStates());
         states.addAll(WELL_LICKED.get().getStateDefinition().getPossibleStates());
         states.addAll(HEAVILY_LICKED.get().getStateDefinition().getPossibleStates());
@@ -88,6 +86,7 @@ public final class HHSaltRegistry {
         // Load complete, after every mod's common setup: the lick restore wraps whatever Salt (or another mod) registered
         bus.addListener((net.minecraftforge.fml.event.lifecycle.FMLLoadCompleteEvent event) -> event.enqueueWork(SaltEvents::registerDispenser));
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onRightClickBlock);
+        MinecraftForge.EVENT_BUS.addListener(SaltEvents::onPlace);
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onEntityJoin);
         MinecraftForge.EVENT_BUS.addListener(SaltEvents::onTooltip);
     }

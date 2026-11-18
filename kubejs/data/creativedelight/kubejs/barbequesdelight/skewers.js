@@ -43,8 +43,8 @@ ServerEvents.recipes(e => {
 		//######################### Pack skewers #########################
 		// Raw craft from the raw ingredients (one of each, a diagonal skewer as the Crispy Skewer; the End Skewer
 		// shapeless), cooked by the Grill (ticks of the closest Barbeque's Delight line), furnace, smoker or campfire. The
-		// heatless craft from cooked ingredients stays where one exists; the Nether and Cave Skewers have no cooked form
-		// of their inputs, so their only route is cooking the raw skewer. Upstream crafts removed.
+		// heatless craft from cooked ingredients stays where one exists; the Nether Skewer has no cooked form of its
+		// inputs, so its only route is cooking the raw skewer. Upstream crafts removed.
 
 		// Barbecue Skewer (Farmer's Delight barbecue_stick): raw meat in place of the cooked meat; grill as beef
 		if (on('farmersdelight')) {
@@ -101,12 +101,19 @@ ServerEvents.recipes(e => {
 				steps: [i.chorus_fruit, i.popped_chorus_fruit, i.mite_crust],
 				rawSteps: [i.chorus_fruit, i.chorus_fruit, i.mite_crust] })
 		}
-		// Cave Skewer (Hostile Delight caveskewer): glow berries, spider eye, rotten flesh, all raw already; no heatless
-		// craft (dishes/meals #58 merges it with Miner's later). Grill as chicken
+		// Cave Skewer (Hostile Delight caveskewer; dishes/meals #58): kept beside the Improvised Skewer.
+		// Miner's Delight's spider leg in place of the spider eye; glow berries and rotten flesh have no cooked form, so the
+		// heatless craft swaps only the leg for the baked one. Without Miner's, upstream's spider eye and no heatless craft.
+		// Grill as chicken
 		if (on('hostiledelight')) {
 			R.remove({ id: 'hostiledelight:caveskewerrecp' }, e)
-			F.skewer({ raw: i.raw_caveskewer, cooked: i.caveskewer, grill: 280,
-				rawInputs: [i.glow_berries, i.spider_eye, i.rotten_flesh] })
+			if (on('miners_delight'))
+				F.skewer({ raw: i.raw_caveskewer, cooked: i.caveskewer, grill: 280,
+					rawInputs: [i.glow_berries, i.spider_leg, i.rotten_flesh],
+					cookedInputs: [i.glow_berries, i.baked_spider_leg, i.rotten_flesh] })
+			else
+				F.skewer({ raw: i.raw_caveskewer, cooked: i.caveskewer, grill: 280,
+					rawInputs: [i.glow_berries, i.spider_eye, i.rotten_flesh] })
 		}
 	})
 })

@@ -217,3 +217,31 @@ expect verb=rdetail id=creativedelight:createsequencedassembly/raw_nether_skewer
 kjsreject incomplete\('raw_\S+'\) not registered
 reject \[cdevtest\] verb=\S+ .*error=
 look beef steps: deploy beef tag, cabbage tag, beef, cabbage; nether base blaze rod; crispy: chorus, chorus, mite crust
+
+@@section 2
+@@title Cave Skewer and Cooked Nether Wart dishes, 2026-11-17 ([plan_meals_rolls_bbq.md](../plan_meals_rolls_bbq.md) 5; TODO `dishes/meals #58`, `#59`)
+@@date 2026-11-17
+@@jars creativedelight
+@@sources kubejs/data/creativedelight/kubejs/barbequesdelight/skewers.js kubejs/data/creativedelight/kubejs/nethersdelight/recipes.js
+@@text
+@@text Script-only change in the Creative Delight jar of 2026-11-17 (server scripts; `/reload` is enough on a running server).
+@@text
+@@table
+## SQ-BBQ-10 | Cave Skewer with Miner's Delight: raw = spider leg + glow berries + rotten flesh; heatless with baked spider leg; Improvised Skewer kept
+@group any
+@commands `cdevtest rdetail creativedelight:shaped/raw_caveskewer`; `cdevtest rdetail creativedelight:shaped/caveskewer_from_cooked_manual_only`; `cdevtest rdetail caveskewer`; `cdevtest rdetail improvised_barbecue_stick`
+@pass raw craft: glow berries, `miners_delight:spider_leg`, rotten flesh, stick -> 1 `hostiledelight:raw_caveskewer` (no spider eye); heatless: glow berries, `miners_delight:baked_spider_leg`, rotten flesh, stick -> 1 `hostiledelight:caveskewer`; grill / furnace / smoker / campfire cook the raw one; Miner's Improvised Barbecue Stick recipes unchanged; `hostiledelight:caveskewerrecp` absent
+@fails spider eye in the raw craft: `on('miners_delight')` false (member id); no heatless craft: `cookedInputs` missing
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-BBQ-11 | Nether's Delight: Strider Moss Stew pot takes nether wart for the 2nd warped fungus; Warped Moldy Meat takes Cooked Nether Wart for the bowl
+@group any
+@commands `cdevtest rdetail creativedelight:farmersdelightcooking/strider_moss_stew`; `cdevtest rdetail creativedelight:shapeless/warped_moldy_meat`; `cdevtest rdetail nethersdelight:cooking/strider_moss_stew`; `cdevtest rdetail nethersdelight:warped_moldy_meat`
+@pass pot: warped fungus, crimson fungus, crimson roots, `#forge:crops/nether_wart`, `#nethersdelight:raw_strider`, container bowl, 200 ticks -> Strider Moss Stew; shapeless: 2 warped roots, hoglin sirloin, `roll_delight:cooked_nether_wart` (no bowl) -> Warped Moldy Meat; both upstream ids absent
+@fails upstream ids still there: `nethersdelight/recipes.js` did not run (`CD.on('nethersdelight')`)
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-BBQ-12 | heatless Strider Moss Stew from Cooked Nether Wart; Nether Skewer unchanged
+@group any
+@commands `cdevtest rdetail strider_moss_stew_cooked_manual_only`; `cdevtest rdetail raw_nether_skewer`; live: craft the heatless stew in a grid
+@pass shapeless: Cooked Nether Wart, warped fungus, crimson fungus, crimson roots, 2 raw strider -> 1 Strider Moss Stew, id ends `_manual_only` (no basin copy); Nether Skewer recipes as before this change; the grid gives back the Cooked Nether Wart's bowl (its crafting remainder)
+@fails no recipe: `F.mealCraft` line skipped (`CD.on('roll_delight')`)
+@draft runnable steps not written yet; the next runner writes them from @commands
