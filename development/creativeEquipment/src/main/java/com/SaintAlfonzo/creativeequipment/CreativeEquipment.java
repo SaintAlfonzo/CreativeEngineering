@@ -37,13 +37,11 @@ import java.util.List;
  * Creative Equipment (feature_writeup/creative_equipment.md): the pack's gear. Tier shields, stepstools, backpack
  * skins, the air brake, Bottled Air, elytra duplication and elytra chestplates, the copper tool tier, armor caps and
  * enchantability, the bone meal charm, the Nock Enough Arrows recipe book fix, and the gear scripts (tool and armor
- * tuning, archery, End gear, dragon autorepair, harvest tiers). Requires Creative Common ({@code creativeengineering}, later
- * Creative Common: the damage tag framework and {@code shield.EffectTickContext} stay there as Common APIs) and
+ * tuning, archery, End gear, dragon autorepair, harvest tiers). Requires Creative Common (the damage tag framework and {@code shield.EffectTickContext} are Common APIs) and
  * Creative Compat.
  *
  * Ids follow the owner (feature_writeup/namespace_move.md): the shields, the recipe serializers, the copper tier, the
- * stepstool channel, tags and lang keys use this mod's namespace ({@link #NS}). The registrations below are the ones
- * Creative Common's constructor made, in the same order.
+ * stepstool channel, tags and lang keys use this mod's namespace ({@link #NS}).
  */
 @Mod(CreativeEquipment.MOD_ID)
 public class CreativeEquipment {
@@ -63,7 +61,7 @@ public class CreativeEquipment {
 		if (!ConfigRename.carrySections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS))
 			ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CEQConfig.CB_SECTIONS);
 		ConfigRename.mergeSections(OLD_FILE, FILE, CEQConfig.CB_SECTIONS);
-		// [armor_overflow] came from Creative Common's file with the Detail Armor Bar code, before the swap from
+		// [armor_overflow] is carried from Creative Common's file (Detail Armor Bar code), else merged from
 		// Creative Common's creativeengineering-common.toml.
 		if (!ConfigRename.carrySections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS))
 			ConfigRename.mergeSections("creativecommon-common.toml", FILE, CEQConfig.COMMON_SECTIONS);
@@ -94,8 +92,7 @@ public class CreativeEquipment {
 		// channel is creativeequipment:stepstool.
 		Stepstool.register();
 		if (curios) MinecraftForge.EVENT_BUS.register(Stepstool.class);
-		// Hands, face, feet Curios slots by IMC (compat/CuriosSlots; feature_writeup/curios_slots.md; from Creative
-		// Common).
+		// Hands, face, feet Curios slots by IMC (compat/CuriosSlots; feature_writeup/curios_slots.md).
 		if (curios) modEventBus.addListener(com.SaintAlfonzo.creativeequipment.compat.CuriosSlots::enqueue);
 
 		// Elytra air brake velocity effect (the item itself is registered by this jar's startup script

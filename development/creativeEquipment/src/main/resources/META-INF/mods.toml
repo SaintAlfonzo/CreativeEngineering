@@ -25,8 +25,7 @@ versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
 # patcherMod: KubeJS, the shared helpers, the startup script loader and the Common APIs this jar calls
-# (swap/ConfigRename, the damage tag framework, shield/EffectTickContext). Becomes creativecommon at the final swap
-# (creative_split.md 7.6 Q1). The range must exclude every Creative Common version that still carries the Equipment classes and mixins
+# (swap/ConfigRename, the damage tag framework, shield/EffectTickContext). The range must exclude every Creative Common version that still carries the Equipment classes and mixins
 # (1.1.08 and older: they would register twice).
 [[dependencies.creativeequipment]]
 modId="creativecommon"
@@ -81,7 +80,7 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# --- Detail Armor Bar from Creative Common, --- armor bar overflow rows and modded armor icons (API
+# --- Detail Armor Bar, --- armor bar overflow rows and modded armor icons (API
 # plus 2 mixins)
 [[dependencies.creativeequipment]]
 modId="detailab"

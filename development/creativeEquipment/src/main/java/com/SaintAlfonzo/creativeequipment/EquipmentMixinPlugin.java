@@ -32,7 +32,7 @@ public class EquipmentMixinPlugin extends GatedMixinPlugin {
 			Map.entry("CopperPoisoningEffectMixin", List.of("everythingcopper")),
 			Map.entry("EchoArmorEffectProcedureMixin", List.of("create_deep_dark")),
 			Map.entry("EchoArmorTooltipMixin", List.of("create_deep_dark")),
-			// Detail Armor Bar overflow row, from Creative Common
+			// Detail Armor Bar overflow row
 			Map.entry("ArmorBarRendererAccessor", List.of("detailab")),
 			Map.entry("ArmorBarRendererOverflowTickMixin", List.of("detailab")));
 

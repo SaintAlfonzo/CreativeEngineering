@@ -13,13 +13,12 @@ import com.SaintAlfonzo.creativeequipment.shield.ShieldTier;
 import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
- * Creative Equipment's COMMON config, {@code config/creativeequipment-common.toml}. The sections moved out of
- * Creative Common's creativeengineering-common.toml (creative_split.md 7.6, wave 7) with keys, comments,
- * defaults and field names unchanged: {@code [dragon_gear]}, {@code [air_brake]}, {@code [stepstool]},
+ * Creative Equipment's COMMON config, {@code config/creativeequipment-common.toml}. The sections carried from
+ * Creative Common's creativeengineering-common.toml (creative_split.md 7.6, wave 7): {@code [dragon_gear]}, {@code [air_brake]}, {@code [stepstool]},
  * {@code [crafting]} (the felsic assembly values), {@code [armor_enchantability]}, {@code [shields]},
  * {@code [bonemeal_charm]}, {@code [bottled_air]} and {@code [backpackSkins]}. The first boot with Equipment copies a
  * player's values over ({@code swap.ConfigRename.carrySections}, called from {@link CreativeEquipment}). The static
- * field names are the pre-carve CEConfig's, so {@code global.NCH.cfg(..., 'CRAFTING.FELSIC_SWORD')} finds them once the scripts
+ * field names are the section field names, so {@code global.NCH.cfg(..., 'CRAFTING.FELSIC_SWORD')} finds them once the scripts
  * register this class. {@code [damage_tags]} stays in Common with the damage tag framework (Creative Brewing reads it).
  */
 public final class CEQConfig {
@@ -40,10 +39,10 @@ public final class CEQConfig {
 	public static final CopperPoisoning COPPER_POISONING;
 	public static final ArmorOverflow ARMOR_OVERFLOW;
 
-	/** Sections taken over from Creative Common's creativecommon-common.toml (interface carve). */
+	/** Sections carried over from Creative Common's creativecommon-common.toml. */
 	public static final List<String> COMMON_SECTIONS = List.of("armor_overflow");
 
-	/** Taken over from Creative Brewing's creativebrewing-common.toml (plan_cb_polish.md 1). */
+	/** Carried over from Creative Brewing's creativebrewing-common.toml (plan_cb_polish.md 1). */
 	public static final List<String> CB_SECTIONS = List.of("copper_poisoning");
 
 	/** The toml tables carried over from creativeengineering-common.toml. */
@@ -64,7 +63,7 @@ public final class CEQConfig {
 		BACKPACK_SKINS = new BackpackSkins(builder);
 		TOOLTIPS = new Tooltips(builder);
 		COPPER_POISONING = new CopperPoisoning(builder);
-		// from creativecommon-common.toml (interface carve)
+		// from creativecommon-common.toml
 		ARMOR_OVERFLOW = new ArmorOverflow(builder);
 		SPEC = builder.build();
 	}
@@ -263,7 +262,7 @@ public final class CEQConfig {
 
 		private Crafting(ForgeConfigSpec.Builder b) {
 			b.push("crafting");
-			String magicResistance = "creativecommon:magic_resistance"; // Creative Common (creativebrewing: before, creativeengineering: up to)
+			String magicResistance = "creativecommon:magic_resistance"; // Creative Common's effect id
 			FELSIC_HELMET = new FelsicPiece(b, "felsic_helmet", magicResistance, 500, 1, 5);
 			FELSIC_CHESTPLATE = new FelsicPiece(b, "felsic_chestplate", magicResistance, 500, 1, 5);
 			FELSIC_LEGGINGS = new FelsicPiece(b, "felsic_leggings", magicResistance, 500, 1, 5);
