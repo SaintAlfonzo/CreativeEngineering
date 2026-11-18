@@ -1174,3 +1174,17 @@ source (`DecompiledMods/powergrid-0.6.2-source/`, tag v0.6.2).
 - Not port changes (8.3): #82 acid takes rotten flesh through the pack script `kubejs/server_scripts/other/power_grid.js`
   (the jar keeps upstream's `mixing/acid`); #83, #84, #87 match upstream; #86 is Create's display board.
 
+
+## 26. Arm belt fix: jar `-20` (2026-11-17, plan_post_scratch_1115b.md, TODO `tooling/scratch-1115-follow-ups-2 #14`)
+
+Gate jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-20.jar` (`port_phase=10`, sha1
+79ba272a37f07cbea0c0ca6dcb791fb813397715).
+
+- **B39** (deliberate deviation, upstream puts the part on the belt) with no incomplete circuit in the belt's centre
+  window, `ArmInteractionPointMixin.powerGrid$handleBelt` returned null and Create's belt insert took the part, so a part
+  the arm brought before the circuit arrived rode to the belt end, took the end depot and held the finished board at
+  the belt end (r1116 SQ-PS15-14 on `-19`). The belt branch now refuses a circuit component (`ComponentRegistry`
+  maps it to a component) while no circuit is in the window; the arm keeps it, and with `getDistributableAmount`
+  (D3, `-19`) seeing the refusal it does not grab a part at all until a circuit is in the window. Other items keep
+  upstream's fallback. A player who wants loose components on a belt from an arm goes through a depot or chute.
+  SQ-PWG-98.

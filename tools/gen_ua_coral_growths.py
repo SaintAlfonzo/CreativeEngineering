@@ -4,8 +4,9 @@
 IW grows fans, wall fans, coral and the odd wet sponge into the water around each vanilla coral block, from one
 data file per kind (data/immersive_weathering/block_growths/<kind>_coral.json; the five differ only in the kind name).
 This copies IW's brain_coral.json once per living Upgrade Aquatic coral kind (every <kind> with a _coral_block,
-_coral, _coral_fan and _coral_wall_fan blockstate, dead kinds excluded) into
-kubejs/data/immersive_weathering/block_growths/ua_<kind>_coral.json, swapping the block names. Chance, crowding
+_coral, _coral_fan and _coral_wall_fan blockstate, dead kinds excluded) into Creative Worldgen's
+packs/immersive_weathering+upgrade_aquatic/data/immersive_weathering/block_growths/ua_<kind>_coral.json (a data pack
+added only while both mods are loaded, so a pack without Upgrade Aquatic loads no unknown block ids), swapping the block names. Chance, crowding
 limit, weights and the 0.8 water match stay IW's.
 
 Dead kinds do not grow, as in IW: the dead_ ones, and elder prismarine, which is prismarine coral's dead form.
@@ -18,7 +19,7 @@ Owns every ua_*_coral.json in that folder: stale ones are deleted.
 
   python3 tools/gen_ua_coral_growths.py [--dry-run]
 
-Apply: /reload (IW reads block growths at data load).
+Apply: :creativeWorldgen: rebuild + install, then restart (the growths ship in the Worldgen jar).
 """
 import argparse
 import glob
@@ -28,7 +29,8 @@ import zipfile
 from pathlib import Path
 
 INSTANCE = Path(__file__).resolve().parent.parent
-OUT = INSTANCE / 'kubejs/data/immersive_weathering/block_growths'
+OUT = INSTANCE / ('development/creativeWorldgen/src/main/resources/packs/immersive_weathering+upgrade_aquatic/'
+	'data/immersive_weathering/block_growths')
 TEMPLATE = 'data/immersive_weathering/block_growths/brain_coral.json'
 UA_STATES = 'assets/upgrade_aquatic/blockstates/'
 BIOMES = {'prismarine': '#minecraft:is_ocean'}

@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "Creative Worldgen: Immersive Weathering coral growth for Upgrade Aquatic corals (added only with both mods)",
+    "pack_format": 10,
+    "forge:resource_pack_format": 9,
+    "forge:data_pack_format": 10
+  }
+}

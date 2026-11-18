@@ -22,6 +22,7 @@ import java.util.stream.Stream;
  * Ids under creativeworldgen: upgrade_aquatic (driftwood on
  * land, the flotilla driftwood meta part), farmersdelight and fungidelight (wild mushroom colonies and patches),
  * miners_delight (cave carrots), vintagedelight (wild ghost peppers).
+ * packs/immersive_weathering+upgrade_aquatic/: Immersive Weathering coral growth for Upgrade Aquatic corals.
  * Also Upgrade Aquatic's own overridden ids (upgrade_aquatic:river_tree configured feature, trees_river
  * and driftwood_* placed features), here so a pack without Upgrade Aquatic boots (plan_post_scratch_1115.md D5). UA registers those in Java, so a datapack entry here still overrides them.
  */

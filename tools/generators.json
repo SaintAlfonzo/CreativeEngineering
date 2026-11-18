@@ -527,8 +527,8 @@
 			"id": "ua_coral_growths",
 			"script": "tools/gen_ua_coral_growths.py",
 			"groups": ["core", "pack"],
-			"outputs": ["kubejs/data/immersive_weathering/block_growths"],
-			"apply": "/reload (Immersive Weathering reads block growths at data load)"
+			"outputs": ["development/creativeWorldgen/src/main/resources/packs/immersive_weathering+upgrade_aquatic/data/immersive_weathering/block_growths"],
+			"apply": ":creativeWorldgen: rebuild + install, then restart (the growths ship in the Worldgen jar, loaded only with Upgrade Aquatic)"
 		},
 		{
 			"id": "jei_world",

@@ -55,7 +55,7 @@ feature are documented with that feature and only pointed to here.
 | 2.27 | Config-only (2026-10-22): JEI tooltip search behind `$`, Breezy wind particles x3, every Chalk symbol unlocked; Cosmetic Armor keep-on-death checked, unchanged | `jei-client.ini`, `breezy-client.toml`, `chalk-common.toml` (all in `configs_edited/root_config/`) | done, not deployed, untested: FX-25, FX-26 client only; FX-27 server half scratch server PASSED 2026-10-22 (SQ-GM-06); FX-28 in game |
 | 2.28 | Polymorph recipe choice in the Sophisticated Backpacks crafting upgrade | `compat/SophisticatedPolymorphCompat`, `compat/SophisticatedPolymorphClient`, `SophisticatedCraftingPolymorphMixin`, `SophisticatedUpgradeOpenMixin`, `PolymorphRecipeSelectionPacketMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-35 to FX-38 in game |
 | 2.29 | Polymorph recipe choice in the IE Engineer's Crafting Table and the Pretty Pipes Crafting Terminal | `compat/CraftingMenuPolymorphCompat`, `compat/CraftingMenuPolymorphClient`, `IECraftingTablePolymorphMixin`, `PrettyPipesCraftingTerminalPolymorphMixin` | built 2026-10-22, jar not yet in `mods/`, untested: FX-39 to FX-42 in game |
-| 2.31 | Upgrade Aquatic coral grows like vanilla coral (Immersive Weathering growths) | [tools/gen_ua_coral_growths.py](../tools/gen_ua_coral_growths.py), `kubejs/data/immersive_weathering/block_growths/ua_*` | BUILT 2026-10-28; scratch r1031 (2026-10-31): growth files parse (SQ-UC-01), prismarine grows in a cold ocean (SQ-UC-03, weak PASS); acan growth unproven, the setup grew no vanilla coral either (SQ-UC-02 client check pending); FX-48 |
+| 2.31 | Upgrade Aquatic coral grows like vanilla coral (Immersive Weathering growths) | [tools/gen_ua_coral_growths.py](../tools/gen_ua_coral_growths.py), Creative Worldgen `packs/immersive_weathering+upgrade_aquatic/` (was `kubejs/data/immersive_weathering/block_growths/ua_*` until 2026-11-17) | BUILT 2026-10-28; scratch r1031 (2026-10-31): growth files parse (SQ-UC-01), prismarine grows in a cold ocean (SQ-UC-03, weak PASS); acan growth unproven, the setup grew no vanilla coral either (SQ-UC-02 client check pending); FX-48 |
 | 2.32 | Falling blocks (anvil, sand, gravel) splash on entering water via Effective | `mixin/FallingBlockWaterSplashMixin` | BUILT 2026-10-28, untested (FX-49) |
 | 2.33 | Opening chat with / (or T) sometimes typed the key into the box ("//"), MC-122477 | `ChatOpenArmMixin`, `ChatOpenCharDropMixin`, `util.ChatOpenKeyGuard` | BUILT 2026-11-12, in `mods/`; FX-50 PASS (owner observed 2026-11-13) |
 
@@ -363,7 +363,10 @@ the vanilla texture). Off: nothing is swapped, moss is vanilla. Read at model lo
 Immersive Weathering grows fans, wall fans, coral and rarely wet sponge into the water around each vanilla coral
 block (`gameplay/misc #15`). It does this with one data file per kind, `block_growths/<kind>_coral.json`, and the five
 files differ only in the kind name. `tools/gen_ua_coral_growths.py` (`/cdevgen run ua_coral_growths`) copies IW's
-`brain_coral.json` once per living UA coral kind into `kubejs/data/immersive_weathering/block_growths/ua_<kind>_coral.json`.
+`brain_coral.json` once per living UA coral kind into `data/immersive_weathering/block_growths/ua_<kind>_coral.json` of
+Creative Worldgen's `packs/immersive_weathering+upgrade_aquatic/` (since 2026-11-17; before that `kubejs/data/`, which
+logged 11 unknown block id errors in a pack without Upgrade Aquatic, r1116 SQ-PS15-16). That data pack is added only
+while both mods are loaded (`ModDataPacks`), so a change needs a Worldgen rebuild, install and restart.
 It finds the kinds from the UA jar: every kind with a block, coral, fan and wall fan, dead kinds excluded. That gives 11
 kinds: acan, branch, chrome, finger, moss, petal, pillow, prismarine, rock, silk, star.
 
