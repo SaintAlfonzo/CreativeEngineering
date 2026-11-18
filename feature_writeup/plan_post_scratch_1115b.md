@@ -1,11 +1,10 @@
 # Post-scratch plan 2: pass-through rework (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=0b700fc3da65 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 16 open TODO rows (Planned 1, Testing 15), 0 Complete.
+<!-- generated:status_index begin open_work sha1=16f427001c1f -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 16 open TODO rows (Testing 16), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `tooling/scratch-1115-follow-ups-2 #10` | Planned | S | In-place Compat toml save not reloaded |
 | `tooling/scratch-1115-follow-ups-2 #1` | Testing | S | Cobweb fall distance reset |
 | `tooling/scratch-1115-follow-ups-2 #2` | Testing | S | Stopped break-group projectiles break as a fallback |
 | `tooling/scratch-1115-follow-ups-2 #3` | Testing | S P | Neighbor model: 4 sides for crops, 6 faces for webs, dense 3 / 3, surrounded 6 |
@@ -15,6 +14,7 @@
 | `tooling/scratch-1115-follow-ups-2 #7` | Testing | S C | Broken config switches (timing, denseWalk, wthit passThrough) |
 | `tooling/scratch-1115-follow-ups-2 #8` | Testing | S | Ground-level web: same-tick enter and land takes full fall damage |
 | `tooling/scratch-1115-follow-ups-2 #9` | Testing | S | IW sand layer and Supplementaries fodder never slow |
+| `tooling/scratch-1115-follow-ups-2 #10` | Testing | S | In-place Compat toml save not reloaded |
 | `tooling/scratch-1115-follow-ups-2 #11` | Testing | S | Pass-through bench web cube over budget |
 | `tooling/scratch-1115-follow-ups-2 #12` | Testing | S | Rare Ice swallows salt dust and Salt Melt clicks on plain ice |
 | `tooling/scratch-1115-follow-ups-2 #13` | Testing | S | Salt layer on melting ice drops as dust before the vanish roll |
