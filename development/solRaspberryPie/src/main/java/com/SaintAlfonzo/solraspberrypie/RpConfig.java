@@ -73,7 +73,7 @@ public final class RpConfig {
 					.defineList("unlock", List.of("monobank:replacement_lock", "minecraft:potion{Potion:\"minecraft:awkward\"}"), o -> o instanceof String);
 			flatIcon = b.comment("Diet Log icon for permanent buffs: the first of these items that is loaded.")
 					.defineList("permanentBuff", List.of("create_crush_everything:diamond_shard", "minecraft:diamond"), o -> o instanceof String);
-			slotIcon = b.comment("Diet Log icon for effect slots: the first of these items that is loaded.")
+			slotIcon = b.comment("Diet Log icon for effect slots with no chosen effect (a slot with one shows that effect): the first of these items that is loaded.")
 					.defineList("slot", List.of("suppsquared:metal_frame", "minecraft:item_frame"), o -> o instanceof String);
 			b.pop();
 			b.push("widget");

@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.solraspberrypie.client;
 
 import com.SaintAlfonzo.solraspberrypie.RpConfig;
+import com.SaintAlfonzo.solraspberrypie.data.SlotChoice;
 import com.SaintAlfonzo.solraspberrypie.ladder.Ladder;
 import com.SaintAlfonzo.solraspberrypie.ladder.Rung;
 import com.SaintAlfonzo.solraspberrypie.logic.DietEngine;
@@ -15,6 +16,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraftforge.registries.ForgeRegistries;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
@@ -88,7 +90,11 @@ public final class DietLogPages {
 		return switch (r.kind) {
 			case HEALTH -> SlotActions.hearts(r.amount);
 			case ATTRIBUTE -> SlotActions.attribute(r.id, r.amount);
-			case SLOT -> Component.translatable("solraspberrypie.slot", r.slotIndex + 1);
+			case SLOT -> {
+				SlotChoice c = chosen(r);
+				Component slot = Component.translatable("solraspberrypie.slot", r.slotIndex + 1);
+				yield c == null ? slot : Component.translatable("solraspberrypie.dietlog.slot_chosen", slot, DietEngine.effectName(c.effect(), c.level()));
+			}
 			case FLAT -> Component.translatable("solraspberrypie.preview.flat", DietEngine.effectName(r.id, r.level));
 			case UNLOCK -> Component.translatable("solraspberrypie.dietlog.unlock", DietEngine.effectName(r.id, r.level));
 		};
@@ -116,6 +122,41 @@ public final class DietLogPages {
 		else Icons.effect(pose, r.id, x, y, ICON);
 	}
 
+	/** The effect chosen in a slot rung's slot, or null (no choice, or an effect that is not loaded). */
+	static SlotChoice chosen(Rung r) {
+		if (r.kind != Rung.Kind.SLOT || r.slotIndex < 0 || !ClientState.ready()) return null;
+		List<SlotChoice> slots = ClientState.state.slots;
+		SlotChoice c = r.slotIndex < slots.size() ? slots.get(r.slotIndex) : null;
+		return c == null || c.effect() == null || !ForgeRegistries.MOB_EFFECTS.containsKey(c.effect()) ? null : c;
+	}
+
+	/** How long the key's effect-slot entry shows each pool effect (G11 #24). */
+	private static final long LEGEND_CYCLE_MS = 1000;
+
+	/** The pool effect the key's effect-slot entry shows now: it steps through the loaded pool effects in order. */
+	private static ResourceLocation legendSlotEffect() {
+		if (!ClientState.ready()) return null;
+		List<ResourceLocation> ids = new ArrayList<>();
+		for (ResourceLocation id : ClientState.ladder.pool.keySet()) if (ForgeRegistries.MOB_EFFECTS.containsKey(id)) ids.add(id);
+		if (ids.isEmpty()) return null;
+		return ids.get((int) ((System.currentTimeMillis() / LEGEND_CYCLE_MS) % ids.size()));
+	}
+
+	/**
+	 * A slot rung's icon (G11 #24): the chosen effect's sprite when the slot holds one, else the configured slot item.
+	 * The key's sample slot rung cycles through the pool effects instead.
+	 */
+	private static void slotIcon(PoseStack pose, Rung r, int x, int y) {
+		ResourceLocation effect;
+		if (r == LEGEND[3]) effect = legendSlotEffect();
+		else {
+			SlotChoice c = chosen(r);
+			effect = c == null ? null : c.effect();
+		}
+		if (effect != null) Icons.effect(pose, effect, x, y, ICON);
+		else kindIcon(pose, RpConfig.CLIENT.slotIcon.get(), r, x, y);
+	}
+
 	/** The rung's icon at {@code (x, y)}, {@link #ICON} pixels: kind-colored frame, grayed when not reached. */
 	static void drawIcon(PoseStack pose, Rung r, int x, int y, boolean got) {
 		switch (r.kind) {
@@ -125,7 +166,7 @@ public final class DietLogPages {
 				if (stack.isEmpty()) Icons.armor(pose, x, y);
 				else Icons.item(stack, x, y, ICON);
 			}
-			case SLOT -> kindIcon(pose, RpConfig.CLIENT.slotIcon.get(), r, x, y);
+			case SLOT -> slotIcon(pose, r, x, y);
 			case FLAT -> kindIcon(pose, RpConfig.CLIENT.flatIcon.get(), r, x, y);
 			case UNLOCK -> kindIcon(pose, RpConfig.CLIENT.unlockIcon.get(), r, x, y);
 		}
