@@ -670,6 +670,16 @@ Same rarities as the mods: FD's config chances as the pack sets them (30, 15), F
 and 6. A change to `farmersdelight-common.toml` `[world.wild_cabbages]` or `[world.wild_beetroots]` no longer
 reaches these two crops; edit the placed feature json instead.
 
+Canopy-proof switch (plan_post_scratch_1115 C4, E2; built 2026-11-17, default off): `[worldgen]
+wildCropCanopyProofHeightmap` in `creativedelight-common.toml`. When on, a placed feature in
+`#creativedelight:canopy_proof` (CD jar `data/creativedelight/tags/worldgen/placed_feature/canopy_proof.json`: FD
+carrots, onions, potatoes, tomatoes, rice; Veggies broccoli, cauliflower, garlic, sweet potato, zucchini; Vintage oats,
+cucumbers, peanuts; Rustic bell pepper, coffee, cotton; Delightful mini melon, salmonberry; Respite tea; Corn Delight
+corn; CD `wild/pumpkin`, `wild/raspberry_bush`, `wild/sweet_berries`) reads `MOTION_BLOCKING_NO_LEAVES` where it asked
+for `MOTION_BLOCKING`, so patches under trees start on the ground. Mixin `mixin/minecraft/HeightmapPlacementCanopyMixin`
+(redirect of the heightmap read in `HeightmapPlacement.getPositions`, keyed on `PlacementContext.topFeature()`),
+`crops/CanopyProofHeightmap`. Java-registered features (FD) are covered. Only new chunks change. Tests SQ-PS15-28, -29.
+
 **Where each crop goes** (exact lists: [crops_by_biome.md](crops_by_biome.md) §3, generated from the current `wild_crops.json`;
 rows corrected 2026-10-21 to the 2026-10-10 rules)
 

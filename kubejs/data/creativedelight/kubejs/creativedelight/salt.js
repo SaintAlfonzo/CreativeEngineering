@@ -1,5 +1,6 @@
 // requires: creativedelight
-// The pack's salt routes: raw rock salt -> 4 salt, heated basin water -> salt, the Large Salt Lamp, the Salt Melt. Salt
+// The pack's salt routes: rock salt -> 4 salt, Rock Salt Block <-> 4 rock salt, heated basin water over a Rock Salt Block
+// -> salt, the Large Salt Lamp, the Salt Melt. Salt
 // is Vintage Delight's salt dust since the salt merge (food/seasoning #6, vintage_items.js); The Salt's salt only if
 // the Vintage member is off.
 ServerEvents.recipes(e => {
@@ -8,15 +9,16 @@ ServerEvents.recipes(e => {
 	const R = global.NCH.forPack('creativedelight')
 	var i = global.item
 	var f = global.fluid
+	var b = global.blocks
 
 	global.CD.recipes(() => {
 
 		var SALT = global.CD.on('vintagedelight') ? i.salt_dust : i.salt_item
 
 		// ============================================================
-		// Raw rock salt (the salt crystals) -> salt, 4x
+		// Rock salt (the salt crystals, salt:raw_rock_salt) -> salt, 4x
 		// ============================================================
-		// Every route that turns raw rock salt into usable salt gives 4 salt. Salt block 9 <-> 1 and the water / cauldron
+		// Every route that turns rock salt into usable salt gives 4 salt. Salt Dust Block 9 <-> 1 and the water / cauldron
 		// routes (not from crystals) are unchanged. The mortar craft comes from mortar_catalog.json (count 4 there).
 
 		var SALT_PER_RAW = 4
@@ -34,18 +36,26 @@ ServerEvents.recipes(e => {
 		R.createCrushing(MACHINE_SALT, i.raw_rock_salt, e, 'raw_rock_salt_salt')
 		R.createMilling(MACHINE_SALT, i.raw_rock_salt, e, 'raw_rock_salt_salt')
 
-		// Water -> salt, heated basin: 1000 mB -> 2 (was 200 mB -> 60 %; salt.md 6 S2). Cauldron evaporation is a loot
-		// table override, kubejs/data/salt/loot_tables/cauldron_evaporation/: full 8, two thirds 5, one third 3.
-		R.createMixing(Item.of(SALT, 2), Fluid.of(f.water, 1000), e, 'water_salt', 'heated')
+		// Rock Salt Block <-> 4 rock salt (upstream 9; plan_post_scratch_1115 G2b): one block is one salt lick, worn in 4
+		// stages, each stage refilled by 1 rock salt. The block id is block_dict's (no item_dict key yet).
+		var ROCK_SALT_BLOCK = b.raw_rock_salt_block
+		R.remove({ id: 'salt:raw_rock_salt' }, e)
+		R.remove({ id: 'salt:raw_rock_salt_block' }, e)
+		R.shaped(ROCK_SALT_BLOCK, ['RR', 'RR'], { R: i.raw_rock_salt }, e, 'rock_salt_block')
+		R.shapeless(Item.of(i.raw_rock_salt, 4), [ROCK_SALT_BLOCK], e, 'rock_salt_from_block')
+
+		// Water -> salt, heated basin over a Rock Salt Block (kept): 1000 mB -> 2 salt (G2c, G6-11; was water alone, so
+		// water poured first into any heated basin turned to salt). Cauldron evaporation is a loot table override,
+		// kubejs/data/salt/loot_tables/cauldron_evaporation/: full 8, two thirds 5, one third 3.
+		R.createMixing([ROCK_SALT_BLOCK, Item.of(SALT, 2)], [ROCK_SALT_BLOCK, Fluid.of(f.water, 1000)], e,
+			'rock_salt_water_salt', 'heated')
 
 		// ============================================================
 		// Large Salt Lamp (The Salt's lamp, renamed in namechanges.js)
 		// ============================================================
-		// Vintage's default lamp outline (glowstone between two salt blocks over deepslate tiles) without its salt on
-		// top, every other slot a Salt Block: 7 salt blocks, 1 glowstone, 1 deepslate tiles. Was raw rock salt block over
-		// a torch over a wooden slab.
+		// 7 rock salt around glowstone over a wooden slab (G2d; was 7 Salt Dust Blocks and deepslate tiles).
 		R.remove({ id: 'salt:salt_lamp' }, e)
-		R.shaped(i.salt_lamp, ['SSS', 'SGS', 'SDS'], { S: i.salt_salt_block, G: i.glowstone_block, D: i.deepslate_tiles }, e,
+		R.shaped(i.salt_lamp, ['SSS', 'SGS', 'SDS'], { S: i.raw_rock_salt, G: i.glowstone_block, D: i.wood_slab }, e,
 			'large_salt_lamp')
 
 		// ============================================================

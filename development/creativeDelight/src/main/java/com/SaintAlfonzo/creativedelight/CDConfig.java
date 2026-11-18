@@ -94,6 +94,8 @@ public final class CDConfig {
 	public static final Perf PERF;
 	public static final Food FOOD;
 	public static final Campfire CAMPFIRE;
+	/** {@code [worldgen] wildCropCanopyProofHeightmap} (crops.CanopyProofHeightmap, plan_post_scratch_1115 E2). */
+	public static final ForgeConfigSpec.BooleanValue WILD_CROP_CANOPY_PROOF;
 	public static final Cfb CFB;
 	public static final Incubation INCUBATION;
 	private static final Map<String, ForgeConfigSpec.BooleanValue> MEMBER_SWITCHES = new LinkedHashMap<>();
@@ -147,6 +149,10 @@ public final class CDConfig {
 				"to apply; only chunks generated afterwards change.").push("worldgen");
 		WORLDGEN.put(WILD_CROPS, b.comment("Which biomes each wild crop and fruit tree spawns in (_worldgen/wild_crops.json).",
 				"Off: every crop as its mod ships it.").define(WILD_CROPS, true));
+		WILD_CROP_CANOPY_PROOF = b.comment("Wild crop patches in #creativedelight:canopy_proof (placed features) that look for the",
+				"surface with MOTION_BLOCKING look with MOTION_BLOCKING_NO_LEAVES instead, so a patch under a forest or jungle",
+				"canopy lands on the ground, not on the leaves (plan_post_scratch_1115 C4, E2). Rejoin the world to apply;",
+				"only chunks generated afterwards change.").define("wildCropCanopyProofHeightmap", false);
 		b.pop();
 		defineMemberSettings(b);
 		// Sections carried over from creativeengineering-common.toml (creative_delight.md 34), with its keys, comments
@@ -749,6 +755,11 @@ public final class CDConfig {
 		public final ForgeConfigSpec.IntValue comfortDistance;
 		public final ForgeConfigSpec.IntValue comfortSeconds;
 		public final ForgeConfigSpec.IntValue comfortEveryTicks;
+		public final ForgeConfigSpec.BooleanValue torchLights;
+		public final ForgeConfigSpec.BooleanValue torchConsumed;
+		public final ForgeConfigSpec.BooleanValue torchRainRefuses;
+		public final ForgeConfigSpec.BooleanValue soulflameRule;
+		public final ForgeConfigSpec.BooleanValue unlitTooltip;
 
 		private Campfire(ForgeConfigSpec.Builder b) {
 			b.comment(
@@ -780,6 +791,26 @@ public final class CDConfig {
 					"A campfire looks for players once per this many ticks (the mod checked every tick; campfires are",
 					"spread over the period). 1 = every tick."
 			).defineInRange("comfortEveryTicks", 20, 1, 200);
+
+			// plan_post_scratch_1115 G3, G7.8, G7.13, G7.14 (campfire.CampfireTorch, campfire.CampfireTooltip).
+			torchLights = b.comment(
+					"A torch used on an unlit campfire lights it (campfire.CampfireTorch). Flint and steel is unchanged."
+			).define("torchLights", true);
+			torchConsumed = b.comment("Lighting a campfire with a torch uses the torch up (not in creative mode).")
+					.define("torchConsumed", true);
+			torchRainRefuses = b.comment(
+					"A torch does not light a campfire that rain would put out (rainDouses, open rain, not on a",
+					"rain_proof_fuel block): the extinguish sound plays and no torch is used."
+			).define("torchRainRefuses", true);
+			soulflameRule = b.comment(
+					"Soul torches light only soul campfires and plain torches only the other campfires. Off: any torch",
+					"lights any campfire."
+			).define("soulflameRule", true);
+			unlitTooltip = b.comment(
+					"Tooltip on campfires that Unlit Campfire places unlit: \"Requires a spark or flame to light\"",
+					"(\"soulflame\" on soul campfires), plus a torch line while torchLights is on. Shown only while Unlit",
+					"Campfire is loaded. Read on the client from its own copy of this file."
+			).define("unlitTooltip", true);
 
 			b.pop(); // campfire
 		}

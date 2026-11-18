@@ -35,7 +35,10 @@ import net.minecraft.world.phys.Vec3;
 public class Melting {
     public static final DispenseItemBehavior SALT_DISPENSER_BEHAVIOR = new SaltItemDispenseBehavior();
 
-    /** Creative Delight: a melting target, Creative Common's (Melting.isTarget) or, without Common, upstream's tag. */
+    /**
+     * Creative Delight: a block salt can melt: Creative Common's Melting.isSaltable (plan_post_scratch_1115 G7.11; isTarget
+     * on an older Common) or, without Common, upstream's tag.
+     */
     public static boolean isMeltTarget(BlockState state) {
         CommonMelting common = CommonMelting.get();
         return common != null ? common.isTarget(state) : state.is(Salt.BlockTags.MELTABLES);
@@ -168,8 +171,17 @@ public class Melting {
                         try {
                             Class<?> c = Class.forName("com.SaintAlfonzo.creativecommon.melting.Melting");
                             java.lang.invoke.MethodHandles.Lookup l = java.lang.invoke.MethodHandles.publicLookup();
+                            java.lang.invoke.MethodType test = java.lang.invoke.MethodType.methodType(boolean.class, BlockState.class);
+                            // Salt melts only saltable blocks (Common's creativecommon:melting/saltable, G7.11); an
+                            // older Common without isSaltable falls back to every melting target.
+                            java.lang.invoke.MethodHandle target;
+                            try {
+                                target = l.findStatic(c, "isSaltable", test);
+                            } catch (NoSuchMethodException e) {
+                                target = l.findStatic(c, "isTarget", test);
+                            }
                             instance = new CommonMelting(
-                                    l.findStatic(c, "isTarget", java.lang.invoke.MethodType.methodType(boolean.class, BlockState.class)),
+                                    target,
                                     l.findStatic(c, "meltStep", java.lang.invoke.MethodType.methodType(boolean.class, ServerLevel.class, BlockPos.class)));
                         } catch (ReflectiveOperationException | LinkageError e) {
                             instance = null;

@@ -4,27 +4,29 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.annotation.Nullable;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.registries.ForgeRegistries;
 
-/** The chain of lick stages. Stage 0 is {@code salt:salt_block}; the rest are our {@link LickableSaltBlock}s. */
+/**
+ * The chain of lick stages. Stage 0 is The Salt's Rock Salt Block ({@code salt:raw_rock_salt_block}, plan_post_scratch_1115
+ * G2b); the rest are our {@link LickableSaltBlock}s. 4 stages = 4 Rock Salt: one wear is one stage, one Rock Salt (by hand
+ * or dispenser) refills one stage. Salt layers no longer refill a lick and are not eaten first (G6-10).
+ */
 public final class SaltLick {
-    public static final ResourceLocation SALT_BLOCK_ID = new ResourceLocation("salt", "salt_block");
-    public static final TagKey<Item> SALT_TAG = TagKey.create(Registry.ITEM_REGISTRY, new ResourceLocation("forge", "salt"));
+    public static final ResourceLocation SALT_BLOCK_ID = new ResourceLocation("salt", "raw_rock_salt_block");
+    /** Rock Salt, the item that refills a worn stage (G2b). */
+    public static final ResourceLocation ROCK_SALT_ID = new ResourceLocation("salt", "raw_rock_salt");
+    /** The pack's salt (Vintage Delight's salt dust): the last wear drops 1 (G6-10c). The Salt's own salt without it. */
+    private static final ResourceLocation SALT_DUST_ID = new ResourceLocation("vintagedelight", "salt_dust");
     private static final ResourceLocation SALT_ITEM_ID = new ResourceLocation("salt", "salt");
-    /** Vintage Delight's salt layer (block and its block item): refills a worn stage (plan_bugfix_1114 3.7). */
-    public static final ResourceLocation SALT_LAYER_ID = new ResourceLocation("vintagedelight", "salt");
 
     private static final Map<Block, Block> NEXT = new HashMap<>();
     private static final Map<Block, Block> PREV = new HashMap<>();
@@ -60,6 +62,7 @@ public final class SaltLick {
         }
     }
 
+    /** Stage 0, the Rock Salt Block. */
     public static Block saltBlock() {
         return ForgeRegistries.BLOCKS.getValue(SALT_BLOCK_ID);
     }
@@ -94,110 +97,44 @@ public final class SaltLick {
         return PREV.get(block);
     }
 
-    /** Restores one stage by hand: #forge:salt (salt, salt dust) or a salt layer block item. */
+    /** Restores one stage by hand or dispenser: Rock Salt only (G2b). */
     public static boolean isSalt(ItemStack stack) {
-        return stack.is(SALT_TAG) || SALT_LAYER_ID.equals(ForgeRegistries.ITEMS.getKey(stack.getItem()));
-    }
-
-    /** Vintage Delight's salt layer block, or null without it. */
-    @Nullable
-    public static Block saltLayer() {
-        Block b = ForgeRegistries.BLOCKS.getValue(SALT_LAYER_ID);
-        return b instanceof SnowLayerBlock ? b : null;
+        return !stack.isEmpty() && ROCK_SALT_ID.equals(ForgeRegistries.ITEMS.getKey(stack.getItem()));
     }
 
     /**
-     * The one refill (plan_post_scratch_1115 B7): restores the lick at pos by up to {@code layers} stages, one per layer of
-     * salt (heavily, well, lightly, full); a waxed stage stays waxed. Returns the layers not used (all of them when the
-     * block is not a worn stage). Entry points: salt by hand ({@link SaltEvents#onRightClickBlock}), by dispenser
-     * ({@link SaltEvents#registerDispenser}) and a salt layer arriving on top ({@link LickableSaltBlock#neighborChanged}).
+     * The one refill: restores the lick at pos by up to {@code count} stages, one per Rock Salt (heavily, well, lightly,
+     * full); a waxed stage stays waxed. Returns the count not used (all of it when the block is not a worn stage).
+     * Entry points: Rock Salt by hand ({@link SaltEvents#onRightClickBlock}) and by dispenser
+     * ({@link SaltEvents#registerDispenser}).
      */
-    public static int refill(Level level, BlockPos pos, BlockState state, int layers) {
+    public static int refill(Level level, BlockPos pos, BlockState state, int count) {
         build();
         Block stage = state.getBlock();
-        while (layers > 0 && PREV.get(stage) != null) {
+        while (count > 0 && PREV.get(stage) != null) {
             stage = PREV.get(stage);
-            layers--;
+            count--;
         }
         if (stage != state.getBlock()) {
             level.setBlockAndUpdate(pos, stage.defaultBlockState());
             level.playSound(null, pos, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.4F);
         }
-        return layers;
+        return count;
     }
 
-    /**
-     * Salt on a full lick (B7, owner): one salt layer on top of it, or one more on a layer already there (below 8).
-     * False when nothing could be placed (no Vintage Delight, the spot is taken, the layer is full).
-     */
-    public static boolean addLayerOnTop(Level level, BlockPos lick) {
-        Block layer = saltLayer();
-        if (layer == null) {
-            return false;
-        }
-        BlockPos above = lick.above();
-        BlockState here = level.getBlockState(above);
-        if (here.is(layer)) {
-            int n = here.getValue(SnowLayerBlock.LAYERS);
-            if (n >= SnowLayerBlock.MAX_HEIGHT) {
-                return false;
-            }
-            level.setBlockAndUpdate(above, here.setValue(SnowLayerBlock.LAYERS, n + 1));
-        } else if (here.isAir() && layer.defaultBlockState().canSurvive(level, above)) {
-            level.setBlockAndUpdate(above, layer.defaultBlockState());
-        } else {
-            return false;
-        }
-        level.playSound(null, above, SoundEvents.SAND_PLACE, SoundSource.BLOCKS, 1.0F, 1.0F);
-        return true;
-    }
-
-    /**
-     * B5: the topmost salt layer resting on the lick (a column of full 8-layer salt blocks counts as one stack, the top
-     * block is the one worn), or null when no salt layer sits on it.
-     */
-    @Nullable
-    static BlockPos topLayer(Level level, BlockPos lick) {
-        Block layer = saltLayer();
-        if (layer == null) {
-            return null;
-        }
-        BlockPos.MutableBlockPos m = lick.above().mutable();
-        BlockState s = level.getBlockState(m);
-        if (!s.is(layer)) {
-            return null;
-        }
-        while (s.getValue(SnowLayerBlock.LAYERS) >= SnowLayerBlock.MAX_HEIGHT && !level.isOutsideBuildHeight(m.above())) {
-            BlockState up = level.getBlockState(m.above());
-            if (!up.is(layer)) {
-                break;
-            }
-            m.move(0, 1, 0);
-            s = up;
-        }
-        return m.immutable();
-    }
-
-    /**
-     * Wears the lick one step. B5 (plan_post_scratch_1115): salt layers on top go first, one layer per lick from the top
-     * down, and the lick keeps its size; with none, the block wears one stage and the last stage pops 1 salt and is gone.
-     */
+    /** Wears the lick one stage; the last stage is gone and drops 1 Salt (G6-10c). */
     public static void wear(Level level, BlockPos pos, BlockState state) {
         build();
-        BlockPos top = topLayer(level, pos);
-        if (top != null) {
-            BlockState layer = level.getBlockState(top);
-            int n = layer.getValue(SnowLayerBlock.LAYERS);
-            level.setBlockAndUpdate(top, n > 1 ? layer.setValue(SnowLayerBlock.LAYERS, n - 1) : Blocks.AIR.defaultBlockState());
-            return;
-        }
         Block next = NEXT.get(state.getBlock());
         if (next != null) {
             level.setBlockAndUpdate(pos, next.defaultBlockState());
         } else {
             level.removeBlock(pos, false);
-            Item salt = ForgeRegistries.ITEMS.getValue(SALT_ITEM_ID);
-            if (salt != null) {
+            Item salt = ForgeRegistries.ITEMS.getValue(SALT_DUST_ID);
+            if (salt == null || salt == Items.AIR) {
+                salt = ForgeRegistries.ITEMS.getValue(SALT_ITEM_ID);
+            }
+            if (salt != null && salt != Items.AIR) {
                 Block.popResource(level, pos, new ItemStack(salt));
             }
         }

@@ -59,6 +59,11 @@
 	#Which biomes each wild crop and fruit tree spawns in (_worldgen/wild_crops.json).
 	#Off: every crop as its mod ships it.
 	wildCrops = true
+	#Wild crop patches in #creativedelight:canopy_proof (placed features) that look for the
+	#surface with MOTION_BLOCKING look with MOTION_BLOCKING_NO_LEAVES instead, so a patch under a forest or jungle
+	#canopy lands on the ground, not on the leaves (plan_post_scratch_1115 C4, E2). Rejoin the world to apply;
+	#only chunks generated afterwards change.
+	wildCropCanopyProofHeightmap = false
 
 #WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
 #plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
@@ -427,6 +432,20 @@
 	#spread over the period). 1 = every tick.
 	#Range: 1 ~ 200
 	comfortEveryTicks = 20
+	#A torch used on an unlit campfire lights it (campfire.CampfireTorch). Flint and steel is unchanged.
+	torchLights = true
+	#Lighting a campfire with a torch uses the torch up (not in creative mode).
+	torchConsumed = true
+	#A torch does not light a campfire that rain would put out (rainDouses, open rain, not on a
+	#rain_proof_fuel block): the extinguish sound plays and no torch is used.
+	torchRainRefuses = true
+	#Soul torches light only soul campfires and plain torches only the other campfires. Off: any torch
+	#lights any campfire.
+	soulflameRule = true
+	#Tooltip on campfires that Unlit Campfire places unlit: "Requires a spark or flame to light"
+	#("soulflame" on soul campfires), plus a torch line while torchLights is on. Shown only while Unlit
+	#Campfire is loaded. Read on the client from its own copy of this file.
+	unlitTooltip = true
 
 #One switch per optional Creative Delight compartment (Java, assets and data folded into this jar).
 #Each works only with its mod installed; off = as if that mod were absent: no blocks, no changes to it,

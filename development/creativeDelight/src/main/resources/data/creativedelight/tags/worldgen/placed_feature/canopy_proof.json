@@ -1,0 +1,28 @@
+{
+  "replace": false,
+  "values": [
+    {"id": "farmersdelight:patch_wild_carrots", "required": false},
+    {"id": "farmersdelight:patch_wild_onions", "required": false},
+    {"id": "farmersdelight:patch_wild_potatoes", "required": false},
+    {"id": "farmersdelight:patch_wild_tomatoes", "required": false},
+    {"id": "farmersdelight:patch_wild_rice", "required": false},
+    {"id": "veggiesdelight:patch_wild_broccoli", "required": false},
+    {"id": "veggiesdelight:patch_wild_cauliflowers", "required": false},
+    {"id": "veggiesdelight:patch_wild_garlic", "required": false},
+    {"id": "veggiesdelight:patch_wild_sweet_potatoes", "required": false},
+    {"id": "veggiesdelight:patch_wild_zucchinis", "required": false},
+    {"id": "vintagedelight:patch_wild_oats", "required": false},
+    {"id": "vintagedelight:patch_wild_cucumbers", "required": false},
+    {"id": "vintagedelight:patch_wild_peanuts", "required": false},
+    {"id": "rusticdelight:wild_bell_peppers_placed", "required": false},
+    {"id": "rusticdelight:wild_coffee_placed", "required": false},
+    {"id": "rusticdelight:wild_cotton_placed", "required": false},
+    {"id": "delightful:patch_mini_melon", "required": false},
+    {"id": "delightful:patch_wild_salmonberries", "required": false},
+    {"id": "farmersrespite:patch_wild_tea_bush", "required": false},
+    {"id": "corn_delight:patch_wild_corn", "required": false},
+    {"id": "creativedelight:wild/pumpkin", "required": false},
+    {"id": "creativedelight:wild/raspberry_bush", "required": false},
+    {"id": "creativedelight:wild/sweet_berries", "required": false}
+  ]
+}

@@ -2,23 +2,20 @@ package com.SaintAlfonzo.creativedelight.hearth.salt;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.SnowLayerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * A worn or waxed stage of a salt lick. Every interaction lives in {@link SaltEvents}, because stage 0 is The Salt's
- * {@code salt:salt_block} and cannot carry code of ours. Waxed stages are separate blocks for the same reason: the foreign
+ * {@code salt:raw_rock_salt_block} (the Rock Salt Block, plan_post_scratch_1115 G2b) and cannot carry code of ours. Waxed stages are separate blocks for the same reason: the foreign
  * block cannot take a {@code waxed} property, and a waxed block must stay out of the POI type.
  * <p>
  * Each stage is a layer like snow (plan_bugfix_1114 3.7): 16 / 12 / 8 / 4 px for full / lightly / well / heavily licked;
- * a waxed stage is as high as its unwaxed twin.
+ * a waxed stage is as high as its unwaxed twin. Salt layers on top no longer refill a stage (G6-10): only Rock
+ * Salt does, by hand or dispenser.
  */
 public class LickableSaltBlock extends Block {
     private final int height;
@@ -43,42 +40,6 @@ public class LickableSaltBlock extends Block {
     @Override
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         return shape;
-    }
-
-    /**
-     * A Vintage Delight salt layer placed on a worn stage drops into it: one layer restores one stage (heavily, well,
-     * lightly, full), a waxed stage stays waxed, and layers left over stay on the full block (plan_bugfix_1114 3.7). The
-     * layer's own onPlace sends this update even for placements that send none.
-     */
-    @Override
-    public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
-        super.neighborChanged(state, level, pos, block, fromPos, isMoving);
-        if (level.isClientSide || !fromPos.equals(pos.above())) {
-            return;
-        }
-        BlockState above = level.getBlockState(fromPos);
-        if (!(above.getBlock() instanceof SnowLayerBlock) || !SaltLick.SALT_LAYER_ID.equals(ForgeRegistries.BLOCKS.getKey(above.getBlock()))) {
-            return;
-        }
-        int layers = above.getValue(SnowLayerBlock.LAYERS);
-        // Order matters: an empty layer goes first so nothing pops off a partial stage; leftover layers are set after
-        // the block is full, so they survive and this does not run twice. SaltLick.refill is the one refill (B7).
-        Block stage = state.getBlock();
-        int used = 0;
-        while (used < layers && SaltLick.restored(stage) != null) {
-            stage = SaltLick.restored(stage);
-            used++;
-        }
-        if (used == 0) {
-            return;
-        }
-        if (used == layers) {
-            level.setBlockAndUpdate(fromPos, Blocks.AIR.defaultBlockState());
-            SaltLick.refill(level, pos, state, used);
-        } else {
-            SaltLick.refill(level, pos, state, used);
-            level.setBlockAndUpdate(fromPos, above.setValue(SnowLayerBlock.LAYERS, layers - used));
-        }
     }
 
     @Override

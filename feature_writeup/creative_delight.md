@@ -1986,6 +1986,12 @@ from `creativecompat-common.toml`, else `creativeengineering-common.toml`). CD f
 WTHIT line; `CampfireRainTicks`, `WthitCampfire` and the `#creativecommon:campfire/*` tags stay in Common. The
 Ender's endstone stove damage id is CD's tag `creativedelight:stoves` (`data/creativedelight/damage_tags/`), included
 by Common's `fire` and `burn_tick`. Tests SQ-CFR-01 to -08, CQ-CFR-01.
+Since 2026-11-17 (plan_post_scratch_1115 G3, G7.8, G7.13, G7.14) `campfire/CampfireTorch`: a torch (a `TorchBlock`
+item, not redstone) lights an unlit dry campfire and is used up; soul torches only soul campfires (registry path
+"soul"); refused with the extinguish sound where `CampfireRain` would douse it; tooltip "Requires a spark or flame to
+light" ("soulflame") on every `CampfireBlock` item while Unlit Campfire is loaded, plus a torch line. Switches
+`[campfire] torchLights`, `torchConsumed`, `torchRainRefuses`, `soulflameRule`, `unlitTooltip`. Tests SQ-PS15-24 to
+-26, CQ-PS15-05.
 
 ### 34.3 Install and tests
 

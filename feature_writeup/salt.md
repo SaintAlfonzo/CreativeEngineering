@@ -171,10 +171,10 @@ Status: BUILT 2026-11-15, not installed: Creative Common 1.2.0 (`Melting` listen
 | B1 | Salt dust clicked on ice or snow places a salt layer on top (as on any block); the click never melts. The layer is a salt source, so the ice under it melts at the melting system's block rate. | Vintage `SaltDustItem` (unchanged). The Salt's own `salt:salt` item would still melt by click, but it is merged into salt dust and never in play |
 | B2 | Salt dust (and `salt:salt`) in a dispenser: a melting target in front melts one stage (packed and blue ice step down a tier) for 1 salt; air in front (with support below) gets a salt layer, a salt layer below 8 gets one more, for 1 salt; anything else: the salt is dropped. `[salt.Melting] SaltItemMeltingEnabled = false` turns the melt off (the layer place stays). | Salt member `Melting.SaltItemDispenseBehavior`; CD `salt/SaltLayerMelt` registers it on `vintagedelight:salt_dust` at common setup |
 | B3 | Each time a salt layer melts ice or snow by the melting system's random tick, it loses one layer with chance `[salt.Melting] SaltLayerVanishChance` (default 0.05); the last layer leaves air. Only `SnowLayerBlock` salt sources (Vintage Delight's salt layer); the Salt Block, Raw Rock Salt Block, salt lick stages and other full blocks never vanish. | Common `Melting.setSaltMeltListener` (after a salt-source melt in `targetTick`); CD `salt/SaltLayerMelt` |
-| B4 | Open, waiting for owner: salt layers have no gravity in the pack (plan B4). | none |
-| B5 | A lick with salt layers on top gives up one layer per lick (player or animal), from the topmost layer block down; the lick keeps its stage until no layer is left. | hearth `SaltLick.wear`, `topLayer` |
+| B4 | Dropped for licks (G7.5): salt layers fall as part of Creative Compat's general layer fall; no lick hook. | none |
+| B5 | Removed 2026-11-17 (section 8). Was: a lick with salt layers on top gives up one layer per lick (player or animal), from the topmost layer block down; the lick keeps its stage until no layer is left. | hearth `SaltLick.wear`, `topLayer` |
 | B6 | Salt Melt (`salt:salt_melt`, Tools tab): 64 uses; right click on any melting target melts it one stage for 1 durability (packed and blue ice step down a tier); in a dispenser the same on the block in front (nothing in front to melt: the dispenser fails and keeps it). Recipe: shapeless, 2 salt + 2 raw rock salt. | Salt member overlay `ce/SaltMeltItem`, `ce/SaltMeltRegistry` (Forge annotation scan, `RegisterEvent`); CD `creativedelight/salt.js`; JEI `kubejs/assets/creativedelight/kubejs/salt/jei_info.js` |
-| B7 | One refill, `SaltLick.refill`: each salt (hand or dispenser) or salt layer (placed on top) restores one stage of a worn lick, waxed or not; leftover layers stay on the full lick. Salt on a full lick puts a layer on top: by hand salt dust's own click, by dispenser `SaltLick.addLayerOnTop`. The dispenser now also refills waxed stages (was unwaxed only). | hearth `SaltLick`, `SaltEvents`, `LickableSaltBlock` |
+| B7 | Superseded 2026-11-17 by Rock Salt refill (section 8). Was: one refill, `SaltLick.refill`: each salt (hand or dispenser) or salt layer (placed on top) restores one stage of a worn lick, waxed or not; leftover layers stay on the full lick. Salt on a full lick puts a layer on top: by hand salt dust's own click, by dispenser `SaltLick.addLayerOnTop`. The dispenser now also refills waxed stages (was unwaxed only). | hearth `SaltLick`, `SaltEvents`, `LickableSaltBlock` |
 | B9 | Glowstone cage lantern is no longer a fire source (light 3, no random tick). | Common `tags/melting_tags.js` |
 
 ### 7.2 Notes
@@ -185,6 +185,33 @@ Status: BUILT 2026-11-15, not installed: Creative Common 1.2.0 (`Melting` listen
   reflection; a Creative Delight jar without the `-04` Salt member reads chance 0 (no layer vanishes).
 - Salt member `-04`: `replaced_resources` now lists `assets/salt/lang/en_us.json` (upstream copy plus `item.salt.salt_melt`).
 - SQ-HH-474 (salt dust on an unworn salt block places a layer): by design under B1 and B7 unless the owner says otherwise.
+
+## 8. Salt redesign (plan_post_scratch_1115 G2, G6, G7.5 to G7.7, G7.13, G7.14; built 2026-11-17)
+
+Status: built in the Creative Delight jar (Salt member `-04`, hearth `-04`, Vintage member, CD main), not installed, not
+booted. Queue: SQ-SALT-R01 to -R09 (rows/SALT.qb section 8). TODO `tooling/scratch-1115-follow-ups #21`, `#6`; 1115b
+`#12`, `#13`. Supersedes 7.1 B4 (salt lick hook), B5 and the layer part of B7.
+
+| Step | Rule | Where |
+|---|---|---|
+| Names | Raw Rock Salt -> Rock Salt; Block of Raw Rock Salt -> Rock Salt Block; Salt Block -> Salt Dust Block (Vintage's merged `salt_block` too); ores -> Rock Salt Vein, Deepslate Rock Salt Vein; licks -> "{Waxed} {Lightly/Well/Heavily} Licked Rock Salt Block", stage 0 waxed "Waxed Rock Salt Block"; Vintage decor -> Chiseled Salt Block, Pillar, Bricks, Brick Slab/Stairs/Wall. Ids unchanged; salt lamps and Mixed Salt Bricks keep their names; the item stays "Salt" | Salt member `assets/salt/lang/en_us.json`, hearth and Vintage lang files |
+| Lick root | Stage 0 is `salt:raw_rock_salt_block`; the POI, the waxed stage 0 model (Rock Salt Block texture, referenced in place) and the JEI lick page follow. Salt Dust Blocks are no longer licks | hearth `SaltLick.SALT_BLOCK_ID`, `models/block/waxed_salt_block.json` |
+| Refill | Rock Salt (`salt:raw_rock_salt`) restores one stage of a worn lick by hand or dispenser, waxed or not; on a full lick it does nothing. Salt, salt dust and salt layers no longer refill; licks no longer eat layers on top first; the dispenser no longer puts a layer on a full lick | hearth `SaltLick.isSalt`, `refill`, `SaltEvents` (dispenser on Rock Salt only), `LickableSaltBlock` (layer hook removed) |
+| Last wear | The heavily licked stage wears away and drops 1 Salt (salt dust; The Salt's salt without Vintage) | `SaltLick.wear` |
+| Recipes | Rock Salt Block = 4 Rock Salt (2x2), back to 4 (upstream 9 both ways, removed); heated mixing 1000 mB water + Rock Salt Block -> Rock Salt Block + 2 Salt (`rock_salt_water_salt`; `water_salt` removed); Large Salt Lamp = 7 Rock Salt, glowstone, wooden slab | CD `creativedelight/salt.js` |
+| Acid | Power Grid's `powergrid_acid_in_water` is heated again (G6-11): water poured first no longer becomes salt | `server_scripts/other/power_grid.js` |
+| Salt Melt | Undamaged Salt Melts stack to 16 (`getMaxStackSize(ItemStack)`), damaged ones to 1; a use from a stack splits one off, damages it and hands it back (inventory, else dropped; a dispenser keeps it in a free slot, else spits it out). It and the salt dispenser act only on saltable blocks (Common `isSaltable`; older Common: `isTarget`) | Salt member `ce/SaltMeltItem`, `Melting.CommonMelting` |
+| `salt:meltables` | Follows `#creativecommon:melting/saltable` (wiped, then the tag added), so The Salt's own paths refuse Blue Ice and reinforced snow | CD `salt/block_tags.js`; needs block_dict key `b.t_salt_meltables` (inert until it exists) |
+| JEI | Water Evaporation page with the pack's yields (8, 5, 3 from the loot tables when the server runs in the same process; pack defaults on a dedicated server's client), The Salt's own page hidden | CD `compat/jei/SaltEvaporationJEI` |
+| Rare Ice | `allowInsertingItemsToIce=false`: Rare Ice no longer takes the right click on plain ice, so salt dust and the Salt Melt act on it (1115b `#12`) | `config/rare-ice.properties` (+ `configs_edited/`) |
+
+Notes:
+- Natural Rock Salt Blocks (salt caves, beach patches) are licks too: animals walk to them and wear them away (G6-10
+  accepted the messy path). Their POI is added as chunks load.
+- 1115b `#13` (a salt layer on melting ice drops as dust before the vanish roll): the cause is in Creative Common
+  `Melting` (the target is melted before the salt listener runs, so the layer above loses support first). Not fixed here.
+- Salt layers falling (E4, G7.5) is Creative Compat's general layer fall; the lick hook of E4 is dropped. Vintage's salt
+  layer is `vintagedelight:salt` (a `SnowLayerBlock`, layers 1 to 8, loot 1 salt dust per layer).
 
 ## History
 
