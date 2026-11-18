@@ -22,7 +22,7 @@ global.CEQ = {
 	},
 }
 
-// The config sections that moved from CEConfig at the Equipment carve are CEQConfig's: NCH.cfg finds them by section
+// The config sections of CEQConfig: NCH.cfg finds them by section
 // name (end_gear.js reads CRAFTING.FELSIC_<PIECE>).
 global.NCH.registerConfig(global.CEQ.modId, 'com.SaintAlfonzo.creativeequipment.CEQConfig')
 

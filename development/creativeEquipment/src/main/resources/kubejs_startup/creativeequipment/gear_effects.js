@@ -1,7 +1,6 @@
 // Gear effect rows (plan_cb_polish.md 1): which armor set or tool grants which effect, with the jar that owns the gear.
 // The frameworks (global.armorEffects, global.toolEffects, the tick appliers and tooltip lines) are Creative Common's
-// (kubejs_startup/creativecommon/effects/). Moved here from Creative Brewing, where the echo tool rows leaked without
-// this jar (scratch r1106cbo SQ-CBO-01). Equipment rebuild + restart. Each row needs every mod it names: the gear's own
+// (kubejs_startup/creativecommon/effects/). Equipment rebuild + restart. Each row needs every mod it names: the gear's own
 // mod (dict keys resolve to it) and the effect's mod.
 ;(function () {
 	var i = global.item
@@ -100,10 +99,7 @@
 
 	// Echo tools (creativeequipment:echo_pickaxe/axe/shovel/hoe, see
 	// [[echo-tier-tools]]) mirror create_deep_dark:echo_sword's own on-hit Weakness II +
-	// Darkness II (5 sec.). Previously hardcoded in its own dedicated
-	// server_scripts/magic/echo_tool_effects.js + manual .tooltip() lines in
-	// startup_scripts/items/echo_tools.js - both replaced by this registration now that
-	// the generic framework exists (see [[echo-armor-set-bonus]] for why echo ARMOR's set
+	// Darkness II (5 sec.), registered through the generic framework (see [[echo-armor-set-bonus]] for why echo ARMOR's set
 	// bonus, by contrast, stays a mixin - that constraint doesn't apply here since the
 	// on-hit tool effect was always our own KubeJS code, never CDD's).
 	var echoHit = [

@@ -34,13 +34,11 @@ import org.slf4j.Logger;
  * {@code PlayerEvents.tick}, which only ever runs on the logical server) would be silently
  * overwritten by the client's next movement packet before a player ever saw it slow down.
  *
- * <p><b>Why the use-tick path:</b> the brake did nothing at all on first release. This class was
- * fine - {@code isUsingItem()} simply never became true, because right-clicking a plain
- * KubeJS item does NOT call {@code startUsingItem()} on its own (that's specific to items
+ * <p><b>Why the use-tick path:</b> {@code isUsingItem()} never becomes true by itself, because
+ * right-clicking a plain KubeJS item does NOT call {@code startUsingItem()} on its own (that's specific to items
  * like {@code BowItem} that override {@code use()} to do it). KubeJS's own {@code ItemMixin}
  * only starts the use-item phase when the item's builder has a {@code .use(...)} callback
- * that returns true - see {@code items/air_brake.js}'s {@code .use(...)} call, added
- * alongside this note. {@code useAnimation}/{@code useDuration} alone only describe what
+ * that returns true - see {@code items/air_brake.js}'s {@code .use(...)} call. {@code useAnimation}/{@code useDuration} alone only describe what
  * happens once a use is already in progress; something still has to start one.
  *
  * <p>All the actual deceleration numbers, and the stall effect below, are config knobs -
