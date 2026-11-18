@@ -115,8 +115,9 @@ melt ticks (about every 10 s), plus its random ticks.
 - API for other jars: `Melting.isTarget(state)`, `Melting.isSaltable(state)`, `Melting.meltStep(level, pos)` (one salt
   melt at once, no roll: `saltMeltSnowLayers` snow layers, else the salt product; false when the block is not
   saltable; for the salt dispenser and the Salt Melt), `Melting.saltMelt(level, pos, layers)` (the same with a layer
-  count), `Melting.saltedState(state, level, layers)`, `Melting.meltedState(state, level, slow)` (heat, one layer), `Melting.setSaltMeltListener(listener)` (told after a salt source in salt range melted a target by random
-  tick, with the source's position and state; Creative Delight's `salt/SaltLayerMelt` uses it for the salt layer
+  count), `Melting.saltedState(state, level, layers)`, `Melting.meltedState(state, level, slow)` (heat, one layer), `Melting.setSaltMeltListener(listener)` (told when a salt source in salt range melts a target by a
+  tick, just before the target changes, so a salt layer resting on the target is still supported when the listener
+  rolls; with the source's position and state; Creative Delight's `salt/SaltLayerMelt` uses it for the salt layer
   vanish chance, 2026-11-15).
 
 ## 3. Tags

@@ -253,6 +253,7 @@ b.t_melt_ultrawarm_instant = '#creativecommon:melting/ultrawarm_instant'; // air
 b.t_melt_saltable = '#creativecommon:melting/saltable';        // the only targets salt melts ([melting] saltProducts)
 b.t_melt_keeps_snow = '#creativecommon:melting/keeps_snow';    // snow resting on these ignores heat and light, not salt
 b.t_melt_magma = '#creativecommon:melting/magma';              // melts snow within 2 at once, stops snow and ice forming
+b.t_salt_meltables = '#salt:meltables';                         // The Salt's own melt tag (item click, no-Common fallback); Creative Delight salt/block_tags.js follows melting/saltable
 b.t_fire = '#minecraft:fire';                                   // fire, soul fire, modded fires
 b.t_campfires = '#minecraft:campfires';
 b.ice = 'minecraft:ice';

@@ -1,7 +1,8 @@
 # Random-tick audit (F2, `farming/crops #15`)
 
-Investigation only, nothing built. Plan: [plan_farming_cooking_batch.md](plan_farming_cooking_batch.md) F2, owner
-decision Q14. Output: the list below, for approval before any change.
+Plan: [plan_farming_cooking_batch.md](plan_farming_cooking_batch.md) F2, owner decision Q14. Rows 1 to 12 approved
+(owner, 2026-11-17; row 12: stop the ticks) and built in Creative Common: section "Built" below. Status lives in the
+TODO row `farming/crops #15`.
 
 ## How it was made (2026-11-07)
 
@@ -52,7 +53,39 @@ decision Q14. Output: the list below, for approval before any change.
 Not counted: blocks outside the plant audit. A class scan for empty `randomTick` / `tick` bodies found only three
 (Create metal scaffolding, Vinery dirt path slab, Botania solid vine), all scheduled-tick overrides, not random ticks.
 
-## How to stop them (when approved)
+## Built
+
+- Creative Common `perf/IdleRandomTicks` + `mixin/IdleRandomTickMixin` on `BlockStateBase.isRandomlyTicking`
+  (`m_60823_`): a state a rule matches answers false, cached per state in one byte (other states: one field read).
+  A section holding only stopped states drops out of the random-tick loop.
+- Config `creativecommon-common.toml` `[perf]`: `idleRandomTicks` (true) and `idleRandomTickRules` (35 lines,
+  `IdleTickRules.defaults()`). Line format `<block id> [prop=value | prop!=value ...] [+wake_above]`; `max` / `min`
+  for integer properties; lines for one block are alternatives; a line naming a missing property is skipped with a
+  warning; absent mods are ignored. Read once at the first lookup after the config loads (a ticking flag must not
+  change while a chunk is loaded), so a change needs a restart. Log line: `[perf] idle random ticks: N rules on M
+  blocks`.
+- Rules per row:
+
+| Row | Rule (stop when) | Notes |
+|---|---|---|
+| 1 | `farmersdelight:tomatoes`, `supplementaries:rope_tomatoes`, `supplementaries:stick_tomatoes`, `creativedelight:treated_stick_tomatoes`: `age=max +wake_above` | "rope above" is not in the state, so the climb case is kept by `+wake_above`: a block placed right above a stopped vine (updateShape from above) gets up to 12 scheduled tries, about one random-tick interval apart, each running the vine's own random tick (climb 30%), until the block above changes. In memory only (lost on restart). Picking resets the vine to age 0, so it ticks and climbs again |
+| 2 | `farmersdelight:rice age=max supporting=true` | `supporting` turns false when the panicles are cut |
+| 3-5 | the six colonies `age=max` | |
+| 6 | `immersiveengineering:hemp growth=top0` | only the top half: the grown bottom (`bottom4`) regrows a cut top when the space above is air, which is not in the state |
+| 7, 9 | `neapolitan:strawberry_bush age=max`, `neapolitan:adzuki_sprouts age=max` | adzuki: `flowering` only changes the growth chance |
+| 8 | none | mint keeps spreading (Keep) |
+| 10 | not built here | Vinery port source is in-tree in Creative Brewing (`members/vinery`, `PaleStemBlock`, `LegacyLatticeStemBlock`): override `isRandomlyTicking` there, or add two lines to `idleRandomTickRules` once the Creative Calendar season mixins are checked |
+| 11 | `redeco:stone_lantern` / `deepslate_lantern`: `waxed!=0`, or `mossing=max` | unwaxing with an axe makes it tick again |
+| 12 | the 17 `floralench:*_bush` blocks, every state | no change in play (they grow only with bone meal) |
+
+- Interactions checked: Creative Calendar `CropSeasons` second random tick asks `isRandomlyTicking` (stopped states are
+  no-ops anyway); `CropSeasonGrowHookMixin` gates growth only; Melting's random-tick hook does not touch these blocks;
+  `cdevtest randomtick` counts only ticking states (`block_ticks`), which the queue rows use.
+- Tests: `tools/test_idle_random_ticks.sh` (headless: rule parsing, the 35 defaults, the table on vanilla states);
+  queue rows SQ-FCK-20 (stopped vs growing states, log line), SQ-FCK-21 (rope climb after growth, picked vine ticks),
+  SQ-FCK-22 (perf suite C04 before / after, a perf session).
+
+## How to stop them (design notes)
 
 - One Creative Common mixin on `BlockBehaviour.BlockStateBase.isRandomlyTicking` driven by a table (block id ->
   "stop when" predicate on its properties: max age, max colony age, waxed), checked once per state at load and cached,
@@ -63,9 +96,8 @@ Not counted: blocks outside the plant audit. A class scan for empty `randomTick`
   (`MulchBlockCropGrowthMixin`, `FarmBlockUnderCropsMixin`), Immersive Weathering growths (they run from random ticks
   of the block and stop with it; none of the candidates has an IW growth), WTHIT growth lines (unaffected).
 
-## Next step
+## Still open
 
 A `/dumprandomticks` in Creative Devtools: every registered block state, `isRandomlyTicking(state)`, block class and
-mod. It confirms the "flag" rows, gives the full registry (not just plants), and makes this list repeatable. Then
-the owner approves rows 1 to 12 and the mixin is built with a scratch test (perf suite C04 crop growth before and
-after).
+mod. It confirms the "flag" rows, gives the full registry (not just plants), and makes this list repeatable. The
+perf suite C04 comparison is queued as SQ-FCK-22.

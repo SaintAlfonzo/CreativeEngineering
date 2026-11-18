@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Offline checks for Melting (feature_writeup/melting.md section 7): MeltingTest builds the [melting] spec (2026-11-17
+# Offline checks for Melting (feature_writeup/melting.md section 7): MeltingTest builds the [melting] spec (current
 # defaults), checks snow by layer (heat one, salt saltMeltSnowLayers), salt products, the water rule, shared property
 # copy and the melt tick delay. Runs against development/creativeCommon build/classes (./gradlew :creativeCommon:compileJava
 # --offline first). No game needed.

@@ -111,8 +111,8 @@ public final class Melting {
 	private static volatile Values cfg = Values.UNLOADED;
 
 	/**
-	 * Told after a salt source melted a target by a tick (plan_post_scratch_1115 B3): Creative Delight removes a salt
-	 * layer by chance. Not called for {@link #meltStep} (the caller spends its own salt).
+	 * Told when a salt source melts a target by a tick (plan_post_scratch_1115 B3), just before the target changes:
+	 * Creative Delight removes a salt layer by chance, while the target still holds the layer up. Not called for {@link #meltStep} (the caller spends its own salt).
 	 */
 	@FunctionalInterface
 	public interface SaltMeltListener {
@@ -460,8 +460,10 @@ public final class Melting {
 					schedule(level, m, s.getBlock(), random, c);
 				} else if (random.nextDouble() < chance(s, tf, c)) { // scheduling off: one chance roll per random tick
 					BlockPos at = m.immutable();
-					meltTo(level, at, s, heatOk ? meltedState(s, level, slowT) : saltedState(s, level, 1));
+					// the listener first: it may drop a salt layer resting on the target, which must not lose its
+					// support (and pop as an item) before the vanish roll
 					if (!heatOk) afterMelt(level, pos, state, random);
+					meltTo(level, at, s, heatOk ? meltedState(s, level, slowT) : saltedState(s, level, 1));
 				}
 			}
 		}
@@ -547,8 +549,8 @@ public final class Melting {
 
 	private static void meltBy(ServerLevel level, BlockPos pos, BlockState state, int f, Hit hit, RandomSource random) {
 		if (hit.kind == BY_SALT) {
+			afterMelt(level, hit.pos, hit.state, random); // before the melt, see sourceTick
 			meltTo(level, pos, state, saltedState(state, level, 1));
-			afterMelt(level, hit.pos, hit.state, random);
 		} else if (hit.kind == BY_MAGMA_INSTANT) {
 			meltTo(level, pos, state, Blocks.AIR.defaultBlockState());
 		} else {
@@ -574,7 +576,7 @@ public final class Melting {
 		return Math.max(1, interval * 3 / 4 + random.nextInt(interval / 2 + 1));
 	}
 
-	/** A salt source did the melt: tell the listener (B3). */
+	/** A salt source is melting a target: tell the listener (B3), before the target changes. */
 	private static void afterMelt(ServerLevel level, BlockPos source, BlockState s, RandomSource random) {
 		SaltMeltListener l = saltListener;
 		if (l != null && (flags.getInt(s.getBlock()) & SALT) != 0) l.onSaltMelt(level, source.immutable(), s, random);
