@@ -97,7 +97,7 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 // shared_sources: copy the listed development/shared/<module>/ trees into build/generated/sources/shared with the
-// template package moved to shared_base, and compile them as part of main.
+// template package rewritten to shared_base, and compile them as part of main.
 def sharedModules = csv('shared_sources')
 if (sharedModules) {
 	def sharedBase = prop('shared_base')

@@ -67,8 +67,7 @@ COASTER_DIR = INSTANCE / 'development/creativeBrewing/members/brewin/src/main/re
 # The pack's coaster models (Display Delight's placed models, other mods' wine bottles and jars, borrowed models),
 # from tools/gen_coaster_models.py, shipped in the Creative Brewing jar.
 PACK_COASTER_DIR = INSTANCE / 'development/creativeBrewing/src/main/resources/assets/creativebrewing/brewinandchewin/coaster'
-# Only items with a coaster model go on a coaster (owner: the produce of every raw, cooked, egg and dairy food type
-# had joined the tag and lay flat without a model; those were cut, food_families.md 4.4).
+# Only items with a coaster model go on a coaster (owner ruling, food_families.md 4.4).
 
 # Block classes that make a non-edible block item a placed food (same words as dump_food.js FOOD_BLOCK).
 FOOD_BLOCK = re.compile(r'(Cake|Feast|Pie|Pizza|Pudding|Sandwich|Roast|Platter|Food)')

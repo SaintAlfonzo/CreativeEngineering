@@ -1,4 +1,4 @@
-// Scratch test suite (SQ-CDT): the tag helper (moved into Creative Common's jar) called from a CD server script.
+// Scratch test suite (SQ-CDT): the tag helper (in Creative Common's jar) called from a CD server script.
 ServerEvents.tags('item', e => {
 	global.tags.add(e, 'creativedelight:cdtest/members', [global.item.fishing_net, global.item.wheat])
 })

@@ -27,7 +27,7 @@
 //   nests X Z R                 nests at the surface (tree tops, roofs, ground) in a loaded square: generated / placed counts, first 5 with biome
 //   kill X Y Z TYPE N LOOT      a fake player with an iron sword of Looting LOOT kills N fresh TYPE at X Y Z; sums the drops
 // TYPE defaults to hearthandharvest:crow when written "crow" (the Hearth and Harvest crow; wariness is the entity's own field, NBT "Wariness"). No chunk loads here: forceload first (Rhino deadlock, scratch-test gotchas).
-// MIGRATED in part (creative_devtools.md): items -> /cdevtest items | entities type=minecraft:item nbt,
+// Also available as Devtools verbs (creative_devtools.md): items -> /cdevtest items | entities type=minecraft:item nbt,
 // inv -> /pbot inv NAME get, hit -> /pbot attack NAME @e[...] (or /cdevtest kill). Crow logs, watch, assert, tally stay here.
 (() => {
 	const $HH3Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

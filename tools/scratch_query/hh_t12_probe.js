@@ -26,9 +26,8 @@
 //   /zhh1 container RECIPE_ID     a Cooking Pot recipe's output container
 //   /zhh1 pluck NAME X Y Z N      N fresh chickens, each plucked once by the sneaking bot; feathers and damaged chickens
 //   /zhh1 litter X Y Z TYPE N [truffle]  N parent pairs bred through spawnChildFromBreeding; babies counted, all discarded
-// Output: "[zhh1]..." lines in logs/latest.log, then "[zhh1] done". Written not run yet: one live call each
-// before a batch relies on it (scratch-test gotchas). No Rhino-only tricks: Java collections are copied first.
-// MIGRATED in part (creative_devtools.md): interact -> /pbot interact (sneak via /pbot sneak), drops ->
+// Output: "[zhh1]..." lines in logs/latest.log, then "[zhh1] done". No Rhino-only tricks: Java collections are copied first.
+// Also available as Devtools verbs (creative_devtools.md): interact -> /pbot interact (sneak via /pbot sneak), drops ->
 // /cdevtest items, finish -> /pbot eat or useitem (a ticked use). The rest stays here.
 (() => {
 	const KEPT = [

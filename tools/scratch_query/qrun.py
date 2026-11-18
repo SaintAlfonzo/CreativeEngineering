@@ -222,7 +222,7 @@ class Client:
 			c = "/" + c
 		# 40 ms and a pause after Return keep chat in step
 		self._x("type", "--window", self.w, "--delay", "40", "--", c)
-		time.sleep(0.6)  # 0.2 let Return overtake the last characters on a hitch ("minecraft:air" sent as "minecra")
+		time.sleep(0.6)  # a shorter pause lets Return overtake the last characters on a hitch ("minecraft:air" sent as "minecra")
 		self._x("key", "--window", self.w, "Return")
 		time.sleep(0.7)
 

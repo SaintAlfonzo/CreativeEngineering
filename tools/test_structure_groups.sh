@@ -48,8 +48,8 @@ for v in "density=4 --density=4" "density=0.3 --density=0.3" "groupsoff --groups
     && echo "$1: node and Rhino identical ($(find "$T/rhino_$1" -name '*.json' -path '*structure_set*' | wc -l) sets)" || { echo "$1: node and Rhino DIFFER"; exit 1; }
 done
 
-# The old-jar cases (no StructureFrequencies, no MetaStructure class) were removed: structure_overrides.js
-# loads its classes at the top (463d2342) and ships in the same Creative Worldgen jar as them.
+# No old-jar cases (no StructureFrequencies, no MetaStructure class): structure_overrides.js
+# loads its classes at the top and ships in the same Creative Worldgen jar as them.
 echo "== 3. meta structures off"
 node tools/structure_tuning_sim.js "$T/nometa.md" "$T/nometa" --no-meta > "$T/nometa.log"
 if find "$T/nometa" -path '*worldgen/structure/*' | grep -q . || grep -rq 'creativeworldgen:meta/' "$T/nometa/creativeworldgen/worldgen/structure_set"; then

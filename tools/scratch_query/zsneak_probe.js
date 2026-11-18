@@ -2,7 +2,7 @@
 // `pbot use`, so a single till can be told apart from a lost sneak flag. Copy into a scratch server's
 // kubejs/server_scripts as zz_zsneak_probe.js, never into the pack.
 //   /zsneak NAME        "[zsneak] NAME shift=true|false crouching=true|false pose=... pos=x y z"
-// MIGRATED: /cdevtest player NAME prints shift, pose and position (creative_devtools.md).
+// Replaced by /cdevtest player NAME prints shift, pose and position (creative_devtools.md).
 (() => {
 	const $ZSArgs = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')
 	function out(s) { console.info('[zsneak] ' + s) }

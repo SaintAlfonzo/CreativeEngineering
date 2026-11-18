@@ -32,7 +32,7 @@
 //   drops X Y Z R             item entities within R: id, count, battery Charge and Capacity level
 //   sneak on|off              fake player sneaking (the saw fells the whole tree when sneaking)
 // Output: "[zpwg7] ..." lines in logs/latest.log, then "[zpwg7] done".
-// MIGRATED in part (creative_devtools.md): fp + hold + dig -> /cdevtest break X Y Z held=ITEM (no dig speed),
+// Also available as Devtools verbs (creative_devtools.md): fp + hold + dig -> /cdevtest break X Y Z held=ITEM (no dig speed),
 // drops -> /cdevtest entities type=minecraft:item nbt. Power Grid readers stay here.
 (() => {
 	const $Args = Java.loadClass('com.mojang.brigadier.arguments.StringArgumentType')

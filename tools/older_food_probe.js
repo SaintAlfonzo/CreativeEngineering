@@ -262,7 +262,7 @@
 			if (p != null && p.getSaturationModifier() > 10) high.push(k + ' ' + p.getSaturationModifier())
 		})
 		ok(high.length == 0, 'no can with a saturation modifier above 10 (' + high.join(', ') + ')')
-		// Canned Goods' cookie cans no longer meat
+		// Canned Goods' cookie cans are not meat
 		let meatCookies = Object.keys(canTypes()).filter(k => /cookie/.test(k) && food(i[k]) != null && food(i[k]).isMeat())
 		ok(meatCookies.length == 0, 'no cookie can is meat (' + meatCookies.join(', ') + ')')
 	}

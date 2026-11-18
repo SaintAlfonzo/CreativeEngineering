@@ -36,8 +36,8 @@ rootProject.name = 'CreativeEngineering'
 
 // Creative Delight (feature_writeup/creative_delight.md 14.3): the bundle, and its repacked members (ce.forge-repack)
 // under development/creativeDelight/members/. Project name = the member's jar_name. The Veggies, Vintage, Fungi,
-// Miner's and Display ports are members too (bundle_members; folders moved here the same day). Salt, Create: The Salt,
-// Canned Goods (repacks) and Golden Food (donor port) joined (plan_creative_delight.md J2 to J4).
+// Miner's and Display ports are members too (bundle_members). Salt, Create: The Salt,
+// Canned Goods (repacks) and Golden Food (donor port) are members as well (plan_creative_delight.md J2 to J4).
 include 'creativeDelight'
 project(':creativeDelight').projectDir = file('development/creativeDelight')
 ['repackedFarmers': 'farmers', 'repackedOceans': 'oceans', 'portedOceanic': 'oceanic', 'repackedEnds': 'ends', 'repackedNethers': 'nethers', 'backportedRustic': 'rustic', 'backportedRoll': 'roll', 'backportedLargeMeals': 'largemeals', 'repackedDelightful': 'delightful', 'backportedHearth': 'hearth', 'backportedBarbeques': 'barbeques', 'backportedDisplay': 'display', 'backportedVeggies': 'veggies', 'backportedVintage': 'vintage', 'backportedFungi': 'fungi', 'backportedMiners': 'miners', 'repackedSalt': 'salt', 'repackedCreateSalt': 'createsalt', 'repackedCannedGoods': 'cannedgoods', 'portedGolden': 'golden'].each { name, dir ->

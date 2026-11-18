@@ -134,7 +134,7 @@ SERVER_CONFIG_EDITS = os.path.join(ROOT, 'configs_edited', 'server_config')
 # must be in mods/). Each project keeps its released jars in development/<project>/jar_archive/.
 DEVELOPMENT = os.path.join(ROOT, 'development')
 IN_TREE_MODS = [
-	# Creative Common: patcherMod until the Creative Split swap (creative_split.md 7.13); the shared core
+	# Creative Common: the shared core
 	# every Creative jar requires. Its jar displaces the old creativeengineering-1.x jars (replaces_jars).
 	('creativeCommon', 'creativecommon', True),
 	('exposureBackport', 'exposureBackport', True),
@@ -149,7 +149,7 @@ IN_TREE_MODS = [
 	('creativeCalendar', 'creativecalendar', True),
 	# Creative Compat: tweaks to third-party mods (feature_writeup/creative_compat.md); every other Creative jar requires it.
 	('creativeCompat', 'creativecompat', True),
-	# Tempad 3.0.4 port (feature_writeup/immersive_portals.md 2.1.1): its own jar (nested in Creative Compat before, so
+	# Tempad 3.0.4 port (feature_writeup/immersive_portals.md 2.1.1): its own jar (so
 	# Compat ships without a donor jar); planned to fold into Creative Computing. Reads tempad_upstream/.
 	('backportedTempad', 'backportedTempad', True),
 	# Create: Power Grid 0.6.2 port (feature_writeup/plan_power_grid.md): in mods/ for development testing, never staged
@@ -159,7 +159,7 @@ IN_TREE_MODS = [
 	# (feature_writeup/creative_loot.md). Worldgen, Delight and Brewing require it.
 	('creativeLoot', 'creativeloot', True),
 	# Creative Worldgen: world generation and fauna (feature_writeup/creative_worldgen.md); nests More Mooblooms and
-	# Baby Mobs (development/creativeWorldgen/members/; More Mooblooms shipped on its own).
+	# Baby Mobs (development/creativeWorldgen/members/).
 	('creativeWorldgen', 'creativeworldgen', True),
 	# Creative Magic: Dark Fire and the Nether portal rule, enchantment tweaks, the Botania Trinket Case, magic recipes
 	# (feature_writeup/creative_magic.md).
@@ -256,7 +256,7 @@ EXCLUDE = [
 #   dev      never shipped: notes, reports, generator inputs and output, dumps
 # A file no rule matches stops the build (preflight error), so a new runtime input can't silently stay
 # home. kubejs/exported/ (the /dump* output, git-ignored) is dev-only as a whole: nothing in it is
-# read at runtime since the climate samples moved to generation_scripts/worldgen/climate/ (1.0.3).
+# read at runtime (the climate samples are in generation_scripts/worldgen/climate/).
 KUBEJS_CLASSES = [
 	('README.txt', 'dev'),
 	('archive/*', 'dev'),                  # old worldgen tuning, never loaded
@@ -341,7 +341,7 @@ KUBEJS_CLASSES = [
 	('generation_scripts/worldgen/nether_worldgen_rules.json', 'dev'),  # tools/gen_nether_worldgen.py input
 	('generation_scripts/worldgen/nether_worldgen_manifest.json', 'dev'),  # tools/gen_nether_worldgen.py
 	('generation_scripts/worldgen/terrain_adaptation_scan.json', 'dev'),  # tools/terrain_adaptation_scan.py
-	# The next five are generator records since framework #7: the game reads the CD member scripts
+	# The next five are generator records: the game reads the CD member scripts
 	# (<mod>/food_types.js, placeable.js, mortar_catalog.js in data/creativedelight/kubejs, kubejs_startup/<mod>/
 	# can_types.js and can_servings.js in the CD jar), which the generators write from them.
 	('generation_scripts/food/food_types.json', 'dev'),                 # tools/food_catalog.py record (hand edits)
@@ -604,7 +604,7 @@ UPSTREAM_DONORS = {
 	# nested in the Creative Delight jar, so the CD jar in mods/ is what needs the donor
 	'miners_upstream': ('creativedelight', "Miner's Delight (Creative Delight)",
 						('creativeDelight/members/miners', 'com', 'sammy', 'minersdelight', 'upstream')),
-	# in the Creative Worldgen jar since the wave 5 carve (Creative Common before)
+	# in the Creative Worldgen jar
 	'farmers_upstream': ('creativeworldgen', "Farmer's Structures donor (Creative Worldgen)",
 						 ('creativeWorldgen', 'com', 'SaintAlfonzo', 'creativeworldgen', 'worldgen', 'donor')),
 	'roll_upstream': ('creativedelight', 'Roll Delight (Creative Delight)',
@@ -617,7 +617,7 @@ UPSTREAM_DONORS = {
 						('creativeDelight/members/ends', 'com', 'SaintAlfonzo', 'creativedelight', 'enders', 'upstream')),
 	'goldenfood_upstream': ('creativedelight', 'Golden Food (Creative Delight)',
 							('creativeDelight/members/golden', 'com', 'SaintAlfonzo', 'creativedelight', 'golden', 'upstream')),
-	# its own jar (nested in Creative Compat before)
+	# its own jar
 	'tempad_upstream': ('backportedTempad', 'Tempad',
 						('backportedTempad', 'earth', 'terrarium', 'tempad', 'forge')),
 }

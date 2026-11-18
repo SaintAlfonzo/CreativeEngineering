@@ -432,7 +432,7 @@ public class SpotsTest {
 	}
 
 	/**
-	 * Label surface test and centred notes (sticky_notes.md 3.3a), on the real shapes of the modded hosts (read from
+	 * Label surface test and centered notes (sticky_notes.md 3.3a), on the real shapes of the modded hosts (read from
 	 * their jars) and on vanilla blocks.
 	 */
 	static void surfaceTests(BlockState stone, BlockState chest, BlockState carpet) {
@@ -484,7 +484,7 @@ public class SpotsTest {
 		check(fit(st, Direction.DOWN, N).label() == null, "stair top: no label");
 		expectLabel(fit(st, Direction.SOUTH, null).label(), 0, 0, 0, 10, "stair back: standard label");
 
-		System.out.println("== centred notes");
+		System.out.println("== centered notes");
 		for (Direction side : Direction.Plane.HORIZONTAL) {
 			expectCentreNote(Spots.centreNoteFit(jar, side, null), 3f / 16, -1, "jar side " + side + " (body, not the lid)");
 			expectCentreNote(Spots.centreNoteFit(sack, side, null), 2f / 16, -2, "sack side " + side);

@@ -1,10 +1,10 @@
-// RETIRED: prep_srv.sh no longer copies this file into scratch servers; every reusable verb is a Java
+// RETIRED: prep_srv.sh does not copy this file into scratch servers; every reusable verb is a Java
 // /cdevtest verb in Creative Devtools (feature_writeup/creative_devtools.md, /cdevtest; plan_scratch_testing_expansion.md
 // item 3). Kept so old run docs, batches and the one-off scripts that copy it themselves still make sense. Replacements:
 //   recipes, rdetail, bytype, uses, makes, food, item, potion, count, ages, chunk, tagsof, states -> same verb name
 //   items / blocks -> reg item|block;  biometag / itemtag / blocktag -> tag biome|item|block
 //   useitem P -> useair as=P hand=both
-//   season, floating, under, nbt -> same verb name (moved same arguments, [cdevtest] key=value output;
+//   season, floating, under, nbt -> same verb name (same arguments, [cdevtest] key=value output;
 //   nbt prints the stack's tag as the game holds it, not Rhino's typeof view; efb_judge.py reads both under forms)
 // (original header) Scratch-only query command for bulk queue runs (feature_writeup/testing/scratch_queue.md). Copy into a scratch
 // server's kubejs/server_scripts as zz_zq_probe.js, never into the pack.
@@ -34,7 +34,7 @@
 //                            the off-hand item if the main hand did not consume the action
 //   /zq states all           block-state id count (Block.BLOCK_STATE_REGISTRY) against the 2^20 ceiling
 // Output: "[zq] ..." lines in logs/latest.log, then "[zq] done".
-// MIGRATED to Creative Devtools' Java /cdevtest (feature_writeup/creative_devtools.md, /cdevtest); new rows use
+// Replaced by Creative Devtools' Java /cdevtest (feature_writeup/creative_devtools.md, /cdevtest); new rows use
 // those verbs, old batches keep /zq: recipes, rdetail, bytype, uses, makes, food, item, items/blocks -> reg item|block,
 // potion, count, ages, chunk, biometag/itemtag/blocktag -> tag biome|item|block, tagsof, useitem -> useair as=NAME
 // hand=both, states. season, floating, under and nbt followed (header above).

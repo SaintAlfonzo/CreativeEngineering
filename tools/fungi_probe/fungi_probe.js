@@ -36,7 +36,7 @@
 	function itemId(st) { return String($GReg.ITEMS.getKey(st.getItem())) }
 	function block(id) { return $GReg.BLOCKS.getValue(rl(id)) }
 	function blockId(state) { return String($GReg.BLOCKS.getKey(state.getBlock())) }
-	// The oven pie is still C
+	// The oven pie recipe id sits under C or CDN
 	const FG = 'fungidelight:', C = 'creativeengineering:', CDN = 'creativedelight:'
 
 	let byId = null

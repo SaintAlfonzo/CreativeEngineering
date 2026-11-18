@@ -97,7 +97,7 @@ public class GroundMatchTest {
 		check(Math.abs(b / (double) n - 0.75) < 0.02, "pick keeps proportions: basalt " + b / (double) n);
 		check(GroundMatch.pick(pal, new BlockPos(5, 64, -9)) == GroundMatch.pick(pal, new BlockPos(5, 64, -9)), "pick is deterministic");
 
-		// 3b. column exclusion by height: a deep piece no longer hides the surface (03_phase_3.md 4.1)
+		// 3b. column exclusion by height: a deep piece does not hide the surface (03_phase_3.md 4.1)
 		List<BoundingBox> deep = List.of(new BoundingBox(0, -60, 0, 47, -40, 47));   // ancient city
 		List<BoundingBox> house = List.of(new BoundingBox(0, 65, 0, 8, 72, 8));      // standing on ground at y 64
 		check(!GroundMatch.covered(deep, 10, 10, 60, 65), "deep piece under the column: ground at y 64 still sampled");

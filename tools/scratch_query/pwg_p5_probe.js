@@ -1,6 +1,6 @@
 // Scratch-only probe for the Create: Power Grid port, phase P5 rows (SQ-PWG-45 onward, plan_power_grid.md P5: ponder);
-// since P6 it carries the 55 structures of the -07 jar (P5's 36 plus 19 P6 ones; SQ-PWG-46); since P10 (r1113 pwg17)
-// also ceiling_tile and wire/string_lights from the -17 jar (57 in all; generated the same way). Copy into a scratch
+// it carries 57 structures: the 55 of the -07 jar (P5's 36 plus 19 P6 ones; SQ-PWG-46) and ceiling_tile and
+// wire/string_lights from the -17 jar (r1113 pwg17; generated the same way). Copy into a scratch
 // server's kubejs/server_scripts as zz_pwg_p5_probe.js; never into the pack. Checks that every ponder structure the -07
 // jar ships loads on 1.19.2 (the files are 1.20.1 saves, DataVersion 3465; Create 0.5.1's ponder reads them with
 // StructureTemplate.load and no data fixing). The server has no ponder, so the row copies the 55 files from the jar
