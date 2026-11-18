@@ -1,8 +1,10 @@
 package com.SaintAlfonzo.creativecommon.melting;
 
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.level.biome.Biome;
 import net.minecraft.world.level.block.Block;
 
 /**
@@ -20,10 +22,17 @@ public final class MeltTags {
 	public static final TagKey<Block> FIRE = tag("fire");
 	/** Lava sources besides any block whose fluid state is lava (lava cauldron). */
 	public static final TagKey<Block> LAVA = tag("lava");
-	/** Melt fully: ice and frosted ice to water (air when ultra-warm), snow to air. */
+	/** Melt fully: ice and frosted ice to water (air when ultra-warm), snow to air; frozen decor by [melting] meltProducts. */
 	public static final TagKey<Block> MELTABLE = tag("meltable");
-	/** Step down one tier ([melting] slowSteps) at the low chance: packed and blue ice, IW cryosol and permafrost. */
+	/**
+	 * Step down one tier ([melting] slowSteps) at the low chance: packed and blue ice, IW cryosol and permafrost,
+	 * Architect's Palette packed ice. Only lava and magma (close range) and salt melt them (G11).
+	 */
 	public static final TagKey<Block> MELTABLE_SLOW = tag("meltable_slow");
+	/** Slow targets that only lava melts, and only by touching it: blue ice, IW permafrost (G11). Never saltable. */
+	public static final TagKey<Block> LAVA_ONLY = tag("lava_only");
+	/** Targets that melt at [melting] sluggishMeltFactor of their chance: IW snow bricks (E1). */
+	public static final TagKey<Block> SLUGGISH = tag("sluggish");
 	/** The only targets salt melts (salt blocks, salt dispenser, Salt Melt); product by [melting] saltProducts. */
 	public static final TagKey<Block> SALTABLE = tag("saltable");
 	/** Snow resting on these ignores heat and light, not salt: blue ice, IW permafrost. */
@@ -32,6 +41,13 @@ public final class MeltTags {
 	public static final TagKey<Block> MAGMA = tag("magma");
 	/** Air the moment it is placed in an ultra-warm dimension: snow layers, snow blocks, powder snow. */
 	public static final TagKey<Block> ULTRAWARM_INSTANT = tag("ultrawarm_instant");
+
+	/**
+	 * Hot biomes (G11): ice and snow there take melt ticks every [melting] hotMeltTickInterval with no source needed.
+	 * Filled from Creative Calendar's arid and tropical season types. Ultra-warm dimensions (the Nether) count without it.
+	 */
+	public static final TagKey<Biome> HOT_BIOMES = TagKey.create(Registry.BIOME_REGISTRY,
+			new ResourceLocation("creativecommon", "melting/hot"));
 
 	private static TagKey<Block> tag(String path) {
 		return BlockTags.create(new ResourceLocation("creativecommon", "melting/" + path));

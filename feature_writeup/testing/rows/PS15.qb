@@ -468,7 +468,7 @@ look all three refills one stage per salt (layer of 2: two stages, layer gone); 
 ## SQ-PS15-07 | Salt Melt: recipe, melts ice, packed, blue, snow block, powder snow; stone nothing; 64 uses; dispenser on ice and on stone
 @group A
 @commands Craft Salt Melt (shapeless: 2 salt dust, 2 raw rock salt); use on ice, packed ice, blue ice, snow block, powder snow, stone; use 65 times; then a dispenser facing ice, then facing stone; JEI info page
-@pass 64 uses, 1 durability per melt, breaks at the 64th; packed -> ice, blue -> packed; stone: nothing, no durability; dispenser on ice melts and damages, on stone fails and keeps it; icon is The Salt's salt crystal; name "Salt Melt"; JEI page present
+@pass 64 uses, 1 durability per melt, breaks at the 64th; packed -> ice, blue -> packed; stone: nothing, no durability; dispenser on ice melts and damages, on stone fails and keeps it; icon is the pack's pink Rock Salt texture (`salt:item/raw_rock_salt`, E3); name "Salt Melt"; JEI page present
 @fails `SaltMeltRegistry` (annotation scan), recipe `creativedelight:salt_melt`
 @from batches/r1116/ps15_a.qb
 > cdevtest rdetail creativedelight:shapeless/salt_melt
@@ -537,7 +537,7 @@ look recipe 2 salt dust + 2 raw rock salt; Damage 1 per melt, stone no damage; u
 @commands After the frozen decor report: the melt rule rows for each listed block
 @pass per the report
 @fails per block
-@draft waits on the frozen decor report: the blocks to test are not listed yet (one /cdevtest state + randomtick pair per block once they are)
+@superseded SQ-MELT-17 to -20 and CQ-MELT-01 (E1 built 2026-11-17, MELT.qb section 3)
 ## SQ-PS15-09 | glowstone cage lantern out of the fire tag; no SQ-MELT-10 warning
 @group A
 @commands Boot; `/zq blocktag` the fire tag
@@ -814,19 +814,19 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @@jars creativecommon
 @@sources feature_writeup/melting.md feature_writeup/plan_post_scratch_1115.md
 @@text
-@@text Creative Common built 2026-11-17 (lane M1, build/libs). Group A superflat, `gamerule randomTickSpeed 3` (the melt ticks are scheduled ticks, not random ticks; a high random tick speed hides the pace) unless a row says otherwise. Config `[melting]` in `config/creativecommon-common.toml`: `meltTickInterval 200`, `snowLayerMeltChance 0.8`, `magmaInstantRange 2`, `saltMeltSnowLayers 3`, `slowHeatMelting false`. Rows that need Immersive Weathering blocks use `immersive_weathering:cryosol` and `immersive_weathering:permafrost`.
+@@text Creative Common built 2026-11-17 (lane M1, build/libs). Group A superflat, `gamerule randomTickSpeed 3` (the melt ticks are scheduled ticks, not random ticks; a high random tick speed hides the pace) unless a row says otherwise. Config `[melting]` in `config/creativecommon-common.toml`: `meltTickInterval 100` (G11, was 200), `snowLayerMeltChance 0.8`, `magmaInstantRange 2`, `saltMeltSnowLayers 3` (`slowHeatMelting` removed by G11: SQ-PS15-22 superseded by SQ-MELT-11). Rows that need Immersive Weathering blocks use `immersive_weathering:cryosol` and `immersive_weathering:permafrost`.
 @@text
 @@table
 ## SQ-PS15-17 | snow melts one layer at a time beside a torch, at a steady pace; ice beside a torch still melts to water
 @group A
 @commands `setblock X -60 Z minecraft:snow[layers=8]` on stone, a `minecraft:torch` 2 blocks away (lit room); a second spot: `minecraft:ice` 2 from a torch. Probe the layer count with `cdevtest state` every 20 s for 4 minutes
-@pass the layer count falls one at a time (8, 7, 6, ...; never a jump from several layers to air), first drop within about 70 s (target random tick or melt tick), then about one layer per 10 to 15 s; air within 4 minutes; the ice becomes `minecraft:water[level=0]` within 2 minutes
+@pass the layer count falls one at a time (8, 7, 6, ...; never a jump from several layers to air), first drop within about 70 s (target random tick or melt tick), then about one layer per 5 to 8 s; air within 2 minutes; the ice becomes `minecraft:water[level=0]` within 2 minutes
 @fails whole stack gone at once: `meltedState` layer path; no change after the first drop: melt tick not scheduled (`hasScheduledTick`, mixin `m_222963_` not applied: grep latest.log for `MeltingBlockStateMixin`)
 @draft runnable steps not written yet; the next runner writes them from @commands
 ## SQ-PS15-18 | a scheduled melt tick survives save and restart
 @group A
 @commands Snow `[layers=8]` 2 from a torch; wait for the first layer to go (SQ-PS15-17); `save-all`, `stop`, boot again on the same world, forceload the spot; probe the layer count every 20 s for 2 minutes
-@pass layers keep falling after the restart without any random tick roll first (first drop within about 15 s of the chunk loading); no ERR at load naming block_ticks
+@pass layers keep falling after the restart without any random tick roll first (first drop within about 8 s of the chunk loading); no ERR at load naming block_ticks
 @fails nothing for a minute, then a drop: the tick was not saved (only random ticks restarted it)
 @draft runnable steps not written yet; the next runner writes them from @commands
 ## SQ-PS15-19 | magma: snow within 2 melts at once (placed and existing); snow at 3 melts by layer
@@ -852,7 +852,7 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @commands Boot log `[melting] random ticks on for 2 extra blocks`. Each block on stone with a torch, lava and magma touching it (one spot per block per source); a second set with a `salt:salt_block` touching each; wait 10 minutes
 @pass every heat spot unchanged; salt: packed ice -> `minecraft:ice` (then water as ice does), cryosol -> `minecraft:dirt`; blue ice and permafrost unchanged
 @fails a heat spot changed: `slowHeatMelting` on or the target path ignores it; salted packed ice unchanged: salt block not scanning on its own tick (salt blocks must random tick; Creative Delight SaltBlockTicks)
-@draft runnable steps not written yet; the next runner writes them from @commands
+@superseded SQ-MELT-11 (G11, 2026-11-17: lava and magma melt the slow tier again; `slowHeatMelting` removed)
 ## SQ-PS15-23 | salt dispenser removes 3 snow layers; a snow block becomes 5 layers; blue ice refused
 @group A
 @commands Dispenser with salt dust facing `minecraft:snow[layers=8]`; fire once, probe; fire again; then facing `minecraft:snow_block`, fire once; then facing `minecraft:blue_ice`, fire once
@@ -911,6 +911,18 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @pass carrots and bell peppers place on the ground under the trees; the grass control as with the switch off; census near the rule rarities (carrot 1 in 120 tag chunks, bell pepper and coffee 1 in 15, mini melon 1 in 35)
 @fails canopy placements still: tag `creativedelight:canopy_proof` empty (check the placed feature ids) or the top feature is not the tagged one
 @draft fresh group B world census, as SQ-PS15-12b
+## SQ-PS15-30 | the End: campfires cannot be lit by torch, flint and steel or fire charge; soul campfires can
+@group A
+@commands `/execute in minecraft:the_end run tp @p 100 50 0` onto a platform; survival player with torch, flint and steel (note durability), fire charge, soul torch. Place an unlit campfire and an unlit soul campfire; right click the campfire with each of torch, flint and steel, fire charge; then the soul campfire with flint and steel, then a second soul campfire with a soul torch
+@pass campfire: stays unlit each time, extinguish (fizz) sound, torch and fire charge kept, flint and steel durability unchanged; soul campfires light (flint and steel used, soul torch used)
+@fails campfire lights: `CampfireEnd` not registered or `endUnlightable` off; flint and steel durability lost: event not canceled before the item use; soul campfire refused: `isSoul` path check
+@draft runnable steps not written yet; the next runner writes them from @commands
+## SQ-PS15-31 | the End: a campfire lit any other way goes out at once; switch off restores lighting
+@group A
+@commands In the End: `/setblock ~ ~ ~ minecraft:campfire[lit=true]`; a dispenser with flint and steel facing an unlit campfire, powered; a dispenser with a fire charge facing one; a flame-enchanted bow shot at one; in creative, place a campfire with Unlit Campfire removed or `/give` a lit-state item if available. Then `[campfire] endUnlightable = false`, config reload, flint and steel on an unlit campfire; back in the Overworld flint and steel on a campfire
+@pass every End campfire is unlit within a tick of being lit, with the fizz sound and smoke; food on its grill stays; with the switch off it lights and stays lit; the Overworld campfire lights as before
+@fails stays lit: `CampfireRainMixin` does not call `CampfireEnd.tick` (cookTick SRG `m_155306_`); Overworld refused: dimension check
+@draft runnable steps not written yet; the next runner writes them from @commands
 ## CQ-PS15-05 | campfire tooltips
 @group client
 @commands Hover a Campfire and a Soul Campfire in the inventory (and a Tinted Campfire if present); then `[campfire] torchLights = false` on the client copy and hover again; then `unlitTooltip = false`

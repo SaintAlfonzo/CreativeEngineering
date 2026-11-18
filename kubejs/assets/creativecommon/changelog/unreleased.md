@@ -13,7 +13,7 @@
 - **New:** The Diet Bonuses screen shows the effect slots side by side over a progress bar marked with each slot's diversity.
 - **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button.
 - **New:** The Diet Log's progress bar shows the last milestone reached and the next 3, with an icon for each bonus. The Spice of Life bonus pages are gone.
-- **New:** Diet Log icons: a lock for effect unlocks, a diamond shard for permanent buffs, a metal frame for effect slots. The key lists knockback resistance.
+- **New:** Diet Log icons: a lock for effect unlocks, a diamond shard for permanent buffs, a metal frame for empty effect slots. A filled effect slot shows its effect's icon and name. The key lists knockback resistance, and its effect slot icon cycles through the slot effects.
 - **New:** The Diet Log is drawn at 125% size, smaller on small windows (client setting).
 - **Changed:** The Diet Log is crafted from a book and any food that is not a drink [book and potato].
 - **New:** Liquid Diet Log, a book (book + any drink) listing every drink you have had. No bonuses.
@@ -66,11 +66,13 @@
 - **Changed:** Sweet berry bushes and the other berry bushes no longer cancel fall damage [sweet berry bushes did].
 - **Changed:** Snow layers up to 7 have no collision: you walk through them, 0.90x at 2 layers down to 0.40x at 7 [you stood on them, 0.75x from 3 layers].
 - **Changed:** Leather boots stand on top of snow layers at the snow walking speed; sneak to sink in [snow layers were solid for everyone].
+- **Changed:** Small mobs (rabbits, foxes, chickens, cats, most baby animals) stand on top of snow layers; bigger mobs sink in and climb out when they walk into a block.
+- **Changed:** Mobs path over the top of snow layers, or through them once sunk in.
 - **Changed:** A snow layer that reaches 8 layers becomes a Snow Block.
 - **Changed:** Leaf piles and Bamboo Leaves slow walking by height at every height, down to 0.60x at full height [leaf piles 0.45x from 4 layers, Bamboo Leaves about 0.35x from 3]; Bamboo Leaves now slow ocelots, pandas and parrots too.
 - **Changed:** Jumping from inside 6 or more snow layers is as weak as in Powder Snow; from inside 5 or more leaf layers it is a little weaker but still reaches a block beside the pile.
 - **Changed:** Falling through snow layers is as slow as through Powder Snow; through leaf piles and Bamboo Leaves, twice as fast as that.
-- **New:** Walking through leaf piles of 6 or more layers can prick players for half a heart; each armor piece worn lowers the chance, full armor prevents it.
+- **New:** Walking through a full leaf pile, or sprinting through one of 6 or 7 layers, can prick players for half a heart; each armor piece worn lowers the chance, full armor prevents it.
 - **New:** Inside a leaf pile the screen edges show its leaves, like the Powder Snow frost.
 - **Changed:** Mobs do not walk through leaf piles of 6 or more layers.
 - **Changed:** Rabbits and cats are not slowed by snow layers, leaf piles or Bamboo Leaves, and are not pricked [foxes and bees only].
@@ -205,7 +207,7 @@
 - **Changed:** Raw Rock Salt is named Rock Salt, the Block of Raw Rock Salt Rock Salt Block, the Salt Block Salt Dust Block, Rock Salt ore Rock Salt Vein and Deepslate Rock Salt ore Deepslate Rock Salt Vein.
 - **Changed:** Smooth Salt Block, Salt Pillar, Salt Bricks and Salt Brick Slab, Stairs and Wall are named Chiseled Salt Block, Chiseled Salt Pillar, Chiseled Salt Bricks and so on.
 - **Changed:** A Rock Salt Block is crafted from 4 Rock Salt and breaks back into 4 [9].
-- **Changed:** The salt lick is a Rock Salt Block placed by a player [Salt Block]; Rock Salt Blocks found in the world are never licked or worn. Licked Rock Salt Blocks are layers 12, 8 and 4 pixels high [full blocks]. Salt Dust Blocks are no longer licked.
+- **Changed:** The salt lick is a placed Rock Salt Block [Salt Block], by hand, dispenser, Deployer or Schematicannon; generated Rock Salt Blocks are never licked or worn. Licked Rock Salt Blocks are layers 12, 8 and 4 pixels high [full blocks]. Salt Dust Blocks are no longer licked.
 - **Changed:** Rock Salt restores a licked Rock Salt Block one stage, by hand or from a dispenser, waxed or not [Salt or a salt layer].
 - **Changed:** The Large Salt Lamp is made from 7 Rock Salt, glowstone and a wooden slab [7 Salt Blocks, glowstone and deepslate tiles].
 - **Changed:** Water in a heated basin turns into salt only over a Rock Salt Block, which stays: 1000 mB gives 2 Salt [any heated basin of water].
@@ -223,12 +225,18 @@
 - **New:** Lava melts ice and snow within 4 blocks.
 - **New:** Ice and frosted ice melt into water, or into nothing in the Nether. Snow Blocks and Powder Snow melt into nothing.
 - **New:** Snow layers melt one layer at a time.
-- **New:** Ice and snow near a heat source keep melting at a steady pace, about every 10 seconds, once the heat is found.
-- **New:** Magma melts snow within 2 blocks at once. No snow falls and no water freezes within 3 blocks of magma.
+- **New:** Ice and snow near a heat source keep melting at a steady pace, about every 5 seconds, once the heat is found.
+- **New:** Magma and Molten Nether Bricks melt snow within 2 blocks at once. No snow falls and no water freezes within 3 blocks of them.
 - **New:** Snow on Blue Ice or Permafrost does not melt from fire, lava or magma; salt still melts it.
-- **New:** Salt melts only blocks marked "Saltable" in their tooltip: ice, Packed Ice, snow and Cryosol. Packed Ice becomes Ice, Cryosol becomes Dirt. Salt in a dispenser or a Salt Melt removes 3 snow layers per use; a Snow Block becomes 5 layers.
-- **New:** Packed Ice and Cryosol melt only from salt, slowly. Blue Ice and Permafrost do not melt.
-- **New:** Snow, Snow Blocks and Powder Snow placed in the Nether melt at once.
+- **New:** Salt melts only blocks marked "Saltable" in their tooltip: ice, Packed Ice, snow, Cryosol and the frozen decor blocks. Packed Ice becomes Ice, Cryosol becomes Dirt. Salt in a dispenser or a Salt Melt removes 3 snow layers per use; a Snow Block becomes 5 layers.
+- **New:** Packed Ice and Cryosol melt slowly within 2 blocks of lava or magma, and from salt; torches and other fire do not melt them.
+- **New:** Blue Ice and Permafrost melt only while touching lava, slowly, into Packed Ice and Cryosol.
+- **New:** Snow, Snow Blocks, Powder Snow and Snow Bricks placed in the Nether melt at once.
+- **New:** In the Nether, ice, snow, Packed Ice and Cryosol melt on their own within seconds to minutes; in deserts, badlands, jungles, swamps and warm oceans, ice and snow do.
+- **New:** In the End, salt, fire, magma and lava melt only the blocks touching them.
+- **New:** Snowy stone, cobblestone and stone brick blocks melt back into the plain block, keeping their shape and facing. Frosty glass, panes, grass and ferns melt into the plain block, Thin Ice into water, Coarse Snow into gravel; Frost and Icicles melt away.
+- **New:** Snow Bricks melt away like snow, four times slower.
+- **New:** Architect's Palette Polished, Chiseled and Pillar Packed Ice melt into Ice like Packed Ice; its Packed Ice slabs, stairs and walls melt away. Frozen Prismarine never melts.
 - **Changed:** Light alone no longer melts ice or snow: sea lanterns, shroomlights, redstone torches and lamps and other lights without a flame leave them [any light level 12 or more].
 - **Fixed:** The Salt Dust Block and the Rock Salt Block melted no ice or snow.
 
@@ -318,8 +326,8 @@
 - **Fixed:** A Creative Delight or Creative Brewing member turned off in the config was still used by other jars' recipes, tags and gear effects.
 - **New:** Every raw skewer can be built on its stick in a Create sequenced assembly from the same ingredients as its basin or crafting recipe.
 - **Changed:** The raw Cave Skewer takes a Spider Leg [Spider Eye], Glow Berries and Rotten Flesh; with a Baked Spider Leg it is crafted cooked.
-- **Changed:** Strider Moss Stew in the Cooking Pot takes Nether Wart [a second Warped Fungus]; it can also be crafted from Cooked Nether Wart, Warped and Crimson Fungus, Crimson Roots and 2 raw Strider.
-- **Changed:** Warped Moldy Meat takes Cooked Nether Wart [a bowl].
+- **Changed:** Strider Moss Stew in the Cooking Pot takes Nether Wart [a second Warped Fungus]; it can also be crafted from Cooked Nether Wart, Warped and Crimson Fungus, Crimson Roots and 2 raw Strider, with no bowl handed back.
+- **Changed:** Warped Moldy Meat takes Cooked Nether Wart [a bowl]; no bowl is handed back.
 
 ## Lunchboxes <!-- icon: solapplepie:lunchbox -->
 
@@ -357,6 +365,8 @@
 - **Changed:** Mending repairs gear from collected XP [only by an anvil and a Mending book].
 - **Changed:** Elytra fly in every dimension [the End only].
 - **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
+- **Changed:** Campfires cannot be lit in the End: torches, flint and steel and fire charges hiss and are kept, and a campfire lit any other way goes out at once. Soul campfires still light.
+- **Changed:** Fire cannot exist in the End: flint and steel, fire charges, lava and End crystals light none, and fire already there goes out. Soul fire still burns.
 - **Changed:** Dragon armor gives 8, 13, 11 and 8 armor points for helmet, chestplate, leggings and boots [7, 12, 10, 7].
 - **Changed:** Items can no longer be frozen into Rare Ice; Rare Ice comes only from world generation [right-click ice with an item].
 - **Fixed:** Rubber trees did not generate in jungles.

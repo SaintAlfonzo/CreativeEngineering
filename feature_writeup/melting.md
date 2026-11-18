@@ -3,7 +3,8 @@
 Status: BUILT and installed 2026-11-14 (Creative Common 1.2.0, `development/creativeCommon`), scratch rows queued
 (section 7), not run. Plan: [plan_bugfix_1114.md](plan_bugfix_1114.md) 3.8 (owner, 2026-11-14). TODO
 `creativedelight/members #56`. Rework of 2026-11-17 (melt ticks, snow by layer, magma, saltable tag, slow tier frozen):
-[plan_post_scratch_1115.md](plan_post_scratch_1115.md) G7, G8; TODO `tooling/scratch-1115-follow-ups #20`. Related: [salt.md](salt.md) (The Salt's item click and the switched-off block melt).
+[plan_post_scratch_1115.md](plan_post_scratch_1115.md) G7, G8; TODO `tooling/scratch-1115-follow-ups #20`. G11 rulings
+and E1 frozen decor built 2026-11-17 (lane C1, plan G12; TODO `#20`, `#22`, `#9`). Related: [salt.md](salt.md) (The Salt's item click and the switched-off block melt).
 
 ## 0. At a glance
 
@@ -19,24 +20,42 @@ Status: BUILT and installed 2026-11-14 (Creative Common 1.2.0, `development/crea
 ## 1. Rules
 
 Three source kinds melt two target kinds. A target near a source melts on a steady pace: one roll on each of its
-melt ticks (about every 10 s), plus its random ticks.
+melt ticks (about every 5 s), plus its random ticks.
 
-| Source | Ice and snow (meltable) | Packed ice, blue ice, IW cryosol, IW permafrost (meltable_slow) |
-|---|---|---|
-| salt | touching (6 faces), saltable blocks only | touching: packed ice -> ice, cryosol -> dirt; blue ice and permafrost never |
-| fire | within 3 blocks | none (`slowHeatMelting = false`, G7.15; on: touching) |
-| lava | within 4 blocks | none (on: within 2 blocks) |
-| magma | as fire, and snow within 2 melts at once | none |
+| Source | Ice, snow, frozen decor (meltable) | Packed ice, IW cryosol, AP packed ice (meltable_slow) | Blue ice, IW permafrost (meltable_slow, lava_only) |
+|---|---|---|---|
+| salt | touching (6 faces), saltable blocks only | touching: one step down | never |
+| fire (not magma) | within 3 blocks | never | never |
+| magma | within 3, and snow within 2 melts at once | within 2 (`slowMagmaRange`) | never |
+| lava | within 4 blocks | within 2 (`slowLavaRange`) | touching only: one step down |
+
+- Hot places (G11): in an ultra-warm dimension (the Nether) every target but blue ice and permafrost, and in a hot
+  biome (`#creativecommon:melting/hot`: Creative Calendar's arid and tropical season types) ice, snow and frozen
+  decor (not packed ice or cryosol), take a melt tick every `hotMeltTickInterval` = 20 ticks (15 to 25) with no
+  source, rolling their usual chance. Packed ice placed in the Nether steps to ice, then air. Snow on blue ice or
+  permafrost is left alone there too.
+- The End (G11, `endContactOnly`): every source melts only the 6 blocks touching it (salt, fire, magma, lava); magma's
+  instant zone is the touching blocks; magma's snow and ice guard reaches 1.
+- No `minecraft:fire` in the End (G11, `endNoFire`): every placement is refused (flint and steel, fire charges, lava
+  spread, End crystals, commands, any mod's `setBlock`); fire already there goes out on its next tick. Soul fire stays.
+  Campfires in the End are Creative Delight's (TODO `#22`, campfire part).
 
 - "Within N": Euclidean distance at most N, counted through any blocks. Touching = distance 1.
 - Meltable: ice and frosted ice (and Rare Ice) become a water source; a snow layer stack loses one layer per melt
   (the last one leaves air); snow blocks and powder snow become air whole. In an ultra-warm dimension (the Nether),
   or with `placeWater = false`, ice becomes air too.
-- Meltable slow: steps `slowSteps` (blue ice -> packed ice -> ice, permafrost -> cryosol -> dirt) when heat melts them,
-  which it does not while `slowHeatMelting` is off (the default until the ambient melting audit, G7.14, G7.15).
+- Meltable slow: steps `slowSteps` (blue ice -> packed ice -> ice, permafrost -> cryosol -> dirt, AP polished, chiseled
+  and pillar packed ice -> ice; the AP slab, stairs, wall and vertical slab have no row and melt to air). G11 replaced
+  G7.15's "salt only": lava and magma melt them again within 2, other fire never.
+- Frozen decor (E1, `meltProducts`, shared properties copied by name): IW snowy stone, cobblestone and stone bricks
+  (16, every shape) -> the plain block in the same shape and facing (vertical slabs -> Quark's); frosty glass, pane,
+  grass, fern -> glass, pane, grass, fern; thin ice -> water (air when ultra-warm); coarse snow -> gravel; frost, icicle
+  and the 5 snow brick blocks -> air. Snow bricks are `sluggish` (`sluggishMeltFactor` 0.25 of their chance) and vanish
+  in the Nether like snow. Philips Ruins frozen prismarine never melts.
 - Salt melts only `#creativecommon:melting/saltable` (ice, frosted ice, Rare Ice, snow, snow block, powder snow,
-  packed ice, cryosol). Product: a `saltProducts` row (packed ice -> ice, cryosol -> dirt, shared properties copied),
-  else water for ice (`placeWater`), else air; snow loses layers instead. A salt block's tick removes 1 layer; one
+  packed ice, cryosol, the frozen decor, AP packed ice). Product: a `saltProducts` row (packed ice -> ice, cryosol ->
+  dirt), else the heat product (`meltProducts`, `slowSteps`), shared properties copied, else water for ice
+  (`placeWater`), else air; snow loses layers instead. A salt block's tick removes 1 layer; one
   salt dispense or Salt Melt use (`meltStep`) removes `saltMeltSnowLayers` = 3, a snow block counting as 8 (it
   becomes 5 layers). Items of saltable blocks show a gray "Saltable" tooltip line.
 - Snow resting on `#creativecommon:melting/keeps_snow` (blue ice, IW permafrost) ignores fire, lava, magma and
@@ -44,10 +63,11 @@ melt ticks (about every 10 s), plus its random ticks.
 - Magma (`#creativecommon:melting/magma`): snow within `magmaInstantRange` = 2 melts at once (on placement, on
   magma's tick, on the snow's melt tick); no snow forms from snowfall and no water freezes within `fireRange` = 3
   (`magmaStopsFreezing`, server weather only, not world generation).
-- Chances per roll: `meltChance` 0.4, `snowLayerMeltChance` 0.8 per layer, `slowMeltChance` 0.05 per tier. With
-  `meltTickInterval` 200 (10 s, each tick 7.5 to 12.5 s) ice beside a torch melts in about 25 s once found, a stack of
-  8 snow layers in about 100 s; finding takes up to one random tick of the target or of a ticking source (about
-  68 s on average at randomTickSpeed 3).
+- Chances per roll: `meltChance` 0.4, `snowLayerMeltChance` 0.8 per layer, `slowMeltChance` 0.05 per tier, times
+  `sluggishMeltFactor` for sluggish blocks. With `meltTickInterval` 100 (5 s, each tick 3.75 to 6.25 s; G11, was 200)
+  ice beside a torch melts in about 12 s once found, a stack of 8 snow layers in about 50 s, packed ice beside lava
+  steps in about 100 s; finding takes up to one random tick of the target or of a ticking source (about 68 s on
+  average at randomTickSpeed 3).
 - Fire: a block with a `lit` property counts only while lit (campfires, braziers, candelabras).
 - Nether snow: snow layers, snow blocks and powder snow placed in an ultra-warm dimension become air at once, with a
   fizz (by hand, dispenser, `/setblock`, any mod's `setBlock`). Worldgen placement is not covered (it does not call
@@ -73,7 +93,18 @@ melt ticks (about every 10 s), plus its random ticks.
   per-chunk registry and no save data of our own. `meltTickInterval = 0` turns scheduling off (random ticks only, and
   a source's tick rolls and melts its targets directly, as on 2026-11-14). Frosted ice is never scheduled (it runs
   its own scheduled ticks). Lava skips its own scan in ultra-warm dimensions (lava seas; Nether ice still finds lava
-  by its random tick).
+  by its random tick). G11: in ultra-warm dimensions lava scans only its 6 touching blocks (blue ice beside Nether
+  lava; the rest melts as a hot place).
+- Hot places: `Melting.isHot` (ultra-warm dimension, or `getNoiseBiome` in `#creativecommon:melting/hot` for the
+  meltable tier) on the target's random tick, its melt tick and on placement (`onPlaced` schedules the first tick, as
+  packed ice and cryosol do not random tick); `hotTick` rolls, melts as heat would and schedules the next tick at
+  `hotMeltTickInterval`.
+- The End: `endContact` clamps every reach to 1 in `findSource`, `sourceTick`, `onPlaced` and `magmaBlocksFreezing`.
+- End fire: `mixin/EndFireMixin` on `Level.setBlock(BlockPos, BlockState, int, int)` (`m_6933_`, HEAD, both sides)
+  returns false for `Blocks.FIRE` in `Level.END`; refused at the source, so an End crystal's every-tick fire costs one
+  check and no sound. `Melting.onScheduledTick` removes fire already there on its next tick.
+- Stairs: vanilla `StairBlock.randomTick` passes the tick to its base block's state at the same position; the target
+  path checks that the ticked state is the one in the world, so snowy stone stairs never melt as a full snowy stone.
 - Alternatives (a) extra rolls and (b) extra random ticks per section were not built; the perf comparison is
   SQ-MELT-P2 (queued, not run).
 - Hook: `mixin/MeltingBlockStateMixin` on `BlockStateBase.randomTick` (`m_222972_`, what `ServerLevel.tickChunk`
@@ -91,8 +122,10 @@ melt ticks (about every 10 s), plus its random ticks.
   its own sphere from its random tick, each target with its own roll; the target scan ignores such blocks so nothing
   rolls twice. The chunk sections in reach are checked by palette (`LevelChunkSection.maybeHas`) first, so magma
   seas without ice cost almost nothing.
-- Random ticks: ice, frosted ice, snow layers and magma tick in vanilla. `snow_block` and `powder_snow` get random
-  ticks at common setup (packed and blue ice no longer, 2026-11-17: nothing heats them, salt blocks find them) (`extraRandomTickBlocks`, the `isRandomlyTicking` field `f_60445_`,
+- Random ticks: ice, frosted ice, snow layers and magma tick in vanilla, IW's snowy, frosty, frost and icicle blocks
+  tick for their own un-snow and un-frost. `snow_block`, `powder_snow`, IW thin ice, the 5 snow brick blocks, AP coarse
+  snow and AP Molten Nether Bricks (a source) get random ticks at common setup (packed and blue ice no longer,
+  2026-11-17: lava, magma and salt blocks find them from their own tick) (`extraRandomTickBlocks`, the `isRandomlyTicking` field `f_60445_`,
   the way Creative Delight's SaltBlockTicks does it). A modded target that does not random tick melts only from a
   source-driven source.
 - Nether snow and snow beside magma: `MeltingBlockStateMixin` on `BlockStateBase.onPlace` (`m_60696_`, TAIL).
@@ -158,14 +191,20 @@ Block tags under `creativecommon:melting/`, filled by Creative Common's
 
   Also left out: redstone torches, sea lanterns, candles and candle holders, lamps, modded glowstone blocks.
 - `lava`: `minecraft:lava_cauldron`; any block whose fluid state is `#minecraft:lava` counts without the tag.
-- `meltable`: ice, frosted ice, snow, snow block, powder snow, Rare Ice.
-- `meltable_slow`: packed ice, blue ice, Immersive Weathering cryosol and permafrost (2026-11-17).
-- `ultrawarm_instant`: snow, snow block, powder snow.
-- `saltable` (2026-11-17): ice, frosted ice, snow, snow block, powder snow, packed ice, Rare Ice, IW cryosol. Not blue
-  ice, IW permafrost, frozen prismarine, reinforced blocks. The Salt's own `salt:meltables` (its item click) is
+- `meltable`: ice, frosted ice, snow, snow block, powder snow, Rare Ice; frozen decor (E1): IW `snowy_*` (16),
+  `frosty_*` (4), frost, thin ice, icicle, `snow_brick*` (5), AP coarse snow.
+- `meltable_slow`: packed ice, blue ice, Immersive Weathering cryosol and permafrost (2026-11-17), AP `*packed_ice*` (7).
+- `lava_only` (G11): blue ice, IW permafrost.
+- `sluggish` (E1): IW snow bricks, slab, stairs, wall, vertical slab.
+- `ultrawarm_instant`: snow, snow block, powder snow, IW snow bricks (5).
+- `saltable` (2026-11-17): ice, frosted ice, snow, snow block, powder snow, packed ice, Rare Ice, IW cryosol, the
+  frozen decor and AP packed ice (E1). Not blue ice, IW permafrost, frozen prismarine, reinforced blocks. The Salt's own `salt:meltables` (its item click) is
   Creative Delight's to align (plan E1, G7.11).
 - `keeps_snow` (2026-11-17): blue ice, IW permafrost.
-- `magma` (2026-11-17): magma block.
+- `magma` (2026-11-17): magma block, AP Molten Nether Bricks (G11; the only magma-like block in the 2026-11-17 dump:
+  light 3, made to random tick). The Java side treats every magma block as a fire source too.
+- Biome tag `hot` (G11): `#creativecalendar:seasons/arid` and `#creativecalendar:seasons/tropical` (only with
+  Creative Calendar loaded); the Nether counts by its ultra-warm dimension type.
 
 The modded list is the 2026-11-13 `/dumpall` (`kubejs/exported/tags/block_tags_by_block.json`, tagged blocks only),
 re-grepped 2026-11-14 for torch / lantern / sconce / brazier / candelabra (same 131 ids). Light levels could not be
@@ -183,22 +222,29 @@ new defaults by hand; mirrored to `configs_edited/root_config/creativecommon-com
 | `saltRange` | 1 | 0 to 4 | yes |
 | `fireRange` | 3 | 0 to 8 | yes |
 | `lavaRange` | 4 | 0 to 8 | yes |
-| `slowFireRange` | 1 (used only with `slowHeatMelting`) | 0 to 8 | yes |
-| `slowLavaRange` | 2 (used only with `slowHeatMelting`) | 0 to 8 | yes |
+| `slowLavaRange` | 2 (packed ice, cryosol; lava_only blocks always 1) | 0 to 8 | yes |
+| `slowMagmaRange` | 2 (G11) | 0 to 8 | yes |
 | `meltChance` | 0.4 | 0 to 1 | yes |
 | `slowMeltChance` | 0.05 | 0 to 1 | yes |
 | `placeWater` | true | | yes |
 | `vanillaLightMelting` | false | | yes |
 | `ultraWarmInstantMelt` | true | | yes |
-| `slowSteps` | blue ice = packed ice, packed ice = ice, IW permafrost = IW cryosol, IW cryosol = dirt | | yes |
-| `extraRandomTickBlocks` | snow block, powder snow | | restart |
+| `slowSteps` | blue ice = packed ice, packed ice = ice, IW permafrost = IW cryosol, IW cryosol = dirt, AP polished / chiseled / pillar packed ice = ice | | yes |
+| `extraRandomTickBlocks` | snow block, powder snow, IW thin ice, the 5 snow brick blocks, AP coarse snow, AP Molten Nether Bricks | | restart |
 | `snowLayerMeltChance` | 0.8 | 0 to 1 | yes |
-| `meltTickInterval` | 200 (0 = off) | 0 to 12000 | yes |
-| `slowHeatMelting` | false | | yes |
+| `meltTickInterval` | 100 (0 = off; G11, was 200) | 0 to 12000 | yes |
 | `magmaInstantRange` | 2 | 0 to 4 | yes |
 | `magmaStopsFreezing` | true | | yes |
 | `saltMeltSnowLayers` | 3 | 1 to 8 | yes |
 | `saltProducts` | packed ice = ice, IW cryosol = dirt | | yes |
+| `meltProducts` | the 22 frozen decor rows (E1) | | yes |
+| `sluggishMeltFactor` | 0.25 | 0 to 1 | yes |
+| `hotMeltTickInterval` | 20 (0 = off) | 0 to 12000 | yes |
+| `endContactOnly` | true | | yes |
+| `endNoFire` | true | | yes |
+
+2026-11-17 (G11, E1): `slowFireRange` and `slowHeatMelting` removed; the instance toml's `[melting]` was rewritten
+with the new defaults (all values were defaults) and mirrored to `configs_edited/root_config/`.
 
 A `saltRange` above 1 makes every target scan a sphere on each successful roll (salt gives no light to gate it).
 
@@ -216,14 +262,18 @@ layer, magma instant zone and snow/ice guard, saltable tag and tooltip, keeps_sn
 the slow tier, and the slow tier taken off heat (`slowHeatMelting = false`, G7.15): packed and blue ice no longer
 melt beside fire and lava (before: touching fire, within 2 of lava) and no longer random tick.
 
+2026-11-17, later (G11, E1; lane C1): melt ticks every 5 s; lava and magma melt packed ice and cryosol again within 2,
+blue ice and permafrost only touching lava (fire never melts the slow tier); hot places and the End rules; no fire in
+the End; Molten Nether Bricks join magma; frozen decor melts (`meltProducts`, `sluggish`, AP packed ice).
+
 ## 5b. Not built from G7 (2026-11-17)
 
 - IW's snowy conversion and the vanilla `snowy` property near magma are not touched: no snow forms within reach, so
   grass and podzol there stay unsnowy, but Immersive Weathering's own snowy-stone growth is not blocked.
 - Ambient melting (biome temperature, season, weather): audit only (G7.14), nothing built; snow on keeps_snow blocks
   covers vanilla light melting today and any ambient path added later must ask `Melting` the same way.
-- B8 frozen decor (plan E1: IW snowy and frosty blocks, thin ice, icicles, Architect's Palette packed ice family,
-  snow bricks, coarse snow): rulings in E1, not built. `withShared` (property copy) is in place for it.
+- Arid and tropical biomes do not melt packed ice or cryosol (the ruling names ice and snow); rivers that take a
+  desert's season type (Calendar's adaptive type) are not hot (the tag holds biomes only).
 - Layer falling (lane L2, Creative Compat): Melting schedules ticks on snow layers. A tick scheduled by a falling
   check for the same position and block while a melt tick is pending is merged into the pending one (vanilla
   dedup), so a fall check can wait up to `meltTickInterval`.
@@ -244,8 +294,10 @@ Traced 2026-11-14 for "why did Nether ice melt in r1113":
 
 Headless: `tools/test_melting.sh` (`tools/melting_test/`, `MeltingTest`: spec defaults, snow by layer under heat and
 salt, snow block to 5 layers, products, shared property copy, melt tick delay range; part of `check_all.py`).
-Scratch rows for the 2026-11-17 rework: SQ-PS15-17 to -23, CQ-PS15-04 (PS15.qb section 2); perf SQ-MELT-P2 (queued
-for a later perf run, MELT.qb section 2).
+Scratch rows for the 2026-11-17 rework: SQ-PS15-17 to -23, CQ-PS15-04 (PS15.qb section 2; -22 superseded by
+SQ-MELT-11); perf SQ-MELT-P2 (queued for a later perf run, MELT.qb section 2). G11 and E1: SQ-MELT-11 to -20,
+CQ-MELT-01 (MELT.qb section 3; SQ-PS15-08 superseded). The headless test also covers the new defaults and the
+by-name property copy.
 
 Scratch queue section "SQ-MELT Melting system" ([scratch_queue.md](testing/scratch_queue.md)): SQ-MELT-01 to -10,
 SQ-MELT-P1 (perf, ice spikes style box against a control), SQ-SALT2-06 (rewritten), SQ-SALT2-06b (Nether snow).

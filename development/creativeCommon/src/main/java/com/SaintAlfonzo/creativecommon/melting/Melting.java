@@ -43,7 +43,7 @@ import java.util.TreeSet;
 import java.util.function.Predicate;
 
 /**
- * Melting (feature_writeup/melting.md, plan_bugfix_1114.md 3.8, plan_post_scratch_1115.md G7, G8): salt, fire and lava
+ * Melting (feature_writeup/melting.md, plan_bugfix_1114.md 3.8, plan_post_scratch_1115.md G7, G8, G11, E1): salt, fire and lava
  * melt ice and snow. Sources and targets are the {@link MeltTags} block tags, rules and chances {@code [melting]} in
  * creativecommon-common.toml.
  *
@@ -57,9 +57,15 @@ import java.util.function.Predicate;
  *
  * <p>Snow melts one layer per melt ({@code snowLayerMeltChance}); magma melts snow within {@code magmaInstantRange} at
  * once and stops snow forming and water freezing within {@code fireRange} ({@code mixin.BiomeMeltMixin}). Salt melts
- * only {@link MeltTags#SALTABLE} blocks, into {@code saltProducts}. Packed ice, blue ice and Immersive Weathering's
- * cryosol and permafrost (meltable_slow) take no heat while {@code slowHeatMelting} is off (G7.15). Snow resting on a
- * {@link MeltTags#KEEPS_SNOW} block ignores heat and vanilla light, not salt (G6 4b).
+ * only {@link MeltTags#SALTABLE} blocks, into {@code saltProducts} (else the heat product). Frozen decor melts into
+ * its {@code meltProducts} row with shared properties (E1). Packed ice and cryosol (meltable_slow) take heat only from
+ * magma and lava within the slow ranges; blue ice and permafrost ({@link MeltTags#LAVA_ONLY}) only from touching lava
+ * (G11). Snow resting on a {@link MeltTags#KEEPS_SNOW} block ignores heat and vanilla light, not salt (G6 4b).
+ *
+ * <p>Hot places (G11): in an ultra-warm dimension every target but the lava_only ones, in a
+ * {@link MeltTags#HOT_BIOMES} biome the meltable tier, melts on its own melt ticks ({@code hotMeltTickInterval}) with no
+ * source. The End: sources melt only touching blocks ({@code endContactOnly}), and {@code minecraft:fire} is refused
+ * there ({@code endNoFire}, {@code mixin.EndFireMixin}).
  *
  * <p>Ultra-warm dimensions: melted ice leaves air, and blocks in {@link MeltTags#ULTRAWARM_INSTANT} become air the
  * moment they are placed ({@link #onPlaced}). Vanilla light melting is cut by {@code mixin.VanillaLightMeltMixin}
@@ -75,7 +81,7 @@ public final class Melting {
 	private static final int MAX_RANGE = 8;
 
 	private static final int MELTABLE = 1, SLOW = 2, SALT = 4, FIRE = 8, LAVA = 16, DRIVEN = 32, INSTANT = 64,
-			SALTABLE = 128, KEEPS_SNOW = 256, MAGMA = 512, SRC_TICK = 1024;
+			SALTABLE = 128, KEEPS_SNOW = 256, MAGMA = 512, SRC_TICK = 1024, LAVA_ONLY = 2048, SLUGGISH = 4096;
 	private static final int TARGET = MELTABLE | SLOW;
 	/** What {@link #findSource} found. */
 	private static final int NONE = 0, BY_SALT = 1, BY_HEAT = 2, BY_MAGMA_INSTANT = 3;
@@ -84,27 +90,30 @@ public final class Melting {
 	private static final int[][] OFFSETS = buildOffsets();
 
 	private static volatile Reference2IntOpenHashMap<Block> flags = new Reference2IntOpenHashMap<>();
-	private static List<? extends String> stepsSource, saltSource;
-	private static Map<Block, BlockState> steps = Map.of(), saltProducts = Map.of();
+	private static List<? extends String> stepsSource, saltSource, productsSource;
+	private static Map<Block, BlockState> steps = Map.of(), saltProducts = Map.of(), meltProducts = Map.of();
 
 	/**
 	 * The [melting] config values the tick paths read, copied from the spec on config load and reload so a tick reads
 	 * plain fields instead of ForgeConfigSpec values (SQ-MELT-P1). Before the first load: melting and the ultra-warm
 	 * melt off, vanilla light melting as vanilla, the same as the former isLoaded() checks.
 	 */
-	record Values(boolean enabled, int saltRange, int fireRange, int lavaRange, int slowFireRange,
-			int slowLavaRange, double meltChance, double slowMeltChance, double snowLayerMeltChance, boolean placeWater,
-			boolean vanillaLightMelting, boolean ultraWarmInstantMelt, boolean slowHeatMelting, int meltTickInterval,
-			int magmaInstantRange, boolean magmaStopsFreezing, int saltMeltSnowLayers) {
-		static final Values UNLOADED = new Values(false, 0, 0, 0, 0, 0, 0, 0, 0, true, true, false, false, 0, 0, false, 1);
+	record Values(boolean enabled, int saltRange, int fireRange, int lavaRange, int slowLavaRange,
+			int slowMagmaRange, double meltChance, double slowMeltChance, double snowLayerMeltChance, boolean placeWater,
+			boolean vanillaLightMelting, boolean ultraWarmInstantMelt, int meltTickInterval,
+			int magmaInstantRange, boolean magmaStopsFreezing, int saltMeltSnowLayers, double sluggishMeltFactor,
+			int hotMeltTickInterval, boolean endContactOnly, boolean endNoFire) {
+		static final Values UNLOADED = new Values(false, 0, 0, 0, 0, 0, 0, 0, 0, true, true, false, 0, 0, false, 1, 1,
+				0, false, false);
 
 		static Values read() {
 			CommonConfig.MeltingConfig c = CommonConfig.MELTING;
 			return new Values(c.enabled.get(), c.saltRange.get(), c.fireRange.get(), c.lavaRange.get(),
-					c.slowFireRange.get(), c.slowLavaRange.get(), c.meltChance.get(), c.slowMeltChance.get(),
+					c.slowLavaRange.get(), c.slowMagmaRange.get(), c.meltChance.get(), c.slowMeltChance.get(),
 					c.snowLayerMeltChance.get(), c.placeWater.get(), c.vanillaLightMelting.get(),
-					c.ultraWarmInstantMelt.get(), c.slowHeatMelting.get(), c.meltTickInterval.get(),
-					c.magmaInstantRange.get(), c.magmaStopsFreezing.get(), c.saltMeltSnowLayers.get());
+					c.ultraWarmInstantMelt.get(), c.meltTickInterval.get(),
+					c.magmaInstantRange.get(), c.magmaStopsFreezing.get(), c.saltMeltSnowLayers.get(),
+					c.sluggishMeltFactor.get(), c.hotMeltTickInterval.get(), c.endContactOnly.get(), c.endNoFire.get());
 		}
 	}
 
@@ -179,13 +188,18 @@ public final class Melting {
 		mark(map, tags, MeltTags.ULTRAWARM_INSTANT, INSTANT);
 		mark(map, tags, MeltTags.SALTABLE, SALTABLE);
 		mark(map, tags, MeltTags.KEEPS_SNOW, KEEPS_SNOW);
-		mark(map, tags, MeltTags.MAGMA, MAGMA);
+		mark(map, tags, MeltTags.MAGMA, MAGMA | FIRE); // a magma block is a fire source with the magma rules
+		mark(map, tags, MeltTags.LAVA_ONLY, LAVA_ONLY);
+		mark(map, tags, MeltTags.SLUGGISH, SLUGGISH);
 		map.put(Blocks.LAVA, map.getInt(Blocks.LAVA) | LAVA); // the lava block itself (its fluid counts anyway)
 
 		// Fire blocks that give little light are found only by their own tick; any source that random ticks scans
 		TreeSet<String> driven = new TreeSet<>(), dimStill = new TreeSet<>();
 		int fire = 0, ticking = 0;
-		for (Block block : tags.getTag(MeltTags.FIRE)) {
+		java.util.Set<Block> fireBlocks = new java.util.LinkedHashSet<>();
+		for (Block block : tags.getTag(MeltTags.FIRE)) fireBlocks.add(block);
+		for (Block block : tags.getTag(MeltTags.MAGMA)) fireBlocks.add(block);
+		for (Block block : fireBlocks) {
 			fire++;
 			int light = 0;
 			boolean ticks = false;
@@ -212,10 +226,11 @@ public final class Melting {
 		flags = map;
 		if (event.getUpdateCause() == TagsUpdatedEvent.UpdateCause.SERVER_DATA_LOAD) {
 			LOGGER.info("[melting] tags: {} meltable, {} slow, {} salt, {} fire, {} lava, {} ultra-warm instant, {} saltable,"
-							+ " {} keeps snow, {} magma; {} sources scan on their own tick",
+							+ " {} keeps snow, {} magma, {} lava only, {} sluggish; {} sources scan on their own tick",
 					count(tags, MeltTags.MELTABLE), count(tags, MeltTags.MELTABLE_SLOW), count(tags, MeltTags.SALT),
 					fire, count(tags, MeltTags.LAVA), count(tags, MeltTags.ULTRAWARM_INSTANT),
-					count(tags, MeltTags.SALTABLE), count(tags, MeltTags.KEEPS_SNOW), count(tags, MeltTags.MAGMA), ticking);
+					count(tags, MeltTags.SALTABLE), count(tags, MeltTags.KEEPS_SNOW), count(tags, MeltTags.MAGMA),
+					count(tags, MeltTags.LAVA_ONLY), count(tags, MeltTags.SLUGGISH), ticking);
 			LOGGER.info("[melting] source-driven fire (light below {}, random ticks): {}", DIM_LIGHT, driven);
 			if (!dimStill.isEmpty())
 				LOGGER.warn("[melting] fire tag blocks with light below {} that do not random tick (they melt only touching"
@@ -249,7 +264,11 @@ public final class Melting {
 		int f = flags.getInt(state.getBlock());
 		if ((f & (TARGET | SRC_TICK)) == 0) return false;
 		if (!cfg.enabled()) return false;
-		if ((f & TARGET) != 0) return targetTick(state, f, level, pos, random);
+		if ((f & TARGET) != 0) {
+			// stairs pass their random tick on to their base block's state at the same position: only the real one melts
+			if (level.getBlockState(pos) != state) return false;
+			return targetTick(state, f, level, pos, random);
+		}
 		sourceTick(state, f, level, pos, random);
 		return false;
 	}
@@ -259,10 +278,15 @@ public final class Melting {
 	 * and schedules its next tick. True when it melted (the caller skips the block's own tick).
 	 */
 	public static boolean onScheduledTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		if (state.getBlock() == Blocks.FIRE && cfg.endNoFire() && isEnd(level)) { // fire from before G11 goes out
+			level.removeBlock(pos, false);
+			return true;
+		}
 		int f = flags.getInt(state.getBlock());
 		if ((f & TARGET) == 0) return false;
 		Values c = cfg;
 		if (!c.enabled() || state.getBlock() instanceof FrostedIceBlock) return false; // frosted ice runs its own ticks
+		if (isHot(state, f, level, pos, c)) return hotTick(state, f, level, pos, random, c);
 		Hit hit = new Hit();
 		if (findSource(state, f, level, pos, true, hit) == NONE) return false; // gone out of reach: no next tick
 		boolean melted = false;
@@ -275,7 +299,7 @@ public final class Melting {
 			melted = true;
 		}
 		BlockState now = melted ? level.getBlockState(pos) : state;
-		if (isTarget(now)) schedule(level, pos, now.getBlock(), random, c);
+		if (isTarget(now)) schedule(level, pos, now.getBlock(), random, c.meltTickInterval());
 		return melted;
 	}
 
@@ -285,19 +309,32 @@ public final class Melting {
 		int f = flags.getInt(state.getBlock());
 		if ((f & (INSTANT | TARGET)) == 0) return;
 		Values c = cfg;
-		if (level.dimensionType().ultraWarm()) {
-			if ((f & INSTANT) == 0 || !c.ultraWarmInstantMelt()) return;
+		if (level.dimensionType().ultraWarm() && (f & INSTANT) != 0 && c.ultraWarmInstantMelt()) {
 			if (level.getBlockState(pos) != state) return; // already replaced by the block's own onPlace
 			level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 			level.levelEvent(1501, pos, 0); // lava fizz: hiss and smoke
 			return;
 		}
-		if (!c.enabled() || c.magmaInstantRange() < 1 || !(level instanceof ServerLevel sl)) return;
-		if (!state.is(BlockTags.SNOW) || keepsSnow(sl, pos)) return;
+		if (!c.enabled() || !(level instanceof ServerLevel sl) || (f & TARGET) == 0) return;
 		if (level.getBlockState(pos) != state) return;
-		if (!magmaWithin(sl, pos, c.magmaInstantRange())) return;
+		// hot places (G11): the target starts its rapid melt ticks at once; packed ice and cryosol do not random tick
+		if (isHot(state, f, sl, pos, c)) {
+			schedule(sl, pos, state.getBlock(), sl.getRandom(), c.hotMeltTickInterval());
+			return;
+		}
+		int instant = endContact(sl, c) ? Math.min(1, c.magmaInstantRange()) : c.magmaInstantRange();
+		if (instant < 1 || !state.is(BlockTags.SNOW) || keepsSnow(sl, pos)) return;
+		if (!magmaWithin(sl, pos, instant)) return;
 		level.setBlock(pos, Blocks.AIR.defaultBlockState(), Block.UPDATE_ALL);
 		level.levelEvent(1501, pos, 0);
+	}
+
+	/**
+	 * Level.setBlock (mixin.EndFireMixin, both sides): true refuses the placement of ordinary fire in the End (G11,
+	 * {@code endNoFire}): flint and steel, fire charges, lava, End crystals, commands. Soul fire is another block.
+	 */
+	public static boolean refusesFire(Level level, BlockState state) {
+		return state.getBlock() == Blocks.FIRE && cfg.endNoFire() && isEnd(level);
 	}
 
 	/**
@@ -308,7 +345,7 @@ public final class Melting {
 		if (!(reader instanceof ServerLevel level)) return false; // worldgen regions: no check
 		Values c = cfg;
 		if (!c.enabled() || !c.magmaStopsFreezing() || c.fireRange() < 1) return false;
-		return magmaWithin(level, pos, c.fireRange());
+		return magmaWithin(level, pos, endContact(level, c) ? 1 : c.fireRange());
 	}
 
 	/** The light vanilla IceBlock / SnowLayerBlock (and Rare Ice) melt by: 0 unless vanillaLightMelting is on. */
@@ -363,10 +400,8 @@ public final class Melting {
 			int layers = state.getValue(SnowLayerBlock.LAYERS);
 			if (layers > 1) return state.setValue(SnowLayerBlock.LAYERS, layers - 1);
 		}
-		if (slow) {
-			BlockState step = steps().get(state.getBlock());
-			if (step != null) return withShared(state, step);
-		}
+		BlockState product = (slow ? steps() : meltProducts()).get(state.getBlock());
+		if (product != null) return productOf(state, product, ultraWarm);
 		return waterOrAir(state, ultraWarm);
 	}
 
@@ -382,8 +417,11 @@ public final class Melting {
 			BlockState base = state.getBlock() instanceof SnowLayerBlock ? state : Blocks.SNOW.defaultBlockState();
 			return base.setValue(SnowLayerBlock.LAYERS, left);
 		}
+		// salt: its own row first, then the heat product (frozen decor rows, slow steps), then water or air
 		BlockState product = saltProducts().get(state.getBlock());
-		if (product != null) return withShared(state, product);
+		if (product == null) product = meltProducts().get(state.getBlock());
+		if (product == null) product = steps().get(state.getBlock());
+		if (product != null) return productOf(state, product, ultraWarm);
 		return waterOrAir(state, ultraWarm);
 	}
 
@@ -392,10 +430,30 @@ public final class Melting {
 		return Blocks.AIR.defaultBlockState();
 	}
 
-	/** {@code to} with every property it shares with {@code from} copied over (facing, half, slab type, waterlogged). */
+	/** A product row: water follows the ice rule (air when ultra-warm or placeWater is off), else shared properties. */
+	private static BlockState productOf(BlockState from, BlockState product, boolean ultraWarm) {
+		if (product.is(Blocks.WATER))
+			return !ultraWarm && cfg.placeWater() ? product : Blocks.AIR.defaultBlockState();
+		return withShared(from, product);
+	}
+
+	/**
+	 * {@code to} with every property it shares with {@code from} copied over (facing, half, slab type, wall sides,
+	 * waterlogged). Matched by name and value name, so two mods' own vertical slab types carry over too; a value the
+	 * product does not have is left at its default.
+	 */
 	static BlockState withShared(BlockState from, BlockState to) {
-		for (Property<?> p : from.getProperties())
-			if (to.hasProperty(p)) to = copy(from, to, p);
+		for (Property<?> p : from.getProperties()) {
+			if (to.hasProperty(p)) {
+				to = copy(from, to, p);
+				continue;
+			}
+			for (Property<?> q : to.getProperties())
+				if (q.getName().equals(p.getName())) {
+					to = copyByName(from, to, p, q);
+					break;
+				}
+		}
 		return to;
 	}
 
@@ -403,25 +461,67 @@ public final class Melting {
 		return to.setValue(p, from.getValue(p));
 	}
 
+	private static <T extends Comparable<T>, U extends Comparable<U>> BlockState copyByName(BlockState from, BlockState to,
+			Property<T> p, Property<U> q) {
+		return q.getValue(p.getName(from.getValue(p))).map(v -> to.setValue(q, v)).orElse(to);
+	}
+
 	// ------------------------------------------------------------------ rules
 
 	/** A target's random tick: roll (cheap gate for dark glaciers), find a source, melt, schedule the follow-up. */
 	private static boolean targetTick(BlockState state, int f, ServerLevel level, BlockPos pos, RandomSource random) {
 		Values c = cfg;
+		if (isHot(state, f, level, pos, c)) return hotTick(state, f, level, pos, random, c);
 		if (random.nextDouble() >= chance(state, f, c)) return false;
 		Hit hit = new Hit();
 		int kind = findSource(state, f, level, pos, false, hit);
 		if (kind == NONE) return false;
 		meltBy(level, pos, state, f, hit, random);
 		BlockState now = level.getBlockState(pos);
-		if (isTarget(now)) schedule(level, pos, now.getBlock(), random, c);
+		if (isTarget(now)) schedule(level, pos, now.getBlock(), random, c.meltTickInterval());
 		return true;
 	}
 
 	/**
+	 * A tick of a target in a hot place (G11): no source needed. Rolls its chance, melts one stage as heat would, and
+	 * keeps its melt ticks coming every {@code hotMeltTickInterval}.
+	 */
+	private static boolean hotTick(BlockState state, int f, ServerLevel level, BlockPos pos, RandomSource random, Values c) {
+		boolean melted = false;
+		if (random.nextDouble() < chance(state, f, c)) {
+			meltTo(level, pos, state, meltedState(state, level, (f & MELTABLE) == 0));
+			melted = true;
+		}
+		BlockState now = melted ? level.getBlockState(pos) : state;
+		if (isTarget(now)) schedule(level, pos, now.getBlock(), random, c.hotMeltTickInterval());
+		return melted;
+	}
+
+	/**
+	 * Hot places (G11): an ultra-warm dimension for every target but the lava_only ones, a {@link MeltTags#HOT_BIOMES}
+	 * biome for the meltable tier (ice, snow, frozen decor). Snow on a keeps_snow block is not melted by the place.
+	 */
+	private static boolean isHot(BlockState state, int f, ServerLevel level, BlockPos pos, Values c) {
+		if (c.hotMeltTickInterval() <= 0 || (f & LAVA_ONLY) != 0) return false;
+		boolean hot = level.dimensionType().ultraWarm()
+				|| (f & MELTABLE) != 0 && level.getNoiseBiome(pos.getX() >> 2, pos.getY() >> 2, pos.getZ() >> 2).is(MeltTags.HOT_BIOMES);
+		return hot && !(state.is(BlockTags.SNOW) && keepsSnow(level, pos));
+	}
+
+	/** The End with endContactOnly: every source melts only the blocks touching it (G11). */
+	private static boolean endContact(ServerLevel level, Values c) {
+		return c.endContactOnly() && isEnd(level);
+	}
+
+	private static boolean isEnd(Level level) {
+		return level.dimension() == Level.END;
+	}
+
+	/**
 	 * A random-ticking source (magma, lava, salt blocks): every target in its reach gets a scheduled melt tick; snow
-	 * within magma's instant range melts at once. Lava skips this in ultra-warm dimensions (lava seas; ice there is
-	 * found by its own random tick).
+	 * within magma's instant range melts at once. Fire that is not magma reaches only the meltable tier; magma and lava
+	 * reach packed ice and cryosol within their slow ranges; lava_only targets (blue ice, permafrost) only touching
+	 * lava. In ultra-warm dimensions lava reaches only the touching blocks (lava seas; the rest melts as a hot place).
 	 */
 	private static void sourceTick(BlockState state, int f, ServerLevel level, BlockPos pos, RandomSource random) {
 		Values c = cfg;
@@ -429,16 +529,27 @@ public final class Melting {
 		boolean fire = (f & FIRE) != 0 && fireActive(state);
 		boolean lava = (f & LAVA) != 0 || isLava(state);
 		boolean magma = fire && (f & MAGMA) != 0;
-		if (lava && !fire && !salt && level.dimensionType().ultraWarm()) return;
 		int saltR = salt ? c.saltRange() : 0;
-		int heatR = fire ? c.fireRange() : lava ? c.lavaRange() : 0;
-		int slowR = !c.slowHeatMelting() ? 0 : fire ? c.slowFireRange() : lava ? c.slowLavaRange() : 0;
-		int r = Math.max(saltR, Math.max(heatR, slowR));
+		int fastR = fire ? c.fireRange() : lava ? c.lavaRange() : 0;
+		int slowR = magma ? c.slowMagmaRange() : fire ? 0 : lava ? c.slowLavaRange() : 0;
+		int touchR = lava && !fire ? 1 : 0;
+		int instant = magma ? c.magmaInstantRange() : 0;
+		if (lava && !fire && !salt && level.dimensionType().ultraWarm()) {
+			fastR = Math.min(fastR, 1);
+			slowR = Math.min(slowR, 1);
+		}
+		if (endContact(level, c)) {
+			saltR = Math.min(saltR, 1);
+			fastR = Math.min(fastR, 1);
+			slowR = Math.min(slowR, 1);
+			instant = Math.min(instant, 1);
+		}
+		int r = Math.max(Math.max(saltR, touchR), Math.max(fastR, slowR));
 		if (r < 1) return;
 		ChunkReader reader = new ChunkReader(level);
 		if (!reader.mayHave(pos, r, ChunkReader.TARGET)) return;
-		int s2 = saltR * saltR, h2 = heatR * heatR, sl2 = slowR * slowR, max2 = r * r;
-		int instant = magma ? c.magmaInstantRange() : 0, i2 = instant * instant;
+		int s2 = saltR * saltR, fast2 = fastR * fastR, slow2 = slowR * slowR, touch2 = touchR, max2 = r * r;
+		int i2 = instant * instant;
 		BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
 		for (int[] o : OFFSETS) {
 			int d2 = o[3];
@@ -449,15 +560,16 @@ public final class Melting {
 			int tf = flags.getInt(s.getBlock());
 			if ((tf & TARGET) == 0) continue;
 			boolean slowT = (tf & MELTABLE) == 0;
+			int reach2 = !slowT ? fast2 : (tf & LAVA_ONLY) != 0 ? touch2 : slow2;
 			boolean saltOk = (tf & SALTABLE) != 0 && d2 <= s2;
-			boolean heatOk = d2 <= (slowT ? sl2 : h2) && !(s.is(BlockTags.SNOW) && keepsSnow(reader, m));
+			boolean heatOk = d2 <= reach2 && !(s.is(BlockTags.SNOW) && keepsSnow(reader, m));
 			if (heatOk && d2 <= i2 && s.is(BlockTags.SNOW)) {
 				meltTo(level, m.immutable(), s, Blocks.AIR.defaultBlockState());
 				continue;
 			}
 			if (saltOk || heatOk) {
 				if (c.meltTickInterval() > 0) {
-					schedule(level, m, s.getBlock(), random, c);
+					schedule(level, m, s.getBlock(), random, c.meltTickInterval());
 				} else if (random.nextDouble() < chance(s, tf, c)) { // scheduling off: one chance roll per random tick
 					BlockPos at = m.immutable();
 					// the listener first: it may drop a salt layer resting on the target, which must not lose its
@@ -485,25 +597,37 @@ public final class Melting {
 
 	/**
 	 * Looks for a source in reach of the target, nearest first. {@code scheduled}: a scheduled tick, which also counts
-	 * sources found only by their own tick (magma) and so keeps a magma-found target going.
+	 * sources found only by their own tick (magma) and so keeps a magma-found target going. The meltable tier takes
+	 * every fire (fireRange) and lava (lavaRange); packed ice and cryosol only magma (slowMagmaRange) and lava
+	 * (slowLavaRange); blue ice and permafrost (lava_only) only touching lava. The End: touching sources only.
 	 */
 	private static int findSource(BlockState state, int f, ServerLevel level, BlockPos pos, boolean scheduled, Hit hit) {
 		Values c = cfg;
 		boolean slow = (f & MELTABLE) == 0; // in both tags: the faster rule wins
+		boolean lavaOnly = slow && (f & LAVA_ONLY) != 0;
 		boolean snow = state.is(BlockTags.SNOW);
-		boolean heat = (!slow || c.slowHeatMelting()) && !(snow && keepsSnow(level, pos));
+		boolean heat = !(snow && keepsSnow(level, pos));
 		int saltR = (f & SALTABLE) != 0 ? c.saltRange() : 0;
-		int fireR = !heat ? 0 : slow ? c.slowFireRange() : c.fireRange();
-		int lavaR = !heat ? 0 : slow ? c.slowLavaRange() : c.lavaRange();
-		if (saltR < 1 && fireR < 1 && lavaR < 1) return NONE;
-		int instant = heat && snow ? c.magmaInstantRange() : 0, i2 = instant * instant;
+		int fireR = !heat || slow ? 0 : c.fireRange();
+		int magmaR = !heat || lavaOnly ? 0 : slow ? c.slowMagmaRange() : c.fireRange();
+		int lavaR = !heat ? 0 : lavaOnly ? 1 : slow ? c.slowLavaRange() : c.lavaRange();
+		int instant = heat && snow ? c.magmaInstantRange() : 0;
+		if (endContact(level, c)) {
+			saltR = Math.min(saltR, 1);
+			fireR = Math.min(fireR, 1);
+			magmaR = Math.min(magmaR, 1);
+			lavaR = Math.min(lavaR, 1);
+			instant = Math.min(instant, 1);
+		}
+		if (saltR < 1 && fireR < 1 && magmaR < 1 && lavaR < 1) return NONE;
+		int i2 = instant * instant;
 
 		// 1. the 6 neighbors (loaded: they border a ticking chunk at most)
 		BlockPos.MutableBlockPos m = new BlockPos.MutableBlockPos();
 		for (Direction d : DIRECTIONS) {
 			m.setWithOffset(pos, d);
 			BlockState s = level.getBlockState(m);
-			int kind = sourceKind(s, saltR >= 1, fireR >= 1, lavaR >= 1, scheduled);
+			int kind = sourceKind(s, saltR >= 1, fireR >= 1, magmaR >= 1, lavaR >= 1, scheduled);
 			if (kind == BY_HEAT && i2 >= 1 && isMagma(s)) return hit.set(BY_MAGMA_INSTANT, s, m);
 			if (kind != NONE) return hit.set(kind, s, m);
 		}
@@ -511,11 +635,12 @@ public final class Melting {
 		// 2. the sphere: salt only past 1 (it gives no light), fire and lava only where block light reaches;
 		// on a scheduled tick also the dim sources (magma) without the light gate
 		int saltScan = saltR >= 2 ? saltR : 0;
-		boolean lit = (fireR >= 2 || lavaR >= 2) && blockLit(level, pos, m);
-		int dimR = scheduled ? fireR : 0;
-		int r = Math.max(saltScan, Math.max(lit ? Math.max(fireR, lavaR) : 0, dimR));
+		int heatR = Math.max(fireR, Math.max(magmaR, lavaR));
+		boolean lit = heatR >= 2 && blockLit(level, pos, m);
+		int dimR = scheduled ? Math.max(fireR, magmaR) : 0;
+		int r = Math.max(saltScan, Math.max(lit ? heatR : 0, dimR));
 		if (r < 2) return NONE;
-		int s2 = saltScan * saltScan, f2 = lit ? fireR * fireR : 0, l2 = lit ? lavaR * lavaR : 0, dim2 = dimR * dimR;
+		int s2 = saltScan * saltScan, f2 = fireR * fireR, m2 = magmaR * magmaR, l2 = lit ? lavaR * lavaR : 0;
 		int max2 = r * r;
 		ChunkReader reader = new ChunkReader(level);
 		for (int[] o : OFFSETS) {
@@ -528,9 +653,10 @@ public final class Melting {
 			int sf = flags.getInt(s.getBlock());
 			if (d2 <= s2 && (sf & SALT) != 0) return hit.set(BY_SALT, s, m);
 			if ((sf & FIRE) != 0 && fireActive(s)) {
+				boolean isMagma = (sf & MAGMA) != 0;
 				boolean dim = (sf & DRIVEN) != 0;
-				if (dim ? d2 <= dim2 : d2 <= f2) {
-					if (d2 <= i2 && (sf & MAGMA) != 0) return hit.set(BY_MAGMA_INSTANT, s, m);
+				if ((dim ? scheduled : lit) && d2 <= (isMagma ? m2 : f2)) {
+					if (d2 <= i2 && isMagma) return hit.set(BY_MAGMA_INSTANT, s, m);
 					return hit.set(BY_HEAT, s, m);
 				}
 			}
@@ -539,10 +665,11 @@ public final class Melting {
 		return NONE;
 	}
 
-	private static int sourceKind(BlockState s, boolean salt, boolean fire, boolean lava, boolean scheduled) {
+	private static int sourceKind(BlockState s, boolean salt, boolean fire, boolean magma, boolean lava, boolean scheduled) {
 		int f = flags.getInt(s.getBlock());
 		if (salt && (f & SALT) != 0) return BY_SALT;
-		if (fire && (f & FIRE) != 0 && (scheduled || (f & DRIVEN) == 0) && fireActive(s)) return BY_HEAT;
+		if ((f & FIRE) != 0 && ((f & MAGMA) != 0 ? magma : fire) && (scheduled || (f & DRIVEN) == 0) && fireActive(s))
+			return BY_HEAT;
 		if (lava && ((f & LAVA) != 0 || isLava(s))) return BY_HEAT;
 		return NONE;
 	}
@@ -558,15 +685,18 @@ public final class Melting {
 		}
 	}
 
-	/** Chance per tick: a snow layer its own (G7.10), packed ice and the rest of the slow tier the low one. */
+	/**
+	 * Chance per tick: a snow layer its own (G7.10), packed ice and the rest of the slow tier the low one; sluggish
+	 * targets (snow bricks, E1) a fraction of theirs.
+	 */
 	private static double chance(BlockState state, int f, Values c) {
-		if (state.getBlock() instanceof SnowLayerBlock) return c.snowLayerMeltChance();
-		return (f & MELTABLE) == 0 ? c.slowMeltChance() : c.meltChance();
+		double base = state.getBlock() instanceof SnowLayerBlock ? c.snowLayerMeltChance()
+				: (f & MELTABLE) == 0 ? c.slowMeltChance() : c.meltChance();
+		return (f & SLUGGISH) != 0 ? base * c.sluggishMeltFactor() : base;
 	}
 
-	/** A scheduled melt tick at about meltTickInterval (75 to 125 percent, so a field does not melt in lockstep). */
-	private static void schedule(ServerLevel level, BlockPos pos, Block block, RandomSource random, Values c) {
-		int interval = c.meltTickInterval();
+	/** A scheduled melt tick at about {@code interval} (75 to 125 percent, so a field does not melt in lockstep). */
+	private static void schedule(ServerLevel level, BlockPos pos, Block block, RandomSource random, int interval) {
 		if (interval <= 0 || block instanceof FrostedIceBlock) return;
 		if (level.getBlockTicks().hasScheduledTick(pos, block)) return;
 		level.scheduleTick(pos.immutable(), block, scheduleDelay(interval, random));
@@ -644,6 +774,15 @@ public final class Melting {
 			stepsSource = src;
 		}
 		return steps;
+	}
+
+	private static Map<Block, BlockState> meltProducts() {
+		List<? extends String> src = CommonConfig.MELTING.meltProducts.get();
+		if (src != productsSource) {
+			meltProducts = parseRows(src);
+			productsSource = src;
+		}
+		return meltProducts;
 	}
 
 	private static Map<Block, BlockState> saltProducts() {
