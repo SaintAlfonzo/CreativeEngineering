@@ -82,6 +82,8 @@ public final class CommonConfig {
 		public final ForgeConfigSpec.BooleanValue gravityLimitDimensions;
 		public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> gravityDimensions;
 		public final ForgeConfigSpec.IntValue mountEffectIntervalTicks;
+		public final ForgeConfigSpec.BooleanValue idleRandomTicks;
+		public final ForgeConfigSpec.ConfigValue<java.util.List<? extends String>> idleRandomTickRules;
 
 		private Perf(ForgeConfigSpec.Builder b) {
 			b.comment("Performance throttles for other mods' per-tick work. See feature_writeup/perf.md section 7.")
@@ -112,6 +114,22 @@ public final class CommonConfig {
 					"The pass walks every entity in the level, which cost too much every tick. Effects last",
 					"this + 40 ticks, so they stay on. A newly equipped armor starts working within one interval."
 			).defineInRange("mountEffectIntervalTicks", 100, 1, 1200);
+
+			// feature_writeup/random_tick_audit.md, perf/IdleRandomTicks
+			idleRandomTicks = b.comment(
+					"Block states that can no longer change on a random tick (full-grown colonies, waxed lanterns,",
+					"Floral Enchantment flower bushes) stop asking for random ticks, so chunk sections holding only",
+					"such blocks are skipped. Off: every block keeps its mod's own setting. Restart to apply."
+			).define("idleRandomTicks", true);
+			idleRandomTickRules = b.comment(
+					"Which states stop. One line per rule: '<block id> [<property>=<value> | <property>!=<value> ...]",
+					"[+wake_above]'. All conditions of a line must hold; several lines for one block are alternatives;",
+					"no condition stops every state. 'max' / 'min' is the highest / lowest value of a number property.",
+					"+wake_above: a stopped block runs its own random tick a few more times when a block is placed",
+					"right above it (a grown tomato vine still climbs a rope placed later). Lines for blocks that are",
+					"not installed are ignored. Restart to apply."
+			).defineList("idleRandomTickRules", com.SaintAlfonzo.creativecommon.perf.IdleTickRules.defaults(),
+					o -> o instanceof String);
 
 			b.pop(); // perf
 		}

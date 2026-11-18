@@ -15,7 +15,7 @@ import java.util.List;
 
 /**
  * Headless checks of Melting (feature_writeup/melting.md section 7, plan_post_scratch_1115 G7, G8): the [melting] spec
- * builds with the 2026-11-17 defaults, snow melts by layer under heat and by saltMeltSnowLayers under salt, a snow
+ * builds with the current defaults, snow melts by layer under heat and by saltMeltSnowLayers under salt, a snow
  * block salts into layers, products and the water rule, shared properties are copied, and the melt tick delay stays
  * within 75 to 125 percent of the interval.
  */

@@ -535,6 +535,86 @@ expect verb=makes item=supplementaries:doormat n=1$
 expect verb=rdetail id=\S*doormat_from_straw serializer=\S+ result=supplementaries:doormat\*1 ingredients=farmersdelight:straw,farmersdelight:straw$
 reject \[cdevtest\] .*done=0
 
+## SQ-FCK-20 | idle random ticks: grown or finished states claim no random ticks; their growing states still do
+@group A
+@commands Row z 1200 (stopped): tomato vines age 3 (FD, Supplementaries rope and stick, treated stick), rice age 3 with panicles above, the six colonies age 3, hemp `growth=top0`, strawberry bush age 6, adzuki age 6, waxed stone lantern, fully mossed deepslate lantern, poppy and wither rose bushes; row z 1203 (growing): tomato age 2, rice without panicles, brown colony age 2, hemp `bottom4`, strawberry age 5, adzuki age 5, bare stone lantern; `cdevtest randomtick` once over each row; grep latest.log `[perf] idle random ticks`
+@pass stopped row `block_ticks=0`, growing row `block_ticks=7`; one `[perf] idle random ticks: 35 rules on 35 blocks` line, no `idleRandomTickRules: skipped` (random_tick_audit.md rows 1-7, 9, 11, 12)
+@fails stopped row ticks: Common jar without `IdleRandomTickMixin` or `[perf] idleRandomTicks` off; fewer than 35 rules: a block id or property renamed (the skipped line names it); growing row below 7: one of them never random-ticked (the audit's unconfirmed "flag" rows), note which in random_tick_audit.md
+@jars creativecommon
+@draft no batch holds this row yet
+shell grep -h "\[perf\] idle random ticks\|idleRandomTickRules: skipped" logs/latest.log | cut -c1-300
+shell grep -q "\[perf\] idle random ticks: 35 rules on 35 blocks" logs/latest.log
+shell test "$(grep -c "idleRandomTickRules: skipped" logs/latest.log)" = 0
+> setblock 1200 -60 1200 farmersdelight:tomatoes[age=3]
+> setblock 1202 -60 1200 supplementaries:rope_tomatoes[age=3]
+> setblock 1204 -60 1200 supplementaries:stick_tomatoes[age=3]
+> setblock 1206 -60 1200 creativedelight:treated_stick_tomatoes[age=3]
+> setblock 1208 -60 1200 farmersdelight:rice[age=3]
+> setblock 1208 -59 1200 farmersdelight:rice_panicles[age=3]
+> setblock 1210 -60 1200 farmersdelight:brown_mushroom_colony[age=3]
+> setblock 1212 -60 1200 farmersdelight:red_mushroom_colony[age=3]
+> setblock 1214 -60 1200 fungidelight:inky_cap_mushroom_colony[age=3]
+> setblock 1216 -60 1200 fungidelight:morel_mushroom_colony[age=3]
+> setblock 1218 -60 1200 nethersdelight:crimson_fungus_colony[age=3]
+> setblock 1220 -60 1200 nethersdelight:warped_fungus_colony[age=3]
+> setblock 1222 -60 1200 immersiveengineering:hemp[growth=top0]
+> setblock 1224 -60 1200 neapolitan:strawberry_bush[age=6]
+> setblock 1226 -60 1200 neapolitan:adzuki_sprouts[age=6]
+> setblock 1228 -60 1200 redeco:stone_lantern[waxed=1]
+> setblock 1230 -60 1200 redeco:deepslate_lantern[mossing=3]
+> setblock 1232 -60 1200 floralench:poppy_bush
+> setblock 1234 -60 1200 floralench:wither_rose_bush
+> setblock 1200 -60 1203 farmersdelight:tomatoes[age=2]
+> setblock 1202 -60 1203 farmersdelight:rice[age=3]
+> setblock 1204 -60 1203 farmersdelight:brown_mushroom_colony[age=2]
+> setblock 1206 -60 1203 immersiveengineering:hemp[growth=bottom4]
+> setblock 1208 -60 1203 neapolitan:strawberry_bush[age=5]
+> setblock 1210 -60 1203 neapolitan:adzuki_sprouts[age=5]
+> setblock 1212 -60 1203 redeco:stone_lantern
+> cdevtest state 1208 -60 1200
+> cdevtest randomtick 1200 -60 1200 1236 -59 1200 1 nofluids
+> cdevtest randomtick 1200 -60 1203 1236 -59 1203 1 nofluids
+expect verb=state pos=1208,-60,1200 state="?farmersdelight:rice\[.*supporting=true
+expect verb=randomtick rounds=1 block_ticks=0\b
+expect verb=randomtick rounds=1 block_ticks=7\b
+reject \[cdevtest\] .*done=0
+look the two randomtick lines come in command order: the first (stopped row) must read block_ticks=0, the second 7
+
+## SQ-FCK-21 | idle random ticks: a grown tomato vine still climbs a rope placed above later; a picked vine ticks again
+@group A
+@commands Noon; farmland, `farmersdelight:tomatoes[age=3]` on it, `farmersdelight:rope` placed above; `cdevtest blocktick` on the vine up to 10 times (each runs one wake try); then a bot picks a second grown vine with an empty hand and `cdevtest randomtick` over it
+@pass the block above the first vine becomes a rope-logged tomato vine (`ropelogged=true`); the picked vine is younger than age 3 and `block_ticks=1`
+@fails rope stays: the +wake_above line missing from `idleRandomTickRules` or the updateShape hook not applied; picked vine `block_ticks=0`: the rule matches below age 3 (`age=max` lost)
+@jars creativecommon
+@draft no batch holds this row yet
+> time set noon
+> setblock 1250 -61 1200 minecraft:farmland[moisture=7]
+> setblock 1250 -60 1200 farmersdelight:tomatoes[age=3]
+> setblock 1250 -59 1200 farmersdelight:rope
+repeat 10
+> cdevtest blocktick 1250 -60 1200
+end
+> cdevtest state 1250 -59 1200
+expect verb=state pos=1250,-59,1200 state="?farmersdelight:tomatoes\[.*ropelogged=true
+> setblock 1254 -61 1200 minecraft:farmland[moisture=7]
+> setblock 1254 -60 1200 farmersdelight:tomatoes[age=3]
+> clear G
+> pbot use G 1254 -60 1200 up
+> cdevtest state 1254 -60 1200
+> cdevtest randomtick 1254 -60 1200 1254 -60 1200 1 nofluids
+expect verb=state pos=1254,-60,1200 state="?farmersdelight:tomatoes\[age=[0-2]
+expect verb=randomtick rounds=1 block_ticks=1\b
+reject \[cdevtest\] .*done=0
+look a climb is 30% per try: 10 tries miss about 3 runs in 100; a rope still there after 10 is a rerun, after two reruns a FAIL
+
+## SQ-FCK-22 | perf suite C04 crop growth, before and after idle random ticks
+@group perf
+@commands Perf suite C04 (perf_suite.md: 4096 farmland crops, mixed vanilla and modded, bot present, `randomTickSpeed` 3) with the field fully grown plus full-size colonies, waxed lanterns and Floral Enchantment bushes; run once with `[perf] idleRandomTicks = false` (before) and once `true` (after), same seed and window, JFR
+@pass after: `ServerLevel.tickChunk` random-tick share and MSPT below before; sections holding only grown crops skipped (no `randomTick` frames of the stopped blocks); growing crops grow at the same rate
+@fails no difference: rules not loaded (`[perf] idle random ticks` line) or the field not fully grown; record the numbers in perf.md
+@jars creativecommon
+@draft perf suite row (C04 scenario, two runs with the config key flipped and a restart between): a perf session, not a qrun batch
+
 ## SQ-AZW-01 | rerun: azalea trees grow quark:azalea_log; logs stay azalea; 4 woods merged into oak; no item_dict Missing (sunflower_stem)
 @group A
 @commands `/place feature minecraft:azalea_tree` x3; bone meal a `minecraft:azalea` on moss; `/give @p quark:azalea_log 4`; grep latest.log `[removedWoods]`

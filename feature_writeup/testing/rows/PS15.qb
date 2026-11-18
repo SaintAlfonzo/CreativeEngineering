@@ -857,3 +857,50 @@ look tree placed (place feature reply in the log); logs = oak only; leaves = mul
 @commands Join the scratch server with a client; hover Ice, Packed Ice, Snow, Snow Block, Powder Snow Bucket, Immersive Weathering Cryosol, Blue Ice, IW Permafrost
 @pass a gray "Saltable" line on Ice, Packed Ice, Snow, Snow Block and Cryosol; none on Blue Ice, Permafrost, the Powder Snow Bucket (not a block item)
 @fails no line anywhere: `SaltableTooltip` not registered or the client has no copy of the tag
+
+@@section 3
+@@title SQ-PS15 / CQ-PS15 Small fixes G3 and canopy-proof wild crops E2, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G3, G7.8, G7.13, G7.14, E2; TODO `tooling/scratch-1115-follow-ups #22`, `#14`)
+@@date 2026-11-17
+@@jars creativedelight
+@@sources feature_writeup/plan_post_scratch_1115.md feature_writeup/creative_delight.md feature_writeup/crops.md
+@@text
+@@text Creative Delight built 2026-11-17 (lane M2, build/libs). `[campfire]` and `[worldgen]` keys in `config/creativedelight-common.toml`. Group A superflat unless a row says otherwise.
+@@text
+@@table
+## SQ-PS15-24 | a torch lights an unlit campfire and is used up; a soul torch only a soul campfire
+@group A
+@commands Survival player with 2 torches and 2 soul torches. Under a roof: place a campfire and a soul campfire (both unlit, Unlit Campfire). Right click the campfire with a soul torch; then with a torch. Right click the soul campfire with a torch; then with a soul torch. A third campfire waterlogged: right click with a torch
+@pass soul torch on the campfire: nothing, nothing used; torch: campfire lit, 1 torch used; torch on the soul campfire: nothing; soul torch: lit, 1 used; waterlogged campfire stays unlit, nothing used
+@fails lit by the wrong torch: `soulflameRule` off or `isSoul` path check; torch kept: `torchConsumed` off or creative mode
+## SQ-PS15-25 | in open rain a torch is refused with the extinguish sound and kept; on a coal block it lights
+@group A
+@commands `weather rain`; an unlit campfire on stone under open sky, a second on `minecraft:coal_block` under open sky, an unlit soul campfire under open sky; right click each with a torch (the soul one with a soul torch); then `[campfire] torchRainRefuses = false` and retry the first
+@pass first: stays unlit, extinguish (fizz) sound, torch kept; coal block one: lit, torch used; soul campfire: lit (rain never douses it); with the switch off: lit (then goes out after `rainOutTicks`)
+@fails lit in rain: rule does not read `CampfireRain` tags; torch used though refused: order in `CampfireTorch`
+## SQ-PS15-26 | config switches: torch lighting off, torch kept on
+@group A
+@commands `[campfire] torchLights = false`, restart or config reload; torch on an unlit campfire; then `torchLights = true`, `torchConsumed = false`; torch again
+@pass off: nothing happens to the campfire; on and not consumed: lit, torch count unchanged
+@fails lit while off: switch not read at click time
+## SQ-PS15-27 | dragon armor 8/13/11/8; Rare Ice takes no items
+@group A
+@commands Equip dragon helmet, chestplate, leggings, boots one at a time and read `/attribute @p minecraft:generic.armor get`; then the upgraded dragon chestplate; then right click `minecraft:ice` with a stick
+@pass 8, 13, 11, 8 (40 in a full set), upgraded chestplate 13; the stick stays in hand and the ice stays ice (no Rare Ice)
+@fails old values: `config/dragonloot-common.toml` not the one read; Rare Ice made: `allowInsertingItemsToIce` still true
+## SQ-PS15-28 | canopy-proof switch off: wild crop features place as before (MOTION_BLOCKING)
+@group B
+@commands Seed 8675309, `[worldgen] wildCropCanopyProofHeightmap = false`; repeat SQ-PS15-12b's point placement under the canopy (forest site 2: `/place feature farmersdelight:patch_wild_carrots`; jungle -1380 -2724: `rusticdelight:wild_bell_peppers_placed`) at 10 points each, placing from one block above the leaves; latest.log: no mixin error for `HeightmapPlacementCanopyMixin`
+@pass the patches land on or in the canopy (as SQ-PS15-12b's canopy half: none on the ground)
+@fails mixin error: SRG target `m_213676_` / `m_191824_` wrong; ground placements with the switch off: swap ignores the switch
+@draft fresh group B world census, as SQ-PS15-12b
+## SQ-PS15-29 | canopy-proof switch on: the tagged features land under the canopy; untagged features unchanged
+@group B
+@commands As SQ-PS15-28 with `wildCropCanopyProofHeightmap = true` (rejoin); the same 10 points each; also `/place feature minecraft:patch_grass_forest` (untagged control) at 5 points. Then a census of fresh chunks (SQ-PS15-12c boxes, new area): carrot, bell pepper, coffee, mini melon
+@pass carrots and bell peppers place on the ground under the trees; the grass control as with the switch off; census near the rule rarities (carrot 1 in 120 tag chunks, bell pepper and coffee 1 in 15, mini melon 1 in 35)
+@fails canopy placements still: tag `creativedelight:canopy_proof` empty (check the placed feature ids) or the top feature is not the tagged one
+@draft fresh group B world census, as SQ-PS15-12b
+## CQ-PS15-05 | campfire tooltips
+@group client
+@commands Hover a Campfire and a Soul Campfire in the inventory (and a Tinted Campfire if present); then `[campfire] torchLights = false` on the client copy and hover again; then `unlitTooltip = false`
+@pass Campfire: "Requires a spark or flame to light" and "A torch lights it"; Soul Campfire: "Requires a spark or soulflame to light" and "A soul torch lights it"; Tinted Campfires: no line; torch lighting off: only the first line; tooltip off: no lines
+@fails no line: Unlit Campfire not detected (`unlitcampfire` mod id) or `CampfireTorch` not registered
