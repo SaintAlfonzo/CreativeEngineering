@@ -4,13 +4,18 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiComponent;
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.nbt.TagParser;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Small drawing helpers shared by the screens and the widget. Every icon is drawn from vanilla's own GUI sprites,
@@ -71,6 +76,33 @@ public final class Icons {
 		pose.translate(0, 0, 300);
 		GuiComponent.fill(pose, x - 1, y - 1, x + size + 1, y + size + 1, 0xB0D8D0C0);
 		pose.popPose();
+	}
+
+	private static final Map<String, ItemStack> CONFIGURED = new HashMap<>();
+
+	/**
+	 * The first item of a config list that is loaded (G5d: an item of another mod, then a vanilla fallback). An entry
+	 * may carry NBT in braces after the id. Empty when none is loaded or every entry is malformed.
+	 */
+	public static ItemStack configured(List<? extends String> ids) {
+		String key = String.join("|", ids);
+		return CONFIGURED.computeIfAbsent(key, k -> {
+			for (String entry : ids) {
+				int brace = entry.indexOf('{');
+				ResourceLocation id = ResourceLocation.tryParse((brace < 0 ? entry : entry.substring(0, brace)).trim());
+				if (id == null || !ForgeRegistries.ITEMS.containsKey(id)) continue;
+				ItemStack stack = new ItemStack(ForgeRegistries.ITEMS.getValue(id));
+				if (brace >= 0) {
+					try {
+						stack.setTag(TagParser.parseTag(entry.substring(brace)));
+					} catch (CommandSyntaxException e) {
+						continue;
+					}
+				}
+				return stack;
+			}
+			return ItemStack.EMPTY;
+		}).copy();
 	}
 
 	public static String num(double v) {

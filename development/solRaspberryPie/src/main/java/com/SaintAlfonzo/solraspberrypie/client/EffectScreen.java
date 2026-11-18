@@ -25,20 +25,19 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * The effect screen (11.2): flat bonuses (read only), then the slots in order. Active slots: fill (free, lands in the
+ * The effect screen (11.2): flat bonuses (read only), then the slots side by side with a progress bar under them (G5c). Active slots: fill (free, lands in the
  * lowest empty active slot), level change (free), change effect and drop (paid, through the confirm panel). Grayed
  * slots show their stored choice and are read only. While paused, every action is disabled and PAUSED shows.
  */
 public class EffectScreen extends Screen {
-	private static final int W = 276;
-	private static final int ROW = 24;
+	private static final int MIN_W = 276, CELL_MAX = 92, CELL_H = 90, BAR_H = 5;
 
 	private enum Mode { SLOTS, PICK_FILL, PICK_CHANGE, CONFIRM }
 
 	private Mode mode = Mode.SLOTS;
 	private int pickSlot = -1;
 	private S2CPreview preview;
-	private int left, top, height0;
+	private int left, top, height0, panelW = MIN_W, cell = CELL_MAX;
 	private final List<Runnable> hoverTips = new ArrayList<>();
 
 	public EffectScreen() {
@@ -75,32 +74,42 @@ public class EffectScreen extends Screen {
 		if (!ClientState.ready()) return;
 		Ladder ladder = ClientState.ladder;
 		S2CState s = ClientState.state;
-		height0 = Math.max(210, 70 + Math.max(1, ladder.slotCount()) * ROW + 40);
-		left = (width - W) / 2;
+		int n = Math.max(1, ladder.slotCount());
+		panelW = Math.max(MIN_W, Math.min(n * CELL_MAX + 16, width - 16));
+		cell = (panelW - 16) / n;
+		int pickRows = (pickable(ladder, s).size() + 10) / 11;
+		height0 = Math.max(Math.max(210, 66 + CELL_H + 6 + BAR_H + 22 + 30), 66 + 14 + pickRows * 23 + 34);
+		left = (width - panelW) / 2;
 		top = Math.max(8, (height - height0) / 2);
 		switch (mode) {
 			case SLOTS -> buildSlots(ladder, s);
 			case PICK_FILL, PICK_CHANGE -> buildPicker(ladder, s);
 			case CONFIRM -> buildConfirm(s);
 		}
-		addRenderableWidget(new Button(left + W - 64, top + height0 - 26, 56, 20, Component.translatable("gui.done"), b -> onClose()));
+		addRenderableWidget(new Button(left + panelW - 64, top + height0 - 26, 56, 20, Component.translatable("gui.done"), b -> onClose()));
 	}
 
 	private int slotsTop() {
 		return top + 66;
 	}
 
+	/** Left edge of slot {@code i}'s cell: the slots sit side by side (G5c). */
+	private int cellX(int i) {
+		return left + 8 + i * cell;
+	}
+
 	private void buildSlots(Ladder ladder, S2CState s) {
 		boolean locked = s.paused;
 		for (int i = 0; i < ladder.slotCount(); i++) {
-			int y = slotsTop() + i * ROW;
+			int y = slotsTop();
 			boolean active = i < s.activeSlots;
 			SlotChoice c = i < s.slots.size() ? s.slots.get(i) : null;
 			if (!active || locked) continue;
 			final int slot = i;
-			int bx = left + W - 120;
+			int cx = cellX(i) + cell / 2;
 			if (c == null) {
-				addRenderableWidget(new Button(bx + 54, y + 2, 58, 18, Component.translatable("solraspberrypie.screen.choose"), b -> {
+				int bw = Math.min(64, cell - 8);
+				addRenderableWidget(new Button(cx - bw / 2, y + 48, bw, 18, Component.translatable("solraspberrypie.screen.choose"), b -> {
 					mode = Mode.PICK_FILL;
 					pickSlot = slot;
 					rebuild();
@@ -108,18 +117,19 @@ public class EffectScreen extends Screen {
 				continue;
 			}
 			int max = Math.max(ladder.unlockedLevel(c.effect(), s.maxDiversity), c.level());
-			Button minus = new Button(bx - 22, y + 2, 18, 18, Component.literal("-"), b -> send(C2SAction.Op.LEVEL, slot, c.effect(), c.level() - 1));
+			Button minus = new Button(cx - 19, y + 48, 18, 18, Component.literal("-"), b -> send(C2SAction.Op.LEVEL, slot, c.effect(), c.level() - 1));
 			minus.active = c.level() > 1;
-			Button plus = new Button(bx - 2, y + 2, 18, 18, Component.literal("+"), b -> send(C2SAction.Op.LEVEL, slot, c.effect(), c.level() + 1));
+			Button plus = new Button(cx + 1, y + 48, 18, 18, Component.literal("+"), b -> send(C2SAction.Op.LEVEL, slot, c.effect(), c.level() + 1));
 			plus.active = c.level() < max && c.level() < ladder.unlockedLevel(c.effect(), s.maxDiversity);
 			addRenderableWidget(minus);
 			addRenderableWidget(plus);
-			addRenderableWidget(new Button(bx + 20, y + 2, 48, 18, Component.translatable("solraspberrypie.screen.change"), b -> {
+			int bw = Math.min(44, (cell - 8) / 2);
+			addRenderableWidget(new Button(cx - bw - 1, y + 68, bw, 18, Component.translatable("solraspberrypie.screen.change"), b -> {
 				mode = Mode.PICK_CHANGE;
 				pickSlot = slot;
 				rebuild();
 			}));
-			addRenderableWidget(new Button(bx + 70, y + 2, 42, 18, Component.translatable("solraspberrypie.screen.drop"),
+			addRenderableWidget(new Button(cx + 1, y + 68, bw, 18, Component.translatable("solraspberrypie.screen.drop"),
 					b -> send(C2SAction.Op.PREVIEW_DROP, slot, null, 0)));
 		}
 	}
@@ -198,8 +208,8 @@ public class EffectScreen extends Screen {
 		}
 		Ladder ladder = ClientState.ladder;
 		S2CState s = ClientState.state;
-		fill(pose, left - 1, top - 1, left + W + 1, top + height0 + 1, 0xFF6B6B6B);
-		fill(pose, left, top, left + W, top + height0, 0xFF202020);
+		fill(pose, left - 1, top - 1, left + panelW + 1, top + height0 + 1, 0xFF6B6B6B);
+		fill(pose, left, top, left + panelW, top + height0, 0xFF202020);
 		drawString(pose, font, title, left + 8, top + 8, 0xFFFFFF);
 		Component div = Component.translatable("solraspberrypie.screen.diversity", Icons.num(round(s.diversity)), Icons.num(round(s.maxDiversity)));
 		drawString(pose, font, div, left + 8, top + 20, 0xAAAAAA);
@@ -207,8 +217,9 @@ public class EffectScreen extends Screen {
 			drawString(pose, font, Component.translatable(s.uniqueGate ? "solraspberrypie.screen.gate_unique" : "solraspberrypie.screen.gate", s.minFoods - s.foodsEaten), left + 8, top + 31, 0xFFAA55);
 		}
 		// Flat bonuses (read only).
-		drawString(pose, font, Component.translatable("solraspberrypie.screen.flat"), left + 8, top + 44, 0xFFD27F);
-		int fx = left + 90;
+		Component flatLabel = Component.translatable("solraspberrypie.screen.flat");
+		drawString(pose, font, flatLabel, left + 8, top + 44, 0xFFD27F);
+		int fx = left + 8 + font.width(flatLabel) + 14;
 		if (s.flat.isEmpty()) drawString(pose, font, Component.translatable("solraspberrypie.screen.none"), fx, top + 44, 0x777777);
 		for (Map.Entry<ResourceLocation, Integer> e : s.flat.entrySet()) {
 			fill(pose, fx - 1, top + 39, fx + 19, top + 59, 0xFF8A6D1E);
@@ -230,31 +241,70 @@ public class EffectScreen extends Screen {
 
 	private void drawSlots(PoseStack pose, Ladder ladder, S2CState s, int mouseX, int mouseY) {
 		if (s.paused) {
-			drawString(pose, font, Component.translatable("solraspberrypie.paused").withStyle(ChatFormatting.BOLD), left + W - 60, top + 8, 0xFF5555);
+			drawString(pose, font, Component.translatable("solraspberrypie.paused").withStyle(ChatFormatting.BOLD), left + panelW - 60, top + 8, 0xFF5555);
 		}
 		if (ladder.slotCount() == 0) {
 			drawString(pose, font, Component.translatable("solraspberrypie.screen.no_slots"), left + 8, slotsTop() + 4, 0x777777);
+			return;
 		}
+		int y = slotsTop();
 		for (int i = 0; i < ladder.slotCount(); i++) {
-			int y = slotsTop() + i * ROW;
+			int x = cellX(i), cx = x + cell / 2;
 			boolean active = i < s.activeSlots;
 			SlotChoice c = i < s.slots.size() ? s.slots.get(i) : null;
-			fill(pose, left + 6, y, left + W - 6, y + ROW - 2, active ? 0xFF2E3A2E : 0xFF2A2A2A);
-			fill(pose, left + 9, y + 2, left + 29, y + 22, 0xFF111111);
+			fill(pose, x + 1, y, x + cell - 1, y + CELL_H, active ? 0xFF2E3A2E : 0xFF2A2A2A);
+			drawCenteredString(pose, font, Component.translatable("solraspberrypie.screen.slot", i + 1), cx, y + 3, active ? 0x88AA88 : 0x666666);
+			fill(pose, cx - 10, y + 13, cx + 10, y + 33, 0xFF111111);
 			if (c != null) {
 				if (!active || s.paused) RenderSystem.setShaderColor(0.4F, 0.4F, 0.4F, 1F);
-				Icons.effect(pose, c.effect(), left + 10, y + 3);
+				Icons.effect(pose, c.effect(), cx - 9, y + 14);
 				RenderSystem.setShaderColor(1F, 1F, 1F, 1F);
 			}
 			Component name = c != null ? DietEngine.effectName(c.effect(), c.level()) : Component.translatable("solraspberrypie.screen.empty");
 			boolean covered = c != null && active && s.flat.containsKey(c.effect());
 			int color = !active ? 0x777777 : covered ? 0xFFFF55 : 0xFFFFFF;
-			drawString(pose, font, name, left + 34, y + 3, color);
-			Rung r = ladder.slots.get(i);
-			Component sub = active ? (covered ? Component.translatable("solraspberrypie.screen.covered")
-					: Component.translatable("solraspberrypie.widget.slot", i + 1, Icons.num(r.threshold)))
-					: Component.translatable("solraspberrypie.screen.greyed", i + 1, Icons.num(r.threshold));
-			drawString(pose, font, sub, left + 34, y + 13, active ? 0x88AA88 : 0x666666);
+			String shown = font.plainSubstrByWidth(name.getString(), cell - 6);
+			drawString(pose, font, shown, cx - font.width(shown) / 2, y + 37, color);
+			if (in(mouseX, mouseY, x + 1, y, cell - 2, 46)) {
+				Rung r = ladder.slots.get(i);
+				Component sub = active ? (covered ? Component.translatable("solraspberrypie.screen.covered")
+						: Component.translatable("solraspberrypie.widget.slot", i + 1, Icons.num(r.threshold)))
+						: Component.translatable("solraspberrypie.screen.greyed", i + 1, Icons.num(r.threshold));
+				List<Component> tip = List.of(name, sub.copy().withStyle(active ? ChatFormatting.GREEN : ChatFormatting.GRAY));
+				hoverTips.add(() -> renderComponentTooltip(pose, tip, mouseX, mouseY));
+			}
+		}
+		drawSlotBar(pose, ladder, s, y + CELL_H + 6);
+	}
+
+	/**
+	 * The slot progress bar (G5c), replacing each slot's "needs diversity" line: it runs under the whole row of slots,
+	 * one segment per slot, with a tick and the slot's diversity at the right end of each segment. The green fill
+	 * follows the current diversity piece by piece and is full at the last slot's diversity.
+	 */
+	private void drawSlotBar(PoseStack pose, Ladder ladder, S2CState s, int barY) {
+		int n = ladder.slotCount();
+		int x0 = cellX(0) + 1, x1 = cellX(n - 1) + cell - 1;
+		fill(pose, x0, barY, x1, barY + BAR_H, 0xFF555555);
+		int filled = x0;
+		double prev = 0;
+		for (int i = 0; i < n; i++) {
+			double t = ladder.slots.get(i).threshold;
+			int a = i == 0 ? x0 : cellX(i), b = i == n - 1 ? x1 : cellX(i + 1);
+			if (s.diversity >= t) filled = b;
+			else if (s.diversity > prev && t > prev) filled = Math.max(filled, a + (int) Math.round((b - a) * (s.diversity - prev) / (t - prev)));
+			prev = Math.max(prev, t);
+		}
+		if (filled > x0) fill(pose, x0, barY, filled, barY + BAR_H, 0xFF3FA34D);
+		drawString(pose, font, "0", x0, barY + BAR_H + 3, 0x888888);
+		for (int i = 0; i < n; i++) {
+			double t = ladder.slots.get(i).threshold;
+			int tx = i == n - 1 ? x1 - 1 : cellX(i + 1);
+			boolean got = s.diversity >= t;
+			fill(pose, tx, barY - 2, tx + 1, barY + BAR_H + 2, got ? 0xFFFFFFFF : 0xFFAAAAAA);
+			String label = Icons.num(t);
+			int lx = Math.min(x1 - font.width(label), Math.max(x0, tx - font.width(label) / 2));
+			drawString(pose, font, label, lx, barY + BAR_H + 3, got ? 0x88CC88 : 0x888888);
 		}
 	}
 
@@ -303,7 +353,7 @@ public class EffectScreen extends Screen {
 			itemRenderer.renderAndDecorateItem(stack, x, y);
 			if (in(mouseX, mouseY, x, y, 16, 16)) hoverTips.add(() -> renderTooltip(pose, stack, mouseX, mouseY));
 			x += 17;
-			if (x > left + W - 24) {
+			if (x > left + panelW - 24) {
 				x = left + 8;
 				y += 17;
 			}
