@@ -181,7 +181,7 @@
 		event.register(
 			Commands.literal('dumpclimate')
 				.requires(src => src.hasPermission(2))
-				.executes(ctx => run(ctx.source, 20000, 20000))   // 3000: too coarse for rare biomes (1 sample = 0.033 %)
+				.executes(ctx => run(ctx.source, 20000, 20000))   // A 3000-sample grid is too coarse for rare biomes (1 sample = 0.033 %)
 				.then(Commands.argument('columns', IntArg.integer(100, 100000))
 					.executes(ctx => run(ctx.source, IntArg.getInteger(ctx, 'columns'), 20000))
 					.then(Commands.argument('radius', IntArg.integer(500, 1000000))

@@ -10,9 +10,8 @@ import java.util.function.Supplier;
 /**
  * Creative Devtools' config, {@code config/creativedevtools-common.toml} (feature_writeup/creative_devtools.md 1):
  * <ul>
- * <li>{@code [debug]}: moved whole from creativeengineering-common.toml, keys and comments unchanged (generators,
- * block-state sync, names, WTHIT icons, recipe scan, Level random probe).</li>
- * <li>{@code [worldgen.mass_place]}: /cdevplace's knobs, moved from creativeengineering-common.toml under the same path.</li>
+ * <li>{@code [debug]}: generators, block-state sync, names, WTHIT icons, recipe scan, Level random probe.</li>
+ * <li>{@code [worldgen.mass_place]}: /cdevplace's knobs.</li>
  * <li>{@code [features]}: one switch per Devtools script feature ({@link #FEATURE_ROWS}), read by
  * {@code global.CDV.feature(id)}.</li>
  * </ul>

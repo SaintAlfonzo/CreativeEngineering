@@ -30,15 +30,15 @@ import java.util.Set;
 import java.util.TreeMap;
 
 /**
- * The last verbs moved from {@code /zq} (tools/scratch_query/zq_probe.js, retired): season (Creative
- * Calendar's cached season type, read reflectively so Devtools loads without Calendar), floating (sand and gravel over
- * air), under (structure starts judged on their placed blocks, the SQ-EFB judge) and nbt (an item stack's NBT as the
- * game holds it). Same arguments as the /zq versions; output in the {@code [cdevtest] verb=... key=value} form.
+ * Judge verbs of {@code /cdevtest}: season (Creative Calendar's cached season type, read reflectively so Devtools
+ * loads without Calendar), floating (sand and gravel over air), under (structure starts judged on their placed blocks,
+ * the SQ-EFB judge) and nbt (an item stack's NBT as the game holds it). Output in the
+ * {@code [cdevtest] verb=... key=value} form.
  */
 final class TestJudges {
 
 	private static final String SEASON_TYPES = "com.SaintAlfonzo.creativecalendar.seasons.SeasonTypes";
-	/** /zq under's default earth tag, under its owning jar's namespace. */
+	/** Default earth tag of the under verb. */
 	static final String EARTH_TAG = "creativeworldgen:earth_fill/earth";
 	static final int MAX_STARTS = 30;
 	static final int MAX_FLOAT_LINES = 10;
