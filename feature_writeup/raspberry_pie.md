@@ -16,8 +16,8 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=90f96b99bc25 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Planned 1, Testing 9), 0 Complete.
+<!-- generated:status_index begin open_work sha1=01e5635f6e18 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 1, Testing 8), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -25,7 +25,6 @@ and Forge 1.19.2-43.5.1. Pack Apple Pie settings: `queueSize` 256, `startDecay` 
 | `food/types-and-tuning #21` | Testing | S C P T | Spice of Life selectable unlock bonus |
 | `food/types-and-tuning #29` | Testing | C | Raspberry Pie item tooltip: "Doesn't run programs" |
 | `food/types-and-tuning #30` | Testing | S | Raspberry Pie: player reset command |
-| `food/types-and-tuning #31` | Testing | C | Diet Log: double page view |
 | `food/types-and-tuning #32` | Testing | C | Diet Log progress bar: windowed milestones |
 | `food/types-and-tuning #33` | Testing | S P | Extra hearts at 0 diversity; damage when max health is lowered |
 | `food/types-and-tuning #36` | Testing | C P | Minimum foods to activate shown wrong in the book |

@@ -11,15 +11,15 @@ no emoji, no advancements, no conversions. Hand-edited config is copied to `conf
 
 ## 0. Order and cost
 
-<!-- generated:status_index begin open_work sha1=a4d73835f71d -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 3, In Progress 1, Testing 3), 0 Complete.
+<!-- generated:status_index begin open_work sha1=6553483ca55a -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 2, In Progress 1, Testing 4), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `dishes/meals #57` | Planned | S P | Sequenced assembly for raw skewers |
 | `dishes/meals #58` | Planned | S C P | Cave Skewer: merge with Miner's Delight |
 | `dishes/meals #59` | Planned | S P | Cooked Nether Wart: integrate with Nether's Delight |
 | `dishes/meals #46` | In Progress | S C P | Skewer fold: the pack's skewers join the Barbeque's Delight system |
+| `dishes/meals #57` | Testing | S P | Sequenced assembly for raw skewers |
 | `largecontent/mod-additions #37` | Testing | S~ C P T | Barbeque's Delight: integrate skewers, combos, seasonings and blocks |
 | `largecontent/mod-additions #39` | Testing | S~ C P T | Roll Delight 1.3.1 port |
 | `largecontent/mod-additions #40` | Testing | S~ C P T | Large Meals 1.3.0 port |
