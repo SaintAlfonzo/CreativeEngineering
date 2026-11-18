@@ -160,6 +160,7 @@ reject verb=\S+ .*done=0
 @fails startup `pneumaticcraft/pneumatic_items.js` not loaded (requires line)
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
+@absent creativeengineering:canned_chips (removed; the row checks it is unknown)
 > cdevtest makes pneumaticcraft:chips
 > cdevtest uses pneumaticcraft:chips
 > cdevtest recipes creativedelight:cooking/fries
@@ -226,3 +227,23 @@ waitlog Dumped compost table 300
 shell python3 -I $INST/tools/scratch_query/dumpq.py compost create:dough=0.85 vintagedelight:oat_dough=0.85 vintagedelight:cucumber_dough=0.85 veggiesdelight:sweet_potato_dough=0.85 farmersdelight:wheat_dough=0.85
 shell python3 -I -c "import json;n=json.load(open('kubejs/exported/compost/compost.json'))['now'];print({k:v for k,v in n.items() if 'noodle' in k and 'cucumber' in k})"
 look cucumber noodles unchanged against the instance dump (kubejs/exported/compost/compost.json)
+
+## SQ-VDF-11 | garlic: 2 cloves crafted, 5 cut and mixed, 6 cloves -> 1 garlic; no 3-clove recipe left
+@group A
+@commands `/cdevtest rdetail cloves_from_garlic`; `/cdevtest rdetail garlic_clove_from_cutting`; `/cdevtest rdetail garlic_clove_from_mixing`; `/cdevtest rdetail garlic_from_cloves`
+@pass creativedelight ids only: shapeless 2 cloves, cutting 5, mixing 5, garlic_from_cloves 1 garlic from 6 cloves; no veggiesdelight:cloves_from_garlic, veggiesdelight:cutting/garlic_clove_from_cutting or the veggiesdelight mixing id (dishes/ingredients #34, RC-191)
+@fails `veggiesdelight/recipes.js` Garlic cloves block
+@reviewed 2026-11-17
+> cdevtest rdetail cloves_from_garlic
+expect id=creativedelight:shapeless/cloves_from_garlic .*result=veggiesdelight:garlic_clove\*2\b
+reject id=veggiesdelight:cloves_from_garlic
+> cdevtest rdetail garlic_clove_from_cutting
+expect id=creativedelight:farmersdelightcutting/garlic_clove_from_cutting
+reject id=veggiesdelight:cutting/garlic_clove_from_cutting
+> cdevtest rdetail garlic_clove_from_mixing
+expect id=creativedelight:createmixing/garlic_clove_from_mixing
+reject id=veggiesdelight:integration/create/mixing/garlic_clove_from_mixing
+> cdevtest rdetail garlic_from_cloves
+expect id=creativedelight:shapeless/garlic_from_cloves .*result=veggiesdelight:garlic\b
+reject \[cdevtest\] .*done=0
+look cutting and mixing show 5 cloves; Slice and Dice has a 5-clove copy of the cutting recipe

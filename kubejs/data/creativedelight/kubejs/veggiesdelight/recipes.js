@@ -21,6 +21,18 @@ ServerEvents.recipes(e => {
 		R.replaceInput({ id: 'veggiesdelight:garlic_bread' }, i.t_bread, i.t_bread_loaf, e)
 		R.replaceInput({ id: 'veggiesdelight:compat/moredelight/cutting/bread_slice' }, i.t_bread, i.t_bread_loaf, e)
 
+		//######################### Garlic cloves #########################
+		// A bulb gives 2 cloves by hand and 5 on the cutting board or in the mixer; 6 cloves craft back into a bulb, so no
+		// route makes garlic (dishes/ingredients #34).
+		R.remove({ id: 'veggiesdelight:cloves_from_garlic' }, e)
+		R.remove({ id: 'veggiesdelight:cutting/garlic_clove_from_cutting' }, e)
+		R.remove({ id: 'sliceanddice:cutting/veggiesdelight/cutting/garlic_clove_from_cutting' }, e)
+		R.remove({ id: 'veggiesdelight:integration/create/mixing/garlic_clove_from_mixing' }, e)
+		R.shapeless(Item.of(fd.veggie_garlic_clove, 2), [i.garlic], e, 'cloves_from_garlic')
+		R.fdCutting(i.garlic, i.any_knife, Item.of(fd.veggie_garlic_clove, 5), e, 'garlic_clove_from_cutting')
+		R.createMixing(Item.of(fd.veggie_garlic_clove, 5), [i.garlic], e, 'garlic_clove_from_mixing')
+		R.shapeless(i.garlic, [Item.of(fd.veggie_garlic_clove, 6)], e, 'garlic_from_cloves')
+
 		//######################### Juices #########################
 		// Fluids like chorus juice (development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/fluids.js; feature_writeup/veggies_delight.md 4.9). Pot: Veggies
 		// Delight's pot recipes removed: pot and Kettle follow the drink rules (creativedelight/drinks.js, food/drinks #15).

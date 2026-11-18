@@ -125,6 +125,8 @@
 - **Fixed:** Syrup had two crafting recipes into sugar; only the one giving 4 sugar is left.
 - **New:** The Cooking Pot and a heated Create mixer turn 1 Syrup into 8 Sugar and give the bottle back.
 - **New:** Syrup fluid: a heated Create mixer turns 1000 mB Sap into 250 mB Syrup and 250 mB Syrup into 8 Sugar; Spouts fill and Item Drains empty Syrup bottles at 250 mB.
+- **Removed:** The Cooking Pot Syrup recipe from sugar and apple or beetroot; Syrup comes only from Sap.
+- **New:** Syrup and the Sap Bucket have JEI information pages on boiling sap in a cauldron.
 
 ## Hops <!-- icon: hearthandharvest:hops -->
 
@@ -239,6 +241,7 @@
 - **New:** Architect's Palette Polished, Chiseled and Pillar Packed Ice melt into Ice like Packed Ice; its Packed Ice slabs, stairs and walls melt away. Frozen Prismarine never melts.
 - **Changed:** Light alone no longer melts ice or snow: sea lanterns, shroomlights, redstone torches and lamps and other lights without a flame leave them [any light level 12 or more].
 - **Fixed:** The Salt Dust Block and the Rock Salt Block melted no ice or snow.
+- **Fixed:** Using Salt on ice or snow melts it one stage and uses 1 Salt; it places a salt layer only on blocks it cannot melt [placed a layer on the ice].
 
 ## Bees <!-- icon: minecraft:honeycomb -->
 
@@ -328,6 +331,10 @@
 - **Changed:** The raw Cave Skewer takes a Spider Leg [Spider Eye], Glow Berries and Rotten Flesh; with a Baked Spider Leg it is crafted cooked.
 - **Changed:** Strider Moss Stew in the Cooking Pot takes Nether Wart [a second Warped Fungus]; it can also be crafted from Cooked Nether Wart, Warped and Crimson Fungus, Crimson Roots and 2 raw Strider, with no bowl handed back.
 - **Changed:** Warped Moldy Meat takes Cooked Nether Wart [a bowl]; no bowl is handed back.
+- **Changed:** Garlic gives 5 Garlic Cloves on a Cutting Board and in a Create mixer [3], and 2 when crafted [3].
+- **New:** 6 Garlic Cloves craft into a Garlic.
+- **New:** Cat Food, cooked in the Cooking Pot from a raw fish, a cooked fish, raw meat and rice, or crafted from a raw fish, a cooked fish, 2 cooked meats and cooked rice. Fed to a tamed cat it restores full health and gives Speed, Strength and Resistance for 5 minutes.
+- **Changed:** The Fish Egg Roll takes Salmon Eggs or Ancient Fish Eggs [Salmon Eggs only].
 
 ## Lunchboxes <!-- icon: solapplepie:lunchbox -->
 

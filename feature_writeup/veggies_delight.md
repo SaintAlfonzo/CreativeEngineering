@@ -392,6 +392,8 @@ Where a pack rule exists ([recipes_cooking.md](recipes_cooking.md)), the VD reci
   bell peppers (any color). Stuffed Bell Peppers feast: 3 Rustic peppers.
 - **Wraps require a tortilla:** Chicken Fajitas Wrap and Vegetables Wrap take `corn_delight:tortilla` in place of
   `#forge:dough` (VD's Corn Delight compat recipes, made the only ones), plus a sequenced assembly like the Mutton Wrap.
+- **Garlic cloves** (`dishes/ingredients #34`, owner 2026-11-17): a garlic gives 2 cloves crafted, 5 on the cutting board,
+  Slice and Dice and the Create mixer (all 3 upstream); 6 cloves craft back into a garlic (`garlic_from_cloves`). Test RC-191.
 - **Fermented garlic honey:** Vintage Delight's Pickling Jar, 4 garlic cloves + honey bottle, 600 ticks (VD's compat
   recipe, since `-02`, 2026-10-23; was the FD cooking pot); the hand recipe is removed.
 - **Heatless grid routes** from cooked ingredients for pot meals, `_manual_only` where Slice and Dice must not copy;

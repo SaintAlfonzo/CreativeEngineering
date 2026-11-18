@@ -223,3 +223,24 @@ reject \[cdevtest\] .*done=0
 > cdevtest rdetail cacciatore
 reject \[cdevtest\] .*done=0
 look cake base takes 2 chicken eggs, 3 flour, 2 honey bottles (not the first item of a tag only); pie crust has a cornmeal recipe; the cacciatore grid recipe slot holds several cooked chicken cuts (/+N). Crafting it by hand is the client half
+
+## SQ-CDB-16 | fish egg roll takes salmon eggs or ancient fish eggs
+@group A
+@commands `/cdevtest rdetail fish_egg_roll`
+@pass `oceanic_delight:fish_egg_roll` top slot holds `oceanic_delight:salmon_eggs` and `oceanic_delight:ancient_fish_eggs`, no chicken egg (dishes/ocean #2)
+@fails `oceanic_delight/recipes.js`
+@reviewed 2026-11-17
+> cdevtest rdetail fish_egg_roll
+reject \[cdevtest\] .*done=0
+look the oceanic_delight:fish_egg_roll recipe's egg slot lists salmon eggs and ancient fish eggs (/+1), nothing else
+
+## SQ-CDB-17 | cat food: item, pot and grid recipes, tamed cat feeding
+@group A
+@commands `/cdevtest rdetail cat_food`; give cat_food; tame a cat, use cat food on it at half health
+@pass item `creativedelight:cat_food` exists; pot recipe (raw fish, cooked fish, raw meat, rice, bowl) and the grid meal; the cat goes to full health with Speed, Strength, Resistance 6000 ticks, the stack shrinks by 1 and a bowl comes back; an untamed cat is unaffected (dishes/meals #56, RC-190)
+@fails `farmersdelight/cat_food.js` (CD startup) feeding handler; `farmersdelight/recipes.js`
+@draft feeding steps not written yet; the next runner writes them from @commands (recipe half below is runnable)
+@reviewed 2026-11-17
+> cdevtest rdetail cat_food
+expect id=creativedelight:farmersdelightcooking/cat_food
+reject \[cdevtest\] .*done=0
