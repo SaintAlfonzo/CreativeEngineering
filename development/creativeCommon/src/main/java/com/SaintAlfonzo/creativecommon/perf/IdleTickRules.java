@@ -90,7 +90,7 @@ public final class IdleTickRules {
 		return true;
 	}
 
-	/** Pack defaults: rows 1-7, 9, 11 and 12 of random_tick_audit.md (owner, 2026-11-17). */
+	/** Pack defaults: rows 1-7, 9, 11 and 12 of random_tick_audit.md. */
 	public static List<String> defaults() {
 		List<String> l = new ArrayList<>(List.of(
 				// 1: FD tomato vines and the Supplementaries / Creative Delight climbing variants. Grown vines still
@@ -118,8 +118,8 @@ public final class IdleTickRules {
 				"redeco:stone_lantern mossing=max",
 				"redeco:deepslate_lantern waxed!=0",
 				"redeco:deepslate_lantern mossing=max"));
-		// 12: Floral Enchantment flower bushes: their growth method has the 1.18 signature, never called on 1.19.2
-		// (they grow only with bone meal), so the ticks do nothing (owner, 2026-11-17: stop them)
+		// 12: Floral Enchantment flower bushes: their growth method has the older signature, never called on 1.19.2
+		// (they grow only with bone meal), so the ticks do nothing
 		for (String f : List.of("allium", "azure_bluet", "blue_orchid", "cornflower", "dandelion", "lilac",
 				"lily_of_the_valley", "orange_tulip", "oxeye_daisy", "peony", "pink_tulip", "poppy", "red_tulip",
 				"rose_bush", "sunflower", "white_tulip", "wither_rose")) {

@@ -1016,3 +1016,28 @@ reject verb=uses id=\S*gold_bars\S* alone=
 waitlog verb=uses item=vintageimprovements:rose_gold_sheet alone= 60
 reject \[cdevtest\] .*done=0
 look uses lines name recipe ids (the old probe printed results): a recipe whose id differs from its result shows under its own id; component_gold craft takes the plate or wire tag; gold block and gold bars not in the rose gold uses
+
+## SQ-FCK-23 | idle random ticks: a ripe grapevine stem and lattice claim no random ticks; unripe ones still do
+@group A
+@commands Row z 1240 (stopped): `vinery:grapevine_stem[age=4,grape=savanna_red]`, `vinery:grapevine_lattice[age=4,grape=jungle_red,facing=north]`; row z 1243 (growing): stem age 3 savanna_red, lattice age 3 jungle_red, lattice age 4 `grape=none` (the hops restore case); stone on both sides of each lattice; `cdevtest randomtick` once over each row
+@pass stopped row `block_ticks=0`, growing row `block_ticks=3`; the grape=none lattice now holds `grape=hops` (random_tick_audit.md row 10)
+@fails stopped row ticks: Creative Brewing jar without the `isRandomlyTicking` override in PaleStemBlock / LegacyLatticeStemBlock; growing row below 3: the override matches below age 4 or with grape none
+@jars creativebrewing
+@draft no batch holds this row yet
+> fill 1258 -60 1239 1266 -60 1239 minecraft:stone
+> fill 1258 -60 1241 1266 -60 1241 minecraft:stone
+> fill 1258 -60 1242 1266 -60 1242 minecraft:stone
+> fill 1258 -60 1244 1266 -60 1244 minecraft:stone
+> setblock 1260 -60 1240 vinery:grapevine_stem[age=4,grape=savanna_red]
+> setblock 1262 -60 1240 vinery:grapevine_lattice[age=4,grape=jungle_red,facing=north]
+> setblock 1260 -60 1243 vinery:grapevine_stem[age=3,grape=savanna_red]
+> setblock 1262 -60 1243 vinery:grapevine_lattice[age=3,grape=jungle_red,facing=north]
+> setblock 1264 -60 1243 vinery:grapevine_lattice[age=4,grape=none,facing=north]
+> cdevtest randomtick 1258 -60 1240 1266 -60 1240 1 nofluids
+> cdevtest randomtick 1258 -60 1243 1266 -60 1243 1 nofluids
+> cdevtest state 1264 -60 1243
+expect verb=randomtick rounds=1 block_ticks=0\b
+expect verb=randomtick rounds=1 block_ticks=3\b
+expect verb=state pos=1264,-60,1243 state="?vinery:grapevine_lattice\[.*grape=hops
+reject \[cdevtest\] .*done=0
+look the two randomtick lines come in command order: the first (stopped row) must read block_ticks=0, the second 3; savanna_red keeps the stem's leaf placement (red and white only) out of the test

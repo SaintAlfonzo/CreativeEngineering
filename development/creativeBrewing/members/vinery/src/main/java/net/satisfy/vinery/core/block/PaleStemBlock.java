@@ -179,6 +179,17 @@ public class PaleStemBlock extends StemBlock {
         }
     }
 
+    /**
+     * Pack (random_tick_audit.md row 10, farming/crops #15): a ripe stem (stage 4 with a grape) has nothing left to do on
+     * a random tick, so it stops claiming them. Pending grapevine leaves keep ticking (their own scheduled tick still
+     * comes). Harvest or shears lower the stage and the stem ticks again; a lost support schedules its own tick.
+     */
+    @Override
+    public boolean isRandomlyTicking(BlockState state) {
+        if (isMature(state) && state.getValue(GRAPE) != GrapeTypeRegistry.NONE && !state.getValue(LEAVES_PENDING)) return false;
+        return super.isRandomlyTicking(state);
+    }
+
     @Override
     public void randomTick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
         if (random.nextDouble() >= 0.98 * PlatformHelper.getGrapeGrowthMultiplier()) return;

@@ -74,7 +74,7 @@ Not counted: blocks outside the plant audit. A class scan for empty `randomTick`
 | 6 | `immersiveengineering:hemp growth=top0` | only the top half: the grown bottom (`bottom4`) regrows a cut top when the space above is air, which is not in the state |
 | 7, 9 | `neapolitan:strawberry_bush age=max`, `neapolitan:adzuki_sprouts age=max` | adzuki: `flowering` only changes the growth chance |
 | 8 | none | mint keeps spreading (Keep) |
-| 10 | not built here | Vinery port source is in-tree in Creative Brewing (`members/vinery`, `PaleStemBlock`, `LegacyLatticeStemBlock`): override `isRandomlyTicking` there, or add two lines to `idleRandomTickRules` once the Creative Calendar season mixins are checked |
+| 10 | `vinery:grapevine_stem`, `vinery:grapevine_lattice`: `age=4` with a grape (not `none`); built in Creative Brewing, not in `idleRandomTickRules` | `isRandomlyTicking` overrides in the Vinery member (`PaleStemBlock`, `LegacyLatticeStemBlock`). Stem: a stem with grapevine leaves pending keeps ticking. Lattice: `grape=none` at age 4 keeps ticking so the hops restore runs. Harvest and shears lower the age (ticks again); a lost support schedules its own tick. Creative Calendar checked: its crop seasons only gate growth (crop-grow event) and queue extra ticks for fertile growing blocks, nothing on a ripe stem. Test SQ-FCK-23 |
 | 11 | `redeco:stone_lantern` / `deepslate_lantern`: `waxed!=0`, or `mossing=max` | unwaxing with an axe makes it tick again |
 | 12 | the 17 `floralench:*_bush` blocks, every state | no change in play (they grow only with bone meal) |
 
