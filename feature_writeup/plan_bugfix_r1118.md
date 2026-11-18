@@ -68,3 +68,9 @@ the end, together with the row plan's rerun pass (plan_rowfix_r1118.md R7).
 | 4 | B5 removing the transitional zucchini quiche item | clear | "keep zucchini quiche": not removed | 2026-11-18 | chat 2026-11-18 |
 
 History: row 4 was an agent default (remove the item) until the owner ruled keep, 2026-11-18.
+
+## 4. Phase notes
+
+- B0 (2026-11-18): judged as [testing/r1118/j15.md](testing/r1118/j15.md): 5 PASS, 9 BATCH-FAULT, 0 real bugs. Row
+  text for HR-05, HH-328, META31-09, META31-01 and NSM-06 handed to the coordinator for the row plan (rows are not
+  edited by this plan); HH-319/-320 wait for multi-boot, CDW-01/-03/-03b and MIN-03 for reduced mod sets (row plan R4).
