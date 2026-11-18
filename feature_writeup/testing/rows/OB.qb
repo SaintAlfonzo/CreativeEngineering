@@ -10,6 +10,7 @@
 @@text
 @@table
 ## SQ-OB-01 | no script error on the batch's food items
+@phase worldgen
 @group B, fresh world
 @commands Boot to `Done (`; `grep -E "Error occurred while handling event\|Exception" logs/kubejs/*.log logs/latest.log \| grep -iE "corn\|pie\|patty\|biscuit\|glazed\|salt\|summerhat\|farmers_hats"`
 @pass Nothing printed; no startup script error

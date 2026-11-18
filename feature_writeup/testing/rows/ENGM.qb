@@ -20,6 +20,7 @@
 @@text
 @@table
 ## SQ-ENGM-01 | Done; no mixin or moved-class error; Worldgen and Equipment mod data packs lines
+@phase worldgen
 @group B (full pack, fresh world)
 @commands prep_srv (swaps all eight builds); boot; `grep -E "Mixing [A-Za-z_.]*(creativecompat|creativemagic|creativeengineering)" logs/latest.log \| wc -l`; `grep -h "mod data packs\|NCH.*not on classpath\|CEConfig" logs/latest.log logs/kubejs/startup.log`
 @pass boot reaches Done; no `Mixin apply failed`, `InvalidMixinException`, `ClassNotFoundException` naming a moved class; no `CEConfig not on classpath`; Worldgen and Equipment print `mod data packs on: [...]` naming the five Delight / Upgrade Aquatic packs and `felsic_gear`; `[swaps] config sections ... carried` not needed (values already in the Compat file)
@@ -37,6 +38,7 @@ shell for m in creativecompat creativemagic creativeengineering; do echo "$m $(g
 look Worldgen's line also has biomesoplenty now (its pack folder exists since the row was written); the mixin count is for the record
 
 ## SQ-ENGM-02 | creativeworldgen packs listed; sky island locatable; driftwood, morels, cave carrots present near spawn
+@phase worldgen
 @group B (same boot)
 @commands `> datapack list`; `/locate structure creativeengineering:sky_island` and `waystone_ruin` (or `/cdevplace`); `> execute in minecraft:the_nether run locate biome terralith:scarlet_mountains` or the Scarlet biome id; `/zq census` driftwood / deadwood / morel / cave carrot features over a few chunks near spawn
 @pass all `creativeworldgen:<mod>` packs listed and enabled; sky island and waystone ruin locatable; wild mushrooms, cave carrots, driftwood present as before (compare SQ-WGE / SQ-CDW census numbers)

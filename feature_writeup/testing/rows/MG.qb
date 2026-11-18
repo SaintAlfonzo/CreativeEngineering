@@ -20,6 +20,7 @@
 bootreject (Mixin apply failed|InvalidInjectionException).*(GorillaForageBananaMixin|SugarGliderForageBananaMixin)
 
 ## SQ-MG-18 | no chimpanzees in a jungle; gorillas forage Neapolitan bananas
+@phase worldgen
 @group server
 @commands Fresh world; `/locate biome minecraft:jungle`; `/place feature neapolitan:banana_plant` 20 times around; `/kill @e[type=neapolitan:chimpanzee]` count; then summon 3 gorillas by jungle leaves, `/time add` until they forage
 @pass No chimpanzees (kill count 0); gorillas drop and eat Neapolitan bananas, never Alex's Mobs'

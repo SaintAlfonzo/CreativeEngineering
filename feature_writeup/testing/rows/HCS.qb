@@ -24,6 +24,7 @@ bootreject Exception generating new chunk
 bootreject CrowEvents
 
 ## SQ-HCS-02 | 40 new chunks of forest and plains by bot, no long tick naming crow code
+@phase worldgen
 @group B
 @commands Same boot: `/tp` through 40 new chunks of forest and plains (`zq` path or 40 `tp` steps of 128 blocks); watch tick times
 @pass No crash; no tick over 200 ms naming `Crow`, `Nest` or `RoofNests` in the log or a JFR hot method
@@ -53,6 +54,7 @@ shell grep -nE "Can't keep up" logs/latest.log | tail -5; grep -nE "Exception|ER
 look no Can't keep up during the walk worth attention; no crow / nest exception (JFR hot methods checked after the run)
 
 ## SQ-HCS-03 | Chunky 30 x 30 chunks of forest: nests on leaves, about 1 in 6 chunks
+@phase long
 @group B
 @commands Chunky 30 x 30 chunks in `minecraft:forest` (seed with a large forest); then a script or `/cdevfind hearthandharvest:nest` count over the area
 @pass Every nest sits on leaves with nothing above; count near 150 (1 in 6 chunks, about 100 to 200); none on grass or the ground
@@ -70,6 +72,7 @@ shell python3 $INST/tools/scratch_query/region_blocks.py blocks world 'hearthand
 look nest count about 100 to 200 over the 900 chunks of the forest square, every nest with a leaves neighbour and depth 0 (top block), none on grass
 
 ## SQ-HCS-04 | villages: a quarter of houses carry one roof nest
+@phase worldgen
 @group B
 @commands `/place structure minecraft:village_plains` x 5 at spread positions (and one each of desert, savanna, taiga, snowy); look at every house roof
 @pass About a quarter of houses carry one nest, on a full block on the roof, never two on one house, none in a street or on a lamp post

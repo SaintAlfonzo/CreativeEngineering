@@ -4,6 +4,7 @@
 
 @@section 1
 @@title Farmer's Structures donor (farmers_structures.md section 5)
+@@phase worldgen
 @@jars creativecommon
 @@text
 @@text Needs patcherMod rebuilt and installed (`:creativeCommon:installToMods`), the Creative Delight jar (hanging canvas sign), and `farmers_upstream/FarmersStructures-1.0.6-1.21.1_neoforge.jar` in the game folder.

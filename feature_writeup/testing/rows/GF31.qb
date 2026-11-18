@@ -56,6 +56,7 @@ reject (?i)unknown entity|invalid
 look "Test failed" must come from the sputter check and "Test passed" from the pumpkin check
 
 ## SQ-GF31-04 | fresh world: next year is Year 2 at the first Early Spring (TI-37 server half, new row)
+@phase worldgen
 @group B (fresh world)
 @commands `ccaltime date next year`; `ccaltime date`
 @pass "Year 2, Early Spring, day 1" (TI-37 server half)

@@ -4,6 +4,7 @@
 
 @@section 1
 @@title SQ-CWG Creative Worldgen carve, 2026-11-02 ([creative_worldgen.md](../creative_worldgen.md) 5, TODO `creativesplit/worldgen #8`)
+@@phase worldgen
 @@date 2026-11-02
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/creative_worldgen.md

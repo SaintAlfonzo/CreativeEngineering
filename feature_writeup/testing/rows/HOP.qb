@@ -137,6 +137,7 @@ expect HOP05-unsterilized$
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-HOP-06 | judged from SQ-HH-304's countsets: hops vine chunks at least 1 and at most a quarter of the wild carrot chunks
+@phase worldgen
 @group B (fresh world, with SQ-HH-304)
 @commands As SQ-HH-304 (two located forests, 256 chunks each) counting `hearthandharvest:hops_vine`; also the typical crop: same boxes, `/zhh2 countset ... farmersdelight:wild_carrots`
 @pass hops vine count at least 1 over the two sites and below the wild carrot patch count (rarity 96 vs 120, but one tree per hit, several vine blocks per tree; compare hits: vine clusters at most a quarter of the carrot patches)
@@ -304,6 +305,7 @@ bootexpect hops states drawn with the white jungle grape models: \d+
 bootreject (?i)missing texture.*hearthandharvest:hops
 look vine and lattice stages show the white jungle grape art tinted green, cutout, no missing texture; JEI: Grape Planting has a vine page and a lattice page for hops, Grape Stomping has no hops page
 ## SQ-HH-304 (rewritten)
+@phase worldgen
 @group B
 @commands As SQ-HH-304 above, counting `hearthandharvest:hops_vine` instead of `hearthandharvest:wild_hops`
 @pass sum of the two counts at least 1 (vines on trunks, 1 in 96 chunks); `columns skipped: 0`

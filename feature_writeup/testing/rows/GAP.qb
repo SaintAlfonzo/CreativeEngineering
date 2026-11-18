@@ -38,6 +38,7 @@ shell cd $INST && python3 tools/gen_moobloom_rules.py --check; echo "gen exit=$?
 look gen --check prints no change and exit 0 (37 rules); checker prints no errors
 
 ## SQ-GAP-03 | Bushier Flowers worldgen off: 5 forge:none modifiers, zero bushierflowers blocks after pregen
+@phase long
 @group B (fresh world)
 @commands Bushier Flowers off (TODO `flowers #3`): boot; `grep -c "forge:none" kubejs/data/bushierflowers/forge/biome_modifier/*.json`; `/forceload add -300 -300 300 300`, pregen, then `python3 tools/scratch_query/region_blocks.py` over the region for namespace `bushierflowers`
 @pass the 5 modifier files each hold `forge:none`; zero `bushierflowers:` blocks generated; no `bushierflowers` worldgen error in the log

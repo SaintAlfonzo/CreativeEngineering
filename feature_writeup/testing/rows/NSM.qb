@@ -12,6 +12,7 @@
 @@text
 @@table
 ## SQ-NSM-01 | seasonings after the move (static half; crafting, overlay, eat bonus and JEI page are client)
+@phase worldgen
 @group Old save (NSM fixture) and new world
 @commands Fixture copy: hover and eat a seasoned food from the old save. New world: season a food with each of the 5 seasonings (crafting), hover, eat; JEI Seasoning page
 @pass Old stack: loads with no error or log spam, no seasoning lines (accepted loss). New: tooltip lines, the overlay on the icon, the eat bonus and the JEI page all work; `/data get entity @s SelectedItem` shows `creativedelight:<seasoning>` in `Seasonings`
@@ -110,6 +111,7 @@ expect \[zp9\] dye creativedelight:netherite_lunchbox \+ minecraft:red_dye recip
 look skin results carry the skin id (creativedelight skin tag) and keep the box; model and render are CQ (client)
 
 ## SQ-NSM-06 | recipe dump: no air, no moved id left
+@phase worldgen
 @group New world
 @commands `/cdevdumprecipes` (or `/dumpall`), then grep `kubejs/exported/recipes` for `minecraft:air` and for `creativeengineering:` ids that moved
 @pass No new `minecraft:air` outputs or inputs; no moved id left in any recipe; stepstool, shield, echo tool, felsic and air brake recipes resolve
@@ -142,6 +144,7 @@ expect \[nsmprobe\] login nsmH dim creativeworldgen:hub
 reject \[nsmprobe\] login nsm[YH] dim minecraft:overworld
 look 11 dimension-move lines; ls shows only creativeworldgen; nsmY's respawn (login line) is the bed in yellowstone; structure starts: RECORD not covered (fixture has none)
 ## SQ-NSM-08 | the 11 creativeworldgen dimensions open; structures locate under creativeworldgen
+@phase worldgen
 @group New world
 @commands Create a world on the new jars (live `config/creativeworldgen-common.toml` already rewritten); `/execute in creativeworldgen:<dim> run tp @s ~ 200 ~` for each of the 11 dimensions; `/locate structure creativeworldgen:sky_island`, `#creativeworldgen:meta/<any>`, a `creativeworldgen:group/settlements` member; `/cwglocate census`; `/dumptags` and grep `kubejs/exported` for Worldgen or Calendar tags still under `creativeengineering:`; create a world with the Flower Test preset
 @pass All 11 dimensions open with their biome and noise; `ls world/dimensions` shows only `creativeworldgen/`; sky islands, meta structures and groups locate and generate with terrain adaptation, earth fill and ground match; `[mob-spawns]` and `[bee-nests]` summaries with no rule idle; season and crop season tags (`creativecalendar:`) filled and the season tooltip shows; the Flower Test preset is listed and loads

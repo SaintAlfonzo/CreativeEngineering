@@ -335,6 +335,7 @@ waitlog verb=tickwarp end=done 300
 look the four counts sum to about 25 (not 70); the farthest monster within about 90 blocks of 0 0 (perf.md 17); the toml switch is read live (if the level line still says auto, it is not)
 
 ## SQ-META31-04 | meteorite strikes
+@phase worldgen
 @group FAIL: `meta/meteorite_desert_pyramid` placed with "0/1 desert_pyramid, short" = crater with no pyramid (MetaStructure keepShortParts: a replacement meta should fail when its first part is short)
 @jars creativecommon
 @from batches/r1031/w2_metas_spawns.qb
@@ -353,6 +354,7 @@ reject 0/1 #creativeengineering:meta/meteorites
 look crater through the village middle, no floating house; struck pyramid has a crater and a plain pyramid still exists; sky stone sphere in a sunken ruin; camp strikes on and beside camps (ST-310, ST-311, ST-313, ST-314): client block at the logged positions
 
 ## SQ-SB-03 | lone large pillager tower: illager mix at night, pillagers only by day
+@phase worldgen
 @group FAIL, cause not settled: no illager at the lone birch tower by night or day (zombies and a creeper did spawn); may be the monster cap / player distance, see judged_w2.md for the rerun
 @jars creativecommon
 @from batches/r1031/w2_metas_spawns.qb
@@ -385,6 +387,7 @@ look night: pillager, vindicator, evoker, illusioner, witch present (counts), ra
 > time set 18000
 
 ## SQ-EF-06 | undead castles kept on slopes (same world plus a highlands square)
+@phase long
 @group owner call: 1 of 3 undead castles kept; 2 canceled over-air 708 / 562 against limit 320
 @jars creativecommon
 @from batches/r1031/w1_earthfill.qb
@@ -489,9 +492,11 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @group Partial: falling blocks 193 to 102, not near 0; red sand gone, most sand stays. Next: which trigger is left (13.2: neighbor updates across chunk borders after post-processing? a feature tick outside ProtoChunkTicks?)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-HRU-01
+@phase worldgen
 @group PASS: 20 lines, all at 20:51:31 to :32 on `main` (mod loading, before the world): MoreWires connectors, Immersive Petroleum and IE multiblock / cloth / concrete blocks. So the unkeyed holders are asked during block construction, not only at pregen
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-HRU-02
+@phase worldgen
 @group PASS by the summary (Copycats no longer in the pregen profile); the per-thread Worker-Main share not read
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 @@text | Found | Precision sawblade blueprints (added 18:41) were all skipped: `'2x ' + tag` strings are not parsed by `_resolveIdCount`. Fixed in blueprints.js with `{ id, count: 2 }` (the transport.js:76 form); `/reload` on ov2 gave no new errors. Recipe presence in JEI not checked |
@@ -561,12 +566,14 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @group PASS (fill-only form): `wgp_tc` fill lines all in `wgp_old`'s
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-05
+@phase worldgen
 @group Partial: `wgp_g4` pregen 4:33, `Done` 92.6 s; census half dropped (owner request)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-06
 @group OPEN: `wgp_cl` stalled at 513 chunks on a corrupt chunk (CME in chunk save, perf.md 10.9 problem 1; TODO `perf #23`); the rerun crashed at boot on the 17:47 jar (`ImmersivePostsValidItemMixin`, TODO `perf #21`)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-WGP-07
+@phase worldgen
 @group PASS: pregen 3:50 vs the 5:26 baseline (`wgp_old` same day 4:53)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PF-04
@@ -609,6 +616,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @@text | Entries | Result |
 @@text |---|---|
 ## SQ-PF-04
+@phase worldgen
 @group Partial: pregen 5:26 with the pack events, 5:12 with them off (one run each); repeat the pair
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-PF-01, -05 (re-check)
@@ -990,6 +998,7 @@ look rows/SQ-FGD-01.log, part tags: all PASS (colonies in the Serene Seasons tag
 @jars creativedelight
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-RW-04 | river tree through the holder: trees_river grows the Mulberry override
+@phase worldgen
 @group PASS through the holder: UA's `trees_river` grows the override (90 river leaves, 21 oak logs, 0 river logs). Worldgen itself gave no river tree at three rivers: the feature needs dry land inside the river biome and the samples had none (0 dry columns in 25 x 25)
 @from batches/r1106spf/b1.qb passed
 @reviewed 2026-11-16
@@ -1086,6 +1095,7 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 @jars creativecommon
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-CF-01
+@phase worldgen
 @group PASS with the deploy's `defaultconfigs` (every value in the new world). Spice of Life warns for 4 Large Meals `complexityUnparsed` entries (placed meals are not food items, so the entries do nothing)
 @commands this log
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
@@ -1225,6 +1235,7 @@ expect verb=items items=\S*vintagedelight:salt_dust:\d+
 reject verb=items items=(\S*,)?salt:salt:\d
 reject \[cdevtest\] .*done=0
 ## SQ-SALT-04
+@phase worldgen
 @group new world
 @commands `/place feature vintagedelight:patch_salt` on a beach 10 times: layers on `salt:raw_rock_salt_block`, no `salt:salt_block` / `vintagedelight:salt_block`; after 5 min at `randomTickSpeed 300` no rock salt next to water is gone
 @pass Existing test: MG-34

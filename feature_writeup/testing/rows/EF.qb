@@ -4,6 +4,7 @@
 
 @@section 1
 @@title SQ-EF earth fill build plan, 2026-10-30
+@@phase worldgen
 @@date 2026-10-30
 @@jars creativeworldgen
 @@text
@@ -15,6 +16,7 @@
 @@text
 @@table
 ## SQ-EF-01 | -1,-1 keeps the size's mound limit; -1,-1,-1 never prunes (W1a)
+@phase long
 @group B
 @commands scratch toml `overrides = ["minecraft:village_plains=-1,-1", "village_savanna=-1,-1,-1"]`; Chunky the inland square (and a savanna square r 200)
 @pass plains lines show `mound columns (limit N)` with N the size's limit, not -1; savanna lines `limit -1` everywhere, `-> kept`, and no `pruned` line for savanna villages (ST-242)
@@ -39,6 +41,7 @@ reject \[earth-fill\].*village_savanna.*CANCELLED
 look savanna village lines show limit -1 and "-> kept" (ST-242); none in the savanna square = Chunky one more savanna square
 
 ## SQ-EF-02 | villages at a lake lose the wet houses only (W1b)
+@phase long
 @group B
 @commands same world, no overrides; `grep 'pruned.*footprint'`
 @pass at least one village logs `pruned K of N pieces` with a `(footprint W water / G ground)` reason, W >= 16; tp there: the dry part of the village stands, no house over the lake (ST-239)
@@ -53,6 +56,7 @@ expect \[earth-fill\].*pruned \d+ of \d+ pieces.*footprint \d+ water / \d+ groun
 look tp a spectator (pbot spawn qa X 150 Z minecraft:overworld creative, or the client block) to one pruned village: the dry part stands, no house over the lake (ST-239); W >= 16 in the reason; none: Chunky a coast square r 200 at -80 -16 and grep again
 
 ## SQ-EF-03 | desert pyramids and temples judged by footprint, none in water (same world)
+@phase long
 @group B
 @commands desert square r 300 with a river or oasis (`/locate biome minecraft:desert`, Terralith `desert_oasis` if present); `grep -E 'desert_pyramid\|desert_temple\|desert'`
 @pass every pyramid / temple line has a `footprint` part; no kept one with water > ground; tp to 3 kept pyramids: none in standing water; a line for a tent camp or ruin with `0 earth` and a footprint exists (#12) (ST-235, ST-237)
@@ -70,6 +74,7 @@ expect \[earth-fill\].* 0 earth.*footprint
 look no kept pyramid with water > ground; tp to 3 kept pyramids (client block or spectator bot): none in standing water (ST-235, ST-237)
 
 ## SQ-EF-04 | swamp huts, witch huts, mangrove towers still stand in water (same world)
+@phase long
 @group B
 @commands swamp + mangrove square r 300; `grep -E 'swamp_hut\|witch_hut\|mangrove_pillager_tower'`
 @pass their lines (if any) show no footprint part; `/locate structure minecraft:swamp_hut` and `betterwitchhuts:witch_hut` still find huts standing in water (ST-236)
@@ -113,6 +118,7 @@ reject (?i)failed to place
 look crypt: ground ring at the entrance roof, no pit, rooms open (screenshots in the client block at the logged positions); record how the seabed ruins sit for brief #3 (ST-238)
 
 ## SQ-EF-06 | undead castles kept on slopes (same world plus a highlands square)
+@phase long
 @group B
 @commands two r 400 squares, one plains/taiga, one highlands (`/locate biome terralith:alpine_highlands`); `grep 'eugene:undead_castle'`; biome per line with the `/zcol`-style `getNoiseBiome` probe (brief #4)
 @pass at least half the castles kept; lines show `limit 400` for mound; tp to one kept castle on a slope: no earth over more than 6 blocks of air (ST-240); write the per-fit table into brief #4
@@ -147,6 +153,7 @@ expect not placed, no anchor fits
 look after this batch: save-all, stop, boot, then "locate structure creativeengineering:meta/farmers_camp" finds a naturally built one (a /place structure start is never locatable, vanilla) and the boot log has no MetaStructure error (ST-241); any "dropped K of N parts" line names satellite ids
 
 ## SQ-EF-09 | non-village jigsaws at water lose wet parts only
+@phase long
 @group B
 @commands same world as SQ-EF-02, `log = "ALL"`; a lake or river square r 300; `grep 'wet only'`
 @pass at least one non-village jigsaw (outpost, camp, ruin) logs `pruned K of N pieces (wet only)` with a `footprint` reason; tp there: its dry part stands, no piece over the water; no `type/village` id with `wet only` (ST-297)

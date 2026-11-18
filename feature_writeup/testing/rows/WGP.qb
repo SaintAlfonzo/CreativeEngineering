@@ -4,6 +4,7 @@
 
 @@section 1
 @@title Worldgen hot spots, 2026-10-27 ([perf.md](../perf.md) 10.8, TODO `perf #13`)
+@@phase worldgen
 @@date 2026-10-27
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
@@ -79,6 +80,7 @@ look wgp_new: flat_cache 3; Overworld skips twigs:bloodstone_obelisk and the oth
 @fails No speedup: the wraps did not reach the per-block path (check that terratonic's `final_density` still points at `tectonic:overworld/legacy/cliffs`)
 @draft two-level JFR comparison (wgp_old vs wgp_cl, noise fill frames), as SQ-WGP-03; open since the cliffs world stalled on a corrupt chunk
 ## SQ-WGP-07
+@phase long
 @group `wgp_new`
 @commands Pregen; note Chunky's total and `Done`
 @pass Faster than the 5:26 baseline by roughly the sum of options 1-4 (perf.md 10.8)

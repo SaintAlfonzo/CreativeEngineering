@@ -6001,6 +6001,7 @@ expect verb=tag kind=biome tag=creativedelight:wild_crops/wild_hops n=18\b (?=.*
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-303 | `[Pp]laced feature` in the command output; `countset hearthandharvest:
+@phase worldgen
 @group A
 @commands Plot 4160 32. `/place feature creativedelight:wild/wild_hops 4160 -60 32`; `/zhh2 countset 4144 -60 16 4176 -58 48 hearthandharvest:wild_hops,minecraft:grass`
 @pass `[Pp]laced feature` in the command output; `countset hearthandharvest:wild_hops: [1-9]` (the configured feature parses and the wild crop places, J24)
@@ -6011,6 +6012,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 look `[Pp]laced feature` in the command output; `countset hearthandharvest:wild_hops: [1-9]` (the configured feature parses and the wild crop places, J24)
 
 ## SQ-HH-304 | sum of the two `countset hearthandharvest:wild_hops` lines at least 1
+@phase worldgen
 @group B
 @commands Fresh world, new level-name, seed 8675309 (worldgen registry rows; a world made before tranche 3 has none of this). `prep_srv.sh OUT hhwb B`; copy the probe; boot. `/locate biome minecraft:forest`, qrun `capture P is at \[(-?\d+), (~\|-?\d+), (-?\d+)\]` ({P1} = x, {P3} = z; same form for every capture below); `forceload add {P1-128} {P3-128} {P1+127} {P3+127}` (256 chunks); after it finishes `/zhh2 countset {P1-128} 40 {P3-128} {P1+127} 120 {P3+127} hearthandharvest:wild_hops`; second site: `execute positioned 2144 70 -2592 run locate biome minecraft:forest` capture Q; `forceload add {Q1-128} {Q3-128} {Q1+127} {Q3+127}`; `/zhh2 countset {Q1-128} 40 {Q3-128} {Q1+127} 120 {Q3+127} hearthandharvest:wild_hops`
 @pass sum of the two `countset hearthandharvest:wild_hops` lines at least 1 (`countset ... [1-9]` on one of them: rate 1 in 120 chunks, two 256-chunk sites give about 4 patches, HNH-04 hops half, J24). `columns skipped: 0` on each
@@ -6043,6 +6045,7 @@ expect verb=tag kind=biome tag=creativeworldgen:wild_flowers/mums/r5 n=10\b (?=.
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-306 | `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines ab
+@phase worldgen
 @group A
 @commands Plot 4352 32. `/place feature creativeengineering:wild_flowers/mums/r5 4352 -60 32`; `/place feature creativeengineering:wild_flowers/mums/r5 4376 -60 32`; `/place feature creativeengineering:wild_flowers/mums/r5 4352 -60 56`; `/zhh2 countset 4340 -60 20 4388 -56 68 hearthandharvest:white_mum,hearthandharvest:yellow_mum,hearthandharvest:orange_mum,hearthandharvest:red_mum,hearthandharvest:pink_mum,hearthandharvest:purple_mum,hearthandharvest:blue_mum,hearthandharvest:light_blue_mum`
 @pass `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines above 0; `columns skipped: 0` (J26, one equal-weight patch of all 8; 3 patches keep the chance of a missed color under 1 %)
@@ -6055,6 +6058,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 look `[Pp]laced feature` three times; all 8 `countset ... : [1-9]` lines above 0; `columns skipped: 0` (J26, one equal-weight patch of all 8; 3 patches keep the chance of a missed colour under 1 %)
 
 ## SQ-HH-307 | sum over the 8 colors at least 8 (rate 1/5 per chunk over 64 plains c
+@phase worldgen
 @group B
 @commands Same world as SQ-HH-304. `/locate biome minecraft:plains` capture R; `forceload add {R1-64} {R3-64} {R1+63} {R3+63}` (64 chunks); `/zhh2 countset {R1-64} 50 {R3-64} {R1+63} 100 {R3+63} hearthandharvest:white_mum,hearthandharvest:yellow_mum,hearthandharvest:orange_mum,hearthandharvest:red_mum,hearthandharvest:pink_mum,hearthandharvest:purple_mum,hearthandharvest:blue_mum,hearthandharvest:light_blue_mum`
 @pass sum over the 8 colors at least 8 (rate 1/5 per chunk over 64 plains chunks, about 12 patches; HNH-06 first half)
@@ -6156,6 +6160,7 @@ expect verb=tag kind=biome tag=creativeworldgen:wild_flowers/clover_patches_rare
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-312 | `[Pp]laced feature` twice; `countset hearthandharvest:four_leaf_clover
+@phase worldgen
 @group A
 @commands Plot 4096 96. `/place feature creativeengineering:wild_flowers/four_leaf_clover/r48 4096 -60 96`; `/place feature creativeengineering:wild_flowers/four_leaf_clover/r48 4104 -60 96`; `/zhh2 countset 4088 -60 88 4112 -57 104 hearthandharvest:four_leaf_clover`
 @pass `[Pp]laced feature` twice; `countset hearthandharvest:four_leaf_clover: [1-9]` (J28, tries 6, spread 3/2)
@@ -6167,6 +6172,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 look `[Pp]laced feature` twice; `countset hearthandharvest:four_leaf_clover: [1-9]` (J28, tries 6, spread 3/2)
 
 ## SQ-HH-313 | clover patches place both colors (rerun, 3 placements)
+@phase worldgen
 @group A
 @commands Plot 4160 96. `/place feature creativeengineering:wild_flowers/clover_patches_rare/r48 4160 -60 96`; `/zhh2 countset 4152 -60 88 4168 -57 104 buzzier_bees:white_clover,buzzier_bees:pink_clover`
 @pass `[Pp]laced feature`; `countset buzzier_bees:white_clover: [1-9]` and `countset buzzier_bees:pink_clover: [1-9]` (J29, the rare clover patch is Buzzier Bees' flowers)
@@ -6179,6 +6185,7 @@ look `[Pp]laced feature` twice; `countset hearthandharvest:four_leaf_clover: [1-
 look Placed feature 3 times; white_clover and pink_clover both [1-9]
 
 ## SQ-HH-314 | `four_leaf_clover: [1-9]`, `white_clover: [1-9]`, `pink_clover: [1-9]`
+@phase worldgen
 @group B
 @commands Same world as SQ-HH-304. `/locate biome minecraft:flower_forest` capture F; `forceload add {F1-128} {F3-128} {F1+127} {F3+127}` (256 chunks); `/zhh2 countset {F1-128} 40 {F3-128} {F1+127} 120 {F3+127} hearthandharvest:four_leaf_clover,buzzier_bees:white_clover,buzzier_bees:pink_clover`
 @pass `four_leaf_clover: [1-9]`, `white_clover: [1-9]`, `pink_clover: [1-9]` (rate 1/48 each over 256 chunks, about 5 patches each; J28, J29)
@@ -6242,6 +6249,7 @@ expect verb=tag kind=biome tag=hearthandharvest:has_salt_caves n=[1-9]\d*\b (?=.
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-318 | `[Pp]laced feature`; `raw_rock_salt_block` above 200, about 70 % of th
+@phase worldgen
 @group A
 @commands Boot 2 (SQ-HH-274 config, including `saltCaveRarity 1`, `saltCaveMinY 0`, `saltCaveMaxY 0`). Plot 4480 96. `fill 4464 -16 80 4496 0 112 minecraft:stone`; `fill 4464 1 80 4496 16 112 minecraft:stone` (33 cube, two fills under the 32768 limit); `/place feature hearthandharvest:salt_cave 4480 0 96`; `/zhh2 countset 4464 -16 80 4496 16 112 salt:raw_rock_salt_block,minecraft:calcite,minecraft:tuff,minecraft:cave_air,salt:salt_cluster,salt:large_salt_bud,salt:medium_salt_bud,salt:small_salt_bud,minecraft:water`
 @pass `[Pp]laced feature`; `raw_rock_salt_block` above 200, about 70 % of the shell total: raw rock over calcite+tuff at least 1.8 (`raw_rock / (calcite+tuff)`; J36 70/30); `cave_air` above 1000; calcite and tuff each above 20; at least one of the four bud or cluster ids above 0 (J37); water count is logged only (pools are rare at 1.2 %, 0 is allowed, J36 pool rim is LOOK-free)
@@ -6255,6 +6263,7 @@ look UNPARSED CMD: saltCaveRarity 1 ;; saltCaveMinY 0 ;; saltCaveMaxY 0
 look `[Pp]laced feature`; `raw_rock_salt_block` above 200, about 70 % of the shell total: raw rock over calcite+tuff at least 1.8 (`raw_rock / (calcite+tuff)`; J36 70/30); `cave_air` above 1000; calcite and tuff each above 20; at least one of the four bud or cluster ids above 0 (J37); water count is logged only (pools are rare at 1.2 %, 0 is allowed, J36 pool rim is LOOK-free)
 
 ## SQ-HH-319 | salt cave origin pulled into saltCaveMinY..MaxY (0..0), stone box and forceload
+@phase worldgen
 @group A
 @commands Boot 2. Plot 4544 96. Same 33-cube stone box as SQ-HH-318. `/place feature hearthandharvest:salt_cave 4544 40 96` (origin far above the configured band); `/zhh2 countset 4528 -16 80 4560 16 112 minecraft:cave_air`
 @pass `Placed "hearthandharvest:salt_cave"` (1.19.2 wording); `cave_air` above 1000 (origin pulled into saltCaveMinY..MaxY = 0..0; J33 config range, HHConfig `[worldgen]`)
@@ -6271,6 +6280,7 @@ expect Placed "hearthandharvest:salt_cave"
 look shell shows saltCaves true, rarity 1, MinY 0, MaxY 0; cave_air above 1000 (a carve below y 17 means the origin was pulled down from y 40)
 
 ## SQ-HH-320 | salt cave and corn maze refused with their config switches off
+@phase worldgen
 @group A
 @commands Boot 3 (restart with `qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen saltCaves false`, `qrun.py toml OUT/srv/config/hearthandharvest-common.toml worldgen cornMaze false`). Plot 4608 96. Same 33-cube stone box as SQ-HH-318. `/place feature hearthandharvest:salt_cave 4608 0 96`; `/place structure hearthandharvest:corn_maze 4400 -60 4400`
 @pass `Failed to place feature`; `Failed to place structure` or the command's generic failure on both (config off switches, J33 and J38 `cornMaze`)
@@ -6290,6 +6300,7 @@ reject [Pp]laced feature
 look shell shows saltCaves = false, cornMaze = false; `Failed to place structure` (or the generic failure) for the maze; cave_air 0 in the box
 
 ## SQ-HH-321 | `raw_rock_salt_block: [1-9]\d{2,}` (at least 100 blocks over 144 deser
+@phase worldgen
 @group B
 @commands Fresh world, seed 8675309, new level-name, config copied from a boot that has `saltCaveRarity 1`, `saltCaveMinY -40`, `saltCaveMaxY 30` (`cp` the file from boot 2 into `OUT/srv/config/`, then `qrun.py toml` min and max back to -40 and 30) before first boot. `/locate biome minecraft:desert` capture D; `forceload add {D1-96} {D3-96} {D1+95} {D3+95}` (144 chunks); `/zhh2 countset {D1-96} -60 {D3-96} {D1+95} 60 {D3+95} salt:raw_rock_salt_block,salt:salt_cluster,minecraft:calcite`
 @pass `raw_rock_salt_block: [1-9]\d{2,}` (at least 100 blocks over 144 desert chunks with rarity 1, J33 placed feature plus biome modifier; `canPlace` rejects some sites over water or lava, not most)
@@ -6306,6 +6317,7 @@ look UNPARSED CMD: saltCaveRarity 1 ;; saltCaveMinY -40 ;; saltCaveMaxY 30 ;; cp
 look `raw_rock_salt_block: [1-9]\d{2,}` (at least 100 blocks over 144 desert chunks with rarity 1, J33 placed feature plus biome modifier; `canPlace` rejects some sites over water or lava, not most)
 
 ## SQ-HH-322 | `raw_rock_salt_block: 0` (salt caves stay in their biomes; no `minecra
+@phase worldgen
 @group B
 @commands Same world as SQ-HH-321. `execute positioned {D1+2000} 70 {D3} run locate biome minecraft:forest` capture G (a forest far from the desert); `forceload add {G1-64} {G3-64} {G1+63} {G3+63}` (64 chunks); `/zhh2 countset {G1-64} -60 {G3-64} {G1+63} 60 {G3+63} salt:raw_rock_salt_block`
 @pass `raw_rock_salt_block: 0` (salt caves stay in their biomes; no `minecraft:biome` filter in the placement, the biome modifier decides, J34, J35). Far enough that a desert cave's 16-block overhang cannot reach
@@ -6320,6 +6332,7 @@ sleep 60
 look `raw_rock_salt_block: 0` (salt caves stay in their biomes; no `minecraft:biome` filter in the placement, the biome modifier decides, J34, J35). Far enough that a desert cave's 16-block overhang cannot reach
 
 ## SQ-HH-323 | `Placed structure` (flat ground is a valid site: `surface != floor` fa
+@phase worldgen
 @group A
 @commands Plot 4160 160. `/place structure hearthandharvest:corn_maze 4160 -60 160`; `/zhh2 countset 4158 -61 158 4196 -56 196 corn_delight:corn_crop,minecraft:oak_fence,minecraft:oak_log,minecraft:lantern,minecraft:chest,minecraft:farmland,minecraft:hay_block,hearthandharvest:scarecrow`
 @pass `Placed structure` (flat ground is a valid site: `surface != floor` false, `surface <= seaLevel+2` false); `corn_crop` above 200; `oak_fence: 16`, `oak_log: 6`, `lantern: 2` (two gates, J38); `chest: [1-9]`; `farmland: [1-9]` (HNH-22 maze half: `/place structure` proves the piece; natural placement is SQ-HH-328)
@@ -6379,6 +6392,7 @@ expect verb=tag kind=biome tag=hearthandharvest:has_structure/corn_maze n=\d+\b 
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-328 | corn maze locate from spawn within the shipped 120 s deadline (seed 8675309), then the maze census
+@phase worldgen
 @group B
 @commands Rewritten 2026-11-14 (corn maze weight 850, 2x; plan_bugfix_1114.md 6.3, TODO `locate #6`): three fresh group B worlds (seed 8675309 and two others, recorded), shipped `searchTimeoutSeconds` 120; in each, from spawn, `/locate structure hearthandharvest:corn_maze`, record the locate time and the candidates count from the log; then on the first found maze capture M; if not found, `execute positioned 2144 70 -2592 run locate structure hearthandharvest:corn_maze` capture M; `forceload add {M1-32} {M3-32} {M1+31} {M3+31}` (16 chunks, box centred on M); wait for load; `/cdevtest under {M1} {M3} 2 corn_maze`; `/zhh2 countset {M1-20} 50 {M3-20} {M1+20} 110 {M3+20} corn_delight:corn_crop,minecraft:oak_fence,minecraft:chest`; `/zhh2 chests {M1-20} 50 {M3-20} {M1+20} 110 {M3+20}` (box centred on M: the locate point is the maze centre; r1115 found the old M-2..M+36 box covers one quadrant, fence 8)
 @pass `locate` finds a maze within 120 s from spawn on at least two of the three seeds (time and candidates recorded per seed; r1114 at weight 400 needed 424 s and 1681 candidates; if fewer than two, the owner picks a longer deadline or a higher rate); estimate group `remote` about 1 per 52x52 chunks of plains (`structure_group_estimates.md`); `corn_crop` above 100, `oak_fence: 16`, a chest with table `hearthandharvest:chests/corn_maze_center`; `under` reports no large air gaps under the built base (`over6=0`). HNH-22 maze half; the Lilliput Lane half is not built (J43, needs a substitution table), no row
@@ -8352,6 +8366,7 @@ expect verb=break drops=(\S*,)?minecraft:emerald:1\b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## SQ-HH-464 | `expect \[zhh3\] nests generated=[1-9]`; `expect \[zhh3\] nest at .* g
+@phase worldgen
 @group B
 @commands Fresh normal world, seed 8675309, worldgen registries as built (copy `zz_hh_crow_probe.js` as in SQ-HH-401). HNH-66, HNH-96, J64 (`rarity 1 in 32`, heightmap MOTION_BLOCKING).; `locate biome minecraft:plains`; `capture P is at \[(-?\d+), (~\|-?\d+), (-?\d+)\]`; `forceload add {P1-96} {P3-96} {P1+96} {P3+96}`; `sleep 45`; `zhh3 nests {P1} {P3} 96`; `/cdevtest count {P1-96} -64 {P3-96} {P1+96} 200 {P3+96} hearthandharvest:nest`; `forceload remove {P1-96} {P3-96} {P1+96} {P3+96}`
 @pass `expect \[zhh3\] nests generated=[1-9]`; `expect \[zhh3\] nest at .* generated=true biome=(minecraft\|terralith):`

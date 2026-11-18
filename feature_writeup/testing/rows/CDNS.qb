@@ -58,6 +58,7 @@ look RECORD the losses (scan compare after the stop)
 @fails `SwapRemapper.remap`, `SwapReport.noteEmptyStack`, `noteChunk`
 @draft runs through tools/scratch_query/cdns_step2_run.sh / cdns_full_run.sh: fixture copies, a stop between boots and the offline scan and compare (cdns_probe.py) decide it; multi-boot scripts, not one qrun boot
 ## SQ-CDNS-07
+@phase worldgen
 @group Fresh world
 @commands FULL BUILD. Boot; grep `logs/latest.log` and `logs/kubejs/*.log` for errors and for `creativeengineering:` naming a moved id or tag (list: `tools/cd_namespace_ids.json`)
 @pass Clean boot; none found
@@ -69,6 +70,7 @@ shell grep -hciE "\[(error|fatal)\]|ERROR\]" logs/latest.log; grep -hiE "error" 
 shell python3 -c "import json,re,glob;ids=set(json.load(open('$INST/tools/cd_namespace_ids.json'))['ids']);txt=''.join(open(f,errors='ignore').read() for f in ['logs/latest.log']+glob.glob('logs/kubejs/*.log'));hits=sorted(set(m for m in re.findall(r'creativeengineering:([a-z0-9_/]+)',txt) if m in ids));print('moved ids still named creativeengineering:',len(hits),hits[:20]);raise SystemExit(1 if hits else 0)"
 look the error lines printed are known ones (none naming creativedelight or a moved id)
 ## SQ-CDNS-08
+@phase worldgen
 @group Fresh world
 @commands FULL BUILD. `/kubejs dump_registry` for items, blocks, block entity types, menus, recipe serializers, recipe types; tag dump
 @pass Every id and tag in `tools/cd_namespace_ids.json` under its target namespace (smokable and plantable under `creativecommon`); 376 items and 26 blocks for the mods present

@@ -17,6 +17,7 @@
 @@text
 @@table
 ## SQ-CS2-01 | old-id save: placed sticks and a village start
+@phase worldgen
 @group A
 @commands Boot 1 (old jars): `setblock` a `creative_delight:treated_stick` and a tomato-grown treated stick next to spawn, put 3 treated sticks in a chest and 2 in the player's (bot's) inventory, drop 1 on the ground; `/locate structure minecraft:village_plains` and teleport so a village start with an unplaced farm piece is saved (do not walk into the farm); stop
 @pass Save written; no error

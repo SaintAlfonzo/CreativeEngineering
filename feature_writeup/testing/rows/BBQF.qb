@@ -239,6 +239,7 @@ expect verb=tag kind=block tag=minecraft:mineable/hoe .*oceanic_delight:sea_grap
 reject (Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-CDM2-02 | warm ocean: sea grape patches from the wild crops config, no [wild-crops] errors
+@phase worldgen
 @group B
 @commands Fresh world, warm ocean, scan 64 chunks
 @pass Sea grape patches; no `[wild-crops]` errors; `creativedelight:wild_crops/sea_grape` lists the 3 oceans
@@ -531,6 +532,7 @@ shell awk '/^[[:space:]]*\[/{s=$0} s ~ /^[[:space:]]*\[salt\.Evaporation\][[:spa
 look carried line says 19 values; ls shows salt-client.toml and salt-common.toml.moved only, then SALT2-08-FILES-OK; [salt.Evaporation] EvaporationChance = 0.5
 
 ## SQ-NEST-01 | placed nest features: duck, goose, emu nests with eggs and birds
+@phase worldgen
 @group A
 @commands `/place feature incubation_additions:nest_duck` (and `nest_goose`, `nest_emu`) on grass
 @pass Nest with 2 to 4 eggs and birds
@@ -555,6 +557,7 @@ look eggs 2 to 4 per nest: the count lines give the nests; read the eggs state w
 reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[cdevtest\] .*done=0)
 
 ## SQ-NEST-02 | swamp, river, savanna: nests here and there, no worldgen or biome-tag errors
+@phase worldgen
 @group B
 @commands Fresh world: swamp, river, savanna
 @pass Nests here and there; no worldgen or biome-tag errors in the log

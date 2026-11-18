@@ -4,6 +4,7 @@
 
 @@section 1
 @@title SQ-WG30 worldgen batch 2026-10-30
+@@phase worldgen
 @@date 2026-10-30
 @@jars creativeworldgen
 @@text
@@ -21,6 +22,7 @@
 @@text
 @@table
 ## SQ-WG30-A01 **PASS 2026-10-30**: 34 village starts in the square, all `-> kept`, no `too wet`; 3 with water over 1.5x ground kept (e.g. T&T snowy slopes 315 / 0)
+@phase long
 @group B
 @commands scratch toml `overrides = ["#creativeengineering:type/village=-1,-1,-1"]`, `log = "ALL"`; Chunky the square; `grep '\[earth-fill\]' latest.log` for village ids
 @pass every village line ends `-> kept`, none `CANCELLED`, none says `too wet`, also lines whose footprint has water more than 1.5x ground (#9)
@@ -42,6 +44,7 @@ look village lines whose footprint has water more than 1.5x ground are kept too 
 @fails `EarthCheck.cancels` (`box.minY() + sink`); TerrainAdaptation sink value
 @draft compares camp air counts against a 1.1.04-jar run that no longer exists (r1030 PARTIAL) and ST-199 depends on a pick the weight strip changed; needs an owner ruling whether to drop the jar comparison before steps are written
 ## SQ-WG30-A03 **PARTIAL 2026-10-30**: `minecraft:village_plains` [177, -93] logged at limit -1 and kept; the 31 `philipsruins:ancient_ruins` lines show limit 0 but none had earth over water or air, so the cancel path was not exercised; exempt ids not checked
+@phase long
 @group B
 @commands ST-54 at `log = "ALL"`: `overrides = ["minecraft:village_plains=-1,-1,-1", "philipsruins:ancient_ruins=0,0,0"]` (village_savanna if no plains in the square)
 @pass the `-1,-1,-1` village is logged but never canceled; ruins cancel at any earth over water or air past the beard; exempt ids log nothing

@@ -125,6 +125,7 @@ expect verb=potion potion=creativebrewing:phantom_bane ingredient=minecraft:glow
 bootreject \[CE potions\].*(error|Error)
 reject verb=\S+ .*done=0
 ## SQ-CM-08
+@phase worldgen
 @group new world
 @commands Echo set on a player (or fake player): Night Vision and Phantom Bane amplifier 0
 @pass Existing test: AE-10 (expected now 0)
@@ -158,6 +159,7 @@ reject tactical_fishing:fishing_creativeengineering_powdered_sugar_bucket
 reject verb=\S+ .*done=0
 
 ## SQ-CM-09
+@phase worldgen
 @group new world
 @commands `/place feature creativedelight:wild/mini_cantaloupe` in a desert 10 times: Mini Cantaloupe blocks on sand / red sand / terracotta; biome tag `creativedelight:wild_crops/cantaloupe` lists deserts and badlands, no savanna
 @pass Existing test: MG-44

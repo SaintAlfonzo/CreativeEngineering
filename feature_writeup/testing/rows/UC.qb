@@ -24,6 +24,7 @@ bootreject (?i)(failed|error).*(ua_[a-z_]*coral|upgrade_aquatic:)
 look the "Loaded N block growths" count is 11 higher than a pre-10-28 boot (perf/sessions/q1028 boots)
 
 ## SQ-UC-02 | acan coral grows in a warm ocean, dead one does not
+@phase worldgen
 @group B
 @commands `/locate biome minecraft:warm_ocean`, tp there; fill a 7x5x7 water box, `/setblock` `upgrade_aquatic:acan_coral_block` in the middle, `upgrade_aquatic:dead_acan_coral_block` 3 blocks away; `/gamerule randomTickSpeed 1000` 120 s, then 3
 @pass Acan wall fans on the live block's sides and acan fans or acan coral on top (an occasional wet sponge); nothing around the dead block
@@ -55,6 +56,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 look 1170 random ticks per block = 240 s at randomTickSpeed 1000
 
 ## SQ-UC-03 | prismarine coral grows in a cold ocean; elder prismarine and acan do not
+@phase worldgen
 @group B
 @commands Same box in a `minecraft:cold_ocean`: one `upgrade_aquatic:prismarine_coral_block`, one `upgrade_aquatic:elder_prismarine_coral_block`, one `upgrade_aquatic:acan_coral_block`; `randomTickSpeed 1000` 120 s, then 3
 @pass Prismarine fans / coral around the prismarine block; nothing around the elder prismarine or acan block

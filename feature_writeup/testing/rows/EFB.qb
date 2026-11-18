@@ -4,6 +4,7 @@
 
 @@section 1
 @@title SQ-EFB Earth fill on the placed blocks: water, air and earth replaced, 2026-11-02 ([structure_tuning.md](../structure_tuning.md) 3.8, 3.13, 3.28 to 3.30, 7.3.1, 7.5; TODO `structures/earthfill`, `structures/terrain #2`)
+@@phase worldgen
 @@date 2026-11-02
 @@jars creativeworldgen
 @@sources feature_writeup/structure_tuning.md
@@ -55,6 +56,7 @@ shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log | 
 look 0 starts at an ocean spawn is a pass for the verb; rerun on a square tile (SQ-EFB-02) if so
 
 ## SQ-EFB-02 (air)
+@phase long
 @group B
 @commands inland plains / taiga square (`/locate biome minecraft:plains`, a spot with hills nearby), Chunky r 300; `/cdevtest under` tiles over the square
 @pass every kept start: `over6 0` (no column hangs more than `beardReach` over air); `air-below` columns only where the gap is 1 to 6 and the beard rounded them off; no village house standing on air
@@ -111,6 +113,7 @@ reject \[cdevtest\] verb=under .*done=0
 shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {PL1-304} {PL3-304} {PL1+304} {PL3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail over6
 shell python3 -I $INST/tools/scratch_query/efb_judge.py log logs/latest.log --box {PL1-304} {PL3-304} {PL1+304} {PL3+304} | tail -15
 ## SQ-EFB-03 (air, mounds)
+@phase long
 @group B
 @commands hills square (`/locate biome minecraft:windswept_hills` or `terralith:highlands`), Chunky r 300; `grep 'mound columns'`
 @pass every start whose line shows mound columns within its limit is kept and the probe shows `air-below 0` under it (the beard built the mound); every start over the mound limit is CANCELED and has no probe line; LOOK at two mound starts from the side: an earth slope, no overhang, no stone pillar
@@ -171,6 +174,7 @@ shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --
 shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --box {HL1-304} {HL3-304} {HL1+304} {HL3+304}
 look two kept mound starts (mound columns > 0 in their [earth-fill] line) from the side, client block or a spectator bot: an earth slope, no overhang, no stone pillar
 ## SQ-EFB-04 (air, earthless pieces)
+@phase long
 @group B
 @commands same squares plus a desert and a jungle square; `/cdevtest under` filtered `pyramid`, `igloo`, `jungle`, `camp`, `ruin` (`/cdevtest under <x> <z> 6 camp`)
 @pass legacy and earthless pieces (spans, 3.28): `over6 0` for kept ones; a camp or ruin with a column more than 6 over air has a CANCELED line, not a world entry; tents and plinths sit on the ground (LOOK one camp, one ruin)
@@ -278,6 +282,7 @@ shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --
 shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --id "camp|ruin"
 look one camp and one ruin from the side: tents and plinths sit on the ground (judge list above: their over6 0)
 ## SQ-EFB-05 (water, lakes)
+@phase long
 @group B
 @commands check the scratch toml has `[worldgen.earth_fill] maxWaterSurplus = 0.5` (instance value since 2026-11-02); lake / river square (the SQ-EF-09 kind, `/locate biome minecraft:river` near plains), Chunky r 300; `grep -E 'too wet\|wet only\|footprint'`; `/cdevtest under` tiles
 @pass kept starts: `water-below` only with `max` 2 or less (`waterReach`; deeper water under earth counts, and over `maxOverWater` 24 the start goes), `base water 0` (no flooded floor) except `wet_ok` and pond structures; every `too wet` start has no probe line; no kept start has footprint water above 1.5 x its ground (60:40 passes, 61:39 goes) in its log line; record how many kept starts sit between 50:50 and 60:40 (kept at 0.5, canceled at 0.0)
@@ -340,6 +345,7 @@ shell grep -E '\[earth-fill\].*footprint [0-9]+ water / [0-9]+ ground.*-> kept' 
 shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --box {RV1-304} {RV3-304} {RV1+304} {RV3+304}
 look RECORD the "kept 50:50 to 60:40" count from the awk line (kept at 0.5, cancelled at 0.0) in the run doc
 ## SQ-EFB-06 (water, coast)
+@phase long
 @group B
 @commands beach and coast square with villages (`/locate structure minecraft:village_plains` near an ocean, or `minecraft:beach`), Chunky r 300; `/cdevtest under <x> <z> 6 village`
 @pass no house floor in the sea-level water layer (`base water 0` on every kept village); `water-below` under houses `max` 2 or less; pruned wet houses (log `pruned K of N`) are not in the world: the probe's `pieces` equals N minus K
@@ -399,6 +405,7 @@ shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --
 shell L=$(grep -m1 '^level-name=' server.properties | cut -d= -f2); python3 -I $INST/tools/scratch_query/efb_judge.py gone "$L" logs/latest.log --box {BC1-304} {BC3-304} {BC1+304} {BC3+304} --id village
 shell grep -E "\[earth-fill\].*village.*pruned [0-9]+ of [0-9]+ pieces" logs/latest.log | grep -v predicted | tail -5 | cut -c1-300
 ## SQ-EFB-07 (water kept on purpose)
+@phase long
 @group B
 @commands swamp and mangrove square (SQ-EF-04 kind) plus a hillside with `/place structure farmers_structures:aquacultures_common` and `_carp`, and `old_swamp_fisherman_house:fisherman_house`
 @pass swamp huts, witch huts, mangrove towers (`earth_fill/wet_ok`) keep `water-below` > 0 and stand on their stilts (LOOK: water under the hut, not earth); ponds keep their water (`base water` > 0, the pond full, no earth plugging it, rim intact)
@@ -514,6 +521,7 @@ shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --
 shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --id aquaculture --need basewater
 look one hut and one mangrove tower from the side: water under the hut, not earth, on its stilts; the placed ponds full, no earth plugging them, rim intact
 ## SQ-EFB-08 (earth, desert)
+@phase long
 @group B
 @commands desert square with Philip's ruins and villages (`/locate biome minecraft:desert`; `/place structure philipsruins:ancient_ruins` twice on sand), Chunky r 300; `/cdevtest under` tiles; `/cdevtest count <box> minecraft:grass` and `minecraft:tall_grass` over each probed box
 @pass `foreign: none` on every start that is not in `ground_match/exempt` (base earth is sand / sandstone, no grass block or dirt in the bottom 3 layers); no grass plants standing on sand (`count` 0 or on `minecraft:grass_block` only)
@@ -584,6 +592,7 @@ count \[cdevtest\] verb=under done=1 >= 9
 reject \[cdevtest\] verb=under .*done=0
 shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {DS1-304} {DS3-304} {DS1+304} {DS3+304} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail foreign
 ## SQ-EFB-09 (earth, other grounds)
+@phase long
 @group B
 @commands one square each in snow (`minecraft:snowy_plains`), badlands (`minecraft:badlands`), volcanic peaks (`terralith:volcanic_peaks`); `/cdevtest under` tiles
 @pass `foreign: none` outside the exempt list; badlands bases are terracotta or red sand, volcanic bases stone or basalt-family (the ring's ids), snowy bases snow or dirt under snow per ring; the exempt structures (ids in `ground_match.js`) keep their own earth and are listed as foreign on purpose
@@ -859,6 +868,7 @@ shell grep -E '\[(earth-fill|meta)\].*dropped [0-9]+ of [0-9]+ parts' logs/lates
 shell python3 -I $INST/tools/scratch_query/efb_judge.py under logs/latest.log --box {RV1-24} {RV3-64} {RV1+104} {RV3+64} --except 'mineshaft|stronghold|ancient_city|buried_treasure|monument|shipwreck|ocean_ruin|underwater|fortress|dungeon|trial|catacomb|cave|ratatouilles|squids|mansion|balloon|sky|meteorite|ship|raft|village_ocean|outpost_ocean|wreckage|sushis|voyager' --fail over6 --fail basewater --fail foreign
 look no meta part over the water (dropped parts are not in the world)
 ## SQ-EFB-16 (switch off)
+@phase long
 @group B, second fresh world (new level-name)
 @commands scratch toml `[worldgen.systems] earthFill = false`, Chunky the SQ-EFB-05 lake square again; `/cdevtest under` tiles
 @pass with earth fill off the probe finds floating or flooded starts the first world canceled (at least a few `over6` > 0 or `base water` > 0); this shows the probe and the system each catch the real cases
@@ -947,6 +957,7 @@ sleep 20
 reject \[earth-fill\] blocks: .*(holds no block|is not a tag id)
 reject \[cdevtest\] verb=tag .*done=0
 ## SQ-EFB-21 (sand base, counted)
+@phase long
 @group B
 @commands a desert square with villages and a river or oasis (`/locate biome minecraft:desert`, `terralith:desert_oasis`), and a badlands square (`/locate structure towns_and_towers:village_badlands`); Chunky r 300 each; `grep -E 'village_desert\|fortified_desert\|village_badlands\|village_wooded_badlands\|pillager_outpost_desert\|pillager_outpost_badlands\|desert_structures\|badlands_start_dungeon\|village_temple' logs/latest.log`; `/cdevtest under` tiles
 @pass their lines show earth counts that include the sandstone / terracotta floor (a T&T badlands village logs hundreds of earth, not 0 to 16; size medium or larger); a house over a river or a cliff now logs over water / air and is pruned or the start canceled; kept ones: `over6 0`, water-below max 2

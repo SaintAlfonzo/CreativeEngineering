@@ -21,6 +21,7 @@ bootexpect \[template-swaps\] \d+ block swap\(s\) in \d+ template\(s\)
 bootreject \[template-swaps\] .*(bad entry|could not read)
 
 ## SQ-ST-02 | the placed village waystones (common and desert) have yellow corundum at [2, 0, 3], not glowstone
+@phase worldgen
 @group A
 @commands `forceload add 700 700 740 740`; `/place template waystones:village/common/waystone 700 -60 700`; `/place template waystones:village/desert/waystone 720 -60 700`; `execute if block 702 -60 703 quark:yellow_corundum`; the same at 722 -60 703; grep the log for `no longer hold`
 @pass both positions hold `quark:yellow_corundum`; no glowstone in either piece; no `no longer hold` warning naming a waystones template

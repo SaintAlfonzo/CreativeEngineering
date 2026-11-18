@@ -93,6 +93,7 @@ look the five player lines: Comfort 5:00, Nourishment 5:00, Instant Breath (air=
 @fails Nothing drops: the CD jar is missing `data/creativedelight/loot_tables`; a block ignored: the tag fill in `oceanic_delight/fishing_net_tags.js`
 @draft reruns DA-01, DA-02, DA-09 to -11 (ocean_delight.md 6): fishing-net catch rows whose steps live in the DA rows of the ocean rows file; run those rows on this boot instead of copying their steps here
 ## SQ-DNR-O-04
+@phase worldgen
 @group normal world
 @commands Kill a salmon with a knife, an elder guardian, a squid; `/loot` a shipwreck supply and a buried treasure chest; fresh warm ocean
 @pass Salmon eggs and elder eye drop as upstream (squid: one squid item, no tentacles); chests can hold salmon or ancient fish eggs; wild sea grape patches generate
@@ -143,6 +144,7 @@ look own boot with oceanic_upstream/oceanic_delight-1.0.1-forge-1.19.2.jar moved
 @fails Missing textures: check that `enders_upstream_assets` is listed; 1.2.2 art changed: a translator path collides with 1.2.2
 @draft needs a copy of a 1.1.03+ world with the placed blocks of the Commands cell as the boot level (none in the scratch kit); the reads are cdevtest state / be at their positions and bootreject on Missing / remap lines
 ## SQ-DNR-E-02
+@phase worldgen
 @group A
 @commands `/loot spawn ~ ~ ~ loot endersdelight:blocks/chorus_crate`; break `chorus_flame_block` age 2 and a fruiting `voidpepper_block`; `/locate structure endersdelight:end_house` in the End
 @pass Crate drops itself; plants drop as in EDL-01 / EDL-02; the End House is located and placed

@@ -785,6 +785,7 @@ reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
 look unheated 1150: tanks water 750 + powergrid:acid 250, no items left, no salt; heated 1142 (water first): record what ran (expected salt from water_salt, flesh and eye left, no acid; not a FAIL); recipes list both acid recipes; mixer speed non-zero
 
 ## SQ-PS15-16 | boot 1 (full pack): upgrade_aquatic in the on list; /place feature upgrade_aquatic:river_tree: oak trunk, mulberry leaves
+@phase worldgen
 @group A
 @commands Upgrade Aquatic guard (D5: the 7 `upgrade_aquatic` worldgen JSONs moved from `kubejs/data/upgrade_aquatic/worldgen` into Creative Worldgen `packs/upgrade_aquatic/`, build 2026-11-15). Boot 1 with the full pack: `grep -n "mod data packs on" logs/latest.log`; `/place feature upgrade_aquatic:river_tree` on river bank grass; locate a river and check mulberry trees and driftwood as before. Boot 2: SQ-DEP-09b extra pair, `upgrade_aquatic` and `alexsabnormalities` removed from a scratch `mods/`
 @pass boot 1: `upgrade_aquatic` in the `on` list; the tree has an oak trunk and mulberry leaves (the override still wins over UA's Java registration); boot 2: `Done (`, no `Unknown registry key ... upgrade_aquatic:river_tree`, no other ERR naming upgrade_aquatic; `upgrade_aquatic` in the `off` list

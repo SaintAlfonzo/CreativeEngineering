@@ -970,6 +970,7 @@ look r1110 and r1111: no config-change line for any file. On 2026-11-13 the owne
 reject \[cdevtest\] .*done=0
 
 ## SQ-WO-35 | biome tag and placement (region census judged after the stop)
+@phase worldgen
 @group B, fresh world, srv `config/mysticaloaktree-common.toml` `tree_rarity = 1`
 @commands `/locate biome` for `minecraft:plains`, `minecraft:forest`, `minecraft:taiga`, `minecraft:desert`, `minecraft:snowy_plains`, `minecraft:ocean`, `minecraft:river`, `minecraft:dripstone_caves`; forceload 5 x 5 chunks at each; `cdevtest tag biome creativeworldgen:wise_oak_biomes` (`execute if biome` is 1.19.3+); `save-all flush`; stop; `python3 tools/scratch_query/region_blocks.py blocks OUT/srv/wo mysticaloaktree:wise_oak --json OUT/wo_blocks.json` (WO-14)
 @pass Tag test passes for plains and forest, fails for the rest; Wise Oak blocks only in biomes listed in `wise_oak_biomes.json`, above 0 in plains or forest

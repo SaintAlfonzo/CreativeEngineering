@@ -116,6 +116,7 @@ expect verb=rdetail id=\S*fertile_soil_from_rich_soil_manual_only serializer=min
 reject \[cdevtest\] .*done=0
 
 ## SQ-FCK-07 | glow lichen in a 9x9-chunk plains box about 3x the control boot (c3_b2.qb, SQ-FCK-07c); no lichen codec error
+@phase worldgen
 @group A
 @commands Fresh world, pregen a 9x9 chunk area around 0,0 in a plains / forest seed; count `minecraft:glow_lichen` blocks (`tools/farm_worldgen_probe.js` block census or WorldEdit `//count`); same on a control boot with the two `kubejs/data/minecraft/worldgen/*/glow_lichen.json` files moved out
 @pass about 3x the control count or more; no `glow_lichen` codec error in latest.log (FL-15)
@@ -150,6 +151,7 @@ reject verb=count .*skipped_columns=[1-9]
 look the shell's summed glow_lichen total here vs SQ-FCK-07c (same seed and box): about 3x or more. The plains spot is the same in both boots (same seed); note both counts
 
 ## SQ-FCK-08 | hamimelon and Mini Cantaloupe in desert and badlands about 2.5x the control (c3_b2.qb, SQ-FCK-08c); rules list the _common features
+@phase worldgen
 @group A
 @commands Pregen 25x25 chunks in `minecraft:desert` and `minecraft:badlands` (two seeds); count `fruitsdelight:hamimelon` and the Mini Cantaloupe block; control with the two `_common` placed features removed from wild_crops.json
 @pass about 2.5x the control count of each (CR-111); log lists the two new features in the hamimelon / cantaloupe rules
@@ -616,6 +618,7 @@ look a climb is 30% per try: 10 tries miss about 3 runs in 100; a rope still the
 @draft perf suite row (C04 scenario, two runs with the config key flipped and a restart between): a perf session, not a qrun batch
 
 ## SQ-AZW-01 | rerun: azalea trees grow quark:azalea_log; logs stay azalea; 4 woods merged into oak; no item_dict Missing (sunflower_stem)
+@phase worldgen
 @group A
 @commands `/place feature minecraft:azalea_tree` x3; bone meal a `minecraft:azalea` on moss; `/give @p quark:azalea_log 4`; grep latest.log `[removedWoods]`
 @pass trunks `quark:azalea_log`; the logs stay azalea; `4 woods merged into oak`, no `[item_dict] Missing`

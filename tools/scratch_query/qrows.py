@@ -14,6 +14,10 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @@jars a b ...              own jars (mod ids) the rows test
     @@sources PATH ...          files the rows were written from (repo paths; a directory covers every file in it)
     @@tier T2                   T1 smoke, T2 feature (default), T3 release gate
+    @@phase NAME                run-order phase of the section's server rows (scratch-test skill step 6): priority, server
+                                (default), worldgen, long; client rows are phase client unless the row says otherwise.
+                                qrun.py plan orders a run priority, server, longwait (a long row a Testing TODO row's
+                                queue column cites), worldgen, client, long
     @@reviewed YYYY-MM-DD     the rows were last matched to their sources that day (default: @@date); qrowlint.py
                               flags a row whose sources changed later (stale)
     @@archived YYYY-MM-DD     every row PASSed on the jars still installed (qrun.py archive): the section is shown in
@@ -24,7 +28,7 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @@table world             the same with World in place of Group (rows that need a particular world; DR-W4)
     ## ID | title             a row (ID exactly as the queue shows it)
     @group / @commands / @pass / @fails TEXT     the table cells (columns 2 to 5; @c6, @c7 for wider tables)
-    @jars / @sources / @tier  override the section defaults
+    @jars / @sources / @tier / @phase  override the section defaults
     @owner true               design-feel row the owner judges in a playtest (never automated)
     @client true              needs a client (default: true for CQ- ids)
     @reviewed YYYY-MM-DD      as @@reviewed, for this row
@@ -65,9 +69,11 @@ CELL_KEYS = ['id', 'group', 'commands', 'pass', 'fails']
 ROW_RE = re.compile(r'^\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-\S')
 CODE_RE = re.compile(r'\b(?:SQ|CQ)-([A-Za-z][A-Za-z0-9]*)(?=-[A-Za-z0-9])')
 BLOCK_BEGIN = re.compile(r'^<!-- generated:status_index begin (rows_(\w+?)_(\d+)) sha1=([0-9a-f]+) -->$')
-SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier', 'archived')
-ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded', 'absent')
+SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier', 'phase', 'archived')
+ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'phase', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded', 'absent')
 TIERS = ('T1', 'T2', 'T3')
+# run order (scratch-test skill step 6); longwait is never written, qplan.py derives it from long + a Testing TODO row
+PHASES = ('priority', 'server', 'longwait', 'worldgen', 'client', 'long')
 
 
 def cells_of(line):
@@ -189,6 +195,8 @@ def effective(sec, row):
 	m.setdefault('tier', 'T2')
 	if 'client' not in m:
 		m['client'] = 'true' if row['id'].startswith('CQ-') else 'false'
+	if not m.get('phase'):
+		m['phase'] = 'client' if m['client'] == 'true' else sec['meta'].get('phase') or 'server'
 	return m
 
 
@@ -490,6 +498,9 @@ def check(argv=()):
 				if kind != 'row':
 					continue
 				m = effective(s, r)
+				if m['phase'] not in PHASES or m['phase'] == 'longwait':
+					fails.append('%s:%d: %s phase %r not in %s' % (os.path.relpath(p, ROOT), r['line'], r['id'], m['phase'],
+																   '/'.join(x for x in PHASES if x != 'longwait')))
 				if m['tier'] not in TIERS:
 					fails.append('%s:%d: %s tier %r not in %s' % (os.path.relpath(p, ROOT), r['line'], r['id'], m['tier'],
 																  '/'.join(TIERS)))
