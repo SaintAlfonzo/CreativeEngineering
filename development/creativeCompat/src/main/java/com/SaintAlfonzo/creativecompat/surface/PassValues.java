@@ -1,16 +1,11 @@
 package com.SaintAlfonzo.creativecompat.surface;
 
 import java.util.EnumMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import com.SaintAlfonzo.creativecompat.CompatConfig;
 
-import net.minecraft.core.Registry;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 
 /**
@@ -31,21 +26,27 @@ public final class PassValues {
 	 * (plan_post_scratch_1115b.md B); 0 = off.
 	 */
 	public final int breakStallTicks;
-	/** Per-block {@code solidBelowFull} of the layer tier, block id to value ({@code [surface.passthrough.layers]}). */
-	public final Map<String, Integer> layerOverrides;
+	/**
+	 * {@code [surface.passthrough.layers] snowWalkThrough} (plan_post_scratch_1115.md G7.4): snow layers below full have
+	 * no collision for living entities, except one in leather boots standing on top and not sneaking ({@link SnowLayers}).
+	 */
+	public final boolean snowWalkThrough;
+	/** {@code [surface.passthrough.layers] snowFullBecomesBlock}: a snow layer that reaches 8 becomes a snow block. */
+	public final boolean snowFullBecomesBlock;
 	private final PassTier.Values[] tiers;
 
 	public PassValues(boolean enabled, int arrowLifeTicks, int arrowLongLifeCap, Map<PassTier, PassTier.Values> tiers) {
-		this(enabled, arrowLifeTicks, arrowLongLifeCap, DEFAULT_STALL_TICKS, DEFAULT_OVERRIDES, tiers);
+		this(enabled, arrowLifeTicks, arrowLongLifeCap, DEFAULT_STALL_TICKS, true, true, tiers);
 	}
 
 	public PassValues(boolean enabled, int arrowLifeTicks, int arrowLongLifeCap, int breakStallTicks,
-					  Map<String, Integer> layerOverrides, Map<PassTier, PassTier.Values> tiers) {
+					  boolean snowWalkThrough, boolean snowFullBecomesBlock, Map<PassTier, PassTier.Values> tiers) {
 		this.enabled = enabled;
 		this.arrowLifeTicks = arrowLifeTicks;
 		this.arrowLongLifeCap = arrowLongLifeCap;
 		this.breakStallTicks = breakStallTicks;
-		this.layerOverrides = Map.copyOf(layerOverrides);
+		this.snowWalkThrough = snowWalkThrough;
+		this.snowFullBecomesBlock = snowFullBecomesBlock;
 		this.tiers = new PassTier.Values[PassTier.values().length];
 		for (PassTier t : PassTier.values()) {
 			PassTier.Values v = tiers.get(t);
@@ -58,54 +59,11 @@ public final class PassValues {
 	}
 
 	public static final int DEFAULT_STALL_TICKS = 3;
-	/** No per-block overrides by default (leaf layers use the passthrough_layers_open tag, owner). */
-	public static final Map<String, Integer> DEFAULT_OVERRIDES = Map.of();
-
-	private final Map<Block, Integer> solidBelowFullOf = new ConcurrentHashMap<>();
-
-	/** The layer tier's {@code solidBelowFull} for this block: its override, else the tier value. */
-	public int solidBelowFull(Block block) {
-		if (layerOverrides.isEmpty()) return tier(PassTier.LAYERS).solidBelowFull();
-		return solidBelowFullOf.computeIfAbsent(block, b -> {
-			ResourceLocation id = Registry.BLOCK.getKey(b);
-			Integer o = id == null ? null : layerOverrides.get(id.toString());
-			return o != null ? o : tier(PassTier.LAYERS).solidBelowFull();
-		});
-	}
-
-	/**
-	 * Parses {@code solidBelowFullOverrides} entries ({@code blockid=value}); a malformed entry is skipped (the
-	 * config validator already refuses them).
-	 */
-	public static Map<String, Integer> parseOverrides(Iterable<? extends String> entries) {
-		Map<String, Integer> out = new LinkedHashMap<>();
-		for (String e : entries) {
-			Map.Entry<String, Integer> kv = parseOverride(e);
-			if (kv != null) out.put(kv.getKey(), kv.getValue());
-		}
-		return out;
-	}
-
-	/** One {@code blockid=value} entry (value 0 to 16), or null when it is not one. */
-	public static Map.Entry<String, Integer> parseOverride(Object entry) {
-		if (!(entry instanceof String s)) return null;
-		int eq = s.indexOf('=');
-		if (eq <= 0) return null;
-		String id = s.substring(0, eq).trim();
-		if (ResourceLocation.tryParse(id) == null || !id.contains(":")) return null;
-		try {
-			int v = Integer.parseInt(s.substring(eq + 1).trim());
-			return v >= 0 && v <= 16 ? Map.entry(id, v) : null;
-		} catch (NumberFormatException ex) {
-			return null;
-		}
-	}
-
 	/** The built-in defaults (what an unloaded config gives). */
 	public static PassValues defaults() {
 		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
 		for (PassTier t : PassTier.values()) m.put(t, t.defaults());
-		return new PassValues(true, 12000, 128, DEFAULT_STALL_TICKS, DEFAULT_OVERRIDES, m);
+		return new PassValues(true, 12000, 128, DEFAULT_STALL_TICKS, true, true, m);
 	}
 
 	// ---- which copy ----
@@ -140,7 +98,7 @@ public final class PassValues {
 		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
 		c.tiers.forEach((t, cfg) -> m.put(t, cfg.values()));
 		return new PassValues(c.enabled.get(), c.arrowLifeTicks.get(), c.arrowLongLifeCap.get(),
-				c.breakStallTicks.get(), parseOverrides(c.solidBelowFullOverrides.get()), m);
+				c.breakStallTicks.get(), c.snowWalkThrough.get(), c.snowFullBecomesBlock.get(), m);
 	}
 
 	/** Received from the server (client side), or null on logout. */
@@ -175,10 +133,11 @@ public final class PassValues {
 
 	/**
 	 * Wire format version, written first (plan_post_scratch_1115b.md C1: the layout changed with the neighbor model
-	 * and the layer rule). A client that reads another version uses the system switched off ({@link #mismatch()})
+	 * and the layer rule; 3 with plan_post_scratch_1115.md G7.4: snow and leaf max slow, the snow switches instead of
+	 * solidBelowFull and its overrides). A client that reads another version uses the system switched off ({@link #mismatch()})
 	 * rather than misreading the table.
 	 */
-	public static final int FORMAT = 2;
+	public static final int FORMAT = 3;
 
 	public void write(FriendlyByteBuf buf) {
 		buf.writeVarInt(FORMAT);
@@ -186,11 +145,8 @@ public final class PassValues {
 		buf.writeVarInt(arrowLifeTicks);
 		buf.writeVarInt(arrowLongLifeCap);
 		buf.writeVarInt(breakStallTicks);
-		buf.writeVarInt(layerOverrides.size());
-		layerOverrides.forEach((id, v) -> {
-			buf.writeUtf(id);
-			buf.writeVarInt(v);
-		});
+		buf.writeBoolean(snowWalkThrough);
+		buf.writeBoolean(snowFullBecomesBlock);
 		buf.writeVarInt(tiers.length);
 		for (PassTier t : PassTier.values()) {
 			buf.writeUtf(t.key());
@@ -211,8 +167,8 @@ public final class PassValues {
 			buf.writeDouble(v.itemStickChance());
 			buf.writeBoolean(v.projectiles());
 			buf.writeBoolean(v.depthStriderPasses());
-			buf.writeDouble(v.layerMaxSlow());
-			buf.writeVarInt(v.solidBelowFull());
+			buf.writeDouble(v.snowMaxSlow());
+			buf.writeDouble(v.leafMaxSlow());
 		}
 	}
 
@@ -230,9 +186,8 @@ public final class PassValues {
 		int life = buf.readVarInt();
 		int cap = buf.readVarInt();
 		int stall = buf.readVarInt();
-		int no = buf.readVarInt();
-		Map<String, Integer> overrides = new LinkedHashMap<>();
-		for (int i = 0; i < no; i++) overrides.put(buf.readUtf(), buf.readVarInt());
+		boolean snowWalk = buf.readBoolean();
+		boolean snowBlock = buf.readBoolean();
 		int n = buf.readVarInt();
 		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
 		for (int i = 0; i < n; i++) {
@@ -241,26 +196,27 @@ public final class PassValues {
 					buf.readEnum(PassTier.Growth.class), buf.readEnum(PassTier.Neighbours.class), buf.readVarInt(),
 					buf.readDouble(), buf.readDouble(), buf.readBoolean(), buf.readEnum(PassTier.Surround.class),
 					buf.readVarInt(), buf.readVarInt(), buf.readBoolean(), buf.readEnum(PassTier.ItemRule.class),
-					buf.readDouble(), buf.readBoolean(), buf.readBoolean(), buf.readDouble(), buf.readVarInt());
+					buf.readDouble(), buf.readBoolean(), buf.readBoolean(), buf.readDouble(), buf.readDouble());
 			for (PassTier t : PassTier.values()) {
 				if (t.key().equals(key)) m.put(t, v);
 			}
 		}
-		return new PassValues(enabled, life, cap, stall, overrides, m);
+		return new PassValues(enabled, life, cap, stall, snowWalk, snowBlock, m);
 	}
 
 	/** What a client uses when the server's values came in another format: the system off (vanilla behavior). */
 	public static PassValues mismatch() {
 		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
 		for (PassTier t : PassTier.values()) m.put(t, t.defaults());
-		return new PassValues(false, 1200, 0, 0, Map.of(), m);
+		return new PassValues(false, 1200, 0, 0, false, false, m);
 	}
 
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof PassValues p)) return false;
 		return enabled == p.enabled && arrowLifeTicks == p.arrowLifeTicks && arrowLongLifeCap == p.arrowLongLifeCap
-				&& breakStallTicks == p.breakStallTicks && layerOverrides.equals(p.layerOverrides)
+				&& breakStallTicks == p.breakStallTicks && snowWalkThrough == p.snowWalkThrough
+				&& snowFullBecomesBlock == p.snowFullBecomesBlock
 				&& java.util.Arrays.equals(tiers, p.tiers);
 	}
 

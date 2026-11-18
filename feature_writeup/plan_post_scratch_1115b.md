@@ -149,17 +149,19 @@ block's own layers property, not assumed to be 8). All layered blocks use one ru
 
 ### D1. Which blocks (found by scanning every blockstate in `mods/` for a layers-style property, 2026-11-15)
 
+Updated 2026-11-17 for F1 and plan_post_scratch_1115.md G7.4 (built; was "in" for every row but the last two).
+
 | Block | Layers | Treatment |
 |---|---|---|
-| Vanilla `minecraft:snow` (SnowLayerBlock; not in a jar, by class) | 1-8 | in |
-| Immersive Weathering leaf piles: oak, spruce, birch, jungle, acacia, dark oak, mangrove, azalea, flowering azalea | 0-8 | in (replaces leaf_pile tier) |
-| Immersive Weathering `azalea_flower_pile` | 0-8 | in |
-| Immersive Weathering `ash_layer_block` | 1-8 | in |
-| Immersive Weathering `sand_layer_block`, `red_sand_layer_block` | 1-8 | in (owner, 2026-11-15) |
-| Twigs `bamboo_leaves` | 1-4 | in; the old writeup said 1-8, the blockstate has 4 layers, so max 4. Own rule: walk-through up to 1 layer below max (D2) |
-| Supplementaries `ash` | 1-8 | in |
-| Supplementaries `fodder` | 1-8 | in (owner, 2026-11-15, if standard height: checked, it is: 2 px per layer, layer 8 full) |
-| Immersive Engineering `sawdust` | 1-9 | in (checked: 1, 3, 5 ... 15 px for layers 1 to 8, layer 9 is the full block, the same 2 px steps as snow; max read from the property, so H differs: 6 at the default) |
+| Vanilla `minecraft:snow` (SnowLayerBlock; not in a jar, by class) | 1-8 | in: walk-through 1 to 7 (no collision, `snowMaxSlow` 0.4 at 7); 8 becomes a snow block; leather boots stand on top (BlockRunner `snow`) |
+| Immersive Weathering leaf piles: oak, spruce, birch, jungle, acacia, dark oak, mangrove, azalea, flowering azalea | 0-8 | in, leaf layer: walk-through at every height, `leafMaxSlow` 0.6 at 8; on top BlockRunner `leaves` |
+| Immersive Weathering `azalea_flower_pile` | 0-8 | in, leaf layer (as above) |
+| Immersive Weathering `ash_layer_block` | 1-8 | out (F1): dust, not walk-through |
+| Immersive Weathering `sand_layer_block`, `red_sand_layer_block` | 1-8 | out (F1): dust, not walk-through (closes the SQ-PS15B-10 finding: collision = outline, never inside) |
+| Twigs `bamboo_leaves` | 1-4 | in, leaf layer: walk-through at every height, 0.6 at 4 (no override); on top BlockRunner `leaves` |
+| Supplementaries `ash` | 1-8 | out (F1): dust |
+| Supplementaries `fodder` | 1-8 | out (F1): soft, not walk-through |
+| Immersive Engineering `sawdust` | 1-9 | out (F1): dust |
 | Create Deco coinstacks (brass, cast iron, copper, gold, iron, netherite, zinc) | 1-8 | out (owner, 2026-11-15) |
 | Control Engineering `logic_cabinet` (height 0-1), Copycats layers (own property) | n/a | out: not stacked-layer terrain |
 
@@ -260,6 +262,13 @@ into a single cobweb no longer resets fall damage (past tense). Run `python3 too
 Owner decisions (scratchpad.md "layers"; foxes and bees stay exempt from every layered block, keep). State: **planned,
 not built.** Order: F1, F2, F3, F4, then update the D table, harness, SQ-PS15B-10/-11, changelog bullets, layers tooltip.
 
+**State F: built 2026-11-17 (lane L1 of plan_exec_1117.md), as superseded by plan_post_scratch_1115.md G7.4.** F1 as
+written; F2 replaced by G7.4 (no `solidBelowFull` at all: snow 1 to 7 walk-through, 8 a snow block; leaf layers every
+height; keys `snowMaxSlow`, `leafMaxSlow`, `snowWalkThrough`, `snowFullBecomesBlock`); F3: G7.4's on-top speeds (snow
+layers in `runner.snow`, leaf piles and bamboo leaves in `runner.leaves`; BlockRunner reads the block under the feet,
+so no double slowdown); F4 done (D table, harness, SQ-PS15B-10/-11, changelog, WTHIT). Creative Compat build/libs,
+not installed; headless ALL 292 OK.
+
 - F1. Tag `creativecompat:passthrough_layers` holds only snow layers, IW leaf piles (azalea flower pile included) and
   Twigs bamboo leaves. Remove IW sand, red sand and ash layers, Supplementaries ash and fodder, IE sawdust (and salt
   layers): dust material, no walk-through, they stay in their BlockRunner tiers. Files: `passthrough_tags.js`, D table.
@@ -294,6 +303,8 @@ Open notes, owner TODO, not built (what each would touch):
 - Layered blocks still in a BlockRunner surface tier: IW sand, red sand and ash layers, Supplementaries ash, IE
   sawdust (`dust` 0.85), Supplementaries fodder (`soft` 0.88), Twigs bamboo leaves (`leaves` 0.78) get both the tier
   speed and the height slowdown at 3 to H layers. Take them out of their surface tiers like snow layers, or keep both?
+  Settled (G7.4, built 2026-11-17): dust layers and fodder left the layer tier; snow and leaf layers keep a surface
+  tier as their on-top speed only.
 - Foxes and bees were exempt from leaf piles; the exemption is per tier, so it now covers snow, sand and ash layers
   too. Keep, or narrow it to leaf piles?
 - E2: `/cdevreload compat` built in Creative Devtools 2026-11-15 (install with Compat).

@@ -594,8 +594,10 @@ public final class CompatConfig {
 			public final ForgeConfigSpec.IntValue arrowLongLifeCap;
 			public final ForgeConfigSpec.IntValue breakStallTicks;
 			public final Map<PassTier, Tier> tiers = new EnumMap<>(PassTier.class);
-			/** {@code [surface.passthrough.layers] solidBelowFullOverrides} (set by the layer tier's table). */
-			public ForgeConfigSpec.ConfigValue<List<? extends String>> solidBelowFullOverrides;
+			/** {@code [surface.passthrough.layers] snowWalkThrough} (set by the layer tier's table). */
+			public ForgeConfigSpec.BooleanValue snowWalkThrough;
+			/** {@code [surface.passthrough.layers] snowFullBecomesBlock} (set by the layer tier's table). */
+			public ForgeConfigSpec.BooleanValue snowFullBecomesBlock;
 
 			private Passthrough(ForgeConfigSpec.Builder b) {
 				b.comment(
@@ -655,8 +657,8 @@ public final class CompatConfig {
 				public final ForgeConfigSpec.DoubleValue itemStickChance;
 				public final ForgeConfigSpec.BooleanValue projectiles;
 				public final ForgeConfigSpec.BooleanValue depthStriderPasses;
-				public final ForgeConfigSpec.DoubleValue layerMaxSlow;
-				public final ForgeConfigSpec.IntValue solidBelowFull;
+				public final ForgeConfigSpec.DoubleValue snowMaxSlow;
+				public final ForgeConfigSpec.DoubleValue leafMaxSlow;
 				private final PassTier.Values defaults;
 
 				private Tier(ForgeConfigSpec.Builder b, PassTier t, Passthrough parent) {
@@ -677,25 +679,26 @@ public final class CompatConfig {
 						items = null;
 						itemStickChance = null;
 						projectiles = null;
-						layerMaxSlow = b.comment(
-								"Walk multiplier at the highest walk-through layer H (5 of 8 at the defaults). One layer",
-								"does not slow; from 2 layers the value falls in equal steps to this one at H.")
-								.defineInRange("layerMaxSlow", d.layerMaxSlow(), 0.05, 1.0);
-						solidBelowFull = b.comment(
-								"Stages below full at which a pile stops being walk-through and acts whole (normal",
-								"collision and speed, no slowdown): 2 = 6, 7 and 8 of 8 act whole, so H = max - 3. 0 = only",
-								"the full block acts whole. The max is read from each block's own layers property. A",
-								"value that leaves H under 2 means the block never slows. Snow layers only; leaf layers never act whole.")
-								.defineInRange("solidBelowFull", d.solidBelowFull(), 0, 16);
+						snowMaxSlow = b.comment(
+								"Walk multiplier inside snow layers at 7 of 8 layers, the highest walk-through height (a full",
+								"layer becomes a snow block). One layer does not slow; from 2 layers the value falls in",
+								"equal steps to this one at 7. Also any other layer block outside the leaf layers.")
+								.defineInRange("snowMaxSlow", d.snowMaxSlow(), 0.05, 1.0);
+						leafMaxSlow = b.comment(
+								"Walk multiplier inside leaf layers (Immersive Weathering leaf piles, Twigs bamboo leaves;",
+								"tag creativecompat:passthrough_layers_open) at full height. Leaf layers are walk-through",
+								"at every height and never act as a solid block.")
+								.defineInRange("leafMaxSlow", d.leafMaxSlow(), 0.05, 1.0);
 						minLayers = b.comment("Piles with fewer layers than this are ignored (one layer never slows).")
 								.defineInRange("minLayers", d.minLayers(), 1, 16);
-						parent.solidBelowFullOverrides = b.comment(
-								"Per-block solidBelowFull, entries 'blockid=value'. Empty by default. Leaf piles and",
-								"bamboo leaves never act whole (tag passthrough_layers_open) and ignore this.")
-								.defineListAllowEmpty(List.of("solidBelowFullOverrides"),
-										() -> PassValues.DEFAULT_OVERRIDES.entrySet().stream()
-												.map(e -> e.getKey() + "=" + e.getValue()).toList(),
-										o -> PassValues.parseOverride(o) != null);
+						parent.snowWalkThrough = b.comment(
+								"Snow layers 1 to 7 have no collision for mobs and players: they walk through at the",
+								"slowdown above. Leather boots (and the mobs vanilla lets walk on powder snow) stand on",
+								"top at the snow surface speed; sneaking sinks in. Off: vanilla snow collision.")
+								.define("snowWalkThrough", true);
+						parent.snowFullBecomesBlock = b.comment(
+								"A snow layer that reaches 8 layers (placed, or found on a random tick) becomes a snow block.")
+								.define("snowFullBecomesBlock", true);
 						fall = b.comment("Multiplier on downward speed each tick inside a walk-through pile, and on fall",
 										"distance per block passed.")
 								.defineInRange("fall", d.fall(), 0.0, 1.0);
@@ -704,8 +707,8 @@ public final class CompatConfig {
 						b.pop();
 						return;
 					}
-					layerMaxSlow = null;
-					solidBelowFull = null;
+					snowMaxSlow = null;
+					leafMaxSlow = null;
 					minLayers = null;
 					walk = b.comment("Horizontal speed multiplier while inside (1.0 = normal).")
 							.defineInRange("walk", d.walk(), 0.05, 1.5);
@@ -756,8 +759,8 @@ public final class CompatConfig {
 							or(surroundedAt, d.surroundedAt()), or(minLayers, d.minLayers()),
 							or(walkOnlyMoving, d.walkOnlyMoving()), or(items, d.items()),
 							or(itemStickChance, d.itemStickChance()), or(projectiles, d.projectiles()),
-							depthStriderPasses.get(), or(layerMaxSlow, d.layerMaxSlow()),
-							or(solidBelowFull, d.solidBelowFull()));
+							depthStriderPasses.get(), or(snowMaxSlow, d.snowMaxSlow()),
+							or(leafMaxSlow, d.leafMaxSlow()));
 				}
 			}
 		}

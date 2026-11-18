@@ -96,7 +96,7 @@ final class PassPhase35Test {
 		CompatConfig.SPEC.correct(cfg);
 		check("migrate: then leaf_pile -> layers and Forge's correction keep minLayers 5 and fill the table",
 				Integer.valueOf(5).equals(cfg.get(List.of("surface", "passthrough", "layers", "minLayers")))
-						&& cfg.contains(List.of("surface", "passthrough", "layers", "layerMaxSlow"))
+						&& cfg.contains(List.of("surface", "passthrough", "layers", "snowMaxSlow"))
 						&& !cfg.contains(List.of("surface", "passthrough", "leaf_pile")) && !cfg.contains("leaf_piles"));
 		for (String bad : List.of("0", "12", "abc")) {
 			r = LeafPileMigration.migrate(OLD.formatted(bad) + NEW_TABLE.formatted("4"));

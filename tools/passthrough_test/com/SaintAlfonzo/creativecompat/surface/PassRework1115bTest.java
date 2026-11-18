@@ -77,6 +77,16 @@ final class PassRework1115bTest {
 		PassRule.Cell t = PassThrough.cellAt(two, new BlockPos(0, 10, 0), WEB, PassValues.defaults());
 		check("A: 2 of 6 is not dense: scales, no reset", !t.dense() && !t.resetFall() && near(t.fall(), 0.85)
 				&& !PassFixesTest.fixedHit(two, 11.2, 9.9));
+		// #8: a drop that enters a ground-level web and lands in the same move (PassThrough.beforeLanding): no state
+		// yet, every cell is new; the cells counted there are remembered, so the same move's TAIL hook adds nothing
+		PassResult landing = new PassResult();
+		BlockPos g = new BlockPos(0, 10, 0);
+		landing.add(g.asLong(), PassThrough.cellAt(lone, g, WEB, PassValues.defaults()), true, true);
+		double before = PassThrough.newCellsFallFactor(null, landing);
+		PassState st = new PassState();
+		st.rememberCells(landing);
+		check("#8: landing in a lone web without a state: x0.85; the TAIL hook then x1.0",
+				near(before, 0.85) && near(PassThrough.newCellsFallFactor(st, landing), 1.0));
 	}
 
 	static void stallB() {
@@ -243,15 +253,25 @@ final class PassRework1115bTest {
 		r = PassConfigMigration.migrate(OLD.formatted("5", "0.3", "6", "false"));
 		t = r.text();
 		check("C1 migrate: an edited denseFrom (5) stays", Integer.valueOf(5).equals(at(t, "surface", "passthrough", "cobweb", "denseFrom")));
-		check("D migrate: edited leaf_pile values carried into layers (minLayers 6, layerMaxSlow 0.3, depth strider off)",
+		check("D migrate: edited leaf_pile values carried into layers (minLayers 6, leafMaxSlow 0.3, depth strider off)",
 				Integer.valueOf(6).equals(at(t, "surface", "passthrough", "layers", "minLayers"))
-						&& Double.valueOf(0.3).equals(at(t, "surface", "passthrough", "layers", "layerMaxSlow"))
+						&& Double.valueOf(0.3).equals(at(t, "surface", "passthrough", "layers", "leafMaxSlow"))
 						&& Boolean.FALSE.equals(at(t, "surface", "passthrough", "layers", "depthStriderPasses")));
 		cfg = new TomlParser().parse(t);
 		CompatConfig.SPEC.correct(cfg);
 		check("D migrate: Forge's correction keeps the carried layers values",
 				Integer.valueOf(6).equals(cfg.get(List.of("surface", "passthrough", "layers", "minLayers")))
-						&& Double.valueOf(0.3).equals(cfg.get(List.of("surface", "passthrough", "layers", "layerMaxSlow"))));
+						&& Double.valueOf(0.3).equals(cfg.get(List.of("surface", "passthrough", "layers", "leafMaxSlow"))));
+		// a 1115b D file (layerMaxSlow, solidBelowFull, overrides): Forge's correction drops the old keys, adds the new
+		cfg = new TomlParser().parse("[surface.passthrough.layers]\n\tlayerMaxSlow = 0.3\n\tsolidBelowFull = 2\n"
+				+ "\tsolidBelowFullOverrides = [\"twigs:bamboo_leaves=0\"]\n\tminLayers = 3\n");
+		CompatConfig.SPEC.correct(cfg);
+		check("G7.4 migrate: Forge drops layerMaxSlow / solidBelowFull / overrides, keeps minLayers 3, adds snowMaxSlow 0.4",
+				!cfg.contains(List.of("surface", "passthrough", "layers", "layerMaxSlow"))
+						&& !cfg.contains(List.of("surface", "passthrough", "layers", "solidBelowFull"))
+						&& !cfg.contains(List.of("surface", "passthrough", "layers", "solidBelowFullOverrides"))
+						&& Integer.valueOf(3).equals(cfg.get(List.of("surface", "passthrough", "layers", "minLayers")))
+						&& Double.valueOf(0.4).equals(cfg.get(List.of("surface", "passthrough", "layers", "snowMaxSlow"))));
 		// after Forge corrects it (surroundedAt present, no leaf_pile), a second run does nothing
 		com.electronwill.nightconfig.toml.TomlWriter wr = new com.electronwill.nightconfig.toml.TomlWriter();
 		java.io.StringWriter sw = new java.io.StringWriter();
@@ -265,13 +285,15 @@ final class PassRework1115bTest {
 	static void syncC() {
 		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
 		for (PassTier t : PassTier.values()) m.put(t, t.defaults());
-		PassValues v = new PassValues(true, 12000, 128, 5, Map.of("twigs:bamboo_leaves", 0, "minecraft:snow", 1), m);
+		m.put(PassTier.LAYERS, PassTier.LAYERS.defaults().layers(0.3, 0.7));
+		PassValues v = new PassValues(true, 12000, 128, 5, false, true, m);
 		FriendlyByteBuf buf = new FriendlyByteBuf(Unpooled.buffer());
 		v.write(buf);
 		PassValues back = PassValues.read(buf);
-		check("C1 sync: format 2 round trip (breakStallTicks, overrides, surroundedAt, layer keys)",
-				back.equals(v) && back.breakStallTicks == 5 && back.layerOverrides.get("minecraft:snow") == 1
-						&& buf.readableBytes() == 0);
+		check("G7.4 sync: format 3 round trip (breakStallTicks, snow switches, snow / leaf max slow)",
+				PassValues.FORMAT == 3 && back.equals(v) && back.breakStallTicks == 5 && !back.snowWalkThrough
+						&& back.snowFullBecomesBlock && near(back.tier(PassTier.LAYERS).snowMaxSlow(), 0.3)
+						&& near(back.tier(PassTier.LAYERS).leafMaxSlow(), 0.7) && buf.readableBytes() == 0);
 		FriendlyByteBuf old = new FriendlyByteBuf(Unpooled.buffer());
 		old.writeVarInt(1);
 		old.writeBoolean(true);
@@ -281,49 +303,59 @@ final class PassRework1115bTest {
 	}
 
 	static void layersD() {
-		double[] want = {1.0, 0.875, 0.75, 0.625, 0.5};
+		// G7.4: snow (closed) H = max - 1, snowMaxSlow 0.4 at 7 of 8
+		double[] snow = {1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4};
 		boolean ok = true;
-		for (int l = 1; l <= 5; l++) ok &= near(PassRule.layerWalk(l, 8, 2, 0.5), want[l - 1]);
-		check("D2: 8 layers, solidBelowFull 2: 1.0, 0.875, 0.75, 0.625, 0.5 for 1 to 5 layers", ok);
-		check("D2: 6, 7, 8 of 8 act whole", Double.isNaN(PassRule.layerWalk(6, 8, 2, 0.5))
-				&& Double.isNaN(PassRule.layerWalk(7, 8, 2, 0.5)) && Double.isNaN(PassRule.layerWalk(8, 8, 2, 0.5)));
-		check("D2: 0.5 reached at H = 5, not before", PassRule.highestWalkThrough(8, 2) == 5
-				&& PassRule.layerWalk(4, 8, 2, 0.5) > 0.5);
-		check("D2: IE sawdust (max 9): H 6, 0.5 at 6, 7 acts whole", PassRule.highestWalkThrough(9, 2) == 6
-				&& near(PassRule.layerWalk(6, 9, 2, 0.5), 0.5) && Double.isNaN(PassRule.layerWalk(7, 9, 2, 0.5)));
-		check("D2: bamboo leaves (max 4, override 0): 2 -> 0.75, 3 -> 0.5, 4 acts whole",
-				near(PassRule.layerWalk(2, 4, 0, 0.5), 0.75) && near(PassRule.layerWalk(3, 4, 0, 0.5), 0.5)
-						&& Double.isNaN(PassRule.layerWalk(4, 4, 0, 0.5)));
-		check("D2: bamboo leaves without the override (H = 1): never slows",
-				Double.isNaN(PassRule.layerWalk(2, 4, 2, 0.5)) && Double.isNaN(PassRule.layerWalk(1, 4, 2, 0.5)));
-		check("D2: solidBelowFull 0: H = 7, 0.5 at 7, 8 acts whole", near(PassRule.layerWalk(7, 8, 0, 0.5), 0.5)
-				&& Double.isNaN(PassRule.layerWalk(8, 8, 0, 0.5)));
-		check("D2: solidBelowFull clamped to max", PassRule.highestWalkThrough(8, 40) == -1);
-		check("D2: layerMaxSlow 0.3 at H", near(PassRule.layerWalk(5, 8, 2, 0.3), 0.3));
+		for (int l = 1; l <= 7; l++) ok &= near(PassRule.layerWalk(l, 8, false, 0.4), snow[l - 1]);
+		check("G7.4: snow 1 to 7 of 8: 1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4", ok);
+		check("G7.4: snow 8 of 8 acts whole (becomes a snow block)", Double.isNaN(PassRule.layerWalk(8, 8, false, 0.4))
+				&& PassRule.highestWalkThrough(8, false) == 7);
+		// leaf layers (open) H = max, leafMaxSlow 0.6 at full
+		check("G7.4: leaf pile 8 of 8 walk-through at 0.6, 2 of 8 at 1 - 0.4 / 7",
+				near(PassRule.layerWalk(8, 8, true, 0.6), 0.6) && near(PassRule.layerWalk(2, 8, true, 0.6), 1.0 - 0.4 / 7.0)
+						&& PassRule.highestWalkThrough(8, true) == 8);
+		check("G7.4: bamboo leaves (max 4, open): 2 -> 0.867, 3 -> 0.733, 4 -> 0.6",
+				near(PassRule.layerWalk(2, 4, true, 0.6), 1.0 - 0.4 / 3.0)
+						&& near(PassRule.layerWalk(3, 4, true, 0.6), 1.0 - 0.8 / 3.0)
+						&& near(PassRule.layerWalk(4, 4, true, 0.6), 0.6));
+		check("G7.4: one layer never slows; H under 2 never slows", near(PassRule.layerWalk(1, 8, true, 0.6), 1.0)
+				&& Double.isNaN(PassRule.layerWalk(1, 2, false, 0.4)) && Double.isNaN(PassRule.layerWalk(2, 2, false, 0.4)));
+		check("G7.4: snowMaxSlow 0.3 at 7", near(PassRule.layerWalk(7, 8, false, 0.3), 0.3));
 
-		// through the block: snow layers in the layer tier
+		// through the block: snow layers in the layer tier (no tags headless: snow is not a leaf layer)
 		PassThrough.seedTier(Blocks.SNOW, PassTier.LAYERS);
 		World w = new World();
 		PassValues d = PassValues.defaults();
 		PassRule.Cell five = PassThrough.cellAt(w, BlockPos.ZERO, Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 5), d);
-		check("D: 5-layer snow -> walk 0.50, fall 1.0, no density", five != null && near(five.walk(), 0.5)
+		check("G7.4: 5-layer snow -> walk 0.60, fall 1.0, no density", five != null && near(five.walk(), 0.6)
 				&& near(five.fall(), 1.0) && !five.dense());
-		check("D: 6-layer snow acts whole (no rule), 1 layer below minLayers 2 (no rule)",
-				PassThrough.cellAt(w, BlockPos.ZERO, Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 6), d) == null
+		PassRule.Cell seven = PassThrough.cellAt(w, BlockPos.ZERO, Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 7), d);
+		check("G7.4: 7-layer snow walk-through at 0.40; 8 acts whole; 1 layer below minLayers 2 (no rule)",
+				seven != null && near(seven.walk(), 0.4)
+						&& PassThrough.cellAt(w, BlockPos.ZERO, Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 8), d) == null
 						&& PassThrough.cellAt(w, BlockPos.ZERO, Blocks.SNOW.defaultBlockState(), d) == null);
-		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
-		for (PassTier t : PassTier.values()) m.put(t, t.defaults());
-		PassValues over = new PassValues(true, 12000, 128, 3, Map.of("minecraft:snow", 0), m);
-		PassRule.Cell seven = PassThrough.cellAt(w, BlockPos.ZERO, Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 7), over);
-		check("D: per-block override minecraft:snow=0 -> 7 layers walk-through at 0.50", seven != null && near(seven.walk(), 0.5)
-				&& over.solidBelowFull(Blocks.SNOW) == 0 && over.solidBelowFull(Blocks.COBWEB) == 2);
-		check("D: override entries parsed: 'twigs:bamboo_leaves=0' ok; 'x=1', 'a:b=99', 'a:b' refused",
-				PassValues.parseOverride("twigs:bamboo_leaves=0") != null && PassValues.parseOverride("x=1") == null
-						&& PassValues.parseOverride("a:b=99") == null && PassValues.parseOverride("a:b") == null);
-		check("D: layers(state) = {5, 8}", java.util.Arrays.equals(PassThrough.layers(
+		check("G7.4: layers(state) = {5, 8}", java.util.Arrays.equals(PassThrough.layers(
 				Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 5)), new int[]{5, 8}));
 		List<String> t = PassThroughFormat.lines(five, PassTier.LAYERS.defaults(), 1.0, true, 5, 8).stream()
 				.map(l -> PassThroughFormat.english(l, false, null, null)).toList();
-		check("D: WTHIT line 'Walk Through: 0.50x (5 of 8 layers)' " + t, t.equals(List.of("Walk Through: 0.50× (5 of 8 layers)")));
+		check("G7.4: WTHIT line 'Walk Through: 0.60x (5 of 8 layers)' " + t, t.equals(List.of("Walk Through: 0.60× (5 of 8 layers)")));
+
+		// snow walk-through and the full layer -> snow block (SnowLayers)
+		Map<PassTier, PassTier.Values> m = new EnumMap<>(PassTier.class);
+		for (PassTier tt : PassTier.values()) m.put(tt, tt.defaults());
+		PassValues off = new PassValues(true, 12000, 128, 3, false, false, m);
+		BlockState s7 = Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 7);
+		BlockState s8 = Blocks.SNOW.defaultBlockState().setValue(SnowLayerBlock.LAYERS, 8);
+		check("G7.4: snow 1 to 7 walk-through, 8 not; switch off or system off: none",
+				SnowLayers.walkThrough(s7, d) && SnowLayers.walkThrough(Blocks.SNOW.defaultBlockState(), d)
+						&& !SnowLayers.walkThrough(s8, d) && !SnowLayers.walkThrough(s7, off)
+						&& !SnowLayers.walkThrough(s7, PassValues.mismatch()));
+		PassThrough.seedTier(Blocks.SNOW, null);
+		check("G7.4: a snow layer outside the layer tier keeps vanilla collision", !SnowLayers.walkThrough(s7, d));
+		PassThrough.seedTier(Blocks.SNOW, PassTier.LAYERS);
+		check("G7.4: snow 8 -> snow block; 7 stays; switch off: 8 stays; snow block unchanged",
+				SnowLayers.fullToBlock(s8, d).is(Blocks.SNOW_BLOCK) && SnowLayers.fullToBlock(s7, d) == s7
+						&& SnowLayers.fullToBlock(s8, off) == s8
+						&& SnowLayers.fullToBlock(Blocks.SNOW_BLOCK.defaultBlockState(), d).is(Blocks.SNOW_BLOCK));
 	}
 }

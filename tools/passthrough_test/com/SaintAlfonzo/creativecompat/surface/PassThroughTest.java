@@ -145,8 +145,8 @@ public final class PassThroughTest {
 		check("cane 0.50", near(PassTier.CANE.defaults().walk(), 0.50));
 		check("bush 0.36", near(PassTier.BUSH.defaults().walk(), 0.36));
 		PassTier.Values lv = PassTier.LAYERS.defaults();
-		check("layers: minLayers 2, layerMaxSlow 0.5, solidBelowFull 2, depth strider, tag passthrough_layers, not inert",
-				lv.minLayers() == 2 && near(lv.layerMaxSlow(), 0.5) && lv.solidBelowFull() == 2 && lv.depthStriderPasses()
+		check("layers: minLayers 2, snowMaxSlow 0.4, leafMaxSlow 0.6, depth strider, tag passthrough_layers, not inert",
+				lv.minLayers() == 2 && near(lv.snowMaxSlow(), 0.4) && near(lv.leafMaxSlow(), 0.6) && lv.depthStriderPasses()
 						&& PassTier.LAYERS.tagPath().equals("passthrough_layers") && PassTier.LAYERS.layered()
 						&& !lv.inert() && PassTier.COBWEB.tagPath().equals("passthrough/cobweb"));
 		check("vine walkOnlyMoving", PassTier.VINE.defaults().walkOnlyMoving() && near(PassTier.VINE.defaults().walk(), 0.75));
@@ -562,7 +562,8 @@ public final class PassThroughTest {
 		CompatConfig.SPEC.setConfig(cfg);
 		for (PassTier t : PassTier.values()) {
 			List<String> keys = t.layered()
-					? List.of("layerMaxSlow", "solidBelowFull", "minLayers", "solidBelowFullOverrides", "fall", "depthStriderPasses")
+					? List.of("snowMaxSlow", "leafMaxSlow", "minLayers", "snowWalkThrough", "snowFullBecomesBlock", "fall",
+					"depthStriderPasses")
 					: List.of("walk", "fall", "growth", "neighbours", "denseFrom", "denseWalk", "denseFall",
 					"denseResetsFall", "surrounded", "surroundedAt", "walkOnlyMoving", "items", "itemStickChance",
 					"projectiles", "depthStriderPasses");
@@ -577,9 +578,12 @@ public final class PassThroughTest {
 				!cfg.contains(List.of("surface", "passthrough", "layers", "walk"))
 						&& !cfg.contains(List.of("surface", "passthrough", "layers", "neighbours"))
 						&& !cfg.contains(List.of("surface", "passthrough", "cobweb", "minLayers")));
-		check("toml breakStallTicks 3, overrides empty",
+		check("toml breakStallTicks 3, snow switches on, no solidBelowFull keys",
 				Integer.valueOf(3).equals(cfg.get(List.of("surface", "passthrough", "breakStallTicks")))
-						&& List.of().equals(cfg.get(List.of("surface", "passthrough", "layers", "solidBelowFullOverrides"))));
+						&& Boolean.TRUE.equals(cfg.get(List.of("surface", "passthrough", "layers", "snowWalkThrough")))
+						&& Boolean.TRUE.equals(cfg.get(List.of("surface", "passthrough", "layers", "snowFullBecomesBlock")))
+						&& !cfg.contains(List.of("surface", "passthrough", "layers", "solidBelowFull"))
+						&& !cfg.contains(List.of("surface", "passthrough", "layers", "solidBelowFullOverrides")));
 		check("toml enabled / arrowLifeTicks / arrowLongLifeCap",
 				Boolean.TRUE.equals(cfg.get(List.of("surface", "passthrough", "enabled")))
 						&& Integer.valueOf(12000).equals(cfg.get(List.of("surface", "passthrough", "arrowLifeTicks")))

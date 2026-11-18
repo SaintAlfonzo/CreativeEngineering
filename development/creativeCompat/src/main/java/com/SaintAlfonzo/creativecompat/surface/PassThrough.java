@@ -81,7 +81,7 @@ public final class PassThrough {
 		static final Map<PassTier, TagKey<Block>> BLOCK = new EnumMap<>(PassTier.class);
 		static final Map<PassTier, TagKey<EntityType<?>>> EXEMPT = new EnumMap<>(PassTier.class);
 		static final TagKey<EntityType<?>> EXEMPT_ALL = entityTag("passthrough_exempt/all");
-		/** Layer blocks that never act whole (leaf piles, bamboo leaves; owner). */
+		/** Leaf layer blocks, walk-through at every height (leaf piles, bamboo leaves; plan_post_scratch_1115.md G7.4). */
 		static final TagKey<Block> LAYERS_OPEN = BlockTags.create(new ResourceLocation(CreativeCompat.NS, "passthrough_layers_open"));
 		static final TagKey<Block> GROWTH_ANY = BlockTags.create(new ResourceLocation(CreativeCompat.NS, "passthrough_growth_any"));
 
@@ -308,16 +308,22 @@ public final class PassThrough {
 	}
 
 	/**
-	 * Walk value inside a layer height block (plan_post_scratch_1115b.md D2), from its own {@code layers} value and
-	 * maximum, the tier's {@code layerMaxSlow} and the block's {@code solidBelowFull} (override or tier value). NaN when
-	 * the block has no layers property, has fewer than {@code minLayers}, or is high enough to act whole.
+	 * Walk value inside a layer height block (plan_post_scratch_1115.md G7.4), from its own {@code layers} value and
+	 * maximum: leaf layers ({@code #creativecompat:passthrough_layers_open}) walk through at every height down to
+	 * {@code leafMaxSlow}, snow and any other layer block up to one layer below full down to {@code snowMaxSlow}. NaN
+	 * when the block has no layers property, has fewer than {@code minLayers}, or is full.
 	 */
 	public static double layerWalk(BlockState state, PassTier.Values v, PassValues values) {
 		int l = PassGrowth.layers(state);
 		int max = PassGrowth.layersMax(state);
 		if (l < 0 || max <= 0 || l < v.minLayers()) return Double.NaN;
-		int below = state.is(Tags.LAYERS_OPEN) ? -1 : values.solidBelowFull(state.getBlock());
-		return PassRule.layerWalk(l, max, below, v.layerMaxSlow());
+		boolean open = openLayers(state);
+		return PassRule.layerWalk(l, max, open, open ? v.leafMaxSlow() : v.snowMaxSlow());
+	}
+
+	/** A leaf layer block (walk-through at every height): {@code #creativecompat:passthrough_layers_open}. */
+	public static boolean openLayers(BlockState state) {
+		return state.is(Tags.LAYERS_OPEN);
 	}
 
 	/** The block's layers and the most it can have, for the WTHIT layer note ({@code {-1, -1}}: none). */
@@ -467,14 +473,32 @@ public final class PassThrough {
 	 * else counted now (several at once from one block read, {@link #countRegion}) and baked.
 	 */
 	private static void counts(Level level, Cand c) {
+		// one chunk lookup per chunk, not two per cell (TODO tooling/scratch-1115-follow-ups-2 #11): an entity's cells
+		// are nearly always in one chunk
+		PassCountData[] data = DATA.get();
+		if (data.length < c.n) DATA.set(data = new PassCountData[c.n * 2]);
+		int minY = level.getMinBuildHeight();
+		int lcx = Integer.MIN_VALUE, lcz = Integer.MIN_VALUE;
+		PassCountData ld = null;
 		int misses = 0;
 		for (int i = 0; i < c.n; i++) {
 			if (c.count[i] >= 0) continue;
-			int k = PassCounts.baked(level, c.pos[i], c.mode[i]);
+			long p = c.pos[i];
+			int x = BlockPos.getX(p), z = BlockPos.getZ(p);
+			if ((x >> 4) != lcx || (z >> 4) != lcz) {
+				lcx = x >> 4;
+				lcz = z >> 4;
+				ld = PassCounts.chunkData(level, x, z);
+			}
+			data[i] = ld;
+			int k = ld == null ? -1 : ld.get(PassCountData.key(x, BlockPos.getY(p), z, minY), c.mode[i].vertical());
 			if (k >= 0) c.count[i] = k;
 			else misses++;
 		}
-		if (misses == 0) return;
+		if (misses == 0) {
+			java.util.Arrays.fill(data, 0, c.n, null);
+			return;
+		}
 		boolean[] miss = MISS.get();
 		if (miss.length < c.n) MISS.set(miss = new boolean[c.n * 2]);
 		for (int i = 0; i < c.n; i++) miss[i] = c.count[i] < 0;
@@ -488,10 +512,16 @@ public final class PassThrough {
 			countRegion(level, c.pos, c.tier, c.mode, c.count, c.n);
 		}
 		for (int i = 0; i < c.n; i++) {
-			if (miss[i]) PassCounts.bake(level, c.pos[i], c.mode[i], c.count[i]);
+			if (miss[i] && data[i] != null) {
+				long p = c.pos[i];
+				data[i].put(PassCountData.key(BlockPos.getX(p), BlockPos.getY(p), BlockPos.getZ(p), minY),
+						c.mode[i].vertical(), c.count[i]);
+			}
 		}
+		java.util.Arrays.fill(data, 0, c.n, null);
 	}
 
+	private static final ThreadLocal<PassCountData[]> DATA = ThreadLocal.withInitial(() -> new PassCountData[8]);
 	private static final ThreadLocal<boolean[]> MISS = ThreadLocal.withInitial(() -> new boolean[8]);
 
 	private static final int REGION_MAX = 4096;
@@ -611,6 +641,33 @@ public final class PassThrough {
 
 	private static final ThreadLocal<PassResult> SCRATCH = ThreadLocal.withInitial(PassResult::new);
 
+	/**
+	 * Before {@code Entity#checkFallDamage} in {@code Entity#move} ({@code mixin/InsideBlocksMixin}; TODO
+	 * {@code tooling/scratch-1115-follow-ups-2 #8}): an entity that lands this move with some fall distance gets the
+	 * fall factor of the cells it entered this tick before the landing deals damage. Without it a drop that enters a
+	 * ground-level web and lands in the same move took full damage: {@link #afterInsideBlocks} runs after the landing,
+	 * when the fall distance is already spent. A dense web with {@code denseResetsFall} or a surrounded one resets it.
+	 * Cells the entity was in last tick were already counted by {@link #afterInsideBlocks} and do not count again; the
+	 * cells counted here are remembered, so the same move's {@link #afterInsideBlocks} skips them.
+	 */
+	public static void beforeLanding(Entity e) {
+		if (!(e instanceof LivingEntity) || !e.isOnGround() || e.fallDistance <= 0.0F) return;
+		PassValues values = PassValues.of(e.level.isClientSide);
+		if (!values.enabled || skipsEntity(e)) return;
+		PassResult r = evaluate(e, values, SCRATCH.get());
+		if (!r.any()) return;
+		if (r.resetFall || r.surrounded) {
+			e.resetFallDistance();
+			return;
+		}
+		PassState st = state(e, true);
+		double f = newCellsFallFactor(st, r);
+		if (f < 1.0) e.fallDistance = (float) (e.fallDistance * f);
+		// counted now: the TAIL hook of this move must not count them again (a server player keeps its fall
+		// distance through the move; ServerPlayer#doCheckFallDamage spends it after)
+		st.rememberCells(r);
+	}
+
 	/** A shared result for a check that needs no per-entity state yet (same thread only, do not keep). */
 	static PassResult scratch() {
 		return SCRATCH.get();
@@ -663,21 +720,22 @@ public final class PassThrough {
 
 	/**
 	 * Fall-distance factor for the cells entered this tick (plan 1.2: once per block passed). Cells side by side on
-	 * one layer are one block passed (the lowest factor of that layer); each new layer multiplies.
+	 * one layer are one block passed (the lowest factor of that layer); each new layer multiplies. No state: every cell
+	 * is new.
 	 */
-	static double newCellsFallFactor(PassState st, PassResult r) {
+	static double newCellsFallFactor(@Nullable PassState st, PassResult r) {
 		double product = 1.0;
 		int n = r.cells();
 		for (int i = 0; i < n; i++) {
 			long pos = r.cellPos(i);
-			if (st.wasIn(pos)) continue;
+			if (st != null && st.wasIn(pos)) continue;
 			int y = BlockPos.getY(pos);
 			boolean seenLayer = false;
 			double layerMin = r.cellRule(i).fall();
 			for (int j = 0; j < n; j++) {
 				if (j == i) continue;
 				long other = r.cellPos(j);
-				if (BlockPos.getY(other) != y || st.wasIn(other)) continue;
+				if (BlockPos.getY(other) != y || (st != null && st.wasIn(other))) continue;
 				if (j < i) { seenLayer = true; break; }
 				layerMin = Math.min(layerMin, r.cellRule(j).fall());
 			}

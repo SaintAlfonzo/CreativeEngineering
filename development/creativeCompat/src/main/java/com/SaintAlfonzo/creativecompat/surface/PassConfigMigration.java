@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
  *       and {@code denseFrom = 6} (the old default) becomes 3 (the new one). Another denseFrom is an edit and stays.</li>
  *   <li>D: the {@code [surface.passthrough.leaf_pile]} table goes; its edited values move into
  *       {@code [surface.passthrough.layers]}: {@code minLayers} (unless the old default 4: the new default 2 applies),
- *       {@code fall}, {@code depthStriderPasses} and {@code walk} as {@code layerMaxSlow} (each only when not its old
+ *       {@code fall}, {@code depthStriderPasses} and {@code walk} as {@code leafMaxSlow} (each only when not its old
  *       default).</li>
  * </ul>
  * Forge then adds the new keys and rewrites the layout when it corrects the file. Plain Java (no game classes) so the
@@ -102,7 +102,7 @@ public final class PassConfigMigration {
 			if (ds != null && ds.equals("false")) carry.put("depthStriderPasses", "false");
 			String walk = value(lines, leaf, end, "walk");
 			if (walk != null && parseDouble(walk, 0.45) != 0.45) {
-				carry.put("layerMaxSlow", String.valueOf(Math.max(0.05, Math.min(1.0, parseDouble(walk, 0.5)))));
+				carry.put("leafMaxSlow", String.valueOf(Math.max(0.05, Math.min(1.0, parseDouble(walk, 0.6)))));
 			}
 			// the table and its own comment block above the header (at the header's indent)
 			int start = leaf;

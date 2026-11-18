@@ -118,6 +118,8 @@ public final class WthitRunSpeed implements IWailaClientPlugin, IBlockComponentP
 		Level level = accessor.getLevel();
 		BlockPos pos = accessor.getPosition();
 		Player player = accessor.getPlayer();
+		// snow layers seen in leather boots: the player stands on top, so the surface Run Speed line (snow tier)
+		if (tier.layered() && player != null && SnowLayers.viewedFromTop(state, player, values)) return false;
 		PassRule.Cell cell = PassThrough.cellAt(level, pos, state, values);
 		// a layer height block too high (acts whole) or too low to walk through: the normal Run Speed line
 		if (cell == null && tier.layered()) return false;

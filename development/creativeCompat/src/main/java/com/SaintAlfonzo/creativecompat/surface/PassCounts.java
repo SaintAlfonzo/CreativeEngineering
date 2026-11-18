@@ -157,24 +157,9 @@ public final class PassCounts {
 		return k;
 	}
 
-	/** The baked count, or -1 (not baked, or no chunk data). */
-	static int baked(Level level, long pos, PassTier.Neighbours mode) {
-		int x = BlockPos.getX(pos), z = BlockPos.getZ(pos);
-		PassCountData d = chunkData(level, x, z);
-		if (d == null) return -1;
-		return d.get(PassCountData.key(x, BlockPos.getY(pos), z, level.getMinBuildHeight()), mode.vertical());
-	}
-
-	/** Bakes a count found another way ({@link PassThrough#countRegion}). */
-	static void bake(Level level, long pos, PassTier.Neighbours mode, int count) {
-		int x = BlockPos.getX(pos), z = BlockPos.getZ(pos);
-		PassCountData d = chunkData(level, x, z);
-		if (d != null) d.put(PassCountData.key(x, BlockPos.getY(pos), z, level.getMinBuildHeight()), mode.vertical(), count);
-	}
-
 	/** The loaded chunk's data at block x / z, or null (not loaded). Never loads a chunk. */
 	@Nullable
-	private static PassCountData chunkData(Level level, int x, int z) {
+	static PassCountData chunkData(Level level, int x, int z) {
 		LevelChunk c = level.getChunkSource().getChunkNow(x >> 4, z >> 4);
 		return c == null ? null : data(c);
 	}

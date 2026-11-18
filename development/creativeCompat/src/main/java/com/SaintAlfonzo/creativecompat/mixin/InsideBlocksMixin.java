@@ -34,7 +34,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
  * {@code Entity#move} ({@code m_6478_}, scratch fixes): at HEAD an item or orb held in a web skips the whole move
  * ({@link PassItems#heldMove}: only its web is checked), and the fast-fall reset clip ({@code Level#clip},
  * {@code m_45547_}) leaves out webs whose fall factor applies ({@link PassThrough#fallResetClip}); {@code require = 0}
- * so another mod's redirect of the same call wins quietly.
+ * so another mod's redirect of the same call wins quietly. Before the landing ({@code checkFallDamage},
+ * {@code m_7840_}) a landing entity gets the fall factor of the cells it entered this move
+ * ({@link PassThrough#beforeLanding}, a lone web at ground level), also {@code require = 0}.
  *
  * <p>Vanilla-class target, matched by SRG name with {@code remap = false} (no refmap).
  */
@@ -74,6 +76,17 @@ public abstract class InsideBlocksMixin implements PassHolder {
 			return PassThrough.fallResetClip((Entity) (Object) this, level, ctx, hit);
 		} catch (Throwable t) {
 			return hit;
+		}
+	}
+
+	@Inject(method = "m_6478_", at = @At(value = "INVOKE",
+			target = "Lnet/minecraft/world/entity/Entity;m_7840_(DZLnet/minecraft/world/level/block/state/BlockState;Lnet/minecraft/core/BlockPos;)V"),
+			require = 0)
+	private void creativecompat$beforeLanding(MoverType type, Vec3 motion, CallbackInfo ci) {
+		try {
+			PassThrough.beforeLanding((Entity) (Object) this);
+		} catch (Throwable ignored) {
+			// fall damage as vanilla
 		}
 	}
 
