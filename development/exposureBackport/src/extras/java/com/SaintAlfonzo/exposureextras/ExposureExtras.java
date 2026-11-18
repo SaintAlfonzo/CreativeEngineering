@@ -26,7 +26,7 @@ public class ExposureExtras {
 
     public static final String ID = "exposureextras";
 
-    /** The mod id before the naming-rule rename. */
+    /** Legacy mod id; its config file is carried over to the current id's. */
     private static final String OLD_ID = "exposure_extras";
     private static final Logger LOGGER = LogUtils.getLogger();
 
