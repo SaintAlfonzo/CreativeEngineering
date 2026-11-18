@@ -33,11 +33,11 @@ import java.util.regex.Pattern;
  * namespace (Vinery with its second id {@code foundation}, Brewin' and Chewin'). What CB adds is KubeJS scripts
  * (startup scripts in {@code kubejs_startup/}, server and client scripts under {@code data/} and
  * {@code assets/creativebrewing/kubejs/}) that call the pack's helpers, {@link CBConfig}, and the potion, effect,
- * potion machine and alcohol Java moved here from Creative Common (creative_brewing.md 4.2 phases 2 and 3).
+ * potion machine and alcohol Java (creative_brewing.md 4.2).
  *
  * Ids: everything CB registers or names (the potion buckets, JEI recipe
- * types,  lang keys, the lingerification list) is under {@code creativebrewing} ({@link #NS}, the mod id) since
- * (plan_cb_publish.md M4; they were {@code creativeengineering:} and {@code kubejs:}). The old ids are in
+ * types, lang keys, the lingerification list) is under {@code creativebrewing} ({@link #NS}, the mod id)
+ * (plan_cb_publish.md M4). The old {@code creativeengineering:} and {@code kubejs:} ids are in
  * {@code data/creativebrewing/swaps/creative_split.json}, so saved effects, buckets and the registry table carry over.
  */
 @Mod(CreativeBrewing.MOD_ID)
@@ -63,7 +63,7 @@ public class CreativeBrewing {
 
 		IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 		modEventBus.addListener(CreativeBrewing::commonSetup);
-		// Better Beacons potions (creativebrewing:long_reach, phantom_bane and variants), from Creative Common.
+		// Better Beacons potions (creativebrewing:long_reach, phantom_bane and variants).
 		com.SaintAlfonzo.creativebrewing.potion.BetterBeaconsPotions.register(modEventBus);
 		// Dispensed potion buckets credit the dispenser's placer (PotionBucketDispenser, potions/potion-buckets #3)
 		MinecraftForge.EVENT_BUS.register(PotionBucketDispenser.class);
@@ -85,7 +85,7 @@ public class CreativeBrewing {
 		event.enqueueWork(PotionBucketDispenser::register);
 	}
 
-	/** Lines of creativeengineering-common.toml that held the sections moved here. */
+	/** Lines of creativeengineering-common.toml that held the sections CB now owns. */
 	private static final Pattern OLD_KEY = Pattern.compile(
 			"^\\s*(\\[(?:alcohol)\\])", Pattern.MULTILINE);
 

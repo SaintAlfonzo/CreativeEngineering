@@ -1,5 +1,5 @@
 // requires: creativebrewing
-// Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:).
+// Recipe ids are creativebrewing:<type>/<suffix>.
 ServerEvents.recipes(e => {
 if (!global.CB) return
 global.CB.recipes(() => {

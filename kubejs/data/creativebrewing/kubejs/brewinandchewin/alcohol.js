@@ -1,8 +1,8 @@
 // requires: creativebrewing
 // requires: brewinandchewin
 // Brewin' and Chewin' (backport) recipe changes: feature_writeup/alcohol.md 8.6 and 8.7. Brewin' dishes are Creative
-// Delight's (kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js). The Vinery rows went to
-// ../vinery/alcohol.js. Recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:). The port's data
+// Delight's (kubejs/data/creativedelight/kubejs/brewinandchewin/recipes.js). The Vinery rows are in
+// ../vinery/alcohol.js. Recipe ids are creativebrewing:<type>/<suffix>. The port's data
 // stays 4.5.0, so each change removes the upstream id and adds the pack recipe here.
 ServerEvents.recipes(e => {
 if (!global.CB || !global.CB.on('brewinandchewin')) return

@@ -10,7 +10,7 @@ var i = global.item
 var R = global.NCH.forPack('creativebrewing')
 
 //######################### Vinery banner #########################
-// Advancements are gone (alcohol.md 10.2), so wine_somelier no longer hands it out. Any banner over a nether star,
+// The pack has no advancements (alcohol.md 10.2), so wine_somelier does not hand it out. Any banner over a nether star,
 // ringed by the 7 most complex wines (alcohol.md 10.5: scored by recipe depth, juice region and ingredients).
 // Wines ignore their age NBT here, so any vintage works. Upstream's smithing recipe (banner + netherite ingot -> 2)
 // still copies it.

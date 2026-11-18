@@ -10,7 +10,7 @@ import java.util.Map;
  * (creative_delight.md 12): a mixin in {@code mixin.<modid>.} applies only when that mod is loaded (and, for a mod in
  * {@link #FOR_VERSION}, only at that version), so CB boots the same without it. Vanilla targets go in
  * {@code mixin.minecraft.} (always loaded). The gate is the shared {@link GatedMixinPlugin}
- * (development/shared/mixinplugin). Potion and effect mixins moved from Creative Common land here (creative_brewing.md 4.2).
+ * (development/shared/mixinplugin). Potion and effect mixins live here (creative_brewing.md 4.2).
  */
 public class CBMixinPlugin extends GatedMixinPlugin {
 
