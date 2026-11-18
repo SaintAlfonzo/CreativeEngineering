@@ -36,6 +36,11 @@ ALLOW = {
 STR_CONST = re.compile(r'\b(?:public\s+|private\s+|protected\s+)?static\s+final\s+String\s+(\w+)\s*=\s*([^;]+);')
 CLASS_DECL = re.compile(r'\b(?:class|interface|enum|record)\s+(\w+)')
 RL_CONST = re.compile(r'\bResourceLocation\s+(\w+)\s*=\s*(new\s+ResourceLocation\s*\([^;]*?\))\s*;', re.S)
+RL_FIELD = re.compile(r'\bResourceLocation\s+(\w+)\s*=\s*([^;]+);', re.S)
+# Mod helper: static ResourceLocation m(String p) { return new ResourceLocation(NS, p); }
+RL_HELPER = re.compile(r'\bstatic\s+ResourceLocation\s+(\w+)\s*\(\s*String\s+(\w+)\s*\)\s*\{\s*'
+	r'return\s+new\s+ResourceLocation\s*\(\s*([^,()]+?)\s*,\s*\2\s*\)\s*;', re.S)
+HELPER_CALL = re.compile(r'(?:[\w.]*\.)?(\w+)\.(\w+)\s*\(\s*"[^"]*"\s*\)$')
 SUBSCRIBER = re.compile(r'@(?:Mod\.)?EventBusSubscriber\s*\(([^)]*)\)', re.S)
 MODID_ARG = re.compile(r'modid\s*=\s*([\w."]+)')
 SET_LINE = re.compile(r'\.setLine\s*\(\s*([\w.]+)\s*,')
@@ -94,9 +99,13 @@ class Consts:
 	def __init__(self, files):
 		self.raw = {}       # "Class.FIELD" -> (expr, defining file)
 		self.by_file = {}   # path -> {FIELD: expr}
+		self.helpers = {}   # "Class.method" -> (namespace expr, defining file)
 		for p in files:
 			text = p.read_text(errors="replace")
 			cls = CLASS_DECL.search(text)
+			if cls:
+				for meth, _arg, ns in RL_HELPER.findall(text):
+					self.helpers[f"{cls.group(1)}.{meth}"] = (ns.strip(), p)
 			local = {}
 			for name, expr in STR_CONST.findall(text):
 				local[name] = expr.strip()
@@ -134,11 +143,41 @@ def rl_namespace(expr, path, text, consts):
 			v = consts.resolve(args[0], path)
 			return v.split(":", 1)[0] if v and ":" in v else None
 		return None
+	m = HELPER_CALL.match(expr)
+	if m:
+		h = consts.helpers.get(f"{m.group(1)}.{m.group(2)}")
+		return consts.resolve(h[0], h[1]) if h else None
+	if not re.fullmatch(r'[\w.]+', expr):
+		return None
 	name = expr.split(".")[-1]
-	for fname, rl in RL_CONST.findall(text):
-		if fname == name:
+	for fname, rl in RL_FIELD.findall(text):
+		if fname == name and rl.strip() != expr:
 			return rl_namespace(rl, path, text, consts)
 	return None
+
+
+def ctor_param_namespace(param, path, text, pos, files, consts):
+	"""A channel name passed into a constructor: resolve the matching argument at every `new Class(...)` call site.
+	Returns the namespace when all call sites agree, else None."""
+	ctors = list(re.finditer(r'\bpublic\s+(\w+)\s*\(([^)]*)\)\s*\{', text[:pos]))
+	if not ctors:
+		return None
+	cls, params = ctors[-1].group(1), [a.split()[-1] for a in split_args(ctors[-1].group(2)) if a.split()]
+	if param not in params:
+		return None
+	idx, found = params.index(param), set()
+	for f in files:
+		ft = f.read_text(errors="replace")
+		for c in re.finditer(r'\bnew\s+' + cls + r'\s*\(', ft):
+			depth, i = 1, c.end()
+			while i < len(ft) and depth:
+				depth += ft[i] == "("
+				depth -= ft[i] == ")"
+				i += 1
+			args = split_args(ft[c.end():i - 1])
+			if idx < len(args):
+				found.add(rl_namespace(args[idx], f, ft, consts))
+	return found.pop() if len(found) == 1 else None
 
 
 def split_args(s):
@@ -263,7 +302,10 @@ def main():
 			arg = m.group(1)
 			if "(" in arg and "ResourceLocation" not in arg:
 				continue  # helper like Mod.id("main"): namespace is the port's own
-			check_ns("channel", rl_namespace(arg, p, text, consts), m.start(), "channel")
+			ns = rl_namespace(arg, p, text, consts)
+			if ns is None and re.fullmatch(r'\w+', arg):
+				ns = ctor_param_namespace(arg, p, text, m.start(), files, consts)
+			check_ns("channel", ns, m.start(), "channel")
 
 		if own and not is_eng:
 			for m in LITERAL_CE.finditer(text):

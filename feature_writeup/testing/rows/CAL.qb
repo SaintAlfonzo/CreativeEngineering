@@ -78,10 +78,11 @@ look day +1 in both cetime lines, /season agrees
 
 ## SQ-CAL-06 | season and crop season tags
 @group A
-@commands `/locate biome #creativeengineering:seasons/arid`; place wheat at x y z, `/execute if block x y z #creativeengineering:crop_seasons/temperate run say temperate`; `/execute if block <glass> #sereneseasons:greenhouse_glass run say glass`
+@commands `/locate biome #creativeengineering:seasons/arid`; place wheat at x y z, `/execute if block x y z #creativecalendar:crop_seasons/temperate run say temperate`; `/execute if block <glass> #sereneseasons:greenhouse_glass run say glass`
 @pass a desert or badlands found; both `say` lines print (tags filled by the moved `sereneseasons/seasontags.js` and `cropseasontags.js`)
 @fails Calendar server script tree missing from the jar, or `// requires: sereneseasons` skipped it
 @from batches/r1101/cs1_split.qb
+@reviewed 2026-11-17
 > locate biome #creativeengineering:seasons/arid
 waitlog (Located|Could not find) 180
 expect (desert|badlands)
@@ -89,7 +90,7 @@ expect (desert|badlands)
 sleep 3
 > setblock 30 -61 30 minecraft:farmland
 > setblock 30 -60 30 minecraft:wheat
-> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate run say CALTAG temperate
+> execute if block 30 -60 30 #creativecalendar:crop_seasons/temperate run say CALTAG temperate
 > setblock 32 -60 30 minecraft:glass
 > execute if block 32 -60 30 #sereneseasons:greenhouse_glass run say CALTAG glass
 expect CALTAG temperate

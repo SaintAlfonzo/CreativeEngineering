@@ -115,14 +115,14 @@ look hand: hover it: "Points to any structure!" and "Not craftable"
 @pass bark textured on every side
 @fails `kubejs/assets/myrtrees/blockstates/`
 @from batches/r1101/c1_client.qb
+@reviewed 2026-11-17
 > tp @s 50 -55 58 180 20
 sleep 3
 > setblock 50 -60 50 myrtrees:rubberwood_log[axis=x]
 > setblock 50 -60 52 myrtrees:filled_rubberwood_log[axis=y]
-> setblock 50 -60 54 myrtrees:rubberwood_wood
 > tp @s 46 -59 52 -90 20
 shot rubberwood
-look bark sides textured (no purple-black checker) on the log, the filled log and the wood block; an "Unknown block" for rubberwood_wood is fine (only the logs changed)
+look bark sides textured (no purple-black checker) on the log and the filled log (myrtrees has no rubberwood wood block)
 
 ## SQ-TL-09 | /cegen lists the generators
 @group A

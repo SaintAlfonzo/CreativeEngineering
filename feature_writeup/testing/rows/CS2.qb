@@ -22,6 +22,7 @@
 @pass Save written; no error
 @fails Old jar set wrong
 @from batches/r1101/cs2_boot1.qb
+@absent creative_delight:treated_stick creative_delight:treated_stick_tomatoes (pre-rename ids, placed by the old-jar boot)
 bootexpect Done \(
 > execute unless entity @e[type=minecraft:marker,tag=cshome] run summon minecraft:marker ~ ~ ~ {Tags:["cshome"]}
 sleep 2

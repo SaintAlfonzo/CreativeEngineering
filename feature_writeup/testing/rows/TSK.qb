@@ -112,11 +112,11 @@ look vine reverted to treated_stick and dropped FD tomato loot; each axe loot = 
 @commands Dandelions on Rich Soil and Fertile Soil, `/gamerule randomTickSpeed 300`
 @pass Fertile Soil matures about twice as fast as Rich Soil (`fertileSoilTicks = 10`, `richSoilTicks = 20`)
 @fails the config file still holds the old values
-@reviewed 2026-11-16
+@reviewed 2026-11-17
 @from batches/r1101/p1_server.qb
 > gamerule randomTickSpeed 0
 > fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
-> fill 20 -61 32 29 -61 32 creativedelight:fertile_soil
+> fill 20 -61 32 29 -61 32 immersive_weathering:mulch_block
 > fill 20 -60 30 29 -60 30 minecraft:dandelion
 > fill 20 -60 32 29 -60 32 minecraft:dandelion
 > cdevtest randomtick 20 -61 30 29 -60 32 5

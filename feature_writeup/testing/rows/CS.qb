@@ -24,10 +24,11 @@ bootreject \[crop-seasons\].*(ERROR|error|Error)
 
 ## SQ-CS-02 | crop season type tags (each block passes its own type only)
 @group server
-@commands `/execute if block` on placed `minecraft:wheat`, `the_dirty_stuff:tobacco_seeds`, `minecraft:attached_melon_stem`, `minecraft:cave_vines` against `#creativeengineering:crop_seasons/temperate`, `warm_dry`, `warm_wet`, `cave`
+@commands `/execute if block` on placed `minecraft:wheat`, `the_dirty_stuff:tobacco_seeds`, `minecraft:attached_melon_stem`, `minecraft:cave_vines` against `#creativecalendar:crop_seasons/temperate`, `warm_dry`, `warm_wet`, `cave`
 @pass each passes for its own type only
 @fails tags not filled (script not run, registry check)
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-17
 > setblock 30 -61 30 minecraft:farmland
 > setblock 30 -60 30 minecraft:wheat
 > setblock 32 -61 30 minecraft:farmland
@@ -35,22 +36,22 @@ bootreject \[crop-seasons\].*(ERROR|error|Error)
 > setblock 34 -60 30 minecraft:attached_melon_stem
 > setblock 36 -50 30 minecraft:stone
 > setblock 36 -51 30 minecraft:cave_vines
-> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate
-> execute if block 30 -60 30 #creativeengineering:crop_seasons/warm_dry
-> execute if block 30 -60 30 #creativeengineering:crop_seasons/warm_wet
-> execute if block 30 -60 30 #creativeengineering:crop_seasons/cave
-> execute if block 32 -60 30 #creativeengineering:crop_seasons/temperate
-> execute if block 32 -60 30 #creativeengineering:crop_seasons/warm_dry
-> execute if block 32 -60 30 #creativeengineering:crop_seasons/warm_wet
-> execute if block 32 -60 30 #creativeengineering:crop_seasons/cave
-> execute if block 34 -60 30 #creativeengineering:crop_seasons/temperate
-> execute if block 34 -60 30 #creativeengineering:crop_seasons/warm_dry
-> execute if block 34 -60 30 #creativeengineering:crop_seasons/warm_wet
-> execute if block 34 -60 30 #creativeengineering:crop_seasons/cave
-> execute if block 36 -51 30 #creativeengineering:crop_seasons/temperate
-> execute if block 36 -51 30 #creativeengineering:crop_seasons/warm_dry
-> execute if block 36 -51 30 #creativeengineering:crop_seasons/warm_wet
-> execute if block 36 -51 30 #creativeengineering:crop_seasons/cave
+> execute if block 30 -60 30 #creativecalendar:crop_seasons/temperate
+> execute if block 30 -60 30 #creativecalendar:crop_seasons/warm_dry
+> execute if block 30 -60 30 #creativecalendar:crop_seasons/warm_wet
+> execute if block 30 -60 30 #creativecalendar:crop_seasons/cave
+> execute if block 32 -60 30 #creativecalendar:crop_seasons/temperate
+> execute if block 32 -60 30 #creativecalendar:crop_seasons/warm_dry
+> execute if block 32 -60 30 #creativecalendar:crop_seasons/warm_wet
+> execute if block 32 -60 30 #creativecalendar:crop_seasons/cave
+> execute if block 34 -60 30 #creativecalendar:crop_seasons/temperate
+> execute if block 34 -60 30 #creativecalendar:crop_seasons/warm_dry
+> execute if block 34 -60 30 #creativecalendar:crop_seasons/warm_wet
+> execute if block 34 -60 30 #creativecalendar:crop_seasons/cave
+> execute if block 36 -51 30 #creativecalendar:crop_seasons/temperate
+> execute if block 36 -51 30 #creativecalendar:crop_seasons/warm_dry
+> execute if block 36 -51 30 #creativecalendar:crop_seasons/warm_wet
+> execute if block 36 -51 30 #creativecalendar:crop_seasons/cave
 count Test passed == 4
 look order of the 16 answers in RES/rows/SQ-CS-02.log: pass on 1 (wheat temperate), 6 (tobacco warm_dry), 11 (melon stem warm_wet), 16 (cave vines cave); "Unknown block" for tobacco = id changed
 
@@ -183,11 +184,12 @@ look every "Test failed" = grew past age 0; an "Unknown block" or property error
 @pass wheat now in `cold`, not `temperate`; put it back
 @fails tag cache not cleared on reload
 @from batches/r1106spf/b1.qb
+@reviewed 2026-11-17
 shell python3 -c "import json;p='kubejs/generation_scripts/worldgen/crop_seasons.json';d=json.load(open(p));b=d['blocks'];b['temperate'].remove('minecraft:wheat');b['cold'].append('minecraft:wheat');json.dump(d,open(p,'w'),indent=2)"
 > reload
 sleep 20
-> execute if block 30 -60 30 #creativeengineering:crop_seasons/cold
-> execute if block 30 -60 30 #creativeengineering:crop_seasons/temperate
+> execute if block 30 -60 30 #creativecalendar:crop_seasons/cold
+> execute if block 30 -60 30 #creativecalendar:crop_seasons/temperate
 shell cp "$INST/kubejs/generation_scripts/worldgen/crop_seasons.json" kubejs/generation_scripts/worldgen/crop_seasons.json
 expect Test passed
 expect Test failed

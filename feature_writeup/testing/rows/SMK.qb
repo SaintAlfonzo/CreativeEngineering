@@ -491,6 +491,7 @@ reject Unknown or incomplete command
 @commands `/cdevtest reg entity ^moremooblooms:moobloom$`; `summon moremooblooms:moobloom 9048 -60 9030 {NoAI:1b}`; `/cdevtest entities 9048 -60 9030 3 type=moremooblooms:moobloom`; kill it
 @pass the entity type is registered (`n=1`); one Moobloom found
 @fails Mooblooms member not nested or its entity not registered
+@absent moremooblooms:moobloom (mod id renamed from more_mooblooms 2026-11-17, after the dumps; drop this line after /dumpall)
 > forceload add 9000 9000 9100 9100
 sleep 5
 > cdevtest reg entity ^moremooblooms:moobloom$

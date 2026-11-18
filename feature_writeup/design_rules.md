@@ -9,12 +9,8 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=5fd4ce17ff16 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 1 open TODO row (Planned 1), 0 Complete.
-
-| Id | Status | Tests | Change |
-|---|---|---|---|
-| `tooling/conventions #10` | Planned | none | id_owner_lint: 8 unresolved ids |
+<!-- generated:status_index begin open_work sha1=82c9ec667fb6 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 0 open TODO rows (none), 1 Complete.
 <!-- generated:status_index end open_work -->
 
 | Part | Status |
@@ -110,7 +106,7 @@ section 9 lists every violation found (ids `V-NN`, for later fixes), and section
 | DR-W8 | New ideas go in `todo/scratchpad.md` first; "translate the scratchpad" turns each note into a TODO row. | Hard | README.md intro; note [todo-layout](agent_notes/todo-layout.md) |
 | DR-W9 | Links inside docs are relative markdown links (`../kubejs/...`). In chat, files and images are clickable workspace links, never bare paths; images are copied into the repo as one small combined sheet. | Memory | memory `links-not-filepaths` |
 | DR-W10 | "Visualize" means markdown tables in the writeup. Never publish claude.ai artifacts. | Hard | CLAUDE.md; memory `no-published-artifacts` |
-| DR-W11 | File names: `snake_case.md`; integration reports `<mod_snake>.md`; release and work plans `plan_<name>.md`; briefs `briefs/<family>_<sub>.md`; run docs `testing/scratch_run_<date>.md`. | Convention | skills `integration-report`, `scratch-test`; README.md |
+| DR-W11 | File names: `snake_case.md`; integration reports `<mod_snake>.md`; release and work plans `plan_<name>.md`; briefs `briefs/<family>_<sub>.md`; run docs `testing/scratch_run_<date>.md`. Exempt: `agent_notes/` keep their kebab-case slugs (indexes link them by those names), the DR-W33 forms (`NN_<name>.scratch.md`, `split/<Letter>_<topic>.md`) and generated `loot_catalog/tables/<namespace>.md`. | Convention | skills `integration-report`, `scratch-test`; README.md |
 | DR-W12 | Integration reports follow one of the two layouts in the `integration-report` skill (full report, jar upgrade); ports follow the model writeups named in the `port` skill (veggies_delight.md, miners_delight.md). The older integration reports are content examples per section, not layout models (2026-11-17, plan_rules_fixes.md V-62c). | Hard | skills `integration-report`, `port` |
 | DR-W13 | Hand-over: name the exact test ids to run in game, any jar still waiting for `mods/`, and whether a changelog bullet was added (or why not). | Hard | CLAUDE.md "Done means" |
 | DR-W14 | Every live check a change needs goes into the scratch queue in the same session; scratch servers boot only when the owner says so. | Hard | CLAUDE.md "Build and verify"; skill `scratch-test` |

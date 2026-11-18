@@ -657,11 +657,13 @@ look the cave_soup_cup stack in slot 4 (meal) has Count 2b
 @superseded SQ-MDL-02 (squid kills are the squid chain's; Miner's squid modifiers are not served)
 ## SQ-MDP-05 | Miner's items exist, hot_cocoa_cup removed
 @group A
-@commands probe: count registry entries in namespace `miners_delight`; `/give @p` each of `hot_cocoa_cup`, `arthropod`, `cooked_arthropod`, `spider_leg`, `baked_spider_leg`, `moss`, `copper_carrot`, `crunchy_bar`, `nutritional_bar`, `golden_nutritional_bar`, `bat_cookie`, `bat_soup_cup`, `insect_stew_cup`, `bone_broth_cup`, `onion_soup_cup`
+@commands probe: count registry entries in namespace `miners_delight`; `/give @p` each of `hot_cocoa_cup`, `arthropod`, `cooked_arthropod`, `spider_leg`, `baked_spider_leg`, `moss`, `copper_carrot`, `crunchy_bar`, `nutritional_bar`, `golden_nutritional_bar`, `bat_cookie`, `bat_soup`, `insect_stew` (the cups are gone since the cup drop: SQ-CUP-02)
 @pass MND-02 server half: 69 items minus `hot_cocoa_cup`, which must not exist (changelog: removed); every other id exists; no `Unknown item` line from `item_dict.js` or the loot/recipe scripts naming `miners_delight`
 @fails `item_dict.js` keys; the port's drop of the cup (`MinersTranslator` or the item registry) **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
 @jars creativedelight creativeworldgen
 @from batches/r1102/b1_main.qb
+@absent miners_delight:hot_cocoa_cup (removed; the row checks /give fails)
+@reviewed 2026-11-17
 > pbot spawn md5 {H1} {H2} {H3-5} minecraft:overworld survival
 > give md5 miners_delight:hot_cocoa_cup
 > give md5 miners_delight:arthropod
@@ -674,12 +676,10 @@ look the cave_soup_cup stack in slot 4 (meal) has Count 2b
 > give md5 miners_delight:nutritional_bar
 > give md5 miners_delight:golden_nutritional_bar
 > give md5 miners_delight:bat_cookie
-> give md5 miners_delight:bat_soup_cup
-> give md5 miners_delight:insect_stew_cup
-> give md5 miners_delight:bone_broth_cup
-> give md5 miners_delight:onion_soup_cup
+> give md5 miners_delight:bat_soup
+> give md5 miners_delight:insect_stew
 expect Unknown item.*miners_delight:hot_cocoa_cup
-count Gave 1 +\[ == 14
+count Gave 1 +\[ == 12
 shell ! grep -A80 "\[item_dict\] Missing/invalid item IDs:" logs/latest.log | grep -m5 "miners_delight"
 shell ! grep -niE "unknown item.*miners_delight" logs/kubejs/startup.log logs/kubejs/server.log
 look registry count in namespace miners_delight: SQ-CDJ-09b (items_by_mod after /dumpall; the row says 69 minus hot_cocoa_cup, the 2026-10-24 dump already had 69 without it: record the number)
@@ -1434,12 +1434,13 @@ expect Test failed
 @@table
 ## SQ-VL-00 | ladder in the villager ladder tag
 @group B
-@commands boot, grep the log for `McaVillagerPathLadders` / `GroundPathNavigationClimb` / `MoveControlVillagerLadder`; `/execute if block <a minecraft:ladder> #creativeengineering:villager_ladders`
+@commands boot, grep the log for `McaVillagerPathLadders` / `GroundPathNavigationClimb` / `MoveControlVillagerLadder`; `/execute if block <a minecraft:ladder> #creativeworldgen:villager_ladders`
 @pass no mixin error; the tag test passes
 @fails MCA method names (`getLandNodeType`, `m_6065_`, `m_7171_`) changed; tag script not loaded
 @from batches/r1031/a1_world.qb passed
+@reviewed 2026-11-17
 > setblock 2 -50 0 minecraft:ladder
-> execute if block 2 -50 0 #creativeengineering:villager_ladders
+> execute if block 2 -50 0 #creativeworldgen:villager_ladders
 > setblock 2 -50 0 minecraft:air
 expect Test passed
 
@@ -4193,17 +4194,18 @@ look rows/SQ-DF-01.shell.txt names delightful 3.4.1-ce-19.2-01 (or the version l
 
 ## SQ-DF-02 | the five 3.8.1 Delightful items exist
 @group A
-@commands `/give @s delightful:cantaloupe_seeds`, `delightful:baklava`, `delightful:fluix_knife`, `delightful:matcha_milkshake`, `delightful:cactus_soup_cup`
+@commands `/give @s delightful:cantaloupe_seeds`, `delightful:baklava`, `delightful:fluix_knife`, `delightful:matcha_milkshake`, `delightful:cactus_soup`
 @pass all 5 exist
 @fails the overlay registers did not run (mixin, or CD member switch off) **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
 @from batches/r1102b/s2_A.qb passed
+@reviewed 2026-11-17
 > pbot spawn df2 {H1} {H2} {H3+96} minecraft:overworld survival
 sleep 2
 > give df2 delightful:cantaloupe_seeds
 > give df2 delightful:baklava
 > give df2 delightful:fluix_knife
 > give df2 delightful:matcha_milkshake
-> give df2 delightful:cactus_soup_cup
+> give df2 delightful:cactus_soup
 count Gave 1 +\[ >= 5
 reject Unknown item
 
