@@ -97,6 +97,7 @@ was waiting finishes on its next tick.
 | Placing | The block below must be a full solid block (`isRedstoneConductor`) or another stem. Placing it on a non-stem while holding **2 or more** builds a 2-high stem and uses both. |
 | Planting | Right-click with seeds, only on the **upper** stem (a stem below it), only while it's empty. Any non-jungle seed works, and **savanna and taiga seeds ignore their bush requirements** on a stem. |
 | Growth | +1 stage on **every** random tick (no chance roll) from 1 to 4, which takes about 3.4 min. Needs a stem below and raw light 9 or more at the stem. |
+| Random ticks when ripe | Since 2026-11-17 (Creative Brewing `PaleStemBlock.isRandomlyTicking`, [random_tick_audit.md](random_tick_audit.md) row 10, `farming/crops #15`) a stage 4 stem with grapes claims no random ticks (nothing left to grow); a stem with leaves still pending keeps them. Harvest or shears lower the stage and it ticks again. No change in play. |
 | Harvest | Main-hand right-click only works at stage 4: drops 3-4 grapes and drops back to stage 2 (about 2.3 min to regrow). |
 | Shears | Right-click: drops grapes (2 at stage 3, 3-4 at stage 4) plus the seed, and empties the stem. The shears lose no durability. |
 | Bone meal | Works at stages 1-3 with a stem below: +1 or +2 stages, capped at 4. Never fails. |
@@ -110,6 +111,7 @@ was waiting finishes on its next tick.
 | Placing | On a wall face. Clicking a top or bottom face faces it toward you. The block behind needs a **full face**. |
 | Planting | Jungle seeds only, on an empty lattice. No lattice below needed. |
 | Growth | Same as the stem: every random tick, raw light 9 or more, stage 1 -> 4. |
+| Random ticks when ripe | Same as the stem since 2026-11-17 (`LegacyLatticeStemBlock.isRandomlyTicking`): stage 4 with grapes claims none; stage 4 with `grape=none` keeps ticking so the hops restore runs. |
 | Harvest | Main-hand right-click with an empty hand or any non-shears, non-seed item at stage 3 or more. Stage 3 drops 2, stage 4 drops 3-4. Resets to **stage 1**. The held item loses 1 durability if it has any. |
 | Shears | Drop the grapes (if 3+) and the seed, empty the lattice, and cost 1 durability. |
 | Bone meal | Since 2026-11-16 (Creative Brewing `LegacyLatticeStemBlock.isValidBonemealTarget`: stage above 0 and not ripe; `farming/crops #52`, R6) any planted lattice takes bone meal, alone or stacked; the stem's "trunk" check (another lattice below) is gone from the lattice and stays on the stem (2.4). A right-click at stage 3 harvests before bone meal is used, so by hand bone meal grows stages 1 and 2; a dispenser also grows stage 3. Before: only with another lattice directly below. |

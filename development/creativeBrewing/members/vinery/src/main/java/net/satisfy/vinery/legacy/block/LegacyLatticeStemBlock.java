@@ -138,6 +138,17 @@ public class LegacyLatticeStemBlock extends StemBlock {
       return (Integer)state.getValue(AGE) > 0 && !this.isMature(state);
    }
 
+   /**
+    * Pack (random_tick_audit.md row 10, farming/crops #15): a ripe lattice (stage 4 with a grape) has nothing left to do
+    * on a random tick, so it stops claiming them. Grape none at stage 4 keeps ticking so restoreHops still runs.
+    * Harvest or shears lower the stage and the lattice ticks again; a lost support schedules its own tick.
+    */
+   @Override
+   public boolean isRandomlyTicking(BlockState state) {
+      if (this.isMature(state) && state.getValue(GRAPE) != GrapeTypeRegistry.NONE) return false;
+      return super.isRandomlyTicking(state);
+   }
+
    public void randomTick(BlockState state, ServerLevel world, BlockPos pos, RandomSource random) {
       int i;
       state = restoreHops(world, pos, state);
