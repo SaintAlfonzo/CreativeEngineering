@@ -574,8 +574,8 @@ public final class CommonConfig {
 					.defineInRange("sluggishMeltFactor", 0.25, 0.0, 1.0);
 			hotMeltTickInterval = b.comment(
 					"Hot places: in an ultra-warm dimension (the Nether) every target but the lava_only ones (blue ice,",
-					"permafrost), and in a creativecommon:melting/hot biome (arid and tropical) ice, snow and frozen decor, take a",
-					"melt tick this often with no source needed, rolling their chance each time. 0 = off."
+					"permafrost), and in a creativecommon:melting/hot biome (arid, dry and tropical) ice, snow and frozen decor, take a",
+					"melt tick this often with no source needed, rolling meltChance each time (the slow tier too). 0 = off."
 			).defineInRange("hotMeltTickInterval", 20, 0, 12000);
 			endContactOnly = b.comment(
 					"The End: every source (salt, fire, magma, lava) melts only the blocks touching it; no reach, no magma",

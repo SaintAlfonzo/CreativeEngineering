@@ -870,6 +870,25 @@ Headless `tools/test_config_watcher.sh` ALL 23 OK. Changelog bullet under Perfor
 - **assumed:** off switch is a JVM argument `-Dcreativecommon.configWatcher=false` (no toml key, so the watcher never
   depends on a file it reloads).
 
+### G13. Owner follow-ups of 2026-11-17 (built)
+
+- Packed ice -> ice and cryosol -> dirt confirmed on every path (heat and hot places use `slowSteps`, salt
+  `saltProducts` then `slowSteps`); no change needed.
+- Packed ice and the slow tier melt rapidly in the Nether: hot ticks roll `meltChance` (0.4) for the slow tier, not
+  `slowMeltChance` (0.05), so a step takes about 2.5 s instead of about 20 s.
+- Dry biomes join the hot group: `#creativecalendar:seasons/dry` (savannas, shrublands) in `#creativecommon:melting/hot`
+  (block_dict `b.t_biome_seasons_dry`). Ice and snow only there, as in arid and tropical.
+- Salt Melt icon back to `salt:item/salt`: `kubejs/assets/salt/textures/item/salt.png` is the pack's recolor of The
+  Salt's salt item (its shape, Vintage Delight's pink palette, `palette_swap.py`), and `salt:salt` is merged into
+  Vintage's Salt and hidden, so the texture is free. Supersedes E3.
+- Light mobs (`#creativecompat:snow_layer_light`): cats, ocelots, spiders and cave spiders, Neapolitan plantain spider,
+  every bird (chicken, parrot, Alex's Mobs bald eagle, blue jay, crow, emu, hummingbird, potoo, roadrunner, seagull,
+  shoebill, soul vulture, sunbird, toucan; ducks and geese), bat, bee, allay, frog, and small modded mobs picked from
+  the entity dump: Alex's banana slug, capuchin monkey, cockroach, crimson mosquito, fly, jerboa, leafcutter ant,
+  mudskipper, platypus, raccoon, rain frog, rattlesnake, skunk, sugar glider, tarantula hawk, terrapin, Tasmanian
+  devil; Quark crab and stoneling; gingerbread man. **assumed:** emu and shoebill count as birds although they are
+  large; monkeys bigger than a capuchin, anteater, maned wolf, kangaroo and gazelle stay heavy.
+
 ## Not decided or not in this pass
 
 Still on the owner list, unchanged: SQ-QN-02 elytra feel (LOOK), CQ-PWG-66 hookup rewrite, SQ-NSM-04 fixture (tooling),

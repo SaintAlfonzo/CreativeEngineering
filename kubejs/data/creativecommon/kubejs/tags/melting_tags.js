@@ -90,8 +90,8 @@ ServerEvents.tags('block', e => {
 })
 
 // Hot biomes (G11): ice and snow there melt on their own melt ticks with no source ([melting] hotMeltTickInterval).
-// The arid and tropical season types of Creative Calendar (kubejs/generation_scripts/worldgen/season_types.json).
+// The arid, dry and tropical season types of Creative Calendar (kubejs/generation_scripts/worldgen/season_types.json).
 ServerEvents.tags('worldgen/biome', e => {
 	if (!global.has('creativecalendar')) return
-	global.tags.add(e, global.blocks.t_melt_hot_biomes, [global.blocks.t_biome_seasons_arid, global.blocks.t_biome_seasons_tropical])
+	global.tags.add(e, global.blocks.t_melt_hot_biomes, [global.blocks.t_biome_seasons_arid, global.blocks.t_biome_seasons_dry, global.blocks.t_biome_seasons_tropical])
 })

@@ -66,7 +66,7 @@
 - **Changed:** Sweet berry bushes and the other berry bushes no longer cancel fall damage [sweet berry bushes did].
 - **Changed:** Snow layers up to 7 have no collision: you walk through them, 0.90x at 2 layers down to 0.40x at 7 [you stood on them, 0.75x from 3 layers].
 - **Changed:** Leather boots stand on top of snow layers at the snow walking speed; sneak to sink in [snow layers were solid for everyone].
-- **Changed:** Small mobs (rabbits, foxes, chickens, cats, most baby animals) stand on top of snow layers; bigger mobs sink in and climb out when they walk into a block.
+- **Changed:** Small mobs (rabbits, foxes, chickens, cats, spiders, birds, most baby animals) stand on top of snow layers; bigger mobs sink in and climb out when they walk into a block.
 - **Changed:** Mobs path over the top of snow layers, or through them once sunk in.
 - **Changed:** A snow layer that reaches 8 layers becomes a Snow Block.
 - **Changed:** Leaf piles and Bamboo Leaves slow walking by height at every height, down to 0.60x at full height [leaf piles 0.45x from 4 layers, Bamboo Leaves about 0.35x from 3]; Bamboo Leaves now slow ocelots, pandas and parrots too.
@@ -232,7 +232,7 @@
 - **New:** Packed Ice and Cryosol melt slowly within 2 blocks of lava or magma, and from salt; torches and other fire do not melt them.
 - **New:** Blue Ice and Permafrost melt only while touching lava, slowly, into Packed Ice and Cryosol.
 - **New:** Snow, Snow Blocks, Powder Snow and Snow Bricks placed in the Nether melt at once.
-- **New:** In the Nether, ice, snow, Packed Ice and Cryosol melt on their own within seconds to minutes; in deserts, badlands, jungles, swamps and warm oceans, ice and snow do.
+- **New:** In the Nether, ice, snow, Packed Ice and Cryosol melt on their own within seconds; in deserts, badlands, savannas, shrublands, jungles, swamps and warm oceans, ice and snow do.
 - **New:** In the End, salt, fire, magma and lava melt only the blocks touching them.
 - **New:** Snowy stone, cobblestone and stone brick blocks melt back into the plain block, keeping their shape and facing. Frosty glass, panes, grass and ferns melt into the plain block, Thin Ice into water, Coarse Snow into gravel; Frost and Icicles melt away.
 - **New:** Snow Bricks melt away like snow, four times slower.
