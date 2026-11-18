@@ -1,7 +1,7 @@
 # Rules violation fix plan (design_rules.md section 9, V-01 to V-62)
 
 Owner brief 2026-11-16 applied to the 2026-11-14 compliance audit in [design_rules.md](design_rules.md) section 9.
-Status: built through P7 on 2026-11-17 (every phase; queue rows written, none run); V-14 left for the owner. Test ids,
+Status: built through P7 on 2026-11-17 (every phase; queue rows written, none run); V-14 closed 2026-11-17 as not applicable (owner, follow-up F1). Test ids,
 pending jars and the open owner items: [Hand-over](#hand-over) at the end; earlier owner items: [Owner list (P1)](#owner-list-p1).
 Code facts below were read 2026-11-16 (paths and lines drift; re-read before editing).
 
@@ -13,7 +13,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 
 ## 0. Decisions
 
-<!-- generated:status_index begin open_work sha1=54b6c038076a -->
+<!-- generated:status_index begin open_work sha1=0204dafe9d84 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 20 open TODO rows (Planned 3, Testing 17), 11 Complete.
 
 | Id | Status | Tests | Change |
@@ -23,7 +23,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 | `tooling/design-rules #4` | Planned |  | Palette test tooltips off before distribution |
 | `conventions #14` | Testing | SQ-DRK-08 | Tilled end stone and sea pickles |
 | `conventions #15` | Testing | SQ-LOOT-02, SQ-RFX-16 to -18 | Global loot modifiers |
-| `conventions #16` | Testing | SQ-LOOT-01 to -06 | Split Creative Loot out of Creative Worldgen |
+| `conventions #16` | Testing | SQ-LOOT-01 to -06, SQ-RFX-30, -32 | Split Creative Loot out of Creative Worldgen |
 | `conventions #17` | Testing | SQ-RFX-01 to -02, -05, -07, -08, -14, -16, -19 | Registration and namespace |
 | `conventions #18` | Testing | SQ-RFX-02 to -03, -11, -19 | Dict keys for literals and the lints |
 | `conventions #20` | Testing | CQ-TT-04, CQ-TT-05 | Test-item palette switch |
@@ -37,7 +37,7 @@ E = Creative Equipment. One jar at a time, never while the game runs. Every func
 | `conventions #29` | Testing | SQ-RFX-28 | patcherMod to Creative Common in text |
 | `conventions #30` | Testing | SQ-RFX-25 to -27, SQ-BM-03, SQ-CAL-09, SQ-EX-01, CQ-RFX-05 | Underscores in own names, touches saves |
 | `conventions #32` | Testing | CQ-TT-01 to -03, SQ-RFX-28 | American spelling and arrows |
-| `tooling/conventions #11` | Testing | SQ-RFX-01 to -29, CQ-RFX-01 to -05 (per section: conventions #13 to #37) | Rules violation fixes (design_rules V-01 to V-62) |
+| `tooling/conventions #11` | Testing | SQ-RFX-01 to -32, CQ-RFX-01 to -05 (per section: conventions #13 to #37) | Rules violation fixes (design_rules V-01 to V-62) |
 <!-- generated:status_index end open_work -->
 
 Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2026-11-16, D20 to D26 from the owner's answers the same day.
@@ -113,7 +113,7 @@ Owner 2026-11-16 unless marked. D7 to D19 come from the review of this plan on 2
 
 Still open (owner):
 
-- **V-14 (from P3b, 2026-11-17)**: the Miner's member cannot move out of `com.sammy.minersdelight` as written: Create
+- **V-14 (from P3b, 2026-11-17; CLOSED 2026-11-17: not applicable, upstream-license member, owner ruling F1 in plan_rules_fixes_followup.md)**: the Miner's member cannot move out of `com.sammy.minersdelight` as written: Create
   Central Kitchen 1.3.11.c has three mixins that target `com.sammy.minersdelight.content.block.copper_pot.CopperPotBlockEntity`
   and `...sticky_basket.StickyBasketBlockEntity` by class name ([miners_delight.md](miners_delight.md) D1). Options:
   keep the package (record V-14 as an exception), or repackage everything except those two classes. Not built.

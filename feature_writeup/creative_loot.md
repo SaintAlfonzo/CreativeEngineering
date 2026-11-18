@@ -11,13 +11,13 @@ packed food, drops) is [loot.md](loot.md); this file is the jar.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=136cfd48874f -->
+<!-- generated:status_index begin open_work sha1=ca442e9150f0 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `conventions #15` | Testing | SQ-LOOT-02, SQ-RFX-16 to -18 | Global loot modifiers |
-| `conventions #16` | Testing | SQ-LOOT-01 to -06 | Split Creative Loot out of Creative Worldgen |
+| `conventions #16` | Testing | SQ-LOOT-01 to -06, SQ-RFX-30, -32 | Split Creative Loot out of Creative Worldgen |
 <!-- generated:status_index end open_work -->
 
 - Requires Creative Common, Creative Compat and LootJS (mandatory, AFTER). Required by Creative Worldgen (since
@@ -114,6 +114,7 @@ swaps and R table rewrites`. `_core/item_merges.js` (Common's item-merge runner)
   the drops engine gained the shapes of section 2b and Creative Delight's own loot rules moved into it (12d). Queue
   SQ-RFX-16 to -18, -21 to -23; SQ-LOOT-02 and SQ-MDL-01 updated.
 
+- 2026-11-17: F5 of plan_rules_fixes_followup.md checked: the loot group tags are `#creativeloot:loot/*` in Common's dict (`i.t_loot_chalk`, `i.t_loot_golden_food`; no key name mentions worldgen), `tags/loottags.js`, the loot rules and the docs; nothing reads `creativeworldgen:loot/` any more except `tools/dump_diff.py --rename` (maps old baselines) and History lines. Queue SQ-RFX-30, -32.
 - 2026-11-17: P3a of plan_rules_fixes.md: LootJS names through `R.logName` (`CL/tuning`, `CL/removals/...`), the loot group tags renamed `#creativeloot:loot/chalk` and `#creativeloot:loot/golden_food` (dict keys unchanged); SQ-RFX-03, -05.
 - 2026-11-17: built (P2b of plan_rules_fixes.md): the jar, the loot tree and `loottags.js` moved from Creative Worldgen,
   `global.CWG.lootRules` -> `global.LOOT.rules` with the four Creative Delight callers, `CWGResources` -> `CLResources`,

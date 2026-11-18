@@ -450,8 +450,6 @@ Paths: `PM` = `development/creativeCommon/src/main/java/com/SaintAlfonzo/creativ
 
 Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 
-- 2026-10-25: Moved from the pack's startup_scripts/compost/compost_values.js 2026-10-25, rows unchanged (development/creativeBrewing/src/main/resources/kubejs_startup/brewinandchewin/compost_values.js)
-- 2026-10-25: Moved from the pack's startup_scripts/compost/compost_values.js 2026-10-25, rows unchanged (development/creativeBrewing/src/main/resources/kubejs_startup/vinery/compost_values.js)
 - 2026-11-01: Moved from the pack's server_scripts/engineering/potion_bottling.js 2026-11-01 (creative_brewing.md 4.5), rows unchanged; recipe ids are creativebrewing:<type>/<suffix> (were creativeengineering:) (kubejs/data/creativebrewing/kubejs/creativebrewing/potion_bottling.js)
 - 2026-11-01: Moved from the pack's client_scripts/potion_buckets.js 2026-11-01 (creative_brewing.md 4.5), unchanged (kubejs/assets/creativebrewing/kubejs/creativebrewing/potion_buckets.js)
 - 2026-11-01: What CB adds is KubeJS scripts (startup scripts in {@code kubejs_startup/}, server and client scripts under {@code data/} and {@code assets/creativebrewing/kubejs/}) that call the pack's helpers, {@link CBConfig}, and the potion, effect, potion machine and alcohol Java moved here from Creative Common on 2026-11-01 (creative_brewing.md 4.2 phases 2 and 3) (development/creativeBrewing/src/main/java/com/SaintAlfonzo/creativebrewing/CreativeBrewing.java)
@@ -487,6 +485,8 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-07: interface APIs (JEI rows and pages, WTHIT lines, potion fluid tooltip) moved to Creative Compat 2026-11-07 (development/creativeBrewing/build.gradle)
 - 2026-11-07: Better Beacons potions (creativebrewing:long_reach, phantom_bane and variants), from Creative Common 2026-11-07 (development/creativeBrewing/src/main/java/com/SaintAlfonzo/creativebrewing/CreativeBrewing.java)
 - 2026-11-07: Creative Engineering's {@code FluidTagInputMixin} (optional, since 2026-11-07) relaxes it to a subset match, so stacks with extra keys also match there; nothing here needs it (development/creativeBrewing/src/main/java/com/SaintAlfonzo/creativebrewing/fluidbrewing/Lingerification.java)
+- 2026-11-17: The pack's startup_scripts/compost/compost_values.js rows for Brewin' and Chewin' and Vinery moved unchanged into the CB jar's kubejs_startup/<mod>/compost_values.js (compost_values files)
+- 2026-11-17: Potion, effect, potion machine and alcohol Java, the Winemaker spawner and the Brewin' kubejs rows moved into Creative Brewing from Creative Common / patcherMod / the pack folder (CBConfig, CreativeBrewing)
 
 
 ## 9. Publishing on CurseForge (license audit 2026-11-01)

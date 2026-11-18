@@ -5,10 +5,10 @@ its Hand-over and Owner list sections hold the items settled here). Short names 
 
 ## 0. Owner rulings (2026-11-17)
 
-1. **F1 Miner's Delight (V-14)**: treated like every other member of the same licence (ARR, donor-jar method). It keeps its
+1. **F1 Miner's Delight (V-14)**: treated like every other member of the same license (ARR, donor-jar method). It keeps its
    upstream package (`com.sammy.minersdelight`, Create Central Kitchen targets it by class name); no repackage. It gets the
    same treatment the other ARR members get in the rule passes, notices and lints (excluded as upstream). V-14 closes as
-   "Not applicable: upstream-licence member".
+   "Not applicable: upstream-license member".
 2. **F2 Comment rewrites**: executed. Every entry of [history_extract_review.md](history_extract_review.md) is read; comments
    that read wrong are fixed or deleted; the 136 undated history-sounding comments are deleted or rewritten in present tense
    (DR-C26), history going to the writeup History.
@@ -37,3 +37,4 @@ both run, agent A does not touch it.
 
 - 2026-11-17: plan written from the owner's rulings after plan_rules_fixes.md P7.
 - 2026-11-17: agent A (queue and docs) done: F3 (7 duplicates merged, `SQ-CNS-` real collision split into `SQ-CSN-`, 30 queue tables standardized), F4 (`SQ-MBX-`, `SQ-RW-00` to `-04`, `SQ-CSN-` recorded in test_prefix_index.md section 2); owner list items 1, 10, 11 closed in plan_rules_fixes.md.
+- 2026-11-17: agent B built F1 (V-14 closed as not applicable; Miner's has no NOTICE file and the same lint scope as golden, roll, largemeals and oceanic, so only the docs changed), F2 (history_extract_review.md resolved, comment-only edits in every jar tree, all builds pass), F5 (checked: the loot tags and dict keys were already Creative Loot's; no reader of `creativeworldgen:loot/` left) and F7 (`flower_tags.js` in Compat; installed `creativecompat-1.0.0.jar`). Queue SQ-RFX-30 to -32.

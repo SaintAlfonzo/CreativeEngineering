@@ -222,6 +222,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-07: Xaero's World Map calls the resolver up to 9 times per map pixel and chunk meshing once per tinted block; on 2026-11-07 that was about 6% of the render thread (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/seasons/SeasonAnswers.java)
 - 2026-11-10: The namespace of every tag this mod keys (its own mod id since 2026-11-10) (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CreativeCalendar.java)
 - 2026-11-10: Tags (season types, snow seasons, crop seasons) are under this jar's own namespace ({@link #NAMESPACE}) since 2026-11-10 (namespace_move.md step 6); they were {@code creativeengineering:} until then (development/creativeCalendar/src/main/java/com/SaintAlfonzo/creativecalendar/CreativeCalendar.java)
+- 2026-11-17: [seasons], [crop_seasons], [time] config, WineTime and the season tags moved into Creative Calendar from Creative Common (CalendarConfig, WineTime)
 
 
 ## 10. License audit (2026-11-04, plan_cb_publish.md Step 2)
