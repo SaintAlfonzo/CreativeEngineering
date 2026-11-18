@@ -18,11 +18,10 @@ import net.minecraft.world.level.block.state.BlockState;
  * zeroes your momentum every tick, so the speed you really get is {@code multiplier * (1 - 0.91 * friction)} of normal
  * ({@link #walkRatio}), about 0.45x the multiplier on a normal floor.
  *
- * <p>Since pass-through phase 5 only untiered blocks are listed: cobwebs, barbed wire, berry bushes,
- * propelplant, leaf piles and bamboo leaves moved to the tiers. Kept: powder snow and bamboo spikes (out of scope), and
+ * <p>Only untiered blocks are listed (cobwebs, barbed wire, berry bushes, propelplant, leaf piles and bamboo leaves
+ * are tiered). Listed: powder snow and bamboo spikes (out of scope), and
  * the plants left outside the system (plan_passthrough.md seventh pass; phase 0 brief 1.2): Floral Enchantment vine
- * bushes, Farmer's Respite wither roots, Neapolitan beanstalk thorns, Upgrade Aquatic pickerelweed. The Vinery taiga
- * grape bush entry was stale (no {@code entityInside} in the installed port) and is gone. Keyed by block class
+ * bushes, Farmer's Respite wither roots, Neapolitan beanstalk thorns, Upgrade Aquatic pickerelweed. Keyed by block class
  * (superclasses count). Multipliers were read from each class's {@code entityInside} bytecode; only the horizontal
  * part is kept and per-entity conditions are not modelled. Display only: nothing here changes movement.
  */

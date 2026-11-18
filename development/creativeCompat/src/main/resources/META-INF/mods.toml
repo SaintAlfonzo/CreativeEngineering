@@ -23,7 +23,7 @@ versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"
 # patcherMod: KubeJS, the shared helpers, the startup script loader and the Common APIs this jar calls (swap/ConfigRename,
-# the WTHIT and JEI holders). Becomes creativecommon at the final swap (creative_split.md 7.6 Q1). The range must exclude
+# the WTHIT and JEI holders). The range must exclude
 # every Creative Common version that still carries the compat classes and mixins (they would apply twice).
 [[dependencies.creativecompat]]
 modId="creativecommon"
@@ -32,7 +32,7 @@ versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
 # The mods the tweaks target: optional, each mixin is gated on its mods (compat/CompatMixinPlugin) and each listener on
-# ModList. No ordering: Creative Common never declared them either, so the load order stays as it was before the carve.
+# ModList. No ordering, so the load order stays the default.
 [[dependencies.creativecompat]]
 modId="handcrafted"
 mandatory=false
@@ -190,7 +190,7 @@ versionRange="*"
 ordering="NONE"
 side="BOTH"
 
-# --- interface carve from Creative Common, --- WTHIT plugins: state lines, holder and pot contents, hives, campfires,
+# --- interface mixins and tooltips, --- WTHIT plugins: state lines, holder and pot contents, hives, campfires,
 # coasters, tanks, remainder buffer, silk touch, sheared, operator blocks, block model icons
 [[dependencies.creativecompat]]
 modId="wthit"
