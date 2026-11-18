@@ -623,6 +623,15 @@ from the fire and lava target path (a `salt_only` flag on `meltable_slow`, or mo
 and keep them out of `extraRandomTickBlocks` (nothing needs to tick them). Current behavior changes: packed and blue
 ice stop melting beside fire and lava (today `slowFireRange` 1, `slowLavaRange` 2). Changelog bullet at build.
 
+### G8. Rulings of 2026-11-17
+
+- G7.1 method (owner, 2026-11-17): **sources find, targets schedule** ((c) without a registry, plus (d)). Heat sources
+  (fire tag, lava, magma) scan their reach on their own tick, as magma does today; each target found schedules its own
+  melt ticks (vanilla scheduled ticks, saved by the game) at a configurable interval until it is gone or out of reach.
+  No per-chunk source set, no new save data. G7.3 builds on it: packed ice, blue ice, cryosol and permafrost leave
+  `extraRandomTickBlocks`. The perf comparison of G7.1 is queued for a later run, not run before the build.
+- Order of execution: [plan_exec_1117.md](plan_exec_1117.md).
+
 ## Not decided or not in this pass
 
 Still on the owner list, unchanged: SQ-QN-02 elytra feel (LOOK), CQ-PWG-66 hookup rewrite, SQ-NSM-04 fixture (tooling),
