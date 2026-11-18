@@ -248,6 +248,16 @@ waiting for the Devtools owner:** `/cdevreload compat` (spec in the round report
 `/cdevreloadclient compat` (client command) call `CompatConfigReload.reload()`; registered only with Compat loaded.
 Rows SQ-TX-18, CQ-TXR-01; SQ-PS15B-12 can run on this build.
 
+**State E3 (investigation of 1115b #10, 2026-11-17).** Cause of "in-place save not picked up": night-config 3.6.7
+`FileWatcher$WatcherThread.run` registers only `ENTRY_MODIFY` and skips every event whose `count() > 1` (bytecode:
+`count; iconst_1; if_icmple`), then parks 1 microsecond per pass (ModernFix's throttler raises it). On Linux the JDK's
+inotify watch service folds a truncate and the write that follows into one `ENTRY_MODIFY` with count 2. A headless test
+(JDK `WatchService` on a temp dir, polled every 1 microsecond and every 1 s) gave count 2 for python `r+` with truncate,
+python `open(..., 'w')` and a shell `>` redirect, at both poll rates; one save of six came through as count 1. So on this
+machine a hand save almost never reloads, and a save by rename (`sed -i`, atomic editors) never does (no CREATE watch).
+Not our code: the readers react correctly when Reloading fires (E1, and `/cdevreload compat` works for every switch).
+Owner decision on the fix route: G11 below (plan_post_scratch_1115.md assumptions round).
+
 ## Writeups and docs to update
 
 plan_passthrough.md (sections 1, 2, 3.1, 4.3, 5, 7, 10: neighbor model, layer model, break fallback, perf numbers),
