@@ -32,6 +32,9 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @superseded TEXT          the row no longer applies (feature removed or replaced; TEXT names the replacement):
                               never planned, not counted as never-run
     @draft TEXT               no runnable steps yet: the next runner writes them here once (the reason in TEXT)
+    @absent ID ... (TEXT)     ids the steps name that the dumps do not list, on purpose: removed ids a negative test
+                              gives, old ids an old-jar boot places, ids registered after the last /dumpall;
+                              qrowlint.py skips them (ids in TEXT count too)
     > cmd / waitlog / ...     the row's steps (qrun format)
 
 Commands:
@@ -63,7 +66,7 @@ ROW_RE = re.compile(r'^\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-\S')
 CODE_RE = re.compile(r'\b(?:SQ|CQ)-([A-Za-z][A-Za-z0-9]*)(?=-[A-Za-z0-9])')
 BLOCK_BEGIN = re.compile(r'^<!-- generated:status_index begin (rows_(\w+?)_(\d+)) sha1=([0-9a-f]+) -->$')
 SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier', 'archived')
-ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded')
+ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded', 'absent')
 TIERS = ('T1', 'T2', 'T3')
 
 

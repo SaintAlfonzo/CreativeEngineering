@@ -32,6 +32,7 @@ look rows/SQ-CUP-01.shell.txt: no Unknown item line from the dicts, stack_sizes 
 @fails `MDItems` / `DelightfulBackportRegistry`
 @from batches/r1103/sB_2.qb passed
 @reviewed 2026-11-16
+@absent miners_delight:copper_cup miners_delight:water_cup miners_delight:milk_cup miners_delight:powder_snow_cup miners_delight:beef_stew_cup miners_delight:onion_soup_cup delightful:cactus_soup_cup (removed; the row checks /give fails)
 > cdevtest reg item ^miners_delight: max=500
 > cdevtest reg item cup$
 > give @p miners_delight:copper_cup

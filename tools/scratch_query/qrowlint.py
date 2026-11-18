@@ -12,7 +12,8 @@ Dead ids: every `namespace:path` in a row's runnable steps is checked against th
 display_names.json registries, tags/*.json, structures and biomes). In a known position (setblock / fill / execute if
 block -> block, give / clear / item id -> item, summon -> entity, effect give -> effect, #tag -> tag) an unknown id is an
 error; elsewhere an unknown id in a namespace the dumps know is a warning. Ids inside quotes of a shell step, regexes
-and comments are skipped.
+and comments are skipped, and so are the ids a row lists in `@absent` (negative tests, old-jar boots, ids newer than
+the dumps).
 
     qrowlint.py [FILE.qb ...] [--changed PATH ...] [--quiet] [--gate] [--write-baseline]
         no files: every rows file. --changed: the session's changed files; a stale row whose source is among them and
@@ -316,12 +317,15 @@ def lint_file(path, changed=None):
 					out.append((sev, r['line'], r['id'], 'stale: %s changed %s, after the row was reviewed (%s); '
 								'rewrite the row and set @reviewed' % (
 									hit[1], time.strftime('%Y-%m-%d', time.localtime(hit[0])), day)))
+			absent = {'%s:%s' % (a.group(2), a.group(3)) for a in ID_RE.finditer(m.get('absent') or '')}
 			n = r['line']
 			for l in r['steps']:
 				n += 1
 				s = l.strip()
 				if s.startswith('> ') or s.startswith(('srv> ', 'cli> ')):
 					for sev, ident, kind2 in dead_ids(s.split('> ', 1)[1]):
+						if ident.lstrip('#') in absent:
+							continue
 						out.append((sev, n, r['id'], 'dead id: %s not in the %s dump' % (
 							ident, 'registry' if kind2 == 'any' else kind2)))
 	return out

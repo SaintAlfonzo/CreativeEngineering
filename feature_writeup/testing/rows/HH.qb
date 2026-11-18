@@ -529,6 +529,7 @@ expect ids sound hearthandharvest:entities\.fart true
 @pass each of the four lines: `Unknown item` (console, no player needed for the parse error)
 @fails A dropped id registered again: `HHItems`
 @from batches/r1108hh/t12_a.qb
+@absent hearthandharvest:corn hearthandharvest:cherry hearthandharvest:cask hearthandharvest:cheese_wheel (dropped ids; the row checks /give fails)
 > give @p hearthandharvest:corn
 > give @p hearthandharvest:cherry
 > give @p hearthandharvest:cask
@@ -11971,3 +11972,16 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass filling gives 1 `rusticdelight:syrup`; draining gives 250 mB `creativedelight:syrup` and a glass bottle
 @fails no route: `R.createBottle` line skipped (`f.syrup` missing)
 @draft runnable steps not written yet; the next runner writes them from @commands
+
+## SQ-HH-1617 | syrup only from sap: no rusticdelight:syrup pot recipe
+@group A
+@commands `/cdevtest rdetail syrup`
+@pass no `rusticdelight:syrup` cooking recipe (nor a Slice and Dice copy); `creativedelight:createmixing/syrup_from_sap` still there; JEI information pages on Syrup and the Sap Bucket are the client half (dishes/ingredients #41)
+@fails `hearthandharvest/recipes.js` remove line
+@reviewed 2026-11-17
+> cdevtest rdetail syrup
+reject id=rusticdelight:syrup\b
+reject id=sliceanddice:cooking/rusticdelight/syrup\b
+reject \[cdevtest\] .*done=0
+> cdevtest rdetail syrup_from_sap
+expect id=creativedelight:createmixing/syrup_from_sap

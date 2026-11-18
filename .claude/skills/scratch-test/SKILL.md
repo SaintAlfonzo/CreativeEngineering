@@ -71,7 +71,9 @@ date", "collect queued tests".
    recently changed writeups and the latest run doc with the queue. Every player-visible bullet has a row;
    `python3 tools/scratch_query/qrowlint.py` lists rows whose sources changed after they were reviewed (rewrite them,
    then set `@reviewed <date>` on the row or `@@reviewed` on the section) and ids gone from the dumps; superseded rows
-   get `@superseded <replacement>`; results stay in the run docs and verdict files, never the rows.
+   get `@superseded <replacement>`; ids a row names on purpose although the dumps lack them (a negative test's
+   removed ids, an old-jar boot's old ids, ids registered after the last `/dumpall`) go in `@absent <ids> (why)`,
+   which `qrowlint.py` skips; results stay in the run docs and verdict files, never the rows.
    Update the "Jars in `mods/` now" line from `ls -l mods/` and the build outputs.
 
 ## Part B: run

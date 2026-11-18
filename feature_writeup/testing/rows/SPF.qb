@@ -227,10 +227,10 @@ look date moved one day; Better Days and Serene Seasons values match [time.day] 
 @pass off-season crop grows slower than in season, wheat as the baseline ratio; SQ-CS pass texts
 @fails `CropSeasonGrowHook` gated off (`sereneseasons`); `crop_seasons.json` not found in the game folder
 @from batches/r1106spf/b1.qb
-@reviewed 2026-11-16
-> execute if block -30 -60 -48 #creativeengineering:crop_seasons/warm_wet
-> execute if block -30 -60 -48 #creativeengineering:crop_seasons/warm_dry
-> execute if block -30 -60 -50 #creativeengineering:crop_seasons/temperate
+@reviewed 2026-11-17
+> execute if block -30 -60 -48 #creativecalendar:crop_seasons/warm_wet
+> execute if block -30 -60 -48 #creativecalendar:crop_seasons/warm_dry
+> execute if block -30 -60 -50 #creativecalendar:crop_seasons/temperate
 > fill -35 -60 -50 -26 -60 -50 minecraft:wheat[age=0]
 > fill -35 -60 -48 -26 -60 -48 vintagedelight:cucumber_crop[age=0]
 > tp qa -30 -60 -45

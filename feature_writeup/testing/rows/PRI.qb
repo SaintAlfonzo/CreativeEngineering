@@ -62,12 +62,12 @@ reject verb=\S+ .*done=0
 @pass the Floral Enchantment large pot recipe is gone; the 31 large pots are not in JEI or the creative tabs; a pot placed with `/setblock` still renders and keeps its plant
 @fails `removed_items.js` (`floral_large_` prefix), `other/flowers.js` recipe removal
 @from batches/r1101/p1_server.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-17
 > cdevtest recipes floral_large
 > cdevtest makes floralench:
-> setblock 60 -60 30 floralench:floral_large_pot_poppy
-> execute if block 60 -60 30 floralench:floral_large_pot_poppy
-look no floral large pot recipe; the setblock works or names the real id (31 ids, prefix floral_large_); JEI / creative tabs hiding is CQ-PRI-02 side
+> setblock 60 -60 30 floralench:large_poppy_pot
+> execute if block 60 -60 30 floralench:large_poppy_pot
+look no floral large pot recipe; the setblock works or names the real id (`floralench:large_<flower>_pot`; dict keys `floral_large_`); JEI / creative tabs hiding is CQ-PRI-02 side
 reject verb=\S+ .*done=0
 
 ## SQ-PRI-03 | JRFTL gone
@@ -147,12 +147,13 @@ look new texture, no magenta checker, edges tile seamlessly (an "Unknown block" 
 @pass "Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Foundation (Creative Brewing)" (renamed 2026-11-04, plan_cb_publish M5); the pack's own mods show no "(Alfonzo)"
 @fails `credit.txt`, `mods.toml` display names, `waila_plugins.json`
 @from batches/r1101/c0_priority.qb
+@reviewed 2026-11-17
 > tp @s 230 -55 8 180 20
 sleep 3
 > setblock 230 -60 0 vinery:wine_press
 > setblock 232 -60 0 brewinandchewin:keg
-> setblock 234 -60 0 foundation:chair
-> setblock 236 -60 0 creativeengineering:copper_coil
+> setblock 234 -60 0 vinery:chair
+> setblock 236 -60 0 creativeengineering:coil_iron
 > tp @s 230.5 -60 2.5 180 30
 shot vinery_press
 > tp @s 232.5 -60 2.5 180 30
@@ -161,7 +162,7 @@ shot keg
 shot foundation_chair
 > tp @s 236.5 -60 2.5 180 30
 shot ce_block
-look WTHIT mod line: "Let's Do Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Creative Brewing" for the Foundation chair, Creative Engineering without "(Alfonzo)". hand: Mods list screen
+look WTHIT mod line: "Let's Do Vinery (Creative Brewing)", "Brewin' & Chewin' (Creative Brewing)", "Let's Do Vinery (Creative Brewing)" for the chair (Foundation registers no block; its name is checked in the mod list), Creative Engineering without "(Alfonzo)". hand: Mods list screen
 
 ## CQ-PRI-04 | flower pots: WTHIT contents and names
 @group client

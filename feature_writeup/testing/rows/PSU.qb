@@ -333,17 +333,18 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 
 ## SQ-PST-02 | grass block in #crop_seasons/grass; dirt and mycelium not
 @group A
-@commands stand on a grass block: `/execute if block ~ ~-1 ~ #creativeengineering:crop_seasons/grass`; same on dirt and on mycelium
+@commands stand on a grass block: `/execute if block ~ ~-1 ~ #creativecalendar:crop_seasons/grass`; same on dirt and on mycelium
 @pass "Test passed" on grass; "Test failed" on dirt and mycelium
 @fails json `grass` list or tag fill
 @jars creativecommon
 @from batches/r1102b/s5_A.qb passed
+@reviewed 2026-11-17
 > setblock {S5H1+20} {S5H2-1} {S5H3+90} minecraft:grass_block
 > setblock {S5H1+21} {S5H2-1} {S5H3+90} minecraft:dirt
 > setblock {S5H1+22} {S5H2-1} {S5H3+90} minecraft:mycelium
-> execute if block {S5H1+20} {S5H2-1} {S5H3+90} #creativeengineering:crop_seasons/grass run say PST02 grass in tag
-> execute unless block {S5H1+21} {S5H2-1} {S5H3+90} #creativeengineering:crop_seasons/grass run say PST02 dirt not in tag
-> execute unless block {S5H1+22} {S5H2-1} {S5H3+90} #creativeengineering:crop_seasons/grass run say PST02 mycelium not in tag
+> execute if block {S5H1+20} {S5H2-1} {S5H3+90} #creativecalendar:crop_seasons/grass run say PST02 grass in tag
+> execute unless block {S5H1+21} {S5H2-1} {S5H3+90} #creativecalendar:crop_seasons/grass run say PST02 dirt not in tag
+> execute unless block {S5H1+22} {S5H2-1} {S5H3+90} #creativecalendar:crop_seasons/grass run say PST02 mycelium not in tag
 expect PST02 grass in tag
 expect PST02 dirt not in tag
 expect PST02 mycelium not in tag
@@ -407,23 +408,24 @@ look the debug lines name IW ModGrassBlock, Botania BotaniaGrassBlock, Vinery Sp
 
 ## SQ-PST-07 | modded grasses in the grass season tag
 @group A
-@commands for each of `immersive_weathering:rooted_grass_block`, `vinery:grass_slab`, `vintagedelight:lush_grass_block`, `botania:vivid_grass`, `immersive_weathering:frosty_grass`, `upgrade_aquatic:beachgrass`: `/setblock ~ ~-1 ~ <id>`, `/execute if block ~ ~-1 ~ #creativeengineering:crop_seasons/grass`
+@commands for each of `immersive_weathering:rooted_grass_block`, `vinery:grass_slab`, `vintagedelight:lush_grass_block`, `botania:vivid_grass`, `immersive_weathering:frosty_grass`, `upgrade_aquatic:beachgrass`: `/setblock ~ ~-1 ~ <id>`, `/execute if block ~ ~-1 ~ #creativecalendar:crop_seasons/grass`
 @pass "Test passed" for the first four; "Test failed" for frosty grass and beachgrass
 @fails json `grass` list or tag fill (cropseasontags.js skips unregistered ids)
 @jars creativecommon
 @from batches/r1102b/s5_A.qb passed
+@reviewed 2026-11-17
 > setblock {S5H1+20} {S5H2-1} {S5H3+92} immersive_weathering:rooted_grass_block
-> execute if block {S5H1+20} {S5H2-1} {S5H3+92} #creativeengineering:crop_seasons/grass run say PST07 immersive_weathering:rooted_grass_block in tag
+> execute if block {S5H1+20} {S5H2-1} {S5H3+92} #creativecalendar:crop_seasons/grass run say PST07 immersive_weathering:rooted_grass_block in tag
 > setblock {S5H1+21} {S5H2-1} {S5H3+92} vinery:grass_slab
-> execute if block {S5H1+21} {S5H2-1} {S5H3+92} #creativeengineering:crop_seasons/grass run say PST07 vinery:grass_slab in tag
+> execute if block {S5H1+21} {S5H2-1} {S5H3+92} #creativecalendar:crop_seasons/grass run say PST07 vinery:grass_slab in tag
 > setblock {S5H1+22} {S5H2-1} {S5H3+92} vintagedelight:lush_grass_block
-> execute if block {S5H1+22} {S5H2-1} {S5H3+92} #creativeengineering:crop_seasons/grass run say PST07 vintagedelight:lush_grass_block in tag
+> execute if block {S5H1+22} {S5H2-1} {S5H3+92} #creativecalendar:crop_seasons/grass run say PST07 vintagedelight:lush_grass_block in tag
 > setblock {S5H1+23} {S5H2-1} {S5H3+92} botania:vivid_grass
-> execute if block {S5H1+23} {S5H2-1} {S5H3+92} #creativeengineering:crop_seasons/grass run say PST07 botania:vivid_grass in tag
+> execute if block {S5H1+23} {S5H2-1} {S5H3+92} #creativecalendar:crop_seasons/grass run say PST07 botania:vivid_grass in tag
 > setblock {S5H1+24} {S5H2-1} {S5H3+92} immersive_weathering:frosty_grass
-> execute unless block {S5H1+24} {S5H2-1} {S5H3+92} #creativeengineering:crop_seasons/grass run say PST07 immersive_weathering:frosty_grass not in tag
+> execute unless block {S5H1+24} {S5H2-1} {S5H3+92} #creativecalendar:crop_seasons/grass run say PST07 immersive_weathering:frosty_grass not in tag
 > setblock {S5H1+25} {S5H2-1} {S5H3+92} upgrade_aquatic:beachgrass
-> execute unless block {S5H1+25} {S5H2-1} {S5H3+92} #creativeengineering:crop_seasons/grass run say PST07 upgrade_aquatic:beachgrass not in tag
+> execute unless block {S5H1+25} {S5H2-1} {S5H3+92} #creativecalendar:crop_seasons/grass run say PST07 upgrade_aquatic:beachgrass not in tag
 count PST07 \S+ in tag == 4
 count PST07 \S+ not in tag == 2
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|s5)\] (error|no player)|\[cdevtest\] .*(done=0|error=))
@@ -1647,7 +1649,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails vines untouched: own_pick tag missing (`/reload`, check `#creativeengineering:crops/own_pick`); only the lower two levels: climb not running
 @jars creativecalendar creativedelight
 @from batches/r1103/p2_R2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-17
 > kill @e[type=minecraft:item]
 > kill @e[type=alexsmobs:crow]
 > kill @e[type=minecraft:slime]
@@ -1663,9 +1665,9 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 > setblock {S5H1+22} {S5H2} {S5H3+60} farmersdelight:tomatoes[age=3]
 > setblock {S5H1+22} {S5H2+1} {S5H3+60} creativedelight:treated_stick_tomatoes[age=3]
 > setblock {S5H1+22} {S5H2+2} {S5H3+60} creativedelight:treated_stick_tomatoes[age=3]
-> pbot spawn s5tm {S5H1+21} {S5H2} {S5H3+58}
+> pbot spawn s5tm {S5H1+21} {S5H2} {S5H3+58} minecraft:overworld survival
 sleep 2
-> clear s5tm minecraft:overworld survival
+> clear s5tm
 > pbot hold s5tm minecraft:iron_hoe
 > pbot use s5tm {S5H1+21} {S5H2} {S5H3+60} up
 > tp s5tm {S5H1+21} {S5H2} {S5H3+54}
@@ -2347,7 +2349,7 @@ reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect 
 @fails `CookwareHandling` not registered; fake player `isShiftKeyDown` false (set the pose); `getInventory` reflection fails (contents then drop from onRemove instead); LeftClickBlock not fired for fake players: punch half is CQ-FCB-04
 @jars creativecommon creativedelight
 @from batches/r1102b/s5_A.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-17
 > cdevtest tag block creativedelight:cookware_pickup
 waitlog \[cdevtest\] verb=tag kind=block 30
 expect \[cdevtest\] verb=tag kind=block tag=creativedelight:cookware_pickup n=4 ids=(?=.*farmersdelight:cooking_pot)(?=.*miners_delight:copper_pot)(?=.*farmersrespite:kettle)(?=.*farmersdelight:skillet)
@@ -2368,7 +2370,7 @@ sleep 2
 > item replace entity s5ck weapon.mainhand with minecraft:air
 > setblock {S5H1+64} {S5H2} {S5H3+30} minecraft:campfire[lit=true]
 > setblock {S5H1+64} {S5H2+1} {S5H3+30} miners_delight:copper_pot
-> data merge block {S5H1+64} {S5H2+1} {S5H3+30} {Inventory:{Size:8,Items:[{Slot:0b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"miners_delight:cave_soup_cup",Count:1b}]}}
+> data merge block {S5H1+64} {S5H2+1} {S5H3+30} {Inventory:{Size:8,Items:[{Slot:0b,id:"minecraft:carrot",Count:1b},{Slot:4b,id:"miners_delight:cave_soup",Count:1b}]}}
 > pbot use s5ck {S5H1+64} {S5H2+1} {S5H3+30} up
 sleep 1
 > execute if block {S5H1+64} {S5H2+1} {S5H3+30} minecraft:air run say FCB08 copper_pot picked up
@@ -2400,7 +2402,7 @@ sleep 2
 > item replace entity s5ck weapon.mainhand with minecraft:air
 count FCB08 (cooking_pot|copper_pot|kettle|skillet) picked up >= 4
 expect s5ck has the following entity data: \{.*id: "farmersdelight:cooking_pot".*beef_stew
-expect s5ck has the following entity data: \{.*id: "miners_delight:copper_pot".*cave_soup_cup
+expect s5ck has the following entity data: \{.*id: "miners_delight:copper_pot".*cave_soup\b
 expect s5ck has the following entity data: \{.*id: "farmersrespite:kettle"
 expect s5ck has the following entity data: \{.*id: "farmersdelight:skillet"
 count \[cdevtest\] verb=items items=\S*\bminecraft:carrot:\d+ >= 2

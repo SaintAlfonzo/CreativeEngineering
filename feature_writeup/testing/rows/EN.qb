@@ -39,7 +39,8 @@ look librarians offer enchanted books; Offers reset at a level change may need a
 @pass Each drops itself
 @fails
 @from batches/r1101/w2_worldgen.qb
-> summon lightmanscurrency:cashier 6 101 3 {Tags:["en2"]}
+@reviewed 2026-11-17
+> summon minecraft:villager 6 101 3 {Tags:["en2"],VillagerData:{profession:"lightmanscurrency:cashier",level:1,type:"minecraft:plains"}}
 sleep 2
 > execute as @e[tag=en2] run data get entity @s
 reject nock_enough_arrows:(stockpile|recovery|cycle)

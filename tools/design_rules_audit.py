@@ -443,10 +443,18 @@ if wants('docnames'):
 	# agent_notes/ keep the hyphenated ids they had as memory files (CLAUDE.md links them by those names).
 	hits = [(p, 0, Path(p).name) for p in FILES if p.startswith('feature_writeup/') and p.endswith('.md')
 			and not p.startswith('feature_writeup/agent_notes/')
-			and not re.fullmatch(r'[a-z0-9_]+(_\d{4}-\d\d-\d\d[a-z]?)?(\.[0-9]+)*\.md|README\.md|TODO\.md|RUNNER\.md|[A-Z_]+\.md',
+			and not re.fullmatch(r'[a-z0-9_]+(_\d{4}-\d\d-\d\d[a-z]?)?(\.[0-9]+)*\.md|README\.md|TODO(_history)?\.md|RUNNER\.md|[A-Z_]+\.md',
 								 Path(p).name)
 			and not (p.startswith('feature_writeup/briefs/')        # briefs/<family>_<sub>.md, sub keeps its hyphens
-					 and re.fullmatch(r'[a-z0-9]+_[a-z0-9-]+\.md', Path(p).name))]
+					 and re.fullmatch(r'[a-z0-9]+_[a-z0-9-]+\.md', Path(p).name))
+			# DR-W33 forms: structure logs NN_<name>.scratch.md, split notes split/<Letter>_<topic>.md
+			and not (p.startswith('feature_writeup/testing/structures/')
+					 and re.fullmatch(r'\d\d_[a-z0-9_]+\.scratch\.md', Path(p).name))
+			and not (p.startswith('feature_writeup/split/')
+					 and re.fullmatch(r'[A-Z]_[a-z0-9_]+\.md', Path(p).name))
+			# loot_breakdown.py output: one file per mod namespace, named by the namespace as written
+			and not (p.startswith('feature_writeup/loot_catalog/tables/')
+					 and re.fullmatch(r'[a-z0-9_.-]+\.md', Path(p).name))]
 	report('DR-W11', 'writeup file names that are not snake_case', hits, 'files', top=20)
 
 if '--fail' in sys.argv and TRADE_HITS:

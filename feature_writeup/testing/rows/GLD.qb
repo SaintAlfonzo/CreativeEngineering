@@ -792,6 +792,7 @@ reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Un
 @fails `soupItemList` and `removed.json` entries; a stale `i.golden_*_stew` key in a script
 @from batches/r1113/c1_g2.qb
 @reviewed 2026-11-16
+@absent creativedelight:canned_golden_mushroom_stew (removed; the row checks /give fails)
 bootexpect Done \(
 bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*goldenfood:(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
 bootreject (?i)^(?!.*MinecraftServer/\]: unknown item).*(missing|unidentified|unknown).*creativedelight:canned_(enchanted_)?golden_(mushroom_stew|beetroot_soup|rabbit_stew)
