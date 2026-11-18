@@ -123,23 +123,23 @@ SQ-FCK-07,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,"@group A: plains count on
 SQ-FCK-08,BATCH-FAULT,wrong-group/y-level,fixed-in-qb,"@group A: no desert on the superflat, capture DS unset. Group B (fresh world); capture DS: no line matches /minecraft:desert is at \[(-?\d+), (~/-?\d+), (-?\d+)\]/; placeholder DS1, DS3, DS1, DS3 unse"
 SQ-CBC-04,FAIL,real-bug,not-fixed,same absent-mods datapack bug as CBA-18; also sequenced count 296 stale (314 now)
 SQ-HCS-04,BATCH-FAULT,harness/tool,fixed-in-qb,"row ended 48 s in while six 169-chunk forceloads still held the console (villages generated later), and the scan read the stale world 'world'. waitlog per village, level @"
-SQ-HH-319,FAIL,unjudged,not-fixed,"no judge covered this step; no line matches /Placed ""hearthandharvest:salt_cave""/; open look 1: shell shows saltCaves true, rarity 1, MinY 0, MaxY 0; cave_air above 1000 (a carve below y 17 means the or"
-SQ-HH-320,FAIL,unjudged,not-fixed,"no judge covered this step; no line matches /Failed to place feature/; open look 1: shell shows saltCaves = false, cornMaze = false; `Failed to place structure` (or the generic failure) for the maze; ca"
-SQ-HH-328,FAIL,unjudged,not-fixed,"no judge covered this step; no line matches /\[cdevtest\] verb=under id=hearthandharvest:corn_maze/; open look 1: locate time and candidates ([locate] line); corn_crop > 100, oak_fence 16, a chest with "
-SQ-HR-05,FAIL,unjudged,not-fixed,no judge covered this step; boot log: no line matches /\[wild-crops\].*raspberry/; no line matches /verb=count block=hearthandharvest:raspberry_bush n=[1-9]/; /\[cdevtest\] .*done=0/ matched: [18Nov2026
+SQ-HH-319,BATCH-FAULT,multi-boot,not-fixed,"judge-15: boot 2 config fixture (saltCaveRarity 1, MinY 0, MaxY 0) never applied; toml shows 24/-40/30"
+SQ-HH-320,BATCH-FAULT,multi-boot,not-fixed,"judge-15: boot 3 config fixture (saltCaves false, cornMaze false) never applied; both placed"
+SQ-HH-328,BATCH-FAULT,other,fix-handed-off,"judge-15: body still uses the old M-2..M+36 quadrant box (fence 8); locate 75.7 s, corn 334, centre chest; under 0 starts within r 2; centred box and r 4 in bug_rows.md"
+SQ-HR-05,BATCH-FAULT,lost-setup,fix-handed-off,"judge-15: stale [wild-crops] bootexpect, no bot spawn, count box over the 262144-block cap; fix in bug_rows.md"
 SQ-IDS-02,FAIL,stale-id-or-command,not-fixed,"unjudged; diagnosed here: the old-name list now holds the new names ccaltime and cwglocate (rename sweep hit the row), so 7 unknowns, not 8; old names should be cetime / celocate"
-SQ-IWF-03,LOOK,unjudged,not-fixed,"no judge covered this step; open look 1: the counts (two y bands per block; the random ticks go through the level's chunk tick on purpose: that is the IW sky-tick path, so no /cdevtest randomtick here)"
-SQ-META31-01,LOOK,unjudged,not-fixed,no judge covered this step; open look 1: meta count 13 higher than the 2026-10-30 W30 boots (perf/sessions or the WG30 rows' logs)
+SQ-IWF-03,PASS,pass,-,"judge-15: icicle 7, snowy_stone 19 after 60 s thunder"
+SQ-META31-01,PASS,pass,-,"judge-15: 40 metas, JS 4 replacements (Java 3: meta targets count as metas), no share/part error; +13 wording stale"
 SQ-META31-08,FAIL,stale-id-or-command,fixed-in-qb,unjudged FAIL; listed in rerun.txt (meta id / worldgen row fixes)
-SQ-META31-09,HARNESS,unjudged,not-fixed,"no judge covered this step; placeholder SM1, SM3 unset (no capture in this batch, not in RES/vars.json); placeholder SM1, SM3 unset (no capture in this batch, not in RES/vars.json); placeholder SM1, SM3"
-SQ-CDW-01,FAIL,unjudged,not-fixed,no judge covered this step; shell exit 1: ; boot log: no line matches /\[creativedelight\] wild crop worldgen packs on: \[.*\]; off \(mod not loaded\): \[[^]]*myrtrees[^]]*\]/; open look 1: the level is
+SQ-META31-09,BATCH-FAULT,lost-setup,fix-handed-off,judge-15: capture SM only set by SQ-META31-06; own locate and capture in bug_rows.md
+SQ-CDW-01,BATCH-FAULT,reduced-modset,not-fixed,judge-15: myrtrees still in mods
 SQ-CDW-02,FAIL,harness/tool,fixed-in-qb,"unjudged FAIL; rerun.txt: count box over the 262144-block cdevtest limit, shrunk"
-SQ-CDW-03,FAIL,unjudged,not-fixed,no judge covered this step; shell exit 1: ; shell exit 1: ; open look 1: exactly the one line `rubber: needs myrtrees`; other [wild-flowers] / mob spawn skip lines naming myrtrees are not this row's (ju
-SQ-CDW-03b,FAIL,unjudged,not-fixed,"no judge covered this step; shell exit 1: ; open look 1: 17 ""<rule>: needs fruitsdelight"" lines, none naming a fruitsdelight: feature; no apple skip line"
-SQ-MIN-01,LOOK,unjudged,not-fixed,"no judge covered this step; open look 1: tag id is creativecalendar:seasons/arid (row: creativeengineering:seasons/arid, before the 2026-11-09 namespace move)"
-SQ-MIN-03,HARNESS,unjudged,not-fixed,no judge covered this step; shell exit 1: ; open look 1: none of the five lines; no ERR hit in the row list
-SQ-MIN-07,LOOK,unjudged,not-fixed,"no judge covered this step; open look 1: the `loot spawn` reply lines (""Dropped N items"" or the item list) differ between river and ocean per the table's biome_tag conditions (read the table creativedel"
-SQ-NSM-06,LOOK,unjudged,not-fixed,"no judge covered this step; open look 1: no minecraft:air rows from our namespaces, --left lists nothing moved"
+SQ-CDW-03,BATCH-FAULT,reduced-modset,not-fixed,judge-15: needs the CDW-01 boot without myrtrees
+SQ-CDW-03b,BATCH-FAULT,reduced-modset,not-fixed,judge-15: needs the CDW-01 boot without fruitsdelight
+SQ-MIN-01,PASS,pass,-,judge-15: creativecalendar:seasons/arid n=15 incl desert
+SQ-MIN-03,BATCH-FAULT,reduced-modset,not-fixed,"judge-15: full pack; only 135 railways loot table errors, 0 in the row list"
+SQ-MIN-07,PASS,pass,-,"judge-15: river salmon_eggs only, ocean shrimp and treasure pool only"
+SQ-NSM-06,PASS,pass,fix-handed-off,judge-15: 0 air; creativeengineering hits Engineering-owned or from 10 stale by_mod files; row clears by_mod first (bug_rows.md)
 SQ-CBJ4-02,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,legacy-config fixture section (CE->CB config merge of 2026-11-01) not staged; qa bot and {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids and jar paths stale since the 2026-11-0
 SQ-CBJ4-03,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,legacy-config fixture section (CE->CB config merge of 2026-11-01) not staged; qa bot and {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids and jar paths stale since the 2026-11-0
 SQ-CBJ4-04,BATCH-FAULT,old-save-or-legacy-fixture,not-fixed,[raw] legacy-config fixture (CE->CB merge of 2026-11-01) not staged; qa bot / {H} home marker from the lost cs4_boot3 setup; creativeengineering: ids stale
