@@ -7,15 +7,15 @@ metal half of [tags/metaltags.js](../kubejs/data/creativeengineering/kubejs/tags
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=96a729269613 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 3, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=4f31d776f934 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Bug 1, Planned 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
+| `recipes/metal #3` | Bug | S P | Rose gold in gold tags |
 | `recipes/metal #1` | Planned | S P | Plates made three ways |
 | `recipes/metal #2` | Planned | S P | Hand-crafted rods |
 | `recipes/metal #4` | Planned | S P | Metal standardization gaps |
-| `recipes/metal #3` | Testing | S P | Rose gold in gold tags |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |
