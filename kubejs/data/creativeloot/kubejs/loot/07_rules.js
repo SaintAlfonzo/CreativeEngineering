@@ -99,8 +99,7 @@
 	}, { mod: 'chalk' })
 	// Botania (botania:inject/village_chest: temple, toolsmith, weaponsmith) and CC:Tweaked (computercraft:treasure_disk:
 	// cartographer) are not restored: owner keeps them out of village chests (plan_scratch_bugfix_1103 7.3).
-	// Since the golden copies stopped being served, Forge injects them natively, so they are removed after the roll in
-	// 10_removals.js.
+	// Forge injects them natively, so they are removed after the roll in 10_removals.js.
 
 	// The Golden Food enchantment book is not placed in any loot table (goldenfood's copies are reverted
 	// above, which is what removed it from villages).
