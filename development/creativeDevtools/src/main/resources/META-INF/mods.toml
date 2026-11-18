@@ -30,10 +30,12 @@ mandatory=true
 versionRange="[1.1.0,)"
 ordering="AFTER"
 side="BOTH"
-# Creative Compat: required by every other Creative jar (creative_split.md 7.6).
+# Creative Compat: optional for Devtools (TODO tooling/scratch-1115-follow-ups-2 #16, SQ-TX-18). Every command that
+# reads Compat's classes (/cdevbench passthrough, /cdevreload compat, /dumpsurface, /cdevdumpicons) registers only when
+# it is loaded. The other Creative jars still require it (creative_split.md 7.6).
 [[dependencies.creativedevtools]]
 modId="creativecompat"
-mandatory=true
+mandatory=false
 versionRange="[1.0.0,)"
 ordering="AFTER"
 side="BOTH"

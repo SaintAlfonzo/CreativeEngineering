@@ -125,5 +125,7 @@
   "creativecommon.wthit.rich_pot": "Rich Pot",
   "creativecommon.wthit.rooted_dirt": "Rooted Dirt",
   "creativecommon.wthit.yes": "Yes",
-  "creativecommon.wthit.no": "No"
+  "creativecommon.wthit.no": "No",
+  "block.creativecompat.bamboo_leaves_full": "Bamboo Leaves",
+  "entity.creativecompat.falling_layer": "Falling Layer"
 }

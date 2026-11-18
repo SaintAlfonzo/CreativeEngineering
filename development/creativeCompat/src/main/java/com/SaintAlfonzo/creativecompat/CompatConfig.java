@@ -598,6 +598,31 @@ public final class CompatConfig {
 			public ForgeConfigSpec.BooleanValue snowWalkThrough;
 			/** {@code [surface.passthrough.layers] snowFullBecomesBlock} (set by the layer tier's table). */
 			public ForgeConfigSpec.BooleanValue snowFullBecomesBlock;
+			// [surface.passthrough.layers] jump and fall (synced, surface.LayerMotion; plan_post_scratch_1115.md G7.13)
+			public ForgeConfigSpec.IntValue snowJumpLayers;
+			public ForgeConfigSpec.DoubleValue snowJumpFactor;
+			public ForgeConfigSpec.DoubleValue snowFallSpeed;
+			public ForgeConfigSpec.IntValue leafJumpLayers;
+			public ForgeConfigSpec.DoubleValue leafJumpFactor;
+			public ForgeConfigSpec.DoubleValue leafFallSpeed;
+			// [surface.passthrough.layers] server side: falling layers (surface.FallingLayers, G7.5), leaf thorns and mob
+			// pathing (surface.LeafThorns, G7.13/G7.14), bamboo leaf drops (surface.BambooLeafDrops, G7.9)
+			public ForgeConfigSpec.BooleanValue layersFall;
+			public ForgeConfigSpec.DoubleValue thornChance;
+			public ForgeConfigSpec.IntValue thornLayers;
+			public ForgeConfigSpec.DoubleValue thornMinSpeed;
+			public ForgeConfigSpec.IntValue thornCooldownTicks;
+			public ForgeConfigSpec.IntValue pathBlockLayers;
+			public ForgeConfigSpec.DoubleValue bambooLeafChance;
+			public ForgeConfigSpec.IntValue bambooLeafMaxLayers;
+			// [surface.passthrough.layers] client side: the leaf overlay (surface.LeafOverlay, G7.14)
+			public ForgeConfigSpec.BooleanValue leafOverlay;
+
+			/** The synced jump and fall values ({@link com.SaintAlfonzo.creativecompat.surface.LayerMotion}). */
+			public com.SaintAlfonzo.creativecompat.surface.LayerMotion motion() {
+				return new com.SaintAlfonzo.creativecompat.surface.LayerMotion(snowJumpLayers.get(), snowJumpFactor.get(),
+						snowFallSpeed.get(), leafJumpLayers.get(), leafJumpFactor.get(), leafFallSpeed.get());
+			}
 
 			private Passthrough(ForgeConfigSpec.Builder b) {
 				b.comment(
@@ -699,6 +724,61 @@ public final class CompatConfig {
 						parent.snowFullBecomesBlock = b.comment(
 								"A snow layer that reaches 8 layers (placed, or found on a random tick) becomes a snow block.")
 								.define("snowFullBecomesBlock", true);
+						com.SaintAlfonzo.creativecompat.surface.LayerMotion m =
+								com.SaintAlfonzo.creativecompat.surface.LayerMotion.DEFAULTS;
+						parent.snowJumpLayers = b.comment(
+								"From this many snow layers up, jumping from inside the snow is as weak as in powder snow.")
+								.defineInRange("snowJumpLayers", m.snowJumpLayers(), 1, 8);
+						parent.snowJumpFactor = b.comment(
+								"Jump power multiplier in snow from snowJumpLayers up (0.67: a hop of about 0.63 blocks, like",
+								"powder snow; 1.0 = normal jump).")
+								.defineInRange("snowJumpFactor", m.snowJumpFactor(), 0.1, 1.0);
+						parent.snowFallSpeed = b.comment(
+								"Fastest fall inside snow layers, blocks per tick (powder snow's is 0.12; 0 = no limit).")
+								.defineInRange("snowFallSpeed", m.snowFallSpeed(), 0.0, 4.0);
+						parent.leafJumpLayers = b.comment("From this many leaf layers up, jumping from inside the pile is weaker.")
+								.defineInRange("leafJumpLayers", m.leafJumpLayers(), 1, 8);
+						parent.leafJumpFactor = b.comment(
+								"Jump power multiplier in leaf layers from leafJumpLayers up (0.9: about 1.05 blocks, still",
+								"enough to jump onto a block beside the pile; 1.0 = normal jump).")
+								.defineInRange("leafJumpFactor", m.leafJumpFactor(), 0.1, 1.0);
+						parent.leafFallSpeed = b.comment(
+								"Fastest fall inside leaf layers, blocks per tick (0 = no limit).")
+								.defineInRange("leafFallSpeed", m.leafFallSpeed(), 0.0, 4.0);
+						parent.layersFall = b.comment(
+								"Snow layers, salt layers, Twigs bamboo leaves (and the full bamboo leaves), Immersive",
+								"Engineering sawdust and Supplementaries fodder fall when the block below is gone and stack",
+								"on landing (capped at the most layers, the rest lands on top; items drop when it cannot",
+								"land). Tag creativecompat:falling_layers. Immersive Weathering's layers and Supplementaries",
+								"ash fall by their own code either way. Off: those blocks stay as before (server side).")
+								.define("layersFall", true);
+						parent.thornChance = b.comment(
+								"Chance per check that a player moving through a leaf pile is pricked (half a heart, sweet",
+								"berry bush damage). Lowered by a quarter for each armor piece worn; full armor never pricks.",
+								"0 = off (server side).")
+								.defineInRange("thornChance", 0.25, 0.0, 1.0);
+						parent.thornLayers = b.comment("Leaf piles of at least this many layers prick.")
+								.defineInRange("thornLayers", 6, 1, 8);
+						parent.thornMinSpeed = b.comment(
+								"Pricks only while moving at least this fast (1.0 = walking), measured against the full",
+								"pile's slowdown, so a pile of 6 pricks more easily than a pile of 8.")
+								.defineInRange("thornMinSpeed", 1.0, 0.0, 4.0);
+						parent.thornCooldownTicks = b.comment("Ticks between prick checks.")
+								.defineInRange("thornCooldownTicks", 20, 1, 1200);
+						parent.pathBlockLayers = b.comment(
+								"Mobs do not path through leaf piles of at least this many layers (9 = off; server side).")
+								.defineInRange("pathBlockLayers", 6, 1, 9);
+						parent.bambooLeafChance = b.comment(
+								"Grown bamboo with leaves drops Twigs bamboo leaves beside it: chance per random tick for",
+								"each free side (Immersive Weathering's leaf pile chance is 0.0005). 0 = off (server side).")
+								.defineInRange("bambooLeafChance", 0.0005, 0.0, 1.0);
+						parent.bambooLeafMaxLayers = b.comment(
+								"Dropped bamboo leaves pile up to this many layers (5 to 8 are the full bamboo leaves block).")
+								.defineInRange("bambooLeafMaxLayers", 4, 1, 8);
+						parent.leafOverlay = b.comment(
+								"Client: inside a leaf pile the screen edges show the pile's leaves, like the powder snow",
+								"frost overlay.")
+								.define("leafOverlay", true);
 						fall = b.comment("Multiplier on downward speed each tick inside a walk-through pile, and on fall",
 										"distance per block passed.")
 								.defineInRange("fall", d.fall(), 0.0, 1.0);

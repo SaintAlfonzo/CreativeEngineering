@@ -1,19 +1,15 @@
 # Post-scratch plan, run r1115 (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=7fe0ba6e4f37 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Bug 1, Planned 7, In Progress 1, Testing 15), 0 Complete.
+<!-- generated:status_index begin open_work sha1=ccdf068d44ba -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 23 open TODO rows (Bug 1, Planned 4, Testing 18), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `tooling/scratch-1115-follow-ups #2` | Bug | C | Flint and Terrasteel portal crashes AMD clients |
 | `tooling/scratch-1115-follow-ups #9` | Planned | P | Investigate frozen decor melting |
 | `tooling/scratch-1115-follow-ups #12` | Planned | P | Investigate original wild hops vs current |
-| `tooling/scratch-1115-follow-ups #14` | Planned | S P | Investigate missing wild crop placements and missing crops |
 | `tooling/scratch-1115-follow-ups #16` | Planned | C | Heap spill into warped forest: look in game |
-| `tooling/scratch-1115-follow-ups #21` | Planned | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
-| `tooling/scratch-1115-follow-ups #22` | Planned | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
 | `tooling/scratch-1115-follow-ups #23` | Planned | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
-| `tooling/scratch-1115-follow-ups #6` | In Progress | S | Falling salt layer refills a salt lick; lick pulls top layers first |
 | `tooling/scratch-1115-follow-ups #1` | Testing | C | Wall exit lift: floor portal to wall portal stuck in floor |
 | `tooling/scratch-1115-follow-ups #3` | Testing | S | Salt: click on frozen block places a layer, no melt |
 | `tooling/scratch-1115-follow-ups #4` | Testing | S | Salt: dispenser places a layer on air, one melt (1 salt) on a frozen block |
@@ -23,11 +19,14 @@
 | `tooling/scratch-1115-follow-ups #10` | Testing | S | Drop glowstone cage lantern from the fire tag |
 | `tooling/scratch-1115-follow-ups #11` | Testing | S | Hops vine and other vine crops cannot be replaced by placing |
 | `tooling/scratch-1115-follow-ups #13` | Testing | S P | Fix wild hops trunk search |
+| `tooling/scratch-1115-follow-ups #14` | Testing | S P | Investigate missing wild crop placements and missing crops |
 | `tooling/scratch-1115-follow-ups #15` | Testing | S | No pie placeable; lunchbox edible items only |
 | `tooling/scratch-1115-follow-ups #17` | Testing | S | Power Grid arm takes one circuit component per pickup |
 | `tooling/scratch-1115-follow-ups #18` | Testing | S | Acid from rotten flesh and spider eyes in water |
 | `tooling/scratch-1115-follow-ups #19` | Testing | S | Upgrade Aquatic guard for river tree worldgen files |
 | `tooling/scratch-1115-follow-ups #20` | Testing | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
+| `tooling/scratch-1115-follow-ups #21` | Testing | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
+| `tooling/scratch-1115-follow-ups #22` | Testing | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
 | `tooling/scratch-1115-follow-ups #24` | Testing | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 <!-- generated:status_index end open_work -->
 
@@ -516,6 +515,7 @@ if it cannot place, pistons, chunk load, `layersFall` switch). Snow merging to 8
 lick hook in E4 is dropped (layers no longer refill). Holes: does IW already make its own layers fall (reuse its
 falling entity if so; check at build); snow on leaves (leaves are not full blocks, so does snow fall through
 canopies?). Perf: falling entities from big snowfall on unsupported spots; watch TPS (E4's 200-layer row, extended to snow).
+**State: built 2026-11-17 (lane L2, G10; not installed).**
 
 **G7.6 Salt Melt stacks when undamaged.** Keep vanilla durability and override Forge's `Item.getMaxStackSize(ItemStack)`:
 16 when undamaged, 1 when damaged (vanilla `isStackable` already refuses damaged stacks). Using or dispensing one from a
@@ -542,6 +542,7 @@ lit state is set the way flint and steel does it.
   only, no new texture). Placing a 5th layer on 4 Twigs bamboo leaves converts to the new block; it fills and walks like any
   leaf stack (G7.4). Id in Creative Compat's namespace (ids follow the owning mod; check Twigs' license before copying
   its models).
+- **State: built 2026-11-17 (lane L2, G10; not installed).**
 
 **G7.10 Snow melts by layer.** A melt removes one snow layer; the chance per layer is its own key (`[melting]
 snowLayerMeltChance`, higher than `meltChance`; proposal 0.8). Open decision 6 covers the Salt Melt and dispenser.
@@ -595,6 +596,7 @@ shield icon missing from the key (the knockback resistance entry); the effect sc
   Foxes and bees stay exempt from the slowdown; whether they also avoid piles, check at build (foxes hide in berry
   bushes; proposal: they may path through). Hole: mobs already standing in a pile, and piles across a whole forest
   floor, can leave mobs stuck in place; watch for it in the scratch run.
+- **State: jump, fall, thorns, overlay and pathing built 2026-11-17 (lane L2, G10; not installed).**
 
 **G7.14 Third-round answers (2026-11-16).**
 - Salt lamps (Vintage's 17 and The Salt's Large Salt Lamp) keep their names; only the decor in G7.13 becomes Chiseled.
@@ -673,6 +675,38 @@ CQ-PS15-04, perf SQ-MELT-P2 (queued). Points the plan left open, built as propos
 - **assumed:** saltable = the meltable set (ice, frosted ice, Rare Ice, snow, snow block, powder snow) plus packed ice
   and cryosol. The tooltip line is gray (`col.norm` role).
 - Not built: IW snowy conversion near magma (G7.2), E1 frozen decor (row `#9`), the ambient audits (G7.14).
+
+### G10. Layers build of 2026-11-17 (lane L2; Creative Compat, Creative Devtools)
+
+Built in Creative Compat (`surface/FallingLayers`, `FallingLayerEntity`, `FullBambooLeavesBlock`, `BambooLeafDrops`,
+`LayerMotion`, `LeafThorns`, `LeafOverlay`; mixins `SnowLayerFallMixin`, `TwigsBambooLeavesMixin`, `IeSawdustFallMixin`,
+`SuppFodderFallMixin`, `BambooLeafDropMixin`, `LeafPilePathMixin`, `McaLeafPilePathMixin`, `LayerJumpMixin`; keys in
+`[surface.passthrough.layers]`, sync format 4) and Creative Devtools (bench cold case, optional Compat). Rows
+SQ-PS15B-13 to -22, CQ-PS15B-03. Not installed.
+- G7.5: Immersive Weathering's sand, red sand, ash layers and leaf piles are already `FallingBlock`s with their own
+  stacking falling entity, and Supplementaries ash is a `FallingBlock`: left alone. The rest (tag
+  `creativecompat:falling_layers`: snow, `vintagedelight:salt`, Twigs bamboo leaves, the full bamboo leaves, IE
+  sawdust, Supplementaries fodder) keep their state in `updateShape` when the block below is free and fall at the
+  end of the level tick (no scheduled tick: G9's melt ticks own that slot); snow and salt also on a random tick
+  (floating layers in old chunks). Landing merges up to the most layers, the rest on top; snow at 8 goes through
+  `SnowLayers.fullToBlock`; items drop when it cannot land (snow as snowballs). Snow on leaves stays (leaves are not
+  free); it falls when the leaves go. Switch `layersFall`.
+- G7.9: `creativecompat:bamboo_leaves_full` (layers 5 to 8, no item, drops Twigs bamboo leaves per layer in code).
+  Twigs is All Rights Reserved: own model JSONs (a 5 px base and Twigs' 1 to 4 layer heights on top) that reference
+  Twigs' textures; no file of Twigs copied. Leafy bamboo random-ticks (mixin) and drops on free sides.
+- **assumed:** `snowJumpFactor` 0.67 (a 0.63-block hop, powder snow's), `snowFallSpeed` 0.12 (powder snow's fall);
+  `leafJumpLayers` 5 (G4c's "above half height"), `leafJumpFactor` 0.9 (about 1.05 blocks, clears a 1-block step),
+  leaf fall as a cap `leafFallSpeed` 0.24 instead of the plan's `leafFallFactor` (a per-tick multiplier compounds below
+  snow's speed); both leaf values wait for the G7.13 eval (SQ-PS15B-16).
+- **assumed:** `thornChance` 0.25 (no value in the plan); thorns are checked once per `thornCooldownTicks` while the
+  speed test passes; speed is the tick-to-tick distance of the server player with a 10 percent margin. Immersive
+  Weathering's own spruce pile thorns still apply on top (leggings stop those).
+- **assumed:** mobs see a deep pile as `DAMAGE_OTHER` (a berry bush: impassable at the default malus, foxes path it).
+  The exempt tag is per tier, so rabbits and cats are also exempt from snow layers' slowdown.
+- **assumed:** `bambooLeafMaxLayers` 4 for natural drops (IW's own piles stop at 3); 5 to 8 by hand. The overlay
+  shows in first person in a leaf pile of 2 or more layers, opacity 0.7 x layers / max, tiled 64 GUI px.
+- Not built: seeing out from inside a leaf pile (render without face culling, G4e). Devtools: `/cdevreload compat`
+  existed (E2); 1115b #10 (in-place save not seen by Forge's watcher) is unchanged and still the owner's question.
 
 ## Not decided or not in this pass
 

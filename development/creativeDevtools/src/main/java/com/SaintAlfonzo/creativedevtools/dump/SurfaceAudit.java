@@ -55,6 +55,7 @@ public final class SurfaceAudit {
 
 	@SubscribeEvent
 	public static void onRegisterCommands(RegisterCommandsEvent event) {
+		if (!net.minecraftforge.fml.ModList.get().isLoaded("creativecompat")) return; // reads Compat's surface tiers
 		event.getDispatcher().register(Commands.literal("dumpsurface")
 				.requires(src -> src.hasPermission(2))
 				.executes(ctx -> {

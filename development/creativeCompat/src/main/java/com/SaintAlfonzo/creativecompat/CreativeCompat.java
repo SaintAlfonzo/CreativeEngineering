@@ -156,6 +156,11 @@ public class CreativeCompat {
 				com.SaintAlfonzo.creativecompat.surface.PassCounts::attach);
 		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.PassCounts::onChunkLoad);
 		modEventBus.addListener(PassValues::onConfig);
+		// layers fall and stack, the full bamboo leaves, leaf thorns (plan_post_scratch_1115.md G7.5, G7.9, G7.14)
+		com.SaintAlfonzo.creativecompat.surface.FallingLayerEntities.register(modEventBus);
+		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.FallingLayers::onLevelTick);
+		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.FallingLayers::onLevelUnload);
+		MinecraftForge.EVENT_BUS.addListener(com.SaintAlfonzo.creativecompat.surface.LeafThorns::onPlayerTick);
 		PassSync.register();
 		MinecraftForge.EVENT_BUS.addListener(PassSync::onLogin);
 		// [debug.passthrough] timing: the 200-tick timing lines (surface/PassTiming, plan 7.3)
@@ -336,6 +341,18 @@ public class CreativeCompat {
 		public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
 			event.registerEntityRenderer(ShrapnelEntities.SHRAPNEL.get(),
 					context -> new ThrownItemRenderer<>(context, 1.0F, false));
+		}
+
+		@SubscribeEvent
+		public static void onRegisterLayerRenderers(EntityRenderersEvent.RegisterRenderers event) {
+			event.registerEntityRenderer(com.SaintAlfonzo.creativecompat.surface.FallingLayerEntities.FALLING_LAYER.get(),
+					net.minecraft.client.renderer.entity.FallingBlockRenderer::new);
+		}
+
+		/** Leaf pile overlay (surface/LeafOverlay, plan_post_scratch_1115.md G7.14). */
+		@SubscribeEvent
+		public static void onRegisterOverlays(net.minecraftforge.client.event.RegisterGuiOverlaysEvent event) {
+			com.SaintAlfonzo.creativecompat.surface.LeafOverlay.register(event);
 		}
 	}
 }

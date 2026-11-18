@@ -48,6 +48,12 @@ public final class PassState {
 	boolean arrowJoined;
 	long arrowChunk;
 
+	// ---- leaf thorns (LeafThorns, plan_post_scratch_1115.md G7.14; server players) ----
+	/** Position at the last player tick, for the speed check. */
+	double thornX, thornZ;
+	/** Game time of the next allowed prick check. */
+	long thornNext;
+
 	/** Amount of the speed modifier currently on the entity, NaN when none. */
 	double modifierAmount = Double.NaN;
 
