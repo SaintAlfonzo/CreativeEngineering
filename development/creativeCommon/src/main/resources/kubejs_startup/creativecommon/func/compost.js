@@ -1,6 +1,5 @@
 // priority: 900
-// Creative Common: src/main/resources/kubejs_startup/creativeengineering/func/compost.js (was
-// kubejs/startup_scripts/func/compost.js). Creative Common's startup loader runs this pack before the pack's
+// Creative Common: src/main/resources/kubejs_startup/creativecommon/func/compost.js. Creative Common's startup loader runs this pack before the pack's
 // startup_scripts folder, so global.compost exists before compost/compost_rules.js +
 // compost/compost_values.js call it at top level. It reads no dict at load time; keep it that way (the
 // dicts load after it). An edit needs a Creative Common rebuild.
@@ -19,7 +18,7 @@
 //
 //  A chance is a number 0-1 or a tier name from global.compost.tiers(). 0 = not compostable.
 //  To change a chance: edit the data file, /kubejs reload startup_scripts, then /reload (the data files
-//  stay in the pack folder; only this engine moved into Creative Common's jar).
+//  stay in the pack folder; the engine is in Creative Common's jar).
 //  /dumpcompost (server_scripts/_lib/dump_compost.js) writes kubejs/exported/compost/compost.json:
 //  the table as the mods left it, the table now, and which rule or value put each item there.
 //  tools/gen_compost_values.py turns that dump into compost_values.js.

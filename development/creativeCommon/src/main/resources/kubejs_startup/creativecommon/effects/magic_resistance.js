@@ -1,5 +1,5 @@
 // Creative Common (plan_cb_polish.md 2: every potion and effect the Creative mods own is registered from Common,
-// under creativecommon:; was creativebrewing:magic_resistance, remapped by
+// under creativecommon:; an old creativebrewing:magic_resistance id is remapped by
 // data/creativecommon/swaps/effects_potions.json). Common rebuild + restart. creativecommon:magic_resistance — a
 // brand-new, pack-original MobEffect (the first one this pack defines itself, rather than reusing vanilla/Alex's
 // Mobs/Better Beacons).

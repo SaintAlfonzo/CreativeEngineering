@@ -1,5 +1,4 @@
-// Creative Common: src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js (was
-// kubejs/startup_scripts/func/neoCraftHelper.js). Shipped in Creative Common's jar and loaded by its startup loader
+// Creative Common: src/main/resources/kubejs_startup/creativecommon/func/neoCraftHelper.js. Shipped in Creative Common's jar and loaded by its startup loader
 // (compat/kubejs/JarStartupScripts) BEFORE the pack's startup_scripts folder, so the dicts (global.item, global.fluid)
 // do not exist yet when this file runs: read them inside functions only (at call time), never at top level. An edit
 // needs a Creative Common rebuild.
@@ -1006,8 +1005,8 @@ global.NCH = {
 	//
 	// Recipes are baked at datapack-reload time (ServerEvents.recipes) - a toml edit needs
 	// /reload to reach an already-generated recipe, same as any other config-driven recipe.
-	// A section is looked up in every registered config class in order, so a section that moves to a carved jar keeps
-	// working without a script change. 'modid:SECTION.FIELD' pins the lookup to one jar's class.
+	// A section is looked up in every registered config class in order, so a section can live in a carved jar
+	// without a script change. 'modid:SECTION.FIELD' pins the lookup to one jar's class.
 	registerConfig(modId, className) {
 		if ($NCH_configClasses.some(c => c.id === modId)) {
 			console.warn('[NCH.cfg] ' + modId + ' config already registered; ' + className + ' skipped')
@@ -1036,7 +1035,7 @@ global.NCH = {
 			}
 			if (!c.cls) return
 			// Rhino THROWS on a missing static field of a Java class (InternalError "has no public instance field or method
-			// named X"), it does not return undefined: a section that moved to a carved jar must read as "not here" in
+			// named X"), it does not return undefined: a section that lives in a carved jar must read as "not here" in
 			// CommonConfig, or the error escapes and cfg() returns undefined (scratch_run_2026-11-01.md 7).
 			var found = path.split('.').reduce((obj, seg) => {
 				if (obj == null) return null
@@ -1438,9 +1437,8 @@ global.NCH = {
 
 		// Derive a naming source that works whether arrowhead comes in as a
 		// string ("#forge:..." or an item id) or as an already-built {tag}/{item}
-		// ingredient object - previously this collapsed to the literal word
-		// "tag" for any object shape, causing id collisions between different
-		// tag-based arrowheads.
+		// ingredient object, so different tag-based arrowheads get
+		// different ids.
 		var arrowheadName = typeof arrowhead === 'string'
 			? arrowhead
 			: (arrowhead && arrowhead.tag ? '#' + arrowhead.tag : (arrowhead && arrowhead.item) ?? arrowhead)

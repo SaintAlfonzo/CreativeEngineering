@@ -45,8 +45,8 @@ public class CreativeCommon
 	// -------------------------------------------------------------------------
 	// Constants
 	// -------------------------------------------------------------------------
-	/** This jar's mod id since the Creative Split swap (creative_split.md 6 Q1 and 7.13): patcherMod was
-	 *  {@code creativecommon} until then; that id is now Creative Engineering's (development/creativeEngineering). */
+	/** This jar's mod id (creative_split.md 6 Q1 and 7.13); Creative Engineering (development/creativeEngineering) is
+	 *  {@code creativeengineering}. */
 	public static final String MODID = "creativecommon";
 	/** The namespace of every id, tag, lang key and channel this jar uses: Creative Common's, unchanged by the swap. */
 	public static final String NS = "creativecommon";
@@ -72,8 +72,8 @@ public class CreativeCommon
 		// spec drops them from that file when Forge corrects it). The swap list toml is only renamed.
 		com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections(OLD_FILE, FILE, CommonConfig.SECTIONS);
 		com.SaintAlfonzo.creativecommon.swap.ConfigRename.carryOver("creativeengineering-swaps.toml", MODID + "-swaps.toml");
-		// [effects] and [magic_resistance] came from Creative Brewing's file (plan_cb_polish.md 2), and before
-		// that from Creative Common's: the first boot copies the player's values in (sections this file already has are kept).
+		// [effects] and [magic_resistance] are carried over from Creative Brewing's file (plan_cb_polish.md 2) and
+		// patcherMod's old file: the first boot copies the player's values in (sections this file already has are kept).
 		// CB drops them from its own file when Forge corrects it.
 		if (!com.SaintAlfonzo.creativecommon.swap.ConfigRename.carrySections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS))
 			com.SaintAlfonzo.creativecommon.swap.ConfigRename.mergeSections("creativebrewing-common.toml", FILE, CommonConfig.EFFECT_SECTIONS);
@@ -111,7 +111,7 @@ public class CreativeCommon
 		// Remainder buffer (cooking/): Creative Delight; the WTHIT line reads compat.RemainderView. Armor Trims' item
 		// lists cached once the registry locks; the trimmable list resets on tag reload (perf.md 10.2 #1).
 		com.SaintAlfonzo.creativecommon.compat.ArmorTrimsItemCache.init();
-		// Emu / duck / goose nests moved to their own mod: development/incubationAdditions.
+		// Emu / duck / goose nests live in their own mod: development/incubationAdditions.
 
 		// Register this class for FORGE bus events (e.g. onServerStarted, attachCaps)
 		MinecraftForge.EVENT_BUS.register(this);
@@ -143,11 +143,11 @@ public class CreativeCommon
 
 		// World generation and fauna (structures, locate, earth and water fill, terrain adaptation, meta structures,
 		// sky islands, bee nests, mob spawns, mooshrooms, named mobs, leaf decay, the biome_tag loot condition, the
-		// Farmer's Structures donor, Forgiving Void) moved to Creative Worldgen (creative_split.md 7.6).
+		// Farmer's Structures donor, Forgiving Void) live in Creative Worldgen (creative_split.md 7.6).
 
-		// /cdevplace (MassPlacer) moved to Creative Devtools (feature_writeup/creative_devtools.md 2).
+		// /cdevplace (MassPlacer) lives in Creative Devtools (feature_writeup/creative_devtools.md 2).
 
-		// Python generators (/cdevgen) and the other dev tools moved to Creative Devtools
+		// Python generators (/cdevgen) and the other dev tools live in Creative Devtools
 		// (feature_writeup/creative_devtools.md).
 
 	}
@@ -189,7 +189,7 @@ public class CreativeCommon
 	}
 
 	// -------------------------------------------------------------------------
-	// The IE recycling diagnostics that ran here on ServerStartedEvent moved to Creative Devtools
+	// The IE recycling diagnostics (on ServerStartedEvent) live in Creative Devtools
 	// (ie/IeRecyclingDiagnostics, feature_writeup/creative_devtools.md 2). The prefixToIngotMap override itself is
 	// IECompat.onServerAboutToStart.
 	// -------------------------------------------------------------------------

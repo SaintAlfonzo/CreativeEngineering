@@ -2304,7 +2304,7 @@ i.bell_pepper_roll_purple      = 'rusticdelight:bell_pepper_roll_purple';
 i.bell_pepper_roll_black       = 'rusticdelight:bell_pepper_roll_black';
 i.cherry_blossom_roll          = 'rusticdelight:cherry_blossom_roll';
 i.calamari_soup                = 'rusticdelight:calamari_soup';
-// Rustic Delight member items, (rustic_delight.md 5.10): roll assemblies, Supreme Pizza, golden coffee beans
+// Rustic Delight member items (rustic_delight.md 5.10): roll assemblies, Supreme Pizza, golden coffee beans
 i.rice_roll_royale             = 'rusticdelight:rice_roll_royale';
 i.glowing_calamari_crate       = 'rusticdelight:glowing_calamari_crate';   // the port's own block, not upstream's
 i.t_coffee_ingredients         = '#rusticdelight:coffee_ingredients';      // coffee beans, roasted coffee beans
@@ -2329,7 +2329,7 @@ i.roasted_bell_pepper_slice_pink   = 'rusticdelight:roasted_bell_pepper_slice_pi
 i.roasted_bell_pepper_slice_blue   = 'rusticdelight:roasted_bell_pepper_slice_blue';
 i.roasted_bell_pepper_slice_purple = 'rusticdelight:roasted_bell_pepper_slice_purple';
 i.roasted_bell_pepper_slice_black  = 'rusticdelight:roasted_bell_pepper_slice_black';
-// Rustic Delight pancakes, (pancake family, food_families.md 4.7, TODO dishes/meals #12): the six flavored single
+// Rustic Delight pancakes (pancake family, food_families.md 4.7, TODO dishes/meals #12): the six flavored single
 // pancakes (food type sweet/pancake) and the seven placed plates (block items, PancakeStackBlock). The plain plate
 // serves Supplementaries' pancake (i.pancakes); Rustic's plain single is not registered.
 i.honey_pancake                = 'rusticdelight:honey_pancake';
@@ -14920,7 +14920,7 @@ i.simplehats_hockeymask          = 'simplehats:hockeymask';
 i.simplehats_horsemask           = 'simplehats:horsemask';
 i.simplehats_sleepeyemask        = 'simplehats:sleepeyemask';
 
-// ===== vintagedelight (134) - development/creativeDelight/members/vintage, feature_writeup/vintage_delight.md; =====
+// ===== vintagedelight (134) - development/creativeDelight/members/vintage, feature_writeup/vintage_delight.md =====
 // Prefixed where the bare key was taken: kimchi, salt
 i.apple_sauce_bottle             = 'vintagedelight:apple_sauce_bottle';
 i.apple_sauce_jar                = 'vintagedelight:apple_sauce_jar';
@@ -15099,10 +15099,10 @@ i.wild_ghost_peppers             = 'vintagedelight:wild_ghost_peppers';
 i.wild_oats                      = 'vintagedelight:wild_oats';
 i.wild_peanuts                   = 'vintagedelight:wild_peanuts';
 i.yellow_chefs_hat               = 'vintagedelight:yellow_chefs_hat';
-i.vinegar                      = i.vinegar_jar;   // the pack vinegar: the mason jar since the jar merge (vintage_delight.md S9, plan_scratch_bugfix_1103 1.1)
+i.vinegar                      = i.vinegar_jar;   // the pack vinegar: the mason jar (vintage_delight.md S9, plan_scratch_bugfix_1103 1.1)
 i.vinegar_bottle               = 'vintagedelight:vinegar_bottle';   // merged into the jar (merges_vintagedelight.json); only for removing its recipes
 
-// ===== fungidelight (32) - development/creativeDelight/members/fungi, feature_writeup/fungi_delight.md; =====
+// ===== fungidelight (32) - development/creativeDelight/members/fungi, feature_writeup/fungi_delight.md =====
 i.brown_mushroom_crate           = 'fungidelight:brown_mushroom_crate';
 i.cleaned_cap                    = 'fungidelight:cleaned_cap';            // Cleaned Inky Cap
 i.cooked_cleaned_cap             = 'fungidelight:cooked_cleaned_cap';     // Cooked Inky Cap
