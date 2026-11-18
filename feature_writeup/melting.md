@@ -30,9 +30,10 @@ melt ticks (about every 5 s), plus its random ticks.
 | lava | within 4 blocks | within 2 (`slowLavaRange`) | touching only: one step down |
 
 - Hot places (G11): in an ultra-warm dimension (the Nether) every target but blue ice and permafrost, and in a hot
-  biome (`#creativecommon:melting/hot`: Creative Calendar's arid and tropical season types) ice, snow and frozen
+  biome (`#creativecommon:melting/hot`: Creative Calendar's arid, dry and tropical season types) ice, snow and frozen
   decor (not packed ice or cryosol), take a melt tick every `hotMeltTickInterval` = 20 ticks (15 to 25) with no
-  source, rolling their usual chance. Packed ice placed in the Nether steps to ice, then air. Snow on blue ice or
+  source, rolling `meltChance` (0.4; the slow tier too, so packed ice and cryosol melt rapidly in the Nether, owner
+  2026-11-17). Packed ice placed in the Nether steps to ice, then air; cryosol steps to dirt. Snow on blue ice or
   permafrost is left alone there too.
 - The End (G11, `endContactOnly`): every source melts only the 6 blocks touching it (salt, fire, magma, lava); magma's
   instant zone is the touching blocks; magma's snow and ice guard reaches 1.
@@ -203,7 +204,7 @@ Block tags under `creativecommon:melting/`, filled by Creative Common's
 - `keeps_snow` (2026-11-17): blue ice, IW permafrost.
 - `magma` (2026-11-17): magma block, AP Molten Nether Bricks (G11; the only magma-like block in the 2026-11-17 dump:
   light 3, made to random tick). The Java side treats every magma block as a fire source too.
-- Biome tag `hot` (G11): `#creativecalendar:seasons/arid` and `#creativecalendar:seasons/tropical` (only with
+- Biome tag `hot` (G11): `#creativecalendar:seasons/arid`, `/dry` (savannas, shrublands; owner 2026-11-17) and `/tropical` (only with
   Creative Calendar loaded); the Nether counts by its ultra-warm dimension type.
 
 The modded list is the 2026-11-13 `/dumpall` (`kubejs/exported/tags/block_tags_by_block.json`, tagged blocks only),
@@ -272,7 +273,7 @@ the End; Molten Nether Bricks join magma; frozen decor melts (`meltProducts`, `s
   grass and podzol there stay unsnowy, but Immersive Weathering's own snowy-stone growth is not blocked.
 - Ambient melting (biome temperature, season, weather): audit only (G7.14), nothing built; snow on keeps_snow blocks
   covers vanilla light melting today and any ambient path added later must ask `Melting` the same way.
-- Arid and tropical biomes do not melt packed ice or cryosol (the ruling names ice and snow); rivers that take a
+- Arid, dry and tropical biomes do not melt packed ice or cryosol (the ruling names ice and snow); rivers that take a
   desert's season type (Calendar's adaptive type) are not hot (the tag holds biomes only).
 - Layer falling (lane L2, Creative Compat): Melting schedules ticks on snow layers. A tick scheduled by a falling
   check for the same position and block while a melt tick is pending is merged into the pending one (vanilla

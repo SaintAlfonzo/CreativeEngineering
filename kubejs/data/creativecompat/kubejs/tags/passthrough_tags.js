@@ -134,8 +134,21 @@ ServerEvents.tags('entity_type', e => {
 	// Light mobs stand on top of snow layers whatever their size (plan_post_scratch_1115.md G11; surface/SnowLayers).
 	// Mobs with a hitbox under [surface.passthrough.layers] snowLightVolume count without the tag; vanilla's own
 	// powder snow walkers are listed so they still stand on top with the size rule off (snowLightVolume = 0).
+	// Light mobs stand on snow layers (G11). Owner 2026-11-17: cats, spiders, every bird (Alex's Mobs included);
+	// the rest are small modded mobs picked from the entity dump. Mobs of an absent mod are skipped by the helper.
 	t.add(e, 'creativecompat:snow_layer_light', ['minecraft:fox', 'minecraft:rabbit', 'minecraft:endermite',
-		'minecraft:silverfish'])
+		'minecraft:silverfish', 'minecraft:cat', 'minecraft:ocelot', 'minecraft:spider', 'minecraft:cave_spider',
+		'minecraft:chicken', 'minecraft:parrot', 'minecraft:frog', 'minecraft:bat', 'minecraft:bee', 'minecraft:allay',
+		'neapolitan:plantain_spider',
+		'alexsmobs:bald_eagle', 'alexsmobs:blue_jay', 'alexsmobs:crow', 'alexsmobs:emu', 'alexsmobs:hummingbird',
+		'alexsmobs:potoo', 'alexsmobs:roadrunner', 'alexsmobs:seagull', 'alexsmobs:shoebill', 'alexsmobs:soul_vulture',
+		'alexsmobs:sunbird', 'alexsmobs:toucan',
+		'untitledduckmod:duck', 'untitledduckmod:goose', 'upgrade_aquatic:goose',
+		'alexsmobs:banana_slug', 'alexsmobs:capuchin_monkey', 'alexsmobs:cockroach', 'alexsmobs:crimson_mosquito',
+		'alexsmobs:fly', 'alexsmobs:jerboa', 'alexsmobs:leafcutter_ant', 'alexsmobs:mudskipper', 'alexsmobs:platypus',
+		'alexsmobs:raccoon', 'alexsmobs:rain_frog', 'alexsmobs:rattlesnake', 'alexsmobs:skunk', 'alexsmobs:sugar_glider',
+		'alexsmobs:tarantula_hawk', 'alexsmobs:terrapin', 'alexsmobs:tasmanian_devil',
+		'quark:crab', 'quark:stoneling', 'create_confectionery:little_gingerbread_man'])
 
 	// Projectile web groups (plan 5.1). Without a tag a projectile runs on its base-class default (surface/PassGroup);
 	// tools/projectile_scan.py lists the ones with no tag. Vanilla rows are listed too, so the tags are the full table.

@@ -258,6 +258,7 @@ b.t_melt_sluggish = '#creativecommon:melting/sluggish';        // melt at [melti
 b.t_melt_hot_biomes = '#creativecommon:melting/hot';           // BIOME tag: ice and snow melt there with no source (G11)
 b.t_biome_seasons_arid = '#creativecalendar:seasons/arid';      // BIOME tag, Creative Calendar sereneseasons/seasontags.js
 b.t_biome_seasons_tropical = '#creativecalendar:seasons/tropical'; // BIOME tag, as above
+b.t_biome_seasons_dry = '#creativecalendar:seasons/dry';            // BIOME tag, as above
 // Frozen decor (plan_post_scratch_1115 B8, E1): melts by [melting] meltProducts (fast tier) or slowSteps (AP packed ice)
 b.melt_iw_snowy = 'immersive_weathering:snowy_*';               // the 16 snowy stone, cobblestone, stone brick blocks -> plain
 b.melt_iw_frosty = 'immersive_weathering:frosty_*';             // frosty glass, pane, grass, fern -> glass, pane, grass, fern

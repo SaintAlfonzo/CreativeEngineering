@@ -484,11 +484,12 @@ public final class Melting {
 
 	/**
 	 * A tick of a target in a hot place (G11): no source needed. Rolls its chance, melts one stage as heat would, and
-	 * keeps its melt ticks coming every {@code hotMeltTickInterval}.
+	 * keeps its melt ticks coming every {@code hotMeltTickInterval}. The slow tier (packed ice, cryosol) rolls
+	 * {@code meltChance} here, not the low {@code slowMeltChance}, so it melts rapidly in the Nether (owner, 2026-11-17).
 	 */
 	private static boolean hotTick(BlockState state, int f, ServerLevel level, BlockPos pos, RandomSource random, Values c) {
 		boolean melted = false;
-		if (random.nextDouble() < chance(state, f, c)) {
+		if (random.nextDouble() < ((f & MELTABLE) == 0 ? c.meltChance() : chance(state, f, c))) {
 			meltTo(level, pos, state, meltedState(state, level, (f & MELTABLE) == 0));
 			melted = true;
 		}

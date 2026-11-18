@@ -590,14 +590,14 @@ look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `Fo
 ## SQ-MELT-12 | Nether (G11): packed ice, cryosol, ice and snow melt on their own with no source; blue ice and permafrost only beside lava
 @group A
 @commands In the Nether on netherrack, far from lava (16+ blocks, no lava above or below): `setblock` `minecraft:packed_ice`, `immersive_weathering:cryosol`, `minecraft:ice`, `minecraft:blue_ice`, `immersive_weathering:permafrost`; a second `minecraft:blue_ice` with a lava source touching it. Probe every 20 s for 5 minutes
-@pass ice -> air within about 1 minute (melt tick every 15 to 25 ticks, chance 0.4); packed ice -> ice -> air, cryosol -> dirt, each within about 5 minutes (chance 0.05 per tick); the lone blue ice and permafrost unchanged; the blue ice touching lava -> packed ice (then melts on as packed ice)
+@pass ice -> air within about 1 minute (melt tick every 15 to 25 ticks, chance 0.4); packed ice -> ice -> air, cryosol -> dirt, each step within about 1 minute (chance 0.4 per tick, the slow tier too, owner 2026-11-17); the lone blue ice and permafrost unchanged; the blue ice touching lava -> packed ice (then melts on as packed ice)
 @fails nothing melts: `onPlaced` hot path (packed ice has no random tick, it needs the placement schedule) or `hotMeltTickInterval 0`; lone blue ice melts: lava_only flag skipped in `isHot`
 @draft runnable steps not written yet; the next runner writes them from @commands
-## SQ-MELT-13 | arid and tropical biomes (G11): ice and snow melt with no source; packed ice and snow on blue ice stay
+## SQ-MELT-13 | arid, dry and tropical biomes (G11; dry added 2026-11-17): ice and snow melt with no source; packed ice and snow on blue ice stay
 @group B
-@commands Fresh normal world; find a desert (`locate biome minecraft:desert`) and a jungle; at each, away from any light source: `minecraft:ice`, `minecraft:snow[layers=8]`, `minecraft:snow_block`, `minecraft:packed_ice`, and `minecraft:snow[layers=8]` on `minecraft:blue_ice`. Control: the same set in a plains biome. Probe every 20 s for 4 minutes. Boot: Creative Calendar loaded (the hot tag reads its season tags)
-@pass desert and jungle: ice -> water within about 1 minute, the snow stack loses one layer at a time and is gone within about 1 minute, the snow block gone; packed ice unchanged; the snow on blue ice keeps 8 layers; plains: nothing changes
-@fails nothing melts in the desert: `#creativecommon:melting/hot` empty (Creative Calendar's `creativecalendar:seasons/arid` tag, `melting_tags.js` biome event) or `getNoiseBiome` reads another biome at that height; plains melts: tag too wide
+@commands Fresh normal world; find a desert (`locate biome minecraft:desert`), a savanna and a jungle; at each, away from any light source: `minecraft:ice`, `minecraft:snow[layers=8]`, `minecraft:snow_block`, `minecraft:packed_ice`, and `minecraft:snow[layers=8]` on `minecraft:blue_ice`. Control: the same set in a plains biome. Probe every 20 s for 4 minutes. Boot: Creative Calendar loaded (the hot tag reads its season tags)
+@pass desert, savanna and jungle: ice -> water within about 1 minute, the snow stack loses one layer at a time and is gone within about 1 minute, the snow block gone; packed ice unchanged; the snow on blue ice keeps 8 layers; plains: nothing changes
+@fails nothing melts in the desert: `#creativecommon:melting/hot` empty (Creative Calendar's `creativecalendar:seasons/arid`, `/dry`, `/tropical` tags, `melting_tags.js` biome event) or `getNoiseBiome` reads another biome at that height; plains melts: tag too wide
 @draft runnable steps not written yet; the next runner writes them from @commands
 ## SQ-MELT-14 | the End (G11): every source melts only touching blocks
 @group A

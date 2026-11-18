@@ -179,8 +179,10 @@ Status: BUILT 2026-11-15, not installed: Creative Common 1.2.0 (`Melting` listen
 
 ### 7.2 Notes
 
-- Salt Melt texture (E3, built 2026-11-17): the item model's `layer0` is `salt:item/raw_rock_salt` (was `salt:item/salt`).
-  KubeJS assets outrank the jar, so it renders `kubejs/assets/salt/textures/item/raw_rock_salt.png`, the pack's recolor
+- Salt Melt texture: the item model's `layer0` is `salt:item/salt` again (owner, 2026-11-17, after E3 had switched it to
+  `salt:item/raw_rock_salt`). KubeJS assets outrank the jar, so it renders `kubejs/assets/salt/textures/item/salt.png`,
+  the texture of The Salt's own salt item, which is merged into Vintage's Salt and hidden, so no visible item shares it;
+  the pack's recolor
   (The Salt's shape, Vintage Delight's pink palette, `palette_swap.py` via `textureswapper/salt/make_salt.py`), not
   upstream art used as is (G2h). The `kubejs/assets/salt/textures/*` row in `sources.csv` covers it. An own Salt Melt
   texture is open (owner's tools only).

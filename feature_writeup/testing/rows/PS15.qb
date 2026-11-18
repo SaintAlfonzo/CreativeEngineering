@@ -468,7 +468,7 @@ look all three refills one stage per salt (layer of 2: two stages, layer gone); 
 ## SQ-PS15-07 | Salt Melt: recipe, melts ice, packed, blue, snow block, powder snow; stone nothing; 64 uses; dispenser on ice and on stone
 @group A
 @commands Craft Salt Melt (shapeless: 2 salt dust, 2 raw rock salt); use on ice, packed ice, blue ice, snow block, powder snow, stone; use 65 times; then a dispenser facing ice, then facing stone; JEI info page
-@pass 64 uses, 1 durability per melt, breaks at the 64th; packed -> ice, blue -> packed; stone: nothing, no durability; dispenser on ice melts and damages, on stone fails and keeps it; icon is the pack's pink Rock Salt texture (`salt:item/raw_rock_salt`, E3); name "Salt Melt"; JEI page present
+@pass 64 uses, 1 durability per melt, breaks at the 64th; packed -> ice, blue -> packed; stone: nothing, no durability; dispenser on ice melts and damages, on stone fails and keeps it; icon is the pack's pink salt crystal texture (`salt:item/salt`, restored 2026-11-17), not the Rock Salt icon; name "Salt Melt"; JEI page present
 @fails `SaltMeltRegistry` (annotation scan), recipe `creativedelight:salt_melt`
 @from batches/r1116/ps15_a.qb
 > cdevtest rdetail creativedelight:shapeless/salt_melt

@@ -257,7 +257,7 @@ Create Deco coin stacks, Control Engineering logic cabinet, Copycats layers.
   top at the full layer height and the `snow` surface speed; sneaking sinks in. Items, falling blocks, projectiles and
   pathfinding keep vanilla's collision. Leaf piles and bamboo leaves have no collision of their own already.
 - Mobs in snow (G11, 2026-11-17; `SnowLayers`, `mixin/SnowMobMixin`, `SnowPathMixin`): a mob is light when its type is
-  in `#creativecompat:snow_layer_light` (fox, rabbit, endermite, silverfish) or its hitbox width x width x height is at
+  in `#creativecompat:snow_layer_light` (fox, rabbit, endermite, silverfish cats, ocelots, spiders, cave spiders, every bird: chicken, parrot, Alex's Mobs eagle, blue jay, crow, emu, hummingbird, potoo, roadrunner, seagull, shoebill, soul vulture, sunbird, toucan, ducks and geese; small modded mobs: Alex's slug, capuchin, cockroach, mosquito, fly, jerboa, ant, mudskipper, platypus, raccoon, rain frog, rattlesnake, skunk, sugar glider, tarantula hawk, terrapin, Tasmanian devil, Quark crab and stoneling, gingerbread man; owner 2026-11-17) or its hitbox width x width x height is at
   most `snowLightVolume` 0.3 (rabbit, fox, cat, chicken, parrot, frog, most babies; a wolf at 0.31 is not). Players are
   never light (leather boots only). `#minecraft:powder_snow_walkable_mobs` no longer counts alone (it holds Alex's Mobs
   tigers and bison). Other mobs sink. A sunk mob that walks into a block climbs at 0.2 blocks per tick while its feet
