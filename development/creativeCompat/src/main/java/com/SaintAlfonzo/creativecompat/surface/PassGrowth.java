@@ -142,8 +142,13 @@ final class PassGrowth {
 		return p == null ? -1 : state.getValue(p);
 	}
 
-	/** The highest value of the block's {@code layers} property, or -1 when it has none. */
+	/**
+	 * The highest value of the block's {@code layers} property, or -1 when it has none. Twigs bamboo leaves (1 to 4)
+	 * count on the 8-layer scale of {@code creativecompat:bamboo_leaves_full} (5 to 8), so slowdown, overlay and the
+	 * layer note rise steadily from 1 to 8 across both blocks.
+	 */
 	static int layersMax(BlockState state) {
+		if (FallingLayers.isTwigsLeaves(state)) return FullBambooLeavesBlock.MAX;
 		return info(state.getBlock()).layersMax();
 	}
 }
