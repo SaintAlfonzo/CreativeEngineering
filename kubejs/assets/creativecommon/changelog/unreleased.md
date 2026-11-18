@@ -10,9 +10,11 @@
 - **New:** Diet bonus effects return the tick after milk, a totem or a clear removes them.
 - **New:** Diet bonus messages show on the action bar, one at a time.
 - **New:** Diet Bonuses screen (P) and a diet bonus bar on the inventory; Shift+T unlocks the bar to move it.
+- **New:** The Diet Bonuses screen shows the effect slots side by side over a progress bar marked with each slot's diversity.
 - **Changed:** The Spice of Life Food Book is called Diet Log. It shows the diet ladder and has a Diet Bonuses button.
 - **New:** The Diet Log's progress bar shows the last milestone reached and the next 3, with an icon for each bonus. The Spice of Life bonus pages are gone.
-- **New:** The Diet Log can show foods in your diet and older foods on two pages side by side (client setting, on by default).
+- **New:** Diet Log icons: a lock for effect unlocks, a diamond shard for permanent buffs, a metal frame for effect slots. The key lists knockback resistance.
+- **New:** The Diet Log is drawn at 125% size, smaller on small windows (client setting).
 - **Changed:** The Diet Log is crafted from a book and any food that is not a drink [book and potato].
 - **New:** Liquid Diet Log, a book (book + any drink) listing every drink you have had. No bonuses.
 - **Changed:** Drinks, potions and milk no longer count toward food diversity or push foods out of your diet.
@@ -62,8 +64,16 @@
 - **Changed:** In a cobweb with webs on all 6 sides, falling stops; jump climbs slowly, sneak sinks slowly.
 - **Changed:** Taiga grape bushes, salmonberry bushes and cranberry bushes slow walking like sweet berry bushes [no slowdown].
 - **Changed:** Sweet berry bushes and the other berry bushes no longer cancel fall damage [sweet berry bushes did].
-- **Changed:** Snow layers, leaf piles, ash and sand layers, Fodder and Sawdust slow walking by height, 0.875x at 2 layers down to 0.50x at 5 of 8 (Sawdust 6 of 9); 6 or more layers walk normally [snow 0.75x from 3 layers, leaf piles 0.45x from 4, the others no slowdown].
-- **Changed:** Bamboo Leaves slow walking to 0.75x at 2 layers and 0.50x at 3, normal at 4 [about 0.35x from 3 layers], and now slow ocelots, pandas and parrots too.
+- **Changed:** Snow layers up to 7 have no collision: you walk through them, 0.90x at 2 layers down to 0.40x at 7 [you stood on them, 0.75x from 3 layers].
+- **Changed:** Leather boots stand on top of snow layers at the snow walking speed; sneak to sink in [snow layers were solid for everyone].
+- **Changed:** A snow layer that reaches 8 layers becomes a Snow Block.
+- **Changed:** Leaf piles and Bamboo Leaves slow walking by height at every height, down to 0.60x at full height [leaf piles 0.45x from 4 layers, Bamboo Leaves about 0.35x from 3]; Bamboo Leaves now slow ocelots, pandas and parrots too.
+- **Changed:** Jumping from inside 6 or more snow layers is as weak as in Powder Snow; from inside 5 or more leaf layers it is a little weaker but still reaches a block beside the pile.
+- **Changed:** Falling through snow layers is as slow as through Powder Snow; through leaf piles and Bamboo Leaves, twice as fast as that.
+- **New:** Walking through leaf piles of 6 or more layers can prick players for half a heart; each armor piece worn lowers the chance, full armor prevents it.
+- **New:** Inside a leaf pile the screen edges show its leaves, like the Powder Snow frost.
+- **Changed:** Mobs do not walk through leaf piles of 6 or more layers.
+- **Changed:** Rabbits and cats are not slowed by snow layers, leaf piles or Bamboo Leaves, and are not pricked [foxes and bees only].
 - **Changed:** Villagers, horses and every mob are slowed by these blocks like players; flying, gliding and swimming are not.
 - **Changed:** Dropped items and experience orbs stop inside any cobweb and hang there until the web is broken [they sank slowly through].
 - **Changed:** Projectiles slow down in cobwebs [no effect]. Guns, turrets and siege munitions are not affected.
@@ -76,6 +86,14 @@
 - **Changed:** Arrows, tridents and thrown tools players can pick up stay stuck for 10 minutes [1 minute], up to 128 per chunk; Loyalty tridents and tools still never despawn.
 - **Changed:** Walking through these blocks does not change the field of view.
 - **New:** WTHIT shows Walk Through, Fall Through and Neighbors lines on these blocks; the walk speed includes the block underneath.
+
+## Falling Layers <!-- icon: minecraft:snow -->
+
+- **New:** Snow layers, salt layers, Bamboo Leaves, Sawdust and Fodder fall when the block below is removed, like sand.
+- **New:** A falling layer stacks onto the same layer where it lands, up to a full block; the rest lands on top. Snow that reaches 8 layers becomes a Snow Block.
+- **New:** A falling layer that cannot land drops as items.
+- **New:** Bamboo Leaves stack past 4 layers up to 8; walking slows steadily over all 8 layers.
+- **New:** Grown bamboo drops Bamboo Leaves beside it now and then, like trees drop leaf piles.
 
 ## Wise Oak <!-- icon: minecraft:oak_log -->
 
@@ -103,6 +121,8 @@
 - **Changed:** Corn Mazes generate twice as often.
 - **Changed:** Mums go in flower pots, planter boxes and flower boxes, and spread with bone meal like other small flowers.
 - **Fixed:** Syrup had two crafting recipes into sugar; only the one giving 4 sugar is left.
+- **New:** The Cooking Pot and a heated Create mixer turn 1 Syrup into 8 Sugar and give the bottle back.
+- **New:** Syrup fluid: a heated Create mixer turns 1000 mB Sap into 250 mB Syrup and 250 mB Syrup into 8 Sugar; Spouts fill and Item Drains empty Syrup bottles at 250 mB.
 
 ## Hops <!-- icon: hearthandharvest:hops -->
 
@@ -182,11 +202,15 @@
 ## Salt <!-- icon: salt:salt -->
 
 - **Changed:** Salt Dust is named Salt.
-- **Changed:** Licked salt blocks are rock salt layers 12, 8 and 4 pixels high [full blocks].
-- **New:** A salt layer placed on a licked salt block refills it one stage per layer; waxed blocks stay waxed.
-- **New:** Salt in a dispenser restores a licked salt block, waxed or not, and puts a salt layer on top of a full one.
-- **New:** Licking a salt block with salt layers on top eats the top layer; the block keeps its size until the layers are gone.
-- **New:** Salt Melt: a 64-use tool made from 2 Salt and 2 Raw Rock Salt. Right-click ice or snow to melt it at once; Packed Ice and Blue Ice go down one tier per use. Works in a dispenser.
+- **Changed:** Raw Rock Salt is named Rock Salt, the Block of Raw Rock Salt Rock Salt Block, the Salt Block Salt Dust Block, Rock Salt ore Rock Salt Vein and Deepslate Rock Salt ore Deepslate Rock Salt Vein.
+- **Changed:** Smooth Salt Block, Salt Pillar, Salt Bricks and Salt Brick Slab, Stairs and Wall are named Chiseled Salt Block, Chiseled Salt Pillar, Chiseled Salt Bricks and so on.
+- **Changed:** A Rock Salt Block is crafted from 4 Rock Salt and breaks back into 4 [9].
+- **Changed:** The salt lick is a Rock Salt Block placed by a player [Salt Block]; Rock Salt Blocks found in the world are never licked or worn. Licked Rock Salt Blocks are layers 12, 8 and 4 pixels high [full blocks]. Salt Dust Blocks are no longer licked.
+- **Changed:** Rock Salt restores a licked Rock Salt Block one stage, by hand or from a dispenser, waxed or not [Salt or a salt layer].
+- **Changed:** The Large Salt Lamp is made from 7 Rock Salt, glowstone and a wooden slab [7 Salt Blocks, glowstone and deepslate tiles].
+- **Changed:** Water in a heated basin turns into salt only over a Rock Salt Block, which stays: 1000 mB gives 2 Salt [any heated basin of water].
+- **New:** Salt Melt: a 64-use tool made from 2 Salt and 2 Rock Salt. Right-click a saltable block to melt it at once; Packed Ice becomes ice, Blue Ice does not melt. Works in a dispenser. Unused Salt Melts stack to 16.
+- **Changed:** The Water Evaporation page in JEI shows the salt a boiled cauldron gives: 8, 5 or 3 by fill level [1].
 - **Changed:** Salt in a dispenser melts the ice or snow in front, one tier per Salt, or places a salt layer on the ground in front [did nothing].
 - **Changed:** A salt layer has a 5% chance to lose a layer each time it melts ice or snow; Salt Blocks never wear away.
 - **Fixed:** Animals more than 16 blocks from a salt lick never walked to it.
@@ -197,11 +221,16 @@
 - **New:** Licked salt blocks melt touching ice and snow, like other salt blocks.
 - **New:** Fire, soul fire, lit campfires, magma, torches, lanterns, jack o'lanterns and glowstone melt ice and snow within 3 blocks. Modded torches, sconces, lanterns and lit braziers and candelabras count too.
 - **New:** Lava melts ice and snow within 4 blocks.
-- **New:** Ice and frosted ice melt into water, or into nothing in the Nether. Snow layers, Snow Blocks and Powder Snow melt into nothing.
-- **New:** Packed Ice and Blue Ice melt one tier at a time (Blue Ice to Packed Ice to Ice), slowly: touching salt or fire, or within 2 blocks of lava.
+- **New:** Ice and frosted ice melt into water, or into nothing in the Nether. Snow Blocks and Powder Snow melt into nothing.
+- **New:** Snow layers melt one layer at a time.
+- **New:** Ice and snow near a heat source keep melting at a steady pace, about every 10 seconds, once the heat is found.
+- **New:** Magma melts snow within 2 blocks at once. No snow falls and no water freezes within 3 blocks of magma.
+- **New:** Snow on Blue Ice or Permafrost does not melt from fire, lava or magma; salt still melts it.
+- **New:** Salt melts only blocks marked "Saltable" in their tooltip: ice, Packed Ice, snow and Cryosol. Packed Ice becomes Ice, Cryosol becomes Dirt. Salt in a dispenser or a Salt Melt removes 3 snow layers per use; a Snow Block becomes 5 layers.
+- **New:** Packed Ice and Cryosol melt only from salt, slowly. Blue Ice and Permafrost do not melt.
 - **New:** Snow, Snow Blocks and Powder Snow placed in the Nether melt at once.
 - **Changed:** Light alone no longer melts ice or snow: sea lanterns, shroomlights, redstone torches and lamps and other lights without a flame leave them [any light level 12 or more].
-- **Fixed:** The Salt Block and the Block of Raw Rock Salt melted no ice or snow.
+- **Fixed:** The Salt Dust Block and the Rock Salt Block melted no ice or snow.
 
 ## Bees <!-- icon: minecraft:honeycomb -->
 
@@ -287,6 +316,10 @@
 - **Changed:** Fruit pies and cheesecakes take 3 fruit [2].
 - **Changed:** Engineer's Delight Wheat Flour turns into Create Wheat Flour in inventories, chests and loot.
 - **Fixed:** A Creative Delight or Creative Brewing member turned off in the config was still used by other jars' recipes, tags and gear effects.
+- **New:** Every raw skewer can be built on its stick in a Create sequenced assembly from the same ingredients as its basin or crafting recipe.
+- **Changed:** The raw Cave Skewer takes a Spider Leg [Spider Eye], Glow Berries and Rotten Flesh; with a Baked Spider Leg it is crafted cooked.
+- **Changed:** Strider Moss Stew in the Cooking Pot takes Nether Wart [a second Warped Fungus]; it can also be crafted from Cooked Nether Wart, Warped and Crimson Fungus, Crimson Roots and 2 raw Strider.
+- **Changed:** Warped Moldy Meat takes Cooked Nether Wart [a bowl].
 
 ## Lunchboxes <!-- icon: solapplepie:lunchbox -->
 
@@ -300,6 +333,7 @@
 - **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.
 - **Changed:** Melons, pumpkins, carved pumpkins, jack o'lanterns, moss blocks and moss carpets no longer go in flower boxes or planter boxes.
 - **Changed:** Village waystones have Yellow Corundum in their base [Glowstone].
+- **New:** Supplementaries Doormat is crafted from 2 Straw in a row.
 
 ## Loading screen tips
 
@@ -316,11 +350,15 @@
 - **Changed:** Tooltips, screen text and config file comments use American spelling: color, gray, labeled, fueled.
 - **Changed:** Recipes are no longer unlocked in the recipe book by crafting or cooking.
 - **Changed:** Fertile Soil's farmer villager tooltip line is green, as on Rich Farmland [dark blue].
+- **New:** Campfires that place unlit say so in their tooltip: "Requires a spark or flame to light" ("soulflame" on soul campfires).
 
 ## Gameplay
 
 - **Changed:** Mending repairs gear from collected XP [only by an anvil and a Mending book].
 - **Changed:** Elytra fly in every dimension [the End only].
+- **New:** A torch lights an unlit campfire and is used up; a soul torch lights only a soul campfire, a plain torch only the others. In rain that would put the campfire out, the torch hisses and is kept.
+- **Changed:** Dragon armor gives 8, 13, 11 and 8 armor points for helmet, chestplate, leggings and boots [7, 12, 10, 7].
+- **Changed:** Items can no longer be frozen into Rare Ice; Rare Ice comes only from world generation [right-click ice with an item].
 - **Fixed:** Rubber trees did not generate in jungles.
 - **Fixed:** Placing a block or item against a hops vine, jungle grape vine, vanilla vine or mulberry vine replaced the vine.
 - **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
