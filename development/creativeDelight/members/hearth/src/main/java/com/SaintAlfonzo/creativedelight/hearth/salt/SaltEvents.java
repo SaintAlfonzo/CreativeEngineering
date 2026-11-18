@@ -35,12 +35,11 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * Player use of a salt lick. Goes through events rather than the block because stage 0 is The Salt's block: lick with
- * both hands empty, honeycomb to wax, an axe to unwax, salt to restore one stage (by hand and by dispenser).
+ * both hands empty, honeycomb to wax, an axe to unwax, Rock Salt to restore one stage (by hand and by dispenser;
+ * plan_post_scratch_1115 G2b).
  */
 public final class SaltEvents {
     public static final TagKey<EntityType<?>> SALT_LICKERS = TagKey.create(Registry.ENTITY_TYPE_REGISTRY, new ResourceLocation("creativedelight", "salt_lickers"));
-    private static final ResourceLocation SALT_ITEM_ID = new ResourceLocation("salt", "salt");
-    private static final ResourceLocation SALT_DUST_ID = new ResourceLocation("vintagedelight", "salt_dust");
 
     private SaltEvents() {
     }
@@ -79,7 +78,6 @@ public final class SaltEvents {
             }
             succeed(event, level);
         } else if (SaltLick.isSalt(stack) && SaltLick.restored(block) != null) {
-            // On a full lick this does not fire: salt dust's own click puts a layer on top (B7).
             if (!level.isClientSide()) {
                 SaltLick.refill(level, pos, state, 1);
                 consume(player, stack);
@@ -108,22 +106,19 @@ public final class SaltEvents {
     }
 
     /**
-     * Salt (and, since plan_bugfix_1114 3.7, Vintage Delight salt dust) in a dispenser facing a salt lick: a worn stage is
-     * restored one stage (waxed or not, the same refill as by hand), a full one gets a salt layer on top (B7,
-     * plan_post_scratch_1115). Any other target falls through to the behavior already registered (The Salt's: melt a
-     * frozen block, a layer on air, else drop).
+     * Rock Salt in a dispenser facing a worn salt lick restores one stage (waxed or not, the same refill as by hand;
+     * plan_post_scratch_1115 G2b). Any other target falls through to the behavior already registered (a plain drop).
+     * Salt dust is no longer wrapped: it keeps The Salt's melting dispense (G6-10).
      */
     public static void registerDispenser() {
-        registerDispenser(ForgeRegistries.ITEMS.getValue(SALT_ITEM_ID));
-        registerDispenser(ForgeRegistries.ITEMS.getValue(SALT_DUST_ID));
+        registerDispenser(ForgeRegistries.ITEMS.getValue(SaltLick.ROCK_SALT_ID));
     }
 
     private static void registerDispenser(Item salt) {
         if (salt == null || salt == Items.AIR) {
             return;
         }
-        // Wrap the behavior already there (Salt's melting dispense for salt:salt), so a target that is not a lick
-        // still gets it instead of a plain drop.
+        // Wrap the behavior already there, so a target that is not a worn lick still gets it.
         java.util.Map<Item, DispenseItemBehavior> registry = ObfuscationReflectionHelper.getPrivateValue(DispenserBlock.class, null, "f_52661_");
         DispenseItemBehavior previous = registry == null ? null : registry.get(salt);
         DispenserBlock.registerBehavior(salt, new DefaultDispenseItemBehavior() {
@@ -134,14 +129,9 @@ public final class SaltEvents {
                 Level level = source.getLevel();
                 BlockState state = level.getBlockState(target);
                 Block block = state.getBlock();
-                if (SaltLick.isLickable(block) || SaltLick.isWaxed(block)) {
-                    boolean done = SaltLick.restored(block) != null
-                            ? SaltLick.refill(level, target, state, 1) == 0
-                            : SaltLick.addLayerOnTop(level, target);
-                    if (done) {
-                        stack.shrink(1);
-                        return stack;
-                    }
+                if (SaltLick.restored(block) != null && SaltLick.refill(level, target, state, 1) == 0) {
+                    stack.shrink(1);
+                    return stack;
                 }
                 return previous != null ? previous.dispense(source, stack) : super.execute(source, stack);
             }

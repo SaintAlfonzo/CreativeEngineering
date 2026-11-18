@@ -1316,3 +1316,64 @@ expect \[salttest\] PASS vintagedelight:salt_bricks in rain, open sky, stays
 expect \[salttest\] PASS vintagedelight:salt in rain, open sky, stays
 expect \[salttest\] PASS Salt Layer beside water becomes water
 expect \[salttest\] PASS salt:salt_block beside water dissolves
+
+@@section 3
+@@title Salt redesign, 2026-11-17 ([salt.md](../salt.md) 8, plan_post_scratch_1115 G2, G7.6, G7.7; TODO `tooling/scratch-1115-follow-ups #21`, `#6`, 1115b `#12`)
+@@date 2026-11-17
+@@jars creativedelight
+@@sources feature_writeup/salt.md development/creativeDelight/members/hearth/src/main/java/com/SaintAlfonzo/creativedelight/hearth/salt development/creativeDelight/members/salt/src/main/java/io/github/mortuusars/salt kubejs/data/creativedelight/kubejs/creativedelight/salt.js development/creativeDelight/src/main/java/com/SaintAlfonzo/creativedelight/compat/jei/SaltEvaporationJEI.java
+@@text
+@@text Server rows need the Creative Delight jar built 2026-11-17 and the Creative Common jar from lane M1 (isSaltable,
+@@text saltMeltSnowLayers). Client rows: names, JEI page.
+@@text
+@@table
+## SQ-SALT2-10 | Rock Salt Block is the lick: a cow walks to it and wears it; Salt Dust Block is not licked
+@group A
+@commands Fenced 9x9 pasture, 2 cows; `salt:raw_rock_salt_block` at one end, `salt:salt_block` at the other; `/gamerule randomTickSpeed 3`; watch 10 minutes (or until the rock salt block wears a stage)
+@pass the Rock Salt Block becomes `hearthandharvest:lightly_licked_salt_block` (then well, heavily); the Salt Dust Block never changes; latest.log has no "salt lick POI clash" line
+@fails no wear: POI not built on the Rock Salt Block (`SaltLick.SALT_BLOCK_ID`); Salt Dust Block worn: old root
+## SQ-SALT2-11 | Rock Salt refills one stage by hand and by dispenser; salt dust and salt layers do not
+@group A
+@commands A `heavily_licked_salt_block`: right click with salt dust, then with `vintagedelight:salt` (layer item), then with `salt:raw_rock_salt`; a dispenser with salt dust then rock salt facing a `well_licked_salt_block`; a `waxed_heavily_licked_salt_block` + rock salt by hand; a full Rock Salt Block + rock salt by hand
+@pass salt dust and the layer item do not change the lick (the layer item places a layer on top, which stays); rock salt: heavily -> well, 1 rock salt used; dispenser: salt dust leaves the lick unchanged (dropped or melts nothing), rock salt well -> lightly; waxed heavily -> waxed well; full block: nothing used
+@fails salt dust refills: `SaltLick.isSalt` still on `#forge:salt`; layer merged into the lick: `LickableSaltBlock.neighborChanged` still present
+## SQ-SALT2-12 | licking with a salt layer on top wears the lick, not the layer; last wear drops 1 salt dust
+@group A
+@commands `hearthandharvest:heavily_licked_salt_block` with `vintagedelight:salt[layers=3]` on top; empty both hands, right click it until it wears (`[hearthandharvest] playerLickChance` permitting)
+@pass the lick is removed (the layer above drops as dust from lost support) and 1 `vintagedelight:salt_dust` pops from the lick; the layer never shrinks from licking
+@fails layer shrinks first: B5 path still in `SaltLick.wear`; `salt:salt` drops: old drop id
+## SQ-SALT2-13 | recipes: Rock Salt Block 4 <-> 4, heated basin water over a Rock Salt Block, Large Salt Lamp, no water_salt
+@group any
+@commands `/kubejs dump_recipes` or JEI-free check: `creativedelight:shaped/rock_salt_block`, `creativedelight:shapeless/rock_salt_from_block`, `creativedelight:createmixing/rock_salt_water_salt`, `creativedelight:shaped/large_salt_lamp`; `salt:raw_rock_salt`, `salt:raw_rock_salt_block` and `creativedelight:createmixing/water_salt` absent. Live: heated basin, 1000 mB water first, wait 10 s; then a Rock Salt Block in, wait
+@pass ids as listed (salt lamp: 7 rock salt, glowstone, `#minecraft:wooden_slabs`); water alone stays water; with the block: 2 salt dust out, the block stays in the basin, 1000 mB used
+@fails water turns to salt alone: old `water_salt` still loaded
+## SQ-SALT2-14 | Power Grid acid in water is heated; flesh in a heated basin with water makes acid, not salt
+@group any
+@commands Heated basin: 250 mB water, 1 rotten flesh, 1 spider eye; then the same in an unheated basin
+@pass heated: 250 mB `powergrid:acid`; unheated: nothing happens
+@fails unheated makes acid: the `heated` argument missing in power_grid.js
+## SQ-SALT2-15 | Salt Melt stacks to 16 unused; a use from a stack splits one off
+@group A
+@commands `/give @p salt:salt_melt 20`; right click `minecraft:ice` once with the 16 stack; check the inventory; put a damaged Salt Melt and an unused one in a crafting grid slot drag test (try to stack them)
+@pass the 20 arrive as 16 + 4; after the use: 15 unused in hand and 1 Salt Melt with 63/64 elsewhere in the inventory; the ice is water; damaged and unused never stack
+@fails 20 stacks of 1: `getMaxStackSize(ItemStack)` not called; whole stack damaged: split missing
+## SQ-SALT2-16 | Salt Melt in a dispenser: a stack of 4 melts and keeps the used one in the dispenser
+@group A
+@commands Dispenser with 4 unused Salt Melts facing `minecraft:snow[layers=8]`; power once; open the dispenser
+@pass snow 8 -> 5 layers; the dispenser holds 3 unused and 1 at 63/64 in another slot (if no slot was free, that one lies in front)
+@fails 4 at 63: split missing in `SaltMeltItem.Dispense`
+## SQ-SALT2-17 | Salt Melt and salt dust act on plain ice with Rare Ice installed (1115b #12)
+@group A
+@commands `grep allowInsertingItemsToIce config/rare-ice.properties`; right click `minecraft:ice` with salt dust, then with a Salt Melt; on Blue Ice with a Salt Melt
+@pass the config line says false; salt dust places a salt layer on the ice (no Rare Ice block); the Salt Melt turns the ice into water and loses 1 use; Blue Ice: nothing happens, no use spent
+@fails Rare Ice block appears: config not read; blue ice melted: `salt:meltables` or `isSaltable` gate missing
+## SQ-SALT2-18 | `#salt:meltables` follows the saltable tag
+@group any
+@commands latest.log after load: no `t_salt_meltables` warning (needs the Creative Common block_dict key); `/kubejs dump_tags block` or a tag probe for `salt:meltables`
+@pass `salt:meltables` holds the saltable tag's blocks; no `minecraft:blue_ice`, no `securitycraft:reinforced_snow_block`
+@fails the warning line: block_dict key missing (Creative Common); blue ice listed: script did not run
+## CQ-SALT2-01 | names and the Water Evaporation page
+@group client
+@commands Hover Rock Salt, Rock Salt Block, Salt Dust Block, Rock Salt Vein, Deepslate Rock Salt Vein, the licked stages, Smooth Salt Block, Salt Bricks; JEI: open Salt's uses (U), the Water Evaporation page
+@pass names: Rock Salt, Rock Salt Block, Salt Dust Block, Rock Salt Vein, Deepslate Rock Salt Vein, Lightly Licked Rock Salt Block (and the rest), Chiseled Salt Block, Chiseled Salt Bricks; lamps unchanged; one Water Evaporation page (not two) with 8 salt in the output slot and the tooltip "Full cauldron: 8 / Two thirds full: 5 / One third full: 3"
+@fails two evaporation pages: The Salt's page not hidden; output 1: CD plugin not loaded

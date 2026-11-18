@@ -54,6 +54,7 @@
     "minecraft.ServerPlayerGameModePlacedFoodMixin",
     "minecraft.TemptGoalTroughRetryMixin",
     "minecraft.VineCropNoReplaceMixin",
+    "minecraft.HeightmapPlacementCanopyMixin",
     "quark.FeedingTroughModuleMixin",
     "quark.QuarkHoeAreaBreakMixin",
     "quark.QuarkHoeAreaHarvestMixin",

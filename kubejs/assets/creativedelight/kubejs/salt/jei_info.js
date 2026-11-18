@@ -7,9 +7,9 @@ JEIEvents.information(e => {
 	if (!global.CD.qol('jeiInfoPages')) return
 	var i = global.item
 
-	// Salt Melt (plan_post_scratch_1115 B6)
+	// Salt Melt (plan_post_scratch_1115 B6, G7.6, G7.11, G7.14)
 	e.addItem(i.salt_melt, [
-		Text.of('Right click ice or snow to melt it at once. Packed and blue ice step down one kind of ice per use.'),
-		Text.of('Works in a dispenser facing the block. 64 uses, 1 per melt.'),
+		Text.of('Right click a saltable block (its tooltip says so) to melt it at once: snow loses 3 layers, ice turns to water, Packed Ice to ice. Blue Ice does not melt.'),
+		Text.of('Works in a dispenser facing the block. 64 uses, 1 per melt. Unused ones stack to 16.'),
 	])
 })

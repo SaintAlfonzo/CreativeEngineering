@@ -72,5 +72,12 @@
   "item.creativedelight.wooden_water_bucket": "Wooden Water Bucket",
   "item.creativedelight.wooden_sap_bucket": "Wooden Sap Bucket",
   "item.creativedelight.wooden_milk_bucket": "Wooden Milk Bucket",
-  "item.creativedelight.wooden_honey_bucket": "Wooden Honey Bucket"
+  "item.creativedelight.wooden_honey_bucket": "Wooden Honey Bucket",
+  "creativedelight.jei.salt_evaporation.full": "Full cauldron: %s",
+  "creativedelight.jei.salt_evaporation.two_thirds": "Two thirds full: %s",
+  "creativedelight.jei.salt_evaporation.one_third": "One third full: %s",
+  "creativedelight.campfire.unlit": "Requires a spark or flame to light",
+  "creativedelight.campfire.unlit_soul": "Requires a spark or soulflame to light",
+  "creativedelight.campfire.torch": "A torch lights it",
+  "creativedelight.campfire.torch_soul": "A soul torch lights it"
 }

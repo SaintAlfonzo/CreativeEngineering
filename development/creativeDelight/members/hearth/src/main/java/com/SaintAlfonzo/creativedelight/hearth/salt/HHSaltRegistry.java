@@ -64,7 +64,7 @@ public final class HHSaltRegistry {
         if (salt != null && salt != Blocks.AIR) {
             states.addAll(salt.getStateDefinition().getPossibleStates());
         } else {
-            LOGGER.warn("salt:salt_block is not registered; the salt lick POI covers the worn stages only");
+            LOGGER.warn("salt:raw_rock_salt_block is not registered; the salt lick POI covers the worn stages only");
         }
         states.addAll(LIGHTLY_LICKED.get().getStateDefinition().getPossibleStates());
         states.addAll(WELL_LICKED.get().getStateDefinition().getPossibleStates());

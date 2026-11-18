@@ -1,7 +1,7 @@
 # Post-scratch plan, run r1115 (written 2026-11-15)
 
-<!-- generated:status_index begin open_work sha1=b1190bf43c81 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Bug 1, Planned 9, In Progress 1, Testing 13), 0 Complete.
+<!-- generated:status_index begin open_work sha1=7fe0ba6e4f37 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 24 open TODO rows (Bug 1, Planned 7, In Progress 1, Testing 15), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -10,11 +10,9 @@
 | `tooling/scratch-1115-follow-ups #12` | Planned | P | Investigate original wild hops vs current |
 | `tooling/scratch-1115-follow-ups #14` | Planned | S P | Investigate missing wild crop placements and missing crops |
 | `tooling/scratch-1115-follow-ups #16` | Planned | C | Heap spill into warped forest: look in game |
-| `tooling/scratch-1115-follow-ups #20` | Planned | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
 | `tooling/scratch-1115-follow-ups #21` | Planned | S C | Salt redesign: rock salt names, rock salt lick root and refill, water-salt recipe swap, lamp recipe, Salt Melt stacking, JEI yield |
 | `tooling/scratch-1115-follow-ups #22` | Planned | S C | Small fixes: campfire light tooltip, torches light campfires, dragon armor +4, Rare Ice worldgen only |
 | `tooling/scratch-1115-follow-ups #23` | Planned | S C | Layers: BlockRunner materials, full snow to powder snow, jump and fall in layers, leather boots, leaf thorns and overlay, bamboo leaves drop |
-| `tooling/scratch-1115-follow-ups #24` | Planned | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 | `tooling/scratch-1115-follow-ups #6` | In Progress | S | Falling salt layer refills a salt lick; lick pulls top layers first |
 | `tooling/scratch-1115-follow-ups #1` | Testing | C | Wall exit lift: floor portal to wall portal stuck in floor |
 | `tooling/scratch-1115-follow-ups #3` | Testing | S | Salt: click on frozen block places a layer, no melt |
@@ -29,6 +27,8 @@
 | `tooling/scratch-1115-follow-ups #17` | Testing | S | Power Grid arm takes one circuit component per pickup |
 | `tooling/scratch-1115-follow-ups #18` | Testing | S | Acid from rotten flesh and spider eyes in water |
 | `tooling/scratch-1115-follow-ups #19` | Testing | S | Upgrade Aquatic guard for river tree worldgen files |
+| `tooling/scratch-1115-follow-ups #20` | Testing | S C | Melting: 5x speed, magma snow guard, snow on blue ice and permafrost, IW cryosol and permafrost melt, snow melts by layer |
+| `tooling/scratch-1115-follow-ups #24` | Testing | S C | Raspberry Pie: single page, book scale 125%, horizontal buff slots and progress bar, icon swaps |
 <!-- generated:status_index end open_work -->
 
 Source: [scratch_run_2026-11-15.md](testing/scratch_run_2026-11-15.md) section 9 (findings routing) and the owner's
@@ -280,6 +280,8 @@ proposal (rows 2 to 5: frosty glass, pane, grass, fern, frost, thin ice, icicle)
 
 ### E2. C4 fix: canopy-proof heightmap for wild crops, config switch, default off
 
+**Built 2026-11-17 (lane M2), not installed:** CD mixin `HeightmapPlacementCanopyMixin` (redirect of the heightmap read in `getPositions`, `PlacementContext.topFeature()` checked on 1.19.2 Mojmap), `crops/CanopyProofHeightmap`, tag `creativedelight:canopy_proof` in the CD jar, key `[worldgen] wildCropCanopyProofHeightmap = false` (mirrored); crops.md 2.8. Assumed: the tag also takes the Vintage, Delightful, Respite and Corn Delight patches of the C4 table (harmless where no leaves). Rows SQ-PS15-28, -29.
+
 - What: a switch that makes the surface wild crop features of forest, jungle, swamp and taiga rules use
   `MOTION_BLOCKING_NO_LEAVES` instead of `MOTION_BLOCKING`. Placed-feature JSON cannot read a config, so the switch is a
   small hook on the heightmap placement modifier of the `creativedelight:wild/*` placed features (mixin or swapped modifier
@@ -346,6 +348,8 @@ permafrost and cryosol out as soils; E1 makes blue ice lava-only.
 
 ### G2. Salt redesign (Creative Delight salt, Vintage and hearth members; lang; `salt.js`)
 
+**Built 2026-11-17 (lane M2), not installed** with G7.6, G7.7 and the lick part of G7.5: salt.md 8, rows SQ-SALT2-10 to -18, CQ-SALT2-01. Assumed: Vintage's merged `salt_block` is named Salt Dust Block (it follows the block it merges into, not Chiseled); Rock Salt on a full lick does nothing; natural Rock Salt Blocks (caves, beaches) are licks too (G6-10 accepted); the JEI page reads the loot tables only when the server runs in the same process and shows 8, 5, 3 on a dedicated server's client. Open: 1115b `#13` cause is in Common `Melting` (target melted before the salt listener).
+
 Facts (2026-11-16): the lick chain is `salt:salt_block` (stage 0) -> lightly, well, heavily licked (hearth `SaltLick`,
 4 stages; the last wear removes the block and drops 1 salt). The licked stages already look like rock salt (changelog:
 "Licked salt blocks are rock salt layers 12, 8 and 4 pixels high"). Refill today is salt dust (hand, dispenser) and salt
@@ -367,6 +371,8 @@ heated mixing 1000 mB water -> 2 salt (`water_salt`); Large Salt Lamp = 7 Salt B
 | G2h | "Where did the Salt Melt texture come from?" Answered: the model points at `salt:item/salt`, and KubeJS assets outrank the jar, so it renders `kubejs/assets/salt/textures/item/salt.png`. That file is the pack's recolour (The Salt's shape, Vintage Delight's pink palette, `palette_swap.py` via `textureswapper/salt/make_salt.py`; its row is `kubejs/assets/salt/textures/*` in sources.csv). | B6 and E3 said "plain upstream use"; that is wrong for both `item/salt` and `item/raw_rock_salt` (both recoloured in kubejs/assets). Fix B6/E3 wording in salt.md 7.2 at build; no new sources.csv row is needed because the existing row covers the folder. |
 
 ### G3. Small fixes (independent)
+
+**Built 2026-11-17 (lane M2), not installed:** CD `campfire/CampfireTorch`, `[campfire]` switches (mirrored), dragon armor 8/13/11/8 and Rare Ice `allowInsertingItemsToIce=false` (both mirrored). Assumed: a torch is any `TorchBlock` item but the redstone torch, "soul" read from the registry path; rain refuses only where `CampfireRain` would put the campfire out (not soul campfires, not on a fuel block); the tooltip's torch line is a second line ("A torch lights it"). Rows SQ-PS15-24 to -27, CQ-PS15-05.
 
 | Step | What | Notes |
 |---|---|---|
@@ -492,6 +498,16 @@ cryosol). Gated on G7.1's method choice.
 - Holes: snow layer 8 -> snow block also fires on layers made by snowfall and by G7.5 merges; a snow block keeps
   melting as a full block (whole block per melt). 1115b F2 (snow keeps `solidBelowFull`) and its default overrides are
   dropped for snow. Rewrite the D table, harness cases and SQ-PS15B-10/-11 at build.
+- **State: built 2026-11-17** (Creative Compat, lane L1 of plan_exec_1117.md; not installed). `surface/SnowLayers` +
+  `mixin/SnowLayerPassMixin`: snow layers 1 to 7 have no collision for living entities; an entity that can walk on
+  powder snow (leather boots, `#minecraft:powder_snow_walkable_mobs`) stands on the full layer height while above it
+  and not sneaking; items, falling blocks, projectiles and contexts without an entity keep vanilla collision. Layer 8
+  -> snow block on placement (`getStateForPlacement`) and on a random tick; `SnowLayers.fullToBlock` is the seam for
+  G7.5 merges and snowfall stacking (vanilla 1.19.2 snowfall only places 1 layer). Config `[surface.passthrough.layers]`
+  `snowMaxSlow`, `leafMaxSlow`, `snowWalkThrough`, `snowFullBecomesBlock` (sync format 3); `solidBelowFull` and its
+  overrides removed. **Assumed** (plan proposals, not ruled): `snowMaxSlow` 0.4 and `leafMaxSlow` 0.6; the two
+  switches; mobs vanilla lets walk on powder snow (rabbits, foxes) stand on snow layers like leather boots; mob
+  pathfinding still sees vanilla snow collision (a mob may aim to step onto a pile it then sinks into).
 
 **G7.5 All layers fall and stack (E4 generalized).** Every layer block (snow layers, leaf piles, bamboo leaves and its
 full version, salt, IW sand, red sand and ash, Supplementaries ash and fodder, IE sawdust) falls when unsupported and
@@ -631,6 +647,32 @@ ice stop melting beside fire and lava (today `slowFireRange` 1, `slowLavaRange` 
   No per-chunk source set, no new save data. G7.3 builds on it: packed ice, blue ice, cryosol and permafrost leave
   `extraRandomTickBlocks`. The perf comparison of G7.1 is queued for a later run, not run before the build.
 - Order of execution: [plan_exec_1117.md](plan_exec_1117.md).
+
+### G9. Melting build of 2026-11-17 (lane M1; Creative Common)
+
+Built in Creative Common (`melting/Melting.java`, `MeltTags`, `SaltableTooltip`, `mixin/BiomeMeltMixin`,
+`MeltingBlockStateMixin` scheduled tick, `[melting]` keys, `melting_tags.js`): G8 method, G7.2 and G6 A (magma),
+G7.3 with G7.15 (slow tier on the source path, heat off), G7.10 and G6 6 (snow by layer, 3 per salt use), G7.11
+(saltable tag, saltProducts, tooltip), G6 4b (keeps_snow). Writeup [melting.md](melting.md); rows SQ-PS15-17 to -23,
+CQ-PS15-04, perf SQ-MELT-P2 (queued). Points the plan left open, built as proposed and **assumed** (owner to confirm):
+- **assumed:** `meltTickInterval = 200` (10 s, each tick 75 to 125 percent of it), and each melt tick rolls the
+  chance (`meltChance` 0.4, `snowLayerMeltChance` 0.8, `slowMeltChance` 0.05) instead of melting for certain.
+- **assumed:** G7.15 against G8: the four slow blocks leave `extraRandomTickBlocks` and sit on the source path, but
+  heat skips the whole slow tier while `[melting] slowHeatMelting = false` (default). Salt blocks scan on their own
+  random tick so they still find packed ice and cryosol. With the switch on, a fire that does not tick (torch) next to
+  them still melts nothing.
+- **assumed:** lava scans on its own tick except in ultra-warm dimensions (lava seas; Nether ice still finds lava on
+  its random tick).
+- **assumed:** magma's instant zone (2) fires on snow placement, on magma's tick and on the snow's melt tick, not on
+  every snow random tick (a magma check per snow random tick costs too much in snowy biomes). The snow and ice guard
+  uses the `fireRange` sphere on the server only; world generation is not checked. The magma tag holds only
+  `minecraft:magma_block`.
+- **assumed:** a salt block's tick removes 1 snow layer; a snow block hit by salt (tick or use) first becomes 8 layers
+  (heat still melts it whole). "Snow" for keeps_snow and the instant zone is `#minecraft:snow` (layers, snow block,
+  powder snow).
+- **assumed:** saltable = the meltable set (ice, frosted ice, Rare Ice, snow, snow block, powder snow) plus packed ice
+  and cryosol. The tooltip line is gray (`col.norm` role).
+- Not built: IW snowy conversion near magma (G7.2), E1 frozen decor (row `#9`), the ambient audits (G7.14).
 
 ## Not decided or not in this pass
 

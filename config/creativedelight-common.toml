@@ -59,6 +59,11 @@
 	#Which biomes each wild crop and fruit tree spawns in (_worldgen/wild_crops.json).
 	#Off: every crop as its mod ships it.
 	wildCrops = true
+	#Wild crop patches in #creativedelight:canopy_proof (placed features) that look for the
+	#surface with MOTION_BLOCKING look with MOTION_BLOCKING_NO_LEAVES instead, so a patch under a forest or jungle
+	#canopy lands on the ground, not on the leaves (plan_post_scratch_1115 C4, E2). Rejoin the world to apply;
+	#only chunks generated afterwards change.
+	wildCropCanopyProofHeightmap = false
 
 #WTHIT shows 'Growth: 60%' / 'Growth: Mature' only for CropBlock subclasses plus a few vanilla
 #plants. This adds the same line, with the same wording and the same 'Crop progress' toggle in
@@ -92,11 +97,11 @@
 [crop_drops]
 
 	#Rustic Delight bell peppers. A ripe plant drops one pepper picked by weight, then each
-	#colour has its own bonus chance for one extra. Each colour's share of the picked pepper is
-	#weight / (sum of weights). Per harvest, colour X averages
+	#color has its own bonus chance for one extra. Each color's share of the picked pepper is
+	#weight / (sum of weights). Per harvest, color X averages
 	#  weightX / (sum of weights) + bonusChanceX
 	#Defaults (1:1:1, 0.15 each) give 0.483 of every colour. The mod ships 6:1:1 with no red
-	#bonus (red about 58% of peppers). A weight of 0 takes the colour out of the main roll.
+	#bonus (red about 58% of peppers). A weight of 0 takes the color out of the main roll.
 	[crop_drops.bell_peppers]
 		#true: use the values below. false: the mod's own table, untouched.
 		enabled = true
@@ -264,7 +269,7 @@
 	#Quark feeding trough: after an animal's trough search finds nothing, it does not search again for
 	#this many ticks (600 = 30 s). Each search is a point-of-interest scan plus a ray cast, and a
 	#hungry animal with no trough nearby repeated it every few ticks. Cost: a trough placed or
-	#refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behaviour).
+	#refilled next to an animal is noticed up to this long late. 0 = off (Quark's own behavior).
 	#Range: 0 ~ 72000
 	troughMissCooldownTicks = 600
 
@@ -427,6 +432,20 @@
 	#spread over the period). 1 = every tick.
 	#Range: 1 ~ 200
 	comfortEveryTicks = 20
+	#A torch used on an unlit campfire lights it (campfire.CampfireTorch). Flint and steel is unchanged.
+	torchLights = true
+	#Lighting a campfire with a torch uses the torch up (not in creative mode).
+	torchConsumed = true
+	#A torch does not light a campfire that rain would put out (rainDouses, open rain, not on a
+	#rain_proof_fuel block): the extinguish sound plays and no torch is used.
+	torchRainRefuses = true
+	#Soul torches light only soul campfires and plain torches only the other campfires. Off: any torch
+	#lights any campfire.
+	soulflameRule = true
+	#Tooltip on campfires that Unlit Campfire places unlit: "Requires a spark or flame to light"
+	#("soulflame" on soul campfires), plus a torch line while torchLights is on. Shown only while Unlit
+	#Campfire is loaded. Read on the client from its own copy of this file.
+	unlitTooltip = true
 
 #One switch per optional Creative Delight compartment (Java, assets and data folded into this jar).
 #Each works only with its mod installed; off = as if that mod were absent: no blocks, no changes to it,

@@ -144,6 +144,10 @@ public class CreativeDelight {
 		if (mods.isLoaded("corn_delight")) {
 			MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.compat.CornDelightCompat.class);
 		}
+		// Torches light campfires and the "placed unlit" campfire tooltip ([campfire], plan_post_scratch_1115 G3, G7.8).
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.campfire.CampfireTorch.class);
+		// Canopy-proof wild crop heightmap ([worldgen] wildCropCanopyProofHeightmap, E2): tag cache cleared on tag reload.
+		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.crops.CanopyProofHeightmap.class);
 		// Remainder buffer: pot/kettle/oven keep ingredient leftovers (remainder_buffer.md). Saved as an attached cap.
 		MinecraftForge.EVENT_BUS.register(com.SaintAlfonzo.creativedelight.cooking.RemainderBufferStorage.class);
 		// Cookware: sneak right-click picks up, sneak left-click toggles the handle (QoL-7, cooking/kitchen #27).
