@@ -177,4 +177,6 @@ row status, `configs_edited/` copy for any config. Jars wait for a restart windo
 
 - F2: random-tick audit fixes rows 1 to 12 of [random_tick_audit.md](random_tick_audit.md) approved (owner, 2026-11-17).
 - Supplementaries Doormat gets a recipe; Floral Enchantment flower bushes stop random-ticking (owner, 2026-11-17, pack defaults).
+  Doormat built 2026-11-17 (lane F): 2 Farmer's Delight straw in a row, upstream's flax shape, in Creative Compat's
+  `misc_mods.js`; SQ-FCK-19, MG-51.
 - Order of execution: [plan_exec_1117.md](plan_exec_1117.md).

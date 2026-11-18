@@ -521,6 +521,20 @@ expect verb=count block=corn_delight:corn_crop n=0\b
 reject \[cdevtest\] .*done=0
 look the count box is the top layer only (y -59): n=0 means no top halves left; tag is creativedelight:crops/harvest_from_bottom since 2026-11-09
 
+## SQ-FCK-19 | Supplementaries Doormat: one recipe, two straw in a row
+@group A
+@commands `cdevtest makes supplementaries:doormat`; `cdevtest rdetail doormat_from_straw`
+@pass one recipe makes the doormat, `creativecompat:shaped/doormat_from_straw` (or the id NCH gives), ingredients 2 `farmersdelight:straw` (owner, 2026-11-17)
+@fails `misc_mods.js` not in the Compat jar; Supplementaries' `doormat` flag off
+@jars creativecompat
+@draft no batch holds this row yet
+> cdevtest makes supplementaries:doormat
+> cdevtest rdetail doormat_from_straw
+waitlog verb=rdetail text=doormat_from_straw 30
+expect verb=makes item=supplementaries:doormat n=1$
+expect verb=rdetail id=\S*doormat_from_straw serializer=\S+ result=supplementaries:doormat\*1 ingredients=farmersdelight:straw,farmersdelight:straw$
+reject \[cdevtest\] .*done=0
+
 ## SQ-AZW-01 | rerun: azalea trees grow quark:azalea_log; logs stay azalea; 4 woods merged into oak; no item_dict Missing (sunflower_stem)
 @group A
 @commands `/place feature minecraft:azalea_tree` x3; bone meal a `minecraft:azalea` on moss; `/give @p quark:azalea_log 4`; grep latest.log `[removedWoods]`

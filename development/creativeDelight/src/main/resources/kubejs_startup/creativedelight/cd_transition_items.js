@@ -89,6 +89,19 @@ StartupEvents.registry('item', e => {
 		['horror_lasagna'],
 		['stuffed_potato'],
 		['crispy_skewer'],
+		// Raw skewers (CD barbequesdelight/skewers.js, dishes/meals #57), keyed by the raw item's id path. The ten
+		// Barbeque's Delight lines use their own sprite; the eight pack raws share the raw cod skewer's, as their models do
+		['raw_beef_skewer'], ['raw_chicken_skewer'], ['raw_cod_skewer'], ['raw_salmon_skewer'], ['raw_lamb_skewer'],
+		['raw_mushroom_skewer'], ['raw_pork_sausage_skewer'], ['raw_potato_skewer'], ['raw_rabbit_skewer'],
+		['raw_vegetable_skewer'],
+		['raw_barbecue_stick',             'barbequesdelight:item/raw_cod_skewer'],
+		['raw_end_barbecue_stick',         'barbequesdelight:item/raw_cod_skewer'],
+		['raw_improvised_barbecue_stick',  'barbequesdelight:item/raw_cod_skewer'],
+		['raw_nether_skewer',              'barbequesdelight:item/raw_cod_skewer'],
+		['raw_seafood_skewer',             'barbequesdelight:item/raw_cod_skewer'],
+		['raw_turnip_mutton_skewer',       'barbequesdelight:item/raw_cod_skewer'],
+		['raw_crispy_skewer',              'barbequesdelight:item/raw_cod_skewer'],
+		['raw_caveskewer',                 'barbequesdelight:item/raw_cod_skewer'],
 		['kebab_wrap'],                                               // Barbeque's Delight combos (plan_meals_rolls_bbq.md C8)
 		['kebab_sandwich'],
 		['crawling_sandwich'],

@@ -213,12 +213,15 @@ global.CD.food = function (e) {
 		//   cookedInputs     1 to 3 cooked ingredient groups: the heatless craft straight to the cooked skewer
 		//                    (`_from_cooked_manual_only`); none when no input has a cooked form (the raw craft would clash)
 		//   steps            the cooked skewer's sequenced assembly on the stick (cooked ingredients, in order)
+		//   rawSteps         the raw skewer's sequenced assembly on the stick (dishes/meals #57); default the basin's
+		//                    inputs (main and side alternating, counts kept) or else rawInputs in order. false: none
 		//   shape            'bbq' 5 A or 3 A + 2 B (the Barbeque's Delight lines), 'diagonal' one of each (default),
 		//                    'shapeless' one of each, any layout
 		//   stick            the stick item (default the stick; the Nether Skewer's is a blaze rod)
 		// The furnace, smoker and campfire cook raw to cooked too (0.35 xp, the vanilla times); vanilla cooking keeps no
 		// NBT, so only the Grill carries a raw skewer's seasonings over. Ids: raw path (basin, raw craft), cooked path
-		// (grill), cooked path + _from_smelting / _from_smoking / _from_campfire / _from_cooked_manual_only.
+		// (grill), cooked path + _from_smelting / _from_smoking / _from_campfire / _from_cooked_manual_only, raw path +
+		// _sequenced_assembly.
 		skewer(o) {
 			var stick = o.stick || i.stick
 			var rawPath = pathOf(o.raw), cookedPath = pathOf(o.cooked)
@@ -240,6 +243,18 @@ global.CD.food = function (e) {
 			R.campfireCooking(o.cooked, o.raw, e, cookedPath + '_from_campfire', 0.35)
 			if (o.cookedInputs) craft(o.cooked, o.cookedInputs, cookedPath + '_from_cooked_manual_only')
 			if (o.steps) F.assemble(stick, o.steps, o.cooked)
+			var rawSteps = o.rawSteps
+			if (rawSteps === undefined && o.skewering) {
+				var m = o.skewering.main, sd = o.skewering.side
+				rawSteps = []
+				for (var k = 0; k < Math.max(m.count, sd ? sd.count : 0); k++) {
+					if (k < m.count) rawSteps.push(m.id)
+					if (sd && k < sd.count) rawSteps.push(sd.id)
+				}
+			}
+			if (rawSteps === undefined) rawSteps = o.rawInputs
+			// Incomplete item keyed by the raw skewer's id path (cd_transition_items.js)
+			if (rawSteps) F.assemble(stick, rawSteps, o.raw)
 		},
 		sandwichAssemble(pattern, keys, output, steps, base) { F._shapedAssemble(pattern, keys, output, steps, base || i.t_bread) },
 		wrapAssemble(fillings, output) {

@@ -477,7 +477,7 @@ Not a merge: Supplementaries' flax goes with no survivor, folded into the string
 
 | Piece | Where | What |
 |---|---|---|
-| Config | `config/supplementaries-common.toml` `[functional.flax] enabled = false` (copy in `configs_edited/root_config/`) | Supplementaries' own switch. Its items stay registered (the switch only drops the creative tab), so old worlds keep them. Its flag recipes change: rope from 3 string (`rope_2`, 3 rope), sack from wheat and string (`sack_2`); flax -> string (`strings`) and the flax doormat (`doormat_2`) are off. Its chest injects (dungeon, mineshaft, pillager outpost, shipwreck) and the flax seed trades (farmer buys 15, wandering trader sells) are off. Wild flax was already off (V6) |
+| Config | `config/supplementaries-common.toml` `[functional.flax] enabled = false` (copy in `configs_edited/root_config/`) | Supplementaries' own switch. Its items stay registered (the switch only drops the creative tab), so old worlds keep them. Its flag recipes change: rope from 3 string (`rope_2`, 3 rope), sack from wheat and string (`sack_2`); flax -> string (`strings`) and the flax doormat (`doormat_2`) are off; the doormat takes 2 straw in a row instead (`misc_mods.js`, owner 2026-11-17). Its chest injects (dungeon, mineshaft, pillager outpost, shipwreck) and the flax seed trades (farmer buys 15, wandering trader sells) are off. Wild flax was already off (V6) |
 | Hidden | `removed_items.js` (Creative Common) | flax, flax seeds, flax bale (`flax_block`), wild flax: hidden in JEI, item tags stripped (`#forge:crops/flax`, `#forge:fiber`, `#minecraft:straw`, `#supplementaries:straw`, seeds and flower tags) |
 | Recipes | `kubejs/data/creativecompat/kubejs/other/misc_mods.js` | removed: `supplementaries:flax_block`, `flax_block_uncrafting`, `botany_flax`, `botanypots:supplementaries/crop/flax`, `create:milling/compat/supplementaries/flax`. `kubejs/data/creativeengineering/kubejs/engineering/oil.js`: the flax seeds -> 60 mB plant oil squeezer row dropped. Fodder already took a rice bale and a straw bale in place of the flax bale (unchanged) |
 | Loot | `kubejs/data/creativeworldgen/kubejs/loot/loot_config.json` | `supplementaries:flax_seeds` `remove: true` (the underground bunker treasure table also had them) |
@@ -597,7 +597,8 @@ from `item_merges.js` or `cooking.js`, no `ieMixer` warning, no mixin apply erro
   crafting a flowering azalea gives 6 of them; right-click on a plain azalea (Immersive Weathering shearing on) still
   re-flowers it (2.21). Server half: SQ-MG-23.
 - [ ] **MG-51 Flax [game]:** JEI has no flax, flax seeds, flax bale or wild flax; rope shows 3 string -> 3, sack shows
-  wheat and string; no flax in any chest or trade; a doormat has no recipe (2.22). Server half: SQ-MG-24.
+  wheat and string; no flax in any chest or trade; the doormat is made from 2 straw in a row (owner, 2026-11-17; 2.22).
+  Server half: SQ-MG-24, SQ-FCK-19.
 
 Server half of MG-35 to MG-37 without a player: `tools/salt_probe/salt_probe.js` (`/salttest`, scratch queue SQ-SALT-05
 to -07) calls each block's random tick itself and times a salt-brick tick against a stone one (added 2026-10-27).

@@ -4,7 +4,9 @@
 // furnace / smoker / campfire to the cooked one, the heatless cooked-ingredient craft and the assembly. F.skewer is in
 // Creative Delight's cd_food.js. The ten Barbeque's Delight lines keep their recipe ids (BBQ-35); the eight pack skewers
 // get the raw items the member registers under their own namespaces (PackRawSkewers.java), crafted by hand from raw
-// ingredients. Recipe ids are creativedelight:<type>/<suffix>.
+// ingredients. Every raw skewer also has a sequenced assembly on its stick (dishes/meals #57): the Barbeque's Delight
+// lines deploy the basin's inputs (main and side alternating, same counts), the pack skewers their raw craft inputs.
+// Recipe ids are creativedelight:<type>/<suffix>.
 ServerEvents.recipes(e => {
 	if (!global.CD || !global.CD.on('barbequesdelight')) return
 
@@ -87,7 +89,7 @@ ServerEvents.recipes(e => {
 			R.remove({ id: 'veggiesdelight:turnip_mutton_skewer' }, e)
 			F.skewer({ raw: i.raw_turnip_mutton_skewer, cooked: i.turnip_mutton_skewer, grill: 320,
 				rawInputs: [i.raw_mutton, i.turnip], cookedInputs: [i.cooked_mutton, i.turnip],
-				steps: [i.turnip, i.cooked_mutton] })
+				steps: [i.turnip, i.cooked_mutton], rawSteps: [i.turnip, i.raw_mutton] })
 		}
 		// Crispy Skewer (Ender's Delight): the popped chorus fruit is the cooked part, so the raw skewer takes two chorus
 		// fruit; grill as chicken
@@ -96,7 +98,8 @@ ServerEvents.recipes(e => {
 			F.skewer({ raw: i.raw_crispy_skewer, cooked: i.crispy_skewer, grill: 280,
 				rawInputs: [i.mite_crust, i.chorus_fruit, i.chorus_fruit],
 				cookedInputs: [i.mite_crust, i.chorus_fruit, i.popped_chorus_fruit],
-				steps: [i.chorus_fruit, i.popped_chorus_fruit, i.mite_crust] })
+				steps: [i.chorus_fruit, i.popped_chorus_fruit, i.mite_crust],
+				rawSteps: [i.chorus_fruit, i.chorus_fruit, i.mite_crust] })
 		}
 		// Cave Skewer (Hostile Delight caveskewer): glow berries, spider eye, rotten flesh, all raw already; no heatless
 		// craft (dishes/meals #58 merges it with Miner's later). Grill as chicken

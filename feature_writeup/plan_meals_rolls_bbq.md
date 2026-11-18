@@ -145,3 +145,13 @@ Deviations from the table above:
 - **A1, A3 (AWAIT_DUMP), A6:** wait on `/dumpall` and `/cegen` (dumps predate the three mods).
 - **Display Delight names:** set by hand; `gen_display_delight_names.py` currently loses 12 unrelated names (sources
   moved by the split), so it was not rerun.
+
+## Build record (2026-11-17, `dishes/meals #57`)
+
+Raw skewer sequenced assembly built into the CD jar (lane F of [plan_exec_1117.md](plan_exec_1117.md)); not installed,
+not run. `F.skewer` (CD `cd_food.js`) emits one assembly per raw skewer on its stick: the ten BBQ lines deploy the basin's
+inputs (main and side alternating, same counts), the pack skewers their raw craft inputs (Turnip Mutton and Crispy ordered
+as their cooked assemblies, option `rawSteps`). 18 incomplete items in `cd_transition_items.js`. Writeup
+[barbeques_delight.md](barbeques_delight.md) 4.8, BBQ-41, queue SQ-BBQ-09. With this the assembly part of
+`dishes/meals #46` is done; seasoning pairs remain open there.
+
