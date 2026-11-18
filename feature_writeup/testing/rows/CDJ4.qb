@@ -53,12 +53,16 @@ shell grep -E "\[creativedelight\] members" logs/latest.log | cut -c60-400; ls m
 @pass Block and block entity exist (`creativeengineering:oven`); no missing registry lines for `oven`, `powdered_sugar_block`, `placed_*`
 @fails `OvenRegistry` / `PowderedSugarRegistry` / `DisplayDelightDishes` not registered from CD
 @from batches/r1101/cs4_boot3.qb passed
-> setblock {H1-8} {H2} {H3} minecraft:campfire[lit=true]
-> setblock {H1-8} {H2+1} {H3} creativeengineering:oven
-> data get block {H1-8} {H2+1} {H3}
-> give qa creativeengineering:oven
-> give qa creativeengineering:powdered_sugar_bucket
-reject Unknown (block|item)
+# self-contained since r1118 (judge-4, 2026-11-18): home marker capture {H} was never set; ids follow the owning mod since 2026-11-09 (creativeengineering: -> creativedelight:), bot qa spawned here (r1101 p1_server position)
+> forceload add 0 0 16 16
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
+> setblock 8 -60 8 minecraft:campfire[lit=true]
+> setblock 8 -59 8 creativedelight:oven
+> data get block 8 -59 8
+> give qa creativedelight:oven
+> give qa creativedelight:powdered_sugar_bucket
+reject Unknown (block|item)|No player was found
 expect has the following block data
 shell grep -iE "missing.*(oven|powdered_sugar_block|placed_)|Registry Object not present" logs/latest.log | head -3
 
@@ -91,10 +95,16 @@ kjsreject no switch in CDConfig
 @fails Lunchbox registration guard or class path wrong
 @from batches/r1101/cs4_boot3.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-4, 2026-11-18): lunchbox recipes are creativedelight:lunchbox/ and creativedelight:shaped/*lunchbox*; ids follow the owning mod since 2026-11-09 (creativeengineering: -> creativedelight:), bot qa spawned here (r1101 p1_server position)
+> forceload add 0 0 16 16
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > give qa solapplepie:lunchbag
-> cdevtest recipes creativeengineering:lunchbox
+> cdevtest recipes lunchbox
 sleep 5
 shell grep -E "lunchbox" logs/latest.log | grep -iE "error|unknown|serializer" | head -3 | cut -c1-200
+expect verb=recipes text=lunchbox n=[1-9]
+reject No player was found
 look lunchbox recipes present (zq lists them), no unknown serializer
 reject verb=\S+ .*done=0
 

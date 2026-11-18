@@ -32,6 +32,29 @@ look item name "Food Dictionary" is a lang check (client); here: the item exists
 @from batches/r1113/c4_ar2.qb
 > pbot spawn fdj 40600.5 -60 40010.5 minecraft:overworld survival
 sleep 3
+# self-contained since r1118 (judge-8, 2026-11-18): the 20 bites came from r1113 c4_ar SQ-FDI-02 (world data kept)
+> clear fdj
+> zc4 eat fdj minecraft:apple
+> zc4 eat fdj minecraft:bread
+> zc4 eat fdj minecraft:cooked_beef
+> zc4 eat fdj minecraft:baked_potato
+> zc4 eat fdj minecraft:carrot
+> zc4 eat fdj minecraft:cooked_chicken
+> zc4 eat fdj minecraft:cooked_porkchop
+> zc4 eat fdj minecraft:cooked_mutton
+> zc4 eat fdj minecraft:cooked_cod
+> zc4 eat fdj minecraft:cooked_salmon
+> zc4 eat fdj minecraft:cookie
+> zc4 eat fdj minecraft:melon_slice
+> zc4 eat fdj minecraft:pumpkin_pie
+> zc4 eat fdj minecraft:mushroom_stew
+> zc4 eat fdj minecraft:beetroot
+> zc4 eat fdj minecraft:sweet_berries
+> zc4 eat fdj minecraft:rabbit_stew
+> zc4 eat fdj minecraft:dried_kelp
+> zc4 eat fdj minecraft:golden_carrot
+> zc4 eat fdj minecraft:potato
+waitlog \[zc4\] eat fdj minecraft:potato 30
 > zc4 sol fdj minecraft:apple
 > zc4 sol fdj minecraft:bread
 > zc4 sol fdj minecraft:cooked_beef
@@ -141,12 +164,13 @@ waitlog \[zc4\] sol fd5 20
 > zc4 sol fd5 solapplepie:golden_lunchbox
 waitlog \[zc4\] sol fd5 20
 > pbot hunger fd5 2
-> zp9 lbfill fd5 creativedelight:netherite_lunchbox minecraft:pumpkin_pie 2
+# cooked chicken since r1118 (judge-8, 2026-11-18): lunchbox slots take edible items only, pumpkin pie is refused
+> zp9 lbfill fd5 creativedelight:netherite_lunchbox minecraft:cooked_chicken 2
 waitlog \[zp9\] done 20
 > pbot eat fd5
 > cdevtest tickwarp 44
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=44 60
-> zc4 sol fd5 minecraft:pumpkin_pie
+> zc4 sol fd5 minecraft:cooked_chicken
 waitlog \[zc4\] sol fd5 20
 > zc4 sol fd5 creativedelight:netherite_lunchbox
 waitlog \[zc4\] sol fd5 20
@@ -155,12 +179,12 @@ waitlog \[zc4\] sol fd5 20
 > pbot eat fd5
 > cdevtest tickwarp 45
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=45 60
-> zc4 sol fd5 minecraft:pumpkin_pie
+> zc4 sol fd5 minecraft:cooked_chicken
 waitlog \[zc4\] sol fd5 20
 count \[cdevtest\] verb=pbot\.useitem bot=fd5 end=finish item=\S*lunch\S* >= 5
-count carrotHas=true applepieHas=true >= 4
+count carrotHas=true applepie=\d+ applepieEntries=\d+ applepieHas=true >= 4
 reject \[zp9\] error|\[zc4\] .*error|\[cdevtest\] .*(done=0|error=)
-look per box: the food line carrotHas=true applepieHas=true, the lunchbox line carrotHas=false applepieHas=false; carrot and applepie counts +1 per new food; applepieEntries +1 per bite (also the repeated pumpkin pie bite)
+look per box: the food line carrotHas=true applepieHas=true, the lunchbox line applepieHas=false (Carrot's raw list records the lunchbox, carrotHas=true, hidden by its blacklist: food_dictionary.md P2); carrot and applepie counts +1 per new food; applepieEntries +1 per bite (also the repeated cooked chicken bite)
 
 ## SQ-FDI-05 | lunchbox blacklist in the new world's server configs (static half)
 @group A

@@ -54,7 +54,7 @@ look pack creativecompat loads; [item_physics] summary line as before
 @from batches/r1101/cs2_boot2.qb
 > dumpphysics
 sleep 5
-reject Unknown command
+reject Unknown or incomplete command
 reject (Error|Exception)
 look rules listed
 
@@ -64,6 +64,12 @@ look rules listed
 @pass Blast plus shrapnel as before; fireproof item survives
 @fails `BurnBursts` handler not registered by the shrapnel side
 @from batches/r1101/cs2_boot2.qb
+# self-contained since r1118 (judge-5, 2026-11-18): the {H} home marker came from a lost setup row; fixed superflat spot
+> forceload add 200 200 232 232
+> execute unless entity @e[type=minecraft:marker,tag=cmphome] run summon minecraft:marker 200 -60 200 {Tags:["cmphome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=cmphome,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > forceload add {H1+20} {H3+20}
 sleep 5
 # items of the same kind merge: clear earlier test items first
@@ -86,13 +92,21 @@ look the blast itself is not visible on a console; the TNT item is consumed and 
 ## SQ-CMP-06 | weathered cardboard box, monster box loot, physics tags
 @group A
 @commands Same boot: `/give` a weathered cardboard box and place it; `/loot` the monster box reward table; check `#creativeengineering:...` physics tags with `/dumptags`
-@pass Block and item exist (`creativeengineering:weathered_cardboard_box`); loot table resolves; physics tags present
+@pass Block and item exist (`creativecompat:weathered_cardboard_box`); loot table resolves; physics tags present
 @fails Startup `decor_blocks.js` or jar data paths
 @from batches/r1101/cs2_boot2.qb
-> setblock {H1+8} {H2} {H3} creativeengineering:weathered_cardboard_box
-> execute if block {H1+8} {H2} {H3} creativeengineering:weathered_cardboard_box run say CMP box placed
-> give qa creativeengineering:weathered_cardboard_box
-> loot give qa loot creativeengineering:misc/monster_box_reward
+# self-contained since r1118 (judge-5, 2026-11-18; ids creativecompat: since the 2026-11-09 move): the {H} home marker came from a lost setup row; fixed superflat spot
+> forceload add 200 200 232 232
+> execute unless entity @e[type=minecraft:marker,tag=cmphome] run summon minecraft:marker 200 -60 200 {Tags:["cmphome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=cmphome,limit=1] Pos
+capture H entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> execute unless entity qa run pbot spawn qa {H1} {H2} {H3} minecraft:overworld survival
+sleep 3
+> setblock {H1+8} {H2} {H3} creativecompat:weathered_cardboard_box
+> execute if block {H1+8} {H2} {H3} creativecompat:weathered_cardboard_box run say CMP box placed
+> give qa creativecompat:weathered_cardboard_box
+> loot give qa loot creativecompat:misc/monster_box_reward
 expect CMP box placed
 reject Unknown (block|item)|Unknown loot table
 > dumptags
@@ -115,10 +129,10 @@ look painting count as before the carve, no load error
 @pass No script error from the moved server files (coin, starter kit, feature ports, flowers, misc mods, tag rows); `/reload` clean
 @fails A moved script reading a top-level name from the pack's scope
 @from batches/r1101/cs2_boot2.qb
-shell grep -E "Error occurred while handling event|creativecompat" logs/kubejs/server.log | head -6 | cut -c1-220; grep -c "Error occurred while handling event" logs/latest.log
+shell grep -E "Error occurred while handling event|creativecompat" logs/kubejs/server.log | head -6 | cut -c1-220; grep -c "Error occurred while handling event" logs/latest.log; true
 kjsreject Error occurred while handling event
 > reload
 waitlog (Reloaded|reload) 180
 sleep 10
-shell grep -cE "Error occurred while handling event|ReferenceError" logs/kubejs/server.log
+shell grep -cE "Error occurred while handling event|ReferenceError" logs/kubejs/server.log; true
 look no script error from moved Compat files; /reload clean

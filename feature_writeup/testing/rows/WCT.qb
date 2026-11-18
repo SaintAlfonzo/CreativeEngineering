@@ -41,6 +41,9 @@ reject verb=\S+ .*done=0
 @pass WaterLevel 8, cauldron level 2; diamond WaterLevel 20, level 1; netherite WaterLevel 32, empty cauldron; diamond on level 1: WaterLevel 10, empty cauldron; netherite on level 2: WaterLevel 21, empty cauldron
 @fails cauldron interaction map claimed the click; level or partial-fill math
 @from batches/r1101/p1_server.qb passed
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > setblock -30 -60 -15 minecraft:water_cauldron[level=3]
 > tp qa -30 -60 -13
 > item replace entity qa weapon.mainhand with hearthandharvest:watering_can
@@ -79,7 +82,12 @@ count Test passed >= 3
 @fails well did not pass the click (fluid item check); roof half not routed below
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > setblock -36 -60 -15 well:well
+# roof half placed (judge-13, 2026-11-18): setblock places only the lower half, so r1118's roof click hit air (use PASS)
+> setblock -36 -59 -15 well:well[half=upper]
 > data get block -36 -60 -15
 > data get block -36 -59 -15
 > cdevtest tickwarp 400
@@ -104,6 +112,9 @@ look WaterLevel 12 after each use; well tank down 1000 mB per fill; an empty wel
 @pass 7x7 soaked, WaterLevel 63; copper soaks the center only
 @fails area spans
 @from batches/r1101/p1_server.qb passed
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > gamerule randomTickSpeed 0
 > fill -43 -61 -33 -37 -61 -27 minecraft:farmland[moisture=0]
 > fill -43 -60 -33 -37 -60 -27 minecraft:wheat[age=0]
@@ -131,6 +142,9 @@ count Test passed >= 4
 @fails recipe id; clamp on read
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > cdevtest rdetail smithing/diamond_watering_can
 expect golden_watering_can
 > gamerule randomTickSpeed 0

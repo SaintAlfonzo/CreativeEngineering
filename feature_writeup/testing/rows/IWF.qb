@@ -7,6 +7,7 @@
 @@date 2026-10-28
 @@jars creativecommon creativeworldgen
 @@sources feature_writeup/perf.md
+@@prep B: difficulty=normal spawn-animals=true spawn-monsters=true
 @@text
 @@text Creative Common 1.1.03 with `IwBlockGrowthHandlerMixin`, `IwBlockGrowthHolderMixin`, `IwServerLevelTickMixin` and the
 @@text config plugin `perf/CommonMixinPlugin` (rewrites IW's `callTick` handler). Group B (normal world, real biomes). Any player
@@ -29,6 +30,13 @@ bootreject (?i)(IwBlockGrowth|IwServerLevel).*(error|fail|not found|unknown sign
 @fails Nothing in the fast boot only: the per-block tables were not filled (`IwGrowthFast.rebuilt` not called: check the `rebuild` RETURN inject)
 @from batches/r1031/b1_gameplay.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 b1_gameplay / w2_metas_spawns bot row
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
+# PL located here since r1118 (judge-8, 2026-11-18): no row of the section captured it (Expected integer on every fill)
+> execute positioned 0 70 0 run locate biome minecraft:plains
+waitlog nearest minecraft:plains is at 300
+capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {PL1} 150 {PL3}
 sleep 20
 > fill {PL1-8} 160 {PL3-8} {PL1+8} 160 {PL3+8} minecraft:grass_block
@@ -55,6 +63,9 @@ reject verb=\S+ .*done=0
 @fails None: the universal table is empty, check `universal[]` after rebuild
 @from batches/r1031/b1_gameplay.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 b1_gameplay / w2_metas_spawns bot row
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
 > execute positioned 0 70 0 run locate biome minecraft:snowy_plains
 waitlog nearest minecraft:snowy_plains is at 300
 capture SN is at \[(-?\d+), (~|-?\d+), (-?\d+)\]

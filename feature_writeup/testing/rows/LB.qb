@@ -18,8 +18,9 @@
 @pass the test prints `Test passed`; boot log has no `InvalidInjectionException` / `Mixin apply failed` naming `AlexsMobsSeagull`; `latest.log` has no `Unknown item 'solapplepie:netherite_lunchbox'`; the id resolves
 @fails mixin target names changed in Alex's Mobs: javap `SeagullAIStealFromPlayers.isBlacklisted`, `EntitySeagull.canTargetItem`; item: `LunchboxItems` registered only with solapplepie loaded
 @from batches/r1031/a1_world.qb passed
-> summon item 2 -55 2 {Item:{id:"solapplepie:netherite_lunchbox",Count:1b},NoGravity:1b}
-> execute if entity @e[type=item,nbt={Item:{id:"solapplepie:netherite_lunchbox"}}]
+# creativedelight id since r1118 (judge-8, 2026-11-18): the old solapplepie id is aliased on load (Summoned item.creativedelight.netherite_lunchbox), so the nbt test never matched
+> summon item 2 -55 2 {Item:{id:"creativedelight:netherite_lunchbox",Count:1b},NoGravity:1b}
+> execute if entity @e[type=item,nbt={Item:{id:"creativedelight:netherite_lunchbox"}}]
 expect Test passed
 > kill @e[type=item]
 

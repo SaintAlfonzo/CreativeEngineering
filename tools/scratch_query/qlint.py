@@ -21,7 +21,8 @@ Lint codes (E = the row will fail or mislead, W = risk; exit 1 when any E):
   W waitlog    waitlog pattern also matches an earlier row's reply (from --res logs), or repeats an earlier row's
                waitlog / capture pattern for a slow reply, or a locate waitlog does not name its own target
   W marker     tag=X selected, but no earlier selected row summons or tags an X (marker from an older world or boot)
-  W unloaded   (first per row) absolute x z outside every forceloaded box of the selected rows so far (server batches)
+  W unloaded   (first per row) absolute x z outside every forceloaded box of the selected rows so far (server batches;
+               vanilla, cdevtest and probe commands; a rows-file section starts with no boxes: one section per step)
   E forceload  forceload box over 256 chunks (refused: "Too many chunks")
   E cmd119     command that does not exist in 1.19.2 (execute if biome, tick)
   W kjs        kjsexpect / kjsreject after a /reload (reload truncates the KubeJS log)
@@ -158,8 +159,21 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
 	prev_waits = []  # (row id, pattern, slow)
 	seen_logs = []  # (row id, lines) of earlier selected rows
 
+	xyz_roots = set(VANILLA_XYZ) | {"cdevtest"}
+	if not client:
+		try:
+			xyz_roots |= set(_qrun().probe_map())  # probe commands take block coordinates too (zpwg3 place X Y Z ...)
+		except Exception:
+			pass
+	section = None
 	for r in rows:
 		rid = r["id"]
+		if r.get("section") != section:
+			# a rows file (feature_writeup/testing/rows/*.qb) runs one section per driver step on a fresh world: another
+			# section's forceloads do not carry over (r1118 judge-9 / judge-10: the PWG setup-row forceloads were lost)
+			if section is not None:
+				boxes = {}
+			section = r.get("section")
 		row_waits, row_dup, row_unloaded = set(), set(), False
 		row_slow = False
 		for (w, a, _), ln in zip(r["steps"], r["lines"]):
@@ -311,7 +325,7 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
 			if re.match(r"forceload\s+remove\s+all", rc):
 				boxes[dim] = []
 				continue
-			if client or rc.startswith("forceload") or c.split(" ", 1)[0] not in VANILLA_XYZ:
+			if client or rc.startswith("forceload") or c.split(" ", 1)[0] not in xyz_roots:
 				continue
 			if None in boxes.get(dim, []) or row_unloaded:
 				continue
@@ -372,7 +386,8 @@ def lint(batch, opts):
 				continue
 			if sev == "E" and qrowlint._key(batch, rid, msg) in base:
 				sev, msg = "W", msg + " (baseline)"
-			out.append((sev, "stale" if msg.startswith("stale") else "dead-id", rid, ln, msg))
+			code = "stale" if msg.startswith("stale") else "trail-space" if "ends in a space" in msg else "dead-id"
+			out.append((sev, code, rid, ln, msg))
 	return out
 
 

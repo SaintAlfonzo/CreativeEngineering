@@ -73,6 +73,10 @@ look (1) the rdetail line gives tomato_sauce's inputs; if they are not 2 tomatoe
 @fails keg tag no longer nests FD heat_sources
 @reviewed 2026-11-16
 @from batches/r1113/c2_a1.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
+> forceload add 296 290 360 380
+> execute unless entity c2b run pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > setblock 308 -60 310 cookingforblockheads:oven[facing=north]
 > setblock 308 -59 310 farmersdelight:skillet[facing=north]
 > setblock 312 -60 310 cookingforblockheads:oven[facing=north]

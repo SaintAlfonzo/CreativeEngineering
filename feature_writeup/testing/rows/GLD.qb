@@ -810,7 +810,8 @@ sleep 3
 reject verb=pbot.inv bot=c1gj .*golden_(rabbit_stew|beetroot_soup)
 > give c1gj goldenfood:golden_mushroom_stew
 > give c1gj creativedelight:canned_golden_mushroom_stew
-count Unknown item == 2
+# MinecraftServer only since r1118 (judge-8, 2026-11-18): KubeJS recipe parse warnings also say Unknown item
+count MinecraftServer/\]: Unknown item == 2
 > cdevtest food goldenfood:golden_bread
 > cdevtest food goldenfood:enchanted_golden_cooked_beef
 > cdevtest food minecraft:mushroom_stew
@@ -825,7 +826,7 @@ waitlog verb=pbot.useitem bot=c1gj end=finish item=minecraft:mushroom_stew 20
 > pbot inv c1gj get
 shell grep -h -i -E "error|exception" logs/kubejs/startup.log logs/kubejs/server.log | grep -i -E "golden|goldenfood" | head -10 | cut -c1-300; echo "golden script errors listed above (none = pass)"
 look jar data: no golden_mushroom_stew fluid (empty or cleared); the pbot inv after the eat shows 2 mushroom_stew and 1 bowl (or a bowl dropped: check the hotbar); the shell step lists no golden/goldenfood script error. A stack of 3 mushroom stew only exists if the pack stacks stews: if hold gave 1, judge "one bowl back" on that
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
+reject ^(?!.*KubeJS Recipe Event)(?!.*Unknown item '(goldenfood|creativedelight):canned_golden_mushroom_stew'|.*Unknown item 'goldenfood:golden_mushroom_stew').*(Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|No player was found|Invalid (block state|tag)|\[sa\] (error|no player)|\[cdevtest\] verb=\S+ .*error=)
 
 ## CQ-GLD-03
 @group client

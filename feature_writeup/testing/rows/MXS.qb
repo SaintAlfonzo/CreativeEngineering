@@ -42,42 +42,45 @@ reject verb=\S+ .*done=0
 @fails All one kind: the shuffle failed; seeds kept after planting: shrink missing
 @from batches/r1102/b1_main.qb
 @reviewed 2026-11-16
-> fill {H1} {H2-1} {H3+22} {H1+19} {H2-1} {H3+22} minecraft:farmland[moisture=7]
-> fill {H1} {H2-1} {H3+23} {H1+19} {H2-1} {H3+23} minecraft:water
-> pbot spawn mx {H1+10} {H2} {H3+25} minecraft:overworld survival
+# self-contained since r1118 (judge-10, 2026-11-18): fixed home 1400 -60 1400 (was {H}, the cdj5home marker capture of a CDJ5 boot 0 that this step never runs)
+> forceload add 1392 1408 1431 1439
+sleep 2
+> fill 1400 -61 1422 1419 -61 1422 minecraft:farmland[moisture=7]
+> fill 1400 -61 1423 1419 -61 1423 minecraft:water
+> pbot spawn mx 1410 -60 1425 minecraft:overworld survival
 > pbot hold mx vintagedelight:mixed_seeds 20
-> pbot use mx {H1} {H2-1} {H3+22} up
-> pbot use mx {H1+1} {H2-1} {H3+22} up
-> pbot use mx {H1+2} {H2-1} {H3+22} up
-> pbot use mx {H1+3} {H2-1} {H3+22} up
-> pbot use mx {H1+4} {H2-1} {H3+22} up
-> pbot use mx {H1+5} {H2-1} {H3+22} up
-> pbot use mx {H1+6} {H2-1} {H3+22} up
-> pbot use mx {H1+7} {H2-1} {H3+22} up
-> pbot use mx {H1+8} {H2-1} {H3+22} up
-> pbot use mx {H1+9} {H2-1} {H3+22} up
-> pbot use mx {H1+10} {H2-1} {H3+22} up
-> pbot use mx {H1+11} {H2-1} {H3+22} up
-> pbot use mx {H1+12} {H2-1} {H3+22} up
-> pbot use mx {H1+13} {H2-1} {H3+22} up
-> pbot use mx {H1+14} {H2-1} {H3+22} up
-> pbot use mx {H1+15} {H2-1} {H3+22} up
-> pbot use mx {H1+16} {H2-1} {H3+22} up
-> pbot use mx {H1+17} {H2-1} {H3+22} up
-> pbot use mx {H1+18} {H2-1} {H3+22} up
-> pbot use mx {H1+19} {H2-1} {H3+22} up
-> cdevtest count {H1} {H2} {H3+22} {H1+19} {H2} {H3+22} #minecraft:crops
+> pbot use mx 1400 -61 1422 up
+> pbot use mx 1401 -61 1422 up
+> pbot use mx 1402 -61 1422 up
+> pbot use mx 1403 -61 1422 up
+> pbot use mx 1404 -61 1422 up
+> pbot use mx 1405 -61 1422 up
+> pbot use mx 1406 -61 1422 up
+> pbot use mx 1407 -61 1422 up
+> pbot use mx 1408 -61 1422 up
+> pbot use mx 1409 -61 1422 up
+> pbot use mx 1410 -61 1422 up
+> pbot use mx 1411 -61 1422 up
+> pbot use mx 1412 -61 1422 up
+> pbot use mx 1413 -61 1422 up
+> pbot use mx 1414 -61 1422 up
+> pbot use mx 1415 -61 1422 up
+> pbot use mx 1416 -61 1422 up
+> pbot use mx 1417 -61 1422 up
+> pbot use mx 1418 -61 1422 up
+> pbot use mx 1419 -61 1422 up
+> cdevtest count 1400 -60 1422 1419 -60 1422 #minecraft:crops
 > data get entity mx SelectedItem
 expect Found no elements matching SelectedItem
 expect verb=count block=#minecraft:crops n=20 
 reject verb=\S+ .*done=0
 # one more seed on grass (natural floor) and on stone: nothing planted, the seed kept
-> setblock {H1+3} {H2-1} {H3+26} minecraft:stone
+> setblock 1403 -61 1426 minecraft:stone
 > pbot hold mx vintagedelight:mixed_seeds 1
-> pbot use mx {H1} {H2-1} {H3+26} up
-> pbot use mx {H1+3} {H2-1} {H3+26} up
-> execute if block {H1} {H2} {H3+26} minecraft:air run say MXS02 grass stays empty
-> execute if block {H1+3} {H2} {H3+26} minecraft:air run say MXS02 stone stays empty
+> pbot use mx 1400 -61 1426 up
+> pbot use mx 1403 -61 1426 up
+> execute if block 1400 -60 1426 minecraft:air run say MXS02 grass stays empty
+> execute if block 1403 -60 1426 minecraft:air run say MXS02 stone stays empty
 > data get entity mx SelectedItem
 expect MXS02 grass stays empty
 expect MXS02 stone stays empty

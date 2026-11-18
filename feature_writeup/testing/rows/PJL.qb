@@ -7,6 +7,7 @@
 @@date 2026-11-03
 @@jars creativedelight
 @@sources feature_writeup/recipes_cooking.md
+@@prep spawn-animals=true
 @@text
 @@text Not run. Needs the Creative Delight jar from `development/creativeDelight/build/libs` (Vintage port `-15`) in `mods/` and a
 @@text full restart. Group A: any world. After boot `/dumpall`, then `/cdevgen` (food families, placeable, coaster models, cans).
@@ -44,6 +45,10 @@ reject \[cdevtest\] verb=\S+ done=0
 @fails CD `vintagedelight/jams.js` "Pack jam line"; swaps `merges_upgrade_aquatic_jams.json`
 @from batches/r1113/c2_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c2_a1 SQ-C2-00
+> forceload add 296 290 360 380
+> execute unless entity c2b run pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > cdevtest recipes farmersdelightcooking/ancient_fruit_jam_jar
 > cdevtest recipes farmersdelightcooking/banana_jam_jar
 > cdevtest recipes farmersdelightcooking/mulberry_jam_jar

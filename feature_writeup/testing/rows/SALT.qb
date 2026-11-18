@@ -285,7 +285,11 @@
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-AC-02 | dragon set 36 armor, 18 toughness
 @group FAIL: dragon set 33 armor, not 36; dragonloot-common.toml (7/10/9/7) overrides the KubeJS tune; the cap mixin works
+@superseded run-log copy of the row in AC.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @from batches/r1101/p1_server.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > item replace entity qa armor.head with dragonloot:dragon_helmet
 > item replace entity qa armor.chest with dragonloot:dragon_chestplate
 > item replace entity qa armor.legs with dragonloot:dragon_leggings
@@ -301,19 +305,21 @@ expect armor_toughness for entity qa is 18
 @group FAIL: CD `kubejs/oceansdelight/recipes.js` removes the tentacle recipes (line 39) before the calamari replaceInputs (41-47); 4 dishes gone, empty `#forge:squid_tentacles` slots, NCH error x16
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-RW-23 | smoked wood smoking recipes
-@group FAIL: `#creativeengineering:smokable/*` shape tags include Botania, driftwood, crimson and warped
+@group FAIL: `#creativecommon:smokable/*` shape tags include Botania, driftwood, crimson and warped
+@superseded run-log copy of the row in RW.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @from batches/r1031/a1_data.qb
 @reviewed 2026-11-16
 > cdevtest recipes smoked
-> cdevtest tag item creativeengineering:smokable/planks
+> cdevtest tag item creativecommon:smokable/planks
 expect verb=recipes text=smoked n=[1-9]
-expect verb=tag kind=item tag=creativeengineering:smokable/planks n=[1-9]
-reject verb=tag kind=item tag=creativeengineering:smokable/planks .*ids=\S*(botania:|driftwood|crimson|warped)
+expect verb=tag kind=item tag=creativecommon:smokable/planks n=[1-9]
+reject verb=tag kind=item tag=creativecommon:smokable/planks .*ids=\S*(botania:|driftwood|crimson|warped)
 reject \[cdevtest\] .*done=0
 look 13 smoking recipes, one per smoked shape, cook time 200 (rdetail if unsure); smokable tags hold oak and spruce, no botania:* and no driftwood
 
 ## SQ-MCL-04 | forced level 2: hostiles settle near 25, none far out
 @group FAIL on superflat only: forced level 2 spawned 0 monsters in 8 min (level 0: 13 zombies); normal world passes (SQ-MCL-05)
+@superseded run-log copy of the row in MCL.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @from batches/r1031/a2_variants.qb
 @reviewed 2026-11-16
 # needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
@@ -337,6 +343,7 @@ look the four counts sum to about 25 (not 70); the farthest monster within about
 ## SQ-META31-04 | meteorite strikes
 @phase worldgen
 @group FAIL: `meta/meteorite_desert_pyramid` placed with "0/1 desert_pyramid, short" = crater with no pyramid (MetaStructure keepShortParts: a replacement meta should fail when its first part is short)
+@superseded run-log copy of the row in META31.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @jars creativecommon
 @from batches/r1031/w2_metas_spawns.qb
 > locate structure creativeengineering:meta/meteorite_village
@@ -356,6 +363,7 @@ look crater through the village middle, no floating house; struck pyramid has a 
 ## SQ-SB-03 | lone large pillager tower: illager mix at night, pillagers only by day
 @phase worldgen
 @group FAIL, cause not settled: no illager at the lone birch tower by night or day (zombies and a creeper did spawn); may be the monster cap / player distance, see judged_w2.md for the rerun
+@superseded run-log copy of the row in SB.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @jars creativecommon
 @from batches/r1031/w2_metas_spawns.qb
 @reviewed 2026-11-16
@@ -389,6 +397,7 @@ look night: pillager, vindicator, evoker, illusioner, witch present (counts), ra
 ## SQ-EF-06 | undead castles kept on slopes (same world plus a highlands square)
 @phase long
 @group owner call: 1 of 3 undead castles kept; 2 canceled over-air 708 / 562 against limit 320
+@superseded run-log copy of the row in EF.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @jars creativecommon
 @from batches/r1031/w1_earthfill.qb
 > chunky center {AH1} {AH3}
@@ -484,6 +493,7 @@ look at least half the eugene:undead_castle lines end "-> kept" across both squa
 @@text |---|---|
 ## SQ-GFB-01 | generated falling blocks mixins
 @group PASS (no mixin error, Done)
+@superseded run-log copy of the row in GFB.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @from batches/r1106spf/b1.qb passed
 bootreject (?i)(FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound).*(error|fail)
 bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
@@ -909,6 +919,7 @@ bootreject (?i)Mixin.*(error|fail).*(FallingBlock|ProtoChunk)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-FGD-01 | /fgdtest all (FGD-01 to -06, -08, -09, -10 logic)
 @group PASS except **truffle pie**: `create_central_kitchen:truffle_pie` is not an item (CCK registers the pie block, slice and incomplete pie; the whole-pie item comes from Environmental), so `baking/truffle_pie` never loads, also in the client (`fungiport #3`)
+@superseded run-log copy of the row in RD.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @from batches/r1102/b1_main.qb
 # zz_fgd_probe.js copied in before the boot (README Boot 1); its blocks sit at absolute x 70..160, z 0
 > forceload add 64 -16 176 16
@@ -921,6 +932,7 @@ look any FAIL line: truffle pie (fungiport #3) may still fail if SQ-CM-36 is not
 
 ## SQ-FGD-02 | tags (from the /fgdtest all lines)
 @group PASS except the colonies in the Serene Seasons tags: the port and fungi_delight.md list only the two mushrooms; the row's wording overreached (record, decide in `fungiport #3`)
+@superseded run-log copy of the row in RD.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @from batches/r1102/b1_main.qb
 look rows/SQ-FGD-01.log, part tags: all PASS (colonies in the Serene Seasons tags: known wording overreach, fungiport #3)
 
@@ -1075,6 +1087,7 @@ expect creativeengineering:phase": 1b
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
 ## SQ-SB-01 | spawn boxes load
 @group PASS, 10 of 10
+@superseded run-log copy of the row in SB.qb (judge-11, 2026-11-18: the P2.1 migration left its steps in this Run log, so the driver ran the copy)
 @commands [oven.md](../oven.md) OV-32, [can_parity.md](../can_parity.md) CP-26
 @jars creativecommon
 @from batches/r1031/w2_metas_spawns.qb

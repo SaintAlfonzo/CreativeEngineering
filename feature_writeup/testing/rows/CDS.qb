@@ -20,9 +20,14 @@
 @fails `global.sampleSyringe` not set before the item callback
 @from batches/r1101/cs4_boot3.qb
 shell grep -E "sample_syringe|Error" logs/kubejs/startup.log | head -5 | cut -c1-200
-> give qa creativeengineering:cow_sample_syringe
-> give qa creativeengineering:sample_syringe
-reject Unknown item
+# self-contained since r1118 (judge-4, 2026-11-18): ids follow the owning mod since 2026-11-09 (creativeengineering: -> creativedelight:), bot qa spawned here (r1101 p1_server position)
+> forceload add 0 0 16 16
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
+> give qa creativedelight:cow_sample_syringe
+> give qa creativedelight:sample_syringe
+count Gave 1 +\[ == 2
+reject Unknown item|No player was found
 look both syringes exist (sampling a cow is a client / bot-use check)
 
 ## SQ-CDS-02 | CD kitchen tags (dumptags of SQ-CBM-05)

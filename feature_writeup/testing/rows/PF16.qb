@@ -49,32 +49,41 @@ reject (?i)unknown entity
 @fails Moves while away: mixin did not apply. Falls or takes damage: check flying state
 @from batches/r1031/b1_gameplay.qb
 @reviewed 2026-11-16
-> tp qa {PL1} 150 {PL3}
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 b1_gameplay / w2_metas_spawns bot row
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+# judge-10, 2026-11-18: fixed spot 1500 1500 (was {PL}, a plains locate of another section); a stone box makes the cave in the flat world, stone pads hold qa at y 150
+> forceload add 1488 1488 1519 1519
+sleep 2
+> setblock 1500 149 1500 minecraft:stone
+> setblock 1500 149 1503 minecraft:stone
+sleep 3
+> tp qa 1500 150 1500
 > cdevtest tickwarp 200
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=200 60
-> fill {PL1-4} 20 {PL3-4} {PL1+4} 24 {PL3+4} minecraft:air
-> tp qa {PL1} 20 {PL3}
-> summon minecraft:bee {PL1} 22 {PL3+3}
+> fill 1495 19 1495 1505 25 1505 minecraft:stone
+> fill 1496 20 1496 1504 24 1504 minecraft:air
+> tp qa 1500 20 1500
+> summon minecraft:bee 1500 22 1503
 > cdevtest tickwarp 401
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=401 60
-> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+> execute positioned 1500 22 1503 as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
 > cdevtest tickwarp 102
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=102 60
-> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
-> tp qa {PL1} 150 {PL3+3}
+> execute positioned 1500 22 1503 as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+> tp qa 1500 150 1503
 > cdevtest tickwarp 403
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=403 60
-> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+> execute positioned 1500 22 1503 as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
 > cdevtest tickwarp 204
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=204 60
-> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
-> tp qa {PL1} 20 {PL3}
+> execute positioned 1500 22 1503 as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+> tp qa 1500 20 1500
 > cdevtest tickwarp 205
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=205 60
-> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+> execute positioned 1500 22 1503 as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
 > cdevtest tickwarp 106
 waitlog \[cdevtest\] verb=tickwarp end=done ticks=106 60
-> execute positioned {PL1} 22 {PL3+3} as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
+> execute positioned 1500 22 1503 as @e[type=minecraft:bee,distance=..8,limit=1,sort=nearest] run data get entity @s Pos
 reject \[cdevtest\] .*(done=0|error=)
 look reads 1-2 differ (qa near), reads 3-4 equal (qa 128 blocks above, same chunk, still entity-ticking), reads 5-6 differ
 

@@ -5,6 +5,7 @@
 @@section 1
 @@title Food family recipe helpers (food_families.md 4.5)
 @@jars creativecommon creativedelight
+@@prep spawn-animals=true
 @@text
 @@text Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, `installToMods`).
 @@text
@@ -47,8 +48,10 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails Depends on: SQ-FFH-02
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
-kjsreject Error parsing recipe creativedelight:createsequencedassembly/zucchini_quiche
+# since r1118 (judge-8, 2026-11-18): the assembly was replaced by an oven-only baking recipe (veggiesdelight/recipes.js, merges/dishes #8)
+kjsreject Error parsing recipe creativedelight:.*zucchini_quiche
 > cdevtest rdetail zucchini_quiche
-expect verb=rdetail id=\S*zucchini_quiche_sequenced_assembly serializer=
-look pie crust base, 3 roasted zucchini deploys, cooked meat deploy, 250 mB milk fill
+expect verb=rdetail id=creativedelight:baking/zucchini_quiche serializer=creativedelight:baking result=veggiesdelight:zucchini_quiche\*1 ingredients=farmersdelight:pie_crust
+reject verb=rdetail id=\S*zucchini_quiche_sequenced_assembly
+look baking: pie crust, cheese wedge, milk, eggs, 2 cooked zucchini, pie tin tool; no sequenced assembly left
 reject \[cdevtest\] verb=\S+ .*error=

@@ -110,6 +110,8 @@ reject Exception|\tat
 @pass `placed=true state="minecraft:chest[facing=north,type=single,waterlogged=false]"`; state line `be=minecraft:chest shape_top=0.875 biome=minecraft:plains`; `verb=be be=minecraft:chest nbt="{...id:\"minecraft:chest\"...}"`; leaves `placed=true`
 @fails `TestWorld.place` (BlockStateParser), `TestWorld.state`
 @from batches/r1116/tx.qb passed
+# forceload in-row since r1118 (judge-13, 2026-11-18): the section text's forceload was never a row step
+> forceload add 896 880 1007 927
 > cdevtest place 900 -60 900 minecraft:chest[facing=north]
 > cdevtest state 900 -60 900
 > cdevtest be 900 -60 900
@@ -142,6 +144,8 @@ expect verb=energy energy=none
 @pass first ages `n=256 mean=0.000 hist=0:256`; randomtick `rounds=20 block_ticks=5120 changed=` over 100, `equiv_game_ticks=27306` (randomTickSpeed 3); second ages mean over 1.0; count `n=256 on=minecraft:farmland:256`
 @fails crops not growing: a season or growth rule cancels CropGrowEvent (Creative Calendar season at the biome: `/cdevtest state` biome, `/zq season`); block_ticks 0: `isRandomlyTicking` false for the state
 @from batches/r1116/tx.qb passed
+# forceload in-row since r1118 (judge-13, 2026-11-18): the section text's forceload was never a row step
+> forceload add 896 880 1007 927
 > fill 900 -61 902 915 -61 917 minecraft:farmland
 > fill 900 -60 902 915 -60 917 minecraft:wheat
 > cdevtest ages 900 -60 902 915 -60 917 minecraft:wheat
@@ -246,7 +250,7 @@ expect verb=recipes id=minecraft:bread result=minecraft:bread\*1
 expect verb=food item=minecraft:bread\*1 food=true nutrition=5 modifier=0.6 
 expect verb=tag kind=item tag=minecraft:logs n=([2-9]\d|\d{3,}) 
 expect verb=states states=\d+ ceiling=1048576 headroom=
-expect verb=attrs item=minecraft:diamond_sword\*1 n=([2-9]|\d\d)
+expect verb=attrs item=minecraft:diamond_sword\*1\S* n=([2-9]|\d\d)
 look spider eye gives awkward or nothing (the potion line for it)
 
 ## SQ-TX-10 | break, use, loot, useair as the fake player
@@ -255,6 +259,8 @@ look spider eye gives awkward or nothing (the potion line for it)
 @pass break `who=fake broken=true before=minecraft:oak_log[axis=y] after=minecraft:air` then `drops=minecraft:oak_log:1`; use `result=CONSUME` (or SUCCESS) and `state="minecraft:farmland[moisture=0]"`; loot `drops=minecraft:oak_leaves:10`; useair `result=` CONSUME or SUCCESS
 @fails fake player per dimension (profile `[cdevtest:overworld]`); a protection mod refusing fake players
 @from batches/r1116/tx.qb passed
+# forceload in-row since r1118 (judge-13, 2026-11-18): the section text's forceload was never a row step
+> forceload add 896 880 1007 927
 > setblock 940 -60 900 minecraft:oak_log
 > cdevtest break 940 -60 900 held=minecraft:iron_axe
 > cdevtest use 941 -61 900 held=minecraft:iron_hoe
@@ -309,12 +315,19 @@ look each attack line health_after below health_before (respawned bot included)
 @pass first player line `health=20 invulnerable=true`; after vulnerable on `health=` under 20 and `invulnerable=false`; interact `result=SUCCESS` (or CONSUME) and `held_after=minecraft:iron_ingot*0` or empty (golem repaired)
 @fails `Bots.setVulnerable`; `pbot interact` uses Player.interactOn
 @from batches/r1116/tx.qb passed
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-TX-12 (not in every plan)
+> forceload add 944 896 975 911
+> execute unless entity @e[type=minecraft:iron_golem,x=961,y=-60,z=900,distance=..3] run summon minecraft:iron_golem 961 -60 900 {NoAI:1b}
+> execute unless entity A run pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 3
 > effect give A minecraft:instant_damage 1 0
 > cdevtest player A
 > pbot vulnerable A on
 > effect give A minecraft:instant_damage 1 0
 > cdevtest player A
 > pbot vulnerable A off
+# golem damaged in-row (judge-13, 2026-11-18): a full-health golem refuses the ingot (PASS); r1116 had SQ-TX-12's hits
+> data merge entity @e[type=minecraft:iron_golem,x=961,y=-60,z=900,distance=..3,limit=1] {Health:50.0f}
 > pbot inv A set 0 minecraft:iron_ingot
 > pbot interact A @e[type=minecraft:iron_golem,limit=1,sort=nearest]
 expect verb=player name=A .*health=20 .*invulnerable=true
@@ -328,6 +341,11 @@ expect verb=pbot.interact bot=A .*result=(SUCCESS|CONSUME) held_after=(minecraft
 @pass eat `result=CONSUME using=true use_ticks=32 food=10`; within 3 s `verb=pbot.useitem bot=A end=finish item=minecraft:bread result=minecraft:bread food=` 10 + bread nutrition and `sat=` equal to `cdevtest food` saturation (start 0), finish `tick` 32 after the eat line's; bow `using=true release_after=20`, then `end=released`, entities `n=1`
 @fails no finish line: the bot's LivingEntity tick does not count the use down (BotPlayer.tick calls doTick); food values off by the pack's food tuning: compare with `cdevtest food`, not vanilla
 @from batches/r1116/tx.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-TX-12 (not in every plan)
+> forceload add 944 896 975 911
+> execute unless entity @e[type=minecraft:iron_golem,x=961,y=-60,z=900,distance=..3] run summon minecraft:iron_golem 961 -60 900 {NoAI:1b}
+> execute unless entity A run pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 3
 > pbot hunger A 10
 > pbot inv A set 0 minecraft:bread 2
 > pbot inv A select 0
@@ -353,6 +371,11 @@ look finish line food = 10 + bread nutrition and sat = cdevtest food saturation;
 @pass `shift=true pose=CROUCHING`; then `yaw=90 pitch=30`; break `broken=true`; punch `after=` the same grass block (survival click aborted)
 @fails pose updates on the bot's own tick; `handleBlockBreakAction` arguments
 @from batches/r1116/tx.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from SQ-TX-12 (not in every plan)
+> forceload add 944 896 975 911
+> execute unless entity @e[type=minecraft:iron_golem,x=961,y=-60,z=900,distance=..3] run summon minecraft:iron_golem 961 -60 900 {NoAI:1b}
+> execute unless entity A run pbot spawn A 960 -60 900 minecraft:overworld survival
+sleep 3
 > pbot sneak A on
 sleep 1
 > cdevtest player A
@@ -408,7 +431,7 @@ waitlog verb=layerdump .*done= 120
 shell cp kubejs/exported/passthrough_layers_dump.json "$INST/kubejs/exported/" && echo copied
 expect verb=layerdump .*done=1
 expect tag_without_property=0
-look dump json: class=in_tag for snow 1-8, 9 IW leaf piles + azalea_flower_pile 0-8, IW ash/sand/red sand layers, supplementaries ash and fodder, twigs bamboo_leaves max=4, IE sawdust max=9; class=d1_out for 7 createdeco coin stacks and logic_cabinet; snow collision_px; class=new lines go to the owner
+look dump json: class=in_tag for snow 1-8, the IW leaf piles + azalea_flower_pile 0-8, twigs bamboo_leaves max=4; class=d1_out for 7 createdeco coin stacks, logic_cabinet and the Copycats layers; the F1 outs (IW ash/sand/red sand layers, supplementaries ash and fodder, IE sawdust max=9; plan_post_scratch_1115b.md D1, 2026-11-17) show class=new until TestLayers learns them; snow collision_px; any other class=new line goes to the owner (judge-13, 2026-11-18)
 
 ## SQ-TX-18 | cdevreload compat with Compat loaded (boot 1 part)
 @group A

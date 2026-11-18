@@ -28,11 +28,11 @@ kjsreject (stepstools\.js|stepstool\.js|curiostags\.js).*(Error|error)
 @from batches/r1106spf/b1.qb passed
 @reviewed 2026-11-16
 > cdevtest recipes _stepstool max=100
-> cdevtest tag item creativeengineering:stepstools
+> cdevtest tag item creativeequipment:stepstools
 > cdevtest tag item curios:feet
 > curios list
 count verb=recipes id=creative(engineering|equipment):shaped/[a-z0-9_]*_stepstool[a-z_]* result=\S*_stepstool\*1 == 16
-expect verb=tag kind=item tag=creativeengineering:stepstools n=16
+expect verb=tag kind=item tag=creativeequipment:stepstools n=16
 expect verb=tag kind=item tag=curios:feet .*stepstool
 expect (?i)feet
 reject \[cdevtest\] verb=\S+ done=0

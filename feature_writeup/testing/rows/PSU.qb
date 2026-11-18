@@ -2170,15 +2170,16 @@ look the probe calls TrimmableItem.applyTrim directly (the smithing and JEI path
 @fails `PhantomSpawnerBaneSkipMixin` not applied; Better Beacons inject order
 @from batches/r1102b/s5_R_A.qb
 # spawning on for this row only; hard raises the local-difficulty roll per pass (the row names no difficulty)
+# self-contained since r1118 (judge-10, 2026-11-18): fixed home 0 -60 0 (was {S5H}, the s5home marker capture of an r1102b boot 1 this step never runs)
 > pbot remove-all
 sleep 2
 > gamerule doMobSpawning true
 > gamerule doInsomnia true
 > difficulty hard
 > time set 18000
-> pbot spawn s5pb1 {S5H1-200} {S5H2} {S5H3} minecraft:overworld survival
+> pbot spawn s5pb1 -200 -60 0 minecraft:overworld survival
 sleep 2
-> pbot spawn s5pb2 {S5H1+200} {S5H2} {S5H3-200} minecraft:overworld survival
+> pbot spawn s5pb2 200 -60 -200 minecraft:overworld survival
 sleep 5
 > s5 rest s5pb1 1200000
 > s5 rest s5pb2 1200000

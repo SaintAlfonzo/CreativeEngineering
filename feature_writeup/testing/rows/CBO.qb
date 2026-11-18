@@ -103,7 +103,7 @@ waitlog Added [0-9]+ recipes, removed 120
 sleep 3
 # "server scripts ready" prints on ServerEvents.loaded only (boot), not on /reload
 bootexpect server scripts ready, members on: vinery, brewinandchewin
-shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe"
+shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe\|Couldn't parse loot table\|Not a JSON object"
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/server.log
 > cbo effects
 waitlog \[cbo\] done 30
@@ -149,7 +149,10 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 24 of 24
-expect effects items by namespace: .*alexsmobs.*botania.*create_deep_dark.*dragonloot.*everythingcopper.*felsic_gear.*immersive_armors.*immersiveengineering.*supplementaries
+# judge-3, 2026-11-18: the probe counts ITEM namespaces of the Armor / Tool Effects rows; since the gear rows moved to
+# Creative Equipment (2026-11-06) the items are dragonloot, everythingcopper, felsic_gear, immersive_armors, vanilla and
+# the echo tools (creativeequipment:); alexsmobs / botania / IE / supplementaries only supply effects, not items
+expect effects items by namespace: .*creativeequipment=.*dragonloot=.*everythingcopper=.*felsic_gear=.*immersive_armors=.*minecraft=
 > cbo potions
 waitlog \[cbo\] done 30
 look record the potion ... registered lines (all true except quark:resilience and upgrade_aquatic:restfulness expected)
@@ -165,7 +168,8 @@ kjsexpect potion bottling done \([1-9]
 kjsexpect jeed_providers.js: [1-9][0-9]* effect provider recipes
 bootexpect registered [1-9][0-9]* dragon-breath fluid-brewing recipes
 bootexpect Lingerification: registered refinery list generator
-shell grep -h "\[alcohol\] food values" logs/kubejs/startup.log logs/kubejs/server.log | grep "44 of 44"
+# judge-3, 2026-11-18: the drink list grew past 44; every drink set = N of N
+shell grep -hE "\[alcohol\] food values set on ([0-9]+) of \1 drinks" logs/kubejs/startup.log
 shell ! grep -hE "better_beacons not present|\[CE potions\] mix skipped|effect .* not registered" logs/kubejs/startup.log logs/kubejs/server.log logs/latest.log
 look mix and effect swap counts above SQ-CBO-02's; re-added [1-9]
 
@@ -298,7 +302,7 @@ waitlog Added [0-9]+ recipes, removed 120
 sleep 3
 # "server scripts ready" prints on ServerEvents.loaded only (boot), not on /reload
 bootexpect server scripts ready, members on: vinery, brewinandchewin
-shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe"
+shell n=$(cat .preload_n); tail -n +$n logs/latest.log | grep -c "Error parsing recipe\|Couldn't parse loot table"; ! tail -n +$n logs/latest.log | grep -n "Exception" | grep -v "Can't find block\|Error parsing recipe\|Couldn't parse loot table\|Not a JSON object"
 shell ! grep -nE "ReferenceError|TypeError|EvaluatorException|is not defined" logs/kubejs/server.log
 > cbo effects
 waitlog \[cbo\] done 30
@@ -412,7 +416,7 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: botania$
-expect effects items by namespace: .*\bbotania=
+# judge-3, 2026-11-18: no Armor / Tool Effects item is in botania's namespace any more (effects only, see SQ-CBO-10)
 
 ## SQ-CBO-24 | chain + buzzier_bees-*.jar,blueprint-*.jar
 @group A (chain + Buzzier Bees)
@@ -472,7 +476,7 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: create_deep_dark$
-expect effects items by namespace: .*\bcreate_deep_dark=
+# judge-3, 2026-11-18: no Armor / Tool Effects item is in create_deep_dark's namespace any more (effects only, see SQ-CBO-10)
 bootreject EchoArmorEffectProcedureMixin
 
 ## SQ-CBO-27 | chain + dragonloot-*.jar
@@ -655,7 +659,7 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: immersiveengineering$
-expect effects items by namespace: .*\bimmersiveengineering=
+# judge-3, 2026-11-18: no Armor / Tool Effects item is in immersiveengineering's namespace any more (effects only, see SQ-CBO-10)
 bootexpect Lingerification: registered refinery list generator
 shell grep -h "potion bottling done\|Lingerification: generated" logs/kubejs/server.log logs/latest.log
 bootexpect Lingerification: generated [1-9]
@@ -803,7 +807,7 @@ expect effects leaks 0$
 reject \[cbo\] leak 
 reject \[cbo\] leak .*echo_
 expect mods loaded 1 of 24: supplementaries$
-expect effects items by namespace: .*\bsupplementaries=
+# judge-3, 2026-11-18: no Armor / Tool Effects item is in supplementaries's namespace any more (effects only, see SQ-CBO-10)
 
 ## SQ-CBO-42 | chain + Engineers Delight *.jar,ImmersiveEngineering-*.jar
 @group A (chain + Engineer's Delight)

@@ -7,6 +7,7 @@
 @@date 2026-11-12
 @@jars powergrid
 @@sources feature_writeup/power_grid.md feature_writeup/energy_advanced.md
+@@prep PGJAR=jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-20.jar
 @@text
 @@text **Refreshed 2026-11-13 for the P2 build** (was held until a port existed): jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-03.jar` (port phase 2: creative
 @@text sources, creative resistors, gauges, wires; enough for the D14 measurement). Defines how the server cost and the client
@@ -221,6 +222,8 @@ look server tick under 50 ms with 40 bots (perf segment mean / p99); record the 
 @@date 2026-11-13
 @@jars powergrid
 @@sources feature_writeup/plan_power_grid.md feature_writeup/power_grid.md
+@@prep PGJAR=jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-20.jar spawn-animals=true spawn-npcs=true
+@@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@text **Priority: high (P0 gate; P1 waits on it).** Targets `development/backportedPowerGrid/build/libs/backportedPowerGrid-0.6.2-ce-19.2-01.jar`
 @@text (built 2026-11-13 00:52, port phase 0: registers nothing). **The PG jar is NOT in `mods/` and must not be put there**
@@ -335,6 +338,28 @@ expect \[zpwg\] ns powergrid sound_event: [1-9]
 @pass the `powergrid` command runs (no `Unknown command`); the counter prints `Last measurement: no measurement yet` before any solve and a date after one (in a run where the P2 solves ran first, as P11, a measurement is already present), then three values (fix B8: upstream threw a NullPointerException here) (fix 2026-11-13, P2 run r1113: rerun on `-04`); after `reload` the wire types line appears a second time (count 2); no ERROR line in between
 @fails `collections/ModdedCommands`, `PerformanceCommand` argument type registration (`PowerGridImpl.COMMAND_ARGUMENT_TYPES`); reload: `PowerGridImpl.addReloadListeners`
 @from batches/r1113pwg/pwgr1.qb passed
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > powergrid debug problems
 > powergrid performance get NetSolve
 sleep 2
@@ -356,6 +381,28 @@ reject \[(Server thread|Worker-Main-\d+)/ERROR\].*(powergrid|patryk)
 @pass `[zpwgg] read V=12.0 I=<i> Vr=<v>` with I within 1 % of `expectedI` = 12 / (10 + Rwires + Rgauge) (Rwires as printed, a few milliohm; Rgauge = the current gauge's own series resistance, config `current_gauge` 0.05 ohm, printed by `read` since r1113) and Vr within 1 % of I x 10; `wires 5`; no ERROR line
 @fails `electricity/creative`, `electricity/gauge` (`getValue` server side), wire creation (`HangingWireEntity.create`, endpoint resolution on the wire's first tick); a 0 reading with wires present: the network did not join (`WorldNetworks.lineConnected`, `ITransmissionLine` casts)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwgg loop 1000 -60 1000 12 36
 waitlog \[zpwgg\] done 30
 sleep 3
@@ -376,6 +423,28 @@ look read line: I within 1 % of 12/(10+Rwires), Vr within 1 % of I x 10
 @pass `[zpwgg] cut 1` (the probe picks the gauge-to-resistor wire by its endpoints since r1113; the box version also cut the source and voltage gauge wires on a 3-block loop) (fix 2026-11-13, P2 run r1113: rerun on `-04`); read shows `I=0` (abs below 1e-6) and `wires=4`; no ERROR or exception line
 @fails `BaseWireEntity.remove`, island discovery (`scheduleIslandDiscovery`), fix B5 for wires to ground (P1)
 @from batches/r1113pwg/pwgr2.qb passed
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwgg cut 1000 -60 1000
 waitlog \[zpwgg\] done 20
 sleep 1
@@ -391,6 +460,28 @@ reject (Exception|/ERROR\])
 @pass the 24-block wire's `R=` is 0.018 (12 items x 0.0015 ohm); the second `read` line has `pass=true`: `drop` (V - Vr) within 0.5 % of `expectedDrop` = I x (Rpath + Rgauge), where `Rpath` is the current-path wires only (the voltage gauge's two sense wires, 2 x 0.0015 ohm, carry no current and are only in `Rwires`) and the current gauge (0.05 ohm, `Rgauge`) is in series; P2 run r1113 saw 0.042 to 0.047 ohm unaccounted, which is this gauge (fix 2026-11-13, P2 run r1113: rerun on `-04`; probe split `Rpath` 2026-11-13 after the P3 run, rerun with the new probe)
 @fails wire item count per length (`HangingWireEntity.create` count, wire type `itemsPerMeter` 0.5, `resistancePerItem`); wire types not loaded on the server (`WireRegistry.serverEntries`)
 @from batches/r1113pwg/pwgr1.qb passed
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > forceload add 990 990 1060 1030
 sleep 4
 > zpwgg loop 1000 -60 1010 12 27 powergrid:wire 24
@@ -415,6 +506,28 @@ reject \[zpwgg\] error
 @pass first `ohm` about 120 A (`I=` from the resistor's terminal voltages); `watched` has `pass=true` (`overheatedWires` at least 1, `firstOverheatedTick` set: the flag lives about 5 ticks, so the 20-tick `wires` samples may miss it, probe watcher 2026-11-13 after the P3 run), then the wire count drops (burnt wires are removed); `items 0` (burnt wires drop nothing); `ohm` after: `I=0` or a lower current, no exception; the log has no ERROR from the network split (fix 2026-11-13, P2 run r1113: rerun on `-04`)
 @fails `BaseWireEntity.temperatureUpdate` / tick (`discard` after 5 ticks), `wireOverheating` config; items dropped: something calls `dropWire` with items (port bug, H4 says none)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwgg overheat 1000 -60 1020
 > zpwgg watch 1000 -60 1020 8 300
 > zpwgg ohm 1003 -60 1020
@@ -449,6 +562,28 @@ look first ohm about 120 A; wire count drops; last ohm I=0 or lower
 @pass both loops read a current within 1 % of `expectedI` = 12 / (10 + Rwires + Rgauge); `wires 5` each
 @fails wire types per item (`WireRegistry.forItem` server table)
 @from batches/r1113pwg/pwgr1.qb passed
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwgg loop 1000 -60 1050 12 36 powergrid:insulated_copper_wire
 waitlog \[zpwgg\] done 30
 > zpwgg loop 1000 -60 1060 12 36 powergrid:golden_wire
@@ -470,6 +605,28 @@ reject (Exception|/ERROR\])
 @pass after the restart: the same `V`, `I` (within 1 %), `R` and wire counts as before the stop; no `Failed to` / `Exception` line naming `powergrid` or `TransmissionLine`; no wire entity lost
 @fails world network saved data (`powergrid_electric_network_data`, `WorldNetworks` NBT), `TransmissionLinePart` load (`WireEndpointType` ordinals), wire entity save (`BaseWireEntity` NBT)
 @from batches/r1113pwg/pwgr2.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > forceload add 990 990 1060 1090
 sleep 6
 > zpwgg read 1000 -60 1000
@@ -492,28 +649,51 @@ look compare with SQ-PWG-20a.log: same V, I (1 %), R and wire counts
 @fails `ElectricBehaviour.handleTicketChange` (Forge `ChunkTicketLevelUpdatedEvent`), `unload` / `nodeHolderUnloaded`, `WorldNetworks.bounty` / `chunkLoaded`; a line removed after reload: the entity was not found within 10 ticks of the chunk load (PORT_NOTES 12)
 @from batches/r1113pwg/pwgr1.qb
 # r1114: SQ-PWG-P11A forceloads 990 990 1060 1090, which kept chunk 65 loaded; the rerun (pwgr1r.qb) moves the loop to Z 2200
-> forceload add 1000 1070 1050 1075
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
 sleep 4
-> zpwgg loop 1000 -60 1070 12 36 powergrid:wire 40
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
+# self-contained since r1118 (judge-9, 2026-11-18): loop moved to Z 2200 as in pwgr1r.qb (the block above forceloads the P2 area)
+> forceload add 1000 2200 1050 2205
+sleep 4
+> zpwgg loop 1000 -60 2200 12 36 powergrid:wire 40
 waitlog \[zpwgg\] done 20
 sleep 2
-> zpwgg read 1000 -60 1070 40
+> zpwgg read 1000 -60 2200 40
 waitlog \[zpwgg\] done 20
-> forceload remove 1016 1070 1050 1075
+> forceload remove 1016 2200 1050 2205
 sleep 15
-> zpwgg chunk 1043 0 1070
+> zpwgg chunk 1043 0 2200
 waitlog \[zpwgg\] done 20
-> zpwgg chunk 1020 0 1070
+> zpwgg chunk 1020 0 2200
 waitlog \[zpwgg\] done 20
-> zpwgg read 1000 -60 1070 40
+> zpwgg read 1000 -60 2200 40
 waitlog \[zpwgg\] done 20
-> zpwgg net 1000 -60 1070
+> zpwgg net 1000 -60 2200
 waitlog \[zpwgg\] done 20
-> forceload add 1016 1070 1050 1075
+> forceload add 1016 2200 1050 2205
 sleep 5
-> zpwgg read 1000 -60 1070 40
+> zpwgg read 1000 -60 2200 40
 waitlog \[zpwgg\] done 20
-> zpwgg wires 1020 -60 1070 30
+> zpwgg wires 1020 -60 2200 30
 waitlog \[zpwgg\] done 20
 expect \[zpwgg\] chunk 65 \S+ loaded=false
 expect \[zpwgg\] read unloaded .*resistor
@@ -530,6 +710,28 @@ look first and last read within 1 %; record chunk 63 blockTicking
 @pass the server runs the loop as with the mirror on (same read); no ERROR; the config comment says the switch is read on the server
 @fails `WorldNetworks.postTick` (`clientMirror` gate), `config/CCommon`
 @from batches/r1113pwg/pwgr3.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > forceload add 990 990 1060 1090
 sleep 6
 > zpwgg loop 1000 -60 1080 12 36
@@ -551,6 +753,28 @@ look the config comment says the switch is read on the server
 @pass each item id exists (in the `zpwg ns` item list); recipes: `grep -c 'powergrid' OUT/srv/logs/latest.log` shows no recipe parse error
 @fails `collections/ModdedItems`
 @from batches/r1113pwg/pwgr1.qb passed
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg ns powergrid all
 waitlog \[zpwg\] done 30
 expect \[zpwg\] ns powergrid item: .*powergrid:copper_cord
@@ -668,6 +892,28 @@ look recipes list also has copper_coil, resistive_coil, grounding_rod, device_co
 @pass `coils primary=0-1x10 secondary=2-3x100`; secondary voltage (voltage gauge) within 10 % of 100 V and secondary current (gauge at 1109) within 10 % of 1 A; primary current (gauge at 1103) within 15 % of 10 x the secondary current; record the exact values (losses come from the coupling factor `smallCoreK` and the winding model); no ERROR; AC: the voltage gauge value changes sign between reads
 @fails `TransformerBlockEntity.buildCircuit` (coupling), `makePrimary` / `makeSecondary`; a voltage near 0: the coil terminals (`xfmr` uses 0-1 and 2-3; `be` lists terminals)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 src 1100 -60 1000 10
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1103 -60 1000 powergrid:current_gauge
@@ -728,6 +974,28 @@ look secondary V (gauge 1112 1002) within 10 % of 100; secondary I (1109) within
 @pass `fe received 20000`; each window: N6 = (20000 - stored after) / (t after - t of the fill) / P, with P the mean of I x V over the two gauge reads (watts at the load); record the three N6 values: the port keeps upstream's rate, so N6 is about 10 (FE per tick per watt; `ceil` rounding adds up to 1 FE per tick); output voltage near `stored / 2` volts (2 FE per V) times I / I(no throttle); no ERROR
 @fails `FEInverterBlockEntity.electricalTick` (`ceil(forgeEnergyPerWatt x power)` per tick), `forge/FEInverterBlockEntityImpl` (capability only on the `facing` side; `fe none on down`: wrong side or the substitute provider did not install the forge block entity, `PowerGridImpl`)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1103 -60 1020 powergrid:fe_inverter facing=down
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1106 -60 1020 powergrid:current_gauge
@@ -771,6 +1039,28 @@ look compute N6 per window from fe stored / t and gauge I x V
 @pass `thermal T=` rises, smoke particles server side are not checked; the resistor turns into an Overheated Component: `[zpwgg] overheated at 1104 -60 1040 original=Block{powergrid:power_resistor}` with data keys; no explosion, no ERROR; the loop is open afterwards (`zpwg3 be 1100 -60 1040`: the source still holds T0 = 40 V, T1 = 0 V, as a voltage source does; the wires to the component carry no current)
 @fails `ThermalBehaviour.explode` / `overheatBlock`; power resistor rating `CThermal.maxPower(1000, 2.0)`; if it never overheats, record P = V^2 / R from `be` (terminal voltages)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 src 1100 -60 1040 40
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1104 -60 1040 powergrid:power_resistor facing=down
@@ -799,6 +1089,28 @@ look thermal T rises over the 20 reads; last be: source T0 = 40 V, T1 = 0 V (wir
 @pass the bare resistor overheats into an Overheated Component; the cooled one stays a power resistor with `thermal T=` level and lower than the bare one's at the same tick; if both overheat, lower both sources to 35 V (about 1.2 kW) and repeat; if neither does, raise to 50 V (2.5 kW, 50 A); record the boundary
 @fails `mixin/AirCurrentMixin` (moved to P3; `rebuild` HEAD / TAIL on Create 0.5.1.i), `ThermalBehaviour.addCoolingMultiplier`, config `encasedFanCooling`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1102 -60 1060 create:encased_fan facing=east
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1101 -60 1060 create:creative_motor facing=east
@@ -851,6 +1163,28 @@ look cooled T below bare T at the same tick; fan running (be 1102)
 @pass first: fuse state `blown` (rating 5) and gauge current 0 (abs below 1e-6); after the 20 A rating and reset: state `closed`, gauge current within 5 % of 12 / (1 + 0.2 + 0.05 + Rwires) (the fuse holder's 0.2 ohm and the gauge's 0.05 ohm are in the loop: about 9.47 A); no ERROR
 @fails `FuseHolderBlockEntity.electricalTick` (blows when the current exceeds the setting), `setState`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1103 -60 1070 powergrid:fuse_holder facing=down
 waitlog \[zpwg3\] done 20
 > zpwg3 fuse 1103 -60 1070 5
@@ -883,6 +1217,28 @@ look first: fuse state blown (rating 5), gauge 0 (abs below 1e-6); after 20 A + 
 @pass battery `energy=` starts at 0.9 x 120 Wh (388800 J) and `percent=90`; open-circuit voltage at the terminals near 1.2 x 0.9 + 11.5 = 12.58 V; discharging: energy falls by about I x V x 20 s (within 10 %), the meter's `energy=` rises by the same amount (record the unit), voltage drifts down slightly; charging at 14 V: energy rises; no ERROR
 @fails `BatteryBlockEntity` (`SimpleBatterySpec.ACID_BATTERY`), `MultiBlockBatteryEntity`, `EnergyMeterBlockEntity`; `percent` is the port's `getPercent` for Create 0.5.1's threshold switch
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1103 -60 1080 powergrid:battery
 waitlog \[zpwg3\] done 20
 > zpwg3 be 1103 -60 1080
@@ -929,6 +1285,28 @@ look battery starts energy 388800 J, percent 90, OCV near 12.58 V; meter reads n
 @pass the connector stays placed (it needs a receiving energy storage behind it); the capacitor's stored FE rises between the two reads; record FE per tick and the connector's current (goggle lines) for the FE per watt check; no ERROR
 @fails `DeviceConnectorBlock.canSurvive` / `hasEnergyStorage`, `BridgeElectricBehaviour` and `forge/BridgeElectricBehaviourImpl` (FE handler), `SubstituteBlockEntityProvider` default for the device connector
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1106 -60 1090 immersiveengineering:capacitor_lv
 waitlog \[zpwg3\] done 20
 > zpwg3 be 1106 -60 1090
@@ -955,6 +1333,28 @@ look the second fe stored above the first; record FE per tick (difference / 100)
 @pass lightning: magnets more than 0 (about 5 % per hit per entity) and magnets + andesite alloy = 64 (struck alloy is not destroyed); the iron ingots give no magnet (upstream converts andesite alloy only; PWG-31's "iron ingots" wording is wrong, fix B7 corrects the config comment); electromagnet: no magnet while unpowered (`field 0`); powered: `field` above 0.25 and the alloy turns into 1 magnet; no ERROR
 @fails `mixin/EntityMixin` (`thunderHit`, canceled for alloy and magnets), `lightningMagnetizationChance`; electromagnet: `MagnetizingBehaviour` (item entity on the ground one block below), `MagnetizingRecipe` / `RecipeApplier` (0.5.1 signature)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 drop 1100 -60 1100 create:andesite_alloy 64
 waitlog \[zpwg3\] done 20
 > zpwg3 drop 1100 -60 1104 minecraft:iron_ingot 64
@@ -1006,6 +1406,28 @@ look lightning: magnets > 0 and magnets + alloy = 64; iron gives 0 magnets; elec
 @pass first: current about 10 / (5000 + 1) A (test rod at the highest resistance, 0 conductive blocks; the reference rod near 1 ohm with 64+ copper blocks); test rod resistance = its `T0` voltage / current; after the copper fill: the current rises and the test rod's resistance falls (record both); a test rod with fewer than 10 solid blocks below it within 10 blocks gives no current at all; no ERROR
 @fails `GroundingRodBlockEntity.scan` / `lazyTick` (tag `powergrid:conductive_ground`, config `grounding*`), fix B5 (wires to ground, P1); the touch damage (fix B6) is checked in CQ-PWG-12
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > fill 1118 -63 1126 1122 -61 1130 minecraft:copper_block
 > zpwg3 place 1120 -60 1128 powergrid:grounding_rod
 waitlog \[zpwg3\] done 20
@@ -1180,6 +1602,28 @@ look shell output: config lines as listed (exit 0 = all 20 key = value pairs pre
 @pass `accessor=true`; `generated=` within 3 RPM of 0.003835 x Vm^2 (Vm = voltage gauge): about 55 at 120 V, 127 at 182 V, 255 at 258 V (PWG-06's old "half speed at 120 V" is wrong, power_grid.md 3.5); network `capacitySU` = 64 x speed (16320 at 255); current gauge about Vm / 512 (no load: dynamic resistance 25.6 / 0.05): 0.23, 0.36, 0.50 A (within 10 %); AC: the speed follows the source and changes sign, the press and shaft stay placed (no block popped by Create's flicker check), no ERROR; constant speed motor: at 258 V `speed=64` and `capacityAdded` about 255 (SU per RPM; network `capacitySU` about 16320), at 100 V `speed=64` and `capacityAdded` about 37 (2368 SU), at 10 V `speed=0` (under 64 SU)
 @fails `ElectricMotorBlockEntity.tick` / `lazyTick` (5-tick average, `calculateSpeed`), `updateFromNetwork` (dynamic resistance), `applyNewSpeed` (flicker workaround through `KineticBlockEntityAccessor`), `ConstantSpeedMotorBlockEntity.getGeneratedSpeed` / `calculateAddedStressCapacity`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 src 1100 -60 1150 258
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1103 -60 1150 powergrid:current_gauge
@@ -1222,6 +1666,28 @@ look the 16 fast reads follow the AC wave (speed changes sign within one 40-tick
 @pass **A**: no presses: `generated=255`, `capacitySU=16320 stressSU=0`, current about 0.50 A (load 0.05, 512 ohm), Vm about 258 V; 4 presses: same RPM, `stressSU` = 4 x k x 255 (8160 with Create's default k = 8), current = Vm / (25.6 / load) with load = 4k / 64 (about 5.0 A for k = 8, within 10 %); 9 presses (72 > 64 per RPM): `overstressed=true` on the presses, motor current about Vm / 25.6 (about 10 A); record RPM, SU, V and A for each step. **B**: winding `I=` about 1.0 A (30 V on two 2-block windings; record) and `field=` = f(I) (6.60 at 1.0 A, within 5 %); each rotor `induction field=` = winding field / 2 (two windings of four sides); clutch `speed=` = the creative motor RPM, `impact=104` (clutch 32 + 2 rotors 32 + commutator 8) and network `stressSU` = 104 x RPM (6656, 13312, 26624); rotor `rpm=` within 5 % of the clutch speed after 100 ticks; commutator `V=` between 0.6 and 1.0 of EMF = 2 x rotor field x RPM x pi / 30 (about 44, 88, 177 V at 1 A field) and the voltage gauge equal to it within wire drop; current gauge = gauge volts / 10 within 5 %; V(128) / V(64) and V(256) / V(128) between 1.7 and 2.3; record RPM, SU, V, A and `power=` (mechanical) against V x A (electrical) at each speed; no ERROR
 @fails A: `ElectricMotorBlockEntity.updateFromNetwork` (load from Create stress), `torqueForStress`; a press count that does not overstress at 9: Create's press impact in the pack config (use k). B: winding not feeding the rotor: `zpwg4 kin` on the winding shows `field=none` (coil not built: check `wind` output `magnetic=y`) or the connector dropped; `InductionRotorBlockEntity.neighborsChanged` (magnetic axis must match the side), `CommutatorBlockEntity.tick` (field sum), `GeneratorCoupling.preSolve`; rotor not following: `GeneratorClutchBlockEntity.sourceForce` / `RotorBehaviour.tick` (PD, `rotorKp` / `rotorKd`)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 src 1100 -60 1160 258
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1103 -60 1160 powergrid:current_gauge
@@ -1270,6 +1736,77 @@ look record RPM, SU, V, A per step: 0 presses about 0.50 A at 258 V; 4 presses s
 @pass 1 ohm: current rises (record; about EMF / 4, below the copper wire's 80 A), rotor `rpm=` falls under the clutch speed (record the gap), clutch `load=` rises toward 1 and `redstoneOut=` rises (comparator output), network `stressSU` stays 104 x 256 = 26624 (the code does not raise Create stress with electrical load; PWG-10's wording corrected); redstone 15: clutch `impact=0`, network `stressSU=0`, rotor `rpm=` falls toward 0 (friction) and the commutator voltage with it; back at 10 ohm and no redstone: rotor returns within 5 % of 256 and the voltage to the SQ-PWG-38 value; no ERROR
 @fails `GeneratorCoupling.postUpperSolve` (counter force = field x current), `RotorBehaviour.tick` (force limit), `GeneratorClutchBlockEntity.calculateStressApplied` (coupling (15 - redstone) / 15), `updateStrength` / `GeneratorClutchBlock.neighborChanged`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
+# self-contained since r1118 (judge-9, 2026-11-18): the SQ-PWG-38B generator line (pwgr1.qb batch-only row) this row, -44 and -07 run on
+> zpwg3 place 1100 -58 1180 create:creative_motor facing=east
+waitlog \[zpwg3\] done 20
+> zpwg3 place 1101 -58 1180 powergrid:generator_clutch facing=west
+> zpwg3 place 1102 -58 1180 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1103 -58 1180 powergrid:generator_induction_rotor axis=x
+> zpwg3 place 1104 -58 1180 powergrid:generator_commutator facing=east
+> zpwg4 wind 1102 -57 1180 1103 -57 1180 y
+> zpwg4 wind 1102 -59 1180 1103 -59 1180 y
+> zpwg3 place 1101 -57 1180 powergrid:device_connector facing=east
+> zpwg3 place 1101 -59 1180 powergrid:device_connector facing=east
+> zpwg3 be 1101 -57 1180
+> zpwg3 be 1101 -59 1180
+> zpwg3 src 1098 -58 1183 30
+> zpwg3 w 1098 -58 1183 0 1101 -57 1180 0
+> zpwg3 w 1101 -57 1180 1 1101 -59 1180 0
+> zpwg3 w 1101 -59 1180 1 1098 -58 1183 1
+> zpwg3 place 1107 -60 1180 powergrid:current_gauge
+> zpwg3 place 1110 -60 1180 powergrid:creative_resistor
+> zpwg3 res 1110 -60 1180 36
+> zpwg3 place 1110 -60 1182 powergrid:voltage_gauge
+> zpwg3 w 1104 -58 1180 0 1107 -60 1180 0
+> zpwg3 w 1107 -60 1180 1 1110 -60 1180 0
+> zpwg3 w 1110 -60 1180 1 1104 -58 1180 1
+> zpwg3 w 1110 -60 1180 0 1110 -60 1182 0
+> zpwg3 w 1110 -60 1180 1 1110 -60 1182 1
+sleep 2
+> zpwg4 kin 1102 -57 1180
+> zpwg3 scroll 1100 -58 1180 64
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+> zpwg3 scroll 1100 -58 1180 128
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
+> zpwg3 scroll 1100 -58 1180 256
+sleep 5
+> zpwg4 kin 1101 -58 1180
+> zpwg4 kin 1102 -58 1180
+> zpwg4 kin 1104 -58 1180
+> zpwg3 be 1107 -60 1180
+> zpwg3 be 1110 -60 1182
 > zpwg3 res 1110 -60 1180 27
 waitlog \[zpwg3\] done 20
 sleep 3
@@ -1422,6 +1959,28 @@ look 128 RPM: winding I near 0 (residual); 256 RPM: winding I near 2 A and commu
 @pass rheostat: `tuned arm=1 ratio=0.99`, gauge about 9.9 V at first; after turning: arm between 0.2 and 0.9 and holds after the motor stops, gauge / 10 = ratio within 0.02; variac: gauge peak about ratio x 100 V (within 10 %) before and after turning, ratio as `kin` shows; servo: `generated=` about 4 (or -4) within 10 ticks of the 0.5 V step (power-limited: the idle coil's 25 W gives 25 x 94.25 / 480 = 4.9 RPM, truncated), back to 0 after about 35 ticks (36 degrees at 1.2 degrees per tick plus 5), then the current gauge reads about 40 / 64 = 0.63 A (idle coil; fix B9: upstream stayed on the moving coil, 3.1 A); unpowered with a 1 V target: `generated=0` and no move; powered again: the servo moves (`generated=` non-zero within 15 ticks: one full idle window first, B38; upstream had already marked the angle reached) at the same speed as the 0.5 V step (`generated=` about 4, within 20 %; jar -17 gave `generated=1` for about 105 ticks from a partly powered window, slower than the r1113 read of `generated=2` for about 47 ticks) for about 35 ticks, then idle current again; no ERROR
 @fails `TunedBlockEntity.onSpeedChanged` (arm chase), `RheostatBlockEntity.refreshParameters`, `VariacBlockEntity.refreshParameters` (`TransformerCoupling`), `ServoBlockEntity.tick` (fix B9, `SequenceContext` TURN_ANGLE); powered again at `generated=1` or 2: B38 not in the jar (`fullWindowPowered`, `windowClean` in `ServoBlockEntity`; needs jar -18)
 @from batches/r1115/p2_r1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1103 -60 1250 powergrid:servo facing=east
 waitlog \[zpwg3\] done 20
 > zpwg3 src 1100 -60 1250 40
@@ -1467,6 +2026,28 @@ look 0.5 V step: generated about +-4 within 10 ticks (2 reads), 0 after about 35
 @pass record the load voltage at 100 and 10 ohm without and with the regulator; the change between the two loads is smaller with the regulator (PWG-11: within a few volts; record the two differences and the pile resistance from the coil's goggle lines); no ERROR
 @fails `CarbonPileCoilBlockEntity` (`coilPull` saturates at 0.4 A coil current, pile resistance base x trim x (1 + pull^1.5 x gain)); a regulator that does nothing: the sense resistor (lower it to 300 ohm, index 47) or the trim (`zpwg3 scroll 1097 -59 1186`)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 res 1110 -60 1180 45
 waitlog \[zpwg3\] done 20
 sleep 3
@@ -1512,6 +2093,28 @@ look load V at 100 and 10 ohm without (first two gauge reads) and with the regul
 @pass mean tick delta against SQ-PWG-01 under 0.2 ms (record; the generator adds non-linear coupling and per-tick force exchange); rotor `rpm=` steady: the 10 samples within 2 % of each other (PD gains `rotorKp` 0.85, `rotorKd` 0.002 do not oscillate on Create 0.5.1's tick); after each load step the rotor settles within 60 ticks without overshooting past 272 RPM (`rotorRPMMax`; no rotor destroyed); no `did not converge` / convergence problem lines and no `Converged after` spam
 @fails `GeneratorCoupling` (back-EMF residual, `postUpperSolve` force), `RotorBehaviour.tick` (PD), solver iterations (`CSolver` limits)
 @from batches/r1113pwg/pwgperf.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 res 1110 -60 1180 36
 sleep 10
 > forge tps
@@ -1730,7 +2333,29 @@ look entities= for electric_fan (4 in the file), factory_light/factory_light (2)
 @fails heater state stays COLD: coil wiring (`be` terminals) or `CThermal.maxPower(60, 1.0)`; a stream without heater types: `HeaterFanProcessingTypes.register` not run (SQ-PWG-46 `check`) or the coil is not fan-transparent (`create:fan_transparent` tag in the jar); time above 113: `FanProcessingMixin` did not apply (`decrementProcessingTime` local ordinal) or `heaterFanProcessingSpeedMultiplier`; dragon breathing gone: compare a boot without the PG jar before blaming PG
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
-shell grep -n -E 'fanProcessingTime|fanPushDistance' pwgr/serverconfig/create-server.toml | head
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
+shell grep -n -E 'fanProcessingTime|fanPushDistance' $(sed -n 's/^level-name=//p' server.properties)/serverconfig/create-server.toml | head
 > zpwg3 place 1100 -60 1400 powergrid:electric_fan facing=east
 waitlog \[zpwg3\] done 20
 > zpwg3 src 1100 -60 1402 40
@@ -1837,6 +2462,28 @@ look heater line T about 460 at 50 V, about 270 at 38 V; Z 1410 coil about 510 (
 @fails `isHeated` false over a kindled heater: `CookingPotBlockEntityMixin` did not apply or another mod changed `isHeated` (Create Central Kitchen injects `processCooking` only); skillet never cooks: `SkilletBlockEntityMixin` `cookingTick` redirect; heat level stays none: `BasinHeaterBlockEntity.electricalTick` or the wiring; boiler heat -1: `BoilerHeaters.registerHeater` (`ModdedBlocks.BASIN_HEATER` `onRegister`); basin sees none: `BasinBlockEntity.getHeatLevelOf` reads `blaze` (Create's `HEAT_LEVEL`)
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1100 -60 1420 powergrid:basin_heater
 waitlog \[zpwg3\] done 20
 > zpwg3 src 1100 -60 1423 0
@@ -1933,6 +2580,28 @@ look waitlog timeout on the first mixer kin = the mixer did not join the motor's
 @fails speed 0: wiring, or `motor.current()` before the circuit is built; motion 0 while powered: `ChuteBlockEntityMixin` (remap off, `calculatePush` / `calculatePull`; compressedcreativity also injects there, later in the method)
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1100 -60 1440 powergrid:electric_fan facing=east
 waitlog \[zpwg3\] done 20
 > zpwg3 src 1100 -60 1442 20
@@ -1986,6 +2655,28 @@ look flow=east (west: reversed polarity, record), reach grows with speed (pwg8: 
 @fails `fill ... 0` on every route: a probe fault (record the `fill stack` line), not Power Grid; no flow at all: pump facing (try `facing=west`) or pipe connections (re-place a pipe); flow only when the pump is re-placed after the pipes: `FluidPropagatorMixin` (`propagateChangedPipe`, `@Local` ordinal of `target`); speed 0: wiring
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1100 -60 1450 create:fluid_tank
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1104 -60 1450 create:fluid_tank
@@ -2037,6 +2728,28 @@ look tank reads in order: 1100 once (8000), the 1104 tank in the loop and after 
 @pass fixture at 120 V: `power=2` within 120 ticks, `T=` about 1450, `emission=15` (the fixture's own block-state light; `blockLight` also counts the LV fixture 3 blocks east); at 60 V `power` 0 or 1 and a lower `emission` (record); at 0 V `power=0`, `emission=0`; LV bulb at 12 V `power=1`, `emission=10` (`LvLightBulb` caps the level at 1); at 120 V `burned=true` within 60 ticks and `power=0` (the bulb burns out; the fixture stays, no Overheated Component: `zpwgg` reports none); factory light: state `power=3` (bulb level 2 + 1), `emission=15`, `factory light blocks below=15 deepest=15` (`projectDown` loops 1 to range - 1, range 16: upstream loop) and `blockLight16` above 0; no ERROR
 @fails no bulb: `bulb` reports none (the saved-data route: `AbstractLightFixtureBlockEntity.read`); power stays 0 at 120 V: filament wiring or `LightBulbState.tick` (filament not converged); light level 0 with `power=2`: the block's `lightLevel` (`LightFixtureBlock` / `FactoryLightBlock`); no light blocks below a factory light: `FactoryLightBlockEntity.projectDown`, or the `factory_light_light` material (port: replaceable, destroyed on push, PORT_NOTES.md 16)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1100 -60 1460 powergrid:light_fixture
 waitlog \[zpwg3\] done 20
 > zpwg6 bulb 1100 -60 1460 powergrid:light_bulb
@@ -2094,6 +2807,28 @@ look fixture T about 1450 at 120 V (power=2, emission 15); 60 V: power and emiss
 @fails lamp patch no faster than the open one: bulb not lit (`light`), `growthLampChance` / `growthLampRadius`, tag `powergrid:affected_by_lamp` (`#minecraft:bee_growables`, cactus, sugar cane); no season effect at all on either patch: Creative Calendar's `CropSeasonGrowHookMixin` (crops.md 2.12.1), not Power Grid
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > fill 1098 -61 1478 1102 -61 1482 minecraft:farmland[moisture=7]
 > setblock 1100 -61 1480 minecraft:water
 > fill 1098 -60 1478 1102 -60 1482 minecraft:wheat
@@ -2149,6 +2884,28 @@ look reads alternate lamp (Z 1480) / open (Z 1490); lamp patch mean about 3.6 af
 @pass panel A at noon: terminals about 18 to 21 V across 7 ohm (record P = V^2 / 7; rated about 64 W at the maximum power point), `override=none`, sky 15; multiblock across 30 ohm: the goggle lines show 4 panels, current near one panel's (about 3.5 A), voltage about 4 x, P = V^2 / 30 about 3.5 to 4 times panel A's 7 ohm power (record); after `/reload`: log `Loaded 2 solar biome overrides`, `check` `solar biome overrides 2`; panel B: `override=constant=1361.0/false temp=34.4/true` (the plains file applies even with a second file: fix B10, upstream kept only the last file's match) and lower power than panel A's first reads (hotter cells: PWG-23 "desert lower"; record both); panel A unchanged (it read its biome entry at its first tick; upstream-same, datapack registries never change mid-world on 1.20.1); night: power 0; bearing: `assemble lastException=none running=true`, both `contraptions all` reads list one `controlled ... removed=false ... type=powergrid:solar_panel blocks=2 controller=1100,-60,1510 attachedToBearing=true` and `bearing ... movedContraption=set` (r1113 pwg10: `contraptions 0` 100 ticks after a successful assemble), `contraption create:controlled_contraption type=powergrid:solar_panel blocks=2`, the bearing's output non-zero at noon (record; it turns toward the sun: record the second read); no ERROR
 @fails `Loaded 0`: the datapack path (`data/<ns>/powergrid/solar_biome_override/*.json`) or the listener (`PowerGridImpl.addReloadListeners`); override `none` on B: biome id (`level.getBiome` key `minecraft:plains`); no power at noon: panel facing (`facing=down` points the cells up), `skyVisible` (nothing above), resistor wiring; `solarjoin` fails: controller missing (`SolarPanelBlockEntity.getController`); no contraption: the `lastException` text; `running=true` but no entity: the two `contraptions all` reads tell apart an entity that never joined (`controlled=0` right after assemble, `movedContraption=set (entity not in the level)`: `addFreshEntity` refused) and one that discarded itself (listed right after assemble, gone or `removed=true` 100 ticks later: Create's `tickContraption` / the controller check in `ControlledContraptionEntity`); `none` with `running=false`: `SolarPanelBearingContraption.assemble` returned false (needs panels on the bearing's face) or the contraption type (SQ-PWG-46 `check`)
 @from batches/r1115/p2_r1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > forceload add 1330 1490 1365 1525
 sleep 4
 > time set 6000
@@ -2175,7 +2932,7 @@ sleep 1
 > zpwg3 res 1340 -60 1503 38
 sleep 5
 > zpwg6 solar 1340 -60 1500
-shell d=p2pwg/datapacks/pwgsolar; o=$d/data/pwgsolar/powergrid/solar_biome_override; mkdir -p $o && printf '{"pack":{"pack_format":10,"description":"PWG solar overrides, scratch only"}}' > $d/pack.mcmeta && printf '{"biome":"minecraft:plains","overrideTemp":true,"biomeTemp":34.4,"overrideSolarConstant":false,"solarConstant":1361,"enableFullRotation":false,"disableWeather":false,"disableAtmosphere":false}' > $o/plains_hot.json && printf '{"biome":"minecraft:swamp","overrideTemp":true,"biomeTemp":34.4,"overrideSolarConstant":false,"solarConstant":1361,"enableFullRotation":false,"disableWeather":false,"disableAtmosphere":false}' > $o/zz_swamp.json && find $d -type f
+shell d=$(sed -n "s/^level-name=//p" server.properties)/datapacks/pwgsolar; o=$d/data/pwgsolar/powergrid/solar_biome_override; mkdir -p $o && printf '{"pack":{"pack_format":10,"description":"PWG solar overrides, scratch only"}}' > $d/pack.mcmeta && printf '{"biome":"minecraft:plains","overrideTemp":true,"biomeTemp":34.4,"overrideSolarConstant":false,"solarConstant":1361,"enableFullRotation":false,"disableWeather":false,"disableAtmosphere":false}' > $o/plains_hot.json && printf '{"biome":"minecraft:swamp","overrideTemp":true,"biomeTemp":34.4,"overrideSolarConstant":false,"solarConstant":1361,"enableFullRotation":false,"disableWeather":false,"disableAtmosphere":false}' > $o/zz_swamp.json && find $d -type f
 > reload
 waitlog Loaded 2 solar biome overrides 180
 sleep 5
@@ -2333,6 +3090,28 @@ look shell output: mixin lines name no failure, none naming SheepMixin, PlayerDr
 @fails no block: `PortableBatteryItem.useOn` (the placeable `BacktankBlockItem`); charge stays 0: wiring (`terminals`), `PortableBatteryBlockEntity.electricalTick`; no drop or `Charge` missing: loot table `blocks/portable_battery` (`copy_nbt`) and `PortableBatteryBlock.getDrops`; capacityLevel 0 after placing an enchanted one: `setPlacedBy`
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg7 fp 1100 -60 1527
 > zpwg7 holdbat 0
 > zpwg7 place 1100 -60 1530
@@ -2381,6 +3160,28 @@ look waits overlap: the first block's mid read is about 9 s (~180 ticks) after w
 @pass `bat`: `20000/20000 output=1`; `8000/20000 output=0.8`; `2000/20000 output=0.25` (0.2 raised to the 0.25 floor); `0/20000 output=0` (below one use); `20000/60000 output=0.667` (Capacity II: 20 000 + 2 x 20 000); `40000/40000 output=1`; `feitems` lists at least one item (record the list; Power Grid adds none of its own); worn tick: the held item's FE rises and the battery charge falls by the same amount (record both per tick; one tick moves at most what the item accepts per tick); no ERROR
 @fails wrong maximum: `BatteryUtils.getMaxCharge` (Capacity from `AllEnchantments.CAPACITY`); no FE moves: `PortableBatteryItemImpl.tryTransferPower` (Forge Energy capability on the held item); `feitems 0`: no Forge Energy item in the pack, then the worn tick is checked only in CQ-PWG-18
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg7 fp 1100 -60 1540
 > zpwg7 wear 20000
 > zpwg7 bat
@@ -2504,6 +3305,28 @@ look digSpeed / digSpeedNow climb 6, 8.5, 11, 13.5, 16 and stay 16; charge -25 p
 @pass modifiers `attack_damage=0.5 attack_speed=-2.6 attack_knockback=1` (sword of the zinc tier: -1 + 1.5; knockback +1); full battery on the villager (20 health): `slowness amp=10 dur=60` (stun = (30 - max health) x output, capped at 10), `charge 20000 -> 19750`, `dur 20/20 -> 20/20`; at 8 000 (output 0.8): `amp=8`; at 2 000 (output 0.25, not above 0.3): no slowness, charge still -250; empty (`wear 0`): no slowness, `dur 20/20 -> 19/20` (fix B14: upstream never wore a player's baton); iron golem (100 health): no slowness at full charge; no ERROR
 @fails no slowness at full charge: `ElectroBatonItem.hurtEnemy` power (`BatteryUtils.drawEnergy`), or the target's max health (record it: MCA villagers may differ); wrong modifiers: `ZincToolMaterial`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > summon minecraft:villager 1100 -60 1562 {NoAI:1b}
 > summon minecraft:iron_golem 1104 -60 1562 {NoAI:1b}
 > zpwg7 fp 1100 -60 1560
@@ -2544,6 +3367,28 @@ look slowness at 2000 (output 0.25) and 0 is none (effect clear ran after the 20
 @pass single: `use=SUCCESS` (or `CONSUME`), `projectiles 0 -> 1`, `zap projectile power=1` with a motion of length 4, `charge 20000 -> 19500`, `dur 50/50` unchanged, `cooldown=true`; the villager at 12/20 (8 damage, armor 0); health as deltas from the read just before each zap (MCA villagers regenerate about 1 health per 190 ticks, so absolute values drift): chain: each of the three villagers loses about 2.667 (8 / 3: the hit is shared with up to 2 neighbors within 2 blocks, power above 0.6); low power (6 000: output 0.6, not above 0.6): `power=0.6`, only the target loses about 1.6 (8 x 0.6 / 3) from the `hp` read before that zap, the neighbors unchanged; empty: `power=0.5` (floor), the single villager in the box loses 4 (20 -> 16), `dur 50/50 -> 49/50`; the projectile is gone after the hit; no ERROR (an error line from the use after `projectiles ... -> 1` is the fake player's missing connection, not the port: record it)
 @fails no projectile: `ElectroZapperItem.use` or the entity registration; no damage: `ZapProjectileEntity.onHitEntity` (zap source `ModdedDamageTypes.indirect`), Loading Protection (see the P7 notes); damage not shared: the entity box (`AABB(target.blockPosition()).inflate(2)`)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > summon minecraft:villager 1300 -60 1575 {NoAI:1b}
 > zpwg7 fp 1300 -60 1568
 > zpwg7 hold powergrid:electrozapper
@@ -2594,6 +3439,28 @@ look health as deltas (MCA villagers regenerate about 1 per 190 ticks): chain, e
 @pass wire cutters: `result=SUCCESS`, `sheared false -> true`, `health 8 -> 7` (the cut hurts the sheep for 1), `strings` up by 0 to 2 (string, not wool); second try: `result=CONSUME`, nothing changes; saw: `result` not SUCCESS and the sheep stays unsheared (only `#powergrid:wire_cutters`, the wire cutter, cuts; PWG-37's "or saw" was a wording error, power_grid.md history); no advancement line naming powergrid (the award is removed); no ERROR
 @fails result PASS with the cutters: `SheepMixin` not applied (SQ-PWG-55 grep) or the tag `powergrid:wire_cutters`; sheep gone before the shear: `spawn-animals` is false
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > summon minecraft:sheep 1100 -60 1585 {NoAI:1b}
 > zpwg7 fp 1100 -60 1583
 > zpwg7 hold powergrid:wire_cutter
@@ -2740,6 +3607,28 @@ look shell output 1: mixin lines name no failure; shell output 2: no CC error or
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1300 -60 1600 powergrid:modular_display facing=north
 > zpwg8 fp 1300 -60 1598
 > zpwg8 hold powergrid:display_module 4
@@ -2823,6 +3712,28 @@ look modules in slots 0 and 1 (not 3) now that the display's use gets the probe'
 @fails current never flows: `CRTBlockEntity.electricalTick` / `tick` (anode-cathode resistance from the grid and heater current), terminal order (`CRTBlock.TERMINALS`: cathode 0, heater 1, grid 2, anode 3, X coil 4, Y coil 5, coil common 6); no encasing: `CRTBlock.use` -> `tryEncase`, `EncasingRegistry.addVariantTo(CRT)` in `ModdedBlocks`
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1300 -60 1615 powergrid:crt facing=north
 > zpwg3 src 1303 -60 1615 12
 > zpwg3 w 1303 -60 1615 0 1300 -60 1615 1
@@ -2894,6 +3805,28 @@ look the five [zpwg3] gauge values in order (anode current): about 0.1 (grid 0, 
 @fails plotter `fulfilled=false` at 64 RPM: the shaft does not reach it (`PlotterBlock.hasShaftTowards`, axis X for facing north); samples stay 0: wiring, `plotterRecordNonconvergence` and `wire.isConverged`; reader angle never moves: `PunchCardReaderBlockEntity.tick` (`getChaseSpeed`), the card (`currentItem` of the forge impl); bit wrong: `electricalTick` (byte per column, bit i to terminal i + 1); card lost on break: `PunchCardReaderBlock.onRemove` order (B15)
 @from batches/r1113pwg/pwgr1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1298 -60 1630 create:creative_motor facing=east
 > zpwg3 place 1299 -60 1630 create:shaft axis=x
 > zpwg3 place 1300 -60 1630 powergrid:plotter facing=north
@@ -2988,6 +3921,28 @@ look plotter: head moves between the 64 RPM calls, samples about 0.5 at +10 V, a
 @pass `periph type=powergrid_voltage_gauge voltage=` about 12 = `getValue`, `maxRange` the gauge range, `rangePercentage` = 12 / range; current gauge `type=powergrid_current_gauge current=` the SQ-PWG-64 gauge value; converter `type=powergrid_redstone_converter`; `conv override=7` then `override=null`, and the converter's terminal voltage follows (record both readings); computer file: `start`, three `sample N peripherals=2` blocks, each with a `powergrid_voltage_gauge` line (`voltage=` about 12, the same as `periph`) and a `powergrid_redstone_converter` line; `top setValue(7) ok=true` and `top clearValue ok=true` (fix B17: main-thread calls; record the side names), `end`; the `be` inside the window shows the 7 override's voltage; display board text (`board ... nbt=`) contains the gauge value with its unit (about `12 V`, then about `-5 V` in polarized mode 2); no ERROR, no CC `LuaException` in the file or the log
 @fails no file: the computer did not start (`On:1b`; CC: Tweaked server config `computer_threads`; check `computercraft/computer/7/` exists) or the program errored (CC writes nothing to the server log: rerun by hand in CQ-PWG-21); `peripherals=0`: `CCBridge` provider not registered (SQ-PWG-62 log) or the block entity type does not match (`ModdedBlockEntities.VOLTAGE_METER`); `setValue` error: B17 `mainThread` change; board empty: `activeTarget=none` (the board must be its own controller: wait longer after placing), board speed 0 (motor and shaft on its X side; `DisplayBoardTarget` skips an unpowered board), the display source (`ModdedDisplaySources.ELECTRIC_GAUGE`, P2)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1300 -60 1660 powergrid:voltage_gauge facing=north
 > zpwg3 src 1300 -60 1657 12
 > zpwg3 w 1300 -60 1657 0 1300 -60 1660 0
@@ -3004,12 +3959,12 @@ sleep 1
 sleep 1
 > zpwg3 be 1301 -59 1660
 # real computer: startup.lua copied into the running level (CC reads it when the computer starts)
-shell mkdir -p pwgr/computercraft/computer/7 && cp $INST/tools/scratch_query/pwg_p8_cc_startup.lua pwgr/computercraft/computer/7/startup.lua && ls -la pwgr/computercraft/computer/7/
+shell L=$(sed -n "s/^level-name=//p" server.properties); mkdir -p $L/computercraft/computer/7 && cp $INST/tools/scratch_query/pwg_p8_cc_startup.lua $L/computercraft/computer/7/startup.lua && ls -la $L/computercraft/computer/7/
 > setblock 1301 -60 1660 computercraft:computer_advanced{ComputerId:7,On:1b}
 sleep 10
 > zpwg3 be 1301 -59 1660
 sleep 15
-shell cat pwgr/computercraft/computer/7/pwg_out.txt
+shell L=$(sed -n "s/^level-name=//p" server.properties); cat $L/computercraft/computer/7/pwg_out.txt
 # display link
 > zpwg3 place 1298 -60 1666 create:creative_motor facing=east
 > zpwg3 place 1299 -60 1666 create:shaft axis=x
@@ -3200,6 +4155,28 @@ look ns entity_type (P8: 4; record); packets ordinals consecutive; shell 1: one 
 @pass `board at 1100 -60 1700 state=Block{powergrid:circuit_board}[facing=north,rotation=0] components=3 terminals=2`; two bundles `connector@0,6#0* resistor@5,6#0` and `connector@11,6#0* resistor@5,6#1`; gauge about 0.1 A (10 V / 100 ohm, within 2 %; the board's pads and the wires add milliohms); `bcomp` `resistor@5,6 ... props[resistor_value=100.0 ...]`, `thermal` one unit above ambient (1 W in a 25 W part), terminals T0 - T1 about 10; `net converged=true`, `networkNodes` about 7 (the board's pad and junction nodes plus the gauge and source); after `bset`: `resistor_value=1000.0`, gauge about 0.01 A; upstream resistor board: 2 terminals, bundles to `resistor@6,6`, T0 - T1 = 10 V and the same 0.1 A path (record); thyratron board: `components=8`, 5 terminals (4 connectors and the thyratron's top cap), bundles listed with the two voltage gauges, no `error` (version 2 traces read)
 @fails `terminals=0`: connectors not external (`ConnectorComponent.emitExternalTerminals`) or `BakedCircuit.makePadNodes`; no current: the traces (`bmap` shows a bundle with one pad: flood / `TraceMatrix` directions), the wire endpoints (`zpwg3 w` to a board terminal: `CircuitBoardBlockEntity.terminal`); `ponder ... error`: `CircuitSchematic.deserializeNbt` (legacy `FullPixelTraces`)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9 board 1100 -60 1700 resistor
 waitlog \[zpwg9\] done 20
 > zpwg3 place 1100 -60 1706 powergrid:current_gauge facing=north
@@ -3245,6 +4222,28 @@ look gauge about 0.1 A at 100 ohm, about 0.01 A after bset (be lines; 2 %); ther
 @fails `settledAt=-1` or values that keep moving: the step limits `triodeLim*` / `diodeLimAlpha` (`CSolver`), record the series of terminal values; diode drop far off: the board diode model (`DiodeComponent.bake`, PNJunctionWire temperature callback); tubes never conduct: the heater wiring (T3 / T4) or the thermal callback (`setSaturationCurrent`), record `bcomp` thermal
 @from batches/r1115/p2_r1.qb
 # diode, Z 1710
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9 board 1100 -60 1710 diode
 waitlog \[zpwg9\] done 20
 > zpwg3 place 1100 -60 1714 powergrid:creative_resistor
@@ -3425,6 +4424,28 @@ look watch ends in order: diode fwd, rev, NPN 100 k, 5 k, PNP 100 k, 5 k, triode
 @pass relay: open (no redstone): gauge about 0; with the redstone block: about 0.1 A and `bcomp` `redstone_relay@5,6 ... props[redstone_relay_powered=true ...]`; after removing it: about 0 again; switch: about 0 first (`switch_state=false`), `buse ... result=SUCCESS` (or CONSUME), about 0.1 A after the first use, about 0 after the second; capacitor: T0 - T1 rises from 0 toward 10 V: about 6.3 V after 20 ticks (one RC, backward Euler gives about 6.2), about 8.6 at 40, about 10 at 100
 @fails relay never closes: the input side (`CircuitBoardBlock.getOrientation`, the relay's orientation DOWN takes the south neighbor on a flat north-facing board; try the other three sides and record which works), `neighborChanged`; switch: `SwitchComponent.use` / `tick`; capacitor jumps: `CapacitorComponent` charge property
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9 board 1100 -60 1780 relay_rs
 waitlog \[zpwg9\] done 20
 > zpwg3 place 1100 -60 1786 powergrid:current_gauge facing=north
@@ -3501,6 +4522,28 @@ look relay gauge about 0 open, about 0.1 A with the redstone block, about 0 afte
 @pass copy: `pick powergrid:circuit_board Schematic=true components=6`, `use ... result=SUCCESS` (or CONSUME), the new board's bundles equal the first one's (the same 5 terminals); plain board: `use` places it and it removes itself (upstream: a board without a schematic has no circuit), `execute if block` fails, no drop; drops: `drop powergrid:circuit_board x1 Schematic components=6 Thermal`; overheat: the resistor unit climbs past 175 and stops at 185 (the cap, overheat 175 + 10; was 125 / 135 before jar -17, run r1114) within about 40 ticks, then the circuit opens (T0 - T1 = 100 V, no further heating; on a client the part shows burnt and sparks: CQ-PWG-22); `repair` cools nothing but rebakes: `thermal` back at ambient, the circuit conducts again; the creative sneak use does the same (`use ... result=SUCCESS`); cooling: `cooling=` above 1 while the fan runs (1 + the fan's factor), back to 1 after the motor is removed
 @fails copy without schematic: `CircuitBoardBlock.getCloneItemStack`; the placed copy is empty: `setPlacedBy` (`CircuitSchematic.fromStack`); drop without tags: the loot table `copy_nbt` (shipped `loot_tables/blocks/circuit_board.json`); never overheats: `ThermalBehaviour.shouldOverheat` (`overheating` config); cooling stays 1: the P9a branch of `AirCurrentMixin` (`addCoolingMultiplier`)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9 board 1100 -60 1790 triode
 waitlog \[zpwg9\] done 20
 > zpwg9 pick 1100 -60 1790
@@ -3581,6 +4624,28 @@ look copy: the bmap of 1104 has the same 5 terminals / bundles as the 1100 board
 @pass the server stays up through every step (no `StackOverflowError`, no crash report); with `logsEnabled = true` in `powergrid-common.toml` at most a few `Prevented recursive add` warnings (none is fine); every `kin` reads a winding with a terminal readout (the non-owner windings proxy their owner: the same voltages on all three); no ERROR with `powergrid`
 @fails crash again: the `adding` guard or `rootOwner` in `WindingBlockEntity` (B19 fix), send the crash report's first 20 frames; windings without terminals after the joins: the owner repair (an owner chain flattened onto a root that does not list the winding)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg4 wind 1110 -57 1798 1111 -57 1798 y
 waitlog \[zpwg4\] done 20
 > zpwg4 wind 1110 -59 1798 1111 -59 1798 y
@@ -3610,7 +4675,7 @@ count \[zpwg4\] wind 2 blocks axis=x along=true magnetic=y$ == 8
 count \[zpwg4\] winding I= >= 6
 count \[zpwg4\] terminals T0= >= 6
 expect \[zpwg9\] fp at
-expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-17
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-20
 reject StackOverflowError
 reject \[zpwg\w*\] (error|unknown subcommand)
 reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
@@ -3692,6 +4757,28 @@ look tag size=27 missing=[create:copper_nugget] is the pack's removal (not the j
 @fails cord fails: the hit points (socket box `SOCKET_DOWN` top at 3 px, the table's back socket at z 14 px), or power the table some other way and record (the packets do not need power); `apply threw`: send the error line (a fake player menu open on the dummy connection); far packet applied: B21 check in `SaveSchematicC2SPacket.apply` / `ChangeScreenC2SPacket.apply`; second write replaced slot 2: B23 check in `CircuitDesignTableBlockEntity.writeToItem`; `safeNbtEqual=false`: `CircuitSchematic.toItemStack` / `fromStack`
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17r.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1100 -60 1810 powergrid:circuit_design_table facing=north
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1100 -60 1813 powergrid:socket facing=down
@@ -3762,6 +4849,28 @@ look cord: step 5 and 7 lines and the socket tag= (the cord end stored in the it
 @pass write: slot 1 empty, slot 2 `powergrid:circuit_schematic x1 Schematic components=3`; `toboard use ... result=SUCCESS -> powergrid:circuit_board x1 Schematic components=3` (no name: upstream resets it), `place ... result=` SUCCESS or CONSUME `-> Block{powergrid:circuit_board}` (record facing / rotation), `toboard board schematic name="Test Resistor" components=3 terminals=2`; `bmap`: the same two bundles as the source board (`connector@0,6#0* resistor@5,6#0` and `connector@11,6#0* resistor@5,6#1`); gauge about 0.1 A (10 V / 100 ohm, within 2 %, as SQ-PWG-68); `bcomp` `resistor@5,6 ... resistor_value=100.0`
 @fails `toboard` without a schematic: `CircuitSchematicItem.use` (tag copy); placed board empty: the item's `Schematic` tag (`toItemStack` writes `serializeSafeNbt`) and `CircuitBoardBlock.setPlacedBy`; no current: wire by `bmap` (the placed board's facing may differ from the probe's boards) and record
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9b write 1100 -60 1810
 waitlog \[zpwg9b\] done 20
 > zpwg9b toboard 1100 -60 1810 1106 -60 1820
@@ -3799,6 +4908,28 @@ look gauge about 0.1 A (10 V / 100 ohm, 2 %; be line); toboard use item has no n
 @pass survival `buse creative=false result=PASS menu=inventory`; creative `buse creative=true result=SUCCESS` (or CONSUME) `menu=powergrid:circuit_board_edit class=CircuitBoardEditMenu slots=36`; `menu board powergrid:circuit_board_edit ... slots=36`; survival `bedit`: board unchanged (`name="Test Resistor"`, `resistor_value=100.0`); creative `bedit`: `name="Edited Board"` (B22) and `resistor_value=1000.0`, gauge about 0.01 A; far `bedit` (15 blocks): unchanged (`Edited Board`, 1000.0; B21); no ERROR with `powergrid`
 @fails creative `buse` PASS: the restored branch in `CircuitBoardBlock.use` (empty main and off hand, not sneaking); name stays: B22 in `SaveSchematicC2SPacket.apply`; survival edit applied: the creative check in `apply`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9b fp 1106 -60 1822
 waitlog \[zpwg9b\] done 20
 > zpwg9b buse 1106 -60 1820
@@ -3880,6 +5011,28 @@ look gauge about 0.01 A after the creative edit (be line); survival bedit left t
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-15`; log `(1.19.2 port, phase 9.3)`; `[zpwg] ns powergrid block: 69` (+ `acid`), `item: 112` (+ `acid_bucket`, `empty_circuit`, `unetched_circuit`, `incomplete_unetched_circuit`, `incomplete_circuit`), `fluid: 2`, `block_entity_type: 56`, `menu: 7`, `recipe_type: 1`; `[zpwg3] recipes 100` (still absent: `crafting/circuit_design_table`, `crafting/solar_panel_bearing` and the other P10 ones, `sequenced_assembly/electrical_gizmo`, the four `deploying/*_boosting`); `zpwg9b check`: `items of P9c and P9d registered=acid_bucket,empty_circuit,unetched_circuit,incomplete_circuit,incomplete_unetched_circuit` (P9c now; `integrated_circuit` and `incomplete_electrical_gizmo` absent), the rest as SQ-PWG-72; `zpwg9c check`: `fluids acid=true flowing_acid=true block acid=true fluid type=powergrid:acid description=fluid.powergrid.acid`, `acid source=powergrid:acid isSource=true flowing=powergrid:flowing_acid bucket=powergrid:acid_bucket block=powergrid:acid`, items `acid_bucket ... maxStack=1`, `empty_circuit maxStack=64`, `unetched_circuit maxStack=64`, `incomplete_unetched_circuit ... sequencedAssemblyItem=true`, `incomplete_circuit maxStack=1 incompleteCircuitItem=true`; `acid_bucket contains powergrid:acid 1000`; `circuit_schematic_holder` all five `=true`; `fluid tag powergrid:acid source=true flowing=true`; `recipes P9c` all six `=true`, `recipes P9d (absent)` all `=false`; `mixin RecipeApplier powergrid:incomplete_circuit x1 Schematic components=0 schematicCopied=true`; `damage acid source=acid acidSource=true`; no mixin error lines; `bmap` two bundles as SQ-PWG-68's resistor board; no ERROR with `powergrid`
 @fails boot stops at a mixin: the `InvalidInjectionException` line names the mixin and target (Create 0.5.1 `BeltDeployerCallbacks.activate` award call, `RecipeApplier.applyRecipeOn(ItemStack, Recipe)`, `ArmInteractionPoint.insert` `ItemHandlerHelper.insertItem`, `ArmBlockEntity.tick` `tickMovementProgress`); `schematicCopied=false`: `RecipeApplierMixin` not applied; wrong counts: the jar is not `-15` or `port_phase` is not 9.3
 @from batches/r1116/ps15_pwg.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > forceload add 1135 1855 1200 1915
 sleep 8
 > zpwg9c check
@@ -3915,6 +5068,28 @@ look the "recipes P9d (absent)" label is P9c's, all three =true since -16; shell
 @pass flow: `count acid source=1 flowing=` about 112 `farthest=7` (water-like spread on the flat; record the numbers); `pick result=SUCCESS -> powergrid:acid_bucket x1 fluid at ... = minecraft:empty block=Block{minecraft:air}`; `pour result=SUCCESS -> minecraft:bucket x1 fluid at ... = powergrid:acid block=Block{powergrid:acid}[level=0]`; second `pick` as the first; pen: `pit acid at 1176 -60 1880 villager health=20`, then `hurt minecraft:villager source=acid acidSource=true amount=2 health=` falling by 2, one hurt every 10 to 15 ticks (the 10-tick hurt cooldown limits the 1-in-3 roll per tick), 10 hurts, `death minecraft:villager source=acid acidSource=true` within 200 ticks; the vanilla `Villager ... died, message: 'death.attack.acid'` line (key, server lang)
 @fails no flow: the fluid's `ForgeFlowingFluid.Properties` (Registrate defaults) in `ModdedFluids`; pick returns `minecraft:bucket`: the source block's fluid or the bucket mapping (`acid_bucket contains` in `check`); no hurt: `AcidFluidType.move` is called only while the entity's feet block holds acid (Forge `LivingEntity.travel` fluid branch): read the villager's position (`data get entity @e[type=villager,limit=1,x=1176,y=-60,z=1880,distance=..2] Pos`)
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c acid 1190 -60 1866
 waitlog \[zpwg9c\] done 20
 sleep 4
@@ -3950,6 +5125,28 @@ look count line: flowing about 112 farthest=7 (record both); hurt lines: entity 
 @fails depot keeps `create:empty_schematic`: the deployer did not run (speed 0: `placeShaftNorth` warning in the log, or the recipe missing: `zpwg9c check`); schematic without the design: `BeltDeployerMixin` (the held item's `Schematic` tag, `circuit_schematic_holder` tag on both)
 @from batches/r1115/p2_r1.qb passed
 # from r1113/pwg17r2.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c depot 1142 -60 1866 create:empty_schematic 1
 waitlog \[zpwg9c\] done 20
 > zpwg9c deployer 1142 -58 1866 none
@@ -3976,6 +5173,28 @@ reject ^(?!.*RuntimeDistCleaner).*(Exception|/ERROR\]).*(powergrid|patryk)
 @fails `take` refused by the belt: `zpwg9c feed 1142 -60 1874 schem 1140 -60 1858` (a fresh copy of the same design) and record; stuck at a station (end depot empty, `show` on the belt start segments lists the item): the deployer's speed or hand; `SequencedAssembly` without `Schematic`: `RecipeApplierMixin` (deployer path) or, after the press step, the press (`MechanicalPressBlockEntity` uses `RecipeApplier`); `loop timeout`: send the `show` of every station; a create:dough clash with a pack recipe shows as a different item on the end depot
 @from batches/r1115/p2_r1.qb
 # from r1113/pwg17r2.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c line 1142 -60 1874 unetched
 waitlog \[zpwg9c\] done 20
 sleep 1
@@ -4018,6 +5237,28 @@ look loop 1 progress about 0.5; stuck at one step: the deployer at that step kep
 @pass `basin at ... burner Block{create:blaze_burner}[blaze=kindled,...] creative=true`; log `power grid recipes done`; `recipes powergrid` lists no `mixing/acid`; acid basin: `tanks` with `minecraft:water 750` and `powergrid:acid 250` (the output tank), no items left, no salt; etch basin: `put powergrid:unetched_circuit x1 Schematic components=3 ...`, then `items` `powergrid:incomplete_circuit x1 Schematic components=3` (output slot) and `tanks ... powergrid:acid 750`; no ERROR
 @fails `mixing/acid` still listed or no log line: the script's guard (`global.has('powergrid')`) or a script error (latest.log); no acid: another mixing recipe took the items or the water first (record the output; the pack's recipe list, `zq`), or the burner is not `kindled` (heat `heated` needs kindled or seething); incomplete circuit without `Schematic`: `BasinRecipeMixin` / `RecipeNbtTransfer` (P6 code); nothing: the mixer's speed (`show 1146 -58 1890`)
 @from batches/r1115/p2_r1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 recipes powergrid
 waitlog \[zpwg3\] recipes \d+ 30
 > zpwg9c basin 1142 -60 1890
@@ -4063,6 +5304,28 @@ look acid basin: no items left (all three consumed), water 750 + acid 250, no sa
 @fails depot still incomplete with `Assembly inserted=k/3`: read `missing=`; the arm never moves: its points (the `arm point` lines; Create needs the arm's chunk area loaded) or speed; parts taken but not inserted: `ArmInteractionPointMixin` (`insert` on a `DepotPoint`); arm stuck holding a part: the mixin's simulate path returned a full refusal for a needed part (`ComponentRegistry.getComponentId` on the server: `zpwg9 check` lists the component items)
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17r.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c depot 1146 -60 1898
 waitlog \[zpwg9c\] done 20
 > zpwg9c take 1146 -60 1890 1146 -60 1898
@@ -4150,6 +5413,28 @@ look first belt show: circuit about @4.5 lockedExternally, Assembly inserted 1 t
 @fails spout never fills: the item reaches the spout station with the wrong step (deployer order) or the spout's fluid (`show` before); `loop timeout`: `show` each station
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c line 1142 -60 1882 battery
 waitlog \[zpwg9c\] done 20
 sleep 1
@@ -4268,6 +5553,28 @@ look the "items of P9c and P9d (expect none)" label is P9b's (all seven register
 @fails tool unchanged and the chip kept: the deployer found no recipe (`zpwg9d check` `findRecipe`), or the deployer is not turning (`zpwg9c show` speed) or its hand is empty (the `hold deployer` line); `Boosted=75` but no `name` / `ProbeKeep`: `RecipeApplierMixin` boost branch; chip used twice on the baton: `BoostRecipe.matches`; the saw rides past: belt lock window (`zpwg3 scroll` the belt motor slower, as SQ-PWG-82)
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c depot 1102 -60 1930
 waitlog \[zpwg9c\] done 20
 > zpwg9d tool 1102 -60 1930 powergrid:portable_drill 30
@@ -4326,6 +5633,28 @@ look keys of the boosted drill and saw include Boosted, Damage, display, Enchant
 @pass each tool: `hands main=powergrid:<tool> x1 Boosted=none ... off=powergrid:integrated_circuit x2 ...`, `use chip result=PASS using=true usedHand=OFF_HAND remaining=32`, `finish main=powergrid:<tool> x1 Boosted=` 75 (drill, saw), 6 (baton), 15 (zapper) `... chips=1 returned=1`; `again`: `use chip result=PASS using=false` (the boosted tool has no recipe; nothing more); diamond pickaxe: `use chip result=PASS using=false` (no recipe: the chip is not used); `handswap`: `swapped main to minecraft:diamond_sword x1 Boosted=none`, `finish main=minecraft:diamond_sword x1 Boosted=none ... chips=2` (B28: the chip is kept, the sword not tagged; upstream gave the sword `Boosted=468` and used the chip); `zappass`: `zappass unboosted use=PASS projectiles 0 -> 0 main=powergrid:electrozapper x1 Boosted=none` (the zapper passes so the chip can be used), `zappass boosted use=SUCCESS projectiles 0 -> 1 main=powergrid:electrozapper x1 Boosted=14 Damage=1/50 ... chips=2` (no battery: power 0, so 1 wear; if the zap packet to the fake player throws, `use=error ...` and `Damage=0/50` with the projectile still there and `Boosted=14`: the fake player's missing connection, as SQ-PWG-60, record it)
 @fails `using=false` for a tool: `findRecipe` (see SQ-PWG-84) or `isBoosted`; no `Boosted` after `finish`: `finishUsingItem` (`getUsedItemHand`, the off hand); `chips=1` after `handswap`: B28 regression; `zappass unboosted use=SUCCESS` with a projectile: the chip check in `ElectroZapperItem.use`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9d fp 1120 -60 1930
 waitlog \[zpwg9d\] done 20
 > zpwg9d hand powergrid:portable_drill
@@ -4360,6 +5689,28 @@ look zappass boosted: use=SUCCESS with Damage=1/50 (no battery: power 0, one wea
 @pass `drill0 speedMult=0`; `boost [zpwg7] powergrid:portable_drill x1 Boosted=75 Damage=0/250`; drill digs: `digSpeed` 12, 17, 22, 27, 32 (twice SQ-PWG-58's 6, 8.5, 11, 13.5, 16; the speed-up per block is the same), each block breaks, `charge` falls by 50 per block (SQ-PWG-58: 25), `dur 250/250` unchanged; `boosted ... Boosted=70 ... speedMult=1`; expiry: the dig at 1105 starts at `digSpeed=32` and ends with `digSpeedNow=16`, then `boosted ... Boosted=none` (the last boosted use removes the tag and plays the item-break event); the dig at 1106 `digSpeed=16`, `charge` -25; saw: the log `itemSpeed=12` (SQ-PWG-58: 6), `charge` -200 (SQ-PWG-58: -100); stone `itemSpeed=2` (SQ-PWG-58: 1); `boosted ... Boosted=73`; no ERROR
 @fails `digSpeed` 6 with `Boosted=75`: `PlayerDrillMixin.powerGrid$adjustDrillDigSpeed` (`ItemBoostUtils.isBoosted` on the main hand); speeds start at 32: `drill0` failed (the level from SQ-PWG-58 stays: the fake player never ticks); charge -25: `DrillItem.mineBlock` `useBoost`; `Boosted` never drops: `useBoost`
 @from batches/r1113pwg/pwgr1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > fill 1100 -60 1950 1106 -60 1950 minecraft:stone
 > zpwg7 fp 1100 -60 1947
 waitlog \[zpwg7\] done 20
@@ -4419,6 +5770,28 @@ look drill charge -50 per boosted block (SQ-PWG-58: -25), dur 250/250; the dig a
 @fails baton `dur=60` with a boost: `ElectroBatonItem.hurtEnemy` `useBoost`; zapper `power=1` at full charge with a boost: `ElectroZapperItem.use` (`useBoost` before the chip check); villager health odd: MCA villagers (record their max health; the deltas count)
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > summon minecraft:pig 1100 -60 1965 {NoAI:1b}
 waitlog Summoned new 20
 > summon minecraft:pig 1104 -60 1965 {NoAI:1b,Health:26.0f,Attributes:[{Name:"minecraft:generic.max_health",Base:26.0d}]}
@@ -4509,6 +5882,28 @@ look the 26-health pig's maxHealth line (if the attribute did not take, record a
 @fails the sheet rides past unchanged: the first step (zinc sheet + copper coil) did not match (`forge:plates/zinc`, `forge:copper_coils` tags: `zpwg9 check` / the pack's tag dump); stops at the Integrated Circuit step: another deploying recipe took the chip (record the item)
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c line 1102 -60 1985 plain
 waitlog \[zpwg9c\] done 20
 sleep 1
@@ -4600,6 +5995,28 @@ look both loop done lines (record each output: electrical_gizmo or a byproduct: 
 @pass `Done (`; `[zpwg] mod powergrid 0.6.2-ce-19.2-17`; log `(1.19.2 port, phase 10)`; `[zpwg] ns powergrid block: 78` (69 + 9), `item: 119` (114 + the four block items and `string_light_cord`), `block_entity_type: 60` (+4), `fluid: 2`, `menu: 7`, `recipe_type: 1`, `recipe_serializer` one up on SQ-PWG-84 (if listed), `entity_type: 5` (if listed); `[zpwg3] recipes 116` (all of the jar's recipes; none absent any more); `zpwg10 check`: the nine `block ... registered=true`, `item=true` for `copper_plating`, `copper_plating_slab`, `copper_plating_stairs`, `ceiling_tile` and `item=false` for the four attachments and `string_light_block`; `item string_light_cord cordItem=true`; `entity string_light_cord registered=true`; the four `block entity ... registered=true`; `serializer powergrid:crafting_special_string_light_cord ok true`; the ten recipes present: the two stonecutting ones (`count`: slab 2, stairs 1), `crafting/copper_plating_slab` (6 slabs) and `_stairs` (4), `crafting/string_light_cord_pattern` (`StringLightCordRecipe`, `ingredients=0`), `deploying/copper_plating`, `deploying/string_light_cord`, `deploying/ceiling_tile` with `unresolved=[1]` (`#forge:cardboard` is empty in the pack, D13: uncraftable until integration), `crafting/circuit_design_table` and `crafting/solar_panel_bearing` with `unresolved=[]`; `recipes powergrid 116`; tool lines: `copper_plating`, `copper_plating_slab`, `copper_plating_stairs` all `pickaxeTag=true needsTool=true ironPickaxeCorrect=true` (B33: upstream had the slab and stairs in no tag, so `ironPickaxeCorrect=false` and no drop), `ceiling_tile pickaxeTag=true axeTag=true`; loot `type=bottom -> powergrid:copper_plating_slab x1`, `top` x1, `double` x2 (B33); grids: `[string_light_cord minecraft:red_dye minecraft:green_dye minecraft:blue_dye] matches=true result=powergrid:string_light_cord x1 tag={Pattern:[B;14B,13B,11B]}`, `[string_light_cord] matches=true result=powergrid:string_light_cord x1` with no tag (B34; upstream `tag={Pattern:[B;]}`), `[string_light_cord string_light_cord]`, `[string_light_cord minecraft:stick]` and `[minecraft:red_dye]` `matches=false`, the yellow / yellow / purple grid `Pattern:[B;4B,4B,10B]`; `zpwg5`: `files=79`, `ceiling_tile` and `wire/string_lights` `size=ok badName=[] missingBE=0`, `bad=0 error=0`; no mixin error; no ERROR with `powergrid`
 @fails wrong counts: the jar is not `-17` or `port_phase` is not 10; a `MISSING` recipe: `pg_phase_check.py` (`phases.json`) or a 1.19.2 parse error in the log (the stonecutting `count`, the special recipe's serializer id); `ironPickaxeCorrect=false` for the slab or stairs: `data/minecraft/tags/blocks/mineable/pickaxe.json` in the jar; double slab x1: the slab loot table; empty-pattern tag on the plain grid: `StringLightCordRecipe.assemble`
 @from batches/r1113/pwg17r2.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 bootexpect Done \(
 bootexpect Power grid starting, prepare to be electrocuted \(1\.19\.2 port, phase 10(\.0)?\)
 bootexpect Loaded 28 component items
@@ -4617,7 +6034,7 @@ waitlog \[zpwg3\] recipes \d+ 30
 > zpwg10 check
 waitlog \[zpwg10\] done 30
 shell grep -n -E 'powergrid\.mixins\.json|Mixin apply failed|string_light|ceiling_tile|copper_plating' logs/latest.log | grep -v -E 'zpwg|KubeJS' | head -40
-expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-17
+expect \[zpwg\] mod powergrid 0\.6\.2-ce-19\.2-20
 expect \[zpwg\] ns powergrid block: 78\b
 expect \[zpwg\] ns powergrid item: 119\b
 expect \[zpwg\] ns powergrid fluid: 2\b
@@ -4626,7 +6043,7 @@ expect \[zpwg\] ns powergrid menu: 7\b
 expect \[zpwg\] ns powergrid recipe_type: 1\b
 expect \[zpwg\] ns powergrid recipe_serializer: 3\b
 expect \[zpwg\] ns powergrid entity_type: 5\b
-expect \[zpwg3\] recipes 116$
+expect \[zpwg3\] recipes 115$
 expect recipe powergrid:crafting/circuit_design_table type=minecraft:crafting_shaped output=1 circuit_design_table
 expect recipe powergrid:crafting/solar_panel_bearing type=minecraft:crafting_shaped output=1 solar_panel_bearing
 count \[zpwg10\] block (copper_plating|copper_plating_slab|copper_plating_stairs|ceiling_tile) registered=true item=true == 4
@@ -4645,7 +6062,7 @@ expect \[zpwg10\] recipe deploying/copper_plating .*result=powergrid:copper_plat
 expect \[zpwg10\] recipe deploying/string_light_cord .*result=powergrid:string_light_cord x1 .*unresolved=\[\]
 expect \[zpwg10\] recipe crafting/circuit_design_table .*result=powergrid:circuit_design_table x1 .*blank=\[4\] unresolved=\[\]
 expect \[zpwg10\] recipe crafting/solar_panel_bearing .*result=powergrid:solar_panel_bearing x1 .*unresolved=\[\]
-expect \[zpwg10\] recipes powergrid 116$
+expect \[zpwg10\] recipes powergrid 115$
 count \[zpwg10\] tool copper_plating(_slab|_stairs)? pickaxeTag=true .*needsTool=true ironPickaxeCorrect=true == 3
 expect \[zpwg10\] tool ceiling_tile pickaxeTag=true axeTag=true
 expect \[zpwg10\] loot copper_plating_slab type=bottom -> powergrid:copper_plating_slab x1$
@@ -4672,6 +6089,28 @@ look ns entity_type and recipe_serializer lists (string_light_cord, crafting_spe
 @pass `attach powergrid:factory_light result=SUCCESS block powergrid:ceiling_tile -> powergrid:ceiling_tile_lamp state=...[state=empty] hand=powergrid:factory_light x1`; wire connector -> `powergrid:ceiling_tile_connector`, cord junction -> `powergrid:ceiling_tile_junction`, solar panel -> `powergrid:ceiling_tile_solar`, each `hand ... x1`; stone: `result=PASS`, block stays `powergrid:ceiling_tile`, `hand=minecraft:stone x2`; helper on the lamp: `result=SUCCESS`, `south=powergrid:ceiling_tile`, `hand=powergrid:ceiling_tile x3`; helper on the plain tile: `east=powergrid:ceiling_tile` (1109) `x3`; drops (B36, jar -18: two pools, every break gives tile and attachment; upstream and -17 gave one of the two): lamp with the bulb `powergrid:ceiling_tile x1, powergrid:factory_light x1, powergrid:light_bulb x1` (B32; upstream lost the bulb), connector `powergrid:ceiling_tile x1, powergrid:wire_connector x1`, junction (after the wrench, attached again) `powergrid:ceiling_tile x1, powergrid:cord_junction x1`, solar `powergrid:ceiling_tile x1, powergrid:solar_panel x1`; wrench: lamp `result=SUCCESS -> powergrid:ceiling_tile got: powergrid:light_bulb x1, powergrid:factory_light x1` (B32: the bulb comes back too), connector `got: powergrid:wire_connector x1`, junction `powergrid:cord_junction x1`, solar `powergrid:solar_panel x1` (side face: removal), each block back to `powergrid:ceiling_tile`; no ERROR
 @fails `PASS` for an attachment: `CeilingTileBlock.use` (`ModdedBlocks.<X>.is(item)`); the helper places nothing: `PlacementHelpers` id (`CeilingTileBlock.placementHelperId`) or the neighbor is not replaceable; only the tile or only the attachment: B36 not in the jar (`loot_tables/blocks/ceiling_tile_*.json` one pool; needs -18); no bulb in the drops / from the wrench: B32 regression (`CeilingTileLampBlock.getDrops` / `onWrenched`); wrench `error`: `CeilingBlock.removeCeilingAttachment` (`playRemoveSound` is an instance method on 0.5.1)
 @from batches/r1115/p2_r1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1100 -58 2010 powergrid:ceiling_tile
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1102 -58 2010 powergrid:ceiling_tile
@@ -4730,6 +6169,28 @@ look helper neighbours; lamp state after the bulb; every drops line lists tile a
 @fails `state=empty` with a bulb: the bulb did not load (`zpwg6 bulb` saved-data route) or `setPowerLevel` never ran (no power change yet: step the voltage); `emission=0` at `lamp_on`: the light level map in `CeilingTileLampBlock` (`ILightBulb.LIGHT_LEVEL_*`); no current: the lamp's filament switch (`buildCircuit`)
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1100 -58 2020 powergrid:ceiling_tile
 waitlog \[zpwg3\] done 20
 > zpwg10 attach 1100 -58 2020 powergrid:factory_light
@@ -4777,6 +6238,28 @@ look 120 V: ticks to lamp_on (the six reads), T about 1450 as SQ-PWG-52's fixtur
 @fails 0 V at noon: `sky` below 15 (something above), or the ceiling BE's raycast (`CeilingTileSolarBlockEntity.sunRaycast`); different from the panel: the ceiling copy's NBT / normal (`facing` DOWN, face UP); `connected=0` after joining: `mergeMultiblock` (record)
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > time set 6000
 waitlog Set the time 20
 > weather clear
@@ -4829,6 +6312,28 @@ look single: the ceiling solar's terminal voltage and goggle power equal the sol
 @fails no current: the connector's single terminal (`CeilingTileConnectorBlock` terminal box, `buildCircuit` count 1) or the wire did not attach (`zpwg3 w` output)
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17r.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 src 1100 -60 2050 12
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1103 -58 2050 powergrid:ceiling_tile_connector
@@ -4878,6 +6383,28 @@ look ohm about 1.2 A (12 V over 10 ohm less the copper wire drop: record R= and 
 @from batches/r1113pwg/pwgr1.qb
 @absent powergrid:string_light_block (itemless block, in no dump; ModdedBlocks.STRING_LIGHT_BLOCK)
 # from r1113/pwg17r.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 src 1100 -58 2060 0
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1108 -58 2060 powergrid:ceiling_tile_junction
@@ -4939,6 +6466,28 @@ look 0 V pattern about [b02e26 5e7c16 3c44aa] (each channel may read one lower);
 @fails the item rides unchanged: the deployer's speed or hand (`zpwg9c show`), or the recipe did not load (`zpwg10 check`); `create:copper_sheet` asked for: the jar's recipe still names the sheet (P0 fix: `#forge:plates/copper`)
 @from batches/r1113pwg/pwgr1.qb
 # from r1113/pwg17.qb (P11 phase 5: latest passing version)
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c depot 1100 -60 2070 minecraft:copper_block 1
 waitlog \[zpwg9c\] done 20
 > zpwg9c deployer 1100 -58 2070 immersiveengineering:plate_copper 2
@@ -4985,6 +6534,8 @@ look the items ride unchanged: the deployer speed (show of the deployer) or the 
 @@date 2026-11-14
 @@jars powergrid
 @@sources feature_writeup/plan_bugfix_1114.md feature_writeup/plan_power_grid.md
+@@prep PGJAR=jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-20.jar spawn-animals=true spawn-npcs=true
+@@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@text Targets gate jar `jar_archive/pwg_gate/backportedPowerGrid-0.6.2-ce-19.2-18.jar` (B36 ceiling tile drops, B37 connector support, B38 servo window; PORT_NOTES.md 25) plus the pack script `kubejs/server_scripts/other/power_grid.js` (acid with rotten flesh), on a scratch server set up as the "SQ-PWG Power Grid port" section (its probes). Never copy the jar into the instance's `mods/` (plan E1). Rewritten in place in that section: SQ-PWG-06 (thyratron order), -43 (servo speed, B38), -80 (acid, items first), -82 (PASS-as-upstream), -91 (both drops, B36). Run order: SQ-PWG-91, -97, -43, -06, -80, -80b, -82, then the restart row -54r last; CQ-PWG-66 on a client.
 @@text
@@ -4995,6 +6546,28 @@ look the items ride unchanged: the deployer speed (show of the deployer) or the 
 @pass gauge about 12 V before the break; control: the connector still there after the stone above it; after the support goes: block `minecraft:air` at 1101 -60 2100, `count powergrid:wire_connector 1`, `count powergrid:wire` 1 or more (the two wires' items, record the count; a hand break of the same layout gives the same), gauge about 0 V (its T0 wire went with the connector, the network re-solved); heavy: air, `count powergrid:heavy_wire_connector 1`, wire items 1 or more; no ERROR
 @fails connector still in place: B37 not in the jar (`AbstractConnectorBlock.canSurvive` / `updateShape`; needs -18) or `facing` given the wrong way (FACING must point at the support); connector gone but no item: drops off in `updateOrDestroy` (flag 32) or the loot table; wires stay or keep the gauge at 12 V: `ElectricBlock.onRemove` -> `ElectricBehaviour.remove` not reached; connector breaks in the control step: `updateShape` direction check
 @from batches/r1115/p2_r1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg3 place 1100 -60 2100 minecraft:stone
 waitlog \[zpwg3\] done 20
 > zpwg3 place 1101 -60 2100 powergrid:wire_connector facing=west
@@ -5044,6 +6617,28 @@ look gauge about 12 V before the break, about 0 V after; connector still there a
 @pass RECORD (not a FAIL either way): which recipe ran. Expected: Creative Delight's heated water to salt (`water_salt`, 1000 mB -> 2 salt) takes the water before the items land, so the basin shows salt and the three items left, no acid; if acid formed instead (250 mB, water 750), record it; no ERROR
 @fails an ERROR or a basin that never settles: the mixer (`show 1142 -58 1894`) or the burner; the limit itself is a plan decision (plan_bugfix_1114.md 8.3), not a bug
 @from batches/r1115/p2_r1.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 > zpwg9c basin 1142 -60 1894
 waitlog \[zpwg9c\] done 20
 > zpwg9c bfill 1142 -60 1894 minecraft:water 1000
@@ -5066,6 +6661,28 @@ look RECORD which recipe ran: salt (water_salt) with the three items left, or ac
 @pass after the restart: one `controlled ... removed=false ... type=powergrid:solar_panel blocks=2 ... attachedToBearing=true` (the probe prints `controller=none` before and after the restart, r1115; not a criterion), `bearing ... movedContraption=set`, `solar` output non-zero at noon (`time set 6000` if the clock moved); no ERROR
 @fails `attachedToBearing=false` after 100 ticks in a forceloaded chunk: the entity is not ticking (check `forceload query`) or `SolarPanelBearingBlockEntity.attach` is not called from the contraption tick (`ControlledContraptionEntity` controller lookup); entity gone: the contraption did not save (`contraptions 0`)
 @from batches/r1115/p2_r2.qb
+# self-contained since r1118 (judge-9, 2026-11-18): area setup of pwgr1.qb SQ-PWG-P11A / SETUP9 (batch-only rows, lost in the move to rows)
+pace 0.3
+> forceload add 990 990 1060 1090
+> forceload add 1090 990 1140 1260
+> forceload add 1085 1385 1125 1520
+> forceload add 1095 1525 1115 1590
+> forceload add 1290 1495 1320 1680
+> forceload add 1090 1695 1130 1800
+> forceload add 1095 1670 1165 1685
+> forceload add 1090 1805 1130 1850
+> forceload add 1135 1855 1200 1915
+> forceload add 1095 1920 1200 1990
+> forceload add 1095 1995 1135 2085
+> forceload add 1095 2095 1110 2110
+> gamerule doMobSpawning false
+> gamerule doFireTick false
+> scoreboard objectives add pwgsetup dummy
+sleep 4
+> execute unless score #done pwgsetup matches 1 run weather clear
+> execute unless score #done pwgsetup matches 1 run kill @e[type=!minecraft:player]
+> scoreboard players set #done pwgsetup 1
+pace 2
 bootexpect Done \(
 > forceload add 1380 1500 1395 1515
 > time set 6000

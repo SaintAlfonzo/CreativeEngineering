@@ -21,6 +21,8 @@
 @jars creativedelight
 @from batches/r1113/c2_a1.qb
 @reviewed 2026-11-16
+> pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > pbot hunger c2b 4
 > pbot hold c2b largemeals:pufferfish_broth 1
 > pbot eat c2b
@@ -102,6 +104,8 @@ reject \[cdevtest\] verb=\S+ .*error=
 @jars creativedelight
 @from batches/r1113/fix_c2a1.qb
 @reviewed 2026-11-16
+> pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > effect clear c2b
 > pbot hunger c2b 0
 > pbot hold c2b minecraft:bread 1
@@ -213,6 +217,8 @@ reject \[cdevtest\] verb=\S+ .*error=
 @fails incomplete item missing (transition_items.js)
 @from batches/r1113/fix_c2a1.qb
 @reviewed 2026-11-16
+> pbot spawn c2b 300.5 -60 296.5 minecraft:overworld survival
+sleep 3
 > effect clear c2b
 > pbot hunger c2b 2
 > pbot hold c2b barbequesdelight:kebab_wrap 1

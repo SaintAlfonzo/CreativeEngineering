@@ -2,8 +2,11 @@
 """Resumable scratch run driver (plan_process_overhaul.md P2.4 item 3, scratch plan TX-44; perf_suite.py pattern).
 
 A run is a list of steps, one per (rows file, section, world group A/B) of a plan (qrun.py plan --json). Each step:
-prep_srv.sh (copies and pins the jars) -> scratch_server.sh boot -> wait for "Done (" -> qrun.py run on the step's rows
--> scratch_server.sh stop. State lives in perf/runs/RUN/drive/state.json (written at every step boundary), so a killed
+prep_srv.sh (copies and pins the jars) -> the section's @@prep actions -> scratch_server.sh boot -> wait for "Done (" ->
+qrun.py run on the step's rows -> scratch_server.sh stop. Section prep (`@@prep` lines, format in qrows.py's docstring) is
+read from the rows file when the step starts, so an edit reaches every later step of a running driver: its KEY=VALUE
+pairs become prep_srv.sh environment (NOSWAP, SKIPSWAP, COPYDEV, PGJAR) and server.properties props, then its toml /
+copy / rm actions edit OUT/srv before the boot (a change under mods/ re-pins: qpin.py pin). sNN_prep.txt logs both. State lives in perf/runs/RUN/drive/state.json (written at every step boundary), so a killed
 or crashed driver resumes where it stopped: a step that was running is stopped (its server too) and continues from its
 first row without a result. RUNNER.md is claimed at start (State: running, Phase, ETA, Updated) and released at the end.
 A watchdog process stops the step's server when the driver dies (kill -9 included), so no server is left orphaned.
@@ -13,6 +16,8 @@ A watchdog process stops the step's server when the driver dies (kill -9 include
     qrun.py drive resume RUN       continue after a dead driver, a signal or a reboot
     qrun.py drive status RUN       steps, rows done, ETA
     qrun.py drive stop RUN         ask a running driver to stop after the current row (state stays resumable)
+    qrun.py prep FILE SECTION [A|B] [--out OUT --level LEVEL]   a section's @@prep: print it, or with --out run
+                                   prep_srv.sh and the actions as a driver step does (no boot)
 Start it detached so the session can end: setsid nohup python3 tools/scratch_query/qrun.py drive start RUN ... &
 Server rows only: client rows (CQ-) are planned but skipped here (scratch plan TX-01 to TX-05 drive clients).
 Refuses while RUNNER.md is claimed by another run or a game JVM is up (one game JVM at a time).
@@ -149,6 +154,68 @@ def build_steps(plan_rows):
 	return out, skipped
 
 
+def section_prep(file, section, group):
+	"""The step's @@prep (qrows.prep_of), read from the rows file now. A file or section that is gone: no prep."""
+	sys.path.insert(0, str(HERE))
+	import qrows
+	path = Path(file) if Path(file).is_absolute() else INST / file
+	sec = qrows.section_of(path, section) if path.exists() else None
+	return qrows.prep_of(sec or {}, group)
+
+
+def prep_srv(out, level, group, prep):
+	"""prep_srv.sh with the prep's environment and props; (returncode, output)."""
+	env = dict(os.environ, **prep['env'])
+	r = subprocess.run(['bash', str(PREP), str(out), level, group] + prep['props'], capture_output=True, text=True,
+					   env=env, stdin=subprocess.DEVNULL)
+	head = ''.join('prep: %s\n' % t for t in prep['lines'])
+	if prep['env']:
+		head += 'prep env: %s\n' % ' '.join('%s=%s' % kv for kv in sorted(prep['env'].items()))
+	return r.returncode, head + r.stdout + r.stderr
+
+
+def prep_actions(out, prep):
+	"""Apply the prep's toml / copy / rm actions to OUT/srv (after prep_srv.sh, before the boot); log lines.
+	RuntimeError on a missing source."""
+	import glob
+	import shutil
+	srv = Path(out) / 'srv'
+	log, mods = [], False
+	for kind, args in prep['actions']:
+		if kind == 'toml':
+			f, section, key, value = args
+			path = srv / (f if '/' in f else 'config/' + f)
+			path.parent.mkdir(parents=True, exist_ok=True)
+			path.touch()
+			r = subprocess.run([sys.executable, str(HERE / 'qrun.py'), 'toml', str(path), section, key, value],
+							   capture_output=True, text=True)
+			log.append('toml: ' + (r.stdout + r.stderr).strip())
+			if r.returncode:
+				raise RuntimeError('@@prep toml failed: %s' % ' '.join(args))
+		elif kind == 'copy':
+			src, dest = INST / args[0], srv / args[1]
+			if not src.exists():
+				raise RuntimeError('@@prep copy: no %s' % args[0])
+			if args[1].endswith('/'):
+				dest = dest / src.name
+			dest.parent.mkdir(parents=True, exist_ok=True)
+			if src.is_dir():
+				shutil.copytree(src, dest, dirs_exist_ok=True)
+			else:
+				shutil.copy2(src, dest)
+			log.append('copy: %s -> %s' % (args[0], dest.relative_to(srv)))
+		elif kind == 'rm':
+			hits = sorted(glob.glob(str(srv / args[0])))
+			for h in hits:
+				(shutil.rmtree if os.path.isdir(h) and not os.path.islink(h) else os.remove)(h)
+			log.append('rm: %s (%d)' % (args[0], len(hits)))
+		mods = mods or (args[0] if kind in ('toml', 'rm') else args[1]).startswith('mods')
+	if mods:
+		r = subprocess.run([sys.executable, str(HERE / 'qpin.py'), 'pin', str(out)], capture_output=True, text=True)
+		log.append('repin: ' + (r.stdout + r.stderr).strip()[-300:])
+	return log
+
+
 def wait_ready(out, secs=600):
 	log = Path(out) / 'srv/logs/latest.log'
 	end = time.time() + secs
@@ -197,11 +264,22 @@ def run_step(d, i, s):
 			raise RuntimeError('a game JVM is still up; not booting a second one')
 	level = '%s_s%02d' % (d.run, i)
 	d.log('step %d: prep %s group %s' % (i + 1, out, s['group']))
-	r = subprocess.run(['bash', str(PREP), str(out), level, s['group']], capture_output=True, text=True)
-	(d.dir / ('s%02d_prep.txt' % i)).write_text(r.stdout + r.stderr)
-	if r.returncode:
+	try:
+		prep = section_prep(s['file'], s['section'], s['group'])
+	except (ValueError, SystemExit) as e:
+		raise RuntimeError('bad @@prep in %s section %s: %s' % (s['file'], s['section'], e))
+	if prep['lines']:
+		d.log('step %d: @@prep %s' % (i + 1, ' | '.join(prep['lines'])))
+	rc, text = prep_srv(out, level, s['group'], prep)
+	(d.dir / ('s%02d_prep.txt' % i)).write_text(text)
+	if rc:
 		raise RuntimeError('prep_srv.sh failed (s%02d_prep.txt)' % i)
-	subprocess.run(['bash', str(SCRATCH), 'boot', str(out)], capture_output=True)
+	if prep['actions']:
+		with open(d.dir / ('s%02d_prep.txt' % i), 'a') as f:
+			f.write('\n'.join(prep_actions(out, prep)) + '\n')
+	# output to a file, never a pipe: the server's fifo feeder inherits the fds and holds a pipe open (r1118)
+	with open(d.dir / ('s%02d_boot.txt' % i), 'a') as bf:
+		subprocess.run(['bash', str(SCRATCH), 'boot', str(out)], stdout=bf, stderr=subprocess.STDOUT, stdin=subprocess.DEVNULL)
 	dog = watchdog(os.getpid(), out)
 	s['watchdog'] = dog.pid
 	d.save()
@@ -221,7 +299,7 @@ def run_step(d, i, s):
 		s['status'] = 'done' if not left else ('stopped' if STOP['flag'] else 'incomplete')
 		s['left'] = left
 	finally:
-		subprocess.run(['bash', str(SCRATCH), 'stop', str(out)], capture_output=True)
+		subprocess.run(['bash', str(SCRATCH), 'stop', str(out)], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, stdin=subprocess.DEVNULL)
 		try:
 			os.kill(dog.pid, signal.SIGTERM)
 		except OSError:
@@ -284,6 +362,27 @@ def status(d):
 			len(s['rows']), ('  ' + s['error']) if s.get('error') else ''))
 	if st.get('skipped'):
 		print('  client or draft rows not driven: %d' % len(st['skipped']))
+
+
+def main_prep(argv):
+	"""qrun.py prep FILE SECTION [A|B] [--out OUT --level LEVEL]"""
+	if len(argv) < 2:
+		sys.exit(main_prep.__doc__)
+	opt = {k: argv[argv.index(k) + 1] for k in ('--out', '--level') if k in argv}
+	pos = [a for j, a in enumerate(argv) if not a.startswith('--') and (j == 0 or argv[j - 1] not in ('--out', '--level'))]
+	group = pos[2] if len(pos) > 2 else 'A'
+	prep = section_prep(pos[0], pos[1], group)
+	print(json.dumps(prep, indent=1))
+	if '--out' not in opt:
+		return 0
+	if game_jvms():
+		sys.exit('a game JVM is up: not preparing over it')
+	rc, text = prep_srv(opt['--out'], opt.get('--level', Path(opt['--out']).name), group, prep)
+	print(text[-2000:])
+	if rc:
+		return rc
+	print('\n'.join(prep_actions(opt['--out'], prep)))
+	return 0
 
 
 def main(argv):

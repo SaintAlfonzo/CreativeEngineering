@@ -7,6 +7,7 @@
 @@date 2026-11-07
 @@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @@sources feature_writeup/creative_split.md
+@@prep B: difficulty=normal
 @@text
 @@text Not run. Builds of 2026-11-07 (Common, Compat, Equipment, Delight, Brewing, Devtools, Engineering), installed by the
 @@text parallel build session if at all (check `jar_archive/displaced/`). Moved: 89 classes (35 client mixins, the JEI and
@@ -40,6 +41,12 @@ look the carry log line (`[swaps] config sections ... carried` or similar) in la
 @fails swap list not read (data/creativebrewing/swaps), PotionByNameRemapMixin
 @from batches/r1113/c3_b1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_b1 SQ-C3B-setup
+> forceload add 0 0
+> setblock 0 199 0 minecraft:stone
+> setblock 0 199 2 minecraft:stone
+> execute unless entity cb run pbot spawn cb 0.5 200 0.5 minecraft:overworld survival
+sleep 3
 > cdevtest potion creativebrewing:long_long_reach
 > cdevtest potion creativebrewing:long_reach minecraft:redstone
 waitlog \[cdevtest\] verb=potion done= 30
@@ -63,13 +70,20 @@ look old-world half (a chest with creativecommon:long_reach potions from an 2026
 @fails CaffeinatedPhantomBane not registered (farmersrespite gate) or the mixin compartment gate
 @from batches/r1113/c3_b1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_b1 SQ-C3B-setup
+> forceload add 0 0
+> setblock 0 199 0 minecraft:stone
+> setblock 0 199 2 minecraft:stone
+> execute unless entity cb run pbot spawn cb 0.5 200 0.5 minecraft:overworld survival
+sleep 3
 > effect clear cb
 > zc3 rest cb
 > clear cb
 > pbot hunger cb 10
 > item replace entity cb weapon.mainhand with farmersrespite:coffee
 > pbot eat cb
-waitlog \[cdevtest\] verb=pbot\.useitem bot=cb end=finish item=farmersrespite:coffee 30
+# judge-5, 2026-11-18: the item merge turns farmersrespite:coffee into rusticdelight:coffee in the hand (r1118 s36)
+waitlog \[cdevtest\] verb=pbot\.useitem bot=cb end=finish item=(farmersrespite|rusticdelight):coffee 30
 > cdevtest player cb
 waitlog \[cdevtest\] verb=player name=cb effects= 20
 expect \[cdevtest\] verb=player name=cb effects=\S*farmersrespite:caffeinated:

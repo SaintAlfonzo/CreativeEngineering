@@ -19,6 +19,9 @@
                                                                 and sources (qplan.py docstring)
     qrun.py playtest [--out FILE] / qrun.py states              owner playtest checklist / row states per code
     qrun.py drive start|resume|status|stop RUN [plan options]   resumable run driver (qdrive.py docstring)
+    qrun.py prep FILE SECTION [A|B] [--out OUT --level LEVEL]    a rows section's @@prep (qrows.py docstring): print it;
+                                                                with --out run prep_srv.sh with it and apply its toml /
+                                                                copy / rm actions, as the driver does before a boot
 
 run / client: lint runs first (errors printed, the batch runs anyway; --no-lint skips it). Crash watch (qwatch.py,
 --no-watch skips it): the JVM with cwd OUT/srv or GAME (or --pid P), new hs_err_pid*.log and crash-reports/ files are
@@ -27,6 +30,9 @@ checked before every step and every second of a waitlog or sleep; the row ends C
 goes on with the next row once --ready REGEX (default server 'Done \(', client 'joined the game') shows in latest.log
 within --ready-secs (600); at most --max-relaunch (2) times. Without --relaunch a crash ends the batch. A row that
 sends "stop" ends the batch without a CRASH.
+run (server): before the first row, the scratch KubeJS probes (tools/**/*_probe.js and any other tools/**/*.js that
+registers a server command, qrun.probe_files) whose commands the selected rows use
+are copied into srv/kubejs/server_scripts as zz_<file> and the server is /reloaded once (--no-probes skips it).
 
 Batch format (one directive per line, '#' comments, blank lines ignored):
     ## ID | title                 starts a row
@@ -372,11 +378,18 @@ def run_row(t, row, res, checks=None):
 			return False
 
 	def unset(step, arg):
-		"""HARNESS (P2.4): a {NAME} still unresolved after substitution names a capture whose row was skipped or failed."""
-		left = [n for n in re.findall(r"\{([A-Za-z_][A-Za-z_0-9]*)(?:[+-]\d+)?\}", arg) if n in CAPTURES]
+		"""HARNESS (P2.4): a {NAME} still unresolved after substitution names a capture whose row was skipped or failed.
+		An upper-case {NAME} (the capture naming the rows use) that no capture in this batch defines, and that RES/vars.json
+		did not supply, is a capture from another batch or boot that never ran: also HARNESS, not sent raw (judge-8)."""
+		names = re.findall(r"\{([A-Za-z_][A-Za-z_0-9]*)(?:[+-]\d+)?\}", arg)
+		left = [n for n in names if n in CAPTURES]
+		foreign = [n for n in names if n not in CAPTURES and re.fullmatch(r"[A-Z][A-Z0-9_]*", n)]
 		if left:
 			chk(step, arg, False, f"capture {', '.join(left)} unset (its row was skipped or failed)", harness=True)
-		return bool(left)
+		if foreign:
+			chk(step, arg, False, f"placeholder {', '.join(foreign)} unset (no capture in this batch, not in RES/vars.json)",
+				harness=True)
+		return bool(left or foreign)
 
 	def since(o, side):
 		"""Log lines since o; side 'srv' / 'cli' (pair mode, TX-30) reads one game's log, '' every log of the target."""
@@ -602,6 +615,9 @@ def main():
 	if a[0] == "drive":
 		import qdrive
 		sys.exit(qdrive.main(a[1:]))
+	if a[0] == "prep":
+		import qdrive
+		sys.exit(qdrive.main_prep(a[1:]))
 	if a[0] in ("plan", "playtest", "states", "archive", "never"):
 		import qplan
 		sys.exit(qplan.main(a))
@@ -611,6 +627,177 @@ def main():
 	if a[0] not in ("run", "client") or len(a) < 4:
 		sys.exit(__doc__)
 	run_batch(a, "server" if a[0] == "run" else "client")
+
+
+def probe_files():
+	"""Scratch KubeJS probe files: tools/**/*_probe.js, then every other tools/**/*.js that registers a server command
+    (ServerEvents / onEvent plus `register(X.literal('root')`), e.g. tools/fungi_probe/ztrades.js, zcount.js, zgoose.js
+    (r1118 judge-11 / judge-9, 2026-11-18). *_probe.js files come first, so their roots win a clash."""
+	import glob
+	probes = sorted(glob.glob(os.path.join(INST, "tools/**/*_probe.js"), recursive=True))
+	extra = []
+	for js in sorted(glob.glob(os.path.join(INST, "tools/**/*.js"), recursive=True)):
+		if js in probes or "node_modules" in js:
+			continue
+		try:
+			s = open(js, encoding="utf-8", errors="replace").read()
+		except OSError:
+			continue
+		if re.search(r"ServerEvents\.|onEvent\(", s) and REG_ROOT.search(s):
+			extra.append(js)
+	return probes + extra
+
+
+# a command root: the first literal of a register(...) call (sub-literals like 'check' or 'setup' are not roots)
+REG_ROOT = re.compile(r"""register\(\s*\w+\.literal\(\s*['"](\w+)['"]""")
+
+
+def probe_map():
+	"""command root -> scratch KubeJS probe file (probe_files(); in *_probe.js every '.literal('root')', in the other
+    files only the first literal of each register(...) call). Roots that more than one probe registers map to the first
+    in probe_files() order."""
+	m = {}
+	for js in probe_files():
+		try:
+			s = open(js, encoding="utf-8", errors="replace").read()
+		except OSError:
+			continue
+		pat = r"""\.literal\(\s*['"](\w+)['"]""" if js.endswith("_probe.js") else REG_ROOT
+		for root in re.findall(pat, s):
+			m.setdefault(root, js)
+	return m
+
+
+def probe_tags(files):
+	"""probe file -> the '[tag]' log prefixes it prints (console.log / logger strings starting with '[word]')."""
+	m = {}
+	for js in files:
+		try:
+			src = open(js, encoding="utf-8", errors="replace").read()
+		except OSError:
+			continue
+		m[js] = set(re.findall(r"""['"`]\[([A-Za-z0-9_-]+)\]""", src))
+	return m
+
+
+def probes_needed(rows):
+	"""(probe files, roots) the rows need. A probe is needed when (1) a '> root ...' command uses a root only it
+    registers (roots a jar registers via literal("root") in development/ Java are dropped), (2) a step or the row's
+    @commands names its file (tools/**/NAME_probe.js), or (3) a log check (expect, count,
+    waitlog, kjsexpect, ...) looks for a '[tag]' prefix that only that probe prints. (2) and (3) cover probes that only
+    print at load or reload and register no command (cc_dict_probe.js, nch_guard_probe.js; r1118 judge-4, judge-5)."""
+	import glob
+	pm = probe_map()
+	allp = probe_files()
+	byname = {}
+	for js in allp:
+		byname.setdefault(os.path.basename(js), js)
+	roots, named = set(), set()
+	files = {}  # probe file -> the '[tag]'s that matched a log check
+	tagmap = None
+	for r in rows:
+		# section @@text is left out: it carries run-log history that names retired probes (SALT names 27)
+		texts = [arg for _, arg, _ in r["steps"]] + [r.get("meta", {}).get("commands", "")]
+		for w, arg, _ in r["steps"]:
+			if w in (">", "cmd"):
+				m = re.match(r"(?:execute .*? run )?(\w+)", arg)
+				if m and m.group(1) in pm:
+					roots.add(m.group(1))
+		for txt in texts:
+			for m in re.finditer(r"(?:zz_)?(\w+_probe\.js|\b\w+\.js)", txt):
+				# "zq_probe.js is retired", "(zq_probe.js End climate dump retired)": a mention, not a use
+				near = txt[m.end():m.end() + 60].split(";")[0].split(")")[0]
+				if m.group(1) in byname and not re.search(r"retired|not used|no longer", near):
+					named.add(byname[m.group(1)])
+		checks = [arg.replace("\\", "") for w, arg, _ in r["steps"]
+				  if w in ("expect", "reject", "count", "waitlog", "bootexpect", "bootreject", "kjsexpect", "kjsreject")]
+		if checks:
+			if tagmap is None:
+				tagmap = probe_tags(allp)
+			for js, tags in tagmap.items():
+				hit = {tg for tg in tags for c in checks if "[" + tg + "]" in c}
+				if hit:
+					files.setdefault(js, set()).update(hit)
+	if roots:
+		java = subprocess.run(["grep", "-rhoE", r'literal\("(' + "|".join(sorted(roots)) + r')"', os.path.join(INST, "development"),
+							   "--include=*.java"], capture_output=True, text=True).stdout
+		roots -= set(re.findall(r'"(\w+)"', java))
+	# a '[tag]' that another probe or our own code (jars, pack scripts) also prints is no proof this probe is needed:
+	# a tag-only match stands only when every matched tag is this probe's alone (named files and roots always stand)
+	keep = set()
+	for js, hit in sorted(files.items()):
+		if js in named:
+			continue
+		if any(tg in tagmap[o] for o in tagmap if o != js for tg in hit):
+			continue
+		own = False
+		for tg in hit:
+			out = subprocess.run(["grep", "-rlF", "--include=*.java", "--include=*.js", "--exclude-dir=exported",
+								  "--exclude-dir=build", "[" + tg + "]", os.path.join(INST, "development"),
+								  os.path.join(INST, "kubejs")], capture_output=True, text=True).stdout
+			if out.strip():
+				own = True
+				break
+		if not own:
+			keep.add(js)
+	# a root that a named file (or one kept for its own log tag) registers comes from that file, not from probe_map's first registrant (RD names
+	# zcount.js for `/zcount BOX`; leaf_decay_probe.js also registers an argless zcount and a tick handler)
+	def own_roots(js):
+		try:
+			src = open(js, encoding="utf-8", errors="replace").read()
+		except OSError:
+			return set()
+		return set(re.findall(r"""\.literal\(\s*['"](\w+)['"]""" if js.endswith("_probe.js") else REG_ROOT, src))
+	by_named = set().union(*[own_roots(js) for js in named | keep]) if (named or keep) else set()
+	return keep | named | {pm[x] for x in roots if x not in by_named}, roots
+
+
+def install_probes(t, rows):
+	"""Server mode: copy the KubeJS probes the rows need (probes_needed: command roots, named probe files, probe-only
+    log tags) into srv/kubejs/server_scripts as zz_<file> and /reload once. Section texts used to ask for this by hand
+    before boot, which the driver never did (r1118 judge-1). A probe already in place (an @@prep copy) is left.
+    --no-probes turns it off."""
+	need, roots = probes_needed(rows)
+	if not need:
+		return
+	sdir = os.path.join(t.dir, "kubejs/server_scripts")
+	new = []
+	for f in sorted(need):
+		dst = os.path.join(sdir, "zz_" + os.path.basename(f))
+		if os.path.isdir(sdir) and not os.path.exists(dst):
+			import shutil
+			shutil.copyfile(f, dst)
+			new.append(os.path.basename(f))
+	if not new:
+		return
+	why = f" for /{', /'.join(sorted(roots))}" if roots else ""
+	print(f"probes: copied {', '.join(new)}{why}; reload", flush=True)
+	# The "Loaded N/M KubeJS server scripts" line goes to latest.log (KubeJS Server logger), not to
+	# logs/kubejs/server.log, which KubeJS also rewrites on reload (an old offset can sit past its end):
+	# watch latest.log from its pre-reload offset (judge-2, 2026-11-18).
+	off = t.log.size()
+	t.cmd("reload")
+	# The reload goes on about 10 s past "Loaded N/M" (recipes, tags, datapack listeners); its last line is KubeJS's
+	# "Reloaded with no KubeJS errors!" or "KubeJS errors found [N]!" (MinecraftServer logger). Wait for that, 180 s
+	# cap; once "Loaded" is seen, give the end line at most 60 s (hideServerScriptErrors can suppress it) (judge-7).
+	end = time.time() + 180
+	pat = re.compile(r"Loaded \d+/\d+ KubeJS server scripts")
+	fin = re.compile(r"Reloaded with no KubeJS errors!|KubeJS errors found \[")
+	loaded = None
+	while time.time() < end:
+		lines = t.log.since(off)
+		if any(fin.search(x) for x in lines):
+			break
+		if loaded is None and any(pat.search(x) for x in lines):
+			loaded = time.time()
+			end = min(end, loaded + 60)
+		time.sleep(1)
+	else:
+		if loaded is None:
+			print("probes: no 'Loaded ... KubeJS server scripts' in 180 s after the reload", flush=True)
+		else:
+			print("probes: 'Loaded ... KubeJS server scripts' seen, no reload end line within 60 s", flush=True)
+	time.sleep(2)
 
 
 def run_batch(a, mode, t=None):
@@ -670,6 +857,12 @@ def run_batch(a, mode, t=None):
 	crashes0 = set(os.listdir(crashdir)) if crashdir and os.path.isdir(crashdir) else set()
 	allrows = parse(batch)
 	CAPTURES.update(arg.split(" ", 1)[0] for r in allrows for w, arg, _ in r["steps"] if w.endswith("capture"))
+	if mode == "server" and a[0] == "run" and "--no-probes" not in a:
+		sel = [r for r in allrows if (not only or r["id"] in only) and (not sections or r["section"] in sections)]
+		try:
+			install_probes(t, sel)
+		except (OSError, RuntimeError) as e:
+			print(f"probes: not installed ({e})", flush=True)
 	for row in allrows:
 		if crashdir and os.path.isdir(crashdir) and set(os.listdir(crashdir)) - crashes0:
 			# the server died: later rows would only time out (r1102b 19:03, a probe crashed the tick loop)

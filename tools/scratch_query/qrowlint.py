@@ -298,6 +298,9 @@ def reviewed(sec, row):
 	return row['meta'].get('reviewed') or sec['meta'].get('reviewed') or sec['meta'].get('date', '')
 
 
+TRAIL_CHECKS = ('expect', 'reject', 'kjsexpect', 'kjsreject', 'bootexpect', 'bootreject')
+
+
 def lint_file(path, changed=None):
 	out = []
 	f = qrows.load(path)
@@ -322,6 +325,12 @@ def lint_file(path, changed=None):
 			for l in r['steps']:
 				n += 1
 				s = l.strip()
+				w0 = s.split(' ', 1)[0].rpartition(':')[2]
+				if w0 in TRAIL_CHECKS and l.rstrip('\n') != l.rstrip():
+					# qrun strips each line: 'reject id=x/cantaloupe_seeds ' also matches cantaloupe_seeds_from_mini
+					# (r1118 judge-5, SQ-CM-02)
+					out.append(('W', n, r['id'], 'check regex ends in a space, which qrun strips: end it with '
+								'( |$), \\b or the next field instead'))
 				if s.startswith('> ') or s.startswith(('srv> ', 'cli> ')):
 					for sev, ident, kind2 in dead_ids(s.split('> ', 1)[1]):
 						if ident.lstrip('#') in absent:

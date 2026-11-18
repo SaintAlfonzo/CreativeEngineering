@@ -48,11 +48,13 @@ look block flowers: no wild_ id other than wild_onions, wild_carrots, wild_potat
 reject \[cdevtest\] .*done=0
 
 ## SQ-BREED-03 | a bee pollinates a wild carrot (poppy hive as control; isfood half PASSed in c4_ar)
-@group B
+@group A
 @commands `/reload`; feed a pig carrot, a cat and an ocelot cod, a bee a wild carrot item and a poppy; place a wild carrot and a wild rice near a hive
 @pass pig, cat, ocelot breed; the bee refuses the wild carrot and accepts the poppy; bees pollinate the wild carrot and ignore the wild rice
 @fails tags above
 @from batches/r1113/c4_ar2.qb
+# group A since r1118 (judge-2, 2026-11-18): the fixture sits at y -60, the flat surface of the c4_a boot A world; in the
+# group B normal world that is deep underground (the air fill opened into caves) and no bee was found in either reading.
 > forceload add 40705 39985 40750 40015
 > time set 1000
 > weather clear 100000

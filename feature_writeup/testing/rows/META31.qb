@@ -127,6 +127,9 @@ look a witch respawned and its Pos is in the hut, none on the wagons (ST-317); n
 @pass guardians respawn in the monument but not out over the meteorite's water; pillagers in the tower and outworks (ST-319, ST-320)
 @fails guardians across the meteorite area: the meta's `spawn_overrides` not empty (staged json)
 @from batches/r1031/w2_metas_spawns.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 b1_gameplay / w2_metas_spawns bot row
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
 > tp qa {SM1} 70 {SM3}
 > difficulty normal
 sleep 240

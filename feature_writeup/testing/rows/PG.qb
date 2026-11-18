@@ -7,6 +7,7 @@
 @@date 2026-11-07
 @@jars creativecompat creativedelight powergrid tempad
 @@sources feature_writeup/plan_portal_gun.md
+@@prep difficulty=normal spawn-animals=true spawn-npcs=true
 @@text
 @@text Not run. Targets `creativecompat-1.0.0.jar` built 2026-11-07 15:58; the 16:44 build in `mods/` carries it (with SQ-IP). Unlike SQ-TP, keep
 @@text `portalgun`, `immersive-portals` and `geckolib` in the server and client; ImmediatelyFast in the client. Boot check

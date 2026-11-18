@@ -7,6 +7,8 @@
 @@date 2026-11-01
 @@jars creativedelight
 @@sources feature_writeup/rustic_delight.md
+@@prep spawn-animals=true
+@@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@text **RERUN (nested jar 2026-11-02):** SQ-RDX-01, -04, -05 (coffee merge) rerun with the 2026-11-02 CD jar (00:45) and CB jar together, SQ-CDJ5 Boot 1.
 @@text

@@ -24,13 +24,20 @@
 @draft no batch holds this row yet
 @superseded SUPERSEDED 2026-11-10 by the SQ-HH crow rows rewritten for `hearthandharvest:crow` and SQ-HCS (plan_hearth_crow_swap (2026-11-16 P2.5, from the row text)
 ## SQ-HSC-89 | salt caves in the set biomes: raw rock salt shell (desert box of SQ-FCK-08)
-@group A
+@group B
 @commands HNH-89: locate a salt cave, enter it
 @pass generates in the set biomes; shell is raw rock salt block; logged for the further eval
 @fails no cave, or a dissolving shell
 @from batches/r1113/c3_b1.qb
 @reviewed 2026-11-16
 # a count box is at most 262144 blocks (64x64x64): the box runs as slices; the shell sums them per block and fails on no raw rock salt
+# self-contained since r1118 (judge-8, 2026-11-18): DS came from SQ-FCK-08 (another step) and group A is superflat
+# (no caves); group B boots a normal world, the desert box is located and loaded here
+> locate biome minecraft:desert
+waitlog nearest minecraft:desert is at|Could not find 300
+capture DS minecraft:desert is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> forceload add {DS1-112} {DS3-112} {DS1+111} {DS3+111}
+sleep 150
 > say HSC89 begin
 > cdevtest count {DS1-112} -45 {DS3-112} {DS1+111} 40 {DS3-100} salt:raw_rock_salt_block
 > cdevtest count {DS1-112} -45 {DS3-99} {DS1+111} 40 {DS3-87} salt:raw_rock_salt_block
@@ -74,7 +81,7 @@ shell python3 -I -c "import re,sys;L=open('logs/latest.log',errors='replace').re
 > forceload remove {DS1-112} {DS3-112} {DS1+111} {DS3+111}
 reject \[cdevtest\] verb=count .*skipped_columns=[1-9]
 reject \[cdevtest\] .*(done=0|error=)
-look the box is desert (in #hearthandharvest:has_salt_caves); rarity 24 gives about 9 attempts in 225 chunks; raw rock salt > 0 with cave air: caves generated; "dissolving shell" (water eating the salt) needs a look in game: for the further eval, record the counts. Row group was A; caves need a normal world, so it runs here
+look the box is desert (in #hearthandharvest:has_salt_caves); rarity 24 gives about 9 attempts in 225 chunks; raw rock salt > 0 with cave air: caves generated; "dissolving shell" (water eating the salt) needs a look in game: for the further eval, record the counts. Caves need a normal world: group B since r1118
 
 ## SQ-HSC-90
 @group A

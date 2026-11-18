@@ -84,6 +84,10 @@ look 995.5 snowball and pearl: slow in the edge cell (z about 1000.7), gone abou
 @pass middle and edge cells (3 or 4 of 4 sides): 0.50x; corner (2 of 4): 0.75x
 @fails `PassThrough.neighbours` SIDES, `denseFrom` 3
 @from batches/r1116/ps15b_a.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1116 ps15b_a P2-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > fill 1000 -61 1150 1004 -61 1154 minecraft:farmland[moisture=7]
 > fill 1000 -60 1150 1004 -60 1154 minecraft:wheat[age=7]
 > fill 1010 -61 1150 1012 -61 1154 minecraft:farmland[moisture=7]
@@ -155,6 +159,10 @@ look bot walk through the middle row (x 1002) vs open grass (x 1006): speed_bps 
 @pass 3 faces: dense (0.35 / 0.20, no fall damage); cube center (6 of 6): falling stops, hangs, jump climbs about 0.07 b/t, sneak sinks about 0.05; open above: dense, not surrounded (falls slowly)
 @fails `PassRule.cell` `surroundedCount`, `[surface.passthrough.cobweb] surroundedAt`
 @from batches/r1116/ps15b_a.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1116 ps15b_a P2-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > setblock 1000 -60 1180 minecraft:cobweb
 > setblock 999 -60 1180 minecraft:cobweb
 > setblock 1001 -60 1180 minecraft:cobweb
@@ -256,6 +264,9 @@ look z06: -0.500, after the break -0.250 at once, after the planting -0.500 at o
 @pass ripe: 0.50 (dense); seedling: no slowdown
 @fails `PassThrough.rule` (growth on the block itself only)
 @from batches/r1116/ps15b_a.qb passed
+# self-contained since r1118 (judge-10, 2026-11-18): forceload ("That position is not loaded")
+> forceload add 992 976 1231 1215
+sleep 3
 > fill 1079 -61 1151 1083 -61 1154 minecraft:farmland[moisture=7]
 > setblock 1081 -60 1152 minecraft:wheat[age=7]
 > setblock 1080 -60 1152 minecraft:wheat[age=0]
@@ -275,6 +286,10 @@ expect \[zpth\] mod z07s minecraft:zombie mod=(none|-?0\.000)
 @pass same speeds both sides of the border, no "moved wrongly" lines; after the restart the same
 @fails `PassCounts.onChunkLoad` edge drops, `Saved` capability load
 @from batches/r1116/ps15b_a.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1116 ps15b_a P2-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > fill 1006 -61 1200 1009 -61 1204 minecraft:farmland[moisture=7]
 > fill 1006 -60 1200 1009 -60 1204 minecraft:wheat[age=7]
 > fill 1007 -60 1209 1009 -58 1211 minecraft:cobweb
@@ -566,6 +581,10 @@ look z10snow5 Pos[1] is -60.0 (stands on the ground inside the snow, not on the 
 @fails `SnowLayers.collision` (standsOn, isAbove, isDescending), `SnowLayerPassMixin` getStateForPlacement, blocktags.js `runner.snow` with `b.snow`
 @reviewed 2026-11-17
 # written 2026-11-17 for G7.4 (replaces the r1116 version: snow layers now have an on-top speed in leather boots)
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1116 ps15b_a P2-setup
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1000.5 -60 990.5 minecraft:overworld survival
+sleep 3
 > pbot moveto-stop P
 > fill 1100 -60 1145 1104 -60 1147 minecraft:snow[layers=5]
 > item replace entity P armor.feet with minecraft:air
@@ -682,6 +701,10 @@ look z12x mod after denseWalk 0.2 (second zpth mod line) is lower than before (f
 @fails `PassCounts.baked` path, `LevelChunkPassMixin` field
 @jars creativedevtools
 @from batches/r1116/ps15b_a.qb passed
+# self-contained since r1118 (judge-10, 2026-11-18): forceload and bot P ("No entity was found" for P)
+> forceload add 992 976 1231 1215
+> execute unless entity P run pbot spawn P 1150.5 -60 1150.5 minecraft:overworld survival
+sleep 3
 > tp P 1150.5 -60 1150.5
 sleep 2
 > execute as P at P run cdevbench passthrough
@@ -943,7 +966,7 @@ sleep 4
 shell sed -i 's/timing = false/timing = "maybe"/' config/creativecompat-common.toml
 waitlog \[creativecommon\] creativecompat-common.toml reloaded \(1 value\(s\) corrected\) 10
 sleep 5
-shell grep -c 'timing = false' config/creativecompat-common.toml
+shell grep -c 'timing = false' config/creativecompat-common.toml; true
 shell sh -c 'f=$(ls config/jei-client.toml config/quark-common.toml 2>/dev/null | head -1); cp "$f" .ps15b27_third.toml; printf "\n" >> "$f"; echo "ps15b27 third=$f"'
 sleep 4
 count \[creativecommon\] creativecompat-common.toml reloaded == 1

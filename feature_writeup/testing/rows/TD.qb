@@ -18,11 +18,11 @@
 @pass after reset "Year 1, Early Spring, day 1 of 8, 7:42 am (world day 1)", daytime 0, `/season` Early Spring day 1
 @fails start() or firstSunrise offset wrong
 @from batches/r1106spf/b1.qb passed
-> cetime date
+> ccaltime date
 # units are singular (day, month, season, year): `40 days` is refused (TI-32 and the queue wrote days)
-> cetime date add 40 day
-> cetime date reset
-> cetime date
+> ccaltime date add 40 day
+> ccaltime date reset
+> ccaltime date
 > time query daytime
 expect Year 1, Early Spring, day 1 of 8, 7:42 am \(world day 1\)
 expect The time is [0-9]{1,2}$
@@ -34,23 +34,23 @@ expect (?i)early spring
 @pass Mid Spring, Late Spring, Early Summer day 1 6:00 am; then Early Spring day 1; then Early Spring day 4 -> day 1
 @fails unit alignment or now() wrong
 @from batches/r1106spf/b1.qb
-> cetime date next month
-> cetime date
-> cetime date next month
-> cetime date
-> cetime date next month
-> cetime date
-> cetime date previous season
-> cetime date
-> cetime date add 3 day
-> cetime date
-> cetime date restart month
-> cetime date
+> ccaltime date next month
+> ccaltime date
+> ccaltime date next month
+> ccaltime date
+> ccaltime date next month
+> ccaltime date
+> ccaltime date previous season
+> ccaltime date
+> ccaltime date add 3 day
+> ccaltime date
+> ccaltime date restart month
+> ccaltime date
 expect Mid Spring
 expect Late Spring
 expect Early Summer, day 1 of 8, 6:00 am
 expect Early Spring, day 4
-look order of the /cetime date answers: Mid Spring, Late Spring, Early Summer day 1 6:00 am, Early Spring day 1, Early Spring day 4, Early Spring day 1
+look order of the /ccaltime date answers: Mid Spring, Late Spring, Early Summer day 1 6:00 am, Early Spring day 1, Early Spring day 4, Early Spring day 1
 
 ## SQ-TD-03 | set an exact date, no double step
 @group server
@@ -58,11 +58,11 @@ look order of the /cetime date answers: Mid Spring, Late Spring, Early Summer da
 @pass "Year 3, Mid Autumn, day 5 of 8, 7:30 pm (world day 253)"; `/season` agrees; 30 s later still day 5 (no double step)
 @fails SeasonClock.jumped not reached, season counter added the jump twice
 @from batches/r1106spf/b1.qb passed
-> cetime date set 3 mid_autumn 5 7:30 pm
-> cetime date
-> season
+> ccaltime date set 3 mid_autumn 5 7:30 pm
+> ccaltime date
+> season get
 sleep 30
-> cetime date
+> ccaltime date
 expect Year 3, Mid Autumn, day 5 of 8, 7:30 pm \(world day 253\)
 count Mid Autumn, day 5 >= 2
 expect (?i)mid autumn
@@ -74,9 +74,9 @@ expect (?i)mid autumn
 @fails VintageClock.add reflection failed (name or signature changed)
 @from batches/r1106spf/b1.qb
 > wine clock set 0 days
-> cetime date add 1 month
+> ccaltime date add 1 month
 > wine time
-> cetime date add -1 month
+> ccaltime date add -1 month
 > wine time
 reject (?i)WARN.*(VintageClock|wine)
 look wine time reads 8 days after the forward step and about 0 after the backward one; the chat line "wine clock moved back" goes to the console too
@@ -87,7 +87,7 @@ look wine time reads 8 days after the forward step and about 0 after the backwar
 @pass one line per command with before / after position, dayTime and seasonCycleTicks
 @fails logging missing
 @from batches/r1106spf/b1.qb
-shell test "$(grep -c "\[time\] /cetime date" logs/latest.log)" -ge 8
+shell test "$(grep -c "\[time\] /ccaltime date" logs/latest.log)" -ge 8
 
 ## CQ-TD-06 | calendar on the client after a date set
 @group client
@@ -95,8 +95,8 @@ shell test "$(grep -c "\[time\] /cetime date" logs/latest.log)" -ge 8
 @pass "Autumn, Day 13/24 7:30 pm" (the pack HUD has `enable_show_sub_season = false`; corrected 2026-11-02), calendar Year 3, Xaero "Day 253, 19:30"; the world re-tints once
 @fails client counter ran ahead (packet order)
 @from batches/r1101/c1_client.qb
-> cetime date set 3 mid_autumn 5 7:30 pm
+> ccaltime date set 3 mid_autumn 5 7:30 pm
 sleep 5
 shot hud
 look SeasonHUD "Mid Autumn (Day 13/24) 7:30 pm", Xaero time line "Day 253, 19:30", the world re-tints once. hand: calendar item tooltip Year 3
-> cetime date reset
+> ccaltime date reset

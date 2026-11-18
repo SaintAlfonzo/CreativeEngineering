@@ -108,7 +108,8 @@ expect \[ztp\] cd true
 waitlog \[ztp\] doors total 20
 expect \[ztp\] door minecraft:overworld .* target minecraft:overworld \(30\.5, -60\.0, 0\.5\)
 > pbot look qa 0 0
-> pbot moveto qa 0.5 6 walk 100
+# judge-12, 2026-11-18: a 100-tick walk carried the bot through the door and 12 blocks back west (x 17.7); 20 ticks ends just past the exit
+> pbot moveto qa 0.5 6 walk 20
 waitlog verb=pbot\.moveto bot=qa end= 20
 > cdevtest player qa
 expect verb=player name=qa dim=minecraft:overworld x=(2\d|3\d)(\.\d+)?\b
@@ -412,7 +413,20 @@ look debug log drops data/tempad/curios but keeps data/curios/tags; the second b
 > pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
 sleep 3
 > clear qa
+# judge-12, 2026-11-18: own location setup (the SQ-TP-04 saves live in another step's world)
+> forceload add -16 -16 48 16
+> execute in minecraft:the_nether run forceload add -16 -16 16 16
+> execute in minecraft:the_nether run fill -3 119 -3 3 119 3 minecraft:obsidian
+> execute in minecraft:the_nether run fill -3 120 -3 3 123 3 minecraft:air
 > item replace entity qa hotbar.0 with tempad:tempad
+> ztp setchr qa 0 6000
+> tp qa 30.5 -60 0.5 0 0
+> ztp save qa Far East
+> execute in minecraft:the_nether run tp qa 0.5 120 0.5 0 0
+sleep 2
+> ztp save qa Hell Spot
+> execute in minecraft:overworld run tp qa 0.5 -60 0.5 0 0
+sleep 2
 > kill @e[type=tempad:timedoor]
 shell f=config/tempad-common.toml; sed 's/^allow_intradimensional_travel = true/allow_intradimensional_travel = false/' $f > $f.new && cat $f.new > $f && rm $f.new; grep -E "^allow_" $f
 sleep 6
@@ -488,7 +502,7 @@ sleep 3
 > cdevtest rdetail tempad: max=500
 waitlog verb=rdetail (done=1|error=) 60
 reject verb=rdetail .*done=0
-reject verb=rdetail .*ingredients=\S*\bempty\b
+# judge-12, 2026-11-18: blank cells of a shaped recipe print 'empty' (timedoor_projector, chronon_generator); parse errors are the shell count
 > give qa tempad:location_card
 > give qa tempad:card_wallet
 > give qa tempad:time_steel
@@ -510,8 +524,8 @@ reject verb=rdetail .*ingredients=\S*\bempty\b
 > give qa tempad:metronome
 > give qa tempad:screening_device
 > give qa tempad:creative_chronometer
-count Gave 1 \[ >= 21
-reject Unknown item
+count Gave 1 +\[ >= 21
+reject Unknown item 'tempad:
 > cdevtest reg item ^tempad:
 waitlog verb=reg kind=item regex=\S+ n= 20
 shell grep -hcE "Error parsing recipe.*tempad|Couldn't load .*tempad" logs/latest.log; grep -hE "verb=reg kind=item regex=\S+ n=" logs/latest.log | tail -1
@@ -541,6 +555,13 @@ look shell: 0 recipe parse errors; reg n= equals the 21 given items plus any blo
 # needs the SQ-TP-04 locations; bot qa
 > pbot spawn qa 0.5 -60 0.5 minecraft:overworld survival
 sleep 3
+# judge-12, 2026-11-18: own location setup (the SQ-TP-04 saves live in another step's world)
+> forceload add -16 -16 48 16
+> item replace entity qa hotbar.0 with tempad:tempad
+> ztp setchr qa 0 6000
+> tp qa 30.5 -60 0.5 0 0
+> ztp save qa Far East
+> tp qa 0.5 -60 0.5 0 0
 > kill @e[type=tempad:timedoor]
 > clear qa
 > item replace entity qa hotbar.1 with tempad:chronon_generator

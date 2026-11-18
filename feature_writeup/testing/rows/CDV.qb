@@ -21,7 +21,8 @@
 @pass `[creativedevtools] loaded, members: [cdevperfbot, cdevcapture]` with no `NOT loaded`; startup log `[creativedevtools] core finished`; server log `[creativedevtools] server scripts ready`; no ERROR naming creativedevtools; `config/creativedevtools-common.toml` has `[debug.*]`, `[worldgen.mass_place]`, `[features]`, and the CE toml lost `[debug]` and `[worldgen.mass_place]` after Forge's correction
 @fails Creative Common jar older than the hooks (NoClassDefFoundError `BlockStateLookupHook`), or the script trees missing from the jar
 @from batches/r1106spf/b1.qb
-bootexpect \[creativedevtools\] loaded, members: \[ceperfbot, cecapture\]
+# judge-5, 2026-11-18: member names are cdevperfbot, cdevcapture since the cdev rename
+bootexpect \[creativedevtools\] loaded, members: \[cdevperfbot, cdevcapture\]
 bootreject \[creativedevtools\].*NOT loaded
 bootreject NoClassDefFoundError.*(BlockStateLookupHook|LevelRandomHook)
 kjsexpect \[creativedevtools\] server scripts ready
@@ -34,28 +35,31 @@ look startup core finished; toml has [debug.*], [worldgen.mass_place], [features
 @pass Each command answers (no "Unknown command"); `/recipescan` prints its summary line; `/dumpspawns` writes `kubejs/exported/spawns.json`
 @fails A script without `global.CDV`, or `SpawnDump` class name not updated in `dump_spawns.js`
 @from batches/r1106spf/b1.qb
-> cegen list
-> ceperf status
-> ceplace status
+# judge-5, 2026-11-18: roots renamed /cegen /ceperf /ceplace -> /cdevgen /cdevperf /cdevplace
+> cdevgen list
+> cdevperf status
+> cdevplace status
 > recipescan
 waitlog (?i)(recipescan|recipe scan).*(done|summary|checked|recipes|references) 300
 > dumpworldjei
 sleep 10
 > dumpspawns
 sleep 10
-reject Unknown command
+reject Unknown or incomplete command
 shell ls -la kubejs/exported/spawns.json; grep -rn "flowerworld" kubejs/server_scripts logs/kubejs/server.log | head -3
 look every command answered; /recipescan summary line; spawns.json written now; /flowerworld registered (not run)
 
 ## SQ-CDV-03 | /dumpall (about 5 min)
 @group A
 @commands `/dumpall` (about 5 min, includes dumpclimate); then `grep -E "ReferenceError\|guardThrowable\|writeExportJson" logs/kubejs/server.log`
-@pass `[dumpall] all 25 dumps done`; no ReferenceError: the Devtools wrappers reach `global.guardThrowable` / `global.writeExportJson` from the pack's `_lib`
+@pass `[dumpall] all 20 dumps done` (plain `/dumpall`; `full` adds the 6 worldgen dumps); no ReferenceError: the Devtools wrappers reach `global.guardThrowable` / `global.writeExportJson` from the pack's `_lib`
 @fails `java_guard.js` / `export_io.js` not exporting their globals
 @from batches/r1106spf/b1.qb passed
 > dumpall
 waitlog \[dumpall\] (all \d+ dumps done|\d+/\d+ (dumps )?ok) 900
-expect \[dumpall\] (all 25 dumps done|2[45]/25 (dumps )?ok)
+# judge-5, 2026-11-18: plain /dumpall runs 20 dumps (the 6 worldgen ones only with /dumpall full)
+expect \[dumpall\] all 20 dumps done
+reject \[dumpall\] \d+/\d+ dumps ok in .*failed
 kjsreject ReferenceError
 kjsreject guardThrowable.*(not|undefined)|writeExportJson.*(not|undefined)
 

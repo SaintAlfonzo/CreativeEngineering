@@ -30,6 +30,9 @@ bootreject (?i)(missing|exception).*(vintagedelight:lush_grass_block|vinery:gras
 @pass Sheared patch: 24 dirt left, center still `fertile=false` (`/execute if block ... minecraft:grass_block[fertile=false]`); other patch: fewer than 24
 @fails IW behavior changed: re-read `ModGrassBlock#isRandomlyTicking`
 @from batches/r1031/a1_world.qb
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1101 p1_server / r1031 a1_world, a2_variants bot row
+> execute unless entity qa run pbot spawn qa 0 -60 0 minecraft:overworld survival
+sleep 3
 > fill -42 -57 20 -12 -57 36 minecraft:stone
 > fill -40 -56 30 -36 -56 34 minecraft:dirt
 > setblock -38 -56 32 minecraft:grass_block[fertile=false]

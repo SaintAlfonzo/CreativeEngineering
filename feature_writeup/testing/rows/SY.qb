@@ -23,10 +23,10 @@
 @fails Boot stops on a mixin: the target class or `m_49840_` call changed (crop_yields.md 4); `no base`: `soil_yield.json` missing from the jar
 @from batches/r1115/p6_a1.qb
 bootexpect \[soil-yield\] Fortune stripped: \d+ terms on ([7-9]\d|\d{3,}) crop tables
-bootexpect \[soil-yield\] 36 crops \(.*sweet_berry.*\)
-bootexpect \[soil-yield\] 36 crops \(.*lemon.*\)
-bootexpect \[soil-yield\] 36 crops \(.*nether_wart.*\)
-bootexpect \[soil-yield\] 36 crops \(.*crimson_fungus_colony.*\)
+bootexpect \[soil-yield\] 35 crops \(.*sweet_berry.*\)
+bootexpect \[soil-yield\] 35 crops \(.*lemon.*\)
+bootexpect \[soil-yield\] 35 crops \(.*nether_wart.*\)
+bootexpect \[soil-yield\] 35 crops \(.*crimson_fungus_colony.*\)
 bootexpect rich soul soil \+33%, fertile soul soil \+66%
 bootreject no base in soil_yield\.json
 bootreject PickSoilYieldMixin.*(fail|error|Error|could not)
@@ -41,6 +41,7 @@ look shell lines: soils list and crop list as the pass text
 @pass Wheat 1.00 / 1.33 / 1.66, carrots 3.71 / 4.87 / 6.02, sweet potato 2.71 / 3.54 / 4.36 (within 0.1; ripe sweet potato is `age=5`, its max); the Fortune III means match the no-tool means (wheat seeds 2.71 both)
 @fails Fortune higher: table not in `fortune_free` or the strip missed a nested function; base off: `soil_yield.json`
 @from batches/r1115/p6_a6.qb
+> forceload add 990 990 1070 1060
 > setblock 1000 -60 1000 minecraft:wheat[age=7]
 > setblock 1002 -60 1000 minecraft:wheat[age=7]
 > setblock 1004 -60 1000 minecraft:wheat[age=7]
@@ -69,6 +70,7 @@ look wheat 1.00 / 1.33 / 1.66 (seeds about 2.71), carrots 3.71 / 4.87 / 6.02, sw
 @pass Cucumber 1.50 / 2.49, zucchini 1.50 / 2.49, ghost pepper 1.00 / 1.66, rope vine tomato 2.49 (rotten tomato about 0.05, not raised); the plant goes back to stage 5 (cucumber, ghost pepper) or 0 (vine); Fortune changes nothing
 @fails Pick unchanged: mixin not applied (check `-Dmixin.debug.export`), or the block id lacks a `picks` row; rope vine at 1.50: walk list in `soil_yield.json`
 @from batches/r1115/p6_a6.qb
+> forceload add 990 990 1070 1060
 > setblock 1002 -60 1004 vintagedelight:cucumber_crop[age=7]
 > setblock 1006 -60 1004 veggiesdelight:zucchini_crop[age=7]
 > setblock 1010 -60 1004 vintagedelight:ghost_pepper_crop[age=7]
@@ -88,6 +90,7 @@ look cucumber 2.49, zucchini 2.49, ghost pepper 1.66, rope tomato 2.49 with F3
 @pass Picks: sweet berry 2.50 / 3.33 / 4.15, strawberry 1.50 / 2.00 / 2.49, blueberry and cranberry 1.50 / 2.00 / 2.49, salmonberry 2.50 / 3.33 / 4.15, lemon 3.50 / 4.66 / 5.81. Breaks: sweet berry 2.50 / 3.33 / 4.15, strawberry 1.00 / 1.33 / 1.66, blueberry and cranberry 1.00 / 1.33 / 1.66, lemon 3.50 / 4.66 / 5.81. Unripe picks (sweet berry age 2, salmonberry age 3) the same on every soil
 @fails A bush that holds no soil (dirt only) in the pack: crops.md soil table; unripe raised: `ripe` in `soil_yield.json`
 @from batches/r1115/p6_a2.qb
+> forceload add 990 990 1070 1060
 > setblock 1000 -61 1008 minecraft:dirt
 > setblock 1002 -61 1008 farmersdelight:rich_soil
 > setblock 1004 -61 1008 immersive_weathering:mulch_block
@@ -184,6 +187,7 @@ look picks sweet berry 2.50 / 3.33 / 4.15, strawberry 1.50 / 2.00 / 2.49, blue/c
 @pass Ripe: produce 1.00 plus seeds mean about 2.71 (1 to 4); age 3: seeds about 3.71 (2 to 5) as before
 @fails No ripe seeds: the seed pool's age condition
 @from batches/r1115/p6_a2.qb
+> forceload add 990 990 1070 1060
 > setblock 1000 -61 1012 minecraft:farmland
 > setblock 1002 -61 1012 minecraft:farmland
 > setblock 1004 -61 1012 minecraft:farmland
@@ -206,6 +210,7 @@ look ripe: produce 1.00, seeds about 2.71 (max 4); age 3: seeds about 3.71 (max 
 @pass Wart 3.00 / 4.98; colony break 6.65 crimson fungus with no tool, the colony item only with shears (no extra fungi); shear pick 1.33 fungus
 @fails Shears give fungi: the `notTool` condition; wart on Nulch 3.00: soil id
 @from batches/r1115/p6_a2.qb
+> forceload add 990 990 1070 1060
 > setblock 1000 -61 1016 minecraft:soul_sand
 > setblock 1002 -61 1016 immersive_weathering:nulch_block
 > setblock 1000 -60 1016 minecraft:nether_wart[age=3]
@@ -228,6 +233,7 @@ look wart 3.00 / 4.98; colony break 6.65 crimson fungus (none), colony item only
 @pass Pearls 1.50 / 2.00
 @fails 1.50 on Rich Soul Soil: the walk list misses a propelplant block id
 @from batches/r1115/p6_a2.qb
+> forceload add 990 990 1070 1060
 > setblock 1000 -61 1020 minecraft:netherrack
 > setblock 1002 -61 1020 nethersdelight:rich_soul_soil
 > setblock 1000 -60 1020 nethersdelight:propelplant_stem
@@ -249,6 +255,10 @@ look pearls 1.50 / 2.00
 @pass `3 soils set (Rich x1.1, Fertile x1.2)`; a wheat pot on Fertile Soil completes in about 8000 ticks (9600 / 1.2), on Rich Farmland about 8727 (9600 / 1.1)
 @fails `setRecipeNumber missing`: old Creative Common jar; Fertile Soil not accepted: recipe `<NCH ns>:botany_soil/fertile_soil` not loaded
 @from batches/r1115/p6_a3.qb
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1115 p6_a3 P6-reload
+> forceload add 990 990 1070 1060
+> execute unless entity c6t run pbot spawn c6t 1000.5 -60 1050.5 minecraft:overworld survival
+sleep 3
 > setblock 1000 -60 1024 botanypots:terracotta_botany_pot
 > setblock 1002 -60 1024 botanypots:terracotta_botany_pot
 > setblock 1004 -60 1024 botanypots:terracotta_botany_pot

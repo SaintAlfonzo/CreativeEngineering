@@ -7,6 +7,7 @@
 @@date 2026-11-10
 @@jars creativedelight
 @@sources feature_writeup/plan_rustic_fold_in.md feature_writeup/rustic_delight.md
+@@prep spawn-animals=true
 @@text
 @@text Needs the 2026-11-10 Creative Delight jar (nests `backportedRustic-1.7.0-ce-19.2-02`) in `mods/`: full restart. Group A
 @@text (superflat) unless noted. Baseline for -02: the pre-change dumps in `kubejs/exported/` (2026-11-09/10: 270 `rusticdelight`
@@ -118,7 +119,8 @@ shell echo "missing-registry lines naming rusticdelight: $(grep -ciE '(missing|u
 bootexpect Done \(
 bootreject (?i)(Couldn't parse|Failed to load).*rusticdelight:
 bootreject rustic_upstream_assets
-shell ls -ld rustic_upstream; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")"; grep -ciE 'rustic_upstream' logs/latest.log
+# grep -c exits 1 on 0 matches, the good outcome here (judge-11, 2026-11-18)
+shell ls -ld rustic_upstream; echo "rustic error lines: $(grep -iE 'rustic' logs/latest.log | grep -ciE "error|exception|couldn't parse|failed to load")"; grep -ciE 'rustic_upstream' logs/latest.log; true
 
 ## CQ-RDB-01
 @group client

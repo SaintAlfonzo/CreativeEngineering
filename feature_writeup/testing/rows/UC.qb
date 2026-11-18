@@ -63,6 +63,9 @@ look 1170 random ticks per block = 240 s at randomTickSpeed 1000
 @fails Prismarine silent: the `#minecraft:is_ocean` tag string is not read by IW's `biome_match`; acan grows: the warm ocean predicate is missing
 @from batches/r1031/b1_gameplay.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (judge-3, 2026-11-18): bot spawn from r1031 b1_gameplay / w2_metas_spawns bot row
+> execute unless entity qa run pbot spawn qa 0 120 0 minecraft:overworld creative
+sleep 3
 > execute positioned 0 70 0 run locate biome minecraft:cold_ocean
 waitlog nearest minecraft:cold_ocean is at 300
 capture CO is at \[(-?\d+), (~|-?\d+), (-?\d+)\]

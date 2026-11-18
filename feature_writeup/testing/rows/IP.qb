@@ -100,6 +100,10 @@ look audit header "dump yes", unclassified below 650, minecraft:netherite_scrap 
 @fails `IPFireGateMixin` not applied (boot check), or IP's redirect took another path: grep `onFireLitOnObsidian` callers again
 @from batches/r1113/fix_c3a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 fix_c3a1 SQ-C3F-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity qa run pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 3
 > fill 1200 -60 1000 1203 -56 1000 minecraft:obsidian
 > fill 1201 -59 1000 1202 -57 1000 minecraft:air
 > fill 1210 -60 1000 1213 -56 1000 minecraft:obsidian
@@ -160,6 +164,10 @@ look all ten edge-middle reads crying obsidian (corners stay obsidian: the conve
 @fails `IPNetherPortalBridge.light` returned false (IP mode not `normal`, or no frame found: falls back to vanilla blocks, which is the old behavior)
 @from batches/r1113/c3_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity qa run pbot spawn qa 1350 -60 1030 minecraft:overworld survival
+sleep 3
 > fill 1200 -60 1020 1203 -56 1020 minecraft:obsidian
 > fill 1201 -59 1020 1202 -57 1020 minecraft:air
 > fill 1210 -60 1020 1213 -60 1020 minecraft:obsidian
@@ -199,6 +207,10 @@ look first execute: Test passed, count 2 or 1 (the Overworld side of the pair); 
 @fails `/kubejs` tag dump: the tag is empty (blocktags.js not in the jar) or the mixin missed (boot check)
 @from batches/r1113/c3_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 (rowfix-1, 2026-11-18): bot spawn from r1113 c3_a1 SQ-C3A-setup
+> forceload add 1000 1000 1480 1080
+> execute unless entity qm run pbot spawn qm 1200 -60 1065 minecraft:overworld survival
+sleep 3
 > clear qm
 > pbot hold qm minecraft:flint_and_steel 1
 > fill 1200 -60 1075 1202 -58 1075 alexsmobs:rainbow_glass
