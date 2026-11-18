@@ -4,7 +4,7 @@ import net.minecraftforge.common.ForgeConfigSpec;
 
 /**
  * Creative Calendar's config, {@code config/creativecalendar-common.toml} (feature_writeup/creative_calendar.md 4.3).
- * Every section moved from creativeengineering-common.toml with its keys and comments unchanged (rule 3.3
+ * Sections (keys and comments as in the old creativeengineering-common.toml, rule 3.3
  * of creative_split.md): {@code [seasons]}, {@code [crop_seasons]}, {@code [time]} (with {@code .day}, {@code .seasons},
  * {@code .wine}, {@code .wine.boosts}), and the two keys of other sections that only Calendar reads, kept under their
  * old section names: {@code [perf] seasonsMeltIntervalTicks} and {@code [wthit] cropSeasons} / {@code cropOutOfSeason}.
