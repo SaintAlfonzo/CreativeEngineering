@@ -9,8 +9,7 @@
 @@text
 @@text Needs Creative Common 1.1.03 built 2026-10-26 (in `mods/`). SQ-SV-02 needs a client connected to the scratch server.
 @@text
-@@text | ID | Group | Action | Expect | Depends on |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-SV-01
 @group A
 @commands End: `/execute in minecraft:the_end run tp` an armor stand to 300016 100 300016 (ST-232); then a pearl onto Myalite at a spire viaduct

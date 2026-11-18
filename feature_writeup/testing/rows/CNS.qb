@@ -3,7 +3,7 @@
 # Run: qrun.py run OUT feature_writeup/testing/rows/CNS.qb RES [--section KEY] [--rows ID,...]
 
 @@section 1
-@@title SQ-CNS Creative Common namespace and moves out (wave 9), 2026-11-04 ([creative_split.md](../creative_split.md) 7.14)
+@@title SQ-CSN Creative Common namespace and moves out (wave 9), 2026-11-04 ([creative_split.md](../creative_split.md) 7.14)
 @@date 2026-11-04
 @@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @@sources feature_writeup/creative_split.md
@@ -13,67 +13,31 @@
 @@text run once more and What's New shows once (expected, not a failure).
 @@text
 @@table
-## SQ-CNS-01 | Comfort / Nourishment split at startup
+## SQ-CSN-01 | Creative Common damage tags load from creativecommon (no #creativeengineering: reference)
 @group A
 @commands Boot 2: `grep -iE "damage tag\|damage_tags\|creativeengineering:(fire\|magic\|burn_tick)" logs/latest.log`; with `[damage_tags]` logging on, set the bot on fire and hit it with an Instant Damage potion, read the `DamageTagLogger` lines
 @pass Damage tags load from `creativecommon` (32 plus CD's `creativedelight:stoves`), no unknown `#creativeengineering:` reference; the fire hit is tagged `fire`/`burn_tick`, the magic hit `magic`
 @fails A file still naming `#creativeengineering:`: grep `development/*/src/main/resources/data/*/damage_tags`
 @from batches/r1102b/s1_A.qb
-bootexpect \[comfort_nourishment\] \d+ ruled foods set, \d+ bottles stripped, \d+ other foods lost Nourishment
-bootreject \[comfort_nourishment\] (could not read|no item_dict key)
-bootreject comfort_nourishment\.js.*(Error|error|exception)
-shell grep -o "\[comfort_nourishment\] [0-9]* ruled foods set.*" logs/latest.log | head -1
-look the ruled count is 269 (row text) or the current comfort_nourishment.json count
+@draft Common namespace check (creative_split.md 7.14): no steps yet. The steps this row carried belonged to the Comfort / Nourishment rows SQ-CSN-01 to -03 (RD.qb, FO.qb), where they now live
 
-## SQ-CNS-02 | Comfort / Nourishment on eight foods
+## SQ-CSN-02 | WTHIT and JEI order tag scripts load; glass matches wthit/needs_silk_touch
 @group A
 @commands Same boot: `/execute if block <glass> #creativecommon:wthit/needs_silk_touch` on a placed glass block; `grep -iE "jei_order_tags\|wthittags" logs/kubejs/server.log`
 @pass Glass matches; both scripts load with no error
 @fails `wthittags.js` TAG strings, `jei_order.js` TAG_ROOT
 @from batches/r1102b/s1_R.qb
-@reviewed 2026-11-16
-> cdevtest food farmersdelight:noodle_soup
-> cdevtest food farmersdelight:beef_stew
-> cdevtest food farmersdelight:bone_broth
-> cdevtest food farmersdelight:dog_food
-> cdevtest food minecraft:golden_carrot
-> cdevtest food minecraft:enchanted_golden_apple
-> cdevtest food delightful:chunkwich
-> cdevtest food delightful:azalea_tea
-expect verb=food item=farmersdelight:noodle_soup\S* food=true .*effects=\S*farmersdelight:nourishment:0:4800:
-expect verb=food item=farmersdelight:beef_stew\S* food=true .*effects=\S*farmersdelight:comfort:0:4800:
-reject verb=food item=farmersdelight:bone_broth\S* .*effects=\S*(comfort|nourishment)
-expect verb=food item=farmersdelight:dog_food\S* food=true .*effects=\S*farmersdelight:comfort:0:1200:
-expect verb=food item=minecraft:golden_carrot\S* food=true .*effects=\S*farmersdelight:nourishment:0:2400:
-expect verb=food item=minecraft:enchanted_golden_apple\S* food=true .*effects=\S*farmersdelight:nourishment:0:4800:
-expect verb=food item=minecraft:enchanted_golden_apple\S* food=true .*effects=\S*minecraft:absorption:
-reject verb=food item=delightful:chunkwich\S* .*effects=\S*nourishment
-reject verb=food item=delightful:azalea_tea\S* .*effects=\S*(comfort|nourishment)
-reject verb=food item=\S+ food=false
-reject \[cdevtest\] verb=\S+ done=0
+@draft Common namespace check (creative_split.md 7.14): no steps yet. The steps this row carried belonged to the Comfort / Nourishment rows SQ-CSN-01 to -03 (RD.qb, FO.qb), where they now live
 
-## SQ-CNS-03 | Comfort / Nourishment on cans match their dishes
+## SQ-CSN-03 | item merge rewrite runs once (boot 2), skipped on boot 3
 @group A
 @commands Boot 2 then boot 3: `grep -iE "item merge\|swap_merges" logs/latest.log` each time
 @pass Boot 2 runs the merge rewrite once (stamp `creativecommon:swap_merges`); boot 3 skips it
 @fails `swap/ItemMerges` STAMP
 @from batches/r1103/sB_2.qb
-@reviewed 2026-11-16
-# the cans moved to creativedelight: (namespace move 2026-11-10)
-> cdevtest food farmersdelight:noodle_soup
-> cdevtest food creativedelight:canned_noodle_soup
-> cdevtest food creativedelight:canned_bone_broth
-> cdevtest food farmersdelight:beef_stew
-> cdevtest food creativedelight:canned_beef_stew
-expect verb=food item=creativedelight:canned_noodle_soup\S* food=true .*effects=\S*farmersdelight:nourishment:
-reject verb=food item=creativedelight:canned_bone_broth\S* .*effects=\S*farmersdelight:(nourishment|comfort)
-expect verb=food item=creativedelight:canned_beef_stew\S* food=true .*effects=\S*farmersdelight:comfort:
-reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command)
-reject verb=food item=\S+ food=false
-reject \[cdevtest\] verb=\S+ done=0
-look the canned noodle soup's nourishment ticks equal the noodle soup's; the canned beef stew's comfort ticks equal the beef stew's
+@draft Common namespace check (creative_split.md 7.14): no steps yet. The steps this row carried belonged to the Comfort / Nourishment rows SQ-CSN-01 to -03 (RD.qb, FO.qb), where they now live
 
-## SQ-CNS-04 | no Compat / CD / Common mixin failures; Curios hands, face, feet slots registered by Equipment
+## SQ-CSN-04 | no Compat / CD / Common mixin failures; Curios hands, face, feet slots registered by Equipment
 @group A
 @commands Same boot: `grep -E "creativecompat.mixins.json\|creativedelight.mixins.json\|creativecommon.mixins.json" logs/latest.log \| grep -iE "fail\|error\|could not"`; `/curios list @p` (or the Curios screen on the bot)
 @pass No mixin failures (Compat's Jetpack and falling-block mixins, CD's two Central Kitchen mixins on the client config only); the hands, face and feet slots exist (now registered by Equipment)
@@ -88,7 +52,7 @@ expect (?i)face
 expect (?i)feet
 look the curios list output names the slot types hands, face and feet (registered by Equipment)
 
-## SQ-CNS-05 | Common's JFR events (creativecommon.ServerTick, LevelTick) are recorded
+## SQ-CSN-05 | Common's JFR events (creativecommon.ServerTick, LevelTick) are recorded
 @group A
 @commands Short JFR recording on boot 2 (perf suite settings, `server/perf/ce-server.jfc`), then `java tools/perf/PerfParse.java <file>`
 @pass `creativecommon.ServerTick` and `creativecommon.LevelTick` events counted
@@ -98,7 +62,7 @@ shell for p in $(pgrep -x java); do [ "$(readlink /proc/$p/cwd)" = "$PWD" ] && j
 shell rm -rf perf/c2_cns05_parse; java $INST/tools/perf/PerfParse.java perf/c2_cns05_parse perf/c2_cns05.jfr 2>&1 | tail -3; grep -c '"creativecommon.ServerTick"' perf/c2_cns05_parse/events.jsonl; grep -c '"creativecommon.LevelTick"' perf/c2_cns05_parse/events.jsonl; true
 look both counts above 0 (event type names as written in events.jsonl; if both 0, grep the file for "creativecommon." to see the real names before calling FAIL). If no JFR (CE_PERF=0 at setup) the dump line says no recording: not judged
 
-## CQ-CNS-01
+## CQ-CSN-01
 @group client
 @commands Client on boot 2: WTHIT on a flower pot, a Supplementaries jar, a beehive, a sheared grass block, a glass block, a cake; WTHIT config screen; JEI world tabs (Weathering and Growth, Lightning, Salt) and a cycling crafting page; armor bar with dragon armor; What's New from the menu; hover a Curios item and a Create Central Kitchen cooking guide's meal slot; drop sand into water; open the creative search tab with D&D loaded
 @pass Every line reads as text (no raw `creativecommon.` keys), the plugin group is "Creative Common"; tabs have titles and rows; tinted armor bar; the changelog shows; "Slot:" line and the meal tooltip show; the sand splashes; no crash

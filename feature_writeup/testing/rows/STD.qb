@@ -8,13 +8,12 @@
 @@text
 @@text Needs `repackedStorage-25.12.09-1.19-forge-ce-19.2-01.jar` installed (`:repackedStorage:installToMods`).
 @@text
-@@text | ID | Group | Action | Expect | Depends on |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-STD-01
 @group B
 @commands Boot a server with the jar and the pack's Quark; `/dumpall`
 @pass No `storagedelight` error in `logs/latest.log`; 140 `storagedelight:` blocks, 50 of them new; the 50 recipes load (`storagedelight:` recipe ids for the 36 stone countertops and 14 bamboo blocks)
-@fails repackedStorage jar
+@fails Depends on: repackedStorage jar
 @reviewed 2026-11-16
 bootexpect Done \(
 bootreject (?i)(ERROR|Exception).*storagedelight
@@ -30,7 +29,7 @@ look recipe count at least the 50 new rows (36 stone countertops and 14 bamboo b
 @group B
 @commands `/give` and place a `storagedelight:bamboo_drawer`, a `storagedelight:oak_cabinet_with_polished_tuff_countertop` and a `storagedelight:warped_cabinet_with_stone_bricks_countertop`; open and close each, break with an axe
 @pass Opens as 27 slots, no block entity error, item kept and dropped
-@fails repackedStorage jar
+@fails Depends on: repackedStorage jar
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
 > setblock 100 -60 500 storagedelight:bamboo_drawer

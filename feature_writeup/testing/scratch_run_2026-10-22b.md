@@ -9,7 +9,7 @@ plus the 2026-10-19 to 2026-10-21 builds that were never scratch-tested (32 chec
 own commands, so all can be copied in at once: `/fdtest`, `/gmprobe`, `/zfw`, `/ofprobe`, `/omprobe`. Suggested order:
 install jars; one group A world (sqA3) with all five probes, after boot `forceload add 384 384 655 527` (zfw) and
 `forceload add 0 80 239 111` (omprobe), wait 30 s; then the config-flip restarts (SQ-GM-05, SQ-OM-CFG); a second group A world (sqOM2)
-for the serverconfig payload (SQ-OM-18); SQ-OM-17 is an offline build check; then group B: one normal world for SQ-MB-04
+for the serverconfig payload (SQ-OM-18); SQ-OM-17 is an offline build check; then group B: one normal world for SQ-MB-04 (now SQ-RW-04)
 and SQ-GE-01 to SQ-GE-03, a second for SQ-GE-04.
 
 Before the run (game closed, `pgrep -c java` is 0):
@@ -123,7 +123,7 @@ fixes_compat.md 2.26 / 2.27, mob_block_tweaks.md MT-26, mooblooms.md 5, storage_
 `gear/archery #2`, `#5`, `gear/camera-bags #4`, `potions/effects #2`, `mobs/tweaks #7`, `mobs/mooblooms #2`,
 `items/storage-and-item-loss #7`, `gameplay/misc #8`, `#12`.
 
-### Farming and worldgen probe (SQ-SF, SQ-WC, SQ-CD, SQ-MB, SQ-GE)
+### Farming and worldgen probe (SQ-SF, SQ-WC, SQ-CD, SQ-MB (now SQ-RW), SQ-GE)
 
 Probe: [tools/farm_worldgen_probe.js](../../tools/farm_worldgen_probe.js), copied before `boot` to
 `OUT/srv/kubejs/server_scripts/zz_zfw_probe.js`. Commands `/zfw stem|wild|straw|loot|mulberry|recipes|geode N|count R ids`;
@@ -177,18 +177,18 @@ Feature: [../crops.md](../crops.md) 3, V17, CR-57, CR-69, TODO `farming/crops #6
 | SQ-CD-01 | A | `/zfw loot` | PASS each pepper color 0.40 to 0.56 per ripe harvest (600 rolls); PASS unripe drops no pepper | `09_crop_drops.js` weights / CEConfig `[crop_drops.bell_peppers]` defaults |
 | SQ-CD-02 | A | same | PASS no apples from oak, dark oak, rubberwood leaves (2000 rolls each) | `08_leaf_apples.js` TABLES |
 
-#### SQ-MB: river wood removed, Mulberry tree
+#### SQ-MB (now SQ-RW): river wood removed, Mulberry tree
 
 Feature: [../recipes_wood.md](../recipes_wood.md) 2.6, RW-15 to RW-20, TODO `recipes/wood #3`. KubeJS tree 2026-10-22 +
 Creative Common `MulberrySapling` (in `mods/` and `build/libs`).
 
 | ID | Group | Commands | Pass | If it fails |
 |---|---|---|---|---|
-| SQ-MB-00 | A | boot, `/zfw recipes` | startup.log `[removedWoods] 1 woods merged into oak`, no `[item_dict] Missing` for river / oak ids; PASS `no recipe makes one` (92 purged); PASS one hedge recipe, oak log, x2 | `server_scripts/wood/removed_woods.js` `R.remove` filter; item_dict keys |
-| SQ-MB-01 | A | `/zfw mulberry` | PASS river_tree feature: oak_log > 0, river_log 0, mulberry leaves > 0 | Datapack `upgrade_aquatic/worldgen/configured_feature/river_tree.json` not read |
-| SQ-MB-02 | A | same | PASS bone-meal sapling gives an oak trunk; PASS with `mulberrySapling = false` river logs, no oak | `MulberrySapling` event not fired (UA's grower may bypass `SaplingGrowTreeEvent`) |
-| SQ-MB-03 | A | `/zfw loot` | PASS river_log drops oak_log x5, river_planks drops oak_planks x5 | Item merge loot path |
-| SQ-MB-04 | B | `/locate biome minecraft:river` (X Z); `/forceload add X-48 Z-48 X+48 Z+48`; wait 60 s; `/execute positioned X 0 Z run zfw count 3 upgrade_aquatic:river_log upgrade_aquatic:river_leaves minecraft:oak_log` | river_log 0, river_leaves > 0 (0 leaves: try another river) | Worldgen still uses UA's built-in holder |
+| SQ-MB-00 (now SQ-RW-00) | A | boot, `/zfw recipes` | startup.log `[removedWoods] 1 woods merged into oak`, no `[item_dict] Missing` for river / oak ids; PASS `no recipe makes one` (92 purged); PASS one hedge recipe, oak log, x2 | `server_scripts/wood/removed_woods.js` `R.remove` filter; item_dict keys |
+| SQ-MB-01 (now SQ-RW-01) | A | `/zfw mulberry` | PASS river_tree feature: oak_log > 0, river_log 0, mulberry leaves > 0 | Datapack `upgrade_aquatic/worldgen/configured_feature/river_tree.json` not read |
+| SQ-MB-02 (now SQ-RW-02) | A | same | PASS bone-meal sapling gives an oak trunk; PASS with `mulberrySapling = false` river logs, no oak | `MulberrySapling` event not fired (UA's grower may bypass `SaplingGrowTreeEvent`) |
+| SQ-MB-03 (now SQ-RW-03) | A | `/zfw loot` | PASS river_log drops oak_log x5, river_planks drops oak_planks x5 | Item merge loot path |
+| SQ-MB-04 (now SQ-RW-04) | B | `/locate biome minecraft:river` (X Z); `/forceload add X-48 Z-48 X+48 Z+48`; wait 60 s; `/execute positioned X 0 Z run zfw count 3 upgrade_aquatic:river_log upgrade_aquatic:river_leaves minecraft:oak_log` | river_log 0, river_leaves > 0 (0 leaves: try another river) | Worldgen still uses UA's built-in holder |
 
 #### SQ-GE: ocean geodes under the deepest floor
 

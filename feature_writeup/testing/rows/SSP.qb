@@ -9,13 +9,12 @@
 @@text
 @@text Needs the Creative Common jar (`creativeengineering-1.1.04.jar`, built 2026-11-01 01:35) and the Creative Delight jar (`creativedelight-1.0.0.jar`, 01:23) installed, and a full restart. Already-queued checks to rerun with these jars: SQ-RSP-09 (Spout / Item Drain drinks), SQ-FFH-03 (zucchini quiche), SQ-MRD-03 (tags half, rewritten), SQ-CM-32 and SQ-CM-35 (calamari), SQ-AC-02 (also `/attribute <bot> minecraft:generic.armor_toughness get`: armor 36, toughness 18).
 @@text
-@@text | ID | Group | Action | Expect | Depends on |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-NCH-01 | NCH numeric defaults: no empty-stack error, sawdust smelts in 10 s
 @group A
 @commands After boot grep `logs/latest.log` and `logs/kubejs/server.log` for `Can't modify the empty stack`; sawdust in a furnace with fuel; JEI Smelting page for sawdust
 @pass no hits; ash after 10 s; JEI shows 10 s, not 0
-@fails `food/drinks #12` (NCH `_or` replaces numeric `??` defaults)
+@fails Depends on: `food/drinks #12` (NCH `_or` replaces numeric `??` defaults)
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
 bootreject Can't modify the empty stack
@@ -31,7 +30,7 @@ reject verb=\S+ .*done=0
 @group A
 @commands grep the log for `[NCH.cfg] no CEConfig.CRAFTING.FELSIC_`; set `[crafting.felsic_helmet] reachPotionMb = 100`, `/reload`; revert after
 @pass no missing-key lines; log shows `CRAFTING.FELSIC_HELMET.reachMb overridden: default 500 -> 100`; recipe has a 100 mB Long Reach fill and a 500 mB Magic Resistance fill
-@fails `gear/tuning #6`
+@fails Depends on: `gear/tuning #6`
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
 bootreject \[NCH.cfg\] no CEConfig.CRAFTING.FELSIC_
@@ -49,7 +48,7 @@ reject verb=\S+ .*done=0
 @group A
 @commands JEI uses of an amethyst shard (RE-16)
 @pass millstone and crushing wheels: one recipe each, 75 % amethyst dust; IE crusher: amethyst dust + 25 % amethyst dust; no glowstone from shards
-@fails `recipes/engineering #2`, `dust.js`
+@fails Depends on: `recipes/engineering #2`, `dust.js`
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
 > cdevtest uses minecraft:amethyst_shard
@@ -60,7 +59,7 @@ reject verb=\S+ .*done=0
 @group A
 @commands recipe dump for `smoking` outputs of `create_dd:smoked_*`; `/dumptags`
 @pass 13 smoking recipes, cook time 200; each `creativeengineering:smokable/*` tag holds exactly the 7 `minecraft:` overworld woods (mangrove included); no `botania:*`, driftwood, `quark:*`, crimson or warped
-@fails `engineering/dreams-and-desires #10`
+@fails Depends on: `engineering/dreams-and-desires #10`
 @from batches/r1031/a1_followup.qb
 @reviewed 2026-11-16
 > cdevtest rdetail creativeengineering:smoking/
@@ -71,7 +70,7 @@ reject verb=\S+ .*done=0
 @group B
 @commands `/dumptrades`; summon a librarian with a lectern, step `VillagerData.level` 1 to 5 (reset offers each level)
 @pass librarians still offer enchanted books; no offer or dump entry holds `nock_enough_arrows:stockpile`, `:recovery` or `:cycle`
-@fails `loot/tables #10` (NEA mixins isTradeable)
+@fails Depends on: `loot/tables #10` (NEA mixins isTradeable)
 @jars creativedelight
 @from batches/r1101/w2_worldgen.qb
 > forceload add -16 -16 16 16
@@ -91,7 +90,7 @@ look librarians offer enchanted books; Offers reset at a level change may need a
 @group B
 @commands summon several Lightman's Currency cashiers at levels 1 to 4
 @pass cashiers still offer enchanted books; none of the three NEA enchantments
-@fails `loot/tables #10`
+@fails Depends on: `loot/tables #10`
 @jars creativedelight
 @from batches/r1101/w2_worldgen.qb
 > summon lightmanscurrency:cashier 6 101 3 {Tags:["en2"]}
@@ -104,7 +103,7 @@ look cashiers still offer enchanted books; the cashier trader type may not use v
 @group C
 @commands `[worldgen.meta_structures] log` on, new world, `/locate structure creativeengineering:meta/meteorite_desert_pyramid` a few times, grep `meteorite_desert_pyramid` in latest.log
 @pass every placed line `1/1 minecraft:desert_pyramid` plus a meteorite; short ones `not placed, core part ...` or `no satellite fitted`; none placed with `0/1 desert_pyramid`
-@fails `structures/metas #11`
+@fails Depends on: `structures/metas #11`
 @jars creativecommon
 @from batches/r1101/w2_worldgen.qb
 > locate structure creativeengineering:meta/meteorite_desert_pyramid
@@ -120,7 +119,7 @@ look every placed line 1/1 minecraft:desert_pyramid plus a meteorite; short ones
 @group C
 @commands new world, Chunky square, `/cwglocate census 96 <x> <z>`; read `falseNegativeAt` in `kubejs/exported/worldgen/locate_census.json`
 @pass every biome false negative has a diagnosis string (regenerated point, its biome, nearest-distance entries, start-piece center); record which case it shows
-@fails `structures/rates-and-groups #13`
+@fails Depends on: `structures/rates-and-groups #13`
 @jars creativecommon
 @from batches/r1101/w2_worldgen.qb
 > tp qa 2144 200 -2592
@@ -138,7 +137,7 @@ look every biome false negative has a diagnosis string (regenerated point, biome
 @group A
 @commands boot, grep `latest.log` for the terrain adaptation load line; `/locate structure philipsruins:ancient_crypt` in new chunks
 @pass load line counts 7 sunk starts with no `ancient_crypt ... ignored` warning; the crypt places on its own terrain-matching projection
-@fails `structures/earthfill #17`
+@fails Depends on: `structures/earthfill #17`
 @jars creativecommon
 @from batches/r1101/w2_worldgen.qb
 bootexpect \[terrain-adaptation\] world load
@@ -154,7 +153,7 @@ look load line: 7 sunk starts, no crypt warning; the crypt position goes to the 
 @group A
 @commands knife on a cutting board with a potato, then a sweet potato; Slice & Dice slicer with a knife over a depot, 1 potato then 1 sweet potato
 @pass board and slicer each give 3 Potato Slices and 3 Sliced Sweet Potatoes; no recipe error for `creativedelight:farmersdelightcutting/potato_slices` or `.../sliced_sweet_potato`
-@fails `dishes/ingredients #20`
+@fails Depends on: `dishes/ingredients #20`
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
 > cdevtest rdetail farmersdelightcutting/potato_slices
@@ -186,7 +185,7 @@ reject verb=\S+ .*done=0
 @group A
 @commands `/dumptags`, grep `kubejs/exported/tags/item_tags_by_item.json` for `creativeengineering:sliced_sweet_potato`
 @pass lists `forge:sliced_potato`, `forge:sliced_potatoes`, `forge:vegetables/sweet_potato`, `forge:vegetables/potato`, `forge:vegetables`, `creativeengineering:food_type/raw/veggie/sliced`
-@fails `dishes/ingredients #20`
+@fails Depends on: `dishes/ingredients #20`
 @from batches/r1102b/s3_A.qb passed
 @reviewed 2026-11-16
 > cdevtest tagsof creativeengineering:sliced_sweet_potato
@@ -202,7 +201,7 @@ reject verb=\S+ .*done=0
 @group A
 @commands `/dumpfood`, `/dumpcompost`; client: JEI on the item
 @pass nutrition 1, modifier 0.3, compost 0.5; JEI shows the potato slices sprite, "Sliced Sweet Potato", uses in fries, More Delight potato dishes and Canned Sweet Potato
-@fails `dishes/ingredients #20`, `dishes/meals #34`
+@fails Depends on: `dishes/ingredients #20`, `dishes/meals #34`
 @from batches/r1102b/s3_A.qb passed
 @reviewed 2026-11-16
 > cdevtest food creativeengineering:sliced_sweet_potato

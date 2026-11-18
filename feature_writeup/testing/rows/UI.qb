@@ -6,8 +6,7 @@
 @@title UI renames, names and Kettle bar, 2026-10-30
 @@date 2026-10-30
 @@text
-@@text | Entry | Tier | Steps | Pass | Fail meaning |
-@@text |---|---|---|---|---|
+@@table
 ## CQ-UI-01 | renamed items (hotbar name popup)
 @group client
 @commands JEI search each rename: Cheesy Fish Pasta (and canned, plated), Loaded Burger, Stackable Pancake, Bread with Jam, Coffee Pie and its slice, the three tobacco bundles

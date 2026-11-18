@@ -422,7 +422,7 @@ RW-23 Bark + inputs in the jar give leather; non-bark logs do not; keg route abs
 
 ## Built, needs play
 
-- `wood #3` (2026-10-22): built; `MulberrySapling` is in the `mods/` jar (11:06); scratch SQ-MB queued; RW-15 to RW-20 in [recipes_wood.md](../recipes_wood.md) 7.
+- `wood #3` (2026-10-22): built; `MulberrySapling` is in the `mods/` jar (11:06); scratch SQ-RW queued; RW-15 to RW-20 in [recipes_wood.md](../recipes_wood.md) 7.
 
 ## Writeup corrections made
 

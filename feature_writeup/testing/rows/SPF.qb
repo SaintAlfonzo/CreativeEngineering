@@ -11,7 +11,7 @@
 @@text Not run. Targets the builds of 2026-11-06 18:51-18:54 (Common 1.1.0, Compat, Calendar, Magic, Equipment, Engineering
 @@text 2.0.0, Worldgen, Delight 1.1.0, Brewing 1.0.0; `prep_srv.sh` swaps them in), Devtools `creativedevtools-1.0.0` of 2026-11-05
 @@text 22:09, Creative Labels 1.0.1 of 2026-11-04 21:53. None of the 18:5x builds is in `mods/` (installed jars are 2026-11-05 22:09 and
-@@text 2026-11-06 01:30). The carve rows (SQ-CEN, SQ-CMG / SQ-CEQ, SQ-CNS, SQ-DEP, SQ-ENGM, SQ-CBP) check that each jar boots and
+@@text 2026-11-06 01:30). The carve rows (SQ-CEN, SQ-CMG / SQ-CEQ, SQ-CSN, SQ-DEP, SQ-ENGM, SQ-CBP) check that each jar boots and
 @@text carries its config; this section checks that the **features** still work, one jar at a time, against a baseline from
 @@text the jars installed today. Rows named "RERUN" are earlier feature rows to run unchanged on these jars (their ids, config
 @@text file and namespace may need the split reading: a table that was in `creativeengineering-common.toml` is now in the
@@ -126,13 +126,13 @@ bootreject (?i)(FallingBlockHold|ProtoChunkTicksFalling|HolderReferenceUnbound).
 
 ## SQ-SPF-10 | Compat: moss patch kept, monster box / vine reruns follow
 @group A
-@commands Compat, blocks: moss patch `/data get block` around it after `/time add 24000` with `gamerule randomTickSpeed 300`; RERUN SQ-VS-01 onwards (vine shearing) and SQ-MB-01 to -06 (monster box) reading `[vine_shearing]` / `[monster_box]` in `creativecompat-common.toml`
+@commands Compat, blocks: moss patch `/data get block` around it after `/time add 24000` with `gamerule randomTickSpeed 300`; RERUN SQ-VS-01 onwards (vine shearing) and SQ-MBX-01 to -06 (monster box) reading `[vine_shearing]` / `[monster_box]` in `creativecompat-common.toml`
 @pass moss spreads as the baseline; vine and monster box rows as their pass text
 @fails `MossTint` / `VineShearing` subscribers on the wrong mod bus; config read from the old class
 @from batches/r1106spf/b1.qb
 > execute if block -39 -61 -39 minecraft:moss_block
 expect Test passed
-look moss tint is client-only (CQ-SPF-01); vine and monster box: SQ-VS / SQ-MB rows of this boot
+look moss tint is client-only (CQ-SPF-01); vine and monster box: SQ-VS / SQ-MBX rows of this boot
 
 ## SQ-SPF-11 | Compat item physics: stick in lava, log in fire
 @group A

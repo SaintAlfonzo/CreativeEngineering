@@ -8,13 +8,12 @@
 @@text
 @@text Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, `installToMods`).
 @@text
-@@text | ID | Group | Action | Expect | Depends on |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-FFH-01
 @group B
 @commands Retired 2026-10-27: `global.foodFamily` is deleted (PASSED before, run log). Its dump diff is SQ-FFH-02 now
 @pass -
-@fails -
+@fails Depends on: -
 @draft retired 2026-10-27 (global.foodFamily deleted); nothing to run, the dump diff is SQ-FFH-02
 @reviewed 2026-11-16
 
@@ -22,7 +21,7 @@
 @group B
 @commands Rewritten 2026-10-27 (callers moved to `global.CD.food`, creative_delight.md 30); the 2026-10-27 CD jar is installed and in 1.1.04, so this is the dump diff only: boot, `/dumpall`, then diff the recipe dump against the 2026-10-26 one
 @pass No `cd_food.js` or `global.CD.food` error in `logs/latest.log`. Every `creativedelight:baking/` id and the muffin `farmersdelightcooking/` ids unchanged; new: `farmersdelightcutting/<meat>_from_culture_<x>` (7, replacing `culture_*_by_fdcutting`) and `{smelting,smoking,campfirecooking}/cooked_calamari[_slice]_from_glowing_calamari[_slice]` (6, replacing `cooked_glowing_calamari*`); one Cooking Pot muffin recipe per muffin (no duplicate id error); nothing else gone
-@fails CD jar; creative_delight.md 30
+@fails Depends on: CD jar; creative_delight.md 30
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
 kjsreject (?i)(cd_food\.js|global\.CD\.food|CD\.food).*(error|exception)
@@ -45,7 +44,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @group A
 @commands Added 2026-10-30. After the `CD.food` `assemble` fix (an array step became a filling step with fluid `minecraft:empty`, creative_delight.md 30): boot, grep `logs/kubejs/server.log`, `/dumpall` recipe dump
 @pass No `Error parsing recipe creativedelight:createsequencedassembly/zucchini_quiche_sequenced_assembly`; that id is in the recipe dump: pie crust base, 3 roasted zucchini deploys, one cooked-meat deploy (any of 5), 250 mB milk fill
-@fails SQ-FFH-02
+@fails Depends on: SQ-FFH-02
 @from batches/r1101/p1_server.qb
 @reviewed 2026-11-16
 kjsreject Error parsing recipe creativedelight:createsequencedassembly/zucchini_quiche

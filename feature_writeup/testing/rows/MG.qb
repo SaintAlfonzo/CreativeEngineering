@@ -10,8 +10,7 @@
 @@text
 @@text Needs the creativeDelight jar of 2026-10-30 installed and a full restart (mixins, startup scripts, Neapolitan config).
 @@text
-@@text | Entry | Tier | Steps | Pass | Fail meaning |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-MG-17 | monkey merge mixins
 @group server
 @commands Boot; grep latest.log for `GorillaForageBananaMixin`, `SugarGliderForageBananaMixin`, `Mixin apply`, `[creativedelight]`

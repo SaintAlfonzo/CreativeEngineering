@@ -704,7 +704,7 @@ read-old fallback), the pack-folder trees included; and move four groups out of 
   APIs content jars fill (`RemainderView`, `PottedPlantHolder`, `JarContents`, `DamageTags`, `TradeListings`,
   `BurnBursts`) and engine/perf fixes even when they target a mod (IW growth, Create: Gravity, Quark spiral spires,
   Nock Enough Arrows whistles). Compat holds behavior tweaks to third-party mods with no system of their own.
-- Built: Common, Compat, CD, Equipment, Brewing, Engineering. Scratch SQ-CNS-01 to -06.
+- Built: Common, Compat, CD, Equipment, Brewing, Engineering. Scratch SQ-CSN-01 to -06.
 
 ### 7.15 Dependency trace: Common, Delight, Brewing (2026-11-04; fixes built, NOT installed, not booted, not tested)
 
@@ -1007,9 +1007,9 @@ Scratch run r1115 (2026-11-15, [scratch_run_2026-11-15.md](testing/scratch_run_2
 - 2026-11-04, wave 8 (7.13): D3 to Engineering (owner). Creative Engineering carved and patcherMod swapped to Creative Common (`creativecommon`, `development/creativeCommon`); all ten Creative jars built, not installed. Next: install the ten jars together, SQ-CEN with SQ-CMG and SQ-CEQ, then the bulk client session.
 - 2026-11-04, wave 9 (7.14): Common's data moved to the `creativecommon` namespace (outright), the pack's changelog and
   JEI world trees to `kubejs/assets/creativecommon/`; meal tooltips to CD, two fixes to Compat, Curios slots to
-  Equipment. Built, not installed. Next: install the ten jars together, SQ-CNS with SQ-CEN.
+  Equipment. Built, not installed. Next: install the ten jars together, SQ-CSN with SQ-CEN.
 - 2026-11-04, dependency trace part 2 (7.16): every jar traced, full build clean; campfire rain tag namespace and CB's
-  Create/IE setup guard fixed, Common and CB rebuilt, not installed. Next: SQ-DEP-01 to -06 on the SQ-CNS boot.
+  Create/IE setup guard fixed, Common and CB rebuilt, not installed. Next: SQ-DEP-01 to -06 on the SQ-CSN boot.
 - 2026-11-04, dependency audit follow-up (7.17): campfire rain tags moved to `creativecommon` on both sides, 40
   `NEEDS_MOD` gates for Common's third-party mixins, Storage Delight requires Farmer's Delight. Built, not installed.
 

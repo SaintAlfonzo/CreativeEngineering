@@ -55,6 +55,9 @@ The rows files keep their names (`EN.qb` holds `SQ-EDL-` rows). Queue rows are r
 | `TS-` | [trade_sync.md](../trade_sync.md) (2026-11-06) | `TSY-` | [trashslot.md](../trashslot.md) (2026-10-02) | none: already `SQ-TSY-`, `CQ-TSY-` |
 | `PWG-` | [energy_advanced.md](../energy_advanced.md) README cell | none | [power_grid.md](../power_grid.md) | none: energy_advanced.md has no tests of its own; its README cell becomes "tests in power_grid.md" |
 | `NP-`, `RA-` | [creative_magic.md](../creative_magic.md) README cell | none | [nether_portal.md](../nether_portal.md), [recipes_magic.md](../recipes_magic.md) | none: README cell becomes a reference |
+| `SQ-MB-`, `CQ-MB-` (queue codes only) | [mooblooms.md](../mooblooms.md) (2026-10-10; `MB-` writeup tests) | `SQ-MBX-`, `CQ-MBX-` | [mooblooms.md](../mooblooms.md) | monster box rows `SQ-MB-01` to `-07`, `CQ-MB-08` (`MB.qb`, mob_block_tweaks.md; `SQ-MBX-` because `SQ-MT-01` to `-03` exist) |
+| `SQ-MB-` (Mulberry run) | mooblooms.md | `SQ-RW-` | mooblooms.md | `SQ-MB-00` to `-04` (2026-10-22 run, `SALT.qb`, recipes_wood.md) become `SQ-RW-00` to `-04` |
+| `SQ-CNS-`, `CQ-CNS-` (Common wave 9) | [comfort_nourishment.md](../comfort_nourishment.md) (2026-10-26) | `SQ-CSN-`, `CQ-CSN-` | comfort_nourishment.md | `SQ-CNS-01` to `-05`, `CQ-CNS-01` in `CNS.qb` (creative_split.md 7.14); the three Comfort rows `SQ-CNS-01` to `-03` stay (`RD.qb`, `FO.qb`) |
 
 Run docs that quote an old id in a past result keep it and get "(now X)" once, at the first quote.
 
@@ -90,7 +93,7 @@ same pass as the renames.
 | `CM-` | [composting.md](../composting.md) | SQ-CM (24) |  |  |
 | `CMP-` | [creative_compat.md](../creative_compat.md) | SQ-CMP (8) |  |  |
 | `CN-` | [cans.md](../cans.md) |  |  |  |
-| `CNS-` | [comfort_nourishment.md](../comfort_nourishment.md) | CQ-CNS (1), SQ-CNS (8) |  |  |
+| `CNS-` | [comfort_nourishment.md](../comfort_nourishment.md) | SQ-CNS (3) |  | the Common namespace wave 9 rows that used `SQ-CNS-` are `SQ-CSN-` (section 2) |
 | `CORN-` | [corn_delight.md](../corn_delight.md) | CQ-CORN (1), SQ-CORN (9) |  | new 2026-11-16, was CN- (README only; cans.md owns CN-); queue SQ-CN and CQ-CN become SQ-CORN, CQ-CORN |
 | `CP-` | [can_parity.md](../can_parity.md) | SQ-CP (1) |  |  |
 | `CR-` | [crops.md](../crops.md) |  | briefs/farming_crops.md, briefs/farming_wild-crops.md |  |
@@ -139,7 +142,7 @@ same pass as the renames.
 | `LT-` | [loot.md](../loot.md) |  | briefs/loot_lootjs-layer.md, briefs/loot_lootr.md, briefs/loot_tables.md |  |
 | `LTP-` | [loading_tips.md](../loading_tips.md) | CQ-LTP (15) | loading_tips_audit.md, plan_loading_tips_screens.md | new 2026-11-16, was LT- (collided with loot.md); also loading_tips_audit.md and plan_loading_tips_screens.md |
 | `LW-` | [log_warnings.md](../log_warnings.md) |  |  |  |
-| `MB-` | [mooblooms.md](../mooblooms.md) |  | briefs/mobs_mooblooms.md | `SQ-MB-` / `CQ-MB-` are not this feature's rows: see section 4 |
+| `MB-` | [mooblooms.md](../mooblooms.md) |  | briefs/mobs_mooblooms.md | its queue codes are `SQ-GM-`; the old `SQ-MB-` rows are now `SQ-MBX-` and `SQ-RW-` (section 2) |
 | `MC-` | [thirdparty_fixes.md](../thirdparty_fixes.md) |  |  | not in the README index yet |
 | `MG-` | [item_merges.md](../item_merges.md) | CQ-MG (1), SQ-MG (10) |  |  |
 | `MIN-` | [archive/mineral_delight.md](../archive/mineral_delight.md) | SQ-MIN (9) |  |  |
@@ -184,7 +187,7 @@ same pass as the renames.
 | `RPB-` | [perf_rpack.md](../perf_rpack.md) | CQ-RPB (3) |  | new 2026-11-16, was RP- (collided with recipe_progression.md); queue CQ-RP-01 to -03 in the bench section become CQ-RPB |
 | `RPI-` | [raspberry_pie.md](../raspberry_pie.md) | CQ-RPI (40), SQ-RPI (8) |  | new 2026-11-16, was RP- (README only); queue SQ-RP and the Raspberry Pie CQ-RP rows become SQ-RPI, CQ-RPI |
 | `RSP-` | [farmers_respite.md](../farmers_respite.md) | CQ-RSP (1), SQ-RSP (15) |  |  |
-| `RW-` | [recipes_wood.md](../recipes_wood.md) | CQ-RW (1), SQ-RW (9) | briefs/recipes_wood.md |  |
+| `RW-` | [recipes_wood.md](../recipes_wood.md) | CQ-RW (1), SQ-RW (14) | briefs/recipes_wood.md |  |
 | `SB-` | [storage_audit.md](../storage_audit.md) | SQ-SB (10) |  | not in the README index yet |
 | `SCAT-` | [plan_structure_catalogue.md](../plan_structure_catalogue.md) | CQ-SCAT (5), SQ-SCAT (3) |  |  |
 | `SH-` | [shields.md](../shields.md) |  |  |  |
@@ -287,7 +290,9 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `CQ-LBS-` | 1 | [sticky_notes.md](../sticky_notes.md) |  |
 | `CQ-LCA-` | 5 | [nests.md](../nests.md) |  |
 | `CQ-LTC-` | 1 | none found | no doc names it: the first lint run assigns an owner |
-| `CQ-MB-` | 1 | [mob_block_tweaks.md](../mob_block_tweaks.md) | monster box (CQ-MB-08); same collision as `SQ-MB-` |
+| `CQ-MBX-` | 1 | [mob_block_tweaks.md](../mob_block_tweaks.md) | monster box (CQ-MBX-08) |
+| `CQ-CSN-` | 1 | [creative_split.md](../creative_split.md) | Common namespace wave 9 (`CNS.qb`); renamed from `CQ-CNS-` 2026-11-17 |
+| `SQ-CSN-` | 5 | [creative_split.md](../creative_split.md) | Common namespace wave 9 (`CNS.qb`); renamed from `SQ-CNS-` 2026-11-17 |
 | `CQ-MRGT-` | 1 | none found | no doc names it: the first lint run assigns an owner |
 | `CQ-MXS-` | 1 | none found | no doc names it: the first lint run assigns an owner |
 | `CQ-NCR-` | 1 | none found | no doc names it: the first lint run assigns an owner |
@@ -437,7 +442,7 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 | `SQ-LEM-` | 2 | [plan_scratch_bugfix_1103.md](../plan_scratch_bugfix_1103.md) |  |
 | `SQ-LP-` | 1 | [mob_block_tweaks.md](../mob_block_tweaks.md) |  |
 | `SQ-LR-` | 1 | [fixes_compat.md](../fixes_compat.md) |  |
-| `SQ-MB-` | 8 | [mob_block_tweaks.md](../mob_block_tweaks.md) | monster box vaults (2026-10-30, `MB.qb`); the 2026-10-22 run used `SQ-MB-00` to `-04` for the Mulberry tree ([recipes_wood.md](../recipes_wood.md), results in `SALT.qb`); the code collides with the writeup prefix `MB-` (mooblooms): rename left to the owner |
+| `SQ-MBX-` | 7 | [mob_block_tweaks.md](../mob_block_tweaks.md) | monster box vaults (2026-10-30, `MB.qb`); renamed from `SQ-MB-` 2026-11-17 (section 2) |
 | `SQ-MCL-` | 7 | [perf.md](../perf.md) |  |
 | `SQ-MD-` | 1 | [plan_creative_delight.md](../plan_creative_delight.md) |  |
 | `SQ-MDL-` | 5 | [miners_delight.md](../miners_delight.md) |  |
@@ -527,3 +532,4 @@ they use the feature's writeup prefix (section 0). Rows with no owner get one at
 - 2026-11-17: the 10 renames applied by `tools/test_prefix_rename.py` (591 ids; 9 by hand after the report); queue columns updated; `tools/test_prefix_lint.py` built (fails on 20 queue ids defined twice, listed in plan_rules_fixes.md "Owner list (P1)").
 - 2026-11-17: `RFX-` added for [plan_rules_fixes.md](../plan_rules_fixes.md) (P3 dump diffs and checks).
 - 2026-11-17: `LOOT-` added for [creative_loot.md](../creative_loot.md) (Creative Loot jar, plan_rules_fixes.md section 5b).
+- 2026-11-17: follow-up plan F3/F4: the 7 whole-copy queue rows merged to one (`tools/test_prefix_lint.py` passes, its accepted failure removed); `SQ-MB-` / `CQ-MB-` renamed (`SQ-MBX-`, `CQ-MBX-` monster box; `SQ-RW-00` to `-04` Mulberry run) and `SQ-CNS-` / `CQ-CNS-` of Common wave 9 renamed `SQ-CSN-` / `CQ-CSN-` (section 2) by `tools/test_prefix_rename.py --only`.

@@ -88,6 +88,9 @@ reject verb=tagsof id=create_dd:rose_log .*_tags=(?!-)\S
 reject verb=makes item=create_dd:smoked_planks n=0
 kjsreject (removed_woods\.js).*(Error|error)
 look smoked planks keep their own recipe (RW-23); the JEI half is RW-28 in the client block
+# removed duplicate copy (dedupe 2026-11-17, VS.qb, SQ-RW-28): @commands boot; probe `global.removedWoods` keys and `global.removedItems`
+# removed duplicate copy (dedupe 2026-11-17, VS.qb, SQ-RW-28): @pass `river`, `rose`, `rubber`, `spirit`; every rose / rubber / spirit id and the 18 track ids in `removedItems`; no `[itemMerges]` skipped or chain line; no `[item_dict] Missing`
+# removed duplicate copy (dedupe 2026-11-17, VS.qb, SQ-RW-28): @fails `startup_scripts/_lib/removed_woods.js` (RW-28)
 
 ## CQ-GF31-01 | sawmill sticks show sawdust (new row)
 @group client

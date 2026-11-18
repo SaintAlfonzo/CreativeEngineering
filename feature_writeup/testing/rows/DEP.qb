@@ -8,8 +8,8 @@
 @@jars creativebrewing creativecommon creativedelight creativedevtools creativeengineering creativemagic
 @@sources feature_writeup/creative_split.md
 @@text
-@@text Not run. Built 2026-11-04 with the SQ-CEN / SQ-CNS jars (Common, CD, Brewing rebuilt; Blockheads Additions `-02`,
-@@text Vinery `-09`), NOT installed. Runs on the same boot as SQ-CNS.
+@@text Not run. Built 2026-11-04 with the SQ-CEN / SQ-CSN jars (Common, CD, Brewing rebuilt; Blockheads Additions `-02`,
+@@text Vinery `-09`), NOT installed. Runs on the same boot as SQ-CSN.
 @@text
 @@table
 ## SQ-DEP-01 | coaster offset mixin (now in creativedelight.mixins.json, gated on Brewin'): no apply error or skip

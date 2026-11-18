@@ -420,7 +420,7 @@ Killing one costs a little karma later (`largecontent/karma #1`).
 ---
 
 ## tweaks #5: Quark monster boxes
-Status Testing (built 2026-10-30, SQ-MB queued) (writeup: [mob_block_tweaks.md](../mob_block_tweaks.md) 2.9) / Work config / Creative Common / data / TODO `mobs/tweaks #5`
+Status Testing (built 2026-10-30, SQ-MBX queued) (writeup: [mob_block_tweaks.md](../mob_block_tweaks.md) 2.9) / Work config / Creative Common / data / TODO `mobs/tweaks #5`
 
 ### Goal
 Answer "do they break when they spawn, and is that configurable?" Then rework them into a vault-like box: when its

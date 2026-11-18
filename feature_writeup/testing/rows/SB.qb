@@ -228,26 +228,3 @@ sleep 60
 > gamerule randomTickSpeed 3
 > execute if block -10 -60 14 minecraft:dandelion
 expect Test passed
-
-## SQ-DM-03 | dandelion maturing: fertile soil about twice as fast as rich soil
-@group D
-@commands right-click a Mature Dandelion with shears, then with a Farmer's Delight knife (50 times for the drop rate)
-@pass becomes a plain dandelion, 2-3 leaves every time, a dandelion about half the time, tool loses 1 durability; bare hand does nothing
-@fails no drop: `DandelionBlock.use` not reached
-@jars creativedelight
-@from batches/r1101/p1_server.qb
-@reviewed 2026-11-16
-> gamerule randomTickSpeed 0
-> fill 20 -61 30 29 -61 30 farmersdelight:rich_soil
-> fill 20 -61 32 29 -61 32 creativedelight:fertile_soil
-> fill 20 -60 30 29 -60 30 minecraft:dandelion
-> fill 20 -60 32 29 -60 32 minecraft:dandelion
-> cdevtest randomtick 20 -60 30 29 -60 32 4
-> cdevtest count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
-> cdevtest count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
-> cdevtest randomtick 20 -60 30 29 -60 32 4
-> cdevtest count 20 -60 30 29 -60 30 veggiesdelight:mature_dandelion
-> cdevtest count 20 -60 32 29 -60 32 veggiesdelight:mature_dandelion
-> gamerule randomTickSpeed 3
-reject \[cdevtest\] verb=\S+ .*error=
-look counts: fertile row (z 32, second and fourth count) about twice the rich row (z 30); 4 random ticks per block per round (about 30 s at randomTickSpeed 30)
