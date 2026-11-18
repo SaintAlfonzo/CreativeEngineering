@@ -882,12 +882,12 @@ Headless `tools/test_config_watcher.sh` ALL 23 OK. Changelog bullet under Perfor
   Salt's salt item (its shape, Vintage Delight's pink palette, `palette_swap.py`), and `salt:salt` is merged into
   Vintage's Salt and hidden, so the texture is free. Supersedes E3.
 - Light mobs (`#creativecompat:snow_layer_light`): cats, ocelots, spiders and cave spiders, Neapolitan plantain spider,
-  every bird (chicken, parrot, Alex's Mobs bald eagle, blue jay, crow, emu, hummingbird, potoo, roadrunner, seagull,
-  shoebill, soul vulture, sunbird, toucan; ducks and geese), bat, bee, allay, frog, and small modded mobs picked from
+  every bird (chicken, parrot, Alex's Mobs bald eagle, blue jay, crow, hummingbird, potoo, roadrunner, seagull,
+  soul vulture, sunbird, toucan; ducks and geese), bat, bee, allay, frog, and small modded mobs picked from
   the entity dump: Alex's banana slug, capuchin monkey, cockroach, crimson mosquito, fly, jerboa, leafcutter ant,
   mudskipper, platypus, raccoon, rain frog, rattlesnake, skunk, sugar glider, tarantula hawk, terrapin, Tasmanian
-  devil; Quark crab and stoneling; gingerbread man. **assumed:** emu and shoebill count as birds although they are
-  large; monkeys bigger than a capuchin, anteater, maned wolf, kangaroo and gazelle stay heavy.
+  devil; Quark crab and stoneling; gingerbread man. Emu and shoebill are heavy (owner, 2026-11-17, though they are
+  birds); monkeys bigger than a capuchin, anteater, maned wolf, kangaroo and gazelle stay heavy.
 
 ## Not decided or not in this pass
 
