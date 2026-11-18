@@ -36,3 +36,4 @@ both run, agent A does not touch it.
 ## History
 
 - 2026-11-17: plan written from the owner's rulings after plan_rules_fixes.md P7.
+- 2026-11-17: agent A (queue and docs) done: F3 (7 duplicates merged, `SQ-CNS-` real collision split into `SQ-CSN-`, 30 queue tables standardized), F4 (`SQ-MBX-`, `SQ-RW-00` to `-04`, `SQ-CSN-` recorded in test_prefix_index.md section 2); owner list items 1, 10, 11 closed in plan_rules_fixes.md.

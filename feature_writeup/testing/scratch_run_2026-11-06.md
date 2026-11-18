@@ -484,7 +484,7 @@ Devtools), jx_* (one jar out), b2 / b2r / b2s (B world). Results `perf/runs/r110
 | SQ-SPF-03 | PASS | `Loaded 0 advancements`; MCA farmer offers with pack items (b1r; vanilla villager selector was a BATCH-FAULT) |
 | SQ-SPF-04 | PASS | `creativecommon:` long_reach, phantom_bane, magic_resistance, long_magic_resistance registered; `creativebrewing:magic_resistance` gone; effect applies (04b) |
 | SQ-SPF-05 | PASS | 4 x 2 section fills, 0 null-state / section-update lines; SQ-GFB-01 PASS |
-| SQ-SPF-10 | PASS | moss kept; SQ-VS-01..-08 PASS (b1c on fresh blocks: b1r reused b1's blocks), SQ-MB-01..-06 PASS (b1r) |
+| SQ-SPF-10 | PASS | moss kept; SQ-VS-01..-08 PASS (b1c on fresh blocks: b1r reused b1's blocks), SQ-MB-01 (now SQ-MBX-01)..-06 PASS (b1r) |
 | SQ-SPF-11 | PASS (partial) | log in fire -> `supplementaries:ash`, stick in lava destroyed; SQ-IP-15 FAIL as on r1102b and r1103w (not a split change) |
 | SQ-SPF-12 | PASS (leaf piles) / client | SQ-LP probe: scheduled-tick decay 20 -> 0 leaves, piles 5; tree 300 ticks -> 13 piles. Walk speed: `pbot path` moves at a fixed rate, judge in CQ-SPF-02 |
 | SQ-SPF-13 | PASS | `Killed 24 entities` one tick after a TNT blast = `[shrapnel] count 24` (b1n). Vein undo: client |

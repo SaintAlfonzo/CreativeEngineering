@@ -8,13 +8,12 @@
 @@text
 @@text Needs the Creative Delight jar rebuilt and installed (`:creativeDelight:build`, `installToMods`).
 @@text
-@@text | ID | Group | Action | Expect | Depends on |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-ABD-01
 @group B
 @commands Boot, then `/dumpall` and look up `abnormals_delight:upgrade_aquatic/cooked_perch_slice` and `.../cooked_pike_slice`
 @pass Both gone; `creativedelight:smelting/cooked_perch_slice` and `.../cooked_pike_slice` present, experience 0.35, cookingtime 200, same input and output; the smoking and campfire recipes unchanged; no error in `logs/latest.log`
-@fails CD jar
+@fails Depends on: CD jar
 @reviewed 2026-11-16
 > cdevtest recipes abnormals_delight:upgrade_aquatic/cooked_
 > cdevtest rdetail cooked_perch_slice
@@ -29,7 +28,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @group B
 @commands Same boot: look up the salvaging ids in the dump
 @pass `abnormals_delight:upgrade_aquatic/cutting/driftwood_door`, `_sign`, `_trapdoor` gone; `creativedelight:farmersdelightcutting/salvaging/driftwood_furniture` (10 items incl. `abnormals_delight:driftwood_cabinet`, 0.75 driftwood planks, axe), `.../driftwood_chest_boat`, `.../driftwood_furnace_boat`, `.../<wood>_furnace_boat` for the 9 vanilla woods (crimson and warped give `boatload:` boats), `.../crimson_boat`, `.../warped_boat`, `.../crimson_chest_boat`, `.../warped_chest_boat` present; no `fdCutting` warning in `logs/latest.log`
-@fails CD jar
+@fails Depends on: CD jar
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
 > cdevtest recipes abnormals_delight:upgrade_aquatic/cutting/driftwood_
@@ -53,7 +52,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @group B
 @commands Same boot
 @pass `abnormals_delight:neapolitan/adzuki_curry` gone; `creativedelight:shapeless/adzuki_curry_cooked_manual_only` takes roasted adzuki beans, dried banana, `#forge:crops/carrot`, pumpkin slice, bowl; `abnormals_delight:neapolitan/cooking/adzuki_curry` unchanged
-@fails CD jar
+@fails Depends on: CD jar
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
 > cdevtest rdetail adzuki_curry
@@ -67,7 +66,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @group B
 @commands Same boot; `/dumptags` or the tag dump
 @pass `#creativeengineering:pickerelweed` = blue + purple; `abnormals_delight:pickerelweed_juice` and `pike_with_beetroot` gone; `creativedelight:farmersdelightcooking/pickerelweed_juice` and `.../pike_with_beetroot` take that tag twice, 1.0 xp, 200 ticks
-@fails CD jar
+@fails Depends on: CD jar
 @from batches/r1102b/s3_A.qb
 @reviewed 2026-11-16
 > cdevtest tag item creativeengineering:pickerelweed
@@ -86,7 +85,7 @@ reject \[cdevtest\] verb=\S+ .*error=
 @group B
 @commands Same boot
 @pass `neapolitan:milk/milk_bottles_from_bucket` and `milk_bucket_from_bottles` gone; `creativedelight:shapeless/milk_bottles_from_bucket` (`#forge:buckets/milk` + 4 glass bottles -> 4 `farmersdelight:milk_bottle`) and `.../milk_bucket_from_bottles` (bucket + 4 `#forge:bottles/milk` -> milk bucket) present
-@fails CD jar
+@fails Depends on: CD jar
 @from batches/r1102b/s3_A.qb passed
 @reviewed 2026-11-16
 > cdevtest rdetail milk_bottles_from_bucket

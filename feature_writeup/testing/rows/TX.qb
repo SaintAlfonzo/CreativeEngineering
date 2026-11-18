@@ -11,12 +11,11 @@
 @@text (2026-10-26 22:30) and the Creative Common jar (2026-10-26 23:36) first; the fridge and Vintage textures are loose files in
 @@text `kubejs/assets/`, so a resource reload is enough for those.
 @@text
-@@text | ID | World | What to do and look at | Existing test |
-@@text |---|---|---|---|
+@@table world
 ## CQ-TX-01
 @group creative superflat
 @commands Plant Coffee, Bell Pepper, Pale Bell Pepper and Dark Bell Pepper seeds; bone meal each through every stage: no purple-black stage, none of the four crops missing a texture; latest.log has no `Missing textures in model` lines for these crops
-@pass SQ-RD-32
+@pass Existing test: SQ-RD-32
 @reviewed 2026-11-16
 > fill ~-4 ~-1 ~3 ~4 ~-1 ~4 minecraft:farmland
 # columns at x -3, -1, 1, 3: at x -4 the near plant sat outside the view (yaw 0, pitch 35, 16:9)
@@ -44,7 +43,7 @@ look the four shots walk the four crops (coffee, bell, pale and dark pepper, two
 ## CQ-TX-02
 @group same
 @commands Place a Bell Pepper Medley, Pale Bell Pepper Medley and Dark Bell Pepper Medley: the platter under each shows a texture (new `farmersdelight:block/platter`); take servings down to leftovers, platter still drawn
-@pass SQ-RD-32
+@pass Existing test: SQ-RD-32
 @reviewed 2026-11-16
 > setblock ~-2 ~ ~3 rusticdelight:bell_pepper_medley
 > setblock ~ ~ ~3 rusticdelight:pale_bell_pepper_medley
@@ -56,7 +55,7 @@ look the platter under each medley has a texture (`farmersdelight:block/platter`
 ## CQ-TX-03
 @group same
 @commands Place a two-high Cooking for Blockheads Fridge: the white box on top has a texture and fills the block (the model now uses CfB's own `fridge_top`, `fridge_side`, `fridge_back`; the custom `fridge_top_fill` is deleted; latest.log has no missing-texture line for `fridge_large_upper`)
-@pass CQ-NEW-05
+@pass Existing test: CQ-NEW-05
 @reviewed 2026-11-16
 > setblock ~ ~ ~3 cookingforblockheads:fridge
 > setblock ~ ~1 ~3 cookingforblockheads:fridge
@@ -68,7 +67,7 @@ look the white box on top has a texture and fills the block (CfB's own fridge_to
 ## CQ-TX-04
 @group same
 @commands Sunbloom (Moobloom) in the world and in the JEI Moobloom Conversion and Shearing pages: sunflower faces show, not the back
-@pass CQ-JT-09, MB-105
+@pass Existing test: CQ-JT-09, MB-105
 @draft no batch holds this row yet
 @@text
 @@text Results: not run yet.

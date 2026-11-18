@@ -128,6 +128,15 @@ look vine reverted to treated_stick and dropped FD tomato loot; each axe loot = 
 > gamerule randomTickSpeed 3
 reject \[cdevtest\] .*done=0
 look count lines alternate rich (z 30), fertile (z 32): fertile matures about twice as fast as rich at each read (5 random ticks per block per round = the old 30 s at randomTickSpeed 30); fertile soil id may differ (record the fill error if any)
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): @group D
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): @commands right-click a Mature Dandelion with shears, then with a Farmer's Delight knife (50 times for the drop rate)
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): @pass becomes a plain dandelion, 2-3 leaves every time, a dandelion about half the time, tool loses 1 durability; bare hand does nothing
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): @fails no drop: `DandelionBlock.use` not reached
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): @jars creativedelight
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): > cdevtest randomtick 20 -60 30 29 -60 32 4
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): > cdevtest randomtick 20 -60 30 29 -60 32 4
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): reject \[cdevtest\] verb=\S+ .*error=
+# removed duplicate copy (dedupe 2026-11-17, SB.qb, SQ-DM-03): look counts: fertile row (z 32, second and fourth count) about twice the rich row (z 30); 4 random ticks per block per round (about 30 s at randomTickSpeed 30)
 
 ## CQ-WC-06 | bone-meal can on a sweet berry bush
 @group client

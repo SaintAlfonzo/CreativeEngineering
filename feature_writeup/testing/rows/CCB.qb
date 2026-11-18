@@ -8,8 +8,7 @@
 @@jars creativecommon creativeengineering
 @@sources feature_writeup/creative_engineering.md feature_writeup/jei_ordering.md
 @@text
-@@text | ID | Setup | Steps | Pass | Fail points at |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-CCB-01 | [jeiOrder] defined once; jei tags as before; a node tag lists its members; no creativecommon:jei/ tag
 @group A (full pack)
 @commands boot, `/reload`; `grep -nE "jeiOrder\|jei_order\|fluid_jei" logs/kubejs/startup.log logs/kubejs/server.log \| head`; `/kubejs tags item creativecompat:jei/equipment/tools/copper` (or any node with members)

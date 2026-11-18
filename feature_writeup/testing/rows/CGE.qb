@@ -11,8 +11,7 @@
 @@text Not run. Targets `development/creativeCommon/build/libs/creativecommon-1.1.0.jar` of 2026-11-08 00:01 (newer than the 2026-11-07 20:28 jar in `mods/`; prep_srv.sh and `cc_only_srv.sh` swap it in, install it in `mods/` only with the game closed). New code: `CreateGravityEntitiesMixin` (gated on `create_gravity`; `require = 0`, so a wrong method name skips silently: SQ-CGE-02 is the real check). Servers: full pack for SQ-CGE-01 to -05, `bash tools/scratch_query/cc_only_srv.sh OUT LEVEL full` for SQ-CGE-06. Probe scripts go in `tools/scratch_query/` (`cge_probe.js` or `.qb` batch `batches/r1108cge/`).
 @@text Entity speed rows: `/forceload add 0 0`, summon at y 120 over the End main island (0, 120, 0) and over a flat overworld spot, read `Pos[1]` after 20 and 40 ticks with `data get entity @e[type=...,limit=1] Pos[1] 1000`; vanilla pull is -0.04 per tick, so 40 ticks drop about 27 blocks, and Create Gravity's default End factor -0.8 should leave about a fifth of that.
 @@text
-@@text | ID | Setup | Steps | Pass | Fail points at |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-CGE-01 | boots, no mixin error naming the Create Gravity mixins
 @group A (full pack, new Common)
 @commands boot; `grep -nE "Mixin apply failed\|InvalidMixinException\|CreateGravity\|outside the tested range" logs/latest.log \| head`

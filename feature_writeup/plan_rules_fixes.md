@@ -648,6 +648,12 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
    and title): `SQ-CNS-01`, `-02` (RD.qb and CNS.qb), `SQ-CNS-03` (FO.qb, CNS.qb), `SQ-PWG-06`, `-07` (two PWG.qb sections),
    `SQ-DM-03` (TSK.qb, SB.qb), `SQ-RW-28` (VS.qb, GF31.qb). Which copy stays is still the scratch-test owner's call
    (`tools/check_known.csv` now expects 7).
+   **Settled 2026-11-17 (follow-up plan F3):** merged to one copy each; the accepted failure is gone from `tools/check_known.csv`.
+   `SQ-PWG-06`, `-07`: the "performance measuring" copies were "moved" stubs, deleted; the port-section rows stay.
+   `SQ-DM-03`: kept in TSK.qb, SB.qb copy deleted. `SQ-RW-28`: kept in GF31.qb, VS.qb copy deleted. A removed copy's
+   differing text or steps is kept as `#` comment lines under the kept row. `SQ-CNS-01` to `-03` were a real id collision:
+   `CNS.qb` held Creative Common wave 9 text under Comfort / Nourishment titles; the Comfort rows stay in RD.qb and FO.qb
+   and the Common rows became `SQ-CSN-` / `CQ-CSN-` (`@draft`, no steps yet).
 2. **Number ranges the date tool reports** (not dates, left as written): `briefs/recipes_cooking.md` "cooking.js 12-13",
    `plan_1.0.3.md` "12-16 rounds", `split/F_pack_scripts.md` "- 12-18:" (line numbers), `testing/structures/02_new_mods_tests.md`
    "30 and 12-15", `todo/rows/kitchen_and_cooking.csv` "12-14 (moved from cooking...)" (line numbers). No impossible
@@ -678,9 +684,16 @@ Items the P1 agent did not guess (2026-11-17). Nothing here blocks P2.
    (`SQ-MB-00` to `-04`, results in `SALT.qb`, recipes_wood.md). Not mechanical (three owners, verdict history in two
    sections), so not renamed: the index now lists `SQ-MB-` / `CQ-MB-` in section 4 under mob_block_tweaks.md with the
    collision noted. Rename (for example monster box to a new code) is the scratch-test owner's call.
+   **Settled 2026-11-17 (follow-up plan F3, F4):** renamed with `tools/test_prefix_rename.py --only MB`: monster box rows
+   `SQ-MBX-01` to `-07`, `CQ-MBX-08` (`SQ-MT-01` to `-03` exist); the Mulberry run `SQ-RW-00` to `-04`. Run docs keep the
+   old id with "(now X)"; `MB-` stays mooblooms.
 11. **Queue tables left in their own headers** (V-58): 25 tables in `rows/*.qb` whose columns mean something else
    (`Action / Expect / Depends on` x10, `What to do and look at / Existing test` x7, `Setup / Steps`, `Where / Test`,
    `Commands / Pass / After`, `Tests / Notes`). Say if they should become the standard table anyway.
+   **Settled 2026-11-17 (follow-up plan F3):** all became the standard table (30 tables with the five `Entry / Tier / Steps`
+   ones): `Depends on` and `After` go into the If-it-fails cell, `Existing test` into the Pass cell, `Tests / Notes` into the
+   Commands and Pass cells, each with its old column name as a prefix; the `World` header form is used where the old table
+   had World. No row id, step or `@reviewed` field changed.
 12. **Test lines the fixer did not change** (V-54): 39 lines (`python3 tools/design_rules_audit.py testlines`), mostly
    brief prose that starts with an id ("PO-25 stays valid") and 8 bold names whose bracket note runs onto the next line
    (`archery.md:244`, `food.md:1032`). Two `| ID | Test | Where |` table families (creative_delight.md, fruits_delight.md)
@@ -759,11 +772,11 @@ Creative Equipment have P7 comment-only edits and no new build. None needs insta
 
 **Open owner items** (consolidated):
 
-1. V-14: Miner's package (section 0 "Still open").
-2. Owner list (P1) items 1 (7 whole-copy duplicate queue ids), 3 (Create Confectionery name), 4 (JEI in `unreleased.md`, G17),
-   5 (NOTICE file name), 7 (rows file names), 8 (Alcohol Part B numbering), 9 (read [history_extract_review.md](history_extract_review.md)),
-   10 (`SQ-MB-` collision), 11 (25 queue tables in their own headers), 12 (39 test lines).
-3. From P3c: `creativecompat:physics/floats` in `animal_tags.js` (ordering), Calendar's Nether's Delight class name in
+1. V-14: closed 2026-11-17 (not applicable; plan_rules_fixes_followup.md F1).
+2. Owner list (P1) items 1 (closed 2026-11-17, F3), 3 (Create Confectionery name), 4 (JEI in `unreleased.md`, G17),
+   5 (NOTICE file name), 7 (rows file names), 8 (Alcohol Part B numbering), 9 (read [history_extract_review.md](history_extract_review.md); closed 2026-11-17, F2),
+   10 (closed 2026-11-17, F3, F4), 11 (closed 2026-11-17, F3), 12 (39 test lines).
+3. From P3c: `creativecompat:physics/floats` in `animal_tags.js` (ordering; closed 2026-11-17, F7), Calendar's Nether's Delight class name in
    `CropSeasonGrowHookMixin`.
 4. TODO `tooling/design-rules #2` (History audit, deferred), `#3` (patcherMod identifier rename audit), `#4` (palette demo
    off before the next release; it brings the section 9 changelog bullet).

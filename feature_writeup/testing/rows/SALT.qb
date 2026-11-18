@@ -396,7 +396,7 @@ expect \[earth-fill\].*eugene:undead_castle.*limit 400
 look at least half the eugene:undead_castle lines end "-> kept" across both squares; tp to one kept on a slope: no earth over more than 6 blocks of air (ST-240); write the per-fit table into briefs/structures_earthfill.md #4
 
 @@text | Findings outside rows | Farmer's Structures cook / angler pieces point at missing `minecraft:cook_additions_1..4_pool`, `cook_end_1_pool`, `angler_additions_3_pool`; census 11 biome false negatives for underground structures (deep-biome ties); spec conflict ST-317 vs `spawn_boxes.json` boxing `eugene:witch_wagon`; 7 of 8 sky villages at y 213 got no islands; six moredelight potato recipes with an empty `#forge:sliced_potatoes` slot; `/ccaltime` accepts singular units only |
-@@text | OPEN (client, deferred) | SQ-EF-02, -03, -10, SQ-MB-05, SQ-MG-18, -19, SQ-PF16-02, SQ-POT-06, SQ-PS-05, SQ-RW-24, SQ-TD-04, SQ-UC-02, SQ-META31-02, -03, -05, -06 |
+@@text | OPEN (client, deferred) | SQ-EF-02, -03, -10, SQ-MBX-05, SQ-MG-18, -19, SQ-PF16-02, SQ-POT-06, SQ-PS-05, SQ-RW-24, SQ-TD-04, SQ-UC-02, SQ-META31-02, -03, -05, -06 |
 @@text | Not run (deferred by the owner 2026-10-31) | client block `c1_client.qb` (32 rows); L1 to L4 (SQ-WGP-07 pregen, perf suite, rpack bench, CQ-WG30-A04); W2 rest SQ-SB-04 to -08, SQ-SB-01e; W3a / W3b SQ-TER-02, -03, -04, -06, -06b, SQ-SVA-03, -04 |
 @@text | Everything else in the r1031 batches | PASS (list in the run doc section 8) |
 @@text
@@ -985,11 +985,11 @@ look rows/SQ-FGD-01.log, part tags: all PASS (colonies in the Serene Seasons tag
 ## SQ-SF-00 to SQ-SF-05
 @group PASS (17 / 0 after fix 5)
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
-## SQ-WC-00 to SQ-WC-05, SQ-CD-00 to SQ-CD-02, SQ-MB-00 to SQ-MB-03
+## SQ-WC-00 to SQ-WC-05, SQ-CD-00 to SQ-CD-02, SQ-RW-00 to SQ-RW-03
 @group PASS. `[wild-crops]` also warns that 5 Terralith cave biomes are not in `wild_crops.json` (no crops there; not an error)
 @jars creativedelight
 @draft run-log entry (a past run's verdict for these ids, section "Run log"), not a test row: the ids' own rows hold the steps
-## SQ-MB-04 | cooldown ends, a new wave starts (cooldownTicks 200)
+## SQ-RW-04 | river tree through the holder: trees_river grows the Mulberry override
 @group PASS through the holder: UA's `trees_river` grows the override (90 river leaves, 21 oak logs, 0 river logs). Worldgen itself gave no river tree at three rivers: the feature needs dry land inside the river biome and the samples had none (0 dry columns in 25 x 25)
 @from batches/r1106spf/b1.qb passed
 @reviewed 2026-11-16
@@ -1103,8 +1103,7 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 @@text
 @@text - SQ-VF (queued 2026-10-25): village farm crops ([crops.md](../crops.md) 2.11), needs the new CD jar installed.
 @@text
-@@text | ID | Where | Test | Pass | Fail points to |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-VF-01
 @group B
 @commands Boot a fresh world
@@ -1150,12 +1149,11 @@ look after the first spawns the log has "N structure(s) boxed" (about 75); re-ch
 @@text Server checks; install the CD and Creative Common jars built 2026-10-26 18:xx first. Client rows (textures, names, JEI) are
 @@text MG-29 and MG-31 in game.
 @@text
-@@text | ID | World | What to do and look at | Existing test |
-@@text |---|---|---|---|
+@@table world
 ## SQ-SALT-01
 @group any
 @commands latest.log: `[itemMerges]` counts include the two salt pairs, no script error; no loaded recipe takes or makes the items `salt:salt`, `vintagedelight:salt_block` or `vintagedelight:salt_bucket`. The recipe id `vintagedelight:salt_block` stays on purpose (item_merges.md 2.9: any `#forge:salt` x9 -> `salt:salt_block`; the 2026-10-27 FAIL read the id as the item); `salt:salt_packing`, `vintagedelight:salt_block_deconstruct`, `vintagedelight:salt_from_smelting`, `vintagedelight:salt_bucket_to_salt`, `salt:salt_lamp` gone; `creativedelight:shaped/large_salt_lamp` present
-@pass MG-30, MG-31
+@pass Existing test: MG-30, MG-31
 @reviewed 2026-11-16
 kjsexpect \[itemMerges\] \S+: \d+ merges, \d+ recipes swapped
 kjsreject \[itemMerges\] .*(already merged|already ran|unknown group)
@@ -1187,7 +1185,7 @@ reject \[cdevtest\] .*done=0
 ## SQ-SALT-02
 @group same
 @commands `#forge:salts`, `#forge:salt`, `#forge:dusts` hold salt dust and not `salt:salt`; Salting craft accepts salt dust
-@pass MG-32 (the Salting craft takes `#forge:salts`, so salt dust in that tag is what makes it accept dust)
+@pass Existing test: MG-32 (the Salting craft takes `#forge:salts`, so salt dust in that tag is what makes it accept dust)
 @reviewed 2026-11-16
 > cdevtest tag item forge:salts
 > cdevtest tag item forge:salt
@@ -1200,7 +1198,7 @@ reject \[cdevtest\] .*done=0
 ## SQ-SALT-03
 @group same
 @commands Give `salt:salt 3`, `vintagedelight:salt_block 1`: swapped to 3 salt dust, 1 `salt:salt_block`. Evaporate a full water cauldron 20 times: only salt dust
-@pass MG-32, MG-33
+@pass Existing test: MG-32, MG-33
 @reviewed 2026-11-16
 # the give swap through a bot's inventory; cauldron evaporation through its three loot tables (the cauldron itself
 # evaporates through The Salt's code, which rolls these tables), 20 rolls of the full one
@@ -1229,7 +1227,7 @@ reject \[cdevtest\] .*done=0
 ## SQ-SALT-04
 @group new world
 @commands `/place feature vintagedelight:patch_salt` on a beach 10 times: layers on `salt:raw_rock_salt_block`, no `salt:salt_block` / `vintagedelight:salt_block`; after 5 min at `randomTickSpeed 300` no rock salt next to water is gone
-@pass MG-34
+@pass Existing test: MG-34
 @reviewed 2026-11-16
 # randomtick replaces 5 min at randomTickSpeed 300: 300 rounds over the patch box (no player needed)
 > locate biome minecraft:beach
@@ -1257,7 +1255,7 @@ look the raw rock salt count after the 300 random-tick rounds (second count line
 ## SQ-SALT-05
 @group same
 @commands patcherMod 23:36 jar. latest.log: `[salt] 30 Vintage salt blocks random tick`, no mixin error for `SaltBlockRandomTickMixin` / `SaltLayerRandomTickMixin` / `SaltRockNoDissolveMixin`. Block half: copy `tools/salt_probe/salt_probe.js` into `srv/kubejs/server_scripts/zz_salt_probe.js`, `/salttest`: `[salttest] PASS ... melts minecraft:snow` and `minecraft:ice` for salt bricks, brick stairs, a Vintage lamp, a Salt Layer, raw rock salt and The Salt's Salt Block
-@pass MG-36
+@pass Existing test: MG-36
 @reviewed 2026-11-16
 bootexpect \[salt\] 30 Vintage salt blocks random tick
 bootreject (ERROR|Error|error).*Salt(Block|Layer)RandomTickMixin
@@ -1279,7 +1277,7 @@ reject \[salttest\] FAIL .* melts minecraft:
 ## SQ-SALT-06 | /salttest dissolving with rain set before the probe (rain cases need isRainingAt true)
 @group same
 @commands same `/salttest` run (it calls `randomTick` itself: forceloaded chunks get no random ticks without a player, 2026-10-27): Salt Layer beside a water source becomes water, Salt Layer in rain in open sky stays (rain dissolving is off since 2026-10-28, `SaltDissolvingInRain = false`; the NOTE line names the biome), layer by a torch stays; raw rock salt beside water and in rain stays; Evaporator by water grows layers to 8; `vintagedelight:salt_block` by water dissolves and grows no layer
-@pass MG-35, MG-37
+@pass Existing test: MG-35, MG-37
 @from batches/r1102b/r_A.qb passed
 > weather rain 6000
 sleep 5
@@ -1298,7 +1296,7 @@ expect \[salttest\] NOTE rain cases: .*isRainingAt true
 ## SQ-SALT-07
 @group same
 @commands same `/salttest` run, `cost` line: one salt-brick random tick (minus a stone one, both through Rhino) times 146 hits/s for 10 000 bricks under 0.1 % of server time. A JFR with real bricks needs a player (client session)
-@pass none
+@pass Existing test: none
 @reviewed 2026-11-16
 > salttest
 waitlog \[salttest\] done \d+ pass 600
@@ -1306,7 +1304,7 @@ expect \[salttest\] PASS salt brick random tick under 0.1 % of server time at 10
 ## SQ-SALT-08 | rain dissolving off: nothing dissolves in rain, water still dissolves
 @group A
 @commands `config/salt-common.toml` `SaltDissolvingInRain = false` (and the `configs_edited/root_config/` copy): `/weather rain`, `randomTickSpeed 300`, a Salt Block, a Salt Layer, salt ore and a Vintage salt brick in open sky (not a snowing biome) for 2 min; then beside a water source
-@pass None dissolve in rain; the layer and the Salt Block beside water still dissolve
+@pass Existing test: None dissolve in rain; the layer and the Salt Block beside water still dissolve
 @fails MG-35
 @from batches/r1102b/s3_A.qb passed
 shell grep -q "SaltDissolvingInRain = false" config/salt-common.toml && grep -q "SaltDissolvingInRain = false" $INST/configs_edited/root_config/salt-common.toml

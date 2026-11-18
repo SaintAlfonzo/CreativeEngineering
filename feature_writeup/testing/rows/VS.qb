@@ -70,23 +70,3 @@ reject \[cdevtest\] verb=\S+ done=0
 > setblock 18 -58 9 floralench:poppy_vine
 > execute if block 18 -58 9 floralench:poppy_vine[fertile=true]
 expect Test passed
-
-## SQ-RW-28 | Dreams & Desires rose, rubber, spirit wood removed (new row, recipes_wood.md 2.6)
-@group A
-@commands boot; probe `global.removedWoods` keys and `global.removedItems`
-@pass `river`, `rose`, `rubber`, `spirit`; every rose / rubber / spirit id and the 18 track ids in `removedItems`; no `[itemMerges]` skipped or chain line; no `[item_dict] Missing`
-@fails `startup_scripts/_lib/removed_woods.js` (RW-28)
-@from batches/r1031/a1_effects.qb
-@reviewed 2026-11-16
-> cdevtest makes create_dd:rose_planks
-> cdevtest makes create_dd:rubber_planks
-> cdevtest makes create_dd:spirit_planks
-> cdevtest tagsof create_dd:rose_log
-> cdevtest makes create_dd:smoked_planks
-expect verb=makes item=create_dd:rose_planks n=0
-expect verb=makes item=create_dd:rubber_planks n=0
-expect verb=makes item=create_dd:spirit_planks n=0
-reject verb=tagsof id=create_dd:rose_log .*_tags=(?!-)\S
-reject verb=makes item=create_dd:smoked_planks n=0
-kjsreject (removed_woods\.js).*(Error|error)
-look smoked planks keep their own recipe (RW-23); the JEI half is RW-28 in the client block

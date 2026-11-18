@@ -7,8 +7,7 @@
 @@date 2026-10-30
 @@jars creativecommon creativedelight creativeworldgen
 @@text
-@@text | Entry | Tier | Steps | Pass | Fail meaning |
-@@text |---|---|---|---|---|
+@@table
 ## CQ-FF-01 | firefly bushes in savanna, shrubland, brushland, mangrove and orchid swamps
 @group server
 @commands fresh world, `/locate biome` or fly through savanna, Terralith shrubland and brushland, mangrove swamp, orchid swamp; look for firefly bushes

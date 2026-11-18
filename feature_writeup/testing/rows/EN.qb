@@ -13,8 +13,7 @@
 @@text
 @@text > Since 2026-11-02 the `enders_additions` mod is inside `repackedEnds-...-ce-19.2-03` (ends_delight.md 5.9). Rerun SQ-EDL-01 (boot: both `ends_delight` and `enders_additions` listed, from the one jar), SQ-EDL-03 (soils now tagged from `endersdelight/additions.js`), SQ-EDL-05 (the 5 dishes and Crushed Void Pepper in JEI; meal rows now gated on `endersdelight`) and SQ-EDL-07 (End House from the merged jar's donor pack) on that jar. SQ-EDL-02, -04, -06, -08 are End's or 1.2.2 content and unaffected.
 @@text
-@@text | ID | Group | Action | Expect | Depends on |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-EDL-01 | librarians: no Nock Enough Arrows enchantments in trades
 @group A
 @commands Boot; `logs/latest.log`
@@ -92,7 +91,7 @@ count \[cbetest\] PASS dragon dragon (knife|machete): \+2 meat, \+1 tooth per ki
 @group A
 @commands JEI and tooltips: the 10 drop items; Dragon Tooth Knife; the 5 dishes; Crushed Void Pepper; crate unpack; End's grid meals (EDL-08, EDL-09, EDL-11 to EDL-14)
 @pass As ends_delight.md 5.6
-@fails SQ-EDL-01
+@fails Depends on: SQ-EDL-01
 @draft no batch holds this row yet
 ## SQ-EDL-06 | Dragon Tooth Knife repairs with a Dragon Tooth
 @group A
@@ -108,7 +107,7 @@ expect \[cbetest\] PASS anvil dragon tooth knife repairs with a dragon tooth
 @group A
 @commands New End world: `/locate structure endersdelight:end_house`, fly the highlands; earth fill log ALL (EDL-06, EDL-02, EDL-10)
 @pass Houses only in highlands / midlands, on ground, no chests; plants and succulent wild on end stone
-@fails SQ-EDL-01
+@fails Depends on: SQ-EDL-01
 @draft no batch holds this row yet
 ## SQ-EDL-08
 @group A

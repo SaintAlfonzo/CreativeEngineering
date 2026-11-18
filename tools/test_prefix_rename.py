@@ -48,7 +48,13 @@ RENAMES = {
 	'CN': [{'new': 'CORN', 'owners': [FW + 'corn_delight.md'], 'kw': r'corn_delight|Corn Delight|\bcorn'}],
 	'IP': [{'new': 'PRT', 'owners': [FW + 'immersive_portals.md'], 'kw': r'immersive_portals|Immersive Portals|portal'}],
 	'TS': [{'new': 'TSY', 'owners': [FW + 'trade_sync.md'], 'kw': r'trade_sync|TradeSync|Trade Sync'}],
+	# queue ids only (the bare writeup prefix MB- stays mooblooms): monster box rows and the Mulberry run (follow-up F3)
+	'MB': [
+		{'new': 'MBX', 'owners': [], 'kw': r'monster box|monster_box|mob_block_tweaks|vault'},
+		{'new': 'RW', 'owners': [], 'kw': r'mulberry|recipes_wood|river|removed ?wood'},
+	],
 }
+QUEUE_ONLY = {'MB'}
 ROWS = FW + 'testing/rows/'
 # queue rows files: (file, section key or None for all, line regex or None) -> {old: new}
 SECTION = [
@@ -68,6 +74,13 @@ SECTION = [
 	(ROWS + 'SALT.qb', None, r'SQ-PB-', {'PB': 'PFS'}),
 	(ROWS + 'SALT.qb', None, r'SQ-RP', {'RP': 'RPI'}),
 	(ROWS + 'SALT.qb', None, r'SQ-CN-', {'CN': 'CORN'}),
+	(ROWS + 'MB.qb', None, None, {'MB': 'MBX'}),
+	(FW + 'mob_block_tweaks.md', None, None, {'MB': 'MBX'}),
+	(FW + 'testing/scratch_run_2026-10-31.md', None, None, {'MB': 'MBX'}),
+	(FW + 'testing/scratch_run_2026-11-06.md', None, None, {'MB': 'MBX'}),
+	(FW + 'recipes_wood.md', None, None, {'MB': 'RW'}),
+	(FW + 'testing/scratch_run_2026-10-22b.md', None, None, {'MB': 'RW'}),
+	(ROWS + 'SALT.qb', None, r'SQ-MB-0[0-4]', {'MB': 'RW'}),
 	(ROWS + '_lint_baseline.csv', None, r'^EN\.qb,', {'EN': 'EDL'}),
 	(ROWS + '_lint_baseline.csv', None, r'^SSP\.qb,', {'EN': 'ENC'}),
 ]
@@ -81,6 +94,7 @@ KEPT = {
 	'CN': re.compile(r'^feature_writeup/(cans\.md|briefs/cans_)'),
 	'IP': re.compile(r'^feature_writeup/(item_physics\.md|briefs/items_item-physics)'),
 	'TS': re.compile(r'^feature_writeup/(trashslot\.md|plan_1\.0\.3\.md)'),
+	'MB': re.compile(r'^feature_writeup/(mooblooms\.md|briefs/mobs_mooblooms)'),
 }
 # queue ids that mean one target wherever they appear: (kind, old) -> (new, numbers or None for all)
 UNIQUE = {
@@ -93,11 +107,14 @@ UNIQUE = {
 	('CQ', 'RP'): ('RPI', {f'{n:02d}' for n in range(4, 40)}),
 	('SQ', 'IP'): ('PRT', {'01', '02', '03', '04', '05'}),
 	('CQ', 'IP'): ('PRT', None),
+	('SQ', 'MB'): ('MBX', {'05', '06', '07'}),
+	('CQ', 'MB'): ('MBX', None),
 }
 SKIP = {FW + 'testing/test_prefix_index.md', FW + 'todo/TODO.md', FW + 'testing/scratch_queue.md',
 		FW + 'design_rules.md', FW + 'plan_rules_fixes.md'}
 SKIP_RE = re.compile(r'^feature_writeup/status/(?!features\.csv)|^tools/scratch_query/batches/|/archive/')
 RUN_DOC = re.compile(r'^feature_writeup/testing/(scratch_run_|scratch_queue_run_)')
+ONLY = set()  # --only OLD[,OLD]: rename just these old prefixes (the others were applied earlier; reruns would repeat the run-doc notes)
 ID = re.compile(r'(?<![\w-])(?:(SQ|CQ)-)?(' + '|'.join(RENAMES) + r')-(\d+[a-z]?)(?![\w])')
 
 
@@ -111,6 +128,8 @@ def scope():
 def resolve(path, kind, old, num, line, section, title):
 	"""New prefix for one occurrence, or None (stays)."""
 	targets = RENAMES[old]
+	if old in QUEUE_ONLY and not kind:
+		return None
 	for t in targets:
 		if path in t['owners']:
 			return t['new']
@@ -145,9 +164,11 @@ def process(path, apply):
 		pieces, pos = [], 0
 		for m in ID.finditer(line):
 			kind, old, num = m.group(1), m.group(2), m.group(3)
+			if ONLY and old not in ONLY:
+				continue
 			new = resolve(path, kind, old, num, line, section, title)
 			if new is None:
-				if any_kw[old] and not KEPT[old].search(path):
+				if any_kw[old] and not KEPT[old].search(path) and (kind or old not in QUEUE_ONLY):
 					kept.append((i, m.group(0), line.strip()[:120]))
 				continue
 			repl = (kind + '-' if kind else '') + new + '-' + num
@@ -168,8 +189,10 @@ def process(path, apply):
 def main():
 	ap = argparse.ArgumentParser(description=__doc__.split('\n')[0])
 	ap.add_argument('--apply', action='store_true')
+	ap.add_argument('--only', default='', help='comma list of old prefixes to rename (default: all)')
 	ap.add_argument('--report', default=str(Path(tempfile.gettempdir()) / 'test_prefix_rename_report.txt'))
 	a = ap.parse_args()
+	ONLY.update(x for x in a.only.split(',') if x)
 	rep, tc, tk = [], 0, 0
 	for path in scope():
 		try:

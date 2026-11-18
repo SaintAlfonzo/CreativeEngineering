@@ -325,6 +325,13 @@ reject verb=food item=creativedelight:canned_bone_broth\S* .*farmersdelight:(nou
 expect verb=food item=creativedelight:canned_beef_stew\S* .*farmersdelight:comfort
 reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command|not a food|\[(zsb|zlbs)\] (error|unknown)|verb=\S+ .*done=0)
 look the canned noodle soup's nourishment ticks equal the noodle soup's; the canned beef stew's comfort ticks equal the beef stew's
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): # the cans moved to creativedelight: (namespace move 2026-11-10)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): expect verb=food item=creativedelight:canned_noodle_soup\S* food=true .*effects=\S*farmersdelight:nourishment:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject verb=food item=creativedelight:canned_bone_broth\S* .*effects=\S*farmersdelight:(nourishment|comfort)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): expect verb=food item=creativedelight:canned_beef_stew\S* food=true .*effects=\S*farmersdelight:comfort:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject (Unknown (item|block|entity)|Unknown or incomplete command|Incorrect argument for command)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject verb=food item=\S+ food=false
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-03): reject \[cdevtest\] verb=\S+ done=0
 
 @@text
 @@text ### SQ-DRK Bayberry Juice, 2026-11-02 ([creative_delight_drinks.md](../creative_delight_drinks.md) section 8, TODO `food/drinks #9`)

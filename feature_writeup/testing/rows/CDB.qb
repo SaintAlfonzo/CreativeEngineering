@@ -10,8 +10,7 @@
 @@text Needs the Creative Delight jar built 2026-10-25 22:48 (installed in `mods/`). Startup changes (new items, removed items,
 @@text the merge): restart. Then `/dumpfood`, `/cdevgen run` the can generator, restart again for the can changes.
 @@text
-@@text | ID | Group | Action | Expect | Depends on |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-CDB-01
 @group A
 @commands Boot; `logs/latest.log`
@@ -185,7 +184,7 @@ look the cacciatore grid recipe slot lists several cooked chicken cuts (/+N); th
 @group A
 @commands After `/dumpfood` and `/cdevgen`: can generator output
 @pass No `canned_mhadjeb`; `canned_pickled_pickles` named Canned Pickles from pickle or pickled sea pickle
-@fails SQ-CDB-01
+@fails Depends on: SQ-CDB-01
 @reviewed 2026-11-16
 > cdevtest reg item canned_mhadjeb
 > cdevtest reg item canned_pickled_pickles

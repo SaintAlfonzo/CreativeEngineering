@@ -11,12 +11,11 @@
 @@text Install the Creative Common 1.1.03 and Creative Delight jars of 2026-10-28 00:00 first (both in `mods/`). Creative Delight must be rebuilt and installed again first: `pneumaticcraft/recipes.js` (sourdough cut to 3 Bread, 18:03) is newer than the installed jar (18:01). Server checks; the
 @@text names, JEI and wild-patch looks are MG-39 to MG-44 in game.
 @@text
-@@text | ID | World | What to do and look at | Existing test |
-@@text |---|---|---|---|
+@@table world
 ## SQ-CM-01
 @group any
 @commands latest.log: `[itemMerges] creativedelight` count up by 3 (cantaloupe pairs), no script error from `fruitsdelight/item_merges.js`, `veggies_foods.js`, `canning.js`; no loaded recipe makes `creativeengineering:canned_hamimelon` or `fruitsdelight:hamimelon_popsicle` or takes `fruitsdelight:hamimelon_slice`
-@pass MG-39
+@pass Existing test: MG-39
 @reviewed 2026-11-16
 shell grep -hE "\[itemMerges\] creativedelight" logs/latest.log logs/kubejs/startup.log | tail -3; grep -hiE "(item_merges|veggies_foods|canning)\.js.*(error|exception)" logs/kubejs/startup.log logs/kubejs/server.log | head -5; true
 > cdevtest makes canned_hamimelon
@@ -30,7 +29,7 @@ look shell: the [itemMerges] creativedelight count is 3 higher than before the c
 ## SQ-CM-02
 @group same
 @commands Recipe lookups: `fruitsdelight:hamimelon_seeds` takes the cantaloupe slice; `creativedelight:shaped/mini_cantaloupe`, `shapeless/mini_cantaloupe_seeds`, `shapeless/cantaloupe_seeds_from_mini` exist; `creativedelight:shapeless/cantaloupe_seeds` is gone, Delightful's two popsicle recipes stay and `fruitsdelight:hamimelon_popsicle` makes nothing
-@pass MG-41
+@pass Existing test: MG-41
 @reviewed 2026-11-16
 > cdevtest makes fruitsdelight:hamimelon_seeds
 > cdevtest uses delightful:cantaloupe_slice
@@ -50,7 +49,7 @@ look makes fruitsdelight:hamimelon_seeds lists a recipe; the uses lines of the s
 ## SQ-CM-03
 @group same
 @commands `#creativeengineering:exotic_fruit` holds `delightful:cantaloupe_slice`; `#forge:seeds` holds `fruitsdelight:hamimelon_seeds`; `#forge:pasta` holds `veggiesdelight:potato_noodle`
-@pass MG-43
+@pass Existing test: MG-43
 @reviewed 2026-11-16
 > cdevtest tagsof delightful:cantaloupe_slice
 > cdevtest tagsof fruitsdelight:hamimelon_seeds
@@ -62,7 +61,7 @@ reject verb=\S+ .*done=0
 ## SQ-CM-04
 @group same
 @commands Pasta: every recipe that took `farmersdelight:raw_pasta` or `#forge:pasta/raw_pasta` (FD pasta dishes, Brewin's cheesy pasta, More Delight, Alex's Delight pastas) now takes `#forge:pasta`; count the swapped recipes, none left naming raw pasta alone
-@pass none (TODO `dishes/meals #38`)
+@pass Existing test: none (TODO `dishes/meals #38`)
 @reviewed 2026-11-16
 > cdevtest uses farmersdelight:raw_pasta
 > cdevtest tag item forge:pasta
@@ -75,7 +74,7 @@ look the uses lines of raw pasta (FD pasta dishes, Brewin' cheesy pasta, More De
 ## SQ-CM-05
 @group same
 @commands Food values (the 1.1.04 check, PASSED 2026-10-28 at 11; the 12 of 2026-10-29 is SQ-CM-21): `veggiesdelight:coleslaw` nutrition 11, modifier 0.6, Comfort kept; `veggiesdelight:fermented_garlic_honey` Regeneration amplifier 1 100 ticks, Health Boost amplifier 1 600 ticks, nothing else
-@pass none (TODO `dishes/pickles-and-ferments #10`)
+@pass Existing test: none (TODO `dishes/pickles-and-ferments #10`)
 @reviewed 2026-11-16
 > cdevtest food veggiesdelight:coleslaw
 > cdevtest food veggiesdelight:fermented_garlic_honey
@@ -85,7 +84,7 @@ reject verb=\S+ .*done=0
 ## SQ-CM-06
 @group same
 @commands Recipes: `endersdelight:shulker_bowl` gone, `creativedelight:shapeless/shulker_bowl` shell -> 12; `vintagedelight:bread_from_smelting` and `bread_from_smoking` absent, no campfire bread from oat dough, oven `bread_from_dough_1`, `_3`, `_6` present (oat dough bakes in each), `sourdough_bread_1/3/6` make sourdough bread and sourdough never makes plain bread; `creativedelight:shapeless/overnight_oats` present
-@pass none (TODO `recipes/cooking #4`, `baking/baked-goods #29`, `dishes/meals #22`)
+@pass Existing test: none (TODO `recipes/cooking #4`, `baking/baked-goods #29`, `dishes/meals #22`)
 @reviewed 2026-11-16
 > cdevtest recipes endersdelight:shulker_bowl
 > cdevtest rdetail creativedelight:shapeless/shulker_bowl
@@ -113,7 +112,7 @@ look the uses lines of oat dough include the three oven bread_from_dough recipes
 ## SQ-CM-07
 @group same
 @commands `felsic_sword` max damage 2501. `creativeengineering:strong_phantom_bane` not in the potion registry, no brewing mix with glowstone on Phantom Bane, base and long present; latest.log no `[CE potions]` error
-@pass none (gear_tuning F9, armor_effects F7)
+@pass Existing test: none (gear_tuning F9, armor_effects F7)
 @reviewed 2026-11-16
 > cdevtest item felsic_gear:felsic_sword
 > cdevtest reg potion phantom_bane
@@ -128,7 +127,7 @@ reject verb=\S+ .*done=0
 ## SQ-CM-08
 @group new world
 @commands Echo set on a player (or fake player): Night Vision and Phantom Bane amplifier 0
-@pass AE-10 (expected now 0)
+@pass Existing test: AE-10 (expected now 0)
 @reviewed 2026-11-16
 > pbot spawn cm8 0.5 -60 8.5 minecraft:overworld survival
 sleep 2
@@ -147,7 +146,7 @@ reject verb=\S+ .*done=0
 ## SQ-CM-10 | salt retest (SQ-SALT-01 fix of 2026-10-28)
 @group any
 @commands `creativedelight:...` oven/knife check: `zq makes minecraft:bread` shows the knife cut of `sourdough_bread` giving 3 Bread (was 2); `vintagedelight:fermenting/{ochre,verdant,pearlescent}_froglight_from_fermenting` take `salt:salt_block` and are present once; `tactical_fishing:fishing_vintagedelight_salt_bucket` and `fishing_creativeengineering_powdered_sugar_bucket` absent (retest of SQ-SALT-01 leftovers)
-@pass none
+@pass Existing test: none
 @from batches/r1031/a1_data.qb passed
 @reviewed 2026-11-16
 > cdevtest uses salt:salt_block
@@ -161,7 +160,7 @@ reject verb=\S+ .*done=0
 ## SQ-CM-09
 @group new world
 @commands `/place feature creativedelight:wild/mini_cantaloupe` in a desert 10 times: Mini Cantaloupe blocks on sand / red sand / terracotta; biome tag `creativedelight:wild_crops/cantaloupe` lists deserts and badlands, no savanna
-@pass MG-44
+@pass Existing test: MG-44
 @reviewed 2026-11-16
 > cdevtest tag biome creativedelight:wild_crops/cantaloupe
 expect verb=tag kind=biome tag=creativedelight:wild_crops/cantaloupe n=[1-9]\d* ids=\S*minecraft:desert\S*badlands

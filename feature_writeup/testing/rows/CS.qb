@@ -12,8 +12,7 @@
 @@text `-06`, creativedelight with endersAdditions `-02`, the new `config/sereneseasons/fertility.toml` and the KubeJS files
 @@text (`crop_seasons.json`, `tags/cropseasontags.js`). Fresh normal world, plains spawn.
 @@text
-@@text | Entry | Tier | Steps | Pass | Fail meaning |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-CS-01 | crop season hook
 @group server
 @commands Boot; grep latest.log for `CropSeasonGrowHookMixin`, `Mixin apply`, `[crop-seasons]`

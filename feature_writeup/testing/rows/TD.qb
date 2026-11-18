@@ -11,8 +11,7 @@
 @@text Needs Creative Common built after 2026-10-30 21:45 (`time/TimeDate`) installed and a full restart. Fresh normal world with
 @@text Serene Seasons on SUN (either preset); ops level 4 console is enough.
 @@text
-@@text | Entry | Tier | Steps | Pass | Fail meaning |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-TD-01 | reset
 @group server
 @commands `/ccaltime date`; `/ccaltime date add 40 days`; `/ccaltime date reset`; `/ccaltime date`; `/time query daytime`; `/season`

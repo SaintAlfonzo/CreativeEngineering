@@ -11,8 +11,7 @@
 @@text `scratch_server.sh setup` now adds by itself (2026-10-28; `/cdevperf dump` still works, its window is the whole boot). Grep `latest.log` for
 @@text `Perf` / `KubeJSEventHandler` mixin warnings first.
 @@text
-@@text | ID | Group | Action | Expect | Depends on |
-@@text |---|---|---|---|---|
+@@table
 ## SQ-PF-01
 @group A
 @commands Boot; `/cdevperf status` (PF-14)
@@ -30,7 +29,7 @@ look the recorded list holds all 10 events (no "not recorded:" line); a hooks li
 @group A
 @commands After 2 min, `/cdevperf dump smoke`; copy the file here, `python3 tools/perf/perf_report.py <file>` (PF-15)
 @pass Chat says saved; the report's "Measured by the pack's hooks" has ticks, a row per dimension, handlers as `server_scripts:<file>:<line>`, entity and block entity types
-@fails SQ-PF-01
+@fails Depends on: SQ-PF-01
 @reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb
 > cdevperf status
@@ -45,7 +44,7 @@ look rows/SQ-PF-02.shell.txt: ticks, a row per dimension, handlers as server_scr
 @group B
 @commands New world: `/tp` 5 times to unexplored land 2000+ blocks apart, then `/cdevperf dump tp` and report (PF-16)
 @pass Chunk waits lists waits over 1 ms with a caller and phase; totals non-zero
-@fails SQ-PF-01
+@fails Depends on: SQ-PF-01
 @reviewed 2026-11-16
 > pbot spawn pf3 0 100 0 minecraft:overworld creative
 sleep 5
@@ -69,13 +68,13 @@ look rows/SQ-PF-03.shell.txt: chunk waits over 1 ms with a caller and phase; tot
 @group B
 @commands Chunky pregen 2601 chunks with the jfc as is, then with every `creativecommon.*` set to `enabled=false` (PF-17)
 @pass Same time within noise (1:34 in the 2026-09-28 A/B)
-@fails SQ-PF-01
+@fails Depends on: SQ-PF-01
 @draft two Chunky pregens of 2601 chunks on the same seed, the second after a stop with every creativecommon.* JFR event set to enabled=false in the jfc: two boots and a jfc edit between them, timed by wall clock against the 2026-09-28 A/B (1:34); a runner script, not one batch
 ## SQ-PF-05 | /reload twice keeps the wrapped KubeJS handler count
 @group A
 @commands `/reload` twice, `/cdevperf status` (PF-18)
 @pass Wrapped-handler count unchanged; no KubeJS errors
-@fails SQ-PF-01
+@fails Depends on: SQ-PF-01
 @reviewed 2026-11-16
 @from batches/r1102b/s3_A.qb passed
 > cdevperf status

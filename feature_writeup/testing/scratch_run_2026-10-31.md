@@ -157,7 +157,7 @@ with `[worldgen.debug] testOverrides = true` (share 1 for the meta), as the META
 | Armor cap | SQ-AC-01 to -04 | a1_boot, a1_world (bot); c1 CQ-AC-04 |
 | Crop seasons | SQ-CS-01 to -09, CQ-CS-07 | a1_boot, a1_world, a2, b1; c1 |
 | Watering can | SQ-WC-01 to -05 | a1_boot, a1_data, a1_world (bot); c1 CQ-WC-04 |
-| Monster boxes | SQ-MB-01 to -07, CQ-MB-08 | a1_boot, a1_world (bot), a2; c1 |
+| Monster boxes | SQ-MB-01 (now SQ-MBX-01) to -07, CQ-MB-08 (now CQ-MBX-08) | a1_boot, a1_world (bot), a2; c1 |
 | Vine shearing | SQ-VS-01 to -08 (05 to 08 new: the shears interaction on a bot) | a1_boot, a1_world; c1 CQ-VS-09 |
 | Resource pack bench | CQ-RP-01 to -03 | L3 |
 | New gap rows | SQ-GF31-01 to -06, SQ-RW-28 (section "Gap fill, 2026-10-31" in the queue) | a1_data, a1_world, a1_effects, b1; c1 |
@@ -208,9 +208,9 @@ Running log of the execution: steps done, problems met, decisions. Results per r
     grew 9 blocks, age 25 none: PASS), SQ-VS-02 (unsheared poppy vine spread to 19 blocks: PASS).
   - SQ-GF31-03: the bot's use on the barrel opened it (no sneak), nothing placed. Row now places the pumpkin by
     `setblock` (same `CarvedPumpkinBlock.onPlace` pattern check). Rerun.
-  - SQ-MB-03: 3 items = mob loot from the killed wave; rerun with `doMobLoot false` found 0 because the bot, still
+  - SQ-MB-03 (now SQ-MBX-03): 3 items = mob loot from the killed wave; rerun with `doMobLoot false` found 0 because the bot, still
     beside the box, picked the reward up (its inventory: raw gold 4, raw copper 5 = one reward per wave). Reward
-    works: PASS on judgment. SQ-MB-04: cooldown (200 ticks) ran out with the bot beside the box -> re-armed; row now
+    works: PASS on judgment. SQ-MB-04 (now SQ-MBX-04): cooldown (200 ticks) ran out with the bot beside the box -> re-armed; row now
     moves the bot away before the kill: rerun PASS.
   - SQ-VG-01 PASS was void (`fill ... hollow` one block high is solid: villager inside a fence square). SQ-VG-02 / -03:
     Dramatic Doors tall doors have `third=lower|middle|upper`, not `half`; both setblocks failed (open doorway, no
@@ -225,7 +225,7 @@ Running log of the execution: steps done, problems met, decisions. Results per r
     age 0 wheat (no fertilizer in the can, so age is irrelevant). Dry farmland drops 7 -> 6 by random tick within
     seconds (vanilla), so the check now runs at `randomTickSpeed 0`; the count was also wrong (4 setup fills also log
     "filled 9"). Rerun: 9 farmland and 9 mulch soaked, WaterLevel 15, second use spends nothing: PASS.
-  - SQ-VG-01 / -02: zombies from the SQ-MB waves killed the villager; VG rows now set Peaceful (villager AI is the
+  - SQ-VG-01 / -02: zombies from the SQ-MB (now SQ-MBX) waves killed the villager; VG rows now set Peaceful (villager AI is the
     same) and clear mobs, select `#zq:villagers` (new scratch-only tag in `tools/scratch_query/datapack/zq`, copied by
     prep_srv.sh: vanilla + MCA villagers). VG-01 PASS (stayed in with the gate closed and open), VG-03 PASS (iron door
     kept it out). VG-02: the villager started outside (z -58) and ended at its bed inside: it went through the closed
@@ -234,7 +234,7 @@ Running log of the execution: steps done, problems met, decisions. Results per r
     SQ-EFX-02, -03, -09 now read Health on a NoAI pillager (queue setup note: no Poison on undead). Results: EFX-02
     24 -> 24 PASS; EFX-03 Poison II control drop 13.0, with Magic Resistance 10.4 (0.80 x) PASS, Wither I 24 -> 24
     PASS; EFX-09 six ticks after the give: Poison I, Duration 155 (160 at start), Health 24 (no direct damage) PASS.
-  - SQ-MB rows on A1 ran at Normal (SQ-MB-02 sets it); the A1 world is now Normal again after the VG rows.
+  - SQ-MB (now SQ-MBX) rows on A1 ran at Normal (SQ-MB-02 (now SQ-MBX-02) sets it); the A1 world is now Normal again after the VG rows.
 - 02:40 A1 LOOK rows judged offline (subagent; table in `perf/runs/r1031/judged_a1.md`): PASS 17, FAIL 6, OPEN 9.
   Real pack problems (not fixed here: recipe and tag behavior, owner decides):
   - SQ-CM-32 (+ SQ-R31-BOOT / -KJS): `kubejs/data/creative_delight/kubejs/oceansdelight/recipes.js` removes every
@@ -426,7 +426,7 @@ Counts: BATCH-FAULT 5, FAIL 10, OPEN 18, PASS 134 (total 167 row results, reruns
 | OPEN | SQ-EF-03 | client look deferred |
 | OPEN | SQ-EF-06 | 1 of 3 castles kept; 2 canceled over-air 708/562 vs limit 320: owner call |
 | OPEN | SQ-EF-10 | needs a hand-made shore case (deferred) |
-| OPEN | SQ-MB-05 | judged_a1.md: `#minecraft:mineable/pickaxe` and `#minecraft:needs_diamond_tool` both Test passed. |
+| OPEN | SQ-MB-05 (now SQ-MBX-05) | judged_a1.md: `#minecraft:mineable/pickaxe` and `#minecraft:needs_diamond_tool` both Test passed. |
 | OPEN | SQ-MG-18 | judged_b1.md: Kill -> `No entity was found` (no chimpanzees: that half passes). 3 gorillas summoned, time set. |
 | OPEN | SQ-MG-19 | judged_b1.md: 3 sugar gliders summoned; both `execute at qa if entity` checks sent, no output logged (same ano |
 | OPEN | SQ-PF16-02 | client look deferred |
@@ -445,7 +445,7 @@ Counts: BATCH-FAULT 5, FAIL 10, OPEN 18, PASS 134 (total 167 row results, reruns
 | BATCH-FAULT | SQ-R31-KJS | NCH errors log to latest.log, not server.log; needs bootreject [NCH] |
 | BATCH-FAULT | SQ-SB-02 | judged_w2.md: Row window: `[ceplace] done: 3 of 3 placed ... 0 failed` (catapult, Mysticrift oak tower, Blocky |
 | BATCH-FAULT | SQ-UC-02c | control: brain coral 0 too |
-| PASS | CQ-FF-01, SQ-A2-BOOT, SQ-AC-01, SQ-AC-03, SQ-B1-BOOT, SQ-BJ-01, SQ-BJ-01b, SQ-BJ-02, SQ-BJ-02b, SQ-BJ-03, SQ-CM-10, SQ-CM-20, SQ-CM-21, SQ-CM-22, SQ-CM-23, SQ-CM-24, SQ-CM-30, SQ-CM-31, SQ-CP-01, SQ-CS-01, SQ-CS-02, SQ-CS-03, SQ-CS-04, SQ-CS-05, SQ-CS-06, SQ-CS-08, SQ-CS-09, SQ-DD-08, SQ-DM-01, SQ-DM-02, SQ-DM-03, SQ-DM-03b, SQ-EF-01, SQ-EF-04, SQ-EF-08, SQ-EF-09, SQ-EF-11, SQ-EFX-01, SQ-EFX-02, SQ-EFX-03, SQ-EFX-04, SQ-EFX-05, SQ-EFX-06, SQ-EFX-07, SQ-EFX-08, SQ-EFX-08b, SQ-EFX-09, SQ-EFX-10, SQ-EFX-11, SQ-EN-21, SQ-EN-21b, SQ-FF-01, SQ-GF31-01, SQ-GF31-02, SQ-GF31-03, SQ-GF31-04, SQ-IWF-01, SQ-IWF-02, SQ-IWF-02b, SQ-IWF-03, SQ-IWF-04b, SQ-KT-21, SQ-KT-21b, SQ-LB-01, SQ-LB-01b, SQ-LB-02, SQ-MB-01, SQ-MB-02, SQ-MB-03, SQ-MB-04, SQ-MB-06, SQ-MB-07, SQ-MCL-01, SQ-MCL-02, SQ-MCL-03, SQ-MCL-05, SQ-META31-01, SQ-META31-04b, SQ-META31-08, SQ-META31-09, SQ-MG-17, SQ-NM-01, SQ-NM-02, SQ-NM-03, SQ-PF16-01, SQ-PF16-03, SQ-POT-06b, SQ-R31-BOT, SQ-RE-28, SQ-RW-25, SQ-RW-26, SQ-RW-27, SQ-RW-27b, SQ-RW-28, SQ-SB-01, SQ-SB-01b, SQ-SG-01, SQ-SG-02, SQ-SG-03, SQ-SPC-01, SQ-SPC-02, SQ-STL-01, SQ-STL-02, SQ-SVA-01, SQ-SVA-02, SQ-TD-01, SQ-TD-02, SQ-TD-03, SQ-TD-05, SQ-TER-05, SQ-UC-01, SQ-UC-03, SQ-VG-00, SQ-VG-01, SQ-VG-02, SQ-VG-03, SQ-VL-00, SQ-VL-00b, SQ-VL-01, SQ-VL-02, SQ-VS-01, SQ-VS-02, SQ-VS-03, SQ-VS-04, SQ-VS-05, SQ-VS-06, SQ-VS-07, SQ-VS-08, SQ-WC-01, SQ-WC-01b, SQ-WC-02, SQ-WC-03, SQ-WC-05, SQ-WT-01 | |
+| PASS | CQ-FF-01, SQ-A2-BOOT, SQ-AC-01, SQ-AC-03, SQ-B1-BOOT, SQ-BJ-01, SQ-BJ-01b, SQ-BJ-02, SQ-BJ-02b, SQ-BJ-03, SQ-CM-10, SQ-CM-20, SQ-CM-21, SQ-CM-22, SQ-CM-23, SQ-CM-24, SQ-CM-30, SQ-CM-31, SQ-CP-01, SQ-CS-01, SQ-CS-02, SQ-CS-03, SQ-CS-04, SQ-CS-05, SQ-CS-06, SQ-CS-08, SQ-CS-09, SQ-DD-08, SQ-DM-01, SQ-DM-02, SQ-DM-03, SQ-DM-03b, SQ-EF-01, SQ-EF-04, SQ-EF-08, SQ-EF-09, SQ-EF-11, SQ-EFX-01, SQ-EFX-02, SQ-EFX-03, SQ-EFX-04, SQ-EFX-05, SQ-EFX-06, SQ-EFX-07, SQ-EFX-08, SQ-EFX-08b, SQ-EFX-09, SQ-EFX-10, SQ-EFX-11, SQ-EN-21, SQ-EN-21b, SQ-FF-01, SQ-GF31-01, SQ-GF31-02, SQ-GF31-03, SQ-GF31-04, SQ-IWF-01, SQ-IWF-02, SQ-IWF-02b, SQ-IWF-03, SQ-IWF-04b, SQ-KT-21, SQ-KT-21b, SQ-LB-01, SQ-LB-01b, SQ-LB-02, SQ-MB-01, SQ-MB-02, SQ-MB-03, SQ-MB-04, SQ-MB-06 (now SQ-MBX-06), SQ-MB-07 (now SQ-MBX-07), SQ-MCL-01, SQ-MCL-02, SQ-MCL-03, SQ-MCL-05, SQ-META31-01, SQ-META31-04b, SQ-META31-08, SQ-META31-09, SQ-MG-17, SQ-NM-01, SQ-NM-02, SQ-NM-03, SQ-PF16-01, SQ-PF16-03, SQ-POT-06b, SQ-R31-BOT, SQ-RE-28, SQ-RW-25, SQ-RW-26, SQ-RW-27, SQ-RW-27b, SQ-RW-28, SQ-SB-01, SQ-SB-01b, SQ-SG-01, SQ-SG-02, SQ-SG-03, SQ-SPC-01, SQ-SPC-02, SQ-STL-01, SQ-STL-02, SQ-SVA-01, SQ-SVA-02, SQ-TD-01, SQ-TD-02, SQ-TD-03, SQ-TD-05, SQ-TER-05, SQ-UC-01, SQ-UC-03, SQ-VG-00, SQ-VG-01, SQ-VG-02, SQ-VG-03, SQ-VL-00, SQ-VL-00b, SQ-VL-01, SQ-VL-02, SQ-VS-01, SQ-VS-02, SQ-VS-03, SQ-VS-04, SQ-VS-05, SQ-VS-06, SQ-VS-07, SQ-VS-08, SQ-WC-01, SQ-WC-01b, SQ-WC-02, SQ-WC-03, SQ-WC-05, SQ-WT-01 | |
 
 **12:10. Wrap-up done.** Perf report written (no prune). Results moved into the feature writeups, README status
 words (BROKEN where a FAIL applies) and TODO.md (8 new Bug rows). Open point for the owner: SQ-RW-23 recorded as

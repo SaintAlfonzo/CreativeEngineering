@@ -272,27 +272,26 @@ look entity census (rows/SQ-FGD-15.shell.txt): dark forest about 50 % brown, mus
 @@text
 @@text Client half (round 2, one creative superflat world, after SQ-FGD-00 passes):
 @@text
-@@text | ID | World | Commands | Pass | After |
-@@text |---|---|---|---|---|
+@@table world
 ## CQ-FGD-DUMP
 @group creative superflat
 @commands `/dumpall`, `/dumpfood`, `/dumpnames`, `/dumpplaceable`
 @pass `fungidelight:` items in the dumps
-@fails `food_catalog.py --check`; remove `fungidelight` from `AWAIT_DUMP` and rerun `gen_can_types.py` (truffle, cooked inky cap, truffle pasta, creamy morel soup, inky caps salad cans); TODO `fungiport #2`
+@fails After: `food_catalog.py --check`; remove `fungidelight` from `AWAIT_DUMP` and rerun `gen_can_types.py` (truffle, cooked inky cap, truffle pasta, creamy morel soup, inky caps salad cans); TODO `fungiport #2`
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## CQ-FGD-UI
 @group same
 @commands JEI on a mushroom, a truffle, a cleaned cap; JEI on Burrowing and Weak Stomach; render both cows and a mixed-pair calf; wolf hunt particles and sounds; pig digging sounds
 @pass the 3 info pages; JEED descriptions (FGD-37); cow layers show their mushroom; sounds play (FGD-08, FGD-39)
-@fails `jei_info.js`; lang overlay
+@fails After: `jei_info.js`; lang overlay
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## CQ-FGD-PLAY
 @group same
 @commands eat each dish, mine truffle dirt with shovel / Fortune / Silk Touch, mill an inky cap, shear a Fungi cow, bowl on one, crates
 @pass FGD-06, FGD-07, FGD-13, FGD-14, FGD-19, FGD-21, FGD-22, FGD-25, FGD-40
-@fails values feed `fungiport #2`
+@fails After: values feed `fungiport #2`
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 @@text
@@ -1361,7 +1360,7 @@ bootreject (Mixin apply failed|InvalidInjectionException|Redirect).*(McaVillager
 @pass villager never leaves the ring either time
 @fails gate still WALKABLE_DOOR: redirect did not apply
 @from batches/r1031/a1_world.qb passed
-# Peaceful (villager AI unchanged): the monster box waves of SQ-MB left zombies that killed the villager
+# Peaceful (villager AI unchanged): the monster box waves of SQ-MBX left zombies that killed the villager
 > difficulty peaceful
 > kill @e[type=!minecraft:player,type=!minecraft:item,distance=..300]
 # a one-high `hollow` fill is solid: fill, then clear the inside
@@ -1748,6 +1747,17 @@ expect verb=food item=minecraft:enchanted_golden_apple\*1 .*effects=\S*minecraft
 reject verb=food item=delightful:chunkwich\*1 .*nourishment
 reject verb=food item=delightful:azalea_tea\*1 .*(comfort|nourishment)
 reject verb=food .*food=false|verb=food done=0
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): expect verb=food item=farmersdelight:noodle_soup\S* food=true .*effects=\S*farmersdelight:nourishment:0:4800:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): expect verb=food item=farmersdelight:beef_stew\S* food=true .*effects=\S*farmersdelight:comfort:0:4800:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): reject verb=food item=farmersdelight:bone_broth\S* .*effects=\S*(comfort|nourishment)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): expect verb=food item=farmersdelight:dog_food\S* food=true .*effects=\S*farmersdelight:comfort:0:1200:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): expect verb=food item=minecraft:golden_carrot\S* food=true .*effects=\S*farmersdelight:nourishment:0:2400:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): expect verb=food item=minecraft:enchanted_golden_apple\S* food=true .*effects=\S*farmersdelight:nourishment:0:4800:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): expect verb=food item=minecraft:enchanted_golden_apple\S* food=true .*effects=\S*minecraft:absorption:
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): reject verb=food item=delightful:chunkwich\S* .*effects=\S*nourishment
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): reject verb=food item=delightful:azalea_tea\S* .*effects=\S*(comfort|nourishment)
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): reject verb=food item=\S+ food=false
+# removed duplicate copy (dedupe 2026-11-17, CNS.qb, SQ-CNS-02): reject \[cdevtest\] verb=\S+ done=0
 
 @@text
 @@text #### SQ-PS: powdered sugar (added 2026-10-25)
@@ -4292,36 +4302,35 @@ expect has the following block data: .*minecraft:apple
 @@text in the writeup or in `testing/structures/*.scratch.md`; read those first so a rerun does not start cold. Run only after the
 @@text jar set is the current one, and tick in the writeup.
 @@text
-@@text | ID | Group | Tests | Notes |
-@@text |---|---|---|---|
+@@table
 ## SQ-OPEN-LO
 @group B
-@commands [../locate.md](../locate.md) LO-01, LO-03, LO-04, LO-05, LO-13, LO-14, LO-17
-@pass `/cwglocate` baseline, census 128 with stages A + B, rates, non-blocking loads, config switches, miss reasons, stop label. LO-03/04/14 share one census run
+@commands Tests: [../locate.md](../locate.md) LO-01, LO-03, LO-04, LO-05, LO-13, LO-14, LO-17
+@pass Notes: `/cwglocate` baseline, census 128 with stages A + B, rates, non-blocking loads, config switches, miss reasons, stop label. LO-03/04/14 share one census run
 @jars creativecommon creativedelight
 @draft pointer row: the steps are locate.md's own test ids (LO-01 ...), to be written as rows in that feature's rows file, not here
 ## SQ-OPEN-FP
 @group B (new player join)
-@commands [../feature_porting.md](../feature_porting.md) FP-02, FP-03, FP-05, FP-07, FP-10, FP-12; server halves of FP-11, FP-13, FP-15 already PASSED (SQ-OM)
-@pass FP-10 duplicates FP-03: run once, tick both. FP-12 needs a real or fake player beside a lit campfire. FP-05 ice boats is client-feel; only the speed numbers are server
+@commands Tests: [../feature_porting.md](../feature_porting.md) FP-02, FP-03, FP-05, FP-07, FP-10, FP-12; server halves of FP-11, FP-13, FP-15 already PASSED (SQ-OM)
+@pass Notes: FP-10 duplicates FP-03: run once, tick both. FP-12 needs a real or fake player beside a lit campfire. FP-05 ice boats is client-feel; only the speed numbers are server
 @jars creativecommon creativedelight
 @draft pointer row: the steps are feature_porting.md's FP ids, to be written as rows in that feature's rows file, not here
 ## SQ-OPEN-ST1
 @group B
-@commands [../structure_tuning.md](../structure_tuning.md) ST-106, ST-114, ST-115, ST-118, ST-120, ST-135, ST-136
-@pass Phase 2 / 6 results are already in the entries (ST-115 and ST-135 FAILED then); recheck against the current jar before blaming code
+@commands Tests: [../structure_tuning.md](../structure_tuning.md) ST-106, ST-114, ST-115, ST-118, ST-120, ST-135, ST-136
+@pass Notes: Phase 2 / 6 results are already in the entries (ST-115 and ST-135 FAILED then); recheck against the current jar before blaming code
 @jars creativecommon creativedelight
 @draft pointer row: the steps are structure_tuning.md's ST ids, to be written as rows in that feature's rows file, not here
 ## SQ-OPEN-ST2
 @group B
-@commands ST-133, ST-137, ST-142, ST-147 (the `[scratch/game]` ones: the scratch half only)
-@pass Ocean geode count by y; way sign text and no-mashup / town village checks need eyes
+@commands Tests: ST-133, ST-137, ST-142, ST-147 (the `[scratch/game]` ones: the scratch half only)
+@pass Notes: Ocean geode count by y; way sign text and no-mashup / town village checks need eyes
 @jars creativecommon creativedelight
 @draft pointer row: the steps are structure_tuning.md's ST ids (scratch halves), to be written as rows in that feature's rows file, not here
 ## SQ-OPEN-ST3
 @group B
-@commands ST-158, ST-160, ST-176, ST-186, ST-188, ST-191 to ST-198
-@pass Earth-fill `log = ALL` lines, ground match, restart determinism of villages, deep dungeons, drum tower, stone tag
+@commands Tests: ST-158, ST-160, ST-176, ST-186, ST-188, ST-191 to ST-198
+@pass Notes: Earth-fill `log = ALL` lines, ground match, restart determinism of villages, deep dungeons, drum tower, stone tag
 @jars creativecommon creativedelight
 @draft pointer row: the steps are structure_tuning.md's ST ids, to be written as rows in that feature's rows file, not here
 @@text
@@ -6042,130 +6051,127 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 @@text
 @@text #### CQ-DUMP: client-only dumps (unblocks the Vintage rows and the UI generators)
 @@text
-@@text | ID | World | Commands | Pass | After |
-@@text |---|---|---|---|---|
+@@table world
 ## CQ-DUMP-01
 @group creative superflat
 @commands `/dumpall`, then `/dumpfood`, `/dumpcompost`, `/dumpcropgrowth`, `/dumpplaceable`, `/dumpnames` (those not in `/dumpall`)
 @pass Files in `kubejs/exported/` newer than the boot; they list `vintagedelight:` items
-@fails `python3 tools/food_catalog.py --check` (no unclassified Vintage food, VTD-20, VTD-53); empty `AWAIT_DUMP` in `gen_can_types.py` and rerun, then restart; `gen_stack_sizes.py`, `placeable_catalog.py`, `crop_growth_coverage.py` (0 UNKNOWN), `name_audit.py`, `jei_coverage.py`, BlockRunner tier script, `gen_pack_manifest.py`
+@fails After: `python3 tools/food_catalog.py --check` (no unclassified Vintage food, VTD-20, VTD-53); empty `AWAIT_DUMP` in `gen_can_types.py` and rerun, then restart; `gen_stack_sizes.py`, `placeable_catalog.py`, `crop_growth_coverage.py` (0 UNKNOWN), `name_audit.py`, `jei_coverage.py`, BlockRunner tier script, `gen_pack_manifest.py`
 @draft no batch holds this row yet
 ## CQ-DUMP-02
 @group same, after the rerun
 @commands restart; `/ofprobe` and `/vtdtest recipes` again
 @pass CP-31 recipe level: the 16 Vintage cans + 4 shared sources load; `[cans] registered` rises accordingly (and the Vintage rows of `can_parity.md` get their numbers, `can_audit.py`)
-@fails server-visible, so it can ride the next round-1 run
+@fails After: server-visible, so it can ride the next round-1 run
 @draft no batch holds this row yet
 ## CQ-DUMP-03
 @group same boot as CQ-DUMP-01
 @commands the dumps `/dumpall` does not run: `/dumpstacks`, `/dumppotions`, `/dumptags`, `/cdevdumpnames`, `/cdevdumpicons` (or `[debug.wthit] dumpIconsAtTitle`), `/dumpwinetextures`
 @pass Files newer than the boot in `kubejs/exported/` (and the name / icon / wine texture outputs)
-@fails `tools/stack_sizes.py` (`food/stack-sizes #2`), `effect_audit.py` and the `/dumppotions` step (`pack/release #5`, `alcohol/brewinport #4`), `name_audit.py` (`ui/names #4`), `wthit_icon_audit.py` (`ui/wthit #2`), the wine texture check (`textures/tools #1`); rerun `/dumptags` for the heat / cold tag audit (`alcohol/brewinport #2`)
+@fails After: `tools/stack_sizes.py` (`food/stack-sizes #2`), `effect_audit.py` and the `/dumppotions` step (`pack/release #5`, `alcohol/brewinport #4`), `name_audit.py` (`ui/names #4`), `wthit_icon_audit.py` (`ui/wthit #2`), the wine texture check (`textures/tools #1`); rerun `/dumptags` for the heat / cold tag audit (`alcohol/brewinport #2`)
 @draft no batch holds this row yet
 ## CQ-DUMP-04
 @group creative superflat, after CQ-DUMP-01
 @commands `/cdevgen run loot dumps`, then `/cdevgen` for the can generators and `soup_soft_fluids`; `python3 tools/food_catalog.py --check`, `gen_can_types.py` (empty `AWAIT_DUMP`: Fungi and Vintage), `can_audit.py`
 @pass Loot census and `loot_index.json` list Subterrestrial, Underground Bunkers and eugene (21 tables) (`loot/lootjs-layer #3`); `canned_mhadjeb` gone, glow calamari cans, Canned Pickles with the pickled sea pickle source, Canned Kimchi no longer copies Satisfaction (`dishes/ocean #3`, `dishes/pickles-and-ferments #1`, `dishes/meals #32`, `pack/release #5`); the hunger / saturation findings for the cans, 24 soup fluids still cover every `food_type/soup` item (`cans/canning #3, #14`, `dishes/ingredients #13`)
-@fails restart after the can regeneration (CQ-DUMP-02 covers the load check)
+@fails After: restart after the can regeneration (CQ-DUMP-02 covers the load check)
 @draft no batch holds this row yet
 ## CQ-DUMP-05
 @group scratch server, group B normal world with the End
 @commands `/dumpall` biomes and `/locate biome nullscape:crystal_peaks` and `nullscape:void_barrens`; rerun the End climate dump
 @pass Whether crystal peaks and void barrens exist live (`worldgen/biomes #8`, `#4`)
-@fails none
+@fails After: none
 @draft no batch holds this row yet
 ## CQ-DUMP-06
 @group any, after CQ-DUMP-01
 @commands read the new `/dumpfood` and recipe dump: Comfort foods per type (57 on 2026-10-25), vanilla egg uses in recipes (rescan, the dump cannot read IE recipes), shapeless pie -> crust recipes, Hostile Mobs effect name, placeable cheese wheels and the Review regex
 @pass Numbers and ids for `food/types-and-tuning #15, #6`, `baking/baked-goods #24`, `ui/effects #10`, `food/placeable #2`
-@fails none
+@fails After: none
 @draft no batch holds this row yet
 @@text
 @@text #### CQ-VP: Vintage and Veggies, visual and machine runs
 @@text
-@@text | ID | Existing test | What to do and look at |
-@@text |---|---|---|
+@@table
 ## CQ-VP-01
-@group VD-40, VTD-45
 @commands Names read the pack's rules (Caesar Salad, Zucchini Seeds, cases, "with", "and"); JEI: every Vintage and Veggies item has a recipe or a use; every Vintage item has a texture (no purple-black)
+@pass Existing test: VD-40, VTD-45
 @draft no batch holds this row yet
 ## CQ-VP-02
-@group VD-03, VTD-05
 @commands WTHIT growth line on every Vintage and Veggies crop; WTHIT icons after `wthit_icons.json` regenerates
+@pass Existing test: VD-03, VTD-05
 @draft no batch holds this row yet
 ## CQ-VP-03
-@group VD-21, MJ-11, MJ-12, MJ-14, VTD-26, VTD-53
 @commands Soups and the new jar fluids in a Supplementaries jar: each in its own colour close to its texture; 12 bottles fill a jar for bottle soups; WTHIT line on the jar
+@pass Existing test: VD-21, MJ-11, MJ-12, MJ-14, VTD-26, VTD-53
 @draft no batch holds this row yet
 ## CQ-VP-04
-@group VTD-10 to VTD-14
 @commands Pickling jar GUI: hopper in from the top, out from the bottom, salt from The Salt and Vintage's salt dust; evaporator beside water grows salt layers, bucket -> 3 dust; cheese mold wheel after a random tick, JEI explains it; Mason jars stack 1 to 4 and render
+@pass Existing test: VTD-10 to VTD-14
 @draft no batch holds this row yet
 ## CQ-VP-05
-@group VTD-25, VD-17
 @commands Placeable tooltips: Vintage jars, pizzas, cheese mold, golden egg; Veggies pies, cake, tray, lasagna, stuffed peppers (after `placeable_catalog.py`)
+@pass Existing test: VTD-25, VD-17
 @draft no batch holds this row yet
 ## CQ-VP-06
-@group VTD-08, VTD-08a, VTD-08b, VTD-47
 @commands Magic Peanut about 1 % from ripe peanuts, magic vine tree with Lush Grass and an 80 % Golden Egg; vine tiles only from cutting stripped vine; bone meal on Lush Grass; hoe -> Rich Soil Farmland. Write keep / purge into the writeup (S1)
+@pass Existing test: VTD-08, VTD-08a, VTD-08b, VTD-47
 @draft no batch holds this row yet
 ## CQ-VP-07
-@group VTD-02, VTD-03, VTD-04, VD-02
 @commands Replant feel with the real right-click and a hoe over an area (cucumber, ghost pepper, zucchini); note Quark's generic replant interplay, then fill `crops.md` 2.1 rows
+@pass Existing test: VTD-02, VTD-03, VTD-04, VD-02
 @draft no batch holds this row yet
 ## CQ-VP-08
-@group VTD-24, CP-27 to CP-30
 @commands Crafting in the grid: a vinegar can (salad + vinegar + can), Veggies cans with the real servings, a canned golden melon slice; JEI on Vinegar Bottle
+@pass Existing test: VTD-24, CP-27 to CP-30
 @draft no batch holds this row yet
 ## CQ-VP-09
-@group VTD-21, VTD-48 to VTD-52, VD-13, VD-22, VD-23
 @commands Crafting and JEI for the cooking rules: pizzas in the oven, oat bread chain, burgers / burrito (grid and deployer belt assembly), Cheese Pasta / Pad Thai / Pickle Soup heatless, oatmeal cookies 12 from the oven, cauliflower bread in the oven
+@pass Existing test: VTD-21, VTD-48 to VTD-52, VD-13, VD-22, VD-23
 @draft no batch holds this row yet
 ## CQ-VP-10
-@group VTD-32, VTD-32a, NE-15, NE-16
 @commands Goose golden egg with the chance raised to 1: watch it drop beside the pen wall; default 1 in 1000 not worth waiting for
+@pass Existing test: VTD-32, VTD-32a, NE-15, NE-16
 @draft no batch holds this row yet
 ## CQ-VP-11
-@group VTD-33, VTD-35, VTD-40
 @commands Chef hats in 16 colours and Simple Hats' gone from bags and recipes; century egg in the jar; overlap review of `*overlaps w/*` rows in JEI, write keep / merge into `vintage_delight.md` 3.1
+@pass Existing test: VTD-33, VTD-35, VTD-40
 @draft no batch holds this row yet
 ## CQ-VP-12
-@group VD-06, VD-07
 @commands Mature dandelion: break drops 1 dandelion + 0 to 3 leaves, shears give the block, bone meal pops another
+@pass Existing test: VD-06, VD-07
 @draft no batch holds this row yet
 ## CQ-VP-13
-@group VD-32, VD-33
 @commands Farmer buys VD produce; wandering trader sells VD seeds, clove, sweet potato, leaf; animal breeding / taming by real right-click
+@pass Existing test: VD-32, VD-33
 @draft no batch holds this row yet
 ## CQ-VP-14
-@group VTD-23
 @commands Brew the 6 custom-effect jar drinks and record how the potion mixers and fluid handle them (record only)
+@pass Existing test: VTD-23
 @draft no batch holds this row yet
 @@text
 @@text #### CQ-WT: WTHIT Silk Touch, crop seasons, operator blocks (added 2026-10-28)
 @@text
 @@text Needs Creative Common 1.1.03 of 2026-10-28 22:59 or later in `mods/` (and `server_mods/` for the server rows).
 @@text
-@@text | ID | Existing test | What to do and look at |
-@@text |---|---|---|
+@@table
 ## CQ-WT-01
-@group WL-37, WL-38
 @commands Silk Touch book line on glass, ice, grass block, iron ore, stone; none on dirt, oak log, leaves; gone while holding a Silk Touch pickaxe
+@pass Existing test: WL-37, WL-38
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## CQ-WT-02
-@group WL-39, WL-40
 @commands (reworded 2026-10-30 for crop seasons) "Fertile: Spring" / "Offseason: Winter, Dry" on wheat; green "Fertile here" in mid spring in plains, red "Offseason here" in mid winter, gone under greenhouse glass
+@pass Existing test: WL-39, WL-40
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## CQ-WT-03
-@group WL-41, WL-42
 @commands Barrier and structure void shown as an op; on a server, `/deop` hides them, `/op` shows them again without a relog
+@pass Existing test: WL-41, WL-42
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## CQ-WT-04
-@group WL-31
 @commands the six new `[wthit]` switches (`silkTouch`, `cropSeasons`, `cropOutOfSeason`, `operatorBlocks`, `operatorBlockList`, `operatorBlockLevel`) each turn their part off
+@pass Existing test: WL-31
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 @@text
@@ -6174,39 +6180,38 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 @@text Tests already named in their writeups with "in game" as the open half; one pass in one creative world covers them.
 @@text Colors / WTHIT / JEI / GUI each need the client.
 @@text
-@@text | ID | Existing tests | What to do and look at |
-@@text |---|---|---|
+@@table
 ## CQ-OLD-01
-@group RC-15 to RC-17, RC-55 to RC-69
 @commands Corn / cornmeal names and textures, crushing wheels, millstone, JEI shapes of the heatless meals, burgers, quiche, shepherd's pie, squid ink pasta basin run, dog food, frying
+@pass Existing test: RC-15 to RC-17, RC-55 to RC-69
 @draft no batch holds this row yet
 ## CQ-OLD-02
-@group RC-71 to RC-78
 @commands Chorus juice (JEI, basin / spout runs, Absorption line), pot recipe, berry matcha latte (kettle screen, bottle remainder), milk from Milk Jar / Cow in a Jar with a real player, broth soups, ice cubes with the hammer on the board, egg solution, frosting
+@pass Existing test: RC-71 to RC-78
 @draft no batch holds this row yet
 ## CQ-OLD-03
-@group MJ-11, MJ-12, MJ-14, WL-32, WL-33
 @commands Soup colours and WTHIT in jars; WTHIT "Holding:" and "Waiting: leftover slots full" lines on pot, kettle, oven
+@pass Existing test: MJ-11, MJ-12, MJ-14, WL-32, WL-33
 @draft no batch holds this row yet
 ## CQ-OLD-04
-@group KT-01 to KT-06, OV-11, OV-32, OV-33, RB-01 to RB-14
 @commands CfB kitchen: oven fuel and oil, sink, cutting board offset, fridge model, oven JEI [+] without log spam, Sweet Berry Pie names, remainder buffer
+@pass Existing test: KT-01 to KT-06, OV-11, OV-32, OV-33, RB-01 to RB-14
 @draft no batch holds this row yet
 ## CQ-OLD-05
-@group FO-30, FO-31, FO-32, FO-43, SN-48, PL-01 to PL-09
 @commands Seasoning JEI page; Spice of Life in a single-player world (new world values); a pie bite counts for SoL; no `{}` NBT on returned bowls; placeable tooltip lines and coaster line
+@pass Existing test: FO-30, FO-31, FO-32, FO-43, SN-48, PL-01 to PL-09
 @draft no batch holds this row yet
 ## CQ-OLD-06
-@group AE-01 to AE-24, GR-28, FX-21 to FX-24
 @commands Armor and tool effects in play (the on-hit half passed on the server), air brake `useDurationTicks`, Trinket Case refuses only the open case
+@pass Existing test: AE-01 to AE-24, GR-28, FX-21 to FX-24
 @draft no batch holds this row yet
 ## CQ-OLD-07
-@group MB-100 to MB-104, MT-25, SN, CP-15 to CP-26
 @commands More Mooblooms JEI, leaf pile slow height walking and WTHIT, can crafts and effects in play
+@pass Existing test: MB-100 to MB-104, MT-25, SN, CP-15 to CP-26
 @draft no batch holds this row yet
 ## CQ-OLD-08
-@group DP-08, OV
 @commands First join of a world with the release's `world_serverconfig` README steps for a single-player save (client half of DP-08)
+@pass Existing test: DP-08, OV
 @draft no batch holds this row yet
 @@text
 @@text #### CQ-MND: Miner's Delight port -02, client half (added 2026-11-01)
@@ -6216,8 +6221,7 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 @@text Feature: [../miners_delight.md](../miners_delight.md) 4.2 (I3, I4, I8) and 5. Needs port `-02` in `mods/` and both
 @@text donor jars in `miners_upstream/`.
 @@text
-@@text | ID | World | Commands | Pass | After |
-@@text |---|---|---|---|---|
+@@table world
 ## CQ-MND-01
 @group creative superflat
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Look at a Sticky Basket, `/give` Baked Cave Carrot, Tentacles, Baked Tentacles, Cave Carrot, Weird Caviar, Bowl of Stuffed Squid; plant cave carrots and bonemeal them
@@ -6229,14 +6233,14 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 @group creative superflat
 @commands Copper Pot GUI over a campfire, cook a bucket or bottle recipe; JEI R on Beef Stew Cup and on Onion Soup Cup
 @pass MND-18 client half: the leftover slot has a frame right of the output and holds the empty container; JEI opens the Copper Pot category with the cup as output and the Copper Cup as container (`jei #14`)
-@fails **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
+@fails After: **Superseded 2026-11-02 by SQ-CUP (cups removed): drop the cup parts.**
 @jars creativedelight creativeworldgen
 @draft no batch holds this row yet
 ## CQ-MND-NAMES
 @group any
 @commands `/cdevdumpnames`, then `python3 tools/name_audit.py --print`
 @pass I3 names audit: no raw key and no capitalization fix left for `miners_delight` (or the fixes land in `name_fixes.json`)
-@fails `python3 tools/name_audit.py`
+@fails After: `python3 tools/name_audit.py`
 @jars creativedelight creativeworldgen
 @draft no batch holds this row yet
 @@text
@@ -6321,51 +6325,50 @@ look rows/SQ-CAT-05.shell.txt: no line saying a value was corrected or refused
 @@text
 @@text #### CQ-NEW: client halves added 2026-10-24
 @@text
-@@text | ID | Existing test | What to do and look at |
-@@text |---|---|---|
+@@table
 ## CQ-NEW-01
-@group TI-30, TI-31
 @commands Xaero minimap time line agrees with SeasonHUD (default profile, `/time set 11800`, sunrise step; Nether unchanged); bed clock: sleep at dusk, note whether Better Days' and the hotbar clock turn
+@pass Existing test: TI-30, TI-31
 @draft no batch holds this row yet
 ## CQ-NEW-02
-@group FX-43 to FX-45
 @commands Moss block and carpet follow the biome grass colour; items stay vanilla green in inventory, JEI and hand; `biomeTint = false` (F3+T) vanilla; `tintStrength = 0.5` (F3+A)
+@pass Existing test: FX-43 to FX-45
 @draft no batch holds this row yet
 ## CQ-NEW-03
-@group FO-49
 @commands AppleSkin: onion popcorn's hunger bar 2 drumsticks longer than plain; cheese and garlic lines; JEI seasoning page (`SeasoningJEI`)
+@pass Existing test: FO-49
 @draft no batch holds this row yet
 @@text
 ## CQ-NEW-04
-@group names/tooltips (1.1.03)
 @commands Salmon Eggs read Caviar, Fish Egg Roll / Slice / Noodle Soup read Caviar Roll / Roll Slice / Noodle Soup, Fried Rice reads Egg Fried Rice, Ocean's / Oceanic / End's Delight read "(Creative Delight)" in mod list, JEI and WTHIT; Drop of Glycerol tooltip "Tastes sweet!" without Shift; Fishing Net tooltip lists the blocks and the drops by biome (SQ-FN numbers)
+@pass Existing test: names/tooltips (1.1.03)
 @draft no batch holds this row yet
 ## CQ-NEW-05
-@group kitchen (1.1.03)
 @commands Two-high fridge has its own shape with a white top box filling the block; Plates, plated foods and Coasters on a Kitchen Counter and Corner; break the block under a plate: it drops (SQ-KT-02); Miner's Delight redrawn textures (Cave Carrot, Baked Cave Carrot, crops, Wild Cave Carrots, Gossypium, Weird Caviar, Stuffed Squid bowl, Tentacles, Baked Tentacles, Sticky Basket sides) show no purple-black
+@pass Existing test: kitchen (1.1.03)
 @draft no batch holds this row yet
 ## CQ-NEW-06
-@group potion buckets and Haste
 @commands Survival potion buckets have a cooldown; Awkward, Thick, Mundane and Water buckets do nothing and are not used up; Miner's Haste and Mining Fatigue potions brew, show in JEI and JEED text (MND-22)
+@pass Existing test: potion buckets and Haste
 @draft no batch holds this row yet
 ## CQ-DDP-01
-@group DDP-02, DDP-04, DDP-05, DDP-07, DDP-08
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) (old world: the SQ-CDJ5 Boot 0 world, Display `-01` standalone; 1.2.0 worlds are no longer the baseline) Open a world with 1.2.0 plates and food placed: all intact. Axe on a plated hamburger hides the plate (drops it), a Food Plate restores it; sneak + empty hand takes a stack of 3 cookies; Blazing Chili flames, Hot Cocoa steam; a stew on a fence and on a slab gets a wooden leg, on a Kitchen Counter none
+@pass Existing test: DDP-02, DDP-04, DDP-05, DDP-07, DDP-08
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## CQ-DDP-02
-@group DDP-06, DDP-11
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) Silk touch on a Beef Stew drops "Placed Beef Stew"; JEI and WTHIT on 5 new blocks show "Placed ..." / "Plated ..." names and 3D icons (no purple cube); the Display Delight creative tab lists them
+@pass Existing test: DDP-06, DDP-11
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## CQ-JO-01
-@group JO-13 to JO-16 (jei_ordering.md 12.5)
 @commands Set `orderReport = true` under `[jei]`; latest.log: `[jeiOrder] item: 34 jei tags`, no `global.jeiOrder` warning, no `[item_dict]` missing key from the "JEI equipment tree" block. JEI list opens with wooden tools; families in order wood to dragon, then the other sets, then misc (vanilla, modded, knives, arrows, guns with Old Guns first, tech, magic, hats). `python3 tools/jei_order_report.py`: no conflicts under `equipment/`
+@pass Existing test: JO-13 to JO-16 (jei_ordering.md 12.5)
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 ## CQ-RSP-01
-@group RSP-09 to RSP-13
 @commands Kettle GUI: the bar has 4 steps in the fluid's colour (water blue, black tea dark) with "Black Tea: 2 / 4" tooltip; fill box (top left) and empty box (bottom left) framed, hint tooltips while empty; Black Tea bottles in the fill box pour one per 0.2 s and the empties land in the empty box; glass bottles put in the empty box flip it and fill from the tank; shift-click a tea goes to the fill box, a stone block goes nowhere new; the pointer marks the active box. Kettle item tooltip "Tank: Water, 3 / 4"; WTHIT "Tank: Black Tea 2 / 4"; JEI Kettle page shows the base fluid in the bar (Strong Black Tea: black tea, one quarter) and lists the Rustic coffees and Fruits Delight teas; Wither Roots death text with and without a mob hitting you
+@pass Existing test: RSP-09 to RSP-13
 @jars creativecommon creativedelight
 @draft no batch holds this row yet
 @@text

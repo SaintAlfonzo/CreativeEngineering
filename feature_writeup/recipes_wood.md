@@ -29,7 +29,7 @@ Sawmill's per-blade recipes (which replace IE's own log and plank sawmill recipe
 | Compost, fertile soil and nulch from mulches and bark | DEPLOYED |
 | Create saw: planks -> every wood shape for 13 species; IE sawmill door and stair recipes removed | DEPLOYED |
 | Soot from Sooty Chimneys scraping (75 % / 50 %); torches ×12 from animal fat | DEPLOYED |
-| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood was merged into oak 2026-11-02 (shipped 1.2.00) and is restored 2026-11-07 (`farming/trees #7`, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; Creative Common `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-MB-00 to SQ-MB-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
+| Removed woods: Upgrade Aquatic's river wood merged into oak; its tree is the Mulberry tree (oak trunk, mulberry leaves and vines); Quark azalea wood was merged into oak 2026-11-02 (shipped 1.2.00) and is restored 2026-11-07 (`farming/trees #7`, RW-29) | BUILT 2026-10-22 (KubeJS + datapack; Creative Common `MulberrySapling` in the `mods/` jar of 11:06, md5 b5f60533, and the newer `build/libs` one; not in `server_mods/`); shipped in 1.1.01 (2026-10-22); scratch server PASSED 2026-10-22 (SQ-RW-00 to SQ-RW-04, second bulk run); RW-15, RW-16, RW-18 to RW-20 in game |
 
 - **Pending:** smoked wood (RW-23 to RW-26) and bark leather (RW-27), built 2026-10-30. Scratch r1031 (2026-10-31):
   SQ-RW-23 FAILED: the `#creativecommon:smokable/*` shape tags included Botania, driftwood, crimson and warped.
@@ -170,7 +170,7 @@ Compat variants, Supplementaries and Supp Squared signs and shelves, plus the Im
 Railways tracks (18 ids, no oak twin) are only hidden and their recipes removed (`global.removedWoodTracks`). Smoked wood stays
 (it has its own recipe, RW-23). Tests RW-28 and SQ-RW-28. TODO `engineering/dreams-and-desires #4`.
 
-**Finding (scratch run 2026-10-22, SQ-MB-04): river trees almost never generate.** The override works through the
+**Finding (scratch run 2026-10-22, SQ-RW-04): river trees almost never generate.** The override works through the
 holder (UA's `trees_river` grew 90 river leaves, 21 oak logs, 0 river logs), but worldgen placed no river tree at three
 sampled rivers: the feature needs dry land inside the river biome, and the samples had none (0 dry columns in 25 x 25).
 Natural Mulberry trees are therefore rare (UA's placement, not the merge). Since then the try count is 4x (above); river biomes with no
@@ -252,19 +252,19 @@ None.
 - [ ] **RW-08 Saw shapes:** blossom planks on the saw with a filter -> each shape in JEI, slabs ×2.
 - [ ] **RW-09 Soot:** scrape a dirty brick chimney with an axe 20 times -> about 15 soot.
 - [ ] **RW-10 Torch:** animal fat over a stick -> 12 torches.
-- [ ] **RW-15 River set gone [game: JEI and names; the startup log lines: scratch server PASSED 2026-10-22, SQ-MB-00, 92 purged, no recipe makes one]:** JEI search `river` -> only Mulberry Leaves, Mulberry Sapling, Pile of Mulberry Leaves,
+- [ ] **RW-15 River set gone [game: JEI and names; the startup log lines: scratch server PASSED 2026-10-22, SQ-RW-00, 92 purged, no recipe makes one]:** JEI search `river` -> only Mulberry Leaves, Mulberry Sapling, Pile of Mulberry Leaves,
   Mulberry Leaf Carpet, Mulberry Hedge, Mulberry Leaf Pile (IW); the hedge recipe takes river leaves over an oak log (x2).
   The startup log shows `[removedWoods] 1 woods merged into oak` and no `[item_dict] Missing` line for river or oak ids.
-- [ ] **RW-16 Mulberry tree [feature: scratch server PASSED 2026-10-22, SQ-MB-01, SQ-MB-04 through the holder / game: new chunks rarely have a river tree, see the 2.6 finding; driftwood half open, TODO `structures/contents #2`]:** `/place feature upgrade_aquatic:river_tree` on grass -> oak trunk, mulberry leaves, some
+- [ ] **RW-16 Mulberry tree [feature: scratch server PASSED 2026-10-22, SQ-RW-01, SQ-RW-04 through the holder / game: new chunks rarely have a river tree, see the 2.6 finding; driftwood half open, TODO `structures/contents #2`]:** `/place feature upgrade_aquatic:river_tree` on grass -> oak trunk, mulberry leaves, some
   mulberry vines; new chunks along a river show the same trees, about 4x as many as before on river banks (8 tries per
   chunk); `zfw rivertrees R` on a river with dry banks places some.
-- [x] **RW-17 Mulberry sapling [scratch server PASSED 2026-10-22, SQ-MB-02, switch off gives river logs]:** bone-meal a Mulberry Sapling -> the oak-trunk tree (Creative Common `MulberrySapling`).
-- [ ] **RW-18 Old river items [block drops: scratch server PASSED 2026-10-22, SQ-MB-03, x5 each / game for the inventory swap]:** `/setblock ~ ~ ~ upgrade_aquatic:river_log` and break it -> an oak log;
+- [x] **RW-17 Mulberry sapling [scratch server PASSED 2026-10-22, SQ-RW-02, switch off gives river logs]:** bone-meal a Mulberry Sapling -> the oak-trunk tree (Creative Common `MulberrySapling`).
+- [ ] **RW-18 Old river items [block drops: scratch server PASSED 2026-10-22, SQ-RW-03, x5 each / game for the inventory swap]:** `/setblock ~ ~ ~ upgrade_aquatic:river_log` and break it -> an oak log;
   `/give @s upgrade_aquatic:river_planks 4` -> 4 oak planks in the inventory; same for an Every Compat one
   (`everycomp:hc/upgrade_aquatic/river_chair` -> Handcrafted oak chair).
 - [ ] **RW-19 Mulberry names [game]:** the river leaves, sapling, potted sapling, leaf pile, carpet, hedge and the IW
   leaf pile show as Mulberry (Mulberry Leaves, Mulberry Sapling, ...) in hand, JEI and WTHIT; no "River" name left.
-- [ ] **RW-20 Hedge recipe [scratch server PASSED 2026-10-22, SQ-MB-00, one recipe, oak log, x2 / game]:** JEI shows one Mulberry Hedge recipe: Mulberry Leaves over an
+- [ ] **RW-20 Hedge recipe [scratch server PASSED 2026-10-22, SQ-RW-00, one recipe, oak log, x2 / game]:** JEI shows one Mulberry Hedge recipe: Mulberry Leaves over an
   Oak Log -> 2; `upgrade_aquatic:river_hedge` (the old recipe id) is gone.
 - [ ] **RW-21 Driftwood bark:** a driftwood log on the cutting board with an axe -> stripped driftwood log, about half
   the time Driftwood Bark (no Tree Bark); driftwood (wood) -> 75 %; the same on the Create saw. JEI shows no Abnormals
@@ -296,7 +296,7 @@ None.
 - 2026-10-22 (doc audit): jar state corrected (`MulberrySapling` is in the `mods/` jar since 11:06); all 92 river ids
   in `item_dict.js` are in the removed list (checked); tests tagged scratch / game; RW-19, RW-20 added; scratch
   probe `tools/farm_worldgen_probe.js` (`zfw mulberry`, `zfw loot`, `zfw count`).
-- 2026-10-22 (second bulk run): SQ-MB-00 to SQ-MB-04 PASS on the scratch server; RW-17 done. SQ-MB-04 found that
+- 2026-10-22 (second bulk run): SQ-RW-00 to SQ-RW-04 PASS on the scratch server; RW-17 done. SQ-RW-04 found that
   river trees almost never generate (no dry land in the sampled river biomes, 2.6 finding); probe `zfw rivertrees R` added.
 - 2026-10-22: `trees_river` placed feature overridden, 8 tries per chunk (was about 2), 4x the Mulberry trees by rivers.
 - 2026-10-23: F5 fixed (`recipes/wood #2`): Quark Engineering stairs sawmill recipes removed, driftwood added to

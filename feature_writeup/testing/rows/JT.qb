@@ -10,57 +10,56 @@
 @@text Client checks (JEI is client side); install the Creative Common and moreMooblooms jars built 2026-10-26 first. One creative
 @@text superflat world covers all but CQ-JT-07, which needs a world with IE.
 @@text
-@@text | ID | World | What to do and look at | Existing test |
-@@text |---|---|---|---|
+@@table world
 ## CQ-JT-01
 @group creative superflat
 @commands latest.log: `[jei_world] N rows in 19 tabs`, no `[jei_world]` warnings, no mixin warning for `JeiFluidTankScaleMixin` or `IEConcreteSetTimeMixin`; world join time against the last run (Block Dyeing now 2177 rows)
-@pass JW-02, JW-21
+@pass Existing test: JW-02, JW-21
 @draft no batch holds this row yet
 ## CQ-JT-02
 @group same
 @commands Stripping, Soap Washing, Block Dyeing pages (Oak Log, Soap, Red Dye uses): one log per page, soap cycles, dyed sails drawn as sails
-@pass JW-19, JW-20, JW-21
+@pass Existing test: JW-19, JW-20, JW-21
 @draft no batch holds this row yet
 ## CQ-JT-03
 @group same
 @commands Page every world tab: no Barrier icons, blocks drawn (frosted ice, candle cake, tall seagrass, crops), Budding "Nothing" slot; mobs drawn turning in Mob Transformations / Mob Bottling / Jar Storage, MCA egg fallback
-@pass JW-22, JW-23
+@pass Existing test: JW-22, JW-23
 @draft no batch holds this row yet
 ## CQ-JT-04
 @group same
 @commands Uses of a Healing potion: Jar Storage and Jar Fluids rows per potion, red jar; Jar Storage icon is the jar with a faucet
-@pass JW-24, JW-25, JW-10
+@pass Existing test: JW-24, JW-25, JW-10
 @draft no batch holds this row yet
 ## CQ-JT-05
 @group same
 @commands Notes and titles: "Cut with a knife / shears", Lava Interactions, Burning text fits; Tipped Arrows / Potion Buckets / Seasoning arrows
-@pass JW-26, JC-30
+@pass Existing test: JW-26, JC-30
 @draft no batch holds this row yet
 ## CQ-JT-06
 @group same
 @commands Fluid tanks: 250 mB clearly part-filled (LOG); switch `[jei] fluidAmountScale` to SQRT and LINEAR and back
-@pass JC-31
+@pass Existing test: JC-31
 @draft no batch holds this row yet
 ## CQ-JT-07
 @group survival or creative with IE
 @commands Place liquid concrete, time the set: about 30 s; the tab says 30 s
-@pass JW-27
+@pass Existing test: JW-27
 @draft no batch holds this row yet
 ## CQ-JT-08
 @group same as 01
 @commands `/reload`, JEI Regeneration effect page: the three potion bundles show full and coloured
-@pass EF-21
+@pass Existing test: EF-21
 @draft no batch holds this row yet
 ## CQ-JT-10
 @group same
 @commands Flower crown freeze (TODO `jei/jei-coverage #8`): time uses of Flower Crown with and without a crafting table open, then another hat (Crown); grep latest.log for `craftable-first sort of N` and note N; if it freezes, `jstack` the client mid-freeze; retry with `[jei] craftableFirst = false`
-@pass none
+@pass Existing test: none
 @draft no batch holds this row yet
 ## CQ-JT-09
 @group same
 @commands Sunbloom pages (Moobloom Conversion, Shearing): sunflower faces show, not the green back
-@pass MB-105
+@pass Existing test: MB-105
 @draft no batch holds this row yet
 @@text
 @@text Results 2026-10-28 (Run log): SQ-SY-01 to -07 PASS.
