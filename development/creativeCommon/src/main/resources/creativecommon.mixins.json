@@ -52,6 +52,7 @@
     "MobEffectCategoryMixin",
     "PhantomSpawnerBaneSkipMixin",
     "MeltingBlockStateMixin",
+    "BiomeMeltMixin",
     "VanillaLightMeltMixin",
     "RareIceLightMeltMixin",
     "NoRecipeUnlockMixin"

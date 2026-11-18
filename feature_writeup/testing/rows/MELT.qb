@@ -555,3 +555,19 @@ sleep 8
 > forceload remove 2200 2200 2363 2263
 reject \[cdevtest\] .*done=0
 look glacier {MG2} ms minus stone {MS2} ms under 0.5; JFR glacier window: no `ForgeConfigSpec$ConfigValue.get` / `ConfigValue.get` frames under `Melting.onRandomTick`, `Melting.onRandomTick` under 1 %
+
+@@section 2
+@@title SQ-MELT perf: melt tick method against the G7.1 alternatives, 2026-11-17 ([plan_post_scratch_1115.md](../plan_post_scratch_1115.md) G7.1, G8; [melting.md](../melting.md) 2)
+@@date 2026-11-17
+@@jars creativecommon
+@@sources feature_writeup/melting.md feature_writeup/plan_post_scratch_1115.md
+@@text
+@@text Queued for a later perf run (owner, 2026-11-17: G8 "the perf comparison of G7.1 is queued for a later run"). Method: `tools/perf` session with JFR and the perfBot players (memory `perf-suite-bot-players`). Only the built method exists in code; (a) and (b) are approximated by config, as noted in the row.
+@@text
+@@table
+## SQ-MELT-P2 | melt tick method (G8) against (a) extra rolls and (b) extra random ticks: ms per tick and melts per minute
+@group perf
+@commands Two fixtures, each forceloaded with 4 perfBot players: a snowy taiga area (snow layers on the ground, spruce) and a frozen ocean area (ice sheet), each with a 16x16 field of magma blocks and a 16x16 field of lanterns placed into the snow and ice. Four 10-minute windows per fixture, fresh copy of the fixture each time: (G8) defaults (`meltTickInterval 200`); (control) `meltTickInterval 0` (random ticks only, the 2026-11-14 method); (a) `meltTickInterval 0`, `meltChance 1.0`, `snowLayerMeltChance 1.0` (stands in for 5 rolls per random tick); (b) `meltTickInterval 0` with `gamerule randomTickSpeed 15` (stands in for 5x random ticks to meltable sections; over-counts, every block ticks more). Record `forge tps` mean tick time, JFR share of `Melting.*`, and melts per minute (count of target blocks changed: `cdevtest count` of snow, ice and water at the start and end of each window)
+@pass G8 within 0.5 ms per tick of the control and below (b); melts per minute of G8 at least 3x the control; JFR `Melting.onScheduledTick` plus `Melting.onRandomTick` under 2 percent of server samples; no `LevelTicks` growth beyond the targets in reach (scheduled tick count steady)
+@fails G8 costs more than (b): raise `meltTickInterval` default or cap scheduling per source tick; report numbers to the owner either way (the G7.1 report)
+@owner true
