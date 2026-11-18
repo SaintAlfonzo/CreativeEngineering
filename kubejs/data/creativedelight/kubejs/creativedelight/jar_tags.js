@@ -6,7 +6,6 @@
 // Every family is nested into #supplementaries:cookies, so putting an item in a family is enough. An item that is
 // jarable but in no family (moredelight:toast, the Hyperexperience bottle) still fills a jar, on its own.
 // Removed items (honey apple, chocolate coins) are left out; see the writeup for what was considered and skipped.
-// Moved from the pack's server_scripts/tags/jartags.js rows unchanged: one table, kept whole here.
 
 ServerEvents.tags('item', e => {
 	if (!global.CD) return

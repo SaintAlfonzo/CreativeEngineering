@@ -21,7 +21,7 @@ import java.util.function.UnaryOperator;
  */
 public final class MinersTranslator {
 	/**
-	 * Upstream ids the port does not register: the hot cocoa cup (D3) and, since TODO dishes/meals #53, the Copper Cup
+	 * Upstream ids the port does not register: the hot cocoa cup (D3) and, per TODO dishes/meals #53, the Copper Cup
 	 * and every cup (water, milk, powder snow, the 15 soup and stew cups). Files named after them are left out, files
 	 * naming them are dropped (tags lose the entry instead), the cup conversion data is not read at all.
 	 */

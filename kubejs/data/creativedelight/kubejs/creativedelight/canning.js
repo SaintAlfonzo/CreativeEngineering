@@ -346,7 +346,7 @@ global.CD.recipes(() => {
 	// Raw Fish
 	// ============================================================
 
-	// Goal: (Fish Meal- 4, 2) sized meals, 4 Meals/Can, salt or bone broth (was the Meat Meal 5, 3). Every sliced fish
+	// Goal: (Fish Meal- 4, 2) sized meals, 4 Meals/Can, salt or bone broth. Every sliced fish
 	// takes the whole fish's slots and count (a full can either way). Tropical Fish reuses Canned Goods' can.
 	canSection('raw_fish')
 

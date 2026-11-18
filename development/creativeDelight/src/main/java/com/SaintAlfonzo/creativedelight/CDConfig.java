@@ -65,13 +65,13 @@ public final class CDConfig {
 	/** Worldgen switch ids (creative_delight.md 24). */
 	public static final String WILD_CROPS = "wildCrops";
 
-	/** This config's file, and Creative Common's, which held the sections moved here at the CD carve. */
+	/** This config's file, and Creative Common's old file, the source of the sections carried over (see MOVED_SECTIONS). */
 	public static final String FILE = "creativedelight-common.toml";
 	public static final String OLD_FILE = "creativeengineering-common.toml";
 
 	/**
-	 * Sections moved here from creativeengineering-common.toml (creative_delight.md 34), for the carry-over
-	 * and the leftover WARN. {@code perf} carries only {@code troughMissCooldownTicks}: Forge drops the other old keys
+	 * Sections carried over from creativeengineering-common.toml (creative_delight.md 34) on the first boot,
+	 * and checked for the leftover WARN. {@code perf} carries only {@code troughMissCooldownTicks}: Forge drops the other old keys
 	 * when it corrects this file.
 	 */
 	public static final List<String> MOVED_SECTIONS = List.of("crop_growth", "dandelion_maturing", "crop_drops", "stem_fruit",
@@ -149,8 +149,8 @@ public final class CDConfig {
 				"Off: every crop as its mod ships it.").define(WILD_CROPS, true));
 		b.pop();
 		defineMemberSettings(b);
-		// Moved from creativeengineering-common.toml at the CD carve (creative_delight.md 34): same keys, comments
-		// and defaults, in the old order; ConfigRename carries the player's values over on the first boot.
+		// Sections carried over from creativeengineering-common.toml (creative_delight.md 34), with its keys, comments
+		// and defaults, in its order; ConfigRename carries the player's values over on the first boot.
 		CROP_GROWTH = new CropGrowth(b);
 		DANDELION_MATURING = new DandelionMaturing(b);
 		CROP_DROPS = new CropDrops(b);
@@ -168,7 +168,7 @@ public final class CDConfig {
 
 	private CDConfig() {}
 
-	/** Lines of creativeengineering-common.toml that held the sections or the key moved here. */
+	/** Lines of creativeengineering-common.toml that hold the carried-over sections or the key. */
 	private static final Pattern OLD_KEY = Pattern.compile(
 			"^\\s*(\\[(?:crop_growth|dandelion_maturing|crop_drops|stem_fruit|canning|cooking)(?:\\.[a-z_.]+)?\\]|troughMissCooldownTicks\\s*=)",
 			Pattern.MULTILINE);
@@ -197,7 +197,7 @@ public final class CDConfig {
 	}
 
 	/**
-	 * Old config files of members whose settings moved here (plan_creative_delight.md A6): file -> {old path -> new path},
+	 * Old config files of members whose settings are keys here (plan_creative_delight.md A6): file -> {old path -> new path},
 	 * a new path starting with {@code !} takes the old value inverted (the "Disable..." keys became positive switches).
 	 * Read once by {@code compat.MemberConfigMove} at construction, then the old file is renamed to {@code <file>.moved}.
 	 */

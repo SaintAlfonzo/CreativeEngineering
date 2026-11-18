@@ -71,8 +71,8 @@ ServerEvents.tags('block', e => {
 	t.add(e, '#minecraft:walls', [i.manure_brick_wall, i.polished_manure_wall])
 	t.add(e, i.wood_slab, [i.crimson_fungus_crate, i.warped_fungus_crate])
 	t.add(e, b.t_mineable_axe, [i.tree_tapper])
-	// Tilled end stone is Ender Crop's (the H&H block is gone, plan_bugfix_1114 3.2); the hops lattice block is gone
-	// too (hops on Vinery's lattice, 3.1), and the hops vine breaks by hand like a vine.
+	// Tilled end stone is Ender Crop's (no H&H block, plan_bugfix_1114 3.2); there is no hops lattice block
+	// (hops grow on Vinery's lattice, 3.1), and the hops vine breaks by hand like a vine.
 	if (global.has.mod('endercrop')) t.add(e, b.t_mineable_pickaxe, [b.tilled_end_stone])
 
 	// Sap logs: 1.4.1's spruce and dark oak, plus birch (real-world syrup, 3.1).

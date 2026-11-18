@@ -11,7 +11,7 @@ import java.util.Map;
  * <ul>
  * <li>the generator script upstream left under {@code assets/goldenfood/python/} is not served (not a resource);</li>
  * <li>the 16 village chest table copies ({@code data/minecraft/loot_tables/chests/village/}) are not served: each is the
- * vanilla table plus one Golden Food Enchantment book entry (checked), and the enchantment is removed.</li>
+ * vanilla table plus one Golden Food Enchantment book entry, and the enchantment is removed.</li>
  * </ul>
  * The 24 crafting recipes (all in the {@code minecraft} namespace; one replaces vanilla's golden carrot recipe) are
  * served as they are; the pack's recipe scripts handle them as they handled the upstream jar.

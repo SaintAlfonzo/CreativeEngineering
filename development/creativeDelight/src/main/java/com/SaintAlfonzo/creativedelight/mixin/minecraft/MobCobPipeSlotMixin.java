@@ -16,8 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 @Mixin(LivingEntity.class)
 public abstract class MobCobPipeSlotMixin {
 
-	// m_147233_ = LivingEntity.getEquipmentSlotForItem(ItemStack), static (no refmap: SRG name, remap = false). Targeted
-	// Mob: never applied in Creative Common (no defaultRequire), crashed the server under CD (defaultRequire 1)
+	// m_147233_ = LivingEntity.getEquipmentSlotForItem(ItemStack), static (no refmap: SRG name, remap = false). Targets
+	// LivingEntity, which declares the method (a Mob target never applies).
 	@Inject(method = "m_147233_", at = @At("HEAD"), cancellable = true, remap = false)
 	private static void creativeengineering$cobPipeHead(ItemStack stack, CallbackInfoReturnable<EquipmentSlot> cir) {
 		if (CornDelightCompat.isCobPipe(stack)) cir.setReturnValue(EquipmentSlot.HEAD);

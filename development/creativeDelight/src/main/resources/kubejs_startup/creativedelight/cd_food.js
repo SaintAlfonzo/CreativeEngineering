@@ -56,7 +56,7 @@ global.CD.FOOD = {
 	// Golden food: gold in the heated mixer and the Arc Furnace (the grid is a ring of 8)
 	gold: { mixer: 6, arc: 4 },
 	// Gilded (enchanted golden) food: sequenced assembly loops, each 1 gold ingot + this much liquid XP and a press
-	// (owner, food.md 3.16; was a gold block + 250 mB, 4 loops)
+	// (owner, food.md 3.16)
 	gilded: { loops: 8, xp: 125 },
 }
 

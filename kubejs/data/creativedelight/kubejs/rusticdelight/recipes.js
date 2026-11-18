@@ -36,7 +36,7 @@ ServerEvents.recipes(e => {
 
 		//######################### Maple foods ######################### Abnormals Delight's maple foods stay; Rustic's
 		// syrup stands in for Autumnity's (owner). Maple is half syrup, half honey (owner, creativedelight/members #16):
-		// the bacon takes one of each (was syrup only), the Maple Cookie above too.
+		// the bacon takes one of each the Maple Cookie above too.
 		R.shapeless(i.maple_glazed_bacon, [i.cooked_bacon, i.syrup, i.honey_bottle], e, 'maple_glazed_bacon')
 
 

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Client only. The compartment textures that were copies or recolours of other mods' art, built in memory from the
+ * Client only. The compartment textures that are copies or recolors of other mods' art, built in memory from the
  * installed jars when the resource pack loads (like Creative Brewing's Vinery bottle looks), so CD's jar ships none of
  * it (license audit TODO licence/cd #1 and mobs/nests #2). Served as the hidden resource pack
  * {@code creativedelight_compartment_art} at the bottom of the stack (CompartmentPacks); resource packs and

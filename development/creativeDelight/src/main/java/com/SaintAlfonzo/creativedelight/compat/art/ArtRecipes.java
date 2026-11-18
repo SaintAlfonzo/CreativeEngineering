@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * What {@link CompartmentArt} builds and from what. Plain data (texture ids as {@code namespace:path} strings, without
  * {@code textures/} and {@code .png}), no Minecraft classes. Output paths are the ones the compartment packs' models
- * name, so nothing else changed when the copied PNGs left the jar; kubejs/assets can still override any of them.
+ * name, so the models need no change; kubejs/assets can still override any of them.
  */
 public final class ArtRecipes {
 

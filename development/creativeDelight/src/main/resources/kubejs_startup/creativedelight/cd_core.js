@@ -83,7 +83,7 @@ global.CD = {
 	},
 }
 
-// The dial sections that moved from CEConfig at the CD carve ([cooking], [canning], [crop_drops], [crop_growth],
+// The dial sections ([cooking], [canning], [crop_drops], [crop_growth],
 // [stem_fruit], [dandelion_maturing]; creative_delight.md 34) are CDConfig's: NCH.cfg finds them by section name.
 global.NCH.registerConfig(global.CD.modId, 'com.SaintAlfonzo.creativedelight.CDConfig')
 

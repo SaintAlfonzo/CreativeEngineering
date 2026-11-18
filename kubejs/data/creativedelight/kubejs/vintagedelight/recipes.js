@@ -84,8 +84,7 @@ ServerEvents.recipes(e => {
 		R.remove({ id: 'vintagedelight:salt_from_smelting' }, e)
 		R.remove({ id: 'vintagedelight:salt_bucket_to_salt' }, e)
 
-		// The 3 froglight jar recipes took Vintage's salt block, which no longer exists as an item: rebuilt on The Salt's
-		// block (the merged one). Same inputs, time and outputs otherwise.
+		// The 3 froglight jar recipes use The Salt's salt block (Vintage's salt block is not an item here).
 		var froglights = [
 			['ochre', i.ochre_froglight, i.blaze_powder, i.magma_cream],
 			['verdant', i.verdant_froglight, i.glowstone, i.glow_berries],

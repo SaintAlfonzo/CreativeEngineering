@@ -194,7 +194,7 @@ ServerEvents.recipes(e => {
 			// Matcha latte: honey is any sugar-like; pot milk + 2 matcha + sugar-like (Kettle: farmersrespite/kettle.js)
 			pot([i.milk, i.matcha, i.matcha, sweet], i.matcha_latte, 'matcha_latte')
 			// Ice Berry Matcha (was Berry Matcha Latte): the matcha latte + 2 ice + 2 berries, shapeless or in the
-			// unheated mixer (delightful/recipes.js no longer adds its grid recipe)
+			// unheated mixer (delightful/recipes.js adds no grid recipe)
 			R.shapeless(i.berry_matcha_latte, [i.matcha_latte, i.t_ice_cubes, i.t_ice_cubes, i.t_fruits_berries, i.t_fruits_berries], e, 'berry_matcha_latte')
 			R.createMixing(mb(f.berry_matcha_latte), [mb(f.matcha_latte), i.t_ice_cubes, i.t_ice_cubes, i.t_fruits_berries, i.t_fruits_berries], e, 'berry_matcha_latte', 'n/a')
 		}

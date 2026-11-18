@@ -1,7 +1,7 @@
 // requires: creativedelight
 // Can tags: #creativedelight:cans/servings/<n> for every can in the <mod>/can_servings.js startup member scripts of
 // the CD jar (item_dict key -> servings; record kubejs/generation_scripts/food/can_servings.json, written by
-// tools/gen_can_types.py; framework #7 read by instance path before), chained up to #creativedelight:cans/servings
+// tools/gen_can_types.py; framework #7), chained up to #creativedelight:cans/servings
 // and #creativedelight:cans. Creative Common food.CanServings reads the servings count from the tag path: eating or
 // crafting takes a serving, the bar shows what's left, the last one rolls empty/crushed/nothing (CEConfig [canning]).
 // Recipes use cans through global.NCH shaped/shapeless with the `cans` argument. The JSON stays in the pack folder.

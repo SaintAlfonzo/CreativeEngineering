@@ -33,7 +33,7 @@ import net.minecraftforge.registries.ForgeRegistries;
  *       Unlit Campfire nor the rain rule touches them.</li>
  * </ul>
  * Rows in the {@code WorldRow} JSON format (Creative Common {@code compat.world.WorldRows}, registered from
- * {@code CreativeDelight}). Moved from Creative Compat (creative_split.md 7.9 step 1); the JSON helpers
+ * {@code CreativeDelight}). The JSON helpers
  * are copies of Compat's {@code BurnRows} ones, so CD has no class edge to Compat.
  */
 public final class CampfireRows {

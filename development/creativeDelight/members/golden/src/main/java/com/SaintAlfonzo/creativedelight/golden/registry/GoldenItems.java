@@ -28,7 +28,7 @@ import java.util.function.Function;
  * <p>
  * As upstream, three vanilla ids are replaced: {@code minecraft:golden_apple}, {@code minecraft:enchanted_golden_apple}
  * and {@code minecraft:golden_carrot} (the carrot gains the golden apple's effects, the enchanted apple the higher
- * values above and a stack of 1), all three moved into the Golden Food tab.
+ * values above and a stack of 1), all three sit in the Golden Food tab.
  */
 public final class GoldenItems {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, GoldenFoodMod.MODID);

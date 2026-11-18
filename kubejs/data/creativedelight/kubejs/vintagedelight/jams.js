@@ -78,7 +78,7 @@ ServerEvents.recipes(e => {
 		;[i.sweet_berry_jam_bottle, i.glow_berry_jam_bottle, i.pepper_jam_bottle, i.relish_bottle, i.sweet_berry_jam_jar,
 			i.glow_berry_jam_jar].forEach(id => R.remove({ output: id }, e))
 
-		//######################### Mason jars only (decided) ######################### items/jars #9: the vinegar and apple
+		//######################### Mason jars only ######################### items/jars #9: the vinegar and apple
 		// sauce bottles merge into their jars (CD startup item_merges.js). Their bottle <-> jar crafts go first, or the
 		// merge's swap would turn them into jar -> 3 jars.
 		;['vinegar', 'apple_sauce'].forEach(n => {
@@ -105,8 +105,8 @@ ServerEvents.recipes(e => {
 			R.replaceInput({ output: jam }, i.glass_bottle, i.empty_mason_jar, e, true)
 			R.replaceOutput({ input: jam }, i.glass_bottle, i.empty_mason_jar, e, true)
 		})
-		// Jar audit (plan_scratch_bugfix_1103 1.3, mod jar recipe scan): Handcrafted's Berry Jam Jar (decor) was the last jam
-		// recipe taking a glass bottle.
+		// Jar audit (plan_scratch_bugfix_1103 1.3, mod jar recipe scan): Handcrafted's Berry Jam Jar (decor) is the only jam
+		// recipe that took a glass bottle.
 		if (Platform.isLoaded('handcrafted'))
 			R.replaceInput({ id: 'handcrafted:berry_jam_jar' }, i.glass_bottle, i.empty_mason_jar, e)
 

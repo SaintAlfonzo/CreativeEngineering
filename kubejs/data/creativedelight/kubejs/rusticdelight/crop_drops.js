@@ -1,6 +1,6 @@
 // requires: creativedelight
 // requires: rusticdelight
-// Rustic Delight crop drops: per-crop fixes to harvest tables. It now runs after every pack loot script (they do not
+// Rustic Delight crop drops: per-crop fixes to harvest tables. It runs after every pack loot script (they do not
 // touch this table).
 //
 // Bell peppers (Rustic Delight 1.3.0): the ripe roll was red 6 : green 1 : yellow 1 plus a 15% bonus green and a

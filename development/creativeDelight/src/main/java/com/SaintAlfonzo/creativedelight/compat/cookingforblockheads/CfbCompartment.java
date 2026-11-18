@@ -14,11 +14,11 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 
 /**
  * The Cooking for Blockheads compartment of Creative Delight (feature_writeup/kitchen.md 9; plan_cb_publish.md 3b): the
- * pack's Cooking for Blockheads additions and changes, the blockheads_additions member until M8. Cooking for
+ * pack's Cooking for Blockheads additions and changes. Cooking for
  * Blockheads (All Rights Reserved) stays its own jar; this is our own code and art only (GPL-3.0-only).
  * <ul>
  * <li>{@code rack}: spice racks, tool racks and fruit baskets in 19 woods, {@code creativedelight:<wood>_spice_rack} and so
- * on (they were {@code cookingforblockheads:*} up to M8; data/creativedelight/swaps/compartments.json carries them over).</li>
+ * on (data/creativedelight/swaps/compartments.json carries older {@code cookingforblockheads:*} ids over).</li>
  * <li>{@code kitchen}: corner storage, counter toppers (cutting board, plates, coaster on a counter); the oven fuel and
  * smoking mixins; the oven lit state (Farmer's Delight heat source).</li>
  * <li>{@code client}: the 2-tall fridge filled to a full block; the oven cook surface raised to the block top.</li>
@@ -28,7 +28,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
  * {@code mixin.cookingforblockheads} name CfB's types, so without CfB the JVM never loads one. The mixins
  * ({@code mixin.cookingforblockheads}, the cutting board and coaster offsets) are gated by {@code CDMixinPlugin}; the
  * assets and loot tables are the built-in pack {@code packs/cookingforblockheads/} ({@code compat.CompartmentPacks}).
- * The kitchen code lived in Creative Common; its saved data and tag ids keep their creativeengineering names.
+ * Its saved data and tag ids keep their creativeengineering names.
  */
 public final class CfbCompartment {
 	/** Log tag of this compartment. */

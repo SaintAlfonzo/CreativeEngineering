@@ -2,7 +2,7 @@
 // Mortar and pestle (Old Guns) grinding for other mods' food recipes (TODO cooking/kitchen #10): one shapeless craft
 // per catalog entry, written by tools/gen_mortar_catalog.py from the /dumpfood recipe export (Create milling and
 // crushing whose main output is a food ingredient) into one <mod>/mortar_catalog.js member script per source recipe's
-// mod (`// requires: <mod>`, framework #7; was the JSON read by instance path). The pack's own grinding gets its mortar
+// mod (`// requires: <mod>`, framework #7). The pack's own grinding gets its mortar
 // craft from R.foodGrinding (cooking.js), so it isn't in the catalog. Regenerate the catalog after adding mods or
 // changing grinding recipes, then /reload.
 var R = global.NCH.forPack('creativedelight')
