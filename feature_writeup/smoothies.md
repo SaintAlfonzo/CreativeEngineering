@@ -31,7 +31,7 @@ Smoothie (removed 2026-10-29, `baking/sweets #5`).
 ## 2. Smoothies
 
 Recipe = shapeless in the crafting grid, plus a glass bottle. Base lengths are the fruit's Fruits Delight jam (`_jelly`
-bottle) and jello lengths ([fruit.md](fruit.md) 3.1); first fruit = base, second fruit = half base (owner 2026-11-18).
+bottle) and jello lengths ([fruit.md](fruit.md) 3.1); first fruit = base, second fruit = half base (owner, 2026-11-18).
 
 | # | Smoothie | 2 x | 1 x | First fruit (base) | Second fruit (half) |
 |---|---|---|---|---|---|
@@ -53,13 +53,13 @@ bottle) and jello lengths ([fruit.md](fruit.md) 3.1); first fruit = base, second
 | 16 | Hawberry | Hawberry | White Strawberries | Appetizing 20 s | none |
 
 Every smoothie: always edible, honey drink sound, returns the glass bottle, counts toward brain freeze, sprite =
-the strawberry banana smoothie placeholder (owner 2026-11-18; per-flavor sprites: TODO `sweets #10`). Cherry Lemon, Cherry and Raspberry Peach get nothing from their
+the strawberry banana smoothie placeholder (owner, 2026-11-18; per-flavor sprites: TODO `sweets #10`). Cherry Lemon, Cherry and Raspberry Peach get nothing from their
 first fruit (cherry and raspberry have no effect in the pack).
 
 ### 2.1 Mixed Berry effects
 
 2 red + 1 blue or purple, any berries of the slot's color ([fruit.md](fruit.md) section 4). Each berry adds its effect at half base; a berry
-used twice adds up to the full base (owner 2026-11-18). The item stores the result and shows it in its tooltip, so different
+used twice adds up to the full base (owner, 2026-11-18). The item stores the result and shows it in its tooltip, so different
 mixes do not stack together.
 
 | Slot | Berry | Effect per berry (half base) | Used twice |
@@ -86,7 +86,7 @@ Owner (2026-11-17, 2026-11-18):
 - Length by the number of rolls up to and including the hit: 1 -> 5 s, 2 -> 8 s, 3 -> 11 s, 4 -> 14 s, 5 or more ->
   20 s. Configurable: the list of lengths, the chance step and the window go in Creative Delight's common config
   (`[brainFreeze]`; backup in `configs_edited/` when hand-edited).
-- A hit resets the count (owner 2026-11-18). Fire Resistance does not block it (vanilla freeze damage ignores it).
+- A hit resets the count (owner, 2026-11-18). Fire Resistance does not block it (vanilla freeze damage ignores it).
 
 Home: Creative Delight Java (food code goes in CD; creative-delight-routing). A `#creativedelight:brain_freeze` item tag
 (through `global.tags`) lists what counts, so families join by tag, not code.
@@ -108,7 +108,7 @@ The exact item list is built from the food family tags at build time, so new fro
 
 ## 4. Limits and decisions
 
-- Rage Aura stays on the three mango smoothies, as on every Fruits Delight mango food (owner 2026-11-18); it is marked to
+- Rage Aura stays on the three mango smoothies, as on every Fruits Delight mango food (owner, 2026-11-18); it is marked to
   move to another food later (ghost pepper candidate, [fruit.md](fruit.md) section 5).
 - Pear smoothie is the "eat at any hunger" drink: Appetizing 5 min (Fruits Delight's own foods give 10 to 20 s).
 - Rejected: capping Strength III to I and fixed 60 s / 30 s lengths (2026-11-17 draft), replaced by the Fruits Delight

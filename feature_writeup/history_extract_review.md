@@ -1,17 +1,14 @@
-# Comment rewrites (plan_rules_fixes.md section 17) - resolved 2026-11-17
+# Comment rewrites for owner review (plan_rules_fixes.md section 17)
 
-`tools/history_extract.py --apply` (2026-11-17) took dates and history clauses out of code comments and filed the dated sentences
-in the writeup History. The review of its 792 rewritten comments and 136 undated history-sounding lines was done the same day
-(plan_rules_fixes_followup.md F2, six readers by file group, every entry read in the code it sits on).
+Written by `tools/history_extract.py --apply` on 2026-11-18. Each row is a dated comment that states a rule: the date was taken out and the rule kept in present tense; its dated line is in the writeup History. Check that the rule is still wanted and reads right.
 
-Result, in round numbers: about 290 comments rewritten in present tense or trimmed (orphaned fragments, "from Creative Engineering",
-"up to ...", empty parentheses, stale paths and "was" notes), 8 sentences deleted, about 500 left as they read fine, and the
-undated list (136) split into about 90 rewritten and the rest plain English ("used to power", "no longer ticking") or upstream
-donor code (Power Grid, Tempad, Vinery `core/`), which F6 leaves alone. Facts a rewrite would lose went to the writeup History;
-the near-identical "Moved from ... compost_values" History lines (33) became one line each in creative_delight.md and
-creative_brewing.md. Edits were comment-only (checked: the diff outside comment lines is empty for the touched trees).
+| File | Line | Was | Now |
+|---|---|---|---|
+| development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/config/OwnConfigLogic.java | 26 | Mod ids whose config files the watcher owns: the in-tree jars of development/ (the Creative jars, Sol: Raspberry Pie) and the in-tree ports and bundle members that keep their own config file in config/ (assumed list, 2026-11-17). | Mod ids whose config files the watcher owns: the in-tree jars of development/ (the Creative jars, Sol: Raspberry Pie) and the in-tree ports and bundle members that keep their own config file in config/ (assumed list). |
+| development/creativeCommon/src/main/java/com/SaintAlfonzo/creativecommon/melting/Melting.java | 486 | The slow tier (packed ice, cryosol) rolls {@code meltChance} here, not the low {@code slowMeltChance}, so it melts rapidly in the Nether (owner, 2026-11-17). | The slow tier (packed ice, cryosol) rolls {@code meltChance} here, not the low {@code slowMeltChance}, so it melts rapidly in the Nether (owner). |
+| tools/gen_can_types.py | 219 | Ender's Delight's mollusk and filet (End's Delight's meat and slice are merged onto them, plan_misc_1117.md 2) plus End's shulker meat's Levitation II (4 s) as a 50% chance (owner, 2026-11-18) | Ender's Delight's mollusk and filet (End's Delight's meat and slice are merged onto them, plan_misc_1117.md 2) plus End's shulker meat's Levitation II (4 s) as a 50% chance (owner) |
 
-Left for a later sweep (not on the list): "was X" and "(was creativeengineering:)" notes in a few more Delight scripts,
-`CreativeEngineeringItems.java` "migrated to KubeJS" comments, `CommonConfig` "now lives in" pointer comments.
+## Undated history phrases, left in code
 
-The dated-comment lint stays: `python3 tools/history_extract.py --lint`.
+Comment lines that read as history but carry no date; not moved (no date to file them under).
+

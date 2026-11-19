@@ -24,8 +24,8 @@ public final class OwnConfigLogic {
 
 	/**
 	 * Mod ids whose config files the watcher owns: the in-tree jars of development/ (the Creative jars, Sol: Raspberry
-	 * Pie) and the in-tree ports and bundle members that keep their own config file in config/ (assumed list,
-	 * 2026-11-17). Third-party mods keep Forge's own watcher.
+	 * Pie) and the in-tree ports and bundle members that keep their own config file in config/ (assumed list).
+	 * Third-party mods keep Forge's own watcher.
 	 */
 	public static final Set<String> OWN_MOD_IDS = Set.of(
 			// Creative jars
