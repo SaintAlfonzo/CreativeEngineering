@@ -1,0 +1,421 @@
+# Scratch queue rows UPG (plan_process_overhaul.md P2.1). Data: the queue table in scratch_queue.md is generated
+# from this file (python3 tools/status_index.py). Format: tools/scratch_query/qrows.py docstring.
+# Run: the driver (qrun.py drive): every section is a multi-boot step on the mod set release_1202 (boot 1) and the
+# full pack (boot 2 and later), one world.
+
+@@section 1
+@@title SQ-UPG 1.2.02 upgrade: a world built on the 1.2.02 release, booted on the current jars, 2026-11-18 ([plan_rowfix_r1118.md](../plan_rowfix_r1118.md) section 4, owner ruling 1; TODO `generators-and-tests #23`)
+@@date 2026-11-18
+@@jars creativecommon creativecompat creativedelight creativeequipment creativemagic creativelabels creativeworldgen
+@@sources feature_writeup/plan_rowfix_r1118.md feature_writeup/namespace_move.md
+@@tier T3
+@@modset release_1202
+@@prep copy development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.1.0.jar mods/
+@@prep copy tools/scratch_query/nsm_fixture.js kubejs/server_scripts/zz_nsm_fixture.js
+@@prep run sed -i -E 's/^(\s*noteLength\s*=\s*).*/\120/' config/creative_labels-common.toml
+@@prep run sed -i -E 's/^(\s*textDistance\s*=\s*).*/\110.0/' config/creative_labels-client.toml
+@@prep run sed -i -E 's/^(\s*leatherSlots\s*=\s*).*/\16/' config/exposure_extras-common.toml
+@@prep run sed -i -E 's/^(\s*squidBabyChance\s*=\s*).*/\10.75/' config/baby_mobs-common.toml
+@@prep run sed -i -E 's/^(\s*regrowChance\s*=\s*).*/\10.6/' config/more_mooblooms-common.toml
+@@prep boot=2: modset pack
+@@prep boot=2: copy tools/scratch_query/nsm_probe.js kubejs/server_scripts/zz_nsm_probe.js
+@@text
+@@text Boot 1 runs the deployed 1.2.02 pack (`deploy/latest/mods`, kubejs and config of commit 40ed32be; owner ruling 3) plus the
+@@text dev perfBot jar (bots for worn gear and players in other dimensions; no Creative Devtools: boot-1 rows use vanilla commands
+@@text and the KubeJS fixture probe `/nsmfix`). Boot 2 switches to the full current pack, world kept, and runs the old SQ-NSM,
+@@text SQ-HOP, SQ-RFX, SQ-BM, SQ-RDB and SQ-VH fixture checks. Old config edits (the r1111 NSM fixture's and SQ-RFX-25's) are
+@@text `@@prep run` lines before boot 1. Layout: NSM fixture x 0..16 z 0..30 (nsm_fixture.js), mooblooms and squid x 40,
+@@text painting x 60, hops x 620, Rustic blocks x 200..220 z 200.
+@@text
+@@table
+## SQ-UPG-01 | boot 1 (1.2.02 jars): build the old-id world (NSM fixture, painting, hops, tilled end stone, mooblooms, baby squid, Rustic blocks)
+@group A
+@commands `/nsmfix chests placed ground bags bots gear labels label potjar dims logout manifest`; summon an old-motive Immersive Painting; place H&H hops lattices and tilled end stone; summon the three mooblooms, a baby squid and an egg chest under the `more_mooblooms:` ids; place the Rustic blocks with their states; `randomTickSpeed 0`; `save-all flush`
+@pass every `[nsmfix]` step ends `OK step <name> finished` (the r1111 MISSING lines for backpack skins and the iron camera bag are expected); no `Unknown (block|entity)` or `Incorrect argument` reply; the save completes
+@fails a fixture step failing: `tools/scratch_query/nsm_fixture.js` against the 1.2.02 jars; an unknown id: the 1.2.02 jar set (modsets/release_1202.toml)
+@absent creativeengineering:paintings/minecraft/alban.png hearthandharvest:hops hearthandharvest:tilled_end_stone more_mooblooms:moobloom more_mooblooms:moobloom_spawn_egg more_mooblooms:peonybloom (1.2.02 ids, placed on the release jars on purpose)
+# replaces the r1111 fixture build (nsm_fixture.sh), jar_archive/p4_oldid (SQ-RFX-25 boot 1) and jar_archive/displaced (SQ-HOP-11)
+> gamerule randomTickSpeed 0
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> forceload add 0 0 63 31
+> forceload add 608 512 639 527
+> forceload add 192 192 223 207
+sleep 10
+> nsmfix chests
+> nsmfix placed
+> nsmfix ground
+> nsmfix bags
+> nsmfix bots
+sleep 3
+> nsmfix gear
+> nsmfix labels
+> nsmfix label
+> nsmfix potjar
+> nsmfix dims
+sleep 5
+> nsmfix logout
+> nsmfix manifest
+waitlog \[nsmfix\] OK step manifest finished 60
+expect \[nsmfix\] OK step gear finished
+expect \[nsmfix\] OK step labels finished
+expect \[nsmfix\] OK step dims finished
+> fill 60 -60 0 62 -58 0 minecraft:stone
+> summon immersive_paintings:painting 60 -59 1 {Motive:"creativeengineering:paintings/minecraft/alban.png",Facing:0b}
+> setblock 620 -60 520 minecraft:stone
+> setblock 622 -60 520 minecraft:stone
+> setblock 620 -60 521 hearthandharvest:hops[age=4,facing=south]
+> setblock 622 -60 521 hearthandharvest:hops[age=2,facing=south]
+> setblock 624 -61 520 hearthandharvest:tilled_end_stone
+> summon more_mooblooms:moobloom 40 -60 4 {NoAI:1b,PersistenceRequired:1b,Variant:"more_mooblooms:sunbloom",Tags:["p4a"]}
+> summon more_mooblooms:moobloom 40 -60 6 {NoAI:1b,PersistenceRequired:1b,Variant:"more_mooblooms:rosebloom",Tags:["p4a"]}
+> summon more_mooblooms:moobloom 40 -60 8 {NoAI:1b,PersistenceRequired:1b,Age:-24000,Variant:"more_mooblooms:lilybloom",Tags:["p4a"]}
+> setblock 40 -61 10 chest{Items:[{Slot:0b,id:"more_mooblooms:moobloom_spawn_egg",Count:3b,tag:{EntityTag:{Variant:"more_mooblooms:peonybloom"}}}]}
+> fill 39 -62 11 41 -61 13 minecraft:water
+> summon minecraft:squid 40 -61 12 {Age:-24000,NoAI:1b,PersistenceRequired:1b}
+> setblock 204 -61 200 minecraft:farmland[moisture=7]
+> setblock 206 -61 200 minecraft:farmland[moisture=7]
+> setblock 208 -61 200 minecraft:farmland[moisture=7]
+> setblock 200 -60 200 rusticdelight:pancakes[facing=east,servings=4]
+> setblock 202 -60 200 rusticdelight:honey_pancakes[facing=east,servings=7]
+> setblock 204 -60 200 rusticdelight:cotton[age=3]
+> setblock 206 -60 200 rusticdelight:coffee[age=4]
+> setblock 208 -60 200 rusticdelight:bell_peppers[age=6]
+> setblock 210 -60 200 rusticdelight:bell_pepper_red_crate
+> setblock 212 -60 200 rusticdelight:cotton_boll_crate
+> setblock 214 -60 200 rusticdelight:potted_wild_coffee
+> setblock 216 -60 200 rusticdelight:cherry_blossom_cheesecake[bites=1,facing=north]
+> setblock 218 -60 200 rusticdelight:wild_coffee
+> setblock 220 -60 200 rusticdelight:glowing_calamari_crate
+sleep 3
+> save-all flush
+waitlog Saved the game 120
+reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|\[nsmfix\] STEPFAIL (chests|placed|ground|bots|gear|labels|dims))
+
+## SQ-UPG-02 | old Equipment, Magic and lunchbox ids: chests, worn, Curios and dropped items read back under the new ids
+@group A
+@boot 2
+@commands Boot; open the chest; check the worn shield and Curios stepstool; walk to the dropped items and Dark Fire; `/save-all flush`; `/data get block <chest>`
+@pass Log: `[swaps]` remap lines for every `creativeengineering:` Equipment and Magic id and `solapplepie:netherite_lunchbox`, nothing unresolved. Chest, offhand, Curios slot and ground items read back under `creativeequipment:` / `creativemagic:` / `creativedelight:netherite_lunchbox` with NBT kept (shield patterns, lunchbox contents); Dark Fire still burns; stepstool still lifts
+@fails Item gone: swap list missing from the jar (`data/<ns>/swaps/owner_namespace.json`). Missing model: assets not moved into `assets/<ns>/`
+@from rows/NSM.qb SQ-NSM-02 (r1118 R3: was its fixture copy)
+bootreject \[swaps\] .*unresolved
+> forceload add 0 0 16 28
+> pbot spawn nsmA 2 -60 28 minecraft:overworld survival
+sleep 3
+shell grep -E "\[swaps\]" logs/latest.log | cut -c1-240 | head -20
+> cdevtest inv 0 -60 0
+> cdevtest inv 2 -60 0
+> cdevtest inv 4 -60 0
+> cdevtest entities 8 -60 8 10 type=minecraft:item nbt
+> cdevtest state 0 -60 4
+> cdevtest player nsmA
+> data get entity nsmA ForgeCaps
+bootexpect \[swaps\] minecraft:item: \d+ id\(s\) remapped
+expect verb=inv slot=\d+ item="?creativeequipment:\S*shield
+expect verb=inv slot=\d+ item="?creativeequipment:diamond_shield\*1\{.*Patterns
+expect verb=inv slot=2 item="?creativedelight:netherite_lunchbox
+expect verb=entities type=minecraft:item .*creativedelight:netherite_lunchbox
+expect verb=state pos=0,-60,4 state="?\S+:dark_fire
+expect verb=player name=nsmA .*off="?creativeequipment:\S*shield
+reject item="?creativeengineering:|id:\\"creativeengineering:|id:\\"solapplepie:netherite_lunchbox|state="?creativeengineering:
+reject \[cdevtest\] verb=\S+ done=0
+look swaps lines: every creativeengineering Equipment and Magic id and solapplepie:netherite_lunchbox remapped, 0 unresolved; the lunchbox keeps its food (NBT in the inv line); Curios feet slot in the ForgeCaps line holds a creativeequipment stepstool (a crow may carry the red one, scratch_run_2026-11-11); Dark Fire and stepstool behaviour unchanged
+
+## SQ-UPG-03 | old block entities: cardboard box, Botanist Pot, jar, nightstand keep contents and caps
+@group A
+@boot 2
+@commands Same boot: the cardboard box, Botanist Pot, jar and nightstand; set off TNT near a mob (shrapnel); `/data get block` each
+@pass Box, pot, jar fluid and nightstand items present; the jar and nightstand caps read `creativecompat:jar_fluid_pipes` / `creativecompat:nightstand_storage`; shrapnel entities spawn as `creativecompat:shrapnel`; the monster box reward table (config `rewardTable`) still drops
+@fails Contents gone: `capabilities` entry in Compat's swap list, `SwapLists.renameCapabilityKeys`. Reward empty: `config/creativecompat-common.toml` still names `creativeengineering:misc/monster_box_reward`
+@from rows/NSM.qb SQ-NSM-03 (r1118 R3: was its fixture copy)
+> forceload add 0 0 24 16
+> cdevtest state 2 -60 4
+> cdevtest be 4 -60 4
+> cdevtest be 6 -60 4
+> cdevtest be 8 -60 4
+> summon minecraft:zombie 20 -60 4 {NoAI:1b,PersistenceRequired:1b}
+> summon minecraft:tnt 20 -60 6 {Fuse:1}
+sleep 2
+shell grep -nE "^\s*rewardTable" config/creativecompat-common.toml
+expect verb=state pos=2,-60,4 state="?creativecompat:weathered_cardboard_box
+expect verb=be be=creativecompat:botanist_pot nbt=.*Plant:\\"minecraft:poppy\\"
+expect verb=be be=\S+ nbt=.*creativecompat:jar_fluid_pipes
+expect verb=be be=\S+ nbt=.*minecraft:book
+expect \[nsmprobe\] spawned creativecompat:shrapnel
+reject \[nsmprobe\] spawned creativeengineering:
+reject creativeengineering:misc/monster_box_reward
+reject \[cdevtest\] verb=\S+ done=0
+look jar water kept (FluidHolder in the be line); nightstand items present and its cap key under creativecompat (nightstand_storage, or the CENightstandItems list as in r1111); rewardTable names a creativecompat table
+
+## SQ-UPG-04 | (server half of SQ-NSM-04) a placed painting with an old creativeengineering motive keeps its picture id
+@group A
+@boot 2
+@commands `/data get entity` the Immersive Painting placed in boot 1 with `creativeengineering:paintings/minecraft/alban.png`; `/save-all flush`; again
+@pass Motive reads `creativecompat:paintings/minecraft/alban.png` before and after the save; the painting entity is still there. The picture, the Datapacks page and the banner pattern are client halves (a later CQ-UPG row on this world)
+@fails Old motive kept: `ImmersivePaintingMotiveAliasMixin` not applied (gated on `immersive_paintings`); painting gone: it lost its wall (boot 1 build)
+@from rows/NSM.qb SQ-NSM-04 (r1118 R3: was a draft on the fixture)
+> forceload add 48 0 63 15
+sleep 5
+> data get entity @e[type=immersive_paintings:painting,x=60,y=-59,z=1,distance=..2,limit=1] Motive
+> save-all flush
+waitlog Saved the game 120
+> data get entity @e[type=immersive_paintings:painting,x=60,y=-59,z=1,distance=..2,limit=1] Motive
+count creativecompat:paintings/minecraft/alban\.png >= 2
+reject has the following entity data: "creativeengineering:paintings
+reject No entity was found
+
+## SQ-UPG-05 | dimension move: players logged out in yellowstone and hub come back there; dimension folders move
+@group A
+@boot 2
+@commands Fixture also has: a player logged out in `creativeengineering:yellowstone` with a bed spawn there; a second player in `hub`; a waystone, a sky island and a meta structure (e.g. a balloon fleet) generated and forceloaded in the Overworld; `dimensions/creativeengineering/{yellowstone,hub,...}` on disk. Boot a copy on the new jars; both players log in; `/execute in creativeworldgen:yellowstone run say ok`; `/locate structure creativeworldgen:sky_island`; walk into the old sky island and meta structure; `/kill` the first player; `/save-all flush`; stop; `ls world/dimensions`
+@pass Log: `[dimension-move] dimensions/creativeengineering/<dim> -> dimensions/creativeworldgen/<dim>` per dimension, `[legacy-ids]` key and chunk structure lines, `[swaps]` lines for `tune_spawns` / `bee_nests`; no `Unknown structure start`, `Found reference to unknown structure`, `Unknown structure piece id` or WorldGenSettings error. Players log in at their old spot (`Dimension` = `creativeworldgen:yellowstone`); respawn at the bed; terrain intact; old structures still count (spawns, `/locate` finds the old one); the waystone teleports into the moved dimension; after stop `world/dimensions/creativeengineering` is gone and level.dat names only `creativeworldgen:` dimensions. Record whether Xaero minimap data for those dimensions starts empty
+@fails Dimension empty or regenerated: `LevelStorageAccessDimensionMoveMixin` not applied, or both folders existed (warning). Player in the Overworld: `ResourceKeyLegacyDimensionMixin`. Structure starts dropped: `ChunkSerializerLegacyStructuresMixin` / `StructureCheckLegacyStructuresMixin` SRG names
+@from rows/NSM.qb SQ-NSM-07 (r1118 R3: was its fixture copy)
+bootreject Unknown structure start|Found reference to unknown structure|Unknown structure piece id|WorldGenSettings.*(error|Error)
+> pbot spawn nsmY 0 100 0 creativeworldgen:yellowstone survival
+sleep 5
+> pbot spawn nsmH 0 100 0 creativeworldgen:hub survival
+sleep 5
+> execute in creativeworldgen:yellowstone run say NSM07-yellowstone-ok
+shell echo "dimension-move lines: $(grep -c '\[dimension-move\] dimensions/creativeengineering/' logs/latest.log)"; grep -E "\[legacy-ids\]" logs/latest.log | head -5 | cut -c1-240; L=$(sed -n "s/^level-name=//p" server.properties); ls "$L"/dimensions
+expect NSM07-yellowstone-ok$
+expect \[nsmprobe\] login nsmY dim creativeworldgen:yellowstone
+expect \[nsmprobe\] login nsmH dim creativeworldgen:hub
+reject \[nsmprobe\] login nsm[YH] dim minecraft:overworld
+look 11 dimension-move lines; ls shows only creativeworldgen; nsmY's respawn (login line) is the bed in yellowstone; structure starts: RECORD not covered (fixture has none)
+
+## SQ-UPG-06 | Creative Labels rename: notes, labels and the edited labels config carried
+@group A
+@boot 2
+@commands Fixture built on `creativeLabels-1.0.1.jar` before the rename: a stone wall with 3 written, dyed notes (one special, one with its text erased), a label showing a diamond on a chest face, notes and an eraser in a chest and the player inventory; hand-edited `creative_labels-common.toml` (`noteLength` 20) and `creative_labels-client.toml` (`textDistance` 10). Boot a copy on the new jars; `/save-all flush`; reload the chunks; `/data get block <chest>`; check config/
+@pass Log: `[creativelabels] config creative_labels-common.toml carried over`, `[swaps]` remap lines for `creative_labels:*`, no `[swaps] unresolved`, no block entity load error for `face_paper`. Every note keeps text, color, special and layer order; the label keeps its picture. Chest reads `creativelabels:sticky_note` with `CreativeLabels.Text` and `creativelabels:eraser`. `config/creativelabels-*.toml` hold 20 and 10, old files gone. `/give @s creativelabels:sticky_note` works
+@fails Notes gone but block present: the `replaces` entry for `face_paper` (block entity alias). Config at defaults: `CreativeLabels.carryOverConfig` ran after the new file existed
+@from rows/NSM.qb SQ-NSM-09 (r1118 R3: was its fixture copy)
+bootexpect \[creativelabels\] config creative_labels-common.toml carried over
+bootreject face_paper.*(Exception|[Ee]rror)|\[swaps\] .*unresolved
+> forceload add 0 16 8 17
+> save-all flush
+waitlog Saved the game 120
+> cdevtest be 1 -59 17
+> cdevtest be 2 -59 17
+> cdevtest be 3 -59 17
+> cdevtest be 6 -60 17
+> cdevtest inv 6 -60 16
+shell grep -hE "^\s*(noteLength|textDistance)" config/creativelabels-*.toml; ls config | grep -c "creative_labels-" || true
+count verb=be be=creativelabels:face_paper == 4
+expect verb=be be=creativelabels:face_paper nbt=.*Kind:\\"label\\".*minecraft:diamond
+expect verb=inv slot=\d+ item="?creativelabels:sticky_note\*1\{.*chest note
+expect verb=inv slot=\d+ item="?creativelabels:eraser
+reject \[cdevtest\] verb=\S+ done=0
+look notes keep text, colour, special and layer order (Notes lists in the three wall lines); configs hold noteLength 20 and textDistance 10, old creative_labels files gone (count 0)
+
+## SQ-UPG-07 | old H&H hops lattices keep age and facing, then grape=hops
+@group A
+@boot 2
+@commands boot 2 on the world where boot 1 placed `hearthandharvest:hops[age=4,facing=south]` at 620 -60 521 and `[age=2]` at 622; `/execute if block` the lattices; 75 random ticks; again
+@pass log `[swaps] minecraft:block: N id(s) remapped` (N counts every moved block of the world, hops and tilled end stone among them); all "Test passed" (memory forge-missing-mappings-staging: a fresh old-id save)
+@fails `data/creativedelight/swaps/hearth_removals.json`, `LegacyLatticeStemBlock.restoreHops`
+@absent hearthandharvest:hops (the 1.2.02 id placed in boot 1)
+@from rows/HOP.qb SQ-HOP-11 (r1118 R3: was its fixture copy)
+> forceload add 608 512 639 527
+sleep 5
+bootexpect \[swaps\] minecraft:block: \d+ id\(s\) remapped
+> gamerule randomTickSpeed
+> execute if block 620 -60 521 vinery:grapevine_lattice[age=4,facing=south] run say HOP11-620-lattice-age4
+> execute if block 622 -60 521 vinery:grapevine_lattice[age=2,facing=south] run say HOP11-622-lattice-age2
+> pbot spawn G 615 -60 512 minecraft:overworld survival
+sleep 2
+> cdevtest randomtick 620 -60 521 622 -60 521 75
+waitlog verb=randomtick done= 60
+sleep 1
+> execute if block 620 -60 521 vinery:grapevine_lattice[grape=hops] run say HOP11-620-grape-hops
+> execute if block 622 -60 521 vinery:grapevine_lattice[grape=hops] run say HOP11-622-grape-hops
+expect HOP11-620-lattice-age4$
+expect HOP11-622-lattice-age2$
+expect HOP11-620-grape-hops$
+expect HOP11-622-grape-hops$
+reject \[cdevtest\] verb=\S+ done=0
+look watch lines: loaded states (grape none), then grape=hops after the 75 random ticks on the two lattices (the old 5 s at randomTickSpeed 3000); 624 loads as endercrop:tilled_end_stone (outside the randomtick box)
+> gamerule randomTickSpeed 3
+
+## SQ-UPG-08 | old H&H tilled end stone loads as Ender Crop's (SQ-HH-1546b)
+@group A
+@boot 2
+@commands `/execute if block 624 -61 520 endercrop:tilled_end_stone` (boot 1 placed `hearthandharvest:tilled_end_stone`; 1.2.02's Hearth member ships it)
+@pass "Test passed" (the say line)
+@fails `hearth_removals.json`
+@from rows/HOP.qb SQ-HH-1546b (r1118 R3: was part of the SQ-HOP-11 fixture)
+@absent hearthandharvest:tilled_end_stone (the 1.2.02 id placed in boot 1)
+> forceload add 608 512 639 527
+sleep 5
+> execute if block 624 -61 520 endercrop:tilled_end_stone run say UPG08-ender-tes
+expect UPG08-ender-tes$
+
+## SQ-UPG-09 | Worldgen member renames: swap log lines, baby_mobs and more_mooblooms configs carried
+@group A
+@boot 2
+@commands boot 2 log and config: `grep "\[swaps\]" logs/latest.log`; `config/moremooblooms-common.toml`, `config/babymobs-common.toml` (boot 1 set `regrowChance = 0.6` and `squidBabyChance = 0.75` in the old files)
+@pass boot 2 log: `[swaps] ... namespace move(s)` counts the list, `[swaps] minecraft:entity_type: 1 id(s) remapped` and the same for `minecraft:item`; `[swaps] config more_mooblooms-common.toml carried over to moremooblooms-common.toml` and the `baby_mobs` one; no `Identifier .* is missing` / missing registry entry naming `more_mooblooms` or `baby_mobs`; `config/` holds `moremooblooms-common.toml` (`regrowChance = 0.6`) and `babymobs-common.toml` (`squidBabyChance = 0.75`), the old files gone
+@fails ids missing: the swap list is not in the moreMooblooms member jar (`data/moremooblooms/swaps/`) or the world was opened once without it; a config at defaults: `CreativeWorldgen` did not call `carryOver` before Forge read the COMMON configs
+@from rows/RFX.qb SQ-RFX-25 (r1118 R3: was its fixture copy)
+shell ! grep -E "Identifier .* is missing|[Mm]issing.*(more_mooblooms|baby_mobs):" logs/latest.log
+shell grep -hE "\[swaps\]" logs/latest.log | head -12
+shell grep -n "regrowChance\|squidBabyChance" config/moremooblooms-common.toml config/babymobs-common.toml; ls config | grep -E "mooblooms|baby_?mobs"
+
+## SQ-UPG-10 | mooblooms keep their variants, eggs keep theirs
+@group A
+@boot 2
+@commands `/cdevtest entities 40 -60 6 8 type=moremooblooms:moobloom`; `> data get block 40 -61 10 Items`
+@pass three mooblooms load as `moremooblooms:moobloom` with `Variant: "moremooblooms:sunbloom"`, `"moremooblooms:rosebloom"`, `"moremooblooms:lilybloom"` (the calf still a calf), no `unknown variant` WARN; the chest holds 3 `moremooblooms:moobloom_spawn_egg`; the egg spawns a peonybloom
+@fails a moobloom gone: the entity type was not remapped (SQ-RFX-25); a plain `moremooblooms:moobloom` variant with an `unknown variant` WARN: `MoobloomVariants.legacy` not applied in `Moobloom.readAdditionalSaveData`; an egg giving a random variant: `MoobloomSpawnEggItem.variantOf`
+@from rows/RFX.qb SQ-RFX-26 (r1118 R3: was its fixture copy)
+> cdevtest entities 40 -60 6 8 type=moremooblooms:moobloom
+> data get block 40 -61 10 Items
+expect moremooblooms:moobloom_spawn_egg
+shell ! grep -E "has unknown variant 'more_mooblooms:" logs/latest.log
+look each moobloom's Variant reads the moremooblooms: id it was summoned with; the egg used on the ground gives a peonybloom
+
+## SQ-UPG-11 | baby squid from the old world stays a baby; config carried
+@group A
+@boot 2
+@commands `> data get entity @e[type=minecraft:squid,limit=1,sort=nearest,x=40,y=-61,z=12] Age`; `grep -n squidBabyChance config/babymobs-common.toml`
+@pass the squid's `Age` is still negative (about -24000 plus the ticks since boot 1); `squidBabyChance = 0.75` in `babymobs-common.toml`, no `baby_mobs-common.toml` left; the common mixins apply from `babymobs.mixins.json`, no mixin error naming `babymobs`
+@fails Age 0: `MobBabyMixin` did not run (the mixin config name in the member manifest); the chance back at 0.05: `ConfigRename.carryOver` in `CreativeWorldgen`
+@from rows/BM.qb SQ-BM-03 (r1118 R3: was its fixture copy)
+> data get entity @e[type=minecraft:squid,limit=1,sort=nearest,x=40,y=-61,z=12] Age
+expect Age: -
+shell grep -n squidBabyChance config/babymobs-common.toml; ls config | grep -c "^baby_mobs-common.toml$" || true
+shell ! grep -E "babymobs\S*mixins.*(error|Error|failed)" logs/latest.log
+
+## SQ-UPG-12 | Rustic blocks from the 1.2.02 world keep their states
+@group A
+@boot 2
+@commands `/cdevtest state` on the eleven Rustic blocks boot 1 placed at 200..220 -60 200
+@pass Every block keeps its state; no missing-registry warning for `rusticdelight:`
+@fails Ids did not change, so a loss is a registry bug, not the bake
+@from rows/RDB.qb SQ-RDB-05 (r1118 R3: was its fixture copy)
+> forceload add 192 192 223 207
+sleep 5
+> cdevtest state 200 -60 200
+> cdevtest state 202 -60 200
+> cdevtest state 204 -60 200
+> cdevtest state 206 -60 200
+> cdevtest state 208 -60 200
+> cdevtest state 210 -60 200
+> cdevtest state 212 -60 200
+> cdevtest state 214 -60 200
+> cdevtest state 216 -60 200
+> cdevtest state 218 -60 200
+> cdevtest state 220 -60 200
+expect verb=state pos=200,-60,200 state="rusticdelight:pancakes\[facing=east,servings=4\]"
+expect verb=state pos=202,-60,200 state="rusticdelight:honey_pancakes\[facing=east,servings=7\]"
+expect verb=state pos=204,-60,200 state="rusticdelight:cotton\[age=3\]"
+expect verb=state pos=206,-60,200 state="rusticdelight:coffee\[age=4\]"
+expect verb=state pos=208,-60,200 state="rusticdelight:bell_peppers\[age=6\]"
+expect verb=state pos=210,-60,200 state=rusticdelight:bell_pepper_red_crate
+expect verb=state pos=212,-60,200 state=rusticdelight:cotton_boll_crate
+expect verb=state pos=214,-60,200 state=rusticdelight:potted_wild_coffee
+expect verb=state pos=216,-60,200 state="rusticdelight:cherry_blossom_cheesecake\[bites=1,facing=north\]"
+expect verb=state pos=218,-60,200 state=rusticdelight:wild_coffee
+expect verb=state pos=220,-60,200 state=rusticdelight:glowing_calamari_crate
+reject \[cdevtest\] verb=\S+ done=0
+shell echo "missing-registry lines naming rusticdelight: $(grep -ciE '(missing|unidentified|unknown).*rusticdelight' logs/latest.log)"; grep -iE "(missing|unidentified|unknown).*rusticdelight" logs/latest.log | cut -c1-240 | head -8
+
+## SQ-UPG-13 | Visceral Heap in new Nether chunks of a world made without Biomes O' Plenty
+@group A
+@boot 2
+@commands the 1.2.02 server set had no Biomes O' Plenty (deploy/latest/verify/server.installed.sha1); boot 2 adds it: `locate biome biomesoplenty:visceral_heap` from 3000 64 3000 in the Nether, forceload, count flesh; RECORD
+@pass RECORD whether the Heap appears in new chunks (plan section 9 question 1)
+@fails `RegistryLoaderPresetOverworldMixin` comment against the `biome_config.json` readme
+@from rows/VH.qb SQ-VH-11 (r1118 R3: was its fixture copy)
+shell ls DIM-1/region 2>/dev/null | head -3; L=$(sed -n "s/^level-name=//p" server.properties); ls "$L"/DIM-1/region 2>/dev/null | wc -l
+> execute in minecraft:the_nether positioned 3000 64 3000 run locate biome biomesoplenty:visceral_heap
+waitlog (The nearest biomesoplenty:visceral_heap is at|Could not find a biome of type) 120
+capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> execute in minecraft:the_nether run forceload add {P1} {P3}
+sleep 15
+> cdevtest state {P1} 64 {P3} dim=minecraft:the_nether
+> cdevtest count {P1-8} 5 {P3-8} {P1+8} 120 {P3+8} biomesoplenty:flesh dim=minecraft:the_nether
+> cdevtest count {P1-8} 5 {P3-8} {P1+8} 120 {P3+8} minecraft:netherrack dim=minecraft:the_nether
+expect verb=count block=biomesoplenty:flesh n=[1-9]
+expect verb=state pos=\S+ .*biome=biomesoplenty:visceral_heap
+reject \[cdevtest\] verb=\S+ done=0
+look RECORD: locate answer and distance from 3000 3000; flesh present in the newly generated chunk
+
+@@section 2
+@@title SQ-UPG 1.2.02 upgrade, Creative Delight namespace move: the CDNS fixture on the 1.2.02 release, scanned before and after, 2026-11-18 ([plan_cd_namespace.md](../plan_cd_namespace.md) 5, [plan_rowfix_r1118.md](../plan_rowfix_r1118.md) section 4; TODO `generators-and-tests #23`)
+@@date 2026-11-18
+@@jars creativecommon creativedelight
+@@sources feature_writeup/plan_cd_namespace.md feature_writeup/plan_rowfix_r1118.md
+@@tier T3
+@@modset release_1202
+@@prep copy development/creativeDevtools/members/perfbot/build/libs/cdevperfbot-0.1.0.jar mods/
+@@prep run bash "$INST/tools/scratch_query/cdns_fixture.sh" "$OUT" "$INST/development/creativeDelight/src/main/resources/data/creativedelight/swaps/cd_namespace.json"
+@@prep boot=2: modset pack
+@@text
+@@text Its own world: the CDNS fixture (cdns_fixture.js) fills x 0..127 like the NSM one. Boot 1 builds it on the 1.2.02 pack
+@@text and scans the save (`cdns_probe.py scan`, baseline); boot 2 (current jars) and boot 3 (again) scan and compare. Replaces
+@@text the cdns_step2 / cdns_full jar fixtures and their run scripts (cdns_step2_run.sh, cdns_full_run.sh).
+@@text
+@@table
+## SQ-UPG-14 | boot 1 (1.2.02 jars): build the CDNS fixture (FULL BUILD: blocks, vanilla holders, every moved id, entities, bots, Cooking for Blockheads and remainder buffer) and scan it
+@group A
+@commands `/cdnsfix blocks vanilla allids entities bots pack pack2 manifest`; `save-all flush`; `cdns_probe.py scan` of the save into `OUT/upg_cdns_b1.json`
+@pass every `[cdnsfix]` step OK (MISSING lines name ids the 1.2.02 jars lack, recorded); the scan writes the baseline
+@fails a step failing: `tools/scratch_query/cdns_fixture.js` against the 1.2.02 jars
+@absent creativeengineering:wooden_bucket creativeengineering:wooden_water_bucket (1.2.02 ids the fixture places on purpose)
+> gamerule doMobSpawning false
+> forceload add 0 0 127 127
+sleep 10
+> cdnsfix blocks
+> cdnsfix vanilla
+> cdnsfix allids
+> cdnsfix entities
+> cdnsfix bots
+sleep 3
+> cdnsfix pack
+> cdnsfix pack2
+> cdnsfix manifest
+waitlog \[cdnsfix\] OK.*manifest 60
+sleep 30
+> save-all flush
+waitlog Saved the game 120
+shell L=$(sed -n "s/^level-name=//p" server.properties); python3 -I "$INST/tools/scratch_query/cdns_probe.py" scan "$L" ../upg_cdns_b1.json | tail -2
+reject \[cdnsfix\] CMDFAIL|Unknown or incomplete command
+look the [cdnsfix] MISSING lines (ids the 1.2.02 jars do not have) and the scan summary
+## SQ-UPG-15 | boot 2 (current jars): every moved CD id read back, holders and blocks equal to boot 1, caps under creativedelight (SQ-CDNS-01, -03, -09)
+@group A
+@boot 2
+@commands boot on the current jars; bot `cdnsOn` logs in again; hold 60 s; `save-all flush`; scan; `cdns_probe.py compare` boot 1 against boot 2
+@pass Log: `[swaps]` remap lines for the moved ids, `[swaps] N permanent alias(es)` with N > 0, `[swaps] load report: every listed id resolved`, no `[swaps] unresolved`; compare exits 0 (holders and the block census equal); no `creativeengineering:corner_storage` / `remainder_buffer` capability key in the boot 2 scan
+@fails `swap/SwapRemapper.java`, `swap/SwapReport.java`, `SwapCapabilityKeysMixin`, `SwapLists.renameCapabilityKeys`; compare names the holder and id
+@from rows/CDNS.qb SQ-CDNS-01, -03, -09 (r1118 R3: were step2 / full jar fixture runs)
+bootexpect \[swaps\] .*remapped
+bootreject \[swaps\] .*unresolved
+> forceload add 0 0 127 127
+> pbot spawn cdnsOn 2 -60 20 minecraft:overworld survival
+sleep 60
+> data get block 0 -60 16
+> data get block 2 -60 16
+> save-all flush
+waitlog Saved the game 120
+shell grep -hE "\[swaps\]" logs/latest.log | cut -c1-240 | head -12
+shell L=$(sed -n "s/^level-name=//p" server.properties); python3 -I "$INST/tools/scratch_query/cdns_probe.py" scan "$L" ../upg_cdns_b2.json | tail -2; python3 -I "$INST/tools/scratch_query/cdns_probe.py" compare ../upg_cdns_b1.json ../upg_cdns_b2.json | tail -20
+shell ! grep -qE '"creativeengineering:(corner_storage|remainder_buffer)"' ../upg_cdns_b2.json
+look compare lines (exit 0 = EQUAL); ids still under creativeengineering in the scan only for stacks nothing decoded this boot (nested NBT, drive cells, data/*.dat)
+## SQ-UPG-16 | boot 3 (current jars again): no second remap, the save stays equal (SQ-CDNS-04)
+@group A
+@boot 3
+@commands boot again on the same jars; `save-all flush`; scan; compare with boot 2
+@pass no `[swaps] ... remapped` line for the moved ids (already saved under the new ids); compare boot 2 against boot 3 exits 0; no `[swaps] unresolved`
+@fails a remap line again: the saved snapshot still names the old id, or the alias hides it
+@from rows/CDNS.qb SQ-CDNS-04 (r1118 R3)
+bootreject \[swaps\] .*unresolved
+bootreject \[swaps\] minecraft:item: \d+ id\(s\) remapped
+> forceload add 0 0 127 127
+> pbot spawn cdnsOn 2 -60 20 minecraft:overworld survival
+sleep 30
+> save-all flush
+waitlog Saved the game 120
+shell L=$(sed -n "s/^level-name=//p" server.properties); python3 -I "$INST/tools/scratch_query/cdns_probe.py" scan "$L" ../upg_cdns_b3.json | tail -2; python3 -I "$INST/tools/scratch_query/cdns_probe.py" compare ../upg_cdns_b2.json ../upg_cdns_b3.json | tail -20

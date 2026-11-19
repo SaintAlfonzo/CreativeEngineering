@@ -148,6 +148,7 @@ look the two entities reads at x 145 z 505 (by_type): the cat (minecraft:cat) ri
 @commands `> data get entity @e[type=minecraft:squid,limit=1,sort=nearest,x=0,y=-59,z=12] Age`; `grep -n squidBabyChance config/babymobs-common.toml`; `grep -E "babymobs.mixins.json" logs/debug.log \| head -3`
 @pass the squid's `Age` is still negative (about -24000 plus the ticks since boot 1); `squidBabyChance = 0.75` in `babymobs-common.toml`, no `baby_mobs-common.toml` left; the common mixins apply from `babymobs.mixins.json`, no mixin error naming `babymobs`
 @fails Age 0: `MobBabyMixin` did not run (the mixin config name in the member manifest); the chance back at 0.05: `ConfigRename.carryOver` in `CreativeWorldgen`
+@superseded by SQ-UPG-11 (1.2.02 upgrade section) (owner ruling 1, 2026-11-18)
 > data get entity @e[type=minecraft:squid,limit=1,sort=nearest,x=0,y=-59,z=12] Age
 expect Age: -
 shell grep -n squidBabyChance config/babymobs-common.toml; ls config | grep -c "^baby_mobs-common.toml$" || true

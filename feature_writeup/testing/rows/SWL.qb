@@ -29,3 +29,34 @@
 @pass SQ-CDFL-03's pass line holds: an old id with no cycle still remaps to its survivor and the fluid is kept. No `dropped stale alias` line for it
 @fails A survivor's outgoing alias was needed after all: `SwapRemapper.dropAliasFromSurvivor`, `ForgeRegistry.sync`
 @draft no batch holds this row yet
+
+@@section 2
+@@title SQ-SWL old_id_check swap entries: strong Phantom Bane and four removed ids, 2026-11-18 ([plan_rowfix_r1118.md](../plan_rowfix_r1118.md) section 7 ruling 8; [creative_split.md](../creative_split.md) 7.7)
+@@date 2026-11-18
+@@jars creativebrewing creativecommon creativedelight creativedevtools
+@@sources development/creativeBrewing/src/main/resources/data/creativebrewing/swaps development/creativeDelight/src/main/resources/data/creativedelight/swaps
+@@text
+@@text Commit 069db1cd (from tools/old_id_check.py): `creativeengineering:strong_phantom_bane` replaced into `creativebrewing:phantom_bane` (better_beacons_potions.json; Phantom Bane is levelless); `removed` entries for `rusticdelight:fruit_beignet`, `kubejs:incomplete_quiche_bacon`, `kubejs:incomplete_quiche_mushroom` (Creative Delight removed.json) and the effect `vinery:jellie` (Creative Brewing removed.json). Any world; no old save.
+@@text
+@@table
+## SQ-SWL-02 | an old strong Phantom Bane potion reads back as creativebrewing:phantom_bane; removed ids in a chest load with no missing-registry warning
+@group A (no old save)
+@commands `cdevtest nbt` on a potion with `Potion:"creativeengineering:strong_phantom_bane"`; a chest written with that potion, `rusticdelight:fruit_beignet`, `kubejs:incomplete_quiche_bacon`, `kubejs:incomplete_quiche_mushroom` and a bread; `/data get block`
+@pass `potion=creativebrewing:phantom_bane` (not `minecraft:empty`); the chest keeps the potion (its id resolves to Phantom Bane) and the bread, the three removed items are gone; no `Unknown` / missing-registry warning naming any of the five ids. The effect `vinery:jellie` only shows in an old world's registry snapshot (not testable here)
+@fails potion=minecraft:empty: the `replaces` entry missing from `better_beacons_potions.json`, or `PotionByNameRemapMixin` not reading it; a warning: the `removed` entry missing from that jar's removed.json
+@absent creativeengineering:strong_phantom_bane rusticdelight:fruit_beignet kubejs:incomplete_quiche_bacon kubejs:incomplete_quiche_mushroom vinery:jellie (old or removed ids written on purpose)
+# r1118 (2026-11-18): the SQ-EX-01 pattern (old ids in item NBT on a world of its own)
+> forceload add 320 192 335 207
+sleep 3
+> cdevtest nbt minecraft:potion{Potion:'creativeengineering:strong_phantom_bane'}
+expect verb=nbt item=minecraft:potion .*potion=creativebrewing:phantom_bane\b
+> setblock 328 -60 200 chest{Items:[{Slot:0b,id:"minecraft:potion",Count:1b,tag:{Potion:"creativeengineering:strong_phantom_bane"}},{Slot:1b,id:"rusticdelight:fruit_beignet",Count:1b},{Slot:2b,id:"kubejs:incomplete_quiche_bacon",Count:1b},{Slot:3b,id:"kubejs:incomplete_quiche_mushroom",Count:1b},{Slot:4b,id:"minecraft:bread",Count:1b}]}
+> cdevtest inv 328 -60 200
+expect verb=inv slot=\d+ item="?minecraft:potion\*1\{.*phantom_bane
+expect verb=inv slot=\d+ item="?minecraft:bread\*1
+reject verb=inv slot=\d+ item="?(rusticdelight:fruit_beignet|kubejs:incomplete_quiche_(bacon|mushroom))
+shell ! grep -iE "(missing|unknown|unidentified).*(strong_phantom_bane|fruit_beignet|incomplete_quiche_(bacon|mushroom)|vinery:jellie)" logs/latest.log
+> setblock 328 -60 200 minecraft:air
+reject \[cdevtest\] verb=\S+ done=0
+reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded)
+

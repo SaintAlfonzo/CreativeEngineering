@@ -36,6 +36,7 @@ reject seasonable.*creativeengineering:
 @pass Log: `[swaps]` remap lines for every `creativeengineering:` Equipment and Magic id and `solapplepie:netherite_lunchbox`, nothing unresolved. Chest, offhand, Curios slot and ground items read back under `creativeequipment:` / `creativemagic:` / `creativedelight:netherite_lunchbox` with NBT kept (shield patterns, lunchbox contents); Dark Fire still burns; stepstool still lifts
 @fails Item gone: swap list missing from the jar (`data/<ns>/swaps/owner_namespace.json`). Missing model: assets not moved into `assets/<ns>/`
 @reviewed 2026-11-16
+@superseded by SQ-UPG-02 (1.2.02 upgrade section; the chest half is also SQ-NSM-11) (owner ruling 1, 2026-11-18)
 # setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
 bootreject \[swaps\] .*unresolved
 > forceload add 0 0 16 28
@@ -65,6 +66,7 @@ look swaps lines: every creativeengineering Equipment and Magic id and solapplep
 @pass Box, pot, jar fluid and nightstand items present; the jar and nightstand caps read `creativecompat:jar_fluid_pipes` / `creativecompat:nightstand_storage`; shrapnel entities spawn as `creativecompat:shrapnel`; the monster box reward table (config `rewardTable`) still drops
 @fails Contents gone: `capabilities` entry in Compat's swap list, `SwapLists.renameCapabilityKeys`. Reward empty: `config/creativecompat-common.toml` still names `creativeengineering:misc/monster_box_reward`
 @reviewed 2026-11-16
+@superseded by SQ-UPG-03 (1.2.02 upgrade section) (owner ruling 1, 2026-11-18)
 # setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
 > forceload add 0 0 24 16
 > cdevtest state 2 -60 4
@@ -90,6 +92,7 @@ look jar water kept (FluidHolder in the be line); nightstand items present and i
 @pass Both paintings keep their picture; Motive reads `creativecompat:paintings/...` after the save; the Datapacks page lists the modded and vanilla paintings once each; Bedspreads and Customizable Elytra show the modded pattern
 @fails Blank painting: `ImmersivePaintingMotiveAliasMixin` not applied (gated on `immersive_paintings`). Duplicate entries: an old `kubejs/data/creativeengineering/paintings/` copy left somewhere
 @draft the NSM fixture has no paintings or banner (nsm_fixture.js has no painting step; scratch_run_2026-11-15.md); a fixture with old-namespace paintings is needed first, and the picture and Datapacks page are client looks
+@superseded by SQ-UPG-04 (server half, 1.2.02 upgrade section); the picture, Datapacks page and banner pattern become a client row on that world, not written yet (owner ruling 1, 2026-11-18)
 ## SQ-NSM-05 | (skin half) a netherite lunchbox written under the old id takes a skin and a dye
 @group A (no old save)
 @commands Chest with `solapplepie:netherite_lunchbox` (old id in the NBT) reads back `creativedelight:netherite_lunchbox`; bot n5 holds one; skin and dye it in the smithing / crafting recipes (`zp9 skin`, `zp9 dye`)
@@ -145,6 +148,7 @@ look no minecraft:air rows from our namespaces, --left lists nothing moved
 @pass Log: `[dimension-move] dimensions/creativeengineering/<dim> -> dimensions/creativeworldgen/<dim>` per dimension, `[legacy-ids]` key and chunk structure lines, `[swaps]` lines for `tune_spawns` / `bee_nests`; no `Unknown structure start`, `Found reference to unknown structure`, `Unknown structure piece id` or WorldGenSettings error. Players log in at their old spot (`Dimension` = `creativeworldgen:yellowstone`); respawn at the bed; terrain intact; old structures still count (spawns, `/locate` finds the old one); the waystone teleports into the moved dimension; after stop `world/dimensions/creativeengineering` is gone and level.dat names only `creativeworldgen:` dimensions. Record whether Xaero minimap data for those dimensions starts empty
 @fails Dimension empty or regenerated: `LevelStorageAccessDimensionMoveMixin` not applied, or both folders existed (warning). Player in the Overworld: `ResourceKeyLegacyDimensionMixin`. Structure starts dropped: `ChunkSerializerLegacyStructuresMixin` / `StructureCheckLegacyStructuresMixin` SRG names
 @reviewed 2026-11-16
+@superseded by SQ-UPG-05 (1.2.02 upgrade section) (owner ruling 1, 2026-11-18)
 # setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
 # the r1111 fixture has no sky island, meta structure or waystone (superflat): only the dimension half is automated
 bootreject Unknown structure start|Found reference to unknown structure|Unknown structure piece id|WorldGenSettings.*(error|Error)
@@ -225,6 +229,7 @@ look every chunk line shows a loaded full chunk (11 dimensions; debug= names the
 @pass Log: `[creativelabels] config creative_labels-common.toml carried over`, `[swaps]` remap lines for `creative_labels:*`, no `[swaps] unresolved`, no block entity load error for `face_paper`. Every note keeps text, color, special and layer order; the label keeps its picture. Chest reads `creativelabels:sticky_note` with `CreativeLabels.Text` and `creativelabels:eraser`. `config/creativelabels-*.toml` hold 20 and 10, old files gone. `/give @s creativelabels:sticky_note` works
 @fails Notes gone but block present: the `replaces` entry for `face_paper` (block entity alias). Config at defaults: `CreativeLabels.carryOverConfig` ran after the new file existed
 @reviewed 2026-11-16
+@superseded by SQ-UPG-06 (1.2.02 upgrade section) (owner ruling 1, 2026-11-18)
 # setup: tools/scratch_query/nsm_newjars.sh OUT perf/runs/r1111/nsm/fixture_world perf/runs/r1111/nsm/old_cfg (a copy of the 1.2.02 fixture on the new jars, level nsmfix); copy nsm_probe.js into srv/kubejs/server_scripts; positions from perf/runs/r1111/nsm/nsm_fixture_manifest.json
 bootexpect \[creativelabels\] config creative_labels-common.toml carried over
 bootreject face_paper.*(Exception|[Ee]rror)|\[swaps\] .*unresolved

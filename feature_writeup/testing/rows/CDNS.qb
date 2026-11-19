@@ -17,6 +17,7 @@
 @pass Log: `[swaps]` remap lines for `wooden_bucket` and `wooden_water_bucket`, `[swaps] N permanent alias(es)` with N > 0, `[swaps] load report: every listed id resolved`, no `[swaps] unresolved`; compare prints EQUAL for the bucket rows (the other moved ids are unchanged on this set)
 @fails `swap/SwapRemapper.java`, `swap/SwapReport.java`; a boot crash naming `SwapReport*Mixin` or `SwapCapabilityKeysMixin` is the mixin target or signature
 @draft runs through tools/scratch_query/cdns_step2_run.sh / cdns_full_run.sh: fixture copies, a stop between boots and the offline scan and compare (cdns_probe.py) decide it; multi-boot scripts, not one qrun boot
+@superseded by SQ-UPG-14 and SQ-UPG-15 (1.2.02 upgrade section; replaces the cdns_step2 jar fixture) (owner ruling 1, 2026-11-18)
 ## SQ-CDNS-02 | old-id wooden bucket written into a chest reads back as creativedelight:wooden_bucket after a save and chunk reload
 @group A (no old save)
 @commands `setblock` a chest with `{Items:[{Slot:0b,id:"creativeengineering:wooden_bucket",Count:1b}]}`; `/data get block` after `/save-all flush` and a chunk reload
@@ -45,12 +46,14 @@ reject (Unknown (block|block type|entity)|Incorrect argument for command|Unknown
 @pass Contents present in both boots (`/data get`); caps in the probe list only `creativedelight:corner_storage` and `creativedelight:remainder_buffer`, none under `creativeengineering:`
 @fails `SwapCapabilityKeysMixin`, `SwapLists.renameCapabilityKeys`, capability ids in `CornerStorage`, `RemainderBufferStorage`
 @draft runs through tools/scratch_query/cdns_step2_run.sh / cdns_full_run.sh: fixture copies, a stop between boots and the offline scan and compare (cdns_probe.py) decide it; multi-boot scripts, not one qrun boot
+@superseded by SQ-UPG-15 (1.2.02 upgrade section; replaces the cdns_full jar fixture) (owner ruling 1, 2026-11-18)
 ## SQ-CDNS-04
 @group Old save (CDNS fixture)
 @commands Boot the SQ-CDNS-01 copy a second and a third time, `/save-all flush` each
 @pass No `[swaps] ... remapped` line for the buckets (already saved under the new ids); compare EQUAL; no `[swaps] unresolved`
 @fails Saved snapshot still names the old id, or the alias hides it
 @draft runs through tools/scratch_query/cdns_step2_run.sh / cdns_full_run.sh: fixture copies, a stop between boots and the offline scan and compare (cdns_probe.py) decide it; multi-boot scripts, not one qrun boot
+@superseded by SQ-UPG-16 (1.2.02 upgrade section, boot 3) (owner ruling 1, 2026-11-18)
 ## SQ-CDNS-05 | rollback: a save written by the new jars, booted on the 1.2.02 jars; record what is lost
 @group Old save (CDNS fixture)
 @commands Copy of a save written by the new jars, booted on the jars in `mods/` (rollback); `/save-all flush`; stop; scan; compare
@@ -111,6 +114,7 @@ look shell: none still under creativeengineering; the creativedelight count near
 @pass compare EQUAL holder by holder and in the block census; moved ids left under `creativeengineering` in `ns` are only stacks nothing decoded on this boot (nested item NBT, drive cells, `data/*.dat`, resolved by alias when read); no `[swaps] unresolved`
 @fails Compare names the holder and id; `strings` in the scan names ids a mod keeps as plain text
 @draft runs through tools/scratch_query/cdns_step2_run.sh / cdns_full_run.sh: fixture copies, a stop between boots and the offline scan and compare (cdns_probe.py) decide it; multi-boot scripts, not one qrun boot
+@superseded by SQ-UPG-15 (1.2.02 upgrade section; replaces the cdns_full jar fixture) (owner ruling 1, 2026-11-18)
 ## SQ-CDNS-10
 @group A
 @commands FULL BUILD. Static part: `tools/scratch_query/batches/r1110/cdns_10_11.qb`. Hand crafting goes with CQ-CDNS-01. Oven baking, seasoning, lunchbox recipes, a KubeJS recipe with `can_serving`, fishing net loot with `biome_tag`, block loot of each moved block, tag-driven recipes (`food_type`, `bakeware`, `cans/servings`); `/kubejs dump_recipes`

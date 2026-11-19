@@ -191,6 +191,9 @@ converting its rows -> R3 upgrade section (needs A1 + C1) -> R7.
 | 3 | release jars from `deploy/latest` as an accepted pin source for the upgrade section | open | accept: a modset naming `deploy/latest` as its jar source may pin jars without a `mod_sides.md` row | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 4 | trailing-space check lines | open | strip the trailing spaces in the .qb files; `trail-space` lint stays an error | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 5 | SB-01 and FGD-00 counts: confirm the new values are intended before changing | clear | agent checks the code first | 2026-11-18 | this plan |
+| 6 | SQ-TP-04: does an API open (`/ztp open`, `openTimedoor`) set the Tempad cooldown? | open | no: API opens stay cooldown-free; the cooldown check moves to an item-use / macro row (SQ-TP-41) and SQ-TP-04 drops it | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 7 | port_chain jars (CEPortTesting) as a pin source | open | accept: the port_chain mod set keeps `unlisted_ok`, beyond ruling 3's `deploy/latest` | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 8 | old_id_check: 29 pre-2026-11-09 ids neither present nor in a swap list | open | the Display Delight dishes are accepted as conditional (present only with their mods); the other 5 get swap entries (`strong_phantom_bane` replaces into `phantom_bane`; `removed` for `fruit_beignet`, two `incomplete_quiche` ids, `vinery:jellie`; commit 069db1cd; row SQ-SWL-02) | 2026-11-18 | AskUserQuestion 2026-11-18 |
 
 ## 8. Phase notes
 
@@ -232,3 +235,12 @@ changed; nothing booted. Every changed row carries an `r1118 R<n> (2026-11-18)` 
 - **Tool findings for R5** (not changed): `qlint` `waitlog2` still warns that a repeated waitlog returns at once, but
   qrun waits for a new line since judge-14; `cdevtest watch` lines carry no position, so two watches at once can not be
   told apart (MELT-04 watches one block for that reason); SQ-CWG-08 still sends `ceperf` / `ceplace`.
+- **R4 conversions and the upgrade section, 2026-11-18** (driver keys from commits 54ab001d, 3e43388e, 78cd52e4): two
+  forks converted WO, HH, FLR, TP, MCL, PTH, PWG, MELT, CWG (dfd34c7f) and CBA, CBB, CBC, CBO, CBP, CC, CC12, CCO, CMV,
+  CPP, CDFL, CIF, ENGM, CGE, SPF, CDS (1cbff999). New rows file UPG.qb: section 1 (SQ-UPG-01 boot 1 on `@@modset
+  release_1202` with the dev perfBot jar copied in and the old config edits as `@@prep run`; SQ-UPG-02 to -13 `@boot 2`
+  after `@@prep boot=2: modset pack`) and section 2 (CDNS fixture: SQ-UPG-14 boot 1 and baseline scan, -15 boot 2
+  compare, -16 boot 3). The keep rows they replace are superseded. SQ-HOP-01 and SQ-RDB-01 moved into sections of their
+  own with `@@prep rm`. SQ-DEP-02 moved the same way (DEP.qb section 3). Not expressible: DEP-09b (ten boots, one per removed jar),
+  CIF-04 Equipment half and CMV-03 (no manifest), WO-37 (strace launch), and the cc_only / cpp_chain manifests forbid
+  Creative Devtools, so their `/cdevtest` rows can not pass until the manifests allow it (tools owner).

@@ -222,6 +222,7 @@ look RECORD which TerraBlender loads (the mod list line and version), and whethe
 @fails `RegistryLoaderPresetOverworldMixin` comment against the `biome_config.json` readme
 @from batches/r1115/p9_o2.qb
 @reviewed 2026-11-16
+@superseded by SQ-UPG-13 (1.2.02 upgrade section) (owner ruling 1, 2026-11-18)
 shell ls DIM-1/region 2>/dev/null | head -3; ls nsmfix/DIM-1/region 2>/dev/null | wc -l
 > execute in minecraft:the_nether positioned 3000 64 3000 run locate biome biomesoplenty:visceral_heap
 waitlog (The nearest biomesoplenty:visceral_heap is at|Could not find a biome of type) 120
