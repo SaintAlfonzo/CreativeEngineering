@@ -141,6 +141,13 @@ input (the Create sheets and nuggets are swapped out of every recipe that uses t
   in `forge:ingots/gold` and the dust in `forge:dusts/gold` (MCA 7.5.20 jar). Check with RM-11.
   Decided (2026-11-07, narrowed 2026-11-14 in `recipes/metal #7`): rose gold counts as gold in every recipe, golden
   armor, tools and food included, except the ones that make raw gold forms (`metal/rose_gold_interchange.js`).
+  2026-11-18 (owner ruling, plan_bugfix_r1118.md B8): the rose gold block is in the block tag
+  `forge:storage_blocks/gold` too (`tags/storageblocktags.js`). Gold-only, literal gold block: recipes that make gold
+  forms (ingots, nuggets, crushed and dust gold blocks, gold bars) and gold-shaped decor cut from a gold block (Create
+  Deco Gold Sheet Metal, Design Decor Gold Boiler and Large Gold Boiler); gilded blackstone keeps gold (it drops gold
+  nuggets). Gold as a material takes the tag: the Golden Watering Can smithing, Handcrafted golden pots, Dustrial
+  Decor chains, Design Decor capitalism block, MCA whistle, Yuushya pearl, PneumaticCraft weighted ammo, CC turtle
+  upgrade, Sophisticated stack upgrade tier 2. The full audit is in the plan's phase notes.
 - **F6. Dust -> ingot recycling is the pack's for zinc only;** the other 8 use IE's own arc and smelting recipes. Works,
   but uneven.
 - **F7.** PARTLY FIXED 2026-10-19: the two `EVENT:` lines are gone; the rest stays ([plan_1.0.9.md](plan_1.0.9.md)). **Leftovers:** `console.log('EVENT:', e)` in both base files (prints the event object every reload);

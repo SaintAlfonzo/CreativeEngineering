@@ -1,11 +1,15 @@
 // requires: creativeengineering
 // Rose gold counts as gold (TODO recipes/metal #3, owner; #7 closed as a decision plan_bugfix_1114.md 4.2). The ingot,
-// nugget, dust, block and rod are already in the forge gold tags (MCA's own tags, tags/metaltags.js); the plate and
-// wire join them there. Here every recipe that still names a literal gold item takes the gold tag instead, so rose gold
+// nugget, dust, block and rod are already in the forge gold item tags (MCA's own tags, tags/metaltags.js); the plate and
+// wire join them there, and the block is in the gold block tag too (tags/storageblocktags.js). Here every recipe that still names a literal gold item takes the gold tag instead, so rose gold
 // fits all of them except the recipes that make the raw gold forms themselves (gold or rose gold ore, raw, crushed,
 // dust, nugget, ingot, block, bars, plate, rod, wire and their storage blocks and coils), which would turn one metal
 // into the other. Everything else takes either: golden tools, armor and food, components, equipment, shields and magic.
-// Pack scripts that name a literal gold item are edited where they are (components, redstone, process).
+// Pack scripts that name a literal gold item are edited where they are (components, redstone, process); script-added
+// recipes are not reached by the swap below, so their gold-only cases (gilded blackstone, gold bars, crushed and dust
+// gold blocks) keep the literal block on purpose (audit: plan_bugfix_r1118.md section 4, B8).
+// Stonecutting a gold block into a gold shape (Create Deco gold sheet metal, Design Decor gold boiler and cylinder)
+// makes gold itself, so those outputs are gold-only too.
 ServerEvents.recipes(e => {
 	var i = global.item
 	var R = global.NCH.forPack('creativeengineering')
@@ -13,7 +17,7 @@ ServerEvents.recipes(e => {
 	var goldOnly = []
 	var forms = ['ore', 'ds_ore', 'raw', 'raw_block', 'crushed', 'crushed_block', 'dust', 'dust_block', 'nugget', 'ingot',
 		'block', 'plate', 'plate_block', 'rod', 'wire', 'wire_coil', 'coil_block']
-	var keys = ['gold_bars', 'ornate_gold_bars']
+	var keys = ['gold_bars', 'ornate_gold_bars', 'gold_sheet_metal', 'gold_boiler', 'gold_boiler_large']
 	forms.forEach(f => { keys.push(f + '_gold'); keys.push(f + '_rose_gold') })
 	keys.forEach(key => {
 		var id = i[key]

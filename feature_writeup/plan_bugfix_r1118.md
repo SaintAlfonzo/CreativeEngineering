@@ -74,3 +74,48 @@ History: row 4 was an agent default (remove the item) until the owner ruled keep
 - B0 (2026-11-18): judged as [testing/r1118/j15.md](testing/r1118/j15.md): 5 PASS, 9 BATCH-FAULT, 0 real bugs. Row
   text for HR-05, HH-328, META31-09, META31-01 and NSM-06 handed to the coordinator for the row plan (rows are not
   edited by this plan); HH-319/-320 wait for multi-boot, CDW-01/-03/-03b and MIN-03 for reduced mod sets (row plan R4).
+- B1 (2026-11-18): `javap -p` on forge-1.19.2-43.3.13-universal.jar: `LootModifierManager` has `apply(Map, ResourceManager,
+  ProfilerFiller)` (Forge's own name, kept in production) and the bridge `m_5787_(Object, ...)`; the old target
+  `m_5787_(Map, ...)` matched neither. Inject retargeted to `apply(Map, ...)`, `injectors.defaultRequire 1` added.
+  Changelog: none. The miss came in with 89a25077 (2026-11-17), after 1.2.02 shipped, so no released version lost the
+  jar loot drops; the plan's "yes" assumed a player-visible regression.
+- B2 (2026-11-18): `global.has.datapack(ns)` asks Common's `DataNamespaces`, filled at the head of
+  `ReloadableServerResources.loadResources` (m_206861_; KubeJS has already added its packs to the manager there).
+  Narrowed against the plan: the tag helper keeps a datapack namespace only in worldgen tags (`event.getType()`
+  contains `worldgen/`). Item and block tags keep the mod rule, because jars ship optional compat data under absent
+  mods' namespaces and a kept unknown item or block would fail the whole tag.
+- B3 (2026-11-18): cause found at lead (c). KubeJS 1902.6.2 `RecipeJS.createRecipe` returns the original `Recipe` when
+  `hasChanged()` is false and the original was already parsed; `JsonRecipeJS.hasInput` parses it (`getOriginalRecipe`)
+  for every `{ input }` filter, such as `replaceItems`' item-merge pass. So a bare `r.json` edit is dropped once any such
+  filter has touched the recipe. Fixed in the helper: `setCookTime`, `scaleRecipeInt` and `setRecipeNumber` set
+  `r.changed = true`. Users: botany_pots.js (scale, set) and fruitsdelight/recipes.js (jelly cook time 400). Changelog:
+  none. 1.2.02 had working pot times; the regression and the unreleased soil bullet sit in the same cycle, and the
+  working list already describes the fixed state.
+- B4 (2026-11-18): `i.raw_pasta` -> `i.pasta`; Slice and Dice builds its copy from the cooking recipe after KubeJS, so it
+  follows. CD rebuilt. Changelog bullet under Hearth and Harvest.
+- B5 (2026-11-18): the entry was only in the toml overrides (and its configs_edited copy), not in Common's default list.
+- B6 (2026-11-18): `rdetail` prints smithing `base:` / `addition:` (UpgradeRecipe fields by SRG name) and a public
+  `input` Ingredient (IE sawmill) when `getIngredients()` is empty; a `part=fluids` line with amounts; a `part=numbers`
+  line (growth ticks, growth modifier, cook time, processing duration) so B3 checks can run without a pot; `cdevtest tag`
+  takes kind `structure` (for the B2 row).
+- B7 (2026-11-18): rows handed off (F2 client names, F5 the 9 over-limit Create recipes, F6 CS-03 at 4x). The
+  `armorCap` comment says a full dragon set is 40 (Dragon Loot config); Equipment rebuilt; the toml comment edited in
+  `config/` and `configs_edited/`.
+- B8 (2026-11-18): rose gold block added to block `forge:storage_blocks/gold` (`tags/storageblocktags.js`). Audit of every
+  recipe that reads the gold block (jar recipe JSONs scanned for `#forge:storage_blocks/gold` and literal
+  `minecraft:gold_block`, plus pack scripts). `rose_gold_interchange.js` swaps a jar recipe's literal gold block for
+  the tag unless the output is in `goldOnly`; script-added recipes are not reached by that swap.
+
+| Recipe | Reads | Ruling | Result |
+|---|---|---|---|
+| vanilla gold ingot from gold block; Create Recycle `create:crushing/gold/scrap_gold_block` (-> 9 gold ingots) | literal | gold-only (makes gold) | stays literal (`goldOnly` ingot) |
+| pack: gold bars laser cutting, gold block -> crushed gold block, gold block -> gold dust pile (`metal_building.js`, `metal_base_materials.js`) | literal, script-added | gold-only (makes gold forms) | stays literal |
+| pack: gilded blackstone deploying (`misc_metal_crafts.js`) | literal, script-added | gold-only (gilded blackstone drops gold nuggets: rose gold -> gold) | stays literal |
+| Create Deco `gold_sheet_metal_from_gold_block_stonecutting`; Design Decor `gold_cyllinder`, `gold_boiler_large` stonecutting | literal -> was swapped to the tag | gold-only (gold reshaped, output is gold) | `goldOnly` gains `i.gold_sheet_metal`, `i.gold_boiler`, `i.gold_boiler_large`: literal again |
+| pack: Golden Watering Can smithing (`hearthandharvest/recipes.js`) | literal, script-added | material | `i.any_block_gold` (tag) |
+| Handcrafted golden thin / medium / thick / wide pot; Dustrial Decor large gold chain; Design Decor capitalism block; MCA whistle; Yuushya shimmering pearl | literal -> swapped to the tag | material | tag (unchanged) |
+| CC: Tweaked advanced turtle upgrade; PneumaticCraft weighted gun ammo; Sophisticated Backpacks stack upgrade tier 2 | tag | material | tag (unchanged) |
+| Quark raw gold block / bricks smelting and blasting; Fortune on Netherite gold block smelting | output only | n/a | unchanged |
+
+  Changelog: a Rose Gold family (the earlier golden-items bullet moved into it) with the watering can and the decor
+  cuts.

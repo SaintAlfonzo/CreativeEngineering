@@ -114,6 +114,7 @@
 - **Changed:** Street Corn gives Fire Resistance for 30 seconds.
 - **Changed:** Biscuits and Gravy are made only in the cooking pot, from any dough, raw sausage, salt and milk [also shapeless].
 - **Changed:** Glazed Carrots accept cave carrots.
+- **Changed:** Macaroni and Cheese accepts Gnocchi and Cucumber Noodles [Raw Pasta only].
 - **New:** Wooden buckets hold sap, milk and honey; the Tree Tapper fills them with sap.
 - **New:** A wooden bucket milks cows and goats; a Wooden Milk Bucket is drunk like a milk bucket.
 - **Changed:** The Tree Tapper can be crafted with a wooden bucket.
@@ -367,6 +368,12 @@
 - **Changed:** Fertile Soil's farmer villager tooltip line is green, as on Rich Farmland [dark blue].
 - **New:** Campfires that place unlit say so in their tooltip: "Requires a spark or flame to light" ("soulflame" on soul campfires).
 
+## Rose Gold <!-- icon: mca:rose_gold_ingot -->
+
+- **Changed:** Golden armor, golden tools and golden food can be crafted with rose gold [gold only]. Only the recipes that make gold itself still need gold.
+- **Changed:** The Golden Watering Can can be made with a Rose Gold Block [Block of Gold only].
+- **Changed:** Gold Sheet Metal, Gold Boilers and Large Gold Boilers are cut only from Blocks of Gold [also Rose Gold Blocks].
+
 ## Gameplay
 
 - **Changed:** Mending repairs gear from collected XP [only by an anvil and a Mending book].
@@ -380,7 +387,6 @@
 - **Fixed:** Placing a block or item against a hops vine, jungle grape vine, vanilla vine or mulberry vine replaced the vine.
 - **Changed:** A planted Grapevine Lattice takes bone meal without a lattice below it.
 - **Removed:** Baby rabbits no longer have a 5% chance to be killer rabbits.
-- **Changed:** Golden armor, golden tools and golden food can be crafted with rose gold [gold only]. Only the recipes that make gold itself still need gold.
 - **Changed:** Little Logistics receiver and transmitter components in an inventory turn into Redstone Links.
 
 ## Performance & Stability
@@ -389,6 +395,7 @@
 - **Fixed:** Changes saved to the pack's own mod config files while the game ran were often not applied until a restart; they now apply about 1 second after saving.
 - **Fixed:** On Linux the game closed without a crash report while opening its window when 420 or more mods were installed.
 - **Fixed:** Tags, food types and recipes for Cozy's Improved Cats, Towns and Towers, Hopo Better Underwater Ruins, Unwrecked Ships and Yuushya were skipped as if those mods were not installed.
+- **Fixed:** Structures from the bundled structure datapacks were not blended into the terrain and kept their square pads and air gaps; they were skipped as if their mods were not installed.
 
 ## Mods Added & Removed
 

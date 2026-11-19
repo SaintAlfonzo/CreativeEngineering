@@ -16,7 +16,8 @@ ServerEvents.recipes(e => {
 		// which keep the can's water and fertilizer (vanilla smithing copies the base's NBT).
 		R.shaped(Item.of(i.watering_can), ['C  ', 'CBC', 'CC '], {C: i.ingot_copper, B: i.bucket}, e, 'watering_can')
 		R.smithing(i.iron_watering_can, i.watering_can, i.block_iron, e, 'iron_watering_can')
-		R.smithing(i.golden_watering_can, i.iron_watering_can, i.block_gold, e, 'golden_watering_can')
+		// gold as material: the rose gold block works too (recipes/metal #3)
+		R.smithing(i.golden_watering_can, i.iron_watering_can, i.any_block_gold, e, 'golden_watering_can')
 		R.smithing(i.diamond_watering_can, i.golden_watering_can, i.diamond, e, 'diamond_watering_can')
 		R.smithing(i.netherite_watering_can, i.diamond_watering_can, i.ingot_netherite, e, 'netherite_watering_can')
 		R.smithing(i.dragon_watering_can, i.netherite_watering_can, i.dragon_scale, e, 'dragon_watering_can')
@@ -62,7 +63,7 @@ ServerEvents.recipes(e => {
 		R.fdCooking([i.batter, i.syrup], i.hh_waffle, e, 'waffle', 0.35, 100)
 		R.fdCooking([i.grilled_corn, i.blaze_powder, i.any_cheese], i.street_corn, e, 'street_corn', 0.35, 100)
 		R.fdCooking([i.any_dough, i.raw_sausage, i.t_salts, i.milk], i.biscuits_and_gravy, e, 'biscuits_and_gravy', 1.0, 200, i.bowl)
-		R.fdCooking([i.raw_pasta, i.t_salts, i.milk, i.butter, i.any_cheese], i.macaroni_and_cheese, e, 'macaroni_and_cheese', 1.0, 200, i.bowl)
+		R.fdCooking([i.pasta, i.t_salts, i.milk, i.butter, i.any_cheese], i.macaroni_and_cheese, e, 'macaroni_and_cheese', 1.0, 200, i.bowl)
 		var gcCarrot = global.CD.on('miners_delight') ? [i.carrot, i.cave_carrot] : i.carrot   // dishes/meals #64
 		R.fdCooking([gcCarrot, gcCarrot, i.syrup], i.glazed_carrots, e, 'glazed_carrots', 1.0, 200, i.bowl)
 		R.fdCooking([i.t_food_cooked_meat, i.vegetables, i.any_cheese], i.tamale, e, 'tamale', 1.0, 200, i.corn_husk)
