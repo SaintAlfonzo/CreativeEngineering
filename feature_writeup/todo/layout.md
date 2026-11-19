@@ -570,6 +570,10 @@ Loot tables, LootJS, Lootr and the wandering trader.
 
 <?todo rows Loot Tables?>
 
+## Corpses
+
+<?todo rows Corpses?>
+
 ## LootJS Layer
 
 <?todo rows LootJS Layer?>
