@@ -471,12 +471,12 @@
 @@jars creativedelight powergrid
 @@sources feature_writeup/hearth_and_harvest.md
 @@prep spawn-animals=true difficulty=normal spawn-monsters=false
-@@prep toml hearthandharvest-common.toml crow stealChance 1.0
-@@prep toml hearthandharvest-common.toml crow carryTicks 200
-@@prep toml hearthandharvest-common.toml salt saltPlayerLickChance 1.0
-@@prep toml hearthandharvest-common.toml salt saltAnimalStageChance 1.0
-@@prep toml hearthandharvest-common.toml salt saltLickInterval 200
-@@prep toml hearthandharvest-common.toml salt saltSearchInterval 20
+@@prep A: boot=2: toml hearthandharvest-common.toml crow stealChance 1.0
+@@prep A: boot=2: toml hearthandharvest-common.toml crow carryTicks 200
+@@prep A: boot=2: toml hearthandharvest-common.toml salt saltPlayerLickChance 1.0
+@@prep A: boot=2: toml hearthandharvest-common.toml salt saltAnimalStageChance 1.0
+@@prep A: boot=2: toml hearthandharvest-common.toml salt saltLickInterval 200
+@@prep A: boot=2: toml hearthandharvest-common.toml salt saltSearchInterval 20
 @@prep toml loadingprotection-common.toml '"Loading Protection Configuration"' protectionDuration 1
 @@text
 @@text Targets `mods/` of 2026-11-08 22:02: Creative Common 22:02, Creative Delight 22:00 (nests `backportedHearth-1.4.1-ce-19.2-04`), Creative Brewing 21:56; all installed. Run `/dumpall` and `/cdevgen` before the worldgen block on a world that has booted these jars. Replaces the SQ-HH-01 to -15, -A, -B, -C and -D rows above, each marked with its replacement. **Nothing here has run, and the four probes have only passed `node --check`:** the first row of each block makes the probe's first live call, so run those first and fix the probe before trusting a batch. Tranche 3 has never booted: SQ-HH-401 (crow registration; the Alex's Mobs mixin is gone since the 2026-11-10 crow swap), SQ-HH-201, SQ-HH-301 and SQ-HH-1101 are the boot checks.
@@ -4186,11 +4186,13 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `TreeTapperBlockEntity`, `tapperChance`
 @from batches/r1108hh/t12_b.qb
 @reviewed 2026-11-16
-# setup/shell: qrun.py toml config/hearthandharvest-common.toml farming tapperChance 1.0
-# setup/shell: qrun.py toml config/hearthandharvest-common.toml animals bottleMilking false
-# setup/shell: qrun.py toml config/hearthandharvest-common.toml animals chickenPlucking false
-# setup/shell: qrun.py toml config/hearthandharvest-common.toml animals litters false
-# setup/shell: qrun.py toml config/hearthandharvest-common.toml animals manureFromFedAnimals false
+# r1118 R4 A2 (2026-11-18): the config edits and the restart in the row (were setup/shell notes); -1325, -1326 run on this boot
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml farming tapperChance 1.0
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml animals bottleMilking false
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml animals chickenPlucking false
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml animals litters false
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml animals manureFromFedAnimals false
+restart
 > forceload add 3048 3480
 > pbot spawn bot1 3048 -60 3480 minecraft:overworld survival
 > effect clear bot1
@@ -5929,6 +5931,14 @@ look `role controller, ...` again (re-forms after a break) (B09)
 @pass `basin` line shows `role controller`; `data get` `"controller"`; the group persisted across a restart (`FluidCapacity 32000` restored in `load()`)
 @fails `saveAdditional` / `load` (`MultiblockRole`, `MasterPos`, `FluidCapacity`)
 @from batches/r1112/hh_mach_a2.qb
+# r1118 R4 A2 (2026-11-18): the config edits and the restart in the row (were prose); -275 to -277 follow on this boot
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml machines troughBreedingCap 2
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml machines stompingBasinSlotLimit 128
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml machines sprinklerRescanTicks 20
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml worldgen saltCaveRarity 1
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml worldgen saltCaveMinY 0
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/hearthandharvest-common.toml worldgen saltCaveMaxY 0
+restart
 sleep 30
 > pbot spawn hb1 8 -60 8 minecraft:overworld survival
 sleep 4
@@ -8425,6 +8435,9 @@ expect AlarmSource: \[I; ?1, 2, 3, 4\]
 @pass `expect \[zhh3\] cfg stealChance = 1\.0`; `expect \[zhh3\] cfg saltLickInterval = 200\b`; `expect has the following entity data: \{.*Trust: [1-9]`; `expect AlarmTicks: 1[4-9]\d\d`; `expect \[zhh3\] log hearthandharvest:crow .*carry=true.* main=minecraft:emerald x1`
 @fails `CrowWariness.load` from the entity's `Wariness` compound (keys `Trust`, `AlarmTicks`, `AlarmSource`, `Carrying`, `CarryTicks`); the crow only starts ticking once its chunk is forceloaded again, so a low Trust here means the chunk stayed loaded across the restart or the save lost it.
 @from batches/r1112/hh_crow.qb passed
+@boot 2
+# r1118 R4 A1 (2026-11-18): first row of boot 2 (Boot F: the crow and salt numbers are @@prep A: boot=2: lines; Boot D
+# rows 401 to 465 keep the shipped values: SQ-HH-451 reads the shipped carryTicks 1200)
 sleep 10
 > data get entity @e[tag=r465,limit=1] Wariness
 > forceload add 21132 3992 21148 4008
@@ -8449,6 +8462,7 @@ expect \[zhh3\] cfg saltLickInterval = 200\b
 @fails `SaltEvents.onRightClickBlock` lick branch, `SaltLick.wear` (last stage pops `salt:salt`; the pack's item swap turns it to salt dust on pickup, so either id counts here).
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 15960 0 15976 16
 sleep 3
 > pbot spawn b467 15965 -60 3 minecraft:overworld survival
@@ -8480,6 +8494,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltEvents` lick branch (`player.getOffhandItem().isEmpty()`).
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16020 0 16036 16
 sleep 3
 > pbot spawn b468 16025 -60 3 minecraft:overworld survival
@@ -8501,6 +8516,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltEvents` lick branch (`stack.isEmpty()`).
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16080 0 16096 16
 sleep 3
 > pbot spawn b469 16085 -60 3 minecraft:overworld survival
@@ -8522,6 +8538,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltEvents` `SaltConfig.PLAYER_LICKING` guard.
 @from batches/r1111/hh_crow_f.qb
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16140 0 16156 16
 sleep 3
 > pbot spawn b470 16145 -60 3 minecraft:overworld survival
@@ -8545,6 +8562,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltEvents` wax and `AXE_WAX_OFF` branches, `SaltLick.waxedOf`/`unwaxedOf`.
 @from batches/r1111/hh_crow_f.qb
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16200 0 16216 16
 sleep 3
 > pbot spawn b471 16205 -60 3 minecraft:overworld survival
@@ -8578,6 +8596,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltLick` `WAX` / `UNWAX` maps.
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16260 0 16276 16
 sleep 3
 > pbot spawn b472 16265 -60 3 minecraft:overworld survival
@@ -8603,6 +8622,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `loot_tables/blocks/waxed_*` and `*_licked_*` drop themselves; `#minecraft:mineable/pickaxe` (J57).
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16320 0 16336 16
 sleep 3
 > setblock 16323 -60 3 hearthandharvest:waxed_salt_block
@@ -8621,6 +8641,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltEvents` restore branch (`SaltLick.isSalt` = `#forge:salt`, which in the current tag dump holds only `vintagedelight:salt_dust`), `SaltLick.restored`, `consume`. Five restores use 4 dust then stop at 0: the 4th use on stage 0 consumes nothing (restored null), the waxed use is the 4th consumption.
 @from batches/r1112/hh_crow.qb
 @reviewed 2026-11-16
+@boot 2
 > forceload add 21192 3992 21208 4008
 sleep 3
 > kill @e[type=!player,x=21192,y=-62,z=3992,dx=16,dy=16,dz=16]
@@ -8660,6 +8681,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltEvents.registerDispenser`, `SaltLick.restored`.
 @from batches/r1111/hh_crow_f.qb
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16440 0 16456 16
 sleep 3
 > setblock 16443 -60 3 hearthandharvest:well_licked_salt_block
@@ -8683,6 +8705,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltEvents.registerDispenser` (only `salt:salt`, item_merges.md 2.9 swaps salt to salt dust); register for `#forge:salt` or the dust too.
 @from batches/r1111/hh_crow_f.qb
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16500 0 16516 16
 sleep 3
 > setblock 16503 -60 3 hearthandharvest:heavily_licked_salt_block
@@ -8706,6 +8729,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `registerDispenser` `SaltLick.isLickable` guard.
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16560 0 16576 16
 sleep 3
 > setblock 16563 -60 3 hearthandharvest:waxed_well_licked_salt_block
@@ -8727,6 +8751,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `SaltLick.restored` null at stage 0.
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16620 0 16636 16
 sleep 3
 > setblock 16623 -60 3 salt:salt_block
@@ -8748,6 +8773,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `StayNearSaltGoal` (trip to a `walkable` spot, `closeEnough` within 2), `HHSaltRegistry.SALT_LICK_POI`, `SaltLick.wear`. A cow that never starts: POI not registered (`/zhh3 poi` row) or `salt_lickers` tag.
 @from batches/r1112/hh_crow_rerun.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 21254 3994 21266 4006
 sleep 3
 > kill @e[type=!player,x=21254,y=-62,z=3994,dx=12,dy=8,dz=12]
@@ -8780,6 +8806,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `StayNearSaltGoal` rate (N24-10 scaled by the 200-tick interval); five cows at chance 1 need only 4 licks between them.
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16733 -7 16747 7
 sleep 3
 > fill 16733 -61 -7 16747 -56 7 minecraft:glass hollow
@@ -8806,6 +8833,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `StayNearSaltGoal.lick` (`ANIMAL_STAGE_CHANCE` roll). Live-set double only; restore with the last command.
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16793 -7 16807 7
 sleep 3
 > fill 16793 -61 -7 16807 -56 7 minecraft:glass hollow
@@ -8836,6 +8864,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `StayNearSaltGoal.beyondRadius` and `findSalt` (`saltAnimalRadius` + 2). Note a cow left inside 17 to 20 blocks without being pulled may also never lick: `findTrip` needs a complete path and a cow's follow range is 16 (retries every 125 ticks).
 @from batches/r1115/p4_a1.qb
 @reviewed 2026-11-16
+@boot 2
 > forceload add 21290 3994 21350 4006
 sleep 3
 > kill @e[type=!player,x=21290,y=-62,z=3994,dx=60,dy=8,dz=12]
@@ -8871,6 +8900,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails POI type states (no waxed states), `StayNearSaltGoal.saltStillThere` (`isLickable`).
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 16913 -7 16927 7
 sleep 3
 > fill 16913 -61 -7 16927 -56 7 minecraft:glass hollow
@@ -8895,6 +8925,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `expect \[zhh3\] seen a StayNearSaltGoal no`; `expect \[zhh3\] log minecraft:cow .*restricted=false`
 @fails `StayNearSaltGoal.saltStillThere` drop-out, `Goal.stop`; plan S4 "no home area".
 @from batches/r1111/hh_crow_f.qb
+@boot 2
 > zhh3 log
 > forceload add 16973 -7 16987 7
 sleep 3
@@ -8923,6 +8954,7 @@ look UNPARSED CMD: restricted=
 @fails `StayNearSaltGoal.lick` (no mobGriefing check, J58).
 @from batches/r1112/hh_crow.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 21373 3993 21387 4007
 sleep 3
 > kill @e[type=!player,x=21373,y=-62,z=3993,dx=14,dy=8,dz=14]
@@ -8951,6 +8983,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `StayNearSaltGoal.available`, `ANIMAL_LICKING`.
 @from batches/r1111/hh_crow_f.qb
 @reviewed 2026-11-16
+@boot 2
 > forceload add 17093 -7 17107 7
 sleep 3
 > fill 17093 -61 -7 17107 -56 7 minecraft:glass hollow
@@ -8978,6 +9011,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `expect \[zhh3\] seen a StayNearSaltGoal no`
 @fails `StayNearSaltGoal.available` (`isLeashed`).
 @from batches/r1111/hh_crow_f.qb passed
+@boot 2
 > forceload add 17154 -6 17166 6
 sleep 3
 > fill 17154 -61 -6 17166 -56 6 minecraft:glass hollow
@@ -9000,6 +9034,7 @@ expect \[zhh3\] seen a StayNearSaltGoal no
 @pass `expect \[zhh3\] seen a StayNearSaltGoal no`
 @fails `StayNearSaltGoal.available` (`AbstractHorse.isTamed`, `crow_salt_tags` horse is in).
 @from batches/r1111/hh_crow_f.qb passed
+@boot 2
 > forceload add 17214 -6 17226 6
 sleep 3
 > fill 17214 -61 -6 17226 -56 6 minecraft:glass hollow
@@ -9021,6 +9056,7 @@ expect \[zhh3\] seen a StayNearSaltGoal no
 @pass `expect \[zhh3\] seen a StayNearSaltGoal no`
 @fails `#creativedelight:salt_lickers`; `SaltEvents.onEntityJoin`.
 @from batches/r1111/hh_crow_f.qb passed
+@boot 2
 > forceload add 17274 -6 17286 6
 sleep 3
 > fill 17274 -61 -6 17286 -56 6 minecraft:glass hollow
@@ -9042,6 +9078,7 @@ expect \[zhh3\] seen a StayNearSaltGoal no
 @pass `expect \[zhh3\] seen a StayNearSaltGoal no`
 @fails same.
 @from batches/r1111/hh_crow_f.qb passed
+@boot 2
 > forceload add 17334 -6 17346 6
 sleep 3
 > fill 17334 -61 -6 17346 -56 6 minecraft:glass hollow
@@ -9063,6 +9100,7 @@ expect \[zhh3\] seen a StayNearSaltGoal no
 @pass `expect \[zhh3\] seen a StayNearSaltGoal no`
 @fails same.
 @from batches/r1111/hh_crow_f.qb passed
+@boot 2
 > forceload add 17394 -6 17406 6
 sleep 3
 > fill 17394 -61 -6 17406 -56 6 minecraft:glass hollow
@@ -9084,6 +9122,7 @@ expect \[zhh3\] seen a StayNearSaltGoal no
 @pass `count Mean TPS: (19\|20) >= 3`; LOOK: the three `Mean tick time` values are within noise of each other (with salt not noticeably above goal-off; with salt removed back to baseline). Group A superflat keeps this comparable.
 @fails `StayNearSaltGoal` POI search (only `findSalt` every 20 ticks in Boot F); a large step between the first two windows is the goal itself.
 @from batches/r1111/hh_crow_f.qb
+@boot 2
 > forge tps
 > forceload add 17396 -64 17524 64
 sleep 3
@@ -9113,6 +9152,7 @@ look `count Mean TPS: (19|20) >= 3`; LOOK: the three `Mean tick time` values are
 @fails `CrowSeekShinyGoal` (`pickSlot` hotbar 0..8, `removeItem(slot, 1)`), `stealable`. A ground diamond taken would mean the probe set a Thrower; this row uses `summon item` without one. The bot is a survival ServerPlayer, so theft works; the action-bar text needs a client (see CQ row).
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 17507 -13 17533 13
 sleep 3
 > fill 17507 -61 -13 17533 -47 13 minecraft:glass hollow
@@ -9148,6 +9188,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `CrowSeekShinyGoal.stealable` (`hasTag`, `is(SHINY_ITEMS)`), `crow_shiny_items` exclusions.
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 17567 -13 17593 13
 sleep 3
 > fill 17567 -61 -13 17593 -47 13 minecraft:glass hollow
@@ -9183,6 +9224,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `CrowSeekShinyGoal.canUse` `STEAL_SHINY_ITEMS`.
 @from batches/r1111/hh_crow_f.qb
 @reviewed 2026-11-16
+@boot 2
 > forceload add 17627 -13 17653 13
 sleep 3
 > fill 17627 -61 -13 17653 -47 13 minecraft:glass hollow
@@ -9211,6 +9253,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `CrowLogic.isWild` in `CrowSeekShinyGoal.canUse`. Fetching does not use the loot carry, so `carry=false` stays even while the crow holds the diamond.
 @from batches/r1112/hh_crow.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 21427 3987 21453 4013
 sleep 3
 > kill @e[type=!player,x=21427,y=-62,z=3987,dx=26,dy=17,dz=26]
@@ -9246,6 +9289,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `CrowSeekShinyGoal.findVictim` (box inflated 10).
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 17744 -16 17776 16
 sleep 3
 > fill 17759 -61 -1 17761 -57 1 minecraft:glass hollow
@@ -9272,6 +9316,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `CrowSeekShinyGoal.validVictim`.
 @from batches/r1111/hh_crow_f.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 17807 -13 17833 13
 sleep 3
 > fill 17807 -61 -13 17833 -47 13 minecraft:glass hollow
@@ -9299,6 +9344,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @fails `CrowSeekShinyGoal.fleePlayers`, `CrowEvents.onLivingTick`, `CrowLogic.dropLoot`. The carry time starts at `loot` (200 ticks, Boot F); wait is 15 s + 6 s.
 @from batches/r1112/hh_crow.qb passed
 @reviewed 2026-11-16
+@boot 2
 > forceload add 21475 3975 21525 4025
 sleep 3
 > kill @e[type=!player,x=21475,y=-62,z=3975,dx=50,dy=14,dz=50]
@@ -9333,6 +9379,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `expect \[zhh3\] seen a CrowSeekShinyGoal yes`; `expect \[zhh3\] assert a minD=.* <= 2\.?0* PASS`; `expect minecraft:gold_ingot`; `expect has the following block data: 1b`; `expect \[zhh3\] log hearthandharvest:crow .*carry=false/0 .*main=empty`
 @fails `CrowSeekShinyGoal.nearbyNest` (16 / vertical 3), `flyToNest` (`NEST_WAIT` 20), `deposit`, `NestBlockEntity.markCrowStash`, `crow.stashInNests`, `#creativedelight:nests`.
 @from batches/r1111/hh_crow_f.qb
+@boot 2
 > forceload add 17927 -13 17953 13
 sleep 3
 > fill 17927 -61 -13 17953 -47 13 minecraft:glass hollow
@@ -9366,6 +9413,7 @@ look UNPARSED CMD: CrowStash
 @fails `CrowSeekShinyGoal` carry + nest path (carry starts from the theft), `#creativedelight:nests`.
 @from batches/r1113/rerun_a.qb
 @reviewed 2026-11-16
+@boot 2
 > fill 30987 -61 29987 31013 -47 30013 minecraft:glass hollow
 > fill 30988 -60 29988 31012 -48 30012 minecraft:air
 > kill @e[type=!player,x=30987,y=-62,z=29987,dx=26,dy=17,dz=26]
@@ -9398,6 +9446,7 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `reject minecraft:gold_ingot`
 @fails `CrowSeekShinyGoal.nearbyNest` (`STASH_IN_NESTS`).
 @from batches/r1112/hh_crow.qb passed
+@boot 2
 > forceload add 21547 3987 21573 4013
 sleep 3
 > kill @e[type=!player,x=21547,y=-62,z=3987,dx=26,dy=17,dz=26]
@@ -9684,6 +9733,12 @@ reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 @pass `shod=true` and `Horseshoe=0.25` after the restart; transient modifiers are re-added, not saved twice (one `Horseshoe=0.25` only)
 @fails persistent data key; `addTransientModifier`
 @from batches/r1111/hh_gear_b.qb
+# r1118 R4 A2 (2026-11-18): the restart in the row (was prose)
+> save-all flush
+sleep 5
+restart
+> forceload add 470 470 620 620
+sleep 3
 > pbot spawn G 500 -60 490 minecraft:overworld survival
 sleep 3
 > zhh5 horse zh1

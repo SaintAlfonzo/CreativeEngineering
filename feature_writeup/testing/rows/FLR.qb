@@ -203,6 +203,16 @@ look heated: flesh 250 mB blood (+ a bone 1 in 4), porous 500 mB, tendons 250 mB
 @pass items still there; `/data get block <controller>` shows `Size: 32`
 @fails `ProcessingInventoryMixin.growOnLoad`
 @from batches/r1111/a2.qb passed
+# r1118 R4 A2 (2026-11-18): placing and filling rebuilt here (boot 1 of r1111 a1 was not migrated), then the restart in the
+# row; the NBT gives Size 16, so a 32 read back is the mixin's grow on load kept through a save
+> forceload add 2300 0 2310 10
+sleep 2
+> setblock 2300 -60 2 create:crushing_wheel_controller{Inventory:{Size:16,Items:[{Slot:0,id:"biomesoplenty:flesh",Count:16b}]}}
+> setblock 2304 -60 2 create:mechanical_saw[facing=up]{Inventory:{Size:16,Items:[{Slot:0,id:"biomesoplenty:flesh",Count:16b}]}}
+sleep 2
+> save-all flush
+sleep 5
+restart
 > forceload add 2300 0 2310 10
 sleep 2
 > data get block 2300 -60 2 Inventory

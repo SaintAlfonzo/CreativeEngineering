@@ -81,8 +81,13 @@ look the four counts sum to about 25 (not 70); the farthest monster within about
 @pass No new monster more than 32 blocks above or below the player
 @fails Deep cave spawns: band mixin did not apply
 @from batches/r1031/b1_gameplay.qb
-# needs [perf] mobCapForceLevel = 2 set in the toml BEFORE the boot (a running server does not reload the toml);
-# run on its own restart (A2: after a2_variants; B1: on the B1b boot), then set it back to -1
+# r1118 R4 A2 (2026-11-18): [perf] mobCapForceLevel = 2 needs a boot (a running server does not reload it): edit and
+# restart in the row, back to -1 at the end; PL is located here (it came from a setup row that was not migrated)
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml perf mobCapForceLevel 2
+restart
+> locate biome minecraft:plains
+waitlog nearest minecraft:plains is at 120
+capture PL nearest minecraft:plains is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > pbot spawn qm {PL1} 120 {PL3} minecraft:overworld survival
 # fresh boot: nothing spawns near a just-joined bot for about 2.5 min (2026-10-31): wait it out
 sleep 160
@@ -94,6 +99,8 @@ sleep 120
 look every monster Y within 32 of qm's Y; qm stands in plains over caves
 > pbot remove qm
 > time set noon
+edit python3 "$INST/tools/scratch_query/qrun.py" toml config/creativeworldgen-common.toml perf mobCapForceLevel -1
+restart
 
 ## SQ-MCL-06
 @group A

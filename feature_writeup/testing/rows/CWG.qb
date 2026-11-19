@@ -144,13 +144,59 @@ sleep 10
 shell python3 -c "import json;b=json.load(open('kubejs/exported/tags/block_tags.json'));e=json.load(open('kubejs/exported/tags/entity_type_tags.json'));i=json.load(open('kubejs/exported/tags/item_tags.json'));want=[(k,len(v)) for d in (b,i) for k,v in d.items() if k.startswith(('creativeworldgen:earth_fill/','creativeworldgen:ground_match/')) or k=='creativeworldgen:worldgen/grass_like_soils'];want+=[(k,len(v)) for k,v in e.items() if k.endswith('bubble_column_immune')];[print(k,n) for k,n in sorted(want)];empty=[k for k,n in want if n==0];print('empty:',empty);import sys;sys.exit(1 if empty or not want else 0)"
 look every listed tag has members; the bubble_column_immune entity tag present
 
-## SQ-CWG-08 | old world on the new jars: chunks, mobs and blocks intact; mooshroom breeding; leaf decay; Devtools commands
+## SQ-CWG-08a | (boot 1 of SQ-CWG-08) a placed village, a mooshroom pair in a pen, two cows; saved
 @group A
-@commands Boot 2 save: walk into boot 1's chunks; spawn a cow next to a flower biome, a mooshroom pair with a brown and red; break a log under leaves; start a raid; `/cdevperf mobcap`, `/dumpspawns`, `/cdevplace` (Devtools)
+@commands Home marker and capture SAH; mooshroom pen (brown, red), two NoAI cows, `place structure minecraft:village_plains` at SAH x+160; bell and bed clone counts; `save-all flush`
+@pass both mooshrooms present; the village placed; clone counts recorded for SQ-CWG-08 (boot 2)
+@fails `place structure` refused (pool or template), a summon refused
+@from batches/r1103/sA_1.qb
+@reviewed 2026-11-18
+# r1118 R4 A1 (2026-11-18): boot 1 of SQ-CWG-08 on the current jars (the old 1.1.06 world half is dropped, plan_rowfix_r1118
+# section 4: that migration shipped in 1.2.00); SQ-CWG-08 is @boot 2 on the same world
+bootexpect Done \(
+> execute unless entity @e[type=minecraft:marker,tag=sahome] run summon minecraft:marker ~ ~ ~ {Tags:["sahome"]}
+sleep 2
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
+> gamerule doDaylightCycle false
+> time set noon
+> gamerule doWeatherCycle false
+> weather clear 1000000
+> gamerule doPatrolSpawning false
+> gamerule doTraderSpawning false
+> gamerule doInsomnia false
+> fill {SAH1+40} {SAH2} {SAH3+8} {SAH1+46} {SAH2+2} {SAH3+14} minecraft:glass hollow
+> fill {SAH1+41} {SAH2+2} {SAH3+9} {SAH1+45} {SAH2+2} {SAH3+13} minecraft:air
+> summon minecraft:mooshroom {SAH1+42} {SAH2} {SAH3+11} {Type:"brown",PersistenceRequired:1b,Tags:["sacwgm","sacwgbrown"]}
+> summon minecraft:mooshroom {SAH1+44} {SAH2} {SAH3+11} {Type:"red",PersistenceRequired:1b,Tags:["sacwgm","sacwgred"]}
+> summon minecraft:cow {SAH1+50} {SAH2} {SAH3+10} {NoAI:1b,PersistenceRequired:1b,Tags:["sacwgc"]}
+> summon minecraft:cow {SAH1+52} {SAH2} {SAH3+10} {NoAI:1b,PersistenceRequired:1b,Tags:["sacwgc"]}
+> forceload add {SAH1+112} {SAH3-48} {SAH1+208} {SAH3+48}
+sleep 30
+> place structure minecraft:village_plains {SAH1+160} {SAH2} {SAH3}
+sleep 10
+> execute if entity @e[type=minecraft:mooshroom,tag=sacwgbrown] run say SA1 brown ok
+> execute if entity @e[type=minecraft:mooshroom,tag=sacwgred] run say SA1 red ok
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+60} {SAH3-32} filtered minecraft:bell
+> clone {SAH1+128} {SAH2-4} {SAH3-32} {SAH1+191} {SAH2+3} {SAH3+31} {SAH1+128} {SAH2+80} {SAH3-32} filtered #minecraft:beds
+expect SA1 brown ok
+expect SA1 red ok
+> save-all flush
+waitlog Saved the game 60
+look village placed; bell / bed clone counts noted for SQ-CWG-08; the forceload stays (boot 2 reads the same chunks)
+reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag))
+
+## SQ-CWG-08 | the SQ-CWG-08a world after a restart: chunks, mobs and blocks intact; mooshroom breeding; leaf decay; Devtools commands
+@group A
+@commands Boot 2 of the SQ-CWG-08a world: walk into boot 1's chunks; spawn a cow next to a flower biome, a mooshroom pair with a brown and red; break a log under leaves; start a raid; `/cdevperf mobcap`, `/dumpspawns`, `/cdevplace` (Devtools)
 @pass Saved structures and mobs intact; mooshroom breeding as before; leaf decay cascade; raiders glow; the three Devtools commands run
 @fails A listener that did not move, or Devtools' `ModList` guard
 @from batches/r1103/sA_2.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
+@boot 2
+# r1118 R4 A1 (2026-11-18): boot 2 of SQ-CWG-08a (same world, current jars); SAH captured again; old names ceperf / ceplace -> cdevperf / cdevplace
+> data get entity @e[type=minecraft:marker,tag=sahome,limit=1] Pos
+capture SAH entity data: \[(-?\d+)\.\d+d, (-?\d+)\.\d+d, (-?\d+)\.\d+d\]
 > execute if entity @e[type=minecraft:mooshroom,tag=sacwgbrown] run say SA2 brown ok
 > execute if entity @e[type=minecraft:mooshroom,tag=sacwgred] run say SA2 red ok
 > scoreboard objectives add sacwg dummy
@@ -184,12 +230,12 @@ sleep 2
 waitlog verb=randomtick (done=|error=) 30
 > cdevtest count {SAH1+66} {SAH2} {SAH3+16} {SAH1+74} {SAH2+6} {SAH3+24} minecraft:oak_leaves
 waitlog verb=count block=minecraft:oak_leaves n=
-> ceperf mobcap
+> cdevperf mobcap
 > dumpspawns
-> ceplace status
+> cdevplace status
 sleep 5
 > pbot remove sacwg
-look bell / bed clone counts equal boot 1's (SQ-CWG-08o); the mooshroom pair bred (entities n=3 or more, a calf, Type as the pack's rule for brown x red); oak_leaves count 0 or far below 75 after 30 random ticks each; ceperf mobcap, dumpspawns and ceplace status each answered (no "Unknown command"). Cow beside a flower biome: n/a in superflat (moobloom conversion: CQ-CWG-11)
+look bell / bed clone counts equal boot 1's (SQ-CWG-08a); the mooshroom pair bred (entities n=3 or more, a calf, Type as the pack's rule for brown x red); oak_leaves count 0 or far below 75 after 30 random ticks each; cdevperf mobcap, dumpspawns and cdevplace status each answered (no "Unknown command"). Cow beside a flower biome: n/a in superflat (moobloom conversion: CQ-CWG-11)
 reject (Unknown (item|block|block type|entity)|does not (have|accept)|Incorrect argument for command|Unknown or incomplete command|That position is not loaded|No player was found|no such bot|no such item|Invalid (block state|tag)|\[(zq|sa|zp)\] (error|no player))
 reject verb=\S+ .*done=0
 
