@@ -16,14 +16,14 @@ Related pages: [ocean_delight.md](ocean_delight.md), [hostile_delight.md](hostil
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=169db7746cc2 -->
+<!-- generated:status_index begin open_work sha1=676bc74f3ef2 -->
 **Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 5 open TODO rows (Planned 1, Testing 4), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `gear/tuning #22` | Planned | S C P | Rework the Dragon Tooth Knife, remove the Dragon Egg Shell Knife |
 | `creativedelight/members #7` | Testing | S~ C P | End's Delight integration pass |
-| `dishes/ingredients #32` | Testing | S+ P | Shulker meat from End's Delight only |
+| `dishes/ingredients #32` | Testing | S+ P | Shulker Mollusk is the shulker meat (End's meat merged onto it) |
 | `largecontent/mod-additions #28` | Testing | S~ C P | Ender's Delight 1.1.4 changes on the installed 1.2.2 |
 | `largecontent/mod-additions #29` | Testing | S~ C P T | End's Delight 2.6.1 changes on the installed 2.1 |
 <!-- generated:status_index end open_work -->

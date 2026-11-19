@@ -2,14 +2,14 @@
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=40e9eb197e82 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Bug 1, Planned 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=b9be6993b89c -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 3 open TODO rows (Planned 1, Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `gameplay/tnt-and-portal #3` | Bug | S P T | Minecart shrapnel and damage |
 | `gameplay/tnt-and-portal #2` | Planned | S P | Lighter immune to own shrapnel |
 | `gameplay/tnt-and-portal #1` | Testing | S P T | TNT shrapnel |
+| `gameplay/tnt-and-portal #3` | Testing | S P T | Minecart shrapnel and damage |
 <!-- generated:status_index end open_work -->
 
 | Part | Status |

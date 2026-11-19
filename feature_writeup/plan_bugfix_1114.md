@@ -18,12 +18,11 @@ One jar at a time, never while the game runs. Every item gets its changelog bull
 
 ## 0. Decisions taken in this plan (owner can override)
 
-<!-- generated:status_index begin open_work sha1=ee2fc03860a5 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Bug 1, Testing 6), 1 Complete.
+<!-- generated:status_index begin open_work sha1=3048ffdcb37b -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 6 open TODO rows (Testing 6), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `gameplay/tnt-and-portal #15` | Bug | S C P | Portal Gun: player lifted one block after walking out of a wall portal |
 | `creativecommon/publish #4` | Testing | S | SQ-AZW-01: `[item_dict] Missing` for the block-only Sunflower Stem |
 | `creativecommon/publish #5` | Testing | S | SQ-DCM-02: `global.has` read five data namespaces as absent mods |
 | `dishes/ingredients #43` | Testing | S+ C | Vegetarian patty renamed Veggie patty; cave carrot makes patties |
