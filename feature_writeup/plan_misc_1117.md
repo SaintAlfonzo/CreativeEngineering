@@ -53,7 +53,8 @@ preferred End's Delight's shulker meat.
   take `DAMAGE_OTHER` at no cost. Other mobs keep `DAMAGE_OTHER`. SQ-PTH-21 (updated), -29, -30.
 - 2026-11-18: section 2 built (Creative Delight). Report on the checks the build was to make:
   - Values kept: the mollusk's own stack size and food values (the food tuning tables have no shulker entry).
-  - Canned Shulker Flesh follows the mollusk's food: 8 a can [1], its Nausea chance [End's Levitation].
+  - Canned Shulker Flesh follows the mollusk's food: 8 a can [1], its Nausea (10 s); plus a 50% chance of End's
+    Levitation II (4 s), added 2026-11-18 at the owner's request (generator `extra_fx`).
   - Ender's knife drop and filet cut stay on. End's knife drop is off; its machete drop gives the mollusk.
   - End's cut is removed. End's roasted shulker meat now cooks from the mollusk.
   - SQ-BBQ2-08, SQ-FCB-05 (reversed).

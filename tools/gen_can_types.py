@@ -143,7 +143,7 @@ CAN_OPTS = {
 #       makes; code_fx = Canned Goods applies the effects itself (no copy); values = fixed meal for a food not in the
 #       catalog (hunger, modifier, meat, always, clear_effects); meal = this can's own (hunger, saturation points) meal
 #       in a meal section, instead of the section's; adv / n / servings = this can's own additive ratio, recipe count,
-#       servings; counts = (basic, additive) item counts in a meal section instead of the sizing rule; fx_ticks = {effect id: ticks} fixed effect lengths; food = False: not edible (an ingredient can);
+#       servings; counts = (basic, additive) item counts in a meal section instead of the sizing rule; fx_ticks = {effect id: ticks} fixed effect lengths; extra_fx = [(effect id, ticks, amp, chance)] effects added after the copied ones; food = False: not edible (an ingredient can);
 #       norecipe = values only (Canned Goods cans that no recipe makes: a pack can of the same food has the recipe)
 EXPLICIT = [
 	# raw veggie: Baked Potato meals. Whole and sliced share a tag (cabbage leaf, potato slices) or the slots (kernels)
@@ -218,8 +218,9 @@ EXPLICIT = [
 	('raw_meat', 'canned_raw_rabbit', 'Canned Raw Rabbit', ['rabbit'], False),
 	# Shulker: a low value meat, so its own small meal (2, 1) x 4 keeps a full can at 8 pieces. Ender's Delight's mollusk
 	# and filet (End's Delight's meat and slice are merged onto them, plan_misc_1117.md 2)
+	# plus End's shulker meat's Levitation II (4 s) as a 50% chance (owner, 2026-11-18)
 	('raw_meat', 'canned_shulker', 'Canned Shulker Flesh', ['shulker_mollusk', 'shulker_filet'], False,
-	 dict(meal=(2, 1))),
+	 dict(meal=(2, 1), extra_fx=[('minecraft:levitation', 80, 1, 0.5)])),
 
 	# raw fish: sliced cuts share the whole fish's count
 	('raw_fish', 'canned_blobfish', 'Canned Blobfish', ['blobfish'], False),
@@ -677,6 +678,8 @@ def build(foods, names, keymap_all, keymap_base, types):
 			c['always'] = 'A' in flags
 			c['glow'] = section == 'golden' and sources[0].startswith('enchanted_')
 			c['effects'] = [] if opts.get('code_fx') else scaled_effects(src, spec['dur'], opts.get('fx_ticks', {}))
+			for eff, ticks, amp, chance in opts.get('extra_fx', []):
+				c['effects'].append(OrderedDict([('effect', eff), ('ticks', ticks), ('amp', amp), ('chance', chance)]))
 		if opts.get('code_fx'):
 			c['code_fx'] = True
 		c['sources'] = sources
