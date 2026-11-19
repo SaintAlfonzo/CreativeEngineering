@@ -1001,7 +1001,7 @@ reject Unknown block|Incorrect argument|Unknown or incomplete
 ## SQ-PTH-21 | entity tag groups: projectiles, spider, fox
 @group A
 @commands `/summon` with `{NoGravity:1b}` 10 blocks up: snowball, potion, quark:pickarang, firework_rocket, arrow, nock_enough_arrows:explosive_arrow, immersiveengineering:revolver_shot, botania:mana_burst, blocky_siege:projectile_fire_bomb, spider, fox; for each `/execute as @e[type=<id>,limit=1,sort=nearest] if entity @s[type=#creativecompat:passthrough/projectile/<group>]` (and `passthrough_exempt/all`, `passthrough_exempt/cobweb`, `passthrough_exempt/bush`)
-@pass snowball break, potion settle, pickarang snag, firework linger, both arrows hang, revolver shot, mana burst and fire bomb exempt and exempt/all; spider in exempt/cobweb; fox in exempt/bush and leaf_pile
+@pass snowball break, potion settle, pickarang snag, firework linger, both arrows hang, revolver shot, mana burst and fire bomb exempt and exempt/all; spider in exempt/cobweb; fox in exempt/bush and exempt/leaf_layers, not in exempt/layers (plan_misc_1117 1, 2026-11-18)
 @fails entity ids in passthrough_tags.js (projectile_scan pairs by registration code: an unverified id may be wrong)
 @from batches/r1115/pth_a1.qb
 # self-contained since r1118 (judge-10, 2026-11-18): forceload (rows here had no loaded chunks: "That position is not loaded")
@@ -1138,7 +1138,8 @@ sleep 1
 > execute as @e[tag=e21_fox,limit=1] if entity @s[type=#creativecompat:passthrough_exempt/all] run say PTH21-fox-IN-passthrough_exempt/all
 > execute as @e[tag=e21_fox,limit=1] if entity @s[type=#creativecompat:passthrough_exempt/cobweb] run say PTH21-fox-IN-passthrough_exempt/cobweb
 > execute as @e[tag=e21_fox,limit=1] if entity @s[type=#creativecompat:passthrough_exempt/bush] run say PTH21-fox-IN-passthrough_exempt/bush
-> execute as @e[tag=e21_fox,limit=1] if entity @s[type=#creativecompat:passthrough_exempt/leaf_pile] run say PTH21-fox-IN-passthrough_exempt/leaf_pile
+> execute as @e[tag=e21_fox,limit=1] if entity @s[type=#creativecompat:passthrough_exempt/leaf_layers] run say PTH21-fox-IN-passthrough_exempt/leaf_layers
+> execute as @e[tag=e21_fox,limit=1] if entity @s[type=#creativecompat:passthrough_exempt/layers] run say PTH21-fox-IN-passthrough_exempt/layers
 > execute unless entity @e[tag=e21_fox] run say PTH21-fox-MISSING
 expect PTH21-snowball-IN-projectile/break$
 count PTH21-snowball-IN-projectile/ == 1
@@ -1163,7 +1164,9 @@ expect PTH21-mana_burst-IN-passthrough_exempt/all$
 expect PTH21-fire_bomb-IN-passthrough_exempt/all$
 expect PTH21-spider-IN-passthrough_exempt/cobweb$
 expect PTH21-fox-IN-passthrough_exempt/bush$
-expect PTH21-fox-IN-passthrough_exempt/leaf_pile$
+# plan_misc_1117 1 (2026-11-18): foxes and bees exempt on leaf layers only
+expect PTH21-fox-IN-passthrough_exempt/leaf_layers$
+reject PTH21-fox-IN-passthrough_exempt/layers$
 reject MISSING
 > kill @e[tag=e21_snowball]
 > kill @e[tag=e21_snowball]
@@ -1491,4 +1494,67 @@ reject \[cdevtest\] verb=\S+ .*error=
 @pass about 0.150 b/t in both (vanilla's 0.15 b/t climbable cap, below 0.75 x 0.216 = 0.162): the rope row's 0.75x is reached only when the cap is higher; sneak on the rope: owner look
 @fails the cap is `LivingEntity#handleOnClimbable`, not pass-through
 @owner true
+@draft no batch holds this row yet
+
+@@section 7
+@@title SQ-PTH Foxes and bees in layered blocks, 2026-11-18 ([plan_misc_1117.md](../plan_misc_1117.md) 1, TODO `ingredients #44`)
+@@date 2026-11-18
+@@jars creativecommon creativecompat
+@@sources feature_writeup/plan_passthrough.md
+@@table
+## SQ-PTH-29 | foxes and bees: leaf piles do not slow them, snow layers do; a zombie is slowed by both
+@group A
+@commands Speed-0 fox, bee and zombie each standing in a 5-layer oak leaf pile; the same three in 5 snow layers; read the pass-through modifier with `zpth mod`
+@pass leaf pile: fox and bee `mod=none`, zombie a negative modifier; snow layers: fox, bee and zombie each a negative modifier
+@fails fox or bee slowed in the leaf pile: `passthrough_exempt/leaf_layers` missing or `PassThrough.leafLayerExempt` not reached; fox or bee `mod=none` in snow: still in `passthrough_exempt/layers`
+> forceload add 992 976 1231 1215
+sleep 3
+> fill 1000 -60 1190 1020 -55 1196 minecraft:air
+> setblock 1000 -60 1190 immersive_weathering:oak_leaf_pile[layers=5]
+> setblock 1004 -60 1190 immersive_weathering:oak_leaf_pile[layers=5]
+> setblock 1008 -60 1190 immersive_weathering:oak_leaf_pile[layers=5]
+> setblock 1000 -60 1194 minecraft:snow[layers=5]
+> setblock 1004 -60 1194 minecraft:snow[layers=5]
+> setblock 1008 -60 1194 minecraft:snow[layers=5]
+> summon minecraft:fox 1000.5 -60 1190.5 {Tags:["f29l","pth"],Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d}],PersistenceRequired:1b}
+> summon minecraft:bee 1004.5 -60 1190.5 {Tags:["b29l","pth"],NoGravity:1b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.flying_speed",Base:0d}],PersistenceRequired:1b}
+> summon minecraft:zombie 1008.5 -60 1190.5 {Tags:["z29l","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d}]}
+> summon minecraft:fox 1000.5 -60 1194.5 {Tags:["f29s","pth"],Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d}],PersistenceRequired:1b}
+> summon minecraft:bee 1004.5 -60 1194.5 {Tags:["b29s","pth"],NoGravity:1b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d},{Name:"minecraft:generic.flying_speed",Base:0d}],PersistenceRequired:1b}
+> summon minecraft:zombie 1008.5 -60 1194.5 {Tags:["z29s","pth"],PersistenceRequired:1b,IsBaby:0b,CanPickUpLoot:0b,Attributes:[{Name:"minecraft:generic.movement_speed",Base:0d}]}
+sleep 4
+> zpth mod f29l
+> zpth mod b29l
+> zpth mod z29l
+> zpth mod f29s
+> zpth mod b29s
+> zpth mod z29s
+expect \[zpth\] mod f29l .* mod=none
+expect \[zpth\] mod b29l .* mod=none
+expect \[zpth\] mod z29l .* mod=-
+expect \[zpth\] mod f29s .* mod=-
+expect \[zpth\] mod b29s .* mod=-
+expect \[zpth\] mod z29s .* mod=-
+look a light mob standing on top of 5 snow layers (snow_layer_light: fox, bee) reads none because it is not inside the layers: if so, rerun the snow half at 3 layers, where every mob is inside
+> kill @e[tag=pth]
+@draft no batch holds this row yet
+
+## SQ-PTH-30 | a fox does not plan a path across deep leaf piles
+@group A
+@commands A 1x9 pen of glass, 3 tall, at Z 1200; X 1004 a wall of 8-layer oak leaf piles (deeper than `pathBlockLayers` 6) across the pen; one fox on the west side; `cdevtest tickwarp 1200`; read the fox's position
+@pass the fox is still west of the leaf pile wall (X below 1004); LOOK: it wandered on its side (its X changed)
+@fails the fox crossed: a deep pile is not `BLOCKED` for it (`LeafThorns.pathType`, `SnowPathMixin` begin and end); the fox never moved: not a pathing result, rerun with more ticks
+> forceload add 992 976 1231 1215
+sleep 3
+> fill 999 -61 1199 1009 -57 1201 minecraft:glass hollow
+> fill 1000 -60 1200 1008 -58 1200 minecraft:air
+> fill 1004 -60 1200 1004 -60 1200 immersive_weathering:oak_leaf_pile[layers=8]
+> summon minecraft:fox 1001.5 -60 1200.5 {Tags:["f30","pth"],PersistenceRequired:1b}
+sleep 2
+> cdevtest tickwarp 1200
+waitlog verb=tickwarp end=done ticks=1200 120
+> data get entity @e[tag=f30,limit=1] Pos
+expect has the following entity data: \[100[0-3]\.
+> kill @e[tag=pth]
+> fill 999 -61 1199 1009 -57 1201 minecraft:air
 @draft no batch holds this row yet

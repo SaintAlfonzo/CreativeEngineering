@@ -325,6 +325,9 @@ Open notes, owner TODO, not built (what each would touch):
   tier as their on-top speed only.
 - Foxes and bees were exempt from leaf piles; the exemption is per tier, so it now covers snow, sand and ash layers
   too. Keep, or narrow it to leaf piles?
+  Settled (owner, 2026-11-17; built 2026-11-18, plan_misc_1117.md 1): narrowed to leaf layers, movement only. Foxes and
+  bees left `passthrough_exempt/layers` for `passthrough_exempt/leaf_layers` (leaf piles and bamboo leaves); snow
+  slows them; a deep leaf pile is `BLOCKED` in their path search. Sand and ash layers were never walk-through.
 - E2: `/cdevreload compat` built in Creative Devtools 2026-11-15 (install with Compat). An in-place save is still not
   seen by Forge's watcher (TODO `-2 #10`, owner question). Devtools no longer requires Compat (`-2 #16`, built
   2026-11-17, SQ-PS15B-20); the bench's budgeted cold cases keep the chunk counts and two unbudgeted `_recount` cases

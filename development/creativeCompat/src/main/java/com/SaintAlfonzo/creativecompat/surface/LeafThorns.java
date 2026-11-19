@@ -3,6 +3,9 @@ package com.SaintAlfonzo.creativecompat.surface;
 import com.SaintAlfonzo.creativecompat.CompatConfig;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.entity.Mob;
+import net.minecraft.world.level.pathfinder.BlockPathTypes;
+import org.jetbrains.annotations.Nullable;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -68,6 +71,27 @@ public final class LeafThorns {
 			if (!p.getItemBySlot(s).isEmpty()) n++;
 		}
 		return n;
+	}
+
+	/** True while a node evaluator plans for a mob in {@code passthrough_exempt/leaf_layers} (server thread). */
+	private static final ThreadLocal<boolean[]> LEAF_EXEMPT_PATH = ThreadLocal.withInitial(() -> new boolean[1]);
+
+	/**
+	 * Start of a path search ({@code mixin/SnowPathMixin}): foxes and bees walk and fly through leaf piles but must not
+	 * plan through them (plan_misc_1117.md 1). Foxes take {@code DAMAGE_OTHER} at no cost (sweet berry bushes), so for
+	 * them a deep pile is {@code BLOCKED} ({@link #pathType}).
+	 */
+	public static void beginPath(@Nullable Mob mob) {
+		LEAF_EXEMPT_PATH.get()[0] = mob != null && mob.getType().is(PassThrough.exemptLeafLayersTag());
+	}
+
+	public static void endPath() {
+		LEAF_EXEMPT_PATH.get()[0] = false;
+	}
+
+	/** Path type of a deep leaf pile for the mob planning now: {@code BLOCKED} for the leaf-layer exempt mobs. */
+	public static BlockPathTypes pathType() {
+		return LEAF_EXEMPT_PATH.get()[0] ? BlockPathTypes.BLOCKED : BlockPathTypes.DAMAGE_OTHER;
 	}
 
 	/** A leaf layer block of {@code pathBlockLayers} or more (server values; system and switch on). */

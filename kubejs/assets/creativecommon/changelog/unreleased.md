@@ -75,7 +75,8 @@
 - **New:** Walking through a full leaf pile, or sprinting through one of 6 or 7 layers, can prick players for half a heart; each armor piece worn lowers the chance, full armor prevents it.
 - **New:** Inside a leaf pile the screen edges show its leaves, like the Powder Snow frost.
 - **Changed:** Mobs do not walk through leaf piles of 6 or more layers.
-- **Changed:** Rabbits and cats are not slowed by snow layers, leaf piles or Bamboo Leaves, and are not pricked [foxes and bees only].
+- **Changed:** Rabbits and cats are not slowed by snow layers, leaf piles or Bamboo Leaves, and are not pricked.
+- **Changed:** Foxes and bees are not slowed by leaf piles or Bamboo Leaves but are slowed by snow layers, and never route through leaf piles of 6 or more layers.
 - **Changed:** Villagers, horses and every mob are slowed by these blocks like players; flying, gliding and swimming are not.
 - **Changed:** Dropped items and experience orbs stop inside any cobweb and hang there until the web is broken [they sank slowly through].
 - **Changed:** Projectiles slow down in cobwebs [no effect]. Guns, turrets and siege munitions are not affected.

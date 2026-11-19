@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: GPL-3.0-only
 package com.SaintAlfonzo.creativecompat.mixin;
 
+import com.SaintAlfonzo.creativecompat.surface.LeafThorns;
 import com.SaintAlfonzo.creativecompat.surface.SnowLayers;
 
 import net.minecraft.world.entity.Mob;
@@ -24,13 +25,16 @@ public abstract class SnowPathMixin {
 	private void creativecompat$sunkStart(PathNavigationRegion region, Mob mob, CallbackInfo ci) {
 		try {
 			SnowLayers.beginPath(mob);
+			LeafThorns.beginPath(mob);
 		} catch (Throwable ignored) {
 			SnowLayers.endPath();
+			LeafThorns.endPath();
 		}
 	}
 
 	@Inject(method = "m_6802_", at = @At("HEAD"))
 	private void creativecompat$sunkEnd(CallbackInfo ci) {
 		SnowLayers.endPath();
+		LeafThorns.endPath();
 	}
 }

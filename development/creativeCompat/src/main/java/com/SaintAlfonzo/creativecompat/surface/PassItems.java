@@ -119,7 +119,7 @@ public final class PassItems {
 		if (tier == null) return null;
 		PassTier.Values v = values.tier(tier);
 		if (v.items() != PassTier.ItemRule.STICK) return null;
-		if (PassThrough.exempt(e, tier, v) || !PassThrough.grown(level, pos, state, tier, v)) return null;
+		if (PassThrough.exempt(e, tier, v, state) || !PassThrough.grown(level, pos, state, tier, v)) return null;
 		return v;
 	}
 
