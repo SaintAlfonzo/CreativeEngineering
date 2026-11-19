@@ -345,6 +345,7 @@
 
 ## Blocks <!-- icon: createdeco:cast_iron_block -->
 
+- **Fixed:** The Weathered Cardboard Box showed its whole texture sheet on every face; it now looks like a taped box.
 - **Changed:** Cast Iron Block is named Cast Iron Plating.
 - **Fixed:** The breaking cracks on Straw, Hay and Canvas Rugs also covered their fringe outside the block.
 - **Changed:** Melons, pumpkins, carved pumpkins, jack o'lanterns, moss blocks and moss carpets no longer go in flower boxes or planter boxes.

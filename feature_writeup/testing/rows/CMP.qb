@@ -137,3 +137,26 @@ waitlog (Reloaded|reload) 180
 sleep 10
 shell grep -cE "Error occurred while handling event|ReferenceError" logs/kubejs/server.log; true
 look no script error from moved Compat files; /reload clean
+
+@@section 2
+@@title CQ-CMP Weathered Cardboard Box model, 2026-11-18 ([plan_bugfix_1117.md](../plan_bugfix_1117.md) A3, TODO `textures/merges #11`)
+@@date 2026-11-18
+@@jars creativecommon creativecompat
+@@sources feature_writeup/creative_compat.md
+@@table
+## SQ-CMP-09s | Weathered Cardboard Box: the startup blockstate assignment loads (server half of CQ-CMP-09)
+@group A
+@commands Any boot with the current Compat jar; `setblock ~ ~ ~2 creativecompat:weathered_cardboard_box`
+@pass no `decor_blocks.js` error in `logs/kubejs/startup.log`; the setblock succeeds
+@fails a startup error on `blockstateJson`: Rhino did not convert the object to a JsonObject (set it from Java or `JsonIO` instead)
+kjsreject decor_blocks.js
+> setblock 0 -60 2 creativecompat:weathered_cardboard_box
+expect Changed the block
+@draft no batch holds this row yet
+
+## CQ-CMP-09 | Weathered Cardboard Box wraps its texture
+@group client
+@commands Creative client: place a Weathered Cardboard Box, look at all six faces, hold it in the hand, check the inventory icon; F3+T is not needed (startup asset)
+@pass LOOK: each face shows one tile of the sheet (not the whole sheet four times): taped top, plain flap bottom, a handle side north and south, label sides east and west, matching Design and Decor's cardboard box placed facing north; the box fills the full block
+@fails the whole sheet on each face: the generated cube_all model still wins (blockstate not taken from `decor_blocks.js`); a face sideways or upside down: the face rotations of `block/weathered_cardboard_box_wrapped`
+@draft no batch holds this row yet; needs a client

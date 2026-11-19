@@ -203,6 +203,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-16: Leaf layers never act whole (owner, 2026-11-16): no solidBelowFull for them (kubejs/data/creativecompat/kubejs/tags/passthrough_tags.js)
 - 2026-11-16: Layer height blocks (plan_post_scratch_1115b.md D, owner 2026-11-16): snow layers, leaf piles, bamboo leaves (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/surface/PassTier.java)
 - 2026-11-17: Tempad was a Compat nested member until 2026-11-07, now its own jar (development/backportedTempad); the Vinery taiga grape bush entry of StuckInBlock was dropped (no entityInside in the port) (build.gradle, StuckInBlock)
+- 2026-11-18: Weathered Cardboard Box renders its own model again: KubeJS generated a cube_all model at `block/weathered_cardboard_box` that outranked the jar's JSON (the whole sheet on every face). The model ships as `block/weathered_cardboard_box_wrapped` (Design and Decor's `cardboard_box/block.json` geometry) and `decor_blocks.js` sets the blockstate (`x: 90`, Design and Decor's facing-north box); the shadowed blockstate and item model left the jar (plan_bugfix_1117 A3, TODO `textures/merges #11`; CQ-CMP-09) (development/creativeCompat/src/main/resources/kubejs_startup/creativecompat/decor_blocks.js)
 
 
 ## 6. License audit (2026-11-04, plan_cb_publish.md Step 2)
@@ -227,7 +228,7 @@ art upscaled (474 exact after downscaling, one stretched). None is own art; each
 | paintings `minecraft` (30) | Mojang | remove |
 | elytra banner and bedspread textures (73) | derived from Botania, IE (Blu's), Alex's Mobs (LGPL), Buzzier Bees banner patterns | built 2026-11-06: built at load from the installed jars, none ship (6.3) |
 | MineColonies banner textures (25) | MineColonies not in the pack; leftover output | removed 2026-11-06 (6.3) |
-| `weathered_cardboard_box.png` + models | Design and Decor (MIT) recolour | OK: MIT notice added 2026-11-05 |
+| `weathered_cardboard_box.png` + models | Design and Decor (MIT) recolor | OK: MIT notice added 2026-11-05 |
 | `moss_block_tinted.png` | Mojang `moss_block` greyscaled | low ([creative_brewing.md](creative_brewing.md) 9.3) |
 | flower box models (3) | reference Beautify / Quark textures, none copied | OK |
 | Java, 79 classes (45 mixins), scripts, lang, tags, loot | own | OK |
