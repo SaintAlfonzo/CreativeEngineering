@@ -37,7 +37,7 @@ ServerEvents.recipes(e => {
 		// Bone broth routes
 		// (TODO dishes/ingredients #4) and pastas (no broth: the pot's bowl), same rule.
 		R.shapeless(i.carrot_soup, [i.bone_broth, i.milk, i.carrot, i.carrot, i.carrot], e, 'carrot_soup_cooked_manual_only')
-		R.shapeless(i.creamy_pasta_with_chicken_cuts, [i.milk, i.pasta, i.chicken_cuts_cooked, i.chicken_cuts_cooked, i.onion, i.bowl], e, 'creamy_pasta_with_chicken_cuts_cooked_manual_only')
-		R.shapeless(i.creamy_pasta_with_ham, [i.milk, i.pasta, i.smoked_ham, i.onion, i.onion, i.bowl], e, 'creamy_pasta_with_ham_cooked_manual_only')
+		R.shapeless(i.creamy_pasta_with_chicken_cuts, [i.any_cheese, i.pasta, i.chicken_cuts_cooked, i.chicken_cuts_cooked, i.onion, i.bowl], e, 'creamy_pasta_with_chicken_cuts_cooked_manual_only')
+		R.shapeless(i.creamy_pasta_with_ham, [i.any_cheese, i.pasta, i.smoked_ham, i.onion, i.onion, i.bowl], e, 'creamy_pasta_with_ham_cooked_manual_only')
 	})
 })

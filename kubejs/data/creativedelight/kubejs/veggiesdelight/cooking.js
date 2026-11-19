@@ -48,8 +48,9 @@ ServerEvents.recipes(e => {
 		R.shapeless(fd.dish_stuffed_zucchini_boat, [fd.veggie_cooked_zucchini, VD_COOKED_MEAT, [i.milk, i.any_cheese]], e, 'stuffed_zucchini_boat_cooked_manual_only')
 		R.shapeless(fd.sandwich_square_zucchini, [i.t_bread, fd.veggie_zucchini, i.salad_ingredients, i.tomato], e, 'zucchini_sandwich_cooked_manual_only')
 		// Turnip mutton skewer and vegetarian burger: skewer and burger family rules (recipes.js, creativedelight/members #30)
-		// Heatless routes for its pot meals
-		R.shapeless(fd.soup_broccoli, [fd.soup_bone_broth, Item.of(fd.veggie_broccoli, 3), i.milk], e, 'broccoli_soup_cooked_manual_only')
+		// Heatless routes for its pot meals. Broccoli soup and pasta with broccoli take cheese, not milk (TODO dishes/meals #45,
+		// plan_food_batch_1119.md A1): their milk pot recipes go (creativedelight/cheese_for_milk.js), the mod's Vintage compat cheese ones stay.
+		R.shapeless(fd.soup_broccoli, [fd.soup_bone_broth, Item.of(fd.veggie_broccoli, 3), i.any_cheese], e, 'broccoli_soup_cooked_manual_only')
 		R.shapeless(fd.soup_cauliflower, [fd.soup_bone_broth, Item.of(fd.veggie_cooked_cauliflower_floret, 5), i.milk], e, 'cauliflower_soup_cooked_manual_only')
 		R.shapeless(fd.soup_garlic_chicken_stew, [fd.soup_bone_broth, Item.of(fd.veggie_cooked_garlic_clove, 2), i.cooked_chicken, i.cooked_chicken, i.milk], e,
 			'garlic_chicken_stew_cooked_manual_only')
@@ -60,7 +61,7 @@ ServerEvents.recipes(e => {
 		// Mashed family (TODO merges/dishes #2): 3 baked sweet potatoes + milk + bowl (pot route: recipes.js)
 		R.shapeless(fd.dish_mashed_potatoes_veggiesdelight, [Item.of(fd.veggie_cooked_sweet_potato, 3), i.milk, i.bowl], e,
 			'mashed_sweet_potatoes_cooked_manual_only')
-		R.shapeless(fd.dish_pasta_with_broccoli, [i.pasta, Item.of(fd.veggie_broccoli, 2), i.milk, i.bowl], e, 'pasta_with_broccoli_cooked_manual_only')
+		R.shapeless(fd.dish_pasta_with_broccoli, [i.pasta, Item.of(fd.veggie_broccoli, 2), i.any_cheese, i.bowl], e, 'pasta_with_broccoli_cooked_manual_only')
 		R.shapeless(fd.dish_rice_and_vegetables, [fd.grain_cooked_rice, i.carrot, i.onion, fd.veggie_cooked_zucchini, i.t_soup_veggie_cooked, i.t_soup_veggie_cooked], e,
 			'rice_and_vegetables_cooked_manual_only')
 		R.shapeless(fd.dish_roasted_vegetables, [fd.veggie_cooked_potato, i.carrot, i.onion, fd.sauce_tomato, i.t_soup_veggie_cooked, i.t_soup_veggie_cooked,

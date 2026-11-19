@@ -11,16 +11,9 @@ ServerEvents.recipes(e => {
 	global.CD.recipes(() => {
 		var F = global.CD.food(e)
 
-		//######################### Lemon yield (TODO farming/trees #3) #########################
-		// A lemon cuts into 8 slices (Fruits Delight: 4), by knife and by Create saw. Remade, not replaceOutput: KubeJS's
-		// replaceOutput keeps the old stack's count, so 4 stayed 4 (r1102b SQ-LEM-02). The tree's break drop is
+		// Lemon, orange, pineapple and hamimelon cuts and whole-from-slices: creativedelight/fruit_cuts.js (TODO fruit #3; the
+		// lemon cut was 8 + seeds, farming/trees #3). The tree's break drop is
 		// kubejs/data/fruitsdelight/loot_tables/blocks/lemon_tree.json, its right-click pick CD's LemonTreePickYieldMixin.
-		R.remove({ id: 'fruitsdelight:lemon_cutting' }, e)
-		R.fdCutting(i.t_fruits_lemon, i.any_knife, [Item.of(i.lemon_slice, 8), i.lemon_seeds], e, 'lemon_slice')
-		if (Platform.isLoaded('create')) {
-			R.remove({ id: 'fruitsdelight:cutting/lemon_slice' }, e)
-			R.createSaw(Item.of(i.lemon_slice, 8), i.t_fruits_lemon, e, 'lemon_slice')
-		}
 
 		//######################### Cooked fruit ######################### Dried or baked fruit is made in all three of
 		// smoker, furnace and campfire (food_families.md 3.1 `fruit/cooked`): the family call (CD.FOOD values; Fruits

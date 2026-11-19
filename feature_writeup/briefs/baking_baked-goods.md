@@ -681,21 +681,11 @@ Status In Progress / Work KubeJS / data / TODO `baking/baked-goods #19` (scratch
 ### Goal
 Quiche as a baking type: a pie variant for vegetables and eggs, with its own family rule and more variants.
 
-### Now
-- Family `quiche` exists (food_families.md 4.6, applied 2026-10-27): rule "shaped recipe on a pie crust + one sequenced
-  assembly on a pie crust (as Brewin' quiche)"; slices cut on the board, Small Food Plate planned.
-- Members: Brewin' `quiche` (shaped `quiche_manual_only` and two assemblies, `brewinandchewin/recipes.js` 20-26, 58-73);
-  Veggies Delight `zucchini_quiche` (shaped VD recipes + the assembly that fails, #37). No oven route.
-
-### Build
-1. Fix #37.
-2. Optional oven route per quiche: pie tin, crust + 2 eggs + milk + cheese + 2 filling (6 slots), through a new
-   `F.quicheBake(fillings, output)` in cd_food.js beside `pieBake`.
-3. New variants (decision): each a CD startup block item needs a placed block, so variants come from mods first.
-
-### Decisions
-- **Recipes, textures** (TODO decision). Recommendation: keep the family rule (grid + assembly), add the oven route for
-  both quiches, no new quiche items until a mod brings one.
+### Now (checked 2026-11-19)
+- Both quiches are oven-only with a pie tin. Brewin' `quiche`: crust + cheese wedge + milk + any egg + 2 filling, one
+  recipe per filling (any cooked meat, any fungus, a leafy green; `brewinandchewin/recipes.js`, filling doubled
+  2026-11-19, plan_food_batch_1119.md A8). Veggies Delight `zucchini_quiche`: 2 cooked zucchini (counts as doubled).
+- Left: new variants (each needs a placed block, so variants come from mods first).
 
 ### Tests (proposed)
 - [ ] **FF-26 Quiche oven:** both quiches bake in the pie tin from crust, eggs, milk, cheese and filling.

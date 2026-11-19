@@ -11,6 +11,12 @@ ServerEvents.recipes(e => {
 
 	global.CD.recipes(() => {
 
+		//######################### Any egg #########################
+		// Create echo cake base and Create Factory cake paste took only the vanilla egg; any egg works (TODO
+		// food/types-and-tuning #6: #forge:eggs holds turtle and parrot eggs). Fried egg and dread nog keep theirs.
+		if (global.has('create_deep_dark')) R.replaceInput({ id: 'create_deep_dark:compacting_echo_cake_base' }, i.minecraft_egg, i.eggs, e)
+		if (global.has('create_factory')) R.replaceInput({ id: 'create_factory:cake_paste' }, i.minecraft_egg, i.eggs, e)
+
 		//######################### Bread rolls ####################
 		// Sweet roll and the Create Factory rolls took only vanilla bread; any bread works (creativedelight/bread_tags.js)
 		R.replaceInput([{ id: 'create:filling/sweet_roll' }, { id: /^create_factory:(caramel|chocolate|dark_chocolate|honey|ruby_chocolate|white_chocolate)_roll$/ }],

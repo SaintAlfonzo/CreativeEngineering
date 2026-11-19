@@ -8,33 +8,32 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=a26b17d0617a -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 14, In Progress 8), 0 Complete.
+<!-- generated:status_index begin open_work sha1=216f37840ec5 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 21 open TODO rows (Planned 10, In Progress 6, Testing 5), 1 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `dishes/ingredients #10` | Planned | S C P T | Fats and oils: animal fat, blubber, cooking oil |
 | `dishes/ingredients #40` | Planned | S P | Edible seed family: sunflower, pumpkin, oat, mixed, corn seeds |
 | `dishes/meals #27` | Planned | S C P | Pineapple pizza |
-| `dishes/meals #44` | Planned | S C P | Unify the two stuffed pumpkin recipes |
-| `dishes/meals #45` | Planned | S C P | Broccoli soup: milk to cheese |
 | `dishes/meals #54` | Planned | S C P | Onion soup and creamy onion soup placeable |
-| `dishes/meals #60` | Planned | S P | Cucumber salad |
 | `food/drinks #14` | Planned | none | Hot cocoa and apple cider review |
-| `fruit #3` | Planned | S C | Fruit slice yields and reassembly |
 | `pickles-and-ferments #17` | Planned | S C P | Pickled garlic item |
 | `seasoning #25` | Planned | S C P | Rename the seasoning mechanic to Flavor |
 | `seasoning #26` | Planned | S C P | Flavor pairs: garlic + onion, salt + pepper, sugar + ghost pepper |
 | `seasoning #27` | Planned | S C P | Sauce flavors: chorus sauce, glowing sauce, ardent sauce, relish |
 | `seasoning #28` | Planned | S C P | Onion, garlic and ghost pepper powders, milled |
-| `baking/baked-goods #19` | In Progress | S C P | Quiche baking type |
 | `baking/baked-goods #20` | In Progress | S C P | Pizza food type |
 | `baking/baked-goods #21` | In Progress | S C P | Lasagna baking type |
 | `dishes/ingredients #33` | In Progress | S C P | Rename cucumber dough to veggie dough |
 | `dishes/meals #5` | In Progress | S C P T | Feasts |
-| `dishes/pickles-and-ferments #14` | In Progress | S C P | Pickled garlic; zucchini or cucumber pickles |
+| `dishes/meals #45` | In Progress | S C P | Broccoli soup: milk to cheese |
 | `food/seasoning #3` | In Progress | S~ C P T | New seasonings |
-| `food/types-and-tuning #6` | In Progress | S P | Vanilla egg -> `#forge:eggs` in recipes |
+| `baking/baked-goods #19` | Testing | S C P | Quiche baking type |
+| `dishes/meals #44` | Testing | S C P | Unify the two stuffed pumpkin recipes |
+| `dishes/meals #60` | Testing | S P | Cucumber salad |
+| `food/types-and-tuning #6` | Testing | S P | Vanilla egg -> `#forge:eggs` in recipes |
+| `fruit #3` | Testing | S C | Fruit slice yields and reassembly |
 <!-- generated:status_index end open_work -->
 
 <!-- generated:status_index begin open_work -->
@@ -63,16 +62,13 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 | R17 | `dishes/ingredients #33` "veggie list for veggie pasta is good, ensure green bell pepper slice is usable" | clear | Keep `#creativedelight:veggie_noodle_veg`, add `rusticdelight:bell_pepper_slice_green`; rename Cucumber Dough (and its block) to Veggie Dough. Recolor texture not in this batch | 2026-11-19 | chat 2026-11-19 |
 | R18 | `dishes/meals #5` "eating a pizza from the block gives 2 slices as items" | clear | Right-click on a placed pizza without a knife takes a bite off and gives 2 slice items (no direct eating), for all 5 pizzas | 2026-11-19 | chat 2026-11-19 |
 | R19 | `dishes/ingredients #10` "any raw fish and any standard seed can be processed into oils" | clear | Any raw fish -> fish oil; any standard seed (`#forge:seeds`) -> seed oil (cooking oil) | 2026-11-19 | chat 2026-11-19 |
+| R20 | A2 Grilled | open | Accepted as written: Grilled's flavor slots replace its +2 saturation | 2026-11-19 | AskUserQuestion 2026-11-19 (via the orchestrator) |
+| R21 | A3 "compensate" | open | Accepted as written: re-derive the outputs' values upward from the new ingredients | 2026-11-19 | AskUserQuestion 2026-11-19 (via the orchestrator) |
+| R22 | A4 blubber cut | open | Accepted as written: a knife cuts a blubber into 2 animal fat | 2026-11-19 | AskUserQuestion 2026-11-19 (via the orchestrator) |
+| R23 | A5 Tropical Pizza id | open | Accepted as written: the id is in the Vintage member's namespace (`vintagedelight:`) | 2026-11-19 | AskUserQuestion 2026-11-19 (via the orchestrator) |
+| R24 | Wave E powder textures | open | Run `textureswapper/palette_swap.py` on the Barbeque's Delight chili powder sprite with each crop's own sprite palette (onion, garlic, ghost pepper); no further confirm | 2026-11-19 | AskUserQuestion 2026-11-19 (via the orchestrator) |
 
-**Agent readings, unconfirmed** (asked at the start of the wave that builds them):
-
-- A1 (R2): ruled 2026-11-19 (owner, chat): using the placed pizza (no knife) gives 2 slices as items instead of
-  eating a bite; see R18.
-- A2 (R3): Grilled's +2 saturation is replaced by its flavor-slot bonus (it does not keep both).
-- A3 (R13): "compensate" = re-derive the output's nutrition and saturation from the new ingredients under the food tuning rules (`food/types-and-tuning #8` style), raising the value.
-- A4 (R12): blubber knife-cut yield (2 animal fat) is drafted in wave D and asked before build. Seeds and fish: ruled
-  2026-11-19, see R19.
-- A5 (R1): Tropical Pizza id namespace follows [ids-follow-owning-mod](agent_notes/README.md) for pack additions in the Vintage member.
+**Agent readings, unconfirmed**: none left (A1 became R18; A2 to A5 were accepted as written, R20 to R23).
 
 ## 2. Premise corrections found 2026-11-19
 
@@ -148,3 +144,23 @@ gets scratch queue rows and a changelog bullet in the same session (CLAUDE.md "D
 A -> B -> C -> D -> E. Each wave: `python3 tools/check_all.py --fast --changed`, scratch rows in the feature's `.qb`
 file, changelog bullets in `unreleased.md`, row `log` entries, `status_index.py`. Waves C, D and E need jar installs
 through `installToMods` (never under a running game without the dialog).
+
+## 5. Build notes
+
+Choices made while building, where the plan or a ruling left a gap (newest wave last).
+
+- Wave A, 2026-11-19 (food agent of the orchestrated session):
+  - A1: the pack's heatless grid routes for broccoli soup and pasta with broccoli were converted to cheese rather than
+    removed: removing them would leave the two pot meals without the heatless route the meal rule requires. The milk
+    pot recipes are removed as planned (the mod's Vintage compat cheese versions stay).
+  - A1 / R13 premise: Farmer's Delight's sweet berry cheesecake is the pack's **Sweet Berry Pie** (pie family: crust + 3
+    berries + 2 sweet, no milk), so there was no milk to convert; left unchanged. Owner question: should the pie (and
+    Rustic's three cheesecakes) take a cheese?
+  - A3: "re-derive" used the soup rule draft of `food/types-and-tuning #8` (output hunger about 1.5x the ingredients',
+    milk 2, cheese 4): +3 hunger for a bowl dish, +1 per serving for a feast (nachos, lasagna, fiery fondue); the
+    saturation modifier kept. Rows in CD startup `creativedelight/cheese_values.js` (applied by
+    `food_value_copies.js`); can values copied from the catalog go stale until `/dumpfood` + `gen_can_types.py`.
+  - A6: Delightful's 1 -> 3 hand split of the mini cantaloupe stays (the knife gives 4); the mini melon is untouched.
+    The lemon section moved from `fruitsdelight/recipes.js` into `creativedelight/fruit_cuts.js`.
+  - A4: zucchini and cucumber pickle into `vintagedelight:pickle` (checked); pickled garlic is `pickles-and-ferments #17`.
+

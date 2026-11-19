@@ -1050,8 +1050,8 @@ RULES = {
 		place=[R('Own block', PF, placed_on('block', 'sneak'))],
 		recipe=[D('One shaped recipe + one sequenced assembly (as Brewin\' pizza, ' + RCK + ' 2.1)',
 				  lambda m: m.at('Crafting') and m.at('Sequenced assembly')),
-				P('8 slices per pizza, dearer dough and cheese; Brewin\' pizzas merge into Deluxe Pizza, plus a Tropical Pizza '
-				  '(pineapple, bacon)', T('dishes/meals #5', 'dishes/meals #26', 'dishes/meals #27', 'baking/baked-goods #20'))]),
+				P('8 slices per pizza (4 bites, each cut or bite gives 2 slices), 8 slices in a ring recraft one; a Tropical Pizza '
+				  '(pineapple, bacon); Brewin\' pizza named Supreme Pizza', T('dishes/meals #5', 'dishes/meals #26', 'dishes/meals #27', 'baking/baked-goods #20'))]),
 	'pizza/slice': dict(
 		place=[D('Small Food Plate', placed_on('small_plate'))],
 		recipe=[D('Cutting Board: whole pizza -> slices', board)]),
@@ -1061,8 +1061,8 @@ RULES = {
 		recipe=[D('see subfamilies')]),
 	'quiche/whole': dict(
 		place=[R('Own block', PF, placed_on('block', 'sneak'))],
-		recipe=[D('Shaped recipe on a pie crust + one sequenced assembly on a pie crust (as Brewin\' quiche, ' + RCK + ' 2.1)',
-				  lambda m: m.at('Crafting', ['pie_crust']) and m.at('Sequenced assembly')),
+		recipe=[D('Oven only, pie tin: pie crust + cheese + milk + egg + 2 filling (Brewin\' quiche: meat, fungus or greens); '
+				  'zucchini quiche: 2 cooked zucchini', lambda m: m.at('Oven', ['pie_crust'])),
 				P('Quiche: a pie variant for vegetables', T('baking/baked-goods #19'))]),
 	'quiche/slice': dict(
 		place=[D('Small Food Plate', placed_on('small_plate'))],
