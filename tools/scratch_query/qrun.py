@@ -29,7 +29,7 @@ checked before every step and every second of a waitlog or sleep; the row ends C
 --relaunch CMD (bash, cwd = instance, e.g. an eval_client.py launch plus a join step) restarts the game and the batch
 goes on with the next row once --ready REGEX (default server 'Done \(', client 'joined the game') shows in latest.log
 within --ready-secs (600); at most --max-relaunch (2) times. Without --relaunch a crash ends the batch. A row that
-sends "stop" ends the batch without a CRASH.
+sends "stop" ends the batch without a CRASH; a row that needs the server back uses `restart` instead (r1118 R4 A2).
 run (server): before the first row, the scratch KubeJS probes (tools/**/*_probe.js and any other tools/**/*.js that
 registers a server command, qrun.probe_files) whose commands the selected rows use
 are copied into srv/kubejs/server_scripts as zz_<file> and the server is /reloaded once (--no-probes skips it).
@@ -67,6 +67,15 @@ row ends LOOK). --xdotool forces the old window transport.
                                   kept in RES/vars.json for later batches and boots; FAIL if nothing matches. Locate: capture P is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
     shell CMD                     bash CMD run in OUT/srv (server) or GAME (client), e.g. to edit a scratch file;
                                   $INST = the instance root
+    edit CMD                      server: bash CMD queued for the row's next restart; it runs in OUT/srv while the
+                                  server is down ($INST, $OUT set; output in RES/rows/ID.shell.txt), e.g. a qrun.py toml
+                                  edit or a jar swap. A failed edit FAILs the row (HARNESS) and the restart still boots
+    restart [SECS]                server: a deliberate stop (not a crash), wait for the JVM to exit, the queued edit
+                                  lines, boot, wait up to SECS (default 600) for "Done (", then the row and the batch go
+                                  on on the new boot. The row's log segment keeps its lines from before the restart;
+                                  waitlog / capture after it read the new boot's log; bootexpect reads the new boot.
+                                  The old log is kept as srv/logs/qrun_bootN.log. Probes copied in stay (they load at
+                                  boot). No restart within SECS: the row FAILs and the batch ends (ABORT)
 
 Every row is also a perf segment: when a perf session is open (tools/perf/session/perf_session.sh) the row ID is
 marked there; RES/timeline.tsv always gets the wall-clock start and end of each row, so a JFR recording (server or
@@ -148,7 +157,7 @@ def parse(path, errors=None):
 				side, _, base = word.rpartition(":")
 				if side not in ("", "srv", "cli") or base not in (
 						"capture", "shell", "sleep", "waitlog", "expect", "reject", "count", "bootexpect", "bootreject",
-						"kjsexpect", "kjsreject", "look", "shot", "key", "click", "do"):
+						"kjsexpect", "kjsreject", "look", "shot", "key", "click", "do", "edit", "restart"):
 					bad(n, f"unknown directive {word!r}")
 					continue
 				cur["steps"].append((word, rest.strip(), pace))
@@ -199,6 +208,54 @@ class Server:
 
 	def click(self, x, y):
 		pass
+
+	def restart(self, edits, secs, shell_log):
+		"""The restart directive (r1118 R4 A2): stop (the watch is told it is deliberate), wait for the JVM to exit,
+		run the queued edit lines in srv, boot, wait for 'Done ('. Returns (ok, detail, [(cmd, rc, output)])."""
+		import qwatch
+		w = getattr(self, "watch", None)
+		if w is not None:
+			w.stopping = True
+		subprocess.run(["bash", SCRATCH, "stop", self.out], capture_output=True, text=True, stdin=subprocess.DEVNULL)
+		end = time.time() + 120
+		while qwatch.jvm_pids(self.dir) and time.time() < end:
+			time.sleep(1)
+		if qwatch.jvm_pids(self.dir):
+			return False, "JVM still up 120 s after stop (not killed)", []
+		self.boots = getattr(self, "boots", 1)
+		logs = os.path.join(self.dir, "logs")
+		if os.path.exists(self.log.path):
+			import shutil
+			shutil.copy2(self.log.path, os.path.join(logs, f"qrun_boot{self.boots}.log"))
+		ran = []
+		for c in edits:
+			r = subprocess.run(["bash", "-c", c], cwd=self.dir, capture_output=True, text=True,
+							   env=dict(os.environ, INST=INST, OUT=os.path.abspath(self.out)), stdin=subprocess.DEVNULL)
+			ran.append((c, r.returncode, r.stdout + r.stderr))
+			with open(shell_log, "a") as so:
+				so.write(f"$ (edit, server down) {c}\n{r.stdout}{r.stderr}\n")
+		# output to a file, never a pipe: the server's fifo feeder inherits the fds and holds a pipe open (r1118)
+		os.makedirs(logs, exist_ok=True)
+		with open(os.path.join(logs, "qrun_restart.out"), "a") as bf:
+			subprocess.run(["bash", SCRATCH, "boot", self.out], stdout=bf, stderr=subprocess.STDOUT,
+						   stdin=subprocess.DEVNULL)
+		self.boots += 1
+		end = time.time() + secs
+		ok = False
+		while time.time() < end:
+			if any("Done (" in x for x in self.log.since(0)):
+				ok = True
+				break
+			if w is not None and w.new_files():
+				break
+			time.sleep(2)
+		if w is not None:
+			w.files0 = qwatch.crash_files(self.dir) if ok else w.files0
+			w.pids = qwatch.jvm_pids(self.dir)
+			w.stopping = False
+		if not ok:
+			return False, f"no 'Done (' within {int(secs)} s after the restart (srv/logs/latest.log)", ran
+		return True, f"boot {self.boots} ready", ran
 
 
 class Client:
@@ -404,10 +461,11 @@ def run_row(t, row, res, checks=None):
 	# a waitlog whose pattern an earlier waitlog of this row already matched waits for one more matching line, not the
 	# old one (judge-14, r1118 SQ-EF-01: the second "waitlog Task finished" hit the first Chunky task's line at once)
 	wl_seen = {}
+	pre, edits = [], []   # restart (A2): the segment before each restart; edit lines queued for the next restart
 	for word, arg, pace in row["steps"]:
 		watch_check(t)
 		side, _, word = word.rpartition(":")
-		if word in ("cmd", "shell", "waitlog"):
+		if word in ("cmd", "shell", "waitlog", "edit"):
 			arg = sub(arg)
 			if unset(word, arg):
 				continue
@@ -434,6 +492,24 @@ def run_row(t, row, res, checks=None):
 			else:
 				t.cmd(arg)
 			time.sleep(pace * getattr(t, "pace_scale", 1))
+		elif word == "edit":
+			edits.append(arg)
+		elif word == "restart":
+			if side or not hasattr(t, "restart"):
+				chk("restart", arg, False, "restart needs a server target (qrun.py run)", harness=True)
+				continue
+			secs = float(arg) if re.fullmatch(r"\d+(\.\d+)?", arg or "") else 600.0
+			os.makedirs(os.path.join(res, "rows"), exist_ok=True)
+			pre += t.log.since(off)
+			ok, detail, ran = t.restart(edits, secs, os.path.join(res, "rows", row["id"] + ".shell.txt"))
+			for c, rc, outp in ran:
+				chk("edit", c, not rc, f"edit exit {rc}: {outp.strip()[:200]}" if rc else "exit 0", harness=bool(rc))
+			edits = []
+			chk("restart", arg, ok, detail)
+			off, wl_seen = 0, {}
+			if not ok:
+				t.broken = detail
+				break
 		elif word == "shell":
 			r = subprocess.run(["bash", "-c", arg], cwd=t.side_dir(side) if side else t.dir, capture_output=True,
 							   text=True,
@@ -493,7 +569,7 @@ def run_row(t, row, res, checks=None):
 				chk("do", arg, not err, err or "ok")
 	time.sleep(float(os.environ.get("QRUN_SETTLE", "2")))   # log flush before the checks; the offline tests use less
 	watch_check(t)
-	segs, wholes = {"": t.log.since(off)}, {}
+	segs, wholes = {"": pre + t.log.since(off)}, {}
 	for word, arg, _ in row["steps"]:
 		side, _, word = word.rpartition(":")
 		if side not in segs:
@@ -782,7 +858,7 @@ def install_probes(t, rows):
 	print(f"probes: copied {', '.join(new)}{why}; reload", flush=True)
 	# The "Loaded N/M KubeJS server scripts" line goes to latest.log (KubeJS Server logger), not to
 	# logs/kubejs/server.log, which KubeJS also rewrites on reload (an old offset can sit past its end):
-	# watch latest.log from its pre-reload offset (judge-2, 2026-11-18).
+	# watch latest.log from its pre-reload offset (judge-2, r1118).
 	off = t.log.size()
 	t.cmd("reload")
 	# The reload goes on about 10 s past "Loaded N/M" (recipes, tags, datapack listeners); its last line is KubeJS's
@@ -914,6 +990,9 @@ def run_batch(a, mode, t=None):
 		with open(vp, "w") as f:
 			json.dump(VARS, f, indent=1)
 		print(r["result"], "; ".join(r["fails"])[:200])
+		if getattr(t, "broken", None):
+			print(f"ABORT: restart failed ({t.broken})")
+			break
 		if crash:
 			print(f"  evidence: {os.path.join(res, crash['evidence_dir'])}")
 			if not relaunch or relaunched >= max_relaunch:

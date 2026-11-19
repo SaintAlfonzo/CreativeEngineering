@@ -17,7 +17,6 @@ Lint codes (E = the row will fail or mislead, W = risk; exit 1 when any E):
   E grepc      shell step with grep -c whose exit status is the step's: 0 matches exits 1 = false FAIL
   E var        {NAME} used, but its capture is in a row the selection skips (--from / --rows) or after this use
   W var        {NAME} never captured in the batch and not in --vars (first use per batch)
-  W waitlog2   the same waitlog pattern twice in one row: the repeats return at once on the first's line
   W waitlog    waitlog pattern also matches an earlier row's reply (from --res logs), or repeats an earlier row's
                waitlog / capture pattern for a slow reply, or a locate waitlog does not name its own target
   W marker     tag=X selected, but no earlier selected row summons or tags an X (marker from an older world or boot)
@@ -29,6 +28,8 @@ Lint codes (E = the row will fail or mislead, W = risk; exit 1 when any E):
   W cfgedit    shell edits a config file while the server runs (Forge often misses it; set it before the boot)
   W pipefail   set -o pipefail with grep -q (SIGPIPE reads as not found)
   W ugrep      grep with a {n,m} repeat over 99 (the system grep is ugrep and refuses it)
+  E restart    restart with an argument that is not seconds, restart in a client batch, or an edit line with no
+               restart after it in the same row (qrun runs edit lines only at a restart)
 """
 import json
 import os
@@ -174,7 +175,7 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
 			if section is not None:
 				boxes = {}
 			section = r.get("section")
-		row_waits, row_dup, row_unloaded = set(), set(), False
+		row_unloaded = False
 		row_slow = False
 		for (w, a, _), ln in zip(r["steps"], r["lines"]):
 			def f(sev, code, msg):
@@ -208,6 +209,14 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
 				f("E", "arg", f"sleep wants seconds, got {a!r}: qrun stops with a ValueError here")
 			if w == "click" and not re.fullmatch(r"\d+ \d+", a):
 				f("E", "arg", f"click wants X Y, got {a!r}")
+			# restart verb (r1118 R4 A2)
+			if w == "restart":
+				if a and not re.fullmatch(NUM, a):
+					f("E", "restart", f"restart wants nothing or the seconds to wait for Done, got {a!r}")
+				if client:
+					f("E", "restart", "restart restarts a scratch server: not in a client batch")
+			if w == "edit" and not any(w2 == "restart" for (w2, _, _), ln2 in zip(r["steps"], r["lines"]) if ln2 > ln):
+				f("E", "restart", "edit runs at the row's next restart, and no restart follows it in this row")
 			# regexes
 			if w in ("waitlog", "expect", "reject", "bootexpect", "bootreject", "kjsexpect", "kjsreject", "capture",
 					 "count"):
@@ -234,11 +243,8 @@ def lint_rows(rows, all_rows, client=False, vars0=None, logs=None, perrors=()):
 			if w == "waitlog":
 				parts = a.rsplit(" ", 1)
 				pat = parts[0] if len(parts) == 2 and parts[1].isdigit() else a
-				if pat in row_waits and pat not in row_dup:
-					row_dup.add(pat)
-					f("W", "waitlog2", f"/{pat[:60]}/ waited for again in this row: every repeat returns at once on "
-									   f"the first match (fine only for synchronous replies; else distinct patterns)")
-				row_waits.add(pat)
+				# no waitlog2 warning since r1118: qrun waits for a new matching line when a row repeats a waitlog
+				# pattern (judge-14), so a repeat no longer returns at once on the first's line
 				try:
 					rx = re.compile(VAR_RX.sub("0", pat))
 				except re.error:
@@ -455,6 +461,9 @@ def _est(r):
 		elif w == "waitlog":
 			parts = a.rsplit(" ", 1)
 			hi += float(parts[1]) if len(parts) == 2 and parts[1].isdigit() else 120.0
+		elif w == "restart":
+			lo += 90.0   # stop and a boot
+			hi += 30.0 + (float(a) if re.fullmatch(NUM, a or "") else 600.0)
 	return lo, hi
 
 

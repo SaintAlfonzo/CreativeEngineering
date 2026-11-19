@@ -30,7 +30,8 @@ FAKE = TMP / 'fake_scratch.sh'
 FAKE.write_text('''#!/usr/bin/env bash
 what=$1; OUT=$2; L="$OUT/srv/logs/latest.log"
 case "$what" in
-  boot) mkdir -p "$OUT/srv/logs"; echo "[Server] Done (1.0s)!" > "$L"; echo booting;;
+  boot) mkdir -p "$OUT/srv/logs"; echo boot >> "$OUT/boots.txt"
+    if [ -f "$OUT/srv/nodone" ]; then : > "$L"; else echo "[Server] Done (1.0s)!" > "$L"; fi; echo booting;;
   cmd) echo "[Server thread/INFO] [fake] $3" >> "$L";;
   stop) echo stopped;;
 esac
@@ -350,6 +351,35 @@ def r5b():
 	r = subprocess.run([sys.executable, str(HERE / 'tag_diff.py'), str(b), str(a), 'block:minecraft:x', '--no-rename'],
 					   capture_output=True, text=True)
 	assert 'only before' in r.stdout, r.stdout
+
+
+@case('R1118-A2 restart: edit lines run with the server down, the row and batch go on on the new boot, log kept')
+def ra2():
+	p = write_rows('ZR.qb', SECTION % ('zjar', 'T2')
+				   + row('SQ-ZR-01', '> say before\nedit echo "$OUT" > edited.txt\nrestart 20\n> say after\n'
+							'expect say before\nexpect say after\nbootreject say before\nwaitlog say after 5')
+				   + row('SQ-ZR-02', '> say next\nexpect say next\nreject say before'))
+	out = fake_out('or2')
+	res = TMP / 'rr2'
+	r = subprocess.run(QRUN + ['run', str(out), str(p), str(res)], capture_output=True, text=True, timeout=120)
+	d = json.loads((res / 'results.json').read_text())
+	assert d.get('SQ-ZR-01', {}).get('result') == 'PASS', (d, r.stdout[-600:])
+	assert d.get('SQ-ZR-02', {}).get('result') == 'PASS', (d, r.stdout[-600:])
+	assert (out / 'srv/edited.txt').read_text().strip() == str(out), 'edit ran with OUT set, cwd srv'
+	assert 'say before' in (out / 'srv/logs/qrun_boot1.log').read_text()
+	assert (out / 'boots.txt').read_text().count('boot') == 1, 'fake boots: one restart'
+	v = json.loads((res / 'verdicts/SQ-ZR-01.json').read_text())
+	assert [c['step'] for c in v['checks']][:2] == ['edit', 'restart'], v['checks']
+	# no Done after the restart: the row FAILs, the batch ends before the next row
+	(out / 'srv/nodone').write_text('')
+	res2 = TMP / 'rr2b'
+	p2 = write_rows('ZR2.qb', SECTION % ('zjar', 'T2') + row('SQ-ZR-03', '> say x\nrestart 3')
+					+ row('SQ-ZR-04', '> say y'))
+	r = subprocess.run(QRUN + ['run', str(out), str(p2), str(res2), '--no-watch'], capture_output=True, text=True,
+					   timeout=120)
+	d = json.loads((res2 / 'results.json').read_text())
+	assert d.get('SQ-ZR-03', {}).get('result') == 'FAIL' and 'SQ-ZR-04' not in d, (d, r.stdout[-400:])
+	assert 'ABORT: restart failed' in r.stdout, r.stdout[-400:]
 
 
 sys.path.insert(0, str(HERE.parent / 'client_capture'))
