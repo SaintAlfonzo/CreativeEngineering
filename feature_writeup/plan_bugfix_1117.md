@@ -1,16 +1,24 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Bug fixes that need no live diagnosis (2026-11-17)
 
-<!-- generated:status_index begin open_work sha1=260d3a4b1aa6 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=0bb3018c34c2 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 10 open TODO rows (Testing 10), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
 | `creativedelight/members #60` | Testing | S | Salt item click does not melt ice one stage per click (SQ-MELT-08) |
+| `gameplay/tnt-and-portal #3` | Testing | S P T | Minecart shrapnel and damage |
+| `gameplay/tnt-and-portal #15` | Testing | S C P | Portal Gun: player lifted one block after walking out of a wall portal |
+| `gameplay/tnt-and-portal #29` | Testing | S P | Tempad: time shown in game time; chronometers cancel chronitons charging |
+| `gameplay/tnt-and-portal #31` | Testing | C | Tempad: timedoor marker screen bugs |
+| `largecontent/mod-additions #68` | Testing | S | Crow: loot stolen from a survival player is not stashed in a nest |
+| `largecontent/mod-additions #71` | Testing | S | Mums missing from the small flowers item tag; wild hops never generate |
 | `largecontent/mod-additions #82` | Testing | S P | Power Grid acid mixing loses its water to Creative Delight's heated water-to-salt mixing |
+| `largecontent/mod-additions #90` | Testing | C | Client with Power Grid crashes joining a server without it |
+| `textures/merges #11` | Testing | C | Weathered cardboard box: too small, UVs wrong |
 <!-- generated:status_index end open_work -->
 
-Status: **planned, not built.** Scope: the open Bug rows whose cause is known or readable from code. Left out on purpose:
+Status: **built, waiting on reruns** (2026-11-18; phase notes in section 6). Scope: the open Bug rows whose cause is known or readable from code. Left out on purpose:
 `gameplay/tnt-and-portal #38` and `tooling/scratch-1115-follow-ups #2` (urgent portal crash), `jei/jei-coverage #8`
 (flower crown crash), and the rows whose cause is unknown and needs an in-game look first (section 4). Status is in the TODO
 rows, not here. Code facts below were read 2026-11-17 from the row text and file names; re-read before editing.
@@ -68,3 +76,34 @@ A5 Tempad time is the in-world day clock. B3: salt hits ice and snow directly, a
    `python3 tools/status_index.py`, then a commit per phase pushed to `agent_staging`.
 4. No scratch server boot unless the owner asks; rows go to the queue.
 5. Do not edit rows' plan cell by hand; use `tools/todo.py` once the owner approves this plan.
+
+## 6. Phase notes (2026-11-18)
+
+- A1: `ElectroZapperRenderHandler.appliesTo` returns false when `ELECTROZAPPER.isPresent()` is false. Power Grid -20
+  rebuilt and installed. CQ-PWG-67 (client).
+- A2: the crow's nest search is +-8 blocks vertically (was 3) and runs again every 20 ticks while it flees without a
+  nest. CD rebuilt. SQ-HH-501 (boot 2, `carryTicks 200`) is the test. No changelog bullet: with the default carry the
+  crow already stashed.
+- A3: the cause was not the UVs. KubeJS generated a cube_all model at `block/weathered_cardboard_box` that outranked
+  the jar's JSON, so the whole 32x32 sheet showed on every face. The model now ships as
+  `block/weathered_cardboard_box_wrapped` (Design and Decor's `cardboard_box/block.json` geometry, our texture), and
+  `decor_blocks.js` sets `blockstateJson` with `x: 90` (Design and Decor's box placed facing north: tape on top). The
+  item uses the unrotated model. SQ-CMP-09s, CQ-CMP-09.
+- A4: `isClashing` made every chronometer stand down while another `tempad:chronon_generators` item was carried. Now
+  only the first one found charges. SQ-TP-42.
+- A5: the clock in the title bar already used day time. The real-world time was the Timeline app's entry stamps
+  (`new Date()`). `HistoricalLocation` carries `dayTime` (NBT `day_time`, one long on the wire), shown as
+  `Day N, HH:MM`; entries saved before keep their date. CQ-TP-17.
+- A6: `TextBox` set its value at width 0 (text scrolled out of view until clicked), so `withSize` scrolls to the start;
+  `ColorPicker.input` reloads the state's color whenever it differs and the box is not focused. CQ-TP-18.
+- B1: shrapnel hits living things only (`hitsNonLiving` false): a burst broke nearby carts and armor stands and turned
+  TNT minecarts into items, the minecart half of the row. Chain cap `maxNearby` 32 pieces in flight within 32 blocks.
+  A burning TNT item's blast hurts x0.5 (`itemBlastDamageFactor`, a `LivingHurtEvent` on `BurnBlastDamage`), knockback
+  unchanged. F3: no change. SQ-TN-11, -12, CQ-TN-13 (new `TN.qb`).
+- B2: no code. The named defects went with the 2026-11-14 rewrite (`PortalGunExitLift` and its mixin deleted), and
+  the sideways-exit rule built 2026-11-16 (Immersive Portals' lift on a wall exit only when a block in front of the exit
+  overlaps the player) is the ruling as read. Rerun SQ-PG-01a, -01b, CQ-PG-03.
+- B4: no code. The 289-column trunk search built 2026-11-15 (plan_post_scratch_1115 C3) is the reliable search the
+  owner chose, and it has never run. Rerun SQ-HH-304, SQ-HOP-06, SQ-PS15-11.
+- Installs used `-PskipChecks`: the date lints fail only on other sessions' files.
+

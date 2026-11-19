@@ -1,15 +1,15 @@
 # Miscellaneous rulings, not executed (2026-11-17)
 
-<!-- generated:status_index begin open_work sha1=e44029a2979e -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Planned 1, Testing 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=5f14b125c153 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 2 open TODO rows (Testing 2), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `ingredients #44` | Planned | S | Foxes and bees: leaf piles flyable not pathable; sand/ash/snow layers blocked |
-| `dishes/ingredients #32` | Testing | S+ P | Shulker meat from End's Delight only |
+| `dishes/ingredients #32` | Testing | S+ P | Shulker Mollusk is the shulker meat (End's meat merged onto it) |
+| `ingredients #44` | Testing | S | Foxes and bees: leaf piles flyable not pathable; sand/ash/snow layers blocked |
 <!-- generated:status_index end open_work -->
 
-Status: **planned, not built.** Owner rulings from the 2026-11-17 open-decision review of
+Status: **built 2026-11-18, waiting on reruns** (notes in the History). Owner rulings from the 2026-11-17 open-decision review of
 [plan_post_scratch_1115.md](plan_post_scratch_1115.md), [plan_post_scratch_1115b.md](plan_post_scratch_1115b.md),
 [plan_passthrough.md](plan_passthrough.md) and [plan_meals_rolls_bbq.md](plan_meals_rolls_bbq.md). Append further
 unexecuted small items here. Status lives in the TODO rows.
@@ -46,3 +46,15 @@ preferred End's Delight's shulker meat.
 ## History
 
 - 2026-11-17: written from the owner's answers.
+- 2026-11-18: section 1 built (Creative Compat). Sand and ash layers were never in a walk-through tier, so only snow
+  changed for foxes and bees. They moved from `passthrough_exempt/layers` to `passthrough_exempt/leaf_layers` (leaf
+  piles and Twigs bamboo leaves), so snow slows them. Rabbits and cats keep the tier-wide exemption. A deep leaf pile
+  (`pathBlockLayers`) is `BLOCKED` in their path search (`LeafThorns.pathType` through `SnowPathMixin`), because foxes
+  take `DAMAGE_OTHER` at no cost. Other mobs keep `DAMAGE_OTHER`. SQ-PTH-21 (updated), -29, -30.
+- 2026-11-18: section 2 built (Creative Delight). Report on the checks the build was to make:
+  - Values kept: the mollusk's own stack size and food values (the food tuning tables have no shulker entry).
+  - Canned Shulker Flesh follows the mollusk's food: 8 a can [1], its Nausea chance [End's Levitation].
+  - Ender's knife drop and filet cut stay on. End's knife drop is off; its machete drop gives the mollusk.
+  - End's cut is removed. End's roasted shulker meat now cooks from the mollusk.
+  - SQ-BBQ2-08, SQ-FCB-05 (reversed).
+
