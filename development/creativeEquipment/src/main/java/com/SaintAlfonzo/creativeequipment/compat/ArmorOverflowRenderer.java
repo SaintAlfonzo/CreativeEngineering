@@ -69,6 +69,9 @@ public class ArmorOverflowRenderer {
 		Minecraft mc = Minecraft.getInstance();
 		LocalPlayer player = mc.player;
 		if (player == null) return;
+		// Same condition as ForgeGui#shouldDrawSurvivalElements: the armor overlay is skipped in creative and spectator,
+		// but its Pre event still fires, so the extra rows must stop here too.
+		if (mc.options.hideGui || mc.gameMode == null || !mc.gameMode.canHurtPlayer()) return;
 
 		List<Pair<ItemStack, CustomArmorBar>> armorPoints = ArmorBarRendererAccessor.creativecommon$getArmorPoints(player);
 		int stackCount = (armorPoints.size() - 1) / ROW_SIZE;

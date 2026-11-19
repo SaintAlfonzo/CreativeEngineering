@@ -4,6 +4,7 @@
 
 - **New:** Spice of Life: Raspberry Pie Addition. Food diversity climbs a ladder of hearts, armor toughness, knockback resistance, permanent buffs, effect slots and effect unlocks. Applies to new worlds.
 - **Changed:** The pack's diet bonuses are 8 hearts, 3 armor toughness tiers, knockback resistance, 10% walk speed, permanent Speed I at diversity 20 and 5 effect slots [fixed Apple Pie bonuses].
+- **Changed:** The Diet Log book is larger (140% [125%]) and its text and icons are drawn at 85% so they stay on the page; both sizes are in the client config.
 - **New:** Effect slots hold an unlocked effect of your choice: Speed, Haste, Strength, Jump Boost, Night Vision, Water Breathing, Luck, Regeneration, Shrinking, Long Reach, Patrol Nullifier, Phantom Bane, Fleet-Footed or Lava Walker.
 - **New:** Filling a slot or changing its level is free. Changing a slot's effect ages your 8 oldest recent foods out of your diet; dropping a slot ages out foods until your highest slot switches off. A confirm panel shows the cost first.
 - **New:** Effect unlocks are kept for good. Slots below their diversity gray out and keep their choice.
@@ -371,6 +372,7 @@
 
 ## Interface
 
+- **Fixed:** Extra armor bar rows no longer show in creative mode.
 - **Fixed:** Opening chat with / sometimes typed a second / into the box (T sometimes typed t).
 - **Changed:** In JEI, fishing rods and backpacks each have their own group after the equipment materials [with each material]; Simple Hats and Wardrobe backpacks are not sorted.
 - **New:** Title screen splash: Stience!

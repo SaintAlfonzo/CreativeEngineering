@@ -7,6 +7,7 @@ import com.SaintAlfonzo.solraspberrypie.ladder.Rung;
 import com.SaintAlfonzo.solraspberrypie.logic.DietEngine;
 import com.SaintAlfonzo.solraspberrypie.logic.SlotActions;
 import com.SaintAlfonzo.solraspberrypie.mixin.client.FoodBookScreenAccessor;
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.tarinoita.solsweetpotato.client.gui.BenefitsPage;
 import com.tarinoita.solsweetpotato.client.gui.FoodBookScreen;
@@ -29,7 +30,7 @@ import java.util.TreeSet;
  * Raspberry Pie's pages in Apple Pie's Diet Log (6.3, 12.4): a progress bar over a window of the ladder (the last
  * milestone reached, a short stretch before it and the next few milestones) with an icon per rung (reached in color,
  * unreached grayed, hover for the value), then the milestone list. Inserted after the diversity page; Apple Pie's own
- * benefit pages are removed. The whole book is drawn at {@link #bookScale} (G5b).
+ * benefit pages are removed. The whole book is drawn at {@link #bookScale} (G5b); our pages' text and icons at {@link #contentScale} within it.
  */
 public final class DietLogPages {
 	static final int HEALTH = 0xFFD03030, ATTRIBUTE = 0xFF4060C0, SLOT = 0xFF20A0A0, FLAT = 0xFFC09020, UNLOCK = 0xFF9040C0, GREY = 0xFFA0A0A0;
@@ -43,10 +44,42 @@ public final class DietLogPages {
 	 * margin, but never below 100% (or below the configured value when that is under 1.0).
 	 */
 	public static float bookScale(int screenWidth, int screenHeight) {
-		float want = RpConfig.CLIENT_SPEC.isLoaded() ? RpConfig.CLIENT.bookScale.get().floatValue() : 1.25F;
+		float want = RpConfig.CLIENT_SPEC.isLoaded() ? RpConfig.CLIENT.bookScale.get().floatValue() : 1.4F;
 		if (want <= 1F) return want;
 		float fit = Math.min((screenWidth / 2F - 4F) / (BOOK_W / 2F), (screenHeight / 2F - 4F) / BUTTON_BOTTOM);
 		return Math.min(want, Math.max(1F, fit));
+	}
+
+	/** Scale of our pages' text and icons inside the book (configurable), below 1 so they stay on the page. */
+	static float contentScale() {
+		return RpConfig.CLIENT_SPEC.isLoaded() ? RpConfig.CLIENT.contentScale.get().floatValue() : 0.85F;
+	}
+
+	/** The page frame laid out at {@code 1 / contentScale} size, so content drawn at the content scale fills the page. */
+	private static Rectangle virtual(Rectangle f) {
+		float c = contentScale();
+		return new Rectangle(f.x, f.y, Math.round(f.width / c), Math.round(f.height / c));
+	}
+
+	/** Maps a rectangle laid out in the virtual frame to its screen position under the content scale. */
+	private static Rectangle mapped(Rectangle page, int x, int y, int w, int h) {
+		float c = contentScale();
+		return new Rectangle(page.x + Math.round((x - page.x) * c), page.y + Math.round((y - page.y) * c), Math.max(1, Math.round(w * c)), Math.max(1, Math.round(h * c)));
+	}
+
+	private static void scaleBegin(Rectangle page) {
+		float c = contentScale();
+		PoseStack mv = RenderSystem.getModelViewStack();
+		mv.pushPose();
+		mv.translate(page.x, page.y, 0);
+		mv.scale(c, c, 1);
+		mv.translate(-page.x, -page.y, 0);
+		RenderSystem.applyModelViewMatrix();
+	}
+
+	private static void scaleEnd() {
+		RenderSystem.getModelViewStack().popPose();
+		RenderSystem.applyModelViewMatrix();
 	}
 
 	/** Rebuilds the page list after Apple Pie's initPages. */
@@ -60,10 +93,10 @@ public final class DietLogPages {
 
 		if (!ClientState.ready()) return;
 		List<UIElement> ours = new ArrayList<>();
-		ours.add(new ProgressPage(new Rectangle(frame)));
+		ours.add(new ProgressPage(virtual(frame)));
 		List<Rung> rungs = ClientState.ladder.rungs;
 		for (int i = 0; i < rungs.size(); i += ROWS_PER_PAGE) {
-			ours.add(new ListPage(new Rectangle(frame), rungs.subList(i, Math.min(rungs.size(), i + ROWS_PER_PAGE))));
+			ours.add(new ListPage(virtual(frame), rungs.subList(i, Math.min(rungs.size(), i + ROWS_PER_PAGE))));
 		}
 		pages.addAll(Math.min(1, pages.size()), ours);
 	}
@@ -247,17 +280,18 @@ public final class DietLogPages {
 				int ix = x - ICON / 2, iy = barY - 3 - ICON - n * (ICON + 2);
 				shown.add(r);
 				spots.add(new int[]{ix, iy});
-				children.add(new Hover(new Rectangle(ix, iy, ICON, ICON), Icons.num(r.threshold) + ": " + describe(r).getString()));
+				children.add(new Hover(mapped(frame, ix, iy, ICON, ICON), Icons.num(r.threshold) + ": " + describe(r).getString()));
 			}
 			int ly = frame.y + LEGEND_DY;
 			for (int i = 0; i < LEGEND_NAMES.length; i++) {
-				children.add(new Hover(new Rectangle(frame.x + 8, ly + i * 11, ICON, ICON),
+				children.add(new Hover(mapped(frame, frame.x + 8, ly + i * 11, ICON, ICON),
 						Component.translatable("solraspberrypie.dietlog.legend." + LEGEND_NAMES[i]).getString()));
 			}
 		}
 
 		@Override
 		protected void render(PoseStack pose) {
+			scaleBegin(frame);
 			var s = ClientState.state;
 			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.ladder"), frame.x + 6, frame.y + 4, 0x000000);
 			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.now", Icons.num(Math.round(s.diversity * 10) / 10.0)), frame.x + 6, frame.y + 16, 0x333333);
@@ -292,6 +326,7 @@ public final class DietLogPages {
 				fontRenderer.draw(pose, Component.translatable(s.uniqueGate ? "solraspberrypie.screen.gate_unique" : "solraspberrypie.screen.gate",
 						s.minFoods - s.foodsEaten), frame.x + 6, ly + LEGEND_NAMES.length * 11 + 2, 0x8A4A00);
 			}
+			scaleEnd();
 			super.render(pose);
 		}
 	}
@@ -306,6 +341,7 @@ public final class DietLogPages {
 
 		@Override
 		protected void render(PoseStack pose) {
+			scaleBegin(frame);
 			fontRenderer.draw(pose, Component.translatable("solraspberrypie.dietlog.milestones"), frame.x + 6, frame.y + 4, 0x000000);
 			int y = frame.y + 18;
 			for (Rung r : rungs) {
@@ -316,6 +352,7 @@ public final class DietLogPages {
 				fontRenderer.draw(pose, text, frame.x + 40, y + 1, got ? 0x000000 : 0x777777);
 				y += 12;
 			}
+			scaleEnd();
 			super.render(pose);
 		}
 	}
