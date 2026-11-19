@@ -1,18 +1,18 @@
 <!-- SPDX-License-Identifier: GPL-3.0-only -->
 # Bug fixes from scratch run r1118 (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=ab368c33b6a6 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Bug 6, Planned 1), 0 Complete.
+<!-- generated:status_index begin open_work sha1=dee915d6a6f2 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 7 open TODO rows (Planned 1, Testing 6), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `conventions #38` | Bug | SQ-HH-1269 | Jar loot modifiers never run: Creative Loot GLM merge mixin matches nothing |
-| `creative-delight-members #1` | Bug |  | Stale incubation_additions in the mod_names config |
-| `crops #58` | Bug | SQ-SY-21 | Botany Pots growth times back at mod defaults |
-| `generators-and-tests #19` | Bug | SQ-WCT-05 | cdevtest rdetail shows no ingredients for smithing and IE sawmill recipes |
-| `recipes/metal #3` | Bug | S P | Rose gold in gold tags |
-| `terrain-adaptation #1` | Bug | SQ-CBA-18 SQ-CBC-04 | Ported structure datapacks dropped from structure tags as absent mods |
 | `performance-and-server #1` | Planned | S | Boot log noise cleanup: 91 failed third-party compat recipes for absent mods |
+| `conventions #38` | Testing | SQ-HH-1269 | Jar loot modifiers never run: Creative Loot GLM merge mixin matches nothing |
+| `creative-delight-members #1` | Testing |  | Stale incubation_additions in the mod_names config |
+| `crops #58` | Testing | SQ-SY-21 | Botany Pots growth times back at mod defaults |
+| `generators-and-tests #19` | Testing | SQ-WCT-05 | cdevtest rdetail shows no ingredients for smithing and IE sawmill recipes |
+| `recipes/metal #3` | Testing | S P | Rose gold in gold tags |
+| `terrain-adaptation #1` | Testing | SQ-CBA-18 SQ-CBC-04 | Ported structure datapacks dropped from structure tags as absent mods |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, not built.** Source: [scratch_run_2026-11-18.md](testing/scratch_run_2026-11-18.md) sections 8 to
