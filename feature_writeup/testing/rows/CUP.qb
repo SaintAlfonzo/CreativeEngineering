@@ -45,8 +45,8 @@ look rows/SQ-CUP-01.shell.txt: no Unknown item line from the dicts, stack_sizes 
 > cdevtest item delightful:cactus_soup
 waitlog verb=item item=delightful:cactus_soup 30
 expect verb=reg kind=item regex=\^miners_delight: n=50\b
-reject verb=reg kind=item id=miners_delight:\S*cup 
-reject verb=reg kind=item id=delightful:\S*cup 
+reject verb=reg kind=item id=miners_delight:\S*cup
+reject verb=reg kind=item id=delightful:\S*cup
 count Unknown item >= 7
 expect verb=item item=delightful:cactus_soup class=(?!\S*AirItem)
 reject verb=\S+ .*done=0

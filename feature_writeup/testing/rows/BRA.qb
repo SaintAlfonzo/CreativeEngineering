@@ -75,7 +75,7 @@ waitlog \[cdevtest\] verb=tag done= 20
 expect \[cdevtest\] verb=tag kind=block tag=blockrunner:surface/metal n=[1-9]\d* ids=\S*\bmetalfences:
 > cdevtest tag block blockrunner:surface/camouflage
 waitlog \[cdevtest\] verb=tag done= 20
-expect \[cdevtest\] verb=tag kind=block tag=blockrunner:surface/camouflage n=([3-9]|\d\d+) 
+expect \[cdevtest\] verb=tag kind=block tag=blockrunner:surface/camouflage n=([3-9]|\d\d+)
 reject \[cdevtest\] .*(done=0|error=)
 
 ## SQ-BRA-05 | speed modifiers, set 1

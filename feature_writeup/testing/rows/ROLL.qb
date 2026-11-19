@@ -137,7 +137,7 @@ expect ROLL05 medley gone after 9
 expect ROLL05 dirt placed against the medley
 expect verb=items items=\S*minecraft:bowl:1
 expect verb=pbot\.hunger bot=rl5 food=10
-expect verb=player name=rl5 .*food=(1[1-9]|20) 
+expect verb=player name=rl5 .*food=(1[1-9]|20)
 reject verb=pbot\.\S+ .*error=
 reject \[cdevtest\] .*done=0
 > pbot remove rl5
@@ -156,7 +156,7 @@ look the nine SelectedItem lines: 3 mushroom slices, 3 Salmon Maki, 2 Tobiko, th
 > cdevtest break 160 -60 500
 count \[cdevtest\] verb=break who=fake broken=true before=\"?roll_delight:mythical_roll_medley == 2
 expect \[cdevtest\] verb=break drops=\S*\bminecraft:bowl:1\b
-expect \[cdevtest\] verb=break drops=roll_delight:mythical_roll_medley:1 stacks=1 
+expect \[cdevtest\] verb=break drops=roll_delight:mythical_roll_medley:1 stacks=1
 look the drops= line with the bowl (servings=5): 2 Nether Rolls and 3 Golden Roll Slices
 reject \[cdevtest\] verb=\S+ done=0
 
@@ -185,7 +185,7 @@ expect ROLL07 block gone
 > setblock 165 -60 500 roll_delight:wrapped_chopsticks[chopsticks=3]
 > cdevtest break 165 -60 500
 expect \[cdevtest\] verb=break who=fake broken=true before=\"?roll_delight:wrapped_chopsticks
-expect \[cdevtest\] verb=break drops=roll_delight:wrapped_chopsticks:3 
+expect \[cdevtest\] verb=break drops=roll_delight:wrapped_chopsticks:3
 > pbot remove rl7
 reject \[cdevtest\] verb=\S+ done=0
 
@@ -202,8 +202,8 @@ reject \[cdevtest\] verb=\S+ done=0
 > setblock 170 -60 500 minecraft:frogspawn
 > cdevtest break 170 -60 500
 count \[cdevtest\] verb=break who=fake broken=true before=minecraft:frogspawn == 2
-expect \[cdevtest\] verb=break drops=minecraft:frogspawn:1 stacks=1 
-expect \[cdevtest\] verb=break drops=- stacks=0 
+expect \[cdevtest\] verb=break drops=minecraft:frogspawn:1 stacks=1
+expect \[cdevtest\] verb=break drops=- stacks=0
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-ROLL-09 | Unbreaking applies to chopsticks (server half; anvil plank repair is CQ-ROLL-10)

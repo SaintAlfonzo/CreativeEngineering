@@ -22,7 +22,7 @@ bootreject (?i)(ERROR|Exception).*storagedelight
 > cdevtest reg block ^storagedelight:.*countertop max=1
 > cdevtest reg block ^storagedelight:bamboo_ max=1
 expect verb=reg kind=block regex=\^storagedelight: n=140$
-expect verb=recipes text=storagedelight: n=([5-9]\d|\d{3,}) 
+expect verb=recipes text=storagedelight: n=([5-9]\d|\d{3,})
 reject \[cdevtest\] verb=\S+ done=0
 look recipe count at least the 50 new rows (36 stone countertops and 14 bamboo blocks: the countertop and bamboo reg counts); a different block count than 140: record it against storage_delight.md 5
 ## SQ-STD-02 | Storage Delight drawer and cabinets: 27 slots, dropped with contents (x 100..104; queue group B)

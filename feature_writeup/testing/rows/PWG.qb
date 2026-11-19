@@ -364,7 +364,7 @@ pace 2
 > powergrid performance get NetSolve
 sleep 2
 # r1114: P11 runs -13 after the P2 solves, so a measurement exists (the "no measurement yet" read needs a fresh world)
-expect Last measurement: 
+expect Last measurement:
 reject An unexpected error occurred
 reject Unknown or incomplete command
 > reload
@@ -410,7 +410,7 @@ sleep 3
 waitlog \[zpwgg\] done 30
 > zpwgg wires 1000 -60 1000 8
 waitlog \[zpwgg\] wires 30
-expect \[zpwgg\] read V=12(\.0)? I=1\.(19|2)\S* 
+expect \[zpwgg\] read V=12(\.0)? I=1\.(19|2)\S*
 expect \[zpwgg\] wires 5$
 reject /ERROR\]
 look read line: I within 1 % of 12/(10+Rwires), Vr within 1 % of I x 10
@@ -3279,7 +3279,7 @@ expect \[zpwg7\] dig result=true after=minecraft:air charge=19975/20000 dur=250/
 expect \[zpwg7\] dig result=true after=minecraft:air charge=19875/20000 dur=250/250 .*speedMult=1 digSpeedNow=16
 expect verb=items items=\S*minecraft:cobblestone:[1-9]
 expect \[zpwg7\] dig minecraft:obsidian with powergrid:portable_drill .*correctTool=true
-expect verb=items items=minecraft:obsidian:1 
+expect verb=items items=minecraft:obsidian:1
 expect \[zpwg7\] dig minecraft:dirt with powergrid:portable_drill .*itemSpeed=6
 expect \[zpwg7\] dig minecraft:oak_planks with powergrid:portable_drill .*itemSpeed=1 correctTool=false
 expect \[zpwg7\] action START_DESTROY_BLOCK held=powergrid:portable_drill mining=true
@@ -5673,7 +5673,7 @@ expect \[zpwg9d\] finish main=powergrid:electrobaton x1 Boosted=6 .* chips=1 ret
 expect \[zpwg9d\] finish main=powergrid:electrozapper x1 Boosted=15 .* chips=1 returned=1$
 count \[zpwg9d\] use chip result=PASS using=false$ == 6
 expect \[zpwg9d\] swapped main to minecraft:diamond_sword x1 Boosted=none
-expect \[zpwg9d\] finish main=minecraft:diamond_sword x1 Boosted=none .* chips=2 
+expect \[zpwg9d\] finish main=minecraft:diamond_sword x1 Boosted=none .* chips=2
 expect \[zpwg9d\] zappass unboosted use=PASS projectiles 0 -> 0 main=powergrid:electrozapper x1 Boosted=none
 expect \[zpwg9d\] zappass boosted use=.* projectiles 0 -> 1 main=powergrid:electrozapper x1 Boosted=14 Damage=[01]/50 .*chips=2$
 reject \[zpwg9d\] finish error
@@ -5742,17 +5742,17 @@ waitlog \[zpwg7\] done 20
 sleep 1
 expect \[zpwg9d\] drill0 speedMult=0$
 expect \[zpwg9d\] boost \[zpwg7\] powergrid:portable_drill x1 Boosted=75 Damage=0/250
-expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=12 
-expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=17 
-expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=22 
-expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=27 
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=12
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=17
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=22
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=27
 count \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=32 >= 2
 expect \[zpwg7\] dig result=true after=minecraft:air charge=19950/20000 dur=250/250
 expect \[zpwg7\] dig result=true after=minecraft:air charge=19750/20000 dur=250/250
 expect \[zpwg9d\] boosted \[zpwg7\] powergrid:portable_drill x1 Boosted=70 .*speedMult=1$
 expect \[zpwg7\] dig result=true .*digSpeedNow=16
 expect \[zpwg9d\] boosted \[zpwg7\] powergrid:portable_drill x1 Boosted=none
-expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=16 
+expect \[zpwg7\] dig minecraft:stone with powergrid:portable_drill digSpeed=16
 expect \[zpwg7\] dig minecraft:oak_log with powergrid:portable_saw .*itemSpeed=12\b
 expect \[zpwg7\] dig minecraft:stone with powergrid:portable_saw .*itemSpeed=2\b
 expect \[zpwg9d\] boosted \[zpwg7\] powergrid:portable_saw x1 Boosted=73
@@ -5866,7 +5866,7 @@ expect \[zpwg7\] zap projectile power=1\.2\b
 count \[zpwg7\] hp minecraft:pig 1\.467/10 == 3
 expect \[zpwg7\] zap .*dur 50/50 -> 49/50
 expect \[zpwg7\] zap projectile power=1 motion
-expect \[zpwg7\] hp minecraft:pig 2/10 
+expect \[zpwg7\] hp minecraft:pig 2/10
 expect \[zpwg9d\] boosted \[zpwg7\] powergrid:electrozapper x1 Boosted=14\b
 reject \[zpwg7\] (baton: no target|zap: no target)
 reject \[zpwg7\] (baton|zap) target=\S*villager
@@ -6221,9 +6221,9 @@ sleep 1
 expect \[zpwg10\] attach powergrid:factory_light result=(SUCCESS|CONSUME) block powergrid:ceiling_tile -> powergrid:ceiling_tile_lamp
 expect (?i)\[zpwg10\] lamp state=lamp_on .*burned=false emission=15 .*below=1[45]$
 expect \[zpwg10\] terminals T0=1[12]\d(\.\d+)? T1=
-expect (?i)\[zpwg10\] lamp state=lamp(_low_power)? .*emission=(0|10) 
-expect (?i)\[zpwg10\] lamp state=lamp .*emission=0 
-expect (?i)\[zpwg10\] lamp state=lamp_low_power .*emission=10 
+expect (?i)\[zpwg10\] lamp state=lamp(_low_power)? .*emission=(0|10)
+expect (?i)\[zpwg10\] lamp state=lamp .*emission=0
+expect (?i)\[zpwg10\] lamp state=lamp_low_power .*emission=10
 reject \[zpwg10\] lamp none
 reject (?i)\[zpwg10\] lamp state=empty
 reject An unexpected error occurred trying to execute that command
@@ -6294,10 +6294,10 @@ sleep 5
 > zpwg10 solar 1103 -60 2040
 > gamerule doDaylightCycle true
 sleep 1
-expect \[zpwg10\] solar ceiling controller=.* sky=15 
+expect \[zpwg10\] solar ceiling controller=.* sky=15
 expect \[zpwg6\] solar powergrid:solar_panel
 count \[zpwg10\] solarjoin ok == 3
-expect \[zpwg10\] solar ceiling controller=.* connected=3 sky=15 
+expect \[zpwg10\] solar ceiling controller=.* connected=3 sky=15
 count \[zpwg10\] terminals T0=\S+ T1=\S+$ >= 3
 reject \[zpwg10\] solar(join)?: (no controller|both must|none at)
 reject An unexpected error occurred trying to execute that command

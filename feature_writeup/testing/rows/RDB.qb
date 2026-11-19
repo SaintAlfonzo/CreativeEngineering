@@ -101,12 +101,12 @@ expect verb=state pos=202,-60,200 state="rusticdelight:honey_pancakes\[facing=ea
 expect verb=state pos=204,-60,200 state="rusticdelight:cotton\[age=3\]"
 expect verb=state pos=206,-60,200 state="rusticdelight:coffee\[age=4\]"
 expect verb=state pos=208,-60,200 state="rusticdelight:bell_peppers\[age=6\]"
-expect verb=state pos=210,-60,200 state=rusticdelight:bell_pepper_red_crate 
-expect verb=state pos=212,-60,200 state=rusticdelight:cotton_boll_crate 
-expect verb=state pos=214,-60,200 state=rusticdelight:potted_wild_coffee 
+expect verb=state pos=210,-60,200 state=rusticdelight:bell_pepper_red_crate
+expect verb=state pos=212,-60,200 state=rusticdelight:cotton_boll_crate
+expect verb=state pos=214,-60,200 state=rusticdelight:potted_wild_coffee
 expect verb=state pos=216,-60,200 state="rusticdelight:cherry_blossom_cheesecake\[bites=1,facing=north\]"
-expect verb=state pos=218,-60,200 state=rusticdelight:wild_coffee 
-expect verb=state pos=220,-60,200 state=rusticdelight:glowing_calamari_crate 
+expect verb=state pos=218,-60,200 state=rusticdelight:wild_coffee
+expect verb=state pos=220,-60,200 state=rusticdelight:glowing_calamari_crate
 reject \[cdevtest\] verb=\S+ done=0
 shell echo "missing-registry lines naming rusticdelight: $(grep -ciE '(missing|unidentified|unknown).*rusticdelight' logs/latest.log)"; grep -iE "(missing|unidentified|unknown).*rusticdelight" logs/latest.log | cut -c1-240 | head -8
 

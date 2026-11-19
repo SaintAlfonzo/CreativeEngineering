@@ -253,7 +253,7 @@ capture FF is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
 > tp qa {FF1} 200 {FF3}
 sleep 30
 > cdevtest count {FF1-48} 40 {FF3-48} {FF1+48} 140 {FF3+48} fruitsdelight:apple_leaves
-expect verb=count block=fruitsdelight:apple_leaves n=0 
+expect verb=count block=fruitsdelight:apple_leaves n=0
 reject \[cdevtest\] .*done=0
 reject fruitsdelight:apple_sapling
 bootexpect \[itemMerges\]

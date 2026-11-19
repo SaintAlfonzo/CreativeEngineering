@@ -41,7 +41,7 @@ sleep 8
 > pbot spawn H 276 -60 280 minecraft:overworld survival
 sleep 3
 > cdevtest state 310 -60 300
-expect verb=state pos=310,-60,300 
+expect verb=state pos=310,-60,300
 > gamerule randomTickSpeed 0
 reject \[cdevtest\] .*done=0
 

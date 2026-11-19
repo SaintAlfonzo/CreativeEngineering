@@ -56,7 +56,7 @@ sleep 3
 > cdevtest player G
 waitlog verb=player done= 20
 expect HOP02-vine$
-expect verb=player name=G .*main=hearthandharvest:hops\*1 
+expect verb=player name=G .*main=hearthandharvest:hops\*1
 reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-HOP-03 | hops vine grows to age 3 at randomTickSpeed 3000 in 10 s (open sky, mid autumn)
@@ -177,7 +177,7 @@ sleep 3
 > cdevtest player G
 waitlog verb=player done= 20
 expect HOP07-lattice-hops$
-expect verb=player name=G .*main=hearthandharvest:hops\*1 
+expect verb=player name=G .*main=hearthandharvest:hops\*1
 look "Test passed"
 
 ## SQ-HOP-08 | hops lattice grows to age 4 in the open at randomTickSpeed 3000 in 15 s; a dark one (stone box, light 0) stays age 1
@@ -263,7 +263,7 @@ waitlog verb=player done= 20
 > pbot hold G vinery:jungle_grape_seeds_white 1
 > pbot use G 618 -60 521 south
 > execute if block 618 -60 521 vinery:grapevine_lattice[age=1,grape=jungle_white] run say HOP10-jungle
-expect verb=player name=G .*main=hearthandharvest:hops\*3 
+expect verb=player name=G .*main=hearthandharvest:hops\*3
 expect HOP10-jungle$
 reject (Unknown item|Unknown block type|Incorrect argument for command)
 look hand still 3 hops after the pot; jungle "Test passed"; registry part in SQ-HOP-10x

@@ -890,5 +890,5 @@ reject verb=bytype id=\S+ result=(farmersdelight:fried_egg|moredelight:omelette|
 expect verb=recipes text=creativedelight:smelting/fried_egg_from_egg n=0\b
 expect verb=recipes text=moredelight:omelette_smelting n=0\b
 expect verb=recipes text=alexsmobs:boiled_emu_egg n=0\b
-reject verb=recipes id=ends_delight:food_smelting/(fried_dragon_egg|shulker_omelette) 
+reject verb=recipes id=ends_delight:food_smelting/(fried_dragon_egg|shulker_omelette)
 look makes lines: the fried egg and the omelette still have a smoking and a campfire recipe

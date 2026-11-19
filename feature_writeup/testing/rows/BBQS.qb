@@ -84,7 +84,7 @@ sleep 3
 waitlog verb=pbot\.inv bot=c2b filled= 20
 expect verb=pbot\.sneak bot=c2b shift=true
 expect verb=inv slot=0 item=farmersdelight:cabbage\*3
-expect verb=use main=minecraft:stick\*1 
+expect verb=use main=minecraft:stick\*1
 expect verb=pbot\.inv bot=c2b slot=\d+ item=farmersdelight:cabbage\*1
 expect verb=pbot\.inv bot=c2b slot=\d+ item=minecraft:stick\*1
 reject verb=pbot\.\S+ .*error=

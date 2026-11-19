@@ -51,10 +51,10 @@ expect Gave 1 +\[.*\] to qa
 shell grep -E "potion bottling done|tipped arrow|alcohol recipes|jeed_providers.js:" logs/kubejs/server.log | cut -c1-200 | head -10
 > cdevtest recipes creativebrewing: max=1
 waitlog \[cdevtest\] verb=recipes text=creativebrewing: n= 30
-expect \[cdevtest\] verb=recipes text=creativebrewing: n=[1-9]\d* 
+expect \[cdevtest\] verb=recipes text=creativebrewing: n=[1-9]\d*
 > cdevtest recipes brewinandchewin:fermenting/beer_from_water
 waitlog \[cdevtest\] verb=recipes text=brewinandchewin:fermenting/beer_from_water n= 30
-expect \[cdevtest\] verb=recipes text=brewinandchewin:fermenting/beer_from_water n=0 
+expect \[cdevtest\] verb=recipes text=brewinandchewin:fermenting/beer_from_water n=0
 reject \[cdevtest\] .*(done=0|error=)
 look bottling 1710, tipped 94 x 2 as in boot 2; the `verb=recipes text=creativebrewing:` count is the CB recipe total (compare with the last dump); ids creativebrewing:<type>/...
 

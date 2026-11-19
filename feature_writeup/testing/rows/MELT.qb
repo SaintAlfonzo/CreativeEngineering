@@ -505,7 +505,7 @@ shell grep -hE "\[melting\]" logs/latest.log | sed -E 's/^.*\[melting\]/[melting
 > cdevtest tag block creativecommon:melting/meltable
 > cdevtest tag block creativecommon:melting/meltable_slow
 waitlog \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/meltable_slow n= 30
-expect \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/fire n=\d{3,} 
+expect \[cdevtest\] verb=tag kind=block tag=creativecommon:melting/fire n=\d{3,}
 look fire count >= 100 in the [melting] tags line; source-driven list = magma_block (light 3) only; every 3.8 table id in the ids= of the verb=tag ... tag=creativecommon:melting/fire line
 reject \[cdevtest\] verb=\S+ done=0
 
@@ -722,7 +722,7 @@ sleep 8
 > cdevtest randomtick 2211 -60 2210 2211 -60 2210 50
 waitlog verb=randomtick done= 60
 > cdevtest state 2211 -60 2210
-expect verb=state pos=2211,-60,2210 state=minecraft:ice 
+expect verb=state pos=2211,-60,2210 state=minecraft:ice
 shell cp .meltp1b_common.toml config/creativecommon-common.toml
 sleep 8
 > setblock 2210 -60 2210 minecraft:air

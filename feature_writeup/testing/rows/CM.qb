@@ -38,9 +38,9 @@ look shell: the [itemMerges] creativedelight count is 3 higher than before the c
 > cdevtest recipes popsicle
 > cdevtest makes fruitsdelight:hamimelon_popsicle
 expect verb=uses id=\S+ alone=\S+ serializer=\S+
-expect verb=recipes id=creativedelight:shaped/mini_cantaloupe 
-expect verb=recipes id=creativedelight:shapeless/mini_cantaloupe_seeds 
-expect verb=recipes id=creativedelight:shapeless/cantaloupe_seeds_from_mini 
+expect verb=recipes id=creativedelight:shaped/mini_cantaloupe
+expect verb=recipes id=creativedelight:shapeless/mini_cantaloupe_seeds
+expect verb=recipes id=creativedelight:shapeless/cantaloupe_seeds_from_mini
 # judge-5, 2026-11-18: trailing spaces are stripped, so the reject matched cantaloupe_seeds_from_mini; Delightful's popsicle recipes are creativedelight:shaped/cantaloupe_popsicle(_from_cantaloupe) now
 reject verb=recipes id=creativedelight:shapeless/cantaloupe_seeds result=
 count verb=recipes id=\S*cantaloupe_popsicle\S* result=delightful:cantaloupe_popsicle >= 2
@@ -103,13 +103,13 @@ expect verb=rdetail id=creativedelight:shapeless/shulker_bowl serializer=\S+ res
 expect verb=recipes text=vintagedelight:bread_from_smelting n=0\b
 expect verb=recipes text=vintagedelight:bread_from_smoking n=0\b
 reject verb=uses id=\S+ .*serializer=minecraft:campfire_cooking
-expect verb=recipes id=\S*bread_from_dough_1 
-expect verb=recipes id=\S*bread_from_dough_3 
-expect verb=recipes id=\S*bread_from_dough_6 
+expect verb=recipes id=\S*bread_from_dough_1
+expect verb=recipes id=\S*bread_from_dough_3
+expect verb=recipes id=\S*bread_from_dough_6
 count verb=recipes id=\S*sourdough_bread_[136] result=\S*sourdough_bread\*\d+ >= 3
 # judge-5, 2026-11-18: sourdough is meant to cut to 3 Bread (section text, item_merges.md SQ-CM-10); only the oven sourdough_bread_N recipes must not make plain bread
 reject verb=makes id=\S*sourdough_bread_[136]\b\S* result=minecraft:bread\*
-expect verb=recipes id=creativedelight:shapeless/overnight_oats 
+expect verb=recipes id=creativedelight:shapeless/overnight_oats
 reject verb=\S+ .*done=0
 look the uses lines of oat dough include the three oven bread_from_dough recipes
 ## SQ-CM-07
@@ -122,8 +122,8 @@ look the uses lines of oat dough include the three oven bread_from_dough recipes
 > cdevtest potion creativebrewing:phantom_bane minecraft:glowstone_dust
 expect verb=item item=felsic_gear:felsic_sword .*max_damage=2501\b
 reject verb=reg kind=potion id=\S*strong_phantom_bane
-expect verb=reg kind=potion id=\S+:phantom_bane 
-expect verb=reg kind=potion id=\S+:long_phantom_bane 
+expect verb=reg kind=potion id=\S+:phantom_bane
+expect verb=reg kind=potion id=\S+:long_phantom_bane
 expect verb=potion potion=creativebrewing:phantom_bane ingredient=minecraft:glowstone_dust output=nothing
 bootreject \[CE potions\].*(error|Error)
 reject verb=\S+ .*done=0
@@ -232,9 +232,9 @@ reject verb=\S+ .*done=0
 expect creativedelight:shapeless/field_salad_manual_only
 expect creativedelight:shapeless/field_salad_flowers_manual_only
 reject delightful:food/field_salad
-expect verb=tag kind=item tag=creativedelight:field_salad/root n=5 
-expect verb=tag kind=item tag=creativedelight:field_salad/nut n=2 
-expect verb=tag kind=item tag=creativedelight:field_salad/green n=8 
+expect verb=tag kind=item tag=creativedelight:field_salad/root n=5
+expect verb=tag kind=item tag=creativedelight:field_salad/nut n=2
+expect verb=tag kind=item tag=creativedelight:field_salad/green n=8
 reject verb=\S+ .*done=0
 
 ## SQ-CM-21 | coleslaw and shrimp fried rice values
@@ -262,7 +262,7 @@ reject verb=\S+ .*done=0
 > cdevtest tag item creativedelight:veggie_noodle_veg
 expect creativedelight:shapeless/cucumber_dough
 reject id=vintagedelight:cucumber_dough serializer=
-expect verb=tag kind=item tag=creativedelight:veggie_noodle_veg n=6 
+expect verb=tag kind=item tag=creativedelight:veggie_noodle_veg n=6
 reject verb=\S+ .*done=0
 
 ## SQ-CM-23 | shrimp fried rice in the Cooking Pot
@@ -444,7 +444,7 @@ reject verb=\S+ .*done=0
 bootreject (?i)(error|fail|unknown|invalid|missing).*(creativecompat|creativecommon|creativeengineering):jei/storage_delight
 > cdevtest tag item creativecompat:jei/storage_delight
 waitlog verb=tag kind=item tag=creativecompat:jei/storage_delight n= 30
-expect verb=tag kind=item tag=creativecompat:jei/storage_delight n=140 
+expect verb=tag kind=item tag=creativecompat:jei/storage_delight n=140
 look client half (JEI item list in wood order) stays open: CQ row / client run
 reject verb=\S+ .*done=0
 

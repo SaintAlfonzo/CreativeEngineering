@@ -636,7 +636,7 @@ sleep 1
 > cdevtest use 300 -60 380 held=hearthandharvest:hops face=south
 > cdevtest state 300 -60 380
 > cdevtest items 306 -60 380 10
-expect \[cdevtest\] verb=tag kind=block tag=creativedelight:crops/vine_crops n=6 
+expect \[cdevtest\] verb=tag kind=block tag=creativedelight:crops/vine_crops n=6
 reject verb=use main=\S+ off=empty state="?minecraft:(stick|torch|wall_torch|dirt|air)\b
 count verb=use main=\S+ off=empty state="?(hearthandharvest:hops_vine|vinery:jungle_grape_bush_red|neapolitan:vanilla_vine|upgrade_aquatic:mulberry_vine)\b == 13
 bootreject VineCropNoReplace.*(fail|error|Exception)

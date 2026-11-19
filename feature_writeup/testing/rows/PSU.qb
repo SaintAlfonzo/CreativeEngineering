@@ -255,7 +255,7 @@ look the rdetail inputs match beef + carrot + potato (else BATCH-FAULT: adjust t
 > setblock {S5H1+400} {S5H2} {S5H3+10} farmersdelight:granite_cutting_board
 sleep 1
 > data get block {S5H1+400} {S5H2} {S5H3+10}
-expect has the following block data: 
+expect has the following block data:
 reject (?i)invalid for block
 > kill @e[type=minecraft:item]
 > cdevtest uses minecraft:carrot

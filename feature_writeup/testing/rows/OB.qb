@@ -80,7 +80,7 @@ waitlog \[cdevtest\] verb=rdetail text=veggie_patty_from n=\d+ 30
 expect \[cdevtest\] verb=rdetail id=\S*raw_veggie_patty_from_cave_carrot .*veggie_patty\*2\b
 expect \[cdevtest\] verb=rdetail id=\S*cooked_veggie_patty_from_baked_cave_carrot .*veggie_patty\*2\b
 reject \[cdevtest\] verb=rdetail id=\S*veggie_patty_from\S* .*(minecraft:air|result=empty|\*0\b)
-expect \[cdevtest\] verb=rdetail text=veggie_patty_from n=4 
+expect \[cdevtest\] verb=rdetail text=veggie_patty_from n=4
 look 4 recipes (2 cutting, 2 S&D copies): results 2 raw / 2 cooked veggie patties, inputs cave carrot / baked cave carrot, never air
 reject \[cdevtest\] verb=\S+ done=0
 
