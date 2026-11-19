@@ -2436,6 +2436,8 @@ i.t_field_salad_nut   = '#creativedelight:field_salad/nut';
 i.t_field_salad_green = '#creativedelight:field_salad/green';
 // Vegetables for Veggie Noodles dough (dishes/meals #43; CD vintagedelight/tags.js)
 i.t_veggie_noodle_veg = '#creativedelight:veggie_noodle_veg';
+// Seeds eaten raw and used in edible-seed recipes (trail mix; dishes/ingredients #40; CD creativedelight/tags.js)
+i.t_edible_seeds = '#creativedelight:edible_seeds';
 i.t_shrimps = '#forge:shrimps'; // Oceanic Delight's shrimp and shrimp slices
 
 //Farmer's Delight

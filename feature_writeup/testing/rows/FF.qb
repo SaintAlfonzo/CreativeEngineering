@@ -206,3 +206,57 @@ waitlog verb=rdetail text=brewinandchewin:cooking/horror_lasagna n= 30
 reject verb=rdetail id=brewinandchewin:cooking/horror_lasagna .*flaxen_cheese_wedge
 look quiche: 6 ingredients with the filling twice; horror lasagna: two scarlet_cheese_wedge
 reject verb=\S+ .*done=0
+
+@@section 3
+@@title Food batch 2026-11-19 wave B: names, edible seeds, warm drinks ([plan_food_batch_1119.md](../plan_food_batch_1119.md) wave B, TODO `dishes/ingredients #33`, `#40`, `baking/baked-goods #21`, `food/drinks #14`)
+@@date 2026-11-19
+@@jars creativecommon creativedelight
+@@sources feature_writeup/plan_food_batch_1119.md development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/edible_seeds.js development/creativeDelight/src/main/resources/kubejs_startup/creativedelight/drinks.js kubejs/assets/creativedelight/kubejs/creativedelight/names.js
+@@text
+@@text Needs Creative Common (the `t_edible_seeds` dict key) and Creative Delight (startup values) built in this batch installed; a restart. Names are client-side (CQ row). Group A.
+@@text
+@@table
+## SQ-FF-09 | edible seeds: values, tag, trail mix and stuffed cantaloupe
+@group A
+@commands `cdevtest food` for the five seeds; tag probe; rdetail of trail mix and stuffed cantaloupe
+@pass sunflower seeds and corn kernels nutrition 1 modifier 0.25; pumpkin, oat and mixed seeds nutrition 1 modifier 0; `creativedelight:edible_seeds` holds the five; trail mix and stuffed cantaloupe take the tag, not `#forge:seeds`
+@fails CD startup `creativedelight/edible_seeds.js`; `creativedelight/tags.js`; Common item_dict `t_edible_seeds` (Common jar not installed: the recipes warn an undefined ingredient)
+@absent creativedelight:edible_seeds (a new tag, not in the dumps yet)
+> cdevtest food hearthandharvest:sunflower_seeds
+> cdevtest food corn_delight:corn_seeds
+> cdevtest food minecraft:pumpkin_seeds
+> cdevtest food vintagedelight:oat_seeds
+> cdevtest food vintagedelight:mixed_seeds
+> cdevtest tag item creativedelight:edible_seeds
+> cdevtest rdetail trail_mix
+> cdevtest rdetail stuffed_cantaloupe
+waitlog verb=rdetail text=stuffed_cantaloupe n= 30
+expect verb=food item=hearthandharvest:sunflower_seeds\S* food=true nutrition=1 modifier=0\.25
+expect verb=food item=corn_delight:corn_seeds\S* food=true nutrition=1 modifier=0\.25
+expect verb=food item=minecraft:pumpkin_seeds\S* food=true nutrition=1 modifier=0\.0
+expect verb=food item=vintagedelight:oat_seeds\S* food=true nutrition=1 modifier=0\.0
+expect verb=food item=vintagedelight:mixed_seeds\S* food=true nutrition=1 modifier=0\.0
+expect verb=tag kind=item tag=creativedelight:edible_seeds n=5\b
+look trail mix and stuffed cantaloupe list an edible seed slot (no wheat or beetroot seeds)
+reject verb=\S+ .*done=0
+
+## SQ-FF-10 | warm drinks take tea values, effects kept
+@group A
+@commands `cdevtest food` for hot cocoa, strong hot cocoa, FD apple cider
+@pass each nutrition 1 modifier 0.2, always edible; apple cider keeps Absorption; hot cocoa still clears a bad effect when drunk (use as a bot with Slowness)
+@fails CD startup `creativedelight/drinks.js` (the warm drinks block), applier `food_value_copies.js`
+> cdevtest food farmersdelight:hot_cocoa
+> cdevtest food farmersrespite:strong_hot_cocoa
+> cdevtest food farmersdelight:apple_cider
+waitlog verb=food item=farmersdelight:apple_cider\S* 30
+expect verb=food item=farmersdelight:hot_cocoa\S* food=true nutrition=1 modifier=0\.2
+expect verb=food item=farmersrespite:strong_hot_cocoa\S* food=true nutrition=1 modifier=0\.2
+expect verb=food item=farmersdelight:apple_cider\S* food=true nutrition=1 modifier=0\.2.*absorption
+reject verb=\S+ .*done=0
+
+## CQ-FF-02 | renamed: Veggie Dough, Lasagna, Crimson Lasagna
+@group client
+@commands JEI search "Veggie Dough", "Lasagna", "Crimson Lasagna"; place a Crimson Lasagna on a Display Delight spot and look at it
+@pass Cucumber Dough and its block read Veggie Dough and Veggie Dough Block; the Lasagna Pan reads Lasagna; Horror Lasagna reads Crimson Lasagna, placed: Placed Crimson Lasagna
+@fails `assets/creativedelight/kubejs/creativedelight/names.js`; `kubejs/assets/displaydelight/lang/en_us.json`
+@draft names need a client lang read; the first client runner writes the steps

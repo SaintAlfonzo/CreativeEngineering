@@ -161,6 +161,7 @@ FAMILIES = OrderedDict([
 	('drink/coffee', ('Coffee', 'Coffee drinks.')),
 	('drink/milk', ('Milk drink', 'Milkshakes and hot chocolate.')),
 	('drink/soda', ('Soda and cider', 'Fizzy or fermented-sweet soft drinks, sweet cider.')),
+	('drink/warm', ('Warm drink', 'Drunk warm: hot cocoa, warm apple cider (food/drinks #14).')),
 	('drink/other', ('Other drink', 'Honey, water and drinks that fit no other group.')),
 	('alcohol', ('Alcohol', 'Drinks that make you tipsy.')),
 	('alcohol/wine', ('Wine', 'Vinery barrel drinks: grape and fruit wines, ciders.')),
@@ -188,6 +189,9 @@ FAMILY_OVERRIDE = {'oceanic_delight:sponge_cake': 'pie/whole', 'oceanic_delight:
 				   'largemeals:mushroom_pot_pie_block': 'feast/whole', 'largemeals:mushroom_pot_pie': 'feast/serving',
 				   'largemeals:cod_deluxe': 'meal/plate', 'largemeals:hearty_lunch': 'meal/plate'}
 # Sweet or baked one-offs that fit no other family: the dessert catchall, ahead of the special-type no-family rule
+# Warm drinks (food/drinks #14, plan_food_batch_1119.md R11): by id, as the names alone would put the cider in drink/soda
+# and the cocoa (not a food before the rule) nowhere.
+WARM_DRINKS = {'farmersdelight:hot_cocoa', 'farmersrespite:strong_hot_cocoa', 'farmersdelight:apple_cider'}
 DESSERT_OTHER = {'botania:mana_cookie', 'create_confectionery:gingerbread'}
 UNSORTED = 'unsorted'
 NOFAM = 'nofamily'   # foods that fit no family: listed on their own, no rules
@@ -300,6 +304,8 @@ def classify(r):
 		return 'preserve/pickle'
 	if t == 'special' or r['id'] in NO_FAMILY:
 		return NOFAM
+	if r['id'] in WARM_DRINKS:
+		return 'drink/warm'
 	if has(n, 'bellini'):
 		return 'alcohol/mixed'
 	if t == 'meal/feast':
@@ -1157,6 +1163,9 @@ RULES = {
 				  '2 fruit per tea, sugar / honey / honeycomb in the pot recipe only; Create mixing dearer than manual',
 				  T('food/drinks #8', 'food/drinks #7', 'food/drinks #2')),
 				P('Farmer\'s Respite long and strong teas get their own names and textures', T('food/drinks #2'))]),
+	'drink/warm': dict(values=[R('Tea values: 1 hunger, 0.2 modifier, always drinkable, 32 per stack, the bottle comes back; '
+								 'own effects kept (CD startup creativedelight/drinks.js)', T('food/drinks #14'),
+								 lambda m: bool(m.food) and m.food['nutrition'] == 1)]),
 	'drink/soda': dict(recipe=[R('Ciders: a potion-like chain, base -> long (milk) -> strong (honey), each a fluid',
 								 '[item_merges.md](item_merges.md) 2.x')]),
 	'alcohol': dict(

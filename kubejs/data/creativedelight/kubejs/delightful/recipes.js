@@ -26,7 +26,7 @@ ServerEvents.recipes(e => {
 		R.shaped(i.cantaloupe_popsicle, [' cc', 'icc', 'si '], { c: i.t_fruits_cantaloupe, i: i.t_ice_cubes, s: i.any_stick }, e, 'cantaloupe_popsicle')
 		R.shaped(i.cantaloupe_popsicle, ['im', 'si'], { m: i.cantaloupe, i: i.t_ice_cubes, s: i.any_stick }, e, 'cantaloupe_popsicle_from_cantaloupe')
 		// Served from a whole Cantaloupe (the pot's container slot), placed as a feast of 4
-		R.fdCooking([i.rice, i.cooked_mutton, i.onion, i.t_berries, i.t_seeds], i.stuffed_cantaloupe_block, e, 'stuffed_cantaloupe', 0.35, 400, i.cantaloupe)
+		R.fdCooking([i.rice, i.cooked_mutton, i.onion, i.t_berries, i.t_edible_seeds], i.stuffed_cantaloupe_block, e, 'stuffed_cantaloupe', 0.35, 400, i.cantaloupe)
 
 		//######################### Field salad #########################
 		// (TODO dishes/meals #39) Upstream: 2 salad ingredients, cactus steak, carrot, salmonberries, acorn, bowl. Each

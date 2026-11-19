@@ -16,6 +16,9 @@ ServerEvents.tags('item', e => {
 	t.add(e, i.any_sweetener_brewing, [i.sugar, i.powdered_sugar, i.honey_bottle, i.honeycomb])
 	t.add(e, i.any_sweetener_plain, [i.sugar, i.powdered_sugar])
 
+	// edible seeds (dishes/ingredients #40): eaten raw (values: CD startup creativedelight/edible_seeds.js) and taken by
+	// recipes that need a seed for a food (trail mix, stuffed cantaloupe). Corn: Corn Delight's kernels.
+	t.add(e, i.t_edible_seeds, [i.sunflower_seeds, i.pumpkin_seeds, i.oat_seeds, i.mixed_seeds, i.corn_seeds]) // G5
 	// cornmeal: its own flour tag, plus the "flour or cornmeal" tag pancakes, pies and cakes take (TODO dishes/ingredients #1)
 	t.add(e, i.t_flour_corn, i.cornmeal)
 	t.add(e, i.t_flour_or_cornmeal, [i.flour, i.t_flour_corn])

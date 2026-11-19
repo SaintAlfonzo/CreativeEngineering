@@ -12,14 +12,14 @@ whole or sliced in every recipe below.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=5830f4ab3785 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Planned 1, Pinned 1, Testing 2), 0 Complete.
+<!-- generated:status_index begin open_work sha1=49ffc16ce394 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 4 open TODO rows (Pinned 1, Testing 3), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `food/drinks #14` | Planned | none | Hot cocoa and apple cider review |
 | `food/drinks #13` | Pinned | none | Milkshake family |
 | `food/drinks #9` | Testing | S C P | Bayberry soup becomes juice |
+| `food/drinks #14` | Testing | S P | Hot cocoa and apple cider review |
 | `food/drinks #15` | Testing | S~ C P | Build the drink rules (juice, tea, coffee, new ids) |
 <!-- generated:status_index end open_work -->
 
@@ -126,6 +126,14 @@ additive in the same craft, and (mixing) the same chain below. Dark coffee keeps
   cherry leaves) mixes to that flavor; coffee + milk + additive mixes to the flavor straight; plain coffee to flavored in
   one mixer step is allowed (any number of steps).
 - A flavor made from another flavor is not a route: flavors branch off milk coffee or coffee, never off each other.
+
+### 4.3 Warm drinks (`food/drinks #14`, owner 2026-11-19, plan_food_batch_1119.md R11)
+
+Family `drink/warm` (food_families.py `WARM_DRINKS`): Farmer's Delight hot cocoa, Farmer's Respite strong hot cocoa and
+Farmer's Delight apple cider (out of `drink/soda`). Tea values: 1 hunger, 0.2 modifier, always drinkable, 32 per stack,
+the bottle back; their own effects stay (hot cocoa clears a bad effect, cider gives Absorption). Values: CD startup
+`creativedelight/drinks.js` (rows read by `food_value_copies.js`). Respite's long and strong apple cider are not in the
+family (not named in the ruling). Test: SQ-FF-10.
 
 ## 5. Parked
 

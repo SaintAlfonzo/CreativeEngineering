@@ -57,3 +57,12 @@ StartupEvents.registry('fluid', e => {
 	fluid(f.sea_grape_juice, 'Sea Grape Juice', 0x6FAF5A)
 	fluid(f.pickerelweed_juice, 'Pickerelweed Juice', 0x6C7FD0)
 })
+
+// Warm drinks (TODO food/drinks #14, plan_food_batch_1119.md R11; family drink/warm in food_families.py): hot cocoa,
+// Farmer's Respite's strong hot cocoa and Farmer's Delight's apple cider take the tea values (1 hunger, 0.2 modifier,
+// always drinkable); their own effects stay. They already stack to 32 and hand the bottle back. Applied by
+// food_value_copies.js (rows written directly: this file loads before the applier defines absolute()).
+global.foodValueCopies = global.foodValueCopies || {}
+;['hot_cocoa', 'strong_hot_cocoa', 'farmersdelight_apple_cider'].forEach(key => {
+	global.foodValueCopies[key] = { absolute: { nutrition: 1, saturationMod: 0.2, alwaysEat: true } }
+})
