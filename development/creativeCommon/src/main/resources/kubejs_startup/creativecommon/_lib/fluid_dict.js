@@ -98,6 +98,9 @@ f.egg_solution = 'creativedelight:egg_solution';
 f.t_egg_solution = '#forge:fluid/egg_solution';
 f.frosting = 'creativedelight:frosting';
 f.t_frosting = '#forge:fluid/frosting';
+// Whale oil (dishes/ingredients #10): rendered from blubber, a lubricant
+f.whale_oil = 'creativedelight:whale_oil';
+f.t_lubricant = '#forge:lubricant';
 // Kettle tank drinks with no fluid of their own (farmers_respite.md K9)
 f.milk_coffee = 'creativedelight:milk_coffee';
 f.honey_coffee = 'creativedelight:honey_coffee';

@@ -56,7 +56,7 @@ ServerEvents.recipes(e => {
 		F.pieSlice(i.peanut_butter_pie, i.peanut_butter_pie_slice)
 		R.ceBaking([i.any_dough, i.butter], i.croissant, e, 'croissant', SHEET)
 		R.ceBaking([i.butter, F.slot(i.t_fruits_raspberries, 2), i.sugar, i.batter], i.raspberry_scone, e, 'raspberry_scone', SHEET)
-		R.ceBaking([i.farmersdelight_apple_cider, i.cooking_oil, i.t_salts, i.eggs, i.sugar], n(i.cider_donut, 2), e, 'cider_donut', SHEET)
+		R.ceBaking([i.farmersdelight_apple_cider, i.t_cooking_oil, i.t_salts, i.eggs, i.sugar], n(i.cider_donut, 2), e, 'cider_donut', SHEET)
 
 		// Cooking Pot
 		R.fdCooking([i.corn_seeds, i.dye_orange, i.syrup, i.sugar], n(i.candy_corn, 4), e, 'candy_corn', 0.35, 100)
@@ -71,7 +71,7 @@ ServerEvents.recipes(e => {
 		// By hand
 		// Hops exist only with Vinery (Creative Brewing; plan_bugfix_1114 3.1)
 		var hopsOn = global.has('vinery')
-		if (hopsOn) F.saladCraft([i.hops, i.hops, i.cooking_oil, i.t_salts], i.hops_salad)
+		if (hopsOn) F.saladCraft([i.hops, i.hops, i.t_cooking_oil, i.t_salts], i.hops_salad)
 		R.shapeless(i.hot_dog, [i.cooked_sausage, i.bread], e, 'hot_dog')
 		R.shapeless(i.trail_mix, [i.roasted_peanut, i.raisins, i.cocoa_beans, i.t_edible_seeds], e, 'trail_mix')   // edible seeds (dishes/ingredients #40)
 		R.shapeless(n(i.paper, 3), [n(i.corn_husk, 3)], e, 'paper_from_corn_husks')

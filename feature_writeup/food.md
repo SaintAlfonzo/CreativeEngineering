@@ -833,6 +833,22 @@ hunger, no saturation (owner R15). Tag `#creativedelight:edible_seeds` (the five
 recipe jar, 2026-11-19; Create Crafts & Additions' seed oil and PneumaticCraft's vegetable oil keep `#forge:seeds`).
 Test SQ-FF-09.
 
+### 3.22 Fats and oils (`dishes/ingredients #10`, 2026-11-19)
+
+Owner R12, R19, R22 (plan_food_batch_1119.md wave D). Each part has a `[fats]` switch in `creativedelight-common.toml`
+(`global.CD.fats(id)`, CDConfig `fats`): off drops its recipes, tags and drop on `/reload`; the items stay registered.
+
+| Part (switch) | What |
+|---|---|
+| Blubber (`blubber`) | `creativedelight:blubber` (Delightful's animal fat sprite read in place). The Alex's Mobs cachalot whale drops 3-6 (Creative Loot drop rule; its own table is empty). A Knife cuts one into 2 animal fat. In `#forge:animal_fat`; soap fat (Compat `other/misc_mods.js`) |
+| Whale oil (`whaleOil`) | `creativedelight:whale_oil` bottle (Rustic's cooking oil sprite, container glass bottle) and fluid (Crafts & Additions' seed oil textures, untinted). Heated mixer 1 blubber -> 250 mB; Cooking Pot 2 blubber + bottle -> 1 (`_manual_only`); Spout / Item Drain 250 mB. Fluid in `#forge:lubricant`; soap fat |
+| Animal fat oil (`animalFatOil`) | 2 animal fat + bottle -> 1 Cooking Oil in the pot; Delightful's animal oil bottle recipe removed and the item merged into Cooking Oil (swaps `merges_delightful_oil.json`) |
+| Seed oil (`seedOil`) | `#forge:seeds` joins `#rusticdelight:cooking_oil_ingredients` (Rustic's pot and mixer cooking oil recipes); Spout: bottle + 250 mB Crafts & Additions seed oil -> Cooking Oil |
+| Fish oil (`fishOil`) | `alexsmobs:fish_oil` joins `#rusticdelight:cooking_oil`; 2 raw fish (`#forge:raw_fishes`) + bottle -> 1 fish oil in the pot (its 4-blobfish craft stays). Recipes that took the Cooking Oil item take the tag (fried eggs, cultured meats, cider donut, hops salad) |
+
+The plan's cauldron route for whale oil is the Cooking Pot recipe for now (a cauldron mechanic needs its own block and
+art; `dairy-fats-and-batter #2`). Tests SQ-FO-08 to SQ-FO-11.
+
 ## 4. Limits and decisions
 
 ### 4.1 Limits

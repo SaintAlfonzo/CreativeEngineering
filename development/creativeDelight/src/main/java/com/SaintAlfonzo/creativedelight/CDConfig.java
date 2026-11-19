@@ -100,6 +100,12 @@ public final class CDConfig {
 	public static final Incubation INCUBATION;
 	private static final Map<String, ForgeConfigSpec.BooleanValue> MEMBER_SWITCHES = new LinkedHashMap<>();
 	private static final Map<String, ForgeConfigSpec.BooleanValue> QOL = new LinkedHashMap<>();
+	private static final Map<String, ForgeConfigSpec.BooleanValue> FATS = new LinkedHashMap<>();
+	public static final String FAT_BLUBBER = "blubber";
+	public static final String FAT_WHALE_OIL = "whaleOil";
+	public static final String FAT_ANIMAL_FAT_OIL = "animalFatOil";
+	public static final String FAT_SEED_OIL = "seedOil";
+	public static final String FAT_FISH_OIL = "fishOil";
 	private static final Map<String, ForgeConfigSpec.BooleanValue> WORLDGEN = new LinkedHashMap<>();
 
 	static {
@@ -143,6 +149,20 @@ public final class CDConfig {
 		qolSwitch(b, COOKWARE_KEEP_CONTENTS, "QoL-8: a cooking pot, copper pot or kettle broken by a player (or picked up, QoL-7) keeps",
 				"its ingredients, meal and output in the item, restored when placed; the leftover slots drop. Off: everything but",
 				"the meal drops, as in the original mods (QoL-7 pickup then empties the station into the inventory).");
+		b.pop();
+
+		b.comment("Fats and oils (TODO dishes/ingredients #10, plan_food_batch_1119.md wave D): one switch per part. Scripts",
+				"read them on /reload. Off: that part's recipes, drops and tags are not added (the items stay registered).").push("fats");
+		FATS.put(FAT_BLUBBER, b.comment("Blubber: dropped by the Alex's Mobs cachalot whale, cut into animal fat, soap fat.")
+				.define(FAT_BLUBBER, true));
+		FATS.put(FAT_WHALE_OIL, b.comment("Whale oil: rendered from blubber (Create mixer, Cooking Pot), its fluid a lubricant, soap fat.")
+				.define(FAT_WHALE_OIL, true));
+		FATS.put(FAT_ANIMAL_FAT_OIL, b.comment("Animal fat cooks into cooking oil (in place of Delightful's animal oil bottle).")
+				.define(FAT_ANIMAL_FAT_OIL, true));
+		FATS.put(FAT_SEED_OIL, b.comment("Any standard seed (#forge:seeds) makes cooking oil; seed oil fluid fills cooking oil bottles.")
+				.define(FAT_SEED_OIL, true));
+		FATS.put(FAT_FISH_OIL, b.comment("Alex's Mobs fish oil counts as cooking oil; any raw fish cooks down to fish oil.")
+				.define(FAT_FISH_OIL, true));
 		b.pop();
 
 		b.comment("One switch per Creative Delight worldgen system (feature_writeup/creative_delight.md 24). Rejoin the world",
@@ -296,6 +316,13 @@ public final class CDConfig {
 	/** True if QoL switch {@code id} is on (or the config is not loaded yet); false for an unknown id. */
 	public static boolean qol(String id) {
 		ForgeConfigSpec.BooleanValue v = QOL.get(id);
+		if (v == null) return false;
+		return !SPEC.isLoaded() || v.get();
+	}
+
+	/** True if fats switch {@code id} is on (or the config is not loaded yet); false for an unknown id. */
+	public static boolean fats(String id) {
+		ForgeConfigSpec.BooleanValue v = FATS.get(id);
 		if (v == null) return false;
 		return !SPEC.isLoaded() || v.get();
 	}

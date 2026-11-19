@@ -45,13 +45,13 @@ ServerEvents.recipes(e => {
 		// Growth in the cooking pot, the same 1 -> 3 as the mixer: bone meal stands in for diluted bonemeal and Rustic
 		// Delight's cooking oil for plant oil
 		if (global.CD.on('rusticdelight')) {
-			R.fdCooking([i.culture_beef, i.bonemeal, i.cooking_oil], Item.of(i.culture_beef, 3), e, 'beef_culture_cooking', 0.35, 200)
-			R.fdCooking([i.culture_pork, i.bonemeal, i.cooking_oil], Item.of(i.culture_pork, 3), e, 'pork_culture_cooking', 0.35, 200)
-			R.fdCooking([i.culture_poultry, i.bonemeal, i.cooking_oil], Item.of(i.culture_poultry, 3), e, 'poultry_culture_cooking', 0.35, 200)
-			R.fdCooking([i.culture_mutton, i.bonemeal, i.cooking_oil], Item.of(i.culture_mutton, 3), e, 'mutton_culture_cooking', 0.35, 200)
-			R.fdCooking([i.culture_rabbit, i.bonemeal, i.cooking_oil], Item.of(i.culture_rabbit, 3), e, 'rabbit_culture_cooking', 0.35, 200)
-			R.fdCooking([i.culture_cod, i.bonemeal, i.cooking_oil], Item.of(i.culture_cod, 3), e, 'cod_culture_cooking', 0.35, 200)
-			R.fdCooking([i.culture_salmon, i.bonemeal, i.cooking_oil], Item.of(i.culture_salmon, 3), e, 'salmon_culture_cooking', 0.35, 200)
+			R.fdCooking([i.culture_beef, i.bonemeal, i.t_cooking_oil], Item.of(i.culture_beef, 3), e, 'beef_culture_cooking', 0.35, 200)
+			R.fdCooking([i.culture_pork, i.bonemeal, i.t_cooking_oil], Item.of(i.culture_pork, 3), e, 'pork_culture_cooking', 0.35, 200)
+			R.fdCooking([i.culture_poultry, i.bonemeal, i.t_cooking_oil], Item.of(i.culture_poultry, 3), e, 'poultry_culture_cooking', 0.35, 200)
+			R.fdCooking([i.culture_mutton, i.bonemeal, i.t_cooking_oil], Item.of(i.culture_mutton, 3), e, 'mutton_culture_cooking', 0.35, 200)
+			R.fdCooking([i.culture_rabbit, i.bonemeal, i.t_cooking_oil], Item.of(i.culture_rabbit, 3), e, 'rabbit_culture_cooking', 0.35, 200)
+			R.fdCooking([i.culture_cod, i.bonemeal, i.t_cooking_oil], Item.of(i.culture_cod, 3), e, 'cod_culture_cooking', 0.35, 200)
+			R.fdCooking([i.culture_salmon, i.bonemeal, i.t_cooking_oil], Item.of(i.culture_salmon, 3), e, 'salmon_culture_cooking', 0.35, 200)
 		}
 
 		// Cutting: the culture family (4 unless given; no bone meal from the fish cultures)

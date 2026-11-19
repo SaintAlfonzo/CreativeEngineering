@@ -396,6 +396,10 @@ i.animal_fat = 'delightful:animal_fat';
 i.animal_oil_bottle = 'delightful:animal_oil_bottle';
 i.matcha = 'delightful:matcha';
 i.fish_oil = 'alexsmobs:fish_oil';
+// Fats and oils (dishes/ingredients #10; CD kubejs_startup/creativedelight/fats.js)
+i.blubber = 'creativedelight:blubber';
+i.whale_oil = 'creativedelight:whale_oil';
+i.t_raw_fishes = '#forge:raw_fishes';
 i.flax_block = 'supplementaries:flax_block';
 i.rice_bale = 'farmersdelight:rice_bale';
 i.straw_bale = 'farmersdelight:straw_bale';
