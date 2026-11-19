@@ -59,6 +59,9 @@ jars are covered and JEI shows the new times.
 - Flowers by tag, not by category: pot categories are soil kinds (dirt, farmland), not plant kinds.
 - Lemon: a stacked two-half model (option M) was rejected for now; lower half only (Q24).
 - No yield changes (owner: no yield increases).
+- `NCH.scaleRecipeInt` / `setRecipeNumber` / `setCookTime` edit the recipe JSON in place and set `r.changed`: KubeJS
+  1902.6 builds an unchanged recipe from its original `Recipe` once anything parsed it (every `{ input }` /
+  `{ output }` filter does, such as the item-merge pass), so the bare JSON edit was dropped (r1118 F12, `crops #58`).
 
 ## 5. File map
 
@@ -94,3 +97,5 @@ jars are covered and JEI shows the new times.
 - 2026-11-07: built (plan_farming_cooking_batch A15 / C5): growth pass, fertilizer removal, lemon display, tooltip,
   `NCH.scaleRecipeInt`.
 - 2026-11-17: `botany_pots.js` moved into Creative Compat's script pack (plan_rules_fixes.md V-26); the Fertile Soil pot soil recipe id is now `creativecompat:`; the `global.BOTANY_*` values the tooltip reads are unchanged (SQ-RFX-02).
+- 2026-11-18: growth and soil values reached no loaded recipe (r1118 F12, back at the mod's times); the three NCH JSON
+  helpers now mark the recipe changed (plan_bugfix_r1118.md B3).
