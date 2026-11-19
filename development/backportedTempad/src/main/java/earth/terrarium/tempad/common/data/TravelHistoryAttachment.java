@@ -45,7 +45,7 @@ public class TravelHistoryAttachment {
     public void logLocation(LivingEntity entity, @Nullable ResourceLocation marker) {
         if (entity.isSpectator() || (entity instanceof Player player && player.getAbilities().instabuild)) return;
         if (history.isEmpty() || marker != null) {
-            add(new HistoricalLocation(marker, entity.level.dimension(), entity.position()));
+            add(new HistoricalLocation(marker, entity.level.dimension(), entity.position(), entity.level.getDayTime()));
             if (history.size() > CommonConfig.maxHistorySize()) history.remove(history.keySet().iterator().next());
             return;
         }
@@ -53,7 +53,7 @@ public class TravelHistoryAttachment {
         for (HistoricalLocation value : history.values()) lastPos = value;
         if (entity.level.dimension() == lastPos.dimension() && entity.position().distanceToSqr(lastPos.pos()) < 64) return;
         if (history.size() > CommonConfig.maxHistorySize()) history.remove(history.keySet().iterator().next());
-        add(new HistoricalLocation(null, entity.level.dimension(), entity.position()));
+        add(new HistoricalLocation(null, entity.level.dimension(), entity.position(), entity.level.getDayTime()));
     }
 
     /** Backtrack to a specific location in the history, and removes all locations after it. */

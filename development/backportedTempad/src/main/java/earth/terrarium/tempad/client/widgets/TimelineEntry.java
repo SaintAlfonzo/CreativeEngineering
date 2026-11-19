@@ -30,6 +30,17 @@ public class TimelineEntry extends TimelineWidget.Item {
     public static final DateFormat dateFormat = DateFormat.getDateTimeInstance(DateFormat.DEFAULT, DateFormat.SHORT,
             Minecraft.getInstance().getLanguageManager().getSelected().getJavaLocale());
 
+    /**
+     * Creative Engineering (plan_bugfix_1117 A5): the in-world day and clock, "Day 3, 14:05", with the clock of the
+     * Tempad's title bar (day time 0 = 06:00).
+     */
+    public static String gameTime(long dayTime) {
+        long time = dayTime % 24000;
+        int minutes = (int) ((time % 1000) * 0.06);
+        long hours = ((time / 1000) + 6) % 24;
+        return String.format("Day %d, %02d:%02d", dayTime / 24000 + 1, hours, minutes);
+    }
+
     /** Upstream {@code Vec3.component}. */
     public static Component positionText(Vec3 pos) {
         return Component.literal("XYZ: " + (int) pos.x + " / " + (int) pos.y + " / " + (int) pos.z);
@@ -56,7 +67,7 @@ public class TimelineEntry extends TimelineWidget.Item {
         this.font = font;
         this.date = date;
         this.location = location;
-        Component dateDisplay = Component.literal(dateFormat.format(date));
+        Component dateDisplay = Component.literal(location.dayTime() >= 0 ? gameTime(location.dayTime()) : dateFormat.format(date));
         MutableComponent markerComponent = location.marker() != null
                 ? Component.translatable(Util.makeDescriptionId("marker", location.marker()))
                 : Component.translatable("misc.tempad.wandering");

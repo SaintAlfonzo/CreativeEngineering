@@ -46,7 +46,13 @@ public class ChronometerItem extends CapacitorItem {
         return chronons != null && chronons.hasRoom() && target != source && !target.is(ModTags.chargeBlacklist);
     }
 
+    /**
+     * Creative Engineering (plan_bugfix_1117 A4): upstream skipped this generator whenever any other one was carried, so
+     * two chronometers stopped each other and nothing charged. Now only the first generator found in the player's
+     * contexts charges; the extras are ignored.
+     */
     public boolean isClashing(Player player, ItemStack stack) {
-        return ContextRegistry.locate(player, it -> it.is(ModTags.chrononGens) && it != stack) != null;
+        SyncableContext<?> first = ContextRegistry.locate(player, it -> it.is(ModTags.chrononGens));
+        return first != null && first.getStack() != stack;
     }
 }
