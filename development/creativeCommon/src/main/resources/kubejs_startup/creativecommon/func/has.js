@@ -101,3 +101,20 @@ global.has.mod = function (ns) {
 	var id = Platform.isLoaded(ns) ? ns : global.has._modOf[ns]
 	return global.has.switchOn(id)
 }
+
+// Whether a loaded pack ships server data under this namespace (mod jars, datapacks, kubejs/data/<ns>), from the server
+// resource manager of the current reload (Java DataNamespaces, set before the tag listeners run; plan_bugfix_r1118.md
+// B2). False before the first data reload (startup scripts) and without Creative Common's Java side (headless tests).
+global.has._dataNs = null
+global.has.datapack = function (ns) {
+	if (ns === undefined || ns === null) return false
+	if (global.has._dataNs === null) {
+		try {
+			global.has._dataNs = Java.loadClass('com.SaintAlfonzo.creativecommon.util.DataNamespaces')
+		} catch (err) {
+			global.has._dataNs = false
+		}
+	}
+	if (!global.has._dataNs) return false
+	return !!global.has._dataNs.has(String(ns))
+}
