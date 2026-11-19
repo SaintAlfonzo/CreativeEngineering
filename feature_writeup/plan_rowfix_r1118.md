@@ -14,7 +14,10 @@
 | `generators-and-tests #22` | Testing | H | Scratch driver: @@modset NAME manifests for chain and reduced jar sets (port_chain, cc_only, cpp_chain, cco_sets) |
 <!-- generated:status_index end open_work -->
 
-Status: **planned, not built.** Source: [scratch_run_2026-11-18.md](testing/scratch_run_2026-11-18.md) section 10,
+Status: **row text and driver built; R7 rerun open** (2026-11-18). R1, R2, R5, R6 and the R3 drops, rewrites and
+upgrade section (UPG.qb) are done, the R4 driver keys are built and their rows converted (section 8). Left: the R7
+rerun (owner says when), and the rows the driver still can not express (section 8, last note). Rows: TODO.
+Source: [scratch_run_2026-11-18.md](testing/scratch_run_2026-11-18.md) section 10,
 the judge reports in [testing/r1118/](testing/r1118/), and the per-row classification
 [testing/r1118/classes.csv](testing/r1118/classes.csv) (469 non-PASS rows: id, result, bucket, status, note). Game bugs
 are the sibling plan [plan_bugfix_r1118.md](plan_bugfix_r1118.md). Rows file edits never touch MELT.qb while another
@@ -247,3 +250,7 @@ changed; nothing booted. Every changed row carries an `r1118 R<n> (2026-11-18)` 
   own with `@@prep rm`. SQ-DEP-02 moved the same way (DEP.qb section 3). Not expressible: DEP-09b (ten boots, one per removed jar),
   CIF-04 Equipment half and CMV-03 (no manifest), WO-37 (strace launch), and the cc_only / cpp_chain manifests forbid
   Creative Devtools, so their `/cdevtest` rows can not pass until the manifests allow it (tools owner).
+- **Rulings 6, 9, 10 applied, 2026-11-18** (commit 4317e815): SQ-TP-04 checks `cd true` after an API open, SQ-TP-41 the
+  macro path; `creativedevtools-*` is in the cc_only and cpp_chain base groups (the last note's Devtools block is gone);
+  SQ-CMV-04 keeps only the config-default checks. SQ-GAP-04 has its block-tag check back (after bugfix B8) and SQ-RSP-09
+  reads `part=fluids` amounts (after B6), so R1 is complete.

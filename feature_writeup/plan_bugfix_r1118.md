@@ -15,7 +15,9 @@
 | `terrain-adaptation #1` | Testing | SQ-CBA-18 SQ-CBC-04 | Ported structure datapacks dropped from structure tags as absent mods |
 <!-- generated:status_index end open_work -->
 
-Status: **planned, not built.** Source: [scratch_run_2026-11-18.md](testing/scratch_run_2026-11-18.md) sections 8 to
+Status: **built, waiting on reruns** (2026-11-18). B0 to B8 are done (section 4); every fix waits on its rows in the
+R7 rerun of [plan_rowfix_r1118.md](plan_rowfix_r1118.md). `performance-and-server #1` (F4 log noise) is a later
+cleanup, not in this plan's scope. Source: [scratch_run_2026-11-18.md](testing/scratch_run_2026-11-18.md) sections 8 to
 10 (findings F1 to F12) and the classification [testing/r1118/classes.csv](testing/r1118/classes.csv). Row-side work
 (broken test rows, driver limits, old-save rows) is the sibling plan [plan_rowfix_r1118.md](plan_rowfix_r1118.md).
 Status lives in the TODO rows; code facts below were read 2026-11-18, re-read before editing.
