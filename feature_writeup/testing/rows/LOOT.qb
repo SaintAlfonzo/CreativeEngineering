@@ -95,7 +95,7 @@ kjsexpect \[loot-tuning\] \d+ rules -> rewrote \d+ tables
 @draft a boot of its own: move the two files out of OUT/srv/kubejs/data/creativeloot/kubejs/loot/ before the boot (no setup step for that yet); the steps above are the checks after it
 
 @@section 3
-@@title SQ-LOOT Ancient corpses and Visceral Heap remains, 2026-11-18 ([creative_loot.md](../creative_loot.md) 2c, LOOT-07 to -09; TODO `corpses #2`, `#5`, `#7`)
+@@title SQ-LOOT Ancient corpses and Visceral Heap remains, 2026-11-18 ([creative_loot.md](../creative_loot.md) 2c, LOOT-07 to -09, -11; TODO `corpses #2`, `#5`, `#7`, `#8`)
 @@date 2026-11-18
 @@jars creativeloot creativecompat
 @@sources feature_writeup/creative_loot.md feature_writeup/plan_corpses.md
@@ -103,14 +103,14 @@ kjsexpect \[loot-tuning\] \d+ rules -> rewrote \d+ tables
 @@text Rows 07 and 09 summon corpses with the NBT the feature writes (`AncientCorpseFeature.spawn`); row 08 needs a fresh world.
 @@text
 @@table
-## SQ-LOOT-07 | an ancient corpse: skeleton, sealed, unrolled loot
+## SQ-LOOT-07 | an ancient corpse: skeleton, unrolled loot, not empty
 @group A
-@commands `forceload add 0 0`; `summon corpse:corpse 3 -60 3 {Tags:["l07"],Death:{PlayerName:"",ArmorInventory:[{Slot:0,id:"minecraft:leather_boots",Count:1b}]},"creativecompat:corpse":{Ancient:1b,Stage:1b},ForgeData:{"creativeloot:corpse_loot":"creativeloot:corpse/cave","creativecompat:corpse_sealed":1b}}`; wait 40 s; read its `creativecompat:corpse`; `loot spawn 3 -58 3 loot creativeloot:corpse/cave`
-@pass `Stage: 1b`, `Ancient: 1b`, `EmptiedAt: -1L` after 40 s (the sealed mark keeps it from the empty rules); the cave table spawns torches (and sometimes bread)
-@fails `EmptiedAt` set: Compat ignores `creativecompat:corpse_sealed`; the loot command fails: the tables are not in the jar
-@absent creativecompat:corpse creativecompat:corpse_sealed creativeloot:corpse_loot (NBT keys, not registry ids)
+@commands `forceload add 0 0`; `summon corpse:corpse 3 -60 3 {Tags:["l07"],Death:{PlayerName:"",ArmorInventory:[{Slot:0,id:"minecraft:leather_boots",Count:1b}]},"creativecompat:corpse":{Ancient:1b,Stage:1b},ForgeData:{"creativeloot:corpse_loot":"creativeloot:corpse/cave"}}`; wait 40 s; read its `creativecompat:corpse`; `loot spawn 3 -58 3 loot creativeloot:corpse/cave`
+@pass `Stage: 1b`, `Ancient: 1b`, `EmptiedAt: -1L` after 40 s (it holds the boots); the cave table spawns torches (and sometimes bread)
+@fails `EmptiedAt` set: Compat counts the armor slots as empty; the loot command fails: the tables are not in the jar
+@absent creativecompat:corpse creativeloot:corpse_loot (NBT keys, not registry ids)
 > forceload add 0 0
-> summon corpse:corpse 3 -60 3 {Tags:["l07"],Death:{PlayerName:"",ArmorInventory:[{Slot:0,id:"minecraft:leather_boots",Count:1b}]},"creativecompat:corpse":{Ancient:1b,Stage:1b},ForgeData:{"creativeloot:corpse_loot":"creativeloot:corpse/cave","creativecompat:corpse_sealed":1b}}
+> summon corpse:corpse 3 -60 3 {Tags:["l07"],Death:{PlayerName:"",ArmorInventory:[{Slot:0,id:"minecraft:leather_boots",Count:1b}]},"creativecompat:corpse":{Ancient:1b,Stage:1b},ForgeData:{"creativeloot:corpse_loot":"creativeloot:corpse/cave"}}
 sleep 40
 > data get entity @e[tag=l07,limit=1] "creativecompat:corpse"
 expect Stage: 1b
@@ -140,6 +140,22 @@ sleep 360
 expect 1b
 @phase long
 @draft no batch holds this row yet
+
+## SQ-LOOT-11 | ancient corpse held items and the no-empty guarantee
+@group world
+@commands In the SQ-LOOT-08 world (same scan): for every `corpse:corpse` with `creativecompat:corpse.Ancient`, read `Death.ArmorInventory`, `Death.MainInventory`, `Death.OffHandInventory`, `NoGravity`
+@pass every ancient corpse holds at least one item; about 45% hold a main hand sword or pickaxe (wood, stone, copper, iron) plus about 19% more from the guarantee; about 20% an offhand item, half of them torches (cave) or bread (ocean), 1 to 6 torches, 1 to 3 bread; copper tools carry `state` and `waxed` (unwaxed ones `oxidized`); no ocean corpse has `NoGravity`
+@fails a corpse with all three lists empty: `guarantee_tool` off or the hands block not read; ocean corpses with `NoGravity`: an old Loot jar
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+@phase worldgen
+@draft needs the offline entity region scan step of SQ-LOOT-08
+
+## CQ-LOOT-12 | ancient corpse held items on the model
+@group client
+@commands Creative client in the SQ-LOOT-08 world (or a fresh area underground): find ancient corpses holding a tool; open one, take the main hand tool, close; take the offhand item from another
+@pass LOOK: the skeleton holds the tool in its right hand and the offhand item (torch, bread or tool) in its left; a copper tool shows its oxidized or waxed texture; once taken out, the item is no longer held within a second
+@fails nothing held: the `Equipment` snapshot not written or Compat's `followContents` off; still held after taking it: the main hand snapshot is not matched against the main inventory
+@draft no batch holds this row yet; needs a client
 
 ## CQ-LOOT-10 | ancient corpse look, first open, remains break
 @group client

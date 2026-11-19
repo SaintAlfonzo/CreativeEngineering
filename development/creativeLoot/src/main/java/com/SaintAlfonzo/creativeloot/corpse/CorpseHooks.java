@@ -1,6 +1,5 @@
 package com.SaintAlfonzo.creativeloot.corpse;
 
-import com.SaintAlfonzo.creativecompat.corpse.CorpseState;
 import de.maxhenkel.corpse.entities.CorpseEntity;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
@@ -28,8 +27,8 @@ import java.util.List;
  * the Corpse mod ({@link AncientCorpseEvents#registerCorpseListeners}).
  * <ul>
  * <li>First open: the table in {@link AncientCorpseFeature#LOOT_KEY} is rolled as chest loot (so the LootJS layer
- * applies) into the corpse's main inventory, overflow into its additional items; the key and Compat's sealed mark are
- * cleared, so whoever opens first takes it and the corpse then follows the empty rules.</li>
+ * applies) into the corpse's free main inventory slots, overflow into its additional items; the key is cleared, so
+ * whoever opens first takes it and the corpse then follows the empty rules.</li>
  * <li>Remains ({@link AncientCorpseFeature#REMAINS_KEY}): a player's hit drops {@code remains.drops} at the corpse and
  * removes it.
  * No other corpse can be broken.</li>
@@ -44,7 +43,6 @@ public final class CorpseHooks {
 		if (!data.contains(AncientCorpseFeature.LOOT_KEY)) return;
 		String table = data.getString(AncientCorpseFeature.LOOT_KEY);
 		data.remove(AncientCorpseFeature.LOOT_KEY);
-		data.remove(CorpseState.SEALED);
 		List<ItemStack> items = roll(level, corpse, event.getEntity(), table);
 		NonNullList<ItemStack> main = corpse.getDeath().getMainInventory();
 		for (ItemStack stack : items) {

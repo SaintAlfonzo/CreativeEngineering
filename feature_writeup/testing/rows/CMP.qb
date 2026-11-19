@@ -237,6 +237,25 @@ expect 2b
 expect 0b
 @draft no batch holds this row yet
 
+## SQ-CMP-16 | Skeleton corpses sink in water, player-model corpses float
+@group A
+@commands `forceload add 16 16`; fill two water columns (`fill 20 -59 20 22 -50 22 minecraft:water`, `fill 26 -59 20 28 -50 22 minecraft:water`); summon a skeleton corpse (`Stage:1b`) at the top of the first and a player-model corpse (`Stage:0b`) at the bottom of the second, both holding a stone; wait 5 s; read both `Pos`
+@pass c16a (skeleton) at the bottom of its column (y about -59); c16b (player model) at the water surface (y about -50); `config/creativecompat-common.toml` has `skeletonsSink = true`, `sinkSpeed = 0.1`
+@fails c16a still near the top: the `@ModifyArg` on `m_20334_` in `CorpseEntity.m_8119_` did not apply (look for a mixin warning); c16b sank too: the skeleton check is missing
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+> forceload add 16 16
+> fill 20 -59 20 22 -50 22 minecraft:water
+> fill 26 -59 20 28 -50 22 minecraft:water
+> summon corpse:corpse 21 -51 21 {Tags:["c16a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{Stage:1b}}
+> summon corpse:corpse 27 -59 21 {Tags:["c16b"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{Stage:0b}}
+sleep 5
+> data get entity @e[tag=c16a,limit=1] Pos[1]
+look about -59 (the column floor)
+> data get entity @e[tag=c16b,limit=1] Pos[1]
+look about -50 (the water surface)
+shell grep -nE "skeletonsSink|sinkSpeed" config/creativecompat-common.toml
+@draft no batch holds this row yet
+
 ## CQ-CMP-14 | Corpse look: armor follows contents, wither skeleton in the Nether
 @group client
 @commands Survival client: die in the overworld wearing iron armor and holding a sword; open the corpse, take the helmet and the sword; close. Then summon the c13b corpse of SQ-CMP-13 in the Nether next to you with `ArmorInventory:[{Slot:3b,id:"minecraft:golden_helmet",Count:1b}]` in its `Death`

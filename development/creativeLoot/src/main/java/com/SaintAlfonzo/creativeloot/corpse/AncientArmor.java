@@ -38,6 +38,14 @@ public final class AncientArmor {
 	}
 
 	public static ItemStack[] roll(AncientCorpseConfig.Armor a, RandomSource r) {
+		return roll(a, r, new String[1][]);
+	}
+
+	/**
+	 * @param wax holder for the corpse's waxed copper states (rolled on the first waxed piece), shared with the hand
+	 *            rolls so a waxed copper tool follows the same one-state-or-two rule as the armor
+	 */
+	public static ItemStack[] roll(AncientCorpseConfig.Armor a, RandomSource r, String[][] wax) {
 		ItemStack[] out = new ItemStack[4];
 		for (int i = 0; i < 4; i++) out[i] = ItemStack.EMPTY;
 		if (a.chains().isEmpty()) return out;
@@ -63,7 +71,6 @@ public final class AncientArmor {
 		int[] colors = dyed > 0 ? colors(a, r) : null;
 		boolean twoColors = colors != null && colors.length > 1;
 
-		String[] waxedStates = null;
 		for (int i = 0; i < slots.size(); i++) {
 			String mat = mats.get(i);
 			String slot = slots.get(i);
@@ -78,27 +85,38 @@ public final class AncientArmor {
 				int color = twoColors ? colors[r.nextInt(2)] : colors[0];
 				stack.getOrCreateTagElement("display").putInt("color", color);
 			}
-			if ("copper".equals(mat)) {
-				boolean waxed = r.nextDouble() < a.copperWaxChance();
-				String state = "oxidized";
-				if (waxed) {
-					if (waxedStates == null) waxedStates = waxedStates(a, r);
-					state = waxedStates.length > 1 ? waxedStates[r.nextInt(2)] : waxedStates[0];
-				}
-				stack.getOrCreateTag().putString("state", state);
-				stack.getOrCreateTag().putBoolean("waxed", waxed);
-			}
-			if (stack.isDamageableItem()) {
-				double share = a.damageMin() + r.nextDouble() * Math.max(0.0, a.damageMax() - a.damageMin());
-				stack.setDamageValue(Math.min(stack.getMaxDamage() - 1, (int) Math.round(stack.getMaxDamage() * share)));
-			}
-			if (r.nextDouble() < a.enchantChance()) {
-				int lvl = a.enchantLevelMin() + r.nextInt(Math.max(1, a.enchantLevelMax() - a.enchantLevelMin() + 1));
-				stack = EnchantmentHelper.enchantItem(r, stack, lvl, false);
-			}
-			out[idx] = stack;
+			if ("copper".equals(mat)) copper(stack, a, r, wax);
+			out[idx] = wear(stack, a.damageMin(), a.damageMax(), a.enchantChance(), a.enchantLevelMin(), a.enchantLevelMax(), r);
 		}
 		return out;
+	}
+
+	/**
+	 * Everything Is Copper state (item NBT {@code state}, {@code waxed}; ruling 14): unwaxed is fully oxidized, a waxed
+	 * piece takes one of the corpse's waxed states ({@code wax[0]}, rolled on first use).
+	 */
+	static void copper(ItemStack stack, AncientCorpseConfig.Armor a, RandomSource r, String[][] wax) {
+		boolean waxed = r.nextDouble() < a.copperWaxChance();
+		String state = "oxidized";
+		if (waxed) {
+			if (wax[0] == null) wax[0] = waxedStates(a, r);
+			state = wax[0].length > 1 ? wax[0][r.nextInt(2)] : wax[0][0];
+		}
+		stack.getOrCreateTag().putString("state", state);
+		stack.getOrCreateTag().putBoolean("waxed", waxed);
+	}
+
+	/** Damages a random share ({@code min} to {@code max}) of the durability and enchants at {@code enchantChance}. */
+	static ItemStack wear(ItemStack stack, double min, double max, double enchantChance, int levelMin, int levelMax, RandomSource r) {
+		if (stack.isDamageableItem()) {
+			double share = min + r.nextDouble() * Math.max(0.0, max - min);
+			stack.setDamageValue(Math.min(stack.getMaxDamage() - 1, (int) Math.round(stack.getMaxDamage() * share)));
+		}
+		if (r.nextDouble() < enchantChance) {
+			int lvl = levelMin + r.nextInt(Math.max(1, levelMax - levelMin + 1));
+			stack = EnchantmentHelper.enchantItem(r, stack, lvl, false);
+		}
+		return stack;
 	}
 
 	/** One color, or two at least {@code dyeMinDistance} apart in RGB (the farthest of 64 tries if none is). */

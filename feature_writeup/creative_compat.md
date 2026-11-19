@@ -80,6 +80,9 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
   `Stage`, `Ancient`, `Remains`); corpses from before the change take `DeathTime` = now minus the mod's loaded age.
   `Ancient` (skeleton from the start, "Ancient Corpse") and `Remains` (never decays or despawns, "Ancient Remains") are
   set by Creative Loot through that compound (`corpses #2`, `#7`); their names are Creative Loot lang keys.
+  Skeletons sink (`skeletonsSink`, `sinkSpeed` 0.1 blocks a tick; ruling 27, TODO `corpses #9`): a skeleton-stage
+  corpse (player, ancient or remains) in water or lava speeds down to `sinkSpeed` instead of the Corpse mod's upward
+  drift (a `@ModifyArg` on the y of its one `setDeltaMovement` in `tick`); player-model corpses keep floating.
 - **Resources in the jar** (paths and ids keep the `creativeengineering` namespace): moss tinted models and texture,
   flower box models, `tags/items/physics/`, 13
   lang keys (MCA eyes, monster box), no banner pattern textures (since 2026-11-06 the Bedspreads and Customizable
@@ -117,7 +120,7 @@ Every other Creative jar requires it (Common <- Compat <- content jars). Same be
 Scratch SQ-CMP-01 to -08 ([scratch_queue.md](testing/scratch_queue.md)). In game: CMP-01 open a Supplementaries jar
 with two potions and read the WTHIT line; CMP-02 (campfire) moved to SQ-CFR / CQ-CFR-01 with the code; CMP-03 TrashSlot
 and Polymorph in a Sophisticated crafting upgrade; CMP-04 MCA comb eye colors and a Bedspreads / Elytra banner.
-Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3).
+Corpse decay: SQ-CMP-10 to -13 and CQ-CMP-14 (queue section 3); sinking skeletons SQ-CMP-16.
 
 ## 5. History
 
@@ -153,6 +156,7 @@ Lines moved out of code comments (2026-11-17, plan_rules_fixes.md section 17):
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/flowers.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/flowers.js)
 - 2026-11-01: Creative Compat; moved from kubejs/server_scripts/other/feature_ports.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/other/feature_ports.js)
 - 2026-11-01: Creative Compat: decor blocks with no system of their own (feature_writeup/creative_split.md 7.6); moved from kubejs/startup_scripts/items/decor_blocks.js on 2026-11-01 (development/creativeCompat/src/main/resources/kubejs_startup/creativecompat/decor_blocks.js)
+- 2026-11-18: skeleton corpses sink in water and lava (`[corpses] skeletonsSink`, `sinkSpeed`; TODO `corpses #9`; SQ-CMP-16); the sealed mark is gone (ruling 24)
 - 2026-11-18: corpse decay on world time with Nether and End rules, armor shown follows contents, wither skeleton look (plan_corpses.md 3.1, TODO `corpses #1`, `corpses #6`; SQ-CMP-10 to -13, CQ-CMP-14) (corpse/, CorpseDecayMixin, CorpseRendererMixin, CompatConfig.Corpses)
 - 2026-11-01: Creative Compat: Curios slot membership for the pack's own slots (data: kubejs/data/creativeengineering/curios/; feature_writeup/curios_slots.md); moved from kubejs/server_scripts/tags/curiostags.js on 2026-11-01 (kubejs/data/creativecompat/kubejs/tags/curiostags.js)
 - 2026-11-01: cropSeasons, cropOutOfSeason: creativecalendar-common.toml [wthit] (Creative Calendar, 2026-11-01) (development/creativeCompat/src/main/java/com/SaintAlfonzo/creativecompat/CompatConfig.java)

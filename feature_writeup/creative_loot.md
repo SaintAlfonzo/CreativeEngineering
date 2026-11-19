@@ -96,7 +96,7 @@ decay, names and render are Creative Compat's ([creative_compat.md](creative_com
 - **Java** `corpse/`: `AncientCorpseModifier` (the serializer, always registered; `data/creativeloot/forge/biome_modifier/ancient_corpses.json`
   adds the placed feature `creativeloot:ancient_corpse` to `#minecraft:is_overworld` biomes and the remains biomes,
   step underground decoration, only when `corpse` is loaded and `enabled`), `AncientCorpseFeature` (placement and
-  spawn), `HeightCurve`, `AncientArmor` (armor rolls), `AncientCorpseConfig` (reads the block below on server start and
+  spawn), `HeightCurve`, `AncientArmor` (armor rolls), `AncientHands` (held items), `AncientCorpseConfig` (reads the block below on server start and
   /reload), `AncientCorpseEvents` and `CorpseHooks` (the only class touching Corpse classes; loaded only with the mod).
 - **Per chunk** (new chunks only): cave roll (`cave.chunk_chance` 1/32, overworld), ocean roll (chunk center biome in
   `#minecraft:is_ocean`), remains roll (`remains.chunk_chance` 1/8; the spot's biome must be in `remains.biomes`).
@@ -112,13 +112,15 @@ decay, names and render are Creative Compat's ([creative_compat.md](creative_com
 - **Ocean rate** (ruling 13): `base_chunk_chance` 0.00347 (about 1/288) x `temperature_factor` (warm 1, neutral 2,
   cold 3; cold and frozen oceans cold, lukewarm and warm oceans warm, plain and modded oceans neutral) x
   `depth_factor` (shallow 1, deep 6): warm shallow about 1 per 288 chunks, cold deep about 1 per 16.
-- **The corpse** is built from NBT (`EntityType.loadEntityRecursive`, no Corpse classes): an empty Death with the
-  rolled armor, Compat's `creativecompat:corpse` compound (`Ancient` or `Remains`, stage skeleton) and Forge
-  persistent data: `creativeloot:corpse_loot` (the chest table rolled on first open, ruling 5) with Compat's
-  `creativecompat:corpse_sealed` (so an armorless unopened corpse does not start the 5 min empty despawn), or
-  `creativeloot:corpse_remains` for remains. Ocean corpses get `NoGravity` (the Corpse mod floats corpses up through water).
+- **The corpse** is built from NBT (`EntityType.loadEntityRecursive`, no Corpse classes): a Death with the rolled
+  armor and held items (main hand in hotbar slot 0 plus the `Equipment` snapshot, offhand in `OffHandInventory`),
+  Compat's `creativecompat:corpse` compound (`Ancient` or `Remains`, stage skeleton) and Forge persistent data:
+  `creativeloot:corpse_loot` (the chest table rolled on first open, ruling 5), or `creativeloot:corpse_remains` for
+  remains. Every ancient corpse holds at least one item (held items below), so none is empty before it is opened; the
+  old `creativecompat:corpse_sealed` mark is gone (ruling 24; no migration of first-build corpses, ruling 29). Ocean
+  corpses keep gravity and sink, as every skeleton corpse does (Compat `skeletonsSink`, ruling 27).
 - **First open** (`CorpseHooks.onInteract`): the table is rolled as chest loot (LootJS and the tuning layer apply) into
-  the main inventory, overflow into additional items; both keys are cleared. Tables `creativeloot:corpse/cave` and
+  the free main inventory slots, overflow into additional items; the key is cleared. Tables `creativeloot:corpse/cave` and
   `corpse/ocean` are placeholders (torches and bread; bread) until `corpses #3` fills them.
 - **Remains** (rulings 21, 22): plain skeletons, empty, never wither or despawn, named "Ancient Remains". A player's hit
   drops `remains.drops` (1 to 3 bones, 0 to 1 bone chunk, 0 to 2 cracked bones, a skeleton skull at 25%; rolled in
@@ -130,6 +132,14 @@ decay, names and render are Creative Compat's ([creative_compat.md](creative_com
   `min_distance` 200 apart in RGB, each piece taking one. Copper: unwaxed pieces fully oxidized; `wax_chance` 10%
   waxed, a waxed piece unaffected (weight 0.5), exposed or weathered (1 each), one state for all waxed pieces or two
   (`waxed_same_state_chance` 50%).
+- **Held items** (`AncientHands`, rulings 24 to 26, 28; TODO `corpses #8`), block `hands`: main hand at `main_chance`
+  45%; offhand on its own roll at `offhand_chance` 20% (not chained to the main hand): the kind's `offhand_supplies`
+  stack at `offhand_supply_chance` 50% (cave 1 to 6 torches, ocean 1 to 3 bread), else a tool. Tools: sword or pickaxe
+  (`tool_weights` 1 : 1) in wood, stone, copper 25 or iron 8 (`material_weights`); an offhand tool copies the main
+  hand's material at `same_material_chance` 50%; `damage` 30% to 90%, `enchant_chance` 5% at level 5 to 15. Copper
+  tools follow the armor's copper rules (`armor.copper`) and share the corpse's waxed states with its armor. No dye.
+  `guarantee_tool`: a corpse whose armor and hands all missed gets a main hand tool. Shares: 44% roll no armor, so
+  about 0.44 x 0.55 x 0.8 = 19% of corpses take the guaranteed tool.
 - **Config** `loot_config.json` block `ancient_corpses` (every value above; `tools/gen_loot_config.py` keeps blocks it
   does not own since 2026-11-18). Worldgen values apply to chunks generated after the change. A block with
   `"requires": <mod id>` is skipped when the mod is absent (the remains on Biomes O' Plenty, the wood and copper armor
@@ -164,11 +174,16 @@ decay, names and render are Creative Compat's ([creative_compat.md](creative_com
   shown; first open rolls the cave table; looted, it is gone 5 min later. Queue SQ-LOOT-07, CQ-LOOT-10.
 - [ ] **LOOT-08 Worldgen survey:** pregenerate 64x64 chunks of a fresh world -> ancient corpses at about the configured
   rates, cave ones below y48 and mostly deep, ocean ones on the floor. Queue SQ-LOOT-08.
+- [ ] **LOOT-11 Held items:** summon 40 corpses with the feature (`/cdevplace` or a fresh area) -> some hold a sword or
+  pickaxe in the main hand (wood, stone, copper, iron; worn; copper oxidized or waxed), some an offhand tool or torches
+  (bread underwater); none is empty before opening; taking the held item off the corpse removes it from the model.
+  Ocean ones have no `NoGravity` (sinking itself: Compat SQ-CMP-16). Queue SQ-LOOT-11, CQ-LOOT-12.
 - [ ] **LOOT-09 Remains:** remains in the Visceral Heap -> a hit breaks them and drops bones; they never despawn. Queue
   SQ-LOOT-09.
 
 ## 5. History
 
+- 2026-11-18: held items and the no-empty guarantee (`hands` block, `AncientHands`; TODO `corpses #8`); sealed mark and ocean `NoGravity` dropped (`corpses #9`); SQ-LOOT-11, CQ-LOOT-12.
 - 2026-11-18: ancient corpses, their armor rolls and the Visceral Heap remains (section 2c; plan_corpses.md, TODO `corpses #2`, `#5`, `#7`; SQ-LOOT-07 to -09, CQ-LOOT-10).
 - 2026-11-17: P3c of plan_rules_fixes.md: every member list became a fragment, Delight and Brewing gate them (section 5);
   the drops engine gained the shapes of section 2b and Creative Delight's own loot rules moved into it (12d). Queue

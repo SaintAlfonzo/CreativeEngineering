@@ -1,12 +1,10 @@
 # Corpse decay and ancient corpses (2026-11-18)
 
-<!-- generated:status_index begin open_work sha1=934efe9f9aab -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Planned 2, Pinned 1, In Progress 1, Testing 5), 0 Complete.
+<!-- generated:status_index begin open_work sha1=a43e35e72006 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 9 open TODO rows (Pinned 1, In Progress 1, Testing 7), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
-| `corpses #8` | Planned | S C | Ancient corpse held items: wood, stone, copper or iron sword or pickaxe in the main hand (45%) and offhand (20%, half torches or bread), worn, rarely enchanted, copper oxidized or waxed; a corpse that rolls nothing gets a main hand tool (Creative Loot) |
-| `corpses #9` | Planned | S | Skeleton corpses sink in water instead of floating; ocean corpses keep gravity (Creative Compat, Creative Loot) |
 | `corpses #3` | Pinned | P | Work out ancient corpse loot tables (cave and ocean dead-player kits, tier check against loot_tiers.md) |
 | `corpses #4` | In Progress | S | Cosmetic armor and curios go into the corpse; corpse screen in sections by inventory location; cosmetic armor and visible curios shown on the corpse model |
 | `corpses #1` | Testing | S C | Corpse decay on world time: skeleton after 7 days, empty corpse skeleton after 30 s and despawn after 5 min, shown armor follows contents (Creative Compat) |
@@ -14,6 +12,8 @@
 | `corpses #5` | Testing | S C | Ancient corpse armor rolls: equip chains, 56/35/15/5 chances, material weights, oxidized or waxed copper, dyed leather colors (all configurable) |
 | `corpses #6` | Testing | S C | Nether corpses wither (skeleton then wither skeleton corpse), End corpses keep the player model (Creative Compat) |
 | `corpses #7` | Testing | S C | Visceral Heap Ancient Remains: empty breakable skeletons dropping bones, bone chunks, cracked bones and a skeleton skull 25% of the time |
+| `corpses #8` | Testing | S C | Ancient corpse held items: wood, stone, copper or iron sword or pickaxe in the main hand (45%) and offhand (20%, half torches or bread), worn, rarely enchanted, copper oxidized or waxed; a corpse that rolls nothing gets a main hand tool (Creative Loot) |
+| `corpses #9` | Testing | S | Skeleton corpses sink in water instead of floating; ocean corpses keep gravity (Creative Compat, Creative Loot) |
 <!-- generated:status_index end open_work -->
 
 Status: **planned, rulings in** (section 4); loot contents still to work out (section 5). Status lives in the TODO rows (section 6).
@@ -177,9 +177,12 @@ Design holes the questions close are listed with each item; rulings go in sectio
 | 22 | breaking (Q21b) | open | Only Visceral Heap skeletons can be broken; drops bones, bone chunk and cracked bones (Philip's Ruins), and a skeleton skull 25% of the time | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 23 | End corpses (Q22) | open | Never turn skeleton, keep the player model; never despawn while full, gone 5 min after emptied | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 24 | spawned corpse that rolls nothing (Q23, item 26) | open | Guarantee a held item: when the armor and hand rolls all miss, the main hand gets a tool, so no spawned corpse is empty; the sealed mark goes | 2026-11-18 | AskUserQuestion 2026-11-18 |
-| 25 | hand rolls (Q24, item 28) | open | Main hand 45%, offhand 20%; the offhand item is 50% torches underground or bread underwater, else a tool. Offhand rolled only when the main hand hit (chain, as the armor): agent reading, unconfirmed | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 25 | hand rolls (Q24, item 28) | open | Main hand 45%, offhand 20%; the offhand item is 50% torches underground or bread underwater, else a tool. Offhand rolled on its own, not only after a main hand hit (Q26) | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 26 | tool materials and copper (Q25, item 28) | open | Mirror armor: wood, stone, copper 25 each, iron 8; sword or pickaxe 50/50; unwaxed copper fully oxidized, 10% waxed with the armor's state rules; worn 30 to 90%; 5% enchant; a second tool copies the first one's material 50% of the time | 2026-11-18 | AskUserQuestion 2026-11-18 |
 | 27 | ocean corpse gravity, skeleton floating (items 29, 30) | clear | Ocean corpses keep gravity; every skeleton-stage corpse sinks instead of floating | 2026-11-18 | chat 2026-11-18 |
+| 28 | offhand stack sizes (Q27) | open | Torches 1 to 6, bread 1 to 3, configurable | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 29 | ancient corpses from the first build (sealed mark, NoGravity) (Q28) | open | No migration: new spawns only; test-world leftovers may despawn or float (nothing deployed) | 2026-11-18 | AskUserQuestion 2026-11-18 |
+| 30 | second phase scope (Q29) | open | `corpses #8`, `#9` and the rest of `#4` (sectioned screen, curio slot check, cosmetic and curio rendering) | 2026-11-18 | AskUserQuestion 2026-11-18 |
 
 Armor rolls (ruling 15), share of ancient corpses by pieces worn:
 
@@ -250,10 +253,23 @@ and the cosmetic and curio rendering (3.3). Choices the rulings did not fix, for
 - **Remains drops** are rows in `loot_config.json` (`remains.drops`), rolled in Java, not a loot table: a 1.19.2 loot
   table cannot be gated on Philip's Ruins. `philipsruins:cracked_bone` got no dict key (no script names it).
 
+Second phase (2026-11-18, rulings 24 to 30): built `corpses #8` (Creative Loot `AncientHands`, block `hands` in
+`loot_config.json`) and `#9` (Compat `[corpses] skeletonsSink`, `sinkSpeed`; ocean corpses lose `NoGravity`). Choices
+the rulings did not fix:
+- **Waxed copper states are shared** between a corpse's armor and its copper tools (one state, or two, for the whole
+  kit), since the tool rolls "mirror armor" (ruling 26).
+- **Offhand tool material copy** (ruling 26, "a second tool copies the first") applies only when the main hand holds a
+  tool; an offhand tool on an empty main hand rolls its material freely.
+- **Sinking speed**: skeletons accelerate down 0.02 a tick to `sinkSpeed` 0.1 blocks a tick (2 blocks a second), in
+  water and lava alike.
+- **Hands tuning** has its own `damage`, `enchant_chance`, `enchant_levels` (same values as the armor) so they can
+  drift apart later.
+
 ## 7. Tests
 
 Prefixes: `CMP-` (creative_compat.md) for decay, `LOOT-` (creative_loot.md) for ancient corpses. Queue: SQ-CMP-10 to
--13, CQ-CMP-14 (decay); SQ-LOOT-07 to -09, CQ-LOOT-10 (ancient corpses, remains).
+-13, CQ-CMP-14 (decay); SQ-LOOT-07 to -09, CQ-LOOT-10 (ancient corpses, remains); second phase SQ-LOOT-11, CQ-LOOT-12
+(held items), SQ-CMP-16 (sinking).
 
 ## History
 
@@ -262,3 +278,4 @@ Prefixes: `CMP-` (creative_compat.md) for decay, `LOOT-` (creative_loot.md) for 
 - 2026-11-18: section 3.3 added (cosmetic armor and curios); rulings 9 and 10; row `corpses #4`.
 - 2026-11-18: built `corpses #1`, `#2`, `#5`, `#6`, `#7`; build notes in 6b.
 - 2026-11-18: second pass notes (3.5, items 25 to 34); rulings 24 to 27; rows `corpses #8`, `#9`; `#3` pinned on `loot/tables #1`.
+- 2026-11-18: second phase questions: ruling 25 offhand made independent; rulings 28 to 30.
