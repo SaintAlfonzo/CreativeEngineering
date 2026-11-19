@@ -31,7 +31,7 @@
 ## SQ-FGD-00 | Fungi member boots: mixins, item_dict, spawn and crop rules
 @group A
 @commands (RERUN: nested jar 2026-11-02, run plan in SQ-CDJ5) boot
-@pass `Done (`; `fungidelight` in the mod list; no mixin error naming `MushroomCowBreedingMixin`, `AnimalCanMateMooshroomMixin`, `HoglinMixin`; no `Unknown item`/`Unknown tag` naming `fungidelight`; `[item_dict]` missing list has no Fungi key; `[mob-spawns]` summary shows `mooshroom_mushroom_fields` matched with 0 changes and the 4 Fungi cow rules matched, none idle; `[mushroom-spawns]` and `[wild-crops]` load lines list the 8 mushroom rules and `rooted_dirt`, `truffle_dirt` (FGD-01, FGD-26 server half)
+@pass `Done (`; `fungidelight` in the mod list; no mixin error naming `MushroomCowBreedingMixin`, `AnimalCanMateMooshroomMixin`, `HoglinMixin`; no `Unknown item`/`Unknown tag` naming `fungidelight`; `[item_dict]` missing list has no Fungi key; `[mob-spawns]` summary shows `mooshroom_mushroom_fields` matched with 0 changes and the 4 Fungi cow rules matched, none idle; `[mushroom-spawns]` and `[wild-crops]` load lines list 9 rules (the 8 mushroom rules plus Miner's Delight `cave_carrots`, since 2026-10-24) and `rooted_dirt`, `truffle_dirt` (FGD-01, FGD-26 server half)
 @fails port README; SRG names in the Creative Common mixins (m_28928_, m_142606_, m_7848_); `_biome_rules.js` priority
 @jars creativecommon creativedelight
 @from batches/r1102/b1_main.qb
@@ -39,10 +39,12 @@ bootreject (?i)(error|fail|warn).*(MushroomCowBreedingMixin|AnimalCanMateMooshro
 bootreject Unknown (item|tag).*fungidelight
 shell ! grep -A80 "\[item_dict\] Missing/invalid item IDs:" logs/latest.log | grep -m5 "fungidelight"
 bootexpect \[mob-spawns\]
-bootexpect \[mushroom-spawns\]
+# r1118 R1 (2026-11-18): 9 is intended: the 9th rule is cave_carrots (Miner's Delight cave mode, mushroom_spawns.json since 2026-10-24)
+bootexpect \[mushroom-spawns\] 9 mushroom modifiers added
+bootexpect \[mushroom-spawns\] \d+ mushroom/biome pairs in 9 mushroom tags
 bootexpect \[wild-crops\]
 shell grep -nE "\[(mob-spawns|mushroom-spawns|wild-crops)\]" logs/latest.log | cut -c1-400
-look rows/SQ-FGD-00.shell.txt: mooshroom_mushroom_fields matched with 0 changes, the 4 Fungi cow rules matched and none idle; mushroom-spawns names 8 rules; wild-crops covers rooted_dirt and truffle_dirt
+look rows/SQ-FGD-00.shell.txt: mooshroom_mushroom_fields matched with 0 changes, the 4 Fungi cow rules matched and none idle; mushroom-spawns names 9 rules (8 mushroom rules plus cave_carrots); wild-crops covers rooted_dirt and truffle_dirt
 
 ## SQ-FGD-01 | /fgdtest all (FGD-01 to -06, -08, -09, -10 logic)
 @group A
@@ -214,16 +216,95 @@ look farmer L3 also buys the brown and red mushroom colonies (4 colonies in all)
 @fails `[mushroom-spawns]` log lines (skipped, not in tag); CEConfig `mushroomSpawns` read; feature ids; placeable tags
 @jars creativecommon creativedelight
 @from batches/r1102/b5_groupB.qb
+# self-contained since r1118 R2 (2026-11-18): the five squares from r1102 b5_groupB.qb SQ-FGD-12a to -12e (setup rows,
+# not migrated); locate runs from the console (world spawn); on a world already pregenerated the chunky tasks end at once
+> locate biome minecraft:dark_forest
+waitlog (nearest minecraft:dark_forest|Could not find) 600
+capture DF nearest minecraft:dark_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {DF1} {DF3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:swamp
+waitlog (nearest minecraft:swamp|Could not find) 600
+capture SW nearest minecraft:swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {SW1} {SW3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:mushroom_fields
+waitlog (nearest minecraft:mushroom_fields|Could not find) 900
+capture MF nearest minecraft:mushroom_fields is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {MF1} {MF3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:taiga
+waitlog (nearest minecraft:taiga|Could not find) 600
+capture TA nearest minecraft:taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {TA1} {TA3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:birch_forest
+waitlog (nearest minecraft:birch_forest|Could not find) 600
+capture BI nearest minecraft:birch_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {BI1} {BI3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> save-all flush
+waitlog Saved the game 300
 shell for b in "DF {DF1} {DF3}" "SW {SW1} {SW3}" "MF {MF1} {MF3}" "TA {TA1} {TA3}" "BI {BI1} {BI3}"; do set -- $b; echo "== $1 square"; python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ '(fungidelight:(inky_cap|morel)_mushroom|minecraft:(brown|red)_mushroom)$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)) --json ../fgd12_$1_singles.json; python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'fungidelight:(inky_cap|morel)_mushroom_block$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'fungidelight:[a-z_]+_colony$' --near 'minecraft:(dirt|coarse_dirt|podzol|rooted_dirt|grass_block|mycelium|moss_block)$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); done
 look rows/SQ-FGD-12.shell.txt (depth 0..1 = surface): inky cap only in dark forest and mushroom fields at the surface, morel also in the swamp; none at the surface in taiga or birch; dark-forest Fungi singles clearly rarer than brown / red; mushroom fields: huge inky in about 1 of 3 chunks, huge morel 1 of 4 ("chunks with a match by surface biome"); colonies next to dirt / podzol
 
 ## SQ-FGD-13 | underground Fungi mushrooms (offline, same squares)
-@group B, same world
+@phase worldgen
+@group B (new world; same squares as SQ-FGD-12)
 @commands count below y 50 and 13+ under the surface
 @pass inky and morel singles on stone, sculk or dirt floors, rare; colonies of all four only over dirt / moss / mycelium-type blocks, never bare stone; none under open sky (FGD-28 caves). Too few: raise the count or scan length (`mushroom_spawns.json`)
 @fails a load error naming `environment_scan` or `surface_relative_threshold_filter`: 1.19.2 codec field names
 @jars creativecommon creativedelight
 @from batches/r1102/b5_groupB.qb
+# self-contained since r1118 R2 (2026-11-18): the five squares from r1102 b5_groupB.qb SQ-FGD-12a to -12e (setup rows,
+# not migrated); locate runs from the console (world spawn); on a world already pregenerated the chunky tasks end at once
+> locate biome minecraft:dark_forest
+waitlog (nearest minecraft:dark_forest|Could not find) 600
+capture DF nearest minecraft:dark_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {DF1} {DF3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:swamp
+waitlog (nearest minecraft:swamp|Could not find) 600
+capture SW nearest minecraft:swamp is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {SW1} {SW3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:mushroom_fields
+waitlog (nearest minecraft:mushroom_fields|Could not find) 900
+capture MF nearest minecraft:mushroom_fields is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {MF1} {MF3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:taiga
+waitlog (nearest minecraft:taiga|Could not find) 600
+capture TA nearest minecraft:taiga is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {TA1} {TA3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> locate biome minecraft:birch_forest
+waitlog (nearest minecraft:birch_forest|Could not find) 600
+capture BI nearest minecraft:birch_forest is at \[(-?\d+), (~|-?\d+), (-?\d+)\]
+> chunky center {BI1} {BI3}
+> chunky radius 300
+> chunky start
+waitlog Task finished 5400
+> save-all flush
+waitlog Saved the game 300
 shell for b in "DF {DF1} {DF3}" "SW {SW1} {SW3}" "MF {MF1} {MF3}" "TA {TA1} {TA3}" "BI {BI1} {BI3}"; do set -- $b; echo "== $1 square"; python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ 'fungidelight:(inky_cap|morel)_mushroom$' --near 'minecraft:(stone|deepslate|tuff|sculk|dirt|rooted_dirt|moss_block)$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); python3 -I $INST/tools/scratch_query/region_blocks.py blocks @ '(fungidelight:[a-z_]+_colony|farmersdelight:(brown|red)_mushroom_colony)$' --near 'minecraft:(stone|deepslate|tuff|andesite|diorite|granite)$' --box $(($2-300)) $(($3-300)) $(($2+300)) $(($3+300)); done
 look below Y 50 and depth 13+: inky and morel singles rare, on stone / sculk / dirt floors; colonies of all four only over dirt-type blocks (a stone neighbour count near the colony total = colonies on bare stone: FAIL); none under open sky. A load error naming environment_scan or surface_relative_threshold_filter: grep latest.log
 

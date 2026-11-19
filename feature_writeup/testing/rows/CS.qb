@@ -108,39 +108,54 @@ look verb=ages means (open x 100 first, glass x 120 second): winter: open mean b
 
 ## SQ-CS-04 | spring field ahead of a summer field (same timing)
 @group server
-@commands Same fields replanted, `/season set mid_spring` vs a third field in `mid_summer` (separate runs, same timing)
-@pass spring run ahead of the summer run (about 5/4)
+@commands Four open 9x9 wheat fields on hydrated farmland (320 plants, 4x the r1118 sample), `/season set mid_spring`, 18 random-tick rounds, mean age; replanted, the same in `mid_summer`
+@pass spring mean age about 5/4 of the summer mean (`fertileBonus = 0.25`; noise on each mean about 0.09 at n=320, so 1.15 or more passes)
 @fails fertile bonus not queued / extra tick not run
 @from batches/r1031/a2_variants.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
+# r1118 R6 (2026-11-18): n=80 gave 1.07 against 1.25 with noise about 0.18 (judge-6), so four fields measured as one box
+# (n=320); self-contained (its own fields at x 100..108, z 0..68; it used CS-03's field); randomtick replaces 2 min at
+# randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block); the tick warp runs queued season extra ticks
+> forceload add 96 -4 112 72
+> fill 96 -61 -4 112 -61 72 minecraft:grass_block
+> fill 96 -60 -4 112 -55 72 minecraft:air
+> fill 100 -61 0 108 -61 8 minecraft:farmland[moisture=7]
+> setblock 104 -61 4 minecraft:water
+> fill 100 -61 20 108 -61 28 minecraft:farmland[moisture=7]
+> setblock 104 -61 24 minecraft:water
+> fill 100 -61 40 108 -61 48 minecraft:farmland[moisture=7]
+> setblock 104 -61 44 minecraft:water
+> fill 100 -61 60 108 -61 68 minecraft:farmland[moisture=7]
+> setblock 104 -61 64 minecraft:water
 > fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
-> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
 > setblock 104 -60 4 minecraft:air
-> setblock 124 -60 4 minecraft:air
+> fill 100 -60 20 108 -60 28 minecraft:wheat[age=0]
+> setblock 104 -60 24 minecraft:air
+> fill 100 -60 40 108 -60 48 minecraft:wheat[age=0]
+> setblock 104 -60 44 minecraft:air
+> fill 100 -60 60 108 -60 68 minecraft:wheat[age=0]
+> setblock 104 -60 64 minecraft:air
 > season set MID_SPRING
-# randomtick replaces 2 min at randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block), both
-# fields the same; the tick warp runs queued season extra ticks
-> cdevtest randomtick 100 -60 0 108 -60 8 18
-> cdevtest randomtick 120 -60 0 128 -60 8 18
+> cdevtest randomtick 100 -60 0 108 -60 68 18
 > cdevtest tickwarp 22
 waitlog verb=tickwarp end=done ticks=22 60
-> cdevtest ages 100 -60 0 108 -60 8 minecraft:wheat
-> cdevtest ages 120 -60 0 128 -60 8 minecraft:wheat
+> cdevtest ages 100 -60 0 108 -60 68 minecraft:wheat
 > fill 100 -60 0 108 -60 8 minecraft:wheat[age=0]
-> fill 120 -60 0 128 -60 8 minecraft:wheat[age=0]
 > setblock 104 -60 4 minecraft:air
-> setblock 124 -60 4 minecraft:air
+> fill 100 -60 20 108 -60 28 minecraft:wheat[age=0]
+> setblock 104 -60 24 minecraft:air
+> fill 100 -60 40 108 -60 48 minecraft:wheat[age=0]
+> setblock 104 -60 44 minecraft:air
+> fill 100 -60 60 108 -60 68 minecraft:wheat[age=0]
+> setblock 104 -60 64 minecraft:air
 > season set MID_SUMMER
-# randomtick replaces 2 min at randomTickSpeed 30 (2400 ticks x 30 / 4096 = about 18 random ticks per block), both
-# fields the same; the tick warp runs queued season extra ticks
-> cdevtest randomtick 100 -60 0 108 -60 8 18
-> cdevtest randomtick 120 -60 0 128 -60 8 18
+> cdevtest randomtick 100 -60 0 108 -60 68 18
 > cdevtest tickwarp 23
 waitlog verb=tickwarp end=done ticks=23 60
-> cdevtest ages 100 -60 0 108 -60 8 minecraft:wheat
-> cdevtest ages 120 -60 0 128 -60 8 minecraft:wheat
+> cdevtest ages 100 -60 0 108 -60 68 minecraft:wheat
+shell grep -E "verb=ages block=minecraft:wheat" logs/latest.log | grep -oE "n=[0-9]+ mean=[0-9.]+" | tail -2 | tr "\n" " " | awk '{split($2,a,"="); split($4,b,"="); printf "spring %s summer %s ratio %.3f\n", a[2], b[2], a[2]/b[2]}'
 reject \[cdevtest\] .*done=0
-look open field (first verb=ages line of each pair): spring growth about 5/4 of the summer growth (wheat temperate: spring fertile, summer neutral)
+look rows/SQ-CS-04.shell.txt: spring / summer ratio about 1.25 (1.15 or more passes; wheat temperate: spring fertile, summer neutral)
 > season set MID_SPRING
 
 ## SQ-CS-05 | off-season crops still grow (mid_winter, randomTickSpeed 100, 1 min)

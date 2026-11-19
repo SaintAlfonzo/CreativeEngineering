@@ -106,10 +106,10 @@ shell grep -E "Skipped creativebrewing:kubejs/" logs/kubejs/server.log | sed 's/
 kjsreject Skipped creativebrewing:kubejs/
 kjsexpect Loaded script creativebrewing:kubejs/alexsmobs/lava_vision.js
 
-## SQ-CBB-07 | cooking: 44 of 44 alcohol drinks, winemaker trades
+## SQ-CBB-07 | cooking: 51 of 51 alcohol drinks, winemaker trades
 @group A (cooking)
-@commands `shell grep -oE "\[alcohol\] food values set on [0-9]+ of 44" logs/kubejs/startup.log`; `kjsexpect \[wandering trades\] winemaker [1-9]`
-@pass 44 of 44 (Fruits Delight bellini, Engineer's Delight wodka present); winemaker 34 or more
+@commands `shell grep -oE "\[alcohol\] food values set on [0-9]+ of [0-9]+" logs/kubejs/startup.log` (N of N); `kjsexpect \[wandering trades\] winemaker [1-9]`
+@pass 51 of 51 (was 44; every drink set: N of N; Fruits Delight bellini, Engineer's Delight wodka present); winemaker 34 or more
 @fails `alcohol_drinks.js` ids, `vinery/wandering_trades.js`
 @from batches/r1106cbb/c2.qb passed
 # judge-3, 2026-11-18: the drink list grew (51 in the full pack 2026-11-18); every drink set = N of N

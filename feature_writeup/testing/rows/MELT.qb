@@ -17,10 +17,32 @@
 @@table
 ## SQ-MELT-01 | salt melts touching ice to a water source, snow block / powder snow / layer to air; salt stays
 @group A
-@commands `setblock X -60 Z salt:salt_block`; around it (touching): `minecraft:ice`, `minecraft:snow_block`, `minecraft:powder_snow`, `minecraft:snow[layers=3]` (layer on a stone block beside the salt); wait 60 s
+@commands `setblock X -60 Z salt:salt_block`; around it (touching): `minecraft:ice`, `minecraft:snow_block`, `minecraft:powder_snow`, `minecraft:snow[layers=3]` (layer on a stone block beside the salt); wait 120 s at randomTickSpeed 1000
 @pass ice -> `minecraft:water[level=0]`, the other three -> air; the Salt Block stays; latest.log `[melting] tags:` line with salt >= 2
 @fails `#creativecommon:melting/salt` empty (`melting_tags.js`, `has('salt')`); snow block and powder snow not melting: `[melting] random ticks on for N extra blocks` missing or N < 4 (`extraRandomTickBlocks`)
 @from batches/r1115/p3_a1.qb
+# self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
+# bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
+> forceload add 1984 1984 2143 2143
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
+> setblock 2001 -61 2000 minecraft:ice
+> setblock 1999 -61 2000 minecraft:snow_block
+> setblock 2000 -61 2001 minecraft:powder_snow
+> setblock 2000 -61 1999 minecraft:snow[layers=3]
+> setblock 2000 -61 2000 salt:salt_block
+sleep 1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
 > execute if block 2001 -61 2000 minecraft:water[level=0] run say SQ-MELT-01-ice_water
 > execute if block 1999 -61 2000 minecraft:air run say SQ-MELT-01-snowblock_air
 > execute if block 2000 -61 2001 minecraft:air run say SQ-MELT-01-powder_air
@@ -32,15 +54,60 @@ expect SQ-MELT-01-powder_air$
 expect SQ-MELT-01-layer_air$
 expect SQ-MELT-01-salt_kept$
 bootexpect \[melting\] tags: \d+ meltable, \d+ slow, ([2-9]|\d\d+) salt
-look and the m01_ changes in P3-01's log (one step each); [melting] tags salt >= 2
-shell grep -hE "\[zmelt\] change m01_" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
+look [melting] tags salt >= 2 (bootexpect above); the five end states above
 
 ## SQ-MELT-02 | fire, soul fire, lit campfire, lit soul campfire, magma: ice and snow at 3 melt, at 4 not; unlit campfire nothing
 @group A
-@commands In a lit room (one torch-free row): ice at distance 3 from `minecraft:fire` (on netherrack) and at distance 4 from a second fire; the same pair for `soul_fire` (on soul soil), `campfire[lit=true]`, `soul_campfire[lit=true]`, `magma_block`; plus ice 1 from `campfire[lit=false]`; wait 90 s
+@commands In a lit room (one torch-free row): ice at distance 3 from `minecraft:fire` (on netherrack) and at distance 4 from a second fire; the same pair for `soul_fire` (on soul soil), `campfire[lit=true]`, `soul_campfire[lit=true]`, `magma_block`; plus ice 1 from `campfire[lit=false]`; wait 120 s at randomTickSpeed 1000
 @pass every distance-3 ice melted, every distance-4 ice still ice (each pair); the unlit-campfire ice still ice
 @fails the 4-block ice melted: range wrong or vanilla light melt on (`vanillaLightMelting`); magma at 3 not melting: SQ-MELT-07; unlit campfire melting: `fireActive` (lit property)
 @from batches/r1115/p3_a1.qb
+# self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
+# bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
+> forceload add 1984 1984 2143 2143
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
+> setblock 2033 -61 2000 minecraft:ice
+> setblock 2026 -61 2000 minecraft:ice
+> setblock 2030 -61 2003 minecraft:snow
+> setblock 2030 -61 1996 minecraft:snow
+> setblock 2030 -62 2000 minecraft:netherrack
+> setblock 2030 -61 2000 minecraft:fire
+> setblock 2033 -61 2012 minecraft:ice
+> setblock 2026 -61 2012 minecraft:ice
+> setblock 2030 -61 2015 minecraft:snow
+> setblock 2030 -61 2008 minecraft:snow
+> setblock 2030 -62 2012 minecraft:soul_soil
+> setblock 2030 -61 2012 minecraft:soul_fire
+> setblock 2033 -61 2024 minecraft:ice
+> setblock 2026 -61 2024 minecraft:ice
+> setblock 2030 -61 2027 minecraft:snow
+> setblock 2030 -61 2020 minecraft:snow
+> setblock 2030 -61 2024 minecraft:campfire[lit=true]
+> setblock 2033 -61 2036 minecraft:ice
+> setblock 2026 -61 2036 minecraft:ice
+> setblock 2030 -61 2039 minecraft:snow
+> setblock 2030 -61 2032 minecraft:snow
+> setblock 2030 -61 2036 minecraft:soul_campfire[lit=true]
+> setblock 2033 -61 2048 minecraft:ice
+> setblock 2026 -61 2048 minecraft:ice
+> setblock 2030 -61 2051 minecraft:snow
+> setblock 2030 -61 2044 minecraft:snow
+> setblock 2030 -61 2048 minecraft:magma_block
+> setblock 2031 -61 2060 minecraft:ice
+> setblock 2030 -61 2060 minecraft:campfire[lit=false]
+sleep 1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
 > execute if block 2033 -61 2000 minecraft:water run say SQ-MELT-02-fire_ice3_water
 > execute if block 2026 -61 2000 minecraft:ice run say SQ-MELT-02-fire_ice4_ice
 > execute if block 2030 -61 2003 minecraft:air run say SQ-MELT-02-fire_snow3_air
@@ -84,14 +151,40 @@ expect SQ-MELT-02-magma_snow3_air$
 expect SQ-MELT-02-magma_snow4_snow$
 expect SQ-MELT-02-unlit_ice1_ice$
 look every pair: 3 melted, 4 kept; the unlit campfire's ice kept
-shell grep -hE "\[zmelt\] change m02_" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
 
 ## SQ-MELT-03 | lava source, flowing lava, lava cauldron melt ice at 4; source at 5 not
 @group A
-@commands Ice at distance 4 and at distance 5 from a lava source; ice at 4 from flowing lava (`setblock ... minecraft:lava[level=3]`, blocked from spreading by a glass ring); a `lava_cauldron` with ice at 4; wait 90 s
+@commands Ice at distance 4 and at distance 5 from a lava source; ice at 4 from flowing lava (`setblock ... minecraft:lava[level=3]`, blocked from spreading by a glass ring); a `lava_cauldron` with ice at 4; wait 120 s at randomTickSpeed 1000
 @pass distance 4 melted (source, flowing, cauldron); distance 5 still ice
 @fails flowing lava missed: the fluid check (`FluidTags.LAVA`); cauldron missed: `#creativecommon:melting/lava`
 @from batches/r1115/p3_a1.qb
+# self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
+# bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
+> forceload add 1984 1984 2143 2143
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
+> setblock 2064 -61 2000 minecraft:ice
+> setblock 2055 -61 2000 minecraft:ice
+> setblock 2060 -61 2000 minecraft:lava
+> setblock 2066 -61 2012 minecraft:ice
+> setblock 2063 -61 2012 minecraft:glass
+> setblock 2061 -61 2012 minecraft:air
+> setblock 2062 -61 2012 minecraft:air
+> setblock 2060 -61 2012 minecraft:lava
+> setblock 2064 -61 2024 minecraft:ice
+> setblock 2060 -61 2024 minecraft:lava_cauldron
+sleep 1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
 > execute if block 2064 -61 2000 minecraft:water run say SQ-MELT-03-src_ice4_water
 > execute if block 2055 -61 2000 minecraft:ice run say SQ-MELT-03-src_ice5_ice
 > execute if block 2062 -61 2012 minecraft:lava run say SQ-MELT-03-flow_cell_lava
@@ -103,71 +196,99 @@ expect SQ-MELT-03-flow_cell_lava$
 expect SQ-MELT-03-flow_ice4_water$
 expect SQ-MELT-03-cauldron_ice4_water$
 look flowing lava cell at 2062 present (fed by the source 6 away from the ice)
-shell grep -hE "\[zmelt\] change m03_" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
 
 ## SQ-MELT-04 | blue ice beside salt steps blue -> packed -> ice -> water at the slow rate; packed by fire / lava ranges (randomTickSpeed 100, 5 min)
 @group A
-@commands Four Salt Blocks each touching one `minecraft:blue_ice`; sample every 20 s for 5 min (`execute if block`); packed ice touching fire and packed ice at distance 2 from fire; packed ice at 2 and at 3 from lava; wait 5 min
+@commands Four Salt Blocks each touching one `minecraft:blue_ice`; the first watched every tick for 5 min (`cdevtest watch`); packed ice touching fire and packed ice at distance 2 from fire; packed ice at 2 and at 3 from lava; wait 5 min
 @pass blue ice steps blue -> packed -> ice -> water, never skipping a tier; step count over the window roughly `slowMeltChance` (0.05) x random ticks (about 1 in 20 of the melts the plain ice gets); packed beside fire stepped, at 2 from fire not; at 2 from lava stepped, at 3 not
 @fails skipped tiers: `slowSteps`; no steps at all: blue/packed not random ticking (`extraRandomTickBlocks`)
 @from batches/r1115/p3_a1.qb
+# self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
+# bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
+> forceload add 1984 1984 2143 2143
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
+# blue0 is watched every tick (one watch at a time: watch lines carry no position) and its state sequence must be
+# blue -> packed -> ice -> water without a skipped tier; the other cases are judged by their end state
 > setblock 2001 -61 2084 minecraft:blue_ice
 > setblock 2000 -61 2084 salt:salt_block
-> zmelt w m04_blue0 overworld 2001 -61 2084
 > setblock 2007 -61 2084 minecraft:blue_ice
 > setblock 2006 -61 2084 salt:salt_block
-> zmelt w m04_blue1 overworld 2007 -61 2084
 > setblock 2013 -61 2084 minecraft:blue_ice
 > setblock 2012 -61 2084 salt:salt_block
-> zmelt w m04_blue2 overworld 2013 -61 2084
 > setblock 2019 -61 2084 minecraft:blue_ice
 > setblock 2018 -61 2084 salt:salt_block
-> zmelt w m04_blue3 overworld 2019 -61 2084
 > setblock 2025 -61 2084 minecraft:ice
 > setblock 2024 -61 2084 salt:salt_block
-> zmelt w m04_plainice overworld 2025 -61 2084
 > setblock 2001 -61 2096 minecraft:packed_ice
 > setblock 2000 -62 2096 minecraft:netherrack
 > setblock 2000 -61 2096 minecraft:fire
-> zmelt w m04_packed_fire1 overworld 2001 -61 2096
 > setblock 2014 -61 2096 minecraft:packed_ice
 > setblock 2012 -62 2096 minecraft:netherrack
 > setblock 2012 -61 2096 minecraft:fire
-> zmelt w m04_packed_fire2 overworld 2014 -61 2096
 > setblock 2026 -61 2096 minecraft:packed_ice
 > setblock 2024 -61 2096 minecraft:lava
-> zmelt w m04_packed_lava2 overworld 2026 -61 2096
 > setblock 2039 -61 2096 minecraft:packed_ice
 > setblock 2036 -61 2096 minecraft:lava
-> zmelt w m04_packed_lava3 overworld 2039 -61 2096
-reject (Unknown (item|block|block type|entity)|Incorrect argument for command|zmelt\] error)
+sleep 1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> cdevtest watch 2001 -61 2084 6000 1
 > gamerule randomTickSpeed 100
-repeat 15
-sleep 20
-> zmelt show
-end
+waitlog verb=watch end=done 400
 > gamerule randomTickSpeed 3
-> execute if block 2014 -61 2096 minecraft:packed_ice run say SQ-MELT-04-fire2_packed
-> execute if block 2039 -61 2096 minecraft:packed_ice run say SQ-MELT-04-lava3_packed
-expect SQ-MELT-04-fire2_packed$
-expect SQ-MELT-04-lava3_packed$
-reject change m04_blue\d .*blue_ice -> minecraft:(ice|water|air)
-reject change m04_blue\d .*packed_ice -> minecraft:(water|air)
-reject change m04_packed_(fire2|lava3)
-shell grep -hE "\[zmelt\] change m04_" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
-look step ticks: slow steps ~ 1/(100/4096*0.05) = 820 ticks mean, ice -> water ~ 102 ticks; packed_fire1 and packed_lava2 stepped
+shell awk '/verb=watch watching=state ticks=6000 every=1/{n=1; k=0; last=""} n && /verb=watch t=[0-9]+ state=/{match($0,/state="?[a-z0-9_:]+/); v=substr($0,RSTART,RLENGTH); sub(/state="?/,"",v); if(v!=last){q[++k]=v; last=v}} END{s=""; for(i=1;i<=k;i++) s=s" "q[i]; print "MELT-04 blue0 sequence:" s; exit !(k>0 && s ~ /^ minecraft:blue_ice( minecraft:packed_ice( minecraft:ice( minecraft:water)?)?)?$/)}' logs/latest.log
+> cdevtest state 2007 -61 2084
+> cdevtest state 2013 -61 2084
+> cdevtest state 2019 -61 2084
+> cdevtest state 2025 -61 2084
+> execute unless block 2001 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_fire1_stepped
+> execute if block 2014 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_fire2_kept
+> execute unless block 2026 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_lava2_stepped
+> execute if block 2039 -61 2096 minecraft:packed_ice run say SQ-MELT-04-packed_lava3_kept
+expect SQ-MELT-04-packed_fire1_stepped$
+expect SQ-MELT-04-packed_fire2_kept$
+expect SQ-MELT-04-packed_lava2_stepped$
+expect SQ-MELT-04-packed_lava3_kept$
+reject \[cdevtest\] .*done=0
+look rows/SQ-MELT-04.shell.txt: blue0 sequence and the tick of each step in the watch lines (slow steps ~ 1/(100/4096*0.05) = 820 ticks mean, ice -> water ~ 102 ticks); blue1 to blue3 end states (no tier skipped is only proven for blue0); plain ice beside salt went to water
 
 ## SQ-MELT-05 | Nether: ice beside a Salt Block -> air, never water
 @group B-nether
-@commands In the Nether (forceloaded): `ice` beside a Salt Block; wait 60 s
+@commands In the Nether (forceloaded): `ice` beside a Salt Block, a control ice without salt; wait 120 s at randomTickSpeed 1000
 @pass ice -> air (never water)
 @fails `meltedState` ultra-warm check; Immersive Weathering also melts Nether ice by itself (expected, [melting.md](../melting.md) 6)
 @from batches/r1115/p3_a1.qb
+# self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
+# bot m3n on a stone platform on the Nether roof keeps it random-ticking; the retired zmelt probe is not used
+> execute in minecraft:the_nether run forceload add 0 0 31 31
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 3
+> execute in minecraft:the_nether run fill 0 128 0 31 128 31 minecraft:stone
+> execute in minecraft:the_nether run fill 0 129 0 31 133 31 minecraft:air
+sleep 3
+> execute unless entity m3n run pbot spawn m3n 8 129 8 minecraft:the_nether survival
+sleep 3
+> execute in minecraft:the_nether run setblock 5 129 4 minecraft:ice
+> execute in minecraft:the_nether run setblock 4 129 4 salt:salt_block
+> execute in minecraft:the_nether run setblock 20 129 20 minecraft:ice
+sleep 1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
 > execute in minecraft:the_nether if block 5 129 4 minecraft:air run say SQ-MELT-05-ice_air
 expect SQ-MELT-05-ice_air$
-look m05_nether_ice change goes to air without a water step; n_control_ice (no salt) recorded (Immersive Weathering)
-reject change m05_nether_ice .*-> minecraft:water
-shell grep -hE "\[zmelt\] change (m05_|n_control)" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
+look ice beside the salt went to air (never water: a water source would stay); the control ice 20 129 20 (no salt) state is recorded for Immersive Weathering's own Nether melt
+> execute in minecraft:the_nether run cdevtest state 20 129 20
+reject \[cdevtest\] .*done=0
 
 ## SQ-MELT-06 | part 1 (switch off): torch, soul torch, lantern, sconce, copper lantern, glowstone melt at 3, not 4; sea lantern, redstone torch, jelly torch, unlit brazier nothing
 @group A
@@ -240,11 +361,33 @@ shell grep -hE "\[zmelt\] change m06_" logs/latest.log | sed -E 's/^.*\[zmelt\]/
 @pass ice melted; latest.log `[melting] source-driven fire (light below 4, random ticks): [minecraft:magma_block (light 3)...]`
 @fails magma not source-driven: `DRIVEN` flag / `isRandomlyTicking`; the palette pre-check (`mayHaveTargets`)
 @from batches/r1115/p3_a1.qb
+# self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
+# bot m3 keeps the area random-ticking (no player near = no random ticks); the retired zmelt probe is not used
+> forceload add 1984 1984 2143 2143
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule doDaylightCycle false
+> time set 18000
+> weather clear 1000000
+> gamerule randomTickSpeed 3
+sleep 3
+> execute unless entity m3 run pbot spawn m3 2060 -60 2060 minecraft:overworld survival
+sleep 3
+> fill 1999 -60 2059 2004 -56 2061 minecraft:stone hollow
+> setblock 2000 -59 2060 minecraft:magma_block
+> setblock 2003 -59 2060 minecraft:ice
+> cdevtest state 2003 -59 2060
+sleep 1
+reject (Unknown (item|block|block type|entity)|Incorrect argument for command|Unknown or incomplete command|Block property)
+> gamerule randomTickSpeed 1000
+sleep 120
+> gamerule randomTickSpeed 3
 > execute if block 2003 -59 2060 minecraft:water run say SQ-MELT-07-ice_water
 expect SQ-MELT-07-ice_water$
-look light line shows block 0 at the ice; boot source-driven line names magma_block (light 3)
+look boot source-driven line names magma_block (light 3); the ice had block light 0 before the wait (expect above)
 bootexpect \[melting\] source-driven fire \(light below 4, random ticks\): \[minecraft:magma_block \(light 3\)
-shell grep -hE "\[zmelt\] (change m07_|light)" logs/latest.log | sed -E 's/^.*\[zmelt\]/[zmelt]/'
+expect verb=state pos=2003,-59,2060 state="?minecraft:ice\b.*light_block=0
+reject \[cdevtest\] .*done=0
 
 ## SQ-MELT-08b | salt dust (survival bot) on a non-meltable block places a salt layer; on snow or ice it never places one
 @group A
@@ -252,6 +395,7 @@ shell grep -hE "\[zmelt\] (change m07_|light)" logs/latest.log | sed -E 's/^.*\[
 @pass stone: `vintagedelight:salt` layer above it, 1 dust spent; ice and snow: melt step, no layer
 @fails the hand click listener (`SaltLayerMelt.onUseSalt`) cancels non-targets, or lets the layer place on ice
 @reviewed 2026-11-17
+@draft no steps written yet: the next runner writes them (survival bot with salt dust on stone, snow, ice; r1118 R2 note, 2026-11-18)
 
 ## SQ-MELT-08 | salt item click (survival bot) steps blue ice one tier per click: blue -> packed -> ice -> water
 @group A
@@ -367,7 +511,7 @@ reject \[cdevtest\] verb=\S+ done=0
 
 ## SQ-MELT-P1
 @group A
-@commands Perf suite, `randomTickSpeed 3`: two boxes 64 x 64 x 16, one solid `packed_ice` with ice and snow layers on top (dark), one stone (control); 10 min each with `perf_session.sh mark SQ-MELT-P1`; JFR on
+@commands Perf suite, `randomTickSpeed 3`: two boxes 64 x 64 x 16, one solid `packed_ice` with an ice course, a snow block course and snow layers on top (dark), one stone (control); 10 min each with `perf_session.sh mark SQ-MELT-P1`; JFR on
 @pass MSPT difference under 0.5 ms; `Melting.onRandomTick` under 1 % of server tick time in JFR
 @fails most time in `targetTick`: the roll happens first, so a dark glacier should cost only the roll; a hot `blockLit` / sphere scan means light is reaching the box
 @reviewed 2026-11-16
@@ -375,9 +519,17 @@ reject \[cdevtest\] verb=\S+ done=0
 # 64 x 64 at 2200..2263 / 2300..2363, z 2200..2263, roofed with stone so the glacier is dark
 > gamerule randomTickSpeed 3
 > forceload add 2200 2200 2363 2263
+# r1118 R2 (2026-11-18): clear both boxes first (a stopped earlier run leaves them: "No blocks were filled"); snow
+# layers sit on a snow_block course (vanilla never keeps a layer on ice or packed ice); every fill stays under 32768 blocks
+> fill 2200 -60 2200 2263 -53 2263 minecraft:air
+> fill 2200 -52 2200 2263 -45 2263 minecraft:air
+> fill 2200 -44 2200 2263 -44 2263 minecraft:air
+> fill 2300 -60 2200 2363 -53 2263 minecraft:air
+> fill 2300 -52 2200 2363 -45 2263 minecraft:air
 > fill 2200 -60 2200 2263 -53 2263 minecraft:packed_ice
-> fill 2200 -52 2200 2263 -47 2263 minecraft:packed_ice
-> fill 2200 -46 2200 2263 -46 2263 minecraft:ice
+> fill 2200 -52 2200 2263 -48 2263 minecraft:packed_ice
+> fill 2200 -47 2200 2263 -47 2263 minecraft:ice
+> fill 2200 -46 2200 2263 -46 2263 minecraft:snow_block
 > fill 2200 -45 2200 2263 -45 2263 minecraft:snow[layers=2]
 > fill 2200 -44 2200 2263 -44 2263 minecraft:stone
 > cdevtest state 2230 -45 2230
@@ -389,7 +541,8 @@ capture MG Overall: Mean tick time: ([\d.]+) ms
 > fill 2300 -60 2200 2363 -53 2263 minecraft:stone
 > fill 2300 -52 2200 2363 -45 2263 minecraft:stone
 > fill 2200 -60 2200 2263 -53 2263 minecraft:air
-> fill 2200 -52 2200 2263 -44 2263 minecraft:air
+> fill 2200 -52 2200 2263 -45 2263 minecraft:air
+> fill 2200 -44 2200 2263 -44 2263 minecraft:air
 shell bash $INST/tools/perf/session/perf_session.sh mark "SQ-MELT-P1 stone" || true
 sleep 600
 > forge tps
@@ -407,11 +560,18 @@ look glacier window mean tick {MG} ms minus stone window {MS} ms under 0.5; JFR 
 @jars creativedelight
 @from batches/r1115/p3_a1.qb
 @reviewed 2026-11-16
+# self-contained since r1118 R2 (2026-11-18): setup and build from r1115 p3_a1.qb P3-00 / P3-01 (not migrated);
+# bot m3n (survival) places the snow on a stone platform on the Nether roof; the retired zmelt probe is not used
+> execute in minecraft:the_nether run forceload add 0 0 31 31
+> gamerule doFireTick false
+> gamerule doMobSpawning false
+> gamerule randomTickSpeed 3
+> execute in minecraft:the_nether run fill 0 128 0 31 128 31 minecraft:stone
+> execute in minecraft:the_nether run fill 0 129 0 31 133 31 minecraft:air
+sleep 3
+> execute unless entity m3n run pbot spawn m3n 8 129 8 minecraft:the_nether survival
+sleep 3
 > execute in minecraft:the_nether run clear m3n
-> zmelt w n_layer the_nether 16 129 16
-> zmelt w n_block the_nether 18 129 16
-> zmelt w n_powder the_nether 20 129 16
-> zmelt w n_disp_out the_nether 23 129 16
 > pbot hold m3n minecraft:snow 4
 > pbot use m3n 16 128 16 up
 > execute in minecraft:the_nether if block 16 129 16 minecraft:air run say SQ-SALT2-06b-layer_air
@@ -433,8 +593,7 @@ expect SQ-SALT2-06b-layer_air$
 expect SQ-SALT2-06b-block_air$
 expect SQ-SALT2-06b-powder_air$
 expect SQ-SALT2-06b-disp_air$
-reject change n_(layer|block|powder|disp_out) .*-> minecraft:(snow|snow_block|powder_snow)
-shell grep -hE "\[zmelt\] change n_|verb=pbot\.inv" logs/latest.log | sed -E 's/^.*\[(zmelt|cdevtest)\]/[\1]/' | tail -12
+shell grep -hE "verb=pbot\.inv bot=m3n" logs/latest.log | sed -E 's/^.*\[cdevtest\]/[cdevtest]/' | tail -8
 expect \[cdevtest\] verb=pbot\.inv bot=m3n slot=\d+ item=minecraft:snow\*3$
 expect \[cdevtest\] verb=pbot\.inv bot=m3n slot=\d+ item=minecraft:snow_block\*3$
 look dispenser: placed-and-melted (no item entity, Items shrinks) or dropped as an item (vanilla dispense; record which)
@@ -528,9 +687,17 @@ look no Rare Ice line in the log (bootreject); fire and lava pairs as in -02 / -
 # saved in place mid-run, a salt block touching ice gets 50 random-tick rounds and the ice must stay
 > gamerule randomTickSpeed 3
 > forceload add 2200 2200 2363 2263
+# r1118 R2 (2026-11-18): clear both boxes first (a stopped earlier run leaves them: "No blocks were filled"); snow
+# layers sit on a snow_block course (vanilla never keeps a layer on ice or packed ice); every fill stays under 32768 blocks
+> fill 2200 -60 2200 2263 -53 2263 minecraft:air
+> fill 2200 -52 2200 2263 -45 2263 minecraft:air
+> fill 2200 -44 2200 2263 -44 2263 minecraft:air
+> fill 2300 -60 2200 2363 -53 2263 minecraft:air
+> fill 2300 -52 2200 2363 -45 2263 minecraft:air
 > fill 2200 -60 2200 2263 -53 2263 minecraft:packed_ice
-> fill 2200 -52 2200 2263 -47 2263 minecraft:packed_ice
-> fill 2200 -46 2200 2263 -46 2263 minecraft:ice
+> fill 2200 -52 2200 2263 -48 2263 minecraft:packed_ice
+> fill 2200 -47 2200 2263 -47 2263 minecraft:ice
+> fill 2200 -46 2200 2263 -46 2263 minecraft:snow_block
 > fill 2200 -45 2200 2263 -45 2263 minecraft:snow[layers=2]
 > fill 2200 -44 2200 2263 -44 2263 minecraft:stone
 shell bash $INST/tools/perf/session/perf_session.sh mark "SQ-MELT-P1b glacier" || true
@@ -540,7 +707,8 @@ capture MG2 Overall: Mean tick time: ([\d.]+) ms
 > fill 2300 -60 2200 2363 -53 2263 minecraft:stone
 > fill 2300 -52 2200 2363 -45 2263 minecraft:stone
 > fill 2200 -60 2200 2263 -53 2263 minecraft:air
-> fill 2200 -52 2200 2263 -44 2263 minecraft:air
+> fill 2200 -52 2200 2263 -45 2263 minecraft:air
+> fill 2200 -44 2200 2263 -44 2263 minecraft:air
 shell bash $INST/tools/perf/session/perf_session.sh mark "SQ-MELT-P1b stone" || true
 sleep 600
 > forge tps

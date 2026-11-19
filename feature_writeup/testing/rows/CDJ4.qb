@@ -43,6 +43,7 @@ look merge names the six sections and perf; CD file emptyCanChance = 0.5, [perf]
 @pass Member list ends with `babymobs, incubation_additions`; no "is loaded from ... not from the Creative Delight jar" ERROR
 @fails A standalone jar left in `mods/`, or the bundle missed a member
 @from batches/r1101/cs4_boot3.qb passed
+@superseded premise obsolete: Baby Mobs nests in Creative Worldgen and Incubation Additions folded into CD compartments (M8), so the CD member list no longer ends with them (r1118 R1, 2026-11-18)
 bootexpect \[creativedelight\] members: .*babymobs, incubation_additions
 bootreject is loaded from .* not from the Creative Delight jar
 shell grep -E "\[creativedelight\] members" logs/latest.log | cut -c60-400; ls mods | grep -iE "babymobs|incubationAdditions" || echo "no standalone jars"

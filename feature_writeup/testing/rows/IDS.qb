@@ -48,9 +48,10 @@ look plugin_toggle.json5 half (client config) is CQ-IDS-01's
 > cdevperf
 # r1114: /cdevdumpnames is a client command (RegisterClientCommandsEvent): unknown on a server, left to the client half
 sleep 10
+# r1118 R1 (2026-11-18): the rename sweep had written the new names here; the old names are cetime / celocate
 > ceswap
-> ccaltime
-> cwglocate
+> cetime
+> celocate
 > cespawnbox
 > cegen
 > ceplace

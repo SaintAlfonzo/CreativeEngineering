@@ -272,6 +272,7 @@ look key counts (108 tool, 227 misc): KubeJS 1.19.2 has no /kubejs eval and the 
 @pass No error after `/reload`; no LOST `veggiesdelight:` recipe, tag or loot id, and no LOST recipe whose output is a Veggies item, other than ids that moved to `creativedelight:<same path>` with the same type (allowed by B4); LOST lines from other 2026-11-01 moves are listed in the run notes, not judged here
 @fails A lost Veggies recipe: the pilot's `fd.<key>` lookups (a key missing from `tool_dict.js` / `misc_dict.js` returns undefined and the NCH call drops the row); compare with CDT-09 offline
 @from batches/r1102/b1_main.qb
+@superseded baseline obsolete: the 2026-10-30 snapshot predates every later CD move (3863 LOST in r1118, all deliberate reroutes) and no pre-pilot jar exists to re-baseline from; the id-table half is the headless old-id check (plan_rowfix_r1118 R5) (r1118 R1, 2026-11-18)
 # no --ns: the snapshot was taken without one, so a filtered "after" reports every other namespace LOST (r1102: 80857
 # false LOST lines); the Veggies lines are pulled out by the grep below
 shell python3 -I $INST/tools/cd_move_diff.py dump-diff --exported kubejs/exported --verbose > ../cdfw11_diff.txt; echo "exit $?"; tail -2 ../cdfw11_diff.txt; grep "^LOST" ../cdfw11_diff.txt | grep -i veggies

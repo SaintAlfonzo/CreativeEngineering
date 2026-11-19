@@ -11760,62 +11760,76 @@ count has the following entity data: -59\.75d == 2
 count has the following entity data: -59\.0d == 1
 look order: lightly -59.25, well -59.5, heavily -59.75, waxed the same, waxed_salt_block -59.0
 
-## SQ-SLK-03 | salt layers refill licked stages
+## SQ-SLK-03 | Rock Salt by hand refills one stage per click; waxed stays waxed; salt layers no longer refill
 @group A
-@commands On a `heavily_licked_salt_block`: `setblock` above it `vintagedelight:salt[layers=1]`; on a second: `vintagedelight:salt[layers=3]`; on a third (well licked): `layers=5`; on `salt:salt_block`: `layers=1`; on `waxed_heavily_licked_salt_block`: `layers=1`
-@pass first: `well_licked`, no layer; second: `salt:salt_block`, no layer; third: `salt:salt_block` with `layers=3` on top; fourth: the layer stays; fifth: `waxed_well_licked`, no layer; no salt item dropped anywhere
-@fails `LickableSaltBlock.neighborChanged`, `SaltLayerBlock.onPlace`
+@commands Bot (survival) right-clicks a `heavily_licked_salt_block` with `salt:raw_rock_salt` four times; once on a `waxed_heavily_licked_salt_block`; `setblock` a `vintagedelight:salt[layers=3]` on a third `heavily_licked_salt_block`
+@pass first lick: heavily -> well -> lightly -> `hearthandharvest:placed_rock_salt_block`, one Rock Salt used per stage, the fourth click on stage 0 uses none (1 left of 4); waxed: `waxed_well_licked`, one used; the block under the salt layer stays `heavily_licked` (G6-10: layers do not refill)
+@fails `SaltEvents.onRightClickBlock` (isSalt / restored), `SaltLick.refill`; plan_post_scratch_1115 G2b, G6-10
 @jars creativedelight
 @from batches/r1115/p4_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
+# r1118 R1 (2026-11-18): rewritten for G2b / G6-10 (Rock Salt is the only refill; salt dust and salt layers removed)
 > forceload add 798 508 816 512
 sleep 3
 > fill 798 -60 508 816 -55 512 minecraft:air
 > setblock 800 -60 510 hearthandharvest:heavily_licked_salt_block
-> setblock 802 -60 510 hearthandharvest:heavily_licked_salt_block
-> setblock 804 -60 510 hearthandharvest:well_licked_salt_block
-> setblock 806 -60 510 salt:salt_block
+> setblock 804 -60 510 hearthandharvest:heavily_licked_salt_block
 > setblock 808 -60 510 hearthandharvest:waxed_heavily_licked_salt_block
-> setblock 800 -59 510 vintagedelight:salt[layers=1]
-> setblock 802 -59 510 vintagedelight:salt[layers=3]
-> setblock 804 -59 510 vintagedelight:salt[layers=5]
-> setblock 806 -59 510 vintagedelight:salt[layers=1]
-> setblock 808 -59 510 vintagedelight:salt[layers=1]
+> setblock 804 -59 510 vintagedelight:salt[layers=3]
+> pbot spawn slk 802.5 -60 512.5 minecraft:overworld survival
+sleep 3
+> clear slk
+> pbot hold slk salt:raw_rock_salt 4
+> pbot use slk 800 -60 510 up
 sleep 1
 > cdevtest state 800 -60 510
-> cdevtest state 800 -59 510
-> cdevtest state 802 -60 510
-> cdevtest state 802 -59 510
-> cdevtest state 804 -60 510
-> cdevtest state 804 -59 510
-> cdevtest state 806 -60 510
-> cdevtest state 806 -59 510
+> pbot use slk 800 -60 510 up
+sleep 1
+> cdevtest state 800 -60 510
+> pbot use slk 800 -60 510 up
+sleep 1
+> cdevtest state 800 -60 510
+> pbot use slk 800 -60 510 up
+sleep 1
+> cdevtest state 800 -60 510
+> pbot inv slk get
+> clear slk
+> pbot hold slk salt:raw_rock_salt 4
+> pbot use slk 808 -60 510 up
+sleep 1
 > cdevtest state 808 -60 510
-> cdevtest state 808 -59 510
-> cdevtest items 804 -60 510 10 keep
+> pbot inv slk get
+> cdevtest state 804 -60 510
+> pbot remove slk
 expect verb=state pos=800,-60,510 state="?hearthandharvest:well_licked_salt_block\b
-expect verb=state pos=800,-59,510 state=minecraft:air 
-expect verb=state pos=802,-60,510 state="?salt:salt_block\b
-expect verb=state pos=802,-59,510 state=minecraft:air 
-expect verb=state pos=804,-60,510 state="?salt:salt_block\b
-expect verb=state pos=804,-59,510 state="vintagedelight:salt\[layers=3\b
-expect verb=state pos=806,-59,510 state="vintagedelight:salt\[layers=1\b
+expect verb=state pos=800,-60,510 state="?hearthandharvest:lightly_licked_salt_block\b
+expect verb=state pos=800,-60,510 state="?hearthandharvest:placed_rock_salt_block\b
+expect verb=pbot\.inv bot=slk slot=\d+ item=salt:raw_rock_salt\*1\b
 expect verb=state pos=808,-60,510 state="?hearthandharvest:waxed_well_licked_salt_block\b
-expect verb=state pos=808,-59,510 state=minecraft:air 
-expect verb=items items=- 
+expect verb=pbot\.inv bot=slk slot=\d+ item=salt:raw_rock_salt\*3\b
+expect verb=state pos=804,-60,510 state="?hearthandharvest:heavily_licked_salt_block\b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
-## SQ-SLK-04 | salt dust and salt layer item restore one stage per click; dispenser restores one stage and keeps the rest
+## SQ-SLK-04 | dispenser with Rock Salt restores one stage per pulse and keeps the rest; salt dust no longer refills
 @group A
-@commands Bot right-clicks a `well_licked_salt_block` with `vintagedelight:salt_dust`, then with `vintagedelight:salt` (layer item); dispenser with salt dust facing a `heavily_licked_salt_block`
-@pass each click restores one stage (well -> lightly -> `salt:salt_block`); the dispenser restores one stage and keeps the rest of the dust
-@fails `SaltLick.isSalt`, `SaltEvents.registerDispenser`
+@commands Dispenser with 4 `salt:raw_rock_salt` facing a `heavily_licked_salt_block`, one redstone pulse; bot right-clicks a `well_licked_salt_block` with `vintagedelight:salt_dust`
+@pass the dispenser lick becomes `well_licked`, the dispenser keeps 3 Rock Salt, no Rock Salt item dropped; the salt dust click leaves `well_licked` (G2b)
+@fails `SaltEvents.registerDispenser` (the Rock Salt behavior, `f_52661_` lookup), `SaltLick.isSalt`
 @jars creativedelight
 @from batches/r1115/p4_a1.qb
-@reviewed 2026-11-16
+@reviewed 2026-11-18
+# r1118 R1 (2026-11-18): rewritten for G2b (Rock Salt by dispenser; salt dust and the salt layer item no longer refill)
 > forceload add 798 518 816 524
 sleep 3
 > fill 798 -60 518 816 -55 524 minecraft:air
+> setblock 806 -60 520 hearthandharvest:heavily_licked_salt_block
+> setblock 806 -60 521 minecraft:dispenser[facing=north]
+> data merge block 806 -60 521 {Items:[{Slot:0b,id:"salt:raw_rock_salt",Count:4b}]}
+> setblock 806 -59 521 minecraft:redstone_block
+sleep 2
+> cdevtest state 806 -60 520
+> data get block 806 -60 521 Items
+> cdevtest items 806 -60 520 4 keep
 > setblock 800 -60 520 hearthandharvest:well_licked_salt_block
 > pbot spawn slk 800.5 -60 522.5 minecraft:overworld survival
 sleep 3
@@ -11824,30 +11838,12 @@ sleep 3
 > pbot use slk 800 -60 520 up
 sleep 1
 > cdevtest state 800 -60 520
-> cdevtest state 800 -59 520
 > pbot inv slk get
-> pbot hold slk vintagedelight:salt 4
-> pbot use slk 800 -60 520 up
-sleep 1
-> cdevtest state 800 -60 520
-> cdevtest state 800 -59 520
-> pbot inv slk get
-> setblock 806 -60 520 hearthandharvest:heavily_licked_salt_block
-> setblock 806 -60 521 minecraft:dispenser[facing=north]
-> data merge block 806 -60 521 {Items:[{Slot:0b,id:"vintagedelight:salt_dust",Count:4b}]}
-> setblock 806 -59 521 minecraft:redstone_block
-sleep 2
-> cdevtest state 806 -60 520
-> cdevtest state 806 -59 520
-> data get block 806 -60 521 Items
-> cdevtest items 806 -60 520 4 keep
 > pbot remove slk
-expect verb=state pos=800,-60,520 state="?hearthandharvest:lightly_licked_salt_block\b
-expect verb=pbot\.inv bot=slk slot=\d+ item=vintagedelight:salt_dust\*3\b
-expect verb=state pos=800,-60,520 state="?salt:salt_block\b
 expect verb=state pos=806,-60,520 state="?hearthandharvest:well_licked_salt_block\b
-expect has the following block data: \[\{Slot: 0b, id: "vintagedelight:salt_dust", Count: 3b
-expect verb=items items=- 
+expect has the following block data: \[\{Slot: 0b, id: "salt:raw_rock_salt", Count: 3b
+expect verb=items items=-
+expect verb=state pos=800,-60,520 state="?hearthandharvest:well_licked_salt_block\b
 reject \[cdevtest\] verb=(\S+ done=0|pbot\.\S+ .*error=)
 
 ## CQ-SLK-01
