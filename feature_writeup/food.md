@@ -10,8 +10,8 @@ wrong today and how tuning will work.
 
 ## 0. At a glance
 
-<!-- generated:status_index begin open_work sha1=28537f2a6ac6 -->
-**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 2, Pinned 1, In Progress 5, Testing 14), 0 Complete.
+<!-- generated:status_index begin open_work sha1=e0d5f666fb57 -->
+**Open work** (generated from `todo/rows/*.csv` by `tools/status_index.py`; change a row with `tools/todo.py`). Status: 22 open TODO rows (Planned 2, Pinned 1, In Progress 4, Testing 15), 0 Complete.
 
 | Id | Status | Tests | Change |
 |---|---|---|---|
@@ -21,7 +21,6 @@ wrong today and how tuning will work.
 | `dishes/ingredients #22` | In Progress | S C P | Honeycomb as sugar, honey and spread |
 | `food/seasoning #3` | In Progress | S~ C P T | New seasonings |
 | `food/types-and-tuning #3` | In Progress | S P T | Golden food changes vanilla values |
-| `food/types-and-tuning #6` | In Progress | S P | Vanilla egg -> `#forge:eggs` in recipes |
 | `food/types-and-tuning #16` | In Progress | S C P | Spice of Life carrot for the food dictionary only |
 | `dishes/ingredients #23` | Testing | S~ C P T | Powdered sugar recipe rebalance |
 | `dishes/jams #1` | Testing | S~ C P | Merge all jams into one jam jar |
@@ -33,6 +32,7 @@ wrong today and how tuning will work.
 | `food/types-and-tuning #2` | Testing | S+ C P | Canned Goods data broken |
 | `food/types-and-tuning #4` | Testing | S~ P T | Spice of Life config |
 | `food/types-and-tuning #5` | Testing | S+ P | Placed pies and non-vanilla cakes don't count for SoL |
+| `food/types-and-tuning #6` | Testing | S P | Vanilla egg -> `#forge:eggs` in recipes |
 | `food/types-and-tuning #11` | Testing | S C P | Food tests FO-02 to FO-28 |
 | `food/types-and-tuning #22` | Testing | S C P | Golden food and gilded food recipes |
 | `food/types-and-tuning #23` | Testing | C P | Call enchanted golden food gilded in language |
