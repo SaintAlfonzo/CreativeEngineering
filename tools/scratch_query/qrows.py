@@ -23,9 +23,11 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @@archived YYYY-MM-DD     every row PASSed on the jars still installed (qrun.py archive): the section is shown in
                               scratch_queue_archive.md with its verdict history instead of the queue; it stays data
                               (qrun.py plan still plans it when a jar or source changes)
-    @@prep [A:|B:] SPEC       pre-boot setup of the section's driver steps (qdrive.py, before prep_srv.sh and the boot;
-                              by hand: qrun.py prep). Lines add up in order; a leading A: / B: limits the line to the step
-                              of that world group. SPEC is shell-quoted (shlex) and one of:
+    @@prep [A:|B:] [boot=N:] SPEC   pre-boot setup of the section's driver steps (qdrive.py, before prep_srv.sh and the
+                              boot; by hand: qrun.py prep). Lines add up in order; a leading A: / B: limits the line to the
+                              step of that world group; boot=N: (N >= 2) makes it a change before boot N of a multi-boot
+                              step (rows with `@boot N`), applied to the folder and world boot N-1 left (untagged lines
+                              are boot 1's). SPEC is shell-quoted (shlex) and one of:
                                 KEY=VALUE ...           UPPERCASE KEY -> prep_srv.sh environment (NOSWAP, SKIPSWAP,
                                                         COPYDEV, PGJAR); lowercase key -> server.properties (prep_srv.sh
                                                         prop=value: difficulty, spawn-animals, spawn-monsters, level-seed)
@@ -35,6 +37,12 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
                                                         quotes inside: '"Loading Protection Configuration"'
                                 copy SRC DEST           repo file or directory SRC -> OUT/srv/DEST (DEST ending in '/' = into)
                                 rm PATH                 delete OUT/srv/PATH (a glob; a jar the section runs without)
+                                run CMD                 bash CMD (the rest of the line, verbatim) in OUT/srv with $INST,
+                                                        $OUT, $SRV and $BOOT set, logged in sNN_prep.txt; a non-zero
+                                                        exit fails the step; srv/mods is re-pinned after it
+                                fresh                   boot=N: only: a new world for boot N (level-name LEVEL_bN)
+                              UPPERCASE keys are boot 1 only (prep_srv.sh runs once); boot=N: lowercase keys are set in
+                              server.properties before boot N.
                               Only what every planned row of the section needs before its boot belongs here; a row that
                               restarts with other values keeps its own `shell` / `qrun.py toml` steps. Rendered into the
                               queue as a "Driver prep" line.
@@ -48,6 +56,9 @@ File format (on top of the qrun batch format in qrun.py's docstring; qrun ignore
     @client true              needs a client (default: true for CQ- ids)
     @reviewed YYYY-MM-DD      as @@reviewed, for this row
     @from PATH [passed]       where the steps came from (a past batch; "passed" = a run with that text passed)
+    @boot N                   driver boot phase (default 1): the step runs boots 1..N in order on one server folder and
+                              world, each boot's rows after its `@@prep boot=N:` lines (qdrive.py); a planned row of boot
+                              N brings the section's rows of lower boots (same world group) into the step as setup
     @superseded TEXT          the row no longer applies (feature removed or replaced; TEXT names the replacement):
                               never planned, not counted as never-run
     @draft TEXT               no runnable steps yet: the next runner writes them here once (the reason in TEXT)
@@ -85,7 +96,7 @@ ROW_RE = re.compile(r'^\|\s*((?:SQ|CQ)-[A-Za-z][A-Za-z0-9]*)-\S')
 CODE_RE = re.compile(r'\b(?:SQ|CQ)-([A-Za-z][A-Za-z0-9]*)(?=-[A-Za-z0-9])')
 BLOCK_BEGIN = re.compile(r'^<!-- generated:status_index begin (rows_(\w+?)_(\d+)) sha1=([0-9a-f]+) -->$')
 SECTION_META = ('title', 'date', 'reviewed', 'jars', 'sources', 'tier', 'phase', 'archived')
-ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'phase', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded', 'absent')
+ROW_META = ('group', 'commands', 'pass', 'fails', 'jars', 'sources', 'tier', 'phase', 'owner', 'client', 'reviewed', 'from', 'draft', 'superseded', 'absent', 'boot')
 TIERS = ('T1', 'T2', 'T3')
 # run order (scratch-test skill step 6); longwait is never written, qplan.py derives it from long + a Testing TODO row
 PHASES = ('priority', 'server', 'longwait', 'worldgen', 'client', 'long')
@@ -232,21 +243,46 @@ def tiers_of(path):
 
 
 PREP_ENV = ('NOSWAP', 'SKIPSWAP', 'COPYDEV', 'PGJAR')
-PREP_ACTIONS = {'toml': 4, 'copy': 2, 'rm': 1}
+PREP_ACTIONS = {'toml': 4, 'copy': 2, 'rm': 1, 'run': 1, 'fresh': 0}
 
 
 def prep_line(text):
-	"""One @@prep line -> (group or None, kind, args). kind 'set': args [(KEY, VALUE)]; 'toml' / 'copy' / 'rm': the
-    words (toml VALUE = the rest of the line). ValueError on a bad line."""
+	"""One @@prep line -> (group or None, kind, args) (prep_line_boot without the boot number)."""
+	group, _boot, kind, args = prep_line_boot(text)
+	return group, kind, args
+
+
+def prep_line_boot(text):
+	"""One @@prep line -> (group or None, boot (1 when untagged), kind, args). kind 'set': args [(KEY, VALUE)];
+    'toml' / 'copy' / 'rm': the words (toml VALUE = the rest of the line); 'run': [the rest of the line]; 'fresh': [].
+    ValueError on a bad line."""
 	import shlex
 	text = text.strip()
-	group = None
-	m = re.match(r'([AB]):\s*', text)
-	if m:
-		group, text = m.group(1), text[m.end():]
+	group, boot = None, 1
+	for _ in range(2):
+		m = re.match(r'([AB]):\s*', text)
+		if m and group is None:
+			group, text = m.group(1), text[m.end():]
+			continue
+		m = re.match(r'boot=(\d+):\s*', text)
+		if m and boot == 1:
+			boot, text = int(m.group(1)), text[m.end():]
+			if boot < 1:
+				raise ValueError('boot=N: wants N >= 1')
 	if not text:
 		raise ValueError('empty')
 	word = text.split()[0]
+	if word == 'run':
+		rest = text[3:].strip()
+		if not rest:
+			raise ValueError('run takes a command')
+		return group, boot, 'run', [rest]
+	if word == 'fresh':
+		if text.strip() != 'fresh':
+			raise ValueError('fresh takes no argument')
+		if boot < 2:
+			raise ValueError('fresh is a boot=N: (N >= 2) action: boot 1 is always a new world')
+		return group, boot, 'fresh', []
 	if word in PREP_ACTIONS:
 		n = PREP_ACTIONS[word]
 		if word == 'toml':
@@ -265,7 +301,7 @@ def prep_line(text):
 		dest = args[0] if word == 'toml' else args[-1]
 		if '..' in Path(dest).parts or dest.startswith('/'):
 			raise ValueError('%s: the srv path must be relative, without ..' % word)
-		return group, word, args
+		return group, boot, word, args
 	pairs = []
 	for tok in shlex.split(text):
 		k, eq, v = tok.partition('=')
@@ -273,17 +309,19 @@ def prep_line(text):
 			raise ValueError('expected KEY=VALUE, toml, copy or rm, got %r' % tok)
 		if k.isupper() and k not in PREP_ENV:
 			raise ValueError('unknown prep_srv.sh variable %s (known: %s)' % (k, ', '.join(PREP_ENV)))
+		if k.isupper() and boot > 1:
+			raise ValueError('%s is a prep_srv.sh variable: boot 1 only (prep_srv.sh runs once, before boot 1)' % k)
 		pairs.append((k, v))
-	return group, 'set', pairs
+	return group, boot, 'set', pairs
 
 
-def prep_of(sec, group):
-	"""The section's @@prep for a step of world group A/B: {'env': {KEY: VALUE}, 'props': ['k=v', ...],
-    'actions': [(kind, args), ...], 'lines': [the @@prep lines that apply]}."""
+def prep_of(sec, group, boot=1):
+	"""The section's @@prep for boot BOOT of a step of world group A/B: {'env': {KEY: VALUE}, 'props': ['k=v', ...],
+    'actions': [(kind, args), ...], 'lines': [the @@prep lines that apply]}. Untagged lines are boot 1's."""
 	out = {'env': {}, 'props': [], 'actions': [], 'lines': []}
 	for text in sec.get('prep', []):
-		g, kind, args = prep_line(text)
-		if g and g != group:
+		g, b, kind, args = prep_line_boot(text)
+		if (g and g != group) or b != boot:
 			continue
 		out['lines'].append(text)
 		if kind == 'set':

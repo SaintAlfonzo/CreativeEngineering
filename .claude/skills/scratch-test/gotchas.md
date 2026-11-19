@@ -66,6 +66,12 @@ defaultconfigs, no-player gaps, KubeJS renames) are in
 
 ## Boot and shutdown
 
+- A multi-boot section runs its boots only under the driver (`qrun.py drive`, `@boot N` + `@@prep boot=N:`): a plain
+  `qrun.py run` on the file runs every row on the one boot it is given, boot-2 rows included; run it per boot with
+  `--rows` and `qrun.py prep FILE SECTION A --boot N --out OUT` between (r1118 R4 A1). A resumed multi-boot step
+  needs its OUT from the earlier boots (the driver refuses when it is gone). Enforced: `qrun.py lint` E boot (not a
+  whole number), W boot (a lower boot after a higher one in the file); `@@prep` boot lines are checked when the rows
+  file loads (UPPERCASE prep_srv.sh keys and `fresh` refused where they cannot work).
 - A restart inside a row is the `restart [SECS]` directive with `edit CMD` lines before it, not `> stop` and a
   shell boot: a sent `stop` ends the batch, the crash watch reads the exit as the end, a boot wipes `latest.log` (the
   row's offsets go with it) and config edits made while the server runs are often missed (r1118 R4 A2, SQ-WO-10,

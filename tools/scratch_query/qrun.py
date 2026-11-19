@@ -19,7 +19,7 @@
                                                                 and sources (qplan.py docstring)
     qrun.py playtest [--out FILE] / qrun.py states              owner playtest checklist / row states per code
     qrun.py drive start|resume|status|stop RUN [plan options]   resumable run driver (qdrive.py docstring)
-    qrun.py prep FILE SECTION [A|B] [--out OUT --level LEVEL]    a rows section's @@prep (qrows.py docstring): print it;
+    qrun.py prep FILE SECTION [A|B] [--boot N] [--out OUT --level LEVEL]   a rows section's @@prep (qrows.py docstring): print it;
                                                                 with --out run prep_srv.sh with it and apply its toml /
                                                                 copy / rm actions, as the driver does before a boot
 

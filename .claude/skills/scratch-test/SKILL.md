@@ -70,6 +70,11 @@ date", "collect queued tests".
    - Restart inside a row: `edit CMD` lines (run in `OUT/srv` while the server is down: `qrun.py toml`, a jar swap),
      then `restart [SECS]` (stop, edits, boot, wait for `Done (`; the row and the batch go on on the new boot; the old
      log stays in `srv/logs/qrun_bootN.log`). Never `> stop` in a row that needs the server back: it ends the batch.
+   - Boot phases on one world: `@boot N` on the row (default 1) and `@@prep [A:|B:] boot=N: SPEC` section lines (props,
+     `toml`, `copy`, `rm`, `run CMD`, `fresh`) for the change before boot N; untagged `@@prep` lines are boot 1's. The
+     driver runs boots 1..N in order on one folder; a planned boot-N row brings its section's lower-boot rows along.
+     `@@prep run CMD` is a logged shell step in `OUT/srv` (`$INST`, `$OUT`, `$SRV`, `$BOOT`), for fixtures a prep
+     action cannot express (a `git archive` config tree, a jar swap). Format: `qrows.py` docstring.
 4. **Index it.** Test IDs into the feature writeup's test list; README status "built, scratch test queued"; the TODO
    row names the IDs. `qrun.py lint feature_writeup/testing/rows/<CODE>.qb` (batch lint plus stale rows and dead ids,
    `qrowlint.py`); fix every E. The rows file is the batch: no separate copy in `batches/`.
