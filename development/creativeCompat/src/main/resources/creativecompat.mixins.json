@@ -75,7 +75,8 @@
     "PortalGunHeartbeatMixin",
     "PortalGunPortalInvoker",
     "IPMirrorGlassMixin",
-    "DhNoGenerationMixin"
+    "DhNoGenerationMixin",
+    "CorpseDecayMixin"
   ],
   "client": [
     "GeckoItemHudBatchMixin",
@@ -136,7 +137,8 @@
     "PortalGunRendererOpaqueMixin",
     "SignTextDistanceMixin",
     "PassFovMixin",
-    "BlockRunnerFovMixin"
+    "BlockRunnerFovMixin",
+    "CorpseRendererMixin"
   ],
   "server": []
 }

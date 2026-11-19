@@ -39,6 +39,7 @@ public final class CompatConfig {
 	public static final Wthit WTHIT;
 	public static final ImmersivePortals IMMERSIVE_PORTALS;
 	public static final PortalGun PORTAL_GUN;
+	public static final Corpses CORPSES;
 	public static final Debug DEBUG;
 
 	/** Sections carried over from Creative Common's creativecommon-common.toml. */
@@ -85,6 +86,8 @@ public final class CompatConfig {
 		// Immersive Portals and the Portal Gun (feature_writeup/plan_portal_changes.md)
 		IMMERSIVE_PORTALS = new ImmersivePortals(builder);
 		PORTAL_GUN = new PortalGun(builder);
+		// Corpse mod decay (feature_writeup/plan_corpses.md 3.1, rulings 1 to 4, 18 to 20, 23)
+		CORPSES = new Corpses(builder);
 		// developer switches (plan_passthrough.md 7.3)
 		DEBUG = new Debug(builder);
 		SPEC = builder.build();
@@ -1413,6 +1416,59 @@ public final class CompatConfig {
 			).defineInRange("heartbeatSeconds", 10, 1, 600);
 
 			b.pop(); // portalgun
+		}
+	}
+
+	/**
+	 * Corpse mod decay ({@code corpse.CorpseDecay}, mixin {@code CorpseDecayMixin}; feature_writeup/plan_corpses.md 3.1).
+	 * Replaces the Corpse mod's loaded-tick clock ({@code [corpse] skeleton_time} and {@code [corpse.despawn] time} in
+	 * corpse-server.toml are ignored while {@code enabled} is on; {@code force_time} still applies, on world time).
+	 * Server side; read on each corpse check (once a second).
+	 */
+	public static final class Corpses {
+		public final ForgeConfigSpec.BooleanValue enabled;
+		public final ForgeConfigSpec.IntValue skeletonTime;
+		public final ForgeConfigSpec.IntValue emptySkeletonTime;
+		public final ForgeConfigSpec.IntValue emptyDespawnTime;
+		public final ForgeConfigSpec.IntValue netherSkeletonTime;
+		public final ForgeConfigSpec.IntValue netherWitherTime;
+		public final ForgeConfigSpec.IntValue netherEmptySkeletonTime;
+		public final ForgeConfigSpec.IntValue netherEmptyWitherTime;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> netherDimensions;
+		public final ForgeConfigSpec.ConfigValue<List<? extends String>> noDecayDimensions;
+		public final ForgeConfigSpec.BooleanValue followContents;
+
+		private Corpses(ForgeConfigSpec.Builder b) {
+			b.comment("Corpse mod decay on world time (server side). Times are in ticks (20 = 1 second, 24000 = 1 in-game day)",
+					"and count while the corpse's chunk is unloaded too (caught up when it loads).").push("corpses");
+
+			enabled = b.comment("Use these rules instead of the Corpse mod's own skeleton_time and despawn time.").define("enabled", true);
+			skeletonTime = b.comment("A corpse that still holds items turns into a skeleton this long after death (168000 = 7 days).")
+					.defineInRange("skeletonTime", 168000, 0, Integer.MAX_VALUE);
+			emptySkeletonTime = b.comment("An emptied corpse turns into a skeleton this long after it became empty (600 = 30 s).")
+					.defineInRange("emptySkeletonTime", 600, 0, Integer.MAX_VALUE);
+			emptyDespawnTime = b.comment("An emptied corpse is removed this long after it became empty, in every dimension (6000 = 5 min).",
+					"Putting items back in resets it.").defineInRange("emptyDespawnTime", 6000, 0, Integer.MAX_VALUE);
+			netherSkeletonTime = b.comment("Nether: a corpse that still holds items turns into a skeleton this long after death (24000 = 1 day).")
+					.defineInRange("netherSkeletonTime", 24000, 0, Integer.MAX_VALUE);
+			netherWitherTime = b.comment("Nether: it turns into a wither skeleton this long after it became a skeleton (24000 = 1 day).",
+					"It never despawns while it holds items.").defineInRange("netherWitherTime", 24000, 0, Integer.MAX_VALUE);
+			netherEmptySkeletonTime = b.comment("Nether: an emptied corpse turns into a skeleton this long after it became empty (300 = 15 s).")
+					.defineInRange("netherEmptySkeletonTime", 300, 0, Integer.MAX_VALUE);
+			netherEmptyWitherTime = b.comment("Nether: an emptied skeleton withers this long after it became a skeleton (600 = 30 s).")
+					.defineInRange("netherEmptyWitherTime", 600, 0, Integer.MAX_VALUE);
+			netherDimensions = b.comment("Dimensions that use the Nether rules.")
+					.defineList("netherDimensions", List.of("minecraft:the_nether"), o -> o instanceof String);
+			noDecayDimensions = b.comment("Dimensions where corpses never turn into skeletons (they keep the player model until removed).")
+					.defineList("noDecayDimensions", List.of("minecraft:the_end"), o -> o instanceof String);
+			followContents = b.comment("The corpse and its skeleton show only the armor and held items still inside it.")
+					.define("followContents", true);
+
+			b.pop(); // corpses
+		}
+
+		public static boolean on() {
+			return SPEC.isLoaded() && CORPSES.enabled.get();
 		}
 	}
 

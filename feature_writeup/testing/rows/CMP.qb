@@ -160,3 +160,86 @@ expect Changed the block
 @pass LOOK: each face shows one tile of the sheet (not the whole sheet four times): taped top, plain flap bottom, a handle side north and south, label sides east and west, matching Design and Decor's cardboard box placed facing north; the box fills the full block
 @fails the whole sheet on each face: the generated cube_all model still wins (blockstate not taken from `decor_blocks.js`); a face sideways or upside down: the face rotations of `block/weathered_cardboard_box_wrapped`
 @draft no batch holds this row yet; needs a client
+
+@@section 3
+@@title SQ-CMP Corpse decay on world time, 2026-11-18 ([plan_corpses.md](../plan_corpses.md) 3.1, TODO `corpses #1`, `corpses #6`)
+@@date 2026-11-18
+@@jars creativecompat
+@@sources feature_writeup/plan_corpses.md
+@@text
+@@text Corpses are summoned with a `Death` compound (Corpse mod NBT) and Compat's `creativecompat:corpse` state; a `DeathTime` in the past stands in for days of play. Times are the defaults in `[corpses]` (creativecompat-common.toml).
+@@text
+@@table
+## SQ-CMP-10 | Corpse mixins apply; the config section exists
+@group A
+@commands Any boot with Corpse and the current Compat jar; read `config/creativecompat-common.toml`
+@pass `CorpseDecayMixin` applies (no mixin error); the file has `[corpses]` with `skeletonTime = 168000`, `emptySkeletonTime = 600`, `emptyDespawnTime = 6000`, the four Nether times and both dimension lists
+@fails a target name in `CorpseDecayMixin` (m_8119_, m_7380_, m_7378_, m_8097_, m_5446_) no longer matches the Corpse jar
+bootreject CorpseDecayMixin.*(Error|error|failed)
+shell grep -nE "^\s*\[corpses\]|skeletonTime|emptyDespawnTime|netherWitherTime|noDecayDimensions" config/creativecompat-common.toml
+look the [corpses] section with the default values
+@draft no batch holds this row yet
+
+## SQ-CMP-11 | A full corpse turns skeleton 7 days after death, caught up on load
+@group A
+@commands `forceload add 0 0`; `summon corpse:corpse 2 -60 2 {Tags:["c11a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:-200000L}}` and a second with `Tags:["c11b"]` and no `creativecompat:corpse`; wait 3 s; `data get entity @e[tag=c11a,limit=1] "creativecompat:corpse"`; same for c11b
+@pass c11a: `Stage: 1b` (skeleton; its death was more than 168000 ticks of game time ago); c11b: `Stage: 0b` with a `DeathTime` near the current game time
+@fails c11a stays 0: the decay check does not run (tick redirect or config gate); c11b turns skeleton at once: DeathTime defaulted to 0
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+> forceload add 0 0
+> summon corpse:corpse 2 -60 2 {Tags:["c11a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:-200000L}}
+> summon corpse:corpse 4 -60 2 {Tags:["c11b"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]}}
+sleep 3
+> data get entity @e[tag=c11a,limit=1] "creativecompat:corpse".Stage
+expect 1b
+> data get entity @e[tag=c11b,limit=1] "creativecompat:corpse".Stage
+expect 0b
+@draft no batch holds this row yet
+
+## SQ-CMP-12 | An empty corpse: skeleton after 30 s, gone after 5 min
+@group A
+@commands `summon corpse:corpse 6 -60 2 {Tags:["c12"],Death:{PlayerName:"Test"}}`; read `Stage` at 10 s and 35 s; check the entity at 4 min 50 s and 5 min 10 s
+@pass Stage 0b at 10 s, 1b at 35 s; still there at 4 min 50 s; gone at 5 min 10 s (no item drops: it was empty)
+@fails gone after 30 s: the Corpse mod's own despawn still runs (redirect of m_146870_ in tick); never gone: emptiedAt never set
+> summon corpse:corpse 6 -60 2 {Tags:["c12"],Death:{PlayerName:"Test"}}
+sleep 10
+> data get entity @e[tag=c12,limit=1] "creativecompat:corpse".Stage
+expect 0b
+sleep 25
+> data get entity @e[tag=c12,limit=1] "creativecompat:corpse".Stage
+expect 1b
+sleep 255
+> execute if entity @e[tag=c12]
+expect Test passed
+sleep 20
+> execute if entity @e[tag=c12]
+expect Test failed
+@phase long
+@draft no batch holds this row yet
+
+## SQ-CMP-13 | Nether: skeleton after 1 day, wither skeleton after 2; End: never
+@group A
+@commands In the Nether: `execute in minecraft:the_nether run summon corpse:corpse 0 64 0 {Tags:["c13a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:-30000L}}`, a second (`c13b`) with `DeathTime:-60000L`; in the End a third (`c13c`) with `DeathTime:-500000L`; forceload each spot; wait 3 s; read each `Stage`
+@pass c13a 1b, c13b 2b, c13c 0b
+@fails c13b 1b: the Nether list does not match the dimension id; c13c 1b: the End is not in `noDecayDimensions`
+@absent creativecompat:corpse (an NBT compound key on the corpse entity, not a registry id)
+> execute in minecraft:the_nether run forceload add 0 0
+> execute in minecraft:the_end run forceload add 100 0
+> execute in minecraft:the_nether run summon corpse:corpse 0 64 0 {Tags:["c13a"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:-30000L}}
+> execute in minecraft:the_nether run summon corpse:corpse 2 64 0 {Tags:["c13b"],Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:-60000L}}
+> execute in minecraft:the_end run summon corpse:corpse 100 64 0 {Tags:["c13c"],NoGravity:1b,Death:{PlayerName:"Test",MainInventory:[{Slot:0b,id:"minecraft:stone",Count:1b}]},"creativecompat:corpse":{DeathTime:-500000L}}
+sleep 3
+> execute in minecraft:the_nether run data get entity @e[tag=c13a,limit=1] "creativecompat:corpse".Stage
+expect 1b
+> execute in minecraft:the_nether run data get entity @e[tag=c13b,limit=1] "creativecompat:corpse".Stage
+expect 2b
+> execute in minecraft:the_end run data get entity @e[tag=c13c,limit=1] "creativecompat:corpse".Stage
+expect 0b
+@draft no batch holds this row yet
+
+## CQ-CMP-14 | Corpse look: armor follows contents, wither skeleton in the Nether
+@group client
+@commands Survival client: die in the overworld wearing iron armor and holding a sword; open the corpse, take the helmet and the sword; close. Then summon the c13b corpse of SQ-CMP-13 in the Nether next to you with `ArmorInventory:[{Slot:3b,id:"minecraft:golden_helmet",Count:1b}]` in its `Death`
+@pass LOOK: within a second the corpse no longer wears the helmet or holds the sword, the rest of the armor stays; the Nether corpse is a normal-size skeleton with the dark wither skeleton texture, wearing the gold helmet
+@fails armor still shown: `followContents` off or the renderer still caches its dummy; wither corpse big: drawn with the wither skeleton renderer instead of the skeleton model
+@draft no batch holds this row yet; needs a client
