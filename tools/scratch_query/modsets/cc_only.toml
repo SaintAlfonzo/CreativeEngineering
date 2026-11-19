@@ -11,11 +11,11 @@ group = "B"
 kubejs = "probes"
 config = "empty"
 default = "full"
-forbid = ["(?i)^creative(compat|calendar|engineering|equipment|magic|delight|brewing|devtools|worldgen|labels)-"]
+forbid = ["(?i)^creative(compat|calendar|engineering|equipment|magic|delight|brewing|worldgen|labels)-"]
 
 [groups]
-# always kept: Forge-side libraries of KubeJS (Common's hard dependency), Common itself, and the dev-only perfBot (bots)
-base = ["creativecommon-*", "kubejs-forge-*", "rhino-forge-*", "architectury-*", "cdevperfbot-*"]
+# always kept: Forge-side libraries of KubeJS (Common's hard dependency), Common itself, the dev-only perfBot (bots) and Creative Devtools (the /cdevtest rows; needs only Common, owner ruling 2026-11-18)
+base = ["creativecommon-*", "creativedevtools-*", "kubejs-forge-*", "rhino-forge-*", "architectury-*", "cdevperfbot-*"]
 # one group per optional mod key, with the extra libraries that mod needs
 iw = ["immersive_weathering-*", "moonlight-*"]
 trims = ["armortrims-*"]
