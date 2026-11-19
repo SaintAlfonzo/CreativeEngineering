@@ -1,6 +1,7 @@
 package com.SaintAlfonzo.solraspberrypie.mixin;
 
 import com.SaintAlfonzo.solraspberrypie.data.GateFoods;
+import com.SaintAlfonzo.solraspberrypie.data.MealLog;
 import com.SaintAlfonzo.solraspberrypie.logic.Drinks;
 import com.tarinoita.solsweetpotato.SOLSweetPotatoConfig;
 import com.tarinoita.solsweetpotato.tracking.FoodInstance;
@@ -22,7 +23,10 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import com.tarinoita.solsweetpotato.tracking.FoodList;
 
+import java.util.ArrayList;
 import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -33,9 +37,13 @@ import java.util.Set;
  * Also keeps the unique-food gate counter ({@link GateFoods}, 12.4): filled on a counted eat, cleared with Apple Pie's
  * own counter, saved beside it in Apple Pie's NBT (key {@code solrp_gateFoods}). A list saved before the key existed is
  * backfilled with the remembered foods eaten since the counter last reset.
+ * <p>
+ * And the meal log ({@link MealLog}, plan_diet_books.md 1.2): the last {@code endDecay} counted meals, newest first,
+ * duplicates kept (key {@code solrp_meals}); cleared with Apple Pie's food memory. A list saved before the key existed is
+ * backfilled from the memory (one entry per food still in the window, so no duplicates).
  */
 @Mixin(value = FoodList.class, remap = false)
-public abstract class FoodListMixin implements GateFoods {
+public abstract class FoodListMixin implements GateFoods, MealLog {
 	@Unique
 	private static final String SOLRP_KEY = "solrp_gateFoods";
 
@@ -47,7 +55,23 @@ public abstract class FoodListMixin implements GateFoods {
 	private Map<FoodInstance, Integer> uniqueFoods;
 
 	@Unique
+	private static final String SOLRP_MEALS = "solrp_meals";
+
+	@Unique
 	private final Set<ResourceLocation> solrp$gate = new LinkedHashSet<>();
+
+	@Unique
+	private final LinkedList<ResourceLocation> solrp$mealLog = new LinkedList<>();
+
+	@Override
+	public List<ResourceLocation> solrp$meals() {
+		return solrp$mealLog;
+	}
+
+	@Inject(method = "clearFood", at = @At("RETURN"))
+	private void solrp$clearMeals(CallbackInfo ci) {
+		solrp$mealLog.clear();
+	}
 
 	@Override
 	public Set<ResourceLocation> solrp$gateFoods() {
@@ -63,7 +87,10 @@ public abstract class FoodListMixin implements GateFoods {
 	private void solrp$countUnique(Item item, CallbackInfo ci) {
 		if (!SOLSweetPotatoConfig.shouldCount(item)) return;
 		ResourceLocation id = ForgeRegistries.ITEMS.getKey(item);
-		if (id != null) solrp$gate.add(id);
+		if (id == null) return;
+		solrp$gate.add(id);
+		solrp$mealLog.addFirst(id);
+		while (solrp$mealLog.size() > MealLog.length()) solrp$mealLog.removeLast();
 	}
 
 	@Inject(method = "resetFoodsEaten", at = @At("RETURN"))
@@ -76,10 +103,14 @@ public abstract class FoodListMixin implements GateFoods {
 		ListTag list = new ListTag();
 		for (ResourceLocation id : solrp$gate) list.add(StringTag.valueOf(id.toString()));
 		cir.getReturnValue().put(SOLRP_KEY, list);
+		ListTag meals = new ListTag();
+		for (ResourceLocation id : solrp$mealLog) meals.add(StringTag.valueOf(id.toString()));
+		cir.getReturnValue().put(SOLRP_MEALS, meals);
 	}
 
 	@Inject(method = "deserializeNBT(Lnet/minecraft/nbt/CompoundTag;)V", at = @At("RETURN"))
 	private void solrp$load(CompoundTag tag, CallbackInfo ci) {
+		solrp$loadMeals(tag);
 		solrp$gate.clear();
 		if (tag.contains(SOLRP_KEY, Tag.TAG_LIST)) {
 			for (Tag el : tag.getList(SOLRP_KEY, Tag.TAG_STRING)) {
@@ -93,6 +124,28 @@ public abstract class FoodListMixin implements GateFoods {
 			if (e.getValue() >= foodsEaten || e.getKey().getItem() == null) continue;
 			ResourceLocation id = ForgeRegistries.ITEMS.getKey(e.getKey().getItem());
 			if (id != null) solrp$gate.add(id);
+		}
+	}
+
+	@Unique
+	private void solrp$loadMeals(CompoundTag tag) {
+		solrp$mealLog.clear();
+		if (tag.contains(SOLRP_MEALS, Tag.TAG_LIST)) {
+			for (Tag el : tag.getList(SOLRP_MEALS, Tag.TAG_STRING)) {
+				ResourceLocation id = ResourceLocation.tryParse(el.getAsString());
+				if (id != null) solrp$mealLog.add(id);
+			}
+			return;
+		}
+		// Saved before the log existed: the remembered foods still in the window, newest first.
+		List<Map.Entry<FoodInstance, Integer>> in = new ArrayList<>();
+		for (Map.Entry<FoodInstance, Integer> e : uniqueFoods.entrySet()) {
+			if (e.getValue() < MealLog.length() && e.getKey().getItem() != null) in.add(e);
+		}
+		in.sort(Map.Entry.comparingByValue());
+		for (Map.Entry<FoodInstance, Integer> e : in) {
+			ResourceLocation id = ForgeRegistries.ITEMS.getKey(e.getKey().getItem());
+			if (id != null) solrp$mealLog.add(id);
 		}
 	}
 }

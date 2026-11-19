@@ -105,6 +105,22 @@ public final class Icons {
 		}).copy();
 	}
 
+	/**
+	 * A diversity value as printed by Raspberry Pie: rounded down to one decimal (plan_diet_books.md 1.3), so 4.97
+	 * shows 4.9 and never reads as a milestone of 5 not reached yet.
+	 */
+	public static String diversity(double v) {
+		return num(Math.floor(v * 10 + 1e-9) / 10.0);
+	}
+
+	/** Grays out a {@code size} square without covering a frame drawn around it. */
+	public static void dimInner(PoseStack pose, int x, int y, int size) {
+		pose.pushPose();
+		pose.translate(0, 0, 300);
+		GuiComponent.fill(pose, x, y, x + size, y + size, 0xB0D8D0C0);
+		pose.popPose();
+	}
+
 	public static String num(double v) {
 		return v == Math.floor(v) ? String.valueOf((long) v) : String.format(Locale.ROOT, "%.1f", v);
 	}
